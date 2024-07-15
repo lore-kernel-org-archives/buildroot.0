@@ -4,73 +4,98 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EE418C3DA4B
-	for <buildroot@archiver.kernel.org>; Mon, 15 Jul 2024 19:56:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 595E3C3DA4B
+	for <buildroot@archiver.kernel.org>; Mon, 15 Jul 2024 20:11:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8909340653;
-	Mon, 15 Jul 2024 19:56:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EB3F7403D5;
+	Mon, 15 Jul 2024 20:11:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UMocAzddz4Im; Mon, 15 Jul 2024 19:56:55 +0000 (UTC)
+ id T2htC_YTPS9K; Mon, 15 Jul 2024 20:11:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1E56040624
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 78EFF403E1
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1E56040624;
-	Mon, 15 Jul 2024 19:56:55 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 7B8DC1BF3D4
- for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 19:56:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 78EFF403E1;
+	Mon, 15 Jul 2024 20:11:26 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 4B0F41BF3E8
+ for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 20:11:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 67E8E4050A
- for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 19:56:53 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 377554096F
+ for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 20:11:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dWSuiehwor-3 for <buildroot@lists.busybox.net>;
- Mon, 15 Jul 2024 19:56:52 +0000 (UTC)
-X-Greylist: delayed 595 seconds by postgrey-1.37 at util1.osuosl.org;
- Mon, 15 Jul 2024 19:56:51 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9B1E1404FE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9B1E1404FE
-Received-SPF: Pass (sender SPF authorized) identity=helo;
- client-ip=188.68.63.102; helo=relay.yourmailgateway.de;
- envelope-from=mail@t-voltmer.net; receiver=<UNKNOWN> 
-Received: from relay.yourmailgateway.de (relay.yourmailgateway.de
- [188.68.63.102])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 9B1E1404FE
- for <buildroot@buildroot.org>; Mon, 15 Jul 2024 19:56:51 +0000 (UTC)
-Received: from mors-relay-2502.netcup.net (localhost [127.0.0.1])
- by mors-relay-2502.netcup.net (Postfix) with ESMTPS id 4WNCQ61svFz60LY
- for <buildroot@buildroot.org>; Mon, 15 Jul 2024 21:46:54 +0200 (CEST)
-Received: from policy02-mors.netcup.net (unknown [46.38.225.35])
- by mors-relay-2502.netcup.net (Postfix) with ESMTPS id 4WNCQ6194Hz4xfl
- for <buildroot@buildroot.org>; Mon, 15 Jul 2024 21:46:54 +0200 (CEST)
-Received: from mxe217.netcup.net (unknown [10.243.12.53])
- (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
- (No client certificate requested)
- by policy02-mors.netcup.net (Postfix) with ESMTPS id 4WNCQ56XFyz8sgW
- for <buildroot@buildroot.org>; Mon, 15 Jul 2024 21:46:53 +0200 (CEST)
-Received: from cygn.fritz.box (ipb21a3d34.dynamic.kabel-deutschland.de
- [178.26.61.52])
- by mxe217.netcup.net (Postfix) with ESMTPSA id A8AF483C07;
- Mon, 15 Jul 2024 21:46:48 +0200 (CEST)
-From: Torben Voltmer <mail@t-voltmer.net>
-To: buildroot@buildroot.org
-Date: Mon, 15 Jul 2024 21:46:35 +0200
-Message-ID: <20240715194635.949193-1-mail@t-voltmer.net>
-X-Mailer: git-send-email 2.45.2
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZMeo4VK5KxZt for <buildroot@lists.busybox.net>;
+ Mon, 15 Jul 2024 20:11:23 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::32f; helo=mail-ot1-x32f.google.com;
+ envelope-from=kris@embeddedts.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 053EC40376
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 053EC40376
+Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com
+ [IPv6:2607:f8b0:4864:20::32f])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 053EC40376
+ for <buildroot@buildroot.org>; Mon, 15 Jul 2024 20:11:22 +0000 (UTC)
+Received: by mail-ot1-x32f.google.com with SMTP id
+ 46e09a7af769-704156d0e0dso2526666a34.1
+ for <buildroot@buildroot.org>; Mon, 15 Jul 2024 13:11:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1721074281; x=1721679081;
+ h=content-transfer-encoding:mime-version:user-agent:organization
+ :references:in-reply-to:date:cc:to:reply-to:subject:message-id:from
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=26+sIs/ddq8IptE8bdpivJWsVvtoTeXo/dw2YqeztFs=;
+ b=gyxiiWzIZw0fa6esaUP7i6JvLf44dmQsyTLtS3HeR+ybRfe2/lMplBZp7+46VUx98C
+ kSAlI0awvYBxHxd9Ahkzr0Zos82orPdpyLM91MZbxKAENQbqu8Wq/nXJkkrrk64Tb0ib
+ /HGe3kn73qkiT/wXZ9qv3iI8GUOXMbU5IMHNicimlXNiOh7+W94DxHhtO4UA0a79QcA8
+ HJQof42gzCYLK83Ch4yxBsi+ddLtytjmDHMdZN/MEPDTs9Fl5ozOvwigyRZrGJs9HMhL
+ qIMs71ukSBwC5CBJo0U+Cti5ukDlcYUUkUsHJS52pfK9so1xOdId8y3wjJr/CBMHCQcb
+ eXNw==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCVkEKxspGm/XAn8ySorIEqlME3uNMPVT3gFkfaVkzyk9Kfs66SCVd8DpqP4dUghERiT+I5bJgN1LycvUYCUR+GjwkiAxkMPiA==
+X-Gm-Message-State: AOJu0YyOdLSkkPsD3Z7nKEnboKN7M4Kl8KjQYLd8lNZoymN37Vtmx4Kg
+ UkBtJ6M16tQESAKdDl4ZYnQrfxStQJzr9dgLvYzwuks6Pd6fXXrAtBAE8QZt+FNk3y6zzbJ3fZT
+ uxcE=
+X-Google-Smtp-Source: AGHT+IHcoFbDhLLDO6fKu1xHcjYY23sacXR937WFjkhg371iwtUornATWglqPyc+OW/NwzfaTmCdqA==
+X-Received: by 2002:a05:6870:3048:b0:25e:1817:e4b7 with SMTP id
+ 586e51a60fabf-25eaebfacf7mr17051098fac.38.1721074281626; 
+ Mon, 15 Jul 2024 13:11:21 -0700 (PDT)
+Received: from [10.10.10.151] ([174.25.79.17])
+ by smtp.gmail.com with ESMTPSA id
+ d2e1a72fcca58-70b7eb9c995sm4961442b3a.15.2024.07.15.13.11.20
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 15 Jul 2024 13:11:21 -0700 (PDT)
+X-Google-Original-From: Kris Bahnsen <kris@embeddedTS.com>
+Message-ID: <bc23a512b541ddfa69d5d7de1d4d2cf2d5c01a1d.camel@embeddedTS.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, Kris Bahnsen via
+ buildroot <buildroot@buildroot.org>
+Date: Mon, 15 Jul 2024 13:11:23 -0700
+In-Reply-To: <20240715212442.367a9df9@windsurf>
+References: <20240715180236.664036-1-giulio.benetti@benettiengineering.com>
+ <27d046a7a40bbc72279aac3e5971d8d58842b55d.camel@embeddedTS.com>
+ <20240715212442.367a9df9@windsurf>
+Organization: embeddedTS
+User-Agent: Evolution 3.38.3-1+deb11u2 
 MIME-Version: 1.0
-X-Rspamd-Queue-Id: A8AF483C07
-X-Rspamd-Server: rspamd-worker-8404
-X-NC-CID: nLejgGFjcJ9NaU2FmRxMl7ULa3nutcr4kJkz4noewYcF5w==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=t-voltmer.net
-X-Mailman-Original-Authentication-Results: mors-relay-2502.netcup.net;
- dkim=permerror (bad
- message/signature format)
-Subject: [Buildroot] [PATCH 1/1] package/espflash: new package
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=embeddedts.com; s=google; t=1721074281; x=1721679081; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:user-agent:organization
+ :references:in-reply-to:date:cc:to:reply-to:subject:message-id:from
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=26+sIs/ddq8IptE8bdpivJWsVvtoTeXo/dw2YqeztFs=;
+ b=Pfm8kONcl9eO+teKu4brz++QRYYT0YEMzCF4YyiD2KYFpgInVXhpP4Xr59FjnesMKF
+ 4EyjInvM/xUezCIq8rNYi6IwvnkfN9qizGvVjmWSLxaORhdDDozoNR0Df/HBj8EOLm0M
+ GY0eex3Q9UvZ37fiHTiJzX03Hqd1wh8L+2z/Y=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=embeddedts.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=embeddedts.com header.i=@embeddedts.com
+ header.a=rsa-sha256 header.s=google header.b=Pfm8kONc
+Subject: Re: [Buildroot] [PATCH] package/wilc-driver: bump version to 2024.04
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,86 +107,62 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Torben Voltmer <mail@t-voltmer.net>
+From: Kris Bahnsen via buildroot <buildroot@buildroot.org>
+Reply-To: kris@embeddedTS.com
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This package provides espflash. A serial flasher utilities for
-Espressif devices, based loosely on esptool.py. Supports the
-ESP32, ESP32-C2/C3/C6, ESP32-H2, ESP32-P4, and ESP32-S2/S3.
+On Mon, 2024-07-15 at 21:24 +0200, Thomas Petazzoni wrote:
+> On Mon, 15 Jul 2024 11:25:13 -0700
+> Kris Bahnsen via buildroot <buildroot@buildroot.org> wrote:
+> 
+> > Be advised that this does NOT support "up to" Linux 6.6. The latest
+> > updates from Microchip drop any backwards compatibility support,
+> > which
+> > is why we have not pushed this up to Buildroot yet.
+> > 
+> > I think this only will support kernels 6.2~6.6 and currently do not
+> > believe it will compile against upstream Linux 6.9 (I tested it a
+> > while
+> > ago but don't remember the outcome as it wasn't important).
+> > 
+> > As I mentioned in my previous email responding to build failures,
+> > we're
+> > working on a solution to be able to handle backwards compatibility
+> > with
+> > 'backports' but are first catching up on other tasks.
+> 
+> So what can we do in the mean time? Support a few versions of the
+> driver, and let the user chose?
 
-Signed-off-by: Torben Voltmer <mail@t-voltmer.net>
----
- package/Config.in              |  1 +
- package/espflash/Config.in     | 10 ++++++++++
- package/espflash/espflash.hash |  4 ++++
- package/espflash/espflash.mk   | 13 +++++++++++++
- 4 files changed, 28 insertions(+)
- create mode 100644 package/espflash/Config.in
- create mode 100644 package/espflash/espflash.hash
- create mode 100644 package/espflash/espflash.mk
+At this time the driver that is in Buildroot, with the patches
+submitted by Giulio, I believe will compile up to Linux 6.4. Most of
+the testing we did on the latest driver updates was for Linux 6.6
+(latest LTS), which did not cleanly compile with the existing patches
+from Giulio which is why we pulled in the latest updates from
+Microchip.
 
-diff --git a/package/Config.in b/package/Config.in
-index 6c390f7bd3..dfd598d626 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -508,6 +508,7 @@ endmenu
- 	source "package/edk2-non-osi/Config.in"
- 	source "package/edk2-platforms/Config.in"
- 	source "package/esp-hosted/Config.in"
-+	source "package/espflash/Config.in"
- 	source "package/eudev/Config.in"
- 	source "package/ev3dev-linux-drivers/Config.in"
- 	source "package/evemu/Config.in"
-diff --git a/package/espflash/Config.in b/package/espflash/Config.in
-new file mode 100644
-index 0000000000..2a7a0f6b38
---- /dev/null
-+++ b/package/espflash/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_ESPFLASH
-+	bool "espflash"
-+	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
-+	select BR2_PACKAGE_HOST_RUSTC
-+	help
-+	  Serial flasher utilities for Espressif devices, based
-+	  loosely on esptool.py. Supports the ESP32,
-+	  ESP32-C2/C3/C6, ESP32-H2, ESP32-P4, and ESP32-S2/S3.
-+
-+	  https://github.com/esp-rs/espflash
-diff --git a/package/espflash/espflash.hash b/package/espflash/espflash.hash
-new file mode 100644
-index 0000000000..ebe24ef51f
---- /dev/null
-+++ b/package/espflash/espflash.hash
-@@ -0,0 +1,4 @@
-+# Locally calculated
-+sha256  8e5da5e90d03135a1b2af6c0b551e4f2504ad64e659b0e88e8a4ecd98cc6a6b6  espflash-3.1.0-cargo2.tar.gz
-+sha256  0886cf791a43c02d71c105b4835b53293704ec407a72f84a87f73e20cb2d3251  LICENSE-APACHE
-+sha256  a75018ab59a13738ed2024a0090ae8f91b7693ae84568aa0e52c3dff99e6748d  LICENSE-MIT
-diff --git a/package/espflash/espflash.mk b/package/espflash/espflash.mk
-new file mode 100644
-index 0000000000..43532de58c
---- /dev/null
-+++ b/package/espflash/espflash.mk
-@@ -0,0 +1,13 @@
-+################################################################################
-+#
-+# espflash
-+#
-+################################################################################
-+
-+ESPFLASH_VERSION = 3.1.0
-+ESPFLASH_SITE = $(call github,esp-rs,espflash,v$(ESPFLASH_VERSION))
-+ESPFLASH_SUBDIR = espflash
-+ESPFLASH_LICENSE = Apache-2.0 or MIT
-+ESPFLASH_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
-+
-+$(eval $(cargo-package))
--- 
-2.45.2
+This patch could be modified to support the older linux4microchip-
+2021.10-1 tag on Linux <= 6.4, and linux4microchip-2024.04 tag for
+Linux == 6.6 But I'm not sure the best way to go about that other than
+adding a Config 'choice' to select between the two, but that would put
+the burden on the user to select the correct option.
+
+But the issue also remains that it currently does not compile against
+6.9 (I just confirmed this via a test) which I am not greenlit to put
+time in to patching the driver solely for 6.9 at this time.
+
+We are working on upstreaming platform support for many of our
+products, but with how fiddly the WILC3000 driver is, we're going to
+focus on that first so I hope to have a real solution sooner rather
+than later.
+
+> 
+> Thomas
+
 
 _______________________________________________
 buildroot mailing list
