@@ -4,97 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91F60C3DA4B
-	for <buildroot@archiver.kernel.org>; Mon, 15 Jul 2024 14:51:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1F448C3DA4B
+	for <buildroot@archiver.kernel.org>; Mon, 15 Jul 2024 14:54:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 561AC40734;
-	Mon, 15 Jul 2024 14:51:32 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B22EE403FC;
+	Mon, 15 Jul 2024 14:54:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OXy-MWcP8nGm; Mon, 15 Jul 2024 14:51:31 +0000 (UTC)
+ id MQqbsmomE2hq; Mon, 15 Jul 2024 14:54:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F2E8340A51
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3BE2C40650
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id F2E8340A51;
-	Mon, 15 Jul 2024 14:51:30 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 39D761BF3AD
- for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 14:51:29 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3BE2C40650;
+	Mon, 15 Jul 2024 14:54:44 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id EE34F1BF3AD
+ for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 14:54:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2682D4035F
- for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 14:51:29 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id D9D0680FA6
+ for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 14:54:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tSh7cE0meHJ6 for <buildroot@lists.busybox.net>;
- Mon, 15 Jul 2024 14:51:28 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id x7xkRt5fNVWu for <buildroot@lists.busybox.net>;
+ Mon, 15 Jul 2024 14:54:42 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42a; helo=mail-wr1-x42a.google.com;
- envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org C74F640363
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C74F640363
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
- [IPv6:2a00:1450:4864:20::42a])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C74F640363
- for <buildroot@buildroot.org>; Mon, 15 Jul 2024 14:51:27 +0000 (UTC)
-Received: by mail-wr1-x42a.google.com with SMTP id
- ffacd0b85a97d-3679e9bfb08so2431758f8f.1
- for <buildroot@buildroot.org>; Mon, 15 Jul 2024 07:51:27 -0700 (PDT)
+ client-ip=2607:f8b0:4864:20::b34; helo=mail-yb1-xb34.google.com;
+ envelope-from=fred.lefranc.evs@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org C1AEE80F97
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C1AEE80F97
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com
+ [IPv6:2607:f8b0:4864:20::b34])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id C1AEE80F97
+ for <buildroot@buildroot.org>; Mon, 15 Jul 2024 14:54:41 +0000 (UTC)
+Received: by mail-yb1-xb34.google.com with SMTP id
+ 3f1490d57ef6-e02b79c6f21so4493681276.2
+ for <buildroot@buildroot.org>; Mon, 15 Jul 2024 07:54:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1721055086; x=1721659886;
- h=content-transfer-encoding:in-reply-to:content-language:from
- :references:to:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=rxvLYMJz4L2nwt9B8eFkoI4Cf2oyWvZgAR0i0plKzic=;
- b=Y3aE08cqX+LwaghwMOZo+54GnqC99c/44A52pPPS3k+/8WEwUw4dt8bKfr3KeasW8f
- r8cEvFPFlxdDVTppIuEg8ifLNNa0klDpmrmwWMWRgUr4O+J751hlAX5QS+pfaEhr0UHd
- EPDv2cVeR4IAs/PEe+WUNYQ3F3FxqGHtBVTHCGpF2SQeMOs/Pp5slGoW7YzyFrJ7ADf5
- /4LCos696Ax3dc94PexHjFjy4TlbraD4XZ3mYT5MNn8xx/DMtDfaIawgrboYY8nlI/DX
- Eu5fbNRDpUz+plNGcvyLg81ErL333ht98y8ruOL4tI+YDylhktQFDOqK18o+dMzLsagg
- aHCg==
-X-Forwarded-Encrypted: i=1;
- AJvYcCWAU79pac6X3Eds9imR8nJkpsyPhvyUcul6F0S80/HpvqO2pALlXe435UoJTWQm5/6rTH4QkfapFNR4Ui2T7mKQlTQvlkiJ5g==
-X-Gm-Message-State: AOJu0YzsTGErfJcpLOyLY4TUPW0EseigLWhNvZaaiCOjjd2taQgpU6e2
- qDkiuMoqDOmNOVWvQOdcNmqNh/DPXhZcuQV+w3Cdp0HtGVdO3x8/blk9Gmb6XY3R7F4TrNBatpH
- C1js=
-X-Google-Smtp-Source: AGHT+IFnilSj85+h+PRd6f6bJagRmoGId4QlfJrYJoVOHFvPBWqSUu+JVUNCyKc519BZqTdJMD+EGQ==
-X-Received: by 2002:a5d:518d:0:b0:367:8e06:d5cf with SMTP id
- ffacd0b85a97d-367ff6ee125mr8117116f8f.13.1721055085798; 
- Mon, 15 Jul 2024 07:51:25 -0700 (PDT)
-Received: from [10.8.0.42] (ip-188-118-3-185.reverse.destiny.be.
- [188.118.3.185]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3680db046e2sm6639019f8f.105.2024.07.15.07.51.24
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Mon, 15 Jul 2024 07:51:25 -0700 (PDT)
-Message-ID: <e752e21e-e072-4c45-a515-93d414e1fb99@mind.be>
-Date: Mon, 15 Jul 2024 16:51:22 +0200
+ d=1e100.net; s=20230601; t=1721055280; x=1721660080;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=8MKr38Qh83PWWdpJjFlToRhPPiFOfQ3HcnF5rKSntXQ=;
+ b=OfeG2d7+zZQh2S5tnqGtQ6qKtnURnZXbBC8yqqUNieQS1CBwYYcyKY3cR75lyEf1+u
+ EoF1ceFJLt1/1cAdQreqSYQnmkQgCZF3YWJ+ETpMwkSt9chyrjoOjQ6dmeiBM0TnTrAT
+ oOZee4bxLEcq6Emg4A+3XeBAxYP2fPBjoPD0MFyNw5hL43Aq4LZ4nZYOY35Q+bcqC8zL
+ LcBX0MyEkkpIkpiszpbauTnUzj84QUB9BNIFsEWef+/NDRkxVNOaeUKXBK2W2Sc+M0Pb
+ FJbdOiEunbv3InOzT97JVWrUjuTbkW1GKARz30Nhk4YTav0OuKvaR8T/O23Ssqk63uHz
+ Gseg==
+X-Gm-Message-State: AOJu0Ywn+WJWK9puq2kS1NFhZAxQB+BfkUpZz7tIfeZXUMIw8j3FAzgA
+ Fe2aPpccJQxCcAs5nwlqAYsmzGurcdZ5kASpV1Ro0mRySvDKARQZ8S7ojSdndkLaPRiuc0t8LYx
+ j9bNuGXVbtrX7POSfHj7pDJI3X4s=
+X-Google-Smtp-Source: AGHT+IE+uKg+uViMyP7oF/QU+BDOv5G/B0TWXGoqGLkKNaehoNWuxUq4GKLInFEVTXeZQNxu6G7NXJQnsxzgzqzHxeU=
+X-Received: by 2002:a25:9004:0:b0:dfb:1e8d:1313 with SMTP id
+ 3f1490d57ef6-e041b0b91c5mr20405065276.39.1721055280455; Mon, 15 Jul 2024
+ 07:54:40 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Brandon Maier <brandon.maier@collins.com>, buildroot@buildroot.org
-References: <20240715-support-testing-s6-networking-fix-v1-1-f6fe7d3fcf51@collins.com>
-Content-Language: en-GB
-In-Reply-To: <20240715-support-testing-s6-networking-fix-v1-1-f6fe7d3fcf51@collins.com>
+References: <20240715101607.1288233-1-fred.lefranc+evs@gmail.com>
+ <20240715111003.1296141-1-fred.lefranc+evs@gmail.com>
+ <20240715160809.351cdc89@windsurf>
+In-Reply-To: <20240715160809.351cdc89@windsurf>
+From: Fred Lefranc <fred.lefranc.evs@gmail.com>
+Date: Mon, 15 Jul 2024 16:54:29 +0200
+Message-ID: <CAGkXw1V5bnDFuXPOukDKdqNF1FgAo1JjtbRYKS8EYCj0V9bo7g@mail.gmail.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1721055086; x=1721659886; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:content-language:from
- :references:to:subject:user-agent:mime-version:date:message-id:from
- :to:cc:subject:date:message-id:reply-to;
- bh=rxvLYMJz4L2nwt9B8eFkoI4Cf2oyWvZgAR0i0plKzic=;
- b=GCzO9WOBhknMXqv7JKwr+a9GW86dY2GY72+AjIPs45PF8n+uQemlZMLdoHOh4z9we1
- YzxrX10ZMkS7gaoG2tQIlJsJ1LzYcBFtSwMGiOfDuo6BILtw+mCfWRvjc78RnMMY+NBe
- 6OfB6a+GS2wwgAw29igFc7maxPhGG+7NV8EhOSMEvvn22yjMHDkNnnYzLbSNup5+pL1f
- u3mf7olUQNhgcMR84htctB+JU+IX5jcWHIqONEXDI/5Iaf0sbPdRaCH28QzBAClC5bf/
- 3RV8KH/wAUZEVh4/I0t1IrHk2n5BroirAqcwa+W8ybAJNtHCF97+SnKr/snk0scf8EEE
- 1P9Q==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=GCzO9WOB
-Subject: Re: [Buildroot] [PATCH] support/testing: fix
- package/test_s6_networking.py
+ d=gmail.com; s=20230601; t=1721055280; x=1721660080; darn=buildroot.org;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=8MKr38Qh83PWWdpJjFlToRhPPiFOfQ3HcnF5rKSntXQ=;
+ b=AWaYColXxCHQpw6OHkBmZsDJS1rGfDeza2CElOVcyIZ7ru+LdiAqB/jiWpW+mggBTj
+ NWWd8lOhvVVKAg+Gh6/nr17dIM6aXLqFUAHzfn7SlZrlKF3ntlPFEQ8Wx7EBcmO2u27I
+ As/HIKkgEPTJsDjfwMeFUwOZRIvwnD3bktDODCF0iKdQq99f98laSHAK1v7kp6vPCjCD
+ jXQQl7Fpg4cwEwhUmWEA/no0htw7Lh6E60bMwSHcSy2hLXW4f0NJkUT8fTtLsNkxoo0a
+ WYq6zc279LyAgUjQqBO7kUXI/5qKGNZA92Yfbt5oWYH2VOTOVJrQD0cyWGx2UHXbSSnH
+ Yejg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=AWaYColX
+Subject: Re: [Buildroot] [PATCH v2] package/busybox: fix build with glibc
+ 2.39
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -106,59 +99,142 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Cc: Fred Lefranc <fred.lefranc+evs@gmail.com>, buildroot@buildroot.org
+Content-Type: multipart/mixed; boundary="===============1036358286318125847=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+--===============1036358286318125847==
+Content-Type: multipart/alternative; boundary="000000000000a167b0061d4a6850"
 
+--000000000000a167b0061d4a6850
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 15/07/2024 16:00, Brandon Maier via buildroot wrote:
-> This test fails with the following error
-> 
->    -sh: s6-tcpserver4: not found
-> 
-> In release 2.6.0.0 of s6-networking the `s6-tcpserver4` was unified into
-> a new `s6-tcpserver` command[1].
+Hi Thomas,
 
-  D'oh! A compatibility symlink would have been too difficult of course...
+Sorry I've been too fast to write the comment as I merely (incorrectly)
+copied one from a systemd's similar patch.
 
-  Applied to master, thanks.
+Would this comment work for you?
 
-  Regards,
-  Arnout
+When glibc was bumped to version 2.39 in commit
+b5680f53d60acf8ff6010082f873438a39bd5d97 it removed the deprecated
+libcrypt support.
 
+As glibc's libcrypt was providing busybox's libcrypt dependency this
+broke any busybox build using glibc version 2.39.
 
-> 
-> [1] https://github.com/skarnet/s6-networking/blob/master/NEWS#L33
-> 
-> Signed-off-by: Brandon Maier <brandon.maier@collins.com>
-> ---
->   support/testing/tests/package/test_s6_networking.py | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/support/testing/tests/package/test_s6_networking.py b/support/testing/tests/package/test_s6_networking.py
-> index 1fe1b81668..bbbaefdf94 100644
-> --- a/support/testing/tests/package/test_s6_networking.py
-> +++ b/support/testing/tests/package/test_s6_networking.py
-> @@ -28,7 +28,7 @@ class TestS6Networking(infra.basetest.BRTest):
->           self.assertEqual(output[1][0:5], "after")
->   
->           # Test the TCP server and client
-> -        _, exit_code = self.emulator.run("s6-tcpserver4 127.0.0.1 1024 cat &")
-> +        _, exit_code = self.emulator.run("s6-tcpserver 127.0.0.1 1024 cat &")
->           self.emulator.run("sleep 2")
->           cmd = "echo foobar | s6-tcpclient 127.0.0.1 1024 s6-ioconnect -67"
->           output, exit_code = self.emulator.run(cmd)
-> 
-> ---
-> base-commit: 51a58ff0624f62ca0fa0ca6494928e8bd1410f69
-> change-id: 20240715-support-testing-s6-networking-fix-28e7573197e7
-> 
-> Best regards,
+To fix this, add the libxcrypt dependency to busybox when
+BR2_PACKAGE_LIBXCRYPT is selected. The user still has to select the
+libxcrypt package for this patch to work properly.
+
+Regards,
+Fred
+
+On Mon, Jul 15, 2024 at 4:08=E2=80=AFPM Thomas Petazzoni <
+thomas.petazzoni@bootlin.com> wrote:
+
+> Hello Fred,
+>
+> On Mon, 15 Jul 2024 13:10:02 +0200
+> Fred Lefranc <fred.lefranc.evs@gmail.com> wrote:
+>
+> > When glibc was bumped to version 2.39 in commit
+> > b5680f53d60acf8ff6010082f873438a39bd5d97 it removed the deprecated
+> > libcrypt support.
+> >
+> > As glibc's libcrypt was providing systemd's libcrypt dependency this
+> > broke any systemd build using glibc version 2.39.
+> >
+> > To fix this add the libxcrypt dependency to busybox which is the
+> > preferred way of providing libcrypt support in busybox as the glibc
+> > variant is only used as a fallback due to being deprecated.
+>
+> I'm sorry but I don't follow you on this last paragraph, in particular
+> the part "as the glibc variant is only used as a fallback due to being
+> deprecated".
+>
+> What happens is that recent glibc versions no longer provide libcrypt,
+> so libxcrypt should be used as a replacement. And it's up to the user
+> to enable BR2_PACKAGE_LIBXCRYPT if the user enables an applet in the
+> Busybox configuration that needs lib(x)crypt features.
+>
+> Thomas
+> --
+> Thomas Petazzoni, co-owner and CEO, Bootlin
+> Embedded Linux and Kernel engineering and training
+> https://bootlin.com
+>
+
+--000000000000a167b0061d4a6850
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Hi Thomas,<br><br>Sorry I&#39;ve been too fast to write th=
+e comment as I merely (incorrectly) copied one from a systemd&#39;s similar=
+ patch.<br><br><div>Would this comment work for you?</div><div><br></div>Wh=
+en glibc was bumped to version 2.39 in commit<br>b5680f53d60acf8ff6010082f8=
+73438a39bd5d97 it removed the deprecated<br>libcrypt support.<br><br>As gli=
+bc&#39;s libcrypt was providing busybox&#39;s libcrypt dependency this<br>b=
+roke any busybox build using glibc version 2.39.<br><br>To fix this, add th=
+e libxcrypt dependency to busybox when<br>BR2_PACKAGE_LIBXCRYPT is selected=
+. The user still has to select the <br>libxcrypt package for this patch to =
+work properly. <div><br></div>Regards,<br>Fred</div><br><div class=3D"gmail=
+_quote"><div dir=3D"ltr" class=3D"gmail_attr">On Mon, Jul 15, 2024 at 4:08=
+=E2=80=AFPM Thomas Petazzoni &lt;<a href=3D"mailto:thomas.petazzoni@bootlin=
+.com">thomas.petazzoni@bootlin.com</a>&gt; wrote:<br></div><blockquote clas=
+s=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid r=
+gb(204,204,204);padding-left:1ex">Hello Fred,<br>
+<br>
+On Mon, 15 Jul 2024 13:10:02 +0200<br>
+Fred Lefranc &lt;<a href=3D"mailto:fred.lefranc.evs@gmail.com" target=3D"_b=
+lank">fred.lefranc.evs@gmail.com</a>&gt; wrote:<br>
+<br>
+&gt; When glibc was bumped to version 2.39 in commit<br>
+&gt; b5680f53d60acf8ff6010082f873438a39bd5d97 it removed the deprecated<br>
+&gt; libcrypt support.<br>
+&gt; <br>
+&gt; As glibc&#39;s libcrypt was providing systemd&#39;s libcrypt dependenc=
+y this<br>
+&gt; broke any systemd build using glibc version 2.39.<br>
+&gt; <br>
+&gt; To fix this add the libxcrypt dependency to busybox which is the<br>
+&gt; preferred way of providing libcrypt support in busybox as the glibc<br=
+>
+&gt; variant is only used as a fallback due to being deprecated.<br>
+<br>
+I&#39;m sorry but I don&#39;t follow you on this last paragraph, in particu=
+lar<br>
+the part &quot;as the glibc variant is only used as a fallback due to being=
+<br>
+deprecated&quot;.<br>
+<br>
+What happens is that recent glibc versions no longer provide libcrypt,<br>
+so libxcrypt should be used as a replacement. And it&#39;s up to the user<b=
+r>
+to enable BR2_PACKAGE_LIBXCRYPT if the user enables an applet in the<br>
+Busybox configuration that needs lib(x)crypt features.<br>
+<br>
+Thomas<br>
+-- <br>
+Thomas Petazzoni, co-owner and CEO, Bootlin<br>
+Embedded Linux and Kernel engineering and training<br>
+<a href=3D"https://bootlin.com" rel=3D"noreferrer" target=3D"_blank">https:=
+//bootlin.com</a><br>
+</blockquote></div>
+
+--000000000000a167b0061d4a6850--
+
+--===============1036358286318125847==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1036358286318125847==--
