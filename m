@@ -4,72 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 893D3C3DA59
-	for <buildroot@archiver.kernel.org>; Mon, 15 Jul 2024 12:34:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64A67C3DA59
+	for <buildroot@archiver.kernel.org>; Mon, 15 Jul 2024 12:36:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 26209405C9;
-	Mon, 15 Jul 2024 12:34:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1D6E1405DD;
+	Mon, 15 Jul 2024 12:36:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id K-muzr6ji2U2; Mon, 15 Jul 2024 12:34:44 +0000 (UTC)
+ id 8kcJlWLJPEXx; Mon, 15 Jul 2024 12:36:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D653C405CC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F271F405DE
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D653C405CC;
-	Mon, 15 Jul 2024 12:34:43 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9D1851BF3B8
- for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 12:34:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F271F405DE;
+	Mon, 15 Jul 2024 12:36:16 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 2B5671BF3B8
+ for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 12:36:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 88C51405CC
- for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 12:34:41 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1744B81222
+ for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 12:36:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mvcDXBmh2Ezc for <buildroot@lists.busybox.net>;
- Mon, 15 Jul 2024 12:34:39 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::223;
- helo=relay3-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id kWf6scVMZfFr for <buildroot@lists.busybox.net>;
+ Mon, 15 Jul 2024 12:36:15 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::222;
+ helo=relay2-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6220F405C9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6220F405C9
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6220F405C9
- for <buildroot@buildroot.org>; Mon, 15 Jul 2024 12:34:39 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 76B0C60007;
- Mon, 15 Jul 2024 12:34:36 +0000 (UTC)
-Date: Mon, 15 Jul 2024 14:34:34 +0200
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org ED04581220
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ED04581220
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id ED04581220
+ for <buildroot@buildroot.org>; Mon, 15 Jul 2024 12:36:14 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 06B3F40004;
+ Mon, 15 Jul 2024 12:36:11 +0000 (UTC)
+Date: Mon, 15 Jul 2024 14:36:10 +0200
 To: Ben Hutchings via buildroot <buildroot@buildroot.org>
-Message-ID: <20240715143434.6ae4f592@windsurf>
-In-Reply-To: <3c8dd9da9315d5ed33b43fdbfc5898573d966a84.1712957992.git.ben.hutchings@mind.be>
+Message-ID: <20240715143610.26215270@windsurf>
+In-Reply-To: <50b8003c4466222765fa343b71bcad2da8478a37.1712957992.git.ben.hutchings@mind.be>
 References: <cover.1712957992.git.ben.hutchings@mind.be>
- <3c8dd9da9315d5ed33b43fdbfc5898573d966a84.1712957992.git.ben.hutchings@mind.be>
+ <50b8003c4466222765fa343b71bcad2da8478a37.1712957992.git.ben.hutchings@mind.be>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1721046876;
+ d=bootlin.com; s=gm1; t=1721046972;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=PVYNt0LU/727OasVtTJ4IttZu0/ahVEA5b+QMoUFc0I=;
- b=Xn8ctPiBifd8zN1AlJxb6d8z+6weLtwSGiuc0SeHWXDJSRahpIAcYW84dLeRA6q5ktKdf8
- Wk2kSelthqLKav+1H0QQn/Mj7MOLGPBpjXHmA2TcjUP09wjb3uCvv8DqgTd3lvwkscvbET
- Wr8wpX/cCwsmeFwIdjnKZP33fLJ2adwmSbEioKO3mpyqKM5xIiA1OZkomQHRJGoh1kylTB
- fHlGXGCk7HGmyJNyi2V9qvzI8/oRSVS9uDi9YuS7GSy+7BVZQG9Y/O3rUU3tFZZJA4utzE
- W7yfT940lGDjFB/KQbDeVqFgWpqx76TfAqfOAASYH7ZPJLcZVHU6N38cf50Zig==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=gecxMNH2qcXxTC8GywVpoz8XQxbwpUuTcJROllflFfw=;
+ b=DKYJdosuUl4eelVqlAd9sKmWI3io3BRVTlO4yoltn7O2ppoOoit2dmql5gGhoetJbTvN0m
+ VZldtQfFh06Yq2Q2Wi+OIJojzFq6d59T4HFWyGFGpwZ6U03+aCJ/t7orRsxgquP230yZlY
+ TXQxcyorR+B6XHf3hxd3qTKdaVoKechM/efHwB3fJxcyXvFApLb2lTvGKw5wRroXCDCD15
+ Cn4u458SNUv/fzYCAx0Jw1/tbPKo8qUBFcrO00P/Iaxc5Cf2DbY0nc3Zp2rGb6fZvRNKoZ
+ zrS0zEAkMPNWq/zh0VoNyKO7CbIBrpUbmquVoM9xlyVRw4F0NZzdTFcTK/Xskg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Xn8ctPiB
-Subject: Re: [Buildroot] [PATCH 4/6] package/libgcrypt: Add host package
+ header.s=gm1 header.b=DKYJdosu
+Subject: Re: [Buildroot] [PATCH 5/6] package/libksba: Add host package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -89,7 +89,7 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri, 12 Apr 2024 23:43:08 +0200
+On Fri, 12 Apr 2024 23:43:09 +0200
 Ben Hutchings via buildroot <buildroot@buildroot.org> wrote:
 
 > This is needed to support a host build of gnupg2.  It is not directly
@@ -97,34 +97,15 @@ Ben Hutchings via buildroot <buildroot@buildroot.org> wrote:
 > 
 > Signed-off-by: Ben Hutchings <ben.hutchings@mind.be>
 > ---
->  package/libgcrypt/libgcrypt.mk | 4 ++++
+>  package/libksba/libksba.mk | 4 ++++
 >  1 file changed, 4 insertions(+)
-> 
-> diff --git a/package/libgcrypt/libgcrypt.mk b/package/libgcrypt/libgcrypt.mk
-> index 2e4bf7448e..af342c6948 100644
-> --- a/package/libgcrypt/libgcrypt.mk
-> +++ b/package/libgcrypt/libgcrypt.mk
-> @@ -13,6 +13,7 @@ LIBGCRYPT_INSTALL_STAGING = YES
->  LIBGCRYPT_DEPENDENCIES = libgpg-error
->  LIBGCRYPT_CONFIG_SCRIPTS = libgcrypt-config
->  LIBGCRYPT_CPE_ID_VENDOR = gnupg
-> +HOST_LIBGCRYPT_DEPENDENCIES = host-libgpg-error
->  
->  # Patching configure.ac and Makefile.am in 0001
->  LIBGCRYPT_AUTORECONF = YES
-> @@ -20,6 +21,8 @@ LIBGCRYPT_CONF_OPTS = \
->  	--disable-tests \
->  	$(if $(BR2_OPTIMIZE_0),--disable-ppc-crypto-support,) \
->  	--with-gpg-error-prefix=$(STAGING_DIR)/usr
-> +HOST_LIBGCRYPT_CONF_OPTS = \
-> +	--with-gpg-error-prefix=$(HOST_DIR)
 
-I've added --disable-tests here, and applied. Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
 https://bootlin.com
 _______________________________________________
 buildroot mailing list
