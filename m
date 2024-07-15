@@ -4,92 +4,94 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5BFBCC3DA4B
-	for <buildroot@archiver.kernel.org>; Mon, 15 Jul 2024 13:09:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12403C3DA4B
+	for <buildroot@archiver.kernel.org>; Mon, 15 Jul 2024 13:10:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 25AB580FF8;
-	Mon, 15 Jul 2024 13:09:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8EB8B810F0;
+	Mon, 15 Jul 2024 13:09:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wf7VTh1r4lGv; Mon, 15 Jul 2024 13:09:54 +0000 (UTC)
+ id 7hQcxHLFFSNi; Mon, 15 Jul 2024 13:09:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 20667810F0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 60F4A8110A
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 20667810F0;
-	Mon, 15 Jul 2024 13:09:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 60F4A8110A;
+	Mon, 15 Jul 2024 13:09:56 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id CB98B1BF3BE
- for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 13:09:52 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0D2BA1BF3BE
+ for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 13:09:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B9CD8810F0
- for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 13:09:52 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 07ECB80CE0
+ for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 13:09:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xDU3WpgUy9nU for <buildroot@lists.busybox.net>;
- Mon, 15 Jul 2024 13:09:51 +0000 (UTC)
+ id Ro9dcZc1ZZfe for <buildroot@lists.busybox.net>;
+ Mon, 15 Jul 2024 13:09:52 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::330; helo=mail-wm1-x330.google.com;
+ client-ip=2a00:1450:4864:20::42f; helo=mail-wr1-x42f.google.com;
  envelope-from=francois.perrad@gadz.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 7E2E280CE0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7E2E280CE0
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
- [IPv6:2a00:1450:4864:20::330])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7E2E280CE0
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org CF15680CE3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CF15680CE3
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
+ [IPv6:2a00:1450:4864:20::42f])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id CF15680CE3
  for <buildroot@busybox.net>; Mon, 15 Jul 2024 13:09:51 +0000 (UTC)
-Received: by mail-wm1-x330.google.com with SMTP id
- 5b1f17b1804b1-427b1d4da32so4110865e9.0
+Received: by mail-wr1-x42f.google.com with SMTP id
+ ffacd0b85a97d-367aa05bf9dso2516372f8f.3
  for <buildroot@busybox.net>; Mon, 15 Jul 2024 06:09:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1721048989; x=1721653789;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=DHnfW8GlMYvSd+PLjLpJvuFVxNmXi9/hayywGtuBzbI=;
- b=bGS6V33vxeyE+zpWMepr958tu+9E43TMV7fZpVCHFbfakxgUN+n7xqhIILjspg3/vg
- gh9q+UP7vf6hSeDR6S5CL1njaZR5dq5q0NE4d5PdaKddfAsHAokoE1IAjKnE8w7aqnew
- gJX7IZmhsrImZ1yYdvz8LHFB0pFsR5rLH3+DW0xIqHy96Is2Y4BjxS3QQ4/e7xEBTev0
- tOO9qT+NSLY1g+glP5AjOdVDVujGF2qwleGv0VNJ4LbHLJOervdY32yLhCBh6PaOtXct
- c0yARAwM/7qcSeWP1fWLcZSP5ilIn7oLUKWjrk2c+jtoexUzzZ/z/tmRoEbgMzAgKIfm
- CXmw==
-X-Gm-Message-State: AOJu0Ywq3WGbBa2rBHTcRauqScdzl0zyLTDI7hhBx1M7dLJ7T/XrN7Ci
- 0fTUjxFjT2VXGPYYwE9SBrCX6+X1T9bvBbdUG8QpQdM7KCAy3ateZXkGiKgukecaFf9J13NCftU
+ d=1e100.net; s=20230601; t=1721048990; x=1721653790;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=YnZdA32DxsqoKu84d1cxIOt03ssPMMPPhLaznTDqV9M=;
+ b=A2QQ6VehGgXCZrxasgPrGUcxuMpM6JvD2l6DULAbUcT8HDZ4Yg7xzn8Vqy63sFTyQd
+ O/1L3XjnWgDUSJvzFEm129oneeGdk4LECtKxl7hhaBcgkryGm3n9DaBUyg7QOLMs0+CW
+ 5ZPD7omUY6Y0UOAmplB7hstXacrDHKiChqzYEY45KRL9rEaf+uerKkpAWzACbMEvFhHu
+ M6NmDleKn34XngNOLmJVJ2GriHoXsQC7NlS3TqS4OsDFOvWEeHD+VFfHsP8FA7iSB+t2
+ 8cKMyKe43y26gT7HDHbWz+ifaZGIrYxJJrNT2GYQ9rKk0TmFHSEt7iZ6OtY6HsGMLWw6
+ xkGA==
+X-Gm-Message-State: AOJu0YztIXe/6b4UYT4UpL+wk6A2lN49TdrWSe21NLxH+1Z9RKJ1tZhP
+ bbyRzEF6d88Sfjz7lUf4MeSS1Oc00LTUI0u33Aj3oKWcOSvpNNbaRSDLpWf99QglfRVUED0npuA
  =
-X-Google-Smtp-Source: AGHT+IEocPEnQmAAHZyHlkzLPjg94vFUIuVsXX0VxViEO1HZxrP0XIzdwZJt2AcCxuSmrpHJSkSkRg==
-X-Received: by 2002:a5d:64a7:0:b0:363:ac4d:c44f with SMTP id
- ffacd0b85a97d-36804ec285cmr8286036f8f.17.1721048989054; 
+X-Google-Smtp-Source: AGHT+IE4hOGvuTQSQ8XBfAyWH9K9NJCHma5sKY5Zh0KIgMp/MkKoYQJm3NtaAC/2Y/aAiqCfcpK7+g==
+X-Received: by 2002:adf:fdc3:0:b0:367:8a2f:a6dc with SMTP id
+ ffacd0b85a97d-367cead15b8mr12712626f8f.44.1721048989892; 
  Mon, 15 Jul 2024 06:09:49 -0700 (PDT)
 Received: from vm-2404.. (140.33.66.37.rev.sfr.net. [37.66.33.140])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3680dab3cb0sm6359227f8f.10.2024.07.15.06.09.48
+ ffacd0b85a97d-3680dab3cb0sm6359227f8f.10.2024.07.15.06.09.49
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 15 Jul 2024 06:09:48 -0700 (PDT)
+ Mon, 15 Jul 2024 06:09:49 -0700 (PDT)
 From: Francois Perrad <francois.perrad@gadz.org>
 To: buildroot@busybox.net
-Date: Mon, 15 Jul 2024 15:09:38 +0200
-Message-ID: <20240715130940.470769-1-francois.perrad@gadz.org>
+Date: Mon, 15 Jul 2024 15:09:39 +0200
+Message-ID: <20240715130940.470769-2-francois.perrad@gadz.org>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240715130940.470769-1-francois.perrad@gadz.org>
+References: <20240715130940.470769-1-francois.perrad@gadz.org>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gadz.org; s=google; t=1721048989; x=1721653789; darn=busybox.net;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=DHnfW8GlMYvSd+PLjLpJvuFVxNmXi9/hayywGtuBzbI=;
- b=MJ3C9Me/cJ8Lw19j5aHbqSXlrX3C1bGym/XxVhjbueMdZiuhLUqQytqyIpsPA7KnQS
- /x1WeVslfUyFDKjIy88h/ky5/VowwcGPJdu/LUNh7GVHj+pjtRI9TjJLtq+F855DaWkc
- VxxEymT9iaefrFRGFfJQ6TXP1sLQSl7WR04ZX+6dZtjQU9fHfydxc7S7UcXy4zY4v2MA
- vROH+s+fQxtAWm9PatLMgUU/IkMKQrmL+hKS+Lw3YOIbKKltcSVifs0fWyMgVDq/1iX3
- scXkcICz3m0T7p8sRW8KutTYs2osaYlQJlTrpBmbjvDFc9ytvNb6cxvO6RI9CT5ICaib
- Yxig==
+ d=gadz.org; s=google; t=1721048990; x=1721653790; darn=busybox.net;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=YnZdA32DxsqoKu84d1cxIOt03ssPMMPPhLaznTDqV9M=;
+ b=DOZQutWO7i+7ptPMbM4GtV0awtyFHvhaRt5h7z8xmBD3C7/2J0qbMtd/4rzLGWT7ly
+ Wv6SKT6YwicDGzV2K9bsLn5zBXwTj9PMH3BnkYRBY6P7HdKZ/fnHb9ugstmr/zA/4X17
+ YJpdkhYf/uqueolrfzWOzB84Sh0cnrcL08nUMdKSBiuAc81/Kt8PwEMVmsMgXfIg8laH
+ 1esEhF1/e82q94XmPF/1xeeNQH3Nf9rIzgaeqnaGfApSBYRSA5/k1SPUe3mZpPQBpwFg
+ 6/xkWuolh2uJIYv+O0PBaSXSoHUMHM2opzLG+yyF3qCM1eNFAKz9YMwSsEA/ugjnY7YO
+ 3++Q==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gadz.org
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gadz.org header.i=@gadz.org header.a=rsa-sha256
- header.s=google header.b=MJ3C9Me/
-Subject: [Buildroot] [PATCH v2 1/3] package/lua: bump to version 5.4.7
+ dkim=pass (2048-bit key) header.d=gadz.org header.i=@gadz.org
+ header.a=rsa-sha256 header.s=google header.b=DOZQutWO
+Subject: [Buildroot] [PATCH v2 2/3] package/lua: use tag Upstream in patches
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -108,96 +110,84 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- .checkpackageignore                                         | 6 +++---
- package/lua/5.4.6/lua.hash                                  | 5 -----
- package/lua/{5.4.6 => 5.4.7}/0001-root-path.patch           | 0
- package/lua/{5.4.6 => 5.4.7}/0002-shared-libs-for-lua.patch | 0
- .../0011-linenoise.patch => 5.4.7/0003-linenoise.patch}     | 2 +-
- package/lua/5.4.7/lua.hash                                  | 5 +++++
- package/lua/lua.mk                                          | 2 +-
- 7 files changed, 10 insertions(+), 10 deletions(-)
- delete mode 100644 package/lua/5.4.6/lua.hash
- rename package/lua/{5.4.6 => 5.4.7}/0001-root-path.patch (100%)
- rename package/lua/{5.4.6 => 5.4.7}/0002-shared-libs-for-lua.patch (100%)
- rename package/lua/{5.4.6/0011-linenoise.patch => 5.4.7/0003-linenoise.patch} (97%)
- create mode 100644 package/lua/5.4.7/lua.hash
+ .checkpackageignore                            | 4 ----
+ package/lua/5.1.5/0011-linenoise.patch         | 3 +--
+ package/lua/5.1.5/0012-fix-reader-at-eoz.patch | 3 +--
+ package/lua/5.3.6/0003-linenoise.patch         | 3 +--
+ package/lua/5.4.7/0003-linenoise.patch         | 3 +--
+ 5 files changed, 4 insertions(+), 12 deletions(-)
 
 diff --git a/.checkpackageignore b/.checkpackageignore
-index 72ebab6d8..497cac8d4 100644
+index 497cac8d4..4b7553b7a 100644
 --- a/.checkpackageignore
 +++ b/.checkpackageignore
-@@ -985,9 +985,9 @@ package/lua/5.1.5/0012-fix-reader-at-eoz.patch lib_patch.Upstream
+@@ -980,14 +980,10 @@ package/lua-sdl2/0001-Do-not-reference-host-directory-for-headers.patch lib_patc
+ package/lua-sdl2/0002-CMakeLists-do-not-require-C.patch lib_patch.Upstream
+ package/lua/5.1.5/0001-root-path.patch lib_patch.Upstream
+ package/lua/5.1.5/0002-shared-libs-for-lua.patch lib_patch.Upstream
+-package/lua/5.1.5/0011-linenoise.patch lib_patch.Upstream
+-package/lua/5.1.5/0012-fix-reader-at-eoz.patch lib_patch.Upstream
  package/lua/5.3.6/0001-root-path.patch lib_patch.Upstream
  package/lua/5.3.6/0002-shared-libs-for-lua.patch lib_patch.Upstream
- package/lua/5.3.6/0003-linenoise.patch lib_patch.Upstream
--package/lua/5.4.6/0001-root-path.patch lib_patch.Upstream
--package/lua/5.4.6/0002-shared-libs-for-lua.patch lib_patch.Upstream
--package/lua/5.4.6/0011-linenoise.patch lib_patch.Upstream
-+package/lua/5.4.7/0001-root-path.patch lib_patch.Upstream
-+package/lua/5.4.7/0002-shared-libs-for-lua.patch lib_patch.Upstream
-+package/lua/5.4.7/0003-linenoise.patch lib_patch.Upstream
+-package/lua/5.3.6/0003-linenoise.patch lib_patch.Upstream
+ package/lua/5.4.7/0001-root-path.patch lib_patch.Upstream
+ package/lua/5.4.7/0002-shared-libs-for-lua.patch lib_patch.Upstream
+-package/lua/5.4.7/0003-linenoise.patch lib_patch.Upstream
  package/luajit/0001-no-bin-symlink.patch lib_patch.Upstream
  package/luajit/0002-install-inc.patch lib_patch.Upstream
  package/luasyslog/0001-remove-AX_LUA_LIBS.patch lib_patch.Upstream
-diff --git a/package/lua/5.4.6/lua.hash b/package/lua/5.4.6/lua.hash
-deleted file mode 100644
-index 0b03fd563..000000000
---- a/package/lua/5.4.6/lua.hash
-+++ /dev/null
-@@ -1,5 +0,0 @@
--# Hashes from: https://www.lua.org/ftp/
--sha256  7d5ea1b9cb6aa0b59ca3dde1c6adcb57ef83a1ba8e5432c0ecd06bf439b3ad88  lua-5.4.6.tar.gz
--
--# Locally computed
--sha256  8f1bff27c5b0585ab679dbe4e37e75a1014af0f79732f42a79f86728321a0c6d  doc/readme.html
-diff --git a/package/lua/5.4.6/0001-root-path.patch b/package/lua/5.4.7/0001-root-path.patch
-similarity index 100%
-rename from package/lua/5.4.6/0001-root-path.patch
-rename to package/lua/5.4.7/0001-root-path.patch
-diff --git a/package/lua/5.4.6/0002-shared-libs-for-lua.patch b/package/lua/5.4.7/0002-shared-libs-for-lua.patch
-similarity index 100%
-rename from package/lua/5.4.6/0002-shared-libs-for-lua.patch
-rename to package/lua/5.4.7/0002-shared-libs-for-lua.patch
-diff --git a/package/lua/5.4.6/0011-linenoise.patch b/package/lua/5.4.7/0003-linenoise.patch
-similarity index 97%
-rename from package/lua/5.4.6/0011-linenoise.patch
-rename to package/lua/5.4.7/0003-linenoise.patch
-index 5054ae19e..2fcbc49f6 100644
---- a/package/lua/5.4.6/0011-linenoise.patch
-+++ b/package/lua/5.4.7/0003-linenoise.patch
-@@ -8,7 +8,7 @@ Index: b/src/lua.c
- ===================================================================
- --- a/src/lua.c
- +++ b/src/lua.c
--@@ -438,6 +438,14 @@
-+@@ -447,6 +447,14 @@
-  #define lua_saveline(L,line)	((void)L, add_history(line))
-  #define lua_freeline(L,b)	((void)L, free(b))
-  
-diff --git a/package/lua/5.4.7/lua.hash b/package/lua/5.4.7/lua.hash
-new file mode 100644
-index 000000000..d67fdcf6c
---- /dev/null
-+++ b/package/lua/5.4.7/lua.hash
-@@ -0,0 +1,5 @@
-+# Hashes from: https://www.lua.org/ftp/
-+sha256  9fbf5e28ef86c69858f6d3d34eccc32e911c1a28b4120ff3e84aaa70cfbf1e30  lua-5.4.7.tar.gz
-+
-+# Locally computed
-+sha256  33a975a766520bc54de2d71e45442e504effa0519e331e31ee3fc46eca4f98bd  doc/readme.html
-diff --git a/package/lua/lua.mk b/package/lua/lua.mk
-index 93d480381..15772dbdf 100644
---- a/package/lua/lua.mk
-+++ b/package/lua/lua.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/lua/5.1.5/0011-linenoise.patch b/package/lua/5.1.5/0011-linenoise.patch
+index 488c080a1..c0ab200bd 100644
+--- a/package/lua/5.1.5/0011-linenoise.patch
++++ b/package/lua/5.1.5/0011-linenoise.patch
+@@ -1,7 +1,6 @@
+ Add support of linenoise (replace readline)
  
- ifeq ($(BR2_PACKAGE_LUA_5_4),y)
--LUA_VERSION = 5.4.6
-+LUA_VERSION = 5.4.7
- else ifeq ($(BR2_PACKAGE_LUA_5_3),y)
- LUA_VERSION = 5.3.6
- else
+-see discussion, http://lua-users.org/lists/lua-l/2010-03/msg00879.html
+-
++Upstream: http://lua-users.org/lists/lua-l/2010-03/msg00879.html
+ Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+ 
+ Index: b/src/luaconf.h
+diff --git a/package/lua/5.1.5/0012-fix-reader-at-eoz.patch b/package/lua/5.1.5/0012-fix-reader-at-eoz.patch
+index 17a28ba4c..fd92147ea 100644
+--- a/package/lua/5.1.5/0012-fix-reader-at-eoz.patch
++++ b/package/lua/5.1.5/0012-fix-reader-at-eoz.patch
+@@ -1,7 +1,6 @@
+ When loading a file, Lua may call the reader function again after it returned end of input.
+ 
+-Fetch from: http://www.lua.org/bugs.html#5.1.5-2
+-
++Upstream: https://www.lua.org/bugs.html#5.1.5-2
+ Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+ 
+ Index: b/src/lzio.c
+diff --git a/package/lua/5.3.6/0003-linenoise.patch b/package/lua/5.3.6/0003-linenoise.patch
+index 574e6c8f0..495177c32 100644
+--- a/package/lua/5.3.6/0003-linenoise.patch
++++ b/package/lua/5.3.6/0003-linenoise.patch
+@@ -1,7 +1,6 @@
+ Add support of linenoise (replace readline)
+ 
+-see discussion, http://lua-users.org/lists/lua-l/2010-03/msg00879.html
+-
++Upstream: http://lua-users.org/lists/lua-l/2010-03/msg00879.html
+ Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+ 
+ Index: b/src/lua.c
+diff --git a/package/lua/5.4.7/0003-linenoise.patch b/package/lua/5.4.7/0003-linenoise.patch
+index 2fcbc49f6..a82c8801a 100644
+--- a/package/lua/5.4.7/0003-linenoise.patch
++++ b/package/lua/5.4.7/0003-linenoise.patch
+@@ -1,7 +1,6 @@
+ Add support of linenoise (replace readline)
+ 
+-see discussion, http://lua-users.org/lists/lua-l/2010-03/msg00879.html
+-
++Upstream: http://lua-users.org/lists/lua-l/2010-03/msg00879.html
+ Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+ 
+ Index: b/src/lua.c
 -- 
 2.43.0
 
