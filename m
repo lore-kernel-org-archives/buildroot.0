@@ -1,93 +1,118 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1F448C3DA4B
-	for <buildroot@archiver.kernel.org>; Mon, 15 Jul 2024 14:54:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7CE50C3DA4A
+	for <buildroot@archiver.kernel.org>; Mon, 15 Jul 2024 15:22:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B22EE403FC;
-	Mon, 15 Jul 2024 14:54:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AD00440597;
+	Mon, 15 Jul 2024 15:22:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MQqbsmomE2hq; Mon, 15 Jul 2024 14:54:44 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id K38uQadqIhbE; Mon, 15 Jul 2024 15:22:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3BE2C40650
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EF30240647
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3BE2C40650;
-	Mon, 15 Jul 2024 14:54:44 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id EE34F1BF3AD
- for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 14:54:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EF30240647;
+	Mon, 15 Jul 2024 15:22:52 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 99DA41BF3B5
+ for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 15:22:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D9D0680FA6
- for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 14:54:42 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9288240647
+ for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 15:22:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id x7xkRt5fNVWu for <buildroot@lists.busybox.net>;
- Mon, 15 Jul 2024 14:54:42 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::b34; helo=mail-yb1-xb34.google.com;
- envelope-from=fred.lefranc.evs@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org C1AEE80F97
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C1AEE80F97
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com
- [IPv6:2607:f8b0:4864:20::b34])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C1AEE80F97
- for <buildroot@buildroot.org>; Mon, 15 Jul 2024 14:54:41 +0000 (UTC)
-Received: by mail-yb1-xb34.google.com with SMTP id
- 3f1490d57ef6-e02b79c6f21so4493681276.2
- for <buildroot@buildroot.org>; Mon, 15 Jul 2024 07:54:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1721055280; x=1721660080;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=8MKr38Qh83PWWdpJjFlToRhPPiFOfQ3HcnF5rKSntXQ=;
- b=OfeG2d7+zZQh2S5tnqGtQ6qKtnURnZXbBC8yqqUNieQS1CBwYYcyKY3cR75lyEf1+u
- EoF1ceFJLt1/1cAdQreqSYQnmkQgCZF3YWJ+ETpMwkSt9chyrjoOjQ6dmeiBM0TnTrAT
- oOZee4bxLEcq6Emg4A+3XeBAxYP2fPBjoPD0MFyNw5hL43Aq4LZ4nZYOY35Q+bcqC8zL
- LcBX0MyEkkpIkpiszpbauTnUzj84QUB9BNIFsEWef+/NDRkxVNOaeUKXBK2W2Sc+M0Pb
- FJbdOiEunbv3InOzT97JVWrUjuTbkW1GKARz30Nhk4YTav0OuKvaR8T/O23Ssqk63uHz
- Gseg==
-X-Gm-Message-State: AOJu0Ywn+WJWK9puq2kS1NFhZAxQB+BfkUpZz7tIfeZXUMIw8j3FAzgA
- Fe2aPpccJQxCcAs5nwlqAYsmzGurcdZ5kASpV1Ro0mRySvDKARQZ8S7ojSdndkLaPRiuc0t8LYx
- j9bNuGXVbtrX7POSfHj7pDJI3X4s=
-X-Google-Smtp-Source: AGHT+IE+uKg+uViMyP7oF/QU+BDOv5G/B0TWXGoqGLkKNaehoNWuxUq4GKLInFEVTXeZQNxu6G7NXJQnsxzgzqzHxeU=
-X-Received: by 2002:a25:9004:0:b0:dfb:1e8d:1313 with SMTP id
- 3f1490d57ef6-e041b0b91c5mr20405065276.39.1721055280455; Mon, 15 Jul 2024
- 07:54:40 -0700 (PDT)
-MIME-Version: 1.0
-References: <20240715101607.1288233-1-fred.lefranc+evs@gmail.com>
- <20240715111003.1296141-1-fred.lefranc+evs@gmail.com>
- <20240715160809.351cdc89@windsurf>
-In-Reply-To: <20240715160809.351cdc89@windsurf>
-From: Fred Lefranc <fred.lefranc.evs@gmail.com>
-Date: Mon, 15 Jul 2024 16:54:29 +0200
-Message-ID: <CAGkXw1V5bnDFuXPOukDKdqNF1FgAo1JjtbRYKS8EYCj0V9bo7g@mail.gmail.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8ntEdnDpiYo5 for <buildroot@lists.busybox.net>;
+ Mon, 15 Jul 2024 15:22:50 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=67.231.144.184;
+ helo=mx0a-00105401.pphosted.com; envelope-from=brandon.maier@collins.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 2117640597
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2117640597
+Received: from mx0a-00105401.pphosted.com (mx0a-00105401.pphosted.com
+ [67.231.144.184])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 2117640597
+ for <buildroot@buildroot.org>; Mon, 15 Jul 2024 15:22:49 +0000 (UTC)
+Received: from pps.filterd (m0346907.ppops.net [127.0.0.1])
+ by mx0a-00105401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id
+ 46FDjGkC013120; Mon, 15 Jul 2024 15:22:47 GMT
+Received: from xusxph009rp050.rtx.com (xusxph009rp050.rtx.com [128.13.125.147])
+ by mx0a-00105401.pphosted.com (PPS) with ESMTPS id 40bh64es60-1
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+ Mon, 15 Jul 2024 15:22:47 +0000
+Received: from xusxph008rp020.corp.ray.com ([128.13.124.224])
+ by xusxph009rp050.rtx.com (8.17.1.19/8.17.1.19) with ESMTPS id 46FFMieb010392
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+ Mon, 15 Jul 2024 15:22:45 GMT
+Received: from ciulimr01.rockwellcollins.com
+ (snat-utc-mailhub.rockwellcollins.com [10.172.224.19])
+ by xusxph008rp020.corp.ray.com (8.17.1.19/8.17.1.19) with ESMTPS id
+ 46FFMhVN015009
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+ Mon, 15 Jul 2024 15:22:44 GMT
+X-Received: from localhost (unknown [10.148.204.208])
+ by ciulimr01.rockwellcollins.com (Postfix) with ESMTP id CFEFA3000445;
+ Mon, 15 Jul 2024 10:22:43 -0500 (CDT)
+Mime-Version: 1.0
+Date: Mon, 15 Jul 2024 15:22:43 +0000
+Message-Id: <D2Q7RY7OPU0I.2KCWEGO4SYQX5@collins.com>
+To: "Arnout Vandecappelle" <arnout@mind.be>, "Kory Maincent"
+ <kory.maincent@bootlin.com>, <buildroot@buildroot.org>
+X-Mailer: aerc 0.17.0-0-g6ea74eb30457
+References: <20240710152941.334195-1-kory.maincent@bootlin.com>
+ <d9fcfe9b-7b11-42ee-9773-b9620d720135@mind.be>
+In-Reply-To: <d9fcfe9b-7b11-42ee-9773-b9620d720135@mind.be>
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-07-15_09,2024-07-11_01,2024-05-17_01
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-07-15_09,2024-07-11_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0
+ spamscore=0 adultscore=0
+ mlxlogscore=999 mlxscore=0 bulkscore=0 malwarescore=0 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2406180000
+ definitions=main-2407150121
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0
+ adultscore=0 bulkscore=0
+ phishscore=0 spamscore=0 mlxlogscore=999 suspectscore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2406180000
+ definitions=main-2407150121
+X-Proofpoint-GUID: LYWgnZlOi_1SvPYiXDJrltvAznlmm_Cx
+X-Proofpoint-ORIG-GUID: LYWgnZlOi_1SvPYiXDJrltvAznlmm_Cx
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-07-15_09,2024-07-11_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_default_notspam
+ policy=outbound_default score=0
+ suspectscore=0 lowpriorityscore=0 bulkscore=0 phishscore=0 mlxlogscore=999
+ mlxscore=0 clxscore=1011 priorityscore=1501 malwarescore=0 impostorscore=0
+ spamscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2406180000 definitions=main-2407150121
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1721055280; x=1721660080; darn=buildroot.org;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=8MKr38Qh83PWWdpJjFlToRhPPiFOfQ3HcnF5rKSntXQ=;
- b=AWaYColXxCHQpw6OHkBmZsDJS1rGfDeza2CElOVcyIZ7ru+LdiAqB/jiWpW+mggBTj
- NWWd8lOhvVVKAg+Gh6/nr17dIM6aXLqFUAHzfn7SlZrlKF3ntlPFEQ8Wx7EBcmO2u27I
- As/HIKkgEPTJsDjfwMeFUwOZRIvwnD3bktDODCF0iKdQq99f98laSHAK1v7kp6vPCjCD
- jXQQl7Fpg4cwEwhUmWEA/no0htw7Lh6E60bMwSHcSy2hLXW4f0NJkUT8fTtLsNkxoo0a
- WYq6zc279LyAgUjQqBO7kUXI/5qKGNZA92Yfbt5oWYH2VOTOVJrQD0cyWGx2UHXbSSnH
- Yejg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=AWaYColX
-Subject: Re: [Buildroot] [PATCH v2] package/busybox: fix build with glibc
- 2.39
+ d=collins.com; h=cc :
+ content-transfer-encoding : content-type : date : from : in-reply-to :
+ message-id : mime-version : references : subject : to; s=POD051818;
+ bh=6nbXWu7V4W9lqxl5zE7aihFYveV3PNCh6ZGoCJCSbCk=;
+ b=LP2wxG0rojqP42yw5EFd9oFTjsyROlwUzIGU6ZjVA0PnPqaq9+0FWZlNk9kz659w+kCC
+ gy5YL+1aXeKBiO+Ks74r4jotAkkyQ7cz7S8nyTfQNSukTXU8R/tnZfmrv5QxMflAzpgI
+ 4ndKUJO7yfmc0elGq0FdAoAdv74tl13/B54039tqgpf3QdyozV9eMtI6w+WwzROMPiHZ
+ gq9xMuxg4t7cYEvYSwhNKMQgHrLfNhT1KNEajJkefiSOLqxOVuhBW5sOujMZ1RgrqzVX
+ vOX0dyUSU9GocesGQaDkb/oHUB4kBy+VQSWtqTusQGwgpuRdOqGtu2A9CxwXQCnK1XRv jg== 
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=collins.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=collins.com header.i=@collins.com header.a=rsa-sha256
+ header.s=POD051818 header.b=LP2wxG0r
+Subject: Re: [Buildroot] [PATCH] linux: Add support for vendor directory in
+ BR2_LINUX_KERNEL_CUSTOM_DTS_PATH
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,142 +124,159 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fred Lefranc <fred.lefranc+evs@gmail.com>, buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============1036358286318125847=="
+From: Brandon Maier via buildroot <buildroot@buildroot.org>
+Reply-To: Brandon Maier <brandon.maier@collins.com>
+Cc: thomas.petazzoni@bootlin.com
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1036358286318125847==
-Content-Type: multipart/alternative; boundary="000000000000a167b0061d4a6850"
+Hi Arnout, Kory,
 
---000000000000a167b0061d4a6850
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-Hi Thomas,
-
-Sorry I've been too fast to write the comment as I merely (incorrectly)
-copied one from a systemd's similar patch.
-
-Would this comment work for you?
-
-When glibc was bumped to version 2.39 in commit
-b5680f53d60acf8ff6010082f873438a39bd5d97 it removed the deprecated
-libcrypt support.
-
-As glibc's libcrypt was providing busybox's libcrypt dependency this
-broke any busybox build using glibc version 2.39.
-
-To fix this, add the libxcrypt dependency to busybox when
-BR2_PACKAGE_LIBXCRYPT is selected. The user still has to select the
-libxcrypt package for this patch to work properly.
-
-Regards,
-Fred
-
-On Mon, Jul 15, 2024 at 4:08=E2=80=AFPM Thomas Petazzoni <
-thomas.petazzoni@bootlin.com> wrote:
-
-> Hello Fred,
+On Mon Jul 15, 2024 at 2:07 PM UTC, Arnout Vandecappelle via buildroot wrote:
 >
-> On Mon, 15 Jul 2024 13:10:02 +0200
-> Fred Lefranc <fred.lefranc.evs@gmail.com> wrote:
 >
-> > When glibc was bumped to version 2.39 in commit
-> > b5680f53d60acf8ff6010082f873438a39bd5d97 it removed the deprecated
-> > libcrypt support.
+> On 10/07/2024 17:29, Kory Maincent via buildroot wrote:
+> > Linux organizes devicetree files under vendor subdirectories for arm and
+> > arm64 architectures, such as arch/<arch>/boot/dts/<vendor>/. The
+> > BR2_LINUX_KERNEL_CUSTOM_DTS_PATH was only copying devicetree files to
+> > arch/<arch>/boot/dts/, which is incompatible with the vendor
+> > subdirectory structure.
+>
+>   I don't see what the problem is though? If a DT is put in
+> arch/<arch>/boot/dts, it can still be built with the current Buildroot.
+>
+>   The only thing you need to do is to make sure to do
+>
+> #include "vendor/cpu.dtsi"
+>
+> instead of
+>
+> #include "cpu.dtsi"
+>
+>   The in-tree DTSes don't have the vendor/ part in the include, of course, but
+> for custom DTSes you can do what you want, right?
+
+This does work, I do this for Xilinx devicetrees which go into a
+'xilinx' vendor directory.
+
+>
+>   I'm going to mark it as Rejected for now, but feel free to resubmit if there
+> is a good reason to have this feature.
+
+This does solve one problem for me. I compile the same devicetree into
+Linux and U-Boot. But Linux migrated the Xilinx devicetrees into a
+'xilinx/' vendor directory. But U-Boot has not made the same migration
+as their Makefiles don't support dts sub-directories. So the #include
+path is the only thing different between the Linux and U-Boot
+devicetrees.
+
+I work around it for now by patching a symlink into U-Boot
+'arch/arm/dts/xilinx -> ./'.
+
+Though ideally U-Boot would be updated to use the same devicetree layout
+as Linux.
+
+Thanks,
+Brandon
+
+>
+>
+> > This patch adds support for using a directory in
+> > BR2_LINUX_KERNEL_CUSTOM_DTS_PATH that matches the vendor subdirectory name.
 > >
-> > As glibc's libcrypt was providing systemd's libcrypt dependency this
-> > broke any systemd build using glibc version 2.39.
+> > Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
+> > ---
+> >   linux/Config.in |  4 +++-
+> >   linux/linux.mk  | 14 +++++++++++---
+> >   2 files changed, 14 insertions(+), 4 deletions(-)
 > >
-> > To fix this add the libxcrypt dependency to busybox which is the
-> > preferred way of providing libcrypt support in busybox as the glibc
-> > variant is only used as a fallback due to being deprecated.
+> > diff --git a/linux/Config.in b/linux/Config.in
+> > index 34057a4893..6ca615cae3 100644
+> > --- a/linux/Config.in
+> > +++ b/linux/Config.in
+> > @@ -423,7 +423,9 @@ config BR2_LINUX_KERNEL_CUSTOM_DTS_PATH
+> >   	  Paths to out-of-tree Device Tree Source (.dts) and Device Tree
+> >   	  Source Include (.dtsi) files, separated by spaces. These files
+> >   	  will be copied to the kernel sources and the .dts files will
+> > -	  be compiled from there.
+> > +	  be compiled from there. You can also use a directory which
+> > +	  name match the vendor name as in
+> > +	  arch/<arch>/boot/dts/<vendor>/
 >
-> I'm sorry but I don't follow you on this last paragraph, in particular
-> the part "as the glibc variant is only used as a fallback due to being
-> deprecated".
+>   I think the explanation could be better:
 >
-> What happens is that recent glibc versions no longer provide libcrypt,
-> so libxcrypt should be used as a replacement. And it's up to the user
-> to enable BR2_PACKAGE_LIBXCRYPT if the user enables an applet in the
-> Busybox configuration that needs lib(x)crypt features.
+> 	  Starting from Linux 6.5, the device trees are put in a <vendor>
+> 	  subdirectory. To emulate this, you can put custom device trees
+> 	  in a directory with that same <vendor> name, and specify the
+> 	  path to that directory here instead of to individual dts files.
 >
-> Thomas
-> --
-> Thomas Petazzoni, co-owner and CEO, Bootlin
-> Embedded Linux and Kernel engineering and training
-> https://bootlin.com
+>   I feel this is pretty complicated for a user to understand though...
 >
-
---000000000000a167b0061d4a6850
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">Hi Thomas,<br><br>Sorry I&#39;ve been too fast to write th=
-e comment as I merely (incorrectly) copied one from a systemd&#39;s similar=
- patch.<br><br><div>Would this comment work for you?</div><div><br></div>Wh=
-en glibc was bumped to version 2.39 in commit<br>b5680f53d60acf8ff6010082f8=
-73438a39bd5d97 it removed the deprecated<br>libcrypt support.<br><br>As gli=
-bc&#39;s libcrypt was providing busybox&#39;s libcrypt dependency this<br>b=
-roke any busybox build using glibc version 2.39.<br><br>To fix this, add th=
-e libxcrypt dependency to busybox when<br>BR2_PACKAGE_LIBXCRYPT is selected=
-. The user still has to select the <br>libxcrypt package for this patch to =
-work properly. <div><br></div>Regards,<br>Fred</div><br><div class=3D"gmail=
-_quote"><div dir=3D"ltr" class=3D"gmail_attr">On Mon, Jul 15, 2024 at 4:08=
-=E2=80=AFPM Thomas Petazzoni &lt;<a href=3D"mailto:thomas.petazzoni@bootlin=
-.com">thomas.petazzoni@bootlin.com</a>&gt; wrote:<br></div><blockquote clas=
-s=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid r=
-gb(204,204,204);padding-left:1ex">Hello Fred,<br>
-<br>
-On Mon, 15 Jul 2024 13:10:02 +0200<br>
-Fred Lefranc &lt;<a href=3D"mailto:fred.lefranc.evs@gmail.com" target=3D"_b=
-lank">fred.lefranc.evs@gmail.com</a>&gt; wrote:<br>
-<br>
-&gt; When glibc was bumped to version 2.39 in commit<br>
-&gt; b5680f53d60acf8ff6010082f873438a39bd5d97 it removed the deprecated<br>
-&gt; libcrypt support.<br>
-&gt; <br>
-&gt; As glibc&#39;s libcrypt was providing systemd&#39;s libcrypt dependenc=
-y this<br>
-&gt; broke any systemd build using glibc version 2.39.<br>
-&gt; <br>
-&gt; To fix this add the libxcrypt dependency to busybox which is the<br>
-&gt; preferred way of providing libcrypt support in busybox as the glibc<br=
+> >
+> >   config BR2_LINUX_KERNEL_DTB_KEEP_DIRNAME
+> >   	bool "Keep the directory name of the Device Tree"
+> > diff --git a/linux/linux.mk b/linux/linux.mk
+> > index 16d9f19470..07d4ddf7f3 100644
+> > --- a/linux/linux.mk
+> > +++ b/linux/linux.mk
+> > @@ -198,7 +198,15 @@ LINUX_DTS_NAME += $(call qstrip,$(BR2_LINUX_KERNEL_INTREE_DTS_NAME))
+> >   # and .dtsi files in BR2_LINUX_KERNEL_CUSTOM_DTS_PATH. Both will be
+> >   # copied to arch/<arch>/boot/dts, but only the .dts files will
+> >   # actually be generated as .dtb.
+> > -LINUX_DTS_NAME += $(basename $(filter %.dts,$(notdir $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH)))))
+> > +# In case we are copying a vendor dts subdirectory as in
+> > +# arch/<arch>/boot/dts/<vendor>/ we have to append the wildcard to the
+> > +# folder to list the devicetree.
+> > +LINUX_KERNEL_CUSTOM_DTS_PATH = $(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH))
+> > +ifneq ($(wildcard $(LINUX_KERNEL_CUSTOM_DTS_PATH)/.*),)
 >
-&gt; variant is only used as a fallback due to being deprecated.<br>
-<br>
-I&#39;m sorry but I don&#39;t follow you on this last paragraph, in particu=
-lar<br>
-the part &quot;as the glibc variant is only used as a fallback due to being=
-<br>
-deprecated&quot;.<br>
-<br>
-What happens is that recent glibc versions no longer provide libcrypt,<br>
-so libxcrypt should be used as a replacement. And it&#39;s up to the user<b=
-r>
-to enable BR2_PACKAGE_LIBXCRYPT if the user enables an applet in the<br>
-Busybox configuration that needs lib(x)crypt features.<br>
-<br>
-Thomas<br>
--- <br>
-Thomas Petazzoni, co-owner and CEO, Bootlin<br>
-Embedded Linux and Kernel engineering and training<br>
-<a href=3D"https://bootlin.com" rel=3D"noreferrer" target=3D"_blank">https:=
-//bootlin.com</a><br>
-</blockquote></div>
-
---000000000000a167b0061d4a6850--
-
---===============1036358286318125847==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+>   You don't actually need the * here.
+>
+>   Also, better use positive logic (ifeq instead of ifneq, and swap the branches).
+>
+> > +LINUX_DTS_NAME += $(addprefix $(notdir $(LINUX_KERNEL_CUSTOM_DTS_PATH))/,$(basename $(filter %.dts,$(notdir $(wildcard $(LINUX_KERNEL_CUSTOM_DTS_PATH)/*)))))
+> > +else
+> > +LINUX_DTS_NAME += $(basename $(filter %.dts,$(notdir $(wildcard $(LINUX_KERNEL_CUSTOM_DTS_PATH)))))
+>
+>   This is also getting pretty complicated, could it be refactored so there are a
+> bit more common parts? Something like:
+>
+> ifeq ($(wildcard $(LINUX_KERNEL_CUSTOM_DTS_PATH)/.),)
+> LINUX_CUSTOM_DTS_FILES = $(wildcard $(LINUX_KERNEL_CUSTOM_DTS_PATH)/*))
+> LINUX_CUSTOM_DTS_PREFIX = $(notdir $(LINUX_KERNEL_CUSTOM_DTS_PATH))/
+> else
+> LINUX_CUSTOM_DTS_FILES = $(LINUX_KERNEL_CUSTOM_DTS_PATH)
+> endif
+> LINUX_DTS_NAME += $(addprefix $(LINUX_CUSTOM_DTS_PREFIX),$(basename $(filter
+> %.dts,$(LINUX_CUSTOM_DTS_FILES))))
+>
+> (parenthesis added in an email editor so probably unbalanced :-)
+>
+>   Regards,
+>   Arnout
+>
+> > +endif
+> >
+> >   LINUX_DTBS = $(addsuffix .dtb,$(LINUX_DTS_NAME))
+> >
+> > @@ -505,8 +513,8 @@ endif
+> >   #   http://lists.busybox.net/pipermail/buildroot/2020-May/282727.html
+> >   define LINUX_BUILD_CMDS
+> >   	$(call KCONFIG_DISABLE_OPT,CONFIG_GCC_PLUGINS)
+> > -	$(foreach dts,$(call qstrip,$(BR2_LINUX_KERNEL_CUSTOM_DTS_PATH)), \
+> > -		cp -f $(dts) $(LINUX_ARCH_PATH)/boot/dts/
+> > +	$(foreach dts,$(LINUX_KERNEL_CUSTOM_DTS_PATH), \
+> > +		cp -rf $(dts) $(LINUX_ARCH_PATH)/boot/dts/
+> >   	)
+> >   	$(LINUX_MAKE_ENV) $(BR2_MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) all
+> >   	$(LINUX_MAKE_ENV) $(BR2_MAKE) $(LINUX_MAKE_FLAGS) -C $(@D) $(LINUX_TARGET_NAME)
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============1036358286318125847==--
