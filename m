@@ -4,48 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5949EC3DA4B
-	for <buildroot@archiver.kernel.org>; Mon, 15 Jul 2024 14:38:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06290C3DA4B
+	for <buildroot@archiver.kernel.org>; Mon, 15 Jul 2024 14:39:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id F10F6400D8;
-	Mon, 15 Jul 2024 14:38:09 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C7C9240918;
+	Mon, 15 Jul 2024 14:39:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id i3wpoigWCE_x; Mon, 15 Jul 2024 14:38:08 +0000 (UTC)
+ id MMVm49ANnHBY; Mon, 15 Jul 2024 14:39:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 958F140734
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7BBDB40919
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 958F140734;
-	Mon, 15 Jul 2024 14:38:08 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 372DE1BF3AD
- for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 14:38:07 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7BBDB40919;
+	Mon, 15 Jul 2024 14:39:41 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B04EC1BF3AD
+ for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 14:39:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2F0EB60744
- for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 14:38:07 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id AA49840919
+ for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 14:39:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id x5mIQHh3-ENZ for <buildroot@lists.busybox.net>;
- Mon, 15 Jul 2024 14:38:06 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7BO38n5zKpi4 for <buildroot@lists.busybox.net>;
+ Mon, 15 Jul 2024 14:39:38 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.201;
+ helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4439860747
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4439860747
- for <buildroot@buildroot.org>; Mon, 15 Jul 2024 14:38:06 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 366BC86C73; Mon, 15 Jul 2024 14:38:06 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 15 Jul 2024 16:37:42 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 664f02a60c98536e516ba8a802bceba40418a34c
-X-Git-Newrev: 69cbb563a124002fcb3e2725c3516b502587f9cc
-X-Patchwork-Hint: ignore
-Message-Id: <20240715143806.366BC86C73@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/tar: properly handle autoreconf
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0778840918
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0778840918
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0778840918
+ for <buildroot@buildroot.org>; Mon, 15 Jul 2024 14:39:37 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id A017A1BF205;
+ Mon, 15 Jul 2024 14:39:35 +0000 (UTC)
+Date: Mon, 15 Jul 2024 16:39:33 +0200
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Message-ID: <20240715163933.7317e08c@windsurf>
+In-Reply-To: <20240715102848.7dc3d619@windsurf>
+References: <20240630210938.1590435-1-yann.morin.1998@free.fr>
+ <20240715102848.7dc3d619@windsurf>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1721054376;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=s/01EQJMHWfvzOMBXxmi+VTOjRGEMegPuBHv3p0JTzA=;
+ b=WTRBhgioYPkDxN0qj9NYxunP81oJa4uFXnoK+9OJwq8S0XdcdNspxVpY5Cvdgs8nEgjff8
+ qm29hzZgQq0stzghg3x4zX5Tlnj25urD71ObSeY1g6Pn7mlWDlupockDxAMI3figc8EGY2
+ PHBbkeHfIxX4PQcn74hitQNH6oqPoRZeajRNwVsXIvUTkkvwQ7J93X1Ku2hSVOeNwxVR2Y
+ JFLg7H8gzBCXD3AE6hqM7CaEhjYVq3EHSa9ZbVMCWvHdize9IFGh+OwDs7h/maJS6ca7px
+ lGjwjqBHIMQcWd+U5QLG6ejTGelRU7oIaJMQM4JvLzwTZD7t4MYmYCZFiaGbig==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=WTRBhgio
+Subject: Re: [Buildroot] [PATCH] package/tar: fix linking with libiconv
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,75 +83,49 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=69cbb563a124002fcb3e2725c3516b502587f9cc
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Commit 9a66711be1786b90f94cbb1648fa470def3486f8 ("package/tar: fix
-linking with libiconv") added two patches that patch Makefile.am
-files, but it forgot to add TAR_AUTORECONF = YES.
+On Mon, 15 Jul 2024 10:28:48 +0200
+Thomas Petazzoni <thomas.petazzoni@bootlin.com> wrote:
 
-However, a gotcha is that TAR_AUTORECONF = YES would apply to both the
-target tar, but also the host tar. But for host-tar, we can't accept
-to do an autoreconf, because this would cause host-tar to have a
-dependency on host-{autoconf,automake,libtool}, which in turn would
-have a dependency on host-tar.
+> I've changed this to:
+> 
+>     Fixes:
+>     
+>      https://gitlab.com/buildroot.org/buildroot/-/issues/4
+>      http://autobuild.buildroot.net/results/c074c2e22a7f764400ecc7dd1a6cd6022fa87fb9/
+> 
+> I don't know if Peter will agree, but I find the full URL to the gitlab
+> issue to be clearer. One can directly click, we can more easily grep
+> through the git commit messages to find all commits that fix a Gitlab
+> issue, etc.
 
-Since anyway the patches 0002/0003 that modify Makefile.am are only
-useful to fix a libiconv problem that occurs when building target tar,
-we disable autoreconf for host-tar, and we prevent automatic
-autoreconf by touching the right Makefile.in files. This mess can be
-dropped next time we update tar, as 0002/0003 will be part of the next
-tar release.
+Except these patches are touching Makefile.am, so we need
+TAR_AUTORECONF = YES.
 
-Fixes:
+... except TAR_AUTORECONF = YES is fine for target tar, but not
+host-tar, because it would add a dependency on
+host-{autoconf,automake,libtool}, which themselves depend on host-tar.
 
-  http://autobuild.buildroot.net/results/efdf7cf9ede810ed7f766cc4138b16054bc0c18a/
+This caused some failures in the autobuilders:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/tar/tar.mk | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+  http://autobuild.buildroot.net/results/efd/efdf7cf9ede810ed7f766cc4138b16054bc0c18a/build-end.log
 
-diff --git a/package/tar/tar.mk b/package/tar/tar.mk
-index b9de082603..ab8d0fc683 100644
---- a/package/tar/tar.mk
-+++ b/package/tar/tar.mk
-@@ -12,6 +12,9 @@ TAR_LICENSE_FILES = COPYING
- TAR_CPE_ID_VENDOR = gnu
- TAR_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
- TAR_CONF_ENV = LIBS=$(TARGET_NLS_LIBS)
-+# 0002-Fix-savannah-bug-#64441.patch
-+# 0003-tests-fix-LDADD.patch
-+TAR_AUTORECONF = YES
- 
- # The package is a dependency to ccache so ccache cannot be a dependency
- HOST_TAR_ADD_CCACHE_DEPENDENCY = NO
-@@ -61,4 +64,19 @@ HOST_TAR_CONF_ENV = \
- 	CC="$(HOSTCC_NOCCACHE)" \
- 	CXX="$(HOSTCXX_NOCCACHE)"
- 
-+# Patches 0002-Fix-savannah-bug-#64441.patch and
-+# 0003-tests-fix-LDADD.patch are patching Makefile.am, so they do
-+# require TAR_AUTORECONF = YES above. However, for the host-tar
-+# package we can't do this: we can't have host-tar depend on
-+# host-{autoconf,automake,libtool} as those in turn might depend on
-+# host-tar. Since the patches 0002 and 0003 are only related to
-+# linking against libiconv, which is only an issue for the target tar,
-+# we do not autoreconf, and touch the corresponding Makefile.in to
-+# prevent them from being re-generated.
-+HOST_TAR_AUTORECONF = NO
-+define HOST_TAR_NO_AUTORECONF
-+	touch $(@D)/src/Makefile.in $(@D)/tests/Makefile.in
-+endef
-+HOST_TAR_POST_PATCH_HOOKS += HOST_TAR_NO_AUTORECONF
-+
- $(eval $(host-autotools-package))
+So I added a quirk:
+
+  https://gitlab.com/buildroot.org/buildroot/-/commit/69cbb563a124002fcb3e2725c3516b502587f9cc
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
