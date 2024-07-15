@@ -4,49 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36AB1C3DA59
-	for <buildroot@archiver.kernel.org>; Mon, 15 Jul 2024 10:15:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ACA9AC3DA59
+	for <buildroot@archiver.kernel.org>; Mon, 15 Jul 2024 10:15:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0128440551;
-	Mon, 15 Jul 2024 10:15:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 53ED640352;
+	Mon, 15 Jul 2024 10:15:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rP-1BE9YHwz5; Mon, 15 Jul 2024 10:15:10 +0000 (UTC)
+ id k68yhzu43bUx; Mon, 15 Jul 2024 10:15:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4DF2B405F7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 06D52404D5
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4DF2B405F7;
-	Mon, 15 Jul 2024 10:15:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 06D52404D5;
+	Mon, 15 Jul 2024 10:15:45 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E19DE1BF3FF
- for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 10:14:29 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A30B51BF3FF
+ for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 10:15:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id AC43880D91
- for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 10:14:25 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8E60C80F26
+ for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 10:15:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id G6miXXvshFrr for <buildroot@lists.busybox.net>;
- Mon, 15 Jul 2024 10:14:24 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id lucnk8WPsHs3 for <buildroot@lists.busybox.net>;
+ Mon, 15 Jul 2024 10:15:42 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::227;
+ helo=relay7-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CB44A80DC8
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id CB44A80DC8
- for <buildroot@buildroot.org>; Mon, 15 Jul 2024 10:14:24 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7665986C43; Mon, 15 Jul 2024 10:14:24 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 15 Jul 2024 12:14:00 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 33b5412b7869bba90ffc63fa00da763a64c981a8
-X-Git-Newrev: c53455ea4ffaaee050e1e43a3c15fa98324d5235
-X-Patchwork-Hint: ignore
-Message-Id: <20240715101424.7665986C43@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/qt5/qt5webengine-chromium: bump
- version after qtwebengine bump
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 44D0980F0E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 44D0980F0E
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::227])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 44D0980F0E
+ for <buildroot@buildroot.org>; Mon, 15 Jul 2024 10:15:41 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 7142720004;
+ Mon, 15 Jul 2024 10:15:38 +0000 (UTC)
+Date: Mon, 15 Jul 2024 12:15:36 +0200
+To: Kadir Yilmaz <kadir.c.yilmaz@gmail.com>
+Message-ID: <20240715121536.1db28c1e@windsurf>
+In-Reply-To: <20231025212924.1957581-1-kadir.c.yilmaz@gmail.com>
+References: <20231025212924.1957581-1-kadir.c.yilmaz@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1721038539;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=/lLzxtbwhZqvkzZNZJEDUYtqlzLIY5HiXAoCbDNClKw=;
+ b=L+PQowV/6r8478LQ3sC4D+a66dRxdV4znixlLosO0EEogNCCRAVbZKMljoVxuow7UNe664
+ xj+tYJrfsCY/hE6wmDgTsYSibjMeTH5fsalQyPAPSA1HRXw3qeXAnfhy3pendjrI+eKEyH
+ KmlzEbm2q3CVdyIYwwvovKMqWe2zbT1OHEdfWgoUF6T7pJqo5oP0HsE4++Dx+O5yhnZ1Nx
+ U2MGFtC35li+40fefZ11FKxVaNJTT1r1qhSD3bdzQWi4uEuvgcyulw6q0MiyWA4nBkYthI
+ bwmbWwiCRDQFA99wqZQmdyWg/Gc1br9zathE34smv3ZJbFzMXDO0u8r5+E6wug==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=L+PQowV/
+Subject: Re: [Buildroot] [PATCH 1/1] package/qt5webengine: don't use system
+ ICU libraries
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,61 +83,55 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Julien Corjon <corjon.j@ecagroup.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c53455ea4ffaaee050e1e43a3c15fa98324d5235
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Kadir,
 
-In commit ca9e08277c473de1d0119768661ce0ba96559a7a ("package/qt5: bump
-packages to latest kde submodule versions"), the version of Qt5 was
-bumped to 5.15.14. This means that the version of qt5webengine being
-built is now qtwebengine-v5.15.14-lts.tar.bz2.
+On Wed, 25 Oct 2023 23:29:24 +0200
+Kadir Yilmaz <kadir.c.yilmaz@gmail.com> wrote:
 
-However, qt5webengine-chromium is packaging a submodule of
-qtwebengine, so we must keep them in sync, and therefore it should
-have been updated.
+> With the "-webengine-icu" config option qt5webengine uses icu headers
+> on the build host. If (for ubuntu) libicu-dev is not installed on the
+> system, build fails with:
+> 
+> In file included from ../../3rdparty/chromium/v8/src/regexp/gen-regexp-special-case.cc:10:
+> ../../3rdparty/chromium/v8/src/regexp/special-case.h:12:10: fatal error: unicode/uchar.h: No such file or directory
+>    12 | #include "unicode/uchar.h"
+>       |          ^~~~~~~~~~~~~~~~~
+> compilation terminated.
+> 
+> Otherwise, if (for ubuntu) libicu-dev is installed on the system, build
+> fails later at linking stage.
+> 
+> Using icu bundled with qt solves this problem
+> 
+> Signed-off-by: Kadir Yilmaz <kadir.c.yilmaz@gmail.com>
+> ---
+>  package/qt5/qt5webengine/qt5webengine.mk | 1 -
+>  1 file changed, 1 deletion(-)
 
-The current version of qt5webengine-chromium,
-0ad2814370799a2161057d92231fe3ee00e2fe98, was matching with
-5.15.11-lts, but for 5.15.14-lts, we need to use
-18c9261dc5b8aa57a0bdd5b62ce6f648cca1ef5e, as can be seen at:
+I have applied your patch, with an improved commit log, as part of a
+larger set of 13 patches to fix the build of qt5webengine (which now
+builds fine for me on ARM64), with all those fixes. See your final
+commit at:
 
-  https://github.com/qt/qtwebengine/tree/v5.15.14-lts/src (thirdparty submodule)
+ https://gitlab.com/buildroot.org/buildroot/-/commit/ca7cedaa8cab0a0ac0fc48c2f40c4e6a84fb6877
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/qt5/qt5webengine-chromium/qt5webengine-chromium.hash | 2 +-
- package/qt5/qt5webengine-chromium/qt5webengine-chromium.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+If you are able to test the latest master, and report back if
+qt5webengine now works for you, it'd be amazing!
 
-diff --git a/package/qt5/qt5webengine-chromium/qt5webengine-chromium.hash b/package/qt5/qt5webengine-chromium/qt5webengine-chromium.hash
-index 103e27d889..270da153c6 100644
---- a/package/qt5/qt5webengine-chromium/qt5webengine-chromium.hash
-+++ b/package/qt5/qt5webengine-chromium/qt5webengine-chromium.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  14c0654d046fd1faf0204b79e33c091012a8f4df972777e5691875aa75d29a65  qtwebengine-chromium-0ad2814370799a2161057d92231fe3ee00e2fe98.tar.bz2
-+sha256  fb0953b0cc7b980f128d5f66b8345eb4fbf2e05b70db3926958fb657953b64dc  qtwebengine-chromium-18c9261dc5b8aa57a0bdd5b62ce6f648cca1ef5e.tar.bz2
- 
- # Locally calculated with:
- # for i in $(find * -type f \( -iname 'license*' -o -iname 'copying*' -o -name 'APPLE_LICENSE' -o -name 'Copyright' -o -path '*/license_texts/*' -o -path '*/licenses/*' \) -a -not -name '*.cc' -not -name '*.py' -not -name '*.pyc' -not -name '*.h' -not -name 'LICENSE.sha1' -not -name 'licensecheck.pl*' -not -name 'license.after' -not -name 'license.before' -not -path 'chromium/third_party/catapult/*') ; do echo -n "sha256  " ; sha256sum $i ; done | sort --key=3
-diff --git a/package/qt5/qt5webengine-chromium/qt5webengine-chromium.mk b/package/qt5/qt5webengine-chromium/qt5webengine-chromium.mk
-index 2b061815b5..fc48945e0d 100644
---- a/package/qt5/qt5webengine-chromium/qt5webengine-chromium.mk
-+++ b/package/qt5/qt5webengine-chromium/qt5webengine-chromium.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--QT5WEBENGINE_CHROMIUM_VERSION = 0ad2814370799a2161057d92231fe3ee00e2fe98
-+QT5WEBENGINE_CHROMIUM_VERSION = 18c9261dc5b8aa57a0bdd5b62ce6f648cca1ef5e
- QT5WEBENGINE_CHROMIUM_SITE = $(QT5_SITE)/qtwebengine-chromium/-/archive/$(QT5WEBENGINE_CHROMIUM_VERSION)
- QT5WEBENGINE_CHROMIUM_SOURCE = qtwebengine-chromium-$(QT5WEBENGINE_CHROMIUM_VERSION).tar.bz2
- QT5WEBENGINE_CHROMIUM_PATCH_DEPENDENCIES = qt5webengine-chromium-catapult
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
