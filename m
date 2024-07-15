@@ -4,77 +4,89 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C179C3DA59
-	for <buildroot@archiver.kernel.org>; Mon, 15 Jul 2024 21:13:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62236C3DA59
+	for <buildroot@archiver.kernel.org>; Mon, 15 Jul 2024 21:32:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 018FE60831;
-	Mon, 15 Jul 2024 21:13:51 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0B3FB605BE;
+	Mon, 15 Jul 2024 21:32:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FVLiF1jFKGL9; Mon, 15 Jul 2024 21:13:49 +0000 (UTC)
+ id VC9ZSc1jFu6Z; Mon, 15 Jul 2024 21:32:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ED756605E0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1BE5060832
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ED756605E0;
-	Mon, 15 Jul 2024 21:13:48 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id AED5C1BF398
- for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 21:13:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1BE5060832;
+	Mon, 15 Jul 2024 21:32:07 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 9DDD51BF398
+ for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 21:32:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9BA64401DE
- for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 21:13:46 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9716281272
+ for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 21:32:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yPY9SDjxVn-p for <buildroot@lists.busybox.net>;
- Mon, 15 Jul 2024 21:13:45 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Z9CDihdCys-H for <buildroot@lists.busybox.net>;
+ Mon, 15 Jul 2024 21:32:04 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a02:598:128:8a00::1000:a54; helo=mxd-1-a54.seznam.cz;
- envelope-from=havran.jan@email.cz; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 0A3F14019F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0A3F14019F
-Received: from mxd-1-a54.seznam.cz (mxd-1-a54.seznam.cz
- [IPv6:2a02:598:128:8a00::1000:a54])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0A3F14019F
- for <buildroot@buildroot.org>; Mon, 15 Jul 2024 21:13:42 +0000 (UTC)
-Received: from email.seznam.cz by smtpc-mxd-989f5b47-nqqg5
- (smtpc-mxd-989f5b47-nqqg5 [2a02:598:128:8a00::1000:a54])
- id 57700d17d797678a55043379; Mon, 15 Jul 2024 23:13:39 +0200 (CEST)
-Received: from arch-zen.localdomain (havhav.seb.rev-fortech.cz [213.250.223.2])
- by smtpd-relay-74976dd645-vjcdv (szn-email-smtpd/2.0.19) with ESMTPA
- id 3f85fc2c-e949-4028-9f05-2a6aa857f3db;
- Mon, 15 Jul 2024 23:13:37 +0200
-Date: Mon, 15 Jul 2024 23:13:31 +0200
-From: Jan Havran <havran.jan@email.cz>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Message-ID: <ZpWQ--EXTvJfqAOv@arch-zen.localdomain>
-References: <Zm70YkR_roWwY-ms@arch-zen.localdomain>
- <20240711212450.03598fa8@windsurf>
+ client-ip=2607:f8b0:4864:20::92a; helo=mail-ua1-x92a.google.com;
+ envelope-from=alistair23@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org EB207810C7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EB207810C7
+Received: from mail-ua1-x92a.google.com (mail-ua1-x92a.google.com
+ [IPv6:2607:f8b0:4864:20::92a])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id EB207810C7
+ for <buildroot@buildroot.org>; Mon, 15 Jul 2024 21:32:03 +0000 (UTC)
+Received: by mail-ua1-x92a.google.com with SMTP id
+ a1e0cc1a2514c-8100f08b5a8so1492575241.0
+ for <buildroot@buildroot.org>; Mon, 15 Jul 2024 14:32:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1721079122; x=1721683922;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=tOWq9TUdQMAFz25prtBhrueMMN3tUPUqlZ22+cCVuwU=;
+ b=fPCkl3gTGVsJj1DtljQK4CTQXSnBavX5++wDRAOufVtmGwvf5aT2hrqeYCMmM8GHPc
+ 4xtveQgIFM0EHNGMgXbR5nKKJSZI6L/btFX1Dhao2mGt9xXHPR5sniCsrCxh+5IoGt+R
+ UPHZXNxJPqVU/BQvBKvPIIqT42zHHXjk+qEXuEcLh3IZWGXeFDqzk336T3TnklQahVHd
+ H+zDqUn6z/KRdUMTd8BRmOlaMXLT63DPa8Q3X6wnOWs31gRJbc/EKIq9hNvASSk94Szn
+ ko+KyBGzJiDAhSvFTUBAFGus7ixLfAG/YTktc0qe0tFz0HI+V4XwlGEozyIjpk1iVreC
+ rNUQ==
+X-Gm-Message-State: AOJu0YztEgh2LeooiaT7y51gbNLksRDRz6AoYAV4XZT7UBt5GeFDNMSg
+ O8GsNrbna0Al32BQpCLJteNOdc8JM4Fzd2rzpdfi2B3GxGnhGnQZMt76lmgeoLQeco60dhUJKY8
+ Wib6mKeRTDLk8oxMjQh58/hjBgLOQLFKcBws=
+X-Google-Smtp-Source: AGHT+IFyIYbJEKUTKsetYCfmHvmPLP5x9nxZgpQUZxPNKnkje8pxztl8/hdS/v15lz6XftCr9M6Y5ZSziDh/ieATCfs=
+X-Received: by 2002:a05:6122:2019:b0:4ed:53c:e0f6 with SMTP id
+ 71dfb90a1353d-4f4d07cbf53mr291006e0c.8.1721079122474; Mon, 15 Jul 2024
+ 14:32:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20240711212450.03598fa8@windsurf>
+References: <YT2PR01MB4239F7AA538B4C2B46B13D7EF7A12@YT2PR01MB4239.CANPRD01.PROD.OUTLOOK.COM>
+In-Reply-To: <YT2PR01MB4239F7AA538B4C2B46B13D7EF7A12@YT2PR01MB4239.CANPRD01.PROD.OUTLOOK.COM>
+From: Alistair Francis <alistair23@gmail.com>
+Date: Tue, 16 Jul 2024 07:31:36 +1000
+Message-ID: <CAKmqyKNaX0mwdTRdb33X7Rc7VuDwadcm1p_j0-iWEsCJMvBFrA@mail.gmail.com>
+To: Rajnesh Joshi <rajnesh_joshi@sfu.ca>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=email.cz; s=szn20221014; t=1721078019;
- bh=KcJgqig/stn25StLEpJe3ZZwNeEbdEbpGxQrmHNl5wg=;
- h=Received:Date:From:To:Cc:Subject:Message-ID:References:
- MIME-Version:Content-Type:Content-Disposition:
- Content-Transfer-Encoding:In-Reply-To;
- b=BBpaQr0DwMVChbmVPqz+9OKDzCJbX3nvfsiZkbTNXN0qowvDKLjJiozLqSbKzu61Z
- bqFUephGDO7XOxgh2izNjI10THBBH9KjuXlQA7pEUP3XmEnOF91KiV21ilDQV6s3qt
- Dymsj9rYJ9ruhF5Rc2vJ1fXJuzQUKFxD3rRXPLGYTe+nzmJ9CeBd6aAZCF/FFQ9K1M
- wa/6ZBP+Fk9O0XpdnrTy8YBaJfGvrSN+eJ7nudjmG31+iHx0Mwe/Xy8SMr8UKFkNii
- QAeLPcoAZ67TKUBKmiU43WqRLcRiT7lI9WKWQcmF8hpi1OChwT1kqWspODQCd7sk+8
- gd0BT/kFTQgDA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=gmail.com; s=20230601; t=1721079122; x=1721683922; darn=buildroot.org;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=tOWq9TUdQMAFz25prtBhrueMMN3tUPUqlZ22+cCVuwU=;
+ b=dlcad5P/1R1S9uNLa7fMSJMHrXj4kLf1nNr9MA17d5vRCLCNMiQN2O2nBHkgijazPs
+ 06VfZUwTNtjadQ/HAJdZ5U8KAT1FL9Fgmvrql3YCvpRTIpTR+TwN0Zou2cp21CCnepXg
+ UmOt8sfCvlHkIkJJmuFeUXWBqBboe+0eIcV89Iyaz+GM/ylwPI3VZsreyr0SpQw9zSVO
+ G7PfTJ61uhU4hQ4KZ9NJJ6GicU1ORDvScKirMrPttr4Om4/mD8EpFbQUK7s9f41LlHgy
+ YydqORn5fAO7kO97zW0N9Xe1NBp6gc/BLP8Vkl+tw4hkKWnpVpl33vmIx6yM9oEg5bcM
+ w31Q==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=email.cz
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=email.cz header.i=@email.cz header.a=rsa-sha256
- header.s=szn20221014 header.b=BBpaQr0D
-Subject: Re: [Buildroot] [PATCH 1/1] package/ubus: remove obsolete systemd
- option
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=dlcad5P/
+Subject: Re: [Buildroot] 32-bit RISCV build error
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,66 +98,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Sergio Prado <sergio.prado@e-labworks.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Cc: "buildroot@buildroot.org" <buildroot@buildroot.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-V=A0Thu, Jul 11, 2024 at 09:24:50PM +0200,=A0Thomas Petazzoni napsal(a):
-> On Sun, 16 Jun 2024 16:19:14 +0200
-> Jan Havran <havran.jan@email.cz> wrote:
-> =
-
-> > ENABLE_SYSTEMD option has been removed from ubus by commit:
-> > 96ab0b3032f5 ubusd: remove systemd socket activation support
-> > =
-
-> > Signed-off-by: Jan Havran <havran.jan@email.cz>
-> > ---
-> >  package/ubus/ubus.mk | 7 -------
-> >  1 file changed, 7 deletions(-)
-> =
-
-> I've done a bit more research to see from a Buildroot perspective since
-> when this obsolete systemd option has been dropped, and I added the
-> conclusion of this investigation in an improved commit message:
-> =
-
->     package/ubus: remove obsolete systemd option
->     =
-
->     ENABLE_SYSTEMD option has been removed from ubus by upstream commit:
->     =
-
->       96ab0b3032f5 ubusd: remove systemd socket activation support
->     =
-
->     From a Buildroot perspective, this means that this systemd socket
->     activation feature no longer exists since Buildroot commit
->     130be80d34905d3e79ff6b8f8fb31b3c3765eb96 ("ubus: bump version"), as we
->     bumped ubus from 259450f414d8c9ee41896e8e6d6bc57ec00e2b63 to
->     34c6e818e431cc53478a0f7c7c1eca07d194d692 in this commit, and the
->     96ab0b3032f5 ("ubusd: remove systemd socket activation support")
->     commit is in this range. It was therefore dropped upstream in 2016,
->     and in Buildroot in 2017.
-> =
-
-> Applied with this improved commit message. Thanks!
-> =
-
-> Thomas
-
-Oh yes, this message is much better.
-
-Thank you, Thomas!
-
-> -- =
-
-> Thomas Petazzoni, CTO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+T24gVHVlLCBKdWwgMTYsIDIwMjQgYXQgNjo1OeKAr0FNIFJham5lc2ggSm9zaGkgPHJham5lc2hf
+am9zaGlAc2Z1LmNhPiB3cm90ZToKPgo+IEkgYW0gcmVzZW5kaW5nIHRoaXMgZW1haWwgYXMgQnVp
+bGRyb290IEF1dG9tYXRlZCBFbWFpbCB0b2xkIG1lIHRoYXQgSSB3YXMgbm90IHN1YnNjcmliZWQg
+dG8gdGhlIG1haWxpbmcgbGlzdCwgYW5kIHRoZXJlZm9yZSwgY291bGQgbm90IHNlbmQgdG8gaXQu
+IEkgZG91YmxlLWNoZWNrZWQsIGFuZCBJIGFtIGEgcGFydCBvZiB0aGUgbWFpbGluZyBsaXN0LCBi
+dXQgdGhpcyBlbWFpbCB0ZWNobmljYWxseSBoYXMgdHdvIGFsaWFzZXMgc28gSSBhZGRlZCB0aGUg
+b3RoZXIgb25lLiBMZXQncyB0cnkgdGhpcyBhZ2Fpbi4gU29ycnkgZm9yIHRoZSBkb3VibGUgbWVz
+c2FnZSBpbiBjYXNlLgo+Cj4gRGVhciBNYWlsaW5nIExpc3QgUmVhZGVycywKPgo+IEkgYW0gdHJ5
+aW5nIHRvIGJ1aWxkIGEgMzItYml0IExpbnV4IEtlcm5lbCB1c2luZyB0aGUgdWNsaWJjIGxpYnJh
+cnkgZm9yIGEgc29mdC1jb3JlIENQVSwgdXNpbmcgYSBjdXN0b20gTGludXggZm9yay4KPgo+IElu
+IG15IC5jb25maWcsIEkgaGF2ZSB0aGUgZm9sbG93aW5nIGxpbmVzOiBCUjJfVE9PTENIQUlOX0dD
+Q19BVF9MRUFTVF8xMj15IHdoaWNoIEkgYmVsaWV2ZSBpcyB0aGUgcGF0Y2ggZm9yIHRoaXMgaXNz
+dWUsIGJ1dCBpdCBpcyBub3Qgd29ya2luZyBmb3Igc29tZSByZWFzb24uCj4KPiBJIGFtIGdldHRp
+bmcgdGhlIGZvbGxvd2luZyBlcnJvcnMgd2hlbiBCdWlsZHJvb3QgY29tcGxldGVzIGRvd25sb2Fk
+aW5nIHRoZSBMaW51eCBLZXJuZWwgYW5kIGJlZ2lucyBidWlsZGluZyB0aGUgTGludXgga2VybmVs
+Lgo+Cj4KPgo+IFRvIHByb3ZpZGUgbW9yZSBjb250ZXh0LCBoZXJlIGlzIG15IGRlZmNvbmZpZyBm
+b3IgdGhlICJib2FyZC4iCj4KPiBCUjJfcmlzY3Y9eQo+IEJSMl9yaXNjdl9jdXN0b209eQoKVGhl
+IHByb2JsZW0gaXMgdGhhdCB5b3UgYXJlbid0IHVzaW5nIFJWMzJHLCBzbyB5b3UgbmVlZCB0byBt
+YW51YWxseQpzYXkgeW91IHN1cHBvcnQgdGhlIFppQ3NyIGFuZCB0aGUgWmlmZW5jZWkgZXh0ZW5z
+aW9ucy4KClNlZSBodHRwczovL2dpdGh1Yi5jb20vcmlzY3YtY29sbGFiL3Jpc2N2LWdudS10b29s
+Y2hhaW4vaXNzdWVzLzEyNjIKZm9yIGFuIGV4YW1wbGUgb2YgaG93IHRvIGRvIHRoaXMuCgpJJ20g
+bm90IHN1cmUgaG93IHlvdSBjYW4gZG8gaXQgd2l0aCBidWlsZHJvb3QgdGhvdWdoLiBZb3UgbWln
+aHQgbmVlZAp0byBwYXRjaCBidWlsZHJvb3QgdG8gYWxsb3cgc3BlY2lmeWluZyBjdXN0b20gZXh0
+ZW5zaW9ucwoKQWxpc3RhaXIKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpo
+dHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
