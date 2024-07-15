@@ -4,48 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 75FE7C3DA4B
-	for <buildroot@archiver.kernel.org>; Mon, 15 Jul 2024 12:41:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA3FEC3DA59
+	for <buildroot@archiver.kernel.org>; Mon, 15 Jul 2024 12:41:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 428DB4043D;
-	Mon, 15 Jul 2024 12:41:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A1F3A40609;
+	Mon, 15 Jul 2024 12:41:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id p2lw4_wixy_B; Mon, 15 Jul 2024 12:41:24 +0000 (UTC)
+ id kyZX-VEmiEML; Mon, 15 Jul 2024 12:41:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0D29A4069A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 64FB7405DE
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0D29A4069A;
-	Mon, 15 Jul 2024 12:41:24 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id BBDBE1BF3B8
- for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 12:40:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 64FB7405DE;
+	Mon, 15 Jul 2024 12:41:48 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 1A4EE1BF3B8
+ for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 12:41:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4B59460806
- for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 12:40:58 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 125A5405F9
+ for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 12:41:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fltpnvkt_GTd for <buildroot@lists.busybox.net>;
- Mon, 15 Jul 2024 12:40:57 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id CfqB3MK2zsjf for <buildroot@lists.busybox.net>;
+ Mon, 15 Jul 2024 12:41:45 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::222;
+ helo=relay2-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7372C6080B
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7372C6080B
- for <buildroot@buildroot.org>; Mon, 15 Jul 2024 12:40:57 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5FF1086BA6; Mon, 15 Jul 2024 12:40:57 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 15 Jul 2024 14:37:51 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c0734f68612b39e5dc863cbc8262afbb6af07e93
-X-Git-Newrev: 54c92715dd2293c8e649a619ddfaa6b036b4b3a4
-X-Patchwork-Hint: ignore
-Message-Id: <20240715124057.5FF1086BA6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gnupg2: add host variant
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 486C6405DE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 486C6405DE
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 486C6405DE
+ for <buildroot@buildroot.org>; Mon, 15 Jul 2024 12:41:45 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 7614B40003;
+ Mon, 15 Jul 2024 12:41:43 +0000 (UTC)
+Date: Mon, 15 Jul 2024 14:41:41 +0200
+To: Ben Hutchings via buildroot <buildroot@buildroot.org>
+Message-ID: <20240715144141.19dc5350@windsurf>
+In-Reply-To: <e73a9bd517211d64f4c0c167a57b2e578665131d.1712957992.git.ben.hutchings@mind.be>
+References: <cover.1712957992.git.ben.hutchings@mind.be>
+ <e73a9bd517211d64f4c0c167a57b2e578665131d.1712957992.git.ben.hutchings@mind.be>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1721047303;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=00F9wq+Z5pbUqW+1K7/9kyNH6wwnlgN4vlFqffuJRII=;
+ b=YxevFoLDU3cuw6OWLjZ3nxorsrNLxLiS5YdumCmw2Bj7cWHvGqIxs8qlptUSKRGwrntmLv
+ t7Ki6o8HZubNBsclo6ty+20fscPe5+8JVSvxqsQnWVjWisZjuPsPjwBgQsvx2nCbnzRE8E
+ mpMhrQbAwoo4tTlPyJ+d+7Q4g8RoIwzwvItpdkF89bIaBSldF2yaS7iSgaX2N8COlTjOVY
+ 8VNlClJDmzo9d4pF5LgoBKDvolU/mYd+367NXWwiEUqF5J7W85PFiTSu9G2Hw26GfjncFZ
+ YOilsCkHW03gmgxSU/xztga91IIvG8A2HPfZzJBzX5nmuDOHG+Tuwuvlrlx2FQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=YxevFoLD
+Subject: Re: [Buildroot] [PATCH 6/6] package/gnupg2: Add host package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,95 +83,39 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Ben Hutchings <ben.hutchings@mind.be>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=54c92715dd2293c8e649a619ddfaa6b036b4b3a4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Fri, 12 Apr 2024 23:43:10 +0200
+Ben Hutchings via buildroot <buildroot@buildroot.org> wrote:
 
-Signed-off-by: Ben Hutchings <ben.hutchings@mind.be>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/Config.in.host        |  1 +
- package/gnupg2/Config.in.host | 13 +++++++++++++
- package/gnupg2/gnupg2.mk      | 16 ++++++++++++++++
- 3 files changed, 30 insertions(+)
+> +HOST_GNUPG2_CONF_OPTS = \
+> +	--with-gpg-error-prefix=$(HOST_DIR) \
+> +	--with-libgcrypt-prefix=$(HOST_DIR) \
+> +	--with-libassuan-prefix=$(HOST_DIR) \
+> +	--with-ksba-prefix=$(HOST_DIR) \
+> +	--with-npth-prefix=$(HOST_DIR)
 
-diff --git a/package/Config.in.host b/package/Config.in.host
-index 5843210d10..4340e6e8c9 100644
---- a/package/Config.in.host
-+++ b/package/Config.in.host
-@@ -43,6 +43,7 @@ menu "Host utilities"
- 	source "package/genimage/Config.in.host"
- 	source "package/genpart/Config.in.host"
- 	source "package/gnupg/Config.in.host"
-+	source "package/gnupg2/Config.in.host"
- 	source "package/go/Config.in.host"
- 	source "package/google-breakpad/Config.in.host"
- 	source "package/gptfdisk/Config.in.host"
-diff --git a/package/gnupg2/Config.in.host b/package/gnupg2/Config.in.host
-new file mode 100644
-index 0000000000..c636cbee8b
---- /dev/null
-+++ b/package/gnupg2/Config.in.host
-@@ -0,0 +1,13 @@
-+config BR2_PACKAGE_HOST_GNUPG2
-+	bool "host gnupg2"
-+	depends on !BR2_PACKAGE_HOST_GNUPG
-+	help
-+	  GnuPG is the GNU project's complete and free implementation
-+	  of the OpenPGP standard as defined by RFC4880. GnuPG allows
-+	  to encrypt and sign your data and communication, features a
-+	  versatile key management system as well as access modules
-+	  for all kinds of public key directories. GnuPG, also known
-+	  as GPG, is a command line tool with features for easy
-+	  integration with other applications.
-+
-+	  http://gnupg.org/
-diff --git a/package/gnupg2/gnupg2.mk b/package/gnupg2/gnupg2.mk
-index 39b0a066f6..d38aaeec1a 100644
---- a/package/gnupg2/gnupg2.mk
-+++ b/package/gnupg2/gnupg2.mk
-@@ -14,6 +14,8 @@ GNUPG2_CPE_ID_PRODUCT = gnupg
- GNUPG2_SELINUX_MODULES = gpg
- GNUPG2_DEPENDENCIES = zlib libgpg-error libgcrypt libassuan libksba libnpth \
- 	$(if $(BR2_PACKAGE_LIBICONV),libiconv) host-pkgconf
-+HOST_GNUPG2_DEPENDENCIES = host-zlib host-libgpg-error host-libgcrypt host-libassuan \
-+	host-libksba host-libnpth host-pkgconf
- 
- GNUPG2_CONF_OPTS = \
- 	--disable-rpath \
-@@ -23,9 +25,22 @@ GNUPG2_CONF_OPTS = \
- 	--with-ksba-prefix=$(STAGING_DIR)/usr \
- 	--with-npth-prefix=$(STAGING_DIR)/usr
- 
-+HOST_GNUPG2_CONF_OPTS = \
-+	--with-gpg-error-prefix=$(HOST_DIR) \
-+	--with-libgcrypt-prefix=$(HOST_DIR) \
-+	--with-libassuan-prefix=$(HOST_DIR) \
-+	--with-ksba-prefix=$(HOST_DIR) \
-+	--with-npth-prefix=$(HOST_DIR) \
-+	--disable-bzip2 \
-+	--disable-gnutls \
-+	--disable-ccid-driver \
-+	--without-readline \
-+	--disable-sqlite
-+
- # Force the path to "gpgrt-config" (from the libgpg-error package) to
- # avoid using the one on host, if present.
- GNUPG2_CONF_ENV += GPGRT_CONFIG=$(STAGING_DIR)/usr/bin/gpgrt-config
-+HOST_GNUPG2_CONF_ENV += GPGRT_CONFIG=$(HOST_DIR)/bin/gpgrt-config
- 
- ifneq ($(BR2_PACKAGE_GNUPG2_GPGV),y)
- define GNUPG2_REMOVE_GPGV
-@@ -71,3 +86,4 @@ GNUPG2_CONF_OPTS += --disable-sqlite
- endif
- 
- $(eval $(autotools-package))
-+$(eval $(host-autotools-package))
+I've added a whole bunch of --disable/--without to disable optional
+features that we don't support in the host package, to avoid the
+./configure from mistakenly detecting stuff provided by the system:
+
++       --disable-bzip2 \
++       --disable-gnutls \
++       --disable-ccid-driver \
++       --without-readline \
++       --disable-sqlite
+
+Applied with this change. Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
