@@ -4,48 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A126BC3DA5D
-	for <buildroot@archiver.kernel.org>; Mon, 15 Jul 2024 10:15:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36AB1C3DA59
+	for <buildroot@archiver.kernel.org>; Mon, 15 Jul 2024 10:15:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5D3B1405F9;
-	Mon, 15 Jul 2024 10:15:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0128440551;
+	Mon, 15 Jul 2024 10:15:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yAJEK-UDsPz2; Mon, 15 Jul 2024 10:15:06 +0000 (UTC)
+ id rP-1BE9YHwz5; Mon, 15 Jul 2024 10:15:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D58C7405FA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4DF2B405F7
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D58C7405FA;
-	Mon, 15 Jul 2024 10:15:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4DF2B405F7;
+	Mon, 15 Jul 2024 10:15:10 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D212F1BF3FF
- for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 10:14:28 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id E19DE1BF3FF
+ for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 10:14:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4A06A80D8D
+ by smtp1.osuosl.org (Postfix) with ESMTP id AC43880D91
  for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 10:14:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7IWjlzGQeIGM for <buildroot@lists.busybox.net>;
+ id G6miXXvshFrr for <buildroot@lists.busybox.net>;
  Mon, 15 Jul 2024 10:14:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5751B80D91
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CB44A80DC8
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5751B80D91
+ by smtp1.osuosl.org (Postfix) with ESMTP id CB44A80DC8
  for <buildroot@buildroot.org>; Mon, 15 Jul 2024 10:14:24 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4D20686C44; Mon, 15 Jul 2024 10:14:24 +0000 (UTC)
+ id 7665986C43; Mon, 15 Jul 2024 10:14:24 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 15 Jul 2024 12:13:59 +0200
+Date: Mon, 15 Jul 2024 12:14:00 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3c998848b4c75601f8e55a886d79b4d51bb6f83f
-X-Git-Newrev: 33b5412b7869bba90ffc63fa00da763a64c981a8
+X-Git-Oldrev: 33b5412b7869bba90ffc63fa00da763a64c981a8
+X-Git-Newrev: c53455ea4ffaaee050e1e43a3c15fa98324d5235
 X-Patchwork-Hint: ignore
-Message-Id: <20240715101424.4D20686C44@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/qt5/qt5webengine: use bundled re2
+Message-Id: <20240715101424.7665986C43@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/qt5/qt5webengine-chromium: bump
+ version after qtwebengine bump
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,102 +66,55 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=33b5412b7869bba90ffc63fa00da763a64c981a8
+commit: https://git.buildroot.net/buildroot/commit/?id=c53455ea4ffaaee050e1e43a3c15fa98324d5235
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When we use Buildroot's re2 package to build qt5webengine, there is an
-issue at link time as the qt5webengine mistakenly uses the abseil-cpp
-headers of its built-in copy rather than the ones of our abseil-cpp
-library, built as a dependency of re2. However, we build our
-abseil-cpp differently than the one bundled, and that causes some
-conflicts.
+In commit ca9e08277c473de1d0119768661ce0ba96559a7a ("package/qt5: bump
+packages to latest kde submodule versions"), the version of Qt5 was
+bumped to 5.15.14. This means that the version of qt5webengine being
+built is now qtwebengine-v5.15.14-lts.tar.bz2.
 
-Since teaching Chromium's build system to not use its own abseil-cpp
-headers is an adventure we'd rather not engage into, we fallback to
-use the bundled re2.
+However, qt5webengine-chromium is packaging a submodule of
+qtwebengine, so we must keep them in sync, and therefore it should
+have been updated.
 
-Therefore, we drop in Config.in all dependencies that were inherited
-from Buildroot's re2 package. This warrants a few comments:
+The current version of qt5webengine-chromium,
+0ad2814370799a2161057d92231fe3ee00e2fe98, was matching with
+5.15.11-lts, but for 5.15.14-lts, we need to use
+18c9261dc5b8aa57a0bdd5b62ce6f648cca1ef5e, as can be seen at:
 
-- BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS should be dropped because
-  the list of architectures supported by our Buildroot abseil-cpp
-  package may be different than the set of architectures supported by
-  the bundled abseil-cpp in Chromium. In addition, the list of
-  architectures in BR2_PACKAGE_QT5WEBENGINE_ARCH_SUPPORTS is also a
-  very limited subset of BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS, so
-  this change will not expose the build of qt5webengine to additional
-  architectures.
-
-- We're dropping BR2_TOOLCHAIN_GCC_AT_LEAST_8 because it was inherited
-  from re2. The main qt5 package anyway depends on gcc >= 5.x. We will
-  figure out thanks to the autobuilders exactly which gcc version is
-  needed.
+  https://github.com/qt/qtwebengine/tree/v5.15.14-lts/src (thirdparty submodule)
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/qt5/qt5webengine/Config.in       | 9 ++-------
- package/qt5/qt5webengine/qt5webengine.mk | 2 --
- 2 files changed, 2 insertions(+), 9 deletions(-)
+ package/qt5/qt5webengine-chromium/qt5webengine-chromium.hash | 2 +-
+ package/qt5/qt5webengine-chromium/qt5webengine-chromium.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/qt5/qt5webengine/Config.in b/package/qt5/qt5webengine/Config.in
-index 57cbe301f0..28786bd2c8 100644
---- a/package/qt5/qt5webengine/Config.in
-+++ b/package/qt5/qt5webengine/Config.in
-@@ -9,13 +9,11 @@ config BR2_PACKAGE_QT5WEBENGINE_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE # qt5declarative
- 	depends on !BR2_BINFMT_FLAT # qt5base-icu
- 	depends on BR2_USE_MMU # libglib2, qt5base-dbus
--	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS # re2
+diff --git a/package/qt5/qt5webengine-chromium/qt5webengine-chromium.hash b/package/qt5/qt5webengine-chromium/qt5webengine-chromium.hash
+index 103e27d889..270da153c6 100644
+--- a/package/qt5/qt5webengine-chromium/qt5webengine-chromium.hash
++++ b/package/qt5/qt5webengine-chromium/qt5webengine-chromium.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  14c0654d046fd1faf0204b79e33c091012a8f4df972777e5691875aa75d29a65  qtwebengine-chromium-0ad2814370799a2161057d92231fe3ee00e2fe98.tar.bz2
++sha256  fb0953b0cc7b980f128d5f66b8345eb4fbf2e05b70db3926958fb657953b64dc  qtwebengine-chromium-18c9261dc5b8aa57a0bdd5b62ce6f648cca1ef5e.tar.bz2
  
--comment "qt5webengine needs udev /dev management and a glibc toolchain w/ gcc >= 8, host gcc >= 4.9, dynamic library, threads, wchar"
-+comment "qt5webengine needs udev /dev management and a glibc toolchain w/ host gcc >= 4.9, threads, wchar"
- 	depends on BR2_PACKAGE_QT5WEBENGINE_ARCH_SUPPORTS
- 	depends on !BR2_PACKAGE_HAS_UDEV || !BR2_TOOLCHAIN_USES_GLIBC || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_8 || \
--		!BR2_HOST_GCC_AT_LEAST_4_9 || BR2_STATIC_LIBS || \
-+		!BR2_HOST_GCC_AT_LEAST_4_9 || \
- 		!BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
+ # Locally calculated with:
+ # for i in $(find * -type f \( -iname 'license*' -o -iname 'copying*' -o -name 'APPLE_LICENSE' -o -name 'Copyright' -o -path '*/license_texts/*' -o -path '*/licenses/*' \) -a -not -name '*.cc' -not -name '*.py' -not -name '*.pyc' -not -name '*.h' -not -name 'LICENSE.sha1' -not -name 'licensecheck.pl*' -not -name 'license.after' -not -name 'license.before' -not -path 'chromium/third_party/catapult/*') ; do echo -n "sha256  " ; sha256sum $i ; done | sort --key=3
+diff --git a/package/qt5/qt5webengine-chromium/qt5webengine-chromium.mk b/package/qt5/qt5webengine-chromium/qt5webengine-chromium.mk
+index 2b061815b5..fc48945e0d 100644
+--- a/package/qt5/qt5webengine-chromium/qt5webengine-chromium.mk
++++ b/package/qt5/qt5webengine-chromium/qt5webengine-chromium.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- comment "qt5webengine needs an OpenGL and EGL-capable backend"
-@@ -25,10 +23,8 @@ comment "qt5webengine needs an OpenGL and EGL-capable backend"
- config BR2_PACKAGE_QT5WEBENGINE
- 	bool "qt5webengine"
- 	depends on BR2_PACKAGE_QT5WEBENGINE_ARCH_SUPPORTS
--	depends on !BR2_STATIC_LIBS # re2
- 	depends on BR2_TOOLCHAIN_USES_GLIBC # execinfo.h, mallinfo
- 	depends on BR2_HOST_GCC_AT_LEAST_4_9 # qt5base-icu
--	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # re2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2, libvpx, qt5base-dbus
- 	depends on BR2_USE_WCHAR # libglib2
- 	depends on BR2_PACKAGE_QT5_GL_AVAILABLE # qt5declarative, qt5base-eglfs
-@@ -50,7 +46,6 @@ config BR2_PACKAGE_QT5WEBENGINE
- 	select BR2_PACKAGE_LIBXSLT
- 	select BR2_PACKAGE_MINIZIP
- 	select BR2_PACKAGE_OPUS
--	select BR2_PACKAGE_RE2
- 	select BR2_PACKAGE_SNAPPY
- 	select BR2_PACKAGE_WEBP
- 	select BR2_PACKAGE_WEBP_DEMUX
-diff --git a/package/qt5/qt5webengine/qt5webengine.mk b/package/qt5/qt5webengine/qt5webengine.mk
-index bccd460aa7..529a83df6c 100644
---- a/package/qt5/qt5webengine/qt5webengine.mk
-+++ b/package/qt5/qt5webengine/qt5webengine.mk
-@@ -78,7 +78,6 @@ QT5WEBENGINE_DEPENDENCIES += \
- 	libvpx \
- 	libxml2 \
- 	libxslt \
--	re2 \
- 	snappy \
- 	webp
- 
-@@ -104,7 +103,6 @@ QT5WEBENGINE_CONF_OPTS += \
- 	-feature-webengine-system-ninja \
- 	-feature-webengine-system-nss \
- 	-feature-webengine-system-png \
--	-feature-webengine-system-re2 \
- 	-feature-webengine-system-snappy \
- 	-feature-webengine-system-zlib
- 
+-QT5WEBENGINE_CHROMIUM_VERSION = 0ad2814370799a2161057d92231fe3ee00e2fe98
++QT5WEBENGINE_CHROMIUM_VERSION = 18c9261dc5b8aa57a0bdd5b62ce6f648cca1ef5e
+ QT5WEBENGINE_CHROMIUM_SITE = $(QT5_SITE)/qtwebengine-chromium/-/archive/$(QT5WEBENGINE_CHROMIUM_VERSION)
+ QT5WEBENGINE_CHROMIUM_SOURCE = qtwebengine-chromium-$(QT5WEBENGINE_CHROMIUM_VERSION).tar.bz2
+ QT5WEBENGINE_CHROMIUM_PATCH_DEPENDENCIES = qt5webengine-chromium-catapult
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
