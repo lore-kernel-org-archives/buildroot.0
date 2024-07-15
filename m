@@ -4,72 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ACA9AC3DA59
-	for <buildroot@archiver.kernel.org>; Mon, 15 Jul 2024 10:15:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A226C3DA59
+	for <buildroot@archiver.kernel.org>; Mon, 15 Jul 2024 10:16:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 53ED640352;
-	Mon, 15 Jul 2024 10:15:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 083C74054E;
+	Mon, 15 Jul 2024 10:16:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id k68yhzu43bUx; Mon, 15 Jul 2024 10:15:45 +0000 (UTC)
+ id JwRBq4dsxdnk; Mon, 15 Jul 2024 10:16:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 06D52404D5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B59F4405D1
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 06D52404D5;
-	Mon, 15 Jul 2024 10:15:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B59F4405D1;
+	Mon, 15 Jul 2024 10:16:15 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A30B51BF3FF
- for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 10:15:43 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B5DB91BF3FF
+ for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 10:16:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8E60C80F26
- for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 10:15:43 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id AFCDC80F26
+ for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 10:16:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lucnk8WPsHs3 for <buildroot@lists.busybox.net>;
- Mon, 15 Jul 2024 10:15:42 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::227;
- helo=relay7-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 44D0980F0E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 44D0980F0E
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 44D0980F0E
- for <buildroot@buildroot.org>; Mon, 15 Jul 2024 10:15:41 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 7142720004;
- Mon, 15 Jul 2024 10:15:38 +0000 (UTC)
-Date: Mon, 15 Jul 2024 12:15:36 +0200
-To: Kadir Yilmaz <kadir.c.yilmaz@gmail.com>
-Message-ID: <20240715121536.1db28c1e@windsurf>
-In-Reply-To: <20231025212924.1957581-1-kadir.c.yilmaz@gmail.com>
-References: <20231025212924.1957581-1-kadir.c.yilmaz@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+ id 1iWQ8fDeqW80 for <buildroot@lists.busybox.net>;
+ Mon, 15 Jul 2024 10:16:13 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::52c; helo=mail-ed1-x52c.google.com;
+ envelope-from=fred.lefranc.evs@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 2269580F0E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2269580F0E
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com
+ [IPv6:2a00:1450:4864:20::52c])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2269580F0E
+ for <buildroot@buildroot.org>; Mon, 15 Jul 2024 10:16:12 +0000 (UTC)
+Received: by mail-ed1-x52c.google.com with SMTP id
+ 4fb4d7f45d1cf-58b966b41fbso5033210a12.1
+ for <buildroot@buildroot.org>; Mon, 15 Jul 2024 03:16:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1721038571; x=1721643371;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=KfqDGastLDmH1FwhWvYoUMpDBsRsg4jt/DoFBVPpzlQ=;
+ b=IcQbZ1fmnLjQyYXvlBN7yJ7Zj97+k505n+v0om711F8eq842QzmhESblYSZn7cmYk3
+ AmXhPZ/EJzy7Ny/2y8XlLBItdk0YgTkpAEbXhv9oy1XYAmCcHt6V4TXIPReweZg7daAY
+ YdnELh/cLHv0H7bKUmoMAZT2qaPQ9dZS0R3IY1uo5xVjmgjXKbcECrQtsNSvUtL7Vu+S
+ wG3lu6lXYNdeU+Z/PtJlYPBySe9Mn1aDHOzkDt6T1PJRtmmzsu3N7pXIgkMRZ4Mdar1c
+ PnWFY+Tm0vw5mjUngDRBCs8bJYN72hwYHioQ6SHk7VWpl8cPNr5MGJV5N0Z88F2kmsAm
+ pQiA==
+X-Gm-Message-State: AOJu0YwvhDWJUuM0PjIB6OvBUui/umpUdg4jXwkexGAnKUgwOL0iauwA
+ OFkfQshSQ+waNS+QKzomdW+jmosC0fEp+C1a7gAPco9m+48VKOd4Kb5iSw==
+X-Google-Smtp-Source: AGHT+IGEq2gPrHk0ovpU/Bc3z+w7rQkutAur7S/dNMzBI7xqV1jUCjziB0q/e+qq8hu+rJdk5k3ZFg==
+X-Received: by 2002:a05:6402:1909:b0:57a:2eff:8ae with SMTP id
+ 4fb4d7f45d1cf-594ba9974edmr14857754a12.1.1721038570575; 
+ Mon, 15 Jul 2024 03:16:10 -0700 (PDT)
+Received: from hw-dev-vm01.evs.tv ([212.222.125.68])
+ by smtp.gmail.com with ESMTPSA id
+ 4fb4d7f45d1cf-59b25528069sm3218267a12.50.2024.07.15.03.16.09
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 15 Jul 2024 03:16:10 -0700 (PDT)
+From: Fred Lefranc <fred.lefranc.evs@gmail.com>
+X-Google-Original-From: Fred Lefranc <fred.lefranc+evs@gmail.com>
+To: buildroot@buildroot.org
+Date: Mon, 15 Jul 2024 12:16:06 +0200
+Message-Id: <20240715101607.1288233-1-fred.lefranc+evs@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1721038539;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=/lLzxtbwhZqvkzZNZJEDUYtqlzLIY5HiXAoCbDNClKw=;
- b=L+PQowV/6r8478LQ3sC4D+a66dRxdV4znixlLosO0EEogNCCRAVbZKMljoVxuow7UNe664
- xj+tYJrfsCY/hE6wmDgTsYSibjMeTH5fsalQyPAPSA1HRXw3qeXAnfhy3pendjrI+eKEyH
- KmlzEbm2q3CVdyIYwwvovKMqWe2zbT1OHEdfWgoUF6T7pJqo5oP0HsE4++Dx+O5yhnZ1Nx
- U2MGFtC35li+40fefZ11FKxVaNJTT1r1qhSD3bdzQWi4uEuvgcyulw6q0MiyWA4nBkYthI
- bwmbWwiCRDQFA99wqZQmdyWg/Gc1br9zathE34smv3ZJbFzMXDO0u8r5+E6wug==
+ d=gmail.com; s=20230601; t=1721038571; x=1721643371; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=KfqDGastLDmH1FwhWvYoUMpDBsRsg4jt/DoFBVPpzlQ=;
+ b=F5dKiHHrSaIP9Xyw//VB3/6cHu7KEm3vjurffmDVVJGX1ZKbwKCG4YoA6Sol7BsM9i
+ pNH3FEwfMugsanHfxE6ZOoeGSIwXBFZipnt7UJy1fIfPIm7R2HJiLXpD/7IH21igsuXb
+ QiteXyzwpYF78yrwzv+eE/oZLjgF3oXEdzZ3+kGzQ1sTEKbM9IUMj4A+EX4sY4VdoYuf
+ FnUvMyTlZt3ja2MU2GoBY8Zs62KQfWHENbJOMvpY2Q6ODPgLYCekJV5Zbf5kAsAGPYZ+
+ s1YA5egut5nOKg8IJhHqBKHsJzPKw775DncY/Ywh5txn6Va59+zvS+kSj92rkFXjJKAl
+ Drhw==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=L+PQowV/
-Subject: Re: [Buildroot] [PATCH 1/1] package/qt5webengine: don't use system
- ICU libraries
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=F5dKiHHr
+Subject: [Buildroot] [PATCH] package/busybox: fix build with glibc 2.39
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,57 +100,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Julien Corjon <corjon.j@ecagroup.com>, buildroot@buildroot.org
+Cc: Fred Lefranc <fred.lefranc+evs@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Kadir,
+When glibc was bumped to version 2.39 in commit
+b5680f53d60acf8ff6010082f873438a39bd5d97 it removed the deprecated
+libcrypt support.
 
-On Wed, 25 Oct 2023 23:29:24 +0200
-Kadir Yilmaz <kadir.c.yilmaz@gmail.com> wrote:
+As glibc's libcrypt was providing systemd's libcrypt dependency this
+broke any systemd build using glibc version 2.39.
 
-> With the "-webengine-icu" config option qt5webengine uses icu headers
-> on the build host. If (for ubuntu) libicu-dev is not installed on the
-> system, build fails with:
-> 
-> In file included from ../../3rdparty/chromium/v8/src/regexp/gen-regexp-special-case.cc:10:
-> ../../3rdparty/chromium/v8/src/regexp/special-case.h:12:10: fatal error: unicode/uchar.h: No such file or directory
->    12 | #include "unicode/uchar.h"
->       |          ^~~~~~~~~~~~~~~~~
-> compilation terminated.
-> 
-> Otherwise, if (for ubuntu) libicu-dev is installed on the system, build
-> fails later at linking stage.
-> 
-> Using icu bundled with qt solves this problem
-> 
-> Signed-off-by: Kadir Yilmaz <kadir.c.yilmaz@gmail.com>
-> ---
->  package/qt5/qt5webengine/qt5webengine.mk | 1 -
->  1 file changed, 1 deletion(-)
+To fix this add the libxcrypt dependency to busybox which is the
+preferred way of providing libcrypt support in busybox as the glibc
+variant is only used as a fallback due to being deprecated.
 
-I have applied your patch, with an improved commit log, as part of a
-larger set of 13 patches to fix the build of qt5webengine (which now
-builds fine for me on ARM64), with all those fixes. See your final
-commit at:
+Signed-off-by: Fred Lefranc <fred.lefranc+evs@gmail.com>
+---
+ package/busybox/Config.in  | 1 +
+ package/busybox/busybox.mk | 4 ++++
+ 2 files changed, 5 insertions(+)
 
- https://gitlab.com/buildroot.org/buildroot/-/commit/ca7cedaa8cab0a0ac0fc48c2f40c4e6a84fb6877
-
-If you are able to test the latest master, and report back if
-qt5webengine now works for you, it'd be amazing!
-
-Thanks!
-
-Thomas
+diff --git a/package/busybox/Config.in b/package/busybox/Config.in
+index 3c2aa515f8..85fa0c7f9a 100644
+--- a/package/busybox/Config.in
++++ b/package/busybox/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_BUSYBOX
+ 	bool "BusyBox"
+ 	default y
++	select BR2_PACKAGE_LIBXCRYPT if BR2_TOOLCHAIN_USES_GLIBC
+ 	help
+ 	  The Swiss Army Knife of embedded Linux. It slices, it dices,
+ 	  it makes Julian Fries.
+diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
+index eb5e7ad922..d014b3d275 100644
+--- a/package/busybox/busybox.mk
++++ b/package/busybox/busybox.mk
+@@ -164,6 +164,10 @@ define BUSYBOX_SET_MDEV
+ endef
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBXCRYPT)$(BR2_TOOLCHAIN_USES_GLIBC),yy)
++	BUSYBOX_DEPENDENCIES += libxcrypt
++endif
++
+ # sha passwords need USE_BB_CRYPT_SHA
+ ifeq ($(BR2_TARGET_GENERIC_PASSWD_SHA256)$(BR2_TARGET_GENERIC_PASSWD_SHA512),y)
+ define BUSYBOX_SET_CRYPT_SHA
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.25.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
