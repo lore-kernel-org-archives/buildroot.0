@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06F40C3DA4A
-	for <buildroot@archiver.kernel.org>; Mon, 15 Jul 2024 14:48:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9A4B9C3DA4B
+	for <buildroot@archiver.kernel.org>; Mon, 15 Jul 2024 14:48:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C0B11400D8;
-	Mon, 15 Jul 2024 14:48:16 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E4D2F40976;
+	Mon, 15 Jul 2024 14:48:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XZaGiCsslsVX; Mon, 15 Jul 2024 14:48:15 +0000 (UTC)
+ id fxuR04hUVJGg; Mon, 15 Jul 2024 14:48:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7B18B403FC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 683DC40965
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7B18B403FC;
-	Mon, 15 Jul 2024 14:48:15 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id BE5351BF3AD
- for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 14:48:13 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 683DC40965;
+	Mon, 15 Jul 2024 14:48:18 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 328371BF3AD
+ for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 14:48:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id AA6F58113D
- for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 14:48:13 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1FAA7408AD
+ for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 14:48:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id n1ig8TjXTQJS for <buildroot@lists.busybox.net>;
- Mon, 15 Jul 2024 14:48:12 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id CTJ3Tzjxw-We for <buildroot@lists.busybox.net>;
+ Mon, 15 Jul 2024 14:48:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DB7D781130
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 13E87403FC
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id DB7D781130
- for <buildroot@buildroot.org>; Mon, 15 Jul 2024 14:48:12 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 13E87403FC
+ for <buildroot@buildroot.org>; Mon, 15 Jul 2024 14:48:13 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CA3E786D04; Mon, 15 Jul 2024 14:48:12 +0000 (UTC)
+ id EE56586D05; Mon, 15 Jul 2024 14:48:12 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 15 Jul 2024 16:44:19 +0200
+Date: Mon, 15 Jul 2024 16:44:38 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ebccc2130379708daba70dfdcc5269c6eadf08e3
-X-Git-Newrev: ae1ddbabc933fd8d3447c47293bebb9ad06427ae
+X-Git-Oldrev: ae1ddbabc933fd8d3447c47293bebb9ad06427ae
+X-Git-Newrev: 99381a141ecc6101801e905e20c8bfa1944206ae
 X-Patchwork-Hint: ignore
-Message-Id: <20240715144812.CA3E786D04@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gdbm: bump to version 1.24
+Message-Id: <20240715144812.EE56586D05@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/nano: bump to version 8.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,43 +65,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ae1ddbabc933fd8d3447c47293bebb9ad06427ae
+commit: https://git.buildroot.net/buildroot/commit/?id=99381a141ecc6101801e905e20c8bfa1944206ae
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/gdbm/gdbm.hash | 6 +++---
- package/gdbm/gdbm.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/nano/nano.hash | 4 ++--
+ package/nano/nano.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/gdbm/gdbm.hash b/package/gdbm/gdbm.hash
-index 7449d5dc9d..a9df48908f 100644
---- a/package/gdbm/gdbm.hash
-+++ b/package/gdbm/gdbm.hash
-@@ -1,6 +1,6 @@
- # From https://www.gnu.org.ua/software/gdbm/download.html
--md5  8551961e36bf8c70b7500d255d3658ec  gdbm-1.23.tar.gz
--sha1  50ba1b1d45ce33fd44e4fdaaf3b55a9d8f3dc418  gdbm-1.23.tar.gz
-+md5  c780815649e52317be48331c1773e987  gdbm-1.24.tar.gz
-+sha1  7bd455f28c9e4afacc042e0c712aac1b2391fef2  gdbm-1.24.tar.gz
- # Locally computed
--sha256  74b1081d21fff13ae4bd7c16e5d6e504a4c26f7cde1dca0d963a484174bbcacd  gdbm-1.23.tar.gz
-+sha256  695e9827fdf763513f133910bc7e6cfdb9187943a4fec943e57449723d2b8dbf  gdbm-1.24.tar.gz
- sha256  690d762f2e8e149ab1e2d6a409a3853b6151a2533b2382fae549a176d6bedecf  COPYING
-diff --git a/package/gdbm/gdbm.mk b/package/gdbm/gdbm.mk
-index e807a8e1e7..1a2c352d71 100644
---- a/package/gdbm/gdbm.mk
-+++ b/package/gdbm/gdbm.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/nano/nano.hash b/package/nano/nano.hash
+index fc9a0947a3..04e3c6290a 100644
+--- a/package/nano/nano.hash
++++ b/package/nano/nano.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-# https://www.nano-editor.org/dist/v8/nano-8.0.tar.xz.asc
++# https://www.nano-editor.org/dist/v8/nano-8.1.tar.xz.asc
+ # using key 168E6F4297BFD7A79AFD4496514BBE2EB8E1961F
+-sha256  c17f43fc0e37336b33ee50a209c701d5beb808adc2d9f089ca831b40539c9ac4  nano-8.0.tar.xz
++sha256  93b3e3e9155ae389fe9ccf9cb7ab380eac29602835ba3077b22f64d0f0cbe8cb  nano-8.1.tar.xz
+ sha256  fc82ca8b6fdb18d4e3e85cfd8ab58d1bcd3f1b29abe782895abd91d64763f8e7  COPYING
+diff --git a/package/nano/nano.mk b/package/nano/nano.mk
+index 72f4de6a0a..db614feb75 100644
+--- a/package/nano/nano.mk
++++ b/package/nano/nano.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--GDBM_VERSION = 1.23
-+GDBM_VERSION = 1.24
- GDBM_SITE = $(BR2_GNU_MIRROR)/gdbm
- GDBM_LICENSE = GPL-3.0+
- GDBM_LICENSE_FILES = COPYING
+ NANO_VERSION_MAJOR = 8
+-NANO_VERSION = $(NANO_VERSION_MAJOR).0
++NANO_VERSION = $(NANO_VERSION_MAJOR).1
+ NANO_SITE = https://www.nano-editor.org/dist/v$(NANO_VERSION_MAJOR)
+ NANO_SOURCE = nano-$(NANO_VERSION).tar.xz
+ NANO_LICENSE = GPL-3.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
