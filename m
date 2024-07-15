@@ -4,115 +4,96 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2393CC3DA4B
-	for <buildroot@archiver.kernel.org>; Mon, 15 Jul 2024 14:01:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B03E2C3DA4B
+	for <buildroot@archiver.kernel.org>; Mon, 15 Jul 2024 14:02:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D1599810BE;
-	Mon, 15 Jul 2024 14:01:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1B8E5810BE;
+	Mon, 15 Jul 2024 14:02:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 07UUs3zprVMN; Mon, 15 Jul 2024 14:01:08 +0000 (UTC)
+ id 7MNo772I1ohO; Mon, 15 Jul 2024 14:02:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E0055810DC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E5039810DC
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E0055810DC;
-	Mon, 15 Jul 2024 14:01:07 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 9326E1BF3BE
- for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 14:01:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E5039810DC;
+	Mon, 15 Jul 2024 14:02:08 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 366881BF3BE
+ for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 14:02:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 804E060806
- for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 14:01:06 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 225FF405F2
+ for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 14:02:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XsTeuPhujv4e for <buildroot@lists.busybox.net>;
- Mon, 15 Jul 2024 14:01:04 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=67.231.144.184;
- helo=mx0a-00105401.pphosted.com; envelope-from=brandon.maier@collins.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 2BEAE6076C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2BEAE6076C
-Received: from mx0a-00105401.pphosted.com (mx0a-00105401.pphosted.com
- [67.231.144.184])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2BEAE6076C
- for <buildroot@buildroot.org>; Mon, 15 Jul 2024 14:01:03 +0000 (UTC)
-Received: from pps.filterd (m0346910.ppops.net [127.0.0.1])
- by mx0a-00105401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id
- 46FDfGAj019503; Mon, 15 Jul 2024 14:01:03 GMT
-Received: from xusxph005rp050.rtx.com (xusxph005rp050.rtx.com [128.13.121.147])
- by mx0a-00105401.pphosted.com (PPS) with ESMTPS id 40bj9rdc7p-1
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
- Mon, 15 Jul 2024 14:01:02 +0000
-Received: from xusxph009rp020.corp.ray.com ([128.13.125.224])
- by xusxph005rp050.rtx.com (8.17.1.19/8.17.1.19) with ESMTPS id 46FE105w002455
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
- Mon, 15 Jul 2024 14:01:01 GMT
-Received: from ciulimr01.rockwellcollins.com
- (snat-utc-mailhub.rockwellcollins.com [10.172.224.19])
- by xusxph009rp020.corp.ray.com (8.17.1.19/8.17.1.19) with ESMTPS id
- 46FE10ix018925
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
- Mon, 15 Jul 2024 14:01:00 GMT
-X-Received: from localhost (unknown [10.148.204.208])
- by ciulimr01.rockwellcollins.com (Postfix) with ESMTP id 432B83000424;
- Mon, 15 Jul 2024 09:01:00 -0500 (CDT)
-Date: Mon, 15 Jul 2024 14:00:52 +0000
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id D5fMnPLbiiRX for <buildroot@lists.busybox.net>;
+ Mon, 15 Jul 2024 14:02:06 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::332; helo=mail-wm1-x332.google.com;
+ envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 95BB8405E9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 95BB8405E9
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
+ [IPv6:2a00:1450:4864:20::332])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 95BB8405E9
+ for <buildroot@buildroot.org>; Mon, 15 Jul 2024 14:02:05 +0000 (UTC)
+Received: by mail-wm1-x332.google.com with SMTP id
+ 5b1f17b1804b1-426636ef8c9so29129045e9.2
+ for <buildroot@buildroot.org>; Mon, 15 Jul 2024 07:02:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1721052123; x=1721656923;
+ h=content-transfer-encoding:in-reply-to:content-language:from
+ :references:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=7LXMoZRM0EdUZmUZdTzp8AyI8Wmi2HLUUQZ/d4NGLKA=;
+ b=EzimvdaExPuh5dl8ctC+ds+QqNFvLlhiUlJ2tkZHgwOHSCNVaGkt3ngFvmqdjc8DRG
+ TFJ3ZWMUskxIiV96keS4yY4l1fn0Xndj7KVuUd5pOkTZPedzvszuS1lFqhSsIc9kT5z7
+ H9SiFRoe8S/yaH4pT+FbjUuLF+YUw+icD2gWb0KpTlqel61t41c5QcjdAW5bDSKTFfqS
+ t6YNmBtJ76Ivcszh4nAqcGqArRA4cmdwCR6KgnI2IGVpiA81PA6rxcIANyJ8gjekzZ3D
+ 1/53Dvkbq8Y1RXbmha7HPeouf73b9La/HvlEKJrGjKQ7efFuDjZyg2gb8j33PNkFag1g
+ uOWw==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCVKCbw2DZTVTzSiWaZefUfeyvq2vtxjeZvOOs85ay8DIvzaxOC7tRBwhStY5OFLAonKSvty+/lZ1fu3ejLWLd/oh9zmTOX7Vw==
+X-Gm-Message-State: AOJu0Yxg6nP9VKv0hOGFO6vjcAF930tj3qz4vo9YCaaEB0ADEHBDQ2uG
+ bLLiQaP6ntB3HBxgU6XINJziXNMDdjiur89R4oXPivGf00+lx1EENfqbMwZYAYQ=
+X-Google-Smtp-Source: AGHT+IE7bfAYq5fk1YEOHZXg2c47S5lXCn5nTsKSZ4jfXKAWqVeK8f/VzaQZeiHSgdXspSzQ3uh22g==
+X-Received: by 2002:a05:600c:4a99:b0:426:5de3:2ae5 with SMTP id
+ 5b1f17b1804b1-426707d8ae6mr141472535e9.10.1721052123266; 
+ Mon, 15 Jul 2024 07:02:03 -0700 (PDT)
+Received: from [10.8.0.42] (ip-188-118-3-185.reverse.destiny.be.
+ [188.118.3.185]) by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-3680daccd68sm6483197f8f.63.2024.07.15.07.02.02
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Mon, 15 Jul 2024 07:02:02 -0700 (PDT)
+Message-ID: <7a2cae8e-dc23-497d-bf16-7a5afb5b5976@mind.be>
+Date: Mon, 15 Jul 2024 11:22:02 +0200
 MIME-Version: 1.0
-Message-Id: <20240715-support-testing-s6-networking-fix-v1-1-f6fe7d3fcf51@collins.com>
-X-B4-Tracking: v=1; b=H4sIAJMrlWYC/x3NSw7CMAyE4atUXmOpSSkGroK6QDAUCymJ7PCQq
- t6dwPL7FzMLOUzhdOwWMrzUNaeGsOnocj+nGazXZop93PYSRvZnKdkqV3jVNLPvOKG+sz1+uum
- H4x4yyhAOAqG2Uwwt/z9O07p+AXGGtExzAAAA
-To: buildroot@buildroot.org
-X-Mailer: b4 0.14.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-07-15_08,2024-07-11_01,2024-05-17_01
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-07-15_08,2024-07-11_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0
- spamscore=0 malwarescore=0
- mlxlogscore=999 adultscore=0 bulkscore=0 suspectscore=0 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2406180000
- definitions=main-2407150110
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0
- bulkscore=0
- suspectscore=0 phishscore=0 adultscore=0 mlxscore=0 mlxlogscore=999
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2406180000 definitions=main-2407150110
-X-Proofpoint-ORIG-GUID: NWy8JGiRo9by9I_IDfNshbJJ2ryryAiy
-X-Proofpoint-GUID: NWy8JGiRo9by9I_IDfNshbJJ2ryryAiy
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-07-15_08,2024-07-11_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_default_notspam
- policy=outbound_default score=0
- suspectscore=0 mlxscore=0 lowpriorityscore=0 spamscore=0 clxscore=1011
- bulkscore=0 adultscore=0 impostorscore=0 priorityscore=1501
- mlxlogscore=999 malwarescore=0 phishscore=0 classifier=spam adjust=0
- reason=mlx scancount=1 engine=8.12.0-2406180000
- definitions=main-2407150111
+User-Agent: Mozilla Thunderbird
+To: Julien Olivain <ju.o@free.fr>, buildroot@buildroot.org
+References: <20240714165527.2451312-1-ju.o@free.fr>
+Content-Language: en-GB
+In-Reply-To: <20240714165527.2451312-1-ju.o@free.fr>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=collins.com; h=cc :
- content-transfer-encoding : content-type : date : from : message-id :
- mime-version : subject : to; s=POD051818;
- bh=1Ie85Juj81beZzc1aj/p6qWFm5MrbaNqr57i9aeyDdM=;
- b=ldTyLe8B4RQ3lxhTmme4HsQ1Sz7n86UjVfAjkM2U7CuNzXfUbdGmfsS21lzBkXBU8H2S
- QOPbJqB5+hY/J7ZYCbOdX+E/9EJWVgZdXNOqtlnSmy1GVPUpIcR1oq9dx/+SFNCj61iR
- F3FufDy39/YPxee5mwD7ytXERaFBiuDPFQYUlCc56HC2I8q/G+SFDn9Ac84t8+bXmN6a
- ybTyWoZKYBJTJROULfhSN9wfRy4ZTcg5A/NL4SEIM1FHs0FAh6mxSMKCnR1JJnxYUFtd
- CU+/nnBIELDv04XKzX6sZ4B/Yd2b5gvMuXTp/5B5CZu2IxlqU7S0WndKTYf65vsv9jXg QQ== 
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=collins.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=collins.com header.i=@collins.com header.a=rsa-sha256
- header.s=POD051818 header.b=ldTyLe8B
-Subject: [Buildroot] [PATCH] support/testing: fix
- package/test_s6_networking.py
+ d=mind.be; s=google; t=1721052123; x=1721656923; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:content-language:from
+ :references:to:subject:user-agent:mime-version:date:message-id:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=7LXMoZRM0EdUZmUZdTzp8AyI8Wmi2HLUUQZ/d4NGLKA=;
+ b=XRYqxXfgKD4gs8Zxw9HUfc12fEJp9tt527PU6JYCIiuEnUAmGMDh/J5YYP5eRj/g7r
+ vrMZNMLncLShNwNOSZo1A4v5J7u1EYXBdJPIV3K0rb1bKA6x8K6HCuWEKkRkcMPuRA22
+ EvJKUuGlzR+pL9/VHH3MOuUlL5NnqGj2IzYmrxQmu/PXobW9tRRq3gDyWHkZBysjYYlq
+ AvnS8XqgqyOgyyMvbIQR5JeT9sZrUkqdIGD06qSM6PdOH+eovT7PcwiFxKlvWyyWuQH5
+ PE2scopY9d9mNEPy2XNnGtcYo6FB8mxs6EdKxUPoW0h2cDXOZUfSSoZwJpRezZkKaItv
+ DmeQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=XRYqxXfg
+Subject: Re: [Buildroot] [PATCH 1/1] support/testing: new dmidecode runtime
+ test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -124,50 +105,120 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Brandon Maier via buildroot <buildroot@buildroot.org>
-Reply-To: Brandon Maier <brandon.maier@collins.com>
-Cc: Brandon Maier <brandon.maier@collins.com>
-Content-Type: text/plain; charset="us-ascii"
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@mind.be>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This test fails with the following error
 
-  -sh: s6-tcpserver4: not found
 
-In release 2.6.0.0 of s6-networking the `s6-tcpserver4` was unified into
-a new `s6-tcpserver` command[1].
+On 14/07/2024 18:55, Julien Olivain wrote:
+> Note: this test was not working in Buildroot test infrastructure
+> before commit [1] was merged, because dmidecode has the string "# "
+> in its output.
+> 
+> [1] https://gitlab.com/buildroot.org/buildroot/-/commit/0cad947b964be5612a182413da136fcf0dc5a1f2
+> 
+> Signed-off-by: Julien Olivain <ju.o@free.fr>
 
-[1] https://github.com/skarnet/s6-networking/blob/master/NEWS#L33
+  Applied to master, thanks.
 
-Signed-off-by: Brandon Maier <brandon.maier@collins.com>
----
- support/testing/tests/package/test_s6_networking.py | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+  Regards,
+  Arnout
 
-diff --git a/support/testing/tests/package/test_s6_networking.py b/support/testing/tests/package/test_s6_networking.py
-index 1fe1b81668..bbbaefdf94 100644
---- a/support/testing/tests/package/test_s6_networking.py
-+++ b/support/testing/tests/package/test_s6_networking.py
-@@ -28,7 +28,7 @@ class TestS6Networking(infra.basetest.BRTest):
-         self.assertEqual(output[1][0:5], "after")
- 
-         # Test the TCP server and client
--        _, exit_code = self.emulator.run("s6-tcpserver4 127.0.0.1 1024 cat &")
-+        _, exit_code = self.emulator.run("s6-tcpserver 127.0.0.1 1024 cat &")
-         self.emulator.run("sleep 2")
-         cmd = "echo foobar | s6-tcpclient 127.0.0.1 1024 s6-ioconnect -67"
-         output, exit_code = self.emulator.run(cmd)
-
----
-base-commit: 51a58ff0624f62ca0fa0ca6494928e8bd1410f69
-change-id: 20240715-support-testing-s6-networking-fix-28e7573197e7
-
-Best regards,
--- 
-Brandon Maier <brandon.maier@collins.com>
-
+> ---
+>   DEVELOPERS                                    |  1 +
+>   .../testing/tests/package/test_dmidecode.py   | 67 +++++++++++++++++++
+>   2 files changed, 68 insertions(+)
+>   create mode 100644 support/testing/tests/package/test_dmidecode.py
+> 
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 466dcd4826..2190567246 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -1831,6 +1831,7 @@ F:	support/testing/tests/package/test_cryptsetup.py
+>   F:	support/testing/tests/package/test_cryptsetup/
+>   F:	support/testing/tests/package/test_ddrescue.py
+>   F:	support/testing/tests/package/test_ddrescue/
+> +F:	support/testing/tests/package/test_dmidecode.py
+>   F:	support/testing/tests/package/test_dos2unix.py
+>   F:	support/testing/tests/package/test_ed.py
+>   F:	support/testing/tests/package/test_ethtool.py
+> diff --git a/support/testing/tests/package/test_dmidecode.py b/support/testing/tests/package/test_dmidecode.py
+> new file mode 100644
+> index 0000000000..33c19f0d96
+> --- /dev/null
+> +++ b/support/testing/tests/package/test_dmidecode.py
+> @@ -0,0 +1,67 @@
+> +import os
+> +
+> +import infra.basetest
+> +
+> +
+> +class TestDmidecode(infra.basetest.BRTest):
+> +    # We use a x86_64 arch for this dmidecode test because aarch64
+> +    # SMBIOS is not supported in non-UEFI use-cases (and using a UEFI
+> +    # aarch64 would make the test longer).
+> +    config = \
+> +        """
+> +        BR2_x86_64=y
+> +        BR2_x86_corei7=y
+> +        BR2_TOOLCHAIN_EXTERNAL=y
+> +        BR2_LINUX_KERNEL=y
+> +        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+> +        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.39"
+> +        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+> +        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/x86_64/linux.config"
+> +        BR2_LINUX_KERNEL_NEEDS_HOST_LIBELF=y
+> +        BR2_PACKAGE_DMIDECODE=y
+> +        BR2_TARGET_ROOTFS_CPIO=y
+> +        BR2_TARGET_ROOTFS_CPIO_GZIP=y
+> +        # BR2_TARGET_ROOTFS_TAR is not set
+> +        """
+> +
+> +    def test_run(self):
+> +
+> +        # An arbitrary SMBIOS OEM string for the test
+> +        oem_string = "Hello Buildroot SMBIOS"
+> +
+> +        kernel = os.path.join(self.builddir, "images", "bzImage")
+> +        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio.gz")
+> +        self.emulator.boot(
+> +            arch="x86_64",
+> +            kernel=kernel,
+> +            kernel_cmdline=["console=ttyS0"],
+> +            options=["-cpu", "Nehalem", "-m", "256", "-initrd", cpio_file,
+> +                     "-smbios", f"type=11,value={oem_string}"],
+> +        )
+> +        self.emulator.login()
+> +
+> +        # Check the program can run
+> +        cmd = "dmidecode --version"
+> +        self.assertRunOk(cmd)
+> +
+> +        # Check a simple invocation of "dmidecode"
+> +        self.assertRunOk("dmidecode")
+> +
+> +        # Check a simple invocation of "biosdecode"
+> +        self.assertRunOk("biosdecode")
+> +
+> +        # Check dmidecode detects SMBIOS
+> +        cmd = "dmidecode | grep -E '^SMBIOS .* present\\.$'"
+> +        self.assertRunOk(cmd)
+> +
+> +        # Check the system-manufacturer is QEMU
+> +        cmd = "dmidecode -s system-manufacturer"
+> +        output, exit_code = self.emulator.run(cmd)
+> +        self.assertEqual(exit_code, 0)
+> +        self.assertEqual(output[0], "QEMU")
+> +
+> +        # Check we read back our OEM string
+> +        cmd = "dmidecode --oem-string 1"
+> +        output, exit_code = self.emulator.run(cmd)
+> +        self.assertEqual(exit_code, 0)
+> +        self.assertEqual(output[0], oem_string)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
