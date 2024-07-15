@@ -4,72 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3C353C3DA4B
-	for <buildroot@archiver.kernel.org>; Mon, 15 Jul 2024 19:45:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EE418C3DA4B
+	for <buildroot@archiver.kernel.org>; Mon, 15 Jul 2024 19:56:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F2245405F2;
-	Mon, 15 Jul 2024 19:45:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8909340653;
+	Mon, 15 Jul 2024 19:56:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kyJyZS15qN2w; Mon, 15 Jul 2024 19:45:36 +0000 (UTC)
+ id UMocAzddz4Im; Mon, 15 Jul 2024 19:56:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9ED8A40622
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1E56040624
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9ED8A40622;
-	Mon, 15 Jul 2024 19:45:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1E56040624;
+	Mon, 15 Jul 2024 19:56:55 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id BE65F1BF3D4
- for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 19:45:35 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 7B8DC1BF3D4
+ for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 19:56:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id AACE840622
- for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 19:45:35 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 67E8E4050A
+ for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 19:56:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BwOLJPg6v69Q for <buildroot@lists.busybox.net>;
- Mon, 15 Jul 2024 19:45:34 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.200;
- helo=relay7-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 4FF3D405F2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4FF3D405F2
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4FF3D405F2
- for <buildroot@buildroot.org>; Mon, 15 Jul 2024 19:45:34 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 5F23120004;
- Mon, 15 Jul 2024 19:45:31 +0000 (UTC)
-Date: Mon, 15 Jul 2024 21:45:30 +0200
-To: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
-Message-ID: <20240715214530.18b1ce0f@windsurf>
-In-Reply-To: <20240228202414.719244-2-buildroot@bubu1.eu>
-References: <20240228202414.719244-1-buildroot@bubu1.eu>
- <20240228202414.719244-2-buildroot@bubu1.eu>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+ id dWSuiehwor-3 for <buildroot@lists.busybox.net>;
+ Mon, 15 Jul 2024 19:56:52 +0000 (UTC)
+X-Greylist: delayed 595 seconds by postgrey-1.37 at util1.osuosl.org;
+ Mon, 15 Jul 2024 19:56:51 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9B1E1404FE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9B1E1404FE
+Received-SPF: Pass (sender SPF authorized) identity=helo;
+ client-ip=188.68.63.102; helo=relay.yourmailgateway.de;
+ envelope-from=mail@t-voltmer.net; receiver=<UNKNOWN> 
+Received: from relay.yourmailgateway.de (relay.yourmailgateway.de
+ [188.68.63.102])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9B1E1404FE
+ for <buildroot@buildroot.org>; Mon, 15 Jul 2024 19:56:51 +0000 (UTC)
+Received: from mors-relay-2502.netcup.net (localhost [127.0.0.1])
+ by mors-relay-2502.netcup.net (Postfix) with ESMTPS id 4WNCQ61svFz60LY
+ for <buildroot@buildroot.org>; Mon, 15 Jul 2024 21:46:54 +0200 (CEST)
+Received: from policy02-mors.netcup.net (unknown [46.38.225.35])
+ by mors-relay-2502.netcup.net (Postfix) with ESMTPS id 4WNCQ6194Hz4xfl
+ for <buildroot@buildroot.org>; Mon, 15 Jul 2024 21:46:54 +0200 (CEST)
+Received: from mxe217.netcup.net (unknown [10.243.12.53])
+ (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+ (No client certificate requested)
+ by policy02-mors.netcup.net (Postfix) with ESMTPS id 4WNCQ56XFyz8sgW
+ for <buildroot@buildroot.org>; Mon, 15 Jul 2024 21:46:53 +0200 (CEST)
+Received: from cygn.fritz.box (ipb21a3d34.dynamic.kabel-deutschland.de
+ [178.26.61.52])
+ by mxe217.netcup.net (Postfix) with ESMTPSA id A8AF483C07;
+ Mon, 15 Jul 2024 21:46:48 +0200 (CEST)
+From: Torben Voltmer <mail@t-voltmer.net>
+To: buildroot@buildroot.org
+Date: Mon, 15 Jul 2024 21:46:35 +0200
+Message-ID: <20240715194635.949193-1-mail@t-voltmer.net>
+X-Mailer: git-send-email 2.45.2
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1721072731;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=hX3p6h2Sy3IKRVh+40uH+YUzMssTxtbcwnxX/mGuj0M=;
- b=XiAJ8n6eh5eEpnDDhmrfMaXgNixzMU5ry6d3CEARDzW5SOkded9mHJWcAEV//Zt/g4viEI
- 0WX+cDp8H6tEqR2Hnw1BRIvIA1JuJNXDSmVDVGSJYFxHCZER3GHUVwdv2AcRZqNyDGvtyy
- LJw9dynfhFoNKG3/438aIeh6R8Hb6FIHijwGvxn1Ac/UWJz5G0mGBUTx5tEn/3S/e31I1E
- TweeoEwEtZ8OiMn6wbyHOkbTtOyub8s7+OBKAg4rnk9I5FX3e74jCr00ehQxrwrFMaWDHE
- TCmXrCy14yKC9HgIuOgmj3JruTkSsmM3y5KpCNLHFLyW7ZuBYswHpkmZAYUOew==
+X-Rspamd-Queue-Id: A8AF483C07
+X-Rspamd-Server: rspamd-worker-8404
+X-NC-CID: nLejgGFjcJ9NaU2FmRxMl7ULa3nutcr4kJkz4noewYcF5w==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=XiAJ8n6e
-Subject: Re: [Buildroot] [PATCH v2 2/2] package/picotool: new package
+ dmarc=none (p=none dis=none)
+ header.from=t-voltmer.net
+X-Mailman-Original-Authentication-Results: mors-relay-2502.netcup.net;
+ dkim=permerror (bad
+ message/signature format)
+Subject: [Buildroot] [PATCH 1/1] package/espflash: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,63 +82,87 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Samuel Martin <s.martin49@gmail.com>, Marcus Hoffmann <buildroot@bubu1.eu>
+Cc: Torben Voltmer <mail@t-voltmer.net>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Marcus,
+This package provides espflash. A serial flasher utilities for
+Espressif devices, based loosely on esptool.py. Supports the
+ESP32, ESP32-C2/C3/C6, ESP32-H2, ESP32-P4, and ESP32-S2/S3.
 
-On Wed, 28 Feb 2024 21:24:13 +0100
-Marcus Hoffmann via buildroot <buildroot@buildroot.org> wrote:
+Signed-off-by: Torben Voltmer <mail@t-voltmer.net>
+---
+ package/Config.in              |  1 +
+ package/espflash/Config.in     | 10 ++++++++++
+ package/espflash/espflash.hash |  4 ++++
+ package/espflash/espflash.mk   | 13 +++++++++++++
+ 4 files changed, 28 insertions(+)
+ create mode 100644 package/espflash/Config.in
+ create mode 100644 package/espflash/espflash.hash
+ create mode 100644 package/espflash/espflash.mk
 
->  package/Config.in              |  1 +
->  package/picotool/Config.in     | 16 ++++++++++++++++
->  package/picotool/picotool.hash |  3 +++
->  package/picotool/picotool.mk   | 15 +++++++++++++++
->  4 files changed, 35 insertions(+)
->  create mode 100644 package/picotool/Config.in
->  create mode 100644 package/picotool/picotool.hash
->  create mode 100644 package/picotool/picotool.mk
-
-Entry in the DEVELOPERS file was missing, so I added one.
-
-> diff --git a/package/picotool/picotool.mk b/package/picotool/picotool.mk
-> new file mode 100644
-> index 0000000000..c98284c491
-> --- /dev/null
-> +++ b/package/picotool/picotool.mk
-> @@ -0,0 +1,15 @@
-> +################################################################################
-> +#
-> +# picotool
-> +#
-> +################################################################################
-> +
-> +PICOTOOL_VERSION = 1.1.2
-> +PICOTOOL_SITE = https://github.com/raspberrypi/picotool/archive/refs/tags
-
-This should have used the $(call github,...) macro since they don't
-provide specific tarballs other than the auto-generated ones.
-
-> +PICOTOOL_SOURCE = $(PICOTOOL_VERSION).tar.gz
-
-This can therefore go.
-
-> +PICOTOOL_CONF_OPTS = -DPICO_SDK_PATH=$(STAGING_DIR)/usr/include/pico-sdk
-
-And this had to be adjusted to usr/share/pico-sdk.
-
-Applied with those minor fixes. Thanks!
-
-Thomas
+diff --git a/package/Config.in b/package/Config.in
+index 6c390f7bd3..dfd598d626 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -508,6 +508,7 @@ endmenu
+ 	source "package/edk2-non-osi/Config.in"
+ 	source "package/edk2-platforms/Config.in"
+ 	source "package/esp-hosted/Config.in"
++	source "package/espflash/Config.in"
+ 	source "package/eudev/Config.in"
+ 	source "package/ev3dev-linux-drivers/Config.in"
+ 	source "package/evemu/Config.in"
+diff --git a/package/espflash/Config.in b/package/espflash/Config.in
+new file mode 100644
+index 0000000000..2a7a0f6b38
+--- /dev/null
++++ b/package/espflash/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_ESPFLASH
++	bool "espflash"
++	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
++	select BR2_PACKAGE_HOST_RUSTC
++	help
++	  Serial flasher utilities for Espressif devices, based
++	  loosely on esptool.py. Supports the ESP32,
++	  ESP32-C2/C3/C6, ESP32-H2, ESP32-P4, and ESP32-S2/S3.
++
++	  https://github.com/esp-rs/espflash
+diff --git a/package/espflash/espflash.hash b/package/espflash/espflash.hash
+new file mode 100644
+index 0000000000..ebe24ef51f
+--- /dev/null
++++ b/package/espflash/espflash.hash
+@@ -0,0 +1,4 @@
++# Locally calculated
++sha256  8e5da5e90d03135a1b2af6c0b551e4f2504ad64e659b0e88e8a4ecd98cc6a6b6  espflash-3.1.0-cargo2.tar.gz
++sha256  0886cf791a43c02d71c105b4835b53293704ec407a72f84a87f73e20cb2d3251  LICENSE-APACHE
++sha256  a75018ab59a13738ed2024a0090ae8f91b7693ae84568aa0e52c3dff99e6748d  LICENSE-MIT
+diff --git a/package/espflash/espflash.mk b/package/espflash/espflash.mk
+new file mode 100644
+index 0000000000..43532de58c
+--- /dev/null
++++ b/package/espflash/espflash.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# espflash
++#
++################################################################################
++
++ESPFLASH_VERSION = 3.1.0
++ESPFLASH_SITE = $(call github,esp-rs,espflash,v$(ESPFLASH_VERSION))
++ESPFLASH_SUBDIR = espflash
++ESPFLASH_LICENSE = Apache-2.0 or MIT
++ESPFLASH_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
++
++$(eval $(cargo-package))
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+2.45.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
