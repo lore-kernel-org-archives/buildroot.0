@@ -4,73 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 63316C3DA59
-	for <buildroot@archiver.kernel.org>; Mon, 15 Jul 2024 14:08:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA47BC3DA4B
+	for <buildroot@archiver.kernel.org>; Mon, 15 Jul 2024 14:18:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D6E1C4074E;
-	Mon, 15 Jul 2024 14:08:18 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 632F540608;
+	Mon, 15 Jul 2024 14:18:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id L3qQP0S4YJPc; Mon, 15 Jul 2024 14:08:17 +0000 (UTC)
+ id u6PpXW4w7WIA; Mon, 15 Jul 2024 14:18:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6D36C408A8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4731A40650
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6D36C408A8;
-	Mon, 15 Jul 2024 14:08:17 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8D68E1BF3AD
- for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 14:08:15 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4731A40650;
+	Mon, 15 Jul 2024 14:18:07 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id E206E1BF3AD
+ for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 14:18:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8799980C89
- for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 14:08:15 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id CE5F04064E
+ for <buildroot@lists.busybox.net>; Mon, 15 Jul 2024 14:18:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TgrTETUbXQ59 for <buildroot@lists.busybox.net>;
- Mon, 15 Jul 2024 14:08:14 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::221;
- helo=relay1-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 6D35B80BC7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6D35B80BC7
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6D35B80BC7
- for <buildroot@buildroot.org>; Mon, 15 Jul 2024 14:08:13 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 4DD0A240010;
- Mon, 15 Jul 2024 14:08:11 +0000 (UTC)
-Date: Mon, 15 Jul 2024 16:08:09 +0200
-To: Fred Lefranc <fred.lefranc.evs@gmail.com>
-Message-ID: <20240715160809.351cdc89@windsurf>
-In-Reply-To: <20240715111003.1296141-1-fred.lefranc+evs@gmail.com>
-References: <20240715101607.1288233-1-fred.lefranc+evs@gmail.com>
- <20240715111003.1296141-1-fred.lefranc+evs@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id iHx72wFkulLZ for <buildroot@lists.busybox.net>;
+ Mon, 15 Jul 2024 14:18:06 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.140.110.172;
+ helo=foss.arm.com; envelope-from=vincent.stehle@arm.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org BAA8340608
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BAA8340608
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+ by smtp2.osuosl.org (Postfix) with ESMTP id BAA8340608
+ for <buildroot@buildroot.org>; Mon, 15 Jul 2024 14:18:05 +0000 (UTC)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+ by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 73A8FDA7;
+ Mon, 15 Jul 2024 07:18:29 -0700 (PDT)
+Received: from localhost.localdomain (unknown [10.57.10.123])
+ by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 970E53F766;
+ Mon, 15 Jul 2024 07:18:03 -0700 (PDT)
+From: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@arm.com>
+To: buildroot@buildroot.org
+Date: Mon, 15 Jul 2024 16:17:56 +0200
+Message-ID: <20240715141756.522303-1-vincent.stehle@arm.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1721052491;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=fspHeb8EQ++C9pHJ6hq9FZ1Ig5mzF0xlrrlPfbspzIw=;
- b=IPaKD3WjFqiuOb0A0Fm/Z+dhKEipHQySxyRIoJAKFlt47z0pC9jUD3WsVLgedcwJ+fMwc5
- +OMPVYjpYX2+6j1N23a36pw7ZraQLexBgydk1C055GDIH9KByyZKhK15x+5y2fY1I/H4oR
- vFOOM+6DcVfqRC9YIQOcw1Cl9T7IuQQAh3ZLtbx2IIIuIPHOMJH5tSsJGcI/48Sjz1KuFN
- /Et/46y1f/hD3EhjYi816PffSGP0rLK8CCYEWyXehb5MepFz1eAIUdOQ1zdF1xkuQoxIv9
- VCm7vnf7HnnhQ+OagYB3OOkbr4dzat5qeItHD+YfNiCDDyBDMOqd6CotuIt47A==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=IPaKD3Wj
-Subject: Re: [Buildroot] [PATCH v2] package/busybox: fix build with glibc
- 2.39
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=arm.com
+Subject: [Buildroot] [PATCH] Makefile: fix make help
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,45 +63,32 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Fred Lefranc <fred.lefranc+evs@gmail.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@arm.com>,
+ Steve Hay <me@stevenhay.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Fred,
-
-On Mon, 15 Jul 2024 13:10:02 +0200
-Fred Lefranc <fred.lefranc.evs@gmail.com> wrote:
-
-> When glibc was bumped to version 2.39 in commit
-> b5680f53d60acf8ff6010082f873438a39bd5d97 it removed the deprecated
-> libcrypt support.
-> 
-> As glibc's libcrypt was providing systemd's libcrypt dependency this
-> broke any systemd build using glibc version 2.39.
-> 
-> To fix this add the libxcrypt dependency to busybox which is the
-> preferred way of providing libcrypt support in busybox as the glibc
-> variant is only used as a fallback due to being deprecated.
-
-I'm sorry but I don't follow you on this last paragraph, in particular
-the part "as the glibc variant is only used as a fallback due to being
-deprecated".
-
-What happens is that recent glibc versions no longer provide libcrypt,
-so libxcrypt should be used as a replacement. And it's up to the user
-to enable BR2_PACKAGE_LIBXCRYPT if the user enables an applet in the
-Busybox configuration that needs lib(x)crypt features.
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+QWRkIG1pc3NpbmcgJyB0byBmaXggYG1ha2UgaGVscCcuCgpUaGlzIGZpeGVzIHRoZSBmb2xsb3dp
+bmcgZXJyb3I6CgogIC9iaW4vYmFzaDogLWM6IGxpbmUgMTogdW5leHBlY3RlZCBFT0Ygd2hpbGUg
+bG9va2luZyBmb3IgbWF0Y2hpbmcgYCcnCiAgbWFrZTogKioqIFtNYWtlZmlsZToxMTgwOiBoZWxw
+XSBFcnJvciAyCgpGaXhlczogY2E2Yzg5NmJkZDc1Y2YzMzRhYzlhMDJhNmRkNzg2NDE1MjIxZjU1
+ZQpTaWduZWQtb2ZmLWJ5OiBWaW5jZW50IFN0ZWhsw6kgPHZpbmNlbnQuc3RlaGxlQGFybS5jb20+
+CkNjOiBTdGV2ZSBIYXkgPG1lQHN0ZXZlbmhheS5jb20+Ci0tLQogTWFrZWZpbGUgfCAyICstCiAx
+IGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDEgZGVsZXRpb24oLSkKCmRpZmYgLS1naXQg
+YS9NYWtlZmlsZSBiL01ha2VmaWxlCmluZGV4IGZhYWYwZjE2NWMuLjA0MzJhMDE0YWIgMTAwNjQ0
+Ci0tLSBhL01ha2VmaWxlCisrKyBiL01ha2VmaWxlCkBAIC0xMTc3LDcgKzExNzcsNyBAQCBoZWxw
+OgogCUBlY2hvICcgIDxwa2c+LWdyYXBoLXJkZXBlbmRzICAgLSBHZW5lcmF0ZSBhIGdyYXBoIG9m
+IDxwa2c+J1wnJ3MgcmV2ZXJzZSBkZXBlbmRlbmNpZXMnCiAJQGVjaG8gJyAgPHBrZz4tZ3JhcGgt
+Ym90aC1kZXBlbmRzJwogCUBlY2hvICcgICAgICAgICAgICAgICAgICAgICAgICAgLSBHZW5lcmF0
+ZSBhIGdyYXBoIG9mIGJvdGggPHBrZz4nXCcncyBmb3J3YXJkIGFuZCcKLQlAZWNobyAnICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgcmV2ZXJzZSBkZXBlbmRlbmNpZXMuCisJQGVjaG8gJyAgICAg
+ICAgICAgICAgICAgICAgICAgICAgIHJldmVyc2UgZGVwZW5kZW5jaWVzLicKIAlAZWNobyAnICA8
+cGtnPi1kaXJjbGVhbiAgICAgICAgIC0gUmVtb3ZlIDxwa2c+IGJ1aWxkIGRpcmVjdG9yeScKIAlA
+ZWNobyAnICA8cGtnPi1yZWNvbmZpZ3VyZSAgICAgIC0gUmVzdGFydCB0aGUgYnVpbGQgZnJvbSB0
+aGUgY29uZmlndXJlIHN0ZXAnCiAJQGVjaG8gJyAgPHBrZz4tcmVidWlsZCAgICAgICAgICAtIFJl
+c3RhcnQgdGhlIGJ1aWxkIGZyb20gdGhlIGJ1aWxkIHN0ZXAnCi0tIAoyLjQzLjAKCl9fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5n
+IGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3Jn
+L21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
