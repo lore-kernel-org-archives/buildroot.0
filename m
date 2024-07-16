@@ -4,72 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF109C3DA49
-	for <buildroot@archiver.kernel.org>; Tue, 16 Jul 2024 21:26:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C43AC3DA49
+	for <buildroot@archiver.kernel.org>; Tue, 16 Jul 2024 21:26:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A2BEF405C8;
-	Tue, 16 Jul 2024 21:26:27 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 36AC6409FA;
+	Tue, 16 Jul 2024 21:26:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TqPI304HRFoR; Tue, 16 Jul 2024 21:26:26 +0000 (UTC)
+ id 5PRfc_HE5-NL; Tue, 16 Jul 2024 21:26:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 64CA8409FA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F2DA740C04
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 64CA8409FA;
-	Tue, 16 Jul 2024 21:26:26 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B45841BF37B
- for <buildroot@lists.busybox.net>; Tue, 16 Jul 2024 21:26:25 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id F2DA740C04;
+	Tue, 16 Jul 2024 21:26:47 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 554E31BF37B
+ for <buildroot@lists.busybox.net>; Tue, 16 Jul 2024 21:26:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A0A27409FA
- for <buildroot@lists.busybox.net>; Tue, 16 Jul 2024 21:26:25 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4F937606F1
+ for <buildroot@lists.busybox.net>; Tue, 16 Jul 2024 21:26:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id I9ZmfcXh5ypN for <buildroot@lists.busybox.net>;
- Tue, 16 Jul 2024 21:26:24 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::226;
- helo=relay6-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id vFy7iuECEP9u for <buildroot@lists.busybox.net>;
+ Tue, 16 Jul 2024 21:26:45 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::223;
+ helo=relay3-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 3CC20405C8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3CC20405C8
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::226])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 3CC20405C8
- for <buildroot@buildroot.org>; Tue, 16 Jul 2024 21:26:23 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 1C4D9C0003;
- Tue, 16 Jul 2024 21:26:20 +0000 (UTC)
-Date: Tue, 16 Jul 2024 23:26:20 +0200
-To: Andreas Naumann <anaumann@ultratronik.de>
-Message-ID: <20240716232620.6bf94528@windsurf>
-In-Reply-To: <20240716183259.113591-1-anaumann@ultratronik.de>
-References: <20240716183259.113591-1-anaumann@ultratronik.de>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 249CD6066E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 249CD6066E
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 249CD6066E
+ for <buildroot@buildroot.org>; Tue, 16 Jul 2024 21:26:44 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id CC01E60002;
+ Tue, 16 Jul 2024 21:26:41 +0000 (UTC)
+Date: Tue, 16 Jul 2024 23:26:40 +0200
+To: TIAN Yuanhao <tianyuanhao3@163.com>
+Message-ID: <20240716232640.67478147@windsurf>
+In-Reply-To: <20240716131908.6070-1-tianyuanhao3@163.com>
+References: <20240716131908.6070-1-tianyuanhao3@163.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1721165181;
+ d=bootlin.com; s=gm1; t=1721165202;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=alUNVTPWQV3uGJK1BbR39/GPtYjNDgRUd/2psuJPPl0=;
- b=nG2JTIs8EDUos5FGgevqv8j8U3Mi9THwjH9oJzaSJgry0xjI/h66lD0aE6KDxCpCay8xux
- 2iJHRQEwCLP0g6OptrG2bJTiKSRnb9iloktQ170oJXa6l8qKAml6v1FjOR1WDuiVlT4JNK
- xmRZKDs87cSbOrK9wmfoRxiu48a2Zjxn/V7+GVjInm1+exKFGHbNfBsEOE6O4DlhiXVq2C
- Pipq+0frTwhFR5GuwjStbK80/yACQa7JaULG+t71TQUSbsaFFKqX9jNTryieZD9A9xf3BD
- tgZtp3TFfleSey1i8jr4SI6XPi5Nmhh0+bi+dBOnRADKIh1aT3h/gecUN+LwFA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=YRWlSGb87IJXdl2roM90MMDg9LW11XHtQRpOe9e55gI=;
+ b=ekEmNqvdvm3vM6Sf3lPSuL5BU8n+PVBngWOdKPRgYEtWsvsKkJdmgJx4CxDVmX/+LJ8SZy
+ 1I+QWdtO7yS8/wSsFkxuloxwvYVs8wCmYBQZ3+ZkhZ5X9mYTlN62oQrHInW+fYEEhNyWo4
+ d6z6Z6BKwmoa5R5AgAhty18pFexF3XgbG7V944l7hZ4ONOIy1Jo2naDWt+L8W5J5dYymNm
+ 3ecyiygeriBPHSKXUF5eZAcnnx9AR7rPGQPjWlDAMNTJuz1uUFqzjy6bWpoqGainB+RZQz
+ b3xhKHQrUOSKQVKRNO38JkS8BsQI7DT63LkoWDeAv/nzKpTrOrDmfmUklhxAbQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=nG2JTIs8
-Subject: Re: [Buildroot] [PATCH 1/1] package/evemu: needs autoreconf for
- python 3.12 compatibility
+ header.s=gm1 header.b=ekEmNqvd
+Subject: Re: [Buildroot] [PATCH 1/1] package/crun: bump to version 1.15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -89,31 +88,18 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 16 Jul 2024 20:32:59 +0200
-Andreas Naumann <anaumann@ultratronik.de> wrote:
+On Tue, 16 Jul 2024 06:19:08 -0700
+TIAN Yuanhao <tianyuanhao3@163.com> wrote:
 
-> evemu ships with an ancient py-compile script (from 2011) depending
-> the imp module, which was finally removed in Python 3.12.
-> Set autoreconf in order to get an up to date version of py-compile
-> which automatically handles the different python versions.
-> 
-> This is a similar problem as in
-> 42eae73ef1 package/cracklib: python needs autoreconf
-> 
-> Fixes:
-> 
->  http://autobuild.buildroot.org/results/a52/a520583be6e86993d268d6535f727a352bd92028/
-> 
-> and many other configs where Python3 is selected and thus evemu
-> is configured to build the python-bindings.
-> 
-> Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
+> Signed-off-by: TIAN Yuanhao <tianyuanhao3@163.com>
 > ---
->  package/evemu/evemu.mk | 1 +
->  1 file changed, 1 insertion(+)
+>  ...ile-error-without-libseccomp-and-lib.patch | 59 -------------------
+>  package/crun/crun.hash                        |  2 +-
+>  package/crun/crun.mk                          |  2 +-
+>  3 files changed, 2 insertions(+), 61 deletions(-)
+>  delete mode 100644 package/crun/0001-libcrun-fix-compile-error-without-libseccomp-and-lib.patch
 
-Applied to master after adding missing spaces around "=" sign. Thanks a
-lot!
+Applied to master, thanks.
 
 Thomas
 -- 
