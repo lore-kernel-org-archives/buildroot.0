@@ -4,49 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3B62C3DA49
-	for <buildroot@archiver.kernel.org>; Tue, 16 Jul 2024 21:26:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 54F71C3DA49
+	for <buildroot@archiver.kernel.org>; Tue, 16 Jul 2024 21:27:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9CE2C40C05;
-	Tue, 16 Jul 2024 21:26:56 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id BC75340C12;
+	Tue, 16 Jul 2024 21:27:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id msfeDM_ytJIW; Tue, 16 Jul 2024 21:26:55 +0000 (UTC)
+ id 5wOpMpD58hON; Tue, 16 Jul 2024 21:26:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4CE2640C11
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 15CC640C39
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4CE2640C11;
-	Tue, 16 Jul 2024 21:26:55 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 15CC640C39;
+	Tue, 16 Jul 2024 21:26:59 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 343FF1BF37B
- for <buildroot@lists.busybox.net>; Tue, 16 Jul 2024 21:26:54 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 49C201BF37B
+ for <buildroot@lists.busybox.net>; Tue, 16 Jul 2024 21:26:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 226F380F80
+ by smtp1.osuosl.org (Postfix) with ESMTP id 31B1480F74
  for <buildroot@lists.busybox.net>; Tue, 16 Jul 2024 21:26:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NKq6waWyUb9Q for <buildroot@lists.busybox.net>;
+ id GrXaroQ5O09k for <buildroot@lists.busybox.net>;
  Tue, 16 Jul 2024 21:26:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 44A0380F74
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5158680F79
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 44A0380F74
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5158680F79
  for <buildroot@buildroot.org>; Tue, 16 Jul 2024 21:26:53 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 32E4C869DA; Tue, 16 Jul 2024 21:26:53 +0000 (UTC)
+ id 3EF3C869E3; Tue, 16 Jul 2024 21:26:53 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 16 Jul 2024 23:25:58 +0200
+Date: Tue, 16 Jul 2024 23:26:34 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3d7e6cdf54683c6e84fc7f93b5fad886526223e1
-X-Git-Newrev: bcf05650bfdaacbec4a09c73a661ec3ef1d4a09b
+X-Git-Oldrev: bcf05650bfdaacbec4a09c73a661ec3ef1d4a09b
+X-Git-Newrev: 531fc0a60e3bef6b04c61a21c1f258825e169d23
 X-Patchwork-Hint: ignore
-Message-Id: <20240716212653.32E4C869DA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/evemu: needs autoreconf for python
- 3.12 compatibility
+Message-Id: <20240716212653.3EF3C869E3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/crun: bump to version 1.15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,42 +65,105 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bcf05650bfdaacbec4a09c73a661ec3ef1d4a09b
+commit: https://git.buildroot.net/buildroot/commit/?id=531fc0a60e3bef6b04c61a21c1f258825e169d23
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-evemu ships with an ancient py-compile script (from 2011) depending
-the imp module, which was finally removed in Python 3.12.
-Set autoreconf in order to get an up to date version of py-compile
-which automatically handles the different python versions.
-
-This is a similar problem as in
-42eae73ef1 package/cracklib: python needs autoreconf
-
-Fixes:
-
- http://autobuild.buildroot.org/results/a52/a520583be6e86993d268d6535f727a352bd92028/
-
-and many other configs where Python3 is selected and thus evemu
-is configured to build the python-bindings.
-
-Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
+Signed-off-by: TIAN Yuanhao <tianyuanhao3@163.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/evemu/evemu.mk | 1 +
- 1 file changed, 1 insertion(+)
+ ...-compile-error-without-libseccomp-and-lib.patch | 59 ----------------------
+ package/crun/crun.hash                             |  2 +-
+ package/crun/crun.mk                               |  2 +-
+ 3 files changed, 2 insertions(+), 61 deletions(-)
 
-diff --git a/package/evemu/evemu.mk b/package/evemu/evemu.mk
-index 886ceb1142..6bba59cf82 100644
---- a/package/evemu/evemu.mk
-+++ b/package/evemu/evemu.mk
-@@ -9,6 +9,7 @@ EVEMU_SITE = http://www.freedesktop.org/software/evemu
- EVEMU_SOURCE = evemu-$(EVEMU_VERSION).tar.xz
- EVEMU_LICENSE = LGPL-3.0 (library), GPL-3.0 (tools)
- EVEMU_LICENSE_FILES = COPYING
-+EVEMU_AUTORECONF = YES
- EVEMU_INSTALL_STAGING = YES
+diff --git a/package/crun/0001-libcrun-fix-compile-error-without-libseccomp-and-lib.patch b/package/crun/0001-libcrun-fix-compile-error-without-libseccomp-and-lib.patch
+deleted file mode 100644
+index 81b08d34b7..0000000000
+--- a/package/crun/0001-libcrun-fix-compile-error-without-libseccomp-and-lib.patch
++++ /dev/null
+@@ -1,59 +0,0 @@
+-From ea27b1363ef709ce4b169138017b67ef624b127b Mon Sep 17 00:00:00 2001
+-From: Xiangyu Chen <xiangyu.chen@windriver.com>
+-Date: Tue, 12 Dec 2023 10:47:42 +0800
+-Subject: [PATCH] libcrun: fix compile error without libseccomp and libcap
+-
+-Fixed compile error without libseccomp and libcap, running
+-clang-format to format the code style.
+-
+-Upstream: https://github.com/containers/crun/commit/ea27b1363ef709ce4b169138017b67ef624b127b
+-Signed-off-by: Xiangyu Chen <xiangyu.chen@windriver.com>
+----
+- src/libcrun/container.c | 10 ++++++++--
+- 1 file changed, 8 insertions(+), 2 deletions(-)
+-
+-diff --git a/src/libcrun/container.c b/src/libcrun/container.c
+-index 34649f8..ffcdb24 100644
+---- a/src/libcrun/container.c
+-+++ b/src/libcrun/container.c
+-@@ -23,7 +23,9 @@
+- #include "container.h"
+- #include "utils.h"
+- #include "seccomp.h"
+--#include <seccomp.h>
+-+#ifdef HAVE_SECCOMP
+-+#  include <seccomp.h>
+-+#endif
+- #include "scheduler.h"
+- #include "seccomp_notify.h"
+- #include "custom-handler.h"
+-@@ -47,7 +49,9 @@
+- #include <sys/signalfd.h>
+- #include <sys/epoll.h>
+- #include <sys/socket.h>
+--#include <sys/capability.h>
+-+#ifdef HAVE_CAP
+-+#  include <sys/capability.h>
+-+#endif
+- #include <sys/ioctl.h>
+- #include <termios.h>
+- #include <grp.h>
+-@@ -3829,6 +3833,7 @@ populate_array_field (char ***field, char *array[], size_t num_elements)
+-   (*field)[i] = NULL;
+- }
+- 
+-+#ifdef HAVE_CAP
+- static void
+- populate_capabilities (struct features_info_s *info, char ***capabilities, size_t *num_capabilities)
+- {
+-@@ -3876,6 +3881,7 @@ populate_capabilities (struct features_info_s *info, char ***capabilities, size_
+-   (*capabilities)[index] = NULL; // Terminate the array with NULL
+-   populate_array_field (&(info->linux.capabilities), *capabilities, *num_capabilities);
+- }
+-+#endif
+- 
+- static void
+- retrieve_mount_options (struct features_info_s **info)
+--- 
+-2.34.1
+-
+diff --git a/package/crun/crun.hash b/package/crun/crun.hash
+index c461d78d97..b111e941dd 100644
+--- a/package/crun/crun.hash
++++ b/package/crun/crun.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  a76982ac076a5c9bf9f85bd8d25b1dc6344e252399a7e9231504357fc019f7cc  crun-1.12.tar.gz
++sha256  a03ba1e58b8823ae77d010024b43bd94c5a99f7d652257b1b23abd2d2cdb087f  crun-1.15.tar.gz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.libcrun
+diff --git a/package/crun/crun.mk b/package/crun/crun.mk
+index 005d5fb397..b48f15304b 100644
+--- a/package/crun/crun.mk
++++ b/package/crun/crun.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # asciidoc used to generate manpages, which we don't need, and if it's
+-CRUN_VERSION = 1.12
++CRUN_VERSION = 1.15
+ CRUN_SITE = https://github.com/containers/crun/releases/download/$(CRUN_VERSION)
+ CRUN_DEPENDENCIES = host-pkgconf yajl
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
