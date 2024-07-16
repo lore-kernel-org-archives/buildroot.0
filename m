@@ -1,59 +1,78 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F4CDC3DA59
-	for <buildroot@archiver.kernel.org>; Tue, 16 Jul 2024 18:40:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8145AC3DA49
+	for <buildroot@archiver.kernel.org>; Tue, 16 Jul 2024 19:39:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 48B3960A38;
-	Tue, 16 Jul 2024 18:40:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 15DE4401FE;
+	Tue, 16 Jul 2024 19:39:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3Q_DZl0m5RlZ; Tue, 16 Jul 2024 18:40:21 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id m668eW_OFVmu; Tue, 16 Jul 2024 19:39:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3983E60ABE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C247E401DA
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3983E60ABE;
-	Tue, 16 Jul 2024 18:40:21 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id CD4B81BF3B5
- for <buildroot@lists.busybox.net>; Tue, 16 Jul 2024 18:40:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C247E401DA;
+	Tue, 16 Jul 2024 19:39:53 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 50D1A1BF37C
+ for <buildroot@lists.busybox.net>; Tue, 16 Jul 2024 19:39:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C622980B35
- for <buildroot@lists.busybox.net>; Tue, 16 Jul 2024 18:40:19 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3DE1C400D6
+ for <buildroot@lists.busybox.net>; Tue, 16 Jul 2024 19:39:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tbqNR3ryGDvo for <buildroot@lists.busybox.net>;
- Tue, 16 Jul 2024 18:40:18 +0000 (UTC)
-X-Greylist: delayed 422 seconds by postgrey-1.37 at util1.osuosl.org;
- Tue, 16 Jul 2024 18:40:17 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 0B1DD80B20
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0B1DD80B20
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.130.47;
- helo=dd5108.kasserver.com; envelope-from=dev@andin.de; receiver=<UNKNOWN> 
-Received: from dd5108.kasserver.com (dd5108.kasserver.com [85.13.130.47])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0B1DD80B20
- for <buildroot@buildroot.org>; Tue, 16 Jul 2024 18:40:17 +0000 (UTC)
-Received: from andi-ThinkPad-P52.fritz.box
- (ipb21bd56e.dynamic.kabel-deutschland.de [178.27.213.110])
- by dd5108.kasserver.com (Postfix) with ESMTPA id 314735245CE7;
- Tue, 16 Jul 2024 20:33:13 +0200 (CEST)
-From: Andreas Naumann <anaumann@ultratronik.de>
-To: buildroot@buildroot.org
-Date: Tue, 16 Jul 2024 20:32:59 +0200
-Message-Id: <20240716183259.113591-1-anaumann@ultratronik.de>
-X-Mailer: git-send-email 2.34.1
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4-inPJOaJeob for <buildroot@lists.busybox.net>;
+ Tue, 16 Jul 2024 19:39:51 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.195;
+ helo=relay3-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D39F7400AB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D39F7400AB
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D39F7400AB
+ for <buildroot@buildroot.org>; Tue, 16 Jul 2024 19:39:50 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id B23EC60005;
+ Tue, 16 Jul 2024 19:39:47 +0000 (UTC)
+Date: Tue, 16 Jul 2024 21:39:46 +0200
+To: Fred Lefranc <fred.lefranc.evs@gmail.com>
+Message-ID: <20240716213946.43077ab4@windsurf>
+In-Reply-To: <CAGkXw1WpytUyJK+bjDp77LA6-i93=anNqth57SYV5YNbj0hmxw@mail.gmail.com>
+References: <20240715111003.1296141-1-fred.lefranc+evs@gmail.com>
+ <20240716075933.1315047-1-fred.lefranc+evs@gmail.com>
+ <20240716162323.48fb829b@windsurf>
+ <CAGkXw1WpytUyJK+bjDp77LA6-i93=anNqth57SYV5YNbj0hmxw@mail.gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-X-Spamd-Bar: +
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=fail (p=none dis=none)
- header.from=ultratronik.de
-Subject: [Buildroot] [PATCH 1/1] package/evemu: needs autoreconf for python
- 3.12 compatibility
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1721158787;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=hUAd4Iny7zue+g6BuZ7d6hZ0FgancgVu1E/Fe6ubc0g=;
+ b=N+OkJ9QgWOyjx03Em5tn3S7Ih/jKWf10WvwZAz+yjYQUAWkI78PaIumw/cLrdWHwYDJjTM
+ +6CxEWyCvxB8sBNbN2YbWqDNXgs4x+WQgdwmd9oiNUQ/3YHc7v/BYD+uBNrsnCKefm0wUA
+ gWlFQJX8ZHnH9apqlyxa5ARSJ482sgG8zupxIrR8Emkfp8AhmL2nmZqmGbUcCbo598GPHr
+ 835ovXeA7V6+J4SzYvRJmVotgKSOuPTlIMBVVToSdCXzjdMGroM8dXZjPIJTeBmlZcSa+u
+ lyXdxUdk0fDG3H6VwSpSFR5QWFsdLNSNWQBlW1OELkmcin9/2E0lnRKXddmDRw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=N+OkJ9Qg
+Subject: Re: [Buildroot] [PATCH v3] package/busybox: fix build with glibc
+ 2.39
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,47 +84,64 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Andreas Naumann <anaumann@ultratronik.de>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Fred Lefranc <fred.lefranc+evs@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-evemu ships with an ancient py-compile script (from 2011) depending
-the imp module, which was finally removed in Python 3.12.
-Set autoreconf in order to get an up to date version of py-compile
-which automatically handles the different python versions.
+Hello Fred,
 
-This is a similar problem as in
-42eae73ef1 package/cracklib: python needs autoreconf
+On Tue, 16 Jul 2024 19:32:05 +0200
+Fred Lefranc <fred.lefranc.evs@gmail.com> wrote:
 
-Fixes:
+> Here is a revised version:
 
- http://autobuild.buildroot.org/results/a52/a520583be6e86993d268d6535f727a352bd92028/
+This is much better. Minor comments.
 
-and many other configs where Python3 is selected and thus evemu
-is configured to build the python-bindings.
+> When glibc was bumped to version 2.39 in commit
+> b5680f53d60acf8ff6010082f873438a39bd5d97
+> it removed the deprecated libcrypt support.
+> 
+> Busybox has internal crypt functions that are enabled by default. However,
+> a user
+> can choose to use the system's crypt function instead by disabling
+> CONFIG_USE_BB_CRYPT.
+> In such situations, glibc's libcrypt was providing busybox's libcrypt
+> dependency
+> and so busybox builds are broken when using glibc version 2.39 with
+> CONFIG_USE_BB_CRYPT
+> disabled.
 
-Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
----
- package/evemu/evemu.mk | 1 +
- 1 file changed, 1 insertion(+)
+In this last sentence, the usage of English tenses doesn't seem correct
+to me (even though I'm not a native speaker). What about:
 
-diff --git a/package/evemu/evemu.mk b/package/evemu/evemu.mk
-index 886ceb1142..b450e372de 100644
---- a/package/evemu/evemu.mk
-+++ b/package/evemu/evemu.mk
-@@ -9,6 +9,7 @@ EVEMU_SITE = http://www.freedesktop.org/software/evemu
- EVEMU_SOURCE = evemu-$(EVEMU_VERSION).tar.xz
- EVEMU_LICENSE = LGPL-3.0 (library), GPL-3.0 (tools)
- EVEMU_LICENSE_FILES = COPYING
-+EVEMU_AUTORECONF=YES
- EVEMU_INSTALL_STAGING = YES
- 
- # asciidoc used to generate manpages, which we don't need, and if it's
+In such situation, until the upgrade of glibc to 2.39, Busybox could
+rely on the libcrypt provided by glibc. However, this the bump of glibc
+to 2.39, glibc no longer provides libcrypt, causing a build failure
+with Busybox configurations that have CONFIG_USE_BB_CRYPT disabled.
+
+> 
+> To fix this, add the libxcrypt dependency to busybox when
+> BR2_PACKAGE_LIBXCRYPT is
+> selected. The user still has to select the libxcrypt package for this patch
+> to work
+> properly.
+
+Replace last sentence with:
+
+The user is still responsible for enabling BR2_PACKAGE_LIBXCRYPT when
+their Busybox configuration has CONFIG_USE_BB_CRYPT disabled.
+
+Thanks!
+
+Thomas
 -- 
-2.34.1
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
