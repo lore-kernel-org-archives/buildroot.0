@@ -4,48 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C707BC3DA5E
-	for <buildroot@archiver.kernel.org>; Tue, 16 Jul 2024 12:43:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20EB5C3DA49
+	for <buildroot@archiver.kernel.org>; Tue, 16 Jul 2024 12:43:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9013540BFA;
-	Tue, 16 Jul 2024 12:43:26 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A651340BD1;
+	Tue, 16 Jul 2024 12:43:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7_seMqjOPbYP; Tue, 16 Jul 2024 12:43:25 +0000 (UTC)
+ id c_I_I_T3wNT1; Tue, 16 Jul 2024 12:43:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DA9F340BF4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3D60240C01
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DA9F340BF4;
-	Tue, 16 Jul 2024 12:43:24 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3D60240C01;
+	Tue, 16 Jul 2024 12:43:28 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 381481BF3E3
- for <buildroot@lists.busybox.net>; Tue, 16 Jul 2024 12:43:11 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3D2051BF97D
+ for <buildroot@lists.busybox.net>; Tue, 16 Jul 2024 12:43:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9134C402FE
+ by smtp4.osuosl.org (Postfix) with ESMTP id ADC18403B2
  for <buildroot@lists.busybox.net>; Tue, 16 Jul 2024 12:43:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rfE7GIM733b7 for <buildroot@lists.busybox.net>;
+ id 78z-j6AhwZiO for <buildroot@lists.busybox.net>;
  Tue, 16 Jul 2024 12:43:09 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.194;
+ helo=relay2-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 09FAD403B2
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 09FAD403B2
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 77700402DA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 77700402DA
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [217.70.183.194])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 77700402DA
  for <buildroot@buildroot.org>; Tue, 16 Jul 2024 12:43:08 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6ED158438E; Tue, 16 Jul 2024 12:43:08 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 16 Jul 2024 14:42:03 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: bffb6a2339bbfe28a0ca2399716c3966af4a623c
-X-Git-Newrev: 34fbdb0d99d00df578f825f9bf5d211e67413076
-X-Patchwork-Hint: ignore
-Message-Id: <20240716124308.6ED158438E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/c-ares: bump to 1.32.2
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 27C744000D;
+ Tue, 16 Jul 2024 12:43:06 +0000 (UTC)
+Date: Tue, 16 Jul 2024 14:43:05 +0200
+To: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
+Message-ID: <20240716144305.19eb7c88@windsurf>
+In-Reply-To: <20240716102809.1704624-1-buildroot@bubu1.eu>
+References: <20240716102809.1704624-1-buildroot@bubu1.eu>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1721133786;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=5+WgdsnzZMtdrpLWK0nXkWx8nWCcPLfOOb9vEucnVRo=;
+ b=EE76UxJpt3O9RULko6MOOkuOsnZRxZvJ3/a2zcL74IyKddaHvzIsQcAAJLUHfUJeN8I3GZ
+ 8gXP8LXn8MpxPIonWesUHm8VQ6qtJNRg0UfQXSDTrxKiqeZAM5RwtodVaBRFXzlbyemX9u
+ /y2xZPk5MDnt5HVtJkn5iUQrgDtQlLs6owOKXN7OiGzuOQTPvoSy9nRdLmbtJgGjzqfWzD
+ Ka83agoeqRwSYjtYWloHLA8OJoXWI87H1zSgCgTDG56iIkfqIx3NeqDy9FM8Xg74LFhdEG
+ Qnur+19ad44u7loC0uN99dgeXzPa8+q7Q+ciuOdYmEfkjsWeGEbwW/pcewvuSw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=EE76UxJp
+Subject: Re: [Buildroot] [PATCH] package/c-ares: bump to 1.32.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,54 +82,33 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Marcus Hoffmann <buildroot@bubu1.eu>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=34fbdb0d99d00df578f825f9bf5d211e67413076
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue, 16 Jul 2024 12:28:08 +0200
+Marcus Hoffmann via buildroot <buildroot@buildroot.org> wrote:
 
-Changelog: https://c-ares.org/changelog.html#1_32_2
+> Changelog: https://c-ares.org/changelog.html#1_32_2
+> 
+> License hash changed due to whitespace changes:
+> https://github.com/c-ares/c-ares/commit/ce4c20afcbf9a05d36d02893e8ebb66726d8396c
+> 
+> Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+> ---
+>  package/c-ares/c-ares.hash | 4 ++--
+>  package/c-ares/c-ares.mk   | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
-License hash changed due to whitespace changes:
-https://github.com/c-ares/c-ares/commit/ce4c20afcbf9a05d36d02893e8ebb66726d8396c
+Applied to master, thanks.
 
-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/c-ares/c-ares.hash | 4 ++--
- package/c-ares/c-ares.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/c-ares/c-ares.hash b/package/c-ares/c-ares.hash
-index 9a2b69c731..e1cf9f657a 100644
---- a/package/c-ares/c-ares.hash
-+++ b/package/c-ares/c-ares.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--sha256  0a72be66959955c43e2af2fbd03418e82a2bd5464604ec9a62147e37aceb420b  c-ares-1.27.0.tar.gz
-+sha256  072ff6b30b9682d965b87eb9b77851dc1cd8e6d8090f6821a56bd8fa89595061  c-ares-1.32.2.tar.gz
- 
- # Hash for license file
--sha256  80fff25340df53b0cf0c3cddbca9050b559b9cbed2ad71830327cfef54959aef  LICENSE.md
-+sha256  8a9994f85a8e531e1a3217ab7ba509787c6b93056aabe702137ce662db8321c2  LICENSE.md
-diff --git a/package/c-ares/c-ares.mk b/package/c-ares/c-ares.mk
-index c2403b9c4c..4b7342cadb 100644
---- a/package/c-ares/c-ares.mk
-+++ b/package/c-ares/c-ares.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--C_ARES_VERSION = 1.27.0
--C_ARES_SITE = https://github.com/c-ares/c-ares/releases/download/cares-1_27_0
-+C_ARES_VERSION = 1.32.2
-+C_ARES_SITE = https://github.com/c-ares/c-ares/releases/download/v1.32.2
- C_ARES_INSTALL_STAGING = YES
- C_ARES_CONF_OPTS = --with-random=/dev/urandom
- C_ARES_LICENSE = MIT
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
