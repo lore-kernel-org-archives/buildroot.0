@@ -4,99 +4,92 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70612C3DA59
-	for <buildroot@archiver.kernel.org>; Tue, 16 Jul 2024 18:16:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97B5EC3DA59
+	for <buildroot@archiver.kernel.org>; Tue, 16 Jul 2024 18:34:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 20533607B8;
-	Tue, 16 Jul 2024 18:16:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3FE4C607ED;
+	Tue, 16 Jul 2024 18:34:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cl4m2TgCME3n; Tue, 16 Jul 2024 18:16:37 +0000 (UTC)
+ id x_9ou6Tsx6tP; Tue, 16 Jul 2024 18:34:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 391F660AA6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 39BB060ABE
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 391F660AA6;
-	Tue, 16 Jul 2024 18:16:37 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2B3D21BF3CB
- for <buildroot@lists.busybox.net>; Tue, 16 Jul 2024 18:16:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 39BB060ABE;
+	Tue, 16 Jul 2024 18:34:41 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 21CAA1BF3B5
+ for <buildroot@lists.busybox.net>; Tue, 16 Jul 2024 18:34:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 25356607B8
- for <buildroot@lists.busybox.net>; Tue, 16 Jul 2024 18:16:36 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1CAF081351
+ for <buildroot@lists.busybox.net>; Tue, 16 Jul 2024 18:34:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vWpxvC-bDngB for <buildroot@lists.busybox.net>;
- Tue, 16 Jul 2024 18:16:35 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id I6DHgWuN_gBj for <buildroot@lists.busybox.net>;
+ Tue, 16 Jul 2024 18:34:38 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::334; helo=mail-wm1-x334.google.com;
- envelope-from=gael.portay@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 261F960AA6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 261F960AA6
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
- [IPv6:2a00:1450:4864:20::334])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 261F960AA6
- for <buildroot@buildroot.org>; Tue, 16 Jul 2024 18:16:35 +0000 (UTC)
-Received: by mail-wm1-x334.google.com with SMTP id
- 5b1f17b1804b1-4266edee10cso37655925e9.2
- for <buildroot@buildroot.org>; Tue, 16 Jul 2024 11:16:34 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::332; helo=mail-wm1-x332.google.com;
+ envelope-from=francois.perrad@gadz.org; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D05E28134E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D05E28134E
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
+ [IPv6:2a00:1450:4864:20::332])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D05E28134E
+ for <buildroot@busybox.net>; Tue, 16 Jul 2024 18:34:37 +0000 (UTC)
+Received: by mail-wm1-x332.google.com with SMTP id
+ 5b1f17b1804b1-427b8571820so11116505e9.0
+ for <buildroot@busybox.net>; Tue, 16 Jul 2024 11:34:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1721153793; x=1721758593;
- h=in-reply-to:references:subject:cc:to:from:message-id:date
- :content-transfer-encoding:mime-version:x-gm-message-state:from:to
- :cc:subject:date:message-id:reply-to;
- bh=ZWbG3ql9J18P3gcR7dI3RL0lZZy8EOJ7DoYg4HwSx4Q=;
- b=BcgieDpcMCBWF3kRu+RZU1JSzNWi+Eho+PJ3QM1EI4y8ZEVux8xyT52JNT1sHmm7GQ
- NY49enNT4av2CRAWBKiMzoqYReTRV5HqX80oeCTnTcKJyzef5TvZq8dZn8trYsA8HZAe
- hf53uybKrNsEBDg1AYsGdh41D3EzS6cn9xtO6lQGAZ2dsPwAyKGBCDPhdr48GYmtWhI/
- tz8v/Rj5Z572uPlv/e545LlLmTm0DAz7XaI7J1JAbr3QqpkBPfE2SNEbL/90wziwH8sh
- zi2yXqx4dolFqyMNoPwWnj7e+Ju6x3f5bGaKLfLeUPNEl7NFQXxiOYv40q1Yk0z/JrQ9
- oV7w==
-X-Forwarded-Encrypted: i=1;
- AJvYcCUeHhiCqnl8+QO3R0PuGblY3hZslcf4GV4zZ92qyIYqbPZV3D5NFK4s5GiIf7ZLY7wyFeQ/48HSmK5xp+NSrIE0hbKl3Ka47Q==
-X-Gm-Message-State: AOJu0YyIWaZYHEq5gIDTDe3owUF5x0vr6xtQGygmapekDqOyRHzex/9m
- BbtDDJwK6PyunVrQLutUBLcvSOdYkO2SBUG9ITxehJ/S6VNJ+EYz
-X-Google-Smtp-Source: AGHT+IFJh4Kr0P1nZN0DiAY7cijaphVOqFaUoMioBa08J47Uu/WHmJ6BfB5Kye7xTrHMYkCnWOUIGA==
-X-Received: by 2002:a05:600c:46c9:b0:426:6b47:290b with SMTP id
- 5b1f17b1804b1-427ba6dc9a8mr22479815e9.28.1721153792899; 
- Tue, 16 Jul 2024 11:16:32 -0700 (PDT)
-Received: from localhost ([2a01:e0a:ce:f2f0:2a6b:35ff:feb8:77d9])
+ d=1e100.net; s=20230601; t=1721154875; x=1721759675;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=7vNkNOQLuMrbFrtL+sJfaSlL7GdhPc0RJNU/kAowRfg=;
+ b=IZbusuzdrL7HvRE2zg+Y8wfYTmZhZNxq//VOJGwyo4Kd21vAXBhaQEVPXIacHSzOSk
+ XeCgj0G4nSd2+SkEZhiS0w0HEUUU6jZH60DXNC/NkRIprh8REKNWzZKhy6+shkzMWpnB
+ U3oNWxtBJhC23zdFYav9JbrIRxqocaSdkAHPf5mimCGhWmNzkM/jwy0gtRi3MTmdgNbB
+ wmPJYnsq/mgBikb13lTfnOWR4bP5ostRy4DvofPj4qWKD3TO5mxr7LNcY+fZcUJbqD4t
+ jx4F22rbVWPzIKJNFkqkeef2BVNKdvOaKDD1dlPIBNIXgtxgSA8gR3WYf6NkbcH3hD5r
+ VO7g==
+X-Gm-Message-State: AOJu0YyHFW0/q/S2V6Sj/8jn8kRDmalbSJUjOJXXopFY9yfSHpjYx3fW
+ i5jYc7rv7TlLwXnY2AbSPpW8SC8Qi+Opx0P//VammWyd5TMNHGJE4SPQc6Ra3Y+uokmipTNbzho
+ =
+X-Google-Smtp-Source: AGHT+IEjm2n/iG0vqGFbxd5/QuRprFE6FJQFLirjZrreK4gM9c2iRPAeSM96sFXwXUpj76Ben0vXdg==
+X-Received: by 2002:a05:600c:314a:b0:426:5fcf:5e89 with SMTP id
+ 5b1f17b1804b1-427ba72b1aamr19986565e9.33.1721154875275; 
+ Tue, 16 Jul 2024 11:34:35 -0700 (PDT)
+Received: from vm-2404.. (140.33.66.37.rev.sfr.net. [37.66.33.140])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-4279f27a265sm170653935e9.28.2024.07.16.11.16.32
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 16 Jul 2024 11:16:32 -0700 (PDT)
-Mime-Version: 1.0
-Date: Tue, 16 Jul 2024 20:16:32 +0200
-Message-Id: <D2R63KJLU3ZF.3CNKAW80ULZGX@gmail.com>
-From: =?utf-8?q?Ga=C3=ABl_PORTAY?= <gael.portay@gmail.com>
-To: "Athaariq Ardhiansyah" <foss@athaariq.my.id>, <buildroot@buildroot.org>
-X-Mailer: aerc 0.18.0-0-g5f8620445ed9
-References: <20240715160941.90353-1-foss@athaariq.my.id>
- <D2QRF2XRV54A.YI13SBIAUJMY@gmail.com>
- <8c2efc93-e2a8-402e-adf0-5679ef6c7cc8@athaariq.my.id>
-In-Reply-To: <8c2efc93-e2a8-402e-adf0-5679ef6c7cc8@athaariq.my.id>
+ ffacd0b85a97d-368155f7891sm7444358f8f.52.2024.07.16.11.34.34
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 16 Jul 2024 11:34:34 -0700 (PDT)
+From: Francois Perrad <francois.perrad@gadz.org>
+To: buildroot@busybox.net
+Date: Tue, 16 Jul 2024 20:34:29 +0200
+Message-ID: <20240716183430.725788-1-francois.perrad@gadz.org>
+X-Mailer: git-send-email 2.43.0
+MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1721153793; x=1721758593; darn=buildroot.org;
- h=in-reply-to:references:subject:cc:to:from:message-id:date
- :content-transfer-encoding:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=ZWbG3ql9J18P3gcR7dI3RL0lZZy8EOJ7DoYg4HwSx4Q=;
- b=JG74eAh3kxCh/dPj1In6zGFL2RItUuYQ121MOwcAuFrcdawEqxhgEaClsD0k/ssnuK
- skAJVVQq+bu9aoHjZo4dWsn4hE1a39oz2qjziQh7RWcgQX4EgsvmyQqZBj99HQ2et4oN
- BhLeGEza6F+khFa5nn7M1EJdWs6Gt0YVTYeIlYQP79wQLTYOZSfjYSVqPie0twPyiEfE
- FtjNuJcCMoN57GNw3cDzaRKgrC6wLhOQaaxGI/cVGDr87tla1fshtPrEGNogl3TG4F35
- L8/soU0br33uiiRYNiz8HTaxcQa/iXEeQez1qifs01OsIzA3ZPV3euJeCSaiv54zAQ3Z
- 7fKA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=gadz.org; s=google; t=1721154875; x=1721759675; darn=busybox.net;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=7vNkNOQLuMrbFrtL+sJfaSlL7GdhPc0RJNU/kAowRfg=;
+ b=Xdd7LceyBqcNAu8ndF65XcyyVuxog5o3pG6VT0h0VyTIztqKby9P3z3uPmGKC4HXhY
+ vwMV60WyQtYzkzE79FYCMt57YD2Wk/HCrI8ZHUEBuCcD+nEwm1Hcr7sVE9WQGwppUc4G
+ S8vWGoG+sY3oGG62U1AHM3HrnjN6wZ+sgQ/js8glCPQFzVHbNwEZo8nLqcyA+sBLOfJP
+ YgpTpNDuTGJqfQMhSpJnTM9rirXweRHYSRYR0Z3kDXPGMTnlSYOUFWD5CFC2cu5DLYpG
+ y8u5GMoRvCNwmOKRcWjq/Y/bpU9D1Ef5AKouf7MgeD9K7RbQXUg/Qmy74aKcPIfWAifP
+ H1LA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ header.from=gadz.org
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=JG74eAh3
-Subject: Re: [Buildroot] [PATCH v5 1/3] package/rpi-firmware: bump version
- to 1.20240529
+ unprotected) header.d=gadz.org header.i=@gadz.org header.a=rsa-sha256
+ header.s=google header.b=Xdd7Lcey
+Subject: [Buildroot] [PATCH] package/libfribidi: bump to version 1.0.15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -108,35 +101,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Mahyar Koshkouei <mahyar.koshkouei@gmail.com>,
- Martin Bark <martin@barkynet.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gQXRoYWFyaXEsCgpPbiBUdWUgSnVsIDE2LCAyMDI0IGF0IDE6NDUgUE0gQ0VTVCwgQXRo
-YWFyaXEgQXJkaGlhbnN5YWggd3JvdGU6Cj4gWWVhaCBJIGFncmVlLiBJIHRoaW5rIHRoaXMgcGF0
-Y2ggc2VyaWVzIGlzIG5vIGxvbmdlciByZWxldmFudCBmb3Igbm93Lgo+IFRoZSBXaS1GaSBicmVh
-a2FnZSBmaXggb25seSBleGlzdCBvbiBsaW51eCB2Ni42LjM5LCBub3QgdjYuNi4zMSB3aGljaCBp
-cwo+IGN1cnJlbnRseSBsYXRlc3Qgc3RhYmxlIG5vdy4gVGhlcmVmb3JlLCB0aGUgYnVtcCB3b24n
-dCBkbyBhbnl0aW5nIHVzZWZ1bAo+IHVudGlsIHRoZSBuZXdlciBzdGFibGUgdGFnLgo+CgpXZWxs
-IG5vLCBpdCBkb2VzIG1ha2Ugc2Vuc2UgdG8gYnVtcCBib3RoIHJwaS1maXJtd2FyZSBhbmQgbGlu
-dXghCgpFc3BlY2lhbGx5LCBpdCBpcyB2ZXJ5IG5pY2UgdG8gYnVtcCB0byBhIHRhZ2dlZCBjb21t
-aXQsIEkgZ3Vlc3MsIGl0IGhhcwpuZXZlciBiZWVuIGJlZm9yZSA6KQoKPiAgPiBBcyByZXF1ZXN0
-ZWQgYnkgVGhvbWFzLCB5b3UgY2FuIGFkZCB0aGUgZm9sbG93aW5nIGNvbW1lbnQ6Cj4gID4JIyBQ
-bGVhc2Uga2VlcCBpbiBzeW5jIHdpdGggY29uZmlncy9yYXNwYmVycnlwaSpfZGVjb25maWcKPgo+
-IFRoaXMgZ29pbmcgdG8gYmUgc3VibWl0dGVkIG9uIHRoZSBuZXh0IHJhc3BiZXJyeSdzIGxpbnV4
-IGtlcm5lbCBzdGFibGUKPiB0YWcsIGFzIEkgd2FudCB0byBleHBlcmltZW50IHRvIG1ha2UgdGhl
-IHZlcnNpb24gdGFnIHN5bmNocm9uaXplZCBvbgo+IGJvdGgga2VybmVsIGFuZCBycGktZmlybXdh
-cmUgdmVyc2lvbi4gSWYgaXQgaW1wb3NzaWJsZSwgdGhlbiBUaG9tYXMnCj4gc3VnZ2VzdGlvbiB3
-b3VsZCBiZSB0aGUgYmVzdCBvcHRpb24uIEknbSBnb2luZyB0byBidW1wIGFsbCBvZgo+IHJhc3Bi
-ZXJyeSBwaSBib2FyZHMgYXQgb25jZSBvbiB0aGF0IHBhdGNoIHN1Ym1pc3Npb24uCj4KCkl0IGlz
-IHBvc3NpYmxlLCBpdCBpcyB3aGF0IGl0IGlzIGRvbmUgdXAgdG8gbm93IChhdCB0aGUgZXhjZXB0
-aW9uIG9mCmJ1bXBpbmcgdG8gYSB0YWdnZWQgY29tbWl0KS4KCkFuZCwgZG8gbm90IGZvcmdldCB0
-byBjb21tZW50IGJlbG93IGFzIHdlbGwgaW4gdGhlIGRlZmNvbmZpZyBmaWxlcyA7KQoKCSMgUGxl
-YXNlIGtlZXAgaW4gc3luYyB3aXRoIHBhY2thZ2UvcnBpLWZpcm13YXJlL3JwaS1maXJtd2FyZS5t
-awoKPiBSZWdhcmRzLAo+IEF0aGFhcmlxIEFyZGhpYW5zeWFoCgpLaW5kIFJlZ2FyZHMsCkdhw6ts
-Cl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9v
-dCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWls
-ZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/libfribidi/libfribidi.hash | 2 +-
+ package/libfribidi/libfribidi.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/libfribidi/libfribidi.hash b/package/libfribidi/libfribidi.hash
+index b37fb9223..29948fbba 100644
+--- a/package/libfribidi/libfribidi.hash
++++ b/package/libfribidi/libfribidi.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  76ae204a7027652ac3981b9fa5817c083ba23114340284c58e756b259cd2259a  fribidi-1.0.14.tar.xz
++sha256  0bbc7ff633bfa208ae32d7e369cf5a7d20d5d2557a0b067c9aa98bcbf9967587  fribidi-1.0.15.tar.xz
+ sha256  32434afcc8666ba060e111d715bfdb6c2d5dd8a35fa4d3ab8ad67d8f850d2f2b  COPYING
+diff --git a/package/libfribidi/libfribidi.mk b/package/libfribidi/libfribidi.mk
+index 7c6d32fb7..ab7fe7030 100644
+--- a/package/libfribidi/libfribidi.mk
++++ b/package/libfribidi/libfribidi.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBFRIBIDI_VERSION = 1.0.14
++LIBFRIBIDI_VERSION = 1.0.15
+ LIBFRIBIDI_SOURCE = fribidi-$(LIBFRIBIDI_VERSION).tar.xz
+ LIBFRIBIDI_SITE = https://github.com/fribidi/fribidi/releases/download/v$(LIBFRIBIDI_VERSION)
+ LIBFRIBIDI_LICENSE = LGPL-2.1+
+-- 
+2.43.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
