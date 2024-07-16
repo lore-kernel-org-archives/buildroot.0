@@ -4,92 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97B5EC3DA59
-	for <buildroot@archiver.kernel.org>; Tue, 16 Jul 2024 18:34:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3D1E6C3DA59
+	for <buildroot@archiver.kernel.org>; Tue, 16 Jul 2024 18:34:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3FE4C607ED;
-	Tue, 16 Jul 2024 18:34:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EBEA960ABE;
+	Tue, 16 Jul 2024 18:34:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id x_9ou6Tsx6tP; Tue, 16 Jul 2024 18:34:41 +0000 (UTC)
+ id ans8cv6ETK8X; Tue, 16 Jul 2024 18:34:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 39BB060ABE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F32EB60B4F
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 39BB060ABE;
-	Tue, 16 Jul 2024 18:34:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F32EB60B4F;
+	Tue, 16 Jul 2024 18:34:48 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 21CAA1BF3B5
- for <buildroot@lists.busybox.net>; Tue, 16 Jul 2024 18:34:39 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8EC121BF3B5
+ for <buildroot@lists.busybox.net>; Tue, 16 Jul 2024 18:34:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1CAF081351
- for <buildroot@lists.busybox.net>; Tue, 16 Jul 2024 18:34:39 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7AE2581351
+ for <buildroot@lists.busybox.net>; Tue, 16 Jul 2024 18:34:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id I6DHgWuN_gBj for <buildroot@lists.busybox.net>;
- Tue, 16 Jul 2024 18:34:38 +0000 (UTC)
+ id 6Kbxm5qSqoYa for <buildroot@lists.busybox.net>;
+ Tue, 16 Jul 2024 18:34:46 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::332; helo=mail-wm1-x332.google.com;
+ client-ip=2a00:1450:4864:20::330; helo=mail-wm1-x330.google.com;
  envelope-from=francois.perrad@gadz.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D05E28134E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D05E28134E
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
- [IPv6:2a00:1450:4864:20::332])
- by smtp1.osuosl.org (Postfix) with ESMTPS id D05E28134E
- for <buildroot@busybox.net>; Tue, 16 Jul 2024 18:34:37 +0000 (UTC)
-Received: by mail-wm1-x332.google.com with SMTP id
- 5b1f17b1804b1-427b8571820so11116505e9.0
- for <buildroot@busybox.net>; Tue, 16 Jul 2024 11:34:37 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 610ED8134E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 610ED8134E
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
+ [IPv6:2a00:1450:4864:20::330])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 610ED8134E
+ for <buildroot@busybox.net>; Tue, 16 Jul 2024 18:34:46 +0000 (UTC)
+Received: by mail-wm1-x330.google.com with SMTP id
+ 5b1f17b1804b1-427b1d4da32so249345e9.0
+ for <buildroot@busybox.net>; Tue, 16 Jul 2024 11:34:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1721154875; x=1721759675;
+ d=1e100.net; s=20230601; t=1721154884; x=1721759684;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=7vNkNOQLuMrbFrtL+sJfaSlL7GdhPc0RJNU/kAowRfg=;
- b=IZbusuzdrL7HvRE2zg+Y8wfYTmZhZNxq//VOJGwyo4Kd21vAXBhaQEVPXIacHSzOSk
- XeCgj0G4nSd2+SkEZhiS0w0HEUUU6jZH60DXNC/NkRIprh8REKNWzZKhy6+shkzMWpnB
- U3oNWxtBJhC23zdFYav9JbrIRxqocaSdkAHPf5mimCGhWmNzkM/jwy0gtRi3MTmdgNbB
- wmPJYnsq/mgBikb13lTfnOWR4bP5ostRy4DvofPj4qWKD3TO5mxr7LNcY+fZcUJbqD4t
- jx4F22rbVWPzIKJNFkqkeef2BVNKdvOaKDD1dlPIBNIXgtxgSA8gR3WYf6NkbcH3hD5r
- VO7g==
-X-Gm-Message-State: AOJu0YyHFW0/q/S2V6Sj/8jn8kRDmalbSJUjOJXXopFY9yfSHpjYx3fW
- i5jYc7rv7TlLwXnY2AbSPpW8SC8Qi+Opx0P//VammWyd5TMNHGJE4SPQc6Ra3Y+uokmipTNbzho
+ bh=sgdlkFp2+aNexorHwo0R1CMi/R7Xz5qnVyi9U0tL72c=;
+ b=g1BBpk1xaBcTgQ++4pQA40hGS6FWjV4MfLQjPFmnax2PjbRUq86Sd2+3pF9rjHTCOK
+ JvDkp/pagYsyio6PdML4x3YKRgH50EC2Z1QSqfJWM5pVc/igVn/4c3is2B8zXLBr1UR4
+ 1eCMH3GWu19RJRfM+7Fz5thdJH6TgHLaGSxsXEnZlnUOTX0bdxqxHUYhSArAlJT3L3C3
+ q2lriNpr0EUVZ781gPPGi5W4x2ztoQcHDDA8Xj+piLDuFSe5T2yzTmPPw4ifLOq0A+st
+ LqaW4LhUQO6IlW+A0ifQ9qn5M3KnQUi2g7XYSa7IGUIte2iKeZz5TZLElRn5Sn8YV3/m
+ SqAA==
+X-Gm-Message-State: AOJu0Ywv6z7NSQO/g8/Nd3Xc5Rnv0MBX0faDIPod5Zho9gqNPJT5U0G3
+ JAkPYxAb09JH3TAI8t85AJGj/iEiUSCiyki2gVx0cRPMTAx57Af2RwRaHFCMbKc8Y2VVGb9nhUs
  =
-X-Google-Smtp-Source: AGHT+IEjm2n/iG0vqGFbxd5/QuRprFE6FJQFLirjZrreK4gM9c2iRPAeSM96sFXwXUpj76Ben0vXdg==
-X-Received: by 2002:a05:600c:314a:b0:426:5fcf:5e89 with SMTP id
- 5b1f17b1804b1-427ba72b1aamr19986565e9.33.1721154875275; 
- Tue, 16 Jul 2024 11:34:35 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IE8c0bpIYo1SHhn0l9fY/mfm7GsFdSoCbmM3Jn3R8RnTgQuGWPShk+7CBH3QCT2PRahWhmFOQ==
+X-Received: by 2002:a05:600c:3c9b:b0:426:5b17:8458 with SMTP id
+ 5b1f17b1804b1-427bb6d3d6dmr19185665e9.12.1721154884404; 
+ Tue, 16 Jul 2024 11:34:44 -0700 (PDT)
 Received: from vm-2404.. (140.33.66.37.rev.sfr.net. [37.66.33.140])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-368155f7891sm7444358f8f.52.2024.07.16.11.34.34
+ 5b1f17b1804b1-427c0019f5bsm15440825e9.27.2024.07.16.11.34.43
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 16 Jul 2024 11:34:34 -0700 (PDT)
+ Tue, 16 Jul 2024 11:34:44 -0700 (PDT)
 From: Francois Perrad <francois.perrad@gadz.org>
 To: buildroot@busybox.net
-Date: Tue, 16 Jul 2024 20:34:29 +0200
-Message-ID: <20240716183430.725788-1-francois.perrad@gadz.org>
+Date: Tue, 16 Jul 2024 20:34:40 +0200
+Message-ID: <20240716183440.725816-1-francois.perrad@gadz.org>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gadz.org; s=google; t=1721154875; x=1721759675; darn=busybox.net;
+ d=gadz.org; s=google; t=1721154884; x=1721759684; darn=busybox.net;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=7vNkNOQLuMrbFrtL+sJfaSlL7GdhPc0RJNU/kAowRfg=;
- b=Xdd7LceyBqcNAu8ndF65XcyyVuxog5o3pG6VT0h0VyTIztqKby9P3z3uPmGKC4HXhY
- vwMV60WyQtYzkzE79FYCMt57YD2Wk/HCrI8ZHUEBuCcD+nEwm1Hcr7sVE9WQGwppUc4G
- S8vWGoG+sY3oGG62U1AHM3HrnjN6wZ+sgQ/js8glCPQFzVHbNwEZo8nLqcyA+sBLOfJP
- YgpTpNDuTGJqfQMhSpJnTM9rirXweRHYSRYR0Z3kDXPGMTnlSYOUFWD5CFC2cu5DLYpG
- y8u5GMoRvCNwmOKRcWjq/Y/bpU9D1Ef5AKouf7MgeD9K7RbQXUg/Qmy74aKcPIfWAifP
- H1LA==
+ bh=sgdlkFp2+aNexorHwo0R1CMi/R7Xz5qnVyi9U0tL72c=;
+ b=cerQlkG6bwkAUOeVFKvl4CeVbdibkx6aZnQyevTmMsCRmoCj/JqYWUR7YUVI6ztiah
+ /VP9y3Dl2FDwhGmpm4CBBjV+Mkt81dtLB6+ekP/mrcbkA9dOB0YuRP/Q7Yt3BSvGK9ol
+ 6SuP8fjxvIWtmAMgL2Y/OIia+pT4R47W9WdOtv6D63+rWYDBiFbwieWwLbtpsCwgakce
+ 9qqQ1HH7LQNUBEJ+ScXzIuQ71EdO13uP4HYZMbm/0GmIhNzfMj8I2rAZ+tpL9t3gbP23
+ 10IhsRa++aGjbgMRn/zhhiDLJp/VLA3g+EaxhrTiGsGxhmqvf+aNd8SzIyApjY0KzqOI
+ Fd4A==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gadz.org
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gadz.org header.i=@gadz.org header.a=rsa-sha256
- header.s=google header.b=Xdd7Lcey
-Subject: [Buildroot] [PATCH] package/libfribidi: bump to version 1.0.15
+ dkim=pass (2048-bit key) header.d=gadz.org header.i=@gadz.org
+ header.a=rsa-sha256 header.s=google header.b=cerQlkG6
+Subject: [Buildroot] [PATCH] package/pango: bump to version 1.54.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -108,32 +107,37 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/libfribidi/libfribidi.hash | 2 +-
- package/libfribidi/libfribidi.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/pango/pango.hash | 4 ++--
+ package/pango/pango.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libfribidi/libfribidi.hash b/package/libfribidi/libfribidi.hash
-index b37fb9223..29948fbba 100644
---- a/package/libfribidi/libfribidi.hash
-+++ b/package/libfribidi/libfribidi.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/pango/pango.hash b/package/pango/pango.hash
+index 69b6b0adf..9f321eea6 100644
+--- a/package/pango/pango.hash
++++ b/package/pango/pango.hash
+@@ -1,5 +1,5 @@
+-# From https://download.gnome.org/sources/pango/1.52/pango-1.52.2.sha256sum
+-sha256  d0076afe01082814b853deec99f9349ece5f2ce83908b8e58ff736b41f78a96b  pango-1.52.2.tar.xz
++# From https://download.gnome.org/sources/pango/1.54/pango-1.54.0.sha256sum
++sha256  8a9eed75021ee734d7fc0fdf3a65c3bba51dfefe4ae51a9b414a60c70b2d1ed8  pango-1.54.0.tar.xz
+ 
  # Locally computed
--sha256  76ae204a7027652ac3981b9fa5817c083ba23114340284c58e756b259cd2259a  fribidi-1.0.14.tar.xz
-+sha256  0bbc7ff633bfa208ae32d7e369cf5a7d20d5d2557a0b067c9aa98bcbf9967587  fribidi-1.0.15.tar.xz
- sha256  32434afcc8666ba060e111d715bfdb6c2d5dd8a35fa4d3ab8ad67d8f850d2f2b  COPYING
-diff --git a/package/libfribidi/libfribidi.mk b/package/libfribidi/libfribidi.mk
-index 7c6d32fb7..ab7fe7030 100644
---- a/package/libfribidi/libfribidi.mk
-+++ b/package/libfribidi/libfribidi.mk
-@@ -4,7 +4,7 @@
+ sha256  d245807f90032872d1438d741ed21e2490e1175dc8aa3afa5ddb6c8e529b58e5  COPYING
+diff --git a/package/pango/pango.mk b/package/pango/pango.mk
+index ec0f5127e..df82b456f 100644
+--- a/package/pango/pango.mk
++++ b/package/pango/pango.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--LIBFRIBIDI_VERSION = 1.0.14
-+LIBFRIBIDI_VERSION = 1.0.15
- LIBFRIBIDI_SOURCE = fribidi-$(LIBFRIBIDI_VERSION).tar.xz
- LIBFRIBIDI_SITE = https://github.com/fribidi/fribidi/releases/download/v$(LIBFRIBIDI_VERSION)
- LIBFRIBIDI_LICENSE = LGPL-2.1+
+-PANGO_VERSION_MAJOR = 1.52
+-PANGO_VERSION = $(PANGO_VERSION_MAJOR).2
++PANGO_VERSION_MAJOR = 1.54
++PANGO_VERSION = $(PANGO_VERSION_MAJOR).0
+ PANGO_SOURCE = pango-$(PANGO_VERSION).tar.xz
+ PANGO_SITE = https://download.gnome.org/sources/pango/$(PANGO_VERSION_MAJOR)
+ PANGO_INSTALL_STAGING = YES
 -- 
 2.43.0
 
