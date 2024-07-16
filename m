@@ -4,93 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90210C3DA49
-	for <buildroot@archiver.kernel.org>; Tue, 16 Jul 2024 17:51:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38D0FC3DA49
+	for <buildroot@archiver.kernel.org>; Tue, 16 Jul 2024 17:55:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 278CE60B5D;
-	Tue, 16 Jul 2024 17:51:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 06A1A60805;
+	Tue, 16 Jul 2024 17:55:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FTjrxlCI9KK6; Tue, 16 Jul 2024 17:51:03 +0000 (UTC)
+ id 8860NPspQ2ZB; Tue, 16 Jul 2024 17:55:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 79A2960AD3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 01C2D60AA6
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 79A2960AD3;
-	Tue, 16 Jul 2024 17:51:01 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D64C21BF307
- for <buildroot@lists.busybox.net>; Tue, 16 Jul 2024 17:50:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 01C2D60AA6;
+	Tue, 16 Jul 2024 17:55:34 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id F04621BF307
+ for <buildroot@lists.busybox.net>; Tue, 16 Jul 2024 17:55:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C446F405F5
- for <buildroot@lists.busybox.net>; Tue, 16 Jul 2024 17:50:50 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id DD2F54035C
+ for <buildroot@lists.busybox.net>; Tue, 16 Jul 2024 17:55:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Xja4P-Bhp9Bo for <buildroot@lists.busybox.net>;
- Tue, 16 Jul 2024 17:50:49 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id kXnPWSWRrk31 for <buildroot@lists.busybox.net>;
+ Tue, 16 Jul 2024 17:55:31 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::d32; helo=mail-io1-xd32.google.com;
+ client-ip=2607:f8b0:4864:20::e29; helo=mail-vs1-xe29.google.com;
  envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 3A4D2400D6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3A4D2400D6
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com
- [IPv6:2607:f8b0:4864:20::d32])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 3A4D2400D6
- for <buildroot@buildroot.org>; Tue, 16 Jul 2024 17:50:48 +0000 (UTC)
-Received: by mail-io1-xd32.google.com with SMTP id
- ca18e2360f4ac-8138e2f2f69so2541139f.0
- for <buildroot@buildroot.org>; Tue, 16 Jul 2024 10:50:48 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 85D8A40354
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 85D8A40354
+Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com
+ [IPv6:2607:f8b0:4864:20::e29])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 85D8A40354
+ for <buildroot@buildroot.org>; Tue, 16 Jul 2024 17:55:31 +0000 (UTC)
+Received: by mail-vs1-xe29.google.com with SMTP id
+ ada2fe7eead31-48fe86bfde6so14539137.2
+ for <buildroot@buildroot.org>; Tue, 16 Jul 2024 10:55:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1721152247; x=1721757047;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ d=1e100.net; s=20230601; t=1721152530; x=1721757330;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=Y62qOylQjCLfGqlqxDfjRay9Z2Y2CM7qRKGUFzJ8q8c=;
- b=lKJEkiXvDlsCaxRuapeHBxIioRXIa+N7MJhyqTLTJI1iRk5o4cuz7LXvCOkP8HefFo
- A7JoZBgvhViVwCKNa4r9ihDHLKOiUfCtILuwsZ9Nn0/EumEI0ZYNJAqS20Ik7YxHWkQd
- Mx8h2Zz278kCYlkjP3DIUlFJnILaRHfXkAi3oJWk8TQtV2bUOrtZ5HA9G02anc4avyjx
- LsFwJzZbnC58VxxUVWDx0AuFgFjF2eWp3ek8vRNDpZ+KKg7/gzH7fsGYBWjaAPttE312
- Kxr+QObskFiY9aUT1DLc1lpcQkoVUlWhVDImvgdosO5kwAuJRzZE/DNK3UgPlomtzjux
- SCMQ==
-X-Gm-Message-State: AOJu0YyKnIhpYadkS4r8zO3JLMoP87zKY80WkSmtWwkStEN5xOKyWDyT
- K8QmKCE8ZIo+9HCRSvNR1pvKlRn1KLJ6Zb7fO6h8KGsyB2kQ3f3mc/Lw2pus
-X-Google-Smtp-Source: AGHT+IH8kGxzoECPpv4FV3tnPQWErt+cT719xKUpJpLkE4gPtKOzz1vGkzdGnT+ANaCYwZ7WNc43UA==
-X-Received: by 2002:a05:6602:2b8b:b0:7f8:c0ed:b5a6 with SMTP id
- ca18e2360f4ac-816c33efaaemr24702539f.5.1721152247325; 
- Tue, 16 Jul 2024 10:50:47 -0700 (PDT)
-Received: from james-x399.localdomain (97-118-154-90.hlrn.qwest.net.
- [97.118.154.90]) by smtp.gmail.com with ESMTPSA id
- 8926c6da1cb9f-4c210bbef1fsm39420173.31.2024.07.16.10.50.46
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 16 Jul 2024 10:50:47 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
-To: buildroot@buildroot.org
-Date: Tue, 16 Jul 2024 11:50:37 -0600
-Message-Id: <20240716175037.1844929-5-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240716175037.1844929-1-james.hilliard1@gmail.com>
-References: <20240716175037.1844929-1-james.hilliard1@gmail.com>
+ bh=5N+WO9X7iCQqmbWXswSWfqYgcG/3RrbqWpgRzkHzrY0=;
+ b=FuCqDCuHb++7GYjY0eGvpKI30a3wTWX7Vi6rMfW0DH305Cgx+B+QnB8xePLCebFD3W
+ nNgQomWyfvcSoJmZDo+8dyH2Qq+hRPImyxxejsfu0yHizxy2m0HdFywQ7oZr3wqSmAlp
+ GkxrFg/yUXJeDYfkGJHYY05xYwMxQcWJS7Wtp8q0qxgqQpS68OmoPgw7GSGdJ21QqTon
+ y0fWU+Uls7O1nTMwQw6y+AXLuuF3oiLw+ECQcuwSOJFBs7yWPjJggfc9/fcUBhFD0T2I
+ tZXGd7tHLg31Vg1mfl4wE0Zs8r0zYBBthYmzu/xSW7bqYlqG6w/8Rhv4s3et78U1CTD+
+ z9Mw==
+X-Gm-Message-State: AOJu0YylLQxEZxB95/t1d7Oj+baS4CQViVj4Pa383YUpl3CgzdClyIu6
+ yaeGy2sR7BagnvYO5IMgbEreIRbCOoWCNmr28QfSJxg3EvWLUZnhB3JEC976uSyUu7ZsIlpd32V
+ 5x70jb2sUVanu3BQ/mquEHCB+ksw=
+X-Google-Smtp-Source: AGHT+IH5r6txf3eIyrrgpb+Xw/uueoZcKLgz6f/XupmLyZkgoTbkc0QMZ+07nGfQpkklm8Wmh4BkbfG3VMC32jGm7+E=
+X-Received: by 2002:a05:6102:4a86:b0:48f:e5a0:3728 with SMTP id
+ ada2fe7eead31-4915626158cmr169611137.20.1721152530077; Tue, 16 Jul 2024
+ 10:55:30 -0700 (PDT)
 MIME-Version: 1.0
+References: <20240611152202.951202-1-james.hilliard1@gmail.com>
+ <20240611152202.951202-4-james.hilliard1@gmail.com>
+ <20240716141755.1bf5473b@windsurf>
+In-Reply-To: <20240716141755.1bf5473b@windsurf>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Tue, 16 Jul 2024 11:55:18 -0600
+Message-ID: <CADvTj4pA9E8H7=S5HKBHwUhgKq8c_+TcRcu1BAMSBxPNTwTX0Q@mail.gmail.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1721152247; x=1721757047; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ d=gmail.com; s=20230601; t=1721152530; x=1721757330; darn=buildroot.org;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:from:to:cc:subject:date
  :message-id:reply-to;
- bh=Y62qOylQjCLfGqlqxDfjRay9Z2Y2CM7qRKGUFzJ8q8c=;
- b=lmiVwOaMqcLseM+NTfAj5G40WmQtz7H4RHdiO9K1CFKRlEsjls68GFppUjSeTX4+BV
- 1WZe8QQVvFfPBMtmRGYnJozI4BQJ2KIZFidsr9jOZSps35CQiOUKwdssPKA9tnbexJ5A
- b7QwQ1RULDlfVmP9H67hw2pwdJ/+702ee45NZUPZSsKxWnEz+qYGtjlvyoR0tFHp8FVY
- 7QtgZVx5YSJJcmWEu+THucKuHI0CP0bE/eD9/WzKwZiqoPiCk62+oJJzz659DCTBrtfQ
- qhksyv9OgpV32piQR5cAEuYPrDk47pbJoTA3nLGUGUpCH/TLTFPgl0HBPv1uKHlzkpM+
- tdbA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=5N+WO9X7iCQqmbWXswSWfqYgcG/3RrbqWpgRzkHzrY0=;
+ b=feEXC840Ma3h+Q/bf39N19qKS/FWGK2Mczuvpqo/avwy/jV8MCuUw3bn3CwC6Gl6K3
+ xb0iFPto6HxLCDQHMDa+2lOOVHPXgw0rI6z//T0dafkU4sGawP0wkQOQKiXgewoYIbO9
+ Y4jjdPIfUtgQOFBiusYvpmlpCbq838xBNWzfQD5h15dI+CiJFm9PJx27gxzoJajWj26Y
+ mA7Zu/K0TJBtt+qYVkzdjArnJLeRIl9nHb/9FYzm1yU+y8fwiSdi4ulvYzqRe1NPUICN
+ pgfj3l0/gqwieAMF9xlIMPYsDf8Xrx04DGae9pjjUmArotzq1J4Nmbtjsyr9nmmHPaMh
+ uQ2g==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=lmiVwOaM
-Subject: [Buildroot] [PATCH v3 5/5] package/fwupd: new package
+ header.a=rsa-sha256 header.s=20230601 header.b=feEXC840
+Subject: Re: [Buildroot] [PATCH v2 4/4] package/fwupd: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,308 +99,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
- James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
-Changes v2 -> v3:
-  - set udevdir so that we don't need to depend on udev
-  - add missing host-python-jinja2 build dependency
-  - only set -Doffline=enabled when systemd is enabled
----
- DEVELOPERS               |   1 +
- package/Config.in        |   1 +
- package/fwupd/Config.in  |  19 ++++
- package/fwupd/fwupd.hash |   3 +
- package/fwupd/fwupd.mk   | 209 +++++++++++++++++++++++++++++++++++++++
- 5 files changed, 233 insertions(+)
- create mode 100644 package/fwupd/Config.in
- create mode 100644 package/fwupd/fwupd.hash
- create mode 100644 package/fwupd/fwupd.mk
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index f54a01e477..20054d4609 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1480,6 +1480,7 @@ F:	package/apcupsd/
- F:	package/bpftool/
- F:	package/cloudflared/
- F:	package/exfatprogs/
-+F:	package/fwupd/
- F:	package/fwupd-efi/
- F:	package/fxdiv/
- F:	package/gensio/
-diff --git a/package/Config.in b/package/Config.in
-index 4cd7cfbc62..e60fe2aa7f 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -519,6 +519,7 @@ endmenu
- 	source "package/fmtools/Config.in"
- 	source "package/freeipmi/Config.in"
- 	source "package/freescale-imx/Config.in"
-+	source "package/fwupd/Config.in"
- 	source "package/fwupd-efi/Config.in"
- 	source "package/fxload/Config.in"
- 	source "package/gcnano-binaries/Config.in"
-diff --git a/package/fwupd/Config.in b/package/fwupd/Config.in
-new file mode 100644
-index 0000000000..6a96358e5b
---- /dev/null
-+++ b/package/fwupd/Config.in
-@@ -0,0 +1,19 @@
-+config BR2_PACKAGE_FWUPD
-+	bool "fwupd"
-+	depends on !BR2_STATIC_LIBS # libxmlb
-+	depends on BR2_USE_WCHAR # libglib2
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
-+	depends on BR2_USE_MMU # libglib2
-+	select BR2_PACKAGE_LIBGLIB2
-+	select BR2_PACKAGE_LIBJCAT
-+	select BR2_PACKAGE_LIBXMLB
-+	select BR2_PACKAGE_ZLIB
-+	help
-+	  Fwupd is a simple daemon to allow session software
-+	  to update device firmware on your local machine.
-+
-+	  https://fwupd.org/
-+
-+comment "fwupd needs a toolchain w/ wchar, threads, dynamic library"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-diff --git a/package/fwupd/fwupd.hash b/package/fwupd/fwupd.hash
-new file mode 100644
-index 0000000000..8da9dc3c66
---- /dev/null
-+++ b/package/fwupd/fwupd.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  b86a2d7fe1b6cc0ac4f75f3351a78cb3c225880c9e20b932fa078ef472e9fcb2  fwupd-1.9.20.tar.xz
-+sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/fwupd/fwupd.mk b/package/fwupd/fwupd.mk
-new file mode 100644
-index 0000000000..081dfdd617
---- /dev/null
-+++ b/package/fwupd/fwupd.mk
-@@ -0,0 +1,209 @@
-+################################################################################
-+#
-+# fwupd
-+#
-+################################################################################
-+
-+FWUPD_VERSION = 1.9.20
-+FWUPD_SITE = https://github.com/fwupd/fwupd/releases/download/$(FWUPD_VERSION)
-+FWUPD_SOURCE = fwupd-$(FWUPD_VERSION).tar.xz
-+FWUPD_LICENSE = LGPL-2.1+
-+FWUPD_LICENSE_FILES = COPYING
-+FWUPD_DEPENDENCIES = \
-+	host-pkgconf \
-+	host-python-jinja2 \
-+	libglib2 \
-+	libjcat \
-+	libxmlb \
-+	zlib
-+
-+FWUPD_CONF_OPTS = \
-+	-Dstatic_analysis=false \
-+	-Dconsolekit=disabled \
-+	-Dfirmware-packager=true \
-+	-Ddocs=disabled \
-+	-Dlvfs=true \
-+	-Dman=false \
-+	-Dgusb=disabled \
-+	-Dpassim=disabled \
-+	-Dp2p_policy=none \
-+	-Dcbor=disabled \
-+	-Dplugin_acpi_phat=enabled \
-+	-Dplugin_cfu=disabled \
-+	-Dplugin_ep963x=enabled \
-+	-Dplugin_fastboot=disabled \
-+	-Dplugin_logitech_bulkcontroller=disabled \
-+	-Dplugin_logitech_scribe=disabled \
-+	-Dplugin_logitech_tap=disabled \
-+	-Dplugin_pixart_rf=enabled \
-+	-Dplugin_tpm=disabled \
-+	-Dplugin_uefi_capsule=enabled \
-+	-Dplugin_uefi_capsule_splash=false \
-+	-Dplugin_nitrokey=enabled \
-+	-Dplugin_mtd=enabled \
-+	-Dplugin_intel_me=enabled \
-+	-Dplugin_upower=enabled \
-+	-Dplugin_powerd=enabled \
-+	-Dqubes=false \
-+	-Dsupported_build=enabled \
-+	-Dlaunchd=disabled \
-+	-Dtests=false \
-+	-Dudevdir=/usr/lib/udev \
-+	-Dmetainfo=true \
-+	-Dfish_completion=false \
-+	-Dcompat_cli=false \
-+	-Dthinklmi_compat=false \
-+	-Dpython="$(HOST_DIR)/bin/python3"
-+
-+ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
-+FWUPD_DEPENDENCIES += gobject-introspection
-+FWUPD_CONF_OPTS += -Dintrospection=enabled
-+else
-+FWUPD_CONF_OPTS += -Dintrospection=disabled
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBARCHIVE),y)
-+FWUPD_DEPENDENCIES += libarchive
-+FWUPD_CONF_OPTS += -Dlibarchive=enabled
-+else
-+FWUPD_CONF_OPTS += -Dlibarchive=disabled
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBGUDEV),y)
-+FWUPD_DEPENDENCIES += libgudev
-+FWUPD_CONF_OPTS += \
-+	-Dgudev=enabled \
-+	-Dplugin_android_boot=enabled \
-+	-Dplugin_bcm57xx=enabled \
-+	-Dplugin_emmc=enabled \
-+	-Dplugin_gpio=enabled \
-+	-Dplugin_igsc=enabled \
-+	-Dplugin_kinetic_dp=enabled \
-+	-Dplugin_parade_lspcon=enabled \
-+	-Dplugin_realtek_mst=enabled \
-+	-Dplugin_synaptics_mst=enabled \
-+	-Dplugin_mediatek_scaler=enabled \
-+	-Dplugin_scsi=enabled \
-+	-Dplugin_nvme=enabled \
-+	-Dplugin_uf2=enabled
-+else
-+FWUPD_CONF_OPTS += \
-+	-Dgudev=disabled \
-+	-Dplugin_android_boot=disabled \
-+	-Dplugin_bcm57xx=disabled \
-+	-Dplugin_emmc=disabled \
-+	-Dplugin_gpio=disabled \
-+	-Dplugin_igsc=disabled \
-+	-Dplugin_kinetic_dp=disabled \
-+	-Dplugin_parade_lspcon=disabled \
-+	-Dplugin_realtek_mst=disabled \
-+	-Dplugin_synaptics_mst=disabled \
-+	-Dplugin_mediatek_scaler=disabled \
-+	-Dplugin_scsi=disabled \
-+	-Dplugin_nvme=disabled \
-+	-Dplugin_uf2=disabled
-+endif
-+
-+ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS),y)
-+FWUPD_DEPENDENCIES += bluez5_utils
-+FWUPD_CONF_OPTS += -Dbluez=enabled
-+else
-+FWUPD_CONF_OPTS += -Dbluez=disabled
-+endif
-+
-+ifeq ($(BR2_PACKAGE_POLKIT),y)
-+FWUPD_DEPENDENCIES += polkit
-+FWUPD_CONF_OPTS += -Dpolkit=enabled
-+else
-+FWUPD_CONF_OPTS += -Dpolkit=disabled
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GNUTLS),y)
-+FWUPD_DEPENDENCIES += gnutls
-+FWUPD_CONF_OPTS += -Dgnutls=enabled -Dplugin_uefi_pk=enabled
-+else
-+FWUPD_CONF_OPTS += -Dgnutls=disabled -Dplugin_uefi_pk=disabled
-+endif
-+
-+ifeq ($(BR2_PACKAGE_SQLITE),y)
-+FWUPD_DEPENDENCIES += sqlite
-+FWUPD_CONF_OPTS += -Dsqlite=enabled
-+else
-+FWUPD_CONF_OPTS += -Dsqlite=disabled
-+endif
-+
-+ifeq ($(BR2_PACKAGE_XZ),y)
-+FWUPD_DEPENDENCIES += xz
-+FWUPD_CONF_OPTS += -Dlzma=enabled
-+ifeq ($(BR2_i386)$(BR2_x86_64),y)
-+FWUPD_CONF_OPTS += -Dplugin_intel_spi=true
-+else
-+FWUPD_CONF_OPTS += -Dplugin_intel_spi=false
-+endif
-+else
-+FWUPD_CONF_OPTS += -Dlzma=disabled -Dplugin_intel_spi=false
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBDRM_AMDGPU)$(BR2_PACKAGE_LIBGUDEV),yy)
-+FWUPD_DEPENDENCIES += libdrm libgudev
-+FWUPD_CONF_OPTS += -Dplugin_amdgpu=enabled
-+else
-+FWUPD_CONF_OPTS += -Dplugin_amdgpu=disabled
-+endif
-+
-+ifeq ($(BR2_i386)$(BR2_x86_64),y)
-+FWUPD_CONF_OPTS += -Dplugin_cpu=enabled -Dplugin_msr=enabled -Dhsi=enabled
-+else
-+FWUPD_CONF_OPTS += -Dplugin_cpu=disabled -Dplugin_msr=disabled -Dhsi=disabled
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GNUTLS)$(BR2_PACKAGE_LIBGUDEV),yy)
-+FWUPD_DEPENDENCIES += gnutls libgudev
-+FWUPD_CONF_OPTS += -Dplugin_synaptics_rmi=enabled
-+else
-+FWUPD_CONF_OPTS += -Dplugin_synaptics_rmi=disabled
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBCURL),y)
-+FWUPD_DEPENDENCIES += libcurl
-+FWUPD_CONF_OPTS += -Dplugin_redfish=enabled -Dcurl=enabled
-+else
-+FWUPD_CONF_OPTS += -Dplugin_redfish=disabled -Dcurl=disabled
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBGUDEV)$(BR2_PACKAGE_LIBMBIM)$(BR2_PACKAGE_LIBQMI)$(BR2_PACKAGE_MODEM_MANAGER),yyyy)
-+FWUPD_DEPENDENCIES += libgudev libmbim libqmi modem-manager
-+FWUPD_CONF_OPTS += -Dplugin_modem_manager=enabled
-+else
-+FWUPD_CONF_OPTS += -Dplugin_modem_manager=disabled
-+endif
-+
-+ifeq ($(BR2_PACKAGE_FLASHROM),y)
-+FWUPD_DEPENDENCIES += flashrom
-+FWUPD_CONF_OPTS += -Dplugin_flashrom=enabled
-+else
-+FWUPD_CONF_OPTS += -Dplugin_flashrom=disabled
-+endif
-+
-+ifeq ($(BR2_PACKAGE_SYSTEMD),y)
-+FWUPD_DEPENDENCIES += systemd
-+FWUPD_CONF_OPTS += -Dsystemd=enabled -Delogind=enabled -Doffline=enabled
-+else
-+FWUPD_CONF_OPTS += -Dsystemd=disabled -Delogind=disabled -Doffline=disabled
-+endif
-+
-+ifeq ($(BR2_PACKAGE_FWUPD_EFI),y)
-+FWUPD_DEPENDENCIES += fwupd-efi
-+FWUPD_CONF_OPTS += -Defi_binary=true
-+else
-+FWUPD_CONF_OPTS += -Defi_binary=false
-+endif
-+
-+ifeq ($(BR2_PACKAGE_BASH_COMPLETION),y)
-+FWUPD_DEPENDENCIES += bash-completion
-+FWUPD_CONF_OPTS += -Dbash_completion=true
-+else
-+FWUPD_CONF_OPTS += -Dbash_completion=false
-+endif
-+
-+$(eval $(meson-package))
--- 
-2.34.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+T24gVHVlLCBKdWwgMTYsIDIwMjQgYXQgNjoxN+KAr0FNIFRob21hcyBQZXRhenpvbmkKPHRob21h
+cy5wZXRhenpvbmlAYm9vdGxpbi5jb20+IHdyb3RlOgo+Cj4gT24gVHVlLCAxMSBKdW4gMjAyNCAw
+OToyMjowMiAtMDYwMAo+IEphbWVzIEhpbGxpYXJkIDxqYW1lcy5oaWxsaWFyZDFAZ21haWwuY29t
+PiB3cm90ZToKPgo+ID4gU2lnbmVkLW9mZi1ieTogSmFtZXMgSGlsbGlhcmQgPGphbWVzLmhpbGxp
+YXJkMUBnbWFpbC5jb20+Cj4gPiAtLS0KPiA+ICBwYWNrYWdlL0NvbmZpZy5pbiAgICAgICAgfCAg
+IDEgKwo+ID4gIHBhY2thZ2UvZnd1cGQvQ29uZmlnLmluICB8ICAxOSArKysrCj4gPiAgcGFja2Fn
+ZS9md3VwZC9md3VwZC5oYXNoIHwgICAzICsKPiA+ICBwYWNrYWdlL2Z3dXBkL2Z3dXBkLm1rICAg
+fCAyMDggKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrCj4gPiAgNCBmaWxl
+cyBjaGFuZ2VkLCAyMzEgaW5zZXJ0aW9ucygrKQo+ID4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNr
+YWdlL2Z3dXBkL0NvbmZpZy5pbgo+ID4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL2Z3dXBk
+L2Z3dXBkLmhhc2gKPiA+ICBjcmVhdGUgbW9kZSAxMDA2NDQgcGFja2FnZS9md3VwZC9md3VwZC5t
+awo+Cj4gRW50cnkgaW4gdGhlIERFVkVMT1BFUlMgaXMgbWlzc2luZyAoSSBoYWQgYWRkZWQgaXQg
+bG9jYWxseSwgYnV0Cj4gZW5jb3VudGVyZWQgb3RoZXIgaXNzdWVzKS4KPgo+IFRoZW4sIHVkZXYg
+ZGVwZW5kZW5jeSBpcyBtaXNzaW5nOgo+Cj4gb3V0cHV0L2J1aWxkL2Z3dXBkLTEuOS4yMC9tZXNv
+bi5idWlsZDoyNzg6MTE6IEVSUk9SOiBEZXBlbmRlbmN5ICJ1ZGV2IiBub3QgZm91bmQsIHRyaWVk
+IHBrZ2NvbmZpZyBhbmQgY21ha2UKCkZpeGVkIGluIHYzIGJ5IHNldHRpbmcgLUR1ZGV2ZGlyPS91
+c3IvbGliL3VkZXYgd2hpY2ggZWxpbWluYXRlcyB0aGUKdWRldiBkZXBlbmRlbmN5LgoKPgo+IHNv
+IEkgYWRkZWQgaXQuIEJ1dCB0aGVuOgo+Cj4gb3V0cHV0L2J1aWxkL2Z3dXBkLTEuOS4yMC9tZXNv
+bi5idWlsZDozMjc6MzI6IEVSUk9SOiBGZWF0dXJlIG9mZmxpbmUgY2Fubm90IGJlIGVuYWJsZWQ6
+IC1Eb2ZmbGluZT1lbmFibGVkIHJlcXVpcmVzIHN5c3RlbWQKPgo+IHNvIEkgbW92ZWQgLURvZmZs
+aW5lPWVuYWJsZWQgaW50byB0aGUgc3lzdGVtZCBjb25kaXRpb24uCgpGaXhlZCBpbiB2My4KCj4K
+PiBCdXQgdGhlbjoKPgo+IG91dHB1dC9idWlsZC9md3VwZC0xLjkuMjAvbWVzb24uYnVpbGQ6NTk0
+Ojk6IEVSUk9SOiBDb21tYW5kIGAvaG9tZS90aG9tYXMvcHJvamV0cy9idWlsZHJvb3Qvb3V0cHV0
+L2hvc3QvYmluL3B5dGhvbjMgLWMgJ2ltcG9ydCBqaW5qYTI7IHByaW50KGppbmphMi5fX3ZlcnNp
+b25fXyknYCBmYWlsZWQgd2l0aCBzdGF0dXMgMS4KPgo+IFdoaWNoIHByb2JhYmx5IHlvdSBoYWQg
+bm90IHNlZW4gYmVjYXVzZSB5b3UgaGFkIGppbmphMiBpbnN0YWxsZWQgb24KPiB5b3VyIHN5c3Rl
+bS4gQ291bGQgeW91IG1ha2Ugc3VyZSB0byB0ZXN0IGJ1aWxkIHBhY2thZ2VzIHdpdGgKPiAuL3V0
+aWxzL2RvY2tlci1ydW4gdG8gY2F0Y2ggc3VjaCAic3B1cmlvdXMiIGhvc3QgZGVwZW5kZW5jaWVz
+PwoKSXQgd2FzIG1pc3NlZCBiZWNhdXNlIEkgd2FzIHRlc3Rpbmcgd2l0aCBzeXN0ZW1kIGVuYWJs
+ZWQsIHdoaWNoIGhhcyBhCnRyYW5zaXRpdmUgZGVwZW5kZW5jeSBvbiBob3N0LXB5dGhvbi1qaW5q
+YTIuCgo+Cj4gSSBxdWlja2x5IGdyZXBwZWQgZm9yIGppbmphMiBpbiB0aGUgdHJlZSwgYnV0IGl0
+IHdhc24ndCBpbW1lZGlhdGVseQo+IGNsZWFyIGlmIGl0IHdhcyBhYnNvbHV0ZWx5IG1hbmRhdG9y
+eSwgZXhhY3RseSBmb3Igd2hhdCwgZXRjLiBIb3BlZnVsbHkKPiB5b3UnbGwgYmUgYWJsZSB0byBm
+aWd1cmUgb3V0LiBJdCB3b3VsZCBiZSBuaWNlIHRvIG5vdCBtYWtlIGl0IGEKPiBtYW5kYXRvcnkg
+ZGVwZW5kZW5jeSB0byBidWlsZCBmd3VwZCwgaWYgcG9zc2libGUgb2YgY291cnNlLgoKWWVhaCwg
+aXQncyBtYW5kYXRvcnkgZm9yIHNvbWUgc2NyaXB0cywgZml4ZWQgaW4gdjMuCgo+Cj4gQ291bGQg
+eW91IGhhdmUgYSBsb29rPwoKdjM6Cmh0dHBzOi8vcGF0Y2h3b3JrLm96bGFicy5vcmcvcHJvamVj
+dC9idWlsZHJvb3QvcGF0Y2gvMjAyNDA3MTYxNzUwMzcuMTg0NDkyOS01LWphbWVzLmhpbGxpYXJk
+MUBnbWFpbC5jb20vCgo+Cj4gVGhhbmtzIGEgbG90IQo+Cj4gVGhvbWFzCj4gLS0KPiBUaG9tYXMg
+UGV0YXp6b25pLCBDVE8sIEJvb3RsaW4KPiBFbWJlZGRlZCBMaW51eCBhbmQgS2VybmVsIGVuZ2lu
+ZWVyaW5nCj4gaHR0cHM6Ly9ib290bGluLmNvbQpfX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWls
+ZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1
+aWxkcm9vdAo=
