@@ -1,98 +1,94 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55F31C3DA49
-	for <buildroot@archiver.kernel.org>; Tue, 16 Jul 2024 07:59:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6EBC0C3DA49
+	for <buildroot@archiver.kernel.org>; Tue, 16 Jul 2024 08:57:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D576D6062B;
-	Tue, 16 Jul 2024 07:59:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E65468134C;
+	Tue, 16 Jul 2024 08:57:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id p2gFuByf3JdU; Tue, 16 Jul 2024 07:59:56 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id k95ZUrcrukg4; Tue, 16 Jul 2024 08:57:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DD5E16066B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 13A618134E
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DD5E16066B;
-	Tue, 16 Jul 2024 07:59:55 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 8C7E91BF20D
- for <buildroot@lists.busybox.net>; Tue, 16 Jul 2024 07:59:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 13A618134E;
+	Tue, 16 Jul 2024 08:57:56 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 0C0CA1BF3D6
+ for <buildroot@lists.busybox.net>; Tue, 16 Jul 2024 08:57:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7AC5A6066B
- for <buildroot@lists.busybox.net>; Tue, 16 Jul 2024 07:59:55 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0739F8134E
+ for <buildroot@lists.busybox.net>; Tue, 16 Jul 2024 08:57:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kn2grWvZSTMK for <buildroot@lists.busybox.net>;
- Tue, 16 Jul 2024 07:59:54 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NVxhU2jTDP5O for <buildroot@lists.busybox.net>;
+ Tue, 16 Jul 2024 08:57:53 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::529; helo=mail-ed1-x529.google.com;
- envelope-from=fred.lefranc.evs@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 7D6916062B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7D6916062B
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com
- [IPv6:2a00:1450:4864:20::529])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 7D6916062B
- for <buildroot@buildroot.org>; Tue, 16 Jul 2024 07:59:54 +0000 (UTC)
-Received: by mail-ed1-x529.google.com with SMTP id
- 4fb4d7f45d1cf-59f7fc89201so141790a12.3
- for <buildroot@buildroot.org>; Tue, 16 Jul 2024 00:59:54 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::530; helo=mail-ed1-x530.google.com;
+ envelope-from=troglobit@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org EAB9F8134C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EAB9F8134C
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com
+ [IPv6:2a00:1450:4864:20::530])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id EAB9F8134C
+ for <buildroot@buildroot.org>; Tue, 16 Jul 2024 08:57:52 +0000 (UTC)
+Received: by mail-ed1-x530.google.com with SMTP id
+ 4fb4d7f45d1cf-58ef19aa6c4so6890360a12.2
+ for <buildroot@buildroot.org>; Tue, 16 Jul 2024 01:57:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1721116792; x=1721721592;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=7UISRTN6KW/COP/b/KH/tRDWz7Ou2W+7EeaI/hfrm+c=;
- b=VG6g0dcW2zyb5ak2V9RiM86Z/4sLVgqNogEM4GGGfwpI+ZmDU2BUiREXDBRUoEI2jo
- Rrq4ajieIQRRyB1VYR2WM81x3aMnHYSD0yC9/3Df1hfBLTxFq7klIXjJUI23KUnR6A/f
- GY9AKD+ta4U9wmdJf0RA4yDn4zjZjk8/IjvYHVSP33W8DDNN2vgvmvpdiYRALXKTWRHA
- 9av7XeZeKa62GaIRJd80hYkhrvdmlvuWu0NbXb39CjZ7bcBuNfYMSps30fJY1iEa+vNw
- jZB8C6QdC0FBzD07jenqXTOBbBU/rpO6pvwS3qZZuicjAZw7j37a0IboRsVQ/Tv9GXtW
- GdeA==
-X-Gm-Message-State: AOJu0YyCvuWuBlXjKKwQPBcj/IlZYuHgxBZXo/FIYfWAGSTZzqGb/5Sa
- c0cPLeEohUuRMApcG5kBK1DnXsu+fufwnU9EhYMQWqEz4FOcPXtSxFyw2A==
-X-Google-Smtp-Source: AGHT+IHA+u9WbuFCb865eJ+ehMcJFF5VY4vws5a+Joj7ZjjLmxVg+1Uvj5hjGaIs2/dytTiDsFdnww==
-X-Received: by 2002:a17:906:d213:b0:a77:d85c:86fa with SMTP id
- a640c23a62f3a-a79ea3da816mr102173466b.13.1721116791862; 
- Tue, 16 Jul 2024 00:59:51 -0700 (PDT)
-Received: from hw-dev-vm01.evs.tv ([212.222.125.68])
- by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-a79bc5b7f00sm278926666b.63.2024.07.16.00.59.51
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 16 Jul 2024 00:59:51 -0700 (PDT)
-From: Fred Lefranc <fred.lefranc.evs@gmail.com>
-X-Google-Original-From: Fred Lefranc <fred.lefranc+evs@gmail.com>
-To: buildroot@buildroot.org
-Date: Tue, 16 Jul 2024 09:59:34 +0200
-Message-Id: <20240716075933.1315047-1-fred.lefranc+evs@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20240715111003.1296141-1-fred.lefranc+evs@gmail.com>
-References: <20240715111003.1296141-1-fred.lefranc+evs@gmail.com>
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1721116792; x=1721721592; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ d=1e100.net; s=20230601; t=1721120271; x=1721725071;
+ h=content-transfer-encoding:organization:mime-version:message-id:date
+ :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
  :message-id:reply-to;
- bh=7UISRTN6KW/COP/b/KH/tRDWz7Ou2W+7EeaI/hfrm+c=;
- b=iUxnzRnAsMK/fCTJADjRfBFtqnczXWIbwfw254wE+twbsd7BEoZFeSNRs0yRSrSE6Y
- YhAKUO6YTqJAm/xXZ62UC/KXFGJBad7Cd3NAQmgOhuJtajECwMdT6d1AO7ptaRWkz6x+
- 8RsKPToIBP01r/Z0JP/lp8n68Al6eZWvT+ratfRsKpCn2zOUyXlpK55Xav08e/dCh3JI
- yEZhD+fA/v7ppzbSG1RtgNZmsLCw58bikos+gmhxGnkmLkAeFqgVSW3ASf5IHeJQz4qX
- 678r10DsFA04qK4c6N4Txpxp2mJ/dZMMKlqolF+xnkK/gaXNYgMM6OybL8tQDAAmw6Wu
- DYkA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=yUqVcIBISpXisE5JVB5t2aeEZdc91cgmXVDwtGlPXOI=;
+ b=vG/JivZpJHTNG4BoJvnSlpxhAP2vendkB6/jS0b1OtTqDfZRed09hTAqos2UL350Tp
+ KMz1z46hkM1scycTrCqRZ47Gy4E5QYX4gpnJdwnD5Izx23BxAQtyG4eeiT5OHGtSHZxf
+ 1GVG2KZNSTFFxEfg2MobvBT8PpEQBEyEiKD/KY7fhi02xT7QxZy/dHPheASQCJG6RG49
+ 7c4bKX0UZReWFVNeTsNE0YCyg+NxGIabpH0n46HEJOyjvEvoe7Zx3GB3p6uTwvyFwwPq
+ 7wRur1FACLKt7rzUr5ANzuTSb6qQkYkqTVPuvHN7+zAnRJeMauhFD0N58843Tn9j1yCV
+ g27g==
+X-Gm-Message-State: AOJu0YwEuCn+k3WxvS1iG0uMVdBPsRqoK/emQM5QdzSJyraIu308rCBL
+ jglVN9j67IYZezcKs2spCV5NgXuz81uK/mGbxwbEO1zsNLj1y2bJju3pyMvn
+X-Google-Smtp-Source: AGHT+IHRUBXpnImnYS1utx1iYuFzo+5jopVuNssJjsl6EBokoDUd6DhNVnsWNWqGor/eaQ7ihCagzA==
+X-Received: by 2002:a17:906:2b12:b0:a77:9d57:97ad with SMTP id
+ a640c23a62f3a-a79ea46d6ecmr100696866b.40.1721120270306; 
+ Tue, 16 Jul 2024 01:57:50 -0700 (PDT)
+Received: from gimli.addiva.ad (h-79-136-22-50.NA.cust.bahnhof.se.
+ [79.136.22.50]) by smtp.gmail.com with ESMTPSA id
+ a640c23a62f3a-a79bc7ff8c9sm282951266b.162.2024.07.16.01.57.49
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 16 Jul 2024 01:57:49 -0700 (PDT)
+From: Joachim Wiberg <troglobit@gmail.com>
+To: buildroot@buildroot.org
+Date: Tue, 16 Jul 2024 10:57:45 +0200
+Message-Id: <20240716085747.490549-1-troglobit@gmail.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Organization: Addiva Elektronik
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1721120271; x=1721725071; darn=buildroot.org;
+ h=content-transfer-encoding:organization:mime-version:message-id:date
+ :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=yUqVcIBISpXisE5JVB5t2aeEZdc91cgmXVDwtGlPXOI=;
+ b=d+lBz/pNDJqmuXAQMaxm9bm74w644cPZ8gnBYrvF6Arca4e1fxv89to4PZBIwNO4wQ
+ ECbrNaFCifp0OIH8vjYNWASpzs8C8lpRV8vQ180TdUEWKdn6fNf+ur9j4IuSBd4lEM83
+ EAwak/Zm8q6BBNuubuB+9vASQQLl5cnDzy/dsnMkymVrI+YHnniv+2AwM+MyoTJQrGeU
+ VBAybd3WjbywYm9MQbq9fCqmyNIGlNBz7ts5Fpqbn+g/tXbH2sBmYuYCoN1IM9FY3pnF
+ FQvmiBCyxLmhYkOc022ztLHZb7Zx/W/KSGdUtQGTrhqpgmOh/ls7DzxDtduuzCdmmZND
+ Qh9w==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=iUxnzRnA
-Subject: [Buildroot] [PATCH v3] package/busybox: fix build with glibc 2.39
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=d+lBz/pN
+Subject: [Buildroot] [PATCH 0/2] package/syslogd: bump to v2.6.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -104,53 +100,31 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fred Lefranc <fred.lefranc+evs@gmail.com>
+Cc: Joachim Wiberg <troglobit@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-When glibc was bumped to version 2.39 in commit
-b5680f53d60acf8ff6010082f873438a39bd5d97 it removed the deprecated
-libcrypt support.
+These patches upgrade sysklogd to the latest feature release and exposes
+a new configure setting to tune the internal DNS retry delay.
 
-As glibc's libcrypt was providing busybox's libcrypt dependency this
-broke any busybox build using glibc version 2.39.
+Release Notes: https://github.com/troglobit/sysklogd/releases/tag/v2.6.0
 
-To fix this, add the libxcrypt dependency to busybox when
-BR2_PACKAGE_LIBXCRYPT is selected. The user still has to select the
-libxcrypt package for this patch to work properly.
+Best regards
+ /Joachim
 
-Signed-off-by: Fred Lefranc <fred.lefranc+evs@gmail.com>
----
-Changes v2 -> v3
-  - fix commit message
-Changes v1 -> v2
-  - busybox.mk: fix BUSYBOX_DEPENDENCIES ident & remove the check
-for BR2_TOOLCHAIN_USES_GLIBC (req by Thomas)
-  - Config.in: remove libxcrypt mandatory dependency
-(req by Thomas)
----
- package/busybox/busybox.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+Joachim Wiberg (2):
+  package/sysklogd: bump to v2.6.0
+  package/sysklogd: new setting
 
-diff --git a/package/busybox/busybox.mk b/package/busybox/busybox.mk
-index eb5e7ad922..d25e5bf468 100644
---- a/package/busybox/busybox.mk
-+++ b/package/busybox/busybox.mk
-@@ -164,6 +164,10 @@ define BUSYBOX_SET_MDEV
- endef
- endif
- 
-+ifeq ($(BR2_PACKAGE_LIBXCRYPT),y)
-+BUSYBOX_DEPENDENCIES += libxcrypt
-+endif
-+
- # sha passwords need USE_BB_CRYPT_SHA
- ifeq ($(BR2_TARGET_GENERIC_PASSWD_SHA256)$(BR2_TARGET_GENERIC_PASSWD_SHA512),y)
- define BUSYBOX_SET_CRYPT_SHA
+ package/sysklogd/Config.in     | 12 +++++++++++-
+ package/sysklogd/sysklogd.hash |  2 +-
+ package/sysklogd/sysklogd.mk   |  3 ++-
+ 3 files changed, 14 insertions(+), 3 deletions(-)
+
 -- 
-2.25.1
+2.34.1
 
 _______________________________________________
 buildroot mailing list
