@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BAD6EC3DA59
-	for <buildroot@archiver.kernel.org>; Tue, 16 Jul 2024 12:43:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8A829C3DA49
+	for <buildroot@archiver.kernel.org>; Tue, 16 Jul 2024 12:43:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 55C5F40B9D;
-	Tue, 16 Jul 2024 12:43:19 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4672440BE7;
+	Tue, 16 Jul 2024 12:43:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YELDlPqS1RIL; Tue, 16 Jul 2024 12:43:18 +0000 (UTC)
+ id yb-bjQ0oAKdp; Tue, 16 Jul 2024 12:43:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 945F940BE3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 37EF840BF4
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 945F940BE3;
-	Tue, 16 Jul 2024 12:43:17 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A031F1BF3E3
- for <buildroot@lists.busybox.net>; Tue, 16 Jul 2024 12:43:09 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 37EF840BF4;
+	Tue, 16 Jul 2024 12:43:21 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id A9DAB1BF3E3
+ for <buildroot@lists.busybox.net>; Tue, 16 Jul 2024 12:43:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 99F7D40B9D
+ by smtp4.osuosl.org (Postfix) with ESMTP id D300F403B6
  for <buildroot@lists.busybox.net>; Tue, 16 Jul 2024 12:43:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pwcENd5XftiV for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XPC-33y_Vm39 for <buildroot@lists.busybox.net>;
  Tue, 16 Jul 2024 12:43:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7074240B94
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8BDAE402FE
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7074240B94
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8BDAE402FE
  for <buildroot@buildroot.org>; Tue, 16 Jul 2024 12:43:08 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5A32E86BA6; Tue, 16 Jul 2024 12:43:08 +0000 (UTC)
+ id 863B886B9E; Tue, 16 Jul 2024 12:43:08 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 16 Jul 2024 14:42:00 +0200
+Date: Tue, 16 Jul 2024 14:42:05 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a4a1e36e1a085ce589c112c0ce089bf129633808
-X-Git-Newrev: bffb6a2339bbfe28a0ca2399716c3966af4a623c
+X-Git-Oldrev: 34fbdb0d99d00df578f825f9bf5d211e67413076
+X-Git-Newrev: 3d85e9df431af790930e03d860bfa098108888a0
 X-Patchwork-Hint: ignore
-Message-Id: <20240716124308.5A32E86BA6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/nodejs: security bump to v20.15.1
+Message-Id: <20240716124308.863B886B9E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/tio: bump to 3.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,88 +65,101 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bffb6a2339bbfe28a0ca2399716c3966af4a623c
+commit: https://git.buildroot.net/buildroot/commit/?id=3d85e9df431af790930e03d860bfa098108888a0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release Notes: https://nodejs.org/en/blog/release/v20.15.1
+Dependencies changed: inih dependency was removed, glib2 and lua added.
+Tio's meson build system fails to find luajit, so exclude that,
+otherwise all versions of lua >= 5.1 are supported.
 
-Fixes the following CVE's:
+Retested the build for sparc and sparc64 and the compile issues have
+been resolved upstream by reworking the baudrate selection code quite a
+while ago[1].
 
-CVE-2024-36138 - Bypass incomplete fix of CVE-2024-27980 (High)
-CVE-2024-22020 - Bypass network import restriction via data URL (Medium)
-CVE-2024-22018 - fs.lstat bypasses permission model (Low)
-CVE-2024-36137 - fs.fchown/fchmod bypasses permission model (Low)
-CVE-2024-37372 - Permission model improperly processes UNC paths (Low)
+Disable installation of man pages with new build option.
 
-Also these additional CVE's were fixed in the v20.12.1 and v20.12.2 releases [1][2]:
-
-CVE-2024-27983 - Assertion failed in node::http2::Http2Session::~Http2Session() leads to HTTP/2 server crash- (High)
-CVE-2024-27982 - HTTP Request Smuggling via Content Length Obfuscation - (Medium)
-CVE-2024-27980 - Command injection via args parameter of child_process.spawn without shell option enabled on Windows
-
-NodeJS tests are passing:
-$ ./support/testing/run-tests -o ./outputs/ -k tests.package.test_nodejs -d dl
-12:02:58 TestNodeJSModuleHostSrc                  Starting
-12:02:58 TestNodeJSModuleHostSrc                  Building
-13:17:15 TestNodeJSModuleHostSrc                  Building done
-13:17:23 TestNodeJSModuleHostSrc                  Cleaning up
-.13:17:23 TestNodeJSModuleHostBin                  Starting
-13:17:23 TestNodeJSModuleHostBin                  Building
-14:06:15 TestNodeJSModuleHostBin                  Building done
-14:06:20 TestNodeJSModuleHostBin                  Cleaning up
-.14:06:20 TestNodeJSBasic                          Starting
-14:06:20 TestNodeJSBasic                          Building
-14:55:40 TestNodeJSBasic                          Building done
-14:55:45 TestNodeJSBasic                          Cleaning up
-
-LICENSE hash changed due to changes in vendored components:
-
-* copyright year update and adding spdx identifier [1]
-
-[1] https://nodejs.org/en/blog/release/v20.12.1
-[2] https://nodejs.org/en/blog/release/v20.12.2
-[3] https://github.com/nodejs/node/commit/d5a316f5ea3fade3140c2ae35c144b500fb5d758
+[1] https://github.com/tio/tio/commit/a23be7f2c2bacef428b0e50aa93e37e5b52bdd56
 
 Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/nodejs/nodejs.hash | 14 +++++++-------
- package/nodejs/nodejs.mk   |  2 +-
- 2 files changed, 8 insertions(+), 8 deletions(-)
+ package/tio/Config.in | 23 +++++++++++++----------
+ package/tio/tio.hash  |  4 ++--
+ package/tio/tio.mk    |  6 ++++--
+ 3 files changed, 19 insertions(+), 14 deletions(-)
 
-diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
-index 2cbbf766f5..61bda55098 100644
---- a/package/nodejs/nodejs.hash
-+++ b/package/nodejs/nodejs.hash
-@@ -1,8 +1,8 @@
--# From https://nodejs.org/dist/v20.12.0/SHASUMS256.txt.asc
--sha256  007ca2699cf6e84290e5bed844ed66ef9d707d23561dfaf117212b7dce216ba7  node-v20.12.0-linux-arm64.tar.xz
--sha256  668fb421a24be596c98f00a31049fbf6ada14d221b7382e0f1caa55ab421431a  node-v20.12.0-linux-armv7l.tar.xz
--sha256  78dc3b7ad993c332684802e35c1f0de2b76193d13394bc89e3bab216828587c7  node-v20.12.0-linux-ppc64le.tar.xz
--sha256  0a126adf5b6a5eb11a37bad76a0c626a18f20b6811322e68aae0e3cf9bf580bd  node-v20.12.0-linux-x64.tar.xz
--sha256  76e5346cebfd581528f699f764f4d1a6e87cb818b696708f235ddcb625a0f78d  node-v20.12.0.tar.xz
-+# From https://nodejs.org/dist/v20.15.1/SHASUMS256.txt.asc
-+sha256  10d47a46ef208b3e4b226e4d595a82659123b22397ed77b7975d989114ec317e  node-v20.15.1-linux-arm64.tar.xz
-+sha256  7bc120efdd8018f6915471b963d9b80adf4ed406d6dc9edb4ae944b85f505c4c  node-v20.15.1-linux-armv7l.tar.xz
-+sha256  b33e684802251397ad62ad3f8a1836267ee8b7723f87f669470018ad0035287b  node-v20.15.1-linux-ppc64le.tar.xz
-+sha256  26700f8d3e78112ad4a2618a9c8e2816e38a49ecf0213ece80e54c38cb02563f  node-v20.15.1-linux-x64.tar.xz
-+sha256  fdd53a5729d936691a2a1151046fb4897721cb8b0fca2af957823a9b40fe0c34  node-v20.15.1.tar.xz
- # Locally calculated
--sha256  d3a9fbfe0a1fb78627ee296cd5ca5b498822d4d1c5da3b8e8100c41bd7b791fd  LICENSE
-+sha256  49cd410e0fe6a8879a40d0764092d1e6114cc85fe41d4efed990d028eec25582  LICENSE
-diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
-index 9ed51fbe9b..104d2cf258 100644
---- a/package/nodejs/nodejs.mk
-+++ b/package/nodejs/nodejs.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/tio/Config.in b/package/tio/Config.in
+index e4241fa5e1..953b26a349 100644
+--- a/package/tio/Config.in
++++ b/package/tio/Config.in
+@@ -1,8 +1,10 @@
+ config BR2_PACKAGE_TIO
+ 	bool "tio"
+-	depends on !BR2_sparc64 && !BR2_sparc
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	select BR2_PACKAGE_INIH
++	depends on BR2_USE_MMU # glib2
++	depends on BR2_USE_WCHAR # glib2
++	depends on BR2_PACKAGE_HAS_LUAINTERPRETER
++	depends on !BR2_PACKAGE_LUAJIT
+ 	help
+ 	  "tio" is a simple TTY terminal application which features a
+ 	  straightforward commandline interface to easily connect to
+@@ -10,12 +12,13 @@ config BR2_PACKAGE_TIO
+ 
+ 	  https://tio.github.io/
+ 
+-# tio is disabled for sparc and sparc64 architectures because it fails
+-# to build with a redefinition of 'struct termio' error, with no proper
+-# fix or workaround for now
+-comment "tio is disabled for sparc and sparc64 architectures"
+-	depends on BR2_sparc64 || BR2_sparc
+-
+-comment "tio needs a toolchain w/ threads"
++comment "tio needs a toolchain w/ threads, wchar"
++	depends on BR2_USE_MMU
+ 	depends on !BR2_sparc64 && !BR2_sparc
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_USE_WCHAR
++
++comment "tio needs lua (but not luajit)"
++	depends on BR2_USE_MMU
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	depends on BR2_USE_WCHAR
++	depends on !BR2_PACKAGE_HAS_LUAINTERPRETER || BR2_PACKAGE_LUAJIT
+diff --git a/package/tio/tio.hash b/package/tio/tio.hash
+index 02699fdeb4..d1caeeebc6 100644
+--- a/package/tio/tio.hash
++++ b/package/tio/tio.hash
+@@ -1,5 +1,5 @@
+-# From https://github.com/tio/tio/releases/download/v2.7/tio-2.7.tar.xz.sha256sum:
+-sha256  bf8fe434848c2c1b6540af0b42503c986068176ddc1a988cf02e521e7de5daa5  tio-2.7.tar.xz
++# From https://github.com/tio/tio/releases/download/v3.5/tio-3.5.tar.xz.sha256sum:
++sha256  efd3e9a406f827ac22d4157e345079dde15ee5a948b24156561d6c97a54e6ec0  tio-3.5.tar.xz
+ 
+ # Hash for license files:
+ sha256  9248dee77ee136321f24556a96e07ff8f90461013941884a9defd0ac825ef131  LICENSE
+diff --git a/package/tio/tio.mk b/package/tio/tio.mk
+index 95831e8ce6..637a7bdd83 100644
+--- a/package/tio/tio.mk
++++ b/package/tio/tio.mk
+@@ -4,12 +4,14 @@
+ #
  ################################################################################
  
- # _VERSION, _SOURCE and _SITE must be kept empty to avoid downloading anything
--NODEJS_COMMON_VERSION = 20.12.0
-+NODEJS_COMMON_VERSION = 20.15.1
- NODEJS_COMMON_SOURCE = node-v$(NODEJS_COMMON_VERSION).tar.xz
- NODEJS_COMMON_SITE = http://nodejs.org/dist/v$(NODEJS_COMMON_VERSION)
+-TIO_VERSION = 2.7
++TIO_VERSION = 3.5
+ TIO_SOURCE = tio-$(TIO_VERSION).tar.xz
+ TIO_SITE = https://github.com/tio/tio/releases/download/v$(TIO_VERSION)
+ TIO_LICENSE = GPL-2.0+
+ TIO_LICENSE_FILES = LICENSE
+-TIO_DEPENDENCIES = inih
++TIO_DEPENDENCIES = libglib2 luainterpreter
++
++TIO_CONF_OPTS += -Dinstall_man_pages=false
  
+ ifeq ($(BR2_PACKAGE_BASH_COMPLETION),y)
+ TIO_CONF_OPTS +=-Dbashcompletiondir=/usr/share/bash-completion/completions
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
