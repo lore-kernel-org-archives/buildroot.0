@@ -4,53 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C287C3DA62
-	for <buildroot@archiver.kernel.org>; Wed, 17 Jul 2024 19:48:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66DFBC3DA5D
+	for <buildroot@archiver.kernel.org>; Wed, 17 Jul 2024 20:10:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0710040C15;
-	Wed, 17 Jul 2024 19:48:24 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7887740C01;
+	Wed, 17 Jul 2024 20:10:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hZ4uRpZGees5; Wed, 17 Jul 2024 19:48:22 +0000 (UTC)
+ id BYOifAgvduuc; Wed, 17 Jul 2024 20:10:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CF55840BA4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D18D940146
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CF55840BA4;
-	Wed, 17 Jul 2024 19:48:21 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C6C9D1BF35A
- for <buildroot@lists.busybox.net>; Wed, 17 Jul 2024 19:48:19 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D18D940146;
+	Wed, 17 Jul 2024 20:10:09 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 1BC2D1BF846
+ for <buildroot@lists.busybox.net>; Wed, 17 Jul 2024 20:10:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B39CF40BA4
- for <buildroot@lists.busybox.net>; Wed, 17 Jul 2024 19:48:19 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 09AA060AD0
+ for <buildroot@lists.busybox.net>; Wed, 17 Jul 2024 20:10:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QVgAuMl0f8Tw for <buildroot@lists.busybox.net>;
- Wed, 17 Jul 2024 19:48:17 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.130.47;
- helo=dd5108.kasserver.com; envelope-from=dev@andin.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0C08540146
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0C08540146
-Received: from dd5108.kasserver.com (dd5108.kasserver.com [85.13.130.47])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0C08540146
- for <buildroot@buildroot.org>; Wed, 17 Jul 2024 19:48:16 +0000 (UTC)
-Received: from andi-ThinkPad-P52.fritz.box
- (ipb21bd56e.dynamic.kabel-deutschland.de [178.27.213.110])
- by dd5108.kasserver.com (Postfix) with ESMTPA id EB8F05242948;
- Wed, 17 Jul 2024 21:48:12 +0200 (CEST)
-From: Andreas Naumann <anaumann@ultratronik.de>
-To: buildroot@buildroot.org
-Date: Wed, 17 Jul 2024 21:48:08 +0200
-Message-Id: <20240717194808.126443-1-anaumann@ultratronik.de>
-X-Mailer: git-send-email 2.34.1
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id P1RPoXa4m31g for <buildroot@lists.busybox.net>;
+ Wed, 17 Jul 2024 20:10:07 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.200;
+ helo=relay7-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 94CDD60771
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 94CDD60771
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 94CDD60771
+ for <buildroot@buildroot.org>; Wed, 17 Jul 2024 20:10:06 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 975CD20003;
+ Wed, 17 Jul 2024 20:10:03 +0000 (UTC)
+Date: Wed, 17 Jul 2024 22:10:00 +0200
+To: "Karicheri, Murali via buildroot" <buildroot@buildroot.org>
+Message-ID: <20240717221000.5ced2d0d@windsurf>
+In-Reply-To: <DM4PR02MB9216BC15AD2F3FEE125A71118AA32@DM4PR02MB9216.namprd02.prod.outlook.com>
+References: <DM4PR02MB9216BC15AD2F3FEE125A71118AA32@DM4PR02MB9216.namprd02.prod.outlook.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-X-Spamd-Bar: +++
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=fail (p=none dis=none)
- header.from=ultratronik.de
-Subject: [Buildroot] [PATCH 1/1] package/qt6/qt6opcua: new package
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1721247003;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=oX7HrCexCJUhAAznQbasozaWBVWXBJjAUtTxrkuI1L8=;
+ b=IYS2FcYAsy5Dnuzz1JvqdzdV05A10IMmJbn7V7LQgQbSIFGPk+937sZlB6NVSLDAGAmPfm
+ fD3T46cH22w7gzIS35rE6l+612rjDxjPg+H3X3C7eJjzSLbFPMewECDyFqWy9Pq3A88UOL
+ ozruSIvpvUTsa1X+YvMmxIi24evQTxvWuOwze+V01fYz+EFg7o/s7N9PhrX+M4UwrOlGV2
+ bUt9FkxstVJJB+j2xuABNXSFX7wLGOb0yC5OucgsEBiHMHF9O6YeaCKdmykNhYNcdzFYxw
+ w6bY5jWpbhPhv8l1F6IE01RWc2pQ8RD6g3A5o69m07ng18rHlyfzcZelRk0z1w==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=fail reason="signature verification failed" (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=IYS2FcYA
+Subject: Re: [Buildroot] Year 2038 time util issue - Build failure in
+ 2024.02.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,140 +81,89 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Andreas Naumann <anaumann@ultratronik.de>,
- Jesse Van Gavere <jesseevg@gmail.com>, Samuel Martin <s.martin49@gmail.com>,
- Roy Kollen Svendsen <roykollensvendsen@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: "Karicheri, Murali" <Murali.Karicheri@sandc.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add qt6 version of qtopcua from git as it's not contained in the
-official qt release submodule directory.
+Hello Murali,
 
-Fulfill the mandatory dependency on qt6base, and qt6base-network in
-particular, as well as the need for host tool qopcuaxmldatatypes2cpp
-which is provided by host-qt6opcua.
-For host-qt6opcua set the dependency on host-qt6base-network as well.
+On Wed, 17 Jul 2024 18:18:35 +0000
+"Karicheri, Murali via buildroot" <buildroot@buildroot.org> wrote:
 
-Existence of the optional dependency openssl enables
-FEATURE_open62541_security. (This has changed from qt5opcua where
-mbedtls was supported.)
+> We were using buildroot version 2023.08 version and encountered a
+> year 2038 crash when using time/date utilities. So, my research found
+> some work done in the recent version of buildroot. Where
+> BR2_TIME_BITS_64=y was added to build with 64bit time field. My board
+> is based on a STM32MP133c SoC and using an external project to build
+> buildroot. So, I have migrated our project to using 2024.02.x version
+> of buildroot and enabled BR2_TIME_BITS_64=y to get the fix for the
+> 2038 issue. But my build fails with the logs below.
 
-Signed-off-by: Andreas Naumann <anaumann@ultratronik.de>
----
- package/qt6/Config.in              |  1 +
- package/qt6/qt6opcua/Config.in     | 14 +++++++++
- package/qt6/qt6opcua/qt6opcua.hash |  9 ++++++
- package/qt6/qt6opcua/qt6opcua.mk   | 46 ++++++++++++++++++++++++++++++
- 4 files changed, 70 insertions(+)
- create mode 100644 package/qt6/qt6opcua/Config.in
- create mode 100644 package/qt6/qt6opcua/qt6opcua.hash
- create mode 100644 package/qt6/qt6opcua/qt6opcua.mk
+Sorry to hear that your build fails with Buildroot 2024.02.x. See below
+some details.
 
-diff --git a/package/qt6/Config.in b/package/qt6/Config.in
-index e84806d5e4..29c1c25c7f 100644
---- a/package/qt6/Config.in
-+++ b/package/qt6/Config.in
-@@ -48,6 +48,7 @@ source "package/qt6/qt6core5compat/Config.in"
- source "package/qt6/qt6declarative/Config.in"
- source "package/qt6/qt6languageserver/Config.in"
- source "package/qt6/qt6mqtt/Config.in"
-+source "package/qt6/qt6opcua/Config.in"
- source "package/qt6/qt6serialbus/Config.in"
- source "package/qt6/qt6serialport/Config.in"
- source "package/qt6/qt6shadertools/Config.in"
-diff --git a/package/qt6/qt6opcua/Config.in b/package/qt6/qt6opcua/Config.in
-new file mode 100644
-index 0000000000..84a51f544f
---- /dev/null
-+++ b/package/qt6/qt6opcua/Config.in
-@@ -0,0 +1,14 @@
-+config BR2_PACKAGE_QT6OPCUA
-+	bool "qt6opcua"
-+	select BR2_PACKAGE_QT6BASE_NETWORK
-+        # qt6opcuda needs host-qt6opcua, and host-qt6opcua needs
-+        # network support in qt6base.
-+	select BR2_PACKAGE_HOST_QT6BASE_NETWORK
-+
-+	help
-+	  Qt is a cross-platform application and UI framework for
-+	  developers using C++.
-+
-+	  This package corresponds to the qt6opcua module.
-+
-+	  https://doc.qt.io/qt-6/qtopcua-index.html
-diff --git a/package/qt6/qt6opcua/qt6opcua.hash b/package/qt6/qt6opcua/qt6opcua.hash
-new file mode 100644
-index 0000000000..cf54bef98e
---- /dev/null
-+++ b/package/qt6/qt6opcua/qt6opcua.hash
-@@ -0,0 +1,9 @@
-+sha256  653597e2926ddb512f078bab1e5d2a059202ba1bc1f68ff0b4a0e053ab1272b2  qt6opcua-6.7.2-git4.tar.gz
-+
-+# Hashes for license files:
-+sha256  9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce  LICENSES/BSD-3-Clause.txt
-+sha256  110535522396708cea37c72a802c5e7e81391139f5f7985631c93ef242b206a4  LICENSES/GFDL-1.3-no-invariants-only.txt
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSES/GPL-2.0-only.txt
-+sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSES/GPL-3.0-only.txt
-+sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  LICENSES/LGPL-3.0-only.txt
-+sha256  40678d338ce53cd93f8b22b281a2ecbcaa3ee65ce60b25ffb0c462b0530846b2  LICENSES/Qt-GPL-exception-1.0.txt
-diff --git a/package/qt6/qt6opcua/qt6opcua.mk b/package/qt6/qt6opcua/qt6opcua.mk
-new file mode 100644
-index 0000000000..d8bd492233
---- /dev/null
-+++ b/package/qt6/qt6opcua/qt6opcua.mk
-@@ -0,0 +1,46 @@
-+################################################################################
-+#
-+# qt6opcua
-+#
-+################################################################################
-+
-+QT6OPCUA_VERSION = $(QT6_VERSION)
-+QT6OPCUA_SITE = $(QT6_GIT)/qt/qtopcua.git
-+QT6OPCUA_SITE_METHOD = git
-+QT6OPCUA_INSTALL_STAGING = YES
-+QT6OPCUA_SUPPORTS_IN_SOURCE_BUILD = NO
-+
-+QT6OPCUA_CMAKE_BACKEND = ninja
-+
-+QT6OPCUA_LICENSE = \
-+	GPL-2.0 or GPL-3.0 or LGPL-3.0, \
-+	GPL-3.0 WITH Qt-GPL-exception-1.0 (tools), \
-+	GFDL-1.3 no invariants (docs), \
-+	BSD-3-Clause (examples + buildsystem)
-+
-+QT6OPCUA_LICENSE_FILES = \
-+	LICENSES/BSD-3-Clause.txt \
-+	LICENSES/GFDL-1.3-no-invariants-only.txt \
-+	LICENSES/GPL-2.0-only.txt \
-+	LICENSES/GPL-3.0-only.txt \
-+	LICENSES/LGPL-3.0-only.txt \
-+	LICENSES/Qt-GPL-exception-1.0.txt
-+
-+QT6OPCUA_CONF_OPTS = \
-+	-DQT_HOST_PATH=$(HOST_DIR) \
-+	-DBUILD_WITH_PCH=OFF
-+
-+HOST_QT6OPCUA_CONF_OPTS = \
-+	-DQT_HOST_PATH=$(HOST_DIR) \
-+	-DBUILD_WITH_PCH=OFF
-+
-+QT6OPCUA_DEPENDENCIES = \
-+	qt6base \
-+	host-qt6opcua
-+
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+QT6OPCUA_DEPENDENCIES += openssl
-+endif
-+
-+$(eval $(cmake-package))
-+$(eval $(host-cmake-package))
+> 
+> Could you help me answer the following questions?
+
+> 1. Is the Y2038 time issue resolved in buildroot? If not, is there
+> some work, though officially not supported,  I can investigate for a
+> potential solution
+
+Things are not as black and white as "Is the Y2038 time issue
+resolved". How 64-bit time_t is handled depends on the C library, and
+also different packages might exhibit different problems. So it's not
+like we can absolutely guarantee that everything is fixed.
+
+> 2. If it is in fact resolved and expected to work in 2024.02.x, what
+> I might be missing? Is there specific version of the toolchain
+> packages I need to select in the Toolchain configuration and other
+> packages?
+
+We expect things to work, but we have lots of packages.
+
+> libtool: compile:  /src/linux-bsp-stm32mp133c/output/development/build/host-gcc-final-12.3.0/build/./gcc/xgcc -shared-libgcc -B/src/linux-bsp-stm32mp133c/output/development/build/host-gcc-final-12.3.0/build/./gcc -nostdinc++ -L/src/linux-bsp-stm32mp133c/output/development/build/host-gcc-final-12.3.0/build/arm-buildroot-linux-gnueabihf/libstdc++-v3/src -L/src/linux-bsp-stm32mp133c/output/development/build/host-gcc-final-12.3.0/build/arm-buildroot-linux-gnueabihf/libstdc++-v3/src/.libs -L/src/linux-bsp-stm32mp133c/output/development/build/host-gcc-final-12.3.0/build/arm-buildroot-linux-gnueabihf/libstdc++-v3/libsupc++/.libs -B/src/linux-bsp-stm32mp133c/output/development/host/arm-buildroot-linux-gnueabihf/bin/ -B/src/linux-bsp-stm32mp133c/output/development/host/arm-buildroot-linux-gnueabihf/lib/ -isystem /src/linux-bsp-stm32mp133c/output/development/host/arm-buildroot-linux-gnueabihf/include -isystem /src/linux-bsp-stm32mp133c/output/development/host/arm-buildroot-linux-gnueabihf/sy
+ s-
+>  include -D_GNU_SOURCE -D_DEBUG -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -DHAVE_RPC_XDR_H=0 -DHAVE_TIRPC_RPC_XDR_H=0 -I. -I../../../../libsanitizer/sanitizer_common -I.. -I ../../../../libsanitizer/include -I ../../../../libsanitizer -isystem ../../../../libsanitizer/include/system -Wall -W -Wno-unused-parameter -Wwrite-strings -pedantic -Wno-long-long -fPIC -fno-builtin -fno-exceptions -fno-rtti -fomit-frame-pointer -funwind-tables -fvisibility=hidden -Wno-variadic-macros -I../../libstdc++-v3/include -I../../libstdc++-v3/include/arm-buildroot-linux-gnueabihf -I../../../../libsanitizer/../libstdc++-v3/libsupc++ -std=gnu++14 -DSANITIZER_LIBBACKTRACE -DSANITIZER_CP_DEMANGLE -I ../../../../libsanitizer/../libbacktrace -I ../libbacktrace -I ../../../../libsanitizer/../include -include ../../../../libsanitizer/libbacktrace/backtrace-rename.h -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -D_TIME_BITS=64 -Og -g2 -D_GNU_SOURCE -MT sanitizer_p
+ ro
+>  cmaps_common.lo -MD -MP -MF .deps/sanitizer_procmaps_common.Tpo -c ../../../../libsanitizer/sanitizer_common/sanitizer_procmaps_common.cpp -o sanitizer_procmaps_common.o >/dev/null 2>&1
+> mv -f .deps/sanitizer_linux_libcdep.Tpo .deps/sanitizer_linux_libcdep.Plo
+> mv -f .deps/sanitizer_procmaps_linux.Tpo .deps/sanitizer_procmaps_linux.Plo
+> mv -f .deps/sanitizer_linux.Tpo .deps/sanitizer_linux.Plo
+> mv -f .deps/sanitizer_printf.Tpo .deps/sanitizer_printf.Plo
+> mv -f .deps/sanitizer_posix.Tpo .deps/sanitizer_posix.Plo
+> mv -f .deps/sanitizer_procmaps_common.Tpo .deps/sanitizer_procmaps_common.Plo
+> mv -f .deps/sanitizer_posix_libcdep.Tpo .deps/sanitizer_posix_libcdep.Plo
+> make[6]: *** [Makefile:533: all-recursive] Error 1
+> make[5]: *** [Makefile:420: all] Error 2
+> make[4]: *** [Makefile:13138: all-target-libsanitizer] Error 2
+> make[3]: *** [Makefile:1033: all] Error 2
+> make[2]: *** [package/pkg-generic.mk:283: /src/linux-bsp-stm32mp133c/output/development/build/host-gcc-final-12.3.0/.stamp_built] Error 2
+> make[1]: *** [Makefile:82: _all] Error 2
+> make: *** [Makefile:106: /src/linux-bsp-stm32mp133c/output/development/host/bin/arm-none-linux-gnueabihf-gcc] Error 2
+
+This error log is unfortunately useless, as you didn't copy/paste
+enough of the build log to have the actual error. All we can see from
+this is that the compilation failed during the host-gcc-final step.
+
+Please provide:
+
+ 1. A Buildroot .config file that allows to reproduce the issue with
+    upstream Buildroot (without any custom changes)
+
+ 2. The full build log, preferably posted on some pastebin site, as the
+    mailing list will not accept a mail that contains a full build log.
+
+Best regards,
+
+Thomas
 -- 
-2.34.1
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
