@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08499C3DA5D
-	for <buildroot@archiver.kernel.org>; Wed, 17 Jul 2024 21:17:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D7335C3DA62
+	for <buildroot@archiver.kernel.org>; Wed, 17 Jul 2024 21:17:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BA06940EBE;
-	Wed, 17 Jul 2024 21:17:47 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8D80040E9D;
+	Wed, 17 Jul 2024 21:17:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2jNpHlYg8_1I; Wed, 17 Jul 2024 21:17:46 +0000 (UTC)
+ id 0N5sUEPRk9qj; Wed, 17 Jul 2024 21:17:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 16C9740EB3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6C1C040EA9
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 16C9740EB3;
-	Wed, 17 Jul 2024 21:17:46 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id F239E1BF385
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6C1C040EA9;
+	Wed, 17 Jul 2024 21:17:43 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 4AA751BF385
  for <buildroot@lists.busybox.net>; Wed, 17 Jul 2024 21:17:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DF78F40319
+ by smtp3.osuosl.org (Postfix) with ESMTP id 45A6860B14
  for <buildroot@lists.busybox.net>; Wed, 17 Jul 2024 21:17:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FuKZTsTpv95f for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id uQFU6wkqAdho for <buildroot@lists.busybox.net>;
  Wed, 17 Jul 2024 21:17:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CB7FD402B9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E831360AD0
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id CB7FD402B9
- for <buildroot@buildroot.org>; Wed, 17 Jul 2024 21:17:35 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E831360AD0
+ for <buildroot@buildroot.org>; Wed, 17 Jul 2024 21:17:34 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2364786D82; Wed, 17 Jul 2024 21:17:35 +0000 (UTC)
+ id DED4186D80; Wed, 17 Jul 2024 21:17:34 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 17 Jul 2024 23:13:29 +0200
+Date: Wed, 17 Jul 2024 23:11:02 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b0ceb0ac5833aeec4c86e992ff324810a860ba84
-X-Git-Newrev: 51090999ca3c817237b35022ce245a89562236c5
+X-Git-Oldrev: c51f9881d6737ba63ae4ce6f1ea436eeec364e09
+X-Git-Newrev: 68967524427d8a53dd6458fe408960d1383980f1
 X-Patchwork-Hint: ignore
-Message-Id: <20240717211735.2364786D82@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/raspberrypi3_64: remove upstream
- device-tree blob
+Message-Id: <20240717211734.DED4186D80@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/raspberrypi: install Raspberry Pi
+ rev 1.0 device-tree blob
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -61,79 +61,52 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============0136382061210529838=="
+Content-Type: multipart/mixed; boundary="===============2745178370831423718=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============0136382061210529838==
+--===============2745178370831423718==
 Content-Type: text/plain
 
-commit: https://git.buildroot.net/buildroot/commit/?id=51090999ca3c817237b35022ce245a89562236c5
+commit: https://git.buildroot.net/buildroot/commit/?id=68967524427d8a53dd6458fe408960d1383980f1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-There are two kind of device-tree blobs up to the Rasperry Pi 3[1][2]:
- - the downstream dtbs are named after the die name (i.e. BCM27xx)
- - the upstream dtbs are name after the package name (i.e. BCM283x)
-
-Every defconfigs install exclusively the downstream device-tree blob, at
-the exception of the raspberrypi3_64_defconfig that installs both since
-the begining.
-
-This removes the upstream device-tree blob for the beauty of
-consistency.
-
-Note: It is possible to load the upstream device-tree using the
-upstream_kernel property[3].
-
-Raspberry Pi, Compute Module, Raspberry Pi Zero and Raspberry Pi Zero W
-use bcm2835 for upstream and bcm2708 for downstream.
-
-Raspberry Pi 2 uses bcm2836 for upstream and bcm2709 for downstream.
-
-Raspberry Pi 2 rev 1.2, Raspberry Pi 3, Compute Module 3/3+ and
-Raspberry Zero 2 W use bcm2837 for upstream and bcm2709 for downstream.
-
-Raspberry Pi 4/400 and Compute Module 4/4s uses bcm2711 and Raspberry Pi
-5 uses bcm2712.
-
-[1]: https://github.com/raspberrypi/linux/issues/3237
-[2]: https://www.raspberrypi.com/documentation/computers/raspberry-pi.html#flagship-series
-[3]: https://www.raspberrypi.com/documentation/computers/legacy_config_txt.html#upstream_kernel
+This installs Raspberry Pi Model B rev 1.0 device-tree blob.
 
 Signed-off-by: Gaël PORTAY <gael.portay@rtone.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- board/raspberrypi/readme.txt      | 1 -
- configs/raspberrypi3_64_defconfig | 2 +-
- 2 files changed, 1 insertion(+), 2 deletions(-)
+ board/raspberrypi/readme.txt  | 1 +
+ configs/raspberrypi_defconfig | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/board/raspberrypi/readme.txt b/board/raspberrypi/readme.txt
-index 0499fe0d51..78c551579a 100644
+index aa6421ea01..cbd9a57a63 100644
 --- a/board/raspberrypi/readme.txt
 +++ b/board/raspberrypi/readme.txt
-@@ -102,7 +102,6 @@ After building, you should obtain this tree:
-     +-- bcm2711-rpi-4-b.dtb         [1]
-     +-- bcm2711-rpi-cm4.dtb         [1]
-     +-- bcm2712-rpi-5-b.dtb         [1]
--    +-- bcm2837-rpi-3-b.dtb         [1]
-     +-- boot.vfat
-     +-- rootfs.ext4
-     +-- rpi-firmware/
-diff --git a/configs/raspberrypi3_64_defconfig b/configs/raspberrypi3_64_defconfig
-index d6cae400ae..f4ecf2575f 100644
---- a/configs/raspberrypi3_64_defconfig
-+++ b/configs/raspberrypi3_64_defconfig
-@@ -20,7 +20,7 @@ BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi3"
+@@ -87,6 +87,7 @@ Result of the build
+ After building, you should obtain this tree:
  
- # Build the DTB from the kernel sources
+     output/images/
++    +-- bcm2708-rpi-b-rev1.dtb      [1]
+     +-- bcm2708-rpi-b.dtb           [1]
+     +-- bcm2708-rpi-b-plus.dtb      [1]
+     +-- bcm2708-rpi-cm.dtb          [1]
+diff --git a/configs/raspberrypi_defconfig b/configs/raspberrypi_defconfig
+index 03c81ebf39..c6b296e1af 100644
+--- a/configs/raspberrypi_defconfig
++++ b/configs/raspberrypi_defconfig
+@@ -20,7 +20,7 @@ BR2_LINUX_KERNEL_DEFCONFIG="bcmrpi"
+ 
+ # Build the DTBs for A/B, A+/B+ and compute module from the kernel sources
  BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="broadcom/bcm2710-rpi-3-b broadcom/bcm2710-rpi-3-b-plus broadcom/bcm2710-rpi-cm3 broadcom/bcm2837-rpi-3-b"
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="broadcom/bcm2710-rpi-3-b broadcom/bcm2710-rpi-3-b-plus broadcom/bcm2710-rpi-cm3"
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="broadcom/bcm2708-rpi-b broadcom/bcm2708-rpi-b-plus broadcom/bcm2708-rpi-cm"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="broadcom/bcm2708-rpi-b-rev1 broadcom/bcm2708-rpi-b broadcom/bcm2708-rpi-b-plus broadcom/bcm2708-rpi-cm"
  
  BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
  
 
---===============0136382061210529838==
+--===============2745178370831423718==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -144,4 +117,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============0136382061210529838==--
+--===============2745178370831423718==--
