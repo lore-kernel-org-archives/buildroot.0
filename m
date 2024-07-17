@@ -4,72 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4060FC3DA60
-	for <buildroot@archiver.kernel.org>; Wed, 17 Jul 2024 20:45:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 16A53C3DA5D
+	for <buildroot@archiver.kernel.org>; Wed, 17 Jul 2024 20:45:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9AF8740CA1;
-	Wed, 17 Jul 2024 20:45:04 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id AAEE9400C1;
+	Wed, 17 Jul 2024 20:45:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XtmZdKiUAVn2; Wed, 17 Jul 2024 20:45:03 +0000 (UTC)
+ id I9remgNzFXsN; Wed, 17 Jul 2024 20:45:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D787440C15
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7402140CA1
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D787440C15;
-	Wed, 17 Jul 2024 20:45:02 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id EB68A1BF846
- for <buildroot@lists.busybox.net>; Wed, 17 Jul 2024 20:45:01 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7402140CA1;
+	Wed, 17 Jul 2024 20:45:39 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id F06371BF846
+ for <buildroot@lists.busybox.net>; Wed, 17 Jul 2024 20:45:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DFBFC80BC3
- for <buildroot@lists.busybox.net>; Wed, 17 Jul 2024 20:45:01 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id DE32360644
+ for <buildroot@lists.busybox.net>; Wed, 17 Jul 2024 20:45:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id u2EDPU-fz7FH for <buildroot@lists.busybox.net>;
- Wed, 17 Jul 2024 20:45:00 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::226;
- helo=relay6-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tObDd2_yolMT for <buildroot@lists.busybox.net>;
+ Wed, 17 Jul 2024 20:45:37 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 6B4FB80B6A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6B4FB80B6A
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::226])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6B4FB80B6A
- for <buildroot@busybox.net>; Wed, 17 Jul 2024 20:45:00 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 8C300C0006;
- Wed, 17 Jul 2024 20:44:57 +0000 (UTC)
-Date: Wed, 17 Jul 2024 22:44:56 +0200
-To: Francois Perrad <francois.perrad@gadz.org>
-Message-ID: <20240717224456.3434e170@windsurf>
-In-Reply-To: <20240403084807.512825-2-francois.perrad@gadz.org>
-References: <20240403084807.512825-1-francois.perrad@gadz.org>
- <20240403084807.512825-2-francois.perrad@gadz.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1721249097;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=Ow0AJNnl1ZiahdYdIZ4mZFbvh8yOXU6QZMiDNVH9zQk=;
- b=olNuUUmW06yPBdI/HpVCCXZN2imYkQdlGqnLB6KGyHZHmNn/vH/mY8g1dVHISw8GmLid/3
- IhFtrGjJfJeUPfviPVrXHErcuUGSlBw8pxYmUGXWxe6bi8kkWjr3pSWyTvYQ84jtFCHBTo
- 3GWrJ7F5TeQqMiTOJRE+2ZfOpMAqX8aqHwgx5WS8OMOL/LLpXwJ6MzLfnuB5MiYCaQ3Q6m
- FgJC521dexNMHhHr+eyqDv4Tk2g9oFA2OP3vIqtmZroNEOLd9x/4NZNYLywnfkFJY/9Jrm
- XEhdJo0shFfqeWkHtuMbZi4VhZzUUKqgkJhKjUlMiypLrDMdAVU6nTIwF55ncA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=olNuUUmW
-Subject: Re: [Buildroot] [PATCH 2/2] package/libgtk4: new package
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 22A7060624
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 22A7060624
+ for <buildroot@buildroot.org>; Wed, 17 Jul 2024 20:45:37 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 0829D86C8A; Wed, 17 Jul 2024 20:45:37 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 17 Jul 2024 22:45:19 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: faf2a1d2abfbff79fc0603def835066587144420
+X-Git-Newrev: f761a8c4516d88d70ae6f5d192fdb99cafa761a6
+X-Patchwork-Hint: ignore
+Message-Id: <20240717204537.0829D86C8A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/uclibc: add patch for libucontext
+ usage
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,190 +60,67 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@busybox.net
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed,  3 Apr 2024 10:48:07 +0200
-Francois Perrad <francois.perrad@gadz.org> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=f761a8c4516d88d70ae6f5d192fdb99cafa761a6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  DEVELOPERS                   |   1 +
->  package/Config.in            |   1 +
->  package/libgtk4/Config.in    | 106 +++++++++++++++++++++++++++++++++
->  package/libgtk4/libgtk4.hash |   5 ++
->  package/libgtk4/libgtk4.mk   | 111 +++++++++++++++++++++++++++++++++++
->  5 files changed, 224 insertions(+)
->  create mode 100644 package/libgtk4/Config.in
->  create mode 100644 package/libgtk4/libgtk4.hash
->  create mode 100644 package/libgtk4/libgtk4.mk
+*ucontext functions are only implemented for a subset of
+uClibc supported architectures. To allow the external library
+libucontext to be used this small patch is required.
+Tested for riscv64.
 
-I've applied, after doing a few changes. See below.
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../uclibc/0001-allow-to-use-sys-ucontext.h.patch  | 35 ++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
-
-> diff --git a/package/libgtk4/Config.in b/package/libgtk4/Config.in
-> new file mode 100644
-> index 000000000..cda183c8d
-> --- /dev/null
-> +++ b/package/libgtk4/Config.in
-> @@ -0,0 +1,106 @@
-> +comment "libgtk4 needs a toolchain w/ wchar, threads, C++, gcc >= 4.9"
-> +	depends on BR2_USE_MMU
-> +	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-> +	depends on !BR2_USE_WCHAR || !BR2_INSTALL_LIBSTDCPP || \
-> +		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
-> +		!BR2_TOOLCHAIN_HAS_THREADS
-> +
-> +comment "libgtk4 needs an OpenGL or an OpenGL-EGL/wayland backend"
-> +	depends on BR2_USE_MMU
-> +	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-> +	depends on !BR2_PACKAGE_HAS_LIBEGL_WAYLAND && !BR2_PACKAGE_HAS_LIBGL
-
-BR2_PACKAGE_HAS_LIBEGL_WAYLAND is gone. And in fact, even on X11/OpenGL
-systems, EGL is needed. So I simplified this to:
-
-+comment "libgtk4 needs an OpenGL(ES) EGL backend"
-+       depends on BR2_USE_MMU
-+       depends on BR2_TOOLCHAIN_HAS_SYNC_4
-+       depends on !BR2_PACKAGE_HAS_LIBEGL
-
-
-> +
-> +config BR2_PACKAGE_LIBGTK4
-> +	bool "libgtk4"
-> +	depends on BR2_USE_WCHAR # glib2
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
-> +	depends on BR2_USE_MMU # glib2
-> +	depends on BR2_INSTALL_LIBSTDCPP # pango
-> +	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # pango -> harfbuzz
-> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # pango -> harfbuzz
-> +	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND || BR2_PACKAGE_HAS_LIBGL
-
-And this to:
-
-+       # Even in the case of X11/OpenGL, libgtk4 needs epoxy built
-+       # with EGL support, see
-+       # https://gitlab.gnome.org/GNOME/gtk/-/issues/6866.
-+       depends on BR2_PACKAGE_HAS_LIBEGL
-
-
-> +	select BR2_PACKAGE_CAIRO
-> +	select BR2_PACKAGE_CAIRO_PS
-> +	select BR2_PACKAGE_CAIRO_PDF
-> +	select BR2_PACKAGE_CAIRO_SVG
-
-These 3 options no longer exist, so I dropped them.
-
-> +if BR2_PACKAGE_LIBGTK4
-> +
-> +config BR2_PACKAGE_LIBGTK4_BROADWAY
-> +	bool "Broadway GDK backend"
-> +	default y
-> +	  help
-> +	  This enables the Broadway backend for GDK, which provides
-> +	  support for displaying GTK+ applications in a web browser,
-> +	  using HTML5 and web sockets.
-> +
-> +	  For example, to run gtk4-demo on a target which IP address is
-> +	  192.168.0.1 and use it from a web browser, execute the
-> +	  following commands:
-> +
-> +	  $ broadwayd -a 192.168.0.1 -p 8080 :2 &
-> +	  $ export GDK_BACKEND=broadway
-> +	  $ export BROADWAY_DISPLAY=:2
-> +	  $ gtk4-demo
-> +
-> +	  Then open a web browser at address http://192.168.0.1:8080.
-> +	  Javascript and web sockets should be enabled.
-> +
-> +comment "Wayland GDK backend needs an OpenGL EGL backend provided by mesa3d w/ headers >= 3.17"
-> +	depends on !BR2_PACKAGE_MESA3D_OPENGL_EGL || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
-> +
-> +config BR2_PACKAGE_LIBGTK4_WAYLAND
-> +	bool "Wayland GDK backend"
-> +	default y
-> +	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND
-
-Dropped, as the main option now implies EGL is available.
-
-> +	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17
-> +	select BR2_PACKAGE_WAYLAND
-
-+       select BR2_PACKAGE_WAYLAND_PROTOCOLS
-
-was missing.
-
-
-> diff --git a/package/libgtk4/libgtk4.mk b/package/libgtk4/libgtk4.mk
-> new file mode 100644
-> index 000000000..2d3e5049a
-> --- /dev/null
-> +++ b/package/libgtk4/libgtk4.mk
-> @@ -0,0 +1,111 @@
-> +################################################################################
-> +#
-> +# libgtk4
-> +#
-> +################################################################################
-> +
-> +LIBGTK4_VERSION_MAJOR = 4.12
-> +LIBGTK4_VERSION = $(LIBGTK4_VERSION_MAJOR).4
-> +LIBGTK4_SOURCE = gtk-$(LIBGTK4_VERSION).tar.xz
-> +LIBGTK4_SITE = https://download.gnome.org/sources/gtk/$(LIBGTK4_VERSION_MAJOR)
-> +LIBGTK4_LICENSE = LGPL-2.0+
-> +LIBGTK4_LICENSE_FILES = COPYING
-> +LIBGTK4_CPE_ID_VENDOR = gnome
-> +LIBGTK4_CPE_ID_PRODUCT = gtk
-> +LIBGTK4_INSTALL_STAGING = YES
-> +
-> +LIBGTK4_DEPENDENCIES = host-pkgconf host-libgtk4 \
-> +	gdk-pixbuf graphene libepoxy libglib2 pango \
-> +	$(TARGET_NLS_DEPENDENCIES)
-> +
-> +LIBGTK4_CONF_OPTS = -Dbuild-tests=false
-
-Added many more disabling:
-
-+LIBGTK4_CONF_OPTS = \
-+       -Dbuild-tests=false \
-+       -Dmedia-ffmpeg=disabled \
-+       -Dprint-cpdb=disabled \
-+       -Dvulkan=disabled \
-+       -Dcloudproviders=disabled \
-+       -Dsysprof=disabled \
-+       -Dtracker=disabled \
-+       -Dcolord=disabled \
-+       -Dintrospection=disabled \
-+       -Ddocumentation=false \
-+       -Dscreenshots=false \
-+       -Dman-pages=false
-
-
-> +
-> +ifeq ($(BR2_PACKAGE_LIBGTK4_X11),y)
-> +LIBGTK4_DEPENDENCIES += xlib_libXcursor xlib_libXi xlib_libXinerama
-> +LIBGTK4_CONF_OPTS += -Dx11-backend=true
-> +else
-> +LIBGTK4_CONF_OPTS += -Dx11-backend=false
-> +endif
-> +
-> +ifeq ($(BR2_PACKAGE_LIBGTK4_WAYLAND),y)
-> +LIBGTK4_DEPENDENCIES += wayland libxkbcommon
-
-Added wayland-protocols here, which was missing.
-
-And I think that's pretty much it. Thanks a lot for the contribution!
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/package/uclibc/0001-allow-to-use-sys-ucontext.h.patch b/package/uclibc/0001-allow-to-use-sys-ucontext.h.patch
+new file mode 100644
+index 0000000000..b6bd5602d9
+--- /dev/null
++++ b/package/uclibc/0001-allow-to-use-sys-ucontext.h.patch
+@@ -0,0 +1,35 @@
++From 903da45dde43836e35a295226c5b1efccd413c08 Mon Sep 17 00:00:00 2001
++From: Waldemar Brodkorb <wbx@openadk.org>
++Date: Wed, 17 Jul 2024 15:41:40 +0200
++Subject: [PATCH] allow to use <sys/ucontext.h>
++
++For architectures without ucontext implementation it is possible
++to use libucontext with this small adaptation.
++
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++Upstream: https://mailman.openadk.org/mailman3/hyperkitty/list/devel@uclibc-ng.org/thread/MZCPGG56TL7SVOZY2L3AGHLREJ76BYZE/
++---
++ include/ucontext.h | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/include/ucontext.h b/include/ucontext.h
++index 4ce114ef1..76b4f375e 100644
++--- a/include/ucontext.h
+++++ b/include/ucontext.h
++@@ -23,11 +23,11 @@
++ 
++ #include <features.h>
++ 
++-#ifdef __UCLIBC_HAS_CONTEXT_FUNCS__
++-
++ /* Get machine dependent definition of data structures.  */
++ #include <sys/ucontext.h>
++ 
+++#ifdef __UCLIBC_HAS_CONTEXT_FUNCS__
+++
++ __BEGIN_DECLS
++ 
++ /* Get user context and store it in variable pointed to by UCP.  */
++-- 
++2.30.2
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
