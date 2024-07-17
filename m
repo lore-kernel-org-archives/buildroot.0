@@ -4,71 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D52B1C3DA42
-	for <buildroot@archiver.kernel.org>; Wed, 17 Jul 2024 14:59:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8F93BC3DA42
+	for <buildroot@archiver.kernel.org>; Wed, 17 Jul 2024 15:13:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9D3B160B2C;
-	Wed, 17 Jul 2024 14:59:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 08524607DA;
+	Wed, 17 Jul 2024 15:13:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GNci_0dtBUUK; Wed, 17 Jul 2024 14:59:07 +0000 (UTC)
+ id QVaTiQeNUMh6; Wed, 17 Jul 2024 15:13:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3E11960B4A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 16A1B607ED
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3E11960B4A;
-	Wed, 17 Jul 2024 14:59:07 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 7EA6A1BF20D
- for <buildroot@lists.busybox.net>; Wed, 17 Jul 2024 14:59:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 16A1B607ED;
+	Wed, 17 Jul 2024 15:13:02 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 158481BF3ED
+ for <buildroot@lists.busybox.net>; Wed, 17 Jul 2024 15:13:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6C8F76090A
- for <buildroot@lists.busybox.net>; Wed, 17 Jul 2024 14:59:04 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0E1DB40330
+ for <buildroot@lists.busybox.net>; Wed, 17 Jul 2024 15:13:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NjvEQKepqQ1I for <buildroot@lists.busybox.net>;
- Wed, 17 Jul 2024 14:59:03 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.194;
- helo=relay2-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 46F4460654
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 46F4460654
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 46F4460654
- for <buildroot@buildroot.org>; Wed, 17 Jul 2024 14:59:03 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 5569C40009;
- Wed, 17 Jul 2024 14:59:00 +0000 (UTC)
-Date: Wed, 17 Jul 2024 16:58:59 +0200
-To: TIAN Yuanhao <tianyuanhao3@163.com>
-Message-ID: <20240717165859.171095b0@windsurf>
-In-Reply-To: <20240717133702.4377-1-tianyuanhao3@163.com>
-References: <20240717133702.4377-1-tianyuanhao3@163.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UYa2odpwb-Da for <buildroot@lists.busybox.net>;
+ Wed, 17 Jul 2024 15:13:00 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=89.238.66.15;
+ helo=helium.openadk.org; envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 4E7DB4032A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4E7DB4032A
+Received: from helium.openadk.org (helium.openadk.org [89.238.66.15])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 4E7DB4032A
+ for <buildroot@buildroot.org>; Wed, 17 Jul 2024 15:12:58 +0000 (UTC)
+Received: by helium.openadk.org (Postfix, from userid 1000)
+ id 7EB773521187; Wed, 17 Jul 2024 17:12:56 +0200 (CEST)
+Date: Wed, 17 Jul 2024 17:12:54 +0200
+From: Waldemar Brodkorb <wbx@openadk.org>
+To: buildroot@buildroot.org
+Message-ID: <Zpffdv/lWI4det+1@waldemar-brodkorb.de>
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1721228340;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=xVJglhBWh0lib9dI6HwrGJYlROufROnhVoJW5uJbe3M=;
- b=ndJcv/OJsvc0dGsmRrWY9aeTmsCbuAlqgdZqgO1bnHdwve9LPsvg5lSZwwq+s6mi+jIVTQ
- xp+Q/khBV+yoflkklLEYooTsQPSkwvDPr7Jq2NJiqSblT85sY3G0QDQL7VKdCDsfR+Bl8x
- QgHt2VNrzF3YHW/5rS0F2QQNXF5Myn673LxkVv8GIWrGMGAnPsgMpCVGjy5zHzlPuZyl7d
- 2fy4fC1imQqVZgBVwKEWCOB8yyjaFDdx/3qam/l6PR1dH5rWLe0atLXTGbXcHOGcPGq4b5
- eJWMb6tYxe7zxfF9WnY+hugqF0PwcUaYy7OwkEgQgBr4tmyA9L6cA+jL9asN+Q==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+Content-Disposition: inline
+X-Operating-System: Linux 5.10.0-31-amd64 x86_64
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=openadk.org; s=2022; 
+ t=1721229176; bh=b0LwytmnXkJUQNQSr1FQvk24GpPJ633+D9F0KqrpvhA=;
+ h=Date:From:To:Subject:From;
+ b=fW/ImJXo7HMHx/dlNrACG2Q3W017SvjQVPhyNAo+j0fT0awszPVWKP/rIPBivCuiz
+ /FIafqj3wJxahSQB1nKhRNSLSwa76+BC2I9/j4nfaTwi4v0E73cArMKNxnXzU+2wl5
+ Xq/NsosJvifnieka7Zw9HHTV39VMa+5lnGGbc2kKiBb+5VmkrZKWh3rnhpzatW0dZT
+ BAQD0iztxpYa7z/64ZSISXNbAEpvOE9or+oVCGig9Qfl11TB2NSPrxiIXIVHkQlU0p
+ eIwjLdpnvZyO8bqBQ1Wp3Z5AhAhztpLypitJTXQofYtozdJzXBZeXKeqMiF7RiHSHF
+ mRYubEqKJu4hg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=openadk.org
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=ndJcv/OJ
-Subject: Re: [Buildroot] [PATCH 1/1] package/crun: drop libgcrypt dependency
+ unprotected) header.d=openadk.org header.i=@openadk.org header.a=rsa-sha256
+ header.s=2022 header.b=fW/ImJXo
+Subject: [Buildroot] [PATCH] package/uclibc: add patch for libucontext usage
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,36 +74,66 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, 17 Jul 2024 06:37:02 -0700
-TIAN Yuanhao <tianyuanhao3@163.com> wrote:
+*ucontext functions are only implemented for a subset of
+uClibc supported architectures. To allow the external library
+libucontext to be used this small patch is required.
+Tested for riscv64.
 
-> This reverts commit 4d5fd84496 (package/crun: add libgcrypt optional
-> dependency, 2022-12-30).
-> 
-> Since bump to 1.15, libgcrypt is not an optional dependency anymore as
-> it has been droped in 1.14 with
-> https://github.com/containers/crun/commit/8d96f0884b46765693b6d86125216c895e095ed6
-> 
-> Signed-off-by: TIAN Yuanhao <tianyuanhao3@163.com>
-> ---
->  package/crun/crun.mk | 4 ----
->  1 file changed, 4 deletions(-)
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+ .../0001-allow-to-use-sys-ucontext.h.patch    | 35 +++++++++++++++++++
+ 1 file changed, 35 insertions(+)
+ create mode 100644 package/uclibc/0001-allow-to-use-sys-ucontext.h.patch
 
-Applied to master, thanks.
-
-Thomas
+diff --git a/package/uclibc/0001-allow-to-use-sys-ucontext.h.patch b/package/uclibc/0001-allow-to-use-sys-ucontext.h.patch
+new file mode 100644
+index 0000000000..b6bd5602d9
+--- /dev/null
++++ b/package/uclibc/0001-allow-to-use-sys-ucontext.h.patch
+@@ -0,0 +1,35 @@
++From 903da45dde43836e35a295226c5b1efccd413c08 Mon Sep 17 00:00:00 2001
++From: Waldemar Brodkorb <wbx@openadk.org>
++Date: Wed, 17 Jul 2024 15:41:40 +0200
++Subject: [PATCH] allow to use <sys/ucontext.h>
++
++For architectures without ucontext implementation it is possible
++to use libucontext with this small adaptation.
++
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++Upstream: https://mailman.openadk.org/mailman3/hyperkitty/list/devel@uclibc-ng.org/thread/MZCPGG56TL7SVOZY2L3AGHLREJ76BYZE/
++---
++ include/ucontext.h | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/include/ucontext.h b/include/ucontext.h
++index 4ce114ef1..76b4f375e 100644
++--- a/include/ucontext.h
+++++ b/include/ucontext.h
++@@ -23,11 +23,11 @@
++ 
++ #include <features.h>
++ 
++-#ifdef __UCLIBC_HAS_CONTEXT_FUNCS__
++-
++ /* Get machine dependent definition of data structures.  */
++ #include <sys/ucontext.h>
++ 
+++#ifdef __UCLIBC_HAS_CONTEXT_FUNCS__
+++
++ __BEGIN_DECLS
++ 
++ /* Get user context and store it in variable pointed to by UCP.  */
++-- 
++2.30.2
++
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.39.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
