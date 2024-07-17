@@ -4,73 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2917AC3DA5D
-	for <buildroot@archiver.kernel.org>; Wed, 17 Jul 2024 21:21:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C32B4C3DA60
+	for <buildroot@archiver.kernel.org>; Wed, 17 Jul 2024 21:32:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E5AB3400EA;
-	Wed, 17 Jul 2024 21:21:21 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 84F08400C1;
+	Wed, 17 Jul 2024 21:32:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xX5WQtA1RB6N; Wed, 17 Jul 2024 21:21:21 +0000 (UTC)
+ id iNSi3r_hu6lE; Wed, 17 Jul 2024 21:32:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BB2DF40C0E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 23B6C40C56
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BB2DF40C0E;
-	Wed, 17 Jul 2024 21:21:20 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id CE5C61BF385
- for <buildroot@lists.busybox.net>; Wed, 17 Jul 2024 21:21:18 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 23B6C40C56;
+	Wed, 17 Jul 2024 21:32:36 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 628391BF385
+ for <buildroot@lists.busybox.net>; Wed, 17 Jul 2024 21:32:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BC80381253
- for <buildroot@lists.busybox.net>; Wed, 17 Jul 2024 21:21:18 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4B7BB40C56
+ for <buildroot@lists.busybox.net>; Wed, 17 Jul 2024 21:32:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VVgqkoWsniOe for <buildroot@lists.busybox.net>;
- Wed, 17 Jul 2024 21:21:18 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::225;
- helo=relay5-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id t_oLk3jt1kUw for <buildroot@lists.busybox.net>;
+ Wed, 17 Jul 2024 21:32:33 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B646F80CE7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B646F80CE7
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::225])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B646F80CE7
- for <buildroot@buildroot.org>; Wed, 17 Jul 2024 21:21:17 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id BA26D1C0003;
- Wed, 17 Jul 2024 21:21:14 +0000 (UTC)
-Date: Wed, 17 Jul 2024 23:21:13 +0200
-To: "=?UTF-8?B?R2HDq2w=?= PORTAY" <gael.portay@gmail.com>
-Message-ID: <20240717232113.0f00055d@windsurf>
-In-Reply-To: <20240716054359.92966-5-gael.portay@rtone.fr>
-References: <20240716054359.92966-1-gael.portay@rtone.fr>
- <20240716054359.92966-5-gael.portay@rtone.fr>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1721251275;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=3G/pnI7mNaVua07alEydJaBQD1NPwjJNl6jMDzgDQfk=;
- b=Xrf0+UY6Lc/uX+wkJqBicwU48mIh4UcwBauh26bhonzx4zNiaSdkguYMtaqwcKkJzwvgRb
- YqiNMnOD0ClVxkKkxVa3mVVgb3FUcsVMa+LZsaoWQjzmGRZBROu1PQo8QsIzovWXm1lw7K
- o4GLS/1qVTNKUGD2nqAf4Ag2EsycYkdEepx2y2dhkh5zME+ojvMmFm3OambWzC9n3UJdpP
- Leni3G+QZ9dzCiexmd9gEC/rWKYtMIkVsEW44Ate5S7g65H3mFXogXIBZuEl+UHOHtZoLx
- gLRfftTycrJq2EKJq/gDlZbajb3+OUn39GqRbDWc2z/MWepr7vtAm6sb3GYU0g==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Xrf0+UY6
-Subject: Re: [Buildroot] [PATCH 4/8] configs/raspberrypi3_64: remove
- upstream device-tree blob
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2901740C0E
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2901740C0E
+ for <buildroot@buildroot.org>; Wed, 17 Jul 2024 21:32:33 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 11D9886D23; Wed, 17 Jul 2024 21:32:33 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 17 Jul 2024 23:32:15 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 281134f346ad8652dffd89b4488beb00e8ccd5d0
+X-Git-Newrev: 23fd1f85543f2aa048914834252a659989c81db2
+X-Patchwork-Hint: ignore
+Message-Id: <20240717213233.11D9886D23@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/espflash: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,27 +59,101 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: =?UTF-8?B?R2HDq2w=?= PORTAY <gael.portay@rtone.fr>,
- Martin Bark <martin@barkynet.com>,
- Julien Grossholtz <julien.grossholtz@openest.io>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gVHVlLCAxNiBKdWwgMjAyNCAwNzo0Mzo1NSArMDIwMAoiR2HDq2wgUE9SVEFZIiA8Z2FlbC5w
-b3J0YXlAZ21haWwuY29tPiB3cm90ZToKCj4gVGhpcyByZW1vdmVzIHRoZSB1cHN0cmVhbSBkZXZp
-Y2UtdHJlZSBibG9iIGZvciB0aGUgYmVhdXR5IG9mCj4gY29uc2lzdGVuY3kuCj4gCj4gTm90ZTog
-SXQgaXMgcG9zc2libGUgdG8gbG9hZCB0aGUgdXBzdHJlYW0gZGV2aWNlLXRyZWUgdXNpbmcgdGhl
-Cj4gdXBzdHJlYW1fa2VybmVsIHByb3BlcnR5WzNdLgoKQnV0IEkgc3VwcG9zZSB0aGlzIG9ubHkg
-d29ya3MgaWYgdGhlIHVwc3RyZWFtIERUQnMgYXJlIGluc3RhbGxlZC4uLiBhbmQKd2UgYXJlIG5v
-dCBpbnN0YWxsaW5nIHRoZW0sIHJpZ2h0PwoKQnV0IEkgZ3Vlc3MgdXBzdHJlYW0gRGV2aWNlIFRy
-ZWVzIG1ha2Ugc2Vuc2UgaWYgeW91IHVzZSB0aGUgdXBzdHJlYW0Ka2VybmVsLCB3aGlsZSB0aG9z
-ZSBkZWZjb25maWdzIGFsbCB1c2UgdGhlIHZlbmRvci9kb3duc3RyZWFtIGtlcm5lbCwgc28KaXQg
-bWFrZXMgY29tcGxldGUgc2Vuc2UgdG8gdXNlIHRoZSBjb3JyZXNwb25kaW5nIHZlbmRvci9kb3du
-c3RyZWFtCmtlcm5lbC4KClRoYW5rcywKClRob21hcwotLSAKVGhvbWFzIFBldGF6em9uaSwgY28t
-b3duZXIgYW5kIENFTywgQm9vdGxpbgpFbWJlZGRlZCBMaW51eCBhbmQgS2VybmVsIGVuZ2luZWVy
-aW5nIGFuZCB0cmFpbmluZwpodHRwczovL2Jvb3RsaW4uY29tCl9fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRy
-b290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlz
-dGluZm8vYnVpbGRyb290Cg==
+commit: https://git.buildroot.net/buildroot/commit/?id=23fd1f85543f2aa048914834252a659989c81db2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+This package provides espflash. A serial flasher utilities for
+Espressif devices, based loosely on esptool.py. Supports the
+ESP32, ESP32-C2/C3/C6, ESP32-H2, ESP32-P4, and ESP32-S2/S3.
+
+Signed-off-by: Torben Voltmer <mail@t-voltmer.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS                     |  3 +++
+ package/Config.in              |  1 +
+ package/espflash/Config.in     | 10 ++++++++++
+ package/espflash/espflash.hash |  4 ++++
+ package/espflash/espflash.mk   | 13 +++++++++++++
+ 5 files changed, 31 insertions(+)
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 08c120a60f..e51d56daa2 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -3193,6 +3193,9 @@ F:	support/testing/tests/package/test_redis.py
+ N:	Tobias Waldekranz <tobias@waldekranz.com>
+ F:	package/kmemd/
+ 
++N:	Torben Voltmer <mail@t-voltmer.net>
++F:	package/espflash/
++
+ N:	Tudor Holton <buildroot@tudorholton.com>
+ F:	package/openjdk/
+ 
+diff --git a/package/Config.in b/package/Config.in
+index a7cb768dcd..d6658f185f 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -508,6 +508,7 @@ endmenu
+ 	source "package/edk2-non-osi/Config.in"
+ 	source "package/edk2-platforms/Config.in"
+ 	source "package/esp-hosted/Config.in"
++	source "package/espflash/Config.in"
+ 	source "package/eudev/Config.in"
+ 	source "package/ev3dev-linux-drivers/Config.in"
+ 	source "package/evemu/Config.in"
+diff --git a/package/espflash/Config.in b/package/espflash/Config.in
+new file mode 100644
+index 0000000000..2a7a0f6b38
+--- /dev/null
++++ b/package/espflash/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_ESPFLASH
++	bool "espflash"
++	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
++	select BR2_PACKAGE_HOST_RUSTC
++	help
++	  Serial flasher utilities for Espressif devices, based
++	  loosely on esptool.py. Supports the ESP32,
++	  ESP32-C2/C3/C6, ESP32-H2, ESP32-P4, and ESP32-S2/S3.
++
++	  https://github.com/esp-rs/espflash
+diff --git a/package/espflash/espflash.hash b/package/espflash/espflash.hash
+new file mode 100644
+index 0000000000..ebe24ef51f
+--- /dev/null
++++ b/package/espflash/espflash.hash
+@@ -0,0 +1,4 @@
++# Locally calculated
++sha256  8e5da5e90d03135a1b2af6c0b551e4f2504ad64e659b0e88e8a4ecd98cc6a6b6  espflash-3.1.0-cargo2.tar.gz
++sha256  0886cf791a43c02d71c105b4835b53293704ec407a72f84a87f73e20cb2d3251  LICENSE-APACHE
++sha256  a75018ab59a13738ed2024a0090ae8f91b7693ae84568aa0e52c3dff99e6748d  LICENSE-MIT
+diff --git a/package/espflash/espflash.mk b/package/espflash/espflash.mk
+new file mode 100644
+index 0000000000..43532de58c
+--- /dev/null
++++ b/package/espflash/espflash.mk
+@@ -0,0 +1,13 @@
++################################################################################
++#
++# espflash
++#
++################################################################################
++
++ESPFLASH_VERSION = 3.1.0
++ESPFLASH_SITE = $(call github,esp-rs,espflash,v$(ESPFLASH_VERSION))
++ESPFLASH_SUBDIR = espflash
++ESPFLASH_LICENSE = Apache-2.0 or MIT
++ESPFLASH_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
++
++$(eval $(cargo-package))
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
