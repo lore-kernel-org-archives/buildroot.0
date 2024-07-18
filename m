@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72D33C3DA61
-	for <buildroot@archiver.kernel.org>; Thu, 18 Jul 2024 20:54:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1BC8FC3DA61
+	for <buildroot@archiver.kernel.org>; Thu, 18 Jul 2024 20:54:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3D4C460EA2;
-	Thu, 18 Jul 2024 20:54:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CF39460ED5;
+	Thu, 18 Jul 2024 20:54:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id B4buxXIVtUGt; Thu, 18 Jul 2024 20:54:51 +0000 (UTC)
+ id y88tV7ZKwUdJ; Thu, 18 Jul 2024 20:54:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A43CD60E97
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 58DC060ED2
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A43CD60E97;
-	Thu, 18 Jul 2024 20:54:50 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 196441BF983
+	by smtp3.osuosl.org (Postfix) with ESMTP id 58DC060ED2;
+	Thu, 18 Jul 2024 20:54:54 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id B50B41BF3F9
  for <buildroot@lists.busybox.net>; Thu, 18 Jul 2024 20:54:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 130F240313
- for <buildroot@lists.busybox.net>; Thu, 18 Jul 2024 20:54:23 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id D219860612
+ for <buildroot@lists.busybox.net>; Thu, 18 Jul 2024 20:54:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KsbhrlB067e8 for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id H6j6pDpDLaE1 for <buildroot@lists.busybox.net>;
  Thu, 18 Jul 2024 20:54:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9BE6D402E1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CE74C6062E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9BE6D402E1
+ by smtp3.osuosl.org (Postfix) with ESMTP id CE74C6062E
  for <buildroot@buildroot.org>; Thu, 18 Jul 2024 20:54:21 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9541B86E0A; Thu, 18 Jul 2024 20:54:21 +0000 (UTC)
+ id BD64B86E0A; Thu, 18 Jul 2024 20:54:21 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 18 Jul 2024 22:47:01 +0200
+Date: Thu, 18 Jul 2024 22:49:07 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9fecf2811cb7cecc47c9f1d160a713720850efa5
-X-Git-Newrev: 500070c1050c0a718026a43f620af6c443e003e6
+X-Git-Oldrev: 8a549a1bad51f1ef0ede2666a52e8f389babbc22
+X-Git-Newrev: c1d9e4b9f74e840f6bb805743f3872310369506e
 X-Patchwork-Hint: ignore
-Message-Id: <20240718205421.9541B86E0A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-tortoise-orm: new package
+Message-Id: <20240718205421.BD64B86E0A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-aerich: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,76 +65,117 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=500070c1050c0a718026a43f620af6c443e003e6
+commit: https://git.buildroot.net/buildroot/commit/?id=c1d9e4b9f74e840f6bb805743f3872310369506e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+We need to backport a patch so that the correct poetry build backend
+is used.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/Config.in                                    |  1 +
- package/python-tortoise-orm/Config.in                | 10 ++++++++++
- package/python-tortoise-orm/python-tortoise-orm.hash |  5 +++++
- package/python-tortoise-orm/python-tortoise-orm.mk   | 15 +++++++++++++++
- 4 files changed, 31 insertions(+)
+ package/Config.in                                  |  1 +
+ ...ry-build-backend-to-support-editable-inst.patch | 29 ++++++++++++++++++++++
+ package/python-aerich/Config.in                    | 12 +++++++++
+ package/python-aerich/python-aerich.hash           |  5 ++++
+ package/python-aerich/python-aerich.mk             | 15 +++++++++++
+ 5 files changed, 62 insertions(+)
 
 diff --git a/package/Config.in b/package/Config.in
-index f314140df4..e58b8eebc9 100644
+index 017c6f21e6..c6e9611ca9 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -1397,6 +1397,7 @@ menu "External python modules"
- 	source "package/python-toml/Config.in"
- 	source "package/python-tomli/Config.in"
- 	source "package/python-tornado/Config.in"
-+	source "package/python-tortoise-orm/Config.in"
- 	source "package/python-tqdm/Config.in"
- 	source "package/python-trafaret/Config.in"
- 	source "package/python-traitlets/Config.in"
-diff --git a/package/python-tortoise-orm/Config.in b/package/python-tortoise-orm/Config.in
+@@ -963,6 +963,7 @@ endif
+ if BR2_PACKAGE_PYTHON3
+ menu "External python modules"
+ 	source "package/python-aenum/Config.in"
++	source "package/python-aerich/Config.in"
+ 	source "package/python-aexpect/Config.in"
+ 	source "package/python-aioblescan/Config.in"
+ 	source "package/python-aiocoap/Config.in"
+diff --git a/package/python-aerich/0001-update-poetry-build-backend-to-support-editable-inst.patch b/package/python-aerich/0001-update-poetry-build-backend-to-support-editable-inst.patch
 new file mode 100644
-index 0000000000..62b1a5a86e
+index 0000000000..67d7c45bfb
 --- /dev/null
-+++ b/package/python-tortoise-orm/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_PYTHON_TORTOISE_ORM
-+	bool "python-tortoise-orm"
-+	select BR2_PACKAGE_PYTHON_AIOSQLITE # runtime
-+	select BR2_PACKAGE_PYTHON_ISO8601 # runtime
-+	select BR2_PACKAGE_PYTHON_PYPIKA_TORTOISE # runtime
-+	select BR2_PACKAGE_PYTHON_PYTZ # runtime
-+	help
-+	  Easy async ORM for python, built with relations in mind.
++++ b/package/python-aerich/0001-update-poetry-build-backend-to-support-editable-inst.patch
+@@ -0,0 +1,29 @@
++From e729bb9b602ba74dea7ccc978dac709283a0934a Mon Sep 17 00:00:00 2001
++From: strayge <strayge@gmail.com>
++Date: Fri, 18 Aug 2023 15:03:38 +0400
++Subject: [PATCH] update poetry build-backend to support editable install
 +
-+	  https://github.com/tortoise/tortoise-orm
-diff --git a/package/python-tortoise-orm/python-tortoise-orm.hash b/package/python-tortoise-orm/python-tortoise-orm.hash
++Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
++Upstream: https://github.com/tortoise/aerich/commit/e729bb9b602ba74dea7ccc978dac709283a0934a
++---
++ pyproject.toml | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/pyproject.toml b/pyproject.toml
++index b9390e1..7673d70 100644
++--- a/pyproject.toml
+++++ b/pyproject.toml
++@@ -45,8 +45,8 @@ location = "./migrations"
++ src_folder = "./."
++ 
++ [build-system]
++-requires = ["poetry>=0.12"]
++-build-backend = "poetry.masonry.api"
+++requires = ["poetry-core>=1.0.0"]
+++build-backend = "poetry.core.masonry.api"
++ 
++ [tool.poetry.scripts]
++ aerich = "aerich.cli:main"
++-- 
++2.34.1
++
+diff --git a/package/python-aerich/Config.in b/package/python-aerich/Config.in
 new file mode 100644
-index 0000000000..4796c8277f
+index 0000000000..3aa39e176d
 --- /dev/null
-+++ b/package/python-tortoise-orm/python-tortoise-orm.hash
++++ b/package/python-aerich/Config.in
+@@ -0,0 +1,12 @@
++config BR2_PACKAGE_PYTHON_AERICH
++	bool "python-aerich"
++	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS # python-pydantic -> python-pydantic-core
++	select BR2_PACKAGE_PYTHON_CLICK # runtime
++	select BR2_PACKAGE_PYTHON_DICTDIFFER # runtime
++	select BR2_PACKAGE_PYTHON_PYDANTIC # runtime
++	select BR2_PACKAGE_PYTHON_TOMLKIT # runtime
++	select BR2_PACKAGE_PYTHON_TORTOISE_ORM # runtime
++	help
++	  A database migrations tool for Tortoise ORM.
++
++	  https://github.com/tortoise/aerich
+diff --git a/package/python-aerich/python-aerich.hash b/package/python-aerich/python-aerich.hash
+new file mode 100644
+index 0000000000..c104c3d58e
+--- /dev/null
++++ b/package/python-aerich/python-aerich.hash
 @@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/tortoise-orm/json
-+md5  aa5efa50e69d0a67b75c187f7550acd7  tortoise_orm-0.20.0.tar.gz
-+sha256  283af584d685dcc58d6cc1da35b9115bb1e41c89075eae2a19c493b39b9b41f7  tortoise_orm-0.20.0.tar.gz
++# md5, sha256 from https://pypi.org/pypi/aerich/json
++md5  26a99a2c6c604a370b228b74e12c7981  aerich-0.7.2.tar.gz
++sha256  31d67de7b96184636b89de99062e059e5e6204b6251d24c33eb21fc9cf982e09  aerich-0.7.2.tar.gz
 +# Locally computed sha256 checksums
-+sha256  f955d347b975d5867ee364f978476b3012878a706d468571b9758cac74de6041  LICENSE.txt
-diff --git a/package/python-tortoise-orm/python-tortoise-orm.mk b/package/python-tortoise-orm/python-tortoise-orm.mk
++sha256  4cc00f0e33ac8e089b37d8a1474be441b26311bdc16fe035c75b51201515f617  LICENSE
+diff --git a/package/python-aerich/python-aerich.mk b/package/python-aerich/python-aerich.mk
 new file mode 100644
-index 0000000000..cc1c2126b7
+index 0000000000..63343e0b96
 --- /dev/null
-+++ b/package/python-tortoise-orm/python-tortoise-orm.mk
++++ b/package/python-aerich/python-aerich.mk
 @@ -0,0 +1,15 @@
 +################################################################################
 +#
-+# python-tortoise-orm
++# python-aerich
 +#
 +################################################################################
 +
-+PYTHON_TORTOISE_ORM_VERSION = 0.20.0
-+PYTHON_TORTOISE_ORM_SOURCE = tortoise_orm-$(PYTHON_TORTOISE_ORM_VERSION).tar.gz
-+PYTHON_TORTOISE_ORM_SITE = https://files.pythonhosted.org/packages/3b/84/8ca142fe370d59c4e3135825b2822d199c4f885ae855657c1a7361e68511
-+PYTHON_TORTOISE_ORM_SETUP_TYPE = pep517
-+PYTHON_TORTOISE_ORM_LICENSE = Apache-2.0
-+PYTHON_TORTOISE_ORM_LICENSE_FILES = LICENSE.txt
-+PYTHON_TORTOISE_ORM_DEPENDENCIES = host-python-poetry-core
++PYTHON_AERICH_VERSION = 0.7.2
++PYTHON_AERICH_SOURCE = aerich-$(PYTHON_AERICH_VERSION).tar.gz
++PYTHON_AERICH_SITE = https://files.pythonhosted.org/packages/ca/cd/ae9c60ffc21e2d41e22c62cbf24a60dfad937222d880489703842d179746
++PYTHON_AERICH_SETUP_TYPE = pep517
++PYTHON_AERICH_LICENSE = Apache-2.0
++PYTHON_AERICH_LICENSE_FILES = LICENSE
++PYTHON_AERICH_DEPENDENCIES = host-python-poetry-core
 +
 +$(eval $(python-package))
 _______________________________________________
