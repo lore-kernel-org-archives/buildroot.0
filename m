@@ -4,89 +4,100 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E62F1C3DA61
-	for <buildroot@archiver.kernel.org>; Thu, 18 Jul 2024 20:53:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1BECBC3DA49
+	for <buildroot@archiver.kernel.org>; Thu, 18 Jul 2024 20:54:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7492360612;
-	Thu, 18 Jul 2024 20:53:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D2E0660612;
+	Thu, 18 Jul 2024 20:54:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lNrK0aSRVGqa; Thu, 18 Jul 2024 20:53:25 +0000 (UTC)
+ id LbiRy8V-6006; Thu, 18 Jul 2024 20:54:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 711FF60E77
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CD91D6062E
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 711FF60E77;
-	Thu, 18 Jul 2024 20:53:25 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 58FEE1BF3F9
- for <buildroot@lists.busybox.net>; Thu, 18 Jul 2024 20:53:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CD91D6062E;
+	Thu, 18 Jul 2024 20:54:41 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 89B1F1BF3F9
+ for <buildroot@lists.busybox.net>; Thu, 18 Jul 2024 20:54:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4630A40F3C
- for <buildroot@lists.busybox.net>; Thu, 18 Jul 2024 20:53:23 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 82260812B6
+ for <buildroot@lists.busybox.net>; Thu, 18 Jul 2024 20:54:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8wZZd-OCwPXW for <buildroot@lists.busybox.net>;
- Thu, 18 Jul 2024 20:53:22 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.15;
- helo=mout.gmx.net; envelope-from=j.neuschaefer@gmx.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D21B140F3B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D21B140F3B
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D21B140F3B
- for <buildroot@buildroot.org>; Thu, 18 Jul 2024 20:53:21 +0000 (UTC)
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from probook ([151.216.37.99]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MQ5rO-1shpoU2sV6-00Yh4J; Thu, 18
- Jul 2024 22:53:18 +0200
-Date: Thu, 18 Jul 2024 22:53:17 +0200
-To: Arnout Vandecappelle <arnout@mind.be>
-Message-ID: <ZpmAvdJnGWB5T4DG@probook>
-References: <20240704-svtree-v1-1-8fbd93dcfbb9@gmx.net>
- <0d66f3e0-cec6-487a-8bfa-880142420e52@mind.be>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 32Q6cusZphFA for <buildroot@lists.busybox.net>;
+ Thu, 18 Jul 2024 20:54:05 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::32d; helo=mail-wm1-x32d.google.com;
+ envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4FFC6811BB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4FFC6811BB
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
+ [IPv6:2a00:1450:4864:20::32d])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4FFC6811BB
+ for <buildroot@buildroot.org>; Thu, 18 Jul 2024 20:54:04 +0000 (UTC)
+Received: by mail-wm1-x32d.google.com with SMTP id
+ 5b1f17b1804b1-426717a2d12so4952375e9.0
+ for <buildroot@buildroot.org>; Thu, 18 Jul 2024 13:54:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1721336043; x=1721940843;
+ h=content-transfer-encoding:in-reply-to:content-language:from
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=n7mPv1wU24XIHaud3++DTj4bf6sPrTv+U1upTmWpIh0=;
+ b=dRNw77lUz4yzT06roC72h7j93tKbheBWXAxvYJzKFGCm+XjQX5YKHwCvEl6FLnwAsg
+ 97qMcql3dUO3Aq4/Nqg2/upDoJQNvItldtDfsgIRI6Wkit3hkwh6B6oUMD5MhqHIgbdx
+ fRzK1PCyBgTmb6DslD4P6Athz1ZvX61Xc72TAxiRFbQZlaGgc6KvtW1Tp/X1PJc6Gqjh
+ iUoS5QZwXeXYn0UDlIwb8lerDALOQ5h52Gc+kXRy6N/+ieCIeyx4O6QOYrd4APiLn+/w
+ t0TrjzvW6GqvbMuBFeA7ImShrcn1Oo7cjwPGdb79W9m1dEdb8MAWOKWrTBd9E0GkDx6X
+ vWVw==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCUwXYTOFx9fKTCmKGy9BpCVBpG8v3MKBiYWStxR92uCCiDpQHA7uWb9DHEVGNI5EX41iL23y6vHceMKGiVZ5gJmnsjPzOM34w==
+X-Gm-Message-State: AOJu0YxbhFBKZufgXDO62NPqBq1I0tRUHeut4DV7x6md1HBq1IzRNCI7
+ 9iOycno3zNLLu1JcufzQ+FYa13zpX4KKSrDPQDrphsao6ZiXpRFxd9z2GJzUq+pdwo15FTOQ2PC
+ b
+X-Google-Smtp-Source: AGHT+IFZhW8+jKfsYr6xjANggVdCwC6/VCQ8UW1HaM9rEelWKedCBxdfCJgdsiOnBWlN1VU1ujblFQ==
+X-Received: by 2002:a05:600c:5486:b0:427:aab7:976b with SMTP id
+ 5b1f17b1804b1-427d2a8e1b1mr16977845e9.5.1721336042623; 
+ Thu, 18 Jul 2024 13:54:02 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
+ (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
+ by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-427d2a7f6d0sm14390775e9.1.2024.07.18.13.54.01
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Thu, 18 Jul 2024 13:54:01 -0700 (PDT)
+Message-ID: <604efb4b-7ebe-46fd-8090-74333b23f09f@mind.be>
+Date: Thu, 18 Jul 2024 22:53:59 +0200
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <0d66f3e0-cec6-487a-8bfa-880142420e52@mind.be>
-X-Provags-ID: V03:K1:8pjtDKDxSZZvgPx3B6Ak96hIZTwNv9WHDIyYTJp2zCb7hD4cYYk
- fPaQwUQdEpJBYlS5zAxoP65iLZ9mXSSnCcSjhwjN7wRM4LKh2k0rzrVrb14rH8mJY3W3Vur
- K+iVvSCz76PiwSevV0GzpEFMH/krHv6N4mEDA9mnthxiaxS3ENs/sy+8trArW+qNZAd0057
- jjOwN/zrx29BRX744ibbA==
-UI-OutboundReport: notjunk:1;M01:P0:tJ9yE9Fgodw=;6+oPdwbIA4Wx1SUodx4cwg1zHIm
- 1f/QmVjGbjjzVgtLwEQGom9GvHE+qSJ9FxXUDNytgcNn/M5pq6ovPq0fl5PryHRVoWZpXjZBe
- ehB1mg0oAehL9LeJIHer9KMDXS5ao3fZerQSpqXS0MpT/re8yjux/PzwxR243J1LeDkyJwRzL
- 95cUCTJHwerj/WE6hGwG0t8uvt9KSipmyJ/pR8JK2DEKk8I0Xj0RtO50iTB95CkVrL3DfCblP
- 3iKXtVXTyCbBfLupAAFGYPuyNN1U9uToMdUeIcch+1LS+gUTIVzhqPoBqyDYIeuXAS00JcQiV
- O3mFmAfKKA8uOw2g+rApbLq4U2iSTC2r2LTHAfrQoJAGXzmC4R8qLXBpgZWsl87fLNeZv0En0
- /YWRIEIhDHbDlMLQ+c54bnaw7bH8L0Zn4ETpxxHN/NgnZ6PEX+D+4o61IFGoqc/hBEbd6Q/Nz
- +LeKywq9pGlbUCS6mmnWNvISiOJHZdfoGwoyRbbN3/0bSXPUL0fMO/njK+iS7Dn76RDHpWbky
- duQ2bIEhQXr0ZL4fIirPNRUdDfGqdhvLXQ821EJxhakxPjwCKhQ6EtpLuD61pyVBBO+G31K3b
- RDnwQEx37pscftwxAG/RHoDKdGOUAZPsXwJFKK+eC31wT09Y23X0eGKb5L9Kpu3FZBO9P2Mkl
- 23zYyDNsXLYzVX+aXlkptijhoxeiKZBowUD+0jXPlt9trbsbIlKhyr7LwUoB+ABPFJAFjG6gW
- VTc9htyPDV+BwYDp4uf2eLPbpJpYqELyMDEVF4JAAGz/NoO6hHcJu4+q56gT7uYPYuWw5M/X8
- 4UVj4twoqhiHswDGbzAvnrUw==
+User-Agent: Mozilla Thunderbird
+To: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
+References: <20240401212344.1345395-1-james.hilliard1@gmail.com>
+ <20240401212344.1345395-3-james.hilliard1@gmail.com>
+Content-Language: en-GB
+In-Reply-To: <20240401212344.1345395-3-james.hilliard1@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmx.net; 
- s=s31663417; t=1721335998; x=1721940798; i=j.neuschaefer@gmx.net;
- bh=DAx5ciiVsU3BgvOLaoUtxqP75gkBwR/3T1ebV0nIxeE=;
- h=X-UI-Sender-Class:Date:From:To:Cc:Subject:Message-ID:References:
- MIME-Version:Content-Type:Content-Transfer-Encoding:In-Reply-To:
- cc:content-transfer-encoding:content-type:date:from:message-id:
- mime-version:reply-to:subject:to;
- b=ass34gFFJL9GQccMFWKHPxKiR2OtvWwcy1a2Exc1+cNKIigP7KldcU1ZfynwsT5v
- kSd0GbtKhEW5EsHRvanontzloAmazRAzdwbqwtT/VGsrTz2FQqB6pVZLfoUanwmX7
- uU++71iL8KfYy2ftTQAfZSaCt6gvb/181yMsL16gaP3d6+4r9QY4xqiaG6v/pwArq
- CmczpD/ZEUmMXfGOL3ct/EKtf1NLKcgPWjtPTZm8m9Jsv1vaJzZAgS3bas2j0OVYH
- lWOxrgG8qKoMVTmyw9sepHBlquxl9U4dImrJcAsyc1s2MmPokAPX/UOXoPjQ2IciC
- IlgedP79FStVxDJ5BA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=mind.be; s=google; t=1721336043; x=1721940843; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:content-language:from
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=n7mPv1wU24XIHaud3++DTj4bf6sPrTv+U1upTmWpIh0=;
+ b=Y4vaLeTU9hpOKxafmOrAUq7imEhCcubS3Y6r59CRghMAKH9pPsIJ/UrB/0dBft4wWZ
+ TDjacgr4zpELbjRrRQ2KIcpV002GtvaaBlECHQIf7q0+u9MBGHZ8qQU7zKBdIuOX/l9d
+ zVhhHWOrhgyAxRWnF988dC3RL0FgfT0eboN6QhZjTSN6P4npfM+IPeZGWd3OZgA707o7
+ FiHSUinyC+uksCXL8FoTNqcvYVreVvFQLxnunR1+WKuWePi/BiWAkceGJcvJGzmpK33R
+ wmVqsDAlf7cALv8A6csceM6czec/X3a6tY5q28wMyyAkE7ijEOcg3ZserlkmE+iLqBYF
+ xsKQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
- header.from=gmx.net
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmx.net header.i=j.neuschaefer@gmx.net
- header.a=rsa-sha256 header.s=s31663417 header.b=ass34gFF
-Subject: Re: [Buildroot] [PATCH] system: Add option to maintain a
- supervision tree
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
+ header.a=rsa-sha256 header.s=google header.b=Y4vaLeTU
+Subject: Re: [Buildroot] [PATCH v4 3/5] package/python-dictdiffer: new
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,51 +109,62 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: =?utf-8?q?J=2E_Neusch=C3=A4fer_via_buildroot?= <buildroot@buildroot.org>
-Reply-To: =?utf-8?Q?J=2E_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-Cc: =?utf-8?Q?J=2E_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
- buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@mind.be>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Asaf Kahlon <asafka7@gmail.com>
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gU3VuLCBKdWwgMTQsIDIwMjQgYXQgMTE6MTE6NTdQTSArMDIwMCwgQXJub3V0IFZhbmRlY2Fw
-cGVsbGUgd3JvdGU6Cj4gIEhpIEouLAo+Cj4gT24gMDQvMDcvMjAyNCAyMTowMCwgSi4gTmV1c2No
-w6RmZXIgdmlhIGJ1aWxkcm9vdCB3cm90ZToKPiA+IE9uZSBvZiB0aGUgbWFqb3IgZHJhd2JhY2tz
-IG9mIGNsYXNzaWMgaW5pdC9yYyBzeXN0ZW1zIGlzIHRoYXQgZGVhZAo+ID4gZGFlbW9ucyByZW1h
-aW4gZGVhZDogT25jZSBzdGFydGVkIGJ5IHRoZSByYyBzY3JpcHRzLCB0aGV5IGFyZSBsZWZ0IHRv
-Cj4gPiBsb29rIGFmdGVyIHRoZW1zZWx2ZXMuCj4gPgo+ID4gQSBzaW1wbGUgYXBwcm9hY2ggdG8g
-a2VlcCB0aGVtIHJ1bm5pbmcgcmVsaWFibHkgaXMgdG8gc3VwZXJ2aXNlIHRoZW06Cj4gPiBJbiBh
-IHRyZWUgd2l0aCBQSUQgMSBhdCBpdHMgcm9vdCwgZXZlcnkgcHJvY2VzcyBrbm93cyB3aGljaCBj
-aGlsZHJlbgo+ID4gb3VnaHQgdG8gcnVuIHVuZGVyIGl0LCBhbmQgaXQgcmVzcGF3bnMgdGhlbSBh
-Y2NvcmRpbmdseS4gVGhpcyBpcyB0aGUKPiA+IHN1cGVydmlzaW9uIHRyZWUuCj4gPgo+ID4gQ2xh
-c3NpYyBpbml0IGFscmVhZHkgcHJvdmlkZXMgcnVkaW1lbnRhcnkgc3VwZXJ2aXNpb24gaW4gdGhl
-IGZvcm0gb2YKPiA+IGluaXR0YWIuIFRoaXMgcGF0Y2ggdXNlcyBpbml0dGFiIHRvIGVzdGFibGlz
-aCBhIG1vcmUgZmxleGlibGUKPiA+IHN1cGVydmlzaW9uIHRyZWUgYmFzZWQgb24gcnVuaXQncyBy
-dnN2ZGlyIG9yIHM2J3MgczYtc3ZzY2FuLgo+Cj4gIFdlIGRpc2N1c3NlZCB0aGlzIHBhdGNoIGhl
-cmUgYXQgdGhlIEJ1aWxkcm9vdCBoYWNrYXRvbi4gQWx0aG91Z2ggd2UgZnVsbHkKPiBhZ3JlZSB0
-aGF0IGhhdmluZyBhIHN1cGVydmlzb3IgaXMgZXh0cmVtZWx5IHVzZWZ1bCwgd2UgYWxzbyBmZWVs
-IHRoYXQgdGhpcwo+IHBhdGNoIGlzIHZlcnkgaW52YXNpdmUgZm9yIHNvbWV0aGluZyB0aGF0IGlz
-IHJlbGF0aXZlbHkgc2ltcGxlIHRvIGltcGxlbWVudAo+IGF0IHRoZSBtb21lbnQuIFRoZSBvbmx5
-IHRoaW5nIHlvdSBuZWVkIHRvIGRvIGlzIHRvIHNlbGVjdCB0aGUgc3VwZXJ2aXNvciB5b3UKPiB3
-YW50IHRvIHVzZSwgYW5kIHB1dCBhIGN1c3RvbSBpbml0dGFiIGluIHRoZSBmaWxlc3lzdGVtIG92
-ZXJsYXkgdGhhdCBzdGFydHMKPiB0aGUgc3VwZXJ2aXNvci4gT2gsIGFuZCB5b3UgcHJvYmFibHkg
-YWxzbyB3YW50IGEgcG9zdC1idWlsZCBzY3JpcHQgdG8gcmVtb3ZlCj4gZXZlcnl0aGluZyBpbiAv
-ZXRjL2luaXQuZCBmb3Igd2hpY2ggeW91IGNyZWF0ZWQgYSBzZXJ2aWNlIGluc3RlYWQgLSBidXQg
-dGhhdAo+IHBhcnQgaXNuJ3QgZXZlbiBoYW5kbGVkIGJ5IHRoaXMgcGF0Y2guCj4KPiAgT25lIG9m
-IEJ1aWxkcm9vdCdzIG1haW4gcHJpbmNpcGxlcyBpcyBrZWVwaW5nIGl0IHNpbXBsZS4gT3ZlciB0
-aGUgeWVhcnMsCj4gd2UndmUgYWxyZWFkeSBjb2xsZWN0ZWQgd2F5IHRvbyBtdWNoIGNvbXBsZXhp
-dHkuIFRoZXJlZm9yZSwgd2UndmUgZGVjaWRlZCB0bwo+IHJlamVjdCB0aGlzIHBhdGNoLgoKRmFp
-ciBlbm91Z2ggLS0gdGhlIHBhcnRpY3VsYXIgZGVzaWduIHRyYWRlLW9mZnMgY2FuIGJlIGEgYml0
-IGRpZmZpY3VsdAp0byBzZWUgZnJvbSB0aGUgb3V0c2lkZS4gRm9yIGV4YW1wbGUgKGFuZCB0aGlz
-IGlzIG5vdCBhIHJlYXNvbiB0byBtZXJnZQpteSBwYXRjaCwganVzdCBhbiBleHBsYW5hdGlvbiBv
-ZiBteSB0aG91Z2h0IHByb2Nlc3MpLCBhZGRpbmcgYSBjdXN0b20KaW5pdHRhYiByZXF1aXJlcyBr
-bm93aW5nL2NvcHlpbmcgdGhlIHdob2xlIGluaXR0YWIsIHdoZXJlYXMgdGhlIHVzZXIgb2YKdGhp
-cyBvcHRpb24gd291bGQgb25seSBuZWVkIHRvIGtub3cgdGhhdCB0aGV5IHdhbnQgYSBzdXBlcnZp
-c2lvbiB0cmVlLAp3aGljaCBpcyBmcm9tIHRoYXQgcGVyc3BlY3RpdmUgc2ltcGxlci4KCj4KPiAg
-UmVnYXJkbGVzcywgdGhhbmsgeW91IGZvciB5b3VyIGNvbnRyaWJ1dGlvbnMhCgpBZ2FpbiwgdGhh
-bmsgeW91IGZvciB5b3VyIHRob3VnaHRmdWwgYW5kIGZyaWVuZGx5IHJldmlld3MgOikKCgotLSBq
-bgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJv
-b3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVp
-bGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+
+
+On 01/04/2024 23:23, James Hilliard wrote:
+> We need to set --skip-dependency-check to prevent pytest-runner from
+> being required to build python-dictdiffer.
+> 
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+
+  Applied all 5 to master, thanks. I just have a question about this one.
+
+[snip]
+> diff --git a/package/python-dictdiffer/python-dictdiffer.mk b/package/python-dictdiffer/python-dictdiffer.mk
+> new file mode 100644
+> index 0000000000..569f923a9a
+> --- /dev/null
+> +++ b/package/python-dictdiffer/python-dictdiffer.mk
+> @@ -0,0 +1,16 @@
+> +################################################################################
+> +#
+> +# python-dictdiffer
+> +#
+> +################################################################################
+> +
+> +PYTHON_DICTDIFFER_VERSION = 0.9.0
+> +PYTHON_DICTDIFFER_SOURCE = dictdiffer-$(PYTHON_DICTDIFFER_VERSION).tar.gz
+> +PYTHON_DICTDIFFER_SITE = https://files.pythonhosted.org/packages/61/7b/35cbccb7effc5d7e40f4c55e2b79399e1853041997fcda15c9ff160abba0
+> +PYTHON_DICTDIFFER_SETUP_TYPE = setuptools
+
+  IIUC, the setuptools setup type is in fact identical to pep517, the only 
+difference is that a dependency on host-python-setuptools is added, right? So I 
+wonder if for new packages, we shouldn't do it that way. And basically keep the 
+SETUP_TYPE approach as a backward compatibility measure.
+
+> +PYTHON_DICTDIFFER_LICENSE = MIT
+> +PYTHON_DICTDIFFER_LICENSE_FILES = LICENSE
+> +PYTHON_DICTDIFFER_DEPENDENCIES = host-python-setuptools-scm
+
+  ... And with this one, it's not even needed to add a dependency on 
+host-python-setuptools!
+
+  Regards,
+  Arnout
+
+> +PYTHON_DICTDIFFER_BUILD_OPTS = --skip-dependency-check
+> +
+> +$(eval $(python-package))
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
