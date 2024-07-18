@@ -1,52 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AA32AC3DA61
-	for <buildroot@archiver.kernel.org>; Thu, 18 Jul 2024 21:00:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8F6CBC3DA61
+	for <buildroot@archiver.kernel.org>; Thu, 18 Jul 2024 21:25:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 41D5460E85;
-	Thu, 18 Jul 2024 21:00:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4103480B16;
+	Thu, 18 Jul 2024 21:25:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id j8xHtiYRvKPG; Thu, 18 Jul 2024 21:00:46 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id deIGw-dHg2Sr; Thu, 18 Jul 2024 21:25:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 48213607AD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 47C5B80B23
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 48213607AD;
-	Thu, 18 Jul 2024 21:00:46 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 02B411BF3F9
- for <buildroot@lists.busybox.net>; Thu, 18 Jul 2024 21:00:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 47C5B80B23;
+	Thu, 18 Jul 2024 21:25:33 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id AF9301BF3A1
+ for <buildroot@lists.busybox.net>; Thu, 18 Jul 2024 21:25:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E3CEE40754
- for <buildroot@lists.busybox.net>; Thu, 18 Jul 2024 21:00:44 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9B11480B23
+ for <buildroot@lists.busybox.net>; Thu, 18 Jul 2024 21:25:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FC90Y2nW7H9C for <buildroot@lists.busybox.net>;
- Thu, 18 Jul 2024 21:00:44 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UVzZs7l8GITd for <buildroot@lists.busybox.net>;
+ Thu, 18 Jul 2024 21:25:30 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::224;
+ helo=relay4-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 11B2940730
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 11B2940730
- for <buildroot@buildroot.org>; Thu, 18 Jul 2024 21:00:43 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 68F2186193; Thu, 18 Jul 2024 21:00:43 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 18 Jul 2024 22:58:42 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c1d3b7f97a080a0a278fdaab7f28f9fbbc82a743
-X-Git-Newrev: eb519ad7cc716347dbf0f9707ff282a97b21f623
-X-Patchwork-Hint: ignore
-Message-Id: <20240718210043.68F2186193@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] docs/manual: promote using fixed version
- for kernel headers when contributing a board
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 780CE80B16
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 780CE80B16
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::224])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 780CE80B16
+ for <buildroot@buildroot.org>; Thu, 18 Jul 2024 21:25:30 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 747A3E0003;
+ Thu, 18 Jul 2024 21:25:27 +0000 (UTC)
+Date: Thu, 18 Jul 2024 23:25:25 +0200
+To: Romain Naour via buildroot <buildroot@buildroot.org>
+Message-ID: <20240718232525.2b67bf21@windsurf>
+In-Reply-To: <20240627075441.4116645-1-romain.naour@smile.fr>
+References: <20240627075441.4116645-1-romain.naour@smile.fr>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1721337927;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=8tmTA5MNvM5heHLXrOhm91LGkDUO3JkJukQc0Sd86qM=;
+ b=fbj4JSQgO8p71/SiI13Sgqy61kttiPUe7DYEvHBp5TLE1AVgxXAc7TB0XBa5mTmS82onQN
+ t6pueAQIyS7p19Wq8xPYhBCvFaZvtC0xzZ1TJiGn7HDs1yM1t1wYZ1SQ5wyIvQKx/mGfDf
+ QY3Ryy4ocVTSd3ocutrklYXPiVqAiIvaW+2sPAZ7hdMkzM6q39kB9uqlIl+n9NZWh1bILw
+ Ty0+33ivHQuKUxdKD3Nur+mUEbesxUKJrTvEhJCezgt8na0ZEgIfEFWfp386DyudCvqDbF
+ IiIgEC0g8WnT37noYWHCI5edHhl1MiBIdUzRpRMEcyTnx6Z9gvXXaELOE2s+TA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=fbj4JSQg
+Subject: Re: [Buildroot] [PATCH 0/6] add missing tpm2-openssl package and
+ tpm2_ptool script
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,69 +81,38 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============4192829775915933243=="
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Romain Naour <romain.naour@smile.fr>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============4192829775915933243==
-Content-Type: text/plain
+Hello Romain,
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eb519ad7cc716347dbf0f9707ff282a97b21f623
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Thu, 27 Jun 2024 09:54:35 +0200
+Romain Naour via buildroot <buildroot@buildroot.org> wrote:
 
-When the default (newest) kernel headers series changes the build can
-break. Example error message:
+> Romain Naour (6):
+>   package/ima-evm-utils: update url to github
+>   package/tpm2-openssl: new package
+>   package/python-asn1crypto: add host-variant
+>   package/python-pkgconfig: new host package
+>   package/python-tpm2-pytss: new package
+>   package/tpm2-pkcs11: install tool script (tpm2_ptool)
 
-  Incorrect selection of kernel headers: expected 6.8.x, got 6.5.x
+Series applied, except PATCH 1/6, which was already done by someone
+else.
 
-In the above case the defconfig used:
+Thanks!
 
-  BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-  BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.5.9"
-
-The kernel headers were not specified, so the build defaulted to using
-the kernel sources as header source and the default (newest) header
-series. From .config:
-
-  BR2_KERNEL_HEADERS_AS_KERNEL=y
-  BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_8=y
-
-Signed-off-by: Gero Schwäricke <gero.schwaericke@posteo.de>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
----
- docs/manual/adding-board-support.adoc | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
-
-diff --git a/docs/manual/adding-board-support.adoc b/docs/manual/adding-board-support.adoc
-index 9501262086..be7699668d 100644
---- a/docs/manual/adding-board-support.adoc
-+++ b/docs/manual/adding-board-support.adoc
-@@ -32,7 +32,11 @@ Always use fixed versions or commit hashes for the different
- components, not the "latest" version. For example, set
- +BR2_LINUX_KERNEL_CUSTOM_VERSION=y+ and
- +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE+ to the kernel version you tested
--with.
-+with. If you are using the buildroot toolchain +BR2_TOOLCHAIN_BUILDROOT+
-+(which is the default), additionally ensure that the same kernel headers
-+are used (+BR2_KERNEL_HEADERS_AS_KERNEL+, which is also the default) and
-+set the custom kernel headers series to match your kernel version
-+(+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_*+).
- 
- It is recommended to use as much as possible upstream versions of the
- Linux kernel and bootloaders, and to use as much as possible default
-
---===============4192829775915933243==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============4192829775915933243==--
