@@ -4,99 +4,97 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E71DBC3DA49
-	for <buildroot@archiver.kernel.org>; Thu, 18 Jul 2024 20:32:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 199E7C3DA61
+	for <buildroot@archiver.kernel.org>; Thu, 18 Jul 2024 20:33:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8353C606C9;
-	Thu, 18 Jul 2024 20:32:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DE53E606D5;
+	Thu, 18 Jul 2024 20:33:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BF3pd72XwSXH; Thu, 18 Jul 2024 20:32:29 +0000 (UTC)
+ id NqvjrVHh6tXF; Thu, 18 Jul 2024 20:33:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7912B60BF3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DFE87606D9
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7912B60BF3;
-	Thu, 18 Jul 2024 20:32:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DFE87606D9;
+	Thu, 18 Jul 2024 20:33:38 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 634891BF3A1
- for <buildroot@lists.busybox.net>; Thu, 18 Jul 2024 20:32:28 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0EA2A1BF3A1
+ for <buildroot@lists.busybox.net>; Thu, 18 Jul 2024 20:33:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5D5524048B
- for <buildroot@lists.busybox.net>; Thu, 18 Jul 2024 20:32:28 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id F00C0404A3
+ for <buildroot@lists.busybox.net>; Thu, 18 Jul 2024 20:33:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kpXFgsvxbRKX for <buildroot@lists.busybox.net>;
- Thu, 18 Jul 2024 20:32:27 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::432; helo=mail-wr1-x432.google.com;
- envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D084E400BF
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D084E400BF
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
- [IPv6:2a00:1450:4864:20::432])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D084E400BF
- for <buildroot@buildroot.org>; Thu, 18 Jul 2024 20:32:26 +0000 (UTC)
-Received: by mail-wr1-x432.google.com with SMTP id
- ffacd0b85a97d-3685afd0c56so141185f8f.1
- for <buildroot@buildroot.org>; Thu, 18 Jul 2024 13:32:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1721334744; x=1721939544;
- h=content-transfer-encoding:in-reply-to:content-language:from
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=rz1t7IcEyqHWis8931oDHKARjqvaYXwFaj11DpF9oHc=;
- b=SCovvMbPFlmWh7/E8GPH0Komo+h2R8afW30ZK7O6LAJg0HMs05Ge9331ea/eno3SXg
- X87xuPmueA3pccwO6Wmk/WcjySE/Oz3UBjjayMn+3hkHkBCovXrdIoJJBEIcUzxpchuG
- FtSxPvThhh3Q/aF2h3wxC9k8ADoK2Fr0jBoxt1MQchCewrRVMG4197hvGUOjEeD3PGcj
- 5tDW3kxbZc2xmpyY5UeWjQoXyYklkSurkH59nANfWbRyPbTSfImPkR9c1F9+ZqHtBtyj
- cjfczCfFXfKV2nGOtVQGOsJPzdtFoNKyeMf5BYcf+UivF4HWef0lM5Tfm5cEELC2e6KQ
- 2cCA==
-X-Gm-Message-State: AOJu0YyCG4BfACr0hJgd41+DBnUDLTmK4xdzGD84qyadGF0Cm3muTtf6
- PmVOwyp3bAnMF8B5sKdUH1eScSo7pjmTHWEfrXKGOi7AaiGC9LxdbYkGMZKrdjrJvlYXpsGJPnC
- j
-X-Google-Smtp-Source: AGHT+IFcnDyb7hdz57Kr15guqW+BkWH9Vs1IRl7wlvgfoMs49NAzkSvSc0q5kQVWqCW3sRgckX7JqQ==
-X-Received: by 2002:a5d:4b0f:0:b0:367:f13a:79f0 with SMTP id
- ffacd0b85a97d-368317c8c2cmr3175938f8f.67.1721334744376; 
- Thu, 18 Jul 2024 13:32:24 -0700 (PDT)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
- (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-427d6906a26sm808625e9.21.2024.07.18.13.32.23
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Thu, 18 Jul 2024 13:32:23 -0700 (PDT)
-Message-ID: <b165fb5e-38f5-4751-9873-765ab3239549@mind.be>
-Date: Thu, 18 Jul 2024 22:32:21 +0200
+ id eiZ_7IzQP1kg for <buildroot@lists.busybox.net>;
+ Thu, 18 Jul 2024 20:33:35 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.19;
+ helo=mout.gmx.net; envelope-from=j.neuschaefer@gmx.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 2BFD34048B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2BFD34048B
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 2BFD34048B
+ for <buildroot@buildroot.org>; Thu, 18 Jul 2024 20:33:34 +0000 (UTC)
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from probook ([151.216.37.99]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1M9nxn-1sQwud3BfJ-002qbI; Thu, 18
+ Jul 2024 22:33:30 +0200
+Date: Thu, 18 Jul 2024 22:33:23 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Luca Ceresoli <luca.ceresoli@bootlin.com>,
- Brandon Maier <brandon.maier@collins.com>
-References: <20240718-boot-uboot-env-select-v1-1-e6c778e814d8@collins.com>
- <20240718191355.34e1a05e@booty>
-Content-Language: en-GB
-In-Reply-To: <20240718191355.34e1a05e@booty>
+Message-Id: <20240718-ztext-v4-1-15a9744f1edb@gmx.net>
+X-B4-Tracking: v=1; b=H4sIABJ8mWYC/1XNTQ6DIBRG0a0YxqV5oCh01H00HSA/yqDaACG2x
+ r0XTa3p8HvhXGYUjHcmoEsxI2+SC24c8qhOBVK9HDqDnc4bUaAVVKTB72imiJlUqpVtTRRIlN8
+ +vbFu2jq3e969C3H0ry2byHrdC+JbSAQTLLlmiiqrLGuu3WM6Dyai1Sd6GEZ/hmLAnArOoKSW1
+ OLflIdpoNpNmf8RRDANteKthsMsy/IBPUUxggABAAA=
+To: buildroot@buildroot.org
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1721334810; l=2292;
+ i=j.neuschaefer@gmx.net; s=20240329; h=from:subject:message-id;
+ bh=ncULdTHRSQBwAL9QqV4ScMwWPVRTBV5NeyZGLihMPvc=;
+ b=HvKBSek671oORoujmKWLyHYDfCA1Klzxfzanvbs9jNH2473ULcwiRET6CeMlxWoQWIBanLwkE
+ HO5JH3wJGT4AcsvpHhLs4WTAla1MsDA1e421mNv2okB16gMnm8OWueJ
+X-Developer-Key: i=j.neuschaefer@gmx.net; a=ed25519;
+ pk=NIe0bK42wNaX/C4bi6ezm7NJK0IQE+8MKBm7igFMIS4=
+X-Provags-ID: V03:K1:PrcZrnaMUvxhqtFxrOb5oUcE3h6iPCNx1sCPrbFRAOyvYt4Thkv
+ E/N0muYHSaOwts05lp4EzFafGhxvM496uR4LffMJaXvCfr0mwx7ORXxTLtKd00XyzHJbcXr
+ WFlM1h9XCQOdR9YVYVCpEhFi91hArb9Jz5evGq6Z+X4LnXsZCCq/0k1Xs4eEAwFnm53FXXj
+ eSh2JUy0UAVUcML773B+A==
+UI-OutboundReport: notjunk:1;M01:P0:/NeWtxg07V8=;bJldITi/vksDPXjIXvBCANT9BP3
+ N63JO7plPY236q9EB/LpSCsmPJ2NOXlEEOrKOq7f4qsWwJ3sX7pLUifil74xxH4zZghARXaqy
+ W1VtHH2YWrcbw2jOl+PRtIFxu9IIBh+Tv3rohuyq8el2OTsTzHzSzChS5Kf9QoLGo2xdaFlBW
+ eQU32yUq2IOfUXZMPw0ybqXQf8H9RjrDzzVwuu0Us4uKfSDrGZC63j5v1J1fNsKnSE5kLwH7U
+ AqeaDSdG2B4NG2jagU/Cl83EBkjzaEqojp0HHe+9xw4xJ3KvU0CzI0dVdNE6biS2h83Mvejar
+ ktNqgG3l4Ott/zdvVN785fFx5TtVO85koYPz8sug6yGx1aJFI5ytopgWNdHfjaA6MW9BG4bxt
+ vjeGkNWu47WI6ALy8ssW04eDMvRJQaQ+myQfYAtJSbbmFHc6QHXOuXCwzoX1lEx2pCRqsaHsN
+ bw0QQCAJJoKDnjFuQrk1ex+7DJGHmgUMYrt9PEYcrHgWSwbjqO3O6AAq6HNKEWUDDue6t6cJh
+ YuaIrweFrr3Jcb/BUQ+nIdsm1Y4DFGrxIv0U/0jPSTEtzAuqzhxIAXSKbRg2Rmf2wkv0FZiPO
+ Ef21MWnpME1OfknLcIcTGC2gSED6bPA8vdWL8O9zZxfRmhJaZ4Zz3zkWx05pnArI8mPjyFT9d
+ p1kJ6VpTZhEfUNhrmAPP/pvq5NeRPnDarFNUrsUcKOc0vBX9hL2kykP1ne9ZF0FPVXgv9mTP3
+ iLTnzVDpV3y0kxyaKEQRJvOxXQpic49qWtN8bjHDmxn+hZ6gXqawT2At2e/0PhxLpdhJaguqe
+ nbudvcZR5/E99kdecXgmFCOQ==
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1721334744; x=1721939544; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:content-language:from
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=rz1t7IcEyqHWis8931oDHKARjqvaYXwFaj11DpF9oHc=;
- b=PlDapuPXG7fx8q7HFNGNdECjtlcanoEChSPH7vENCtg/IwB4TaulseRQX0wctQknrl
- oikdxnn8iG3ocZ55Y7Cpd90T5DZCYNQ7gPnagvLEQerbfwcWqK6uamBn7YH39pb8QsVz
- uxtE/SYVcJOUUS5WbCM8G4cQFRj/NyHWkbiLFhQVS9cJcXfPFjktIP8OmONeAnx3od7A
- kci1hs9HiVTsNsgCD4+yN2oCKaVGlPvcgCD2SpVialfquYKmfm2/88rubdClHzBM9pnT
- 8RbDPBWhD73t1N4i1zstRVv3MYEfLVw+r6tZNHBlKWFmX+pRORG7i9sT3om8mSKkQsmS
- i0eg==
+ d=gmx.net; 
+ s=s31663417; t=1721334810; x=1721939610; i=j.neuschaefer@gmx.net;
+ bh=RnlKSpsVk6RMYCd00NLGm06W2Rync1UBPqIq6kVq6ZE=;
+ h=X-UI-Sender-Class:From:Date:Subject:MIME-Version:Content-Type:
+ Content-Transfer-Encoding:Message-Id:To:Cc:cc:
+ content-transfer-encoding:content-type:date:from:message-id:
+ mime-version:reply-to:subject:to;
+ b=JUjNpXbx0D6r4HZm4sGnm3TGzq08emMLG1jOuwEof4SGoqXBIJVlAZuqBmdgkwd/
+ NmPyUzoC79+7XOcfGi8KI2+wQH0EZMgplYEho2Fe4ZppQWbDFET59tvZrVZFk7iCK
+ nFBL9e+vYVE//lUqEaZb9Ti8nlLtJ71Sh8/9BsJM5THdXzXlgq28lNG9LLLZ/KayP
+ uPHQszL2CG9G4tt1FXrvqHcciNzM7IyxAqbWi7aIgLrncrwHLx2bAJCq8tfbkP2Jb
+ bu4AIh5nrNULLGg3rTlEXMS0DizXOhBL6IWJARPoha0jxPxcnKI/pTD2YIWyf9+JQ
+ gcmp1DYVjB5jNJdVqw==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
+ header.from=gmx.net
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=PlDapuPX
-Subject: Re: [Buildroot] [PATCH] boot/uboot: fix Kconfig warning for
- DEFAULT_ENV_FILE
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmx.net header.i=j.neuschaefer@gmx.net
+ header.a=rsa-sha256 header.s=s31663417 header.b=JUjNpXbx
+Subject: [Buildroot] [PATCH v4] Config.in: ban textrels on musl toolchains
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -108,80 +106,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
-Cc: buildroot@buildroot.org
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+From: =?utf-8?q?J=2E_Neusch=C3=A4fer_via_buildroot?= <buildroot@buildroot.org>
+Reply-To: =?utf-8?q?J=2E_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ =?utf-8?q?J=2E_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-
-
-On 18/07/2024 19:13, Luca Ceresoli wrote:
-> Hello Brandon, Arnout,
-> 
-> On Thu, 18 Jul 2024 15:45:45 +0000
-> Brandon Maier <brandon.maier@collins.com> wrote:
-> 
->> The following warning occurs from commit "boot/uboot: allow taking the
->> entire default environment from a text file".
->>
->>    boot/uboot/Config.in:141:warning: config symbol
->>    'BR2_TARGET_UBOOT_DEFAULT_ENV_FILE' uses select, but is not bool or
->>    tristate
-
-  Oh right, Kconfig is too stupid for that. You need a helper config but it can 
-be blind. Like:
-
-config BR2_TARGET_UBOOT_USE_DEFAULT_ENV_FILE
-	bool
-	default y
-	depends on BR2_TARGET_UBOOT_DEFAULT_ENV_FILE != ""
-	select BR2_TARGET_UBOOT_NEEDS_XXD
-
-
-> Hum, apologies, didn't notice this, at least when working on v2 (see
-> below).
-> 
->> Add a 'bool' config so we can enable dependencies.
-> 
-> That's basically what I did in v1 [0], possibly for this same reason,
-> but I'm afraid I don't remember exactly.
-> 
-> Then in his review Arnout suggested to have only a string option, and I
-> did not recall any good reason to not do so, and so v2 came without the
-> bool.
-> 
->> In addition, the DEFAULT_ENV_FILE works by setting Kconfig options,
->> therefore we also need to depend on
->> BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG.
-
-  Oh yes, but that's a simple depends on in the 
-BR2_TARGET_UBOOT_DEFAULT_ENV_FILE option.
-
-> 
-> Arnout, do you think the issues reported by Brandon can be fixed while
-> keeping a single string option?
-
-  Yes I think so. But it needs to be tested so I'd prefer is _someone_ <grin> 
-would do that.
-
-  Regards,
-  Arnout
-
-
-> If they can't, I think it's worth resurrecting the help text from the
-> two options as I had written them initially in [0]. Otherwise one would
-> have a bool without help text, and woudl have to enable it just to make
-> the string option (with help text) visible. Kinda chicken-egg.
-> 
-> [0]
-> https://lore.kernel.org/buildroot/20240617-uboot-default-env-v1-1-9ac88f0e1789@bootlin.com/
-> 
-> Luca
-> 
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+bXVzbC1saWJjIGRvZXNuJ3Qgc3VwcG9ydCBURVhUUkVMc1sxXSBhbmQgcHJvZ3JhbXMgd2l0aCBU
+RVhUUkVMcyB3aWxsCmNyYXNoIG9uIHN0YXJ0LXVwIHVuZGVyIG11c2wuCgpUaGlzIHBhdGNoIGZv
+cmJpZHMgdGhlIHVzZSBvZiBURVhUUkVMcyBvbiBtdXNsIHRvb2xjaGFpbnMgd2l0aCBkeW5hbWlj
+CmxpbmtpbmcuCgpUbyB2ZXJpZnkgdGhpcyBwYXRjaDoKCi0gRGVsZXRlIHBhY2thZ2UvbWljcm9w
+eXRob24vMDAwMS1weS1ubHJ0aHVtYi1NYWtlLW5vbi1UaHVtYjItbG9uZy1qdW1wLXdvcmthcm91
+bmQtb3B0LnBhdGNoCi0gQnVpbGQgbWljcm9weXRob24gKGJlZm9yZSB2MS4yMykgd2l0aCBhIG11
+c2wgdG9vbGNoYWluIGFuZAogIEJSMl9TSEFSRURfTElCUy4gVGhlIGJ1aWxkIHNob3VsZCBhYm9y
+dCB3aGlsZSBsaW5raW5nIG1pY3JvcHl0aG9uLgoKWzFdOiBodHRwczovL3d3dy5vcGVud2FsbC5j
+b20vbGlzdHMvbXVzbC8yMDIwLzA5LzI1LzQKClNpZ25lZC1vZmYtYnk6IEouIE5ldXNjaMOkZmVy
+IDxqLm5ldXNjaGFlZmVyQGdteC5uZXQ+Ci0tLQpDaGFuZ2VzIGluIHY0OgotIFJlbW92ZSBDb25m
+aWcuaW4gb3B0aW9uLCBpbXBsZW1lbnQgdGhlIHdob2xlIGxvZ2ljIGluCiAgcGFja2FnZS9NYWtl
+ZmlsZS5pbgotIERvY3VtZW50IGhvdyB0byB2ZXJpZnkKLSBMaW5rIHRvIHYzOiBodHRwczovL2xv
+cmUua2VybmVsLm9yZy9yLzIwMjQwNzA0LXp0ZXh0LXYzLTEtOTE5NWQwNmM4YmQwQGdteC5uZXQK
+CkNoYW5nZXMgaW4gdjM6Ci0gZHJvcCBtaWNyb3B5dGhvbiBwYXRjaCAoYWxyZWFkeSBtZXJnZWQp
+Ci0gcmV3cml0ZSB0byBwb3NpdGl2ZSBsb2dpYywgYXMgc3VnZ2VzdGVkIGJ5IFlhbm4gRS4gTU9S
+SU4KLSBMaW5rIHRvIHYyOiBodHRwczovL2xvcmUua2VybmVsLm9yZy9yLzIwMjQwNTI5LXp0ZXh0
+LXYyLTAtODI5ODUwMzJmMTY5QGdteC5uZXQKCkNoYW5nZXMgaW4gdjI6Ci0gU2xpZ2h0bHkgZGlm
+ZmVyZW50IHdvcmRpbmcKLSBFbmFibGUgdGhlIG9wdGlvbiBieSBkZWZhdWx0IG9uIG11c2wgdG9v
+bGNoYWlucwotIEFkZCBwYXRjaCB0byBmaXggYnVpbGQgb2YgbWljcm9weXRob24KCkxpbmsgdG8g
+djE6Ci0gaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvci8yMDI0MDQxOS16dGV4dC12MS0xLWE4ZDVj
+MmNmY2Y1N0BnbXgubmV0Ci0tLQotLS0KIHBhY2thZ2UvTWFrZWZpbGUuaW4gfCA5ICsrKysrKysr
+KwogMSBmaWxlIGNoYW5nZWQsIDkgaW5zZXJ0aW9ucygrKQoKZGlmZiAtLWdpdCBhL3BhY2thZ2Uv
+TWFrZWZpbGUuaW4gYi9wYWNrYWdlL01ha2VmaWxlLmluCmluZGV4IDQ3YTg5ZjFhZTEuLjM1ODc2
+NjIwMTQgMTAwNjQ0Ci0tLSBhL3BhY2thZ2UvTWFrZWZpbGUuaW4KKysrIGIvcGFja2FnZS9NYWtl
+ZmlsZS5pbgpAQCAtMTQ5LDYgKzE0OSwxNSBAQCBlbmRpZgoKIFRBUkdFVF9MREZMQUdTID0gJChj
+YWxsIHFzdHJpcCwkKEJSMl9UQVJHRVRfTERGTEFHUykpCgorIyBtdXNsJ3MgZHluYW1pYyBsb2Fk
+ZXIgZG9lc24ndCBzdXBwb3J0IERUX1RFWFRSRUwsIHdoaWNoIHJlc3VsdHMgaW4gYSBydW50aW1l
+CisjIGNyYXNoIGlmIGl0IGdldHMgdXNlZC4gVGhlICIteiB0ZXh0IiBsaW5rZXIgb3B0aW9uIGlz
+c3VlcyBhIGJ1aWxkLXRpbWUgZXJyb3IKKyMgd2hlbiBEVF9URVhSRUwgaXMgdXNlZCwgc28gd2Ug
+Y2FwdHVyZSB0aGUgcHJvYmxlbSBlYXJsaWVyLgorIworIyBTZWUgYWxzbzogaHR0cHM6Ly93d3cu
+b3BlbndhbGwuY29tL2xpc3RzL211c2wvMjAyMC8wOS8yNS80CitpZmVxICgkKEJSMl9UT09MQ0hB
+SU5fVVNFU19NVVNMKSQoQlIyX0JJTkZNVF9TVVBQT1JUU19TSEFSRUQpLHl5KQorVEFSR0VUX0xE
+RkxBR1MgKz0gLVdsLC16LHRleHQKK2VuZGlmCisKICMgQnkgZGVzaWduLCBfRk9SVElGWV9TT1VS
+Q0UgcmVxdWlyZXMgZ2NjIG9wdGltaXphdGlvbiB0byBiZSBlbmFibGVkLgogIyBUaGVyZWZvcmUs
+IHdlIG5lZWQgdG8gcGFzcyBfRk9SVElGWV9TT1VSQ0UgYW5kIHRoZSBvcHRpbWl6YXRpb24gbGV2
+ZWwKICMgdGhyb3VnaCB0aGUgc2FtZSBtZWNoYW5pc20sIGkuZSBjdXJyZW50bHkgdGhyb3VnaCBD
+RkxBR1MuIFBhc3NpbmcKCi0tLQpiYXNlLWNvbW1pdDogYzYyNGVlZTEyMGI2ZWUwYzgxZTYzNmJk
+NDdhYmU5MjQ1MjYxMGNmNwpjaGFuZ2UtaWQ6IDIwMjQwNDE3LXp0ZXh0LTVhY2NiYWI2MWMwYQoK
+QmVzdCByZWdhcmRzLAotLQpKLiBOZXVzY2jDpGZlciA8ai5uZXVzY2hhZWZlckBnbXgubmV0PgoK
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290
+IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxk
+cm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
