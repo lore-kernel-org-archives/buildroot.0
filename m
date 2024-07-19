@@ -1,70 +1,102 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A701AC3DA5D
-	for <buildroot@archiver.kernel.org>; Fri, 19 Jul 2024 17:37:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF3ECC3DA59
+	for <buildroot@archiver.kernel.org>; Fri, 19 Jul 2024 18:06:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4303840F13;
-	Fri, 19 Jul 2024 17:37:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A3CE66078D;
+	Fri, 19 Jul 2024 18:06:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ORgo_bw6fbV4; Fri, 19 Jul 2024 17:37:42 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id sZpZvVkK1fWe; Fri, 19 Jul 2024 18:06:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D3F1340242
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9F6D3607D2
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D3F1340242;
-	Fri, 19 Jul 2024 17:37:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9F6D3607D2;
+	Fri, 19 Jul 2024 18:06:44 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 08AC31BF30D
- for <buildroot@lists.busybox.net>; Fri, 19 Jul 2024 17:37:40 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 69F461BF990
+ for <buildroot@lists.busybox.net>; Fri, 19 Jul 2024 18:06:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E8CED83B7B
- for <buildroot@lists.busybox.net>; Fri, 19 Jul 2024 17:37:39 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 629FE83EC4
+ for <buildroot@lists.busybox.net>; Fri, 19 Jul 2024 18:06:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id aHegrxizSYlm for <buildroot@lists.busybox.net>;
- Fri, 19 Jul 2024 17:37:38 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 407A882083
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 407A882083
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 407A882083
- for <buildroot@buildroot.org>; Fri, 19 Jul 2024 17:37:37 +0000 (UTC)
-Received: from home.juju.sh (unknown
- [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id C7BB0B00579;
- Fri, 19 Jul 2024 19:37:33 +0200 (CEST)
-From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Fri, 19 Jul 2024 19:37:23 +0200
-Message-ID: <20240719173723.546583-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.45.2
+ id narmuEQMu0bB for <buildroot@lists.busybox.net>;
+ Fri, 19 Jul 2024 18:06:42 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::330; helo=mail-wm1-x330.google.com;
+ envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 0826282126
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0826282126
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
+ [IPv6:2a00:1450:4864:20::330])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0826282126
+ for <buildroot@buildroot.org>; Fri, 19 Jul 2024 18:06:41 +0000 (UTC)
+Received: by mail-wm1-x330.google.com with SMTP id
+ 5b1f17b1804b1-4266ed6c691so12971705e9.3
+ for <buildroot@buildroot.org>; Fri, 19 Jul 2024 11:06:41 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1721412400; x=1722017200;
+ h=content-transfer-encoding:in-reply-to:content-language:from
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=mHPFHcSYkeKCOQPCBkmt4xaPc4FvNYhkHxRApDIgYqc=;
+ b=O7EkYnHYbCoHG5qW8pED/LTPcZNlYoG6pyxHr2L7MIF/KoLli1MKy4x07uJHbZGzF3
+ /hkEmHSMXjHxspQwyA+kj4y/3roah09uN7UGurzBcfu4G2yBYzqvD5E+WuYVwB8aom7h
+ fVefuGy/Z1JXwo4G7NdgRIrE3nlLJNnvCnQw56eeKTlmzPCHbG+uhWqieGO9SdMW8xGl
+ l7HcO6gumZFh6pyRxtNyjLDt1uDtW37LXc9y65jwx/ZBIyJfU/nwBGJgJ/chc+S96Poe
+ b9TMfKI2vGsw/yD92c3EQS2WRisQ/r/B5Wnfblz7gfHUgdRmCZn9E/1KbU4WBWrUKMXh
+ 5d/w==
+X-Gm-Message-State: AOJu0YwR1vc32iaam1gGVT7qB/lqjLR1muEFBT4+NCF9EwRkTeQlfmzp
+ IHICRtgQ2ld4FoA7gVP8IafZNhiQe+R543Ei2rb2gF0A6XNkyXZE5TgiV4juIxRhPJUpg4QCa7a
+ r
+X-Google-Smtp-Source: AGHT+IEkC50ZdKgQqmQDZ4Z+QOZWO2INl+AcINdN/flVNWydQ7EQ6mgtPeynZ7trogOO8FX3TT7hLg==
+X-Received: by 2002:a05:6000:2cb:b0:368:7943:146f with SMTP id
+ ffacd0b85a97d-368794314c4mr2057161f8f.26.1721412399584; 
+ Fri, 19 Jul 2024 11:06:39 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
+ (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-36878694ba0sm2244223f8f.61.2024.07.19.11.06.38
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Fri, 19 Jul 2024 11:06:38 -0700 (PDT)
+Message-ID: <798cfbed-ce54-4b4a-8a63-e1e88ad842d3@mind.be>
+Date: Fri, 19 Jul 2024 20:06:36 +0200
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1721410654;
- bh=uDapLP1dS3WcwTQovTds74UhTMk8c8noJNX53IprWjg=;
- h=From:To:Cc:Subject:Date:From;
- b=KQfA3c5hdOXsa0SwGmXd0M/fKL7nbiCncJEgyNZulud09kvnCiFGkmV2HQMMGZ4Gn
- mbMv5hvzpAT70uUKjvcmlhrmL7qFnaSp/pe1FuLb3G8h3QMQv43hyak77izaKoGUJJ
- CfU/TJnlhRapxMnMw78BYftw/mTbHmAzxPXjWEvNNWsYupGDWSHBi9fuI/StY4Xq7T
- LeK8y90lI12Vc+Dhe9kYkbE4maQRbIFDP02QUN3CsKCF8ThZuQHtfh5tMj6z1Aod2g
- 84+IMNq/rnK2Mq5OArmH2n/isVB1ZjpgnCigsXZjL0R8yaofhppH8vED7evabF3E1F
- 79t1K1jF8NEIg==
+User-Agent: Mozilla Thunderbird
+To: =?UTF-8?Q?J=2E_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+References: <20240709-tipidee-v2-0-a69a8668005e@gmx.net>
+ <20240709-tipidee-v2-8-a69a8668005e@gmx.net>
+ <f6fe9b7b-28e4-48e0-bac8-7aa87d787473@mind.be> <Zpp53mr6-TUO7rVD@probook>
+Content-Language: en-GB
+In-Reply-To: <Zpp53mr6-TUO7rVD@probook>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mind.be; s=google; t=1721412400; x=1722017200; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:content-language:from
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=mHPFHcSYkeKCOQPCBkmt4xaPc4FvNYhkHxRApDIgYqc=;
+ b=bcO/VaODVMAdmUUURmg/yevxLEkIW1UlfoJYQ3P837KRVZRAM27+w6J3VSydyPhudF
+ gSs3DoXbegWg+59ZFdYqpTgscmRQYzDbdJ2gX1yLx7/0RZoTu+94pzfoAISYnmMYrWDB
+ YdRC2CWR0ds7tjYQG43py/hZV3kCzdeiq/rF96253lbZ2HnyQi5+gCUXyYMZrR6HZUPD
+ LY/Iw8ad7eNYDFsFYl7BXuCmRFIMc/knmPQK8UU2J3TCYqgwynJy91IQDA/OBYXqdLuA
+ CVfLwx8ugDhiFoaGwpYdR9bQbjG+QjiV0kBayL0yOCMNiIm0IdKHdQSZlQwBTCXSzndr
+ kNaw==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=KQfA3c5h
-Subject: [Buildroot] [PATCH 1/1] package/kexec: bump to version 2.0.29
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=bcO/VaOD
+Subject: Re: [Buildroot] [PATCH v2 8/8] tipidee: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,162 +108,60 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@mind.be>
+Cc: buildroot@buildroot.org
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-For release announce, see [1].
-
-This commit removes the package patch, which is now included in this
-new version.
-
-The license hash also changed, due to a FSF address update. See [2].
-This commit also adds a comment in the hash file about the pgp
-signature check.
-
-[1] https://lists.infradead.org/pipermail/kexec/2024-July/030452.html
-[2] https://git.kernel.org/pub/scm/utils/kernel/kexec/kexec-tools.git/commit/?id=f53bcef5063c70960b2b8eb8990722d5c9d1b99e
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- ...uilding-on-x86_64-with-binutils-2-41.patch | 94 -------------------
- package/kexec/kexec.hash                      |  6 +-
- package/kexec/kexec.mk                        |  2 +-
- 3 files changed, 5 insertions(+), 97 deletions(-)
- delete mode 100644 package/kexec/0001-Fix-building-on-x86_64-with-binutils-2-41.patch
-
-diff --git a/package/kexec/0001-Fix-building-on-x86_64-with-binutils-2-41.patch b/package/kexec/0001-Fix-building-on-x86_64-with-binutils-2-41.patch
-deleted file mode 100644
-index ae44c21fe1..0000000000
---- a/package/kexec/0001-Fix-building-on-x86_64-with-binutils-2-41.patch
-+++ /dev/null
-@@ -1,94 +0,0 @@
--From 328de8e00e298f00d7ba6b25dc3950147e9642e6 Mon Sep 17 00:00:00 2001
--From: Michel Lind <salimma@fedoraproject.org>
--Date: Tue, 30 Jan 2024 04:14:31 -0600
--Subject: Fix building on x86_64 with binutils 2.41
--
--Newer versions of the GNU assembler (observed with binutils 2.41) will
--complain about the ".arch i386" in files assembled with "as --64",
--with the message "Error: 64bit mode not supported on 'i386'".
--
--Fix by moving ".arch i386" below the relevant ".code32" directive, so
--that the assembler is no longer expecting 64-bit instructions to be used
--by the time that the ".arch i386" directive is encountered.
--
--Based on similar iPXE fix:
--https://github.com/ipxe/ipxe/commit/6ca597eee
--
--Signed-off-by: Michel Lind <michel@michel-slm.name>
--Signed-off-by: Simon Horman <horms@kernel.org>
--Upstream: https://git.kernel.org/pub/scm/utils/kernel/kexec/kexec-tools.git/commit/?id=328de8e00e298f00d7ba6b25dc3950147e9642e6
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- purgatory/arch/i386/entry32-16-debug.S | 2 +-
-- purgatory/arch/i386/entry32-16.S       | 2 +-
-- purgatory/arch/i386/entry32.S          | 2 +-
-- purgatory/arch/i386/setup-x86.S        | 2 +-
-- 4 files changed, 4 insertions(+), 4 deletions(-)
--
--diff --git a/purgatory/arch/i386/entry32-16-debug.S b/purgatory/arch/i386/entry32-16-debug.S
--index 5167944d..12e11649 100644
----- a/purgatory/arch/i386/entry32-16-debug.S
--+++ b/purgatory/arch/i386/entry32-16-debug.S
--@@ -25,10 +25,10 @@
-- 	.globl entry16_debug_pre32
-- 	.globl entry16_debug_first32
-- 	.globl entry16_debug_old_first32
---	.arch i386
-- 	.balign 16
-- entry16_debug:
-- 	.code32
--+	.arch i386
-- 	/* Compute where I am running at (assumes esp valid) */
-- 	call	1f
-- 1:	popl	%ebx
--diff --git a/purgatory/arch/i386/entry32-16.S b/purgatory/arch/i386/entry32-16.S
--index c051aab0..eace0958 100644
----- a/purgatory/arch/i386/entry32-16.S
--+++ b/purgatory/arch/i386/entry32-16.S
--@@ -20,10 +20,10 @@
-- #undef i386	
-- 	.text
-- 	.globl entry16, entry16_regs
---	.arch i386
-- 	.balign 16
-- entry16:
-- 	.code32
--+	.arch i386
-- 	/* Compute where I am running at (assumes esp valid) */
-- 	call	1f
-- 1:	popl	%ebx
--diff --git a/purgatory/arch/i386/entry32.S b/purgatory/arch/i386/entry32.S
--index f7a494f1..8ce9e316 100644
----- a/purgatory/arch/i386/entry32.S
--+++ b/purgatory/arch/i386/entry32.S
--@@ -20,10 +20,10 @@
-- #undef i386
-- 
-- 	.text
---	.arch	i386
-- 	.globl entry32, entry32_regs
-- entry32:
-- 	.code32
--+	.arch	i386
-- 
-- 	/* Setup a gdt that should that is generally usefully */
-- 	lgdt	%cs:gdt
--diff --git a/purgatory/arch/i386/setup-x86.S b/purgatory/arch/i386/setup-x86.S
--index 201bb2cb..a212eed4 100644
----- a/purgatory/arch/i386/setup-x86.S
--+++ b/purgatory/arch/i386/setup-x86.S
--@@ -21,10 +21,10 @@
-- #undef i386
-- 
-- 	.text
---	.arch	i386
-- 	.globl purgatory_start
-- purgatory_start:
-- 	.code32
--+	.arch	i386
-- 
-- 	/* Load a gdt so I know what the segment registers are */
-- 	lgdt	%cs:gdt
---- 
--cgit 1.2.3-korg
--
-diff --git a/package/kexec/kexec.hash b/package/kexec/kexec.hash
-index cfa8790bb1..91496c06fc 100644
---- a/package/kexec/kexec.hash
-+++ b/package/kexec/kexec.hash
-@@ -1,4 +1,6 @@
- # From https://www.kernel.org/pub/linux/utils/kernel/kexec/sha256sums.asc
--sha256  d2f0ef872f39e2fe4b1b01feb62b0001383207239b9f8041f98a95564161d053  kexec-tools-2.0.28.tar.xz
-+# After checking pgp signature with key:
-+# B8868C80BA62A1FFFAF5FDA9632D3A06589DA6B1
-+sha256  67b1ac503aade45a54db0bc79228a8830a35d5d4f83cee932cff3e7a81a4a9ec  kexec-tools-2.0.29.tar.xz
- # locally calculated
--sha256  fa5fc1d1eec39532ea517518eeefd7b6e3c14341a55e5880a0e2a49eee47a5b7  COPYING
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/kexec/kexec.mk b/package/kexec/kexec.mk
-index 1fd8c0f0ab..5f798b6a3f 100644
---- a/package/kexec/kexec.mk
-+++ b/package/kexec/kexec.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KEXEC_VERSION = 2.0.28
-+KEXEC_VERSION = 2.0.29
- KEXEC_SOURCE = kexec-tools-$(KEXEC_VERSION).tar.xz
- KEXEC_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kernel/kexec
- KEXEC_LICENSE = GPL-2.0
--- 
-2.45.2
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+CgpPbiAxOS8wNy8yMDI0IDE2OjM2LCBKLiBOZXVzY2jDpGZlciB3cm90ZToKPiBPbiBTdW4sIEp1
+bCAxNCwgMjAyNCBhdCAxMDoyMjozMFBNICswMjAwLCBBcm5vdXQgVmFuZGVjYXBwZWxsZSB3cm90
+ZToKPj4KPj4KPj4gT24gMDkvMDcvMjAyNCAwMDo0NSwgSi4gTmV1c2Now6RmZXIgdmlhIGJ1aWxk
+cm9vdCB3cm90ZToKPj4+IFNpZ25lZC1vZmYtYnk6IEouIE5ldXNjaMOkZmVyIDxqLm5ldXNjaGFl
+ZmVyQGdteC5uZXQ+Cj4+Cj4+ICAgQXBwbGllZCBzZXJpZXMgdG8gbWFzdGVyLCB0aGFua3MuIFRo
+ZSByZXN0IHdlbnQgaW4gdW5jaGFuZ2VkLCBidXQgaW4gdGhpcwo+PiBvbmUsIEkgbWFkZSBxdWl0
+ZSBhIGZldyBjaGFuZ2VzOgo+Pgo+PiAgICAgICAtIFJlbW92ZSBCUjJfUEFDS0FHRV9USVBJREVF
+X0NPTkZJR1VSQVRJT04sIHVzZSBlbXB0eSB2YWx1ZSBvZgo+PiAgICAgICAgIEJSMl9QQUNLQUdF
+X1RJUElERUVfQ09ORklHX0ZJTEUgdG8gZmxhZyBmYWxzZS4KPj4gICAgICAgLSBSZW5hbWUgQlIy
+X1BBQ0tBR0VfVElQSURFRV9DT05GSUdVUkFUSU9OX0ZJTEUgdG8KPj4gICAgICAgICBCUjJfUEFD
+S0FHRV9USVBJREVFX0NPTkZJR19GSUxFLgo+PiAgICAgICAtIERlZmF1bHQgQlIyX1BBQ0tBR0Vf
+VElQSURFRV9DT05GSUdfRklMRSB0byBlbXB0eS4KPiAKPiBVbmZvcnR1bmF0ZWx5LCB0aGlzIGFw
+cHJvYWNoIGNhdXNlcyBhdXRvYnVpbGQgZmFpbHVyZXMgYmVjYXVzZQo+IHRpcGlkZWUtY29uZmln
+IGNhbm5vdCB3b3JrIHdpdGhvdXQgYSBmaWxlOgo+IAo+IAlodHRwOi8vYXV0b2J1aWxkLmJ1aWxk
+cm9vdC5vcmcvP3JlYXNvbj10aXBpZGVlLTAuMC41LjAKPiAKPiBXaGF0J3MgYSBnb29kIHdheSB0
+byBmaXggdGhpcz8KCiAgT29wcywgdGhhdCdzIG15IGJhZCwgSSBzaG91bGQgaGF2ZSBxc3RyaXAn
+ZWQgYmVmb3JlIHRoZSBjb25kaXRpb24uIEkgZGlyZWN0bHkgCnB1c2hlZCB0aGUgZml4IGJlbG93
+LgoKICBSZWdhcmRzLAogIEFybm91dAoKICAgICBjb21taXQgMjdlN2IwYmYxNGNmMjMyMWUyYWFl
+NjRlNDkwNjcxZjVjZmEyMjgxZCAoSEVBRCAtPiBtYXN0ZXIpCiAgICAgQXV0aG9yOiBBcm5vdXQg
+VmFuZGVjYXBwZWxsZSAoRXNzZW5zaXVtL01pbmQpIDxhcm5vdXRAbWluZC5iZT4KICAgICBEYXRl
+OiAgIEZyaSBKdWwgMTkgMjA6MDM6NTMgMjAyNAoKICAgICBwYWNrYWdlL3RpcGlkZWU6IGZpeCBp
+bnN0YWxsIHdpdGhvdXQgY29uZmlnIGZpbGUKCiAgICAgV2hlbiB0aGUgdGlwaWRlZSBwYWNrYWdl
+IHdhcyBhZGRlZCBpbiBjb21taXQKICAgICAxN2RlYWY2MGY2NmZjMDhhNzk2MjMzOTIwYTEwNGU1
+MjMzYjUwMWUwLCB0aGUgY29tbWl0dGVyIHJlZmFjdG9yZWQgaXQgc28KICAgICBubyBzZXBhcmF0
+ZSBib29sZWFuIG9wdGlvbiBpcyByZXF1aXJlZCB0byBlbmFibGUgdGhlIGNvbmZpZyBmaWxlLgog
+ICAgIEhvd2V2ZXIsIGluIGRvaW5nIHNvLCB0aGUgY2FzZSB3aGVyZSB0aGUgY29uZmlnIGZpbGUg
+aXMgZW1wdHkgd2FzIG5vdAogICAgIGNvcnJlY3RseSBoYW5kbGVkOiBCUjJfUEFDS0FHRV9USVBJ
+REVFX0NPTkZJR19GSUxFIGlzIG5ldmVyIGVtcHR5CiAgICAgYmVjYXVzZSBldmVuIHdpdGggdGhl
+IGVtcHR5IHN0cmluZyBpdCBjb250YWlucyAiIi4KCiAgICAgRm94IGJ5IHFzdHJpcCdpbmcgYmVm
+b3JlIGNoZWNraW5nIGZvciBlbXB0eS4KCiAgICAgU2lnbmVkLW9mZi1ieTogQXJub3V0IFZhbmRl
+Y2FwcGVsbGUgPGFybm91dEBtaW5kLmJlPgoKICAgICBkaWZmIC0tZ2l0IGEvcGFja2FnZS90aXBp
+ZGVlL3RpcGlkZWUubWsgYi9wYWNrYWdlL3RpcGlkZWUvdGlwaWRlZS5tawogICAgIGluZGV4IDFl
+MTU3ODJhYTQuLjkxNWI0Zjg0YmQgMTAwNjQ0CiAgICAgLS0tIGEvcGFja2FnZS90aXBpZGVlL3Rp
+cGlkZWUubWsKICAgICArKysgYi9wYWNrYWdlL3RpcGlkZWUvdGlwaWRlZS5tawogICAgIEBAIC0z
+MywxMiArMzMsMTMgQEAgZGVmaW5lIFRJUElERUVfSU5TVEFMTF9UQVJHRVRfQ01EUwogICAgICAg
+ICAgICAgcm0gLWYgJChUQVJHRVRfRElSKS9saWJleGVjL3RpcGlkZWUtY29uZmlnLXByZXByb2Nl
+c3MKICAgICAgZW5kZWYKCiAgICAgLWlmbmVxICgkKEJSMl9QQUNLQUdFX1RJUElERUVfQ09ORklH
+X0ZJTEUpLCkKICAgICArVElQSURFRV9DT05GSUdfRklMRSA9ICQoY2FsbCBxc3RyaXAsICQoQlIy
+X1BBQ0tBR0VfVElQSURFRV9DT05GSUdfRklMRSkpCiAgICAgK2lmbmVxICgkKFRJUElERUVfQ09O
+RklHX0ZJTEUpLCkKICAgICAgVElQSURFRV9ERVBFTkRFTkNJRVMgKz0gaG9zdC10aXBpZGVlCgog
+ICAgICBkZWZpbmUgVElQSURFRV9JTlNUQUxMX0NPTkZJRwogICAgICAgICAgICAgJChIT1NUX0RJ
+UikvYmluL3RpcGlkZWUtY29uZmlnIFwKICAgICAtICAgICAgICAgICAgICAgIC1pICQoY2FsbCBx
+c3RyaXAsICQoQlIyX1BBQ0tBR0VfVElQSURFRV9DT05GSUdfRklMRSkpIFwKICAgICArICAgICAg
+ICAgICAgICAgLWkgIiQoVElQSURFRV9DT05GSUdfRklMRSkiIFwKICAgICAgICAgICAgICAgICAg
+ICAgLW8gJChUQVJHRVRfRElSKS9ldGMvdGlwaWRlZS5jb25mLmNkYgogICAgICBlbmRlZgogICAg
+ICBUSVBJREVFX1BPU1RfSU5TVEFMTF9UQVJHRVRfSE9PS1MgKz0gVElQSURFRV9JTlNUQUxMX0NP
+TkZJRwoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVp
+bGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3Rz
+LmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
