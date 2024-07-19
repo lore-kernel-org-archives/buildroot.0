@@ -4,93 +4,89 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1AC89C3DA59
-	for <buildroot@archiver.kernel.org>; Fri, 19 Jul 2024 06:33:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72A8CC3DA5D
+	for <buildroot@archiver.kernel.org>; Fri, 19 Jul 2024 06:49:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2092560EC4;
-	Fri, 19 Jul 2024 06:33:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 26D88607C4;
+	Fri, 19 Jul 2024 06:49:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WvLIj7zPtLY8; Fri, 19 Jul 2024 06:33:03 +0000 (UTC)
+ id BoxmOouWnpun; Fri, 19 Jul 2024 06:49:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 84C2360ED3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2E93560E85
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 84C2360ED3;
-	Fri, 19 Jul 2024 06:33:02 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 494821BF362
- for <buildroot@lists.busybox.net>; Fri, 19 Jul 2024 06:32:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2E93560E85;
+	Fri, 19 Jul 2024 06:49:14 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 8131A1BF362
+ for <buildroot@lists.busybox.net>; Fri, 19 Jul 2024 06:49:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4433840413
- for <buildroot@lists.busybox.net>; Fri, 19 Jul 2024 06:32:46 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6EAB260E85
+ for <buildroot@lists.busybox.net>; Fri, 19 Jul 2024 06:49:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id abDLEgjFCiJb for <buildroot@lists.busybox.net>;
- Fri, 19 Jul 2024 06:32:44 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::d2b; helo=mail-io1-xd2b.google.com;
- envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 5EE9D4022B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5EE9D4022B
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com
- [IPv6:2607:f8b0:4864:20::d2b])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5EE9D4022B
- for <buildroot@buildroot.org>; Fri, 19 Jul 2024 06:32:44 +0000 (UTC)
-Received: by mail-io1-xd2b.google.com with SMTP id
- ca18e2360f4ac-8076cee8088so52152839f.0
- for <buildroot@buildroot.org>; Thu, 18 Jul 2024 23:32:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1721370763; x=1721975563;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=TtZWaotiGg9DsUWAkufSINEL8GrSuw0dsL+43a91gVs=;
- b=MK2T+o3xMkV9Mn4M0/zohktRB9q2OnQfRhtzqDljB2FXa8GzpGlzjy0yiNDf6GXcuv
- Ujnvgo/xB/eLlLEoeYxKCyeIdL+asWrl8keRstipQlXDzewkyDUXcNOfxTzv4U6bRwzf
- lGBsxQP5yd1/uN1xhS0h27/pP7ZQJ/O9Z6MfAsOUAo58HbUNWmHCybAy0XZw1czolY9b
- 5n8TB9ADx8tBT5NDEEyKhYTeE0gjmjfkp7IUE9LRfmOYfMhyDsxWREFtgifBBXVClpvd
- bC9vrUHGT3PcXeLCNLTAHHycs0IzTGHLjVRclDfCu/dVvKhfaccRcIV4CiWIrpEtWZ5K
- 9VVg==
-X-Gm-Message-State: AOJu0YyM2AWuhXTBdwgEM9Tn8+uRkNV9s6mi+8t0ts6n2GNgDi7IMk4b
- VZ53dMoDQwXxR71fwtKWICKbdHfzakQ30gxavCHAres7jjZhIqCj5uH1qw==
-X-Google-Smtp-Source: AGHT+IHxcHUZdc3B7tB854izTE+6H4o162fw8YtwmbiY969u8wHklU/lvjqoslC422hmt8+6mX753Q==
-X-Received: by 2002:a05:6602:3cd:b0:805:b510:92a2 with SMTP id
- ca18e2360f4ac-817123e0ab2mr876208539f.19.1721370763010; 
- Thu, 18 Jul 2024 23:32:43 -0700 (PDT)
-Received: from james-x399.localdomain (97-118-239-252.hlrn.qwest.net.
- [97.118.239.252]) by smtp.gmail.com with ESMTPSA id
- ca18e2360f4ac-819ac79ab26sm29587239f.22.2024.07.18.23.32.42
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 18 Jul 2024 23:32:42 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
-To: buildroot@buildroot.org
-Date: Fri, 19 Jul 2024 00:32:35 -0600
-Message-Id: <20240719063235.3823015-6-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240719063235.3823015-1-james.hilliard1@gmail.com>
-References: <20240719063235.3823015-1-james.hilliard1@gmail.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xwSSL1wT_CGy for <buildroot@lists.busybox.net>;
+ Fri, 19 Jul 2024 06:49:11 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.20;
+ helo=mout.gmx.net; envelope-from=j.neuschaefer@gmx.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 3C3CC607C4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3C3CC607C4
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3C3CC607C4
+ for <buildroot@buildroot.org>; Fri, 19 Jul 2024 06:49:10 +0000 (UTC)
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from probook ([151.216.37.99]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mw9UK-1sEP1r24No-011akn; Fri, 19
+ Jul 2024 08:49:07 +0200
+Date: Fri, 19 Jul 2024 08:49:06 +0200
+To: =?utf-8?Q?J=2E_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+Message-ID: <ZpoMYixDlvqpfpJ6@probook>
+References: <20240718-ztext-v4-1-15a9744f1edb@gmx.net>
 MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20240718-ztext-v4-1-15a9744f1edb@gmx.net>
+X-Provags-ID: V03:K1:Ozjn+wfMstuaNaOFrT7K0qkme19oXyrOc+CxrVF8ndK5E2of3nV
+ t1UmU5h+EUTdl4FEZXORgqceQnb+mNZrPy/P9ZnKazdT4l7T4gz68o6h1p2GVGOM9GMtRdS
+ 6mRhBOPVxR3y/hFzCJtq/nnbf+UtFPKDcASxivnZYWK1UIwe/tngma0fBDOM7diYhJ7vSOr
+ 7y+QyU9MNDIoiETG1fgsw==
+UI-OutboundReport: notjunk:1;M01:P0:4T7dQRFS9vs=;ybQxI8zAAOjfIG1hoR4UfQCq2/U
+ 8kuzGnv9wvYZ2bv3MZi0Hmu1FEyTwEna18bUdR417B9AB+WdVcg3ecycNQoQ5wrqLIXkF7prL
+ mc1y9xofy7j51yg6x+J4wcmFy3hXYkhEHW8p4LtSd8NMEGgDZ4jZO3NxkTpFckwBbFBUcOqly
+ jkQNl13q/+8iFU5OxQ77LUP/0k3I5t6EMkBav6ysncvde90jqErM/HnQecyBZ2M+ep0F5uCKe
+ ra7+527x+nH5cWLsulBsWKaVBfkyY5e8WJ+y1QuS6QSS4wJyDOARQdi70BCK5S1Hc+EqaTIP+
+ Qnifa4MHgDuyV5HyU+UBjPTfLaNtnBDof0ebICJwAK47KofDpeCbvHaT+lIdMBglAPY5JwN5S
+ bNqqL2uUtoCqxPobFGTB3zbUp4AQnstv+2JwyqjUlIbtKSzmxeEs2j+3YIWzA2ccSfrKuOwOZ
+ GhUnkXuA0bG3QdTi2ZsBPZ1c/ei+XOgGBoZHKp31wqR5rrcaNj1nJiJzgk+uepDJTHmZOndSX
+ uqTlypKQU2Ely85XPNBYu3PTxoYARvtzqbvkqzHnrHjRwwzyka+REwc/XVyNJRJxriOSOvwfn
+ fQoEJiGaGJdKMZapatQct1i2PHPtIOt7DtsVUmVW0mFNbEULMm1jpHe1NHUgVWDCEC1taYwD8
+ 44np4TtsOALfDsVlKjaW6Yzk9B1GUhVik2kyls/V7cGSnNXxCL+iSCD4SLdsdOhJfbKxnbgJB
+ Y0bg7gB5r1SHZdDcY9FR3LnfdpwNRp8y7q6FV9zfUOH7FJrfuMt/ayLdwPlqFGCZePkiJXJkX
+ O/g6a5TozSCcRZMaUhrAcPdQ==
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1721370763; x=1721975563; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=TtZWaotiGg9DsUWAkufSINEL8GrSuw0dsL+43a91gVs=;
- b=dkMtK6YQ1lR2rrJVrfAkvwVMHFBe0ayYbIkpBwKO4vk9hpO70mhcTADG7I55u6F2XB
- 27j1gp6XCdedpsC1uxWQDVZ7Kwsrls5wgQOqx/oKc+A7lgHgz3mwTUyafel5Re1Jz6yX
- 8xinWDmOZ2JHQ98H3e/yaPOu5VVmVEJWl35yNiqpPwec+U9IijV1y/eaTAgfR2bFwRMM
- H9VITSSJuE8zcuDa812hxx3hIrSIsDRIGTvibkJsw/2d9h9fiMwb7vV5oyjVE0387sMR
- nzxOtzeSTuIYZioVMvftui97UEMGHpsAcnlcDOLjiEFtReptyOGJ3YzeuW/N69qjqEwE
- vx2Q==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=dkMtK6YQ
-Subject: [Buildroot] [PATCH v4 6/6] package/fwupd: new package
+ d=gmx.net; 
+ s=s31663417; t=1721371747; x=1721976547; i=j.neuschaefer@gmx.net;
+ bh=WMTvhqH41yYB4y3kJSThONo/4ikrWRFsVEFOVqmsxzU=;
+ h=X-UI-Sender-Class:Date:From:To:Cc:Subject:Message-ID:References:
+ MIME-Version:Content-Type:Content-Transfer-Encoding:In-Reply-To:
+ cc:content-transfer-encoding:content-type:date:from:message-id:
+ mime-version:reply-to:subject:to;
+ b=LI5Wxf/AfL04124OQDW6khy/Z5rkuysOjCcgJM9DIA2QWKWmDRF1TNCNlt70GiPd
+ HiXfh6wO1DJs7NqNfH1dB7tw0/rdwmE894RKEfZP7jSPj0/UH04ohZRHwcn22vMUT
+ vYHQdr3ofePCmCWMeAUd3aV7Z3G5f5+IleMmIDRSZiDkITx0rrsVB3EAokhnwe40A
+ 1fH2fFrM7abIihMz59rElfISFHwGircQ1fTW1Xj4c2CT62WfoWMJdRT91TjyK142F
+ OH90jkID+L60LC0UhTp6mLor/ghsdzoxcKrsMHuDJftKML1AQ6lmdMxofMSAmeORq
+ xntOg4xMyeZjD3okrA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=gmx.net
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmx.net header.i=j.neuschaefer@gmx.net
+ header.a=rsa-sha256 header.s=s31663417 header.b=LI5Wxf/A
+Subject: Re: [Buildroot] [PATCH v4] Config.in: ban textrels on musl
+ toolchains
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,353 +98,30 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
- James Hilliard <james.hilliard1@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Asaf Kahlon <asafka7@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: =?utf-8?q?J=2E_Neusch=C3=A4fer_via_buildroot?= <buildroot@buildroot.org>
+Reply-To: =?utf-8?Q?J=2E_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
-Changes v3 -> v4:
-  - add patch removing udevdir requirement
-Changes v2 -> v3:
-  - set udevdir so that we don't need to depend on udev
-  - add missing host-python-jinja2 build dependency
-  - only set -Doffline=enabled when systemd is enabled
----
- DEVELOPERS                                    |   1 +
- package/Config.in                             |   1 +
- ...devdir-when-gudev-support-is-enabled.patch |  35 +++
- package/fwupd/Config.in                       |  19 ++
- package/fwupd/fwupd.hash                      |   3 +
- package/fwupd/fwupd.mk                        | 208 ++++++++++++++++++
- 6 files changed, 267 insertions(+)
- create mode 100644 package/fwupd/0001-Only-require-udevdir-when-gudev-support-is-enabled.patch
- create mode 100644 package/fwupd/Config.in
- create mode 100644 package/fwupd/fwupd.hash
- create mode 100644 package/fwupd/fwupd.mk
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index e686dd7060..a546a5b244 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1489,6 +1489,7 @@ F:	package/apcupsd/
- F:	package/bpftool/
- F:	package/cloudflared/
- F:	package/exfatprogs/
-+F:	package/fwupd/
- F:	package/fwupd-efi/
- F:	package/fxdiv/
- F:	package/gensio/
-diff --git a/package/Config.in b/package/Config.in
-index c07544bb21..ed34afe281 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -520,6 +520,7 @@ endmenu
- 	source "package/fmtools/Config.in"
- 	source "package/freeipmi/Config.in"
- 	source "package/freescale-imx/Config.in"
-+	source "package/fwupd/Config.in"
- 	source "package/fwupd-efi/Config.in"
- 	source "package/fxload/Config.in"
- 	source "package/gcnano-binaries/Config.in"
-diff --git a/package/fwupd/0001-Only-require-udevdir-when-gudev-support-is-enabled.patch b/package/fwupd/0001-Only-require-udevdir-when-gudev-support-is-enabled.patch
-new file mode 100644
-index 0000000000..0f14508516
---- /dev/null
-+++ b/package/fwupd/0001-Only-require-udevdir-when-gudev-support-is-enabled.patch
-@@ -0,0 +1,35 @@
-+From a784ef9b904778b511a6284f46d983906939de6c Mon Sep 17 00:00:00 2001
-+From: James Hilliard <james.hilliard1@gmail.com>
-+Date: Thu, 18 Jul 2024 09:44:15 -0600
-+Subject: [PATCH] Only require udevdir when gudev support is enabled
-+
-+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-+Upstream: https://github.com/fwupd/fwupd/commit/a784ef9b904778b511a6284f46d983906939de6c
-+---
-+ meson.build | 10 ++++++----
-+ 1 file changed, 6 insertions(+), 4 deletions(-)
-+
-+diff --git a/meson.build b/meson.build
-+index 22282d73e..f49d08d29 100644
-+--- a/meson.build
-++++ b/meson.build
-+@@ -273,10 +273,12 @@ if build_daemon
-+   if not polkit.found()
-+     warning('Polkit is disabled, the daemon will allow ALL client actions')
-+   endif
-+-  udevdir = get_option('udevdir')
-+-  if udevdir == '' and host_machine.system() == 'linux'
-+-    udev = dependency('udev')
-+-    udevdir = udev.get_variable(pkgconfig: 'udevdir')
-++  if gudev.found()
-++    udevdir = get_option('udevdir')
-++    if udevdir == '' and host_machine.system() == 'linux'
-++      udev = dependency('udev')
-++      udevdir = udev.get_variable(pkgconfig: 'udevdir')
-++    endif
-+   endif
-+ endif
-+ libm = cc.find_library('m', required: false)
-+-- 
-+2.34.1
-+
-diff --git a/package/fwupd/Config.in b/package/fwupd/Config.in
-new file mode 100644
-index 0000000000..6a96358e5b
---- /dev/null
-+++ b/package/fwupd/Config.in
-@@ -0,0 +1,19 @@
-+config BR2_PACKAGE_FWUPD
-+	bool "fwupd"
-+	depends on !BR2_STATIC_LIBS # libxmlb
-+	depends on BR2_USE_WCHAR # libglib2
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
-+	depends on BR2_USE_MMU # libglib2
-+	select BR2_PACKAGE_LIBGLIB2
-+	select BR2_PACKAGE_LIBJCAT
-+	select BR2_PACKAGE_LIBXMLB
-+	select BR2_PACKAGE_ZLIB
-+	help
-+	  Fwupd is a simple daemon to allow session software
-+	  to update device firmware on your local machine.
-+
-+	  https://fwupd.org/
-+
-+comment "fwupd needs a toolchain w/ wchar, threads, dynamic library"
-+	depends on BR2_USE_MMU
-+	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
-diff --git a/package/fwupd/fwupd.hash b/package/fwupd/fwupd.hash
-new file mode 100644
-index 0000000000..8da9dc3c66
---- /dev/null
-+++ b/package/fwupd/fwupd.hash
-@@ -0,0 +1,3 @@
-+# Locally calculated
-+sha256  b86a2d7fe1b6cc0ac4f75f3351a78cb3c225880c9e20b932fa078ef472e9fcb2  fwupd-1.9.20.tar.xz
-+sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/fwupd/fwupd.mk b/package/fwupd/fwupd.mk
-new file mode 100644
-index 0000000000..9283eb43aa
---- /dev/null
-+++ b/package/fwupd/fwupd.mk
-@@ -0,0 +1,208 @@
-+################################################################################
-+#
-+# fwupd
-+#
-+################################################################################
-+
-+FWUPD_VERSION = 1.9.20
-+FWUPD_SITE = https://github.com/fwupd/fwupd/releases/download/$(FWUPD_VERSION)
-+FWUPD_SOURCE = fwupd-$(FWUPD_VERSION).tar.xz
-+FWUPD_LICENSE = LGPL-2.1+
-+FWUPD_LICENSE_FILES = COPYING
-+FWUPD_DEPENDENCIES = \
-+	host-pkgconf \
-+	host-python-jinja2 \
-+	libglib2 \
-+	libjcat \
-+	libxmlb \
-+	zlib
-+
-+FWUPD_CONF_OPTS = \
-+	-Dstatic_analysis=false \
-+	-Dconsolekit=disabled \
-+	-Dfirmware-packager=true \
-+	-Ddocs=disabled \
-+	-Dlvfs=true \
-+	-Dman=false \
-+	-Dgusb=disabled \
-+	-Dpassim=disabled \
-+	-Dp2p_policy=none \
-+	-Dcbor=disabled \
-+	-Dplugin_acpi_phat=enabled \
-+	-Dplugin_cfu=disabled \
-+	-Dplugin_ep963x=enabled \
-+	-Dplugin_fastboot=disabled \
-+	-Dplugin_logitech_bulkcontroller=disabled \
-+	-Dplugin_logitech_scribe=disabled \
-+	-Dplugin_logitech_tap=disabled \
-+	-Dplugin_pixart_rf=enabled \
-+	-Dplugin_tpm=disabled \
-+	-Dplugin_uefi_capsule=enabled \
-+	-Dplugin_uefi_capsule_splash=false \
-+	-Dplugin_nitrokey=enabled \
-+	-Dplugin_mtd=enabled \
-+	-Dplugin_intel_me=enabled \
-+	-Dplugin_upower=enabled \
-+	-Dplugin_powerd=enabled \
-+	-Dqubes=false \
-+	-Dsupported_build=enabled \
-+	-Dlaunchd=disabled \
-+	-Dtests=false \
-+	-Dmetainfo=true \
-+	-Dfish_completion=false \
-+	-Dcompat_cli=false \
-+	-Dthinklmi_compat=false \
-+	-Dpython="$(HOST_DIR)/bin/python3"
-+
-+ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
-+FWUPD_DEPENDENCIES += gobject-introspection
-+FWUPD_CONF_OPTS += -Dintrospection=enabled
-+else
-+FWUPD_CONF_OPTS += -Dintrospection=disabled
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBARCHIVE),y)
-+FWUPD_DEPENDENCIES += libarchive
-+FWUPD_CONF_OPTS += -Dlibarchive=enabled
-+else
-+FWUPD_CONF_OPTS += -Dlibarchive=disabled
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBGUDEV),y)
-+FWUPD_DEPENDENCIES += libgudev
-+FWUPD_CONF_OPTS += \
-+	-Dgudev=enabled \
-+	-Dplugin_android_boot=enabled \
-+	-Dplugin_bcm57xx=enabled \
-+	-Dplugin_emmc=enabled \
-+	-Dplugin_gpio=enabled \
-+	-Dplugin_igsc=enabled \
-+	-Dplugin_kinetic_dp=enabled \
-+	-Dplugin_parade_lspcon=enabled \
-+	-Dplugin_realtek_mst=enabled \
-+	-Dplugin_synaptics_mst=enabled \
-+	-Dplugin_mediatek_scaler=enabled \
-+	-Dplugin_scsi=enabled \
-+	-Dplugin_nvme=enabled \
-+	-Dplugin_uf2=enabled
-+else
-+FWUPD_CONF_OPTS += \
-+	-Dgudev=disabled \
-+	-Dplugin_android_boot=disabled \
-+	-Dplugin_bcm57xx=disabled \
-+	-Dplugin_emmc=disabled \
-+	-Dplugin_gpio=disabled \
-+	-Dplugin_igsc=disabled \
-+	-Dplugin_kinetic_dp=disabled \
-+	-Dplugin_parade_lspcon=disabled \
-+	-Dplugin_realtek_mst=disabled \
-+	-Dplugin_synaptics_mst=disabled \
-+	-Dplugin_mediatek_scaler=disabled \
-+	-Dplugin_scsi=disabled \
-+	-Dplugin_nvme=disabled \
-+	-Dplugin_uf2=disabled
-+endif
-+
-+ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS),y)
-+FWUPD_DEPENDENCIES += bluez5_utils
-+FWUPD_CONF_OPTS += -Dbluez=enabled
-+else
-+FWUPD_CONF_OPTS += -Dbluez=disabled
-+endif
-+
-+ifeq ($(BR2_PACKAGE_POLKIT),y)
-+FWUPD_DEPENDENCIES += polkit
-+FWUPD_CONF_OPTS += -Dpolkit=enabled
-+else
-+FWUPD_CONF_OPTS += -Dpolkit=disabled
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GNUTLS),y)
-+FWUPD_DEPENDENCIES += gnutls
-+FWUPD_CONF_OPTS += -Dgnutls=enabled -Dplugin_uefi_pk=enabled
-+else
-+FWUPD_CONF_OPTS += -Dgnutls=disabled -Dplugin_uefi_pk=disabled
-+endif
-+
-+ifeq ($(BR2_PACKAGE_SQLITE),y)
-+FWUPD_DEPENDENCIES += sqlite
-+FWUPD_CONF_OPTS += -Dsqlite=enabled
-+else
-+FWUPD_CONF_OPTS += -Dsqlite=disabled
-+endif
-+
-+ifeq ($(BR2_PACKAGE_XZ),y)
-+FWUPD_DEPENDENCIES += xz
-+FWUPD_CONF_OPTS += -Dlzma=enabled
-+ifeq ($(BR2_i386)$(BR2_x86_64),y)
-+FWUPD_CONF_OPTS += -Dplugin_intel_spi=true
-+else
-+FWUPD_CONF_OPTS += -Dplugin_intel_spi=false
-+endif
-+else
-+FWUPD_CONF_OPTS += -Dlzma=disabled -Dplugin_intel_spi=false
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBDRM_AMDGPU)$(BR2_PACKAGE_LIBGUDEV),yy)
-+FWUPD_DEPENDENCIES += libdrm libgudev
-+FWUPD_CONF_OPTS += -Dplugin_amdgpu=enabled
-+else
-+FWUPD_CONF_OPTS += -Dplugin_amdgpu=disabled
-+endif
-+
-+ifeq ($(BR2_i386)$(BR2_x86_64),y)
-+FWUPD_CONF_OPTS += -Dplugin_cpu=enabled -Dplugin_msr=enabled -Dhsi=enabled
-+else
-+FWUPD_CONF_OPTS += -Dplugin_cpu=disabled -Dplugin_msr=disabled -Dhsi=disabled
-+endif
-+
-+ifeq ($(BR2_PACKAGE_GNUTLS)$(BR2_PACKAGE_LIBGUDEV),yy)
-+FWUPD_DEPENDENCIES += gnutls libgudev
-+FWUPD_CONF_OPTS += -Dplugin_synaptics_rmi=enabled
-+else
-+FWUPD_CONF_OPTS += -Dplugin_synaptics_rmi=disabled
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBCURL),y)
-+FWUPD_DEPENDENCIES += libcurl
-+FWUPD_CONF_OPTS += -Dplugin_redfish=enabled -Dcurl=enabled
-+else
-+FWUPD_CONF_OPTS += -Dplugin_redfish=disabled -Dcurl=disabled
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBGUDEV)$(BR2_PACKAGE_LIBMBIM)$(BR2_PACKAGE_LIBQMI)$(BR2_PACKAGE_MODEM_MANAGER),yyyy)
-+FWUPD_DEPENDENCIES += libgudev libmbim libqmi modem-manager
-+FWUPD_CONF_OPTS += -Dplugin_modem_manager=enabled
-+else
-+FWUPD_CONF_OPTS += -Dplugin_modem_manager=disabled
-+endif
-+
-+ifeq ($(BR2_PACKAGE_FLASHROM),y)
-+FWUPD_DEPENDENCIES += flashrom
-+FWUPD_CONF_OPTS += -Dplugin_flashrom=enabled
-+else
-+FWUPD_CONF_OPTS += -Dplugin_flashrom=disabled
-+endif
-+
-+ifeq ($(BR2_PACKAGE_SYSTEMD),y)
-+FWUPD_DEPENDENCIES += systemd
-+FWUPD_CONF_OPTS += -Dsystemd=enabled -Delogind=enabled -Doffline=enabled
-+else
-+FWUPD_CONF_OPTS += -Dsystemd=disabled -Delogind=disabled -Doffline=disabled
-+endif
-+
-+ifeq ($(BR2_PACKAGE_FWUPD_EFI),y)
-+FWUPD_DEPENDENCIES += fwupd-efi
-+FWUPD_CONF_OPTS += -Defi_binary=true
-+else
-+FWUPD_CONF_OPTS += -Defi_binary=false
-+endif
-+
-+ifeq ($(BR2_PACKAGE_BASH_COMPLETION),y)
-+FWUPD_DEPENDENCIES += bash-completion
-+FWUPD_CONF_OPTS += -Dbash_completion=true
-+else
-+FWUPD_CONF_OPTS += -Dbash_completion=false
-+endif
-+
-+$(eval $(meson-package))
--- 
-2.34.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+T24gVGh1LCBKdWwgMTgsIDIwMjQgYXQgMTA6MzM6MjNQTSArMDIwMCwgSi4gTmV1c2Now6RmZXIg
+d3JvdGU6Cj4gK2lmZXEgKCQoQlIyX1RPT0xDSEFJTl9VU0VTX01VU0wpJChCUjJfQklORk1UX1NV
+UFBPUlRTX1NIQVJFRCkseXkpCgpJIGp1c3Qgbm90aWNlZCB0aGF0IEJSMl9CSU5GTVRfU1VQUE9S
+VFNfU0hBUkVEIGlzIGluY29ycmVjdCwgYmVjYXVzZQppdCdzIHRydWUgcmVnYXJkbGVzcyBvZiB3
+aGV0aGVyIHNoYXJlZCBsaWJyYXJpZXMgYXJlIGFjdHVhbGx5IHVzZWQuCldoYXQgSSB3YXMgYWlt
+aW5nIGZvciBpcyAiQlIyX1NIQVJFRF9MSUJTIG9yIEJSMl9TSEFSRURfU1RBVElDX0xJQlMiLgoK
+SSBzdXBwb3NlIHRoaXMgc2hvdWxkIHdvcms6CgppZmVxICgkKEJSMl9UT09MQ0hBSU5fVVNFU19N
+VVNMKSQoQlIyX1NIQVJFRF9MSUJTKSQoQlIyX1NIQVJFRF9TVEFUSUNfTElCUykseXkpCgouLi4g
+YnV0IEkgZmluZCBpdCBhIGJpdCB1bmNsZWFyIGJlY2F1c2UgaXQgdGVjaG5pY2FsbHkgZG9lc24n
+dCBsaW1pdAp3aGljaCB0d28gb2YgdGhlIHRocmVlIG9wdGlvbnMgaGF2ZSB0byBiZSB0cnVlICh0
+aGlzIGlzIGRvbmUgZWxzZXdoZXJlLAppbiB0aGUgS2NvbmZpZyBsb2dpYyB0aGF0IG1ha2VzIEJS
+Ml9TSEFSRURfTElCUyBhbmQgQlIyX1NIQVJFRF9TVEFUSUNfTElCUwptdXR1YWxseSBleGNsdXNp
+dmUpLiBJJ2xsIHJhdGhlciBnbyBmb3IgdHdvIGlmZXFzIGluIHRoaXMgY2FzZToKCmlmZXEgKCQo
+QlIyX1RPT0xDSEFJTl9VU0VTX01VU0wpLHkpCmlmZXEgKCQoQlIyX1NIQVJFRF9MSUJTKSQoQlIy
+X1NIQVJFRF9TVEFUSUNfTElCUykseSkKCgotLSBqbgpfX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBi
+dWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZv
+L2J1aWxkcm9vdAo=
