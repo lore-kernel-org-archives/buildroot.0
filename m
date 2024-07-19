@@ -4,67 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B5634C3DA5D
-	for <buildroot@archiver.kernel.org>; Fri, 19 Jul 2024 21:03:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A24EC3DA5D
+	for <buildroot@archiver.kernel.org>; Fri, 19 Jul 2024 21:15:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2113583F18;
-	Fri, 19 Jul 2024 21:03:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CEACD80B1D;
+	Fri, 19 Jul 2024 21:15:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kW7g6oZaxjEZ; Fri, 19 Jul 2024 21:03:33 +0000 (UTC)
+ id OVBKWvhSeuW7; Fri, 19 Jul 2024 21:15:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3E69D82E95
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9A69380BAD
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3E69D82E95;
-	Fri, 19 Jul 2024 21:03:33 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5220F1BF31F
- for <buildroot@lists.busybox.net>; Fri, 19 Jul 2024 21:03:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9A69380BAD;
+	Fri, 19 Jul 2024 21:15:31 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 5C6261BF4E7
+ for <buildroot@lists.busybox.net>; Fri, 19 Jul 2024 21:15:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4C38A41026
- for <buildroot@lists.busybox.net>; Fri, 19 Jul 2024 21:03:32 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 57025608DA
+ for <buildroot@lists.busybox.net>; Fri, 19 Jul 2024 21:15:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Q4xM22htsoA3 for <buildroot@lists.busybox.net>;
- Fri, 19 Jul 2024 21:03:30 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.194;
- helo=relay2-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org F231E40175
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F231E40175
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp2.osuosl.org (Postfix) with ESMTPS id F231E40175
- for <buildroot@buildroot.org>; Fri, 19 Jul 2024 21:03:29 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPA id CB50840003;
- Fri, 19 Jul 2024 21:03:26 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9eb_OpsChYZo for <buildroot@lists.busybox.net>;
+ Fri, 19 Jul 2024 21:15:29 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::332; helo=mail-wm1-x332.google.com;
+ envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 5642D608B6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5642D608B6
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
+ [IPv6:2a00:1450:4864:20::332])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5642D608B6
+ for <buildroot@buildroot.org>; Fri, 19 Jul 2024 21:15:29 +0000 (UTC)
+Received: by mail-wm1-x332.google.com with SMTP id
+ 5b1f17b1804b1-427d2c8c632so14758485e9.2
+ for <buildroot@buildroot.org>; Fri, 19 Jul 2024 14:15:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1721423727; x=1722028527;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=H0KXtquILHGhnHQ96nGpz/9rHGETAjlmR6TCnyn0b1c=;
+ b=ckA75j1x94ICxIxcuZa5AGYQkMo4YeM8VPDYuQ6FGf/EYFfA8sWNvpaqt32dIPWKJN
+ R7kTyV54NE5qm4C4UtrW5sILXioTmZTATAL52aFWJ9SWqHOI1xqAhWeaQ6xOLcpMyKKy
+ GoN3p0YQdG5D7df4rP1TlnocI7jWMmZnuK9i3T9f7dlCr05hddD6IDLFsp4+ma2bQAZX
+ A5wPcT8+WHbYcIr3DnOurGpz36sZmPJbKAcQDaBKgjrwMS28OQPiaHszGy6PiYea/h0/
+ ZjjU2ZrlzNbMojnyyRxp12xPZcV1TckdIO+WppBRIZWOXMb1RUGiGdid3MtJFsDjdNUh
+ 0XWw==
+X-Gm-Message-State: AOJu0YwpYaUI/lW/Oi4dXU5/H0+kqG62qVre3EDvb6eyEIsSZ4wldQIw
+ 8EwyEgf0PjMNTXE6xMVenySKRSC3QADt4Zod/XLa/lZ2DmuXURMB1gs8ZQ==
+X-Google-Smtp-Source: AGHT+IHO5dZqaFaZ+DZS5CqPUiOipD9FtgosuOTLi7qrMAQP7Zfn8yinG9U66rZKvNc6rkuihTeHbA==
+X-Received: by 2002:a05:600c:3d18:b0:426:8ee5:5d29 with SMTP id
+ 5b1f17b1804b1-427c2cb8a26mr58123035e9.9.1721423726692; 
+ Fri, 19 Jul 2024 14:15:26 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-785-215.w83-197.abo.wanadoo.fr.
+ [83.197.112.215]) by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-427d692ad62sm37511475e9.38.2024.07.19.14.15.25
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 19 Jul 2024 14:15:25 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri, 19 Jul 2024 23:03:24 +0200
-Message-ID: <20240719210325.2096254-1-thomas.petazzoni@bootlin.com>
-X-Mailer: git-send-email 2.45.2
+Date: Fri, 19 Jul 2024 23:15:24 +0200
+Message-ID: <20240719211524.10419-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1721423007;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding;
- bh=reNjem5Lk6I+hbN1sxnpP3TD2JKazzyLNkdfwZ/wDwQ=;
- b=g0zTSl96sm/jpo1YthMUarplq9etOTwAq8yH16Bwb7S/XJ+QSBKYXu78sEdaaeXojsIvO/
- mWJVdt3jzpfk1adnAxzyURZUT5ImpBO9o7AADN7cqmPqguchcld/qqY6XXsPjau8awtdYg
- 2yM+Abp48yKBZa19xOFEgD7kijGAYXV4wdnPPJcVaAAuiB92RXLekE9+bjgrR2aNmdGtC+
- v4DQE0jcHpoXirYzu8uKp/DRHJr4RumMBsdA8h7mk2dBMUcPjWFkkpbbZObl1iPLQ1fizj
- HSrdGU3M927qW0e/Mg9RfuEKKHGjZ3PLam/k7eN7UxqMOJ7JrmbD+wgfFrXgyA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=gmail.com; s=20230601; t=1721423727; x=1722028527; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=H0KXtquILHGhnHQ96nGpz/9rHGETAjlmR6TCnyn0b1c=;
+ b=PCmfecZ505CWF1hvC9oO+TU26y0Wry0qhWPct3yQwtYHW1hZTsjwa10zkozDQ5aBIV
+ 8jH4VL6WNEhIhdvv7sIeGpdAWRue6OZjy8zrOJtjAEGZOnjKPrTGpi9+c99DdLbgBTGn
+ kD3kTKsaGnUFfmuV5A05SUkwjUQNA5lz+0b2aeDV0uZ/kH7DN0/zkL0fXzXzlHt4uyy7
+ ZOhaB06VcV8DplD1NmyqzAhiynSWE0bX1WYPMFDgva2B2G0NIQ2zE0TDhlmZ6EuDOv1f
+ iSv+HgYfqQpquCXd6fmlPNDb+FHUTzjdQo/EYngQHCRy6XByng7ZvP0lSqjF0CQ1oAC9
+ ZMoQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=g0zTSl96
-Subject: [Buildroot] [PATCH] package/gcc: fix build with BR2_TIME_BITS_64=y
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=PCmfecZ5
+Subject: [Buildroot] [PATCH 1/1] package/libmaxminddb: bump to version 1.10.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,341 +100,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Romain Naour <romain.naour@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On the architectures that supports libsanitizer (part of gcc), the
-build is currently failing with BR2_TIME_BITS_64=y. This is because
-some code in libsanitizer unsets _FILE_OFFSET_BITS, but building code
-with _FILE_OFFSET_BITS unset, but _TIME_BITS set isn't legal.
+https://github.com/maxmind/libmaxminddb/blob/1.10.0/Changes.md
 
-To fix this, this commit backports two changes:
-
-- One change to also unset _TIME_BITS in
-  sanitizer_platform_limits_posix.cpp. This change is upstream in
-  LLVM, and already part of GCC 14.x, so we only bringing it to GCC
-  12.x and GCC 13.x.
-
-- A second change doing the same modification, but in
-  sanitizer_procmaps_solaris.cpp, which as crazy as it might sound,
-  also gets compiled on Linux platforms (but to basically an empty
-  file). This change has been submitted upstream to both LLVM and gcc.
-
-Notes:
-
- - the special PowerPC SPE version of GCC cannot be affected, as only
-   uClibc-ng is used for this architecture, and uClibc-ng doesn't use
-   _TIME_BITS=64 (but now default to 64-bit time_t on 32-bit
-   architectures, like musl does).
-
- - the special ARC version doesn't need patching because libsanitizer
-   doesn't support the ARC architecture, so it doesn't get built
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/ff2dbfdabf0bb6a0d82ea8a80122ab97fd75bd3f/
-  https://gitlab.com/buildroot.org/buildroot/-/issues/16
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...-along-with-_FILE_OFFSET_BITS-on-Lin.patch | 44 +++++++++++++++
- ...o-undef-_TIME_BITS-in-sanitizer_proc.patch | 53 +++++++++++++++++++
- ...-along-with-_FILE_OFFSET_BITS-on-Lin.patch | 44 +++++++++++++++
- ...o-undef-_TIME_BITS-in-sanitizer_proc.patch | 53 +++++++++++++++++++
- ...o-undef-_TIME_BITS-in-sanitizer_proc.patch | 53 +++++++++++++++++++
- 5 files changed, 247 insertions(+)
- create mode 100644 package/gcc/12.4.0/0005-Undef-_TIME_BITS-along-with-_FILE_OFFSET_BITS-on-Lin.patch
- create mode 100644 package/gcc/12.4.0/0006-libsanitizer-also-undef-_TIME_BITS-in-sanitizer_proc.patch
- create mode 100644 package/gcc/13.3.0/0004-Undef-_TIME_BITS-along-with-_FILE_OFFSET_BITS-on-Lin.patch
- create mode 100644 package/gcc/13.3.0/0005-libsanitizer-also-undef-_TIME_BITS-in-sanitizer_proc.patch
- create mode 100644 package/gcc/14.1.0/0002-libsanitizer-also-undef-_TIME_BITS-in-sanitizer_proc.patch
+ package/libmaxminddb/libmaxminddb.hash | 2 +-
+ package/libmaxminddb/libmaxminddb.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/gcc/12.4.0/0005-Undef-_TIME_BITS-along-with-_FILE_OFFSET_BITS-on-Lin.patch b/package/gcc/12.4.0/0005-Undef-_TIME_BITS-along-with-_FILE_OFFSET_BITS-on-Lin.patch
-new file mode 100644
-index 0000000000..386c9287f6
---- /dev/null
-+++ b/package/gcc/12.4.0/0005-Undef-_TIME_BITS-along-with-_FILE_OFFSET_BITS-on-Lin.patch
-@@ -0,0 +1,44 @@
-+From e45f12ecf703eed45515d451cf014fba32e7410b Mon Sep 17 00:00:00 2001
-+From: Khem Raj <raj.khem@gmail.com>
-+Date: Fri, 3 Feb 2023 11:48:35 -0800
-+Subject: [PATCH] Undef _TIME_BITS along with _FILE_OFFSET_BITS on Linux
-+
-+On 32-bit glibc>=2.34 systems using 64bit time_t build fails because
-+_FILE_OFFSET_BITS is undefined here but _TIME_BITS is still set to 64
-+
-+Fixes
-+
-+```
-+/usr/include/features-time64.h:26:5: error: "_TIME_BITS=64 is allowed
-+ only with _FILE_OFFSET_BITS=64"
-+| #   error "_TIME_BITS=64 is allowed only with _FILE_OFFSET_BITS=64"
-+|     ^
-+| 1 error generated.
-+```
-+
-+Reviewed By: thesamesam, MaskRay
-+
-+Differential Revision: https://reviews.llvm.org/D140812
-+
-+Upstream: https://github.com/llvm/llvm-project/commit/26800a2c7e7996dc773b4e990dd5cca41c45e1a9
-+Upstream: https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=d53b3d94aaf211ffb2159614f5aaaf03ceb861cc
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ .../sanitizer_common/sanitizer_platform_limits_posix.cpp         | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cpp b/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cpp
-+index bfdccd5df07..4cedcbfb4bf 100644
-+--- a/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cpp
-++++ b/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cpp
-+@@ -18,6 +18,7 @@
-+ // depends on _FILE_OFFSET_BITS setting.
-+ // To get this "true" dirent definition, we undefine _FILE_OFFSET_BITS below.
-+ #undef _FILE_OFFSET_BITS
-++#undef _TIME_BITS
-+ #endif
-+ 
-+ // Must go after undef _FILE_OFFSET_BITS.
-+-- 
-+2.45.2
-+
-diff --git a/package/gcc/12.4.0/0006-libsanitizer-also-undef-_TIME_BITS-in-sanitizer_proc.patch b/package/gcc/12.4.0/0006-libsanitizer-also-undef-_TIME_BITS-in-sanitizer_proc.patch
-new file mode 100644
-index 0000000000..80c3378d7b
---- /dev/null
-+++ b/package/gcc/12.4.0/0006-libsanitizer-also-undef-_TIME_BITS-in-sanitizer_proc.patch
-@@ -0,0 +1,53 @@
-+From 940a0c955bca98aba937c4bfe3fe4a4c17dddb85 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Date: Thu, 18 Jul 2024 23:13:41 +0200
-+Subject: [PATCH] libsanitizer: also undef _TIME_BITS in
-+ sanitizer_procmaps_solaris.cpp
-+
-+Upstream commit
-+https://github.com/llvm/llvm-project/commit/26800a2c7e7996dc773b4e990dd5cca41c45e1a9
-+of LLVM added a #undef _TIME_BITS in
-+libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cpp to
-+fix the build on 32-bit Linux platforms that have enabled 64-bit
-+time_t using _TIME_BITS=64.
-+
-+Indeed, _TIME_BITS=64 can only be used when _FILE_OFFSET_BITS=64, but
-+sanitizer_platform_limits_posix.cpp undefines _FILE_OFFSET_BITS before
-+including any header file. To fix this, the upstream fix was to also
-+undef _TIME_BITS.
-+
-+This commit simply does the same in sanitizer_procmaps_solaris.cpp,
-+which also gets compiled under Linux (despite what the file name
-+says). In practice on Linux hosts (where _TIME_BITS=64 matters),
-+sanitizer_procmaps_solaris.cpp will expand to nothing, as pretty much
-+the rest of the file is inside a #ifdef SANITIZER_SOLARIS...#endif. So
-+the #undef _FILE_OFFSET_BITS and #undef _TIME_BITS are only here
-+before including sanitizer_platform.h, which will set the
-+SANITIZER_LINUX/SANITIZER_SOLARIS define depending on the platform.
-+
-+Fixes:
-+
-+armeb-buildroot-linux-gnueabi/sysroot/usr/include/features-time64.h:26:5: error: #error "_TIME_BITS=64 is allowed only with _FILE_OFFSET_BITS=64"
-+   26 | #   error "_TIME_BITS=64 is allowed only with _FILE_OFFSET_BITS=64"
-+
-+Upstream: https://gcc.gnu.org/pipermail/gcc-patches/2024-July/657811.html
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ libsanitizer/sanitizer_common/sanitizer_procmaps_solaris.cpp | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/libsanitizer/sanitizer_common/sanitizer_procmaps_solaris.cpp b/libsanitizer/sanitizer_common/sanitizer_procmaps_solaris.cpp
-+index e16c4e938cb..ca88cf2c2df 100644
-+--- a/libsanitizer/sanitizer_common/sanitizer_procmaps_solaris.cpp
-++++ b/libsanitizer/sanitizer_common/sanitizer_procmaps_solaris.cpp
-+@@ -11,6 +11,7 @@
-+ 
-+ // Before Solaris 11.4, <procfs.h> doesn't work in a largefile environment.
-+ #undef _FILE_OFFSET_BITS
-++#undef _TIME_BITS
-+ #include "sanitizer_platform.h"
-+ #if SANITIZER_SOLARIS
-+ #include "sanitizer_common.h"
-+-- 
-+2.45.2
-+
-diff --git a/package/gcc/13.3.0/0004-Undef-_TIME_BITS-along-with-_FILE_OFFSET_BITS-on-Lin.patch b/package/gcc/13.3.0/0004-Undef-_TIME_BITS-along-with-_FILE_OFFSET_BITS-on-Lin.patch
-new file mode 100644
-index 0000000000..a3be0914b9
---- /dev/null
-+++ b/package/gcc/13.3.0/0004-Undef-_TIME_BITS-along-with-_FILE_OFFSET_BITS-on-Lin.patch
-@@ -0,0 +1,44 @@
-+From 88b73eedcfa0fc58aee2555377e6f7d4de153282 Mon Sep 17 00:00:00 2001
-+From: Khem Raj <raj.khem@gmail.com>
-+Date: Fri, 3 Feb 2023 11:48:35 -0800
-+Subject: [PATCH] Undef _TIME_BITS along with _FILE_OFFSET_BITS on Linux
-+
-+On 32-bit glibc>=2.34 systems using 64bit time_t build fails because
-+_FILE_OFFSET_BITS is undefined here but _TIME_BITS is still set to 64
-+
-+Fixes
-+
-+```
-+/usr/include/features-time64.h:26:5: error: "_TIME_BITS=64 is allowed
-+ only with _FILE_OFFSET_BITS=64"
-+| #   error "_TIME_BITS=64 is allowed only with _FILE_OFFSET_BITS=64"
-+|     ^
-+| 1 error generated.
-+```
-+
-+Reviewed By: thesamesam, MaskRay
-+
-+Differential Revision: https://reviews.llvm.org/D140812
-+
-+Upstream: https://github.com/llvm/llvm-project/commit/26800a2c7e7996dc773b4e990dd5cca41c45e1a9
-+Upstream: https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=d53b3d94aaf211ffb2159614f5aaaf03ceb861cc
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ .../sanitizer_common/sanitizer_platform_limits_posix.cpp         | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cpp b/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cpp
-+index bcbd143d19d..1b23898b374 100644
-+--- a/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cpp
-++++ b/libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cpp
-+@@ -18,6 +18,7 @@
-+ // depends on _FILE_OFFSET_BITS setting.
-+ // To get this "true" dirent definition, we undefine _FILE_OFFSET_BITS below.
-+ #undef _FILE_OFFSET_BITS
-++#undef _TIME_BITS
-+ #endif
-+ 
-+ // Must go after undef _FILE_OFFSET_BITS.
-+-- 
-+2.45.2
-+
-diff --git a/package/gcc/13.3.0/0005-libsanitizer-also-undef-_TIME_BITS-in-sanitizer_proc.patch b/package/gcc/13.3.0/0005-libsanitizer-also-undef-_TIME_BITS-in-sanitizer_proc.patch
-new file mode 100644
-index 0000000000..73b09ac389
---- /dev/null
-+++ b/package/gcc/13.3.0/0005-libsanitizer-also-undef-_TIME_BITS-in-sanitizer_proc.patch
-@@ -0,0 +1,53 @@
-+From 7ad54084a2c07cca6d03dfe274893e903852d359 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Date: Thu, 18 Jul 2024 23:13:41 +0200
-+Subject: [PATCH] libsanitizer: also undef _TIME_BITS in
-+ sanitizer_procmaps_solaris.cpp
-+
-+Upstream commit
-+https://github.com/llvm/llvm-project/commit/26800a2c7e7996dc773b4e990dd5cca41c45e1a9
-+of LLVM added a #undef _TIME_BITS in
-+libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cpp to
-+fix the build on 32-bit Linux platforms that have enabled 64-bit
-+time_t using _TIME_BITS=64.
-+
-+Indeed, _TIME_BITS=64 can only be used when _FILE_OFFSET_BITS=64, but
-+sanitizer_platform_limits_posix.cpp undefines _FILE_OFFSET_BITS before
-+including any header file. To fix this, the upstream fix was to also
-+undef _TIME_BITS.
-+
-+This commit simply does the same in sanitizer_procmaps_solaris.cpp,
-+which also gets compiled under Linux (despite what the file name
-+says). In practice on Linux hosts (where _TIME_BITS=64 matters),
-+sanitizer_procmaps_solaris.cpp will expand to nothing, as pretty much
-+the rest of the file is inside a #ifdef SANITIZER_SOLARIS...#endif. So
-+the #undef _FILE_OFFSET_BITS and #undef _TIME_BITS are only here
-+before including sanitizer_platform.h, which will set the
-+SANITIZER_LINUX/SANITIZER_SOLARIS define depending on the platform.
-+
-+Fixes:
-+
-+armeb-buildroot-linux-gnueabi/sysroot/usr/include/features-time64.h:26:5: error: #error "_TIME_BITS=64 is allowed only with _FILE_OFFSET_BITS=64"
-+   26 | #   error "_TIME_BITS=64 is allowed only with _FILE_OFFSET_BITS=64"
-+
-+Upstream: https://gcc.gnu.org/pipermail/gcc-patches/2024-July/657811.html
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ libsanitizer/sanitizer_common/sanitizer_procmaps_solaris.cpp | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/libsanitizer/sanitizer_common/sanitizer_procmaps_solaris.cpp b/libsanitizer/sanitizer_common/sanitizer_procmaps_solaris.cpp
-+index eeb49e2afe3..1b23fd4d512 100644
-+--- a/libsanitizer/sanitizer_common/sanitizer_procmaps_solaris.cpp
-++++ b/libsanitizer/sanitizer_common/sanitizer_procmaps_solaris.cpp
-+@@ -11,6 +11,7 @@
-+ 
-+ // Before Solaris 11.4, <procfs.h> doesn't work in a largefile environment.
-+ #undef _FILE_OFFSET_BITS
-++#undef _TIME_BITS
-+ #include "sanitizer_platform.h"
-+ #if SANITIZER_SOLARIS
-+ #  include <fcntl.h>
-+-- 
-+2.45.2
-+
-diff --git a/package/gcc/14.1.0/0002-libsanitizer-also-undef-_TIME_BITS-in-sanitizer_proc.patch b/package/gcc/14.1.0/0002-libsanitizer-also-undef-_TIME_BITS-in-sanitizer_proc.patch
-new file mode 100644
-index 0000000000..b9dfcd0d01
---- /dev/null
-+++ b/package/gcc/14.1.0/0002-libsanitizer-also-undef-_TIME_BITS-in-sanitizer_proc.patch
-@@ -0,0 +1,53 @@
-+From 71de45698f60f8feabc0e91336f1e2fb387902df Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Date: Thu, 18 Jul 2024 23:13:41 +0200
-+Subject: [PATCH] libsanitizer: also undef _TIME_BITS in
-+ sanitizer_procmaps_solaris.cpp
-+
-+Upstream commit
-+https://github.com/llvm/llvm-project/commit/26800a2c7e7996dc773b4e990dd5cca41c45e1a9
-+of LLVM added a #undef _TIME_BITS in
-+libsanitizer/sanitizer_common/sanitizer_platform_limits_posix.cpp to
-+fix the build on 32-bit Linux platforms that have enabled 64-bit
-+time_t using _TIME_BITS=64.
-+
-+Indeed, _TIME_BITS=64 can only be used when _FILE_OFFSET_BITS=64, but
-+sanitizer_platform_limits_posix.cpp undefines _FILE_OFFSET_BITS before
-+including any header file. To fix this, the upstream fix was to also
-+undef _TIME_BITS.
-+
-+This commit simply does the same in sanitizer_procmaps_solaris.cpp,
-+which also gets compiled under Linux (despite what the file name
-+says). In practice on Linux hosts (where _TIME_BITS=64 matters),
-+sanitizer_procmaps_solaris.cpp will expand to nothing, as pretty much
-+the rest of the file is inside a #ifdef SANITIZER_SOLARIS...#endif. So
-+the #undef _FILE_OFFSET_BITS and #undef _TIME_BITS are only here
-+before including sanitizer_platform.h, which will set the
-+SANITIZER_LINUX/SANITIZER_SOLARIS define depending on the platform.
-+
-+Fixes:
-+
-+armeb-buildroot-linux-gnueabi/sysroot/usr/include/features-time64.h:26:5: error: #error "_TIME_BITS=64 is allowed only with _FILE_OFFSET_BITS=64"
-+   26 | #   error "_TIME_BITS=64 is allowed only with _FILE_OFFSET_BITS=64"
-+
-+Upstream: https://gcc.gnu.org/pipermail/gcc-patches/2024-July/657811.html
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ libsanitizer/sanitizer_common/sanitizer_procmaps_solaris.cpp | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/libsanitizer/sanitizer_common/sanitizer_procmaps_solaris.cpp b/libsanitizer/sanitizer_common/sanitizer_procmaps_solaris.cpp
-+index eeb49e2afe3..1b23fd4d512 100644
-+--- a/libsanitizer/sanitizer_common/sanitizer_procmaps_solaris.cpp
-++++ b/libsanitizer/sanitizer_common/sanitizer_procmaps_solaris.cpp
-+@@ -11,6 +11,7 @@
-+ 
-+ // Before Solaris 11.4, <procfs.h> doesn't work in a largefile environment.
-+ #undef _FILE_OFFSET_BITS
-++#undef _TIME_BITS
-+ #include "sanitizer_platform.h"
-+ #if SANITIZER_SOLARIS
-+ #  include <fcntl.h>
-+-- 
-+2.45.2
-+
+diff --git a/package/libmaxminddb/libmaxminddb.hash b/package/libmaxminddb/libmaxminddb.hash
+index f5c84fc905..567a428e42 100644
+--- a/package/libmaxminddb/libmaxminddb.hash
++++ b/package/libmaxminddb/libmaxminddb.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  a80682a89d915fdf60b35d316232fb04ebf36fff27fda9bd39fe8a38d3cd3f12  libmaxminddb-1.9.1.tar.gz
++sha256  5e6db72df423ae225bfe8897069f6def40faa8931f456b99d79b8b4d664c6671  libmaxminddb-1.10.0.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/libmaxminddb/libmaxminddb.mk b/package/libmaxminddb/libmaxminddb.mk
+index 1a1a2e302a..84fc3d11dd 100644
+--- a/package/libmaxminddb/libmaxminddb.mk
++++ b/package/libmaxminddb/libmaxminddb.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBMAXMINDDB_VERSION = 1.9.1
++LIBMAXMINDDB_VERSION = 1.10.0
+ LIBMAXMINDDB_SITE = \
+ 	https://github.com/maxmind/libmaxminddb/releases/download/$(LIBMAXMINDDB_VERSION)
+ LIBMAXMINDDB_INSTALL_STAGING = YES
 -- 
-2.45.2
+2.43.0
 
 _______________________________________________
 buildroot mailing list
