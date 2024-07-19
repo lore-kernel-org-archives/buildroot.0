@@ -4,61 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 800C0C3DA5D
-	for <buildroot@archiver.kernel.org>; Fri, 19 Jul 2024 06:32:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1AC89C3DA59
+	for <buildroot@archiver.kernel.org>; Fri, 19 Jul 2024 06:33:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4C66160E8C;
-	Fri, 19 Jul 2024 06:32:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2092560EC4;
+	Fri, 19 Jul 2024 06:33:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bonnmYFNpkBr; Fri, 19 Jul 2024 06:32:57 +0000 (UTC)
+ id WvLIj7zPtLY8; Fri, 19 Jul 2024 06:33:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A8D59608AA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 84C2360ED3
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A8D59608AA;
-	Fri, 19 Jul 2024 06:32:56 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3DD2B1BF362
- for <buildroot@lists.busybox.net>; Fri, 19 Jul 2024 06:32:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 84C2360ED3;
+	Fri, 19 Jul 2024 06:33:02 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 494821BF362
+ for <buildroot@lists.busybox.net>; Fri, 19 Jul 2024 06:32:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3694D81F59
- for <buildroot@lists.busybox.net>; Fri, 19 Jul 2024 06:32:45 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4433840413
+ for <buildroot@lists.busybox.net>; Fri, 19 Jul 2024 06:32:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id z8cxfSRDRkeC for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id abDLEgjFCiJb for <buildroot@lists.busybox.net>;
  Fri, 19 Jul 2024 06:32:44 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
  client-ip=2607:f8b0:4864:20::d2b; helo=mail-io1-xd2b.google.com;
  envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org C3FA181F53
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C3FA181F53
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 5EE9D4022B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5EE9D4022B
 Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com
  [IPv6:2607:f8b0:4864:20::d2b])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C3FA181F53
- for <buildroot@buildroot.org>; Fri, 19 Jul 2024 06:32:43 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 5EE9D4022B
+ for <buildroot@buildroot.org>; Fri, 19 Jul 2024 06:32:44 +0000 (UTC)
 Received: by mail-io1-xd2b.google.com with SMTP id
- ca18e2360f4ac-8138e2f2f69so58095539f.0
- for <buildroot@buildroot.org>; Thu, 18 Jul 2024 23:32:43 -0700 (PDT)
+ ca18e2360f4ac-8076cee8088so52152839f.0
+ for <buildroot@buildroot.org>; Thu, 18 Jul 2024 23:32:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1721370762; x=1721975562;
+ d=1e100.net; s=20230601; t=1721370763; x=1721975563;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=yGs/hKD42B+hpDyHgtCc39OYNWalxscYhKbEAdEAtf0=;
- b=l7TZrx3m8QhcMUWs2HJUTTOEOMQ4f8UO4DAfEdmMu+gasi8AN9MCca4E6DArUO1Z/Q
- 3sf7GDxcUyd594PM5U1mA/kwUWL+8zg80ILkffTcTqvKWQESXj1FQaqOGSsYp9/cbk3/
- 13VwSfBVg4cLSScbfuQqSzLHocnZS+icqKYwuts5ph1fY6hkeobYNGUJp8nkViIKJw89
- gWo4qGsH+x/xuvhwOF18BSS7ujhFsa02tyFO38SQX/+/LX24UkGtiMkxdfCPOGbgk4lk
- U2mBs91yP6AGxmLz3U0L/242v96rSVh5YfQzQniozlCmoShx47PfMaHJAcUal3ajhxIY
- v1ag==
-X-Gm-Message-State: AOJu0YzwqyE+hU0w6sXbtcnT8FqZippq3+zgix2lgck5HUNxRrP0Zb6J
- Syrmyjtn6UzOzcyVtQ77dt04kENrDiEu9/WbXzFrUFxgI770wIiYHQDgKQ==
-X-Google-Smtp-Source: AGHT+IEFbMkcgowqDgEyIdx1YkTq4kW07DI4hjhmjL/Z8pyYFlkHp60N1eKJcm9UkQj+6wTGQ5XmAQ==
-X-Received: by 2002:a05:6602:2cce:b0:803:5d04:2d2c with SMTP id
- ca18e2360f4ac-81710bd217emr1062245239f.11.1721370762435; 
- Thu, 18 Jul 2024 23:32:42 -0700 (PDT)
+ bh=TtZWaotiGg9DsUWAkufSINEL8GrSuw0dsL+43a91gVs=;
+ b=MK2T+o3xMkV9Mn4M0/zohktRB9q2OnQfRhtzqDljB2FXa8GzpGlzjy0yiNDf6GXcuv
+ Ujnvgo/xB/eLlLEoeYxKCyeIdL+asWrl8keRstipQlXDzewkyDUXcNOfxTzv4U6bRwzf
+ lGBsxQP5yd1/uN1xhS0h27/pP7ZQJ/O9Z6MfAsOUAo58HbUNWmHCybAy0XZw1czolY9b
+ 5n8TB9ADx8tBT5NDEEyKhYTeE0gjmjfkp7IUE9LRfmOYfMhyDsxWREFtgifBBXVClpvd
+ bC9vrUHGT3PcXeLCNLTAHHycs0IzTGHLjVRclDfCu/dVvKhfaccRcIV4CiWIrpEtWZ5K
+ 9VVg==
+X-Gm-Message-State: AOJu0YyM2AWuhXTBdwgEM9Tn8+uRkNV9s6mi+8t0ts6n2GNgDi7IMk4b
+ VZ53dMoDQwXxR71fwtKWICKbdHfzakQ30gxavCHAres7jjZhIqCj5uH1qw==
+X-Google-Smtp-Source: AGHT+IHxcHUZdc3B7tB854izTE+6H4o162fw8YtwmbiY969u8wHklU/lvjqoslC422hmt8+6mX753Q==
+X-Received: by 2002:a05:6602:3cd:b0:805:b510:92a2 with SMTP id
+ ca18e2360f4ac-817123e0ab2mr876208539f.19.1721370763010; 
+ Thu, 18 Jul 2024 23:32:43 -0700 (PDT)
 Received: from james-x399.localdomain (97-118-239-252.hlrn.qwest.net.
  [97.118.239.252]) by smtp.gmail.com with ESMTPSA id
  ca18e2360f4ac-819ac79ab26sm29587239f.22.2024.07.18.23.32.42
@@ -66,31 +66,31 @@ Received: from james-x399.localdomain (97-118-239-252.hlrn.qwest.net.
  Thu, 18 Jul 2024 23:32:42 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri, 19 Jul 2024 00:32:34 -0600
-Message-Id: <20240719063235.3823015-5-james.hilliard1@gmail.com>
+Date: Fri, 19 Jul 2024 00:32:35 -0600
+Message-Id: <20240719063235.3823015-6-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240719063235.3823015-1-james.hilliard1@gmail.com>
 References: <20240719063235.3823015-1-james.hilliard1@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1721370762; x=1721975562; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1721370763; x=1721975563; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=yGs/hKD42B+hpDyHgtCc39OYNWalxscYhKbEAdEAtf0=;
- b=aCXINXIrrfwwGCsHg/Dpmm3Z6wiU5LL0bLKVXS73f9QRwy5UYm9J9VzpJ1iAQX+s+q
- qusCCfMu7I3nGgLp4dyUS9Sg0sMioimPG4S5xwGVvMDRB//yckghsJAtZOliUA8ftcO4
- cfMbYr4OvaE0QgnB9AqlhugHdh1jqsFE+O6vXAPTSUwbyM7Ji4wq6lWtUjtArpLj1akr
- zJryx8gAmQosmO3s33KJ1oLIIQBXtZCIb3SwfXKTijPQjHTcTCUMLpLj7b7lMiR8zwio
- BedG+nr5bthgadfm+smmD/6C+bBkaLDaxhWTqWkavuGIp4rVGo7w5fBMfikKKtFnSd/n
- DHqw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=TtZWaotiGg9DsUWAkufSINEL8GrSuw0dsL+43a91gVs=;
+ b=dkMtK6YQ1lR2rrJVrfAkvwVMHFBe0ayYbIkpBwKO4vk9hpO70mhcTADG7I55u6F2XB
+ 27j1gp6XCdedpsC1uxWQDVZ7Kwsrls5wgQOqx/oKc+A7lgHgz3mwTUyafel5Re1Jz6yX
+ 8xinWDmOZ2JHQ98H3e/yaPOu5VVmVEJWl35yNiqpPwec+U9IijV1y/eaTAgfR2bFwRMM
+ H9VITSSJuE8zcuDa812hxx3hIrSIsDRIGTvibkJsw/2d9h9fiMwb7vV5oyjVE0387sMR
+ nzxOtzeSTuIYZioVMvftui97UEMGHpsAcnlcDOLjiEFtReptyOGJ3YzeuW/N69qjqEwE
+ vx2Q==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=aCXINXIr
-Subject: [Buildroot] [PATCH v4 5/6] package/fwupd-efi: new package
+ header.a=rsa-sha256 header.s=20230601 header.b=dkMtK6YQ
+Subject: [Buildroot] [PATCH v4 6/6] package/fwupd: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -111,263 +111,338 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Backport some patches fixing the python shebang and allowing one
-to disable the use of genpeimg since we use host-python-pefile.
-
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
 Changes v3 -> v4:
-  - select BR2_PACKAGE_HOST_PYTHON_USWID
+  - add patch removing udevdir requirement
 Changes v2 -> v3:
-  - add python shebang fix
-  - disable genpeimg binary usage
-  - set objcopy path
-  - add host-python-pefile host-python-uswid deps
-Changes v1 -> v2:
-  - use gitlab for efi_sbat_distro_url
+  - set udevdir so that we don't need to depend on udev
+  - add missing host-python-jinja2 build dependency
+  - only set -Doffline=enabled when systemd is enabled
 ---
- DEVELOPERS                                    |  1 +
- package/Config.in                             |  1 +
- ...disabling-the-use-of-genpeimg-binary.patch | 41 ++++++++
- ...-shebang-paths-and-add-python-option.patch | 95 +++++++++++++++++++
- package/fwupd-efi/Config.in                   |  9 ++
- package/fwupd-efi/fwupd-efi.hash              |  3 +
- package/fwupd-efi/fwupd-efi.mk                | 28 ++++++
- 7 files changed, 178 insertions(+)
- create mode 100644 package/fwupd-efi/0001-Allow-enabling-disabling-the-use-of-genpeimg-binary.patch
- create mode 100644 package/fwupd-efi/0002-Fix-python3-shebang-paths-and-add-python-option.patch
- create mode 100644 package/fwupd-efi/Config.in
- create mode 100644 package/fwupd-efi/fwupd-efi.hash
- create mode 100644 package/fwupd-efi/fwupd-efi.mk
+ DEVELOPERS                                    |   1 +
+ package/Config.in                             |   1 +
+ ...devdir-when-gudev-support-is-enabled.patch |  35 +++
+ package/fwupd/Config.in                       |  19 ++
+ package/fwupd/fwupd.hash                      |   3 +
+ package/fwupd/fwupd.mk                        | 208 ++++++++++++++++++
+ 6 files changed, 267 insertions(+)
+ create mode 100644 package/fwupd/0001-Only-require-udevdir-when-gudev-support-is-enabled.patch
+ create mode 100644 package/fwupd/Config.in
+ create mode 100644 package/fwupd/fwupd.hash
+ create mode 100644 package/fwupd/fwupd.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index c4f1565edd..e686dd7060 100644
+index e686dd7060..a546a5b244 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
 @@ -1489,6 +1489,7 @@ F:	package/apcupsd/
  F:	package/bpftool/
  F:	package/cloudflared/
  F:	package/exfatprogs/
-+F:	package/fwupd-efi/
++F:	package/fwupd/
+ F:	package/fwupd-efi/
  F:	package/fxdiv/
  F:	package/gensio/
- F:	package/lua-std-debug/
 diff --git a/package/Config.in b/package/Config.in
-index f2e10b2b5e..c07544bb21 100644
+index c07544bb21..ed34afe281 100644
 --- a/package/Config.in
 +++ b/package/Config.in
 @@ -520,6 +520,7 @@ endmenu
  	source "package/fmtools/Config.in"
  	source "package/freeipmi/Config.in"
  	source "package/freescale-imx/Config.in"
-+	source "package/fwupd-efi/Config.in"
++	source "package/fwupd/Config.in"
+ 	source "package/fwupd-efi/Config.in"
  	source "package/fxload/Config.in"
  	source "package/gcnano-binaries/Config.in"
- 	source "package/gpm/Config.in"
-diff --git a/package/fwupd-efi/0001-Allow-enabling-disabling-the-use-of-genpeimg-binary.patch b/package/fwupd-efi/0001-Allow-enabling-disabling-the-use-of-genpeimg-binary.patch
+diff --git a/package/fwupd/0001-Only-require-udevdir-when-gudev-support-is-enabled.patch b/package/fwupd/0001-Only-require-udevdir-when-gudev-support-is-enabled.patch
 new file mode 100644
-index 0000000000..e6e460a3b7
+index 0000000000..0f14508516
 --- /dev/null
-+++ b/package/fwupd-efi/0001-Allow-enabling-disabling-the-use-of-genpeimg-binary.patch
-@@ -0,0 +1,41 @@
-+From fb1cf079346a2838cc44f7116cb4a790e40cc5bf Mon Sep 17 00:00:00 2001
++++ b/package/fwupd/0001-Only-require-udevdir-when-gudev-support-is-enabled.patch
+@@ -0,0 +1,35 @@
++From a784ef9b904778b511a6284f46d983906939de6c Mon Sep 17 00:00:00 2001
 +From: James Hilliard <james.hilliard1@gmail.com>
-+Date: Tue, 2 Jul 2024 15:08:18 -0600
-+Subject: [PATCH] Allow enabling/disabling the use of genpeimg binary
++Date: Thu, 18 Jul 2024 09:44:15 -0600
++Subject: [PATCH] Only require udevdir when gudev support is enabled
 +
-+In some cases we may want to force the use of python3-pefile instead
-+of genpeimg such as when cross compiling, add a feature option to
-+allow disabling genpeimg.
-+
-+Upstream: https://github.com/fwupd/fwupd-efi/commit/fb1cf079346a2838cc44f7116cb4a790e40cc5bf
 +Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
++Upstream: https://github.com/fwupd/fwupd/commit/a784ef9b904778b511a6284f46d983906939de6c
 +---
-+ meson.build       | 2 +-
-+ meson_options.txt | 1 +
-+ 2 files changed, 2 insertions(+), 1 deletion(-)
++ meson.build | 10 ++++++----
++ 1 file changed, 6 insertions(+), 4 deletions(-)
 +
 +diff --git a/meson.build b/meson.build
-+index a3ce068..a5612a6 100644
++index 22282d73e..f49d08d29 100644
 +--- a/meson.build
 ++++ b/meson.build
-+@@ -17,7 +17,7 @@ prefix = get_option('prefix')
-+ libdir = join_paths(prefix, get_option('libdir'))
-+ libexecdir = join_paths(prefix, get_option('libexecdir'))
-+ 
-+-genpeimg = find_program ('genpeimg', required: false)
-++genpeimg = find_program ('genpeimg', required: get_option('genpeimg'))
-+ 
-+ efi_app_location = join_paths(libexecdir, 'fwupd', 'efi')
-+ host_cpu = host_machine.cpu_family()
-+diff --git a/meson_options.txt b/meson_options.txt
-+index 26161e1..588ae29 100644
-+--- a/meson_options.txt
-++++ b/meson_options.txt
-+@@ -7,3 +7,4 @@ option('efi_sbat_distro_summary', type : 'string', value : '', description : 'SB
-+ option('efi_sbat_distro_pkgname', type : 'string', value : '', description : 'SBAT distribution package name, e.g. fwupd')
-+ option('efi_sbat_distro_version', type : 'string', value : '', description : 'SBAT distribution version, e.g. fwupd-1.5.6.fc33')
-+ option('efi_sbat_distro_url', type : 'string', value : '', description : 'SBAT distribution URL, e.g. https://src.fedoraproject.org/rpms/fwupd')
-++option('genpeimg', type : 'feature', description : 'Use genpeimg to add NX support to binaries')
++@@ -273,10 +273,12 @@ if build_daemon
++   if not polkit.found()
++     warning('Polkit is disabled, the daemon will allow ALL client actions')
++   endif
++-  udevdir = get_option('udevdir')
++-  if udevdir == '' and host_machine.system() == 'linux'
++-    udev = dependency('udev')
++-    udevdir = udev.get_variable(pkgconfig: 'udevdir')
+++  if gudev.found()
+++    udevdir = get_option('udevdir')
+++    if udevdir == '' and host_machine.system() == 'linux'
+++      udev = dependency('udev')
+++      udevdir = udev.get_variable(pkgconfig: 'udevdir')
+++    endif
++   endif
++ endif
++ libm = cc.find_library('m', required: false)
 +-- 
 +2.34.1
 +
-diff --git a/package/fwupd-efi/0002-Fix-python3-shebang-paths-and-add-python-option.patch b/package/fwupd-efi/0002-Fix-python3-shebang-paths-and-add-python-option.patch
+diff --git a/package/fwupd/Config.in b/package/fwupd/Config.in
 new file mode 100644
-index 0000000000..9747565182
+index 0000000000..6a96358e5b
 --- /dev/null
-+++ b/package/fwupd-efi/0002-Fix-python3-shebang-paths-and-add-python-option.patch
-@@ -0,0 +1,95 @@
-+From 1cd1ff0216d5beb2a2523031398d4dba7d12729d Mon Sep 17 00:00:00 2001
-+From: James Hilliard <james.hilliard1@gmail.com>
-+Date: Tue, 2 Jul 2024 14:51:26 -0600
-+Subject: [PATCH] Fix python3 shebang paths and add python option.
-+
-+Using absolute paths can result in the wrong python3 binary being
-+used, such as when cross compiling using a non-system python3.
-+
-+Use the normal python3 env shebang instead.
-+
-+Also add a meson option to allow overriding the python path.
-+
-+Upstream: https://github.com/fwupd/fwupd-efi/commit/1cd1ff0216d5beb2a2523031398d4dba7d12729d
-+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-+---
-+ contrib/reformat-code.py | 2 +-
-+ efi/generate_binary.py   | 2 +-
-+ efi/generate_sbat.py     | 2 +-
-+ efi/meson.build          | 4 ++--
-+ meson.build              | 7 +++++++
-+ meson_options.txt        | 1 +
-+ 6 files changed, 13 insertions(+), 5 deletions(-)
-+
-+diff --git a/contrib/reformat-code.py b/contrib/reformat-code.py
-+index 65a4ac4..ff6014d 100755
-+--- a/contrib/reformat-code.py
-++++ b/contrib/reformat-code.py
-+@@ -1,4 +1,4 @@
-+-#!/usr/bin/python3
-++#!/usr/bin/env python3
-+ #
-+ # Copyright (C) 2017 Dell Inc.
-+ #
-+diff --git a/efi/generate_binary.py b/efi/generate_binary.py
-+index 443472a..a4611bb 100755
-+--- a/efi/generate_binary.py
-++++ b/efi/generate_binary.py
-+@@ -1,4 +1,4 @@
-+-#!/usr/bin/python3
-++#!/usr/bin/env python3
-+ #
-+ # Copyright (C) 2021 Javier Martinez Canillas <javierm@redhat.com>
-+ # Copyright (C) 2021 Richard Hughes <richard@hughsie.com>
-+diff --git a/efi/generate_sbat.py b/efi/generate_sbat.py
-+index 6c904e5..b9b80ac 100755
-+--- a/efi/generate_sbat.py
-++++ b/efi/generate_sbat.py
-+@@ -1,4 +1,4 @@
-+-#!/usr/bin/python3
-++#!/usr/bin/env python3
-+ #
-+ # Copyright (C) 2021 Javier Martinez Canillas <javierm@redhat.com>
-+ # Copyright (C) 2021 Richard Hughes <richard@hughsie.com>
-+diff --git a/efi/meson.build b/efi/meson.build
-+index 75ade7a..008ba3d 100644
-+--- a/efi/meson.build
-++++ b/efi/meson.build
-+@@ -1,5 +1,5 @@
-+-generate_sbat = find_program('generate_sbat.py', native: true)
-+-generate_binary = find_program('generate_binary.py', native: true)
-++generate_sbat = [python3, files('generate_sbat.py')]
-++generate_binary = [python3, files('generate_binary.py')]
-+ 
-+ # get source version, falling back
-+ git = find_program('git', required : false)
-+diff --git a/meson.build b/meson.build
-+index a5612a6..5836213 100644
-+--- a/meson.build
-++++ b/meson.build
-+@@ -19,6 +19,13 @@ libexecdir = join_paths(prefix, get_option('libexecdir'))
-+ 
-+ genpeimg = find_program ('genpeimg', required: get_option('genpeimg'))
-+ 
-++python3path = get_option('python')
-++if python3path == ''
-++  python3 = import('python').find_installation('python3')
-++else
-++  python3 = find_program(python3path)
-++endif
-++
-+ efi_app_location = join_paths(libexecdir, 'fwupd', 'efi')
-+ host_cpu = host_machine.cpu_family()
-+ if host_cpu == 'x86'
-+diff --git a/meson_options.txt b/meson_options.txt
-+index 588ae29..5f6f521 100644
-+--- a/meson_options.txt
-++++ b/meson_options.txt
-+@@ -8,3 +8,4 @@ option('efi_sbat_distro_pkgname', type : 'string', value : '', description : 'SB
-+ option('efi_sbat_distro_version', type : 'string', value : '', description : 'SBAT distribution version, e.g. fwupd-1.5.6.fc33')
-+ option('efi_sbat_distro_url', type : 'string', value : '', description : 'SBAT distribution URL, e.g. https://src.fedoraproject.org/rpms/fwupd')
-+ option('genpeimg', type : 'feature', description : 'Use genpeimg to add NX support to binaries')
-++option('python', type : 'string', description : 'the absolute path of the python3 binary')
-+-- 
-+2.34.1
-+
-diff --git a/package/fwupd-efi/Config.in b/package/fwupd-efi/Config.in
-new file mode 100644
-index 0000000000..7d3ad6a4a8
---- /dev/null
-+++ b/package/fwupd-efi/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_FWUPD_EFI
-+	bool "fwupd-efi"
-+	depends on BR2_PACKAGE_GNU_EFI_ARCH_SUPPORTS
-+	select BR2_PACKAGE_GNU_EFI
-+	select BR2_PACKAGE_HOST_PYTHON_USWID
++++ b/package/fwupd/Config.in
+@@ -0,0 +1,19 @@
++config BR2_PACKAGE_FWUPD
++	bool "fwupd"
++	depends on !BR2_STATIC_LIBS # libxmlb
++	depends on BR2_USE_WCHAR # libglib2
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
++	depends on BR2_USE_MMU # libglib2
++	select BR2_PACKAGE_LIBGLIB2
++	select BR2_PACKAGE_LIBJCAT
++	select BR2_PACKAGE_LIBXMLB
++	select BR2_PACKAGE_ZLIB
 +	help
-+	  EFI Application used by uefi-capsule plugin in fwupd.
++	  Fwupd is a simple daemon to allow session software
++	  to update device firmware on your local machine.
 +
-+	  https://github.com/fwupd/fwupd-efi
-diff --git a/package/fwupd-efi/fwupd-efi.hash b/package/fwupd-efi/fwupd-efi.hash
++	  https://fwupd.org/
++
++comment "fwupd needs a toolchain w/ wchar, threads, dynamic library"
++	depends on BR2_USE_MMU
++	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+diff --git a/package/fwupd/fwupd.hash b/package/fwupd/fwupd.hash
 new file mode 100644
-index 0000000000..35dc9625ca
+index 0000000000..8da9dc3c66
 --- /dev/null
-+++ b/package/fwupd-efi/fwupd-efi.hash
++++ b/package/fwupd/fwupd.hash
 @@ -0,0 +1,3 @@
 +# Locally calculated
-+sha256  afd0805a2ad081a7caff2ef5bc004ce3a0147b538015e8eca966341716b1260e  fwupd-efi-1.6.tar.xz
++sha256  b86a2d7fe1b6cc0ac4f75f3351a78cb3c225880c9e20b932fa078ef472e9fcb2  fwupd-1.9.20.tar.xz
 +sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/fwupd-efi/fwupd-efi.mk b/package/fwupd-efi/fwupd-efi.mk
+diff --git a/package/fwupd/fwupd.mk b/package/fwupd/fwupd.mk
 new file mode 100644
-index 0000000000..45eeb8d824
+index 0000000000..9283eb43aa
 --- /dev/null
-+++ b/package/fwupd-efi/fwupd-efi.mk
-@@ -0,0 +1,28 @@
++++ b/package/fwupd/fwupd.mk
+@@ -0,0 +1,208 @@
 +################################################################################
 +#
-+# fwupd-efi
++# fwupd
 +#
 +################################################################################
 +
-+FWUPD_EFI_VERSION = 1.6
-+FWUPD_EFI_SITE = https://github.com/fwupd/fwupd-efi/releases/download/$(FWUPD_EFI_VERSION)
-+FWUPD_EFI_SOURCE = fwupd-efi-$(FWUPD_EFI_VERSION).tar.xz
-+FWUPD_EFI_LICENSE = LGPL-2.1+
-+FWUPD_EFI_LICENSE_FILES = COPYING
-+FWUPD_EFI_INSTALL_STAGING = YES
-+FWUPD_EFI_DEPENDENCIES = host-python-pefile host-python-uswid gnu-efi
-+FWUPD_EFI_CONF_OPTS = \
-+	-Defi-libdir=$(STAGING_DIR)/usr/lib \
-+	-Defi-ldsdir=$(STAGING_DIR)/usr/lib \
-+	-Defi-includedir=$(STAGING_DIR)/usr/include/efi \
-+	-Defi_sbat_fwupd_generation=1 \
-+	-Defi_sbat_distro_id=buildroot \
-+	-Defi_sbat_distro_summary=Buildroot \
-+	-Defi_sbat_distro_pkgname=fwupd-efi \
-+	-Defi_sbat_distro_version=fwupd-efi-$(FWUPD_EFI_VERSION) \
-+	-Defi_sbat_distro_url=https://gitlab.com/buildroot.org/buildroot/-/tree/master/package/fwupd-efi \
-+	-Dgenpeimg=disabled \
++FWUPD_VERSION = 1.9.20
++FWUPD_SITE = https://github.com/fwupd/fwupd/releases/download/$(FWUPD_VERSION)
++FWUPD_SOURCE = fwupd-$(FWUPD_VERSION).tar.xz
++FWUPD_LICENSE = LGPL-2.1+
++FWUPD_LICENSE_FILES = COPYING
++FWUPD_DEPENDENCIES = \
++	host-pkgconf \
++	host-python-jinja2 \
++	libglib2 \
++	libjcat \
++	libxmlb \
++	zlib
++
++FWUPD_CONF_OPTS = \
++	-Dstatic_analysis=false \
++	-Dconsolekit=disabled \
++	-Dfirmware-packager=true \
++	-Ddocs=disabled \
++	-Dlvfs=true \
++	-Dman=false \
++	-Dgusb=disabled \
++	-Dpassim=disabled \
++	-Dp2p_policy=none \
++	-Dcbor=disabled \
++	-Dplugin_acpi_phat=enabled \
++	-Dplugin_cfu=disabled \
++	-Dplugin_ep963x=enabled \
++	-Dplugin_fastboot=disabled \
++	-Dplugin_logitech_bulkcontroller=disabled \
++	-Dplugin_logitech_scribe=disabled \
++	-Dplugin_logitech_tap=disabled \
++	-Dplugin_pixart_rf=enabled \
++	-Dplugin_tpm=disabled \
++	-Dplugin_uefi_capsule=enabled \
++	-Dplugin_uefi_capsule_splash=false \
++	-Dplugin_nitrokey=enabled \
++	-Dplugin_mtd=enabled \
++	-Dplugin_intel_me=enabled \
++	-Dplugin_upower=enabled \
++	-Dplugin_powerd=enabled \
++	-Dqubes=false \
++	-Dsupported_build=enabled \
++	-Dlaunchd=disabled \
++	-Dtests=false \
++	-Dmetainfo=true \
++	-Dfish_completion=false \
++	-Dcompat_cli=false \
++	-Dthinklmi_compat=false \
 +	-Dpython="$(HOST_DIR)/bin/python3"
-+FWUPD_EFI_MESON_EXTRA_BINARIES = objcopy='$(TARGET_OBJCOPY)'
++
++ifeq ($(BR2_PACKAGE_GOBJECT_INTROSPECTION),y)
++FWUPD_DEPENDENCIES += gobject-introspection
++FWUPD_CONF_OPTS += -Dintrospection=enabled
++else
++FWUPD_CONF_OPTS += -Dintrospection=disabled
++endif
++
++ifeq ($(BR2_PACKAGE_LIBARCHIVE),y)
++FWUPD_DEPENDENCIES += libarchive
++FWUPD_CONF_OPTS += -Dlibarchive=enabled
++else
++FWUPD_CONF_OPTS += -Dlibarchive=disabled
++endif
++
++ifeq ($(BR2_PACKAGE_LIBGUDEV),y)
++FWUPD_DEPENDENCIES += libgudev
++FWUPD_CONF_OPTS += \
++	-Dgudev=enabled \
++	-Dplugin_android_boot=enabled \
++	-Dplugin_bcm57xx=enabled \
++	-Dplugin_emmc=enabled \
++	-Dplugin_gpio=enabled \
++	-Dplugin_igsc=enabled \
++	-Dplugin_kinetic_dp=enabled \
++	-Dplugin_parade_lspcon=enabled \
++	-Dplugin_realtek_mst=enabled \
++	-Dplugin_synaptics_mst=enabled \
++	-Dplugin_mediatek_scaler=enabled \
++	-Dplugin_scsi=enabled \
++	-Dplugin_nvme=enabled \
++	-Dplugin_uf2=enabled
++else
++FWUPD_CONF_OPTS += \
++	-Dgudev=disabled \
++	-Dplugin_android_boot=disabled \
++	-Dplugin_bcm57xx=disabled \
++	-Dplugin_emmc=disabled \
++	-Dplugin_gpio=disabled \
++	-Dplugin_igsc=disabled \
++	-Dplugin_kinetic_dp=disabled \
++	-Dplugin_parade_lspcon=disabled \
++	-Dplugin_realtek_mst=disabled \
++	-Dplugin_synaptics_mst=disabled \
++	-Dplugin_mediatek_scaler=disabled \
++	-Dplugin_scsi=disabled \
++	-Dplugin_nvme=disabled \
++	-Dplugin_uf2=disabled
++endif
++
++ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS),y)
++FWUPD_DEPENDENCIES += bluez5_utils
++FWUPD_CONF_OPTS += -Dbluez=enabled
++else
++FWUPD_CONF_OPTS += -Dbluez=disabled
++endif
++
++ifeq ($(BR2_PACKAGE_POLKIT),y)
++FWUPD_DEPENDENCIES += polkit
++FWUPD_CONF_OPTS += -Dpolkit=enabled
++else
++FWUPD_CONF_OPTS += -Dpolkit=disabled
++endif
++
++ifeq ($(BR2_PACKAGE_GNUTLS),y)
++FWUPD_DEPENDENCIES += gnutls
++FWUPD_CONF_OPTS += -Dgnutls=enabled -Dplugin_uefi_pk=enabled
++else
++FWUPD_CONF_OPTS += -Dgnutls=disabled -Dplugin_uefi_pk=disabled
++endif
++
++ifeq ($(BR2_PACKAGE_SQLITE),y)
++FWUPD_DEPENDENCIES += sqlite
++FWUPD_CONF_OPTS += -Dsqlite=enabled
++else
++FWUPD_CONF_OPTS += -Dsqlite=disabled
++endif
++
++ifeq ($(BR2_PACKAGE_XZ),y)
++FWUPD_DEPENDENCIES += xz
++FWUPD_CONF_OPTS += -Dlzma=enabled
++ifeq ($(BR2_i386)$(BR2_x86_64),y)
++FWUPD_CONF_OPTS += -Dplugin_intel_spi=true
++else
++FWUPD_CONF_OPTS += -Dplugin_intel_spi=false
++endif
++else
++FWUPD_CONF_OPTS += -Dlzma=disabled -Dplugin_intel_spi=false
++endif
++
++ifeq ($(BR2_PACKAGE_LIBDRM_AMDGPU)$(BR2_PACKAGE_LIBGUDEV),yy)
++FWUPD_DEPENDENCIES += libdrm libgudev
++FWUPD_CONF_OPTS += -Dplugin_amdgpu=enabled
++else
++FWUPD_CONF_OPTS += -Dplugin_amdgpu=disabled
++endif
++
++ifeq ($(BR2_i386)$(BR2_x86_64),y)
++FWUPD_CONF_OPTS += -Dplugin_cpu=enabled -Dplugin_msr=enabled -Dhsi=enabled
++else
++FWUPD_CONF_OPTS += -Dplugin_cpu=disabled -Dplugin_msr=disabled -Dhsi=disabled
++endif
++
++ifeq ($(BR2_PACKAGE_GNUTLS)$(BR2_PACKAGE_LIBGUDEV),yy)
++FWUPD_DEPENDENCIES += gnutls libgudev
++FWUPD_CONF_OPTS += -Dplugin_synaptics_rmi=enabled
++else
++FWUPD_CONF_OPTS += -Dplugin_synaptics_rmi=disabled
++endif
++
++ifeq ($(BR2_PACKAGE_LIBCURL),y)
++FWUPD_DEPENDENCIES += libcurl
++FWUPD_CONF_OPTS += -Dplugin_redfish=enabled -Dcurl=enabled
++else
++FWUPD_CONF_OPTS += -Dplugin_redfish=disabled -Dcurl=disabled
++endif
++
++ifeq ($(BR2_PACKAGE_LIBGUDEV)$(BR2_PACKAGE_LIBMBIM)$(BR2_PACKAGE_LIBQMI)$(BR2_PACKAGE_MODEM_MANAGER),yyyy)
++FWUPD_DEPENDENCIES += libgudev libmbim libqmi modem-manager
++FWUPD_CONF_OPTS += -Dplugin_modem_manager=enabled
++else
++FWUPD_CONF_OPTS += -Dplugin_modem_manager=disabled
++endif
++
++ifeq ($(BR2_PACKAGE_FLASHROM),y)
++FWUPD_DEPENDENCIES += flashrom
++FWUPD_CONF_OPTS += -Dplugin_flashrom=enabled
++else
++FWUPD_CONF_OPTS += -Dplugin_flashrom=disabled
++endif
++
++ifeq ($(BR2_PACKAGE_SYSTEMD),y)
++FWUPD_DEPENDENCIES += systemd
++FWUPD_CONF_OPTS += -Dsystemd=enabled -Delogind=enabled -Doffline=enabled
++else
++FWUPD_CONF_OPTS += -Dsystemd=disabled -Delogind=disabled -Doffline=disabled
++endif
++
++ifeq ($(BR2_PACKAGE_FWUPD_EFI),y)
++FWUPD_DEPENDENCIES += fwupd-efi
++FWUPD_CONF_OPTS += -Defi_binary=true
++else
++FWUPD_CONF_OPTS += -Defi_binary=false
++endif
++
++ifeq ($(BR2_PACKAGE_BASH_COMPLETION),y)
++FWUPD_DEPENDENCIES += bash-completion
++FWUPD_CONF_OPTS += -Dbash_completion=true
++else
++FWUPD_CONF_OPTS += -Dbash_completion=false
++endif
 +
 +$(eval $(meson-package))
 -- 
