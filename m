@@ -4,89 +4,116 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4963EC3DA59
-	for <buildroot@archiver.kernel.org>; Fri, 19 Jul 2024 14:36:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 57727C3DA5D
+	for <buildroot@archiver.kernel.org>; Fri, 19 Jul 2024 14:50:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E2E2240FC2;
-	Fri, 19 Jul 2024 14:36:21 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id EDC34400B5;
+	Fri, 19 Jul 2024 14:50:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wNo3RQPDQcoR; Fri, 19 Jul 2024 14:36:21 +0000 (UTC)
+ id LJUo53L6skAd; Fri, 19 Jul 2024 14:50:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CE77E40FC7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A81BD40FCD
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CE77E40FC7;
-	Fri, 19 Jul 2024 14:36:20 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A81BD40FCD;
+	Fri, 19 Jul 2024 14:50:35 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D40051BF335
- for <buildroot@lists.busybox.net>; Fri, 19 Jul 2024 14:36:19 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 47F031BF335
+ for <buildroot@lists.busybox.net>; Fri, 19 Jul 2024 14:50:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BFAB040FC7
- for <buildroot@lists.busybox.net>; Fri, 19 Jul 2024 14:36:19 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4171B40FCD
+ for <buildroot@lists.busybox.net>; Fri, 19 Jul 2024 14:50:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KMNzcXHa9EHX for <buildroot@lists.busybox.net>;
- Fri, 19 Jul 2024 14:36:18 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.22;
- helo=mout.gmx.net; envelope-from=j.neuschaefer@gmx.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 2CB5C40FC2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2CB5C40FC2
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 2CB5C40FC2
- for <buildroot@buildroot.org>; Fri, 19 Jul 2024 14:36:17 +0000 (UTC)
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from probook ([151.216.37.99]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mr9G2-1s0f283tva-00f1sb; Fri, 19
- Jul 2024 16:36:15 +0200
-Date: Fri, 19 Jul 2024 16:36:14 +0200
-To: Arnout Vandecappelle <arnout@mind.be>
-Message-ID: <Zpp53mr6-TUO7rVD@probook>
-References: <20240709-tipidee-v2-0-a69a8668005e@gmx.net>
- <20240709-tipidee-v2-8-a69a8668005e@gmx.net>
- <f6fe9b7b-28e4-48e0-bac8-7aa87d787473@mind.be>
+ id 45lMlqagEC-V for <buildroot@lists.busybox.net>;
+ Fri, 19 Jul 2024 14:50:33 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=67.231.144.184;
+ helo=mx0a-00105401.pphosted.com; envelope-from=brandon.maier@collins.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0C6DB400B5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0C6DB400B5
+Received: from mx0a-00105401.pphosted.com (mx0a-00105401.pphosted.com
+ [67.231.144.184])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0C6DB400B5
+ for <buildroot@buildroot.org>; Fri, 19 Jul 2024 14:50:32 +0000 (UTC)
+Received: from pps.filterd (m0346906.ppops.net [127.0.0.1])
+ by mx0a-00105401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id
+ 46JEbV6v032641; Fri, 19 Jul 2024 14:50:30 GMT
+Received: from xusxph004rp050.rtx.com (xusxph004rp050.rtx.com [128.13.120.147])
+ by mx0a-00105401.pphosted.com (PPS) with ESMTPS id 40ft2s04h2-1
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+ Fri, 19 Jul 2024 14:50:30 +0000
+Received: from xusxph005rp020.corp.ray.com ([128.13.121.224])
+ by xusxph004rp050.rtx.com (8.17.1.19/8.17.1.19) with ESMTPS id 46JEoSqc016124
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+ Fri, 19 Jul 2024 14:50:28 GMT
+Received: from ciulimr01.rockwellcollins.com
+ (snat-utc-mailhub.rockwellcollins.com [10.172.224.19])
+ by xusxph005rp020.corp.ray.com (8.17.1.19/8.17.1.19) with ESMTPS id
+ 46JEoRoj026511
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+ Fri, 19 Jul 2024 14:50:28 GMT
+X-Received: from localhost (unknown [10.148.204.208])
+ by ciulimr01.rockwellcollins.com (Postfix) with ESMTP id C37813000499;
+ Fri, 19 Jul 2024 09:50:27 -0500 (CDT)
+Date: Fri, 19 Jul 2024 14:50:26 +0000
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <f6fe9b7b-28e4-48e0-bac8-7aa87d787473@mind.be>
-X-Provags-ID: V03:K1:XT8OvXe170jaPH4Fmcipi4CEeRQOxJfhGdllLMKcAuw8NIktN+8
- BG6anCevkf4vM3t8m2+Dqicu1B/2TU5UvvL6o5bAVN4XOQxTAEYDa4IRGxwvvyDwCCZz4Cu
- TsgwFdP2W6tBjfcMlracHqrZ1z+yZpvjKN3WeLkNq0Gl7L0xB/qdkonYBg872A0i4Qa05NS
- hXetUd5SwDgHvSGL6k2qA==
-UI-OutboundReport: notjunk:1;M01:P0:1xLpT7fq3Dw=;AcCyWQzXRHHsnW7a3tt8ZwCtoIO
- /KEwPQLLLoTYWUt/6qA178+nLIOA3V21LzF37VOLNB21+6znlssKchI/e4fVqrCBzvTpNOKUQ
- /A+O7yaOK/kaRdWqVeIQQDtHxxpZe1g62QmmE/EHtLSg/60AXGFlkjp73B67fVokJWDVisxqD
- adR+gv2jJNOgkRzsnq0SpWvXI+P0k/j9N11sWyMcgIcA/LRKlNXhH2vRK1utw0eszVutZyuZj
- hOQUQNBmyLi6D6r4bpc4ew1Y4LJzG2LNslOCo/aBc+dlYhZZEHm4eUsCbZaRKyC3Vm0s1XXtJ
- b1fy2l+Pz2aFSflX5egW8B3beOVMMCHxi6J6/SVgIcSakYzXWy9f5HEBoX29b0X/V1ld6z7ig
- VIbdQ+QQ6aeIMmUDl+xXi/krEpYdRUCEUq8ROntI3gqi0eNwgA28iNDbSTW47BtrAwQcCJV08
- M9TBe/v9JLFpBpR9NTQQCvCJxIej+Z+PsId32TnWsE30PdZsB7l4H++Hjr1I33CqgIrao4ueG
- rVVJfzPq0X2jYRSHqL7/U2LMA0whK4iSAfj8FIhjdDWVr05ZC3r/zLVoRyMmK4MPjRUjzVffe
- 42eEae0l4ZFbnqfnU3Z85uJTfvsNm4QxenPb/aLjACBO4DqeHxSzuBbeNA3tulsW3l4egL1be
- smzicF0QNL8lbI65doVQQGwqx+BG7vn+pEdGKZ17kIDYDmCD2RKZeRGq9AgqEzhQgbZhIV6Iw
- yCfROzfRmAFzkdjEFRGy5NdsHzvFA6ZT+sF0EbjUczQMxO++IVPf1L7ZpSMyE2v4twMtpu3Y1
- 7w352AyP+1jKwhnh4OUdEsTQ==
+Message-Id: <20240719-boot-uboot-env-select-v2-1-6abcd50db794@collins.com>
+X-B4-Tracking: v=1; b=H4sIADF9mmYC/4WNQQrCMBBFr1Jm7UgTqkldeQ/poqYTO1CTksSgl
+ Nzd2Au4+fA+/Pc3iBSYIlyaDQJljuxdBXlowMyjexDyVBlkK7tWCY137xO+9iSXMdJCJqG0vW5
+ PwqjR9lC3ayDL7917GyrPHJMPn/0mi1/7z5gFCqSzUUqTFt2kr8YvC7t4NP4JQynlC6blyAS8A
+ AAA
+To: buildroot@buildroot.org
+X-Mailer: b4 0.14.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-07-19_06,2024-07-18_01,2024-05-17_01
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-07-19_06,2024-07-18_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999
+ phishscore=0
+ spamscore=0 suspectscore=0 malwarescore=0 mlxscore=0 adultscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2407110000 definitions=main-2407190113
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0
+ mlxscore=0 mlxlogscore=999
+ adultscore=0 malwarescore=0 spamscore=0 bulkscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2407110000
+ definitions=main-2407190112
+X-Proofpoint-GUID: REXU-pD_0c7-t5rBip_2rdChPTc2Qg8B
+X-Proofpoint-ORIG-GUID: REXU-pD_0c7-t5rBip_2rdChPTc2Qg8B
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-07-19_06,2024-07-18_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_default_notspam
+ policy=outbound_default score=0
+ impostorscore=0 clxscore=1015 spamscore=0 malwarescore=0
+ priorityscore=1501 mlxlogscore=999 lowpriorityscore=0 phishscore=0
+ bulkscore=0 suspectscore=0 adultscore=0 mlxscore=0 classifier=spam
+ adjust=0 reason=mlx scancount=1 engine=8.12.0-2407110000
+ definitions=main-2407190113
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmx.net; 
- s=s31663417; t=1721399775; x=1722004575; i=j.neuschaefer@gmx.net;
- bh=qoR+9TXsGR4+nIK7nfna4JkoHHWpFUmCHZNrlfdnSlw=;
- h=X-UI-Sender-Class:Date:From:To:Cc:Subject:Message-ID:References:
- MIME-Version:Content-Type:Content-Transfer-Encoding:In-Reply-To:
- cc:content-transfer-encoding:content-type:date:from:message-id:
- mime-version:reply-to:subject:to;
- b=dFc0ITWOmNv7sIdnG0ywoEyuglffdDcNJbU7jMUVDfRVKX/DxdLPY0VQn7ANUfyM
- 3kNoTUbkvNhzD0PSM1lGrQUsVupIx36bRIL7NemzDj+qMQenyPeDXDtQsM3+VkjkR
- eEKTYLNXNPkU9bKccdIWzmQAzERa8kGVyyEhn101JrMTk4oUxbCa6CCEYTFLTuzpH
- kJCgbpJReEyP9WiMGActMVrtKA0msSYrQHGIHL4//nh32AnSPK27iltmlcB/LhsWY
- cHfmsReK8HJvRB+a8QXWEuEdZv/748TBO9fdidCaYOZOez+ANQbmR97eBADbW279b
- UgxkC1FBhz48wMUVkg==
+ d=collins.com; h=cc :
+ content-transfer-encoding : content-type : date : from : message-id :
+ mime-version : subject : to; s=POD051818;
+ bh=qgqLVfoAXG1K5yundbNEDW/3SDsGnO+oFl1rqRBs3Gw=;
+ b=a/sDkM0vQXo47qdxS9KmDYx4YMG7q8DYm7wnUVqZABFQAwRuDSxR4iHdHHpkJWhpbUEV
+ OCTPbLW+VTH2z/WmY/P/AQNeSyoum/5DMzN1gCQgks8vzJFa0vWgGmrR7LbFicbegne6
+ lhJPe4v6M+qP206PywztMoxoJHz+F+8SRiKOCOrn+y9yDJViTbHfS4Xb2ZHo9PmCfVY3
+ 3ffTXeMkNSl6eLp5e2kIMY60nRJk7xkYVhCwhjcXldSCCPmqN96ve8uyF3eIyiof7tol
+ hlkxcWMqjSghkRBz960GEoRAsiAIY+XVilU8TIEWRWWczvNSIJ0jY7A/fP4cXn2iulLz +w== 
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=gmx.net
+ dmarc=pass (p=reject dis=none)
+ header.from=collins.com
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmx.net header.i=j.neuschaefer@gmx.net
- header.a=rsa-sha256 header.s=s31663417 header.b=dFc0ITWO
-Subject: Re: [Buildroot] [PATCH v2 8/8] tipidee: new package
+ dkim=pass (2048-bit key,
+ unprotected) header.d=collins.com header.i=@collins.com header.a=rsa-sha256
+ header.s=POD051818 header.b=a/sDkM0v
+Subject: [Buildroot] [PATCH v2] boot/uboot: fix Kconfig warning for
+ DEFAULT_ENV_FILE
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,29 +125,83 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: =?utf-8?q?J=2E_Neusch=C3=A4fer_via_buildroot?= <buildroot@buildroot.org>
-Reply-To: =?utf-8?Q?J=2E_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-Cc: =?utf-8?Q?J=2E_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
- buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Brandon Maier via buildroot <buildroot@buildroot.org>
+Reply-To: Brandon Maier <brandon.maier@collins.com>
+Cc: Luca Ceresoli <luca.ceresoli@bootlin.com>,
+ Brandon Maier <brandon.maier@collins.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gU3VuLCBKdWwgMTQsIDIwMjQgYXQgMTA6MjI6MzBQTSArMDIwMCwgQXJub3V0IFZhbmRlY2Fw
-cGVsbGUgd3JvdGU6Cj4KPgo+IE9uIDA5LzA3LzIwMjQgMDA6NDUsIEouIE5ldXNjaMOkZmVyIHZp
-YSBidWlsZHJvb3Qgd3JvdGU6Cj4gPiBTaWduZWQtb2ZmLWJ5OiBKLiBOZXVzY2jDpGZlciA8ai5u
-ZXVzY2hhZWZlckBnbXgubmV0Pgo+Cj4gIEFwcGxpZWQgc2VyaWVzIHRvIG1hc3RlciwgdGhhbmtz
-LiBUaGUgcmVzdCB3ZW50IGluIHVuY2hhbmdlZCwgYnV0IGluIHRoaXMKPiBvbmUsIEkgbWFkZSBx
-dWl0ZSBhIGZldyBjaGFuZ2VzOgo+Cj4gICAgICAtIFJlbW92ZSBCUjJfUEFDS0FHRV9USVBJREVF
-X0NPTkZJR1VSQVRJT04sIHVzZSBlbXB0eSB2YWx1ZSBvZgo+ICAgICAgICBCUjJfUEFDS0FHRV9U
-SVBJREVFX0NPTkZJR19GSUxFIHRvIGZsYWcgZmFsc2UuCj4gICAgICAtIFJlbmFtZSBCUjJfUEFD
-S0FHRV9USVBJREVFX0NPTkZJR1VSQVRJT05fRklMRSB0bwo+ICAgICAgICBCUjJfUEFDS0FHRV9U
-SVBJREVFX0NPTkZJR19GSUxFLgo+ICAgICAgLSBEZWZhdWx0IEJSMl9QQUNLQUdFX1RJUElERUVf
-Q09ORklHX0ZJTEUgdG8gZW1wdHkuCgpVbmZvcnR1bmF0ZWx5LCB0aGlzIGFwcHJvYWNoIGNhdXNl
-cyBhdXRvYnVpbGQgZmFpbHVyZXMgYmVjYXVzZQp0aXBpZGVlLWNvbmZpZyBjYW5ub3Qgd29yayB3
-aXRob3V0IGEgZmlsZToKCglodHRwOi8vYXV0b2J1aWxkLmJ1aWxkcm9vdC5vcmcvP3JlYXNvbj10
-aXBpZGVlLTAuMC41LjAKCldoYXQncyBhIGdvb2Qgd2F5IHRvIGZpeCB0aGlzPwoKLS0gam4KX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1h
-aWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9v
-dC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+The following warning occurs from commit "boot/uboot: allow taking the
+entire default environment from a text file".
+
+  boot/uboot/Config.in:141:warning: config symbol
+  'BR2_TARGET_UBOOT_DEFAULT_ENV_FILE' uses select, but is not bool or
+  tristate
+
+Add a hidden 'bool' config so we can enable dependencies.
+
+In addition, the DEFAULT_ENV_FILE works by setting Kconfig options,
+therefore we also need to depend on
+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG.
+
+Signed-off-by: Brandon Maier <brandon.maier@collins.com>
+---
+Changes in v2:
+- Use a hidden bool [Arnout, Thomas]
+- Link to v1: https://lore.kernel.org/r/20240718-boot-uboot-env-select-v1-1-e6c778e814d8@collins.com
+---
+ boot/uboot/Config.in | 7 ++++++-
+ boot/uboot/uboot.mk  | 2 +-
+ 2 files changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index 57aac06e20..e9689b9f33 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -136,9 +136,14 @@ config BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES
+ 	  that will be merged to the main U-Boot configuration file.
+ endif
+ 
++config BR2_TARGET_UBOOT_DEFAULT_ENV_FILE_HIDDEN
++	bool
++	default y if BR2_TARGET_UBOOT_DEFAULT_ENV_FILE != ""
++	select BR2_TARGET_UBOOT_NEEDS_XXD
++
+ config BR2_TARGET_UBOOT_DEFAULT_ENV_FILE
+ 	string "Text file with default environment"
+-	select BR2_TARGET_UBOOT_NEEDS_XXD
++	depends on BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG
+ 	help
+ 	  Text file containing the variables to be used as the default
+ 	  environment in U-Boot.
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index 6cc87b35d3..80059a1a88 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -391,8 +391,8 @@ UBOOT_KCONFIG_EDITORS = menuconfig xconfig gconfig nconfig
+ # time, so use HOSTCC_NOCCACHE.
+ UBOOT_KCONFIG_OPTS = $(UBOOT_MAKE_OPTS) HOSTCC="$(HOSTCC_NOCCACHE)" HOSTLDFLAGS=""
+ 
++ifeq ($(BR2_TARGET_UBOOT_DEFAULT_ENV_FILE_HIDDEN),y)
+ UBOOT_DEFAULT_ENV_FILE = $(call qstrip,$(BR2_TARGET_UBOOT_DEFAULT_ENV_FILE))
+-ifneq ($(UBOOT_DEFAULT_ENV_FILE),)
+ define UBOOT_KCONFIG_DEFAULT_ENV_FILE
+ 	$(call KCONFIG_SET_OPT,CONFIG_USE_DEFAULT_ENV_FILE,y)
+ 	$(call KCONFIG_SET_OPT,CONFIG_DEFAULT_ENV_FILE,"$(shell readlink -f $(UBOOT_DEFAULT_ENV_FILE))")
+
+---
+base-commit: c624eee120b6ee0c81e636bd47abe92452610cf7
+change-id: 20240718-boot-uboot-env-select-2f98051c7af9
+
+Best regards,
+-- 
+Brandon Maier <brandon.maier@collins.com>
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
