@@ -4,91 +4,97 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8F02CC3DA59
-	for <buildroot@archiver.kernel.org>; Fri, 19 Jul 2024 04:37:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 27CF8C3DA5D
+	for <buildroot@archiver.kernel.org>; Fri, 19 Jul 2024 04:44:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0F61B408DB;
-	Fri, 19 Jul 2024 04:37:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9CF954009B;
+	Fri, 19 Jul 2024 04:44:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id D-DM4oWIFv-n; Fri, 19 Jul 2024 04:37:45 +0000 (UTC)
+ id vuqd8jL9ke3A; Fri, 19 Jul 2024 04:44:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9B70540917
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 66545408C3
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9B70540917;
-	Fri, 19 Jul 2024 04:37:45 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id CFB861BF841
- for <buildroot@lists.busybox.net>; Fri, 19 Jul 2024 04:37:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 66545408C3;
+	Fri, 19 Jul 2024 04:44:27 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 068B61BF841
+ for <buildroot@lists.busybox.net>; Fri, 19 Jul 2024 04:44:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B96C180CBB
- for <buildroot@lists.busybox.net>; Fri, 19 Jul 2024 04:37:43 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0155D60707
+ for <buildroot@lists.busybox.net>; Fri, 19 Jul 2024 04:44:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rrr_8nKPeocD for <buildroot@lists.busybox.net>;
- Fri, 19 Jul 2024 04:37:42 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XcOEDXNYQ5RO for <buildroot@lists.busybox.net>;
+ Fri, 19 Jul 2024 04:44:25 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::d29; helo=mail-io1-xd29.google.com;
- envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B4EE080C77
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B4EE080C77
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com
- [IPv6:2607:f8b0:4864:20::d29])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B4EE080C77
- for <buildroot@buildroot.org>; Fri, 19 Jul 2024 04:37:42 +0000 (UTC)
-Received: by mail-io1-xd29.google.com with SMTP id
- ca18e2360f4ac-804ac219676so81566539f.0
- for <buildroot@buildroot.org>; Thu, 18 Jul 2024 21:37:42 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::12c; helo=mail-lf1-x12c.google.com;
+ envelope-from=christian@aperture.us; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org D517D606FA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D517D606FA
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com
+ [IPv6:2a00:1450:4864:20::12c])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id D517D606FA
+ for <buildroot@buildroot.org>; Fri, 19 Jul 2024 04:44:24 +0000 (UTC)
+Received: by mail-lf1-x12c.google.com with SMTP id
+ 2adb3069b0e04-52ea79e6979so1427843e87.2
+ for <buildroot@buildroot.org>; Thu, 18 Jul 2024 21:44:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1721363861; x=1721968661;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=EPZMxKY4s7Mvyb6JPVjc1wmy53CCW9JGYQDRMe/ZlW4=;
- b=uD4o0icNzV5vfyo20GrMlKcrDpe1hMWlau74nBwdqcsasfwyAZQgEyMRJVOgN+1AR6
- 2KEYq0ZU/SHEvjzcljzLNNbKkfajnYvFOp5CtEm7HPGOpzcih0jyMmJu06QlsukTo+vY
- XiKi5mLg8xiHnh19Pvi4NGJ7yHJk6q6ZekExhmsTcf+vM95cAmSsbHERIK37LhorYPQX
- opZ+HDthWaEx8hPmnaWRXOwJLoU7KKl3G/t55+o7DLFyKqPeF5EpBDM2ype715wi3QfR
- f+UHBMws8bTBWKCOGyDBt+1myGeoq3blg5JFATQmyvSw3JPLqmAMs6dnqd0deZwsZTtY
- PDHw==
-X-Gm-Message-State: AOJu0YygJPPgKLYQLzLeAR8cKDegOPkOSRZ2azvifwf76sWFkpVhYeDA
- Fsawwjh/6GVdE39iZNu6VWWqtbL2BTEKHo8XbLztPLXh3IIYh4UtdDi7lg==
-X-Google-Smtp-Source: AGHT+IHW4PE1LKa+vCeXn9Vtyi2ZiGvbCjcPXLUV7YQzP6JBDyTmfbk702jK3pBK6AIVEP+8TS/CDw==
-X-Received: by 2002:a05:6e02:1d86:b0:382:325c:f7bd with SMTP id
- e9e14a558f8ab-3964e088bd3mr39757965ab.10.1721363861269; 
- Thu, 18 Jul 2024 21:37:41 -0700 (PDT)
-Received: from james-x399.localdomain (97-118-239-252.hlrn.qwest.net.
- [97.118.239.252]) by smtp.gmail.com with ESMTPSA id
- e9e14a558f8ab-397f5c2b5b5sm1985955ab.39.2024.07.18.21.37.40
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 18 Jul 2024 21:37:41 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
-To: buildroot@buildroot.org
-Date: Thu, 18 Jul 2024 22:37:39 -0600
-Message-Id: <20240719043739.3241372-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
+ d=1e100.net; s=20230601; t=1721364262; x=1721969062;
+ h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=TWacEYb9GHsnodfGwD3hwqU8NvuiMo7PCd6hSkgojd8=;
+ b=fRcAFOntVcE9wQ3PpLxcFx2LVJ44nrsQJJeTKo6KKQ4fXVeVgEzpV4j4kAqLAkLXx9
+ b8gNZGpypWYqVsyZZ8XBV0tkffW/4YUKu5VhoMlT2vLmm1wu5Q5IWa8W2PDGJqnQIoEo
+ tAlPIEBwDX9SpIbISBSqC712D1U0tedlPKTxI367davX7tfl3CUWZDJxsyeCgn39E0oA
+ xYQuqjszkeV8T9nnOVkGKpbbZ0/dDBz5nezrbA13vikxo8vL8WYotf4a43cSKA/HvhOZ
+ SiIH7iNwnwEyJQ0Fwvu3ftDeA1hjftrW499gj0XzpP3elOv8Mc4PucnX7vFLrpXffXzO
+ u6Xg==
+X-Gm-Message-State: AOJu0YwCBFUmc7lYGl9WmXlS0FfX37d4ulAxQYZOmQHBDSmEy1zhVjXl
+ DGUl93X9YaCZR5ejypH4bt3rddTafRCDE12E+F6kEgQcIOUAh/ibv+QKj7TvXC2VMyBUpCaFNP3
+ U7gnI3g==
+X-Google-Smtp-Source: AGHT+IGMhSbrHE/ew/r7htzHNKgGrj07ozQ8tJsMXa9b7qoDBb5wCpfz1y9Io68EWYtfEeHwKhkthQ==
+X-Received: by 2002:a05:6512:280e:b0:52e:999b:7c01 with SMTP id
+ 2adb3069b0e04-52ee5428836mr5258341e87.48.1721364262143; 
+ Thu, 18 Jul 2024 21:44:22 -0700 (PDT)
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com.
+ [209.85.167.51]) by smtp.gmail.com with ESMTPSA id
+ 2adb3069b0e04-52ef553ca47sm74971e87.93.2024.07.18.21.44.19
+ for <buildroot@buildroot.org>
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Thu, 18 Jul 2024 21:44:20 -0700 (PDT)
+Received: by mail-lf1-f51.google.com with SMTP id
+ 2adb3069b0e04-52e99060b0dso1277958e87.1
+ for <buildroot@buildroot.org>; Thu, 18 Jul 2024 21:44:19 -0700 (PDT)
+X-Received: by 2002:a05:6512:3a87:b0:52e:7ef1:7c6e with SMTP id
+ 2adb3069b0e04-52ee5429389mr4733702e87.51.1721364259355; Thu, 18 Jul 2024
+ 21:44:19 -0700 (PDT)
 MIME-Version: 1.0
+Date: Thu, 18 Jul 2024 21:44:08 -0700
+X-Gmail-Original-Message-ID: <CA+h8R2osC5ok1g3UYL_2iuSJwF0wKNQiHexsEUaCjLHWuzF6Rw@mail.gmail.com>
+Message-ID: <CA+h8R2osC5ok1g3UYL_2iuSJwF0wKNQiHexsEUaCjLHWuzF6Rw@mail.gmail.com>
+To: Buildroot Mailing List <buildroot@buildroot.org>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1721363861; x=1721968661; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=EPZMxKY4s7Mvyb6JPVjc1wmy53CCW9JGYQDRMe/ZlW4=;
- b=g6UlAgFSdaooG3qmyYvHxqscNYAAaS9FoJKdSMENpB8LrI36SEKKykmn1h6ki7selK
- SRy8QHi4CTyLde6ffWnyjhGfFnHso5hIFjAdQeGcYXN2posusSg0q+R4TwtOlVl7fVwR
- pBJXxaGRd9ZDnVlDlVz+rPuSoWERleoILDpAl+WTeRyLJjJAVV2JTZkMIbWNJ5UusAVR
- w5wDaKyKMkGlb4fvGl/9d3gxTcza8u864Jtoe34opX9M9WU1ydiLJ+HmuhJaEdArNevc
- 8+Pu1JabelWVz9yqBE2gxg5Ah67lV8HKDELB6lv0tU2V7uR2GpzmzNWYE6WpyFlmTXXA
- /6FQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=g6UlAgFS
-Subject: [Buildroot] [PATCH 1/1] package/python-pydantic-core: bump to
- version 2.20.1
+ d=aperture.us; s=google; t=1721364262; x=1721969062; darn=buildroot.org;
+ h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+ :date:message-id:reply-to;
+ bh=TWacEYb9GHsnodfGwD3hwqU8NvuiMo7PCd6hSkgojd8=;
+ b=pPMolT5m8RkWulZsrgeyc8CyxtesrcyKZc8HTUV4GKBEFto0ZGX1zJonTZO4DL76d0
+ Dm78lqxx1984mxkRMYuPW7dnFRVotOBQQevPJBsME7+Zn1LkEPC1cOqniY9ZvasOARx/
+ WKQPKDMHTSBMgoiD8euAmZkv7CP993MCieamVL6Gi3J8aiU7IroKZ7A4kRQCIvX5JxQz
+ foCZGd9J4HKnuuaxGP8G6Z0GRo4flPN+++0zignqqQWEVbgl0CqbYlLZRsDpee/mgeN9
+ e9CDXkf5u/SaTpfE0PJPoJB1gpWlILrUhRiSnVeph5YbtzRjl3FZ7fRn/Ou3PZn0787W
+ lDzw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=aperture.us
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=aperture.us header.i=@aperture.us header.a=rsa-sha256
+ header.s=google header.b=pPMolT5m
+Subject: [Buildroot] git send-email via. GMail API
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,47 +106,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+From: Christian Stewart via buildroot <buildroot@buildroot.org>
+Reply-To: Christian Stewart <christian@aperture.us>
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/python-pydantic-core/python-pydantic-core.hash | 2 +-
- package/python-pydantic-core/python-pydantic-core.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Hi all,
 
-diff --git a/package/python-pydantic-core/python-pydantic-core.hash b/package/python-pydantic-core/python-pydantic-core.hash
-index 1703fcff3d..3554d0c0f6 100644
---- a/package/python-pydantic-core/python-pydantic-core.hash
-+++ b/package/python-pydantic-core/python-pydantic-core.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after vendoring
--sha256  a3597bcb7a6c9aabee543ba5797ba4997eb5a91b36bc6c596be4640bccf98daf  pydantic_core-2.20.0.tar.gz
-+sha256  87cee9e796c31e3470dd13675286f13d58084e4362dae9288a9fa45b1264c084  pydantic_core-2.20.1.tar.gz
- # Locally computed sha256 checksums
- sha256  2afdd30d54b4d62b6f488a6bcc1546e84ec5061f13f4209c03d012348783795a  LICENSE
-diff --git a/package/python-pydantic-core/python-pydantic-core.mk b/package/python-pydantic-core/python-pydantic-core.mk
-index 2e37c37004..4332c4f6a6 100644
---- a/package/python-pydantic-core/python-pydantic-core.mk
-+++ b/package/python-pydantic-core/python-pydantic-core.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_PYDANTIC_CORE_VERSION = 2.20.0
-+PYTHON_PYDANTIC_CORE_VERSION = 2.20.1
- PYTHON_PYDANTIC_CORE_SOURCE = pydantic_core-$(PYTHON_PYDANTIC_CORE_VERSION).tar.gz
--PYTHON_PYDANTIC_CORE_SITE = https://files.pythonhosted.org/packages/7d/fa/9802d053f33dbcf110d46e3f28667b06cd764b164f1e3f4189848cdd6e78
-+PYTHON_PYDANTIC_CORE_SITE = https://files.pythonhosted.org/packages/12/e3/0d5ad91211dba310f7ded335f4dad871172b9cc9ce204f5a56d76ccd6247
- PYTHON_PYDANTIC_CORE_SETUP_TYPE = maturin
- PYTHON_PYDANTIC_CORE_LICENSE = MIT
- PYTHON_PYDANTIC_CORE_LICENSE_FILES = LICENSE
--- 
-2.34.1
+As a Buildroot developer, I frequently send out patches via email:
 
+  git format-patch -v1  -M -n -s -o outgoing upstream/master
+  git send-email --to buildroot@buildroot.org ./outgoing
+
+Using GMail, this has caused a lot of issues with SMTP:
+
+- Leaking personal IP address in emails
+- SPF validation failures
+- Email marked as spam
+- Needing to use an app password
+
+I have written a program `sendgmailapi` which sends via the GMail API.
+
+https://github.com/paralin/sendgmailapi?tab=readme-ov-file#setup
+
+Hopefully this is helpful to others developing Buildroot with GMail.
+
+Best regards,
+Christian Stewart
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
