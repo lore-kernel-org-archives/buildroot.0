@@ -4,91 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C68BDC3DA59
-	for <buildroot@archiver.kernel.org>; Sat, 20 Jul 2024 20:43:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 272A2C3DA59
+	for <buildroot@archiver.kernel.org>; Sat, 20 Jul 2024 20:50:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 092884038E;
-	Sat, 20 Jul 2024 20:43:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7137B403B9;
+	Sat, 20 Jul 2024 20:50:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LxNkee-9s3qO; Sat, 20 Jul 2024 20:43:50 +0000 (UTC)
+ id eZHMX2vRBV73; Sat, 20 Jul 2024 20:50:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ACC8440390
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D08E940225
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id ACC8440390;
-	Sat, 20 Jul 2024 20:43:50 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 00D901BF2CF
- for <buildroot@lists.busybox.net>; Sat, 20 Jul 2024 20:43:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D08E940225;
+	Sat, 20 Jul 2024 20:50:05 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 411ED1BF2CF
+ for <buildroot@lists.busybox.net>; Sat, 20 Jul 2024 20:50:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E268E81253
- for <buildroot@lists.busybox.net>; Sat, 20 Jul 2024 20:43:49 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2B5DA40151
+ for <buildroot@lists.busybox.net>; Sat, 20 Jul 2024 20:50:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SBPVAyWXmDbX for <buildroot@lists.busybox.net>;
- Sat, 20 Jul 2024 20:43:49 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::332; helo=mail-wm1-x332.google.com;
- envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org A247080B3E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A247080B3E
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
- [IPv6:2a00:1450:4864:20::332])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A247080B3E
- for <buildroot@buildroot.org>; Sat, 20 Jul 2024 20:43:48 +0000 (UTC)
-Received: by mail-wm1-x332.google.com with SMTP id
- 5b1f17b1804b1-4265b7514fcso13836375e9.1
- for <buildroot@buildroot.org>; Sat, 20 Jul 2024 13:43:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1721508226; x=1722113026;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=7l4mdFOqeLxbp0QEedt7TGV1NexZUyBTz/hyemSbS8I=;
- b=AIHsP6I+RfUbAMvGLlSLovSAOJlts852ePuulNCk7kywlSYwgbVd6tA9jc23R764rl
- BOGqGnhRoYMe3y6iTRrO4ynyWebYL8HN4A69GuxUsXwhRCMgTftvlNjZ+EJgXKfrC5C0
- rHWLSm5gxpsufF1QtDsqEbwak6HMHxWaZ1cYs0SF92KJg4QhzDBP1rAkks8e+/Q0zo61
- kejo4PvGpPJob/JuVz5HcPUAX8/WPmNqU33i55sZ2Is3RFAGMI+wdFjo/VydUaIx8gYo
- a0fQS+cQmY+d1wSciExPR9k6nLzoYwSyhEJXqFcvg++Vekb0sOYvW2/z+q29ci0gnGxF
- iTBw==
-X-Gm-Message-State: AOJu0Yz0LFX4nAOfbx55pZoiciYstt6Cg0YOrmEBp+E1VYsmHN0lFzlc
- kHJJL4e+O0VcO7IKdGjtReJEFIDnmChG4ODme+jA6lvwzWaRdsGYAo5Yug==
-X-Google-Smtp-Source: AGHT+IGN5vddhIbuQg0B3vPca8wmL+LTNQsKgFahf8VtSDRVUQelFKZ63+vsIu9K/Ali8FqvwaFo7Q==
-X-Received: by 2002:a05:600c:4513:b0:426:5c36:f57a with SMTP id
- 5b1f17b1804b1-427da84ab76mr21106015e9.14.1721508225941; 
- Sat, 20 Jul 2024 13:43:45 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-785-215.w83-197.abo.wanadoo.fr.
- [83.197.112.215]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-427d8f1cf7esm56597915e9.39.2024.07.20.13.43.45
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 20 Jul 2024 13:43:45 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id m9wpnvtErVt9 for <buildroot@lists.busybox.net>;
+ Sat, 20 Jul 2024 20:50:02 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D99D8400D8
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id D99D8400D8
+ for <buildroot@buildroot.org>; Sat, 20 Jul 2024 20:50:02 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 44DDA86D95; Sat, 20 Jul 2024 20:50:02 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 20 Jul 2024 22:43:41 +0200
-Message-ID: <20240720204341.1521701-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.43.0
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1721508226; x=1722113026; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=7l4mdFOqeLxbp0QEedt7TGV1NexZUyBTz/hyemSbS8I=;
- b=BG01qkGAYHxHwIJ6HeTN10pyOzzKEGDDae1S9snqgrWrntshVPauj15fKivx5+1LYg
- mBE8n6w4HPAdCND8/iV7H/6A5lTbk9VB6B5uv+gaGJ+WY+ncOnA//uRje8M4qNWdxBnf
- 8fcdJwodYxHERozMaF0Eq8WrjjAk9uhmQHmnopAkI+0tMlEeijZosXWe96jjSRdpMENS
- xvpMrsvEt7TqOSiBtlOOAOmYnVgwhrXfXKDKykUfWSeuoIr4gJ5iuiYpnwZjtaFPQxgQ
- zJNbqvFHQF3oxeiou4378Rmw+mDyevxFiJqYaBHi4E3adPZltsrCmJ3QFSeV1KigmIqZ
- vuOg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=BG01qkGA
-Subject: [Buildroot] [PATCH 1/1] package/gtkiostream: fix version
+Date: Sat, 20 Jul 2024 22:49:46 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 27e7b0bf14cf2321e2aae64e490671f5cfa2281d
+X-Git-Newrev: 3bb426628c19f04cbad6821c1a68f008043d7808
+X-Patchwork-Hint: ignore
+Message-Id: <20240720205002.44DDA86D95@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/mpir: fix build with host gcc >= 14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,51 +57,183 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>, Matt Flax <flatmax@flatmax.org>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Update GTKIOSTREAM_VERSION to make it compatible with what is returned
-by https://release-monitoring.org/project/373420/
+commit: https://git.buildroot.net/buildroot/commit/?id=3bb426628c19f04cbad6821c1a68f008043d7808
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes: fab48302865e5c0c98d91b696bc90e75e38189bb
+Fix the following build failure with host gcc >= 14 which enables
+-Werror=implicit-function-declaration
+(https://gcc.gnu.org/gcc-14/porting_to.html):
+
+configure:9998: checking build system compiler /usr/bin/gcc
+configure:10011: /usr/bin/gcc conftest.c
+conftest.c: In function 'main':
+conftest.c:4:3: error: implicit declaration of function 'exit' [-Wimplicit-function-declaration]
+    4 |   exit(0);
+      |   ^~~~
+conftest.c:1:1: note: include '<stdlib.h>' or provide a declaration of 'exit'
+  +++ |+#include <stdlib.h>
+    1 | int
+conftest.c:4:3: warning: incompatible implicit declaration of built-in function 'exit' [-Wbuiltin-declaration-mismatch]
+    4 |   exit(0);
+      |   ^~~~
+conftest.c:4:3: note: include '<stdlib.h>' or provide a declaration of 'exit'
+configure:10014: $? = 1
+configure:10021: result: no
+configure:10026: error: Specified CC_FOR_BUILD doesn't seem to work
+
+Fixes:
+ - http://autobuild.buildroot.org/results/3ab381f06d5dc030039b6f6f8d19feb55cf3367d
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/gtkiostream/gtkiostream.hash | 2 +-
- package/gtkiostream/gtkiostream.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ .../0002-Fix-configure-failures-with-Xcode12.patch | 116 +++++++++++++++++++++
+ package/mpir/mpir.mk                               |   2 +
+ 2 files changed, 118 insertions(+)
 
-diff --git a/package/gtkiostream/gtkiostream.hash b/package/gtkiostream/gtkiostream.hash
-index 90c754f48c..225504be1b 100644
---- a/package/gtkiostream/gtkiostream.hash
-+++ b/package/gtkiostream/gtkiostream.hash
-@@ -1,3 +1,3 @@
- # locally computed hash
--sha256  44e8d921d462005cd330a1c24e5bd8061175b90ae53f537dbf73f59b74f6e01b  gtkiostream-v1.8.0.tar.gz
-+sha256  44e8d921d462005cd330a1c24e5bd8061175b90ae53f537dbf73f59b74f6e01b  gtkiostream-1.8.0.tar.gz
- sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  gpl.txt
-diff --git a/package/gtkiostream/gtkiostream.mk b/package/gtkiostream/gtkiostream.mk
-index 36905d7e7d..970644d6df 100644
---- a/package/gtkiostream/gtkiostream.mk
-+++ b/package/gtkiostream/gtkiostream.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+diff --git a/package/mpir/0002-Fix-configure-failures-with-Xcode12.patch b/package/mpir/0002-Fix-configure-failures-with-Xcode12.patch
+new file mode 100644
+index 0000000000..453515f926
+--- /dev/null
++++ b/package/mpir/0002-Fix-configure-failures-with-Xcode12.patch
+@@ -0,0 +1,116 @@
++From bbc43ca6ae0bec4f64e69c9cd4c967005d6470eb Mon Sep 17 00:00:00 2001
++From: Mitchell Blank Jr <mitch@bodyfour.com>
++Date: Mon, 21 Dec 2020 12:05:19 +0000
++Subject: [PATCH] Fix configure failures with Xcode12
++
++Changes are needed becuase Xcode12 includes a default of
++-Werror,-Wimplicit-function-declaration which means that
++even something like calling "exit(0);" is a compile failure
++if you haven't done a "#include <stdlib.h>" first (as C99
++requires, but most other compilers will just warn about)
++
++I don't know if the "long long reliability test 2" test which
++tries to provoke a crash on a particular gcc 3.3 build still
++does what it was originally intended to do with my change.
++Of course, I doubt anyone has tried to use that compiler in
++years.
++
++Fixes #290
++
++Upstream: https://github.com/wbhart/mpir/commit/bbc43ca6ae0bec4f64e69c9cd4c967005d6470eb
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ acinclude.m4 | 24 +++++++++++++-----------
++ 1 file changed, 13 insertions(+), 11 deletions(-)
++
++diff --git a/acinclude.m4 b/acinclude.m4
++index 91c35bc23..620a629ef 100644
++--- a/acinclude.m4
+++++ b/acinclude.m4
++@@ -589,9 +589,9 @@ extern
++ #endif
++ __inline__ t1 e(t2 rp,t2 up,int n,t1 v0)
++ {t1 c,x,r;int i;if(v0){c=1;for(i=1;i<n;i++){x=up[i];r=x+1;rp[i]=r;}}return c;}
++-f(){static const struct{t1 n;t1 src[9];t1 want[9];}d[]={{1,{0},{1}},};t1 got[9];int i;
+++void f(){static const struct{t1 n;t1 src[9];t1 want[9];}d[]={{1,{0},{1}},};t1 got[9];int i;
++ for(i=0;i<1;i++){if(e(got,got,9,d[i].n)==0)h();g(i,d[i].src,d[i].n,got,d[i].want,9);if(d[i].n)h();}}
++-h(){}g(){}
+++void h(){} void g(){}
++ #else
++ int dummy;
++ #endif
++@@ -603,8 +603,9 @@ GMP_PROG_CC_WORKS_PART([$1], [long long reliability test 2],
++    1666 to get an ICE with -O1 -mpowerpc64.  */
++ 
++ #ifdef __GNUC__
++-f(int u){int i;long long x;x=u?~0:0;if(x)for(i=0;i<9;i++);x&=g();if(x)g();}
++-g(){}
+++extern int g();
+++void f(int u){int i;long long x;x=u?~0:0;if(x)for(i=0;i<9;i++);x&=g();if(x)g();}
+++int g(){return 0;}
++ #else
++ int dummy;
++ #endif
++@@ -3323,11 +3324,11 @@ check (va_alist)
++   ret = vsnprintf (buf, 4, fmt, ap);
++ 
++   if (strcmp (buf, "hel") != 0)
++-    exit (1);
+++    return 1;
++ 
++   /* allowed return values */
++   if (ret != -1 && ret != 3 && ret != 11)
++-    exit (2);
+++    return 2;
++ 
++   return 0;
++ }
++@@ -3336,7 +3337,7 @@ int
++ main ()
++ {
++ $i
++-  exit (0);
+++  return 0;
++ }
++ ],
++       [:],
++@@ -3469,7 +3470,7 @@ cat >conftest.c <<EOF
++ int
++ main ()
++ {
++-  exit(0);
+++  return 0;
++ }
++ EOF
++ gmp_compile="$1 conftest.c"
++@@ -3543,7 +3544,7 @@ AC_CACHE_CHECK([for build system executable suffix],
++ int
++ main ()
++ {
++-  exit (0);
+++  return 0;
++ }
++ EOF
++ for i in .exe ,ff8 ""; do
++@@ -3577,7 +3578,7 @@ AC_CACHE_CHECK([whether build system compiler is ANSI],
++ int
++ main (int argc, char *argv[])
++ {
++-  exit(0);
+++  return 0;
++ }
++ EOF
++ gmp_compile="$CC_FOR_BUILD conftest.c"
++@@ -3608,10 +3609,11 @@ AC_DEFUN([GMP_CHECK_LIBM_FOR_BUILD],
++ AC_CACHE_CHECK([for build system compiler math library],
++                gmp_cv_check_libm_for_build,
++ [cat >conftest.c <<EOF
+++#include <math.h>
++ int
++ main ()
++ {
++-  exit(0);
+++  return 0;
++ }
++ double d;
++ double
+diff --git a/package/mpir/mpir.mk b/package/mpir/mpir.mk
+index 5dbd760aa1..46cd35e436 100644
+--- a/package/mpir/mpir.mk
++++ b/package/mpir/mpir.mk
+@@ -11,6 +11,8 @@ MPIR_LICENSE = LGPL-3.0+
+ MPIR_LICENSE_FILES = COPYING.LIB
+ MPIR_INSTALL_STAGING = YES
+ MPIR_DEPENDENCIES = gmp host-yasm
++# 0002-Fix-configure-failures-with-Xcode12.patch
++MPIR_AUTORECONF = YES
  
--GTKIOSTREAM_VERSION = v1.8.0
--GTKIOSTREAM_SITE = $(call github,flatmax,gtkiostream,$(GTKIOSTREAM_VERSION))
-+GTKIOSTREAM_VERSION = 1.8.0
-+GTKIOSTREAM_SITE = $(call github,flatmax,gtkiostream,v$(GTKIOSTREAM_VERSION))
- GTKIOSTREAM_LICENSE = GPL-2.0+
- GTKIOSTREAM_LICENSE_FILES = gpl.txt
- 
--- 
-2.43.0
-
+ ifeq ($(BR2_MIPS_NABI32),y)
+ MPIR_CONF_OPTS += ABI=n32
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
