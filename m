@@ -4,48 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 76F3EC3DA70
-	for <buildroot@archiver.kernel.org>; Sat, 20 Jul 2024 21:14:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97B35C3DA49
+	for <buildroot@archiver.kernel.org>; Sat, 20 Jul 2024 21:17:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4A05D40647;
-	Sat, 20 Jul 2024 21:14:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4511740201;
+	Sat, 20 Jul 2024 21:17:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zLWv1Gtsn78m; Sat, 20 Jul 2024 21:13:59 +0000 (UTC)
+ id IVwJ4OKZ3vV5; Sat, 20 Jul 2024 21:17:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A8C674061B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 09832404EF
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A8C674061B;
-	Sat, 20 Jul 2024 21:13:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 09832404EF;
+	Sat, 20 Jul 2024 21:17:49 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id DEE951BF868
- for <buildroot@lists.busybox.net>; Sat, 20 Jul 2024 21:13:54 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0A97B1BF2C7
+ for <buildroot@lists.busybox.net>; Sat, 20 Jul 2024 21:17:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DA05C6068A
- for <buildroot@lists.busybox.net>; Sat, 20 Jul 2024 21:13:54 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id ECABD60731
+ for <buildroot@lists.busybox.net>; Sat, 20 Jul 2024 21:17:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RXpKbAvHwoP0 for <buildroot@lists.busybox.net>;
- Sat, 20 Jul 2024 21:13:54 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id cUzublvDmBi1 for <buildroot@lists.busybox.net>;
+ Sat, 20 Jul 2024 21:17:46 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.200;
+ helo=relay7-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 240D7605E3
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 240D7605E3
- for <buildroot@buildroot.org>; Sat, 20 Jul 2024 21:13:54 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 10BF681840; Sat, 20 Jul 2024 21:13:54 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 20 Jul 2024 23:12:26 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 58983179e4f8849ca4e9d6bb063c2f5bd232235a
-X-Git-Newrev: 6084d904de77ddb99daad7fb9d67dad06fd42526
-X-Patchwork-Hint: ignore
-Message-Id: <20240720211354.10BF681840@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/flashrom: fix satamv handling
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org D684F605E3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D684F605E3
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id D684F605E3
+ for <buildroot@buildroot.org>; Sat, 20 Jul 2024 21:17:45 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id D58E420002;
+ Sat, 20 Jul 2024 21:17:43 +0000 (UTC)
+Date: Sat, 20 Jul 2024 23:17:43 +0200
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20240720231743.0727d3af@windsurf>
+In-Reply-To: <20240720153113.1371411-1-fontaine.fabrice@gmail.com>
+References: <20240720153113.1371411-1-fontaine.fabrice@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1721510264;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=dj2/na3RvXzwHAvchUhFie+OoSUTASqtzXtFi4t/ldo=;
+ b=CyKWRXXH9uu4GWzA0KsEohPT+3qHG7y00COO/GJEqBkQZwQCbM5rCswnLcCypG+ddRr41v
+ 7omVCtJSJOEELWkz+fsxJxpGaORu43fKzoEAfMS1A8S1VnbewwoH3sRaEXxMWEXVpRkFPI
+ 0GaTcwL99QEYA/0DXJHDETZlg/7yo4+egsHXWqbpynKnuz9tNQgQ006R1iWxjPtnfoAZ6P
+ clnYZyC484E75SykV4uMbjsolRl9B59RwGtThfokB71l9SfHajIxfM2pyE74c1maoM5BHV
+ SHSBUVCuvI0Z0x7oO9v52oO9PoNhpO9q6RkhH/uMpNdWzA8399HQCiuB/vFg2Q==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=CyKWRXXH
+Subject: Re: [Buildroot] [PATCH 1/1] package/zabbix: fix patch fuzz
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,52 +82,57 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Alexey Lukyanchuk <skif@skif-web.ru>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6084d904de77ddb99daad7fb9d67dad06fd42526
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sat, 20 Jul 2024 17:31:13 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-satamv is only available on x86 resulting in the following build failure
-since switch to meson-package in commit
-37dded43ae681e8319d7b76f9a612c71991467a9:
+> Fix patch fuzz to avoid the following build failure raised since commit
+> 8f88a644ed7d6c9ea55fd4fbe9d7f37055920016 which reduced the fuzz factor:
+> 
+> Applying 0002-fix-build-with-libressl-3.5.0.patch using patch:
+> patching file include/zbxcomms.h
+> Hunk #1 succeeded at 210 (offset -43 lines).
+> patching file src/libs/zbxcomms/tls.c
+> Hunk #1 FAILED at 30.
+> 1 out of 1 hunk FAILED -- saving rejects to file src/libs/zbxcomms/tls.c.rej
+> 
+> While at it, also fix Upstream tags
+> 
+> Fixes: 8f88a644ed7d6c9ea55fd4fbe9d7f37055920016
+>  - http://autobuild.buildroot.org/results/75dfe12312b5479669fcdfea623d93880c675e13
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-../output-1/build/flashrom-1.3.0/meson.build:475:6: ERROR: Problem encountered: satamv selected but not supported on this platform
+Thanks applied. Please note that the URL from which we download this
+tarball no longer works:
 
-Fixes: 37dded43ae681e8319d7b76f9a612c71991467a9
- - http://autobuild.buildroot.org/results/c689bf039d7686a9b42c6fcb84f87b555a9bcfb6
+--2024-07-20 23:15:29--  https://cdn.zabbix.com/zabbix/sources/stable/6.2/zabbix-6.2.7.tar.gz
+Resolving cdn.zabbix.com (cdn.zabbix.com)... 2606:4700:20::ac43:4504, 2606:4700:20::681a:694, 2606:4700:20::681a:794, ...
+Connecting to cdn.zabbix.com (cdn.zabbix.com)|2606:4700:20::ac43:4504|:443... connected.
+HTTP request sent, awaiting response... 404 Not Found
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/flashrom/flashrom.mk | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> -[Upstream status: not sent (no feedback on first patch)]
+> +Upstream: not sent (no feedback on first patch)
 
-diff --git a/package/flashrom/flashrom.mk b/package/flashrom/flashrom.mk
-index 0b474caab4..478b53e1ac 100644
---- a/package/flashrom/flashrom.mk
-+++ b/package/flashrom/flashrom.mk
-@@ -65,7 +65,6 @@ FLASHROM_PROGRAMMERS += \
- 	nicintel_eeprom \
- 	nicintel_spi \
- 	ogp_spi \
--	satamv \
- 	satasii
- 
- ifeq ($(BR2_i386)$(BR2_x86_64),y)
-@@ -74,7 +73,8 @@ FLASHROM_PROGRAMMERS += \
- 	atapromise \
- 	nic3com \
- 	nicnatsemi \
--	nicrealtek
-+	nicrealtek \
-+	satamv
- endif
- endif
- 
+Zabbix is one of those not really open-source projects. It's driven by
+a company, released under AGPLv3 so that they can create a business
+incentive for their customers to purchase a commercial license. It
+looks like if you want to contribute you need to sign a Contributor
+License Agreement. See the details
+at https://www.zabbix.com/developers, if you're brave enough.
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
