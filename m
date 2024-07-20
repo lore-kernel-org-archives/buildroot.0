@@ -4,48 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AC260C3DA59
-	for <buildroot@archiver.kernel.org>; Sat, 20 Jul 2024 21:22:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4BEBBC3DA49
+	for <buildroot@archiver.kernel.org>; Sat, 20 Jul 2024 21:22:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 726D440657;
-	Sat, 20 Jul 2024 21:22:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 10A74405F8;
+	Sat, 20 Jul 2024 21:22:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MPRuJZy_Emu3; Sat, 20 Jul 2024 21:22:16 +0000 (UTC)
+ id GDprCkgkLm29; Sat, 20 Jul 2024 21:22:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CACC74065F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C1FBA405FA
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CACC74065F;
-	Sat, 20 Jul 2024 21:22:15 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 28AA11BF2C7
- for <buildroot@lists.busybox.net>; Sat, 20 Jul 2024 21:22:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C1FBA405FA;
+	Sat, 20 Jul 2024 21:22:36 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id BF6511BF2C7
+ for <buildroot@lists.busybox.net>; Sat, 20 Jul 2024 21:22:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 16551605E3
- for <buildroot@lists.busybox.net>; Sat, 20 Jul 2024 21:22:12 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id AC0EF405F8
+ for <buildroot@lists.busybox.net>; Sat, 20 Jul 2024 21:22:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id V6m-jJXgQF7x for <buildroot@lists.busybox.net>;
- Sat, 20 Jul 2024 21:22:11 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jC6MPgP_6HLF for <buildroot@lists.busybox.net>;
+ Sat, 20 Jul 2024 21:22:33 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::222;
+ helo=relay2-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 28118605E0
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 28118605E0
- for <buildroot@buildroot.org>; Sat, 20 Jul 2024 21:22:11 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 13F6886EBB; Sat, 20 Jul 2024 21:22:11 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 20 Jul 2024 23:21:56 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4649372e87bd33f6e159b585796137bbedf4fd3a
-X-Git-Newrev: 9c8f6dc5e4d7244b493e290c055202cadc9a12cb
-X-Patchwork-Hint: ignore
-Message-Id: <20240720212211.13F6886EBB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support/testing: add gpsd runtime testing
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 57767405FA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 57767405FA
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 57767405FA
+ for <buildroot@buildroot.org>; Sat, 20 Jul 2024 21:22:32 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id D2D5440002;
+ Sat, 20 Jul 2024 21:22:29 +0000 (UTC)
+Date: Sat, 20 Jul 2024 23:22:28 +0200
+To: Julien Olivain <ju.o@free.fr>
+Message-ID: <20240720232228.290e88b3@windsurf>
+In-Reply-To: <20240720173834.302209-1-ju.o@free.fr>
+References: <20240720173834.302209-1-ju.o@free.fr>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1721510550;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=tETSXx35sh6bIhf9LtbEicef8FcBmuRoFYieV+DPHKw=;
+ b=oK80PcquftLFQ+YOPWZ7e7liEdC8G4xLmMmjv6qO0YuFDAUtiiID2LkvIPfHujU5/ZRD3E
+ h+kv3E8kdXh2P6kR3zkuAFiu3AelRvWbSanGCw8L1xyHkui4mt9abmNHSw0nUbLU2pM/Sh
+ LzVn569Zz8T2p07bkxC2XbfV+uMUuy+HGTfEUpttGTyp4PdbWH78I0OjUwv6NIEVZx1Vwu
+ nylFuXUug13pBDQmtwC7hdU44Ze8m2zV11Fc+J10WtiJZnon6m3UZyrNCWB0tYzH1gIvQP
+ fM2KvA4GmtxxDhC6bO5X2ArVaaSpQ4apRSzsqv+duwKTKtDlNoF+nBVBmwwIvQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=oK80Pcqu
+Subject: Re: [Buildroot] [PATCH 1/1] support/testing: add gpsd runtime
+ testing
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,110 +83,36 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9c8f6dc5e4d7244b493e290c055202cadc9a12cb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sat, 20 Jul 2024 19:38:34 +0200
+Julien Olivain <ju.o@free.fr> wrote:
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- DEVELOPERS                                         |  2 +
- support/testing/tests/package/test_gpsd.py         | 56 ++++++++++++++++++++++
- .../test_gpsd/rootfs-overlay/root/udp-nmea.log     |  6 +++
- 3 files changed, 64 insertions(+)
+> Signed-off-by: Julien Olivain <ju.o@free.fr>
+> ---
+>  DEVELOPERS                                    |  2 +
+>  support/testing/tests/package/test_gpsd.py    | 56 +++++++++++++++++++
+>  .../rootfs-overlay/root/udp-nmea.log          |  6 ++
+>  3 files changed, 64 insertions(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 06eef3740f..e5fe7b25a5 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1870,6 +1870,8 @@ F:	support/testing/tests/package/test_gnuplot.py
- F:	support/testing/tests/package/test_gnuplot/
- F:	support/testing/tests/package/test_gnuradio.py
- F:	support/testing/tests/package/test_gnuradio/
-+F:	support/testing/tests/package/test_gpsd.py
-+F:	support/testing/tests/package/test_gpsd/
- F:	support/testing/tests/package/test_gzip.py
- F:	support/testing/tests/package/test_highway.py
- F:	support/testing/tests/package/test_hwloc.py
-diff --git a/support/testing/tests/package/test_gpsd.py b/support/testing/tests/package/test_gpsd.py
-new file mode 100644
-index 0000000000..deed586c17
---- /dev/null
-+++ b/support/testing/tests/package/test_gpsd.py
-@@ -0,0 +1,56 @@
-+import os
-+import time
-+
-+import infra.basetest
-+
-+
-+class TestGpsd(infra.basetest.BRTest):
-+    rootfs_overlay = \
-+        infra.filepath("tests/package/test_gpsd/rootfs-overlay")
-+    # This test is using the gpsfake Python script.
-+    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-+        f"""
-+        BR2_PACKAGE_GPSD=y
-+        BR2_PACKAGE_PYTHON3=y
-+        BR2_ROOTFS_OVERLAY="{rootfs_overlay}"
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
-+
-+    def test_run(self):
-+        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        self.emulator.boot(arch="armv5",
-+                           kernel="builtin",
-+                           options=["-initrd", cpio_file])
-+        self.emulator.login()
-+
-+        # We check the program can execute.
-+        self.assertRunOk("gpsd --version")
-+
-+        # Since gpsd needs a real GPS device, we stop the service.
-+        self.assertRunOk("/etc/init.d/S50gpsd stop")
-+
-+        # We start the "gpsfake" GPS emulator instead.
-+        cmd = "gpsfake"
-+        cmd += " --slow --cycle 0.1 --quiet"
-+        cmd += "/root/udp-nmea.log &> /dev/null &"
-+        self.assertRunOk(cmd)
-+
-+        # Wait a bit, to let the gpsfake and gpsd to settle...
-+        time.sleep(3 * self.timeout_multiplier)
-+
-+        # List the GPS devices. We should see our local UDP test GPS.
-+        out, ret = self.emulator.run("gpsctl")
-+        self.assertEqual(ret, 0)
-+        self.assertTrue(out[0].startswith("udp://127.0.0.1"))
-+        self.assertIn("NMEA0183", out[0])
-+
-+        # Collect some of our fake GPS data, and check we got the
-+        # coordinates from our test data file.
-+        # Our expected coordinates are:
-+        # https://www.openstreetmap.org/#map=19/43.60439/1.44336
-+        out, ret = self.emulator.run("gpscsv --header 0 --count 3")
-+        self.assertEqual(ret, 0)
-+        _, gps_lat, gps_long, _ = out[0].split(",")
-+        self.assertAlmostEqual(float(gps_lat), 43.60439)
-+        self.assertAlmostEqual(float(gps_long), 1.44336)
-diff --git a/support/testing/tests/package/test_gpsd/rootfs-overlay/root/udp-nmea.log b/support/testing/tests/package/test_gpsd/rootfs-overlay/root/udp-nmea.log
-new file mode 100644
-index 0000000000..f3730da7c5
---- /dev/null
-+++ b/support/testing/tests/package/test_gpsd/rootfs-overlay/root/udp-nmea.log
-@@ -0,0 +1,6 @@
-+# Name: NMEA 0183 messages for gpsd Buildroot test
-+# Transport: UDP
-+# For packet format, see:
-+# https://gpsd.gitlab.io/gpsd/NMEA.html
-+$GPGGA,123456.789,4336.2634,N,0126.6016,E,1,04,1.7,143.5,M,,,,*3A
-+$GPZDA,123456.789,20,07,2024,2,00*64
+Thanks, applied!
+
+> +        # Collect some of our fake GPS data, and check we got the
+> +        # coordinates from our test data file.
+> +        # Our expected coordinates are:
+> +        # https://www.openstreetmap.org/#map=19/43.60439/1.44336
+
+Nice choice of location :-)
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
