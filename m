@@ -4,49 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7013AC3DA49
-	for <buildroot@archiver.kernel.org>; Sat, 20 Jul 2024 21:04:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 331D3C3DA49
+	for <buildroot@archiver.kernel.org>; Sat, 20 Jul 2024 21:05:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3CF3740204;
-	Sat, 20 Jul 2024 21:04:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EB49B40204;
+	Sat, 20 Jul 2024 21:05:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4R1-ZQ2Y0CVY; Sat, 20 Jul 2024 21:04:56 +0000 (UTC)
+ id WkwAB2Jc84-J; Sat, 20 Jul 2024 21:05:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1C3284023C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A650640281
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1C3284023C;
-	Sat, 20 Jul 2024 21:04:56 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 283EF1BF2C7
- for <buildroot@lists.busybox.net>; Sat, 20 Jul 2024 21:04:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A650640281;
+	Sat, 20 Jul 2024 21:05:07 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 40D2F1BF2C7
+ for <buildroot@lists.busybox.net>; Sat, 20 Jul 2024 21:05:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 20A4981865
- for <buildroot@lists.busybox.net>; Sat, 20 Jul 2024 21:04:54 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id C060740290
+ for <buildroot@lists.busybox.net>; Sat, 20 Jul 2024 21:05:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 824vDXs6dmoQ for <buildroot@lists.busybox.net>;
- Sat, 20 Jul 2024 21:04:53 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id iBClRZ-R_VMW for <buildroot@lists.busybox.net>;
+ Sat, 20 Jul 2024 21:05:03 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.200;
+ helo=relay7-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5957C80B36
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5957C80B36
- for <buildroot@buildroot.org>; Sat, 20 Jul 2024 21:04:53 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3D68286E6E; Sat, 20 Jul 2024 21:04:53 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 20 Jul 2024 23:03:41 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e66a1a5e864ba78f78b01ea373bbb6ad31f0cba4
-X-Git-Newrev: 16598146fbbbf492283f7b42d7c02e0d9fde2000
-X-Patchwork-Hint: ignore
-Message-Id: <20240720210453.3D68286E6E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gtkiostream: fix build with
- alsa-lib
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 5A3AC402BB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5A3AC402BB
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 5A3AC402BB
+ for <buildroot@buildroot.org>; Sat, 20 Jul 2024 21:05:03 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 7B52220003;
+ Sat, 20 Jul 2024 21:05:01 +0000 (UTC)
+Date: Sat, 20 Jul 2024 23:05:00 +0200
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20240720230500.26fbd225@windsurf>
+In-Reply-To: <20240720195505.1052184-1-fontaine.fabrice@gmail.com>
+References: <20240720195505.1052184-1-fontaine.fabrice@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1721509501;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=fY9NevdR69REC2HsBt94Nph/uaILVmYrUr5MsO9bAdo=;
+ b=Lp+3a05pJoO654jV1Z9xJzYAkDa8dgXaoiXCQI8VOozRg/W5ADip6DLGZfVpgrHbswj06h
+ 47oDXNEF78AwIDm5y/QBEy70UoT9DeSlZNiZjYkI2L2uA7Cesf0BZYnY08FSBHxKDco8Kj
+ uEQbSvuzLEkvPrft0+2hoLBX5k+OKdY2DLI84gMeuUqJBHbk46ueY/ATOMv/4ePrrJ2E4l
+ PuNWERSjrVm41/7DwRtqiZzQdrFKUOgYmFDYlqldLsF+x39uWH1OpJ6hmMPK0IV/D9ZiGZ
+ fl+b/wl/jvGijob4q4gU7JxkXA2ylZgu8HGZQ/XwxCVaD7OdxUzn0zmW50hsgg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=Lp+3a05p
+Subject: Re: [Buildroot] [PATCH 1/1] package/zsh: fix build with gcc >= 14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,48 +82,46 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Phil Eichinger <phil.eichinger@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=16598146fbbbf492283f7b42d7c02e0d9fde2000
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sat, 20 Jul 2024 21:55:05 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-Select BR2_PACKAGE_ALSA_LIB_MIXER if needed to fix the following build
-failure with alsa-lib raised since the addition of the package in commit
-fab48302865e5c0c98d91b696bc90e75e38189bb:
+> Fix the following build failure with gcc >= 14:
+> 
+> termcap.c:45:14: error: conflicting types for 'boolcodes'; have 'char *[]'
+>    45 | static char *boolcodes[] = {
+>       |              ^~~~~~~~~
+> In file included from ../../Src/zshterm.h:1,
+>                  from ../../Src/zsh_system.h:932,
+>                  from ../../Src/zsh.mdh:17,
+>                  from termcap.mdh:17,
+>                  from termcap.c:38:
+> /home/autobuild/autobuild/instance-0/output-1/host/or1k-buildroot-linux-uclibc/sysroot/usr/include/term.h:764:56: note: previous declaration of 'boolcodes' with type 'const char * const[]'
+>   764 | extern NCURSES_EXPORT_VAR(NCURSES_CONST char * const ) boolcodes[];
+>       |                                                        ^~~~~~~~~
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/fe2f7170465e96cc1de3dae139a25f615331f4b9
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  ...er-types-in-terminfo-global-variable.patch | 51 +++++++++++++++++++
+>  package/zsh/zsh.mk                            |  2 +
+>  2 files changed, 53 insertions(+)
+>  create mode 100644 package/zsh/0001-52383-Avoid-incompatible-pointer-types-in-terminfo-global-variable.patch
 
-In file included from ../include/ALSA/MixerElement.H:20,
-                 from ../include/ALSA/Mixer.H:20,
-                 from ../include/ALSA/ALSA.H:56,
-                 from ALSAControlMonitor.C:19:
-../include/ALSA/MixerElementTypes.H:26:5: error: 'snd_mixer_selem_channel_id_t' does not name a type
-   26 |     snd_mixer_selem_channel_id_t channel; ///< The ALSA channel ID
-      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Applied to master, thanks.
 
-Fixes: fab48302865e5c0c98d91b696bc90e75e38189bb
- - http://autobuild.buildroot.org/results/6be71c9fbdccbdf4f5e540bafa748dda833aeedb
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/gtkiostream/Config.in | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/gtkiostream/Config.in b/package/gtkiostream/Config.in
-index 17480b8ff8..1d1ec27346 100644
---- a/package/gtkiostream/Config.in
-+++ b/package/gtkiostream/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_GTKIOSTREAM
- 	bool "gtkiostream"
- 	depends on BR2_INSTALL_LIBSTDCPP # eigen
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_PACKAGE_ALSA_LIB_MIXER if BR2_PACKAGE_ALSA_LIB
- 	select BR2_PACKAGE_EIGEN
- 	select BR2_PACKAGE_FFTW
- 	select BR2_PACKAGE_FFTW_DOUBLE
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
