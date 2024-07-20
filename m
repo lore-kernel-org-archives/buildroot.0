@@ -4,95 +4,95 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7786C3DA59
-	for <buildroot@archiver.kernel.org>; Sat, 20 Jul 2024 20:17:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67132C3DA59
+	for <buildroot@archiver.kernel.org>; Sat, 20 Jul 2024 20:17:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 676FC81E72;
-	Sat, 20 Jul 2024 20:17:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3556681E76;
+	Sat, 20 Jul 2024 20:17:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PGVIlrdoRRkU; Sat, 20 Jul 2024 20:17:26 +0000 (UTC)
+ id PVchZJ8Shhwe; Sat, 20 Jul 2024 20:17:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 12DA481E50
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E276781E7E
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 12DA481E50;
-	Sat, 20 Jul 2024 20:17:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E276781E7E;
+	Sat, 20 Jul 2024 20:17:29 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A54C61BF2CF
- for <buildroot@lists.busybox.net>; Sat, 20 Jul 2024 20:17:16 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1BBA81BF2CF
+ for <buildroot@lists.busybox.net>; Sat, 20 Jul 2024 20:17:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9F935403A7
- for <buildroot@lists.busybox.net>; Sat, 20 Jul 2024 20:17:16 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0963C40390
+ for <buildroot@lists.busybox.net>; Sat, 20 Jul 2024 20:17:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jB78DByJzEun for <buildroot@lists.busybox.net>;
- Sat, 20 Jul 2024 20:17:15 +0000 (UTC)
+ id ocHqS1z3Lf7k for <buildroot@lists.busybox.net>;
+ Sat, 20 Jul 2024 20:17:17 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::231; helo=mail-lj1-x231.google.com;
+ client-ip=2a00:1450:4864:20::62b; helo=mail-ej1-x62b.google.com;
  envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 73FAD40390
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 73FAD40390
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com
- [IPv6:2a00:1450:4864:20::231])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 73FAD40390
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 94CA0403A2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 94CA0403A2
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com
+ [IPv6:2a00:1450:4864:20::62b])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 94CA0403A2
  for <buildroot@buildroot.org>; Sat, 20 Jul 2024 20:17:15 +0000 (UTC)
-Received: by mail-lj1-x231.google.com with SMTP id
- 38308e7fff4ca-2eeb1ba0481so45668121fa.2
+Received: by mail-ej1-x62b.google.com with SMTP id
+ a640c23a62f3a-a77b60cafecso313081766b.1
  for <buildroot@buildroot.org>; Sat, 20 Jul 2024 13:17:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1721506633; x=1722111433;
+ d=1e100.net; s=20230601; t=1721506634; x=1722111434;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=iRoe/sJrxf/0mxRAEFhN+XMoEpxYxXjAWP3w64Gc1q0=;
- b=rkqrZMAikPsJeB7yOs2zym3l7umgaKUeOWHnyHIu/4N4916/vU8qxHrOm2WeWU2LUN
- cS+lsQn38k7AlAVtYN8lSvqw8cKo/BiL8OhnkJ48xGYcAt0bLZfyzIfgL7BGwQ72gGXm
- TwHTjhkPBbTso2b4vxw/PPfE+Q9COdV68z9WmuGf4NUoXgaD7w+JCHqnEbj61M8+b38I
- elxpdbTGKafS2MHVWIGaoa1LMrCPKbyPBm581Fzrz2BjMJ6XLuzxrnljBVIpmgXRWBsI
- 3p/AKkx80U2exMtNQSfK3eTcQCXn+CqOfDWKaCygKTic5qyIcGTjVPu0tfwcXgnkG2qw
- 1mxw==
-X-Gm-Message-State: AOJu0Yx7N9S/aHcEIW3pOPKGRY1XfpLIXa5AzXSxv/jqvjqil4KEmXc6
- Jg89xY7s7aWbtYmCkuhat62r/1/CtJrH0666txDljNjZlhkBbZU56otr00RzJkfmHFPay+ewwDc
- aCe4=
-X-Google-Smtp-Source: AGHT+IFD8PiAh7Mb0rU4TaqpBKEUjCnDEKwTc8F/mBBBZ7EZaIMSLUE9YxXXqjgnSscV+S5Bobx6Zg==
-X-Received: by 2002:a05:6512:2309:b0:52d:b1c9:34e with SMTP id
- 2adb3069b0e04-52efb798f1bmr1364978e87.21.1721506632973; 
- Sat, 20 Jul 2024 13:17:12 -0700 (PDT)
+ bh=PPfgidpmLVAB14IuLGtPiruRZ6gI5sz7mTCh2C1/GZQ=;
+ b=hzNgKpnN/ju7igPQftBBl/FAX2tDVK79efYrDwpWz8xhngoG9flk8lcCtE/w1IWche
+ W9kwaEz5NayYpeojE+1llQpJP3JIFl6MsPY4w3GoDUh+KhdhfOM69zo/dxBbRStwPphk
+ 8tCefRxZbNhKOBaCck2CFxL002qCzLiDLFYheZGSMF9pEP7u9cXwvgj/ook1nsD2qmvN
+ /8qtkkhmBtU47eyOPsyJ3n703aKiNsnk6IuIphAM3+m0ndF73ehlndtjw2L5SmhnKIlA
+ QXP0GNGfdg94W/T8blV7T0n8NbvP/iQTr8VQTotplb6hhtYxMA3MGT7k4a2kOE9/O1Gg
+ OCMA==
+X-Gm-Message-State: AOJu0YzcCTdOC5iSHijmmEsknq3dQ61v6mQkNBdM5KYkJTqZHyvDyxJp
+ WpZiNeh842TBlelwB67HZCKJkfVyetyGDimcorsUY5zPlir3o2IccJgldlL08f9paqF5dC8MMhM
+ 2lFY=
+X-Google-Smtp-Source: AGHT+IGhBxC9dqsJpfBkVZCTHM1CoOZXnb+ZuRwbYfQtz30wjlbspej1HXn7hfZcOQ7CkD/N3KKEOw==
+X-Received: by 2002:a17:907:94c9:b0:a7a:3904:f45 with SMTP id
+ a640c23a62f3a-a7a4bf39545mr159754566b.8.1721506633858; 
+ Sat, 20 Jul 2024 13:17:13 -0700 (PDT)
 Received: from dario-ThinkPad-T14s-Gen-2i.amarulasolutions.com
  (host-80-180-25-123.retail.telecomitalia.it. [80.180.25.123])
  by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-a7a3c7e7871sm204723766b.96.2024.07.20.13.17.12
+ a640c23a62f3a-a7a3c7e7871sm204723766b.96.2024.07.20.13.17.13
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 20 Jul 2024 13:17:12 -0700 (PDT)
+ Sat, 20 Jul 2024 13:17:13 -0700 (PDT)
 From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Sat, 20 Jul 2024 22:16:58 +0200
-Message-ID: <20240720201659.2253736-4-dario.binacchi@amarulasolutions.com>
+Date: Sat, 20 Jul 2024 22:16:59 +0200
+Message-ID: <20240720201659.2253736-5-dario.binacchi@amarulasolutions.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240720201659.2253736-1-dario.binacchi@amarulasolutions.com>
 References: <20240720201659.2253736-1-dario.binacchi@amarulasolutions.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1721506633; x=1722111433;
+ d=amarulasolutions.com; s=google; t=1721506634; x=1722111434;
  darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=iRoe/sJrxf/0mxRAEFhN+XMoEpxYxXjAWP3w64Gc1q0=;
- b=nfDgANV5MF48S3FRGbU1JCN0NdIGt06/DK1XY8Alo/i+pZAKRkB0dqpJtql4Wy3ZLY
- dl4lNS+N4BpxZJLFyA857Ba8S+5mp3PeuE6GBt67lnnieLnn5IDNQHSnfASyRu9iiDS5
- CvEEKaAreldOJuopG6tCw8idydibRUvBiyHoE=
+ bh=PPfgidpmLVAB14IuLGtPiruRZ6gI5sz7mTCh2C1/GZQ=;
+ b=gC9TADmjV8tTEusu/6pmWQ5zjYfl5ucRuQV0Tg6Hy9Kmo3oxYemNQRnOFmAu0NDUaE
+ jGotydaxhLV2XAh2DIPQmPcegN7lvCJ8oIchD/WbB8HT0GguyeM4k0LD/eFCv8G5HxJP
+ dtfwyLoOLI7JVxydzJshOKzgRWBzfyzoGXuR8=
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=amarulasolutions.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=nfDgANV5
-Subject: [Buildroot] [PATCH 4/5] configs/beaglebone_defconfig: add hashes
- for Linux/headers/U-Boot
+ dkim=pass (1024-bit key) header.d=amarulasolutions.com
+ header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
+ header.b=gC9TADmj
+Subject: [Buildroot] [PATCH 5/5] configs/beaglebone: bump Linux to
+ 6.6.32-ti-rt-arm32-r7 and U-Boot to 2024.07
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -111,71 +111,72 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The patch adds .hash files for Linux, Linux headers and U-Boot and then
-enables BR2_DOWNLOAD_FORCE_CHECK_HASHES. With this, we can now drop the
-defconfig from .checkpackageignore.
+The patch bumps the Linux kernel to version 6.6.32-ti-rt-arm32-r7 and
+U-Boot to version 2024.07.
 
+Tested on beaglebone black.
+
+Link: https://github.com/beagleboard/linux/releases/tag/6.6.32-ti-rt-arm32-r7
 Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 ---
- .checkpackageignore                                             | 1 -
- .../beaglebone/patches/linux-headers/linux-headers.hash         | 1 +
- board/beagleboard/beaglebone/patches/linux/linux.hash           | 2 ++
- board/beagleboard/beaglebone/patches/uboot/uboot.hash           | 2 ++
- configs/beaglebone_defconfig                                    | 2 ++
- 5 files changed, 7 insertions(+), 1 deletion(-)
- create mode 120000 board/beagleboard/beaglebone/patches/linux-headers/linux-headers.hash
- create mode 100644 board/beagleboard/beaglebone/patches/linux/linux.hash
- create mode 100644 board/beagleboard/beaglebone/patches/uboot/uboot.hash
+ board/beagleboard/beaglebone/patches/linux/linux.hash |  2 +-
+ board/beagleboard/beaglebone/patches/uboot/uboot.hash |  2 +-
+ configs/beaglebone_defconfig                          | 10 +++++-----
+ 3 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 2f40d1e77c6b..2aec21b90faa 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -141,7 +141,6 @@ configs/bananapi_m2_berry_defconfig lib_defconfig.ForceCheckHash
- configs/bananapi_m2_ultra_defconfig lib_defconfig.ForceCheckHash
- configs/bananapi_m2_zero_defconfig lib_defconfig.ForceCheckHash
- configs/bananapro_defconfig lib_defconfig.ForceCheckHash
--configs/beaglebone_defconfig lib_defconfig.ForceCheckHash
- configs/beelink_gs1_defconfig lib_defconfig.ForceCheckHash
- configs/broadcom_northstar_defconfig lib_defconfig.ForceCheckHash
- configs/canaan_kd233_defconfig lib_defconfig.ForceCheckHash
-diff --git a/board/beagleboard/beaglebone/patches/linux-headers/linux-headers.hash b/board/beagleboard/beaglebone/patches/linux-headers/linux-headers.hash
-new file mode 120000
-index 000000000000..5808d92afe89
---- /dev/null
-+++ b/board/beagleboard/beaglebone/patches/linux-headers/linux-headers.hash
-@@ -0,0 +1 @@
-+../linux/linux.hash
-\ No newline at end of file
 diff --git a/board/beagleboard/beaglebone/patches/linux/linux.hash b/board/beagleboard/beaglebone/patches/linux/linux.hash
-new file mode 100644
-index 000000000000..ce0613ad4467
---- /dev/null
+index ce0613ad4467..4a7384d03634 100644
+--- a/board/beagleboard/beaglebone/patches/linux/linux.hash
 +++ b/board/beagleboard/beaglebone/patches/linux/linux.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  6b73d8dca21000030acd2e37aed43f23de2fdd2850a2808722658241df48e671  linux-6.1.80-ti-r34.tar.gz
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  6b73d8dca21000030acd2e37aed43f23de2fdd2850a2808722658241df48e671  linux-6.1.80-ti-r34.tar.gz
++sha256  f1ae7325c6c146e0f852866a3bfd3f90ae1b5f46e414bc99a38384ed677e3721  linux-6.6.32-ti-arm32-r7.tar.gz
 diff --git a/board/beagleboard/beaglebone/patches/uboot/uboot.hash b/board/beagleboard/beaglebone/patches/uboot/uboot.hash
-new file mode 100644
-index 000000000000..bc999536af21
---- /dev/null
+index bc999536af21..fe9b4f53dc63 100644
+--- a/board/beagleboard/beaglebone/patches/uboot/uboot.hash
 +++ b/board/beagleboard/beaglebone/patches/uboot/uboot.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  b99611f1ed237bf3541bdc8434b68c96a6e05967061f992443cb30aabebef5b3  u-boot-2024.01.tar.bz2
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  b99611f1ed237bf3541bdc8434b68c96a6e05967061f992443cb30aabebef5b3  u-boot-2024.01.tar.bz2
++sha256  f591da9ab90ef3d6b3d173766d0ddff90c4ed7330680897486117df390d83c8f  u-boot-2024.07.tar.bz2
 diff --git a/configs/beaglebone_defconfig b/configs/beaglebone_defconfig
-index b1a0c7cda408..28f3c20c00ee 100644
+index 28f3c20c00ee..ca418bed2083 100644
 --- a/configs/beaglebone_defconfig
 +++ b/configs/beaglebone_defconfig
-@@ -7,6 +7,8 @@ BR2_ARM_FPU_VFPV3=y
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
+@@ -3,8 +3,8 @@ BR2_arm=y
+ BR2_cortex_a8=y
+ BR2_ARM_FPU_VFPV3=y
+ 
+-# Linux headers same as kernel, a 6.1 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
++# Linux headers same as kernel, a 6.6 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
  
  # System
-+BR2_GLOBAL_PATCH_DIR="board/beagleboard/beaglebone/patches"
-+BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
+ BR2_GLOBAL_PATCH_DIR="board/beagleboard/beaglebone/patches"
+@@ -19,10 +19,10 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/beagleboard/beaglebone/genimage.cfg"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,beagleboard,linux,6.1.80-ti-r34)/linux-6.1.80-ti-r34.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,beagleboard,linux,6.6.32-ti-arm32-r7)/linux-6.6.32-ti-arm32-r7.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="bb.org"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="am335x-evm am335x-bone am335x-boneblack am335x-bonegreen am335x-evmsk am335x-boneblue am335x-boneblack-wireless am335x-bonegreen-wireless"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="ti/omap/am335x-evm ti/omap/am335x-bone ti/omap/am335x-boneblack ti/omap/am335x-bonegreen ti/omap/am335x-evmsk ti/omap/am335x-boneblue ti/omap/am335x-boneblack-wireless ti/omap/am335x-bonegreen-wireless"
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
  
- # Image
+ # Filesystem
+@@ -33,7 +33,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.01"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.07"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="am335x_evm"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
 -- 
 2.43.0
 
