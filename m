@@ -4,71 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53DDAC3DA59
-	for <buildroot@archiver.kernel.org>; Sat, 20 Jul 2024 21:19:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 660D1C3DA49
+	for <buildroot@archiver.kernel.org>; Sat, 20 Jul 2024 21:22:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0177340285;
-	Sat, 20 Jul 2024 21:19:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 234E5405F8;
+	Sat, 20 Jul 2024 21:22:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HU5rn5KDa4dw; Sat, 20 Jul 2024 21:19:29 +0000 (UTC)
+ id BU8M3ypirMpo; Sat, 20 Jul 2024 21:22:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E1DD44064B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E35D440609
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E1DD44064B;
-	Sat, 20 Jul 2024 21:19:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E35D440609;
+	Sat, 20 Jul 2024 21:22:12 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 855B11BF2C7
- for <buildroot@lists.busybox.net>; Sat, 20 Jul 2024 21:19:27 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id EB5FC1BF2C7
+ for <buildroot@lists.busybox.net>; Sat, 20 Jul 2024 21:22:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 72E2481D02
- for <buildroot@lists.busybox.net>; Sat, 20 Jul 2024 21:19:27 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id D800E81CBA
+ for <buildroot@lists.busybox.net>; Sat, 20 Jul 2024 21:22:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jeKhskdJhr3j for <buildroot@lists.busybox.net>;
- Sat, 20 Jul 2024 21:19:26 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::225;
- helo=relay5-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id lrD_XBZri2Bk for <buildroot@lists.busybox.net>;
+ Sat, 20 Jul 2024 21:22:11 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 5F8F581CBA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5F8F581CBA
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::225])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5F8F581CBA
- for <buildroot@buildroot.org>; Sat, 20 Jul 2024 21:19:26 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id B9DD71C0003;
- Sat, 20 Jul 2024 21:19:24 +0000 (UTC)
-Date: Sat, 20 Jul 2024 23:19:23 +0200
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20240720231923.50b82c43@windsurf>
-In-Reply-To: <20240719211524.10419-1-fontaine.fabrice@gmail.com>
-References: <20240719211524.10419-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1721510364;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=aFqwj2KXNzZ5DG1BrsousJs9tDDL0xcb7HL4hejjerA=;
- b=XpLECYsCy9nd5q8A0OVY2Xjh3gz6nXniuHtVPYd60X3j0n/0Diy/Fd+Slm3aqlaft8/3EG
- gW7VHJAqfPS/dlBZSJbDFo/tOmcynfaZFBOP+/TN24ZKeG+jhsHJ4A1q/4v7A156dKBVrm
- Emty8MePytaeMCX0WBxFxEbGV4Hc6tjUbiWgw4lJwirjNO2X8IX05btLPwLSgfZqniTnQq
- ZwNMDckFolgXdQ55lo3WjT9q5p1+iM6+bbIqHCPdX6H7vFEep1wSVK6lPVeT4g76GxvmB+
- cWfj5wJ3GqyL+YopewUd73o1Xll9ttwm07/KYlhNtygivL6Zx6hnW4th6PL2IA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=XpLECYsC
-Subject: Re: [Buildroot] [PATCH 1/1] package/libmaxminddb: bump to version
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0FDD081316
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0FDD081316
+ for <buildroot@buildroot.org>; Sat, 20 Jul 2024 21:22:11 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id EABEC86E76; Sat, 20 Jul 2024 21:22:10 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 20 Jul 2024 23:18:38 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 183f5399cef8b09b675ef7386a0e4984294e5f59
+X-Git-Newrev: 4649372e87bd33f6e159b585796137bbedf4fd3a
+X-Patchwork-Hint: ignore
+Message-Id: <20240720212210.EABEC86E76@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libmaxminddb: bump to version
  1.10.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -83,30 +60,46 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri, 19 Jul 2024 23:15:24 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=4649372e87bd33f6e159b585796137bbedf4fd3a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> https://github.com/maxmind/libmaxminddb/blob/1.10.0/Changes.md
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/libmaxminddb/libmaxminddb.hash | 2 +-
->  package/libmaxminddb/libmaxminddb.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+https://github.com/maxmind/libmaxminddb/blob/1.10.0/Changes.md
 
-Applied to master, thanks.
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libmaxminddb/libmaxminddb.hash | 2 +-
+ package/libmaxminddb/libmaxminddb.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libmaxminddb/libmaxminddb.hash b/package/libmaxminddb/libmaxminddb.hash
+index f5c84fc905..567a428e42 100644
+--- a/package/libmaxminddb/libmaxminddb.hash
++++ b/package/libmaxminddb/libmaxminddb.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  a80682a89d915fdf60b35d316232fb04ebf36fff27fda9bd39fe8a38d3cd3f12  libmaxminddb-1.9.1.tar.gz
++sha256  5e6db72df423ae225bfe8897069f6def40faa8931f456b99d79b8b4d664c6671  libmaxminddb-1.10.0.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/libmaxminddb/libmaxminddb.mk b/package/libmaxminddb/libmaxminddb.mk
+index 1a1a2e302a..84fc3d11dd 100644
+--- a/package/libmaxminddb/libmaxminddb.mk
++++ b/package/libmaxminddb/libmaxminddb.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBMAXMINDDB_VERSION = 1.9.1
++LIBMAXMINDDB_VERSION = 1.10.0
+ LIBMAXMINDDB_SITE = \
+ 	https://github.com/maxmind/libmaxminddb/releases/download/$(LIBMAXMINDDB_VERSION)
+ LIBMAXMINDDB_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
