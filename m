@@ -4,71 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2BA2C3DA59
-	for <buildroot@archiver.kernel.org>; Sat, 20 Jul 2024 21:12:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66939C3DA49
+	for <buildroot@archiver.kernel.org>; Sat, 20 Jul 2024 21:13:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7C8934055F;
-	Sat, 20 Jul 2024 21:12:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2B67F4053B;
+	Sat, 20 Jul 2024 21:13:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kAGxNLaUzqRx; Sat, 20 Jul 2024 21:12:47 +0000 (UTC)
+ id yuJv05YmVEBE; Sat, 20 Jul 2024 21:13:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4BA02405D5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 07F1F4055F
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4BA02405D5;
-	Sat, 20 Jul 2024 21:12:47 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A81CB1BF2C7
- for <buildroot@lists.busybox.net>; Sat, 20 Jul 2024 21:12:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 07F1F4055F;
+	Sat, 20 Jul 2024 21:13:56 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id DCA531BF2C7
+ for <buildroot@lists.busybox.net>; Sat, 20 Jul 2024 21:13:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B173D4055F
- for <buildroot@lists.busybox.net>; Sat, 20 Jul 2024 21:12:44 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id C8BFB81DEB
+ for <buildroot@lists.busybox.net>; Sat, 20 Jul 2024 21:13:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id f9B9p9A6Shvd for <buildroot@lists.busybox.net>;
- Sat, 20 Jul 2024 21:12:43 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::227;
- helo=relay7-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id odjbbm8MDZVT for <buildroot@lists.busybox.net>;
+ Sat, 20 Jul 2024 21:13:54 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 5ADEA405E6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5ADEA405E6
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5ADEA405E6
- for <buildroot@buildroot.org>; Sat, 20 Jul 2024 21:12:43 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 9EA1620002;
- Sat, 20 Jul 2024 21:12:41 +0000 (UTC)
-Date: Sat, 20 Jul 2024 23:12:40 +0200
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20240720231240.2f744e2f@windsurf>
-In-Reply-To: <20240720145018.1087079-1-fontaine.fabrice@gmail.com>
-References: <20240720145018.1087079-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1721509961;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=pxJ5c8CTqwLCMnV7zCw6vPCOucioCzIraH4ammOhgiA=;
- b=OjIiww5g59LwPqauORoMJzccDK9su36Oko0edKlLkJKIgwWC1boKcDybXyxNepfG2J7dZ1
- Zk/oMj1qMzKGlkrVm70bV9oWkX0EKR/6kWNj71MeTHVwTWvT3PrWAf03rGgD7noBi9Xtye
- QQ/P7eGHaOtGRAd8zqbnXb8pToTo9bSmXDMav8WDL5YWZvRovaOd+gN8a17yUdl40oMn3Y
- 5ijhd8xOoAQVcdiWckZuVVm3IVvrytW8cbabean+vzfgsYYYbWTqxe5FBYbKg7LDA/iXn9
- IMtZJdNj5NupN6QUm/cQXXB8Py7LDlBlyIZLTw7qF8EDXXuKFwMPRjs6oJq9uw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=OjIiww5g
-Subject: Re: [Buildroot] [PATCH 1/1] package/flashrom: fix satamv handling
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0AF4C81D3A
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0AF4C81D3A
+ for <buildroot@buildroot.org>; Sat, 20 Jul 2024 21:13:54 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id F40B884440; Sat, 20 Jul 2024 21:13:53 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 20 Jul 2024 23:12:13 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: f04a95f79f087869a44ea3d63d55ce7b27b8e922
+X-Git-Newrev: 58983179e4f8849ca4e9d6bb063c2f5bd232235a
+X-Patchwork-Hint: ignore
+Message-Id: <20240720211353.F40B884440@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/flashrom: disable -Werror
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,36 +59,49 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat, 20 Jul 2024 16:50:18 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=58983179e4f8849ca4e9d6bb063c2f5bd232235a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> satamv is only available on x86 resulting in the following build failure
-> since switch to meson-package in commit
-> 37dded43ae681e8319d7b76f9a612c71991467a9:
-> 
-> ../output-1/build/flashrom-1.3.0/meson.build:475:6: ERROR: Problem encountered: satamv selected but not supported on this platform
-> 
-> Fixes: 37dded43ae681e8319d7b76f9a612c71991467a9
->  - http://autobuild.buildroot.org/results/c689bf039d7686a9b42c6fcb84f87b555a9bcfb6
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/flashrom/flashrom.mk | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+Disable -Werror to avoid the following build failure raised since switch
+to meson-package in commit 37dded43ae681e8319d7b76f9a612c71991467a9:
 
-Thanks, I had apparently missed this one.
+../stlinkv3_spi.c: In function 'stlinkv3_spi_init':
+../stlinkv3_spi.c:508:12: error: 'stlinkv3_handle' may be used uninitialized [-Werror=maybe-uninitialized]
+  508 |         if (!stlinkv3_handle) {
+      |            ^
+../stlinkv3_spi.c:485:31: note: 'stlinkv3_handle' was declared here
+  485 |         libusb_device_handle *stlinkv3_handle;
+      |                               ^~~~~~~~~~~~~~~
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Fixes: 37dded43ae681e8319d7b76f9a612c71991467a9
+ - http://autobuild.buildroot.org/results/eecabbdd0d21344991379a57e605845e73ef679e
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/flashrom/flashrom.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/package/flashrom/flashrom.mk b/package/flashrom/flashrom.mk
+index 60774b9621..0b474caab4 100644
+--- a/package/flashrom/flashrom.mk
++++ b/package/flashrom/flashrom.mk
+@@ -15,7 +15,8 @@ FLASHROM_CONF_OPTS = \
+ 	-Dclassic_cli_print_wiki=disabled \
+ 	-Dich_descriptors_tool=enabled \
+ 	-Dtests=disabled \
+-	-Duse_internal_dmi=true
++	-Duse_internal_dmi=true \
++	-Dwerror=false
+ 
+ FLASHROM_PROGRAMMERS = \
+ 	buspirate_spi \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
