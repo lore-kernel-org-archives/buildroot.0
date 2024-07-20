@@ -4,48 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7880BC3DA70
-	for <buildroot@archiver.kernel.org>; Sat, 20 Jul 2024 21:09:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 651B1C3DA49
+	for <buildroot@archiver.kernel.org>; Sat, 20 Jul 2024 21:09:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F35D8405AD;
-	Sat, 20 Jul 2024 21:09:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2D7BB405B3;
+	Sat, 20 Jul 2024 21:09:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nSFgPMLpn1Sp; Sat, 20 Jul 2024 21:09:06 +0000 (UTC)
+ id IpwdTKWprIaR; Sat, 20 Jul 2024 21:09:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3AA71405A1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A26A8405B5
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3AA71405A1;
-	Sat, 20 Jul 2024 21:09:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A26A8405B5;
+	Sat, 20 Jul 2024 21:09:09 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 42FA91BF2C7
- for <buildroot@lists.busybox.net>; Sat, 20 Jul 2024 21:08:59 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 52F291BF2C7
+ for <buildroot@lists.busybox.net>; Sat, 20 Jul 2024 21:09:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2347B81DF4
- for <buildroot@lists.busybox.net>; Sat, 20 Jul 2024 21:08:58 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4BA2E81D3A
+ for <buildroot@lists.busybox.net>; Sat, 20 Jul 2024 21:09:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Mo2RYzQ9c3tf for <buildroot@lists.busybox.net>;
- Sat, 20 Jul 2024 21:08:57 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id zefN5M4v3W17 for <buildroot@lists.busybox.net>;
+ Sat, 20 Jul 2024 21:09:02 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
+ helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5494D819BC
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5494D819BC
- for <buildroot@buildroot.org>; Sat, 20 Jul 2024 21:08:57 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3F86A86EA3; Sat, 20 Jul 2024 21:08:57 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 20 Jul 2024 23:07:52 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: da45ae33040a55d9eaa6a05c75c5e7f24fe73cf4
-X-Git-Newrev: 3a4bd98d11550081db622327fd8cab570c0ad077
-X-Patchwork-Hint: ignore
-Message-Id: <20240720210857.3F86A86EA3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libupnp: bump to version 1.4.19
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 43E5E819BC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 43E5E819BC
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 43E5E819BC
+ for <buildroot@buildroot.org>; Sat, 20 Jul 2024 21:09:02 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 67653FF803;
+ Sat, 20 Jul 2024 21:09:00 +0000 (UTC)
+Date: Sat, 20 Jul 2024 23:08:59 +0200
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20240720230859.78025649@windsurf>
+In-Reply-To: <20240719212354.19307-1-fontaine.fabrice@gmail.com>
+References: <20240719212354.19307-1-fontaine.fabrice@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1721509740;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=4Q5IDFLRhpw0NHtjUvkkLSIUg6TOIqlQekaZzYdhGzo=;
+ b=kr+CxCLc955zo1isOo3vs+8eMbV66luF7y5dPbsSXMXr5tAQHXoZkNvp6bfJH7MC3pryws
+ XDH9b8q97uZkJNuve7yiGaFPuz1salHEbq4XEcvnWJUyXmw+6N5s4eQpJlakQhs3vOrGOR
+ F28kBszvduUD/zXkNQVI9f/yz3kEX82DPXRHHXcRi6asgR4c3dEcoc4aT+g7k/rcrsUYVA
+ 4C30H8v5i+E0cX6Eq5ro39IiG2Gu5Y1QGLacmekE8vVOXXZ8Xv9VSC8h0CzwGA62cRkmDa
+ EO+BE5mIRYEHzRWEZra2Nlq8htm5NbkpCANOCEqy3YixskQ1WFXnjd0ptSf0IA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=kr+CxCLc
+Subject: Re: [Buildroot] [PATCH 1/1] package/liburing: bump to version 2.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,46 +82,36 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3a4bd98d11550081db622327fd8cab570c0ad077
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Fri, 19 Jul 2024 23:23:54 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-https://github.com/pupnp/pupnp/blob/release-1.14.19/ChangeLog
+> - Drop patch (already in version)
+> - Update hash of README (typo fixed with
+>   https://github.com/axboe/liburing/commit/2c89b57f3d55b2e3098a629e8aabe659fd5ec138)
+> 
+> https://github.com/axboe/liburing/blob/liburing-2.6/CHANGELOG
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  ...01-src-arch-aarch64-fix-uclibc-build.patch | 39 -------------------
+>  package/liburing/liburing.hash                |  4 +-
+>  package/liburing/liburing.mk                  |  2 +-
+>  3 files changed, 3 insertions(+), 42 deletions(-)
+>  delete mode 100644 package/liburing/0001-src-arch-aarch64-fix-uclibc-build.patch
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/libupnp/libupnp.hash | 2 +-
- package/libupnp/libupnp.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Applied to master, thanks.
 
-diff --git a/package/libupnp/libupnp.hash b/package/libupnp/libupnp.hash
-index 6fd4678c0d..86437a7339 100644
---- a/package/libupnp/libupnp.hash
-+++ b/package/libupnp/libupnp.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  16a7cee93ce2868ae63ab1a8164dc7de43577c59983b9f61293a310d6888dceb  libupnp-1.14.18.tar.bz2
-+sha256  b6423c573b758d09539f5e6c4712c1a9fd35dccf835f81d99473d50a50ad49b0  libupnp-1.14.19.tar.bz2
- sha256  c8b99423cad48bb44e2cf52a496361404290865eac259a82da6d1e4331ececb3  COPYING
-diff --git a/package/libupnp/libupnp.mk b/package/libupnp/libupnp.mk
-index 61e52c095a..cd148d14d0 100644
---- a/package/libupnp/libupnp.mk
-+++ b/package/libupnp/libupnp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBUPNP_VERSION = 1.14.18
-+LIBUPNP_VERSION = 1.14.19
- LIBUPNP_SOURCE = libupnp-$(LIBUPNP_VERSION).tar.bz2
- LIBUPNP_SITE = \
- 	http://downloads.sourceforge.net/project/pupnp/release-$(LIBUPNP_VERSION)
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
