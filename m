@@ -4,48 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 049D0C3DA49
-	for <buildroot@archiver.kernel.org>; Sat, 20 Jul 2024 21:12:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 51666C3DA49
+	for <buildroot@archiver.kernel.org>; Sat, 20 Jul 2024 21:12:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A8AD44055F;
-	Sat, 20 Jul 2024 21:12:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1D21F405D5;
+	Sat, 20 Jul 2024 21:12:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id votG6uNa31Zt; Sat, 20 Jul 2024 21:12:08 +0000 (UTC)
+ id oKHonhi1XLXc; Sat, 20 Jul 2024 21:12:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 233C9404AA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 12471405F9
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 233C9404AA;
-	Sat, 20 Jul 2024 21:12:08 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1AF9A1BF2C7
+	by smtp4.osuosl.org (Postfix) with ESMTP id 12471405F9;
+	Sat, 20 Jul 2024 21:12:12 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id C015C1BF2C7
  for <buildroot@lists.busybox.net>; Sat, 20 Jul 2024 21:12:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 15C1760731
+ by smtp1.osuosl.org (Postfix) with ESMTP id AB47781D3A
  for <buildroot@lists.busybox.net>; Sat, 20 Jul 2024 21:12:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8wKT_YaU-ATw for <buildroot@lists.busybox.net>;
- Sat, 20 Jul 2024 21:12:06 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id g2vEUTcSDXGf for <buildroot@lists.busybox.net>;
+ Sat, 20 Jul 2024 21:12:01 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::225;
+ helo=relay5-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 16F996068A
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 16F996068A
- for <buildroot@buildroot.org>; Sat, 20 Jul 2024 21:12:06 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 03D2786EB2; Sat, 20 Jul 2024 21:12:06 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 20 Jul 2024 23:11:48 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 124087c51c6bf751b0caa5cd6327f7ce3d89d0e1
-X-Git-Newrev: f04a95f79f087869a44ea3d63d55ce7b27b8e922
-X-Patchwork-Hint: ignore
-Message-Id: <20240720211206.03D2786EB2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support/testing: add mawk runtime test
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org C87B981ABA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C87B981ABA
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id C87B981ABA
+ for <buildroot@buildroot.org>; Sat, 20 Jul 2024 21:12:00 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 13AB21C0002;
+ Sat, 20 Jul 2024 21:11:59 +0000 (UTC)
+Date: Sat, 20 Jul 2024 23:11:58 +0200
+To: Julien Olivain <ju.o@free.fr>
+Message-ID: <20240720231158.425c096d@windsurf>
+In-Reply-To: <20240720114557.100691-1-ju.o@free.fr>
+References: <20240720114557.100691-1-ju.o@free.fr>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1721509919;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=2cQI/fT3l+K+SL8ntcB6Zz84qqzCb+EW8me6EfLouVY=;
+ b=nrctr8VQRzpJSZAkDEYsO7xn6tgb9MJV05GcpzIg9AYADgYgVa9wSIELqri5v7VYoxZv0r
+ 5r6r7SssW5vOwgEwTjS4OAFG1RFaI0VznSQTvXFx4SDtHbMtszVfgTW+OIJAPzah80ka2A
+ H+wuatQfKJLgGyqRLEAGoOfskvyL9qGh70JH6+h5kUMPm8OUcyA81+yjx/aNAhvnhJGtbw
+ VE8ryUs1n6XcTEWX5IshYde7CVHlfg7/4o3lm5wXeIUrEbGux9UDYkYHYADGRI8xrwX31w
+ iHZGpmZsU+bTcbsoIue26gTosEfStDCX/m3UpzdtQyAfIzqSgXdeWr+Yaq23DQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=nrctr8VQ
+Subject: Re: [Buildroot] [PATCH 1/1] support/testing: add mawk runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,154 +82,29 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f04a95f79f087869a44ea3d63d55ce7b27b8e922
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sat, 20 Jul 2024 13:45:57 +0200
+Julien Olivain <ju.o@free.fr> wrote:
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- DEVELOPERS                                 |   1 +
- support/testing/tests/package/test_mawk.py | 114 +++++++++++++++++++++++++++++
- 2 files changed, 115 insertions(+)
+> Signed-off-by: Julien Olivain <ju.o@free.fr>
+> ---
+>  DEVELOPERS                                 |   1 +
+>  support/testing/tests/package/test_mawk.py | 114 +++++++++++++++++++++
+>  2 files changed, 115 insertions(+)
+>  create mode 100644 support/testing/tests/package/test_mawk.py
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index c4f1565edd..06eef3740f 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1901,6 +1901,7 @@ F:	support/testing/tests/package/test_lzip.py
- F:	support/testing/tests/package/test_lsof.py
- F:	support/testing/tests/package/test_lz4.py
- F:	support/testing/tests/package/test_lzop.py
-+F:	support/testing/tests/package/test_mawk.py
- F:	support/testing/tests/package/test_mdadm.py
- F:	support/testing/tests/package/test_mdadm/
- F:	support/testing/tests/package/test_micropython.py
-diff --git a/support/testing/tests/package/test_mawk.py b/support/testing/tests/package/test_mawk.py
-new file mode 100644
-index 0000000000..5caf77c116
---- /dev/null
-+++ b/support/testing/tests/package/test_mawk.py
-@@ -0,0 +1,114 @@
-+import os
-+
-+import infra.basetest
-+
-+
-+class TestMawk(infra.basetest.BRTest):
-+    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-+        """
-+        BR2_PACKAGE_MAWK=y
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
-+
-+    def basic_mawk_tests(self):
-+        # Check the program can execute
-+        self.assertRunOk("mawk --version")
-+
-+        # Check "mawk" can return a specific exit code
-+        code = 123
-+        cmd = "mawk 'BEGIN { exit(" + str(code) + "); }'"
-+        _, exit_code = self.emulator.run(cmd)
-+        self.assertEqual(exit_code, code)
-+
-+        # Run a basic print program
-+        test_string = "Hello Buildroot"
-+        cmd = "mawk 'BEGIN {print \"" + test_string + "\"; }'"
-+        output, exit_code = self.emulator.run(cmd)
-+        self.assertEqual(exit_code, 0)
-+        self.assertEqual(output[0], test_string)
-+
-+    def create_test_data(self):
-+        # Create some test data
-+        entries = ["one", "two", "three", "four"]
-+        for entry in entries:
-+            self.assertRunOk(f"echo {entry} >> data1.txt")
-+
-+    def add_line_numbers(self):
-+        # Add line numbers with mawk
-+        cmd = "mawk '{ print NR \"\\t\" $1; }' data1.txt > data2.txt"
-+        self.assertRunOk(cmd)
-+
-+    def sum_column(self):
-+        # Check the sum of the first column is 1+2+3+4 == 10
-+        awk_prg = "BEGIN { SUM = 0; } { SUM = SUM + $1; } END { print SUM; }"
-+        cmd = f"mawk '{awk_prg}' data2.txt"
-+        output, exit_code = self.emulator.run(cmd)
-+        self.assertEqual(exit_code, 0)
-+        self.assertEqual(int(output[0]), 10)
-+
-+    def uppercase_column(self):
-+        # Extract only column 2 and convert it to upper case
-+        cmd = "mawk '{ print toupper($2); }' data2.txt > data3.txt"
-+        self.assertRunOk(cmd)
-+
-+        # Prepare the same output using "data1.txt" and the "tr" command,
-+        # for verification
-+        cmd = "tr a-z A-Z < data1.txt > data3-tr.txt"
-+        self.assertRunOk(cmd)
-+
-+        # "mawk" and "tr" output are expected to be the same
-+        self.assertRunOk("cmp data3.txt data3-tr.txt")
-+
-+    def mawk_head(self):
-+        # Show the first 2 lines of a file
-+        cmd = "mawk 'NR <= 2 { print $0; }' data2.txt > data4.txt"
-+        self.assertRunOk(cmd)
-+
-+        # Prepare the same output using the "head" command
-+        cmd = "head -2 data2.txt > data4-head.txt"
-+        self.assertRunOk(cmd)
-+
-+        # "mawk" and "tr" output are expected to be the same
-+        self.assertRunOk("cmp data4.txt data4-head.txt")
-+
-+    def mawk_specific(self):
-+        # Use the "-W dump" mawk specific option.
-+        # See: https://invisible-island.net/mawk/manpage/mawk.html
-+        # We create an arbitrary awk program with an integer and
-+        # string constant. We then check those constants are in the
-+        # mawk "assembler" output.
-+        awk_int = 12345
-+        awk_str = "Buildroot"
-+        awk_expr = f"print ($1 + {awk_int}) \"{awk_str}\";"
-+        awk_prg = "BEGIN { " + awk_expr + " }"
-+        cmd = f"mawk -W dump '{awk_prg}'"
-+        output, exit_code = self.emulator.run(cmd)
-+        self.assertEqual(exit_code, 0)
-+        out_str = "\n".join(output)
-+        self.assertIn(str(awk_int), out_str)
-+        self.assertIn(awk_str, out_str)
-+
-+    def mawk_numeric(self):
-+        value = 1234
-+        squared_value = value * value
-+        cmd = "mawk 'BEGIN { print sqrt(" + str(squared_value) + "); }'"
-+        output, exit_code = self.emulator.run(cmd)
-+        self.assertEqual(exit_code, 0)
-+        self.assertEqual(int(output[0]), value)
-+
-+    def test_run(self):
-+        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        self.emulator.boot(arch="armv5",
-+                           kernel="builtin",
-+                           options=["-initrd", cpio_file])
-+        self.emulator.login()
-+
-+        self.basic_mawk_tests()
-+        self.create_test_data()
-+        self.add_line_numbers()
-+        self.sum_column()
-+        self.uppercase_column()
-+        self.mawk_head()
-+        self.mawk_specific()
-+        self.mawk_numeric()
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
