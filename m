@@ -4,71 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 47465C3DA61
-	for <buildroot@archiver.kernel.org>; Sun, 21 Jul 2024 16:17:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11E19C3DA61
+	for <buildroot@archiver.kernel.org>; Sun, 21 Jul 2024 16:18:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 08A74605F0;
-	Sun, 21 Jul 2024 16:17:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CEC21605D2;
+	Sun, 21 Jul 2024 16:18:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id scvpKOLtrXgU; Sun, 21 Jul 2024 16:17:27 +0000 (UTC)
+ id 2vFW4oEB-CWK; Sun, 21 Jul 2024 16:18:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 10B3960605
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E6CCE605F0
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 10B3960605;
-	Sun, 21 Jul 2024 16:17:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E6CCE605F0;
+	Sun, 21 Jul 2024 16:18:25 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 9942B1BF321
- for <buildroot@lists.busybox.net>; Sun, 21 Jul 2024 16:17:26 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B02621BF321
+ for <buildroot@lists.busybox.net>; Sun, 21 Jul 2024 16:18:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 86FAE60605
- for <buildroot@lists.busybox.net>; Sun, 21 Jul 2024 16:17:26 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9DDAD605F0
+ for <buildroot@lists.busybox.net>; Sun, 21 Jul 2024 16:18:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ISQaqSIpKL6H for <buildroot@lists.busybox.net>;
- Sun, 21 Jul 2024 16:17:25 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.196;
- helo=relay4-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id t93RilGXGBum for <buildroot@lists.busybox.net>;
+ Sun, 21 Jul 2024 16:18:23 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::221;
+ helo=relay1-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 5B00F605F0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5B00F605F0
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5B00F605F0
- for <buildroot@buildroot.org>; Sun, 21 Jul 2024 16:17:24 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 170FFE0003;
- Sun, 21 Jul 2024 16:17:21 +0000 (UTC)
-Date: Sun, 21 Jul 2024 18:17:21 +0200
-To: Julien Olivain <ju.o@free.fr>
-Message-ID: <20240721181721.279e4f7c@windsurf>
-In-Reply-To: <20240719173723.546583-1-ju.o@free.fr>
-References: <20240719173723.546583-1-ju.o@free.fr>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 93F1B605D2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 93F1B605D2
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 93F1B605D2
+ for <buildroot@buildroot.org>; Sun, 21 Jul 2024 16:18:23 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 68073240006;
+ Sun, 21 Jul 2024 16:18:20 +0000 (UTC)
+Date: Sun, 21 Jul 2024 18:18:19 +0200
+To: "J. =?UTF-8?B?TmV1c2Now6RmZXI=?= via buildroot" <buildroot@buildroot.org>
+Message-ID: <20240721181819.48656d0c@windsurf>
+In-Reply-To: <20240719-micropython-v1-1-9d71f1125e49@gmx.net>
+References: <20240719-micropython-v1-0-9d71f1125e49@gmx.net>
+ <20240719-micropython-v1-1-9d71f1125e49@gmx.net>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1721578642;
+ d=bootlin.com; s=gm1; t=1721578700;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=BWX3KYao4xd8ko4nIfa+74xA1E2Mg/T1V9jhByVTFb4=;
- b=iqN4vSvVdiBIJXCHo/0HVHvPSDIcBCOy7PRX52/BPM/KQvZEPH67X5P63nJ40hIO4eMJr0
- NaCwzxOamvMHR85KhmSeEVb1hqQiSiCwCocALHLD5EDJIvjK0oNO8kJmj+FDjiIlFTekni
- 6xf6yJK6tZ/fkp/wYSrZjZQj1ShBNYW17oGbcbq5HJmbE/xvd+FHpSQ724xvdrCVv55rLS
- enUHVYk3zN3l4aFcf9hV7pN/hWta+/QFpwTsdiiLBERI1EzE/ceZFw0n0jUCdG1IRS63v4
- hlPD+tyv/h0WGzIr/C+eqYRA0e+NGVlENhIFSaTIjUR2R/rL3Z5gedh6hwZouQ==
+ bh=5BAy0LohMpln98jbSA9yfpTLfuGMQ39YWT0JuU0SYWk=;
+ b=Zr9AaRRz5Hj4w7fGi7W/Y+oLBthnFKlEEuS9mECRbUt7/KuXVYrjkA4qG2qCP6+Rbqdjo0
+ 0MPvM84AFDTuPtdT0yEqEeoo/JM6L8Fb+Un5ewHTSrUtG4No0kz7waqY00ZK6x99wHrNsf
+ dGUB8j8ax/TO1owJd8dBpRBxACn9QIdUvrN1pQGHPdgkaKoGQTzzyQzd3DnSdKP4XHOl3Q
+ e+Bmu8zGC4GR58GX+7qbPd5MaBfzLrFhLNtC/jbNarq14KGUU4vxs99YsWt6asU34Sqqox
+ iiv3hK4iej2W/ohwtdaysrqlxLDWJk5Pv5xgQ/bSm2vx5+8zzyURA/FjDMEZmg==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=iqN4vSvV
-Subject: Re: [Buildroot] [PATCH 1/1] package/kexec: bump to version 2.0.29
+ header.s=gm1 header.b=Zr9AaRRz
+Subject: Re: [Buildroot] [PATCH 1/2] package/micropython: Change URL to HTTPS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,43 +83,21 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Chris Packham <judge.packham@gmail.com>,
+ "J. =?UTF-8?B?TmV1c2Now6RmZXI=?=" <j.neuschaefer@gmx.net>,
+ "J. =?UTF-8?B?TmV1c2Now6RmZXI=?=" <j.ne@posteo.net>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri, 19 Jul 2024 19:37:23 +0200
-Julien Olivain <ju.o@free.fr> wrote:
-
-> For release announce, see [1].
-> 
-> This commit removes the package patch, which is now included in this
-> new version.
-> 
-> The license hash also changed, due to a FSF address update. See [2].
-> This commit also adds a comment in the hash file about the pgp
-> signature check.
-> 
-> [1] https://lists.infradead.org/pipermail/kexec/2024-July/030452.html
-> [2] https://git.kernel.org/pub/scm/utils/kernel/kexec/kexec-tools.git/commit/?id=f53bcef5063c70960b2b8eb8990722d5c9d1b99e
-> 
-> Signed-off-by: Julien Olivain <ju.o@free.fr>
-> ---
->  ...uilding-on-x86_64-with-binutils-2-41.patch | 94 -------------------
->  package/kexec/kexec.hash                      |  6 +-
->  package/kexec/kexec.mk                        |  2 +-
->  3 files changed, 5 insertions(+), 97 deletions(-)
->  delete mode 100644 package/kexec/0001-Fix-building-on-x86_64-with-binutils-2-41.patch
-
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+T24gRnJpLCAxOSBKdWwgMjAyNCAxNjoxNzo1OSArMDIwMApKLiBOZXVzY2jDpGZlciB2aWEgYnVp
+bGRyb290IDxidWlsZHJvb3RAYnVpbGRyb290Lm9yZz4gd3JvdGU6Cgo+IFNpZ25lZC1vZmYtYnk6
+IEouIE5ldXNjaMOkZmVyIDxqLm5ldXNjaGFlZmVyQGdteC5uZXQ+Cj4gLS0tCj4gIHBhY2thZ2Uv
+bWljcm9weXRob24vQ29uZmlnLmluIHwgMiArLQo+ICAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRp
+b24oKyksIDEgZGVsZXRpb24oLSkKCkJvdGggYXBwbGllZCwgdGhhbmtzIQoKVGhvbWFzCi0tIApU
+aG9tYXMgUGV0YXp6b25pLCBDVE8sIEJvb3RsaW4KRW1iZWRkZWQgTGludXggYW5kIEtlcm5lbCBl
+bmdpbmVlcmluZwpodHRwczovL2Jvb3RsaW4uY29tCl9fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1
+aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8v
+YnVpbGRyb290Cg==
