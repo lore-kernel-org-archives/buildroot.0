@@ -4,66 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2C12C3DA5D
-	for <buildroot@archiver.kernel.org>; Sun, 21 Jul 2024 17:37:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 069F7C3DA61
+	for <buildroot@archiver.kernel.org>; Sun, 21 Jul 2024 17:38:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6149B60605;
-	Sun, 21 Jul 2024 17:37:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C9FB0600D1;
+	Sun, 21 Jul 2024 17:38:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ejACUcjVjN5w; Sun, 21 Jul 2024 17:37:12 +0000 (UTC)
+ id AaXccd8SHCsm; Sun, 21 Jul 2024 17:38:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B448D60631
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CE548605BB
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B448D60631;
-	Sun, 21 Jul 2024 17:37:12 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 636F11BF2C3
- for <buildroot@lists.busybox.net>; Sun, 21 Jul 2024 17:37:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CE548605BB;
+	Sun, 21 Jul 2024 17:38:53 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id CD5771BF2C3
+ for <buildroot@lists.busybox.net>; Sun, 21 Jul 2024 17:38:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 509C660631
- for <buildroot@lists.busybox.net>; Sun, 21 Jul 2024 17:37:11 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id C86B2810B3
+ for <buildroot@lists.busybox.net>; Sun, 21 Jul 2024 17:38:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id S92PUoxar1Wg for <buildroot@lists.busybox.net>;
- Sun, 21 Jul 2024 17:37:10 +0000 (UTC)
-Received-SPF: None (mailfrom) identity=mailfrom; client-ip=176.9.89.163;
- helo=serv15.avernis.de; envelope-from=br015@umbiko.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org CAC2B60605
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CAC2B60605
-Received: from serv15.avernis.de (serv15.avernis.de [176.9.89.163])
- by smtp3.osuosl.org (Postfix) with ESMTPS id CAC2B60605
- for <buildroot@buildroot.org>; Sun, 21 Jul 2024 17:37:08 +0000 (UTC)
-Received: by serv15.avernis.de (Postfix) with ESMTPSA id 4D0C9BDE64FF;
- Sun, 21 Jul 2024 19:37:05 +0200 (CEST)
-From: Andreas Ziegler <br015@umbiko.net>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id FEI_j_xUzzke for <buildroot@lists.busybox.net>;
+ Sun, 21 Jul 2024 17:38:52 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::32c; helo=mail-wm1-x32c.google.com;
+ envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9C326810B0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9C326810B0
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com
+ [IPv6:2a00:1450:4864:20::32c])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 9C326810B0
+ for <buildroot@buildroot.org>; Sun, 21 Jul 2024 17:38:51 +0000 (UTC)
+Received: by mail-wm1-x32c.google.com with SMTP id
+ 5b1f17b1804b1-4266fd395eeso24887605e9.3
+ for <buildroot@buildroot.org>; Sun, 21 Jul 2024 10:38:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1721583529; x=1722188329;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=Lfrt7eOMiQeMZ69C1j7PNEd5zltM+KCSRkrKEh7DpUg=;
+ b=MRHDYkTkAI5TgiWo0D+P2QQoXfoD/0ld8sQae7L3k8+2396mAMa06yrvZ0m66tynMx
+ StlYhQtSEcZmRwG5ksQAaBb+ARPDxc4gLYCGAr23UY/fJmNkx8BvcmXW9DxeI5lAvsDG
+ iA9g/FOLlN5xxfMJEfmKYqnWyfmO0s77jvh5MTE8WMTGFlGIzEbHgz/zMNVi1wn//Dvb
+ Kzuk8z75I+Pn+zaWehNCysDl9g3AfsJeVP7IssHM3PpuX3NPdl4g+bBVZfIMm9cNEHhw
+ MiSt/wKCZEd03jj3toYVwNu9PbtLSFDRLKPzArWd3Q7FmMPFiWD47SWbzDA0D51wBxTa
+ atxw==
+X-Gm-Message-State: AOJu0Yz5dzVeP9LJbWUmrepJTTpitXbU6qCCZRpcYoloAgyUiVNR2v7Y
+ 82S1R+zFTpOnZFqihO9xMyzG8RJ3XZ5/8SjLClbwTmUeHdNTmET2+H+azA==
+X-Google-Smtp-Source: AGHT+IFhCF6cEom5qBixW1TXnuB1oEoSCMjuao97cD47DZizsAoNjSmZlFQmVGxG00+9kt1y+WiVlw==
+X-Received: by 2002:a05:600c:19c7:b0:426:6551:3174 with SMTP id
+ 5b1f17b1804b1-427dc58f4aamr34648815e9.29.1721583529026; 
+ Sun, 21 Jul 2024 10:38:49 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-785-215.w83-197.abo.wanadoo.fr.
+ [83.197.112.215]) by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-427d692996bsm98001375e9.37.2024.07.21.10.38.48
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 21 Jul 2024 10:38:48 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 21 Jul 2024 19:36:04 +0200
-Message-ID: <20240721173604.13824-1-br015@umbiko.net>
+Date: Sun, 21 Jul 2024 19:38:31 +0200
+Message-ID: <20240721173831.2350206-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240721182342.6403c1d7@windsurf>
-References: <20240721182342.6403c1d7@windsurf>
 MIME-Version: 1.0
-X-Virus-Scanned: clamav-milter 1.0.5 at serv15.avernis.de
-X-Virus-Status: Clean
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=umbiko.net; s=mail; 
- t=1721583426; bh=UokSvo1AhVj5IjUCuxDLscktHFKmFBJIuarr0Yuf7zw=;
- h=From:To:Cc:Subject:Date:In-Reply-To:References;
- b=R/yIqqgfKurixO/sYGqBjNUv9VgDIRcA7toMP+9326qHZURl06x8Cw0GW5mCFwS2q
- 1n8O1P84b5/bISKT8E6ovcxJHfvI0zNPj1QxW+hWottQJJ28VLBxdXIpTwPgV3ww0R
- P5OEXcF6vIbyc2iQG0lNVGbw17p5kgvsEQ82Jjd4=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=umbiko.net
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=umbiko.net header.i=@umbiko.net header.a=rsa-sha256
- header.s=mail header.b=R/yIqqgf
-Subject: [Buildroot] [PATCH v2] package/mpd: rebase init script on layout
- introduced by openssh
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1721583529; x=1722188329; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=Lfrt7eOMiQeMZ69C1j7PNEd5zltM+KCSRkrKEh7DpUg=;
+ b=WG+mpIHc/Fc80wlw6ZloXOg79hVF2j7xmmOpaeuWdG7rpzltTFwMmU9o4T83SwNvBi
+ AELRF7hIFxlpyZKJGCwNdVOPiY0inwJb/TP6KKYO6ZwT74C6KBiIFJezdwcceoWkSwzI
+ 3WMQTWb5vxc77orT8r5GyGUhH1cdCJuilO8LSX7Ar9MQiCJOB9gc2cy0l5Vyb/lb1fnB
+ 89AWXbfen66RAAjXwb1xDZr87XemC5nPafB7t14FNaedfyMQljyFlpr5PsewID5UTWde
+ oG11bmC9aOfAXavoCZjtDpQLSAo5NLsATTeaRZP4erJXKeoJveT0huht4/blZjXgOQ9h
+ ylGg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=WG+mpIHc
+Subject: [Buildroot] [PATCH 1/1] package/picotool: fix libusb dependencies
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,113 +99,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Andreas Ziegler <br015@umbiko.net>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Marcus Hoffmann <bubu@bubu1.eu>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Rebase S95mpd on commit 1f743f4 (package/openssh: tidy up init script)
+libusb dependencies are wrong since the addition of the package in
+commit f7aac1c008f9c59f8c669bade17864b099221065:
+ - BR2_HOST_GCC_AT_LEAST_4_9 is used instead of
+   BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ - BR2_TOOLCHAIN_HAS_THREADS is missing
 
-$ utils/check-package package/mpd/S95mpd 
-61 lines processed
-0 warnings generated
+Fixes: f7aac1c008f9c59f8c669bade17864b099221065
+ - http://autobuild.buildroot.org/results/22689afc092e33b6e3c1c7ffea0d0e3b5bf76d99
 
-(smoke test on live system)
-
-Signed-off-by: Andreas Ziegler <br015@umbiko.net>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-Changes v1 -> v2
- - use --pidfile in startup of service [Thomas Petazzoni]
+ package/picotool/Config.in | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
- package/mpd/S95mpd | 64 +++++++++++++++++++++++++++++++++-------------
- 1 file changed, 46 insertions(+), 18 deletions(-)
-
-diff --git a/package/mpd/S95mpd b/package/mpd/S95mpd
-index a258930b3e..ac971e04a2 100644
---- a/package/mpd/S95mpd
-+++ b/package/mpd/S95mpd
-@@ -1,33 +1,61 @@
- #!/bin/sh
-+#
-+# S95mpd	Starts Music Player daemon.
-+#
-+# shellcheck disable=SC2317 # functions are called via variable
-+
-+DAEMON="mpd"
-+PIDFILE="/var/run/$DAEMON.pid"
+diff --git a/package/picotool/Config.in b/package/picotool/Config.in
+index 0046f8ad61..bbbcef405d 100644
+--- a/package/picotool/Config.in
++++ b/package/picotool/Config.in
+@@ -1,10 +1,13 @@
+-comment "picotool needs a toolchain w/ C++ and gcc >= 4.9"
+-	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_HOST_GCC_AT_LEAST_4_9
++comment "picotool needs a toolchain w/ C++, threads, gcc >= 4.9"
++	depends on !BR2_INSTALL_LIBSTDCPP || \
++		BR2_TOOLCHAIN_HAS_THREADS || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
  
- # Sanity checks
--test -f /etc/mpd.conf || exit 0
-+[ -f /etc/$DAEMON.conf ] || exit 0
- 
- start() {
--	printf "Starting mpd: "
--	start-stop-daemon --start --quiet --background --exec /usr/bin/mpd \
--		&& echo "OK" || echo "FAIL"
-+	printf "Starting %s: " "$DAEMON"
-+	start-stop-daemon --start --pidfile "$PIDFILE" \
-+		--exec "/usr/bin/$DAEMON"
-+	status=$?
-+	if [ "$status" -eq 0 ]; then
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+	fi
-+	return "$status"
- }
- 
- stop() {
--	printf "Stopping mpd: "
--	start-stop-daemon --stop --quiet --pidfile /var/run/mpd.pid \
--		&& echo "OK" || echo "FAIL"
-+	printf "Stopping %s: " "$DAEMON"
-+	start-stop-daemon --stop --pidfile "$PIDFILE" \
-+		--exec "/usr/bin/$DAEMON"
-+	status=$?
-+	if [ "$status" -eq 0 ]; then
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+	fi
-+	# $DAEMON deletes its PID file on exit, wait for it to be gone
-+	while [ -f "$PIDFILE" ]; do
-+		sleep 0.1
-+	done
-+	return "$status"
-+}
-+
-+restart() {
-+	stop
-+	start
-+}
-+
-+reload() {
-+	restart
- }
- 
- case "$1" in
--	start)
--		start
--		;;
--	stop)
--		stop
--		;;
--	restart|reload)
--		stop
--		sleep 1
--		start
-+	start|stop|reload|restart)
-+		"$1"
- 		;;
- 	*)
--		echo "Usage: $0 {start|stop|restart}"
-+		echo "Usage: $0 {start|stop|reload|restart}"
- 		exit 1
- esac
-+
-+exit $?
+ config BR2_PACKAGE_PICOTOOL
+ 	bool "picotool"
+ 	depends on BR2_INSTALL_LIBSTDCPP
+-	depends on BR2_HOST_GCC_AT_LEAST_4_9 # libusb
++	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libusb
+ 	select BR2_PACKAGE_LIBUSB
+ 	select BR2_PACKAGE_PICO_SDK
+ 	help
 -- 
 2.43.0
 
