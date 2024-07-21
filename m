@@ -4,91 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0FCB7C3DA5D
-	for <buildroot@archiver.kernel.org>; Sun, 21 Jul 2024 16:50:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A2FCC3DA5D
+	for <buildroot@archiver.kernel.org>; Sun, 21 Jul 2024 16:57:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CC37F605B0;
-	Sun, 21 Jul 2024 16:50:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 20D70605D4;
+	Sun, 21 Jul 2024 16:57:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RppsAqmpVpXl; Sun, 21 Jul 2024 16:50:29 +0000 (UTC)
+ id uRJbi6qPl12Q; Sun, 21 Jul 2024 16:57:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BED38605D4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 297B0605DD
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BED38605D4;
-	Sun, 21 Jul 2024 16:50:29 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id F10371BF321
- for <buildroot@lists.busybox.net>; Sun, 21 Jul 2024 16:50:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 297B0605DD;
+	Sun, 21 Jul 2024 16:57:27 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B5ED11BF321
+ for <buildroot@lists.busybox.net>; Sun, 21 Jul 2024 16:57:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E8B2880A7E
- for <buildroot@lists.busybox.net>; Sun, 21 Jul 2024 16:50:28 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id A325640120
+ for <buildroot@lists.busybox.net>; Sun, 21 Jul 2024 16:57:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id H8W9RdmOfr24 for <buildroot@lists.busybox.net>;
- Sun, 21 Jul 2024 16:50:28 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5NVjh_D0eqHv for <buildroot@lists.busybox.net>;
+ Sun, 21 Jul 2024 16:57:24 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::329; helo=mail-wm1-x329.google.com;
+ client-ip=2a00:1450:4864:20::433; helo=mail-wr1-x433.google.com;
  envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org AF6B880A7C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AF6B880A7C
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
- [IPv6:2a00:1450:4864:20::329])
- by smtp1.osuosl.org (Postfix) with ESMTPS id AF6B880A7C
- for <buildroot@buildroot.org>; Sun, 21 Jul 2024 16:50:27 +0000 (UTC)
-Received: by mail-wm1-x329.google.com with SMTP id
- 5b1f17b1804b1-42726d6eca5so25281915e9.1
- for <buildroot@buildroot.org>; Sun, 21 Jul 2024 09:50:27 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 16A44400F3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 16A44400F3
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
+ [IPv6:2a00:1450:4864:20::433])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 16A44400F3
+ for <buildroot@buildroot.org>; Sun, 21 Jul 2024 16:57:23 +0000 (UTC)
+Received: by mail-wr1-x433.google.com with SMTP id
+ ffacd0b85a97d-3687fd09251so1297782f8f.0
+ for <buildroot@buildroot.org>; Sun, 21 Jul 2024 09:57:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1721580625; x=1722185425;
+ d=1e100.net; s=20230601; t=1721581041; x=1722185841;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=1OUvjkH6SrsA0/nqnrGV2fSMcHBOinCFIcm8yggHv04=;
- b=Yo7JS1jgmlGRcbgDgrZPK1Vo8XMs3OIdp5YlRpdvljR2YpyDXUAL+3UtH9/lgLuha8
- LGcM+o5s5cpnK+OU/pVYJRF74+W8xvW68XTBGLAZAInU2TtYR1J96pX+x+IgOJGbeu1j
- MluyfmCB206ub+Xqx0hgY+9GVZnRs/RYEN1w6X9enOAvyjitc8saOMX6ElkdLPDHAJYx
- CRKqe/cdhdz8Z82UpJyQpNcAetEqTVp2XCaljkLuZrDZGf2E9t1DpSHj955xFL0/On1t
- HtlILUs5oKosrodBpvtTU/hkiNa0p3yUSt+g3xvYfdf9mcFmJOvBlII3fj02o107Dvgy
- 5Ijw==
-X-Gm-Message-State: AOJu0YwGO7rnhyo2OXRl+as+bpKgfHIYSttLhIcoDLgPcbBbJExDPkTO
- Gnjr2vI1l42dul4CfE1n3rQYR40YfkoczsjELT0l9yK5iEGGvEkrlqBM5w==
-X-Google-Smtp-Source: AGHT+IEp0PY2XqRweTEiq7hHjl+Sb1E5TaZwcoUkrap4K2lHqk4WqEmzFTCbYXpP24mZR+bOQe9R0A==
-X-Received: by 2002:a05:600c:468e:b0:426:6ead:5709 with SMTP id
- 5b1f17b1804b1-427dc520518mr28376495e9.9.1721580625128; 
- Sun, 21 Jul 2024 09:50:25 -0700 (PDT)
+ bh=ghARpuOJmEVX9ylRlfjawosjTxGsE5uPyqCnO6Cp4YU=;
+ b=lID5Qh71cw/tJpMC2VmH7KHMtPQb0SxzghDpPuEMmJxmsKIGnbIumsYB2e1Vq+XXE6
+ u2UPsBEgOdNKK7i1KkxQq8RsR2A3at99nW/2eax960WrcTAEYa3QAyX0BBagzFOpsadz
+ 11Qkpqxhx5K6emjFJ+NjvvggxxlaoOF+u5T1Re1BeA/xif7shOITYxkLwnVaf30DhNwH
+ MMGMy6Q8fZGC7rzUrXvV5o0t4+dxS5+W+rpuoRYRBStHwu/cB7M/+ftZNayq/UwPreXh
+ wwB6rz+lKgM33zFK7TzoeT9IKCRUTQOjrUn6CGLYZs4ZJPj8aEm8ibfTdmetO/nTIVeH
+ 8lNw==
+X-Gm-Message-State: AOJu0YwkDPCn59Yr4nymAQCunkgb7qzp5u5I4TWCOjqR9jDlIFbFZPI8
+ PHbtRwlSPun8nq3kljzYptDyxn2lhb31NBcBPPgVICCPg5nZ6hDVKjN8iA==
+X-Google-Smtp-Source: AGHT+IH08YjlkL6p2prhK6PPD9sk+QC1H6aL74ibuXtjepLEmcXuCg9qafwa/TttXbHMw6j4GhJM9g==
+X-Received: by 2002:adf:a35a:0:b0:368:6633:c550 with SMTP id
+ ffacd0b85a97d-369bb2ba6d7mr2683729f8f.52.1721581041377; 
+ Sun, 21 Jul 2024 09:57:21 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-785-215.w83-197.abo.wanadoo.fr.
  [83.197.112.215]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-427d2a3c09csm123588395e9.9.2024.07.21.09.50.24
+ ffacd0b85a97d-368787ced05sm6353476f8f.67.2024.07.21.09.57.20
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 21 Jul 2024 09:50:24 -0700 (PDT)
+ Sun, 21 Jul 2024 09:57:21 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 21 Jul 2024 18:50:23 +0200
-Message-ID: <20240721165023.1988603-1-fontaine.fabrice@gmail.com>
+Date: Sun, 21 Jul 2024 18:57:17 +0200
+Message-ID: <20240721165717.1996106-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1721580625; x=1722185425; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1721581041; x=1722185841; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=1OUvjkH6SrsA0/nqnrGV2fSMcHBOinCFIcm8yggHv04=;
- b=Pghrfs6Po8bwTCiC0irSt45lv+49VtjRoUYoU2r8AgUnIEhlebwAlsbrb0NmHHv14Q
- 03+RQpL01krfplZIH1ZSWs6WUq/J7Q55059EctPPpDbSk5ZsJ61QZZbiqLexUOCvRNSE
- NwYjxL/YtxeP/uDUijRGrkVswJaEZZkyxggIYauFHXDOduoqbNCKu8Hb2MOCSI8Gde3W
- GrJP2uJL+2wXSgS6z2YTlovXzBb0IqxNUo5ud2+w9PAcy/ARdRFqKbtE8Tf+Xw5Z9Qff
- MRx4m9eldfj1g9+bPg169q/PZlFy28Ijru3/mNDoWAkWlEC5bK1MdfZ+JxpDxDD+e+52
- zXKw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=ghARpuOJmEVX9ylRlfjawosjTxGsE5uPyqCnO6Cp4YU=;
+ b=DqtccdWXBwsZGWkScvzVN+LfpvZOHUOE6IXWDxjrgmV2bjA0gFmogOoCSdME+wQHFz
+ yc2Ogtc0qDOOEN6JwnlCzeELaH5nOLPIXkhnwe9sRzMdmezHQm4PRY3Hw64Ub0Dvq3cy
+ LR2rDkpkOIEmSqb3C+KDHljVKOtSF9hCMWLmbBk8hA2XM6m0hFT1jdNAt24SYVyWBSZq
+ ryn7Q2iqJO97VKn8mDqNDBOk3kcUDpGaeyKN/oIrBO1gRq1IdhaPoL+MIBQ+xQruow2W
+ wUbzyDJgT/nmHzcnaijzdD2HLq8To2BQfxvZ+hAC43MYy11Y2xt0LNy/XhcWKqXqF865
+ 7pBw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=Pghrfs6P
-Subject: [Buildroot] [PATCH 1/1] package/sysprof: needs headers >= 5.12
+ header.s=20230601 header.b=DqtccdWX
+Subject: [Buildroot] [PATCH v2,1/1] package/gnutls: disable tpm2-tss
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,63 +100,66 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Will Newton <will.newton@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-sysprof unconditionally uses PERF_RECORD_MISC_MMAP_BUILD_ID which is
-only available since kernel 5.12 and
-https://github.com/torvalds/linux/commit/88a16a1309333e43d328621ece3e9fa37027e8eb
-resulting in the following build failure with kernel < 5.12 since bump
-to version 46.0 in commit 0d57555407f2a0708515e7c377f57a6466c78b1b:
+Disable tpm2-tss to avoid the following circular dependency if
+BR2_PACKAGE_TPM2_TSS_FAPI is selected:
+tpm2-tss -> libcurl -> gnutls -> tmp2-tss
+resulting in the following build failure of libcurl or rtmpdump since
+commit caff4179a4481233257f5f475ca57ce9061af900:
 
-../src/libsysprof/sysprof-sampler.c: In function 'sysprof_sampler_perf_event_stream_cb':
-../src/libsysprof/sysprof-sampler.c:186:33: error: 'PERF_RECORD_MISC_MMAP_BUILD_ID' undeclared (first use in this function); did you mean 'PERF_RECORD_MISC_MMAP_DATA'?
-  186 |       if ((event->header.misc & PERF_RECORD_MISC_MMAP_BUILD_ID) != 0)
-      |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      |                                 PERF_RECORD_MISC_MMAP_DATA
+configure: error: TLS not detected, you will not be able to use HTTPS, FTPS, NTLM and more.
+Use --with-openssl, --with-gnutls, --with-wolfssl, --with-mbedtls, --with-schannel, --with-secure-transport, --with-amissl, --with-bearssl or --with-rustls to address this.
 
-While at it, also fix a typo in "library"
+[...]
 
-Fixes: 0d57555407f2a0708515e7c377f57a6466c78b1b
- - http://autobuild.buildroot.org/results/9a9f8462bd1d7127dc80de7f280ab9d100db47fe
+In file included from rtmp.c:32:
+rtmp_sys.h:110:10: fatal error: gnutls/gnutls.h: No such file or directory
+  110 | #include <gnutls/gnutls.h>
+      |          ^~~~~~~~~~~~~~~~~
+
+Fixes: caff4179a4481233257f5f475ca57ce9061af900
+ - http://autobuild.buildroot.org/results/72e1843de650c9ed4795f1141e9fd485b71a14c3
+ - http://autobuild.buildroot.org/results/918f0f7efa810b17f6d2266a890bf0150cbed146
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/sysprof/Config.in | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+Changes v1 -> v2 (after review of Baruch Siach):
+ - Add --without-tpm2
 
-diff --git a/package/sysprof/Config.in b/package/sysprof/Config.in
-index be4f7653b0..32a5f99798 100644
---- a/package/sysprof/Config.in
-+++ b/package/sysprof/Config.in
-@@ -8,6 +8,7 @@ config BR2_PACKAGE_SYSPROF
- 	depends on !BR2_STATIC_LIBS # libunwind, polkit
- 	depends on !BR2_OPTIMIZE_FAST # polkit
- 	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_12
- 	select BR2_PACKAGE_JSON_GLIB
- 	select BR2_PACKAGE_LIBDEX
- 	select BR2_PACKAGE_LIBGLIB2
-@@ -19,12 +20,13 @@ config BR2_PACKAGE_SYSPROF
+ package/gnutls/gnutls.mk | 8 +-------
+ 1 file changed, 1 insertion(+), 7 deletions(-)
+
+diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+index 8302194812..cf2f02cc9d 100644
+--- a/package/gnutls/gnutls.mk
++++ b/package/gnutls/gnutls.mk
+@@ -30,6 +30,7 @@ GNUTLS_CONF_OPTS = \
+ 	--without-librt-prefix \
+ 	--without-libz-prefix \
+ 	--without-tpm \
++	--without-tpm2 \
+ 	$(if $(BR2_PACKAGE_GNUTLS_TOOLS),--enable-tools,--disable-tools) \
+ 	$(if $(BR2_PACKAGE_GNUTLS_ENABLE_SSL2),--enable,--disable)-ssl2-support \
+ 	$(if $(BR2_PACKAGE_GNUTLS_ENABLE_GOST),--enable,--disable)-gost
+@@ -99,13 +100,6 @@ else
+ GNUTLS_CONF_OPTS += --without-p11-kit
+ endif
  
- 	  http://sysprof.com
- 
--comment "sysprof needs a toolchain w/ dynamic libraray, wchar, threads, C++, gcc >= 7"
-+comment "sysprof needs a toolchain w/ dynamic library, wchar, threads, C++, gcc >= 7, headers >= 5.12"
- 	depends on BR2_USE_MMU
- 	depends on BR2_PACKAGE_LIBUNWIND_ARCH_SUPPORTS
- 	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS || \
- 		!BR2_TOOLCHAIN_GCC_AT_LEAST_7 || \
--		BR2_STATIC_LIBS || !BR2_INSTALL_LIBSTDCPP
-+		BR2_STATIC_LIBS || !BR2_INSTALL_LIBSTDCPP || \
-+		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_12
- 
- comment "sysprof can't be built with Optimize for fast"
- 	depends on BR2_OPTIMIZE_FAST
+-ifeq ($(BR2_PACKAGE_TPM2_TSS),y)
+-GNUTLS_CONF_OPTS += --with-tpm2
+-GNUTLS_DEPENDENCIES += tpm2-tss
+-else
+-GNUTLS_CONF_OPTS += --without-tpm2
+-endif
+-
+ ifeq ($(BR2_PACKAGE_ZLIB),y)
+ GNUTLS_CONF_OPTS += --with-zlib
+ GNUTLS_DEPENDENCIES += zlib
 -- 
 2.43.0
 
