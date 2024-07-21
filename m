@@ -4,71 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D7F20C3DA61
-	for <buildroot@archiver.kernel.org>; Sun, 21 Jul 2024 16:21:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DCA13C3DA61
+	for <buildroot@archiver.kernel.org>; Sun, 21 Jul 2024 16:21:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A5C906068A;
-	Sun, 21 Jul 2024 16:21:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AC3A76075D;
+	Sun, 21 Jul 2024 16:21:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HHG6b9ErQaLC; Sun, 21 Jul 2024 16:21:48 +0000 (UTC)
+ id tSIz2H1z9hwz; Sun, 21 Jul 2024 16:21:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B1D70606EB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CFDB8607CC
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B1D70606EB;
-	Sun, 21 Jul 2024 16:21:48 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 7206B1BF321
+	by smtp3.osuosl.org (Postfix) with ESMTP id CFDB8607CC;
+	Sun, 21 Jul 2024 16:21:50 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 7D0E31BF86C
  for <buildroot@lists.busybox.net>; Sun, 21 Jul 2024 16:21:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5F60840139
- for <buildroot@lists.busybox.net>; Sun, 21 Jul 2024 16:21:43 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 654DA60638
+ for <buildroot@lists.busybox.net>; Sun, 21 Jul 2024 16:21:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HKcLCWlfhtrC for <buildroot@lists.busybox.net>;
- Sun, 21 Jul 2024 16:21:42 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.194;
- helo=relay2-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id aa71OAuMkl-o for <buildroot@lists.busybox.net>;
+ Sun, 21 Jul 2024 16:21:41 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 11E1540124
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 11E1540124
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 11E1540124
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7D11F605F8
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7D11F605F8
  for <buildroot@buildroot.org>; Sun, 21 Jul 2024 16:21:41 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id B1C1C40003;
- Sun, 21 Jul 2024 16:21:38 +0000 (UTC)
-Date: Sun, 21 Jul 2024 18:21:37 +0200
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20240721182137.13d567d6@windsurf>
-In-Reply-To: <20240721065302.35452-1-fontaine.fabrice@gmail.com>
-References: <20240721065302.35452-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1721578898;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=8+kxPjfDbpVgReCLVLYBAQiigGk9HfrouBodpvnFXiU=;
- b=CByDET8MZdVnAHc3gPZoNqW/1U9Dtap4+nTLC0A9raWPH35sj2aSeVjD+oXTLh6jwHbtMu
- nXM0otOzo1w/XYa+NHKAENsLo8C16d/JmmXfQdZkBVe1quTwn6RKFN8RzN31Oeu7FbP+ea
- +mVCfKuHY25I/B2yXM6+Qrfj4s33zA5xb/cHZSAafJF8r8ABxKYYJ2ELMbUNqSvkfQcBjt
- UVLuuRJ01hRq/M+jRWvHIJIbERxS0+DyZSf9aF8Fw4ZuHpKU/hkYAP8T6q/L6u58QMR4qX
- WXWMUKKWlsc51kkZO/PUqScxe4CUP5+sFJQ58o/c21kzAIrp3i3Bun5XrGXiyw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=CByDET8M
-Subject: Re: [Buildroot] [PATCH 1/1] package/sysprof: needs C++
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 6B42386F11; Sun, 21 Jul 2024 16:21:41 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 21 Jul 2024 18:21:02 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 8637884057ddc3c1aeb9f0dd285fc6fcf378c26b
+X-Git-Newrev: a8b788e19448bf06603f37666a54abec3f6af6e8
+X-Patchwork-Hint: ignore
+Message-Id: <20240721162141.6B42386F11@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gengetopt: fix patch fuzz
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,34 +59,93 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Will Newton <will.newton@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, 21 Jul 2024 08:53:02 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=a8b788e19448bf06603f37666a54abec3f6af6e8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> sysprof needs C++ since bump to version 46.0 in commit
-> 0d57555407f2a0708515e7c377f57a6466c78b1b and
-> https://gitlab.gnome.org/GNOME/sysprof/-/commit/a4b5ea6160135ae4ee2916b6a93b281302d5ddc8
-> 
-> Fixes: 0d57555407f2a0708515e7c377f57a6466c78b1b
->  - http://autobuild.buildroot.org/results/6ab455b9287220d4353154ba3b54df4ce57748df
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  package/sysprof/Config.in | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
+Use upstream patch to fix patch fuzz and avoid the following build
+failure raised since commit 8f88a644ed7d6c9ea55fd4fbe9d7f37055920016
+which reduced the fuzz factor:
 
-Applied to master, thanks.
+Applying 0001-configure.ac-add-disable-doc-option.patch using patch:
+patching file Makefile.am
+Hunk #1 FAILED at 18.
+1 out of 1 hunk FAILED -- saving rejects to file Makefile.am.rej
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Fixes:
+ - http://autobuild.buildroot.org/results/4cfa513e024ea2cb2058fde4ffdd727bd379dae7
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .checkpackageignore                                         |  1 -
+ .../0001-configure.ac-add-disable-doc-option.patch          | 13 +++++++------
+ 2 files changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 975a7f21f4..6505cd6f76 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -604,7 +604,6 @@ package/gdb/15.1/0006-Fix-getrandom-compile-for-uclibc-v1.0.35.patch lib_patch.U
+ package/gdb/15.1/0007-fix-musl-build-on-riscv.patch lib_patch.Upstream
+ package/gdb/15.1/0008-gdbserver-Makefile.in-fix-NLS-build.patch lib_patch.Upstream
+ package/gdb/15.1/0009-gdb-Fix-native-build-on-xtensa.patch lib_patch.Upstream
+-package/gengetopt/0001-configure.ac-add-disable-doc-option.patch lib_patch.Upstream
+ package/genpart/0001-fix-return-code.patch lib_patch.Upstream
+ package/genromfs/0001-build-system.patch lib_patch.Sob lib_patch.Upstream
+ package/gensio/0001-Fix-missing-EVP_PKEY_ED25519-build-error-on-libressl.patch lib_patch.Upstream
+diff --git a/package/gengetopt/0001-configure.ac-add-disable-doc-option.patch b/package/gengetopt/0001-configure.ac-add-disable-doc-option.patch
+index d43714a3df..80bda9b721 100644
+--- a/package/gengetopt/0001-configure.ac-add-disable-doc-option.patch
++++ b/package/gengetopt/0001-configure.ac-add-disable-doc-option.patch
+@@ -1,22 +1,22 @@
+-From 250bee9e02546846d70dbe88ac36bb83c6a7ebdf Mon Sep 17 00:00:00 2001
++From e3fe8db2b67cdb18e1a2a6765644c8cc476d0b0a Mon Sep 17 00:00:00 2001
+ From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ Date: Sun, 22 Sep 2019 09:27:24 +0200
+-Subject: [PATCH] configure.ac: add --disable-doc option
++Subject: configure.ac: add --disable-doc option
+ 
+ Add --disable-doc option to allow the user to disable documentation
+ 
+ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Sent upstream: https://savannah.gnu.org/bugs/index.php?56931]
++Upstream: https://git.savannah.gnu.org/cgit/gengetopt.git/commit/?id=e3fe8db2b67cdb18e1a2a6765644c8cc476d0b0a
+ ---
+  Makefile.am  | 6 +++++-
+  configure.ac | 7 +++++++
+  2 files changed, 12 insertions(+), 1 deletion(-)
+ 
+ diff --git a/Makefile.am b/Makefile.am
+-index dbb5719..2db307a 100644
++index 1f184c2..76ac21a 100644
+ --- a/Makefile.am
+ +++ b/Makefile.am
+-@@ -18,6 +18,10 @@
++@@ -18,7 +18,11 @@
+  ACLOCAL_AMFLAGS = -I m4 -I gl/m4
+  
+  EXTRA_DIST = configure TODO LICENSE gl/m4/gnulib-cache.m4
+@@ -28,6 +28,7 @@ index dbb5719..2db307a 100644
+ +endif
+  
+  gengetoptdoc_DATA = ChangeLog COPYING NEWS THANKS INSTALL README LICENSE
++ 
+ diff --git a/configure.ac b/configure.ac
+ index 0ee89db..915706c 100644
+ --- a/configure.ac
+@@ -47,5 +48,5 @@ index 0ee89db..915706c 100644
+  	[gengen],
+  	[  --with-gengen=mygengen       gengen to use],
+ -- 
+-2.23.0
++cgit v1.1
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
