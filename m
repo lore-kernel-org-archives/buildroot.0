@@ -4,71 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1DEFAC3DA5D
-	for <buildroot@archiver.kernel.org>; Sun, 21 Jul 2024 16:25:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 347D3C3DA5D
+	for <buildroot@archiver.kernel.org>; Sun, 21 Jul 2024 16:25:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C7166600B5;
-	Sun, 21 Jul 2024 16:25:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 07460600B5;
+	Sun, 21 Jul 2024 16:25:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RNH34g-ZZU7f; Sun, 21 Jul 2024 16:25:23 +0000 (UTC)
+ id YwOElqYxJFVo; Sun, 21 Jul 2024 16:25:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C0D36605D4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1493F605D4
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C0D36605D4;
-	Sun, 21 Jul 2024 16:25:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1493F605D4;
+	Sun, 21 Jul 2024 16:25:44 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8A1C11BF321
- for <buildroot@lists.busybox.net>; Sun, 21 Jul 2024 16:25:22 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 51C0E1BF321
+ for <buildroot@lists.busybox.net>; Sun, 21 Jul 2024 16:25:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7792540139
- for <buildroot@lists.busybox.net>; Sun, 21 Jul 2024 16:25:22 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3EE5840124
+ for <buildroot@lists.busybox.net>; Sun, 21 Jul 2024 16:25:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UVoTD5yXqX8m for <buildroot@lists.busybox.net>;
- Sun, 21 Jul 2024 16:25:21 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::225;
- helo=relay5-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id Rj2J5q0Jk1YQ for <buildroot@lists.busybox.net>;
+ Sun, 21 Jul 2024 16:25:41 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::223;
+ helo=relay3-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 4158D40124
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4158D40124
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::225])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4158D40124
- for <buildroot@buildroot.org>; Sun, 21 Jul 2024 16:25:20 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 1461B1C0004;
- Sun, 21 Jul 2024 16:25:17 +0000 (UTC)
-Date: Sun, 21 Jul 2024 18:25:17 +0200
-To: Waldemar Brodkorb <wbx@openadk.org>
-Message-ID: <20240721182517.4d4ef36a@windsurf>
-In-Reply-To: <Zpy90k5YGhEjoWnO@waldemar-brodkorb.de>
-References: <Zpy90k5YGhEjoWnO@waldemar-brodkorb.de>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D80B540120
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D80B540120
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D80B540120
+ for <buildroot@buildroot.org>; Sun, 21 Jul 2024 16:25:40 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 098FF60003;
+ Sun, 21 Jul 2024 16:25:37 +0000 (UTC)
+Date: Sun, 21 Jul 2024 18:25:37 +0200
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20240721182537.6dd7a967@windsurf>
+In-Reply-To: <20240721070147.54855-1-fontaine.fabrice@gmail.com>
+References: <20240721070147.54855-1-fontaine.fabrice@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1721579118;
+ d=bootlin.com; s=gm1; t=1721579138;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=BXcuFm3mzVKSQfLN+gaQF1J9sVBnmYZQxiSJ5ux6eHY=;
- b=mNpt9CVs+IV/hjdz46vQBLKgz8pMQxqDpZRr1dJArVk+/awvr8c44RMZmeYCQvD7IfvJbH
- RcPtWzHXB7TQu09dbFQlkNPn42vMdVbffyyDCXSr5GKz8AiHtq3YDYqNGbthTJ8iRZnorf
- IXWBRXxKx68XXz8RoYGZQ9YGz6LsFWYrgPTQwNoVPzLjTTTBb45JwPN0wvEIyMNmb5cX1z
- m/4YKckibZDC7GnWxrHZFvQ/LBDqHEFchFcLWVCDJChgaPteRIHrLWb73JOmbNZclNrbQ9
- m57g58VdcHTikF89l60I2ybBLGhBVVU4qXaq8G6C2X2wbpnuNk9RQFVxBbI/rg==
+ bh=ESk91O/x2qPRVT2ZqD9mmcn8gMaZvHJeb0n+oiJeYO0=;
+ b=MUTJTg3/F1RzCz+EHLj5J7dvlMSiIReZNxzWd/Z/XUO4TdRjq+JiLNlmN+Z0R/wa822Q6S
+ gC3m9bvYw0OHn/fUe3e0HI+iZvN5EQUX3492vwlcvOQzwfCsdBmG0bGCeRNUjeegGkR+9X
+ QrAqh0GFDahCs1dPm7/3xjL0XUKqfvSK+Y3ukN6WfmjZVjTNp+2BfHBeglajO1/n9/Wd/n
+ RzLtjuYYo6q0WJWxIG74ELTvgu3/WmoB0bY8az9uXG/WiarlajEjvYrBZmWnxr89g2N/z+
+ 4ctNgPK8WVSneusz07PiiO1gEfk3nbFpJ++fyZsocwRtNGHgRLh7lqKpIxM4bA==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=mNpt9CVs
-Subject: Re: [Buildroot] [PATCH] package/libucontext: allow uClibc toolchains
+ header.s=gm1 header.b=MUTJTg3/
+Subject: Re: [Buildroot] [PATCH 1/1] package/iproute2: bump to version 6.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,27 +82,35 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+Cc: Petr Vorel <petr.vorel@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, 21 Jul 2024 09:50:42 +0200
-Waldemar Brodkorb <wbx@openadk.org> wrote:
+On Sun, 21 Jul 2024 09:01:47 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> With commit f761a8c4516d88d70ae6f5d192fdb99cafa761a6 it is
-> possible to use external libucontext together with uClibc toolchains.
+> This bump will fix the following build failure with gcc >= 14 thanks to
+> https://git.kernel.org/pub/scm/network/iproute2/iproute2.git/commit/?id=53a89bfd86fff1a00cc77cabb8457a03eaa3bc7d:
 > 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> ../include/json_print.h: In function 'print_tv':
+> ../include/json_print.h:58:48: error: passing argument 5 of 'print_color_tv' from incompatible pointer type [-Wincompatible-pointer-types]
+>    58 |                                                value);                  \
+>       |                                                ^~~~~
+>       |                                                |
+>       |                                                const struct timeval *
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/c47c1e13659e4bfcccd98ebd22949e9dd278079e
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/libucontext/Config.in | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  package/iproute2/iproute2.hash | 2 +-
+>  package/iproute2/iproute2.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-This is true, but it will cause a lot of build failures as Bootlin
-toolchains have not yet been rebuilt with the uClibc change. I think we
-at least need to wait until Bootlin toolchains are updated with this
-patch before we can merge such a change.
+Applied to master, thanks.
 
 Thomas
 -- 
