@@ -4,72 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A4305C3DA5D
-	for <buildroot@archiver.kernel.org>; Sun, 21 Jul 2024 16:20:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CDFCFC3DA61
+	for <buildroot@archiver.kernel.org>; Sun, 21 Jul 2024 16:21:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 70824605F8;
-	Sun, 21 Jul 2024 16:20:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9C7DD605F8;
+	Sun, 21 Jul 2024 16:21:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id X8R2dlUQfxrP; Sun, 21 Jul 2024 16:20:41 +0000 (UTC)
+ id 4s1h6vaXgsjK; Sun, 21 Jul 2024 16:21:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 80D396066B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9EF8D60638
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 80D396066B;
-	Sun, 21 Jul 2024 16:20:41 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 269791BF321
- for <buildroot@lists.busybox.net>; Sun, 21 Jul 2024 16:20:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9EF8D60638;
+	Sun, 21 Jul 2024 16:21:16 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 587D51BF321
+ for <buildroot@lists.busybox.net>; Sun, 21 Jul 2024 16:21:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 899C04039F
- for <buildroot@lists.busybox.net>; Sun, 21 Jul 2024 16:20:39 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4688480E4A
+ for <buildroot@lists.busybox.net>; Sun, 21 Jul 2024 16:21:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dKRD2-xeBDVo for <buildroot@lists.busybox.net>;
- Sun, 21 Jul 2024 16:20:38 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::229;
- helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2ynqKSDNhtWv for <buildroot@lists.busybox.net>;
+ Sun, 21 Jul 2024 16:21:14 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::228;
+ helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 14FF7401CA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 14FF7401CA
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 14FF7401CA
- for <buildroot@buildroot.org>; Sun, 21 Jul 2024 16:20:37 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 2D1C8FF802;
- Sun, 21 Jul 2024 16:20:35 +0000 (UTC)
-Date: Sun, 21 Jul 2024 18:20:34 +0200
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org ECDD080CAD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ECDD080CAD
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id ECDD080CAD
+ for <buildroot@buildroot.org>; Sun, 21 Jul 2024 16:21:13 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 04FC21BF204;
+ Sun, 21 Jul 2024 16:21:10 +0000 (UTC)
+Date: Sun, 21 Jul 2024 18:21:10 +0200
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20240721182034.525452fc@windsurf>
-In-Reply-To: <20240720211841.1728725-1-fontaine.fabrice@gmail.com>
-References: <20240720211841.1728725-1-fontaine.fabrice@gmail.com>
+Message-ID: <20240721182110.03f3e2a6@windsurf>
+In-Reply-To: <20240720213347.1740848-1-fontaine.fabrice@gmail.com>
+References: <20240720213347.1740848-1-fontaine.fabrice@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1721578835;
+ d=bootlin.com; s=gm1; t=1721578871;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=YCluFtwdUILOWTgXjfBVBuduP8W+ILvopcLEpGhmpgA=;
- b=QjN9IBzKLtVmel5NeMmFy3cRrzUxqK9U+I0nwtQQqEhDMqsGj+hdqa7BwvzEwQBPof8oby
- VtlQPT1HGjlBvXfiCMC6Qaas6eoCoxyA0YIWmWs87GAkFlB75UT79uv7JL05a1XckEAZd/
- w8HdzSj84tRIVpZLUpGITkxN8aG6DAM+FkhLfM15xUjlZsOUnMc8vu80f4aJdsdIzAN6SQ
- nCowUrz8xHXNEDPY5WrGb5/xDr1j5JWUUBnGCf4a3JURmVjQovzPFMEP0npYiKJ7hpiJOm
- hwupeZj4SObOLHeOKN+pAv1IzRAh5Uvk/raZUpUD6EF1J249Wpy/8AOMC0yTxg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=bfOx7gNhdKkmLlJlZLOOB1ouvS8sRk25CbL1Q1Yb2To=;
+ b=OmGlq97EW7iDfqRWhsLMmnctCZDVf7fxx9nF5CzIlAPH6xDATLYNxj0lY0ZZf54tKV2c7b
+ RxXD4DpE8N/hj7QeceQFmbVH5xMOC/A14ff4kJYgsBFNDeCDWs2uGeX8iT6WFFXhd0GySK
+ 6DEv/xIadmWZyE1yCmSwrVqlpjtcFIr0bzTSTsHUtpwhMRsX2+0HD3R8GupIpcrmuPRTna
+ SmPlW+Te4TNizK2QDipvmdMGL4PPXi0s+cMVJ3jGJPEm4MGqSN+W94z1JrH7CmubK7t5tK
+ fydQ9Ytmmnh5lMw5I3wXb5IylAFcZjSXo4euZL+/KaYi5ot3RDL10TUUQev0sQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=QjN9IBzK
-Subject: Re: [Buildroot] [PATCH 1/1] package/flashrom: bump to version
- 1.4.0-rc2
+ header.s=gm1 header.b=OmGlq97E
+Subject: Re: [Buildroot] [PATCH 1/1] package/gengetopt: fix patch fuzz
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,42 +82,34 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+Cc: Gregory Dymarek <gregd72002@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat, 20 Jul 2024 23:18:41 +0200
+On Sat, 20 Jul 2024 23:33:47 +0200
 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> - Drop patch (already in version)
-> - This bump will fix the following static build failure raised
->   since switch to meson-package in commit
->   37dded43ae681e8319d7b76f9a612c71991467a9 thanks to
->   https://github.com/flashrom/flashrom/commit/67ca4a71c477320d4b726acd152b7536344e227f
->   (which doesn't apply cleanly above version 1.3.0):
+> Use upstream patch to fix patch fuzz and avoid the following build
+> failure raised since commit 8f88a644ed7d6c9ea55fd4fbe9d7f37055920016
+> which reduced the fuzz factor:
 > 
->   ld (ld-elf2flt): -shared used without passing a shared library ID
+> Applying 0001-configure.ac-add-disable-doc-option.patch using patch:
+> patching file Makefile.am
+> Hunk #1 FAILED at 18.
+> 1 out of 1 hunk FAILED -- saving rejects to file Makefile.am.rej
 > 
-> - With above patch, classic_cli can't be built without a static library
->   (i.e. with BR2_SHARED_LIBS)
-> 
-> Fixes: 37dded43ae681e8319d7b76f9a612c71991467a9
->  - http://autobuild.buildroot.org/results/ee61dc30056b6c3335d64054c875bfb40526033d
+> Fixes:
+>  - http://autobuild.buildroot.org/results/4cfa513e024ea2cb2058fde4ffdd727bd379dae7
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  ...et_enable.c-Drop-_LARGEFILE64_SOURCE.patch | 38 -------------------
->  package/flashrom/flashrom.hash                |  5 +--
->  package/flashrom/flashrom.mk                  | 12 ++++--
->  3 files changed, 10 insertions(+), 45 deletions(-)
->  delete mode 100644 package/flashrom/0001-chipset_enable.c-Drop-_LARGEFILE64_SOURCE.patch
+>  .checkpackageignore                                 |  1 -
+>  .../0001-configure.ac-add-disable-doc-option.patch  | 13 +++++++------
+>  2 files changed, 7 insertions(+), 7 deletions(-)
 
-Not super nice to bump to a -rc version, but fair enough. Hopefully
-they will release 1.4.0 soon.
-
-Thanks!
+Applied to master, thanks.
 
 Thomas
 -- 
