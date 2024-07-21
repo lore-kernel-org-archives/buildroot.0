@@ -4,91 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B6674C3DA61
-	for <buildroot@archiver.kernel.org>; Sun, 21 Jul 2024 15:00:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E22EBC3DA5D
+	for <buildroot@archiver.kernel.org>; Sun, 21 Jul 2024 15:01:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 59CBF80AE9;
-	Sun, 21 Jul 2024 15:00:23 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B05A980AF4;
+	Sun, 21 Jul 2024 15:01:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xNw61JuXcj5D; Sun, 21 Jul 2024 15:00:22 +0000 (UTC)
+ id kB-YFep4vxLX; Sun, 21 Jul 2024 15:01:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7304F80AF0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A836B80CB2
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7304F80AF0;
-	Sun, 21 Jul 2024 15:00:22 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 922C41BF2BE
- for <buildroot@lists.busybox.net>; Sun, 21 Jul 2024 15:00:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A836B80CB2;
+	Sun, 21 Jul 2024 15:01:24 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id C03291BF2BE
+ for <buildroot@lists.busybox.net>; Sun, 21 Jul 2024 15:01:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7F64A4027C
- for <buildroot@lists.busybox.net>; Sun, 21 Jul 2024 15:00:21 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id AC4F680CB2
+ for <buildroot@lists.busybox.net>; Sun, 21 Jul 2024 15:01:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6BPcsPnD0PfY for <buildroot@lists.busybox.net>;
- Sun, 21 Jul 2024 15:00:20 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7DTiIZBBBw6x for <buildroot@lists.busybox.net>;
+ Sun, 21 Jul 2024 15:01:22 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32f; helo=mail-wm1-x32f.google.com;
+ client-ip=2a00:1450:4864:20::333; helo=mail-wm1-x333.google.com;
  envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 2C2254027B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2C2254027B
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
- [IPv6:2a00:1450:4864:20::32f])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 2C2254027B
- for <buildroot@buildroot.org>; Sun, 21 Jul 2024 15:00:20 +0000 (UTC)
-Received: by mail-wm1-x32f.google.com with SMTP id
- 5b1f17b1804b1-4266dc7591fso24446895e9.0
- for <buildroot@buildroot.org>; Sun, 21 Jul 2024 08:00:19 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 834FC80AF4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 834FC80AF4
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
+ [IPv6:2a00:1450:4864:20::333])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 834FC80AF4
+ for <buildroot@buildroot.org>; Sun, 21 Jul 2024 15:01:21 +0000 (UTC)
+Received: by mail-wm1-x333.google.com with SMTP id
+ 5b1f17b1804b1-4277a5ed48bso25807145e9.2
+ for <buildroot@buildroot.org>; Sun, 21 Jul 2024 08:01:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1721574018; x=1722178818;
+ d=1e100.net; s=20230601; t=1721574079; x=1722178879;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=vStRyNAw6ha9uxfsVoChuFlql/KEaGQU1cYOGVSQIF4=;
- b=f8dycNucUDP2WNQckGWipjPJVFBnI4bDqI+F83vBzU36TfsxnzMVXzwEcqO/3FkiIT
- m9Jq+Z4huMY65Vy30x2zTmz5eDUEQVTzbjlZrxOrG37C35YoJPMowe/eQKJsL0d9JJ04
- IjjlgJElvCX0lQ1WKKWF/Pl2Ir+jwc7f3jBSb775qL1q5q154b/KKieqtpXxMPi29yzb
- 9e9V+rP6JaXjWLt2dCYm509ZNktKNwwv+Z6vSxxajLDmhRhfyvL3tSQEPcscjpU1awEg
- mIqECmxJzuhkbPC/6J0g3Y39aDiXPvKAOCKd8GP7yfItMfRowYBWBDV7l5lo1bYBZ7OT
- c2Ig==
-X-Gm-Message-State: AOJu0YxUWh7LJGy+SdXNGpHDMVnyHlXOgvP1l6ZhHLsUr0ERvaDseThP
- LppZUFr4GmkCtJ8k/WvxHChZbH7rTLgVstzdAaXQHbvQ2kEhcoZ70c/6PA==
-X-Google-Smtp-Source: AGHT+IGnUBpmfbnxzy4q/SNF9w6loN0MJjGnWIwPVSrWaXIomNQTryk4tXOFosIOcsIf20NA5jK4hQ==
-X-Received: by 2002:a05:600c:3547:b0:426:6c70:dd9c with SMTP id
- 5b1f17b1804b1-427dc58f1f3mr27841925e9.31.1721574017476; 
- Sun, 21 Jul 2024 08:00:17 -0700 (PDT)
+ bh=SSq1J/GazUYyJhOsQ4gt1oSsL3S+O9iOkgsFYe/lBvQ=;
+ b=EAJ5WYn6+ah0zb6j44kWQ+n7uw9eTAWAaCL/3pNV29IadMf3kzLTPKG6k0qyAIarw0
+ 7qrkOUSeQe0r6D491TToZcjqxkyOa8zp/20NqVNugvuO6OU2XzDm3uHhtfwSVAHzzhcR
+ Y7YVC5bz59mN0XiHXTl4Phj3+24TWzhg+WgGlFf4bdSTLqadCJQUqs5xdIgM3B4ID0og
+ HH+kZAJ9R3ORktHjYAhoMF21raHXPPSpbpi5oqxJQ+xyPuqYrwEL28gqVTmp02+aSQ0L
+ 2QnDUWtjatUPhA83Mk1T13i9leJzCE+cu9CLkseJvL3/qbZNPIpsdcs+Q0pg+KNaX1ho
+ iwtw==
+X-Gm-Message-State: AOJu0YwuhfhwPqirxGzplCRxuVvwcGSyFOEw5KKpdGN3+NjL8bua99A7
+ oIUUqPh8WMkjcTXwmsgBws6yTHdfZ/+swRJgb/1rtp7rWo6YCb6C1IbD9A==
+X-Google-Smtp-Source: AGHT+IF0M213o5LVO+/r7vGJXvW+rDuqvsXkV3xG5ynRxwT+8uzPi0HvTkSZlNZxTH7FX3QLQjpLcg==
+X-Received: by 2002:a05:600c:444e:b0:427:d8f2:332 with SMTP id
+ 5b1f17b1804b1-427dc513007mr25689775e9.7.1721574078806; 
+ Sun, 21 Jul 2024 08:01:18 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-785-215.w83-197.abo.wanadoo.fr.
  [83.197.112.215]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-427d6936e1esm94068605e9.44.2024.07.21.08.00.16
+ 5b1f17b1804b1-427db2a4e3bsm60977415e9.44.2024.07.21.08.01.18
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 21 Jul 2024 08:00:16 -0700 (PDT)
+ Sun, 21 Jul 2024 08:01:18 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 21 Jul 2024 17:00:11 +0200
-Message-ID: <20240721150011.1437080-1-fontaine.fabrice@gmail.com>
+Date: Sun, 21 Jul 2024 17:01:16 +0200
+Message-ID: <20240721150116.1438024-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1721574018; x=1722178818; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1721574079; x=1722178879; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=vStRyNAw6ha9uxfsVoChuFlql/KEaGQU1cYOGVSQIF4=;
- b=fV8kGtfgoJCQqPmjTqS2ZEm6l/eRSmsWA1xdAP9zANwJ2ouOqwwebxRrx8uU9ZUaEA
- RCGoxmymPRBDJkKmZgIoikMBRDxl8phEtwuUH9Xt/8Sv7bjEFGKD7yX+EkKSsih1RJjf
- 7EVmXv3OH+TPb+og2AhvgesQJFeBIOjZ18zf7PBYoP4UYbEuPO0zUyjzSbGT3pRqQo8Q
- 2izPPyoKQNXuYMyIsnQ5VxiMStMVWAaT1NHZ4XANC92JeLn1T54vgDOph9UqM+ZZwh76
- RGQIbY1VriIhdQW0XywRMYnQR1kKKcSdOgiMvlBF1pwdfRju/lbw2UuftukngRkZ7l1N
- vRMA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=SSq1J/GazUYyJhOsQ4gt1oSsL3S+O9iOkgsFYe/lBvQ=;
+ b=l/oA4Gc0IwxnyJYJenf/2eID7jGZERBER7lSdsrT7GgSpxSEG+qM8YI+t9GnA4+IMp
+ lwLqJOjfgVs+ZZNA/qzSHowNoVgi4ykV6vdWsS8wwu1M7ng9DRQ10KqCfLmjdeS+Xu7I
+ KBSTiBD+Em+LG5E9lEcfGitY7HALcHh+nEtkJZEGZh659/m8Sy5b7i1bF5EMvuAr/aOm
+ dzJJe0csW1UClglRP3bz9GLbSjGPuCGwpWtdfiYgHCvx86cWOhIBasf+v0fQhIHo5A1k
+ 73AWV+HpH8ibLMU8js5SzsBu40sX7ampBwA6Qmfp66V5HwqfOJY6ufvvfsL/mDhcbNx7
+ URVw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=fV8kGtfg
-Subject: [Buildroot] [PATCH 1/1] package/unbound: select
- BR2_PACKAGE_LIBOPENSSL_ENGINES
+ header.a=rsa-sha256 header.s=20230601 header.b=l/oA4Gc0
+Subject: [Buildroot] [PATCH 1/1] package/unbound: security bump to version
+ 1.20.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -106,35 +106,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-unbound unconditionally calls the (deprecated) ENGINE_* logic in
-libopenssl resulting in a build failure when
-!BR2_PACKAGE_LIBOPENSSL_ENGINES since commit
-623d3bbe43e9193aa8e3395367d01af59071b859:
+This release has a fix for the DNSBomb issue CVE-2024-33655. This has a
+low severity for Unbound, since it makes Unbound complicit in targeting
+others, but does not affect Unbound so much.
+This security release also fixes CVE-2024-1931.
 
-sldns/keyraw.c:167:35: error: 'ENGINE_METHOD_ALL' undeclared (first use in this function)
-  167 |         if(!ENGINE_set_default(e, ENGINE_METHOD_ALL)) {
-      |                                   ^~~~~~~~~~~~~~~~~
-
-Fixes: 623d3bbe43e9193aa8e3395367d01af59071b859
- - http://autobuild.buildroot.org/results/b7782f5ba54543df53a835552632f58d4ad6c082
+https://nlnetlabs.nl/news/2024/May/08/unbound-1.20.0-released
+https://nlnetlabs.nl/news/2024/Mar/14/unbound-1.19.3-released
+https://nlnetlabs.nl/news/2024/Mar/07/unbound-1.19.2-released
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/unbound/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/unbound/unbound.hash | 4 ++--
+ package/unbound/unbound.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/unbound/Config.in b/package/unbound/Config.in
-index ae2ebfd975..c8d697113c 100644
---- a/package/unbound/Config.in
-+++ b/package/unbound/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_UNBOUND
- 	depends on !BR2_STATIC_LIBS
- 	select BR2_PACKAGE_EXPAT
- 	select BR2_PACKAGE_LIBEVENT
-+	select BR2_PACKAGE_LIBOPENSSL_ENGINES if BR2_PACKAGE_LIBOPENSSL
- 	select BR2_PACKAGE_OPENSSL
- 	help
- 	  Unbound is a validating, recursive, and caching DNS resolver.
+diff --git a/package/unbound/unbound.hash b/package/unbound/unbound.hash
+index 843026abc7..96ee80b0ec 100644
+--- a/package/unbound/unbound.hash
++++ b/package/unbound/unbound.hash
+@@ -1,5 +1,5 @@
+-# From https://nlnetlabs.nl/downloads/unbound/unbound-1.19.1.tar.gz.sha256
+-sha256  bc1d576f3dd846a0739adc41ffaa702404c6767d2b6082deb9f2f97cbb24a3a9  unbound-1.19.1.tar.gz
++# From https://nlnetlabs.nl/downloads/unbound/unbound-1.20.0.tar.gz.sha256
++sha256  56b4ceed33639522000fd96775576ddf8782bb3617610715d7f1e777c5ec1dbf  unbound-1.20.0.tar.gz
+ 
+ # Locally calculated
+ sha256  8eb9a16cbfb8703090bbfa3a2028fd46bb351509a2f90dc1001e51fbe6fd45db  LICENSE
+diff --git a/package/unbound/unbound.mk b/package/unbound/unbound.mk
+index 5128d0e420..ff0262bef1 100644
+--- a/package/unbound/unbound.mk
++++ b/package/unbound/unbound.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-UNBOUND_VERSION = 1.19.1
++UNBOUND_VERSION = 1.20.0
+ UNBOUND_SITE = https://www.unbound.net/downloads
+ UNBOUND_INSTALL_STAGING = YES
+ UNBOUND_DEPENDENCIES = host-pkgconf expat libevent openssl
 -- 
 2.43.0
 
