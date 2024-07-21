@@ -4,67 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B375C3DA5D
-	for <buildroot@archiver.kernel.org>; Sun, 21 Jul 2024 10:16:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 37210C3DA61
+	for <buildroot@archiver.kernel.org>; Sun, 21 Jul 2024 10:24:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DE2A660759;
-	Sun, 21 Jul 2024 10:16:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D2E5B605D4;
+	Sun, 21 Jul 2024 10:24:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4Q5VqtgnNGfC; Sun, 21 Jul 2024 10:16:34 +0000 (UTC)
+ id yczUXf296Wwu; Sun, 21 Jul 2024 10:24:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CB60D6075D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CAE586074E
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CB60D6075D;
-	Sun, 21 Jul 2024 10:16:33 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 407EC1BF380
- for <buildroot@lists.busybox.net>; Sun, 21 Jul 2024 10:16:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CAE586074E;
+	Sun, 21 Jul 2024 10:24:38 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id E87A61BF380
+ for <buildroot@lists.busybox.net>; Sun, 21 Jul 2024 10:24:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3B61E6075D
- for <buildroot@lists.busybox.net>; Sun, 21 Jul 2024 10:16:32 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D56CF4016A
+ for <buildroot@lists.busybox.net>; Sun, 21 Jul 2024 10:24:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yrUheemLCqGc for <buildroot@lists.busybox.net>;
- Sun, 21 Jul 2024 10:16:31 +0000 (UTC)
-Received-SPF: None (mailfrom) identity=mailfrom; client-ip=176.9.89.163;
- helo=serv15.avernis.de; envelope-from=br015@umbiko.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org D108260759
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D108260759
-Received: from serv15.avernis.de (serv15.avernis.de [176.9.89.163])
- by smtp3.osuosl.org (Postfix) with ESMTPS id D108260759
- for <buildroot@buildroot.org>; Sun, 21 Jul 2024 10:16:30 +0000 (UTC)
-Received: by serv15.avernis.de (Postfix) with ESMTPSA id 2D642BDE5EE1;
- Sun, 21 Jul 2024 12:16:27 +0200 (CEST)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Z-iKmFCQgJjP for <buildroot@lists.busybox.net>;
+ Sun, 21 Jul 2024 10:24:36 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::331; helo=mail-wm1-x331.google.com;
+ envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 519884013A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 519884013A
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
+ [IPv6:2a00:1450:4864:20::331])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 519884013A
+ for <buildroot@buildroot.org>; Sun, 21 Jul 2024 10:24:36 +0000 (UTC)
+Received: by mail-wm1-x331.google.com with SMTP id
+ 5b1f17b1804b1-4277a5ed48bso24611985e9.2
+ for <buildroot@buildroot.org>; Sun, 21 Jul 2024 03:24:35 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1721557473; x=1722162273;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=Cu4zWea0eU7m6hDu9Ojeq2Bs/fp27EyTDLAZf6ySsJQ=;
+ b=M90kpfdhSpgk4MUVyRGDSi+3fqApx+uRQ5OQ2aifyHWEPRM9kKltJC1ux+RU6l8JXg
+ Ou2Q0hBPet6P4jF0RAI7Vz5ZhVLK5uGUZN+UMSdf6qZtKbasikTnSsrO8w9O0qA3CJVM
+ /h1LMwD/lF4QQ2rcXv3REemy9pH/qIWEqbjDz3QsxO1Dwc3BraXv+GLRbFFnG44BwZzs
+ lUax+iuJXsbsHFSxfnp9df61AcLAb2ov2HfmyptTneqH4aGnRSiccCiFP+h0sW077BX1
+ k7D6SnNwF915o/9YeWGpgXKxKRMVcR6YGjV/iq0le7weuVB7lWLN2ijoLqnstQKuTfP3
+ Ibiw==
+X-Gm-Message-State: AOJu0YxlxAkiyHZlwEZjBLHMZdEyvJOg3Z4iP9jCz2amLg0zRyzyyI/j
+ 8jAlhAKAs3dUk8Rh8kwkJbDs1SRms0aRCRdXMRImwD40z6KSrn6DB3ndKQ==
+X-Google-Smtp-Source: AGHT+IFtYcbEiv0Ny5BX+Wz9/YZfKBCksMcUh8FbBpvgdFc5a1AsdqoRn4oWnCG0PfG2Gs6/YzN3Uw==
+X-Received: by 2002:a05:600c:5486:b0:426:5ee5:3130 with SMTP id
+ 5b1f17b1804b1-427dc513699mr21329465e9.3.1721557473046; 
+ Sun, 21 Jul 2024 03:24:33 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-785-215.w83-197.abo.wanadoo.fr.
+ [83.197.112.215]) by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-427d2a638bbsm107749865e9.15.2024.07.21.03.24.32
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 21 Jul 2024 03:24:32 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Sun, 21 Jul 2024 12:24:30 +0200
+Message-ID: <20240721102430.980514-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-Date: Sun, 21 Jul 2024 10:16:27 +0000
-From: Andreas Ziegler <br015@umbiko.net>
-To: Frank Wunderlich <frank-w@public-files.de>
-In-Reply-To: <trinity-cf5cdaab-cad5-4928-9dea-541742606976-1721555640184@3c-app-gmx-bap52>
-References: <mailman.12142.1721505316.24059.buildroot@buildroot.org>
- <f49923df9029dfb3217cb858d0be4f69@umbiko.net>
- <trinity-cf5cdaab-cad5-4928-9dea-541742606976-1721555640184@3c-app-gmx-bap52>
-Message-ID: <e00d6149cbd2bd2a5a672fcf0323c814@umbiko.net>
-X-Sender: br015@umbiko.net
-X-Virus-Scanned: clamav-milter 1.0.5 at serv15.avernis.de
-X-Virus-Status: Clean
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=umbiko.net; s=mail; 
- t=1721556987; bh=DyHoU1GvcXyP6+uP1rFn1hUR516jA7PJnB7p0KLqTh0=;
- h=Date:From:To:Cc:Subject:In-Reply-To:References;
- b=hFI5Ny4+BpC0nhXVFpvmsQyJibwJm6oUgvBANOfDR9BuaGUERigV59fIYZOZpom+J
- Jd2Z2EfjBt2R5mr14xUY6b2hRAZJfvHWQB93QjijjYAJHztVcJeO3d5jWSEge53Ngt
- ykcgG4wzPHTCZ0roosQmLwTiGFGM+cmDtN95yBCg=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=umbiko.net
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=umbiko.net header.i=@umbiko.net header.a=rsa-sha256
- header.s=mail header.b=hFI5Ny4+
-Subject: Re: [Buildroot] lvm2 seems to require systemd
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1721557473; x=1722162273; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=Cu4zWea0eU7m6hDu9Ojeq2Bs/fp27EyTDLAZf6ySsJQ=;
+ b=ZKzDIKSLahgKd5ZHGm22xeWcZV5/ZeApy0QyC0sFwUc157E7d3fHjfVMXHSdZcO5NJ
+ /FRCP6o4bZF3+60VtUC3G69mgUEjHtfh7E3ZBfNrKDgJeZcxH77DGncM1IPd9j7D0aUt
+ o9bxzzY9lqp742jjyPZSLuyJSwKU0EwzUiC1XqhoG4+WJigIEVBsoAt9UgHaitAgnqg7
+ 84EplwUJDPXGAc5ew8jYZnPOa0Il5H9HSXvxd+1UfkbTaeH2A9mx4mJx/EzQcFW0R8RK
+ rGbq/523FW5qQvBt4fEwkBvrwz2ejBLnoSNC+e5Spujjjc14BD08XkdH7XUzzXLfNrFh
+ T1Bw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=ZKzDIKSL
+Subject: [Buildroot] [PATCH 1/1] package/tftpd: bump to latest git commit
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,135 +100,74 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot <buildroot@buildroot.org>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Frank,
+- Update hash of tftpd.c (changes not related to license)
+- --include=$(@D)/autoconf/m4 and --disable-tcpwrappers must be passed
+  since
+  https://git.kernel.org/pub/scm/network/tftp/tftp-hpa.git/commit/?id=fefaa2cc5c2ae1537fccbb552496787130feeeaa
+- This bump will also fix the following musl build failure raised since
+  latest bump in ee2b57e0c98acf1d02cf66a38c9ec82bd69bcbeb:
 
-On 2024-07-21 09:54, Frank Wunderlich wrote:
-> regards Frank
-> 
-> 
->> Gesendet: Sonntag, 21. Juli 2024 um 11:17 Uhr
->> Von: "Andreas Ziegler" <br015@umbiko.net>
->> An: frank-w@public-files.de
->> Cc: "buildroot" <buildroot@buildroot.org>
->> Betreff: Re: lvm2 seems to require systemd
->> 
->> Hi Frank,
->> 
->> On 2024-07-20 14:34, Frank Wunderlich wrote:
->> > Hi,
->> >
->> > i try to build a buildroot (2024.05) initrd with lvm2 support
->> >
->> > so basicly added these options:
->> >
->> > #to select BR2_PACKAGE_HAS_UDEV
->> > BR2_PACKAGE_EUDEV=y
->> > BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
->> > BR2_PACKAGE_LIBBLOCKDEV=y
->> > BR2_PACKAGE_LVM2=y
->> >
->> > build is fine, but i see this while bootup:
->> >
->> > [    3.665010] udevd[1520]: failed to execute '/usr/bin/systemd-run'
->> > '/usr/bin/systemd-run --no-block --property DefaultDependencies=
->> > no --unit lvm-activate-vg-nvme /usr/sbin/lvm vgchange -aay
->> > --autoactivation event vg-nvme': No such file or directory
->> > done
->> 
->> lvm2 installs a bunch of udev rules; one of them relies on systemd-run
->> to execute a command in the background:
->> 
->> # pvscan will check if this device completes a VG,
->> # i.e. all PVs in the VG are now present with the
->> # arrival of this PV.  If so, it prints to stdout:
->> # LVM_VG_NAME_COMPLETE='foo'
->> #
->> # When the VG is complete it can be activated, so
->> # vgchange -aay <vgname> is run.  It is run via
->> # systemd since it can take longer to run than
->> # udev wants to block when processing rules.
->> # (if there are hundreds of LVs to activate,
->> # the vgchange can take many seconds.)
->> 
->> ...
->> 
->> IMPORT{program}="/usr/sbin/lvm pvscan --cache --listvg --checkcomplete
->> --vgonline --autoactivation event --udevoutput --journal=output
->> $env{DEVNAME}"
->> ENV{LVM_VG_NAME_COMPLETE}=="?*", RUN+="/usr/bin/systemd-run --no-block
->> --property DefaultDependencies=no --unit
->> lvm-activate-$env{LVM_VG_NAME_COMPLETE} /usr/sbin/lvm vgchange -aay
->> --autoactivation event $env{LVM_VG_NAME_COMPLETE}"
->> GOTO="lvm_end"
->> 
->> > i see the physical volume, but logical volumes are disabled
->> >
->> > # pvscan
->> >   PV /dev/nvme0n1p5   VG vg-nvme   lvm2 [<1.79 TiB / <1.78 TiB free]
->> >   Total: 1 [<1.79 TiB] / in use: 1 [<1.79 TiB] / in no VG: 0 [0   ]
->> > # vgscan
->> >   Found volume group "vg-nvme" using metadata type lvm2
->> > # lvscan
->> >   inactive          '/dev/vg-nvme/var' [10.00 GiB] inherit
->> >
->> > and so i cannot mount the logical volume
->> >
->> > # mount /dev/vg-nvme/var /mnt
->> > [  281.006375] /dev/vg-nvme/var: Can't lookup blockdev
->> > [  281.011279] /dev/vg-nvme/var: Can't lookup blockdev
->> > [  281.016202] /dev/vg-nvme/var: Can't lookup blockdev
->> > [  281.021080] /dev/vg-nvme/var: Can't lookup blockdev
->> > mount: mounting /dev/vg-nvme/var on /mnt failed: No such file or
->> > directory
->> >
->> > any ideas?
->> 
->> I would try to run vgchange manually to see if the setup works at all,
->> then create a /usr/bin/systemd-run script that is able to execute
->> commands in the background. Something like this (untested):
-> 
-> i was able to manually initialize the lvm value after adding the 
-> systemd without init (running the command without prefix 
-> "systemd-run")...
-> 
-> basicly with this command:
-> 
-> /usr/sbin/lvm vgchange -aay --autoactivation event vg-nvme
-> 
-> with init i had compile issues missing libmount, see my followup post
-> 
-> now i have to remove systems from my initrd somehow to do further 
-> testing with only the eudev. any idea doing this without making all 
-> clear (or is this dropped when recreating the cpio file)?
+  In file included from tftpsubs.h:41,
+                   from tftpsubs.c:34:
+  /home/autobuild/autobuild/instance-9/output-1/build/tftpd-e52af4207a6e09a1ba21f61d6f85d8b2b1e6efc0/config.h:209:13: error: conflicting types for 'socklen_t'; have 'int'
+    209 | typedef int socklen_t;
+        |             ^~~~~~~~~
 
-Without running make clean, unwanted files need to be removed manually. 
-Buildroot creates per-package logs .files-list, 
-.files-list-{host,images,staging}, which contain the names of files 
-copied to the respective destination. Remove at least those from 
-.files-list to revert to a system without the package; preferrably also 
-those from .files-list-staging.
+Fixes: ee2b57e0c98acf1d02cf66a38c9ec82bd69bcbeb
+ - http://autobuild.buildroot.org/results/4b5320013d8ab50499a459d64a71e0b71814fb2f
 
-Kind regards,
-Andreas
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/tftpd/tftpd.hash | 4 ++--
+ package/tftpd/tftpd.mk   | 5 +++--
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-> 
->>    #!/bin/sh
->>    prg=$1
->>    shift
->>    (
->>      $prg $@ < /dev/zero > /tmp/error.log 2>&1
->>    )&
-> 
->> Kind regards,
->> Andreas
->> 
->> > regards Frank
+diff --git a/package/tftpd/tftpd.hash b/package/tftpd/tftpd.hash
+index 3fab9dba07..5a4e87f689 100644
+--- a/package/tftpd/tftpd.hash
++++ b/package/tftpd/tftpd.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  9bdb3e2ab2b68e4d8cd057d102395c362baf07c7b052f1d5e40e5190afecc15e  tftpd-e52af4207a6e09a1ba21f61d6f85d8b2b1e6efc0-git4.tar.gz
++sha256  452b2d630f884d80a7c4c324aa8248470224048ffb9473e3490460658b8ebea4  tftpd-2c86ff58dcc003107b47f2d35aa0fdc4a3fd95e1-git4.tar.gz
+ 
+ # Hash for license file
+-sha256  5936d0764cb6e8f2f5ce8a11c249d81037b5f275f5983e8538ee4fbe57195369  tftpd/tftpd.c
++sha256  9c46847a03d4cf290616a173d526b9bbdfcaf6846cbc01f361989b4e61f2d72e  tftpd/tftpd.c
+diff --git a/package/tftpd/tftpd.mk b/package/tftpd/tftpd.mk
+index 81b67f82ce..73ac7006a4 100644
+--- a/package/tftpd/tftpd.mk
++++ b/package/tftpd/tftpd.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
+ 
+-TFTPD_VERSION = e52af4207a6e09a1ba21f61d6f85d8b2b1e6efc0
++TFTPD_VERSION = 2c86ff58dcc003107b47f2d35aa0fdc4a3fd95e1
+ TFTPD_SITE = https://git.kernel.org/pub/scm/network/tftp/tftp-hpa.git
+ TFTPD_SITE_METHOD = git
+-TFTPD_CONF_OPTS = --without-tcpwrappers
++TFTPD_CONF_OPTS = --disable-tcpwrappers
+ TFTPD_LICENSE = BSD-4-Clause
+ TFTPD_LICENSE_FILES = tftpd/tftpd.c
+ TFTPD_CPE_ID_VENDOR = tftpd-hpa_project
+@@ -15,6 +15,7 @@ TFTPD_CPE_ID_PRODUCT = tftpd-hpa
+ TFTPD_SELINUX_MODULES = tftp
+ # From git
+ TFTPD_AUTORECONF = YES
++TFTPD_AUTORECONF_OPTS = --include=$(@D)/autoconf/m4
+ 
+ define TFTPD_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -D $(@D)/tftp/tftp $(TARGET_DIR)/usr/bin/tftp
+-- 
+2.43.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
