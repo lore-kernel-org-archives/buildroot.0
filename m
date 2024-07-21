@@ -4,91 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A2FCC3DA5D
-	for <buildroot@archiver.kernel.org>; Sun, 21 Jul 2024 16:57:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3025BC3DA5D
+	for <buildroot@archiver.kernel.org>; Sun, 21 Jul 2024 17:09:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 20D70605D4;
-	Sun, 21 Jul 2024 16:57:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D6D57605BA;
+	Sun, 21 Jul 2024 17:09:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uRJbi6qPl12Q; Sun, 21 Jul 2024 16:57:27 +0000 (UTC)
+ id qwMOkgbF3KOT; Sun, 21 Jul 2024 17:09:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 297B0605DD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D826E605F0
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 297B0605DD;
-	Sun, 21 Jul 2024 16:57:27 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B5ED11BF321
- for <buildroot@lists.busybox.net>; Sun, 21 Jul 2024 16:57:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D826E605F0;
+	Sun, 21 Jul 2024 17:09:26 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 8E1EF1BF2C3
+ for <buildroot@lists.busybox.net>; Sun, 21 Jul 2024 17:09:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A325640120
- for <buildroot@lists.busybox.net>; Sun, 21 Jul 2024 16:57:25 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7C130605F0
+ for <buildroot@lists.busybox.net>; Sun, 21 Jul 2024 17:09:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5NVjh_D0eqHv for <buildroot@lists.busybox.net>;
- Sun, 21 Jul 2024 16:57:24 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::433; helo=mail-wr1-x433.google.com;
- envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 16A44400F3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 16A44400F3
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
- [IPv6:2a00:1450:4864:20::433])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 16A44400F3
- for <buildroot@buildroot.org>; Sun, 21 Jul 2024 16:57:23 +0000 (UTC)
-Received: by mail-wr1-x433.google.com with SMTP id
- ffacd0b85a97d-3687fd09251so1297782f8f.0
- for <buildroot@buildroot.org>; Sun, 21 Jul 2024 09:57:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1721581041; x=1722185841;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=ghARpuOJmEVX9ylRlfjawosjTxGsE5uPyqCnO6Cp4YU=;
- b=lID5Qh71cw/tJpMC2VmH7KHMtPQb0SxzghDpPuEMmJxmsKIGnbIumsYB2e1Vq+XXE6
- u2UPsBEgOdNKK7i1KkxQq8RsR2A3at99nW/2eax960WrcTAEYa3QAyX0BBagzFOpsadz
- 11Qkpqxhx5K6emjFJ+NjvvggxxlaoOF+u5T1Re1BeA/xif7shOITYxkLwnVaf30DhNwH
- MMGMy6Q8fZGC7rzUrXvV5o0t4+dxS5+W+rpuoRYRBStHwu/cB7M/+ftZNayq/UwPreXh
- wwB6rz+lKgM33zFK7TzoeT9IKCRUTQOjrUn6CGLYZs4ZJPj8aEm8ibfTdmetO/nTIVeH
- 8lNw==
-X-Gm-Message-State: AOJu0YwkDPCn59Yr4nymAQCunkgb7qzp5u5I4TWCOjqR9jDlIFbFZPI8
- PHbtRwlSPun8nq3kljzYptDyxn2lhb31NBcBPPgVICCPg5nZ6hDVKjN8iA==
-X-Google-Smtp-Source: AGHT+IH08YjlkL6p2prhK6PPD9sk+QC1H6aL74ibuXtjepLEmcXuCg9qafwa/TttXbHMw6j4GhJM9g==
-X-Received: by 2002:adf:a35a:0:b0:368:6633:c550 with SMTP id
- ffacd0b85a97d-369bb2ba6d7mr2683729f8f.52.1721581041377; 
- Sun, 21 Jul 2024 09:57:21 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-785-215.w83-197.abo.wanadoo.fr.
- [83.197.112.215]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-368787ced05sm6353476f8f.67.2024.07.21.09.57.20
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 21 Jul 2024 09:57:21 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5G74UOv9oem3 for <buildroot@lists.busybox.net>;
+ Sun, 21 Jul 2024 17:09:24 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 6CB48605BA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6CB48605BA
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6CB48605BA
+ for <buildroot@buildroot.org>; Sun, 21 Jul 2024 17:09:23 +0000 (UTC)
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 04106B0051B;
+ Sun, 21 Jul 2024 19:09:19 +0200 (CEST)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 21 Jul 2024 18:57:17 +0200
-Message-ID: <20240721165717.1996106-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.43.0
+Date: Sun, 21 Jul 2024 19:09:12 +0200
+Message-ID: <20240721170912.138847-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.45.2
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1721581041; x=1722185841; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=ghARpuOJmEVX9ylRlfjawosjTxGsE5uPyqCnO6Cp4YU=;
- b=DqtccdWXBwsZGWkScvzVN+LfpvZOHUOE6IXWDxjrgmV2bjA0gFmogOoCSdME+wQHFz
- yc2Ogtc0qDOOEN6JwnlCzeELaH5nOLPIXkhnwe9sRzMdmezHQm4PRY3Hw64Ub0Dvq3cy
- LR2rDkpkOIEmSqb3C+KDHljVKOtSF9hCMWLmbBk8hA2XM6m0hFT1jdNAt24SYVyWBSZq
- ryn7Q2iqJO97VKn8mDqNDBOk3kcUDpGaeyKN/oIrBO1gRq1IdhaPoL+MIBQ+xQruow2W
- wUbzyDJgT/nmHzcnaijzdD2HLq8To2BQfxvZ+hAC43MYy11Y2xt0LNy/XhcWKqXqF865
- 7pBw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1721581761;
+ bh=dV6V2UqsMUYGO60njqT8M9ZJFEgVioq5AElRg6rqU4Q=;
+ h=From:To:Cc:Subject:Date:From;
+ b=AKV34awVPY0vZPz20PAkaeX4UMom39ltqxOhogqH0qAlPv6nBoJBqR3IIxI2XGBeS
+ taFyeFjws2oMbnLRXUwmblBWZrd92Sg2I5TfSg+VhH9r3IZdgZlCF3mhUBVoBUHGwq
+ tFaORIFJLitxnsApfvhpuwyr7W0XjsRfjMC1Fq4o+HUt0wYKF8dGUEc2m9cxSe3Tri
+ 2twzcvuuzETET1epAXSjq7KNu0CIWp6faTcxQ0B1iuk/EqK8PSTdtr/1jTJ89QnaG9
+ Wb197WfKCQx15IuFwcO+FtKWLlfnl3+DtUVUsVGP3W40Xw+64Bu6SibMQ5ZzE4wbfY
+ cZMKxNyfuyQDQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=DqtccdWX
-Subject: [Buildroot] [PATCH v2,1/1] package/gnutls: disable tpm2-tss
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=AKV34awV
+Subject: [Buildroot] [PATCH 1/1] support/testing: add iproute2 runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,68 +76,116 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Julien Olivain <ju.o@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Disable tpm2-tss to avoid the following circular dependency if
-BR2_PACKAGE_TPM2_TSS_FAPI is selected:
-tpm2-tss -> libcurl -> gnutls -> tmp2-tss
-resulting in the following build failure of libcurl or rtmpdump since
-commit caff4179a4481233257f5f475ca57ce9061af900:
-
-configure: error: TLS not detected, you will not be able to use HTTPS, FTPS, NTLM and more.
-Use --with-openssl, --with-gnutls, --with-wolfssl, --with-mbedtls, --with-schannel, --with-secure-transport, --with-amissl, --with-bearssl or --with-rustls to address this.
-
-[...]
-
-In file included from rtmp.c:32:
-rtmp_sys.h:110:10: fatal error: gnutls/gnutls.h: No such file or directory
-  110 | #include <gnutls/gnutls.h>
-      |          ^~~~~~~~~~~~~~~~~
-
-Fixes: caff4179a4481233257f5f475ca57ce9061af900
- - http://autobuild.buildroot.org/results/72e1843de650c9ed4795f1141e9fd485b71a14c3
- - http://autobuild.buildroot.org/results/918f0f7efa810b17f6d2266a890bf0150cbed146
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
-Changes v1 -> v2 (after review of Baruch Siach):
- - Add --without-tpm2
+ DEVELOPERS                                    |  1 +
+ .../testing/tests/package/test_iproute2.py    | 77 +++++++++++++++++++
+ 2 files changed, 78 insertions(+)
+ create mode 100644 support/testing/tests/package/test_iproute2.py
 
- package/gnutls/gnutls.mk | 8 +-------
- 1 file changed, 1 insertion(+), 7 deletions(-)
-
-diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
-index 8302194812..cf2f02cc9d 100644
---- a/package/gnutls/gnutls.mk
-+++ b/package/gnutls/gnutls.mk
-@@ -30,6 +30,7 @@ GNUTLS_CONF_OPTS = \
- 	--without-librt-prefix \
- 	--without-libz-prefix \
- 	--without-tpm \
-+	--without-tpm2 \
- 	$(if $(BR2_PACKAGE_GNUTLS_TOOLS),--enable-tools,--disable-tools) \
- 	$(if $(BR2_PACKAGE_GNUTLS_ENABLE_SSL2),--enable,--disable)-ssl2-support \
- 	$(if $(BR2_PACKAGE_GNUTLS_ENABLE_GOST),--enable,--disable)-gost
-@@ -99,13 +100,6 @@ else
- GNUTLS_CONF_OPTS += --without-p11-kit
- endif
- 
--ifeq ($(BR2_PACKAGE_TPM2_TSS),y)
--GNUTLS_CONF_OPTS += --with-tpm2
--GNUTLS_DEPENDENCIES += tpm2-tss
--else
--GNUTLS_CONF_OPTS += --without-tpm2
--endif
--
- ifeq ($(BR2_PACKAGE_ZLIB),y)
- GNUTLS_CONF_OPTS += --with-zlib
- GNUTLS_DEPENDENCIES += zlib
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 333e26d74e..77a798b25c 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1878,6 +1878,7 @@ F:	support/testing/tests/package/test_hwloc.py
+ F:	support/testing/tests/package/test_iozone.py
+ F:	support/testing/tests/package/test_iperf.py
+ F:	support/testing/tests/package/test_iperf3.py
++F:	support/testing/tests/package/test_iproute2.py
+ F:	support/testing/tests/package/test_iptables.py
+ F:	support/testing/tests/package/test_jailhouse.py
+ F:	support/testing/tests/package/test_jq.py
+diff --git a/support/testing/tests/package/test_iproute2.py b/support/testing/tests/package/test_iproute2.py
+new file mode 100644
+index 0000000000..91d9006e23
+--- /dev/null
++++ b/support/testing/tests/package/test_iproute2.py
+@@ -0,0 +1,77 @@
++import os
++
++import infra.basetest
++
++
++class TestIpRoute2(infra.basetest.BRTest):
++    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
++        """
++        BR2_PACKAGE_IPROUTE2=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++
++    def test_run(self):
++        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
++        self.emulator.boot(arch="armv5",
++                           kernel="builtin",
++                           options=["-initrd", cpio_file])
++        self.emulator.login()
++
++        # Check the program can execute. This also check we are
++        # actually using the version from the iproute2 package, rather
++        # than the BusyBox version (which does not understand this
++        # option).
++        self.assertRunOk("ip -Version")
++
++        # We run simple invocations of iproute2 tools.
++        self.assertRunOk("ifstat")
++        self.assertRunOk("ip link show dev lo")
++
++        # Buildroot is supposed to have setup the loopback "lo"
++        # interface. We should be able to ping any address in
++        # the 127.0.0.0/8 subnet.
++        addrs = ["127.0.0.1", "127.0.1.2", "127.1.2.3"]
++        ping_cmd = "ping -c 3 -i 0.2"
++        for addr in addrs:
++            self.assertRunOk(f"{ping_cmd} {addr}")
++
++        # We now change this 127.0.0.1/8 to a /16.
++        self.assertRunOk("ip addr del 127.0.0.1/8 dev lo")
++        self.assertRunOk("ip addr add 127.0.0.1/16 dev lo")
++
++        # The IPs in the 127.0.0.0/16 subnet are still supposed to
++        # ping...
++        addrs = ["127.0.0.1", "127.0.1.2"]
++        for addr in addrs:
++            self.assertRunOk(f"{ping_cmd} {addr}")
++        # ...but the IP outside is supposed to fail.
++        _, ret = self.emulator.run(f"{ping_cmd} 127.1.2.3")
++        self.assertNotEqual(ret, 0)
++
++        # We add a prohibited route.
++        self.assertRunOk("ip route add prohibit 127.0.1.0/24")
++
++        # Now, only 127.0.0.1 is supposed to ping...
++        self.assertRunOk(f"{ping_cmd} 127.0.0.1")
++        # ...while the other IPs expected to fail.
++        addrs = ["127.0.1.2", "127.1.2.3"]
++        for addr in addrs:
++            _, ret = self.emulator.run(f"{ping_cmd} {addr}")
++            self.assertNotEqual(ret, 0)
++
++        # We should be able to see our prohibited route.
++        out, ret = self.emulator.run("ip route list")
++        self.assertEqual(ret, 0)
++        self.assertEqual(out[0].strip(), "prohibit 127.0.1.0/24")
++
++        # We create a new network namespace, and create a new shell
++        # process in it.
++        self.assertRunOk("ip netns add br-test")
++        self.assertRunOk("ip netns exec br-test /bin/sh")
++
++        # Since we are in a new namespace, we should no longer see the
++        # prohibited route. The route list output should be empty.
++        out, ret = self.emulator.run("ip route list")
++        self.assertEqual(ret, 0)
++        self.assertEqual(len(out), 0)
 -- 
-2.43.0
+2.45.2
 
 _______________________________________________
 buildroot mailing list
