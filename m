@@ -4,48 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D04D2C3DA5D
-	for <buildroot@archiver.kernel.org>; Sun, 21 Jul 2024 16:33:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA8FAC3DA5D
+	for <buildroot@archiver.kernel.org>; Sun, 21 Jul 2024 16:34:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A0E2F605CF;
-	Sun, 21 Jul 2024 16:33:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AF3EF605CF;
+	Sun, 21 Jul 2024 16:34:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FHuGZ0wtWABS; Sun, 21 Jul 2024 16:33:58 +0000 (UTC)
+ id emK9Pbo-AFbp; Sun, 21 Jul 2024 16:34:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B9212605D4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CA7B7605D4
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B9212605D4;
-	Sun, 21 Jul 2024 16:33:58 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0FD2C1BF321
- for <buildroot@lists.busybox.net>; Sun, 21 Jul 2024 16:33:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CA7B7605D4;
+	Sun, 21 Jul 2024 16:34:41 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 2526D1BF321
+ for <buildroot@lists.busybox.net>; Sun, 21 Jul 2024 16:34:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id F158340308
- for <buildroot@lists.busybox.net>; Sun, 21 Jul 2024 16:33:56 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 01ED840120
+ for <buildroot@lists.busybox.net>; Sun, 21 Jul 2024 16:34:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id np81KFYzZEnW for <buildroot@lists.busybox.net>;
- Sun, 21 Jul 2024 16:33:56 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id v8raRNIoNgit for <buildroot@lists.busybox.net>;
+ Sun, 21 Jul 2024 16:34:39 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
+ helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0491240301
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0491240301
- for <buildroot@buildroot.org>; Sun, 21 Jul 2024 16:33:56 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F381286F53; Sun, 21 Jul 2024 16:33:55 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 21 Jul 2024 18:32:25 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d4a84e61615553ff678d3c3b52ed33f898e9fcc9
-X-Git-Newrev: 998c12bc1567a27f5e55035af80f1eb95f0b078c
-X-Patchwork-Hint: ignore
-Message-Id: <20240721163355.F381286F53@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/mxt-app: bump to version 1.38
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org BAB9D400F3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BAB9D400F3
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id BAB9D400F3
+ for <buildroot@buildroot.org>; Sun, 21 Jul 2024 16:34:38 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 1B937FF802;
+ Sun, 21 Jul 2024 16:34:37 +0000 (UTC)
+Date: Sun, 21 Jul 2024 18:34:36 +0200
+To: Saeed Kazemi <kazemi.ms@gmail.com>
+Message-ID: <20240721183436.39697007@windsurf>
+In-Reply-To: <20240721121107.2125187-1-kazemi.ms@gmail.com>
+References: <20240721121107.2125187-1-kazemi.ms@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1721579677;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=6ylYOYUFLei1q49cfmitZyCSkU3k83L34jlGGEPYiTI=;
+ b=B5zIyRAiQqjMzZ7bVNaCIdJYZ/v0VaTnqGNuFplLUvGTEry4SN2PB3SlE8NttFkzZm+kpk
+ +rHmj8SWI3XVtOJEatjTuAQ4VwbHJFi2PDWJ6NORJhwLuYUwXv7xZAAyAzmmHTcT6fulxp
+ CtuxCW/XylVhX0MfzdPSk1fp1Sw9KBhmCSU1XV4FyMWa4fbMVtJpGLRaHWJ05N/16SOPco
+ VkF+U4e6acUXuOUoW2aKztcy2Fe8BjC1vPOCRNUUtzYI4iqTgZIpi/2a4p3Y05KCxI5Dkm
+ h4EW7R1HUdClOnDfJz67Wa7QyTGLJN0qGcTnPURJnX42CVAi/gABn0u05ZNfRQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=B5zIyRAi
+Subject: Re: [Buildroot] [PATCH 1/1] package/eza: bump to version 0.18.22
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,47 +82,31 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=998c12bc1567a27f5e55035af80f1eb95f0b078c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sun, 21 Jul 2024 14:11:07 +0200
+Saeed Kazemi <kazemi.ms@gmail.com> wrote:
 
-Release notes:
-https://github.com/atmel-maxtouch/mxt-app/releases/tag/v1.38
+> Release notes:
+> https://github.com/eza-community/eza/releases/tag/v0.18.22
+> 
+> Signed-off-by: Saeed Kazemi <kazemi.ms@gmail.com>
+> ---
+>  package/eza/eza.hash | 2 +-
+>  package/eza/eza.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Signed-off-by: Saeed Kazemi <kazemi.ms@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/mxt-app/mxt-app.hash | 2 +-
- package/mxt-app/mxt-app.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Applied to master, thanks.
 
-diff --git a/package/mxt-app/mxt-app.hash b/package/mxt-app/mxt-app.hash
-index b7851cea37..2f5ea814d8 100644
---- a/package/mxt-app/mxt-app.hash
-+++ b/package/mxt-app/mxt-app.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  3639720ae1ea033bd982d68c5cab84432ce046fe14a66d9b2de07f115b642722  mxt-app-1.36.tar.gz
-+sha256  38fdf7954d2184d122f6f1b1493fba1955c0e3c7dfd5196dbc3d536afc9c672a  mxt-app-1.38.tar.gz
- sha256  3682b125a40a4da00b6ab69bdbd38c25ed4beae69b3fe32458d2e32638477c4c  LICENSE
-diff --git a/package/mxt-app/mxt-app.mk b/package/mxt-app/mxt-app.mk
-index 3da1458978..4921803e4c 100644
---- a/package/mxt-app/mxt-app.mk
-+++ b/package/mxt-app/mxt-app.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--MXT_APP_VERSION = 1.36
-+MXT_APP_VERSION = 1.38
- MXT_APP_SITE = $(call github,atmel-maxtouch,mxt-app,v$(MXT_APP_VERSION))
- MXT_APP_LICENSE = BSD-2-Clause
- MXT_APP_LICENSE_FILES = LICENSE
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
