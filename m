@@ -4,67 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3025BC3DA5D
-	for <buildroot@archiver.kernel.org>; Sun, 21 Jul 2024 17:09:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66265C3DA61
+	for <buildroot@archiver.kernel.org>; Sun, 21 Jul 2024 17:28:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D6D57605BA;
-	Sun, 21 Jul 2024 17:09:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 10825605F0;
+	Sun, 21 Jul 2024 17:28:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qwMOkgbF3KOT; Sun, 21 Jul 2024 17:09:27 +0000 (UTC)
+ id tjJjzRZPeFcI; Sun, 21 Jul 2024 17:28:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D826E605F0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DA52D60602
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D826E605F0;
-	Sun, 21 Jul 2024 17:09:26 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 8E1EF1BF2C3
- for <buildroot@lists.busybox.net>; Sun, 21 Jul 2024 17:09:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DA52D60602;
+	Sun, 21 Jul 2024 17:28:53 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 913151BF2C3
+ for <buildroot@lists.busybox.net>; Sun, 21 Jul 2024 17:28:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7C130605F0
- for <buildroot@lists.busybox.net>; Sun, 21 Jul 2024 17:09:25 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7F402811A7
+ for <buildroot@lists.busybox.net>; Sun, 21 Jul 2024 17:28:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5G74UOv9oem3 for <buildroot@lists.busybox.net>;
- Sun, 21 Jul 2024 17:09:24 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 6CB48605BA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6CB48605BA
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6CB48605BA
- for <buildroot@buildroot.org>; Sun, 21 Jul 2024 17:09:23 +0000 (UTC)
-Received: from home.juju.sh (unknown
- [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 04106B0051B;
- Sun, 21 Jul 2024 19:09:19 +0200 (CEST)
-From: Julien Olivain <ju.o@free.fr>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9-_M_2u-Ysve for <buildroot@lists.busybox.net>;
+ Sun, 21 Jul 2024 17:28:51 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::436; helo=mail-wr1-x436.google.com;
+ envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 3AF0C810B3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3AF0C810B3
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com
+ [IPv6:2a00:1450:4864:20::436])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3AF0C810B3
+ for <buildroot@buildroot.org>; Sun, 21 Jul 2024 17:28:51 +0000 (UTC)
+Received: by mail-wr1-x436.google.com with SMTP id
+ ffacd0b85a97d-3687fd09251so1308614f8f.0
+ for <buildroot@buildroot.org>; Sun, 21 Jul 2024 10:28:50 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1721582928; x=1722187728;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=p/dnbbYT/5jCiyUopvd2LnGNWUaaFzE4h369cXATBeQ=;
+ b=FcCelZH9DlErAoyKHmFIzRVY0E0u6HtdyownT4VKBYEBd47jDTagcVkyZNg2bda6MU
+ l6E/RbEbkE93iIt6S0iAbTg8Ws2asyC9GmzLJzAMT/Lh7hqSwEfwhqvG3NSbJ8XvzD0h
+ JpcHwMETKHELSZi97GN8nWsWqGa1vo/zphte6Z5u60NA/z6tePvPGAkGGUOy48U4Hogi
+ Et0/4eQodlwhVTXcrB/lT02L0wDUKcm3AsyRhVE+9fX71vy2cyELY1dI9qW0EpRgUamc
+ pjxS5fWJ1IPN3xuO2moHWuqqdYQ8jCnIOTcS1cdZpxLSCttyL3P01ggW9YqkHssSd741
+ gltg==
+X-Gm-Message-State: AOJu0YztnO+pZwsxHH3YmqcAU5R55GdgQhFEGmf9shbwZrqEi3+gEvc+
+ mG5h06YncNazAqGUSE51kJm2T3/EYC56OgD++YGOB/c22KjbkZLBdY8CNw==
+X-Google-Smtp-Source: AGHT+IHYtydsu50tVW1ljgGgLcITGTRBlQBEMKalM9mOrWPunzt5rxiyDd2R/biS9An932xHW933Lg==
+X-Received: by 2002:a5d:5f8d:0:b0:368:78ed:994c with SMTP id
+ ffacd0b85a97d-369bae4e008mr3282866f8f.17.1721582928515; 
+ Sun, 21 Jul 2024 10:28:48 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-785-215.w83-197.abo.wanadoo.fr.
+ [83.197.112.215]) by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-368786848basm6436379f8f.15.2024.07.21.10.28.48
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 21 Jul 2024 10:28:48 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 21 Jul 2024 19:09:12 +0200
-Message-ID: <20240721170912.138847-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.45.2
+Date: Sun, 21 Jul 2024 19:28:43 +0200
+Message-ID: <20240721172843.2342941-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1721581761;
- bh=dV6V2UqsMUYGO60njqT8M9ZJFEgVioq5AElRg6rqU4Q=;
- h=From:To:Cc:Subject:Date:From;
- b=AKV34awVPY0vZPz20PAkaeX4UMom39ltqxOhogqH0qAlPv6nBoJBqR3IIxI2XGBeS
- taFyeFjws2oMbnLRXUwmblBWZrd92Sg2I5TfSg+VhH9r3IZdgZlCF3mhUBVoBUHGwq
- tFaORIFJLitxnsApfvhpuwyr7W0XjsRfjMC1Fq4o+HUt0wYKF8dGUEc2m9cxSe3Tri
- 2twzcvuuzETET1epAXSjq7KNu0CIWp6faTcxQ0B1iuk/EqK8PSTdtr/1jTJ89QnaG9
- Wb197WfKCQx15IuFwcO+FtKWLlfnl3+DtUVUsVGP3W40Xw+64Bu6SibMQ5ZzE4wbfY
- cZMKxNyfuyQDQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1721582928; x=1722187728; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=p/dnbbYT/5jCiyUopvd2LnGNWUaaFzE4h369cXATBeQ=;
+ b=SpIlJtCP8uSGDznn3Se/jiLqweW3LIBrAptlnmmtCwlZlnLCjjaIpY1KvjJ56Y0B4E
+ puNdViTxgDBD8lEy+TetWvOXVsb7wYMjMM/45CKsxIA3GZtlCYtaen2d1Lk44AcrqHgF
+ 5bTz9oXK2E1JrlZ6uogl9ZGVZo0R+SIsb8MXFgNMAeeZPPnhUuj+RXtLzxLCFF6wSnZ5
+ r5pAp3xu1JIp7CY0Vf+QPyCjZ0Oq5pvO/eK/NGjH7byYtuC5iuXwvg0TtJgUnuks240g
+ LrfoZ2aqMDBzScUjWNaXF+M6PcWFtlXj9IMjrFLN/me/jp3OI1jCQlTVVCc2vli2ANwW
+ uH4g==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=AKV34awV
-Subject: [Buildroot] [PATCH 1/1] support/testing: add iproute2 runtime test
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=SpIlJtCP
+Subject: [Buildroot] [PATCH 1/1] package/libfreefare: bump to latest git
+ commit
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,116 +100,71 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>
+Cc: Simon Dawson <spdawson@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- DEVELOPERS                                    |  1 +
- .../testing/tests/package/test_iproute2.py    | 77 +++++++++++++++++++
- 2 files changed, 78 insertions(+)
- create mode 100644 support/testing/tests/package/test_iproute2.py
+This bump will fix the following build failure with gcc >= 14 thanks to
+https://github.com/nfc-tools/libfreefare/commit/494233d33b3a9d21da1bb0f1c59606820afe4691
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 333e26d74e..77a798b25c 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1878,6 +1878,7 @@ F:	support/testing/tests/package/test_hwloc.py
- F:	support/testing/tests/package/test_iozone.py
- F:	support/testing/tests/package/test_iperf.py
- F:	support/testing/tests/package/test_iperf3.py
-+F:	support/testing/tests/package/test_iproute2.py
- F:	support/testing/tests/package/test_iptables.py
- F:	support/testing/tests/package/test_jailhouse.py
- F:	support/testing/tests/package/test_jq.py
-diff --git a/support/testing/tests/package/test_iproute2.py b/support/testing/tests/package/test_iproute2.py
-new file mode 100644
-index 0000000000..91d9006e23
---- /dev/null
-+++ b/support/testing/tests/package/test_iproute2.py
-@@ -0,0 +1,77 @@
-+import os
-+
-+import infra.basetest
-+
-+
-+class TestIpRoute2(infra.basetest.BRTest):
-+    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-+        """
-+        BR2_PACKAGE_IPROUTE2=y
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
-+
-+    def test_run(self):
-+        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        self.emulator.boot(arch="armv5",
-+                           kernel="builtin",
-+                           options=["-initrd", cpio_file])
-+        self.emulator.login()
-+
-+        # Check the program can execute. This also check we are
-+        # actually using the version from the iproute2 package, rather
-+        # than the BusyBox version (which does not understand this
-+        # option).
-+        self.assertRunOk("ip -Version")
-+
-+        # We run simple invocations of iproute2 tools.
-+        self.assertRunOk("ifstat")
-+        self.assertRunOk("ip link show dev lo")
-+
-+        # Buildroot is supposed to have setup the loopback "lo"
-+        # interface. We should be able to ping any address in
-+        # the 127.0.0.0/8 subnet.
-+        addrs = ["127.0.0.1", "127.0.1.2", "127.1.2.3"]
-+        ping_cmd = "ping -c 3 -i 0.2"
-+        for addr in addrs:
-+            self.assertRunOk(f"{ping_cmd} {addr}")
-+
-+        # We now change this 127.0.0.1/8 to a /16.
-+        self.assertRunOk("ip addr del 127.0.0.1/8 dev lo")
-+        self.assertRunOk("ip addr add 127.0.0.1/16 dev lo")
-+
-+        # The IPs in the 127.0.0.0/16 subnet are still supposed to
-+        # ping...
-+        addrs = ["127.0.0.1", "127.0.1.2"]
-+        for addr in addrs:
-+            self.assertRunOk(f"{ping_cmd} {addr}")
-+        # ...but the IP outside is supposed to fail.
-+        _, ret = self.emulator.run(f"{ping_cmd} 127.1.2.3")
-+        self.assertNotEqual(ret, 0)
-+
-+        # We add a prohibited route.
-+        self.assertRunOk("ip route add prohibit 127.0.1.0/24")
-+
-+        # Now, only 127.0.0.1 is supposed to ping...
-+        self.assertRunOk(f"{ping_cmd} 127.0.0.1")
-+        # ...while the other IPs expected to fail.
-+        addrs = ["127.0.1.2", "127.1.2.3"]
-+        for addr in addrs:
-+            _, ret = self.emulator.run(f"{ping_cmd} {addr}")
-+            self.assertNotEqual(ret, 0)
-+
-+        # We should be able to see our prohibited route.
-+        out, ret = self.emulator.run("ip route list")
-+        self.assertEqual(ret, 0)
-+        self.assertEqual(out[0].strip(), "prohibit 127.0.1.0/24")
-+
-+        # We create a new network namespace, and create a new shell
-+        # process in it.
-+        self.assertRunOk("ip netns add br-test")
-+        self.assertRunOk("ip netns exec br-test /bin/sh")
-+
-+        # Since we are in a new namespace, we should no longer see the
-+        # prohibited route. The route list output should be empty.
-+        out, ret = self.emulator.run("ip route list")
-+        self.assertEqual(ret, 0)
-+        self.assertEqual(len(out), 0)
+mifare_desfire_crypto.c: In function 'cmac':
+mifare_desfire_crypto.c:139:23: error: implicit declaration of function 'malloc' [-Wimplicit-function-declaration]
+  139 |     uint8_t *buffer = malloc (padded_data_length (len, kbs));
+      |                       ^~~~~~
+mifare_desfire_crypto.c:69:1: note: include '<stdlib.h>' or provide a declaration of 'malloc'
+   68 | #include "freefare_internal.h"
+  +++ |+#include <stdlib.h>
+   69 |
+
+Fixes:
+ - http://autobuild.buildroot.org/results/778be216f62b8c2e05aba1b3e297dab0c6c6ccd0
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/libfreefare/libfreefare.hash | 4 ++--
+ package/libfreefare/libfreefare.mk   | 9 ++++-----
+ 2 files changed, 6 insertions(+), 7 deletions(-)
+
+diff --git a/package/libfreefare/libfreefare.hash b/package/libfreefare/libfreefare.hash
+index 9115518a3f..6ef30513d1 100644
+--- a/package/libfreefare/libfreefare.hash
++++ b/package/libfreefare/libfreefare.hash
+@@ -1,5 +1,5 @@
+-# From https://github.com/nfc-tools/libfreefare/releases/download/libfreefare-0.4.0/libfreefare-0.4.0.tar.bz2
+-sha256  bfa31d14a99a1247f5ed49195d6373de512e3eb75bf1627658b40cf7f876bc64  libfreefare-0.4.0.tar.bz2
++# Locally computed
++sha256  48db20cccdf3435a9f205bcbb67dbd4eec055991d21840fb419874efd9ce9df8  libfreefare-c2b0cfa4b9fb0e4be88604f00b7a2405618d5abc.tar.gz
+ 
+ # Hash for license file:
+ sha256  be6209dfd763a0ba77fbe990cfd2512804441d8b5f0cad927baa3341b50fcade  COPYING
+diff --git a/package/libfreefare/libfreefare.mk b/package/libfreefare/libfreefare.mk
+index 16f15b34e4..7065c441dc 100644
+--- a/package/libfreefare/libfreefare.mk
++++ b/package/libfreefare/libfreefare.mk
+@@ -4,14 +4,13 @@
+ #
+ ################################################################################
+ 
+-LIBFREEFARE_VERSION = 0.4.0
+-LIBFREEFARE_SOURCE = libfreefare-$(LIBFREEFARE_VERSION).tar.bz2
+-# Do not use the github helper here, the generated tarball is *NOT*
+-# the same as the one uploaded by upstream for the release.
+-LIBFREEFARE_SITE = https://github.com/nfc-tools/libfreefare/releases/download/libfreefare-$(LIBFREEFARE_VERSION)
++LIBFREEFARE_VERSION = c2b0cfa4b9fb0e4be88604f00b7a2405618d5abc
++LIBFREEFARE_SITE = $(call github,nfc-tools,libfreefare,$(LIBFREEFARE_VERSION))
+ LIBFREEFARE_DEPENDENCIES = host-pkgconf libnfc openssl
+ LIBFREEFARE_LICENSE = LGPL-3.0+ with exception
+ LIBFREEFARE_LICENSE_FILES = COPYING
++# From git
++LIBFREEFARE_AUTORECONF = YES
+ LIBFREEFARE_CONF_ENV += LIBS=`$(PKG_CONFIG_HOST_BINARY) --libs openssl`
+ 
+ $(eval $(autotools-package))
 -- 
-2.45.2
+2.43.0
 
 _______________________________________________
 buildroot mailing list
