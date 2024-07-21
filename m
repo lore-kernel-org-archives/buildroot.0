@@ -4,49 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F079FC3DA61
-	for <buildroot@archiver.kernel.org>; Sun, 21 Jul 2024 16:35:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 86622C3DA61
+	for <buildroot@archiver.kernel.org>; Sun, 21 Jul 2024 16:35:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C423C605CF;
-	Sun, 21 Jul 2024 16:35:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4F8B36068A;
+	Sun, 21 Jul 2024 16:35:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QaTcQeKdZnRU; Sun, 21 Jul 2024 16:35:06 +0000 (UTC)
+ id VqaVOMZJrWe0; Sun, 21 Jul 2024 16:35:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D282F60605
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E437160814
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D282F60605;
-	Sun, 21 Jul 2024 16:35:05 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 6039C1BF321
+	by smtp3.osuosl.org (Postfix) with ESMTP id E437160814;
+	Sun, 21 Jul 2024 16:35:07 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 85A821BF321
  for <buildroot@lists.busybox.net>; Sun, 21 Jul 2024 16:35:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4B50760605
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7FF6140245
  for <buildroot@lists.busybox.net>; Sun, 21 Jul 2024 16:35:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pRdCJ3bB79IJ for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id lm5yja-nW3jZ for <buildroot@lists.busybox.net>;
  Sun, 21 Jul 2024 16:35:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 97A3E605CF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8E15E4022B
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 97A3E605CF
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8E15E4022B
  for <buildroot@buildroot.org>; Sun, 21 Jul 2024 16:35:03 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 903F286F75; Sun, 21 Jul 2024 16:35:03 +0000 (UTC)
+ id 7AED386F74; Sun, 21 Jul 2024 16:35:03 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 21 Jul 2024 18:34:53 +0200
+Date: Sun, 21 Jul 2024 18:33:09 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2d76e7e5fc05c7c6bec131168a108fa3ac00343b
-X-Git-Newrev: ec7ae882e048ce4ca5c2b72cb884b8d1ef33c6cc
+X-Git-Oldrev: 998c12bc1567a27f5e55035af80f1eb95f0b078c
+X-Git-Newrev: 2d76e7e5fc05c7c6bec131168a108fa3ac00343b
 X-Patchwork-Hint: ignore
-Message-Id: <20240721163503.903F286F75@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/unbound: select
- BR2_PACKAGE_LIBOPENSSL_ENGINES
+Message-Id: <20240721163503.7AED386F74@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/eza: bump to version 0.18.22
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,39 +65,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ec7ae882e048ce4ca5c2b72cb884b8d1ef33c6cc
+commit: https://git.buildroot.net/buildroot/commit/?id=2d76e7e5fc05c7c6bec131168a108fa3ac00343b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-unbound unconditionally calls the (deprecated) ENGINE_* logic in
-libopenssl resulting in a build failure when
-!BR2_PACKAGE_LIBOPENSSL_ENGINES since commit
-623d3bbe43e9193aa8e3395367d01af59071b859:
+Release notes:
+https://github.com/eza-community/eza/releases/tag/v0.18.22
 
-sldns/keyraw.c:167:35: error: 'ENGINE_METHOD_ALL' undeclared (first use in this function)
-  167 |         if(!ENGINE_set_default(e, ENGINE_METHOD_ALL)) {
-      |                                   ^~~~~~~~~~~~~~~~~
-
-Fixes: 623d3bbe43e9193aa8e3395367d01af59071b859
- - http://autobuild.buildroot.org/results/b7782f5ba54543df53a835552632f58d4ad6c082
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Saeed Kazemi <kazemi.ms@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/unbound/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/eza/eza.hash | 2 +-
+ package/eza/eza.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/unbound/Config.in b/package/unbound/Config.in
-index ae2ebfd975..c8d697113c 100644
---- a/package/unbound/Config.in
-+++ b/package/unbound/Config.in
-@@ -3,6 +3,7 @@ config BR2_PACKAGE_UNBOUND
- 	depends on !BR2_STATIC_LIBS
- 	select BR2_PACKAGE_EXPAT
- 	select BR2_PACKAGE_LIBEVENT
-+	select BR2_PACKAGE_LIBOPENSSL_ENGINES if BR2_PACKAGE_LIBOPENSSL
- 	select BR2_PACKAGE_OPENSSL
- 	help
- 	  Unbound is a validating, recursive, and caching DNS resolver.
+diff --git a/package/eza/eza.hash b/package/eza/eza.hash
+index 3bc55b26ef..18d437abd1 100644
+--- a/package/eza/eza.hash
++++ b/package/eza/eza.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  c01f11ba19956108e42244f0b094bbb6bc74c13ea2c68feecf6f0ff2f127df97  eza-0.18.17-cargo2.tar.gz
++sha256  4ecb6221b28aaae309043b8403555eb6835de671c519c224a3807cea50f48001  eza-0.18.22-cargo2.tar.gz
+ sha256  2762990c7fbba9d550802a2593c1d857dcd52596bb0f9f192a97e9a7ac5f4f9e  LICENCE
+diff --git a/package/eza/eza.mk b/package/eza/eza.mk
+index 5a44fd7826..79fd2d3633 100644
+--- a/package/eza/eza.mk
++++ b/package/eza/eza.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-EZA_VERSION = 0.18.17
++EZA_VERSION = 0.18.22
+ EZA_SITE = $(call github,eza-community,eza,v$(EZA_VERSION))
+ EZA_LICENSE = MIT
+ EZA_LICENSE_FILES = LICENCE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
