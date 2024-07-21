@@ -4,91 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AF605C3DA61
-	for <buildroot@archiver.kernel.org>; Sun, 21 Jul 2024 21:16:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8837CC3DA5D
+	for <buildroot@archiver.kernel.org>; Sun, 21 Jul 2024 21:27:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 44EDD605DE;
-	Sun, 21 Jul 2024 21:16:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3F41E600CB;
+	Sun, 21 Jul 2024 21:27:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tFS0wU4aET18; Sun, 21 Jul 2024 21:16:36 +0000 (UTC)
+ id K8o2b2iyOpGr; Sun, 21 Jul 2024 21:26:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 42E46607CC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4F740605D0
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 42E46607CC;
-	Sun, 21 Jul 2024 21:16:36 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 25A1E1BF2FC
- for <buildroot@lists.busybox.net>; Sun, 21 Jul 2024 21:16:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4F740605D0;
+	Sun, 21 Jul 2024 21:26:59 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 2D6F01BF2FC
+ for <buildroot@lists.busybox.net>; Sun, 21 Jul 2024 21:26:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 13C90607CC
- for <buildroot@lists.busybox.net>; Sun, 21 Jul 2024 21:16:35 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 26E8E40319
+ for <buildroot@lists.busybox.net>; Sun, 21 Jul 2024 21:26:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PyOobPou74rq for <buildroot@lists.busybox.net>;
- Sun, 21 Jul 2024 21:16:34 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 49HnwbAljS6N for <buildroot@lists.busybox.net>;
+ Sun, 21 Jul 2024 21:26:56 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::331; helo=mail-wm1-x331.google.com;
+ client-ip=2a00:1450:4864:20::42b; helo=mail-wr1-x42b.google.com;
  envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 0ACB6605DE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0ACB6605DE
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
- [IPv6:2a00:1450:4864:20::331])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 0ACB6605DE
- for <buildroot@buildroot.org>; Sun, 21 Jul 2024 21:16:33 +0000 (UTC)
-Received: by mail-wm1-x331.google.com with SMTP id
- 5b1f17b1804b1-4266b1f1b21so27229055e9.1
- for <buildroot@buildroot.org>; Sun, 21 Jul 2024 14:16:33 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org B2B2B40314
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B2B2B40314
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
+ [IPv6:2a00:1450:4864:20::42b])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B2B2B40314
+ for <buildroot@buildroot.org>; Sun, 21 Jul 2024 21:26:55 +0000 (UTC)
+Received: by mail-wr1-x42b.google.com with SMTP id
+ ffacd0b85a97d-368440b073bso1573261f8f.0
+ for <buildroot@buildroot.org>; Sun, 21 Jul 2024 14:26:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1721596591; x=1722201391;
+ d=1e100.net; s=20230601; t=1721597213; x=1722202013;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=8T77Pf6QMRPxp0JA4aKCzzN8dgXBwgBXPE7hGgwhGFQ=;
- b=PplV3Eav46iL3O6kJOhUZNTaGjEaf41HqzXOKwORkxFMdV6DJHLzSpZuVL0cCB/XYZ
- G9xJXDWjhqFVkbUn3rn7SKS4byh6cpKUQxl7ov/mg6HawDK0SM5jjJHhbsmXe0m1iAFU
- ddS84S5nRLll4GqyoA03Jo9X6lqmfBs06oEk2OD3Gq7VbM60Fq5wtAFFWGqjsdfLhOTa
- fjLo97RD0MXRu47LU05LSTk+vM4Jl4lp9dwK588hhWqXW7k2h9/MAG1EZBvfjiQGmDEf
- D7Dn5lhV1HiXCjRq61EqNhekhq3BxW2BxU9xUtydEkuVJHOuB1WVv6ujebIsz2E8kwDl
- h2vA==
-X-Gm-Message-State: AOJu0Yxp/Pjg9mn+7WFl7vm6Ah2x0Ugb5JVqI7HG6inuoepCJ/3MZfN3
- QFu7decCNVvem4Yj5omor+qcRBbti6w7zWRAubxYDEJnwvhs83D5J7eOGw==
-X-Google-Smtp-Source: AGHT+IEUQDPzduM5s8SBDafyN7RoDw6OcOybwxbzCj2eJo0PQ8MLTWXIhxOE7VX3UkCxQGJ2pT37Kg==
-X-Received: by 2002:a05:600c:4ec7:b0:426:6f15:2e4d with SMTP id
- 5b1f17b1804b1-427dc51cecbmr32310825e9.9.1721596591346; 
- Sun, 21 Jul 2024 14:16:31 -0700 (PDT)
+ bh=DTSHXS5jLrZwxaktG1dCmCwyjUcV+L2astcgEcLw/1c=;
+ b=aZw5BwuL3pY6PJwvibdZXLtU3pwiv+FyWZApHstkGfzUSNHT+XHL/pCt07KBeIX2KE
+ NLxFDoJYvbHxaaL9XKaGfLsHHqVU/MC5HwwCGLA7VZFG1Nj3b+jrkVYK9aYEwexR1rBE
+ TqqS3Rn4/bKmfnjCQSwN8zuhUyGoI28LxOZ0wZNjSc4yz7g2gffuTiio+qniDsDql+Gs
+ 6jpTxuIrk+5VLG5ZUZT1Tli2MEhVdQhP8KtH6otFSd+KQIf8GTdbsSffI4MxhAm9MDlM
+ sDZqckPGjcahZVRh9SZSa/p43nak5zjjjdMkCkdKL7rG9lUF/eFR96rskHFhT+0hQB11
+ sH1g==
+X-Gm-Message-State: AOJu0Yyk+NyFsyJyO3RD0Jr07o/VFEi2haoAG6Atb4YeNACr5fzUVVxa
+ dvapUJ8gA+5DLMulNT3td6PgeYftv9K+7j+yIY+xWXitNceXqWzDHgzxPw==
+X-Google-Smtp-Source: AGHT+IGHHiHgVJ38sp84e4TszYlhA3qbiQl8SvZJIqbqAQXoE517ATgvjKaL+KzD5m+jAIFhGeSW9Q==
+X-Received: by 2002:adf:e5cc:0:b0:367:89ae:c204 with SMTP id
+ ffacd0b85a97d-36873eccaf1mr4853353f8f.12.1721597213038; 
+ Sun, 21 Jul 2024 14:26:53 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-785-215.w83-197.abo.wanadoo.fr.
  [83.197.112.215]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-427d69019a5sm102152325e9.18.2024.07.21.14.16.30
+ 5b1f17b1804b1-427d8f1cf7esm91929965e9.39.2024.07.21.14.26.52
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 21 Jul 2024 14:16:30 -0700 (PDT)
+ Sun, 21 Jul 2024 14:26:52 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 21 Jul 2024 23:16:28 +0200
-Message-ID: <20240721211628.3485003-1-fontaine.fabrice@gmail.com>
+Date: Sun, 21 Jul 2024 23:26:50 +0200
+Message-ID: <20240721212650.3542775-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1721596591; x=1722201391; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1721597213; x=1722202013; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=8T77Pf6QMRPxp0JA4aKCzzN8dgXBwgBXPE7hGgwhGFQ=;
- b=adwnSNPhCgBhQ7izFK1/sGpXExyVYgxfmi7htrE3SEXtV1uifkMG4KGUForgVIqqrv
- 12L+/JmuSbP5OfbsydEvbNDNBx/KYK8cYnNir42dFwejauCXOgduvc8zZrs9ac4DPIoi
- CXRaOfDov9/Pc4LZf15L5lVxVmBcpdCI89dXieHh/UApEpNQ8m+Pl+ed1sXctrCV+Sf0
- PxTUiYPr8iCYIwBxJUSyomlSiZurL6s62KkSCV+EmCNrKV/wobXN+GeTJpgvhJ25LU6A
- fGf4Bk4Y3HDJg+bjJ/J8jr3s+9xb96gA7x/l0JnQllSsPkOllyb9OTP5vw6TiTV0+pkP
- A7Qg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=DTSHXS5jLrZwxaktG1dCmCwyjUcV+L2astcgEcLw/1c=;
+ b=JHiGTH6Tg+cB9k9RzRB/Hfdiy20nMoziVU4XYRQY26EUhkK9BN7NitM9p2qfago8SX
+ BrvXzURGSih0yk34ncqTTAWa1Tef+ALU+TXiopMbpOUUrDyZUdECA1IagayCv8wJbURg
+ ZjZanMLNZNNiIU2+3MwbI9rOlcgF/sKqsNpAlML14fPieyb0uNkn0OUj1eMoogxq25wq
+ VgeiXU4U7WRfWqutxWuzXlwqjTa/PK9JuKTedzMYZCyYuYjFCQQTfpuyAfjZ/iioLcUJ
+ y3m/JOLUKt1MzgJ72Te9jUpIufSw4TKj6PPGf2zRWPbDbjs/wkPqEwfEFovgNkgrtmcJ
+ hx4g==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=adwnSNPh
-Subject: [Buildroot] [PATCH 1/1] package/apr-util: requires DES in openssl
+ header.s=20230601 header.b=JHiGTH6T
+Subject: [Buildroot] [PATCH 1/1] package/libbytesize: bump to version 2.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,42 +100,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd@kuhls.net>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Enable DES in openssl to avoid the following build failure raised since
-commit a83d41867c8d69a77d5cd0a665aa216af5340359:
-
-crypto/apr_crypto_openssl.c: In function 'crypto_cipher_mechanism':
-crypto/apr_crypto_openssl.c:385:27: error: implicit declaration of function 'EVP_des_ede3_cbc'; did you mean 'NID_des_ede3_cbc'? [-Wimplicit-function-declaration]
-  385 |             key->cipher = EVP_des_ede3_cbc();
-      |                           ^~~~~~~~~~~~~~~~
-      |                           NID_des_ede3_cbc
-
-Fixes: a83d41867c8d69a77d5cd0a665aa216af5340359
- - http://autobuild.buildroot.org/results/4b1088a705f8564f85e629316f5cfc92953f0047
+https://github.com/storaged-project/libbytesize/blob/2.10/NEWS.rst
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/apr-util/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ package/libbytesize/libbytesize.hash | 2 +-
+ package/libbytesize/libbytesize.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/apr-util/Config.in b/package/apr-util/Config.in
-index f7c119db48..06b6c2684c 100644
---- a/package/apr-util/Config.in
-+++ b/package/apr-util/Config.in
-@@ -5,6 +5,7 @@ config BR2_PACKAGE_APR_UTIL
- 	depends on BR2_USE_MMU # apr
- 	select BR2_PACKAGE_APR
- 	select BR2_PACKAGE_EXPAT
-+	select BR2_PACKAGE_LIBOPENSSL_ENABLE_DES if BR2_PACKAGE_LIBOPENSSL
- 	select BR2_PACKAGE_LIBOPENSSL_ENGINES if BR2_PACKAGE_LIBOPENSSL
- 	help
- 	  The utility library for the apache runtime project
+diff --git a/package/libbytesize/libbytesize.hash b/package/libbytesize/libbytesize.hash
+index 7dd572842d..a52a2803e5 100644
+--- a/package/libbytesize/libbytesize.hash
++++ b/package/libbytesize/libbytesize.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  8bae8287af6ef5624c320f70defdcd84ddc0c2057d3b59a5871897f27697811e  libbytesize-2.7.tar.gz
++sha256  1d1ce3be8ac59fd59511d0794c7327d5cf33f1e83496837b17e19ac49400cad1  libbytesize-2.10.tar.gz
+ sha256  97bdc721d875501b6243a456333fdfdb1ab64d31c4da2554de845caf4674b946  LICENSE
+diff --git a/package/libbytesize/libbytesize.mk b/package/libbytesize/libbytesize.mk
+index a95ee08357..7f56cbcb79 100644
+--- a/package/libbytesize/libbytesize.mk
++++ b/package/libbytesize/libbytesize.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBBYTESIZE_VERSION = 2.7
++LIBBYTESIZE_VERSION = 2.10
+ LIBBYTESIZE_SITE = https://github.com/storaged-project/libbytesize/releases/download/$(LIBBYTESIZE_VERSION)
+ LIBBYTESIZE_LICENSE = LGPL-2.1+
+ LIBBYTESIZE_LICENSE_FILES = LICENSE
 -- 
 2.43.0
 
