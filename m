@@ -4,48 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 77610C3DA61
-	for <buildroot@archiver.kernel.org>; Sun, 21 Jul 2024 16:33:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10131C3DA5D
+	for <buildroot@archiver.kernel.org>; Sun, 21 Jul 2024 16:33:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C1490606B4;
-	Sun, 21 Jul 2024 16:33:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CF2DA60808;
+	Sun, 21 Jul 2024 16:33:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XdwN1O8k4KPc; Sun, 21 Jul 2024 16:33:04 +0000 (UTC)
+ id 5Oqcyd3bDS96; Sun, 21 Jul 2024 16:33:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AB96560703
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9A9F560815
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AB96560703;
-	Sun, 21 Jul 2024 16:33:04 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 801141BF321
- for <buildroot@lists.busybox.net>; Sun, 21 Jul 2024 16:32:26 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9A9F560815;
+	Sun, 21 Jul 2024 16:33:07 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id B7B481BF321
+ for <buildroot@lists.busybox.net>; Sun, 21 Jul 2024 16:32:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id EACD840120
- for <buildroot@lists.busybox.net>; Sun, 21 Jul 2024 16:32:24 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B190F40301
+ for <buildroot@lists.busybox.net>; Sun, 21 Jul 2024 16:32:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hqxbf9Ia2rxB for <buildroot@lists.busybox.net>;
- Sun, 21 Jul 2024 16:32:23 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9swX-jY3aVV6 for <buildroot@lists.busybox.net>;
+ Sun, 21 Jul 2024 16:32:59 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.193;
+ helo=relay1-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C86C0400F3
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id C86C0400F3
- for <buildroot@buildroot.org>; Sun, 21 Jul 2024 16:32:23 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B5E3786F4C; Sun, 21 Jul 2024 16:32:23 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 21 Jul 2024 18:31:06 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 13c0b7cd08c8300d288409ab88907f97b1a95687
-X-Git-Newrev: b22828cb0b4c6e467c86c10588bea2e247eca7ec
-X-Patchwork-Hint: ignore
-Message-Id: <20240721163223.B5E3786F4C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/rtmpdump: bump to latest git
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 8992440308
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8992440308
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 8992440308
+ for <buildroot@buildroot.org>; Sun, 21 Jul 2024 16:32:58 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id CACD6240003;
+ Sun, 21 Jul 2024 16:32:56 +0000 (UTC)
+Date: Sun, 21 Jul 2024 18:32:56 +0200
+To: Saeed Kazemi <kazemi.ms@gmail.com>
+Message-ID: <20240721183256.7b07b263@windsurf>
+In-Reply-To: <20240721115112.2041723-1-kazemi.ms@gmail.com>
+References: <20240721115112.2041723-1-kazemi.ms@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1721579577;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=gwVVzAxjus3pO6M4rBtaDtu3EkIpevPnrYy+HXNidxc=;
+ b=mWznK0l4wtRmSBj7I6aIcMOJhMzPI3TH36I/VGNxKz9f4l8iYAsytMP90vtiM9/Hy73SYR
+ O+6QUwMXwTmWYP3ljp0MFW1NPe0MId1gE1dGwzcuWruvwL1lsjVfr9dH5aP3CMKkGbVOnJ
+ k2bqt60ygaR9ox7RNBWv8B7WvxiAi+9zyE6kqT+VW00LQVmZ8cIXGU9rhIjw04ToMEHd8M
+ CBKV1EuhTsIrocXrPnz0btArNDcs/Xc1jZlxrsekMZZ6eBnZtzBaHM02DXFsGCcH1e8pWc
+ V2K7Soru6GduuYuD7ApvNbYwRWQZYJze8ocad9WfXykulpp+vRnBd+UgdigvxA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=mWznK0l4
+Subject: Re: [Buildroot] [PATCH 1/1] package/mxt-app: bump to version 1.38
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,106 +82,31 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b22828cb0b4c6e467c86c10588bea2e247eca7ec
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sun, 21 Jul 2024 13:51:12 +0200
+Saeed Kazemi <kazemi.ms@gmail.com> wrote:
 
-Drop patch (not needed since
-https://git.ffmpeg.org/gitweb/rtmpdump.git/commit/06142d3ef4754c9ebd6c4c5f52c858aa63811161)
+> Release notes:
+> https://github.com/atmel-maxtouch/mxt-app/releases/tag/v1.38
+> 
+> Signed-off-by: Saeed Kazemi <kazemi.ms@gmail.com>
+> ---
+>  package/mxt-app/mxt-app.hash | 2 +-
+>  package/mxt-app/mxt-app.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- .checkpackageignore                          |  1 -
- package/rtmpdump/0001-include-limits.h.patch | 39 ----------------------------
- package/rtmpdump/rtmpdump.hash               |  2 +-
- package/rtmpdump/rtmpdump.mk                 |  2 +-
- 4 files changed, 2 insertions(+), 42 deletions(-)
+Applied to master, thanks.
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 6505cd6f76..905d14178f 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -1225,7 +1225,6 @@ package/rpi-userland/0005-dtmerge-add-missing-include-for-va_list.patch lib_patc
- package/rpi-userland/0006-interface-vcos-pthreads-CMakeLists.txt-fix-build-wit.patch lib_patch.Upstream
- package/rpi-userland/0007-GLES2-gl2ext.h-add-GLint64-GLuint64-and-GLsync-typed.patch lib_patch.Upstream
- package/rt-tests/0001-Fix-a-build-issue-with-uClibc-ng.patch lib_patch.Upstream
--package/rtmpdump/0001-include-limits.h.patch lib_patch.Upstream
- package/rtorrent/0001-Added--disable-execinfo-option-to-configure.patch lib_patch.Upstream
- package/rtty/0001-CMakeLists.txt-prefer-pkg_check_modules.patch lib_patch.Upstream
- package/rubix/0001-dont-use-legacy-functions.patch lib_patch.Upstream
-diff --git a/package/rtmpdump/0001-include-limits.h.patch b/package/rtmpdump/0001-include-limits.h.patch
-deleted file mode 100644
-index 172a9630f7..0000000000
---- a/package/rtmpdump/0001-include-limits.h.patch
-+++ /dev/null
-@@ -1,39 +0,0 @@
--From b9d010d2c07e07eeffa510f14ff833ecb10dc0c8 Mon Sep 17 00:00:00 2001
--From: Bernd Kuhls <bernd.kuhls@t-online.de>
--Date: Mon, 24 Jun 2019 21:11:33 +0200
--Subject: [PATCH] include <limits.h>
--
--Needed after
--https://repo.or.cz/rtmpdump.git/commitdiff/c5f04a58fc2aeea6296ca7c44ee4734c18401aa3
--
--to fix
--
--rtmp.c: In function 'HTTP_read':
--rtmp.c:4459:26: error: 'INT_MAX' undeclared (first use in this function); did you mean 'INT8_MAX'?
--
--reported by buildroot autobuilders:
--http://autobuild.buildroot.net/?reason=rtmpdump-c5f04a58fc2aeea6296ca7c44ee4734c18401aa3
--
--Patch sent upstream by e-mail to author of
--https://repo.or.cz/rtmpdump.git/patch/c5f04a58fc2aeea6296ca7c44ee4734c18401aa3
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-----
-- librtmp/rtmp.h | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/librtmp/rtmp.h b/librtmp/rtmp.h
--index 6d7dd89..48d4fc3 100644
----- a/librtmp/rtmp.h
--+++ b/librtmp/rtmp.h
--@@ -32,6 +32,7 @@
-- #include <errno.h>
-- #include <stdint.h>
-- #include <stddef.h>
--+#include <limits.h>
-- 
-- #include "amf.h"
-- 
---- 
--2.20.1
--
-diff --git a/package/rtmpdump/rtmpdump.hash b/package/rtmpdump/rtmpdump.hash
-index feec5f4878..3aca9bda39 100644
---- a/package/rtmpdump/rtmpdump.hash
-+++ b/package/rtmpdump/rtmpdump.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  810908e60c8f4e453bc828775937e4bad996fafac89b9546652f17e08a3dac81  rtmpdump-c5f04a58fc2aeea6296ca7c44ee4734c18401aa3-git4.tar.gz
-+sha256  372b5574af90ad3ec8cb7fde9bb3db76f7f7379c135a31d7af2c1ebba3051526  rtmpdump-6f6bb1353fc84f4cc37138baa99f586750028a01-git4.tar.gz
- sha256  03fe7ca91cc28e99b4003d5b3bd4ce3b084d4c475fdf9975cf0e7fdf4dc739cd  librtmp/COPYING
-diff --git a/package/rtmpdump/rtmpdump.mk b/package/rtmpdump/rtmpdump.mk
-index 4c8ecfe127..4dfacb594a 100644
---- a/package/rtmpdump/rtmpdump.mk
-+++ b/package/rtmpdump/rtmpdump.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RTMPDUMP_VERSION = c5f04a58fc2aeea6296ca7c44ee4734c18401aa3
-+RTMPDUMP_VERSION = 6f6bb1353fc84f4cc37138baa99f586750028a01
- RTMPDUMP_SITE = https://git.ffmpeg.org/rtmpdump
- RTMPDUMP_SITE_METHOD = git
- RTMPDUMP_INSTALL_STAGING = YES
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
