@@ -4,93 +4,92 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6546EC3DA5D
-	for <buildroot@archiver.kernel.org>; Sun, 21 Jul 2024 18:32:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A67EBC3DA5D
+	for <buildroot@archiver.kernel.org>; Sun, 21 Jul 2024 19:18:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A531140287;
-	Sun, 21 Jul 2024 18:32:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 24C7040208;
+	Sun, 21 Jul 2024 19:18:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5Su0zEkSqkAV; Sun, 21 Jul 2024 18:32:33 +0000 (UTC)
+ id kzslamR4c9Wc; Sun, 21 Jul 2024 19:18:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3A2D14028F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F12C8402D6
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3A2D14028F;
-	Sun, 21 Jul 2024 18:32:33 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0EF5F1BF2BF
- for <buildroot@lists.busybox.net>; Sun, 21 Jul 2024 18:32:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F12C8402D6;
+	Sun, 21 Jul 2024 19:18:48 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 966351BF2AB
+ for <buildroot@lists.busybox.net>; Sun, 21 Jul 2024 19:18:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id F0C348113E
- for <buildroot@lists.busybox.net>; Sun, 21 Jul 2024 18:32:31 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 84992605D0
+ for <buildroot@lists.busybox.net>; Sun, 21 Jul 2024 19:18:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Cr0VH0uyJvd7 for <buildroot@lists.busybox.net>;
- Sun, 21 Jul 2024 18:32:30 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4DNrUsO4Ur74 for <buildroot@lists.busybox.net>;
+ Sun, 21 Jul 2024 19:18:46 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::536; helo=mail-ed1-x536.google.com;
- envelope-from=kazemi.ms@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 6A4AF81138
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6A4AF81138
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com
- [IPv6:2a00:1450:4864:20::536])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6A4AF81138
- for <buildroot@buildroot.org>; Sun, 21 Jul 2024 18:32:29 +0000 (UTC)
-Received: by mail-ed1-x536.google.com with SMTP id
- 4fb4d7f45d1cf-5a3b866ebc9so1730538a12.3
- for <buildroot@buildroot.org>; Sun, 21 Jul 2024 11:32:29 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::32b; helo=mail-wm1-x32b.google.com;
+ envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 4D8B8600B6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4D8B8600B6
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
+ [IPv6:2a00:1450:4864:20::32b])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 4D8B8600B6
+ for <buildroot@buildroot.org>; Sun, 21 Jul 2024 19:18:46 +0000 (UTC)
+Received: by mail-wm1-x32b.google.com with SMTP id
+ 5b1f17b1804b1-427d2c8c632so24924035e9.2
+ for <buildroot@buildroot.org>; Sun, 21 Jul 2024 12:18:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1721586747; x=1722191547;
+ d=1e100.net; s=20230601; t=1721589523; x=1722194323;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=2DskSaCcD7xBYfXvMw6hQkc1+TMZ4INZtwC0xIZogjU=;
- b=ld8y+wMKb/s7r3EzzgAdDUBqeRSUTxab1atzUIsMKibn8eHUWGrjOmGM6/YgPj02Qz
- rw8QKNyH4vrhcxbj32IwpTWTApu69p4ZmabO0yaLqrme9her2VZy01NuSFX6yUy2paSm
- dEYJZoailYFXYAYw0TF3Z9RbPObzDP8vK8Elmi+Mw60S7ldBn+3V9avaFh5Y2eTUHm0t
- YDVzA9wPOe/svabOHL6f3vTf5EINTMGvHjEGofgHRSqc8ujoY7cwXQOWPhBDj5vhXZUV
- M+kPkCvwyaTrE7M1Gknl/f6Rnx3Gds0kO2YzuX0ddpYwpDe15qV8z5Zh7rJ8KovHhVwY
- i5Mw==
-X-Gm-Message-State: AOJu0YyA78bEYr02p4x8vVSULda7ccPsVZH9JU/fi9vT6y/6mInVf3X/
- tXI+2jbIA6KFbydWvyLpw/XX4165qz7TxGps7kHmhXR0faJlzPVr6N2wXA==
-X-Google-Smtp-Source: AGHT+IHjJeXrgEa01bnU/VUiSuam7zlfWnFfla6TzRQXRNQxmTRg566bJAooTQPxh+2WfuSP7saSDA==
-X-Received: by 2002:a50:8a9d:0:b0:5a1:7362:91d9 with SMTP id
- 4fb4d7f45d1cf-5a479a75685mr2822653a12.22.1721586747208; 
- Sun, 21 Jul 2024 11:32:27 -0700 (PDT)
-Received: from saeedkazemi-ThinkPad.abbrnd.local
- (2001-1c00-0b13-1d00-8013-5d90-9d2a-226a.cable.dynamic.v6.ziggo.nl.
- [2001:1c00:b13:1d00:8013:5d90:9d2a:226a])
- by smtp.gmail.com with ESMTPSA id
- 4fb4d7f45d1cf-5a30a4d6bf8sm4855043a12.18.2024.07.21.11.32.26
+ bh=/WAL7uqEHrpixwdPhNyajCpXs8giEaApfpsqeY+5SBM=;
+ b=o3HQrq58+hPiqwG9jFt7f8UB8B4t59XqBBK33iufE9kSOTHulolJNP8EjPXvhWhOSb
+ yR6d5cUl4jiTkqhxPpR1vJcgBtqIHpWmvvglsJtBr3ChChD6ogo8N9Q6cb+bdyUMITP4
+ UYIh3rhGLyawgXLYEVP6QLoX/Syqv3WpWouXV7cODz8oUe7QKGomSDVPcyQ7xywtYXYz
+ 15Wonhjlrt+yqI2OWZja90eRKJphzUq8gxOWmgRNq0Gmd5oOXMq9MIL+31rivvhfEcqZ
+ UN3Hdh5onhQpExhut/bj+U0U0zUFbEhqrURKSFudATvYgteA36q4mTnuwZBgB8BB32Fi
+ P1cw==
+X-Gm-Message-State: AOJu0YxMJyDfOe6pj4AYrWf4JZLDiY9qnK4qshoeDoAUP5AgWZVeVNFS
+ o6VawthxLESTK8bDwhc5bfEMHk2PGR7S6dJZHwXpYSxAwYibATFsgbDfGg==
+X-Google-Smtp-Source: AGHT+IEZOtAyw+a3/Wk5qnVaVKyOEhcpajhy1Aw/qY/jNNLiz8ZaAjEdwFkmBjarVKHsqX9HFWN5ng==
+X-Received: by 2002:a05:600c:1e8e:b0:427:d8f2:5dee with SMTP id
+ 5b1f17b1804b1-427dc548f66mr30188585e9.15.1721589523161; 
+ Sun, 21 Jul 2024 12:18:43 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-785-215.w83-197.abo.wanadoo.fr.
+ [83.197.112.215]) by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-427d6901451sm99578465e9.17.2024.07.21.12.18.42
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 21 Jul 2024 11:32:26 -0700 (PDT)
-From: Saeed Kazemi <kazemi.ms@gmail.com>
+ Sun, 21 Jul 2024 12:18:42 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 21 Jul 2024 20:32:23 +0200
-Message-Id: <20240721183223.2792367-1-kazemi.ms@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Date: Sun, 21 Jul 2024 21:18:39 +0200
+Message-ID: <20240721191839.2757527-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1721586747; x=1722191547; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1721589523; x=1722194323; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=2DskSaCcD7xBYfXvMw6hQkc1+TMZ4INZtwC0xIZogjU=;
- b=H3mb0xcqhc/PV9dvTkBSjaIMbT1jUM3cS3dkzVc1NFvJg9SFzSRBHSiu/YmOraiFFL
- CmzV479iSV32r/+5F2f+gH65ucekXM0XVSQZldBEqFm+gEJN9DMgI1VmtgAfUp5v7AtJ
- iXa0iBXLjXHQnFoOFo9iBp+zZN2nAlTwuoPANF42m7kVilDfcGueTmZo9KSH+rzXng3e
- 01Jb9ZcPMI2/RKS+wRZI68cztH2m2t0YykTKPrNvtXTtkD+0bxDMdD2I1a8Ojy24ARe3
- pccH19Zvjd13vIPQ16gDhAYP1/yUf/wFwsFOflbmBj0FR2D2xMbjc19ehgTp+oR7vKeX
- 6cOg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=/WAL7uqEHrpixwdPhNyajCpXs8giEaApfpsqeY+5SBM=;
+ b=aqIrEIIjC6ydy05TKnXt7uvyfLIYBv+LFmGth2D2XXVYrTaaLLcNb1lQGv76rGsnqt
+ lKjSaGAghC8uDLq82gMfE8wbgArMtewTQgQM2QXUAtgYXCwiNR+FyyleNWkrTKssjGVz
+ o9hF1cyT2lwMRvP0xwlnZB9e2MsNMVqAyGFoEfmfmyjWsbZ4OFOqIGp7Denisok5Voce
+ 4KfV0e3bqDi8M2PTnpwuha5AolexLCzpqBVWO00q1mFmmJRNg1iRJFI0mr8X8uMm3xax
+ vrPxrHX01nx3fSLAj3cZQ0eGwSUJCeJuC3ZB3ZXkYEsR+BzS4tYm+y8LCNQh9y67ILo1
+ Bvxw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=H3mb0xcq
-Subject: [Buildroot] [PATCH 1/1] package/parsec: new package
+ header.s=20230601 header.b=aqIrEIIj
+Subject: [Buildroot] [PATCH 1/1] package/mtd: select
+ BR2_PACKAGE_LIBOPENSSL_ENGINES
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,150 +101,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Saeed Kazemi <kazemi.ms@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Brandon Maier <brandon.maier@collins.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hardware/platform abstraction service for TPMs, HSMs, and Root of Trust
+mtd ubifs unconditionally calls the (deprecated) ENGINE_* logic in
+libopenssl resulting in a build failure when
+!BR2_PACKAGE_LIBOPENSSL_ENGINES since commit
+623d3bbe43e9193aa8e3395367d01af59071b859:
 
-https://github.com/parallaxsecond/parsec.git
+  CCLD     mkfs.ubifs
+/home/autobuild/autobuild/instance-1/output-1/host/lib/gcc/powerpc64-buildroot-linux-gnu/13.3.0/../../../../powerpc64-buildroot-linux-gnu/bin/ld: ubifs-utils/mkfs.ubifs/mkfs_ubifs-sign.o: in function `sign_superblock_node':
+sign.c:(.text+0x328): undefined reference to `ENGINE_load_builtin_engines'
 
-Signed-off-by: Saeed Kazemi <kazemi.ms@gmail.com>
+Fixes: 623d3bbe43e9193aa8e3395367d01af59071b859
+ - http://autobuild.buildroot.org/results/1fd49b193a3623d244ace602c46f15914bfbcff4
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- DEVELOPERS                                    |  1 +
- package/Config.in                             |  1 +
- ...pile-errors-with-latest-Rust-version.patch | 40 +++++++++++++++++++
- package/parsec/Config.in                      | 15 +++++++
- package/parsec/parsec.hash                    |  3 ++
- package/parsec/parsec.mk                      | 12 ++++++
- 6 files changed, 72 insertions(+)
- create mode 100644 package/parsec/0001-Fix-compile-errors-with-latest-Rust-version.patch
- create mode 100644 package/parsec/Config.in
- create mode 100644 package/parsec/parsec.hash
- create mode 100644 package/parsec/parsec.mk
+ package/mtd/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 333e26d74e..a072e8cb13 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2862,6 +2862,7 @@ F:	package/biosdevname/
+diff --git a/package/mtd/Config.in b/package/mtd/Config.in
+index 57a562c108..0c95e3cc54 100644
+--- a/package/mtd/Config.in
++++ b/package/mtd/Config.in
+@@ -15,6 +15,7 @@ config BR2_PACKAGE_MTD_JFFS_UTILS
  
- N:	Saeed Kazemi <kazemi.ms@gmail.com>
- F:	package/eza/
-+F:	package/parsec/
- F:	package/parsec-tool/
- F:	package/procs/
- F:	package/mxt-app/
-diff --git a/package/Config.in b/package/Config.in
-index a0d78518b6..8a7c257c85 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1589,6 +1589,7 @@ menu "Crypto"
- 	source "package/mbedtls/Config.in"
- 	source "package/nettle/Config.in"
- 	source "package/openssl/Config.in"
-+	source "package/parsec/Config.in"
- 	source "package/parsec-tool/Config.in"
- 	source "package/pkcs11-helper/Config.in"
- 	source "package/rhash/Config.in"
-diff --git a/package/parsec/0001-Fix-compile-errors-with-latest-Rust-version.patch b/package/parsec/0001-Fix-compile-errors-with-latest-Rust-version.patch
-new file mode 100644
-index 0000000000..9dcfefedae
---- /dev/null
-+++ b/package/parsec/0001-Fix-compile-errors-with-latest-Rust-version.patch
-@@ -0,0 +1,40 @@
-+From e2ada92b71d8b70e0e771b469f48cc8a07ef11a5 Mon Sep 17 00:00:00 2001
-+From: Saeed Kazemi <kazemi.ms@gmail.com>
-+Date: Sun, 21 Jul 2024 18:46:38 +0200
-+Subject: [PATCH] Fix compile errors with latest Rust version
-+
-+Upstream: N/A not applicable directly but based on:
-+https://github.com/parallaxsecond/parsec/commit/82320d345e08fe6310b684191151c78fc5648693
-+
-+Signed-off-by: Saeed Kazemi <kazemi.ms@gmail.com>
-+---
-+ src/key_info_managers/on_disk_manager/mod.rs | 6 +++---
-+ 1 file changed, 3 insertions(+), 3 deletions(-)
-+
-+diff --git a/src/key_info_managers/on_disk_manager/mod.rs b/src/key_info_managers/on_disk_manager/mod.rs
-+index 717b93d..a4bf935 100644
-+--- a/src/key_info_managers/on_disk_manager/mod.rs
-++++ b/src/key_info_managers/on_disk_manager/mod.rs
-+@@ -79,8 +79,8 @@ impl ApplicationName {
-+ }
-+ 
-+ #[allow(deprecated)]
-+-impl std::fmt::Display for ApplicationName {
-+-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-++impl fmt::Display for ApplicationName {
-++    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-+         write!(f, "{}", self.name)
-+     }
-+ }
-+@@ -489,7 +489,7 @@ impl OnDiskKeyInfoManager {
-+             fs::remove_file(&key_name_file_path)?;
-+         }
-+ 
-+-        let mut mapping_file = fs::File::create(&key_name_file_path).map_err(|e| {
-++        let mut mapping_file = File::create(&key_name_file_path).map_err(|e| {
-+             error!(
-+                 "Failed to create Key Info Mapping file at {:?}",
-+                 key_name_file_path
-+-- 
-+2.34.1
-+
-diff --git a/package/parsec/Config.in b/package/parsec/Config.in
-new file mode 100644
-index 0000000000..378e8b58b4
---- /dev/null
-+++ b/package/parsec/Config.in
-@@ -0,0 +1,15 @@
-+config BR2_PACKAGE_PARSEC
-+	bool "parsec"
-+	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
-+	select BR2_PACKAGE_HOST_RUSTC
-+	help
-+	  Hardware/platform abstraction service for TPMs, HSMs, and
-+	  Root of Trust
-+	  PARSEC is the Platform AbstRaction for SECurity, an
-+	  open-source initiative to provide a common API to hardware
-+	  security and cryptographic services in a platform-agnostic
-+	  way. This abstraction layer keeps workloads decoupled from
-+	  physical platform details, enabling cloud-native delivery
-+	  flows within the data center and at the edge.
-+
-+	  https://github.com/parallaxsecond/parsec.git
-diff --git a/package/parsec/parsec.hash b/package/parsec/parsec.hash
-new file mode 100644
-index 0000000000..f411a1cad5
---- /dev/null
-+++ b/package/parsec/parsec.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256  d9eaf0612bbe61475701ba3ef8ade40dae2da2d45366064748a7a2215aa060d1  parsec-1.3.0-cargo2.tar.gz
-+sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/parsec/parsec.mk b/package/parsec/parsec.mk
-new file mode 100644
-index 0000000000..fa8bf66172
---- /dev/null
-+++ b/package/parsec/parsec.mk
-@@ -0,0 +1,12 @@
-+################################################################################
-+#
-+# parsec
-+#
-+################################################################################
-+
-+PARSEC_VERSION = 1.3.0
-+PARSEC_SITE = $(call github,parallaxsecond,parsec,$(PARSEC_VERSION))
-+PARSEC_LICENSE = Apache-2.0
-+PARSEC_LICENSE_FILES = LICENSE
-+
-+$(eval $(cargo-package))
+ config BR2_PACKAGE_MTD_UBIFS_UTILS
+ 	bool
++	select BR2_PACKAGE_LIBOPENSSL_ENGINES if BR2_PACKAGE_LIBOPENSSL
+ 	select BR2_PACKAGE_UTIL_LINUX
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+ 
 -- 
-2.34.1
+2.43.0
 
 _______________________________________________
 buildroot mailing list
