@@ -4,49 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CACC9C3DA5D
-	for <buildroot@archiver.kernel.org>; Mon, 22 Jul 2024 19:51:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BAF8BC3DA5D
+	for <buildroot@archiver.kernel.org>; Mon, 22 Jul 2024 19:51:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9AF1F60597;
-	Mon, 22 Jul 2024 19:51:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 847BE60604;
+	Mon, 22 Jul 2024 19:51:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mQmx8I1E8t07; Mon, 22 Jul 2024 19:51:18 +0000 (UTC)
+ id 32irEa6G99Fh; Mon, 22 Jul 2024 19:51:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BA58E60604
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 91FD96060A
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BA58E60604;
-	Mon, 22 Jul 2024 19:51:18 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4C52B1BF31D
- for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 19:51:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 91FD96060A;
+	Mon, 22 Jul 2024 19:51:22 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 611231BF31D
+ for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 19:51:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4677860604
- for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 19:51:15 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5C35080ADF
+ for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 19:51:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LYkcgk8FS_ks for <buildroot@lists.busybox.net>;
- Mon, 22 Jul 2024 19:51:14 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 78vuB5XYohLT for <buildroot@lists.busybox.net>;
+ Mon, 22 Jul 2024 19:51:17 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::224;
+ helo=relay4-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 79DED60597
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 79DED60597
- for <buildroot@buildroot.org>; Mon, 22 Jul 2024 19:51:14 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 67D17870D4; Mon, 22 Jul 2024 19:51:14 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 22 Jul 2024 21:51:00 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5ed1fab018db9a001b072fd7bcb3dd3db280aabe
-X-Git-Newrev: 95e10430131fb524a27985b82ee70ae8d0fe71d9
-X-Patchwork-Hint: ignore
-Message-Id: <20240722195114.67D17870D4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support/testing/infra/emulator.py: support
- init=/bin/sh
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 3D58780ADE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3D58780ADE
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::224])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3D58780ADE
+ for <buildroot@buildroot.org>; Mon, 22 Jul 2024 19:51:16 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 6E487E0003;
+ Mon, 22 Jul 2024 19:51:15 +0000 (UTC)
+Date: Mon, 22 Jul 2024 21:51:14 +0200
+To: Brandon Maier via buildroot <buildroot@buildroot.org>
+Message-ID: <20240722215114.6c81a7a4@windsurf>
+In-Reply-To: <20240715-support-testing-fix-testinitsystemnone-v1-0-299145b2d342@collins.com>
+References: <20240715-support-testing-fix-testinitsystemnone-v1-0-299145b2d342@collins.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1721677875;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=Z70EtE7LT5y5WMrMZdfpQ7MP7jcKChjNCOaG/vqp9WE=;
+ b=H37T98AVK89GDil7LroFFgH3FSxXfv+9A5zK5/H6rWEnmNRRps7owu3pgai70Q7HX1IjB+
+ BwXm90mP8hdbu4pYjc58txu/hNoSnvbPnoycDh+i1XJTac5nG37PDQPW4TS8jVAkJxn54P
+ 77aFonkrGs6ZrXO+cGdsVTRGRjzpgbEc2B9WRnDv7nxCWoZDLinZVOKmH/OblckWNyoV4l
+ iCBqPC53fBgAleYsvKc0gjZg5wlKGMpiKD9PH2B1UJ496+9y/RU0R00+F39C+8vC3T24Gr
+ Zz0mr00NQ2WQiozK++9PvEKyVNfLLH/m1rzMW6H7xXa5yjTDbWYW83Sa93w0GA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=H37T98AV
+Subject: Re: [Buildroot] [PATCH 0/2] support/testing: fix TestInitSystemNone
+ for non-login shell
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,39 +83,27 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Ricardo Martincoski <ricardo.martincoski@datacom.com.br>,
+ Brandon Maier <brandon.maier@collins.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=95e10430131fb524a27985b82ee70ae8d0fe71d9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon, 15 Jul 2024 14:50:38 +0000
+Brandon Maier via buildroot <buildroot@buildroot.org> wrote:
 
-The TestInitSystemNone bypasses the normal init and instead launches
-directly into a shell. So it needs to bypass the login code and go
-directly to a shell.
+> Brandon Maier (2):
+>       support/testing/infra/emulator.py: support init=/bin/sh
+>       support/testing: fix TestInitSystemNone for non-login shell
 
-Signed-off-by: Brandon Maier <brandon.maier@collins.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- support/testing/infra/emulator.py | 3 +++
- 1 file changed, 3 insertions(+)
+Both applied, thanks!
 
-diff --git a/support/testing/infra/emulator.py b/support/testing/infra/emulator.py
-index 950843e37d..be26d4caa4 100644
---- a/support/testing/infra/emulator.py
-+++ b/support/testing/infra/emulator.py
-@@ -133,6 +133,9 @@ class Emulator(object):
-             self.qemu.expect("Password:")
-             self.qemu.sendline(password)
- 
-+        self.connect_shell()
-+
-+    def connect_shell(self):
-         extra_init_cmd = " && ".join([
-             'export PAGER=cat',
-             'dmesg -n 1',
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
