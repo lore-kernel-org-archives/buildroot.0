@@ -4,71 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F58FC3DA5D
-	for <buildroot@archiver.kernel.org>; Mon, 22 Jul 2024 12:47:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C63AFC3DA5D
+	for <buildroot@archiver.kernel.org>; Mon, 22 Jul 2024 12:48:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EDB0B400D2;
-	Mon, 22 Jul 2024 12:47:22 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 90C3B403E4;
+	Mon, 22 Jul 2024 12:48:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zMv4LIsai249; Mon, 22 Jul 2024 12:47:21 +0000 (UTC)
+ id fvzHFvK7h2TN; Mon, 22 Jul 2024 12:48:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9597440499
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5B3BD40499
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9597440499;
-	Mon, 22 Jul 2024 12:47:21 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5B3BD40499;
+	Mon, 22 Jul 2024 12:48:04 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4C69F1BF2A1
- for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 12:47:20 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id ABFBF1BF2A1
+ for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 12:48:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3A479605C8
- for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 12:47:20 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9A18E605C8
+ for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 12:48:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nibexXG7iDxs for <buildroot@lists.busybox.net>;
- Mon, 22 Jul 2024 12:47:19 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::226;
- helo=relay6-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id iYeguxg2GLC6 for <buildroot@lists.busybox.net>;
+ Mon, 22 Jul 2024 12:48:02 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::228;
+ helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E423C605C7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E423C605C7
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::226])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E423C605C7
- for <buildroot@buildroot.org>; Mon, 22 Jul 2024 12:47:18 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 2ADE3C0008;
- Mon, 22 Jul 2024 12:47:17 +0000 (UTC)
-Date: Mon, 22 Jul 2024 14:47:16 +0200
-To: Alexander Mukhin <alexander.i.mukhin@gmail.com>
-Message-ID: <20240722144716.092e357b@windsurf>
-In-Reply-To: <20240524181856.2712581-1-alexander.i.mukhin@gmail.com>
-References: <20240524181856.2712581-1-alexander.i.mukhin@gmail.com>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 2BD98605C7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2BD98605C7
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 2BD98605C7
+ for <buildroot@buildroot.org>; Mon, 22 Jul 2024 12:48:01 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 614E81BF20A;
+ Mon, 22 Jul 2024 12:48:00 +0000 (UTC)
+Date: Mon, 22 Jul 2024 14:47:59 +0200
+To: "J. =?UTF-8?B?TmV1c2Now6RmZXI=?= via buildroot" <buildroot@buildroot.org>
+Message-ID: <20240722144759.4084dd9b@windsurf>
+In-Reply-To: <20240709-tipidee-v2-2-a69a8668005e@gmx.net>
+References: <20240709-tipidee-v2-0-a69a8668005e@gmx.net>
+ <20240709-tipidee-v2-2-a69a8668005e@gmx.net>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1721652437;
+ d=bootlin.com; s=gm1; t=1721652480;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=xFhxueSO2NsdG5z7LrGKxgl45mcvO2IYFYrHiNuOPsM=;
- b=DfpbX22MYOHyrSFgvbVq7bjC1sunTSHgsTdT29G1EfLgBjim8i615xzgEkLInIBbZqFLWm
- I35GopxqghQ3v0q+Zq7tqSjdH6NyUjqFjdnbYqPb+/aSojQ2VJ4+n098QJ3g6ShWLwd7JB
- Da436DOQlniv0f1rxsDql99Yp+I0LOzoskoGt8NJFUTO99eKBvyLs+lHguie0m5UmfwDiR
- rECnLV1R3E6F6G10X08D0N7kZ/uVFy7W0JrbMyvwHKR4OurpUPPCIOpQxAGdojzB5SgME2
- hRAWTvL/tmUrhR6uSsZ2G7KCmmMb5KucVAsxKXPiLRF9A4Qf/uvXOscRHCwCmA==
+ bh=aGnIzRy4ps/uifAPgV5XGyXMs3inbKr/mfgfOLs1C+c=;
+ b=Sc0/A0it/5T2QXMZPLFTUJypPtBVI0T5mw6zQZ5EtSPDyUoqkeKGTjRiGQobrSvfqfwObg
+ Uk5TI2ui8qSgAwGc94BYMBXPoSs65kpgTrA30SmqA9K4d6bSK9EjBcz/WqSi7zyH+T9cuv
+ jpTx3tJRxhaH2VT2q/feAV5t0ZucWXzNl2ohQAPbRiQmfz5TM3dVO4llkyJv0EVTzRYUJI
+ 0L4JOQLwhzTZCrUPNu2hClnkKrlbnCZEmOHklgAlCvxqul1OyD9Riln7aHrrBW7K01oSqB
+ OBGiLTqhk4HmxENhmEcjBw39s393LvtMNQcXuyVhdSehcnowzbnx04Lg0/WBBw==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=DfpbX22M
-Subject: Re: [Buildroot] [PATCH 1/1] package/zfs: bump version to 2.2.4
+ header.s=gm1 header.b=Sc0/A0it
+Subject: Re: [Buildroot] [PATCH v2 2/8] s6: bump to version 2.13.0.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,67 +83,23 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: salvador.joseluis@gmail.com, buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: "J. =?UTF-8?B?TmV1c2Now6RmZXI=?=" <j.neuschaefer@gmx.net>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Alexander,
-
-I'm not sure if it's related to this version bump, or to something
-else, but the ZFS runtime test is failing:
-
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/7391793226
-
-Could you perhaps have a look at what's going on?
-
-Thanks a lot,
-
-Thomas
-
-On Fri, 24 May 2024 21:18:56 +0300
-Alexander Mukhin <alexander.i.mukhin@gmail.com> wrote:
-
-> Signed-off-by: Alexander Mukhin <alexander.i.mukhin@gmail.com>
-> ---
->  package/zfs/zfs.hash | 4 ++--
->  package/zfs/zfs.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/zfs/zfs.hash b/package/zfs/zfs.hash
-> index 01c86f2b..9c8d4cec 100644
-> --- a/package/zfs/zfs.hash
-> +++ b/package/zfs/zfs.hash
-> @@ -1,5 +1,5 @@
-> -# From https://github.com/openzfs/zfs/releases/download/zfs-2.2.2/zfs-2.2.2.sha256.asc
-> -sha256  76bc0547d9ba31d4b0142e417aaaf9f969072c3cb3c1a5b10c8738f39ed12fc9  zfs-2.2.2.tar.gz
-> +# From https://github.com/openzfs/zfs/releases/download/zfs-2.2.4/zfs-2.2.4.sha256.asc
-> +sha256  9790905f7683d41759418e1ef3432828c31116654ff040e91356ff1c21c31ec0  zfs-2.2.4.tar.gz
->  
->  # Hash for license files:
->  sha256  1ffb70c33c4f79f04e947facc5c7851f289609256aacb47fc115f700427d9520  LICENSE
-> diff --git a/package/zfs/zfs.mk b/package/zfs/zfs.mk
-> index 59cdd319..fa6d282f 100644
-> --- a/package/zfs/zfs.mk
-> +++ b/package/zfs/zfs.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -ZFS_VERSION = 2.2.2
-> +ZFS_VERSION = 2.2.4
->  ZFS_SITE = https://github.com/openzfs/zfs/releases/download/zfs-$(ZFS_VERSION)
->  ZFS_SELINUX_MODULES = zfs
->  ZFS_LICENSE = CDDL
-
-
-
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gSiwKCk9uIFR1ZSwgMDkgSnVsIDIwMjQgMDA6NDU6MzMgKzAyMDAKSi4gTmV1c2Now6Rm
+ZXIgdmlhIGJ1aWxkcm9vdCA8YnVpbGRyb290QGJ1aWxkcm9vdC5vcmc+IHdyb3RlOgoKPiBTaWdu
+ZWQtb2ZmLWJ5OiBKLiBOZXVzY2jDpGZlciA8ai5uZXVzY2hhZWZlckBnbXgubmV0Pgo+IC0tLQo+
+ICBwYWNrYWdlL3M2L3M2Lmhhc2ggfCAyICstCj4gIHBhY2thZ2UvczYvczYubWsgICB8IDIgKy0K
+PiAgMiBmaWxlcyBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKyksIDIgZGVsZXRpb25zKC0pCgpJIGRv
+bid0IGtub3cgZm9yIHN1cmUgaWYgaXQncyByZWxhdGVkIHRvIHRoZSB2ZXJzaW9uIGJ1bXAsIGJ1
+dCBvdXIgczYKcnVudGltZSB0ZXN0IGlzIGZhaWxpbmcuIFNlZToKCiAgaHR0cHM6Ly9naXRsYWIu
+Y29tL2J1aWxkcm9vdC5vcmcvYnVpbGRyb290Ly0vam9icy83MzkxNzkzMTk1CgpbQlJURVNUIyBz
+Ni10ZXN0IC1wIHRlc3RwaXBlCi1zaDogczYtdGVzdDogbm90IGZvdW5kCgpDb3VsZCB5b3UgaGF2
+ZSBhIGxvb2sgcGVyaGFwcyA/CgpUaG9tYXMKLS0gClRob21hcyBQZXRhenpvbmksIENUTywgQm9v
+dGxpbgpFbWJlZGRlZCBMaW51eCBhbmQgS2VybmVsIGVuZ2luZWVyaW5nCmh0dHBzOi8vYm9vdGxp
+bi5jb20KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVp
+bGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3Rz
+LmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
