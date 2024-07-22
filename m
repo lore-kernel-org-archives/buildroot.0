@@ -4,68 +4,81 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08CBEC3DA59
-	for <buildroot@archiver.kernel.org>; Mon, 22 Jul 2024 22:39:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0814C3DA70
+	for <buildroot@archiver.kernel.org>; Mon, 22 Jul 2024 23:49:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AE7F8401F8;
-	Mon, 22 Jul 2024 22:39:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 71CA54023D;
+	Mon, 22 Jul 2024 23:49:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Xf_yKVMTtSxa; Mon, 22 Jul 2024 22:39:49 +0000 (UTC)
+ id 9ncdmWcrYsGy; Mon, 22 Jul 2024 23:49:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 763C8401F6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E017740235
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 763C8401F6;
-	Mon, 22 Jul 2024 22:39:49 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 7834C1BF31E
- for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 22:39:47 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E017740235;
+	Mon, 22 Jul 2024 23:49:17 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id E942D1BF215
+ for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 23:49:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 663FA6063C
- for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 22:39:47 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id D6837400E5
+ for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 23:49:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sHS-mrRdy41i for <buildroot@lists.busybox.net>;
- Mon, 22 Jul 2024 22:39:46 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E4F8D605F4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E4F8D605F4
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E4F8D605F4
- for <buildroot@buildroot.org>; Mon, 22 Jul 2024 22:39:45 +0000 (UTC)
-Received: from home.juju.sh (unknown
- [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 6D540B00539;
- Tue, 23 Jul 2024 00:39:42 +0200 (CEST)
-From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Tue, 23 Jul 2024 00:39:22 +0200
-Message-ID: <20240722223923.278333-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.45.2
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id dXb3QFMIsx8F for <buildroot@lists.busybox.net>;
+ Mon, 22 Jul 2024 23:49:15 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=198.47.19.141;
+ helo=fllv0015.ext.ti.com; envelope-from=bb@ti.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 8C6B9400BB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8C6B9400BB
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 8C6B9400BB
+ for <buildroot@buildroot.org>; Mon, 22 Jul 2024 23:49:14 +0000 (UTC)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+ by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 46MNnBqf072525;
+ Mon, 22 Jul 2024 18:49:11 -0500
+Received: from DFLE101.ent.ti.com (dfle101.ent.ti.com [10.64.6.22])
+ by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 46MNnBWc018545
+ (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+ Mon, 22 Jul 2024 18:49:11 -0500
+Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE101.ent.ti.com
+ (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 22
+ Jul 2024 18:49:11 -0500
+Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DFLE101.ent.ti.com
+ (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Mon, 22 Jul 2024 18:49:11 -0500
+Received: from localhost (bb.dhcp.ti.com [128.247.81.12])
+ by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 46MNnBNO094562;
+ Mon, 22 Jul 2024 18:49:11 -0500
+Date: Mon, 22 Jul 2024 18:49:11 -0500
+To: Brandon Maier <brandon.maier@collins.com>
+Message-ID: <20240722234911.2u4obhhk6srzomsr@bryanbrattlof.com>
+X-PGP-Fingerprint: D3D1 77E4 0A38 DF4D 1853 FEEF 41B9 0D5D 71D5 6CE0
+References: <20240626-gitignore-output-new-v4-1-fcb3ebc263ca@collins.com>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1721687983;
- bh=6oplmXOqjq+9saPjw6JJNh9tDtuHe27k2E13uQTKoO0=;
- h=From:To:Cc:Subject:Date:From;
- b=QvlovCqf9tHcFpgMMnuDEOk5kziE/3zBDYcvdV2ga5mKKIGihSzzTfSBv1PWa/sRB
- BVDxRcETuJqrbfbFBmglNQqQMKhz3/UwbwUGhwLbjo5S729eXr7RrqBaeglldDMFlZ
- Pa9vIWLT4fEhV012xgD0rH/24DMFxeWtXxXZtknizWN5g2Lqleapbr1twNSoi2v1eD
- a9tXvVpfqCNcKTNeEy7HuNrj8Ms0EZ4D7otdvNMB172cqpuXQkBcpvvUM24CM4SyzW
- U6W0X0325mycA41nUq7BhAAAGhEq9F4W9ImjJd0af0fU97uTM+XqfDxO/W9eYeBefS
- WCMYdVqqcaROg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=QvlovCqf
-Subject: [Buildroot] [PATCH 1/1] support/testing: package: gpsd: fix gpsfake
- command line
+Content-Disposition: inline
+In-Reply-To: <20240626-gitignore-output-new-v4-1-fcb3ebc263ca@collins.com>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=ti.com; s=ti-com-17Q1; t=1721692151;
+ bh=2jcum1C3EEtavEH9WhXzIgFg36qrDBvjEAbB9/5rTAo=;
+ h=Date:From:To:CC:Subject:References:In-Reply-To;
+ b=FDDN2dEhkdrWtqY4PvPL4gndjcT11NArqcEnfwTNnj2HFvkvFNwQIps22Sx56wc6Y
+ fFVyZK7Q/yCvi/wPVlmeSrPXg6fUNUeVCDKJUy9Ii0b0hJ+fPs2gRpIo3EMw0rrTFc
+ PvdzSVy7d34nvBVcZZFap16U8dH55jDYdgShR4sk=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=ti.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=ti.com header.i=@ti.com header.a=rsa-sha256
+ header.s=ti-com-17Q1 header.b=FDDN2dEh
+Subject: Re: [Buildroot] [PATCH v4] Create a .gitignore file in the
+ CANONICAL_O directory
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,41 +90,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>
+From: Bryan Brattlof via buildroot <buildroot@buildroot.org>
+Reply-To: Bryan Brattlof <bb@ti.com>
+Cc: Romain Naour <romain.naour@gmail.com>, "Yann
+ E. MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The gpsfake command line has a typo (a missing space), which makes the
-next gpsctl command to always fail.
+Hello everyone!
 
-This commit fixes the issue by adding the missing space.
+On June 26, 2024 thus sayeth Brandon Maier via buildroot:
+> From: Yegor Yefremov <yegorslists@googlemail.com>
+> 
+> This .gitignore file ignores all files in an output directory and
+> hence doesn't change the git status.
+> 
+> Remove "/output" entry from the main .gitignore file as it is already
+> handled by this general approach.
+> 
+> Signed-off-by: Yegor Yefremov <yegorslists@googlemail.com>
+> Signed-off-by: Brandon Maier <brandon.maier@collins.com>
+> ---
+> This is a resend of the v1 of this patch from Yegor Yefremov, as the
+> original patch series seems to have stalled.
+> 
+> I'm not familiar with the process for resending someone else's patches,
+> so let me know if I should redo anything.
+> 
+> I find having the output folders gitignore'd is useful as some newer
+> tools like fd-find and ripgrep will automatically respect gitignore.
+> Otherwise the output directories are huge and quick searches can
+> suddenly take a long time if I have created a few.
+> ---
 
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/7391792948
+For some odd reason this seems to have broken 
+python-jsonschema-specifications in a fairly weird way that I'm not 
+fully sure I understand. 
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- support/testing/tests/package/test_gpsd.py | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Somehow when downloading the source with this patch applied the build 
+will succeed but it will never be installed in the host directory. 
+Reverting this patch and deleting the package in the dl/ directory fixes 
+everything. (at least for TI's reference boards)
 
-diff --git a/support/testing/tests/package/test_gpsd.py b/support/testing/tests/package/test_gpsd.py
-index deed586c17..7ca5973981 100644
---- a/support/testing/tests/package/test_gpsd.py
-+++ b/support/testing/tests/package/test_gpsd.py
-@@ -33,7 +33,7 @@ class TestGpsd(infra.basetest.BRTest):
-         # We start the "gpsfake" GPS emulator instead.
-         cmd = "gpsfake"
-         cmd += " --slow --cycle 0.1 --quiet"
--        cmd += "/root/udp-nmea.log &> /dev/null &"
-+        cmd += " /root/udp-nmea.log &> /dev/null &"
-         self.assertRunOk(cmd)
- 
-         # Wait a bit, to let the gpsfake and gpsd to settle...
--- 
-2.45.2
+I'll continue to look into this, just wanted to start the thread just in 
+the off chance someone else is doing the same :)
 
+~Bryan
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
