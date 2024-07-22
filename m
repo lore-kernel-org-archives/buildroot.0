@@ -4,95 +4,94 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0982EC3DA63
-	for <buildroot@archiver.kernel.org>; Mon, 22 Jul 2024 19:18:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7AA7C3DA5D
+	for <buildroot@archiver.kernel.org>; Mon, 22 Jul 2024 19:18:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C5B4C607BD;
-	Mon, 22 Jul 2024 19:18:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6E271607C9;
+	Mon, 22 Jul 2024 19:18:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id I0KQ7GCyW9-5; Mon, 22 Jul 2024 19:18:07 +0000 (UTC)
+ id AW67m0uxPohP; Mon, 22 Jul 2024 19:18:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BF5C560755
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D264F607CE
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BF5C560755;
-	Mon, 22 Jul 2024 19:18:06 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D19471BF281
- for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 19:17:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D264F607CE;
+	Mon, 22 Jul 2024 19:18:09 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 4C3231BF281
+ for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 19:18:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BD3F660724
- for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 19:17:58 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 62D1E40200
+ for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 19:17:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TnWwr34mFy5h for <buildroot@lists.busybox.net>;
- Mon, 22 Jul 2024 19:17:57 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=198.47.23.248;
- helo=lelv0143.ext.ti.com; envelope-from=bb@ti.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 740646063F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 740646063F
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 740646063F
- for <buildroot@buildroot.org>; Mon, 22 Jul 2024 19:17:56 +0000 (UTC)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
- by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 46MJHrOf053698;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id cr2tSGsE8BhU for <buildroot@lists.busybox.net>;
+ Mon, 22 Jul 2024 19:17:58 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=198.47.19.142;
+ helo=fllv0016.ext.ti.com; envelope-from=bb@ti.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org D696240204
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D696240204
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id D696240204
+ for <buildroot@buildroot.org>; Mon, 22 Jul 2024 19:17:57 +0000 (UTC)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+ by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 46MJHrfV034015;
  Mon, 22 Jul 2024 14:17:53 -0500
-Received: from DFLE111.ent.ti.com (dfle111.ent.ti.com [10.64.6.32])
- by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 46MJHrNf010136
+Received: from DLEE112.ent.ti.com (dlee112.ent.ti.com [157.170.170.23])
+ by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 46MJHrVh121482
  (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
  Mon, 22 Jul 2024 14:17:53 -0500
-Received: from DFLE110.ent.ti.com (10.64.6.31) by DFLE111.ent.ti.com
- (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
+Received: from DLEE105.ent.ti.com (157.170.170.35) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 22
  Jul 2024 14:17:52 -0500
-Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DFLE110.ent.ti.com
- (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
+Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
  Frontend Transport; Mon, 22 Jul 2024 14:17:52 -0500
 Received: from localhost (bb.dhcp.ti.com [128.247.81.12])
- by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 46MJHqL7103389;
+ by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 46MJHqKx111044;
  Mon, 22 Jul 2024 14:17:52 -0500
-Date: Mon, 22 Jul 2024 14:17:36 -0500
-Message-ID: <20240722-tfa-src-update-v1-0-e68bba62f146@ti.com>
+Date: Mon, 22 Jul 2024 14:17:37 -0500
 MIME-Version: 1.0
-X-B4-Tracking: v=1; b=H4sIAFCwnmYC/x3MQQ5AMBBG4avIrE1ClYiriEXT+ctskBaRiLtrL
- L/Few8lREWioXgo4tKk25pRlwX5xa0zWCWbTGVs1ZmGj+A4Rc/nLu4A9wLrJbQeEMrRHhH0/of
- j9L4fVgzTLWAAAAA=
+Message-ID: <20240722-tfa-src-update-v1-1-e68bba62f146@ti.com>
+References: <20240722-tfa-src-update-v1-0-e68bba62f146@ti.com>
+In-Reply-To: <20240722-tfa-src-update-v1-0-e68bba62f146@ti.com>
 To: <buildroot@buildroot.org>
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2093; i=bb@ti.com;
- h=from:subject:message-id; bh=8IZ0Z6rzZVT3I6CqrRYlHNLg5wm1Npm/BjRH598Ao10=;
- b=owNCWmg5MUFZJlNZxoAbswAAZ3//////L2V/6h3d6+2fP213M2bzcc3/X/pNXX/e0bbV9++wA
- Rm1CHqPSAAaABoDTQ0DQBo0DQAA9Rk0DQAeoAAMnqAAZMmgNDTIeoPRPUM9J6ocmhkPUZGgaZBo
- A0AaaaNDQyAA0NNHpAA0GhkaYjQZBiBk9QB5QD0IbUMJoMcho0MRpo9CYgAMQNohhNADQABkABi
- aZMAIAPSepoMh6gAeoA0BpkADhyYgLYFx6ktDFDMk8J44KpYYPzRA3eNZGb72fqCMATSZgZPCLe
- kaxgwit/4m1iBWVWvHP0Z8BqpWyNFgtHr1TVLQgCVVtpinePmoAnO/MToEYU7Aw+DtDBhwghp76
- YC8k5Co724MMDAIS72boLyG1uYAXwmGKZa1EsHn7WpsyRSrgKgAdA3PgmNVToHb6M4+MhkelmRC
- L9RI2u2CxVQAwTgq3qONDFWIWeTc/Gv5E+0HtZLvPSSagz7/n8Ll2I55WOe1I2Ev1o4XvwwUZQO
- TD1Qboz8FRrHKgEV2Vqh71Fff1R/J5Yhw8QNbA967ttfjsQH0CCJOjEwFFkMSSV2iKjKdi3L3Wm
- laQoWxI/cdGKI3zAFCNGCyN+y0uShEO2bXgkEqJs9M9c3s19XCmBVmPIB39uIPPeZhsA0GFkEMp
- b/4u5IpwoSGNADdmA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=9539; i=bb@ti.com;
+ h=from:subject:message-id; bh=3rNTzWBBTt6R6M8Sgqzwjc8gsty7LuL+awqb3dgQ24U=;
+ b=owNCWmg5MUFZJlNZ/oV/HQAAbf///7bPN+v//767nO7r/1+f1N2388X36d+P/2l+iv34i3ywA
+ RsYHagBo0AAAGgBk0A0PUAAAA0GmgAAaGgDQGQAeoB6hieoB6jT1PU/SnlNP1RABpoAbUPUaAaf
+ qg0aaNA9J6gaAaAAMmEAABjU0HqNGjQGQHqHpNNMjQDI00ACGhkHqDTQNNNAwQANMBDQGCGgAAZ
+ NMmJiYEMjEA0DRoZMg00BkGg0AMBgzgB0Il+X4QL0SEuBJ1FaltBgC3zSL4/BkilVaiZiG8nwLP
+ 1cTvCjt5+C2NDLBNJg6pAWsWZE97inUfpW9hpwnca5IpS+CgKWjNoakL2RfBunlFWiNvhsJLMQT
+ l2hMM4EMEzH60WjH3c62CERDsm8UJoKuoEiNSA0zjqYY36sl2xEyVb+E2TzewhzjgyiQSuWspf5
+ 6FYxBX1S6uD486xcsAeuf5c3YH8ksQdHNQ3IetEjovF3EUP9SBg9GSB2MzkN+pVt1nwSKyZGIpU
+ 7aNeqBbD87j14MWDSTdHeCcCtgPSe4zWQg6Mk8uZRzDdLJXNBBs0DYl8T7FccMyJXxbSkoXU4kp
+ boln58+UWdZMFDuxz1QEhoiPhLKH6hPc1SL8oVfSsjxCPOp/kz2cb+0zFUEF9CnHfAQiohE/iHX
+ lV4f8XckU4UJD+hX8dA
 X-Developer-Key: i=bb@ti.com; a=openpgp;
  fpr=D3D177E40A38DF4D1853FEEF41B90D5D71D56CE0
 X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=ti.com; s=ti-com-17Q1; t=1721675873;
- bh=TBpWpCVWHCbrKLg5+ilqZaobnx/yvJCBgLES3uLUq/k=;
- h=From:Subject:Date:To:CC;
- b=CZrLtpoXVyRSVoKCM/rodNPxEIXSuNS/QAs2eGdD89/r+YI8F3mbg8z5VGy5DyEUR
- WUzLsoNVm7ubfIJTSagJGxxrGmPeBE6HG7onq0YpX4Ep5jBI93jJN8c/b3rFahMljj
- 3sIS2dLbQbRhHnRdCM95vwxzu0PEM3KuMANanWIg=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=IlCM+t0pIwO+Ge4vtmsiI7zzcRV+GoFx5t5oxQmmv5U=;
+ h=From:Date:Subject:References:In-Reply-To:To:CC;
+ b=O+JK+/ap/Fj1EtJSLYu3gF5vneP4B5L+MguiBZa6ZW1a0CED1c8JQxYwQwSzAfcry
+ ZzyGOP32y1KEpLGIfXs/rad49QJEoQdtSDfqAGmHDZOfTeIEPfrKIE4wgkPXDtOQ7E
+ qqnKoDuabi19PR/x1yMDsj+aQxZkfNa5USFXZinQ=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=ti.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (1024-bit key,
  unprotected) header.d=ti.com header.i=@ti.com header.a=rsa-sha256
- header.s=ti-com-17Q1 header.b=CZrLtpoX
-Subject: [Buildroot] [PATCH 0/3] boot/arm-trusted-firmware: version bump and
- source update
+ header.s=ti-com-17Q1 header.b=O+JK+/ap
+Subject: [Buildroot] [PATCH 1/3] boot/arm-trusted-firmware: update source to
+ the new mirror
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -120,51 +119,133 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello everyone,
-
-When trying to bump the versions for arm-trusted-firmware I noticed 
-we're using the old mirror which hasn't received any new tags in a 
-while. So this changes ARM_TRUSTED_FIRMWARE_SITE to point to the new 
-TrustedFirmware-A[0] organization and updates all the hashes I could see
-
-I did notice the lts-v2.10.x branch however I didn't add it as I didn't 
-see anyone using it. (The boards using TI's K3 SoCs will be going to 
-v2.11 in another patch series)
-
-Happy reviewing
-~Bryan
-
-[0] https://github.com/TrustedFirmware-A
+Tags are no longer being pused to the old ARM-softwre
+mirror. Let's move to the new mirror at TrustedFirmware-A which
+continues to publish newer tags
 
 Signed-off-by: Bryan Brattlof <bb@ti.com>
 ---
-Bryan Brattlof (3):
-      boot/arm-trusted-firmware: update source to the new mirror
-      boot/arm-trusted-firmware: bump to v2.11
-      boot/arm-trusted-firmware: bump latest v2.8 version
+ .../fvp-ebbr/patches/arm-trusted-firmware/arm-trusted-firmware.hash   | 2 +-
+ .../patches/arm-trusted-firmware/arm-trusted-firmware.hash            | 2 +-
+ .../beagleplay/patches/arm-trusted-firmware/arm-trusted-firmware.hash | 2 +-
+ .../patches/arm-trusted-firmware/arm-trusted-firmware.hash            | 2 +-
+ .../patches/arm-trusted-firmware/arm-trusted-firmware.hash            | 2 +-
+ board/qemu/patches/arm-trusted-firmware/arm-trusted-firmware.hash     | 2 +-
+ .../stm32mp157/patches/arm-trusted-firmware/arm-trusted-firmware.hash | 2 +-
+ .../am62ax-sk/patches/arm-trusted-firmware/arm-trusted-firmware.hash  | 2 +-
+ .../am62x-sk/patches/arm-trusted-firmware/arm-trusted-firmware.hash   | 2 +-
+ .../am64x-sk/patches/arm-trusted-firmware/arm-trusted-firmware.hash   | 2 +-
+ boot/arm-trusted-firmware/arm-trusted-firmware.hash                   | 4 ++--
+ boot/arm-trusted-firmware/arm-trusted-firmware.mk                     | 2 +-
+ 12 files changed, 13 insertions(+), 13 deletions(-)
 
- .../fvp-ebbr/patches/arm-trusted-firmware/arm-trusted-firmware.hash | 2 +-
- .../patches/arm-trusted-firmware/arm-trusted-firmware.hash          | 2 +-
- .../patches/arm-trusted-firmware/arm-trusted-firmware.hash          | 2 +-
- .../patches/arm-trusted-firmware/arm-trusted-firmware.hash          | 2 +-
- .../patches/arm-trusted-firmware/arm-trusted-firmware.hash          | 2 +-
- board/qemu/patches/arm-trusted-firmware/arm-trusted-firmware.hash   | 2 +-
- .../patches/arm-trusted-firmware/arm-trusted-firmware.hash          | 2 +-
- .../patches/arm-trusted-firmware/arm-trusted-firmware.hash          | 2 +-
- .../am62x-sk/patches/arm-trusted-firmware/arm-trusted-firmware.hash | 2 +-
- .../am64x-sk/patches/arm-trusted-firmware/arm-trusted-firmware.hash | 2 +-
- boot/arm-trusted-firmware/Config.in                                 | 6 +++---
- boot/arm-trusted-firmware/arm-trusted-firmware.hash                 | 4 ++--
- boot/arm-trusted-firmware/arm-trusted-firmware.mk                   | 2 +-
- .../0001-build-tools-avoid-unnecessary-link.patch                   | 0
- 14 files changed, 16 insertions(+), 16 deletions(-)
----
-base-commit: 4e4554eeb76e8b516c6cbcd66f15868492aac594
-change-id: 20240623-tfa-src-update-8de4cdf5ceed
+diff --git a/board/arm/fvp-ebbr/patches/arm-trusted-firmware/arm-trusted-firmware.hash b/board/arm/fvp-ebbr/patches/arm-trusted-firmware/arm-trusted-firmware.hash
+index 02714d06a09c0..c056d6ad0ddc8 100644
+--- a/board/arm/fvp-ebbr/patches/arm-trusted-firmware/arm-trusted-firmware.hash
++++ b/board/arm/fvp-ebbr/patches/arm-trusted-firmware/arm-trusted-firmware.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  2e18b881ada9198173238cca80086c787b1fa3f698944bde1743142823fc511c  arm-trusted-firmware-v2.10.tar.gz
++sha256  88215a62291b9ba87da8e50b077741103cdc08fb6c9e1ebd34dfaace746d3201  arm-trusted-firmware-v2.10.tar.gz
+diff --git a/board/beagleboard/beagleboneai64/patches/arm-trusted-firmware/arm-trusted-firmware.hash b/board/beagleboard/beagleboneai64/patches/arm-trusted-firmware/arm-trusted-firmware.hash
+index 02714d06a09c0..c056d6ad0ddc8 100644
+--- a/board/beagleboard/beagleboneai64/patches/arm-trusted-firmware/arm-trusted-firmware.hash
++++ b/board/beagleboard/beagleboneai64/patches/arm-trusted-firmware/arm-trusted-firmware.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  2e18b881ada9198173238cca80086c787b1fa3f698944bde1743142823fc511c  arm-trusted-firmware-v2.10.tar.gz
++sha256  88215a62291b9ba87da8e50b077741103cdc08fb6c9e1ebd34dfaace746d3201  arm-trusted-firmware-v2.10.tar.gz
+diff --git a/board/beagleboard/beagleplay/patches/arm-trusted-firmware/arm-trusted-firmware.hash b/board/beagleboard/beagleplay/patches/arm-trusted-firmware/arm-trusted-firmware.hash
+index 02714d06a09c0..c056d6ad0ddc8 100644
+--- a/board/beagleboard/beagleplay/patches/arm-trusted-firmware/arm-trusted-firmware.hash
++++ b/board/beagleboard/beagleplay/patches/arm-trusted-firmware/arm-trusted-firmware.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  2e18b881ada9198173238cca80086c787b1fa3f698944bde1743142823fc511c  arm-trusted-firmware-v2.10.tar.gz
++sha256  88215a62291b9ba87da8e50b077741103cdc08fb6c9e1ebd34dfaace746d3201  arm-trusted-firmware-v2.10.tar.gz
+diff --git a/board/bsh/common/imx8mn-bsh-smm-s2/patches/arm-trusted-firmware/arm-trusted-firmware.hash b/board/bsh/common/imx8mn-bsh-smm-s2/patches/arm-trusted-firmware/arm-trusted-firmware.hash
+index 80e592dab6065..6dcfb66431f22 100644
+--- a/board/bsh/common/imx8mn-bsh-smm-s2/patches/arm-trusted-firmware/arm-trusted-firmware.hash
++++ b/board/bsh/common/imx8mn-bsh-smm-s2/patches/arm-trusted-firmware/arm-trusted-firmware.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  fc4cdac7c08fc398b6d4b705285dc13ac2d2b30a7449c6f07e9ccd81207241df  arm-trusted-firmware-v2.5.tar.gz
++sha256  ad8a2ffcbcd12d919723da07630fc0840c3c2fba7656d1462e45488e42995d7c  arm-trusted-firmware-v2.5.tar.gz
+diff --git a/board/orangepi/orangepi-zero2w/patches/arm-trusted-firmware/arm-trusted-firmware.hash b/board/orangepi/orangepi-zero2w/patches/arm-trusted-firmware/arm-trusted-firmware.hash
+index c9d043c46f129..2f00eec47ccd3 100644
+--- a/board/orangepi/orangepi-zero2w/patches/arm-trusted-firmware/arm-trusted-firmware.hash
++++ b/board/orangepi/orangepi-zero2w/patches/arm-trusted-firmware/arm-trusted-firmware.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256  2e18b881ada9198173238cca80086c787b1fa3f698944bde1743142823fc511c  arm-trusted-firmware-v2.10.tar.gz
++sha256  88215a62291b9ba87da8e50b077741103cdc08fb6c9e1ebd34dfaace746d3201  arm-trusted-firmware-v2.10.tar.gz
+diff --git a/board/qemu/patches/arm-trusted-firmware/arm-trusted-firmware.hash b/board/qemu/patches/arm-trusted-firmware/arm-trusted-firmware.hash
+index 74fe35c9bc733..5f8b9fa4419cd 100644
+--- a/board/qemu/patches/arm-trusted-firmware/arm-trusted-firmware.hash
++++ b/board/qemu/patches/arm-trusted-firmware/arm-trusted-firmware.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256  327c65b1bc231608a7a808b068b00c1a22310e9fc86158813cd10a9711d5725e  arm-trusted-firmware-v2.7.tar.gz
++sha256  53422dc649153838e03820330ba17cb10afe3e330ecde0db11e4d5f1361a33e6  arm-trusted-firmware-v2.7.tar.gz
+diff --git a/board/stmicroelectronics/common/stm32mp157/patches/arm-trusted-firmware/arm-trusted-firmware.hash b/board/stmicroelectronics/common/stm32mp157/patches/arm-trusted-firmware/arm-trusted-firmware.hash
+index 8b69a5a96453b..5a4e619135aa2 100644
+--- a/board/stmicroelectronics/common/stm32mp157/patches/arm-trusted-firmware/arm-trusted-firmware.hash
++++ b/board/stmicroelectronics/common/stm32mp157/patches/arm-trusted-firmware/arm-trusted-firmware.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  06d32acf42808b682859008292f0591d2d872f19aa1a8021bfcd1c1c626285e6  arm-trusted-firmware-v2.9.tar.gz
++sha256  76a66a1de0c01aeb83dfc7b72b51173fe62c6e51d6fca17cc562393117bed08b  arm-trusted-firmware-v2.9.tar.gz
+diff --git a/board/ti/am62ax-sk/patches/arm-trusted-firmware/arm-trusted-firmware.hash b/board/ti/am62ax-sk/patches/arm-trusted-firmware/arm-trusted-firmware.hash
+index 8f60864fbf67f..ded5f952cd3d7 100644
+--- a/board/ti/am62ax-sk/patches/arm-trusted-firmware/arm-trusted-firmware.hash
++++ b/board/ti/am62ax-sk/patches/arm-trusted-firmware/arm-trusted-firmware.hash
+@@ -1,2 +1,2 @@
+ # Locally computed:
+-sha256  ba215404fe9db26e5f2cef3fdce17b7c8ed344a2a1d592dd01a5f1c5e72cfdbd  arm-trusted-firmware-lts-v2.10.4.tar.gz
++sha256  05f08e6728474e7af3cca3c0d6f6d065e5b2622aabaca942d57377a46d4ae0ab  arm-trusted-firmware-lts-v2.10.4.tar.gz
+diff --git a/board/ti/am62x-sk/patches/arm-trusted-firmware/arm-trusted-firmware.hash b/board/ti/am62x-sk/patches/arm-trusted-firmware/arm-trusted-firmware.hash
+index 7494e04ead5d0..b7927be6e85b9 100644
+--- a/board/ti/am62x-sk/patches/arm-trusted-firmware/arm-trusted-firmware.hash
++++ b/board/ti/am62x-sk/patches/arm-trusted-firmware/arm-trusted-firmware.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  ba215404fe9db26e5f2cef3fdce17b7c8ed344a2a1d592dd01a5f1c5e72cfdbd  arm-trusted-firmware-lts-v2.10.4.tar.gz
++sha256  05f08e6728474e7af3cca3c0d6f6d065e5b2622aabaca942d57377a46d4ae0ab  arm-trusted-firmware-lts-v2.10.4.tar.gz
+diff --git a/board/ti/am64x-sk/patches/arm-trusted-firmware/arm-trusted-firmware.hash b/board/ti/am64x-sk/patches/arm-trusted-firmware/arm-trusted-firmware.hash
+index 7494e04ead5d0..b7927be6e85b9 100644
+--- a/board/ti/am64x-sk/patches/arm-trusted-firmware/arm-trusted-firmware.hash
++++ b/board/ti/am64x-sk/patches/arm-trusted-firmware/arm-trusted-firmware.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  ba215404fe9db26e5f2cef3fdce17b7c8ed344a2a1d592dd01a5f1c5e72cfdbd  arm-trusted-firmware-lts-v2.10.4.tar.gz
++sha256  05f08e6728474e7af3cca3c0d6f6d065e5b2622aabaca942d57377a46d4ae0ab  arm-trusted-firmware-lts-v2.10.4.tar.gz
+diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.hash b/boot/arm-trusted-firmware/arm-trusted-firmware.hash
+index 73ab431b9fc97..2c541674bf54b 100644
+--- a/boot/arm-trusted-firmware/arm-trusted-firmware.hash
++++ b/boot/arm-trusted-firmware/arm-trusted-firmware.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  2e18b881ada9198173238cca80086c787b1fa3f698944bde1743142823fc511c  arm-trusted-firmware-v2.10.tar.gz
+-sha256  e55ae7105c996b60f748b2eb6adeaf5ac8946425e1d4294ecc1c56aebf435274  arm-trusted-firmware-lts-v2.8.13.tar.gz
++sha256  88215a62291b9ba87da8e50b077741103cdc08fb6c9e1ebd34dfaace746d3201  arm-trusted-firmware-v2.10.tar.gz
++sha256  24b530f15cd714fa82cd8b80fbde0c18b8b8ea33778104532185ad67cb364bf9  arm-trusted-firmware-lts-v2.8.13.tar.gz
+ sha256  130d0c6e5159fa454b1e969fd281fa1d388819aefb203f65dd282544b5ab7ba9  docs/license.rst
+diff --git a/boot/arm-trusted-firmware/arm-trusted-firmware.mk b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+index abf917948eeee..d13998ce091c2 100644
+--- a/boot/arm-trusted-firmware/arm-trusted-firmware.mk
++++ b/boot/arm-trusted-firmware/arm-trusted-firmware.mk
+@@ -16,7 +16,7 @@ ARM_TRUSTED_FIRMWARE_SITE = $(call qstrip,$(BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUST
+ ARM_TRUSTED_FIRMWARE_SITE_METHOD = git
+ else
+ # Handle stable official ATF versions
+-ARM_TRUSTED_FIRMWARE_SITE = $(call github,ARM-software,arm-trusted-firmware,$(ARM_TRUSTED_FIRMWARE_VERSION))
++ARM_TRUSTED_FIRMWARE_SITE = $(call github,TrustedFirmware-A,trusted-firmware-a,$(ARM_TRUSTED_FIRMWARE_VERSION))
+ # The licensing of custom or from-git versions is unknown.
+ # This is valid only for the latest (i.e. known) version.
+ ifeq ($(BR2_TARGET_ARM_TRUSTED_FIRMWARE_LATEST_VERSION),y)
 
-Best regards,
 -- 
-Bryan Brattlof <bb@ti.com>
+2.45.2
 
 _______________________________________________
 buildroot mailing list
