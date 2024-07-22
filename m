@@ -4,72 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8B9FBC3DA5D
-	for <buildroot@archiver.kernel.org>; Mon, 22 Jul 2024 16:23:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 16E9DC3DA5D
+	for <buildroot@archiver.kernel.org>; Mon, 22 Jul 2024 16:24:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 546294029B;
-	Mon, 22 Jul 2024 16:23:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D672B40265;
+	Mon, 22 Jul 2024 16:24:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ILbA9aEEsPfw; Mon, 22 Jul 2024 16:23:55 +0000 (UTC)
+ id lJHQTMtqcoEK; Mon, 22 Jul 2024 16:24:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 25F904021C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 99F6B4029F
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 25F904021C;
-	Mon, 22 Jul 2024 16:23:55 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B418A1BF95C
- for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 16:23:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 99F6B4029F;
+	Mon, 22 Jul 2024 16:24:02 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 0B91B1BF2A1
+ for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 16:24:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9BA314054A
- for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 16:23:52 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id ED7036059E
+ for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 16:24:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rH7XJBiEaZ2N for <buildroot@lists.busybox.net>;
- Mon, 22 Jul 2024 16:23:51 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.193;
- helo=relay1-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id G5I6iTAY2fvm for <buildroot@lists.busybox.net>;
+ Mon, 22 Jul 2024 16:24:00 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.197;
+ helo=relay5-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 5120F40320
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5120F40320
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5120F40320
- for <buildroot@buildroot.org>; Mon, 22 Jul 2024 16:23:50 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 1E8D9240002;
- Mon, 22 Jul 2024 16:23:47 +0000 (UTC)
-Date: Mon, 22 Jul 2024 18:23:47 +0200
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20240722182347.1bac99cb@windsurf>
-In-Reply-To: <20240722131750.519333-1-fontaine.fabrice@gmail.com>
-References: <20240722131750.519333-1-fontaine.fabrice@gmail.com>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org D48026059A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D48026059A
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id D48026059A
+ for <buildroot@buildroot.org>; Mon, 22 Jul 2024 16:23:59 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id CFED91C0006;
+ Mon, 22 Jul 2024 16:23:57 +0000 (UTC)
+Date: Mon, 22 Jul 2024 18:23:57 +0200
+To: James Hilliard <james.hilliard1@gmail.com>
+Message-ID: <20240722182357.49db8e2b@windsurf>
+In-Reply-To: <20240719042632.3227242-1-james.hilliard1@gmail.com>
+References: <20240719042632.3227242-1-james.hilliard1@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1721665428;
+ d=bootlin.com; s=gm1; t=1721665438;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=oyfoyQbSC90Fsm52+6lfjUb8N3pzm8suHzpLu/rGWgc=;
- b=hw+112d118KMgZIwMIffU6grFLfBOrNBgO0v2VehLcwPSFtEu3v4GjbnzrwfheyNI7Pjgv
- 7djdruIopZYMy1zx3cSB3akPC8yRqQ4ImwSIYopgmmpMPiOv8Ooy+maTYtVofSdf5zniH4
- DRbGshEdQSKg2+yI/ZHlsi9NB6r1fEezjHS+PLo4rF8qZWYbjAz8CZHBStP800AAzVjGZv
- oy/lHiyI2tHb5TdeQxS74woXd8LC+vxPXUxiWTfmSPhaKEpJ1IjOV6Z90OPtyMENvFtqGl
- DyA64+NjBbuXo61ojJFgJcZVJ11ZMPryxk2Z98x63LbDCMVRoflR0OvFXzlk3g==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=lISXm5BelbAuM+oUsPwatGlhz1g+cQRWbanj/wTUIN8=;
+ b=OHWI1kBOHCuWVE+5ccN8qm/RYtRqenXiZKM48CKl/93RzTA/dm96YnkgGooKV5xqtojr8M
+ iubN8kCh2z0Hr2sAIjEBcZ+9dVGPDq7gnZG5lPzygNpW2V1Ll2saxgUjEHPvxJTsKmvkqJ
+ aqaV4HIH3Ov+8JEOsrXzxvcjqlrTg6QpceVxLIj+AYER6cJtUak9uVCCvJ4QqFuckXdzxy
+ cYjgF//6X/Rgmon0pbJlYNf6IivU+OrG0MLOsidMeTwB2Z8LXe7eG7sHtZ1uePXd1VZtp3
+ HjqnpAQH1cZelRCtYeiSu6D73YqzLyb9bYqxhy+vX0hx0exsc2lzBbO9LCULeg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=hw+112d1
-Subject: Re: [Buildroot] [PATCH 1/1] package/pkg-meson: support building
- both libraries
+ header.s=gm1 header.b=OHWI1kBO
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-pydantic: bump to
+ version 2.8.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,34 +83,22 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>, buildroot@buildroot.org
+Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, 22 Jul 2024 15:17:50 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Thu, 18 Jul 2024 22:26:32 -0600
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-> meson supports building both libraries (i.e. static and shared).
-> This will avoid the following build failure with flashrom and
-> BR2_SHARED_STATIC_LIBS raised since bump to version 1.4.0-rc2 in commit
-> 8637884057ddc3c1aeb9f0dd285fc6fcf378c26b:
-> 
-> ../output-1/build/flashrom-1.4.0-rc2/meson.build:18:2: ERROR: Problem encountered:
->     Cannot build cli_classic with shared libflashrom. Use \'-Dclassic_cli=disabled\' to disable the cli,
->     or use \'--default-library=both\' to also build the classic_cli
-> 
-> Fixes: 8637884057ddc3c1aeb9f0dd285fc6fcf378c26b
->  - http://autobuild.buildroot.org/results/6d484857ff1674bf81986505827e54f3f1b9aaec
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 > ---
->  package/pkg-meson.mk | 10 +++++++++-
->  1 file changed, 9 insertions(+), 1 deletion(-)
+>  package/python-pydantic/python-pydantic.hash | 4 ++--
+>  package/python-pydantic/python-pydantic.mk   | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
-Applied to master, thanks. I'm guessing this could cause a bit of
-breakage, but let's see how much :-)
+Applied to master, thanks.
 
 Thomas
 -- 
