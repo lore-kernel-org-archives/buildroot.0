@@ -4,49 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04173C3DA59
-	for <buildroot@archiver.kernel.org>; Mon, 22 Jul 2024 12:34:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 063B3C3DA59
+	for <buildroot@archiver.kernel.org>; Mon, 22 Jul 2024 12:45:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A3D21408C4;
-	Mon, 22 Jul 2024 12:34:19 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C312840156;
+	Mon, 22 Jul 2024 12:45:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 93GTHf-Mn8HX; Mon, 22 Jul 2024 12:34:18 +0000 (UTC)
+ id szqLWKJe80-K; Mon, 22 Jul 2024 12:45:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1847040177
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 92624403E4
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1847040177;
-	Mon, 22 Jul 2024 12:34:18 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id ACF341BF2A1
- for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 12:34:16 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 92624403E4;
+	Mon, 22 Jul 2024 12:45:14 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 247891BF2A1
+ for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 12:45:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 96CBD40177
- for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 12:34:16 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1286380597
+ for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 12:45:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cS3AtrNvEZ_K for <buildroot@lists.busybox.net>;
- Mon, 22 Jul 2024 12:34:15 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 85121400D2
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 85121400D2
- for <buildroot@buildroot.org>; Mon, 22 Jul 2024 12:34:15 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 71A7E87039; Mon, 22 Jul 2024 12:34:15 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6gw4n1K39qY9 for <buildroot@lists.busybox.net>;
+ Mon, 22 Jul 2024 12:45:12 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::430; helo=mail-wr1-x430.google.com;
+ envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 2F317801EA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2F317801EA
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com
+ [IPv6:2a00:1450:4864:20::430])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2F317801EA
+ for <buildroot@buildroot.org>; Mon, 22 Jul 2024 12:45:12 +0000 (UTC)
+Received: by mail-wr1-x430.google.com with SMTP id
+ ffacd0b85a97d-36858357bb7so2126216f8f.2
+ for <buildroot@buildroot.org>; Mon, 22 Jul 2024 05:45:11 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1721652309; x=1722257109;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=fkuATyVZO9xD+zlB+jhvwvXXVG+62acIFFJui95PKOc=;
+ b=Mzfbns7V8Wc34FbQmOmrTmXEkR02K9PQR+lnLlTS4XlAtMjOaCoPb2Lze7fOjFJZPx
+ bPjn1Ymo4lmtDrlrJJdcBpJ+kO0H6gfbPTWlTUC9oWhkkwupkgZo/sVEDvQIImDlm1RA
+ qttkc8U+BktHS62voAAss5HacxApMDXFo/8uiSMwaC52nCYi38d2OYAHFqSngp3ak23I
+ qm2LpNYtMC1IYfnl9kL2TJP4iofUAoqIvg1kquEf1y+fL2y/VX++43GZwoIB1GcoNif1
+ uLAuVmKC8oO/XElLmOocszfu8b00KnTwqbmTby+IhXtFt8PDwdmwSTStuT02u9bBYGyE
+ YBDQ==
+X-Gm-Message-State: AOJu0YwZJwVeI9pG3rRaCo5YWr2SSzU3lL5Dzmv3Bgz+OG3s3TrrB50l
+ e/HMyuCX123Ghp2rtasTjyqOk+lpARIYiznPAjFjnJzyqoF4Yiokl+VLWw==
+X-Google-Smtp-Source: AGHT+IFyEZb4bGUtQYdWuKj1nQ6Wv9xoOf9sYg1W1Jif8O2pOlKHZHlY9hMMBSqznOJcdZcyDT+MqA==
+X-Received: by 2002:a5d:64ca:0:b0:362:5816:f134 with SMTP id
+ ffacd0b85a97d-369bbbb300cmr5243235f8f.13.1721652309265; 
+ Mon, 22 Jul 2024 05:45:09 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-785-215.w83-197.abo.wanadoo.fr.
+ [83.197.112.215]) by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-368787ceda0sm8421060f8f.87.2024.07.22.05.45.08
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 22 Jul 2024 05:45:08 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon, 22 Jul 2024 14:32:33 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7103da7c96fc188e8470c39d967a677365ec8398
-X-Git-Newrev: 41cc0f22722e3fbb2581a4f399c2e304fdb061a1
-X-Patchwork-Hint: ignore
-Message-Id: <20240722123415.71A7E87039@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/bandwidthd: fix build with gcc >=
- 14
+Date: Mon, 22 Jul 2024 14:45:07 +0200
+Message-ID: <20240722124507.248444-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.43.0
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1721652309; x=1722257109; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=fkuATyVZO9xD+zlB+jhvwvXXVG+62acIFFJui95PKOc=;
+ b=Nl6dZYoV5qIP51QUkyXgXhPdfpUlitnP2yQTsdQ9uvMWaF7j5KQZdc+ToBQxakZAmP
+ 936ajwgH6o7eYGSv6ZiZtvBxQbhxOSOFDHP5yN3lq3A1NgkDHTGUyTm9+WW8/DnREzYP
+ U6YBVMzyjAseuwCY+P1zxG/wRGuv23vPe7QUWO0AHQudNYPexnCwXVyfL+Dhl49N99MK
+ ok5nuaCWMEW5iqloIeabdNCn2oxRoFqmrJC317h3dLMaTJOpfrxezfrs4E5QC4s0hvjf
+ WLfdKf5Tgcrzz0k1nL4aPramGQhRIrZo2zEU4s1lvkeo5ZlVcHS4LrVbuwqGQoitm3GB
+ qw1A==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=Nl6dZYoV
+Subject: [Buildroot] [PATCH 1/1] package/gnutls: add tpm2-tss comment
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,104 +99,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=41cc0f22722e3fbb2581a4f399c2e304fdb061a1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Fix the following build failure with gcc >= 14:
-
-parser.c: In function 'yyparse':
-parser.c:1196:16: error: implicit declaration of function 'yylex' [-Wimplicit-function-declaration]
- 1196 |       yychar = yylex ();
-      |                ^~~~~
-
-While at it, update Upstream tag of first patch
-
-Fixes:
- - http://autobuild.buildroot.org/results/33364071de4e5e51a2ac2337b82d145f71e0e64a
+As suggested by Thomas Petazzoni, add a comment about tpm2-tss
+dependency
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .checkpackageignore                                |  1 -
- ...01-src-bandwidthd.h-fix-build-with-gcc-10.patch |  2 +-
- .../0002-src-parser.y-fix-build-with-gcc-14.patch  | 36 ++++++++++++++++++++++
- 3 files changed, 37 insertions(+), 2 deletions(-)
+ package/gnutls/gnutls.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 5d5919340c..e20a747da5 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -342,7 +342,6 @@ package/avahi/S05avahi-setup.sh lib_sysv.Indent lib_sysv.Variables
- package/avahi/S50avahi-daemon lib_sysv.Indent lib_sysv.Variables
- package/babeld/S50babeld Shellcheck lib_sysv.Indent lib_sysv.Variables
- package/babeltrace2/0001-configure-simplify-warning-flags-detection.patch lib_patch.Upstream
--package/bandwidthd/0001-src-bandwidthd.h-fix-build-with-gcc-10.patch lib_patch.Upstream
- package/bash/0001-input.h-add-missing-include-on-stdio.h.patch lib_patch.Upstream
- package/bash/0002-parse.y-fix-compilation-for-non-multibyte-builds.patch lib_patch.Upstream
- package/bash/0003-configure-invert-condition-for-strtoimax-builtin.patch lib_patch.Upstream
-diff --git a/package/bandwidthd/0001-src-bandwidthd.h-fix-build-with-gcc-10.patch b/package/bandwidthd/0001-src-bandwidthd.h-fix-build-with-gcc-10.patch
-index e7d0dec8d6..727e18ea84 100644
---- a/package/bandwidthd/0001-src-bandwidthd.h-fix-build-with-gcc-10.patch
-+++ b/package/bandwidthd/0001-src-bandwidthd.h-fix-build-with-gcc-10.patch
-@@ -15,7 +15,7 @@ Fixes:
-  - http://autobuild.buildroot.org/results/6308c8ee38b6017215038d47c009b238113bd36f
+diff --git a/package/gnutls/gnutls.mk b/package/gnutls/gnutls.mk
+index cf2f02cc9d..7a79612102 100644
+--- a/package/gnutls/gnutls.mk
++++ b/package/gnutls/gnutls.mk
+@@ -14,6 +14,7 @@ GNUTLS_LICENSE_FILES = doc/COPYING.LESSER
  
- Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/nroach44/bandwidthd/pull/1]
-+Upstream: https://github.com/nroach44/bandwidthd/commit/dde68ed77114d7b19bfed3068edefc9dc0644445
- ---
-  src/bandwidthd.h | 4 ++--
-  src/graph.c      | 1 +
-diff --git a/package/bandwidthd/0002-src-parser.y-fix-build-with-gcc-14.patch b/package/bandwidthd/0002-src-parser.y-fix-build-with-gcc-14.patch
-new file mode 100644
-index 0000000000..d31070855c
---- /dev/null
-+++ b/package/bandwidthd/0002-src-parser.y-fix-build-with-gcc-14.patch
-@@ -0,0 +1,36 @@
-+From 96f5ad56b1bb872c2c24f0c83d06d94ae2936838 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Mon, 22 Jul 2024 14:08:45 +0200
-+Subject: [PATCH] src/parser.y: fix build with gcc >= 14
-+
-+Fix the following build failure with gcc >= 14:
-+
-+parser.c: In function 'yyparse':
-+parser.c:1196:16: error: implicit declaration of function 'yylex' [-Wimplicit-function-declaration]
-+ 1196 |       yychar = yylex ();
-+      |                ^~~~~
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/33364071de4e5e51a2ac2337b82d145f71e0e64a
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Upstream: https://github.com/nroach44/bandwidthd/pull/3
-+---
-+ src/parser.y | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/src/parser.y b/src/parser.y
-+index d9acc10..15ce61c 100644
-+--- a/src/parser.y
-++++ b/src/parser.y
-+@@ -11,6 +11,7 @@
-+ #include <arpa/inet.h>
-+ #include "bandwidthd.h"
-+ 
-++extern int yylex (void);
-+ extern unsigned int SubnetCount;
-+ extern struct SubnetData SubnetTable[];
-+ extern struct config config;
-+-- 
-+2.43.0
-+
+ GNUTLS_DEPENDENCIES = host-pkgconf libtasn1 libunistring nettle
+ GNUTLS_CPE_ID_VENDOR = gnu
++# Don't add tpm2-tss optional dependency as it creates a circular dependency
+ GNUTLS_CONF_OPTS = \
+ 	--disable-doc \
+ 	--disable-libdane \
+-- 
+2.43.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
