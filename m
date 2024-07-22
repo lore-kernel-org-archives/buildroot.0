@@ -4,48 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C15D8C3DA59
-	for <buildroot@archiver.kernel.org>; Mon, 22 Jul 2024 12:09:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 737EEC3DA64
+	for <buildroot@archiver.kernel.org>; Mon, 22 Jul 2024 12:09:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8C13A40949;
-	Mon, 22 Jul 2024 12:09:34 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3CEE4408F1;
+	Mon, 22 Jul 2024 12:09:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Km_ocJzumUiF; Mon, 22 Jul 2024 12:09:32 +0000 (UTC)
+ id bBPC12GUM7nC; Mon, 22 Jul 2024 12:09:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A084C408F1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 057F04094F
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A084C408F1;
-	Mon, 22 Jul 2024 12:09:31 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 024FB1BF8C7
- for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 12:09:25 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 057F04094F;
+	Mon, 22 Jul 2024 12:09:35 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1B0A61BF2A1
+ for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 12:09:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E23554024A
+ by smtp2.osuosl.org (Postfix) with ESMTP id B76E6408CA
  for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 12:09:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PmaL6TCjDOTS for <buildroot@lists.busybox.net>;
- Mon, 22 Jul 2024 12:09:23 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id DEAhXY142mNJ for <buildroot@lists.busybox.net>;
+ Mon, 22 Jul 2024 12:09:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D02984029C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0799C408D1
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id D02984029C
- for <buildroot@buildroot.org>; Mon, 22 Jul 2024 12:09:23 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0799C408D1
+ for <buildroot@buildroot.org>; Mon, 22 Jul 2024 12:09:24 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C3D8586FFB; Mon, 22 Jul 2024 12:09:23 +0000 (UTC)
+ id 00A3486FFB; Mon, 22 Jul 2024 12:09:23 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 22 Jul 2024 14:06:06 +0200
+Date: Mon, 22 Jul 2024 14:08:23 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6f34e68217264fb62c48ce28c48bf759b30fef0e
-X-Git-Newrev: b2c1a8d2e258a07e69666dab4ef8f1267711a0ae
+X-Git-Oldrev: 701cf686bdfd6c579c4d90768a6a3dab6858d942
+X-Git-Newrev: 1c955f89ab2d0ff9df1d1ae638685f2c0383c81a
 X-Patchwork-Hint: ignore
-Message-Id: <20240722120923.C3D8586FFB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-uvicorn: bump to 0.30.3
+Message-Id: <20240722120924.00A3486FFB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/qemu_arm_ebbr: linux needs
+ host-openssl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,55 +61,55 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============7913301656384822265=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b2c1a8d2e258a07e69666dab4ef8f1267711a0ae
+--===============7913301656384822265==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=1c955f89ab2d0ff9df1d1ae638685f2c0383c81a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog:
+The kernel build needs host-openssl; add it to the configuration.
 
-* https://github.com/encode/uvicorn/releases/tag/0.30.3
-* https://github.com/encode/uvicorn/releases/tag/0.30.2
+In practice the documented build recipe works fine and the build failures
+can only be seen with highly parallel builds using per-package directories.
 
-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+This fixes the following compilation error:
+
+  certs/extract-cert.c:21:10: fatal error: openssl/bio.h: No such file or directory
+
+Fixes: 7115ab39189a6c660745267d8bf0bf41cf8b3db7
+Signed-off-by: Vincent Stehlé <vincent.stehle@arm.com>
+Cc: Romain Naour <romain.naour@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-uvicorn/python-uvicorn.hash | 4 ++--
- package/python-uvicorn/python-uvicorn.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ configs/qemu_arm_ebbr_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/python-uvicorn/python-uvicorn.hash b/package/python-uvicorn/python-uvicorn.hash
-index 318fc65e21..7032319999 100644
---- a/package/python-uvicorn/python-uvicorn.hash
-+++ b/package/python-uvicorn/python-uvicorn.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/uvicorn/json
--md5  a000939f41470e55bad5cec475489b4c  uvicorn-0.30.1.tar.gz
--sha256  d46cd8e0fd80240baffbcd9ec1012a712938754afcf81bce56c024c1656aece8  uvicorn-0.30.1.tar.gz
-+md5  433c22f6ac3bbc2e7011a5623b772e25  uvicorn-0.30.3.tar.gz
-+sha256  0d114d0831ff1adbf231d358cbf42f17333413042552a624ea6a9b4c33dcfd81  uvicorn-0.30.3.tar.gz
- # Locally computed sha256 checksums
- sha256  efe1acf3e62fb99c288b0ec73e5a773b7268ef4320fe757ea994214e4b63c371  LICENSE.md
-diff --git a/package/python-uvicorn/python-uvicorn.mk b/package/python-uvicorn/python-uvicorn.mk
-index 092c640abd..00c3b953a3 100644
---- a/package/python-uvicorn/python-uvicorn.mk
-+++ b/package/python-uvicorn/python-uvicorn.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+diff --git a/configs/qemu_arm_ebbr_defconfig b/configs/qemu_arm_ebbr_defconfig
+index 7c436449d7..bdcd41bbde 100644
+--- a/configs/qemu_arm_ebbr_defconfig
++++ b/configs/qemu_arm_ebbr_defconfig
+@@ -19,6 +19,7 @@ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.32"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/arm-ebbr/linux.fragment"
++BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
  
--PYTHON_UVICORN_VERSION = 0.30.1
-+PYTHON_UVICORN_VERSION = 0.30.3
- PYTHON_UVICORN_SOURCE = uvicorn-$(PYTHON_UVICORN_VERSION).tar.gz
--PYTHON_UVICORN_SITE = https://files.pythonhosted.org/packages/37/16/9f5ccaa1a76e5bfbaa0c67640e2db8a5214ca08d92a1b427fa1677b3da88
-+PYTHON_UVICORN_SITE = https://files.pythonhosted.org/packages/77/40/b650be95700dc83d14c5f2b9eac9deb23cbca757a12ee20e473b5ef1ac48
- PYTHON_UVICORN_SETUP_TYPE = pep517
- PYTHON_UVICORN_LICENSE = BSD-3-Clause
- PYTHON_UVICORN_LICENSE_FILES = LICENSE.md
+ # Packages
+ BR2_PACKAGE_OPTEE_CLIENT=y
+
+--===============7913301656384822265==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============7913301656384822265==--
