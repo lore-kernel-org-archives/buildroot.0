@@ -4,71 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40339C3DA59
-	for <buildroot@archiver.kernel.org>; Mon, 22 Jul 2024 13:13:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2687BC3DA5D
+	for <buildroot@archiver.kernel.org>; Mon, 22 Jul 2024 13:18:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0890140248;
-	Mon, 22 Jul 2024 13:13:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BCF11400AC;
+	Mon, 22 Jul 2024 13:18:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id McKU8Q27RrA2; Mon, 22 Jul 2024 13:13:20 +0000 (UTC)
+ id Du26qNvOxfrm; Mon, 22 Jul 2024 13:18:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B725C4024C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 80BA84022B
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B725C4024C;
-	Mon, 22 Jul 2024 13:13:20 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id BD4501BF2A3
- for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 13:13:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 80BA84022B;
+	Mon, 22 Jul 2024 13:18:07 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 781001BF2A3
+ for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 13:18:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id AB471605D4
- for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 13:13:18 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 657CD810E4
+ for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 13:18:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id arnmb9uncPnI for <buildroot@lists.busybox.net>;
- Mon, 22 Jul 2024 13:13:17 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::225;
- helo=relay5-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 4FC50605C1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4FC50605C1
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::225])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 4FC50605C1
- for <buildroot@buildroot.org>; Mon, 22 Jul 2024 13:13:17 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 801D91C0008;
- Mon, 22 Jul 2024 13:13:15 +0000 (UTC)
-Date: Mon, 22 Jul 2024 15:13:14 +0200
-To: Julien Olivain <ju.o@free.fr>
-Message-ID: <20240722151314.6abebd25@windsurf>
-In-Reply-To: <20240719173723.546583-1-ju.o@free.fr>
-References: <20240719173723.546583-1-ju.o@free.fr>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 0k4PrPBgUIEC for <buildroot@lists.busybox.net>;
+ Mon, 22 Jul 2024 13:18:04 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::22d; helo=mail-lj1-x22d.google.com;
+ envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 512F5810E3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 512F5810E3
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com
+ [IPv6:2a00:1450:4864:20::22d])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 512F5810E3
+ for <buildroot@buildroot.org>; Mon, 22 Jul 2024 13:18:04 +0000 (UTC)
+Received: by mail-lj1-x22d.google.com with SMTP id
+ 38308e7fff4ca-2eeb1ba0481so64759981fa.2
+ for <buildroot@buildroot.org>; Mon, 22 Jul 2024 06:18:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1721654281; x=1722259081;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=mSQp2I6ceuvGMWrrOVS9pftFFCkb3EoXUKqryiZG8bU=;
+ b=sbXfTiuVLvTU8bo1ph/+CdCuIxeIGwHVQfYZT5Ayr9bDfY7gnO2K2+HxZl93yG7UYz
+ jCKNz2VnKo0FuBTyxw1iNjDPnkzMFbHDwqO9D21H5nQ+EEYEA3lSRatZGiOo7YcnRXgB
+ u8GgNSMxY0S9Q4SPbpL9Mcn5/c3AB7PaYnYKMngtdRNi4tNwGHqQFHpJpbpeJsTnqphU
+ /zn308o9bTlvHZcTIzp06qgzJaFA13tWWBWyWhWpcExkhGO8sT7sagEvjN7m3Yjwhh5Q
+ 23efE1SY8VoSqnctUIX6eAnd/Cp0ZCDzvb4XrnLes+2IsNdqoGhMDL74YOP4K/fAJHQi
+ ke6w==
+X-Gm-Message-State: AOJu0YwAkZtraHq2PqqaA03dSlFrogN8S+J3Di2SNiRUCPepg+kO1K9u
+ vOkWtSTw1rE0WWe+buzOydRbclzHOPWZSDRE+NqhiJ1dKZRmYCOlQIZjuA==
+X-Google-Smtp-Source: AGHT+IGMcC42W3tOc1Ol0dV4uloeQoVCpP/vO7so4Esn7pedyQy9xv/SAly5mDjWwrTbt9rZhgqnvw==
+X-Received: by 2002:a2e:9d96:0:b0:2f0:1a19:f3f1 with SMTP id
+ 38308e7fff4ca-2f01a1a00a9mr10970331fa.7.1721654281270; 
+ Mon, 22 Jul 2024 06:18:01 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-785-215.w83-197.abo.wanadoo.fr.
+ [83.197.112.215]) by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-427d69297dcsm127168115e9.35.2024.07.22.06.18.00
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 22 Jul 2024 06:18:00 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Mon, 22 Jul 2024 15:17:50 +0200
+Message-ID: <20240722131750.519333-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1721653995;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=pPIwBwTlvclv8W3HF8asBbakYaHvJUZPH908TOWeJKw=;
- b=mnSdrHIYI9Uuk4wVaPBMOjaZ4QhCM3UUswVkrKxANpnyOT+8u2L/nM8k73CYTG4CZLWSFf
- JeuKzD8IgIq/tm+QGqR3gPNWGslariEUvUVDCyCSBQo4z5ChSy07ZtccOPHEDUVQvd3vGa
- gsrg3Npd1SorZsLnPSqqSrt5DGz4Yksn4IHkHNj4r4LnC6NleRjWHYhZI8B+SjxCfjN0y7
- AJt6K5zR9vxT9JE7eijOQCygzJaDcKjVNP79mO2I2FJKNrqOYeXUU10K2ulKsmTbQe01vt
- mQyFYwL7G0JHdiDNznmeg7IHka/FX4vy7jHAImIrlnHzSg3+ytiB0pFl0XezsQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=mnSdrHIY
-Subject: Re: [Buildroot] [PATCH 1/1] package/kexec: bump to version 2.0.29
+ d=gmail.com; s=20230601; t=1721654281; x=1722259081; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=mSQp2I6ceuvGMWrrOVS9pftFFCkb3EoXUKqryiZG8bU=;
+ b=Akjz2DeAMYME3jIcP44jgoqMl5jd6DEjKYu3p3bVSRWOYyu/p+2I0QhKrWCIBnfOU8
+ lgpiaEb3NoNeVTxxG35UyAF255EXBd7XB1scgn2gY0Qs7IfdIydp/PrCaS/xWC4bkHZs
+ 4LfMohQalKd1byl3zYnHRPDZ65lZLccz0FQXo0LOyCtNWzWw2X8yiIsA2f5qLQiBD3dZ
+ +u23tg0XESEYpUOHxX4IMlxK8pjdvLBbdLA79VAXoK6DVONOITts3WFnaHblK4qiDuGQ
+ 5P4Qv+h96dqFP3JMkHDYzE0HIdcn5Mq4Ls0PPx1Sp55nmjd8yiasU6qD80ZX+zaHb8Y0
+ XR7A==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=Akjz2DeA
+Subject: [Buildroot] [PATCH 1/1] package/pkg-meson: support building both
+ libraries
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,53 +100,61 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Julien,
+meson supports building both libraries (i.e. static and shared).
+This will avoid the following build failure with flashrom and
+BR2_SHARED_STATIC_LIBS raised since bump to version 1.4.0-rc2 in commit
+8637884057ddc3c1aeb9f0dd285fc6fcf378c26b:
 
-On Fri, 19 Jul 2024 19:37:23 +0200
-Julien Olivain <ju.o@free.fr> wrote:
+../output-1/build/flashrom-1.4.0-rc2/meson.build:18:2: ERROR: Problem encountered:
+    Cannot build cli_classic with shared libflashrom. Use \'-Dclassic_cli=disabled\' to disable the cli,
+    or use \'--default-library=both\' to also build the classic_cli
 
-> For release announce, see [1].
-> 
-> This commit removes the package patch, which is now included in this
-> new version.
-> 
-> The license hash also changed, due to a FSF address update. See [2].
-> This commit also adds a comment in the hash file about the pgp
-> signature check.
-> 
-> [1] https://lists.infradead.org/pipermail/kexec/2024-July/030452.html
-> [2] https://git.kernel.org/pub/scm/utils/kernel/kexec/kexec-tools.git/commit/?id=f53bcef5063c70960b2b8eb8990722d5c9d1b99e
-> 
-> Signed-off-by: Julien Olivain <ju.o@free.fr>
-> ---
->  ...uilding-on-x86_64-with-binutils-2-41.patch | 94 -------------------
->  package/kexec/kexec.hash                      |  6 +-
->  package/kexec/kexec.mk                        |  2 +-
->  3 files changed, 5 insertions(+), 97 deletions(-)
->  delete mode 100644 package/kexec/0001-Fix-building-on-x86_64-with-binutils-2-41.patch
+Fixes: 8637884057ddc3c1aeb9f0dd285fc6fcf378c26b
+ - http://autobuild.buildroot.org/results/6d484857ff1674bf81986505827e54f3f1b9aaec
 
-Not sure if it's related to this bump or not, but our kexec test case
-is failing:
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/pkg-meson.mk | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/7391792961
-
-Could you perhaps have a look?
-
-Thanks!
-
-Thomas
+diff --git a/package/pkg-meson.mk b/package/pkg-meson.mk
+index 65cabf23ba..bc805b799c 100644
+--- a/package/pkg-meson.mk
++++ b/package/pkg-meson.mk
+@@ -82,6 +82,14 @@ else
+ PKG_MESON_TARGET_FC = /bin/false
+ endif
+ 
++ifeq ($(BR2_STATIC_LIBS),y)
++PKG_MESON_DEFAULT_LIBRARY=static
++else ifeq ($(BR2_SHARED_LIBS),y)
++PKG_MESON_DEFAULT_LIBRARY=shared
++else ifeq ($(BR2_SHARED_STATIC_LIBS),y)
++PKG_MESON_DEFAULT_LIBRARY=both
++endif
++
+ # Generates sed patterns for patching the cross-compilation.conf template,
+ # since Flags might contain commas the arguments are passed indirectly by
+ # variable name (stripped to deal with whitespaces).
+@@ -152,7 +160,7 @@ define $(2)_CONFIGURE_CMDS
+ 	$$(MESON) setup \
+ 		--prefix=/usr \
+ 		--libdir=lib \
+-		--default-library=$(if $(BR2_STATIC_LIBS),static,shared) \
++		--default-library=$(PKG_MESON_DEFAULT_LIBRARY) \
+ 		--buildtype=$(if $(BR2_ENABLE_RUNTIME_DEBUG),debug,release) \
+ 		--cross-file=$$($$(PKG)_SRCDIR)/build/cross-compilation.conf \
+ 		-Db_pie=false \
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.43.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
