@@ -4,72 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C53BCC3DA5D
-	for <buildroot@archiver.kernel.org>; Mon, 22 Jul 2024 20:28:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B5EFC3DA5D
+	for <buildroot@archiver.kernel.org>; Mon, 22 Jul 2024 20:29:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8FD62810C7;
-	Mon, 22 Jul 2024 20:28:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2C92E810C7;
+	Mon, 22 Jul 2024 20:29:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9oo4X_3qdPrI; Mon, 22 Jul 2024 20:28:39 +0000 (UTC)
+ id qqD9ODEX4eLY; Mon, 22 Jul 2024 20:29:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 83BFC81139
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E85E0810A8
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 83BFC81139;
-	Mon, 22 Jul 2024 20:28:39 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6D7811BF296
- for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 20:28:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E85E0810A8;
+	Mon, 22 Jul 2024 20:29:44 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 356FA1BF296
+ for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 20:29:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 679A3401AF
- for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 20:28:38 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3030960664
+ for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 20:29:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3AA_Z_6HNCjT for <buildroot@lists.busybox.net>;
- Mon, 22 Jul 2024 20:28:37 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.195;
- helo=relay3-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id j0UATcyx0YsN for <buildroot@lists.busybox.net>;
+ Mon, 22 Jul 2024 20:29:42 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 119A3400AC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 119A3400AC
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 119A3400AC
- for <buildroot@buildroot.org>; Mon, 22 Jul 2024 20:28:36 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id AB44660002;
- Mon, 22 Jul 2024 20:28:33 +0000 (UTC)
-Date: Mon, 22 Jul 2024 22:28:32 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Message-ID: <20240722222832.4f270d7c@windsurf>
-In-Reply-To: <20240722174847.24596-1-bernd@kuhls.net>
-References: <20240722174847.24596-1-bernd@kuhls.net>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1721680113;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=wvvgWZw8oQufxcLYG9+LYEjEnvXaWIzGT9C6gbr7JpI=;
- b=inp0XmWWmB5GDHoRWN2xOzTLwWBL0Qq+iEnRlJiiFnJOl6fQ79cH6apqaNCRYRvc8cVXCE
- nlPgd9j8qoZbEirK2EiObQNjpgQao1z3bwLvyBkdUh+7SgbNUm/FwmGroi4x/xX4HGf6xg
- grQ/GP5D1VIPYpB9+uU0OXmo+okyJTFhtzX85vI+RokuwYvXsQJrCca9jBPtY0QkbIBhew
- 7CwQyWBdrBSdJ2aQulI76Ba1123nXY9CGs7iRYOel1QAH9g75NYyCV9SdovlJVhU693qFJ
- IvtkeZtePX+q+xBSe/dvaYa2MfgIvEB6D8k4tJMFHM6EfrITcFRV9+SayKMpNQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=inp0XmWW
-Subject: Re: [Buildroot] [PATCH 1/2] package/kodi-pvr-stalker: bump version
- to 21.1.1-Omega
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4C81160652
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4C81160652
+ for <buildroot@buildroot.org>; Mon, 22 Jul 2024 20:29:42 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 3B08C87119; Mon, 22 Jul 2024 20:29:42 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 22 Jul 2024 22:28:58 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: a1230d443373d42601cec1db1caa3d2694777214
+X-Git-Newrev: 5206e1dba2ccb8e65fc960362017c72799b0e5df
+X-Patchwork-Hint: ignore
+Message-Id: <20240722202942.3B08C87119@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/am335x-pru-package: fix download
+ issue
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,28 +60,84 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, 22 Jul 2024 19:48:46 +0200
-Bernd Kuhls <bernd@kuhls.net> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=5206e1dba2ccb8e65fc960362017c72799b0e5df
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-> ---
->  package/kodi-pvr-stalker/kodi-pvr-stalker.hash | 2 +-
->  package/kodi-pvr-stalker/kodi-pvr-stalker.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+am335x-pru-package is downloaded with the github helper, so the tarball
+is generated "on-the-fly" by github.
 
-Both applied to master, thanks.
+It looks like the process to generate those tarballs has changed,
+again.  The hash for the archive has recently changed. The delta is in
+the way directories are stored in the tarball: it looks like the
+"basename" of the directory path has been split off from the
+"dirname", into a separate field:
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+@@ -270078,8 +270078,8 @@
+ 0041efd0  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00 |................|
+ 0041efe0  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00 |................|
+ 0041eff0  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00 |................|
+-0041f000  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00 |................|
+-0041f010  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00 |................|
++0041f000  50 52 55 5f 50 52 55 74  6f 50 52 55 5f 49 6e 74 |PRU_PRUtoPRU_Int|
++0041f010  65 72 72 75 70 74 2f 00  00 00 00 00 00 00 00 00 |errupt/.........|
+ 0041f020  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00 |................|
+ 0041f030  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00 |................|
+ 0041f040  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00 |................|
+@@ -270104,8 +270104,8 @@
+ 0041f170  34 61 64 35 37 63 63 31  39 35 66 32 38 62 66 35 |4ad57cc195f28bf5|
+ 0041f180  65 35 38 35 63 33 64 34  34 36 61 62 61 36 65 65 |e585c3d446aba6ee|
+ 0041f190  37 30 39 36 2f 70 72 75  5f 73 77 2f 65 78 61 6d |7096/pru_sw/exam|
+-0041f1a0  70 6c 65 5f 61 70 70 73  2f 50 52 55 5f 50 52 55 |ple_apps/PRU_PRU|
+-0041f1b0  74 6f 50 52 55 5f 49 6e  74 65 72 72 75 70 74 00 |toPRU_Interrupt.|
++0041f1a0  70 6c 65 5f 61 70 70 73  00 00 00 00 00 00 00 00 |ple_apps........|
++0041f1b0  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00 |................|
+ 0041f1c0  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00 |................|
+ 0041f1d0  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00 |................|
+ 0041f1e0  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00 |................|
+
+Switch to using a git download, which uses our reproducible way of
+generating archives.
+
+Once extracted, the files have been verified to be identical to the ones
+in the archive on s.b.o.
+
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Frank Hunleth <fhunleth@troodon-software.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/am335x-pru-package/am335x-pru-package.hash | 2 +-
+ package/am335x-pru-package/am335x-pru-package.mk   | 3 ++-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/package/am335x-pru-package/am335x-pru-package.hash b/package/am335x-pru-package/am335x-pru-package.hash
+index ad386fe04b..157fa566eb 100644
+--- a/package/am335x-pru-package/am335x-pru-package.hash
++++ b/package/am335x-pru-package/am335x-pru-package.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  2a902f825ccc1885c5dccd83e1ccee104aa30e601c9964a24f49459f76f674b9  am335x-pru-package-5f374ad57cc195f28bf5e585c3d446aba6ee7096.tar.gz
++sha256  bd90d57d210c2ec1835d701c5d12e228801cb41afebf591e2c146a4dc49c296f  am335x-pru-package-5f374ad57cc195f28bf5e585c3d446aba6ee7096-git4.tar.gz
+ sha256  f0fcdf9b2090896389eb4b784f23be96d5544c5ce5282d84f82ae9a8e8331beb  pru_sw/utils/LICENCE.txt
+diff --git a/package/am335x-pru-package/am335x-pru-package.mk b/package/am335x-pru-package/am335x-pru-package.mk
+index 24a5df4815..9c65ee1387 100644
+--- a/package/am335x-pru-package/am335x-pru-package.mk
++++ b/package/am335x-pru-package/am335x-pru-package.mk
+@@ -5,7 +5,8 @@
+ ################################################################################
+ 
+ AM335X_PRU_PACKAGE_VERSION = 5f374ad57cc195f28bf5e585c3d446aba6ee7096
+-AM335X_PRU_PACKAGE_SITE = $(call github,beagleboard,am335x_pru_package,$(AM335X_PRU_PACKAGE_VERSION))
++AM335X_PRU_PACKAGE_SITE = https://github.com/beagleboard/am335x_pru_package
++AM335X_PRU_PACKAGE_SITE_METHOD = git
+ AM335X_PRU_PACKAGE_LICENSE = BSD-3-Clause
+ AM335X_PRU_PACKAGE_LICENSE_FILES = pru_sw/utils/LICENCE.txt
+ AM335X_PRU_PACKAGE_DEPENDENCIES = host-am335x-pru-package
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
