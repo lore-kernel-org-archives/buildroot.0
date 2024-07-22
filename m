@@ -4,49 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 51973C3DA59
-	for <buildroot@archiver.kernel.org>; Mon, 22 Jul 2024 13:39:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3D6B4C3DA59
+	for <buildroot@archiver.kernel.org>; Mon, 22 Jul 2024 13:41:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 151CF402B9;
-	Mon, 22 Jul 2024 13:39:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F3AD4401CB;
+	Mon, 22 Jul 2024 13:41:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XU4DEHdquf5C; Mon, 22 Jul 2024 13:39:21 +0000 (UTC)
+ id eJtuQu_QJWo3; Mon, 22 Jul 2024 13:41:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B47C5402BB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CD7FD401D1
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B47C5402BB;
-	Mon, 22 Jul 2024 13:39:20 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E60521BF2A3
- for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 13:39:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CD7FD401D1;
+	Mon, 22 Jul 2024 13:41:36 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 0052E1BF2A3
+ for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 13:41:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D3185408C1
- for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 13:39:18 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id EF4D5605A4
+ for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 13:41:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YCg-tzx9CkbF for <buildroot@lists.busybox.net>;
- Mon, 22 Jul 2024 13:39:17 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 61LsITS02rdJ for <buildroot@lists.busybox.net>;
+ Mon, 22 Jul 2024 13:41:34 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::224;
+ helo=relay4-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C7A2D408BF
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id C7A2D408BF
- for <buildroot@buildroot.org>; Mon, 22 Jul 2024 13:39:17 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AC1A687042; Mon, 22 Jul 2024 13:39:17 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 22 Jul 2024 15:15:28 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 41cc0f22722e3fbb2581a4f399c2e304fdb061a1
-X-Git-Newrev: 4e4554eeb76e8b516c6cbcd66f15868492aac594
-X-Patchwork-Hint: ignore
-Message-Id: <20240722133917.AC1A687042@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/luvi: needs engine support in
- OpenSSL
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org B5BFF600D1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B5BFF600D1
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::224])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id B5BFF600D1
+ for <buildroot@buildroot.org>; Mon, 22 Jul 2024 13:41:33 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id EE8C9E0007;
+ Mon, 22 Jul 2024 13:41:30 +0000 (UTC)
+Date: Mon, 22 Jul 2024 15:41:29 +0200
+To: Woodrow Douglass via buildroot <buildroot@buildroot.org>
+Message-ID: <20240722154129.024b7f45@windsurf>
+In-Reply-To: <20240722131117.273274-1-wdouglass@carnegierobotics.com>
+References: <20240722131117.273274-1-wdouglass@carnegierobotics.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1721655691;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=LG5Zz+5W7/J7W5iRoQb34YA93TNIvrvFSmEBvppzGWM=;
+ b=OYkAN/JpbP1xYUR5f6jGnMXDaLGPrjKWvSSn+b3wIZlWRwoONmnTK3ig0oL35fF8k4MlM/
+ /CbOcm50U1H+X8g6CgSbntNiZsNmKJHjwD+hGUYirZQU4UJBfYCZUkyjRCzWBu89vhiZkY
+ EeglGga0tCdx09wvgeFgJ/Jmu7qs3AGpoExsHNRrvxzJSakwu0RRJHHGO/1c5BmgKEBAQV
+ dKl/6HzkjhhPNzfPOsggH4tSbJExhxZ2OcaRyFwnKaPV55sYU40QFngZ92L+asOyQQlOpA
+ gkyYHNKitxaPNbnqzkNviya64nLWZNyJZ5M6fJpqBky7CGZrfl2E5k7SF5zCOw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=OYkAN/Jp
+Subject: Re: [Buildroot] [PATCH] package/chicken: move literals into text
+ section for xtensa architecture
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,47 +83,37 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Woodrow Douglass <wdouglass@carnegierobotics.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4e4554eeb76e8b516c6cbcd66f15868492aac594
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Woodrow,
 
-When OpenSSL support is enabled, luvi needs the engine support,
-otherwise it fails with:
+On Mon, 22 Jul 2024 09:11:16 -0400
+Woodrow Douglass via buildroot <buildroot@buildroot.org> wrote:
 
-/home/buildroot/autobuild/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/aarch64_be-none-linux-gnu/13.2.1/../../../../aarch64_be-none-linux-gnu/bin/ld: liblua_openssl.a(pkey.c.o): in function `openssl_pkey_set_engine':
-pkey.c:(.text+0xac0): undefined reference to `ENGINE_get_DH'
-/home/buildroot/autobuild/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/aarch64_be-none-linux-gnu/13.2.1/../../../../aarch64_be-none-linux-gnu/bin/ld: pkey.c:(.text+0xaf4): undefined reference to `ENGINE_get_EC'
-/home/buildroot/autobuild/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/aarch64_be-none-linux-gnu/13.2.1/../../../../aarch64_be-none-linux-gnu/bin/ld: pkey.c:(.text+0xb20): undefined reference to `ENGINE_get_DSA'
-/home/buildroot/autobuild/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/aarch64_be-none-linux-gnu/13.2.1/../../../../aarch64_be-none-linux-gnu/bin/ld: pkey.c:(.text+0xb4c): undefined reference to `ENGINE_get_RSA'
-collect2: error: ld returned 1 exit status
+> Signed-off-by: Woodrow Douglass <wdouglass@carnegierobotics.com>
 
-Fixes:
+Thanks for the patch. Would be good to have a non-empty commit message.
 
-  http://autobuild.buildroot.net/results/722c767985d75b82baec8c3ac55f8eaf1ed6d07b/
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/7391793024
+> -# If ARCH is not set, it attempts to autodiscover. But it is anyway not used.
+>  CHICKEN_MAKE_OPTS = \
+> -	ARCH=unused \
+> +	ARCH=$(BR2_NORMALIZED_ARCH) \
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/luvi/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+Are you sure that all values of BR2_NORMALIZED_ARCH are supported by
+the chicken build system? What happens when the value passed is unknown
+to the chicken build system?
 
-diff --git a/package/luvi/Config.in b/package/luvi/Config.in
-index 3a724acebb..19d3307f12 100644
---- a/package/luvi/Config.in
-+++ b/package/luvi/Config.in
-@@ -9,6 +9,7 @@ config BR2_PACKAGE_LUVI
- 	select BR2_PACKAGE_LIBUV
- 	select BR2_PACKAGE_LUV
- 	select BR2_PACKAGE_LIBOPENSSL_ENABLE_DES if BR2_PACKAGE_LIBOPENSSL
-+	select BR2_PACKAGE_LIBOPENSSL_ENGINES if BR2_PACKAGE_LIBOPENSSL
- 	help
- 	  A project in-between luv and luvit. The goal of this is to
- 	  make building luvit and derivatives much easier.
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
