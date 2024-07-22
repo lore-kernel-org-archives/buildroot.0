@@ -4,73 +4,78 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C09B1C3DA59
-	for <buildroot@archiver.kernel.org>; Mon, 22 Jul 2024 13:18:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DDD25C3DA59
+	for <buildroot@archiver.kernel.org>; Mon, 22 Jul 2024 13:38:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7260D400AC;
-	Mon, 22 Jul 2024 13:18:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D4C7A402B3;
+	Mon, 22 Jul 2024 13:38:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SfYfm3KgM6j4; Mon, 22 Jul 2024 13:18:41 +0000 (UTC)
+ id EsLgGhE6FRGN; Mon, 22 Jul 2024 13:38:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4FD0740241
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CF292401B7
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4FD0740241;
-	Mon, 22 Jul 2024 13:18:41 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id EEE8D1BF2A3
- for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 13:18:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CF292401B7;
+	Mon, 22 Jul 2024 13:38:35 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id AAB9E1BF2A3
+ for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 13:38:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DB99D40241
- for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 13:18:39 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 982EE40153
+ for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 13:38:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bQdOsdy2e2-u for <buildroot@lists.busybox.net>;
- Mon, 22 Jul 2024 13:18:39 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::223;
- helo=relay3-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 8CA85400AC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8CA85400AC
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 8CA85400AC
- for <buildroot@buildroot.org>; Mon, 22 Jul 2024 13:18:38 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id B341260008;
- Mon, 22 Jul 2024 13:18:35 +0000 (UTC)
-Date: Mon, 22 Jul 2024 15:18:34 +0200
-To: =?UTF-8?B?Sm9zw6k=?= Luis Salvador Rufo <salvador.joseluis@gmail.com>
-Message-ID: <20240722151834.53981478@windsurf>
-In-Reply-To: <CAH+XeQZrmvt7Ui7D6M2515=+W_3wTsPGVVWLcRALx+4X93Chzg@mail.gmail.com>
-References: <20240524181856.2712581-1-alexander.i.mukhin@gmail.com>
- <20240722144716.092e357b@windsurf>
- <CAH+XeQZrmvt7Ui7D6M2515=+W_3wTsPGVVWLcRALx+4X93Chzg@mail.gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id et6Uvg6bntB5 for <buildroot@lists.busybox.net>;
+ Mon, 22 Jul 2024 13:38:32 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=198.47.19.142;
+ helo=fllv0016.ext.ti.com; envelope-from=p-bhagat@ti.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 24ED840114
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 24ED840114
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 24ED840114
+ for <buildroot@buildroot.org>; Mon, 22 Jul 2024 13:38:31 +0000 (UTC)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+ by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 46MDcSCq031619;
+ Mon, 22 Jul 2024 08:38:28 -0500
+Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
+ by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 46MDcS7W062386
+ (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+ Mon, 22 Jul 2024 08:38:28 -0500
+Received: from DFLE104.ent.ti.com (10.64.6.25) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 22
+ Jul 2024 08:38:28 -0500
+Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DFLE104.ent.ti.com
+ (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Mon, 22 Jul 2024 08:38:27 -0500
+Received: from localhost (ula0502350.dhcp.ti.com [172.24.227.38])
+ by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 46MDcRE0115781;
+ Mon, 22 Jul 2024 08:38:27 -0500
+To: <buildroot@buildroot.org>
+Date: Mon, 22 Jul 2024 19:08:04 +0530
+Message-ID: <20240722133804.2794134-1-p-bhagat@ti.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1721654316;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=p1cX8pSp8msdduQ0aY5L8m6ENxNTUOtrxmoSTPpA93Y=;
- b=dX+B98HXGJpWFl9iCweTj+/9BcCF4THCcrVLmGuYA7Z1+JWXJkCVtLMDxyHnEOMVcxxJ+2
- Z9u7Z1qUCgcTaUmOpf1jDamtGSw6ROjCKKSu0k20xxVlbh/22s4LzG2fUbF2A2FNVJfSp9
- 4qLwT5ZUOuOx1nS/oNOGx6XIqK9KLq2OTmOVO//RqmN2FJ8196tavXaYAVyFyp7X8H35tu
- UY+i/EBiL9aNT3HrKxVxQjfAh2hxb2h/f3lakCU8reNUT6b0B6lTNS+F9xayUaWGRsNI06
- hx+n4f8pBWz/kU5p+e0zxFxtmbppIQ6lDOhGIOQAngO1nWqfBxau54neViIZ9Q==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=dX+B98HX
-Subject: Re: [Buildroot] [PATCH 1/1] package/zfs: bump version to 2.2.4
+ d=ti.com; s=ti-com-17Q1; t=1721655508;
+ bh=Hnz5YkfgdYlZk0wwuXZEQmmfmhn6w496Nt9rnWwf9sw=;
+ h=From:To:CC:Subject:Date;
+ b=CcpRSkdsJMIlB/O3swLnwFbikwXGppgSLXh+PD3P+6C/O53ySYOh9lEtZCG6uHu4T
+ QxJ8vIQuFy9LfqNJZrt4PfxxqP+vaeMfy7sZq9EtuaGFk6xGQf20TBNdfEsadmtC3M
+ bAKKMcFgxU6yekkL4vhZiIUlsTlpWwOAAmZph6lA=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=ti.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=ti.com header.i=@ti.com header.a=rsa-sha256
+ header.s=ti-com-17Q1 header.b=CcpRSkds
+Subject: [Buildroot] [PATCH v5] boot/ti-k3-boot-firmware: Add config option
+ to specify version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,27 +87,111 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Alexander Mukhin <alexander.i.mukhin@gmail.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Paresh Bhagat via buildroot <buildroot@buildroot.org>
+Reply-To: Paresh Bhagat <p-bhagat@ti.com>
+Cc: Bryan Brattlof <bb@ti.com>, Chirag Shilwant <c-shilwant@ti.com>,
+ Gyan Gupta <g-gupta@ti.com>, Xuanhao Shi <X15000177@gmail.com>,
+ Syed Mohammed Khasim <khasim@ti.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Andreas Dannenberg <dannenberg@ti.com>,
+ Sai Sree Kartheek Adivi <s-adivi@ti.com>,
+ Romain Naour <romain.naour@gmail.com>, Anand Gadiyar <gadiyar@ti.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gSm9zw6ksCgpUaGFua3MgZm9yIHlvdXIgc3VwZXIgcXVpY2sgZmVlZGJhY2shCgpPbiBN
-b24sIDIyIEp1bCAyMDI0IDE1OjAxOjQ1ICswMjAwCkpvc8OpIEx1aXMgU2FsdmFkb3IgUnVmbyA8
-c2FsdmFkb3Iuam9zZWx1aXNAZ21haWwuY29tPiB3cm90ZToKCj4gSW4gdGhlIG1lYW50aW1lLCBJ
-IHJlY29tbWVuZCB0aGUgZm9sbG93aW5nIG9wdGlvbnM6Cj4gCj4gQSkgUmV2ZXJ0IHRvIHRoZSBw
-cmV2aW91cyB2ZXJzaW9uIChPcGVuWkZTIHYyLjIuMykuIFRoaXMgaXMgbm90IGlkZWFsIGZvcgo+
-IHBlb3BsZSB3aG8gaGF2ZSBhbHJlYWR5IHVwZ3JhZGVkLgo+IAo+IEIpIEluY2x1ZGUgYSB3b3Jr
-LWluLXByb2dyZXNzIChpdCB3b3JrcyBmb3IgYnVpbGRyb290LCBJIHRlc3RlZCBpdCkgcGF0Y2g6
-Cj4gaHR0cHM6Ly9naXRodWIuY29tL29wZW56ZnMvemZzL3B1bGwvMTYxNjkucGF0Y2guCgpQbGVh
-c2UgZG8gdGhpcyBvcHRpb24gKEIpLCBhbmQgYWxzbyBjb250cmlidXRlIFNFRUtfREFUQSBzdXBw
-b3J0IHRvCnVDbGliYy4gSSd2ZSBhZGRlZCBXYWxkZW1hciwgdGhlIHVDbGliYy1uZyBtYWludGFp
-bmVyLCBpbiBDYy4KClRoYW5rcyBhIGxvdCEKClRob21hcwotLSAKVGhvbWFzIFBldGF6em9uaSwg
-Y28tb3duZXIgYW5kIENFTywgQm9vdGxpbgpFbWJlZGRlZCBMaW51eCBhbmQgS2VybmVsIGVuZ2lu
-ZWVyaW5nIGFuZCB0cmFpbmluZwpodHRwczovL2Jvb3RsaW4uY29tCl9fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVp
-bGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4v
-bGlzdGluZm8vYnVpbGRyb290Cg==
+Previously the version of ti-k3-boot-firmware (TI_K3_BOOT_FIRMWARE_VERSION) was
+fixed in mk file. Introduce a new config option 
+BR2_TARGET_TI_K3_BOOT_FIRMWARE_CUSTOM_VERSION so that user can change the version 
+for ti-k3-boot-firmware using menuconfig.
+
+This provides greater flexibility for users to select different versions of
+ti-k3-boot-firmware without modifying the build script directly. Note that
+there might be version difference between ti-k3-boot-firmware and u-boot or
+ki-k3-r5-bootloader, they should still work together due to TI-SCI protocol
+being backward compatible. However, to avoid any potential issues ( e.g. in
+case of TIFS-DM ), it is recommended to synchronize these components
+when using custom version or sources for the build. For stricter version 
+check, hash checking is not disabled.
+
+Signed-off-by: Paresh Bhagat <p-bhagat@ti.com>
+
+---
+Changes v4 -> v5:
+	- Include recommendation regarding version mismatch in commit msg
+	  (Suggested by Bryan and Romain)
+
+Changes v3 -> v4:
+	- Ti k3 -> TI K3 (Suggested by Andreas Dannenberg)
+	- git.ti.org -> git.ti.com (Suggested by Andreas Dannenberg)
+
+Changes v2 -> v3:
+	- flexibilty -> flexibility (Suggested by Chirag Shilwant)
+
+Changes v1 -> v2:
+	- Fix whitespaces/indentation in Config.in file (Suggested by Bryan Brattlof)
+
+---
+ boot/ti-k3-boot-firmware/Config.in            | 30 +++++++++++++++++++
+ .../ti-k3-boot-firmware.mk                    |  2 +-
+ 2 files changed, 31 insertions(+), 1 deletion(-)
+
+diff --git a/boot/ti-k3-boot-firmware/Config.in b/boot/ti-k3-boot-firmware/Config.in
+index d80bb4bdb3..581ec0c3b9 100644
+--- a/boot/ti-k3-boot-firmware/Config.in
++++ b/boot/ti-k3-boot-firmware/Config.in
+@@ -5,3 +5,33 @@ config BR2_TARGET_TI_K3_BOOT_FIRMWARE
+ 	  This package downloads and installs the TI-specific ti-sysfw
+ 	  and ti-dm firmware needed to boot TI K3 platforms (which
+ 	  include AM62x, AM64x, AM65x and more).
++
++if BR2_TARGET_TI_K3_BOOT_FIRMWARE
++choice
++	prompt "ti-k3-boot-firmware version"
++	default BR2_TARGET_TI_K3_BOOT_FIRMWARE_LATEST_VERSION
++	help
++	  Select the version of TI K3 boot firmware you want to use.
++
++config BR2_TARGET_TI_K3_BOOT_FIRMWARE_LATEST_VERSION
++	bool "09.02.00.009"
++
++config BR2_TARGET_TI_K3_BOOT_FIRMWARE_CUSTOM_VERSION
++	bool "Custom version"
++	help
++	  This option allows to use a specific official version from
++	  git.ti.com.
++
++endchoice
++
++config BR2_TARGET_TI_K3_BOOT_FIRMWARE_CUSTOM_VERSION_VALUE
++	string "Custom ti-k3-boot-firmware version"
++	depends on BR2_TARGET_TI_K3_BOOT_FIRMWARE_CUSTOM_VERSION
++
++config BR2_TARGET_TI_K3_BOOT_FIRMWARE_VERSION
++	string
++	default "09.02.00.009"     if BR2_TARGET_TI_K3_BOOT_FIRMWARE_LATEST_VERSION
++	default BR2_TARGET_TI_K3_BOOT_FIRMWARE_CUSTOM_VERSION_VALUE \
++				if BR2_TARGET_TI_K3_BOOT_FIRMWARE_CUSTOM_VERSION
++
++endif
+diff --git a/boot/ti-k3-boot-firmware/ti-k3-boot-firmware.mk b/boot/ti-k3-boot-firmware/ti-k3-boot-firmware.mk
+index 9332732ad4..350381ebbe 100644
+--- a/boot/ti-k3-boot-firmware/ti-k3-boot-firmware.mk
++++ b/boot/ti-k3-boot-firmware/ti-k3-boot-firmware.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TI_K3_BOOT_FIRMWARE_VERSION = 09.02.00.009
++TI_K3_BOOT_FIRMWARE_VERSION = $(call qstrip,$(BR2_TARGET_TI_K3_BOOT_FIRMWARE_VERSION))
+ TI_K3_BOOT_FIRMWARE_SITE = https://git.ti.com/cgit/processor-firmware/ti-linux-firmware/snapshot
+ TI_K3_BOOT_FIRMWARE_SOURCE = ti-linux-firmware-$(TI_K3_BOOT_FIRMWARE_VERSION).tar.xz
+ TI_K3_BOOT_FIRMWARE_INSTALL_IMAGES = YES
+-- 
+2.34.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
