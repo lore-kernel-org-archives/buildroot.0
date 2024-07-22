@@ -4,73 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9295AC3DA5D
-	for <buildroot@archiver.kernel.org>; Mon, 22 Jul 2024 12:16:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E8CAC3DA5D
+	for <buildroot@archiver.kernel.org>; Mon, 22 Jul 2024 12:16:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5CD9B408C3;
-	Mon, 22 Jul 2024 12:16:12 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 37911408CA;
+	Mon, 22 Jul 2024 12:16:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JxU5md-Vm24E; Mon, 22 Jul 2024 12:16:11 +0000 (UTC)
+ id epnXJcAIN4z1; Mon, 22 Jul 2024 12:16:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2448E4090F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0CBC5408E2
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2448E4090F;
-	Mon, 22 Jul 2024 12:16:11 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B48951BF2A1
- for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 12:16:09 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0CBC5408E2;
+	Mon, 22 Jul 2024 12:16:44 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 86CDD1BF2A1
+ for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 12:16:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A15E080CAE
- for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 12:16:09 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 739D440117
+ for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 12:16:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id o5-Ow-pQBEhA for <buildroot@lists.busybox.net>;
- Mon, 22 Jul 2024 12:16:05 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
- helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org F34B680C03
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F34B680C03
-Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
- by smtp1.osuosl.org (Postfix) with ESMTPS id F34B680C03
- for <buildroot@buildroot.org>; Mon, 22 Jul 2024 12:16:04 +0000 (UTC)
-Received: from [192.168.178.36] (unknown [212.37.174.96])
- (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
- key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
- (No client certificate requested)
- by smtp.bubu1.eu (Postfix) with ESMTPSA id 3945F2C86617;
- Mon, 22 Jul 2024 14:16:02 +0200 (CEST)
-Message-ID: <d6a8b81d-b320-4e13-b28d-db027f80b552@bubu1.eu>
-Date: Mon, 22 Jul 2024 14:16:01 +0200
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1J3UT9clArWn for <buildroot@lists.busybox.net>;
+ Mon, 22 Jul 2024 12:16:41 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::227;
+ helo=relay7-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 2DE6A4010B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2DE6A4010B
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::227])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 2DE6A4010B
+ for <buildroot@buildroot.org>; Mon, 22 Jul 2024 12:16:40 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 1E7C42000B;
+ Mon, 22 Jul 2024 12:16:38 +0000 (UTC)
+Date: Mon, 22 Jul 2024 14:16:37 +0200
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20240722141637.01d1c18a@windsurf>
+In-Reply-To: <20240721172843.2342941-1-fontaine.fabrice@gmail.com>
+References: <20240721172843.2342941-1-fontaine.fabrice@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20240721173831.2350206-1-fontaine.fabrice@gmail.com>
- <20240722141443.28d48442@windsurf>
-Content-Language: en-US
-In-Reply-To: <20240722141443.28d48442@windsurf>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=bubu1.eu; s=bubu; 
- t=1721650562; bh=gBZZRVSFLNutjitVpij2vZNEBQUtEM3PQlYxEs7DLis=;
- h=Date:Subject:To:Cc:References:From:In-Reply-To;
- b=dTnOnvu+mO904J38q9y6tgHT9HnQKyst1QbFTQb953Udo6Le+BHi32Tp+y97NnfaH
- gGVHB8H3Y+UXlG/B1RcUQRNOzuB5uTk0teD27e+7mTn8gobPzUetIyzCokBKyA59vA
- hLeUsPGg9SphNNEAKbWSOZkUlZuQzmScYjNuFKSdqABIHGui3BYKmomYgHfZ7GvdNC
- D6PjNYCTsEJc51L1iR3Af3vSsBLz1XSadVDoP0cW+g2+qI3icNhWQdmmhUavlt662I
- 0Hh0HjulVTsOdMjveRbHPJYKue/IP5Dr7HC850vMys8VtuxFPpW5+Gv1l+1VswryUS
- BLtuMfBjNBx/A==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1721650598;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=OdkqaIJdYTorJpXkszWqAgILq+ogM2cljUKszDg+TH8=;
+ b=iRcSsXs/gonf6E7SRp+jAInzvhXP4qRClrEXSWpVdiofz7NE/dVY9A90mE7F7Vef/g7CrY
+ F9jG/MFFPhxpVZ+/loV86VCB9faXze3A/nfInq/G5VT1x/Jr1QTUttDDi5zZsrEZoiOm7W
+ /qy/hegGhlUj0gj0eAUxFIXuGQS1SbR0h8zOqvSjp7RaXLJ9Vvd/Q6HDiWNmrbMtKhrrcx
+ lzdxvRwc80gbmO1KwD3ehnD9gIgrLP2H021D36QkYotGKSmQJolMBiBt2W9RTn5NN+eGbB
+ bwVgm8msqlb7XfaMJ3LzUOuyuGDEjGuTjYLMBaw+vvUywMZDlrpZmYpQUoFq0Q==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
- header.from=bubu1.eu
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=bubu1.eu header.i=@bubu1.eu header.a=rsa-sha256
- header.s=bubu header.b=dTnOnvu+
-Subject: Re: [Buildroot] [PATCH 1/1] package/picotool: fix libusb
- dependencies
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=iRcSsXs/
+Subject: Re: [Buildroot] [PATCH 1/1] package/libfreefare: bump to latest git
+ commit
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,45 +81,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
-Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
-Cc: Marcus Hoffmann <bubu@bubu1.eu>, buildroot@buildroot.org
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Simon Dawson <spdawson@gmail.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+On Sun, 21 Jul 2024 19:28:43 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-
-On 22.07.24 14:14, Thomas Petazzoni via buildroot wrote:
-> On Sun, 21 Jul 2024 19:38:31 +0200
-> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+> This bump will fix the following build failure with gcc >= 14 thanks to
+> https://github.com/nfc-tools/libfreefare/commit/494233d33b3a9d21da1bb0f1c59606820afe4691
 > 
->> libusb dependencies are wrong since the addition of the package in
->> commit f7aac1c008f9c59f8c669bade17864b099221065:
->>   - BR2_HOST_GCC_AT_LEAST_4_9 is used instead of
->>     BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
->>   - BR2_TOOLCHAIN_HAS_THREADS is missing
->>
->> Fixes: f7aac1c008f9c59f8c669bade17864b099221065
->>   - http://autobuild.buildroot.org/results/22689afc092e33b6e3c1c7ffea0d0e3b5bf76d99
->>
->> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
->> ---
->>   package/picotool/Config.in | 9 ++++++---
->>   1 file changed, 6 insertions(+), 3 deletions(-)
+> mifare_desfire_crypto.c: In function 'cmac':
+> mifare_desfire_crypto.c:139:23: error: implicit declaration of function 'malloc' [-Wimplicit-function-declaration]
+>   139 |     uint8_t *buffer = malloc (padded_data_length (len, kbs));
+>       |                       ^~~~~~
+> mifare_desfire_crypto.c:69:1: note: include '<stdlib.h>' or provide a declaration of 'malloc'
+>    68 | #include "freefare_internal.h"
+>   +++ |+#include <stdlib.h>
+>    69 |
 > 
-> Dammit, how could I have left this get through. Thanks for fixing
-> applied!
-
-Thanks Fabrice, Thomas for fixing this. No idea how I got this wrong in 
-the first place. :-/
-
-Marcus
-
+> Fixes:
+>  - http://autobuild.buildroot.org/results/778be216f62b8c2e05aba1b3e297dab0c6c6ccd0
 > 
-> Thomas
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/libfreefare/libfreefare.hash | 4 ++--
+>  package/libfreefare/libfreefare.mk   | 9 ++++-----
+>  2 files changed, 6 insertions(+), 7 deletions(-)
 
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
