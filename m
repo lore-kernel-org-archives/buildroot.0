@@ -4,91 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 29AA2C3DA5D
-	for <buildroot@archiver.kernel.org>; Mon, 22 Jul 2024 08:22:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9003C3DA59
+	for <buildroot@archiver.kernel.org>; Mon, 22 Jul 2024 08:24:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7A4EF402B3;
-	Mon, 22 Jul 2024 08:22:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 48B51402F4;
+	Mon, 22 Jul 2024 08:24:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RtkysXlZ02A4; Mon, 22 Jul 2024 08:22:06 +0000 (UTC)
+ id SpROx_IWlkpi; Mon, 22 Jul 2024 08:24:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 87AAC40241
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B00FB40256
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 87AAC40241;
-	Mon, 22 Jul 2024 08:22:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B00FB40256;
+	Mon, 22 Jul 2024 08:24:17 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id EA1461BF291
- for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 08:22:04 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5D73C1BF291
+ for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 08:24:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E35AD40241
- for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 08:22:04 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 498C440256
+ for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 08:24:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GKhQXkKI7k6K for <buildroot@lists.busybox.net>;
- Mon, 22 Jul 2024 08:22:03 +0000 (UTC)
+ id LzJXtiNl10dv for <buildroot@lists.busybox.net>;
+ Mon, 22 Jul 2024 08:24:15 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42a; helo=mail-wr1-x42a.google.com;
- envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6681C40224
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6681C40224
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
- [IPv6:2a00:1450:4864:20::42a])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6681C40224
- for <buildroot@buildroot.org>; Mon, 22 Jul 2024 08:22:03 +0000 (UTC)
-Received: by mail-wr1-x42a.google.com with SMTP id
- ffacd0b85a97d-367990aaef3so2013391f8f.0
- for <buildroot@buildroot.org>; Mon, 22 Jul 2024 01:22:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1721636521; x=1722241321;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=Wknw/UpHNPTMM1PtFwMTreqN8ajRBAVlq1QwvX5aMUE=;
- b=s1DUAJdFAl9xsQqFt0QrPXJHAdZbhkiUcwdvyr5WPGO6zfuffsu+ezCfFrx6PabEJE
- J1AIHEO+myOL45sSgqdCc9NybE/7sPKXf7kePw05iV92tfDEWLGsHqUov/4Xz9ly3cbi
- PZ7K+irJwHekweA10+4hy9tA5wvD4R+zY+jsSYjHf/T99NV5pvPSCHN9K9o1qhM0f6df
- /s82lrE6twsvq1PqvutdTwZsAQbZwV3hUG8aL67VLHPBJxH4BTwfpEl8zfIHqTtfIVgW
- 0rb2is/WKyiKljPJfO7Jq7+U+6mYlpsq17KD6JHg2MHvorIhOASnXz9DqXMa22e2UgY/
- kAfQ==
-X-Gm-Message-State: AOJu0Yyi3q5hfXwOh8Bt82+NNT/wk1yaIQ7KnL+ixD8I3BpAsMdDRY7W
- nqYBQ3n31caSREQYXW34L4BKgYlOEViNw+moBPiV4GfjFjkNq84pvx4B0g==
-X-Google-Smtp-Source: AGHT+IHsvXDQxMcUP+vTWoQ9vjtYVG469quxkQDemrspgbF1y8lVjEXKMdEXSZEzeXt8XPCW5jzxew==
-X-Received: by 2002:a5d:58f5:0:b0:35f:48e:fe59 with SMTP id
- ffacd0b85a97d-368317c88ebmr7646568f8f.66.1721636520454; 
- Mon, 22 Jul 2024 01:22:00 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-785-215.w83-197.abo.wanadoo.fr.
- [83.197.112.215]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-36878811bedsm7820082f8f.117.2024.07.22.01.21.59
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 22 Jul 2024 01:22:00 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ client-ip=2a00:1828:2000:679::23; helo=helium.openadk.org;
+ envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 5440D40241
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5440D40241
+Received: from helium.openadk.org (helium.openadk.org
+ [IPv6:2a00:1828:2000:679::23])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 5440D40241
+ for <buildroot@buildroot.org>; Mon, 22 Jul 2024 08:24:13 +0000 (UTC)
+Received: by helium.openadk.org (Postfix, from userid 1000)
+ id B056C3521143; Mon, 22 Jul 2024 10:24:11 +0200 (CEST)
+Date: Mon, 22 Jul 2024 10:24:11 +0200
+From: Waldemar Brodkorb <wbx@openadk.org>
 To: buildroot@buildroot.org
-Date: Mon, 22 Jul 2024 10:21:54 +0200
-Message-ID: <20240722082154.721778-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.43.0
+Message-ID: <Zp4XKwrMN9+YZC/B@waldemar-brodkorb.de>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1721636521; x=1722241321; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=Wknw/UpHNPTMM1PtFwMTreqN8ajRBAVlq1QwvX5aMUE=;
- b=ZxqLnpDX+9jDWTudkybdfCqmCSoZRS1l255899CmXkvwfO7umwmskW/QO4mtrKQDLV
- ij7zcyG0IqJvfUJF0UM3OZqHBnd/MiVM4nzatk18oyktP1lPQaRsHuLp1EIPmEuEDGKs
- tTZzEgdXROGSL4v+i8ntJo2rkOmge8J88ajpBSRk9xOTBsjW0jdtbwggn9TgFZv2kfok
- 2uTOb5ztRmakoOGb2OC4it96Z81Yfl7IlDYoSNtvRkr7Y/oo8Md9ffvfr6zES8EbkWT0
- ZZ47ikK/RbN/LT1dnof1JJXiY9tM8qSoaLjWbZAMo+x84o9nTxUfnVKB6VPOwELjsNAc
- 68AA==
+Content-Disposition: inline
+X-Operating-System: Linux 5.10.0-31-amd64 x86_64
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=openadk.org; s=2022; 
+ t=1721636651; bh=ZvNqScOTH8YWL42zPQXfLt9nZLLCrqYmNYEDy1BF/Ok=;
+ h=Date:From:To:Subject:From;
+ b=oj18DNlGMx4pZlzJYu5leKZQCT81ra3JbXjrdsECgk1FgQen7mN6g6WnWamz/qpSm
+ WEr3wgkEqQ1FvfPj1A1T+jKh94ZVVCQ5fqrj4u8kXQ6PMQzP7QQ4/Dz4jQy0JpxrXC
+ 7PBRrneABzFZYwKy1npy0DqqrYrAdQqTLSwrgjl2l9gCrOze9iHW+fFkVeubyPtgL6
+ RlMDAjQtxWCO5+oDEDAlpUu7aoU241yypbWzeviBgZFMQ72q+nbym883CPsB6Jb+Pt
+ lMsBLSFq+EMoyohCw+6AoB/lg+PTFXNpy2/iiFt9VimwLxa2DKvDtyzJRtETntqP3E
+ 2bKa+bSokz/gA==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
+ dmarc=none (p=none dis=none)
+ header.from=openadk.org
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=ZxqLnpDX
-Subject: [Buildroot] [PATCH 1/1] package/gtkiostream: disable octave
+ unprotected) header.d=openadk.org header.i=@openadk.org header.a=rsa-sha256
+ header.s=2022 header.b=oj18DNlG
+Subject: [Buildroot] [PATCH] package/uclibc: fix compile error
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,95 +76,110 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>, Matt Flax <flatmax@flatmax.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Disable octave support which was added in commit
-fab48302865e5c0c98d91b696bc90e75e38189bb but untested as octave is not
-installed to staging and raises the following build failure:
+Fix compile error with older Linux kernel headers.
 
-sparc64-linux-g++: ERROR: unsafe header/library path used in cross-compilation: '-I/usr/include/octave-3.8.1'
+Fixes:
+ http://autobuild.buildroot.net/results/dfa46b243aa6e289333cbd98e3162d62ee6fa865
 
-Fixing those issues is useless, as gtkiostream is not compatible with
-latest octave version as it raises a bunch of errors:
-
-Octave.C: In member function 'void Octave::startOctave(const std::vector<std::__cxx11::basic_string<char> >&)':
-Octave.C:85:5: error: 'octave_main' was not declared in this scope; did you mean 'octave_map'?
-   85 |     octave_main((int)argsIn.size(), (char**)&argsIn[0], embedded);
-      |     ^~~~~~~~~~~
-      |     octave_map
-Octave.C: In member function 'int Octave::setGlobalVariable(const std::string&, Matrix&)':
-Octave.C:283:50: error: use of deleted function 'octave::symbol_table::symbol_table()'
-  283 |             octave_value ov=octave::symbol_table().global_varval(string(baseName));
-      |                                                  ^
-In file included from /home/fabrice/buildroot/output/host/sparc64-buildroot-linux-gnu/sysroot/usr/include/octave-9.2.0/octave/octave-config.h:99,
-                 from /home/fabrice/buildroot/output/host/sparc64-buildroot-linux-gnu/sysroot/usr/include/octave-9.2.0/octave/parse.h:29,
-                 from Octave.C:18:
-/home/fabrice/buildroot/output/host/sparc64-buildroot-linux-gnu/sysroot/usr/include/octave-9.2.0/octave/symtab.h:63:39: note: declared here
-   63 |   OCTAVE_DISABLE_CONSTRUCT_COPY_MOVE (symbol_table)
-      |                                       ^~~~~~~~~~~~
-/home/fabrice/buildroot/output/host/sparc64-buildroot-linux-gnu/sysroot/usr/include/octave-9.2.0/octave/oct-conf-post-public.h:354:3: note: in definition of macro 'OCTAVE_DISABLE_CONSTRUCT_COPY_MOVE'
-  354 |   X () = delete;                                \
-      |   ^
-Octave.C:284:34: error: use of deleted function 'octave::symbol_table::symbol_table()'
-  284 |             octave::symbol_table().global_assign (string(baseName), setGlobalSubVariable(varNames, m, 0, ov));
-      |                                  ^
-/home/fabrice/buildroot/output/host/sparc64-buildroot-linux-gnu/sysroot/usr/include/octave-9.2.0/octave/symtab.h:63:39: note: declared here
-   63 |   OCTAVE_DISABLE_CONSTRUCT_COPY_MOVE (symbol_table)
-      |                                       ^~~~~~~~~~~~
-/home/fabrice/buildroot/output/host/sparc64-buildroot-linux-gnu/sysroot/usr/include/octave-9.2.0/octave/oct-conf-post-public.h:354:3: note: in definition of macro 'OCTAVE_DISABLE_CONSTRUCT_COPY_MOVE'
-  354 |   X () = delete;                                \
-      |   ^
-Octave.C:286:34: error: use of deleted function 'octave::symbol_table::symbol_table()'
-  286 |             octave::symbol_table().global_assign (string(baseName), m);
-      |                                  ^
-/home/fabrice/buildroot/output/host/sparc64-buildroot-linux-gnu/sysroot/usr/include/octave-9.2.0/octave/symtab.h:63:39: note: declared here
-   63 |   OCTAVE_DISABLE_CONSTRUCT_COPY_MOVE (symbol_table)
-      |                                       ^~~~~~~~~~~~
-/home/fabrice/buildroot/output/host/sparc64-buildroot-linux-gnu/sysroot/usr/include/octave-9.2.0/octave/oct-conf-post-public.h:354:3: note: in definition of macro 'OCTAVE_DISABLE_CONSTRUCT_COPY_MOVE'
-  354 |   X () = delete;                                \
-      |   ^
-Octave.C: In member function 'octave_map Octave::setGlobalSubVariable(const std::vector<std::__cxx11::basic_string<char> >&, const Matrix&, int, octave_value&)':
-Octave.C:302:38: error: 'class string_vector' has no member named 'lookup'
-  302 |             whichIdx=base.map_keys().lookup(varNames[index+1]); // map_keys returns a string_vector
-      |                                      ^~~~~~
-
-Fixes: fab48302865e5c0c98d91b696bc90e75e38189bb
- - http://autobuild.buildroot.org/results/9cfc420a4e41503635792472176583a8f81bb2a3
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
- package/gtkiostream/gtkiostream.mk | 8 +-------
- 1 file changed, 1 insertion(+), 7 deletions(-)
+ ...-compilation-with-4.x-kernel-headers.patch | 80 +++++++++++++++++++
+ 1 file changed, 80 insertions(+)
+ create mode 100644 package/uclibc/0002-Fix-compilation-with-4.x-kernel-headers.patch
 
-diff --git a/package/gtkiostream/gtkiostream.mk b/package/gtkiostream/gtkiostream.mk
-index 970644d6df..bc3d859d4e 100644
---- a/package/gtkiostream/gtkiostream.mk
-+++ b/package/gtkiostream/gtkiostream.mk
-@@ -19,16 +19,10 @@ GTKIOSTREAM_DEPENDENCIES = \
- 	host-pkgconf
- 
- GTKIOSTREAM_CONF_OPTS = \
-+	--disable-octave \
- 	--disable-tests \
- 	$(if $(BR2_TOOLCHAIN_HAS_OPENMP),--disable,--enable)-openmp
- 
--ifeq ($(BR2_PACKAGE_OCTAVE),y)
--GTKIOSTREAM_DEPENDENCIES += octave
--GTKIOSTREAM_CONF_OPTS += --enable-octave
--else
--GTKIOSTREAM_CONF_OPTS += --disable-octave
--endif
--
- # For the optional packages below, there's unfortunately no
- # ./configure option to explicitly enable/disable them. They are
- # checked by the ./configure script using pkg-config.
+diff --git a/package/uclibc/0002-Fix-compilation-with-4.x-kernel-headers.patch b/package/uclibc/0002-Fix-compilation-with-4.x-kernel-headers.patch
+new file mode 100644
+index 0000000000..ad3efa9638
+--- /dev/null
++++ b/package/uclibc/0002-Fix-compilation-with-4.x-kernel-headers.patch
+@@ -0,0 +1,80 @@
++From 839bae66a376631ee7d5b1f5b2f5b4094c519ea8 Mon Sep 17 00:00:00 2001
++From: Dmitry Chestnykh <dm.chestnykh@gmail.com>
++Date: Sat, 20 Jul 2024 17:23:45 +0300
++Subject: [PATCH] Fix compilation with 4.x kernel headers
++
++- Fallback to __NR_stat syscall in ld.so if we use 4.x kernel headers.
++4.x kernel doesn't support 64-bit time so we can use old syscall
++- Add preprocessor conditions to have fstat64 and fstatat64 in libc
++with old kernel headers
++
++Signed-off-by: Dmitry Chestnykh <dm.chestnykh@gmail.com>
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++Upstream: https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?id=839bae66a376631ee7d5b1f5b2f5b4094c519ea8
++---
++ ldso/include/dl-syscall.h             | 4 +++-
++ libc/sysdeps/linux/common/fstat64.c   | 3 ++-
++ libc/sysdeps/linux/common/fstatat64.c | 3 ++-
++ 3 files changed, 7 insertions(+), 3 deletions(-)
++
++diff --git a/ldso/include/dl-syscall.h b/ldso/include/dl-syscall.h
++index 4f41034ad..9ec0eac60 100644
++--- a/ldso/include/dl-syscall.h
+++++ b/ldso/include/dl-syscall.h
++@@ -17,6 +17,8 @@ extern int _dl_errno;
++ #define __set_errno(X) {(_dl_errno) = (X);}
++ #endif
++ 
+++#include <linux/version.h>
+++
++ /* Pull in the arch specific syscall implementation */
++ #include <dl-syscalls.h>
++ /*  For MAP_ANONYMOUS -- differs between platforms */
++@@ -139,7 +141,7 @@ static __always_inline int _dl_stat(const char *file_name,
++ {
++ 	return _dl_newfstatat(AT_FDCWD, file_name, buf, 0);
++ }
++-#elif defined __NR_stat && (!defined(__UCLIBC_USE_TIME64__) || defined(__sparc__))
+++#elif defined __NR_stat && (!defined(__UCLIBC_USE_TIME64__) || defined(__sparc__)) || (LINUX_VERSION_CODE <= KERNEL_VERSION(5,1,0))
++ # define __NR__dl_stat __NR_stat
++ static __always_inline _syscall2(int, _dl_stat, const char *, file_name,
++                         struct stat *, buf)
++diff --git a/libc/sysdeps/linux/common/fstat64.c b/libc/sysdeps/linux/common/fstat64.c
++index 359c22af6..121b21fc8 100644
++--- a/libc/sysdeps/linux/common/fstat64.c
+++++ b/libc/sysdeps/linux/common/fstat64.c
++@@ -8,8 +8,9 @@
++ 
++ #include <_lfs_64.h>
++ #include <sys/syscall.h>
+++#include <linux/version.h>
++ 
++-#if defined(__NR_fstat64) && !defined(__UCLIBC_USE_TIME64__)
+++#if defined(__NR_fstat64) && (!defined(__UCLIBC_USE_TIME64__) || LINUX_VERSION_CODE <= KERNEL_VERSION(5,1,0))
++ # include <unistd.h>
++ # include <sys/stat.h>
++ # include "xstatconv.h"
++diff --git a/libc/sysdeps/linux/common/fstatat64.c b/libc/sysdeps/linux/common/fstatat64.c
++index 16dbf9215..739e84081 100644
++--- a/libc/sysdeps/linux/common/fstatat64.c
+++++ b/libc/sysdeps/linux/common/fstatat64.c
++@@ -9,6 +9,7 @@
++ #include <_lfs_64.h>
++ #include <bits/wordsize.h>
++ #include <sys/syscall.h>
+++#include <linux/version.h>
++ 
++ #if defined __mips__
++ # include <sgidefs.h>
++@@ -23,7 +24,7 @@
++ # define __NR_fstatat64 __NR_newfstatat
++ #endif
++ 
++-#if defined(__NR_fstatat64) && !defined(__UCLIBC_USE_TIME64__)
+++#if defined(__NR_fstatat64) && (!defined(__UCLIBC_USE_TIME64__)  || LINUX_VERSION_CODE <= KERNEL_VERSION(5,1,0))
++ # include <sys/stat.h>
++ # include "xstatconv.h"
++ int fstatat64(int fd, const char *file, struct stat64 *buf, int flag)
++-- 
++2.30.2
++
 -- 
-2.43.0
+2.39.2
 
 _______________________________________________
 buildroot mailing list
