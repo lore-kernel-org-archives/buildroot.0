@@ -4,56 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70BBDC3DA5D
-	for <buildroot@archiver.kernel.org>; Mon, 22 Jul 2024 14:31:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E639DC3DA5D
+	for <buildroot@archiver.kernel.org>; Mon, 22 Jul 2024 14:43:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3806C81091;
-	Mon, 22 Jul 2024 14:31:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8F58C80D75;
+	Mon, 22 Jul 2024 14:43:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tx3Fqthw7OMW; Mon, 22 Jul 2024 14:31:21 +0000 (UTC)
+ id TnC2wXWclNKm; Mon, 22 Jul 2024 14:43:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 448B481096
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7769A80DB4
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 448B481096;
-	Mon, 22 Jul 2024 14:31:21 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 32A2B1BF286;
- Mon, 22 Jul 2024 14:31:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7769A80DB4;
+	Mon, 22 Jul 2024 14:43:14 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 30F2D1BF286
+ for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 14:43:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2D91760680;
- Mon, 22 Jul 2024 14:31:19 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0FA5440183
+ for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 14:43:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cdpcVlnexANl; Mon, 22 Jul 2024 14:31:18 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
- helo=sendmail.purelymail.com; envelope-from=git@douglass.dev;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id aCS8HzznuTSY for <buildroot@lists.busybox.net>;
+ Mon, 22 Jul 2024 14:43:11 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.71.1.222;
+ helo=relay-b02.edpnet.be; envelope-from=dev.kurt@vandijck-laurijssen.be;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 28EAF605A9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 28EAF605A9
-Received: from sendmail.purelymail.com (sendmail.purelymail.com
- [34.202.193.197])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 28EAF605A9
- for <buildroot@buildroot.org>; Mon, 22 Jul 2024 14:31:17 +0000 (UTC)
-Feedback-ID: 3578:1022:null:purelymail
-X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -951833297; 
- (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Mon, 22 Jul 2024 14:31:13 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 22 Jul 2024 10:30:59 -0400
-Message-Id: <20240722143100.346659-1-wdouglass@carnegierobotics.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240722131117.273274-1-wdouglass@carnegierobotics.com>
-References: <20240722131117.273274-1-wdouglass@carnegierobotics.com>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9B10340182
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9B10340182
+Received: from relay-b02.edpnet.be (relay-b02.edpnet.be [212.71.1.222])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9B10340182
+ for <buildroot@buildroot.org>; Mon, 22 Jul 2024 14:43:10 +0000 (UTC)
+X-ASG-Debug-ID: 1721659383-214fdf6fa83aac660001-rUBnyj
+Received: from srv21.vandijck-laurijssen.be (77.109.96.193.adsl.dyn.edpnet.net
+ [77.109.96.193]) by relay-b02.edpnet.be with ESMTP id fWsW4AypWpVsTL7j;
+ Mon, 22 Jul 2024 16:43:03 +0200 (CEST)
+X-Barracuda-Envelope-From: dev.kurt@vandijck-laurijssen.be
+X-Barracuda-Effective-Source-IP: 77.109.96.193.adsl.dyn.edpnet.net[77.109.96.193]
+X-Barracuda-Apparent-Source-IP: 77.109.96.193
+Received: from x1.vandijck-laurijssen.be (x1.vandijck-laurijssen.be
+ [IPv6:fd01::1a1d:eaff:fe02:d339])
+ by srv21.vandijck-laurijssen.be (Postfix) with ESMTPSA id 889C85DD677;
+ Mon, 22 Jul 2024 16:43:03 +0200 (CEST)
+Date: Mon, 22 Jul 2024 16:43:02 +0200
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Message-ID: <Zp5v9gKSn5zhtqS1@x1.vandijck-laurijssen.be>
+X-ASG-Orig-Subj: Re: [Buildroot] [PATCH] bcusdk: fix build without libxml
+References: <20240612093118.22195-1-dev.kurt@vandijck-laurijssen.be>
+ <20240711193311.12331db0@windsurf>
 MIME-Version: 1.0
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=fail (p=quarantine dis=none)
- header.from=carnegierobotics.com
-Subject: [Buildroot] [PATCH] package/chicken: move literals into text
- section for xtensa architecture
+Content-Disposition: inline
+In-Reply-To: <20240711193311.12331db0@windsurf>
+X-Barracuda-Connect: 77.109.96.193.adsl.dyn.edpnet.net[77.109.96.193]
+X-Barracuda-Start-Time: 1721659383
+X-Barracuda-URL: https://212.71.1.222:443/cgi-mod/mark.cgi
+X-Virus-Scanned: by bsmtpd at edpnet.be
+X-Barracuda-Scan-Msg-Size: 3327
+X-Barracuda-BRTS-Status: 1
+X-Barracuda-Spam-Score: 0.00
+X-Barracuda-Spam-Status: No, SCORE=0.00 using global scores of TAG_LEVEL=1000.0
+ QUARANTINE_LEVEL=1000.0 KILL_LEVEL=7.0 tests=
+X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.127974
+ Rule breakdown below
+ pts rule name              description
+ ---- ---------------------- --------------------------------------------------
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=vandijck-laurijssen.be; s=default; t=1721659383;
+ bh=NRXVsQIbegNw0yErdxbimCVy6mpbSD/RVDnGcjTBOcQ=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=iqYMXEcCa0MwmpDDHW+OhDpkIaLu7TItk2VYIk42XG0P+duFt//bXB9sVoqIIyEdr
+ B3gFA/glQB9f3VfRaEHpKO5ZqFyZi9hvB1bkNwnK+TelZy3XwWAGRHLewIKecW4Vf9
+ 5lVOXTKqqcSpHAg5uw/Uh7BMjURXWCOt7XNywy7MYUpZXynQeFAuu13bFMpq2vugx7
+ X5KlKfAoBiJKXW1xYPYNqYqnGxSvPuqx/Z0UKeYjsmtML6aeWaaFAbxHDTnvH0wWUq
+ MbQg7JDEOzQu0Z9zaqzajgxdM+lZVuVcffL4UpLbuTioP8sh1NSTi+2CYcXBPb7b69
+ yyHNcCVGhWxqg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=vandijck-laurijssen.be
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=vandijck-laurijssen.be header.i=@vandijck-laurijssen.be
+ header.a=rsa-sha256 header.s=default header.b=iqYMXEcC
+Subject: Re: [Buildroot] [PATCH] bcusdk: fix build without libxml
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,90 +99,108 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Woodrow Douglass via buildroot <buildroot@buildroot.org>
-Reply-To: Woodrow Douglass <wdouglass@carnegierobotics.com>
-Cc: Woodrow Douglass <wdouglass@carnegierobotics.com>
+From: Kurt Van Dijck via buildroot <buildroot@buildroot.org>
+Reply-To: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+Cc: Kurt Van Dijck via buildroot <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This solves a build problem -- by default xtensa-gcc puts literals in a
-different section of memory then the program text, and chicken is a very
-literal-heavy program, so they don't all fit there. This avoids that problem.
+Hey Thomas,
 
-Signed-off-by: Woodrow Douglass <wdouglass@carnegierobotics.com>
----
- .../0001-xtensa-text-section-literals.patch   | 30 +++++++++++++++++++
- package/chicken/chicken.mk                    | 14 +++++++--
- 2 files changed, 42 insertions(+), 2 deletions(-)
- create mode 100644 package/chicken/0001-xtensa-text-section-literals.patch
+I'll try to address all the build failures.
+Unfortunately not very fast.
 
-diff --git a/package/chicken/0001-xtensa-text-section-literals.patch b/package/chicken/0001-xtensa-text-section-literals.patch
-new file mode 100644
-index 0000000000..b93aaf9e21
---- /dev/null
-+++ b/package/chicken/0001-xtensa-text-section-literals.patch
-@@ -0,0 +1,30 @@
-+From e8d177f4d4e1c6bc41787ea1621e323ff4ad493e Mon Sep 17 00:00:00 2001
-+From: Woodrow Douglass <wdouglass@carnegierobotics.com>
-+Date: Mon, 22 Jul 2024 08:50:37 -0400
-+Subject: [PATCH] Move literals into text section for xtensa architecture
-+
-+Upstream: https://bugs.call-cc.org/ticket/1840
-+Signed-off-by: Woodrow Douglass <wdouglass@carnegierobotics.com>
-+---
-+ Makefile.linux | 5 +++++
-+ 1 file changed, 5 insertions(+)
-+
-+diff --git a/Makefile.linux b/Makefile.linux
-+index b628cda4..e97c2b94 100644
-+--- a/Makefile.linux
-++++ b/Makefile.linux
-+@@ -52,6 +52,11 @@ USES_SONAME = yes
-+ 
-+ # architectures
-+ 
-++ifeq ($(ARCH),xtensa)
-++C_COMPILER_OPTIONS += -mtext-section-literals
-++LINKER_OPTIONS += -mtext-section-literals
-++endif
-++
-+ ifeq ($(ARCH),x32)
-+ C_COMPILER_OPTIONS += -mx32
-+ LINKER_OPTIONS += -mx32
-+-- 
-+2.39.2
-+
-diff --git a/package/chicken/chicken.mk b/package/chicken/chicken.mk
-index 2667f7823d..d0e456f92a 100644
---- a/package/chicken/chicken.mk
-+++ b/package/chicken/chicken.mk
-@@ -11,9 +11,19 @@ CHICKEN_LICENSE_FILES = LICENSE
- CHICKEN_CPE_ID_VENDOR = call-cc
- CHICKEN_INSTALL_STAGING = YES
- 
--# If ARCH is not set, it attempts to autodiscover. But it is anyway not used.
-+#Chicken only uses the "arch" variable for some special-case compile arguments
-+#If it's empty, it tries to detect the arch host
-+#Handle some cases, but in most cases the normalized arch is fine here
-+ifeq ($(BR2_NORMALIZED_ARCH),"i386")
-+CHICKEN_ARCH="x32"
-+else ifeq ($(BR2_NORMALIZED_ARCH),"x86_64")
-+CHICKEN_ARCH="x86-64"
-+else
-+CHICKEN_ARCH=$(BR2_NORMALIZED_ARCH)
-+endif
-+
- CHICKEN_MAKE_OPTS = \
--	ARCH=unused \
-+	ARCH=$(CHICKEN_ARCH) \
- 	C_COMPILER="$(TARGET_CC)" \
- 	CXX_COMPILER="$(TARGET_CXX)" \
- 	PREFIX=/usr \
--- 
-2.39.2
+Regards,
+Kurt
 
+On do, 11 jul 2024 19:33:11 +0200, Thomas Petazzoni wrote:
+> Hello Kurt,
+> 
+> On Wed, 12 Jun 2024 11:30:57 +0200
+> Kurt Van Dijck via buildroot <buildroot@buildroot.org> wrote:
+> 
+> > bcusdk is configured without libxml.
+> > This commit removes the autotools libxml dependency.
+> > 
+> > Signed-off-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+> 
+> Thanks for your patch. However, could you clarify which build failure
+> it is fixing? Which Buildroot configuration is broken, which error
+> message?
+> 
+> I don't seem to see any build failure related to this in our
+> autobuilders... but there are other build failures related to bcusdk:
+> 
+>   http://autobuild.buildroot.net/?reason=bcusdk%
+> 
+> Some more comments below.
+> 
+> > ---
+> >  package/bcusdk/0003-remove-xml-autoconf.patch | 11 +++++++++++
+> >  package/bcusdk/bcusdk.mk                      |  2 ++
+> >  2 files changed, 13 insertions(+)
+> >  create mode 100644 package/bcusdk/0003-remove-xml-autoconf.patch
+> > 
+> > diff --git a/package/bcusdk/0003-remove-xml-autoconf.patch b/package/bcusdk/0003-remove-xml-autoconf.patch
+> > new file mode 100644
+> > index 0000000000..33ce45fe12
+> > --- /dev/null
+> > +++ b/package/bcusdk/0003-remove-xml-autoconf.patch
+> 
+> We need this patch to be generated with "git format-patch", and to have
+> a proper commit message + your Signed-off-by line. I encourage you to
+> look at the two other patches in package/bcusdk/ to see the format that
+> is expected.
+> 
+> Also, we expect the patch to be submitted upstream, and the patch to
+> carry an Upstream: tag that references the upstream pull request (or
+> patch posted to a mailing list).
+> 
+> > @@ -0,0 +1,11 @@
+> > +--- a/configure.in	2024-06-12 11:20:16.800828493 +0200
+> > ++++ b/configure.in	2024-06-12 11:18:19.275693151 +0200
+> > +@@ -81,7 +81,7 @@
+> > + 
+> > + if test x$onlyeibd = xfalse ; then
+> > + 
+> > +-AM_PATH_XML2(2.6.16,,[AC_MSG_ERROR([limxml2 not found])])
+> > ++#AM_PATH_XML2(2.6.16,,[AC_MSG_ERROR([limxml2 not found])])
+> 
+> Don't comment code, remove it entirely. But you need to clarify in the
+> commit message why it is not needed.
+> 
+> > + AC_PATH_PROG(TAS,[m68hc05-as],,[$PATH:$bindir:$prefix/bin])
+> > + AC_PATH_PROG(TLD,[m68hc05-ld],,[$PATH:$bindir:$prefix/bin])
+> > + AC_PATH_PROG(TAR,[m68hc05-ar],,[$PATH:$bindir:$prefix/bin])
+> > diff --git a/package/bcusdk/bcusdk.mk b/package/bcusdk/bcusdk.mk
+> > index f14b23c7cc..c572df725d 100644
+> > --- a/package/bcusdk/bcusdk.mk
+> > +++ b/package/bcusdk/bcusdk.mk
+> > @@ -23,6 +23,8 @@ BCUSDK_CONF_OPTS = \
+> >  
+> >  BCUSDK_DEPENDENCIES = libpthsem
+> >  
+> > +BCUSDK_AUTORECONF=YES
+> 
+> We need a comment above that explains why autoreconf is needed. Usually
+> just the patch file name is enough. And we need spaces around the =
+> sign.
+> 
+> Could you rework your patch according to those suggestions, and post a
+> new iteration?
+> 
+> And of course, ideally if you could fix the other build failure(s)
+> occurring with bcusdk, it would be awesome.
+> 
+> Thanks a lot!
+> 
+> Thomas
+> -- 
+> Thomas Petazzoni, co-owner and CEO, Bootlin
+> Embedded Linux and Kernel engineering and training
+> https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
