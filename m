@@ -4,72 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C933EC3DA59
-	for <buildroot@archiver.kernel.org>; Mon, 22 Jul 2024 12:53:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 45356C3DA59
+	for <buildroot@archiver.kernel.org>; Mon, 22 Jul 2024 12:55:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 92A4D400D2;
-	Mon, 22 Jul 2024 12:53:58 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 08C43400C6;
+	Mon, 22 Jul 2024 12:55:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KHhnRF-_pWVC; Mon, 22 Jul 2024 12:53:57 +0000 (UTC)
+ id T0J3DeR_HJoy; Mon, 22 Jul 2024 12:55:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4286040177
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AD18B40114
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4286040177;
-	Mon, 22 Jul 2024 12:53:57 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 98E5E1BF2A1
- for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 12:53:55 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id AD18B40114;
+	Mon, 22 Jul 2024 12:55:54 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id DB5441BF2AF
+ for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 12:55:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 93B36605A9
- for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 12:53:55 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id D669680BC7
+ for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 12:55:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 77I35rHyQFRq for <buildroot@lists.busybox.net>;
- Mon, 22 Jul 2024 12:53:54 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.200;
- helo=relay7-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id YNAwoaIwYRSh for <buildroot@lists.busybox.net>;
+ Mon, 22 Jul 2024 12:55:52 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::229;
+ helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 7A82760594
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7A82760594
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 7A82760594
- for <buildroot@buildroot.org>; Mon, 22 Jul 2024 12:53:54 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 8A4D420004;
- Mon, 22 Jul 2024 12:53:52 +0000 (UTC)
-Date: Mon, 22 Jul 2024 14:53:51 +0200
-To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <20240722145351.17616fb0@windsurf>
-In-Reply-To: <20240109071343.4025060-1-james.hilliard1@gmail.com>
-References: <20240109071343.4025060-1-james.hilliard1@gmail.com>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 848AE80A72
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 848AE80A72
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 848AE80A72
+ for <buildroot@buildroot.org>; Mon, 22 Jul 2024 12:55:52 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id AD25FFF802;
+ Mon, 22 Jul 2024 12:55:50 +0000 (UTC)
+Date: Mon, 22 Jul 2024 14:55:49 +0200
+To: Adam Duskett <adam.duskett@amarulasolutions.com>
+Message-ID: <20240722145549.20a7efcd@windsurf>
+In-Reply-To: <20231219172446.498409-6-adam.duskett@amarulasolutions.com>
+References: <20231219172446.498409-1-adam.duskett@amarulasolutions.com>
+ <20231219172446.498409-6-adam.duskett@amarulasolutions.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1721652832;
+ d=bootlin.com; s=gm1; t=1721652950;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=ans9+7oTzPcpNdUXVPymUmKoFSmkFTsE1gEjgNklMYY=;
- b=AOcm9A9O3M71C8ipmtIxEKrSgxO+zsM1LQQ1yhwRpwgx4bBF8QfJ04oqBuTkhW4Lsj3zk/
- LjRb5LpDVwntHlBc1orpXAnvOIIuEZ3M0CHjl0YhaNQ0e4MfTqR1FczOBusEl3gYZhLs4w
- 7PXut33CTm5rByFvBQx9rPsiA1PjTnVPoc+Sd+qTM+V7D/9kkggxJ7AVV5HgD7ja4GyjJK
- qvRtQ21URu5Vxh7TmDqYcWsAD0Jyt/gipcmnu+0AT/4Z16uGi5kCi7D1OXTq36jcF7BXRK
- zLzLr0i4yOwp8yxMqPW1hUVRipOcLN+hR7mQdzRFjPDMqhtaYbFn+PQnhP1EsQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=8vRiyVujuLu62umSFC37PlU31L7H3oZ3MgTrPVv90qY=;
+ b=Hj+M8uhYkVdhszG5wnH04aGt6B/BliEBoRd+MDiIcGJtjpHFX0VjNpWRVxglihwKjqwnue
+ zNaJj8FS6bUJYqXoWWUffdMwRNlU+CZXu2xr3kz9lPDysFk1Yep6f7oNClUXNF7g4re93w
+ XW6ddwcSTrQFLzb8+68Fe6bWrnvMj7qcKZe4K3Gf852wPwY6vdLkTe+uQvwo8jvIHa9N/E
+ pTmK+l/aJgVDx5nuEOmMNxUvWDyn3hQFsGdBoXb/7XtudvCEbZ6Yci2+s5jmxp2LKXoBeJ
+ AUJSfZsGOYPXhxeUDsa14yphirjNdzcV2a0Kjvd4MmLeTiT2Fjj12GD26c+nHQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=AOcm9A9O
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-dtschema: bump to
- version 2023.11
+ header.s=gm1 header.b=Hj+M8uhY
+Subject: Re: [Buildroot] [PATCH v3 6/6] package/mender: bump version to 3.5.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,39 +83,54 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
+Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello James,
+Hello Adam,
 
-On Tue,  9 Jan 2024 00:13:43 -0700
-James Hilliard <james.hilliard1@gmail.com> wrote:
+On Tue, 19 Dec 2023 10:24:46 -0700
+Adam Duskett <adam.duskett@amarulasolutions.com> wrote:
 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
->  package/python-dtschema/python-dtschema.hash | 4 ++--
->  package/python-dtschema/python-dtschema.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
+> The artifact_info file is no longer supported. Instead, mender now expects a
+> bootstrap.mender artifact created by mender-artifact in either /data/ or
+> /var/lib/mender. See the following for more information:
+> https://northerntech.atlassian.net/browse/MEN-2585
+> https://northerntech.atlassian.net/browse/MEN-2583
 
-Not sure if it's related to this version bump, or the switch of Python
-to 3.12, or something else, but our python-dtschema test case is
-failing:
+[...]
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/7391793121
+I don't think it's related to this version bump, but our Mender test
+case in our CI is failing:
 
-Traceback (most recent call last):
-  File "/root/sample_python_dtschema.py", line 1, in <module>
-    import dtschema
-  File "/usr/lib/python3.12/site-packages/dtschema/__init__.py", line 23, in <module>
-  File "/usr/lib/python3.12/site-packages/dtschema/schema.py", line 10, in <module>
-  File "/usr/lib/python3.12/site-packages/jsonschema/__init__.py", line 16, in <module>
-  File "/usr/lib/python3.12/site-packages/jsonschema/validators.py", line 19, in <module>
-ModuleNotFoundError: No module named 'jsonschema_specifications'
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/7391793034
 
-Could you have a look perhaps?
+I am not 100% sure what the error exactly is. The end of the log looks
+like this:
+
+mdb.c: In function 'mdb_cursor_put':
+mdb.c:6535:44: warning: this statement may fall through [-Wimplicit-fallthrough=]
+ 6535 |                                         if (SIZELEFT(fp) < offset) {
+      |                                            ^
+mdb.c:6540:33: note: here
+ 6540 |                                 case MDB_CURRENT:
+      |                                 ^~~~
+# github.com/mendersoftware/openssl
+vendor/github.com/mendersoftware/openssl/engine.go:29:5: could not determine kind of name for C.ENGINE
+vendor/github.com/mendersoftware/openssl/engine.go:36:6: could not determine kind of name for C.ENGINE_by_id
+vendor/github.com/mendersoftware/openssl/engine.go:46:3: could not determine kind of name for C.ENGINE_finish
+vendor/github.com/mendersoftware/openssl/engine.go:42:3: could not determine kind of name for C.ENGINE_free
+vendor/github.com/mendersoftware/openssl/engine.go:41:5: could not determine kind of name for C.ENGINE_init
+vendor/github.com/mendersoftware/openssl/engine.go:34:8: could not determine kind of name for C.free
+make[1]: *** [package/pkg-generic.mk:289: /builds/buildroot.org/buildroot/test-output/TestMender/build/mender-3.4.0/.stamp_built] Error 1
+
+The OpenSSL engine stuff makes me think perhaps this package needs to
+select BR2_PACKAGE_LIBOPENSSL_ENGINES, but this isn't spotted directly
+as an error.
+
+Could you perhaps have a look?
 
 Thanks a lot!
 
