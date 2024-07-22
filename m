@@ -4,90 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E639DC3DA5D
-	for <buildroot@archiver.kernel.org>; Mon, 22 Jul 2024 14:43:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ECFC4C3DA5D
+	for <buildroot@archiver.kernel.org>; Mon, 22 Jul 2024 14:48:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8F58C80D75;
-	Mon, 22 Jul 2024 14:43:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AE17E810F4;
+	Mon, 22 Jul 2024 14:48:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TnC2wXWclNKm; Mon, 22 Jul 2024 14:43:14 +0000 (UTC)
+ id ENvfxb5Ei8fz; Mon, 22 Jul 2024 14:48:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7769A80DB4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 87BD0810EF
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7769A80DB4;
-	Mon, 22 Jul 2024 14:43:14 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 30F2D1BF286
- for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 14:43:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 87BD0810EF;
+	Mon, 22 Jul 2024 14:48:14 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 804E81BF286
+ for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 14:48:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0FA5440183
- for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 14:43:13 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7928A810EF
+ for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 14:48:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id aCS8HzznuTSY for <buildroot@lists.busybox.net>;
- Mon, 22 Jul 2024 14:43:11 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.71.1.222;
- helo=relay-b02.edpnet.be; envelope-from=dev.kurt@vandijck-laurijssen.be;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9B10340182
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9B10340182
-Received: from relay-b02.edpnet.be (relay-b02.edpnet.be [212.71.1.222])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 9B10340182
- for <buildroot@buildroot.org>; Mon, 22 Jul 2024 14:43:10 +0000 (UTC)
-X-ASG-Debug-ID: 1721659383-214fdf6fa83aac660001-rUBnyj
-Received: from srv21.vandijck-laurijssen.be (77.109.96.193.adsl.dyn.edpnet.net
- [77.109.96.193]) by relay-b02.edpnet.be with ESMTP id fWsW4AypWpVsTL7j;
- Mon, 22 Jul 2024 16:43:03 +0200 (CEST)
-X-Barracuda-Envelope-From: dev.kurt@vandijck-laurijssen.be
-X-Barracuda-Effective-Source-IP: 77.109.96.193.adsl.dyn.edpnet.net[77.109.96.193]
-X-Barracuda-Apparent-Source-IP: 77.109.96.193
-Received: from x1.vandijck-laurijssen.be (x1.vandijck-laurijssen.be
- [IPv6:fd01::1a1d:eaff:fe02:d339])
- by srv21.vandijck-laurijssen.be (Postfix) with ESMTPSA id 889C85DD677;
- Mon, 22 Jul 2024 16:43:03 +0200 (CEST)
-Date: Mon, 22 Jul 2024 16:43:02 +0200
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Message-ID: <Zp5v9gKSn5zhtqS1@x1.vandijck-laurijssen.be>
-X-ASG-Orig-Subj: Re: [Buildroot] [PATCH] bcusdk: fix build without libxml
-References: <20240612093118.22195-1-dev.kurt@vandijck-laurijssen.be>
- <20240711193311.12331db0@windsurf>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id bw1hIzZ8FawM for <buildroot@lists.busybox.net>;
+ Mon, 22 Jul 2024 14:48:11 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
+ helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org A620E80E00
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A620E80E00
+Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A620E80E00
+ for <buildroot@buildroot.org>; Mon, 22 Jul 2024 14:48:11 +0000 (UTC)
+Received: from [192.168.178.36] (unknown [212.37.174.96])
+ (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+ key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+ (No client certificate requested)
+ by smtp.bubu1.eu (Postfix) with ESMTPSA id 1AD8B2C85CB6;
+ Mon, 22 Jul 2024 16:48:09 +0200 (CEST)
+Message-ID: <99a9d884-8052-4128-8f4e-f68517d80a65@bubu1.eu>
+Date: Mon, 22 Jul 2024 16:48:08 +0200
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20240711193311.12331db0@windsurf>
-X-Barracuda-Connect: 77.109.96.193.adsl.dyn.edpnet.net[77.109.96.193]
-X-Barracuda-Start-Time: 1721659383
-X-Barracuda-URL: https://212.71.1.222:443/cgi-mod/mark.cgi
-X-Virus-Scanned: by bsmtpd at edpnet.be
-X-Barracuda-Scan-Msg-Size: 3327
-X-Barracuda-BRTS-Status: 1
-X-Barracuda-Spam-Score: 0.00
-X-Barracuda-Spam-Status: No, SCORE=0.00 using global scores of TAG_LEVEL=1000.0
- QUARANTINE_LEVEL=1000.0 KILL_LEVEL=7.0 tests=
-X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.127974
- Rule breakdown below
- pts rule name              description
- ---- ---------------------- --------------------------------------------------
+User-Agent: Mozilla Thunderbird
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, ~bubu <bubu@git.sr.ht>
+References: <170715461915.13905.5968173515742280918-0@git.sr.ht>
+ <170715461915.13905.5968173515742280918-1@git.sr.ht>
+ <20240722145236.4e7ec0bf@windsurf>
+Content-Language: en-US
+In-Reply-To: <20240722145236.4e7ec0bf@windsurf>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=vandijck-laurijssen.be; s=default; t=1721659383;
- bh=NRXVsQIbegNw0yErdxbimCVy6mpbSD/RVDnGcjTBOcQ=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=iqYMXEcCa0MwmpDDHW+OhDpkIaLu7TItk2VYIk42XG0P+duFt//bXB9sVoqIIyEdr
- B3gFA/glQB9f3VfRaEHpKO5ZqFyZi9hvB1bkNwnK+TelZy3XwWAGRHLewIKecW4Vf9
- 5lVOXTKqqcSpHAg5uw/Uh7BMjURXWCOt7XNywy7MYUpZXynQeFAuu13bFMpq2vugx7
- X5KlKfAoBiJKXW1xYPYNqYqnGxSvPuqx/Z0UKeYjsmtML6aeWaaFAbxHDTnvH0wWUq
- MbQg7JDEOzQu0Z9zaqzajgxdM+lZVuVcffL4UpLbuTioP8sh1NSTi+2CYcXBPb7b69
- yyHNcCVGhWxqg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=bubu1.eu; s=bubu; 
+ t=1721659689; bh=69fV7CPr7sG+r4Vq/PpR2Ilr7weAw4fKuvGpAq6VskE=;
+ h=Date:Subject:To:Cc:References:From:In-Reply-To;
+ b=f6SurFw/VC04+xuyBliAZJPWtsVKcVPWbSqJazpgQDR4BaWBymRMmfSLhUm54vSTo
+ JG0zyXTocYynqxI6L/UvjRI4tvxSpnV7ry+12HFF/rrYRGex2T2x/B1yG5h9oROE7j
+ 8DNoYtra7C4UCSqlhr8j7gj7LvqtE6ZKBsVxCJefVResQUMLPs3vBji7InOuQKt/Iv
+ 5lIjSM1YAruAqNFtzUOpmDVMESvIvEfIXaOq8GPt5ssI4KtPAKTw8emaiJmq7T+FQ+
+ vDnbF9eQ8anEiO0FagaZDcyXyB7YY4L40WiXoroNw0vyFCUO7jOKLQhdd0580Q7325
+ j56aZjs0UFZHQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
- header.from=vandijck-laurijssen.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=vandijck-laurijssen.be header.i=@vandijck-laurijssen.be
- header.a=rsa-sha256 header.s=default header.b=iqYMXEcC
-Subject: Re: [Buildroot] [PATCH] bcusdk: fix build without libxml
+ header.from=bubu1.eu
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=bubu1.eu header.i=@bubu1.eu
+ header.a=rsa-sha256 header.s=bubu header.b=f6SurFw/
+Subject: Re: [Buildroot] [PATCH buildroot v2 2/2] support/testing: add
+ fastapi runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,108 +81,82 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Kurt Van Dijck via buildroot <buildroot@buildroot.org>
-Reply-To: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
-Cc: Kurt Van Dijck via buildroot <buildroot@buildroot.org>
-Content-Type: text/plain; charset="us-ascii"
+From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
+Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
+Cc: James Hilliard <james.hilliard1@gmail.com>, ~bubu <bubu@bubu1.eu>,
+ Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hey Thomas,
+Hi,
 
-I'll try to address all the build failures.
-Unfortunately not very fast.
+On 22.07.24 14:52, Thomas Petazzoni via buildroot wrote:
+> Hello Marcus,
+> 
+> On Mon, 05 Feb 2024 18:25:10 +0100
+> ~bubu <bubu@git.sr.ht> wrote:
+> 
+>> From: Marcus Hoffmann <bubu@bubu1.eu>
+>>
+>> Add a runtime test for fastapi. Use uvicorn as the asgi server
+>> application as does the fastapi hello world example [1].
+>>
+>> Fastapi depends on PydanticV2 now which is written in rust so we need to
+>> run the test on armv7.
+>>
+>> [1] https://fastapi.tiangolo.com/tutorial/first-steps/
+>>
+>> Signed-off-by: Marcus Hoffmann <bubu@bubu1.eu>
+> 
+> It looks like this test is no longer passing in our CI:
+> 
+>    https://gitlab.com/buildroot.org/buildroot/-/jobs/7391793123
+> 
+> Could you perhaps have a look?
 
-Regards,
-Kurt
+This is caused by our pydantic-core install apparently being broken:
 
-On do, 11 jul 2024 19:33:11 +0200, Thomas Petazzoni wrote:
-> Hello Kurt,
-> 
-> On Wed, 12 Jun 2024 11:30:57 +0200
-> Kurt Van Dijck via buildroot <buildroot@buildroot.org> wrote:
-> 
-> > bcusdk is configured without libxml.
-> > This commit removes the autotools libxml dependency.
-> > 
-> > Signed-off-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
-> 
-> Thanks for your patch. However, could you clarify which build failure
-> it is fixing? Which Buildroot configuration is broken, which error
-> message?
-> 
-> I don't seem to see any build failure related to this in our
-> autobuilders... but there are other build failures related to bcusdk:
-> 
->   http://autobuild.buildroot.net/?reason=bcusdk%
-> 
-> Some more comments below.
-> 
-> > ---
-> >  package/bcusdk/0003-remove-xml-autoconf.patch | 11 +++++++++++
-> >  package/bcusdk/bcusdk.mk                      |  2 ++
-> >  2 files changed, 13 insertions(+)
-> >  create mode 100644 package/bcusdk/0003-remove-xml-autoconf.patch
-> > 
-> > diff --git a/package/bcusdk/0003-remove-xml-autoconf.patch b/package/bcusdk/0003-remove-xml-autoconf.patch
-> > new file mode 100644
-> > index 0000000000..33ce45fe12
-> > --- /dev/null
-> > +++ b/package/bcusdk/0003-remove-xml-autoconf.patch
-> 
-> We need this patch to be generated with "git format-patch", and to have
-> a proper commit message + your Signed-off-by line. I encourage you to
-> look at the two other patches in package/bcusdk/ to see the format that
-> is expected.
-> 
-> Also, we expect the patch to be submitted upstream, and the patch to
-> carry an Upstream: tag that references the upstream pull request (or
-> patch posted to a mailing list).
-> 
-> > @@ -0,0 +1,11 @@
-> > +--- a/configure.in	2024-06-12 11:20:16.800828493 +0200
-> > ++++ b/configure.in	2024-06-12 11:18:19.275693151 +0200
-> > +@@ -81,7 +81,7 @@
-> > + 
-> > + if test x$onlyeibd = xfalse ; then
-> > + 
-> > +-AM_PATH_XML2(2.6.16,,[AC_MSG_ERROR([limxml2 not found])])
-> > ++#AM_PATH_XML2(2.6.16,,[AC_MSG_ERROR([limxml2 not found])])
-> 
-> Don't comment code, remove it entirely. But you need to clarify in the
-> commit message why it is not needed.
-> 
-> > + AC_PATH_PROG(TAS,[m68hc05-as],,[$PATH:$bindir:$prefix/bin])
-> > + AC_PATH_PROG(TLD,[m68hc05-ld],,[$PATH:$bindir:$prefix/bin])
-> > + AC_PATH_PROG(TAR,[m68hc05-ar],,[$PATH:$bindir:$prefix/bin])
-> > diff --git a/package/bcusdk/bcusdk.mk b/package/bcusdk/bcusdk.mk
-> > index f14b23c7cc..c572df725d 100644
-> > --- a/package/bcusdk/bcusdk.mk
-> > +++ b/package/bcusdk/bcusdk.mk
-> > @@ -23,6 +23,8 @@ BCUSDK_CONF_OPTS = \
-> >  
-> >  BCUSDK_DEPENDENCIES = libpthsem
-> >  
-> > +BCUSDK_AUTORECONF=YES
-> 
-> We need a comment above that explains why autoreconf is needed. Usually
-> just the patch file name is enough. And we need spaces around the =
-> sign.
-> 
-> Could you rework your patch according to those suggestions, and post a
-> new iteration?
-> 
-> And of course, ideally if you could fix the other build failure(s)
-> occurring with bcusdk, it would be awesome.
+   File "/root/sample_python_fastapi.py", line 1, in <module>
+     from fastapi import FastAPI
+   File "/usr/lib/python3.12/site-packages/fastapi/__init__.py", line 7, 
+in <module>
+   File "/usr/lib/python3.12/site-packages/fastapi/applications.py", 
+line 16, in <module>
+   File "/usr/lib/python3.12/site-packages/fastapi/routing.py", line 22, 
+in <module>
+   File "/usr/lib/python3.12/site-packages/fastapi/params.py", line 5, 
+in <module>
+   File "/usr/lib/python3.12/site-packages/fastapi/openapi/models.py", 
+line 4, in <module>
+   File "/usr/lib/python3.12/site-packages/fastapi/_compat.py", line 20, 
+in <module>
+   File "/usr/lib/python3.12/site-packages/fastapi/exceptions.py", line 
+3, in <module>
+   File "/usr/lib/python3.12/site-packages/pydantic/__init__.py", line 
+404, in __getattr__
+   File "/usr/lib/python3.12/importlib/__init__.py", line 90, in 
+import_module
+   File "/usr/lib/python3.12/site-packages/pydantic/main.py", line 29, 
+in <module>
+ImportError: cannot import name 'PydanticUndefined' from 'pydantic_core' 
+(unknown location)
+
+
+People have hit that here through conda forge as well: 
+https://github.com/pydantic/pydantic/issues/8429
+
+James, can you take a look maybe? (We still use pydantic-v1, so I don't 
+really have any idea about pydantic rust core build topics.
+
+Marcus
+
 > 
 > Thanks a lot!
 > 
 > Thomas
-> -- 
-> Thomas Petazzoni, co-owner and CEO, Bootlin
-> Embedded Linux and Kernel engineering and training
-> https://bootlin.com
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
