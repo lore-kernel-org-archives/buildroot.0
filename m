@@ -4,92 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34AEFC3DA59
-	for <buildroot@archiver.kernel.org>; Mon, 22 Jul 2024 10:10:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE9DEC3DA59
+	for <buildroot@archiver.kernel.org>; Mon, 22 Jul 2024 10:20:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BF8964026A;
-	Mon, 22 Jul 2024 10:10:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8A1A54026A;
+	Mon, 22 Jul 2024 10:20:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id L00MZudZ966j; Mon, 22 Jul 2024 10:10:36 +0000 (UTC)
+ id dufFLKXBAQ4a; Mon, 22 Jul 2024 10:20:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7C1624029C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 472B04027D
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7C1624029C;
-	Mon, 22 Jul 2024 10:10:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 472B04027D;
+	Mon, 22 Jul 2024 10:20:50 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5D3B51BF28C
- for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 10:10:35 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 023CF1BF28C
+ for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 10:20:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4AFE4808AB
- for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 10:10:35 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id E454080BF3
+ for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 10:20:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mHqjXZzORGny for <buildroot@lists.busybox.net>;
- Mon, 22 Jul 2024 10:10:34 +0000 (UTC)
+ id bfc_-oDs5ELt for <buildroot@lists.busybox.net>;
+ Mon, 22 Jul 2024 10:20:48 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::234; helo=mail-lj1-x234.google.com;
- envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 1E1DF808AA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1E1DF808AA
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com
- [IPv6:2a00:1450:4864:20::234])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1E1DF808AA
- for <buildroot@buildroot.org>; Mon, 22 Jul 2024 10:10:33 +0000 (UTC)
-Received: by mail-lj1-x234.google.com with SMTP id
- 38308e7fff4ca-2ef7fef3ccfso6187631fa.3
- for <buildroot@buildroot.org>; Mon, 22 Jul 2024 03:10:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1721643031; x=1722247831;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=xB9kQtxT77UNvjgQ0e4QhO6kmbgNKKzBGiUvLpSlXOM=;
- b=b5Qg07u6p2imJVZ9q2sh0qdAUfGnYOoE1KAGgKTyr8nKXgwA/7hYJRp3zGHh6pFkut
- jmaG8cagp3bICKwhO2cg7919p812bQeklGinN6OjZdWN0MGDTIpZhMXPPSgx3tYvn6Wv
- tXOAY4LLuLMLkJofUA4xaF3Zljcq1SMROzP8X1smVsVKr72MYfHfju7LiHqCuHrzNfLZ
- vjqtGmcNlhRTYf0qLeMLFrU+JovF67VoCXONQ/M/sbzHcKAj4RAohGX54zPkNbGU9SHI
- rq2UenGZW/GP+dA8fDFwg9ZaYA+C/50Bpx5vmke7ImtjQA0m5UN1mexqqq1goqjWoxZ6
- SkyA==
-X-Gm-Message-State: AOJu0Yw2KVCZrLPpGO7fVtfAIg7PPJeYmSna8b1toKcLeQH3ZtIeN9DF
- CxPo2V6oLjeyEhsKfQPplvHkf9b5YRqmIZ7m3Bo7Xlel/tFHbk7/I9ku+A==
-X-Google-Smtp-Source: AGHT+IFh9VG95LQXPk88GidGDnv5Yvyy2sIW4ikNX6M8f79P8hMhwmBOFw6V4K5NV11pCJJTMwcjwQ==
-X-Received: by 2002:a2e:8097:0:b0:2ee:8453:5164 with SMTP id
- 38308e7fff4ca-2ef1662084dmr43880261fa.0.1721643031129; 
- Mon, 22 Jul 2024 03:10:31 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-785-215.w83-197.abo.wanadoo.fr.
- [83.197.112.215]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-368786841f8sm8121412f8f.19.2024.07.22.03.10.30
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 22 Jul 2024 03:10:30 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ client-ip=2a00:1828:2000:679::23; helo=helium.openadk.org;
+ envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org F3D5180BEE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F3D5180BEE
+Received: from helium.openadk.org (helium.openadk.org
+ [IPv6:2a00:1828:2000:679::23])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id F3D5180BEE
+ for <buildroot@buildroot.org>; Mon, 22 Jul 2024 10:20:46 +0000 (UTC)
+Received: by helium.openadk.org (Postfix, from userid 1000)
+ id 28EC135206AD; Mon, 22 Jul 2024 12:20:44 +0200 (CEST)
+Date: Mon, 22 Jul 2024 12:20:44 +0200
+From: Waldemar Brodkorb <wbx@openadk.org>
 To: buildroot@buildroot.org
-Date: Mon, 22 Jul 2024 12:10:28 +0200
-Message-ID: <20240722101028.345215-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.43.0
+Message-ID: <Zp4yfLLt/l+SNXV/@waldemar-brodkorb.de>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1721643031; x=1722247831; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=xB9kQtxT77UNvjgQ0e4QhO6kmbgNKKzBGiUvLpSlXOM=;
- b=nSik3b0kzktb6bV964tIMXxeQbVv/XOQbqmGzGuzvAL6UimBakqmQBcGM9Va4BnBxE
- lY2nZpAwrg/j4ZcFoXysSK1rgGuKiDFvxAQRX72110koGu4BHrnMtJLJDLyURP4fgcSh
- AQPP4ouQPQA6beJ9792T7eR40NiHMBgMkgv6ZhvPyo9XgIZiTX3qyuJL26kHjd45VC+x
- QITjRUfSAtPOr8eplFVTHQJabNsrBOfcBBlvDa25lELNfUn/73flkXd/BF1tF9rs0cda
- 1CXEOR2fHZGw3OPsfUGDtFq+wD40NxQvwu8cMTlJlHCl3xX0TXkPJUggcePTLqL2LLWo
- duzw==
+Content-Disposition: inline
+X-Operating-System: Linux 5.10.0-31-amd64 x86_64
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=openadk.org; s=2022; 
+ t=1721643644; bh=MswGSp/J0wntt9GdgmvuCfPqUFcwlWG/C0S/FMO8C0g=;
+ h=Date:From:To:Subject:From;
+ b=KB8qub9sYsCCqyfna/ZwvUPlfc4BdqCxQXTaIDkbk2OEt68YMUkaV7AT8n/1TDd5X
+ NO+9HjYILK8+gYVTK2AldlanE8+FvSJYoVHu94zW8O4qWGAI7L2HD+LAjNNm/C7p9B
+ oIqITV1I8QZWeI9BTvngQ1MYmxDf5VkWUuJ8lAMoXG+iwbrnadmYNFiLv/rPX+Q2Xl
+ DAfVMSQnc2bXEdjqHBVW5lvDxL0vjljr+8PSMeq18g+wV25U5K25P1g8I89VhKiBI4
+ VKu39dDc+w3KqN3IzkoaiReBRQKw6LSBFIZICCJk61Kmi4stUc20/bw5wGq5r5QJg3
+ wb6q4AXtoJc9g==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
+ dmarc=none (p=none dis=none)
+ header.from=openadk.org
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=nSik3b0k
-Subject: [Buildroot] [PATCH 1/1] package/brcm-patchram-plus: bump to latest
- git commit
+ unprotected) header.d=openadk.org header.i=@openadk.org header.a=rsa-sha256
+ header.s=2022 header.b=KB8qub9s
+Subject: [Buildroot] [PATCH] package/ruby: update to 3.3.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,54 +76,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Vadim Kochan <vadim4j@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This bump will fix the following build failure with gcc >= 14:
-
-main.c: In function 'read_event':
-main.c:715:25: error: implicit declaration of function 'read'; did you mean 'fread'? [-Wimplicit-function-declaration]
-  715 |         while ((count = read(fd, &buffer[i], len)) < len) {
-      |                         ^~~~
-      |                         fread
-
-Fixes:
- - http://autobuild.buildroot.org/results/67965a5245c3d98d683e2c788352bf7c1cf4f00e
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
- package/brcm-patchram-plus/brcm-patchram-plus.hash | 2 +-
- package/brcm-patchram-plus/brcm-patchram-plus.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/ruby/ruby.hash | 4 ++--
+ package/ruby/ruby.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/brcm-patchram-plus/brcm-patchram-plus.hash b/package/brcm-patchram-plus/brcm-patchram-plus.hash
-index f6910e714b..20bc56034c 100644
---- a/package/brcm-patchram-plus/brcm-patchram-plus.hash
-+++ b/package/brcm-patchram-plus/brcm-patchram-plus.hash
-@@ -1,3 +1,3 @@
- # locally computed
--sha256  febad69fbc9185b4c6a31188cf381fd280b88d93cb7f5a40dfdbab9c599c29a7  brcm-patchram-plus-95b7b6916d661a4da3f9c0adf52d5e1f4f8ab042.tar.gz
-+sha256  1287021683e0e71b679b157020f047a44032f3af879b257ff0b94d8d4c3d016d  brcm-patchram-plus-15bd6638dd6d3a37d22dbc18059f6d9eb885f057.tar.gz
- sha256  26324f5c563b7e338c2876c8abe90c3681c1e9a6163fc59b494c94ad6493eda4  COPYING
-diff --git a/package/brcm-patchram-plus/brcm-patchram-plus.mk b/package/brcm-patchram-plus/brcm-patchram-plus.mk
-index 329571d9a9..d873330769 100644
---- a/package/brcm-patchram-plus/brcm-patchram-plus.mk
-+++ b/package/brcm-patchram-plus/brcm-patchram-plus.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/ruby/ruby.hash b/package/ruby/ruby.hash
+index 4ac6200bca..3831e701fb 100644
+--- a/package/ruby/ruby.hash
++++ b/package/ruby/ruby.hash
+@@ -1,5 +1,5 @@
+-# https://www.ruby-lang.org/en/news/2024/04/23/ruby-3-3-1-released/
+-sha512  c58e9be9b5ab48191fbf7d67e13f0ec42ee71ed338170e0f7b246708e9cfc617ce65098f5ce7ab32d4305e785642d3e44253462104d5b9c4abcb1a4113f48347  ruby-3.3.1.tar.xz
++# https://www.ruby-lang.org/en/news/2024/07/09/ruby-3-3-4-released/
++sha512  b26461a13ff82a08a282f10108028bb2a2e4a28da6182a291062fc54089c6655d79c22cc69d59156f9b11cb10a17fe8c69d489343fbae123a45f03361b95c9eb  ruby-3.3.4.tar.xz
+ 
+ # License files, Locally calculated
+ sha256  e849b28d324423e636a3e6bc5d583cdaf4bd046c2b20872c53886b612d01a4a1  LEGAL
+diff --git a/package/ruby/ruby.mk b/package/ruby/ruby.mk
+index fcc637c5ea..08ecbf5941 100644
+--- a/package/ruby/ruby.mk
++++ b/package/ruby/ruby.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--BRCM_PATCHRAM_PLUS_VERSION = 95b7b6916d661a4da3f9c0adf52d5e1f4f8ab042
-+BRCM_PATCHRAM_PLUS_VERSION = 15bd6638dd6d3a37d22dbc18059f6d9eb885f057
- BRCM_PATCHRAM_PLUS_SITE = $(call github,AsteroidOS,brcm-patchram-plus,$(BRCM_PATCHRAM_PLUS_VERSION))
- BRCM_PATCHRAM_PLUS_LICENSE = Apache-2.0
- BRCM_PATCHRAM_PLUS_LICENSE_FILES = COPYING
+ RUBY_VERSION_MAJOR = 3.3
+-RUBY_VERSION = $(RUBY_VERSION_MAJOR).1
++RUBY_VERSION = $(RUBY_VERSION_MAJOR).4
+ RUBY_VERSION_EXT = 3.3.0
+ RUBY_SITE = http://cache.ruby-lang.org/pub/ruby/$(RUBY_VERSION_MAJOR)
+ RUBY_SOURCE = ruby-$(RUBY_VERSION).tar.xz
 -- 
-2.43.0
+2.30.2
 
 _______________________________________________
 buildroot mailing list
