@@ -4,49 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B53D8C3DA5D
-	for <buildroot@archiver.kernel.org>; Mon, 22 Jul 2024 08:05:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10EB4C3DA59
+	for <buildroot@archiver.kernel.org>; Mon, 22 Jul 2024 08:05:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 78828403CA;
-	Mon, 22 Jul 2024 08:05:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CD118403CB;
+	Mon, 22 Jul 2024 08:05:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DEY7FWYUu3Cv; Mon, 22 Jul 2024 08:05:51 +0000 (UTC)
+ id WyKbFjoaLmKv; Mon, 22 Jul 2024 08:05:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B0F8C403B5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 44546403D1
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B0F8C403B5;
-	Mon, 22 Jul 2024 08:05:50 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 675A81BF291
+	by smtp4.osuosl.org (Postfix) with ESMTP id 44546403D1;
+	Mon, 22 Jul 2024 08:05:54 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 6B96B1BF8C7
  for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 08:05:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 156D740320
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2CDCD40281
  for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 08:05:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VCKZspSndXvM for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id v1ees6k4bhM8 for <buildroot@lists.busybox.net>;
  Mon, 22 Jul 2024 08:05:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 26E634033F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 05AC540256
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 26E634033F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 05AC540256
  for <buildroot@buildroot.org>; Mon, 22 Jul 2024 08:05:37 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 236E286FC0; Mon, 22 Jul 2024 08:05:37 +0000 (UTC)
+ id E40DC86FC2; Mon, 22 Jul 2024 08:05:36 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 22 Jul 2024 09:49:19 +0200
+Date: Mon, 22 Jul 2024 09:41:09 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f807855b4d77cd277702e8764f8877d7643f87bf
-X-Git-Newrev: 3d266f280b452ae9d2bd5e50d2b36849ff03dc7d
+X-Git-Oldrev: 8bb67c230b9d32d91bc85e5563f3453cb50d7a38
+X-Git-Newrev: 5510d2890fc628bf08805f83e3430d759c15a8ec
 X-Patchwork-Hint: ignore
-Message-Id: <20240722080537.236E286FC0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/mtd: select
- BR2_PACKAGE_LIBOPENSSL_ENGINES
+Message-Id: <20240722080536.E40DC86FC2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/testing: add nmap runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,39 +65,76 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3d266f280b452ae9d2bd5e50d2b36849ff03dc7d
+commit: https://git.buildroot.net/buildroot/commit/?id=5510d2890fc628bf08805f83e3430d759c15a8ec
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-mtd ubifs unconditionally calls the (deprecated) ENGINE_* logic in
-libopenssl resulting in a build failure when
-!BR2_PACKAGE_LIBOPENSSL_ENGINES since commit
-623d3bbe43e9193aa8e3395367d01af59071b859:
-
-  CCLD     mkfs.ubifs
-/home/autobuild/autobuild/instance-1/output-1/host/lib/gcc/powerpc64-buildroot-linux-gnu/13.3.0/../../../../powerpc64-buildroot-linux-gnu/bin/ld: ubifs-utils/mkfs.ubifs/mkfs_ubifs-sign.o: in function `sign_superblock_node':
-sign.c:(.text+0x328): undefined reference to `ENGINE_load_builtin_engines'
-
-Fixes: 623d3bbe43e9193aa8e3395367d01af59071b859
- - http://autobuild.buildroot.org/results/1fd49b193a3623d244ace602c46f15914bfbcff4
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/mtd/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ DEVELOPERS                                 |  1 +
+ support/testing/tests/package/test_nmap.py | 42 ++++++++++++++++++++++++++++++
+ 2 files changed, 43 insertions(+)
 
-diff --git a/package/mtd/Config.in b/package/mtd/Config.in
-index 57a562c108..0c95e3cc54 100644
---- a/package/mtd/Config.in
-+++ b/package/mtd/Config.in
-@@ -15,6 +15,7 @@ config BR2_PACKAGE_MTD_JFFS_UTILS
- 
- config BR2_PACKAGE_MTD_UBIFS_UTILS
- 	bool
-+	select BR2_PACKAGE_LIBOPENSSL_ENGINES if BR2_PACKAGE_LIBOPENSSL
- 	select BR2_PACKAGE_UTIL_LINUX
- 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
- 
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 333e26d74e..60f6b740c7 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1918,6 +1918,7 @@ F:	support/testing/tests/package/test_netsnmp/
+ F:	support/testing/tests/package/test_nftables.py
+ F:	support/testing/tests/package/test_nftables/
+ F:	support/testing/tests/package/test_ngrep.py
++F:	support/testing/tests/package/test_nmap.py
+ F:	support/testing/tests/package/test_ntp.py
+ F:	support/testing/tests/package/test_ntp/
+ F:	support/testing/tests/package/test_numactl.py
+diff --git a/support/testing/tests/package/test_nmap.py b/support/testing/tests/package/test_nmap.py
+new file mode 100644
+index 0000000000..92b085ece9
+--- /dev/null
++++ b/support/testing/tests/package/test_nmap.py
+@@ -0,0 +1,42 @@
++import os
++import time
++
++import infra.basetest
++
++
++class TestNmap(infra.basetest.BRTest):
++    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
++        """
++        BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
++        BR2_PACKAGE_NMAP=y
++        BR2_PACKAGE_NMAP_NCAT=y
++        BR2_PACKAGE_NMAP_NMAP=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++
++    def test_run(self):
++        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
++        self.emulator.boot(arch="armv5",
++                           kernel="builtin",
++                           options=["-initrd", cpio_file])
++        self.emulator.login()
++
++        # Check the program can execute.
++        self.assertRunOk("nmap --version")
++
++        # We open few ports, using the nmap netcat "nc" commands.
++        ports = [21, 23, 25, 80]
++        for port in ports:
++            cmd = f"nc -l -p {port} </dev/null &>/dev/null &"
++            self.assertRunOk(cmd)
++
++        time.sleep(1 * self.timeout_multiplier)
++
++        # We run a local port scan. We should see in the output the
++        # ports we previously opened.
++        out, ret = self.emulator.run("nmap -n -sS 127.0.0.1", timeout=20)
++        self.assertEqual(ret, 0)
++        nmap_out = "\n".join(out)
++        for port in ports:
++            self.assertRegex(nmap_out, f"{port}/tcp *open")
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
