@@ -4,49 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E053CC3DA59
-	for <buildroot@archiver.kernel.org>; Mon, 22 Jul 2024 19:50:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03C4AC3DA59
+	for <buildroot@archiver.kernel.org>; Mon, 22 Jul 2024 19:50:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 71C8060666;
-	Mon, 22 Jul 2024 19:50:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BFC4060597;
+	Mon, 22 Jul 2024 19:50:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JzK1X_8WWBxz; Mon, 22 Jul 2024 19:50:02 +0000 (UTC)
+ id OCO-MbVlDa1f; Mon, 22 Jul 2024 19:50:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7226160604
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CA2B66064C
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7226160604;
-	Mon, 22 Jul 2024 19:50:02 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 068B11BF31D
- for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 19:50:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CA2B66064C;
+	Mon, 22 Jul 2024 19:50:19 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 53DD21BF31D
+ for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 19:50:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 00AB3401AF
- for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 19:50:01 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4066B401C3
+ for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 19:50:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QrzbMgsdFkWL for <buildroot@lists.busybox.net>;
- Mon, 22 Jul 2024 19:50:00 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NoWiVRMX5AuJ for <buildroot@lists.busybox.net>;
+ Mon, 22 Jul 2024 19:50:17 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::224;
+ helo=relay4-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0A28740424
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0A28740424
- for <buildroot@buildroot.org>; Mon, 22 Jul 2024 19:50:00 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E45CE870CC; Mon, 22 Jul 2024 19:49:59 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 22 Jul 2024 21:49:40 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a1a2f498d7ecdd643b5c057f1c737e082a105384
-X-Git-Newrev: 5ed1fab018db9a001b072fd7bcb3dd3db280aabe
-X-Patchwork-Hint: ignore
-Message-Id: <20240722194959.E45CE870CC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support/testing: fix TestInitSystemNone
- for non-login shell
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org CF78940131
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CF78940131
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::224])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id CF78940131
+ for <buildroot@buildroot.org>; Mon, 22 Jul 2024 19:50:16 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 9C3A7E0002;
+ Mon, 22 Jul 2024 19:50:13 +0000 (UTC)
+Date: Mon, 22 Jul 2024 21:50:12 +0200
+To: "Brandon Maier" <brandon.maier@collins.com>
+Message-ID: <20240722215012.689a742b@windsurf>
+In-Reply-To: <D2W8SSFVLMFX.35Y5MZOPV7155@collins.com>
+References: <20240712-pytest-qemu-prompt-detection-v2-1-273b85382796@collins.com>
+ <20240722151154.0bb0fbf5@windsurf>
+ <D2W8SSFVLMFX.35Y5MZOPV7155@collins.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1721677814;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=ubJGWzYZPVEu7TLSJYNKz71XlGXeHEdCMjb1Zy0Ohu8=;
+ b=QU0aUc21NIURwC+Og4RmdFCoU/MTIT89zAwro8UvAoGBkdC9VFGEkDT1eIli+J6yMTTVVs
+ OmKhXdDuF7SVPYephBhLoAM+Ys9PwTOQu1yFFloJQly1Wv4qis14zVUTo4fa5T6CSaDoZ1
+ F09fE78vBMLVSHhSiTjrluae8+CAUnjIBzeJvh+qR1CVzNwxGidzscmQfUmHAYoggmNTfY
+ 49ohgdomMpksjV7yND5oYyTAUA3Bw8fmwpvO46r63QOZrfS3bsxk7Zmi1H9LreYPjKmuK2
+ hMSWPZCC+b8BSy28rQfHSihkm/orOdZGZtkWN/grqo9QRrLS8azQrOMaSYexnw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=QU0aUc21
+Subject: Re: [Buildroot] [PATCH v2] support/testing/infra/emulator.py: fix
+ qemu prompt detection
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,50 +85,28 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Julien Olivain <ju.o@free.fr>,
+ Ricardo Martincoski <ricardo.martincoski@datacom.com.br>,
+ Brandon Maier via buildroot <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5ed1fab018db9a001b072fd7bcb3dd3db280aabe
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon, 22 Jul 2024 17:26:50 +0000
+"Brandon Maier" <brandon.maier@collins.com> wrote:
 
-This test started failing at commit
-0cad947b964be5612a182413da136fcf0dc5a1f2
-"support/testing/infra/emulator.py: fix qemu prompt detection" with the
-error message
+> I already sent a fix for this ;)
+> 
+> https://patchwork.ozlabs.org/project/buildroot/patch/20240715-support-testing-fix-testinitsystemnone-v1-2-299145b2d342@collins.com/
 
-  AttributeError: 'NoneType' object has no attribute 'run_command'
+Thanks, applied!
 
-This is because we changed emulator.run() so that emulator.login() must
-be called first. But this test skips the login and goes directly to a
-shell. Use the new emulator.connect_shell() function which prepares the
-shell without logging in.
-
-Signed-off-by: Brandon Maier <brandon.maier@collins.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- support/testing/tests/init/test_none.py | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
-
-diff --git a/support/testing/tests/init/test_none.py b/support/testing/tests/init/test_none.py
-index fc4a46efd9..5bfcc3d5c9 100644
---- a/support/testing/tests/init/test_none.py
-+++ b/support/testing/tests/init/test_none.py
-@@ -18,10 +18,8 @@ class TestInitSystemNone(InitSystemBase):
-         if index != 0:
-             self.emulator.logfile.write("==> System does not boot")
-             raise SystemError("System does not boot")
--        index = self.emulator.qemu.expect(["#", pexpect.TIMEOUT], timeout=60)
--        if index != 0:
--            self.emulator.logfile.write("==> System does not boot")
--            raise SystemError("System does not boot")
-+
-+        self.emulator.connect_shell()
- 
-         out, exit_code = self.emulator.run("sh -c 'echo $PPID'")
-         self.assertEqual(exit_code, 0)
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
