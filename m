@@ -4,48 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0FC07C3DA5D
-	for <buildroot@archiver.kernel.org>; Mon, 22 Jul 2024 20:19:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 54FD9C3DA5D
+	for <buildroot@archiver.kernel.org>; Mon, 22 Jul 2024 20:19:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E4B1A81097;
-	Mon, 22 Jul 2024 20:19:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 11281810A4;
+	Mon, 22 Jul 2024 20:19:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id J5DNnULQxBNb; Mon, 22 Jul 2024 20:19:15 +0000 (UTC)
+ id MJuGMppkEEx6; Mon, 22 Jul 2024 20:19:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5BABC8109E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 034B2810AC
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5BABC8109E;
-	Mon, 22 Jul 2024 20:19:15 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 9F15A1BF296
- for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 20:19:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 034B2810AC;
+	Mon, 22 Jul 2024 20:19:27 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 8CDD81BF296
+ for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 20:19:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8B2E58109E
- for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 20:19:13 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 856C040277
+ for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 20:19:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KK6-fSBUkt7C for <buildroot@lists.busybox.net>;
- Mon, 22 Jul 2024 20:19:12 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id kIz3bVO0sl5A for <buildroot@lists.busybox.net>;
+ Mon, 22 Jul 2024 20:19:24 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.198;
+ helo=relay6-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6DFDD81097
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6DFDD81097
- for <buildroot@buildroot.org>; Mon, 22 Jul 2024 20:19:12 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 57D33870BF; Mon, 22 Jul 2024 20:19:12 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 22 Jul 2024 22:18:40 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 95e10430131fb524a27985b82ee70ae8d0fe71d9
-X-Git-Newrev: f17fa2c905845c5a9c5aa55866cd44af176e558a
-X-Patchwork-Hint: ignore
-Message-Id: <20240722201912.57D33870BF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/zfs: fix uClibc support
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 265CF401AF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 265CF401AF
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [217.70.183.198])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 265CF401AF
+ for <buildroot@buildroot.org>; Mon, 22 Jul 2024 20:19:23 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 611E0C0003;
+ Mon, 22 Jul 2024 20:19:21 +0000 (UTC)
+Date: Mon, 22 Jul 2024 22:19:20 +0200
+To: =?UTF-8?B?Sm9zw6k=?= Luis Salvador Rufo <salvador.joseluis@gmail.com>
+Message-ID: <20240722221920.088e521a@windsurf>
+In-Reply-To: <20240722165715.3549-2-salvador.joseluis@gmail.com>
+References: <20240722182312.1500234b@windsurf>
+ <20240722165715.3549-2-salvador.joseluis@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1721679561;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=Q3O+3QSAqWXYVTu+BAGQogsDfbkynJ1U3ucPaMuSXeY=;
+ b=plrIzt2T2ZwTNdaLfc0I0foDY9GOWhuArbssEAqRwDxYqcSn6BwuGOaGUvJfinLNp6p19U
+ kueB95QPOCgKncbe2GO3gcJdfqkKx5qPDzrJu2ch4mRQfEFMFEZk1+7xKja20zGKhbg2O4
+ oC9dpcYcAlmwwe/nsB+2mdVrIagLQ1ygtM5gxF4zo4oScE0HAbA09Zlwdk4nZGrHIRB7dz
+ 0y+6QPzBujGSgKKxe8VhBXOQb/rSLqEjdCNDa+NGqZPzneuMz4z11uD4glGBPHV0uUllIc
+ uUQLvK+pipIWOmjCv+EPJttSBHNY23ZLoyafttCLwyeaHVbZg+ZK+AfzTfqSUQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=plrIzt2T
+Subject: Re: [Buildroot] [PATCH v2 1/1] package/zfs: fix uClibc support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,232 +83,32 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2992913278425206484=="
+Cc: Alexander Mukhin <alexander.i.mukhin@gmail.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============2992913278425206484==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=f17fa2c905845c5a9c5aa55866cd44af176e558a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-This update addresses the issue of uClibc support by skipping ZFS tests
-that require SEEK_DATA support.
-
-This is a work-in-progress patch while we wait for an upstream fix.
-Current upstream efforts can be followed here:
-https://github.com/openzfs/zfs/pull/16169
-
-Context:
-- OpenZFS includes a test for a bug that occurs when copying a large
-  number of PUNCHED files.
-- OpenZFS has backported this test to v2.2.x.
-- uClibc does not support SEEK_DATA and SEEK_HOLE.
-- The ZFS test `cp_stress` can not be compiled using uClibc.
-
-This commit fix:
-- https://gitlab.com/buildroot.org/buildroot/-/jobs/7391793226
-
-Signed-off-by: José Luis Salvador Rufo <salvador.joseluis@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ..._files-ignore-if-SEEK_DATA-is-not-defined.patch | 162 +++++++++++++++++++++
- package/zfs/zfs.mk                                 |   2 +-
- 2 files changed, 163 insertions(+), 1 deletion(-)
-
-diff --git a/package/zfs/0001-tests-cp_files-ignore-if-SEEK_DATA-is-not-defined.patch b/package/zfs/0001-tests-cp_files-ignore-if-SEEK_DATA-is-not-defined.patch
-new file mode 100644
-index 0000000000..f47c615d10
---- /dev/null
-+++ b/package/zfs/0001-tests-cp_files-ignore-if-SEEK_DATA-is-not-defined.patch
-@@ -0,0 +1,162 @@
-+From 93e7f8889072047276da11fe6a525d3f0ea16205 Mon Sep 17 00:00:00 2001
-+From: =?UTF-8?q?Jos=C3=A9=20Luis=20Salvador=20Rufo?=
-+ <salvador.joseluis@gmail.com>
-+Date: Sat, 11 May 2024 22:40:12 +0200
-+Subject: [PATCH] tests/cp_files: ignore if SEEK_DATA is not defined
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
-+
-+Not all C libraries support SEEK_DATA (e.g., uClibc). Skip the test case
-+cp_files if SEEK_DATA is not defined.
-+
-+Signed-off-by: José Luis Salvador Rufo <salvador.joseluis@gmail.com>
-+Upstream: https://github.com/openzfs/zfs/pull/16169
-+---
-+ config/user-unistd.m4                  | 24 ++++++++++++++++++++++++
-+ config/user.m4                         |  1 +
-+ config/zfs-build.m4                    |  1 +
-+ tests/test-runner/bin/zts-report.py.in |  1 +
-+ tests/zfs-tests/Makefile.am            |  2 ++
-+ tests/zfs-tests/cmd/Makefile.am        |  6 +++++-
-+ tests/zfs-tests/tests/Makefile.am      | 14 +++++++++-----
-+ 7 files changed, 43 insertions(+), 6 deletions(-)
-+ create mode 100644 config/user-unistd.m4
-+
-+diff --git a/config/user-unistd.m4 b/config/user-unistd.m4
-+new file mode 100644
-+index 000000000..302bc0bde
-+--- /dev/null
-++++ b/config/user-unistd.m4
-+@@ -0,0 +1,24 @@
-++dnl #
-++dnl # Check for SEEK_DATA - only used for cp_files/seekflood test case.
-++dnl #
-++AC_DEFUN([ZFS_AC_CONFIG_USER_UNISTD_SEEK_DATA], [
-++	AC_MSG_CHECKING(whether host toolchain supports SEEK_DATA)
-++
-++	AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
-++		#ifndef _GNU_SOURCE
-++		#define _GNU_SOURCE
-++		#endif
-++		#include <unistd.h>
-++		#if defined(SEEK_DATA)
-++			int ok;
-++		#else
-++			error fail
-++		#endif
-++	]])], [
-++		user_unistd_seek_data=yes
-++		AC_MSG_RESULT([yes])
-++	], [
-++		user_unistd_seek_data=no
-++		AC_MSG_RESULT([no])
-++	])
-++])
-+diff --git a/config/user.m4 b/config/user.m4
-+index 6ec27a5b2..2326a44be 100644
-+--- a/config/user.m4
-++++ b/config/user.m4
-+@@ -23,6 +23,7 @@ AC_DEFUN([ZFS_AC_CONFIG_USER], [
-+ 	ZFS_AC_CONFIG_USER_LIBAIO
-+ 	ZFS_AC_CONFIG_USER_LIBATOMIC
-+ 	ZFS_AC_CONFIG_USER_LIBFETCH
-++	ZFS_AC_CONFIG_USER_UNISTD_SEEK_DATA
-+ 	ZFS_AC_CONFIG_USER_AIO_H
-+ 	ZFS_AC_CONFIG_USER_CLOCK_GETTIME
-+ 	ZFS_AC_CONFIG_USER_PAM
-+diff --git a/config/zfs-build.m4 b/config/zfs-build.m4
-+index bb5a85d81..578692676 100644
-+--- a/config/zfs-build.m4
-++++ b/config/zfs-build.m4
-+@@ -294,6 +294,7 @@ AC_DEFUN([ZFS_AC_CONFIG], [
-+ 	    [test "x$qatsrc" != x ])
-+ 	AM_CONDITIONAL([WANT_DEVNAME2DEVID], [test "x$user_libudev" = xyes ])
-+ 	AM_CONDITIONAL([WANT_MMAP_LIBAIO], [test "x$user_libaio" = xyes ])
-++	AM_CONDITIONAL([WANT_UNISTD_SEEK_DATA], [test "x$user_unistd_seek_data" = xyes ])
-+ 	AM_CONDITIONAL([PAM_ZFS_ENABLED], [test "x$enable_pam" = xyes])
-+ ])
-+ 
-+diff --git a/tests/test-runner/bin/zts-report.py.in b/tests/test-runner/bin/zts-report.py.in
-+index ecc50f487..3a00345ed 100755
-+--- a/tests/test-runner/bin/zts-report.py.in
-++++ b/tests/test-runner/bin/zts-report.py.in
-+@@ -162,6 +162,7 @@ known = {
-+         ['FAIL', rewind_reason],
-+     'cli_user/misc/zfs_share_001_neg': ['SKIP', na_reason],
-+     'cli_user/misc/zfs_unshare_001_neg': ['SKIP', na_reason],
-++    'cp_files/cp_stress': ['SKIP', 16169],
-+     'pool_checkpoint/checkpoint_discard_busy': ['SKIP', 12053],
-+     'privilege/setup': ['SKIP', na_reason],
-+     'refreserv/refreserv_004_pos': ['FAIL', known_reason],
-+diff --git a/tests/zfs-tests/Makefile.am b/tests/zfs-tests/Makefile.am
-+index 3dd1a6452..8ae790057 100644
-+--- a/tests/zfs-tests/Makefile.am
-++++ b/tests/zfs-tests/Makefile.am
-+@@ -13,8 +13,10 @@ scripts_zfs_tests_functional_hkdf_PROGRAMS = %D%/tests/functional/hkdf/hkdf_test
-+ %C%_tests_functional_hkdf_hkdf_test_LDADD = \
-+ 	libzpool.la
-+ 
-++if WANT_UNISTD_SEEK_DATA
-+ scripts_zfs_tests_functional_cp_filesdir = $(datadir)/$(PACKAGE)/zfs-tests/tests/functional/cp_files
-+ scripts_zfs_tests_functional_cp_files_PROGRAMS = %D%/tests/functional/cp_files/seekflood
-++endif
-+ 
-+ if BUILD_LINUX
-+ scripts_zfs_tests_functional_tmpfiledir = $(datadir)/$(PACKAGE)/zfs-tests/tests/functional/tmpfile
-+diff --git a/tests/zfs-tests/cmd/Makefile.am b/tests/zfs-tests/cmd/Makefile.am
-+index 23848a82f..69bba3039 100644
-+--- a/tests/zfs-tests/cmd/Makefile.am
-++++ b/tests/zfs-tests/cmd/Makefile.am
-+@@ -5,7 +5,6 @@ scripts_zfs_tests_bin_PROGRAMS  = %D%/chg_usr_exec
-+ scripts_zfs_tests_bin_PROGRAMS += %D%/clonefile
-+ scripts_zfs_tests_bin_PROGRAMS += %D%/clone_mmap_cached
-+ scripts_zfs_tests_bin_PROGRAMS += %D%/clone_mmap_write
-+-scripts_zfs_tests_bin_PROGRAMS += %D%/cp_files
-+ scripts_zfs_tests_bin_PROGRAMS += %D%/ctime
-+ scripts_zfs_tests_bin_PROGRAMS += %D%/dir_rd_update
-+ scripts_zfs_tests_bin_PROGRAMS += %D%/dosmode_readonly_write
-+@@ -16,6 +15,11 @@ scripts_zfs_tests_bin_PROGRAMS += %D%/truncate_test
-+ scripts_zfs_tests_bin_PROGRAMS += %D%/zfs_diff-socket
-+ 
-+ 
-++if WANT_UNISTD_SEEK_DATA
-++scripts_zfs_tests_bin_PROGRAMS += %D%/cp_files
-++endif
-++
-++
-+ scripts_zfs_tests_bin_PROGRAMS += %D%/badsend
-+ %C%_badsend_LDADD = \
-+ 	libzfs_core.la \
-+diff --git a/tests/zfs-tests/tests/Makefile.am b/tests/zfs-tests/tests/Makefile.am
-+index cc66d762f..1e9f06a7e 100644
-+--- a/tests/zfs-tests/tests/Makefile.am
-++++ b/tests/zfs-tests/tests/Makefile.am
-+@@ -1394,11 +1394,6 @@ nobase_dist_datadir_zfs_tests_tests_SCRIPTS += \
-+ 	functional/compression/l2arc_encrypted.ksh \
-+ 	functional/compression/l2arc_encrypted_no_compressed_arc.ksh \
-+ 	functional/compression/setup.ksh \
-+-	functional/cp_files/cleanup.ksh \
-+-	functional/cp_files/cp_files_001_pos.ksh \
-+-	functional/cp_files/cp_files_002_pos.ksh \
-+-	functional/cp_files/cp_stress.ksh \
-+-	functional/cp_files/setup.ksh \
-+ 	functional/crtime/cleanup.ksh \
-+ 	functional/crtime/crtime_001_pos.ksh \
-+ 	functional/crtime/setup.ksh \
-+@@ -2108,3 +2103,12 @@ nobase_dist_datadir_zfs_tests_tests_SCRIPTS += \
-+ 	functional/idmap_mount/idmap_mount_003.ksh \
-+ 	functional/idmap_mount/idmap_mount_004.ksh \
-+ 	functional/idmap_mount/idmap_mount_005.ksh
-++
-++if WANT_UNISTD_SEEK_DATA
-++nobase_dist_datadir_zfs_tests_tests_SCRIPTS += \
-++	functional/cp_files/cleanup.ksh \
-++	functional/cp_files/cp_files_001_pos.ksh \
-++	functional/cp_files/cp_files_002_pos.ksh \
-++	functional/cp_files/cp_stress.ksh \
-++	functional/cp_files/setup.ksh
-++endif
-+-- 
-+2.45.2
-+
-diff --git a/package/zfs/zfs.mk b/package/zfs/zfs.mk
-index fa6d282f8c..e0fa392670 100644
---- a/package/zfs/zfs.mk
-+++ b/package/zfs/zfs.mk
-@@ -12,7 +12,7 @@ ZFS_LICENSE_FILES = LICENSE COPYRIGHT
- ZFS_CPE_ID_VENDOR = openzfs
- ZFS_CPE_ID_PRODUCT = openzfs
- 
--# 0001-config-user-check-for-aio.h.patch
-+# 0001-tests-cp_files-ignore-if-SEEK_DATA-is-not-defined.patch
- ZFS_AUTORECONF = YES
- 
- ZFS_DEPENDENCIES = libaio openssl udev util-linux zlib libcurl linux
-
---===============2992913278425206484==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============2992913278425206484==--
+T24gTW9uLCAyMiBKdWwgMjAyNCAxODo1NzoxNiArMDIwMApKb3PDqSBMdWlzIFNhbHZhZG9yIFJ1
+Zm8gPHNhbHZhZG9yLmpvc2VsdWlzQGdtYWlsLmNvbT4gd3JvdGU6Cgo+IFRoaXMgdXBkYXRlIGFk
+ZHJlc3NlcyB0aGUgaXNzdWUgb2YgdUNsaWJjIHN1cHBvcnQgYnkgc2tpcHBpbmcgWkZTIHRlc3Rz
+Cj4gdGhhdCByZXF1aXJlIFNFRUtfREFUQSBzdXBwb3J0Lgo+IAo+IFRoaXMgaXMgYSB3b3JrLWlu
+LXByb2dyZXNzIHBhdGNoIHdoaWxlIHdlIHdhaXQgZm9yIGFuIHVwc3RyZWFtIGZpeC4KPiBDdXJy
+ZW50IHVwc3RyZWFtIGVmZm9ydHMgY2FuIGJlIGZvbGxvd2VkIGhlcmU6Cj4gaHR0cHM6Ly9naXRo
+dWIuY29tL29wZW56ZnMvemZzL3B1bGwvMTYxNjkKPiAKPiBDb250ZXh0Ogo+IC0gT3BlblpGUyBp
+bmNsdWRlcyBhIHRlc3QgZm9yIGEgYnVnIHRoYXQgb2NjdXJzIHdoZW4gY29weWluZyBhIGxhcmdl
+Cj4gICBudW1iZXIgb2YgUFVOQ0hFRCBmaWxlcy4KPiAtIE9wZW5aRlMgaGFzIGJhY2twb3J0ZWQg
+dGhpcyB0ZXN0IHRvIHYyLjIueC4KPiAtIHVDbGliYyBkb2VzIG5vdCBzdXBwb3J0IFNFRUtfREFU
+QSBhbmQgU0VFS19IT0xFLgo+IC0gVGhlIFpGUyB0ZXN0IGBjcF9zdHJlc3NgIGNhbiBub3QgYmUg
+Y29tcGlsZWQgdXNpbmcgdUNsaWJjLgo+IAo+IFRoaXMgY29tbWl0IGZpeDoKPiAtIGh0dHBzOi8v
+Z2l0bGFiLmNvbS9idWlsZHJvb3Qub3JnL2J1aWxkcm9vdC8tL2pvYnMvNzM5MTc5MzIyNgo+IAo+
+IFNpZ25lZC1vZmYtYnk6IEpvc8OpIEx1aXMgU2FsdmFkb3IgUnVmbyA8c2FsdmFkb3Iuam9zZWx1
+aXNAZ21haWwuY29tPgo+IC0tLQo+IENoYW5nZXMgdjEgLT4gdjI6Cj4gICAtIHJlbW92ZWQgcGF0
+Y2ggaGFzaCAgKHN1Z2dlc3RlZCBieSBUaG9tYXMgUGV0YXp6b25pKQo+ICAgLSBmaXggY29tbWVu
+dCBmb3IgcmVhc29uIGFib3V0IFpGU19BVVRPUkVDT05GICAoc3VnZ2VzdGVkIGJ5IFRob21hcyBQ
+ZXRhenpvbmkpCgpBcHBsaWVkIHRvIG1hc3RlciwgdGhhbmtzLgoKVGhvbWFzCi0tIApUaG9tYXMg
+UGV0YXp6b25pLCBDVE8sIEJvb3RsaW4KRW1iZWRkZWQgTGludXggYW5kIEtlcm5lbCBlbmdpbmVl
+cmluZwpodHRwczovL2Jvb3RsaW4uY29tCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9v
+dC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRy
+b290Cg==
