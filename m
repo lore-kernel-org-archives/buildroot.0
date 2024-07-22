@@ -4,107 +4,95 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AC038C3DA5D
-	for <buildroot@archiver.kernel.org>; Mon, 22 Jul 2024 15:14:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9DE39C3DA59
+	for <buildroot@archiver.kernel.org>; Mon, 22 Jul 2024 15:36:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5D550605C8;
-	Mon, 22 Jul 2024 15:14:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 54E9F606BA;
+	Mon, 22 Jul 2024 15:36:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YcU5KwLeEwRf; Mon, 22 Jul 2024 15:14:47 +0000 (UTC)
+ id WSY-EZjda-E6; Mon, 22 Jul 2024 15:36:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 47D84605A4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5253A606C2
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 47D84605A4;
-	Mon, 22 Jul 2024 15:14:47 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 9F9791BF31D
- for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 15:14:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5253A606C2;
+	Mon, 22 Jul 2024 15:36:41 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 5A1111BF2C0
+ for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 15:36:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9A2B460585
- for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 15:14:46 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 46FC340243
+ for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 15:36:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id x9y2LhtReUDT for <buildroot@lists.busybox.net>;
- Mon, 22 Jul 2024 15:14:45 +0000 (UTC)
-X-Greylist: delayed 441 seconds by postgrey-1.37 at util1.osuosl.org;
- Mon, 22 Jul 2024 15:14:45 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 9362C605A4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9362C605A4
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=199.89.1.14;
- helo=011.lax.mailroute.net; envelope-from=wdouglass@carnegierobotics.com;
- receiver=<UNKNOWN> 
-Received: from 011.lax.mailroute.net (011.lax.mailroute.net [199.89.1.14])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 9362C605A4
- for <buildroot@buildroot.org>; Mon, 22 Jul 2024 15:14:45 +0000 (UTC)
-Received: from 007.lax.mailroute.net (007.lax.mailroute.net [199.89.1.10])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
- (No client certificate requested)
- by 011.lax.mailroute.net (Postfix) with ESMTPS id 4WSNtQ4MFkz1XdhJ1
- for <buildroot@buildroot.org>; Mon, 22 Jul 2024 15:07:26 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by 007.lax.mailroute.net (Postfix) with ESMTP id 4WSNtN0N54zly3Sp;
- Mon, 22 Jul 2024 15:07:24 +0000 (UTC)
-X-Virus-Scanned: by MailRoute
-Received: from 007.lax.mailroute.net ([127.0.0.1])
- by localhost (007.lax [127.0.0.1]) (mroute_mailscanner, port 10026) with LMTP
- id NyAqQ6ARA9w5; Mon, 22 Jul 2024 15:07:22 +0000 (UTC)
-Received: from mail.carnegierobotics.com (unknown [72.22.26.5])
- (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
- (No client certificate requested)
- by 007.lax.mailroute.net (Postfix) with ESMTPS id 4WSNtL2VZdzly3S5;
- Mon, 22 Jul 2024 15:07:22 +0000 (UTC)
-Received: from CRL-PGH-EX19-1.crl.local (10.1.7.176) by
- CRL-PGH-EX19-1.crl.local (10.1.7.176) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.858.15; Mon, 22 Jul 2024 11:07:21 -0400
-Received: from CRL-PGH-EX19-1.crl.local ([fe80::81d6:ea84:15d9:67d4]) by
- CRL-PGH-EX19-1.crl.local ([fe80::81d6:ea84:15d9:67d4%7]) with mapi id
- 15.02.0858.015; Mon, 22 Jul 2024 11:07:21 -0400
-To: Baruch Siach <baruch@tkos.co.il>, Woodrow Douglass via buildroot
- <buildroot@buildroot.org>
-Thread-Topic: [Buildroot] [PATCH] package/chicken: move literals into text
- section for xtensa architecture
-Thread-Index: AQHa3EdxLeGIhJGZ+UGtiNGVDDN4o7IDHDEA
-Date: Mon, 22 Jul 2024 15:07:21 +0000
-Message-ID: <c11ec3f0-6e70-4e79-bee3-bc7f8f0130f8@carnegierobotics.com>
-References: <20240722131117.273274-1-wdouglass@carnegierobotics.com>
- <20240722143100.346659-1-wdouglass@carnegierobotics.com>
- <87a5i9mq43.fsf@tarshish>
-In-Reply-To: <87a5i9mq43.fsf@tarshish>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla Thunderbird
-x-originating-ip: [172.30.0.85]
-Content-ID: <15EB303B15DED94F96794F018D4B5BD2@crl.local>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jE3MtuSpMnsj for <buildroot@lists.busybox.net>;
+ Mon, 22 Jul 2024 15:36:38 +0000 (UTC)
+Received-SPF: None (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::c30; helo=mail-oo1-xc30.google.com;
+ envelope-from=flavio.tapajos@newtesc.com.br; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 2DA614023E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2DA614023E
+Received: from mail-oo1-xc30.google.com (mail-oo1-xc30.google.com
+ [IPv6:2607:f8b0:4864:20::c30])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 2DA614023E
+ for <buildroot@buildroot.org>; Mon, 22 Jul 2024 15:36:36 +0000 (UTC)
+Received: by mail-oo1-xc30.google.com with SMTP id
+ 006d021491bc7-5d31ef2c73cso2352764eaf.3
+ for <buildroot@buildroot.org>; Mon, 22 Jul 2024 08:36:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1721662595; x=1722267395;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=EnzyGPFGdGf3VoT2hd9qaDVNTn0bD6wm3yaNqj+cVGU=;
+ b=m1GgZd+LHUGMWJvAqdBtzEJs4poZdYMD/YgzkCsqw7nY/9Fh/KlY9OeFaRtOcBo8Tb
+ JwRFs5JbHLmXVCSja740tMBiH4wNFyu403GZ0ez+EatBvbz62XtUUjuiwu3MpdCWydhm
+ oYCQ5dUuQ7uesgScaCzSN2CGTXrjhXKY7nRzvW4/xSyZMkKo/1ekPfhW2tGn27LyZv6t
+ eBmMXd4Ukb06/24Zd+gtWuD6bJbYVPUmPpZ1W+yu8ZjMLzifqpuvfEO3kMuPMCe3xzRJ
+ Jp9iIWsWPeYmX48NgNmyyXN0ZaUpWE93F45w/7QKcCcqLUt9zVUmB3J6z8ZCQIlb2ZwR
+ aOgg==
+X-Gm-Message-State: AOJu0YxMmkgM5eMGmxmodtysUDhq/ehq5A0t1Mh82FLlP38NkUEvgvAW
+ jjCqCklDUkU38uEGQ+ujSYF16z893OxXT2g2Y4FUnJ7hMJU7FHS29i2q/pJzlNqF2Bs1/RIFNvT
+ fLiA=
+X-Google-Smtp-Source: AGHT+IFN7hb44FguNwyIxp52zoTT01mdgQmP56vzAum4xX7creRTBY4e7aAmNbmRQBqFu/pGIci9iw==
+X-Received: by 2002:a05:6358:33aa:b0:1aa:b0c4:7f8f with SMTP id
+ e5c5f4694b2df-1acc5a621camr993710555d.6.1721662595272; 
+ Mon, 22 Jul 2024 08:36:35 -0700 (PDT)
+Received: from niltesque.newtesc.com.br ([187.120.6.114])
+ by smtp.gmail.com with ESMTPSA id
+ 41be03b00d2f7-79f0b0538bbsm4787707a12.24.2024.07.22.08.36.33
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 22 Jul 2024 08:36:34 -0700 (PDT)
+From: =?UTF-8?q?Fl=C3=A1vio=20Tapaj=C3=B3s?= <flavio.tapajos@newtesc.com.br>
+To: buildroot@buildroot.org
+Date: Mon, 22 Jul 2024 12:36:28 -0300
+Message-ID: <20240722153628.925918-1-flavio.tapajos@newtesc.com.br>
+X-Mailer: git-send-email 2.45.2
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
- carnegierobotics.com; h=mime-version:content-transfer-encoding
- :content-id:content-type:content-type:user-agent
- :content-language:accept-language:in-reply-to:references
- :message-id:date:date:subject:subject:from:from:received
- :received:received:received; s=mr01; t=1721660842; x=1724252843;
- bh=b4+ykwB7u/lDZqurn33Nk0wKjwolfM9g1rwwVRuxCVM=; b=r4xwCKrg6x44
- EPjT8ifFr0PbqmL1PaT6LzUsl+M4al3lSqONcQmOgtPvip5sOtg53miaooKipvkS
- ZalAZigoMEWeOZd6ravhwOxtuG5IRENoOdotu8x9YCtaiy64NHVieEC/mv6jggK9
- Wq5zkChBTyoMkDiiu3JsgBHA6vS2D1Smb+1E6nz7Py+ivyYYLvGJHNknk+ujr+cd
- MKSXCRJ0D5IMbAXU19ODvTsrXzi7VqmEhc8XEHC4Kf2rVwij7AHf8CdK4nGrLCaQ
- 8w1qDClyQRGIzOHsmfCn3LYhCljPz22lqdkpg2SAaPAVzx+awR5L4cM+WhFQLh3h
- EqbbtyBkGg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=carnegierobotics.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=newtesc-com-br.20230601.gappssmtp.com; s=20230601; t=1721662595; x=1722267395;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=EnzyGPFGdGf3VoT2hd9qaDVNTn0bD6wm3yaNqj+cVGU=;
+ b=NnjdxQVASPr3EWtgBsBoQk7TGtEyxs9hoxHu77XkYi16XPrbbLJNKdEZbIxGSFgKf4
+ JfzM1Q/4i+XyAxF0swS9Muzmcruyffyr4g85ZlrjikNWoHk8+YgsdSyzFmylte4lyQmu
+ lFlSoyWTJly7UdDCv8MtlMwzTWBKtCxf90teozuDAWztbSdxUGCaKkwIpkUT/tBERxuz
+ yb1jy8T3CyXRmVdYXbNEszGJOpozu+woVQNN9UlcWd/NNi0u1ac3AkWd7WM79s8wCc9O
+ VJCTVyoD6gnbJB5P7LWt/JDFxm/R0zRsRkIMy8XtTtc9KdfaMf2WOjfgA7/Cqbf2yL/t
+ Ahpw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=newtesc.com.br
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=carnegierobotics.com header.i=@carnegierobotics.com
- header.a=rsa-sha256 header.s=mr01 header.b=r4xwCKrg
-Subject: Re: [Buildroot] [PATCH] package/chicken: move literals into text
- section for xtensa architecture
+ unprotected) header.d=newtesc-com-br.20230601.gappssmtp.com
+ header.i=@newtesc-com-br.20230601.gappssmtp.com header.a=rsa-sha256
+ header.s=20230601 header.b=NnjdxQVA
+Subject: [Buildroot] [PATCH 1/1] package/python-sqlalchemy: bump version to
+ 2.0.31
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -116,114 +104,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Woody Douglass via buildroot <buildroot@buildroot.org>
-Reply-To: Woody Douglass <wdouglass@carnegierobotics.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: =?UTF-8?q?Fl=C3=A1vio=20Tapaj=C3=B3s?= <flavio.tapajos@newtesc.com.br>,
+ James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Baruch,
-
-Thank you for pointing this out! I incorrectly assumed this was a 
-different spelling -- I'll revise and resubmit in a few minutes.
-
-Thanks,
-Woodrow Douglass
-
-On 7/22/24 10:57, Baruch Siach wrote:
-> CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you recognize the sender.
->
->
-> Hi Woodrow,
->
-> On Mon, Jul 22 2024, Woodrow Douglass via buildroot wrote:
->> This solves a build problem -- by default xtensa-gcc puts literals in a
->> different section of memory then the program text, and chicken is a very
->> literal-heavy program, so they don't all fit there. This avoids that problem.
->>
->> Signed-off-by: Woodrow Douglass <wdouglass@carnegierobotics.com>
->> ---
->>   .../0001-xtensa-text-section-literals.patch   | 30 +++++++++++++++++++
->>   package/chicken/chicken.mk                    | 14 +++++++--
->>   2 files changed, 42 insertions(+), 2 deletions(-)
->>   create mode 100644 package/chicken/0001-xtensa-text-section-literals.patch
->>
->> diff --git a/package/chicken/0001-xtensa-text-section-literals.patch b/package/chicken/0001-xtensa-text-section-literals.patch
->> new file mode 100644
->> index 0000000000..b93aaf9e21
->> --- /dev/null
->> +++ b/package/chicken/0001-xtensa-text-section-literals.patch
->> @@ -0,0 +1,30 @@
->> +From e8d177f4d4e1c6bc41787ea1621e323ff4ad493e Mon Sep 17 00:00:00 2001
->> +From: Woodrow Douglass <wdouglass@carnegierobotics.com>
->> +Date: Mon, 22 Jul 2024 08:50:37 -0400
->> +Subject: [PATCH] Move literals into text section for xtensa architecture
->> +
->> +Upstream: https://bugs.call-cc.org/ticket/1840
->> +Signed-off-by: Woodrow Douglass <wdouglass@carnegierobotics.com>
->> +---
->> + Makefile.linux | 5 +++++
->> + 1 file changed, 5 insertions(+)
->> +
->> +diff --git a/Makefile.linux b/Makefile.linux
->> +index b628cda4..e97c2b94 100644
->> +--- a/Makefile.linux
->> ++++ b/Makefile.linux
->> +@@ -52,6 +52,11 @@ USES_SONAME = yes
->> +
->> + # architectures
->> +
->> ++ifeq ($(ARCH),xtensa)
->> ++C_COMPILER_OPTIONS += -mtext-section-literals
->> ++LINKER_OPTIONS += -mtext-section-literals
->> ++endif
->> ++
->> + ifeq ($(ARCH),x32)
->> + C_COMPILER_OPTIONS += -mx32
->> + LINKER_OPTIONS += -mx32
->> +--
->> +2.39.2
->> +
->> diff --git a/package/chicken/chicken.mk b/package/chicken/chicken.mk
->> index 2667f7823d..d0e456f92a 100644
->> --- a/package/chicken/chicken.mk
->> +++ b/package/chicken/chicken.mk
->> @@ -11,9 +11,19 @@ CHICKEN_LICENSE_FILES = LICENSE
->>   CHICKEN_CPE_ID_VENDOR = call-cc
->>   CHICKEN_INSTALL_STAGING = YES
->>
->> -# If ARCH is not set, it attempts to autodiscover. But it is anyway not used.
->> +#Chicken only uses the "arch" variable for some special-case compile arguments
->> +#If it's empty, it tries to detect the arch host
->> +#Handle some cases, but in most cases the normalized arch is fine here
->> +ifeq ($(BR2_NORMALIZED_ARCH),"i386")
->> +CHICKEN_ARCH="x32"
-> Are you sure about that? x32 requires the 64-bit extension for x86
-> processors (https://en.wikipedia.org/wiki/X32_ABI). i386 is for 32-bit
-> capable processors.
->
-> baruch
->
->> +else ifeq ($(BR2_NORMALIZED_ARCH),"x86_64")
->> +CHICKEN_ARCH="x86-64"
->> +else
->> +CHICKEN_ARCH=$(BR2_NORMALIZED_ARCH)
->> +endif
->> +
->>   CHICKEN_MAKE_OPTS = \
->> -     ARCH=unused \
->> +     ARCH=$(CHICKEN_ARCH) \
->>        C_COMPILER="$(TARGET_CC)" \
->>        CXX_COMPILER="$(TARGET_CXX)" \
->>        PREFIX=/usr \
-> --
->                                                       ~. .~   Tk Open Systems
-> =}------------------------------------------------ooO--U--Ooo------------{=
->     - baruch@tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
-
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+U2lnbmVkLW9mZi1ieTogRmzDoXZpbyBUYXBhasOzcyA8ZmxhdmlvLnRhcGFqb3NAbmV3dGVzYy5j
+b20uYnI+Ci0tLQogcGFja2FnZS9weXRob24tc3FsYWxjaGVteS9weXRob24tc3FsYWxjaGVteS5o
+YXNoIHwgNCArKy0tCiBwYWNrYWdlL3B5dGhvbi1zcWxhbGNoZW15L3B5dGhvbi1zcWxhbGNoZW15
+Lm1rICAgfCA0ICsrLS0KIDIgZmlsZXMgY2hhbmdlZCwgNCBpbnNlcnRpb25zKCspLCA0IGRlbGV0
+aW9ucygtKQoKZGlmZiAtLWdpdCBhL3BhY2thZ2UvcHl0aG9uLXNxbGFsY2hlbXkvcHl0aG9uLXNx
+bGFsY2hlbXkuaGFzaCBiL3BhY2thZ2UvcHl0aG9uLXNxbGFsY2hlbXkvcHl0aG9uLXNxbGFsY2hl
+bXkuaGFzaAppbmRleCBkMDQ3NzE5ZDU0Li5hNDEzZmNjMjY2IDEwMDY0NAotLS0gYS9wYWNrYWdl
+L3B5dGhvbi1zcWxhbGNoZW15L3B5dGhvbi1zcWxhbGNoZW15Lmhhc2gKKysrIGIvcGFja2FnZS9w
+eXRob24tc3FsYWxjaGVteS9weXRob24tc3FsYWxjaGVteS5oYXNoCkBAIC0xLDUgKzEsNSBAQAog
+IyBtZDUsIHNoYTI1NiBmcm9tIGh0dHBzOi8vcHlwaS5vcmcvcHlwaS9zcWxhbGNoZW15L2pzb24K
+LW1kNSAgYzEzYTIxNjI2YzdhZTAwYjQyYTA4ODgwYWY1NzRlM2MgIFNRTEFsY2hlbXktMi4wLjMw
+LnRhci5negotc2hhMjU2ICAyYjE3MDg5MTY3MzBmNDgzMGJjNjlkNmY0OWQzN2Y3Njk4YjViZDc1
+MzBhY2E3ZjA0Zjc4NWY4ODQ5ZTk1MjU1ICBTUUxBbGNoZW15LTIuMC4zMC50YXIuZ3oKK21kNSAg
+ZGZhNjg3NzAxZGRmMTQxNmNiYTE5MDI0ZTZmOWVjM2QgIFNRTEFsY2hlbXktMi4wLjMxLnRhci5n
+egorc2hhMjU2ICBiNjA3NDg5ZGQ0YTU0ZGU1Njk4NGEwYzc2NTYyNDc1MDRiZDU1MjNkOWQwYmE3
+OTlhZWY1OWQ0YWRkMDA5NDg0ICBTUUxBbGNoZW15LTIuMC4zMS50YXIuZ3oKICMgTG9jYWxseSBj
+b21wdXRlZCBzaGEyNTYgY2hlY2tzdW1zCiBzaGEyNTYgIDNjMGY1OWFiODg3ZDA0MWRlNmE0ZTUy
+ZmZlM2U5ZWRiNWQ5NTIyZGU5MDlmYWU5YTZjZDdhZGI2ZTdiZTMyOTMgIExJQ0VOU0UKZGlmZiAt
+LWdpdCBhL3BhY2thZ2UvcHl0aG9uLXNxbGFsY2hlbXkvcHl0aG9uLXNxbGFsY2hlbXkubWsgYi9w
+YWNrYWdlL3B5dGhvbi1zcWxhbGNoZW15L3B5dGhvbi1zcWxhbGNoZW15Lm1rCmluZGV4IGUxMTgw
+YTRlMWEuLjU2N2ZmYmJiODcgMTAwNjQ0Ci0tLSBhL3BhY2thZ2UvcHl0aG9uLXNxbGFsY2hlbXkv
+cHl0aG9uLXNxbGFsY2hlbXkubWsKKysrIGIvcGFja2FnZS9weXRob24tc3FsYWxjaGVteS9weXRo
+b24tc3FsYWxjaGVteS5tawpAQCAtNCw5ICs0LDkgQEAKICMKICMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjCiAKLVBZVEhPTl9TUUxBTENIRU1ZX1ZFUlNJT04gPSAyLjAuMzAKK1BZVEhPTl9TUUxBTENI
+RU1ZX1ZFUlNJT04gPSAyLjAuMzEKIFBZVEhPTl9TUUxBTENIRU1ZX1NPVVJDRSA9IFNRTEFsY2hl
+bXktJChQWVRIT05fU1FMQUxDSEVNWV9WRVJTSU9OKS50YXIuZ3oKLVBZVEhPTl9TUUxBTENIRU1Z
+X1NJVEUgPSBodHRwczovL2ZpbGVzLnB5dGhvbmhvc3RlZC5vcmcvcGFja2FnZXMvMzYvZDAvMDEz
+N2ViY2YwZGMyMzBjMmU4MmE2MjFiM2FmNzU1Yjg3ODhhMmE5ZGQ2ZmQxYjhjZDZkNWU3ZjZiMDBk
+CitQWVRIT05fU1FMQUxDSEVNWV9TSVRFID0gaHR0cHM6Ly9maWxlcy5weXRob25ob3N0ZWQub3Jn
+L3BhY2thZ2VzL2JhLzdkL2UzMzEyYWUzNzRmZTdhNGFmN2UxNDk0NzM1MTI1YTcxNGEwOTA3MzE3
+YzgyOWFiOGQ4YTMxZDg5ZGVkNAogUFlUSE9OX1NRTEFMQ0hFTVlfU0VUVVBfVFlQRSA9IHNldHVw
+dG9vbHMKIFBZVEhPTl9TUUxBTENIRU1ZX0xJQ0VOU0UgPSBNSVQKIFBZVEhPTl9TUUxBTENIRU1Z
+X0xJQ0VOU0VfRklMRVMgPSBMSUNFTlNFCi0tIAoyLjQ1LjIKCl9fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRy
+b290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlz
+dGluZm8vYnVpbGRyb290Cg==
