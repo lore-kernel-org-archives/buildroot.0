@@ -4,48 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 411FFC3DA59
-	for <buildroot@archiver.kernel.org>; Mon, 22 Jul 2024 20:22:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A3BDC3DA59
+	for <buildroot@archiver.kernel.org>; Mon, 22 Jul 2024 20:22:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 04DC28113F;
-	Mon, 22 Jul 2024 20:22:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E1EFF810CE;
+	Mon, 22 Jul 2024 20:22:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8MqDNpCulTzP; Mon, 22 Jul 2024 20:22:41 +0000 (UTC)
+ id R20K7GtXfEhq; Mon, 22 Jul 2024 20:22:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EEA81810CA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E2F0F810D0
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EEA81810CA;
-	Mon, 22 Jul 2024 20:22:40 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id CD7951BF296
- for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 20:22:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E2F0F810D0;
+	Mon, 22 Jul 2024 20:22:44 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 4448E1BF296
+ for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 20:22:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C759A401AF
- for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 20:22:39 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 31F5A40328
+ for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 20:22:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OeEe7zSnyBPM for <buildroot@lists.busybox.net>;
- Mon, 22 Jul 2024 20:22:39 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id EfDrvihyHcyN for <buildroot@lists.busybox.net>;
+ Mon, 22 Jul 2024 20:22:43 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.198;
+ helo=relay6-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E5563400AC
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id E5563400AC
- for <buildroot@buildroot.org>; Mon, 22 Jul 2024 20:22:38 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DEEAF870FC; Mon, 22 Jul 2024 20:22:38 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 22 Jul 2024 22:22:26 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b09ae4f0454105afd2b41b2a49f4682d9ee57769
-X-Git-Newrev: 2dc37e5c5b216b2e93f05c015a16a52b9402693f
-X-Patchwork-Hint: ignore
-Message-Id: <20240722202238.DEEAF870FC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/hostapd: drop duplicate
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E4A204024C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E4A204024C
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [217.70.183.198])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E4A204024C
+ for <buildroot@buildroot.org>; Mon, 22 Jul 2024 20:22:42 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id D3482C0002;
+ Mon, 22 Jul 2024 20:22:40 +0000 (UTC)
+Date: Mon, 22 Jul 2024 22:22:39 +0200
+To: Joachim Wiberg <troglobit@gmail.com>
+Message-ID: <20240722222239.47e2dfc6@windsurf>
+In-Reply-To: <20240514103629.2002634-1-troglobit@gmail.com>
+References: <20240514103629.2002634-1-troglobit@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1721679761;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=BwEENZ+wokbksaZGmRgJdDDLF5xn3kliYGRAEGBC6w0=;
+ b=UBa11KPhu0ogYAdTMAGZkebGEUukRLlTVjupd12WcjGx8n+4ASVneApVeOTiIQKX4En/Th
+ tJEM78NROmBSuFcakRc/pjFVRAwJNO017WmladUJHmZR3lEhycj3EU3O58B6Wzdfdc1cvr
+ HFeP0PrDq357lPM6tp8E/zu678JvhFWpoI/QAqi6ScFOP0dsMgprMKystlqOa/n5zRfmcJ
+ r4F9HNO5ly5y2WE/oJ/jgR6sBSCHzxjfzOKczdnP4fdrZhTTCAnCADKdqft5rcqepfnjHD
+ DZONYQYfGGYwMo3jT+KGY4t+23Ohsq1OEusXEmEhbok3Pl4Bx7fvrOldO1hT7Q==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=UBa11KPh
+Subject: Re: [Buildroot] [PATCH 1/1] package/hostapd: drop duplicate
  host-pkgconf dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -60,36 +83,29 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Sergey Matyukevich <geomatsi@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2dc37e5c5b216b2e93f05c015a16a52b9402693f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue, 14 May 2024 12:36:29 +0200
+Joachim Wiberg <troglobit@gmail.com> wrote:
 
-host-pkgconf already defined as dependency in package ingress.
+> host-pkgconf already defined as dependency in package ingress.
+> 
+> Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
+> ---
+>  package/hostapd/hostapd.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/hostapd/hostapd.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Applied to master, thanks.
 
-diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
-index 8981d9247e..5756510e1d 100644
---- a/package/hostapd/hostapd.mk
-+++ b/package/hostapd/hostapd.mk
-@@ -25,7 +25,7 @@ HOSTAPD_CONFIG_DISABLE =
- 
- # Try to use openssl if it's already available
- ifeq ($(BR2_PACKAGE_LIBOPENSSL),y)
--HOSTAPD_DEPENDENCIES += host-pkgconf libopenssl
-+HOSTAPD_DEPENDENCIES += libopenssl
- HOSTAPD_LIBS += `$(PKG_CONFIG_HOST_BINARY) --libs openssl`
- HOSTAPD_CONFIG_EDITS += 's/\#\(CONFIG_TLS=openssl\)/\1/'
- else
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
