@@ -4,48 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D98CCC3DA5D
-	for <buildroot@archiver.kernel.org>; Mon, 22 Jul 2024 16:28:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB384C3DA59
+	for <buildroot@archiver.kernel.org>; Mon, 22 Jul 2024 16:28:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0D1C4401A0;
-	Mon, 22 Jul 2024 16:28:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A6791402E5;
+	Mon, 22 Jul 2024 16:28:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bkYzsB70XLn0; Mon, 22 Jul 2024 16:28:29 +0000 (UTC)
+ id EiH34y5SNg_P; Mon, 22 Jul 2024 16:28:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 49E91401C0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 468D74028E
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 49E91401C0;
-	Mon, 22 Jul 2024 16:28:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 468D74028E;
+	Mon, 22 Jul 2024 16:28:35 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 81BBD1BF2A1
- for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 16:28:27 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6A12C1BF2A1
+ for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 16:28:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 792B58107F
- for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 16:28:27 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 57E1E8107F
+ for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 16:28:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id j9BcyIBbcBNU for <buildroot@lists.busybox.net>;
- Mon, 22 Jul 2024 16:28:26 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id H2nKnJr2V_N5 for <buildroot@lists.busybox.net>;
+ Mon, 22 Jul 2024 16:28:28 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.194;
+ helo=relay2-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 75F3F8106A
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 75F3F8106A
- for <buildroot@buildroot.org>; Mon, 22 Jul 2024 16:28:26 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 63924870A6; Mon, 22 Jul 2024 16:28:26 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 22 Jul 2024 18:28:05 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4f828733c51f3db095920ef93d019293d03005cc
-X-Git-Newrev: fd50b9be374726006f72e7e81ca4cef6808f17f7
-X-Patchwork-Hint: ignore
-Message-Id: <20240722162826.63924870A6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/zxing-cpp: bump to version 2.2.1
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4BE1E8106A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4BE1E8106A
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [217.70.183.194])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4BE1E8106A
+ for <buildroot@buildroot.org>; Mon, 22 Jul 2024 16:28:28 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 6E85B40004;
+ Mon, 22 Jul 2024 16:28:26 +0000 (UTC)
+Date: Mon, 22 Jul 2024 18:28:25 +0200
+To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Message-ID: <20240722182825.53fa31f1@windsurf>
+In-Reply-To: <20240722161740.301988-1-dario.binacchi@amarulasolutions.com>
+References: <20240722161740.301988-1-dario.binacchi@amarulasolutions.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1721665706;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=HKqm1Jftvkfyx88Tqn9SK9rIJHrAX+Vd9Hmxcf1fd0Q=;
+ b=WQ8oAZmFV6WGRqoBe94eEV60H8S3yyqJyIRjkwKzGpe9ixOXr0ZCFcI5CBLpJOIFLwrbsU
+ 9TagxCxiBpz5aZtsiyyfJdzyvb2539TWg2DdtLyju/umjjmKRsbzk7ip472SCf/sC67CBD
+ DrtDDfAXMGV8E5Hb/tzXz95BPK31QHk1NBeFhciAfTsZ1Y7bkUdUrn+rjGGj0KEhGZlaGO
+ /S0tTkyk1bFLSwaERSKbYCCVdYyQoXl9l735VqNB2dndK+Z5ouDFJyGFNnxGKPTbu5b8gV
+ q9mgHbNKO5iBrCruVIYBHfkV+F4mL7zJaWnb7J4JmxZxHEMf3zCPIXKJjJqLCw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=WQ8oAZmF
+Subject: Re: [Buildroot] [PATCH 1/1] package/zxing-cpp: bump to version 2.2.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,225 +82,39 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Francesco Nicoletta Puzzillo <francesco.nicolettap@amarulasolutions.com>,
+ linux-amarula@amarulasolutions.com, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fd50b9be374726006f72e7e81ca4cef6808f17f7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon, 22 Jul 2024 18:17:40 +0200
+Dario Binacchi <dario.binacchi@amarulasolutions.com> wrote:
 
-Release notes:
-https://github.com/zxing-cpp/zxing-cpp/releases/tag/v2.2.0
-https://github.com/zxing-cpp/zxing-cpp/releases/tag/v2.2.1
+> Release notes:
+> https://github.com/zxing-cpp/zxing-cpp/releases/tag/v2.2.0
+> https://github.com/zxing-cpp/zxing-cpp/releases/tag/v2.2.1
+> 
+> The added patch fixes the library compilation when only the writer
+> support is enabled.
+> 
+> Co-Developed-by: Francesco Nicoletta Puzzillo <francesco.nicolettap@amarulasolutions.com>
+> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+> ---
+>  ...-when-only-writer-support-is-enabled.patch | 164 ++++++++++++++++++
+>  package/zxing-cpp/zxing-cpp.hash              |   2 +-
+>  package/zxing-cpp/zxing-cpp.mk                |   2 +-
+>  3 files changed, 166 insertions(+), 2 deletions(-)
+>  create mode 100644 package/zxing-cpp/0001-Fix-building-when-only-writer-support-is-enabled.patch
 
-The added patch fixes the library compilation when only the writer
-support is enabled.
+Applied to master, thanks.
 
-Co-Developed-by: Francesco Nicoletta Puzzillo <francesco.nicolettap@amarulasolutions.com>
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...lding-when-only-writer-support-is-enabled.patch | 164 +++++++++++++++++++++
- package/zxing-cpp/zxing-cpp.hash                   |   2 +-
- package/zxing-cpp/zxing-cpp.mk                     |   2 +-
- 3 files changed, 166 insertions(+), 2 deletions(-)
-
-diff --git a/package/zxing-cpp/0001-Fix-building-when-only-writer-support-is-enabled.patch b/package/zxing-cpp/0001-Fix-building-when-only-writer-support-is-enabled.patch
-new file mode 100644
-index 0000000000..0d2a90f7a5
---- /dev/null
-+++ b/package/zxing-cpp/0001-Fix-building-when-only-writer-support-is-enabled.patch
-@@ -0,0 +1,164 @@
-+From aef33b66df0ad6f085dc55b50d7847e0b8a2ccd8 Mon Sep 17 00:00:00 2001
-+From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-+Date: Wed, 17 Jul 2024 14:53:35 +0200
-+Subject: [PATCH] Fix building when only writer support is enabled
-+
-+The compilation of the following code, which links the zxing-cpp library
-+built with only the writer (encoder) support, raises the following
-+linking errors:
-+
-+using namespace ZXing;
-+
-+int main(void)
-+{
-+	std::string str = "01";
-+	BitHacks::NumberOfLeadingZeros(0);
-+	auto writer = MultiFormatWriter(BarcodeFormat::Code128);
-+	writer.setEncoding(CharacterSet::UTF8);
-+	writer.setMargin(0);
-+	auto matrix = writer.encode(str, 0, 0 /*scaledImageWidth, pixelHeight*/);
-+
-+	return EXIT_SUCCESS;
-+}
-+
-+arm-buildroot-linux-uclibcgnueabihf/bin/ld:host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/lib/libZXing.so:
-+undefined reference to `ZXing::TextDecoder::GuessEncoding(unsigned char const*, unsigned int, ZXing::CharacterSet)'
-+arm-buildroot-linux-uclibcgnueabihf/bin/ld: host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/lib/libZXing.so:
-+undefined reference to `ZXing::HRIFromGS1[abi:cxx11](std::basic_string_view<char, std::char_traits<char> >)'
-+arm-buildroot-linux-uclibcgnueabihf/bin/ld: host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/lib/libZXing.so:
-+undefined reference to `ZXing::TextDecoder::Append(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&, unsigned char const*, unsigned int, ZXing::CharacterSet, bool)'
-+arm-buildroot-linux-uclibcgnueabihf/bin/ld: host/arm-buildroot-linux-uclibcgnueabihf/sysroot/usr/lib/libZXing.so:
-+undefined reference to `ZXing::HRIFromISO15434[abi:cxx11](std::basic_string_view<char, std::char_traits<char> >)'
-+collect2: error: ld returned 1 exit status
-+
-+The patch fixes these errors.
-+
-+Co-Developed-by: Francesco Nicoletta Puzzillo <francesco.nicolettap@amarula>
-+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-+Upstream: backport from upstream https://github.com/zxing-cpp/zxing-cpp/pull/811
-+---
-+ core/src/Content.cpp     | 4 ++++
-+ core/src/Content.h       | 6 ++++++
-+ core/src/DecoderResult.h | 2 ++
-+ core/src/GTIN.cpp        | 2 ++
-+ core/src/GTIN.h          | 2 ++
-+ 5 files changed, 16 insertions(+)
-+
-+diff --git a/core/src/Content.cpp b/core/src/Content.cpp
-+index 4d3c44657cf9..569d4e35614a 100644
-+--- a/core/src/Content.cpp
-++++ b/core/src/Content.cpp
-+@@ -93,6 +93,7 @@ bool Content::canProcess() const
-+ 	return std::all_of(encodings.begin(), encodings.end(), [](Encoding e) { return CanProcess(e.eci); });
-+ }
-+ 
-++#ifdef ZXING_READERS
-+ std::string Content::render(bool withECI) const
-+ {
-+ 	if (empty() || !canProcess())
-+@@ -165,6 +166,7 @@ std::wstring Content::utfW() const
-+ {
-+ 	return FromUtf8(render(false));
-+ }
-++#endif // ZXING_READERS
-+ 
-+ ByteArray Content::bytesECI() const
-+ {
-+@@ -188,6 +190,7 @@ ByteArray Content::bytesECI() const
-+ 	return ByteArray(res);
-+ }
-+ 
-++#ifdef ZXING_READERS
-+ CharacterSet Content::guessEncoding() const
-+ {
-+ 	// assemble all blocks with unknown encoding
-+@@ -236,5 +239,6 @@ ContentType Content::type() const
-+ 
-+ 	return ContentType::Mixed;
-+ }
-++#endif // ZXING_READERS
-+ 
-+ } // namespace ZXing
-+diff --git a/core/src/Content.h b/core/src/Content.h
-+index 99e5a01e7140..aa77bda94d54 100644
-+--- a/core/src/Content.h
-++++ b/core/src/Content.h
-+@@ -38,7 +38,9 @@ class Content
-+ 	void ForEachECIBlock(FUNC f) const;
-+ 
-+ 	void switchEncoding(ECI eci, bool isECI);
-++#ifdef ZXING_READERS
-+ 	std::string render(bool withECI) const;
-++#endif // ZXING_READERS
-+ 
-+ public:
-+ 	struct Encoding
-+@@ -75,13 +77,17 @@ public:
-+ 	bool empty() const { return bytes.empty(); }
-+ 	bool canProcess() const;
-+ 
-++#ifdef ZXING_READERS
-+ 	std::string text(TextMode mode) const;
-+ 	std::wstring utfW() const; // utf16 or utf32 depending on the platform, i.e. on size_of(wchar_t)
-+ 	std::string utf8() const { return render(false); }
-++#endif // ZXING_READERS
-+ 
-+ 	ByteArray bytesECI() const;
-++#ifdef ZXING_READERS
-+ 	CharacterSet guessEncoding() const;
-+ 	ContentType type() const;
-++#endif // ZXING_READERS
-+ };
-+ 
-+ } // ZXing
-+diff --git a/core/src/DecoderResult.h b/core/src/DecoderResult.h
-+index 02b285084195..3117b03a923a 100644
-+--- a/core/src/DecoderResult.h
-++++ b/core/src/DecoderResult.h
-+@@ -50,7 +50,9 @@ public:
-+ 	Content&& content() && { return std::move(_content); }
-+ 
-+ 	// to keep the unit tests happy for now:
-++#ifdef ZXING_READERS
-+ 	std::wstring text() const { return _content.utfW(); }
-++#endif // ZXING_READERS
-+ 	std::string symbologyIdentifier() const { return _content.symbology.toString(false); }
-+ 
-+ 	// Simple macro to set up getter/setter methods that save lots of boilerplate.
-+diff --git a/core/src/GTIN.cpp b/core/src/GTIN.cpp
-+index 256855a03070..690901062301 100644
-+--- a/core/src/GTIN.cpp
-++++ b/core/src/GTIN.cpp
-+@@ -199,6 +199,7 @@ std::string LookupCountryIdentifier(const std::string& GTIN, const BarcodeFormat
-+ 	return it != std::end(COUNTRIES) && prefix >= it->first && prefix <= it->last ? it->id : std::string();
-+ }
-+ 
-++#ifdef ZXING_READERS
-+ std::string EanAddOn(const Result& result)
-+ {
-+ 	if (!(BarcodeFormat::EAN13 | BarcodeFormat::UPCA | BarcodeFormat::UPCE | BarcodeFormat::EAN8)
-+@@ -208,6 +209,7 @@ std::string EanAddOn(const Result& result)
-+ 	auto pos = txt.find(' ');
-+ 	return pos != std::string::npos ? std::string(txt.substr(pos + 1)) : std::string();
-+ }
-++#endif // ZXING_READERS
-+ 
-+ std::string IssueNr(const std::string& ean2AddOn)
-+ {
-+diff --git a/core/src/GTIN.h b/core/src/GTIN.h
-+index d56b604e5f71..9af0b01200ce 100644
-+--- a/core/src/GTIN.h
-++++ b/core/src/GTIN.h
-+@@ -47,7 +47,9 @@ bool IsCheckDigitValid(const std::basic_string<T>& s)
-+  */
-+ std::string LookupCountryIdentifier(const std::string& GTIN, const BarcodeFormat format = BarcodeFormat::None);
-+ 
-++#ifdef ZXING_READERS
-+ std::string EanAddOn(const Result& result);
-++#endif // ZXING_READERS
-+ 
-+ std::string IssueNr(const std::string& ean2AddOn);
-+ std::string Price(const std::string& ean5AddOn);
-+-- 
-+2.43.0
-+
-diff --git a/package/zxing-cpp/zxing-cpp.hash b/package/zxing-cpp/zxing-cpp.hash
-index 6c6917ed86..ff11896f4b 100644
---- a/package/zxing-cpp/zxing-cpp.hash
-+++ b/package/zxing-cpp/zxing-cpp.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  6d54e403592ec7a143791c6526c1baafddf4c0897bb49b1af72b70a0f0c4a3fe  zxing-cpp-2.1.0.tar.gz
-+sha256  02078ae15f19f9d423a441f205b1d1bee32349ddda7467e2c84e8f08876f8635  zxing-cpp-2.2.1.tar.gz
- 
- # License files
- sha256  c6596eb7be8581c18be736c846fb9173b69eccf6ef94c5135893ec56bd92ba08  LICENSE
-diff --git a/package/zxing-cpp/zxing-cpp.mk b/package/zxing-cpp/zxing-cpp.mk
-index 077d7e75d3..5f91bf2f71 100644
---- a/package/zxing-cpp/zxing-cpp.mk
-+++ b/package/zxing-cpp/zxing-cpp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ZXING_CPP_VERSION = 2.1.0
-+ZXING_CPP_VERSION = 2.2.1
- ZXING_CPP_SITE = $(call github,zxing-cpp,zxing-cpp,v$(ZXING_CPP_VERSION))
- ZXING_CPP_LICENSE = Apache-2.0
- ZXING_CPP_LICENSE_FILES = LICENSE
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
