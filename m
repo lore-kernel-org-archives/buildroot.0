@@ -4,67 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9003C3DA59
-	for <buildroot@archiver.kernel.org>; Mon, 22 Jul 2024 08:24:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CDE76C3DA59
+	for <buildroot@archiver.kernel.org>; Mon, 22 Jul 2024 08:57:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 48B51402F4;
-	Mon, 22 Jul 2024 08:24:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 803CB4027A;
+	Mon, 22 Jul 2024 08:57:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SpROx_IWlkpi; Mon, 22 Jul 2024 08:24:17 +0000 (UTC)
+ id 6i7_QxsJM4v2; Mon, 22 Jul 2024 08:57:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B00FB40256
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4372E4027D
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B00FB40256;
-	Mon, 22 Jul 2024 08:24:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4372E4027D;
+	Mon, 22 Jul 2024 08:57:41 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5D73C1BF291
- for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 08:24:16 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 581551BF291
+ for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 08:57:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 498C440256
- for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 08:24:16 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 416684027D
+ for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 08:57:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LzJXtiNl10dv for <buildroot@lists.busybox.net>;
- Mon, 22 Jul 2024 08:24:15 +0000 (UTC)
+ id zXvyNwet85IN for <buildroot@lists.busybox.net>;
+ Mon, 22 Jul 2024 08:57:39 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1828:2000:679::23; helo=helium.openadk.org;
- envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 5440D40241
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5440D40241
-Received: from helium.openadk.org (helium.openadk.org
- [IPv6:2a00:1828:2000:679::23])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5440D40241
- for <buildroot@buildroot.org>; Mon, 22 Jul 2024 08:24:13 +0000 (UTC)
-Received: by helium.openadk.org (Postfix, from userid 1000)
- id B056C3521143; Mon, 22 Jul 2024 10:24:11 +0200 (CEST)
-Date: Mon, 22 Jul 2024 10:24:11 +0200
-From: Waldemar Brodkorb <wbx@openadk.org>
+ client-ip=2a00:1450:4864:20::434; helo=mail-wr1-x434.google.com;
+ envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org D31674027A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D31674027A
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com
+ [IPv6:2a00:1450:4864:20::434])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id D31674027A
+ for <buildroot@buildroot.org>; Mon, 22 Jul 2024 08:57:38 +0000 (UTC)
+Received: by mail-wr1-x434.google.com with SMTP id
+ ffacd0b85a97d-368584f9e36so2073827f8f.2
+ for <buildroot@buildroot.org>; Mon, 22 Jul 2024 01:57:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1721638656; x=1722243456;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=uSlVeKJauePDLdGvFkFiaVV1wlzqgE5EWmXOGWDZCMg=;
+ b=Lsr8d4/kpQQriTfagYF/fQ9f7Nk61wbVrkYocsvp/b7XS3SlagN2AeBe0UXnTEj6O3
+ 7PB8hA6hiWWDNmGzegYxlQwJLyP2+WCcsr6tpCZ/yo4W4eW+AH9i7WtG7kd4JyqFRLRH
+ O4JcmfgsnAI260OfWgA4jTGjTVane2vaAHfHgcvAIkVziwQQo1XeF7MY4xHpi5if/S6B
+ TS4DKF2dLprwgjhJ8uGFkD1paCOzb0aFslPXE/AuGF4yqPF02WgzvImOzLWhfS6DgJ+8
+ zSlrcX3DFRs3ejeFKM9+oXT3dMl5Ul6hPpVoD3aegA3gnidiMp0u1D2k8uaJQtu6HNrl
+ HLxA==
+X-Gm-Message-State: AOJu0YzOR2x3lqY1bV5KbFMVl0X1iOsaxutKgzQsze5Rbhw5rS1QbY9g
+ UfzJOuaily9Z2LjnEcksM5GvCyE/8sAyynF5yKnuO6pSdcAFsAjYbldzSQ==
+X-Google-Smtp-Source: AGHT+IH1vyDCEPT6dcDrzIF9WAbgln23VUD1wVYeQAs/HAHT8689rIhZVTKAPgg1l3BNWTYC558DtA==
+X-Received: by 2002:a5d:55c5:0:b0:368:5e8:2c8e with SMTP id
+ ffacd0b85a97d-369bb2aab3bmr4015541f8f.58.1721638655625; 
+ Mon, 22 Jul 2024 01:57:35 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-785-215.w83-197.abo.wanadoo.fr.
+ [83.197.112.215]) by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-368787cec6bsm7909896f8f.71.2024.07.22.01.57.35
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 22 Jul 2024 01:57:35 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Message-ID: <Zp4XKwrMN9+YZC/B@waldemar-brodkorb.de>
+Date: Mon, 22 Jul 2024 10:57:32 +0200
+Message-ID: <20240722085732.824727-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-Content-Disposition: inline
-X-Operating-System: Linux 5.10.0-31-amd64 x86_64
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=openadk.org; s=2022; 
- t=1721636651; bh=ZvNqScOTH8YWL42zPQXfLt9nZLLCrqYmNYEDy1BF/Ok=;
- h=Date:From:To:Subject:From;
- b=oj18DNlGMx4pZlzJYu5leKZQCT81ra3JbXjrdsECgk1FgQen7mN6g6WnWamz/qpSm
- WEr3wgkEqQ1FvfPj1A1T+jKh94ZVVCQ5fqrj4u8kXQ6PMQzP7QQ4/Dz4jQy0JpxrXC
- 7PBRrneABzFZYwKy1npy0DqqrYrAdQqTLSwrgjl2l9gCrOze9iHW+fFkVeubyPtgL6
- RlMDAjQtxWCO5+oDEDAlpUu7aoU241yypbWzeviBgZFMQ72q+nbym883CPsB6Jb+Pt
- lMsBLSFq+EMoyohCw+6AoB/lg+PTFXNpy2/iiFt9VimwLxa2DKvDtyzJRtETntqP3E
- 2bKa+bSokz/gA==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1721638656; x=1722243456; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=uSlVeKJauePDLdGvFkFiaVV1wlzqgE5EWmXOGWDZCMg=;
+ b=RMB+OUbEiznX4lezpAj56zEN76QHnUcrwdVW9kTjrPaFjcz98GENOTv4U5T6rBYLp+
+ qhwkmMltxJXsYfGFSDDgw9OD3RDkBWG4V0AoItY/1XH9x1+E51zlE1TynTjTokhtH3gS
+ JYcFL4gSA1DdVrGJS7XQvLeRiuKvr2cQY2TA1PDqOEVhq5tml0O1kE22QvcKME/0WeLL
+ tdEu1LGXq3U3IQYFcrfvB9YKo4U9gZrzO8RLzcmMiHnwDheZCu7ulcWT3KZUF3rLrWSv
+ KD5mAoyHI2ekwddqz1VvL0dV7csjfVhgReT6m2KW/NexUejj0sre1CUvCjB8sK6xgK3j
+ 7Nmw==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=openadk.org
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=openadk.org header.i=@openadk.org header.a=rsa-sha256
- header.s=2022 header.b=oj18DNlG
-Subject: [Buildroot] [PATCH] package/uclibc: fix compile error
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=RMB+OUbE
+Subject: [Buildroot] [PATCH 1/1] package/erofs-utils: add libdeflate and
+ zlib optional dependencies
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,110 +100,67 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Gao Xiang <hsiangkao@aol.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix compile error with older Linux kernel headers.
+libdeflate and zlib are optional dependencies and zlib is enabled by
+default since bump to version 1.7.1 in commit
+f5f3d8ca007d46c1b4a351e53b619209b232b113 and
+https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs-utils.git/commit/?id=29b9e71401621d3417599067a75bd9b13154c6a7:
 
-Fixes:
- http://autobuild.buildroot.net/results/dfa46b243aa6e289333cbd98e3162d62ee6fa865
+checking for zlib... no
+configure: error: Package requirements (zlib) were not met:
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Package 'zlib', required by 'virtual:world', not found
+
+Fixes: f5f3d8ca007d46c1b4a351e53b619209b232b113
+ - http://autobuild.buildroot.org/results/a56d5917b5a1e8c75368349f75ec425aeba1ff15
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...-compilation-with-4.x-kernel-headers.patch | 80 +++++++++++++++++++
- 1 file changed, 80 insertions(+)
- create mode 100644 package/uclibc/0002-Fix-compilation-with-4.x-kernel-headers.patch
+ package/erofs-utils/erofs-utils.mk | 22 +++++++++++++++++++++-
+ 1 file changed, 21 insertions(+), 1 deletion(-)
 
-diff --git a/package/uclibc/0002-Fix-compilation-with-4.x-kernel-headers.patch b/package/uclibc/0002-Fix-compilation-with-4.x-kernel-headers.patch
-new file mode 100644
-index 0000000000..ad3efa9638
---- /dev/null
-+++ b/package/uclibc/0002-Fix-compilation-with-4.x-kernel-headers.patch
-@@ -0,0 +1,80 @@
-+From 839bae66a376631ee7d5b1f5b2f5b4094c519ea8 Mon Sep 17 00:00:00 2001
-+From: Dmitry Chestnykh <dm.chestnykh@gmail.com>
-+Date: Sat, 20 Jul 2024 17:23:45 +0300
-+Subject: [PATCH] Fix compilation with 4.x kernel headers
+diff --git a/package/erofs-utils/erofs-utils.mk b/package/erofs-utils/erofs-utils.mk
+index fbf7795583..f994ea9d07 100644
+--- a/package/erofs-utils/erofs-utils.mk
++++ b/package/erofs-utils/erofs-utils.mk
+@@ -42,8 +42,28 @@ else
+ EROFS_UTILS_CONF_OPTS += --disable-fuse
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBDEFLATE),y)
++EROFS_UTILS_DEPENDENCIES += libdeflate
++EROFS_UTILS_CONF_OPTS += --with-libdeflate
++else
++EROFS_UTILS_CONF_OPTS += --without-libdeflate
++endif
 +
-+- Fallback to __NR_stat syscall in ld.so if we use 4.x kernel headers.
-+4.x kernel doesn't support 64-bit time so we can use old syscall
-+- Add preprocessor conditions to have fstat64 and fstatat64 in libc
-+with old kernel headers
++ifeq ($(BR2_PACKAGE_ZLIB),y)
++EROFS_UTILS_DEPENDENCIES += zlib
++EROFS_UTILS_CONF_OPTS += --with-zlib
++else
++EROFS_UTILS_CONF_OPTS += --without-zlib
++endif
 +
-+Signed-off-by: Dmitry Chestnykh <dm.chestnykh@gmail.com>
-+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-+Upstream: https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?id=839bae66a376631ee7d5b1f5b2f5b4094c519ea8
-+---
-+ ldso/include/dl-syscall.h             | 4 +++-
-+ libc/sysdeps/linux/common/fstat64.c   | 3 ++-
-+ libc/sysdeps/linux/common/fstatat64.c | 3 ++-
-+ 3 files changed, 7 insertions(+), 3 deletions(-)
-+
-+diff --git a/ldso/include/dl-syscall.h b/ldso/include/dl-syscall.h
-+index 4f41034ad..9ec0eac60 100644
-+--- a/ldso/include/dl-syscall.h
-++++ b/ldso/include/dl-syscall.h
-+@@ -17,6 +17,8 @@ extern int _dl_errno;
-+ #define __set_errno(X) {(_dl_errno) = (X);}
-+ #endif
-+ 
-++#include <linux/version.h>
-++
-+ /* Pull in the arch specific syscall implementation */
-+ #include <dl-syscalls.h>
-+ /*  For MAP_ANONYMOUS -- differs between platforms */
-+@@ -139,7 +141,7 @@ static __always_inline int _dl_stat(const char *file_name,
-+ {
-+ 	return _dl_newfstatat(AT_FDCWD, file_name, buf, 0);
-+ }
-+-#elif defined __NR_stat && (!defined(__UCLIBC_USE_TIME64__) || defined(__sparc__))
-++#elif defined __NR_stat && (!defined(__UCLIBC_USE_TIME64__) || defined(__sparc__)) || (LINUX_VERSION_CODE <= KERNEL_VERSION(5,1,0))
-+ # define __NR__dl_stat __NR_stat
-+ static __always_inline _syscall2(int, _dl_stat, const char *, file_name,
-+                         struct stat *, buf)
-+diff --git a/libc/sysdeps/linux/common/fstat64.c b/libc/sysdeps/linux/common/fstat64.c
-+index 359c22af6..121b21fc8 100644
-+--- a/libc/sysdeps/linux/common/fstat64.c
-++++ b/libc/sysdeps/linux/common/fstat64.c
-+@@ -8,8 +8,9 @@
-+ 
-+ #include <_lfs_64.h>
-+ #include <sys/syscall.h>
-++#include <linux/version.h>
-+ 
-+-#if defined(__NR_fstat64) && !defined(__UCLIBC_USE_TIME64__)
-++#if defined(__NR_fstat64) && (!defined(__UCLIBC_USE_TIME64__) || LINUX_VERSION_CODE <= KERNEL_VERSION(5,1,0))
-+ # include <unistd.h>
-+ # include <sys/stat.h>
-+ # include "xstatconv.h"
-+diff --git a/libc/sysdeps/linux/common/fstatat64.c b/libc/sysdeps/linux/common/fstatat64.c
-+index 16dbf9215..739e84081 100644
-+--- a/libc/sysdeps/linux/common/fstatat64.c
-++++ b/libc/sysdeps/linux/common/fstatat64.c
-+@@ -9,6 +9,7 @@
-+ #include <_lfs_64.h>
-+ #include <bits/wordsize.h>
-+ #include <sys/syscall.h>
-++#include <linux/version.h>
-+ 
-+ #if defined __mips__
-+ # include <sgidefs.h>
-+@@ -23,7 +24,7 @@
-+ # define __NR_fstatat64 __NR_newfstatat
-+ #endif
-+ 
-+-#if defined(__NR_fstatat64) && !defined(__UCLIBC_USE_TIME64__)
-++#if defined(__NR_fstatat64) && (!defined(__UCLIBC_USE_TIME64__)  || LINUX_VERSION_CODE <= KERNEL_VERSION(5,1,0))
-+ # include <sys/stat.h>
-+ # include "xstatconv.h"
-+ int fstatat64(int fd, const char *file, struct stat64 *buf, int flag)
-+-- 
-+2.30.2
-+
+ HOST_EROFS_UTILS_DEPENDENCIES = host-pkgconf host-util-linux host-lz4 host-xz
+-HOST_EROFS_UTILS_CONF_OPTS += --enable-lz4 --enable-lzma --disable-fuse --without-selinux
++HOST_EROFS_UTILS_CONF_OPTS += \
++	--enable-lz4 \
++	--enable-lzma \
++	--disable-fuse \
++	--without-libdeflate \
++	--without-selinux \
++	--without-zlib
+ 
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
 -- 
-2.39.2
+2.43.0
 
 _______________________________________________
 buildroot mailing list
