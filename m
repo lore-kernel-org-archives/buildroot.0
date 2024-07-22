@@ -4,73 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64847C3DA59
-	for <buildroot@archiver.kernel.org>; Mon, 22 Jul 2024 20:34:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B3794C3DA59
+	for <buildroot@archiver.kernel.org>; Mon, 22 Jul 2024 20:36:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2FF81810B7;
-	Mon, 22 Jul 2024 20:34:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7A53A80BC6;
+	Mon, 22 Jul 2024 20:36:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id c2kkJLQKzNez; Mon, 22 Jul 2024 20:34:44 +0000 (UTC)
+ id soVTazQEfC8d; Mon, 22 Jul 2024 20:36:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 32AD5810D0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6C9EC80BCA
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 32AD5810D0;
-	Mon, 22 Jul 2024 20:34:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6C9EC80BCA;
+	Mon, 22 Jul 2024 20:36:01 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8ADB51BF296
- for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 20:34:43 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C5A5E1BF296
+ for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 20:36:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 84958810D0
- for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 20:34:43 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id BF0AE80BCA
+ for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 20:36:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DAOf-0PBNEsf for <buildroot@lists.busybox.net>;
- Mon, 22 Jul 2024 20:34:42 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.198;
- helo=relay6-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id U2OyJ_QV9KXW for <buildroot@lists.busybox.net>;
+ Mon, 22 Jul 2024 20:36:00 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.193;
+ helo=relay1-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 7B467810B7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7B467810B7
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [217.70.183.198])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7B467810B7
- for <buildroot@buildroot.org>; Mon, 22 Jul 2024 20:34:42 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 9F361C0004;
- Mon, 22 Jul 2024 20:34:40 +0000 (UTC)
-Date: Mon, 22 Jul 2024 22:34:39 +0200
-To: =?UTF-8?B?RmzDoXZpbyBUYXBhasOzcw==?= <flavio.tapajos@newtesc.com.br>
-Message-ID: <20240722223439.3e7589ff@windsurf>
-In-Reply-To: <20240223201354.478070-1-flavio.tapajos@newtesc.com.br>
-References: <20240223201354.478070-1-flavio.tapajos@newtesc.com.br>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9B0D480BC6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9B0D480BC6
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 9B0D480BC6
+ for <buildroot@buildroot.org>; Mon, 22 Jul 2024 20:35:59 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 8A6E0240003;
+ Mon, 22 Jul 2024 20:35:56 +0000 (UTC)
+Date: Mon, 22 Jul 2024 22:35:55 +0200
+To: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
+Message-ID: <20240722223555.521df7be@windsurf>
+In-Reply-To: <20240213123753.2471309-1-buildroot@bubu1.eu>
+References: <20240213123753.2471309-1-buildroot@bubu1.eu>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1721680481;
+ d=bootlin.com; s=gm1; t=1721680556;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=hJGfal+RhKp7OJbdlQiQzwsEyZGKBNgpUxhLSPwlFJ0=;
- b=ca2PQOREOIGR0uShS2vj0r4WoQ3OWcMLITNGzHZmoLY647u744MiZOtJ7Scf62hbuKpJPW
- Qs+d3VuKY3RsY3Rhvd8OqXs900dQZzcuqKwLw0nz9ZtxHgbfmTcRQvvXlxVBD1l0T/oSHm
- xGYon3lcUSvTESvKdsEGc9Uw3Sf9A1S+bIe2nO0RLhJ8Omrb6zZpYnQmbs+iqH7C/Reg63
- +a6eg6EJkd2rAI/ZwP/ziP2Cy9G5F+CEfs//zQ0zHkIWBpv+Q0zSdcl+cT1JAr6SgbHbL1
- myZMnahhLnJFJxZP4jkzn/ZCNESTN1PbzaSQvA+aHYlnWUs+9qqK/KhX3TwQLA==
+ bh=RnjeYPlFLP12cwNpeM/WmWKrw4qyNoxyqUHqeTgqplM=;
+ b=hLQej2OlyORTUBWon2Xw9lNcWn4vDy4AbcSGrA2DDpvod83+dI2Gc0ZiqbEtX3zCuDj7z+
+ 18T7d//gzVcdAKX9hjikCCvPruVNPwj/FyGxxSdW5XOjNXc4xILK1ULlIQhIBmRY6GlkSR
+ kHuJ9w4YOK62wloqFPXcCO4Jv9ie1ozOFg4o5RqTzqEZb27CXv5CUmjRgohHyZPnl3WTm9
+ FI2fXmZgh5lerGaGyaZA3bCAB0KI9y/HidSi/sM3grwJNY/ldWizC+yIWqhyjlcIDi3y3A
+ ayU05rcuBan8A/mC4Us0CrPeenuiG++xwQt1fzuNjzLEbN7PyzqwJ3IbZCNLKA==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=ca2PQORE
-Subject: Re: [Buildroot] 
- =?utf-8?q?=5BPATCH_1/2=5D_DEVELOPERS=3A_add_Fl=C3=A1?=
- =?utf-8?q?vio_Tapaj=C3=B3s_for_python-paho-mqtt?=
+ header.s=gm1 header.b=hLQej2Ol
+Subject: Re: [Buildroot] [PATCH 1/2] package/python-can/Config.in: sort
+ selects
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,19 +83,32 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Davide Viti <zinosat@gmail.com>, James Hilliard <james.hilliard1@gmail.com>,
- Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Asaf Kahlon <asafka7@gmail.com>, James Hilliard <james.hilliard1@gmail.com>,
+ Marcus Hoffmann <buildroot@bubu1.eu>,
+ Angelo Compagnucci <angelo.compagnucci@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gRnJpLCAyMyBGZWIgMjAyNCAxNzoxMzo1MyAtMDMwMApGbMOhdmlvIFRhcGFqw7NzIDxmbGF2
-aW8udGFwYWpvc0BuZXd0ZXNjLmNvbS5icj4gd3JvdGU6Cgo+IFNpZ25lZC1vZmYtYnk6IEZsw6F2
-aW8gVGFwYWrDs3MgPGZsYXZpby50YXBham9zQG5ld3Rlc2MuY29tLmJyPgo+IC0tLQo+ICBERVZF
-TE9QRVJTIHwgMSArCj4gIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKQoKQXBwbGllZCB0
-byBtYXN0ZXIsIHRoYW5rcy4KClRob21hcwotLSAKVGhvbWFzIFBldGF6em9uaSwgQ1RPLCBCb290
-bGluCkVtYmVkZGVkIExpbnV4IGFuZCBLZXJuZWwgZW5naW5lZXJpbmcKaHR0cHM6Ly9ib290bGlu
-LmNvbQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWls
-ZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMu
-YnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+On Tue, 13 Feb 2024 13:37:52 +0100
+Marcus Hoffmann via buildroot <buildroot@buildroot.org> wrote:
+
+> Sort python builtin modules before external python libs.
+> 
+> Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+> ---
+>  package/python-can/Config.in | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
