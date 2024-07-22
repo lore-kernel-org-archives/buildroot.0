@@ -1,94 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8837CC3DA5D
-	for <buildroot@archiver.kernel.org>; Sun, 21 Jul 2024 21:27:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 69E79C3DA5D
+	for <buildroot@archiver.kernel.org>; Mon, 22 Jul 2024 05:16:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3F41E600CB;
-	Sun, 21 Jul 2024 21:27:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7FE1C80C8C;
+	Mon, 22 Jul 2024 05:16:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id K8o2b2iyOpGr; Sun, 21 Jul 2024 21:26:59 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id lF64HA92RuMF; Mon, 22 Jul 2024 05:16:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4F740605D0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 039B680C5F
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4F740605D0;
-	Sun, 21 Jul 2024 21:26:59 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 2D6F01BF2FC
- for <buildroot@lists.busybox.net>; Sun, 21 Jul 2024 21:26:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 039B680C5F;
+	Mon, 22 Jul 2024 05:16:09 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 2C7A91BF2A6
+ for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 05:16:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 26E8E40319
- for <buildroot@lists.busybox.net>; Sun, 21 Jul 2024 21:26:57 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 273E880AB4
+ for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 05:16:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 49HnwbAljS6N for <buildroot@lists.busybox.net>;
- Sun, 21 Jul 2024 21:26:56 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42b; helo=mail-wr1-x42b.google.com;
- envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org B2B2B40314
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B2B2B40314
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com
- [IPv6:2a00:1450:4864:20::42b])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B2B2B40314
- for <buildroot@buildroot.org>; Sun, 21 Jul 2024 21:26:55 +0000 (UTC)
-Received: by mail-wr1-x42b.google.com with SMTP id
- ffacd0b85a97d-368440b073bso1573261f8f.0
- for <buildroot@buildroot.org>; Sun, 21 Jul 2024 14:26:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1721597213; x=1722202013;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=DTSHXS5jLrZwxaktG1dCmCwyjUcV+L2astcgEcLw/1c=;
- b=aZw5BwuL3pY6PJwvibdZXLtU3pwiv+FyWZApHstkGfzUSNHT+XHL/pCt07KBeIX2KE
- NLxFDoJYvbHxaaL9XKaGfLsHHqVU/MC5HwwCGLA7VZFG1Nj3b+jrkVYK9aYEwexR1rBE
- TqqS3Rn4/bKmfnjCQSwN8zuhUyGoI28LxOZ0wZNjSc4yz7g2gffuTiio+qniDsDql+Gs
- 6jpTxuIrk+5VLG5ZUZT1Tli2MEhVdQhP8KtH6otFSd+KQIf8GTdbsSffI4MxhAm9MDlM
- sDZqckPGjcahZVRh9SZSa/p43nak5zjjjdMkCkdKL7rG9lUF/eFR96rskHFhT+0hQB11
- sH1g==
-X-Gm-Message-State: AOJu0Yyk+NyFsyJyO3RD0Jr07o/VFEi2haoAG6Atb4YeNACr5fzUVVxa
- dvapUJ8gA+5DLMulNT3td6PgeYftv9K+7j+yIY+xWXitNceXqWzDHgzxPw==
-X-Google-Smtp-Source: AGHT+IGHHiHgVJ38sp84e4TszYlhA3qbiQl8SvZJIqbqAQXoE517ATgvjKaL+KzD5m+jAIFhGeSW9Q==
-X-Received: by 2002:adf:e5cc:0:b0:367:89ae:c204 with SMTP id
- ffacd0b85a97d-36873eccaf1mr4853353f8f.12.1721597213038; 
- Sun, 21 Jul 2024 14:26:53 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-785-215.w83-197.abo.wanadoo.fr.
- [83.197.112.215]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-427d8f1cf7esm91929965e9.39.2024.07.21.14.26.52
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 21 Jul 2024 14:26:52 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Sun, 21 Jul 2024 23:26:50 +0200
-Message-ID: <20240721212650.3542775-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.43.0
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zko276cxdwGE for <buildroot@lists.busybox.net>;
+ Mon, 22 Jul 2024 05:16:03 +0000 (UTC)
+Received-SPF: None (mailfrom) identity=mailfrom; client-ip=176.9.89.163;
+ helo=serv15.avernis.de; envelope-from=br015@umbiko.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 373B980C5F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 373B980C5F
+Received: from serv15.avernis.de (serv15.avernis.de [176.9.89.163])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 373B980C5F
+ for <buildroot@buildroot.org>; Mon, 22 Jul 2024 05:16:02 +0000 (UTC)
+Received: by serv15.avernis.de (Postfix) with ESMTPSA id B3971BDE2068;
+ Mon, 22 Jul 2024 07:15:54 +0200 (CEST)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1721597213; x=1722202013; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=DTSHXS5jLrZwxaktG1dCmCwyjUcV+L2astcgEcLw/1c=;
- b=JHiGTH6Tg+cB9k9RzRB/Hfdiy20nMoziVU4XYRQY26EUhkK9BN7NitM9p2qfago8SX
- BrvXzURGSih0yk34ncqTTAWa1Tef+ALU+TXiopMbpOUUrDyZUdECA1IagayCv8wJbURg
- ZjZanMLNZNNiIU2+3MwbI9rOlcgF/sKqsNpAlML14fPieyb0uNkn0OUj1eMoogxq25wq
- VgeiXU4U7WRfWqutxWuzXlwqjTa/PK9JuKTedzMYZCyYuYjFCQQTfpuyAfjZ/iioLcUJ
- y3m/JOLUKt1MzgJ72Te9jUpIufSw4TKj6PPGf2zRWPbDbjs/wkPqEwfEFovgNkgrtmcJ
- hx4g==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=JHiGTH6T
-Subject: [Buildroot] [PATCH 1/1] package/libbytesize: bump to version 2.10
+Date: Mon, 22 Jul 2024 05:15:54 +0000
+From: Andreas Ziegler <br015@umbiko.net>
+To: Frank Wunderlich <frank-w@public-files.de>
+In-Reply-To: <trinity-5801e483-666e-4366-b968-4217269be7be-1721590668238@3c-app-gmx-bap52>
+References: <mailman.12142.1721505316.24059.buildroot@buildroot.org>
+ <f49923df9029dfb3217cb858d0be4f69@umbiko.net>
+ <trinity-cf5cdaab-cad5-4928-9dea-541742606976-1721555640184@3c-app-gmx-bap52>
+ <e00d6149cbd2bd2a5a672fcf0323c814@umbiko.net>
+ <trinity-8bdeb9c9-9a2d-407f-80d0-c4bc0847cb82-1721577033740@3c-app-gmx-bap52>
+ <72a472b4614bd2ca6c652bfd6a2c171b@umbiko.net>
+ <trinity-5801e483-666e-4366-b968-4217269be7be-1721590668238@3c-app-gmx-bap52>
+Message-ID: <9a6b9a74e11902c4dcc0d6b88c12251a@umbiko.net>
+X-Sender: br015@umbiko.net
+X-Virus-Scanned: clamav-milter 1.0.5 at serv15.avernis.de
+X-Virus-Status: Clean
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=umbiko.net; s=mail; 
+ t=1721625354; bh=SPvhQ1nS9G1S3JLgHZK93i7un2KSlrI4KxNDTNRh1+4=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References;
+ b=3d7wMRD78OBNwmF1Cx90OPtmM8KIfnB1rrC1K0653FfLoqiipCt9gZanc1GiEhX7I
+ 0wlaPU3AFZrf61cYmPYruPghzY0S3cDCt7Tud5dsrrMHSXKXrfPvpfcSECEh5orDXX
+ 4Cj1MELzaezUraLDmOpvGenoF1VtB4Jag2fALaL8=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=umbiko.net
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=umbiko.net header.i=@umbiko.net header.a=rsa-sha256
+ header.s=mail header.b=3d7wMRD7
+Subject: Re: [Buildroot] lvm2 seems to require systemd
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,45 +80,262 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
+Cc: buildroot <buildroot@buildroot.org>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/storaged-project/libbytesize/blob/2.10/NEWS.rst
+Hi Frank,
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- package/libbytesize/libbytesize.hash | 2 +-
- package/libbytesize/libbytesize.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On 2024-07-21 19:37, Frank Wunderlich wrote:
+> Hi
+> 
+>> Gesendet: Sonntag, 21. Juli 2024 um 19:58 Uhr
+>> Von: "Andreas Ziegler" <br015@umbiko.net>
+>> An: "Frank Wunderlich" <frank-w@public-files.de>
+>> Cc: "buildroot" <buildroot@buildroot.org>
+>> Betreff: Re: Aw: Re:  Re: lvm2 seems to require systemd
+>> 
+>> Hi Frank,
+>> 
+>> On 2024-07-21 15:50, Frank Wunderlich wrote:
+>> > Hi Andreas
+>> >
+>> > noticed some errors when calling the vgchange command
+>> >
+>> > # /usr/sbin/lvm vgchange -aay --autoactivation event vg-nvme
+>> >   1 logical volume(s) in volume group "vg-nvme" now active
+>> > [ 8023.796866] udevd[1614]: failed to execute '/usr/sbin/blkid'
+>> > '/usr/sbin/blkid -o udev -p /dev/dm-0': No such file or directory
+>> > [ 8023.808977] udevd[1610]: conflicting device node
+>> > '/dev/mapper/vg--nvme-var' found, link to '/dev/dm-0' will not be
+>> > created
+>> > # lvscan
+>> >   ACTIVE            '/dev/vg-nvme/var' [10.00 GiB] inherit
+>> 
+>> Your execution of vgchange triggers additional udev messages, that are
+>> not handled correctly. Try to find out what is missing and add it to
+>> your image; blkid, for example, is part of package util-linux.
+> 
+> i have already enabled util_linux
+> Symbol: BR2_PACKAGE_UTIL_LINUX [=y]
+> BR2_PACKAGE_HOST_UTIL_LINUX [=y]
+> BR2_PACKAGE_UTIL_LINUX_LIBBLKID [=y]
+> 
+> so strange that blkid is not there, but it is in /sbin
+> 
+> # which blkid
+> /sbin/blkid
+> 
+> maybe a symlink needs to be created?
+> 
 
-diff --git a/package/libbytesize/libbytesize.hash b/package/libbytesize/libbytesize.hash
-index 7dd572842d..a52a2803e5 100644
---- a/package/libbytesize/libbytesize.hash
-+++ b/package/libbytesize/libbytesize.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  8bae8287af6ef5624c320f70defdcd84ddc0c2057d3b59a5871897f27697811e  libbytesize-2.7.tar.gz
-+sha256  1d1ce3be8ac59fd59511d0794c7327d5cf33f1e83496837b17e19ac49400cad1  libbytesize-2.10.tar.gz
- sha256  97bdc721d875501b6243a456333fdfdb1ab64d31c4da2554de845caf4674b946  LICENSE
-diff --git a/package/libbytesize/libbytesize.mk b/package/libbytesize/libbytesize.mk
-index a95ee08357..7f56cbcb79 100644
---- a/package/libbytesize/libbytesize.mk
-+++ b/package/libbytesize/libbytesize.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBBYTESIZE_VERSION = 2.7
-+LIBBYTESIZE_VERSION = 2.10
- LIBBYTESIZE_SITE = https://github.com/storaged-project/libbytesize/releases/download/$(LIBBYTESIZE_VERSION)
- LIBBYTESIZE_LICENSE = LGPL-2.1+
- LIBBYTESIZE_LICENSE_FILES = LICENSE
--- 
-2.43.0
+Sorry, my mistake: blkid is provided by busybox and busybox installs it 
+in /sbin. Since this is a Buildroot feature (unless you activate 
+BR2_ROOTFS_MERGED_USER), I would modify the udev rule.
 
+>> The double-dash in vg--nvme-var looks strange: is this intentional?
+> 
+> as you can see above i used only one dash in vg-nvme, not sure why 
+> another one was inserted here
+> 
+> # pvscan
+>   PV /dev/nvme0n1p5   VG vg-nvme   lvm2 [<1.79 TiB / <1.78 TiB free]
+>   Total: 1 [<1.79 TiB] / in use: 1 [<1.79 TiB] / in no VG: 0 [0   ]
+> 
+>> > but i'm able to mount it
+>> >
+>> > # mkdir /mnt/var
+>> > # mount /dev/mapper/vg--nvme-var /mnt/var/
+>> > [ 8514.687803] EXT4-fs (dm-0): mounted filesystem
+>> > be8b31d6-96e2-43a1-8416-a058972118b3 r/w with ordered data mode. Quota
+>> > mode: disabled.
+>> > # ls /mnt/var
+>> > cache       lib         log         lost+found  run         tmp
+>> > #
+>> >
+>> > how can i test the script? currently i'm in the initrd, so changing
+>> > anything will be lost on reboot, so i want to test the script before
+>> > putting it into the initrd.
+>> 
+>> I usually mount the target's file system via ssh://root@hostname in a
+>> file browser; that allows me to copy to and from the target machine.
+>> Script and configuration changes are made directly on the target 
+>> system,
+>> and copied back to the development machine when everything runs
+>> satisfactorily.
+>> 
+>> > as far as i see the original call via udev contains some
+>> > systemd-specific params and environment-vars i do not know currently
+>> 
+>> They are probably safe to ignore; when in doubt, consult the systemd
+>> documentation. Evironment variables are extensively used within the 
+>> udev
+>> context; I doubt that the called lvm2 tool makes use of them.
+> 
+> they seem to be systemd options which are not stripped by the script 
+> yet which
+> will result in invalid call (imho only first param is shifted away)
+> 
+
+RUN+="/usr/bin/systemd-run \
+   --no-block \
+   --property DefaultDependencies=no \
+   --unit lvm-activate-$env{LVM_VG_NAME_COMPLETE} \
+   /usr/sbin/lvm \
+   vgchange \
+   -aay \
+   -autoactivation \
+   event $env{LVM_VG_NAME_COMPLETE}"
+
+If you put a 'shift 5' at the beginning of the script, it should get rid 
+of the systemd parameters. Alternatively, you could modify the udev 
+rule.
+
+Kind regards,
+Andreas
+
+>> Kind regards,
+>> Andreas
+>> 
+>> >
+>> > regards Frank
+>> >
+>> >
+>> >> Gesendet: Sonntag, 21. Juli 2024 um 12:16 Uhr
+>> >> Von: "Andreas Ziegler" <br015@umbiko.net>
+>> >> An: "Frank Wunderlich" <frank-w@public-files.de>
+>> >> Cc: "buildroot" <buildroot@buildroot.org>
+>> >> Betreff: Re: Aw: Re: lvm2 seems to require systemd
+>> >>
+>> >> Hi Frank,
+>> >>
+>> >> On 2024-07-21 09:54, Frank Wunderlich wrote:
+>> >> > regards Frank
+>> >> >
+>> >> >
+>> >> >> Gesendet: Sonntag, 21. Juli 2024 um 11:17 Uhr
+>> >> >> Von: "Andreas Ziegler" <br015@umbiko.net>
+>> >> >> An: frank-w@public-files.de
+>> >> >> Cc: "buildroot" <buildroot@buildroot.org>
+>> >> >> Betreff: Re: lvm2 seems to require systemd
+>> >> >>
+>> >> >> Hi Frank,
+>> >> >>
+>> >> >> On 2024-07-20 14:34, Frank Wunderlich wrote:
+>> >> >> > Hi,
+>> >> >> >
+>> >> >> > i try to build a buildroot (2024.05) initrd with lvm2 support
+>> >> >> >
+>> >> >> > so basicly added these options:
+>> >> >> >
+>> >> >> > #to select BR2_PACKAGE_HAS_UDEV
+>> >> >> > BR2_PACKAGE_EUDEV=y
+>> >> >> > BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_EUDEV=y
+>> >> >> > BR2_PACKAGE_LIBBLOCKDEV=y
+>> >> >> > BR2_PACKAGE_LVM2=y
+>> >> >> >
+>> >> >> > build is fine, but i see this while bootup:
+>> >> >> >
+>> >> >> > [    3.665010] udevd[1520]: failed to execute '/usr/bin/systemd-run'
+>> >> >> > '/usr/bin/systemd-run --no-block --property DefaultDependencies=
+>> >> >> > no --unit lvm-activate-vg-nvme /usr/sbin/lvm vgchange -aay
+>> >> >> > --autoactivation event vg-nvme': No such file or directory
+>> >> >> > done
+>> >> >>
+>> >> >> lvm2 installs a bunch of udev rules; one of them relies on systemd-run
+>> >> >> to execute a command in the background:
+>> >> >>
+>> >> >> # pvscan will check if this device completes a VG,
+>> >> >> # i.e. all PVs in the VG are now present with the
+>> >> >> # arrival of this PV.  If so, it prints to stdout:
+>> >> >> # LVM_VG_NAME_COMPLETE='foo'
+>> >> >> #
+>> >> >> # When the VG is complete it can be activated, so
+>> >> >> # vgchange -aay <vgname> is run.  It is run via
+>> >> >> # systemd since it can take longer to run than
+>> >> >> # udev wants to block when processing rules.
+>> >> >> # (if there are hundreds of LVs to activate,
+>> >> >> # the vgchange can take many seconds.)
+>> >> >>
+>> >> >> ...
+>> >> >>
+>> >> >> IMPORT{program}="/usr/sbin/lvm pvscan --cache --listvg --checkcomplete
+>> >> >> --vgonline --autoactivation event --udevoutput --journal=output
+>> >> >> $env{DEVNAME}"
+>> >> >> ENV{LVM_VG_NAME_COMPLETE}=="?*", RUN+="/usr/bin/systemd-run --no-block
+>> >> >> --property DefaultDependencies=no --unit
+>> >> >> lvm-activate-$env{LVM_VG_NAME_COMPLETE} /usr/sbin/lvm vgchange -aay
+>> >> >> --autoactivation event $env{LVM_VG_NAME_COMPLETE}"
+>> >> >> GOTO="lvm_end"
+>> >> >>
+>> >> >> > i see the physical volume, but logical volumes are disabled
+>> >> >> >
+>> >> >> > # pvscan
+>> >> >> >   PV /dev/nvme0n1p5   VG vg-nvme   lvm2 [<1.79 TiB / <1.78 TiB free]
+>> >> >> >   Total: 1 [<1.79 TiB] / in use: 1 [<1.79 TiB] / in no VG: 0 [0   ]
+>> >> >> > # vgscan
+>> >> >> >   Found volume group "vg-nvme" using metadata type lvm2
+>> >> >> > # lvscan
+>> >> >> >   inactive          '/dev/vg-nvme/var' [10.00 GiB] inherit
+>> >> >> >
+>> >> >> > and so i cannot mount the logical volume
+>> >> >> >
+>> >> >> > # mount /dev/vg-nvme/var /mnt
+>> >> >> > [  281.006375] /dev/vg-nvme/var: Can't lookup blockdev
+>> >> >> > [  281.011279] /dev/vg-nvme/var: Can't lookup blockdev
+>> >> >> > [  281.016202] /dev/vg-nvme/var: Can't lookup blockdev
+>> >> >> > [  281.021080] /dev/vg-nvme/var: Can't lookup blockdev
+>> >> >> > mount: mounting /dev/vg-nvme/var on /mnt failed: No such file or
+>> >> >> > directory
+>> >> >> >
+>> >> >> > any ideas?
+>> >> >>
+>> >> >> I would try to run vgchange manually to see if the setup works at all,
+>> >> >> then create a /usr/bin/systemd-run script that is able to execute
+>> >> >> commands in the background. Something like this (untested):
+>> >> >
+>> >> > i was able to manually initialize the lvm value after adding the
+>> >> > systemd without init (running the command without prefix
+>> >> > "systemd-run")...
+>> >> >
+>> >> > basicly with this command:
+>> >> >
+>> >> > /usr/sbin/lvm vgchange -aay --autoactivation event vg-nvme
+>> >> >
+>> >> > with init i had compile issues missing libmount, see my followup post
+>> >> >
+>> >> > now i have to remove systems from my initrd somehow to do further
+>> >> > testing with only the eudev. any idea doing this without making all
+>> >> > clear (or is this dropped when recreating the cpio file)?
+>> >>
+>> >> Without running make clean, unwanted files need to be removed
+>> >> manually.
+>> >> Buildroot creates per-package logs .files-list,
+>> >> .files-list-{host,images,staging}, which contain the names of files
+>> >> copied to the respective destination. Remove at least those from
+>> >> .files-list to revert to a system without the package; preferrably
+>> >> also
+>> >> those from .files-list-staging.
+>> >>
+>> >> Kind regards,
+>> >> Andreas
+>> >>
+>> >> >
+>> >> >>    #!/bin/sh
+>> >> >>    prg=$1
+>> >> >>    shift
+>> >> >>    (
+>> >> >>      $prg $@ < /dev/zero > /tmp/error.log 2>&1
+>> >> >>    )&
+>> >> >
+>> >> >> Kind regards,
+>> >> >> Andreas
+>> >> >>
+>> >> >> > regards Frank
+>> >>
+>> 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
