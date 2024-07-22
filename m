@@ -4,72 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4FB87C3DA59
-	for <buildroot@archiver.kernel.org>; Mon, 22 Jul 2024 13:12:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D66BC3DA5D
+	for <buildroot@archiver.kernel.org>; Mon, 22 Jul 2024 13:12:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0FBE84023E;
-	Mon, 22 Jul 2024 13:12:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E3E6E4023D;
+	Mon, 22 Jul 2024 13:12:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KgEMjTMJm_-A; Mon, 22 Jul 2024 13:12:01 +0000 (UTC)
+ id mutF5Xew_l2K; Mon, 22 Jul 2024 13:12:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BD8F840238
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9F14540250
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BD8F840238;
-	Mon, 22 Jul 2024 13:12:00 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 749E01BF2A3
- for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 13:11:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9F14540250;
+	Mon, 22 Jul 2024 13:12:52 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id E3ACD1BF2A3
+ for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 13:12:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6FC64605D4
- for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 13:11:59 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id DDDD9400D2
+ for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 13:12:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id klukfkSh4tNY for <buildroot@lists.busybox.net>;
- Mon, 22 Jul 2024 13:11:58 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::228;
- helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tOHVgZbjld4Y for <buildroot@lists.busybox.net>;
+ Mon, 22 Jul 2024 13:12:30 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::221;
+ helo=relay1-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 2B9EB605A9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2B9EB605A9
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::228])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2B9EB605A9
- for <buildroot@buildroot.org>; Mon, 22 Jul 2024 13:11:57 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 36DE31BF207;
- Mon, 22 Jul 2024 13:11:55 +0000 (UTC)
-Date: Mon, 22 Jul 2024 15:11:54 +0200
-To: Brandon Maier via buildroot <buildroot@buildroot.org>
-Message-ID: <20240722151154.0bb0fbf5@windsurf>
-In-Reply-To: <20240712-pytest-qemu-prompt-detection-v2-1-273b85382796@collins.com>
-References: <20240712-pytest-qemu-prompt-detection-v2-1-273b85382796@collins.com>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 7C846400C6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7C846400C6
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 7C846400C6
+ for <buildroot@buildroot.org>; Mon, 22 Jul 2024 13:12:30 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 878E3240009;
+ Mon, 22 Jul 2024 13:12:27 +0000 (UTC)
+Date: Mon, 22 Jul 2024 15:12:26 +0200
+To: Julien Olivain <ju.o@free.fr>
+Message-ID: <20240722151226.3c9a3514@windsurf>
+In-Reply-To: <20240720173834.302209-1-ju.o@free.fr>
+References: <20240720173834.302209-1-ju.o@free.fr>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1721653915;
+ d=bootlin.com; s=gm1; t=1721653947;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=uvdb6gahhC9mwwAiKHdahn34BwdIfmA9JJZuX0sCPjQ=;
- b=gVMl+vj0iVy0Yc2R7J9sj10jJyZFONniTbSu1G3BYXg6wPRAdmiVtviKbcEDoJ9nAC9TuW
- IhYWg6zvOQekuX/+zkQjjxWH8uYXLR3EY6tNH+ELZvnw0f/7k5vTvd9MJU93sTWmpV7j0g
- TXxN2gIt8MFzp20u4VEudDbbn0QtMV4Zd7+JIecRaMN3fQydPu1OqJ5dM1jZCzWX8FXFdp
- IsZ/toVVzU11qtTnlUbz51ZlJU8dCw1ymMD5ztTEG2v5SQVRJZkZkZVIlCCTrLJ6b8nioa
- DgtM/6bUm08eHifTSTACnjNjedXeX5G/TjHZctEa5COL+fTeYlYcsOwBHAw7pA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=NVtfLCP064qr/jileGELmbWmEs5i+ZFmAPZIJix2avo=;
+ b=N72TGzsm49Zqc0NE3sByLAGcCWQ13Oaqeb9veGybvnLPp0GR76THOz9PjeN5W8Jj2JSvif
+ nhiAH7ZKO0d63Vz92q42C2SHM0+jtsE+c9UJbTI9nom3wXphvwZ+yPZZhJyoe2N5Dh3m6B
+ 0m0jKBUbQKZpxatAYs84a+xXJn1uDxTxs66ZPWLJCSRGNFTSzP6cU/TYLzXEyI9lfyjJ1F
+ c9XikVvK3gmRmTcfdGAuf1KbYpTKCq+cUpoFDPcyw18m8+iClPoGLDIwsB6UlLCr7YlsW4
+ XF21wPRv0hrBbS6gnwE7HnOBehbsLy+6n5J720Y7bgaLW28O9OfUdIiop1lg+Q==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=gVMl+vj0
-Subject: Re: [Buildroot] [PATCH v2] support/testing/infra/emulator.py: fix
- qemu prompt detection
+ header.s=gm1 header.b=N72TGzsm
+Subject: Re: [Buildroot] [PATCH 1/1] support/testing: add gpsd runtime
+ testing
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,49 +83,31 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Julien Olivain <ju.o@free.fr>,
- Ricardo Martincoski <ricardo.martincoski@datacom.com.br>,
- Brandon Maier <brandon.maier@collins.com>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri, 12 Jul 2024 19:31:04 +0000
-Brandon Maier via buildroot <buildroot@buildroot.org> wrote:
+On Sat, 20 Jul 2024 19:38:34 +0200
+Julien Olivain <ju.o@free.fr> wrote:
 
-> From: Brandon Maier via buildroot <buildroot@buildroot.org>
-> 
-> The qemu.run() method can break when a command happens to output the
-> string "# " to stdout. This is because qemu.run() detects when a command
-> has completed by searching for the shell prompt, which by default is
-> "# ". It then captures everything before the "# " as the commands
-> output, causing the rest of output to be lost.
-> 
-> Instead use the pexpect libraries REPLWrapper to handle running
-> commands. It has hooks to set a custom prompt and avoid some other
-> pitfalls of wrapping a shell.
-> 
-> Signed-off-by: Brandon Maier <brandon.maier@collins.com>
+> Signed-off-by: Julien Olivain <ju.o@free.fr>
 > ---
-> I tested this against a couple tests and test_bash.py which Yann noticed
-> is special in Julian patch series. I am running a full test run but
-> that will take awhile, so sending this in the meantime for review.
+>  DEVELOPERS                                    |  2 +
+>  support/testing/tests/package/test_gpsd.py    | 56 +++++++++++++++++++
+>  .../rootfs-overlay/root/udp-nmea.log          |  6 ++
+>  3 files changed, 64 insertions(+)
+>  create mode 100644 support/testing/tests/package/test_gpsd.py
+>  create mode 100644 support/testing/tests/package/test_gpsd/rootfs-overlay/root/udp-nmea.log
 
-It seems like this change has broken one test:
+Our CI is apparently not happy with this new test:
 
-  https://gitlab.com/buildroot.org/buildroot/-/jobs/7391792869
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/7391792948
 
-Traceback (most recent call last):
-  File "/builds/buildroot.org/buildroot/support/testing/tests/init/test_none.py", line 26, in test_run
-    out, exit_code = self.emulator.run("sh -c 'echo $PPID'")
-  File "/builds/buildroot.org/buildroot/support/testing/infra/emulator.py", line 153, in run
-    output = self.repl.run_command(cmd, timeout=timeout)
-AttributeError: 'NoneType' object has no attribute 'run_command'
+Could you perhaps have a look?
 
-Could you have a look perhaps?
-
-Thanks a lot!
+Thanks!
 
 Thomas
 -- 
