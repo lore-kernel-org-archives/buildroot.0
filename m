@@ -4,49 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 54E53C3DA5D
-	for <buildroot@archiver.kernel.org>; Mon, 22 Jul 2024 12:15:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DBE47C3DA59
+	for <buildroot@archiver.kernel.org>; Mon, 22 Jul 2024 12:15:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 16B4540187;
-	Mon, 22 Jul 2024 12:15:46 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A413840284;
+	Mon, 22 Jul 2024 12:15:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bH6rZ66CEWpQ; Mon, 22 Jul 2024 12:15:44 +0000 (UTC)
+ id Ta55nQ9nVDzg; Mon, 22 Jul 2024 12:15:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ADB0D40284
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7563A4096F
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id ADB0D40284;
-	Mon, 22 Jul 2024 12:15:44 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6C1A61BF2A1
- for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 12:15:43 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7563A4096F;
+	Mon, 22 Jul 2024 12:15:49 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 8BC181BF2A1
+ for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 12:15:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6564A40284
- for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 12:15:43 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8579A4010B
+ for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 12:15:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LHCVrOmGfExi for <buildroot@lists.busybox.net>;
- Mon, 22 Jul 2024 12:15:42 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id befTaBkfEnGu for <buildroot@lists.busybox.net>;
+ Mon, 22 Jul 2024 12:15:47 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.198;
+ helo=relay6-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5089440187
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5089440187
- for <buildroot@buildroot.org>; Mon, 22 Jul 2024 12:15:42 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3DD6386FDA; Mon, 22 Jul 2024 12:15:42 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 22 Jul 2024 14:15:29 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d30c1e3c582545a770d40a63be5b7b477d6b1cba
-X-Git-Newrev: 3c9a5cee94ee767272290e071bf8bd3e7b98fda8
-X-Patchwork-Hint: ignore
-Message-Id: <20240722121542.3DD6386FDA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/mpd: rebase init script on layout
- introduced by openssh
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 290CA40106
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 290CA40106
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [217.70.183.198])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 290CA40106
+ for <buildroot@buildroot.org>; Mon, 22 Jul 2024 12:15:46 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id C9998C0007;
+ Mon, 22 Jul 2024 12:15:44 +0000 (UTC)
+Date: Mon, 22 Jul 2024 14:15:44 +0200
+To: Andreas Ziegler <br015@umbiko.net>
+Message-ID: <20240722141544.488781ce@windsurf>
+In-Reply-To: <20240721173604.13824-1-br015@umbiko.net>
+References: <20240721182342.6403c1d7@windsurf>
+ <20240721173604.13824-1-br015@umbiko.net>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1721650545;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=EoMHazuEBNi25Yq1W/1PZlk2epSAR/vCSBHajCFG/3M=;
+ b=ez1kEp6yzUnW8NczuIusSTfzPqHxMSj5SlChLIJvkiYrWXqavNd66GPm8+b/hQRedlo9kH
+ L/TCA7gI1zj45uP79Dlcce7QeTmdngUAXz3UeVlc+zQunLXIofNexoqUxiYpLzMpf5O2lL
+ 94u2sxAwsn08RAUNFjVm+t+0fCIWgp2Pqvf7eQO5a+ShinjJN8cIhk1vHxcXj332zPlV6R
+ Wc6Ua8E28I1vTLJ6Ak2tAaAoCaOS1wzfz8VHXYuZVCa5PCSW+Fq7Io499Oej2zTdio4eit
+ PE3YhDF/xPgDYJC0h/eMjgpmmyAbT9ufZaDoH67pEtNO7WrwxPDqnurMKa+UaQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=ez1kEp6y
+Subject: Re: [Buildroot] [PATCH v2] package/mpd: rebase init script on
+ layout introduced by openssh
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,126 +84,35 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3c9a5cee94ee767272290e071bf8bd3e7b98fda8
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sun, 21 Jul 2024 19:36:04 +0200
+Andreas Ziegler <br015@umbiko.net> wrote:
 
-Rebase S95mpd on commit 1f743f4 (package/openssh: tidy up init script)
+> Rebase S95mpd on commit 1f743f4 (package/openssh: tidy up init script)
+> 
+> $ utils/check-package package/mpd/S95mpd 
+> 61 lines processed
+> 0 warnings generated
+> 
+> (smoke test on live system)
+> 
+> Signed-off-by: Andreas Ziegler <br015@umbiko.net>
+> ---
+> Changes v1 -> v2
+>  - use --pidfile in startup of service [Thomas Petazzoni]
 
-$ utils/check-package package/mpd/S95mpd
-61 lines processed
-0 warnings generated
+Applied to master, thanks.
 
-(smoke test on live system)
-
-Signed-off-by: Andreas Ziegler <br015@umbiko.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- .checkpackageignore |  1 -
- package/mpd/S95mpd  | 64 ++++++++++++++++++++++++++++++++++++++---------------
- 2 files changed, 46 insertions(+), 19 deletions(-)
-
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 905d14178f..5d5919340c 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -947,7 +947,6 @@ package/mono/0002-Ongoing-work-on-the-cmake-build.patch lib_patch.Upstream
- package/mosquitto/S50mosquitto Shellcheck lib_sysv.Indent lib_sysv.Variables
- package/motion/S99motion Shellcheck lib_sysv.Indent lib_sysv.Variables
- package/mpd/0001-src-event-meson.build-add-atomic-dependency-for-spar.patch lib_patch.Upstream
--package/mpd/S95mpd lib_sysv.Variables
- package/mpir/0001-mpn-arm-udiv.asm-workaround-binutils-bug-14887.patch lib_patch.Upstream
- package/mpv/0001-fix-powerpc64-altivec.patch lib_patch.Upstream
- package/mraa/0001-include-Declare-gVERSION-global-as-extern.patch lib_patch.Upstream
-diff --git a/package/mpd/S95mpd b/package/mpd/S95mpd
-index a258930b3e..ac971e04a2 100644
---- a/package/mpd/S95mpd
-+++ b/package/mpd/S95mpd
-@@ -1,33 +1,61 @@
- #!/bin/sh
-+#
-+# S95mpd	Starts Music Player daemon.
-+#
-+# shellcheck disable=SC2317 # functions are called via variable
-+
-+DAEMON="mpd"
-+PIDFILE="/var/run/$DAEMON.pid"
- 
- # Sanity checks
--test -f /etc/mpd.conf || exit 0
-+[ -f /etc/$DAEMON.conf ] || exit 0
- 
- start() {
--	printf "Starting mpd: "
--	start-stop-daemon --start --quiet --background --exec /usr/bin/mpd \
--		&& echo "OK" || echo "FAIL"
-+	printf "Starting %s: " "$DAEMON"
-+	start-stop-daemon --start --pidfile "$PIDFILE" \
-+		--exec "/usr/bin/$DAEMON"
-+	status=$?
-+	if [ "$status" -eq 0 ]; then
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+	fi
-+	return "$status"
- }
- 
- stop() {
--	printf "Stopping mpd: "
--	start-stop-daemon --stop --quiet --pidfile /var/run/mpd.pid \
--		&& echo "OK" || echo "FAIL"
-+	printf "Stopping %s: " "$DAEMON"
-+	start-stop-daemon --stop --pidfile "$PIDFILE" \
-+		--exec "/usr/bin/$DAEMON"
-+	status=$?
-+	if [ "$status" -eq 0 ]; then
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+	fi
-+	# $DAEMON deletes its PID file on exit, wait for it to be gone
-+	while [ -f "$PIDFILE" ]; do
-+		sleep 0.1
-+	done
-+	return "$status"
-+}
-+
-+restart() {
-+	stop
-+	start
-+}
-+
-+reload() {
-+	restart
- }
- 
- case "$1" in
--	start)
--		start
--		;;
--	stop)
--		stop
--		;;
--	restart|reload)
--		stop
--		sleep 1
--		start
-+	start|stop|reload|restart)
-+		"$1"
- 		;;
- 	*)
--		echo "Usage: $0 {start|stop|restart}"
-+		echo "Usage: $0 {start|stop|reload|restart}"
- 		exit 1
- esac
-+
-+exit $?
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
