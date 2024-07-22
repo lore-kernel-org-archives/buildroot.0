@@ -4,71 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 05A7AC3DA5D
-	for <buildroot@archiver.kernel.org>; Mon, 22 Jul 2024 12:06:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9655DC3DA59
+	for <buildroot@archiver.kernel.org>; Mon, 22 Jul 2024 12:07:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A72594070F;
-	Mon, 22 Jul 2024 12:06:06 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5970A400D2;
+	Mon, 22 Jul 2024 12:07:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9LCbyfIRaxfD; Mon, 22 Jul 2024 12:06:05 +0000 (UTC)
+ id 96EhQJSXDk3I; Mon, 22 Jul 2024 12:07:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BEA6F408BF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2B2C340437
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BEA6F408BF;
-	Mon, 22 Jul 2024 12:06:05 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 068D81BF2A1
- for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 12:06:04 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2B2C340437;
+	Mon, 22 Jul 2024 12:07:28 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id E17741BF2A1
+ for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 12:07:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DA56880C66
- for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 12:06:01 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id CE7634025F
+ for <buildroot@lists.busybox.net>; Mon, 22 Jul 2024 12:07:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ev5x_CC_fAxK for <buildroot@lists.busybox.net>;
- Mon, 22 Jul 2024 12:06:01 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
- helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id FdmcVY-tZK_T for <buildroot@lists.busybox.net>;
+ Mon, 22 Jul 2024 12:07:24 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::224;
+ helo=relay4-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org C1B9E80C45
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C1B9E80C45
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C1B9E80C45
- for <buildroot@buildroot.org>; Mon, 22 Jul 2024 12:06:00 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 6A354FF804;
- Mon, 22 Jul 2024 12:05:57 +0000 (UTC)
-Date: Mon, 22 Jul 2024 14:05:56 +0200
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20240722140556.24233927@windsurf>
-In-Reply-To: <20240722104859.1092677-1-fontaine.fabrice@gmail.com>
-References: <20240722104859.1092677-1-fontaine.fabrice@gmail.com>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 666BA4024A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 666BA4024A
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::224])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 666BA4024A
+ for <buildroot@buildroot.org>; Mon, 22 Jul 2024 12:07:23 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id D7014E0002;
+ Mon, 22 Jul 2024 12:07:20 +0000 (UTC)
+Date: Mon, 22 Jul 2024 14:07:20 +0200
+To: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
+Message-ID: <20240722140720.16c78ed1@windsurf>
+In-Reply-To: <20240722111123.1256111-1-buildroot@bubu1.eu>
+References: <20240722111123.1256111-1-buildroot@bubu1.eu>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1721649957;
+ d=bootlin.com; s=gm1; t=1721650041;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=FiVvZPFiG310ZfiTfVSDs3su+7+Ug4jqXdlB3wTvSeM=;
- b=Qw2g0Hl7g4s06Kxbv0FqV/XD4eBOb6NiqYOVCQX8XzkUuO74IZYRMU4UgWw8/hQ3/pRxJt
- 7sRgvPzDBWyrWzNbyooOlwVovXONc7MGlRZtfmQF9PSNdZN1JZ5B1hKAthUmF3AaoNc41A
- git5KP46WmlsuoIUOabxgvWW441OiZ0EIVYebVl9jzSJPJMZ5kZ0LFTmYsbZgsVVAXpr/w
- kYRLj+GBIGgQ61rkD88qpwZCFnSNqjO0Ois+YtaCG93aM3QiWHFp6cQAWQsVZlsZ4MDxxa
- 6iZkJ66XSTyxeFZK1uGzLBwe4wJth/hjLJWrDY5o9Q7RYGcJ5nTpsgFu+bAUqw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=hOorbubWWDRFuFGczSMZUblRqL2FVIySp6zkYa9tBiw=;
+ b=I48EcL8wLIjfze257YdrBnrmGNbI4QZPiiV2hbo3IJ/26UM7Jl+kzq3CAksvLWD4rLlpUQ
+ syHt++YWTjG0ePAuimBH3wjoOL7IDbJoUBYPYhQ167Pb6+Fo5LkS0gD2ZqcLT88LBL6EQm
+ dnX0xKR8eJewnU1aSYATJXz86UhA+/Cm1iE054Q8QuD1Nc/dtCxhTZ4oNJPLVXfbhZSg3a
+ 3LGu3ud/sw9UyakANn0Mb17dFzGL+MyJ3RfoH+c2tl8wOn7zAJ2WydwDyFDKAMQ+VCjwTg
+ kFgmn4MvUKbQP/Gl+71e1RwjRD3ldSfI7aZbdjcnxuv09Jyn015JsziivWZWAg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Qw2g0Hl7
-Subject: Re: [Buildroot] [PATCH 1/1] package/apr: fix musl build
+ header.s=gm1 header.b=I48EcL8w
+Subject: Re: [Buildroot] [PATCH] package/python-uvicorn: bump to 0.30.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,45 +82,33 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ Marcus Hoffmann <buildroot@bubu1.eu>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, 22 Jul 2024 12:48:59 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+On Mon, 22 Jul 2024 13:11:23 +0200
+Marcus Hoffmann via buildroot <buildroot@buildroot.org> wrote:
 
-> strerror_r on musl always returns an int since its addition back in 2011
-> with
-> https://git.musl-libc.org/cgit/musl/commit/src/string/strerror_r.c?id=0b44a0315b47dd8eced9f3b7f31580cf14bbfc01
+> Changelog:
 > 
-> As a result, setting ac_cv_strerror_r_rc_int to no results in the
-> following build failure since bump to version 1.7.2 in commit
-> 783cd8d90d37b5e0b59d6f0bfca6667855b2b9e1:
+> * https://github.com/encode/uvicorn/releases/tag/0.30.3
+> * https://github.com/encode/uvicorn/releases/tag/0.30.2
 > 
-> misc/unix/errorcodes.c: In function 'native_strerror':
-> misc/unix/errorcodes.c:385:9: error: assignment to 'const char *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
->   385 |     msg = strerror_r(statcode, buf, bufsize);
->       |         ^
-> 
-> Fixes: 783cd8d90d37b5e0b59d6f0bfca6667855b2b9e1
->  - http://autobuild.buildroot.org/results/9a42a4427ff64d47da61c731abb99d7585781cdd
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+> ---
+>  package/python-uvicorn/python-uvicorn.hash | 4 ++--
+>  package/python-uvicorn/python-uvicorn.mk   | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
-Actually, wouldn't it make sense to modify the APR_CHECK_STRERROR_R_RC
-test so that it doesn't need AC_TRY_RUN() ? I guess by building a
-program that expects strerror_r() to return an int and see if it
-compiles without errors (with -Werror), it should allow finding out if
-strerror_r() returns an int or a char* without AC_TRY_RUN. This would
-allow the test to work for cross-compilation, without having to
-explicitly feed a ac_cv_strerror_r_rc_int value.
+Applied to master, thanks.
 
 Thomas
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
 https://bootlin.com
 _______________________________________________
 buildroot mailing list
