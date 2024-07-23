@@ -4,91 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 965B9C3DA49
-	for <buildroot@archiver.kernel.org>; Tue, 23 Jul 2024 20:53:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 47D2EC3DA63
+	for <buildroot@archiver.kernel.org>; Tue, 23 Jul 2024 20:55:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 500D460790;
-	Tue, 23 Jul 2024 20:53:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 857BA6066E;
+	Tue, 23 Jul 2024 20:55:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id C_lvGw79Xumo; Tue, 23 Jul 2024 20:53:15 +0000 (UTC)
+ id 0XlX2qmK7lUL; Tue, 23 Jul 2024 20:55:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 61683606AA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9303E606BD
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 61683606AA;
-	Tue, 23 Jul 2024 20:53:15 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A5EAC1BF27E
- for <buildroot@lists.busybox.net>; Tue, 23 Jul 2024 20:53:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9303E606BD;
+	Tue, 23 Jul 2024 20:55:54 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 75CB41BF27E
+ for <buildroot@lists.busybox.net>; Tue, 23 Jul 2024 20:55:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8F19E4035C
- for <buildroot@lists.busybox.net>; Tue, 23 Jul 2024 20:53:13 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 704C5606BD
+ for <buildroot@lists.busybox.net>; Tue, 23 Jul 2024 20:55:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gYq3F7Ra8rOm for <buildroot@lists.busybox.net>;
- Tue, 23 Jul 2024 20:53:12 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6ri_dkjpfINi for <buildroot@lists.busybox.net>;
+ Tue, 23 Jul 2024 20:55:51 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::431; helo=mail-wr1-x431.google.com;
+ client-ip=2a00:1450:4864:20::336; helo=mail-wm1-x336.google.com;
  envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 3B37B405AB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3B37B405AB
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
- [IPv6:2a00:1450:4864:20::431])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 3B37B405AB
- for <buildroot@buildroot.org>; Tue, 23 Jul 2024 20:53:12 +0000 (UTC)
-Received: by mail-wr1-x431.google.com with SMTP id
- ffacd0b85a97d-368f92df172so2836865f8f.2
- for <buildroot@buildroot.org>; Tue, 23 Jul 2024 13:53:11 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 7522C6066E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7522C6066E
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
+ [IPv6:2a00:1450:4864:20::336])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7522C6066E
+ for <buildroot@buildroot.org>; Tue, 23 Jul 2024 20:55:51 +0000 (UTC)
+Received: by mail-wm1-x336.google.com with SMTP id
+ 5b1f17b1804b1-42797289c8bso45096435e9.0
+ for <buildroot@buildroot.org>; Tue, 23 Jul 2024 13:55:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1721767990; x=1722372790;
+ d=1e100.net; s=20230601; t=1721768149; x=1722372949;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=zFaJlm3Yg2OFC+Kx0BuM45pFHG/inKSufD45mxX331s=;
- b=QceWT34VwUfTj4bVbyFH0S8U3j++ozSuEQ/vyb2h3wfX3tx1rIldQ71ZhAJbBUOcqU
- 3VQgHYEaHSsdPDHifmEH0SDoaTKd4/rgrcerdQLQkQmwWSh8uBtSCqS4Sprdz5A2Stoc
- CCqNz41reQAwSX+CBhkD0ugUVnHgfI/pJSrokf1EeKwr2MsEnfVNAtWdWeb4XvBCiP1o
- H5UjumGY1bKDxkFPr7XtajWAoLM1ZcGdoAa6vl0d4AIQIgA9znwkRBWBA49OLODdYH2a
- 3XZbdN4z7YkJwAQZ6rvglim24NYvFgOwysnYpMPBUB1nZIrdzfHMVOavRXbeatECjtNj
- Eh/g==
-X-Gm-Message-State: AOJu0YxvT1KvLPBbEiiqlZ/2jhxRuvXA1qqyC7SNXjwHUtY7nN3qcyZO
- GwbxkQUnQGxeVkygBOdDTDbLTypVHTt7f+9qIHyu835e6T7cJTot8y26rA==
-X-Google-Smtp-Source: AGHT+IEDNrco+952096M8Qb1CmKj4kk0BmuNtRO7weE3AOym97xu8RvzcddEWlwSI5YvaTXitlSu9Q==
-X-Received: by 2002:adf:f042:0:b0:368:71fa:7532 with SMTP id
- ffacd0b85a97d-369f5b34ef7mr56057f8f.31.1721767989631; 
- Tue, 23 Jul 2024 13:53:09 -0700 (PDT)
+ bh=n891e6AE3QwFzVBSQI3sKyKmqZBnm7cDJMbv7IqxDSU=;
+ b=sGaZyFhM0TWjGSESN7M4qA/6kf22/0FbgHLDFHATjxpXuPH0bA63/laVJkTWgs+Pi2
+ MLZlMdCNp7cvJVMs+GWF3KA1/sdB/XqPSuLYx9pwvoYtXETOVJtAgE2tQmKvVCblxcwy
+ jPhGbGfunBpye0zVh0iKc8/ki77saumafK21P/2Xe5wsTkocRBU8A4ya89wWmkAnsOfn
+ phd3jEkqs+wV+BjXGVChZNUgbF7S8KhmBa4q40pcHmmAaP+Q0ufJybAOE2WRph9oajis
+ yFC5/RX0fpInNrTRe+qjJvEZY4WY7WYCuizS2HmTNdISSmjs2nTn54ODdWh18zwE/3RM
+ 7wug==
+X-Gm-Message-State: AOJu0YxR3SBoNqlkzc4RsbDaT0sMBGbGlVxbaacFPBlouOE+loyCtWez
+ Z4g+47jW8fbalo/g+aU7JgfsxDRKdv14EeaMpahHURmj8jNJx2U2mYxgzg==
+X-Google-Smtp-Source: AGHT+IFVXGdyQR+GadaLxSHOkCeI86Fn4QsjcMQ1mrhEJu0Cs2XRdOjejaYsjROTiForpTNRFwSKwQ==
+X-Received: by 2002:a5d:61c9:0:b0:367:9522:5e6b with SMTP id
+ ffacd0b85a97d-369f5af3870mr49844f8f.45.1721768148609; 
+ Tue, 23 Jul 2024 13:55:48 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-785-215.w83-197.abo.wanadoo.fr.
  [83.197.112.215]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-368787cedcdsm12431784f8f.83.2024.07.23.13.53.09
+ ffacd0b85a97d-36878694ba0sm12463362f8f.61.2024.07.23.13.55.48
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 23 Jul 2024 13:53:09 -0700 (PDT)
+ Tue, 23 Jul 2024 13:55:48 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 23 Jul 2024 22:53:06 +0200
-Message-ID: <20240723205306.672381-1-fontaine.fabrice@gmail.com>
+Date: Tue, 23 Jul 2024 22:55:43 +0200
+Message-ID: <20240723205543.674164-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1721767990; x=1722372790; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1721768149; x=1722372949; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=zFaJlm3Yg2OFC+Kx0BuM45pFHG/inKSufD45mxX331s=;
- b=fBrk3q76Dtcb0g+fORQgqyuymtZQdOXoBYbqyYc3nSzAtypZVII4P4iuEaUVD45eso
- 4kVEbjk2/WF1hRL6cIHAG5JrZotF+lkk3d7t+wLYbLCQTCqr4KqW5UICnf6GaOJmUCiO
- PQQr284sB4w5V7yHBeDpC84ZwqYVnakSOcagMHeRRnfnq6Xt/Yfw+X/p2lBvemGK6h5F
- tp94yhWmJdyl0wKoRvlX9Yt61Ezk0Do7qYvWNttX4c+trNsSw4Y8NThYXk/1xrMBjfPR
- wrhKyl42T02mjcDSHbnxEQ/fAcMM1iiQK8CC5sbeN4xHUGuNWyhFX0cKjhUrvVUNwv4S
- 9MMw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=n891e6AE3QwFzVBSQI3sKyKmqZBnm7cDJMbv7IqxDSU=;
+ b=Q3/rU1UhQjq9yqP8YlVV49Yy1zFcgPObnhIZfHvcELHR4aXxqZmsirWTy3dj8KaRKM
+ l1LP8f9ACi4Fg4mEtydRebUCo2DbIkoHXx3xaEFo9Qwc+1eiybAbAV1NLWGsLbt5MiNX
+ kMEGwttbFOaRK9l+RHPzbtPiPG8Fs32TV9Cy6V+U5S5HCckavIwHUkfbeiqBe8bit1CR
+ NVkEXJPGDd85fHl2Fog0EG4YLQUod4dPkuu6vQB9Vt9aYoZhbVlNI1o7tWD8kNe7wgzw
+ XRUYbjo9dVIBFkm/5iZgrDTT3OoySott64Kl51Rm/msxvmq+PlDri/aIBPc3gEVXkNXD
+ Vzrg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=fBrk3q76
-Subject: [Buildroot] [PATCH v2,1/1] package/speex: ARM5E needs ARM mode
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=Q3/rU1Uh
+Subject: [Buildroot] [PATCH 1/1] package/xz: fix largefile option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -106,35 +105,29 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add a dependency on ARM mode for ARM5E to fix the following build
-failure on Cortex-M3 which only supports Thumb2 mode:
+Fix typo in --enable-largefile added by commit
+25254458bde6befcbf93b746d994f94665741c42
 
-/tmp/ccJHSu7y.s:158: Error: selected processor does not support `smulbb r1,r6,lr' in Thumb mode
-
-Fixes:
- - http://autobuild.buildroot.org/results/1575da3a8ea2bcde7fa9885df317a12d5c36918f
+Fixes: 25254458bde6befcbf93b746d994f94665741c42
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
-Changes v1 -> v2 (after review of Thomas Petazzoni):
- - Fix commit message (replacing arm926ej-s by Cortex-M3)
+ package/xz/xz.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- package/speex/Config.in | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/package/speex/Config.in b/package/speex/Config.in
-index c4e3df5dcd..134e6e4b35 100644
---- a/package/speex/Config.in
-+++ b/package/speex/Config.in
-@@ -18,6 +18,7 @@ config BR2_PACKAGE_SPEEX_ARM4
- config BR2_PACKAGE_SPEEX_ARM5E
- 	bool
- 	default y
--	depends on BR2_arm && !BR2_PACKAGE_SPEEX_ARM4
-+	depends on BR2_arm && BR2_ARM_CPU_HAS_ARM && \
-+		!BR2_PACKAGE_SPEEX_ARM4
- 
- endif
+diff --git a/package/xz/xz.mk b/package/xz/xz.mk
+index e295144ed1..8dfd76f8b9 100644
+--- a/package/xz/xz.mk
++++ b/package/xz/xz.mk
+@@ -38,7 +38,7 @@ XZ_CONF_OPTS = \
+ 	--enable-sandbox=auto \
+ 	--enable-symbol-versions \
+ 	--enable-rpath \
+-	--enable-largfile \
++	--enable-largefile \
+ 	--enable-unaligned-access=auto \
+ 	--disable-unsafe-type-punning \
+ 	--disable-werror \
 -- 
 2.43.0
 
