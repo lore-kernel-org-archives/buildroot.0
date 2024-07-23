@@ -4,60 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2034C3DA49
-	for <buildroot@archiver.kernel.org>; Tue, 23 Jul 2024 14:55:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3FF4BC3DA63
+	for <buildroot@archiver.kernel.org>; Tue, 23 Jul 2024 14:59:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 78183401E2;
-	Tue, 23 Jul 2024 14:55:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DDD784030A;
+	Tue, 23 Jul 2024 14:59:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id taswIqdbOFnH; Tue, 23 Jul 2024 14:55:22 +0000 (UTC)
+ id tU-OnTpHjuw6; Tue, 23 Jul 2024 14:59:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 444E9401E7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9DBA6400EF
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 444E9401E7;
-	Tue, 23 Jul 2024 14:55:22 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 778B21BF4E5
- for <buildroot@lists.busybox.net>; Tue, 23 Jul 2024 14:55:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9DBA6400EF;
+	Tue, 23 Jul 2024 14:59:01 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id CD9D61BF4E5
+ for <buildroot@lists.busybox.net>; Tue, 23 Jul 2024 14:59:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7041680874
- for <buildroot@lists.busybox.net>; Tue, 23 Jul 2024 14:55:20 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id BAE96606C0
+ for <buildroot@lists.busybox.net>; Tue, 23 Jul 2024 14:59:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CK7n-xRT-vIr for <buildroot@lists.busybox.net>;
- Tue, 23 Jul 2024 14:55:19 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::222;
- helo=relay2-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id y-LqOgE8iqej for <buildroot@lists.busybox.net>;
+ Tue, 23 Jul 2024 14:59:00 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 3D7D180840
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3D7D180840
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::222])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3D7D180840
- for <buildroot@buildroot.org>; Tue, 23 Jul 2024 14:55:18 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id C30C140009;
- Tue, 23 Jul 2024 14:55:15 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1sWGv3-0010aw-1A;
- Tue, 23 Jul 2024 16:55:13 +0200
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0C31A6069E
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0C31A6069E
+ for <buildroot@buildroot.org>; Tue, 23 Jul 2024 14:59:00 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 03383873BD; Tue, 23 Jul 2024 14:59:00 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Bernd Kuhls <bernd@kuhls.net>
-References: <20240710161927.61358-1-bernd@kuhls.net>
-Date: Tue, 23 Jul 2024 16:55:13 +0200
-In-Reply-To: <20240710161927.61358-1-bernd@kuhls.net> (Bernd Kuhls's message
- of "Wed, 10 Jul 2024 18:19:27 +0200")
-Message-ID: <875xswcg4u.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/exim: security bump version to
- 4.98
+To: buildroot@buildroot.org
+Date: Tue, 23 Jul 2024 16:46:57 +0200
+X-Git-Refname: refs/heads/2024.05.x
+X-Git-Oldrev: 9c29e72aefaf4b123c2063d8d68ec9c4d933073a
+X-Git-Newrev: f907f52c0c24d83bfcbbab62f8310ce6d31233b9
+X-Patchwork-Hint: ignore
+Message-Id: <20240723145900.03383873BD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.05.x] DEVELOPERS: drop Mathieu
+ Audat
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,33 +59,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Luca Ceresoli <luca.ceresoli@bootlin.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Bernd" == Bernd Kuhls <bernd@kuhls.net> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=f907f52c0c24d83bfcbbab62f8310ce6d31233b9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.05.x
 
- > Release notes:
- > https://lists.exim.org/lurker/message/20240710.155945.8823670d.en.html
+Mathieu privately informed me that he no longer has access to the
+TS4900 board, he is therefore unable to maintain this board moving
+forward. Let's drop his entry from the DEVELOPERS file.
 
- > Fixes CVE-2024-39929: https://bugs.exim.org/show_bug.cgi?id=3099#c4
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 39d23ce823bed1ab9db25ec32a924980ef4b91c1)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ DEVELOPERS | 5 -----
+ 1 file changed, 5 deletions(-)
 
- > Removed patch 0004 due to removal of codesourcery arm/aarch64 toolchains
- > with commit 53a8c5150e5eeeb6dbbead0275dbf9141f507511.
-
- > Patch 0005 (renamed to 0004) is still necessary with gcc-13.x,
- > reformatted Upstream trailer.
-
- > Removed patches 0006, 0007 & 0008 which are included in this release.
-
- > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-
-Committed to 2024.02.x and 2024.05.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/DEVELOPERS b/DEVELOPERS
+index bb346b3619..ef833f00f7 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2209,11 +2209,6 @@ N:	Masahiro Yamada <yamada.masahiro@socionext.com>
+ F:	board/arm/foundation-v8/
+ F:	configs/arm_foundationv8_defconfig
+ 
+-N:	Mathieu Audat <mathieuaudat@gmail.com>
+-F:	board/technologic/ts4900/
+-F:	configs/ts4900_defconfig
+-F:	package/ts4900-fpga/
+-
+ N:	Matt Silva <dev@matt-silva.com>
+ F:	package/rlwrap/
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
