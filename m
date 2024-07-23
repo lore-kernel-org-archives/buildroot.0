@@ -4,81 +4,93 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58974C3DA63
-	for <buildroot@archiver.kernel.org>; Tue, 23 Jul 2024 02:38:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 76EBDC3DA63
+	for <buildroot@archiver.kernel.org>; Tue, 23 Jul 2024 07:04:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EA4D9605F4;
-	Tue, 23 Jul 2024 02:38:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EAF6B60796;
+	Tue, 23 Jul 2024 07:04:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1d1FmM_vXTym; Tue, 23 Jul 2024 02:38:36 +0000 (UTC)
+ id D56GpUKLyTJV; Tue, 23 Jul 2024 07:04:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C62D86071D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CF24B607A4
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C62D86071D;
-	Tue, 23 Jul 2024 02:38:35 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2000E1BF489
- for <buildroot@lists.busybox.net>; Tue, 23 Jul 2024 02:38:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CF24B607A4;
+	Tue, 23 Jul 2024 07:04:49 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id A82021BF2C8
+ for <buildroot@lists.busybox.net>; Tue, 23 Jul 2024 07:04:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 18031810CE
- for <buildroot@lists.busybox.net>; Tue, 23 Jul 2024 02:38:34 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 952844019A
+ for <buildroot@lists.busybox.net>; Tue, 23 Jul 2024 07:04:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id y8mZouAN8BCY for <buildroot@lists.busybox.net>;
- Tue, 23 Jul 2024 02:38:33 +0000 (UTC)
-X-Greylist: delayed 427 seconds by postgrey-1.37 at util1.osuosl.org;
- Tue, 23 Jul 2024 02:38:32 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org CE5778108C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CE5778108C
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=216.71.153.141;
- helo=esa3.hgst.iphmx.com; envelope-from=prvs=9275aa34a=wilfred.mallawa@wdc.com;
- receiver=<UNKNOWN> 
-Received: from esa3.hgst.iphmx.com (esa3.hgst.iphmx.com [216.71.153.141])
- by smtp1.osuosl.org (Postfix) with ESMTPS id CE5778108C
- for <buildroot@buildroot.org>; Tue, 23 Jul 2024 02:38:32 +0000 (UTC)
-X-CSE-ConnectionGUID: SPtmQM8uTUOzCUNDSz62Tw==
-X-CSE-MsgGUID: GkySRuWlQAaGpP6s9f6A1Q==
-X-IronPort-AV: E=Sophos;i="6.09,229,1716220800"; d="scan'208";a="22404034"
-Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com)
- ([199.255.45.15])
- by ob1.hgst.iphmx.com with ESMTP; 23 Jul 2024 10:31:25 +0800
-IronPort-SDR: 669f0815_kIstTvpG3aSjUvwRduDlT6wngixvPY1Ti2aZ97J0Psd4qiW
- 1WzKH3Y7FKTwHI8sytEMFJIq/g/kR6JUV/+BtNw==
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
- by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256;
- 22 Jul 2024 18:32:05 -0700
-WDCIronportException: Internal
-Received: from unknown (HELO fedora.wdc.com) ([10.225.165.90])
- by uls-op-cesaip02.wdc.com with ESMTP; 22 Jul 2024 19:31:22 -0700
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id n-P4jaRAsn_s for <buildroot@lists.busybox.net>;
+ Tue, 23 Jul 2024 07:04:47 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::234; helo=mail-lj1-x234.google.com;
+ envelope-from=kazemi.ms@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 083F4400D7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 083F4400D7
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com
+ [IPv6:2a00:1450:4864:20::234])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 083F4400D7
+ for <buildroot@buildroot.org>; Tue, 23 Jul 2024 07:04:46 +0000 (UTC)
+Received: by mail-lj1-x234.google.com with SMTP id
+ 38308e7fff4ca-2ebe40673d8so62750641fa.3
+ for <buildroot@buildroot.org>; Tue, 23 Jul 2024 00:04:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1721718284; x=1722323084;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=WmEp8bAOj1XVm/g1aoq/3B14ygphE4EiFSxZt8DRQ+o=;
+ b=xARt+3Lbx/jlT4jBYuPdD5bAf+AE+IVaKULvOwfMCUU9XqDQes+MM6AN7ITg4xG3XN
+ BQTCdd0h7AQKkXbZTmn7mmcyFNlb41sIXgcOj9JSAF7Ht574t/E0O2J6v3mEyON1rtqO
+ ZuDGiwoUnvAldOGdZ5CjmOXdlk99SBWbzoFK3vQhTo3uLvQL0aN6+cDE4R7xQGTJLUVT
+ 64AVbjpLuRT41H/usI0UogRH4gE8DgXf/n0wVHh44r0K0CvtXqx193HXUNPnYPf8AwBH
+ +OxcHtF0jjERjg7Bu1vtRsMjB6F72xHCO2NEftjQGfIJmHIRmunS9WbquoN2FUV2bvFw
+ jHxA==
+X-Gm-Message-State: AOJu0Yx7NajvbmzOa8nyN51PYNjnz6pbhaJrqvA2YuuEu3oZF0PaSSAh
+ sqF6O7MrL/aOEAjjYqZG0HU/ctHrvTH2YKHHhM0+qkz1Ne2Pd0KMx2mqxA==
+X-Google-Smtp-Source: AGHT+IEU4Oi9vnAiO0rAOkUCC9yZwtx+IdZ6LIg2bvCkf57KhiUTUCUHXZdfygmiBjNAkgKyWwfjhA==
+X-Received: by 2002:a2e:9684:0:b0:2ef:2f53:c300 with SMTP id
+ 38308e7fff4ca-2ef2f53c391mr34760941fa.28.1721718283388; 
+ Tue, 23 Jul 2024 00:04:43 -0700 (PDT)
+Received: from saeedkazemi-ThinkPad.abbrnd.local
+ (2001-1c00-0b13-1d00-1f25-5d4f-52bb-2df8.cable.dynamic.v6.ziggo.nl.
+ [2001:1c00:b13:1d00:1f25:5d4f:52bb:2df8])
+ by smtp.gmail.com with ESMTPSA id
+ 4fb4d7f45d1cf-5a30c7d38f7sm7141018a12.88.2024.07.23.00.04.42
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 23 Jul 2024 00:04:42 -0700 (PDT)
+From: Saeed Kazemi <kazemi.ms@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 23 Jul 2024 12:26:24 +1000
-Message-ID: <20240723022623.37350-2-wilfred.mallawa@wdc.com>
-X-Mailer: git-send-email 2.45.2
+Date: Tue, 23 Jul 2024 09:04:39 +0200
+Message-Id: <20240723070439.4119145-1-kazemi.ms@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
- d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
- t=1721702313; x=1753238313;
- h=from:to:cc:subject:date:message-id:mime-version:
- content-transfer-encoding;
- bh=ISWe0cqBkI6jwLZYg3LcCiDlrLnMoFdClW9h27CmaLM=;
- b=Vw3B39cEDa0Zt+Mxnhf6OPagr93pgXmdPwfx/jrS/iYm1Z4tdDGdNqs7
- /eA1y9CWy6INKkbS7+Z4MQVHECYvFNEWPk7uAI/iVBZGhfDPREQ+9+QOz
- 5hzJCG90o9iepG5fUqE7joM+fZ+70O91Em7IlISoyVJPC2nY6y+bRRuUk
- J6muLONB59C0hFGXJKMLkVlKiusobr9rZ9XvF9kHXdNKkWR5lucXkZWW2
- 8WmC/WJub7YR5s/vQDkuNqfGbP557FTvRKKegvuQHt+FQ6+fGga+Fgvpo
- fXa5FVXxjvhrCe/C2l24mdx4ZKSGVXE1zMNMJ8M4csK+QVmIKpQUpYijw
- w==;
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=wdc.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1721718284; x=1722323084; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=WmEp8bAOj1XVm/g1aoq/3B14ygphE4EiFSxZt8DRQ+o=;
+ b=YVTio5ks6ZRq3hMtYNShyrakqpmpcfuNxk1cdnL+kB66DykmcG45wb8TGhc4goYiPB
+ oC51/HXxz58f4b1wP7tZCda9vMSzF778P6TPAlTIhBfcapKfF2rV17VzKB9QuHNAkFfb
+ 4LI6kWX72qxkbzsrdf9BlU2XzfWsfztu+YbksedDARB5yQiXnFwEuYiMZKnSsbWf1Arl
+ 3H+y79+zkfg80kwKjm/V+tZjqsZerGa7xc08H2OsNu7Omb4l46MtQkootZdTqOTR6aQm
+ wzXZo3rhCIyH/iLMRrVsflJeNrP8LTySA98ciUF7dzB/3pdO6+hkqHXKNdP4A8sp56NV
+ gEcg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=wdc.com header.i=@wdc.com header.a=rsa-sha256
- header.s=dkim.wdc.com header.b=Vw3B39cE
-Subject: [Buildroot] [PATCH v4 1/1] package/spdm-utils: new package
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=YVTio5ks
+Subject: [Buildroot] [PATCH 1/1] package/parsec: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,195 +102,102 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Wilfred Mallawa via buildroot <buildroot@buildroot.org>
-Reply-To: Wilfred Mallawa <wilfred.mallawa@wdc.com>
-Cc: Wilfred Mallawa <wilfred.mallawa@wdc.com>,
- Alistair Francis <alistair@alistair23.me>,
- Alistair Francis <alistair.francis@wdc.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Wilfred Mallawa <wilfred.opensource@gmail.com>
+Cc: Saeed Kazemi <kazemi.ms@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Wilfred Mallawa via buildroot <buildroot@buildroot.org>
+Hardware/platform abstraction service for TPMs, HSMs, and Root of Trust
 
-Signed-off-by: Alistair Francis <alistair.francis@wdc.com>
-Signed-off-by: Wilfred Mallawa <wilfred.mallawa@wdc.com>
+https://github.com/parallaxsecond/parsec.git
+
+Signed-off-by: Saeed Kazemi <kazemi.ms@gmail.com>
 ---
-Changes in V2 -> V4
-	- Added `host-clang` as an `spdm-utils` dependency
-		- `spdm-utils` uses the `bindgen` crate that requires
-		  libclang.
-	- Remove Python3 (it is not required)
-	- Copy SPDM certificates/manifest and scripts to `usr/share/spdm`
-	- Use less verbose syntax for copying
-	- Update `spdm-utils.hash` to work with the new Cargo
-	  infrastructure.
-	- Update `spdm-utils` to latest release.
-		- This means the certificates source paths have slightly
-		  changed since V2.
-	- Added `ruby` as a host dependency
-	- SPDM-Utils requires the `cbor-diag` ruby gem to be available
-	  on the host, ensure it is installed in `HOST_DIR/usr/bin`.
-		- NOTE: I'm not sure if there's a better way to install
-		  this? had to use `check-package DoNotInstallToHostdirUsr` to
-		  omit `check-package warning`
-	- Updates DEVELOPERS list
-	- No longer copy `generate_certs.sh` script, it is not required.
-
- DEVELOPERS                         |  4 ++
- package/Config.in                  |  1 +
- package/spdm-utils/Config.in       | 24 ++++++++++++
- package/spdm-utils/spdm-utils.hash |  2 +
- package/spdm-utils/spdm-utils.mk   | 61 ++++++++++++++++++++++++++++++
- 5 files changed, 92 insertions(+)
- create mode 100644 package/spdm-utils/Config.in
- create mode 100644 package/spdm-utils/spdm-utils.hash
- create mode 100644 package/spdm-utils/spdm-utils.mk
+ DEVELOPERS                 |  1 +
+ package/Config.in          |  1 +
+ package/parsec/Config.in   | 15 +++++++++++++++
+ package/parsec/parsec.hash |  3 +++
+ package/parsec/parsec.mk   | 12 ++++++++++++
+ 5 files changed, 32 insertions(+)
+ create mode 100644 package/parsec/Config.in
+ create mode 100644 package/parsec/parsec.hash
+ create mode 100644 package/parsec/parsec.mk
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 3650321d6f..dade9385f6 100644
+index 3650321d6f..58d6368339 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -151,6 +151,7 @@ F:	board/sifive/
- F:	boot/opensbi/
- F:	configs/hifive_unleashed_defconfig
- F:	package/libspdm/
-+F:	package/spdm-utils/
- F:	package/xen/
+@@ -2866,6 +2866,7 @@ F:	package/biosdevname/
  
- N:	Alvaro G. M <alvaro.gamez@hazent.com>
-@@ -3288,6 +3289,9 @@ F:	package/uclibc/
- F:	package/uclibc-ng-test/
- F:	support/testing/tests/package/test_ruby.py
- 
-+N:	Wilfred Mallawa <wilfred.opensource@gmail.com>
-+F:	package/spdm-utils/
-+
- N:	Will Newton <will.newton@gmail.com>
- F:	package/enchant/
- F:	package/erlang/
+ N:	Saeed Kazemi <kazemi.ms@gmail.com>
+ F:	package/eza/
++F:	package/parsec/
+ F:	package/parsec-tool/
+ F:	package/procs/
+ F:	package/mxt-app/
 diff --git a/package/Config.in b/package/Config.in
-index a0d78518b6..cfc22ef8ca 100644
+index a0d78518b6..8a7c257c85 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -2740,6 +2740,7 @@ comment "Utilities"
- 	source "package/screen/Config.in"
- 	source "package/screenfetch/Config.in"
- 	source "package/sexpect/Config.in"
-+	source "package/spdm-utils/Config.in"
- 	source "package/sudo/Config.in"
- 	source "package/terminology/Config.in"
- 	source "package/time/Config.in"
-diff --git a/package/spdm-utils/Config.in b/package/spdm-utils/Config.in
+@@ -1589,6 +1589,7 @@ menu "Crypto"
+ 	source "package/mbedtls/Config.in"
+ 	source "package/nettle/Config.in"
+ 	source "package/openssl/Config.in"
++	source "package/parsec/Config.in"
+ 	source "package/parsec-tool/Config.in"
+ 	source "package/pkcs11-helper/Config.in"
+ 	source "package/rhash/Config.in"
+diff --git a/package/parsec/Config.in b/package/parsec/Config.in
 new file mode 100644
-index 0000000000..a2ea4d7f2e
+index 0000000000..378e8b58b4
 --- /dev/null
-+++ b/package/spdm-utils/Config.in
-@@ -0,0 +1,24 @@
-+config BR2_PACKAGE_SPDM_UTILS
-+	bool "spdm-utils"
-+	depends on BR2_HOST_GCC_AT_LEAST_7 # host-clang, host-ruby
++++ b/package/parsec/Config.in
+@@ -0,0 +1,15 @@
++config BR2_PACKAGE_PARSEC
++	bool "parsec"
 +	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_HAS_UDEV
 +	select BR2_PACKAGE_HOST_RUSTC
-+	select BR2_PACKAGE_PCIUTILS
-+	select BR2_PACKAGE_LIBSPDM
 +	help
-+	  SPDM-Utils is a Linux application designed to support,
-+	  test and develop SPDM requesters and responders.
-+	  SPDM-Utils uses libspdm as the backend to perform SPDM
-+	  communication. SPDM-Utils currently supports the
-+	  PCIe Data Object Exchange (DOE) Capability.
++	  Hardware/platform abstraction service for TPMs, HSMs, and
++	  Root of Trust
++	  PARSEC is the Platform AbstRaction for SECurity, an
++	  open-source initiative to provide a common API to hardware
++	  security and cryptographic services in a platform-agnostic
++	  way. This abstraction layer keeps workloads decoupled from
++	  physical platform details, enabling cloud-native delivery
++	  flows within the data center and at the edge.
 +
-+	  https://github.com/westerndigitalcorporation/spdm-utils
-+
-+comment "spdm-utils needs udev /dev management"
-+	depends on BR2_PACKAGE_LIBSPDM_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
-+	depends on !BR2_PACKAGE_HAS_UDEV
-+
-+comment "spdm-utils requires host gcc >= 7"
-+	depends on !BR2_HOST_GCC_AT_LEAST_7
-diff --git a/package/spdm-utils/spdm-utils.hash b/package/spdm-utils/spdm-utils.hash
++	  https://github.com/parallaxsecond/parsec.git
+diff --git a/package/parsec/parsec.hash b/package/parsec/parsec.hash
 new file mode 100644
-index 0000000000..0f923b6ad0
+index 0000000000..e1d7b4fbc9
 --- /dev/null
-+++ b/package/spdm-utils/spdm-utils.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  2816ff5ed5f27d565708441259ba295b32ae1ed3fe1366730e76f7bedde5e783  spdm-utils-0.6.0-cargo2.tar.gz
-diff --git a/package/spdm-utils/spdm-utils.mk b/package/spdm-utils/spdm-utils.mk
++++ b/package/parsec/parsec.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256  0b69c30c7e40c65e3c74450e0baf1e3f821ffa624a6dc7aa49f5aa976c42fda0  parsec-1.4.1-cargo2.tar.gz
++sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/parsec/parsec.mk b/package/parsec/parsec.mk
 new file mode 100644
-index 0000000000..706c69ef5b
+index 0000000000..eec9f4d7a3
 --- /dev/null
-+++ b/package/spdm-utils/spdm-utils.mk
-@@ -0,0 +1,61 @@
++++ b/package/parsec/parsec.mk
+@@ -0,0 +1,12 @@
 +################################################################################
 +#
-+# spdm-utils
++# parsec
 +#
 +################################################################################
 +
-+SPDM_UTILS_VERSION = 0.6.0
-+SPDM_UTILS_SITE = $(call github,westerndigitalcorporation,spdm-utils,v$(SPDM_UTILS_VERSION))
-+SPDM_UTILS_LICENSE = Apache-2.0 or MIT
-+SPDM_UTILS_DEPENDENCIES = udev host-clang host-ruby pciutils libspdm
-+SPDM_UTILS_CBOR_DIAG_VERSION = 0.8.7
-+
-+SPDM_UTILS_ALIAS_CERTS = \
-+		openssl.cnf \
-+		slot0/immutable.der \
-+		slot0/device.cert.der \
-+		slot0/device.der \
-+		slot0/device.key \
-+		slot0/bundle_responder.certchain.der
-+
-+# Used to generate SPDM Alias certificate model certificates,
-+# required by `setup_certs.sh`
-+SPDM_UTILS_GENERIC_CERTS = \
-+		slot0/param.pem \
-+		slot0/end_requester.req \
-+		slot0/end_requester.key \
-+		slot0/end_responder.key \
-+		slot0/end_responder.req
-+
-+# SPDM-Utils expects the following certificates to be present for SPDM
-+# functionality, make sure they are all copied.
-+#
-+# `setup_certs.sh` shall be used by a responder to regenerate it's mutable
-+# certificate chain, typically on start up.
-+define SPDM_UTILS_INSTALL_CERTS
-+	$(INSTALL) -D -m 0755 $(@D)/certs/setup_certs.sh $(TARGET_DIR)/usr/share/spdm/certs/setup_certs.sh
-+	$(INSTALL) -D -m 0644 $(@D)/certs/openssl.cnf $(TARGET_DIR)/usr/share/spdm/certs/openssl.cnf
-+
-+	$(foreach f,$(SPDM_UTILS_ALIAS_CERTS),
-+		$(INSTALL) -D -m 0644 $(@D)/certs/alias/$(f) $(TARGET_DIR)/usr/share/spdm/certs/alias/$(f)
-+	)
-+
-+	$(foreach f,$(SPDM_UTILS_GENERIC_CERTS),
-+		$(INSTALL) -D -m 0644 $(@D)/certs/$(f) $(TARGET_DIR)/usr/share/spdm/certs/$(f)
-+	)
-+	$(INSTALL) -D -m 0644 $(@D)/manifest/manifest.out.cbor $(TARGET_DIR)/usr/share/spdm/manifest/manifest.out.cbor
-+endef
-+
-+# SPDM-Utils uses the `cbor-diag` ruby gem to encode/decode SPDM measurement
-+# manifests. It is checked at compile time by SPDM-Utils, as such it must
-+# be available in the host environment.
-+# `--bindir` allows the respective  binaries to be placed at the specified path.
-+define SPDM_UTILS_INSTALL_CBOR_DIAG
-+	# check-package DoNotInstallToHostdirUsr
-+	$(HOST_DIR)/bin/gem install -v $(SPDM_UTILS_CBOR_DIAG_VERSION) --bindir $(HOST_DIR)/usr/bin cbor-diag
-+endef
-+
-+SPDM_UTILS_POST_INSTALL_TARGET_HOOKS += SPDM_UTILS_INSTALL_CERTS
-+SPDM_UTILS_PRE_BUILD_HOOKS += SPDM_UTILS_INSTALL_CBOR_DIAG
++PARSEC_VERSION = 1.4.1
++PARSEC_SITE = $(call github,parallaxsecond,parsec,$(PARSEC_VERSION))
++PARSEC_LICENSE = Apache-2.0
++PARSEC_LICENSE_FILES = LICENSE
 +
 +$(eval $(cargo-package))
 -- 
-2.45.2
+2.34.1
 
 _______________________________________________
 buildroot mailing list
