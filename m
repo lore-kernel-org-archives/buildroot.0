@@ -4,49 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D774C3DA63
-	for <buildroot@archiver.kernel.org>; Tue, 23 Jul 2024 20:18:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EC33FC3DA49
+	for <buildroot@archiver.kernel.org>; Tue, 23 Jul 2024 20:20:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D9C9F81351;
-	Tue, 23 Jul 2024 20:18:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9BE8280853;
+	Tue, 23 Jul 2024 20:20:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3jJDhHorOq5g; Tue, 23 Jul 2024 20:18:29 +0000 (UTC)
+ id u32stL_Q8vFj; Tue, 23 Jul 2024 20:20:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CF9EA8134A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BCF3580838
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CF9EA8134A;
-	Tue, 23 Jul 2024 20:18:28 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id AC8F11BF27E
- for <buildroot@lists.busybox.net>; Tue, 23 Jul 2024 20:18:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BCF3580838;
+	Tue, 23 Jul 2024 20:20:16 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 8D50F1BF27E
+ for <buildroot@lists.busybox.net>; Tue, 23 Jul 2024 20:20:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 99EF640319
- for <buildroot@lists.busybox.net>; Tue, 23 Jul 2024 20:18:27 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7A45540250
+ for <buildroot@lists.busybox.net>; Tue, 23 Jul 2024 20:20:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4Dqsv50RAKlO for <buildroot@lists.busybox.net>;
- Tue, 23 Jul 2024 20:18:26 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 0ZxstU_-ECe1 for <buildroot@lists.busybox.net>;
+ Tue, 23 Jul 2024 20:20:13 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::222;
+ helo=relay2-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8411B400F6
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8411B400F6
- for <buildroot@buildroot.org>; Tue, 23 Jul 2024 20:18:26 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 685268753A; Tue, 23 Jul 2024 20:18:26 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 23 Jul 2024 22:17:32 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ce00b93d5ad9691b73bba1501847eac8679e3c01
-X-Git-Newrev: b68fa4c31a3d7300e36a7b33ebbf537f04b66b59
-X-Patchwork-Hint: ignore
-Message-Id: <20240723201826.685268753A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gamin: remove stale Config.in
- include breaking build
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6CE524025E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6CE524025E
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 6CE524025E
+ for <buildroot@buildroot.org>; Tue, 23 Jul 2024 20:20:13 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 7AC0240005;
+ Tue, 23 Jul 2024 20:20:10 +0000 (UTC)
+Date: Tue, 23 Jul 2024 22:20:09 +0200
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20240723222009.28870eae@windsurf>
+In-Reply-To: <20240723185553.4619-1-fontaine.fabrice@gmail.com>
+References: <20240723185553.4619-1-fontaine.fabrice@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1721766010;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=mkR5RxOQP4FRVFwemyoGHfCwYtPE8P9wWIKvuojpYi0=;
+ b=EtjU5kgIkpjGwsUxyuSbOMAkO8xSekFjOJXRKbr2R9W3SChLXRtVzIYECkzd9pXjJnao3M
+ ogMfYX6N61hEpmIMOng3+1r9obVzCsNNRf0o01amm4KM6PUaSMDj7gIlHPLVqugPunlhB/
+ KPW80bc0COEpYodseS70ZoNOBTc0kEmD8SaJN+pMKRHxIDeJuh4T4VVV/EVpNYWDXACjTX
+ J79u3GPs5pZ9NIdek50KZVEMio2ZQ7EEaxyk9qxmlKxkF+DAcshr/iOMd//m5APv5FnTNK
+ u00O7o1o+Ujs5Ekn2rRqboCHaPnVu+GWVOFoy7CzAqNXQHs66X4t1fYJuFFXvQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=EtjU5kgI
+Subject: Re: [Buildroot] [PATCH 1/1] package/libdex: fix build without SSP
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,40 +82,39 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Adrian Perez de Castro <aperez@igalia.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b68fa4c31a3d7300e36a7b33ebbf537f04b66b59
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue, 23 Jul 2024 20:55:53 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-The previous commit ce00b93d5 (package/gamin: drop package) forgot to
-remove the package/gamin/Config include from package/Config.in, which
-triggers the following error.
+> Fix the following build failure without stack-protector raised since the
+> addition of the package in commit
+> 70319b47f646f74f407ed3355baf5b581a10518a:
+> 
+> /home/buildroot/instance-0/output-1/host/opt/ext-toolchain/bin/../lib/gcc/i686-buildroot-linux-uclibc/9.3.0/../../../../i686-buildroot-linux-uclibc/bin/ld: src/libdex-1.a.p/dex-async-pair.c.o: in function `dex_async_pair_ready_callback':
+> dex-async-pair.c:(.text+0x118): undefined reference to `__stack_chk_guard'
+> 
+> Fixes: 70319b47f646f74f407ed3355baf5b581a10518a
+>  - http://autobuild.buildroot.org/results/f53768f654a9eddd95b583a366cd7386d9ddb285
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  .../0001-add-stack-protector-option.patch     | 45 +++++++++++++++++++
+>  package/libdex/libdex.mk                      |  1 +
+>  2 files changed, 46 insertions(+)
+>  create mode 100644 package/libdex/0001-add-stack-protector-option.patch
 
-  package/Config.in:1645: can't open file "package/gamin/Config.in"
-  make: *** [Makefile:1027: raspberrypi2_defconfig] Error 1
+Applied to master, thanks.
 
-Signed-off-by: Brandon Maier <brandon.maier@collins.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/Config.in | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/package/Config.in b/package/Config.in
-index 09347f7944..20585d53d0 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1642,7 +1642,6 @@ endif
- endmenu
- 
- menu "Filesystem"
--	source "package/gamin/Config.in"
- 	source "package/libconfig/Config.in"
- 	source "package/libconfuse/Config.in"
- 	source "package/libfuse/Config.in"
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
