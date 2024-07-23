@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6FEE7C3DA63
-	for <buildroot@archiver.kernel.org>; Tue, 23 Jul 2024 14:36:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E732DC3DA49
+	for <buildroot@archiver.kernel.org>; Tue, 23 Jul 2024 14:36:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1AC10404A5;
-	Tue, 23 Jul 2024 14:36:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D03BF404BE;
+	Tue, 23 Jul 2024 14:36:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4KSiFLeZjkgG; Tue, 23 Jul 2024 14:36:38 +0000 (UTC)
+ id 7Pr2o02rW2zV; Tue, 23 Jul 2024 14:36:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D6EEF404A6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9DFEB404CA
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D6EEF404A6;
-	Tue, 23 Jul 2024 14:36:37 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id BEAD91BF969
- for <buildroot@lists.busybox.net>; Tue, 23 Jul 2024 14:34:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9DFEB404CA;
+	Tue, 23 Jul 2024 14:36:40 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 9EFAC1BF4E5
+ for <buildroot@lists.busybox.net>; Tue, 23 Jul 2024 14:36:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id AB73F40112
- for <buildroot@lists.busybox.net>; Tue, 23 Jul 2024 14:34:56 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8CB8F6069A
+ for <buildroot@lists.busybox.net>; Tue, 23 Jul 2024 14:36:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VogR98lzs2_w for <buildroot@lists.busybox.net>;
- Tue, 23 Jul 2024 14:34:55 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id nn9tcFi11B1n for <buildroot@lists.busybox.net>;
+ Tue, 23 Jul 2024 14:36:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C2BC0400B8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E25CA60654
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id C2BC0400B8
- for <buildroot@buildroot.org>; Tue, 23 Jul 2024 14:34:55 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E25CA60654
+ for <buildroot@buildroot.org>; Tue, 23 Jul 2024 14:36:16 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AAE7F87317; Tue, 23 Jul 2024 14:34:55 +0000 (UTC)
+ id DDCF687312; Tue, 23 Jul 2024 14:36:16 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 23 Jul 2024 16:34:01 +0200
-X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 78ea31ddd78598d449f1da8792f9d7c15cd032e7
-X-Git-Newrev: 1d91c6fda4e4cc6aef3d2983c74cb65b80949f8e
+Date: Tue, 23 Jul 2024 16:33:46 +0200
+X-Git-Refname: refs/heads/2024.05.x
+X-Git-Oldrev: b16821b9e268804d190e4f71143b7cb4d7a530f2
+X-Git-Newrev: 7e2f295681a359b908ef0448c9b36f1ccfe65041
 X-Patchwork-Hint: ignore
-Message-Id: <20240723143455.AAE7F87317@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x]
+Message-Id: <20240723143616.DDCF687312@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.05.x]
  package/rauc-hawkbit-updater: add systemd optional dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -65,8 +65,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1d91c6fda4e4cc6aef3d2983c74cb65b80949f8e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=7e2f295681a359b908ef0448c9b36f1ccfe65041
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.05.x
 
 Take the systemd into account if present.
 
