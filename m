@@ -4,96 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 87E8FC3DA63
-	for <buildroot@archiver.kernel.org>; Tue, 23 Jul 2024 16:22:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7DB5EC3DA49
+	for <buildroot@archiver.kernel.org>; Tue, 23 Jul 2024 16:25:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 53DF260669;
-	Tue, 23 Jul 2024 16:22:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3D21260651;
+	Tue, 23 Jul 2024 16:25:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id exBX7o_gfTO8; Tue, 23 Jul 2024 16:22:34 +0000 (UTC)
+ id 3b-x9TWomNQG; Tue, 23 Jul 2024 16:25:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5E70C607F0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 47B7760669
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5E70C607F0;
-	Tue, 23 Jul 2024 16:22:34 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1E62B1BF2FD
- for <buildroot@lists.busybox.net>; Tue, 23 Jul 2024 16:22:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 47B7760669;
+	Tue, 23 Jul 2024 16:25:43 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 9C79A1BF2FD
+ for <buildroot@lists.busybox.net>; Tue, 23 Jul 2024 16:25:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 180F5405C4
- for <buildroot@lists.busybox.net>; Tue, 23 Jul 2024 16:22:33 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9494240065
+ for <buildroot@lists.busybox.net>; Tue, 23 Jul 2024 16:25:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GHBB19-Yv7As for <buildroot@lists.busybox.net>;
- Tue, 23 Jul 2024 16:22:32 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=91.207.212.93;
- helo=mx07-00178001.pphosted.com;
- envelope-from=prvs=79348e9772=etienne.carriere@foss.st.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 98C4F405AA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 98C4F405AA
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com
- [91.207.212.93])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 98C4F405AA
- for <buildroot@buildroot.org>; Tue, 23 Jul 2024 16:22:31 +0000 (UTC)
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
- by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 46NCKtvN013348;
- Tue, 23 Jul 2024 18:22:29 +0200
-Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
- by mx07-00178001.pphosted.com (PPS) with ESMTPS id 40g44d2xag-1
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
- Tue, 23 Jul 2024 18:22:29 +0200 (MEST)
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
- by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id E972740045;
- Tue, 23 Jul 2024 18:22:24 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node3.st.com [10.75.129.71])
- by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 50710241B55;
- Tue, 23 Jul 2024 18:22:15 +0200 (CEST)
-Received: from SHFDAG1NODE1.st.com (10.75.129.69) by SHFDAG1NODE3.st.com
- (10.75.129.71) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.37; Tue, 23 Jul
- 2024 18:22:15 +0200
-Received: from SHFDAG1NODE1.st.com ([fe80::b848:dbeb:cd0:84a0]) by
- SHFDAG1NODE1.st.com ([fe80::b848:dbeb:cd0:84a0%13]) with mapi id
- 15.01.2507.037; Tue, 23 Jul 2024 18:22:15 +0200
-From: Etienne CARRIERE - foss <etienne.carriere@foss.st.com>
-To: "buildroot@buildroot.org" <buildroot@buildroot.org>
-Thread-Topic: [PATCH 1/6] boot/optee-os: bump to version 4.3.0
-Thread-Index: AQHa3RsCM+e16b66pkqzGgv678KrCLIEfULd
-Date: Tue, 23 Jul 2024 16:22:15 +0000
-Message-ID: <f0fafa6e86cf49fb911457a911d3c3e0@foss.st.com>
-References: <20240723161142.2728577-1-etienne.carriere@foss.st.com>
-In-Reply-To: <20240723161142.2728577-1-etienne.carriere@foss.st.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.48.86.128]
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id G_jMZl2nXyd8 for <buildroot@lists.busybox.net>;
+ Tue, 23 Jul 2024 16:25:40 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::32f; helo=mail-wm1-x32f.google.com;
+ envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 2335040026
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2335040026
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
+ [IPv6:2a00:1450:4864:20::32f])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 2335040026
+ for <buildroot@buildroot.org>; Tue, 23 Jul 2024 16:25:39 +0000 (UTC)
+Received: by mail-wm1-x32f.google.com with SMTP id
+ 5b1f17b1804b1-427db004e36so27898215e9.3
+ for <buildroot@buildroot.org>; Tue, 23 Jul 2024 09:25:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1721751937; x=1722356737;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=Clat2COclGSsPAmV8DWcCPiK/Emd3ay2qDvViuY4x/A=;
+ b=Fgk0FLSdNki9ptsmC1n0DSx1CG2BWOsJh6JAOR9aA/VZpsAjp9eRasxXhpKHnMOxGg
+ GSgah0xeoxl50KeQLQIssl+wxve8mVORZdr/0lYPrOD1K7HQYI6rNMIq5vM6u4rntRUS
+ zFNsp2teDGMvFltRD+wWg4ImYGRo8nCz05zyowDj70F/SwMev9doIL5A3Dm9h+cjUWF+
+ ZiYkeNRV0MFgzltCXavArBvo0ZUaVjH3EmVZE9z1CjxrXh25sjR/zflHPRXVkmmzH4DJ
+ 1SKGkO3HcTWhRD9IcJHP9y/977jmTgLjhY/rrSwRiVPNJju/iF10VWz5h7A/yczZvPbA
+ CfHg==
+X-Gm-Message-State: AOJu0YxBpU+pfZoXmsIxnX01bM7zWMUUePahg8xWm1rTpG3Rv2/eHN81
+ 0JZFbX/ID1IIuMCmKiieKlyjWep6/VaPinrxYbjcODyBo624FRwtmYjfpg==
+X-Google-Smtp-Source: AGHT+IE0dYY5zE5X4f85PO/XUoxQeol56Bz//nbbBAIw9RlJvhC42K+GX3+cclRRYjXMJPTNjD8bnQ==
+X-Received: by 2002:a05:600c:3ba3:b0:427:9dad:17df with SMTP id
+ 5b1f17b1804b1-427f7ab5942mr194925e9.12.1721751936884; 
+ Tue, 23 Jul 2024 09:25:36 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-785-215.w83-197.abo.wanadoo.fr.
+ [83.197.112.215]) by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-427d68fa9b1sm182191175e9.8.2024.07.23.09.25.36
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 23 Jul 2024 09:25:36 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Tue, 23 Jul 2024 18:25:33 +0200
+Message-ID: <20240723162533.549929-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-07-23_05,2024-07-23_02,2024-05-17_01
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=foss.st.com; h=
- cc:content-transfer-encoding:content-type:date:from:in-reply-to
- :message-id:mime-version:references:subject:to; s=selector1; bh=
- 6wa3rYBrKERk2qkRxOYg1x1yCklkAXZAiKPm7Y81Rjk=; b=i5Xw6p3XEh8Y4pqO
- HEJjJpPfC+EGsnUwx6H5oQ/MLBCoXpspcizIUk9brGVemvphYwDtQbRiErkJlLW2
- 7R35KZ6uLDcOxbt5SWRwwDMx/QNpmk8Efpbh+bZg7IWmE/XGFz+7X7MlO243p1kH
- cM9t7TsaSfHePapsa9SLXmqS2drQtdWyr7ug9nsL4mete1l7J5BMkfT9RY949fFa
- 6IYh7Nn6MvoE5+9v5bKIoEsRhSyyhhkrlRzJ1LhrIJymP6qDsiKli+mc0z3Qt+DI
- gIni6hX3yBwI/d+s0avIdnzQPM4Pp/nlpPDdTEWQprugRlr/Im3jPu8G5bHkuhqo
- wFZR3Q==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=gmail.com; s=20230601; t=1721751937; x=1722356737; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=Clat2COclGSsPAmV8DWcCPiK/Emd3ay2qDvViuY4x/A=;
+ b=AXkk9RBztkUJiCtTZszDBEbdhKwHz/kSDPPy3D7wmT2MPdjXTBxov3qCNRnnTxOUZV
+ ZC2ax+Clzt4bp4k1iQbYH5sdDYKtrFuqLn09EMqdEXHQJxvMbhgrhvJVzsjX6IpShaEK
+ VH0Xh5KmUqk/lvCD2WoySx4ZIqdlx9PsH7rVaCTkCOX8TYoYj01NRcKZAPdRL/7QH9aW
+ zQArcK0j8il5Ol4yVCoAXZFe3xDeKaPqL169x7noby7yQAasFYaiVJouf8fjUQMz2QfL
+ XWUpP/BYnnVrikT7HpdjweK3dUPgoZgSJdqX/5hLcPKmKLd/CLLsanknfOyaax85/F/j
+ eHkA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=foss.st.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com
- header.a=rsa-sha256 header.s=selector1 header.b=i5Xw6p3X
-Subject: Re: [Buildroot] [PATCH 1/6] boot/optee-os: bump to version 4.3.0
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=AXkk9RBz
+Subject: [Buildroot] [PATCH 1/1] package/dvb-apps: fix build with gcc >= 14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -105,66 +100,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tuesday, July 23, 2024, Etienne Carriere wrote:
-> Bump OP-TEE OS package to OP-TEE release tag 4.3.0.
-> 
-> Signed-off-by: Etienne Carriere <etienne.carriere@foss.st.com>
+Workaround for glibc 2.31 added by commit
+bbe170dbcf4ddb63e76299214e2c18b16e5cf016 back in 2020 is incorrect as it
+writes new_time (a pointer on time_t) into timespec.tv_sec (i.e. time_t).
+This mistake raises the following build failure with gcc >= 14:
 
-Discard this patch as well as patch 2/6, 3/6 and 4/6. My apologies, I just saw a equivalent series was posting few hours ago.
-I'll re-send a series with only the 2 last changes.
+dvbdate.c: In function 'set_time':
+dvbdate.c:313:18: error: assignment to '__time_t' {aka 'long int'} from 'time_t *' {aka 'long int *'} makes integer from pointer without a cast [-Wint-conversion]
+  313 |         s.tv_sec = new_time;
+      |                  ^
 
-BR,
-Etienne
+It shall be noted that gentoo also spotted this mistake:
+https://gitweb.gentoo.org/repo/gentoo.git/commit/media-tv/linuxtv-dvb-apps/files?id=81e99f1c753d1cb564be29b22dcd8927830c4b9a
 
+Fixes: bbe170dbcf4ddb63e76299214e2c18b16e5cf016
+ - http://autobuild.buildroot.org/results/e99b9ebf602d307fbc32f2a367e95177f53a68f9
 
-> ---
->  boot/optee-os/Config.in     | 4 ++--
->  boot/optee-os/optee-os.hash | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/boot/optee-os/Config.in b/boot/optee-os/Config.in
-> index 7870629732..2f996cbafc 100644
-> --- a/boot/optee-os/Config.in
-> +++ b/boot/optee-os/Config.in
-> @@ -18,7 +18,7 @@ choice
->           Select the version of OP-TEE OS you want to use
-> 
->  config BR2_TARGET_OPTEE_OS_LATEST
-> -       bool "4.2.0"
-> +       bool "4.3.0"
->         depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
->         select BR2_TARGET_OPTEE_OS_NEEDS_PYTHON_CRYPTOGRAPHY
->         help
-> @@ -70,7 +70,7 @@ endif
-> 
->  config BR2_TARGET_OPTEE_OS_VERSION
->         string
-> -       default "4.2.0"         if BR2_TARGET_OPTEE_OS_LATEST
-> +       default "4.3.0"         if BR2_TARGET_OPTEE_OS_LATEST
->         default "custom"        if BR2_TARGET_OPTEE_OS_CUSTOM_TARBALL
->         default BR2_TARGET_OPTEE_OS_CUSTOM_REPO_VERSION \
->                                 if BR2_TARGET_OPTEE_OS_CUSTOM_GIT
-> diff --git a/boot/optee-os/optee-os.hash b/boot/optee-os/optee-os.hash
-> index 663640b2ce..16b3d7430e 100644
-> --- a/boot/optee-os/optee-os.hash
-> +++ b/boot/optee-os/optee-os.hash
-> @@ -1,4 +1,4 @@
-> -# From https://github.com/OP-TEE/optee_os/archive/4.2.0/optee-os-4.2.0.tar.gz
-> -sha256  ce70f0d177001bf4855cd6cd6396f515af6126e4bba9b12c716a437a5cb40c7b  optee-os-4.2.0.tar.gz
-> +# From https://github.com/OP-TEE/optee_os/archive/4.3.0/optee-os-4.3.0.tar.gz
-> +sha256  390b271905c828d6def9fa6a77bbaa425f3b434d733c8eb18f582ccbc6896096  optee-os-4.3.0.tar.gz
->  # Locally computed
->  sha256  1247ee90858f4037b6cac63cbffddfed435d0d73c631b37d78c1e6e6ab3e5d1a  LICENSE
-> --
-> 2.25.1
-> 
-> 
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/dvb-apps/0006-fix-glibc-2.31.patch | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/package/dvb-apps/0006-fix-glibc-2.31.patch b/package/dvb-apps/0006-fix-glibc-2.31.patch
+index 079a24f149..51c03d3e2e 100644
+--- a/package/dvb-apps/0006-fix-glibc-2.31.patch
++++ b/package/dvb-apps/0006-fix-glibc-2.31.patch
+@@ -4,6 +4,8 @@ as stime func doesn't exists anymore in newer versions of glibc >= 2.31 due
+ to obseletion, a replacment with clock_settime is inorder to fix the issue.
+ 
+ Signed-off-by: Dagg Stompler <daggs@gmx.com>
++[Fabrice: fix for gcc >= 14]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ 
+ --- a/util/dvbdate/dvbdate.c
+ +++ b/util/dvbdate/dvbdate.c
+@@ -13,7 +15,7 @@ Signed-off-by: Dagg Stompler <daggs@gmx.com>
+  {
+ -	if (stime(new_time)) {
+ +	struct timespec s = {0};
+-+	s.tv_sec = new_time;
+++	s.tv_sec = *new_time;
+ +
+ +	if (clock_settime(CLOCK_REALTIME, &s)) {
+  		perror("Unable to set time");
+-- 
+2.43.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
