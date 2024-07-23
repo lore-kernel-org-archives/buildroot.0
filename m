@@ -4,92 +4,114 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CD266C3DA49
-	for <buildroot@archiver.kernel.org>; Tue, 23 Jul 2024 17:14:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99889C3DA63
+	for <buildroot@archiver.kernel.org>; Tue, 23 Jul 2024 18:43:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6A41E40B47;
-	Tue, 23 Jul 2024 17:14:48 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 47D9B4004A;
+	Tue, 23 Jul 2024 18:43:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ttPlyedK3lvx; Tue, 23 Jul 2024 17:14:47 +0000 (UTC)
+ id QemxP3luMShc; Tue, 23 Jul 2024 18:43:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E2E9B40AA2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 130C4403A9
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E2E9B40AA2;
-	Tue, 23 Jul 2024 17:14:46 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 8789A1BF83E
- for <buildroot@lists.busybox.net>; Tue, 23 Jul 2024 17:14:45 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 130C4403A9;
+	Tue, 23 Jul 2024 18:43:42 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 76E231BF2F3
+ for <buildroot@lists.busybox.net>; Tue, 23 Jul 2024 18:43:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 740BB402F4
- for <buildroot@lists.busybox.net>; Tue, 23 Jul 2024 17:14:45 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 62D0780E84
+ for <buildroot@lists.busybox.net>; Tue, 23 Jul 2024 18:43:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zgSLWQZcZNET for <buildroot@lists.busybox.net>;
- Tue, 23 Jul 2024 17:14:41 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::433; helo=mail-wr1-x433.google.com;
- envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 2858340299
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2858340299
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com
- [IPv6:2a00:1450:4864:20::433])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 2858340299
- for <buildroot@buildroot.org>; Tue, 23 Jul 2024 17:14:41 +0000 (UTC)
-Received: by mail-wr1-x433.google.com with SMTP id
- ffacd0b85a97d-3684eb5be64so2970832f8f.3
- for <buildroot@buildroot.org>; Tue, 23 Jul 2024 10:14:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1721754879; x=1722359679;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=e+oyxrolNHziMj6gZvZlk0QRJ8ubckgPAxGMf0JRBaU=;
- b=jU646Ebk7H3b+E839EL9KimtLrv+rEqk98cDlm26kC2tBDk3DC/3Ut322ghrBnTHFh
- T7/tQX6OKhVea/S4ZrYDyTGMjxZXejrJdsC5n/pRdScW0xTsKU15tLp9v1YlUT++SER6
- oEOanv+gFzQgHdOXu+drkpT7BzfFz6iLOLXr84gdmH3VPMhgHPyRIuMJaZbIr7w6sK9e
- IHCtAsjOuu1bxccpcFqOPW1URP2mxpuYqTtl9zI25nLQBwzN2rI6a+M9RXmjj/P6DqQS
- 1atSKP8nKdaI8dhwZfNzalwozylzM6pNyKf1fFZqJXgRqpPjUz8G2iviPX2GDHQ/f3wF
- bYRg==
-X-Gm-Message-State: AOJu0YzvN66vx2Hw7aYxmyObe4Aa+oDp0lVxBjM8dwZ9BdfGGxM0iHZn
- +WJ7elu4JPVbk0KyviYFPy4+6Axr/x6sbQojEE5OJj/ATIWXgMDdyLOWzA==
-X-Google-Smtp-Source: AGHT+IGl/V6l7QgUWAxdSq4+a8vvEJFNmJId75IFR4QpvNv/pQpDoxK7t3kNIeBOBLWS1PcvCf0DNQ==
-X-Received: by 2002:a5d:6b09:0:b0:367:8383:6305 with SMTP id
- ffacd0b85a97d-369dee62a72mr2066024f8f.55.1721754878510; 
- Tue, 23 Jul 2024 10:14:38 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-785-215.w83-197.abo.wanadoo.fr.
- [83.197.112.215]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-368787ed7b8sm12042323f8f.106.2024.07.23.10.14.37
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 23 Jul 2024 10:14:38 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Tue, 23 Jul 2024 19:14:35 +0200
-Message-ID: <20240723171435.1231918-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.43.0
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ayy9KVxpeJuA for <buildroot@lists.busybox.net>;
+ Tue, 23 Jul 2024 18:43:39 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=67.231.152.184;
+ helo=mx0b-00105401.pphosted.com; envelope-from=brandon.maier@collins.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org A317E80D2D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A317E80D2D
+Received: from mx0b-00105401.pphosted.com (mx0b-00105401.pphosted.com
+ [67.231.152.184])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A317E80D2D
+ for <buildroot@buildroot.org>; Tue, 23 Jul 2024 18:43:39 +0000 (UTC)
+Received: from pps.filterd (m0346902.ppops.net [127.0.0.1])
+ by mx0a-00105401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id
+ 46NE28Ur021372; Tue, 23 Jul 2024 18:43:37 GMT
+Received: from xusxph008rp050.rtx.com (xusxph008rp050.rtx.com [128.13.124.147])
+ by mx0a-00105401.pphosted.com (PPS) with ESMTPS id 40ht3we2bp-1
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+ Tue, 23 Jul 2024 18:43:37 +0000
+Received: from xusxph004rp020.corp.ray.com ([128.13.120.224])
+ by xusxph008rp050.rtx.com (8.17.1.19/8.17.1.19) with ESMTPS id 46NIhZtQ013085
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+ Tue, 23 Jul 2024 18:43:35 GMT
+Received: from dtulimr01.rockwellcollins.com
+ (snat-utc-mailhub.rockwellcollins.com [10.172.224.19])
+ by xusxph004rp020.corp.ray.com (8.17.1.19/8.17.1.19) with ESMTPS id
+ 46NIhY2q012887
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+ Tue, 23 Jul 2024 18:43:35 GMT
+X-Received: from localhost (unknown [10.148.204.208])
+ by dtulimr01.rockwellcollins.com (Postfix) with ESMTP id A2718202259C;
+ Tue, 23 Jul 2024 13:43:34 -0500 (CDT)
+Date: Tue, 23 Jul 2024 18:43:26 +0000
 MIME-Version: 1.0
+Message-Id: <20240723-gamin-remove-kconfig-v1-1-7d85212f201e@collins.com>
+X-B4-Tracking: v=1; b=H4sIAM35n2YC/x3MQQqAIBBA0avErBswC5KuEi0cG22INBQiiO6et
+ HyL/x8onIULTM0DmS8pkmJF1zbgNhsDo6zVoJUe1Kh7DPaQiJmPdDHuLkUvAc1IhlbjFVEHNT0
+ ze7n/7by87weuN6RRZgAAAA==
+To: buildroot@buildroot.org
+X-Mailer: b4 0.14.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-07-23_09,2024-07-23_02,2024-05-17_01
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-07-23_09,2024-07-23_02,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0
+ suspectscore=0
+ mlxlogscore=711 mlxscore=0 malwarescore=0 spamscore=0 phishscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2407110000 definitions=main-2407230129
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0
+ adultscore=0 bulkscore=0
+ suspectscore=0 spamscore=0 mlxscore=0 mlxlogscore=678 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2407110000
+ definitions=main-2407230130
+X-Proofpoint-GUID: 0gaRy5GkCrA64JMu3w-qVy7JJ1BF8wV6
+X-Proofpoint-ORIG-GUID: 0gaRy5GkCrA64JMu3w-qVy7JJ1BF8wV6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-07-23_09,2024-07-23_02,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_default_notspam
+ policy=outbound_default score=0 adultscore=0
+ phishscore=0 spamscore=0 malwarescore=0 suspectscore=0 impostorscore=0
+ bulkscore=0 priorityscore=1501 lowpriorityscore=0 clxscore=1011 mlxscore=0
+ mlxlogscore=785 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2407110000 definitions=main-2407230129
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1721754879; x=1722359679; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=e+oyxrolNHziMj6gZvZlk0QRJ8ubckgPAxGMf0JRBaU=;
- b=XbGqHR4cLsw5kInQ+0I5qnbg+njInwrw0Zfszai4iozca9fbn4usll0l2knCQkHSt+
- tAFGY7Vp9Cn9sgBiTzojpoNKRFOEH4t8CJkRr0Ix5oedUnjA5hjNVbmKHmwxiPrcNSYs
- rZFCDiK27wo9UHxXLrsoEbDYn28RYhVbhowg9wA6KUZRYsThlL9y7mYfwR+FaiOCeZfD
- GhXZvkIvH1t65Hmb9Tt72Fg23RJcIKn4pFDFRDQExQUWf0ORlDnLyAFBM87dplUPORxp
- nK8IOdSirdGYu44P2v75HvMiFRrl/LWzmB6KaGsgAiH/+sZV5R8q6CPUCj22krvE8cPF
- 3n6w==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=collins.com; h=cc :
+ content-transfer-encoding : content-type : date : from : message-id :
+ mime-version : subject : to; s=POD051818;
+ bh=ZqppA8/J/8r78HDALUQfeLVLm+kvwEFJ28K3B6mk5OM=;
+ b=KEr9aNFNuLjQseZBqKQoN3GFa5mMby9J6TjvE0mUE17+w7YjewsM9hClA7fMw3LaPznN
+ OoCjY9JwAgrioNDIJNypZDMRcqV7Pgz0fW35Ep4KyR/RxPuWr1QegWZ9JKOb7dcDWvRt
+ rCbqxC5aoRtTgOrf0PV8t4IjNpFX/BelH7luKpDjXhv1FinEFX420Xgk+4xTrs20/SfU
+ sRTjqSs9UPnoR0fVu2P//5jvD5IbINChAM8J0opYpehAupmvd2jgtqYkHOgfXNXpCDK3
+ IjJv8GL+NJ+4S8Avr3QrdVJ8/DyMfAJUK2rUgrkRD87SwgYmeqGFI+9oa3gGpNI6HciC MA== 
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=collins.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=XbGqHR4c
-Subject: [Buildroot] [PATCH 1/1] package/libcamera-apps: bump to version
- 1.5.0
+ unprotected) header.d=collins.com header.i=@collins.com header.a=rsa-sha256
+ header.s=POD051818 header.b=KEr9aNFN
+Subject: [Buildroot] [PATCH] package/gamin: remove stale Config.in file
+ breaking build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,149 +123,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
- Marcus Folkesson <marcus.folkesson@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+From: Brandon Maier via buildroot <buildroot@buildroot.org>
+Reply-To: Brandon Maier <brandon.maier@collins.com>
+Cc: Bernd Kuhls <bernd@kuhls.net>, Brandon Maier <brandon.maier@collins.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- Use official tarball
-- Switch to meson-package
-- libcamera-apps unconditionally uses linux/dma-heap.h since version
-  1.3.0 and
-  https://github.com/raspberrypi/rpicam-apps/commit/11338687635cc5564c348c2f60c8c58c5779151d
-  which is only available since kernel >= 5.5 and
-  https://github.com/torvalds/linux/commit/a69b0e855d3fd278ff6f09a23e1edf929538e304
-- This bump will fix the following build failure raised since bump of
-  libcamera to version 0.3.0 in commit
-  82efc2faa923e8881748738963be1fbe3cb2bb45:
+The previous commit ce00b93d5 (package/gamin: drop package) forgot to
+remove gamin from Kconfig, which triggers the following error.
 
-/workdir/instance-1/output-1/build/libcamera-apps-1.2.1/core/libcamera_app.cpp: In member function 'void LibcameraApp::ConfigureViewfinder()':
-/workdir/instance-1/output-1/build/libcamera-apps-1.2.1/core/libcamera_app.cpp:327:25: error: 'class libcamera::CameraConfiguration' has no member named 'transform'
-  327 |         configuration_->transform = options_->transform;
-      |                         ^~~~~~~~~
+  package/Config.in:1645: can't open file "package/gamin/Config.in"
+  make: *** [Makefile:1027: raspberrypi2_defconfig] Error 1
 
-It shall be noted that upstream changed its name from libcamera-apps to
-rpicam-apps perhaps the package shall also be renamed on buildroot side
-
-Fixes: 82efc2faa923e8881748738963be1fbe3cb2bb45
- - http://autobuild.buildroot.org/results/18bb6d9c88c1a813a350658b251293744e161916
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Brandon Maier <brandon.maier@collins.com>
 ---
- package/libcamera-apps/Config.in           |  9 ++++--
- package/libcamera-apps/libcamera-apps.hash |  2 +-
- package/libcamera-apps/libcamera-apps.mk   | 32 ++++++++++------------
- 3 files changed, 21 insertions(+), 22 deletions(-)
+ package/Config.in | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/package/libcamera-apps/Config.in b/package/libcamera-apps/Config.in
-index 711fd6de05..f169d8c52e 100644
---- a/package/libcamera-apps/Config.in
-+++ b/package/libcamera-apps/Config.in
-@@ -6,6 +6,7 @@ config BR2_PACKAGE_LIBCAMERA_APPS
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # libcamera
- 	depends on !BR2_STATIC_LIBS # gnutls/libcamera
- 	depends on BR2_USE_WCHAR # gnutls/libcamera/boost
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_5
- 	select BR2_PACKAGE_BOOST
- 	select BR2_PACKAGE_BOOST_PROGRAM_OPTIONS
- 	select BR2_PACKAGE_JPEG
-@@ -24,7 +25,9 @@ config BR2_PACKAGE_LIBCAMERA_APPS
+diff --git a/package/Config.in b/package/Config.in
+index 09347f7944..20585d53d0 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1642,7 +1642,6 @@ endif
+ endmenu
  
- 	  https://github.com/raspberrypi/libcamera-apps
- 
--comment "libcamera-apps needs a toolchain w/ C++, threads, wchar, dynamic library, gcc >= 8"
-+comment "libcamera-apps needs a toolchain w/ C++, threads, wchar, dynamic library, gcc >= 8, headers >= 5.5"
- 	depends on BR2_PACKAGE_LIBCAMERA_ARCH_SUPPORTS
--	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS || \
--		!BR2_TOOLCHAIN_GCC_AT_LEAST_8 || BR2_STATIC_LIBS || !BR2_USE_WCHAR
-+	depends on !BR2_INSTALL_LIBSTDCPP || \
-+		!BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_8 || BR2_STATIC_LIBS || \
-+		!BR2_USE_WCHAR || !BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_5
-diff --git a/package/libcamera-apps/libcamera-apps.hash b/package/libcamera-apps/libcamera-apps.hash
-index 1437a0e8fa..00b499d247 100644
---- a/package/libcamera-apps/libcamera-apps.hash
-+++ b/package/libcamera-apps/libcamera-apps.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  e6b74a0ba10a962f1930199d7dd828c8d9ee370dfe1fdfd8ae2638df744f1344  libcamera-apps-1.2.1.tar.gz
-+sha256  576bcd585f1c8d8bc80e37fa3c8a172e9d1c8406490438cf6d0fbc7ba4996ec1  rpicam-apps-1.5.0.tar.xz
- sha256  36dfed86bdef661a0a14ec1a1cc84c771d5a06b6f9b92e9ebb610ba711bd528a  license.txt
-diff --git a/package/libcamera-apps/libcamera-apps.mk b/package/libcamera-apps/libcamera-apps.mk
-index 2a217f095f..17983bb8ca 100644
---- a/package/libcamera-apps/libcamera-apps.mk
-+++ b/package/libcamera-apps/libcamera-apps.mk
-@@ -4,8 +4,9 @@
- #
- ################################################################################
- 
--LIBCAMERA_APPS_VERSION = 1.2.1
--LIBCAMERA_APPS_SITE = $(call github,raspberrypi,libcamera-apps,v$(LIBCAMERA_APPS_VERSION))
-+LIBCAMERA_APPS_VERSION = 1.5.0
-+LIBCAMERA_APPS_SOURCE = rpicam-apps-$(LIBCAMERA_APPS_VERSION).tar.xz
-+LIBCAMERA_APPS_SITE = https://github.com/raspberrypi/rpicam-apps/releases/download/v$(LIBCAMERA_APPS_VERSION)
- LIBCAMERA_APPS_LICENSE = BSD-2-Clause
- LIBCAMERA_APPS_LICENSE_FILES = license.txt
- LIBCAMERA_APPS_DEPENDENCIES = \
-@@ -18,42 +19,37 @@ LIBCAMERA_APPS_DEPENDENCIES = \
- 	tiff
- 
- LIBCAMERA_APPS_CONF_OPTS = \
--	-DENABLE_COMPILE_FLAGS_FOR_TARGET=disabled \
--	-DENABLE_OPENCV=0 \
--	-DENABLE_TFLITE=0
-+	-Denable_opencv=disabled \
-+	-Denable_tflite=disabled
- 
- ifeq ($(BR2_PACKAGE_LIBDRM),y)
- LIBCAMERA_APPS_DEPENDENCIES += libdrm
--LIBCAMERA_APPS_CONF_OPTS += -DENABLE_DRM=1
-+LIBCAMERA_APPS_CONF_OPTS += -Denable_drm=enabled
- else
--LIBCAMERA_APPS_CONF_OPTS += -DENABLE_DRM=0
-+LIBCAMERA_APPS_CONF_OPTS += -Denable_drm=disabled
- endif
- 
- ifeq ($(BR2_PACKAGE_FFMPEG)$(BR2_PACKAGE_LIBDRM),yy)
- LIBCAMERA_APPS_DEPENDENCIES += ffmpeg libdrm
--LIBCAMERA_APPS_CONF_OPTS += -DENABLE_LIBAV=1
-+LIBCAMERA_APPS_CONF_OPTS += -Denable_libav=enabled
- else
--LIBCAMERA_APPS_CONF_OPTS += -DENABLE_LIBAV=0
-+LIBCAMERA_APPS_CONF_OPTS += -Denable_libav=disabled
- endif
- 
- ifeq ($(BR2_PACKAGE_XORG7),y)
- LIBCAMERA_APPS_DEPENDENCIES += \
- 	$(if $(BR2_PACKAGE_LIBEPOXY),libepoxy) \
- 	$(if $(BR2_PACKAGE_XLIB_LIBX11),xlib_libX11)
--LIBCAMERA_APPS_CONF_OPTS += -DENABLE_X11=1
-+LIBCAMERA_APPS_CONF_OPTS += -Denable_egl=enabled
- else
--LIBCAMERA_APPS_CONF_OPTS += -DENABLE_X11=0
-+LIBCAMERA_APPS_CONF_OPTS += -Denable_egl=disabled
- endif
- 
- ifeq ($(BR2_PACKAGE_QT5),y)
- LIBCAMERA_APPS_DEPENDENCIES += qt5base
--LIBCAMERA_APPS_CONF_OPTS += -DENABLE_QT=1
-+LIBCAMERA_APPS_CONF_OPTS += -Denable_qt=enabled
- else
--LIBCAMERA_APPS_CONF_OPTS += -DENABLE_QT=0
-+LIBCAMERA_APPS_CONF_OPTS += -Denable_qt=disabled
- endif
- 
--ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
--LIBCAMERA_APPS_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-latomic
--endif
--
--$(eval $(cmake-package))
-+$(eval $(meson-package))
+ menu "Filesystem"
+-	source "package/gamin/Config.in"
+ 	source "package/libconfig/Config.in"
+ 	source "package/libconfuse/Config.in"
+ 	source "package/libfuse/Config.in"
+
+---
+base-commit: ce00b93d5ad9691b73bba1501847eac8679e3c01
+change-id: 20240723-gamin-remove-kconfig-87b8bd8f0bb1
+
+Best regards,
 -- 
-2.43.0
+Brandon Maier <brandon.maier@collins.com>
 
 _______________________________________________
 buildroot mailing list
