@@ -4,90 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ADBEBC3DA49
-	for <buildroot@archiver.kernel.org>; Tue, 23 Jul 2024 08:36:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 811E5C3DA63
+	for <buildroot@archiver.kernel.org>; Tue, 23 Jul 2024 08:45:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 63B23400F5;
-	Tue, 23 Jul 2024 08:36:17 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 209ED400F5;
+	Tue, 23 Jul 2024 08:45:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id w6d8HwHEg-b6; Tue, 23 Jul 2024 08:36:16 +0000 (UTC)
+ id oH_E1ReJ2tmN; Tue, 23 Jul 2024 08:45:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 15CA440108
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A04D34025D
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 15CA440108;
-	Tue, 23 Jul 2024 08:36:16 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A04D34025D;
+	Tue, 23 Jul 2024 08:45:24 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id DFA401BF29D
- for <buildroot@lists.busybox.net>; Tue, 23 Jul 2024 08:36:14 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A0D491BF29D
+ for <buildroot@lists.busybox.net>; Tue, 23 Jul 2024 08:45:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DA73381212
- for <buildroot@lists.busybox.net>; Tue, 23 Jul 2024 08:36:14 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8EEF9808AB
+ for <buildroot@lists.busybox.net>; Tue, 23 Jul 2024 08:45:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KWAGNqNSbnae for <buildroot@lists.busybox.net>;
- Tue, 23 Jul 2024 08:36:14 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::333; helo=mail-wm1-x333.google.com;
- envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org A3C9780C90
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A3C9780C90
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com
- [IPv6:2a00:1450:4864:20::333])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A3C9780C90
- for <buildroot@buildroot.org>; Tue, 23 Jul 2024 08:36:13 +0000 (UTC)
-Received: by mail-wm1-x333.google.com with SMTP id
- 5b1f17b1804b1-4266ed6c691so34667405e9.3
- for <buildroot@buildroot.org>; Tue, 23 Jul 2024 01:36:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1721723771; x=1722328571;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=DrFqb1FfmzHe3w8k/j68Cj/B+0C3argOoSMwjGGG2Uo=;
- b=bs2X6infs1L5EIUxk51S9pxgcoUW8EQl434xW61jaBvM97FDnPdDjaE7GTUoKT6UHC
- YjDLfCN/VyEMLV+qNAZLN3CcLuU5DzganvIAB1haX2K6EArt7FPhjntzNvheJKnAgjgl
- btyEuPUsM9sSbnbUifxH1BMf01cK/Z03J02KIoWKxQcC4avTvnIHGAYI1FN/7qMSFsR1
- wvPxrCIQGDg3V0042FAd7GyNN4bbmW/NH8JF/frisKSRTNren7JkbrSs6eBM4/y8ZHjw
- bjCKcPfIF4nPjkpZWhXEEdgD87vV9rvGBFySFpOglpepL5vv7vqJV/4VO6ijxDAGQ56l
- eTZg==
-X-Gm-Message-State: AOJu0YyNcTxKSpWZNlGKMu+MEUxUYsknONG0Vh/l2B6cvlSYo+6r9hoY
- dxHrsHNLp3kKqoA2XHx7ZxV6Dr2PICAtLkfSCkVL6ue2/aj35b2YaByguw==
-X-Google-Smtp-Source: AGHT+IHvPOh7rmUdWEhXdievl0nTGE0TYgs6cZD6AhM+Bt6qN5wLyS1QgAXzmmtVaXEKlt+u9Qkc2A==
-X-Received: by 2002:a05:600c:1f87:b0:426:67ad:38e3 with SMTP id
- 5b1f17b1804b1-427daa2135bmr62490615e9.3.1721723770921; 
- Tue, 23 Jul 2024 01:36:10 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-785-215.w83-197.abo.wanadoo.fr.
- [83.197.112.215]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-427d692976fsm161320165e9.33.2024.07.23.01.36.10
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 23 Jul 2024 01:36:10 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ id UYc3Qbq1xK0I for <buildroot@lists.busybox.net>;
+ Tue, 23 Jul 2024 08:45:22 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 71F0B80843
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 71F0B80843
+ for <buildroot@buildroot.org>; Tue, 23 Jul 2024 08:45:22 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 575A287136; Tue, 23 Jul 2024 08:45:22 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 23 Jul 2024 10:36:08 +0200
-Message-ID: <20240723083608.701739-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.43.0
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1721723771; x=1722328571; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=DrFqb1FfmzHe3w8k/j68Cj/B+0C3argOoSMwjGGG2Uo=;
- b=hHTgqzqI+JILKTodwcJjXCPbZOvSXaKsQ4T2EGW2Y0StcHDeaABA6ePEeCiLoOhkoL
- XRPO1URlRG1buiwYscgWaU92fgkxXmqdcaZ07GdVOvJFaeLgGFphSTh3c4oXPinJzKcy
- 7pMPQWAbPih0abZEYK/gJ3Uen/dyDvDTv0vclzXzWwjEgNcEFVdwZ23aewOK/r44WUfM
- zW4AXj6u7G4mp3oZ6oyb9M1nBF84F+O3gg6OEMriLlVDzoUOAvIeeEziSQK/ch/HJBlw
- 4Tu0Ay4RPEilmWMQLHT7ofzNEdpiPZqHoRZkkBQaiWUlIYz+25bW7PGD9CBfwpUSkxPE
- U8Wg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=hHTgqzqI
-Subject: [Buildroot] [PATCH 1/1] package/cwiid: fix build with gcc >= 14
+Date: Tue, 23 Jul 2024 10:44:08 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 0d582054e131bb6e13d27b2bdfc76a1a30067775
+X-Git-Newrev: ce8793f80a56a95a8c64dced14e818903c5734cc
+X-Patchwork-Hint: ignore
+Message-Id: <20240723084522.575A287136@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/hostapd: bump version to 2.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,75 +57,170 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Samuel Martin <s.martin49@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following build failure with gcc >= 14:
+commit: https://git.buildroot.net/buildroot/commit/?id=ce8793f80a56a95a8c64dced14e818903c5734cc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-led.c: In function 'wmplugin_exec':
-led.c:86:42: error: assignment to 'struct cwiid_btn_message *' from incompatible pointer type 'struct cwiid_btn_mesg *' [-Wincompatible-pointer-types]
-   86 |                                 btn_mesg = &mesg[i].btn_mesg;
-      |                                          ^
+Update hostapd to the latest release v2.11.
+Enable 802.11be support.
+Drop patch as it has been upstreamed.
 
-Fixes:
- - http://autobuild.buildroot.org/results/a3bde74ff2137d088f4261e62930859bfe460cb9
+README's copyright year was updated.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Lance Fredrickson <lancethepants@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...gins-led-led.c-fix-build-with-gcc-14.patch | 37 +++++++++++++++++++
- 1 file changed, 37 insertions(+)
- create mode 100644 package/cwiid/0004-wminput-plugins-led-led.c-fix-build-with-gcc-14.patch
+ ...generic-name-for-IEEE802.11-CRC-32-routin.patch | 102 ---------------------
+ package/hostapd/hostapd.hash                       |   4 +-
+ package/hostapd/hostapd.mk                         |   3 +-
+ 3 files changed, 4 insertions(+), 105 deletions(-)
 
-diff --git a/package/cwiid/0004-wminput-plugins-led-led.c-fix-build-with-gcc-14.patch b/package/cwiid/0004-wminput-plugins-led-led.c-fix-build-with-gcc-14.patch
-new file mode 100644
-index 0000000000..49fa059e6e
---- /dev/null
-+++ b/package/cwiid/0004-wminput-plugins-led-led.c-fix-build-with-gcc-14.patch
-@@ -0,0 +1,37 @@
-+From a775fb452ce324ce5b5ff7bf380e72c1861967b1 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Tue, 23 Jul 2024 10:31:32 +0200
-+Subject: [PATCH] wminput/plugins/led/led.c: fix build with gcc >= 14
-+
-+Fix the following build failure with gcc >= 14:
-+
-+led.c: In function 'wmplugin_exec':
-+led.c:86:42: error: assignment to 'struct cwiid_btn_message *' from incompatible pointer type 'struct cwiid_btn_mesg *' [-Wincompatible-pointer-types]
-+   86 |                                 btn_mesg = &mesg[i].btn_mesg;
-+      |                                          ^
-+
-+Fixes:
-+ - http://autobuild.buildroot.org/results/a3bde74ff2137d088f4261e62930859bfe460cb9
-+
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Upstream: https://github.com/abstrakraft/cwiid/pull/47
-+---
-+ wminput/plugins/led/led.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/wminput/plugins/led/led.c b/wminput/plugins/led/led.c
-+index 93b96d9..723a2db 100644
-+--- a/wminput/plugins/led/led.c
-++++ b/wminput/plugins/led/led.c
-+@@ -83,7 +83,7 @@ struct wmplugin_data *wmplugin_exec(int mesg_count, union cwiid_mesg mesg[])
-+ 		btn_mesg = NULL;
-+ 		for (i=0; i < mesg_count; i++) {
-+ 			if (mesg[i].type == CWIID_MESG_BTN) {
-+-				btn_mesg = &mesg[i].btn_mesg;
-++				btn_mesg = (struct cwiid_btn_message *) &mesg[i].btn_mesg;
-+ 				button = mesg[i].btn_mesg.buttons;
-+ 			}
-+ 		}
-+-- 
-+2.43.0
-+
--- 
-2.43.0
-
+diff --git a/package/hostapd/0001-use-a-less-generic-name-for-IEEE802.11-CRC-32-routin.patch b/package/hostapd/0001-use-a-less-generic-name-for-IEEE802.11-CRC-32-routin.patch
+deleted file mode 100644
+index bf85e97f21..0000000000
+--- a/package/hostapd/0001-use-a-less-generic-name-for-IEEE802.11-CRC-32-routin.patch
++++ /dev/null
+@@ -1,102 +0,0 @@
+-From 9896d8c116f054cebc49928404018a75c9b892cb Mon Sep 17 00:00:00 2001
+-From: Sergey Matyukevich <geomatsi@gmail.com>
+-Date: Fri, 16 Sep 2022 23:18:50 +0300
+-Subject: [PATCH] hostapd: use a less generic name for IEEE802.11 CRC-32 routine
+-
+-Hostapd uses 'crc32' name for IEEE802.11 CRC-32 routine. This name is
+-too generic. Buildroot autobuilder detected build configuration that
+-failed to build due to the naming conflict: static linking with openssl
+-using zlib-ng as a zlib provider, e.g. see:
+-- http://autobuild.buildroot.net/results/9901df820d3afa4cde78e8ad6d62cb8ce7e69fdb/
+-- http://autobuild.buildroot.net/results/ac19975f0bf77f4a8ca574c374092ba81cd5a332/
+-
+-Use a less generic name ieee80211_crc32 for IEEE802.11 CRC-32 routine
+-to avoid such naming conflicts.
+-
+-Upstream: https://w1.fi/cgit/hostap/commit/?id=0c7b3814ca6070a8e930dea09fde08b4058a4ca6
+-Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+----
+- hostapd/config_file.c | 4 ++--
+- src/ap/hostapd.c      | 3 ++-
+- src/ap/neighbor_db.c  | 2 +-
+- src/utils/crc32.c     | 2 +-
+- src/utils/crc32.h     | 2 +-
+- 5 files changed, 7 insertions(+), 6 deletions(-)
+-
+-diff --git a/hostapd/config_file.c b/hostapd/config_file.c
+-index b14728d1b..b38a84647 100644
+---- a/hostapd/config_file.c
+-+++ b/hostapd/config_file.c
+-@@ -2407,7 +2407,7 @@ static int hostapd_config_fill(struct hostapd_config *conf,
+- 		}
+- 		os_memcpy(ssid->ssid, pos, ssid->ssid_len);
+- 		ssid->ssid_set = 1;
+--		ssid->short_ssid = crc32(ssid->ssid, ssid->ssid_len);
+-+		ssid->short_ssid = ieee80211_crc32(ssid->ssid, ssid->ssid_len);
+- 	} else if (os_strcmp(buf, "ssid2") == 0) {
+- 		struct hostapd_ssid *ssid = &bss->ssid;
+- 		size_t slen;
+-@@ -2421,7 +2421,7 @@ static int hostapd_config_fill(struct hostapd_config *conf,
+- 		os_memcpy(ssid->ssid, str, slen);
+- 		ssid->ssid_len = slen;
+- 		ssid->ssid_set = 1;
+--		ssid->short_ssid = crc32(ssid->ssid, ssid->ssid_len);
+-+		ssid->short_ssid = ieee80211_crc32(ssid->ssid, ssid->ssid_len);
+- 		os_free(str);
+- 	} else if (os_strcmp(buf, "utf8_ssid") == 0) {
+- 		bss->ssid.utf8_ssid = atoi(pos) > 0;
+-diff --git a/src/ap/hostapd.c b/src/ap/hostapd.c
+-index 4b88641a2..56c8fb90e 100644
+---- a/src/ap/hostapd.c
+-+++ b/src/ap/hostapd.c
+-@@ -1230,7 +1230,8 @@ static int hostapd_setup_bss(struct hostapd_data *hapd, int first)
+- 	 * Short SSID calculation is identical to FCS and it is defined in
+- 	 * IEEE P802.11-REVmd/D3.0, 9.4.2.170.3 (Calculating the Short-SSID).
+- 	 */
+--	conf->ssid.short_ssid = crc32(conf->ssid.ssid, conf->ssid.ssid_len);
+-+	conf->ssid.short_ssid = ieee80211_crc32(conf->ssid.ssid,
+-+						conf->ssid.ssid_len);
+- 
+- 	if (!hostapd_drv_none(hapd)) {
+- 		wpa_printf(MSG_DEBUG, "Using interface %s with hwaddr " MACSTR
+-diff --git a/src/ap/neighbor_db.c b/src/ap/neighbor_db.c
+-index 229edd2a9..ef17634c3 100644
+---- a/src/ap/neighbor_db.c
+-+++ b/src/ap/neighbor_db.c
+-@@ -136,7 +136,7 @@ int hostapd_neighbor_set(struct hostapd_data *hapd, const u8 *bssid,
+- 
+- 	os_memcpy(entry->bssid, bssid, ETH_ALEN);
+- 	os_memcpy(&entry->ssid, ssid, sizeof(entry->ssid));
+--	entry->short_ssid = crc32(ssid->ssid, ssid->ssid_len);
+-+	entry->short_ssid = ieee80211_crc32(ssid->ssid, ssid->ssid_len);
+- 
+- 	entry->nr = wpabuf_dup(nr);
+- 	if (!entry->nr)
+-diff --git a/src/utils/crc32.c b/src/utils/crc32.c
+-index 12d9e2a70..371254994 100644
+---- a/src/utils/crc32.c
+-+++ b/src/utils/crc32.c
+-@@ -72,7 +72,7 @@ static const u32 crc32_table[256] = {
+- };
+- 
+- 
+--u32 crc32(const u8 *frame, size_t frame_len)
+-+u32 ieee80211_crc32(const u8 *frame, size_t frame_len)
+- {
+- 	size_t i;
+- 	u32 crc;
+-diff --git a/src/utils/crc32.h b/src/utils/crc32.h
+-index dc31399be..71a19dc5f 100644
+---- a/src/utils/crc32.h
+-+++ b/src/utils/crc32.h
+-@@ -9,6 +9,6 @@
+- #ifndef CRC32_H
+- #define CRC32_H
+- 
+--u32 crc32(const u8 *frame, size_t frame_len);
+-+u32 ieee80211_crc32(const u8 *frame, size_t frame_len);
+- 
+- #endif /* CRC32_H */
+--- 
+-2.37.1
+-
+diff --git a/package/hostapd/hostapd.hash b/package/hostapd/hostapd.hash
+index 4e130d01ca..7921586172 100644
+--- a/package/hostapd/hostapd.hash
++++ b/package/hostapd/hostapd.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  206e7c799b678572c2e3d12030238784bc4a9f82323b0156b4c9466f1498915d  hostapd-2.10.tar.gz
+-sha256  af01e1d1ee065a1054d20ebe8a78a016f1fb1133b73e6a9d50801b165bb280c7  README
++sha256  2b3facb632fd4f65e32f4bf82a76b4b72c501f995a4f62e330219fe7aed1747a  hostapd-2.11.tar.gz
++sha256  f1b5992bbdd015c3ccb7faaadd62ef58ed821e15b9329bf2ceb27511ccc3f562  README
+diff --git a/package/hostapd/hostapd.mk b/package/hostapd/hostapd.mk
+index 5756510e1d..3eda1c7e83 100644
+--- a/package/hostapd/hostapd.mk
++++ b/package/hostapd/hostapd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-HOSTAPD_VERSION = 2.10
++HOSTAPD_VERSION = 2.11
+ HOSTAPD_SITE = http://w1.fi/releases
+ HOSTAPD_SUBDIR = hostapd
+ HOSTAPD_CONFIG = $(HOSTAPD_DIR)/$(HOSTAPD_SUBDIR)/.config
+@@ -53,6 +53,7 @@ endif
+ ifeq ($(BR2_PACKAGE_HOSTAPD_HAS_WIFI_DRIVERS),y)
+ HOSTAPD_CONFIG_ENABLE += \
+ 	CONFIG_HS20 \
++	CONFIG_IEEE80211BE \
+ 	CONFIG_IEEE80211AX \
+ 	CONFIG_IEEE80211AC \
+ 	CONFIG_IEEE80211N \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
