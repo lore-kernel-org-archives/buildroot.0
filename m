@@ -4,66 +4,88 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A0E8EC3DA49
-	for <buildroot@archiver.kernel.org>; Tue, 23 Jul 2024 16:29:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2218C3DA63
+	for <buildroot@archiver.kernel.org>; Tue, 23 Jul 2024 16:30:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 534D560651;
-	Tue, 23 Jul 2024 16:29:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8472960669;
+	Tue, 23 Jul 2024 16:30:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id I5kdn4cgapVw; Tue, 23 Jul 2024 16:29:04 +0000 (UTC)
+ id VGSq8GFBnZ0f; Tue, 23 Jul 2024 16:30:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 73BB96069C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8D9F66069C
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 73BB96069C;
-	Tue, 23 Jul 2024 16:29:04 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D4E261BF2FD
- for <buildroot@lists.busybox.net>; Tue, 23 Jul 2024 16:29:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8D9F66069C;
+	Tue, 23 Jul 2024 16:30:45 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 208681BF2FD
+ for <buildroot@lists.busybox.net>; Tue, 23 Jul 2024 16:30:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CB90A404F8
- for <buildroot@lists.busybox.net>; Tue, 23 Jul 2024 16:29:03 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0E3386069C
+ for <buildroot@lists.busybox.net>; Tue, 23 Jul 2024 16:30:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oQO0ETw7PGzv for <buildroot@lists.busybox.net>;
- Tue, 23 Jul 2024 16:29:02 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=84.110.109.230;
- helo=mail.tkos.co.il; envelope-from=baruch@tkos.co.il; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org B7888402AA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B7888402AA
-Received: from mail.tkos.co.il (hours.tkos.co.il [84.110.109.230])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B7888402AA
- for <buildroot@buildroot.org>; Tue, 23 Jul 2024 16:29:01 +0000 (UTC)
-Received: from tarshish.tkos.co.il (unknown [10.0.8.2])
- (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
- (No client certificate requested)
- by mail.tkos.co.il (Postfix) with ESMTPS id 3F7D8440271;
- Tue, 23 Jul 2024 19:27:49 +0300 (IDT)
-To: buildroot@buildroot.org
-Date: Tue, 23 Jul 2024 19:28:15 +0300
-Message-ID: <ec9291a6fb5bf49751b1abd089f14f0b99a160e6.1721752095.git.baruch@tkos.co.il>
-X-Mailer: git-send-email 2.43.0
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id sOg4dYNIcLMs for <buildroot@lists.busybox.net>;
+ Tue, 23 Jul 2024 16:30:43 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=91.207.212.93;
+ helo=mx07-00178001.pphosted.com;
+ envelope-from=prvs=79348e9772=etienne.carriere@foss.st.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 0B83C60669
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0B83C60669
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com
+ [91.207.212.93])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 0B83C60669
+ for <buildroot@buildroot.org>; Tue, 23 Jul 2024 16:30:42 +0000 (UTC)
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+ by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 46NBpKmp026006;
+ Tue, 23 Jul 2024 18:30:41 +0200
+Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
+ by mx07-00178001.pphosted.com (PPS) with ESMTPS id 40g2c4u5bj-1
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+ Tue, 23 Jul 2024 18:30:41 +0200 (MEST)
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+ by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 722B540048;
+ Tue, 23 Jul 2024 18:30:37 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+ by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id D68F724855D;
+ Tue, 23 Jul 2024 18:30:27 +0200 (CEST)
+Received: from localhost (10.48.86.128) by SHFDAG1NODE1.st.com (10.75.129.69)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.37; Tue, 23 Jul
+ 2024 18:30:27 +0200
+From: Etienne Carriere <etienne.carriere@foss.st.com>
+To: <buildroot@buildroot.org>
+Date: Tue, 23 Jul 2024 18:30:24 +0200
+Message-ID: <20240723163025.2733492-1-etienne.carriere@foss.st.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=tkos.co.il; s=default; t=1721752069;
- bh=v3mntHSm6PR9rcxR+WS4YovzHk/lXcw7PpOoko0U1ZQ=;
- h=From:To:Cc:Subject:Date:From;
- b=c6YgEpgoc3G3EfY3z35n6vnNL6m3ZEvEXe158UHAqkdfJUSn9ILe7Ltb9WOWHwHs6
- eSW+iONWLdlvKCXFP82p3ft1PJumS8h67NPKLbcyMBkYJzffURUpWCdgfxvHu1Oxii
- Fo+xhsPNxa6d5Wa10Jb+mtM+zJ81+sIZ77lkQhQKs2ELQ5i+p2iYZeA9SHGRnuM3Lb
- nMy3ToRYr7Er4beErEM+W0iytPcs1odCaDWte2eSSpL6R2ZmUUEMQhCjKd3SMfzJsy
- NuMW7qd+uSOq8M6NtBdeMIwZEA6mVYM6H0CIgQD85+KBpdsH2l0mlmQAynYlVL4nsY
- eqzkp5zquW8SQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=tkos.co.il
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=tkos.co.il header.i=@tkos.co.il header.a=rsa-sha256
- header.s=default header.b=c6YgEpgo
-Subject: [Buildroot] [PATCH] package/uuu: update upstream link
+X-Originating-IP: [10.48.86.128]
+X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-07-23_05,2024-07-23_02,2024-05-17_01
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=foss.st.com; h=
+ cc:content-transfer-encoding:content-type:date:from:message-id
+ :mime-version:subject:to; s=selector1; bh=LOknpTtKSJ/yhjagCqq8is
+ irnkk63fP1t3LJqsFtiSw=; b=4d5uv0Kp6YZkFd4mwo8f6fWQHndFkKyzQ+Oz8m
+ rTBMCI+d9DCJ/Ys98JFagdKJZpJNyAt3y7s1V74pf9QbvcVFM5FzFZoaxgGaQHLr
+ KACUR0AFPOe1jBkIzpDYHLVwF1s03P+xSt+tPyRCjM88QcWGvluxwslTXUvIIdRD
+ eUb/GSgiRZS5sC4z1+jmcNkQyXNi4h9Z0ESprI2/zVk3KVLLDm4iP+UqbY9Ljp7q
+ 22lNrnoX9NSbgttxECVpg5WzJhC9bg2dljnJ6pUA/vBOG+IeOm5sbMwnbB3rTsHd
+ zGwTzcGwMO75b+kJ/rBtTFyZd8ekPo80BlFt4AGvUUTBKJcA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=foss.st.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com
+ header.a=rsa-sha256 header.s=selector1 header.b=4d5uv0Kp
+Subject: [Buildroot] [PATCH v2 1/2] configs/qemu_arm_vexpress_tz: bump tf-a
+ and u-boot versions
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,51 +97,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Baruch Siach via buildroot <buildroot@buildroot.org>
-Reply-To: Baruch Siach <baruch@tkos.co.il>
-Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Cc: Romain Naour <romain.naour@gmail.com>,
+ Etienne Carriere <etienne.carriere@foss.st.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-NXP repositories moved to a new location. The old URL redirects to the
-new one.
+Bump TF-A to version v2.10 and U-Boot to version v2024.07 for
+Qemu arm-vexpress/trustzone board config.
 
-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Etienne Carriere <etienne.carriere@foss.st.com>
 ---
- package/uuu/Config.in.host | 2 +-
- package/uuu/uuu.mk         | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ configs/qemu_arm_vexpress_tz_defconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/uuu/Config.in.host b/package/uuu/Config.in.host
-index 0ed064feb6ea..99f20ee0709b 100644
---- a/package/uuu/Config.in.host
-+++ b/package/uuu/Config.in.host
-@@ -12,7 +12,7 @@ config BR2_PACKAGE_HOST_UUU
- 	    sudo sh -c "uuu -udev >> /etc/udev/rules.d/70-uuu.rules"
- 	    sudo udevadm control --reload
+diff --git a/configs/qemu_arm_vexpress_tz_defconfig b/configs/qemu_arm_vexpress_tz_defconfig
+index 900bd17fc2..52b5e62e6a 100644
+--- a/configs/qemu_arm_vexpress_tz_defconfig
++++ b/configs/qemu_arm_vexpress_tz_defconfig
+@@ -33,7 +33,7 @@ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/arm-vexpress-tz/linux.fragmen
+ # TF-A for booting OP-TEE secure and uboot/linux non secure
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.7"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.10"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="qemu"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL32_OPTEE=y
+@@ -59,7 +59,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.04"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.07"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="qemu_arm"
+ BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/qemu/arm-vexpress-tz/u-boot.config"
  
--	  https://github.com/NXPmicro/mfgtools
-+	  https://github.com/nxp-imx/mfgtools
- 
- comment "host uuu needs a toolchain w/ host gcc >= 4.9"
- 	depends on !BR2_HOST_GCC_AT_LEAST_4_9
-diff --git a/package/uuu/uuu.mk b/package/uuu/uuu.mk
-index 63556b9938a8..e57828a0ca6e 100644
---- a/package/uuu/uuu.mk
-+++ b/package/uuu/uuu.mk
-@@ -6,7 +6,7 @@
- 
- UUU_VERSION = 1.5.182
- UUU_SOURCE = uuu_source-uuu_$(UUU_VERSION).tar.gz
--UUU_SITE = https://github.com/NXPmicro/mfgtools/releases/download/uuu_$(UUU_VERSION)
-+UUU_SITE = https://github.com/nxp-imx/mfgtools/releases/download/uuu_$(UUU_VERSION)
- UUU_LICENSE = BSD 3-Clause "New" or "Revised" License
- UUU_LICENSE_FILES = LICENSE
- HOST_UUU_DEPENDENCIES = \
 -- 
-2.43.0
+2.25.1
 
 _______________________________________________
 buildroot mailing list
