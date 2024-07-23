@@ -4,91 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4DEE7C3DA63
-	for <buildroot@archiver.kernel.org>; Tue, 23 Jul 2024 08:03:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ADBF2C3DA63
+	for <buildroot@archiver.kernel.org>; Tue, 23 Jul 2024 08:09:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1622C80ACC;
-	Tue, 23 Jul 2024 08:03:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6B7BF80B4D;
+	Tue, 23 Jul 2024 08:09:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3yeNMDRFFAdq; Tue, 23 Jul 2024 08:02:59 +0000 (UTC)
+ id rPCb5r_4QCo4; Tue, 23 Jul 2024 08:09:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2019780B04
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 749EB80B7E
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2019780B04;
-	Tue, 23 Jul 2024 08:02:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 749EB80B7E;
+	Tue, 23 Jul 2024 08:09:00 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A60471BF296
- for <buildroot@lists.busybox.net>; Tue, 23 Jul 2024 08:02:56 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0C0171BF29D
+ for <buildroot@lists.busybox.net>; Tue, 23 Jul 2024 08:08:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9FC7C401E1
- for <buildroot@lists.busybox.net>; Tue, 23 Jul 2024 08:02:56 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 05B6240447
+ for <buildroot@lists.busybox.net>; Tue, 23 Jul 2024 08:08:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id W-dXv9d99ZJU for <buildroot@lists.busybox.net>;
- Tue, 23 Jul 2024 08:02:56 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42e; helo=mail-wr1-x42e.google.com;
- envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 7D9D440111
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7D9D440111
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
- [IPv6:2a00:1450:4864:20::42e])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 7D9D440111
- for <buildroot@buildroot.org>; Tue, 23 Jul 2024 08:02:55 +0000 (UTC)
-Received: by mail-wr1-x42e.google.com with SMTP id
- ffacd0b85a97d-3685b3dbcdcso2780700f8f.3
- for <buildroot@buildroot.org>; Tue, 23 Jul 2024 01:02:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1721721773; x=1722326573;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=7rVTTRgkz/bMXRd1NZipLRXkVN/fQ42DsggeD//dl5Q=;
- b=QHFyAdSXcJtw44loUkuWaVizqLhl26ONqIXe1qbDLCLbYbQlyqq66XkHhiVnEMXCJc
- agdJRYx2ivAikFQQju1SaGo851z2QSQ5gnQSVlB2VHfhU/ktw+WhEwS3SqwLVn2Y1rlx
- AM303Xklyw/bmix3jFqx2A4rRXpB2/SQkLdhFXKCBMBSJGcHldr98gN1/UqTUJAJuv84
- v+czmqN1lkcp+j6xggUL3VCZ7GXNgE5hSfd7hPY2MA87T0W241eqiLhWp+wP1hnN1+jl
- eoWh48J4zXgWqLmy50QjO3xGAc89QBXFnQWAe/Zo0gsnTLRaABNQDr0BDngreN9y8ONk
- eydw==
-X-Gm-Message-State: AOJu0YxQIJOw8YSkQSsQz4WdjDrtBFxBCaNLmWDknj8CTIoh3SSS/uhi
- kXlsYCPuXzFC7aOcCNZn+yf9mVhKTNN53AqPa6C5qcObLgwedFMTO4bI5A==
-X-Google-Smtp-Source: AGHT+IHaLzG/4q/S63SM5IRhmZY+p+HD8zINk9oRB9b3yI3DH4PPSg9RI80QMsXIxeZlSrTkQXB4WA==
-X-Received: by 2002:a5d:42ca:0:b0:367:96c5:ae88 with SMTP id
- ffacd0b85a97d-369ded23c58mr1394166f8f.31.1721721772837; 
- Tue, 23 Jul 2024 01:02:52 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-785-215.w83-197.abo.wanadoo.fr.
- [83.197.112.215]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-368787cee03sm10666098f8f.76.2024.07.23.01.02.52
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 23 Jul 2024 01:02:52 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-To: buildroot@buildroot.org
-Date: Tue, 23 Jul 2024 10:02:50 +0200
-Message-ID: <20240723080250.342850-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.43.0
+ id FfgON6pycAJH for <buildroot@lists.busybox.net>;
+ Tue, 23 Jul 2024 08:08:58 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.198;
+ helo=relay6-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org A14754014D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A14754014D
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [217.70.183.198])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A14754014D
+ for <buildroot@buildroot.org>; Tue, 23 Jul 2024 08:08:56 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 79956C0006;
+ Tue, 23 Jul 2024 08:08:53 +0000 (UTC)
+Date: Tue, 23 Jul 2024 10:08:52 +0200
+To: Bryan Brattlof <bb@ti.com>
+Message-ID: <20240723100852.17ddd3e5@windsurf>
+In-Reply-To: <20240722234911.2u4obhhk6srzomsr@bryanbrattlof.com>
+References: <20240626-gitignore-output-new-v4-1-fcb3ebc263ca@collins.com>
+ <20240722234911.2u4obhhk6srzomsr@bryanbrattlof.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1721721773; x=1722326573; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=7rVTTRgkz/bMXRd1NZipLRXkVN/fQ42DsggeD//dl5Q=;
- b=hCLf0vrR4vR4jgBqNqbuKpMAWfrIp9PVtDO2b++/jL+/hh/x+IVhCWHaP1gl0MWkkS
- IdQhbByxBvP4HFdQ13cC5rRSOw0ief3svlhdQR/4Ub5TUJUmxSFI+xnXqILwEaTZra0m
- DoUeof/0OMJbkfnf/+fCSXuYVuEnwhxT6J7NDM7kTh8C5ic5azLbaCdPqpKbTGEfqrI+
- Z72GvaSkyzg9gMadIHcm/VaGtD5I/U2zdhMO8kGJERbyb3ECeUP66B05RAYdu7zfnuf4
- Rc6u0TKUdnbKG197kDRY+FEIPIFKUcMPf+Zt2VGVABcpWdV3wNzxP/9VTDjEoRjZhNO7
- CPmw==
+ d=bootlin.com; s=gm1; t=1721722134;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=3wZ26nEn6Mke95kpMcjeA+Dw4VMJlg5dNHgCf7FdhT0=;
+ b=LvPyqYATAPDkMWXVZ8op20qEJfhJ4slNksUgg/7qqF6t8i5cFablHza69tWrzh2sKyil+r
+ deieCAyoTRWCpLRoORJS7cW1QGKHYJQ6v8pt3ZSxRrh8an1e8u8C1d3RhBd1PDTfMqVzqw
+ u586bmVQPhc9p1e5XJAoWCPzZ2mBPMl98aLPU/VH+Rjm8M3RjrdtmvSMzAccERJ9cSp1zT
+ DzjYp7j/klJtTnjs+ffVRzkYhg2LzINgoXsCdGEXtOZV2vCL9uWlQ75Mkwy9OX7Nc/oLDN
+ JzujZsMG6foEfQtiWOw96quZQytRXbhIMPigvpntk1BSvB9lF0wPCiFgPwn6nA==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=hCLf0vrR
-Subject: [Buildroot] [PATCH 1/1] package/fluent-bit: renumber patch
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=LvPyqYAT
+Subject: Re: [Buildroot] [PATCH v4] Create a .gitignore file in the
+ CANONICAL_O directory
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,30 +82,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Romain Naour <romain.naour@gmail.com>,
+ "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Brandon Maier <brandon.maier@collins.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Commit 94e072849e6c86a8c75402b1e600642673ebfb57 forgot to renumber
-latest patch
+Hello,
 
-Fixes: 94e072849e6c86a8c75402b1e600642673ebfb57
+On Mon, 22 Jul 2024 18:49:11 -0500
+Bryan Brattlof <bb@ti.com> wrote:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
----
- ...04-Enhance-setting-write-gs-base-with-cmake-variable-30.patch} | 0
- 1 file changed, 0 insertions(+), 0 deletions(-)
- rename package/fluent-bit/{0005-Enhance-setting-write-gs-base-with-cmake-variable-30.patch => 0004-Enhance-setting-write-gs-base-with-cmake-variable-30.patch} (100%)
+> For some odd reason this seems to have broken 
+> python-jsonschema-specifications in a fairly weird way that I'm not 
+> fully sure I understand. 
+> 
+> Somehow when downloading the source with this patch applied the build 
+> will succeed but it will never be installed in the host directory. 
+> Reverting this patch and deleting the package in the dl/ directory fixes 
+> everything. (at least for TI's reference boards)
+> 
+> I'll continue to look into this, just wanted to start the thread just in 
+> the off chance someone else is doing the same :)
 
-diff --git a/package/fluent-bit/0005-Enhance-setting-write-gs-base-with-cmake-variable-30.patch b/package/fluent-bit/0004-Enhance-setting-write-gs-base-with-cmake-variable-30.patch
-similarity index 100%
-rename from package/fluent-bit/0005-Enhance-setting-write-gs-base-with-cmake-variable-30.patch
-rename to package/fluent-bit/0004-Enhance-setting-write-gs-base-with-cmake-variable-30.patch
+Interesting, thanks for the heads up on this. I don't know if I'll have
+the time to look into this right now, but I can imagine that the
+package is somehow using git, and the fact that a .gitignore file
+exists breaks stuff?
+
+Thomas
 -- 
-2.43.0
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
