@@ -4,71 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D45E6C3DA49
-	for <buildroot@archiver.kernel.org>; Tue, 23 Jul 2024 09:41:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E4585C3DA63
+	for <buildroot@archiver.kernel.org>; Tue, 23 Jul 2024 09:41:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A4EFD80B28;
-	Tue, 23 Jul 2024 09:41:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B4875811A9;
+	Tue, 23 Jul 2024 09:41:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id g55l3VAO-E-U; Tue, 23 Jul 2024 09:41:14 +0000 (UTC)
+ id wcsJ69IH7U-I; Tue, 23 Jul 2024 09:41:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 95BA380D92
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C04ED811E3
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 95BA380D92;
-	Tue, 23 Jul 2024 09:41:14 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id DBD621BF3AA
- for <buildroot@lists.busybox.net>; Tue, 23 Jul 2024 09:41:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C04ED811E3;
+	Tue, 23 Jul 2024 09:41:46 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id C69701BF3AA
+ for <buildroot@lists.busybox.net>; Tue, 23 Jul 2024 09:41:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D69B881169
- for <buildroot@lists.busybox.net>; Tue, 23 Jul 2024 09:41:13 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B4AFC607B1
+ for <buildroot@lists.busybox.net>; Tue, 23 Jul 2024 09:41:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id T2r3M8rhoVMf for <buildroot@lists.busybox.net>;
- Tue, 23 Jul 2024 09:41:13 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.194;
- helo=relay2-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id bGbKIzvROG2E for <buildroot@lists.busybox.net>;
+ Tue, 23 Jul 2024 09:41:45 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org AE2D480B28
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AE2D480B28
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp1.osuosl.org (Postfix) with ESMTPS id AE2D480B28
- for <buildroot@buildroot.org>; Tue, 23 Jul 2024 09:41:12 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 139BB4000F;
- Tue, 23 Jul 2024 09:41:10 +0000 (UTC)
-Date: Tue, 23 Jul 2024 11:41:10 +0200
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20240723114110.77c9143a@windsurf>
-In-Reply-To: <20240723085645.732060-1-fontaine.fabrice@gmail.com>
-References: <20240723085645.732060-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1721727671;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=I+nrKcC2n6BCk/gbAz+2gFaAT6ocRPzD7+5gq8uHTwk=;
- b=C5AdECw9kdDps1+dA3/mVgN3xghtW5ZKrMG2yxfJ1lyzi5/9Er7W9g4LD6ihhYxhdW8GTH
- L8zWxoySAwIcIhEu2OekvJi1fKi5G8XlPzS2gmky7tx+7m+7jxd2Jt5PejUYqtr5WMTUhX
- SuzSkeeicEkVzNMafloznb8x2YemUbZelgGIIC73plI5O8pdSmDCqUX1+u+A6i8woDyPPx
- KF58OkTJXoB9UwppuWGKPpA38lKTBR1U+vzGefI93GX/CS3PS6QS3ggAPkCKJjORKYFim7
- aMxIgBVZL4WziOWQhez6dfy6oALJzITpRfxayT4avQ4iHXkW+8nJ99C+HOvaJA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=C5AdECw9
-Subject: Re: [Buildroot] [PATCH 1/1] package/gamin: fix build with gcc >= 14
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 04A7C600B8
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 04A7C600B8
+ for <buildroot@buildroot.org>; Tue, 23 Jul 2024 09:41:45 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id EF0D987175; Tue, 23 Jul 2024 09:41:44 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 23 Jul 2024 11:41:29 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 3ebd06c0b13031191919caca07df86268cd758e4
+X-Git-Newrev: 1395330fe6d9729bd46ad3a6c6497ee6e5a66487
+X-Patchwork-Hint: ignore
+Message-Id: <20240723094144.EF0D987175@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/flannel: bump to version 0.25.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,47 +59,44 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Fabrice,
+commit: https://git.buildroot.net/buildroot/commit/?id=1395330fe6d9729bd46ad3a6c6497ee6e5a66487
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 23 Jul 2024 10:56:45 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Signed-off-by: Geoff Levand <geoff@infradead.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/flannel/flannel.hash | 2 +-
+ package/flannel/flannel.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> diff --git a/package/gamin/0004-fix-build-with-gcc-14.patch b/package/gamin/0004-fix-build-with-gcc-14.patch
-> new file mode 100644
-> index 0000000000..0380c6f120
-> --- /dev/null
-> +++ b/package/gamin/0004-fix-build-with-gcc-14.patch
-> @@ -0,0 +1,104 @@
-> +From 2e37707a94d20d6772862f18902a62b5ff666a27 Mon Sep 17 00:00:00 2001
-> +From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> +Date: Tue, 23 Jul 2024 10:43:54 +0200
-> +Subject: [PATCH] fix build with gcc >= 14
-> +
-> +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-
-Thanks, but this patch lacks an Upstream: tag, so it causes a
-check-package warning.
-
-However, I think this stuff is
-deprecated. http://www.gnome.org/~veillard/gamin/sources which we download
-from, no longer exists, so the download only works because we fallback
-on sources.buildroot.net. The project is also
-here: https://gitlab.gnome.org/Archive/gamin, but archived, and last commit
-was made 12 years ago. I think we can drop the package.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/package/flannel/flannel.hash b/package/flannel/flannel.hash
+index 85bc184368..d1f03a9d38 100644
+--- a/package/flannel/flannel.hash
++++ b/package/flannel/flannel.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  e4946abe7212d0a3f89f64ff9d4310dd21fafa782d7e5c1c7d44ea264ab25d5c  flannel-0.25.4-go2.tar.gz
++sha256  e6f312d8a7e635ef707f3811313f045f0f80312d96dfcc722de973ffa2910204  flannel-0.25.5-go2.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/flannel/flannel.mk b/package/flannel/flannel.mk
+index 5231d41de8..7705bdbefe 100644
+--- a/package/flannel/flannel.mk
++++ b/package/flannel/flannel.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FLANNEL_VERSION = 0.25.4
++FLANNEL_VERSION = 0.25.5
+ FLANNEL_SITE = $(call github,flannel-io,flannel,v$(FLANNEL_VERSION))
+ 
+ FLANNEL_LICENSE = Apache-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
