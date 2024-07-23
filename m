@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8732EC3DA63
-	for <buildroot@archiver.kernel.org>; Tue, 23 Jul 2024 15:00:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E3680C3DA63
+	for <buildroot@archiver.kernel.org>; Tue, 23 Jul 2024 15:01:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4C0AF40576;
-	Tue, 23 Jul 2024 15:00:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9378C404D5;
+	Tue, 23 Jul 2024 15:01:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DqNkJaVLXRme; Tue, 23 Jul 2024 15:00:56 +0000 (UTC)
+ id lYJaZtiwrLIp; Tue, 23 Jul 2024 15:00:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BCE9C40553
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3646F40577
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BCE9C40553;
-	Tue, 23 Jul 2024 15:00:55 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5192E1BF4E5
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3646F40577;
+	Tue, 23 Jul 2024 15:00:59 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 688AD1BF969
  for <buildroot@lists.busybox.net>; Tue, 23 Jul 2024 15:00:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3A14B80DCF
+ by smtp2.osuosl.org (Postfix) with ESMTP id 55E66402F5
  for <buildroot@lists.busybox.net>; Tue, 23 Jul 2024 15:00:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4Mn_6Skq6A0w for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id K1bSlgRSgBPc for <buildroot@lists.busybox.net>;
  Tue, 23 Jul 2024 15:00:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1986B80CF7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F0F8E40015
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1986B80CF7
- for <buildroot@buildroot.org>; Tue, 23 Jul 2024 15:00:49 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id F0F8E40015
+ for <buildroot@buildroot.org>; Tue, 23 Jul 2024 15:00:48 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 027D9873DC; Tue, 23 Jul 2024 15:00:48 +0000 (UTC)
+ id D5762873A7; Tue, 23 Jul 2024 15:00:48 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 23 Jul 2024 16:54:21 +0200
+Date: Tue, 23 Jul 2024 16:51:56 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: f466b9305fe520b226f9b6bedef360f2d1cd7050
-X-Git-Newrev: cc610b2f126ebb1c65877d14544bcf3eebe23a90
+X-Git-Oldrev: 51f827e9303e23ba9b72cd7171576d4d67cd9712
+X-Git-Newrev: f466b9305fe520b226f9b6bedef360f2d1cd7050
 X-Patchwork-Hint: ignore
-Message-Id: <20240723150049.027D9873DC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/exim: security
- bump version to 4.98
+Message-Id: <20240723150048.D5762873A7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/exim: update
+ patches to be applied with fuzz 0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,298 +65,173 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cc610b2f126ebb1c65877d14544bcf3eebe23a90
+commit: https://git.buildroot.net/buildroot/commit/?id=f466b9305fe520b226f9b6bedef360f2d1cd7050
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-Release notes:
-https://lists.exim.org/lurker/message/20240710.155945.8823670d.en.html
+Commit 8f88a644ed "support/scripts/apply-patches.sh: set the maximum
+fuzz factor to 0" reduced the fuzz factor.
 
-Fixes CVE-2024-39929: https://bugs.exim.org/show_bug.cgi?id=3099#c4
+Due to this change, exim fails to build with output:
 
-Removed patch 0004 due to removal of codesourcery arm/aarch64 toolchains
-with commit 53a8c5150e5eeeb6dbbead0275dbf9141f507511.
+    Applying 0004-exim_lock-fix-lstat-related-build-errors.patch using patch:
+    patching file src/exim_lock.c
+    Hunk #1 FAILED at 13.
+    Hunk #2 succeeded at 27 (offset 1 line).
+    1 out of 2 hunks FAILED -- saving rejects to file src/exim_lock.c.rej
 
-Patch 0005 (renamed to 0004) is still necessary with gcc-13.x,
-reformatted Upstream trailer.
+This commit rebases the package patches on the current package version
+when needed.
 
-Removed patches 0006, 0007 & 0008 which are included in this release.
+Fixes:
+http://autobuild.buildroot.net/results/ff27d5ebd7f24ac8cb236b83c67c2c75255e51c6/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 1a409fafb0ea24e8e8f07529623d55e8d3435598)
+Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Reviewed-by: Yann E. MORIN <yann.morin@orange.com>
+Tested-by: Yann E. MORIN <yann.morin@orange.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 20973140c14d528d91ecea12ebac6428d78d3340)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .checkpackageignore                                |  2 -
- ...-exim_lock-fix-lstat-related-build-errors.patch | 53 --------------------
- ...ors.patch => 0004-sieve-fix-build-errors.patch} |  2 +-
- package/exim/0006-OpenSSL-fix-non-DANE-build.patch | 28 -----------
- package/exim/0007-typoes.patch                     | 58 ----------------------
- ...s-openssl.c-fix-build-with-libressl-3.5.0.patch | 43 ----------------
- package/exim/exim.hash                             |  4 +-
- package/exim/exim.mk                               |  2 +-
- 8 files changed, 4 insertions(+), 188 deletions(-)
+ package/exim/0001-Build-buildconfig-for-the-host.patch            | 4 +++-
+ .../exim/0002-Don-t-make-backup-copies-of-installed-files.patch   | 4 +++-
+ .../exim/0003-Skip-version-check-and-symlink-installation.patch   | 8 ++++----
+ package/exim/0004-exim_lock-fix-lstat-related-build-errors.patch  | 8 +++++---
+ package/exim/0005-sieve-fix-build-errors.patch                    | 4 +++-
+ 5 files changed, 18 insertions(+), 10 deletions(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index a6ea530f8c..41698e1cde 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -363,8 +363,6 @@ package/evemu/0004-src-evemu.c-fix-build-with-kernels-4.16.patch Upstream
- package/exim/0001-Build-buildconfig-for-the-host.patch Upstream
- package/exim/0002-Don-t-make-backup-copies-of-installed-files.patch Upstream
- package/exim/0003-Skip-version-check-and-symlink-installation.patch Upstream
--package/exim/0004-exim_lock-fix-lstat-related-build-errors.patch Upstream
--package/exim/0005-sieve-fix-build-errors.patch Upstream
- package/exim/S86exim Indent Variables
- package/expect/0001-enable-cross-compilation.patch Upstream
- package/expect/0002-allow-tcl-build-directory.patch Upstream
-diff --git a/package/exim/0004-exim_lock-fix-lstat-related-build-errors.patch b/package/exim/0004-exim_lock-fix-lstat-related-build-errors.patch
-deleted file mode 100644
-index 616ada5026..0000000000
---- a/package/exim/0004-exim_lock-fix-lstat-related-build-errors.patch
-+++ /dev/null
-@@ -1,53 +0,0 @@
--From bbcf4320134efd8a01ce5a02bb9af62019ca05f6 Mon Sep 17 00:00:00 2001
--From: Luca Ceresoli <luca@lucaceresoli.net>
--Date: Tue, 4 Feb 2020 15:57:48 +0100
--Subject: [PATCH] exim_lock: fix lstat-related build errors
--
--exim_lock fails to cross-compile with the Sourcery CodeBench ARM 2014.05
--toolchain due the a missing include of sys/types.h, needed for the
--constants used by fstat() and lstat().
--
--Discovered when cross-compiling with the Buildroot embedded Linux
--buildsystem.
--
--Fixes:
--
--  exim_lock.c:427:30: error: 'S_IFMT' undeclared (first use in this function)
--         if ((statbuf.st_mode & S_IFMT) == S_IFLNK)
--                                ^
--  exim_lock.c:427:30: note: each undeclared identifier is reported only once for each function it appears in
--  exim_lock.c:427:41: error: 'S_IFLNK' undeclared (first use in this function)
--         if ((statbuf.st_mode & S_IFMT) == S_IFLNK)
--                                           ^
--
--Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
--Upstream-status: https://bugs.exim.org/show_bug.cgi?id=2523
--[Bernd: rebased for version 4.97.1]
--Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-----
-- src/exim_lock.c | 3 +++
-- 1 file changed, 3 insertions(+)
--
--diff --git a/src/exim_lock.c b/src/exim_lock.c
--index 068216816054..cb140aff6436 100644
----- a/src/exim_lock.c
--+++ b/src/exim_lock.c
--@@ -14,6 +14,8 @@ Copyright (c) The Exim Maintainers 2016 - 2021
-- SPDX-License-Identifier: GPL-2.0-or-later
-- */
--
--+#define _XOPEN_SOURCE
--+
-- #include "os.h"
--
-- #include <stdio.h>
--@@ -27,6 +29,7 @@ Copyright (c) The Exim Maintainers 2016
-- #include <unistd.h>
-- #include <utime.h>
-- #include <sys/utsname.h>
--+#include <sys/types.h>
-- #include <sys/stat.h>
-- #include <sys/file.h>
-- #include <pwd.h>
----
--2.25.0
-diff --git a/package/exim/0005-sieve-fix-build-errors.patch b/package/exim/0004-sieve-fix-build-errors.patch
-similarity index 95%
-rename from package/exim/0005-sieve-fix-build-errors.patch
-rename to package/exim/0004-sieve-fix-build-errors.patch
-index 20323c17cd..c1a2c45b8d 100644
---- a/package/exim/0005-sieve-fix-build-errors.patch
-+++ b/package/exim/0004-sieve-fix-build-errors.patch
-@@ -20,7 +20,7 @@ Discovered when cross-compiling with the Buildroot embedded Linux
- buildsystem.
+diff --git a/package/exim/0001-Build-buildconfig-for-the-host.patch b/package/exim/0001-Build-buildconfig-for-the-host.patch
+index 87eb527974..e9da80765a 100644
+--- a/package/exim/0001-Build-buildconfig-for-the-host.patch
++++ b/package/exim/0001-Build-buildconfig-for-the-host.patch
+@@ -2,6 +2,8 @@ buildconfig is meant to be executed on the host, so it has to be compiled
+ using $(HOSTCC), not $(CC).
  
  Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
--Upstream-status: https://bugs.exim.org/show_bug.cgi?id=2523
-+Upstream: https://bugs.exim.org/show_bug.cgi?id=2523
- [Bernd: rebased for version 4.97.1]
- Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++[Bernd: rebased for version 4.97.1]
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
  ---
-diff --git a/package/exim/0006-OpenSSL-fix-non-DANE-build.patch b/package/exim/0006-OpenSSL-fix-non-DANE-build.patch
-deleted file mode 100644
-index 8ae63d2226..0000000000
---- a/package/exim/0006-OpenSSL-fix-non-DANE-build.patch
-+++ /dev/null
-@@ -1,28 +0,0 @@
--From 37b849dca4dfd855212a763662825e967a4d77b1 Mon Sep 17 00:00:00 2001
--From: Jeremy Harris <jgh146exb@wizmail.org>
--Date: Tue, 7 Nov 2023 15:02:18 +0000
--Subject: [PATCH] OpenSSL: fix non-DANE build
--
--Upstream: https://git.exim.org/exim.git/commitdiff/37b849dca4dfd855212a763662825e967a4d77b1
--
--Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-----
-- src/tls-openssl.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/src/src/tls-openssl.c b/src/src/tls-openssl.c
--index ef11de593..851ac77c5 100644
----- a/src/tls-openssl.c
--+++ b/src/tls-openssl.c
--@@ -2605,7 +2605,7 @@ if (!(bs = OCSP_response_get1_basic(rsp)))
--     asking for certificate-status under DANE, so this callback won't run for
--     that combination. It still will for non-DANE. */
-- 
---#ifdef EXIM_HAVE_OPENSSL_OCSP_RESP_GET0_SIGNER
--+#if defined(EXIM_HAVE_OPENSSL_OCSP_RESP_GET0_SIGNER) && defined(SUPPORT_DANE)
--     X509 * signer;
-- 
--     if (  tls_out.dane_verified
---- 
--2.30.2
--
-diff --git a/package/exim/0007-typoes.patch b/package/exim/0007-typoes.patch
-deleted file mode 100644
-index 6bbfc9eecd..0000000000
---- a/package/exim/0007-typoes.patch
-+++ /dev/null
-@@ -1,58 +0,0 @@
--From caf57fe7eb5018b8df196e6d9f99586232798eb3 Mon Sep 17 00:00:00 2001
--From: Jeremy Harris <jgh146exb@wizmail.org>
--Date: Wed, 8 Nov 2023 14:22:37 +0000
--Subject: [PATCH] typoes
--
--Upstream: https://git.exim.org/exim.git/commit/caf57fe7eb5018b8df196e6d9f99586232798eb3
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- src/src/tls-openssl.c | 12 ++++++------
-- 1 file changed, 6 insertions(+), 6 deletions(-)
--
--diff --git a/src/tls-openssl.c b/src/tls-openssl.c
--index 851ac77c5..237303ba9 100644
----- a/src/tls-openssl.c
--+++ b/src/tls-openssl.c
--@@ -77,9 +77,9 @@ change this guard and punt the issue for a while longer. */
-- #  define EXIM_HAVE_OPENSSL_KEYLOG
-- #  define EXIM_HAVE_OPENSSL_CIPHER_GET_ID
-- #  define EXIM_HAVE_SESSION_TICKET
---#  define EXIM_HAVE_OPESSL_TRACE
---#  define EXIM_HAVE_OPESSL_GET0_SERIAL
---#  define EXIM_HAVE_OPESSL_OCSP_RESP_GET0_CERTS
--+#  define EXIM_HAVE_OPENSSL_TRACE
--+#  define EXIM_HAVE_OPENSSL_GET0_SERIAL
--+#  define EXIM_HAVE_OPENSSL_OCSP_RESP_GET0_CERTS
-- #  define EXIM_HAVE_SSL_GET0_VERIFIED_CHAIN
-- #  ifndef DISABLE_OCSP
-- #   define EXIM_HAVE_OCSP
--@@ -1756,7 +1756,7 @@ level. */
-- DEBUG(D_tls)
--   {
--   SSL_CTX_set_info_callback(ctx, info_callback);
---#if defined(EXIM_HAVE_OPESSL_TRACE) && !defined(OPENSSL_NO_SSL_TRACE)
--+#if defined(EXIM_HAVE_OPENSSL_TRACE) && !defined(OPENSSL_NO_SSL_TRACE)
--   /* this needs a debug build of OpenSSL */
--   SSL_CTX_set_msg_callback(ctx, SSL_trace);
-- #endif
--@@ -2442,7 +2442,7 @@ tls_in.ocsp = OCSP_NOT_RESP;
-- if (!olist)
--   return SSL_TLSEXT_ERR_NOACK;
-- 
---#ifdef EXIM_HAVE_OPESSL_GET0_SERIAL
--+#ifdef EXIM_HAVE_OPENSSL_GET0_SERIAL
--  {
--   const X509 * cert_sent = SSL_get_certificate(s);
--   const ASN1_INTEGER * cert_serial = X509_get0_serialNumber(cert_sent);
--@@ -2646,7 +2646,7 @@ if (!(bs = OCSP_response_get1_basic(rsp)))
-- 
--       debug_printf("certs contained in basicresp:\n");
--       x509_stack_dump_cert_s_names(
---#ifdef EXIM_HAVE_OPESSL_OCSP_RESP_GET0_CERTS
--+#ifdef EXIM_HAVE_OPENSSL_OCSP_RESP_GET0_CERTS
-- 	OCSP_resp_get0_certs(bs)
-- #else
-- 	bs->certs
---- 
--2.30.2
--
-diff --git a/package/exim/0008-src-src-tls-openssl.c-fix-build-with-libressl-3.5.0.patch b/package/exim/0008-src-src-tls-openssl.c-fix-build-with-libressl-3.5.0.patch
-deleted file mode 100644
-index 67d96fc1af..0000000000
---- a/package/exim/0008-src-src-tls-openssl.c-fix-build-with-libressl-3.5.0.patch
-+++ /dev/null
-@@ -1,43 +0,0 @@
--From 88f45502272a9a674948204e460ebe90202827d4 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sun, 11 Feb 2024 21:45:42 +0100
--Subject: [PATCH] src/src/tls-openssl.c: fix build with libressl >= 3.5.0
--
--OCSP_BASICRESP is an opaque structure since libressl 3.5.0 and
--https://github.com/libressl/openbsd/commit/57442b0028fb09287793f279ee57ebb38e9ab954
--resulting in the following build failure since version 4.97 and
--https://git.exim.org/exim.git/commit/6bf0021993572586f031ac7d973ca33358c2dac8:
--
--In file included from tls.c:473:
--tls-openssl.c: In function 'tls_client_stapling_cb':
--tls-openssl.c:2652:11: error: invalid use of incomplete typedef 'OCSP_BASICRESP' {aka 'struct ocsp_basic_response_st'}
-- 2652 |         bs->certs
--      |           ^~
--
--Fixes:
-- - http://autobuild.buildroot.org/results/869fde62128d7b0c65e0ac596a3a3f69b332583d
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Upstream: https://bugs.exim.org/show_bug.cgi?id=3074
-----
-- src/src/tls-openssl.c | 4 ++++
-- 1 file changed, 4 insertions(+)
--
--diff --git a/src/tls-openssl.c b/src/tls-openssl.c
--index 237303ba9..c7f94c160 100644
----- a/src/tls-openssl.c
--+++ b/src/tls-openssl.c
--@@ -98,6 +98,10 @@ change this guard and punt the issue for a while longer. */
-- # define EXIM_HAVE_OPENSSL_CIPHER_GET_ID
-- #endif
-- 
--+#if LIBRESSL_VERSION_NUMBER >= 0x3050000fL
--+# define EXIM_HAVE_OPENSSL_OCSP_RESP_GET0_CERTS
--+#endif
--+
-- #if !defined(LIBRESSL_VERSION_NUMBER) && (OPENSSL_VERSION_NUMBER >= 0x030000000L)
-- # define EXIM_HAVE_EXPORT_CHNL_BNGNG
-- # define EXIM_HAVE_OPENSSL_X509_STORE_GET1_ALL_CERTS
---- 
--2.43.0
--
-diff --git a/package/exim/exim.hash b/package/exim/exim.hash
-index a3822302fb..de803bb27b 100644
---- a/package/exim/exim.hash
-+++ b/package/exim/exim.hash
-@@ -1,6 +1,6 @@
- # From https://ftp.exim.org/pub/exim/exim4/00-sha256sums.txt
--sha256  bd782057509a793593508528590626d185ea160ce32cb34beda262e99cefdfa9  exim-4.97.1.tar.xz
-+sha256  0ebc108a779f9293ba4b423c20818f9a3db79b60286d96abc6ba6b85a15852f7  exim-4.98.tar.xz
- # From https://ftp.exim.org/pub/exim/exim4/00-sha512sums.txt
--sha512  eab7ca28b37f1635c48f5e963ab69fcbad539b2c35a84286ecaad7d7ff5210bbefce86452302e08099afdc0710f9cb7ca6d9b152b0ba88a19292f7c5541e0cfc  exim-4.97.1.tar.xz
-+sha512  13dd963dd0899bb4d64bee44c20883e720e469a4d77456b877d6693cfc4419805a045cb561508cdf763dbb37cc84fbdc6177d68acc2183934c3224fbd03caf15  exim-4.98.tar.xz
- # Locally calculated
- sha256  49240db527b7e55b312a46fc59794fde5dd006422e422257f4f057bfd27b3c8f  LICENCE
-diff --git a/package/exim/exim.mk b/package/exim/exim.mk
-index 84fe96218c..9db5c46c9a 100644
---- a/package/exim/exim.mk
-+++ b/package/exim/exim.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+  OS/Makefile-Base |    4 ++--
+  1 files changed, 2 insertions(+), 2 deletions(-)
+@@ -10,7 +12,7 @@ diff --git a/OS/Makefile-Base b/OS/Makefile-Base
+ index 29a6ad3..420ba60 100644
+ --- a/OS/Makefile-Base
+ +++ b/OS/Makefile-Base
+-@@ -114,8 +114,8 @@ allexim: config.h $(EXIM_MONITOR) exicyclog exinext exiwhat \
++@@ -258,8 +258,8 @@ allexim: config.h $(EXIM_MONITOR) exicyclog exinext exiwhat \
+  
+  # Targets for special-purpose configuration header builders
+  buildconfig: buildconfig.c
+diff --git a/package/exim/0002-Don-t-make-backup-copies-of-installed-files.patch b/package/exim/0002-Don-t-make-backup-copies-of-installed-files.patch
+index 0cdaa744bc..3c115f8d02 100644
+--- a/package/exim/0002-Don-t-make-backup-copies-of-installed-files.patch
++++ b/package/exim/0002-Don-t-make-backup-copies-of-installed-files.patch
+@@ -5,6 +5,8 @@ This leads to useless duplicated files on the target, so disable this
+ piece of code.
  
--EXIM_VERSION = 4.97.1
-+EXIM_VERSION = 4.98
- EXIM_SOURCE = exim-$(EXIM_VERSION).tar.xz
- EXIM_SITE = https://ftp.exim.org/pub/exim/exim4
- EXIM_LICENSE = GPL-2.0+
+ Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
++[Bernd: rebased for version 4.97.1]
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+ ---
+  scripts/exim_install |   18 +++++++++---------
+  1 files changed, 9 insertions(+), 9 deletions(-)
+@@ -13,7 +15,7 @@ diff --git a/scripts/exim_install b/scripts/exim_install
+ index 616ab3c..e68e7d5 100755
+ --- a/scripts/exim_install
+ +++ b/scripts/exim_install
+-@@ -344,15 +344,15 @@ while [ $# -gt 0 ]; do
++@@ -348,15 +348,15 @@ while [ $# -gt 0 ]; do
+  
+    else
+      if ../scripts/newer ${name} ${BIN_DIRECTORY}/${name}; then
+diff --git a/package/exim/0003-Skip-version-check-and-symlink-installation.patch b/package/exim/0003-Skip-version-check-and-symlink-installation.patch
+index a342d6ed34..55166f108b 100644
+--- a/package/exim/0003-Skip-version-check-and-symlink-installation.patch
++++ b/package/exim/0003-Skip-version-check-and-symlink-installation.patch
+@@ -9,8 +9,8 @@ Inspired by:
+ http://patch-tracker.debian.org/patch/series/view/exim4/4.76-2/35_install.dpatch
+ 
+ Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+-(rebased against exim 4.89)
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
++[Bernd: rebased for version 4.89 & 4.97.1]
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+ ---
+  scripts/exim_install |    7 +++++--
+  1 files changed, 5 insertions(+), 2 deletions(-)
+@@ -19,7 +19,7 @@ diff --git a/scripts/exim_install b/scripts/exim_install
+ index e68e7d5..487a4e1 100755
+ --- a/scripts/exim_install
+ +++ b/scripts/exim_install
+-@@ -58,6 +58,8 @@
++@@ -61,6 +61,8 @@
+    shift
+  done
+  
+@@ -28,7 +28,7 @@ index e68e7d5..487a4e1 100755
+  # Get the values of BIN_DIRECTORY, CONFIGURE_FILE, INFO_DIRECTORY, NO_SYMLINK,
+  # SYSTEM_ALIASES_FILE, and EXE from the global Makefile (in the build
+  # directory). EXE is empty except in the Cygwin environment. In each case, keep
+-@@ -217,9 +219,7 @@
++@@ -220,9 +223,7 @@
+    # The exim binary is handled specially
+  
+    if [ $name = exim${EXE} ]; then
+diff --git a/package/exim/0004-exim_lock-fix-lstat-related-build-errors.patch b/package/exim/0004-exim_lock-fix-lstat-related-build-errors.patch
+index a0a279fc43..616ada5026 100644
+--- a/package/exim/0004-exim_lock-fix-lstat-related-build-errors.patch
++++ b/package/exim/0004-exim_lock-fix-lstat-related-build-errors.patch
+@@ -22,6 +22,8 @@ Fixes:
+ 
+ Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+ Upstream-status: https://bugs.exim.org/show_bug.cgi?id=2523
++[Bernd: rebased for version 4.97.1]
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+ ---
+  src/exim_lock.c | 3 +++
+  1 file changed, 3 insertions(+)
+@@ -30,8 +32,8 @@ diff --git a/src/exim_lock.c b/src/exim_lock.c
+ index 068216816054..cb140aff6436 100644
+ --- a/src/exim_lock.c
+ +++ b/src/exim_lock.c
+-@@ -13,6 +13,8 @@ Argument: the name of the lock file
+- Copyright (c) The Exim Maintainers 2016
++@@ -14,6 +14,8 @@ Copyright (c) The Exim Maintainers 2016 - 2021
++ SPDX-License-Identifier: GPL-2.0-or-later
+  */
+ 
+ +#define _XOPEN_SOURCE
+@@ -39,7 +41,7 @@ index 068216816054..cb140aff6436 100644
+  #include "os.h"
+ 
+  #include <stdio.h>
+-@@ -26,6 +28,7 @@ Copyright (c) The Exim Maintainers 2016
++@@ -27,6 +29,7 @@ Copyright (c) The Exim Maintainers 2016
+  #include <unistd.h>
+  #include <utime.h>
+  #include <sys/utsname.h>
+diff --git a/package/exim/0005-sieve-fix-build-errors.patch b/package/exim/0005-sieve-fix-build-errors.patch
+index f4b95d50bc..20323c17cd 100644
+--- a/package/exim/0005-sieve-fix-build-errors.patch
++++ b/package/exim/0005-sieve-fix-build-errors.patch
+@@ -21,6 +21,8 @@ buildsystem.
+ 
+ Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+ Upstream-status: https://bugs.exim.org/show_bug.cgi?id=2523
++[Bernd: rebased for version 4.97.1]
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+ ---
+  src/sieve.c | 2 ++
+  1 file changed, 2 insertions(+)
+@@ -29,7 +31,7 @@ diff --git a/src/sieve.c b/src/sieve.c
+ index 5e8d1e6f4776..9632f2d43810 100644
+ --- a/src/sieve.c
+ +++ b/src/sieve.c
+-@@ -12,6 +12,8 @@
++@@ -14,6 +14,8 @@
+ 
+  /* Sieve mail filter. */
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
