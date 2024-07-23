@@ -4,49 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ADA48C3DA49
-	for <buildroot@archiver.kernel.org>; Tue, 23 Jul 2024 09:32:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F44EC3DA49
+	for <buildroot@archiver.kernel.org>; Tue, 23 Jul 2024 09:33:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 71FD18108C;
-	Tue, 23 Jul 2024 09:32:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4A78080FF8;
+	Tue, 23 Jul 2024 09:33:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NVk-vRmLUU2w; Tue, 23 Jul 2024 09:32:41 +0000 (UTC)
+ id F3x0XRzUj4bO; Tue, 23 Jul 2024 09:33:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A2794811ED
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4350081068
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A2794811ED;
-	Tue, 23 Jul 2024 09:32:40 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 7BC011BF969
- for <buildroot@lists.busybox.net>; Tue, 23 Jul 2024 09:32:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4350081068;
+	Tue, 23 Jul 2024 09:33:22 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B1A0B1BF3AA
+ for <buildroot@lists.busybox.net>; Tue, 23 Jul 2024 09:33:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 69196600B9
- for <buildroot@lists.busybox.net>; Tue, 23 Jul 2024 09:32:33 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9E056409E4
+ for <buildroot@lists.busybox.net>; Tue, 23 Jul 2024 09:33:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IRwgBolMLgSU for <buildroot@lists.busybox.net>;
- Tue, 23 Jul 2024 09:32:32 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 87F5060073
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 87F5060073
- for <buildroot@buildroot.org>; Tue, 23 Jul 2024 09:32:32 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 723298738E; Tue, 23 Jul 2024 09:32:32 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fMiieyhsMFG8 for <buildroot@lists.busybox.net>;
+ Tue, 23 Jul 2024 09:33:19 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::232; helo=mail-lj1-x232.google.com;
+ envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 430F9409EE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 430F9409EE
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com
+ [IPv6:2a00:1450:4864:20::232])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 430F9409EE
+ for <buildroot@buildroot.org>; Tue, 23 Jul 2024 09:33:19 +0000 (UTC)
+Received: by mail-lj1-x232.google.com with SMTP id
+ 38308e7fff4ca-2eeb1ba040aso76043701fa.1
+ for <buildroot@buildroot.org>; Tue, 23 Jul 2024 02:33:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1721727197; x=1722331997;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=9fFQ49i+JiycVn3eHoXLqZiNwX+c1lD7o26RI3Apswc=;
+ b=oMXdci6LlblzLq4+YvXCyFA6rNbKExv3Nk4KhZWDiVIwdq1xw1NXlTDYwBPDFfFsTf
+ 0S2lrwYF691G9PftowHUN7Sr78hpiYx5H++EvCsRkZycS8MI0FE1Y3WkyvBXKDh7AyL2
+ +EuEsXSRwcxC20zgny5uYQscSMNqDn5BUP2L4eQo6eenVEmZQSX3cnGh2nAsNv756Wco
+ bWYRU/FPjwlAdoumxZWmR7NKNQaaTP3qG430fuTaqO5XXVHPl4wo7SlTtauj/7J0svFH
+ Qqow0osM0MSFFUTw1Ulgbi5inRxGHRzHGYMPFpjuOKQJ04tHFoL3xrUan0yc3kvs//73
+ THkw==
+X-Gm-Message-State: AOJu0YwHIuK4YfZ4Jp4vizfeC1W+dSw73MlTgAAg6cZwc4nCk8AMdYMP
+ TApCTPP8+x4p0MMDo8Sv/3GUoBqSSDTcQ6BcSC/+X3u0od++GPTj2Qoxwg==
+X-Google-Smtp-Source: AGHT+IFJPeFwUSLi6b6Ae9XE9GxDeeoDEA1wW7xBSYxw+Ob4dxbHdXsXWRn/4Mqidm5+tjkSp6Fqsg==
+X-Received: by 2002:a2e:870d:0:b0:2ec:89b8:3d2f with SMTP id
+ 38308e7fff4ca-2f01ea55e28mr16386991fa.19.1721727196379; 
+ Tue, 23 Jul 2024 02:33:16 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-785-215.w83-197.abo.wanadoo.fr.
+ [83.197.112.215]) by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-368787ecec0sm10880896f8f.105.2024.07.23.02.33.15
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 23 Jul 2024 02:33:16 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 23 Jul 2024 11:32:06 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f7c48e2ca40fa3f5622210a8c553405d35364c6f
-X-Git-Newrev: 3ebd06c0b13031191919caca07df86268cd758e4
-X-Patchwork-Hint: ignore
-Message-Id: <20240723093232.723298738E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-cherrypy: bump to version
- 18.9.0
+Date: Tue, 23 Jul 2024 11:33:12 +0200
+Message-ID: <20240723093312.770586-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.43.0
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1721727197; x=1722331997; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=9fFQ49i+JiycVn3eHoXLqZiNwX+c1lD7o26RI3Apswc=;
+ b=FBFU6RVESjI2McdAwzpo9sKU7lHBe08dqgqoGEBsxLSdgt6sU2XVqIJq9fWOyKD39A
+ QyugJ0ptUtoTX9Af+XfteDJfDTh14eftMvYByzxEeXKuvHpUaLx4hgUsgCFvTCnRrwts
+ F0ajlSWxY0srBEmtfqlG/ldye7Pr5gZdxabmq/V2JClNtD6dzX+TsoGzHxuXPgWKIBa5
+ 1h9abmk7+2t+pzlOfWAArOyUaP4YttE06bVHjEeOH0bQmy1TGKsmlr7g7uRiu7ZLrgfc
+ IfA2Tj8Qt9vuy7sQZW55+/QV3jZDa106nT4MALTalRP1BqYsPeoX9daGLrgNAyKyLLj0
+ Bz1Q==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=FBFU6RVE
+Subject: [Buildroot] [PATCH v3, 1/1] package/cwiid: fix build with gcc >= 14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,89 +100,80 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Samuel Martin <s.martin49@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3ebd06c0b13031191919caca07df86268cd758e4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Fix the following build failure with gcc >= 14:
 
-Add new host-python-setuptools-scm-git-archive build dependency.
+led.c: In function 'wmplugin_exec':
+led.c:86:42: error: assignment to 'struct cwiid_btn_message *' from incompatible pointer type 'struct cwiid_btn_mesg *' [-Wincompatible-pointer-types]
+   86 |                                 btn_mesg = &mesg[i].btn_mesg;
+      |                                          ^
 
-Add new python-jaraco-collections runtime dependency.
+Fixes:
+ - http://autobuild.buildroot.org/results/a3bde74ff2137d088f4261e62930859bfe460cb9
 
-Add new python-more-itertools runtime dependency.
-
-Add new python-zc-lockfile runtime dependency.
-
-Drop no longer required python-six and python-jaraco-classes runtime
-dependencies.
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- package/python-cherrypy/Config.in            | 6 ++++--
- package/python-cherrypy/python-cherrypy.hash | 4 ++--
- package/python-cherrypy/python-cherrypy.mk   | 8 +++++---
- 3 files changed, 11 insertions(+), 7 deletions(-)
+Changes v2 -> v3:
+ - Fix patch number
+Changes v1 -> v2 (after review of Thomas Petazzoni):
+ - Fix variable declaration instead of adding a wrong cast
 
-diff --git a/package/python-cherrypy/Config.in b/package/python-cherrypy/Config.in
-index 7548dcf91b..fd67872873 100644
---- a/package/python-cherrypy/Config.in
-+++ b/package/python-cherrypy/Config.in
-@@ -1,10 +1,12 @@
- config BR2_PACKAGE_PYTHON_CHERRYPY
- 	bool "python-cherrypy"
-+	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS # python-jaraco-collections -> python-jaraco-text -> python-inflect -> python-pydantic -> python-pydantic-core
- 	select BR2_PACKAGE_PYTHON_CHEROOT # runtime
--	select BR2_PACKAGE_PYTHON_JARACO_CLASSES # runtime
-+	select BR2_PACKAGE_PYTHON_JARACO_COLLECTIONS # runtime
-+	select BR2_PACKAGE_PYTHON_MORE_ITERTOOLS # runtime
- 	select BR2_PACKAGE_PYTHON_PORTEND # runtime
-+	select BR2_PACKAGE_PYTHON_ZC_LOCKFILE # runtime
- 	select BR2_PACKAGE_PYTHON3_PYEXPAT # runtime
--	select BR2_PACKAGE_PYTHON_SIX # runtime
- 	select BR2_PACKAGE_PYTHON3_ZLIB # runtime
- 	help
- 	  A minimalist web framework
-diff --git a/package/python-cherrypy/python-cherrypy.hash b/package/python-cherrypy/python-cherrypy.hash
-index cd8f8756d8..92697e5f06 100644
---- a/package/python-cherrypy/python-cherrypy.hash
-+++ b/package/python-cherrypy/python-cherrypy.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/cherrypy/json
--md5  033c58bf3da497f283b039911d1c882b  CherryPy-18.8.0.tar.gz
--sha256  9b48cfba8a2f16d5b6419cc657e6d51db005ba35c5e3824e4728bb03bbc7ef9b  CherryPy-18.8.0.tar.gz
-+md5  014dbd400aeda9d2b098ed01c95b4a30  CherryPy-18.9.0.tar.gz
-+sha256  6b06c191ce71a86461f30572a1ab57ffc09f43143ba8e42c103c7b3347220eb1  CherryPy-18.9.0.tar.gz
- # Locally computed sha256 checksums
- sha256  45ade933c280ece37e3e01d3a91afeed9505746a456f72ad10b0897c49e65104  LICENSE.md
-diff --git a/package/python-cherrypy/python-cherrypy.mk b/package/python-cherrypy/python-cherrypy.mk
-index 9b6ad0e99a..244491a040 100644
---- a/package/python-cherrypy/python-cherrypy.mk
-+++ b/package/python-cherrypy/python-cherrypy.mk
-@@ -4,12 +4,14 @@
- #
- ################################################################################
- 
--PYTHON_CHERRYPY_VERSION = 18.8.0
-+PYTHON_CHERRYPY_VERSION = 18.9.0
- PYTHON_CHERRYPY_SOURCE = CherryPy-$(PYTHON_CHERRYPY_VERSION).tar.gz
--PYTHON_CHERRYPY_SITE = https://files.pythonhosted.org/packages/60/ea/6c4d16b0cd1f4f64a478bac8a37d75a585e854afb5693ce80a9711efdc4a
-+PYTHON_CHERRYPY_SITE = https://files.pythonhosted.org/packages/bd/5f/e265a49883bfcfb7f2c3d3d9e96197cfe8136783e96c5ce20e201550aaa0
- PYTHON_CHERRYPY_LICENSE = BSD-3-Clause
- PYTHON_CHERRYPY_LICENSE_FILES = LICENSE.md
- PYTHON_CHERRYPY_SETUP_TYPE = setuptools
--PYTHON_CHERRYPY_DEPENDENCIES = host-python-setuptools-scm
-+PYTHON_CHERRYPY_DEPENDENCIES = \
-+	host-python-setuptools-scm \
-+	host-python-setuptools-scm-git-archive
- 
- $(eval $(python-package))
+ ...gins-led-led.c-fix-build-with-gcc-14.patch | 37 +++++++++++++++++++
+ 1 file changed, 37 insertions(+)
+ create mode 100644 package/cwiid/0003-wminput-plugins-led-led.c-fix-build-with-gcc-14.patch
+
+diff --git a/package/cwiid/0003-wminput-plugins-led-led.c-fix-build-with-gcc-14.patch b/package/cwiid/0003-wminput-plugins-led-led.c-fix-build-with-gcc-14.patch
+new file mode 100644
+index 0000000000..ba8121802b
+--- /dev/null
++++ b/package/cwiid/0003-wminput-plugins-led-led.c-fix-build-with-gcc-14.patch
+@@ -0,0 +1,37 @@
++From 10106fdb4cc833faa3c2fcb980d0a4eb121fe19d Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Tue, 23 Jul 2024 10:31:32 +0200
++Subject: [PATCH] wminput/plugins/led/led.c: fix build with gcc >= 14
++
++Fix the following build failure with gcc >= 14:
++
++led.c: In function 'wmplugin_exec':
++led.c:86:42: error: assignment to 'struct cwiid_btn_message *' from incompatible pointer type 'struct cwiid_btn_mesg *' [-Wincompatible-pointer-types]
++   86 |                                 btn_mesg = &mesg[i].btn_mesg;
++      |                                          ^
++
++Fixes:
++ - http://autobuild.buildroot.org/results/a3bde74ff2137d088f4261e62930859bfe460cb9
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Upstream: https://github.com/abstrakraft/cwiid/pull/47
++---
++ wminput/plugins/led/led.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/wminput/plugins/led/led.c b/wminput/plugins/led/led.c
++index 93b96d9..591f365 100644
++--- a/wminput/plugins/led/led.c
+++++ b/wminput/plugins/led/led.c
++@@ -72,7 +72,7 @@ struct wmplugin_data *wmplugin_exec(int mesg_count, union cwiid_mesg mesg[])
++ {
++ 	int i;
++ 	uint8_t button;
++-	struct cwiid_btn_message *btn_mesg;
+++	struct cwiid_btn_mesg *btn_mesg;
++ 
++ 	uint8_t led_state = (Led1 ? CWIID_LED1_ON : 0)
++ 	                  | (Led2 ? CWIID_LED2_ON : 0)
++-- 
++2.43.0
++
+-- 
+2.43.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
