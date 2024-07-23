@@ -4,49 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C4AC4C3DA49
-	for <buildroot@archiver.kernel.org>; Tue, 23 Jul 2024 21:14:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98EC7C3DA63
+	for <buildroot@archiver.kernel.org>; Tue, 23 Jul 2024 21:15:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7D0A660073;
-	Tue, 23 Jul 2024 21:14:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 67D6460035;
+	Tue, 23 Jul 2024 21:15:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WuHe9q2f1xdz; Tue, 23 Jul 2024 21:14:57 +0000 (UTC)
+ id el_UsfZAuYeQ; Tue, 23 Jul 2024 21:15:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 26C6B600B9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 50525607A5
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 26C6B600B9;
-	Tue, 23 Jul 2024 21:14:57 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 862F61BF2F9
- for <buildroot@lists.busybox.net>; Tue, 23 Jul 2024 21:14:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 50525607A5;
+	Tue, 23 Jul 2024 21:15:21 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 41E5A1BF2F9
+ for <buildroot@lists.busybox.net>; Tue, 23 Jul 2024 21:15:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7351460073
- for <buildroot@lists.busybox.net>; Tue, 23 Jul 2024 21:14:55 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1EA1180B06
+ for <buildroot@lists.busybox.net>; Tue, 23 Jul 2024 21:15:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rA1O3pUGqZTD for <buildroot@lists.busybox.net>;
- Tue, 23 Jul 2024 21:14:54 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id or6eX9nB18zX for <buildroot@lists.busybox.net>;
+ Tue, 23 Jul 2024 21:15:18 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::221;
+ helo=relay1-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3BBAD60035
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3BBAD60035
- for <buildroot@buildroot.org>; Tue, 23 Jul 2024 21:14:54 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 22A3987404; Tue, 23 Jul 2024 21:14:54 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 23 Jul 2024 23:08:42 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 380cdf5c95f2e962b63269d8cf45a8939275d8e0
-X-Git-Newrev: d79f40dbbe98983bc657d4c82d46b38b8283351b
-X-Patchwork-Hint: ignore
-Message-Id: <20240723211454.22A3987404@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/procps-ng: security bump to
- version 4.0.4
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org EDD53805AB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EDD53805AB
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id EDD53805AB
+ for <buildroot@buildroot.org>; Tue, 23 Jul 2024 21:15:17 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 6F3D1240002;
+ Tue, 23 Jul 2024 21:15:15 +0000 (UTC)
+Date: Tue, 23 Jul 2024 23:15:14 +0200
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20240723231514.0c81f86a@windsurf>
+In-Reply-To: <20240723120140.176562-1-fontaine.fabrice@gmail.com>
+References: <20240723120140.176562-1-fontaine.fabrice@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1721769316;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=YbXbiEXUp8/GUHY0ADpKp4kbElC2Gf3WiPFWSPZe2uA=;
+ b=p4jfGXw8ea2TfXFwpCCh/sKlH6NjLKyvMSaPUShpzeuPjMkdq+HHDrORBVTOq9u0Z7YDNz
+ qVsWFVLlDh06BEqk0QdBSJ9Zd+N4pI//CUS70V51bAVFG8a0Oxm6PlsowGC2pYtpFTJPIK
+ +kEHYBBYPj9cOs9bfagsqrdrpnLvpueSJSU65xpvubiGMa4eqbgxvDmzGU/f9/TP4nYtNp
+ TF2FqBw6t1k3NNesf+LaRY1nQzlFqO4bgPfz2RCh7zOq5I8dMVDT9AQ/JV+dqsYHOnhinR
+ DKr7AuBjhTHG4EWOdxsuu5rhseMadH5K1itk0lBy+/LBjllXTuMlmEpBYFoM8w==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=p4jfGXw8
+Subject: Re: [Buildroot] [PATCH 1/1] package/procps-ng: bump to version 4.0.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,299 +82,50 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d79f40dbbe98983bc657d4c82d46b38b8283351b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue, 23 Jul 2024 14:01:40 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-- Fixes CVE-2023-4016
+> - Drop all patches (already in version) and so also drop autoreconf
+> - This bump will also fix the following build failure with gcc >= 14:
+> 
+>   pgrep.c: In function 'main':
+>   pgrep.c:1066:37: error: implicit declaration of function 'pidfd_open'; did you mean 'fdopen'? [-Wimplicit-function-declaration]
+>    1066 |                         int pidfd = pidfd_open(procs[i].num, 0);
+>         |                                     ^~~~~~~~~~
+>         |                                     fdopen
+> 
+> https://gitlab.com/procps-ng/procps/-/blob/v4.0.4/NEWS
+> 
+> Fixes:
+>  - http://autobuild.buildroot.org/results/bd7b49123905c580842a3dd3b7a338d5aedf55d7
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  .checkpackageignore                           |  3 -
+>  .../0001-configure-Add--disable-w.patch       | 93 -------------------
+>  ...ssing-nl_langinfo-on-certain-configs.patch | 34 -------
+>  .../procps-ng/0003-fix-pifd_open-check.patch  | 59 ------------
+>  package/procps-ng/procps-ng.hash              |  8 +-
+>  package/procps-ng/procps-ng.mk                |  4 +-
+>  6 files changed, 5 insertions(+), 196 deletions(-)
+>  delete mode 100644 package/procps-ng/0001-configure-Add--disable-w.patch
+>  delete mode 100644 package/procps-ng/0002-escape-c-Fix-missing-nl_langinfo-on-certain-configs.patch
+>  delete mode 100644 package/procps-ng/0003-fix-pifd_open-check.patch
 
-- Drop all patches (already in version) and so also drop autoreconf
+Applied to master after tweaking the commit title and commit log to
+mention that it's also a security bump. Thanks!
 
-- This bump will also fix the following build failure with gcc >= 14:
-
-  pgrep.c: In function 'main':
-  pgrep.c:1066:37: error: implicit declaration of function 'pidfd_open'; did you mean 'fdopen'? [-Wimplicit-function-declaration]
-   1066 |                         int pidfd = pidfd_open(procs[i].num, 0);
-        |                                     ^~~~~~~~~~
-        |                                     fdopen
-
-https://gitlab.com/procps-ng/procps/-/blob/v4.0.4/NEWS
-
-Fixes:
- - http://autobuild.buildroot.org/results/bd7b49123905c580842a3dd3b7a338d5aedf55d7
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- .checkpackageignore                                |  3 -
- .../procps-ng/0001-configure-Add--disable-w.patch  | 93 ----------------------
- ...ix-missing-nl_langinfo-on-certain-configs.patch | 34 --------
- package/procps-ng/0003-fix-pifd_open-check.patch   | 59 --------------
- package/procps-ng/procps-ng.hash                   |  8 +-
- package/procps-ng/procps-ng.mk                     |  4 +-
- 6 files changed, 5 insertions(+), 196 deletions(-)
-
-diff --git a/.checkpackageignore b/.checkpackageignore
-index bd93f87dfb..53b55fb993 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -1115,9 +1115,6 @@ package/pptp-linux/0002-fix-parallel-build.patch lib_patch.Upstream
- package/prboom/0001-libpng-1.4.patch lib_patch.Upstream
- package/prboom/0002-configure-remove-predefined-O2-optimization-flag.patch lib_patch.Upstream
- package/prelink-cross/0001-src-rtld-dl-tls.c-Fix-TLS-offsets-computation-for-s3.patch lib_patch.Upstream
--package/procps-ng/0001-configure-Add--disable-w.patch lib_patch.Upstream
--package/procps-ng/0002-escape-c-Fix-missing-nl_langinfo-on-certain-configs.patch lib_patch.Upstream
--package/procps-ng/0003-fix-pifd_open-check.patch lib_patch.Upstream
- package/procps-ng/S02sysctl lib_sysv.Variables
- package/proftpd/S50proftpd Shellcheck lib_sysv.Indent lib_sysv.Variables
- package/prosody/0001-enable-syslog.patch lib_patch.Upstream
-diff --git a/package/procps-ng/0001-configure-Add--disable-w.patch b/package/procps-ng/0001-configure-Add--disable-w.patch
-deleted file mode 100644
-index 8a699df5a6..0000000000
---- a/package/procps-ng/0001-configure-Add--disable-w.patch
-+++ /dev/null
-@@ -1,93 +0,0 @@
--From 1524a625e693b956ce0b5091c9f89f24fb7e8614 Mon Sep 17 00:00:00 2001
--From: "Issam E. Maghni" <issam.e.maghni@mailbox.org>
--Date: Fri, 23 Apr 2021 15:58:36 -0400
--Subject: [PATCH] configure: Add --disable-w
--
--[Retrieved (and backported) from:
--https://gitlab.com/procps-ng/procps/-/commit/1524a625e693b956ce0b5091c9f89f24fb7e8614]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- Makefile.am  | 21 +++++++++++++++------
-- configure.ac |  6 ++++++
-- 2 files changed, 21 insertions(+), 6 deletions(-)
--
--diff --git a/Makefile.am b/Makefile.am
--index de15e137..d2356872 100644
----- a/Makefile.am
--+++ b/Makefile.am
--@@ -47,8 +47,7 @@ bin_PROGRAMS = \
-- 	pwdx \
-- 	tload \
-- 	uptime \
---	vmstat \
---	w
--+	vmstat
-- if BUILD_PWAIT
-- bin_PROGRAMS += pwait
-- endif
--@@ -60,8 +59,7 @@ usrbin_exec_PROGRAMS += \
-- 	pkill \
-- 	pmap \
-- 	uptime \
---	vmstat \
---	w
--+	vmstat
-- endif
-- 
-- lib_LTLIBRARIES = \
--@@ -74,7 +72,6 @@ dist_man_MANS = \
-- 	pmap.1 \
-- 	uptime.1 \
-- 	vmstat.8 \
---	w.1 \
-- 	ps/procps.1
-- 
-- if !CYGWIN
--@@ -137,6 +134,19 @@ else
--   EXTRA_DIST += kill.1
-- endif
-- 
--+if BUILD_W
--+if CYGWIN
--+usrbin_exec_PROGRAMS += w
--+else
--+bin_PROGRAMS += w
--+endif
--+
--+dist_man_MANS += w.1
--+w_SOURCES = w.c lib/fileutils.c
--+else
--+  EXTRA_DIST += w.1
--+endif
--+
-- if WITH_NCURSES
-- if !CYGWIN
-- bin_PROGRAMS += \
--@@ -213,7 +223,6 @@ endif
-- tload_SOURCES = tload.c lib/strutils.c lib/fileutils.c
-- uptime_SOURCES = uptime.c lib/fileutils.c
-- vmstat_SOURCES = vmstat.c lib/strutils.c lib/fileutils.c
---w_SOURCES = w.c lib/fileutils.c
-- 
-- # proc/libprocps.la
-- 
--diff --git a/configure.ac b/configure.ac
--index 750c0fbb..3e83fb88 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -234,6 +234,12 @@ AC_ARG_ENABLE([kill],
--   [], [enable_kill=yes]
-- )
-- AM_CONDITIONAL(BUILD_KILL, test "x$enable_kill" = xyes)
--+AC_ARG_ENABLE([w],
--+  AS_HELP_STRING([--disable-w], [do not build w]),
--+  [], [enable_w=yes]
--+)
--+AM_CONDITIONAL(BUILD_W, test "x$enable_w" = xyes)
--+
-- AM_CONDITIONAL(LINUX, test "x$host_os" = xlinux-gnu)
-- AM_CONDITIONAL(CYGWIN, test "x$host_os" = xcygwin)
-- 
---- 
--GitLab
--
-diff --git a/package/procps-ng/0002-escape-c-Fix-missing-nl_langinfo-on-certain-configs.patch b/package/procps-ng/0002-escape-c-Fix-missing-nl_langinfo-on-certain-configs.patch
-deleted file mode 100644
-index f3e2b126a6..0000000000
---- a/package/procps-ng/0002-escape-c-Fix-missing-nl_langinfo-on-certain-configs.patch
-+++ /dev/null
-@@ -1,34 +0,0 @@
--From 2763b9880a7aab569694d6ee3170dd7341a26b84 Mon Sep 17 00:00:00 2001
--From: "Issam E. Maghni" <issam.e.maghni@mailbox.org>
--Date: Fri, 23 Apr 2021 16:53:39 -0400
--Subject: [PATCH] escape.c: Fix missing nl_langinfo on certain configs
--
--[Retrieved from:
--https://gitlab.com/procps-ng/procps/-/commit/2763b9880a7aab569694d6ee3170dd7341a26b84]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- proc/escape.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/proc/escape.c b/proc/escape.c
--index 2e8fb7dd..cf4a80de 100644
----- a/proc/escape.c
--+++ b/proc/escape.c
--@@ -24,13 +24,13 @@
-- #include "procps.h"
-- #include "escape.h"
-- #include "readproc.h"
--+#include "nls.h"
-- 
-- #if (__GNU_LIBRARY__ >= 6) && (!defined(__UCLIBC__) || defined(__UCLIBC_HAS_WCHAR__))
-- # include <wchar.h>
-- # include <wctype.h>
-- # include <stdlib.h>  /* MB_CUR_MAX */
-- # include <ctype.h>
---# include <langinfo.h>
-- #endif
-- 
-- #define SECURE_ESCAPE_ARGS(dst, bytes, cells) do { \
---- 
--GitLab
--
-diff --git a/package/procps-ng/0003-fix-pifd_open-check.patch b/package/procps-ng/0003-fix-pifd_open-check.patch
-deleted file mode 100644
-index 7152901e70..0000000000
---- a/package/procps-ng/0003-fix-pifd_open-check.patch
-+++ /dev/null
-@@ -1,59 +0,0 @@
--From 0cce3e981540c28d2f703b9ab16c04d0df8fa03d Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Thu, 3 Nov 2022 18:24:53 +0100
--Subject: [PATCH] fix pifd_open check
--
--Replace AC_CHECK_FUNC by AC_CHECK_FUNCS otherwise HAVE_PIDFD_OPEN will
--never be defined resulting in the following build failure if pidfd_open
--is available but __NR_pidfd_open is not available:
--
--pgrep.c: In function 'pidfd_open':
--pgrep.c:748:17: error: '__NR_pidfd_open' undeclared (first use in this function); did you mean 'pidfd_open'?
--  748 |  return syscall(__NR_pidfd_open, pid, flags);
--      |                 ^~~~~~~~~~~~~~~
--      |                 pidfd_open
--
--This build failure is raised since the addition of pwait in version
--3.3.17 and
--https://gitlab.com/procps-ng/procps/-/commit/c8384e682c1cfb3b2dc797e0f8a3cbaaccf7a3da
--
--Fixes:
-- - http://autobuild.buildroot.org/results/f23a5156e641b2ebdd673973dec0f9c87760c688
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status:
--https://gitlab.com/procps-ng/procps/-/merge_requests/166]
-----
-- configure.ac | 2 +-
-- src/pgrep.c  | 2 +-
-- 2 files changed, 2 insertions(+), 2 deletions(-)
--
--diff --git a/configure.ac b/configure.ac
--index 629881a6..1a3ccdb8 100644
----- a/configure.ac
--+++ b/configure.ac
--@@ -160,7 +160,7 @@ AC_TRY_COMPILE([#include <errno.h>],
-- 		AC_MSG_RESULT(yes),
-- 		AC_MSG_RESULT(no))
-- 
---AC_CHECK_FUNC([pidfd_open], [enable_pwait=yes], [
--+AC_CHECK_FUNCS([pidfd_open], [enable_pwait=yes], [
--   AC_MSG_CHECKING([for __NR_pidfd_open])
--   AC_COMPILE_IFELSE([AC_LANG_SOURCE([
-- #include <sys/syscall.h>
--diff --git a/pgrep.c b/pgrep.c
--index c4ad5da3..29cfedf7 100644
----- a/pgrep.c
--+++ b/pgrep.c
--@@ -38,7 +38,7 @@
-- #include <stdbool.h>
-- #include <time.h>
-- 
---#if defined(ENABLE_PWAIT) && !defined(HAVE_PIDFD_OPEN)
--+#if defined(ENABLE_PWAIT)
-- #include <sys/epoll.h>
-- #include <sys/syscall.h>
-- #endif
---- 
--2.35.1
--
-diff --git a/package/procps-ng/procps-ng.hash b/package/procps-ng/procps-ng.hash
-index 09f2ebd0cb..0d9cd9a835 100644
---- a/package/procps-ng/procps-ng.hash
-+++ b/package/procps-ng/procps-ng.hash
-@@ -1,8 +1,8 @@
- # From http://sourceforge.net/projects/procps-ng/files/Production/
--md5  d60613e88c2f442ebd462b5a75313d56  procps-ng-3.3.17.tar.xz
--sha1  a52952e8bc6aaab812176c00d25adc4d4e1552e2  procps-ng-3.3.17.tar.xz
-+md5  2f747fc7df8ccf402d03e375c565cf96  procps-ng-4.0.4.tar.xz
-+sha1  2b859acd7060e9898ac457dbd26dbebf563cc44b  procps-ng-4.0.4.tar.xz
- # Locally calculated after checking signature
--# http://downloads.sourceforge.net/project/procps-ng/Production/procps-ng-3.3.17.tar.xz.asc
--sha256  4518b3e7aafd34ec07d0063d250fd474999b20b200218c3ae56f5d2113f141b4  procps-ng-3.3.17.tar.xz
-+# http://downloads.sourceforge.net/project/procps-ng/Production/procps-ng-4.0.4.tar.xz.asc
-+sha256  22870d6feb2478adb617ce4f09a787addaf2d260c5a8aa7b17d889a962c5e42e  procps-ng-4.0.4.tar.xz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  681e386e44a19d7d0674b4320272c90e66b6610b741e7e6305f8219c42e85366  COPYING.LIB
-diff --git a/package/procps-ng/procps-ng.mk b/package/procps-ng/procps-ng.mk
-index ba8958d146..c5675e2ee6 100644
---- a/package/procps-ng/procps-ng.mk
-+++ b/package/procps-ng/procps-ng.mk
-@@ -4,15 +4,13 @@
- #
- ################################################################################
- 
--PROCPS_NG_VERSION = 3.3.17
-+PROCPS_NG_VERSION = 4.0.4
- PROCPS_NG_SOURCE = procps-ng-$(PROCPS_NG_VERSION).tar.xz
- PROCPS_NG_SITE = http://downloads.sourceforge.net/project/procps-ng/Production
- PROCPS_NG_LICENSE = GPL-2.0+, LGPL-2.0+ (libproc and libps)
- PROCPS_NG_LICENSE_FILES = COPYING COPYING.LIB
- PROCPS_NG_CPE_ID_VALID = YES
- PROCPS_NG_INSTALL_STAGING = YES
--# We're patching configure.ac
--PROCPS_NG_AUTORECONF = YES
- PROCPS_NG_DEPENDENCIES = ncurses host-pkgconf $(TARGET_NLS_DEPENDENCIES)
- PROCPS_NG_CONF_OPTS = LIBS=$(TARGET_NLS_LIBS)
- 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
