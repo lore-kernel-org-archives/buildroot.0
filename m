@@ -4,49 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 37E60C3DA63
-	for <buildroot@archiver.kernel.org>; Tue, 23 Jul 2024 20:29:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0C35AC3DA49
+	for <buildroot@archiver.kernel.org>; Tue, 23 Jul 2024 20:31:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 06FED808D9;
-	Tue, 23 Jul 2024 20:29:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C1C8880EEA;
+	Tue, 23 Jul 2024 20:31:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KEvA6glKZOkZ; Tue, 23 Jul 2024 20:29:31 +0000 (UTC)
+ id BXCzvAR1JQzg; Tue, 23 Jul 2024 20:31:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E927180B73
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CD0F780FF5
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E927180B73;
-	Tue, 23 Jul 2024 20:29:30 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 9A9801BF27E
- for <buildroot@lists.busybox.net>; Tue, 23 Jul 2024 20:29:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CD0F780FF5;
+	Tue, 23 Jul 2024 20:31:51 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id AC7761BF27E
+ for <buildroot@lists.busybox.net>; Tue, 23 Jul 2024 20:31:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 879C040549
- for <buildroot@lists.busybox.net>; Tue, 23 Jul 2024 20:29:29 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id A55C480FF5
+ for <buildroot@lists.busybox.net>; Tue, 23 Jul 2024 20:31:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZIedELKu6QRx for <buildroot@lists.busybox.net>;
- Tue, 23 Jul 2024 20:29:28 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id a5dQRLbQvIvh for <buildroot@lists.busybox.net>;
+ Tue, 23 Jul 2024 20:31:49 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::226;
+ helo=relay6-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 89A0740544
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 89A0740544
- for <buildroot@buildroot.org>; Tue, 23 Jul 2024 20:29:28 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7378E87559; Tue, 23 Jul 2024 20:29:28 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 23 Jul 2024 22:29:02 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3f31c4ef33eff191fc17cd0f8aa4d3d4ad9ed2c4
-X-Git-Newrev: bfa3c1932fd5127b73eae1549a84b9c4125e3e0a
-X-Patchwork-Hint: ignore
-Message-Id: <20240723202928.7378E87559@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] board/qemu/arm-vexpress-tz: fix typos in
- readme file
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 95BBB80EEA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 95BBB80EEA
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::226])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 95BBB80EEA
+ for <buildroot@busybox.net>; Tue, 23 Jul 2024 20:31:49 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 7DDEEC0003;
+ Tue, 23 Jul 2024 20:31:47 +0000 (UTC)
+Date: Tue, 23 Jul 2024 22:31:46 +0200
+To: Kurt Van Dijck via buildroot <buildroot@buildroot.org>
+Message-ID: <20240723223146.34a7dff1@windsurf>
+In-Reply-To: <20240723150347.9498-1-dev.kurt@vandijck-laurijssen.be>
+References: <20240723150347.9498-1-dev.kurt@vandijck-laurijssen.be>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1721766707;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=sWW8gq2e8clvsUj4cu3LvWesh36Qrp/etl20s+dikdI=;
+ b=WtIkbA8gyHrToH+TScylApHBSaoJI6rwmiQA+vZv/WFoNV+CHLGSz0J4Il3/3i4qoODswr
+ cb+Zy8eoiMtnkmhzM8Qupg/laLyo2DZBFAjiR1ZJhbDHS6MgYIckBz6OmAnd9Z9RObt9FD
+ sQkMeicKXvlxzlAM+BBdziXGfglPNcncIsMq8bSKz9e+0ZL2WBZrW4YWtUkac/M+vkFkQn
+ gn+q3txTF6ShRsAW4fSc//iPhJpclS8OtFLbj/h8zUrNGPmL0ye/1WlwkEZLkSyd9cOR48
+ 68jPEErol443waRL3oKkOPJPi/c59F2niVlNcTIE3Q/WgerZCAJ7/TUjQwN9Wg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=WtIkbA8g
+Subject: Re: [Buildroot] [PATCH] nilfs-utils: bump to 2.2.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,55 +82,28 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@busybox.net, Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bfa3c1932fd5127b73eae1549a84b9c4125e3e0a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue, 23 Jul 2024 17:03:47 +0200
+Kurt Van Dijck via buildroot <buildroot@buildroot.org> wrote:
 
-Fix typos in QEMU arm-vexpress-tz readme file where 'i.e.' occurrences
-should be replaced with 'e.g.'.
+> Signed-off-by: Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>
+> ---
+>  package/nilfs-utils/nilfs-utils.hash | 2 +-
+>  package/nilfs-utils/nilfs-utils.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Signed-off-by: Etienne Carriere <etienne.carriere@foss.st.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- board/qemu/arm-vexpress-tz/readme.txt | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Applied to master, thanks.
 
-diff --git a/board/qemu/arm-vexpress-tz/readme.txt b/board/qemu/arm-vexpress-tz/readme.txt
-index 3e84fe6391..920777afd4 100644
---- a/board/qemu/arm-vexpress-tz/readme.txt
-+++ b/board/qemu/arm-vexpress-tz/readme.txt
-@@ -26,7 +26,7 @@ If you want to emulate more cores, use "-smp {1|2|3|4}" to select the
- number of cores.
- 
- Note: "-netdev user,id=vmnic -device virtio-net-device,netdev=vmnic"
--brings network support that is used i.e. in OP-TEE regression tests.
-+brings network support that is used e.g. in OP-TEE regression tests.
- 
- 
- -- Boot Details --
-@@ -38,7 +38,7 @@ non-secure bootloader (BL33 stage).
- QEMU natively hosts and loads in RAM the QEMU ARM target device tree. OP-TEE
- reads and modifies its content according to OP-TEE configuration.
- 
--Enable TF-A traces from LOG_LEVEL (I.e LOG_LEVEL=40) from
-+Enable TF-A traces from LOG_LEVEL (e.g. LOG_LEVEL=40) from
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES.
- 
- 
-@@ -53,7 +53,7 @@ serial interface.
- The OP-TEE OS uses the QEMU second serial interface.
- 
- To get the OP-TEE OS traces, append a second -serial argument after
---serial stdio in the QEMU command line. I.e, the following enables 2 serial
-+-serial stdio in the QEMU command line. E.g., the following enables 2 serial
- consoles over telnet connections:
- 
-   cd output/images && ../host/bin/qemu-system-arm \
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
