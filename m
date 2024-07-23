@@ -4,48 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93FA2C3DA49
-	for <buildroot@archiver.kernel.org>; Tue, 23 Jul 2024 09:29:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D81B6C3DA49
+	for <buildroot@archiver.kernel.org>; Tue, 23 Jul 2024 09:29:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 34AF540A0C;
-	Tue, 23 Jul 2024 09:29:08 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8FE4940AA4;
+	Tue, 23 Jul 2024 09:29:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KKU0dnMP8Smc; Tue, 23 Jul 2024 09:29:07 +0000 (UTC)
+ id XvWRWiKMIzZ8; Tue, 23 Jul 2024 09:29:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C199540A76
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3263B40A9C
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C199540A76;
-	Tue, 23 Jul 2024 09:29:06 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 47EED1BF3AA
- for <buildroot@lists.busybox.net>; Tue, 23 Jul 2024 09:28:59 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3263B40A9C;
+	Tue, 23 Jul 2024 09:29:09 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 40D0C1BF3AA
+ for <buildroot@lists.busybox.net>; Tue, 23 Jul 2024 09:29:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 34FF140248
- for <buildroot@lists.busybox.net>; Tue, 23 Jul 2024 09:28:59 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2F0EF607D5
+ for <buildroot@lists.busybox.net>; Tue, 23 Jul 2024 09:29:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id l62ntsq18-8P for <buildroot@lists.busybox.net>;
- Tue, 23 Jul 2024 09:28:58 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id C4JZArx4CxVk for <buildroot@lists.busybox.net>;
+ Tue, 23 Jul 2024 09:29:03 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::229;
+ helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 233214023D
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 233214023D
- for <buildroot@buildroot.org>; Tue, 23 Jul 2024 09:28:58 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0EF67872EE; Tue, 23 Jul 2024 09:28:58 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 23 Jul 2024 11:27:48 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: dece0a512daf03f20bcf9048e3f702da952b8546
-X-Git-Newrev: 0971cbddea49110619d73fec2b5d7b80184024f5
-X-Patchwork-Hint: ignore
-Message-Id: <20240723092858.0EF67872EE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-jaraco-context: new package
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 0E39B60686
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0E39B60686
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 0E39B60686
+ for <buildroot@buildroot.org>; Tue, 23 Jul 2024 09:29:02 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 40A69FF80A;
+ Tue, 23 Jul 2024 09:29:00 +0000 (UTC)
+Date: Tue, 23 Jul 2024 11:28:59 +0200
+To: James Hilliard <james.hilliard1@gmail.com>
+Message-ID: <20240723112859.0e077208@windsurf>
+In-Reply-To: <20240109060128.3974794-3-james.hilliard1@gmail.com>
+References: <20240109060128.3974794-1-james.hilliard1@gmail.com>
+ <20240109060128.3974794-3-james.hilliard1@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1721726940;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=Cri7vYU4k8ve6Z9lCbM7bo4d2mSHTSq0AbXus7mD+SU=;
+ b=BobDFN8SUbP7dXzO6pyGTfcT0WvB+Cye92fN3qumCnjgaS61mVYfZ81S5DobH5KtsEFoaq
+ GmardkwRBf5MieVQpT+nPhr7nUv5w0PwJ2A0otfPWZVrLTfaNGmz6oMXpcsujv8JrvujVt
+ cxdWe5fvLonb2Pz11vh2Gl6XKb+XTXuQydF1jfIWeefy/ewFta5esy+fS3b0v34OFdVnMG
+ bS6E3NYwiSqKuSzKLaH1L+cCzK+N8sFoNIlhgJxjcx492do1IGiFxyXeiEDWQeM1bRlhih
+ 6OCeWk+CaSsEEA1wVrU8zoPr4zUwkFEzqadEe1H2uNbUwCCSXfTornnKo9P6NQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=BobDFN8S
+Subject: Re: [Buildroot] [PATCH 3/6] package/python-jaraco-context: new
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,80 +84,33 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0971cbddea49110619d73fec2b5d7b80184024f5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon,  8 Jan 2024 23:01:25 -0700
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/Config.in                                        |  1 +
- package/python-jaraco-context/Config.in                  |  6 ++++++
- package/python-jaraco-context/python-jaraco-context.hash |  5 +++++
- package/python-jaraco-context/python-jaraco-context.mk   | 15 +++++++++++++++
- 4 files changed, 27 insertions(+)
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>  package/Config.in                                 |  1 +
+>  package/python-jaraco-context/Config.in           |  6 ++++++
+>  .../python-jaraco-context.hash                    |  5 +++++
+>  .../python-jaraco-context.mk                      | 15 +++++++++++++++
+>  4 files changed, 27 insertions(+)
+>  create mode 100644 package/python-jaraco-context/Config.in
+>  create mode 100644 package/python-jaraco-context/python-jaraco-context.hash
+>  create mode 100644 package/python-jaraco-context/python-jaraco-context.mk
 
-diff --git a/package/Config.in b/package/Config.in
-index daf7206957..dbe3c8a495 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1166,6 +1166,7 @@ menu "External python modules"
- 	source "package/python-iwlib/Config.in"
- 	source "package/python-janus/Config.in"
- 	source "package/python-jaraco-classes/Config.in"
-+	source "package/python-jaraco-context/Config.in"
- 	source "package/python-jaraco-functools/Config.in"
- 	source "package/python-jc/Config.in"
- 	source "package/python-jedi/Config.in"
-diff --git a/package/python-jaraco-context/Config.in b/package/python-jaraco-context/Config.in
-new file mode 100644
-index 0000000000..afdc8fa940
---- /dev/null
-+++ b/package/python-jaraco-context/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PYTHON_JARACO_CONTEXT
-+	bool "python-jaraco-context"
-+	help
-+	  Context managers by jaraco.
-+
-+	  https://github.com/jaraco/jaraco.context
-diff --git a/package/python-jaraco-context/python-jaraco-context.hash b/package/python-jaraco-context/python-jaraco-context.hash
-new file mode 100644
-index 0000000000..f8daa91364
---- /dev/null
-+++ b/package/python-jaraco-context/python-jaraco-context.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/jaraco.context/json
-+md5  b40aeeda6a07dd283f2a407f622cda5b  jaraco.context-4.3.0.tar.gz
-+sha256  4dad2404540b936a20acedec53355bdaea223acb88fd329fa6de9261c941566e  jaraco.context-4.3.0.tar.gz
-+# Locally computed sha256 checksums
-+sha256  db3f0246b1f9278f15845b99fec478b8b506eb76487993722f8c6e254285faf8  LICENSE
-diff --git a/package/python-jaraco-context/python-jaraco-context.mk b/package/python-jaraco-context/python-jaraco-context.mk
-new file mode 100644
-index 0000000000..668855c98a
---- /dev/null
-+++ b/package/python-jaraco-context/python-jaraco-context.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# python-jaraco-context
-+#
-+################################################################################
-+
-+PYTHON_JARACO_CONTEXT_VERSION = 4.3.0
-+PYTHON_JARACO_CONTEXT_SOURCE = jaraco.context-$(PYTHON_JARACO_CONTEXT_VERSION).tar.gz
-+PYTHON_JARACO_CONTEXT_SITE = https://files.pythonhosted.org/packages/7c/b4/fa71f82b83ebeed95fe45ce587d6cba85b7c09ef3d9f61602f92f45e90db
-+PYTHON_JARACO_CONTEXT_SETUP_TYPE = setuptools
-+PYTHON_JARACO_CONTEXT_LICENSE = MIT
-+PYTHON_JARACO_CONTEXT_LICENSE_FILES = LICENSE
-+PYTHON_JARACO_CONTEXT_DEPENDENCIES = host-python-setuptools-scm
-+
-+$(eval $(python-package))
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
