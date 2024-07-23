@@ -1,93 +1,94 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3C9F3C3DA63
-	for <buildroot@archiver.kernel.org>; Tue, 23 Jul 2024 10:48:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4FD02C3DA49
+	for <buildroot@archiver.kernel.org>; Tue, 23 Jul 2024 12:01:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DCA6040491;
-	Tue, 23 Jul 2024 10:48:52 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fP2lEYvdmAmm; Tue, 23 Jul 2024 10:48:51 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 05DE24043D
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 05DE24043D;
-	Tue, 23 Jul 2024 10:48:51 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A82131BF20D
- for <buildroot@lists.busybox.net>; Tue, 23 Jul 2024 10:48:49 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 93E1780E8C
- for <buildroot@lists.busybox.net>; Tue, 23 Jul 2024 10:48:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B9FCE80F78;
+	Tue, 23 Jul 2024 12:01:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id aCEQSvkrfOOg for <buildroot@lists.busybox.net>;
- Tue, 23 Jul 2024 10:48:48 +0000 (UTC)
+ id 60rLkr0LYhry; Tue, 23 Jul 2024 12:01:53 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4F3688105C
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4F3688105C;
+	Tue, 23 Jul 2024 12:01:53 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 3E3DE1BF28B
+ for <buildroot@lists.busybox.net>; Tue, 23 Jul 2024 12:01:51 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2A14C8105C
+ for <buildroot@lists.busybox.net>; Tue, 23 Jul 2024 12:01:51 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id dsgsC9grR2K9 for <buildroot@lists.busybox.net>;
+ Tue, 23 Jul 2024 12:01:49 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32e; helo=mail-wm1-x32e.google.com;
+ client-ip=2a00:1450:4864:20::42e; helo=mail-wr1-x42e.google.com;
  envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org DFEFD80DE1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DFEFD80DE1
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
- [IPv6:2a00:1450:4864:20::32e])
- by smtp1.osuosl.org (Postfix) with ESMTPS id DFEFD80DE1
- for <buildroot@buildroot.org>; Tue, 23 Jul 2024 10:48:47 +0000 (UTC)
-Received: by mail-wm1-x32e.google.com with SMTP id
- 5b1f17b1804b1-4277a5ed48bso40142775e9.2
- for <buildroot@buildroot.org>; Tue, 23 Jul 2024 03:48:47 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 74A4280F78
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 74A4280F78
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
+ [IPv6:2a00:1450:4864:20::42e])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 74A4280F78
+ for <buildroot@buildroot.org>; Tue, 23 Jul 2024 12:01:49 +0000 (UTC)
+Received: by mail-wr1-x42e.google.com with SMTP id
+ ffacd0b85a97d-3685b9c8998so2328187f8f.0
+ for <buildroot@buildroot.org>; Tue, 23 Jul 2024 05:01:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1721731725; x=1722336525;
+ d=1e100.net; s=20230601; t=1721736107; x=1722340907;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=wGCP6KsLUqoa8erFSw14bbxcB2XWwcDesAwBslt/cYU=;
- b=oXsfJSl6zqdNWoluBLyALht/DbIo4yiztDFn22A3TvJ1zvfKnGt23yl3gr1gV63KBr
- aRWeJ81VK4v1GH8QJsAPS4aZv4brUFNfXYktiK6oAYB71r936IOE9WifKprifKhGcntX
- lfAo5oWsB0xI1oo8/f600H2hlE1zy0QhzjHCEL1HZmZIo/nK3btXMzwohba3sevj99RA
- 9KkBEBv8DVK4NmfR4pVUF3003ve5hrgkfte2YfbP2fxwsMQxXadBSVT8kLrWNea1p20/
- RqwpMi0ZMZJYlkHsadsLSAyqsCuBdxUxpFxho0ZRbVe5mtbqRa92o6fBeQInF9ESyyHa
- Cb6w==
-X-Gm-Message-State: AOJu0YygCoyYdtg1CRBTJ1BP6EEDPjChnv327O9Tbgo3FlH5huQF/QUb
- 8cW3/jst6hd6WEIUME9IL7AMUIRiHeeSQ0Xeao4CLwD1THA41TInGsLrgA==
-X-Google-Smtp-Source: AGHT+IGNEUWZHUra/1UhMTkmNLwddCQDWjHKnZsaV8aJUUzT3zcynkQeekHGogHPRnOEqR4sHaJSgA==
-X-Received: by 2002:a5d:52d0:0:b0:367:89d3:5d4f with SMTP id
- ffacd0b85a97d-369dec04763mr1398689f8f.12.1721731725314; 
- Tue, 23 Jul 2024 03:48:45 -0700 (PDT)
+ bh=PhRtCqZDXI+YbejpJU26pB9+6MpVbbmowHvcolMhkyQ=;
+ b=HzW0isujjYpcOqh9EOcg8HA1to4Hrm8+DFQimF1aiOrpjozbVnN/cX2Lj8O7GmcBz9
+ P1eNjSSzQCCnSWk2H7Jw/yj0TQZi5w3DE9TEeOXsgDQrB6k0H1a62d5rUuRRL31SugsT
+ ZyPC9hjgsLQiFQ5VTa9Kx/eHapCZ4FfirobwrEZDeb/E6ky36Vq9Z9+NS3AOia3b/cBN
+ eDdXi9nja4UDYmojEWeVJ3M3iM6Z1djmY0o2Ja9pewy80p1kOEbSpzxGC6r2VJf6oysC
+ +ignDFcpUVvvPNbG53O/mmw7YbcQWtum2u3NimmIPmWwsISTzrDHOQv8sYtyIMrWmAvb
+ eTJg==
+X-Gm-Message-State: AOJu0Yx3Dohp5HUb0Peb62okBJFWkDCyEY+1VJK2Mz1xH9fbZ2R1yV09
+ WeMzVD/m3wQ4ajlN+ldssHvCG8tTNlTkjPz4r6D+vJBu0Ap7t3D0jTv52g==
+X-Google-Smtp-Source: AGHT+IECmEyZPOpGrUEA723lKQQsC8xo8BeAiFTQtIkL75uOd+tAILtFyiVa5WtmyPrISU7ofX1v1Q==
+X-Received: by 2002:adf:ebc6:0:b0:368:7f4f:9e95 with SMTP id
+ ffacd0b85a97d-369dec0481bmr1795849f8f.10.1721736106641; 
+ Tue, 23 Jul 2024 05:01:46 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-785-215.w83-197.abo.wanadoo.fr.
  [83.197.112.215]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-427f69bc9d7sm455555e9.4.2024.07.23.03.48.44
+ ffacd0b85a97d-3687869447dsm11356527f8f.53.2024.07.23.05.01.45
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 23 Jul 2024 03:48:44 -0700 (PDT)
+ Tue, 23 Jul 2024 05:01:46 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 23 Jul 2024 12:48:41 +0200
-Message-ID: <20240723104841.9239-1-fontaine.fabrice@gmail.com>
+Date: Tue, 23 Jul 2024 14:01:40 +0200
+Message-ID: <20240723120140.176562-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1721731725; x=1722336525; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1721736107; x=1722340907; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=wGCP6KsLUqoa8erFSw14bbxcB2XWwcDesAwBslt/cYU=;
- b=SLNeXFKtR3UIcbL+sUHmUP3+Tc6PbOEsX/f173SS6qF4A0fH2TucI71hHpulAyHsLr
- ajc/VtpuOAM/oahXiabkHaJD1yPzmIduy30iCOxRI7UNWE24t1QA8IV2yvWtv4mh7/8p
- L/9RYXT6D7S75qHY2BPtl1XMieiGditRoGGNNQbQ4bXm5WYpruwVz6nmEPQQeh6B+bbG
- 0UL5O6zLSlTxCUBurZHpbgN2nk8plwMPWnJDPfpkh0W9ytnYR+DU0cIasTdK9jqWnZ7N
- HV+w9qg675PXgnoE87Y8YOlaqUf446G/rHh0ePV49wMKd+AYY2KTxISqnURGDwn/pZJR
- Gsdw==
+ bh=PhRtCqZDXI+YbejpJU26pB9+6MpVbbmowHvcolMhkyQ=;
+ b=Zhg2a52G2CnnQhorS8Lwr58A8AwvJoSX0/etukpJyzdfzaLWI6aCK5pgUbZ8RpFtfI
+ ZqVnypZBECjWdHme6n3XDl4/uY6fUATR1tTZh0WVxnU1CIxmC0Rn6qA6bVR/KEpxYkI/
+ +PoFVy+l0QfyUv/1gABrcQiZzw+WK/lsvXRrdaxAw/n8fp9ffqjZCj4T04gzfINBtC+t
+ yqFCR1vip2tVGfdM9VAB+dYKIUwOnfhmx0MxkZgptJr2zU61iUx4zbrwk2JxT4QGAr62
+ qUEbF/O/nxBZNT3t+6hL63bjOVDWePEDP+BDEbCayqQlxXKHgWwC23ww1Igcoeu8ARKB
+ hrdQ==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=SLNeXFKt
-Subject: [Buildroot] [PATCH 1/1] package/gamin: drop package
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=Zhg2a52G
+Subject: [Buildroot] [PATCH 1/1] package/procps-ng: bump to version 4.0.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,336 +100,295 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bernd Kuhls <bernd@kuhls.net>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-As advocated by Thomas Petazzoni [1], drop gamin as package is not
-maintained anymore.
+- Drop all patches (already in version) and so also drop autoreconf
+- This bump will also fix the following build failure with gcc >= 14:
 
-This will also avoid the following build failure with gcc 14:
+  pgrep.c: In function 'main':
+  pgrep.c:1066:37: error: implicit declaration of function 'pidfd_open'; did you mean 'fdopen'? [-Wimplicit-function-declaration]
+   1066 |                         int pidfd = pidfd_open(procs[i].num, 0);
+        |                                     ^~~~~~~~~~
+        |                                     fdopen
 
-gam_api.c: In function 'gamin_get_user_name':
-gam_api.c:123:9: error: implicit declaration of function 'strncpy' [-Wimplicit-function-declaration]
-  123 |         strncpy(user_name, pw->pw_name, 99);
-      |         ^~~~~~~
-
-[1] https://patchwork.ozlabs.org/project/buildroot/patch/20240723085645.732060-1-fontaine.fabrice@gmail.com/
+https://gitlab.com/procps-ng/procps/-/blob/v4.0.4/NEWS
 
 Fixes:
- - http://autobuild.buildroot.org/results/b267f53ba6035d256c013dbbbbd1bcdfe0ef111f
+ - http://autobuild.buildroot.org/results/bd7b49123905c580842a3dd3b7a338d5aedf55d7
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
  .checkpackageignore                           |  3 -
- Config.in.legacy                              |  7 +++
- package/gamin/0001-no-abstract-sockets.patch  | 61 -------------------
- package/gamin/0002-no-const-return.patch      | 57 -----------------
- ...x-missing-PTHREAD_MUTEX_RECURSIVE_NP.patch | 39 ------------
- package/gamin/Config.in                       | 14 -----
- package/gamin/gamin.hash                      |  3 -
- package/gamin/gamin.mk                        | 21 -------
- package/samba4/samba4.mk                      |  8 +--
- 9 files changed, 8 insertions(+), 205 deletions(-)
- delete mode 100644 package/gamin/0001-no-abstract-sockets.patch
- delete mode 100644 package/gamin/0002-no-const-return.patch
- delete mode 100644 package/gamin/0003-fix-missing-PTHREAD_MUTEX_RECURSIVE_NP.patch
- delete mode 100644 package/gamin/Config.in
- delete mode 100644 package/gamin/gamin.hash
- delete mode 100644 package/gamin/gamin.mk
+ .../0001-configure-Add--disable-w.patch       | 93 -------------------
+ ...ssing-nl_langinfo-on-certain-configs.patch | 34 -------
+ .../procps-ng/0003-fix-pifd_open-check.patch  | 59 ------------
+ package/procps-ng/procps-ng.hash              |  8 +-
+ package/procps-ng/procps-ng.mk                |  4 +-
+ 6 files changed, 5 insertions(+), 196 deletions(-)
+ delete mode 100644 package/procps-ng/0001-configure-Add--disable-w.patch
+ delete mode 100644 package/procps-ng/0002-escape-c-Fix-missing-nl_langinfo-on-certain-configs.patch
+ delete mode 100644 package/procps-ng/0003-fix-pifd_open-check.patch
 
 diff --git a/.checkpackageignore b/.checkpackageignore
-index b042873aa3..a4492ae09b 100644
+index 760ae29cfb..687086d3a5 100644
 --- a/.checkpackageignore
 +++ b/.checkpackageignore
-@@ -562,9 +562,6 @@ package/ftop/0001-overflow.patch lib_patch.Upstream
- package/fwts/0001-build-do-not-use-Werror.patch lib_patch.Upstream
- package/fxdiv/0001-CMake-don-t-enable-CXX-unless-building-tests-benchma.patch lib_patch.Upstream
- package/fxload/0001-fix-static-build.patch lib_patch.Upstream
--package/gamin/0001-no-abstract-sockets.patch lib_patch.Upstream
--package/gamin/0002-no-const-return.patch lib_patch.Sob lib_patch.Upstream
--package/gamin/0003-fix-missing-PTHREAD_MUTEX_RECURSIVE_NP.patch lib_patch.Upstream
- package/gcc/12.4.0/0001-disable-split-stack-for-non-thread-builds.patch lib_patch.Upstream
- package/gcc/13.3.0/0001-disable-split-stack-for-non-thread-builds.patch lib_patch.Upstream
- package/gcc/14.1.0/0001-disable-split-stack-for-non-thread-builds.patch lib_patch.Upstream
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 414a14944e..94ac60b668 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -146,6 +146,13 @@ endif
- 
- comment "Legacy options removed in 2024.08"
- 
-+config BR2_PACKAGE_GAMIN
-+	bool "gamin package removed"
-+	select BR2_LEGACY
-+	help
-+	  The gamin package was removed as it is not maintained
-+	  anymore (no commit since 2016).
-+
- config BR2_PACKAGE_CAIRO_SVG
- 	bool "cairo svg support"
- 	select BR2_LEGACY
-diff --git a/package/gamin/0001-no-abstract-sockets.patch b/package/gamin/0001-no-abstract-sockets.patch
+@@ -1118,9 +1118,6 @@ package/pptp-linux/0002-fix-parallel-build.patch lib_patch.Upstream
+ package/prboom/0001-libpng-1.4.patch lib_patch.Upstream
+ package/prboom/0002-configure-remove-predefined-O2-optimization-flag.patch lib_patch.Upstream
+ package/prelink-cross/0001-src-rtld-dl-tls.c-Fix-TLS-offsets-computation-for-s3.patch lib_patch.Upstream
+-package/procps-ng/0001-configure-Add--disable-w.patch lib_patch.Upstream
+-package/procps-ng/0002-escape-c-Fix-missing-nl_langinfo-on-certain-configs.patch lib_patch.Upstream
+-package/procps-ng/0003-fix-pifd_open-check.patch lib_patch.Upstream
+ package/procps-ng/S02sysctl lib_sysv.Variables
+ package/proftpd/S50proftpd Shellcheck lib_sysv.Indent lib_sysv.Variables
+ package/prosody/0001-enable-syslog.patch lib_patch.Upstream
+diff --git a/package/procps-ng/0001-configure-Add--disable-w.patch b/package/procps-ng/0001-configure-Add--disable-w.patch
 deleted file mode 100644
-index 3d659015ec..0000000000
---- a/package/gamin/0001-no-abstract-sockets.patch
+index 8a699df5a6..0000000000
+--- a/package/procps-ng/0001-configure-Add--disable-w.patch
 +++ /dev/null
-@@ -1,61 +0,0 @@
--[PATCH]: Remove abstract socket namespace check breaking cross compilation
+@@ -1,93 +0,0 @@
+-From 1524a625e693b956ce0b5091c9f89f24fb7e8614 Mon Sep 17 00:00:00 2001
+-From: "Issam E. Maghni" <issam.e.maghni@mailbox.org>
+-Date: Fri, 23 Apr 2021 15:58:36 -0400
+-Subject: [PATCH] configure: Add --disable-w
 -
--Taken from openembedded:
+-[Retrieved (and backported) from:
+-https://gitlab.com/procps-ng/procps/-/commit/1524a625e693b956ce0b5091c9f89f24fb7e8614]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- Makefile.am  | 21 +++++++++++++++------
+- configure.ac |  6 ++++++
+- 2 files changed, 21 insertions(+), 6 deletions(-)
 -
--http://git.openembedded.org/cgit.cgi/openembedded/tree/recipes/gamin/files/no-abstract-sockets.patch
--
--Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
----- /tmp/configure.in	2007-04-30 13:08:49.000000000 +0200
--+++ gamin-0.1.8/configure.in	2007-04-30 13:10:53.285251000 +0200
--@@ -354,51 +354,6 @@
--     AC_DEFINE(HAVE_CMSGCRED,1,[Have cmsgcred structure])
-- fi
+-diff --git a/Makefile.am b/Makefile.am
+-index de15e137..d2356872 100644
+---- a/Makefile.am
+-+++ b/Makefile.am
+-@@ -47,8 +47,7 @@ bin_PROGRAMS = \
+- 	pwdx \
+- 	tload \
+- 	uptime \
+--	vmstat \
+--	w
+-+	vmstat
+- if BUILD_PWAIT
+- bin_PROGRAMS += pwait
+- endif
+-@@ -60,8 +59,7 @@ usrbin_exec_PROGRAMS += \
+- 	pkill \
+- 	pmap \
+- 	uptime \
+--	vmstat \
+--	w
+-+	vmstat
+- endif
 - 
---#### Abstract sockets
---
---AC_MSG_CHECKING(abstract socket namespace)
---AC_LANG_PUSH(C)
---AC_RUN_IFELSE([AC_LANG_PROGRAM(
---[[
---#include <sys/types.h>
---#include <stdlib.h>
---#include <string.h>
---#include <stdio.h>
---#include <sys/socket.h>
---#include <sys/un.h>
---#include <errno.h>
---]],
---[[
---  int listen_fd;
---  struct sockaddr_un addr;
---  
---  listen_fd = socket (PF_UNIX, SOCK_STREAM, 0);
---  
---  if (listen_fd < 0)
---    {
---      fprintf (stderr, "socket() failed: %s\n", strerror (errno));
---      exit (1);
---    }
---
---  memset (&addr, '\0', sizeof (addr));
---  addr.sun_family = AF_UNIX;
---  strcpy (addr.sun_path, "X/tmp/dbus-fake-socket-path-used-in-configure-test");
---  addr.sun_path[0] = '\0'; /* this is what makes it abstract */
---  
---  if (bind (listen_fd, (struct sockaddr*) &addr, SUN_LEN (&addr)) < 0)
---    {
---       fprintf (stderr, "Abstract socket namespace bind() failed: %s\n", 
---                strerror (errno));
---       exit (1);
---    }
---  else 
---    exit (0);
---]])],
---              [have_abstract_sockets=yes],
---              [have_abstract_sockets=no])
---AC_LANG_POP(C)
---AC_MSG_RESULT($have_abstract_sockets)
---
-- if test x$enable_abstract_sockets = xyes; then
--     if test x$have_abstract_sockets = xno; then
-- 	AC_MSG_ERROR([Abstract sockets explicitly required, and support not detected.])
-diff --git a/package/gamin/0002-no-const-return.patch b/package/gamin/0002-no-const-return.patch
-deleted file mode 100644
-index 3e6e905214..0000000000
---- a/package/gamin/0002-no-const-return.patch
-+++ /dev/null
-@@ -1,57 +0,0 @@
--G_CONST_RETURN is deprecated in glib 2.30 so remove to to avoid
--build failures.
--
--Upstream-Status: Pending
--
--Index: gamin-0.1.10/server/gam_node.c
--===================================================================
----- gamin-0.1.10.orig/server/gam_node.c	2011-10-12 15:25:45.217178314 +0100
--+++ gamin-0.1.10/server/gam_node.c	2011-10-12 15:26:17.807178293 +0100
--@@ -122,7 +122,7 @@
--  * it has finished with the string.  If it must keep it longer, it
--  * should makes its own copy.  The returned string must not be freed.
--  */
---G_CONST_RETURN char *
--+const char *
-- gam_node_get_path(GamNode * node)
-- {
--     g_assert(node);
--Index: gamin-0.1.10/server/gam_node.h
--===================================================================
----- gamin-0.1.10.orig/server/gam_node.h	2011-10-12 15:25:46.857178269 +0100
--+++ gamin-0.1.10/server/gam_node.h	2011-10-12 15:26:28.637178297 +0100
--@@ -58,7 +58,7 @@
-- void                  gam_node_set_is_dir          (GamNode         *node,
-- 						   gboolean        is_dir);
-- 	
---G_CONST_RETURN char  *gam_node_get_path            (GamNode         *node);
--+const char  *gam_node_get_path            (GamNode         *node);
+- lib_LTLIBRARIES = \
+-@@ -74,7 +72,6 @@ dist_man_MANS = \
+- 	pmap.1 \
+- 	uptime.1 \
+- 	vmstat.8 \
+--	w.1 \
+- 	ps/procps.1
 - 
-- GList                *gam_node_get_subscriptions   (GamNode         *node);
+- if !CYGWIN
+-@@ -137,6 +134,19 @@ else
+-   EXTRA_DIST += kill.1
+- endif
 - 
--Index: gamin-0.1.10/server/gam_subscription.c
--===================================================================
----- gamin-0.1.10.orig/server/gam_subscription.c	2011-10-12 15:25:40.497177525 +0100
--+++ gamin-0.1.10/server/gam_subscription.c	2011-10-12 15:26:39.867178304 +0100
--@@ -141,7 +141,7 @@
--  * @param sub the GamSubscription
--  * @returns The path being monitored.  It should not be freed.
--  */
---G_CONST_RETURN char *
--+const char *
-- gam_subscription_get_path(GamSubscription * sub)
-- {
--     if (sub == NULL)
--Index: gamin-0.1.10/server/gam_subscription.h
--===================================================================
----- gamin-0.1.10.orig/server/gam_subscription.h	2011-10-12 15:25:28.507178266 +0100
--+++ gamin-0.1.10/server/gam_subscription.h	2011-10-12 15:25:58.817178285 +0100
--@@ -21,7 +21,7 @@
-- 
-- int                  gam_subscription_get_reqno    (GamSubscription *sub);
-- 
---G_CONST_RETURN char *gam_subscription_get_path     (GamSubscription *sub);
--+const char *gam_subscription_get_path     (GamSubscription *sub);
-- 
-- GamListener         *gam_subscription_get_listener (GamSubscription *sub);
-- 
-diff --git a/package/gamin/0003-fix-missing-PTHREAD_MUTEX_RECURSIVE_NP.patch b/package/gamin/0003-fix-missing-PTHREAD_MUTEX_RECURSIVE_NP.patch
-deleted file mode 100644
-index b5f2e6c521..0000000000
---- a/package/gamin/0003-fix-missing-PTHREAD_MUTEX_RECURSIVE_NP.patch
-+++ /dev/null
-@@ -1,39 +0,0 @@
--Fix missing PTHREAD_MUTEX_RECURSIVE_NP
--
--The musl C library does not provide the non portable
--PTHREAD_MUTEX_RECURSIVE_NP. In addition, uClibc does not define it as
--a #define, but as an enum value, so doing a #if defined() check
--doesn't work properly. Instead, add a AC_CHECK_DECL() autoconf check.
--
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
--[Thomas: switch to an autoconf check.]
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
--
--Index: b/configure.in
--===================================================================
----- a/configure.in
--+++ b/configure.in
--@@ -294,6 +294,10 @@
-- 	   AC_DEFINE([HAVE_LIBPTHREAD], [], [Define if pthread library is there (-lpthread)])
-- 	   AC_DEFINE([HAVE_PTHREAD_H], [], [Define if <pthread.h> is there])
-- 	   WITH_THREADS="1"]))
+-+if BUILD_W
+-+if CYGWIN
+-+usrbin_exec_PROGRAMS += w
+-+else
+-+bin_PROGRAMS += w
+-+endif
 -+
--+    AC_CHECK_DECL([PTHREAD_MUTEX_RECURSIVE_NP],
--+		[AC_DEFINE([HAVE_PTHREAD_MUTEX_RECURSIVE_NP], [], [whether HAVE_PTHREAD_MUTEX_RECURSIVE_NP is defined])],
--+		[], [#include <pthread.h>])
-- fi
+-+dist_man_MANS += w.1
+-+w_SOURCES = w.c lib/fileutils.c
+-+else
+-+  EXTRA_DIST += w.1
+-+endif
+-+
+- if WITH_NCURSES
+- if !CYGWIN
+- bin_PROGRAMS += \
+-@@ -213,7 +223,6 @@ endif
+- tload_SOURCES = tload.c lib/strutils.c lib/fileutils.c
+- uptime_SOURCES = uptime.c lib/fileutils.c
+- vmstat_SOURCES = vmstat.c lib/strutils.c lib/fileutils.c
+--w_SOURCES = w.c lib/fileutils.c
 - 
-- dnl Use weak symbols on linux/gcc to avoid imposing libpthreads to apps
--Index: b/libgamin/gam_data.c
--===================================================================
----- a/libgamin/gam_data.c
--+++ b/libgamin/gam_data.c
--@@ -470,7 +470,7 @@
--     }
--     if (is_threaded > 0) {
-- 	pthread_mutexattr_init(&attr);
---#if defined(linux) || defined(PTHREAD_MUTEX_RECURSIVE_NP)
--+#if defined(HAVE_PTHREAD_MUTEX_RECURSIVE_NP)
-- 	pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE_NP);
-- #else
-- 	pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE);
-diff --git a/package/gamin/Config.in b/package/gamin/Config.in
+- # proc/libprocps.la
+- 
+-diff --git a/configure.ac b/configure.ac
+-index 750c0fbb..3e83fb88 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -234,6 +234,12 @@ AC_ARG_ENABLE([kill],
+-   [], [enable_kill=yes]
+- )
+- AM_CONDITIONAL(BUILD_KILL, test "x$enable_kill" = xyes)
+-+AC_ARG_ENABLE([w],
+-+  AS_HELP_STRING([--disable-w], [do not build w]),
+-+  [], [enable_w=yes]
+-+)
+-+AM_CONDITIONAL(BUILD_W, test "x$enable_w" = xyes)
+-+
+- AM_CONDITIONAL(LINUX, test "x$host_os" = xlinux-gnu)
+- AM_CONDITIONAL(CYGWIN, test "x$host_os" = xcygwin)
+- 
+--- 
+-GitLab
+-
+diff --git a/package/procps-ng/0002-escape-c-Fix-missing-nl_langinfo-on-certain-configs.patch b/package/procps-ng/0002-escape-c-Fix-missing-nl_langinfo-on-certain-configs.patch
 deleted file mode 100644
-index 55e037a4a4..0000000000
---- a/package/gamin/Config.in
+index f3e2b126a6..0000000000
+--- a/package/procps-ng/0002-escape-c-Fix-missing-nl_langinfo-on-certain-configs.patch
 +++ /dev/null
-@@ -1,14 +0,0 @@
--config BR2_PACKAGE_GAMIN
--	bool "gamin"
--	depends on BR2_USE_WCHAR # glib2
--	depends on BR2_TOOLCHAIN_HAS_THREADS
--	depends on BR2_USE_MMU # glib2
--	select BR2_PACKAGE_LIBGLIB2
--	help
--	  the File Alteration Monitor
+@@ -1,34 +0,0 @@
+-From 2763b9880a7aab569694d6ee3170dd7341a26b84 Mon Sep 17 00:00:00 2001
+-From: "Issam E. Maghni" <issam.e.maghni@mailbox.org>
+-Date: Fri, 23 Apr 2021 16:53:39 -0400
+-Subject: [PATCH] escape.c: Fix missing nl_langinfo on certain configs
 -
--	  http://www.gnome.org/~veillard/gamin/sources
+-[Retrieved from:
+-https://gitlab.com/procps-ng/procps/-/commit/2763b9880a7aab569694d6ee3170dd7341a26b84]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- proc/escape.c | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
 -
--comment "gamin needs a toolchain w/ wchar, threads"
--	depends on BR2_USE_MMU
--	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-diff --git a/package/gamin/gamin.hash b/package/gamin/gamin.hash
+-diff --git a/proc/escape.c b/proc/escape.c
+-index 2e8fb7dd..cf4a80de 100644
+---- a/proc/escape.c
+-+++ b/proc/escape.c
+-@@ -24,13 +24,13 @@
+- #include "procps.h"
+- #include "escape.h"
+- #include "readproc.h"
+-+#include "nls.h"
+- 
+- #if (__GNU_LIBRARY__ >= 6) && (!defined(__UCLIBC__) || defined(__UCLIBC_HAS_WCHAR__))
+- # include <wchar.h>
+- # include <wctype.h>
+- # include <stdlib.h>  /* MB_CUR_MAX */
+- # include <ctype.h>
+--# include <langinfo.h>
+- #endif
+- 
+- #define SECURE_ESCAPE_ARGS(dst, bytes, cells) do { \
+--- 
+-GitLab
+-
+diff --git a/package/procps-ng/0003-fix-pifd_open-check.patch b/package/procps-ng/0003-fix-pifd_open-check.patch
 deleted file mode 100644
-index e28660dded..0000000000
---- a/package/gamin/gamin.hash
+index 7152901e70..0000000000
+--- a/package/procps-ng/0003-fix-pifd_open-check.patch
 +++ /dev/null
-@@ -1,3 +0,0 @@
--# Locally calculated
--sha256  28085f0ae8be10eab582ff186af4fb0be92cc6c62b5cc19cd09b295c7c2899a1  gamin-0.1.10.tar.gz
--sha256  7f9ffc38883325f011f331a9d6074ffd0175fbcecd57f69c577fb3845f333876  COPYING
-diff --git a/package/gamin/gamin.mk b/package/gamin/gamin.mk
-deleted file mode 100644
-index 4621b1646f..0000000000
---- a/package/gamin/gamin.mk
-+++ /dev/null
-@@ -1,21 +0,0 @@
--################################################################################
--#
--# gamin
--#
--################################################################################
+@@ -1,59 +0,0 @@
+-From 0cce3e981540c28d2f703b9ab16c04d0df8fa03d Mon Sep 17 00:00:00 2001
+-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Date: Thu, 3 Nov 2022 18:24:53 +0100
+-Subject: [PATCH] fix pifd_open check
 -
--GAMIN_VERSION = 0.1.10
--GAMIN_SITE = http://www.gnome.org/~veillard/gamin/sources
--GAMIN_AUTORECONF = YES
--GAMIN_INSTALL_STAGING = YES
--GAMIN_LICENSE = LGPL-2.0+
--GAMIN_LICENSE_FILES = COPYING
+-Replace AC_CHECK_FUNC by AC_CHECK_FUNCS otherwise HAVE_PIDFD_OPEN will
+-never be defined resulting in the following build failure if pidfd_open
+-is available but __NR_pidfd_open is not available:
 -
--# python support broken
--GAMIN_CONF_OPTS += --without-python
+-pgrep.c: In function 'pidfd_open':
+-pgrep.c:748:17: error: '__NR_pidfd_open' undeclared (first use in this function); did you mean 'pidfd_open'?
+-  748 |  return syscall(__NR_pidfd_open, pid, flags);
+-      |                 ^~~~~~~~~~~~~~~
+-      |                 pidfd_open
 -
--GAMIN_CONF_ENV = have_abstract_sockets=no
+-This build failure is raised since the addition of pwait in version
+-3.3.17 and
+-https://gitlab.com/procps-ng/procps/-/commit/c8384e682c1cfb3b2dc797e0f8a3cbaaccf7a3da
 -
--GAMIN_DEPENDENCIES = libglib2
+-Fixes:
+- - http://autobuild.buildroot.org/results/f23a5156e641b2ebdd673973dec0f9c87760c688
 -
--$(eval $(autotools-package))
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index 126a572c91..c9f025134a 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
-@@ -79,13 +79,6 @@ else
- SAMBA4_CONF_OPTS += --disable-avahi
- endif
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-[Upstream status:
+-https://gitlab.com/procps-ng/procps/-/merge_requests/166]
+----
+- configure.ac | 2 +-
+- src/pgrep.c  | 2 +-
+- 2 files changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index 629881a6..1a3ccdb8 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -160,7 +160,7 @@ AC_TRY_COMPILE([#include <errno.h>],
+- 		AC_MSG_RESULT(yes),
+- 		AC_MSG_RESULT(no))
+- 
+--AC_CHECK_FUNC([pidfd_open], [enable_pwait=yes], [
+-+AC_CHECK_FUNCS([pidfd_open], [enable_pwait=yes], [
+-   AC_MSG_CHECKING([for __NR_pidfd_open])
+-   AC_COMPILE_IFELSE([AC_LANG_SOURCE([
+- #include <sys/syscall.h>
+-diff --git a/pgrep.c b/pgrep.c
+-index c4ad5da3..29cfedf7 100644
+---- a/pgrep.c
+-+++ b/pgrep.c
+-@@ -38,7 +38,7 @@
+- #include <stdbool.h>
+- #include <time.h>
+- 
+--#if defined(ENABLE_PWAIT) && !defined(HAVE_PIDFD_OPEN)
+-+#if defined(ENABLE_PWAIT)
+- #include <sys/epoll.h>
+- #include <sys/syscall.h>
+- #endif
+--- 
+-2.35.1
+-
+diff --git a/package/procps-ng/procps-ng.hash b/package/procps-ng/procps-ng.hash
+index 09f2ebd0cb..0d9cd9a835 100644
+--- a/package/procps-ng/procps-ng.hash
++++ b/package/procps-ng/procps-ng.hash
+@@ -1,8 +1,8 @@
+ # From http://sourceforge.net/projects/procps-ng/files/Production/
+-md5  d60613e88c2f442ebd462b5a75313d56  procps-ng-3.3.17.tar.xz
+-sha1  a52952e8bc6aaab812176c00d25adc4d4e1552e2  procps-ng-3.3.17.tar.xz
++md5  2f747fc7df8ccf402d03e375c565cf96  procps-ng-4.0.4.tar.xz
++sha1  2b859acd7060e9898ac457dbd26dbebf563cc44b  procps-ng-4.0.4.tar.xz
+ # Locally calculated after checking signature
+-# http://downloads.sourceforge.net/project/procps-ng/Production/procps-ng-3.3.17.tar.xz.asc
+-sha256  4518b3e7aafd34ec07d0063d250fd474999b20b200218c3ae56f5d2113f141b4  procps-ng-3.3.17.tar.xz
++# http://downloads.sourceforge.net/project/procps-ng/Production/procps-ng-4.0.4.tar.xz.asc
++sha256  22870d6feb2478adb617ce4f09a787addaf2d260c5a8aa7b17d889a962c5e42e  procps-ng-4.0.4.tar.xz
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  681e386e44a19d7d0674b4320272c90e66b6610b741e7e6305f8219c42e85366  COPYING.LIB
+diff --git a/package/procps-ng/procps-ng.mk b/package/procps-ng/procps-ng.mk
+index ba8958d146..c5675e2ee6 100644
+--- a/package/procps-ng/procps-ng.mk
++++ b/package/procps-ng/procps-ng.mk
+@@ -4,15 +4,13 @@
+ #
+ ################################################################################
  
--ifeq ($(BR2_PACKAGE_GAMIN),y)
--SAMBA4_CONF_OPTS += --with-fam
--SAMBA4_DEPENDENCIES += gamin
--else
--SAMBA4_CONF_OPTS += --without-fam
--endif
--
- ifeq ($(BR2_PACKAGE_LIBARCHIVE),y)
- SAMBA4_CONF_OPTS += --with-libarchive
- SAMBA4_DEPENDENCIES += libarchive
-@@ -143,6 +136,7 @@ define SAMBA4_CONFIGURE_CMDS
- 			--disable-rpath \
- 			--disable-rpath-install \
- 			--disable-iprint \
-+			--without-fam \
- 			--without-pam \
- 			--without-dmapi \
- 			--without-gpgme \
+-PROCPS_NG_VERSION = 3.3.17
++PROCPS_NG_VERSION = 4.0.4
+ PROCPS_NG_SOURCE = procps-ng-$(PROCPS_NG_VERSION).tar.xz
+ PROCPS_NG_SITE = http://downloads.sourceforge.net/project/procps-ng/Production
+ PROCPS_NG_LICENSE = GPL-2.0+, LGPL-2.0+ (libproc and libps)
+ PROCPS_NG_LICENSE_FILES = COPYING COPYING.LIB
+ PROCPS_NG_CPE_ID_VALID = YES
+ PROCPS_NG_INSTALL_STAGING = YES
+-# We're patching configure.ac
+-PROCPS_NG_AUTORECONF = YES
+ PROCPS_NG_DEPENDENCIES = ncurses host-pkgconf $(TARGET_NLS_DEPENDENCIES)
+ PROCPS_NG_CONF_OPTS = LIBS=$(TARGET_NLS_LIBS)
+ 
 -- 
 2.43.0
 
