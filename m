@@ -4,48 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 54A68C3DA63
-	for <buildroot@archiver.kernel.org>; Tue, 23 Jul 2024 08:50:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E46B1C3DA63
+	for <buildroot@archiver.kernel.org>; Tue, 23 Jul 2024 08:50:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1C38A403EB;
-	Tue, 23 Jul 2024 08:50:25 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8A0C5402BC;
+	Tue, 23 Jul 2024 08:50:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jxTvIdV_DUMk; Tue, 23 Jul 2024 08:50:24 +0000 (UTC)
+ id FYIWsHlq4Q-Q; Tue, 23 Jul 2024 08:50:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C6A4E40452
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4D5D5403C9
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C6A4E40452;
-	Tue, 23 Jul 2024 08:50:23 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4EFD61BF29D
- for <buildroot@lists.busybox.net>; Tue, 23 Jul 2024 08:50:22 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4D5D5403C9;
+	Tue, 23 Jul 2024 08:50:40 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id BFAF01BF29D
+ for <buildroot@lists.busybox.net>; Tue, 23 Jul 2024 08:50:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3C7DD401CC
- for <buildroot@lists.busybox.net>; Tue, 23 Jul 2024 08:50:22 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id BA8966071D
+ for <buildroot@lists.busybox.net>; Tue, 23 Jul 2024 08:50:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nBBSVwsGtoQ4 for <buildroot@lists.busybox.net>;
- Tue, 23 Jul 2024 08:50:21 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id olmh__IvboqJ for <buildroot@lists.busybox.net>;
+ Tue, 23 Jul 2024 08:50:39 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.198;
+ helo=relay6-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6C3B84017D
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6C3B84017D
- for <buildroot@buildroot.org>; Tue, 23 Jul 2024 08:50:20 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D4BAC87155; Tue, 23 Jul 2024 08:50:20 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 23 Jul 2024 10:50:08 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2822fdd0bc2a961544e38cf0f8c6f4bd22855714
-X-Git-Newrev: 49156a0fa4a48d5d80f03c3854f631f312b486d4
-X-Patchwork-Hint: ignore
-Message-Id: <20240723085020.D4BAC87155@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support/testing: package: gpsd: fix
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 997F5605CB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 997F5605CB
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [217.70.183.198])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 997F5605CB
+ for <buildroot@buildroot.org>; Tue, 23 Jul 2024 08:50:38 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id F001FC000B;
+ Tue, 23 Jul 2024 08:50:36 +0000 (UTC)
+Date: Tue, 23 Jul 2024 10:50:36 +0200
+To: Julien Olivain <ju.o@free.fr>
+Message-ID: <20240723105036.52dafbe4@windsurf>
+In-Reply-To: <20240722223923.278333-1-ju.o@free.fr>
+References: <20240722223923.278333-1-ju.o@free.fr>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1721724637;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=PpD8wEF2DRJabBpN0UlrT/cTEWhisSQxPd3FDtMhA1s=;
+ b=FxxYjPxcPUYDMADMDfcKrk63OYZXFW4EyxcYN7fAVc7jiTngjtABWMQQ1qlsuMXuVtWst7
+ 8BRjg7IMxq9+6DjN/xJWCoqy9foNpl8ftOcBLetzBJs5RPfiq97vnXSH0ixJnmaR8FopAq
+ FsG2KpCkrm6dFY4cdHNe3G6xNjeS42R1GO46HRypK6Qr+HlepSJFU5rfM8Stt+d4nQGxdU
+ NARV7bh325e/eTKt+VQMLaZcH28M7Gil0C7PT7ixT2CO/OG2sKxRJbYUmOzAmFbT/DgrM8
+ NFz6qkZBcElwOHsC3Uca9KvGJdY/HpYuAPKZ3zjRNpV+djzJSuJ4vysTlN4uNA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=FxxYjPxc
+Subject: Re: [Buildroot] [PATCH 1/1] support/testing: package: gpsd: fix
  gpsfake command line
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -60,42 +83,40 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=49156a0fa4a48d5d80f03c3854f631f312b486d4
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue, 23 Jul 2024 00:39:22 +0200
+Julien Olivain <ju.o@free.fr> wrote:
 
-The gpsfake command line has a typo (a missing space), which makes the
-next gpsctl command to always fail.
+> The gpsfake command line has a typo (a missing space), which makes the
+> next gpsctl command to always fail.
+> 
+> This commit fixes the issue by adding the missing space.
+> 
+> Fixes:
+> https://gitlab.com/buildroot.org/buildroot/-/jobs/7391792948
+> 
+> Signed-off-by: Julien Olivain <ju.o@free.fr>
+> ---
+>  support/testing/tests/package/test_gpsd.py | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-This commit fixes the issue by adding the missing space.
+Ah, I had missed this during the review, it was not easy to spot.
+Thanks for fixing quickly!
 
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/7391792948
+Applied!
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- support/testing/tests/package/test_gpsd.py | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Best regards,
 
-diff --git a/support/testing/tests/package/test_gpsd.py b/support/testing/tests/package/test_gpsd.py
-index deed586c17..7ca5973981 100644
---- a/support/testing/tests/package/test_gpsd.py
-+++ b/support/testing/tests/package/test_gpsd.py
-@@ -33,7 +33,7 @@ class TestGpsd(infra.basetest.BRTest):
-         # We start the "gpsfake" GPS emulator instead.
-         cmd = "gpsfake"
-         cmd += " --slow --cycle 0.1 --quiet"
--        cmd += "/root/udp-nmea.log &> /dev/null &"
-+        cmd += " /root/udp-nmea.log &> /dev/null &"
-         self.assertRunOk(cmd)
- 
-         # Wait a bit, to let the gpsfake and gpsd to settle...
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
