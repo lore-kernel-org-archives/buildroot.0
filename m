@@ -4,62 +4,62 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 288ABC3DA63
-	for <buildroot@archiver.kernel.org>; Tue, 23 Jul 2024 16:12:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94D3FC3DA64
+	for <buildroot@archiver.kernel.org>; Tue, 23 Jul 2024 16:12:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CB42A6085B;
-	Tue, 23 Jul 2024 16:12:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5F18660859;
+	Tue, 23 Jul 2024 16:12:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Tu75eVwh_9pE; Tue, 23 Jul 2024 16:12:08 +0000 (UTC)
+ id VvI9KFFusOWY; Tue, 23 Jul 2024 16:12:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F377460860
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2D41D60880
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F377460860;
-	Tue, 23 Jul 2024 16:12:07 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1B65B1BF2FD
- for <buildroot@lists.busybox.net>; Tue, 23 Jul 2024 16:12:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2D41D60880;
+	Tue, 23 Jul 2024 16:12:11 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D62A31BF2FD
+ for <buildroot@lists.busybox.net>; Tue, 23 Jul 2024 16:12:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0280E405C9
- for <buildroot@lists.busybox.net>; Tue, 23 Jul 2024 16:12:03 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B62096084F
+ for <buildroot@lists.busybox.net>; Tue, 23 Jul 2024 16:12:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jjUKa6cJyYOD for <buildroot@lists.busybox.net>;
- Tue, 23 Jul 2024 16:12:02 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xcgs3bwwCrBp for <buildroot@lists.busybox.net>;
+ Tue, 23 Jul 2024 16:12:04 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=91.207.212.93;
- helo=mx08-00178001.pphosted.com;
+ helo=mx07-00178001.pphosted.com;
  envelope-from=prvs=79348e9772=etienne.carriere@foss.st.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 8522E40598
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8522E40598
-Received: from mx08-00178001.pphosted.com (mx08-00178001.pphosted.com
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 6C6536083A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6C6536083A
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com
  [91.207.212.93])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 8522E40598
- for <buildroot@buildroot.org>; Tue, 23 Jul 2024 16:12:00 +0000 (UTC)
-Received: from pps.filterd (m0369457.ppops.net [127.0.0.1])
- by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 46NBrcxg025597;
- Tue, 23 Jul 2024 18:11:58 +0200
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6C6536083A
+ for <buildroot@buildroot.org>; Tue, 23 Jul 2024 16:12:02 +0000 (UTC)
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+ by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 46NC55P9025894;
+ Tue, 23 Jul 2024 18:12:00 +0200
 Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
- by mx07-00178001.pphosted.com (PPS) with ESMTPS id 40gr6j18xg-1
+ by mx07-00178001.pphosted.com (PPS) with ESMTPS id 40g2c4u314-1
  (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
- Tue, 23 Jul 2024 18:11:58 +0200 (MEST)
+ Tue, 23 Jul 2024 18:12:00 +0200 (MEST)
 Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
- by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 045C54004A;
- Tue, 23 Jul 2024 18:11:55 +0200 (CEST)
+ by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id C5F514004C;
+ Tue, 23 Jul 2024 18:11:56 +0200 (CEST)
 Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
- by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id B2D45244DB0;
- Tue, 23 Jul 2024 18:11:46 +0200 (CEST)
+ by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 832DC244DB5;
+ Tue, 23 Jul 2024 18:11:47 +0200 (CEST)
 Received: from localhost (10.48.86.128) by SHFDAG1NODE1.st.com (10.75.129.69)
  with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.37; Tue, 23 Jul
- 2024 18:11:46 +0200
+ 2024 18:11:47 +0200
 From: Etienne Carriere <etienne.carriere@foss.st.com>
 To: <buildroot@buildroot.org>
-Date: Tue, 23 Jul 2024 18:11:40 +0200
-Message-ID: <20240723161142.2728577-4-etienne.carriere@foss.st.com>
+Date: Tue, 23 Jul 2024 18:11:41 +0200
+Message-ID: <20240723161142.2728577-5-etienne.carriere@foss.st.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20240723161142.2728577-1-etienne.carriere@foss.st.com>
 References: <20240723161142.2728577-1-etienne.carriere@foss.st.com>
@@ -74,22 +74,22 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=foss.st.com; h=
  cc:content-transfer-encoding:content-type:date:from:in-reply-to
  :message-id:mime-version:references:subject:to; s=selector1; bh=
- Elr9xNiBc723bDsCIwfvVyGL85C5voSuXIihraL96oE=; b=X4LM7qKVtH+uQi7q
- ckCCiAv+vMoGt0RHjGowCelRO9B0pHF7+yTjVDVD4JLNxk+l+41IVkJBcLA/cRdm
- V5VIEcfo370g6nsVH5hIndbGwrC8dreBORWHBR5ThqstxV8Di4eAzKdN2KqeBpk7
- m3TXoQt94cAC/MKYM1aXCZOoG3LTb0g3v2bVM+MYDtlURKs/4xmOeqamugn+E7EV
- z/YoWffGgx8auU3LYpKmO+1hO/dkfjoFRYDtIBcL9d34jzSg3SXaK8W/GV7CXjX0
- 1t4EeBqXCohlKM9kCmtY2e8GFSvVTDyO4M/sp3yQwrIZ5LUn4X17wKUy9mW1RZAl
- qfB5AQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ LOknpTtKSJ/yhjagCqq8isirnkk63fP1t3LJqsFtiSw=; b=ywRD9HmN+SMAzqjX
+ YFkwBHU2ZCzQBlG9ON238Srhu/QFPWHwvMYkvGWb2hR5jtv4nTFnDgtglmJbzwN2
+ kT3d5N59ZK3yUDQQYg9fmlzeeyH/WsH6mG98tyzedkw21Mc0YFkLLmebyhbNzm1O
+ I6+/rp59YRXm2SZEMxhb0qhc/c1mOcUfty50pSC9h/uwUmPTpHmYJ5DjSRNgL7Wq
+ tVuwxofdnoSeFCMPr8Vw2xPMdpo4AgVlKiztEPaO559SOGCGOPBNIxoHdhwAsz5V
+ NlzFkooAUEzGxvmmhXFkm9hEuKAmGdZ3ZCLyoYp1Dw34hqMeB6P692qawIpQVLwK
+ SOrYXA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=foss.st.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=foss.st.com header.i=@foss.st.com header.a=rsa-sha256
- header.s=selector1 header.b=X4LM7qKV
-Subject: [Buildroot] [PATCH 4/6] package/optee-examples: bump to version
- 4.3.0
+ header.s=selector1 header.b=ywRD9HmN
+Subject: [Buildroot] [PATCH 5/6] configs/qemu_arm_vexpress_tz: bump tf-a and
+ u-boot versions
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -108,38 +108,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Bump OP-TEE Examples package to OP-TEE release tag 4.3.0.
+Bump TF-A to version v2.10 and U-Boot to version v2024.07 for
+Qemu arm-vexpress/trustzone board config.
 
 Signed-off-by: Etienne Carriere <etienne.carriere@foss.st.com>
 ---
- package/optee-examples/optee-examples.hash | 4 ++--
- package/optee-examples/optee-examples.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ configs/qemu_arm_vexpress_tz_defconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/optee-examples/optee-examples.hash b/package/optee-examples/optee-examples.hash
-index a60b6619f1..a6ecd2caec 100644
---- a/package/optee-examples/optee-examples.hash
-+++ b/package/optee-examples/optee-examples.hash
-@@ -1,4 +1,4 @@
--# From https://github.com/linaro-swg/optee_examples/archive/4.2.0/optee-examples-4.2.0.tar.gz
--sha256  fcc032f84c0c7c90fbc3936c6d4d10e502797da7a7c23780ce2a5a88a720887d  optee-examples-4.2.0.tar.gz
-+# From https://github.com/linaro-swg/optee_examples/archive/4.3.0/optee-examples-4.3.0.tar.gz
-+sha256  ee1576617365b5fe9d20d72c16cf6b39159eb79b1401189bd37a91ef03371820  optee-examples-4.3.0.tar.gz
- # Locally computed
- sha256  6f1ef8449cb82ae79d2155605f7985bdf0f08e7ab5007de9b4362e8bf28733b9  LICENSE
-diff --git a/package/optee-examples/optee-examples.mk b/package/optee-examples/optee-examples.mk
-index 7d52a277d2..8eb8724ff6 100644
---- a/package/optee-examples/optee-examples.mk
-+++ b/package/optee-examples/optee-examples.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/configs/qemu_arm_vexpress_tz_defconfig b/configs/qemu_arm_vexpress_tz_defconfig
+index 900bd17fc2..52b5e62e6a 100644
+--- a/configs/qemu_arm_vexpress_tz_defconfig
++++ b/configs/qemu_arm_vexpress_tz_defconfig
+@@ -33,7 +33,7 @@ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/qemu/arm-vexpress-tz/linux.fragmen
+ # TF-A for booting OP-TEE secure and uboot/linux non secure
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.7"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.10"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="qemu"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_FIP=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL32_OPTEE=y
+@@ -59,7 +59,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="$(BR2_DEFCONFIG)"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2022.04"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.07"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="qemu_arm"
+ BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/qemu/arm-vexpress-tz/u-boot.config"
  
--OPTEE_EXAMPLES_VERSION = 4.2.0
-+OPTEE_EXAMPLES_VERSION = 4.3.0
- OPTEE_EXAMPLES_SITE = $(call github,linaro-swg,optee_examples,$(OPTEE_EXAMPLES_VERSION))
- OPTEE_EXAMPLES_LICENSE = BSD-2-Clause
- OPTEE_EXAMPLES_LICENSE_FILES = LICENSE
 -- 
 2.25.1
 
