@@ -4,80 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80A67C3DA49
-	for <buildroot@archiver.kernel.org>; Tue, 23 Jul 2024 10:45:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3C9F3C3DA63
+	for <buildroot@archiver.kernel.org>; Tue, 23 Jul 2024 10:48:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2AC634043A;
-	Tue, 23 Jul 2024 10:45:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DCA6040491;
+	Tue, 23 Jul 2024 10:48:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id w9GmxvySzLwF; Tue, 23 Jul 2024 10:45:03 +0000 (UTC)
+ id fP2lEYvdmAmm; Tue, 23 Jul 2024 10:48:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EC5B540384
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 05DE24043D
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EC5B540384;
-	Tue, 23 Jul 2024 10:45:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 05DE24043D;
+	Tue, 23 Jul 2024 10:48:51 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 555FF1BF20F
- for <buildroot@lists.busybox.net>; Tue, 23 Jul 2024 10:45:01 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A82131BF20D
+ for <buildroot@lists.busybox.net>; Tue, 23 Jul 2024 10:48:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 413DC81274
- for <buildroot@lists.busybox.net>; Tue, 23 Jul 2024 10:45:01 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 93E1780E8C
+ for <buildroot@lists.busybox.net>; Tue, 23 Jul 2024 10:48:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3GMX4GAH-MiO for <buildroot@lists.busybox.net>;
- Tue, 23 Jul 2024 10:45:00 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.241.56.161;
- helo=mout-p-103.mailbox.org; envelope-from=ruepp.simon@mailbox.org;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E55AC8126D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E55AC8126D
-Received: from mout-p-103.mailbox.org (mout-p-103.mailbox.org [80.241.56.161])
- by smtp1.osuosl.org (Postfix) with ESMTPS id E55AC8126D
- for <buildroot@buildroot.org>; Tue, 23 Jul 2024 10:44:59 +0000 (UTC)
-Received: from smtp102.mailbox.org (smtp102.mailbox.org
- [IPv6:2001:67c:2050:b231:465::102])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
- (No client certificate requested)
- by mout-p-103.mailbox.org (Postfix) with ESMTPS id 4WSv135zHXz9slM;
- Tue, 23 Jul 2024 12:44:55 +0200 (CEST)
-Date: Tue, 23 Jul 2024 12:44:54 +0200 (CEST)
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Simon Ruepp via buildroot <buildroot@buildroot.org>
-Message-ID: <1341543609.165253.1721731494763@office.mailbox.org>
-In-Reply-To: <20240712163228.05cb0a6c@windsurf>
-References: <20240712084824.43044-1-ruepp.simon@mailbox.org>
- <20240712163228.05cb0a6c@windsurf>
+ id aCEQSvkrfOOg for <buildroot@lists.busybox.net>;
+ Tue, 23 Jul 2024 10:48:48 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::32e; helo=mail-wm1-x32e.google.com;
+ envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org DFEFD80DE1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DFEFD80DE1
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
+ [IPv6:2a00:1450:4864:20::32e])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id DFEFD80DE1
+ for <buildroot@buildroot.org>; Tue, 23 Jul 2024 10:48:47 +0000 (UTC)
+Received: by mail-wm1-x32e.google.com with SMTP id
+ 5b1f17b1804b1-4277a5ed48bso40142775e9.2
+ for <buildroot@buildroot.org>; Tue, 23 Jul 2024 03:48:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1721731725; x=1722336525;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=wGCP6KsLUqoa8erFSw14bbxcB2XWwcDesAwBslt/cYU=;
+ b=oXsfJSl6zqdNWoluBLyALht/DbIo4yiztDFn22A3TvJ1zvfKnGt23yl3gr1gV63KBr
+ aRWeJ81VK4v1GH8QJsAPS4aZv4brUFNfXYktiK6oAYB71r936IOE9WifKprifKhGcntX
+ lfAo5oWsB0xI1oo8/f600H2hlE1zy0QhzjHCEL1HZmZIo/nK3btXMzwohba3sevj99RA
+ 9KkBEBv8DVK4NmfR4pVUF3003ve5hrgkfte2YfbP2fxwsMQxXadBSVT8kLrWNea1p20/
+ RqwpMi0ZMZJYlkHsadsLSAyqsCuBdxUxpFxho0ZRbVe5mtbqRa92o6fBeQInF9ESyyHa
+ Cb6w==
+X-Gm-Message-State: AOJu0YygCoyYdtg1CRBTJ1BP6EEDPjChnv327O9Tbgo3FlH5huQF/QUb
+ 8cW3/jst6hd6WEIUME9IL7AMUIRiHeeSQ0Xeao4CLwD1THA41TInGsLrgA==
+X-Google-Smtp-Source: AGHT+IGNEUWZHUra/1UhMTkmNLwddCQDWjHKnZsaV8aJUUzT3zcynkQeekHGogHPRnOEqR4sHaJSgA==
+X-Received: by 2002:a5d:52d0:0:b0:367:89d3:5d4f with SMTP id
+ ffacd0b85a97d-369dec04763mr1398689f8f.12.1721731725314; 
+ Tue, 23 Jul 2024 03:48:45 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-785-215.w83-197.abo.wanadoo.fr.
+ [83.197.112.215]) by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-427f69bc9d7sm455555e9.4.2024.07.23.03.48.44
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 23 Jul 2024 03:48:44 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Tue, 23 Jul 2024 12:48:41 +0200
+Message-ID: <20240723104841.9239-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-Priority: 3
-Importance: Normal
-X-MBO-RS-ID: 0212ce788427d058765
-X-MBO-RS-META: epkt5mr9i6giy1d4xnnn1oz8tg45aaxd
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailbox.org; s=mail20150812; 
- t=1721731495;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=CphxfgGj8powsX3wKb+ai0CL6oJcGdEWSHjMxGWeEO8=;
- b=DlWPYPC+5pBftSINy2t7kkhDtWWDeTMwde3mMo5jerkv8FHdfScSmgROmrv8sngkvOEm0+
- nMb31xtjJD0/h4k++o6XnqWXC3tRxaZUVp14cBTfqC0CXWjRtbot1SQBOXHo8fFXe9hycu
- dGtvRPwcyXbqC8wT8OjErHlcWGM1MjukDZFnH3q5loxVGGElU6NdzFxdOpfwKX5beCuwTp
- Oz134HM4kJF4QC4WH6TSwkfB5gHpz/Gl5wvI3Ph2amSAlO9FCJMU4J6vBeSpRpQFcqq8NC
- zyvarawBm2+w8C5MkcjMhnOtZJTukJz/jdEI+lwFmIWypj0bYntbejuAU/xiBw==
+ d=gmail.com; s=20230601; t=1721731725; x=1722336525; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=wGCP6KsLUqoa8erFSw14bbxcB2XWwcDesAwBslt/cYU=;
+ b=SLNeXFKtR3UIcbL+sUHmUP3+Tc6PbOEsX/f173SS6qF4A0fH2TucI71hHpulAyHsLr
+ ajc/VtpuOAM/oahXiabkHaJD1yPzmIduy30iCOxRI7UNWE24t1QA8IV2yvWtv4mh7/8p
+ L/9RYXT6D7S75qHY2BPtl1XMieiGditRoGGNNQbQ4bXm5WYpruwVz6nmEPQQeh6B+bbG
+ 0UL5O6zLSlTxCUBurZHpbgN2nk8plwMPWnJDPfpkh0W9ytnYR+DU0cIasTdK9jqWnZ7N
+ HV+w9qg675PXgnoE87Y8YOlaqUf446G/rHh0ePV49wMKd+AYY2KTxISqnURGDwn/pZJR
+ Gsdw==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=mailbox.org
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=mailbox.org header.i=@mailbox.org header.a=rsa-sha256
- header.s=mail20150812 header.b=DlWPYPC+
-Subject: Re: [Buildroot] [PATCH 1/1] package/qt5: bump packages to latest
- kde submodule versions
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=SLNeXFKt
+Subject: [Buildroot] [PATCH 1/1] package/gamin: drop package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -89,136 +99,339 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Simon Ruepp via buildroot <buildroot@buildroot.org>
-Reply-To: Simon Ruepp <ruepp.simon@mailbox.org>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Bartosz Bilas <b.bilas@grinn-global.com>,
- Joshua Henderson <joshua.henderson@microchip.com>,
- Julien Corjon <corjon.j@ecagroup.com>
+Cc: Bernd Kuhls <bernd@kuhls.net>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Thomas, 
+As advocated by Thomas Petazzoni [1], drop gamin as package is not
+maintained anymore.
 
-sorry for the late response!
+This will also avoid the following build failure with gcc 14:
 
-Since Roy's patch has been applied, my changes are obsolete.
+gam_api.c: In function 'gamin_get_user_name':
+gam_api.c:123:9: error: implicit declaration of function 'strncpy' [-Wimplicit-function-declaration]
+  123 |         strncpy(user_name, pw->pw_name, 99);
+      |         ^~~~~~~
+
+[1] https://patchwork.ozlabs.org/project/buildroot/patch/20240723085645.732060-1-fontaine.fabrice@gmail.com/
+
+Fixes:
+ - http://autobuild.buildroot.org/results/b267f53ba6035d256c013dbbbbd1bcdfe0ef111f
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ .checkpackageignore                           |  3 -
+ Config.in.legacy                              |  7 +++
+ package/gamin/0001-no-abstract-sockets.patch  | 61 -------------------
+ package/gamin/0002-no-const-return.patch      | 57 -----------------
+ ...x-missing-PTHREAD_MUTEX_RECURSIVE_NP.patch | 39 ------------
+ package/gamin/Config.in                       | 14 -----
+ package/gamin/gamin.hash                      |  3 -
+ package/gamin/gamin.mk                        | 21 -------
+ package/samba4/samba4.mk                      |  8 +--
+ 9 files changed, 8 insertions(+), 205 deletions(-)
+ delete mode 100644 package/gamin/0001-no-abstract-sockets.patch
+ delete mode 100644 package/gamin/0002-no-const-return.patch
+ delete mode 100644 package/gamin/0003-fix-missing-PTHREAD_MUTEX_RECURSIVE_NP.patch
+ delete mode 100644 package/gamin/Config.in
+ delete mode 100644 package/gamin/gamin.hash
+ delete mode 100644 package/gamin/gamin.mk
+
+diff --git a/.checkpackageignore b/.checkpackageignore
+index b042873aa3..a4492ae09b 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -562,9 +562,6 @@ package/ftop/0001-overflow.patch lib_patch.Upstream
+ package/fwts/0001-build-do-not-use-Werror.patch lib_patch.Upstream
+ package/fxdiv/0001-CMake-don-t-enable-CXX-unless-building-tests-benchma.patch lib_patch.Upstream
+ package/fxload/0001-fix-static-build.patch lib_patch.Upstream
+-package/gamin/0001-no-abstract-sockets.patch lib_patch.Upstream
+-package/gamin/0002-no-const-return.patch lib_patch.Sob lib_patch.Upstream
+-package/gamin/0003-fix-missing-PTHREAD_MUTEX_RECURSIVE_NP.patch lib_patch.Upstream
+ package/gcc/12.4.0/0001-disable-split-stack-for-non-thread-builds.patch lib_patch.Upstream
+ package/gcc/13.3.0/0001-disable-split-stack-for-non-thread-builds.patch lib_patch.Upstream
+ package/gcc/14.1.0/0001-disable-split-stack-for-non-thread-builds.patch lib_patch.Upstream
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 414a14944e..94ac60b668 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,13 @@ endif
  
-However, I still have an issue with building the qt53d package, which is why I introduced the new package.
+ comment "Legacy options removed in 2024.08"
+ 
++config BR2_PACKAGE_GAMIN
++	bool "gamin package removed"
++	select BR2_LEGACY
++	help
++	  The gamin package was removed as it is not maintained
++	  anymore (no commit since 2016).
++
+ config BR2_PACKAGE_CAIRO_SVG
+ 	bool "cairo svg support"
+ 	select BR2_LEGACY
+diff --git a/package/gamin/0001-no-abstract-sockets.patch b/package/gamin/0001-no-abstract-sockets.patch
+deleted file mode 100644
+index 3d659015ec..0000000000
+--- a/package/gamin/0001-no-abstract-sockets.patch
++++ /dev/null
+@@ -1,61 +0,0 @@
+-[PATCH]: Remove abstract socket namespace check breaking cross compilation
+-
+-Taken from openembedded:
+-
+-http://git.openembedded.org/cgit.cgi/openembedded/tree/recipes/gamin/files/no-abstract-sockets.patch
+-
+-Signed-off-by: Peter Korsgaard <jacmet@sunsite.dk>
+---- /tmp/configure.in	2007-04-30 13:08:49.000000000 +0200
+-+++ gamin-0.1.8/configure.in	2007-04-30 13:10:53.285251000 +0200
+-@@ -354,51 +354,6 @@
+-     AC_DEFINE(HAVE_CMSGCRED,1,[Have cmsgcred structure])
+- fi
+- 
+--#### Abstract sockets
+--
+--AC_MSG_CHECKING(abstract socket namespace)
+--AC_LANG_PUSH(C)
+--AC_RUN_IFELSE([AC_LANG_PROGRAM(
+--[[
+--#include <sys/types.h>
+--#include <stdlib.h>
+--#include <string.h>
+--#include <stdio.h>
+--#include <sys/socket.h>
+--#include <sys/un.h>
+--#include <errno.h>
+--]],
+--[[
+--  int listen_fd;
+--  struct sockaddr_un addr;
+--  
+--  listen_fd = socket (PF_UNIX, SOCK_STREAM, 0);
+--  
+--  if (listen_fd < 0)
+--    {
+--      fprintf (stderr, "socket() failed: %s\n", strerror (errno));
+--      exit (1);
+--    }
+--
+--  memset (&addr, '\0', sizeof (addr));
+--  addr.sun_family = AF_UNIX;
+--  strcpy (addr.sun_path, "X/tmp/dbus-fake-socket-path-used-in-configure-test");
+--  addr.sun_path[0] = '\0'; /* this is what makes it abstract */
+--  
+--  if (bind (listen_fd, (struct sockaddr*) &addr, SUN_LEN (&addr)) < 0)
+--    {
+--       fprintf (stderr, "Abstract socket namespace bind() failed: %s\n", 
+--                strerror (errno));
+--       exit (1);
+--    }
+--  else 
+--    exit (0);
+--]])],
+--              [have_abstract_sockets=yes],
+--              [have_abstract_sockets=no])
+--AC_LANG_POP(C)
+--AC_MSG_RESULT($have_abstract_sockets)
+--
+- if test x$enable_abstract_sockets = xyes; then
+-     if test x$have_abstract_sockets = xno; then
+- 	AC_MSG_ERROR([Abstract sockets explicitly required, and support not detected.])
+diff --git a/package/gamin/0002-no-const-return.patch b/package/gamin/0002-no-const-return.patch
+deleted file mode 100644
+index 3e6e905214..0000000000
+--- a/package/gamin/0002-no-const-return.patch
++++ /dev/null
+@@ -1,57 +0,0 @@
+-G_CONST_RETURN is deprecated in glib 2.30 so remove to to avoid
+-build failures.
+-
+-Upstream-Status: Pending
+-
+-Index: gamin-0.1.10/server/gam_node.c
+-===================================================================
+---- gamin-0.1.10.orig/server/gam_node.c	2011-10-12 15:25:45.217178314 +0100
+-+++ gamin-0.1.10/server/gam_node.c	2011-10-12 15:26:17.807178293 +0100
+-@@ -122,7 +122,7 @@
+-  * it has finished with the string.  If it must keep it longer, it
+-  * should makes its own copy.  The returned string must not be freed.
+-  */
+--G_CONST_RETURN char *
+-+const char *
+- gam_node_get_path(GamNode * node)
+- {
+-     g_assert(node);
+-Index: gamin-0.1.10/server/gam_node.h
+-===================================================================
+---- gamin-0.1.10.orig/server/gam_node.h	2011-10-12 15:25:46.857178269 +0100
+-+++ gamin-0.1.10/server/gam_node.h	2011-10-12 15:26:28.637178297 +0100
+-@@ -58,7 +58,7 @@
+- void                  gam_node_set_is_dir          (GamNode         *node,
+- 						   gboolean        is_dir);
+- 	
+--G_CONST_RETURN char  *gam_node_get_path            (GamNode         *node);
+-+const char  *gam_node_get_path            (GamNode         *node);
+- 
+- GList                *gam_node_get_subscriptions   (GamNode         *node);
+- 
+-Index: gamin-0.1.10/server/gam_subscription.c
+-===================================================================
+---- gamin-0.1.10.orig/server/gam_subscription.c	2011-10-12 15:25:40.497177525 +0100
+-+++ gamin-0.1.10/server/gam_subscription.c	2011-10-12 15:26:39.867178304 +0100
+-@@ -141,7 +141,7 @@
+-  * @param sub the GamSubscription
+-  * @returns The path being monitored.  It should not be freed.
+-  */
+--G_CONST_RETURN char *
+-+const char *
+- gam_subscription_get_path(GamSubscription * sub)
+- {
+-     if (sub == NULL)
+-Index: gamin-0.1.10/server/gam_subscription.h
+-===================================================================
+---- gamin-0.1.10.orig/server/gam_subscription.h	2011-10-12 15:25:28.507178266 +0100
+-+++ gamin-0.1.10/server/gam_subscription.h	2011-10-12 15:25:58.817178285 +0100
+-@@ -21,7 +21,7 @@
+- 
+- int                  gam_subscription_get_reqno    (GamSubscription *sub);
+- 
+--G_CONST_RETURN char *gam_subscription_get_path     (GamSubscription *sub);
+-+const char *gam_subscription_get_path     (GamSubscription *sub);
+- 
+- GamListener         *gam_subscription_get_listener (GamSubscription *sub);
+- 
+diff --git a/package/gamin/0003-fix-missing-PTHREAD_MUTEX_RECURSIVE_NP.patch b/package/gamin/0003-fix-missing-PTHREAD_MUTEX_RECURSIVE_NP.patch
+deleted file mode 100644
+index b5f2e6c521..0000000000
+--- a/package/gamin/0003-fix-missing-PTHREAD_MUTEX_RECURSIVE_NP.patch
++++ /dev/null
+@@ -1,39 +0,0 @@
+-Fix missing PTHREAD_MUTEX_RECURSIVE_NP
+-
+-The musl C library does not provide the non portable
+-PTHREAD_MUTEX_RECURSIVE_NP. In addition, uClibc does not define it as
+-a #define, but as an enum value, so doing a #if defined() check
+-doesn't work properly. Instead, add a AC_CHECK_DECL() autoconf check.
+-
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+-[Thomas: switch to an autoconf check.]
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
+-
+-Index: b/configure.in
+-===================================================================
+---- a/configure.in
+-+++ b/configure.in
+-@@ -294,6 +294,10 @@
+- 	   AC_DEFINE([HAVE_LIBPTHREAD], [], [Define if pthread library is there (-lpthread)])
+- 	   AC_DEFINE([HAVE_PTHREAD_H], [], [Define if <pthread.h> is there])
+- 	   WITH_THREADS="1"]))
+-+
+-+    AC_CHECK_DECL([PTHREAD_MUTEX_RECURSIVE_NP],
+-+		[AC_DEFINE([HAVE_PTHREAD_MUTEX_RECURSIVE_NP], [], [whether HAVE_PTHREAD_MUTEX_RECURSIVE_NP is defined])],
+-+		[], [#include <pthread.h>])
+- fi
+- 
+- dnl Use weak symbols on linux/gcc to avoid imposing libpthreads to apps
+-Index: b/libgamin/gam_data.c
+-===================================================================
+---- a/libgamin/gam_data.c
+-+++ b/libgamin/gam_data.c
+-@@ -470,7 +470,7 @@
+-     }
+-     if (is_threaded > 0) {
+- 	pthread_mutexattr_init(&attr);
+--#if defined(linux) || defined(PTHREAD_MUTEX_RECURSIVE_NP)
+-+#if defined(HAVE_PTHREAD_MUTEX_RECURSIVE_NP)
+- 	pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE_NP);
+- #else
+- 	pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE);
+diff --git a/package/gamin/Config.in b/package/gamin/Config.in
+deleted file mode 100644
+index 55e037a4a4..0000000000
+--- a/package/gamin/Config.in
++++ /dev/null
+@@ -1,14 +0,0 @@
+-config BR2_PACKAGE_GAMIN
+-	bool "gamin"
+-	depends on BR2_USE_WCHAR # glib2
+-	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	depends on BR2_USE_MMU # glib2
+-	select BR2_PACKAGE_LIBGLIB2
+-	help
+-	  the File Alteration Monitor
+-
+-	  http://www.gnome.org/~veillard/gamin/sources
+-
+-comment "gamin needs a toolchain w/ wchar, threads"
+-	depends on BR2_USE_MMU
+-	depends on !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/gamin/gamin.hash b/package/gamin/gamin.hash
+deleted file mode 100644
+index e28660dded..0000000000
+--- a/package/gamin/gamin.hash
++++ /dev/null
+@@ -1,3 +0,0 @@
+-# Locally calculated
+-sha256  28085f0ae8be10eab582ff186af4fb0be92cc6c62b5cc19cd09b295c7c2899a1  gamin-0.1.10.tar.gz
+-sha256  7f9ffc38883325f011f331a9d6074ffd0175fbcecd57f69c577fb3845f333876  COPYING
+diff --git a/package/gamin/gamin.mk b/package/gamin/gamin.mk
+deleted file mode 100644
+index 4621b1646f..0000000000
+--- a/package/gamin/gamin.mk
++++ /dev/null
+@@ -1,21 +0,0 @@
+-################################################################################
+-#
+-# gamin
+-#
+-################################################################################
+-
+-GAMIN_VERSION = 0.1.10
+-GAMIN_SITE = http://www.gnome.org/~veillard/gamin/sources
+-GAMIN_AUTORECONF = YES
+-GAMIN_INSTALL_STAGING = YES
+-GAMIN_LICENSE = LGPL-2.0+
+-GAMIN_LICENSE_FILES = COPYING
+-
+-# python support broken
+-GAMIN_CONF_OPTS += --without-python
+-
+-GAMIN_CONF_ENV = have_abstract_sockets=no
+-
+-GAMIN_DEPENDENCIES = libglib2
+-
+-$(eval $(autotools-package))
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index 126a572c91..c9f025134a 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
+@@ -79,13 +79,6 @@ else
+ SAMBA4_CONF_OPTS += --disable-avahi
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_GAMIN),y)
+-SAMBA4_CONF_OPTS += --with-fam
+-SAMBA4_DEPENDENCIES += gamin
+-else
+-SAMBA4_CONF_OPTS += --without-fam
+-endif
+-
+ ifeq ($(BR2_PACKAGE_LIBARCHIVE),y)
+ SAMBA4_CONF_OPTS += --with-libarchive
+ SAMBA4_DEPENDENCIES += libarchive
+@@ -143,6 +136,7 @@ define SAMBA4_CONFIGURE_CMDS
+ 			--disable-rpath \
+ 			--disable-rpath-install \
+ 			--disable-iprint \
++			--without-fam \
+ 			--without-pam \
+ 			--without-dmapi \
+ 			--without-gpgme \
+-- 
+2.43.0
 
-I opened an issue that describes the problem: https://gitlab.com/buildroot.org/buildroot/-/issues/22
-
-Next time, my commit log will be more detailed. 
-
-Best regards
-Simon
-
-> Thomas Petazzoni <thomas.petazzoni@bootlin.com> hat am 12.07.2024 16:32 CEST geschrieben:
-> 
->  
-> Hello Simon,
-> 
-> On Fri, 12 Jul 2024 10:48:25 +0200
-> Simon Ruepp via buildroot <buildroot@buildroot.org> wrote:
-> 
-> > From: "Simon Ruepp" <ruepp.simon@mailbox.org>
-> > 
-> > Bump qt5 packages to latest submodule versions from:
-> > https://invent.kde.org/qt/qt/qt5/-/tree/kde/5.15
-> > 
-> > Signed-off-by: Simon Ruepp <ruepp.simon@mailbox.org>
-> 
-> Thanks for your patch. However, I will apply a similar patch that we
-> have received earlier:
-> 
->   https://patchwork.ozlabs.org/project/buildroot/patch/20240611141216.1211627-1-roy.kollen.svendsen@gmail.com/
-> 
-> Indeed, there are a number of things in your patch that do much more
-> than bumping, but the commit log is completely silent about those
-> changes.
-> 
-> > diff --git a/package/qt5/qt53d-assimp/Config.in b/package/qt5/qt53d-assimp/Config.in
-> > new file mode 100644
-> > index 0000000000..421e424f8d
-> > --- /dev/null
-> > +++ b/package/qt5/qt53d-assimp/Config.in
-> > @@ -0,0 +1,4 @@
-> > +# Not user-selectable, it is only needed to be copied
-> > +# into the qt53d source tree.
-> > +config QT53D_ASSIMP
-> > +	bool
-> 
-> Why is this new package needed? Is this related to the version bump?
-> 
-> 
-> > diff --git a/package/qt5/qt5webengine-chromium/0001-Add-python3-build-support.patch b/package/qt5/qt5webengine-chromium/0001-Add-python3-build-support.patch
-> > deleted file mode 100644
-> > index cc9726418e..0000000000
-> > --- a/package/qt5/qt5webengine-chromium/0001-Add-python3-build-support.patch
-> > +++ /dev/null
-> > @@ -1,1858 +0,0 @@
-> > -From bf94b834e9beb4e7bc25dbc4c61f5e2db39e7cdc Mon Sep 17 00:00:00 2001
-> > -From: James Hilliard <james.hilliard1@gmail.com>
-> > -Date: Fri, 4 Feb 2022 15:43:35 -0700
-> > -Subject: [PATCH] Add python3 build support
-> > -
-> > -Adapted from:
-> > -https://github.com/archlinux/svntogit-packages/blob/6edf5f1aaea952d046aff89a2e0175258fe77361/trunk/qt5-webengine-chromium-python3.patch
-> > -
-> > -Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> 
-> Should be explained in the commit log why this patch gets removed.
-> 
-> 
-> > rename to package/qt5/qt5webengine/0001-Add-python3-build-support.patch
-> > diff --git a/package/qt5/qt5webengine/0002-Pass-cppflags-and-ldflags-to-build.patch b/package/qt5/qt5webengine/0002-Pass-cppflags-and-ldflags-to-build.patch
-> > new file mode 100644
-> > index 0000000000..4fd2105c66
-> > --- /dev/null
-> > +++ b/package/qt5/qt5webengine/0002-Pass-cppflags-and-ldflags-to-build.patch
-> > @@ -0,0 +1,55 @@
-> > +From d4ad0fb124c017bdabe72d3a5671bd26c6216470 Mon Sep 17 00:00:00 2001
-> > +From: Stefan Mayrhofer <stefan.mayrhofer@ginzinger.com>
-> > +Date: Tue, 23 Aug 2022 13:48:26 +0200
-> > +Subject: [PATCH 1/1] Pass cppflags and ldflags to build
-> > +
-> > +This patch forwards cppflags and ldflags to the build. This fixes the following compilation error:
-> > +
-> > +[18497/21900] CXX v8_snapshot/obj/v8/gen-regexp-special-case/gen-regexp-special-case.o
-> > +FAILED: v8_snapshot/obj/v8/gen-regexp-special-case/gen-regexp-special-case.o
-> > +/usr/bin/g++ -MMD -MF v8_snapshot/obj/v8/gen-regexp-special-case/gen-regexp-special-case.o.d -DUSE_AURA=1 -DUSE_NSS_CERTS=1 -DUSE_OZONE=1 -DOFFICIAL_BUILD -DTOOLKIT_QT -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -DNO_UNWIND_TABLES -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -DNDEBUG -DNVALGRIND -DDYNAMIC_ANNOTATIONS_ENABLED=0 -DV8_TYPED_ARRAY_MAX_SIZE_IN_HEAP=64 -DENABLE_MINOR_MC -DV8_INTL_SUPPORT -DV8_CONCURRENT_MARKING -DV8_ENABLE_LAZY_SOURCE_POSITIONS -DV8_WIN64_UNWINDING_INFO -DV8_ENABLE_REGEXP_INTERPRETER_THREADED_DISPATCH -DV8_SNAPSHOT_COMPRESSION -DV8_COMPRESS_POINTERS -DV8_31BIT_SMIS_ON_64BIT_ARCH -DV8_DEPRECATION_WARNINGS -DV8_REVERSE_JSARGS -DV8_TARGET_ARCH_ARM64 -DV8_HAVE_TARGET_OS -DV8_TARGET_OS_LINUX -DDISABLE_UNTRUSTED_CODE_MITIGATIONS -DV8_COMPRESS_POINTERS -DV8_31BIT_SMIS_ON_64BIT_ARCH -DV8_DEPRECATION_WARNINGS -DV8_REVERSE_JSARGS -DUSING_SYSTEM_ICU=1 -DICU_UTIL_DATA_IMPL=ICU_UTIL_DATA_STATIC -DUCHAR_TYPE=uint16_t -Iv8_snapshot/gen -I../.
- ./
->  3rdparty/chromium -I../../3rdparty/chromium/v8 -I../../3rdparty/chromium/v8/include -Iv8_snapshot/gen/v8 -Iv8_snapshot/gen -Iv8_snapshot/gen -fno-strict-aliasing --param=ssp-buffer-size=4 -fstack-protector -fno-unwind-tables -fno-asynchronous-unwind-tables -fPIC -pipe -pthread -m64 -Wall -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2 -Wno-unused-local-typedefs -Wno-maybe-uninitialized -Wno-deprecated-declarations -fno-delete-null-pointer-checks -Wno-comments -Wno-packed-not-aligned -Wno-dangling-else -Wno-missing-field-initializers -Wno-unused-parameter -fno-omit-frame-pointer -g0 -fvisibility=hidden -Wno-strict-overflow -Wno-return-type -O3 -fno-ident -fdata-sections -ffunction-sections -I/usr/include -I/usr/include -std=gnu++14 -Wno-narrowing -Wno-class-memaccess -Wno-attributes -Wno-class-memaccess -Wno-subobject-linkage -Wno-invalid-offsetof -Wno-return-type -Wno-deprecated-copy -fno-exceptions -fno-rtti -fvisibility-inlines-hidden -c ../../3rdparty/chromium/v8/src/regexp/gen-regexp-sp
- ec
->  ial-case.cc -o v8_snapshot/obj/v8/gen-regexp-special-case/gen-regexp-special-case.o
-> > +In file included from ../../3rdparty/chromium/v8/src/regexp/gen-regexp-special-case.cc:10:
-> > +../../3rdparty/chromium/v8/src/regexp/special-case.h:12:10: fatal error: unicode/uchar.h: No such file or directory
-> > +   12 | #include "unicode/uchar.h"
-> > +      |          ^~~~~~~~~~~~~~~~~
-> > +compilation terminated.
-> > +
-> > +For the v8 build, extra_cppflags was not passed through.
-> > +v8 and host build both were also missing extra_ldflags. These are needed to find libraries in the buildroot directory.
-> > +
-> 
-> This patch needs your Signed-off-by line, as well as an Upstream: tag
-> (please run "make check-package" before sending patches, it will warn
-> you about those coding style issues).
-> 
-> Also, could you explain in the commit log why it's needed?
-> 
-> I suggest you wait for the patch from Roy to be applied, and then
-> rebase your changes on top of it, if that's fine with you?
-> 
-> Thanks a lot!
-> 
-> Thomas
-> -- 
-> Thomas Petazzoni, co-owner and CEO, Bootlin
-> Embedded Linux and Kernel engineering and training
-> https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
