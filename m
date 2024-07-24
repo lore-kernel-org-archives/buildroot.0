@@ -4,71 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C0C71C3DA7E
-	for <buildroot@archiver.kernel.org>; Wed, 24 Jul 2024 16:18:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 46835C3DA61
+	for <buildroot@archiver.kernel.org>; Wed, 24 Jul 2024 16:21:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3AC4E401C2;
-	Wed, 24 Jul 2024 16:18:24 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id EC783401C2;
+	Wed, 24 Jul 2024 16:21:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nIN7YJZS0RWS; Wed, 24 Jul 2024 16:18:22 +0000 (UTC)
+ id 2wTYssHpE1nv; Wed, 24 Jul 2024 16:21:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1179640E54
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 78E7E40DCD
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1179640E54;
-	Wed, 24 Jul 2024 16:18:22 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1AB3F1BF29C
- for <buildroot@lists.busybox.net>; Wed, 24 Jul 2024 16:18:19 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 78E7E40DCD;
+	Wed, 24 Jul 2024 16:21:29 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 940B61BF29C
+ for <buildroot@lists.busybox.net>; Wed, 24 Jul 2024 16:21:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 983A6401C2
- for <buildroot@lists.busybox.net>; Wed, 24 Jul 2024 16:18:18 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 80CFC40299
+ for <buildroot@lists.busybox.net>; Wed, 24 Jul 2024 16:21:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BAlLfEZKGre8 for <buildroot@lists.busybox.net>;
- Wed, 24 Jul 2024 16:18:17 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.201;
- helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xJ__jmeqoa1r for <buildroot@lists.busybox.net>;
+ Wed, 24 Jul 2024 16:21:26 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.200;
+ helo=relay7-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 22A1F40E24
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 22A1F40E24
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 22A1F40E24
- for <buildroot@buildroot.org>; Wed, 24 Jul 2024 16:18:16 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 4D10E1BF203;
- Wed, 24 Jul 2024 16:18:15 +0000 (UTC)
-Date: Wed, 24 Jul 2024 18:18:14 +0200
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20240724181814.7309ca72@windsurf>
-In-Reply-To: <20240723211300.702319-1-fontaine.fabrice@gmail.com>
-References: <20240723211300.702319-1-fontaine.fabrice@gmail.com>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E305040265
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E305040265
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E305040265
+ for <buildroot@buildroot.org>; Wed, 24 Jul 2024 16:21:25 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id D98BE20004;
+ Wed, 24 Jul 2024 16:21:22 +0000 (UTC)
+Date: Wed, 24 Jul 2024 18:21:22 +0200
+To: "=?UTF-8?B?R2HDq2w=?= PORTAY" <gael.portay@gmail.com>
+Message-ID: <20240724182122.6a1f75ee@windsurf>
+In-Reply-To: <20240723212011.23048-2-gael.portay@rtone.fr>
+References: <20240723212011.23048-1-gael.portay@rtone.fr>
+ <20240723212011.23048-2-gael.portay@rtone.fr>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1721837895;
+ d=bootlin.com; s=gm1; t=1721838083;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=nV8RanqkiHmXUumQrdk7FYrBzZ/eoN43ATUMZpj1ua8=;
- b=hQamZoGPND5nUvM6thjOw5pEj+sOJtw9Gq5dIBaGyc1looV8LWNrv5Zy52PW/WcvX88A6Q
- VyuBoL5QfsZnOvbOVCyGFq9cC5YyP/1zS+xc33fQA8gGMwb3ZO0IQ1183hNHqDwLr9jQiP
- ToRyBZCopiwnNib7RrrxuNp0AAva7p0X57Er1SjHAWFMaWdHme7X8ECFLI1GMAYn2Q5l4H
- sohcIp+xNLGiGIUw4bjyOt/po4740wUC9y7idqbh7MIN5mu62aW3lPddvr1ZBHNFaueZ+t
- xSK8QHGEPqNQi/yryJqlYP2SjnRmKcT3kd1BWmnFgjBu7AadeBdGn8QFDNE9dQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=oJ2ZHBG0M2iLh7O2pTTYnNz2fA2GEd+gJ6oib6oWmcM=;
+ b=Eo+tptEFgNVordBSZlKoChSS/GR6u16ymAYQdwVuMJJLX/slHRzuIZYDfSwXW/nLuewpjx
+ s6RXdhSHGHaFK6dkA+pkU8Ygi24g/HpvZXDQHwTtwqQL+fR65Qsca/8GV3GKDqac7sLuYO
+ UUOH8NrYpukn8Ci8/zVQxjQNe4DWzyTJRDqpNtHC7RD86m6Ms/04yTpQGl18uxhyQkIcNM
+ x7hnZdHaxLfmCpiVWUfYd9UcJfvYT8DksnOQvJg7NBzIkhvNsV+HH0PktxIL/sy1IajPm1
+ jBo3qSVjLh6uOGlChUgLp0ml9uVMksAwC9IcTJZ/PUEQKRHVd/S7evCZWhraWA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=hQamZoGP
-Subject: Re: [Buildroot] [PATCH 1/1] package/dvb-apps: drop package
+ header.s=gm1 header.b=Eo+tptEF
+Subject: Re: [Buildroot] [PATCH 1/2] package/rpi-utils: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,54 +83,61 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Samuel Martin <s.martin49@gmail.com>,
+ =?UTF-8?B?R2HDq2w=?= PORTAY <gael.portay@rtone.fr>,
+ Mahyar Koshkouei <mahyar.koshkouei@gmail.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 23 Jul 2024 23:13:00 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
-
-> As advocated by Thomas Petazzoni [1], drop dvb-apps as package is not
-> maintained anymore.
-> 
-> [1] https://patchwork.ozlabs.org/project/buildroot/patch/20240723162533.549929-1-fontaine.fabrice@gmail.com
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  .checkpackageignore                           |  6 ---
->  Config.in.legacy                              |  7 +++
->  DEVELOPERS                                    |  1 -
->  package/Config.in                             |  1 -
->  .../dvb-apps/0001-Fix-generate-keynames.patch | 30 -----------
->  .../0002-Fix-compiler-warning-flags.patch     | 44 ----------------
->  ...0003-handle-static-shared-only-build.patch | 44 ----------------
->  .../dvb-apps/0004-Makefile-remove-test.patch  | 27 ----------
->  ...s-fix-build-with-kernel-headers-4.14.patch | 52 -------------------
->  package/dvb-apps/0006-fix-glibc-2.31.patch    | 23 --------
->  package/dvb-apps/Config.in                    | 14 -----
->  package/dvb-apps/dvb-apps.hash                |  6 ---
->  package/dvb-apps/dvb-apps.mk                  | 44 ----------------
->  13 files changed, 7 insertions(+), 292 deletions(-)
->  delete mode 100644 package/dvb-apps/0001-Fix-generate-keynames.patch
->  delete mode 100644 package/dvb-apps/0002-Fix-compiler-warning-flags.patch
->  delete mode 100644 package/dvb-apps/0003-handle-static-shared-only-build.patch
->  delete mode 100644 package/dvb-apps/0004-Makefile-remove-test.patch
->  delete mode 100644 package/dvb-apps/0005-utils-fix-build-with-kernel-headers-4.14.patch
->  delete mode 100644 package/dvb-apps/0006-fix-glibc-2.31.patch
->  delete mode 100644 package/dvb-apps/Config.in
->  delete mode 100644 package/dvb-apps/dvb-apps.hash
->  delete mode 100644 package/dvb-apps/dvb-apps.mk
-
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gR2HDq2wsCgpPbiBUdWUsIDIzIEp1bCAyMDI0IDIzOjIwOjEwICswMjAwCiJHYcOrbCBQ
+T1JUQVkiIDxnYWVsLnBvcnRheUBnbWFpbC5jb20+IHdyb3RlOgoKPiBUaGUgcGFja2FnZSBycGkt
+dXNlcmxhbmQgaGFzIGJlZW4gbWFya2VkIGFzIGFuY2llbnQgYW5kIGRlcHJlY2F0ZWRbMV0uCj4g
+Cj4gVGhlIHVzZWZ1bCB0b29scyAoZHRvdmVybGF5LCBkdG1lcmdlLCB2Y21haWxib3gsIHZjZ2Vu
+Y21kKSB3ZXJlIG1vdmVkIHRvCj4gdGhlIHJlcG9zaXRvcnkgcnBpLXV0aWxzIHNpbmNlIHRoZW4u
+Cj4gCj4gVGhpcyBhZGRzIHRoZSBuZXcgcGFja2FnZSBycGktdXRpbHMgYXQgbGF0ZXN0IGNvbW1p
+dCBhcyB0aGVyZSBpcyBubwo+IHRhZ2dlZCBjb21taXQuCj4gCj4gWzFdOiBodHRwczovL2dpdGh1
+Yi5jb20vcmFzcGJlcnJ5cGkvdXNlcmxhbmQvY29tbWl0Lzk2YTczMzRhZTlkNWZjOWRiN2FjOTJl
+NTk4NTIzNzdkZjYzZjE4NDgKPiAKPiBTaWduZWQtb2ZmLWJ5OiBHYcOrbCBQT1JUQVkgPGdhZWwu
+cG9ydGF5QHJ0b25lLmZyPgoKVGhhbmtzIGZvciB0aGUgcGF0Y2guIFNlZSBzb21lIGNvbW1lbnRz
+IGJlbG93LgoKPiAtLS0KPiAgcGFja2FnZS9ycGktdXRpbHMvQ29uZmlnLmluICAgICAgfCAgOSAr
+KysrKysrKysKPiAgcGFja2FnZS9ycGktdXRpbHMvcnBpLXV0aWxzLmhhc2ggfCAgMyArKysKPiAg
+cGFja2FnZS9ycGktdXRpbHMvcnBpLXV0aWxzLm1rICAgfCAxNiArKysrKysrKysrKysrKysrCj4g
+IDMgZmlsZXMgY2hhbmdlZCwgMjggaW5zZXJ0aW9ucygrKQoKUGxlYXNlIGFkZCBhbiBlbnRyeSBp
+biB0aGUgREVWRUxPUEVSUyBmaWxlIGZvciB0aGlzIG5ldyBwYWNrYWdlLgoKPiAgY3JlYXRlIG1v
+ZGUgMTAwNjQ0IHBhY2thZ2UvcnBpLXV0aWxzL0NvbmZpZy5pbgo+ICBjcmVhdGUgbW9kZSAxMDA2
+NDQgcGFja2FnZS9ycGktdXRpbHMvcnBpLXV0aWxzLmhhc2gKPiAgY3JlYXRlIG1vZGUgMTAwNjQ0
+IHBhY2thZ2UvcnBpLXV0aWxzL3JwaS11dGlscy5tawo+IAo+IGRpZmYgLS1naXQgYS9wYWNrYWdl
+L3JwaS11dGlscy9Db25maWcuaW4gYi9wYWNrYWdlL3JwaS11dGlscy9Db25maWcuaW4KPiBuZXcg
+ZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4IDAwMDAwMDAwMDAuLjRhZTgyMjU3YTAKPiAtLS0gL2Rl
+di9udWxsCj4gKysrIGIvcGFja2FnZS9ycGktdXRpbHMvQ29uZmlnLmluCj4gQEAgLTAsMCArMSw5
+IEBACj4gK2NvbmZpZyBCUjJfUEFDS0FHRV9SUElfVVRJTFMKPiArCWJvb2wgInJwaS11dGlscyIK
+PiArCWRlcGVuZHMgb24gIUJSMl9TVEFUSUNfTElCUyAjIGR0Ywo+ICsJc2VsZWN0IEJSMl9QQUNL
+QUdFX0RUQwo+ICsJaGVscAo+ICsJICBBIGNvbGxlY3Rpb24gb2Ygc2NyaXB0cyBhbmQgc2ltcGxl
+IGFwcGxpY2F0aW9ucyBmb3IgdGhlCj4gKwkgIFJhc3BiZXJyeSBQaS4KPiArCj4gKwkgIGh0dHBz
+Oi8vZ2l0aHViLmNvbS9yYXNwYmVycnlwaS91dGlscy8KClBsZWFzZSBhZGQgYSBDb25maWcuaW4g
+Y29tbWVudDoKCmNvbW1lbnQgInJwaS11dGlscyBuZWVkcyBhIHRvb2xjaGFpbiB3LyBkeW5hbWlj
+IGxpYnJhcnkiCglkZXBlbmRzIG9uIEJSMl9TVEFUSUNfTElCUwoKYWxzbywgdGhpcyBDb25maWcu
+aW4gZmlsZSBpcyBub3QgaW5jbHVkZWQgYW55d2hlcmUsIHNvIHRoaW5ncyBjYW5ub3QKd29yay4K
+Cgo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL3JwaS11dGlscy9ycGktdXRpbHMubWsgYi9wYWNrYWdl
+L3JwaS11dGlscy9ycGktdXRpbHMubWsKPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4IDAw
+MDAwMDAwMDAuLjFjNzQ5NTFlNGEKPiAtLS0gL2Rldi9udWxsCj4gKysrIGIvcGFja2FnZS9ycGkt
+dXRpbHMvcnBpLXV0aWxzLm1rCj4gQEAgLTAsMCArMSwxNiBAQAo+ICsjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIwo+ICsjCj4gKyMgcnBpLXV0aWxzCj4gKyMKPiArIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMKPiArCj4gK1JQSV9VVElMU19WRVJTSU9OID0gYTFkNTIyZjBmMWI1MDg1OGE0NGZhYzgwNTIz
+YTJiZDgwMDk4ZTc4OQo+ICtSUElfVVRJTFNfU0lURSA9ICQoY2FsbCBnaXRodWIscmFzcGJlcnJ5
+cGksdXRpbHMsJChSUElfVVRJTFNfVkVSU0lPTikpCj4gK1JQSV9VVElMU19MSUNFTlNFID0gQlNE
+LTMtQ2xhdXNlCj4gK1JQSV9VVElMU19MSUNFTlNFX0ZJTEVTID0gTElDRU5DRQo+ICtSUElfVVRJ
+TFNfSU5TVEFMTF9TVEFHSU5HID0gWUVTCj4gK1JQSV9VVElMU19ERVBFTkRFTkNJRVMgPSBkdGMK
+PiArCj4gK1JQSV9VVElMU19DT05GX09QVFMgPSAtRFNUQVRJQz1TVEFUSUMKCldoYXQgaXMgdGhp
+cyB0aGluZyBkb2luZz8gSXQgc2VlbXMgYSBiaXQgb2RkLgoKQWxzbywgY291bGQgeW91IGdpdmUg
+YSB0ZXN0IHRvIHRoaXMgcGFja2FnZSB1c2luZyB0aGUgLi91dGlscy90ZXN0LXBrZwp1dGlsaXR5
+PwoKVGhhbmtzIGEgbG90IQoKVGhvbWFzCi0tIApUaG9tYXMgUGV0YXp6b25pLCBjby1vd25lciBh
+bmQgQ0VPLCBCb290bGluCkVtYmVkZGVkIExpbnV4IGFuZCBLZXJuZWwgZW5naW5lZXJpbmcgYW5k
+IHRyYWluaW5nCmh0dHBzOi8vYm9vdGxpbi5jb20KX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVp
+bGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9i
+dWlsZHJvb3QK
