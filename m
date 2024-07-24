@@ -4,84 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5419AC3DA63
-	for <buildroot@archiver.kernel.org>; Wed, 24 Jul 2024 11:21:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DCE23C3DA63
+	for <buildroot@archiver.kernel.org>; Wed, 24 Jul 2024 11:56:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1C8B880BEE;
-	Wed, 24 Jul 2024 11:21:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8832F80B8F;
+	Wed, 24 Jul 2024 11:56:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QznwjwaMnWX6; Wed, 24 Jul 2024 11:21:06 +0000 (UTC)
+ id bDSXyczzgRFb; Wed, 24 Jul 2024 11:56:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 19BDD80CE3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8F7F580A73
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 19BDD80CE3;
-	Wed, 24 Jul 2024 11:21:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8F7F580A73;
+	Wed, 24 Jul 2024 11:56:02 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 51A241BF2B3
- for <buildroot@lists.busybox.net>; Wed, 24 Jul 2024 11:21:05 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 08AD21BF831
+ for <buildroot@lists.busybox.net>; Wed, 24 Jul 2024 11:56:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3DE4480BEE
- for <buildroot@lists.busybox.net>; Wed, 24 Jul 2024 11:21:05 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0201380B8F
+ for <buildroot@lists.busybox.net>; Wed, 24 Jul 2024 11:56:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xkFeaVvDsZw1 for <buildroot@lists.busybox.net>;
- Wed, 24 Jul 2024 11:21:04 +0000 (UTC)
+ id TqMzbj_xwXEK for <buildroot@lists.busybox.net>;
+ Wed, 24 Jul 2024 11:56:00 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::12a; helo=mail-lf1-x12a.google.com;
- envelope-from=festevam@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 5037780CE3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5037780CE3
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com
- [IPv6:2a00:1450:4864:20::12a])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5037780CE3
- for <buildroot@buildroot.org>; Wed, 24 Jul 2024 11:21:04 +0000 (UTC)
-Received: by mail-lf1-x12a.google.com with SMTP id
- 2adb3069b0e04-52fcdc2f1b6so159243e87.3
- for <buildroot@buildroot.org>; Wed, 24 Jul 2024 04:21:04 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::329; helo=mail-wm1-x329.google.com;
+ envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E98F680A73
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E98F680A73
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
+ [IPv6:2a00:1450:4864:20::329])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E98F680A73
+ for <buildroot@buildroot.org>; Wed, 24 Jul 2024 11:55:59 +0000 (UTC)
+Received: by mail-wm1-x329.google.com with SMTP id
+ 5b1f17b1804b1-4265b7514fcso4636865e9.1
+ for <buildroot@buildroot.org>; Wed, 24 Jul 2024 04:55:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1721820061; x=1722424861;
- h=to:subject:message-id:date:from:mime-version:x-gm-message-state
- :from:to:cc:subject:date:message-id:reply-to;
- bh=o7d1ZFoOXkiaQQxjDBZjcemPWU15YfL5a58y7BKK6OE=;
- b=plFa7co3e8TolLHIDFDlmHlAvcY9jXgNEFhji5BRKb+VlSgWRqjUT5nYUz4INTmJRC
- ONL3Y2b9cwBI9DwXrEDoufFlbCdn9qcT7x/eOuiL1lFNrhtekcXBH9fynJnZkMo+uwrc
- 4gPB1BDpkndQ6hJR95xB5B9UOSSNNIXsSfXQHZ6WZQsjhucQ67s0Kd/lg7QklYvjPkxn
- 2ZnQdAYIZDetW1xUsdlAtUMETCnIthiNAQITtqfG4IrU5Zxg6NmuYlzjCyRMgr++2rKQ
- sMcTZe0WvTlt/Ekb+O+M6IVbaaHtelG/NyG3hceBXCxCwHym+qAt89RWd9P5O784xTvM
- Tt+Q==
-X-Gm-Message-State: AOJu0YxEpqARclXy7hf+VYSdhhxR0ydAycDAJvk/LjNuPA0WX27FUgIH
- RHq8yLceyqpXrdVOKc8zoOieIXZs/bn7zVObQ3EjOlIZrIvOA33yc9rnSFSiZ6GhGws/FIcIaW1
- CJXUuln/292Q5e1VQnttmxH5KdK8d1cFS
-X-Google-Smtp-Source: AGHT+IEm5dFA+4KDlp2o2HyMo7rw2qCuepP0BF26b89PYacpaqzB4aILDTr6Sn5SEx8YqE5WmHhNYx42xmBRcqIH/Nw=
-X-Received: by 2002:a05:6512:3b21:b0:52f:4b6:bb4b with SMTP id
- 2adb3069b0e04-52f04b6bbb3mr3093866e87.9.1721820061210; Wed, 24 Jul 2024
- 04:21:01 -0700 (PDT)
+ d=1e100.net; s=20230601; t=1721822158; x=1722426958;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=dw1Nds8RQTWwyItOF7UNFuefEqWtHc3c8ciWE22O4qo=;
+ b=WnBk7Hlcpi0Kga/1a3vGk5xdmtDl8m4Oo1AqqqcX+LoM+dtW45RWOMqITW3dlgT32i
+ MTWOK4+D3vFQs1zKd0I3pqnaXhxe+nN82jzqQyDMkXlQuEJtB0HHQvl7XJbhN/gXBKtD
+ yBGsxGMPRGTJNjfWWAsCGFRkPrycRKBPd+hqh+d3IRfcD+Sbl1ee6/DmMlfaeInFlvC/
+ UqlrABdAgc3iNx38Uf8RVFG3HchRQCk889zUvgDhXhQjAHVEb3rzn2rH3icCU26jWzFg
+ ZXP0ByUu47ECvnFL1v2RnrtnRw0AZ2HBcAV/0F6nVMNlNEp8hSDc6Hh+l6cgUO2vpP+s
+ N8ig==
+X-Gm-Message-State: AOJu0YxJ8TS7pmSRqNv1LcjVQwPPueFo8qAMdFm+o4CavF2HMeHoEddH
+ hnOtvnlog0bHdXmWAyeUNrhAPhHFCg62MX/s8bLxAx5d2XC4GsM0uMSVQQ==
+X-Google-Smtp-Source: AGHT+IF6WnLB6CtTmnO4xpKZusH3kgpa60egqFxFfH+40CAbNcat/aadQ6OpO5cMSZyNxBr2ahWngQ==
+X-Received: by 2002:a05:600c:46d1:b0:424:a7f1:ba2 with SMTP id
+ 5b1f17b1804b1-427f9a4d067mr12814515e9.17.1721822157417; 
+ Wed, 24 Jul 2024 04:55:57 -0700 (PDT)
+Received: from kali.home (lfbn-ren-1-785-215.w83-197.abo.wanadoo.fr.
+ [83.197.112.215]) by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-427f939aafdsm25375585e9.28.2024.07.24.04.55.56
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 24 Jul 2024 04:55:56 -0700 (PDT)
+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+To: buildroot@buildroot.org
+Date: Wed, 24 Jul 2024 13:55:54 +0200
+Message-ID: <20240724115554.2270864-1-fontaine.fabrice@gmail.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-From: Fabio Estevam <festevam@gmail.com>
-Date: Wed, 24 Jul 2024 08:20:50 -0300
-Message-ID: <CAOMZO5D3LL=gCQt-k5e3350tQ+XULrzhV233q1GZbGFDD5f3Cg@mail.gmail.com>
-To: buildroot <buildroot@buildroot.org>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1721820061; x=1722424861; darn=buildroot.org;
- h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
- :date:message-id:reply-to;
- bh=o7d1ZFoOXkiaQQxjDBZjcemPWU15YfL5a58y7BKK6OE=;
- b=jI0v2wc6elKlOZLa/DsmlEaHK8N5Ez/2WjT5Zmnc7yIF/LQbrGPUWBdQWQpTa7sLqd
- 6KBB2DKuavwjM02uZqggYdXy+Ah56PH82dz7G3f1u91eHOTPJ2RUy4iyJjgLEKSsFoDu
- uWqgziAMfKNDBntp7Xk3nNvmh9Ej3C425UMuiqGOcorAiWTLTDu6HxTIoDbUNCq6awBZ
- Bv50ePY1Z1zx2eDyqYhrkMOgIeJBNcOsc9TY36F+d9XLQrlra/fd7RBnfTv6U8/SCxXG
- lD1VBdUN2J+lx8ut2OQ5RI+04JxViTxO3jhzYuyzHkad6tGNF4dG1Dy7NrA4v2x4iBey
- Nfcw==
+ d=gmail.com; s=20230601; t=1721822158; x=1722426958; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=dw1Nds8RQTWwyItOF7UNFuefEqWtHc3c8ciWE22O4qo=;
+ b=G5k7zEXkzGw7x/KFOYx5UKsrpY1RnUjjDXo0Om/+JMjMQhuPAn2Y3QsRvoBmVAXsdh
+ NpDzbN/djgCAfTO9JkAbKlXjb97EkmUIx4a81BiJJef7QhCfFP/4uR7ImAuUE3ddIsFl
+ UxGYYT/rynzFeRb0h3BLuQPurY3jTi+QDrgNvzy413awIgNGH/qF9EUifYkHOj7xw+OR
+ sBXYg0K9Rx2yVuhES6Hdvmb/HoO17o+U8xVI+ZBzeRgOL1yeY8ZFl6RzrcwiKp9uHVfd
+ TMADYB0Qo70f9yzBi0BpURkvgUOWmB0ZSGJwaJgDFdDhkAjDVju1ZJ7jt3nAEQf3qrvA
+ xleQ==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=jI0v2wc6
-Subject: [Buildroot] crucible: Build failure on riscv64/mips64el
+ header.a=rsa-sha256 header.s=20230601 header.b=G5k7zEXk
+Subject: [Buildroot] [PATCH 1/1] package/tipidee: fix uclibc build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -93,39 +99,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: =?UTF-8?q?J=20=2E=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi,
+Set _GNU_SOURCE in CFLAGS to fix the following uclibc build failure
+raised since the addition of the package in commit
+17deaf60f66fc08a796233920a104e5233b501e0:
 
-I get some reports that crucible fails to build on some architectures, such as:
+src/libtipidee/tipidee_response_header_lastmodified.c: In function 'tipidee_response_header_lastmodified':
+src/libtipidee/tipidee_response_header_lastmodified.c:17:36: error: 'const struct stat' has no member named 'st_mtim'; did you mean 'st_mtime'?
+   17 |   if (!tain_from_timespec(&t, &st->st_mtim)) return 0 ;
+      |                                    ^~~~~~~
+      |                                    st_mtime
 
-riscv64:
-http://autobuild.buildroot.net/results/77e7ee7c478c1f4a65acc3d29d4562d1cafae3fd/build-end.log
+Fixes: 17deaf60f66fc08a796233920a104e5233b501e0
+ - http://autobuild.buildroot.org/results/f07d6d6ae2331f9972974093c0503b9d3c6b914a
 
-mips64el:
-http://autobuild.buildroot.net/results/77e7ee7c478c1f4a65acc3d29d4562d1cafae3fd/build-end.log
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+---
+ package/tipidee/tipidee.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-The crucible tool is used to read and write fuses of i.MX SoCs.
+diff --git a/package/tipidee/tipidee.mk b/package/tipidee/tipidee.mk
+index 915b4f84bd..cb33b153e6 100644
+--- a/package/tipidee/tipidee.mk
++++ b/package/tipidee/tipidee.mk
+@@ -11,6 +11,7 @@ TIPIDEE_LICENSE_FILES = COPYING
+ TIPIDEE_DEPENDENCIES = skalibs
+ 
+ TIPIDEE_CONF_OPTS = \
++	CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE" \
+ 	--prefix=/usr \
+ 	--with-sysdeps=$(STAGING_DIR)/lib/skalibs/sysdeps \
+ 	--with-include=$(STAGING_DIR)/include \
+-- 
+2.43.0
 
-Should crucible be restricted to build only for arm and aarch64?
-
---- a/package/crucible/Config.in
-+++ b/package/crucible/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_CRUCIBLE
-        bool "crucible"
-        depends on BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
-+       depends on BR2_arm || BR2_aarch64
-        select BR2_PACKAGE_HOST_GO
-        help
-          Crucible is a One-Time-Programmable (OTP) fusing tool for the
-
-Or is there a better fix for these build failures?
-
-Thanks
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
