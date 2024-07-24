@@ -4,90 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15099C3DA63
-	for <buildroot@archiver.kernel.org>; Wed, 24 Jul 2024 11:01:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20441C3DA61
+	for <buildroot@archiver.kernel.org>; Wed, 24 Jul 2024 11:14:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 21F748145C;
-	Wed, 24 Jul 2024 11:01:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C021880A65;
+	Wed, 24 Jul 2024 11:14:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9AMqoVGeVEDK; Wed, 24 Jul 2024 11:01:38 +0000 (UTC)
+ id Z3FRqjL4K4Js; Wed, 24 Jul 2024 11:14:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EE6B081453
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D0FA880F78
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EE6B081453;
-	Wed, 24 Jul 2024 11:01:37 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 961E51BF284
- for <buildroot@lists.busybox.net>; Wed, 24 Jul 2024 11:01:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D0FA880F78;
+	Wed, 24 Jul 2024 11:14:07 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 68F5F1BF2B3
+ for <buildroot@lists.busybox.net>; Wed, 24 Jul 2024 11:14:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8F941405C9
- for <buildroot@lists.busybox.net>; Wed, 24 Jul 2024 11:01:36 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 56437606E3
+ for <buildroot@lists.busybox.net>; Wed, 24 Jul 2024 11:14:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6OrJLSSBPTpW for <buildroot@lists.busybox.net>;
- Wed, 24 Jul 2024 11:01:35 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id T0StfUxsRI8t for <buildroot@lists.busybox.net>;
+ Wed, 24 Jul 2024 11:14:05 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::334; helo=mail-wm1-x334.google.com;
+ client-ip=2a00:1450:4864:20::236; helo=mail-lj1-x236.google.com;
  envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 03C3B403CE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 03C3B403CE
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
- [IPv6:2a00:1450:4864:20::334])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 03C3B403CE
- for <buildroot@buildroot.org>; Wed, 24 Jul 2024 11:01:34 +0000 (UTC)
-Received: by mail-wm1-x334.google.com with SMTP id
- 5b1f17b1804b1-4257d5fc9b7so58015695e9.2
- for <buildroot@buildroot.org>; Wed, 24 Jul 2024 04:01:34 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org F0E71608AA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F0E71608AA
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com
+ [IPv6:2a00:1450:4864:20::236])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id F0E71608AA
+ for <buildroot@buildroot.org>; Wed, 24 Jul 2024 11:14:04 +0000 (UTC)
+Received: by mail-lj1-x236.google.com with SMTP id
+ 38308e7fff4ca-2eecd2c6432so96019791fa.3
+ for <buildroot@buildroot.org>; Wed, 24 Jul 2024 04:14:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1721818892; x=1722423692;
+ d=1e100.net; s=20230601; t=1721819641; x=1722424441;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=vODp4iavzB6OmVkm69ZUwVWgu5IfDx9+Cf0DLn07urU=;
- b=RNepy0wjSTRKq1VFxar2/3UbaLlfOKeVL6fhjpxjpoTHew1ixwmGi2dnXJLAQflRSi
- ixi6+V8k/JKd0VOCRdEwd3e6nq4nHlbKsOSEsWDTJoT39iu4TX/azdOVD2Q9+yaSsVTN
- +bo+u8E6FOlWZWSUr4iUZSa1VSV/B7F8RVkmdvqmgs269cYcyAaprkkbKPLi8c7Nrw16
- JfPIskBN4gALVAG7F4JHPllI9MGryepafR04EnC7amOapRvEQSC5na8mTh9FcL35hI1l
- rH0mNeV4s6taDErXeodKeBZxmj0WiqN6rKo17jT79dJfgSVOtZwoaBcxmy6gKUXR31aD
- qk6w==
-X-Gm-Message-State: AOJu0YyTIQFI6h3pd5nFUhsD+KERjKrm4watG150jI0Cpj2XHyMgdJHv
- Petd9pr3QmOlbxhdDCJfeAJ+YP6/YTNlSDdpq24qxkdQ8a/WCqCI5/2XzA==
-X-Google-Smtp-Source: AGHT+IHkzSl2XMVAzECi2j3wtuwhp/PzgbTowGvDw6iG7SwHycznCvGyR3TNh7RQ2IERfiBLv4L2lw==
-X-Received: by 2002:a05:600c:198b:b0:427:d735:193d with SMTP id
- 5b1f17b1804b1-427f7ade9fdmr20190135e9.31.1721818888327; 
- Wed, 24 Jul 2024 04:01:28 -0700 (PDT)
+ bh=0F2tpyUR2J0X/oCT2evZ48TCyOzA0pPKt2HwwpZ9ZM0=;
+ b=BCQr7hucRoxC5a3anFYYllB0Y8EBgtUJamWp0/J+ibYRO1IAd2PLW/iDjNnpexhCmX
+ xiR5ygXdr38xHif5cR8Rm7LljAirpBlCOn8hKziUgE3o9r2GyGYhCOStzKpUVZxb6/uw
+ 9/nkztbiRvRTyCExi3vn6QhjTksVkwG5/wipmyulBlLg76XWW2mxlGLEjjuXvYso+L9C
+ w0DHTY7F7004lWzTwc4rx4fY/2+XDBOf/GdbkB7WmAq6+uYGiY7jgum4QrQ22D5gxAM0
+ pGf6HeTziQ7XLD5YUQYszmrpTmzGWOTvGXoyOVNMnkBzS1VX8sVIKVUHAmOLn9I2W36S
+ yxzw==
+X-Gm-Message-State: AOJu0YyyiDTUssZte0sg3QmKKKM2bxQhSXS/ZxxcAaBjfi8vjjUHSVAc
+ igRux5F/WaDJBmRnh/xcqWIChR5Q8oNESNmc2wEfIegpfgOzx5TGuPuzWA==
+X-Google-Smtp-Source: AGHT+IFMhti6bdxp5a3FXS/tCEVdXpzHr6ncGp2DCXKTS3GkKB8Iq0ygauVT5W+QDhDWGhM2NFB3PQ==
+X-Received: by 2002:a2e:9b12:0:b0:2ef:32bb:5368 with SMTP id
+ 38308e7fff4ca-2f02b71e90bmr23704421fa.11.1721819640905; 
+ Wed, 24 Jul 2024 04:14:00 -0700 (PDT)
 Received: from kali.home (lfbn-ren-1-785-215.w83-197.abo.wanadoo.fr.
  [83.197.112.215]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-427f937353dsm24632175e9.17.2024.07.24.04.01.27
+ 5b1f17b1804b1-427f93d211bsm24382185e9.47.2024.07.24.04.14.00
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 24 Jul 2024 04:01:27 -0700 (PDT)
+ Wed, 24 Jul 2024 04:14:00 -0700 (PDT)
 From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed, 24 Jul 2024 13:01:26 +0200
-Message-ID: <20240724110126.2133196-1-fontaine.fabrice@gmail.com>
+Date: Wed, 24 Jul 2024 13:13:58 +0200
+Message-ID: <20240724111358.2142860-1-fontaine.fabrice@gmail.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1721818892; x=1722423692; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1721819641; x=1722424441; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=vODp4iavzB6OmVkm69ZUwVWgu5IfDx9+Cf0DLn07urU=;
- b=TrSgs0+117wb7uJrIHYUAalO22WzFJNT3k0/uzgI+RmIJMDK8gi4Wu2zEvchqgR76X
- ERuERZWT7PTWB3CEHm7An6e7Iv4yvcIIAxUY8Dr0elGUGDU6ZFHb6ey9DJ3qtPt5+y+O
- qKl6kpB9dTY2/4Untf24uxdZNFoY7AlMqf3q2fSU880jqCFTS1mhcFIgYMLo+n3TBaSR
- EjIK3GdXeBpoFPrKcVlDR5lZI6hhbUpjEAgOZ/Gyr+5y0nHia/OGb5CbucYvH47u16vh
- BRj7yWW2xGqzOMV4nTShEf3ZKkr5bEM25xXnVzK4bcb2jYO+sVaoe58Ii0S8vQMPOunN
- NIZw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=0F2tpyUR2J0X/oCT2evZ48TCyOzA0pPKt2HwwpZ9ZM0=;
+ b=CZ2db5ydbY5cNfF/mIlVcNwqEKhcm5rTxVvFYbjCv2zX9w0i3h7z6fbG7YMXe1G2hP
+ 3OB5AFQJ6RBFJJIlVmH7RXEwqYBBYmXfPgoj+5h0je9vDsrmxSFmtZPZ1lRnZMb5q1cE
+ yEAA7h6gAUGCcgutejp0hMmVYYDHaawgtD+p9x/ZHi2j/PcFwGH43SW6lfdVTkC6WC3t
+ GX8BblJHKtC6zqjMeeVkunqnM6ATmgaYCIsHC+UvoGhby+M7MR2GcC5nDVy4vIXv4Odq
+ 9R+V8JkCqlqLV91pMZYhaA9vOYBQAQ5dI3e8xYubsSqov1GopNemXUftBPStWljwYaZb
+ rvFQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=TrSgs0+1
-Subject: [Buildroot] [PATCH 1/1] package/can-utils: fix build with gcc >= 14
+ header.a=rsa-sha256 header.s=20230601 header.b=CZ2db5yd
+Subject: [Buildroot] [PATCH 1/1] package/wireless-regdb: fix crda build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,115 +99,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: Dimitrios Siganos <dimitris@siganos.org>, Bernd Kuhls <bernd@kuhls.net>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix the following build failure with gcc >= 14:
+Fix the following build failure raised since bump to version 2024.07.04
+in commit 213c5c0191be022671aa726902dd7dfef5899c6e and
+https://git.kernel.org/pub/scm/linux/kernel/git/wens/wireless-regdb.git/commit/?id=37dcea0e6e5effb4228fe385e906edba3cbee389:
 
-j1939acd.c: In function 'main':
-j1939acd.c:489:38: error: passing argument 1 of 'asprintf' from incompatible pointer type [-Wincompatible-pointer-types]
-  489 |                         if (asprintf(&program_invocation_name, "%s.%s",
-      |                                      ^~~~~~~~~~~~~~~~~~~~~~~~
-      |                                      |
-      |                                      const char **
+/usr/bin/install -m 644 -D -T /home/buildroot/autobuild/instance-3/output-1/build/wireless-regdb-2024.07.04/sforshee.key.pub.pem /home/buildroot/autobuild/instance-3/output-1/target/etc/wireless-regdb/pubkeys/sforshee.key.pub.pem
+/usr/bin/install: cannot stat '/home/buildroot/autobuild/instance-3/output-1/build/wireless-regdb-2024.07.04/sforshee.key.pub.pem': No such file or directory
 
-Fixes:
- - http://autobuild.buildroot.org/results/1e2a533a936624249cd79d34983c889c3c4c2e3b
+Fixes: 213c5c0191be022671aa726902dd7dfef5899c6e
+ - http://autobuild.buildroot.org/results/9ace181735305cf8e29e0bbace1aec3796c32978
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 ---
- ...y-poption-prefix-to-use-when-logging.patch | 79 +++++++++++++++++++
- 1 file changed, 79 insertions(+)
- create mode 100644 package/can-utils/0002-j1939acd-remove-legacy-poption-prefix-to-use-when-logging.patch
+ package/wireless-regdb/wireless-regdb.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/can-utils/0002-j1939acd-remove-legacy-poption-prefix-to-use-when-logging.patch b/package/can-utils/0002-j1939acd-remove-legacy-poption-prefix-to-use-when-logging.patch
-new file mode 100644
-index 0000000000..36c96d59e4
---- /dev/null
-+++ b/package/can-utils/0002-j1939acd-remove-legacy-poption-prefix-to-use-when-logging.patch
-@@ -0,0 +1,79 @@
-+From d337863d9189501dbbb15467cc3dcba85946a2a3 Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Mon, 22 Jul 2024 16:12:04 +0200
-+Subject: [PATCH] j1939acd: remove legacy '-p' option (prefix to use when
-+ logging)
-+
-+- remove legacy '-p' option (prefix to use when logging), fixes uclibc
-+  compile
-+
-+Fixes:
-+
-+  j1939acd.c: In function 'main':
-+  j1939acd.c:489:38: error: passing argument 1 of 'asprintf' from incompatible pointer type [-Wincompatible-pointer-types]
-+    489 |                         if (asprintf(&program_invocation_name, "%s.%s",
-+        |                                      ^~~~~~~~~~~~~~~~~~~~~~~~
-+        |                                      |
-+        |                                      const char **
-+
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+Upstream: https://github.com/linux-can/can-utils/commit/d337863d9189501dbbb15467cc3dcba85946a2a3
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ j1939acd.c | 16 +---------------
-+ 1 file changed, 1 insertion(+), 15 deletions(-)
-+
-+diff --git a/j1939acd.c b/j1939acd.c
-+index 44bb826c..ae4e58ac 100644
-+--- a/j1939acd.c
-++++ b/j1939acd.c
-+@@ -38,7 +38,6 @@ static const char help_msg[] =
-+ 	"			e.g. 80,50-100,200-210 (defaults to 0-253)" "\n"
-+ 	"  -c, --cache=FILE	Cache file to save/restore the source address" "\n"
-+ 	"  -a, --address=ADDRESS	Start with Source Address ADDRESS" "\n"
-+-	"  -p, --prefix=STR	Prefix to use when logging" "\n"
-+ 	"\n"
-+ 	"NAME is the 64bit nodename" "\n"
-+ 	"\n"
-+@@ -54,14 +53,13 @@ static struct option long_opts[] = {
-+ 	{ "range", required_argument, NULL, 'r', },
-+ 	{ "cache", required_argument, NULL, 'c', },
-+ 	{ "address", required_argument, NULL, 'a', },
-+-	{ "prefix", required_argument, NULL, 'p', },
-+ 	{ },
-+ };
-+ #else
-+ #define getopt_long(argc, argv, optstring, longopts, longindex) \
-+ 	getopt((argc), (argv), (optstring))
-+ #endif
-+-static const char optstring[] = "vr:c:a:p:?";
-++static const char optstring[] = "vr:c:a:?";
-+ 
-+ /* byte swap functions */
-+ static inline int host_is_little_endian(void)
-+@@ -466,9 +464,6 @@ int main(int argc, char *argv[])
-+ 	struct sockaddr_can saddr;
-+ 	uint64_t cmd_name;
-+ 
-+-#ifdef _GNU_SOURCE
-+-	program_invocation_name = program_invocation_short_name;
-+-#endif
-+ 	/* argument parsing */
-+ 	while ((opt = getopt_long(argc, argv, optstring, long_opts, NULL)) != -1)
-+ 		switch (opt) {
-+@@ -484,15 +479,6 @@ int main(int argc, char *argv[])
-+ 		case 'a':
-+ 			s.current_sa = strtoul(optarg, 0, 0);
-+ 			break;
-+-		case 'p':
-+-#ifdef _GNU_SOURCE
-+-			if (asprintf(&program_invocation_name, "%s.%s",
-+-				     program_invocation_short_name, optarg) < 0)
-+-				err(1, "asprintf(program invocation name)");
-+-#else
-+-			err(0, "compile with -D_GNU_SOURCE to use -p");
-+-#endif
-+-			break;
-+ 		default:
-+ 			fputs(help_msg, stderr);
-+ 			exit(1);
+diff --git a/package/wireless-regdb/wireless-regdb.mk b/package/wireless-regdb/wireless-regdb.mk
+index b1ec4cb97e..fae21687de 100644
+--- a/package/wireless-regdb/wireless-regdb.mk
++++ b/package/wireless-regdb/wireless-regdb.mk
+@@ -14,8 +14,8 @@ ifeq ($(BR2_PACKAGE_CRDA),y)
+ define WIRELESS_REGDB_INSTALL_CRDA_TARGET_CMDS
+ 	$(INSTALL) -m 644 -D -T $(@D)/regulatory.bin \
+ 		$(TARGET_DIR)/usr/lib/crda/regulatory.bin
+-	$(INSTALL) -m 644 -D -T $(@D)/sforshee.key.pub.pem \
+-		$(TARGET_DIR)/etc/wireless-regdb/pubkeys/sforshee.key.pub.pem
++	$(INSTALL) -m 644 -D -T $(@D)/wens.key.pub.pem \
++		$(TARGET_DIR)/etc/wireless-regdb/pubkeys/wens.key.pub.pem
+ endef
+ endif
+ 
 -- 
 2.43.0
 
