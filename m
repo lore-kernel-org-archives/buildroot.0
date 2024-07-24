@@ -1,94 +1,91 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8EE15C3DA61
-	for <buildroot@archiver.kernel.org>; Wed, 24 Jul 2024 14:19:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4CBA6C3DA63
+	for <buildroot@archiver.kernel.org>; Wed, 24 Jul 2024 14:59:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D5D8F608DB;
-	Wed, 24 Jul 2024 14:19:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6F98580E94;
+	Wed, 24 Jul 2024 14:59:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qzINvjKcGFyy; Wed, 24 Jul 2024 14:19:28 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id sqMhMjWaAlYh; Wed, 24 Jul 2024 14:59:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6A127608C0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1973080E49
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6A127608C0;
-	Wed, 24 Jul 2024 14:19:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1973080E49;
+	Wed, 24 Jul 2024 14:59:51 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C90031BF48D
- for <buildroot@lists.busybox.net>; Wed, 24 Jul 2024 14:19:26 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3C72E1BF20D
+ for <buildroot@lists.busybox.net>; Wed, 24 Jul 2024 14:59:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B721B608C0
- for <buildroot@lists.busybox.net>; Wed, 24 Jul 2024 14:19:26 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2A10D608DF
+ for <buildroot@lists.busybox.net>; Wed, 24 Jul 2024 14:59:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8PEd7fj_Kkrb for <buildroot@lists.busybox.net>;
- Wed, 24 Jul 2024 14:19:25 +0000 (UTC)
+ id CwwvGb8xr8td for <buildroot@lists.busybox.net>;
+ Wed, 24 Jul 2024 14:59:48 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32d; helo=mail-wm1-x32d.google.com;
- envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 2F096606B9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2F096606B9
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com
- [IPv6:2a00:1450:4864:20::32d])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2F096606B9
- for <buildroot@buildroot.org>; Wed, 24 Jul 2024 14:19:25 +0000 (UTC)
-Received: by mail-wm1-x32d.google.com with SMTP id
- 5b1f17b1804b1-4272738eb9eso51975525e9.3
- for <buildroot@buildroot.org>; Wed, 24 Jul 2024 07:19:24 -0700 (PDT)
+ client-ip=2607:f8b0:4864:20::1130; helo=mail-yw1-x1130.google.com;
+ envelope-from=jp.baltazar.mendes@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org ABE4060650
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ABE4060650
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com
+ [IPv6:2607:f8b0:4864:20::1130])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id ABE4060650
+ for <buildroot@buildroot.org>; Wed, 24 Jul 2024 14:59:47 +0000 (UTC)
+Received: by mail-yw1-x1130.google.com with SMTP id
+ 00721157ae682-6659e81bc68so70469617b3.0
+ for <buildroot@buildroot.org>; Wed, 24 Jul 2024 07:59:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1721830763; x=1722435563;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ d=1e100.net; s=20230601; t=1721833186; x=1722437986;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=UfmPccMy+5W32i5Lvox7zj0u9OG1g1jGAq7DEhdGQg4=;
- b=npAb1o/eWMVv5n//qej3whcdozL2wMauxuZKW7+0RUEA1XmD9kPiHuzqtomrkAzVJ+
- RYfnuTuq3+A5x5d/flR6V2khtgEquYrtSxx7nPlmEzRSweq1MvUUlsCROucC2+LnTIuI
- ma631XRJ5pN70CDWVuEO44ZNgv0HiBO3U4KTtpGtAkx/IF1e1f/H26KULK23e8Pg/6px
- EnCMYv57XlA1uLJ2Xw10fi0dU50RLJMKsv0R7bNORQZPAsSSL7oRdujbQahyetGy0tzk
- a6VP+8pwnCiZHiRFWEpB6LDEkKRBt4RBxJnXT7mpCS84EXU8pXZg2DQCq5tdVGji/jP/
- s+BA==
-X-Gm-Message-State: AOJu0Yza5ALT4oJO2Oi0gRrNUYS9IQbCb3i3nvd1IroRQbEcAwW6nCr3
- TRxe8942HMwFmld/B4C7zRM3vhpx8nheoZeKzbJ0rrsQCa6Uo68j7xmLY6P0A5m/G5kIpEn+aDj
- /04Y=
-X-Google-Smtp-Source: AGHT+IENefNmzSe575Lkd3j78CJMOscIFWUMQo4KYu87pz1Z8iJyq3UX3H2DcYgl9cp4k76izVadqQ==
-X-Received: by 2002:a05:6000:1f8f:b0:368:6f64:3072 with SMTP id
- ffacd0b85a97d-369f5a6e512mr2004572f8f.7.1721830762944; 
- Wed, 24 Jul 2024 07:19:22 -0700 (PDT)
-Received: from dario-ThinkPad-T14s-Gen-2i.amarulasolutions.com ([2.196.5.166])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-36878684225sm14605402f8f.9.2024.07.24.07.19.21
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 24 Jul 2024 07:19:22 -0700 (PDT)
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-To: buildroot@buildroot.org
-Date: Wed, 24 Jul 2024 16:19:11 +0200
-Message-ID: <20240724141911.2693092-1-dario.binacchi@amarulasolutions.com>
-X-Mailer: git-send-email 2.43.0
+ bh=svvHoZLZltOcKY0goHCp+me40S5ORjMpFHWWsgevO3Y=;
+ b=i4yy6xgjXy9E5NtGUaOuaFKweuT/YyTL0VOpHgG2Uk/yPQ0wBYy8r5KH+jhyPat6pC
+ 1xlIzVXRZfzcinuxLmoNCmpWkCWkdbJqt8gXYwd+wSvYNUJMXkyLCb3iyVAr6AJwD+Wy
+ OUd+96aA5BhtQ9PvLiBQ+tqA1YOFNtxBtP+KG2/rUyJ7OAKl7K/vuSY3QJP9yGOmXkwR
+ 5tv4oEm9xACbC/5BdG/vjnBGa9e4pkBaxRXinynf4S1Z28IvV9d8ffVfuRNfKxRaPsJD
+ igemvNe6pV4XHIy194Ep7mUlmHu9bh8oFh3yLtc8gQvsZzbZB1aJrtHUnn41s63j8gij
+ zCJQ==
+X-Gm-Message-State: AOJu0Yy4WBHWOsIDoqd7X2PmlSalyBFAEwuj+KP0+GZA1BWuAf+Q1IgI
+ 6OB0ieRjpnMq1DXTUuoyFMC7eCj8okqf2W7dlE+KgV/f8oKZy5FfXKMl9rccv5uEZ/OPVp31+iH
+ Q8IpmNKLlrP5vSmYC7PNAWRlE+tSP
+X-Google-Smtp-Source: AGHT+IEvfzQ66jkn2y1C5jDoekJQRofvw8tG3N3eaiFQZdqz/Es1gwGaQlGPGXYNLX7esB5MhtRQ3SogcGl5ps66REI=
+X-Received: by 2002:a05:690c:23c8:b0:665:7661:2b7a with SMTP id
+ 00721157ae682-6727af4338bmr24671427b3.25.1721833186505; Wed, 24 Jul 2024
+ 07:59:46 -0700 (PDT)
 MIME-Version: 1.0
+References: <CAFAK9+cph-594kM4jz+4zYV3zTkQZa22o9OwQpsaFBrCrL598g@mail.gmail.com>
+ <475db7e5-b2e8-40e9-9547-73b545a33509@gmx.de>
+In-Reply-To: <475db7e5-b2e8-40e9-9547-73b545a33509@gmx.de>
+From: =?UTF-8?B?Sm9zw6kgTWVuZGVz?= <jp.baltazar.mendes@gmail.com>
+Date: Wed, 24 Jul 2024 16:59:10 +0200
+Message-ID: <CAFAK9+eoZ-rncQPW7XqB0Bs77AFCFCRGTxbx=FbLeZxAp+BeQg@mail.gmail.com>
+To: Fiona Klute <fiona.klute@gmx.de>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1721830763; x=1722435563;
- darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=UfmPccMy+5W32i5Lvox7zj0u9OG1g1jGAq7DEhdGQg4=;
- b=rh3bvHb+UHE6zuFFlSDLbE3VyhgTSgl6fAFlCnNi2ZVF3b5Ma2G7r2MWwMs3KWBVLk
- 1M/qHLaGacmsa626JrgGLOGDcm3kd3MGUeR0F+lYxeh6mvD3G1vbMjPuJ21m6XYQbgOU
- HhMoekATSw5AzuqSo6zJLENcYy37hVKHrZq44=
+ d=gmail.com; s=20230601; t=1721833186; x=1722437986; darn=buildroot.org;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=svvHoZLZltOcKY0goHCp+me40S5ORjMpFHWWsgevO3Y=;
+ b=e5+8GElOobsWwDH7LbVpxRYfWFLLfw89tLyGpBrKRJfRv8qE+1N8cRicmWcmTPFstz
+ Eb7UX7OheehfodUAaKm5663GZ+SP7Y1Z+SIpDOyVTK2m1YkKcxw4rCQ9zX1VQHYRPD7I
+ UIuKAxNGHl77FYnJwIGZXk9rXdGpHVMju0hJEFTlcAli9wu3qWzafcmTf5EnPzJGXh6H
+ t0WaefCVSjTqq2Sqa83+t4nOzJG6WhTJnbguYT4A8G/AkgzYbn9b7NaOyAJdRjicc591
+ KwNPF/PIFpX5PUcd/zoOcE2emrU+JE2zmIoFZ0hehi4M/e3/jUP1ZPeP2U7+lH63aaI5
+ 9ARw==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=amarulasolutions.com
+ header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=rh3bvHb+
-Subject: [Buildroot] [PATCH 1/1] configs/imx8mn_bsh_smm_s2[_pro]: bump TF-A,
- U-Boot and Linux versions
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=e5+8GElO
+Subject: Re: [Buildroot] RaspberryPi U-Boot watchdog
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,207 +97,213 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: linux-amarula@amarulasolutions.com,
- Michael Trimarchi <michael@amarulasolutions.com>,
- Dario Binacchi <dario.binacchi@amarulasolutions.com>,
- Ariel D'Alessandro <ariel@vanguardiasur.com.ar>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot@buildroot.org
+Content-Type: multipart/mixed; boundary="===============4529214271183877312=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This patch bumps:
+--===============4529214271183877312==
+Content-Type: multipart/alternative; boundary="00000000000071bb2a061dff8768"
 
-  - TF-A to version v2.10
-  - U-Boot to versione v2024.07
-  - Linux kernel to version 6.10
+--00000000000071bb2a061dff8768
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The TF-A bump required applying a patch, sent upstream, to fix a
-regression in the domain access permissions configuration for the boot
-console UART.
+Hi Fiona,
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
----
- ...rop-UARTs-domain-permissions-setting.patch | 65 +++++++++++++++++++
- .../arm-trusted-firmware.hash                 |  2 +-
- .../patches/linux/linux.hash                  |  2 +-
- .../patches/uboot/uboot.hash                  |  2 +-
- configs/imx8mn_bsh_smm_s2_defconfig           |  8 +--
- configs/imx8mn_bsh_smm_s2_pro_defconfig       |  8 +--
- 6 files changed, 76 insertions(+), 11 deletions(-)
- create mode 100644 board/bsh/common/imx8mn-bsh-smm-s2/patches/arm-trusted-firmware/0001-fix-imx8m-drop-UARTs-domain-permissions-setting.patch
+Your suggestion worked really well.
 
-diff --git a/board/bsh/common/imx8mn-bsh-smm-s2/patches/arm-trusted-firmware/0001-fix-imx8m-drop-UARTs-domain-permissions-setting.patch b/board/bsh/common/imx8mn-bsh-smm-s2/patches/arm-trusted-firmware/0001-fix-imx8m-drop-UARTs-domain-permissions-setting.patch
-new file mode 100644
-index 000000000000..74b12df38dcf
---- /dev/null
-+++ b/board/bsh/common/imx8mn-bsh-smm-s2/patches/arm-trusted-firmware/0001-fix-imx8m-drop-UARTs-domain-permissions-setting.patch
-@@ -0,0 +1,65 @@
-+From 0d12fc41d6c68b257de1610a1511144d731f9af4 Mon Sep 17 00:00:00 2001
-+From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-+Date: Wed, 24 Jul 2024 10:46:49 +0200
-+Subject: [PATCH] fix(imx8m): drop UARTs domain permissions setting
-+
-+The commit d76f012ea8fc0 ("refactor(imx8m): replace magic number with
-+enum type") also hardcodes the domain permissions configuration for the
-+UARTs, causing a regression for any board using a boot console different
-+from UART2. Indeed, previously, the RDC_PDAP_UARTn registers were set to
-+the reset value (0xff), meaning all domains were enabled for read and
-+write access.
-+
-+This patch partially reverts that commit to fix the regression.
-+
-+Fixes: d76f012ea8fc0 ("refactor(imx8m): replace magic number with enum type")
-+Change-Id: I2670bf485372f32ef45cebb72a7694a9a800f417
-+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-+Upstream: https://review.trustedfirmware.org/c/TF-A/trusted-firmware-a/+/30131
-+---
-+ plat/imx/imx8m/imx8mm/imx8mm_bl31_setup.c | 2 --
-+ plat/imx/imx8m/imx8mn/imx8mn_bl31_setup.c | 2 --
-+ plat/imx/imx8m/imx8mp/imx8mp_bl31_setup.c | 1 -
-+ 3 files changed, 5 deletions(-)
-+
-+diff --git a/plat/imx/imx8m/imx8mm/imx8mm_bl31_setup.c b/plat/imx/imx8m/imx8mm/imx8mm_bl31_setup.c
-+index f6e46eb67bc9..539df931a6a4 100644
-+--- a/plat/imx/imx8m/imx8mm/imx8mm_bl31_setup.c
-++++ b/plat/imx/imx8m/imx8mm/imx8mm_bl31_setup.c
-+@@ -67,8 +67,6 @@ static const struct imx_rdc_cfg rdc[] = {
-+ 	RDC_MDAn(RDC_MDA_M4, DID1),
-+ 
-+ 	/* peripherals domain permission */
-+-	RDC_PDAPn(RDC_PDAP_UART4, D1R | D1W),
-+-	RDC_PDAPn(RDC_PDAP_UART2, D0R | D0W),
-+ 
-+ 	/* memory region */
-+ 
-+diff --git a/plat/imx/imx8m/imx8mn/imx8mn_bl31_setup.c b/plat/imx/imx8m/imx8mn/imx8mn_bl31_setup.c
-+index befa7698f912..604ef3cae6dc 100644
-+--- a/plat/imx/imx8m/imx8mn/imx8mn_bl31_setup.c
-++++ b/plat/imx/imx8m/imx8mn/imx8mn_bl31_setup.c
-+@@ -53,8 +53,6 @@ static const struct imx_rdc_cfg rdc[] = {
-+ 	RDC_MDAn(RDC_MDA_M7, DID1),
-+ 
-+ 	/* peripherals domain permission */
-+-	RDC_PDAPn(RDC_PDAP_UART4, D1R | D1W),
-+-	RDC_PDAPn(RDC_PDAP_UART2, D0R | D0W),
-+ 
-+ 	/* memory region */
-+ 	RDC_MEM_REGIONn(16, 0x0, 0x0, 0xff),
-+diff --git a/plat/imx/imx8m/imx8mp/imx8mp_bl31_setup.c b/plat/imx/imx8m/imx8mp/imx8mp_bl31_setup.c
-+index ffad3d159e59..5251c28e6ba8 100644
-+--- a/plat/imx/imx8m/imx8mp/imx8mp_bl31_setup.c
-++++ b/plat/imx/imx8m/imx8mp/imx8mp_bl31_setup.c
-+@@ -54,7 +54,6 @@ static const struct imx_rdc_cfg rdc[] = {
-+ 	RDC_MDAn(RDC_MDA_M7, DID1),
-+ 
-+ 	/* peripherals domain permission */
-+-	RDC_PDAPn(RDC_PDAP_UART2, D0R | D0W),
-+ 
-+ 	/* memory region */
-+ 
-+-- 
-+2.43.0
-+
-diff --git a/board/bsh/common/imx8mn-bsh-smm-s2/patches/arm-trusted-firmware/arm-trusted-firmware.hash b/board/bsh/common/imx8mn-bsh-smm-s2/patches/arm-trusted-firmware/arm-trusted-firmware.hash
-index 80e592dab606..02714d06a09c 100644
---- a/board/bsh/common/imx8mn-bsh-smm-s2/patches/arm-trusted-firmware/arm-trusted-firmware.hash
-+++ b/board/bsh/common/imx8mn-bsh-smm-s2/patches/arm-trusted-firmware/arm-trusted-firmware.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  fc4cdac7c08fc398b6d4b705285dc13ac2d2b30a7449c6f07e9ccd81207241df  arm-trusted-firmware-v2.5.tar.gz
-+sha256  2e18b881ada9198173238cca80086c787b1fa3f698944bde1743142823fc511c  arm-trusted-firmware-v2.10.tar.gz
-diff --git a/board/bsh/common/imx8mn-bsh-smm-s2/patches/linux/linux.hash b/board/bsh/common/imx8mn-bsh-smm-s2/patches/linux/linux.hash
-index b017ef2a893e..53eb1438945b 100644
---- a/board/bsh/common/imx8mn-bsh-smm-s2/patches/linux/linux.hash
-+++ b/board/bsh/common/imx8mn-bsh-smm-s2/patches/linux/linux.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  3e4d8e561da5703a205ae8d7b2bed6c5c64fc4299eebcbfd20481e63b57d5ee3  linux-6.1.6.tar.xz
-+sha256  774698422ee54c5f1e704456f37c65c06b51b4e9a8b0866f34580d86fef8e226  linux-6.10.tar.xz
-diff --git a/board/bsh/common/imx8mn-bsh-smm-s2/patches/uboot/uboot.hash b/board/bsh/common/imx8mn-bsh-smm-s2/patches/uboot/uboot.hash
-index 7cef5b688ec3..fe9b4f53dc63 100644
---- a/board/bsh/common/imx8mn-bsh-smm-s2/patches/uboot/uboot.hash
-+++ b/board/bsh/common/imx8mn-bsh-smm-s2/patches/uboot/uboot.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  e31cac91545ff41b71cec5d8c22afd695645cd6e2a442ccdacacd60534069341  u-boot-2023.04.tar.bz2
-+sha256  f591da9ab90ef3d6b3d173766d0ddff90c4ed7330680897486117df390d83c8f  u-boot-2024.07.tar.bz2
-diff --git a/configs/imx8mn_bsh_smm_s2_defconfig b/configs/imx8mn_bsh_smm_s2_defconfig
-index 841512ed1a16..2b358cf57b28 100644
---- a/configs/imx8mn_bsh_smm_s2_defconfig
-+++ b/configs/imx8mn_bsh_smm_s2_defconfig
-@@ -1,12 +1,12 @@
- BR2_aarch64=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_10=y
- BR2_GLOBAL_PATCH_DIR="board/bsh/common/imx8mn-bsh-smm-s2/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc3"
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/bsh/imx8mn-bsh-smm-s2/post-build.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.6"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.10"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/bsh/common/imx8mn-bsh-smm-s2/linux.fragment"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-@@ -22,14 +22,14 @@ BR2_TARGET_ROOTFS_UBIFS_LEBSIZE=0x1f000
- BR2_TARGET_ROOTFS_UBIFS_RT_NONE=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.5"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.10"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mn"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="IMX_BOOT_UART_BASE=0x30a60000"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_DEBUG=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.04"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.07"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx8mn_bsh_smm_s2"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
-diff --git a/configs/imx8mn_bsh_smm_s2_pro_defconfig b/configs/imx8mn_bsh_smm_s2_pro_defconfig
-index b4553ceb5214..e903cbf3148a 100644
---- a/configs/imx8mn_bsh_smm_s2_pro_defconfig
-+++ b/configs/imx8mn_bsh_smm_s2_pro_defconfig
-@@ -1,5 +1,5 @@
- BR2_aarch64=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_1=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_10=y
- BR2_GLOBAL_PATCH_DIR="board/bsh/common/imx8mn-bsh-smm-s2/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc3"
-@@ -7,7 +7,7 @@ BR2_ROOTFS_POST_BUILD_SCRIPT="board/bsh/imx8mn-bsh-smm-s2-pro/post-build.sh"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/bsh/imx8mn-bsh-smm-s2-pro/post-image.sh"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.6"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.10"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/bsh/common/imx8mn-bsh-smm-s2/linux.fragment"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
-@@ -24,13 +24,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.5"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.10"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mn"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES="IMX_BOOT_UART_BASE=0x30a60000"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2023.04"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.07"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx8mn_bsh_smm_s2pro"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
--- 
-2.43.0
+It helped me figure out I needed to enable the correct watchdog timing
+drivers on uboot-buildroot.
+
+Best regards,
+
+Jos=C3=A9 Mendes
+
+On Wed, 24 Jul 2024 at 12:58, Fiona Klute <fiona.klute@gmx.de> wrote:
+
+> Hi Jos=C3=A9!
+>
+> Am 24.07.24 um 12:16 schrieb Jos=C3=A9 Mendes:
+> > Hi all,
+> >
+> > I'm trying to build a system with redundant rootfs partitions for a
+> > Raspberry Pi 4 with U-Boot.
+> >
+> > I'm trying to test the recovery of this system but I can't seem to get
+> the
+> > raspberry pi to reset after a kernel panic on a non-working rootfs.
+> >
+> > To provoke this kernel panic I am simply deleting all the files in the
+> > particular rootfs. The system seems to just hang there after the panic:
+> >
+> > .....
+> > [    3.374273] Kernel panic - not syncing: No working init found.  Try
+> > passing init=3D option to kernel. See Linux
+> > Documentation/admin-guide/init.rst for guidance.
+> > [    3.388444] CPU: 3 PID: 1 Comm: swapper/0 Not tainted 6.1.61-v8 #2
+> > [    3.394627] Hardware name: Raspberry Pi 4 Model B Rev 1.5 (DT)
+> > [    3.400456] Call trace:
+> > [    3.402897]  dump_backtrace.part.0+0xe8/0x100
+> > [    3.407264]  show_stack+0x20/0x30
+> > [    3.410579]  dump_stack_lvl+0x88/0xb4
+> > [    3.414246]  dump_stack+0x18/0x34
+> > [    3.417561]  panic+0x1a0/0x370
+> > [    3.420618]  kernel_init+0x138/0x140
+> > [    3.424197]  ret_from_fork+0x10/0x20
+> > [    3.427776] SMP: stopping secondary CPUs
+> > [    3.431701] Kernel Offset: 0x1353c00000 from 0xffffffc008000000
+> > [    3.437617] PHYS_OFFSET: 0x0
+> > [    3.440492] CPU features: 0x80000,2013c080,0000421b
+> > [    3.445368] Memory Limit: none
+> > [    3.448423] ---[ end Kernel panic - not syncing: No working init
+> found.
+> > Try passing init=3D option to kernel. See Linux
+> > Documentation/admin-guide/init.rst for guidance. ]---
+> >
+> > What I've tried:
+> > - From `Target packages`: watchdog, watchdogd
+> > - Busybox watchdog
+> > - From linux-menuconfig > device drivers > watchdog
+> > - From uboot-menuconfig > device drivers > watchdog
+> >
+> > None of these seem to be working for me.
+>
+> The config options in menuconfig (both for U-Boot and Linux) only enable
+> the drivers to support the watchdog. The kernel can handle watchdogs
+> internally (see CONFIG_WATCHDOG_HANDLE_BOOT_ENABLED and
+> CONFIG_WATCHDOG_OPEN_TIMEOUT in the kernel config), but generally you
+> want that only as a transitory thing during boot before a watchdog
+> service (whether watchdogd or Busybox watchdog) takes over.
+>
+> If you want the watchdog to reset no matter how broken the kernel or
+> userspace may be, enable the watchdog in U-Boot *before* starting the
+> kernel using the "wdt" command:
+> https://docs.u-boot.org/en/latest/usage/cmd/wdt.html
+>
+> Excerpt from my boot.scr that configures the watchdog of an RPi CM4 (so,
+> the device may be different for you, and you need the matching driver
+> enabled in the U-Boot config) to expect a pet every 15 seconds:
+>
+> wdt dev watchdog@7e100000
+> wdt start 15000
+>
+> Of course the system then needs to boot up far enough to handle the
+> watchdog before that time is over.
+>
+> Best regards,
+> Fiona
+>
+>
+
+--00000000000071bb2a061dff8768
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Hi=C2=A0Fiona,<br><br>Your suggestion worked really well.<=
+br><br>It helped me figure out I needed to enable the correct watchdog timi=
+ng drivers on uboot-buildroot.=C2=A0<br><br>Best regards,<br><br>Jos=C3=A9 =
+Mendes</div><br><div class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_=
+attr">On Wed, 24 Jul 2024 at 12:58, Fiona Klute &lt;<a href=3D"mailto:fiona=
+.klute@gmx.de">fiona.klute@gmx.de</a>&gt; wrote:<br></div><blockquote class=
+=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rg=
+b(204,204,204);padding-left:1ex">Hi Jos=C3=A9!<br>
+<br>
+Am 24.07.24 um 12:16 schrieb Jos=C3=A9 Mendes:<br>
+&gt; Hi all,<br>
+&gt;<br>
+&gt; I&#39;m trying to build a system with redundant rootfs partitions for =
+a<br>
+&gt; Raspberry Pi 4 with U-Boot.<br>
+&gt;<br>
+&gt; I&#39;m trying to test the recovery of this system but I can&#39;t see=
+m to get the<br>
+&gt; raspberry pi to reset after a kernel panic on a non-working rootfs.<br=
+>
+&gt;<br>
+&gt; To provoke this kernel panic I am simply deleting all the files in the=
+<br>
+&gt; particular rootfs. The system seems to just hang there after the panic=
+:<br>
+&gt;<br>
+&gt; .....<br>
+&gt; [=C2=A0 =C2=A0 3.374273] Kernel panic - not syncing: No working init f=
+ound.=C2=A0 Try<br>
+&gt; passing init=3D option to kernel. See Linux<br>
+&gt; Documentation/admin-guide/init.rst for guidance.<br>
+&gt; [=C2=A0 =C2=A0 3.388444] CPU: 3 PID: 1 Comm: swapper/0 Not tainted 6.1=
+.61-v8 #2<br>
+&gt; [=C2=A0 =C2=A0 3.394627] Hardware name: Raspberry Pi 4 Model B Rev 1.5=
+ (DT)<br>
+&gt; [=C2=A0 =C2=A0 3.400456] Call trace:<br>
+&gt; [=C2=A0 =C2=A0 3.402897]=C2=A0 dump_backtrace.part.0+0xe8/0x100<br>
+&gt; [=C2=A0 =C2=A0 3.407264]=C2=A0 show_stack+0x20/0x30<br>
+&gt; [=C2=A0 =C2=A0 3.410579]=C2=A0 dump_stack_lvl+0x88/0xb4<br>
+&gt; [=C2=A0 =C2=A0 3.414246]=C2=A0 dump_stack+0x18/0x34<br>
+&gt; [=C2=A0 =C2=A0 3.417561]=C2=A0 panic+0x1a0/0x370<br>
+&gt; [=C2=A0 =C2=A0 3.420618]=C2=A0 kernel_init+0x138/0x140<br>
+&gt; [=C2=A0 =C2=A0 3.424197]=C2=A0 ret_from_fork+0x10/0x20<br>
+&gt; [=C2=A0 =C2=A0 3.427776] SMP: stopping secondary CPUs<br>
+&gt; [=C2=A0 =C2=A0 3.431701] Kernel Offset: 0x1353c00000 from 0xffffffc008=
+000000<br>
+&gt; [=C2=A0 =C2=A0 3.437617] PHYS_OFFSET: 0x0<br>
+&gt; [=C2=A0 =C2=A0 3.440492] CPU features: 0x80000,2013c080,0000421b<br>
+&gt; [=C2=A0 =C2=A0 3.445368] Memory Limit: none<br>
+&gt; [=C2=A0 =C2=A0 3.448423] ---[ end Kernel panic - not syncing: No worki=
+ng init found.<br>
+&gt; Try passing init=3D option to kernel. See Linux<br>
+&gt; Documentation/admin-guide/init.rst for guidance. ]---<br>
+&gt;<br>
+&gt; What I&#39;ve tried:<br>
+&gt; - From `Target packages`: watchdog, watchdogd<br>
+&gt; - Busybox watchdog<br>
+&gt; - From linux-menuconfig &gt; device drivers &gt; watchdog<br>
+&gt; - From uboot-menuconfig &gt; device drivers &gt; watchdog<br>
+&gt;<br>
+&gt; None of these seem to be working for me.<br>
+<br>
+The config options in menuconfig (both for U-Boot and Linux) only enable<br=
+>
+the drivers to support the watchdog. The kernel can handle watchdogs<br>
+internally (see CONFIG_WATCHDOG_HANDLE_BOOT_ENABLED and<br>
+CONFIG_WATCHDOG_OPEN_TIMEOUT in the kernel config), but generally you<br>
+want that only as a transitory thing during boot before a watchdog<br>
+service (whether watchdogd or Busybox watchdog) takes over.<br>
+<br>
+If you want the watchdog to reset no matter how broken the kernel or<br>
+userspace may be, enable the watchdog in U-Boot *before* starting the<br>
+kernel using the &quot;wdt&quot; command:<br>
+<a href=3D"https://docs.u-boot.org/en/latest/usage/cmd/wdt.html" rel=3D"nor=
+eferrer" target=3D"_blank">https://docs.u-boot.org/en/latest/usage/cmd/wdt.=
+html</a><br>
+<br>
+Excerpt from my boot.scr that configures the watchdog of an RPi CM4 (so,<br=
+>
+the device may be different for you, and you need the matching driver<br>
+enabled in the U-Boot config) to expect a pet every 15 seconds:<br>
+<br>
+wdt dev watchdog@7e100000<br>
+wdt start 15000<br>
+<br>
+Of course the system then needs to boot up far enough to handle the<br>
+watchdog before that time is over.<br>
+<br>
+Best regards,<br>
+Fiona<br>
+<br>
+</blockquote></div>
+
+--00000000000071bb2a061dff8768--
+
+--===============4529214271183877312==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============4529214271183877312==--
