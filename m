@@ -4,72 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5FD55C3DA63
-	for <buildroot@archiver.kernel.org>; Wed, 24 Jul 2024 16:30:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D01FC3DA63
+	for <buildroot@archiver.kernel.org>; Wed, 24 Jul 2024 16:34:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2382140DE9;
-	Wed, 24 Jul 2024 16:30:01 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B3734401C2;
+	Wed, 24 Jul 2024 16:34:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5q6ouS-RyHmx; Wed, 24 Jul 2024 16:30:00 +0000 (UTC)
+ id VVeW9cS9jasZ; Wed, 24 Jul 2024 16:33:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D546F40DF2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6A7E5402F2
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D546F40DF2;
-	Wed, 24 Jul 2024 16:29:59 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 86FA11BF29C
- for <buildroot@lists.busybox.net>; Wed, 24 Jul 2024 16:29:58 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6A7E5402F2;
+	Wed, 24 Jul 2024 16:33:59 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id CBF8C1BF29C
+ for <buildroot@lists.busybox.net>; Wed, 24 Jul 2024 16:33:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 73DB3401C2
- for <buildroot@lists.busybox.net>; Wed, 24 Jul 2024 16:29:58 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B917B40686
+ for <buildroot@lists.busybox.net>; Wed, 24 Jul 2024 16:33:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uIAO2xsK4lRw for <buildroot@lists.busybox.net>;
- Wed, 24 Jul 2024 16:29:56 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tKF6YvX3p6CQ for <buildroot@lists.busybox.net>;
+ Wed, 24 Jul 2024 16:33:57 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::223;
  helo=relay3-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 25F3A402F2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 25F3A402F2
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 5A497400B8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5A497400B8
 Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
  [IPv6:2001:4b98:dc4:8::223])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 25F3A402F2
- for <buildroot@buildroot.org>; Wed, 24 Jul 2024 16:29:55 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id E6D9960006;
- Wed, 24 Jul 2024 16:29:52 +0000 (UTC)
-Date: Wed, 24 Jul 2024 18:29:52 +0200
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 5A497400B8
+ for <buildroot@buildroot.org>; Wed, 24 Jul 2024 16:33:57 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id A7B3260003;
+ Wed, 24 Jul 2024 16:33:55 +0000 (UTC)
+Date: Wed, 24 Jul 2024 18:33:54 +0200
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20240724182952.0cc67c18@windsurf>
-In-Reply-To: <20240724085302.1821942-1-fontaine.fabrice@gmail.com>
-References: <20240724085302.1821942-1-fontaine.fabrice@gmail.com>
+Message-ID: <20240724183354.71cb212b@windsurf>
+In-Reply-To: <20240723215041.771843-1-fontaine.fabrice@gmail.com>
+References: <20240723215041.771843-1-fontaine.fabrice@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1721838593;
+ d=bootlin.com; s=gm1; t=1721838835;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=LekYJBBU5UNUbFALPt8vSm1ijVelOkJH2VHWXmF6p3U=;
- b=kCyxk472BlBr1HebfutG0JAbSLxiSJ70cmPBLdZmEdxpCxlfTnBjLMwRk35IspzsQFzgYk
- q3DYStttmbHOeLm29oBAhakvyQmG0W+KpuG8l8fDY9p3Hs1mP+XZvEhYW0MT/b9ClBC1Gm
- dn65uEByXlKO1EzDwrwR+W9xXH8A6VMsO/Yxrb5M85hTXrYa/9//ezw06ALexl3Sw1rcal
- W7QCacnmgEW/OOS4F7UIrE/QZO818GbZ7ZyabRgj3Y9QBf7f5jWXeTRxmLeZ2WAO5kh0wj
- hs4vWA1/lIcev7RhaFHwPBO5zgeEpfXF+4giBBmYDlpPY/HBmYanymytj/8X6A==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=d6H62xu19FrU7mdQlzdRxv7W51UnOknS1GieL3UyMos=;
+ b=SHAKq/Dbp5cU5mwIpGtpqBkqhnpa1PQnz/gy4WdgRmTC6TktaRzVti6H0g6B4YJD3dam9L
+ fhqFe0SVixhwW2FanPkxeXlu7VbFySBuFDJLCcf30LXo6vRwtmaxHatEx/DBycoYpXEF+N
+ 33UYCMPVpTipyft+rPCNHOdJftTb/fYDfWM32Vi1bM7CqOZbnYbspQr/PC+v1pi6XwOZk5
+ B7NIL7WNlyKZ9ELQoH4Gipx68b2g3GIDkitlVQvJgHUnnM+zG52OTQOQSkdMYdwall7h7I
+ drJSAepRgcmr9OvVfL1TJrz/vH4V9Bp7ALAhAy6M3+qAc4FJ7ZEzHnbFX+/Hew==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=kCyxk472
-Subject: Re: [Buildroot] [PATCH 1/1] package/btrfs-progs: don't install host
- udev files
+ header.s=gm1 header.b=SHAKq/Db
+Subject: Re: [Buildroot] [PATCH 1/1] package/xz: fix musl static build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -89,31 +88,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, 24 Jul 2024 10:53:02 +0200
+On Tue, 23 Jul 2024 23:50:41 +0200
 Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> Pass an empty value for udevdir to avoid the following host build
-> failure on one of the autobuilders:
+> For an unknown reason, runnning autoreconf is needed to avoid the
+> following static build failure on musl which is raised because LDFLAGS
+> (which contains -static) is not passed:
 > 
-> /usr/bin/install -c -m755 -d /usr/lib/udev/rules.d
-> /usr/bin/install -c -m644 64-btrfs-dm.rules 64-btrfs-zoned.rules /usr/lib/udev/rules.d
-> /usr/bin/install: cannot create regular file '/usr/lib/udev/rules.d/64-btrfs-dm.rules': Permission denied
-> /usr/bin/install: cannot create regular file '/usr/lib/udev/rules.d/64-btrfs-zoned.rules': Permission denied
+> /home/autobuild/autobuild/instance-16/output-1/host/lib/gcc/armeb-buildroot-linux-musleabi/13.3.0/../../../../armeb-buildroot-linux-musleabi/bin/ld: /home/autobuild/autobuild/instance-16/output-1/host/lib/gcc/armeb-buildroot-linux-musleabi/13.3.0/libgcc.a(_dvmd_lnx.o): in function `__aeabi_idiv0':
+> /home/autobuild/autobuild/instance-16/output-1/build/host-gcc-final-13.3.0/build/armeb-buildroot-linux-musleabi/libgcc/../../../libgcc/config/arm/lib1funcs.S:1499:(.text+0x8): undefined reference to `raise'
 > 
-> This build failure can be raised since the addition of the host variant
-> in commit ed69859a7261ee86e71aa666d30a28e374769e15. udev rules were
-> added by upstream in 2016 by
-> https://github.com/kdave/btrfs-progs/commit/62c0666378eb70285b6a3052bf4144d2132a5891
+> This build failure is raised by autobuilders since bump to version 5.6.2
+> in commit d1d77eb274761d1f2d24ee4b55a374e917c67a8e but it can also be
+> reproduced on version 5.4.7 (but not on 5.4.6). There is probably an
+> issue with these two official autotools tarballs which have been
+> released the same day (on May 29 2024).
 > 
-> Fixes: ed69859a7261ee86e71aa666d30a28e374769e15
->  - http://autobuild.buildroot.org/results/c46238afe8d23cf4bff4e7290a5eaebd0640eb6e
+> Fixes: 40240ac30afc4c6af765794f38e6815162ca61fa
+>  - http://autobuild.buildroot.org/results/344813b202644a23c166920aa7e861ebf408536b
 > 
 > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  package/btrfs-progs/btrfs-progs.mk | 2 ++
+>  package/xz/xz.mk | 2 ++
 >  1 file changed, 2 insertions(+)
 
-Applied to master, thanks.
+Thanks for the investigation. However, I'd like to have a little bit
+better understanding than "unknown reason". Could you compare the
+build/link command lines used by xz without/with the AUTORECONF = YES,
+to see what's different?
+
+What puzzles me is that the build failures are related to libgcc.a
+missing some symbols. So do we have a xz issue here, or do we have an
+actual host-gcc-final issue that somehow gets worked-around by doing
+XZ_AUTORECONF = YES ? That is what worries me about merging this fix
+without a slightly better understanding of what's going on.
 
 Thomas
 -- 
