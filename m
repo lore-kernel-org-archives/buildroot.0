@@ -4,71 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8FBAC3DA63
-	for <buildroot@archiver.kernel.org>; Wed, 24 Jul 2024 20:02:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62731C3DA63
+	for <buildroot@archiver.kernel.org>; Wed, 24 Jul 2024 20:03:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 77CB840E22;
-	Wed, 24 Jul 2024 20:02:05 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1D1BC40242;
+	Wed, 24 Jul 2024 20:03:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZTcEORG-m8DL; Wed, 24 Jul 2024 20:02:03 +0000 (UTC)
+ id p8EdigVGHt6T; Wed, 24 Jul 2024 20:03:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 825E64052A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C8EB44052A
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 825E64052A;
-	Wed, 24 Jul 2024 20:02:03 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C8EB44052A;
+	Wed, 24 Jul 2024 20:03:42 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 65F901BF2C8
- for <buildroot@lists.busybox.net>; Wed, 24 Jul 2024 20:02:02 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 378281BF2C8
+ for <buildroot@lists.busybox.net>; Wed, 24 Jul 2024 20:03:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 613C04052A
- for <buildroot@lists.busybox.net>; Wed, 24 Jul 2024 20:02:02 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 258614052A
+ for <buildroot@lists.busybox.net>; Wed, 24 Jul 2024 20:03:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GcStEopVflKQ for <buildroot@lists.busybox.net>;
- Wed, 24 Jul 2024 20:02:00 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::226;
- helo=relay6-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id civf7TyCujfr for <buildroot@lists.busybox.net>;
+ Wed, 24 Jul 2024 20:03:40 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 6776440242
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6776440242
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::226])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 6776440242
- for <buildroot@buildroot.org>; Wed, 24 Jul 2024 20:01:59 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 4E871C0003;
- Wed, 24 Jul 2024 20:01:58 +0000 (UTC)
-Date: Wed, 24 Jul 2024 22:01:57 +0200
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20240724220157.0217f28e@windsurf>
-In-Reply-To: <20240724163806.262384-1-fontaine.fabrice@gmail.com>
-References: <20240724163806.262384-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1721851318;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=/DWs0GN4HCutcyVqtzWisgNmAkRjb0J58DW7DbCQMZs=;
- b=kvACJmXkvw5j2/2I021F91nUVqFVySj0sktaQct0puNx6vvBar1AaIw5WJNYM7PB/OPTGi
- vh0a1OCQ3ChgnlMTigGmmO8zuAUcGz9oOE5WYeXb9TJo2+Vz7y0Uw24QIOfwlA7ySc4pE2
- ohRcoL2N6At3qeDw1ZNZ8Sov3inFEkz6dFvT1OeESjMa21RljwNuQhHtze4ryffh7GTcs/
- xjVROsN6m0CLTr0XLR6DxONnDucjZn+ucvarLALexcH6lYbFax77SiPyAu+W/ZRu4ccBZF
- SfhNn63c26C9kwIRATrGmq7xTbMh1VBTk7PPw46SmD1Hoj9CoUq5N6JvNKfTbw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=kvACJmXk
-Subject: Re: [Buildroot] [PATCH 1/1] package/libressl: fix powerpc64 build
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EC95D40242
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id EC95D40242
+ for <buildroot@buildroot.org>; Wed, 24 Jul 2024 20:03:39 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id D633A8744F; Wed, 24 Jul 2024 20:03:39 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 24 Jul 2024 22:03:26 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: ee00cfd09e4ffa97019c4e9384cc761995912e28
+X-Git-Newrev: 3720250420d6b35bd217950d7a0648a0ecd0a2b5
+X-Patchwork-Hint: ignore
+Message-Id: <20240724200339.D633A8744F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/can-utils: fix build with gcc >= 14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,39 +59,118 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, 24 Jul 2024 18:38:06 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=3720250420d6b35bd217950d7a0648a0ecd0a2b5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Fix the following build failure with powerpc64 raised since bump to
-> version 3.8.2 in commit 21eca49ed5110872407b76ab9337d2877c4cda24:
-> 
-> In file included from /home/autobuild/autobuild/instance-23/output-1/build/libressl-3.8.4/crypto/rc4/rc4_enc.c:61:
-> /home/autobuild/autobuild/instance-23/output-1/build/libressl-3.8.4/crypto/../include/openssl/rc4.h:75:9: error: unknown type name 'RC4_INT'
->    75 |         RC4_INT x, y;
->       |         ^~~~~~~
-> 
-> Fixes: 21eca49ed5110872407b76ab9337d2877c4cda24
->  - http://autobuild.buildroot.org/results/2533f8f642f435b40ce687b6df482c51a3fa0250
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...ists-txt-Fix-HOST-variable-for-ppc64.patch | 26 +++++++++++++++++++
->  1 file changed, 26 insertions(+)
->  create mode 100644 package/libressl/0004-CMakeLists-txt-Fix-HOST-variable-for-ppc64.patch
+Fix the following build failure with gcc >= 14:
 
-Applied to master, thanks.
+j1939acd.c: In function 'main':
+j1939acd.c:489:38: error: passing argument 1 of 'asprintf' from incompatible pointer type [-Wincompatible-pointer-types]
+  489 |                         if (asprintf(&program_invocation_name, "%s.%s",
+      |                                      ^~~~~~~~~~~~~~~~~~~~~~~~
+      |                                      |
+      |                                      const char **
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Fixes:
+ - http://autobuild.buildroot.org/results/1e2a533a936624249cd79d34983c889c3c4c2e3b
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...legacy-poption-prefix-to-use-when-logging.patch | 79 ++++++++++++++++++++++
+ 1 file changed, 79 insertions(+)
+
+diff --git a/package/can-utils/0002-j1939acd-remove-legacy-poption-prefix-to-use-when-logging.patch b/package/can-utils/0002-j1939acd-remove-legacy-poption-prefix-to-use-when-logging.patch
+new file mode 100644
+index 0000000000..36c96d59e4
+--- /dev/null
++++ b/package/can-utils/0002-j1939acd-remove-legacy-poption-prefix-to-use-when-logging.patch
+@@ -0,0 +1,79 @@
++From d337863d9189501dbbb15467cc3dcba85946a2a3 Mon Sep 17 00:00:00 2001
++From: Peter Seiderer <ps.report@gmx.net>
++Date: Mon, 22 Jul 2024 16:12:04 +0200
++Subject: [PATCH] j1939acd: remove legacy '-p' option (prefix to use when
++ logging)
++
++- remove legacy '-p' option (prefix to use when logging), fixes uclibc
++  compile
++
++Fixes:
++
++  j1939acd.c: In function 'main':
++  j1939acd.c:489:38: error: passing argument 1 of 'asprintf' from incompatible pointer type [-Wincompatible-pointer-types]
++    489 |                         if (asprintf(&program_invocation_name, "%s.%s",
++        |                                      ^~~~~~~~~~~~~~~~~~~~~~~~
++        |                                      |
++        |                                      const char **
++
++Signed-off-by: Peter Seiderer <ps.report@gmx.net>
++Upstream: https://github.com/linux-can/can-utils/commit/d337863d9189501dbbb15467cc3dcba85946a2a3
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++---
++ j1939acd.c | 16 +---------------
++ 1 file changed, 1 insertion(+), 15 deletions(-)
++
++diff --git a/j1939acd.c b/j1939acd.c
++index 44bb826c..ae4e58ac 100644
++--- a/j1939acd.c
+++++ b/j1939acd.c
++@@ -38,7 +38,6 @@ static const char help_msg[] =
++ 	"			e.g. 80,50-100,200-210 (defaults to 0-253)" "\n"
++ 	"  -c, --cache=FILE	Cache file to save/restore the source address" "\n"
++ 	"  -a, --address=ADDRESS	Start with Source Address ADDRESS" "\n"
++-	"  -p, --prefix=STR	Prefix to use when logging" "\n"
++ 	"\n"
++ 	"NAME is the 64bit nodename" "\n"
++ 	"\n"
++@@ -54,14 +53,13 @@ static struct option long_opts[] = {
++ 	{ "range", required_argument, NULL, 'r', },
++ 	{ "cache", required_argument, NULL, 'c', },
++ 	{ "address", required_argument, NULL, 'a', },
++-	{ "prefix", required_argument, NULL, 'p', },
++ 	{ },
++ };
++ #else
++ #define getopt_long(argc, argv, optstring, longopts, longindex) \
++ 	getopt((argc), (argv), (optstring))
++ #endif
++-static const char optstring[] = "vr:c:a:p:?";
+++static const char optstring[] = "vr:c:a:?";
++ 
++ /* byte swap functions */
++ static inline int host_is_little_endian(void)
++@@ -466,9 +464,6 @@ int main(int argc, char *argv[])
++ 	struct sockaddr_can saddr;
++ 	uint64_t cmd_name;
++ 
++-#ifdef _GNU_SOURCE
++-	program_invocation_name = program_invocation_short_name;
++-#endif
++ 	/* argument parsing */
++ 	while ((opt = getopt_long(argc, argv, optstring, long_opts, NULL)) != -1)
++ 		switch (opt) {
++@@ -484,15 +479,6 @@ int main(int argc, char *argv[])
++ 		case 'a':
++ 			s.current_sa = strtoul(optarg, 0, 0);
++ 			break;
++-		case 'p':
++-#ifdef _GNU_SOURCE
++-			if (asprintf(&program_invocation_name, "%s.%s",
++-				     program_invocation_short_name, optarg) < 0)
++-				err(1, "asprintf(program invocation name)");
++-#else
++-			err(0, "compile with -D_GNU_SOURCE to use -p");
++-#endif
++-			break;
++ 		default:
++ 			fputs(help_msg, stderr);
++ 			exit(1);
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
