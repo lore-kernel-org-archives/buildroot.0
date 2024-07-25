@@ -1,97 +1,119 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1617C3DA5D
-	for <buildroot@archiver.kernel.org>; Thu, 25 Jul 2024 17:37:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B9F3C3DA5D
+	for <buildroot@archiver.kernel.org>; Thu, 25 Jul 2024 19:34:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4CEDC814B7;
-	Thu, 25 Jul 2024 17:37:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BA8EB60676;
+	Thu, 25 Jul 2024 19:34:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8o71eBPCQCPb; Thu, 25 Jul 2024 17:37:20 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 0ZPkBgJ323mg; Thu, 25 Jul 2024 19:34:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 52E1081E19
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C0A316074D
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 52E1081E19;
-	Thu, 25 Jul 2024 17:37:20 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 99E131BF2FB
- for <buildroot@lists.busybox.net>; Thu, 25 Jul 2024 17:37:18 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C0A316074D;
+	Thu, 25 Jul 2024 19:34:41 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 36E071BF422
+ for <buildroot@lists.busybox.net>; Thu, 25 Jul 2024 19:34:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 939F281E19
- for <buildroot@lists.busybox.net>; Thu, 25 Jul 2024 17:37:18 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2513F401E7
+ for <buildroot@lists.busybox.net>; Thu, 25 Jul 2024 19:34:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id v0CIC3BLNz7q for <buildroot@lists.busybox.net>;
- Thu, 25 Jul 2024 17:37:17 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::341; helo=mail-wm1-x341.google.com;
- envelope-from=martin@wetterwald.eu; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 375F9814B7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 375F9814B7
-Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com
- [IPv6:2a00:1450:4864:20::341])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 375F9814B7
- for <buildroot@buildroot.org>; Thu, 25 Jul 2024 17:37:17 +0000 (UTC)
-Received: by mail-wm1-x341.google.com with SMTP id
- 5b1f17b1804b1-42797bcfc77so9066825e9.2
- for <buildroot@buildroot.org>; Thu, 25 Jul 2024 10:37:17 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1721929035; x=1722533835;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=ku9abVqO1cDrATC0+A4fsM3ffTFRsyE2/2vxNRde00I=;
- b=bID0zebt2MTmYt4s529KM0SNhfJSiM92eixTHZXC1qWIFuczNDTqsxasc7bA9jKH3h
- +jofUcBxJ0rk3V55zk2n6punI+Ed7HVSNcpig7+vMVyhPCEf9hgfJHYj112nMsZej+ug
- OJV0dvXO2QV5NIcVV1a0m42gczNyX2yy9zz8MCmqe2Bx89PNOgR3vpHsnSUJpk2UXqYY
- wtFAWS9sMKNiAbDhlrM6KbsXqpkMfoQtskTRAAvQ3bxbutt5uyb4zVyP2nfwMurlWs5P
- VAuhqzl9CoKlRZgsILeNwb6CVt/UDcdz1l+WkK205CCsYZxSLzMBj/7giO1levKypkDt
- YS0g==
-X-Gm-Message-State: AOJu0YwLfZD5LDSyrDRyQJ6sxFP9v0MARBlYfRB3WwSl4g+7A9lYvPUS
- MKU4iAuJM4u4qCggDt6RnQIawOxIWSOrfhp+cg0hru8F0AJm/gJSEdjuw/OzuVAsAPAZkLVCwp6
- AgmKsqw==
-X-Google-Smtp-Source: AGHT+IH75raUHTyPUHRZhsNXD//+VmBu8T7xDd8yJApE+p+sDU0RB4kmr6ZAoLnjk2dyQdW2uVWYoQ==
-X-Received: by 2002:a05:600c:5247:b0:426:5416:67d7 with SMTP id
- 5b1f17b1804b1-4280550c7b1mr21874005e9.27.1721929034779; 
- Thu, 25 Jul 2024 10:37:14 -0700 (PDT)
-Received: from Halley.. ([2a01:e0a:432:9c10:8b37:cbb1:cdce:bb5f])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-428057a6307sm44679655e9.36.2024.07.25.10.37.14
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 25 Jul 2024 10:37:14 -0700 (PDT)
-From: Martin Wetterwald <martin@wetterwald.eu>
-To: buildroot@buildroot.org
-Date: Thu, 25 Jul 2024 19:37:09 +0200
-Message-ID: <20240725173709.1087549-1-martin@wetterwald.eu>
-X-Mailer: git-send-email 2.45.2
-MIME-Version: 1.0
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9RS_8lqxbMec for <buildroot@lists.busybox.net>;
+ Thu, 25 Jul 2024 19:34:39 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=67.231.144.184;
+ helo=mx0a-00105401.pphosted.com; envelope-from=brandon.maier@collins.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org D7D74401BD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D7D74401BD
+Received: from mx0a-00105401.pphosted.com (mx0a-00105401.pphosted.com
+ [67.231.144.184])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id D7D74401BD
+ for <buildroot@buildroot.org>; Thu, 25 Jul 2024 19:34:38 +0000 (UTC)
+Received: from pps.filterd (m0346907.ppops.net [127.0.0.1])
+ by mx0a-00105401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id
+ 46PGlRJP025549; Thu, 25 Jul 2024 19:34:33 GMT
+Received: from xusxph009rp050.rtx.com (xusxph009rp050.rtx.com [128.13.125.147])
+ by mx0a-00105401.pphosted.com (PPS) with ESMTPS id 40k1byjebp-1
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+ Thu, 25 Jul 2024 19:34:32 +0000
+Received: from xusxph005rp020.corp.ray.com ([128.13.121.224])
+ by xusxph009rp050.rtx.com (8.17.1.19/8.17.1.19) with ESMTPS id 46PJYU2Q007258
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+ Thu, 25 Jul 2024 19:34:30 GMT
+Received: from ciulimr01.rockwellcollins.com
+ (snat-utc-mailhub.rockwellcollins.com [10.172.224.19])
+ by xusxph005rp020.corp.ray.com (8.17.1.19/8.17.1.19) with ESMTPS id
+ 46PJYTdl017535
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+ Thu, 25 Jul 2024 19:34:30 GMT
+X-Received: from localhost (unknown [10.148.204.208])
+ by ciulimr01.rockwellcollins.com (Postfix) with ESMTP id 35BF93000425;
+ Thu, 25 Jul 2024 14:34:29 -0500 (CDT)
+Mime-Version: 1.0
+Date: Thu, 25 Jul 2024 19:34:29 +0000
+Message-Id: <D2YVE5NGZSYH.25O7ZZFRN3GCY@collins.com>
+To: "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>
+X-Mailer: aerc 0.17.0-0-g6ea74eb30457
+References: <20240724-revert-output-gitignore-v1-0-510a2795884c@collins.com>
+ <20240724-revert-output-gitignore-v1-1-510a2795884c@collins.com>
+ <20240725075112.576a95cf@windsurf>
+In-Reply-To: <20240725075112.576a95cf@windsurf>
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-07-25_19,2024-07-25_03,2024-05-17_01
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-07-25_19,2024-07-25_03,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0
+ suspectscore=0 spamscore=0
+ bulkscore=0 mlxlogscore=862 mlxscore=0 adultscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2407110000
+ definitions=main-2407250133
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0
+ malwarescore=0 mlxscore=0
+ adultscore=0 phishscore=0 spamscore=0 mlxlogscore=791 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2407110000
+ definitions=main-2407250133
+X-Proofpoint-ORIG-GUID: 8WxDnTWsjM667O1aXBOWMLtIcE25yLl8
+X-Proofpoint-GUID: 8WxDnTWsjM667O1aXBOWMLtIcE25yLl8
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-07-25_19,2024-07-25_03,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_default_notspam
+ policy=outbound_default score=0
+ malwarescore=0 mlxscore=0 lowpriorityscore=0 spamscore=0 suspectscore=0
+ phishscore=0 mlxlogscore=932 priorityscore=1501 adultscore=0
+ impostorscore=0 bulkscore=0 clxscore=1015 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.12.0-2407110000
+ definitions=main-2407250133
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=wetterwald-eu.20230601.gappssmtp.com; s=20230601; t=1721929035; x=1722533835;
- darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=ku9abVqO1cDrATC0+A4fsM3ffTFRsyE2/2vxNRde00I=;
- b=k3jPruesCSk7ihA2+IMBHRGjQycN898X9HJLYfAxsW99LrLfVFWZA4Nonm7jEgYucc
- TCCBZ42xsz6gmmhzjB4zGLQ4PDoZaGNYoEeaso0Sth2LEb4vFFl9a/egGWHgEDwhzBMq
- SHFuAvDQLSYEjcQhwZSp9Bdjak8VifYQrIHp0dBmBaj5UhzTCFxXLz3gN1CMvpp9qCvs
- PizR1X+KdObDOmI+2Z1Lsu1Ujuvo4di35uIWzbjikSS8ezCPOd50Pqw9oDxaT5fxNVEI
- gQw3Esb815VFDEMUee4gYkpXlrHeTaQJoeHex80NdBh5JH/xwkGbFT9vCFM3mNsiTflF
- ad8Q==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=wetterwald.eu
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=collins.com; h=cc :
+ content-transfer-encoding : content-type : date : from : in-reply-to :
+ message-id : mime-version : references : subject : to; s=POD051818;
+ bh=Hp8b/T1Npwwru2lwBGg2BlBG2i6HWvPHCOGH5YZFxPc=;
+ b=gcnSMwbl9Pn2qoQs7K90B+k/IWX33c0gD262n0U6X9a7fcFA2KmYh2t8st20rdfxmvzv
+ 1mziI7k9DxmpCulDsIeytHq5Q+wvfNnaQJPiBQKw64C7gOLRf6SiVfFRwJWFAcSFDTc7
+ UPIOgZLZQNpgY/SW7sVTzWU80Kc+5N3LxIXyp09WRZcZseFYvVnzn7xfwZJdh01GOomb
+ ILRrzBB5nfPxsaJqbixkjQA6hCzonIU1unHAWPZ27Bmus8D1lbfY5OkMeKr5l3qryiYN
+ pIi5/2cepAPBVh0xn2qjJzL7XTEQz/bJKK2iQCEvboQjzEde1zpMlPwRuM5g7EUG/D1j RQ== 
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=collins.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=wetterwald-eu.20230601.gappssmtp.com
- header.i=@wetterwald-eu.20230601.gappssmtp.com header.a=rsa-sha256
- header.s=20230601 header.b=k3jPrues
-Subject: [Buildroot] [PATCH 1/1] package/tinysshd: Fix static-only build
+ unprotected) header.d=collins.com header.i=@collins.com header.a=rsa-sha256
+ header.s=POD051818 header.b=gcnSMwbl
+Subject: Re: [Buildroot] [PATCH 1/2] Revert "Create a .gitignore file in the
+ CANONICAL_O directory"
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,50 +125,60 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Vadim Kochan <vadim4j@gmail.com>, Martin Wetterwald <martin@wetterwald.eu>
+From: Brandon Maier via buildroot <buildroot@buildroot.org>
+Reply-To: Brandon Maier <brandon.maier@collins.com>
+Cc: Romain Naour <romain.naour@gmail.com>, buildroot@buildroot.org,
+ Bryan Brattlof <bb@ti.com>, "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Marcus Hoffmann <buildroot@bubu1.eu>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-When using BR2_STATIC_LIBS=y, tinysshd's build was successful, but the
-binary didn't work on the final target: this is because a dynamically
-linked ELF was produced, on a target having no dynamic loader at all.
+Hi Thomas,
 
-Using $(TARGET_CONFIGURE_OPTS) propagates all the options and not only
-"CC", resulting in a correct static binary able to run on the target.
+On Thu Jul 25, 2024 at 5:51 AM UTC, Thomas Petazzoni via buildroot wrote:
+> Hello Brandon,
+>
+> On Wed, 24 Jul 2024 21:23:20 +0000
+> Brandon Maier <brandon.maier@collins.com> wrote:
+>
+> > The packages 'python-jsonschema-specifications', 'pydantic-core', and
+> > likely other packages based on Python maturin silently stopped
+> > installing files to the host and target directories after commit
+> > a14c862c08.
+> >
+> > A similar issue was reported by the Conda project[1]. It seems some
+> > build tools scan for gitignore files to decide what files to build
+> > and install.
+> >
+> > I attempted various combinations of gitignore patterns including
+> > mimicking the Conda project's gitignore[2], but the only thing that has
+> > worked reliably is the original `/output` ignore in the root Buildroot
+> > directory.
+>
+> Thanks for working on this. However, it's really messed up. Why would
+> these tools be bothered by a .gitignore file? Do you have some more
+> details?
 
-Without the patch:
+I did discover I was wrong about python-jsonschema-specifications, it
+does not use Maturin, it uses Hatchling. Hatchling also has a gitignore
+related bug. I opened a github issue here with more detailed info.
 
-> tinysshd: ELF 32-bit LSB executable, ARM, EABI5 version 1 (SYSV),
-> dynamically linked, interpreter /lib/ld-musl-armhf.so.1, stripped
+https://github.com/pypa/hatch/issues/1641
 
-With the patch:
+>
+> I think I'm going to apply the revert to fix the immediate build
+> issues, but I would really really like to fix the real problem, and
+> allow us to generate this .gitignore file in the output directory.
 
-> tinysshd: ELF 32-bit LSB executable, ARM, EABI5 version 1 (SYSV),
-> statically linked, stripped
+Same, hopefully we can get these issues worked out and try again :)
 
-Signed-off-by: Martin Wetterwald <martin@wetterwald.eu>
----
- package/tinyssh/tinyssh.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks,
+Brandon
 
-diff --git a/package/tinyssh/tinyssh.mk b/package/tinyssh/tinyssh.mk
-index 80b6ccb850..e92ac628f2 100644
---- a/package/tinyssh/tinyssh.mk
-+++ b/package/tinyssh/tinyssh.mk
-@@ -10,7 +10,7 @@ TINYSSH_LICENSE = CC0-1.0
- TINYSSH_LICENSE_FILES = LICENCE
- 
- define TINYSSH_BUILD_CMDS
--	$(TARGET_MAKE_ENV) CC="$(TARGET_CC)" $(MAKE) -C $(@D) cross-compile
-+	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) cross-compile
- endef
- 
- define TINYSSH_INSTALL_TARGET_CMDS
--- 
-2.45.2
-
+>
+> Thomas
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
