@@ -4,72 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5E665C3DA5D
-	for <buildroot@archiver.kernel.org>; Thu, 25 Jul 2024 16:26:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80D95C3DA5D
+	for <buildroot@archiver.kernel.org>; Thu, 25 Jul 2024 16:30:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0C822408D2;
-	Thu, 25 Jul 2024 16:26:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 425924098E;
+	Thu, 25 Jul 2024 16:30:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZJRkzHtpxkqs; Thu, 25 Jul 2024 16:26:10 +0000 (UTC)
+ id YoHPCyOZmQSB; Thu, 25 Jul 2024 16:30:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C8EEB408D8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0C0B6409A2
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C8EEB408D8;
-	Thu, 25 Jul 2024 16:26:09 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 24E141BF330
- for <buildroot@lists.busybox.net>; Thu, 25 Jul 2024 16:26:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0C0B6409A2;
+	Thu, 25 Jul 2024 16:30:37 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 004751BF330
+ for <buildroot@lists.busybox.net>; Thu, 25 Jul 2024 16:30:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1E5AE4042B
- for <buildroot@lists.busybox.net>; Thu, 25 Jul 2024 16:26:08 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id F0BD2813FD
+ for <buildroot@lists.busybox.net>; Thu, 25 Jul 2024 16:30:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id W--DO624VSiC for <buildroot@lists.busybox.net>;
- Thu, 25 Jul 2024 16:26:06 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.195;
- helo=relay3-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ggf1HBnZHKlm for <buildroot@lists.busybox.net>;
+ Thu, 25 Jul 2024 16:30:35 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 5937E4004A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5937E4004A
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5937E4004A
- for <buildroot@buildroot.org>; Thu, 25 Jul 2024 16:26:06 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id CD20F60002;
- Thu, 25 Jul 2024 16:26:02 +0000 (UTC)
-Date: Thu, 25 Jul 2024 18:26:02 +0200
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20240725182602.2cb9493f@windsurf>
-In-Reply-To: <20240725135859.522321-1-fontaine.fabrice@gmail.com>
-References: <20240725135859.522321-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1721924764;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=7muTeF81LFPbXGt1lJP4fc0Y5XbBSAkjKpcqOTKW17k=;
- b=J5VBWkiNw+AVYS3CcUJ27lKDqSn6xznncVDGE2e8YuwgHmVDMmsK8IhMaaWXWKhOUR2rEG
- 6kLPnZt+5bYjnv+MgpKGbpPToo4PJdWm8rTGsRr6XPKZ24Wk/UHep0NoR504vyDZZAwCAK
- oZr8M+W7rjyDyM2hofg9YMF4bLhfGx7AUrPgkB2K02X+XNy1DXaOU9IrTmuvM681f1oVhR
- VldZawrLBvKeBjFZMk4JfvNViRl0TAtlkeYPDhx1UMkpJiKoZLEMxU8fRlTbFIGG9C+G6F
- QcefzCaLg+6qXSIGDhwP9pP6Nj9yJEIxPT4l1Q4EZBvEi/N3e8Db2vDWi/WL/Q==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=J5VBWkiN
-Subject: Re: [Buildroot] [PATCH 1/1] package/libdex: fix musl build with
- liburing
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3B970813B0
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3B970813B0
+ for <buildroot@buildroot.org>; Thu, 25 Jul 2024 16:30:35 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 2809484E62; Thu, 25 Jul 2024 16:30:35 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Thu, 25 Jul 2024 18:29:04 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 9973fc77fa7f781b80fb5a88c3a973f6bf7f955c
+X-Git-Newrev: 0a5260130c6933af04c13ed61efad09b47e62c3c
+X-Patchwork-Hint: ignore
+Message-Id: <20240725163035.2809484E62@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libnss: bump version to 3.102.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,40 +59,46 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Adrian Perez de Castro <aperez@igalia.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu, 25 Jul 2024 15:58:59 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=0a5260130c6933af04c13ed61efad09b47e62c3c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> +LIBDEX_CFLAGS += $(TARGET_CFLAGS) -D_GNU_SOURCE
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libnss/libnss.hash | 4 ++--
+ package/libnss/libnss.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-You will probably hate me, but I think this is not the right solution.
-Indeed, if we adopt this solution then *ALL* packages that use liburing
-will have to manually define _GNU_SOURCE.
-
-I am not entirely clear on
-whether https://github.com/axboe/liburing/commit/c427ed678f39fd144d784f2e970bd8c52f425e14
-is a good idea. It's not clear for me whether the public header of a
-library like this is supposed to set the feature macros it requires for
-itself, or whether that should be done by the users of the library. The
-latter seems really odd to me, to be honest.
-
-At the very least, what I would suggest here is that -D_GNU_SOURCE gets
-added to the .pc file of liburing, and this contributed to upstream
-liburing. Or maybe -D_XOPEN_SOURCE=500 -D_GNU_SOURCE.
-
-Really, I have no idea what is the correct way of dealing with those
-feature macros.
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
+index 8c21316b7b..ae82e7eaa8 100644
+--- a/package/libnss/libnss.hash
++++ b/package/libnss/libnss.hash
+@@ -1,4 +1,4 @@
+-# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_102_RTM/src/SHA256SUMS
+-sha256  c29b03f24856db18a34fbcde737fcca6407c27b5f3f60baba5111460e6cb307b  nss-3.102.tar.gz
++# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_102_1_RTM/src/SHA256SUMS
++sha256  54982d3587e41579c94f2036ba084438b073f8456bbd873b7a942c057e9737cc  nss-3.102.1.tar.gz
+ # Locally calculated
+ sha256  a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index 6cc6008038..93fc1cb543 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBNSS_VERSION = 3.102
++LIBNSS_VERSION = 3.102.1
+ LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
+ LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
+ LIBNSS_DISTDIR = dist
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
