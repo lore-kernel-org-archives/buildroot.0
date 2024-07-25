@@ -4,72 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33E63C3DA5D
-	for <buildroot@archiver.kernel.org>; Thu, 25 Jul 2024 19:51:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 47130C3DA5D
+	for <buildroot@archiver.kernel.org>; Thu, 25 Jul 2024 19:52:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 05E9E60AB9;
-	Thu, 25 Jul 2024 19:51:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 161786076D;
+	Thu, 25 Jul 2024 19:52:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rXOBs7nVGJYH; Thu, 25 Jul 2024 19:51:48 +0000 (UTC)
+ id aoP9ZS54wwLb; Thu, 25 Jul 2024 19:52:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1B19560ACF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2FF6860A7B
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1B19560ACF;
-	Thu, 25 Jul 2024 19:51:48 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 279FF1BF422
- for <buildroot@lists.busybox.net>; Thu, 25 Jul 2024 19:51:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2FF6860A7B;
+	Thu, 25 Jul 2024 19:52:23 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 1DFD21BF422
+ for <buildroot@lists.busybox.net>; Thu, 25 Jul 2024 19:52:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 241A981E17
- for <buildroot@lists.busybox.net>; Thu, 25 Jul 2024 19:51:47 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0C7FC409C6
+ for <buildroot@lists.busybox.net>; Thu, 25 Jul 2024 19:52:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vFpch8ycRKml for <buildroot@lists.busybox.net>;
- Thu, 25 Jul 2024 19:51:46 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id DAH65wCGQiDU for <buildroot@lists.busybox.net>;
+ Thu, 25 Jul 2024 19:52:21 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 179F581585
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 179F581585
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org D65804062D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D65804062D
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 179F581585
- for <buildroot@buildroot.org>; Thu, 25 Jul 2024 19:51:45 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id D65804062D
+ for <buildroot@buildroot.org>; Thu, 25 Jul 2024 19:52:20 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p4fd6c2dc.dip0.t-ipconnect.de [79.214.194.220])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 3958DA4C2FBD
- for <buildroot@buildroot.org>; Thu, 25 Jul 2024 21:51:44 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:42564)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 021C5A4C2C40
+ for <buildroot@buildroot.org>; Thu, 25 Jul 2024 21:52:19 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:53300)
  by fli4l.lan.fli4l with esmtp (Exim 4.98)
- (envelope-from <bernd@kuhls.net>) id 1sX4V5-00000000599-3oDK
- for buildroot@buildroot.org; Thu, 25 Jul 2024 19:51:44 +0000
+ (envelope-from <bernd@kuhls.net>) id 1sX4Ve-000000005EW-2u3r
+ for buildroot@buildroot.org; Thu, 25 Jul 2024 19:52:18 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Thu, 25 Jul 2024 21:51:43 +0200
-Message-Id: <20240725195143.2966238-1-bernd@kuhls.net>
+Date: Thu, 25 Jul 2024 21:52:18 +0200
+Message-Id: <20240725195218.2966267-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-Spamd-Bar: ++++++
-X-Spam: Yes
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202406071026; t=1721937104;
- bh=nf0VjCuYV1/f1uODanFl4976SlJmZO0u6nqI5YFICnw=;
+ s=kas202406071026; t=1721937139;
+ bh=3faXEN7uUledVF7XcJ+Wcah6X0GepvXILY7L+D1zCMc=;
  h=From:To:Subject:Date:From;
- b=AwaryC9BmPQZm6+XOgrxdq2QzLMtJPJRom8nJjj3nx/hZTUanommfK2a3d5GHdQhH
- 6UapV9Qt1J1iyvZt/7yzaHXF0XZUZhzECdnA9TdngTxOcDOAmg/1QDKMzhQi788oSe
- uviqFSZAGrOxQ6kphlIfxj/2lsQ08sUqhD4KdxPuSw3FnR3T3TTVaRiCw8dw3gbpO9
- nZBanMGH710WdU9Dkmmlm0eR/mWlSt5xHEhQ3xNUPvsk5KylEzcY+tnsU9SdKNwwx5
- 4xohOxGYKLKZH29QiuigrCjhyT8vcuTNGYlfXw2LSrwlqM3xpUFOpdHgyhznryUfch
- Z/+8VGJzvAI9A==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=Mx79fTpumo24ymKNETbFpVxh8ePI33d0h+bn1iC2cWncO119JZdSOIZWQRCyZyCsj
+ ymIGVGW0TdwZ3YxRYrOL2bdWFl4cY+jSWww+O6ECTwD65fGbbRbEEnsTdNfJJC/B5f
+ g3Bb0PKZYpMJHOnn3AYMDhmJbMGXFtPqbokcNrnYLOQzauymUR7hG5Fsgy/9cNNA4+
+ T9jqCNuEW+dqce3pi8KqTnT1rQfHbPyYT4gyjS9fyZvSMU9fm3J5KaDFI8KsSqKmvi
+ KI+zVN8ZLYBvBiKDNDMFNFOXNjGt5b/XjM4XXBKQwLh8cesJ/F3hF8Z6E3p7U3oU/W
+ TzOCu8samLKzQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202406071026 header.b=AwaryC9B
-Subject: [Buildroot] [PATCH 1/1] package/openvpn: bump version to 2.6.12
+ header.s=kas202406071026 header.b=Mx79fTpu
+Subject: [Buildroot] [PATCH 1/1] package/fetchmail: bump version to 6.4.39
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,40 +86,38 @@ Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Release notes:
-https://sourceforge.net/p/openvpn/mailman/message/58796813/
-
-Changelog:
-https://github.com/OpenVPN/openvpn/blob/release/2.6/ChangeLog
-https://github.com/OpenVPN/openvpn/blob/release/2.6/Changes.rst
+https://sourceforge.net/p/fetchmail/mailman/message/58797299/
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/openvpn/openvpn.hash | 2 +-
- package/openvpn/openvpn.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/fetchmail/fetchmail.hash | 4 ++--
+ package/fetchmail/fetchmail.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/openvpn/openvpn.hash b/package/openvpn/openvpn.hash
-index a4ba458bd8..7ba3ea3f20 100644
---- a/package/openvpn/openvpn.hash
-+++ b/package/openvpn/openvpn.hash
-@@ -1,3 +1,3 @@
- # Locally calculated after checking signature
--sha256  d60adf413d37e11e6e63531cacf2655906756046b4edffe88a13b9e2fec40d5e  openvpn-2.6.11.tar.gz
-+sha256  1c610fddeb686e34f1367c347e027e418e07523a10f4d8ce4a2c2af2f61a1929  openvpn-2.6.12.tar.gz
- sha256  1fcb78d7e478bb8a9408010bdc91b36e213b1facfad093df3f7ce7e28af19043  COPYRIGHT.GPL
-diff --git a/package/openvpn/openvpn.mk b/package/openvpn/openvpn.mk
-index 3b39d62519..4bf5b54656 100644
---- a/package/openvpn/openvpn.mk
-+++ b/package/openvpn/openvpn.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/fetchmail/fetchmail.hash b/package/fetchmail/fetchmail.hash
+index 3c0403fa78..12612ecc48 100644
+--- a/package/fetchmail/fetchmail.hash
++++ b/package/fetchmail/fetchmail.hash
+@@ -1,4 +1,4 @@
+-# From https://sourceforge.net/p/fetchmail/mailman/message/58731594/
+-sha256  a6cb4ea863ac61d242ffb2db564a39123761578d3e40d71ce7b6f2905be609d9  fetchmail-6.4.38.tar.xz
++# From https://sourceforge.net/p/fetchmail/mailman/message/58797299/
++sha256  75109a1f307b538155fa05f5ef298e8298cb4deae95aed24c16b38d36ff0a186  fetchmail-6.4.39.tar.xz
+ # Locally computed:
+ sha256  6d87443b61041067a5eddb2cabf8aebff15b8b40771ad6b5e4754e607ec21b39  COPYING
+diff --git a/package/fetchmail/fetchmail.mk b/package/fetchmail/fetchmail.mk
+index c74b259698..a9239d0855 100644
+--- a/package/fetchmail/fetchmail.mk
++++ b/package/fetchmail/fetchmail.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--OPENVPN_VERSION = 2.6.11
-+OPENVPN_VERSION = 2.6.12
- OPENVPN_SITE = https://swupdate.openvpn.net/community/releases
- OPENVPN_DEPENDENCIES = host-pkgconf libcap-ng
- OPENVPN_LICENSE = GPL-2.0
+ FETCHMAIL_VERSION_MAJOR = 6.4
+-FETCHMAIL_VERSION = $(FETCHMAIL_VERSION_MAJOR).38
++FETCHMAIL_VERSION = $(FETCHMAIL_VERSION_MAJOR).39
+ FETCHMAIL_SOURCE = fetchmail-$(FETCHMAIL_VERSION).tar.xz
+ FETCHMAIL_SITE = https://downloads.sourceforge.net/project/fetchmail/branch_$(FETCHMAIL_VERSION_MAJOR)
+ FETCHMAIL_LICENSE = GPL-2.0; some exceptions are mentioned in COPYING
 -- 
 2.39.2
 
