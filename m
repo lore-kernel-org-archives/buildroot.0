@@ -4,86 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31E1CC3DA4A
-	for <buildroot@archiver.kernel.org>; Fri, 26 Jul 2024 16:20:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B08F6C3DA49
+	for <buildroot@archiver.kernel.org>; Fri, 26 Jul 2024 16:20:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DA63460B50;
-	Fri, 26 Jul 2024 16:20:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8D10C60B9A;
+	Fri, 26 Jul 2024 16:20:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KxNzin99uTQW; Fri, 26 Jul 2024 16:20:45 +0000 (UTC)
+ id Fs48e9MogdUu; Fri, 26 Jul 2024 16:20:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C5ACD60B58
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9047760BA0
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C5ACD60B58;
-	Fri, 26 Jul 2024 16:20:44 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id EB6531BF860
- for <buildroot@lists.busybox.net>; Fri, 26 Jul 2024 16:20:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9047760BA0;
+	Fri, 26 Jul 2024 16:20:50 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B94881BF860
+ for <buildroot@lists.busybox.net>; Fri, 26 Jul 2024 16:20:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D89DC406E2
- for <buildroot@lists.busybox.net>; Fri, 26 Jul 2024 16:20:43 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id A725680B4C
+ for <buildroot@lists.busybox.net>; Fri, 26 Jul 2024 16:20:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LWPKipj1JhGt for <buildroot@lists.busybox.net>;
- Fri, 26 Jul 2024 16:20:43 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.18;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Y-nVu026UdVA for <buildroot@lists.busybox.net>;
+ Fri, 26 Jul 2024 16:20:44 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.19;
  helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org D7241406DF
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D7241406DF
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D7241406DF
- for <buildroot@buildroot.org>; Fri, 26 Jul 2024 16:20:40 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D09C380B3A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D09C380B3A
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D09C380B3A
+ for <buildroot@buildroot.org>; Fri, 26 Jul 2024 16:20:42 +0000 (UTC)
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from haruka.lan ([85.22.115.174]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1Mnps0-1rvLB201e6-00jc0c; Fri, 26
- Jul 2024 18:20:34 +0200
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1Mk0Ne-1rrTIZ3cHA-00oa5E; Fri, 26
+ Jul 2024 18:20:35 +0200
 To: buildroot@buildroot.org
-Date: Fri, 26 Jul 2024 18:20:05 +0200
-Message-ID: <20240726162013.2183792-1-fiona.klute@gmx.de>
+Date: Fri, 26 Jul 2024 18:20:06 +0200
+Message-ID: <20240726162013.2183792-2-fiona.klute@gmx.de>
 X-Mailer: git-send-email 2.45.2
+In-Reply-To: <20240726162013.2183792-1-fiona.klute@gmx.de>
+References: <20240726162013.2183792-1-fiona.klute@gmx.de>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:e+R+l5+hB8MflD0azHDJooUNF4KA5L71rtxbzISQbIdPs3fUT/b
- hiX5qkZv9mkiPafQbd4Hizg1mzYFVBhf7Cmfxh7llRMizXk8uWtBE6tknIzzaOLHIPKm3Da
- Mn184ZlTcKgZSImmevV1pj3dbVDV1L7OZ472Jo/4KhgYgV+azUmdxEzjIabLzDwYlvbqEOb
- FZkg99UZjNyIrWx3/Jkyw==
-UI-OutboundReport: notjunk:1;M01:P0:iFc2MNRgQqg=;oWSTHxaCcVegIw5LELNl4Q58qZf
- ksyHcTgaQeyFb6P3Vf2UG8iIpVoQdlEBBmc16mFGJs+mhSGo9uzxoz49oZNEZGK5bMtArVKss
- whFwx7KvJ0UMNq63dMw1AVH8IDroUMscOtXyB6qynkYiRNZROlSpgSFsbyKWa6R3eCz/56/aQ
- 9yYTcWv4kMblKjuL1G8UjBQT7cMRk0lkC4yfxmSKJ/tif3DAbTAkjja0A+oC7oExKSVOnW2IK
- mlzx+DHAE0QuIRytUvjI2biRMC/Cw0h2BURsyTC07ID00ShgZB7YLB+uJqaT3as7QQynbBP+u
- 0gqjp9AjezZsM5C1QqPIEfwv3N9+ACFTdz8p8RP45fa1bckLdj3FZqjKNhK+EpCrOuOo3EITX
- lgvVzp8/NJ1kDCL7qqhJT+Du52ApJGwsTpsEpmkH0tubUsR5+DQnMPHMx6CvYlmbJebV23ww5
- c14Fk/TISW2WpARQyz7grE5DE6iM8PKZsHiaLyfXJVGt7pppKi3bhvAMvGbMzFFZF/qH3Fmt0
- BxtUu2iYEJKRGYELYlW3ZDY3CS1lLeFNkU7IlB12XbprIkEDjIPqbJ3dxQeVMk5fTWlVXGQEz
- VJ4XQ+v2Eqlx6dYYIeYunol2wtFLdh3rBy3FdczYrDAcqGl8fBLCM/EjksanYtkgMIJVsjbDB
- uFCHxIhNlIzxie1cyFwbzwD1myNfVDlJfLnyyB+wFwfTzupTBtB52rjoTaSXAYcEzLZRlyimv
- HPqUpTokbhFLHTC1XVP7Jw8qpjt/myzbgYGwrBAq/lfoeBlDwkXXTSYX5nwc4eNtXLsziYFTq
- ZeFX3pGon/JnInnS5lz00ZJA==
+X-Provags-ID: V03:K1:G3Dv3ruiLOOriXjRRty9R3aSLr4QHMyXoJCkIKsbFW/fLBBOJXZ
+ pkVUJV/AlzsK95Bw+Y9zO1DkmVmjTaTHqWV8gBHV+7tJaOKq9r86Ecb2frkwVIOBJyOfgor
+ 24DbiQDObrGK9YflOyxdszb39NUs0svLUH29jhOZsZ9r8fZycvWjI829RFYAv4Wsyvfr2uc
+ jo4soewrrG24eW9fp5POA==
+UI-OutboundReport: notjunk:1;M01:P0:5TjFFCbirlQ=;5r6L1Vr+FK/FM2/kdRVnWIj0Lo2
+ /mfM+4ZmGL3toN8TMzrSfFtcy2Rjzf5462c7UCgrSfO1iFx+iWRTVYCPJxOczuAUDsVSlBr4l
+ +2M7XQ7fITusQhwsT4aKFfDM1L5e4WKDT2Qs66EYATSwTrTQ6QI+v+XG8F2IQkKxCn4SbGrpV
+ ln5EbwKBVl5poxLslmkihDd73ZYM7UR2utLoVyCTNmdAMLu/3pw1S4jegg/MMlpQ5zkMHjf6f
+ O9+mye3HneYF95DjNW6ZUZ4dffyPZ/45hwPC/VM3AmXYXm9mw/3yc+7pFpzoUHPzwnRWNOshj
+ mjpMWo88m8K4iNmE0QNEngC6vSt9UzsjTZ1pGPsc8sY9A5qQQRzC3Jf22j0nlvh6xTuMWiS/C
+ zdxtflSlfri9xbuUUWldUxNf55iT3Je9VMRPwhMdrl36Wl2cmLJomVGLQJ7jb3BpIR6MPOHLJ
+ qC/KKp9FK0Zzg+HhQIk+3nx1iK+Eyt9TmaDAhw7cOqaDZ3B/RxXGPGgndpqJNspJR1ht1tyIu
+ MfUeMPD6QFPXBtVR+8owQHBHEenrBlGC1WgbpMo4u7P/LTA5lvYYvi+vWiyWe5fPQNN5Cg04D
+ b55IRYbDV+Gz83oWJl7+VE4wIF5D6fr5sL6xPT+nCyHJSArTuh15bXUfCRqAposgd2eDzOHr1
+ O1RJ0ONilkIwDzhNjmXro+QNyvr4BOYXE448aibXeWDt969SYuEbuc3WDkglTsK3frGui6jsh
+ cfJ+UJD89nixjWi3non08A6BpUMJU5CxaBi+qA9wwodmQIGDRdAywgVf7a9s1f7OigtVUERNj
+ a9o1EVOWJuFjS/0K9L3zLMIA==
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmx.de; 
- s=s31663417; t=1722010834; x=1722615634; i=fiona.klute@gmx.de;
- bh=eCwuwF1cb+Z8/RWdS17k5C1FVO+Wy/CWpxf+OPVllL0=;
- h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:
- MIME-Version:Content-Transfer-Encoding:cc:
+ s=s31663417; t=1722010836; x=1722615636; i=fiona.klute@gmx.de;
+ bh=p5LzqX0BZlGdwgFcamDhhuFE6ByJ17AQbesBUZOmIh8=;
+ h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:In-Reply-To:
+ References:MIME-Version:Content-Transfer-Encoding:cc:
  content-transfer-encoding:content-type:date:from:message-id:
  mime-version:reply-to:subject:to;
- b=tuVdGhIdY2aqez7MiiNK7aqXpFqsFVpJpEC76n4+j2upGUnwydmv7UFtJhP9ZtU4
- HZCbatouDeA8UouRNUWGgWHcpqzGoqkkeuItNQ+ZbnHXwaIKgGy5DgcrWnacFKeZV
- /NBQXrtyHXQjebpCbO2+kD6orHlsuNJ6l6naL3mGkiNjry0+AHYOq58UwVRQQEaF6
- RSLhDXiOktZlp5jyjjAXcD+paXWVApy5eAGpz7xGNJeeS1vb98eB8J6jd4Cr7CcJ2
- 9lnhSVYV0NA8ZEPfbcqLYUOQ+Om5fBCs7Qe+PLFSmRl4gVV8x0kUSm2Vf2YmOwMVt
- ix1N2j6IqpO//rph6w==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=BVKuth3DN/rE9cP5HXTQ9ch7qpwr9qDauBOZHwVvRi13z+IzBoGTO0R/M4Vd4TLA
+ i4JEjZlToVcUfsDsw6bGpSma5z+WOu8sum8TawLGJwFp7fBxUCJ81MwC6G9pUZC78
+ sZA6AFRWW5mbDxVJ4pzbj9nbZap3lP2D+e5ZxcTT5TGpBHrU/k3cT1q5o0kj59FCQ
+ aDAJRGx/KiwLeGI9vxKiD12XzrSNbDFGMIpn4dA+dPff5YaZIrYdTxXtqC1oTz7Vf
+ wMCJanTmwHSc6a8/usaVLCFB9dyhsMVlsEP+dnUl0ti0f5r1usw33WHTNnwEtvxou
+ sIo3QjCORwc/d6Qxdg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=gmx.de
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmx.de header.i=fiona.klute@gmx.de header.a=rsa-sha256
- header.s=s31663417 header.b=tuVdGhId
-Subject: [Buildroot] [PATCH v4 0/6] Improved nftables firewall support
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmx.de header.i=fiona.klute@gmx.de
+ header.a=rsa-sha256 header.s=s31663417 header.b=BVKuth3D
+Subject: [Buildroot] [PATCH v4 1/6] package/nftables: add init script
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -106,54 +107,113 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
 
-This series builds on two patches I've sent previously before, with
-the main goal of supporting firewall configuration through an nftables
-rules file. Offering the choice of iptables-nft as the default
-iptables implementation (smilar to e.g. update-alternatives on Debian)
-makes it easier to integrate that with legacy applications that rely
-on the iptables command (e.g. Docker).
+The init script handles an nftables ruleset file with support for
+atomic reloading. By default the ruleset is expected in
+/etc/nftables.conf, the location can be changed in
+/etc/default/nftables. If the ruleset file does not exist on start,
+the script does nothing and shows a warning about that fact.
 
-Changes v3 -> v4:
-* set ip6tables symlinks when selecting nftables compat
-
-Changes v2 -> v3:
-* move change from "iptables -F" to "iptables --flush" to the correct
-  patch (3/6)
-
+Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
+---
 Changes v1 -> v2:
-* add patches 3-6
-* clarify comments & commit messages
+* clarify comments & commit message
 * nftables init script: Warning about missing flush in ruleset on reload
 * nftables init script: check for rules file only on start
 * nftables init script: return nft return code from start/stop functions
-* iptables init script: start only if rules file exists
-* add tests for init scripts
-* use long form options in init scripts
-* fix typecheck warnings
 
-Fiona Klute (WIWA) (6):
-  package/nftables: add init script
-  package/iptables: optionally default to nftables compat
-  package/iptables: check for rules in init script
-  support/testing: test for nftables init script
-  support/testing: include init script in iptables test
-  support/testing: fix MyPy warnings about BRConfigTest
-
- .checkpackageignore                           |  1 -
- DEVELOPERS                                    |  1 +
- package/iptables/Config.in                    | 12 ++++
- package/iptables/S35iptables                  | 14 ++--
- package/iptables/iptables.mk                  | 13 +++-
- package/nftables/S35nftables                  | 66 +++++++++++++++++++
- package/nftables/nftables.mk                  |  5 ++
- support/testing/infra/basetest.py             |  4 +-
- .../testing/tests/package/test_iptables.py    | 18 +++++
- .../testing/tests/package/test_nftables.py    | 37 ++++++++++-
- .../rootfs-overlay/etc/nftables.conf          |  8 +++
- 11 files changed, 169 insertions(+), 10 deletions(-)
+ package/nftables/S35nftables | 66 ++++++++++++++++++++++++++++++++++++
+ package/nftables/nftables.mk |  5 +++
+ 2 files changed, 71 insertions(+)
  create mode 100644 package/nftables/S35nftables
- create mode 100644 support/testing/tests/package/test_nftables/rootfs-overlay/etc/nftables.conf
 
+diff --git a/package/nftables/S35nftables b/package/nftables/S35nftables
+new file mode 100644
+index 0000000000..8605ff7e76
+--- /dev/null
++++ b/package/nftables/S35nftables
+@@ -0,0 +1,66 @@
++#!/bin/sh
++
++DAEMON="nftables"
++
++# Main ruleset file, override in /etc/default/nftables if you want a
++# different location. The file should include a "flush ruleset"
++# command to atomically replace any previous rules on reload (instead
++# of adding to them).
++NFTABLES_CONFIG="/etc/nftables.conf"
++
++# shellcheck source=/dev/null
++[ -r "/etc/default/$DAEMON" ] && . "/etc/default/$DAEMON"
++
++start() {
++	printf "Loading nftables rules: "
++	# Run only if the ruleset file exists.
++	if [ ! -f "${NFTABLES_CONFIG}" ]; then
++		echo "${NFTABLES_CONFIG} does not exist, nothing to do."
++		return 0
++	fi
++	/usr/sbin/nft --file "${NFTABLES_CONFIG}"
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return "$status"
++}
++
++stop() {
++	printf "Clearing nftables rules: "
++	/usr/sbin/nft flush ruleset
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return "$status"
++}
++
++restart() {
++	stop
++	start
++}
++
++reload() {
++	FLUSH='flush ruleset'
++	if ! grep -q -x "$FLUSH" "${NFTABLES_CONFIG}"; then
++		printf 'WARNING: no "%s" in %s, duplicated rules likely\n' \
++			"$FLUSH" "${NFTABLES_CONFIG}"
++	fi
++	start
++}
++
++case "$1" in
++	start|stop|restart|reload)
++		"$1"
++		;;
++	*)
++		echo "Usage: $0 {start|stop|restart|reload}"
++		exit 1
++esac
++
++exit $?
+diff --git a/package/nftables/nftables.mk b/package/nftables/nftables.mk
+index 9cba243372..d74ca2da64 100644
+--- a/package/nftables/nftables.mk
++++ b/package/nftables/nftables.mk
+@@ -57,6 +57,11 @@ define NFTABLES_LINUX_CONFIG_FIXUPS
+ 	$(call KCONFIG_ENABLE_OPT,CONFIG_NF_TABLES_INET)
+ endef
+
++define NFTABLES_INSTALL_INIT_SYSV
++	$(INSTALL) -m 0755 -D package/nftables/S35nftables \
++		$(TARGET_DIR)/etc/init.d/S35nftables
++endef
++
+ $(eval $(autotools-package))
+
+ # Legacy: we used to handle it in this .mk
 --
 2.45.2
 
