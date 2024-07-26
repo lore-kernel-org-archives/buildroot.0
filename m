@@ -1,75 +1,68 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2EF7C3DA49
-	for <buildroot@archiver.kernel.org>; Fri, 26 Jul 2024 07:40:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8AB4DC3DA63
+	for <buildroot@archiver.kernel.org>; Fri, 26 Jul 2024 08:03:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8C976409BE;
-	Fri, 26 Jul 2024 07:40:12 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DWDm7zzj0aOe; Fri, 26 Jul 2024 07:40:11 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 61ECD40944
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 61ECD40944;
-	Fri, 26 Jul 2024 07:40:11 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C35811BF311
- for <buildroot@lists.busybox.net>; Fri, 26 Jul 2024 07:40:09 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id AFD5081F9C
- for <buildroot@lists.busybox.net>; Fri, 26 Jul 2024 07:40:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2541D81EEA;
+	Fri, 26 Jul 2024 08:03:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id aqCH2E8HP8Xl for <buildroot@lists.busybox.net>;
- Fri, 26 Jul 2024 07:40:08 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.193;
- helo=relay1-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 6341B81F88
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6341B81F88
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6341B81F88
- for <buildroot@buildroot.org>; Fri, 26 Jul 2024 07:40:08 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id AAEF7240003;
- Fri, 26 Jul 2024 07:40:06 +0000 (UTC)
-Date: Fri, 26 Jul 2024 09:40:05 +0200
-To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Message-ID: <20240726094005.1fbcd4e9@windsurf>
-In-Reply-To: <20240725080641.303312-1-dario.binacchi@amarulasolutions.com>
-References: <20240725080641.303312-1-dario.binacchi@amarulasolutions.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+ id MwjqiKrXDq3S; Fri, 26 Jul 2024 08:03:37 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 37C3E81EED
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 37C3E81EED;
+	Fri, 26 Jul 2024 08:03:37 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 0BFC11BF311
+ for <buildroot@lists.busybox.net>; Fri, 26 Jul 2024 08:03:36 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id EE95481EED
+ for <buildroot@lists.busybox.net>; Fri, 26 Jul 2024 08:03:35 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id IncYem9d1DS9 for <buildroot@lists.busybox.net>;
+ Fri, 26 Jul 2024 08:03:35 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=89.238.66.15;
+ helo=helium.openadk.org; envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E6AEE81EEA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E6AEE81EEA
+Received: from helium.openadk.org (helium.openadk.org [89.238.66.15])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E6AEE81EEA
+ for <buildroot@buildroot.org>; Fri, 26 Jul 2024 08:03:33 +0000 (UTC)
+Received: by helium.openadk.org (Postfix, from userid 1000)
+ id 027F535211DE; Fri, 26 Jul 2024 10:03:29 +0200 (CEST)
+Date: Fri, 26 Jul 2024 10:03:29 +0200
+From: Waldemar Brodkorb <wbx@openadk.org>
+To: buildroot@buildroot.org
+Message-ID: <ZqNYUWTWR+HDGnSP@waldemar-brodkorb.de>
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1721979606;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=lChn8IbhxzAodMRPEEQBMmh5q1Se1/LibB1VLS++LNg=;
- b=Y6LYDTBnrnUj+58jh693EFBd+DWq25yYUTWI1NXSWY8UdpMTs3SXbc3aCuSx3Vm6JTUFft
- qzKnfXkZxhQvHkcBVFm23LYMFsYRxLGxOA42p4Q9tUwcilIKc6mx4Y7NSL800fBpWi7BWI
- plyhAw/JToDc/Wfe6J8nCplifOB2J5NCLLryRd3wXw4IrOXL889h3IEO6l+TQXIW/ZUaEs
- 7Duc4bMQ6UeRYq8fMvCLfBWyauIoR/eelWhhtbWIVw8MZIYKq9kR+2ImeDvhFBWjoQbafN
- BLLQan9czIX1sZN5ictAPWwj5zGIgCecUx8LIM11LTLARFvqAbv7vWr/WOvB5w==
+Content-Disposition: inline
+X-Operating-System: Linux 5.10.0-31-amd64 x86_64
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=openadk.org; s=2022; 
+ t=1721981010; bh=4qg3EujnVHB9wLvov4UAtbGOJVrvJAfTG99siSrq0n4=;
+ h=Date:From:To:Subject:From;
+ b=D32YJno3Yl6oVTXLe/BHLkgx16Wz6wBr3/VwMx387nFxmaP6DDiZWdAwcYEITh7+E
+ vv28JpBXvOZhzmyzOGd77Uu0QpzGoLtxEyxsjFCTpHGE4IppmROY9adZuluVyDs+qE
+ dFFsiIO/LK9rswPN05EG2hy6oO/4Q6mwXgv3BUZksO0lB/05wLBXdocZvhIpDVE1ok
+ Q0PlpAuyszmE5U3/7BuUq4ojA3yZU6i9iKCpjA7jUYcGlkUqk5lrkDAtcriwTd6Hda
+ xl0PirOYPVNcrjA1TYPN8bAc/Wc4P6ETXdM8VZAy+PsLo7itIq0G1RPazw51mPqMLS
+ bkRSbtBe2Z8jQ==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
+ dmarc=none (p=none dis=none)
+ header.from=openadk.org
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Y6LYDTBn
-Subject: Re: [Buildroot] [PATCH 1/1] package/elfutils: fix build on
- microblaze
+ unprotected) header.d=openadk.org header.i=@openadk.org header.a=rsa-sha256
+ header.s=2022 header.b=D32YJno3
+Subject: [Buildroot] [PATCH] package/qemu: update to 9.0.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,41 +74,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Vincent Fazio <vfazio@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu, 25 Jul 2024 10:06:41 +0200
-Dario Binacchi <dario.binacchi@amarulasolutions.com> wrote:
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+ package/qemu/qemu.hash | 2 +-
+ package/qemu/qemu.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> +ifeq ($(BR2_microblazebe),y)
-
-I've changed to:
-
-ifeq ($(BR2_microblaze),y)
-
-as the issue applies to both LE and BE Microblaze, and applied.
-
-Although we do have a proposal for a more general solution to this
-problem: add symber attribute support for Microblaze, in patch:
-
-  https://patchwork.ozlabs.org/project/buildroot/patch/20240228165300.4158751-1-vfazio@gmail.com/
-
-Problem is that the patch proposed by Vincent is apparently not going
-to be accepted by upstream gcc, so we would carry it forever, so I'm
-not sure which decision to take about it.
-
-Thanks!
-
-Thomas
+diff --git a/package/qemu/qemu.hash b/package/qemu/qemu.hash
+index 2c905d2e77..419dd0d1b3 100644
+--- a/package/qemu/qemu.hash
++++ b/package/qemu/qemu.hash
+@@ -1,4 +1,4 @@
+ # Locally computed, tarball verified with GPG signature
+-sha256  32708ac66c30d8c892633ea968c771c1c76d597d70ddead21a0d22ccf386da69  qemu-9.0.0.tar.xz
++sha256  a8c3f596aece96da3b00cafb74baafa0d14515eafb8ed1ee3f7f5c2d0ebf02b6  qemu-9.0.2.tar.xz
+ sha256  6f04ae8364d0079a192b14635f4b1da294ce18724c034c39a6a41d1b09df6100  COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
+diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
+index 8de803dd25..16cff13d18 100644
+--- a/package/qemu/qemu.mk
++++ b/package/qemu/qemu.mk
+@@ -6,7 +6,7 @@
+ 
+ # When updating the version, check whether the list of supported targets
+ # needs to be updated.
+-QEMU_VERSION = 9.0.0
++QEMU_VERSION = 9.0.2
+ QEMU_SOURCE = qemu-$(QEMU_VERSION).tar.xz
+ QEMU_SITE = https://download.qemu.org
+ QEMU_SELINUX_MODULES = qemu virt
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+2.30.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
