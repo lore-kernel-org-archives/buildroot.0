@@ -4,88 +4,89 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 14CD2C3DA4A
-	for <buildroot@archiver.kernel.org>; Fri, 26 Jul 2024 16:21:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C193C3DA4A
+	for <buildroot@archiver.kernel.org>; Fri, 26 Jul 2024 16:21:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D6F4560B6F;
-	Fri, 26 Jul 2024 16:21:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EEAE060E7B;
+	Fri, 26 Jul 2024 16:21:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id X4oL8O3fyum0; Fri, 26 Jul 2024 16:21:01 +0000 (UTC)
+ id jfTZx-6P1rUK; Fri, 26 Jul 2024 16:21:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5B47560E7B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A629860E85
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5B47560E7B;
-	Fri, 26 Jul 2024 16:21:00 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 815921BF860
- for <buildroot@lists.busybox.net>; Fri, 26 Jul 2024 16:20:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A629860E85;
+	Fri, 26 Jul 2024 16:21:03 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 50FE21BF860
+ for <buildroot@lists.busybox.net>; Fri, 26 Jul 2024 16:20:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4047D60B5F
- for <buildroot@lists.busybox.net>; Fri, 26 Jul 2024 16:20:50 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4B52740F73
+ for <buildroot@lists.busybox.net>; Fri, 26 Jul 2024 16:20:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BBU-ZFwkuxLN for <buildroot@lists.busybox.net>;
- Fri, 26 Jul 2024 16:20:49 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.15;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id B1dKUf6q3s0x for <buildroot@lists.busybox.net>;
+ Fri, 26 Jul 2024 16:20:50 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.18;
  helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org CCF9960B60
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CCF9960B60
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
- by smtp3.osuosl.org (Postfix) with ESMTPS id CCF9960B60
- for <buildroot@buildroot.org>; Fri, 26 Jul 2024 16:20:45 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D6FB840118
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D6FB840118
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D6FB840118
+ for <buildroot@buildroot.org>; Fri, 26 Jul 2024 16:20:49 +0000 (UTC)
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from haruka.lan ([85.22.115.174]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1Mq2nA-1rt9Jn4Bm6-00low2; Fri, 26
- Jul 2024 18:20:38 +0200
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MG9kM-1sWJt70cF2-009jYe; Fri, 26
+ Jul 2024 18:20:41 +0200
 To: buildroot@buildroot.org
-Date: Fri, 26 Jul 2024 18:20:08 +0200
-Message-ID: <20240726162013.2183792-4-fiona.klute@gmx.de>
+Date: Fri, 26 Jul 2024 18:20:11 +0200
+Message-ID: <20240726162013.2183792-7-fiona.klute@gmx.de>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20240726162013.2183792-1-fiona.klute@gmx.de>
 References: <20240726162013.2183792-1-fiona.klute@gmx.de>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:AcAWgCK1dTOf5ox7g0Kl9Ticd0rsPoaBNPskv9aoYpTc05BLbix
- F7yrSUJd4o1Ig/6GBaGNSiKlgwP4InDQv8Bz4ST86UovAAUpadw5y/Pp7ZtfCfkmKev2U38
- ft6itwe0lmjrTZUSpoTcrcTFJD0q5LdVwDF4kirTD2W0/sFIrVZVy/qg8UEcu+ECCxeeT+M
- cQlN+I69guDG2eSbxM5LA==
-UI-OutboundReport: notjunk:1;M01:P0:rjUDArbAqIk=;dxkgN7rIYl4oNKhMcUsf24Y7Rdo
- tKhybljoJi7msuDM0zbMN4Qh1UIe1PMQnpwTyHo7McUlxzGe6q/dhA7okGLaF42MBQ3FZz9cK
- rTmfVMtRYHqxsGdm9RYSgu/20wVXlRZO6+UTr5QhcxifmERrvNM4KKy8/xpfbl+snHGhgxvB0
- ew9eZnlN6LcOKNnByeBDKcpsO84yCcowf/IGH4F4UWD+7n6rtJWNjrfY6rUi75PuqdJ58y8rV
- G8Twmu+OUhG1H29TWPEUNcCXAnCni/ojRQ8iezQesNurgMx3zaS1bD/3z2ifk8UzkQ87mA6Ik
- UN8oVhFfiy6WJ8jKA4BDNMnHa/O09DR+r/DDmneI2QbINuqFUPr1DQUOXxZj48+hw7XPYhie0
- ixbwseDVFZdcP1qSX0q8IdJnM79aJf5jg3pwwR9UVp1BhUwykRQ0cBV/TPfN23ZKE2XYss/LF
- QxhhjAE7a6P2JBWgQ1GvdmQsEOliJpiNMVSii/NxnHodt49OIdULUJNlOotqVEkpCNtlt4N/c
- Pl7OxxBxA2qJFlA5x5ncg7kdghBAOf7wHa4zdSkUWuqLLV4AUyK8V7H/bh/kIY8R2KiDrGZ4P
- Toc6+k1TAzA3bCfxeGHtTnB4DkNHU8kSYwRjbSb/Ua8PXyAl8Q+a7TDDTLHxwsZ+EpP8jVxRs
- tB8bFlOQqn5gbdDCrdmfhKcP7meazEkRY8jBfPIorUnA4FAhEoBvkddbbp4yEGUD+dwc4QTXj
- gYI3OzDHBDNWsaNhUibMw0W7yfvRpQXPmzOUc+8KepCCeW1ZCq5euSUV12pimOa9cF1lBWMii
- 0L5di/DP7P2UucshFu/Y4N+A==
+X-Provags-ID: V03:K1:sh8ifhzjMLGSPGU3fIrwcsee+u+xOmpNrcglqzMUbuOs4WK7pfi
+ tGCauuK7Ont29BXFIE2b2iBCMQheRjTipCBKUfUzjzRNZvxPqkJEj16BWUEPP0L1+tA1ZQ1
+ LYxWaJBlbMBhi3nrtSuO8jR38Ybu9GjwNffHOHkB/EG7SIyhMp0fksH7o5eSmUaPgOawVnp
+ /vpmFPaTJ2ZqHhfje1NjQ==
+UI-OutboundReport: notjunk:1;M01:P0:vAG0aTqrvhk=;PqwCnqv4rDQ2495XY/t8VcMglXc
+ mdeYZOVF/TiBptO0pdx0Rty9p3PI071mJfW5s6WmzObJIv6xMW86xn2frclGP1DOqXWlGanty
+ GaEx6Pf0I37NxMXL0TFTzL6pSA484H6a/aA18yeuh3lHv8wtIsHsBM+CVdzyrLkjGVLMD4QQK
+ gonPhzh78IvNpryRGchMn+fCPz+w6d8HpJq+xwxiAufE5c9uBP2uR37O73k7Fo7oqbiOxqKTU
+ B72P2xNgevqm4unlK1nGreCD6/Nx4ThpSCLvatkjfgrmX05nbNB1DofRPNxb80Bi+6SV9+9YO
+ QRwj5UdhvwRrGSMUl08HWtX86QMoUtBkAuuAqHXxgWcNcsBqzpUIP1CPNtQ5kbFIMA1FNLwjH
+ ijtw1ISS/620w/bTos+Hhvbwd4LGfvNcrFzZQ5L7KHgJE7XPteShm8cdH1EhGG6VOIcUjkmWk
+ 7BL4MyCeAQYqAnSFKgeATSRgUTb5Cesbifbx7rvQxVkFtEQG1G6wCEMXrAaOV12RqbVy3LR6w
+ YKjhCGMW/PrcgmsM2+/BL2VlgKVHr6g2Ghk+L84PPpe/IZHK7wFBEYzmw2MPAkr+uT3bV2Y6i
+ iM4BpIayLHYL5EmhxxNWp0bZXNeLOwxZkgJDsA1Gf0ozXf9XwgWOWrG9jaY3I+iXy2RQBoZSt
+ 8xoeBzo06qIEuu9wN9br3MjkcPynNDlI0yf8bkr8hOA28/bmJVttPR0YPit6VMGj27LdhCt2T
+ wcS948dnzVLiGCR4s0DzYnWTWqDl1UoruyUXsADs4MJqbhot633Pl9D0bGEeD4ZOygBTlhy4h
+ RRq3o4aYU3nlHLhNPmWeiQcA==
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmx.de; 
- s=s31663417; t=1722010838; x=1722615638; i=fiona.klute@gmx.de;
- bh=LYL6W0SuPyiiKknGKZmGP43s5L/ouS96jkn1qJdYMAk=;
+ s=s31663417; t=1722010841; x=1722615641; i=fiona.klute@gmx.de;
+ bh=QTbawq7YN9vk2UMCjZtdMo7/fUd64zxOa2Tpry5bhlo=;
  h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:In-Reply-To:
  References:MIME-Version:Content-Transfer-Encoding:cc:
  content-transfer-encoding:content-type:date:from:message-id:
  mime-version:reply-to:subject:to;
- b=nwDNEfn2n8w8WE97W2MOzCIBcz2hynNKvBdSj0s/5EHgYxefOvlLCT2E9+GN0HLX
- B9PJtZaVN0KK4EMSwHKBKGYXN+LXltbKrEeLHEys/Dh1G7Rzu7OZokCCBdm31fWVz
- 88jGlQyUAT3VwXBYwFu8uVZcxtBsK/e4rVXlRGRBPRlmWrcMM2vi0ossbjVz/WlMy
- zIpNA84/vYlooMunJwpgOkU+9HBaJkvrHZWKnUQPCiWGBo09XMODGtJB7szZII2mD
- VkyM77n5wbQR8bEwdPAC2xl59Z+de8so/aKquQwJovYAzvw+bhCZm7VxH6yU8IrGV
- 6uzpYwsBUoDhxQRNDQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=IBZap7W2MfXr10bFwjAZZuNS7IlpEUFEvdUDHbECIC0KhKRjPVileJ69kIMiXvxu
+ Ocr5ALfeIUz9bDmrGDj4Pssm4JdvKQ6lCjLB1Uhy/DSEXMg6BY4zMZDr6py3h5ttU
+ gkt5T9g5IQKb7FTKN0dLSMYyjG3sR7VMB14mcGdqf+OGIwDkJosLocFTKFXiWe3S5
+ eHqpRhfesGXmBa8TzrbqGO/+toRawh3SlxRFx/+GVTzgnLskuQ1kD5yOs4v/qTwHw
+ X+McmrMCPak1KGZCSYnchpRvt1EF/T2uzHvgRoLOWPFs6kTdTS+lU6YCvBdrRhZSq
+ 1rdozJTFuO4Fj35O8A==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=gmx.de
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmx.de header.i=fiona.klute@gmx.de
- header.a=rsa-sha256 header.s=s31663417 header.b=nwDNEfn2
-Subject: [Buildroot] [PATCH v4 3/6] package/iptables: check for rules in
- init script
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmx.de header.i=fiona.klute@gmx.de header.a=rsa-sha256
+ header.s=s31663417 header.b=IBZap7W2
+Subject: [Buildroot] [PATCH v4 6/6] support/testing: fix MyPy warnings about
+ BRConfigTest
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -108,95 +109,34 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
 
-Instead of installing an empty rules file, the init script now checks
-if the rules file exists and does nothing on start if it doesn't. Stop
-remains unchanged so users can still delete the rules file and then
-use the stop command to flush rules from the kernel.
-
-Also fix the shellcheck warning about the unused IPTABLES_ARGS
-variable, and use long form options for iptables commands.
+This removes warnings in editors/IDEs with MyPy typechecking
+integration. Test classes override "config" with strings (different
+type than None).
 
 Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
 ---
-Changes v2 -> v3:
-* replace "iptables -F" with "iptables --flush"
+I haven't seen any other type annotations in the testing code, if
+they're not welcome please just drop this patch from the
+series. Personally I think they're good to avoid bugs.
 
- .checkpackageignore          |  1 -
- package/iptables/S35iptables | 14 +++++++++-----
- package/iptables/iptables.mk |  1 -
- 3 files changed, 9 insertions(+), 7 deletions(-)
+ support/testing/infra/basetest.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 5e45edf765..fd08e0f5f8 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -667,7 +667,6 @@ package/ipmitool/0002-Fix-enterprise-numbers-URL.patch lib_patch.Upstream
- package/ipmitool/0003-Do-not-require-the-IANA-PEN-registry-file.patch lib_patch.Upstream
- package/ipmitool/0004-configure.ac-allow-disabling-registry-downloads.patch lib_patch.Upstream
- package/iprutils/0001-configure.ac-add-AC_USE_SYSTEM_EXTENSIONS.patch lib_patch.Upstream
--package/iptables/S35iptables Shellcheck
- package/irda-utils/0001-daemon.patch lib_patch.Sob lib_patch.Upstream
- package/irda-utils/0002-nommu.patch lib_patch.Sob lib_patch.Upstream
- package/irda-utils/0003-subdir.patch lib_patch.Sob lib_patch.Upstream
-diff --git a/package/iptables/S35iptables b/package/iptables/S35iptables
-index a2de29d222..d6ff4a4762 100644
---- a/package/iptables/S35iptables
-+++ b/package/iptables/S35iptables
-@@ -2,11 +2,16 @@
+diff --git a/support/testing/infra/basetest.py b/support/testing/infra/basetest.py
+index 12d96415da..9fb9dffc53 100644
+--- a/support/testing/infra/basetest.py
++++ b/support/testing/infra/basetest.py
+@@ -24,8 +24,8 @@ MINIMAL_CONFIG = \
 
- DAEMON="iptables"
-
--IPTABLES_ARGS=""
-+IPTABLES_CONF="/etc/iptables.conf"
-
- start() {
- 	printf 'Starting %s: ' "$DAEMON"
--	iptables-restore /etc/iptables.conf
-+	# Run only if IPTABLES_CONF exists.
-+	if [ ! -f "${IPTABLES_CONF}" ]; then
-+		echo "${IPTABLES_CONF} does not exist, nothing to do."
-+		return 0
-+	fi
-+	iptables-restore "$IPTABLES_CONF"
- 	status=$?
- 	if [ "$status" -eq 0 ]; then
- 		echo "OK"
-@@ -18,7 +23,7 @@ start() {
-
- stop() {
- 	printf 'Stopping %s: ' "$DAEMON"
--	iptables -F
-+	iptables --flush
- 	status=$?
- 	if [ "$status" -eq 0 ]; then
- 		echo "OK"
-@@ -30,13 +35,12 @@ stop() {
-
- restart() {
- 	stop
--	sleep 1
- 	start
- }
-
- save() {
- 	printf 'Saving %s: ' "$DAEMON"
--	iptables-save -f /etc/iptables.conf
-+	iptables-save --file "$IPTABLES_CONF"
- 	status=$?
- 	if [ "$status" -eq 0 ]; then
- 		echo "OK"
-diff --git a/package/iptables/iptables.mk b/package/iptables/iptables.mk
-index dbf7fbf5e1..e7495c1085 100644
---- a/package/iptables/iptables.mk
-+++ b/package/iptables/iptables.mk
-@@ -59,7 +59,6 @@ endef
- define IPTABLES_INSTALL_INIT_SYSV
- 	$(INSTALL) -m 0755 -D package/iptables/S35iptables \
- 		$(TARGET_DIR)/etc/init.d/S35iptables
--	touch $(TARGET_DIR)/etc/iptables.conf
- endef
-
- ifeq ($(BR2_PACKAGE_IPTABLES_NFTABLES_DEFAULT),y)
+ class BRConfigTest(unittest.TestCase):
+     """Test up to the configure stage."""
+-    config = None
+-    br2_external = list()
++    config: str
++    br2_external: list[str] = list()
+     downloaddir = None
+     outputdir = None
+     logtofile = True
 --
 2.45.2
 
