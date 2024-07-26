@@ -4,49 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 202D1C3DA63
-	for <buildroot@archiver.kernel.org>; Fri, 26 Jul 2024 07:35:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01E5FC3DA63
+	for <buildroot@archiver.kernel.org>; Fri, 26 Jul 2024 07:35:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D6E6C40795;
-	Fri, 26 Jul 2024 07:35:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B3C7E409C6;
+	Fri, 26 Jul 2024 07:35:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4becRbXMP9N4; Fri, 26 Jul 2024 07:35:26 +0000 (UTC)
+ id 2dSyjk-7iml0; Fri, 26 Jul 2024 07:35:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6E893408D2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C4A04409C9
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6E893408D2;
-	Fri, 26 Jul 2024 07:35:26 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 12B131BF311
- for <buildroot@lists.busybox.net>; Fri, 26 Jul 2024 07:35:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C4A04409C9;
+	Fri, 26 Jul 2024 07:35:30 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 8E2371BF311
+ for <buildroot@lists.busybox.net>; Fri, 26 Jul 2024 07:35:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id F401C408D2
- for <buildroot@lists.busybox.net>; Fri, 26 Jul 2024 07:35:24 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7A16A80B76
+ for <buildroot@lists.busybox.net>; Fri, 26 Jul 2024 07:35:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fSD9E-juDqPp for <buildroot@lists.busybox.net>;
- Fri, 26 Jul 2024 07:35:24 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id v5A2tgY2aEFD for <buildroot@lists.busybox.net>;
+ Fri, 26 Jul 2024 07:35:28 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.200;
+ helo=relay7-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E54E240795
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id E54E240795
- for <buildroot@buildroot.org>; Fri, 26 Jul 2024 07:35:23 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D1D9987508; Fri, 26 Jul 2024 07:35:23 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 26 Jul 2024 09:34:35 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ea3c465304d1d7a2891d9f47775996855461f117
-X-Git-Newrev: b5c1ead57e93b32c900b58f4fd22259313fc5c0d
-X-Patchwork-Hint: ignore
-Message-Id: <20240726073523.D1D9987508@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/uclibc-ng-test: fix build with the
- musl C library
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 601ED80B54
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 601ED80B54
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 601ED80B54
+ for <buildroot@buildroot.org>; Fri, 26 Jul 2024 07:35:28 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 9FE9520004;
+ Fri, 26 Jul 2024 07:35:25 +0000 (UTC)
+Date: Fri, 26 Jul 2024 09:35:24 +0200
+To: Dmitry Chestnykh <dm.chestnykh@gmail.com>
+Message-ID: <20240726093524.1345a522@windsurf>
+In-Reply-To: <20240725082703.615109-1-dm.chestnykh@gmail.com>
+References: <20240725082703.615109-1-dm.chestnykh@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1721979325;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=AinY6sFjGl+rSjkPOKIMtG8Xj5WNa6kM2i7F7c8cBTI=;
+ b=ajq3k1zx9ZugM1vESPLzRxEBWRuE5U/pJoh+ZMcsrB09lOxwxwZWr49fFW8sb0tYoJ125m
+ 4/QnPtrXi4brgJU0Sxyp69NyYuhTiVYTjWZ/nxikdeQC4lIs9R8/h0j4xlH+1ppQ7/atFu
+ n+6t1sbzl7jpvCXz8oMwjoo21HzXhocQAFiqjdCzCbY9NDqdT3YEwYls+HSlttjRWMPPX2
+ aPA0mkMYUyCqora38kUNDp8qi/NqSwSVRUmoG55a0RHE18/JnR8r1Uaf0wXAWO42yI0uXW
+ zU+w6MAPCnoE8l1ZOCVww8udj5RXYKhWGobnVGblpVA6wzm8pGCK5MPmpB6VjQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=ajq3k1zx
+Subject: Re: [Buildroot] [PATCH v3 RESEND] package/uclibc-ng-test: Fix musl
+ build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,93 +83,39 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b5c1ead57e93b32c900b58f4fd22259313fc5c0d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Thu, 25 Jul 2024 11:27:03 +0300
+Dmitry Chestnykh <dm.chestnykh@gmail.com> wrote:
 
-Musl doesn't provide sys/asm.h header so we should add some defines
-inside mips-specific header file to avoid build errors.
+> Musl doesn't provide sys/asm.h header
+> so we should add some defines inside
+> mips-specific header file to avoid build errors
+> 
+> Fixes:
+>  http://autobuild.buildroot.net/results/af7a1d00930485f87f77762b34cae01873a8cd41/
+> 
+> Signed-off-by: Dmitry Chestnykh <dm.chestnykh@gmail.com>
+> ---
+> Musl doesn't provide sys/asm.h header.
+> I think no one has enabled this test before for mips musl builds
+> so perhaps this error has only appeared now
+> ---
+>  .../0001-Fix-error-absent-sys-asm-h.patch     | 61 +++++++++++++++++++
+>  1 file changed, 61 insertions(+)
+>  create mode 100644 package/uclibc-ng-test/0001-Fix-error-absent-sys-asm-h.patch
 
-Fixes:
+Applied to master, thanks.
 
-  http://autobuild.buildroot.net/results/af7a1d00930485f87f77762b34cae01873a8cd41/
-
-Signed-off-by: Dmitry Chestnykh <dm.chestnykh@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- .../0001-Fix-error-absent-sys-asm-h.patch          | 59 ++++++++++++++++++++++
- 1 file changed, 59 insertions(+)
-
-diff --git a/package/uclibc-ng-test/0001-Fix-error-absent-sys-asm-h.patch b/package/uclibc-ng-test/0001-Fix-error-absent-sys-asm-h.patch
-new file mode 100644
-index 0000000000..5c8cd3f463
---- /dev/null
-+++ b/package/uclibc-ng-test/0001-Fix-error-absent-sys-asm-h.patch
-@@ -0,0 +1,59 @@
-+From a99d5bdb51bdab92a303c508b2b938ee0789d614 Mon Sep 17 00:00:00 2001
-+From: Dmitry Chestnykh <dm.chestnykh@gmail.com>
-+Date: Thu, 25 Jul 2024 09:15:11 +0300
-+Subject: [PATCH] Fix errors due to absent sys/asm.h in mips64 musl build
-+
-+Upstream: https://patchwork.ozlabs.org/project/uclibc-ng/patch/20240725081519.611076-1-dm.chestnykh@gmail.com/
-+Signed-off-by: Dmitry Chestnykh <dm.chestnykh@gmail.com>
-+---
-+ test/tls/tls-macros-mips.h | 33 +++++++++++++++++++++++++++++++++
-+ 1 file changed, 33 insertions(+)
-+
-+diff --git a/test/tls/tls-macros-mips.h b/test/tls/tls-macros-mips.h
-+index eed0938..bd4c5c4 100644
-+--- a/test/tls/tls-macros-mips.h
-++++ b/test/tls/tls-macros-mips.h
-+@@ -1,7 +1,40 @@
-+ /* Macros to support TLS testing in times of missing compiler support.  */
-+ 
-+ #include <sys/cdefs.h>
-++#if defined(__has_include) && __has_include(<sys/asm.h>)
-+ #include <sys/asm.h>
-++#else
-++
-++#define __STRING(x) #x
-++
-++#if ((_MIPS_SIM == _MIPS_SIM_ABI32 || _MIPS_SIM == _ABI32) && _MIPS_SZPTR == 32)
-++#define PTR_ADDIU	addiu
-++#define PTR_L		lw
-++#endif
-++
-++#if _MIPS_SIM == _MIPS_SIM_NABI32 || _MIPS_SIM == _NABI32
-++
-++#if !defined __mips_isa_rev || __mips_isa_rev < 6
-++#define PTR_ADDU	add
-++#define PTR_ADDIU	addi
-++#else
-++#define PTR_ADDU        addu
-++#define PTR_ADDIU       addiu
-++#endif
-++
-++#define PTR_L		lw
-++#endif
-++
-++#if ((_MIPS_SIM == _MIPS_SIM_ABI32 || _MIPS_SIM == _ABI32) && _MIPS_SZPTR == 64) \
-++    || _MIPS_SIM == _MIPS_SIM_ABI64 || _MIPS_SIM ==  _ABIN32
-++
-++#define PTR_ADDU	daddu
-++#define PTR_ADDIU	daddiu
-++#define PTR_L		ld
-++
-++#endif
-++
-++#endif
-+ 
-+ #define __STRING2(X) __STRING(X)
-+ #define ADDU __STRING2(PTR_ADDU)
-+-- 
-+2.45.2
-+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
