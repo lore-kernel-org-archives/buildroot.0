@@ -4,89 +4,88 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C193C3DA4A
-	for <buildroot@archiver.kernel.org>; Fri, 26 Jul 2024 16:21:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 587AEC3DA4A
+	for <buildroot@archiver.kernel.org>; Fri, 26 Jul 2024 16:21:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EEAE060E7B;
-	Fri, 26 Jul 2024 16:21:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 24CAB60B66;
+	Fri, 26 Jul 2024 16:21:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jfTZx-6P1rUK; Fri, 26 Jul 2024 16:21:04 +0000 (UTC)
+ id Zta9Dt6yr0zL; Fri, 26 Jul 2024 16:21:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A629860E85
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B806660E90
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A629860E85;
-	Fri, 26 Jul 2024 16:21:03 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 50FE21BF860
- for <buildroot@lists.busybox.net>; Fri, 26 Jul 2024 16:20:51 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B806660E90;
+	Fri, 26 Jul 2024 16:21:06 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id DB1DC1BF860
+ for <buildroot@lists.busybox.net>; Fri, 26 Jul 2024 16:20:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4B52740F73
- for <buildroot@lists.busybox.net>; Fri, 26 Jul 2024 16:20:51 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C58E960BAB
+ for <buildroot@lists.busybox.net>; Fri, 26 Jul 2024 16:20:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id B1dKUf6q3s0x for <buildroot@lists.busybox.net>;
- Fri, 26 Jul 2024 16:20:50 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.18;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id cxqui8GxGBj5 for <buildroot@lists.busybox.net>;
+ Fri, 26 Jul 2024 16:20:49 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.19;
  helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D6FB840118
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D6FB840118
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D6FB840118
- for <buildroot@buildroot.org>; Fri, 26 Jul 2024 16:20:49 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org C1C7560B65
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C1C7560B65
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C1C7560B65
+ for <buildroot@buildroot.org>; Fri, 26 Jul 2024 16:20:46 +0000 (UTC)
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from haruka.lan ([85.22.115.174]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MG9kM-1sWJt70cF2-009jYe; Fri, 26
- Jul 2024 18:20:41 +0200
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MyKHm-1sNHLf3yrk-00rlTM; Fri, 26
+ Jul 2024 18:20:40 +0200
 To: buildroot@buildroot.org
-Date: Fri, 26 Jul 2024 18:20:11 +0200
-Message-ID: <20240726162013.2183792-7-fiona.klute@gmx.de>
+Date: Fri, 26 Jul 2024 18:20:10 +0200
+Message-ID: <20240726162013.2183792-6-fiona.klute@gmx.de>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20240726162013.2183792-1-fiona.klute@gmx.de>
 References: <20240726162013.2183792-1-fiona.klute@gmx.de>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:sh8ifhzjMLGSPGU3fIrwcsee+u+xOmpNrcglqzMUbuOs4WK7pfi
- tGCauuK7Ont29BXFIE2b2iBCMQheRjTipCBKUfUzjzRNZvxPqkJEj16BWUEPP0L1+tA1ZQ1
- LYxWaJBlbMBhi3nrtSuO8jR38Ybu9GjwNffHOHkB/EG7SIyhMp0fksH7o5eSmUaPgOawVnp
- /vpmFPaTJ2ZqHhfje1NjQ==
-UI-OutboundReport: notjunk:1;M01:P0:vAG0aTqrvhk=;PqwCnqv4rDQ2495XY/t8VcMglXc
- mdeYZOVF/TiBptO0pdx0Rty9p3PI071mJfW5s6WmzObJIv6xMW86xn2frclGP1DOqXWlGanty
- GaEx6Pf0I37NxMXL0TFTzL6pSA484H6a/aA18yeuh3lHv8wtIsHsBM+CVdzyrLkjGVLMD4QQK
- gonPhzh78IvNpryRGchMn+fCPz+w6d8HpJq+xwxiAufE5c9uBP2uR37O73k7Fo7oqbiOxqKTU
- B72P2xNgevqm4unlK1nGreCD6/Nx4ThpSCLvatkjfgrmX05nbNB1DofRPNxb80Bi+6SV9+9YO
- QRwj5UdhvwRrGSMUl08HWtX86QMoUtBkAuuAqHXxgWcNcsBqzpUIP1CPNtQ5kbFIMA1FNLwjH
- ijtw1ISS/620w/bTos+Hhvbwd4LGfvNcrFzZQ5L7KHgJE7XPteShm8cdH1EhGG6VOIcUjkmWk
- 7BL4MyCeAQYqAnSFKgeATSRgUTb5Cesbifbx7rvQxVkFtEQG1G6wCEMXrAaOV12RqbVy3LR6w
- YKjhCGMW/PrcgmsM2+/BL2VlgKVHr6g2Ghk+L84PPpe/IZHK7wFBEYzmw2MPAkr+uT3bV2Y6i
- iM4BpIayLHYL5EmhxxNWp0bZXNeLOwxZkgJDsA1Gf0ozXf9XwgWOWrG9jaY3I+iXy2RQBoZSt
- 8xoeBzo06qIEuu9wN9br3MjkcPynNDlI0yf8bkr8hOA28/bmJVttPR0YPit6VMGj27LdhCt2T
- wcS948dnzVLiGCR4s0DzYnWTWqDl1UoruyUXsADs4MJqbhot633Pl9D0bGEeD4ZOygBTlhy4h
- RRq3o4aYU3nlHLhNPmWeiQcA==
+X-Provags-ID: V03:K1:tRS+PqpQHR84jOiVS6CQna+rgSgS/eQ4zu64c9QQqN3N4PrzhW9
+ X66Mw6IPmiIms+581v/AAJHoBxk7DbuTKOqSg28cjOIukg7/iNXHHBKD2wkzDJn9mbRegGL
+ nS1SkhCClLzznrvE8vb0Q33ZvSqi4S9lrxrbTM3xouQNolKfre3MhlA3QlkjAWLZNtzrMw7
+ ptI6godT4E2X8iSGp66TQ==
+UI-OutboundReport: notjunk:1;M01:P0:8HAZkIylUNU=;9Ncc/CTRFhfvjRXVl6LTdsNeVn+
+ NevR1QuzWuxpIjOQ3DJ/9f+JWbqwFRH0D/Q9pZf5Wtgq7Fb+dhHN6WxXtGE4xS+GuOqCdNH8O
+ VXlXjRZEn1Xv0Tjz2HiZDxIyADoKvKDFt+t67+VV4aH4zE8AQ32y3etwGM3+GS6H8joayyv1H
+ yZkk52WXU4v1lNXpWmdhR7+Yu6sggB+xkiS1EQzCWQHnzo3iwjz0bFpc6l/3rYDmIusRqv0YW
+ ZViLGj66fzHv2ZY684t01PaZSuLtz4ZYQuKL+QsXQWTshE4RrMb1C1gu/PMTsS5dcIFzUjjYE
+ lJMQsIJo8/Ml8a0ChsU5pjyHXTRvOS90OxHQMxPyLhkimq76ZbtU01ZNeAPICsWZuKU5S6ckb
+ yLlHKBUQiGn1netdEtZUcUkSmbVmrChBfVmdNtSfttCs4R6a2WsqUMAPeS4aLQj1erm3iMu4Y
+ KumM7h+FSuFZhvqH/MBVYCM2+DCP3Fn+3GzY6F5djiEtVBWTri7Rtaz25mBw7ihTY6LzWWUME
+ WfE6TfCqFecv6JZn/4Iw34fTN8FPZdJ2JhtAX3BDEiv8qhVruZTBCiCon0S2V+NzPnq0zwmqK
+ R+46goYQTTf39/i/HV6YiXFNiqtmQCaQSa2qPgs6FttJXIjatvZoVztnoMAwDQD1yHEqh2BBj
+ tTHxs11b1N/cmoUccGeNEWxY1EwiX0UYpBhnZCLWh+xFqb3FslN/aBP7H5mV7+bKvcN6q6Cz7
+ +xyoKoVrtn46Ko82CgAjIb4W+F696in1eJ7HRkFVzE6f1Dn5x1MLpH/9neDxa+CmO5PF1YXLg
+ uN250e+V12zBJOp3h111VP3Q==
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmx.de; 
- s=s31663417; t=1722010841; x=1722615641; i=fiona.klute@gmx.de;
- bh=QTbawq7YN9vk2UMCjZtdMo7/fUd64zxOa2Tpry5bhlo=;
+ s=s31663417; t=1722010840; x=1722615640; i=fiona.klute@gmx.de;
+ bh=BN/FXo6B97C0eR9xXMWvWc+SIFPrj5qF6kwluHeap9o=;
  h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:In-Reply-To:
  References:MIME-Version:Content-Transfer-Encoding:cc:
  content-transfer-encoding:content-type:date:from:message-id:
  mime-version:reply-to:subject:to;
- b=IBZap7W2MfXr10bFwjAZZuNS7IlpEUFEvdUDHbECIC0KhKRjPVileJ69kIMiXvxu
- Ocr5ALfeIUz9bDmrGDj4Pssm4JdvKQ6lCjLB1Uhy/DSEXMg6BY4zMZDr6py3h5ttU
- gkt5T9g5IQKb7FTKN0dLSMYyjG3sR7VMB14mcGdqf+OGIwDkJosLocFTKFXiWe3S5
- eHqpRhfesGXmBa8TzrbqGO/+toRawh3SlxRFx/+GVTzgnLskuQ1kD5yOs4v/qTwHw
- X+McmrMCPak1KGZCSYnchpRvt1EF/T2uzHvgRoLOWPFs6kTdTS+lU6YCvBdrRhZSq
- 1rdozJTFuO4Fj35O8A==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=clXJ/fi5dFeVQPdHap9mo22KfnSZlojkF5+HLoBi6J9vzoFVbcrzH2G0/1NQ4yhy
+ 1rXVpvv2L5oXcoBKQR1HNnB24jSsyUnD7reArBiEeAibwyf9hHPRuDcKE7OKMhNbp
+ 14J5ec90Be0Um4mxuLgq/DhqWqvbffQcPSNx/GlzooDZfjiju3VkBlPJctxNsyltd
+ 7eYRkk/9SP9ifHTfvzcKhIlNuBxxY/JSgR0Ewqpf6O59M/SymLoS9lt7KuuI5OBCy
+ oFHqSxCxbKcRfxwMHQXgPMhdvMdweZID7fc8BfDPTn3l4QUZMnI2s2Sgr+WICeCTB
+ jO3oSJZQpKs1sZLVmg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=gmx.de
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmx.de header.i=fiona.klute@gmx.de header.a=rsa-sha256
- header.s=s31663417 header.b=IBZap7W2
-Subject: [Buildroot] [PATCH v4 6/6] support/testing: fix MyPy warnings about
- BRConfigTest
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmx.de header.i=fiona.klute@gmx.de
+ header.a=rsa-sha256 header.s=s31663417 header.b=clXJ/fi5
+Subject: [Buildroot] [PATCH v4 5/6] support/testing: include init script in
+ iptables test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -109,34 +108,56 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
 
-This removes warnings in editors/IDEs with MyPy typechecking
-integration. Test classes override "config" with strings (different
-type than None).
+Check a save/start/stop cycle based on the rules created by direct
+commands in the pre-existing test.
 
 Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
 ---
-I haven't seen any other type annotations in the testing code, if
-they're not welcome please just drop this patch from the
-series. Personally I think they're good to avoid bugs.
+Changes v2 -> v3:
+* remove change to init script that belongs in patch 3
 
- support/testing/infra/basetest.py | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ support/testing/tests/package/test_iptables.py | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
-diff --git a/support/testing/infra/basetest.py b/support/testing/infra/basetest.py
-index 12d96415da..9fb9dffc53 100644
---- a/support/testing/infra/basetest.py
-+++ b/support/testing/infra/basetest.py
-@@ -24,8 +24,8 @@ MINIMAL_CONFIG = \
+diff --git a/support/testing/tests/package/test_iptables.py b/support/testing/tests/package/test_iptables.py
+index ee57b31558..e807fc9e83 100644
+--- a/support/testing/tests/package/test_iptables.py
++++ b/support/testing/tests/package/test_iptables.py
+@@ -11,6 +11,7 @@ class TestIptables(infra.basetest.BRTest):
+         """
+         BR2_aarch64=y
+         BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_INIT_BUSYBOX=y
+         BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
+         BR2_LINUX_KERNEL=y
+         BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+@@ -70,9 +71,26 @@ class TestIptables(infra.basetest.BRTest):
+         _, exit_code = self.emulator.run(ping_test_cmd)
+         self.assertNotEqual(exit_code, 0)
 
- class BRConfigTest(unittest.TestCase):
-     """Test up to the configure stage."""
--    config = None
--    br2_external = list()
-+    config: str
-+    br2_external: list[str] = list()
-     downloaddir = None
-     outputdir = None
-     logtofile = True
++        # Save the current rules to test the init script later.
++        self.assertRunOk("/etc/init.d/S35iptables save")
++
+         # We delete our only rule #1 in the INPUT chain.
+         self.assertRunOk("iptables --delete INPUT 1")
+
+         # Since we deleted the rule, the ping test command which was
+         # supposed to fail earlier is now supposed to succeed.
+         self.assertRunOk(ping_test_cmd)
++
++        # Load the rules as saved before.
++        self.assertRunOk("/etc/init.d/S35iptables start")
++
++        # Ping to 127.0.0.2 is expected to fail again.
++        _, exit_code = self.emulator.run(ping_test_cmd)
++        self.assertNotEqual(exit_code, 0)
++
++        # And flush the rules again.
++        self.assertRunOk("/etc/init.d/S35iptables stop")
++
++        # Since we deleted the rule, the ping test command which was
++        # supposed to fail earlier is now supposed to succeed.
++        self.assertRunOk(ping_test_cmd)
 --
 2.45.2
 
