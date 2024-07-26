@@ -4,72 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01E5FC3DA63
-	for <buildroot@archiver.kernel.org>; Fri, 26 Jul 2024 07:35:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 29FC4C3DA49
+	for <buildroot@archiver.kernel.org>; Fri, 26 Jul 2024 07:38:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B3C7E409C6;
-	Fri, 26 Jul 2024 07:35:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A7C02408D2;
+	Fri, 26 Jul 2024 07:38:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2dSyjk-7iml0; Fri, 26 Jul 2024 07:35:31 +0000 (UTC)
+ id 60fdccws__HK; Fri, 26 Jul 2024 07:38:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C4A04409C9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6BE1E40940
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C4A04409C9;
-	Fri, 26 Jul 2024 07:35:30 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8E2371BF311
- for <buildroot@lists.busybox.net>; Fri, 26 Jul 2024 07:35:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6BE1E40940;
+	Fri, 26 Jul 2024 07:38:12 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 9F34D1BF311
+ for <buildroot@lists.busybox.net>; Fri, 26 Jul 2024 07:38:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7A16A80B76
- for <buildroot@lists.busybox.net>; Fri, 26 Jul 2024 07:35:29 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9856C40150
+ for <buildroot@lists.busybox.net>; Fri, 26 Jul 2024 07:38:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id v5A2tgY2aEFD for <buildroot@lists.busybox.net>;
- Fri, 26 Jul 2024 07:35:28 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.200;
- helo=relay7-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5jxeRy54bGWi for <buildroot@lists.busybox.net>;
+ Fri, 26 Jul 2024 07:38:09 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 601ED80B54
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 601ED80B54
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 601ED80B54
- for <buildroot@buildroot.org>; Fri, 26 Jul 2024 07:35:28 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 9FE9520004;
- Fri, 26 Jul 2024 07:35:25 +0000 (UTC)
-Date: Fri, 26 Jul 2024 09:35:24 +0200
-To: Dmitry Chestnykh <dm.chestnykh@gmail.com>
-Message-ID: <20240726093524.1345a522@windsurf>
-In-Reply-To: <20240725082703.615109-1-dm.chestnykh@gmail.com>
-References: <20240725082703.615109-1-dm.chestnykh@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1721979325;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=AinY6sFjGl+rSjkPOKIMtG8Xj5WNa6kM2i7F7c8cBTI=;
- b=ajq3k1zx9ZugM1vESPLzRxEBWRuE5U/pJoh+ZMcsrB09lOxwxwZWr49fFW8sb0tYoJ125m
- 4/QnPtrXi4brgJU0Sxyp69NyYuhTiVYTjWZ/nxikdeQC4lIs9R8/h0j4xlH+1ppQ7/atFu
- n+6t1sbzl7jpvCXz8oMwjoo21HzXhocQAFiqjdCzCbY9NDqdT3YEwYls+HSlttjRWMPPX2
- aPA0mkMYUyCqora38kUNDp8qi/NqSwSVRUmoG55a0RHE18/JnR8r1Uaf0wXAWO42yI0uXW
- zU+w6MAPCnoE8l1ZOCVww8udj5RXYKhWGobnVGblpVA6wzm8pGCK5MPmpB6VjQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=ajq3k1zx
-Subject: Re: [Buildroot] [PATCH v3 RESEND] package/uclibc-ng-test: Fix musl
- build
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 99F5140018
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 99F5140018
+ for <buildroot@buildroot.org>; Fri, 26 Jul 2024 07:38:09 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 7E6398750D; Fri, 26 Jul 2024 07:38:09 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Fri, 26 Jul 2024 09:36:22 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: b5c1ead57e93b32c900b58f4fd22259313fc5c0d
+X-Git-Newrev: 8ef2bb44379e4763682199ad2ecfd23d51cbacc0
+X-Patchwork-Hint: ignore
+Message-Id: <20240726073809.7E6398750D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/elfutils: fix build on microblaze
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,39 +59,46 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu, 25 Jul 2024 11:27:03 +0300
-Dmitry Chestnykh <dm.chestnykh@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=8ef2bb44379e4763682199ad2ecfd23d51cbacc0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Musl doesn't provide sys/asm.h header
-> so we should add some defines inside
-> mips-specific header file to avoid build errors
-> 
-> Fixes:
->  http://autobuild.buildroot.net/results/af7a1d00930485f87f77762b34cae01873a8cd41/
-> 
-> Signed-off-by: Dmitry Chestnykh <dm.chestnykh@gmail.com>
-> ---
-> Musl doesn't provide sys/asm.h header.
-> I think no one has enabled this test before for mips musl builds
-> so perhaps this error has only appeared now
-> ---
->  .../0001-Fix-error-absent-sys-asm-h.patch     | 61 +++++++++++++++++++
->  1 file changed, 61 insertions(+)
->  create mode 100644 package/uclibc-ng-test/0001-Fix-error-absent-sys-asm-h.patch
+Fix the following build failure on microblaze:
 
-Applied to master, thanks.
+dwelf_elf_begin.c:62:1: error: symver is only supported on ELF platforms
+   62 | OLD_VERSION (dwelf_elf_begin, ELFUTILS_0.175)
+      | ^~~~~~~~~~~
+dwelf_elf_begin.c:62:1: error: symver is only supported on ELF platforms
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Fixes:
+ - http://autobuild.buildroot.org/results/5ca2aa5c76415690ad4a85837ba47e7bcfbdbcbc
+
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/elfutils/elfutils.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/package/elfutils/elfutils.mk b/package/elfutils/elfutils.mk
+index 4d8cc43342..8738af7751 100644
+--- a/package/elfutils/elfutils.mk
++++ b/package/elfutils/elfutils.mk
+@@ -45,6 +45,10 @@ ifeq ($(BR2_TOOLCHAIN_USES_UCLIBC),y)
+ ELFUTILS_CONF_OPTS += --disable-symbol-versioning
+ endif
+ 
++ifeq ($(BR2_microblaze),y)
++ELFUTILS_CONF_OPTS += --disable-symbol-versioning
++endif
++
+ # disable for now, needs "distro" support
+ ELFUTILS_CONF_OPTS += --disable-libdebuginfod --disable-debuginfod
+ HOST_ELFUTILS_CONF_OPTS += --disable-libdebuginfod --disable-debuginfod
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
