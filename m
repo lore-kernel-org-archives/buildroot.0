@@ -4,88 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 587AEC3DA4A
-	for <buildroot@archiver.kernel.org>; Fri, 26 Jul 2024 16:21:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4D7B7C3DA4A
+	for <buildroot@archiver.kernel.org>; Fri, 26 Jul 2024 16:45:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 24CAB60B66;
-	Fri, 26 Jul 2024 16:21:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E54F2605E1;
+	Fri, 26 Jul 2024 16:45:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Zta9Dt6yr0zL; Fri, 26 Jul 2024 16:21:07 +0000 (UTC)
+ id rY47x53S8E4W; Fri, 26 Jul 2024 16:45:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B806660E90
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E76D3607B6
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B806660E90;
-	Fri, 26 Jul 2024 16:21:06 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id DB1DC1BF860
- for <buildroot@lists.busybox.net>; Fri, 26 Jul 2024 16:20:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E76D3607B6;
+	Fri, 26 Jul 2024 16:45:29 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 6FF9B1BF860
+ for <buildroot@lists.busybox.net>; Fri, 26 Jul 2024 16:45:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C58E960BAB
- for <buildroot@lists.busybox.net>; Fri, 26 Jul 2024 16:20:52 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 69D4B40979
+ for <buildroot@lists.busybox.net>; Fri, 26 Jul 2024 16:45:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cxqui8GxGBj5 for <buildroot@lists.busybox.net>;
- Fri, 26 Jul 2024 16:20:49 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.19;
- helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org C1C7560B65
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C1C7560B65
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C1C7560B65
- for <buildroot@buildroot.org>; Fri, 26 Jul 2024 16:20:46 +0000 (UTC)
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from haruka.lan ([85.22.115.174]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MyKHm-1sNHLf3yrk-00rlTM; Fri, 26
- Jul 2024 18:20:40 +0200
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id q6yOToboX8an for <buildroot@lists.busybox.net>;
+ Fri, 26 Jul 2024 16:45:27 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org C001C407BC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C001C407BC
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C001C407BC
+ for <buildroot@buildroot.org>; Fri, 26 Jul 2024 16:45:26 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p54a1ba5c.dip0.t-ipconnect.de [84.161.186.92])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id BCE61A4C3149;
+ Fri, 26 Jul 2024 18:45:22 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:57732)
+ by fli4l.lan.fli4l with esmtp (Exim 4.98)
+ (envelope-from <bernd@kuhls.net>) id 1sXO4I-000000005a6-2Ik0;
+ Fri, 26 Jul 2024 16:45:22 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Fri, 26 Jul 2024 18:20:10 +0200
-Message-ID: <20240726162013.2183792-6-fiona.klute@gmx.de>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20240726162013.2183792-1-fiona.klute@gmx.de>
-References: <20240726162013.2183792-1-fiona.klute@gmx.de>
+Date: Fri, 26 Jul 2024 18:45:22 +0200
+Message-Id: <20240726164522.73606-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:tRS+PqpQHR84jOiVS6CQna+rgSgS/eQ4zu64c9QQqN3N4PrzhW9
- X66Mw6IPmiIms+581v/AAJHoBxk7DbuTKOqSg28cjOIukg7/iNXHHBKD2wkzDJn9mbRegGL
- nS1SkhCClLzznrvE8vb0Q33ZvSqi4S9lrxrbTM3xouQNolKfre3MhlA3QlkjAWLZNtzrMw7
- ptI6godT4E2X8iSGp66TQ==
-UI-OutboundReport: notjunk:1;M01:P0:8HAZkIylUNU=;9Ncc/CTRFhfvjRXVl6LTdsNeVn+
- NevR1QuzWuxpIjOQ3DJ/9f+JWbqwFRH0D/Q9pZf5Wtgq7Fb+dhHN6WxXtGE4xS+GuOqCdNH8O
- VXlXjRZEn1Xv0Tjz2HiZDxIyADoKvKDFt+t67+VV4aH4zE8AQ32y3etwGM3+GS6H8joayyv1H
- yZkk52WXU4v1lNXpWmdhR7+Yu6sggB+xkiS1EQzCWQHnzo3iwjz0bFpc6l/3rYDmIusRqv0YW
- ZViLGj66fzHv2ZY684t01PaZSuLtz4ZYQuKL+QsXQWTshE4RrMb1C1gu/PMTsS5dcIFzUjjYE
- lJMQsIJo8/Ml8a0ChsU5pjyHXTRvOS90OxHQMxPyLhkimq76ZbtU01ZNeAPICsWZuKU5S6ckb
- yLlHKBUQiGn1netdEtZUcUkSmbVmrChBfVmdNtSfttCs4R6a2WsqUMAPeS4aLQj1erm3iMu4Y
- KumM7h+FSuFZhvqH/MBVYCM2+DCP3Fn+3GzY6F5djiEtVBWTri7Rtaz25mBw7ihTY6LzWWUME
- WfE6TfCqFecv6JZn/4Iw34fTN8FPZdJ2JhtAX3BDEiv8qhVruZTBCiCon0S2V+NzPnq0zwmqK
- R+46goYQTTf39/i/HV6YiXFNiqtmQCaQSa2qPgs6FttJXIjatvZoVztnoMAwDQD1yHEqh2BBj
- tTHxs11b1N/cmoUccGeNEWxY1EwiX0UYpBhnZCLWh+xFqb3FslN/aBP7H5mV7+bKvcN6q6Cz7
- +xyoKoVrtn46Ko82CgAjIb4W+F696in1eJ7HRkFVzE6f1Dn5x1MLpH/9neDxa+CmO5PF1YXLg
- uN250e+V12zBJOp3h111VP3Q==
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmx.de; 
- s=s31663417; t=1722010840; x=1722615640; i=fiona.klute@gmx.de;
- bh=BN/FXo6B97C0eR9xXMWvWc+SIFPrj5qF6kwluHeap9o=;
- h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:In-Reply-To:
- References:MIME-Version:Content-Transfer-Encoding:cc:
- content-transfer-encoding:content-type:date:from:message-id:
- mime-version:reply-to:subject:to;
- b=clXJ/fi5dFeVQPdHap9mo22KfnSZlojkF5+HLoBi6J9vzoFVbcrzH2G0/1NQ4yhy
- 1rXVpvv2L5oXcoBKQR1HNnB24jSsyUnD7reArBiEeAibwyf9hHPRuDcKE7OKMhNbp
- 14J5ec90Be0Um4mxuLgq/DhqWqvbffQcPSNx/GlzooDZfjiju3VkBlPJctxNsyltd
- 7eYRkk/9SP9ifHTfvzcKhIlNuBxxY/JSgR0Ewqpf6O59M/SymLoS9lt7KuuI5OBCy
- oFHqSxCxbKcRfxwMHQXgPMhdvMdweZID7fc8BfDPTn3l4QUZMnI2s2Sgr+WICeCTB
- jO3oSJZQpKs1sZLVmg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=gmx.de
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmx.de header.i=fiona.klute@gmx.de
- header.a=rsa-sha256 header.s=s31663417 header.b=clXJ/fi5
-Subject: [Buildroot] [PATCH v4 5/6] support/testing: include init script in
- iptables test
+ d=kuhls.net; 
+ s=kas202406071026; t=1722012322;
+ bh=57ecRJh+aHrCCFUPGtnlyNPkfTergAZHDDhCnyHqJkw=;
+ h=From:To:Cc:Subject:Date:From;
+ b=DQSy5bgYuh35efrHfPM6oucTLvYqHqxZVEy2fNgKVNKkCIjmTwpeJk/4XDcwSZ7oc
+ 8FpciCw9OIoSBtwqnmx5KQy/d4PhLdnbzkTDfiY9gTL3ETDiG20rD6m79YdJJUViNo
+ vSUP/TglsnEPhPaDFFwBoQTJ9vlVFcMZIUUiFJ2+ZgOQTE3se5TB3+Be7qcEot5Ze8
+ xeaBLz/gja6w8KGqsRE178oqoUpMNUV2GGmESaunREsKZzwyn+1OKZQjhQh4ItGKi3
+ DTjkunltbLbSyWMzVdVzuz1nEmU87o4HLpA7JgUUV6P8csgBp4FP41QJXdHw4vk9C5
+ Agk1elf03m7lQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202406071026 header.b=DQSy5bgY
+Subject: [Buildroot] [PATCH 1/1] package/dtv-scan-tables: bump version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,69 +80,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Fiona Klute via buildroot <buildroot@buildroot.org>
-Reply-To: Fiona Klute <fiona.klute@gmx.de>
-Cc: Julien Olivain <ju.o@free.fr>, Fiona Klute <fiona.klute@gmx.de>,
- Ricardo Martincoski <ricardo.martincoski@datacom.com.br>
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
-
-Check a save/start/stop cycle based on the rules created by direct
-commands in the pre-existing test.
-
-Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
-Changes v2 -> v3:
-* remove change to init script that belongs in patch 3
+ package/dtv-scan-tables/dtv-scan-tables.hash | 2 +-
+ package/dtv-scan-tables/dtv-scan-tables.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- support/testing/tests/package/test_iptables.py | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
-
-diff --git a/support/testing/tests/package/test_iptables.py b/support/testing/tests/package/test_iptables.py
-index ee57b31558..e807fc9e83 100644
---- a/support/testing/tests/package/test_iptables.py
-+++ b/support/testing/tests/package/test_iptables.py
-@@ -11,6 +11,7 @@ class TestIptables(infra.basetest.BRTest):
-         """
-         BR2_aarch64=y
-         BR2_TOOLCHAIN_EXTERNAL=y
-+        BR2_INIT_BUSYBOX=y
-         BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-         BR2_LINUX_KERNEL=y
-         BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-@@ -70,9 +71,26 @@ class TestIptables(infra.basetest.BRTest):
-         _, exit_code = self.emulator.run(ping_test_cmd)
-         self.assertNotEqual(exit_code, 0)
-
-+        # Save the current rules to test the init script later.
-+        self.assertRunOk("/etc/init.d/S35iptables save")
-+
-         # We delete our only rule #1 in the INPUT chain.
-         self.assertRunOk("iptables --delete INPUT 1")
-
-         # Since we deleted the rule, the ping test command which was
-         # supposed to fail earlier is now supposed to succeed.
-         self.assertRunOk(ping_test_cmd)
-+
-+        # Load the rules as saved before.
-+        self.assertRunOk("/etc/init.d/S35iptables start")
-+
-+        # Ping to 127.0.0.2 is expected to fail again.
-+        _, exit_code = self.emulator.run(ping_test_cmd)
-+        self.assertNotEqual(exit_code, 0)
-+
-+        # And flush the rules again.
-+        self.assertRunOk("/etc/init.d/S35iptables stop")
-+
-+        # Since we deleted the rule, the ping test command which was
-+        # supposed to fail earlier is now supposed to succeed.
-+        self.assertRunOk(ping_test_cmd)
---
-2.45.2
+diff --git a/package/dtv-scan-tables/dtv-scan-tables.hash b/package/dtv-scan-tables/dtv-scan-tables.hash
+index fd2edb13c8..f110bb6dee 100644
+--- a/package/dtv-scan-tables/dtv-scan-tables.hash
++++ b/package/dtv-scan-tables/dtv-scan-tables.hash
+@@ -1,4 +1,4 @@
+ # Locally computed
+-sha256  6bf3e1839f3c4ab9c63994043c1a5dfd3e2b9a6f717fd1db3db0e7a53baf5518  dtv-scan-tables-57ed2982275045ea5e92ef2a40b9fa58255852e5-git4.tar.gz
++sha256  a6ffaeec227c35d8afe79b9d7b7a2dd9d3367c33dc1c3d5d5729cebd4973ef48  dtv-scan-tables-7098bdd27548eaf3e5d9485fc68575f88e362daf-git4.tar.gz
+ sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+ sha256  4fd46f32582c29007657e2daad8d0a6d954cf4e9d2e47bae8f8d8c32765fc987  COPYING.LGPL
+diff --git a/package/dtv-scan-tables/dtv-scan-tables.mk b/package/dtv-scan-tables/dtv-scan-tables.mk
+index 45264a41c5..d9e6910abd 100644
+--- a/package/dtv-scan-tables/dtv-scan-tables.mk
++++ b/package/dtv-scan-tables/dtv-scan-tables.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-DTV_SCAN_TABLES_VERSION = 57ed2982275045ea5e92ef2a40b9fa58255852e5
++DTV_SCAN_TABLES_VERSION = 7098bdd27548eaf3e5d9485fc68575f88e362daf
+ DTV_SCAN_TABLES_SITE = https://git.linuxtv.org/dtv-scan-tables.git
+ DTV_SCAN_TABLES_SITE_METHOD = git
+ 
+-- 
+2.39.2
 
 _______________________________________________
 buildroot mailing list
