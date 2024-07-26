@@ -4,71 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 19A75C3DA49
-	for <buildroot@archiver.kernel.org>; Fri, 26 Jul 2024 06:43:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F03AC3DA63
+	for <buildroot@archiver.kernel.org>; Fri, 26 Jul 2024 06:43:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BB34381EC0;
-	Fri, 26 Jul 2024 06:43:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 431ED81EC0;
+	Fri, 26 Jul 2024 06:43:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qpSqriS6Hgsn; Fri, 26 Jul 2024 06:43:19 +0000 (UTC)
+ id PTCfv9zVtPtA; Fri, 26 Jul 2024 06:43:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C125781EC1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 243E681EC1
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C125781EC1;
-	Fri, 26 Jul 2024 06:43:18 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 433EC1BF83A
- for <buildroot@lists.busybox.net>; Fri, 26 Jul 2024 06:43:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 243E681EC1;
+	Fri, 26 Jul 2024 06:43:33 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 0AE4F1BF83A
+ for <buildroot@lists.busybox.net>; Fri, 26 Jul 2024 06:43:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 31A1881EC1
- for <buildroot@lists.busybox.net>; Fri, 26 Jul 2024 06:43:17 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id EAD2160744
+ for <buildroot@lists.busybox.net>; Fri, 26 Jul 2024 06:43:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8ezKso0dnaFM for <buildroot@lists.busybox.net>;
- Fri, 26 Jul 2024 06:43:16 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.201;
- helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id c7GMgTEi9jW5 for <buildroot@lists.busybox.net>;
+ Fri, 26 Jul 2024 06:43:30 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 15F8A81EC0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 15F8A81EC0
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 15F8A81EC0
- for <buildroot@buildroot.org>; Fri, 26 Jul 2024 06:43:15 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id C34BF1BF203;
- Fri, 26 Jul 2024 06:43:12 +0000 (UTC)
-Date: Fri, 26 Jul 2024 08:43:11 +0200
-To: Danomi Manchego <danomimanchego123@gmail.com>
-Message-ID: <20240726084311.227da789@windsurf>
-In-Reply-To: <20240726025539.30665-1-danomimanchego123@gmail.com>
-References: <20240726025539.30665-1-danomimanchego123@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1721976193;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=7Gwc9PSbujTrGsFnfZQjb5/IKN+0ZuPAK/3WWvFTeIM=;
- b=YunYAzsJYtsqk5WVVM6jELgx8b3Q8n7MiUI0R+fDlxhJSIqr711PLfp/kAFjd1bc4TV7Ux
- 4Nc3nomwGasBJ5MoCHxUdb7ER58/3S2L8QKpxW+r8PEHI+HeTMn3dzKdYardGfsz0avirx
- 4AYHicjmYlcgn6U2d03goSIzStlyPCtu5w8dMCrb/+C9WpOJhZ5cbafg/kTVC63eicp04+
- Ej00lhfcNOlKG4y5Zz/8yGyITnnwPPEbovdkNYWDtsdnPvBSTTBH5l0eTzutqqDnHVq+BP
- dtwwa/94z8FM5x2B5ZOIsxj/Zf+M8frW+/o2XFQqO2QyI15EvqUFlUR2b4Z7qw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=YunYAzsJ
-Subject: Re: [Buildroot] [PATCH 1/1] libpwquality: fix PAM module path
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 18D2E60698
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 18D2E60698
+ for <buildroot@buildroot.org>; Fri, 26 Jul 2024 06:43:30 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id F1FD1874F5; Fri, 26 Jul 2024 06:43:29 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Fri, 26 Jul 2024 08:37:55 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 0a5260130c6933af04c13ed61efad09b47e62c3c
+X-Git-Newrev: b5e2f8287a73f33ac82da78f4b75c6289612510e
+X-Patchwork-Hint: ignore
+Message-Id: <20240726064329.F1FD1874F5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] {linux, linux-headers}: bump 4.19.x / 5.{4,
+ 10, 15}.x / 6.{1, 6, 9}.x series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,51 +60,86 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Stefan =?UTF-8?B?U8O4cmVuc2Vu?= <stefan.sorensen@spectralink.com>,
- buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu, 25 Jul 2024 22:55:39 -0400
-Danomi Manchego <danomimanchego123@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=b5e2f8287a73f33ac82da78f4b75c6289612510e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> The libpwquality package provides the pam_pwquality PAM module - the
-> replacement for pam_cracklib that was dropped from linux-pam back in
-> version 1.5.0.  However, it currently installs it to the wrong place,
-> so passwd and friends fail to find it.  This commit sets the security
-> directory path to /lib/security to match the corresponding setting in
-> linux-pam.mk.
-> 
-> Signed-off-by: Danomi Manchego <danomimanchego123@gmail.com>
-> ---
->  package/libpwquality/libpwquality.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ linux/Config.in                      |  2 +-
+ linux/linux.hash                     | 14 +++++++-------
+ package/linux-headers/Config.in.host | 14 +++++++-------
+ 3 files changed, 15 insertions(+), 15 deletions(-)
 
-Thanks for the fix! Could you indicate more clearly in the commit log
-which Buildroot commit caused the regression? Is it the bump of
-linux-pam to >= 1.5.0 which happened in
-276f1e0a896698abec85500a86686bf72c79eb91 ? At the time, was
-libpwquality already providing a replacement PAM module ? If not, when
-did libpwquality introduced this PAM module ?
-
-Indeed, libpwquality had this optional dependency on linux-pam since
-the package was added in 462040443ca943694fc59ec8380c82f8bf9aaddc, back
-in 2017.
-
-The whole reason why I'm asking for this additional detail is to
-understand whether or not this patch needs to be backported to our LTS
-branch, and therefore instead of just "fixing a problem" we need to
-understand since when the problem started to exist.
-
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/linux/Config.in b/linux/Config.in
+index 34057a4893..1542edc0e9 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -134,7 +134,7 @@ config BR2_LINUX_KERNEL_CUSTOM_REPO_GIT_SUBMODULES
+ 
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "6.9.8" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "6.9.10" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "5.10.162-cip24" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "5.10.162-cip24-rt10" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+diff --git a/linux/linux.hash b/linux/linux.hash
+index d412aafa13..b059ecd892 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,13 +1,13 @@
+ # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+-sha256  f048267b7b88316c9ca708c68d15a9ae802dcfc943c3188c1273eb958c433281  linux-6.9.8.tar.xz
+-sha256  f3976e77708694fe4a1f8d1307c315c8a36cbc58f038a38e006b91e29a1f3214  linux-6.6.37.tar.xz
+-sha256  890b845f36452328716e62dd893b634584f607cdd44b4e685392d302d3be41af  linux-6.1.97.tar.xz
++sha256  efd12e335fa67d13a3eae30e4b7b7546e74b8ccc90682e4c3fffab0b22654da1  linux-6.9.10.tar.xz
++sha256  9ec99c578158ab85d99b37791a76643d2ea4c3f72ecbef7b5eb6d60f3de032ef  linux-6.6.41.tar.xz
++sha256  b9aa6ec1a00f234d6c6f2d428fbb0a6bf459606c259263df978f86685b65a8b9  linux-6.1.100.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+-sha256  91bfc0ea152ce7b102a0b79d35a7c92843874ebf085c99d2ba8b4d85e62b1a7c  linux-5.15.162.tar.xz
+-sha256  da1dd47febac4f7856654038a47703666da3afba348b8e96e39584e0972e2725  linux-5.10.221.tar.xz
+-sha256  b298436b26395b5c3ace6963836ba70d57cd61e01cff254b0e5443636c324a5e  linux-5.4.279.tar.xz
++sha256  025fc7d8b1560cf456ccae50591fe1ca21c990645df9791aed25820fe78db302  linux-5.15.163.tar.xz
++sha256  7b2d06803b5abb03c85f171100ca9d7acd6ba245036fe9a16eb998f088b150cb  linux-5.10.222.tar.xz
++sha256  a976c67eb8270cac310faf1acc61305d1f9967955aca38fbdfcb0bc77d033d42  linux-5.4.280.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+-sha256  062b70cc132378e1c685df44ddf7e05bab4752b690ada17b080655a63f993581  linux-4.19.317.tar.xz
++sha256  0d5fa562a3c53f524f02fc11abe502c01096df73dd27d57736875e8590007493  linux-4.19.318.tar.xz
+ # Locally computed
+ sha256  fb0edc3c18e47d2b6974cb0880a0afb5c3fa08f50ee87dfdf24349405ea5f8ae  linux-cip-5.10.162-cip24.tar.gz
+ sha256  b5539243f187e3d478d76d44ae13aab83952c94b885ad889df6fa9997e16a441  linux-cip-5.10.162-cip24-rt10.tar.gz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 8ae267c2c8..daa54b4ef1 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -419,13 +419,13 @@ endchoice
+ 
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "4.19.317"	if BR2_KERNEL_HEADERS_4_19
+-	default "5.4.279"	if BR2_KERNEL_HEADERS_5_4
+-	default "5.10.221"	if BR2_KERNEL_HEADERS_5_10
+-	default "5.15.162"	if BR2_KERNEL_HEADERS_5_15
+-	default "6.1.97"	if BR2_KERNEL_HEADERS_6_1
+-	default "6.6.37"	if BR2_KERNEL_HEADERS_6_6
+-	default "6.9.8"		if BR2_KERNEL_HEADERS_6_9
++	default "4.19.318"	if BR2_KERNEL_HEADERS_4_19
++	default "5.4.280"	if BR2_KERNEL_HEADERS_5_4
++	default "5.10.222"	if BR2_KERNEL_HEADERS_5_10
++	default "5.15.163"	if BR2_KERNEL_HEADERS_5_15
++	default "6.1.100"	if BR2_KERNEL_HEADERS_6_1
++	default "6.6.41"	if BR2_KERNEL_HEADERS_6_6
++	default "6.9.10"	if BR2_KERNEL_HEADERS_6_9
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
