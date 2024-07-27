@@ -4,71 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6417EC3DA61
-	for <buildroot@archiver.kernel.org>; Sat, 27 Jul 2024 14:09:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B8433C3DA61
+	for <buildroot@archiver.kernel.org>; Sat, 27 Jul 2024 14:13:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2888540CC3;
-	Sat, 27 Jul 2024 14:09:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 32AAA40731;
+	Sat, 27 Jul 2024 14:13:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OpdMF1Cmr2Np; Sat, 27 Jul 2024 14:09:11 +0000 (UTC)
+ id DmJoqrxB87ou; Sat, 27 Jul 2024 14:13:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E440140CC7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F2B05407AA
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E440140CC7;
-	Sat, 27 Jul 2024 14:09:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F2B05407AA;
+	Sat, 27 Jul 2024 14:13:21 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 7DE911BF84C
- for <buildroot@lists.busybox.net>; Sat, 27 Jul 2024 14:09:09 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id E05EF1BF84C
+ for <buildroot@lists.busybox.net>; Sat, 27 Jul 2024 14:13:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6ADDC40CC7
- for <buildroot@lists.busybox.net>; Sat, 27 Jul 2024 14:09:09 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D77A7407AA
+ for <buildroot@lists.busybox.net>; Sat, 27 Jul 2024 14:13:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Zz1vFK3wCEE2 for <buildroot@lists.busybox.net>;
- Sat, 27 Jul 2024 14:09:08 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.196;
- helo=relay4-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id up_v-shgV0GH for <buildroot@lists.busybox.net>;
+ Sat, 27 Jul 2024 14:13:19 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::226;
+ helo=relay6-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 0652E40CC3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0652E40CC3
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0652E40CC3
- for <buildroot@buildroot.org>; Sat, 27 Jul 2024 14:09:07 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 09003E0002;
- Sat, 27 Jul 2024 14:09:04 +0000 (UTC)
-Date: Sat, 27 Jul 2024 16:09:03 +0200
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20240727160903.67519bbf@windsurf>
-In-Reply-To: <20240727084248.18600-1-fontaine.fabrice@gmail.com>
-References: <20240727084248.18600-1-fontaine.fabrice@gmail.com>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 62AF840731
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 62AF840731
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::226])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 62AF840731
+ for <buildroot@buildroot.org>; Sat, 27 Jul 2024 14:13:19 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 8247EC0002;
+ Sat, 27 Jul 2024 14:13:17 +0000 (UTC)
+Date: Sat, 27 Jul 2024 16:13:16 +0200
+To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Message-ID: <20240727161316.4d066c54@windsurf>
+In-Reply-To: <20240727094029.2609733-1-dario.binacchi@amarulasolutions.com>
+References: <20240727094029.2609733-1-dario.binacchi@amarulasolutions.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1722089345;
+ d=bootlin.com; s=gm1; t=1722089597;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=rY+cT8E1duE/HpIp0cPLkXBDdC8mtup35MVLZb4BZhQ=;
- b=XEpgD0WwRA30gmsyyuJ1ZO2m23Cjtl/xqtfx9HshtRcos+WVsBPudyhOzp51BJu1nW2i8t
- Rn8KXDpQm+oL8fVBJgrcqYuCDmC9cTsDORTxcqbfvMBIVdDHk5CFIJMQ39ElKsGIfG/JB6
- cCft/Z5q4ojk3uZS9M0kIzu6e0KUzl7DKGJuuE9erMdYq6qV0/RIXI9/CyNHerxgRPdXe/
- dliLymLasY+RT9Jhw1sWvOIwKOdUbKlfYorcFUZUzEZ48tq0yZ2ccUU6VHYcpx9Jnfsd6q
- aFYAXfiBt6zifUb597GNKvFL7pulQpA6FYT0u9z3veM0DEAUcNUb1pETO6+CRQ==
+ bh=fIDX6xaVUKhxSRXzzb5lNM/vupT56HEv0RB2XCjXhcQ=;
+ b=l8dY6OJGLQHrRWdh8tUaR4nFQLrWE3c6P/k1HuAc/dCsirZhXfIj50rfkAfpwMhi0+7hQQ
+ 9PYBnzJyUVCLZiLUN5jOpo+pjVs/6AHwpyUyjCbNvR8GeqVeMl1EzJSGdIZH5FdgcHwVd9
+ a7TVkQ7TG/Pect28Az3vRfrfXQt1j1/e3CsRmx89PcmsraTb23QN3oj5a9V/rqPUokUnFV
+ h0KgqAILDM5nxNnkqAtrA5ZPBT/LAJxVJ8kKbwmL5L3ctXwwHaqfdRhrnrSq3tV6qhM+zo
+ AW94ZBFBX6TXaihv7b7JibvbIp8NY5rSKjFqaQynuJLTHHGuxokNCmBE2BON0A==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=XEpgD0Ww
-Subject: Re: [Buildroot] [PATCH 1/1] package/libnfs: fix build with gcc >= 14
+ header.s=gm1 header.b=l8dY6OJG
+Subject: Re: [Buildroot] [PATCH 1/1] package/ntpsec: fix build on xtensa
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -88,37 +88,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat, 27 Jul 2024 10:42:48 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+Hello Dario,
 
-> Fix the following build failure with gcc >= 14 which enables
-> -Werror=implicit-function-declaration
-> (https://gcc.gnu.org/gcc-14/porting_to.html):
-> 
-> nfs-stat.c: In function 'main':
-> nfs-stat.c:287:30: error: implicit declaration of function 'ctime' [-Wimplicit-function-declaration]
->   287 |         printf("Access: %s", ctime( (const time_t *) &st.nfs_atime));
->       |                              ^~~~~
-> nfs-stat.c:177:1: note: 'ctime' is defined in header '<time.h>'; this is probably fixable by adding '#include <time.h>'
->   176 | #include <pwd.h>
->   +++ |+#include <time.h>
->   177 | char *uid_to_name(int uid)
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/73c3828a4e5d275ca0dfdd5b314494e2b00393c8
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  ...0002-utils-nfs-stat.c-include-time.h.patch | 39 +++++++++++++++++++
->  1 file changed, 39 insertions(+)
->  create mode 100644 package/libnfs/0002-utils-nfs-stat.c-include-time.h.patch
+On Sat, 27 Jul 2024 11:40:29 +0200
+Dario Binacchi <dario.binacchi@amarulasolutions.com> wrote:
 
-Applied to master, thanks.
+> Fix the following build failure on xtensa:
+> 
+> Waf: Entering directory `/home/buildroot/instance-0/output-1/build/ntpsec-1.2.3/build/host'
+> [1/2] Processing ntpd/ntp_parser.y
+> [2/2] Compiling build/host/ntpd/ntp_parser.tab.c
+> gcc: error: unrecognized command-line option '-mlongcalls'
+> gcc: error: unrecognized command-line option '-mauto-litpools'
+
+Thanks for the patch, but I'm pretty sure this is not the right fix.
+You can see from the error message above that what is happening here is
+that those flags, which are target CFLAGS, are passed to the host
+compiler "gcc".
+
+So your patch is not correct in several ways:
+
+ - It will not solve the problem of other target CFLAGS used for other
+   CPU architectures, which are also not supported by the host gcc
+   compiler
+
+ - It drops those target CFLAGS from the build of target code, which is
+   not correct, as if some flags are present, there's a good reason for
+   that.
+
+So, the correct fix is to look in more details into the ntpsec build
+system, and make sure it doesn't use target CFLAGS when building host
+code.
+
+Could you have a look into this?
+
+Thanks a lot,
 
 Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
 https://bootlin.com
 _______________________________________________
 buildroot mailing list
