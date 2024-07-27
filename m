@@ -4,71 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2FFC4C3DA4A
-	for <buildroot@archiver.kernel.org>; Sat, 27 Jul 2024 14:08:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6417EC3DA61
+	for <buildroot@archiver.kernel.org>; Sat, 27 Jul 2024 14:09:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C71D940CC3;
-	Sat, 27 Jul 2024 14:08:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2888540CC3;
+	Sat, 27 Jul 2024 14:09:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zE4dWx88hyil; Sat, 27 Jul 2024 14:08:41 +0000 (UTC)
+ id OpdMF1Cmr2Np; Sat, 27 Jul 2024 14:09:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9790340CD3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E440140CC7
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9790340CD3;
-	Sat, 27 Jul 2024 14:08:41 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E3FD81BF84C
- for <buildroot@lists.busybox.net>; Sat, 27 Jul 2024 14:08:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E440140CC7;
+	Sat, 27 Jul 2024 14:09:10 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 7DE911BF84C
+ for <buildroot@lists.busybox.net>; Sat, 27 Jul 2024 14:09:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D252960630
- for <buildroot@lists.busybox.net>; Sat, 27 Jul 2024 14:08:39 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6ADDC40CC7
+ for <buildroot@lists.busybox.net>; Sat, 27 Jul 2024 14:09:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LdVIqX4wF5FA for <buildroot@lists.busybox.net>;
- Sat, 27 Jul 2024 14:08:37 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::226;
- helo=relay6-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Zz1vFK3wCEE2 for <buildroot@lists.busybox.net>;
+ Sat, 27 Jul 2024 14:09:08 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.196;
+ helo=relay4-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 210B8605D5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 210B8605D5
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::226])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 210B8605D5
- for <buildroot@buildroot.org>; Sat, 27 Jul 2024 14:08:36 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 00E51C0002;
- Sat, 27 Jul 2024 14:08:32 +0000 (UTC)
-Date: Sat, 27 Jul 2024 16:08:31 +0200
-To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <20240727160831.79443fdd@windsurf>
-In-Reply-To: <20240727081344.1382341-1-james.hilliard1@gmail.com>
-References: <20240727081344.1382341-1-james.hilliard1@gmail.com>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 0652E40CC3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0652E40CC3
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0652E40CC3
+ for <buildroot@buildroot.org>; Sat, 27 Jul 2024 14:09:07 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 09003E0002;
+ Sat, 27 Jul 2024 14:09:04 +0000 (UTC)
+Date: Sat, 27 Jul 2024 16:09:03 +0200
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20240727160903.67519bbf@windsurf>
+In-Reply-To: <20240727084248.18600-1-fontaine.fabrice@gmail.com>
+References: <20240727084248.18600-1-fontaine.fabrice@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1722089313;
+ d=bootlin.com; s=gm1; t=1722089345;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=6vIC+LQlJh5UEOt0m0obWSvTnE/Y+G6pgFdlaUxAIfE=;
- b=AwHaBqhld4GZ4MXtaZKJSwnivOY0Tri9yLYDFaqd6DSnTsdQDN8kWjRTceEe0i0usxpznD
- Cb7vLkdZSu3w16OQ+8ZQ42yvoGS5tyLFQq5D3gGk6R8Z5epgiqB4FBrA9TeI7hB3ufNGz+
- wHn6pYMeT319zccIQ7IVKN2bqs5EC+D40mbvHFfJgJ+VFSdhsixVDBozHSSqlMPBtXaiwV
- P3XHPjdc3q4TKkwVboBX9IBu+qd8mCf7Gpgrt2w63EiK52EVCnfFCoyJJpq2aEbAIp3/72
- ti+7hGP/0sbIJtY9UeiQHds10p0rSojvMhutLLmH/zkfzCQp5KA53oo1RAyVnQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=rY+cT8E1duE/HpIp0cPLkXBDdC8mtup35MVLZb4BZhQ=;
+ b=XEpgD0WwRA30gmsyyuJ1ZO2m23Cjtl/xqtfx9HshtRcos+WVsBPudyhOzp51BJu1nW2i8t
+ Rn8KXDpQm+oL8fVBJgrcqYuCDmC9cTsDORTxcqbfvMBIVdDHk5CFIJMQ39ElKsGIfG/JB6
+ cCft/Z5q4ojk3uZS9M0kIzu6e0KUzl7DKGJuuE9erMdYq6qV0/RIXI9/CyNHerxgRPdXe/
+ dliLymLasY+RT9Jhw1sWvOIwKOdUbKlfYorcFUZUzEZ48tq0yZ2ccUU6VHYcpx9Jnfsd6q
+ aFYAXfiBt6zifUb597GNKvFL7pulQpA6FYT0u9z3veM0DEAUcNUb1pETO6+CRQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=AwHaBqhl
-Subject: Re: [Buildroot] [PATCH 1/1] package/systemd: bump to version 256.4
+ header.s=gm1 header.b=XEpgD0Ww
+Subject: Re: [Buildroot] [PATCH 1/1] package/libnfs: fix build with gcc >= 14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,47 +82,38 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Norbert Lange <nolange79@gmail.com>, Sen Hastings <sen@hastings.org>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat, 27 Jul 2024 02:13:44 -0600
-James Hilliard <james.hilliard1@gmail.com> wrote:
+On Sat, 27 Jul 2024 10:42:48 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> Remove patch which is now upstream
+> Fix the following build failure with gcc >= 14 which enables
+> -Werror=implicit-function-declaration
+> (https://gcc.gnu.org/gcc-14/porting_to.html):
 > 
-> Rebase fix missing LOOP_SET_BLOCK_SIZE patch.
+> nfs-stat.c: In function 'main':
+> nfs-stat.c:287:30: error: implicit declaration of function 'ctime' [-Wimplicit-function-declaration]
+>   287 |         printf("Access: %s", ctime( (const time_t *) &st.nfs_atime));
+>       |                              ^~~~~
+> nfs-stat.c:177:1: note: 'ctime' is defined in header '<time.h>'; this is probably fixable by adding '#include <time.h>'
+>   176 | #include <pwd.h>
+>   +++ |+#include <time.h>
+>   177 | char *uid_to_name(int uid)
 > 
-> Update config options to match new expected format.
+> Fixes:
+>  - http://autobuild.buildroot.org/results/73c3828a4e5d275ca0dfdd5b314494e2b00393c8
 > 
-> Add new nsresourced, mountfsd and vmspawn config options.
-> 
-> Add new systemd-journal-upload user for journald-remote.
-> 
-> Add new kernel config enable/disable options from systemd readme.
-> 
-> Add new optional dependencies and config options as appropriate.
-> 
-> LICENSES/README.md hash changed due to additional details added:
-> https://github.com/systemd/systemd/commit/fb747bd8cdcbeb55f9ef3c62289fff8ff5a25b68
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 > ---
->  ...g_loop.h-fix-missing-LOOP_SET_BLOCK_.patch |  10 +-
->  .../0002-basic-add-bcachefs-magic.patch       |  53 ---
->  package/systemd/Config.in                     |  29 ++
->  package/systemd/systemd.hash                  |   4 +-
->  package/systemd/systemd.mk                    | 334 ++++++++++++------
->  5 files changed, 263 insertions(+), 167 deletions(-)
->  delete mode 100644 package/systemd/0002-basic-add-bcachefs-magic.patch
+>  ...0002-utils-nfs-stat.c-include-time.h.patch | 39 +++++++++++++++++++
+>  1 file changed, 39 insertions(+)
+>  create mode 100644 package/libnfs/0002-utils-nfs-stat.c-include-time.h.patch
 
-Lots of changes, but seems fine from a quick look, so I've applied.
-Let's see whether this blows up in the autobuilders :-)
-
-Thanks a lot!
+Applied to master, thanks.
 
 Thomas
 -- 
