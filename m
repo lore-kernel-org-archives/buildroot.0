@@ -4,92 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5CE0AC3DA61
-	for <buildroot@archiver.kernel.org>; Sat, 27 Jul 2024 16:57:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8CA9CC3DA61
+	for <buildroot@archiver.kernel.org>; Sat, 27 Jul 2024 17:36:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E890340730;
-	Sat, 27 Jul 2024 16:57:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 35A6140944;
+	Sat, 27 Jul 2024 17:36:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id t8ku1OHtlvhB; Sat, 27 Jul 2024 16:57:24 +0000 (UTC)
+ id CCm2KheFWypP; Sat, 27 Jul 2024 17:36:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B527F40750
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D434F40979
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B527F40750;
-	Sat, 27 Jul 2024 16:57:24 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id EF2961BF82F
- for <buildroot@lists.busybox.net>; Sat, 27 Jul 2024 16:57:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D434F40979;
+	Sat, 27 Jul 2024 17:36:07 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 6143A1BF2FF
+ for <buildroot@lists.busybox.net>; Sat, 27 Jul 2024 17:36:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DCB22401FB
- for <buildroot@lists.busybox.net>; Sat, 27 Jul 2024 16:57:22 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4EE2E40944
+ for <buildroot@lists.busybox.net>; Sat, 27 Jul 2024 17:36:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XwKr8fS4F5o5 for <buildroot@lists.busybox.net>;
- Sat, 27 Jul 2024 16:57:21 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::332; helo=mail-wm1-x332.google.com;
- envelope-from=fontaine.fabrice@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 8230C400FE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8230C400FE
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
- [IPv6:2a00:1450:4864:20::332])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 8230C400FE
- for <buildroot@buildroot.org>; Sat, 27 Jul 2024 16:57:21 +0000 (UTC)
-Received: by mail-wm1-x332.google.com with SMTP id
- 5b1f17b1804b1-42816ca797fso2737205e9.2
- for <buildroot@buildroot.org>; Sat, 27 Jul 2024 09:57:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1722099439; x=1722704239;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=cRvNhOtlo6jwyXepkvoyF9rnBszdCNPKmGJ/1XDkUoA=;
- b=xTrwAFXMxL6cHzoNVQni7paD+iIFaxqUw1/P8QLyaWde8sksMK4zW0L/Vpsd1mKjwq
- WG2VF1vC3tOxSPSTQ30J2G1J2LJxEsDOZ1KjrhEIfZ3txrJvUTCZueW8+9YjEei9IDso
- uMkotUUsSMTzG3qom93CYDbsJqcTJAYi0Q6S573fwTTfYTJBcohiRLfXF1FgSC5vFfi+
- 5cJ2gsBVQOvWAm0QXpPHc7kcZl2As8GYKatIksbQOcwkWyn/b1RpbBGx36/bB88nQv68
- iEoFBZKY/ScIjzzGrqWb3wjAvHuBx/EbHrtVJGdgXS/wxbzCGk/0mkTIkyOsDYslVHkS
- pXlA==
-X-Gm-Message-State: AOJu0YzZ67zAqKNFeS5rnCxw4bEpK3i5TlHqwId2wUOi2OcvbJhmghBz
- jYLfSrCysK3lQqp+vKc/Cwa21OvqPVVExWWq9jJP1YkyVA0zUt2V6uK3Zw==
-X-Google-Smtp-Source: AGHT+IFWfDd1RiREFm2k2b2JnZ7UnuhbPIdx8CyFinOtr9ChzjS4TYQGhlokSv8/xJs/QKk2o9jLbw==
-X-Received: by 2002:a5d:6d8f:0:b0:368:6d75:1bde with SMTP id
- ffacd0b85a97d-36b5cef946dmr1719309f8f.15.1722099439037; 
- Sat, 27 Jul 2024 09:57:19 -0700 (PDT)
-Received: from kali.home (lfbn-ren-1-785-215.w83-197.abo.wanadoo.fr.
- [83.197.112.215]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-36b367fc3d0sm8010863f8f.56.2024.07.27.09.57.18
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 27 Jul 2024 09:57:18 -0700 (PDT)
-From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id r5qY741C2j4u for <buildroot@lists.busybox.net>;
+ Sat, 27 Jul 2024 17:36:04 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org AE03F4071A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AE03F4071A
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id AE03F4071A
+ for <buildroot@buildroot.org>; Sat, 27 Jul 2024 17:36:03 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p4fd6ce6c.dip0.t-ipconnect.de [79.214.206.108])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 456CCA4C30D9
+ for <buildroot@buildroot.org>; Sat, 27 Jul 2024 19:35:59 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:53384)
+ by fli4l.lan.fli4l with esmtp (Exim 4.98)
+ (envelope-from <bernd@kuhls.net>) id 1sXlKp-000000002wm-0Xku
+ for buildroot@buildroot.org; Sat, 27 Jul 2024 17:35:58 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sat, 27 Jul 2024 18:57:15 +0200
-Message-ID: <20240727165715.716640-1-fontaine.fabrice@gmail.com>
-X-Mailer: git-send-email 2.43.0
+Date: Sat, 27 Jul 2024 19:35:58 +0200
+Message-Id: <20240727173558.1728746-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1722099439; x=1722704239; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=cRvNhOtlo6jwyXepkvoyF9rnBszdCNPKmGJ/1XDkUoA=;
- b=HUQDI2GkD3IMS5UE2blQcxU65sjDPV4+aw2I8cyHpOG3xvKn6whGF9kya8uY3588T1
- LYT/LRlAJO5XBYHO4F0g86p7FpYB6zKKFA2rFMWyeUuimhQ3f0QBVDLkz8e3s2K36IVT
- 9wHtxlkpDiFO6THgGwCXNUieOCdX2xuoyGdB/a9d60h57aA2tXazC1evawdhmz7t/Kcb
- kjzCTca7EgmUzXZxLaxvCGXAKOZyBrzVv8kLggkpeHSWTT7PBqkBRdG19Nr3+/g8KSaQ
- mCiywNVTM9tbAxrhF/ib49tHdobsCivm+JaG77f5JuLBc+TMXEqdyZtiNm9wr55Cl5Vi
- L7Sw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=kuhls.net; 
+ s=kas202406071026; t=1722101759;
+ bh=t5X7jIPjzX0rLcFffCq9idhtlWyfRnzRyfWgcYmmyAY=;
+ h=From:To:Subject:Date:From;
+ b=daJGns5GPv2hIt5yYEV6r+BLGNGpys5xZ2iLhFDZcIUe2BgYz86OX2v+QZfzCy31M
+ xwcrAYh0svryumTX4ZJ+j8LEBB5iXCsfjruVQnUj5KBUtr63BNXfnX79wJ10ZObPdP
+ DItv6h2SoqW+NbLV6mXIFkOhas71FWD+LQfmKvRU0lNW3PHwTsmgtHjYiM4Y4b6rPu
+ l6HA5+QgzYxHdKc7yFIzWROFtP+OD1z/dps54LGCEnZWKCwvMEZ1UbiGluY54okROR
+ nw3Pa8IGOZLRP6Ov89/uY2zM5HFKFbxh5b7Evqu8pPF4l3JSo4L56HYufG87kho6PM
+ +uZavRpPESkIA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=HUQDI2Gk
-Subject: [Buildroot] [PATCH 1/1] package/open-iscsi: open-isns is optional,
- not mandatory
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202406071026 header.b=daJGns5G
+Subject: [Buildroot] [PATCH 1/1] {linux, linux-headers}: bump 6.{1, 6,
+ 9}.x series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,60 +81,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: TIAN Yuanhao <tianyuanhao3@163.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-open-isns is optional, not mandatory, since bump to version 2.1.9 in
-commit 2314928cf828ff02939b9c0041964c3ee2dd907d and
-https://github.com/open-iscsi/open-iscsi/commit/713524df809396e11f42d7691bd8ead2ffc1ca6b
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/open-iscsi/Config.in     | 1 -
- package/open-iscsi/open-iscsi.mk | 9 ++++++++-
- 2 files changed, 8 insertions(+), 2 deletions(-)
+ linux/linux.hash                     | 6 +++---
+ package/linux-headers/Config.in.host | 6 +++---
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/open-iscsi/Config.in b/package/open-iscsi/Config.in
-index e55bbfd867..01d83615c9 100644
---- a/package/open-iscsi/Config.in
-+++ b/package/open-iscsi/Config.in
-@@ -5,7 +5,6 @@ config BR2_PACKAGE_OPEN_ISCSI
- 	depends on !BR2_STATIC_LIBS # kmod
- 	select BR2_PACKAGE_KMOD
- 	select BR2_PACKAGE_OPENSSL
--	select BR2_PACKAGE_OPEN_ISNS
- 	select BR2_PACKAGE_UTIL_LINUX
- 	select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
- 	help
-diff --git a/package/open-iscsi/open-iscsi.mk b/package/open-iscsi/open-iscsi.mk
-index d1f40d3e20..1266db3d3f 100644
---- a/package/open-iscsi/open-iscsi.mk
-+++ b/package/open-iscsi/open-iscsi.mk
-@@ -9,10 +9,17 @@ OPEN_ISCSI_SITE = $(call github,open-iscsi,open-iscsi,$(OPEN_ISCSI_VERSION))
- OPEN_ISCSI_LICENSE = GPL-2.0+, GPL-3.0+, LGPL-3.0+
- OPEN_ISCSI_LICENSE_FILES = COPYING README libopeniscsiusr/COPYING
- OPEN_ISCSI_CPE_ID_VALID = YES
--OPEN_ISCSI_DEPENDENCIES = kmod open-isns openssl util-linux
-+OPEN_ISCSI_DEPENDENCIES = kmod openssl util-linux
- 
- OPEN_ISCSI_CONF_OPTS = -Ddbroot=/var/lib/iscsi
- 
-+ifeq ($(BR2_PACKAGE_OPEN_ISNS),y)
-+OPEN_ISCSI_DEPENDENCIES += open-isns
-+OPEN_ISCSI_CONF_OPTS += -Disns=enabled
-+else
-+OPEN_ISCSI_CONF_OPTS += -Disns=disabled
-+endif
-+
- ifeq ($(BR2_PACKAGE_SYSTEMD),y)
- OPEN_ISCSI_DEPENDENCIES += systemd
- OPEN_ISCSI_CONF_OPTS += -Dno_systemd=false
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 2d2b6d3546..3f55bf0c51 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,8 +1,8 @@
+ # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+ sha256  70109dfd1cd1c5f8a58eb1cb37122b9bf93f9c6a6280bf91019263c7339cf76b  linux-6.10.1.tar.xz
+-sha256  efd12e335fa67d13a3eae30e4b7b7546e74b8ccc90682e4c3fffab0b22654da1  linux-6.9.10.tar.xz
+-sha256  9ec99c578158ab85d99b37791a76643d2ea4c3f72ecbef7b5eb6d60f3de032ef  linux-6.6.41.tar.xz
+-sha256  b9aa6ec1a00f234d6c6f2d428fbb0a6bf459606c259263df978f86685b65a8b9  linux-6.1.100.tar.xz
++sha256  dedf84e0832c3e912024e0c04347e9e48a2b2676d5c5cd869b3eb0ce92f513e1  linux-6.9.11.tar.xz
++sha256  8801c8c297d774e76044977ec3d0684399dc4e7cce347d730874ec78b774e683  linux-6.6.42.tar.xz
++sha256  f1459faa68429fa6607ae18b869fd02ed685bb33c72289f175aca163c592b34c  linux-6.1.101.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+ sha256  025fc7d8b1560cf456ccae50591fe1ca21c990645df9791aed25820fe78db302  linux-5.15.163.tar.xz
+ sha256  7b2d06803b5abb03c85f171100ca9d7acd6ba245036fe9a16eb998f088b150cb  linux-5.10.222.tar.xz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 707f2ad026..0d96a7cff9 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -431,9 +431,9 @@ config BR2_DEFAULT_KERNEL_HEADERS
+ 	default "5.4.280"	if BR2_KERNEL_HEADERS_5_4
+ 	default "5.10.222"	if BR2_KERNEL_HEADERS_5_10
+ 	default "5.15.163"	if BR2_KERNEL_HEADERS_5_15
+-	default "6.1.100"	if BR2_KERNEL_HEADERS_6_1
+-	default "6.6.41"	if BR2_KERNEL_HEADERS_6_6
+-	default "6.9.10"	if BR2_KERNEL_HEADERS_6_9
++	default "6.1.101"	if BR2_KERNEL_HEADERS_6_1
++	default "6.6.42"	if BR2_KERNEL_HEADERS_6_6
++	default "6.9.11"	if BR2_KERNEL_HEADERS_6_9
+ 	default "6.10.1"	if BR2_KERNEL_HEADERS_6_10
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
 -- 
-2.43.0
+2.39.2
 
 _______________________________________________
 buildroot mailing list
