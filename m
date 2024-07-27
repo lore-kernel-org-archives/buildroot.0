@@ -4,71 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B8433C3DA61
-	for <buildroot@archiver.kernel.org>; Sat, 27 Jul 2024 14:13:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96488C3DA61
+	for <buildroot@archiver.kernel.org>; Sat, 27 Jul 2024 14:15:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 32AAA40731;
-	Sat, 27 Jul 2024 14:13:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 55E2D40C67;
+	Sat, 27 Jul 2024 14:15:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DmJoqrxB87ou; Sat, 27 Jul 2024 14:13:22 +0000 (UTC)
+ id Mz_4zQfZhkzu; Sat, 27 Jul 2024 14:15:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F2B05407AA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 28AA940C8F
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F2B05407AA;
-	Sat, 27 Jul 2024 14:13:21 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E05EF1BF84C
- for <buildroot@lists.busybox.net>; Sat, 27 Jul 2024 14:13:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 28AA940C8F;
+	Sat, 27 Jul 2024 14:15:55 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 5DD271BF84C
+ for <buildroot@lists.busybox.net>; Sat, 27 Jul 2024 14:15:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D77A7407AA
- for <buildroot@lists.busybox.net>; Sat, 27 Jul 2024 14:13:20 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4A5AC80DEB
+ for <buildroot@lists.busybox.net>; Sat, 27 Jul 2024 14:15:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id up_v-shgV0GH for <buildroot@lists.busybox.net>;
- Sat, 27 Jul 2024 14:13:19 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::226;
- helo=relay6-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5g27h4Yb_WGk for <buildroot@lists.busybox.net>;
+ Sat, 27 Jul 2024 14:15:52 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
+ helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 62AF840731
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 62AF840731
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::226])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 62AF840731
- for <buildroot@buildroot.org>; Sat, 27 Jul 2024 14:13:19 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 8247EC0002;
- Sat, 27 Jul 2024 14:13:17 +0000 (UTC)
-Date: Sat, 27 Jul 2024 16:13:16 +0200
-To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Message-ID: <20240727161316.4d066c54@windsurf>
-In-Reply-To: <20240727094029.2609733-1-dario.binacchi@amarulasolutions.com>
-References: <20240727094029.2609733-1-dario.binacchi@amarulasolutions.com>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 434BC80DDE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 434BC80DDE
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 434BC80DDE
+ for <buildroot@buildroot.org>; Sat, 27 Jul 2024 14:15:51 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id C9B11FF802;
+ Sat, 27 Jul 2024 14:15:48 +0000 (UTC)
+Date: Sat, 27 Jul 2024 16:15:47 +0200
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20240727161547.3c7afc77@windsurf>
+In-Reply-To: <20240727135252.389739-1-fontaine.fabrice@gmail.com>
+References: <20240727135252.389739-1-fontaine.fabrice@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1722089597;
+ d=bootlin.com; s=gm1; t=1722089749;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=fIDX6xaVUKhxSRXzzb5lNM/vupT56HEv0RB2XCjXhcQ=;
- b=l8dY6OJGLQHrRWdh8tUaR4nFQLrWE3c6P/k1HuAc/dCsirZhXfIj50rfkAfpwMhi0+7hQQ
- 9PYBnzJyUVCLZiLUN5jOpo+pjVs/6AHwpyUyjCbNvR8GeqVeMl1EzJSGdIZH5FdgcHwVd9
- a7TVkQ7TG/Pect28Az3vRfrfXQt1j1/e3CsRmx89PcmsraTb23QN3oj5a9V/rqPUokUnFV
- h0KgqAILDM5nxNnkqAtrA5ZPBT/LAJxVJ8kKbwmL5L3ctXwwHaqfdRhrnrSq3tV6qhM+zo
- AW94ZBFBX6TXaihv7b7JibvbIp8NY5rSKjFqaQynuJLTHHGuxokNCmBE2BON0A==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=fAeRdqTheSiT/ZBExqpmBdTRFbsGNo5noMdjzIsT8EI=;
+ b=AIg+qHFqmqveKW0rbArKa1YMhUnXEY0k32rlPCXLZuG8xt89rUlkfodL08LYDB+9/chpvP
+ /n7fnPFyJglYOIyw/Z4ZgHVxlFWyRgyYwi/vVe8MivdP4KosE07w7OnDlgMZpRyKTdOUJv
+ laGG+V7aSAEghT/tC5Yjksc5ooa72RVj7muBxemleEx6goM+VNK6y6Nq3NoQs49Mj4ZHIN
+ J4mhlVWe3ZI67H1hMHF9Ao+nkae8x9AYwqVDGkKfaznNR0pcB7X9LeS/jm/b+lQ4OjT55z
+ VJi0gdNQlsuci58L2J4tdQDfoUFpNjt+DIss0ju4qET8aMzfeDd4j6D81NjJvg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=l8dY6OJG
-Subject: Re: [Buildroot] [PATCH 1/1] package/ntpsec: fix build on xtensa
+ header.s=gm1 header.b=AIg+qHFq
+Subject: Re: [Buildroot] [PATCH 1/1] package/avahi: security bump to version
+ 0.9-rc1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -88,41 +89,26 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Dario,
+Hello Fabrice,
 
-On Sat, 27 Jul 2024 11:40:29 +0200
-Dario Binacchi <dario.binacchi@amarulasolutions.com> wrote:
+On Sat, 27 Jul 2024 15:52:52 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-> Fix the following build failure on xtensa:
+> - Drop patch (already in version)
+> - Fix CVE-2021-3468 and CVE-2023-38469 to CVE-2023-38473
+> - --{en,dis}able-libsystemd must be passed since
+>   https://github.com/avahi/avahi/commit/bc116c05b15f1f478a40e47fe9fc68011cef1e50
 > 
-> Waf: Entering directory `/home/buildroot/instance-0/output-1/build/ntpsec-1.2.3/build/host'
-> [1/2] Processing ntpd/ntp_parser.y
-> [2/2] Compiling build/host/ntpd/ntp_parser.tab.c
-> gcc: error: unrecognized command-line option '-mlongcalls'
-> gcc: error: unrecognized command-line option '-mauto-litpools'
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Thanks for the patch, but I'm pretty sure this is not the right fix.
-You can see from the error message above that what is happening here is
-that those flags, which are target CFLAGS, are passed to the host
-compiler "gcc".
+I'm a bit uneasy with moving to a release candidate version. How much
+effort is it to backport the CVE fixes onto version 0.8 ?
 
-So your patch is not correct in several ways:
+Alternatively, do we have some visibility on when the final 0.9 will be
+released? Knowing that 0.8 dates back from 2020, it seems like the
+project is not particularly quick at making new releases :-)
 
- - It will not solve the problem of other target CFLAGS used for other
-   CPU architectures, which are also not supported by the host gcc
-   compiler
-
- - It drops those target CFLAGS from the build of target code, which is
-   not correct, as if some flags are present, there's a good reason for
-   that.
-
-So, the correct fix is to look in more details into the ntpsec build
-system, and make sure it doesn't use target CFLAGS when building host
-code.
-
-Could you have a look into this?
-
-Thanks a lot,
+Thanks!
 
 Thomas
 -- 
