@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9A63C3DA49
-	for <buildroot@archiver.kernel.org>; Sun, 28 Jul 2024 11:07:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E9D4FC3DA49
+	for <buildroot@archiver.kernel.org>; Sun, 28 Jul 2024 11:07:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7799E403F9;
-	Sun, 28 Jul 2024 11:07:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AE36C404CE;
+	Sun, 28 Jul 2024 11:07:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hy1-IfNHC-B1; Sun, 28 Jul 2024 11:07:54 +0000 (UTC)
+ id WjZvw4D7sgKu; Sun, 28 Jul 2024 11:07:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4DA0140442
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 59373404CC
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4DA0140442;
-	Sun, 28 Jul 2024 11:07:54 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 9F3AE1BF471
- for <buildroot@lists.busybox.net>; Sun, 28 Jul 2024 11:07:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 59373404CC;
+	Sun, 28 Jul 2024 11:07:57 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id C45DD1BF471
+ for <buildroot@lists.busybox.net>; Sun, 28 Jul 2024 11:07:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 97D2B811FF
+ by smtp4.osuosl.org (Postfix) with ESMTP id CD06F403CA
  for <buildroot@lists.busybox.net>; Sun, 28 Jul 2024 11:07:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xK3-dpPOLEC0 for <buildroot@lists.busybox.net>;
- Sun, 28 Jul 2024 11:07:36 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4kh0vUA3RKNl for <buildroot@lists.busybox.net>;
+ Sun, 28 Jul 2024 11:07:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E5D9F81209
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A3087403CD
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id E5D9F81209
+ by smtp4.osuosl.org (Postfix) with ESMTP id A3087403CD
  for <buildroot@buildroot.org>; Sun, 28 Jul 2024 11:07:35 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D18DC87567; Sun, 28 Jul 2024 11:07:35 +0000 (UTC)
+ id 8972D87565; Sun, 28 Jul 2024 11:07:35 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 28 Jul 2024 13:06:57 +0200
+Date: Sun, 28 Jul 2024 12:36:26 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 5098b29472c20a7f39d0ca715e7a0c321e12474d
-X-Git-Newrev: ed83248117ac1fdefaa3943d7a335a6481a92545
+X-Git-Oldrev: 2c4db30b366f2e6c7f437ef7f2613e5f49053c35
+X-Git-Newrev: e55cdb58f3a9d5eac092586cc297b309cc0a372b
 X-Patchwork-Hint: ignore
-Message-Id: <20240728110735.D18DC87567@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x]
- package/python-ruamel-yaml: fix comment in hash file
+Message-Id: <20240728110735.8972D87565@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] board/chromebook: use
+ global-patch-dir for kernel patch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,27 +65,73 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ed83248117ac1fdefaa3943d7a335a6481a92545
+commit: https://git.buildroot.net/buildroot/commit/?id=e55cdb58f3a9d5eac092586cc297b309cc0a372b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 9fb8f2e10c547fedb5a65db384c813a2850241d8)
+We're going to add hashes soon, so we'll need to have that directory
+populated with hash files, and it would then be a bit confusing to not
+have the patch file in the patches directory...
+
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Alex Suykov <alex.suykov@gmail.com>
+Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+(cherry picked from commit 552a8cec8cb1a9a66591d075992957ad32547528)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/python-ruamel-yaml/python-ruamel-yaml.hash | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .checkpackageignore                                                    | 1 -
+ .../linux/0001-linux-4.15-dts-tpm.patch}                               | 3 +++
+ configs/chromebook_snow_defconfig                                      | 2 +-
+ 3 files changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-ruamel-yaml/python-ruamel-yaml.hash b/package/python-ruamel-yaml/python-ruamel-yaml.hash
-index 29852a51ed..ee5016835b 100644
---- a/package/python-ruamel-yaml/python-ruamel-yaml.hash
-+++ b/package/python-ruamel-yaml/python-ruamel-yaml.hash
-@@ -1,4 +1,4 @@
--# md5, sha256 from https://pypi.org/pypi/rfc3987/json
-+# md5, sha256 from https://pypi.org/pypi/ruamel.yaml/json
- md5  206bda0f33ab2c2f63777636200748b7  ruamel.yaml-0.17.21.tar.gz
- sha256  8b7ce697a2f212752a35c1ac414471dc16c424c9573be4926b56ff3f5d23b7af  ruamel.yaml-0.17.21.tar.gz
- # Locally computed sha256 checksums
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 41698e1cde..3533b1df33 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -26,7 +26,6 @@ board/canaan/k210-soc/post-build.sh Shellcheck
+ board/canaan/k210-soc/rootfs_overlay/sbin/init Shellcheck
+ board/chromebook/elm/sign.sh Shellcheck
+ board/chromebook/mksd.sh Shellcheck
+-board/chromebook/snow/linux-4.15-dts-tpm.patch ApplyOrder Upstream
+ board/chromebook/snow/sign.sh Shellcheck
+ board/ci20/patches/uboot/0001-mips-Remove-default-endiannes.patch Upstream
+ board/cubietech/cubieboard2/post-image.sh Shellcheck
+diff --git a/board/chromebook/snow/linux-4.15-dts-tpm.patch b/board/chromebook/snow/patches/linux/0001-linux-4.15-dts-tpm.patch
+similarity index 85%
+rename from board/chromebook/snow/linux-4.15-dts-tpm.patch
+rename to board/chromebook/snow/patches/linux/0001-linux-4.15-dts-tpm.patch
+index c71ff1b584..01f452b563 100644
+--- a/board/chromebook/snow/linux-4.15-dts-tpm.patch
++++ b/board/chromebook/snow/patches/linux/0001-linux-4.15-dts-tpm.patch
+@@ -9,6 +9,9 @@ See https://code.google.com/p/chromium/issues/detail?id=220169
+ and https://lkml.org/lkml/2013/3/4/242
+ 
+ Signed-off-by: Alex Suykov <alex.suykov@gmail.com>
++Upstream: Not Applicable
++[yann.morin.1998@free.fr: add Upstream tag]
++Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+ 
+ --- a/arch/arm/boot/dts/exynos5250-snow-common.dtsi
+ +++ b/arch/arm/boot/dts/exynos5250-snow-common.dtsi
+diff --git a/configs/chromebook_snow_defconfig b/configs/chromebook_snow_defconfig
+index bcb94b716b..50e355647c 100644
+--- a/configs/chromebook_snow_defconfig
++++ b/configs/chromebook_snow_defconfig
+@@ -1,6 +1,7 @@
+ BR2_arm=y
+ BR2_cortex_a15=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_15=y
++BR2_GLOBAL_PATCH_DIR="board/chromebook/snow/patches"
+ BR2_TARGET_GENERIC_GETTY_PORT="tty1"
+ BR2_TARGET_GENERIC_GETTY_TERM="linux"
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/chromebook/snow/sign.sh"
+@@ -8,7 +9,6 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/chromebook/mksd.sh"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.15"
+-BR2_LINUX_KERNEL_PATCH="board/chromebook/snow/linux-4.15-dts-tpm.patch"
+ BR2_LINUX_KERNEL_DEFCONFIG="exynos"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/chromebook/snow/linux-4.15.fragment"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
