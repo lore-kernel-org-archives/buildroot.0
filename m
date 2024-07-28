@@ -1,64 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 24915C3DA64
-	for <buildroot@archiver.kernel.org>; Sun, 28 Jul 2024 10:41:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E3628C3DA49
+	for <buildroot@archiver.kernel.org>; Sun, 28 Jul 2024 10:52:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DCEEF8112F;
-	Sun, 28 Jul 2024 10:41:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 957CE403B1;
+	Sun, 28 Jul 2024 10:52:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id l8nM5MwHEHML; Sun, 28 Jul 2024 10:41:23 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jLP-4XhI3Tq1; Sun, 28 Jul 2024 10:52:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3BD0081155
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8287B403E1
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3BD0081155;
-	Sun, 28 Jul 2024 10:41:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8287B403E1;
+	Sun, 28 Jul 2024 10:52:05 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A4FD71BF5F5
- for <buildroot@lists.busybox.net>; Sun, 28 Jul 2024 10:40:27 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id BB3351BF5F5
+ for <buildroot@lists.busybox.net>; Sun, 28 Jul 2024 10:52:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9F5AF40136
- for <buildroot@lists.busybox.net>; Sun, 28 Jul 2024 10:40:27 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B4F5F4014D
+ for <buildroot@lists.busybox.net>; Sun, 28 Jul 2024 10:52:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id S8PcAQ1JnpTK for <buildroot@lists.busybox.net>;
- Sun, 28 Jul 2024 10:40:27 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.197;
- helo=relay5-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+ id opESIZK3-tZE for <buildroot@lists.busybox.net>;
+ Sun, 28 Jul 2024 10:52:03 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.195;
+ helo=relay3-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org B64CE4011A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B64CE4011A
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B64CE4011A
- for <buildroot@buildroot.org>; Sun, 28 Jul 2024 10:40:26 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id CACE11C0003;
- Sun, 28 Jul 2024 10:40:24 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 76E7F400C1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 76E7F400C1
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 76E7F400C1
+ for <buildroot@buildroot.org>; Sun, 28 Jul 2024 10:52:03 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 56DFC60003;
+ Sun, 28 Jul 2024 10:52:00 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1sY1KC-002D5h-1J;
- Sun, 28 Jul 2024 12:40:24 +0200
+ (envelope-from <peter@korsgaard.com>) id 1sY1VO-002Equ-39;
+ Sun, 28 Jul 2024 12:51:58 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-References: <20240616141043.2775083-1-yann.morin.1998@free.fr>
- <20240616141043.2775083-3-yann.morin.1998@free.fr>
-Date: Sun, 28 Jul 2024 12:40:24 +0200
-In-Reply-To: <20240616141043.2775083-3-yann.morin.1998@free.fr> (Yann
- E. MORIN's message of "Sun, 16 Jun 2024 16:10:43 +0200")
-Message-ID: <87jzh5vlyf.fsf@dell.be.48ers.dk>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20240523170523.1492521-1-fontaine.fabrice@gmail.com>
+Date: Sun, 28 Jul 2024 12:51:58 +0200
+In-Reply-To: <20240523170523.1492521-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Thu, 23 May 2024 19:05:23 +0200")
+Message-ID: <87frrtvlf5.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 3/3] boards/chromebook-elm: force checking
- hashes
+Subject: Re: [Buildroot] [PATCH 1/1] package/util-linux: fix build with
+ uclibc-ng < 1.0.39
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,16 +69,28 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Bilal Wasim <bilalwasim676@gmail.com>, buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
- > Cc: Bilal Wasim <bilalwasim676@gmail.com>
+ > Fix the following build failure with uclibc-ng < 1.0.39 (i.e., without
+ > https://github.com/wbx-github/uclibc-ng/commit/85ac4f04d94e98389a8315e720630d0f95bfdfd6)
+ > raised since bump to version 2.39 in commit
+ > ad276d94a392fb13244e042851a44269e6254d61 and
+ > https://github.com/util-linux/util-linux/commit/03a254f010b08da1175f50a8ae7882e59228f1b4:
+
+ > sys-utils/setarch.c:106:7: error: 'PER_LINUX32_3GB' undeclared here (not in a function); did you mean 'PER_LINUX32'?
+ >   106 |     X(PER_LINUX32_3GB) \
+ >       |       ^~~~~~~~~~~~~~~
+
+ > Fixes: ad276d94a392fb13244e042851a44269e6254d61
+ >  - http://autobuild.buildroot.org/results/fb1feb47f2660882fa53f66bacc63e191fd52175
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed to 2024.02.x and 2024.05.x, thanks.
 
