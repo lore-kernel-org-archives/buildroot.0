@@ -4,60 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2297C3DA64
-	for <buildroot@archiver.kernel.org>; Sun, 28 Jul 2024 11:07:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9AA05C3DA64
+	for <buildroot@archiver.kernel.org>; Sun, 28 Jul 2024 11:07:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 73E20403C7;
-	Sun, 28 Jul 2024 11:07:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6372C403C7;
+	Sun, 28 Jul 2024 11:07:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vlhNNCL4YBvL; Sun, 28 Jul 2024 11:07:21 +0000 (UTC)
+ id 7EOl38rUdZCf; Sun, 28 Jul 2024 11:07:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 575F6403CA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EAFB7403CA
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 575F6403CA;
-	Sun, 28 Jul 2024 11:07:21 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id EE6C71BF471
- for <buildroot@lists.busybox.net>; Sun, 28 Jul 2024 11:07:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EAFB7403CA;
+	Sun, 28 Jul 2024 11:07:47 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 81AB31BF471
+ for <buildroot@lists.busybox.net>; Sun, 28 Jul 2024 11:07:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E8E1B400D1
- for <buildroot@lists.busybox.net>; Sun, 28 Jul 2024 11:07:19 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7CC148120B
+ for <buildroot@lists.busybox.net>; Sun, 28 Jul 2024 11:07:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wV2RJKNx3nOx for <buildroot@lists.busybox.net>;
- Sun, 28 Jul 2024 11:07:19 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::223;
- helo=relay3-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id nsrcqfml-Plj for <buildroot@lists.busybox.net>;
+ Sun, 28 Jul 2024 11:07:35 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org B9273400B5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B9273400B5
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B9273400B5
- for <buildroot@buildroot.org>; Sun, 28 Jul 2024 11:07:18 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 92F4860003;
- Sun, 28 Jul 2024 11:07:16 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1sY1kC-002HWl-0Y;
- Sun, 28 Jul 2024 13:07:16 +0200
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AF8F7811FF
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id AF8F7811FF
+ for <buildroot@buildroot.org>; Sun, 28 Jul 2024 11:07:35 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id A617787567; Sun, 28 Jul 2024 11:07:35 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
-References: <20240207170959.2672846-1-buildroot@bubu1.eu>
-Date: Sun, 28 Jul 2024 13:07:16 +0200
-In-Reply-To: <20240207170959.2672846-1-buildroot@bubu1.eu> (Marcus Hoffmann
- via buildroot's message of "Wed, 7 Feb 2024 18:09:53 +0100")
-Message-ID: <87wml5u657.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/4] package/python-ruamel-yaml: fix comment
- in hash file
+To: buildroot@buildroot.org
+Date: Sun, 28 Jul 2024 12:39:51 +0200
+X-Git-Refname: refs/heads/2024.02.x
+X-Git-Oldrev: 403ef0f2b5eab648a59d3ff2b4d14aeeeb8418cf
+X-Git-Newrev: 6e696e2799372a9d1ab6a5f74b2113f1b413f81d
+X-Patchwork-Hint: ignore
+Message-Id: <20240728110735.A617787567@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] boards/chromebook-elm:
+ force checking hashes
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,21 +59,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Marcus Hoffmann <buildroot@bubu1.eu>, Asaf Kahlon <asafka7@gmail.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Marcus" == Marcus Hoffmann via buildroot <buildroot@buildroot.org> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=6e696e2799372a9d1ab6a5f74b2113f1b413f81d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
- > Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Bilal Wasim <bilalwasim676@gmail.com>
+Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+(cherry picked from commit 3988f2d9238bc027b5d16219867e8d3c701c0c06)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ board/chromebook/elm/patches/linux-headers/linux-headers.hash | 1 +
+ board/chromebook/elm/patches/linux/linux.hash                 | 2 ++
+ configs/chromebook_elm_defconfig                              | 4 ++++
+ 3 files changed, 7 insertions(+)
 
-Committed to 2024.02.x and 2024.05.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/board/chromebook/elm/patches/linux-headers/linux-headers.hash b/board/chromebook/elm/patches/linux-headers/linux-headers.hash
+new file mode 120000
+index 0000000000..5808d92afe
+--- /dev/null
++++ b/board/chromebook/elm/patches/linux-headers/linux-headers.hash
+@@ -0,0 +1 @@
++../linux/linux.hash
+\ No newline at end of file
+diff --git a/board/chromebook/elm/patches/linux/linux.hash b/board/chromebook/elm/patches/linux/linux.hash
+new file mode 100644
+index 0000000000..88aa603ac5
+--- /dev/null
++++ b/board/chromebook/elm/patches/linux/linux.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256  dcdf99e43e98330d925016985bfbc7b83c66d367b714b2de0cbbfcbf83d8ca43  linux-5.10.tar.xz
+diff --git a/configs/chromebook_elm_defconfig b/configs/chromebook_elm_defconfig
+index 827d929631..0e8b6287c3 100644
+--- a/configs/chromebook_elm_defconfig
++++ b/configs/chromebook_elm_defconfig
+@@ -35,3 +35,7 @@ BR2_PACKAGE_HOST_PARTED=y
+ BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+ BR2_PACKAGE_HOST_UBOOT_TOOLS_FIT_SUPPORT=y
+ BR2_PACKAGE_HOST_VBOOT_UTILS=y
++
++# Misc
++BR2_GLOBAL_PATCH_DIR="board/chromebook/elm/patches"
++BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
