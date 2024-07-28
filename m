@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 237CAC3DA49
-	for <buildroot@archiver.kernel.org>; Sun, 28 Jul 2024 10:26:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8DFC5C3DA49
+	for <buildroot@archiver.kernel.org>; Sun, 28 Jul 2024 10:26:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EB743812AE;
-	Sun, 28 Jul 2024 10:26:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5CA4A817A0;
+	Sun, 28 Jul 2024 10:26:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id offvzyT4OmqZ; Sun, 28 Jul 2024 10:26:16 +0000 (UTC)
+ id y_3agAg1IaCZ; Sun, 28 Jul 2024 10:26:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9646881836
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E208D8184F
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9646881836;
-	Sun, 28 Jul 2024 10:26:15 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 235C11BF5F5
- for <buildroot@lists.busybox.net>; Sun, 28 Jul 2024 10:26:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E208D8184F;
+	Sun, 28 Jul 2024 10:26:18 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 024B31BF5F5
+ for <buildroot@lists.busybox.net>; Sun, 28 Jul 2024 10:26:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9B8A080B7C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 963A5400C1
  for <buildroot@lists.busybox.net>; Sun, 28 Jul 2024 10:26:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dOa_AxstQ3wH for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 28pIxrYTbGJa for <buildroot@lists.busybox.net>;
  Sun, 28 Jul 2024 10:25:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C327480BF7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9D80F4011A
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id C327480BF7
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9D80F4011A
  for <buildroot@buildroot.org>; Sun, 28 Jul 2024 10:25:59 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B0AF887540; Sun, 28 Jul 2024 10:25:59 +0000 (UTC)
+ id 97A8B8753F; Sun, 28 Jul 2024 10:25:59 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 28 Jul 2024 12:13:56 +0200
+Date: Sun, 28 Jul 2024 12:04:59 +0200
 X-Git-Refname: refs/heads/2024.05.x
-X-Git-Oldrev: 3918d46a260f4731aeb99fe0fa6a4008cf3426aa
-X-Git-Newrev: 58781773ecf0984b3d979c4f0d871c7dca2e3fa0
+X-Git-Oldrev: 8d9f064080a95f4edcfa62c25c292d0345fb3762
+X-Git-Newrev: fc0499a23c8fcf0d48d50602b7c41a6b6d63d8f4
 X-Patchwork-Hint: ignore
-Message-Id: <20240728102559.B0AF887540@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.05.x] package/systemd: fix
- build with recent kernels
+Message-Id: <20240728102559.97A8B8753F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.05.x] package/ubus: remove
+ obsolete systemd option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,80 +65,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=58781773ecf0984b3d979c4f0d871c7dca2e3fa0
+commit: https://git.buildroot.net/buildroot/commit/?id=fc0499a23c8fcf0d48d50602b7c41a6b6d63d8f4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.05.x
 
-Backport a patch from upstream that adds the magic number for the
-bcachefs superblock. Otherwise, systemd 254.13 fails to compile with
-the latest kernel versions.
+ENABLE_SYSTEMD option has been removed from ubus by upstream commit:
 
-Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+  96ab0b3032f5 ubusd: remove systemd socket activation support
+
+From a Buildroot perspective, this means that this systemd socket
+activation feature no longer exists since Buildroot commit
+130be80d34905d3e79ff6b8f8fb31b3c3765eb96 ("ubus: bump version"), as we
+bumped ubus from 259450f414d8c9ee41896e8e6d6bc57ec00e2b63 to
+34c6e818e431cc53478a0f7c7c1eca07d194d692 in this commit, and the
+96ab0b3032f5 ("ubusd: remove systemd socket activation support")
+commit is in this range. It was therefore dropped upstream in 2016,
+and in Buildroot in 2017.
+
+Signed-off-by: Jan Havran <havran.jan@email.cz>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit f3c1f667dcc300eb7205aa3e1731ba3377a8e48d)
+(cherry picked from commit 60c8807c69be60a8f1c35ed9f992850b009126be)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../systemd/0002-basic-add-bcachefs-magic.patch    | 53 ++++++++++++++++++++++
- 1 file changed, 53 insertions(+)
+ package/ubus/ubus.mk | 7 -------
+ 1 file changed, 7 deletions(-)
 
-diff --git a/package/systemd/0002-basic-add-bcachefs-magic.patch b/package/systemd/0002-basic-add-bcachefs-magic.patch
-new file mode 100644
-index 0000000000..e7f4b1cbb7
---- /dev/null
-+++ b/package/systemd/0002-basic-add-bcachefs-magic.patch
-@@ -0,0 +1,53 @@
-+From e5ff9b585d7dc54f50085d518d7d588c250b0690 Mon Sep 17 00:00:00 2001
-+From: Chris Packham <chris.packham@alliedtelesis.co.nz>
-+Date: Fri, 31 May 2024 09:51:38 +1200
-+Subject: [PATCH] basic: Add BCACHEFS magic
-+
-+Import magic.h from Linux 6.9 to get the definition of
-+BCACHEFS_SUPER_MAGIC. Update filesystems-gperf.gperf to add knowledge of
-+bcachefs.
-+
-+This fixes the following error building against a bleeding edge kernel.
-+```
-+src/basic/meson.build:234:8: ERROR: Problem encountered: Unknown filesystems defined in kernel headers:
-+
-+Filesystem found in kernel header but not in filesystems-gperf.gperf: BCACHEFS_SUPER_MAGIC
-+```
-+
-+Upstream: https://github.com/systemd/systemd/commit/201148b08de65de004d10679a8c3d201cc08fb28
-+Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
-+---
-+ src/basic/filesystems-gperf.gperf | 1 +
-+ src/basic/missing_magic.h         | 7 +++++++
-+ 2 files changed, 8 insertions(+)
-+
-+diff --git a/src/basic/filesystems-gperf.gperf b/src/basic/filesystems-gperf.gperf
-+index 1cd66b5a5f..c82fe98227 100644
-+--- a/src/basic/filesystems-gperf.gperf
-++++ b/src/basic/filesystems-gperf.gperf
-+@@ -28,6 +28,7 @@ afs,             {AFS_FS_MAGIC, AFS_SUPER_MAGIC}
-+ anon_inodefs,    {ANON_INODE_FS_MAGIC}
-+ autofs,          {AUTOFS_SUPER_MAGIC}
-+ balloon-kvm,     {BALLOON_KVM_MAGIC}
-++bcachefs,        {BCACHEFS_SUPER_MAGIC}
-+ bdev,            {BDEVFS_MAGIC}
-+ binder,          {BINDERFS_SUPER_MAGIC}
-+ binfmt_misc,     {BINFMTFS_MAGIC}
-+diff --git a/src/basic/missing_magic.h b/src/basic/missing_magic.h
-+index 82d71c8ad1..b3d2ee9f57 100644
-+--- a/src/basic/missing_magic.h
-++++ b/src/basic/missing_magic.h
-+@@ -197,3 +197,10 @@
-+ #ifndef NTFS3_SUPER_MAGIC
-+ #define NTFS3_SUPER_MAGIC 0x7366746e
-+ #endif
-++
-++/* Added in Linux commit e2f48c48090dea172c0c571101041de64634dae5. Remove when next sync'd */
-++#ifndef BCACHEFS_SUPER_MAGIC
-++#  define BCACHEFS_SUPER_MAGIC 0xca451a4e
-++#else
-++assert_cc(BCACHEFS_SUPER_MAGIC == 0xca451a4e)
-++#endif
-+--
-+2.45.1
-+
+diff --git a/package/ubus/ubus.mk b/package/ubus/ubus.mk
+index 1f9891411a..cc2ed81786 100644
+--- a/package/ubus/ubus.mk
++++ b/package/ubus/ubus.mk
+@@ -25,13 +25,6 @@ else
+ UBUS_CONF_OPTS += -DBUILD_LUA=OFF
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_SYSTEMD),y)
+-UBUS_DEPENDENCIES += systemd
+-UBUS_CONF_OPTS += -DENABLE_SYSTEMD=ON
+-else
+-UBUS_CONF_OPTS += -DENABLE_SYSTEMD=OFF
+-endif
+-
+ ifeq ($(BR2_PACKAGE_UBUS_EXAMPLES),y)
+ UBUS_CONF_OPTS += -DBUILD_EXAMPLES=ON
+ else
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
