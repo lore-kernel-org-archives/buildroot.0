@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22DE1C3DA49
-	for <buildroot@archiver.kernel.org>; Sun, 28 Jul 2024 11:08:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F0F0C3DA49
+	for <buildroot@archiver.kernel.org>; Sun, 28 Jul 2024 11:08:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E8165403C7;
-	Sun, 28 Jul 2024 11:08:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EEB1A404C0;
+	Sun, 28 Jul 2024 11:08:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ufsISg1iTpZw; Sun, 28 Jul 2024 11:08:01 +0000 (UTC)
+ id 2D07I3xloFET; Sun, 28 Jul 2024 11:08:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E32E24056C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A86C14059D
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E32E24056C;
-	Sun, 28 Jul 2024 11:08:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A86C14059D;
+	Sun, 28 Jul 2024 11:08:03 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D51881BF471
- for <buildroot@lists.busybox.net>; Sun, 28 Jul 2024 11:07:39 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0CE121BF471
+ for <buildroot@lists.busybox.net>; Sun, 28 Jul 2024 11:07:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D30CB403CD
+ by smtp4.osuosl.org (Postfix) with ESMTP id E5E0F403CE
  for <buildroot@lists.busybox.net>; Sun, 28 Jul 2024 11:07:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yPmo_RQFyasU for <buildroot@lists.busybox.net>;
+ id EG_nNLfwUbzX for <buildroot@lists.busybox.net>;
  Sun, 28 Jul 2024 11:07:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D6C95403E2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CBE18403E5
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id D6C95403E2
+ by smtp4.osuosl.org (Postfix) with ESMTP id CBE18403E5
  for <buildroot@buildroot.org>; Sun, 28 Jul 2024 11:07:35 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C4D4A87565; Sun, 28 Jul 2024 11:07:35 +0000 (UTC)
+ id B6AC087566; Sun, 28 Jul 2024 11:07:35 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 28 Jul 2024 13:01:15 +0200
+Date: Sun, 28 Jul 2024 12:51:09 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: dd6fcca3365805069f2476211defd90df793b578
-X-Git-Newrev: 5098b29472c20a7f39d0ca715e7a0c321e12474d
+X-Git-Oldrev: 6e696e2799372a9d1ab6a5f74b2113f1b413f81d
+X-Git-Newrev: dd6fcca3365805069f2476211defd90df793b578
 X-Patchwork-Hint: ignore
-Message-Id: <20240728110735.C4D4A87565@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] utils/genrandconfig: stop
- passing --passive-ftp to wget
+Message-Id: <20240728110735.B6AC087566@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/util-linux: fix
+ build with uclibc-ng < 1.0.39
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,35 +65,75 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5098b29472c20a7f39d0ca715e7a0c321e12474d
+commit: https://git.buildroot.net/buildroot/commit/?id=dd6fcca3365805069f2476211defd90df793b578
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-Since there are no more packages using FTP-hosted files, we can drop
-the --passive-ftp option from genrandconfig, as it would cause
-problems on systems that use wget2.
+Fix the following build failure with uclibc-ng < 1.0.39 (i.e., without
+https://github.com/wbx-github/uclibc-ng/commit/85ac4f04d94e98389a8315e720630d0f95bfdfd6)
+raised since bump to version 2.39 in commit
+ad276d94a392fb13244e042851a44269e6254d61 and
+https://github.com/util-linux/util-linux/commit/03a254f010b08da1175f50a8ae7882e59228f1b4:
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+sys-utils/setarch.c:106:7: error: 'PER_LINUX32_3GB' undeclared here (not in a function); did you mean 'PER_LINUX32'?
+  106 |     X(PER_LINUX32_3GB) \
+      |       ^~~~~~~~~~~~~~~
+
+Fixes: ad276d94a392fb13244e042851a44269e6254d61
+ - http://autobuild.buildroot.org/results/fb1feb47f2660882fa53f66bacc63e191fd52175
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 881a8f13465b1be19540f6e35f2a658d49f63dd7)
-[Peter: slightly reword commit message, no curl backend here]
+(cherry picked from commit 51f753710d55a6a9e6ee778fba9d1c6b2a722485)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- utils/genrandconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ ...setarch.c-fix-build-with-uclibc-ng-1.0.39.patch | 39 ++++++++++++++++++++++
+ 1 file changed, 39 insertions(+)
 
-diff --git a/utils/genrandconfig b/utils/genrandconfig
-index 5796bbaa0f..63943eafe9 100755
---- a/utils/genrandconfig
-+++ b/utils/genrandconfig
-@@ -681,7 +681,7 @@ async def gen_config(args):
-         configlines += minimalf.readlines()
- 
-     # Allow hosts with old certificates to download over https
--    configlines.append("BR2_WGET=\"wget --passive-ftp -nd -t 3 --no-check-certificate\"\n")
-+    configlines.append("BR2_WGET=\"wget -nd -t 3 --no-check-certificate\"\n")
- 
-     # Per-package folder
-     if randint(0, 15) == 0:
+diff --git a/package/util-linux/0001-sys-utils-setarch.c-fix-build-with-uclibc-ng-1.0.39.patch b/package/util-linux/0001-sys-utils-setarch.c-fix-build-with-uclibc-ng-1.0.39.patch
+new file mode 100644
+index 0000000000..12dd119ef3
+--- /dev/null
++++ b/package/util-linux/0001-sys-utils-setarch.c-fix-build-with-uclibc-ng-1.0.39.patch
+@@ -0,0 +1,39 @@
++From beef18da4de87ca5aaadf2beb14187f35cc4f50f Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Wed, 15 May 2024 18:22:11 +0200
++Subject: [PATCH] sys-utils/setarch.c: fix build with uclibc-ng < 1.0.39
++
++Fix the following build failure with uclibc-ng < 1.0.39 (i.e., without
++https://github.com/wbx-github/uclibc-ng/commit/85ac4f04d94e98389a8315e720630d0f95bfdfd6)
++raised since version 2.39 and
++https://github.com/util-linux/util-linux/commit/03a254f010b08da1175f50a8ae7882e59228f1b4:
++
++sys-utils/setarch.c:106:7: error: 'PER_LINUX32_3GB' undeclared here (not in a function); did you mean 'PER_LINUX32'?
++  106 |     X(PER_LINUX32_3GB) \
++      |       ^~~~~~~~~~~~~~~
++
++Fixes:
++ - http://autobuild.buildroot.org/results/fb1feb47f2660882fa53f66bacc63e191fd52175
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Upstream: https://github.com/util-linux/util-linux/commit/4647fc6afbf7e99c49531600425df60f1243fcd2
++---
++ sys-utils/setarch.c | 5 +++++
++ 1 file changed, 5 insertions(+)
++
++diff --git a/sys-utils/setarch.c b/sys-utils/setarch.c
++index 227bc6b5de..4bcb5e69e6 100644
++--- a/sys-utils/setarch.c
+++++ b/sys-utils/setarch.c
++@@ -89,6 +89,11 @@
++ # define PER_LINUX_FDPIC	(PER_LINUX | FDPIC_FUNCPTRS)
++ #endif
++ 
+++/* fallback for old uclibc-headers < 1.0.39 */
+++#ifndef PER_LINUX32_3GB
+++# define PER_LINUX32_3GB	(PER_LINUX32 | ADDR_LIMIT_3GB)
+++#endif
+++
++ #define ALL_PERSONALITIES \
++     X(PER_LINUX) \
++     X(PER_LINUX_32BIT) \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
