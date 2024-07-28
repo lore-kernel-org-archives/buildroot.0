@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E3628C3DA49
-	for <buildroot@archiver.kernel.org>; Sun, 28 Jul 2024 10:52:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EFA21C3DA49
+	for <buildroot@archiver.kernel.org>; Sun, 28 Jul 2024 11:03:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 957CE403B1;
-	Sun, 28 Jul 2024 10:52:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 53F42403C7;
+	Sun, 28 Jul 2024 11:03:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jLP-4XhI3Tq1; Sun, 28 Jul 2024 10:52:05 +0000 (UTC)
+ id wsICPqOCu004; Sun, 28 Jul 2024 11:03:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8287B403E1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 32979403CA
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8287B403E1;
-	Sun, 28 Jul 2024 10:52:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 32979403CA;
+	Sun, 28 Jul 2024 11:03:58 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id BB3351BF5F5
- for <buildroot@lists.busybox.net>; Sun, 28 Jul 2024 10:52:04 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 246C11BF5F5
+ for <buildroot@lists.busybox.net>; Sun, 28 Jul 2024 11:03:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B4F5F4014D
- for <buildroot@lists.busybox.net>; Sun, 28 Jul 2024 10:52:04 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 10522400C1
+ for <buildroot@lists.busybox.net>; Sun, 28 Jul 2024 11:03:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id opESIZK3-tZE for <buildroot@lists.busybox.net>;
- Sun, 28 Jul 2024 10:52:03 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.195;
- helo=relay3-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+ id N7jxa4WdThun for <buildroot@lists.busybox.net>;
+ Sun, 28 Jul 2024 11:03:55 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.193;
+ helo=relay1-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 76E7F400C1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 76E7F400C1
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 76E7F400C1
- for <buildroot@buildroot.org>; Sun, 28 Jul 2024 10:52:03 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 56DFC60003;
- Sun, 28 Jul 2024 10:52:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 85D45400B5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 85D45400B5
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 85D45400B5
+ for <buildroot@buildroot.org>; Sun, 28 Jul 2024 11:03:54 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 8FF95240002;
+ Sun, 28 Jul 2024 11:03:52 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1sY1VO-002Equ-39;
- Sun, 28 Jul 2024 12:51:58 +0200
+ (envelope-from <peter@korsgaard.com>) id 1sY1gu-002Gkf-0m;
+ Sun, 28 Jul 2024 13:03:52 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20240523170523.1492521-1-fontaine.fabrice@gmail.com>
-Date: Sun, 28 Jul 2024 12:51:58 +0200
-In-Reply-To: <20240523170523.1492521-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Thu, 23 May 2024 19:05:23 +0200")
-Message-ID: <87frrtvlf5.fsf@dell.be.48ers.dk>
+To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+References: <20240712123847.2FE3885E00@busybox.osuosl.org>
+Date: Sun, 28 Jul 2024 13:03:52 +0200
+In-Reply-To: <20240712123847.2FE3885E00@busybox.osuosl.org> (Thomas Petazzoni
+ via buildroot's message of "Fri, 12 Jul 2024 14:34:57 +0200")
+Message-ID: <875xspvkvb.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/util-linux: fix build with
- uclibc-ng < 1.0.39
+Subject: Re: [Buildroot] [git commit] utils/genrandconfig: stop passing
+ --passive-ftp to wget
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,28 +69,23 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+>>>>> "Thomas" == Thomas Petazzoni via buildroot <buildroot@buildroot.org> writes:
 
- > Fix the following build failure with uclibc-ng < 1.0.39 (i.e., without
- > https://github.com/wbx-github/uclibc-ng/commit/85ac4f04d94e98389a8315e720630d0f95bfdfd6)
- > raised since bump to version 2.39 in commit
- > ad276d94a392fb13244e042851a44269e6254d61 and
- > https://github.com/util-linux/util-linux/commit/03a254f010b08da1175f50a8ae7882e59228f1b4:
+ > commit: https://git.buildroot.net/buildroot/commit/?id=881a8f13465b1be19540f6e35f2a658d49f63dd7
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > sys-utils/setarch.c:106:7: error: 'PER_LINUX32_3GB' undeclared here (not in a function); did you mean 'PER_LINUX32'?
- >   106 |     X(PER_LINUX32_3GB) \
- >       |       ^~~~~~~~~~~~~~~
+ > Since we no longer use WGET to retrieve FTP-hosted files, we can drop
+ > the --passive-ftp option from genrandconfig, as it would cause
+ > problems on systems that use wget2.
 
- > Fixes: ad276d94a392fb13244e042851a44269e6254d61
- >  - http://autobuild.buildroot.org/results/fb1feb47f2660882fa53f66bacc63e191fd52175
-
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
 Committed to 2024.02.x and 2024.05.x, thanks.
 
