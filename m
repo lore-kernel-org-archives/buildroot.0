@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ADFC7C3DA64
-	for <buildroot@archiver.kernel.org>; Sun, 28 Jul 2024 10:25:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CBE8FC3DA64
+	for <buildroot@archiver.kernel.org>; Sun, 28 Jul 2024 10:25:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 78E3F80B6A;
-	Sun, 28 Jul 2024 10:25:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 85CA780D6D;
+	Sun, 28 Jul 2024 10:25:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HPmtFeQV2_pi; Sun, 28 Jul 2024 10:25:16 +0000 (UTC)
+ id 3sIeoc6u7bV7; Sun, 28 Jul 2024 10:25:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 87CF080AEA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BDC4A80C07
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 87CF080AEA;
-	Sun, 28 Jul 2024 10:25:16 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id BE0D51BF5F5
+	by smtp1.osuosl.org (Postfix) with ESMTP id BDC4A80C07;
+	Sun, 28 Jul 2024 10:25:18 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id CF3701BF94D
  for <buildroot@lists.busybox.net>; Sun, 28 Jul 2024 10:24:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id ABCF1812AE
+ by smtp4.osuosl.org (Postfix) with ESMTP id C929E40281
  for <buildroot@lists.busybox.net>; Sun, 28 Jul 2024 10:24:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xs5QmiS6aXp3 for <buildroot@lists.busybox.net>;
- Sun, 28 Jul 2024 10:24:53 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id lzQawd9W9-8l for <buildroot@lists.busybox.net>;
+ Sun, 28 Jul 2024 10:24:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F0DC2812A7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D65AF4026F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id F0DC2812A7
+ by smtp4.osuosl.org (Postfix) with ESMTP id D65AF4026F
  for <buildroot@buildroot.org>; Sun, 28 Jul 2024 10:24:52 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EB4BF82690; Sun, 28 Jul 2024 10:24:52 +0000 (UTC)
+ id CF22B8751A; Sun, 28 Jul 2024 10:24:52 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 28 Jul 2024 12:14:10 +0200
+Date: Sun, 28 Jul 2024 12:03:21 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 2d1d07c662c2b8a751aeb4969d491f8e57f041b9
-X-Git-Newrev: 29409c9d345a2536f6b72c605cda0d13f306200f
+X-Git-Oldrev: 4b2aabf2df8147a7425281ed846284e33b09b47a
+X-Git-Newrev: 7fd63a9ef6a6e1851e7347a1fe3fe28fc1fab504
 X-Patchwork-Hint: ignore
-Message-Id: <20240728102452.EB4BF82690@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/systemd: fix
- build with recent kernels
+Message-Id: <20240728102452.CF22B8751A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/c-ares: update
+ site url
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,80 +65,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=29409c9d345a2536f6b72c605cda0d13f306200f
+commit: https://git.buildroot.net/buildroot/commit/?id=7fd63a9ef6a6e1851e7347a1fe3fe28fc1fab504
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-Backport a patch from upstream that adds the magic number for the
-bcachefs superblock. Otherwise, systemd 254.13 fails to compile with
-the latest kernel versions.
+Download URLs changed after hosting of the c-ares website changed
+ownership:
+https://daniel.haxx.se/blog/2024/06/06/bye-bye-hosting-c-ares-web/
 
-Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+This cannot be fixed upstream as github pages does not support .htaccess
+files according to:
+https://github.com/c-ares/c-ares.github.io/issues/2
+
+Signed-off-by: Alexander Wellbrock <a.wellbrock@mailbox.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit f3c1f667dcc300eb7205aa3e1731ba3377a8e48d)
+(cherry picked from commit b57f48e131e94a2fafc31e3ca6cb3c11553a5930)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../systemd/0002-basic-add-bcachefs-magic.patch    | 53 ++++++++++++++++++++++
- 1 file changed, 53 insertions(+)
+ package/c-ares/c-ares.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/systemd/0002-basic-add-bcachefs-magic.patch b/package/systemd/0002-basic-add-bcachefs-magic.patch
-new file mode 100644
-index 0000000000..e7f4b1cbb7
---- /dev/null
-+++ b/package/systemd/0002-basic-add-bcachefs-magic.patch
-@@ -0,0 +1,53 @@
-+From e5ff9b585d7dc54f50085d518d7d588c250b0690 Mon Sep 17 00:00:00 2001
-+From: Chris Packham <chris.packham@alliedtelesis.co.nz>
-+Date: Fri, 31 May 2024 09:51:38 +1200
-+Subject: [PATCH] basic: Add BCACHEFS magic
-+
-+Import magic.h from Linux 6.9 to get the definition of
-+BCACHEFS_SUPER_MAGIC. Update filesystems-gperf.gperf to add knowledge of
-+bcachefs.
-+
-+This fixes the following error building against a bleeding edge kernel.
-+```
-+src/basic/meson.build:234:8: ERROR: Problem encountered: Unknown filesystems defined in kernel headers:
-+
-+Filesystem found in kernel header but not in filesystems-gperf.gperf: BCACHEFS_SUPER_MAGIC
-+```
-+
-+Upstream: https://github.com/systemd/systemd/commit/201148b08de65de004d10679a8c3d201cc08fb28
-+Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
-+---
-+ src/basic/filesystems-gperf.gperf | 1 +
-+ src/basic/missing_magic.h         | 7 +++++++
-+ 2 files changed, 8 insertions(+)
-+
-+diff --git a/src/basic/filesystems-gperf.gperf b/src/basic/filesystems-gperf.gperf
-+index 1cd66b5a5f..c82fe98227 100644
-+--- a/src/basic/filesystems-gperf.gperf
-++++ b/src/basic/filesystems-gperf.gperf
-+@@ -28,6 +28,7 @@ afs,             {AFS_FS_MAGIC, AFS_SUPER_MAGIC}
-+ anon_inodefs,    {ANON_INODE_FS_MAGIC}
-+ autofs,          {AUTOFS_SUPER_MAGIC}
-+ balloon-kvm,     {BALLOON_KVM_MAGIC}
-++bcachefs,        {BCACHEFS_SUPER_MAGIC}
-+ bdev,            {BDEVFS_MAGIC}
-+ binder,          {BINDERFS_SUPER_MAGIC}
-+ binfmt_misc,     {BINFMTFS_MAGIC}
-+diff --git a/src/basic/missing_magic.h b/src/basic/missing_magic.h
-+index 82d71c8ad1..b3d2ee9f57 100644
-+--- a/src/basic/missing_magic.h
-++++ b/src/basic/missing_magic.h
-+@@ -197,3 +197,10 @@
-+ #ifndef NTFS3_SUPER_MAGIC
-+ #define NTFS3_SUPER_MAGIC 0x7366746e
-+ #endif
-++
-++/* Added in Linux commit e2f48c48090dea172c0c571101041de64634dae5. Remove when next sync'd */
-++#ifndef BCACHEFS_SUPER_MAGIC
-++#  define BCACHEFS_SUPER_MAGIC 0xca451a4e
-++#else
-++assert_cc(BCACHEFS_SUPER_MAGIC == 0xca451a4e)
-++#endif
-+--
-+2.45.1
-+
+diff --git a/package/c-ares/c-ares.mk b/package/c-ares/c-ares.mk
+index c4441255a2..c2403b9c4c 100644
+--- a/package/c-ares/c-ares.mk
++++ b/package/c-ares/c-ares.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ C_ARES_VERSION = 1.27.0
+-C_ARES_SITE = http://c-ares.haxx.se/download
++C_ARES_SITE = https://github.com/c-ares/c-ares/releases/download/cares-1_27_0
+ C_ARES_INSTALL_STAGING = YES
+ C_ARES_CONF_OPTS = --with-random=/dev/urandom
+ C_ARES_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
