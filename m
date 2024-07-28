@@ -4,71 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2672C3DA64
-	for <buildroot@archiver.kernel.org>; Sun, 28 Jul 2024 19:56:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A305C3DA49
+	for <buildroot@archiver.kernel.org>; Sun, 28 Jul 2024 19:57:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 77BE440464;
-	Sun, 28 Jul 2024 19:56:47 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2FE7F401AD;
+	Sun, 28 Jul 2024 19:57:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AjKLPDYI4a-m; Sun, 28 Jul 2024 19:56:46 +0000 (UTC)
+ id 149AUJVD-zsn; Sun, 28 Jul 2024 19:57:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 33CE540568
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E1E67403BF
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 33CE540568;
-	Sun, 28 Jul 2024 19:56:46 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 0D37F1BF577
- for <buildroot@lists.busybox.net>; Sun, 28 Jul 2024 19:56:45 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E1E67403BF;
+	Sun, 28 Jul 2024 19:57:45 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 8725D1BF577
+ for <buildroot@lists.busybox.net>; Sun, 28 Jul 2024 19:57:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F0049606D3
- for <buildroot@lists.busybox.net>; Sun, 28 Jul 2024 19:56:44 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 74DB0402F0
+ for <buildroot@lists.busybox.net>; Sun, 28 Jul 2024 19:57:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CcMIuz8ijqiK for <buildroot@lists.busybox.net>;
- Sun, 28 Jul 2024 19:56:44 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.201;
- helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xcU5ph085UpH for <buildroot@lists.busybox.net>;
+ Sun, 28 Jul 2024 19:57:43 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E62EC60628
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E62EC60628
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E62EC60628
- for <buildroot@buildroot.org>; Sun, 28 Jul 2024 19:56:43 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 0E96F1BF203;
- Sun, 28 Jul 2024 19:56:40 +0000 (UTC)
-Date: Sun, 28 Jul 2024 21:56:39 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Message-ID: <20240728215639.5584bc72@windsurf>
-In-Reply-To: <20240727175805.1739987-1-bernd@kuhls.net>
-References: <20240727175805.1739987-1-bernd@kuhls.net>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1722196601;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=SBjpyViodHB9gIq7m4VjIKX7We8HDBzsdLcQ+fQiuiY=;
- b=lh4qQajtHWnVerhkgvUVTteD4ETsAAPPLSyMPmTe5E9e0HTtJmmIRRv4e2lojLT2U/19fa
- M4mC7WR6OH/EwUl1/u6EJ3B5aRX4MlBbcMPp6N32MOgTxoSUIlljLSaSCNGpEx7m6oD/05
- gjSXPZZ8iP1qfkTiEKqfkXKGDSThnyxzp41tJ/8O3au5NgDTFiePs/nAzzglsMWa8GUsg4
- 1ZMEZslMZSNwYBBnFOIVS2pG+3lpqfUZtdIqYz52rjCNcOv694p+mhMgbe6LBMjUGA0gze
- hgyC0bnxVSkz94FO3bewrHomeb7VtXt1B1gItM46UVCEHsQWm9TnrvTSVPkf+A==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=lh4qQajt
-Subject: Re: [Buildroot] [PATCH 1/2] package/libks: bump version to 2.0.5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 81C19402BF
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 81C19402BF
+ for <buildroot@buildroot.org>; Sun, 28 Jul 2024 19:57:43 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 7C99B82894; Sun, 28 Jul 2024 19:57:43 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 28 Jul 2024 21:57:08 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: c79ec67bc8763f8d630f51ffbcaf0bb6bfb71236
+X-Git-Newrev: 197e67e542c909cd4d4d45ef48faf3cae7d586b0
+X-Patchwork-Hint: ignore
+Message-Id: <20240728195743.7C99B82894@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gtkiostream: add
+ BR2_PACKAGE_GTKIOSTREAM_ARCH_SUPPORTS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,28 +60,55 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat, 27 Jul 2024 19:58:04 +0200
-Bernd Kuhls <bernd@kuhls.net> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=197e67e542c909cd4d4d45ef48faf3cae7d586b0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-> ---
->  package/libks/libks.hash | 2 +-
->  package/libks/libks.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+gtkiostream only supports little-endian since its addition in commit
+fab48302865e5c0c98d91b696bc90e75e38189bb resulting in the following
+build failure:
 
-Both applied to master, thanks.
+In file included from BitStream.C:23:
+../include/BitStream.H:35:2: error: #error "iobitstream not tested on big endian systems"
+   35 | #error "iobitstream not tested on big endian systems"
+      |  ^~~~~
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Fixes: fab48302865e5c0c98d91b696bc90e75e38189bb
+ - http://autobuild.buildroot.org/results/aec24d92cc2196596413cf509d686f1f8d1eca95
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/gtkiostream/Config.in | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/package/gtkiostream/Config.in b/package/gtkiostream/Config.in
+index 1d1ec27346..334b4dc331 100644
+--- a/package/gtkiostream/Config.in
++++ b/package/gtkiostream/Config.in
+@@ -1,5 +1,10 @@
++config BR2_PACKAGE_GTKIOSTREAM_ARCH_SUPPORTS
++	bool
++	default y if BR2_ENDIAN = "LITTLE"
++
+ config BR2_PACKAGE_GTKIOSTREAM
+ 	bool "gtkiostream"
++	depends on BR2_PACKAGE_GTKIOSTREAM_ARCH_SUPPORTS
+ 	depends on BR2_INSTALL_LIBSTDCPP # eigen
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	select BR2_PACKAGE_ALSA_LIB_MIXER if BR2_PACKAGE_ALSA_LIB
+@@ -14,5 +19,6 @@ config BR2_PACKAGE_GTKIOSTREAM
+ 	  https://github.com/flatmax/gtkiostream
+ 
+ comment "gtkiostream needs a toolchain w/ C++, threads"
++	depends on BR2_PACKAGE_GTKIOSTREAM_ARCH_SUPPORTS
+ 	depends on !BR2_INSTALL_LIBSTDCPP || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
