@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B8D1C3DA64
-	for <buildroot@archiver.kernel.org>; Sun, 28 Jul 2024 07:23:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AEDEEC3DA64
+	for <buildroot@archiver.kernel.org>; Sun, 28 Jul 2024 07:23:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 68E126068F;
-	Sun, 28 Jul 2024 07:23:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7D007607B4;
+	Sun, 28 Jul 2024 07:23:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MH7RIW5jBqqY; Sun, 28 Jul 2024 07:23:04 +0000 (UTC)
+ id X2Kkltrll_56; Sun, 28 Jul 2024 07:23:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7425E607B4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8339D60828
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7425E607B4;
-	Sun, 28 Jul 2024 07:23:04 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 52AEF1BF32E
- for <buildroot@lists.busybox.net>; Sun, 28 Jul 2024 07:23:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8339D60828;
+	Sun, 28 Jul 2024 07:23:08 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 4E3CE1BF32E
+ for <buildroot@lists.busybox.net>; Sun, 28 Jul 2024 07:23:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3FCFF607B4
+ by smtp4.osuosl.org (Postfix) with ESMTP id 40F77404DC
  for <buildroot@lists.busybox.net>; Sun, 28 Jul 2024 07:23:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NrWzNGJAPOvV for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id SYPn_BCovo3n for <buildroot@lists.busybox.net>;
  Sun, 28 Jul 2024 07:23:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7CBE060770
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 83042404CC
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7CBE060770
+ by smtp4.osuosl.org (Postfix) with ESMTP id 83042404CC
  for <buildroot@buildroot.org>; Sun, 28 Jul 2024 07:23:02 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6A88487469; Sun, 28 Jul 2024 07:23:02 +0000 (UTC)
+ id 7BC0C8747A; Sun, 28 Jul 2024 07:23:02 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 28 Jul 2024 09:04:05 +0200
+Date: Sun, 28 Jul 2024 09:07:29 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: cc610b2f126ebb1c65877d14544bcf3eebe23a90
-X-Git-Newrev: 07659a594b39da9cfe995f949fcf20d7143bedec
+X-Git-Oldrev: 07659a594b39da9cfe995f949fcf20d7143bedec
+X-Git-Newrev: 189d9d965c1b86b4e3f6403657133db8a24c3e18
 X-Patchwork-Hint: ignore
-Message-Id: <20240728072302.6A88487469@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/octave: add
- optional openssl support
+Message-Id: <20240728072302.7BC0C8747A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] boot/syslinux: fix
+ building with GCC 14.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,48 +60,81 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============7287761837075190518=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=07659a594b39da9cfe995f949fcf20d7143bedec
+--===============7287761837075190518==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=189d9d965c1b86b4e3f6403657133db8a24c3e18
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-GNU Octave supports the --with-openssl configure option since v4.0.0.
+Add missing stdio.h include. Without this includes, the build fails
+with the following error under GCC 14.x:
 
-For reference, commit 40ea68b4b2 "package/octave: new package"
-introduced the package at v7.1.0.
+../../../com32/lib/syslinux/debug.c: In function ‘syslinux_debug’:
+../../../com32/lib/syslinux/debug.c:91:5: error: implicit declaration of function ‘printf’ [-Wimplicit-function-declaration]
+   91 |     printf("Dynamic debug unavailable\n");
 
-This commits adds this optional support.
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Lance Fredrickson <lancethepants@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 0e2c2810dc25de0cdc2126851061f9feabe66930)
+(cherry picked from commit 3b9d62dac564b6d1bfa5ba5e0dd72e731fd95d55)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/octave/octave.mk | 7 +++++++
- 1 file changed, 7 insertions(+)
+ boot/syslinux/0020-pull-in-stdio-h-for-gcc14.patch | 34 ++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
 
-diff --git a/package/octave/octave.mk b/package/octave/octave.mk
-index 342fd9b115..e5b1b2607d 100644
---- a/package/octave/octave.mk
-+++ b/package/octave/octave.mk
-@@ -43,6 +43,13 @@ else
- OCTAVE_CONF_OPTS += --without-curl
- endif
- 
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+OCTAVE_CONF_OPTS += --with-openssl=yes
-+OCTAVE_DEPENDENCIES += openssl
-+else
-+OCTAVE_CONF_OPTS += --without-openssl
-+endif
+diff --git a/boot/syslinux/0020-pull-in-stdio-h-for-gcc14.patch b/boot/syslinux/0020-pull-in-stdio-h-for-gcc14.patch
+new file mode 100644
+index 0000000000..09a0074b31
+--- /dev/null
++++ b/boot/syslinux/0020-pull-in-stdio-h-for-gcc14.patch
+@@ -0,0 +1,34 @@
++From dfa2705100a893bc017d23406daa9a383fbc3c95 Mon Sep 17 00:00:00 2001
++From: Lance Fredrickson <lancethepants@gmail.com>
++Date: Wed, 5 Jun 2024 14:31:38 -0600
++Subject: [PATCH] com32/lib/syslinux/debug.c: add missing stdio.h include.
 +
- ifeq ($(BR2_PACKAGE_READLINE),y)
- OCTAVE_CONF_OPTS += \
- 	--enable-readline \
++Fix building syslinux with GCC 14.x
++
++Add missing stdio.h include. Without it results in the following error under GCC 14.x
++
++../../../com32/lib/syslinux/debug.c: In function ‘syslinux_debug’:
++../../../com32/lib/syslinux/debug.c:91:5: error: implicit declaration of function ‘printf’ [-Wimplicit-function-declaration]
++   91 |     printf("Dynamic debug unavailable\n");
++
++Upstream: dead (last release in 2014)
++Signed-off-by: Lance Fredrickson <lancethepants@gmail.com>
++---
++ com32/lib/syslinux/debug.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/com32/lib/syslinux/debug.c b/com32/lib/syslinux/debug.c
++index d9ab863f..e8f53d57 100644
++--- a/com32/lib/syslinux/debug.c
+++++ b/com32/lib/syslinux/debug.c
++@@ -1,6 +1,7 @@
++ #include <linux/list.h>
++ #include <string.h>
++ #include <stdbool.h>
+++#include <stdio.h>
++ 
++ #ifdef DYNAMIC_DEBUG
++ 
++-- 
++2.39.2
++
+
+--===============7287761837075190518==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============7287761837075190518==--
