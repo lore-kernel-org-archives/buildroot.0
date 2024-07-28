@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E5331C3DA64
-	for <buildroot@archiver.kernel.org>; Sun, 28 Jul 2024 10:25:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F16ABC3DA64
+	for <buildroot@archiver.kernel.org>; Sun, 28 Jul 2024 10:26:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B2F388114D;
-	Sun, 28 Jul 2024 10:25:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C166780D43;
+	Sun, 28 Jul 2024 10:26:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RSuWNrI7hvTO; Sun, 28 Jul 2024 10:25:36 +0000 (UTC)
+ id R7xAI6BuS8xf; Sun, 28 Jul 2024 10:26:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5966281258
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C96B080C10
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5966281258;
-	Sun, 28 Jul 2024 10:25:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C96B080C10;
+	Sun, 28 Jul 2024 10:26:01 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 297F21BF5F5
- for <buildroot@lists.busybox.net>; Sun, 28 Jul 2024 10:24:55 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 909341BF5F5
+ for <buildroot@lists.busybox.net>; Sun, 28 Jul 2024 10:26:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 21004400C1
- for <buildroot@lists.busybox.net>; Sun, 28 Jul 2024 10:24:54 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7D45B401F3
+ for <buildroot@lists.busybox.net>; Sun, 28 Jul 2024 10:26:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AwBXS678UL7n for <buildroot@lists.busybox.net>;
- Sun, 28 Jul 2024 10:24:53 +0000 (UTC)
+ id uMhbRhxCi9zE for <buildroot@lists.busybox.net>;
+ Sun, 28 Jul 2024 10:25:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2016740136
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 78DA0400C1
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2016740136
- for <buildroot@buildroot.org>; Sun, 28 Jul 2024 10:24:53 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 78DA0400C1
+ for <buildroot@buildroot.org>; Sun, 28 Jul 2024 10:25:59 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0DB9287517; Sun, 28 Jul 2024 10:24:53 +0000 (UTC)
+ id 73F268753F; Sun, 28 Jul 2024 10:25:59 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 28 Jul 2024 12:24:17 +0200
-X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 6e10be5d3501a5404490d8ff375358045064b919
-X-Git-Newrev: 2c4db30b366f2e6c7f437ef7f2613e5f49053c35
+Date: Sun, 28 Jul 2024 11:54:29 +0200
+X-Git-Refname: refs/heads/2024.05.x
+X-Git-Oldrev: 6d6e9fb45fa79f7370ce0f1ea0bedd5b0800d455
+X-Git-Newrev: 2b0c3604a4ce07ad4335ff4b3f6306fc4172d375
 X-Patchwork-Hint: ignore
-Message-Id: <20240728102453.0DB9287517@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/ed: bump to
- version 1.20.2
+Message-Id: <20240728102559.73F268753F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.05.x] package/libgeos: bump
+ version to 3.12.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,45 +65,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2c4db30b366f2e6c7f437ef7f2613e5f49053c35
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=2b0c3604a4ce07ad4335ff4b3f6306fc4172d375
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.05.x
 
-See release announce:
-https://lists.gnu.org/archive/html/bug-ed/2024-04/msg00003.html
+Changelog: https://github.com/libgeos/geos/releases/tag/3.12.2
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 55235919f87e984f78cd52b5be45d94c44c74dee)
+(cherry picked from commit 5777bfc0f72db4de0315b753b2a064f017b3d652)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ed/ed.hash | 4 ++--
- package/ed/ed.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libgeos/libgeos.hash | 2 +-
+ package/libgeos/libgeos.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/ed/ed.hash b/package/ed/ed.hash
-index 5deb5e74ef..d1d99309c6 100644
---- a/package/ed/ed.hash
-+++ b/package/ed/ed.hash
-@@ -1,4 +1,4 @@
--# From https://lists.gnu.org/archive/html/bug-ed/2024-01/msg00000.html
--sha256  c6030defe6ae172f1687906d7354054c75a6a9130af319d4e73c50a91959c5a6  ed-1.20.tar.lz
-+# From https://lists.gnu.org/archive/html/bug-ed/2024-04/msg00003.html
-+sha256  65fec7318f48c2ca17f334ac0f4703defe62037bb13cc23920de077b5fa24523  ed-1.20.2.tar.lz
+diff --git a/package/libgeos/libgeos.hash b/package/libgeos/libgeos.hash
+index 37fe7d6d23..362f1c10b6 100644
+--- a/package/libgeos/libgeos.hash
++++ b/package/libgeos/libgeos.hash
+@@ -1,3 +1,3 @@
  # Locally calculated
- sha256  3d77c1a58fbde5ddba612d1fe09965e20a3804953eca12e8c1892298bb8a5eef  COPYING
-diff --git a/package/ed/ed.mk b/package/ed/ed.mk
-index edfadf02a6..704744359a 100644
---- a/package/ed/ed.mk
-+++ b/package/ed/ed.mk
+-sha256  d6ea7e492224b51193e8244fe3ec17c4d44d0777f3c32ca4fb171140549a0d03  geos-3.12.1.tar.bz2
++sha256  34c7770bf0090ee88488af98767d08e779f124fa33437e0aabec8abd4609fec6  geos-3.12.2.tar.bz2
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/libgeos/libgeos.mk b/package/libgeos/libgeos.mk
+index 491168324f..05b74b60a2 100644
+--- a/package/libgeos/libgeos.mk
++++ b/package/libgeos/libgeos.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ED_VERSION = 1.20
-+ED_VERSION = 1.20.2
- ED_SITE = $(BR2_GNU_MIRROR)/ed
- ED_SOURCE = ed-$(ED_VERSION).tar.lz
- ED_LICENSE = GPL-2.0+
+-LIBGEOS_VERSION = 3.12.1
++LIBGEOS_VERSION = 3.12.2
+ LIBGEOS_SITE = http://download.osgeo.org/geos
+ LIBGEOS_SOURCE = geos-$(LIBGEOS_VERSION).tar.bz2
+ LIBGEOS_LICENSE = LGPL-2.1
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
