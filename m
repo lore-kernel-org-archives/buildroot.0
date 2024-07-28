@@ -4,49 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EE411C3DA64
-	for <buildroot@archiver.kernel.org>; Sun, 28 Jul 2024 16:36:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1E11C3DA49
+	for <buildroot@archiver.kernel.org>; Sun, 28 Jul 2024 17:01:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1071A8104C;
-	Sun, 28 Jul 2024 16:36:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9A5DD810CA;
+	Sun, 28 Jul 2024 17:01:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 330Ygz-qBXqz; Sun, 28 Jul 2024 16:36:51 +0000 (UTC)
+ id 1qPocAlqR5S2; Sun, 28 Jul 2024 17:01:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C791F810B8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 95676810CB
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C791F810B8;
-	Sun, 28 Jul 2024 16:36:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 95676810CB;
+	Sun, 28 Jul 2024 17:01:22 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 53FE71BF82C
- for <buildroot@lists.busybox.net>; Sun, 28 Jul 2024 16:36:47 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 4B4AD1BF2A7
+ for <buildroot@lists.busybox.net>; Sun, 28 Jul 2024 17:01:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3FA0440318
- for <buildroot@lists.busybox.net>; Sun, 28 Jul 2024 16:36:47 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 45B88402EC
+ for <buildroot@lists.busybox.net>; Sun, 28 Jul 2024 17:01:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KwozjlAmxwpw for <buildroot@lists.busybox.net>;
- Sun, 28 Jul 2024 16:36:46 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id JS4oON-abVpx for <buildroot@lists.busybox.net>;
+ Sun, 28 Jul 2024 17:01:20 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.198;
+ helo=relay6-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EE6C84034C
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id EE6C84034C
- for <buildroot@buildroot.org>; Sun, 28 Jul 2024 16:36:45 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D8E488283C; Sun, 28 Jul 2024 16:36:45 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sun, 28 Jul 2024 18:36:28 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6caf350c1a9f5c6907d109e1c55fe420ec1aebd6
-X-Git-Newrev: 076f345accb811add37c96705ea1602a8a3b06a1
-X-Patchwork-Hint: ignore
-Message-Id: <20240728163645.D8E488283C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gdb: move GDB 14.x patches to the
- right folder
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E1575402E1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E1575402E1
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [217.70.183.198])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E1575402E1
+ for <buildroot@buildroot.org>; Sun, 28 Jul 2024 17:01:19 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 8A4A3C0004;
+ Sun, 28 Jul 2024 17:01:16 +0000 (UTC)
+Date: Sun, 28 Jul 2024 19:01:15 +0200
+To: Waldemar Brodkorb <wbx@openadk.org>, Romain Naour <romain.naour@smile.fr>
+Message-ID: <20240728190115.2e9fc088@windsurf>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1722186076;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=i3nvxYd9cPXvbG5FQn9Yo2lOtuAGeX4IzmefhRHAZTo=;
+ b=kXJE3sdWWQzHif6Tmu7rWfhVBeU4eWd6UYWt9zK9eyn0Kbpxls519RnQhsASyvjXkeEGuq
+ 8gs+IAi6rUf+cNk4FvIAXcUPcjGWYK28dQatarlSOUklMjWHPjHpY4eyxwzAFYsOuWUJLj
+ 2987H9K66NwAUxShG8Tp10dPc/XX3BjQrd9a9DFMWuIKCx9zKuZyzII1sitBQdUYN3MXIW
+ 8IlhfhnHvA7NS9zw5uVaj3HthMtOdG1qsfsuf6LPZ6ITBO7vEZvMZigg8lHyxSpiTiTAXv
+ xVqqLMkSxdFKEBd1suCGKCCe8nyxuXmV6Tx+SRhHFhZQDkGnfYNdqp5BhfokRA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=kXJE3sdW
+Subject: [Buildroot] Weird issue with uClibc RISC-V 32-bit in Qemu
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,104 +79,65 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: "buildroot@buildroot.org" <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=076f345accb811add37c96705ea1602a8a3b06a1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Commit bfefed17a9e5a421b3217685003d3b22c99de4ab ("package/gdb: bump
-14.x series from 14.1 to 14.2"), which upgraded the GDB 14.x series
-from 14.1 to 14.2 forgot to rename the directory containing the
-patches, causing them to no longer be applied.
+I am working on updating the toolchains of toolchains.bootlin.com, and
+as part of that rebuilding all toolchains with Buildroot 2024.05 + a
+few patches:
 
-The patches still apply properly with no change, so renaming the
-directory is sufficient.
+  https://github.com/bootlin/buildroot-toolchains/tree/toolchains.bootlin.com-2024.05
 
-  http://autobuild.buildroot.net/results/b8c6af95b244272220c63847e7cc929c9c58eee4/
+On riscv32-ilp32d, I have the uClibc stable toolchain that generates a
+system that doesn't boot under Qemu: the kernel boots fine, but when
+switching to user-space, nothing happens:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- .checkpackageignore                                    | 18 +++++++++---------
- ...ace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch |  0
- ...ce-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch |  0
- .../gdb/{14.1 => 14.2}/0003-use-asm-sgidefs.h.patch    |  0
- .../0004-gdbserver-fix-build-for-m68k.patch            |  0
- ...0005-nat-fork-inferior-include-linux-ptrace.h.patch |  0
- ...0006-Fix-getrandom-compile-for-uclibc-v1.0.35.patch |  0
- .../{14.1 => 14.2}/0007-fix-musl-build-on-riscv.patch  |  0
- .../0008-gdbserver-Makefile.in-fix-NLS-build.patch     |  0
- .../0009-gdb-Fix-native-build-on-xtensa.patch          |  0
- 10 files changed, 9 insertions(+), 9 deletions(-)
+  https://gitlab.com/buildroot.org/toolchains-builder/-/jobs/7378190992
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 5e45edf765..0f054c9a30 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -573,15 +573,15 @@ package/gdb/13.2/0006-Fix-getrandom-compile-for-uclibc-v1.0.35.patch lib_patch.U
- package/gdb/13.2/0007-fix-musl-build-on-riscv.patch lib_patch.Upstream
- package/gdb/13.2/0008-gdbserver-Makefile.in-fix-NLS-build.patch lib_patch.Upstream
- package/gdb/13.2/0009-gdb-Fix-native-build-on-xtensa.patch lib_patch.Upstream
--package/gdb/14.1/0001-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch lib_patch.Upstream
--package/gdb/14.1/0002-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch lib_patch.Upstream
--package/gdb/14.1/0003-use-asm-sgidefs.h.patch lib_patch.Upstream
--package/gdb/14.1/0004-gdbserver-fix-build-for-m68k.patch lib_patch.Upstream
--package/gdb/14.1/0005-nat-fork-inferior-include-linux-ptrace.h.patch lib_patch.Upstream
--package/gdb/14.1/0006-Fix-getrandom-compile-for-uclibc-v1.0.35.patch lib_patch.Upstream
--package/gdb/14.1/0007-fix-musl-build-on-riscv.patch lib_patch.Upstream
--package/gdb/14.1/0008-gdbserver-Makefile.in-fix-NLS-build.patch lib_patch.Upstream
--package/gdb/14.1/0009-gdb-Fix-native-build-on-xtensa.patch lib_patch.Upstream
-+package/gdb/14.2/0001-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch lib_patch.Upstream
-+package/gdb/14.2/0002-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch lib_patch.Upstream
-+package/gdb/14.2/0003-use-asm-sgidefs.h.patch lib_patch.Upstream
-+package/gdb/14.2/0004-gdbserver-fix-build-for-m68k.patch lib_patch.Upstream
-+package/gdb/14.2/0005-nat-fork-inferior-include-linux-ptrace.h.patch lib_patch.Upstream
-+package/gdb/14.2/0006-Fix-getrandom-compile-for-uclibc-v1.0.35.patch lib_patch.Upstream
-+package/gdb/14.2/0007-fix-musl-build-on-riscv.patch lib_patch.Upstream
-+package/gdb/14.2/0008-gdbserver-Makefile.in-fix-NLS-build.patch lib_patch.Upstream
-+package/gdb/14.2/0009-gdb-Fix-native-build-on-xtensa.patch lib_patch.Upstream
- package/gdb/15.1/0001-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch lib_patch.Upstream
- package/gdb/15.1/0002-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch lib_patch.Upstream
- package/gdb/15.1/0003-use-asm-sgidefs.h.patch lib_patch.Upstream
-diff --git a/package/gdb/14.1/0001-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch b/package/gdb/14.2/0001-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch
-similarity index 100%
-rename from package/gdb/14.1/0001-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch
-rename to package/gdb/14.2/0001-ppc-ptrace-Define-pt_regs-uapi_pt_regs-on-GLIBC-syst.patch
-diff --git a/package/gdb/14.1/0002-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch b/package/gdb/14.2/0002-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch
-similarity index 100%
-rename from package/gdb/14.1/0002-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch
-rename to package/gdb/14.2/0002-sh-ptrace-Define-pt_-dsp-regs-uapi_pt_-dsp-regs-on-G.patch
-diff --git a/package/gdb/14.1/0003-use-asm-sgidefs.h.patch b/package/gdb/14.2/0003-use-asm-sgidefs.h.patch
-similarity index 100%
-rename from package/gdb/14.1/0003-use-asm-sgidefs.h.patch
-rename to package/gdb/14.2/0003-use-asm-sgidefs.h.patch
-diff --git a/package/gdb/14.1/0004-gdbserver-fix-build-for-m68k.patch b/package/gdb/14.2/0004-gdbserver-fix-build-for-m68k.patch
-similarity index 100%
-rename from package/gdb/14.1/0004-gdbserver-fix-build-for-m68k.patch
-rename to package/gdb/14.2/0004-gdbserver-fix-build-for-m68k.patch
-diff --git a/package/gdb/14.1/0005-nat-fork-inferior-include-linux-ptrace.h.patch b/package/gdb/14.2/0005-nat-fork-inferior-include-linux-ptrace.h.patch
-similarity index 100%
-rename from package/gdb/14.1/0005-nat-fork-inferior-include-linux-ptrace.h.patch
-rename to package/gdb/14.2/0005-nat-fork-inferior-include-linux-ptrace.h.patch
-diff --git a/package/gdb/14.1/0006-Fix-getrandom-compile-for-uclibc-v1.0.35.patch b/package/gdb/14.2/0006-Fix-getrandom-compile-for-uclibc-v1.0.35.patch
-similarity index 100%
-rename from package/gdb/14.1/0006-Fix-getrandom-compile-for-uclibc-v1.0.35.patch
-rename to package/gdb/14.2/0006-Fix-getrandom-compile-for-uclibc-v1.0.35.patch
-diff --git a/package/gdb/14.1/0007-fix-musl-build-on-riscv.patch b/package/gdb/14.2/0007-fix-musl-build-on-riscv.patch
-similarity index 100%
-rename from package/gdb/14.1/0007-fix-musl-build-on-riscv.patch
-rename to package/gdb/14.2/0007-fix-musl-build-on-riscv.patch
-diff --git a/package/gdb/14.1/0008-gdbserver-Makefile.in-fix-NLS-build.patch b/package/gdb/14.2/0008-gdbserver-Makefile.in-fix-NLS-build.patch
-similarity index 100%
-rename from package/gdb/14.1/0008-gdbserver-Makefile.in-fix-NLS-build.patch
-rename to package/gdb/14.2/0008-gdbserver-Makefile.in-fix-NLS-build.patch
-diff --git a/package/gdb/14.1/0009-gdb-Fix-native-build-on-xtensa.patch b/package/gdb/14.2/0009-gdb-Fix-native-build-on-xtensa.patch
-similarity index 100%
-rename from package/gdb/14.1/0009-gdb-Fix-native-build-on-xtensa.patch
-rename to package/gdb/14.2/0009-gdb-Fix-native-build-on-xtensa.patch
+The interesting thing is that the uClibc bleeding-edge toolchain works
+fine. The only difference is that GCC is 14.x instead of 13.x, and
+binutils is 2.42 instead of 2.41. Bleeding edge toolchain:
+
+  https://gitlab.com/buildroot.org/toolchains-builder/-/jobs/7378190991
+
+I took just the rootfs.ext2 of the "working" build, and put it together
+with the firmware+kernel of the "non working" build, and it works fine:
+so the problem is in the rootfs.
+
+In the broken build, if I pass init=/bin/sh, then I'm dropped into a
+shell, but some things are weird:
+
+ - When I run ls, the first line of output starts right after the
+   prompt, not in a newline
+
+ - After ls has finished, it doesn't got back to the shell prompt,
+   unless I press Enter again
+
+Using init=/bin/sh with the fully working rootfs does not exhibit this
+issue.
+
+You can retrieve the non-working artefacts and defconfig at:
+
+  https://gitlab.com/buildroot.org/toolchains-builder/-/jobs/7378190992/artifacts/browse/test/output/
+
+And the working artefact and defconfig at:
+
+  https://gitlab.com/buildroot.org/toolchains-builder/-/jobs/7378190991/artifacts/browse/test/output/
+
+Do you have any clue at what could be happening here?
+
+Thanks for your support!
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
