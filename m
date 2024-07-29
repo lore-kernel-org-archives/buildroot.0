@@ -4,71 +4,92 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0E14DC3DA61
-	for <buildroot@archiver.kernel.org>; Mon, 29 Jul 2024 18:33:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15598C3DA61
+	for <buildroot@archiver.kernel.org>; Mon, 29 Jul 2024 18:38:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BDB4060780;
-	Mon, 29 Jul 2024 18:33:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BE53C60888;
+	Mon, 29 Jul 2024 18:38:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VhYufXS3xWjA; Mon, 29 Jul 2024 18:33:30 +0000 (UTC)
+ id BEpsh3hDUb8i; Mon, 29 Jul 2024 18:38:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D1B7C607CB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 22D116060B
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D1B7C607CB;
-	Mon, 29 Jul 2024 18:33:29 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 769801BF42C
- for <buildroot@lists.busybox.net>; Mon, 29 Jul 2024 18:33:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 22D116060B;
+	Mon, 29 Jul 2024 18:38:32 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 339791BF42C
+ for <buildroot@lists.busybox.net>; Mon, 29 Jul 2024 18:38:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 64873607CB
- for <buildroot@lists.busybox.net>; Mon, 29 Jul 2024 18:33:29 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2D6D78115A
+ for <buildroot@lists.busybox.net>; Mon, 29 Jul 2024 18:38:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zOe7BhlMf2Fz for <buildroot@lists.busybox.net>;
- Mon, 29 Jul 2024 18:33:28 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.201;
- helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org DFA5760780
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DFA5760780
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp3.osuosl.org (Postfix) with ESMTPS id DFA5760780
- for <buildroot@buildroot.org>; Mon, 29 Jul 2024 18:33:27 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 1B5101BF205;
- Mon, 29 Jul 2024 18:33:26 +0000 (UTC)
-Date: Mon, 29 Jul 2024 20:33:25 +0200
-To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <20240729203325.3560903e@windsurf>
-In-Reply-To: <20240727202340.1484781-1-james.hilliard1@gmail.com>
-References: <20240727202340.1484781-1-james.hilliard1@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Gy5t1Aa2BF_p for <buildroot@lists.busybox.net>;
+ Mon, 29 Jul 2024 18:38:29 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::133; helo=mail-lf1-x133.google.com;
+ envelope-from=francois.perrad@gadz.org; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org EE53981159
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EE53981159
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com
+ [IPv6:2a00:1450:4864:20::133])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id EE53981159
+ for <buildroot@busybox.net>; Mon, 29 Jul 2024 18:38:28 +0000 (UTC)
+Received: by mail-lf1-x133.google.com with SMTP id
+ 2adb3069b0e04-52efaae7edfso4248681e87.2
+ for <buildroot@busybox.net>; Mon, 29 Jul 2024 11:38:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1722278307; x=1722883107;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=+5syTy44M1Es3Wrndo8rNemAtAJZzoSCMw47h4Z4d/M=;
+ b=KPH2JPKqGkvQTLF00hCUkWQpjED/8WbMOH/MSapqQ4Me+KA0JU3B+Qw3ZzHVghw4dZ
+ ZEnu+AXcS9E6tyCKz01ide+dlFY7q9D1U5ki/2S6H3zS2mKa0cg7w0QWS5K2evqHiTyn
+ rTzmFNKlrMsPL9z9PDyF+YK/PX7s9/6nEVuZpV4ucGEQIz2wPsCgEZLpel7HAnr1nWho
+ qbsKqna8OMcDxJGKw/QsoSWkHoTmrqdhBrbB4GUG0/R6nqimXbX4cntwsGnrNCrB5+0T
+ KPrHGQe8lxy0mk+HNrw7+rCtkPIqeSZoEShPIq/JwiiuoFrNkyGwFduLTaOuzpJuPQO+
+ Z4bA==
+X-Gm-Message-State: AOJu0Yzu9ReRcKjHXwAMPvO0pEGusNuK2lTQdLUguq9nIHnIrE+abnko
+ znkCE+v58tZRpchKfaSNprv58zgtVFRWDnWof8Y7E7eR1kcVmw7C5DLvaviHdQebsKaRijqWqIu
+ ZfQ==
+X-Google-Smtp-Source: AGHT+IEl0iTf49wBKLy4cD/x6O1wA/3X0mKQ7M0iVXrIyrjpf0WOHjAZgc1b3W24ejDI/lFewNsMOw==
+X-Received: by 2002:a05:6512:2351:b0:52e:9d2c:1c56 with SMTP id
+ 2adb3069b0e04-5309b280da0mr6837126e87.35.1722278306298; 
+ Mon, 29 Jul 2024 11:38:26 -0700 (PDT)
+Received: from vm-2404.. (203.34.66.37.rev.sfr.net. [37.66.34.203])
+ by smtp.gmail.com with ESMTPSA id
+ a640c23a62f3a-a7acadb9c8esm543202966b.215.2024.07.29.11.38.25
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 29 Jul 2024 11:38:25 -0700 (PDT)
+From: Francois Perrad <francois.perrad@gadz.org>
+To: buildroot@busybox.net
+Date: Mon, 29 Jul 2024 20:38:15 +0200
+Message-ID: <20240729183816.1654269-1-francois.perrad@gadz.org>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1722278006;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=mm6NJfRi2O6aft9AlUxvrTUh/aXns7A0W/OEzxIJ1/c=;
- b=N7bob2UAnmqKUKb6OrZe5r1ntJa0M/3Lijxqeul6xVAKiTDAPW9ZxG2IuHa7befCaqYrbY
- u/MuPzPb1o6mcN8vmYbYcxwBwjGp9jFBGnn5YELmd8ZizsM85PpT943oEubk6GrvSmBGxa
- OITo5y9m81BACS600ZucN3pU1f/AQmbBUIwO9jW9d6iaNNio1iT4+7z085D6uHqgl4euHv
- KhCky2aCq4pri4C/U7PvLvcCJ98v9V+PoKzrzCGwRQxNDi7be/tWoN1xeJrkI5ehmWKI9l
- fTURuwg7FomwOFB1qYa2mr2qr0wwlWQfgR66r+miPZx9aRmVwimYMzK1SbXF0w==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=gadz.org; s=google; t=1722278307; x=1722883107; darn=busybox.net;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=+5syTy44M1Es3Wrndo8rNemAtAJZzoSCMw47h4Z4d/M=;
+ b=UNtRCdMVdTyZaAH9Y1u6WDgBOzm8+mPHPkx4CeXiolv06Vuls9qpTT2JLvE0GlmlSj
+ UxUpE1g8hcx2uekgA2pYlzULy/wRvZDeFAuteUG6t9Xtj48ysIQfKtCOkuIKukmLFD1m
+ y1YwIKCkMQjsWbVFvH1DXbT3xKveFGG4BhqxMbqv8P9GxsKFJ6iIOivm9pvfWEHS0cue
+ ddj5CiFfTUqg7zxP8xQRVfig+TSKolG/rUMVWVt/biRsjQKe8HuVxLuxSwUfLbsapFOd
+ 0DbidHNfAWIAyMf/tAW1SOIt9CF5sc1xigaFMCjdATl3l40/2izAxPriOlMUqTDHnfwg
+ R4dA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gadz.org
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=N7bob2UA
-Subject: Re: [Buildroot] [PATCH v3 1/1] package/tailscale: new package
+ unprotected) header.d=gadz.org header.i=@gadz.org header.a=rsa-sha256
+ header.s=google header.b=UNtRCdMV
+Subject: [Buildroot] [PATCH] package/lynx: bump to version 2.9.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,54 +101,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Anisse Astier <anisse@astier.eu>, Christian Stewart <christian@aperture.us>,
- buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello James,
+remove upstreamed patch
 
-On Sat, 27 Jul 2024 14:23:40 -0600
-James Hilliard <james.hilliard1@gmail.com> wrote:
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/lynx/lynx.hash | 3 +--
+ package/lynx/lynx.mk   | 6 +-----
+ 2 files changed, 2 insertions(+), 7 deletions(-)
 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
-> Changes v2 -> v3:
->   - set required CONFIG_TUN kernel config option
-> Changes v1 -> v2:
->   - don't set GOPROXY
-> ---
->  package/Config.in                |  1 +
->  package/tailscale/Config.in      |  8 ++++++++
->  package/tailscale/tailscale.hash |  3 +++
->  package/tailscale/tailscale.mk   | 22 ++++++++++++++++++++++
->  4 files changed, 34 insertions(+)
->  create mode 100644 package/tailscale/Config.in
->  create mode 100644 package/tailscale/tailscale.hash
->  create mode 100644 package/tailscale/tailscale.mk
-
-Thanks James for this new package. I tried building it, but it fails
-during the download with:
-
-verifying fybrik.io/crdoc@v0.6.3: checksum mismatch
-	downloaded: h1:Awi+v+URtj5DvPr0LLdVrW2Nn9/G1Y7aGpUPG1IATE4=
-	go.sum:     h1:jNNAVINu8up5vrLa0jrV7z7HSlyHF/6lNOrAtrXwYlI=
-
-Could you have a look into this?
-
-Also, could you make sure to add the entry in the DEVELOPERS file?
-
-Thanks a lot!
-
-Thomas
+diff --git a/package/lynx/lynx.hash b/package/lynx/lynx.hash
+index 62e2555a9..d9a0fc421 100644
+--- a/package/lynx/lynx.hash
++++ b/package/lynx/lynx.hash
+@@ -1,4 +1,3 @@
+ # Locally calculated:
+-sha256  387f193d7792f9cfada14c60b0e5c0bff18f227d9257a39483e14fa1aaf79595  lynx2.8.9rel.1.tar.bz2
+-sha256  b2207e757dbbefc34a20a32b1b4a216b4a4316e1dc812bceca4ac6294871119a  90_CVE-2021-38165.patch
++sha256  7374b89936d991669e101f4e97f2c9592036e1e8cdaa7bafc259a77ab6fb07ce  lynx2.9.2.tar.bz2
+ sha256  8406a30ff3134ec23cf752d1ceda92ddaabbe41b4f2dc07ea3cfa139de12d6d6  COPYING
+diff --git a/package/lynx/lynx.mk b/package/lynx/lynx.mk
+index 831732926..4f23b6891 100644
+--- a/package/lynx/lynx.mk
++++ b/package/lynx/lynx.mk
+@@ -4,13 +4,9 @@
+ #
+ ################################################################################
+ 
+-LYNX_VERSION = 2.8.9rel.1
++LYNX_VERSION = 2.9.2
+ LYNX_SOURCE = lynx$(LYNX_VERSION).tar.bz2
+ LYNX_SITE = https://invisible-mirror.net/archives/lynx/tarballs
+-LYNX_PATCH = \
+-	https://salsa.debian.org/lynx-team/lynx/-/raw/debian/2.9.0dev.6-3_deb11u1/debian/patches/90_CVE-2021-38165.patch
+-# 90_CVE-2021-38165.patch
+-LYNX_IGNORE_CVES += CVE-2021-38165
+ LYNX_LICENSE = GPL-2.0
+ LYNX_LICENSE_FILES = COPYING
+ LYNX_CPE_ID_VALID = YES
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.43.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
