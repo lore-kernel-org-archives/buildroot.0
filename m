@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7AA8EC3DA4A
-	for <buildroot@archiver.kernel.org>; Mon, 29 Jul 2024 17:55:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8CC08C3DA61
+	for <buildroot@archiver.kernel.org>; Mon, 29 Jul 2024 17:57:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4A3116085A;
-	Mon, 29 Jul 2024 17:55:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 560A26086B;
+	Mon, 29 Jul 2024 17:57:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id P-rE9CCQBe4c; Mon, 29 Jul 2024 17:55:38 +0000 (UTC)
+ id 8hA4cPW5Wul7; Mon, 29 Jul 2024 17:57:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 54EA16086B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6902860875
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 54EA16086B;
-	Mon, 29 Jul 2024 17:55:38 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 841181BF424
- for <buildroot@lists.busybox.net>; Mon, 29 Jul 2024 17:55:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6902860875;
+	Mon, 29 Jul 2024 17:57:11 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id AFB851BF424
+ for <buildroot@lists.busybox.net>; Mon, 29 Jul 2024 17:57:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7F2CC80ACF
- for <buildroot@lists.busybox.net>; Mon, 29 Jul 2024 17:55:37 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9D17A404D2
+ for <buildroot@lists.busybox.net>; Mon, 29 Jul 2024 17:57:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AyjWwTanDHXG for <buildroot@lists.busybox.net>;
- Mon, 29 Jul 2024 17:55:36 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id RRsdksOTT5hj for <buildroot@lists.busybox.net>;
+ Mon, 29 Jul 2024 17:57:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BF87F80ABA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B07054033A
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id BF87F80ABA
- for <buildroot@buildroot.org>; Mon, 29 Jul 2024 17:55:36 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B07054033A
+ for <buildroot@buildroot.org>; Mon, 29 Jul 2024 17:57:09 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A58AE82AEA; Mon, 29 Jul 2024 17:55:36 +0000 (UTC)
+ id 9D9F782B8C; Mon, 29 Jul 2024 17:57:09 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 29 Jul 2024 19:53:55 +0200
+Date: Mon, 29 Jul 2024 19:56:36 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5960f45cbc2d0b5a476b36588d1de62af9111011
-X-Git-Newrev: f1a5273389bac989f1a94641616a3c8ad6098ad4
+X-Git-Oldrev: f1a5273389bac989f1a94641616a3c8ad6098ad4
+X-Git-Newrev: ddbdd3584264900b6d5818c1cf0a0a444d298f56
 X-Patchwork-Hint: ignore
-Message-Id: <20240729175536.A58AE82AEA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/trace-cmd: bump to version 3.3
+Message-Id: <20240729175709.9D9F782B8C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/ethtool: bump to version 6.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,40 +65,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f1a5273389bac989f1a94641616a3c8ad6098ad4
+commit: https://git.buildroot.net/buildroot/commit/?id=ddbdd3584264900b6d5818c1cf0a0a444d298f56
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Changelog: https://git.kernel.org/pub/scm/network/ethtool/ethtool.git/tree/NEWS
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/trace-cmd/trace-cmd.hash | 2 +-
- package/trace-cmd/trace-cmd.mk   | 2 +-
+ package/ethtool/ethtool.hash | 2 +-
+ package/ethtool/ethtool.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/trace-cmd/trace-cmd.hash b/package/trace-cmd/trace-cmd.hash
-index 30b0c48de6..ac30eae85f 100644
---- a/package/trace-cmd/trace-cmd.hash
-+++ b/package/trace-cmd/trace-cmd.hash
+diff --git a/package/ethtool/ethtool.hash b/package/ethtool/ethtool.hash
+index b9bc768e8f..6c442c3729 100644
+--- a/package/ethtool/ethtool.hash
++++ b/package/ethtool/ethtool.hash
 @@ -1,5 +1,5 @@
- # Locally computed
--sha256  62af2c6062eeb434925921bb5936774b0a0e17a5f86671fa2ea2f40704a080cd  trace-cmd-v3.2.tar.gz
-+sha256  0671048dd2b8abdb8b2d0eb9cc91335c997620a7da72f858381ff4206f32065f  trace-cmd-v3.3.tar.gz
- sha256  b1d04b850c1c7471b0f0896f6c6f0fcfc9f07e2dd183a5f5826af269fe9e88fb  COPYING
- sha256  70f297763149e72306919c924e164f83041d5e512868d4c8c1826c171b3e49f9  COPYING.LIB
- sha256  f6b78c087c3ebdf0f3c13415070dd480a3f35d8fc76f3d02180a407c1c812f79  LICENSES/GPL-2.0
-diff --git a/package/trace-cmd/trace-cmd.mk b/package/trace-cmd/trace-cmd.mk
-index e02eb79530..14a59b2cc8 100644
---- a/package/trace-cmd/trace-cmd.mk
-+++ b/package/trace-cmd/trace-cmd.mk
+ # From https://www.kernel.org/pub/software/network/ethtool/sha256sums.asc
+-sha256  c3ae526b01ce4d8df6c794ab170de4a4104d111ea8d8db3f1fd7c25fcb905619  ethtool-6.7.tar.xz
++sha256  a71b0354010661c5cf178bc606ed50fcb91805cf1897ad0eb2818387a5fd0cd9  ethtool-6.9.tar.xz
+ # Locally calculated
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  5d632934396f90c82dfebe3c9512648bbb6333b406113d0cd331b0e0aa2d34a1  LICENSE
+diff --git a/package/ethtool/ethtool.mk b/package/ethtool/ethtool.mk
+index 77a7e16937..bd04fca8f3 100644
+--- a/package/ethtool/ethtool.mk
++++ b/package/ethtool/ethtool.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TRACE_CMD_VERSION = 3.2
-+TRACE_CMD_VERSION = 3.3
- TRACE_CMD_SOURCE = trace-cmd-v$(TRACE_CMD_VERSION).tar.gz
- TRACE_CMD_SITE = \
- 	https://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git/snapshot
+-ETHTOOL_VERSION = 6.7
++ETHTOOL_VERSION = 6.9
+ ETHTOOL_SOURCE = ethtool-$(ETHTOOL_VERSION).tar.xz
+ ETHTOOL_SITE = $(BR2_KERNEL_MIRROR)/software/network/ethtool
+ ETHTOOL_LICENSE = GPL-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
