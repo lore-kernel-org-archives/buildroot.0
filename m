@@ -4,48 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE74EC3DA61
-	for <buildroot@archiver.kernel.org>; Mon, 29 Jul 2024 21:11:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35DCCC3DA61
+	for <buildroot@archiver.kernel.org>; Mon, 29 Jul 2024 21:13:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 85B35811AB;
-	Mon, 29 Jul 2024 21:11:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DB2EE811AB;
+	Mon, 29 Jul 2024 21:13:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 79j-qs3_6xY1; Mon, 29 Jul 2024 21:11:45 +0000 (UTC)
+ id bHucokexxeFi; Mon, 29 Jul 2024 21:13:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8A61B811CC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D46F5811CC
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8A61B811CC;
-	Mon, 29 Jul 2024 21:11:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D46F5811CC;
+	Mon, 29 Jul 2024 21:13:07 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 8D7481BF426
- for <buildroot@lists.busybox.net>; Mon, 29 Jul 2024 21:11:44 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 18C931BF426
+ for <buildroot@lists.busybox.net>; Mon, 29 Jul 2024 21:13:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8860F607FB
- for <buildroot@lists.busybox.net>; Mon, 29 Jul 2024 21:11:44 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 13F0C6085C
+ for <buildroot@lists.busybox.net>; Mon, 29 Jul 2024 21:13:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id c_8OkRy4Nvp5 for <buildroot@lists.busybox.net>;
- Mon, 29 Jul 2024 21:11:43 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id pmkHALFZ2xrD for <buildroot@lists.busybox.net>;
+ Mon, 29 Jul 2024 21:13:05 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.195;
+ helo=relay3-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B6BF360760
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id B6BF360760
- for <buildroot@buildroot.org>; Mon, 29 Jul 2024 21:11:43 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AD606835AB; Mon, 29 Jul 2024 21:11:43 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 29 Jul 2024 22:53:52 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c4e845b5b805cc487fca6203caccc363e6e108e6
-X-Git-Newrev: 9bded368221e1aaf69a316565101e6ef109c49db
-X-Patchwork-Hint: ignore
-Message-Id: <20240729211143.AD606835AB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/lynx: bump to version 2.9.2
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 446D060760
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 446D060760
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 446D060760
+ for <buildroot@buildroot.org>; Mon, 29 Jul 2024 21:13:03 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 0D41860004;
+ Mon, 29 Jul 2024 21:13:00 +0000 (UTC)
+Date: Mon, 29 Jul 2024 23:12:54 +0200
+To: Torben Voltmer <mail@t-voltmer.net>
+Message-ID: <20240729231254.1e6123fc@windsurf>
+In-Reply-To: <20240729193242.1409148-2-mail@t-voltmer.net>
+References: <20240729101119.22f92091@windsurf>
+ <20240729193242.1409148-2-mail@t-voltmer.net>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1722287581;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=tQLTqSbiRy2Rvh/KyzUYoFmOy8Tkx7Ltn/DJqUe2pKU=;
+ b=IET5pvmuKfTzTOaKzxFTinQPYX/mErbMRqM1Q0vGHlBA5QeCtPAVhiEVG52PfidI6Ws+0S
+ YidS8touM6caD/XGcO96XyXU4JyPHHakRydMeYxY+5SYsEo3Nx+0k3k/cAoJuBEQsm2AIH
+ +hDQ8tUBB8usli76swZUmEgkMMGTYJLr83KFLyzKZPc/glZgXyCGhfaTkEQbQWzGZiCAUi
+ iziA/NOljaaR3oXyI2uf66cqqqt/38aAJ5VWvUqU+MVNG54NJsQFDPQnL9XuJQNDNUn8Mk
+ JqwbTK32E4QNBo1e3ygP/Wh59+zA8Oz0o+jnThcIsjdImWWcgNSYOWcHQcMIRQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=IET5pvmu
+Subject: Re: [Buildroot] [PATCH v2 1/1] package/espflash: add udev dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,53 +83,47 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9bded368221e1aaf69a316565101e6ef109c49db
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-remove upstreamed patch
+Thanks for the new iteration, which I have applied. Just one minor nit,
+see below!
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/lynx/lynx.hash | 3 +--
- package/lynx/lynx.mk   | 6 +-----
- 2 files changed, 2 insertions(+), 7 deletions(-)
+On Mon, 29 Jul 2024 21:32:43 +0200
+Torben Voltmer <mail@t-voltmer.net> wrote:
 
-diff --git a/package/lynx/lynx.hash b/package/lynx/lynx.hash
-index 62e2555a99..d9a0fc4212 100644
---- a/package/lynx/lynx.hash
-+++ b/package/lynx/lynx.hash
-@@ -1,4 +1,3 @@
- # Locally calculated:
--sha256  387f193d7792f9cfada14c60b0e5c0bff18f227d9257a39483e14fa1aaf79595  lynx2.8.9rel.1.tar.bz2
--sha256  b2207e757dbbefc34a20a32b1b4a216b4a4316e1dc812bceca4ac6294871119a  90_CVE-2021-38165.patch
-+sha256  7374b89936d991669e101f4e97f2c9592036e1e8cdaa7bafc259a77ab6fb07ce  lynx2.9.2.tar.bz2
- sha256  8406a30ff3134ec23cf752d1ceda92ddaabbe41b4f2dc07ea3cfa139de12d6d6  COPYING
-diff --git a/package/lynx/lynx.mk b/package/lynx/lynx.mk
-index 8317329262..4f23b68917 100644
---- a/package/lynx/lynx.mk
-+++ b/package/lynx/lynx.mk
-@@ -4,13 +4,9 @@
- #
- ################################################################################
- 
--LYNX_VERSION = 2.8.9rel.1
-+LYNX_VERSION = 2.9.2
- LYNX_SOURCE = lynx$(LYNX_VERSION).tar.bz2
- LYNX_SITE = https://invisible-mirror.net/archives/lynx/tarballs
--LYNX_PATCH = \
--	https://salsa.debian.org/lynx-team/lynx/-/raw/debian/2.9.0dev.6-3_deb11u1/debian/patches/90_CVE-2021-38165.patch
--# 90_CVE-2021-38165.patch
--LYNX_IGNORE_CVES += CVE-2021-38165
- LYNX_LICENSE = GPL-2.0
- LYNX_LICENSE_FILES = COPYING
- LYNX_CPE_ID_VALID = YES
+> Adding the dependency on udev, since espflash links libudev
+> (via the libudev-sys crate).
+> 
+> Fixes: http://autobuild.buildroot.net/results/c61b6ed4b6fb4d18d503ac37add200f5e6ae3706
+> 
+> ---
+> Changes v1 -> v2:
+>   - Added missing dependency in espflash.mk
+>   - Added missing depends on in Config.in
+>   - Verified that the updated patch fixes at least one autobuild failure
+> 
+> Signed-off-by: Torben Voltmer <mail@t-voltmer.net>
+
+The Signed-off-by: line should be *before* the --- sign. Indeed, when
+git applies a patch, it drops from the commit log everything which is
+after the --- sign. This is why your changelog (Changes v1 -> v2) is at
+the right: we don't want this changelog to be part of the final commit
+message. However, we do want the Signed-off-by to be part of the commit
+message, so it should be before the --- sign.
+
+I fixed that up when applying. Thanks for your contribution!
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
