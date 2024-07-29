@@ -4,71 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38D9DC3DA4A
-	for <buildroot@archiver.kernel.org>; Mon, 29 Jul 2024 17:59:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9489BC3DA61
+	for <buildroot@archiver.kernel.org>; Mon, 29 Jul 2024 18:00:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0877E60862;
-	Mon, 29 Jul 2024 17:59:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5FA9D60647;
+	Mon, 29 Jul 2024 18:00:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id W6vh7lkCYpzn; Mon, 29 Jul 2024 17:59:04 +0000 (UTC)
+ id tex4N1ymYkI7; Mon, 29 Jul 2024 18:00:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2EA206087F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7B53660862
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2EA206087F;
-	Mon, 29 Jul 2024 17:59:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7B53660862;
+	Mon, 29 Jul 2024 18:00:20 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 4C01D1BF267
- for <buildroot@lists.busybox.net>; Mon, 29 Jul 2024 17:59:02 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2671A1BF267
+ for <buildroot@lists.busybox.net>; Mon, 29 Jul 2024 17:59:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 454F4810A4
- for <buildroot@lists.busybox.net>; Mon, 29 Jul 2024 17:59:02 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2130B811B8
+ for <buildroot@lists.busybox.net>; Mon, 29 Jul 2024 17:59:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Qx4GFjQWXqiU for <buildroot@lists.busybox.net>;
- Mon, 29 Jul 2024 17:59:01 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.196;
- helo=relay4-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id p9iHLM2xdIoQ for <buildroot@lists.busybox.net>;
+ Mon, 29 Jul 2024 17:59:14 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.194;
+ helo=relay2-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 2B5AE81065
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2B5AE81065
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2B5AE81065
- for <buildroot@buildroot.org>; Mon, 29 Jul 2024 17:59:00 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 389C5E0003;
- Mon, 29 Jul 2024 17:58:59 +0000 (UTC)
-Date: Mon, 29 Jul 2024 19:58:58 +0200
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 207BF810A4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 207BF810A4
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [217.70.183.194])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 207BF810A4
+ for <buildroot@buildroot.org>; Mon, 29 Jul 2024 17:59:13 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 28FFD40003;
+ Mon, 29 Jul 2024 17:59:11 +0000 (UTC)
+Date: Mon, 29 Jul 2024 19:59:10 +0200
 To: Bernd Kuhls <bernd@kuhls.net>
-Message-ID: <20240729195858.6df213f7@windsurf>
-In-Reply-To: <20240728075311.4745-1-bernd@kuhls.net>
-References: <20240728075311.4745-1-bernd@kuhls.net>
+Message-ID: <20240729195910.75a2043c@windsurf>
+In-Reply-To: <20240728075339.4793-1-bernd@kuhls.net>
+References: <20240728075339.4793-1-bernd@kuhls.net>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1722275939;
+ d=bootlin.com; s=gm1; t=1722275951;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=A8K7xRf3LL7vtO3hoqFArlSJiYPEPt4YWdwM2dG9c+w=;
- b=B0Fb0+Pi/uQlN39oEQ2sAtFmhDk7KURQqCHWY5gCOZhjSFI1nobX2DOU6siFLAti5EXiSL
- PAC/0pTE4tN7xbfyGvUFLSLNDc5PXeqAaxDE7a2BsQSninLuIZGAox4/Qxln9ng1Tfc5YF
- 4/qG3KMQO4mqOj1uD1VUCj0cgj/cD4n8T34ZMUvupr6IRac+aqcc+yqnscxpjSpyRU6dWc
- WkQu+rZoqR4Qnxavc+6fKwx2wQg+a87FNpPgTk1HG3HjbvqGRZNBNM1YBvUkjBJGnMMqD3
- Q3m1VZV8fTB7FKkpuU6fncEdjyo1SdW1oVxV9V9mHaqHlgKZ9rqQQMyc2bPyxw==
+ bh=eCMo3nKLSeOTNtd/bGYh3lUcY1f6V4WrYGnuqmza5DA=;
+ b=NY8bV17wKEcRyvXdoR6dcvkjzMQ1sDw0vqQLi3yXoDsnKpmZL+v5DfivoHgXtnqXQB65Al
+ HUdxdFb62JkWte42xrrzOIvlqff18LveuAKYZVYuOgQSM5MhFtyA93z/BKYjsOoCaQdGUA
+ xH2JuXMRfaY71C87sSzuxZXMduOh8X3nCKxdB6lKFY1tqSc4J9Et/1IfAmjiwat41F5vg9
+ 4mYYDb+gkIoxvUB01xsW6NX5ZdEnvBvdrVZRuHSNfYIz1Fn7dhZHXF3Sm6+1m32xepyAp6
+ 0jOyi0ROYi/MIG9WmXsFgT10OGS8/weg4jxYu9XSz7SOiAzhpbjxyqY/q2iIag==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=B0Fb0+Pi
-Subject: Re: [Buildroot] [PATCH 1/1] package/leafnode2: bump version
+ header.s=gm1 header.b=NY8bV17w
+Subject: Re: [Buildroot] [PATCH 1/1] package/tvheadend: bump version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,19 +82,19 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, 28 Jul 2024 09:53:11 +0200
+On Sun, 28 Jul 2024 09:53:39 +0200
 Bernd Kuhls <bernd@kuhls.net> wrote:
 
 > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 > ---
->  package/leafnode2/leafnode2.hash | 2 +-
->  package/leafnode2/leafnode2.mk   | 2 +-
+>  package/tvheadend/tvheadend.hash | 2 +-
+>  package/tvheadend/tvheadend.mk   | 2 +-
 >  2 files changed, 2 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
