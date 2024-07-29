@@ -4,150 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98CAEC3DA61
-	for <buildroot@archiver.kernel.org>; Mon, 29 Jul 2024 11:57:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C72AC3DA4A
+	for <buildroot@archiver.kernel.org>; Mon, 29 Jul 2024 12:20:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3373440492;
-	Mon, 29 Jul 2024 11:57:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 42EAA404C8;
+	Mon, 29 Jul 2024 12:20:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AzXSnytMhCfC; Mon, 29 Jul 2024 11:57:17 +0000 (UTC)
+ id GfE_T-vwS0Xx; Mon, 29 Jul 2024 12:20:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E2761404AA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D32B8404B6
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E2761404AA;
-	Mon, 29 Jul 2024 11:57:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D32B8404B6;
+	Mon, 29 Jul 2024 12:20:34 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 68E2F1BF475
- for <buildroot@lists.busybox.net>; Mon, 29 Jul 2024 11:57:15 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id AD5FA1BF473
+ for <buildroot@lists.busybox.net>; Mon, 29 Jul 2024 12:20:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 564E24018F
- for <buildroot@lists.busybox.net>; Mon, 29 Jul 2024 11:57:15 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9B07C40173
+ for <buildroot@lists.busybox.net>; Mon, 29 Jul 2024 12:20:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id B35G-1Tf5bdH for <buildroot@lists.busybox.net>;
- Mon, 29 Jul 2024 11:57:14 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a01:111:f403:2405::601;
- helo=nam02-dm3-obe.outbound.protection.outlook.com;
- envelope-from=neal.frager@amd.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 9F82840364
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9F82840364
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com
- (mail-dm3nam02on20601.outbound.protection.outlook.com
- [IPv6:2a01:111:f403:2405::601])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 9F82840364
- for <buildroot@buildroot.org>; Mon, 29 Jul 2024 11:57:13 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=EGlo7tOBwAbSkEunfDe7J+4vLx+NyY5iwUf9XsoHtxIBd45o3rrfKxm175K6AVGQZ5RuVW0GzbZdeYH1s7e1Nbq5Dze5Sxu1P7EzrYOKjKnh76TB3cbzLFldd8f9xgr9iq/5n1mHKwqEUF8zdiEmVii10LQZ8tL6S/yi5ACT/KW+zBFuCg/sMIt4ApyzH44LRV3o4+w1mcAsB2Or8+51kPvJzV4uPxgZiZvyTepP6nTCnehQXvY6Qps3jOZM5LiqnmnYmdJuyYjQFgwG+ravip064TlELVpbhN6cw3YEYOqwxl6pRYQp4hyBs4xupfOjSCr0WIKh6H8rbd9352fLlg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3EfD9kuqPZF/L9TBuPeEcJzt5lPMHqCTnn5hXvvci5w=;
- b=PwmeBU6eYrAq0RQ5EnEDZTfIWY8nnPdHwecBUzqLMF/Metie6PPEwIrqPf4IvO8Zfwq4jm4env67GfqGdU3LuyDWErwAX4fFAyNN20IYB+tC3C22LGLtxO+gS7/ItdetGMaH1EQQxhiPlayfFJpWxOckqS8YfeiHdGPdS+DmQl9g+5EEpw7VTmdvry/jxtbB3FUZtngaJ4WF0AwjJUs/WC7RqM+of8CSpSRluBXAulztjsukLijClxRy1p4H1LII58oXpctMimBH24u6SBDT790aitfrGuDUKcT0tFdwBNq0olrAxRdf/VtDHKzhY47UfSsMqLwEY0kn2JAVK3Q7uw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=buildroot.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none (0)
-Received: from DM6PR12CA0002.namprd12.prod.outlook.com (2603:10b6:5:1c0::15)
- by SJ0PR12MB6832.namprd12.prod.outlook.com (2603:10b6:a03:47e::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7807.26; Mon, 29 Jul
- 2024 11:57:08 +0000
-Received: from CY4PEPF0000EE30.namprd05.prod.outlook.com (2603:10b6:5:1c0::4)
- by DM6PR12CA0002.outlook.office365.com (2603:10b6:5:1c0::15) with
- Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7784.34 via Frontend Transport; Mon, 29 Jul 2024 11:57:07 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CY4PEPF0000EE30.mail.protection.outlook.com (10.167.242.36) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.7828.19 via Frontend Transport; Mon, 29 Jul 2024 11:57:06 +0000
-Received: from SATLEXMB06.amd.com (10.181.40.147) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Mon, 29 Jul
- 2024 06:57:03 -0500
-Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB06.amd.com
- (10.181.40.147) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Mon, 29 Jul
- 2024 06:57:03 -0500
-Received: from xirengwts09.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server id 15.1.2507.39 via Frontend
- Transport; Mon, 29 Jul 2024 06:57:02 -0500
-To: <buildroot@buildroot.org>
-Date: Mon, 29 Jul 2024 12:57:00 +0100
-Message-ID: <20240729115700.2355352-1-neal.frager@amd.com>
-X-Mailer: git-send-email 2.25.1
+ id 2s-PxtqgmrcB for <buildroot@lists.busybox.net>;
+ Mon, 29 Jul 2024 12:20:32 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.21;
+ helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org B7B9C400F8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B7B9C400F8
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B7B9C400F8
+ for <buildroot@buildroot.org>; Mon, 29 Jul 2024 12:20:30 +0000 (UTC)
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from haruka.lan ([85.22.120.168]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1M9nxt-1sbSAg1YyD-00F16R; Mon, 29
+ Jul 2024 14:20:27 +0200
+To: buildroot@buildroot.org
+Date: Mon, 29 Jul 2024 14:20:10 +0200
+Message-ID: <20240729122011.1112914-1-fiona.klute@gmx.de>
+X-Mailer: git-send-email 2.45.2
 MIME-Version: 1.0
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PEPF0000EE30:EE_|SJ0PR12MB6832:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2b68ccb2-dd08-49c3-e14f-08dcafc591ca
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
- ARA:13230040|36860700013|82310400026|1800799024|376014|41080700001; 
-X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?baUO9ccvNmdeyA78P1suy9uBxZebc4SDU2L0Au/41K1SoGRokQde/gB4RTwJ?=
- =?us-ascii?Q?8iZg4QbIGbZdIaHoZOJhuzS6PmXNTtvddxWHL7u0RlmAcvCNicmbYM14gUZD?=
- =?us-ascii?Q?wjixrg12q/En7+WqQbyQKsy5mjnQq4S6Tc2RlpnrqULGKNBkUxpH/AEFNApy?=
- =?us-ascii?Q?HjL7FtdETI+rntWmSlao18sE4nEfpbTnZp+LYfCkChERBKUKOadwkb6FuZiY?=
- =?us-ascii?Q?drzmXqiMr0fsuJaNATYEsFu4cSUxO2IoKFB9wTknZwe72udexA4K6rq3+1MM?=
- =?us-ascii?Q?pc8iAEPdui+gbGDejQDlqjvB/QU1mr5DjVOGMDsVftzPbKhkyi27A7MlZPug?=
- =?us-ascii?Q?vgpK9c/etGoLZO75S0WuxArMvwiHohCwlyq03vpL8GCHe8JuVhrtAN5AJw/X?=
- =?us-ascii?Q?HlLer66Ha+2iFDs2s3GRrdefpKSMASpQMeUZRWR6QTGom/VWGZ5UKjCR4Klh?=
- =?us-ascii?Q?La9GjEOJ6DUJgftYNCq97AU6cvOe7fQFN4/eg7nCUQEwe7/MnT24lOqAab2V?=
- =?us-ascii?Q?D/iB0srX6/pPWogfJ5VcgOFWGGtnObLBpx2HgdKq456PhKZv+AFdNbwhH5+r?=
- =?us-ascii?Q?A7qfumzlinEu+93ow3n6+d9aBSyVKqVEB/Ie2/R6Re1aX2fGgEudNIojXOU+?=
- =?us-ascii?Q?LKqOofOwP8q7/4HnYJJojGw/5ErsWZN5xvWKaOv54YSRjYfYi0Vb2zKGNPnX?=
- =?us-ascii?Q?tStqjcdZi6RWk+mauOQDlXfm1DiigP9ZPUPpqgQOSpFoGUT+9ob7vfQPbu1d?=
- =?us-ascii?Q?pr1lfV6I+0eIVbpYmhoU8Zse8RWRgMn+V1qou9dVB52srpDg5bQUuM3Y9gXi?=
- =?us-ascii?Q?S4rTjDW12U50aN4Sf/RcXZlQxe5lbyiTvqYMbjfEGo7ZrAsiCIMgI1qO0qUi?=
- =?us-ascii?Q?yWrx0depTCFz0b/QcMs8f1UDxQfQL4FsXQCyuQH7xkmukgQlLn224038NS6N?=
- =?us-ascii?Q?eDU15xU916ZbxbTb+mb4uA9vvlOShwSEC9ukr01sd7IftN61ds+CgdTniNEi?=
- =?us-ascii?Q?GNSmTs7v997sVPtM9o9NMnJvBe7sDC/r5JJNWJLm9gWTMjHf/9/t9/kN8LYV?=
- =?us-ascii?Q?RQ6oxFJa8VP6XxuXeFAnk3t5Sp18buxymNPHdCSDbSeRY9ZkmtUoYrmrFkud?=
- =?us-ascii?Q?KL+Dhz78Bar2TKSPq81tvl6U4OOqw5xFeYGzE9fvRLq4lTYhHBHjN+5hUfez?=
- =?us-ascii?Q?epaziaAM2IMcWLceku/b7R4gnil6VGsVpIPLy45Iskcd6kpj5nOHBv+JB9KW?=
- =?us-ascii?Q?1BI3y+2Oqz2q0OPkeQcHJhhi+r2Yno+O0ENlv5DW2ZmK7fZy/w6cYBM6qTGK?=
- =?us-ascii?Q?/mQCHtEunEsZo23lgxGPJqIv1avemIVi228nCqKLuBZuqSqQPZZX7nHCllfu?=
- =?us-ascii?Q?aso44WAIenmwvN0L8QD2gHltXjHJBgJQqRoXIBMQLYeDKbvwx39T9/ufpcdQ?=
- =?us-ascii?Q?vJbFo2Mz1Pr52cAdmtLntXeixxWmH7zNLUxQZDbTRYNzzKVCDihOqw=3D=3D?=
-X-Forefront-Antispam-Report: CIP:165.204.84.17; CTRY:US; LANG:en; SCL:1; SRV:;
- IPV:CAL; SFV:NSPM; H:SATLEXMB04.amd.com; PTR:InfoDomainNonexistent; CAT:NONE;
- SFS:(13230040)(36860700013)(82310400026)(1800799024)(376014)(41080700001);
- DIR:OUT; SFP:1101; 
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Jul 2024 11:57:06.7928 (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2b68ccb2-dd08-49c3-e14f-08dcafc591ca
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d; Ip=[165.204.84.17];
- Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CY4PEPF0000EE30.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB6832
+X-Provags-ID: V03:K1:zZkmp3xLGDqEzLijrNZ7e8VOnrZAhGu4s5WgqdawCFzHMEFq6kR
+ JikLZGY9KXY2T6mBWJP6N6JXP10cFrbW0kCwXVWGaScbv/vk2kOxsnNzLK8r7nThSdc9Aoi
+ VPNmnM5zx/s8CBOEyH7rtsybn4ti+jzOwAzsNdctzMuiyiXdJCc9IIx0ISKi+KJEZSQL8Uy
+ bteqyQDif6S+H8iQyl/zg==
+UI-OutboundReport: notjunk:1;M01:P0:+nBz3eYkW0k=;wALrpdRlhn7vyvQbMiIV6tjd9NJ
+ xPW6N0bfWG4Kg+f1wEagvLf2Q9wPlTx1Y/Tc4ILwU9jS15LVAMqId9kVSJV11sHIwhf+ZJUi8
+ jOo0TqJgIGKtZVcy2qN7HFGv6EYPg7Ysl+bJtGSbokEqs7IEI4OwY4KuxPJ8cuWLIL271j0Gs
+ 8E3DXq9NFEn52kQ+x1Nhr7HnjwpIwQ09ajRw09mVmVXZVyN5rGF/AJfU9/C4QJd4YfJLZfZOs
+ a/zJuyFzAd8SrgZW6+X4/5ZkXOszfrPizbH1TjQuZ5fnn8WN6dweCx01NSOWDl8DUFjeh9zBs
+ QEg5sJ+yVJUvC1cH+1oA+cFxIySN0cBcBt6SxzvR8FO7Wa0qdkNkAmDl4XhdPX5T2cf8D1t3Y
+ FYqe+8kSPQDJQhcb5Bbo6FIR9cMt7//ngnHgHvhhNgTSKBiSsJQM1qd0YJwMerhRRMMaWREZV
+ Yzh2CX0JKmjWVtHGPPv8FvsR/sG8n5N740e10PihgNRf3uS3+acn057Pu+EQaYBpP/tvyH3Ua
+ nDyco3VUuWY2Y+5+c9WJiYho7aLmL3lGIayhhOxf5frOAtqD8qYkRjVxbSAvLfkYpXXdWcrq1
+ GwlYJlqq4Y+PCSyGAP2Q6+dHG9Rt7OcK1w9mJ+mKVEzhagqHj0FlXmZuVdBVwWIsSiIl4qX1U
+ q6PFHr2TqI5P/5Rwa6tm+1iFCDm7+5T6fAa+rA0i32Ee4um9qQGvjsvKxeRzbS8NUPQEEnKQt
+ hjisf/g5ihttl3EG4EV6FuavY8V5Wp/xAHQ/gZFvaKIVyf6gWPBOQOMrqrRhTOQXIRYNahH1e
+ SUMe23BW5Gudl5H7/VOfK+nw==
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amd.com; s=selector1; 
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3EfD9kuqPZF/L9TBuPeEcJzt5lPMHqCTnn5hXvvci5w=;
- b=V9q3JDDqGW4LtHfmZsz+/nFFhbzA3cTMEktbsy3nbNcXtdO/1N48ODc5XByxKsEo7AE90JWSdVE8BYNjUxU62kumu79QKtSdRLSPug8X78oLWEc1lzCe3udlytZeVEDe0qnzfqj0R4RHoLT4hjoUD4JXbQQwvPtre9clPzNNK/A=
+ d=gmx.de; 
+ s=s31663417; t=1722255627; x=1722860427; i=fiona.klute@gmx.de;
+ bh=afK6RFiUZiXcyUhclATZBw4+l6Ik3+p7hbz60Izvjfw=;
+ h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:
+ MIME-Version:Content-Transfer-Encoding:cc:
+ content-transfer-encoding:content-type:date:from:message-id:
+ mime-version:reply-to:subject:to;
+ b=pAGjugaMWBRUET0uqMPH+xcjI4T24I3gEHxP3ut5JL9bMBHs4lakH+U36zFPZHos
+ 6sNMc1S402MdpQ5SLcG+5O+php5zlou1ml9w8oqqPXV5EnufCrpAn59OvjJCb2uDB
+ eJOiZdWWnpMZGWgGEzfVQjIY3YbCgu0EwGH4WHobC/qGRchcN/acWuqQghZs//j1p
+ CYYoxsBWJMkp7FRSZ1o5I3GWK7KCIx1NuBHM6Pu82JjGFYUkLCeXYANucu76gbS6A
+ 7UAH0kHBNDqYAxELokWr9JWBjkGVVfhqXQTXozQvLY46Qz9cl93oekLaA4fk4+Vm2
+ umUnIDy9Q4JmMNaK+w==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
- header.from=amd.com
+ header.from=gmx.de
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
- header.s=selector1 header.b=V9q3JDDq
-Subject: [Buildroot] [PATCH v1 1/1] boot/xilinx-prebuilt: support future AMD
- Vivado versions
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmx.de header.i=fiona.klute@gmx.de header.a=rsa-sha256
+ header.s=s31663417 header.b=pAGjugaM
+Subject: [Buildroot] [PATCH 1/2] package/docker-engine: rewrite dockerd init
+ script
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -159,57 +96,164 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Neal Frager via buildroot <buildroot@buildroot.org>
-Reply-To: Neal Frager <neal.frager@amd.com>
-Cc: andy.a.kennedy@collins.com, ibai.erkiaga-elorza@amd.com,
- luca.ceresoli@bootlin.com, brandon.maier@collins.com,
- thomas.petazzoni@bootlin.com, Neal Frager <neal.frager@amd.com>,
- romain.naour@smile.fr, michal.simek@amd.com, yann.morin.1998@free.fr
+From: Fiona Klute via buildroot <buildroot@buildroot.org>
+Reply-To: Fiona Klute <fiona.klute@gmx.de>
+Cc: "Fiona Klute \(WIWA\)" <fiona.klute@gmx.de>,
+ Christian Stewart <christian@aperture.us>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-When creating a hardware platform for AMD Versal devices with the AMD Vivado
-Design Suite, the resulting XSA file has a file named "psm_fw.elf" included.
-This does not match the "psmfw.elf" filename that users will get when building
-the boot firmware from the Xilinx GIT repository.
+From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
 
-A change request has been submitted to resolve this issue, so that future
-AMD Vivado Design Suite versions will generate XSA files including the boot
-firmware file named "psmfw.elf" to match the filename that is generated when
-building the firmware.
+This brings the dockerd init script in line with the standard
+Buildroot init script pattern.
 
-In order to support both current and future versions of AMD Vivado Design
-Suite, this patch changes the xilinx-prebuilt package to use the filename
-"psm*fw.elf" when obtaining the Versal boot firmware images from a user
-generated XSA file.
+Reload using SIGHUP is also supported now, note that the Docker
+documentation cautions that not all parameters can be changed at
+runtime (without a full restart).
 
-Signed-off-by: Neal Frager <neal.frager@amd.com>
+Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
 ---
- boot/xilinx-prebuilt/xilinx-prebuilt.mk | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+Please note that while the second patch in this series is an RFC, this
+is not and in my opinion can be merged with or without the syslog fix.
 
-diff --git a/boot/xilinx-prebuilt/xilinx-prebuilt.mk b/boot/xilinx-prebuilt/xilinx-prebuilt.mk
-index 0b0e85b820..9f36ee7285 100644
---- a/boot/xilinx-prebuilt/xilinx-prebuilt.mk
-+++ b/boot/xilinx-prebuilt/xilinx-prebuilt.mk
-@@ -34,8 +34,11 @@ ifeq ($(BR2_TARGET_XILINX_PREBUILT_VERSAL),y)
- ifeq ($(BR2_TARGET_XILINX_PREBUILT_VERSAL_XSA),y)
- XILINX_PREBUILT_PLM = $(@D)/pdi_files/gen_files/plm.elf
- # Unlike the psmfw.elf file for Xilinx development boards,
--# AMD Vivado Design Suite generates a file named psm_fw.elf.
--XILINX_PREBUILT_PSMFW = $(@D)/pdi_files/static_files/psm_fw.elf
-+# AMD Vivado Design Suite currently generates a file named psm_fw.elf.
-+# Future versions of AMD Vivado will generate a file named psmfw.elf,
-+# so to support current and future AMD Vivado versions, the filename
-+# psm*fw.elf is used.
-+XILINX_PREBUILT_PSMFW = $(@D)/pdi_files/static_files/psm*fw.elf
- XILINX_PREBUILT_PDI = $(@D)/*.pdi
- else # BR2_TARGET_XILINX_PREBUILT_VERSAL_XSA
- XILINX_PREBUILT_PLM = $(XILINX_PREBUILT_BOARD_DIR)/plm.elf
--- 
-2.25.1
+ .checkpackageignore              |   1 -
+ package/docker-engine/S60dockerd | 103 ++++++++++++++++++++++---------
+ 2 files changed, 74 insertions(+), 30 deletions(-)
+
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 4fb65d231a..a9711f484f 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -460,7 +460,6 @@ package/dmalloc/0004-Makefile-use-the-configure-detected-or-user-supplied.patch
+ package/dmalloc/0005-configure-use-LD-instead-of-hard-coding-ld.patch lib_patch.Upstream
+ package/dmraid/0001-fix-compilation-under-musl.patch lib_patch.Upstream
+ package/dmraid/S20dmraid lib_sysv.Variables
+-package/docker-engine/S60dockerd Shellcheck lib_sysv.Indent lib_sysv.Variables
+ package/docopt-cpp/0001-only-build-one-target-use-BUILD_SHARED_LIBS-where-appropriate.patch lib_patch.Upstream
+ package/domoticz/S99domoticz Shellcheck
+ package/dovecot/0001-auth-Fix-handling-passdbs-with-identical-driver-args.patch lib_patch.Upstream
+diff --git a/package/docker-engine/S60dockerd b/package/docker-engine/S60dockerd
+index def8bea149..6850092eb2 100644
+--- a/package/docker-engine/S60dockerd
++++ b/package/docker-engine/S60dockerd
+@@ -1,38 +1,83 @@
+ #!/bin/sh
+
+-NAME=dockerd
+-DAEMON=/usr/bin/$NAME
+-PIDFILE=/var/run/$NAME.pid
+-DAEMON_ARGS=""
+-
+-[ -r /etc/default/$NAME ] && . /etc/default/$NAME $1
+-
+-do_start() {
+-        echo -n "Starting $NAME: "
+-        start-stop-daemon --start --quiet --background --make-pidfile \
+-		--pidfile $PIDFILE --exec $DAEMON -- $DAEMON_ARGS \
+-                && echo "OK" || echo "FAIL"
++DAEMON="dockerd"
++PIDFILE="/var/run/$DAEMON.pid"
++# expect dockerd to write its PID file within this number of seconds
++# after start
++STARTUP_TIMEOUT="5"
++
++DOCKERD_ARGS=""
++
++# shellcheck source=/dev/null
++[ -r "/etc/default/$DAEMON" ] && . "/etc/default/$DAEMON"
++
++dockerd_running() {
++	start-stop-daemon --stop --test --quiet --pidfile "$PIDFILE" \
++		--exec "/usr/bin/$DAEMON"
++	return $?
++}
++
++start() {
++	printf 'Starting %s: ' "$DAEMON"
++	# shellcheck disable=SC2086 # we need word splitting for DOCKERD_ARGS
++	start-stop-daemon --start --background --pidfile "$PIDFILE" \
++		--exec "/usr/bin/$DAEMON" \
++		-- --pidfile "$PIDFILE" $DOCKERD_ARGS
++	# We have to use --background because dockerd doesn't
++	# daemonize on its own. Unfortunately that means
++	# start-stop-daemon cannot check the return status, so at
++	# least check the process is actually running.
++	timeout="$(($(date +%s) + STARTUP_TIMEOUT))"
++	while [ "$(date +%s)" -lt "$timeout" ]; do
++		if dockerd_running; then
++			echo "OK"
++			return 0
++		fi
++		sleep 0.1
++	done
++	echo "FAIL"
++	return 1
++}
++
++stop() {
++	printf 'Stopping %s: ' "$DAEMON"
++	start-stop-daemon --stop --pidfile "$PIDFILE" --exec "/usr/bin/$DAEMON"
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		echo "OK"
++	else
++		echo "FAIL"
++		return "$status"
++	fi
++	while dockerd_running; do
++		sleep 0.1
++	done
++	rm -f "$PIDFILE"
++	return "$status"
++}
++
++restart() {
++	stop
++	start
+ }
+
+-do_stop() {
+-        echo -n "Stopping $NAME: "
+-        start-stop-daemon --stop --quiet --pidfile $PIDFILE \
+-                && echo "OK" || echo "FAIL"
++reload() {
++	printf "Reloading %s config: " "$DAEMON"
++	start-stop-daemon --stop --signal HUP -q --pidfile "$PIDFILE" \
++		--exec "/usr/bin/$DAEMON"
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return "$status"
+ }
+
+ case "$1" in
+-        start)
+-                do_start
+-                ;;
+-        stop)
+-                do_stop
+-                ;;
+-        restart)
+-                do_stop
+-                sleep 1
+-                do_start
+-                ;;
++	start|stop|restart|reload)
++		"$1";;
+ 	*)
+-                echo "Usage: $0 {start|stop|restart}"
+-                exit 1
++		echo "Usage: $0 {start|stop|restart|reload}"
++		exit 1
+ esac
+--
+2.45.2
 
 _______________________________________________
 buildroot mailing list
