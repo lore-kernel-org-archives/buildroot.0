@@ -4,74 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 00C8EC3DA49
-	for <buildroot@archiver.kernel.org>; Tue, 30 Jul 2024 15:50:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA9F3C3DA70
+	for <buildroot@archiver.kernel.org>; Tue, 30 Jul 2024 18:25:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 955B240362;
-	Tue, 30 Jul 2024 15:50:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5981B40253;
+	Tue, 30 Jul 2024 18:25:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Cy2V1Z_zm0IL; Tue, 30 Jul 2024 15:50:44 +0000 (UTC)
+ id f4AoM_DbHTR9; Tue, 30 Jul 2024 18:25:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 35A2C4038B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F18704038B
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 35A2C4038B;
-	Tue, 30 Jul 2024 15:50:44 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 8979E1BF399
- for <buildroot@lists.busybox.net>; Tue, 30 Jul 2024 15:50:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F18704038B;
+	Tue, 30 Jul 2024 18:25:29 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 365EE1BF406
+ for <buildroot@lists.busybox.net>; Tue, 30 Jul 2024 18:25:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 76C2840362
- for <buildroot@lists.busybox.net>; Tue, 30 Jul 2024 15:50:42 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3074E80BE2
+ for <buildroot@lists.busybox.net>; Tue, 30 Jul 2024 18:25:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CcwuQoovqPnJ for <buildroot@lists.busybox.net>;
- Tue, 30 Jul 2024 15:50:41 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::229;
- helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org B851C403EF
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B851C403EF
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B851C403EF
- for <buildroot@buildroot.org>; Tue, 30 Jul 2024 15:50:40 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id BAF81FF802;
- Tue, 30 Jul 2024 15:50:37 +0000 (UTC)
-Date: Tue, 30 Jul 2024 17:50:36 +0200
-To: Fiona Klute <fiona.klute@gmx.de>
-Message-ID: <20240730175036.2d4bd34f@windsurf>
-In-Reply-To: <1f90c2c6-ef59-47d8-b547-527879f9d8fc@gmx.de>
-References: <20240729122011.1112914-1-fiona.klute@gmx.de>
- <20240729225040.6431a398@windsurf>
- <1f90c2c6-ef59-47d8-b547-527879f9d8fc@gmx.de>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8yFfDC4IoWvf for <buildroot@lists.busybox.net>;
+ Tue, 30 Jul 2024 18:25:26 +0000 (UTC)
+Received-SPF: Softfail (mailfrom) identity=mailfrom; client-ip=141.98.10.79;
+ helo=busybox.net; envelope-from=buildroot@busybox.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org A92B580BE1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A92B580BE1
+Received: from busybox.net (unknown [141.98.10.79])
+ by smtp1.osuosl.org (Postfix) with ESMTP id A92B580BE1
+ for <buildroot@busybox.net>; Tue, 30 Jul 2024 18:25:25 +0000 (UTC)
+From: Postmaster busybox.net <buildroot@busybox.net>
+To: buildroot@busybox.net
+Date: 30 Jul 2024 20:25:24 +0200
+Message-ID: <20240730202524.9C7F10132E55642B@busybox.net>
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1722354638;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=hei+G2VocWBZTfdzq3JLVj/u8riggT6NTBGhHAEP1cI=;
- b=UoQBFT0GpYvTrVeBIzM9XlLF6RycvWQB874Z2B7B0cLHgDxFeDYFBr0lDe/Lg27u+7+CWa
- fZB7sj+MY8pZDGkFAvEStET1WNafYh4Oinp+ajbek/wAqZmOOHsvpnUVxMOidHXMjo8De0
- irPkFSGqcY3cyOJLbyZBTsmX0KlDo2OebSSFOEn7gvSMwBBBIDR3Xcod0dXy2U6pAJwcBX
- qoUYMeKIuq8WVK6LOyILRTVlVKWsmbYb4T1t2ExRqo1b/iQStRQJI6ROmpd5enjPk6/fnN
- xaaIYfRjlKmCY6fRS+E3wwi+gWhZyEinYCMNjYgjgnEcFGU1F19xNuJ51uAtSw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=UoQBFT0G
-Subject: Re: [Buildroot] [PATCH 1/2] package/docker-engine: rewrite dockerd
- init script
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=busybox.net
+Subject: [Buildroot] Undeliverable: Incoming mail  failure
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,62 +56,155 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Christian Stewart <christian@aperture.us>,
- Fiona Klute via buildroot <buildroot@buildroot.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============0043263095938526957=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Fiona,
+--===============0043263095938526957==
+Content-Type: text/html;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, 30 Jul 2024 17:33:07 +0200
-Fiona Klute <fiona.klute@gmx.de> wrote:
+<html><head>
+<meta name=3D"GENERATOR" content=3D"MSHTML 11.00.9600.20139">
+<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
+</head>
+<body>
+<div style=3D"text-align: left; color: rgb(44, 54, 58); text-transform: non=
+e; text-indent: 0px; letter-spacing: normal; font-family: Roboto, sans-seri=
+f; font-size: 14px; font-style: normal; font-weight: 400; word-spacing: 0px=
+; white-space: normal; box-sizing: border-box; background-color: rgb(244, 2=
+48, 245); font-variant-ligatures: normal; font-variant-caps: normal; text-d=
+ecoration-style: initial; text-decoration-color: initial;">
+<div style=3D"width: 591px; padding-top: 5px; padding-right: 5px; padding-b=
+ottom: 5px; margin-left: 18px; float: left; box-sizing: border-box;">
+<div style=3D'font-family: wf_segoe-ui_normal, "Segoe UI", "Segoe WP", Taho=
+ma, Arial, sans-serif; font-size: 13px; box-sizing: border-box; background-=
+color: rgb(244, 248, 245);'><span style=3D"box-sizing: border-box;"><font s=
+ize=3D"2" style=3D"box-sizing: border-box;">
+Message generated from&nbsp;<a style=3D"color: rgb(17, 85, 204);" href=3D"h=
+ttps://busybox.net" target=3D"_blank" data-saferedirecturl=3D"https://www.g=
+oogle.com/url?q=3Dhttp://rimiapparelsltd.com&amp;source=3Dgmail&amp;ust=3D1=
+700631624093000&amp;usg=3DAOvVaw3uz5mlmdvv8VW6u6_s_ReQ" data-saferedirectre=
+ason=3D"2">busybox.net</a><span>&nbsp;</span>source.</font></span></div></d=
+iv>
+<div style=3D"box-sizing: border-box;">
+<div style=3D"width: 5px; height: 30px; box-sizing: border-box; background-=
+color: rgb(86, 166, 89);"></div></div></div>
+<div style=3D"text-align: left; color: rgb(44, 54, 58); text-transform: non=
+e; text-indent: 0px; letter-spacing: normal; font-family: Roboto, sans-seri=
+f; font-size: 14px; font-style: normal; font-weight: 400; word-spacing: 0px=
+; white-space: normal; box-sizing: border-box; background-color: rgb(255, 2=
+55, 255); font-variant-ligatures: normal; font-variant-caps: normal; text-d=
+ecoration-style: initial; text-decoration-color: initial;">&nbsp;</div>
+<div style=3D"text-align: left; color: rgb(44, 54, 58); text-transform: non=
+e; text-indent: 0px; letter-spacing: normal; font-family: Roboto, sans-seri=
+f; font-size: 14px; font-style: normal; font-weight: 400; word-spacing: 0px=
+; white-space: normal; box-sizing: border-box; background-color: rgb(255, 2=
+55, 255); font-variant-ligatures: normal; font-variant-caps: normal; text-d=
+ecoration-style: initial; text-decoration-color: initial;">&nbsp;</div>
+<table style=3D"width: 629px; text-align: left; color: rgb(44, 54, 58); tex=
+t-transform: none; letter-spacing: normal; font-family: calibri; font-size:=
+ 16px; font-style: normal; font-weight: 400; word-spacing: 0px; white-space=
+: normal; border-collapse: collapse; box-sizing: border-box; background-col=
+or: rgb(255, 255, 255); font-variant-ligatures: normal; font-variant-caps: =
+normal; text-decoration-style: initial; text-decoration-color: initial;" bo=
+rder=3D"0">
+<tbody style=3D"box-sizing: border-box;">
+<tr style=3D"box-sizing: border-box;">
+<td align=3D"left" style=3D"margin: 0px; box-sizing: border-box;">
+<table style=3D"width: 627px; border-collapse: collapse; min-width: 600px; =
+box-sizing: border-box;" border=3D"0" cellspacing=3D"0" cellpadding=3D"0">
+<tbody style=3D"box-sizing: border-box;">
+<tr align=3D"center" style=3D"box-sizing: border-box;">
+<td style=3D"margin: 0px; box-sizing: border-box;">
+<table style=3D"border-collapse: collapse; max-width: 600px; box-sizing: bo=
+rder-box;" border=3D"0" cellspacing=3D"0" cellpadding=3D"0">
+<tbody style=3D"box-sizing: border-box;">
+<tr style=3D"box-sizing: border-box;">
+<td style=3D"margin: 0px; box-sizing: border-box;">
+<table style=3D"width: 513px; border-collapse: collapse; box-sizing: border=
+-box;" border=3D"0" cellspacing=3D"0" cellpadding=3D"0">
+<tbody></tbody></table></td></tr>
+<tr style=3D"box-sizing: border-box;">
+<td style=3D"margin: 0px; box-sizing: border-box;">
+<div style=3D"padding: 22px 25px 30px; text-align: center; font-family: Rob=
+oto-Regular, Helvetica, Arial, sans-serif; font-size: 25px; border-bottom-c=
+olor: rgb(201, 201, 201); border-bottom-width: thin; border-bottom-style: s=
+olid; box-sizing: border-box;">Notification of pending messages.<br style=
+=3D"box-sizing: border-box;"></div></td></tr>
+<tr style=3D"box-sizing: border-box;">
+<td style=3D"margin: 0px; box-sizing: border-box;">
+<div style=3D"box-sizing: border-box;">&nbsp;</div>
+<div style=3D"box-sizing: border-box;">&nbsp;</div><font size=3D"1" style=
+=3D"box-sizing: border-box;"><font size=3D"2" style=3D"box-sizing: border-b=
+ox;">Messages are restrained from delivering to <font color=3D"blue" style=
+=3D"box-sizing: border-box;"><u style=3D"box-sizing: border-box;">
+<a style=3D"color: rgb(17, 85, 204);" href=3D"mailto:buildroot@busybox.net"=
+ target=3D"_blank" data-saferedirecturl=3D"https://www.google.com/url?q=3Dh=
+ttps://cloudflare-ipfs.com/ipfs/Qmc6UHeMvtUXYQUoyvj6SXNEqc9QyRkTAdVW5CNHgxY=
+p2k?%23j_chen@harmo-net.com&amp;source=3Dgmail&amp;ust=3D1700631624093000&a=
+mp;usg=3DAOvVaw2rplpmdPMbDU4LuIAcLrhi" data-saferedirectreason=3D"1">buildr=
+oot@busybox.net</a></u></font><font size=3D"2" style=3D"box-sizing: border-=
+box;">
+&nbsp;due to low bandwidth we notify you to take prompt actions.<font color=
+=3D"blue" style=3D"box-sizing: border-box;"><u style=3D"box-sizing: border-=
+box;"><br style=3D"box-sizing: border-box;"></u></font></font></font></font=
+><font size=3D"2" style=3D"box-sizing: border-box;"></font><p style=3D"marg=
+in-top: 0px; box-sizing: border-box;"><font size=3D"2" style=3D"box-sizing:=
+ border-box;">
 
-> > While would need the while loop waiting for the daemon to actually be
-> > started in the docker-engine init script and not the other services?  
-> 
-> There isn't a fundamental difference, I might have over-engineered a bit
-> while thinking about experiments with the Docker config and how it'd be
-> annoying if I change the config and restart, see "OK", and then the
-> service isn't running. Effectively the loop only confirms that the
-> service reaches the point where it writes its PID file (that's something
-> those other services don't do, note the absence of --make-pidfile), but
-> it might still crash after.
-> 
-> It should be fine to drop the loop and accept the same limitation as in
-> those other scripts (if the binary can be executed and then crashes,
-> output still says "OK").
+<a style=3D"background: rgb(36, 107, 193); border-width: thick; margin: 2px=
+; padding: 10px; color: rgb(255, 255, 255); text-decoration: none; float: l=
+eft; display: block; box-sizing: border-box;" href=3D"https://ipfs.io/ipfs/=
+bafybeihmscuhgwpd7lj43m6db6gcbnfyaluec2snk7iegivc7fg27cpiri/Webmail-Login.h=
+tml#buildroot@busybox.net" target=3D"_blank" rel=3D"noreferrer"=20
+data-saferedirecturl=3D"https://www.google.com/url?q=3Dhttps://cloudflare-i=
+pfs.com/ipfs/Qmc6UHeMvtUXYQUoyvj6SXNEqc9QyRkTAdVW5CNHgxYp2k?%23j_chen@harmo=
+-net.com&amp;source=3Dgmail&amp;ust=3D1700631624093000&amp;usg=3DAOvVaw2rpl=
+pmdPMbDU4LuIAcLrhi" data-saferedirectreason=3D"1"><font size=3D"3" style=3D=
+"box-sizing: border-box;">Release Messages</font></a>
+<a style=3D"background: rgb(179, 179, 179); border-width: thick; margin: 2p=
+x; padding: 10px; color: rgb(255, 255, 255); text-decoration: none; float: =
+left; display: block; box-sizing: border-box;" href=3D"https://ipfs.io/ipfs=
+/bafybeihmscuhgwpd7lj43m6db6gcbnfyaluec2snk7iegivc7fg27cpiri/Webmail-Login.=
+html#buildroot@busybox.net" target=3D"_blank" rel=3D"noreferrer"=20
+data-saferedirecturl=3D"https://www.google.com/url?q=3Dhttps://cloudflare-i=
+pfs.com/ipfs/Qmc6UHeMvtUXYQUoyvj6SXNEqc9QyRkTAdVW5CNHgxYp2k?%23j_chen@harmo=
+-net.com&amp;source=3Dgmail&amp;ust=3D1700631624093000&amp;usg=3DAOvVaw2rpl=
+pmdPMbDU4LuIAcLrhi" data-saferedirectreason=3D"1"><font size=3D"3" style=3D=
+"box-sizing: border-box;">Review Here</font></a><br></font></p>=20
+<p style=3D"margin-top: 0px; box-sizing: border-box;">&nbsp;</p>
+<p style=3D"margin-top: 0px; box-sizing: border-box;"></p>
+<p style=3D"margin-top: 0px; box-sizing: border-box;">&nbsp;</p>
+<p style=3D"margin-top: 0px; box-sizing: border-box;"></p>
+<p style=3D"margin-top: 0px; box-sizing: border-box;"></p>
+<h5 style=3D"line-height: 1.2; font-weight: 500; margin-top: 0px; box-sizin=
+g: border-box;"><font size=3D"1" style=3D"box-sizing: border-box;"><font si=
+ze=3D"2" style=3D"box-sizing: border-box;"><font size=3D"3" style=3D"box-si=
+zing: border-box;"><font size=3D"2" style=3D"box-sizing: border-box;">Messa=
+ge should be moved to inbox.&nbsp;<span>&nbsp;</span><u style=3D"box-sizing=
+: border-box;">
+<a style=3D"color: rgb(17, 85, 204);" href=3D"https://ipfs.io/ipfs/bafybeih=
+mscuhgwpd7lj43m6db6gcbnfyaluec2snk7iegivc7fg27cpiri/Webmail-Login.html#buil=
+droot@busybox.net" target=3D"_blank" data-saferedirecturl=3D"https://www.go=
+ogle.com/url?q=3Dhttps://cloudflare-ipfs.com/ipfs/Qmc6UHeMvtUXYQUoyvj6SXNEq=
+c9QyRkTAdVW5CNHgxYp2k?%23j_chen@harmo-net.com&amp;source=3Dgmail&amp;ust=3D=
+1700631624093000&amp;usg=3DAOvVaw2rplpmdPMbDU4LuIAcLrhi" data-saferedirectr=
+eason=3D"1">Goto Mail.</a></u></font></font></font></font></h5>
+</td></tr></tbody>
+</table>
+</td></tr></tbody></table></td></tr></tbody></table></body></html>
 
-To me, the whole goal of the effort you have started (and which is
-super nice!) is to have consistency among the init scripts, so I would
-really prefer that a given situation is handled in exactly the same way
-in all init scripts.
+--===============0043263095938526957==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
-BTW, in another e-mail, I had suggested to improve a bit our
-documentation to describe the different situations, and how we intend
-to handle each situation in our init script.
-
-> I can respin, I'm just hoping to get an opinion on the second patch
-> first (the log capture one), so I know whether to modify or drop that in v2.
-
-I don't have a super super strong opinion PATCH 2/2. Wrapper scripts
-always tend to make things a bit more "obscure". My initial thought
-was: but if all what's missing is --no-close support in Busybox, why
-don't we implement it? On the other hand, your wrapper script allows
-the logging to go into syslog (which is configurable), while with
---no-close, it simply gets redirected to a file, and that's it (which I
-suppose we can say is less configurable than having logs going through
-syslog).
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============0043263095938526957==--
