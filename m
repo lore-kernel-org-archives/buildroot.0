@@ -1,51 +1,112 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9FDDFC3DA49
-	for <buildroot@archiver.kernel.org>; Tue, 30 Jul 2024 05:05:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48F1DC3DA61
+	for <buildroot@archiver.kernel.org>; Tue, 30 Jul 2024 06:42:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 310EB608CD;
-	Tue, 30 Jul 2024 05:05:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C434C40288;
+	Tue, 30 Jul 2024 06:42:11 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PGinYwzA0KqT; Tue, 30 Jul 2024 06:42:10 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8350D40306
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8350D40306;
+	Tue, 30 Jul 2024 06:42:10 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 42B251BF37E
+ for <buildroot@lists.busybox.net>; Tue, 30 Jul 2024 06:42:09 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2FF5D608C5
+ for <buildroot@lists.busybox.net>; Tue, 30 Jul 2024 06:42:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2FOaEGGypRsl; Tue, 30 Jul 2024 05:05:41 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3A03B608CE
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3A03B608CE;
-	Tue, 30 Jul 2024 05:05:41 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A6FB91BF38E
- for <buildroot@lists.busybox.net>; Tue, 30 Jul 2024 05:05:39 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 92A74810B1
- for <buildroot@lists.busybox.net>; Tue, 30 Jul 2024 05:05:39 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Q45NhO1zSAPx for <buildroot@lists.busybox.net>;
- Tue, 30 Jul 2024 05:05:38 +0000 (UTC)
-Received-SPF: Softfail (mailfrom) identity=mailfrom; client-ip=141.98.10.91;
- helo=busybox.net; envelope-from=buildroot@busybox.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 61FFA810AE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 61FFA810AE
-Received: from busybox.net (unknown [141.98.10.91])
- by smtp1.osuosl.org (Postfix) with ESMTP id 61FFA810AE
- for <buildroot@busybox.net>; Tue, 30 Jul 2024 05:05:36 +0000 (UTC)
-From: Postmaster <buildroot@busybox.net>
-To: buildroot@busybox.net
-Date: 30 Jul 2024 07:05:31 +0200
-Message-ID: <20240730070530.D065D8AE4B5A4964@busybox.net>
+ id R2FSCy-2q1xO for <buildroot@lists.busybox.net>;
+ Tue, 30 Jul 2024 06:42:08 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=148.163.156.1;
+ helo=mx0a-001b2d01.pphosted.com; envelope-from=egorenar@linux.ibm.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 68ECF60746
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 68ECF60746
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com
+ [148.163.156.1])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 68ECF60746
+ for <buildroot@buildroot.org>; Tue, 30 Jul 2024 06:42:08 +0000 (UTC)
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+ by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 46U60Hao009981
+ for <buildroot@buildroot.org>; Tue, 30 Jul 2024 06:42:07 GMT
+Received: from ppma13.dal12v.mail.ibm.com
+ (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+ by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 40ptgm03r7-1
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
+ for <buildroot@buildroot.org>; Tue, 30 Jul 2024 06:42:07 +0000 (GMT)
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+ by ppma13.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id
+ 46U5Zals003745
+ for <buildroot@buildroot.org>; Tue, 30 Jul 2024 06:42:06 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+ by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 40ndemaxxp-1
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
+ for <buildroot@buildroot.org>; Tue, 30 Jul 2024 06:42:06 +0000
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com
+ [10.20.54.103])
+ by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id
+ 46U6g3PA51708212
+ (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK)
+ for <buildroot@buildroot.org>; Tue, 30 Jul 2024 06:42:05 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+ by IMSVA (Postfix) with ESMTP id F257820F94
+ for <buildroot@buildroot.org>; Tue, 30 Jul 2024 06:42:02 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+ by IMSVA (Postfix) with ESMTP id D273820F9E
+ for <buildroot@buildroot.org>; Tue, 30 Jul 2024 06:42:02 +0000 (GMT)
+Received: from oc8242746057.boeblingen.de.ibm.com (unknown [9.152.212.85])
+ by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP
+ for <buildroot@buildroot.org>; Tue, 30 Jul 2024 06:42:02 +0000 (GMT)
+From: Alexander Egorenkov <egorenar@linux.ibm.com>
+To: buildroot@buildroot.org
+Date: Tue, 30 Jul 2024 08:42:02 +0200
+Message-ID: <20240730064202.72774-2-egorenar@linux.ibm.com>
+X-Mailer: git-send-email 2.45.2
+In-Reply-To: <20240730064202.72774-1-egorenar@linux.ibm.com>
+References: <20240730064202.72774-1-egorenar@linux.ibm.com>
 MIME-Version: 1.0
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: fP6qmos2-YY5_qFwRXSq3XfyERJGE-Zx
+X-Proofpoint-ORIG-GUID: fP6qmos2-YY5_qFwRXSq3XfyERJGE-Zx
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-07-30_06,2024-07-26_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ suspectscore=0 adultscore=0
+ malwarescore=0 mlxscore=0 spamscore=0 clxscore=1015 mlxlogscore=537
+ phishscore=0 lowpriorityscore=0 bulkscore=0 impostorscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2407110000 definitions=main-2407300046
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=ibm.com; h=from
+ :to:subject:date:message-id:in-reply-to:references:mime-version
+ :content-transfer-encoding; s=pp1; bh=m8Fd/keNTg2c6VwNcQy9tyO/6G
+ Mvsld5Pk03CT4gIwg=; b=Va2/Fe67SiDHKOY8Z62aqhn5KKteLBXrONqrBzKLUv
+ pFkh1TKVUaDRzqnu3N8/c6Txh4LIpF/MfamATjt9d4f1ECagH7pQAQSVnjZ/6RDg
+ +yrCWvgT2WipHWKZA3KmP19/6Cjm/Nva7kea6sMG9mDJukrNKQJ5BCmLppg95I93
+ 7UVtTjilVlxVQpemzckPqmPb+0myYKcNsj/qC+v9wwqZY3FlezxQ2b71B/gZ4Znq
+ s5Q22iwBJNkYCwgPrm+G0cF9sZUGGJY8g7iC0rW9UdS7xGLhClmwKWaHqCza1qAq
+ 9h2HRZHPsfVLo7hcLjoAqkKqE2Kk0JeZImvuFrLPRYAA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=none (p=none dis=none)
- header.from=busybox.net
-Subject: [Buildroot] =?utf-8?q?Undeliverable=3A_You_have_=288=29_pending_?=
- =?utf-8?b?bWVzc8mRZ2Vz?=
+ header.from=linux.ibm.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com
+ header.a=rsa-sha256 header.s=pp1 header.b=Va2/Fe67
+Subject: [Buildroot] [PATCH v1 2/2] configs/qemu_s390x_defconfig: update to
+ Linux 6.10.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,176 +118,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============2056923292546124231=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============2056923292546124231==
-Content-Type: text/html;
-	charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Alexander Egorenkov <egorenar@linux.ibm.com>
+---
+ configs/qemu_s390x_defconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-<html><head>
-<meta name=3D"GENERATOR" content=3D"MSHTML 11.00.9600.20139">
-<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
-</head>
-<body>
-<div id=3D":92b" style=3D'color: rgb(34, 34, 34); text-transform: none; tex=
-t-indent: 0px; letter-spacing: normal; font-family: "Google Sans", Roboto, =
-RobotoDraft, Helvetica, Arial, sans-serif; font-size: medium; font-style: n=
-ormal; font-weight: 400; word-spacing: 0px; white-space: normal; orphans: 2=
-; widows: 2; background-color: rgb(255, 255, 255); font-variant-ligatures: =
-normal; font-variant-caps: normal; -webkit-text-stroke-width: 0px; text-dec=
-oration-thickness: initial; text-decoration-style:=20
-initial; text-decoration-color: initial;'><div class=3D"qQVYZb"><br></div><=
-div class=3D"lQs8Hd" jscontroller=3D"i3Ohde" jsaction=3D"SN3rtf:rcuQ6b"></d=
-iv><div class=3D"btm"></div></div>
-<div style=3D'color: rgb(34, 34, 34); text-transform: none; text-indent: 0p=
-x; letter-spacing: normal; font-family: "Google Sans", Roboto, RobotoDraft,=
- Helvetica, Arial, sans-serif; font-size: medium; font-style: normal; font-=
-weight: 400; word-spacing: 0px; white-space: normal; orphans: 2; widows: 2;=
- background-color: rgb(255, 255, 255); font-variant-ligatures: normal; font=
--variant-caps: normal; -webkit-text-stroke-width: 0px; text-decoration-thic=
-kness: initial; text-decoration-style: initial;=20
-text-decoration-color: initial;'><div class=3D"aHl" style=3D"margin-left: -=
-38px;"></div><div tabindex=3D"-1" id=3D":91y"></div>
-<div class=3D"ii gt" id=3D":929" style=3D"margin: 8px 0px 0px; padding: 0px=
-; font-size: 0.87rem; position: relative; direction: ltr;" jslog=3D"20277; =
-u014N:xr6bB; 1:WyIjdGhyZWFkLWY6MTc3ODU4Mjg5MTg5ODM1MTY4MSIsbnVsbCxudWxsLG51=
-bGwsbnVsbCxudWxsLG51bGwsbnVsbCxudWxsLG51bGwsbnVsbCxudWxsLG51bGwsW11d; 4:WyI=
-jbXNnLWY6MTc3ODU4Mjg5MTg5ODM1MTY4MSIsbnVsbCxbXSxudWxsLG51bGwsbnVsbCxudWxsLG=
-51bGwsbnVsbCxudWxsLG51bGwsbnVsbCxudWxsLG51bGwsbnVsbCxbXSxbXSxbXV0.">
-<div class=3D"a3s aiL " id=3D":92a" style=3D"font: small/1.5 Arial, Helveti=
-ca, sans-serif; width: 603px; height: 606px; overflow: hidden; font-size-ad=
-just: none; font-stretch: normal;"><u></u><div style=3D"margin: 0.4em;">
-<div style=3D"text-align: left; color: rgb(44, 54, 58); text-transform: non=
-e; text-indent: 0px; letter-spacing: normal; font-family: Roboto, sans-seri=
-f; font-size: 14px; font-style: normal; font-weight: 400; word-spacing: 0px=
-; border-top-color: currentColor; border-top-width: 0px; border-top-style: =
-none; white-space: normal; box-sizing: border-box; background-color: rgb(24=
-4, 248, 245); font-variant-ligatures: normal; font-variant-caps: normal; te=
-xt-decoration-style: initial;=20
-text-decoration-color: initial;"><div style=3D"width: 593px; height: 43px; =
-padding-top: 5px; padding-right: 5px; padding-bottom: 5px; margin-left: 18p=
-x; border-top-color: currentColor; border-top-width: 0px; border-top-style:=
- none; float: left; box-sizing: border-box;"><span style=3D"box-sizing: bor=
-der-box;"><font size=3D"2"><span style=3D"box-sizing: border-box;"><font si=
-ze=3D"2">Message generated from<span>&nbsp;</span>
-<a style=3D"color: rgb(17, 85, 204);" href=3D"https://busybox.net" target=
-=3D"_blank" data-saferedirecturl=3D"https://www.google.com/url?q=3Dhttp://m=
-edi-cont.hu&amp;source=3Dgmail&amp;ust=3D1696329870830000&amp;usg=3DAOvVaw0=
-fBxS8iT8to0LhSccEB9L8">busybox.net</a>&nbsp;source.</font></span><font size=
-=3D"2"></font><font size=3D"2"><span style=3D"box-sizing: border-box;"></sp=
-an></font></font><font size=3D"2"><span style=3D"box-sizing: border-box;">
-<div style=3D'font-family: wf_segoe-ui_normal, "Segoe UI", "Segoe WP", Taho=
-ma, Arial, sans-serif; font-size: 13px; border-top-color: currentColor; bor=
-der-top-width: 0px; border-top-style: none; box-sizing: border-box; backgro=
-und-color: rgb(244, 248, 245);'><br></div></span></font></span><font size=
-=3D"2"></font><span style=3D"box-sizing: border-box;"></span>
-<div style=3D'font-family: wf_segoe-ui_normal, "Segoe UI", "Segoe WP", Taho=
-ma, Arial, sans-serif; font-size: 13px; border-top-color: currentColor; bor=
-der-top-width: 0px; border-top-style: none; box-sizing: border-box; backgro=
-und-color: rgb(244, 248, 245);'><br></div></div><div style=3D"box-sizing: b=
-order-box;"><div style=3D"width: 5px; height: 30px; border-top-color: curre=
-ntColor; border-top-width: 0px; border-top-style: none; box-sizing: border-=
-box; background-color: rgb(86, 166, 89);"></div></div>
-</div><div style=3D"text-align: left; color: rgb(44, 54, 58); text-transfor=
-m: none; text-indent: 0px; letter-spacing: normal; font-family: Roboto, san=
-s-serif; font-size: 14px; font-style: normal; font-weight: 400; word-spacin=
-g: 0px; white-space: normal; box-sizing: border-box; background-color: rgb(=
-255, 255, 255); font-variant-ligatures: normal; font-variant-caps: normal; =
-text-decoration-style: initial; text-decoration-color: initial;"><br></div>=
-
-<div style=3D"text-align: left; color: rgb(44, 54, 58); text-transform: non=
-e; text-indent: 0px; letter-spacing: normal; font-family: Roboto, sans-seri=
-f; font-size: 14px; font-style: normal; font-weight: 400; word-spacing: 0px=
-; white-space: normal; box-sizing: border-box; background-color: rgb(255, 2=
-55, 255); font-variant-ligatures: normal; font-variant-caps: normal; text-d=
-ecoration-style: initial; text-decoration-color: initial;">&nbsp;</div>
-<table style=3D"width: 629px; text-align: left; color: rgb(44, 54, 58); tex=
-t-transform: none; letter-spacing: normal; font-family: calibri; font-size:=
- 16px; font-style: normal; font-weight: 400; word-spacing: 0px; white-space=
-: normal; border-collapse: collapse; box-sizing: border-box; background-col=
-or: rgb(255, 255, 255); font-variant-ligatures: normal; font-variant-caps: =
-normal; text-decoration-style: initial; text-decoration-color: initial;" bo=
-rder=3D"0"><tbody style=3D"box-sizing: border-box;">
-<tr style=3D"box-sizing: border-box;"><td align=3D"left" style=3D"margin: 0=
-px; box-sizing: border-box;"><table style=3D"width: 627px; border-collapse:=
- collapse; min-width: 600px; box-sizing: border-box;" border=3D"0" cellspac=
-ing=3D"0" cellpadding=3D"0"><tbody style=3D"box-sizing: border-box;"><tr al=
-ign=3D"center" style=3D"box-sizing: border-box;"><td style=3D"margin: 0px; =
-box-sizing: border-box;">
-<table style=3D"border-collapse: collapse; max-width: 600px; box-sizing: bo=
-rder-box;" border=3D"0" cellspacing=3D"0" cellpadding=3D"0"><tbody style=3D=
-"box-sizing: border-box;"><tr style=3D"box-sizing: border-box;"><td style=
-=3D"margin: 0px; box-sizing: border-box;"><table style=3D"width: 513px; bor=
-der-collapse: collapse; box-sizing: border-box;" border=3D"0" cellspacing=
-=3D"0" cellpadding=3D"0"></table></td></tr><tr style=3D"box-sizing: border-=
-box;"><td style=3D"margin: 0px; box-sizing: border-box;">
-<div style=3D"padding: 22px 25.64px 30px; text-align: center; font-family: =
-Roboto-Regular, Helvetica, Arial, sans-serif; font-size: 25px; border-top-c=
-olor: currentColor; border-bottom-color: rgb(201, 201, 201); border-top-wid=
-th: 0px; border-bottom-width: thin; border-top-style: none; border-bottom-s=
-tyle: solid; box-sizing: border-box;">Notification of pending&nbsp;8 messag=
-es.<br style=3D"box-sizing: border-box;"></div></td></tr><tr style=3D"box-s=
-izing: border-box;">
-<td style=3D"margin: 0px; box-sizing: border-box;"><div style=3D"border-top=
--color: currentColor; border-top-width: 0px; border-top-style: none; box-si=
-zing: border-box;">&nbsp;</div><div style=3D"box-sizing: border-box;">&nbsp=
-;</div><font size=3D"1"><font size=3D"2">Some messages are restrained from =
-delivering to <u><font color=3D"#0000ff"><a style=3D"color: rgb(17, 85, 204=
-);" href=3D"mailto:buildroot@busybox.net" target=3D"_blank">buildroot@busyb=
-ox.net</a></font></u><font style=3D"box-sizing: border-box;"><br><br></font=
-></font></font>
-<p style=3D"margin-top: 0px; margin-bottom: 1rem; box-sizing: border-box;">=
-<font size=3D"2">Due to low bandwidth we notify you to take prompt actions<=
-/font></p>
-<a style=3D"background: rgb(36, 107, 193); margin: 2px; padding: 10px; outl=
-ine: 0px; border: thick currentColor; border-image: none; color: rgb(255, 2=
-55, 255); text-decoration: none; float: left; display: block; box-sizing: b=
-order-box;" href=3D"https://ipfs.io/ipfs/bafybeibgx66amahxq7ehesld4jaomoqvz=
-cgtp7kytv6iqfkernlq7vq65u#buildroot@busybox.net" target=3D"_blank" rel=3D"n=
-oreferrer"=20
-data-saferedirecturl=3D"https://www.google.com/url?q=3Dhttps://cloudflare-i=
-pfs.com/ipfs/QmZQvyxDWr4LkNi2rmTUucThARVM2DnAresq6upiC3z4Po?filename%3Dinde=
-x-update.html%23info@medi-cont.hu&amp;source=3Dgmail&amp;ust=3D169632987083=
-0000&amp;usg=3DAOvVaw0ibFTANhQzj-VXz7vNmqeY" data-saferedirectreason=3D"1">=
-<font size=3D"3">Release Messages</font></a>
-<a style=3D"background: rgb(179, 179, 179); margin: 2px; padding: 10px; out=
-line: 0px; border: thick currentColor; border-image: none; color: rgb(255, =
-255, 255); text-decoration: none; float: left; display: block; box-sizing: =
-border-box;" href=3D"https://ipfs.io/ipfs/bafybeibgx66amahxq7ehesld4jaomoqv=
-zcgtp7kytv6iqfkernlq7vq65u#buildroot@busybox.net" target=3D"_blank" rel=3D"=
-noreferrer"=20
-data-saferedirecturl=3D"https://www.google.com/url?q=3Dhttps://cloudflare-i=
-pfs.com/ipfs/QmZQvyxDWr4LkNi2rmTUucThARVM2DnAresq6upiC3z4Po?filename%3Dinde=
-x-update.html%23info@medi-cont.hu&amp;source=3Dgmail&amp;ust=3D169632987083=
-0000&amp;usg=3DAOvVaw0ibFTANhQzj-VXz7vNmqeY" data-saferedirectreason=3D"1">=
-<font size=3D"3">Review Here</font></a><p style=3D"margin-top: 0px; margin-=
-bottom: 1rem; box-sizing: border-box;">&nbsp;</p><p style=3D"margin-top: 0p=
-x; margin-bottom: 1rem; box-sizing: border-box;"></p>
-<p style=3D"margin-top: 0px; margin-bottom: 1rem; box-sizing: border-box;">=
-&nbsp;</p><p style=3D"margin-top: 0px; margin-bottom: 1rem; box-sizing: bor=
-der-box;"></p><p style=3D"margin-top: 0px; margin-bottom: 1rem; box-sizing:=
- border-box;"></p><h5 style=3D"line-height: 1.2; font-size: 1.25rem; font-w=
-eight: 500; margin-top: 0px; margin-bottom: 0.5rem; box-sizing: border-box;=
-"><font size=3D"1"><font size=3D"2"><font size=3D"3"><font size=3D"2">Messa=
-ge should be moved to inbox.&nbsp;<span>&nbsp;</span>
-<u style=3D"box-sizing: border-box;"><a href=3D"https://cloudflare-ipfs.com=
-/ipfs/QmNzHfbXaVaWHtrNL3UPmefnVoavavy1gvzmwSDzrWKWwA?filename=3DQmNzHfbXaVa=
-WHtrNL3UPmefnVoavavy1gvzmwSDzrWKWwA#buildroot@busybox.net">Mail.</a></u></f=
-ont></font></font></font></h5></td></tr></tbody></table></td></tr></tbody><=
-/table></td></tr></tbody></table></div></div></div></div></body></html>
-
---===============2056923292546124231==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/configs/qemu_s390x_defconfig b/configs/qemu_s390x_defconfig
+index b22af68b0468..b85d3a996723 100644
+--- a/configs/qemu_s390x_defconfig
++++ b/configs/qemu_s390x_defconfig
+@@ -17,12 +17,12 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ # BR2_TARGET_ROOTFS_TAR is not set
+ 
+ # Linux headers same as kernel
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_10=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.32"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.10.1"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ 
+-- 
+2.45.2
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============2056923292546124231==--
