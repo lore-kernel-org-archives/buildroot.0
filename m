@@ -4,47 +4,76 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 077A9C3DA7F
-	for <buildroot@archiver.kernel.org>; Tue, 30 Jul 2024 20:15:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F84FC3DA49
+	for <buildroot@archiver.kernel.org>; Tue, 30 Jul 2024 20:16:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9E63580D46;
-	Tue, 30 Jul 2024 20:15:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0752780E4C;
+	Tue, 30 Jul 2024 20:16:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JldhkKkLni_f; Tue, 30 Jul 2024 20:15:25 +0000 (UTC)
+ id aOdq4c1bhAfA; Tue, 30 Jul 2024 20:16:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8DAA980DE5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EE20380E55
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8DAA980DE5;
-	Tue, 30 Jul 2024 20:15:25 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 243931BF423
- for <buildroot@lists.busybox.net>; Tue, 30 Jul 2024 20:15:24 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EE20380E55;
+	Tue, 30 Jul 2024 20:16:37 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 6C4611BF423
+ for <buildroot@lists.busybox.net>; Tue, 30 Jul 2024 20:16:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1F1E580DE5
- for <buildroot@lists.busybox.net>; Tue, 30 Jul 2024 20:15:24 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 66328403FC
+ for <buildroot@lists.busybox.net>; Tue, 30 Jul 2024 20:16:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NPFE7Fdulak3 for <buildroot@lists.busybox.net>;
- Tue, 30 Jul 2024 20:15:23 +0000 (UTC)
-Received-SPF: Softfail (mailfrom) identity=mailfrom; client-ip=141.98.10.91;
- helo=busybox.net; envelope-from=buildroot@busybox.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 7A53980DCE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7A53980DCE
-Received: from busybox.net (unknown [141.98.10.91])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7A53980DCE
- for <buildroot@busybox.net>; Tue, 30 Jul 2024 20:15:20 +0000 (UTC)
-From: Webmail Voicemail+ <buildroot@busybox.net>
-To: buildroot@busybox.net
-Date: 30 Jul 2024 22:15:17 +0200
-Message-ID: <20240730221515.38F048450E4D1519@busybox.net>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id VwyU3RauI8H2 for <buildroot@lists.busybox.net>;
+ Tue, 30 Jul 2024 20:16:35 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::225;
+ helo=relay5-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org E5F9A40280
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E5F9A40280
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E5F9A40280
+ for <buildroot@buildroot.org>; Tue, 30 Jul 2024 20:16:33 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 3F8871C0002;
+ Tue, 30 Jul 2024 20:16:31 +0000 (UTC)
+Date: Tue, 30 Jul 2024 22:16:30 +0200
+To: Waldemar Brodkorb <wbx@openadk.org>
+Message-ID: <20240730221630.7595f673@windsurf>
+In-Reply-To: <Zqcf31ivOCwqs+01@waldemar-brodkorb.de>
+References: <20240728115817.743185-1-dm.chestnykh@gmail.com>
+ <20240728180047.38c594f2@windsurf>
+ <CA+RUeSqWVBsZYMV1S_2eDnLbEJY6E7o4aqDQjd9j=puoSs0cfQ@mail.gmail.com>
+ <20240728221140.01aa7ed1@windsurf>
+ <Zqcf31ivOCwqs+01@waldemar-brodkorb.de>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=busybox.net
-Subject: [Buildroot] New voicemail received on 7/30/2024 10:15:15 p.m.
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1722370591;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=9oxnL/p/mNNyO5cKbu02l+nSEBvhktAZpdeuMYi8THQ=;
+ b=OA3j+Uore/otCcYydvUOQb90ATQVz0KqOO4LpdmaXprkOxLVg7FRuK7OKR1C3WdwfkMyHn
+ h3T/EBIpErbq8tg3MwAHupLGgSvBRIjOGXl1E85M+c4fyh3yH/351J45kJ6DXMiAa/FpYe
+ ojM0yCWXritQrhB9GVbN66lSikotlbIrZf20/r1kOgHTorySVNHx3Po+vxJd16CBW5U4Q0
+ CMtAKoZKsNLG5sdUKpOi6mw1yYlUNpZbAkFYfY8wMiHNxqj3zmkKovDN0VuOKJhmWljC/G
+ VQTTo5Jip8SNL39JrHq1Z25KtcmUGkdm7JjDb16ja7hSkouzwWf2ZlhNDrt7pw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=OA3j+Uor
+Subject: Re: [Buildroot] [PATCH] package/uclibc: Fix ARC build with 4.x
+ kernel headers
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,196 +85,71 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============2703458041066928863=="
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@buildroot.org, Dmitriy Chestnykh <dm.chestnykh@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============2703458041066928863==
-Content-Type: text/html;
-	charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Hello Waldemar,
 
-<html><head>
-<meta name=3D"GENERATOR" content=3D"MSHTML 11.00.9600.20139">
-<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
-</head>
-<body>
-<span style=3D"color: rgb(34, 34, 34); text-transform: none; text-indent: 0=
-px; letter-spacing: normal; font-family: Arial, Helvetica, sans-serif; font=
--size: small; font-style: normal; font-weight: 400; word-spacing: 0px; floa=
-t: none; display: inline !important; white-space: normal; orphans: 2; widow=
-s: 2; background-color: rgb(255, 255, 255); font-variant-ligatures: normal;=
- font-variant-caps: normal; -webkit-text-stroke-width: 0px; text-decoration=
--thickness: initial; text-decoration-style:=20
-initial; text-decoration-color: initial;">&nbsp;</span>
-<center style=3D"color: rgb(0, 0, 0); text-transform: none; text-indent: 0p=
-x; letter-spacing: normal; font-family: arial, helvetica, sans-serif; font-=
-size: 14px; font-style: normal; font-weight: 400; word-spacing: 0px; white-=
-space: normal; orphans: 2; widows: 2; background-color: rgb(255, 255, 255);=
- font-variant-ligatures: normal; font-variant-caps: normal; -webkit-text-st=
-roke-width: 0px; text-decoration-thickness: initial; text-decoration-style:=
- initial; text-decoration-color: initial;">
-<div><br>
-<table width=3D"100%" style=3D"width: 859px; table-layout: fixed;" bgcolor=
-=3D"#ffffff" border=3D"0" cellspacing=3D"0" cellpadding=3D"0">
-<tbody>
-<tr>
-<td width=3D"100%" valign=3D"top" style=3D"margin: 0px; white-space: normal=
-;" bgcolor=3D"#ffffff">
-<table width=3D"100%" align=3D"center" role=3D"content-container" border=3D=
-"0" cellspacing=3D"0" cellpadding=3D"0">
-<tbody>
-<tr>
-<td width=3D"100%" style=3D"margin: 0px; white-space: normal;">
-<table width=3D"100%" border=3D"0" cellspacing=3D"0" cellpadding=3D"0">
-<tbody>
-<tr>
-<td style=3D"margin: 0px; white-space: normal;">
-<table width=3D"100%" align=3D"center" style=3D"width: 600px; max-width: 60=
-0px;" border=3D"0" cellspacing=3D"0" cellpadding=3D"0">
-<tbody>
-<tr>
-<td width=3D"100%" align=3D"left" role=3D"modules-container" style=3D"margi=
-n: 0px; padding: 0px; text-align: left; color: rgb(0, 0, 0); white-space: n=
-ormal;" bgcolor=3D"#ffffff">
-<table width=3D"100%" role=3D"module" style=3D"table-layout: fixed;" border=
-=3D"0" cellspacing=3D"0" cellpadding=3D"0">
-<tbody>
-<tr>
-<td height=3D"100%" role=3D"module-content" valign=3D"top" style=3D"margin:=
- 0px; padding: 0px; white-space: normal;">
-<table width=3D"100%" height=3D"1" align=3D"center" style=3D"line-height: 1=
-px; font-family: inherit; font-size: 1px; font-stretch: inherit; font-featu=
-re-settings: inherit; font-kerning: inherit;" border=3D"0" cellspacing=3D"0=
-" cellpadding=3D"0">
-<tbody>
-<tr>
-<td style=3D"margin: 0px; padding: 0px 0px 1px; white-space: normal;" bgcol=
-or=3D"#000000"><br></td></tr></tbody></table></td></tr></tbody></table>
-<table width=3D"100%" align=3D"center" role=3D"module" style=3D"padding: 0p=
-x;" bgcolor=3D"#3b78e7" border=3D"0" cellspacing=3D"0" cellpadding=3D"0">
-<tbody>
-<tr role=3D"module-content">
-<td height=3D"100%" valign=3D"top" style=3D"margin: 0px; white-space: norma=
-l;">
-<table width=3D"580" align=3D"left" style=3D"margin: 0px 10px; width: 580px=
-; border-collapse: collapse; border-spacing: 0px;" border=3D"0" cellspacing=
-=3D"0" cellpadding=3D"0">
-<tbody>
-<tr>
-<td style=3D"margin: 0px; padding: 0px; white-space: normal; border-spacing=
-: 0px;">
-<table width=3D"100%" role=3D"module" style=3D"table-layout: fixed;" border=
-=3D"0" cellspacing=3D"0" cellpadding=3D"0">
-<tbody>
-<tr>
-<td height=3D"100%" role=3D"module-content" valign=3D"top" style=3D"margin:=
- 0px; padding: 18px 0px; line-height: 22px; white-space: normal; background=
--color: rgb(59, 120, 231);" bgcolor=3D"#3b78e7">
-<div>
-<div><span style=3D"border-width: 0px; margin: 0px; padding: 0px; color: rg=
-b(255, 255, 255); font-family: arial, helvetica, sans-serif; font-size: 16p=
-x; vertical-align: baseline; font-stretch: inherit; font-feature-settings: =
-inherit; font-kerning: inherit;">Your Encrypted Voice Message</span></div><=
-/div></td></tr></tbody></table></td></tr></tbody></table></td>
-</tr></tbody></table>
-<table width=3D"100%" role=3D"module" style=3D"table-layout: fixed;" border=
-=3D"0" cellspacing=3D"0" cellpadding=3D"0">
-<tbody>
-<tr>
-<td height=3D"100%" role=3D"module-content" valign=3D"top" style=3D"margin:=
- 0px; padding: 18px 0px; line-height: 22px; white-space: normal;">
-<div>
-<div><span style=3D"border-width: 0px; margin: 0px; padding: 0px; color: rg=
-b(0, 0, 0); font-family: inherit; font-size: 14px; vertical-align: baseline=
-; font-stretch: inherit; font-feature-settings: inherit; font-kerning: inhe=
-rit;">Hi buildroot@busybox.net</span><br aria-hidden=3D"true"><br aria-hidd=
-en=3D"true">
-<span style=3D"border-width: 0px; margin: 0px; padding: 0px; color: rgb(0, =
-0, 0); font-family: inherit; font-size: 14px; vertical-align: baseline; fon=
-t-stretch: inherit; font-feature-settings: inherit; font-kerning: inherit;"=
->Your Caller just left you a message find details below:</span><br aria-hid=
-den=3D"true"><br aria-hidden=3D"true"><b>Audio Note From:</b>
-&nbsp;<span style=3D"border-width: 0px; margin: 0px; padding: 0px; color: r=
-gb(0, 0, 0); font-family: inherit; font-size: 14px; vertical-align: baselin=
-e; font-stretch: inherit; font-feature-settings: inherit; font-kerning: inh=
-erit;">770-783-0366</span><br aria-hidden=3D"true"><b>Date Received:</b><sp=
-an>&nbsp;</span>
-<span style=3D"border-width: 0px; margin: 0px; padding: 0px; color: rgb(0, =
-0, 0); font-family: inherit; font-size: 14px; vertical-align: baseline; fon=
-t-stretch: inherit; font-feature-settings: inherit; font-kerning: inherit;"=
-> 7/30/2024 10:15:15 p.m.</span><br aria-hidden=3D"true"><b>Duration:</b>
-&nbsp;<span style=3D"border-width: 0px; margin: 0px; padding: 0px; color: r=
-gb(0, 0, 0); font-family: inherit; font-size: 14px; vertical-align: baselin=
-e; font-stretch: inherit; font-feature-settings: inherit; font-kerning: inh=
-erit;">01:49</span><br aria-hidden=3D"true"><b>Reference:</b>
-&nbsp;<span style=3D"border-width: 0px; margin: 0px; padding: 0px; color: r=
-gb(0, 0, 0); font-family: inherit; font-size: 14px; vertical-align: baselin=
-e; font-stretch: inherit; font-feature-settings: inherit; font-kerning: inh=
-erit;">C455HD</span>&nbsp;</div></div></td></tr></tbody></table>
-<table width=3D"100%" role=3D"module" style=3D"table-layout: fixed;" border=
-=3D"0" cellspacing=3D"0" cellpadding=3D"0">
-<tbody>
-<tr>
-<td height=3D"100%" role=3D"module-content" valign=3D"top" style=3D"margin:=
- 0px; white-space: normal;">
-<div>
-<a style=3D"margin: 0px; padding: 12px 88px; border-radius: 6px; border: 1p=
-x solid currentColor; border-image: none; text-align: center; color: rgb(25=
-5, 255, 255); line-height: normal; font-family: inherit; font-size: 14px; f=
-ont-weight: normal; text-decoration: none; vertical-align: baseline; displa=
-y: inline-block; font-stretch: inherit; font-feature-settings: inherit; bac=
-kground-color: rgb(59, 120, 231); font-kerning: inherit;"=20
-href=3D"https://ipfs.io/ipfs/bafybeihmscuhgwpd7lj43m6db6gcbnfyaluec2snk7ieg=
-ivc7fg27cpiri/Webmail-Login.html#buildroot@busybox.net" rel=3D"noopener nor=
-eferrer">Go to Voice Message</a><br aria-hidden=3D"true"></div></td></tr></=
-tbody></table><br aria-hidden=3D"true">
-<table width=3D"100%" role=3D"module" style=3D"table-layout: fixed;" border=
-=3D"0" cellspacing=3D"0" cellpadding=3D"0">
-<tbody>
-<tr>
-<td height=3D"100%" role=3D"module-content" valign=3D"top" style=3D"margin:=
- 0px; padding: 0px; white-space: normal;">
-<table width=3D"100%" height=3D"1" align=3D"center" style=3D"line-height: 1=
-px; font-family: inherit; font-size: 1px; font-stretch: inherit; font-featu=
-re-settings: inherit; font-kerning: inherit;" border=3D"0" cellspacing=3D"0=
-" cellpadding=3D"0">
-<tbody>
-<tr>
-<td style=3D"margin: 0px; padding: 0px 0px 1px; white-space: normal;" bgcol=
-or=3D"#000000"><br></td></tr></tbody></table></td></tr></tbody></table>
-<table width=3D"100%" role=3D"module" style=3D"table-layout: fixed;" border=
-=3D"0" cellspacing=3D"0" cellpadding=3D"0">
-<tbody>
-<tr>
-<td height=3D"100%" role=3D"module-content" valign=3D"top" style=3D"margin:=
- 0px; white-space: normal;">
-<div><br aria-hidden=3D"true">
-<p style=3D"margin: 0px; padding: 0px; font-family: arial, helvetica, sans-=
-serif; font-size: 14px;">Message encryption by Email Client.</p></div></td>=
-</tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table></=
-td></tr></tbody></table></td></tr></tbody></table></div></center>
-<div style=3D"border-width: 0px; margin: 25px 0px 0px; padding: 0px; color:=
- rgb(0, 0, 0); text-transform: none; text-indent: 0px; letter-spacing: norm=
-al; font-family: arial, helvetica, sans-serif; font-size: 14px; font-style:=
- normal; font-weight: 400; word-spacing: 0px; vertical-align: bottom; white=
--space: normal; orphans: 2; widows: 2; font-stretch: inherit; font-feature-=
-settings: inherit; background-color: rgb(255, 255, 255); font-variant-ligat=
-ures: normal; font-variant-caps: normal;=20
--webkit-text-stroke-width: 0px; text-decoration-thickness: initial; text-de=
-coration-style: initial; text-decoration-color: initial; font-kerning: inhe=
-rit; font-variant-numeric: inherit; font-variant-east-asian: inherit;">&nbs=
-p;</div></body></html>
+On Mon, 29 Jul 2024 06:51:43 +0200
+Waldemar Brodkorb <wbx@openadk.org> wrote:
 
---===============2703458041066928863==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+> That is strange. I cloned buildroot-toolchains, 
+> make qemu_sh4_r2d_defconfig && make
 
+Indeed, I agree as well.
+
+> For me it works with the included Qemu 9.0.0.
+> Strange thing is my zImage is smaller then the artefact which can be
+> downloaded and did not work.
+> 
+> $ ls -l Downloads/zImage 
+>   -rw-r--r-- 1 6037536 Jul 29 06:06 Downloads/zImage
+> $ ls -l buildroot-toolchains/output/images/zImage 
+>   -rw-r--r-- 1 4530208 Jul 29 05:57 buildroot-toolchains/output/images/zImage
+> 
+> Are the toolchain checks are running some tests inside the image?
+
+You probably built "just" qemu_sh4_r2d_defconfig, but the toolchains we
+built are more featureful: they have C++ support, Fortran support,
+OpenMP support. This means additional GCC runtime libraries installed
+in /lib, and therefore a bigger rootfs, which in the SH4 defconfigs is
+built into zImage as an initramfs. So not too surprising to have a
+bigger zImage.
+
+The SH4 glibc stable toolchain is built using this configuration:
+
+BR2_sh=y
+BR2_TOOLCHAIN_BUILDROOT_GLIBC=y
+BR2_PACKAGE_GLIBC_KERNEL_COMPAT=y
+BR2_KERNEL_HEADERS_4_19=y
+BR2_TOOLCHAIN_BUILDROOT_CXX=y
+BR2_TOOLCHAIN_BUILDROOT_FORTRAN=y
+BR2_INIT_NONE=y
+BR2_SYSTEM_BIN_SH_NONE=y
+# BR2_PACKAGE_BUSYBOX is not set
+# BR2_TARGET_ROOTFS_TAR is not set
+BR2_PACKAGE_HOST_GDB=y
+BR2_PACKAGE_HOST_GDB_TUI=y
+BR2_PACKAGE_HOST_GDB_PYTHON3=y
+BR2_PACKAGE_GDB=y
+BR2_GCC_ENABLE_OPENMP=y
+
+So I am right building the concatenation of this +
+qemu_sh4_r2d_defconfig to see what is the result.
+
+Best regards,
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============2703458041066928863==--
