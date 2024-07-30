@@ -4,107 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AF6E0C3DA49
-	for <buildroot@archiver.kernel.org>; Tue, 30 Jul 2024 07:27:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F942C3DA49
+	for <buildroot@archiver.kernel.org>; Tue, 30 Jul 2024 07:35:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6078C80DF2;
-	Tue, 30 Jul 2024 07:27:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 40D7F80D58;
+	Tue, 30 Jul 2024 07:35:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cB9m6SaZgM1a; Tue, 30 Jul 2024 07:27:34 +0000 (UTC)
+ id AVUJ7MkCY4ar; Tue, 30 Jul 2024 07:35:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6826B81083
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 43E9580DB6
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6826B81083;
-	Tue, 30 Jul 2024 07:27:34 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 531CB1BF360
- for <buildroot@lists.busybox.net>; Tue, 30 Jul 2024 07:27:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 43E9580DB6;
+	Tue, 30 Jul 2024 07:35:19 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 6028D1BF360
+ for <buildroot@lists.busybox.net>; Tue, 30 Jul 2024 07:35:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4135C405DE
- for <buildroot@lists.busybox.net>; Tue, 30 Jul 2024 07:27:33 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4DEF540199
+ for <buildroot@lists.busybox.net>; Tue, 30 Jul 2024 07:35:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tPWcvhG2SIns for <buildroot@lists.busybox.net>;
- Tue, 30 Jul 2024 07:27:32 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=148.163.156.1;
- helo=mx0a-001b2d01.pphosted.com; envelope-from=egorenar@linux.ibm.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id E5lubGnM3n1L for <buildroot@lists.busybox.net>;
+ Tue, 30 Jul 2024 07:35:16 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.193;
+ helo=relay1-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 66E9E405D0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 66E9E405D0
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com
- [148.163.156.1])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 66E9E405D0
- for <buildroot@buildroot.org>; Tue, 30 Jul 2024 07:27:31 +0000 (UTC)
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
- by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 46U5xFDe008611
- for <buildroot@buildroot.org>; Tue, 30 Jul 2024 07:27:31 GMT
-Received: from ppma23.wdc07v.mail.ibm.com
- (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
- by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 40ptgm094f-1
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
- for <buildroot@buildroot.org>; Tue, 30 Jul 2024 07:27:31 +0000 (GMT)
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
- by ppma23.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id
- 46U7HgDe011143
- for <buildroot@buildroot.org>; Tue, 30 Jul 2024 07:27:30 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
- by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 40ncqmkcyy-1
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
- for <buildroot@buildroot.org>; Tue, 30 Jul 2024 07:27:29 +0000
-Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com
- [10.20.54.100])
- by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id
- 46U7RPfD56951042
- (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK)
- for <buildroot@buildroot.org>; Tue, 30 Jul 2024 07:27:28 GMT
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
- by IMSVA (Postfix) with ESMTP id D45AE2004B
- for <buildroot@buildroot.org>; Tue, 30 Jul 2024 07:27:25 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
- by IMSVA (Postfix) with ESMTP id B403320043
- for <buildroot@buildroot.org>; Tue, 30 Jul 2024 07:27:25 +0000 (GMT)
-Received: from oc8242746057.boeblingen.de.ibm.com (unknown [9.152.212.85])
- by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP
- for <buildroot@buildroot.org>; Tue, 30 Jul 2024 07:27:25 +0000 (GMT)
-From: Alexander Egorenkov <egorenar@linux.ibm.com>
-To: buildroot@buildroot.org
-Date: Tue, 30 Jul 2024 09:27:25 +0200
-Message-ID: <20240730072725.152016-1-egorenar@linux.ibm.com>
-X-Mailer: git-send-email 2.45.2
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org ED35B400F1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ED35B400F1
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id ED35B400F1
+ for <buildroot@buildroot.org>; Tue, 30 Jul 2024 07:35:15 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 2B0C5240008;
+ Tue, 30 Jul 2024 07:35:13 +0000 (UTC)
+Date: Tue, 30 Jul 2024 09:35:12 +0200
+To: Waldemar Brodkorb <wbx@openadk.org>
+Message-ID: <20240730093512.4a22ef85@windsurf>
+In-Reply-To: <ZqOOwxlgzv49IYFn@waldemar-brodkorb.de>
+References: <ZqOOwxlgzv49IYFn@waldemar-brodkorb.de>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: oi18j_HH1IvmbV_c1o6hYYNcuyvoTFKn
-X-Proofpoint-ORIG-GUID: oi18j_HH1IvmbV_c1o6hYYNcuyvoTFKn
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-07-30_07,2024-07-26_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- suspectscore=0 adultscore=0
- malwarescore=0 mlxscore=0 spamscore=0 clxscore=1015 mlxlogscore=659
- phishscore=0 lowpriorityscore=0 bulkscore=0 impostorscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2407110000 definitions=main-2407300054
+X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=ibm.com; h=from
- :to:subject:date:message-id:mime-version
- :content-transfer-encoding; s=pp1; bh=RxzLnXH4P0ELioohWguYUeYqPj
- zcdkLCXv6sfRsH+VY=; b=HOkTaz0uUVhZHoQMzdYZc5nxUjRknOmLsJeM6aQdhn
- Ho1qa49oYqlcEJlmre7M6WtKNx/J6jxAn6JwlhlFutlW5uXyCs6vLXpGr/ep0YeR
- fyd4D7mQlqdXaLJoFknOVC5T5b2Ibtgjx3Kh33ro9++uYfvxbhkQSzOjin+UM7v2
- dbeEUwY4tHyQtmZRLcmmg3GegUFP+wE/Y14g9QM7rUHcwL+VpJ1FBIqGWqRfGd8L
- HXUe8Y3sU+VBoj1HOe4BYpVCOEJXvHtIsmTXhtxQ/zbmM/5Ee9dyNwPvJ7OQ4RsW
- ecqRjCCp+VjEjVWl4Mtc+KdhRTtnW2aw9HcK53H2r/+Q==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=linux.ibm.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com
- header.a=rsa-sha256 header.s=pp1 header.b=HOkTaz0u
-Subject: [Buildroot] [PATCH v1 1/1] package/qemu: enable s390x arch as
- target package
+ d=bootlin.com; s=gm1; t=1722324913;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=yXSIWLu3jiIQVoqLoRWaLT4uLMHo6YCPpYLFlrWm6zs=;
+ b=JuN+LN8n1DIg6pX2YMpOD51TIZamPveCaU8CF5L7b8Qi3tycqGbdEP8+oBeaiSX9V/vtwB
+ ys3TWuIkfiYZg2ywnPlmtL+YBQVyLWOkjkTuc0qpTyWkjxaCWuS3p3+P4x1Z7HBy/xtG5G
+ Jf/VYciiEZ8sOBl/WTkbpWEQJnwhZ9kZTaBd4SreNx7pLbxIM1toU1tTzH6vrLw1RYjTbV
+ AXiJNQmuQgD0NXaZL7wTgGHtbEgkvWa/NviX0d5sMKlkeQu1GXPIKDHlzT1QoBgCQMPrTJ
+ cgWBBZi4Pm8KNhDnT92j4/xC74hq4OuJ2fL7n3xOKQLiVl4ZlVGANPRI9K7gcw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=JuN+LN8n
+Subject: Re: [Buildroot] [PATCH] configs/beaglebone: update u-boot and linux
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -116,31 +80,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Lothar Felten <lothar.felten@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Alexander Egorenkov <egorenar@linux.ibm.com>
----
- package/qemu/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+Hello Waldemar,
 
-diff --git a/package/qemu/Config.in b/package/qemu/Config.in
-index 74962f3e2664..608e4d429dd6 100644
---- a/package/qemu/Config.in
-+++ b/package/qemu/Config.in
-@@ -9,6 +9,7 @@ config BR2_PACKAGE_QEMU_ARCH_SUPPORTS_TARGET
- 	default y if BR2_powerpc64
- 	default y if BR2_powerpc64le
- 	default y if BR2_riscv
-+	default y if BR2_s390x
- 	default y if BR2_x86_64
- 
- comment "QEMU requires a toolchain with wchar, threads, gcc >= 8"
+On Fri, 26 Jul 2024 13:55:47 +0200
+Waldemar Brodkorb <wbx@openadk.org> wrote:
+
+> Update u-boot to 2024.07. Update Linux to 6.6.32.
+> Add hash checking. Linux patches are no longer required so remove them.
+> 
+> Tested on Beaglebone Black.
+> 
+> Signed-off-by: Wademar Brodkorb <wbx@openadk.org>
+> ---
+>  ...1-keep-jtag-clock-alive-for-debugger.patch |  16 -
+>  ...ce-Sun-Solaris-style-flag-on-section.patch | 432 ------------------
+>  ...EM_MAX_SLOTS-with-SATA_PMP_MAX_PORTS.patch |  80 ----
+>  ...a-ahci-fix-enum-constants-for-gcc-13.patch | 357 ---------------
+>  .../beaglebone/patches/linux/linux.hash       |   2 +-
+>  .../beaglebone/patches/uboot/uboot.hash       |   2 +-
+>  configs/beaglebone_defconfig                  |  15 +-
+>  7 files changed, 12 insertions(+), 892 deletions(-)
+>  delete mode 100644 board/beagleboard/beaglebone/patches/linux/0001-keep-jtag-clock-alive-for-debugger.patch
+>  delete mode 100644 board/beagleboard/beaglebone/patches/linux/0002-ARM-8933-1-replace-Sun-Solaris-style-flag-on-section.patch
+>  delete mode 100644 board/beagleboard/beaglebone/patches/linux/0003-ata-ahci-Match-EM_MAX_SLOTS-with-SATA_PMP_MAX_PORTS.patch
+>  delete mode 100644 board/beagleboard/beaglebone/patches/linux/0004-ata-ahci-fix-enum-constants-for-gcc-13.patch
+
+There is an earlier series from Dario that also updates this defconfig,
+to the same versions:
+
+  https://patchwork.ozlabs.org/project/buildroot/list/?series=416030
+
+And you can't drop the kernel patches like this, because they are still
+used by the beaglebone_qt5 configuration.
+
+Thanks!
+
+Thomas
 -- 
-2.45.2
-
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
