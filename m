@@ -4,151 +4,92 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06D43C3DA61
-	for <buildroot@archiver.kernel.org>; Tue, 30 Jul 2024 08:52:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 51A6CC3DA61
+	for <buildroot@archiver.kernel.org>; Tue, 30 Jul 2024 08:52:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 02747608F7;
-	Tue, 30 Jul 2024 08:52:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B33D260907;
+	Tue, 30 Jul 2024 08:52:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nMyTCq-EwcyM; Tue, 30 Jul 2024 08:52:06 +0000 (UTC)
+ id FCEuuQQz5Mcc; Tue, 30 Jul 2024 08:52:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6AB62608EA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A5125608F2
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6AB62608EA;
-	Tue, 30 Jul 2024 08:52:06 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 36E3B1BF420
- for <buildroot@lists.busybox.net>; Tue, 30 Jul 2024 08:52:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A5125608F2;
+	Tue, 30 Jul 2024 08:52:16 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 9325B1BF420
+ for <buildroot@lists.busybox.net>; Tue, 30 Jul 2024 08:52:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 238F04025C
- for <buildroot@lists.busybox.net>; Tue, 30 Jul 2024 08:52:05 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 809F44022E
+ for <buildroot@lists.busybox.net>; Tue, 30 Jul 2024 08:52:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sOhAe9Dsl78h for <buildroot@lists.busybox.net>;
- Tue, 30 Jul 2024 08:52:03 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id W-FXLx1Q3zVM for <buildroot@lists.busybox.net>;
+ Tue, 30 Jul 2024 08:52:13 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a01:111:f403:2409::600;
- helo=nam04-dm6-obe.outbound.protection.outlook.com;
- envelope-from=neal.frager@amd.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 9874C400F1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9874C400F1
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com
- (mail-dm6nam04on20600.outbound.protection.outlook.com
- [IPv6:2a01:111:f403:2409::600])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 9874C400F1
- for <buildroot@buildroot.org>; Tue, 30 Jul 2024 08:52:03 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=M6HH6GB2SmC4udSpc25YPd+lCln5cd7fK72OFx4c2m95B0fIUJDPpNA7gurBEp7dXqjDeKXc13HZMMUhbPO98fwdS5bbMvPwiNWQj2p7ngftDhubSIyBoekIp0lJzrB2iaBOafPBuOQ+wbL2HqG9IBV5mbkeJtuX81YHiR9YFQ6QhZADZ4sgbV+ug6Rp4pGMJbwus0dwhZsFf7H4qnHKeCYSYW75qpbuvisc0xYde4AXNs8rCVtevAPajEvE055xyli3S0xjR/qHOTVtQ4eSB23w94wDsvXLa3Ezm4R24BjvjVQ+CYmcrFnkt6H50WDC40kQKByIGd4jH6VZ/m3bBA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Dr4AOyrCbir6MCi9dc7yD6zIU6e0oGJzDVLh8MYdXQ8=;
- b=XzL8BAFkrkt/5PbwQc511BClWJPL1YzO+dTs7yzkVRyYdy3rR8ZTczLMxS5DxXlWPScivHvQErZBrj6g2P+H73CDjgWObdDfznuI17gggafHhn9kzPId3c5Rs63D/i2W4PRYd0RXLCDcubkqBpUlDszsCd02Vf5+ZZoErbpOEdIUAVhjKjlNx0oyxer/CiMR91CSpUUuGJowpeqU43/fDb0v3LvpkFcUyLksMzXFReI5qeHNO5uObFXFjAFRXxLJ3QET6EzRKntgRgYas0vVXfYuP4ZY/RShPJ4ismhxo7Ako+92dv/7SEAjzGff8H+oxNZebnKxkbum+xN42GL96Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=buildroot.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none (0)
-Received: from PH8PR21CA0022.namprd21.prod.outlook.com (2603:10b6:510:2ce::7)
- by SJ0PR12MB6966.namprd12.prod.outlook.com (2603:10b6:a03:449::14)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7807.27; Tue, 30 Jul
- 2024 08:51:59 +0000
-Received: from MWH0EPF000A672E.namprd04.prod.outlook.com
- (2603:10b6:510:2ce:cafe::a1) by PH8PR21CA0022.outlook.office365.com
- (2603:10b6:510:2ce::7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7849.4 via Frontend
- Transport; Tue, 30 Jul 2024 08:51:59 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
-Received: from SATLEXMB03.amd.com (165.204.84.17) by
- MWH0EPF000A672E.mail.protection.outlook.com (10.167.249.20) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.7828.19 via Frontend Transport; Tue, 30 Jul 2024 08:51:58 +0000
-Received: from SATLEXMB06.amd.com (10.181.40.147) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Tue, 30 Jul
- 2024 03:51:58 -0500
-Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB06.amd.com
- (10.181.40.147) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Tue, 30 Jul
- 2024 03:51:57 -0500
-Received: from xirengwts09.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server id 15.1.2507.39 via Frontend
- Transport; Tue, 30 Jul 2024 03:51:56 -0500
-To: <buildroot@buildroot.org>
-Date: Tue, 30 Jul 2024 09:51:53 +0100
-Message-ID: <20240730085153.3496255-1-neal.frager@amd.com>
-X-Mailer: git-send-email 2.25.1
+ client-ip=2607:f8b0:4864:20::a36; helo=mail-vk1-xa36.google.com;
+ envelope-from=asd617140123@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 23F07401EC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 23F07401EC
+Received: from mail-vk1-xa36.google.com (mail-vk1-xa36.google.com
+ [IPv6:2607:f8b0:4864:20::a36])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 23F07401EC
+ for <buildroot@buildroot.org>; Tue, 30 Jul 2024 08:52:12 +0000 (UTC)
+Received: by mail-vk1-xa36.google.com with SMTP id
+ 71dfb90a1353d-4f6e36ea1ebso1123335e0c.0
+ for <buildroot@buildroot.org>; Tue, 30 Jul 2024 01:52:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1722329531; x=1722934331;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=uBMU/ufd60isDUCkuYbz0IyIcHzvCHlP0CN70doeehw=;
+ b=piGPoYjdX+7ZNWENFqVUIgUPud4MlxPiY+Hbw8zjKj35Rbp9aU3BUUlsv7P+TzpbfH
+ ojbAGDvbs0GjLdoqJ4NYFu00HHODDsjkDob1GoI2TOydBb8iD6obDxljVwu+Hf4Za8S0
+ DYJYr+euL6lQWpGRjcQ9BObhBn8RlzQAhu1EwjyvD8Ycsvm+NPBvkvx0xmaOm/cHHm+3
+ yd8lThsFmQsP1qVU+TS29zlP9/05kNaxuHaSy8lf2iC2tzcSBNh4E7niQ3XE061E/KOU
+ CJcAjJpYqZwZieElEXFC+t/lWMKHb3gaIzPUKE5QfnA1ibLZttbnsMPWG1JWUY2fWXIA
+ WPWQ==
+X-Gm-Message-State: AOJu0Yy9OVjk+iyg35u3mD2VZOrjfeDD8xQwIhhY9M9+PbcWzw54tQyN
+ 8c/v6w7I35cL5cD5Oizb0Zdj9tghkDtOnbxCkwatsuSku73RHAoMYkObWpFvK8yPVZ8pNYtZcJ9
+ GTLr/xcXgsRKp0ond5cKx3aRopfFtvw==
+X-Google-Smtp-Source: AGHT+IH3EBDhJtmIV0Z4jmwrCSGSgST4f6p6CMSXBRbhGFSS8EFul2rSufs3v+a/ws7xS3C+y2Pw/jmW3txFY4+hR28=
+X-Received: by 2002:a05:6102:944:b0:493:b055:bf56 with SMTP id
+ ada2fe7eead31-493fa61c12emr11798035137.2.1722329531079; Tue, 30 Jul 2024
+ 01:52:11 -0700 (PDT)
 MIME-Version: 1.0
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MWH0EPF000A672E:EE_|SJ0PR12MB6966:EE_
-X-MS-Office365-Filtering-Correlation-Id: baeb39ce-21df-4ba5-167f-08dcb074df6c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
- ARA:13230040|376014|1800799024|36860700013|82310400026|41080700001; 
-X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?6SWkeTVjIWKxKJpOgQ+PatDhg/jrOVZLZ5Oi8QpQw1QKF+7NZltvTjkc2gq4?=
- =?us-ascii?Q?BwW3ra2WkurtyrAp6X7WpAf7+bEqPi3J5lIz65v1KfWn4LDWMLwbnFW0wF6M?=
- =?us-ascii?Q?tpcchd2nQ1YLird6v6XndE6Ws1nG/IGbGi+YrGjMQqX1VtjNVZPJT8sHWXfY?=
- =?us-ascii?Q?5fKSH4U2LsOzA6SqPEeRKbI5fK0gw3yeVn5zYdeCInekIPUrbr9/x2IrLe8f?=
- =?us-ascii?Q?i2OSGGsQRIouJ+lvewSdaaKKsPatiYtD+WmKEXNDOZ+CToouX27iw7AEzWK0?=
- =?us-ascii?Q?vFMWC0/XAT0xXxmihAqpBcUn9ruIYDrKQTmDuwoXzdcUwxUARPfr9wu/7itj?=
- =?us-ascii?Q?mDbI60SXHk32336B5cryro6DgfyiVxemzrQ6i3gKbLnyiz/fjriYxWJTNKgi?=
- =?us-ascii?Q?TZr2ruqMDD7mt+Z48ihoRNGWE5TB8NFSCJqixaATa+yf5OtmVPe/nB2dukJ8?=
- =?us-ascii?Q?6t7YNsN0KfOEtro4WsEVw6aX7wLgs6iRHOvIwfWdEsOvjjyyzZCj+r31eFuB?=
- =?us-ascii?Q?3xSQ+AV5U8izT0aN8RMcpx6pRhFLt4v03QEPYkoaoWjugxNYFIttME2qKnBc?=
- =?us-ascii?Q?CslNY6e6KS34Uf4PR1kpGvwbRrNv54RDSQaaQ3blNodGa/T1oJbKbXoDrqG8?=
- =?us-ascii?Q?kL21B05LKQHIx1v2bXqJ5C7NV8If2AcNAD0pUiuD28eDMgneQ8Ls/MTrAJO2?=
- =?us-ascii?Q?0OyH9fLaIPw0pORUH/pB2AyHFR8l/ARLDs6en2USjpVLU4C//0GxBeEfg4kJ?=
- =?us-ascii?Q?kwVyuH1uAQjCWgoUQPd2BD7uuj/fppHoRguFlL7+tgGVB5gun2czhv8SRSKd?=
- =?us-ascii?Q?+9bMOyLvoywbo5sA0lEit4kLGIds+jX6QIioEHdAuenrA2X7Ta3W8UzmVQKx?=
- =?us-ascii?Q?I3YLcgYqR/prG8j55FxdbYspP+5JIWeGuY7CrEVDWB5+hexIpcrdKuqUzh+L?=
- =?us-ascii?Q?6vRUjewBbdd/PCPnM39d86voU72tCsBgcw0h40Wo2tQN7XUPy77NWHHx1m3G?=
- =?us-ascii?Q?acJcP+fL6lUqDrUh0Gqmlb2yF4FQZQIOOBisxGEcAri51xiwgm03DrzEfKvE?=
- =?us-ascii?Q?UEmGuZJjm3O/0A8vS8s+hDfb9S5FoTASFqE1nlJpYSh7nlwB7jFRvMjakxQY?=
- =?us-ascii?Q?KjctNOWHCuDUpgY1iP8wdo0NKf7G+X6jvVynY1V5Bf/sHNMJhDrvdsP12QMJ?=
- =?us-ascii?Q?SFODwQdqOdVrIIWkUuTTSeKrduKkgLmUOH1/emZFr/2aoxGHxMq+J+l/AEdA?=
- =?us-ascii?Q?wXp7nbIlDhnqT88Y4xVuM0jrJj0rX4I0xyMFsMRsPyxwat6W5cMzkHhhW3Tk?=
- =?us-ascii?Q?5m7QcDYqAM5VSIjUS+mD7kHi+B4qqv+oHgkJFYlghPenExoREN+SFUbnPRQ4?=
- =?us-ascii?Q?04W9nXuCk4ErzFF5D6S1O1ywV8X79NLxcoaKiRU6WcyLXKPLPqIH7XUtkLcd?=
- =?us-ascii?Q?OqXxiiEYlVer4tPfgZbDuXUcBI64I8y1U1g7zHukmSTVCS1OZUpnbjqkquRf?=
- =?us-ascii?Q?u1uH4dV59Hl+u+s=3D?=
-X-Forefront-Antispam-Report: CIP:165.204.84.17; CTRY:US; LANG:en; SCL:1; SRV:;
- IPV:CAL; SFV:NSPM; H:SATLEXMB03.amd.com; PTR:InfoDomainNonexistent; CAT:NONE;
- SFS:(13230040)(376014)(1800799024)(36860700013)(82310400026)(41080700001);
- DIR:OUT; SFP:1101; 
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jul 2024 08:51:58.9303 (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: baeb39ce-21df-4ba5-167f-08dcb074df6c
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d; Ip=[165.204.84.17];
- Helo=[SATLEXMB03.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: MWH0EPF000A672E.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB6966
+References: <20240207030339.3910-1-asd617140123@gmail.com>
+ <0e623797-b573-4604-b89e-737c7c503350@benettiengineering.com>
+ <CAKEXHNMmpdFgR8AUpn3vP9M21dgOpD6VkKKtyH58vgP5HTBSUw@mail.gmail.com>
+ <840786f7-f3a2-4dc1-8250-08135ac10c51@benettiengineering.com>
+In-Reply-To: <840786f7-f3a2-4dc1-8250-08135ac10c51@benettiengineering.com>
+From: eric <asd617140123@gmail.com>
+Date: Tue, 30 Jul 2024 16:52:00 +0800
+Message-ID: <CAKEXHNOyNdanr+QuMj1LSXfMawjuz0KjO=_Zz3JA2uz4nw6fkQ@mail.gmail.com>
+To: Giulio Benetti <giulio.benetti@benettiengineering.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amd.com; s=selector1; 
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Dr4AOyrCbir6MCi9dc7yD6zIU6e0oGJzDVLh8MYdXQ8=;
- b=f4k9YZe0L9rzcrQm9NzBcnEEfbg0iSAO1quz03VZAnpvW2NV1ez43RQrBhB7ifvwfRand/SL4R5w96a0YgGMqOx29xemz3LjGyUCkYdTdBapU2cp74bao7j+vfXaOvuFm2GIOKgrcjRCXTo5r+kC7TYMWUAnznEf9wDw66BSvzU=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=amd.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
- header.s=selector1 header.b=f4k9YZe0
-Subject: [Buildroot] [PATCH v2 1/1] configs/versal_vek280_defconfig: new
- defconfig
+ d=gmail.com; s=20230601; t=1722329531; x=1722934331; darn=buildroot.org;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=uBMU/ufd60isDUCkuYbz0IyIcHzvCHlP0CN70doeehw=;
+ b=I93TG1M2d203sltwGd5V5eo0HxPo3g5VE2bWySHpbM50ebQusFBo8Czm6BUHP/M1i0
+ DFCWuGb8UMC1Qhw8m7TTDxEnNG2FcWgJZjsrcGHu1tYJif71J23ze5oPCxe+tHfemHID
+ rJKKxMf4u7nnzjwkl8rtgfk6vfz2cPcnOdTeTqe2ZOxA4xjO7rXQIQtRXBxH8s5CQ778
+ ATEwYqCtlAnbDZ/FQEqdw+hMaqaA7lC+kUJWnJMS3pd3qNNN0SheNz87mM9RwMK1wVs+
+ WN+NyK0XB/TrZ9e3Jxs9fVJ25irPImcD6XVmw9iOkN3xdqQFVYDnmCD3RK+IbP+UgxpM
+ MQNA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=I93TG1M2
+Subject: Re: [Buildroot] [PATCH v2] board/cubietech/cubieboard4 : Add config
+ file for cubieboard4.
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -160,178 +101,659 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Neal Frager via buildroot <buildroot@buildroot.org>
-Reply-To: Neal Frager <neal.frager@amd.com>
-Cc: andy.a.kennedy@collins.com, ibai.erkiaga-elorza@amd.com,
- luca.ceresoli@bootlin.com, brandon.maier@collins.com,
- thomas.petazzoni@bootlin.com, Neal Frager <neal.frager@amd.com>,
- romain.naour@smile.fr, michal.simek@amd.com, yann.morin.1998@free.fr
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: thomas.petazzoni@free-electrons.com, Romain Naour <romain.naour@gmail.com>,
+ buildroot@buildroot.org
+Content-Type: multipart/mixed; boundary="===============1593297000627685671=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This patch adds support for Xilinx Versal VEK280 Evaluation Kit.
+--===============1593297000627685671==
+Content-Type: multipart/alternative; boundary="000000000000e2e477061e731778"
 
-VEK280 features can be found here:
-https://www.xilinx.com/products/boards-and-kits/vek280.html
+--000000000000e2e477061e731778
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The VEK280 requires a patch for the memory node in the dts file because it is
-not currently correct.  This patch has been applied to the linux-xlnx repo and
-will be included in the 2024.2 release.
+Hi Giulio,
+ long time no see, I already added v3 patch, can you help me review again?
 
-Signed-off-by: Neal Frager <neal.frager@amd.com>
----
-V1->V2:
-- Fixed memory range in dts files for vek280 evaluation board.
----
- DEVELOPERS                                    |  1 +
- board/versal/readme.txt                       |  4 ++
- ...rsal-Fix-vek280-memory-configuration.patch | 45 +++++++++++++++++++
- configs/versal_vek280_defconfig               | 44 ++++++++++++++++++
- 4 files changed, 94 insertions(+)
- create mode 100644 board/versal/vek280/patches/linux/0001-arm64-versal-Fix-vek280-memory-configuration.patch
- create mode 100644 configs/versal_vek280_defconfig
+Best regards,
+Nigel
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 78ea65205d..1fac1da208 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2400,6 +2400,7 @@ F:	board/zynq/
- F:	board/zynqmp/
- F:	boot/xilinx-prebuilt/
- F:	configs/versal_vck190_defconfig
-+F:	configs/versal_vek280_defconfig
- F:	configs/versal_vpk180_defconfig
- F:	configs/zynq_zc702_defconfig
- F:	configs/zynq_zc706_defconfig
-diff --git a/board/versal/readme.txt b/board/versal/readme.txt
-index 9cf499b35b..4d8406fb1f 100644
---- a/board/versal/readme.txt
-+++ b/board/versal/readme.txt
-@@ -4,6 +4,7 @@ Xilinx Versal boards:
- ******************************************
- Supported Versal Boards:
- Xilinx VCK190 board
-+Xilinx VEK280 board
- Xilinx VPK180 board
- ******************************************
- 
-@@ -12,6 +13,9 @@ Evaluation board features can be found here with the links below.
- VCK190:
- https://www.xilinx.com/products/boards-and-kits/vck190.html
- 
-+VEK280:
-+https://www.xilinx.com/products/boards-and-kits/vek280.html
-+
- VPK180:
- https://www.xilinx.com/products/boards-and-kits/vpk180.html
- 
-diff --git a/board/versal/vek280/patches/linux/0001-arm64-versal-Fix-vek280-memory-configuration.patch b/board/versal/vek280/patches/linux/0001-arm64-versal-Fix-vek280-memory-configuration.patch
-new file mode 100644
-index 0000000000..2eff388f50
---- /dev/null
-+++ b/board/versal/vek280/patches/linux/0001-arm64-versal-Fix-vek280-memory-configuration.patch
-@@ -0,0 +1,45 @@
-+From: Michal Simek <michal.simek@amd.com>
-+Date: Mon, 15 Jul 2024 08:24:57 +0200
-+Subject: [PATCH] arm64: versal: Fix vek280 memory configuration
-+
-+Board has 12GB total but Vivado wizard supports one channel LPDDR4 4GB
-+configuration (2GB low + 2GB high) or two channel LPDDR 8GB configuration
-+(2GB low + 6GB high). Wiring the remaining 4GB LPDDR can be done via board
-+tab but not available as option in wizard. That's why only describe 8GB by
-+default.
-+
-+Signed-off-by: Michal Simek <michal.simek@amd.com>
-+---
-+ arch/arm64/boot/dts/xilinx/versal-vek280-revA.dts | 2 +-
-+ arch/arm64/boot/dts/xilinx/versal-vek280-revB.dts | 2 +-
-+ 2 files changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/arch/arm64/boot/dts/xilinx/versal-vek280-revA.dts b/arch/arm64/boot/dts/xilinx/versal-vek280-revA.dts
-+index 1641dc0b5141..ad5d590318e6 100644
-+--- a/arch/arm64/boot/dts/xilinx/versal-vek280-revA.dts
-++++ b/arch/arm64/boot/dts/xilinx/versal-vek280-revA.dts
-+@@ -19,7 +19,7 @@ / {
-+ 
-+ 	memory: memory@0 {
-+ 		device_type = "memory";
-+-		reg = <0 0 0 0x80000000>, <0x8 0x0 0x7 0x80000000>; /* 32GB */
-++		reg = <0 0 0 0x80000000>, <0x8 0x80000000 0x1 0x80000000>; /* 2GB + 6GB */
-+ 	};
-+ 
-+ 	chosen {
-+diff --git a/arch/arm64/boot/dts/xilinx/versal-vek280-revB.dts b/arch/arm64/boot/dts/xilinx/versal-vek280-revB.dts
-+index fda47cd87b3a..80aae8fa4b11 100644
-+--- a/arch/arm64/boot/dts/xilinx/versal-vek280-revB.dts
-++++ b/arch/arm64/boot/dts/xilinx/versal-vek280-revB.dts
-+@@ -19,7 +19,7 @@ / {
-+ 
-+ 	memory: memory@0 {
-+ 		device_type = "memory";
-+-		reg = <0 0 0 0x80000000>, <0x8 0x0 0x7 0x80000000>; /* 32GB */
-++		reg = <0 0 0 0x80000000>, <0x8 0x80000000 0x1 0x80000000>; /* 2GB + 6GB */
-+ 	};
-+ 
-+ 	chosen {
-+-- 
-+2.43.0
-+
-diff --git a/configs/versal_vek280_defconfig b/configs/versal_vek280_defconfig
-new file mode 100644
-index 0000000000..37e479d692
---- /dev/null
-+++ b/configs/versal_vek280_defconfig
-@@ -0,0 +1,44 @@
-+BR2_aarch64=y
-+BR2_cortex_a72=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/versal/post-build.sh"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="board/versal/post-image.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="ttyAMA0,115200 mmcblk0p2"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.6_LTS_2024.1)/xlnx_rebase_v6.6_LTS_2024.1.tar.gz"
-+BR2_LINUX_KERNEL_DEFCONFIG="xilinx"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/versal-vek280-revB"
-+BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_4=y
-+# BR2_TARGET_ROOTFS_TAR is not set
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,arm-trusted-firmware,xlnx_rebase_v2.10_2024.1)/xlnx_rebase_v2.10_2024.1.tar.gz"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="versal"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31_UBOOT=y
-+BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
-+BR2_TARGET_UBOOT_NEEDS_ATF_BL31_ELF=y
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2024.01_2024.1)/xlnx_rebase_v2024.01_2024.1.tar.gz"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="xilinx_versal_virt"
-+BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=versal-vek280-revB"
-+BR2_TARGET_UBOOT_NEEDS_DTC=y
-+BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-+BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
-+BR2_TARGET_UBOOT_FORMAT_REMAKE_ELF=y
-+BR2_TARGET_UBOOT_FORMAT_DTB=y
-+BR2_TARGET_XILINX_PREBUILT=y
-+BR2_TARGET_XILINX_PREBUILT_VERSION="xilinx_v2024.1"
-+BR2_TARGET_XILINX_PREBUILT_BOARD="vek280"
-+BR2_TARGET_XILINX_PREBUILT_VERSAL=y
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
-+BR2_PACKAGE_HOST_BOOTGEN=y
-+BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
-+BR2_GLOBAL_PATCH_DIR="board/versal/vek280/patches board/xilinx/patches"
--- 
-2.25.1
+Giulio Benetti <giulio.benetti@benettiengineering.com> =E6=96=BC 2024=E5=B9=
+=B42=E6=9C=8816=E6=97=A5 =E9=80=B1=E4=BA=94
+=E4=B8=8A=E5=8D=881:10=E5=AF=AB=E9=81=93=EF=BC=9A
+
+> Hi Eric,
+>
+> please use plan-text and not HTML e-mail,
+>
+> On 15/02/24 06:57, eric wrote:
+> > Hi Giulio,
+> >
+> >
+> >     Here you have to keep the previous tags when sending new version of
+> >     patches:
+> >
+> >     I didn't get it, what is the  previous tags?
+>
+> My Reviewed-by and Tested-by: you see below,
+>
+> >
+> >
+> >     Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com
+> >     <mailto:giulio.benetti@benettiengineering.com>>
+> >     [Build Tested]
+> >     Tested-by: Giulio Benetti <giulio.benetti@benettiengineering.com
+> >     <mailto:giulio.benetti@benettiengineering.com>>
+> >
+> >      > ---
+> >      > v1 -> v2
+> >      > * Add BR2_cortex_a15_a7=3Dy in buildroot defconfig.
+> >      > * Bump linux version to 6.6.8
+> >      > * Using sunxi_defconfig in kernel.
+> >      > * Using "make savedefconfig" to save defconfig.
+> >      > * Remove boot.cmd.
+> >
+> >     this patch had to be V3, but don't mind at this point.
+> >     I ask you when you send newer patches to set as superseded
+> >     the previous patch in patchwork:
+> >     https://patchwork.ozlabs.org/project/buildroot/list/
+> >     <https://patchwork.ozlabs.org/project/buildroot/list/>
+> >
+> > I just need to add v3 tag, right? or I need to add other tags, e.g.,
+> resend?
+>
+> for the upcoming one yes, it must be V3,
+>
+> >
+> >      > ---
+> >      >   DEVELOPERS                                |  4 +++
+> >      >   board/cubietech/cubieboard4/extlinux.conf |  5 +++
+> >      >   board/cubietech/cubieboard4/genimage.cfg  | 38
+> >     ++++++++++++++++++++++
+> >      >   board/cubietech/cubieboard4/post-image.sh | 18 +++++++++++
+> >      >   configs/cubieboard4_defconfig             | 39
+> >     +++++++++++++++++++++++
+> >      >   5 files changed, 104 insertions(+)
+> >      >   create mode 100644 board/cubietech/cubieboard4/extlinux.conf
+> >      >   create mode 100644 board/cubietech/cubieboard4/genimage.cfg
+> >      >   create mode 100755 board/cubietech/cubieboard4/post-image.sh
+> >      >   create mode 100644 configs/cubieboard4_defconfig
+> >      >
+> >      > diff --git a/DEVELOPERS b/DEVELOPERS
+> >      > index a03018ab2b..bffb8f2069 100644
+> >      > --- a/DEVELOPERS
+> >      > +++ b/DEVELOPERS
+> >      > @@ -3297,3 +3297,7 @@ F:      package/quazip/
+> >      >   F:  package/shapelib/
+> >      >   F:  package/simple-mail/
+> >      >   F:  package/tinc/
+> >      > +
+> >      > +N:   Nigel Wang <asd617140123@gmail.com
+> >     <mailto:asd617140123@gmail.com>>
+> >      > +F:   board/cubietech/cubieboard4/
+> >      > +F:   configs/cubieboard4_defconfig
+> >      > diff --git a/board/cubietech/cubieboard4/extlinux.conf
+> >     b/board/cubietech/cubieboard4/extlinux.conf
+> >      > new file mode 100644
+> >      > index 0000000000..5084e2237b
+> >      > --- /dev/null
+> >      > +++ b/board/cubietech/cubieboard4/extlinux.conf
+> >      > @@ -0,0 +1,5 @@
+> >      > +label linux
+> >      > +    kernel /boot/zImage
+> >      > +    devicetree /sun9i-a80-cubieboard4.dtb
+> >      > +    append console=3DttyS0,115200 earlyprintk root=3D/dev/mmcbl=
+k0p2
+> >     rootwait
+> >      > +
+> >      > diff --git a/board/cubietech/cubieboard4/genimage.cfg
+> >     b/board/cubietech/cubieboard4/genimage.cfg
+> >      > new file mode 100644
+> >      > index 0000000000..f1dee13923
+> >      > --- /dev/null
+> >      > +++ b/board/cubietech/cubieboard4/genimage.cfg
+> >      > @@ -0,0 +1,38 @@
+> >      > +# Minimal SD card image for the Cubieboard2
+> >      > +# Based in the Orange Pi genimage.cfg
+> >      > +
+> >      > +image boot.vfat {
+> >      > +     vfat {
+> >      > +             files =3D {
+> >      > +                     "zImage",
+> >      > +                     "sun9i-a80-cubieboard4.dtb",
+> >      > +                     "extlinux"
+> >      > +             }
+> >      > +     }
+> >      > +
+> >      > +     size =3D 8M
+> >      > +}
+> >      > +
+> >      > +image sdcard.img {
+> >      > +     hdimage {
+> >      > +     }
+> >      > +
+> >      > +     partition u-boot {
+> >      > +             in-partition-table =3D "no"
+> >      > +             image =3D "u-boot-sunxi-with-spl.bin"
+> >      > +             offset =3D 8K
+> >      > +             size =3D 1016K # 1MB - 8KB
+> >      > +     }
+> >      > +
+> >      > +     partition boot {
+> >      > +             partition-type =3D 0xC
+> >      > +             bootable =3D "true"
+> >      > +             image =3D "boot.vfat"
+> >      > +     }
+> >      > +
+> >      > +     partition rootfs {
+> >      > +             partition-type =3D 0x83
+> >      > +             image =3D "rootfs.ext4"
+> >      > +             size =3D 512M
+> >      > +     }
+> >      > +}
+> >      > diff --git a/board/cubietech/cubieboard4/post-image.sh
+> >     b/board/cubietech/cubieboard4/post-image.sh
+> >      > new file mode 100755
+> >      > index 0000000000..e37b960a4d
+> >      > --- /dev/null
+> >      > +++ b/board/cubietech/cubieboard4/post-image.sh
+> >      > @@ -0,0 +1,18 @@
+> >      > +#!/bin/sh
+> >      > +
+> >      > +BOARD_DIR=3D"$(dirname "$0")"
+> >      > +install -m 0644 -D $BOARD_DIR/extlinux.conf
+> >     $BINARIES_DIR/extlinux/extlinux.conf
+> >      > +
+> >      > +GENIMAGE_CFG=3D"${BOARD_DIR}/genimage.cfg"
+> >      > +GENIMAGE_TMP=3D"${BUILD_DIR}/genimage.tmp"
+> >      > +
+> >      > +rm -rf "${GENIMAGE_TMP}"
+> >      > +
+> >      > +genimage                           \
+> >      > +     --rootpath "${TARGET_DIR}"     \
+> >      > +     --tmppath "${GENIMAGE_TMP}"    \
+> >      > +     --inputpath "${BINARIES_DIR}"  \
+> >      > +     --outputpath "${BINARIES_DIR}" \
+> >      > +     --config "${GENIMAGE_CFG}"
+> >      > +
+> >      > +exit $?
+> >      > diff --git a/configs/cubieboard4_defconfig
+> >     b/configs/cubieboard4_defconfig
+> >      > new file mode 100644
+> >      > index 0000000000..0592fe4a2d
+> >      > --- /dev/null
+> >      > +++ b/configs/cubieboard4_defconfig
+> >      > @@ -0,0 +1,39 @@
+> >      > +# Architecture
+> >      > +BR2_arm=3Dy
+> >      > +BR2_cortex_a15_a7=3Dy
+> >      > +BR2_ARM_FPU_NEON_VFPV4=3Dy
+> >      > +
+> >      > +# System
+> >      > +BR2_TARGET_GENERIC_HOSTNAME=3D"Cubieboard4"
+> >      > +BR2_TARGET_GENERIC_ISSUE=3D"Welcome to Cubieboard4!"
+> >      > +BR2_TARGET_GENERIC_GETTY_PORT=3D"ttyS0"
+> >      >
+> >
+>  +BR2_ROOTFS_POST_IMAGE_SCRIPT=3D"board/cubietech/cubieboard4/post-image.=
+sh"
+> >
+> >     Here the option below is missing and it's needed otherwise the newe=
+st
+> >     Linux version will be picked and build will fail.
+> >     Now we don't see the problem because the latest version is exactly
+> 6.6,
+> >     so need this:
+> >
+> >     # Linux headers same as kernel, a 6.6 series
+> >     BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=3Dy
+>
+> This ^^^ must be part of V3 patch and reported in patch changelog,
+>
+> >
+> >      > +# Kernel
+> >      > +BR2_LINUX_KERNEL=3Dy
+> >      > +BR2_LINUX_KERNEL_CUSTOM_VERSION=3Dy
+> >      > +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE=3D"6.6.8"
+> >      > +BR2_LINUX_KERNEL_DEFCONFIG=3D"sunxi"
+> >      > +BR2_LINUX_KERNEL_DTS_SUPPORT=3Dy
+> >      >
+> +BR2_LINUX_KERNEL_INTREE_DTS_NAME=3D"allwinner/sun9i-a80-cubieboard4"
+> >      > +
+> >      > +# Filesystem
+> >      > +BR2_TARGET_ROOTFS_EXT2=3Dy
+> >      > +BR2_TARGET_ROOTFS_EXT2_4=3Dy
+> >      > +
+> >      > +# Bootloader
+> >      > +BR2_TARGET_UBOOT=3Dy
+> >      > +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=3Dy
+> >      > +BR2_TARGET_UBOOT_CUSTOM_VERSION=3Dy
+> >      > +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE=3D"2021.10"
+> >      > +BR2_TARGET_UBOOT_BOARD_DEFCONFIG=3D"Cubieboard4"
+> >      > +BR2_TARGET_UBOOT_NEEDS_DTC=3Dy
+> >      > +BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=3Dy
+> >      > +BR2_TARGET_UBOOT_NEEDS_PYELFTOOLS=3Dy
+> >      > +BR2_TARGET_UBOOT_NEEDS_OPENSSL=3Dy
+> >      > +BR2_TARGET_UBOOT_SPL=3Dy
+> >      > +BR2_TARGET_UBOOT_SPL_NAME=3D"u-boot-sunxi-with-spl.bin"
+> >      > +BR2_PACKAGE_HOST_DOSFSTOOLS=3Dy
+> >      > +BR2_PACKAGE_HOST_GENIMAGE=3Dy
+> >      > +BR2_PACKAGE_HOST_MTOOLS=3Dy
+> >      > +BR2_PACKAGE_HOST_UBOOT_TOOLS=3Dy
+> >      > --
+> >      > 2.34.1
+> >      >
+> >
+> >     This patch looks to me, except missing Linux header version.
+> >
+> >     I've added that option and re-built successfully so I confirm my:
+> >     Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com
+> >     <mailto:giulio.benetti@benettiengineering.com>>
+> >     [Build Tested]
+> >     Tested-by: Giulio Benetti <giulio.benetti@benettiengineering.com
+> >     <mailto:giulio.benetti@benettiengineering.com>>
+> >
+> >     Maybe a Maintainer can edit while committing, of if you can please
+> send
+> >     a V3 with that missing line.
+> >
+> >     Thank you!
+> >
+> >     Best regards
+> >     --
+> >     Giulio Benetti
+> >     CEO&CTO@Benetti Engineering sas
+> >
+>
+> While sending V3 with modifies listed above please add under your SoB
+> also my:
+> Reviewed-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+> [Build Tested]
+> Tested-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+>
+> Thank you!
+>
+> Best regards
+> --
+> Giulio Benetti
+> CEO&CTO@Benetti Engineering sas
+>
+
+--000000000000e2e477061e731778
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Hi Giulio,<div>=C2=A0long time no see, I already added v3 =
+patch, can you help me review again?<br><br>Best regards,<br>Nigel</div></d=
+iv><br><div class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_attr">Giu=
+lio Benetti &lt;<a href=3D"mailto:giulio.benetti@benettiengineering.com">gi=
+ulio.benetti@benettiengineering.com</a>&gt; =E6=96=BC 2024=E5=B9=B42=E6=9C=
+=8816=E6=97=A5 =E9=80=B1=E4=BA=94 =E4=B8=8A=E5=8D=881:10=E5=AF=AB=E9=81=93=
+=EF=BC=9A<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0p=
+x 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">Hi Eri=
+c,<br>
+<br>
+please use plan-text and not HTML e-mail,<br>
+<br>
+On 15/02/24 06:57, eric wrote:<br>
+&gt; Hi Giulio,<br>
+&gt; <br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0 =C2=A0Here you have to keep the previous tags when sendin=
+g new version of<br>
+&gt;=C2=A0 =C2=A0 =C2=A0patches:<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0 =C2=A0I didn&#39;t get it, what is the=C2=A0 previous tag=
+s?<br>
+<br>
+My Reviewed-by and Tested-by: you see below,<br>
+<br>
+&gt; <br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0 =C2=A0Reviewed-by: Giulio Benetti &lt;<a href=3D"mailto:g=
+iulio.benetti@benettiengineering.com" target=3D"_blank">giulio.benetti@bene=
+ttiengineering.com</a><br>
+&gt;=C2=A0 =C2=A0 =C2=A0&lt;mailto:<a href=3D"mailto:giulio.benetti@benetti=
+engineering.com" target=3D"_blank">giulio.benetti@benettiengineering.com</a=
+>&gt;&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0[Build Tested]<br>
+&gt;=C2=A0 =C2=A0 =C2=A0Tested-by: Giulio Benetti &lt;<a href=3D"mailto:giu=
+lio.benetti@benettiengineering.com" target=3D"_blank">giulio.benetti@benett=
+iengineering.com</a><br>
+&gt;=C2=A0 =C2=A0 =C2=A0&lt;mailto:<a href=3D"mailto:giulio.benetti@benetti=
+engineering.com" target=3D"_blank">giulio.benetti@benettiengineering.com</a=
+>&gt;&gt;<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; ---<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; v1 -&gt; v2<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; * Add BR2_cortex_a15_a7=3Dy in buildroot defc=
+onfig.<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; * Bump linux version to 6.6.8<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; * Using sunxi_defconfig in kernel.<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; * Using &quot;make savedefconfig&quot; to sav=
+e defconfig.<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; * Remove boot.cmd.<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0 =C2=A0this patch had to be V3, but don&#39;t mind at this=
+ point.<br>
+&gt;=C2=A0 =C2=A0 =C2=A0I ask you when you send newer patches to set as sup=
+erseded<br>
+&gt;=C2=A0 =C2=A0 =C2=A0the previous patch in patchwork:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0<a href=3D"https://patchwork.ozlabs.org/project/bui=
+ldroot/list/" rel=3D"noreferrer" target=3D"_blank">https://patchwork.ozlabs=
+.org/project/buildroot/list/</a><br>
+&gt;=C2=A0 =C2=A0 =C2=A0&lt;<a href=3D"https://patchwork.ozlabs.org/project=
+/buildroot/list/" rel=3D"noreferrer" target=3D"_blank">https://patchwork.oz=
+labs.org/project/buildroot/list/</a>&gt;<br>
+&gt; <br>
+&gt; I just need to add v3 tag, right? or I need to add other tags, e.g., r=
+esend?<br>
+<br>
+for the upcoming one yes, it must be V3,<br>
+<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; ---<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt;=C2=A0 =C2=A0DEVELOPERS=C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 =C2=A0 =C2=A0 |=C2=A0 4 +++<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt;=C2=A0 =C2=A0board/cubietech/cubieboard4/extli=
+nux.conf |=C2=A0 5 +++<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt;=C2=A0 =C2=A0board/cubietech/cubieboard4/genim=
+age.cfg=C2=A0 | 38<br>
+&gt;=C2=A0 =C2=A0 =C2=A0++++++++++++++++++++++<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt;=C2=A0 =C2=A0board/cubietech/cubieboard4/post-=
+image.sh | 18 +++++++++++<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt;=C2=A0 =C2=A0configs/cubieboard4_defconfig=C2=
+=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0| 39<br>
+&gt;=C2=A0 =C2=A0 =C2=A0+++++++++++++++++++++++<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt;=C2=A0 =C2=A05 files changed, 104 insertions(+=
+)<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt;=C2=A0 =C2=A0create mode 100644 board/cubietec=
+h/cubieboard4/extlinux.conf<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt;=C2=A0 =C2=A0create mode 100644 board/cubietec=
+h/cubieboard4/genimage.cfg<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt;=C2=A0 =C2=A0create mode 100755 board/cubietec=
+h/cubieboard4/post-image.sh<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt;=C2=A0 =C2=A0create mode 100644 configs/cubieb=
+oard4_defconfig<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; diff --git a/DEVELOPERS b/DEVELOPERS<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; index a03018ab2b..bffb8f2069 100644<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; --- a/DEVELOPERS<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +++ b/DEVELOPERS<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; @@ -3297,3 +3297,7 @@ F:=C2=A0 =C2=A0 =C2=A0 =
+package/quazip/<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt;=C2=A0 =C2=A0F:=C2=A0 package/shapelib/<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt;=C2=A0 =C2=A0F:=C2=A0 package/simple-mail/<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt;=C2=A0 =C2=A0F:=C2=A0 package/tinc/<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +N:=C2=A0 =C2=A0Nigel Wang &lt;<a href=3D"mai=
+lto:asd617140123@gmail.com" target=3D"_blank">asd617140123@gmail.com</a><br=
+>
+&gt;=C2=A0 =C2=A0 =C2=A0&lt;mailto:<a href=3D"mailto:asd617140123@gmail.com=
+" target=3D"_blank">asd617140123@gmail.com</a>&gt;&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +F:=C2=A0 =C2=A0board/cubietech/cubieboard4/<=
+br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +F:=C2=A0 =C2=A0configs/cubieboard4_defconfig=
+<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; diff --git a/board/cubietech/cubieboard4/extl=
+inux.conf<br>
+&gt;=C2=A0 =C2=A0 =C2=A0b/board/cubietech/cubieboard4/extlinux.conf<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; new file mode 100644<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; index 0000000000..5084e2237b<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; --- /dev/null<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +++ b/board/cubietech/cubieboard4/extlinux.co=
+nf<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; @@ -0,0 +1,5 @@<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +label linux<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +=C2=A0 =C2=A0 kernel /boot/zImage<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +=C2=A0 =C2=A0 devicetree /sun9i-a80-cubieboa=
+rd4.dtb<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +=C2=A0 =C2=A0 append console=3DttyS0,115200 =
+earlyprintk root=3D/dev/mmcblk0p2<br>
+&gt;=C2=A0 =C2=A0 =C2=A0rootwait<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; diff --git a/board/cubietech/cubieboard4/geni=
+mage.cfg<br>
+&gt;=C2=A0 =C2=A0 =C2=A0b/board/cubietech/cubieboard4/genimage.cfg<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; new file mode 100644<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; index 0000000000..f1dee13923<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; --- /dev/null<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +++ b/board/cubietech/cubieboard4/genimage.cf=
+g<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; @@ -0,0 +1,38 @@<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +# Minimal SD card image for the Cubieboard2<=
+br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +# Based in the Orange Pi genimage.cfg<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +image boot.vfat {<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +=C2=A0 =C2=A0 =C2=A0vfat {<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0files =3D {<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&quot;zImage&quot;,<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&quot;sun9i-a80-cubieboard4.dtb&quot;,<br=
+>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0&quot;extlinux&quot;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0}<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +=C2=A0 =C2=A0 =C2=A0}<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +=C2=A0 =C2=A0 =C2=A0size =3D 8M<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +}<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +image sdcard.img {<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +=C2=A0 =C2=A0 =C2=A0hdimage {<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +=C2=A0 =C2=A0 =C2=A0}<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +=C2=A0 =C2=A0 =C2=A0partition u-boot {<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0in-partition-table =3D &quot;no&quot;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0image =3D &quot;u-boot-sunxi-with-spl.bin&quot;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0offset =3D 8K<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0size =3D 1016K # 1MB - 8KB<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +=C2=A0 =C2=A0 =C2=A0}<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +=C2=A0 =C2=A0 =C2=A0partition boot {<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0partition-type =3D 0xC<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0bootable =3D &quot;true&quot;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0image =3D &quot;boot.vfat&quot;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +=C2=A0 =C2=A0 =C2=A0}<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +=C2=A0 =C2=A0 =C2=A0partition rootfs {<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0partition-type =3D 0x83<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0image =3D &quot;rootfs.ext4&quot;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0size =3D 512M<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +=C2=A0 =C2=A0 =C2=A0}<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +}<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; diff --git a/board/cubietech/cubieboard4/post=
+-image.sh<br>
+&gt;=C2=A0 =C2=A0 =C2=A0b/board/cubietech/cubieboard4/post-image.sh<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; new file mode 100755<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; index 0000000000..e37b960a4d<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; --- /dev/null<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +++ b/board/cubietech/cubieboard4/post-image.=
+sh<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; @@ -0,0 +1,18 @@<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +#!/bin/sh<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +BOARD_DIR=3D&quot;$(dirname &quot;$0&quot;)&=
+quot;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +install -m 0644 -D $BOARD_DIR/extlinux.conf<=
+br>
+&gt;=C2=A0 =C2=A0 =C2=A0$BINARIES_DIR/extlinux/extlinux.conf<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +GENIMAGE_CFG=3D&quot;${BOARD_DIR}/genimage.c=
+fg&quot;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +GENIMAGE_TMP=3D&quot;${BUILD_DIR}/genimage.t=
+mp&quot;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +rm -rf &quot;${GENIMAGE_TMP}&quot;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +genimage=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0\<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +=C2=A0 =C2=A0 =C2=A0--rootpath &quot;${TARGE=
+T_DIR}&quot;=C2=A0 =C2=A0 =C2=A0\<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +=C2=A0 =C2=A0 =C2=A0--tmppath &quot;${GENIMA=
+GE_TMP}&quot;=C2=A0 =C2=A0 \<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +=C2=A0 =C2=A0 =C2=A0--inputpath &quot;${BINA=
+RIES_DIR}&quot;=C2=A0 \<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +=C2=A0 =C2=A0 =C2=A0--outputpath &quot;${BIN=
+ARIES_DIR}&quot; \<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +=C2=A0 =C2=A0 =C2=A0--config &quot;${GENIMAG=
+E_CFG}&quot;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +exit $?<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; diff --git a/configs/cubieboard4_defconfig<br=
+>
+&gt;=C2=A0 =C2=A0 =C2=A0b/configs/cubieboard4_defconfig<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; new file mode 100644<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; index 0000000000..0592fe4a2d<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; --- /dev/null<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +++ b/configs/cubieboard4_defconfig<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; @@ -0,0 +1,39 @@<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +# Architecture<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +BR2_arm=3Dy<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +BR2_cortex_a15_a7=3Dy<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +BR2_ARM_FPU_NEON_VFPV4=3Dy<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +# System<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +BR2_TARGET_GENERIC_HOSTNAME=3D&quot;Cubieboa=
+rd4&quot;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +BR2_TARGET_GENERIC_ISSUE=3D&quot;Welcome to =
+Cubieboard4!&quot;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +BR2_TARGET_GENERIC_GETTY_PORT=3D&quot;ttyS0&=
+quot;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0+BR2_ROOTFS_POST_IMAGE_SCRIPT=3D&quot;board/cubiete=
+ch/cubieboard4/post-image.sh&quot;<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0 =C2=A0Here the option below is missing and it&#39;s neede=
+d otherwise the newest<br>
+&gt;=C2=A0 =C2=A0 =C2=A0Linux version will be picked and build will fail.<b=
+r>
+&gt;=C2=A0 =C2=A0 =C2=A0Now we don&#39;t see the problem because the latest=
+ version is exactly 6.6,<br>
+&gt;=C2=A0 =C2=A0 =C2=A0so need this:<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0 =C2=A0# Linux headers same as kernel, a 6.6 series<br>
+&gt;=C2=A0 =C2=A0 =C2=A0BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=3Dy<br>
+<br>
+This ^^^ must be part of V3 patch and reported in patch changelog,<br>
+<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +# Kernel<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +BR2_LINUX_KERNEL=3Dy<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +BR2_LINUX_KERNEL_CUSTOM_VERSION=3Dy<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE=3D&quo=
+t;6.6.8&quot;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +BR2_LINUX_KERNEL_DEFCONFIG=3D&quot;sunxi&quo=
+t;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +BR2_LINUX_KERNEL_DTS_SUPPORT=3Dy<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +BR2_LINUX_KERNEL_INTREE_DTS_NAME=3D&quot;all=
+winner/sun9i-a80-cubieboard4&quot;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +# Filesystem<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +BR2_TARGET_ROOTFS_EXT2=3Dy<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +BR2_TARGET_ROOTFS_EXT2_4=3Dy<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +# Bootloader<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +BR2_TARGET_UBOOT=3Dy<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=3Dy<br=
+>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +BR2_TARGET_UBOOT_CUSTOM_VERSION=3Dy<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE=3D&quo=
+t;2021.10&quot;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +BR2_TARGET_UBOOT_BOARD_DEFCONFIG=3D&quot;Cub=
+ieboard4&quot;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +BR2_TARGET_UBOOT_NEEDS_DTC=3Dy<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=3Dy<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +BR2_TARGET_UBOOT_NEEDS_PYELFTOOLS=3Dy<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +BR2_TARGET_UBOOT_NEEDS_OPENSSL=3Dy<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +BR2_TARGET_UBOOT_SPL=3Dy<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +BR2_TARGET_UBOOT_SPL_NAME=3D&quot;u-boot-sun=
+xi-with-spl.bin&quot;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +BR2_PACKAGE_HOST_DOSFSTOOLS=3Dy<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +BR2_PACKAGE_HOST_GENIMAGE=3Dy<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +BR2_PACKAGE_HOST_MTOOLS=3Dy<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; +BR2_PACKAGE_HOST_UBOOT_TOOLS=3Dy<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; --<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt; 2.34.1<br>
+&gt;=C2=A0 =C2=A0 =C2=A0 &gt;<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0 =C2=A0This patch looks to me, except missing Linux header=
+ version.<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0 =C2=A0I&#39;ve added that option and re-built successfull=
+y so I confirm my:<br>
+&gt;=C2=A0 =C2=A0 =C2=A0Reviewed-by: Giulio Benetti &lt;<a href=3D"mailto:g=
+iulio.benetti@benettiengineering.com" target=3D"_blank">giulio.benetti@bene=
+ttiengineering.com</a><br>
+&gt;=C2=A0 =C2=A0 =C2=A0&lt;mailto:<a href=3D"mailto:giulio.benetti@benetti=
+engineering.com" target=3D"_blank">giulio.benetti@benettiengineering.com</a=
+>&gt;&gt;<br>
+&gt;=C2=A0 =C2=A0 =C2=A0[Build Tested]<br>
+&gt;=C2=A0 =C2=A0 =C2=A0Tested-by: Giulio Benetti &lt;<a href=3D"mailto:giu=
+lio.benetti@benettiengineering.com" target=3D"_blank">giulio.benetti@benett=
+iengineering.com</a><br>
+&gt;=C2=A0 =C2=A0 =C2=A0&lt;mailto:<a href=3D"mailto:giulio.benetti@benetti=
+engineering.com" target=3D"_blank">giulio.benetti@benettiengineering.com</a=
+>&gt;&gt;<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0 =C2=A0Maybe a Maintainer can edit while committing, of if=
+ you can please send<br>
+&gt;=C2=A0 =C2=A0 =C2=A0a V3 with that missing line.<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0 =C2=A0Thank you!<br>
+&gt; <br>
+&gt;=C2=A0 =C2=A0 =C2=A0Best regards<br>
+&gt;=C2=A0 =C2=A0 =C2=A0-- <br>
+&gt;=C2=A0 =C2=A0 =C2=A0Giulio Benetti<br>
+&gt;=C2=A0 =C2=A0 =C2=A0CEO&amp;CTO@Benetti Engineering sas<br>
+&gt; <br>
+<br>
+While sending V3 with modifies listed above please add under your SoB <br>
+also my:<br>
+Reviewed-by: Giulio Benetti &lt;<a href=3D"mailto:giulio.benetti@benettieng=
+ineering.com" target=3D"_blank">giulio.benetti@benettiengineering.com</a>&g=
+t;<br>
+[Build Tested]<br>
+Tested-by: Giulio Benetti &lt;<a href=3D"mailto:giulio.benetti@benettiengin=
+eering.com" target=3D"_blank">giulio.benetti@benettiengineering.com</a>&gt;=
+<br>
+<br>
+Thank you!<br>
+<br>
+Best regards<br>
+-- <br>
+Giulio Benetti<br>
+CEO&amp;CTO@Benetti Engineering sas<br>
+</blockquote></div>
+
+--000000000000e2e477061e731778--
+
+--===============1593297000627685671==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1593297000627685671==--
