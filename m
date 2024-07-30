@@ -4,49 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B65DAC3DA49
-	for <buildroot@archiver.kernel.org>; Tue, 30 Jul 2024 07:35:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8DCC1C3DA61
+	for <buildroot@archiver.kernel.org>; Tue, 30 Jul 2024 07:35:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 83E9180E0D;
-	Tue, 30 Jul 2024 07:35:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 55646812DD;
+	Tue, 30 Jul 2024 07:35:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nugsyN7JIyHu; Tue, 30 Jul 2024 07:35:47 +0000 (UTC)
+ id szZyDgJ_wKvU; Tue, 30 Jul 2024 07:35:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0AB94812DD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2C6DC812ED
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0AB94812DD;
-	Tue, 30 Jul 2024 07:35:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2C6DC812ED;
+	Tue, 30 Jul 2024 07:35:50 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4C87F1BF360
- for <buildroot@lists.busybox.net>; Tue, 30 Jul 2024 07:35:38 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id E42031BF360
+ for <buildroot@lists.busybox.net>; Tue, 30 Jul 2024 07:35:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 35C59405DE
- for <buildroot@lists.busybox.net>; Tue, 30 Jul 2024 07:35:37 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id DBFC2405FA
+ for <buildroot@lists.busybox.net>; Tue, 30 Jul 2024 07:35:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id enG4QYsBhjy2 for <buildroot@lists.busybox.net>;
- Tue, 30 Jul 2024 07:35:36 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id c62X-f1_rZyj for <buildroot@lists.busybox.net>;
+ Tue, 30 Jul 2024 07:35:39 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.200;
+ helo=relay7-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1BA02405FA
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1BA02405FA
- for <buildroot@buildroot.org>; Tue, 30 Jul 2024 07:35:36 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 00B2C836B5; Tue, 30 Jul 2024 07:35:35 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 30 Jul 2024 09:28:34 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d76daf0758e04d113c480974e5f89701255397cd
-X-Git-Newrev: 7fab00ff153155fab626e718fb43d425e88d3066
-X-Patchwork-Hint: ignore
-Message-Id: <20240730073536.00B2C836B5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/igh-ethercat: backport fix to
- build with Linux 6.9
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9DADB405DE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9DADB405DE
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9DADB405DE
+ for <buildroot@buildroot.org>; Tue, 30 Jul 2024 07:35:38 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id CFCE520005;
+ Tue, 30 Jul 2024 07:35:35 +0000 (UTC)
+Date: Tue, 30 Jul 2024 09:35:34 +0200
+To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Message-ID: <20240730093534.64231e5a@windsurf>
+In-Reply-To: <20240719203934.2090944-1-thomas.petazzoni@bootlin.com>
+References: <20240719203934.2090944-1-thomas.petazzoni@bootlin.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1722324936;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=6uPUcBPE00pgckMgWB70CO7RfgTs2y1hQRgjCTayF1c=;
+ b=PobmASqJQ8uKdvT32gDL5zzqyhe6ENxiyQWT16QwZgMK2QXHm/vk3ClD0507/r0y+P0j11
+ oQzb2VWylJt8GawIO440GDeDgVdx+Y5hgYHtac6LB2FCIYkr4opaYIpvJhoiCnjv4z0k08
+ R6qQSpiaZlN3NJJhQrPI2bqjJQw71MXut+CHU3jHyYbO2xH18YipWmCpUJqIl5oZQ5EbTV
+ u19Y//S0+brkaVOhYn/ylQurIhHvvkddzP5Xh/awkHrcxjb2CeH0fqJUUghw8KCT93p5dB
+ xzhyVbDwPCRXMKZUTujb33uiUv34R+xjhcKA8Sz/WuR1JMpaOD1lCmfcsJdlzg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=PobmASqJ
+Subject: Re: [Buildroot] [PATCH] package/igh-ethercat: backport fix to build
+ with Linux 6.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,84 +83,35 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7fab00ff153155fab626e718fb43d425e88d3066
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Fri, 19 Jul 2024 22:39:33 +0200
+Thomas Petazzoni via buildroot <buildroot@buildroot.org> wrote:
 
-This commit backports a patch from upstream that fixes the build with
-Linux 6.9.
+> This commit backports a patch from upstream that fixes the build with
+> Linux 6.9.
+> 
+> Fixes:
+> 
+>   http://autobuild.buildroot.net/results/db2462b1c5c6797a0edca66a513c121dbddd8888/
+> 
+> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ---
+>  ...Remove-dev_base_lock-for-linux-6.9.0.patch | 51 +++++++++++++++++++
+>  1 file changed, 51 insertions(+)
+>  create mode 100644 package/igh-ethercat/0001-Remove-dev_base_lock-for-linux-6.9.0.patch
 
-Fixes:
+Applied to master, thanks.
 
-  http://autobuild.buildroot.net/results/db2462b1c5c6797a0edca66a513c121dbddd8888/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...0001-Remove-dev_base_lock-for-linux-6.9.0.patch | 51 ++++++++++++++++++++++
- 1 file changed, 51 insertions(+)
-
-diff --git a/package/igh-ethercat/0001-Remove-dev_base_lock-for-linux-6.9.0.patch b/package/igh-ethercat/0001-Remove-dev_base_lock-for-linux-6.9.0.patch
-new file mode 100644
-index 0000000000..a71edb7be6
---- /dev/null
-+++ b/package/igh-ethercat/0001-Remove-dev_base_lock-for-linux-6.9.0.patch
-@@ -0,0 +1,51 @@
-+From 09eb1b9f73d677d10d18039305b9d974e52cc6d5 Mon Sep 17 00:00:00 2001
-+From: Nicola Fontana <ntd@entidi.it>
-+Date: Mon, 3 Jun 2024 12:45:48 +0200
-+Subject: [PATCH] Remove dev_base_lock for linux >= 6.9.0
-+
-+Kernel commit 1b3ef46cb7f2618cc0b507393220a69810f6da12 removed
-+`dev_base_lock` from v6.9 onward.
-+
-+Use the alternate iterator `for_each_netdev_rcu` introduced by commit
-+c6d14c84566d6b70ad9dc1618db0dec87cca9300 in 2.6.33+.
-+
-+Upstream: https://gitlab.com/etherlab.org/ethercat/-/commit/95c25b50711ca7e1f990bdcbca8fa713c942ab01
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ devices/generic.c | 8 ++++----
-+ 1 file changed, 4 insertions(+), 4 deletions(-)
-+
-+diff --git a/devices/generic.c b/devices/generic.c
-+index 4d4d9bbd..f30f1e17 100644
-+--- a/devices/generic.c
-++++ b/devices/generic.c
-+@@ -420,14 +420,14 @@ int __init ec_gen_init_module(void)
-+     INIT_LIST_HEAD(&generic_devices);
-+     INIT_LIST_HEAD(&descs);
-+ 
-+-    read_lock(&dev_base_lock);
-+-    for_each_netdev(&init_net, netdev) {
-++    rcu_read_lock();
-++    for_each_netdev_rcu(&init_net, netdev) {
-+         if (netdev->type != ARPHRD_ETHER)
-+             continue;
-+         desc = kmalloc(sizeof(ec_gen_interface_desc_t), GFP_ATOMIC);
-+         if (!desc) {
-+             ret = -ENOMEM;
-+-            read_unlock(&dev_base_lock);
-++            rcu_read_unlock();
-+             goto out_err;
-+         }
-+         strncpy(desc->name, netdev->name, IFNAMSIZ);
-+@@ -436,7 +436,7 @@ int __init ec_gen_init_module(void)
-+         memcpy(desc->dev_addr, netdev->dev_addr, ETH_ALEN);
-+         list_add_tail(&desc->list, &descs);
-+     }
-+-    read_unlock(&dev_base_lock);
-++    rcu_read_unlock();
-+ 
-+     list_for_each_entry_safe(desc, next, &descs, list) {
-+         ret = offer_device(desc);
-+-- 
-+2.45.2
-+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
