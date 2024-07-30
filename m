@@ -4,100 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59FF8C3DA70
-	for <buildroot@archiver.kernel.org>; Tue, 30 Jul 2024 15:49:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 00C8EC3DA49
+	for <buildroot@archiver.kernel.org>; Tue, 30 Jul 2024 15:50:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5003A40362;
-	Tue, 30 Jul 2024 15:49:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 955B240362;
+	Tue, 30 Jul 2024 15:50:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Wy6SKDu2Zuhx; Tue, 30 Jul 2024 15:49:34 +0000 (UTC)
+ id Cy2V1Z_zm0IL; Tue, 30 Jul 2024 15:50:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7F3284038B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 35A2C4038B
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7F3284038B;
-	Tue, 30 Jul 2024 15:49:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 35A2C4038B;
+	Tue, 30 Jul 2024 15:50:44 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 00ACE1BF399
- for <buildroot@lists.busybox.net>; Tue, 30 Jul 2024 15:49:33 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8979E1BF399
+ for <buildroot@lists.busybox.net>; Tue, 30 Jul 2024 15:50:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EE95E4038B
- for <buildroot@lists.busybox.net>; Tue, 30 Jul 2024 15:49:32 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 76C2840362
+ for <buildroot@lists.busybox.net>; Tue, 30 Jul 2024 15:50:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id V2TZWyjy0IGo for <buildroot@lists.busybox.net>;
- Tue, 30 Jul 2024 15:49:31 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.18;
- helo=mout.gmx.net; envelope-from=frank-w@public-files.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org C6C3E40362
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C6C3E40362
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C6C3E40362
- for <buildroot@buildroot.org>; Tue, 30 Jul 2024 15:49:29 +0000 (UTC)
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [157.180.227.129] ([157.180.227.129]) by web-mail.gmx.net
- (3c-app-gmx-bs45.server.lan [172.19.170.97]) (via HTTP); Tue, 30 Jul 2024
- 17:49:21 +0200
+ id CcwuQoovqPnJ for <buildroot@lists.busybox.net>;
+ Tue, 30 Jul 2024 15:50:41 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::229;
+ helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org B851C403EF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B851C403EF
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B851C403EF
+ for <buildroot@buildroot.org>; Tue, 30 Jul 2024 15:50:40 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id BAF81FF802;
+ Tue, 30 Jul 2024 15:50:37 +0000 (UTC)
+Date: Tue, 30 Jul 2024 17:50:36 +0200
+To: Fiona Klute <fiona.klute@gmx.de>
+Message-ID: <20240730175036.2d4bd34f@windsurf>
+In-Reply-To: <1f90c2c6-ef59-47d8-b547-527879f9d8fc@gmx.de>
+References: <20240729122011.1112914-1-fiona.klute@gmx.de>
+ <20240729225040.6431a398@windsurf>
+ <1f90c2c6-ef59-47d8-b547-527879f9d8fc@gmx.de>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Message-ID: <trinity-590c1745-eb5b-44d0-85e8-84ee984959c0-1722354561678@3c-app-gmx-bs45>
-To: Andreas Ziegler <br015@umbiko.net>
-Date: Tue, 30 Jul 2024 17:49:21 +0200
-Importance: normal
-Sensitivity: Normal
-In-Reply-To: <a9e107ca09cd66b65d918e91f50695f6@umbiko.net>
-References: <mailman.12142.1721505316.24059.buildroot@buildroot.org>
- <f49923df9029dfb3217cb858d0be4f69@umbiko.net>
- <trinity-cf5cdaab-cad5-4928-9dea-541742606976-1721555640184@3c-app-gmx-bap52>
- <e00d6149cbd2bd2a5a672fcf0323c814@umbiko.net>
- <trinity-8bdeb9c9-9a2d-407f-80d0-c4bc0847cb82-1721577033740@3c-app-gmx-bap52>
- <72a472b4614bd2ca6c652bfd6a2c171b@umbiko.net>
- <trinity-5801e483-666e-4366-b968-4217269be7be-1721590668238@3c-app-gmx-bap52>
- <9a6b9a74e11902c4dcc0d6b88c12251a@umbiko.net>
- <trinity-86e81e5d-18d4-4d6f-8df9-d69f9a24ac08-1722333004307@3c-app-gmx-bs45>
- <a9e107ca09cd66b65d918e91f50695f6@umbiko.net>
-X-UI-Message-Type: mail
-X-Priority: 3
-X-Provags-ID: V03:K1:IZKb2NGSco9qBJNIj/GNCWPMpsP43229fv7Dz+Ym6vyphqNjkaaz5YRb+pPXFzR59YIaA
- h4+XVBFi0nuNNWlZPWenyMecMHb+Fh+2EvIoK0NupUYK6wd/9XqLC4MvNWcNjUw76MaeVnpImQoV
- kqK5bu5jU58EyijtWxiYbNBSs6yXTswJXG2/MHGX6UpwdCZJl6shsnUtngJ6n2di48eMyzFjhL3s
- gP4sukv4eaVcBKjdu4fy+BuSCd5r2NgRhwDGtnqEk6MyLvdHgmrav/fWk95kmQzUBJXJ8EhCgydr
- CA=
-UI-OutboundReport: notjunk:1;M01:P0:7eKwqx7C00U=;Qalq8urZHJyo9Ie2Oo9itoZy/v+
- LCG+R1+Yy/tK81ZgXp5JzZo1LdM+knpTdONgFsnmyG9Dc5/q+GSUhSQjST/9XywRt7cMyEPnE
- 3LINIbQRC1pMUhl+iedkZfMl2KYB/O2y7/9eDnW9e7utrxbG5ncZ++Wq5irivJaQN7dK4eC5G
- vKlZdV6EvEg8YXtXqECEV6v6NdT4o+jVDKqL1cDecWMlSilCH/2lC+YWu5G1rTC7SJ0KKx13N
- eAreyBxKt1gH99pxD8X/nP7WhCmPAh+D6Gf+uwSRguq/CvxDm42jCTpeqimwx7tIdMdju6h9c
- 1Swmi0e069hspatcxmJhLLtyM7Z4CuXjGb3zOLuvR6M+WpNLBeoY2BzE04On2LGIh9yHbTj4A
- 5KyYXkDSZ6PymjWyK0x/OAHQ+b5jhmy4TErL2rRz6L1p9GJZ8EKlBNilnoGS0ig9+pLjToxo6
- 8hRMFvbgOms4S31y20QOOz6GbD8Wpf4zLNCXhsNw96jbASTDFfTwU9kn8TkboFHT0RyM0p8xQ
- gKnH/gncx7SCcbpskonUvEaZqoYIWe/gX7PPayA0EFJrWsJSsvCZ7wgTyn+NTNYkgaqdqII4g
- JTDhQ8ZK6QR3ldvmgGOXGM2VwSkJM75pdwSg2/GmJK8z+Q5sTZjl6kzfk21Kzec4KTmcArW2M
- x5+aWymORj9eU4FMB9x3P9pSVKb520AAgK/MnGMC4A==
+X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=public-files.de; 
- s=s31663417; t=1722354561; x=1722959361; i=frank-w@public-files.de;
- bh=L3OEEjtyjo155glWd09VovhiQn2bU/k70nSxdKMxh+I=;
- h=X-UI-Sender-Class:MIME-Version:Message-ID:From:To:Cc:Subject:
- Content-Type:Date:In-Reply-To:References:
- Content-Transfer-Encoding:cc:content-transfer-encoding:
- content-type:date:from:message-id:mime-version:reply-to:subject:
- to;
- b=oiCysWJoj6DHmrsgR1BBQ8Y0uw7LzGpgNob1u2LSi1QAODojfRjFJwrgzXUnCa71
- 7A5H4SjHyz1n1tUp2BR5rzNsH35Yy0zSBoGnIsepgJVh6gMIjGk7mKQ9YRcUF5ulh
- Y5c7535hsHWTFyIepJq29RkbZuvrPW/bs2NdkN2IF5EDKiYvRbcFGbb8G7KGlwKRS
- RGzZZy/oVRUki7ZdREp6ODxQ5TMuUcs8K3jLUzfE54ZvJjaZ1fSHW2UECylEL3rYL
- A2SjAKJzRmMd/lS8+qQPCKU3yUvuFOn4zH0OCvJBA2lCCTgDf1bc8kX4qlzIc8/2q
- k+5sj60NoGdI6GEVPg==
+ d=bootlin.com; s=gm1; t=1722354638;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=hei+G2VocWBZTfdzq3JLVj/u8riggT6NTBGhHAEP1cI=;
+ b=UoQBFT0GpYvTrVeBIzM9XlLF6RycvWQB874Z2B7B0cLHgDxFeDYFBr0lDe/Lg27u+7+CWa
+ fZB7sj+MY8pZDGkFAvEStET1WNafYh4Oinp+ajbek/wAqZmOOHsvpnUVxMOidHXMjo8De0
+ irPkFSGqcY3cyOJLbyZBTsmX0KlDo2OebSSFOEn7gvSMwBBBIDR3Xcod0dXy2U6pAJwcBX
+ qoUYMeKIuq8WVK6LOyILRTVlVKWsmbYb4T1t2ExRqo1b/iQStRQJI6ROmpd5enjPk6/fnN
+ xaaIYfRjlKmCY6fRS+E3wwi+gWhZyEinYCMNjYgjgnEcFGU1F19xNuJ51uAtSw==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=public-files.de
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=public-files.de
- header.i=frank-w@public-files.de header.a=rsa-sha256 header.s=s31663417
- header.b=oiCysWJo
-Subject: Re: [Buildroot] lvm2 seems to require systemd
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=UoQBFT0G
+Subject: Re: [Buildroot] [PATCH 1/2] package/docker-engine: rewrite dockerd
+ init script
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -109,204 +83,61 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Frank Wunderlich via buildroot <buildroot@buildroot.org>
-Reply-To: Frank Wunderlich <frank-w@public-files.de>
-Cc: buildroot <buildroot@buildroot.org>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Christian Stewart <christian@aperture.us>,
+ Fiona Klute via buildroot <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi
+Hello Fiona,
 
-> Gesendet: Dienstag, 30. Juli 2024 um 13:39 Uhr
-> Von: "Andreas Ziegler" <br015@umbiko.net>
-> An: "Frank Wunderlich" <frank-w@public-files.de>
-> Cc: "buildroot" <buildroot@buildroot.org>
-> Betreff: Re: Aw: Re:  Re:  Re:  Re: lvm2 seems to require systemd
->
-> Hi Frank,
->
-> On 2024-07-30 09:50, Frank Wunderlich wrote:
-> > Hi
-> >
-> >> Gesendet: Montag, 22. Juli 2024 um 07:15 Uhr
-> >> Von: "Andreas Ziegler" <br015@umbiko.net>
-> >> An: "Frank Wunderlich" <frank-w@public-files.de>
-> >> Cc: "buildroot" <buildroot@buildroot.org>
-> >> Betreff: Re: Aw: Re:  Re:  Re: lvm2 seems to require systemd
-> >>
-> >> Hi Frank,
-> >>
-> >> On 2024-07-21 19:37, Frank Wunderlich wrote:
-> >> > Hi
-> >> >
-> >> >> Gesendet: Sonntag, 21. Juli 2024 um 19:58 Uhr
-> >> >> Von: "Andreas Ziegler" <br015@umbiko.net>
-> >> >> An: "Frank Wunderlich" <frank-w@public-files.de>
-> >> >> Cc: "buildroot" <buildroot@buildroot.org>
-> >> >> Betreff: Re: Aw: Re:  Re: lvm2 seems to require systemd
-> >> >>
-> >> >> Hi Frank,
-> >> >>
-> >> >> On 2024-07-21 15:50, Frank Wunderlich wrote:
-> >> >> > Hi Andreas
-> >> >> >
-> >> >> > noticed some errors when calling the vgchange command
-> >> >> >
-> >> >> > # /usr/sbin/lvm vgchange -aay --autoactivation event vg-nvme
-> >> >> >   1 logical volume(s) in volume group "vg-nvme" now active
-> >> >> > [ 8023.796866] udevd[1614]: failed to execute '/usr/sbin/blkid'
-> >> >> > '/usr/sbin/blkid -o udev -p /dev/dm-0': No such file or directory
-> >> >> > [ 8023.808977] udevd[1610]: conflicting device node
-> >> >> > '/dev/mapper/vg--nvme-var' found, link to '/dev/dm-0' will not be
-> >> >> > created
-> >> >> > # lvscan
-> >> >> >   ACTIVE            '/dev/vg-nvme/var' [10.00 GiB] inherit
-> >> >>
-> >> >> Your execution of vgchange triggers additional udev messages, that are
-> >> >> not handled correctly. Try to find out what is missing and add it to
-> >> >> your image; blkid, for example, is part of package util-linux.
-> >> >
-> >> > i have already enabled util_linux
-> >> > Symbol: BR2_PACKAGE_UTIL_LINUX [=y]
-> >> > BR2_PACKAGE_HOST_UTIL_LINUX [=y]
-> >> > BR2_PACKAGE_UTIL_LINUX_LIBBLKID [=y]
-> >> >
-> >> > so strange that blkid is not there, but it is in /sbin
-> >> >
-> >> > # which blkid
-> >> > /sbin/blkid
-> >> >
-> >> > maybe a symlink needs to be created?
-> >> >
-> >>
-> >> Sorry, my mistake: blkid is provided by busybox and busybox installs
-> >> it
-> >> in /sbin. Since this is a Buildroot feature (unless you activate
-> >> BR2_ROOTFS_MERGED_USER), I would modify the udev rule.
-> >>
-> >> >> The double-dash in vg--nvme-var looks strange: is this intentional?
-> >> >
-> >> > as you can see above i used only one dash in vg-nvme, not sure why
-> >> > another one was inserted here
-> >> >
-> >> > # pvscan
-> >> >   PV /dev/nvme0n1p5   VG vg-nvme   lvm2 [<1.79 TiB / <1.78 TiB free]
-> >> >   Total: 1 [<1.79 TiB] / in use: 1 [<1.79 TiB] / in no VG: 0 [0   ]
-> >> >
-> >> >> > but i'm able to mount it
-> >> >> >
-> >> >> > # mkdir /mnt/var
-> >> >> > # mount /dev/mapper/vg--nvme-var /mnt/var/
-> >> >> > [ 8514.687803] EXT4-fs (dm-0): mounted filesystem
-> >> >> > be8b31d6-96e2-43a1-8416-a058972118b3 r/w with ordered data mode. Quota
-> >> >> > mode: disabled.
-> >> >> > # ls /mnt/var
-> >> >> > cache       lib         log         lost+found  run         tmp
-> >> >> > #
-> >> >> >
-> >> >> > how can i test the script? currently i'm in the initrd, so changing
-> >> >> > anything will be lost on reboot, so i want to test the script before
-> >> >> > putting it into the initrd.
-> >> >>
-> >> >> I usually mount the target's file system via ssh://root@hostname in a
-> >> >> file browser; that allows me to copy to and from the target machine.
-> >> >> Script and configuration changes are made directly on the target
-> >> >> system,
-> >> >> and copied back to the development machine when everything runs
-> >> >> satisfactorily.
-> >> >>
-> >> >> > as far as i see the original call via udev contains some
-> >> >> > systemd-specific params and environment-vars i do not know currently
-> >> >>
-> >> >> They are probably safe to ignore; when in doubt, consult the systemd
-> >> >> documentation. Evironment variables are extensively used within the
-> >> >> udev
-> >> >> context; I doubt that the called lvm2 tool makes use of them.
-> >> >
-> >> > they seem to be systemd options which are not stripped by the script
-> >> > yet which
-> >> > will result in invalid call (imho only first param is shifted away)
-> >> >
-> >>
-> >> RUN+="/usr/bin/systemd-run \
-> >>    --no-block \
-> >>    --property DefaultDependencies=no \
-> >>    --unit lvm-activate-$env{LVM_VG_NAME_COMPLETE} \
-> >>    /usr/sbin/lvm \
-> >>    vgchange \
-> >>    -aay \
-> >>    -autoactivation \
-> >>    event $env{LVM_VG_NAME_COMPLETE}"
-> >>
-> >> If you put a 'shift 5' at the beginning of the script, it should get
-> >> rid
-> >> of the systemd parameters. Alternatively, you could modify the udev
-> >> rule.
+On Tue, 30 Jul 2024 17:33:07 +0200
+Fiona Klute <fiona.klute@gmx.de> wrote:
 
-got rootfs-overlay working so far
+> > While would need the while loop waiting for the daemon to actually be
+> > started in the docker-engine init script and not the other services?  
+> 
+> There isn't a fundamental difference, I might have over-engineered a bit
+> while thinking about experiments with the Docker config and how it'd be
+> annoying if I change the config and restart, see "OK", and then the
+> service isn't running. Effectively the loop only confirms that the
+> service reaches the point where it writes its PID file (that's something
+> those other services don't do, note the absence of --make-pidfile), but
+> it might still crash after.
+> 
+> It should be fine to drop the loop and accept the same limitation as in
+> those other scripts (if the binary can be executed and then crashes,
+> output still says "OK").
 
-# ls -l /usr/sbin/blkid
-lrwxrwxrwx    1 root     root            11 Jul 30  2024 /usr/sbin/blkid -> /sbin/blkid
-# cat /usr/bin/systemd-run
-#!/bin/sh
-logfile=/tmp/error.log
-echo $@ > $logfile
-shift 5
-(
-        $@ < /dev/zero >> $logfile 2>&1
-)&
-# ls /dev/vg-nvme/
-var
-#
+To me, the whole goal of the effort you have started (and which is
+super nice!) is to have consistency among the init scripts, so I would
+really prefer that a given situation is handled in exactly the same way
+in all init scripts.
 
-thank you very much for your work...maybe this can be added as a fix somehow?
+BTW, in another e-mail, I had suggested to improve a bit our
+documentation to describe the different situations, and how we intend
+to handle each situation in our init script.
 
-if udev-rules need to be changed (have not done this, only added blkid symlink and systemd-run script), relatred files are
+> I can respin, I'm just hoping to get an opinion on the second patch
+> first (the log capture one), so I know whether to modify or drop that in v2.
 
-13-dm-disk.rules # blkid call
+I don't have a super super strong opinion PATCH 2/2. Wrapper scripts
+always tend to make things a bit more "obscure". My initial thought
+was: but if all what's missing is --no-close support in Busybox, why
+don't we implement it? On the other hand, your wrapper script allows
+the logging to go into syslog (which is configurable), while with
+--no-close, it simply gets redirected to a file, and that's it (which I
+suppose we can say is less configurable than having logs going through
+syslog).
 
-69-dm-lvm.rules # systemd-run call
-
-
-regards Frank
-> > I'm not sure how to fix properly....where should i put the script (it
-> > is called on bootup and there my changes done on runtime are dropped)
-> > and where to call it (imho it should be called by the existing
-> > udev-rule, right)?
->
-> The script might go into /usr/bin. Put all new or changed files in a
-> separate directory, within a layout reflecting that of your root
-> filesystem. Configure Buildroot's  BR2_ROOTFS_OVERLAY and these files -
-> with their relative directories - will be copied to the root filesystem
-> after build and before image creation. For examples, see [1].
->
-> > how to fix the blkid properly (maybe add symlink)? but this has to be
-> > done in source too or while building.
->
-> Leave blkid where it is, modify the udev script and put it in your
-> overlay filesystem. As Arnout suggested, reworking all of the udev
-> scripts will probably be the easiest approach ...
->
-> > sorry for my noob questions, but my buildroot-knowledge is only :)
->
-> The Buildroot manual [2] is quite useful. Bootlin has some training
-> materials [3] for general use.
->
-> Kind regards,
-> Andreas
->
-> >
-> > regards Frank
-> >
->
-> <cut>
->
-> [1] https://buildroot.org/downloads/manual/manual.html#customize
-> [2] https://buildroot.org/docs.html
-> [3] https://bootlin.com/docs/
->
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
