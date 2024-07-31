@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 744D2C3DA7F
-	for <buildroot@archiver.kernel.org>; Wed, 31 Jul 2024 16:54:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4D5E9C3DA7F
+	for <buildroot@archiver.kernel.org>; Wed, 31 Jul 2024 16:55:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2DAA381A4E;
-	Wed, 31 Jul 2024 16:54:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7838180B77;
+	Wed, 31 Jul 2024 16:55:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FmSxyUypKSgd; Wed, 31 Jul 2024 16:54:57 +0000 (UTC)
+ id w9MpxowXi2Qs; Wed, 31 Jul 2024 16:55:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 943AF8136B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8188081A8E
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 943AF8136B;
-	Wed, 31 Jul 2024 16:54:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8188081A8E;
+	Wed, 31 Jul 2024 16:55:00 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 30E0F1BF3D8
- for <buildroot@lists.busybox.net>; Wed, 31 Jul 2024 16:54:33 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 824441BF3D8
+ for <buildroot@lists.busybox.net>; Wed, 31 Jul 2024 16:54:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8A82240E1C
+ by smtp2.osuosl.org (Postfix) with ESMTP id A6A1C408A8
  for <buildroot@lists.busybox.net>; Wed, 31 Jul 2024 16:54:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yCNr4EDf1ORy for <buildroot@lists.busybox.net>;
+ id ntYBj83KLZn0 for <buildroot@lists.busybox.net>;
  Wed, 31 Jul 2024 16:54:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 55272408A8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 49CB440E1F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 55272408A8
+ by smtp2.osuosl.org (Postfix) with ESMTP id 49CB440E1F
  for <buildroot@buildroot.org>; Wed, 31 Jul 2024 16:54:29 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5022B8376F; Wed, 31 Jul 2024 16:54:29 +0000 (UTC)
+ id 3242483771; Wed, 31 Jul 2024 16:54:29 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 31 Jul 2024 18:44:31 +0200
+Date: Wed, 31 Jul 2024 18:31:25 +0200
 X-Git-Refname: refs/heads/2024.05.x
-X-Git-Oldrev: b72162e8068f2e611e4d692afb6da840cd969a08
-X-Git-Newrev: 0eb1ea8cb52cd9ea080aa113646e3656ce66b97f
+X-Git-Oldrev: 0aa79675651636900bfb95d6673a50ac213010cf
+X-Git-Newrev: 4ec45eda0ed47458e6e667f05e9dfb9aabf3bcb4
 X-Patchwork-Hint: ignore
-Message-Id: <20240731165429.5022B8376F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.05.x] configs/stm32mp157a_dk1:
- add hashes
+Message-Id: <20240731165429.3242483771@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.05.x] package/qt5/qt5webkit:
+ fix JavaScriptCore parser error
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,89 +60,124 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============8093473946622205802=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0eb1ea8cb52cd9ea080aa113646e3656ce66b97f
+--===============8093473946622205802==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=4ec45eda0ed47458e6e667f05e9dfb9aabf3bcb4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.05.x
 
-The patch adds .hash files for Arm trusted firmware, Linux, Linux headers
-and U-Boot and then enables BR2_DOWNLOAD_FORCE_CHECK_HASHES. With this, we
-can now drop the defconfig from .checkpackageignore.
+qt5webkit build currently fails with the following error:
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+[...] parser.rb:587:in `block in parseSequence': undefined method `=~' for an instance of Annotation (NoMethodError)
+  from <internal:kernel>:187:in `loop'
+  from /home/alexis/src/buildroot_min/output/build/qt5webkit-5.212.0-alpha4/Source/JavaScriptCore/offlineasm/parser.rb:586:in `parseSequence'
+  from /home/alexis/src/buildroot_min/output/build/qt5webkit-5.212.0-alpha4/Source/JavaScriptCore/offlineasm/parser.rb:654:in `block in parseSequence'
+  from <internal:kernel>:187:in `loop'
+  from /home/alexis/src/buildroot_min/output/build/qt5webkit-5.212.0-alpha4/Source/JavaScriptCore/offlineasm/parser.rb:586:in `parseSequence'
+  from /home/alexis/src/buildroot_min/output/build/qt5webkit-5.212.0-alpha4/Source/JavaScriptCore/offlineasm/parser.rb:814:in `parseData'
+  from /home/alexis/src/buildroot_min/output/build/qt5webkit-5.212.0-alpha4/Source/JavaScriptCore/offlineasm/parser.rb:818:in `parse'
+  from /home/alexis/src/buildroot_min/output/build/qt5webkit-5.212.0-alpha4/Source/JavaScriptCore/offlineasm/parser.rb:780:in `block in parseSequence'
+  from <internal:kernel>:187:in `loop'
+  from /home/alexis/src/buildroot_min/output/build/qt5webkit-5.212.0-alpha4/Source/JavaScriptCore/offlineasm/parser.rb:586:in `parseSequence'
+  from /home/alexis/src/buildroot_min/output/build/qt5webkit-5.212.0-alpha4/Source/JavaScriptCore/offlineasm/parser.rb:625:in `block in parseSequence'
+  from <internal:kernel>:187:in `loop'
+  from /home/alexis/src/buildroot_min/output/build/qt5webkit-5.212.0-alpha4/Source/JavaScriptCore/offlineasm/parser.rb:586:in `parseSequence'
+  from /home/alexis/src/buildroot_min/output/build/qt5webkit-5.212.0-alpha4/Source/JavaScriptCore/offlineasm/parser.rb:814:in `parseData'
+  from /home/alexis/src/buildroot_min/output/build/qt5webkit-5.212.0-alpha4/Source/JavaScriptCore/offlineasm/parser.rb:818:in `parse'
+  from /home/alexis/src/buildroot_min/output/build/qt5webkit-5.212.0-alpha4/Source/JavaScriptCore/offlineasm/generate_offset_extractor.rb:68:in `<main>'
+
+This issue is due to =~ being marked as deprecated since a few Ruby
+versions, and finally removed in 3.2.0 [1]. This now breaks the build since
+buildroot has moved to Ruby v3.3.0.
+The corresponding fix has already been issued in upstream Webkit project
+[2], but qt5webkit version tracked in buildroot does not have the
+corresponding webkit version pulled. Fix this build error by bringing the upstream
+patch. The patch is slightly modified (exclude part about Changelog file,
+which is absent from qt5webkit)
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/21397b110fe02e5711ecb1d35be2108221751b0a/
+
+[1] https://www.ruby-lang.org/en/news/2022/12/25/ruby-3-2-0-released/
+[2] https://github.com/WebKit/WebKit/commit/c7d19a492d97f9282a546831beb918e03315f6ef
+
+Signed-off-by: Alexis Lothoré <alexis.lothore@bootlin.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 751228436a4c68bc440a2f9dd1ef12ceb861765c)
+(cherry picked from commit 51ef6691ac3b18c3a6738535c7ec7c9e3a401bc1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .checkpackageignore                                                     | 1 -
- .../patches/arm-trusted-firmware/arm-trusted-firmware.hash              | 2 ++
- .../stm32mp157a-dk1/patches/linux-headers/linux-headers.hash            | 1 +
- board/stmicroelectronics/stm32mp157a-dk1/patches/linux/linux.hash       | 2 ++
- board/stmicroelectronics/stm32mp157a-dk1/patches/uboot/uboot.hash       | 2 ++
- configs/stm32mp157a_dk1_defconfig                                       | 2 ++
- 6 files changed, 9 insertions(+), 1 deletion(-)
+ ...warnings-with-newer-Ruby-versions-https-b.patch | 48 ++++++++++++++++++++++
+ 1 file changed, 48 insertions(+)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index ee44e82f5b..631e1d9da5 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -331,7 +331,6 @@ configs/solidrun_macchiatobin_defconfig lib_defconfig.ForceCheckHash
- configs/spike_riscv64_defconfig lib_defconfig.ForceCheckHash
- configs/stm32f469_disco_sd_defconfig lib_defconfig.ForceCheckHash
- configs/stm32f469_disco_xip_defconfig lib_defconfig.ForceCheckHash
--configs/stm32mp157a_dk1_defconfig lib_defconfig.ForceCheckHash
- configs/stm32mp157c_dk2_defconfig lib_defconfig.ForceCheckHash
- configs/stm32mp157c_odyssey_defconfig lib_defconfig.ForceCheckHash
- configs/terasic_de10nano_cyclone5_defconfig lib_defconfig.ForceCheckHash
-diff --git a/board/stmicroelectronics/stm32mp157a-dk1/patches/arm-trusted-firmware/arm-trusted-firmware.hash b/board/stmicroelectronics/stm32mp157a-dk1/patches/arm-trusted-firmware/arm-trusted-firmware.hash
+diff --git a/package/qt5/qt5webkit/0007-Offlineasm-warnings-with-newer-Ruby-versions-https-b.patch b/package/qt5/qt5webkit/0007-Offlineasm-warnings-with-newer-Ruby-versions-https-b.patch
 new file mode 100644
-index 0000000000..97c4500711
+index 0000000000..c8e339c5f8
 --- /dev/null
-+++ b/board/stmicroelectronics/stm32mp157a-dk1/patches/arm-trusted-firmware/arm-trusted-firmware.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  068325043b7c8ecc47ebb8b4f241f01e86d3f69dc49a63f340aa94bd41a9e6df  arm-trusted-firmware/arm-trusted-firmware-lts-v2.8.16.tar.gz
-diff --git a/board/stmicroelectronics/stm32mp157a-dk1/patches/linux-headers/linux-headers.hash b/board/stmicroelectronics/stm32mp157a-dk1/patches/linux-headers/linux-headers.hash
-new file mode 120000
-index 0000000000..5808d92afe
---- /dev/null
-+++ b/board/stmicroelectronics/stm32mp157a-dk1/patches/linux-headers/linux-headers.hash
-@@ -0,0 +1 @@
-+../linux/linux.hash
-\ No newline at end of file
-diff --git a/board/stmicroelectronics/stm32mp157a-dk1/patches/linux/linux.hash b/board/stmicroelectronics/stm32mp157a-dk1/patches/linux/linux.hash
-new file mode 100644
-index 0000000000..8b7624cceb
---- /dev/null
-+++ b/board/stmicroelectronics/stm32mp157a-dk1/patches/linux/linux.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  3f6baa97f37518439f51df2e4f3d65a822ca5ff016aa8e60d2cc53b95a6c89d9  linux-5.13.tar.xz
-diff --git a/board/stmicroelectronics/stm32mp157a-dk1/patches/uboot/uboot.hash b/board/stmicroelectronics/stm32mp157a-dk1/patches/uboot/uboot.hash
-new file mode 100644
-index 0000000000..7cef5b688e
---- /dev/null
-+++ b/board/stmicroelectronics/stm32mp157a-dk1/patches/uboot/uboot.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  e31cac91545ff41b71cec5d8c22afd695645cd6e2a442ccdacacd60534069341  u-boot-2023.04.tar.bz2
-diff --git a/configs/stm32mp157a_dk1_defconfig b/configs/stm32mp157a_dk1_defconfig
-index aed6cfad34..38f7bc8946 100644
---- a/configs/stm32mp157a_dk1_defconfig
-+++ b/configs/stm32mp157a_dk1_defconfig
-@@ -6,6 +6,8 @@ BR2_cortex_a7=y
- BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_13=y
- 
- # System configuration
-+BR2_GLOBAL_PATCH_DIR="board/stmicroelectronics/stm32mp157a-dk1/patches"
-+BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_ROOTFS_OVERLAY="board/stmicroelectronics/stm32mp157a-dk1/overlay/"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/stmicroelectronics/common/stm32mp157/post-image.sh"
- 
++++ b/package/qt5/qt5webkit/0007-Offlineasm-warnings-with-newer-Ruby-versions-https-b.patch
+@@ -0,0 +1,48 @@
++From 47e03d4af292805bf304f09e34333b38a94c1789 Mon Sep 17 00:00:00 2001
++From: "aperez@igalia.com" <aperez@igalia.com>
++Date: Wed, 15 Jan 2020 22:15:38 +0000
++Subject: [PATCH] Offlineasm warnings with newer Ruby versions
++ https://bugs.webkit.org/show_bug.cgi?id=206233
++
++Reviewed by Yusuke Suzuki.
++
++Avoid a warning about using Object#=~ on Annotation instances, which
++has been deprecated in Ruby 2.7.
++
++* offlineasm/parser.rb: Swap checks to prevent applying the =~ operator
++to Annotation instances, which do not define it.
++
++git-svn-id: http://svn.webkit.org/repository/webkit/trunk@254637 268f45cc-cd09-0410-ab3c-d52691b4dbfc
++Upstream: https://github.com/WebKit/WebKit/commit/c7d19a492d97f9282a546831beb918e03315f6ef
++Signed-off-by: Alexis Lothoré <alexis.lothore@bootlin.com>
++---
++ Source/JavaScriptCore/offlineasm/parser.rb | 6 +++---
++ 1 file changed, 3 insertions(+), 3 deletions(-)
++
++diff --git a/Source/JavaScriptCore/offlineasm/parser.rb b/Source/JavaScriptCore/offlineasm/parser.rb
++index b4451124521f..cd1cffaec6ed 100644
++--- a/Source/JavaScriptCore/offlineasm/parser.rb
+++++ b/Source/JavaScriptCore/offlineasm/parser.rb
++@@ -584,9 +584,7 @@ class Parser
++         firstCodeOrigin = @tokens[@idx].codeOrigin
++         list = []
++         loop {
++-            if (@idx == @tokens.length and not final) or (final and @tokens[@idx] =~ final)
++-                break
++-            elsif @tokens[@idx].is_a? Annotation
+++            if @tokens[@idx].is_a? Annotation
++                 # This is the only place where we can encounter a global
++                 # annotation, and hence need to be able to distinguish between
++                 # them.
++@@ -600,6 +598,8 @@ class Parser
++                 list << Instruction.new(codeOrigin, annotationOpcode, [], @tokens[@idx].string)
++                 @annotation = nil
++                 @idx += 2 # Consume the newline as well.
+++            elsif (@idx == @tokens.length and not final) or (final and @tokens[@idx] =~ final)
+++                break
++             elsif @tokens[@idx] == "\n"
++                 # ignore
++                 @idx += 1
++-- 
++2.43.1
++
+
+--===============8093473946622205802==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8093473946622205802==--
