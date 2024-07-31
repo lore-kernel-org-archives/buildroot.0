@@ -4,87 +4,89 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CDAA3C3DA7F
-	for <buildroot@archiver.kernel.org>; Wed, 31 Jul 2024 18:14:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22C55C3DA7F
+	for <buildroot@archiver.kernel.org>; Wed, 31 Jul 2024 18:14:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3282840B3E;
-	Wed, 31 Jul 2024 18:14:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B57C240B4F;
+	Wed, 31 Jul 2024 18:14:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EfADqA0wLwwx; Wed, 31 Jul 2024 18:14:07 +0000 (UTC)
+ id 7VmmkYyJrxS6; Wed, 31 Jul 2024 18:14:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C98CC40B4F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9716040B53
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C98CC40B4F;
-	Wed, 31 Jul 2024 18:14:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9716040B53;
+	Wed, 31 Jul 2024 18:14:11 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1E5C11BF44A
- for <buildroot@lists.busybox.net>; Wed, 31 Jul 2024 18:14:06 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 205F81BF44A
+ for <buildroot@lists.busybox.net>; Wed, 31 Jul 2024 18:14:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0C00B40B3E
+ by smtp4.osuosl.org (Postfix) with ESMTP id 22565409F7
  for <buildroot@lists.busybox.net>; Wed, 31 Jul 2024 18:14:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gzMa7RhW75oS for <buildroot@lists.busybox.net>;
+ id jrn_zo_5dt0P for <buildroot@lists.busybox.net>;
  Wed, 31 Jul 2024 18:14:05 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.22;
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.21;
  helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 66A11409F7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 66A11409F7
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 66A11409F7
- for <buildroot@buildroot.org>; Wed, 31 Jul 2024 18:14:02 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 66AF840B53
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 66AF840B53
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 66AF840B53
+ for <buildroot@buildroot.org>; Wed, 31 Jul 2024 18:14:03 +0000 (UTC)
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from haruka.lan ([85.22.116.187]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1N79u8-1sC7wJ1MRY-00tE2H; Wed, 31
- Jul 2024 20:13:59 +0200
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MYvY8-1smIhb3xRI-00InLt; Wed, 31
+ Jul 2024 20:14:00 +0200
 To: buildroot@buildroot.org
-Date: Wed, 31 Jul 2024 20:13:33 +0200
-Message-ID: <20240731181334.3717996-1-fiona.klute@gmx.de>
+Date: Wed, 31 Jul 2024 20:13:34 +0200
+Message-ID: <20240731181334.3717996-2-fiona.klute@gmx.de>
 X-Mailer: git-send-email 2.45.2
+In-Reply-To: <20240731181334.3717996-1-fiona.klute@gmx.de>
+References: <20240731181334.3717996-1-fiona.klute@gmx.de>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:DxktGmUiotcfPKRUm6zQ1hxdONy8VJvkIZiatTwYTDoW/HwWtxV
- 2zv2e29mI8yyAkM9pCaO0vTac//lJBdSm2mpYGaoLH5KsKa43nQKYsuicmaD8R3EOC465ub
- tVJiKOQZABB0qWxrIflqNI4AIWUqClbCUFwcASo2IcPBYJKIsrP58r3xDHuIeTLlHkLpa3k
- 3cO4NbEzvbfLEPk39YR3w==
-UI-OutboundReport: notjunk:1;M01:P0:9tGCVVkLOMk=;f0Ep1JC5MYuLi9Rvoo0OxgIdHbn
- DSDw5sDRhY6JDA2mHeJ7lD/fmKtakBlChEFn+lQBNfElTaEerQoP3WaQCGkEyao4/tnQDRqAs
- 2PuABUfSZm9dH8bO6leXj3e7IKICAOrj1i2jf23gSVJOMhFUi/syO0g1GWI6iPKeRNW6IOhpk
- dcZnA2IctPy3x/A+KrEeI+BFvENGeW7w9aV7lMa9WyFOph/Lkrq+RbvFFbz8/vtU6jW2mX0O7
- gUAuy7VWgcoSKk4j+2GULZz8ja+I29UpHTKLlqGih/Pc6/wc9+3ebjTCv1b/uPw96uB7wWXnD
- 3WXOUvrUolTVT0ssJTgYvpMcKqjOZ50MTVddUSgSw3AHVlFLDCAz/+vgyv/+gIMbfm89n4Q6T
- zpWZE0KEg893AVQ1sfXBJlIUBuJTmZ8aJr/C3R9fnjB3kGrSHnwk1MNINODKA7Ufy1jOzNbHY
- CWs31FhdgnL75K94RFRrzPNN6SbsJDRqtuGdelCFSbpeHtigfv8GwrGrQ+NdpjeMIIADkItsU
- os+KaH0p/20iqd+zCcToeuohYGMfCYaxQ/U+UeDUoC8bgIlLSSmUTTUn46rZ1uX/u33Tg1jzL
- II79aUkpZ/TOmak+jDC41glglMHIyLqhUR31PsLiF/YIzfLXAcjANb/vwiS6Gp5wYvRVHzqcK
- qecJq83F9TK96vFZdy1x5fnVCHQIJLG6KItEw+gYf1om54wIP3jZ+NrghEIYAmvuYxAJOMvrN
- elFC6wQPP5l1Yb7wNOEd6FIJ9k5buFDVa3TErkN2xZsOgVeoZnx7TjBrIcxjCg/yIYL/Ip6K3
- c39HGmOKEcEf3Ox5CDWakM3Q==
+X-Provags-ID: V03:K1:Q6JcsKIaKE2vUOm6RMonXrLojtgvs/17/O11TyGFyHAjPuaNoOq
+ ZiJh8EjEDsJ7eoXGB4zTpg/0PWYo1LiMgb0R842/3pSFwSP7pHlGRT6hCjNHot5/LU8Av3L
+ oD5R/t1Kx1BF2rtAswNlw7/cwPcnt3ks1Jkp72/Cvks/Uxe8vNUYoX/KHWXiTejZ/3fsRLi
+ Tpl+gv1ZBLLLlmC5vndzw==
+UI-OutboundReport: notjunk:1;M01:P0:uluFrZ8uyMQ=;5gevu8KKIXt29FhvHlspkKCkd+E
+ eXjTIXoSNfMO2a5gU9cNGeEljqPCb4OnFmhRkF5LHx0xLKHpzpxhBXNd5AEBtK59a/nTRHQKY
+ Z9XPRRf/F0fUTDqlbRKybVqSQoq63dibaQs0z0ymGobchxS1UMuxXxw/kCIqNpR4t5B7rPGaT
+ u7VHJuVAAHPtXWqKk4HitYRtSkpcq75SxNRufdGH3LUNhX6E3FVpPqeKLm3bRx60jel3wVJGo
+ EwlPztId9cwiPENaJDZ4Q4/0jQ646paK44Ltqhri4LmbtGFwnzQjPR6i/EjRcrQh2S2h0DHE7
+ +sEikR4jfvFoQwNjulavUj0w7MalwPhAqI8FxabxL4E3SXXWGp+XA8faG+Xf8tXrGDOYrSbLH
+ 5rpz4YotnXZ+04kvQ9dDOEGa8jVj05Mpw3fb/Gr1DY//IOYFQXPWdeWzLlZawJk+OytzMgYMN
+ Sd6918nx5ghBTShd1qG8xB7bq3EotoN6DFfyan98p9aIrV5ukegUgdM9EF0++yXph9UGiy6p7
+ dr3yCEoutD10WssMy6zD0/Gac6pEJkH831KXgKUbIvdQYcvbHfJH6BMi1hYv2lcDfj6WgwLrq
+ L/vjntqT4/2BeeCOPsk/CQO8D0/mf1mj9IhjIsNYPK9JUrmKjJjmMChHPkvUtFwXNVzbP46DQ
+ 0IFP/IkFvu58UBhcIe1ENOv5L/JHmeI2xdHoyjXW9EqU+oI8/atmFcoZbKnA0dyjSfUHP5rzM
+ jP5DQbBgGw/B+xLoPjYzkVRL9w22IZr1+aFg0LJQV90gd068P3ZRWYjckCdHPNnOMO6p4ryJV
+ LRI2i/MFzRlybXWb9Sdloqyg==
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmx.de; 
- s=s31663417; t=1722449639; x=1723054439; i=fiona.klute@gmx.de;
- bh=6cb+Ta5bnZRSHuV5c5pvd85GDXU+HhdkpYurtdbDF+M=;
- h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:
- MIME-Version:Content-Transfer-Encoding:cc:
+ s=s31663417; t=1722449640; x=1723054440; i=fiona.klute@gmx.de;
+ bh=M7Vu/hSfA48JgjRYuckV+u9M0GzHuzANrARtHcKdpm8=;
+ h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:In-Reply-To:
+ References:MIME-Version:Content-Transfer-Encoding:cc:
  content-transfer-encoding:content-type:date:from:message-id:
  mime-version:reply-to:subject:to;
- b=JtszsSG6PEC6MVYSeeBRlEydr5LumzMpmZ/o8GEudesmSGQ32ByMIRn9Gs0+OQY+
- CXScmBrhTiWgTWSL40jfTwRK2NHUV+QMcOZtdKSPDSnnqJq9EXL/kcToqYczFoKSZ
- jh6aXbbBQD6PNx2DKOhtqk9Fk7ddvPPBBGkMW7DPq3MOZJlnxtfxERFlN1dtZlc7s
- bSwpYhBnd0/t1R/Z0P1afeyqHPegXPa7mGn9gYFZsjZYUGW8tVWztRO3XSudlmg2p
- IJOwaZ37ioCjZvnOrvyuyP6+EKwGIVGVtW4eVtRRJYmS/5yJL+QiG+Sb15OWICDsF
- i1WCZonGU8b6A2cySw==
+ b=PcUh9TQsWCnIhYe4my8yCII/5WWIE+NXd18YnUQ1eHVx+QeuXJ2oz3PNzk75Gbuq
+ 2IFGBDN4KdQ9VhdvQL8n/tg2jcZENmETr0IIzvwvOHF7wBClzdTkFcYZFrUfRnglR
+ 0epb97C1Z5rWXjIY2CwZNbqHQcxVF+Xh4MKnLDawikqV+neZbPKmSeBHkLdijZjWw
+ E7fw/uG+fJ/hrxvW2yalKsfBDY4xAfEoge5qphvYtrd3Dbz0POUQYbLV1fTfgqlTs
+ pllI16bT6bKW4NkuGMDtwEVJxgx1VKe+RI9B1U0lMoWDqkarh58otbd4tlSS958jX
+ M43JyQNBLEVgWBRuIQ==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=gmx.de
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=gmx.de header.i=fiona.klute@gmx.de header.a=rsa-sha256
- header.s=s31663417 header.b=JtszsSG6
-Subject: [Buildroot] [PATCH v2 1/2] package/docker-engine: rewrite dockerd
- init script
+ header.s=s31663417 header.b=PcUh9TQs
+Subject: [Buildroot] [PATCH v2 2/2] package/docker-engine: add wrapper
+ script for logging to syslog
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -108,136 +110,73 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
 
-This brings the dockerd init script in line with the standard
-Buildroot init script pattern.
+Dockerd logs only to stdout/stderr [1], which is lost with
+--background. The upstream SysV init script [2] logs to a file by
+passing --no-close to start-stop-daemon and redirecting the output,
+but that option is not supported by Busybox' start-stop-daemon.
 
-Reload using SIGHUP is also supported now, note that the Docker
-documentation cautions that not all parameters can be changed at
-runtime (without a full restart).
+The wrapper script added with this commit captures the output of
+dockerd (or whatever other command it is given) and forwards each line
+to syslog.
+
+[1] https://github.com/moby/moby/discussions/48260
+[2] https://github.com/moby/moby/blob/50c3d19179e69f9e7ff01f688c4dbf32c5129ced/contrib/init/sysvinit-debian/docker
 
 Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
 ---
 Changes v1 -> v2:
-* drop wait loop for startup
+* slightly clarify comment about wrapper in init script
 
- .checkpackageignore              |  1 -
- package/docker-engine/S60dockerd | 88 +++++++++++++++++++++-----------
- 2 files changed, 59 insertions(+), 30 deletions(-)
+ package/docker-engine/S60dockerd                | 8 ++++++--
+ package/docker-engine/docker-engine.mk          | 2 ++
+ package/docker-engine/dockerd-syslog-wrapper.sh | 4 ++++
+ 3 files changed, 12 insertions(+), 2 deletions(-)
+ create mode 100644 package/docker-engine/dockerd-syslog-wrapper.sh
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 70a2e88462..abf8b4c772 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -452,7 +452,6 @@ package/dmalloc/0004-Makefile-use-the-configure-detected-or-user-supplied.patch
- package/dmalloc/0005-configure-use-LD-instead-of-hard-coding-ld.patch lib_patch.Upstream
- package/dmraid/0001-fix-compilation-under-musl.patch lib_patch.Upstream
- package/dmraid/S20dmraid lib_sysv.Variables
--package/docker-engine/S60dockerd Shellcheck lib_sysv.Indent lib_sysv.Variables
- package/docopt-cpp/0001-only-build-one-target-use-BUILD_SHARED_LIBS-where-appropriate.patch lib_patch.Upstream
- package/domoticz/S99domoticz Shellcheck
- package/dovecot/0001-auth-Fix-handling-passdbs-with-identical-driver-args.patch lib_patch.Upstream
 diff --git a/package/docker-engine/S60dockerd b/package/docker-engine/S60dockerd
-index def8bea149..aab50d84d4 100644
+index aab50d84d4..dda6dc7474 100644
 --- a/package/docker-engine/S60dockerd
 +++ b/package/docker-engine/S60dockerd
-@@ -1,38 +1,68 @@
- #!/bin/sh
+@@ -10,10 +10,14 @@ DOCKERD_ARGS=""
 
--NAME=dockerd
--DAEMON=/usr/bin/$NAME
--PIDFILE=/var/run/$NAME.pid
--DAEMON_ARGS=""
--
--[ -r /etc/default/$NAME ] && . /etc/default/$NAME $1
--
--do_start() {
--        echo -n "Starting $NAME: "
--        start-stop-daemon --start --quiet --background --make-pidfile \
--		--pidfile $PIDFILE --exec $DAEMON -- $DAEMON_ARGS \
--                && echo "OK" || echo "FAIL"
-+DAEMON="dockerd"
-+PIDFILE="/var/run/$DAEMON.pid"
-+
-+DOCKERD_ARGS=""
-+
-+# shellcheck source=/dev/null
-+[ -r "/etc/default/$DAEMON" ] && . "/etc/default/$DAEMON"
-+
-+start() {
-+	printf 'Starting %s: ' "$DAEMON"
-+	# shellcheck disable=SC2086 # we need word splitting for DOCKERD_ARGS
-+	start-stop-daemon --start --background --pidfile "$PIDFILE" \
-+		--exec "/usr/bin/$DAEMON" \
-+		-- --pidfile "$PIDFILE" $DOCKERD_ARGS
-+	status=$?
-+	if [ "$status" -eq 0 ]; then
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+	fi
-+	return "$status"
-+}
-+
-+stop() {
-+	printf 'Stopping %s: ' "$DAEMON"
-+	start-stop-daemon --stop --pidfile "$PIDFILE" --exec "/usr/bin/$DAEMON"
-+	status=$?
-+	if [ "$status" -eq 0 ]; then
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+		return "$status"
-+	fi
-+	while start-stop-daemon --stop --test --quiet --pidfile "$PIDFILE" \
-+		--exec "/usr/bin/$DAEMON"; do
-+		sleep 0.1
-+	done
-+	rm -f "$PIDFILE"
-+	return "$status"
-+}
-+
-+restart() {
-+	stop
-+	start
- }
+ start() {
+ 	printf 'Starting %s: ' "$DAEMON"
++	# Dockerd logs only to stdout/stderr, which is lost with
++	# --background. The wrapper script runs the given command
++	# (after "--", including dockerd) and forwards stdout/stderr
++	# to syslog.
+ 	# shellcheck disable=SC2086 # we need word splitting for DOCKERD_ARGS
+ 	start-stop-daemon --start --background --pidfile "$PIDFILE" \
+-		--exec "/usr/bin/$DAEMON" \
+-		-- --pidfile "$PIDFILE" $DOCKERD_ARGS
++		--exec /usr/libexec/dockerd-syslog-wrapper.sh \
++		-- "/usr/bin/$DAEMON" --pidfile "$PIDFILE" $DOCKERD_ARGS
+ 	status=$?
+ 	if [ "$status" -eq 0 ]; then
+ 		echo "OK"
+diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
+index c7c51c5ef5..268b851520 100644
+--- a/package/docker-engine/docker-engine.mk
++++ b/package/docker-engine/docker-engine.mk
+@@ -72,6 +72,8 @@ endef
+ define DOCKER_ENGINE_INSTALL_INIT_SYSV
+ 	$(INSTALL) -D -m 755 package/docker-engine/S60dockerd \
+ 		$(TARGET_DIR)/etc/init.d/S60dockerd
++	$(INSTALL) -D -m 755 package/docker-engine/dockerd-syslog-wrapper.sh \
++		$(TARGET_DIR)/usr/libexec/dockerd-syslog-wrapper.sh
+ endef
 
--do_stop() {
--        echo -n "Stopping $NAME: "
--        start-stop-daemon --stop --quiet --pidfile $PIDFILE \
--                && echo "OK" || echo "FAIL"
-+reload() {
-+	printf "Reloading %s config: " "$DAEMON"
-+	start-stop-daemon --stop --signal HUP -q --pidfile "$PIDFILE" \
-+		--exec "/usr/bin/$DAEMON"
-+	status=$?
-+	if [ "$status" -eq 0 ]; then
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+	fi
-+	return "$status"
- }
-
- case "$1" in
--        start)
--                do_start
--                ;;
--        stop)
--                do_stop
--                ;;
--        restart)
--                do_stop
--                sleep 1
--                do_start
--                ;;
-+	start|stop|restart|reload)
-+		"$1";;
- 	*)
--                echo "Usage: $0 {start|stop|restart}"
--                exit 1
-+		echo "Usage: $0 {start|stop|restart|reload}"
-+		exit 1
- esac
+ define DOCKER_ENGINE_USERS
+diff --git a/package/docker-engine/dockerd-syslog-wrapper.sh b/package/docker-engine/dockerd-syslog-wrapper.sh
+new file mode 100644
+index 0000000000..3d6a80a739
+--- /dev/null
++++ b/package/docker-engine/dockerd-syslog-wrapper.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh
++"${@}" 2>&1 | while read -r LINE; do
++	logger -t "$(basename "${1}")" "$LINE";
++done
 --
 2.45.2
 
