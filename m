@@ -4,67 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 386E6C3DA7F
-	for <buildroot@archiver.kernel.org>; Wed, 31 Jul 2024 08:09:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 21046C3DA64
+	for <buildroot@archiver.kernel.org>; Wed, 31 Jul 2024 08:10:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D1F3D406A1;
-	Wed, 31 Jul 2024 08:09:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D50C6406F2;
+	Wed, 31 Jul 2024 08:10:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QZRZOZxuvg72; Wed, 31 Jul 2024 08:09:25 +0000 (UTC)
+ id VxpzLlBM0lwa; Wed, 31 Jul 2024 08:10:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9FB6D406AB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9F5B640710
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9FB6D406AB;
-	Wed, 31 Jul 2024 08:09:25 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C94911BF57B
- for <buildroot@lists.busybox.net>; Wed, 31 Jul 2024 08:09:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9F5B640710;
+	Wed, 31 Jul 2024 08:10:24 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id B866F1BF57B
+ for <buildroot@lists.busybox.net>; Wed, 31 Jul 2024 08:10:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C3B2780DD7
- for <buildroot@lists.busybox.net>; Wed, 31 Jul 2024 08:09:23 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id A6ABD60A77
+ for <buildroot@lists.busybox.net>; Wed, 31 Jul 2024 08:10:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PDbj0cvI6LA2 for <buildroot@lists.busybox.net>;
- Wed, 31 Jul 2024 08:09:23 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id lblGKt99qeRr for <buildroot@lists.busybox.net>;
+ Wed, 31 Jul 2024 08:10:21 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
  client-ip=2a00:1828:2000:679::23; helo=helium.openadk.org;
  envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 6002D80DC9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6002D80DC9
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 867B36065D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 867B36065D
 Received: from helium.openadk.org (helium.openadk.org
  [IPv6:2a00:1828:2000:679::23])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6002D80DC9
- for <buildroot@buildroot.org>; Wed, 31 Jul 2024 08:09:21 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 867B36065D
+ for <buildroot@buildroot.org>; Wed, 31 Jul 2024 08:10:21 +0000 (UTC)
 Received: by helium.openadk.org (Postfix, from userid 1000)
- id 9372D352115E; Wed, 31 Jul 2024 10:09:17 +0200 (CEST)
-Date: Wed, 31 Jul 2024 10:09:17 +0200
+ id 4C61F352115C; Wed, 31 Jul 2024 10:10:19 +0200 (CEST)
+Date: Wed, 31 Jul 2024 10:10:19 +0200
 From: Waldemar Brodkorb <wbx@openadk.org>
 To: buildroot@buildroot.org
-Message-ID: <ZqnxLYzxD9Hs2NiM@waldemar-brodkorb.de>
+Message-ID: <ZqnxazbddLIiWfuP@waldemar-brodkorb.de>
 MIME-Version: 1.0
 Content-Disposition: inline
 X-Operating-System: Linux 5.10.0-31-amd64 x86_64
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=openadk.org; s=2022; 
- t=1722413357; bh=cHW+pvf1qZ4FBLDHPynVxdPNXX4VJjeDVHfK/yRVirI=;
+ t=1722413419; bh=mb+3UWmS4tEpenRxVyY/HnFgPaFoCGABxSHu/E0OhZI=;
  h=Date:From:To:Subject:From;
- b=kMb1OvK8FK7u6F7b4046/Zq9exFbZ4YG77c6siu3WGzBtbk9DJaT/bChV9ITNVNp6
- 9Gr/fEkld9VMfff8badmGLSo3HvrEO/eBibGGs19aQaF8ss8AlyKcozWihOfgygHLE
- F+SP8Av2LU4t4RBkcWHShze/iLZhc05P3lKYRIwMLgf9wGfT6YL5idV0G8nnGwQE/O
- 7aDkpCnbk6Qdt1EKkBOne6tqPtLk0flXT9tf0QLmf3QizxbpyUd/quUwUKRn7CqEUZ
- U8qgUi07VCuGMEjwfBi6qI+NmDTi9IxOM2HjW2NSe29nfXDSElQHJ8kBxItF2Xptdp
- Ck4Erx6cLvSLw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=gb4fhP6RTqV5BXZX1m6ztvyAuq/4aZ44dtjKWqcfaWPpPdEY7d6EX/TqHbZwfpIm+
+ pZqyZ8JPCFaapPD2N7HP7sSf0H5Is7YgObQFZVQm8NAgnQJA6XfTgTeY5E0oal+j+t
+ 700J43bGq92WUAIRTPZhLWioYp85S9IVCbrSOzw/uzzrv2CDZzfeRrgiSTCqqzXcNP
+ tF8SC/9yJQIJq0GxbXAf9TNjvyfo5BuDRdu9GxCyiZX/vuYF1opqKLrkRgXI5UaWX5
+ 5Td3seXsbxl4Xp1gzJ9Nd9HT6A3Xyb5vyFNpfLboArHzYLz9yuICaqCALNKoQwBHh4
+ 2YdVUWFH4Rz4Q==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=openadk.org
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=openadk.org header.i=@openadk.org header.a=rsa-sha256
- header.s=2022 header.b=kMb1OvK8
-Subject: [Buildroot] [PATCH] package/strace: update to 6.10
+ header.s=2022 header.b=gb4fhP6R
+Subject: [Buildroot] [PATCH] package/asterisk: update to 20.9.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,40 +81,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-See here for a ChangeLog:
-https://github.com/strace/strace/blob/master/NEWS
-
 Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
- package/strace/strace.hash | 4 ++--
- package/strace/strace.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/asterisk/asterisk.hash | 2 +-
+ package/asterisk/asterisk.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/strace/strace.hash b/package/strace/strace.hash
-index 68b9cc5f93..dcaf1ad5d4 100644
---- a/package/strace/strace.hash
-+++ b/package/strace/strace.hash
+diff --git a/package/asterisk/asterisk.hash b/package/asterisk/asterisk.hash
+index bff34b37bb..ee21d88d98 100644
+--- a/package/asterisk/asterisk.hash
++++ b/package/asterisk/asterisk.hash
 @@ -1,5 +1,5 @@
- # Locally calculated after checking signature with RSA key 0xA8041FA839E16E36
--# https://strace.io/files/6.8/strace-6.8.tar.xz.asc
--sha256  ba6950a96824cdf93a584fa04f0a733896d2a6bc5f0ad9ffe505d9b41e970149  strace-6.8.tar.xz
-+# https://strace.io/files/6.10/strace-6.10.tar.xz.asc
-+sha256  765ec71aa1de2fe37363c1e40c7b7669fc1d40c44bb5d38ba8e8cd82c4edcf07  strace-6.10.tar.xz
- sha256  1988d0e1aa101d68855e8c4f940aacf2531051b82f6b608eb026c5fad1f33df1  COPYING
- sha256  7c379436436a562834aa7d2f5dcae1f80a25230fa74201046ca1fba4367d39aa  LGPL-2.1-or-later
-diff --git a/package/strace/strace.mk b/package/strace/strace.mk
-index 908aed6653..34a154357f 100644
---- a/package/strace/strace.mk
-+++ b/package/strace/strace.mk
+ # Locally computed
+-sha256  bea2978c41d0f69f7197536c35c2d80cbfdf7db826f48c0741b6f66462981d2f  asterisk-20.8.1.tar.gz
++sha256  c928c715dc5ff783ea6cf62cca3eebdc1dc9c5d40ce9b37b0213c0eac7f4090f  asterisk-20.9.1.tar.gz
+ 
+ # sha1 from: http://downloads.asterisk.org/pub/telephony/sounds/releases
+ # sha256 locally computed
+diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
+index 3d41285c78..64ec740d46 100644
+--- a/package/asterisk/asterisk.mk
++++ b/package/asterisk/asterisk.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--STRACE_VERSION = 6.8
-+STRACE_VERSION = 6.10
- STRACE_SOURCE = strace-$(STRACE_VERSION).tar.xz
- STRACE_SITE = https://github.com/strace/strace/releases/download/v$(STRACE_VERSION)
- STRACE_LICENSE = LGPL-2.1+
+-ASTERISK_VERSION = 20.8.1
++ASTERISK_VERSION = 20.9.1
+ # Use the github mirror: it's an official mirror maintained by Digium, and
+ # provides tarballs, which the main Asterisk git tree (behind Gerrit) does not.
+ ASTERISK_SITE = $(call github,asterisk,asterisk,$(ASTERISK_VERSION))
 -- 
 2.30.2
 
