@@ -4,59 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6B0E8C3DA64
-	for <buildroot@archiver.kernel.org>; Wed, 31 Jul 2024 15:12:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9E3EEC3DA7F
+	for <buildroot@archiver.kernel.org>; Wed, 31 Jul 2024 15:38:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 338F440231;
-	Wed, 31 Jul 2024 15:12:40 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 223AF405CA;
+	Wed, 31 Jul 2024 15:38:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LYRHbJdNwow2; Wed, 31 Jul 2024 15:12:39 +0000 (UTC)
+ id OYeLeGFdYOgj; Wed, 31 Jul 2024 15:38:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0516A40605
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0C29E405D9
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0516A40605;
-	Wed, 31 Jul 2024 15:12:39 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6ABE81BF23C
- for <buildroot@lists.busybox.net>; Wed, 31 Jul 2024 15:12:37 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0C29E405D9;
+	Wed, 31 Jul 2024 15:38:14 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 816721BF23C
+ for <buildroot@lists.busybox.net>; Wed, 31 Jul 2024 15:38:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 57A0840603
- for <buildroot@lists.busybox.net>; Wed, 31 Jul 2024 15:12:37 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6F54C8111F
+ for <buildroot@lists.busybox.net>; Wed, 31 Jul 2024 15:38:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Szjtxhhs9S1p for <buildroot@lists.busybox.net>;
- Wed, 31 Jul 2024 15:12:36 +0000 (UTC)
-X-Greylist: delayed 600 seconds by postgrey-1.37 at util1.osuosl.org;
- Wed, 31 Jul 2024 15:12:36 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 69FED40231
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 69FED40231
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=45.157.188.11;
- helo=smtp-bc0b.mail.infomaniak.ch; envelope-from=philip-dylan@gleonec.bzh;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id IGTXOEjCdehJ for <buildroot@lists.busybox.net>;
+ Wed, 31 Jul 2024 15:38:11 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::224;
+ helo=relay4-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-Received: from smtp-bc0b.mail.infomaniak.ch (smtp-bc0b.mail.infomaniak.ch
- [45.157.188.11])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 69FED40231
- for <buildroot@buildroot.org>; Wed, 31 Jul 2024 15:12:36 +0000 (UTC)
-Received: from smtp-4-0000.mail.infomaniak.ch (smtp-4-0000.mail.infomaniak.ch
- [10.7.10.107])
- by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4WYwBv6zTSzTB7;
- Wed, 31 Jul 2024 16:55:51 +0200 (CEST)
-Received: from unknown by smtp-4-0000.mail.infomaniak.ch (Postfix) with ESMTPA
- id 4WYwBv1hFNzTYp; Wed, 31 Jul 2024 16:55:51 +0200 (CEST)
-From: Philip-Dylan Gleonec <philip-dylan@gleonec.bzh>
-To: buildroot@buildroot.org
-Date: Wed, 31 Jul 2024 16:55:02 +0200
-Message-Id: <20240731145504.365492-1-philip-dylan@gleonec.bzh>
-X-Mailer: git-send-email 2.39.2
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 08E1281095
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 08E1281095
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::224])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 08E1281095
+ for <buildroot@buildroot.org>; Wed, 31 Jul 2024 15:38:10 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 5D094E0003;
+ Wed, 31 Jul 2024 15:38:07 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1sZBOw-0059NL-2g;
+ Wed, 31 Jul 2024 17:38:06 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
+References: <20240207170959.2672846-1-buildroot@bubu1.eu>
+ <20240207170959.2672846-2-buildroot@bubu1.eu>
+Date: Wed, 31 Jul 2024 17:38:06 +0200
+In-Reply-To: <20240207170959.2672846-2-buildroot@bubu1.eu> (Marcus Hoffmann
+ via buildroot's message of "Wed, 7 Feb 2024 18:09:54 +0100")
+Message-ID: <87ikwltvvl.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-X-Infomaniak-Routing: alpha
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=none (p=none dis=none)
- header.from=gleonec.bzh
-Subject: [Buildroot] [PATCH 0/2] Udoo Neo kernel update
+ header.from=korsgaard.com
+Subject: Re: [Buildroot] [PATCH 2/4] support/testing: add new
+ python-ruamel-yaml runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,45 +70,20 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabio Estevam <festevam@gmail.com>,
- Philip-Dylan Gleonec <philip-dylan@gleonec.bzh>
+Cc: Marcus Hoffmann <buildroot@bubu1.eu>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+>>>>> "Marcus" == Marcus Hoffmann via buildroot <buildroot@buildroot.org> writes:
 
-I'm currently playing with the Udoo Neo board and have found that the
-kernel in the current board configuration does not build.
+ > Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
 
-While a point release bump would be sufficient, I took the opportunity
-to update the kernel to the latest LTS version. Hashes verification was
-added to ensure the integrity of uboot and linux sources.
-
-The 6.6 kernel does not add any regression compared to the latest 5.15
-kernel.
-
-Thanks for your time,
-Philip-Dylan Gleonec
-
-Philip-Dylan Gleonec (2):
-  configs/mx6sx_udoo_neo_defconfig: bump kernel to 6.6.43
-  configs/mx6sx_udoo_neo_defconfig: add hashes
-
- .checkpackageignore                                    |  1 -
- .../udoo/neo/patches/linux-headers/linux-headers.hash  |  1 +
- board/udoo/neo/patches/linux/linux.hash                |  2 ++
- board/udoo/neo/patches/uboot/uboot.hash                |  2 ++
- configs/mx6sx_udoo_neo_defconfig                       | 10 ++++++----
- 5 files changed, 11 insertions(+), 5 deletions(-)
- create mode 120000 board/udoo/neo/patches/linux-headers/linux-headers.hash
- create mode 100644 board/udoo/neo/patches/linux/linux.hash
- create mode 100644 board/udoo/neo/patches/uboot/uboot.hash
+Committed to 2024.02.x and 2024.05.x, thanks.
 
 -- 
-2.39.2
-
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
