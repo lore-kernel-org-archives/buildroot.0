@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 21AFEC3DA64
-	for <buildroot@archiver.kernel.org>; Wed, 31 Jul 2024 16:54:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EEED2C3DA64
+	for <buildroot@archiver.kernel.org>; Wed, 31 Jul 2024 16:54:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C6A1380BAB;
-	Wed, 31 Jul 2024 16:54:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B308380DC0;
+	Wed, 31 Jul 2024 16:54:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4KEyrrATqx43; Wed, 31 Jul 2024 16:54:42 +0000 (UTC)
+ id ADIw2iLGSLSJ; Wed, 31 Jul 2024 16:54:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 08AD980D39
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EB75380E0D
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 08AD980D39;
-	Wed, 31 Jul 2024 16:54:42 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 67AFA1BF3D8
+	by smtp1.osuosl.org (Postfix) with ESMTP id EB75380E0D;
+	Wed, 31 Jul 2024 16:54:45 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id E25E91BF3D8
  for <buildroot@lists.busybox.net>; Wed, 31 Jul 2024 16:54:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 554AB606EB
+ by smtp1.osuosl.org (Postfix) with ESMTP id C91FE80B53
  for <buildroot@lists.busybox.net>; Wed, 31 Jul 2024 16:54:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IduNuqVX-bZr for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id W0uYossRA_Lz for <buildroot@lists.busybox.net>;
  Wed, 31 Jul 2024 16:54:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7BFAC60647
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6751480AC7
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7BFAC60647
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6751480AC7
  for <buildroot@buildroot.org>; Wed, 31 Jul 2024 16:54:29 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6ADD683771; Wed, 31 Jul 2024 16:54:29 +0000 (UTC)
+ id 3F2FD8041A; Wed, 31 Jul 2024 16:54:29 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 31 Jul 2024 18:53:14 +0200
+Date: Wed, 31 Jul 2024 18:31:55 +0200
 X-Git-Refname: refs/heads/2024.05.x
-X-Git-Oldrev: 629869f2dd4334acef6e0d3ad5ab69f718c442c6
-X-Git-Newrev: 47c331f0da56580912c6187b69f989fb65bdc88d
+X-Git-Oldrev: 4ec45eda0ed47458e6e667f05e9dfb9aabf3bcb4
+X-Git-Newrev: b72162e8068f2e611e4d692afb6da840cd969a08
 X-Patchwork-Hint: ignore
-Message-Id: <20240731165429.6ADD683771@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.05.x] package/dump1090: fix
- build with GCC 14
+Message-Id: <20240731165429.3F2FD8041A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.05.x] package/qt5/qt5webkit:
+ fix WebCore compatibility issue with updated libxml2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,82 +60,124 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============6976867250147043926=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=47c331f0da56580912c6187b69f989fb65bdc88d
+--===============6976867250147043926==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=b72162e8068f2e611e4d692afb6da840cd969a08
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.05.x
 
-Fixes http://autobuild.buildroot.net/results/1d5804974153f96e80f5200793ec8cd12c9fa18a/
+qt5webkit build currently breaks on the following error:
 
-GCC 14 complains if the arguments to calloc (nmemb, size) are swapped
-around, causing a build failure as dump1090 builds with -Werror:
+XSLStyleSheetLibxslt.cpp:148:129: error: invalid conversion from ‘void (*)(void*, xmlError*)’ {aka ‘void (*)(void*, _xmlError*)’} to ‘xmlStructuredErrorFunc’ {aka ‘void (*)(void*, const _xmlError*)’} [-fpermissive]
+  148 |     XMLDocumentParserScope scope(cachedResourceLoader(), XSLTProcessor::genericErrorFunc, XSLTProcessor::parseErrorFunc, console);
+      |                                                                                                                                 ^
+      |                                                                                                                                 |
+      |                                                                                                                                 void (*)(void*, xmlError*) {aka void (*)(void*, _xmlError*)}
 
-net_io.c:107:34: error: 'calloc' sizes specified with 'sizeof' in the earlier argument and not in the later argument [-Werror=calloc-transposed-args]
-  107 |     if (!(service = calloc(sizeof(*service), 1))) {
+This error is due to an API update in libxml2, enforcing const on more
+struct in version 2.12.0 (see [1]). Buildroot now tracks v2.12.5.
+Upstream Webkit project has already issued the corresponding fix ([2]),
+which updates corresponding internal prototypes depending on libxml2
+version, but the qt5webkit version tracked in buildroot does not integrate
+the corresponding Webkit version.
 
-Add a patch from an upstream pull request to fix that.
+Fix this build issue by bringing the upstream patch "as is" from Webkit
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+No autobuilder references because this build error was hidden by
+another build error fixed in a previous patch.
+
+[1] https://gitlab.gnome.org/GNOME/libxml2/-/releases/v2.12.0
+[2] https://github.com/WebKit/WebKit/commit/1bad176b2496579d760852c80cff3ad9fb7c3a4b
+
+Signed-off-by: Alexis Lothoré <alexis.lothore@bootlin.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit fd358b97c053af9e45fcb94e59ade63b4d895f10)
+(cherry picked from commit e24a11738896118870037d89ccd64d2fa331e15e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-swap-size-arguments-to-calloc.patch       | 43 ++++++++++++++++++++++
- 1 file changed, 43 insertions(+)
+ ...-with-libxml2-version-2.12.0-due-to-API-c.patch | 61 ++++++++++++++++++++++
+ 1 file changed, 61 insertions(+)
 
-diff --git a/package/dump1090/0001-swap-size-arguments-to-calloc.patch b/package/dump1090/0001-swap-size-arguments-to-calloc.patch
+diff --git a/package/qt5/qt5webkit/0008-Build-fails-with-libxml2-version-2.12.0-due-to-API-c.patch b/package/qt5/qt5webkit/0008-Build-fails-with-libxml2-version-2.12.0-due-to-API-c.patch
 new file mode 100644
-index 0000000000..1c2d502793
+index 0000000000..d6f379ae8e
 --- /dev/null
-+++ b/package/dump1090/0001-swap-size-arguments-to-calloc.patch
-@@ -0,0 +1,43 @@
-+From be8f5b7ab1223076ba0086f14aeeb53ace2d4b5c Mon Sep 17 00:00:00 2001
-+From: Jeff Lawson <jeff.lawson@flightaware.com>
-+Date: Tue, 18 Jun 2024 15:58:24 +0000
-+Subject: [PATCH] swap size arguments to calloc
++++ b/package/qt5/qt5webkit/0008-Build-fails-with-libxml2-version-2.12.0-due-to-API-c.patch
+@@ -0,0 +1,61 @@
++From df49bfc4c93001970c9b9266903ee7e8804fb576 Mon Sep 17 00:00:00 2001
++From: Adrian Perez de Castro <aperez@igalia.com>
++Date: Mon, 20 Nov 2023 07:42:30 -0800
++Subject: [PATCH] Build fails with libxml2 version 2.12.0 due to API change
++ https://bugs.webkit.org/show_bug.cgi?id=265128
 +
-+fixes #241
++Reviewed by Philippe Normand.
 +
-+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-+Upstream: https://github.com/flightaware/dump1090/pull/243
++Starting with libxml2 2.12.0, the API has changed the const-ness of the
++xmlError pointers, which results in a build error due to a mismatched
++type in the parsing error callback. This papers over the difference by
++using preprocessor conditionals.
++
++* Source/WebCore/xml/XSLTProcessor.h: Use const when building against
++  libxml2 2.12.0 or newer.
++* Source/WebCore/xml/XSLTProcessorLibxslt.cpp:
++(WebCore::XSLTProcessor::parseErrorFunc): Ditto.
++
++Canonical link: https://commits.webkit.org/270977@main
++Upstream: https://github.com/WebKit/WebKit/commit/1bad176b2496579d760852c80cff3ad9fb7c3a4b
++Signed-off-by: Alexis Lothoré <alexis.lothore@bootlin.com>
 +---
-+ adaptive.c | 2 +-
-+ net_io.c   | 2 +-
-+ 2 files changed, 2 insertions(+), 2 deletions(-)
++ Source/WebCore/xml/XSLTProcessor.h          | 4 ++++
++ Source/WebCore/xml/XSLTProcessorLibxslt.cpp | 4 ++++
++ 2 files changed, 8 insertions(+)
 +
-+diff --git a/adaptive.c b/adaptive.c
-+index f16e16c..d656433 100644
-+--- a/adaptive.c
-++++ b/adaptive.c
-+@@ -195,7 +195,7 @@ void adaptive_init()
-+     adaptive_burst_window_remaining = adaptive_samples_per_window;
-+     adaptive_burst_window_counter = 0;
++diff --git a/Source/WebCore/xml/XSLTProcessor.h b/Source/WebCore/xml/XSLTProcessor.h
++index 21bb45b5cbe1..5cf20557918f 100644
++--- a/Source/WebCore/xml/XSLTProcessor.h
+++++ b/Source/WebCore/xml/XSLTProcessor.h
++@@ -61,7 +61,11 @@ public:
 + 
-+-    adaptive_range_radix = calloc(sizeof(unsigned), 65536);
-++    adaptive_range_radix = calloc(65536, sizeof(unsigned));
-+     adaptive_range_state = RANGE_RESCAN_UP;
++     void reset();
 + 
-+     // select and enforce gain limits
-+diff --git a/net_io.c b/net_io.c
-+index bf98028..8abd510 100644
-+--- a/net_io.c
-++++ b/net_io.c
-+@@ -104,7 +104,7 @@ struct net_service *serviceInit(const char *descr, struct net_writer *writer, he
+++#if LIBXML_VERSION >= 21200
+++    static void parseErrorFunc(void* userData, const xmlError*);
+++#else
++     static void parseErrorFunc(void* userData, xmlError*);
+++#endif
++     static void genericErrorFunc(void* userData, const char* msg, ...);
++     
++     // Only for libXSLT callbacks
++diff --git a/Source/WebCore/xml/XSLTProcessorLibxslt.cpp b/Source/WebCore/xml/XSLTProcessorLibxslt.cpp
++index a65691087e3c..9f6b363dfc6c 100644
++--- a/Source/WebCore/xml/XSLTProcessorLibxslt.cpp
+++++ b/Source/WebCore/xml/XSLTProcessorLibxslt.cpp
++@@ -59,7 +59,11 @@ void XSLTProcessor::genericErrorFunc(void*, const char*, ...)
++     // It would be nice to do something with this error message.
++ }
++ 
+++#if LIBXML_VERSION >= 21200
+++void XSLTProcessor::parseErrorFunc(void* userData, const xmlError* error)
+++#else
++ void XSLTProcessor::parseErrorFunc(void* userData, xmlError* error)
+++#endif
 + {
-+     struct net_service *service;
-+ 
-+-    if (!(service = calloc(sizeof(*service), 1))) {
-++    if (!(service = calloc(1, sizeof(*service)))) {
-+         fprintf(stderr, "Out of memory allocating service %s\n", descr);
-+         exit(1);
-+     }
++     PageConsoleClient* console = static_cast<PageConsoleClient*>(userData);
++     if (!console)
 +-- 
-+2.39.2
++2.43.1
 +
+
+--===============6976867250147043926==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============6976867250147043926==--
