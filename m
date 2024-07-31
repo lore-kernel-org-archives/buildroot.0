@@ -4,50 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 74CADC3DA7F
-	for <buildroot@archiver.kernel.org>; Wed, 31 Jul 2024 16:56:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0D7FC3DA7F
+	for <buildroot@archiver.kernel.org>; Wed, 31 Jul 2024 17:01:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 437FC81A8E;
-	Wed, 31 Jul 2024 16:56:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4293880EC5;
+	Wed, 31 Jul 2024 17:01:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BHAaos_3HoWf; Wed, 31 Jul 2024 16:56:03 +0000 (UTC)
+ id zrwYU0DZkd6B; Wed, 31 Jul 2024 17:01:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7EF6181DE7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4DA7980ED1
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7EF6181DE7;
-	Wed, 31 Jul 2024 16:56:02 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 3D33F1BF3D8
- for <buildroot@lists.busybox.net>; Wed, 31 Jul 2024 16:55:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4DA7980ED1;
+	Wed, 31 Jul 2024 17:01:27 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 743CD1BF3D8
+ for <buildroot@lists.busybox.net>; Wed, 31 Jul 2024 17:01:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2798240259
- for <buildroot@lists.busybox.net>; Wed, 31 Jul 2024 16:55:47 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 60B4C40959
+ for <buildroot@lists.busybox.net>; Wed, 31 Jul 2024 17:01:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GwQQwhoabtvE for <buildroot@lists.busybox.net>;
- Wed, 31 Jul 2024 16:55:46 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E7E99405CA
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id E7E99405CA
- for <buildroot@buildroot.org>; Wed, 31 Jul 2024 16:55:45 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E38968379D; Wed, 31 Jul 2024 16:55:45 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Wed, 31 Jul 2024 18:33:43 +0200
-X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: cacc4db3e609e453b337b04b6e042e836c686e31
-X-Git-Newrev: 9c33ea04a6c2a4242d35fca52fc9b752f114a19c
-X-Patchwork-Hint: ignore
-Message-Id: <20240731165545.E38968379D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/qt5/qt5webkit:
- fix WebCore compatibility issue with updated libxml2
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id AhmfYOu7B5cq for <buildroot@lists.busybox.net>;
+ Wed, 31 Jul 2024 17:01:24 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::132; helo=mail-lf1-x132.google.com;
+ envelope-from=festevam@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 4E403409E3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4E403409E3
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com
+ [IPv6:2a00:1450:4864:20::132])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 4E403409E3
+ for <buildroot@buildroot.org>; Wed, 31 Jul 2024 17:01:24 +0000 (UTC)
+Received: by mail-lf1-x132.google.com with SMTP id
+ 2adb3069b0e04-52f015ea784so980267e87.1
+ for <buildroot@buildroot.org>; Wed, 31 Jul 2024 10:01:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1722445282; x=1723050082;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=3FfuONWkPnY8Ouh7r5OGoN/CG6I5zQU6j3XViKMAHG4=;
+ b=JB0c8wCGrEUKzeeRPg9NyoskERGd0EPkeNM+0LV5NE7SxOBLuNPPzdK6+aMFWF8dxO
+ vt2clW0ElxUScIwkLwT3JRhDzWjISpeua+dXyUpwTUlwZq4bV4h3KK5vgKc45pENuokw
+ eg8LSqKdUJhNNf8YmdDEaGvVEpHXoLrboGWvmZub3IbHytTXVRYcXP9AYF1+4VIOMzZk
+ qCPkjYrP9iNB+7rSUSoVvuGyszOshJnXw0dSboafe/3Ogb2pZ0v6WDBlPRVztLLaNHyE
+ bI9ezq8g3p88izwMJIyJutsu8p+0q/CtuCtUjHqGG/VOjZMA/SahbhYJBgvI0LiyzZoy
+ COVA==
+X-Gm-Message-State: AOJu0YwKqD8kuSZ4/e8jIOp0fxybEIKmJSYx44y4ZDazvQXDxfuBPOqi
+ MPoYdmNmOwFggAWXYqDZIz+e2JrIWNWyLQBtYHU+g2YLnSTxz1wWem7SQHb7JEvKVQYi9lSvqaE
+ lCFIsugrDoAOxHnq19TM8osUoC4G3Bg==
+X-Google-Smtp-Source: AGHT+IFxTEbN1+TfstkQSw970QdbTGVlUkyT4V4gdYQC3uwmmSshoCBOn7aeGXpYSVvS9bt4VQ1VxIoo8PFoKw1Hmb8=
+X-Received: by 2002:a05:6512:23aa:b0:52f:10b:666c with SMTP id
+ 2adb3069b0e04-52fd52fe7f2mr7162950e87.5.1722445281390; Wed, 31 Jul 2024
+ 10:01:21 -0700 (PDT)
+MIME-Version: 1.0
+References: <20240731145504.365492-1-philip-dylan@gleonec.bzh>
+ <20240731145504.365492-3-philip-dylan@gleonec.bzh>
+In-Reply-To: <20240731145504.365492-3-philip-dylan@gleonec.bzh>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Wed, 31 Jul 2024 14:01:10 -0300
+Message-ID: <CAOMZO5B4DLidx1KXvyNUd7mic-WB+WQTQHn-_A7hXTprcLWVjA@mail.gmail.com>
+To: Philip-Dylan Gleonec <philip-dylan@gleonec.bzh>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1722445282; x=1723050082; darn=buildroot.org;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=3FfuONWkPnY8Ouh7r5OGoN/CG6I5zQU6j3XViKMAHG4=;
+ b=dcN+LatWy9SD6Hd0ghMhOJ/t3p4A1HvE6EkC4hqCIOUZAHr2LYsbCbM6LNenzUuLV+
+ LGn/rMiXvMv18GWzCgjp5ws75OH5+ewBhg2UKmHurL9rQX6E15gjbcJN2WpIw4buxFHG
+ YGshqPiCPGLTKvtMvVNxVOb++mZHpzkb1GxW+I88QW+ucEA0l2XDTRTsH1j+TATEhZhp
+ +69/HoP1rIbDmpkslvOPXq8cdhHlRl8GZ7m9QdXN9mwf2dId+GcD+ZmqAzyZdNWQp93v
+ Q6ikLSQ4clCKVcM9oFsPDiaeORTxnT4x3iQ/CQvjSfYIPPB+DZIy5nR6ED5E4Qpby3r4
+ Mfbg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=dcN+LatW
+Subject: Re: [Buildroot] [PATCH 2/2] configs/mx6sx_udoo_neo_defconfig: add
+ hashes
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,125 +99,17 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2112323302967118872=="
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============2112323302967118872==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=9c33ea04a6c2a4242d35fca52fc9b752f114a19c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
-
-qt5webkit build currently breaks on the following error:
-
-XSLStyleSheetLibxslt.cpp:148:129: error: invalid conversion from ‘void (*)(void*, xmlError*)’ {aka ‘void (*)(void*, _xmlError*)’} to ‘xmlStructuredErrorFunc’ {aka ‘void (*)(void*, const _xmlError*)’} [-fpermissive]
-  148 |     XMLDocumentParserScope scope(cachedResourceLoader(), XSLTProcessor::genericErrorFunc, XSLTProcessor::parseErrorFunc, console);
-      |                                                                                                                                 ^
-      |                                                                                                                                 |
-      |                                                                                                                                 void (*)(void*, xmlError*) {aka void (*)(void*, _xmlError*)}
-
-This error is due to an API update in libxml2, enforcing const on more
-struct in version 2.12.0 (see [1]). Buildroot now tracks v2.12.5.
-Upstream Webkit project has already issued the corresponding fix ([2]),
-which updates corresponding internal prototypes depending on libxml2
-version, but the qt5webkit version tracked in buildroot does not integrate
-the corresponding Webkit version.
-
-Fix this build issue by bringing the upstream patch "as is" from Webkit
-
-No autobuilder references because this build error was hidden by
-another build error fixed in a previous patch.
-
-[1] https://gitlab.gnome.org/GNOME/libxml2/-/releases/v2.12.0
-[2] https://github.com/WebKit/WebKit/commit/1bad176b2496579d760852c80cff3ad9fb7c3a4b
-
-Signed-off-by: Alexis Lothoré <alexis.lothore@bootlin.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit e24a11738896118870037d89ccd64d2fa331e15e)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- ...-with-libxml2-version-2.12.0-due-to-API-c.patch | 61 ++++++++++++++++++++++
- 1 file changed, 61 insertions(+)
-
-diff --git a/package/qt5/qt5webkit/0008-Build-fails-with-libxml2-version-2.12.0-due-to-API-c.patch b/package/qt5/qt5webkit/0008-Build-fails-with-libxml2-version-2.12.0-due-to-API-c.patch
-new file mode 100644
-index 0000000000..d6f379ae8e
---- /dev/null
-+++ b/package/qt5/qt5webkit/0008-Build-fails-with-libxml2-version-2.12.0-due-to-API-c.patch
-@@ -0,0 +1,61 @@
-+From df49bfc4c93001970c9b9266903ee7e8804fb576 Mon Sep 17 00:00:00 2001
-+From: Adrian Perez de Castro <aperez@igalia.com>
-+Date: Mon, 20 Nov 2023 07:42:30 -0800
-+Subject: [PATCH] Build fails with libxml2 version 2.12.0 due to API change
-+ https://bugs.webkit.org/show_bug.cgi?id=265128
-+
-+Reviewed by Philippe Normand.
-+
-+Starting with libxml2 2.12.0, the API has changed the const-ness of the
-+xmlError pointers, which results in a build error due to a mismatched
-+type in the parsing error callback. This papers over the difference by
-+using preprocessor conditionals.
-+
-+* Source/WebCore/xml/XSLTProcessor.h: Use const when building against
-+  libxml2 2.12.0 or newer.
-+* Source/WebCore/xml/XSLTProcessorLibxslt.cpp:
-+(WebCore::XSLTProcessor::parseErrorFunc): Ditto.
-+
-+Canonical link: https://commits.webkit.org/270977@main
-+Upstream: https://github.com/WebKit/WebKit/commit/1bad176b2496579d760852c80cff3ad9fb7c3a4b
-+Signed-off-by: Alexis Lothoré <alexis.lothore@bootlin.com>
-+---
-+ Source/WebCore/xml/XSLTProcessor.h          | 4 ++++
-+ Source/WebCore/xml/XSLTProcessorLibxslt.cpp | 4 ++++
-+ 2 files changed, 8 insertions(+)
-+
-+diff --git a/Source/WebCore/xml/XSLTProcessor.h b/Source/WebCore/xml/XSLTProcessor.h
-+index 21bb45b5cbe1..5cf20557918f 100644
-+--- a/Source/WebCore/xml/XSLTProcessor.h
-++++ b/Source/WebCore/xml/XSLTProcessor.h
-+@@ -61,7 +61,11 @@ public:
-+ 
-+     void reset();
-+ 
-++#if LIBXML_VERSION >= 21200
-++    static void parseErrorFunc(void* userData, const xmlError*);
-++#else
-+     static void parseErrorFunc(void* userData, xmlError*);
-++#endif
-+     static void genericErrorFunc(void* userData, const char* msg, ...);
-+     
-+     // Only for libXSLT callbacks
-+diff --git a/Source/WebCore/xml/XSLTProcessorLibxslt.cpp b/Source/WebCore/xml/XSLTProcessorLibxslt.cpp
-+index a65691087e3c..9f6b363dfc6c 100644
-+--- a/Source/WebCore/xml/XSLTProcessorLibxslt.cpp
-++++ b/Source/WebCore/xml/XSLTProcessorLibxslt.cpp
-+@@ -59,7 +59,11 @@ void XSLTProcessor::genericErrorFunc(void*, const char*, ...)
-+     // It would be nice to do something with this error message.
-+ }
-+ 
-++#if LIBXML_VERSION >= 21200
-++void XSLTProcessor::parseErrorFunc(void* userData, const xmlError* error)
-++#else
-+ void XSLTProcessor::parseErrorFunc(void* userData, xmlError* error)
-++#endif
-+ {
-+     PageConsoleClient* console = static_cast<PageConsoleClient*>(userData);
-+     if (!console)
-+-- 
-+2.43.1
-+
-
---===============2112323302967118872==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============2112323302967118872==--
+T24gV2VkLCBKdWwgMzEsIDIwMjQgYXQgMTE6NTXigK9BTSBQaGlsaXAtRHlsYW4gR2xlb25lYwo8
+cGhpbGlwLWR5bGFuQGdsZW9uZWMuYnpoPiB3cm90ZToKCj4gKyMgTG9jYWxseSBjYWxjdWxhdGVk
+Cj4gK3NoYTI1NiAgNWMzYTNjMDNjMDU1YjhkNjAxYTZkN2Y4MGQxNDY1YWRhNmI4M2ExMjI5OWY2
+YWNlMjAyN2I0N2YwYmFmZjUzOCAgbGludXgtNi42LjQwLnRhci54egoKNi42LjQwPyBUaGUgcHJl
+dmlvdXMgcGF0Y2ggdXBkYXRlcyB0byA2LjYuNDMgaW5zdGVhZC4KX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWls
+ZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9s
+aXN0aW5mby9idWlsZHJvb3QK
