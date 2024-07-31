@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 231AEC3DA7F
-	for <buildroot@archiver.kernel.org>; Wed, 31 Jul 2024 16:54:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 21AFEC3DA64
+	for <buildroot@archiver.kernel.org>; Wed, 31 Jul 2024 16:54:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E367780BAE;
-	Wed, 31 Jul 2024 16:54:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C6A1380BAB;
+	Wed, 31 Jul 2024 16:54:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2xAyByudwnjh; Wed, 31 Jul 2024 16:54:40 +0000 (UTC)
+ id 4KEyrrATqx43; Wed, 31 Jul 2024 16:54:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E791380A51
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 08AD980D39
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E791380A51;
-	Wed, 31 Jul 2024 16:54:39 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 3C4761BF3D8
+	by smtp1.osuosl.org (Postfix) with ESMTP id 08AD980D39;
+	Wed, 31 Jul 2024 16:54:42 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 67AFA1BF3D8
  for <buildroot@lists.busybox.net>; Wed, 31 Jul 2024 16:54:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 255D940E1C
+ by smtp3.osuosl.org (Postfix) with ESMTP id 554AB606EB
  for <buildroot@lists.busybox.net>; Wed, 31 Jul 2024 16:54:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Them-910wa5f for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id IduNuqVX-bZr for <buildroot@lists.busybox.net>;
  Wed, 31 Jul 2024 16:54:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1F5EE40259
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7BFAC60647
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1F5EE40259
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7BFAC60647
  for <buildroot@buildroot.org>; Wed, 31 Jul 2024 16:54:29 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 138AF8041A; Wed, 31 Jul 2024 16:54:29 +0000 (UTC)
+ id 6ADD683771; Wed, 31 Jul 2024 16:54:29 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 31 Jul 2024 17:25:15 +0200
+Date: Wed, 31 Jul 2024 18:53:14 +0200
 X-Git-Refname: refs/heads/2024.05.x
-X-Git-Oldrev: 6c8122b48cde07b4325f5c20de01de83288d4cd9
-X-Git-Newrev: 648478ee858d248f5a9a17874d8a774565de691d
+X-Git-Oldrev: 629869f2dd4334acef6e0d3ad5ab69f718c442c6
+X-Git-Newrev: 47c331f0da56580912c6187b69f989fb65bdc88d
 X-Patchwork-Hint: ignore
-Message-Id: <20240731165429.138AF8041A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.05.x] support/testing: add new
- python-ruamel-yaml runtime test
+Message-Id: <20240731165429.6ADD683771@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.05.x] package/dump1090: fix
+ build with GCC 14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,84 +65,76 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=648478ee858d248f5a9a17874d8a774565de691d
+commit: https://git.buildroot.net/buildroot/commit/?id=47c331f0da56580912c6187b69f989fb65bdc88d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.05.x
 
-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+Fixes http://autobuild.buildroot.net/results/1d5804974153f96e80f5200793ec8cd12c9fa18a/
+
+GCC 14 complains if the arguments to calloc (nmemb, size) are swapped
+around, causing a build failure as dump1090 builds with -Werror:
+
+net_io.c:107:34: error: 'calloc' sizes specified with 'sizeof' in the earlier argument and not in the later argument [-Werror=calloc-transposed-args]
+  107 |     if (!(service = calloc(sizeof(*service), 1))) {
+
+Add a patch from an upstream pull request to fix that.
+
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 21da0df09db09700948c27782d0bb446a0ad66f8)
+(cherry picked from commit fd358b97c053af9e45fcb94e59ade63b4d895f10)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS                                         |  2 ++
- .../tests/package/sample_python_ruamel_yaml.py     | 27 ++++++++++++++++++++++
- .../tests/package/test_python_ruamel_yaml.py       | 12 ++++++++++
- 3 files changed, 41 insertions(+)
+ .../0001-swap-size-arguments-to-calloc.patch       | 43 ++++++++++++++++++++++
+ 1 file changed, 43 insertions(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 2a25cc6c2f..8243bca10b 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2150,7 +2150,9 @@ F:	utils/diffconfig
- N:	Marcus Hoffmann <bubu@bubu1.eu>
- F:	package/python-jc/
- F:	support/testing/tests/package/test_python_fastapi.py
-+F:	support/testing/tests/package/test_python_ruamel_yaml.py
- F:	support/testing/tests/package/sample_python_fastapi.py
-+F:	support/testing/tests/package/sample_python_ruamel_yaml.py
- 
- N:	Marek Belisko <marek.belisko@open-nandra.com>
- F:	package/libatasmart/
-diff --git a/support/testing/tests/package/sample_python_ruamel_yaml.py b/support/testing/tests/package/sample_python_ruamel_yaml.py
+diff --git a/package/dump1090/0001-swap-size-arguments-to-calloc.patch b/package/dump1090/0001-swap-size-arguments-to-calloc.patch
 new file mode 100644
-index 0000000000..5b3a079471
+index 0000000000..1c2d502793
 --- /dev/null
-+++ b/support/testing/tests/package/sample_python_ruamel_yaml.py
-@@ -0,0 +1,27 @@
-+from ruamel.yaml import YAML
++++ b/package/dump1090/0001-swap-size-arguments-to-calloc.patch
+@@ -0,0 +1,43 @@
++From be8f5b7ab1223076ba0086f14aeeb53ace2d4b5c Mon Sep 17 00:00:00 2001
++From: Jeff Lawson <jeff.lawson@flightaware.com>
++Date: Tue, 18 Jun 2024 15:58:24 +0000
++Subject: [PATCH] swap size arguments to calloc
 +
-+yaml_text = """
-+Rootkey:
-+  - ListEntry
-+AnotherRootKey: some-string
++fixes #241
 +
-+ListRoot:
-+  - float-value: '1.0'
-+    int-value: 10234
-+    NestedList:
-+      - 1
-+      - 2
++Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
++Upstream: https://github.com/flightaware/dump1090/pull/243
++---
++ adaptive.c | 2 +-
++ net_io.c   | 2 +-
++ 2 files changed, 2 insertions(+), 2 deletions(-)
 +
-+  - another-float: '1.1'
-+    another-int: 1111
++diff --git a/adaptive.c b/adaptive.c
++index f16e16c..d656433 100644
++--- a/adaptive.c
+++++ b/adaptive.c
++@@ -195,7 +195,7 @@ void adaptive_init()
++     adaptive_burst_window_remaining = adaptive_samples_per_window;
++     adaptive_burst_window_counter = 0;
++ 
++-    adaptive_range_radix = calloc(sizeof(unsigned), 65536);
+++    adaptive_range_radix = calloc(65536, sizeof(unsigned));
++     adaptive_range_state = RANGE_RESCAN_UP;
++ 
++     // select and enforce gain limits
++diff --git a/net_io.c b/net_io.c
++index bf98028..8abd510 100644
++--- a/net_io.c
+++++ b/net_io.c
++@@ -104,7 +104,7 @@ struct net_service *serviceInit(const char *descr, struct net_writer *writer, he
++ {
++     struct net_service *service;
++ 
++-    if (!(service = calloc(sizeof(*service), 1))) {
+++    if (!(service = calloc(1, sizeof(*service)))) {
++         fprintf(stderr, "Out of memory allocating service %s\n", descr);
++         exit(1);
++     }
++-- 
++2.39.2
 +
-+OneMoreRootKey: 9.99
-+"""
-+
-+# Tests the pure python based implementation
-+yaml = YAML(typ='safe', pure=True)
-+
-+parsed = yaml.load(yaml_text)
-+
-+assert parsed['OneMoreRootKey'] == 9.99
-+assert parsed['ListRoot'][1]['another-int'] == 1111
-diff --git a/support/testing/tests/package/test_python_ruamel_yaml.py b/support/testing/tests/package/test_python_ruamel_yaml.py
-new file mode 100644
-index 0000000000..15062b4455
---- /dev/null
-+++ b/support/testing/tests/package/test_python_ruamel_yaml.py
-@@ -0,0 +1,12 @@
-+from tests.package.test_python import TestPythonPackageBase
-+
-+
-+class TestPythonPy3RuamelYaml(TestPythonPackageBase):
-+    __test__ = True
-+    config = TestPythonPackageBase.config + \
-+        """
-+        BR2_PACKAGE_PYTHON3=y
-+        BR2_PACKAGE_PYTHON_RUAMEL_YAML=y
-+        """
-+    sample_scripts = ["tests/package/sample_python_ruamel_yaml.py"]
-+    timeout = 40
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
