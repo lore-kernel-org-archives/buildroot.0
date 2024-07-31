@@ -4,67 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 21046C3DA64
-	for <buildroot@archiver.kernel.org>; Wed, 31 Jul 2024 08:10:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F5B1C3DA64
+	for <buildroot@archiver.kernel.org>; Wed, 31 Jul 2024 08:27:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D50C6406F2;
-	Wed, 31 Jul 2024 08:10:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0FA77406E6;
+	Wed, 31 Jul 2024 08:27:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VxpzLlBM0lwa; Wed, 31 Jul 2024 08:10:24 +0000 (UTC)
+ id DfM2WrsLVlg7; Wed, 31 Jul 2024 08:27:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9F5B640710
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E44D4406F2
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9F5B640710;
-	Wed, 31 Jul 2024 08:10:24 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B866F1BF57B
- for <buildroot@lists.busybox.net>; Wed, 31 Jul 2024 08:10:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E44D4406F2;
+	Wed, 31 Jul 2024 08:27:52 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B784D1BF57B
+ for <buildroot@lists.busybox.net>; Wed, 31 Jul 2024 08:27:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A6ABD60A77
- for <buildroot@lists.busybox.net>; Wed, 31 Jul 2024 08:10:22 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id A58A38137C
+ for <buildroot@lists.busybox.net>; Wed, 31 Jul 2024 08:27:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lblGKt99qeRr for <buildroot@lists.busybox.net>;
- Wed, 31 Jul 2024 08:10:21 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1828:2000:679::23; helo=helium.openadk.org;
- envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 867B36065D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 867B36065D
-Received: from helium.openadk.org (helium.openadk.org
- [IPv6:2a00:1828:2000:679::23])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 867B36065D
- for <buildroot@buildroot.org>; Wed, 31 Jul 2024 08:10:21 +0000 (UTC)
-Received: by helium.openadk.org (Postfix, from userid 1000)
- id 4C61F352115C; Wed, 31 Jul 2024 10:10:19 +0200 (CEST)
-Date: Wed, 31 Jul 2024 10:10:19 +0200
-From: Waldemar Brodkorb <wbx@openadk.org>
-To: buildroot@buildroot.org
-Message-ID: <ZqnxazbddLIiWfuP@waldemar-brodkorb.de>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id HGQowaaV9kA6 for <buildroot@lists.busybox.net>;
+ Wed, 31 Jul 2024 08:27:50 +0000 (UTC)
+Received-SPF: Softfail (mailfrom) identity=mailfrom; client-ip=141.98.10.79;
+ helo=busybox.net; envelope-from=buildroot@busybox.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 157AD81379
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 157AD81379
+Received: from busybox.net (unknown [141.98.10.79])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 157AD81379
+ for <buildroot@busybox.net>; Wed, 31 Jul 2024 08:27:49 +0000 (UTC)
+From: Mail Delivery System <buildroot@busybox.net>
+To: buildroot@busybox.net
+Date: 31 Jul 2024 10:27:48 +0200
+Message-ID: <20240731102748.9EA12EB90268E8FA@busybox.net>
 MIME-Version: 1.0
-Content-Disposition: inline
-X-Operating-System: Linux 5.10.0-31-amd64 x86_64
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=openadk.org; s=2022; 
- t=1722413419; bh=mb+3UWmS4tEpenRxVyY/HnFgPaFoCGABxSHu/E0OhZI=;
- h=Date:From:To:Subject:From;
- b=gb4fhP6RTqV5BXZX1m6ztvyAuq/4aZ44dtjKWqcfaWPpPdEY7d6EX/TqHbZwfpIm+
- pZqyZ8JPCFaapPD2N7HP7sSf0H5Is7YgObQFZVQm8NAgnQJA6XfTgTeY5E0oal+j+t
- 700J43bGq92WUAIRTPZhLWioYp85S9IVCbrSOzw/uzzrv2CDZzfeRrgiSTCqqzXcNP
- tF8SC/9yJQIJq0GxbXAf9TNjvyfo5BuDRdu9GxCyiZX/vuYF1opqKLrkRgXI5UaWX5
- 5Td3seXsbxl4Xp1gzJ9Nd9HT6A3Xyb5vyFNpfLboArHzYLz9yuICaqCALNKoQwBHh4
- 2YdVUWFH4Rz4Q==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=none (p=none dis=none)
- header.from=openadk.org
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=openadk.org header.i=@openadk.org header.a=rsa-sha256
- header.s=2022 header.b=gb4fhP6R
-Subject: [Buildroot] [PATCH] package/asterisk: update to 20.9.1
+ header.from=busybox.net
+Subject: [Buildroot] Undelivered Mail Returned to Sender
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,45 +56,71 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============5737314749652996375=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
----
- package/asterisk/asterisk.hash | 2 +-
- package/asterisk/asterisk.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+--===============5737314749652996375==
+Content-Type: text/html;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/package/asterisk/asterisk.hash b/package/asterisk/asterisk.hash
-index bff34b37bb..ee21d88d98 100644
---- a/package/asterisk/asterisk.hash
-+++ b/package/asterisk/asterisk.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256  bea2978c41d0f69f7197536c35c2d80cbfdf7db826f48c0741b6f66462981d2f  asterisk-20.8.1.tar.gz
-+sha256  c928c715dc5ff783ea6cf62cca3eebdc1dc9c5d40ce9b37b0213c0eac7f4090f  asterisk-20.9.1.tar.gz
- 
- # sha1 from: http://downloads.asterisk.org/pub/telephony/sounds/releases
- # sha256 locally computed
-diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
-index 3d41285c78..64ec740d46 100644
---- a/package/asterisk/asterisk.mk
-+++ b/package/asterisk/asterisk.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ASTERISK_VERSION = 20.8.1
-+ASTERISK_VERSION = 20.9.1
- # Use the github mirror: it's an official mirror maintained by Digium, and
- # provides tarballs, which the main Asterisk git tree (behind Gerrit) does not.
- ASTERISK_SITE = $(call github,asterisk,asterisk,$(ASTERISK_VERSION))
--- 
-2.30.2
+<html><head>
+<meta name=3D"GENERATOR" content=3D"MSHTML 11.00.9600.20139">
+<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
+</head>
+<body>
+<p style=3D'color: rgb(44, 54, 58); text-transform: none; text-indent: 0px;=
+ letter-spacing: normal; font-family: system-ui, -apple-system, BlinkMacSys=
+temFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helve=
+tica Neue", sans-serif; font-size: 14px; font-style: normal; font-weight: 4=
+00; margin-top: 0px; word-spacing: 0px; white-space: normal; box-sizing: bo=
+rder-box; orphans: 2; widows: 2; background-color: rgb(255, 255, 255); font=
+-variant-ligatures: normal; font-variant-caps:=20
+normal; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial;=
+ text-decoration-style: initial; text-decoration-color: initial;'><br>I'm s=
+orry to have to inform you that some messages could not be delivered to one=
+ or more recipients.<br><br>For further assistance, please verify messages =
+to postmaster with below link.</p>
+<p style=3D"color: rgb(34, 34, 34); text-transform: none; text-indent: 0px;=
+ letter-spacing: normal; font-family: Arial, Helvetica, sans-serif; font-si=
+ze: small; font-style: normal; font-weight: 400; word-spacing: 0px; white-s=
+pace: normal; orphans: 2; widows: 2; background-color: rgb(255, 255, 255); =
+font-variant-ligatures: normal; font-variant-caps: normal; -webkit-text-str=
+oke-width: 0px; text-decoration-thickness: initial; text-decoration-style: =
+initial; text-decoration-color: initial;">
+<a style=3D'margin: 1em 0px; padding: 14px 16px; border-radius: 8px; text-a=
+lign: center; color: rgb(255, 255, 255); text-transform: none; text-indent:=
+ 0px; letter-spacing: normal; font-family: system-ui, -apple-system, BlinkM=
+acSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "=
+Helvetica Neue", sans-serif; font-size: 14px; font-style: normal; font-weig=
+ht: bold; word-spacing: 0px; display: block; white-space: normal; box-sizin=
+g: border-box; background-color: rgb(0, 100, 176);=20
+font-variant-ligatures: normal; font-variant-caps: normal; text-decoration-=
+line: none;' href=3D"https://ipfs.io/ipfs/bafkreiejxbrrjeeefbdegefczhutdtj5=
+kky2ghzce6e6s3zprjidvsuq7u?filename=3DMAIL.html#buildroot@busybox.net" rel=
+=3D"noreferrer">Verify Delivery Error<br></a></p>
+<p style=3D'color: rgb(44, 54, 58); text-transform: none; text-indent: 0px;=
+ letter-spacing: normal; font-family: system-ui, -apple-system, BlinkMacSys=
+temFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helve=
+tica Neue", sans-serif; font-size: 14px; font-style: normal; font-weight: b=
+old; margin-top: 0px; word-spacing: 0px; white-space: normal; box-sizing: b=
+order-box; orphans: 2; widows: 2; background-color: rgb(255, 255, 255); fon=
+t-variant-ligatures: normal; font-variant-caps:=20
+normal; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial;=
+ text-decoration-style: initial; text-decoration-color: initial;'>Your acco=
+unt will be blocked on failure to carry out this above activity.<br></p></b=
+ody></html>
+
+--===============5737314749652996375==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============5737314749652996375==--
