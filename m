@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 51602C3DA7F
-	for <buildroot@archiver.kernel.org>; Wed, 31 Jul 2024 16:55:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D06DAC52D1D
+	for <buildroot@archiver.kernel.org>; Wed, 31 Jul 2024 16:55:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9EE4A80ED1;
-	Wed, 31 Jul 2024 16:55:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9A20980DB4;
+	Wed, 31 Jul 2024 16:55:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9oZ8aPAVhp0T; Wed, 31 Jul 2024 16:55:48 +0000 (UTC)
+ id PNJW9Xu6H0Ba; Wed, 31 Jul 2024 16:55:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7489F80DB4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A866F81AF4
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7489F80DB4;
-	Wed, 31 Jul 2024 16:55:48 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E27FF1BF3D8
+	by smtp1.osuosl.org (Postfix) with ESMTP id A866F81AF4;
+	Wed, 31 Jul 2024 16:55:50 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id E6FDB1BF97D
  for <buildroot@lists.busybox.net>; Wed, 31 Jul 2024 16:55:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D070C60647
+ by smtp2.osuosl.org (Postfix) with ESMTP id D3C9640E1C
  for <buildroot@lists.busybox.net>; Wed, 31 Jul 2024 16:55:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4BMPYTfLfXfh for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id SSLFLt7ni6MR for <buildroot@lists.busybox.net>;
  Wed, 31 Jul 2024 16:55:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DD6486063D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C94BB40259
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id DD6486063D
+ by smtp2.osuosl.org (Postfix) with ESMTP id C94BB40259
  for <buildroot@buildroot.org>; Wed, 31 Jul 2024 16:55:45 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D8F288379F; Wed, 31 Jul 2024 16:55:45 +0000 (UTC)
+ id C35D08379D; Wed, 31 Jul 2024 16:55:45 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 31 Jul 2024 18:33:33 +0200
+Date: Wed, 31 Jul 2024 17:25:08 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 50911222d2462a8aed6c5d4f6835d98b650c4f18
-X-Git-Newrev: cacc4db3e609e453b337b04b6e042e836c686e31
+X-Git-Oldrev: ed83248117ac1fdefaa3943d7a335a6481a92545
+X-Git-Newrev: 7e0a94b70fcd4e50bc66d137381dbfc540c840da
 X-Patchwork-Hint: ignore
-Message-Id: <20240731165545.D8F288379F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/qt5/qt5webkit:
- fix JavaScriptCore parser error
+Message-Id: <20240731165545.C35D08379D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] support/testing: add new
+ python-ruamel-yaml runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,124 +60,90 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============3041213463714387174=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============3041213463714387174==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=cacc4db3e609e453b337b04b6e042e836c686e31
+commit: https://git.buildroot.net/buildroot/commit/?id=7e0a94b70fcd4e50bc66d137381dbfc540c840da
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-qt5webkit build currently fails with the following error:
-
-[...] parser.rb:587:in `block in parseSequence': undefined method `=~' for an instance of Annotation (NoMethodError)
-  from <internal:kernel>:187:in `loop'
-  from /home/alexis/src/buildroot_min/output/build/qt5webkit-5.212.0-alpha4/Source/JavaScriptCore/offlineasm/parser.rb:586:in `parseSequence'
-  from /home/alexis/src/buildroot_min/output/build/qt5webkit-5.212.0-alpha4/Source/JavaScriptCore/offlineasm/parser.rb:654:in `block in parseSequence'
-  from <internal:kernel>:187:in `loop'
-  from /home/alexis/src/buildroot_min/output/build/qt5webkit-5.212.0-alpha4/Source/JavaScriptCore/offlineasm/parser.rb:586:in `parseSequence'
-  from /home/alexis/src/buildroot_min/output/build/qt5webkit-5.212.0-alpha4/Source/JavaScriptCore/offlineasm/parser.rb:814:in `parseData'
-  from /home/alexis/src/buildroot_min/output/build/qt5webkit-5.212.0-alpha4/Source/JavaScriptCore/offlineasm/parser.rb:818:in `parse'
-  from /home/alexis/src/buildroot_min/output/build/qt5webkit-5.212.0-alpha4/Source/JavaScriptCore/offlineasm/parser.rb:780:in `block in parseSequence'
-  from <internal:kernel>:187:in `loop'
-  from /home/alexis/src/buildroot_min/output/build/qt5webkit-5.212.0-alpha4/Source/JavaScriptCore/offlineasm/parser.rb:586:in `parseSequence'
-  from /home/alexis/src/buildroot_min/output/build/qt5webkit-5.212.0-alpha4/Source/JavaScriptCore/offlineasm/parser.rb:625:in `block in parseSequence'
-  from <internal:kernel>:187:in `loop'
-  from /home/alexis/src/buildroot_min/output/build/qt5webkit-5.212.0-alpha4/Source/JavaScriptCore/offlineasm/parser.rb:586:in `parseSequence'
-  from /home/alexis/src/buildroot_min/output/build/qt5webkit-5.212.0-alpha4/Source/JavaScriptCore/offlineasm/parser.rb:814:in `parseData'
-  from /home/alexis/src/buildroot_min/output/build/qt5webkit-5.212.0-alpha4/Source/JavaScriptCore/offlineasm/parser.rb:818:in `parse'
-  from /home/alexis/src/buildroot_min/output/build/qt5webkit-5.212.0-alpha4/Source/JavaScriptCore/offlineasm/generate_offset_extractor.rb:68:in `<main>'
-
-This issue is due to =~ being marked as deprecated since a few Ruby
-versions, and finally removed in 3.2.0 [1]. This now breaks the build since
-buildroot has moved to Ruby v3.3.0.
-The corresponding fix has already been issued in upstream Webkit project
-[2], but qt5webkit version tracked in buildroot does not have the
-corresponding webkit version pulled. Fix this build error by bringing the upstream
-patch. The patch is slightly modified (exclude part about Changelog file,
-which is absent from qt5webkit)
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/21397b110fe02e5711ecb1d35be2108221751b0a/
-
-[1] https://www.ruby-lang.org/en/news/2022/12/25/ruby-3-2-0-released/
-[2] https://github.com/WebKit/WebKit/commit/c7d19a492d97f9282a546831beb918e03315f6ef
-
-Signed-off-by: Alexis Lothoré <alexis.lothore@bootlin.com>
+Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 51ef6691ac3b18c3a6738535c7ec7c9e3a401bc1)
+(cherry picked from commit 21da0df09db09700948c27782d0bb446a0ad66f8)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...warnings-with-newer-Ruby-versions-https-b.patch | 48 ++++++++++++++++++++++
- 1 file changed, 48 insertions(+)
+ DEVELOPERS                                         |  2 ++
+ .../tests/package/sample_python_ruamel_yaml.py     | 27 ++++++++++++++++++++++
+ .../tests/package/test_python_ruamel_yaml.py       | 12 ++++++++++
+ 3 files changed, 41 insertions(+)
 
-diff --git a/package/qt5/qt5webkit/0007-Offlineasm-warnings-with-newer-Ruby-versions-https-b.patch b/package/qt5/qt5webkit/0007-Offlineasm-warnings-with-newer-Ruby-versions-https-b.patch
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 7c4a5f4501..fcbaa5c31d 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2108,7 +2108,9 @@ F:	utils/diffconfig
+ 
+ N:	Marcus Hoffmann <bubu@bubu1.eu>
+ F:	support/testing/tests/package/test_python_fastapi.py
++F:	support/testing/tests/package/test_python_ruamel_yaml.py
+ F:	support/testing/tests/package/sample_python_fastapi.py
++F:	support/testing/tests/package/sample_python_ruamel_yaml.py
+ 
+ N:	Marek Belisko <marek.belisko@open-nandra.com>
+ F:	package/libatasmart/
+diff --git a/support/testing/tests/package/sample_python_ruamel_yaml.py b/support/testing/tests/package/sample_python_ruamel_yaml.py
 new file mode 100644
-index 0000000000..c8e339c5f8
+index 0000000000..5b3a079471
 --- /dev/null
-+++ b/package/qt5/qt5webkit/0007-Offlineasm-warnings-with-newer-Ruby-versions-https-b.patch
-@@ -0,0 +1,48 @@
-+From 47e03d4af292805bf304f09e34333b38a94c1789 Mon Sep 17 00:00:00 2001
-+From: "aperez@igalia.com" <aperez@igalia.com>
-+Date: Wed, 15 Jan 2020 22:15:38 +0000
-+Subject: [PATCH] Offlineasm warnings with newer Ruby versions
-+ https://bugs.webkit.org/show_bug.cgi?id=206233
++++ b/support/testing/tests/package/sample_python_ruamel_yaml.py
+@@ -0,0 +1,27 @@
++from ruamel.yaml import YAML
 +
-+Reviewed by Yusuke Suzuki.
++yaml_text = """
++Rootkey:
++  - ListEntry
++AnotherRootKey: some-string
 +
-+Avoid a warning about using Object#=~ on Annotation instances, which
-+has been deprecated in Ruby 2.7.
++ListRoot:
++  - float-value: '1.0'
++    int-value: 10234
++    NestedList:
++      - 1
++      - 2
 +
-+* offlineasm/parser.rb: Swap checks to prevent applying the =~ operator
-+to Annotation instances, which do not define it.
++  - another-float: '1.1'
++    another-int: 1111
 +
-+git-svn-id: http://svn.webkit.org/repository/webkit/trunk@254637 268f45cc-cd09-0410-ab3c-d52691b4dbfc
-+Upstream: https://github.com/WebKit/WebKit/commit/c7d19a492d97f9282a546831beb918e03315f6ef
-+Signed-off-by: Alexis Lothoré <alexis.lothore@bootlin.com>
-+---
-+ Source/JavaScriptCore/offlineasm/parser.rb | 6 +++---
-+ 1 file changed, 3 insertions(+), 3 deletions(-)
++OneMoreRootKey: 9.99
++"""
 +
-+diff --git a/Source/JavaScriptCore/offlineasm/parser.rb b/Source/JavaScriptCore/offlineasm/parser.rb
-+index b4451124521f..cd1cffaec6ed 100644
-+--- a/Source/JavaScriptCore/offlineasm/parser.rb
-++++ b/Source/JavaScriptCore/offlineasm/parser.rb
-+@@ -584,9 +584,7 @@ class Parser
-+         firstCodeOrigin = @tokens[@idx].codeOrigin
-+         list = []
-+         loop {
-+-            if (@idx == @tokens.length and not final) or (final and @tokens[@idx] =~ final)
-+-                break
-+-            elsif @tokens[@idx].is_a? Annotation
-++            if @tokens[@idx].is_a? Annotation
-+                 # This is the only place where we can encounter a global
-+                 # annotation, and hence need to be able to distinguish between
-+                 # them.
-+@@ -600,6 +598,8 @@ class Parser
-+                 list << Instruction.new(codeOrigin, annotationOpcode, [], @tokens[@idx].string)
-+                 @annotation = nil
-+                 @idx += 2 # Consume the newline as well.
-++            elsif (@idx == @tokens.length and not final) or (final and @tokens[@idx] =~ final)
-++                break
-+             elsif @tokens[@idx] == "\n"
-+                 # ignore
-+                 @idx += 1
-+-- 
-+2.43.1
++# Tests the pure python based implementation
++yaml = YAML(typ='safe', pure=True)
 +
-
---===============3041213463714387174==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
++parsed = yaml.load(yaml_text)
++
++assert parsed['OneMoreRootKey'] == 9.99
++assert parsed['ListRoot'][1]['another-int'] == 1111
+diff --git a/support/testing/tests/package/test_python_ruamel_yaml.py b/support/testing/tests/package/test_python_ruamel_yaml.py
+new file mode 100644
+index 0000000000..15062b4455
+--- /dev/null
++++ b/support/testing/tests/package/test_python_ruamel_yaml.py
+@@ -0,0 +1,12 @@
++from tests.package.test_python import TestPythonPackageBase
++
++
++class TestPythonPy3RuamelYaml(TestPythonPackageBase):
++    __test__ = True
++    config = TestPythonPackageBase.config + \
++        """
++        BR2_PACKAGE_PYTHON3=y
++        BR2_PACKAGE_PYTHON_RUAMEL_YAML=y
++        """
++    sample_scripts = ["tests/package/sample_python_ruamel_yaml.py"]
++    timeout = 40
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============3041213463714387174==--
