@@ -4,49 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DE5BCC3DA4A
-	for <buildroot@archiver.kernel.org>; Thu,  1 Aug 2024 21:24:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 45993C3DA4A
+	for <buildroot@archiver.kernel.org>; Thu,  1 Aug 2024 21:24:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AC01B82052;
-	Thu,  1 Aug 2024 21:24:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0A3278204F;
+	Thu,  1 Aug 2024 21:24:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bpjO_zx9yy4t; Thu,  1 Aug 2024 21:24:01 +0000 (UTC)
+ id Q4fw2JrSO5Ch; Thu,  1 Aug 2024 21:24:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A5B8C8204F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 20AE982036
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A5B8C8204F;
-	Thu,  1 Aug 2024 21:24:00 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 7FE5A1BF3F0
- for <buildroot@lists.busybox.net>; Thu,  1 Aug 2024 21:23:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 20AE982036;
+	Thu,  1 Aug 2024 21:24:04 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 7B6111BF3F0
+ for <buildroot@lists.busybox.net>; Thu,  1 Aug 2024 21:24:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6936240D0B
- for <buildroot@lists.busybox.net>; Thu,  1 Aug 2024 21:23:53 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 689E4402E7
+ for <buildroot@lists.busybox.net>; Thu,  1 Aug 2024 21:24:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 77z-9kqZNEE6 for <buildroot@lists.busybox.net>;
- Thu,  1 Aug 2024 21:23:52 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tSdH4zOUsWNi for <buildroot@lists.busybox.net>;
+ Thu,  1 Aug 2024 21:24:01 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::223;
+ helo=relay3-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 14594401EC
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 14594401EC
- for <buildroot@buildroot.org>; Thu,  1 Aug 2024 21:23:52 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0C4CB83949; Thu,  1 Aug 2024 21:23:52 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 1 Aug 2024 23:23:04 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0d4e3c4498395fd4d19a1f67228ec28015d2f023
-X-Git-Newrev: a8d594b601b8d5b9cdf8692968a24e5951003b2a
-X-Patchwork-Hint: ignore
-Message-Id: <20240801212352.0C4CB83949@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/freescale_imx8mnevk: bump BSP
- components to lf-6.6.23-2.0.0
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 2408E40153
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2408E40153
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 2408E40153
+ for <buildroot@buildroot.org>; Thu,  1 Aug 2024 21:24:00 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 434FF60003;
+ Thu,  1 Aug 2024 21:23:59 +0000 (UTC)
+Date: Thu, 1 Aug 2024 23:23:58 +0200
+To: Kilian Zinnecker via buildroot <buildroot@buildroot.org>
+Message-ID: <20240801232358.102e4544@windsurf>
+In-Reply-To: <20240801191234.9526-1-kilian.zinnecker@mail.de>
+References: <20240801191234.9526-1-kilian.zinnecker@mail.de>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1722547439;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=RXc3z8c7ysaioPakNXYYbE29HdCgIec8dqILiuhgzFo=;
+ b=LL+Fw4J6qYbfZ6PFAVjQLp1xhxB02G7mCq3MSIDqxcdR5RrEVT7EYn4VW/5Vzs0LK9nZXV
+ XNF/+BfiQiWo6S3gTXljzHKhbqHFaVfHKb5m9CIR1uO8Y7wRFXPJprLvFiZsftUwbde7AD
+ qEda7D2e/FOU2Wubl7peppoCFdh9R3SXxqtotz/GgdWldRY5w+N07UQvUO7Rs8DUrrCE9U
+ Ab/X+zyyP7zH311d/931TcnMegKlcw9w6+HWDz3oumVL9bSSt3yDuNxd8iu/jOjj2xMJiq
+ 6NgO+7HTgS5hIP/nOFXEGTpvWyhoDFD3h7QYsB72JZ4lrziIvKidrsQq7Ye5pw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=LL+Fw4J6
+Subject: Re: [Buildroot] [PATCH] board/udoo/neo/readme.txt improve
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,143 +82,31 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: festevam@gmail.com, Kilian Zinnecker <kilian.zinnecker@mail.de>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a8d594b601b8d5b9cdf8692968a24e5951003b2a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Thu,  1 Aug 2024 21:12:34 +0200
+Kilian Zinnecker via buildroot <buildroot@buildroot.org> wrote:
 
-Bump ATF, U-Boot and Linux kernel to the NXP BSP lf-6.6.23-2.0.0
-versions.
+> This patch adds more inforamtion to the Udoo Neo's readme, e.g.,
+> Uart pins and baudrate.
+> 
+> Signed-off-by: Kilian Zinnecker <kilian.zinnecker@mail.de>
+> ---
+>  board/udoo/neo/readme.txt | 54 ++++++++++++++++++++++++++++++++++++++-
+>  1 file changed, 53 insertions(+), 1 deletion(-)
 
-Also, since commit dc0f721 "package/gcc: switch to 13.x as default",
-this freescale_imx8mnevk_defconfig is failing to build the Kernel
-with output:
+Applied to master with some small improvements to the commit title and
+log. Thanks a lot!
 
-    drivers/mxc/gpu-viv/hal/os/linux/kernel/gc_hal_kernel_os.c:5769:1: error: conflicting types for '_QuerySignal' due to enum/integer mismatch; have 'gceSTATUS(struct _gckOS *, void *)' {aka 'enum _gceSTATUS(struct _gckOS *, void *)'} [-Werror=enum-int-mismatch]
-     5769 | _QuerySignal(
-          | ^~~~~~~~~~~~
-
-This commit fixes the issue by updating the Kernel.
-
-The BR2_GLOBAL_PATCH_DIR is also changed from
-"board/freescale/common/patches" to
-"board/freescale/imx8mnevk/patches". This for two reasons:
-
-1. the common patch directory is removed, because the patches for
-   arm-trusted-firmware are no longer needed. Patch 0001 is included
-   in this new version, and patch 0002 no longer needed due a code
-   rewrite in this new version. The common patch files are kept,
-   because they are used in other freescale_ defconfigs.
-
-2. the imx8mnevk patch directory is introduced, to include the needed
-   hash files, because this commit enables
-   BR2_DOWNLOAD_FORCE_CHECK_HASHES=y. Those hash files are introduced
-   in a board specific directory to allow updating this defconfig
-   independently of the other i.MX defconfigs: there is 16
-   freescale_imx*_defconfigs, with more or less dependencies
-   (firmwares, gpu drivers, ...). The ".checkpackageignore" entry for
-   this defconfig is also removed.
-
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/7422089467
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- .checkpackageignore                                           |  1 -
- .../patches/arm-trusted-firmware/arm-trusted-firmware.hash    |  2 ++
- .../imx8mnevk/patches/linux-headers/linux-headers.hash        |  1 +
- board/freescale/imx8mnevk/patches/linux/linux.hash            |  2 ++
- board/freescale/imx8mnevk/patches/uboot/uboot.hash            |  2 ++
- configs/freescale_imx8mnevk_defconfig                         | 11 ++++++-----
- 6 files changed, 13 insertions(+), 6 deletions(-)
-
-diff --git a/.checkpackageignore b/.checkpackageignore
-index cb08ed1e5a..91bea78a98 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -154,7 +154,6 @@ configs/freescale_imx28evk_defconfig lib_defconfig.ForceCheckHash
- configs/freescale_imx6ullevk_defconfig lib_defconfig.ForceCheckHash
- configs/freescale_imx8dxlevk_defconfig lib_defconfig.ForceCheckHash
- configs/freescale_imx8mmevk_defconfig lib_defconfig.ForceCheckHash
--configs/freescale_imx8mnevk_defconfig lib_defconfig.ForceCheckHash
- configs/freescale_imx8mqevk_defconfig lib_defconfig.ForceCheckHash
- configs/freescale_imx8qmmek_defconfig lib_defconfig.ForceCheckHash
- configs/freescale_imx8qxpmek_defconfig lib_defconfig.ForceCheckHash
-diff --git a/board/freescale/imx8mnevk/patches/arm-trusted-firmware/arm-trusted-firmware.hash b/board/freescale/imx8mnevk/patches/arm-trusted-firmware/arm-trusted-firmware.hash
-new file mode 100644
-index 0000000000..0266b45d6a
---- /dev/null
-+++ b/board/freescale/imx8mnevk/patches/arm-trusted-firmware/arm-trusted-firmware.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  37f0dee8b3b52d6c7f8a46c3bdd4138b528f9cc607015400e7cad0c206df41d7  imx-atf-lf-6.6.23-2.0.0.tar.gz
-diff --git a/board/freescale/imx8mnevk/patches/linux-headers/linux-headers.hash b/board/freescale/imx8mnevk/patches/linux-headers/linux-headers.hash
-new file mode 120000
-index 0000000000..5808d92afe
---- /dev/null
-+++ b/board/freescale/imx8mnevk/patches/linux-headers/linux-headers.hash
-@@ -0,0 +1 @@
-+../linux/linux.hash
-\ No newline at end of file
-diff --git a/board/freescale/imx8mnevk/patches/linux/linux.hash b/board/freescale/imx8mnevk/patches/linux/linux.hash
-new file mode 100644
-index 0000000000..3c4223976b
---- /dev/null
-+++ b/board/freescale/imx8mnevk/patches/linux/linux.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  c70adedadce88f8685cb26d9703b930292c1349138e2c55ed9b4cd6e277de3bd  linux-imx-lf-6.6.23-2.0.0.tar.gz
-diff --git a/board/freescale/imx8mnevk/patches/uboot/uboot.hash b/board/freescale/imx8mnevk/patches/uboot/uboot.hash
-new file mode 100644
-index 0000000000..4e0d729ca0
---- /dev/null
-+++ b/board/freescale/imx8mnevk/patches/uboot/uboot.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  179b6531ef1d4ce681d139741ac7b4144220c90b7223297df28b61e98e8d37fc  uboot-imx-lf-6.6.23-2.0.0.tar.gz
-diff --git a/configs/freescale_imx8mnevk_defconfig b/configs/freescale_imx8mnevk_defconfig
-index ac73bea769..a534c50477 100644
---- a/configs/freescale_imx8mnevk_defconfig
-+++ b/configs/freescale_imx8mnevk_defconfig
-@@ -1,13 +1,14 @@
- BR2_aarch64=y
- BR2_ARM_FPU_VFPV3=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
--BR2_GLOBAL_PATCH_DIR="board/freescale/common/patches"
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-+BR2_GLOBAL_PATCH_DIR="board/freescale/imx8mnevk/patches"
-+BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/imx8-bootloader-prepare.sh board/freescale/common/imx/post-image.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="${UBOOT_DIR}/arch/arm/dts/imx8mn-ddr4-evk.dtb"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
--BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,linux-imx,lf-5.10.y-1.0.0)/linux-imx-lf-5.10.y-1.0.0.tar.gz"
-+BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,linux-imx,lf-6.6.23-2.0.0)/linux-imx-lf-6.6.23-2.0.0.tar.gz"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v8"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/imx8mn-ddr4-evk"
-@@ -21,13 +22,13 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,imx-atf,lf-5.10.y-1.0.0)/imx-atf-lf-5.10.y-1.0.0.tar.gz"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,imx-atf,lf-6.6.23-2.0.0)/imx-atf-lf-6.6.23-2.0.0.tar.gz"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mn"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
--BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,uboot-imx,lf-5.10.y-1.0.0)/uboot-imx-lf-5.10.y-1.0.0.tar.gz"
-+BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,uboot-imx,lf-6.6.23-2.0.0)/uboot-imx-lf-6.6.23-2.0.0.tar.gz"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx8mn_ddr4_evk"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
