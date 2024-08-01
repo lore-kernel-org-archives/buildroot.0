@@ -4,85 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31415C3DA64
-	for <buildroot@archiver.kernel.org>; Thu,  1 Aug 2024 08:46:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A87FFC3DA4A
+	for <buildroot@archiver.kernel.org>; Thu,  1 Aug 2024 08:46:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8EBD681E96;
-	Thu,  1 Aug 2024 08:46:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 95CCF81E8F;
+	Thu,  1 Aug 2024 08:46:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pwh3aMLqkrzX; Thu,  1 Aug 2024 08:46:00 +0000 (UTC)
+ id I8AS0fOnkMfV; Thu,  1 Aug 2024 08:46:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CDF5181E28
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0416281EA2
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CDF5181E28;
-	Thu,  1 Aug 2024 08:45:59 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0D23F1BF3C5
- for <buildroot@lists.busybox.net>; Thu,  1 Aug 2024 08:45:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0416281EA2;
+	Thu,  1 Aug 2024 08:46:03 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id A28941BF3C5
+ for <buildroot@lists.busybox.net>; Thu,  1 Aug 2024 08:45:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id EC9D181E1C
- for <buildroot@lists.busybox.net>; Thu,  1 Aug 2024 08:45:55 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9A4CB40C53
+ for <buildroot@lists.busybox.net>; Thu,  1 Aug 2024 08:45:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KUujPchlkwX4 for <buildroot@lists.busybox.net>;
- Thu,  1 Aug 2024 08:45:55 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.126.236;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TShsksw56T60 for <buildroot@lists.busybox.net>;
+ Thu,  1 Aug 2024 08:45:58 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.210.121;
  helo=smtp-out.orange.com; envelope-from=yann.morin@orange.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B045B81E1E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B045B81E1E
-Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.126.236])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B045B81E1E
- for <buildroot@buildroot.org>; Thu,  1 Aug 2024 08:45:54 +0000 (UTC)
-Received: from unknown (HELO opfedv3rlp0c.nor.fr.ftgroup) ([x.x.x.x]) by
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org DBAFF40BFF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DBAFF40BFF
+Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.210.121])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id DBAFF40BFF
+ for <buildroot@buildroot.org>; Thu,  1 Aug 2024 08:45:57 +0000 (UTC)
+Received: from unknown (HELO opfedv3rlp0h.nor.fr.ftgroup) ([x.x.x.x]) by
  smtp-out.orange.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
- 01 Aug 2024 10:45:53 +0200
+ 01 Aug 2024 10:45:55 +0200
 Received: from unknown (HELO OPE16NORMBX305.corporate.adroot.infra.ftgroup)
- ([x.x.x.x]) by opfedv3rlp0c.nor.fr.ftgroup with
- ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 01 Aug 2024 10:45:54 +0200
+ ([x.x.x.x]) by opfedv3rlp0h.nor.fr.ftgroup with
+ ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 01 Aug 2024 10:45:55 +0200
 Received: from tl-lnx-nyma7486-2 [x.x.x.x] by
  OPE16NORMBX305.corporate.adroot.infra.ftgroup [x.x.x.x] with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39; Thu, 1 Aug 2024 10:45:52 +0200
+ 15.1.2507.39; Thu, 1 Aug 2024 10:45:53 +0200
 Received: by tl-lnx-nyma7486-2 (sSMTP sendmail emulation);
- Thu, 01 Aug 2024 10:45:51 +0200
-X-IronPort-AV: E=Sophos;i="6.09,254,1716242400"; d="scan'208";a="182257587"
+ Thu, 01 Aug 2024 10:45:53 +0200
+X-IronPort-AV: E=Sophos;i="6.09,254,1716242400"; d="scan'208";a="181672097"
 From: <yann.morin@orange.com>
 To: <buildroot@buildroot.org>
-Date: Thu, 1 Aug 2024 10:45:45 +0200
-Message-ID: <87df5815f79f91e5842f7b35d673ec474167d4bb.1722501946.git.yann.morin@orange.com>
+Date: Thu, 1 Aug 2024 10:45:46 +0200
+Message-ID: <36b2737b4867a81a9119c86f9a4fe8135171d920.1722501946.git.yann.morin@orange.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1722501946.git.yann.morin@orange.com>
 References: <cover.1722501946.git.yann.morin@orange.com>
 MIME-Version: 1.0
-X-Originating-IP: [10.115.26.53]
-X-ClientProxiedBy: OPE16NORMBX305.corporate.adroot.infra.ftgroup
- (10.115.27.10) To OPE16NORMBX305.corporate.adroot.infra.ftgroup
+X-Originating-IP: [10.115.26.51]
+X-ClientProxiedBy: OPE16NORMBX301.corporate.adroot.infra.ftgroup
+ (10.115.26.10) To OPE16NORMBX305.corporate.adroot.infra.ftgroup
  (10.115.27.10)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
- t=1722501955; x=1754037955;
+ t=1722501958; x=1754037958;
  h=from:to:cc:subject:date:message-id:in-reply-to:
  references:mime-version:content-transfer-encoding;
- bh=LWhE3BhIEMLBfj677W48jCedLi0D0NexeT0ZCjHSlso=;
- b=nklo8uAmQUjmzeKowBXEz2fgjMr/pQsmZYiGYRsQ6wnRgIMpyvmDzGsO
- yaNpbsGUiRIRy2ggYcwzdhqXfo8ft60HCklK14WaE7UZn4pIEA1dPYUhY
- ENP+kRy+SZnTRTCfNHj4TvlWQamGPH0rr/qMQnTbhP1AbXPF3ZgwSjVrN
- Oa4YKZHH+fQBJMlZfQBUCu/J3Xwi1TXBqWlWtoaBKyOGTGttNtZnInDSj
- Uvc19/1X2wRX+OkiAy02q23ELDlgEQL1n2+dHWj8OmvC6U9sNcELuptmq
- 8ym4Hckfj+FxkvVwtXy0m9S7vE4RDinU1+eLKnfYNSKrlKObTW3ssBvQp
- w==;
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=los1oujhFenYLl1BR3bN9qzB7COtEWDU77+wCI26v6E=;
+ b=Qy5ld1l9mnPlb/g5thisPsvm+f+7x6h5bHcFEusMYNCMHrQzOsQczFHH
+ sZ1rdyrpJb0q3d4L+YBVk9uhavJCsmkLXzMwIhXyULa+3HJ/M5jqlA9N7
+ /Enb08De66EsGRBQ4fFMqwjRmw9tTjCsA4cuXKffUvHU3BL8NSpkXfUM/
+ KaouaSdgL0HBW+J1o5V+KlHfp72YaIp1TAV0qHJFesWgL9wcD+OEh5+QN
+ wF4mimwDIMCAjYN18WAj+S4EBlGGKLlLRzv4QodCkLdfLuvT11hHJXdbo
+ QBX+1DSxwLpvzGCFGLbEY6+t4UHtsm7SMRz4q/87NN3+9aGJ1irnOAxUU
+ Q==;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=orange.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=orange.com header.i=@orange.com
- header.a=rsa-sha256 header.s=orange002 header.b=nklo8uAm
-Subject: [Buildroot] [PATCH 1/7] package/skopeo: add missing dependency on
- host go arch support
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=orange.com header.i=@orange.com header.a=rsa-sha256
+ header.s=orange002 header.b=Qy5ld1l9
+Subject: [Buildroot] [PATCH 2/7] package/go: expose host CGO linking support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -94,7 +94,8 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: yann.morin@orange.com
+Cc: yann.morin@orange.com, Thomas Perale <thomas.perale@mind.be>,
+ Christian Stewart <christian@aperture.us>, Anisse Astier <anisse@astier.eu>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -102,24 +103,88 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: "Yann E. MORIN" <yann.morin@orange.com>
 
-Fixes: 619b83a4438667cdb4cc8a7dddc79dbf6d84ec2a
+Even when configured for cross-compilation, the go compiler is always
+able to build natively as well, and this is was we use in Buildroot to
+build host go packages. This implies that when the target has
+limitations, those limitations thus also apply to the host builds.
+
+This means that, when there is no CGO linking support for the target,
+the compiler is built without CGO linking support, and thus CGO linking
+is also not available for the host builds.
+
+Of course, when there is no go support for the target, the CGO linking
+support only depends on the host architecture.
+
+Add a new Kconfig symbol that repesent whether CGO linking is available
+for the host; host packages can then depend on that symbol, like the
+target variants do on the corresponding target symbol.
 
 Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
+Cc: Thomas Perale <thomas.perale@mind.be>
+Cc: Christian Stewart <christian@aperture.us>
+Cc: Anisse Astier <anisse@astier.eu>
 ---
- package/skopeo/Config.in.host | 1 +
- 1 file changed, 1 insertion(+)
+ docs/manual/adding-packages-golang.adoc |  3 ++-
+ package/go/Config.in.host               | 12 ++++++++++++
+ package/go/go.mk                        |  7 ++++---
+ 3 files changed, 18 insertions(+), 4 deletions(-)
 
-diff --git a/package/skopeo/Config.in.host b/package/skopeo/Config.in.host
-index 4a63a0829c..b3a1c155f7 100644
---- a/package/skopeo/Config.in.host
-+++ b/package/skopeo/Config.in.host
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_HOST_SKOPEO
- 	bool "host skopeo"
+diff --git a/docs/manual/adding-packages-golang.adoc b/docs/manual/adding-packages-golang.adoc
+index 3ddbe57afe..aa25426591 100644
+--- a/docs/manual/adding-packages-golang.adoc
++++ b/docs/manual/adding-packages-golang.adoc
+@@ -49,7 +49,8 @@ infrastructure should depend on +BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS+
+ because Buildroot will automatically add a dependency on +host-go+
+ to such packages.
+ If you need CGO support in your package, you must add a dependency on
+-+BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS+.
+++BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS+; for host packages,
++add a dependency on +BR2_PACKAGE_HOST_GO_HOST_CGO_LINKING_SUPPORTS+.
+ 
+ The main macro of the Go package infrastructure is
+ +golang-package+. It is similar to the +generic-package+ macro. The
+diff --git a/package/go/Config.in.host b/package/go/Config.in.host
+index 11ce6df369..eefca03b02 100644
+--- a/package/go/Config.in.host
++++ b/package/go/Config.in.host
+@@ -36,6 +36,18 @@ config BR2_PACKAGE_HOST_GO_HOST_ARCH_SUPPORTS
+ 	default y
+ 	depends on BR2_PACKAGE_HOST_GO_BOOTSTRAP_STAGE3_ARCH_SUPPORTS
+ 
++# CGO linking for the host. Since we use the same compiler for target
++# and host, if the target can't do CGO linking, then the host can't.
++# But if the target is not supported by Go, then the host can do CGO
++# linking (except when it itself does not support CGO linking).
++config BR2_PACKAGE_HOST_GO_HOST_CGO_LINKING_SUPPORTS
++	bool
++	default y if BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
++	default y if !BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
 +	depends on BR2_PACKAGE_HOST_GO_HOST_ARCH_SUPPORTS
- 	help
- 	  skopeo is a command line utility that performs various
- 	  operations on container images and image repositories.
++	depends on BR2_HOSTARCH != "mips64"
++	depends on BR2_HOSTARCH != "mips64el"
++
+ # Go packages should select BR2_PACKAGE_HOST_GO
+ config BR2_PACKAGE_HOST_GO
+ 	bool
+diff --git a/package/go/go.mk b/package/go/go.mk
+index 660c7a9bad..7e0dfc5880 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -91,10 +91,11 @@ else
+ HOST_GO_CGO_ENABLED = 0
+ endif
+ else # !BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
+-# If the target arch does not support go, host-go can still be used to build
+-# packages for the host, and enable cgo. No need to set all the arch stuff
+-#since we will not be cross-compiling.
++ifeq ($(BR2_PACKAGE_HOST_GO_HOST_CGO_LINKING_SUPPORTS),y)
+ HOST_GO_CGO_ENABLED = 1
++else # !BR2_PACKAGE_HOST_GO_HOST_CGO_LINKING_SUPPORTS
++HOST_GO_CGO_ENABLED = 0
++endif # BR2_PACKAGE_HOST_GO_HOST_CGO_LINKING_SUPPORTS
+ endif # BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
+ # Ensure the toolchain is available, whatever the provider
+ HOST_GO_DEPENDENCIES += $(HOST_GO_DEPENDENCIES_CGO)
 -- 
 2.34.1
 
