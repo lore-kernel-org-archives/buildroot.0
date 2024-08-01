@@ -1,61 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03853C3DA64
-	for <buildroot@archiver.kernel.org>; Thu,  1 Aug 2024 12:12:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 17DC2C3DA64
+	for <buildroot@archiver.kernel.org>; Thu,  1 Aug 2024 12:41:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9380581E10;
-	Thu,  1 Aug 2024 12:12:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A7D546061E;
+	Thu,  1 Aug 2024 12:41:24 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8JmLK5VQGCsm; Thu,  1 Aug 2024 12:41:23 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B5D0760627
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id B5D0760627;
+	Thu,  1 Aug 2024 12:41:23 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id D04471BF3C9
+ for <buildroot@lists.busybox.net>; Thu,  1 Aug 2024 12:41:21 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id BC78B81F5B
+ for <buildroot@lists.busybox.net>; Thu,  1 Aug 2024 12:41:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2r-BFCWmrSoy; Thu,  1 Aug 2024 12:12:39 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9556881E55
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9556881E55;
-	Thu,  1 Aug 2024 12:12:39 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D10471BF47E
- for <buildroot@lists.busybox.net>; Thu,  1 Aug 2024 12:12:37 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BE82B40CAF
- for <buildroot@lists.busybox.net>; Thu,  1 Aug 2024 12:12:37 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wjJFZ0XYIqTi for <buildroot@lists.busybox.net>;
- Thu,  1 Aug 2024 12:12:36 +0000 (UTC)
-X-Greylist: delayed 905 seconds by postgrey-1.37 at util1.osuosl.org;
- Thu, 01 Aug 2024 12:12:35 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 4522740BEF
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4522740BEF
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.181.117.226;
- helo=mail.actia.se; envelope-from=jonas.blixt@actia.se; receiver=<UNKNOWN> 
-Received: from mail.actia.se (mail.actia.se [212.181.117.226])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4522740BEF
- for <buildroot@buildroot.org>; Thu,  1 Aug 2024 12:12:35 +0000 (UTC)
-Received: from W388ANL.actianordic.se (10.12.12.26) by S035ANL.actianordic.se
- (10.12.31.116) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Thu, 1 Aug
- 2024 13:57:26 +0200
-From: Jonas Blixt <jonas.blixt@actia.se>
-To: <buildroot@buildroot.org>
-Date: Thu, 1 Aug 2024 13:57:12 +0200
-Message-ID: <20240801115712.1458767-1-jonas.blixt@actia.se>
-X-Mailer: git-send-email 2.34.1
+ id cKC-dZc4gLTo for <buildroot@lists.busybox.net>;
+ Thu,  1 Aug 2024 12:41:21 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=84.110.109.230;
+ helo=mail.tkos.co.il; envelope-from=baruch@tkos.co.il; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 3B5CC81E51
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3B5CC81E51
+Received: from mail.tkos.co.il (guitar.tkos.co.il [84.110.109.230])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3B5CC81E51
+ for <buildroot@buildroot.org>; Thu,  1 Aug 2024 12:41:19 +0000 (UTC)
+Received: from tarshish.tkos.co.il (unknown [10.0.8.2])
+ (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+ (No client certificate requested)
+ by mail.tkos.co.il (Postfix) with ESMTPS id 86064440850;
+ Thu,  1 Aug 2024 15:39:53 +0300 (IDT)
+To: buildroot@buildroot.org
+Date: Thu,  1 Aug 2024 15:40:57 +0300
+Message-ID: <bb3ab486ff7b0113e36b555f9fdbd850c4d132a8.1722516057.git.baruch@tkos.co.il>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-Originating-IP: [10.12.12.26]
-X-EsetResult: clean, is OK
-X-EsetId: 37303A2956B14454667063
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=actia.se
-Subject: [Buildroot] [PATCH] package/pkg-util: Prevent per-package syncing
- stale deps
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=tkos.co.il; s=default; t=1722515993;
+ bh=zl23h23WPLs+X7maM/qmfzdf5kupimAbHSs2lfrVC4Q=;
+ h=From:To:Cc:Subject:Date:From;
+ b=S9p7EcXGX6UrGjBbzWR0m+NLLn/mxxYbMaarKaiBc00CF5K+hZDdRuXi0rRCD93wG
+ Tb48LFYaUZy/h+lnZdJ+8AzvVY4uBiEl73TrzZzTMEltQ6R3bHC0YuI9nQs2O+Q1BB
+ PSw6zSVjeP/MLWVemLmfW5X/AW8hbizcHgNPZ6I2nfYV29hbwBD/pTW9mQ6FL3sUHz
+ q7Omyj9eXoYk21QJDcZp5uWtjSD/xJ1gLxJn1SZ/+474W/HTj8/ZXT88wQIae6nRSr
+ ycQxJpyBdKvlfp7isB684JMRbP3p3XLTBr66e3tW6Sin/xDNo4GTSjEra13ZtMZ7ym
+ I8diOJBgMsR/g==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=tkos.co.il
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=tkos.co.il header.i=@tkos.co.il header.a=rsa-sha256
+ header.s=default header.b=S9p7EcXG
+Subject: [Buildroot] [PATCH] package/picocom: bump to version 2024-07
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -67,79 +75,60 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Jonas Blixt <jonas.blixt@actia.se>, Thomas
- Petazzoni <thomas.petazzoni@bootlin.com>, john.ernberg@actia.se
+From: Baruch Siach via buildroot <buildroot@buildroot.org>
+Reply-To: Baruch Siach <baruch@tkos.co.il>
+Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This filters out the dependency inputs when syncing the per-package
-target directory to only include 'skeleton' and its dependencies, if
-they exist.
+This release adds support for no-MMU build.
 
-This mainly solves a problem where stale dependencies might linger in
-per-package target directories which end up in the final target
-directory causing unecessarly many rebuild steps to ensure that the
-latest version of a dependency is included in the final target directory.
-
-Example:
-
-liba
-Package B, depends on liba
-
-If liba is changed and rebuilt package B target directory will still
-contain a stale version of liba. During the final rsync the package b
-target dir will be rsync'ed after liba to the final target directory
-which now will contain the stale version of liba.
-
-For our particular configuration the build time was not affected:
-Before: 12m4
-After: 11m43
-
-CC: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Jonas Blixt <jonas.blixt@actia.se>
+Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
 ---
- package/pkg-utils.mk | 20 ++++++++++++++------
- 1 file changed, 14 insertions(+), 6 deletions(-)
+ package/picocom/picocom.hash | 2 +-
+ package/picocom/picocom.mk   | 9 +++++++--
+ 2 files changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/package/pkg-utils.mk b/package/pkg-utils.mk
-index e8e508e334..ea2f2c1549 100644
---- a/package/pkg-utils.mk
-+++ b/package/pkg-utils.mk
-@@ -231,16 +231,24 @@ define per-package-rsync
- 			| rsync -a --hard-links --files-from=- --no-R -r $(PER_PACKAGE_DIR) $(3))
- endef
- 
--# prepares the per-package HOST_DIR and TARGET_DIR of the current
--# package, by rsync the host and target directories of the
--# dependencies of this package. The list of dependencies is passed as
--# argument, so that this function can be used to prepare with
--# different set of dependencies (download, extract, configure, etc.)
-+# prepares the per-package HOST_DIR and TARGET_DIR of the current package, by
-+# rsync the host directories of the dependencies of this package. The list of
-+# dependencies is passed as argument, so that this function can be used to
-+# prepare with different set of dependencies (download, extract, configure,
-+# etc.)
-+#
-+# The per-package sync of target is filtered to only sync skeleton and
-+# skeletons dependencies when they exist. This prevents stale copies of
-+# dependencies in the per-package target directory and thus prevents stale
-+# files from propagating to the final target directory during rebuilds of
-+# packages.
+diff --git a/package/picocom/picocom.hash b/package/picocom/picocom.hash
+index 8107f5633a6c..170de09cf463 100644
+--- a/package/picocom/picocom.hash
++++ b/package/picocom/picocom.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  107d3e49e502ce63f826525f587826990451bcb39492efe2e0463dd62d64f3ea  picocom-2023-04.tar.gz
++sha256  4379de2ec591a5848123f37ccdbc7fbeee6dd3520ef1ce4119d84202fc268a17  picocom-2024-07.tar.gz
+ sha256  9273c6b2c55be95f0f0df292d87e8900e5bfdf5b510a6ea09e80306cf45c10f6  LICENSE.txt
+diff --git a/package/picocom/picocom.mk b/package/picocom/picocom.mk
+index bb55c3c1d1d3..34c3bfb23069 100644
+--- a/package/picocom/picocom.mk
++++ b/package/picocom/picocom.mk
+@@ -4,14 +4,19 @@
  #
- # $1: space-separated list of packages to rsync from
- define prepare-per-package-directory
- 	$(call per-package-rsync,$(1),host,$(HOST_DIR),hardlink)
--	$(call per-package-rsync,$(1),target,$(TARGET_DIR),hardlink)
-+	$(call per-package-rsync,\
-+		$(filter $(SKELETON_FINAL_RECURSIVE_DEPENDENCIES) skeleton, $(1)),\
-+		target,$(TARGET_DIR),hardlink)
+ ################################################################################
+ 
+-PICOCOM_VERSION = 2023-04
++PICOCOM_VERSION = 2024-07
+ PICOCOM_SITE = $(call gitlab,wsakernel,picocom,$(PICOCOM_VERSION))
+ PICOCOM_LICENSE = GPL-2.0+
+ PICOCOM_LICENSE_FILES = LICENSE.txt
+ PICOCOM_CPE_ID_VALID = YES
+ 
++ifeq ($(BR2_USE_MMU),)
++PICOCOM_CPPFLAGS += -DNO_FORK
++endif
++
+ define PICOCOM_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
++	$(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) \
++		EXTRA_CPPFLAGS='$(PICOCOM_CPPFLAGS)' $(MAKE) -C $(@D)
  endef
  
- # Ensure files like .la, .pc, .pri, .cmake, and so on, point to the
+ define PICOCOM_INSTALL_TARGET_CMDS
 -- 
-2.34.1
+2.43.0
 
 _______________________________________________
 buildroot mailing list
