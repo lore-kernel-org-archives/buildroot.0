@@ -4,72 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BE78CC3DA7F
-	for <buildroot@archiver.kernel.org>; Thu,  1 Aug 2024 21:39:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ACFF2C3DA64
+	for <buildroot@archiver.kernel.org>; Thu,  1 Aug 2024 21:40:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 89C1682075;
-	Thu,  1 Aug 2024 21:39:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7B4AB81F5E;
+	Thu,  1 Aug 2024 21:40:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sZYP4neOTLUb; Thu,  1 Aug 2024 21:39:02 +0000 (UTC)
+ id aOCnPhgyekKX; Thu,  1 Aug 2024 21:40:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 845A5820A8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 55B3A81F87
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 845A5820A8;
-	Thu,  1 Aug 2024 21:39:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 55B3A81F87;
+	Thu,  1 Aug 2024 21:40:31 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id AC6581BF3F0
- for <buildroot@lists.busybox.net>; Thu,  1 Aug 2024 21:39:00 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id AD00E1BF3F0
+ for <buildroot@lists.busybox.net>; Thu,  1 Aug 2024 21:40:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 958C060615
- for <buildroot@lists.busybox.net>; Thu,  1 Aug 2024 21:38:59 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 99ECA606F1
+ for <buildroot@lists.busybox.net>; Thu,  1 Aug 2024 21:40:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id enZL1cleqNlA for <buildroot@lists.busybox.net>;
- Thu,  1 Aug 2024 21:38:58 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::224;
- helo=relay4-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id jTc_ea0Vg0bd for <buildroot@lists.busybox.net>;
+ Thu,  1 Aug 2024 21:40:28 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 6522E6067A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6522E6067A
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::224])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6522E6067A
- for <buildroot@buildroot.org>; Thu,  1 Aug 2024 21:38:58 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id EC612E0003;
- Thu,  1 Aug 2024 21:38:54 +0000 (UTC)
-Date: Thu, 1 Aug 2024 23:38:54 +0200
-To: Julien Olivain <ju.o@free.fr>
-Message-ID: <20240801233854.4cedd06d@windsurf>
-In-Reply-To: <20240801195648.61942-1-ju.o@free.fr>
-References: <20240801195648.61942-1-ju.o@free.fr>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1722548335;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=d+/0fo1zudZxi6v6qozDGMxsWV+9N/vvG4kLeJJx8cs=;
- b=YKvzfW5jGRhkzww9ntO6AXaqy8TlhsLebtr560yWyE7BO7UIExgSe1SpVY1nRqCqF7jLxS
- HT/6E7AdX1+WcpOpS7/n2vaHy+rVpGx47Yi37uiiu1VN7riIqD3O4M69K69VwKRtTmXy8b
- A4L0wpkl7zBZTGhFQT6vRJxmaXikPtBhO4Nu8E4lIXy4PbgKX0hTI7SFBBPJ/hWQZL/eGz
- UVMOaxZus6A5x4WEAH5y9J0yNO2NDTHmBKavEZUQdbyqZbC8OqML6/081WjTcK4JYkvhVu
- kH5MYA2WfvtMwhw1+fVV1XE2oudl9q9lS1djQB12LOUfxTGOWiyy1bVJVIg7fA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=YKvzfW5j
-Subject: Re: [Buildroot] [PATCH 1/1] configs/freescale_imx8dxlevk: bump BSP
- components to lf-6.6.23-2.0.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C139F60615
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id C139F60615
+ for <buildroot@buildroot.org>; Thu,  1 Aug 2024 21:40:28 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id B71CA839F3; Thu,  1 Aug 2024 21:40:28 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Thu, 1 Aug 2024 23:24:26 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 008e37b3aeb304919a3eb4d1c47b2b4d49ec49db
+X-Git-Newrev: b6404f78cd2c1179884c9551aee050db49aaf2db
+X-Patchwork-Hint: ignore
+Message-Id: <20240801214028.B71CA839F3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/freescale-imx/firmware-imx: bump
+ version to 8.24
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,58 +60,63 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Fabio Estevam <festevam@gmail.com>, Stefan Nickl <Stefan.Nickl@gmail.com>,
- buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu,  1 Aug 2024 21:56:48 +0200
-Julien Olivain <ju.o@free.fr> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=b6404f78cd2c1179884c9551aee050db49aaf2db
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Bump ATF, U-Boot and Linux kernel to the NXP BSP lf-6.6.23-2.0.0
-> versions.
-> 
-> Also, since commit dc0f721 "package/gcc: switch to 13.x as default",
-> this freescale_imx8dxlevk_defconfig is failing to build the Kernel
-> with output:
-> 
->     drivers/mxc/gpu-viv/hal/os/linux/kernel/gc_hal_kernel_os.c:5675:1: error: conflicting types for '_QuerySignal' due to enum/integer mismatch; have 'gceSTATUS(struct _gckOS *, void *)' {aka 'enum _gceSTATUS(struct _gckOS *, void *)'} [-Werror=enum-int-mismatch]
->      5675 | _QuerySignal(IN gckOS Os, IN gctSIGNAL Signal)
->           | ^~~~~~~~~~~~
-> 
-> This commit fixes the issue by updating the Kernel.
-> 
-> This commit also adds the custom version package hashes. Therefore,
-> BR2_DOWNLOAD_FORCE_CHECK_HASHES=y is added in the defconfig, a
-> BR2_GLOBAL_PATCH_DIR is also added in the board specific directory and
-> the hash files are added.
-> 
-> Fixes:
-> https://gitlab.com/buildroot.org/buildroot/-/jobs/7422089463
-> 
-> Signed-off-by: Julien Olivain <ju.o@free.fr>
-> ---
->  .checkpackageignore                                    |  1 -
->  .../arm-trusted-firmware/arm-trusted-firmware.hash     |  2 ++
->  .../patches/linux-headers/linux-headers.hash           |  1 +
->  board/freescale/imx8dxlevk/patches/linux/linux.hash    |  2 ++
->  board/freescale/imx8dxlevk/patches/uboot/uboot.hash    |  2 ++
->  configs/freescale_imx8dxlevk_defconfig                 | 10 ++++++----
->  6 files changed, 13 insertions(+), 5 deletions(-)
->  create mode 100644 board/freescale/imx8dxlevk/patches/arm-trusted-firmware/arm-trusted-firmware.hash
->  create mode 120000 board/freescale/imx8dxlevk/patches/linux-headers/linux-headers.hash
->  create mode 100644 board/freescale/imx8dxlevk/patches/linux/linux.hash
->  create mode 100644 board/freescale/imx8dxlevk/patches/uboot/uboot.hash
+This version is aligned with NXP Linux BSP version "lf-6.6.23-2.0.0".
 
-Applied to master, thanks.
+License hashes changed because the LA_OPT_NXP_Software_License changed
+from "v49 September 2023" to "v56 April 2024".
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Note: in this release, the package source archive name changed to
+include a revision. This commit adds a new _REVISION variable with the
+value published in the corresponding NXP BSP. See [1].
+
+[1] https://github.com/nxp-imx/meta-imx/blob/rel_imx_6.6.23_2.0.0/meta-imx-bsp/recipes-bsp/firmware-imx/firmware-imx-8.24.inc#L10
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/freescale-imx/firmware-imx/firmware-imx.hash | 6 +++---
+ package/freescale-imx/firmware-imx/firmware-imx.mk   | 5 +++--
+ 2 files changed, 6 insertions(+), 5 deletions(-)
+
+diff --git a/package/freescale-imx/firmware-imx/firmware-imx.hash b/package/freescale-imx/firmware-imx/firmware-imx.hash
+index d9443374c5..d606ae6da6 100644
+--- a/package/freescale-imx/firmware-imx/firmware-imx.hash
++++ b/package/freescale-imx/firmware-imx/firmware-imx.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  94c8bceac56ec503c232e614f77d6bbd8e17c7daa71d4e651ea8fd5034c30350  firmware-imx-8.22.bin
+-sha256  24d7cb3a7e51011466a149bd99acf89387b832be2d0890ce2e183dfbc9d7cb84  COPYING
+-sha256  3282d88fad766897f93b0827297a70c2707d9358db24cccd5777abf7c997da77  EULA
++sha256  2e27962332197ebebbb30138f6dfb365361d48d7efa565df97c4f79285b1ca50  firmware-imx-8.24-fbe0a4c.bin
++sha256  c9ee518510d72e254d62743f5098163eacdb6428c6ba4d8119afe2d12edba068  COPYING
++sha256  165f6c0eacb4d3a05289dfb79331c9a2c05207eb7a67ef28a117f246a0145428  EULA
+ sha256  40d02f6d6b4e94d9307529408f372f5a9908cf3d156ec533a4e54274b40f271e  SCR.txt
+diff --git a/package/freescale-imx/firmware-imx/firmware-imx.mk b/package/freescale-imx/firmware-imx/firmware-imx.mk
+index c131558c37..8666d76a73 100644
+--- a/package/freescale-imx/firmware-imx/firmware-imx.mk
++++ b/package/freescale-imx/firmware-imx/firmware-imx.mk
+@@ -4,9 +4,10 @@
+ #
+ ################################################################################
+ 
+-FIRMWARE_IMX_VERSION = 8.22
++FIRMWARE_IMX_VERSION = 8.24
++FIRMWARE_IMX_REVISION = fbe0a4c
+ FIRMWARE_IMX_SITE = $(FREESCALE_IMX_SITE)
+-FIRMWARE_IMX_SOURCE = firmware-imx-$(FIRMWARE_IMX_VERSION).bin
++FIRMWARE_IMX_SOURCE = firmware-imx-$(FIRMWARE_IMX_VERSION)-$(FIRMWARE_IMX_REVISION).bin
+ 
+ FIRMWARE_IMX_LICENSE = NXP Semiconductor Software License Agreement
+ FIRMWARE_IMX_LICENSE_FILES = EULA COPYING SCR.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
