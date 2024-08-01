@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4BAC6C3DA4A
-	for <buildroot@archiver.kernel.org>; Thu,  1 Aug 2024 20:59:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E2136C3DA4A
+	for <buildroot@archiver.kernel.org>; Thu,  1 Aug 2024 20:59:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 12D8281E66;
-	Thu,  1 Aug 2024 20:59:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3E2E8808B0;
+	Thu,  1 Aug 2024 20:59:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bX1zNkL1o0mD; Thu,  1 Aug 2024 20:59:23 +0000 (UTC)
+ id qsx9MlInmNra; Thu,  1 Aug 2024 20:59:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6FB3C81EAC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C8F5E81F4D
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6FB3C81EAC;
-	Thu,  1 Aug 2024 20:59:23 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C8F5E81F4D;
+	Thu,  1 Aug 2024 20:59:27 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 84F751BF232
- for <buildroot@lists.busybox.net>; Thu,  1 Aug 2024 20:59:19 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id ACD151BF232
+ for <buildroot@lists.busybox.net>; Thu,  1 Aug 2024 20:59:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 731246065C
+ by smtp3.osuosl.org (Postfix) with ESMTP id A5D3E605BE
  for <buildroot@lists.busybox.net>; Thu,  1 Aug 2024 20:59:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Y_Ph8Nkt4rPz for <buildroot@lists.busybox.net>;
+ id ZSIIvbA5WAcU for <buildroot@lists.busybox.net>;
  Thu,  1 Aug 2024 20:59:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 407D4605BE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 686346060A
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 407D4605BE
+ by smtp3.osuosl.org (Postfix) with ESMTP id 686346060A
  for <buildroot@buildroot.org>; Thu,  1 Aug 2024 20:59:18 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3860B838C5; Thu,  1 Aug 2024 20:59:18 +0000 (UTC)
+ id 1851C838C2; Thu,  1 Aug 2024 20:59:18 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 1 Aug 2024 22:58:11 +0200
+Date: Thu, 1 Aug 2024 22:57:56 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b382ede065e1260582d6d27ddb34b0450fce4e5e
-X-Git-Newrev: 345f48304b553b5aed92c6f5a8a56a160f7278c9
+X-Git-Oldrev: 3ec6223b14f70beca551c5551d22f118db54c2aa
+X-Git-Newrev: 1c11f9020ad98db11e6d67066d0fdb2cfab27605
 X-Patchwork-Hint: ignore
-Message-Id: <20240801205918.3860B838C5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/fwts: bump to version 24.07.00
+Message-Id: <20240801205918.1851C838C2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/btrfs-progs: bump version to 6.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,189 +65,208 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=345f48304b553b5aed92c6f5a8a56a160f7278c9
+commit: https://git.buildroot.net/buildroot/commit/?id=1c11f9020ad98db11e6d67066d0fdb2cfab27605
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release announce:
-https://lists.ubuntu.com/archives/fwts-devel/2024-July/013869.html
+For change log since v6.9.2, see:
+https://github.com/kdave/btrfs-progs/blob/v6.10/CHANGES
 
-For release note since 24.03.00, see:
-https://wiki.ubuntu.com/FirmwareTestSuite/ReleaseNotes/24.07.00
-
-This commit removes the patch 0002, which is included in this new
-version.
+This commit also drops the two package patches, which are now
+included in this release.
 
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...iasl-fix-parallel-build-with-GNU-Make-4.4.patch | 133 ---------------------
- package/fwts/fwts.hash                             |   2 +-
- package/fwts/fwts.mk                               |   2 +-
- 3 files changed, 2 insertions(+), 135 deletions(-)
+ ...-kerncompat-fix-fallthrough-definition-fo.patch | 63 ----------------
+ ...-add-uClibc-ng-compatibility-for-printf-f.patch | 85 ----------------------
+ package/btrfs-progs/btrfs-progs.hash               |  2 +-
+ package/btrfs-progs/btrfs-progs.mk                 |  2 +-
+ 4 files changed, 2 insertions(+), 150 deletions(-)
 
-diff --git a/package/fwts/0002-libfwtsiasl-fix-parallel-build-with-GNU-Make-4.4.patch b/package/fwts/0002-libfwtsiasl-fix-parallel-build-with-GNU-Make-4.4.patch
+diff --git a/package/btrfs-progs/0001-btrfs-progs-kerncompat-fix-fallthrough-definition-fo.patch b/package/btrfs-progs/0001-btrfs-progs-kerncompat-fix-fallthrough-definition-fo.patch
 deleted file mode 100644
-index a5568d1fd9..0000000000
---- a/package/fwts/0002-libfwtsiasl-fix-parallel-build-with-GNU-Make-4.4.patch
+index 588e9d4723..0000000000
+--- a/package/btrfs-progs/0001-btrfs-progs-kerncompat-fix-fallthrough-definition-fo.patch
 +++ /dev/null
-@@ -1,133 +0,0 @@
--From 65a89b6253ef527ab4bc951eb8f9deba12f0121a Mon Sep 17 00:00:00 2001
+@@ -1,63 +0,0 @@
+-From 0d2bf742df7f6b6d91fff8abe3c2f8b6ef0e0c01 Mon Sep 17 00:00:00 2001
 -From: Julien Olivain <ju.o@free.fr>
--Date: Mon, 20 May 2024 11:14:02 +0200
--Subject: [PATCH] libfwtsiasl: fix parallel build with GNU Make >= 4.4
+-Date: Sun, 14 Jul 2024 12:52:33 +0200
+-Subject: [PATCH] btrfs-progs: kerncompat: fix fallthrough definition for gcc
+- 5.x and 6.x.
 -
--When a build host has a large number of cores (like 20+) and GNU Make
--version is >= 4.4, fwts randomly fail to build in parallel, with a
--"make -j$(nproc)" command, with error:
+-Commit [1] 3a1d4aa089 "btrfs-progs: fix fallthrough cases with proper
+-attributes" introduced a macro "fallthrough" to better handle compiler
+-warnings of fallthrough situations.
 -
--    mv: cannot stat 'dtcompilerparser.tab.c': No such file or directory
--    mv: cannot stat 'prparser.tab.c': No such file or directory
+-This macro is defined using the "__has_attribute" built-in
+-function-like macro, which was introduced in GCC 5. See [2]. It then
+-test for the "__fallthrough__" attribute, which was introduced in
+-GCC 7. See [3].
 -
--This issue has been reported here:
--https://github.com/fwts/fwts/issues/7
+-When compiling with a gcc version which supports "__has_attribute" and
+-not the "__fallthrough__" attribute, compilation fails with error
+-message:
 -
--The Makefile.am of libfwtsiasl is using the GNU Make ".NOTPARALLEL"
--special target with prerequisites to handle commands generating
--multiple outputs (like lex/yacc invocations). See:
--https://github.com/fwts/fwts/blob/V24.03.00/src/libfwtsiasl/Makefile.am#L61
+-    common/format-output.c: In function 'print_escaped':
+-    common/format-output.c:78:4: error: 'fallthrough' undeclared (first use in this function)
+-        fallthrough;
+-        ^
+-btrfs-progs claim to support gcc at minimal version 4.8 in [4].
 -
--First, the .NOTPARALLEL special target _with_ prerequisites is a
--feature added in GNU Make 4.4. See:
--https://git.savannah.gnu.org/cgit/make.git/commit/?id=f6ea899d83bf00fe9201fde0ca9cf7af8e443677
--https://lists.gnu.org/archive/html/help-make/2022-10/msg00020.html
+-This commit fixes this issue by adding the missing definition.
 -
--GNU Make version < 4.4 will interpret it as if it was written without
--prerequisite (as a standalone ".NOTPARALLEL:"). The effect is that the
--parallel compilation is disabled for the whole libfwtsiasl. The
--standalone .NOTPARALLEL special target was introduced in GNU Make 3.79
--in 2000. This is why parallel builds are working with Make older than
--version 4.4.
+-The definition of the unsupported case is duplicated, because testing
+-for "__has_attribute" and an attribute at the same time is not
+-portable. See the cpp "__has_attribute" documentation [5].
 -
--Secondly, the reason why the build is failing on GNU Make >= 4.4 is
--because the usage of .NOTPARALLEL in incorrect.
+-Note: the issue was found with Buildroot Linux [6], while testing with
+-the command "utils/test-pkg -a -p btrfs-progs".
 -
--Quoting the Make manual:
--https://www.gnu.org/software/make/manual/html_node/Parallel-Disable.html
--"""
--If the .NOTPARALLEL special target has prerequisites, then each of those
--prerequisites will be considered a target and all prerequisites of these
--targets will be run serially.
--"""
+-[1] https://github.com/kdave/btrfs-progs/commit/3a1d4aa089419b7c94b31ff87122fa74907e1aa6
+-[2] https://gcc.gnu.org/gcc-5/changes.html
+-[3] https://gcc.gnu.org/gcc-7/changes.html
+-[4] https://github.com/kdave/btrfs-progs/tree/v6.9.2#build-compatibility
+-[5] https://gcc.gnu.org/onlinedocs/cpp/_005f_005fhas_005fattribute.html
+-[6] https://buildroot.org/
 -
--Note the serialization will happen on the prerequisites of the targets
--set as prerequisites of .NOTPARALLEL.
--
--The targets will not be correctly marked to disable parallel
--execution.
--
--Thirdly, the use of multiple targets in a rule is incorrect here. See
--Make manual:
--https://www.gnu.org/software/make/manual/html_node/Multiple-Targets.html
--The construct used in Makefile.am of libfwtsiasl for lex/yacc parsers
--assumes they are independant targets (so they can be executed in
--parallel). Finally, the "mv" command is failing, because there will be
--one parallel execution per target, the first mv will suceed and the
--other ones will fail. Multiple independant targets are often used in
--Makefiles for lex/yacc, they are working because they are not using
--"mv". Even in multiple execution, files are just overwritten.
--
--Fixing this .NOTPARALLEL usage with prerequisites would require Make
--version 4.4 or greater. This is a strong requirement, as there is
--still many Linux distros with older Make version (as an example Ubuntu
--22.04 LTS has Make 4.3).
--
--The .WAIT special target could be used, but was also introduced in
--Make version 4.4. See:
--https://git.savannah.gnu.org/cgit/make.git/commit/?id=f6ea899d83bf00fe9201fde0ca9cf7af8e443677
--
--GNU Make 4.3 also introduced "Grouped Targets" for that purpose. See:
--https://www.gnu.org/software/make/manual/html_node/Multiple-Targets.html
--But this would add a requirement on a recent Make version.
--
--This commit fixes the issue by declaring the first generated file as a
--dependency of the other extra generated files. This has the effect of
--completely solving the parallel build for all GNU Make versions. Also,
--this enables parallel build for libfwtsiasl (except for the parser
--generation) and makes the whole build faster.
--
+-Upstream: Proposed: https://github.com/kdave/btrfs-progs/pull/842
 -Signed-off-by: Julien Olivain <ju.o@free.fr>
--Upstream: https://github.com/fwts/fwts/commit/c0962cd74c725418523c46ca44101e0e70201f81
 ----
-- src/libfwtsiasl/Makefile.am | 16 ++++++++--------
-- 1 file changed, 8 insertions(+), 8 deletions(-)
+- include/kerncompat.h | 2 ++
+- 1 file changed, 2 insertions(+)
 -
--diff --git a/src/libfwtsiasl/Makefile.am b/src/libfwtsiasl/Makefile.am
--index cb10bc58..ac54f621 100644
----- a/src/libfwtsiasl/Makefile.am
--+++ b/src/libfwtsiasl/Makefile.am
--@@ -58,32 +58,32 @@ aslcompiler.y: $(ASL_PARSER)
-- aslcompilerlex.c: $(ASL_LEXER)
-- 	${LEX} ${AM_LFLAGS} -PAslCompiler -o$@ $(top_srcdir)/src/acpica/source/compiler/aslcompiler.l
-- 
---.NOTPARALLEL: aslcompiler.c
---aslcompiler.c aslcompiler.y.h: aslcompiler.y
--+aslcompiler.c: aslcompiler.y
-- 	${YACC} ${AM_YFLAGS} -d -baslcompiler -pAslCompiler $^
-- 	mv aslcompiler.tab.c aslcompiler.c
-- 	cp aslcompiler.tab.h aslcompiler.y.h
--+aslcompiler.y.h: aslcompiler.c
-- 
---.NOTPARALLEL: dtcompilerparserlex.c
---dtcompilerparserlex.c dtcompilerparser.c dtcompilerparser.y.h: $(top_srcdir)/src/acpica/source/compiler/dtcompilerparser.l $(top_srcdir)/src/acpica/source/compiler/dtcompilerparser.y
--+dtcompilerparserlex.c: $(top_srcdir)/src/acpica/source/compiler/dtcompilerparser.l $(top_srcdir)/src/acpica/source/compiler/dtcompilerparser.y
-- 	${LEX} ${AM_LFLAGS} -PDtCompilerParser -odtcompilerparserlex.c $<
-- 	${YACC} ${AM_YFLAGS} -bdtcompilerparser -pDtCompilerParser $(top_srcdir)/src/acpica/source/compiler/dtcompilerparser.y
-- 	mv dtcompilerparser.tab.c dtcompilerparser.c
-- 	cp dtcompilerparser.tab.h dtcompilerparser.y.h
--+dtcompilerparser.c dtcompilerparser.y.h: dtcompilerparserlex.c
-- 
---.NOTPARALLEL: dtparserlex.c
---dtparserlex.c dtparser.c dtparser.y.h: $(top_srcdir)/src/acpica/source/compiler/dtparser.l $(top_srcdir)/src/acpica/source/compiler/dtparser.y
--+dtparserlex.c: $(top_srcdir)/src/acpica/source/compiler/dtparser.l $(top_srcdir)/src/acpica/source/compiler/dtparser.y
-- 	${LEX} ${AM_LFLAGS} -PDtParser -odtparserlex.c $<
-- 	${YACC} ${AM_YFLAGS} -bdtparser -pDtParser $(top_srcdir)/src/acpica/source/compiler/dtparser.y
-- 	mv dtparser.tab.c dtparser.c
-- 	cp dtparser.tab.h dtparser.y.h
--+dtparser.c dtparser.y.h: dtparserlex.c
-- 
---.NOTPARALLEL: prparserlex.c
---prparserlex.c prparser.c prparser.y.h: $(top_srcdir)/src/acpica/source/compiler/prparser.l $(top_srcdir)/src/acpica/source/compiler/prparser.y
--+prparserlex.c: $(top_srcdir)/src/acpica/source/compiler/prparser.l $(top_srcdir)/src/acpica/source/compiler/prparser.y
-- 	${LEX} ${AM_LFLAGS} -PPrParser -oprparserlex.c $<
-- 	${YACC} ${AM_YFLAGS} -bprparser -pPrParser $(top_srcdir)/src/acpica/source/compiler/prparser.y
-- 	mv prparser.tab.c prparser.c
-- 	cp prparser.tab.h prparser.y.h
--+prparser.c prparser.y.h: prparserlex.c
-- 
-- pkglib_LTLIBRARIES = libfwtsiasl.la
-- 
+-diff --git a/include/kerncompat.h b/include/kerncompat.h
+-index 31cd9d8d..bcd46bde 100644
+---- a/include/kerncompat.h
+-+++ b/include/kerncompat.h
+-@@ -305,6 +305,8 @@ static inline void up_read(struct rw_semaphore *sem)
+- #if defined __has_attribute
+- # if __has_attribute(__fallthrough__)
+- #  define fallthrough			__attribute__((__fallthrough__))
+-+# else
+-+#  define fallthrough			do {} while (0)  /* fallthrough */
+- # endif
+- #else
+- # define fallthrough			do {} while (0)  /* fallthrough */
 --- 
--2.45.1
+-2.45.2
 -
-diff --git a/package/fwts/fwts.hash b/package/fwts/fwts.hash
-index 0c0dd58c15..61f615835e 100644
---- a/package/fwts/fwts.hash
-+++ b/package/fwts/fwts.hash
+diff --git a/package/btrfs-progs/0002-btrfs-progs-add-uClibc-ng-compatibility-for-printf-f.patch b/package/btrfs-progs/0002-btrfs-progs-add-uClibc-ng-compatibility-for-printf-f.patch
+deleted file mode 100644
+index b1b4fba519..0000000000
+--- a/package/btrfs-progs/0002-btrfs-progs-add-uClibc-ng-compatibility-for-printf-f.patch
++++ /dev/null
+@@ -1,85 +0,0 @@
+-From 0f34a362c8644f212138fb8de8e0fba54941e757 Mon Sep 17 00:00:00 2001
+-From: Julien Olivain <ju.o@free.fr>
+-Date: Sun, 14 Jul 2024 16:28:08 +0200
+-Subject: [PATCH] btrfs-progs: add uClibc-ng compatibility for printf format
+- %pV
+-
+-Commit [1] 164bc10d "btrfs-progs: add musl compatibility for printf
+-format %pV" added a logic to detect the presence of the glibc
+-<printf.h> header, and if present, to use the
+-register_printf_specifier() and register_printf_modifier() functions.
+-
+-The original intent (as the commit log suggests), was to support the
+-musl libc, which does not provides this <printf.h> header.
+-
+-When compiling with another libc, such as uClibc-ng, btrfs-progs fail
+-to build with error:
+-
+-    common/messages.c: In function 'print_va_format':
+-    common/messages.c:51:19: error: 'const struct printf_info' has no member named 'user'
+-       51 |         if (!(info->user & va_modifier))
+-          |                   ^~
+-    common/messages.c: In function 'btrfs_no_printk':
+-    common/messages.c:76:17: warning: implicit declaration of function 'register_printf_specifier'; did you mean 'register_printf_function'? [-Wimplicit-function-declaration]
+-       76 |                 register_printf_specifier('V', print_va_format,
+-          |                 ^~~~~~~~~~~~~~~~~~~~~~~~~
+-          |                 register_printf_function
+-    common/messages.c:78:31: warning: implicit declaration of function 'register_printf_modifier'; did you mean 'register_printf_function'? [-Wimplicit-function-declaration]
+-       78 |                 va_modifier = register_printf_modifier(L"p");
+-          |                               ^~~~~~~~~~~~~~~~~~~~~~~~
+-          |                               register_printf_function
+-
+-This is because uClibc-ng provides a <printf.h> header, but not the
+-register_printf_specifier() and register_printf_modifier() functions.
+-See [2]. It mainly includes register_printf_function(). uClibc-ng
+-emulates an older glibc behavior. Glibc added support for printf user
+-elements in commit [3] (first included in glibc-2.10, in 2009). Checking
+-only the <printf.h> is not sufficient.
+-
+-This commit fixes this build issue by refining the detection logic of
+-the <printf.h> functions required by btrfs-progs.
+-
+-[1] https://github.com/kdave/btrfs-progs/commit/164bc10dfc08d8754d23ef0d6d7281e139d6cd53
+-[2] https://gogs.waldemar-brodkorb.de/oss/uclibc-ng/src/v1.0.49/include/printf.h
+-[3] https://sourceware.org/git/?p=glibc.git;a=commitdiff;h=9d26efa90c6dcbcd6b3e586c9927b6058ef4d529
+-
+-Upstream: Proposed: https://github.com/kdave/btrfs-progs/pull/843
+-Signed-off-by: Julien Olivain <ju.o@free.fr>
+----
+- common/messages.h | 4 +++-
+- configure.ac      | 4 ++++
+- 2 files changed, 7 insertions(+), 1 deletion(-)
+-
+-diff --git a/common/messages.h b/common/messages.h
+-index d6d4044d..aced7c9b 100644
+---- a/common/messages.h
+-+++ b/common/messages.h
+-@@ -25,7 +25,9 @@
+- /*
+-  * Workaround for custom format %pV that may not be supported on all libcs.
+-  */
+--#ifdef HAVE_PRINTF_H
+-+#if defined(HAVE_PRINTF_H) \
+-+	&& defined(HAVE_REGISTER_PRINTF_SPECIFIER) \
+-+	&& defined(HAVE_REGISTER_PRINTF_MODIFIER)
+- #define DECLARE_PV(name)		struct va_format name
+- #define PV_FMT				"%pV"
+- #define PV_VAL(va)			&va
+-diff --git a/configure.ac b/configure.ac
+-index b69973b3..62b88973 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -95,6 +95,10 @@ AC_CHECK_HEADERS([linux/hw_breakpoint.h])
+- AC_CHECK_HEADERS([linux/fsverity.h])
+- AC_CHECK_HEADERS([printf.h])
+- 
+-+dnl Check for printf.h functions.
+-+AC_CHECK_FUNCS([register_printf_specifier])
+-+AC_CHECK_FUNCS([register_printf_modifier])
+-+
+- if grep -q 'HAVE_LINUX_FSVERITY_H.*1' confdefs.h; then
+- 	have_fsverity='yes'
+- else
+--- 
+-2.45.2
+-
+diff --git a/package/btrfs-progs/btrfs-progs.hash b/package/btrfs-progs/btrfs-progs.hash
+index 082e8c1cdc..f12c76c2ee 100644
+--- a/package/btrfs-progs/btrfs-progs.hash
++++ b/package/btrfs-progs/btrfs-progs.hash
 @@ -1,5 +1,5 @@
- # Hash from: http://fwts.ubuntu.com/release/SHA256SUMS
--sha256  d7f2642b1ec3697be798409decd6593d52bb1438f0d2dc697cbc85f52d19b41e  fwts-V24.03.00.tar.gz
-+sha256  2bd45ab1b9f8dc1db2716721e89d982ee4b4eda4b1043cca7b13775c95d5023b  fwts-V24.07.00.tar.gz
- 
- # Hash for license file
- sha256  3cd2c5d12f024ff2aa203e37d7e972c4d5ab7bf1a65e3e09aebccf71e64b525b  debian/copyright
-diff --git a/package/fwts/fwts.mk b/package/fwts/fwts.mk
-index 0692121421..fa1f8ed8c4 100644
---- a/package/fwts/fwts.mk
-+++ b/package/fwts/fwts.mk
+ # From https://www.kernel.org/pub/linux/kernel/people/kdave/btrfs-progs/sha256sums.asc
+-sha256  43865bb272dc0ab2585de3605434d81ba217578f0897bf700cd36c14ac40652a  btrfs-progs-v6.9.2.tar.xz
++sha256  3382a84e3fcfe1ffdea07a61ab3f4e86665d38fa35f1f34548d5df867423e0df  btrfs-progs-v6.10.tar.xz
+ # Locally computed
+ sha256  0d5bf346df9e635a29dcdddf832dc5b002ca6cdc1c5c9c6c567d2a61bb0c5c15  COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  libbtrfsutil/COPYING
+diff --git a/package/btrfs-progs/btrfs-progs.mk b/package/btrfs-progs/btrfs-progs.mk
+index 69424a2d72..273c7e37f2 100644
+--- a/package/btrfs-progs/btrfs-progs.mk
++++ b/package/btrfs-progs/btrfs-progs.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--FWTS_VERSION = 24.03.00
-+FWTS_VERSION = 24.07.00
- FWTS_SOURCE = fwts-V$(FWTS_VERSION).tar.gz
- FWTS_SITE = https://fwts.ubuntu.com/release
- FWTS_STRIP_COMPONENTS = 0
+-BTRFS_PROGS_VERSION = 6.9.2
++BTRFS_PROGS_VERSION = 6.10
+ BTRFS_PROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/kdave/btrfs-progs
+ BTRFS_PROGS_SOURCE = btrfs-progs-v$(BTRFS_PROGS_VERSION).tar.xz
+ BTRFS_PROGS_DEPENDENCIES = host-pkgconf lzo util-linux zlib
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
