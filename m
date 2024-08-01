@@ -4,48 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D7202C3DA64
-	for <buildroot@archiver.kernel.org>; Thu,  1 Aug 2024 21:16:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4AA68C3DA4A
+	for <buildroot@archiver.kernel.org>; Thu,  1 Aug 2024 21:20:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3EC5F81F66;
-	Thu,  1 Aug 2024 21:16:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 10F6780DFD;
+	Thu,  1 Aug 2024 21:20:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wNOjrBCrUWmC; Thu,  1 Aug 2024 21:16:34 +0000 (UTC)
+ id fd8hoK3xGqTa; Thu,  1 Aug 2024 21:20:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 82DDD82036
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 145AD80E59
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 82DDD82036;
-	Thu,  1 Aug 2024 21:16:33 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1EE091BF3F0
- for <buildroot@lists.busybox.net>; Thu,  1 Aug 2024 21:16:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 145AD80E59;
+	Thu,  1 Aug 2024 21:20:21 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id B2DB31BF3F0
+ for <buildroot@lists.busybox.net>; Thu,  1 Aug 2024 21:20:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0CBC7400CF
- for <buildroot@lists.busybox.net>; Thu,  1 Aug 2024 21:16:29 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id A0A8160635
+ for <buildroot@lists.busybox.net>; Thu,  1 Aug 2024 21:20:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ljW5hFx_zXDs for <buildroot@lists.busybox.net>;
- Thu,  1 Aug 2024 21:16:28 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id MTeNJqEfFUU6 for <buildroot@lists.busybox.net>;
+ Thu,  1 Aug 2024 21:20:18 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::226;
+ helo=relay6-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F18F440CFB
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id F18F440CFB
- for <buildroot@buildroot.org>; Thu,  1 Aug 2024 21:16:27 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DC2DA8390A; Thu,  1 Aug 2024 21:16:27 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 1 Aug 2024 23:15:43 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 44b921f605dffd07bb6294e6368c2ace34a08266
-X-Git-Newrev: 450240ca3f933b710910a6ff0620fae5bd74f07b
-X-Patchwork-Hint: ignore
-Message-Id: <20240801211627.DC2DA8390A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/mx6sx_udoo_neo: add hashes
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 879526062D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 879526062D
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::226])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 879526062D
+ for <buildroot@buildroot.org>; Thu,  1 Aug 2024 21:20:18 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 7ECBDC0002;
+ Thu,  1 Aug 2024 21:20:15 +0000 (UTC)
+Date: Thu, 1 Aug 2024 23:20:14 +0200
+To: Philip-Dylan Gleonec <philip-dylan@gleonec.bzh>
+Message-ID: <20240801232014.6ec310ce@windsurf>
+In-Reply-To: <20240801153432.1741409-1-philip-dylan@gleonec.bzh>
+References: <20240731145504.365492-1-philip-dylan@gleonec.bzh>
+ <20240801153432.1741409-1-philip-dylan@gleonec.bzh>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1722547215;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=x/vgDB8eZuwec0f0HiPIzBuix7q9yPBrrEakX7W4pN4=;
+ b=Taof4uw1u1FO+vcgBsQ1kI0gQfrtNVv4EL4UCU8TFvQoKEqGKTS1JZM4LkGWCfjliPJjv8
+ A4NBCKFxsNhiyqphj1Tccze4O7UhvN25iTSv6Mmu5dFHL7PQdlH5Zmgwuxl62KUwm3RSuP
+ eo4Jd7o4o1uYhjDoMm+23I28tM2NrAr02zEre0c3QZTIA6k9o9AERfaFMzAl6nFyodpNXY
+ pN8PyQLv3XfJbsemMTVI0DUPhXzP0qNnT7FSpBP+uwpIo28pIBtT2mrbcsQ7AqAY7MMKOc
+ iRdt5Pozzo2Fo1qs9dpRAWqTO6N53d+TPMBiz7/mtoFCtqM/nBWz84sQWbheuQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=Taof4uw1
+Subject: Re: [Buildroot] [PATCH v2 0/2] Udoo Neo kernel update
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,79 +83,64 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Fabio Estevam <festevam@gmail.com>, kilian.zinnecker@mail.de,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=450240ca3f933b710910a6ff0620fae5bd74f07b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Thu,  1 Aug 2024 17:34:30 +0200
+Philip-Dylan Gleonec <philip-dylan@gleonec.bzh> wrote:
 
-Add hashes for uboot and linux, and enable
-BR2_DOWNLOAD_FORCE_CHECK_HASHES.
+> Philip-Dylan Gleonec (2):
+>   configs/mx6sx_udoo_neo_defconfig: bump kernel to 6.6.43
+>   configs/mx6sx_udoo_neo_defconfig: add hashes
 
-Modify .checkpackageignore to enable the hash check for the Udoo Neo
-config.
+Thanks, both patches applied! A couple of small comments to improve
+your future contributions:
 
-Signed-off-by: Philip-Dylan Gleonec <philip-dylan@gleonec.bzh>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- .checkpackageignore                                     | 1 -
- board/udoo/neo/patches/linux-headers/linux-headers.hash | 1 +
- board/udoo/neo/patches/linux/linux.hash                 | 2 ++
- board/udoo/neo/patches/uboot/uboot.hash                 | 2 ++
- configs/mx6sx_udoo_neo_defconfig                        | 2 ++
- 5 files changed, 7 insertions(+), 1 deletion(-)
+- In the first patch, I added a short extract of the kernel build error
+  being fixed, and also a link to the Gitlab CI failure being fixed by
+  this. See the final commit
+  at https://gitlab.com/buildroot.org/buildroot/-/commit/44b921f605dffd07bb6294e6368c2ace34a08266
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 028b63b4d3..fe5d2618c6 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -202,7 +202,6 @@ configs/microchip_sama7g5ek_mmc_dev_defconfig lib_defconfig.ForceCheckHash
- configs/minnowboard_max_defconfig lib_defconfig.ForceCheckHash
- configs/mx25pdk_defconfig lib_defconfig.ForceCheckHash
- configs/mx53loco_defconfig lib_defconfig.ForceCheckHash
--configs/mx6sx_udoo_neo_defconfig lib_defconfig.ForceCheckHash
- configs/mx6udoo_defconfig lib_defconfig.ForceCheckHash
- configs/nexbox_a95x_defconfig lib_defconfig.ForceCheckHash
- configs/nitrogen6sx_defconfig lib_defconfig.ForceCheckHash
-diff --git a/board/udoo/neo/patches/linux-headers/linux-headers.hash b/board/udoo/neo/patches/linux-headers/linux-headers.hash
-new file mode 120000
-index 0000000000..5808d92afe
---- /dev/null
-+++ b/board/udoo/neo/patches/linux-headers/linux-headers.hash
-@@ -0,0 +1 @@
-+../linux/linux.hash
-\ No newline at end of file
-diff --git a/board/udoo/neo/patches/linux/linux.hash b/board/udoo/neo/patches/linux/linux.hash
-new file mode 100644
-index 0000000000..b8935a250a
---- /dev/null
-+++ b/board/udoo/neo/patches/linux/linux.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  0ad83b1a1a780a1aad948d55aa55ee63c50c626f2d46910b9d2180028d100a5e  linux-6.6.43.tar.xz
-diff --git a/board/udoo/neo/patches/uboot/uboot.hash b/board/udoo/neo/patches/uboot/uboot.hash
-new file mode 100644
-index 0000000000..0bfbf306ff
---- /dev/null
-+++ b/board/udoo/neo/patches/uboot/uboot.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  81b4543227db228c03f8a1bf5ddbc813b0bb8f6555ce46064ef721a6fc680413  u-boot-2022.01.tar.bz2
-diff --git a/configs/mx6sx_udoo_neo_defconfig b/configs/mx6sx_udoo_neo_defconfig
-index 71a7473307..adcd7aeb4e 100644
---- a/configs/mx6sx_udoo_neo_defconfig
-+++ b/configs/mx6sx_udoo_neo_defconfig
-@@ -1,5 +1,7 @@
- BR2_arm=y
- BR2_cortex_a9=y
-+BR2_GLOBAL_PATCH_DIR="board/udoo/neo/patches"
-+BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_ARM_ENABLE_NEON=y
- BR2_ARM_ENABLE_VFP=y
- BR2_ARM_FPU_VFPV3=y
+- In the commit title, we normally use "configs/foo:" instead of
+  "configs/foo_defconfig:". No strong reason, just a habit, and we like
+  to be consistent.
+
+- The wrapping/paragraph organization of your commit messages was a bit
+  strange and not really consistent with what is done in Buildroot, but
+  also in the kernel. Basically you tend to do:
+
+Some explanation here.
+Then some more explanation that might
+span multiple
+lines.
+Then another explanations.
+
+  While in most projects, including Buildroot, we expect:
+
+Some explanation here.
+
+Then some more explanation that might span
+multiple lines.
+
+Then another paragraph about something else.
+
+- If you do have this board, it would be nice to add yourself for this
+  defconfig, and its data file in board/ in the DEVELOPERS file. This
+  way you will receive notifications when the build of this defconfig
+  is broken, or when someone submits a patch touching this defconfig.
+
+Thanks a lot!
+
+Thomas
+
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
