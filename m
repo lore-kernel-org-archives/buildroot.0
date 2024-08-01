@@ -4,49 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93388C3DA4A
-	for <buildroot@archiver.kernel.org>; Thu,  1 Aug 2024 21:07:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AC32FC3DA64
+	for <buildroot@archiver.kernel.org>; Thu,  1 Aug 2024 21:07:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5EA4B80C35;
-	Thu,  1 Aug 2024 21:07:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 72E7A81585;
+	Thu,  1 Aug 2024 21:07:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Idck4MQh7ncP; Thu,  1 Aug 2024 21:07:25 +0000 (UTC)
+ id Ix18gfQIl8dD; Thu,  1 Aug 2024 21:07:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7AD4980CEA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D0A6281801
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7AD4980CEA;
-	Thu,  1 Aug 2024 21:07:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D0A6281801;
+	Thu,  1 Aug 2024 21:07:27 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 24FF31BF3F0
- for <buildroot@lists.busybox.net>; Thu,  1 Aug 2024 21:07:23 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5A3791BF3F0
+ for <buildroot@lists.busybox.net>; Thu,  1 Aug 2024 21:07:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1327F606AE
- for <buildroot@lists.busybox.net>; Thu,  1 Aug 2024 21:07:23 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4564E606AE
+ for <buildroot@lists.busybox.net>; Thu,  1 Aug 2024 21:07:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UnkooynAAPn9 for <buildroot@lists.busybox.net>;
- Thu,  1 Aug 2024 21:07:22 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id tggmc4h00smj for <buildroot@lists.busybox.net>;
+ Thu,  1 Aug 2024 21:07:24 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.194;
+ helo=relay2-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 523B360689
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 523B360689
- for <buildroot@buildroot.org>; Thu,  1 Aug 2024 21:07:22 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3C76B838DB; Thu,  1 Aug 2024 21:07:22 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 1 Aug 2024 23:06:22 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 99f65ecb6a16e75d92c3f88e4e01959a2948e4d9
-X-Git-Newrev: 15e411d800999a70cc04a8d506ead40ea3dba210
-X-Patchwork-Hint: ignore
-Message-Id: <20240801210722.3C76B838DB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/ffmpeg: add optional dependency on
- jack
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 3163060689
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3163060689
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [217.70.183.194])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3163060689
+ for <buildroot@buildroot.org>; Thu,  1 Aug 2024 21:07:23 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 24C2C40005;
+ Thu,  1 Aug 2024 21:07:21 +0000 (UTC)
+Date: Thu, 1 Aug 2024 23:07:21 +0200
+To: Thomas Bonnefille via buildroot <buildroot@buildroot.org>
+Message-ID: <20240801230721.09f91c70@windsurf>
+In-Reply-To: <20240801145958.2561632-1-thomas.bonnefille@bootlin.com>
+References: <20240801145958.2561632-1-thomas.bonnefille@bootlin.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1722546442;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=2XPmm6sgEvU/pNNitAzZ8jl8KG9YuJwgS2Ab/I+cMUY=;
+ b=f0k4+iGNV5ek4pb8IAjiofdv3RgCg2WT+m/YGcfMnK2B9GFJ9s4zYxLKmshxlnkGQcB0Hp
+ YpSP7VO+2map2N0K8RtdN5wg3ydzeKf8Rpir/Xmtsy/YidoWjav0yuGhdz1YTJy7AAwA1T
+ udDducPvm7H0HiPeFLYY3osuK9+2pl1VnqlM6WO21uvKb13tUmpSx0Vqfec7GJBpdUOydJ
+ VrtRLiAypUyzhnrxtfhUSlMc8gUebQDNz6t2rx6r+w3DR93f72tiIyOMxloAVW74RFxUz/
+ 0gbTOIMzUmoYaCg7h3Uvg7dPhl3+VSPREZLtx35hTAA6O5//FYaEav8lyPRRVA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=f0k4+iGN
+Subject: Re: [Buildroot] [PATCH 1/1] package/ffmpeg: enable libjack when
+ selected
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,45 +83,32 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Thomas Bonnefille <thomas.bonnefille@bootlin.com>,
+ Bernd Kuhls <bernd@kuhls.net>, Mahyar Koshkouei <mahyar.koshkouei@gmail.com>,
+ Miquel Raynal <miquel.raynal@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=15e411d800999a70cc04a8d506ead40ea3dba210
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Thu,  1 Aug 2024 16:59:58 +0200
+Thomas Bonnefille via buildroot <buildroot@buildroot.org> wrote:
 
-Add automatic JACK audio sound server support to ffmpeg if either JACK
-or JACK2 are enabled.
+> Add automatic JACK audio sound server support to ffmpeg if JACK/JACK2 is
+> selected in Buildroot configuration.
+> 
+> Signed-off-by: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
+> ---
+>  package/ffmpeg/ffmpeg.mk | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
 
-Signed-off-by: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/ffmpeg/ffmpeg.mk | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+Applied to master, thanks.
 
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index 87c482656c..5b2d33883d 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
-@@ -82,6 +82,16 @@ else
- FFMPEG_CONF_OPTS += --disable-ffplay
- endif
- 
-+ifeq ($(BR2_PACKAGE_JACK1),y)
-+FFMPEG_CONF_OPTS += --enable-libjack
-+FFMPEG_DEPENDENCIES += jack1
-+else ifeq ($(BR2_PACKAGE_JACK2),y)
-+FFMPEG_CONF_OPTS += --enable-libjack
-+FFMPEG_DEPENDENCIES += jack2
-+else
-+FFMPEG_CONF_OPTS += --disable-libjack
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBV4L),y)
- FFMPEG_DEPENDENCIES += libv4l
- FFMPEG_CONF_OPTS += --enable-libv4l2
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
