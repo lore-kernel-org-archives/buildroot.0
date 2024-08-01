@@ -4,72 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AC32FC3DA64
-	for <buildroot@archiver.kernel.org>; Thu,  1 Aug 2024 21:07:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9552C3DA4A
+	for <buildroot@archiver.kernel.org>; Thu,  1 Aug 2024 21:16:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 72E7A81585;
-	Thu,  1 Aug 2024 21:07:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8D09E81FB8;
+	Thu,  1 Aug 2024 21:16:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ix18gfQIl8dD; Thu,  1 Aug 2024 21:07:28 +0000 (UTC)
+ id 3BWLD0vsi9wL; Thu,  1 Aug 2024 21:16:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D0A6281801
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 775BE81FC3
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D0A6281801;
-	Thu,  1 Aug 2024 21:07:27 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 5A3791BF3F0
- for <buildroot@lists.busybox.net>; Thu,  1 Aug 2024 21:07:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 775BE81FC3;
+	Thu,  1 Aug 2024 21:16:29 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id C47511BF3F0
+ for <buildroot@lists.busybox.net>; Thu,  1 Aug 2024 21:16:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4564E606AE
- for <buildroot@lists.busybox.net>; Thu,  1 Aug 2024 21:07:25 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id BF68881EF8
+ for <buildroot@lists.busybox.net>; Thu,  1 Aug 2024 21:16:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tggmc4h00smj for <buildroot@lists.busybox.net>;
- Thu,  1 Aug 2024 21:07:24 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.194;
- helo=relay2-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id x2z5PKV7y3cn for <buildroot@lists.busybox.net>;
+ Thu,  1 Aug 2024 21:16:28 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 3163060689
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3163060689
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 3163060689
- for <buildroot@buildroot.org>; Thu,  1 Aug 2024 21:07:23 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 24C2C40005;
- Thu,  1 Aug 2024 21:07:21 +0000 (UTC)
-Date: Thu, 1 Aug 2024 23:07:21 +0200
-To: Thomas Bonnefille via buildroot <buildroot@buildroot.org>
-Message-ID: <20240801230721.09f91c70@windsurf>
-In-Reply-To: <20240801145958.2561632-1-thomas.bonnefille@bootlin.com>
-References: <20240801145958.2561632-1-thomas.bonnefille@bootlin.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1722546442;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=2XPmm6sgEvU/pNNitAzZ8jl8KG9YuJwgS2Ab/I+cMUY=;
- b=f0k4+iGNV5ek4pb8IAjiofdv3RgCg2WT+m/YGcfMnK2B9GFJ9s4zYxLKmshxlnkGQcB0Hp
- YpSP7VO+2map2N0K8RtdN5wg3ydzeKf8Rpir/Xmtsy/YidoWjav0yuGhdz1YTJy7AAwA1T
- udDducPvm7H0HiPeFLYY3osuK9+2pl1VnqlM6WO21uvKb13tUmpSx0Vqfec7GJBpdUOydJ
- VrtRLiAypUyzhnrxtfhUSlMc8gUebQDNz6t2rx6r+w3DR93f72tiIyOMxloAVW74RFxUz/
- 0gbTOIMzUmoYaCg7h3Uvg7dPhl3+VSPREZLtx35hTAA6O5//FYaEav8lyPRRVA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=f0k4+iGN
-Subject: Re: [Buildroot] [PATCH 1/1] package/ffmpeg: enable libjack when
- selected
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E23B78101C
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id E23B78101C
+ for <buildroot@buildroot.org>; Thu,  1 Aug 2024 21:16:27 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id C6BA883906; Thu,  1 Aug 2024 21:16:27 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Thu, 1 Aug 2024 23:15:25 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 15e411d800999a70cc04a8d506ead40ea3dba210
+X-Git-Newrev: 44b921f605dffd07bb6294e6368c2ace34a08266
+X-Patchwork-Hint: ignore
+Message-Id: <20240801211627.C6BA883906@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/mx6sx_udoo_neo: bump kernel to
+ 6.6.43
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,32 +60,67 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Thomas Bonnefille <thomas.bonnefille@bootlin.com>,
- Bernd Kuhls <bernd@kuhls.net>, Mahyar Koshkouei <mahyar.koshkouei@gmail.com>,
- Miquel Raynal <miquel.raynal@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu,  1 Aug 2024 16:59:58 +0200
-Thomas Bonnefille via buildroot <buildroot@buildroot.org> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=44b921f605dffd07bb6294e6368c2ace34a08266
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Add automatic JACK audio sound server support to ffmpeg if JACK/JACK2 is
-> selected in Buildroot configuration.
-> 
-> Signed-off-by: Thomas Bonnefille <thomas.bonnefille@bootlin.com>
-> ---
->  package/ffmpeg/ffmpeg.mk | 10 ++++++++++
->  1 file changed, 10 insertions(+)
+The current 5.15.13 kernel fails to build:
 
-Applied to master, thanks.
+  In file included from <command-line>:
+  drivers/ata/libahci.c: In function 'ahci_led_store':
+  ././include/linux/compiler_types.h:322:45: error: call to '__compiletime_assert_329' declared with attribute error: BUILD_BUG_ON failed: sizeof(_s) > sizeof(long)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+This commit fixes this by using the opportunity to bump the kernel to
+the latest LTS version. While bumping the kernel, the headers to use
+are also updated, and the selected device trees are updated to use the
+new dts per vendor organization.
+
+This update does not introduce any new error or warning with the
+current configuration.
+
+Fixes:
+
+  https://gitlab.com/buildroot.org/buildroot/-/jobs/7477108980
+
+Signed-off-by: Philip-Dylan Gleonec <philip-dylan@gleonec.bzh>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ configs/mx6sx_udoo_neo_defconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/configs/mx6sx_udoo_neo_defconfig b/configs/mx6sx_udoo_neo_defconfig
+index 793d992ce7..71a7473307 100644
+--- a/configs/mx6sx_udoo_neo_defconfig
++++ b/configs/mx6sx_udoo_neo_defconfig
+@@ -3,8 +3,8 @@ BR2_cortex_a9=y
+ BR2_ARM_ENABLE_NEON=y
+ BR2_ARM_ENABLE_VFP=y
+ BR2_ARM_FPU_VFPV3=y
+-# Linux headers same as kernel, a 5.15 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
++# Linux headers same as kernel, a 6.6 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/udoo/common/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/post-image.sh"
+ BR2_TARGET_ROOTFS_EXT2=y
+@@ -19,10 +19,10 @@ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="SPL"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.13"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.43"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6sx-udoo-neo-basic imx6sx-udoo-neo-full imx6sx-udoo-neo-extended"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="nxp/imx/imx6sx-udoo-neo-basic nxp/imx/imx6sx-udoo-neo-full nxp/imx/imx6sx-udoo-neo-extended"
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ # required tools to create the SD card image
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
