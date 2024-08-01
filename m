@@ -4,71 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D6913C3DA64
-	for <buildroot@archiver.kernel.org>; Thu,  1 Aug 2024 21:49:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72365C3DA4A
+	for <buildroot@archiver.kernel.org>; Thu,  1 Aug 2024 21:49:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A0F0581EE2;
-	Thu,  1 Aug 2024 21:49:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3F9D580AB2;
+	Thu,  1 Aug 2024 21:49:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RAJ680u7oe6y; Thu,  1 Aug 2024 21:48:59 +0000 (UTC)
+ id qYDp4pUIxSQV; Thu,  1 Aug 2024 21:49:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B36598454F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 21F9480B85
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B36598454F;
-	Thu,  1 Aug 2024 21:48:58 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 315B41BF3F0
- for <buildroot@lists.busybox.net>; Thu,  1 Aug 2024 21:48:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 21F9480B85;
+	Thu,  1 Aug 2024 21:49:42 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 924FA1BF3F0
+ for <buildroot@lists.busybox.net>; Thu,  1 Aug 2024 21:49:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1F73B81E1A
- for <buildroot@lists.busybox.net>; Thu,  1 Aug 2024 21:48:50 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8962C40E3F
+ for <buildroot@lists.busybox.net>; Thu,  1 Aug 2024 21:49:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zVo-dIYhW500 for <buildroot@lists.busybox.net>;
- Thu,  1 Aug 2024 21:48:49 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.198;
- helo=relay6-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qifcnPN1EGPi for <buildroot@lists.busybox.net>;
+ Thu,  1 Aug 2024 21:49:39 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.197;
+ helo=relay5-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9FD2884523
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9FD2884523
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [217.70.183.198])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9FD2884523
- for <buildroot@buildroot.org>; Thu,  1 Aug 2024 21:48:48 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 97B6EC0005;
- Thu,  1 Aug 2024 21:48:46 +0000 (UTC)
-Date: Thu, 1 Aug 2024 23:48:45 +0200
-To: Joachim Wiberg <troglobit@gmail.com>
-Message-ID: <20240801234845.772a1eb8@windsurf>
-In-Reply-To: <20240731110429.245927-1-troglobit@gmail.com>
-References: <20240731110429.245927-1-troglobit@gmail.com>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 001EC403DD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 001EC403DD
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 001EC403DD
+ for <buildroot@buildroot.org>; Thu,  1 Aug 2024 21:49:38 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id E15FE1C0002;
+ Thu,  1 Aug 2024 21:49:36 +0000 (UTC)
+Date: Thu, 1 Aug 2024 23:49:36 +0200
+To: Julien Olivain <ju.o@free.fr>
+Message-ID: <20240801234936.6e1c5fcc@windsurf>
+In-Reply-To: <20240730220713.1232412-1-ju.o@free.fr>
+References: <20240730220713.1232412-1-ju.o@free.fr>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1722548926;
+ d=bootlin.com; s=gm1; t=1722548977;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=1En30FlsVkRMWqYIRZDQLpb9Jq80BSh91Ua/Fh762o0=;
- b=UZVTXvU4wheL2k74nsybN4n5onaZB46yhyCXDZmvF5AJNUOo4213hM32L5vA2GkJnPOAXk
- LhbCU+StFajO4Rw+SGl6EQ1CV5GkokplSQttp3VN2Hrx4G0nc/Y5hsh4KIamec8XH2m93Y
- oHYzgxTuAj7YCmmjbYkWV3ptYfyR3Hjqu2UEOh56JqeGoyTvWXA5XHPivQ12CGuem6X/Rr
- xgHHXqSO+6S5irgAB6q6Et0LYTieLi8RyjNsVfhSbOV1GYvaMJp0fMW1OZor6fbMm2E4Ay
- 9TP5mYZo/jc9jY0gJt4wVz7KSJ4yt/rGZtCGz6J7bbB0fLx3SIwl8FzMnDWZSA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=oLJ0XdADKM7CfmRO2Jq24+C5sk+WwOBG3e5oREipwzA=;
+ b=o1FAJDFb2YMMLOGHLsUW/HuVsMds553ZElzsyoTQJvUztW5Q2ilfABwqtsEK1k4ufq8JYV
+ +w/9LvJP3KwUbViz7OTEV2kuE6w2iVIycFLBTJY7Jzo4s/GFj9ciaEnBrVjCcWUIbbJPha
+ LBM00xGcIX3v7DCdsQZZ2WfvIdiGzJwNipeWZ0xRWi4xTjdO0m9aLCnVUdjZ9qYgy1sLUu
+ qdyHywMbcCzZgzofcQ2B3yMZj4qcRImf7OhEH3DS167Yl1OPZw/pG/iIRxY8drOs7UN5+z
+ qqFi3IQuuIt1M/qgPwh/kgfavhTV48nyn+pGPx/eLLfMYJikIpgEw313aNMeNg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=UZVTXvU4
-Subject: Re: [Buildroot] [PATCH 1/1] package/netcalc: bump to v2.1.7
+ header.s=gm1 header.b=o1FAJDFb
+Subject: Re: [Buildroot] [PATCH 1/1] configs/freescale_imx8mqevk: bump BSP
+ components to lf-6.6.23-2.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,30 +83,63 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+Cc: Fabio Estevam <festevam@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, 31 Jul 2024 13:04:29 +0200
-Joachim Wiberg <troglobit@gmail.com> wrote:
+On Wed, 31 Jul 2024 00:07:13 +0200
+Julien Olivain <ju.o@free.fr> wrote:
 
-> Upstream now provides sha256sum for tarball.  License hash updated
-> because of copyright year and maintainer surname changes.
+> Bump ATF, U-Boot and Linux kernel to the NXP BSP lf-6.6.23-2.0.0
+> versions.
 > 
-> Changes from https://github.com/troglobit/netcalc/releases/tag/v2.1.7:
+> Also, since commit dc0f721 "package/gcc: switch to 13.x as default",
+> this freescale_imx8mqevk_defconfig is failing to build the Kernel
+> with output:
 > 
->  - Allow colorized output over pipes, use -n to disable.
->    This reverts the auto-disable in pipes, introduced in v2.1
->  - Misc. build issues on macOS and *BSD
->  - Various minor GCC 13 and Clang 18 warnings
+>     drivers/mxc/gpu-viv/hal/os/linux/kernel/gc_hal_kernel_os.c:5769:1: error: conflicting types for '_QuerySignal' due to enum/integer mismatch; have 'gceSTATUS(struct _gckOS *, void *)' {aka 'enum _gceSTATUS(struct _gckOS *, void *)'} [-Werror=enum-int-mismatch]
+>      5769 | _QuerySignal(
+>           | ^~~~~~~~~~~~
 > 
-> Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
+> This commit fixes the issue by updating the Kernel.
+> 
+> The BR2_GLOBAL_PATCH_DIR is also changed from
+> "board/freescale/common/patches" to
+> "board/freescale/imx8mqevk/patches". This for two reasons:
+> 
+> 1. the common patch directory is removed, because the patches for
+>    arm-trusted-firmware are no longer needed. Patch 0001 is included
+>    in this new version, and patch 0002 no longer needed due a code
+>    rewrite in this new version. The common patch files are kept,
+>    because they are used in other freescale_ defconfigs.
+> 
+> 2. the imx8mqevk patch directory is introduced, to include the needed
+>    hash files, because this commit enables
+>    BR2_DOWNLOAD_FORCE_CHECK_HASHES=y. Those hash files are introduced
+>    in a board specific directory to allow updating this defconfig
+>    independently of the other i.MX defconfigs: there is 16
+>    freescale_imx*_defconfigs, with more or less dependencies
+>    (firmwares, gpu drivers, ...). The ".checkpackageignore" entry for
+>    this defconfig is also removed.
+> 
+> Fixes:
+> https://gitlab.com/buildroot.org/buildroot/-/jobs/7422089470
+> 
+> Signed-off-by: Julien Olivain <ju.o@free.fr>
 > ---
->  package/netcalc/netcalc.hash | 10 +++++-----
->  package/netcalc/netcalc.mk   |  2 +-
->  2 files changed, 6 insertions(+), 6 deletions(-)
+>  .checkpackageignore                                   |  1 -
+>  .../arm-trusted-firmware/arm-trusted-firmware.hash    |  2 ++
+>  .../patches/linux-headers/linux-headers.hash          |  1 +
+>  board/freescale/imx8mqevk/patches/linux/linux.hash    |  2 ++
+>  board/freescale/imx8mqevk/patches/uboot/uboot.hash    |  2 ++
+>  configs/freescale_imx8mqevk_defconfig                 | 11 ++++++-----
+>  6 files changed, 13 insertions(+), 6 deletions(-)
+>  create mode 100644 board/freescale/imx8mqevk/patches/arm-trusted-firmware/arm-trusted-firmware.hash
+>  create mode 120000 board/freescale/imx8mqevk/patches/linux-headers/linux-headers.hash
+>  create mode 100644 board/freescale/imx8mqevk/patches/linux/linux.hash
+>  create mode 100644 board/freescale/imx8mqevk/patches/uboot/uboot.hash
 
 Applied to master, thanks.
 
