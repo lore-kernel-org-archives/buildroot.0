@@ -4,84 +4,84 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70112C3DA64
-	for <buildroot@archiver.kernel.org>; Thu,  1 Aug 2024 08:46:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0F9FEC3DA4A
+	for <buildroot@archiver.kernel.org>; Thu,  1 Aug 2024 08:46:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 23B1C81EA3;
-	Thu,  1 Aug 2024 08:46:31 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C997C81EE4;
+	Thu,  1 Aug 2024 08:46:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZtZIkGQF7gxL; Thu,  1 Aug 2024 08:46:30 +0000 (UTC)
+ id k2HxyFBaXIWj; Thu,  1 Aug 2024 08:46:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9C49481EBC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D3E8981ED3
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9C49481EBC;
-	Thu,  1 Aug 2024 08:46:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D3E8981ED3;
+	Thu,  1 Aug 2024 08:46:32 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 44C811BF3C5
- for <buildroot@lists.busybox.net>; Thu,  1 Aug 2024 08:46:05 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id BA56D1BF3C5
+ for <buildroot@lists.busybox.net>; Thu,  1 Aug 2024 08:46:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3F78540C1B
- for <buildroot@lists.busybox.net>; Thu,  1 Aug 2024 08:46:05 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id A7BBF40BFF
+ for <buildroot@lists.busybox.net>; Thu,  1 Aug 2024 08:46:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id v1Q-NRb8S8In for <buildroot@lists.busybox.net>;
- Thu,  1 Aug 2024 08:46:04 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.210.121;
+ id 5_LwEUZJYSWg for <buildroot@lists.busybox.net>;
+ Thu,  1 Aug 2024 08:46:05 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.126.237;
  helo=smtp-out.orange.com; envelope-from=yann.morin@orange.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org EA7FC40BFF
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EA7FC40BFF
-Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.210.121])
- by smtp4.osuosl.org (Postfix) with ESMTPS id EA7FC40BFF
- for <buildroot@buildroot.org>; Thu,  1 Aug 2024 08:46:03 +0000 (UTC)
-Received: from unknown (HELO opfedv3rlp0b.nor.fr.ftgroup) ([x.x.x.x]) by
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 0CCEF40C4F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0CCEF40C4F
+Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.126.237])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0CCEF40C4F
+ for <buildroot@buildroot.org>; Thu,  1 Aug 2024 08:46:04 +0000 (UTC)
+Received: from unknown (HELO opfedv3rlp0f.nor.fr.ftgroup) ([x.x.x.x]) by
  smtp-out.orange.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
- 01 Aug 2024 10:46:03 +0200
+ 01 Aug 2024 10:46:02 +0200
 Received: from unknown (HELO OPE16NORMBX305.corporate.adroot.infra.ftgroup)
- ([x.x.x.x]) by opfedv3rlp0b.nor.fr.ftgroup with
- ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 01 Aug 2024 10:46:03 +0200
+ ([x.x.x.x]) by opfedv3rlp0f.nor.fr.ftgroup with
+ ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 01 Aug 2024 10:46:01 +0200
 Received: from tl-lnx-nyma7486-2 [x.x.x.x] by
  OPE16NORMBX305.corporate.adroot.infra.ftgroup [x.x.x.x] with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39; Thu, 1 Aug 2024 10:46:02 +0200
+ 15.1.2507.39; Thu, 1 Aug 2024 10:46:00 +0200
 Received: by tl-lnx-nyma7486-2 (sSMTP sendmail emulation);
- Thu, 01 Aug 2024 10:46:01 +0200
-X-IronPort-AV: E=Sophos;i="6.09,254,1716242400"; d="scan'208";a="181826378"
+ Thu, 01 Aug 2024 10:46:00 +0200
+X-IronPort-AV: E=Sophos;i="6.09,254,1716242400"; d="scan'208";a="181885248"
 From: <yann.morin@orange.com>
 To: <buildroot@buildroot.org>
-Date: Thu, 1 Aug 2024 10:45:51 +0200
-Message-ID: <5cb88f8337a63230f90e02423005ba169e307549.1722501946.git.yann.morin@orange.com>
+Date: Thu, 1 Aug 2024 10:45:50 +0200
+Message-ID: <7856237162e86c4ad48ffda2f720f7e5916a67fe.1722501946.git.yann.morin@orange.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1722501946.git.yann.morin@orange.com>
 References: <cover.1722501946.git.yann.morin@orange.com>
 MIME-Version: 1.0
-X-Originating-IP: [10.115.26.51]
-X-ClientProxiedBy: OPE16NORMBX104.corporate.adroot.infra.ftgroup (10.115.26.5)
- To OPE16NORMBX305.corporate.adroot.infra.ftgroup
+X-Originating-IP: [10.115.26.53]
+X-ClientProxiedBy: OPE16NORMBX305.corporate.adroot.infra.ftgroup
+ (10.115.27.10) To OPE16NORMBX305.corporate.adroot.infra.ftgroup
  (10.115.27.10)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
- t=1722501964; x=1754037964;
+ t=1722501965; x=1754037965;
  h=from:to:cc:subject:date:message-id:in-reply-to:
  references:mime-version:content-transfer-encoding;
- bh=4FXuWJCIWNKgd+2fM5X1KrjybFbS0YZF/w3yQR80Xjk=;
- b=o7ItmrYQfWXgOUg+10ivxf3HHoQOsZJqmYabRNIEoBDqP+TCSB2CoiuR
- npqOcFMH+GO9JXVMk2KOr5l31W611KWxJiFEJMDPGGKUA/G88Jn0KMVfH
- ahQrkXUYLSf65F39Vecq6Ki+psdb8fqiJkRyZffz7cE/CS6M62Pkag/PC
- 9go3JurObCzktTvBckmY94fQ/FTrFUc21Fq1NxJ/J3s2H4zCb1Oh6aWrz
- SrLtByvvoOYzt3x551tkqcFYyOSJ8iAEvcCK0AZkyRS368xyvKRaQs71/
- 0NCAnsS67/2n1vayPEM7psw2ovEZ+xHoeeEKRa1uJRaXY3xnfqdwNlyXS
- A==;
+ bh=qfW+TuSouvqnNwHgVpdXN/WTiKQSDlauNX46+mywCCA=;
+ b=JZ09ezI168ILW/zycQp1W2b6wGyDGS7kNrIHDbtUjr8eq2J11znYEuwE
+ BuLNF6DimbKGRTO6a0PDgDXMKjit2UdHXC2BHUbxqACWeEVu7Yhmn7htC
+ 3TjuuKluwUGsQslz/aRXrzeMUlTJktCGbVPdvWuC9FV2UgQoJFgrh2oQe
+ PIC4gUMgCCLkuY+7jTmUxFNWwMKLfyD+y0XwUrfUle0zdVgturAOLEk+k
+ 8MTL/G/Q0RIb2Be6AsVQ/HmZcBDF5LhWm6Lwt0HLzt421keNzWVkLQUhx
+ w8QaT88rqwMQd5qedlEQbmGNHEWnhgzliHw/xMWgR2lADLwU2+xfaJI45
+ g==;
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=orange.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=orange.com header.i=@orange.com
- header.a=rsa-sha256 header.s=orange002 header.b=o7ItmrYQ
-Subject: [Buildroot] [PATCH 7/7] package/skopeo: bump version
+ header.a=rsa-sha256 header.s=orange002 header.b=JZ09ezI1
+Subject: [Buildroot] [PATCH 6/7] package/skopeo: needs CGO linking for host
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,34 +101,25 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: "Yann E. MORIN" <yann.morin@orange.com>
 
+Fixes: http://autobuild.buildroot.org/results/35e/35ec43c0970f001e422d0b2ca6f8319deea2cde4/
+
 Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
 ---
- package/skopeo/skopeo.hash | 2 +-
- package/skopeo/skopeo.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/skopeo/Config.in.host | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/skopeo/skopeo.hash b/package/skopeo/skopeo.hash
-index d40585d52f..ee42f18b80 100644
---- a/package/skopeo/skopeo.hash
-+++ b/package/skopeo/skopeo.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  0b788fc5725ac79327f7c29797821a2bafc1c3c87bbfcb2998c2a1be949e314d  skopeo-1.13.3-go2.tar.gz
-+sha256  fed91fd067605460ef33431163227471b1e85c8768203fc393345d6ffd645448  skopeo-1.16.0-go2.tar.gz
- sha256  716a8b80635c394681e652823e1e42e411ad2d254e1f202403422d74f4b0b106  LICENSE
-diff --git a/package/skopeo/skopeo.mk b/package/skopeo/skopeo.mk
-index 58631629b3..f09009d88c 100644
---- a/package/skopeo/skopeo.mk
-+++ b/package/skopeo/skopeo.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SKOPEO_VERSION = 1.13.3
-+SKOPEO_VERSION = 1.16.0
- SKOPEO_SITE = $(call github,containers,skopeo,v$(SKOPEO_VERSION))
- 
- SKOPEO_LICENSE = Apache-2.0
+diff --git a/package/skopeo/Config.in.host b/package/skopeo/Config.in.host
+index b3a1c155f7..334a12b6fc 100644
+--- a/package/skopeo/Config.in.host
++++ b/package/skopeo/Config.in.host
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_HOST_SKOPEO
+ 	bool "host skopeo"
+ 	depends on BR2_PACKAGE_HOST_GO_HOST_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_HOST_GO_HOST_CGO_LINKING_SUPPORTS
+ 	help
+ 	  skopeo is a command line utility that performs various
+ 	  operations on container images and image repositories.
 -- 
 2.34.1
 
