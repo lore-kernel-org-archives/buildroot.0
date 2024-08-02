@@ -4,71 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15EE1C3DA4A
-	for <buildroot@archiver.kernel.org>; Fri,  2 Aug 2024 18:03:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 23AC8C3DA4A
+	for <buildroot@archiver.kernel.org>; Fri,  2 Aug 2024 18:06:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B80B284605;
-	Fri,  2 Aug 2024 18:03:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C87048457A;
+	Fri,  2 Aug 2024 18:06:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id q-lgBprh6a2y; Fri,  2 Aug 2024 18:03:04 +0000 (UTC)
+ id NiDogaP6Xw_r; Fri,  2 Aug 2024 18:06:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E986A84608
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7CFEB84584
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E986A84608;
-	Fri,  2 Aug 2024 18:03:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7CFEB84584;
+	Fri,  2 Aug 2024 18:06:23 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1B3781BF41C
- for <buildroot@lists.busybox.net>; Fri,  2 Aug 2024 18:03:00 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 20E011BF5A6
+ for <buildroot@lists.busybox.net>; Fri,  2 Aug 2024 18:06:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 088D3608BF
- for <buildroot@lists.busybox.net>; Fri,  2 Aug 2024 18:03:00 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0EF7460709
+ for <buildroot@lists.busybox.net>; Fri,  2 Aug 2024 18:06:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zCbs1SyWl7IC for <buildroot@lists.busybox.net>;
- Fri,  2 Aug 2024 18:02:59 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::221;
- helo=relay1-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id OTXlW5Mr_gZa for <buildroot@lists.busybox.net>;
+ Fri,  2 Aug 2024 18:06:20 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E57D560709
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E57D560709
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E57D560709
- for <buildroot@buildroot.org>; Fri,  2 Aug 2024 18:02:58 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 33C75240002;
- Fri,  2 Aug 2024 18:02:56 +0000 (UTC)
-Date: Fri, 2 Aug 2024 20:02:55 +0200
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20240802200255.2b57129d@windsurf>
-In-Reply-To: <20240723133004.652232-1-fontaine.fabrice@gmail.com>
-References: <20240723133004.652232-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1722621776;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=zt9XF9ARRoOkQPCwfu3/4uTdldyOLTAanGZr+QBDP7E=;
- b=ND2wHZfWIImbhUTgeV1HGTYlyKvhFgOa72r9mDoHF2qGfkq0phBf5CUMP0604OI2VlDWQn
- SLiUsmK1tOXFLBGdnI19zoxUkstOFhqQ/iHXFiNZwp3/VB1gX3ukzBGVZarlyPo6M9UkfQ
- i2sFOK1Bu5hOkdBu9S+7T6lPIYPTNPre4ambvkn4Yh+k4wNgl9+7mx4X6fBqrlRmTnjITx
- BtSGIAdNc4BKUK5DdhFC+uwIdOXT1xDBArA9rLM1a0urlZOUmIJBickII2cD1+SYltsJrb
- ZR3EEoiJ4huR1hqo78T2fEvpa/r31A4hJJZHz8rlMel8z3uGnoPsUHnLTNRPbg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=ND2wHZfW
-Subject: Re: [Buildroot] [PATCH 1/1] package/rtty: bump to version 8.1.2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A8413605CA
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id A8413605CA
+ for <buildroot@buildroot.org>; Fri,  2 Aug 2024 18:06:20 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 8D34683B98; Fri,  2 Aug 2024 18:06:20 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Fri, 2 Aug 2024 20:05:49 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: ca742a985cc9acc40fff3539c696e64fa040f1c4
+X-Git-Newrev: 79877bbdb165c8eef90b8aecf75d2dd8363e4995
+X-Patchwork-Hint: ignore
+Message-Id: <20240802180620.8D34683B98@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/wpa_supplicant: bump version to
+ 2.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,47 +60,298 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Jianhui Zhao <zhaojh329@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 23 Jul 2024 15:30:04 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=79877bbdb165c8eef90b8aecf75d2dd8363e4995
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> - Drop patch (already in version)
-> - This bump will fix the following build failure with musl >= 1.2.5
->   thanks to
->   https://github.com/zhaojh329/rtty/commit/eb6394c3d83a21a8825e47b40659cfe0ead33b6f:
-> 
->   /home/autobuild/autobuild/instance-22/output-1/build/rtty-8.1.0/src/file.c: In function 'start_upload_file':
->   /home/autobuild/autobuild/instance-22/output-1/build/rtty-8.1.0/src/file.c:156:24: error: implicit declaration of function 'basename' [-Werror=implicit-function-declaration]
->     156 |     const char *name = basename(path);
->         |                        ^~~~~~~~
-> 
-> https://github.com/zhaojh329/rtty/releases/tag/v8.1.2
-> https://github.com/zhaojh329/rtty/releases/tag/v8.1.1
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/382405b421a8ea7b5b3beb553f47fa20427fa3c3
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
->  .checkpackageignore                           |  1 -
->  ...keLists.txt-prefer-pkg_check_modules.patch | 40 -------------------
->  package/rtty/rtty.hash                        |  2 +-
->  package/rtty/rtty.mk                          |  2 +-
->  4 files changed, 2 insertions(+), 43 deletions(-)
->  delete mode 100644 package/rtty/0001-CMakeLists.txt-prefer-pkg_check_modules.patch
+Update wpa_supplicant to the latest release v2.11. Drop all the patches
+as they are already included into the release.
 
-Applied to master, thanks.
+Hash of the README file used as license file has changed due to:
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+-Copyright (c) 2002-2022, Jouni Malinen <j@w1.fi> and contributors
++Copyright (c) 2002-2024, Jouni Malinen <j@w1.fi> and contributors
+
+Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .checkpackageignore                                |  1 -
+ ...-enable-options-for-libwpa_client.so-and-.patch | 68 -------------------
+ ...ant-use-a-less-generic-name-for-IEEE802.1.patch | 79 ----------------------
+ ...C-SHA384-512-KDF-for-SAE-if-SHA384-512-is.patch | 64 ------------------
+ package/wpa_supplicant/wpa_supplicant.hash         |  4 +-
+ package/wpa_supplicant/wpa_supplicant.mk           |  2 +-
+ 6 files changed, 3 insertions(+), 215 deletions(-)
+
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 2d9b0c13ca..10662bb11e 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -1386,7 +1386,6 @@ package/wipe/0001-musl.patch lib_patch.Upstream
+ package/wireless_tools/0001-remove-bzero.patch lib_patch.Upstream
+ package/wireshark/0001-cmake-lemon-wipe-CMAKE_-EXE_LINKER_FLAGS-SYSROOT-if-.patch lib_patch.Upstream
+ package/woff2/0001-CMake-Handle-multiple-libraries-being-returned-for-B.patch lib_patch.Upstream
+-package/wpa_supplicant/0001-build-re-enable-options-for-libwpa_client.so-and-.patch lib_patch.Upstream
+ package/wpa_supplicant/ifupdown.sh Shellcheck
+ package/x11r7/xapp_luit/0001-posix-openpt.patch lib_patch.Upstream
+ package/x11r7/xapp_xdm/S99xdm lib_sysv.Indent lib_sysv.Variables
+diff --git a/package/wpa_supplicant/0001-build-re-enable-options-for-libwpa_client.so-and-.patch b/package/wpa_supplicant/0001-build-re-enable-options-for-libwpa_client.so-and-.patch
+deleted file mode 100644
+index 156d0e7e2c..0000000000
+--- a/package/wpa_supplicant/0001-build-re-enable-options-for-libwpa_client.so-and-.patch
++++ /dev/null
+@@ -1,68 +0,0 @@
+-From e6a6a4e3df52cc60425fcd037d3ec68a38f948ce Mon Sep 17 00:00:00 2001
+-From: Sergey Matyukevich <geomatsi@gmail.com>
+-Date: Sun, 20 Feb 2022 10:12:28 +0300
+-Subject: [PATCH] build: re-enable options for libwpa_client.so and wpa_passphrase
+-
+-Commit a41a29192e5d ("build: Pull common fragments into a build.rules
+-file") introduced regression into wpa_supplicant build process. Build
+-target libwpa_client.so is not built regardless of whether the option
+-CONFIG_BUILD_WPA_CLIENT_SO is set or not. This happens because config
+-option is used before it is imported from the configuration file.
+-Moving its usage after including build.rules does not help: variable
+-ALL is processed by build.rules and further changes are not applied.
+-Similarly, option CONFIG_NO_WPA_PASSPHRASE also does not work as
+-expected: wpa_passphrase is always built regardless of whether the
+-option is set or not.
+-
+-This commit re-enables options adding both build targets to _all
+-dependencies.
+-
+-Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+----
+- wpa_supplicant/Makefile | 19 ++++++++++++-------
+- 1 file changed, 12 insertions(+), 7 deletions(-)
+-
+-diff --git a/wpa_supplicant/Makefile b/wpa_supplicant/Makefile
+-index cb66defac..e384cc6b8 100644
+---- a/wpa_supplicant/Makefile
+-+++ b/wpa_supplicant/Makefile
+-@@ -1,24 +1,29 @@
+- BINALL=wpa_supplicant wpa_cli
+- 
+--ifndef CONFIG_NO_WPA_PASSPHRASE
+--BINALL += wpa_passphrase
+--endif
+--
+- ALL = $(BINALL)
+- ALL += systemd/wpa_supplicant.service
+- ALL += systemd/wpa_supplicant@.service
+- ALL += systemd/wpa_supplicant-nl80211@.service
+- ALL += systemd/wpa_supplicant-wired@.service
+- ALL += dbus/fi.w1.wpa_supplicant1.service
+--ifdef CONFIG_BUILD_WPA_CLIENT_SO
+--ALL += libwpa_client.so
+--endif
+- 
+- EXTRA_TARGETS=dynamic_eap_methods
+- 
+- CONFIG_FILE=.config
+- include ../src/build.rules
+- 
+-+ifdef CONFIG_BUILD_WPA_CLIENT_SO
+-+# add the dependency this way to allow CONFIG_BUILD_WPA_CLIENT_SO
+-+# being set in the config which is read by build.rules
+-+_all: libwpa_client.so
+-+endif
+-+
+-+ifndef CONFIG_NO_WPA_PASSPHRASE
+-+# add the dependency this way to allow CONFIGNO_WPA_PASSPHRASE
+-+# being set in the config which is read by build.rules
+-+_all: wpa_passphrase
+-+endif
+-+
+- ifdef LIBS
+- # If LIBS is set with some global build system defaults, clone those for
+- # LIBS_c and LIBS_p to cover wpa_passphrase and wpa_cli as well.
+--- 
+-2.35.1
+-
+diff --git a/package/wpa_supplicant/0002-wpa_supplicant-use-a-less-generic-name-for-IEEE802.1.patch b/package/wpa_supplicant/0002-wpa_supplicant-use-a-less-generic-name-for-IEEE802.1.patch
+deleted file mode 100644
+index a8637111bb..0000000000
+--- a/package/wpa_supplicant/0002-wpa_supplicant-use-a-less-generic-name-for-IEEE802.1.patch
++++ /dev/null
+@@ -1,79 +0,0 @@
+-From c8af2e431b47d7d900e0c7359705aaa1096d302a Mon Sep 17 00:00:00 2001
+-From: Sergey Matyukevich <geomatsi@gmail.com>
+-Date: Fri, 16 Sep 2022 23:18:50 +0300
+-Subject: [PATCH] wpa_supplicant: use a less generic name for IEEE802.11 CRC-32 routine
+-
+-Hostapd uses 'crc32' name for IEEE802.11 CRC-32 routine. This name is
+-too generic. Buildroot autobuilder detected build configuration that
+-failed to build due to the naming conflict: static linking with openssl
+-using zlib-ng as a zlib provider, e.g. see:
+-- http://autobuild.buildroot.net/results/9901df820d3afa4cde78e8ad6d62cb8ce7e69fdb/
+-- http://autobuild.buildroot.net/results/ac19975f0bf77f4a8ca574c374092ba81cd5a332/
+-
+-Use a less generic name ieee80211_crc32 for IEEE802.11 CRC-32 routine
+-to avoid such naming conflicts.
+-
+-Upstream: https://w1.fi/cgit/hostap/commit/?id=0c7b3814ca6070a8e930dea09fde08b4058a4ca6
+-Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+----
+- src/ap/hostapd.c     | 3 ++-
+- src/ap/neighbor_db.c | 2 +-
+- src/utils/crc32.c    | 2 +-
+- src/utils/crc32.h    | 2 +-
+- 4 files changed, 5 insertions(+), 4 deletions(-)
+-
+-diff --git a/src/ap/hostapd.c b/src/ap/hostapd.c
+-index 4b88641a2..56c8fb90e 100644
+---- a/src/ap/hostapd.c
+-+++ b/src/ap/hostapd.c
+-@@ -1230,7 +1230,8 @@ static int hostapd_setup_bss(struct hostapd_data *hapd, int first)
+- 	 * Short SSID calculation is identical to FCS and it is defined in
+- 	 * IEEE P802.11-REVmd/D3.0, 9.4.2.170.3 (Calculating the Short-SSID).
+- 	 */
+--	conf->ssid.short_ssid = crc32(conf->ssid.ssid, conf->ssid.ssid_len);
+-+	conf->ssid.short_ssid = ieee80211_crc32(conf->ssid.ssid,
+-+						conf->ssid.ssid_len);
+- 
+- 	if (!hostapd_drv_none(hapd)) {
+- 		wpa_printf(MSG_DEBUG, "Using interface %s with hwaddr " MACSTR
+-diff --git a/src/ap/neighbor_db.c b/src/ap/neighbor_db.c
+-index 229edd2a9..ef17634c3 100644
+---- a/src/ap/neighbor_db.c
+-+++ b/src/ap/neighbor_db.c
+-@@ -136,7 +136,7 @@ int hostapd_neighbor_set(struct hostapd_data *hapd, const u8 *bssid,
+- 
+- 	os_memcpy(entry->bssid, bssid, ETH_ALEN);
+- 	os_memcpy(&entry->ssid, ssid, sizeof(entry->ssid));
+--	entry->short_ssid = crc32(ssid->ssid, ssid->ssid_len);
+-+	entry->short_ssid = ieee80211_crc32(ssid->ssid, ssid->ssid_len);
+- 
+- 	entry->nr = wpabuf_dup(nr);
+- 	if (!entry->nr)
+-diff --git a/src/utils/crc32.c b/src/utils/crc32.c
+-index 12d9e2a70..371254994 100644
+---- a/src/utils/crc32.c
+-+++ b/src/utils/crc32.c
+-@@ -72,7 +72,7 @@ static const u32 crc32_table[256] = {
+- };
+- 
+- 
+--u32 crc32(const u8 *frame, size_t frame_len)
+-+u32 ieee80211_crc32(const u8 *frame, size_t frame_len)
+- {
+- 	size_t i;
+- 	u32 crc;
+-diff --git a/src/utils/crc32.h b/src/utils/crc32.h
+-index dc31399be..71a19dc5f 100644
+---- a/src/utils/crc32.h
+-+++ b/src/utils/crc32.h
+-@@ -9,6 +9,6 @@
+- #ifndef CRC32_H
+- #define CRC32_H
+- 
+--u32 crc32(const u8 *frame, size_t frame_len);
+-+u32 ieee80211_crc32(const u8 *frame, size_t frame_len);
+- 
+- #endif /* CRC32_H */
+--- 
+-2.37.1
+-
+diff --git a/package/wpa_supplicant/0003-Include-HMAC-SHA384-512-KDF-for-SAE-if-SHA384-512-is.patch b/package/wpa_supplicant/0003-Include-HMAC-SHA384-512-KDF-for-SAE-if-SHA384-512-is.patch
+deleted file mode 100644
+index 98df56e540..0000000000
+--- a/package/wpa_supplicant/0003-Include-HMAC-SHA384-512-KDF-for-SAE-if-SHA384-512-is.patch
++++ /dev/null
+@@ -1,64 +0,0 @@
+-From c7f71fb8679c4cdd2607dbaac467a1d5efe9f0f9 Mon Sep 17 00:00:00 2001
+-From: Jouni Malinen <j@w1.fi>
+-Date: Sun, 17 Apr 2022 12:28:41 +0300
+-Subject: [PATCH] Include HMAC-SHA384/512 KDF for SAE if SHA384/512 is included
+-
+-It was possible to miss the HMAC functions if some other build
+-configuration parameters ended up setting NEED_SHA384/512=y.
+-
+-Upstream: https://w1.fi/cgit/hostap/commit/?id=c7f71fb8679c4cdd2607dbaac467a1d5efe9f0f9
+-
+-Signed-off-by: Jouni Malinen <j@w1.fi>
+-Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+----
+- wpa_supplicant/Android.mk | 11 +++++++++++
+- wpa_supplicant/Makefile   | 11 +++++++++++
+- 2 files changed, 22 insertions(+)
+-
+-diff --git a/wpa_supplicant/Android.mk b/wpa_supplicant/Android.mk
+-index 0e0ce467c..bcdbd6c90 100644
+---- a/wpa_supplicant/Android.mk
+-+++ b/wpa_supplicant/Android.mk
+-@@ -1361,6 +1361,17 @@ endif
+- endif
+- endif
+- 
+-+ifdef CONFIG_SAE
+-+ifdef NEED_SHA384
+-+# Need to add HMAC-SHA384 KDF as well, if SHA384 was enabled.
+-+NEED_HMAC_SHA384_KDF=y
+-+endif
+-+ifdef NEED_SHA512
+-+# Need to add HMAC-SHA512 KDF as well, if SHA512 was enabled.
+-+NEED_HMAC_SHA512_KDF=y
+-+endif
+-+endif
+-+
+- SHA256OBJS = # none by default
+- L_CFLAGS += -DCONFIG_SHA256
+- ifneq ($(CONFIG_TLS), openssl)
+-diff --git a/wpa_supplicant/Makefile b/wpa_supplicant/Makefile
+-index ed49aa972..69c80121c 100644
+---- a/wpa_supplicant/Makefile
+-+++ b/wpa_supplicant/Makefile
+-@@ -1475,6 +1475,17 @@ endif
+- endif
+- endif
+- 
+-+ifdef CONFIG_SAE
+-+ifdef NEED_SHA384
+-+# Need to add HMAC-SHA384 KDF as well, if SHA384 was enabled.
+-+NEED_HMAC_SHA384_KDF=y
+-+endif
+-+ifdef NEED_SHA512
+-+# Need to add HMAC-SHA512 KDF as well, if SHA512 was enabled.
+-+NEED_HMAC_SHA512_KDF=y
+-+endif
+-+endif
+-+
+- SHA256OBJS = # none by default
+- CFLAGS += -DCONFIG_SHA256
+- ifneq ($(CONFIG_TLS), openssl)
+--- 
+-2.39.2
+-
+diff --git a/package/wpa_supplicant/wpa_supplicant.hash b/package/wpa_supplicant/wpa_supplicant.hash
+index fcaee0a30b..2f38dc257a 100644
+--- a/package/wpa_supplicant/wpa_supplicant.hash
++++ b/package/wpa_supplicant/wpa_supplicant.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  20df7ae5154b3830355f8ab4269123a87affdea59fe74fe9292a91d0d7e17b2f  wpa_supplicant-2.10.tar.gz
+-sha256  af01e1d1ee065a1054d20ebe8a78a016f1fb1133b73e6a9d50801b165bb280c7  README
++sha256  912ea06f74e30a8e36fbb68064d6cdff218d8d591db0fc5d75dee6c81ac7fc0a  wpa_supplicant-2.11.tar.gz
++sha256  f1b5992bbdd015c3ccb7faaadd62ef58ed821e15b9329bf2ceb27511ccc3f562  README
+diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
+index 42c6f772ac..984959f679 100644
+--- a/package/wpa_supplicant/wpa_supplicant.mk
++++ b/package/wpa_supplicant/wpa_supplicant.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WPA_SUPPLICANT_VERSION = 2.10
++WPA_SUPPLICANT_VERSION = 2.11
+ WPA_SUPPLICANT_SITE = http://w1.fi/releases
+ WPA_SUPPLICANT_LICENSE = BSD-3-Clause
+ WPA_SUPPLICANT_LICENSE_FILES = README
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
