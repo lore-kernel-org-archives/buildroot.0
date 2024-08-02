@@ -4,49 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 42B94C3DA4A
-	for <buildroot@archiver.kernel.org>; Fri,  2 Aug 2024 17:50:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A739AC3DA7F
+	for <buildroot@archiver.kernel.org>; Fri,  2 Aug 2024 17:51:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A0C8581959;
-	Fri,  2 Aug 2024 17:50:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 76D1684508;
+	Fri,  2 Aug 2024 17:51:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QfiLccOEjaUw; Fri,  2 Aug 2024 17:50:39 +0000 (UTC)
+ id pcOMShecsJV6; Fri,  2 Aug 2024 17:51:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E73CA84532
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7D62284509
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E73CA84532;
-	Fri,  2 Aug 2024 17:50:38 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C3CD21BF41C
- for <buildroot@lists.busybox.net>; Fri,  2 Aug 2024 17:50:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7D62284509;
+	Fri,  2 Aug 2024 17:51:39 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 98C311BF41C
+ for <buildroot@lists.busybox.net>; Fri,  2 Aug 2024 17:51:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id AFD6781177
- for <buildroot@lists.busybox.net>; Fri,  2 Aug 2024 17:50:34 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 826924018A
+ for <buildroot@lists.busybox.net>; Fri,  2 Aug 2024 17:51:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qi2PEHmuRUXO for <buildroot@lists.busybox.net>;
- Fri,  2 Aug 2024 17:50:33 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GyiUvXW9UafD for <buildroot@lists.busybox.net>;
+ Fri,  2 Aug 2024 17:51:36 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.200;
+ helo=relay7-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9479E81186
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9479E81186
- for <buildroot@buildroot.org>; Fri,  2 Aug 2024 17:50:33 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8196383B73; Fri,  2 Aug 2024 17:50:33 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 2 Aug 2024 19:50:00 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 668867bfed9a4decd7fd74d87d742368030b9399
-X-Git-Newrev: e4109c1d2d28f737409dce2e346661cbf20084c6
-X-Patchwork-Hint: ignore
-Message-Id: <20240802175033.8196383B73@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/bcusdk: fix build with host GCC
- 14.x
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 38E8A4017A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 38E8A4017A
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 38E8A4017A
+ for <buildroot@buildroot.org>; Fri,  2 Aug 2024 17:51:35 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id A208520005;
+ Fri,  2 Aug 2024 17:51:32 +0000 (UTC)
+Date: Fri, 2 Aug 2024 19:51:31 +0200
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20240802195131.7169e924@windsurf>
+In-Reply-To: <20240723132058.629476-1-fontaine.fabrice@gmail.com>
+References: <20240723132058.629476-1-fontaine.fabrice@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1722621092;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=X094ikJJfsY80kZ55RrACvvCvooj973MXEYe04xpFQo=;
+ b=XgmDrI2+zHDKXkZ4j9PuOCIzVCaWve6xtMxaz2TZm1b2F3+CSw+AvU4UaLvYCV48k1c5bY
+ juKMdi9lwu9v1XmHOg060t26yDGsgjTyksUt46QqY9pvAGh4JrOE5UZ0bBg/YX//iY3+kS
+ I8uYwd6jqF3RL905HXaZl53hNM2TxwRAxixKohlaWYnLa7xWgVGVTbyjjD0Hm7JqdE04FO
+ 4hwa5kQ0wybyWSEJwqWBH/X23JlCY2asACINEYJ+hPCTbnTa7Nz5JzwxVtZ5NJ6ubKOs6Q
+ SFR68A8bf+HkScpUnX/XsrzsoHZAD0raJRQtk0HBUrF1pR4Fn6Ysxa954+qL2Q==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=XgmDrI2+
+Subject: Re: [Buildroot] [PATCH 1/1] package/pistache: needs NPTL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,168 +82,42 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e4109c1d2d28f737409dce2e346661cbf20084c6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue, 23 Jul 2024 15:20:58 +0200
+Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 
-With GCC 14.x as the host compiler, bcusdk fails to build as follows:
+> pistache needs NPTL as it unconditionally uses pthread_setname_np since
+> https://github.com/pistacheio/pistache/commit/b283c32963a7cb0500cf69555d320a6e9e252850
+> resulting in the following uclibc build failure since commit
+> 82e61bed8208857d5d13c384c89086c4dd4e1e79:
+> 
+> ../src/common/reactor.cc: In lambda function:
+> ../src/common/reactor.cc:512:25: error: 'pthread_setname_np' was not declared in this scope; did you mean 'pthread_setcanceltype'?
+>   512 |                         pthread_setname_np(pthread_self(),
+>       |                         ^~~~~~~~~~~~~~~~~~
+>       |                         pthread_setcanceltype
+> 
+> Fixes: 82e61bed8208857d5d13c384c89086c4dd4e1e79
+>  - http://autobuild.buildroot.org/results/b2b22e4f9684aca0246650673fd8c33019712ddf
+>  - http://autobuild.buildroot.org/results/1597bfe2a57cd3aef54d331447dd81cae020d434
+> 
+> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+> ---
+>  package/pistache/Config.in | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 
-configure: error: Specified CC_FOR_BUILD doesn't seem to work
+Applied to master, thanks.
 
-This is due to missing includes in the test programs used in the
-configure script to check the host compiler. We fix this with patch
-0003.
-
-However, this patch requires to autoreconf the package, and autoreconf
-would need the definition of AM_PATH_XML2, which would require libxml2
-even though we don't have libxml2 as a dependency of this package (we
-don't enable the features that requires libxml2). As it turns out that
-the AM_PATH_XML2 macro is in fact deprecated, we replaced it by its
-equivalent using PKG_CHECK_MODULES(), which is in fact exactly how
-AM_PATH_XML2 is implemented in upstream libxml2.
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/458880bd6c207e5bb7afce1a1186f204c30c0941/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...build.m4-include-stdlib.h-in-test-program.patch | 50 ++++++++++++++++++++++
- ...n-replace-obsolete-AM_PATH_XML2-by-PKG_CH.patch | 40 +++++++++++++++++
- package/bcusdk/bcusdk.mk                           |  6 ++-
- 3 files changed, 95 insertions(+), 1 deletion(-)
-
-diff --git a/package/bcusdk/0003-m4-ccforbuild.m4-include-stdlib.h-in-test-program.patch b/package/bcusdk/0003-m4-ccforbuild.m4-include-stdlib.h-in-test-program.patch
-new file mode 100644
-index 0000000000..36b8f3d744
---- /dev/null
-+++ b/package/bcusdk/0003-m4-ccforbuild.m4-include-stdlib.h-in-test-program.patch
-@@ -0,0 +1,50 @@
-+From 1c78aa3541f730e9624504168fb0e1f413e5cbb8 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Date: Fri, 2 Aug 2024 19:28:36 +0200
-+Subject: [PATCH] m4/ccforbuild.m4: include <stdlib.h> in test program
-+
-+The GMP_PROG_CC_FOR_BUILD_WORKS and GMP_PROG_EXEEXT_FOR_BUILD macros
-+do various checks to verify if the host compiler works, but their test
-+programs lack the inclusion of <stdlib.h>, needed for exit(). This
-+causes a build failure with gcc 14.x:
-+
-+conftest.c: In function 'main':
-+conftest.c:4:3: error: implicit declaration of function 'exit' [-Wimplicit-function-declaration]
-+    4 |   exit(0);
-+
-+which then causes the configure script to think that the host compiler
-+does not work:
-+
-+configure: error: Specified CC_FOR_BUILD doesn't seem to work
-+
-+so let's include <stdlib.h> to fix this issue.
-+
-+Upstream: https://sourceforge.net/p/bcusdk/patches/4/
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ m4/ccforbuild.m4 | 2 ++
-+ 1 file changed, 2 insertions(+)
-+
-+diff --git a/m4/ccforbuild.m4 b/m4/ccforbuild.m4
-+index a466cab..389deaa 100644
-+--- a/m4/ccforbuild.m4
-++++ b/m4/ccforbuild.m4
-+@@ -66,6 +66,7 @@ AC_DEFUN([GMP_PROG_CC_FOR_BUILD_WORKS],
-+ # remove anything that might look like compiler output to our "||" expression
-+ rm -f conftest* a.out b.out a.exe a_out.exe
-+ cat >conftest.c <<EOF
-++#include <stdlib.h>
-+ int
-+ main ()
-+ {
-+@@ -140,6 +141,7 @@ AC_DEFUN([GMP_PROG_EXEEXT_FOR_BUILD],
-+ AC_CACHE_CHECK([for build system executable suffix],
-+                gmp_cv_prog_exeext_for_build,
-+ [cat >conftest.c <<EOF
-++#include <stdlib.h>
-+ int
-+ main ()
-+ {
-+-- 
-+2.45.2
-+
-diff --git a/package/bcusdk/0004-configure.in-replace-obsolete-AM_PATH_XML2-by-PKG_CH.patch b/package/bcusdk/0004-configure.in-replace-obsolete-AM_PATH_XML2-by-PKG_CH.patch
-new file mode 100644
-index 0000000000..899f8c0f3b
---- /dev/null
-+++ b/package/bcusdk/0004-configure.in-replace-obsolete-AM_PATH_XML2-by-PKG_CH.patch
-@@ -0,0 +1,40 @@
-+From 8402c1ffccb2eeb47581d2d80b81e94433cdacb7 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Date: Fri, 2 Aug 2024 19:35:02 +0200
-+Subject: [PATCH] configure.in: replace obsolete AM_PATH_XML2 by
-+ PKG_CHECK_MODULES
-+
-+According to the libxml2 code:
-+
-+  AM_PATH_XML2 is deprecated, use PKG_CHECK_MODULES instead
-+
-+See:
-+
-+  https://gitlab.gnome.org/GNOME/libxml2/-/blob/master/libxml.m4
-+
-+Upstream: https://sourceforge.net/p/bcusdk/patches/5/
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ configure.in | 6 +++++-
-+ 1 file changed, 5 insertions(+), 1 deletion(-)
-+
-+diff --git a/configure.in b/configure.in
-+index 7f3a8bd..82176d9 100644
-+--- a/configure.in
-++++ b/configure.in
-+@@ -81,7 +81,11 @@ AM_CONDITIONAL(HAVE_ONLYEIBD, test x$onlyeibd = xtrue)
-+ 
-+ if test x$onlyeibd = xfalse ; then
-+ 
-+-AM_PATH_XML2(2.6.16,,[AC_MSG_ERROR([limxml2 not found])])
-++PKG_CHECK_MODULES(XML, [libxml-2.0 >= 2.6.16], [], [AC_MSG_ERROR([limxml2 not found])])
-++XML_CPPFLAGS=$XML_CFLAGS
-++AC_SUBST(XML_CPPFLAGS)
-++AC_SUBST(XML_LIBS)
-++
-+ AC_PATH_PROG(TAS,[m68hc05-as],,[$PATH:$bindir:$prefix/bin])
-+ AC_PATH_PROG(TLD,[m68hc05-ld],,[$PATH:$bindir:$prefix/bin])
-+ AC_PATH_PROG(TAR,[m68hc05-ar],,[$PATH:$bindir:$prefix/bin])
-+-- 
-+2.45.2
-+
-diff --git a/package/bcusdk/bcusdk.mk b/package/bcusdk/bcusdk.mk
-index f14b23c7cc..4defd29ba1 100644
---- a/package/bcusdk/bcusdk.mk
-+++ b/package/bcusdk/bcusdk.mk
-@@ -10,6 +10,9 @@ BCUSDK_SITE = http://www.auto.tuwien.ac.at/~mkoegler/eib
- BCUSDK_LICENSE = GPL-2.0+
- BCUSDK_LICENSE_FILES = COPYING
- BCUSDK_INSTALL_STAGING = YES
-+# 0003-m4-ccforbuild.m4-include-stdlib.h-in-test-program.patch
-+# 0004-configure.in-replace-obsolete-AM_PATH_XML2-by-PKG_CH.patch
-+BCUSDK_AUTORECONF = YES
- BCUSDK_CONF_OPTS = \
- 	--enable-onlyeibd \
- 	--enable-ft12 \
-@@ -21,7 +24,8 @@ BCUSDK_CONF_OPTS = \
- 	--without-pth-test \
- 	--with-pth=$(STAGING_DIR)/usr
- 
--BCUSDK_DEPENDENCIES = libpthsem
-+# host-pkgconf is only needed because of autoreconf
-+BCUSDK_DEPENDENCIES = libpthsem host-pkgconf
- 
- ifeq ($(BR2_PACKAGE_ARGP_STANDALONE),y)
- BCUSDK_DEPENDENCIES += argp-standalone $(TARGET_NLS_DEPENDENCIES)
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
