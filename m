@@ -4,72 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5EA9AC3DA4A
-	for <buildroot@archiver.kernel.org>; Fri,  2 Aug 2024 16:51:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 735F5C52D6F
+	for <buildroot@archiver.kernel.org>; Fri,  2 Aug 2024 17:07:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1DF7482004;
-	Fri,  2 Aug 2024 16:51:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 230C1845C2;
+	Fri,  2 Aug 2024 17:07:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZhqEadz6dAQk; Fri,  2 Aug 2024 16:51:27 +0000 (UTC)
+ id RmHRhRycJN2f; Fri,  2 Aug 2024 17:07:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3423782107
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2353B845C3
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3423782107;
-	Fri,  2 Aug 2024 16:51:27 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1F6CD1BF3EF
- for <buildroot@lists.busybox.net>; Fri,  2 Aug 2024 16:51:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2353B845C3;
+	Fri,  2 Aug 2024 17:07:16 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 3764E1BF387
+ for <buildroot@lists.busybox.net>; Fri,  2 Aug 2024 17:07:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 192F1404ED
- for <buildroot@lists.busybox.net>; Fri,  2 Aug 2024 16:51:26 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 323EF845C3
+ for <buildroot@lists.busybox.net>; Fri,  2 Aug 2024 17:07:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FPvYFbNmECGj for <buildroot@lists.busybox.net>;
- Fri,  2 Aug 2024 16:51:25 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.193;
- helo=relay1-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5hUxjcWrUrhH for <buildroot@lists.busybox.net>;
+ Fri,  2 Aug 2024 17:07:13 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org C50CC4039D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C50CC4039D
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C50CC4039D
- for <buildroot@buildroot.org>; Fri,  2 Aug 2024 16:51:24 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id A9686240003;
- Fri,  2 Aug 2024 16:51:21 +0000 (UTC)
-Date: Fri, 2 Aug 2024 18:51:20 +0200
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Message-ID: <20240802185120.2bbc1425@windsurf>
-In-Reply-To: <20240723093312.770586-1-fontaine.fabrice@gmail.com>
-References: <20240723093312.770586-1-fontaine.fabrice@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1722617481;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=fqayiDIq8FSccgztjXtu4ZVvibeLO7o8odLmTBN1VZ0=;
- b=HX8mo8/qKSmkMXy83CU/vuMrLfLZD0lv5d5XiZQtNQhNv6BGrNGlZVnHNSMYdtCTQh0M54
- +ir8WoV+0NfPhtimKrplEk78FVLv7fiEZyOrOxij1S0Z44eySD32qa4Mp1vFI3A9ovFJgz
- QM/6m0XjZwAIEKSKaXiNzEIXovuM8kZqbOpZBXibE5XLem9mlKXE2HJ+Gwcl1/Ii64gX58
- Q+7pN0F6WajUngamZrIaaXaQwxQ3ZVSyWwhkNwd8pOYR/YhWe5HRtKCa5HbG4UD8eXEdeG
- Q99LCG0b/NdA+b+hxcoSxJCI3XY2TUKv2drqm6XNVhOkODwK2WLZBmfxeyZYBA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=HX8mo8/q
-Subject: Re: [Buildroot] [PATCH v3,
- 1/1] package/cwiid: fix build with gcc >= 14
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3E8A8845C2
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3E8A8845C2
+ for <buildroot@buildroot.org>; Fri,  2 Aug 2024 17:07:13 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 2790A83B45; Fri,  2 Aug 2024 17:07:13 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Fri, 2 Aug 2024 19:06:53 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: f0877f5f9db6d14e39bd9c82ad13937906a2ab62
+X-Git-Newrev: 86e51fd5fe2810bbf833b48c4914dcd2de01bdbe
+X-Patchwork-Hint: ignore
+Message-Id: <20240802170713.2790A83B45@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/chicken: move literals into text
+ section for xtensa architecture
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,39 +60,92 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Samuel Martin <s.martin49@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 23 Jul 2024 11:33:12 +0200
-Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=86e51fd5fe2810bbf833b48c4914dcd2de01bdbe
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Fix the following build failure with gcc >= 14:
-> 
-> led.c: In function 'wmplugin_exec':
-> led.c:86:42: error: assignment to 'struct cwiid_btn_message *' from incompatible pointer type 'struct cwiid_btn_mesg *' [-Wincompatible-pointer-types]
->    86 |                                 btn_mesg = &mesg[i].btn_mesg;
->       |                                          ^
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/a3bde74ff2137d088f4261e62930859bfe460cb9
-> 
-> Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> ---
-> Changes v2 -> v3:
->  - Fix patch number
-> Changes v1 -> v2 (after review of Thomas Petazzoni):
->  - Fix variable declaration instead of adding a wrong cast
+This solves a build problem -- by default xtensa-gcc puts literals in a
+different section of memory then the program text, and chicken is a very
+literal-heavy program, so they don't all fit there. This avoids that problem.
 
-Applied to master, thanks.
+Fixes:
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+  http://autobuild.buildroot.net/results/ce36170d67c4702f34bee025d8a46e5269c4573e/
+
+Signed-off-by: Woodrow Douglass <wdouglass@carnegierobotics.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .../0001-xtensa-text-section-literals.patch        | 30 ++++++++++++++++++++++
+ package/chicken/chicken.mk                         | 14 ++++++++--
+ 2 files changed, 42 insertions(+), 2 deletions(-)
+
+diff --git a/package/chicken/0001-xtensa-text-section-literals.patch b/package/chicken/0001-xtensa-text-section-literals.patch
+new file mode 100644
+index 0000000000..b93aaf9e21
+--- /dev/null
++++ b/package/chicken/0001-xtensa-text-section-literals.patch
+@@ -0,0 +1,30 @@
++From e8d177f4d4e1c6bc41787ea1621e323ff4ad493e Mon Sep 17 00:00:00 2001
++From: Woodrow Douglass <wdouglass@carnegierobotics.com>
++Date: Mon, 22 Jul 2024 08:50:37 -0400
++Subject: [PATCH] Move literals into text section for xtensa architecture
++
++Upstream: https://bugs.call-cc.org/ticket/1840
++Signed-off-by: Woodrow Douglass <wdouglass@carnegierobotics.com>
++---
++ Makefile.linux | 5 +++++
++ 1 file changed, 5 insertions(+)
++
++diff --git a/Makefile.linux b/Makefile.linux
++index b628cda4..e97c2b94 100644
++--- a/Makefile.linux
+++++ b/Makefile.linux
++@@ -52,6 +52,11 @@ USES_SONAME = yes
++ 
++ # architectures
++ 
+++ifeq ($(ARCH),xtensa)
+++C_COMPILER_OPTIONS += -mtext-section-literals
+++LINKER_OPTIONS += -mtext-section-literals
+++endif
+++
++ ifeq ($(ARCH),x32)
++ C_COMPILER_OPTIONS += -mx32
++ LINKER_OPTIONS += -mx32
++-- 
++2.39.2
++
+diff --git a/package/chicken/chicken.mk b/package/chicken/chicken.mk
+index 2667f7823d..0520280134 100644
+--- a/package/chicken/chicken.mk
++++ b/package/chicken/chicken.mk
+@@ -11,9 +11,19 @@ CHICKEN_LICENSE_FILES = LICENSE
+ CHICKEN_CPE_ID_VENDOR = call-cc
+ CHICKEN_INSTALL_STAGING = YES
+ 
+-# If ARCH is not set, it attempts to autodiscover. But it is anyway not used.
++# Chicken only uses the "arch" variable for some special-case compile
++# arguments If it's empty, it tries to detect the arch host Filter out
++# values that have an effect, or pass "unused" here
++ifeq ($(NORMALIZED_ARCH),x86_64)
++CHICKEN_ARCH = x86-64
++else ifeq ($(NORMALIZED_ARCH),xtensa)
++CHICKEN_ARCH = xtensa
++else
++CHICKEN_ARCH = unused
++endif
++
+ CHICKEN_MAKE_OPTS = \
+-	ARCH=unused \
++	ARCH="$(CHICKEN_ARCH)" \
+ 	C_COMPILER="$(TARGET_CC)" \
+ 	CXX_COMPILER="$(TARGET_CXX)" \
+ 	PREFIX=/usr \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
