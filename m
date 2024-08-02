@@ -1,74 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3BFACC3DA4A
-	for <buildroot@archiver.kernel.org>; Fri,  2 Aug 2024 19:24:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03F25C3DA4A
+	for <buildroot@archiver.kernel.org>; Fri,  2 Aug 2024 20:03:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2B66160779;
-	Fri,  2 Aug 2024 19:24:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 65592410E5;
+	Fri,  2 Aug 2024 20:03:26 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Ai6MuthrqWej; Fri,  2 Aug 2024 20:03:25 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BA06641061
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id BA06641061;
+	Fri,  2 Aug 2024 20:03:24 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 3112B1BF487
+ for <buildroot@lists.busybox.net>; Fri,  2 Aug 2024 20:03:23 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1F3A2606C6
+ for <buildroot@lists.busybox.net>; Fri,  2 Aug 2024 20:03:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sv5KHePAc9lR; Fri,  2 Aug 2024 19:24:32 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1192061305
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1192061305;
-	Fri,  2 Aug 2024 19:24:32 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5F7F71BF487
- for <buildroot@lists.busybox.net>; Fri,  2 Aug 2024 19:24:30 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4D44480B53
- for <buildroot@lists.busybox.net>; Fri,  2 Aug 2024 19:24:30 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NHP6KZM-u_Hu for <buildroot@lists.busybox.net>;
- Fri,  2 Aug 2024 19:24:29 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
- helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id 7Le_lIsMtgpQ for <buildroot@lists.busybox.net>;
+ Fri,  2 Aug 2024 20:03:22 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 1C7928087C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1C7928087C
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1C7928087C
- for <buildroot@buildroot.org>; Fri,  2 Aug 2024 19:24:28 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 215DDFF802;
- Fri,  2 Aug 2024 19:24:25 +0000 (UTC)
-Date: Fri, 2 Aug 2024 21:24:24 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Message-ID: <20240802212424.3402c5cf@windsurf>
-In-Reply-To: <20240726164522.73606-1-bernd@kuhls.net>
-References: <20240726164522.73606-1-bernd@kuhls.net>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1722626666;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=tphAcDupPJJZDQkO/Xk9uhrq8RYhJ8CC2769UOO/fZQ=;
- b=bvv9BtAjJqmvlqkmK+9972seGa3fIB7dOMhnj6NPYg2+3m4NgeOB2o9mOBFacERgSxkcas
- qRzz9587FZEOpLW+aB3u3JOhUWt4j+hLKRw2/FJcf4ZEF9D4xud8mR7BxqiHlyCXEs5XQl
- uZET/2yOvR/thEQoFlSoEUQgGP9yHdu8baTUMRrUEpNjiGz0x1IdJdoCzQCvGlbjM1VkBk
- s3Xfq8qQmxR0hrvOdgUf+xBajK08z5CaTqbvhZtxhszyXYGuAhIjNaMt3FrNg6ZM46SEaL
- aosUzme7dA2TlNiCljID0Nr20XxzVbQZ6tYhkhlqRZJSLby6iuNBPhupFdcgSQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=bvv9BtAj
-Subject: Re: [Buildroot] [PATCH 1/1] package/dtv-scan-tables: bump version
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 302F0606C0
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 302F0606C0
+ for <buildroot@buildroot.org>; Fri,  2 Aug 2024 20:03:22 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 18F1383BD2; Fri,  2 Aug 2024 20:03:22 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Fri, 2 Aug 2024 21:55:26 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 905409a245a5adfbca4dcf934a52aaca992a5435
+X-Git-Newrev: d9c6e47534e4dadbcf727857d0be387299cabb2b
+X-Patchwork-Hint: ignore
+Message-Id: <20240802200322.18F1383BD2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/optee-client: add support for
+ custom tarball
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,28 +60,119 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri, 26 Jul 2024 18:45:22 +0200
-Bernd Kuhls <bernd@kuhls.net> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=d9c6e47534e4dadbcf727857d0be387299cabb2b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-> ---
->  package/dtv-scan-tables/dtv-scan-tables.hash | 2 +-
->  package/dtv-scan-tables/dtv-scan-tables.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+OP-TEE OS supports custom tarballs. If the OP-TEE OS custom tarball
+version does not match the latest optee-client version supported by
+Buildroot, optee-client might not build or run properly. This patch
+adds support for an optee-client custom tarball URL to address this
+potential issue.
 
-Applied to master, thanks.
+Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
+Acked-by: Etienne Carriere <etienne.carriere@foss.st.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/optee-client/Config.in       | 38 ++++++++++++++++++++++++++++++++++++
+ package/optee-client/optee-client.mk | 21 ++++++++++++++++++--
+ 2 files changed, 57 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/optee-client/Config.in b/package/optee-client/Config.in
+index 4061164cbb..738d43f837 100644
+--- a/package/optee-client/Config.in
++++ b/package/optee-client/Config.in
+@@ -17,6 +17,44 @@ config BR2_PACKAGE_OPTEE_CLIENT
+ 
+ if BR2_PACKAGE_OPTEE_CLIENT
+ 
++choice
++	prompt "optee-client version"
++	default BR2_PACKAGE_OPTEE_CLIENT_LATEST
++	help
++	  Select the version of optee-client you want to use
++
++config BR2_PACKAGE_OPTEE_CLIENT_LATEST
++	bool "4.3.0"
++	help
++	  Use the latest release tag from the optee-client official Git
++	  repository.
++
++config BR2_PACKAGE_OPTEE_CLIENT_CUSTOM_TARBALL
++	bool "Custom tarball"
++	help
++	  This option allows to specify a URL pointing to an
++	  optee-client source tarball. This URL can use any protocol
++	  recognized by Buildroot, like http://, ftp://, file://
++	  or scp://.
++
++	  When pointing to a local tarball using file://, you may want
++	  to use a make variable like $(TOPDIR) to reference the root of
++	  the Buildroot tree.
++
++endchoice
++
++if BR2_PACKAGE_OPTEE_CLIENT_CUSTOM_TARBALL
++
++config BR2_PACKAGE_OPTEE_CLIENT_CUSTOM_TARBALL_LOCATION
++	string "URL of custom optee-client tarball"
++
++endif
++
++config BR2_PACKAGE_OPTEE_CLIENT_VERSION
++	string
++	default "4.3.0"		if BR2_PACKAGE_OPTEE_CLIENT_LATEST
++	default "custom"	if BR2_PACKAGE_OPTEE_CLIENT_CUSTOM_TARBALL
++
+ config BR2_PACKAGE_OPTEE_CLIENT_TEE_FS_PATH
+ 	string "Path for normal world OS secure storage"
+ 	default "/data/tee"
+diff --git a/package/optee-client/optee-client.mk b/package/optee-client/optee-client.mk
+index c1813cd9b1..de3ff1df7f 100644
+--- a/package/optee-client/optee-client.mk
++++ b/package/optee-client/optee-client.mk
+@@ -4,12 +4,23 @@
+ #
+ ################################################################################
+ 
+-OPTEE_CLIENT_VERSION = 4.3.0
+-OPTEE_CLIENT_SITE = $(call github,OP-TEE,optee_client,$(OPTEE_CLIENT_VERSION))
++OPTEE_CLIENT_VERSION = $(call qstrip,$(BR2_PACKAGE_OPTEE_CLIENT_VERSION))
+ OPTEE_CLIENT_LICENSE = BSD-2-Clause
+ OPTEE_CLIENT_LICENSE_FILES = LICENSE
+ OPTEE_CLIENT_INSTALL_STAGING = YES
+ 
++ifeq ($(BR2_PACKAGE_OPTEE_CLIENT_CUSTOM_TARBALL),y)
++OPTEE_CLIENT_TARBALL = $(call qstrip,$(BR2_PACKAGE_OPTEE_CLIENT_CUSTOM_TARBALL_LOCATION))
++OPTEE_CLIENT_SITE = $(patsubst %/,%,$(dir $(OPTEE_CLIENT_TARBALL)))
++OPTEE_CLIENT_SOURCE = $(notdir $(OPTEE_CLIENT_TARBALL))
++else
++OPTEE_CLIENT_SITE = $(call github,OP-TEE,optee_client,$(OPTEE_CLIENT_VERSION))
++endif
++
++ifeq ($(BR2_PACKAGE_OPTEE_CLIENT):$(BR2_PACKAGE_OPTEE_CLIENT_LATEST),y:)
++BR_NO_CHECK_HASH_FOR += $(OPTEE_CLIENT_SOURCE)
++endif
++
+ OPTEE_CLIENT_CONF_OPTS = \
+ 	-DCFG_TEE_FS_PARENT_PATH=$(BR2_PACKAGE_OPTEE_CLIENT_TEE_FS_PATH) \
+ 	-DCFG_WERROR=OFF
+@@ -38,4 +49,10 @@ define OPTEE_CLIENT_INSTALL_INIT_SYSV
+ 		$(TARGET_DIR)/etc/init.d/S30tee-supplicant
+ endef
+ 
++ifeq ($(BR2_PACKAGE_OPTEE_CLIENT_CUSTOM_TARBALL)$(BR_BUILDING),yy)
++ifeq ($(call qstrip,$(BR2_PACKAGE_OPTEE_CLIENT_CUSTOM_TARBALL_LOCATION)),)
++$(error No tarball location specified. Please check BR2_PACKAGE_OPTEE_CLIENT_CUSTOM_TARBALL_LOCATION)
++endif
++endif
++
+ $(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
