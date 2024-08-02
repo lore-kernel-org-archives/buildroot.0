@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CDC57C3DA4A
-	for <buildroot@archiver.kernel.org>; Fri,  2 Aug 2024 21:35:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 45AC1C3DA4A
+	for <buildroot@archiver.kernel.org>; Fri,  2 Aug 2024 21:35:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 79688606A5;
-	Fri,  2 Aug 2024 21:35:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7DC02606B8;
+	Fri,  2 Aug 2024 21:35:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iEX4wfsGCcU5; Fri,  2 Aug 2024 21:35:36 +0000 (UTC)
+ id 8_PeaFywXfaZ; Fri,  2 Aug 2024 21:35:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 87E4D606B8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D52786130B
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 87E4D606B8;
-	Fri,  2 Aug 2024 21:35:36 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E5B3E1BF3FF
- for <buildroot@lists.busybox.net>; Fri,  2 Aug 2024 21:35:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D52786130B;
+	Fri,  2 Aug 2024 21:35:38 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 0A2E51BF990
+ for <buildroot@lists.busybox.net>; Fri,  2 Aug 2024 21:35:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D302D40374
- for <buildroot@lists.busybox.net>; Fri,  2 Aug 2024 21:35:34 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 041C240D0B
+ for <buildroot@lists.busybox.net>; Fri,  2 Aug 2024 21:35:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qxK0OtBHvtUo for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id lUrk8CsdIBJI for <buildroot@lists.busybox.net>;
  Fri,  2 Aug 2024 21:35:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E54B4400B5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EF16E40BF7
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id E54B4400B5
+ by smtp4.osuosl.org (Postfix) with ESMTP id EF16E40BF7
  for <buildroot@buildroot.org>; Fri,  2 Aug 2024 21:35:33 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CD89C83C1C; Fri,  2 Aug 2024 21:35:33 +0000 (UTC)
+ id D891F83C23; Fri,  2 Aug 2024 21:35:33 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 2 Aug 2024 23:30:58 +0200
+Date: Fri, 2 Aug 2024 23:31:08 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 65f8174648a3df922892cfac1ad15279d1bffde3
-X-Git-Newrev: 9696d277565159029e74efb9eae16b4a670bf945
+X-Git-Oldrev: 9696d277565159029e74efb9eae16b4a670bf945
+X-Git-Newrev: b88d2b51a4bd2d825d71730bde934dc9991fc6cf
 X-Patchwork-Hint: ignore
-Message-Id: <20240802213533.CD89C83C1C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gpsd: condition python stuff to
- the proper kconfig option
+Message-Id: <20240802213533.D891F83C23@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gpsd: fix comment about wchar
+ requirement
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,37 +66,31 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9696d277565159029e74efb9eae16b4a670bf945
+commit: https://git.buildroot.net/buildroot/commit/?id=b88d2b51a4bd2d825d71730bde934dc9991fc6cf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Currently, we have a Kconfig symbol to enable the python support in
-gpsd, but the condition at configure time is based on whether the python
-package is enabled. So, if a user does not enable python support in
-gpsd, they still get it.
-
-Switch to using the proper symbol.
+The comment does not follow the coding style, so update it appropriately.
 
 Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
 Cc: Bernd Kuhls <bernd@kuhls.net>
-Reviewed-by: Jan Havran <havran.jan@email.cz>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/gpsd/gpsd.mk | 2 +-
+ package/gpsd/Config.in | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/gpsd/gpsd.mk b/package/gpsd/gpsd.mk
-index 1d4013d122..c57fad83c3 100644
---- a/package/gpsd/gpsd.mk
-+++ b/package/gpsd/gpsd.mk
-@@ -178,7 +178,7 @@ ifeq ($(BR2_PACKAGE_GPSD_MAX_DEV),y)
- GPSD_SCONS_OPTS += max_devices=$(BR2_PACKAGE_GPSD_MAX_DEV_VALUE)
- endif
+diff --git a/package/gpsd/Config.in b/package/gpsd/Config.in
+index 8c28c05efd..44615f4e43 100644
+--- a/package/gpsd/Config.in
++++ b/package/gpsd/Config.in
+@@ -84,7 +84,7 @@ config BR2_PACKAGE_GPSD_PYTHON
+ 	  Python libraries and tools for the gpsd service daemon
+ 	  including gpsfake test harness.
  
--ifeq ($(BR2_PACKAGE_PYTHON3),y)
-+ifeq ($(BR2_PACKAGE_GPSD_PYTHON),y)
- GPSD_SCONS_OPTS += \
- 	python=yes \
- 	python_libdir="/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages"
+-comment "GPSD python support not available with toolchain w/o wide characters support"
++comment "python support needs a toolchain w/ wchar"
+ 	depends on !BR2_USE_WCHAR
+ 
+ comment "Protocols"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
