@@ -4,48 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6B131C3DA7F
-	for <buildroot@archiver.kernel.org>; Fri,  2 Aug 2024 21:35:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98081C3DA4A
+	for <buildroot@archiver.kernel.org>; Fri,  2 Aug 2024 21:36:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B0D806133B;
-	Fri,  2 Aug 2024 21:35:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 61B57606D3;
+	Fri,  2 Aug 2024 21:36:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FkA1L8QAQSfb; Fri,  2 Aug 2024 21:35:50 +0000 (UTC)
+ id yK1herIA_iJp; Fri,  2 Aug 2024 21:36:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 07B97612FE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 74CEC612F9
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 07B97612FE;
-	Fri,  2 Aug 2024 21:35:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 74CEC612F9;
+	Fri,  2 Aug 2024 21:36:04 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B176C1BF3FF
- for <buildroot@lists.busybox.net>; Fri,  2 Aug 2024 21:35:36 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 422B21BF3FF
+ for <buildroot@lists.busybox.net>; Fri,  2 Aug 2024 21:36:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9F18340286
- for <buildroot@lists.busybox.net>; Fri,  2 Aug 2024 21:35:36 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id C9E9A40374
+ for <buildroot@lists.busybox.net>; Fri,  2 Aug 2024 21:36:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3UYS_-d6827E for <buildroot@lists.busybox.net>;
- Fri,  2 Aug 2024 21:35:35 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id bQXp0K4NhE6v for <buildroot@lists.busybox.net>;
+ Fri,  2 Aug 2024 21:35:59 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::228;
+ helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8CEFD400B5
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8CEFD400B5
- for <buildroot@buildroot.org>; Fri,  2 Aug 2024 21:35:34 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F3CA683C26; Fri,  2 Aug 2024 21:35:33 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 2 Aug 2024 23:32:21 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5cd3797e9bd103d3c02f37875fda96350863620d
-X-Git-Newrev: ef35d60e1a7f74d381deee26051f78c8bde0002d
-X-Patchwork-Hint: ignore
-Message-Id: <20240802213533.F3CA683C26@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gpsd: add option to enable clients
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 89EA0403AE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 89EA0403AE
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 89EA0403AE
+ for <buildroot@buildroot.org>; Fri,  2 Aug 2024 21:35:59 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 7E2F11BF203;
+ Fri,  2 Aug 2024 21:35:57 +0000 (UTC)
+Date: Fri, 2 Aug 2024 23:35:56 +0200
+To: <yann.morin@orange.com>
+Message-ID: <20240802233556.7bfe9dcd@windsurf>
+In-Reply-To: <cover.1720535037.git.yann.morin@orange.com>
+References: <cover.1720535037.git.yann.morin@orange.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1722634557;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=JgpYq6xFR38bsVXiZiRPIW86v2k0Om+5jLJ+RtKw5t4=;
+ b=oLhui3DB84SEHujonDBpZPJH6sasMNBydxIpsepcqLnLWuS01LnXxwDQKRz4OVDz+mdj3B
+ 3MQOlDCLnSpJmSMQ3T5cqYK4Ck5qQj7egZm2rgeydqE1Z76Kl7EY/dQtnzVwR4TtpLyuRW
+ zCSKZCJRhmsQTbwKTw7f+/VKjfJqJ9Z1sRVGMfoWnAVAB1Ba1RdpYMMif7PXDhyEuWVILO
+ /q7npZOWyd+XXZ/MTvlGCg9lyMZV5CrlxUd6Xsv+ITarkHdBLw8qKLHY1eot2h41CrL7e5
+ pWoruQc0yCkItkX/rCL9Ew3JJk9qOsHogETymCya9+UsGwsAOhLrNKpWuQNUzg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=oLhui3DB
+Subject: Re: [Buildroot] [PATCH 0/5] package/gpsd: make the package more
+ modular
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,65 +83,31 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ef35d60e1a7f74d381deee26051f78c8bde0002d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-In some cases, the clients are useless on the target, e.g. when there is
-no need to adjust the gpsd daemon at runtime.
+On Tue, 9 Jul 2024 16:23:58 +0200
+<yann.morin@orange.com> wrote:
 
-Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
-Cc: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/gpsd/Config.in | 11 +++++++++++
- package/gpsd/gpsd.mk   |  6 ++++++
- 2 files changed, 17 insertions(+)
+> Yann E. MORIN (5):
+>       package/gpsd: condition python stuff to the proper kconfig option
+>       package/gpsd: fix comment about wchar requirement
+>       package/gpsd: move python option later
+>       package/gpsd: add option to enable clients
+>       package/gpsd: add option to enable/disable the daemon
 
-diff --git a/package/gpsd/Config.in b/package/gpsd/Config.in
-index 1b61f8c286..cbdcdb5725 100644
---- a/package/gpsd/Config.in
-+++ b/package/gpsd/Config.in
-@@ -210,6 +210,17 @@ config BR2_PACKAGE_GPSD_UBX
- 	help
- 	  uBlox UBX binary support
- 
-+config BR2_PACKAGE_GPSD_CLIENTS
-+	bool "gpsd clients"
-+	default y # legacy
-+	help
-+	  Build and install gspd client programs, like:
-+	    - gpsctl
-+	    - gpsdctl
-+	    - gpsdecode
-+	    - gpspipe
-+	    - ...
-+
- config BR2_PACKAGE_GPSD_PYTHON
- 	bool "build Python support and modules"
- 	depends on BR2_USE_WCHAR # python3
-diff --git a/package/gpsd/gpsd.mk b/package/gpsd/gpsd.mk
-index c57fad83c3..77c6f6c562 100644
---- a/package/gpsd/gpsd.mk
-+++ b/package/gpsd/gpsd.mk
-@@ -178,6 +178,12 @@ ifeq ($(BR2_PACKAGE_GPSD_MAX_DEV),y)
- GPSD_SCONS_OPTS += max_devices=$(BR2_PACKAGE_GPSD_MAX_DEV_VALUE)
- endif
- 
-+ifeq ($(BR2_PACKAGE_GPSD_CLIENTS),y)
-+GPSD_SCONS_OPTS += gpsdclients=yes
-+else
-+GPSD_SCONS_OPTS += gpsdclients=no
-+endif
-+
- ifeq ($(BR2_PACKAGE_GPSD_PYTHON),y)
- GPSD_SCONS_OPTS += \
- 	python=yes \
+Thanks a lot! Series applied.
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
