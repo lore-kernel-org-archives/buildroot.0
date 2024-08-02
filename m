@@ -4,72 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98081C3DA4A
-	for <buildroot@archiver.kernel.org>; Fri,  2 Aug 2024 21:36:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3400BC3DA7F
+	for <buildroot@archiver.kernel.org>; Fri,  2 Aug 2024 21:39:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 61B57606D3;
-	Fri,  2 Aug 2024 21:36:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F3F926069C;
+	Fri,  2 Aug 2024 21:39:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yK1herIA_iJp; Fri,  2 Aug 2024 21:36:04 +0000 (UTC)
+ id 4ecGnar1qA0K; Fri,  2 Aug 2024 21:39:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 74CEC612F9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1BBB6606A5
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 74CEC612F9;
-	Fri,  2 Aug 2024 21:36:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1BBB6606A5;
+	Fri,  2 Aug 2024 21:39:14 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 422B21BF3FF
- for <buildroot@lists.busybox.net>; Fri,  2 Aug 2024 21:36:02 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 4ECEB1BF3FF
+ for <buildroot@lists.busybox.net>; Fri,  2 Aug 2024 21:39:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C9E9A40374
- for <buildroot@lists.busybox.net>; Fri,  2 Aug 2024 21:36:00 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 48CD540104
+ for <buildroot@lists.busybox.net>; Fri,  2 Aug 2024 21:39:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bQXp0K4NhE6v for <buildroot@lists.busybox.net>;
- Fri,  2 Aug 2024 21:35:59 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::228;
- helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id FNcGdivNiJAm for <buildroot@lists.busybox.net>;
+ Fri,  2 Aug 2024 21:39:12 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::223;
+ helo=relay3-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 89EA0403AE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 89EA0403AE
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::228])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 89EA0403AE
- for <buildroot@buildroot.org>; Fri,  2 Aug 2024 21:35:59 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 7E2F11BF203;
- Fri,  2 Aug 2024 21:35:57 +0000 (UTC)
-Date: Fri, 2 Aug 2024 23:35:56 +0200
-To: <yann.morin@orange.com>
-Message-ID: <20240802233556.7bfe9dcd@windsurf>
-In-Reply-To: <cover.1720535037.git.yann.morin@orange.com>
-References: <cover.1720535037.git.yann.morin@orange.com>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 00B71400B5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 00B71400B5
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 00B71400B5
+ for <buildroot@buildroot.org>; Fri,  2 Aug 2024 21:39:11 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 045F460002;
+ Fri,  2 Aug 2024 21:39:09 +0000 (UTC)
+Date: Fri, 2 Aug 2024 23:39:08 +0200
+To: James Hilliard <james.hilliard1@gmail.com>
+Message-ID: <20240802233908.6e7a3dfa@windsurf>
+In-Reply-To: <20240719030537.3156999-1-james.hilliard1@gmail.com>
+References: <20240719030537.3156999-1-james.hilliard1@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1722634557;
+ d=bootlin.com; s=gm1; t=1722634750;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=JgpYq6xFR38bsVXiZiRPIW86v2k0Om+5jLJ+RtKw5t4=;
- b=oLhui3DB84SEHujonDBpZPJH6sasMNBydxIpsepcqLnLWuS01LnXxwDQKRz4OVDz+mdj3B
- 3MQOlDCLnSpJmSMQ3T5cqYK4Ck5qQj7egZm2rgeydqE1Z76Kl7EY/dQtnzVwR4TtpLyuRW
- zCSKZCJRhmsQTbwKTw7f+/VKjfJqJ9Z1sRVGMfoWnAVAB1Ba1RdpYMMif7PXDhyEuWVILO
- /q7npZOWyd+XXZ/MTvlGCg9lyMZV5CrlxUd6Xsv+ITarkHdBLw8qKLHY1eot2h41CrL7e5
- pWoruQc0yCkItkX/rCL9Ew3JJk9qOsHogETymCya9+UsGwsAOhLrNKpWuQNUzg==
+ bh=cPHWk/5QFCAed62RIvzjbBdgFBNgCIM/XFtopTYH69c=;
+ b=keE6TGyID4GTYXd8Xd5N7CyiftVmzqRajlrhyqHnu+cd9wC73bvit819Ewpytj5b8oSGov
+ ghu5U0w/3m0qtGMyqN9HqI+3WqWtZs1Rf7Mfpirt6jYQsQ31L3Da0b0yDm5fasiapjCC9I
+ wG7n7TL77f3TtqLmEnhOhJP2vq6NEqUYBoBRSjD3s1kZY28YcMBrhKOucWwOCKVUq3mV8P
+ Mtt4hfxJ7Ks9rdaBF64PJJLD4VwMt4Ah/rCL8ZLLuWm14yshnDUJRbXwGHtfdLEIphgx8/
+ C9H6fjjuE7a89uWqIXTT/40drr2FFDlzUQRYe8jFBt4otHA10tWoXLEx7F5GZQ==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=oLhui3DB
-Subject: Re: [Buildroot] [PATCH 0/5] package/gpsd: make the package more
- modular
+ header.s=gm1 header.b=keE6TGyI
+Subject: Re: [Buildroot] [PATCH 1/2] package/pkg-golang.mk: allow packages
+ to override download GOPROXY
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,30 +83,34 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org
+Cc: Anisse Astier <anisse@astier.eu>, Christian Stewart <christian@aperture.us>,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+On Thu, 18 Jul 2024 21:05:36 -0600
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-On Tue, 9 Jul 2024 16:23:58 +0200
-<yann.morin@orange.com> wrote:
+> Some packages like the upcoming tailscale package need to set GOPROXY
+> to get the correct dependencies.
+> 
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>  package/pkg-golang.mk | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 
-> Yann E. MORIN (5):
->       package/gpsd: condition python stuff to the proper kconfig option
->       package/gpsd: fix comment about wchar requirement
->       package/gpsd: move python option later
->       package/gpsd: add option to enable clients
->       package/gpsd: add option to enable/disable the daemon
+Considering the feedback from Christian on this PATCH 1/2, I have
+marked the series as Changes Requested. Could you resend once the
+vendoring issue is resolved?
 
-Thanks a lot! Series applied.
+Thanks!
 
 Thomas
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
 https://bootlin.com
 _______________________________________________
 buildroot mailing list
