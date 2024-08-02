@@ -4,48 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D757C3DA4A
-	for <buildroot@archiver.kernel.org>; Fri,  2 Aug 2024 06:23:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7848C52D6D
+	for <buildroot@archiver.kernel.org>; Fri,  2 Aug 2024 06:23:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5D93884513;
-	Fri,  2 Aug 2024 06:23:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 72F6E81E7E;
+	Fri,  2 Aug 2024 06:23:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CWlsbsdTYs4q; Fri,  2 Aug 2024 06:23:05 +0000 (UTC)
+ id HfVs9KeefEbe; Fri,  2 Aug 2024 06:23:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 533D181F6D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7F98C81EE3
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 533D181F6D;
-	Fri,  2 Aug 2024 06:23:05 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id F07C61BF421
- for <buildroot@lists.busybox.net>; Fri,  2 Aug 2024 06:23:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7F98C81EE3;
+	Fri,  2 Aug 2024 06:23:20 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id D7B691BF421
+ for <buildroot@lists.busybox.net>; Fri,  2 Aug 2024 06:23:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E5E8381E53
- for <buildroot@lists.busybox.net>; Fri,  2 Aug 2024 06:23:01 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id C5B6C40C7F
+ for <buildroot@lists.busybox.net>; Fri,  2 Aug 2024 06:23:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uqjWV8cknAPq for <buildroot@lists.busybox.net>;
- Fri,  2 Aug 2024 06:23:01 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id EDxpQNZOpaEa for <buildroot@lists.busybox.net>;
+ Fri,  2 Aug 2024 06:23:17 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.197;
+ helo=relay5-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 148CF81E7E
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 148CF81E7E
- for <buildroot@buildroot.org>; Fri,  2 Aug 2024 06:23:00 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A7C2783AD4; Fri,  2 Aug 2024 06:23:00 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 2 Aug 2024 08:18:26 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2652faca32bf0d1ab5af825b6c75118dbba0312f
-X-Git-Newrev: a8884c6f40ecd162f4fc7903998d7d7ce6e8583f
-X-Patchwork-Hint: ignore
-Message-Id: <20240802062300.A7C2783AD4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/git: bump to version 2.46.0
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 4F18840C67
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4F18840C67
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 4F18840C67
+ for <buildroot@buildroot.org>; Fri,  2 Aug 2024 06:23:17 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 928631C0002;
+ Fri,  2 Aug 2024 06:23:14 +0000 (UTC)
+Date: Fri, 2 Aug 2024 08:23:13 +0200
+To: Bagas Sanjaya <bagasdotme@gmail.com>
+Message-ID: <20240802082313.617f5ad1@windsurf>
+In-Reply-To: <20240802050830.1020682-2-bagasdotme@gmail.com>
+References: <20240802050830.1020682-2-bagasdotme@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1722579794;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=5lTpRIRmxuIy1x3y8TBk1/kslj+T9uePi9UdSJO5M+w=;
+ b=TE2N5STtIrQZz/2kF5Jl3SGhks/L/1wWxV5oCSrSV9uqRCbLijPcTyCpozRNQsqlFgqLrR
+ A9N0PSFHDCH1dBBAeLhG8PbObLcD20rYApkEF4gF9e52TNrNoTNaybKfOO1VRV7wI4QUwx
+ PF6tNf+lkaAI8SV72HjjkAXJg0utJyFM45TMsC/TTrFkrO7+1igyya/rwye+Bxpo6XmibW
+ GdlENvrydeYI2rvpEMPS4MWu/j2iG+qz8XmB/6jHb3MQXPYGi6xzcVnd574Vr+iz7H2xTQ
+ bOQ12X/L5SJLykj/mUo8wM2VUkYNlgFdyPrYs1gVRH6ZfN2l2gE2XTTytLpyIQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=TE2N5STt
+Subject: Re: [Buildroot] [PATCH] package/git: bump to version 2.46.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,51 +82,33 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Buildroot Development <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a8884c6f40ecd162f4fc7903998d7d7ce6e8583f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Fri,  2 Aug 2024 12:08:31 +0700
+Bagas Sanjaya <bagasdotme@gmail.com> wrote:
 
-Bump the package version to 2.46.0.
+> Bump the package version to 2.46.0.
+> 
+> Release notes:
+> https://lore.kernel.org/git/xmqqzfq0i0qa.fsf@gitster.g/
+> 
+> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+> ---
+>  package/git/git.hash | 2 +-
+>  package/git/git.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Release notes:
-https://lore.kernel.org/git/xmqqzfq0i0qa.fsf@gitster.g/
+Applied to master, thanks.
 
-Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/git/git.hash | 2 +-
- package/git/git.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/git/git.hash b/package/git/git.hash
-index f72fd60ec2..6b34d14543 100644
---- a/package/git/git.hash
-+++ b/package/git/git.hash
-@@ -1,5 +1,5 @@
- # From: https://www.kernel.org/pub/software/scm/git/sha256sums.asc
--sha256  51bfe87eb1c02fed1484051875365eeab229831d30d0cec5d89a14f9e40e9adb  git-2.45.2.tar.xz
-+sha256  7f123462a28b7ca3ebe2607485f7168554c2b10dfc155c7ec46300666ac27f95  git-2.46.0.tar.xz
- # Locally calculated
- sha256  5b2198d1645f767585e8a88ac0499b04472164c0d2da22e75ecf97ef443ab32e  COPYING
- sha256  1922f45d2c49e390032c9c0ba6d7cac904087f7cec51af30c2b2ad022ce0e76a  LGPL-2.1
-diff --git a/package/git/git.mk b/package/git/git.mk
-index d84b2e487c..d0b27d7e5c 100644
---- a/package/git/git.mk
-+++ b/package/git/git.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GIT_VERSION = 2.45.2
-+GIT_VERSION = 2.46.0
- GIT_SOURCE = git-$(GIT_VERSION).tar.xz
- GIT_SITE = $(BR2_KERNEL_MIRROR)/software/scm/git
- GIT_LICENSE = GPL-2.0, LGPL-2.1+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
