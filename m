@@ -4,48 +4,92 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EBA5EC3DA7F
-	for <buildroot@archiver.kernel.org>; Fri,  2 Aug 2024 17:52:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6580CC3DA4A
+	for <buildroot@archiver.kernel.org>; Fri,  2 Aug 2024 18:00:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AFAC7844F0;
-	Fri,  2 Aug 2024 17:52:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2BC0080F03;
+	Fri,  2 Aug 2024 18:00:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EOk5X-MvFFvz; Fri,  2 Aug 2024 17:52:19 +0000 (UTC)
+ id lJ64UK5wIVra; Fri,  2 Aug 2024 18:00:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C34CD84533
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1A1E68134E
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C34CD84533;
-	Fri,  2 Aug 2024 17:52:18 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B94581BF41C
- for <buildroot@lists.busybox.net>; Fri,  2 Aug 2024 17:52:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1A1E68134E;
+	Fri,  2 Aug 2024 18:00:20 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 61D641BF41C
+ for <buildroot@lists.busybox.net>; Fri,  2 Aug 2024 18:00:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A613F401B7
- for <buildroot@lists.busybox.net>; Fri,  2 Aug 2024 17:52:16 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4B7358134E
+ for <buildroot@lists.busybox.net>; Fri,  2 Aug 2024 18:00:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZeqUYv1wkTz7 for <buildroot@lists.busybox.net>;
- Fri,  2 Aug 2024 17:52:15 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9AFE3400FB
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9AFE3400FB
- for <buildroot@buildroot.org>; Fri,  2 Aug 2024 17:52:15 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 85D1183B7B; Fri,  2 Aug 2024 17:52:15 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 2 Aug 2024 19:50:55 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e4109c1d2d28f737409dce2e346661cbf20084c6
-X-Git-Newrev: b6db4e2a79da7aadcbe2beda3e00381afb9e3f28
-X-Patchwork-Hint: ignore
-Message-Id: <20240802175215.85D1183B7B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/pistache: needs NPTL
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id cpuEVY9JaUzF for <buildroot@lists.busybox.net>;
+ Fri,  2 Aug 2024 18:00:15 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::102b; helo=mail-pj1-x102b.google.com;
+ envelope-from=jcmvbkbc@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 3C43E80F03
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3C43E80F03
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com
+ [IPv6:2607:f8b0:4864:20::102b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3C43E80F03
+ for <buildroot@buildroot.org>; Fri,  2 Aug 2024 18:00:15 +0000 (UTC)
+Received: by mail-pj1-x102b.google.com with SMTP id
+ 98e67ed59e1d1-2cd2f89825fso5903052a91.1
+ for <buildroot@buildroot.org>; Fri, 02 Aug 2024 11:00:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1722621614; x=1723226414;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=dHmsA5JK6oIMiW9A917vNEvuJPmz08WYx1k2qA41Tmc=;
+ b=oTRCiRIUQGFM73LDqfqSVU5Ff3rSNL5AtzqvYxXG7kKyuZbfj+4m1GZ7CPoFwvy6/t
+ R2QyY+Xd0XhW5WNEWa5v46E2lh714a2zJSNb1oMp2HzLcy+MI9IEY01k2kT2DfdI+CNF
+ lotspl9aqVL1hhz6hElAfeIhptJugXPhcPmmR22flB1gb6bpBN9osSvXO3H17OWaPubf
+ cry0Jg16RAlLP63OHpq7vexbKsXjIWXzTVvdCHPuqdRHbe/BzFz3+PlPzQdksPgfbNkr
+ C5WAgqSJfEb/cEazwLBoAydTFi3dGkZn6loOe88qsTjOg2Pc30j4ynvOwJBRq59XxckN
+ 2bag==
+X-Gm-Message-State: AOJu0Yz0KRK0zDxI1uz0EVyLEdoMWzQQa0JZu8UJcb0e9hu6+pVqf71Y
+ lKKBaiEZDA7hInJmS7JS80pWZAP5/WS+u5J1ry/Lc89CmkbDRnzJozkMdVERpa3S9ITj22ErXKy
+ Pzn73FO7l65EyYZD9xebEAmOzMDp/Kv/v
+X-Google-Smtp-Source: AGHT+IGPq8+AcIJZgI/4SLHOu8LBV7eB1FLBA/buZQnatvJbMOUUPx3A6X93MQuQnaNDH4XkgGnYpfJcxSKH2k+bu8w=
+X-Received: by 2002:a17:90a:f312:b0:2c9:7616:dec7 with SMTP id
+ 98e67ed59e1d1-2cff93c581cmr5171127a91.6.1722621614381; Fri, 02 Aug 2024
+ 11:00:14 -0700 (PDT)
+MIME-Version: 1.0
+References: <20240802170713.2790A83B45@busybox.osuosl.org>
+ <CAMo8BfK7FSn8imzqjTW8BLS7mPk6HLTKvCM4aBFaJw93z-ZpmQ@mail.gmail.com>
+ <20240802194315.2de20808@windsurf>
+In-Reply-To: <20240802194315.2de20808@windsurf>
+From: Max Filippov <jcmvbkbc@gmail.com>
+Date: Fri, 2 Aug 2024 11:00:02 -0700
+Message-ID: <CAMo8Bf+5XSQyEp1ZP1UbqL7DF=VLfWbUuA-3OFY9M7WENn0GaA@mail.gmail.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1722621614; x=1723226414; darn=buildroot.org;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=dHmsA5JK6oIMiW9A917vNEvuJPmz08WYx1k2qA41Tmc=;
+ b=QpELPGQWBeyBWWQCYrxmIzJa5hEzpAvCk2fMyzXdZd/wVgKouAVnhH3KmxiLJSsSrs
+ 5Q23McAMmNPPVYf9EOygZ1c2jk4bAhIxA1vmzNp+V5qYfs61CVmx9Xlh3H8OXtHtlH+R
+ pNXKNbs9DeKGkttFghIHM5Q51xY4hBMPG1QbQWIWwMLMb+KEslHYN6+9HLu4Vr8kzpT5
+ dt8bY1W9V9jsbMbVbe9XjLzhNNMboNY1EzdT8Iu04DMOsJi8jXccltvI4E1IuZzWcoHE
+ v+lDI1hIXNaWm4nGmgtI+90xPI3wQo6u50VN7Mdl6KgDhAU1nM3QJtEG7Fr/LfTses5g
+ G+rw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=QpELPGQW
+Subject: Re: [Buildroot] [git commit] package/chicken: move literals into
+ text section for xtensa architecture
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,63 +101,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Woodrow Douglass <wdouglass@carnegierobotics.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b6db4e2a79da7aadcbe2beda3e00381afb9e3f28
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-pistache needs NPTL as it unconditionally uses pthread_setname_np since
-https://github.com/pistacheio/pistache/commit/b283c32963a7cb0500cf69555d320a6e9e252850
-resulting in the following uclibc build failure since commit
-82e61bed8208857d5d13c384c89086c4dd4e1e79:
-
-../src/common/reactor.cc: In lambda function:
-../src/common/reactor.cc:512:25: error: 'pthread_setname_np' was not declared in this scope; did you mean 'pthread_setcanceltype'?
-  512 |                         pthread_setname_np(pthread_self(),
-      |                         ^~~~~~~~~~~~~~~~~~
-      |                         pthread_setcanceltype
-
-Fixes: 82e61bed8208857d5d13c384c89086c4dd4e1e79
- - http://autobuild.buildroot.org/results/b2b22e4f9684aca0246650673fd8c33019712ddf
- - http://autobuild.buildroot.org/results/1597bfe2a57cd3aef54d331447dd81cae020d434
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/pistache/Config.in | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/package/pistache/Config.in b/package/pistache/Config.in
-index ca2d2833cd..e66c24d86d 100644
---- a/package/pistache/Config.in
-+++ b/package/pistache/Config.in
-@@ -2,7 +2,7 @@ config BR2_PACKAGE_PISTACHE
- 	bool "pistache"
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # C++17, std::optional
- 	depends on BR2_USE_WCHAR
--	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
- 	depends on BR2_INSTALL_LIBSTDCPP
- 	select BR2_PACKAGE_RAPIDJSON
- 	help
-@@ -12,8 +12,8 @@ config BR2_PACKAGE_PISTACHE
- 
- 	  https://github.com/oktal/pistache
- 
--comment "pistache needs a toolchain w/ C++, gcc >= 7, threads, wchar"
-+comment "pistache needs a toolchain w/ C++, gcc >= 7, NPTL, wchar"
- 	depends on !BR2_INSTALL_LIBSTDCPP || \
- 		   !BR2_TOOLCHAIN_GCC_AT_LEAST_7 || \
--		   !BR2_TOOLCHAIN_HAS_THREADS || \
-+		   !BR2_TOOLCHAIN_HAS_THREADS_NPTL || \
- 		   !BR2_USE_WCHAR
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+T24gRnJpLCBBdWcgMiwgMjAyNCBhdCAxMDo0M+KAr0FNIFRob21hcyBQZXRhenpvbmkKPHRob21h
+cy5wZXRhenpvbmlAYm9vdGxpbi5jb20+IHdyb3RlOgo+IE9uIEZyaSwgMiBBdWcgMjAyNCAxMDoy
+NDoyMCAtMDcwMAo+IE1heCBGaWxpcHBvdiA8amNtdmJrYmNAZ21haWwuY29tPiB3cm90ZToKPgo+
+ID4gPiArK2lmZXEgKCQoQVJDSCkseHRlbnNhKQo+ID4gPiArK0NfQ09NUElMRVJfT1BUSU9OUyAr
+PSAtbXRleHQtc2VjdGlvbi1saXRlcmFscwo+ID4gPiArK0xJTktFUl9PUFRJT05TICs9IC1tdGV4
+dC1zZWN0aW9uLWxpdGVyYWxzCj4gPgo+ID4gVGhlcmUncyBhIHN0cm9uZ2VyIHZlcnNpb24gb2Yg
+dGhpcyBvcHRpb24sIC1tYXV0by1saXRwb29scywgaW4gdGhlIHh0ZW5zYQo+ID4gVEFSR0VUX0FC
+SSBhbmQgaXQgaXMgcGFzc2VkIHRvIHRoZSBUQVJHRVRfQ0ZMQUdTLiBXaHkgZG9lcwo+ID4gdGhp
+cyBwYWNrYWdlIG5lZWQgc3BlY2lhbCB0cmVhdG1lbnQ/Cj4KPiBJdCBjYXVzZXMgYnVpbGQgZmFp
+bHVyZXM6Cj4KPiAgIGh0dHA6Ly9hdXRvYnVpbGQuYnVpbGRyb290Lm5ldC9yZXN1bHRzL2NlMzYx
+NzBkNjdjNDcwMmYzNGJlZTAyNWQ4YTQ2ZTUyNjljNDU3M2UvCgpJIHNlZSB0aGUgZm9sbG93aW5n
+IGluIHRoZSBidWlsZC1lbmQubG9nOgoKL2hvbWUvYXV0b2J1aWxkL2F1dG9idWlsZC9pbnN0YW5j
+ZS0yL291dHB1dC0xL3Blci1wYWNrYWdlL2NoaWNrZW4vaG9zdC9iaW4veHRlbnNhLWJ1aWxkcm9v
+dC1saW51eC11Y2xpYmMtZ2NjCi1mbm8tc3RyaWN0LWFsaWFzaW5nIC1md3JhcHYgLURIQVZFX0NI
+SUNLRU5fQ09ORklHX0gKLURDX0VOQUJMRV9QVEFCTEVTIC1jIC1PcyAtZm9taXQtZnJhbWUtcG9p
+bnRlciAtZlBJQyAtRFBJQwotRENfQlVJTERJTkdfTElCQ0hJQ0tFTiBsaWJyYXJ5LmMgLW8gbGli
+cmFyeS5vIC1JLiAtSS4vCgpUaGVyZSdzIG5vIFRBUkdFVF9DRkxBR1MgaW4gdGhpcyBjb21tYW5k
+IGxpbmUuCgo+IFRoZXJlJ3Mgc29tZSBleHBsYW5hdGlvbiBmcm9tIHRoZSBwYXRjaCBjb250cmli
+dXRvciBpbiB0aGUgY29tbWl0Cj4gbWVzc2FnZSBCVFc6Cj4KPiAgICAgVGhpcyBzb2x2ZXMgYSBi
+dWlsZCBwcm9ibGVtIC0tIGJ5IGRlZmF1bHQgeHRlbnNhLWdjYyBwdXRzIGxpdGVyYWxzIGluIGEK
+PiAgICAgZGlmZmVyZW50IHNlY3Rpb24gb2YgbWVtb3J5IHRoZW4gdGhlIHByb2dyYW0gdGV4dCwg
+YW5kIGNoaWNrZW4gaXMgYSB2ZXJ5Cj4gICAgIGxpdGVyYWwtaGVhdnkgcHJvZ3JhbSwgc28gdGhl
+eSBkb24ndCBhbGwgZml0IHRoZXJlLiBUaGlzIGF2b2lkcyB0aGF0IHByb2JsZW0uCgp4dGVuc2Eg
+VEFSR0VUX0FCSSBmbGFnIC1tYXV0by1saXRwb29sIGlzIHRoZXJlIHRvIGFkZHJlc3MgdGhpcyBz
+cGVjaWZpYyBpc3N1ZS4KCi0tIApUaGFua3MuCi0tIE1heApfX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9v
+dEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3Rp
+bmZvL2J1aWxkcm9vdAo=
