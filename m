@@ -4,74 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 469BDC3DA4A
-	for <buildroot@archiver.kernel.org>; Fri,  2 Aug 2024 17:18:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A4AC3C3DA4A
+	for <buildroot@archiver.kernel.org>; Fri,  2 Aug 2024 17:20:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DFB3B820E2;
-	Fri,  2 Aug 2024 17:18:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6C53681006;
+	Fri,  2 Aug 2024 17:20:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7M0yjxZ7g5HD; Fri,  2 Aug 2024 17:18:15 +0000 (UTC)
+ id C6BMG5nbbXFq; Fri,  2 Aug 2024 17:20:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E88EA84500
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6745881089
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E88EA84500;
-	Fri,  2 Aug 2024 17:18:14 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D63271BF387
- for <buildroot@lists.busybox.net>; Fri,  2 Aug 2024 17:18:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6745881089;
+	Fri,  2 Aug 2024 17:20:19 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id C8A941BF387
+ for <buildroot@lists.busybox.net>; Fri,  2 Aug 2024 17:20:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id CFDC440112
- for <buildroot@lists.busybox.net>; Fri,  2 Aug 2024 17:18:12 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B613E81089
+ for <buildroot@lists.busybox.net>; Fri,  2 Aug 2024 17:20:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id v_wteKMMLl-H for <buildroot@lists.busybox.net>;
- Fri,  2 Aug 2024 17:18:11 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::222;
- helo=relay2-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id y8y3d4udi1ik for <buildroot@lists.busybox.net>;
+ Fri,  2 Aug 2024 17:20:17 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::224;
+ helo=relay4-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 7FFF7400F5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7FFF7400F5
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::222])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 7FFF7400F5
- for <buildroot@buildroot.org>; Fri,  2 Aug 2024 17:18:11 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 4F3B640003;
- Fri,  2 Aug 2024 17:18:08 +0000 (UTC)
-Date: Fri, 2 Aug 2024 19:18:07 +0200
-To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>, Simon Ruepp
- <ruepp.simon@mailbox.org>
-Message-ID: <20240802191807.1b4edf36@windsurf>
-In-Reply-To: <20240724222144.00bffdf2@windsurf>
-References: <20240723103238.704924-1-ruepp.simon@mailbox.org>
- <20240724085442.134872-1-ruepp.simon@mailbox.org>
- <20240724222144.00bffdf2@windsurf>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 75D8681006
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 75D8681006
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::224])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 75D8681006
+ for <buildroot@buildroot.org>; Fri,  2 Aug 2024 17:20:17 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 8C61DE0008;
+ Fri,  2 Aug 2024 17:20:14 +0000 (UTC)
+Date: Fri, 2 Aug 2024 19:20:13 +0200
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Message-ID: <20240802192013.03f7639a@windsurf>
+In-Reply-To: <20240724182838.4a9f1524@windsurf>
+References: <20240724071904.1397662-1-fontaine.fabrice@gmail.com>
+ <20240724182838.4a9f1524@windsurf>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1722619088;
+ d=bootlin.com; s=gm1; t=1722619214;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=GZNuDRPg8s4BN5OI5rbUOK0TZnl5eMBSwbJ5NjAF6D0=;
- b=m0LnpeN+eXmqDKgLVtO8rxbe2B4ex+jMmXDh5hH1kDlLxqBI8AtFqDYelH+WNZJC6CQij4
- eLxxbl4Z+3vV1Tn3P0BlNZdSCDQDbRPM6n38Vt4p+e4zqWK0ATBJ4taDggyJPwTAdjuDg1
- Hofu9G3aG7vqYouEB69HOcHeswfu55p6RBLBA8PKcw1xN5twWuF/BDMRWAGWk5FcaljC7s
- PCljdQeNVNl2q+Z8bQkRl8iM9SyBPyIBYELxfrMKQslsu15aueTcY8TJpt65xvb0a4227w
- cIXBCpNPbnqYdxbOXKGg0J2qski8JCPEug4CpTdy4GYjLtYTNFnALrLl7YGaXw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=3mf3U/csPqe3hFWwhEf6uvaK1Uns1NY05jSSXBjWGHg=;
+ b=htVQBkhDV85K2CAslj0Gj86wLrEcSc5/qJVJSD4Ht4wBQU8jG/rZIgcXUdTjxL3ejnrzdI
+ ZhCQgylg/c44htHwaMTLLJ7fKuIKFVreLRybYkbFotXwv9Rk+miUyP119G44inFt0dFBRS
+ OZvYvEoG4TacH71lEfeUkTbfUs7UnDAvwVU1BJ++Y1ROwHvcLeJZ3gn/R36ZC3n6QVo8hF
+ dwnFjIi2P1H83z+5m99teQpj4a7mmAfMqwPFynVxuK8HLLpqpJ+2lW/qEcnThlcryfO8Up
+ n3BjmBeVTiWu36XMOPQIeiwibTzbjlt4qZ9dXq+8nVRyEp34sAjo4/AmgJTGBg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=m0LnpeN+
-Subject: Re: [Buildroot] [PATCH v2] package/qt5/qt53d: fix compilation error
+ header.s=gm1 header.b=htVQBkhD
+Subject: Re: [Buildroot] [PATCH 1/1] package/ebtables: fix build with gcc >=
+ 14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,62 +84,53 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Julien Corjon <corjon.j@ecagroup.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Simon,
+Hello Fabrice,
 
-Gentle ping on the below questions, in order to be able to move forward
-with resolving this qt53d build issue.
-
-Thanks a lot for your contribution!
+Any feedback to my review on this patch (this e-mail, and the other
+reply to your patch) ? This would allow to move forward with merging
+this fix. Thanks a lot!
 
 Thomas
 
-On Wed, 24 Jul 2024 22:21:44 +0200
+On Wed, 24 Jul 2024 18:28:38 +0200
 Thomas Petazzoni via buildroot <buildroot@buildroot.org> wrote:
 
-> Hello Simon,
+> Hello Fabrice,
 > 
-> On Wed, 24 Jul 2024 10:54:44 +0200
-> Simon Ruepp via buildroot <buildroot@buildroot.org> wrote:
+> Thanks for looking into this, it looks complicated. Question below.
 > 
-> > Compiling the qt53d package currently fails since the required
-> > source files of the assimp library are missing. Because of this,
-> > QT53D_EXTRA_DOWNLOADS along with a post extract hook is used
-> > to separately download and extract the missing files.
-> > 
-> > Signed-off-by: Simon Ruepp <ruepp.simon@mailbox.org>  
+> On Wed, 24 Jul 2024 09:19:04 +0200
+> Fabrice Fontaine <fontaine.fabrice@gmail.com> wrote:
 > 
-> Thanks for the patch. Could you document since when this is failing,
-> i.e which Buildroot commit introduced this regression?
+> > diff --git a/package/ebtables/0003-configure.ac-add-option-enable-kernel-64-userland-32.patch b/package/ebtables/0002-configure.ac-add-option-enable-kernel-64-userland-32.patch
+> > similarity index 85%
+> > rename from package/ebtables/0003-configure.ac-add-option-enable-kernel-64-userland-32.patch
+> > rename to package/ebtables/0002-configure.ac-add-option-enable-kernel-64-userland-32.patch
+> > index cb57b39569..7e481606e7 100644
+> > --- a/package/ebtables/0003-configure.ac-add-option-enable-kernel-64-userland-32.patch
+> > +++ b/package/ebtables/0002-configure.ac-add-option-enable-kernel-64-userland-32.patch  
 > 
-> Also, could you comment on how this will interact with:
+> So why do we have that adds an option to enable kernel-64-userland-32, if...
 > 
-> ifeq ($(BR2_PACKAGE_ASSIMP),y)
-> QT53D_DEPENDENCIES += assimp
-> endif
+> > -# for 0003-configure.ac-add-option-enable-kernel-64-userland-32.patch
+> > +# for 0002-configure.ac-add-option-enable-kernel-64-userland-32.patch
+> >  EBTABLES_AUTORECONF = YES
+> > -ifeq ($(BR2_KERNEL_64_USERLAND_32),y)
+> > -EBTABLES_CONF_OPTS += --enable-kernel-64-userland-32
+> > -endif
+> > +# kernel-64-userland-32 is broken (spotted with gcc >= 14)
+> > +EBTABLES_CONF_OPTS += --disable-kernel-64-userland-32  
 > 
-> that we have in qt53.mk. It seems like qt53d can use a system-provided
-> assimp instead of a bundled copy of assimp:
+> ... we always disable it? Doesn't this make the patch entirely useless?
 > 
-> !ios:!tvos:!qcc:qtConfig(assimp):if(qtConfig(system-assimp)|android-clang|clang|win32-msvc|gcc) {
->     SUBDIRS += assimp
-> }
-> 
-> (from src/plugins/sceneparsers/sceneparsers.pro). There is apparently a
-> -assimp config option that allows to chose between "system", "qt" and
-> "no".
-> 
-> Also, I see that src/3rdparty/patches/ has a bunch of patches for
-> assimp. Should these patches be applied? Are they important?
-> 
-> Thanks a lot for your additional investigations :-)
+> Thanks,
 > 
 > Thomas
 
