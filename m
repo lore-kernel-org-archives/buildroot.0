@@ -4,90 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C761C3DA4A
-	for <buildroot@archiver.kernel.org>; Fri,  2 Aug 2024 17:39:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B3200C3DA4A
+	for <buildroot@archiver.kernel.org>; Fri,  2 Aug 2024 17:43:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3BAFB80ABA;
-	Fri,  2 Aug 2024 17:39:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4E2B480B28;
+	Fri,  2 Aug 2024 17:43:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vrN-_ncXiB7m; Fri,  2 Aug 2024 17:39:35 +0000 (UTC)
+ id kAiL4_T1DU14; Fri,  2 Aug 2024 17:43:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A972480ACC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3AFF680C92
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A972480ACC;
-	Fri,  2 Aug 2024 17:39:35 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 712BF1BF387
- for <buildroot@lists.busybox.net>; Fri,  2 Aug 2024 17:39:34 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3AFF680C92;
+	Fri,  2 Aug 2024 17:43:22 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 667491BF41C
+ for <buildroot@lists.busybox.net>; Fri,  2 Aug 2024 17:43:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5D00940733
- for <buildroot@lists.busybox.net>; Fri,  2 Aug 2024 17:39:34 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 530D940112
+ for <buildroot@lists.busybox.net>; Fri,  2 Aug 2024 17:43:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3iHJiWowj4Kr for <buildroot@lists.busybox.net>;
- Fri,  2 Aug 2024 17:39:32 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::134; helo=mail-lf1-x134.google.com;
- envelope-from=geomatsi@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 3A60B40730
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3A60B40730
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com
- [IPv6:2a00:1450:4864:20::134])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 3A60B40730
- for <buildroot@buildroot.org>; Fri,  2 Aug 2024 17:39:31 +0000 (UTC)
-Received: by mail-lf1-x134.google.com with SMTP id
- 2adb3069b0e04-52efd530a4eso13159788e87.0
- for <buildroot@buildroot.org>; Fri, 02 Aug 2024 10:39:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1722620369; x=1723225169;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=zBD/giiVic7aheM4q4cEH6/tLuBvkqOFQ3yXMbSmDwI=;
- b=Zfowz8XAcKeV1gN5dcjrgzMCSjlE9l3LZ32UE26CMYieXfiF78YpZvD6PMrS2vfJK5
- 5kJ5SxGa5tp3JdJ2fm6T8nB088dyx1CpNqsAqMpD9goPZzgTzpYrF0h4+qp4r7y7aZm4
- BhBJIFAWoIEm7ai5PngrELUzQ5kNZr6pcquUvKk5j+N37G96zKKHParwON9cAGPH0JJW
- M5/yYgim+TWJgPdjx2WPaXivVo4RriwJgG5VV+jdRV3r4TqL0JIXw5sLIvZu6WBHS8YD
- zfchQTTJ6yhEFkSa2uUBRO6AnDPjfIEToMebsLbGhZX81nAlHxa9dz9arosN2Ae1kS1k
- DkCA==
-X-Gm-Message-State: AOJu0Yy25RiUalWdyPcSi4cwcc/VbhKu5B2mls0CKY3Eb05x1NbP5aMC
- M44xKlT3DQxJcB9YoRmAq9o0cMxmLFLMVqznX9BOXPwIK3RaGkny8whpNA==
-X-Google-Smtp-Source: AGHT+IFc5sQAgy003O+npDFTRqTmkIRkUbn/LjNKHvS+TLxSe4jxlz5pPVO3P19O1MGsUt2aEuHNbg==
-X-Received: by 2002:a05:6512:10c9:b0:52f:288:5664 with SMTP id
- 2adb3069b0e04-530bb3b1039mr2864386e87.51.1722620368361; 
- Fri, 02 Aug 2024 10:39:28 -0700 (PDT)
-Received: from localhost.localdomain ([5.188.167.245])
- by smtp.googlemail.com with ESMTPSA id
- 2adb3069b0e04-530bba10fd9sm284310e87.99.2024.08.02.10.39.27
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 02 Aug 2024 10:39:27 -0700 (PDT)
-From: Sergey Matyukevich <geomatsi@gmail.com>
-To: buildroot@buildroot.org
-Date: Fri,  2 Aug 2024 20:39:00 +0300
-Message-ID: <20240802173923.2474734-1-geomatsi@gmail.com>
-X-Mailer: git-send-email 2.45.2
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id FYUtpfxQeoBx for <buildroot@lists.busybox.net>;
+ Fri,  2 Aug 2024 17:43:20 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.195;
+ helo=relay3-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org F3E1D400F5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F3E1D400F5
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id F3E1D400F5
+ for <buildroot@buildroot.org>; Fri,  2 Aug 2024 17:43:19 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id D61D860002;
+ Fri,  2 Aug 2024 17:43:16 +0000 (UTC)
+Date: Fri, 2 Aug 2024 19:43:15 +0200
+To: Max Filippov <jcmvbkbc@gmail.com>
+Message-ID: <20240802194315.2de20808@windsurf>
+In-Reply-To: <CAMo8BfK7FSn8imzqjTW8BLS7mPk6HLTKvCM4aBFaJw93z-ZpmQ@mail.gmail.com>
+References: <20240802170713.2790A83B45@busybox.osuosl.org>
+ <CAMo8BfK7FSn8imzqjTW8BLS7mPk6HLTKvCM4aBFaJw93z-ZpmQ@mail.gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1722620369; x=1723225169; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=zBD/giiVic7aheM4q4cEH6/tLuBvkqOFQ3yXMbSmDwI=;
- b=ZYf7KPk1fYo5EAJTH6zVm7kIcgTpJk5AF1q2KwEOcjLoUtcFDxcYlXqgehrBC4HuC1
- CtRPQE8R1510rhHc79QXLmcv9muV7PhJFx6bXKrsPDX6tHFnbALfIoElJNSlpStkC4hH
- wN14UcHTiwDutpzeh7VhPKGBJydruotIh5Yz++SlGFAJqRpYSMWcjbC4RXUH0dHXQAXN
- TtEak57F4MHaOAjQiSphHw53wR7T69z4Gy+4L1BSUXrxTGWUbJxFvXYR9nBM7rDRfgRg
- py6vFGyqQG8d64VwRxnReVlyRaPoKex4Ua6sP2Sz0J7lvz3N+EIVw5k9/NlWq6zY008Z
- RatA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=ZYf7KPk1
-Subject: [Buildroot] [PATCH 1/1] package/wpa_supplicant: bump version to 2.11
+ d=bootlin.com; s=gm1; t=1722620597;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=H/c5BQ3+64a3/0uM9oZ7OnyPsorlgoUk3MIWbYZm6So=;
+ b=ZjgqpkOC7GpbuE+yaVqB/IJMsZhzJ0jiwM/r5duvJRCbVKgmGhXzDCPgjbis/sqU/ZcLcS
+ wnBl6HhZLI0FsOB4tjrrgM5uHiBWhAwddsQ3RWNU9+JFqQtUPCKZsa+mKgJJNnpE/PZW35
+ M0mbMvwn7h0LnWxvqihQiS3VyoRH8LRLma7aSv87C314MgA4TjFWaJjRM+COMBuk39iJCZ
+ ZpYvzP8GkcbIYJv+keBj7eIrxFSIhzzp+GCUYAjzjEe6kWj8urUnBNeGUNuRfcbQXE+Svs
+ 0aZqDk7YA4wDRgTjDurl9A86ZVoQCZ82dhiciTtK0hVTpmUXpYnbJ+eEpn/CRQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=ZjgqpkOC
+Subject: Re: [Buildroot] [git commit] package/chicken: move literals into
+ text section for xtensa architecture
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,281 +82,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Sergey Matyukevich <geomatsi@gmail.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Woodrow Douglass <wdouglass@carnegierobotics.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Update wpa_supplicant to the latest release v2.11. Drop all the patches
-as they are already included into the release.
+Hello Max,
 
-Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
----
- ...le-options-for-libwpa_client.so-and-.patch | 68 ----------------
- ...se-a-less-generic-name-for-IEEE802.1.patch | 79 -------------------
- ...384-512-KDF-for-SAE-if-SHA384-512-is.patch | 64 ---------------
- package/wpa_supplicant/wpa_supplicant.hash    |  2 +-
- package/wpa_supplicant/wpa_supplicant.mk      |  2 +-
- 5 files changed, 2 insertions(+), 213 deletions(-)
- delete mode 100644 package/wpa_supplicant/0001-build-re-enable-options-for-libwpa_client.so-and-.patch
- delete mode 100644 package/wpa_supplicant/0002-wpa_supplicant-use-a-less-generic-name-for-IEEE802.1.patch
- delete mode 100644 package/wpa_supplicant/0003-Include-HMAC-SHA384-512-KDF-for-SAE-if-SHA384-512-is.patch
+On Fri, 2 Aug 2024 10:24:20 -0700
+Max Filippov <jcmvbkbc@gmail.com> wrote:
 
-diff --git a/package/wpa_supplicant/0001-build-re-enable-options-for-libwpa_client.so-and-.patch b/package/wpa_supplicant/0001-build-re-enable-options-for-libwpa_client.so-and-.patch
-deleted file mode 100644
-index 156d0e7e2c..0000000000
---- a/package/wpa_supplicant/0001-build-re-enable-options-for-libwpa_client.so-and-.patch
-+++ /dev/null
-@@ -1,68 +0,0 @@
--From e6a6a4e3df52cc60425fcd037d3ec68a38f948ce Mon Sep 17 00:00:00 2001
--From: Sergey Matyukevich <geomatsi@gmail.com>
--Date: Sun, 20 Feb 2022 10:12:28 +0300
--Subject: [PATCH] build: re-enable options for libwpa_client.so and wpa_passphrase
--
--Commit a41a29192e5d ("build: Pull common fragments into a build.rules
--file") introduced regression into wpa_supplicant build process. Build
--target libwpa_client.so is not built regardless of whether the option
--CONFIG_BUILD_WPA_CLIENT_SO is set or not. This happens because config
--option is used before it is imported from the configuration file.
--Moving its usage after including build.rules does not help: variable
--ALL is processed by build.rules and further changes are not applied.
--Similarly, option CONFIG_NO_WPA_PASSPHRASE also does not work as
--expected: wpa_passphrase is always built regardless of whether the
--option is set or not.
--
--This commit re-enables options adding both build targets to _all
--dependencies.
--
--Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
-----
-- wpa_supplicant/Makefile | 19 ++++++++++++-------
-- 1 file changed, 12 insertions(+), 7 deletions(-)
--
--diff --git a/wpa_supplicant/Makefile b/wpa_supplicant/Makefile
--index cb66defac..e384cc6b8 100644
----- a/wpa_supplicant/Makefile
--+++ b/wpa_supplicant/Makefile
--@@ -1,24 +1,29 @@
-- BINALL=wpa_supplicant wpa_cli
-- 
---ifndef CONFIG_NO_WPA_PASSPHRASE
---BINALL += wpa_passphrase
---endif
---
-- ALL = $(BINALL)
-- ALL += systemd/wpa_supplicant.service
-- ALL += systemd/wpa_supplicant@.service
-- ALL += systemd/wpa_supplicant-nl80211@.service
-- ALL += systemd/wpa_supplicant-wired@.service
-- ALL += dbus/fi.w1.wpa_supplicant1.service
---ifdef CONFIG_BUILD_WPA_CLIENT_SO
---ALL += libwpa_client.so
---endif
-- 
-- EXTRA_TARGETS=dynamic_eap_methods
-- 
-- CONFIG_FILE=.config
-- include ../src/build.rules
-- 
--+ifdef CONFIG_BUILD_WPA_CLIENT_SO
--+# add the dependency this way to allow CONFIG_BUILD_WPA_CLIENT_SO
--+# being set in the config which is read by build.rules
--+_all: libwpa_client.so
--+endif
--+
--+ifndef CONFIG_NO_WPA_PASSPHRASE
--+# add the dependency this way to allow CONFIGNO_WPA_PASSPHRASE
--+# being set in the config which is read by build.rules
--+_all: wpa_passphrase
--+endif
--+
-- ifdef LIBS
-- # If LIBS is set with some global build system defaults, clone those for
-- # LIBS_c and LIBS_p to cover wpa_passphrase and wpa_cli as well.
---- 
--2.35.1
--
-diff --git a/package/wpa_supplicant/0002-wpa_supplicant-use-a-less-generic-name-for-IEEE802.1.patch b/package/wpa_supplicant/0002-wpa_supplicant-use-a-less-generic-name-for-IEEE802.1.patch
-deleted file mode 100644
-index a8637111bb..0000000000
---- a/package/wpa_supplicant/0002-wpa_supplicant-use-a-less-generic-name-for-IEEE802.1.patch
-+++ /dev/null
-@@ -1,79 +0,0 @@
--From c8af2e431b47d7d900e0c7359705aaa1096d302a Mon Sep 17 00:00:00 2001
--From: Sergey Matyukevich <geomatsi@gmail.com>
--Date: Fri, 16 Sep 2022 23:18:50 +0300
--Subject: [PATCH] wpa_supplicant: use a less generic name for IEEE802.11 CRC-32 routine
--
--Hostapd uses 'crc32' name for IEEE802.11 CRC-32 routine. This name is
--too generic. Buildroot autobuilder detected build configuration that
--failed to build due to the naming conflict: static linking with openssl
--using zlib-ng as a zlib provider, e.g. see:
--- http://autobuild.buildroot.net/results/9901df820d3afa4cde78e8ad6d62cb8ce7e69fdb/
--- http://autobuild.buildroot.net/results/ac19975f0bf77f4a8ca574c374092ba81cd5a332/
--
--Use a less generic name ieee80211_crc32 for IEEE802.11 CRC-32 routine
--to avoid such naming conflicts.
--
--Upstream: https://w1.fi/cgit/hostap/commit/?id=0c7b3814ca6070a8e930dea09fde08b4058a4ca6
--Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
-----
-- src/ap/hostapd.c     | 3 ++-
-- src/ap/neighbor_db.c | 2 +-
-- src/utils/crc32.c    | 2 +-
-- src/utils/crc32.h    | 2 +-
-- 4 files changed, 5 insertions(+), 4 deletions(-)
--
--diff --git a/src/ap/hostapd.c b/src/ap/hostapd.c
--index 4b88641a2..56c8fb90e 100644
----- a/src/ap/hostapd.c
--+++ b/src/ap/hostapd.c
--@@ -1230,7 +1230,8 @@ static int hostapd_setup_bss(struct hostapd_data *hapd, int first)
-- 	 * Short SSID calculation is identical to FCS and it is defined in
-- 	 * IEEE P802.11-REVmd/D3.0, 9.4.2.170.3 (Calculating the Short-SSID).
-- 	 */
---	conf->ssid.short_ssid = crc32(conf->ssid.ssid, conf->ssid.ssid_len);
--+	conf->ssid.short_ssid = ieee80211_crc32(conf->ssid.ssid,
--+						conf->ssid.ssid_len);
-- 
-- 	if (!hostapd_drv_none(hapd)) {
-- 		wpa_printf(MSG_DEBUG, "Using interface %s with hwaddr " MACSTR
--diff --git a/src/ap/neighbor_db.c b/src/ap/neighbor_db.c
--index 229edd2a9..ef17634c3 100644
----- a/src/ap/neighbor_db.c
--+++ b/src/ap/neighbor_db.c
--@@ -136,7 +136,7 @@ int hostapd_neighbor_set(struct hostapd_data *hapd, const u8 *bssid,
-- 
-- 	os_memcpy(entry->bssid, bssid, ETH_ALEN);
-- 	os_memcpy(&entry->ssid, ssid, sizeof(entry->ssid));
---	entry->short_ssid = crc32(ssid->ssid, ssid->ssid_len);
--+	entry->short_ssid = ieee80211_crc32(ssid->ssid, ssid->ssid_len);
-- 
-- 	entry->nr = wpabuf_dup(nr);
-- 	if (!entry->nr)
--diff --git a/src/utils/crc32.c b/src/utils/crc32.c
--index 12d9e2a70..371254994 100644
----- a/src/utils/crc32.c
--+++ b/src/utils/crc32.c
--@@ -72,7 +72,7 @@ static const u32 crc32_table[256] = {
-- };
-- 
-- 
---u32 crc32(const u8 *frame, size_t frame_len)
--+u32 ieee80211_crc32(const u8 *frame, size_t frame_len)
-- {
-- 	size_t i;
-- 	u32 crc;
--diff --git a/src/utils/crc32.h b/src/utils/crc32.h
--index dc31399be..71a19dc5f 100644
----- a/src/utils/crc32.h
--+++ b/src/utils/crc32.h
--@@ -9,6 +9,6 @@
-- #ifndef CRC32_H
-- #define CRC32_H
-- 
---u32 crc32(const u8 *frame, size_t frame_len);
--+u32 ieee80211_crc32(const u8 *frame, size_t frame_len);
-- 
-- #endif /* CRC32_H */
---- 
--2.37.1
--
-diff --git a/package/wpa_supplicant/0003-Include-HMAC-SHA384-512-KDF-for-SAE-if-SHA384-512-is.patch b/package/wpa_supplicant/0003-Include-HMAC-SHA384-512-KDF-for-SAE-if-SHA384-512-is.patch
-deleted file mode 100644
-index 98df56e540..0000000000
---- a/package/wpa_supplicant/0003-Include-HMAC-SHA384-512-KDF-for-SAE-if-SHA384-512-is.patch
-+++ /dev/null
-@@ -1,64 +0,0 @@
--From c7f71fb8679c4cdd2607dbaac467a1d5efe9f0f9 Mon Sep 17 00:00:00 2001
--From: Jouni Malinen <j@w1.fi>
--Date: Sun, 17 Apr 2022 12:28:41 +0300
--Subject: [PATCH] Include HMAC-SHA384/512 KDF for SAE if SHA384/512 is included
--
--It was possible to miss the HMAC functions if some other build
--configuration parameters ended up setting NEED_SHA384/512=y.
--
--Upstream: https://w1.fi/cgit/hostap/commit/?id=c7f71fb8679c4cdd2607dbaac467a1d5efe9f0f9
--
--Signed-off-by: Jouni Malinen <j@w1.fi>
--Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
-----
-- wpa_supplicant/Android.mk | 11 +++++++++++
-- wpa_supplicant/Makefile   | 11 +++++++++++
-- 2 files changed, 22 insertions(+)
--
--diff --git a/wpa_supplicant/Android.mk b/wpa_supplicant/Android.mk
--index 0e0ce467c..bcdbd6c90 100644
----- a/wpa_supplicant/Android.mk
--+++ b/wpa_supplicant/Android.mk
--@@ -1361,6 +1361,17 @@ endif
-- endif
-- endif
-- 
--+ifdef CONFIG_SAE
--+ifdef NEED_SHA384
--+# Need to add HMAC-SHA384 KDF as well, if SHA384 was enabled.
--+NEED_HMAC_SHA384_KDF=y
--+endif
--+ifdef NEED_SHA512
--+# Need to add HMAC-SHA512 KDF as well, if SHA512 was enabled.
--+NEED_HMAC_SHA512_KDF=y
--+endif
--+endif
--+
-- SHA256OBJS = # none by default
-- L_CFLAGS += -DCONFIG_SHA256
-- ifneq ($(CONFIG_TLS), openssl)
--diff --git a/wpa_supplicant/Makefile b/wpa_supplicant/Makefile
--index ed49aa972..69c80121c 100644
----- a/wpa_supplicant/Makefile
--+++ b/wpa_supplicant/Makefile
--@@ -1475,6 +1475,17 @@ endif
-- endif
-- endif
-- 
--+ifdef CONFIG_SAE
--+ifdef NEED_SHA384
--+# Need to add HMAC-SHA384 KDF as well, if SHA384 was enabled.
--+NEED_HMAC_SHA384_KDF=y
--+endif
--+ifdef NEED_SHA512
--+# Need to add HMAC-SHA512 KDF as well, if SHA512 was enabled.
--+NEED_HMAC_SHA512_KDF=y
--+endif
--+endif
--+
-- SHA256OBJS = # none by default
-- CFLAGS += -DCONFIG_SHA256
-- ifneq ($(CONFIG_TLS), openssl)
---- 
--2.39.2
--
-diff --git a/package/wpa_supplicant/wpa_supplicant.hash b/package/wpa_supplicant/wpa_supplicant.hash
-index fcaee0a30b..940fad4c6f 100644
---- a/package/wpa_supplicant/wpa_supplicant.hash
-+++ b/package/wpa_supplicant/wpa_supplicant.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  20df7ae5154b3830355f8ab4269123a87affdea59fe74fe9292a91d0d7e17b2f  wpa_supplicant-2.10.tar.gz
-+sha256  912ea06f74e30a8e36fbb68064d6cdff218d8d591db0fc5d75dee6c81ac7fc0a  wpa_supplicant-2.11.tar.gz
- sha256  af01e1d1ee065a1054d20ebe8a78a016f1fb1133b73e6a9d50801b165bb280c7  README
-diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
-index 42c6f772ac..984959f679 100644
---- a/package/wpa_supplicant/wpa_supplicant.mk
-+++ b/package/wpa_supplicant/wpa_supplicant.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WPA_SUPPLICANT_VERSION = 2.10
-+WPA_SUPPLICANT_VERSION = 2.11
- WPA_SUPPLICANT_SITE = http://w1.fi/releases
- WPA_SUPPLICANT_LICENSE = BSD-3-Clause
- WPA_SUPPLICANT_LICENSE_FILES = README
+> > ++ifeq ($(ARCH),xtensa)
+> > ++C_COMPILER_OPTIONS += -mtext-section-literals
+> > ++LINKER_OPTIONS += -mtext-section-literals  
+> 
+> There's a stronger version of this option, -mauto-litpools, in the xtensa
+> TARGET_ABI and it is passed to the TARGET_CFLAGS. Why does
+> this package need special treatment?
+
+It causes build failures:
+
+  http://autobuild.buildroot.net/results/ce36170d67c4702f34bee025d8a46e5269c4573e/
+
+There's some explanation from the patch contributor in the commit
+message BTW:
+
+    This solves a build problem -- by default xtensa-gcc puts literals in a
+    different section of memory then the program text, and chicken is a very
+    literal-heavy program, so they don't all fit there. This avoids that problem.
+
+Note: I'm not at all an expert with Xtensa, so I'd be happy to have
+your input on this!
+
+Best regards,
+
+Thomas
 -- 
-2.45.2
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
