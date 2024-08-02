@@ -4,72 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7D7D5C3DA7F
-	for <buildroot@archiver.kernel.org>; Fri,  2 Aug 2024 21:00:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F37CDC3DA7F
+	for <buildroot@archiver.kernel.org>; Fri,  2 Aug 2024 21:06:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E159160744;
-	Fri,  2 Aug 2024 21:00:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 162CC612F2;
+	Fri,  2 Aug 2024 21:06:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LQt-iAdCvw0M; Fri,  2 Aug 2024 21:00:23 +0000 (UTC)
+ id VmcIU8k-0y8s; Fri,  2 Aug 2024 21:06:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BC5BA60789
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EB0E760779
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BC5BA60789;
-	Fri,  2 Aug 2024 21:00:23 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8CDA21BF37F
- for <buildroot@lists.busybox.net>; Fri,  2 Aug 2024 21:00:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EB0E760779;
+	Fri,  2 Aug 2024 21:06:51 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 886AA1BF3FF
+ for <buildroot@lists.busybox.net>; Fri,  2 Aug 2024 21:06:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BA72180E17
- for <buildroot@lists.busybox.net>; Fri,  2 Aug 2024 21:00:21 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 76AD960744
+ for <buildroot@lists.busybox.net>; Fri,  2 Aug 2024 21:06:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZG-7pkpmoJO9 for <buildroot@lists.busybox.net>;
- Fri,  2 Aug 2024 21:00:20 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.194;
- helo=relay2-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zr0gddBJN4Df for <buildroot@lists.busybox.net>;
+ Fri,  2 Aug 2024 21:06:49 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::223;
+ helo=relay3-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4C93480E8A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4C93480E8A
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4C93480E8A
- for <buildroot@buildroot.org>; Fri,  2 Aug 2024 21:00:19 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 99F5440008;
- Fri,  2 Aug 2024 21:00:14 +0000 (UTC)
-Date: Fri, 2 Aug 2024 23:00:13 +0200
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 0294560779
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0294560779
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 0294560779
+ for <buildroot@buildroot.org>; Fri,  2 Aug 2024 21:06:48 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 7853D60002;
+ Fri,  2 Aug 2024 21:06:45 +0000 (UTC)
+Date: Fri, 2 Aug 2024 23:06:44 +0200
 To: Adrian Perez de Castro <aperez@igalia.com>
-Message-ID: <20240802230013.0efb9e5c@windsurf>
-In-Reply-To: <20240627193335.4069574-2-aperez@igalia.com>
+Message-ID: <20240802230644.69b29bac@windsurf>
+In-Reply-To: <20240627193335.4069574-3-aperez@igalia.com>
 References: <20240208095531.99049-1-aperez@igalia.com>
- <20240627193335.4069574-2-aperez@igalia.com>
+ <20240627193335.4069574-3-aperez@igalia.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1722632416;
+ d=bootlin.com; s=gm1; t=1722632805;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=reXwaw68yRDcufP34EpTIcT/YDXhThysNV4dpKOW/8Y=;
- b=gpRo44G6KLR29ZJPIY1GPO7j6ChXg9FDaNDROeCzKZ3Ok1LOMd8lMsfh1lE6bKWLE6n99R
- JHkZ/s0YSno0egrW92dVV0QYdXWU+k0wOM53ngWiQD7BXaB302DxOe6F+rHAvK24HT1kAE
- 1IlWUrVAZe+5cUOWmSFBWTDUF/m+5rV7GJbDljAYZxQ8oBHvp78zF0KJtzyF/r1wosuJrm
- 0xpxIJEh65zhaGSJyjdbW5oe/tr5o2ueLeBpZCDOhbDlf61iJTGBzAiU5lG+YtaWkdxEhs
- dBbu6ytJY9N+eAZm4XkJIlbRBTf5tsAhkrMeGCS73t3b1h8tR7FD5eu7CWEmCg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=3/r75ohNCqNB7RtSvOMddkqy+B9R87oBbenDMrgyJSU=;
+ b=ajWGO75+PS54VsZSZu+/GjPcNs6HWnotIVmfVkedWVI2B1N0142BH4ugnHgHO06rS0oZks
+ SlwexfGrqr0/b18xBndLk16rVzJuG2aE+8S+NJO+pHop636ZH4Pbc8zM19cgUsF+szHDg7
+ T8pTNENkOgQD5fJM1smjhhnw8djNPB5a8qDRT7irGvNuKuLLDmoPC/Kh9xXdHkcFaLSNre
+ 6vP12ZjWYLqa42KRyaDqEbYvjI4jwygn/uVlPr45A8njUPlCF9xQDslJMt56pEagNz5xHy
+ qNUsZxM7gtgJmQhO4wlB+8iQ9/dzUs5lJVWcb8LvaKso699S1jnGAN56S+BABg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=gpRo44G6
-Subject: Re: [Buildroot] [PATCH v2 1/4] package/wpebackend-rdk: new package
+ header.s=gm1 header.b=ajWGO75+
+Subject: Re: [Buildroot] [PATCH v2 2/4] package/cog: depend on
+ wpebackend-fdo only if needed
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -89,169 +90,184 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Adrian,
+Hello,
 
-On Thu, 27 Jun 2024 22:33:29 +0300
+On Thu, 27 Jun 2024 22:33:30 +0300
 Adrian Perez de Castro <aperez@igalia.com> wrote:
 
-> The wpebackend-rdk can be used as an alternative to wpebackend-fdo in
-> some cases, and also supports a few additional configurations. For now
-> only the Wayland-EGL and Broadcom RaspberryPi userland implementations
-> can be enabled. The former is useful for testing, and the latter allows
-> using WPE WebKit directly on top of Dispmanx in combination with the
-> rpi-userland package in supported RaspberryPi models.
-> 
-> This only adds the new package, follow-up commits will un-hardcode the
-> usage of wpebackend-fdo and allow selecting either which of both to
-> build.
-> 
+> Make the Cog headless platform plug-in selectable, allowing to configure
+> the build without any plug-in at all. When all plug-ins are disabled,
+> Cog does not require wpebackend-fdo at build time, and it is still
+> able to use its built-in "fallback" support to load other WPE backends
+> like wpebackend-rdk.
+
+This seems to makes sense to me, but I completely fail to understand
+the complicated implementation you are proposing below.
+
+There is in fact something already super wrong in package/cog: it has
+wpebackend-fdo in COG_DEPENDENCIES, but it doesn't select it. It works
+because it depends on wpewebkit, which itself selects wpebackend-fdo,
+but that's really wrong. This should be fixed in a first patch.
+
 > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-
-I wanted to merge this, but unfortunately:
-
-BR2_arm=y
-BR2_cortex_a9=y
-BR2_ARM_ENABLE_VFP=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-BR2_INIT_NONE=y
-BR2_SYSTEM_BIN_SH_NONE=y
-# BR2_PACKAGE_BUSYBOX is not set
-BR2_PACKAGE_RPI_USERLAND=y
-BR2_PACKAGE_WPEBACKEND_RDK=y
-# BR2_TARGET_ROOTFS_TAR is not set
-
-fails to build with:
-
-In file included from /home/thomas/projets/buildroot/output/build/wpebackend-rdk-4.4.1/src/bcm-rpi/view-backend.cpp:30:
-/home/thomas/projets/buildroot/output/build/wpebackend-rdk-4.4.1/src/input/Libinput/LibinputServer.h:37:10: fatal error: libudev.h: No such file or directory
-   37 | #include <libudev.h>
-      |          ^~~~~~~~~~~
-compilation terminated.
-
-as far as I can see, LibinputServer.h includes <libinput.h> and
-<libudev.h>:
-
-#ifndef KEY_INPUT_HANDLING_VIRTUAL
-#include <libudev.h>
-#include <libinput.h>
-#else
-#include <virtualinput.h>
-#endif
-
-whenever KEY_INPUT_HANDLING_VIRTUAL is *NOT* defined. And
-KEY_INPUT_HANDLING_VIRTUAL is only defined when USE_VIRTUAL_KEYBOARD=ON.
-
-I believe you should also properly use the USE_INPUT_UDEV and
-USE_INPUT_WAYLAND options.
-
-find_package(Libxkbcommon REQUIRED)
-
-libxkbcommon is also a mandatory dependency. Even though it is
-indirectly pulled in by libwpe, it should be expressed as a direct
-dependency of wpebackend-rdk.
-
 > ---
->  package/Config.in                          |  1 +
->  package/wpebackend-rdk/Config.in           | 57 ++++++++++++++++++++++
->  package/wpebackend-rdk/wpebackend-rdk.hash |  5 ++
->  package/wpebackend-rdk/wpebackend-rdk.mk   | 43 ++++++++++++++++
->  4 files changed, 106 insertions(+)
+>  package/cog/Config.in | 28 ++++++++++++++++++++++++++--
+>  package/cog/cog.mk    | 13 ++++++++++---
+>  2 files changed, 36 insertions(+), 5 deletions(-)
+> 
+> ---
+> v1 -> v2:
+> - Unchanged.
+> 
+> diff --git a/package/cog/Config.in b/package/cog/Config.in
+> index d2a910f9b89..d706b045b15 100644
+> --- a/package/cog/Config.in
+> +++ b/package/cog/Config.in
+> @@ -19,6 +19,10 @@ config BR2_PACKAGE_COG
+>  
+>  if BR2_PACKAGE_COG
+>  
+> +config BR2_PACKAGE_COG_NEEDS_WPEBACKEND_FDO
+> +	bool
+> +	default n
 
-Please add yourself in the DEVELOPERS file for this package.
+I believe this is not needed.
 
+>  config BR2_PACKAGE_COG_PROGRAMS_HOME_URI
+>  	string "home uri"
+>  	default "https://wpewebkit.org"
+> @@ -30,6 +34,8 @@ config BR2_PACKAGE_COG_PROGRAMS_HOME_URI
+>  config BR2_PACKAGE_COG_PLATFORM_FDO
+>  	bool "Wayland backend"
+>  	default y
+> +	depends on BR2_PACKAGE_WPEBACKEND_FDO
+> +	select BR2_PACKAGE_COG_NEEDS_WPEBACKEND_FDO
 
-> diff --git a/package/wpebackend-rdk/Config.in b/package/wpebackend-rdk/Config.in
-> new file mode 100644
-> index 00000000000..6125911bec9
-> --- /dev/null
-> +++ b/package/wpebackend-rdk/Config.in
-> @@ -0,0 +1,57 @@
-> +comment "wpebackend-rdk needs a toolchain w/ C++, wchar, threads, dynamic library, and rpi-userland or an OpenGL-capable Wayland backend"
-> +	depends on !(BR2_PACKAGE_RPI_USERLAND || BR2_PACKAGE_HAS_LIBEGL_WAYLAND) \
-> +		|| !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR \
-> +		|| !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+If the Wayland backend needs wpebackend-fdo, just select it:
 
-Please split this into two comments, one for the toolchain things, one
-for the rpi-userland || wayland EGL.
+	select BR2_PACKAGE_WPEBACKEND_FDO
 
-Also, the option BR2_PACKAGE_HAS_LIBEGL_WAYLAND is gone, see commit
-4fad6b3c58abd20c533b67b85658bc66d015110b. You can use
-BR2_PACKAGE_HAS_LIBEGL && BR2_PACKAGE_WAYLAND instead. This needs to be
-fixed globally.
+>  	select BR2_PACKAGE_LIBXKBCOMMON
+>  	select BR2_PACKAGE_WAYLAND_PROTOCOLS
+>  	help
+> @@ -43,6 +49,8 @@ config BR2_PACKAGE_COG_PLATFORM_DRM
+>  	depends on BR2_PACKAGE_HAS_LIBGBM
+>  	depends on BR2_PACKAGE_LIBGBM_HAS_FEATURE_DMA_BUF
+>  	depends on BR2_PACKAGE_LIBGBM_HAS_FEATURE_FORMAT_MODIFIER_PLANE_COUNT
+> +	depends on BR2_PACKAGE_WPEBACKEND_FDO
+> +	select BR2_PACKAGE_COG_NEEDS_WPEBACKEND_FDO
 
-> +config BR2_PACKAGE_WPEBACKEND_RDK
-> +	bool "wpebackend-rdk"
-> +	depends on !BR2_STATIC_LIBS # wayland
-> +	depends on BR2_INSTALL_LIBSTDCPP
-> +	depends on BR2_TOOLCHAIN_HAS_THREADS # wayland, libglib2
-> +	depends on BR2_USE_WCHAR # libglib2
-> +	depends on BR2_USE_MMU # libglib2
-> +	depends on BR2_PACKAGE_RPI_USERLAND || BR2_PACKAGE_HAS_LIBEGL_WAYLAND
-> +	select BR2_PACKAGE_LIBGLIB2
-> +	select BR2_PACKAGE_LIBWPE
+If the DRM backend needs wpebackend-fdo, just select it:
+
+	select BR2_PACKAGE_WPEBACKEND_FDO
+
+>  	select BR2_PACKAGE_LIBDRM
+>  	select BR2_PACKAGE_LIBINPUT
+>  	help
+> @@ -50,16 +58,32 @@ config BR2_PACKAGE_COG_PLATFORM_DRM
+>  	  with video drivers that support kernel mode-setting (KMS)
+>  	  via the DRM user-space API.
+>  
+> +config BR2_PACKAGE_COG_PLATFORM_HEADLESS
+> +	bool "Headless backend"
+> +	depends on BR2_PACKAGE_WPEBACKEND_FDO
+> +	select BR2_PACKAGE_COG_NEEDS_WPEBACKEND_FDO
+
+Same, just select wpebackend-fdo.
+
 > +	help
-> +	  WPEBackend interface supporting a number of configurations.
-
-Would be nice to have a slightly extended explanation for the poor
-souls like that are very confused by libwpe vs. wpebackend-fdo vs.
-wpebackend-rdk vs. wpewebkit vs. webkitgtk.
-
-> +if BR2_PACKAGE_WPEBACKEND_RDK
+> +	  Enable the headless platform backend.
 > +
-> +choice
-> +	prompt Implementation
-
-Double quotes around "Implementation". Maybe it should be "Backend"
-instead of "Implementation"?
-
-> +	default BR2_PACKAGE_WPEBACKEND_RDK_IMPL_BRCM_RPI if BR2_PACKAGE_RPI_USERLAND
-> +	default BR2_PACKAGE_WPEBACKEND_RDK_IMPL_WAYLAND_EGL if BR2_PACKAGE_HAS_LIBEGL_WAYLAND
+>  config BR2_PACKAGE_COG_USE_SYSTEM_DBUS
+>  	bool "expose system D-Bus control interface"
+>  	help
+>  	  Expose remote control interface on system bus
+>  
+> -comment "DRM platform needs EGL and GBM"
+> +comment "Headless platform needs wpebackend-fdo"
+> +	depends on \
+> +		!BR2_PACKAGE_WPEBACKEND_FDO
 > +
-> +comment "brcm-rpi needs rpi-userland"
-> +	depends on !BR2_PACKAGE_RPI_USERLAND || !BR2_arm
+> +comment "DRM platform needs EGL, GBM, wpebackend-fdo"
+>  	depends on \
+>  		!BR2_PACKAGE_HAS_LIBEGL || \
+>  		!BR2_PACKAGE_HAS_LIBGBM || \
+>  		!BR2_PACKAGE_LIBGBM_HAS_FEATURE_DMA_BUF || \
+> -		!BR2_PACKAGE_LIBGBM_HAS_FEATURE_FORMAT_MODIFIER_PLANE_COUNT
+> +		!BR2_PACKAGE_LIBGBM_HAS_FEATURE_FORMAT_MODIFIER_PLANE_COUNT || \
+> +		!BR2_PACKAGE_WPEBACKEND_FDO
+> +
+> +comment "Wayland platform needs wpebackend-fdo"
+> +	depends on \
+> +		!BR2_PACKAGE_WPEBACKEND_FDO
 
-better expressed as:
+Drop all those changes.
 
-	depends on BR2_arm
-	depends on !BR2_PACKAGE_RPI_USERLAND
+>  endif
+> diff --git a/package/cog/cog.mk b/package/cog/cog.mk
+> index 7f680bb7005..166f095118b 100644
+> --- a/package/cog/cog.mk
+> +++ b/package/cog/cog.mk
+> @@ -8,7 +8,7 @@ COG_VERSION = 0.18.4
+>  COG_SITE = https://wpewebkit.org/releases
+>  COG_SOURCE = cog-$(COG_VERSION).tar.xz
+>  COG_INSTALL_STAGING = YES
+> -COG_DEPENDENCIES = dbus wpewebkit wpebackend-fdo wayland
+> +COG_DEPENDENCIES = dbus wpewebkit wayland
+>  COG_LICENSE = MIT
+>  COG_LICENSE_FILES = COPYING
+>  COG_CONF_OPTS = \
+> @@ -19,8 +19,6 @@ COG_CONF_OPTS = \
+>  	-Dcog_home_uri='$(call qstrip,$(BR2_PACKAGE_COG_PROGRAMS_HOME_URI))' \
+>  	-Dplatforms='$(subst $(space),$(comma),$(strip $(COG_PLATFORMS_LIST)))'
+>  
+> -COG_PLATFORMS_LIST = headless
+> -
+>  ifeq ($(BR2_PACKAGE_WESTON),y)
+>  COG_CONF_OPTS += -Dwayland_weston_direct_display=true
+>  COG_DEPENDENCIES += weston
+> @@ -28,6 +26,11 @@ else
+>  COG_CONF_OPTS += -Dwayland_weston_direct_display=false
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_COG_PLATFORM_HEADLESS),y)
+> +COG_PLATFORMS_LIST += headless
+> +COG_DEPENDENCIES += wpebackend-fdo
+> +endif
+> +
+>  ifeq ($(BR2_PACKAGE_COG_PLATFORM_FDO),y)
+>  COG_PLATFORMS_LIST += wayland
+>  COG_DEPENDENCIES += libxkbcommon wayland-protocols
+> @@ -48,4 +51,8 @@ ifeq ($(BR2_PACKAGE_LIBMANETTE),y)
+>  COG_DEPENDENCIES += libmanette
+>  endif
+>  
+> +ifeq ($(BR2_PACKAGE_COG_NEEDS_WPEBACKEND_FDO),y)
+> +COG_DEPENDENCIES += wpebackend-fdo
+> +endif
 
-> +
-> +config BR2_PACKAGE_WPEBACKEND_RDK_IMPL_BRCM_RPI
-> +	bool "brcm-rpi"
-> +	depends on BR2_arm
-> +	depends on BR2_PACKAGE_RPI_USERLAND
-> +	help
-> +	  Build RaspberryPi support using Broadcom's rpi-userland.
-> +
-> +comment "wayland-egl needs an EGL capable Wayland implementation"
-> +	depends on !BR2_PACKAGE_HAS_LIBEGL_WAYLAND
-> +
-> +config BR2_PACKAGE_WPEBACKEND_RDK_IMPL_WAYLAND_EGL
-> +	bool "wayland-egl"
-> +	depends on BR2_PACKAGE_HAS_LIBEGL_WAYLAND
-> +	help
-> +	  Build Wayland-EGL support.
-> +
-> +endchoice
-> +
-> +if BR2_PACKAGE_WPEBACKEND_RDK_IMPL_BRCM_RPI
-> +
-> +config BR2_PACKAGE_WPEBACKEND_RDK_LIBINPUT
-> +	bool "libinput support"
-> +	select BR2_PACKAGE_LIBINPUT
-> +	help
-> +	  Support keyboard and mouse input through libinput
+Drop this, and instead do:
 
-Why is the keyboard/mouse support with libinput only available with the
-brcm-rpi backend? Reading the CMakeLists.txt, I don't really see any
-relationship.
+ifeq ($(BR2_PACKAGE_COG_PLATFORM_HEADLESS),y)
+COG_PLATFORMS_LIST += headless
+COG_DEPENDENCIES += wpebackend-fdo
+endif
 
-Could you fix up those different issues and submit a v3 ?
+ifeq ($(BR2_PACKAGE_COG_PLATFORM_FDO),y)
+COG_PLATFORMS_LIST += wayland
+COG_DEPENDENCIES += libxkbcommon wayland-protocols wpebackend-fdo
+endif
+
+ifeq ($(BR2_PACKAGE_COG_PLATFORM_DRM),y)
+COG_PLATFORMS_LIST += drm
+COG_DEPENDENCIES += libdrm libinput libgbm libegl udev wpebackend-fdo
+endif
+
+Could you rework a v3 according to those suggestions?
 
 Thanks a lot!
 
-Thomas Petazzoni
+Thomas
 -- 
 Thomas Petazzoni, co-owner and CEO, Bootlin
 Embedded Linux and Kernel engineering and training
