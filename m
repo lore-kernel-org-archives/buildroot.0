@@ -1,70 +1,94 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 633A2C3DA4A
-	for <buildroot@archiver.kernel.org>; Sat,  3 Aug 2024 14:25:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 16303C3DA4A
+	for <buildroot@archiver.kernel.org>; Sat,  3 Aug 2024 15:55:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BD4CC606A5;
-	Sat,  3 Aug 2024 14:25:55 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7BBEB40233;
+	Sat,  3 Aug 2024 15:55:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OmHeR9ciVkgZ; Sat,  3 Aug 2024 14:25:55 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2H55FV7CYNqc; Sat,  3 Aug 2024 15:55:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C39E860626
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3125840112
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C39E860626;
-	Sat,  3 Aug 2024 14:25:54 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 7DE261BF376
- for <buildroot@lists.busybox.net>; Sat,  3 Aug 2024 14:25:53 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3125840112;
+	Sat,  3 Aug 2024 15:55:35 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id A25831BF3B8
+ for <buildroot@lists.busybox.net>; Sat,  3 Aug 2024 15:55:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6A3E7812A1
- for <buildroot@lists.busybox.net>; Sat,  3 Aug 2024 14:25:53 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9CA0F40386
+ for <buildroot@lists.busybox.net>; Sat,  3 Aug 2024 15:55:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HlfZQLvxL0dS for <buildroot@lists.busybox.net>;
- Sat,  3 Aug 2024 14:25:52 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 6921880E5D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6921880E5D
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6921880E5D
- for <buildroot@buildroot.org>; Sat,  3 Aug 2024 14:25:52 +0000 (UTC)
-Received: from home.juju.sh (unknown
- [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 0A183B00619;
- Sat,  3 Aug 2024 16:25:45 +0200 (CEST)
-From: Julien Olivain <ju.o@free.fr>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jUoyrWm95swl for <buildroot@lists.busybox.net>;
+ Sat,  3 Aug 2024 15:55:32 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::62e; helo=mail-ej1-x62e.google.com;
+ envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E855E40384
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E855E40384
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com
+ [IPv6:2a00:1450:4864:20::62e])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E855E40384
+ for <buildroot@buildroot.org>; Sat,  3 Aug 2024 15:55:31 +0000 (UTC)
+Received: by mail-ej1-x62e.google.com with SMTP id
+ a640c23a62f3a-a7ad02501c3so262225666b.2
+ for <buildroot@buildroot.org>; Sat, 03 Aug 2024 08:55:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1722700529; x=1723305329;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=mGkXRBEI/Px52ST+CkejWQMyPBskoONccBPilOqYu94=;
+ b=c44aIcCZLOfFRTAZVSDqYPxui1+Ov9WHcmRQOKoDLd2eWKcVLNaZUecFZwgMmGxAVI
+ RgxwTcFTwsopJxQgFvr2LaPHraEiVhnIE6p4KDA3voVtosBm5PJ/s4ZwuChh/RwxnKbP
+ NAT30ckVQ2EAs2YtkJj8LtutYDBzTNBDZHsGKUDamWiP8xrxN+6QhSm6u9hFu8134qkF
+ zoBc6I9rr40lTU/4Ukdlg+PgRRa0m7qPPgzTP5SNBiq7caGtC3AH9hlk13x+548ddPzA
+ Uu7BVr7Kq+SzmIJBR4vxVBjm5s8FhJyFHOg7oWYGmUqox6tuaACat9JbnIo340POh/jH
+ iMqg==
+X-Gm-Message-State: AOJu0Yyva4TeZHAf5mdcUbKzHwC4KDvYV6zWlxU9EMX3+rnUxDPNoGb7
+ cA12q5hGmHAZjwchEew2veVq/SQDU3yC9301KMdHwPDdU7btxfU/rHb3HUVYBZpFS2j2zTM+SIE
+ o
+X-Google-Smtp-Source: AGHT+IEgFseHsQSfB+zf8MaifG6nLSY/vlJLJlIKGaNhaldU4J+1nHSjyNEgbY3g3YJn4cIikvEEqA==
+X-Received: by 2002:a17:907:724b:b0:a7a:c083:8575 with SMTP id
+ a640c23a62f3a-a7dc4ae31afmr570455466b.0.1722700529317; 
+ Sat, 03 Aug 2024 08:55:29 -0700 (PDT)
+Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it
+ (host-79-17-93-104.retail.telecomitalia.it. [79.17.93.104])
+ by smtp.gmail.com with ESMTPSA id
+ a640c23a62f3a-a7dc9bc9db6sm228584966b.8.2024.08.03.08.55.28
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 03 Aug 2024 08:55:28 -0700 (PDT)
+From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Sat,  3 Aug 2024 16:25:40 +0200
-Message-ID: <20240803142540.3241396-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.45.2
+Date: Sat,  3 Aug 2024 17:55:14 +0200
+Message-ID: <20240803155517.3499273-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1722695149;
- bh=9XiC0XXGseXh73VWBmvHrv8tKIL8QC2jbhE3TxjA4os=;
- h=From:To:Cc:Subject:Date:From;
- b=EnLNf+PK+pQayrAXzray/XHm7TS5eDjwjyvq6CUZ46ClOSOjPjfEX96/nLHgUpSIf
- DJUYjkCYjvTliK+yUr7o0eVLFRfdjsCgLVkdR3JJjsQZk0aN+KPxrLpEQbXPSruk7T
- bXJGb1x83EQ9QGAC9zT2sdbGBcKxuiTbNrkS4UzPRBChsoauP+tGz3/VKdQPxhg/pm
- rSBFn3noqcODTsEF9Q4dDtejQj0bDwO/+lriMe72eTfeRdUG81SaPf605ZhD+tjIMm
- /k1sdYK0q2LU3XOt8c7d+WE+1bjsiRUPV8IiAk6ZNjanhH4UyxQOrPp7Xdyc/dfIx6
- qBh0EMhKEkSDA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=amarulasolutions.com; s=google; t=1722700529; x=1723305329;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=mGkXRBEI/Px52ST+CkejWQMyPBskoONccBPilOqYu94=;
+ b=WJfApEVbZRwtVOYKvOus2qzc9NyXnN2zsmLYw7KuicXKYeJgSOOfcUaybA7Ijg1lp0
+ x87fZGY0YNejEQXjvfS+iI9XGmJ4O8W5dLmNegDbbvcGs7KatkzyCHPRwRjDvjS5FAON
+ 9m12tYTpvbF85Ds9+Jyy/8Su+Bf6D3vN61Uw0=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=EnLNf+PK
-Subject: [Buildroot] [PATCH 1/1] package/freescale-imx/imx-gpu-viv: bump to
- version 6.4.11.p2.6
+ header.from=amarulasolutions.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
+ header.a=rsa-sha256 header.s=google header.b=WJfApEVb
+Subject: [Buildroot] [PATCH 0/3] tinit and stm32f746_disco_sd_defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,58 +100,85 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Refik Tuzakli <tuzakli.refik@gmail.com>, Julien Olivain <ju.o@free.fr>,
- Gary Bisson <bisson.gary@gmail.com>
+Cc: linux-amarula@amarulasolutions.com, Damien Le Moal <dlemoal@kernel.org>,
+ Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This version is aligned to the NXP BSP lf-6.6.23-2.0.0. See [1].
+This series is inspired by reading the following topic:
 
-License hashes changed because the LA_OPT_NXP_Software_License changed
-from "v49 September 2023" to "v56 April 2024".
+https://lore.kernel.org/buildroot/20230206230203.70e2dbd8@windsurf/T
 
-[1] https://github.com/nxp-imx/meta-imx/blob/rel_imx_6.6.23_2.0.0/meta-imx-bsp/recipes-graphics/imx-gpu-viv/imx-gpu-viv_6.4.11.p2.6-aarch64.bb
+Starting from that patch, and following Thomas Petazzoni's suggestions
+regarding the possibility of using a single minimal script without
+duplicating it within Buildroot, I developed these three patches.
+Meanwhile, the configuration for the stm32f746_disco board was useful
+for developing the display support for the board, which was later
+merged into Linux.
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
- package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash | 8 ++++----
- package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk   | 4 ++--
- 2 files changed, 6 insertions(+), 6 deletions(-)
+Dario Binacchi (3):
+  package/tinit: new package
+  configs/stm32f746_disco_sd_defconfig: new defconfig
+  board/canaan/k210-soc: use tinit as Linux init process
 
-diff --git a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash
-index b350443a51..cce08e2727 100644
---- a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash
-+++ b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  15efe6da5d4bac2a6067c2a898190be8754df6f14128c3db4756cff59c6da049  imx-gpu-viv-6.4.11.p2.2-aarch32-fd0148d.bin
--sha256  6e34f3718925ba37c362cd09a3228cc56d03cfad323ebae0932f64449dbaeb2e  imx-gpu-viv-6.4.11.p2.2-aarch64-fd0148d.bin
--sha256  24d7cb3a7e51011466a149bd99acf89387b832be2d0890ce2e183dfbc9d7cb84  COPYING
--sha256  3282d88fad766897f93b0827297a70c2707d9358db24cccd5777abf7c997da77  EULA
-+sha256  cf6e42c9c9a903cd933b767d411131390d237a4b92ecad579db57d54538707f3  imx-gpu-viv-6.4.11.p2.6-aarch32-bc7b6a2.bin
-+sha256  5fe828113b9b2801b3fd60cd15eadfd0ac747e5897ef7db7fa22f80e7dd8a8e1  imx-gpu-viv-6.4.11.p2.6-aarch64-bc7b6a2.bin
-+sha256  c9ee518510d72e254d62743f5098163eacdb6428c6ba4d8119afe2d12edba068  COPYING
-+sha256  165f6c0eacb4d3a05289dfb79331c9a2c05207eb7a67ef28a117f246a0145428  EULA
-diff --git a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
-index 3cfbfe3ccc..a559bb7478 100644
---- a/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
-+++ b/package/freescale-imx/imx-gpu-viv/imx-gpu-viv.mk
-@@ -5,9 +5,9 @@
- ################################################################################
- 
- ifeq ($(BR2_aarch64),y)
--IMX_GPU_VIV_VERSION = 6.4.11.p2.2-aarch64-fd0148d
-+IMX_GPU_VIV_VERSION = 6.4.11.p2.6-aarch64-bc7b6a2
- else
--IMX_GPU_VIV_VERSION = 6.4.11.p2.2-aarch32-fd0148d
-+IMX_GPU_VIV_VERSION = 6.4.11.p2.6-aarch32-bc7b6a2
- endif
- IMX_GPU_VIV_SITE = $(FREESCALE_IMX_SITE)
- IMX_GPU_VIV_SOURCE = imx-gpu-viv-$(IMX_GPU_VIV_VERSION).bin
+ .checkpackageignore                           |   1 -
+ DEVELOPERS                                    |   3 +
+ board/canaan/k210-soc/rootfs_overlay/init     |   1 -
+ .../canaan/k210-soc/rootfs_overlay/sbin/init  |  41 ----
+ board/canaan/k210-soc/tinit-logo.txt          |   7 +
+ board/canaan/k210-soc/tinit-setup.sh          |  10 +
+ .../stm32f746-disco/busybox-tiny.config       | 230 ++++++++++++++++++
+ .../stm32f746-disco/extlinux.conf             |   4 +
+ .../stm32f746-disco/flash_sd.sh               |  22 ++
+ .../stm32f746-disco/genimage.cfg              |  27 ++
+ .../stm32f746-disco/linux.fragment            |  13 +
+ .../patches/linux-headers/linux-headers.hash  |   1 +
+ .../stm32f746-disco/patches/linux/linux.hash  |   2 +
+ .../stm32f746-disco/patches/uboot/uboot.hash  |   2 +
+ .../stm32f746-disco/post-build.sh             |  15 ++
+ .../stm32f746-disco/readme.txt                |  31 +++
+ .../stm32f746-disco/tinit-logo.txt            |  10 +
+ configs/canaan_kd233_defconfig                |   4 +-
+ configs/sipeed_maix_bit_defconfig             |   4 +-
+ configs/sipeed_maix_bit_sdcard_defconfig      |   5 +-
+ configs/sipeed_maix_dock_defconfig            |   4 +-
+ configs/sipeed_maix_dock_sdcard_defconfig     |   5 +-
+ configs/sipeed_maix_go_defconfig              |   4 +-
+ configs/sipeed_maix_go_sdcard_defconfig       |   4 +-
+ configs/sipeed_maixduino_defconfig            |   4 +-
+ configs/sipeed_maixduino_sdcard_defconfig     |   5 +-
+ configs/stm32f746_disco_sd_defconfig          |  32 +++
+ package/Config.in                             |   1 +
+ package/tinit/Config.in                       |   9 +
+ package/tinit/tinit.hash                      |   3 +
+ package/tinit/tinit.mk                        |  17 ++
+ system/Config.in                              |   5 +
+ 32 files changed, 462 insertions(+), 64 deletions(-)
+ delete mode 120000 board/canaan/k210-soc/rootfs_overlay/init
+ delete mode 100755 board/canaan/k210-soc/rootfs_overlay/sbin/init
+ create mode 100644 board/canaan/k210-soc/tinit-logo.txt
+ create mode 100755 board/canaan/k210-soc/tinit-setup.sh
+ create mode 100644 board/stmicroelectronics/stm32f746-disco/busybox-tiny.config
+ create mode 100644 board/stmicroelectronics/stm32f746-disco/extlinux.conf
+ create mode 100755 board/stmicroelectronics/stm32f746-disco/flash_sd.sh
+ create mode 100644 board/stmicroelectronics/stm32f746-disco/genimage.cfg
+ create mode 100644 board/stmicroelectronics/stm32f746-disco/linux.fragment
+ create mode 120000 board/stmicroelectronics/stm32f746-disco/patches/linux-headers/linux-headers.hash
+ create mode 100644 board/stmicroelectronics/stm32f746-disco/patches/linux/linux.hash
+ create mode 100644 board/stmicroelectronics/stm32f746-disco/patches/uboot/uboot.hash
+ create mode 100755 board/stmicroelectronics/stm32f746-disco/post-build.sh
+ create mode 100644 board/stmicroelectronics/stm32f746-disco/readme.txt
+ create mode 100644 board/stmicroelectronics/stm32f746-disco/tinit-logo.txt
+ create mode 100644 configs/stm32f746_disco_sd_defconfig
+ create mode 100644 package/tinit/Config.in
+ create mode 100644 package/tinit/tinit.hash
+ create mode 100644 package/tinit/tinit.mk
+
 -- 
-2.45.2
+2.43.0
 
 _______________________________________________
 buildroot mailing list
