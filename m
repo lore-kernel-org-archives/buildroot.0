@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1AC4C3DA4A
-	for <buildroot@archiver.kernel.org>; Sat,  3 Aug 2024 18:29:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A95D2C49EA1
+	for <buildroot@archiver.kernel.org>; Sat,  3 Aug 2024 18:29:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 32887403CF;
-	Sat,  3 Aug 2024 18:29:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7B1CC403A5;
+	Sat,  3 Aug 2024 18:29:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2GLs3FdjU69b; Sat,  3 Aug 2024 18:29:24 +0000 (UTC)
+ id 0F3-GfDhbbCO; Sat,  3 Aug 2024 18:29:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 27BB6403C2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1266B403B1
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 27BB6403C2;
-	Sat,  3 Aug 2024 18:29:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1266B403B1;
+	Sat,  3 Aug 2024 18:29:26 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id BF71D1BF364
- for <buildroot@lists.busybox.net>; Sat,  3 Aug 2024 18:29:15 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 81A291BF364
+ for <buildroot@lists.busybox.net>; Sat,  3 Aug 2024 18:29:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3185E6059F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 78CB460618
  for <buildroot@lists.busybox.net>; Sat,  3 Aug 2024 18:29:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1HcDk2xP-UAt for <buildroot@lists.busybox.net>;
+ id Yv31JhI1eF-t for <buildroot@lists.busybox.net>;
  Sat,  3 Aug 2024 18:29:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5769360618
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 95A196060D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5769360618
+ by smtp3.osuosl.org (Postfix) with ESMTP id 95A196060D
  for <buildroot@buildroot.org>; Sat,  3 Aug 2024 18:29:13 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3472E83C66; Sat,  3 Aug 2024 18:29:13 +0000 (UTC)
+ id 24DAC83C64; Sat,  3 Aug 2024 18:29:13 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 3 Aug 2024 20:27:38 +0200
+Date: Sat, 3 Aug 2024 20:26:31 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7165533a3f0e2f3c4bcdcd481a844f5a86a46a40
-X-Git-Newrev: ea301ef80c810791a6b673d46b4f16b6c2f62a29
+X-Git-Oldrev: 45651cdb851bcd5af06bb94d824b078b03d4f187
+X-Git-Newrev: 7165533a3f0e2f3c4bcdcd481a844f5a86a46a40
 X-Patchwork-Hint: ignore
-Message-Id: <20240803182913.3472E83C66@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/php: bump version to 8.3.10
+Message-Id: <20240803182913.24DAC83C64@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/samba4: bump version to 4.20.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,43 +65,76 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ea301ef80c810791a6b673d46b4f16b6c2f62a29
+commit: https://git.buildroot.net/buildroot/commit/?id=7165533a3f0e2f3c4bcdcd481a844f5a86a46a40
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog: https://www.php.net/ChangeLog-8.php#PHP_8_3
-Release notes: https://news-web.php.net/php.announce/434
+Rebased patch 0001.
+
+Release notes:
+https://www.samba.org/samba/history/samba-4.20.3.html
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/php/php.hash | 2 +-
- package/php/php.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...uild-find-pre-built-heimdal-build-tools-in-case-of-.patch | 12 ++++++------
+ package/samba4/samba4.hash                                   |  4 ++--
+ package/samba4/samba4.mk                                     |  2 +-
+ 3 files changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/package/php/php.hash b/package/php/php.hash
-index 59a82b001d..3a6f60680b 100644
---- a/package/php/php.hash
-+++ b/package/php/php.hash
-@@ -1,5 +1,5 @@
- # From https://www.php.net/downloads.php
--sha256  bf4d7b8ea60a356064f88485278bd6f941a230ec16f0fc401574ce1445ad6c77  php-8.3.9.tar.xz
-+sha256  a0f2179d00931fe7631a12cbc3428f898ca3d99fe564260c115af381d2a1978d  php-8.3.10.tar.xz
+diff --git a/package/samba4/0001-build-find-pre-built-heimdal-build-tools-in-case-of-.patch b/package/samba4/0001-build-find-pre-built-heimdal-build-tools-in-case-of-.patch
+index 1c4de6a02e..eb0ea099b7 100644
+--- a/package/samba4/0001-build-find-pre-built-heimdal-build-tools-in-case-of-.patch
++++ b/package/samba4/0001-build-find-pre-built-heimdal-build-tools-in-case-of-.patch
+@@ -32,8 +32,8 @@ and hence the check, in bundled mode.
+ BUG: https://bugzilla.samba.org/show_bug.cgi?id=14164
  
- # License file
- sha256  b42e4df5e50e6ecda1047d503d6d91d71032d09ed1027ba1ef29eed26f890c5a  LICENSE
-diff --git a/package/php/php.mk b/package/php/php.mk
-index 3fdce8186a..0487c03b61 100644
---- a/package/php/php.mk
-+++ b/package/php/php.mk
+ Signed-off-by: Uri Simchoni <uri@samba.org>
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-[Bernd: rebased for version 4.11.13 & 4.17.7]
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++[Bernd: rebased for version 4.11.13, 4.17.7 & 4.20.3]
+ ---
+  wscript_configure_embedded_heimdal | 11 +++++++++++
+  wscript_configure_system_heimdal   | 11 -----------
+@@ -43,10 +43,10 @@ diff --git a/wscript_configure_embedded_heimdal b/wscript_configure_embedded_hei
+ index 8c55ae2..4fdae80 100644
+ --- a/wscript_configure_embedded_heimdal
+ +++ b/wscript_configure_embedded_heimdal
+-@@ -6,3 +6,14 @@
+- 
+- conf.define('USING_EMBEDDED_HEIMDAL', 1)
+- conf.RECURSE('third_party/heimdal_build')
++@@ -13,3 +13,14 @@
++ # when this will be available also in
++ # system libraries...
++ conf.define('HAVE_CLIENT_GSS_C_CHANNEL_BOUND_FLAG', 1)
+ +
+ +def check_system_heimdal_binary(name):
+ +    if conf.LIB_MAY_BE_BUNDLED(name):
+diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
+index 353736f3b2..d2512f2e0a 100644
+--- a/package/samba4/samba4.hash
++++ b/package/samba4/samba4.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-# https://download.samba.org/pub/samba/stable/samba-4.20.2.tar.asc
+-sha256  f969ffed58ccf3e85cbbcc0e33a1726d025c2b40f42a653b1125b82b92d2e0e5  samba-4.20.2.tar.gz
++# https://download.samba.org/pub/samba/stable/samba-4.20.3.tar.asc
++sha256  afd5a9bb03e5c921c4c1d4e4b4fa6ea16cf798d94e5e5bffb9fd61716641cf30  samba-4.20.3.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
+index ec0ffd70bf..d48a02140f 100644
+--- a/package/samba4/samba4.mk
++++ b/package/samba4/samba4.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PHP_VERSION = 8.3.9
-+PHP_VERSION = 8.3.10
- PHP_SITE = https://www.php.net/distributions
- PHP_SOURCE = php-$(PHP_VERSION).tar.xz
- PHP_INSTALL_STAGING = YES
+-SAMBA4_VERSION = 4.20.2
++SAMBA4_VERSION = 4.20.3
+ SAMBA4_SITE = https://download.samba.org/pub/samba/stable
+ SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
+ SAMBA4_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
