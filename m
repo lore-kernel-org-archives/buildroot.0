@@ -4,71 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 287DAC3DA4A
-	for <buildroot@archiver.kernel.org>; Sat,  3 Aug 2024 20:45:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 196B6C3DA4A
+	for <buildroot@archiver.kernel.org>; Sat,  3 Aug 2024 20:52:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D1C998113A;
-	Sat,  3 Aug 2024 20:45:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B9EA0811B2;
+	Sat,  3 Aug 2024 20:52:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 044-gxr6S7Ff; Sat,  3 Aug 2024 20:45:34 +0000 (UTC)
+ id J2vto3X5AYcn; Sat,  3 Aug 2024 20:52:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B20868111D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CE9FF811B3
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B20868111D;
-	Sat,  3 Aug 2024 20:45:34 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6FA001BF35D
- for <buildroot@lists.busybox.net>; Sat,  3 Aug 2024 20:45:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CE9FF811B3;
+	Sat,  3 Aug 2024 20:52:25 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 02E201BF35D
+ for <buildroot@lists.busybox.net>; Sat,  3 Aug 2024 20:52:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5CE9F401ED
- for <buildroot@lists.busybox.net>; Sat,  3 Aug 2024 20:45:33 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id F134840305
+ for <buildroot@lists.busybox.net>; Sat,  3 Aug 2024 20:52:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zGlO743xy7iK for <buildroot@lists.busybox.net>;
- Sat,  3 Aug 2024 20:45:32 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.196;
- helo=relay4-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id btc6SjjyPZSz for <buildroot@lists.busybox.net>;
+ Sat,  3 Aug 2024 20:52:23 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D34DC400DD
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D34DC400DD
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D34DC400DD
- for <buildroot@buildroot.org>; Sat,  3 Aug 2024 20:45:31 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 15011E0003;
- Sat,  3 Aug 2024 20:45:28 +0000 (UTC)
-Date: Sat, 3 Aug 2024 22:45:27 +0200
-To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Message-ID: <20240803224527.1a93f941@windsurf>
-In-Reply-To: <20240803155517.3499273-1-dario.binacchi@amarulasolutions.com>
-References: <20240803155517.3499273-1-dario.binacchi@amarulasolutions.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1722717929;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=HPK75WNQc0M6xrtpHrqBuPBCqShxPbHaerqx1Bi0I3c=;
- b=QPloy+hGR/cAw0kE5A8jwrBTqi3UKSqJbiqFc6KXyuWZo+Uwp0AiuPhe/74ZI1b0sCZP3j
- sDQdq08aegbbLp9Ru27vxH4x6Pc/8BdBBVAtf7x51jXuMMCuuCqxrQyYoUynnycNUwtA6t
- LPvmtkBQ0NokGZRHhtomuEu/AiXPsA3yGP2wYej7b2fiSiZCKo0x55gRL+9ggAJbva3rin
- ldTqJFMo/PU8VBWvKtuuWDZXrHpfJHPOuoAXWeEeohd5A5q2u+fxoyNwJd+HQ8Axnfyy/s
- v+5PWBY1ZwmMicf1G3FE/fJUPYPUkKTS6QDeku+QbQwLIcX/BnolgGJj6882kg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=QPloy+hG
-Subject: Re: [Buildroot] [PATCH 0/3] tinit and stm32f746_disco_sd_defconfig
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 974FB402FF
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 974FB402FF
+ for <buildroot@buildroot.org>; Sat,  3 Aug 2024 20:52:23 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 8CD268277A; Sat,  3 Aug 2024 20:52:23 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 3 Aug 2024 22:45:59 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: dda750dcddda3a609c6c070141638886174f2c19
+X-Git-Newrev: 2143e8f8351c177d7fce87ccacba042afea94f93
+X-Patchwork-Hint: ignore
+Message-Id: <20240803205223.8CD268277A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/swaybg: bump to version 1.2.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,63 +59,48 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Damien Le Moal <dlemoal@kernel.org>, linux-amarula@amarulasolutions.com,
- buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Dario,
+commit: https://git.buildroot.net/buildroot/commit/?id=2143e8f8351c177d7fce87ccacba042afea94f93
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat,  3 Aug 2024 17:55:14 +0200
-Dario Binacchi <dario.binacchi@amarulasolutions.com> wrote:
+See also: https://github.com/swaywm/swaybg/releases/tag/v1.2.1
 
-> This series is inspired by reading the following topic:
-> 
-> https://lore.kernel.org/buildroot/20230206230203.70e2dbd8@windsurf/T
-> 
-> Starting from that patch, and following Thomas Petazzoni's suggestions
-> regarding the possibility of using a single minimal script without
-> duplicating it within Buildroot, I developed these three patches.
-> Meanwhile, the configuration for the stm32f746_disco board was useful
-> for developing the display support for the board, which was later
-> merged into Linux.
-> 
-> Dario Binacchi (3):
->   package/tinit: new package
->   configs/stm32f746_disco_sd_defconfig: new defconfig
->   board/canaan/k210-soc: use tinit as Linux init process
+Signed-off-by: James Knight <james.d.knight@live.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/swaybg/swaybg.hash | 5 +++--
+ package/swaybg/swaybg.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-From a high-level point of view, I think it looks fine, though I'd
-really like to have some opinion from some of the other maintainers on
-this.
-
-Maybe some comments:
-
-- I don't really think it's super useful to have a Github project for
-  tinit. The script could just as well be inside package/tinit
-
-- Should it be named tinyinit instead of tinit, just to make things
-  clear?
-
-- I believe you should drop entirely the logo thing in tinit, we don't
-  have such "logos" in any other Buildroot defconfig, so I don't see
-  why we would have one for those super small noMMU defconfigs. This
-  would allow to get rid of tiny-setup.sh stuff.
-
->  .../stm32f746-disco/busybox-tiny.config       | 230 ++++++++++++++++++
-
-Why do we need a busybox-tiny.config? We already have
-package/busybox/busybox-minimal.config. How different are they?
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/package/swaybg/swaybg.hash b/package/swaybg/swaybg.hash
+index 62bf048d61..e528349db9 100644
+--- a/package/swaybg/swaybg.hash
++++ b/package/swaybg/swaybg.hash
+@@ -1,3 +1,4 @@
+-# Locally computed, tarball verified with GPG signature
+-sha256  c0205b34f1fad94553b6cb2c2b983cc33186018026058cad0b841a00bc3087e3  swaybg-1.2.0.tar.gz
++# Locally calculated after checking pgp signature:
++# https://github.com/swaywm/swaybg/releases/download/v1.2.1/swaybg-1.2.1.tar.gz.sig
++sha256  6af1fdf0e57b1cc5345febed786b761fea0e170943a82639f94cfaed7df84f8f  swaybg-1.2.1.tar.gz
+ sha256  95224d118a325daf31828afcca98cd958d53f0a7cdd856b50b1be8ac44832faf  LICENSE
+diff --git a/package/swaybg/swaybg.mk b/package/swaybg/swaybg.mk
+index 90a8cb5d80..87374e035e 100644
+--- a/package/swaybg/swaybg.mk
++++ b/package/swaybg/swaybg.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SWAYBG_VERSION = 1.2.0
++SWAYBG_VERSION = 1.2.1
+ SWAYBG_SITE = https://github.com/swaywm/swaybg/releases/download/v$(SWAYBG_VERSION)
+ SWAYBG_LICENSE = MIT
+ SWAYBG_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
