@@ -4,71 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11495C3DA4A
-	for <buildroot@archiver.kernel.org>; Sat,  3 Aug 2024 18:28:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 380AEC3DA4A
+	for <buildroot@archiver.kernel.org>; Sat,  3 Aug 2024 18:29:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CEAC64038D;
-	Sat,  3 Aug 2024 18:28:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 003114035A;
+	Sat,  3 Aug 2024 18:29:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sTUIZUCvYFEI; Sat,  3 Aug 2024 18:28:04 +0000 (UTC)
+ id aXMTsfGcQ373; Sat,  3 Aug 2024 18:29:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8C28540393
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BC0D740395
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8C28540393;
-	Sat,  3 Aug 2024 18:28:04 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 673691BF364
- for <buildroot@lists.busybox.net>; Sat,  3 Aug 2024 18:28:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BC0D740395;
+	Sat,  3 Aug 2024 18:29:16 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 2A30E1BF364
+ for <buildroot@lists.busybox.net>; Sat,  3 Aug 2024 18:29:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5553081441
- for <buildroot@lists.busybox.net>; Sat,  3 Aug 2024 18:28:03 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1620B60648
+ for <buildroot@lists.busybox.net>; Sat,  3 Aug 2024 18:29:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id U28wc6XxVlTE for <buildroot@lists.busybox.net>;
- Sat,  3 Aug 2024 18:28:02 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::223;
- helo=relay3-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id CiPqKiDR1xW7 for <buildroot@lists.busybox.net>;
+ Sat,  3 Aug 2024 18:29:13 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 22C688143C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 22C688143C
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 22C688143C
- for <buildroot@buildroot.org>; Sat,  3 Aug 2024 18:28:01 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 0EC1360003;
- Sat,  3 Aug 2024 18:27:59 +0000 (UTC)
-Date: Sat, 3 Aug 2024 20:27:59 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Message-ID: <20240803202759.2b401793@windsurf>
-In-Reply-To: <20240803104555.2574177-1-bernd@kuhls.net>
-References: <20240803104555.2574177-1-bernd@kuhls.net>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1722709680;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=rM7p4phfBBHXCcVb8YQFljQPooMDDgW5wQzEGVhC7h0=;
- b=VkqKLUQGG9qE0CjmAAU0L5S9OsgO3g7qiLV+nER/6a4lJIwvxm5rmzpgxDXziS6Di+VLUE
- tPJvtjQs2Br+hWRBHyiNZBghxnfbUFMox0V2FbLaYEScZbJ7JDKyA2apwfr+2wjtNpkz0A
- NRvaj4aTpEW5dj/ZEfV9f6RLwEEOWT1EULLtFnj1MudLVN1UG64+1nsb2L07Ntf1WFGDsk
- 7INH81bMntiQuHgicziHexOapWR/uJaTdFt9nyS9F5Ks+MfIZVpdklVwwA5Je/cH4n7aK+
- 4WhwSx3jSh8+3Z9vbfvf85bML9Q6lkL8zyK8/bqp/fKsg3ILw0rfyqakp/nEEw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=VkqKLUQG
-Subject: Re: [Buildroot] [PATCH 1/1] package/php: bump version to 8.3.10
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 222346059F
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 222346059F
+ for <buildroot@buildroot.org>; Sat,  3 Aug 2024 18:29:13 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 16B5C83C5D; Sat,  3 Aug 2024 18:29:13 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 3 Aug 2024 20:26:03 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 5356754d1e11174274553f2f7329edd7e8c7fd68
+X-Git-Newrev: 45651cdb851bcd5af06bb94d824b078b03d4f187
+X-Patchwork-Hint: ignore
+Message-Id: <20240803182913.16B5C83C5D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libxml2: security bump version to
+ 2.12.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,31 +60,53 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat,  3 Aug 2024 12:45:55 +0200
-Bernd Kuhls <bernd@kuhls.net> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=45651cdb851bcd5af06bb94d824b078b03d4f187
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Changelog: https://www.php.net/ChangeLog-8.php#PHP_8_3
-> Release notes: https://news-web.php.net/php.announce/434
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-> ---
->  package/php/php.hash | 2 +-
->  package/php/php.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Fixes CVE-2024-34459 (2.12.7) & CVE-2024-40896.
 
-Applied to master, thanks.
+Release notes:
+https://download.gnome.org/sources/libxml2/2.12/libxml2-2.12.7.news
+https://download.gnome.org/sources/libxml2/2.12/libxml2-2.12.8.news
+https://download.gnome.org/sources/libxml2/2.12/libxml2-2.12.9.news
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libxml2/libxml2.hash | 4 ++--
+ package/libxml2/libxml2.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/libxml2/libxml2.hash b/package/libxml2/libxml2.hash
+index 086bb41098..73fd0ecedf 100644
+--- a/package/libxml2/libxml2.hash
++++ b/package/libxml2/libxml2.hash
+@@ -1,4 +1,4 @@
+-# From https://download.gnome.org/sources/libxml2/2.12/libxml2-2.12.6.sha256sum
+-sha256  889c593a881a3db5fdd96cc9318c87df34eb648edfc458272ad46fd607353fbb  libxml2-2.12.6.tar.xz
++# From https://download.gnome.org/sources/libxml2/2.12/libxml2-2.12.9.sha256sum
++sha256  59912db536ab56a3996489ea0299768c7bcffe57169f0235e7f962a91f483590  libxml2-2.12.9.tar.xz
+ # License files, locally calculated
+ sha256  7fb0a66f3989f9bd5c7e5438a3de02cd4a7a47dde0aea2f7ea2ba2ff454ee6a4  Copyright
+diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
+index e7ed6fb752..b69722b21d 100644
+--- a/package/libxml2/libxml2.mk
++++ b/package/libxml2/libxml2.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ LIBXML2_VERSION_MAJOR = 2.12
+-LIBXML2_VERSION = $(LIBXML2_VERSION_MAJOR).6
++LIBXML2_VERSION = $(LIBXML2_VERSION_MAJOR).9
+ LIBXML2_SOURCE = libxml2-$(LIBXML2_VERSION).tar.xz
+ LIBXML2_SITE = \
+ 	https://download.gnome.org/sources/libxml2/$(LIBXML2_VERSION_MAJOR)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
