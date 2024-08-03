@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 07C85C52D6F
-	for <buildroot@archiver.kernel.org>; Sat,  3 Aug 2024 20:14:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 87A6AC52D6F
+	for <buildroot@archiver.kernel.org>; Sat,  3 Aug 2024 20:14:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C2DFF81765;
-	Sat,  3 Aug 2024 20:14:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 536B3812D1;
+	Sat,  3 Aug 2024 20:14:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZrVrgCo2eKxj; Sat,  3 Aug 2024 20:14:03 +0000 (UTC)
+ id 1ZtRzwN6Ly0i; Sat,  3 Aug 2024 20:14:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7E691812CC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0267381499
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7E691812CC;
-	Sat,  3 Aug 2024 20:14:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0267381499;
+	Sat,  3 Aug 2024 20:14:07 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id BA9311BF35D
- for <buildroot@lists.busybox.net>; Sat,  3 Aug 2024 20:13:38 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 038601BF35D
+ for <buildroot@lists.busybox.net>; Sat,  3 Aug 2024 20:13:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 41BA8600B9
+ by smtp3.osuosl.org (Postfix) with ESMTP id 71A37605C8
  for <buildroot@lists.busybox.net>; Sat,  3 Aug 2024 20:13:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xaKgECm7EMOX for <buildroot@lists.busybox.net>;
+ id rgf6QiboFTaD for <buildroot@lists.busybox.net>;
  Sat,  3 Aug 2024 20:13:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5EFB0605C9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7D1B7605EB
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5EFB0605C9
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7D1B7605EB
  for <buildroot@buildroot.org>; Sat,  3 Aug 2024 20:13:36 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 56E3883D52; Sat,  3 Aug 2024 20:13:36 +0000 (UTC)
+ id 79CA683D52; Sat,  3 Aug 2024 20:13:36 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 3 Aug 2024 20:30:07 +0200
+Date: Sat, 3 Aug 2024 20:30:11 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1632d7bc58bd290ec25605c66212fe518a61fdd1
-X-Git-Newrev: f649c17911fc72f3be5552c45f29b374300ed1fa
+X-Git-Oldrev: 8e9a704c2fb59c98b15ed91c68e6fe9966705cc4
+X-Git-Newrev: 74ac6999029a482bf0a39fab8b720b454a66a0db
 X-Patchwork-Hint: ignore
-Message-Id: <20240803201336.56E3883D52@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/kodi-pvr-plutotv: bump version to
- 21.3.1-Omega
+Message-Id: <20240803201336.79CA683D52@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/kodi-pvr-vbox: bump version to
+ 21.1.4-Omega
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,38 +66,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f649c17911fc72f3be5552c45f29b374300ed1fa
+commit: https://git.buildroot.net/buildroot/commit/?id=74ac6999029a482bf0a39fab8b720b454a66a0db
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/kodi-pvr-plutotv/kodi-pvr-plutotv.hash | 2 +-
- package/kodi-pvr-plutotv/kodi-pvr-plutotv.mk   | 2 +-
+ package/kodi-pvr-vbox/kodi-pvr-vbox.hash | 2 +-
+ package/kodi-pvr-vbox/kodi-pvr-vbox.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/kodi-pvr-plutotv/kodi-pvr-plutotv.hash b/package/kodi-pvr-plutotv/kodi-pvr-plutotv.hash
-index bb4826ba66..75f9ed0398 100644
---- a/package/kodi-pvr-plutotv/kodi-pvr-plutotv.hash
-+++ b/package/kodi-pvr-plutotv/kodi-pvr-plutotv.hash
+diff --git a/package/kodi-pvr-vbox/kodi-pvr-vbox.hash b/package/kodi-pvr-vbox/kodi-pvr-vbox.hash
+index aec8100c77..e35d518baa 100644
+--- a/package/kodi-pvr-vbox/kodi-pvr-vbox.hash
++++ b/package/kodi-pvr-vbox/kodi-pvr-vbox.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  fb026664222af3415bb805c4b2c19d1893f9e05a7d089c2d720a495131d1460d  kodi-pvr-plutotv-21.3.0-Omega.tar.gz
-+sha256  468d5ad4703c36d73dc8d08008d19c0e9b44474b86b4d5e618b97c3003214b6e  kodi-pvr-plutotv-21.3.1-Omega.tar.gz
+-sha256  becc98a7d3bc8e4a78f775a34851ea1d4962e64ee4d63bbf339ac86cf12a4b95  kodi-pvr-vbox-21.1.3-Omega.tar.gz
++sha256  241aad6926579835d5d0513ad588f39ee9e99de5858655c38a25454c69372746  kodi-pvr-vbox-21.1.4-Omega.tar.gz
  sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-pvr-plutotv/kodi-pvr-plutotv.mk b/package/kodi-pvr-plutotv/kodi-pvr-plutotv.mk
-index 885ef03e0d..d363f206d7 100644
---- a/package/kodi-pvr-plutotv/kodi-pvr-plutotv.mk
-+++ b/package/kodi-pvr-plutotv/kodi-pvr-plutotv.mk
+diff --git a/package/kodi-pvr-vbox/kodi-pvr-vbox.mk b/package/kodi-pvr-vbox/kodi-pvr-vbox.mk
+index 35ff5fa6c9..4b16c70ea8 100644
+--- a/package/kodi-pvr-vbox/kodi-pvr-vbox.mk
++++ b/package/kodi-pvr-vbox/kodi-pvr-vbox.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KODI_PVR_PLUTOTV_VERSION = 21.3.0-Omega
-+KODI_PVR_PLUTOTV_VERSION = 21.3.1-Omega
- KODI_PVR_PLUTOTV_SITE = $(call github,kodi-pvr,pvr.plutotv,$(KODI_PVR_PLUTOTV_VERSION))
- KODI_PVR_PLUTOTV_LICENSE = GPL-2.0+
- KODI_PVR_PLUTOTV_LICENSE_FILES = LICENSE.md
+-KODI_PVR_VBOX_VERSION = 21.1.3-Omega
++KODI_PVR_VBOX_VERSION = 21.1.4-Omega
+ KODI_PVR_VBOX_SITE = $(call github,kodi-pvr,pvr.vbox,$(KODI_PVR_VBOX_VERSION))
+ KODI_PVR_VBOX_LICENSE = GPL-2.0+
+ KODI_PVR_VBOX_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
