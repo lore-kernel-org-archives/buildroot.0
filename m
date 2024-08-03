@@ -4,90 +4,62 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D6916C3DA4A
-	for <buildroot@archiver.kernel.org>; Sat,  3 Aug 2024 16:38:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58711C3DA4A
+	for <buildroot@archiver.kernel.org>; Sat,  3 Aug 2024 17:15:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5FB2F40102;
-	Sat,  3 Aug 2024 16:38:51 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6299140137;
+	Sat,  3 Aug 2024 17:15:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZaFq_-D8Cr3v; Sat,  3 Aug 2024 16:38:50 +0000 (UTC)
+ id JbgXPj5m5YxT; Sat,  3 Aug 2024 17:15:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4696340112
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0BBF240198
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4696340112;
-	Sat,  3 Aug 2024 16:38:50 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1AB691BF3CE
- for <buildroot@lists.busybox.net>; Sat,  3 Aug 2024 16:38:48 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0BBF240198;
+	Sat,  3 Aug 2024 17:15:33 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 80BAB1BF3AE
+ for <buildroot@lists.busybox.net>; Sat,  3 Aug 2024 17:15:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 14B4E4038F
- for <buildroot@lists.busybox.net>; Sat,  3 Aug 2024 16:38:48 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6E5F1605C1
+ for <buildroot@lists.busybox.net>; Sat,  3 Aug 2024 17:15:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EF877CQQegoG for <buildroot@lists.busybox.net>;
- Sat,  3 Aug 2024 16:38:47 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::230; helo=mail-lj1-x230.google.com;
- envelope-from=festevam@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org D0FE94035D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D0FE94035D
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com
- [IPv6:2a00:1450:4864:20::230])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D0FE94035D
- for <buildroot@buildroot.org>; Sat,  3 Aug 2024 16:38:46 +0000 (UTC)
-Received: by mail-lj1-x230.google.com with SMTP id
- 38308e7fff4ca-2ef302f5dbbso9012011fa.2
- for <buildroot@buildroot.org>; Sat, 03 Aug 2024 09:38:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1722703124; x=1723307924;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=EONOpefjBpJwsuu7SUBGaykcfoaeZgPfdHLjZ2c/6is=;
- b=rnWdu10XowcDwZFcXbKYpPEkin4CN90uQP+AsR9PDqzsb7l/R6NYagvzdXJQ2oLI4a
- Ha1B6yEPRXchWJ9Ceqij7bp3K1If7tSRdgvkpMBkhkmvapq7eiy0yxvbydM/6XSHWOoH
- sooEqk/idt1m/+UnEOJQP5AMqGNdbEedVvcvUJ6pP2hB2Qa2EvqyDkR6MEKDfLRl/ZgR
- FCA1OXTQWeP7/2khK8yh7cnI5kPKTQwW07QCCcYfj6KQUujYl2WiN6+ont1pbADtap/P
- EGJbphPGSxAuUFkQD+Oor0kTRIiEiRHgIy48iK3DTdsPe5nZXURmdXY2vj2ki6kKLgtU
- FOcw==
-X-Gm-Message-State: AOJu0YwGvvUpXh2w6wSeG5kEjZG1yRNv0a7PdZgVJpD90wQRobHwFPsp
- +0/81xk/ttJxIFmHmhsNFrRFQA19VAg8yz116fZTFyY+K/HqSGXtwrRIkRqyJzP+ukfFTyuYpPf
- u8Ni8HUtgDoJ5OE4UlVzXwiZNf3w=
-X-Google-Smtp-Source: AGHT+IG2wOzAvEURB2sGpBNC/QZlWK9opPvVCe80y2SroMa5gGIKF2PhxIhlFuRsXx0UDm9lDYfe+W6ou3uDppWQQvc=
-X-Received: by 2002:a05:6512:3ca4:b0:52e:ccf4:c222 with SMTP id
- 2adb3069b0e04-530bb3b7bdemr2617479e87.9.1722703123837; Sat, 03 Aug 2024
- 09:38:43 -0700 (PDT)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id SY2GArgo1z1u for <buildroot@lists.busybox.net>;
+ Sat,  3 Aug 2024 17:15:30 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:1600:4:17::42aa;
+ helo=smtp-42aa.mail.infomaniak.ch; envelope-from=philip-dylan@gleonec.bzh;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 69DD7605C0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 69DD7605C0
+Received: from smtp-42aa.mail.infomaniak.ch (smtp-42aa.mail.infomaniak.ch
+ [IPv6:2001:1600:4:17::42aa])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 69DD7605C0
+ for <buildroot@buildroot.org>; Sat,  3 Aug 2024 17:15:29 +0000 (UTC)
+Received: from smtp-3-0001.mail.infomaniak.ch (smtp-3-0001.mail.infomaniak.ch
+ [10.4.36.108])
+ by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4Wbq8Z4PKgzfrs;
+ Sat,  3 Aug 2024 19:15:26 +0200 (CEST)
+Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA
+ id 4Wbq8Z1gQFz9Fq; Sat,  3 Aug 2024 19:15:26 +0200 (CEST)
+Message-ID: <5f33a2e1-e2bf-4c4c-982f-f89c85f05a28@gleonec.bzh>
+Date: Sat, 3 Aug 2024 19:15:25 +0200
 MIME-Version: 1.0
-References: <20240803111855.1726141-1-ju.o@free.fr>
-In-Reply-To: <20240803111855.1726141-1-ju.o@free.fr>
-From: Fabio Estevam <festevam@gmail.com>
-Date: Sat, 3 Aug 2024 13:38:32 -0300
-Message-ID: <CAOMZO5DBp21mF9+X1iYq-PJf7RJvJ=wFGKLsr2vT3vzNPCfZ7w@mail.gmail.com>
-To: Julien Olivain <ju.o@free.fr>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1722703124; x=1723307924; darn=buildroot.org;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=EONOpefjBpJwsuu7SUBGaykcfoaeZgPfdHLjZ2c/6is=;
- b=d+UqSS8I+8fXouN1clZpYCFvcCT+LkqoQ2jduHNyFNAfCuJdKBrmeZS5N4G0r8Wot6
- uXQCuaCWCqP61BnJXdqiLZGmxr/6NTO7Xz3HeJbdmARfFNLY0foXsT5M0Lx27IEj7A48
- t4n2E6kiCWqFn6ms6iDWTxlKBRTHgPye/q/GEanzykS9I1qHOTwQJhjGNTKEhahZB46B
- rwLKF046yDneLdThQCLUXx/KU/OIw3Y5DP5Iu05flCu39Wu+pMEUX51WBIG0uaZ+dCF/
- 9vXyhYDtXh7/rKPgjlRK6X9k9isvUSB1Fy2uTfRPBKVSe4+gXABSVQeU8tloLQbwMDxR
- rjbA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=d+UqSS8I
-Subject: Re: [Buildroot] [PATCH 1/1] configs/freescale_imx6ullevk: bump BSP
- components to lf-6.6.23-2.0.0
+User-Agent: Mozilla Thunderbird
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <20240731145504.365492-1-philip-dylan@gleonec.bzh>
+ <20240801153432.1741409-1-philip-dylan@gleonec.bzh>
+ <20240801232014.6ec310ce@windsurf>
+Content-Language: en-US, fr, fr-FR, fr-BE
+From: Philip-Dylan Gleonec <philip-dylan@gleonec.bzh>
+In-Reply-To: <20240801232014.6ec310ce@windsurf>
+X-Infomaniak-Routing: alpha
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=gleonec.bzh
+Subject: Re: [Buildroot] [PATCH v2 0/2] Udoo Neo kernel update
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,18 +71,69 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Fabrice Goucem <fabrice.goucem@oss.nxp.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgSnVsaWVuLAoKVGhhbmtzIGZvciB5b3VyIHBhdGNoZXMgdGhhdCB1cGRhdGUgdGhlIGNvbXBv
-bmVudHMgZm9yIHRoZSBOWFAgYm9hcmRzLgoKT24gU2F0LCBBdWcgMywgMjAyNCBhdCA4OjE54oCv
-QU0gSnVsaWVuIE9saXZhaW4gPGp1Lm9AZnJlZS5mcj4gd3JvdGU6Cj4KPiBCdW1wIEFURiwgVS1C
-b290IGFuZCBMaW51eCBrZXJuZWwgdG8gdGhlIE5YUCBCU1AgbGYtNi42LjIzLTIuMC4wCj4gdmVy
-c2lvbnMuCgpOaXQ6IHRoZSBpbXg2dWwgU29DIGRvZXMgbm90IHVzZSBBVEYuCl9fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxp
-c3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21h
-aWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+On 01/08/2024 23:20, Thomas Petazzoni wrote:
+> On Thu,  1 Aug 2024 17:34:30 +0200
+> Philip-Dylan Gleonec <philip-dylan@gleonec.bzh> wrote:
+> 
+>> Philip-Dylan Gleonec (2):
+>>   configs/mx6sx_udoo_neo_defconfig: bump kernel to 6.6.43
+>>   configs/mx6sx_udoo_neo_defconfig: add hashes
+> 
+> Thanks, both patches applied! A couple of small comments to improve
+> your future contributions:
+> 
+> - In the first patch, I added a short extract of the kernel build error
+>   being fixed, and also a link to the Gitlab CI failure being fixed by
+>   this. See the final commit
+>   at https://gitlab.com/buildroot.org/buildroot/-/commit/44b921f605dffd07bb6294e6368c2ace34a08266
+> 
+> - In the commit title, we normally use "configs/foo:" instead of
+>   "configs/foo_defconfig:". No strong reason, just a habit, and we like
+>   to be consistent.
+> 
+> - The wrapping/paragraph organization of your commit messages was a bit
+>   strange and not really consistent with what is done in Buildroot, but
+>   also in the kernel. Basically you tend to do:
+> 
+> Some explanation here.
+> Then some more explanation that might
+> span multiple
+> lines.
+> Then another explanations.
+> 
+>   While in most projects, including Buildroot, we expect:
+> 
+> Some explanation here.
+> 
+> Then some more explanation that might span
+> multiple lines.
+> 
+> Then another paragraph about something else.
+> 
+> - If you do have this board, it would be nice to add yourself for this
+>   defconfig, and its data file in board/ in the DEVELOPERS file. This
+>   way you will receive notifications when the build of this defconfig
+>   is broken, or when someone submits a patch touching this defconfig.
+> 
+> Thanks a lot!
+> 
+> Thomas
+> 
+
+Hi Thomas,
+
+Thanks a lot for the merge and the feedback, I'll make sure to apply it
+for the next patches.
+
+Regards,
+Philip-Dylan
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
