@@ -4,71 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80EEEC3DA4A
-	for <buildroot@archiver.kernel.org>; Fri,  2 Aug 2024 21:59:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6CDB2C3DA7F
+	for <buildroot@archiver.kernel.org>; Sat,  3 Aug 2024 02:50:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 507C4606A5;
-	Fri,  2 Aug 2024 21:59:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D240C60675;
+	Sat,  3 Aug 2024 02:50:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ks-Gy3sEJD0H; Fri,  2 Aug 2024 21:59:16 +0000 (UTC)
+ id 8iPiXINUFwia; Sat,  3 Aug 2024 02:50:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6647F606B1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BC7626069A
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6647F606B1;
-	Fri,  2 Aug 2024 21:59:16 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 130961BF312
- for <buildroot@lists.busybox.net>; Fri,  2 Aug 2024 21:59:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BC7626069A;
+	Sat,  3 Aug 2024 02:50:22 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 667BD1BF378
+ for <buildroot@lists.busybox.net>; Sat,  3 Aug 2024 02:50:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0092C40789
- for <buildroot@lists.busybox.net>; Fri,  2 Aug 2024 21:59:15 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 615EE6069A
+ for <buildroot@lists.busybox.net>; Sat,  3 Aug 2024 02:50:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lzHMub4t37za for <buildroot@lists.busybox.net>;
- Fri,  2 Aug 2024 21:59:14 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.196;
- helo=relay4-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JDoK6k0x4xsF for <buildroot@lists.busybox.net>;
+ Sat,  3 Aug 2024 02:50:20 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=203.16.199.2;
+ helo=susu.bendor.com.au; envelope-from=zoltan@bendor.com.au;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org A2F4B40754
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A2F4B40754
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A2F4B40754
- for <buildroot@buildroot.org>; Fri,  2 Aug 2024 21:59:13 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id F3A93E0002;
- Fri,  2 Aug 2024 21:59:11 +0000 (UTC)
-Date: Fri, 2 Aug 2024 23:59:11 +0200
-To: Saeed Kazemi <kazemi.ms@gmail.com>
-Message-ID: <20240802235911.17d1ce8f@windsurf>
-In-Reply-To: <20240223203031.825112-1-kazemi.ms@gmail.com>
-References: <20240223203031.825112-1-kazemi.ms@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 8B59A60675
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8B59A60675
+Received: from susu.bendor.com.au (susu.bendor.com.au [203.16.199.2])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 8B59A60675
+ for <buildroot@buildroot.org>; Sat,  3 Aug 2024 02:50:18 +0000 (UTC)
+Received: from mazsola (mazsola.bendor.com.au [203.16.199.5])
+ by susu.bendor.com.au (Postfix) with ESMTPSA id 356BD56004D;
+ Sat,  3 Aug 2024 12:49:38 +1000 (EST)
+Date: Sat, 3 Aug 2024 12:50:13 +1000
+From: =?UTF-8?B?Wm9sdMOhbiBLw7Njc2k=?= <zoltan@bendor.com.au>
+To: buildroot@buildroot.org
+Message-ID: <20240803125013.5b7b907c@mazsola>
+In-Reply-To: <20240802235743.58a983a5@windsurf>
+References: <20240803062508.312de54e@mazsola>
+ <20240802235743.58a983a5@windsurf>
+Organization: Bendor Research Pty. Ltd.
+X-Mailer: Claws Mail 3.16.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1722635952;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=Uyi4A/lEg/4OMwDTfFD/csjwK+u+4oq/kDvorOPZLNA=;
- b=YBObAfdT4mpKLGVBVudZdJ9EiuA7K+93zCct7lx/tgGFFB8Dx2+wfCQLqOUjWvzvBQdZkC
- Utf+c8YtNFlL8JyCpDr3+9ldeIGRcHZ2bGUXml9M3km1IhqNraOHRQXkyMZiOunZuU4dIP
- N7HZKEKwWABGwc1HXhqqPrdGXMtyX8KQXVQne/BFoxLgyngA6zvBPZuvd5mNfMCNdnSEpB
- fIRS4FYpEFM/pJzKWQ4uc6MrfnPPaROJ1/HbMwrC3D5I+46+BBo8O64lWP5UHqFeU7NaSo
- p/rCB3lxj9UInvJ9kyARaOrYEYWPVGGUlnIsuek9z0WkykRwnVfULr53iv0GAw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=YBObAfdT
-Subject: Re: [Buildroot] [PATCH 1/1] package/fd: new package
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=bendor.com.au
+Subject: Re: [Buildroot] User mailing list?
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,61 +65,93 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Saeed,
+Hi there,
 
-On Fri, 23 Feb 2024 21:30:31 +0100
-Saeed Kazemi <kazemi.ms@gmail.com> wrote:
+On Fri, 2 Aug 2024 23:57:43 +0200
+Thomas Petazzoni via buildroot <buildroot@buildroot.org> wrote:
 
-> A simple, fast and user-friendly alternative to 'find'
-> 
-> https://github.com/sharkdp/fd.git
-> 
-> Signed-off-by: Saeed Kazemi <kazemi.ms@gmail.com>
+> This mailing list is actually used for both, so feel free to ask your
+> user's questions.
 
-Thanks, I've applied! I had to fix two small things.
+In that case, I'll have some. Background: I live on Linux, I regularly
+cross-compile to bare-metal targets, write my own BSPs and target libs
+and all, know make.
 
-> diff --git a/package/Config.in b/package/Config.in
-> index bf0fe078b9..090fa80a29 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -182,6 +182,7 @@ menu "Development tools"
->  	source "package/diffutils/Config.in"
->  	source "package/dos2unix/Config.in"
->  	source "package/findutils/Config.in"
-> +	source "package/fd/Config.in"
+New board, with a Xilinx Zynq7 SoC (actually, SoM w/ DRAM). It's just
+an ARM Cortex-A9 with loads of peripherals and an FPGA. I can boot the
+board (with bare metal code), can load anything to RAM, configure all
+devices and all. But I want Linux on it.
 
-Alphabetic ordering was not correct here, and it was spotted by "make
-check-package".
+Not the Xilinx one, but the mainline version (the Zynq7 is old enough
+so that all relevant Xilinx drivers are already on the mainline), with
+the RT patches applied. Don't really want uboot or anything fancy, I can
+load a kernel image, device tree and rootfs into RAM myself and start
+the kernel. So all I need is the kernel, the DTB and the rootfs.
 
+Buildroot seems to be a perfect match for this.
+ 
+Alas, from here, user stupidity and ignorance to be expected...
 
-> diff --git a/package/fd/fd.hash b/package/fd/fd.hash
-> new file mode 100644
-> index 0000000000..7950055efa
-> --- /dev/null
-> +++ b/package/fd/fd.hash
-> @@ -0,0 +1,4 @@
-> +# Locally computed
-> +sha256  49d57704f1a75b20a770d50538818ec003f42a5c19a39a682639b5e72e72ee7d  fd-9.0.0.tar.gz
+First step, let's make an SDK. Load a defconfig with a board using the
+same chip, then change the Buildroot config to use a mainline kernel +
+RT patch, disable everything that the manual says: busybox, init
+system, /bin/sh, and tar-ing the root file system.
+Type make sdk.
 
-The file name and hash changed, because between the moment your patch
-was submitted and now, we did some changes in the cargo-package
-vendoring logic (so basically, not your fault!).
+It chugs along, then the kernel compilation fails with a prototype
+mismatch in the noveau video driver. Why would it need an nVidia driver
+for a headless board is a mystery, but ok. Let's configure the kernel.
+Turn off everything the board doesn't have and/or not needed.
 
-Thanks for this contribution!
+make sdk again. Cool! The kernel compiles. Then Buildroot starts to
+build rootfs.ext2. First, a warning about 64-bit filesystem support not
+being enabled, but it builds it anyway.
+Writing superblocks and filesystem accounting information: done.
+Hurray!
 
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+Then:
+
+>>>   Executing post-image script board/zynq/post-image.sh
+INFO: cmd: "mkdir -p
+"/usr/local/work/Linux/test/buildroot-2024.05/output/build/genimage.tmp"" (stderr):
+INFO: cmd: "rm -rf
+"/usr/local/work/Linux/test/buildroot-2024.05/output/build/genimage.tmp"/*" (stderr):
+INFO: cmd: "mkdir -p
+"/usr/local/work/Linux/test/buildroot-2024.05/output/build/genimage.tmp"" (stderr):
+INFO: cmd: "cp -a "/tmp/tmp.piKMAgmzhv"
+"/usr/local/work/Linux/test/buildroot-2024.05/output/build/genimage.tmp/root"" (stderr):
+ERROR: file(boot.bin):
+stat(/usr/local/work/Linux/test/buildroot-2024.05/output/images/boot.bin)
+failed: No such file or directory
+ERROR: vfat(boot.vfat): could not setup boot.bin
+make: *** [Makefile:826: target-post-image] Error 1
+
+I guess what happened was that Buildroot wanted to invoke the Xilinx
+tool 'genimage' to create boot.bin, which is the FSBL for the Zynq7
+chips.
+Boot.bin is built from bare-metal code source (probably from Xilinx) and
+the resulting elf file is massaged to boot.bin by the Xilinx genimage
+tool. But I don't need boot.bin (I have my own), just the kernel,
+rootfs and the dtb.
+
+Obviously, my gung-ho approach of reading the first few chapters of the
+manual and jumping on it is not the way to go. What I'd like to ask for
+is some advice about the correct way to have a new target board defined,
+the kernel configured *for that board* and building what I need (but
+not what I don't need).
+
+Pointers to information about the whole build process would also be
+appreciated.
+
+Thanks,
+
+Zoltan
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
