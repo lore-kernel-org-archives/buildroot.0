@@ -4,73 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 42846C3DA64
-	for <buildroot@archiver.kernel.org>; Sun,  4 Aug 2024 20:22:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8A558C3DA64
+	for <buildroot@archiver.kernel.org>; Sun,  4 Aug 2024 20:37:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9882C605BE;
-	Sun,  4 Aug 2024 20:22:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1A1D0600CB;
+	Sun,  4 Aug 2024 20:37:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TNwIRiRULAHx; Sun,  4 Aug 2024 20:22:39 +0000 (UTC)
+ id WV0neYyCD_HK; Sun,  4 Aug 2024 20:37:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AFC93605D8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 12C5860607
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AFC93605D8;
-	Sun,  4 Aug 2024 20:22:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 12C5860607;
+	Sun,  4 Aug 2024 20:37:34 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 7E2291BF4DD
- for <buildroot@lists.busybox.net>; Sun,  4 Aug 2024 20:22:38 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 058511BF4DD
+ for <buildroot@lists.busybox.net>; Sun,  4 Aug 2024 20:37:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7817E4018E
- for <buildroot@lists.busybox.net>; Sun,  4 Aug 2024 20:22:38 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id E516C40390
+ for <buildroot@lists.busybox.net>; Sun,  4 Aug 2024 20:37:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dxY58yk1koYj for <buildroot@lists.busybox.net>;
- Sun,  4 Aug 2024 20:22:37 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
- helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id iU2YgSM8uf2r for <buildroot@lists.busybox.net>;
+ Sun,  4 Aug 2024 20:37:31 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 180EF400E5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 180EF400E5
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 180EF400E5
- for <buildroot@buildroot.org>; Sun,  4 Aug 2024 20:22:36 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id B6D34FF802;
- Sun,  4 Aug 2024 20:22:33 +0000 (UTC)
-Date: Sun, 4 Aug 2024 22:22:32 +0200
-To: Joachim Wiberg <troglobit@gmail.com>
-Message-ID: <20240804222232.56c2130a@windsurf>
-In-Reply-To: <20240804094647.876936-1-troglobit@gmail.com>
-References: <20240804060003.735172-1-troglobit@gmail.com>
- <20240804094647.876936-1-troglobit@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1722802954;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=ofwDNgOKKnD6nYl8skSljIeO4fW0z+7Y1cxx/1zh8dk=;
- b=MYoDa/A+6ae6tW/Vh7a1YsYLVDXZ/VAAje5INMjRgwIOQ+tFS/+e+YSw3i4Ku9wYB65SRz
- pMgQ5FdSk2agtmjbeB1ddSBE4vaWKmzheJZ4v/L/uyhYeS7ruAAwz+f+OkBrqpY372H/nc
- K8cb3C77Wvf/Zv/+nq1agufsaXA9vniOGjn2xBund+MsYEe8041Ecs28oU6X025W/Gn1lb
- YyZUg2wfOlvqE/PesA3EqufiXahbKewB+VQkB607EVYLLTXczWVjIOBtdzomdpcScaSl/D
- TcRN9ulPJ0wsyzIUjvOPS7S+XimmH+V7G4O0+towFVlDJqsZ8GTkH4bLSPWZFw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=MYoDa/A+
-Subject: Re: [Buildroot] [PATCH v2 1/1] package/spdlog: add menuconfig
- option to select formatter
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9F046400E5
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9F046400E5
+ for <buildroot@buildroot.org>; Sun,  4 Aug 2024 20:37:31 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 842A983E70; Sun,  4 Aug 2024 20:37:31 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 4 Aug 2024 22:23:26 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 6395fc6e6575d487c4a4404516cc3cb440271e95
+X-Git-Newrev: 4398dd7e847d89ec3cff3446643eb0816279a51d
+X-Patchwork-Hint: ignore
+Message-Id: <20240804203731.842A983E70@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libpqxx: bump to version 7.9.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,47 +59,78 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Joachim,
+commit: https://git.buildroot.net/buildroot/commit/?id=4398dd7e847d89ec3cff3446643eb0816279a51d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sun,  4 Aug 2024 11:46:47 +0200
-Joachim Wiberg <troglobit@gmail.com> wrote:
+Requires GCC 8.3 due to the introduction of the charconv header.
+However, as there is no BR2_TOOLCHAIN_GCC_AT_LEAST_8_3, we round up to
+BR2_TOOLCHAIN_GCC_AT_LEAST_9.
 
-> Add an option menu to select the spdlog formatter: external fmt library,
-> external using headers-only, C++20 std:format, or the bundled (version
-> matched) fmt library, which each release of spdlog is tested against.
-> 
-> The formatters are mutually exclusive (see the CMakeLists.txt[1] file),
-> selecting the 'internal' option disables all the other options in the
-> .mk file, thus "enabling" the bundled formatter.
-> 
-> For backwards compatibility, the Buildroot default remains using the
-> external fmt library.
-> 
-> [1]: https://github.com/gabime/spdlog/blob/5ebfc92/CMakeLists.txt#L95-L105
+Note the `COPYING` file has changed due to copyright year bumps.
 
-Could you provide some details on why we would want to support
-different formatters?
+See also: https://github.com/jtv/libpqxx/blob/master/NEWS
 
-In your reply to Baruch you said you wanted to package Rousette, which
-requires the bundled fmt. How is the bundled fmt different from the
-external one?
+Signed-off-by: James Knight <james.d.knight@live.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libpqxx/Config.in    | 6 +++---
+ package/libpqxx/libpqxx.hash | 4 ++--
+ package/libpqxx/libpqxx.mk   | 2 +-
+ 3 files changed, 6 insertions(+), 6 deletions(-)
 
-Also using a choice...endchoice here will not make it easy to package
-Rousette, because you can't "select" an option of a choice...endchoice,
-so the Rousette package will not be able to select
-BR2_PACKAGE_SPDLOG_FMT_INTERNAL.
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/package/libpqxx/Config.in b/package/libpqxx/Config.in
+index f5fe2b3807..845692eae6 100644
+--- a/package/libpqxx/Config.in
++++ b/package/libpqxx/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_LIBPQXX
+ 	bool "libpqxx"
+ 	depends on BR2_PACKAGE_POSTGRESQL
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # C++17
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_9 # C++17/charconv
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	help
+ 	  libpqxx is the official C++ client API for PostgreSQL, the
+@@ -10,8 +10,8 @@ config BR2_PACKAGE_LIBPQXX
+ 
+ 	  http://pqxx.org/development/libpqxx/
+ 
+-comment "libpqxx needs toolchain w/ C++, gcc >= 7, threads"
++comment "libpqxx needs toolchain w/ C++, gcc >= 9, threads"
+ 	depends on BR2_PACKAGE_POSTGRESQL
+ 	depends on !BR2_INSTALL_LIBSTDCPP || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_7 || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_9 || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/libpqxx/libpqxx.hash b/package/libpqxx/libpqxx.hash
+index 1c0e4c185d..7e13e7415b 100644
+--- a/package/libpqxx/libpqxx.hash
++++ b/package/libpqxx/libpqxx.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  c7dc3e8fa2eee656f2b6a8179d72f15db10e97a80dc4f173f806e615ea990973  libpqxx-7.7.5.tar.gz
+-sha256  91718581edafc9f722915133d75f74c82d7c2e41a1831c1e042206423e5a63b0  COPYING
++sha256  e37d5774c39f6c802e32d7f418e88b8e530404fb54758516e884fc0ebdee6da4  libpqxx-7.9.2.tar.gz
++sha256  3dd057a614dd24688aafc38d4c41111140e17147cfd94f314a80af30879641b2  COPYING
+diff --git a/package/libpqxx/libpqxx.mk b/package/libpqxx/libpqxx.mk
+index 434cefd069..c69b77260d 100644
+--- a/package/libpqxx/libpqxx.mk
++++ b/package/libpqxx/libpqxx.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBPQXX_VERSION = 7.7.5
++LIBPQXX_VERSION = 7.9.2
+ LIBPQXX_SITE = $(call github,jtv,libpqxx,$(LIBPQXX_VERSION))
+ LIBPQXX_INSTALL_STAGING = YES
+ LIBPQXX_DEPENDENCIES = postgresql
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
