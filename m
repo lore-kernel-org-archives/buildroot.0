@@ -4,83 +4,77 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6747BC3DA4A
-	for <buildroot@archiver.kernel.org>; Sun,  4 Aug 2024 00:53:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E553C3DA4A
+	for <buildroot@archiver.kernel.org>; Sun,  4 Aug 2024 02:04:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1FD1A81253;
-	Sun,  4 Aug 2024 00:53:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C3E9580BB0;
+	Sun,  4 Aug 2024 02:04:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xZ69PJZrs6lb; Sun,  4 Aug 2024 00:53:07 +0000 (UTC)
+ id RmyQgsSiGanK; Sun,  4 Aug 2024 02:04:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F3C0881254
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D148B80BEA
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F3C0881254;
-	Sun,  4 Aug 2024 00:53:06 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 11C081BF94D
- for <buildroot@lists.busybox.net>; Sun,  4 Aug 2024 00:53:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D148B80BEA;
+	Sun,  4 Aug 2024 02:04:36 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id ABEEA1BF4E7
+ for <buildroot@lists.busybox.net>; Sun,  4 Aug 2024 02:04:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id F30E0402A8
- for <buildroot@lists.busybox.net>; Sun,  4 Aug 2024 00:53:04 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 72CEB80C1D
+ for <buildroot@lists.busybox.net>; Sun,  4 Aug 2024 02:04:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id T3N9h2OUkyII for <buildroot@lists.busybox.net>;
- Sun,  4 Aug 2024 00:53:04 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=198.47.23.249;
- helo=lelv0142.ext.ti.com; envelope-from=bb@ti.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org B6B4340147
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B6B4340147
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B6B4340147
- for <buildroot@buildroot.org>; Sun,  4 Aug 2024 00:53:03 +0000 (UTC)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
- by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 4740qt1s130471;
- Sat, 3 Aug 2024 19:52:55 -0500
-Received: from DLEE108.ent.ti.com (dlee108.ent.ti.com [157.170.170.38])
- by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 4740qslb045275
- (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
- Sat, 3 Aug 2024 19:52:55 -0500
-Received: from DLEE108.ent.ti.com (157.170.170.38) by DLEE108.ent.ti.com
- (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Sat, 3
- Aug 2024 19:52:54 -0500
-Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DLEE108.ent.ti.com
- (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Sat, 3 Aug 2024 19:52:54 -0500
-Received: from localhost (bb.dhcp.ti.com [128.247.81.12])
- by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 4740qsFR038241;
- Sat, 3 Aug 2024 19:52:54 -0500
-Date: Sat, 3 Aug 2024 19:52:54 -0500
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Message-ID: <20240804005254.lnvss7iizgkncoz5@bryanbrattlof.com>
-X-PGP-Fingerprint: D3D1 77E4 0A38 DF4D 1853 FEEF 41B9 0D5D 71D5 6CE0
-References: <20240722-tfa-src-update-v1-0-e68bba62f146@ti.com>
- <20240722-tfa-src-update-v1-1-e68bba62f146@ti.com>
- <20240803235943.226e6d14@windsurf>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id lDeJgRAMPxU9 for <buildroot@lists.busybox.net>;
+ Sun,  4 Aug 2024 02:04:33 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=209.85.208.169;
+ helo=mail-lj1-f169.google.com; envelope-from=jdknight@jdknight.me;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 63FA480AE7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 63FA480AE7
+Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com
+ [209.85.208.169])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 63FA480AE7
+ for <buildroot@buildroot.org>; Sun,  4 Aug 2024 02:04:33 +0000 (UTC)
+Received: by mail-lj1-f169.google.com with SMTP id
+ 38308e7fff4ca-2eeb1ba0481so144633081fa.2
+ for <buildroot@buildroot.org>; Sat, 03 Aug 2024 19:04:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1722737071; x=1723341871;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=e5EZnT2b/ZMKOX+z74GnKnUqjUl4zkrP/n1ibYZOgf0=;
+ b=PwaI7b601kpZahU22FOBPvHvEozT9bp97R7MTy622P9fadmwUV9wNHgwFJictPPcdp
+ Bo4J7STJyEfYgRKWqnqJ/p9aIRL0YXKsMvnhfwVNHznQ+3ikuFeVXpUDulBj1aYPKrzy
+ zdAqTViFVtMUOkJZSbsHRdPCV+ja+6+FU5SiNsxClUI+R4I4WHK/2+YUdNl5uJSKGIqA
+ 3sgeOqEjuTa0Iw/sl0fZKtpZDdtIocMkaNW4BkbZsfyWLGFYQq58csE92Jyq0V7RZEur
+ 08jvvemwlnK8K6SO5kagsfkFUWf1V0cINPlkBYn/1bIVGMk18KRdPezyur3oSD+7dvry
+ cWtA==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCXNaBt4o9M/PRZ8lmkkME4Vcj0DHAfEsi8zmCfFu/jOXHzoljMzYX7v5QYQE5sOLCrNHGfvGE0aKq05yfB5dmXcKWx+fOU0vA==
+X-Gm-Message-State: AOJu0YwbRvWG8KcMG3s60fGN4vU1jAqGQJFKuIO6eSwEs11n5bHWnf5S
+ rf3O57VIdt/7O8FidiE19Kp12xA9254D9jOdULv3AtihhAywg0cFYq+ycxU4YqDkhQKyPV1Dbqv
+ ncAMjxPOpWxFkPq+EDc2PyB8ZQrg7m81KUdaCxw==
+X-Google-Smtp-Source: AGHT+IGAYUl1hN5aIJMjbj+SUcJb0SdxKvwdcm6NTQKFnBebRFMncg+Qv1Nys+O7H05w2VM70uCx9ViLkW4qtrI1sRI=
+X-Received: by 2002:a2e:870d:0:b0:2ef:2c86:4d47 with SMTP id
+ 38308e7fff4ca-2f15aa95d8dmr53860711fa.15.1722737070433; Sat, 03 Aug 2024
+ 19:04:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20240803235943.226e6d14@windsurf>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=ti.com; s=ti-com-17Q1; t=1722732775;
- bh=wh+5N3iNCRp+8Z8l5NpgFxQKRnKWlcyR394cc2c8uYg=;
- h=Date:From:To:CC:Subject:References:In-Reply-To;
- b=fflmDgDmzjbDQcnlR5guSoDHhPD5nPxZHAhaFvvubs8TFK5RVMA8j8qHwhmO/AnLi
- d6TqGAqg2xreeUZpXWKI6J35mYXJlIAt1pP3ITus60O+lLWxDiMwkqFrODrWCTq2YG
- ruKSw03RLIZdVsPotmguJCOWJEWncnxcE0ae+YmU=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=ti.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=ti.com header.i=@ti.com header.a=rsa-sha256
- header.s=ti-com-17Q1 header.b=fflmDgDm
-Subject: Re: [Buildroot] [PATCH 1/3] boot/arm-trusted-firmware: update
- source to the new mirror
+References: <CYYP221MB1140ACF0E0092617169683ECA0BC2@CYYP221MB1140.NAMP221.PROD.OUTLOOK.COM>
+ <20240803225736.568fb63c@windsurf>
+In-Reply-To: <20240803225736.568fb63c@windsurf>
+From: James Knight <james.d.knight@live.com>
+Date: Sat, 3 Aug 2024 22:04:20 -0400
+Message-ID: <CALAjcgUXc1CuA4JQ4aJxQBa+UsZVskGwmrTPoaSajE+z_kjpcA@mail.gmail.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=fail (p=none dis=none)
+ header.from=live.com
+Subject: Re: [Buildroot] [RFC PATCH 1/1] package/pkg-generic.mk: introduce
+ pre/post target finalize hooks
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,78 +86,41 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Bryan Brattlof via buildroot <buildroot@buildroot.org>
-Reply-To: Bryan Brattlof <bb@ti.com>
-Cc: Vincent =?utf-8?Q?Stehl=C3=A9?= <vincent.stehle@arm.com>,
- Marleen Vos <marleen.vos@mind.be>, Sergey Matyukevich <geomatsi@gmail.com>,
- Romain Naour <romain.naour@smile.fr>,
- Ariel D'Alessandro <ariel@vanguardiasur.com.ar>,
- Xuanhao Shi <X15000177@gmail.com>,
- Dario Binacchi <dario.binacchi@amarulasolutions.com>,
- Bryan Brattlof via buildroot <buildroot@buildroot.org>,
- Romain Naour <romain.naour@gmail.com>,
- Michael Trimarchi <michael@amarulasolutions.com>, "Yann
- E. MORIN" <yann.morin.1998@free.fr>, Anand Gadiyar <gadiyar@ti.com>
+Cc: James Knight <james.d.knight@live.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Thomas
+Hey Thomas,
 
-On August  3, 2024 thus sayeth Thomas Petazzoni:
-> Hello Bryan,
-> 
-> On Mon, 22 Jul 2024 14:17:37 -0500
-> Bryan Brattlof via buildroot <buildroot@buildroot.org> wrote:
-> 
-> > Tags are no longer being pused to the old ARM-softwre
-> > mirror. Let's move to the new mirror at TrustedFirmware-A which
-> > continues to publish newer tags
-> > 
-> > Signed-off-by: Bryan Brattlof <bb@ti.com>
-> > ---
-> >  .../fvp-ebbr/patches/arm-trusted-firmware/arm-trusted-firmware.hash   | 2 +-
-> >  .../patches/arm-trusted-firmware/arm-trusted-firmware.hash            | 2 +-
-> >  .../beagleplay/patches/arm-trusted-firmware/arm-trusted-firmware.hash | 2 +-
-> >  .../patches/arm-trusted-firmware/arm-trusted-firmware.hash            | 2 +-
-> >  .../patches/arm-trusted-firmware/arm-trusted-firmware.hash            | 2 +-
-> >  board/qemu/patches/arm-trusted-firmware/arm-trusted-firmware.hash     | 2 +-
-> >  .../stm32mp157/patches/arm-trusted-firmware/arm-trusted-firmware.hash | 2 +-
-> >  .../am62ax-sk/patches/arm-trusted-firmware/arm-trusted-firmware.hash  
-> >  | 2 +-
-> >  .../am62x-sk/patches/arm-trusted-firmware/arm-trusted-firmware.hash   | 2 +-
-> >  .../am64x-sk/patches/arm-trusted-firmware/arm-trusted-firmware.hash   | 2 +-
-> >  boot/arm-trusted-firmware/arm-trusted-firmware.hash                   | 4 ++--
-> >  boot/arm-trusted-firmware/arm-trusted-firmware.mk                     | 2 +-
-> >  12 files changed, 13 insertions(+), 13 deletions(-)
-> 
-> I have applied locally, but not yet pushed. My concern is that it's
-> really annoying that it breaks hashes for all previous versions of
-> TF-A. This means that all people having existing defconfigs (not the
-> one in Buildroot) that use
-> BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE will see their
-> build fail now. And even for those using the defconfigs in Buildroot,
-> they will see a hash mismatch message and a redownload.
-> 
-> But I don't really see any other way around that. The issue is
-> basically that we are not fetching real tarballs, but auto-generated
-> ones, which are different when fetched from one repo or another.
-> 
-> Should we instead switch to fetching via Git all the time? Should we
-> switch to using the official Git repo, instead of a Github mirror?
-> 
-> As you can see, I am not 100% sure about this change, even though we
-> obviously need to change something to be able to use the newer versions
-> of TF-A...
-> 
+On Sat, Aug 3, 2024 at 4:57 PM Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
+> ... Could give a specific example of something that cannot be using the existing TARGET_FINALIZE_HOOKS? ...
 
-Ah I agree completely. I saw we originally used the mirror and assumed 
-we did that for bandwidth reasons. I can update this to use the 
-trustedfirmware.org source. 
+One example where we have been trying this newly suggested hook is
+defining a br2-external package dedicated for tailoring a generated
+`/usr/lib/os-release` file. Originally, I have been using a post-build
+script to populate entries into `os-release` (e.g. adding a
+`SUPPORT_URL` entry and more). While this works, it does require
+populating a script in `BR2_ROOTFS_POST_BUILD_SCRIPTS`. A different
+approach I was looking for was having a menu option that other board
+configurations can easily use to perform os-release tailoring. With
+the proposed hook, I can now define a package that performs the
+changes after Buildroot generates an os-release, and there is no
+requirement for existing and new board configurations to set or append
+their post-build script option.
 
-Thanks for the review
-~Bryan
+From what I can tell, there was no other means to invoke a
+package-specific hook right before Buildroot triggers any custom
+post-build script. While the mentioned example is somewhat of a
+trivial use case, I figured I would propose this hook to have
+developers have flexibility in their target tailoring.
+
+It would be fine if the proposal is not preferred. The example
+mentioned may be too trivial and having just a `TARGET_FINALIZE_HOOKS`
+over a pre/post pair is simpler to promote/use. It would not be too
+much of a hassle to move back to using post-build scripts.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
