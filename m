@@ -4,92 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48330C3DA64
-	for <buildroot@archiver.kernel.org>; Sun,  4 Aug 2024 09:50:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B7363C3DA7F
+	for <buildroot@archiver.kernel.org>; Sun,  4 Aug 2024 10:02:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EEFC34012B;
-	Sun,  4 Aug 2024 09:50:26 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5ACDC4042C;
+	Sun,  4 Aug 2024 10:02:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BbM9YIM_D432; Sun,  4 Aug 2024 09:50:25 +0000 (UTC)
+ id pVsMkQNmTiLM; Sun,  4 Aug 2024 10:02:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A4C6F40163
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3BB1E40163
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A4C6F40163;
-	Sun,  4 Aug 2024 09:50:25 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3BB1E40163;
+	Sun,  4 Aug 2024 10:02:56 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 759B41BF59E
- for <buildroot@lists.busybox.net>; Sun,  4 Aug 2024 09:50:24 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1892E1BF59E
+ for <buildroot@lists.busybox.net>; Sun,  4 Aug 2024 10:02:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6E5F3605B7
- for <buildroot@lists.busybox.net>; Sun,  4 Aug 2024 09:50:24 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1368A605BE
+ for <buildroot@lists.busybox.net>; Sun,  4 Aug 2024 10:02:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PHvaOpoCh1gD for <buildroot@lists.busybox.net>;
- Sun,  4 Aug 2024 09:50:23 +0000 (UTC)
+ id yqBxWgT6EL1E for <buildroot@lists.busybox.net>;
+ Sun,  4 Aug 2024 10:02:54 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::22f; helo=mail-lj1-x22f.google.com;
- envelope-from=troglobit@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 1E99D605AD
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1E99D605AD
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com
- [IPv6:2a00:1450:4864:20::22f])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 1E99D605AD
- for <buildroot@buildroot.org>; Sun,  4 Aug 2024 09:50:22 +0000 (UTC)
-Received: by mail-lj1-x22f.google.com with SMTP id
- 38308e7fff4ca-2f035ae1083so117010801fa.3
- for <buildroot@buildroot.org>; Sun, 04 Aug 2024 02:50:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1722765020; x=1723369820;
- h=content-transfer-encoding:organization:mime-version:message-id:date
- :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
- :message-id:reply-to;
- bh=4rMNvQVnkPSbjPfXROutMCZVDJABephHEPivjKkc1Ow=;
- b=SLXWtQ+ElMlRzTZZKI7L5ipwBJByt8Y39FG1x7kaNkuaVHk9Iebogv019OzvJir/S/
- r+1bIa+AcEjRWuxmF/Kl23YCl6kN/BVO3mlJTOLMC9GojbpM/Law0DpDCvH64bs5IARp
- tKFS/VQ+JrtdYN/pNYFBPeEeEhDGqhqw1meHjFeOxFGIhRXj+mLYy1eSv2FSFrRGIQjA
- XMJ/okc+dg+95Y/VVC0g012P3PCZ0sRALyMnPWaBjU96uwQXBDLep+7qz2/psr5tOSI6
- xwOo3zTK69Xz3RvWxmyF8ZDQP6uVDR/7ILvp/kpl6K8BJcNu61ADTmh6/zm3JEE0aL+M
- vo9g==
-X-Gm-Message-State: AOJu0Yx2MvBo6N3LEbBTZ/CG/PIZwV3uskKBf+1g/is+xZGq0L7rCAMr
- qqtyoK57Wa0+AuLt3GkWUUMfuMP59KowMmjQa+XnuO9wDsnOxjby2cOuyQ==
-X-Google-Smtp-Source: AGHT+IE4ObV1E1aTvkcwO+oDob8tejZd6goAf2DGPTnOtUd7HmMq5YZFDknty0WIOcADZvIIHnruJA==
-X-Received: by 2002:a2e:9199:0:b0:2ef:1c07:475b with SMTP id
- 38308e7fff4ca-2f15aa95c6amr57897821fa.15.1722765019267; 
- Sun, 04 Aug 2024 02:50:19 -0700 (PDT)
-Received: from gimli.lan ([2001:9b0:214:3500::e19])
- by smtp.gmail.com with ESMTPSA id
- 38308e7fff4ca-2f15e1a8f46sm6901051fa.29.2024.08.04.02.50.18
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 04 Aug 2024 02:50:18 -0700 (PDT)
-From: Joachim Wiberg <troglobit@gmail.com>
+ client-ip=2a00:1828:2000:679::23; helo=helium.openadk.org;
+ envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 79C49605AD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 79C49605AD
+Received: from helium.openadk.org (helium.openadk.org
+ [IPv6:2a00:1828:2000:679::23])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 79C49605AD
+ for <buildroot@buildroot.org>; Sun,  4 Aug 2024 10:02:52 +0000 (UTC)
+Received: by helium.openadk.org (Postfix, from userid 1000)
+ id 8A4C03535FBA; Sun,  4 Aug 2024 12:02:49 +0200 (CEST)
+Date: Sun, 4 Aug 2024 12:02:48 +0200
+From: Waldemar Brodkorb <wbx@openadk.org>
 To: buildroot@buildroot.org
-Date: Sun,  4 Aug 2024 11:50:12 +0200
-Message-ID: <20240804095012.878259-1-troglobit@gmail.com>
-X-Mailer: git-send-email 2.43.0
+Message-ID: <Zq9RyIKN5dTsJ4C4@waldemar-brodkorb.de>
 MIME-Version: 1.0
-Organization: Addiva Elektronik
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1722765020; x=1723369820; darn=buildroot.org;
- h=content-transfer-encoding:organization:mime-version:message-id:date
- :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=4rMNvQVnkPSbjPfXROutMCZVDJABephHEPivjKkc1Ow=;
- b=Cms+GtzY+9cPApKYrVQ3xY7eTUn6yZrrtMtwydvNbAxTl+sWmhtnGOEq7W1T03EZf8
- oJQRNHSXv1nRMFIZcNP2HtYoFp0usTLaA/hC9oQvnA3b4G8klu2+8uwGiO2WicRDV1Of
- rPqsyDujxs40EUutfxZf5WIJMoV2Vjv6c5MB5LYIG9s3zxKXx6wAVTtiY4DSoZwKC8iS
- 7BfJnJujJSDdmLoi0ZV/jKaGpHyq7EHeKQ6SGuZy81WQx8mShMG+aa67IMIAc89QZBIj
- ck4CwFq1LN6Y+P280xAdnCPGBp7Off7bBBa+Nzukw70hcmPFswxc85PFpgPeA6rQZYxm
- b5dg==
+Content-Disposition: inline
+X-Operating-System: Linux 5.10.0-31-amd64 x86_64
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=openadk.org; s=2022; 
+ t=1722765769; bh=8Jpsxb5W2tE3ipNgUtjmvcW+4Nkt2d672I5WAt1Gm/M=;
+ h=Date:From:To:Subject:From;
+ b=Kl/T2AxgBiqV1lMUSlWz3/UQ2msh+muF7todEwfncFL9h9WBmtJQ5GMzkxTL3Not1
+ bpB9UytlO2+3tKyIUK0aR6eAiDgVg8yDcahEkYKuB1BDqxgDfjn2AeKMR4e5jXhUIH
+ oO/60EOPCObTXGmSRr8GGw0QpI/i2xUwEZ6E3tmnEz/b3OrPjWYYhHiNzoxzr3J6uW
+ qSfAPit2QwxYtR+pVx7732UIjPt/kAxBsJ1z69u0tcQ103HbkH1qfV1chfqwWcjTxH
+ nCr/8NlvF7v8vKXHoekCFcSROfpdN/a/e+7xsINfAvP3Bey3s/qpuqE8c7YGjo4eSm
+ BZFk28evtBSjw==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
+ dmarc=none (p=none dis=none)
+ header.from=openadk.org
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=Cms+GtzY
-Subject: [Buildroot] [PATCH 1/1] package/linux-pam: add menuconfig option to
- build pam_lastlog.so
+ dkim=pass (2048-bit key,
+ unprotected) header.d=openadk.org header.i=@openadk.org header.a=rsa-sha256
+ header.s=2022 header.b=Kl/T2Axg
+Subject: [Buildroot] [PATCH] package/libgpg-error: update to 1.50
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,57 +76,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Joachim Wiberg <troglobit@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
- package/linux-pam/Config.in    | 9 +++++++++
- package/linux-pam/linux-pam.mk | 6 ++++++
- 2 files changed, 15 insertions(+)
+ package/libgpg-error/libgpg-error.hash | 4 ++--
+ package/libgpg-error/libgpg-error.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/linux-pam/Config.in b/package/linux-pam/Config.in
-index c8aca97ac6..1aa9045333 100644
---- a/package/linux-pam/Config.in
-+++ b/package/linux-pam/Config.in
-@@ -13,6 +13,15 @@ config BR2_PACKAGE_LINUX_PAM
+diff --git a/package/libgpg-error/libgpg-error.hash b/package/libgpg-error/libgpg-error.hash
+index f87accdd97..be5202584d 100644
+--- a/package/libgpg-error/libgpg-error.hash
++++ b/package/libgpg-error/libgpg-error.hash
+@@ -1,6 +1,6 @@
+ # From https://www.gnupg.org/download/integrity_check.html
+-sha1  28668dc3f693dfd8fa6724c702559e45ab5b15c0  libgpg-error-1.49.tar.bz2
+-sha256  8b79d54639dbf4abc08b5406fb2f37e669a2dec091dd024fb87dd367131c63a9  libgpg-error-1.49.tar.bz2
++sha1  6790fc3d6e7bbd7576654b43971bbe15e953ccc4  libgpg-error-1.50.tar.bz2
++sha256  69405349e0a633e444a28c5b35ce8f14484684518a508dc48a089992fe93e20a  libgpg-error-1.50.tar.bz2
  
- 	  http://linux-pam.org
+ # Locally calculated
+ sha256  231f7edcc7352d7734a96eef0b8030f77982678c516876fcb81e25b32d68564c  COPYING
+diff --git a/package/libgpg-error/libgpg-error.mk b/package/libgpg-error/libgpg-error.mk
+index 9245e76531..8dff6a612d 100644
+--- a/package/libgpg-error/libgpg-error.mk
++++ b/package/libgpg-error/libgpg-error.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+if BR2_PACKAGE_LINUX_PAM
-+
-+config BR2_PACKAGE_LINUX_PAM_LASTLOG
-+	bool "pam_lastlog.so"
-+	help
-+	  Build pam_lastlog.so module.
-+
-+endif
-+
- comment "linux-pam needs a toolchain w/ wchar, locale, dynamic library, gcc >= 4.9"
- 	depends on BR2_USE_MMU
- 	depends on !BR2_ENABLE_LOCALE || !BR2_USE_WCHAR \
-diff --git a/package/linux-pam/linux-pam.mk b/package/linux-pam/linux-pam.mk
-index a205d67c54..1433eb00b3 100644
---- a/package/linux-pam/linux-pam.mk
-+++ b/package/linux-pam/linux-pam.mk
-@@ -54,6 +54,12 @@ else
- LINUX_PAM_CONF_OPTS += --disable-openssl
- endif
- 
-+ifeq ($(BR2_PACKAGE_LINUX_PAM_LASTLOG),y)
-+LINUX_PAM_CONF_OPTS += --enable-lastlog
-+else
-+LINUX_PAM_CONF_OPTS += --disable-lastlog
-+endif
-+
- # Install default pam config (deny everything except login)
- define LINUX_PAM_INSTALL_CONFIG
- 	$(INSTALL) -m 0644 -D package/linux-pam/login.pam \
+-LIBGPG_ERROR_VERSION = 1.49
++LIBGPG_ERROR_VERSION = 1.50
+ LIBGPG_ERROR_SITE = https://www.gnupg.org/ftp/gcrypt/libgpg-error
+ LIBGPG_ERROR_SOURCE = libgpg-error-$(LIBGPG_ERROR_VERSION).tar.bz2
+ LIBGPG_ERROR_LICENSE = GPL-2.0+, LGPL-2.1+
 -- 
-2.43.0
+2.30.2
 
 _______________________________________________
 buildroot mailing list
