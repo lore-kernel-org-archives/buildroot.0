@@ -4,72 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE6A7C3DA64
-	for <buildroot@archiver.kernel.org>; Sun,  4 Aug 2024 20:49:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5929AC3DA64
+	for <buildroot@archiver.kernel.org>; Sun,  4 Aug 2024 21:06:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3CB8680C3E;
-	Sun,  4 Aug 2024 20:49:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1088880F8C;
+	Sun,  4 Aug 2024 21:06:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1mzc-w7B868q; Sun,  4 Aug 2024 20:49:31 +0000 (UTC)
+ id huJobv9R4thQ; Sun,  4 Aug 2024 21:06:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D3212803CD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 08B2E81010
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D3212803CD;
-	Sun,  4 Aug 2024 20:49:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 08B2E81010;
+	Sun,  4 Aug 2024 21:06:39 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id CA2C51BF4DD
- for <buildroot@lists.busybox.net>; Sun,  4 Aug 2024 20:49:20 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1E4491BF35E
+ for <buildroot@lists.busybox.net>; Sun,  4 Aug 2024 21:06:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B5CE16062F
- for <buildroot@lists.busybox.net>; Sun,  4 Aug 2024 20:49:19 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0B55D60670
+ for <buildroot@lists.busybox.net>; Sun,  4 Aug 2024 21:06:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9QujrgtItT2M for <buildroot@lists.busybox.net>;
- Sun,  4 Aug 2024 20:49:19 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::222;
- helo=relay2-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id GZxxqF_DA3Rr for <buildroot@lists.busybox.net>;
+ Sun,  4 Aug 2024 21:06:37 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::224;
+ helo=relay4-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 8E3546063D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8E3546063D
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::222])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8E3546063D
- for <buildroot@buildroot.org>; Sun,  4 Aug 2024 20:49:18 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 8F0F940003;
- Sun,  4 Aug 2024 20:49:16 +0000 (UTC)
-Date: Sun, 4 Aug 2024 22:49:15 +0200
-To: Waldemar Brodkorb <wbx@openadk.org>
-Message-ID: <20240804224915.345e12b1@windsurf>
-In-Reply-To: <Zq9SB3AwoQb731Ki@waldemar-brodkorb.de>
-References: <Zq9SB3AwoQb731Ki@waldemar-brodkorb.de>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org B55076063D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B55076063D
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::224])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id B55076063D
+ for <buildroot@buildroot.org>; Sun,  4 Aug 2024 21:06:36 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id AECAAE0002;
+ Sun,  4 Aug 2024 21:06:32 +0000 (UTC)
+Date: Sun, 4 Aug 2024 23:06:31 +0200
+To: Julien Olivain <ju.o@free.fr>
+Message-ID: <20240804230631.7317e2b3@windsurf>
+In-Reply-To: <20240804161354.1318666-1-ju.o@free.fr>
+References: <20240804161354.1318666-1-ju.o@free.fr>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1722804556;
+ d=bootlin.com; s=gm1; t=1722805593;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=34KYnXKq2sRAtUbCJIlF2CgZ5CPQBilkNntq+NF3LzU=;
- b=VcvsnuKo5TNVMX4CaSeyTUbujRP5nT3wwslEB2ORopplCJl6CBxQCh+8YTWshZNJs5l3M7
- BaGQksVPiOc9ZLhlznHP1azKrPkQTkDlrzY0uDi1ObLhOBWRCMoPjZOpLMnkcdNxPaGFaZ
- tarZJfT97ONLtmPlF9AcYpTYaT+g9m8ftiMXn+gCkXqfnBZc7wCC9Lhee7JqMENm8RFbNF
- vbpuA1ZXi8KGQY51q0XffZSo4NvHaHAcFwGMf67Bg2axgjK/TlYol4+hxA7HV8ppx/qtZh
- Ro+Fo7AxsMJrRNTbPfRpXdmWJBXidl4xw0c4BKQdYeqCU17WAWqkmpZwet2iBA==
+ bh=qzMhAOrAVqUwsszUEzjDLH/eEymSpZQ5Re3JRrVnCHs=;
+ b=NDq78N1l5+JyqABPIot/M74vkyUAINLCR3GjUpc3q3Tie1D+KfL9rHbzz2ocAi7feFVK/0
+ N8m3+sO0+CM8oyZUttoM6fMXm8k11h4EUadeJDL6Y+qrVqu3kBA8U3883cIDCDtZbAdg/e
+ oASAoICKKdAg4Ltd5gOoIL2xyTaUpC363N0uQOOLqFEg29k4n6KlxegMcnmt1xac0SG5eE
+ 5YzONohTSYMFbcCSU/bc0oLnYISk0YULaBoUhUMawFh0Cv1JqTrjCSpnXTSrHDr3lLXc0I
+ mmEflrZ4aRhtod8gHLyr/T06Ag+uemtFv584dtNRpNlZvdKDDb+M794Fdkxicg==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=VcvsnuKo
-Subject: Re: [Buildroot] [PATCH] package/libgcrypt: fix libgpg-error
- detection
+ header.s=gm1 header.b=NDq78N1l
+Subject: Re: [Buildroot] [PATCH 1/1] configs/freescale_imx[67]*: uboot needs
+ openssl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,27 +83,43 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+Cc: Fabio Estevam <festevam@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, 4 Aug 2024 12:03:51 +0200
-Waldemar Brodkorb <wbx@openadk.org> wrote:
+On Sun,  4 Aug 2024 18:13:54 +0200
+Julien Olivain <ju.o@free.fr> wrote:
 
-> Libgcrypt uses two scripts to identify libgpg-error location.
-> The first one is gpg-error-config. The second one is gpgrt-config.
-> The usage of gpg-error-config is deprecated.
-> Help libgcrpyt to find a correct gpgrt-config for cross-compilation.
+> Those defconfigs were recently bumped to NXP BSP lf-6.6.23-2.0.0.
 > 
-> Fixes:
->  - http://autobuild.buildroot.net/results/46e/46efff01f7d0a2ce3c8523cd073302e58e0f0ae5/
+> NXP BSP U-Boot version lf-6.6.23-2.0.0 is based on upstream
+> version 2024.04. This version now requires OpenSSL.
 > 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> Those defconfigs are failing in uboot build, with output:
+> 
+>     In file included from tools/imagetool.h:24,
+>                      from tools/imagetool.c:8:
+>     include/image.h:1471:12: fatal error: openssl/evp.h: No such file or directory
+>      1471 | #  include <openssl/evp.h>
+>           |            ^~~~~~~~~~~~~~~
+> 
+> This commit fixes the issue by adding
+> BR2_TARGET_UBOOT_NEEDS_OPENSSL=y in all the impacted defconfigs.
+> 
+> Signed-off-by: Julien Olivain <ju.o@free.fr>
 > ---
->  package/libgcrypt/libgcrypt.mk | 1 +
->  1 file changed, 1 insertion(+)
+> Note: Patch tested in Gitlab CI pipeline:
+> https://gitlab.com/jolivain/buildroot/-/pipelines/1400170073
+> ---
+>  configs/freescale_imx6dlsabreauto_defconfig | 1 +
+>  configs/freescale_imx6dlsabresd_defconfig   | 1 +
+>  configs/freescale_imx6qsabreauto_defconfig  | 1 +
+>  configs/freescale_imx6qsabresd_defconfig    | 1 +
+>  configs/freescale_imx6sxsabresd_defconfig   | 1 +
+>  configs/freescale_imx7dsabresd_defconfig    | 1 +
+>  6 files changed, 6 insertions(+)
 
 Applied to master, thanks.
 
