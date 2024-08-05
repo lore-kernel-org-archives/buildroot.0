@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BBF80C3DA4A
-	for <buildroot@archiver.kernel.org>; Mon,  5 Aug 2024 20:41:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91835C3DA7F
+	for <buildroot@archiver.kernel.org>; Mon,  5 Aug 2024 20:41:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5E1C78114A;
-	Mon,  5 Aug 2024 20:41:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0BDF580AE8;
+	Mon,  5 Aug 2024 20:41:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nCQ9nTTrH1BS; Mon,  5 Aug 2024 20:40:59 +0000 (UTC)
+ id wI-IEkWdsYUU; Mon,  5 Aug 2024 20:41:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D65108115C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3424781166
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D65108115C;
-	Mon,  5 Aug 2024 20:40:58 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5A5D81BF335
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3424781166;
+	Mon,  5 Aug 2024 20:41:02 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 6E7C71BF966
  for <buildroot@lists.busybox.net>; Mon,  5 Aug 2024 20:40:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 48946402C3
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5AAD560621
  for <buildroot@lists.busybox.net>; Mon,  5 Aug 2024 20:40:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dXppmIDQoBNJ for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id W7I2s3Z7MdEM for <buildroot@lists.busybox.net>;
  Mon,  5 Aug 2024 20:40:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 12C5A40096
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4AB766063E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 12C5A40096
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4AB766063E
  for <buildroot@buildroot.org>; Mon,  5 Aug 2024 20:40:51 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0078284529; Mon,  5 Aug 2024 20:40:50 +0000 (UTC)
+ id 4443884527; Mon,  5 Aug 2024 20:40:51 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 5 Aug 2024 22:32:13 +0200
+Date: Mon, 5 Aug 2024 22:32:19 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 761259c93400bc806611a242c7dc3df7ff67c231
-X-Git-Newrev: baf5a1f0da5cd0deaca214d8ced77b5a1937626c
+X-Git-Oldrev: baf5a1f0da5cd0deaca214d8ced77b5a1937626c
+X-Git-Newrev: 6c540d3439059f57ce24771c8604705dcdefac2b
 X-Patchwork-Hint: ignore
-Message-Id: <20240805204051.0078284529@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/ffmpeg: bump version to 6.1.2
+Message-Id: <20240805204051.4443884527@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/tvheadend: bump version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,68 +65,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=baf5a1f0da5cd0deaca214d8ced77b5a1937626c
+commit: https://git.buildroot.net/buildroot/commit/?id=6c540d3439059f57ce24771c8604705dcdefac2b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Rebased patch 0003.
+This bump adds support for ffmpeg 7.x.
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/ffmpeg/0003-libavutil-Fix-mips-build.patch | 5 +++--
- package/ffmpeg/ffmpeg.hash                         | 2 +-
- package/ffmpeg/ffmpeg.mk                           | 2 +-
- 3 files changed, 5 insertions(+), 4 deletions(-)
+ package/tvheadend/tvheadend.hash | 2 +-
+ package/tvheadend/tvheadend.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/ffmpeg/0003-libavutil-Fix-mips-build.patch b/package/ffmpeg/0003-libavutil-Fix-mips-build.patch
-index a52d7fc347..aeb272c459 100644
---- a/package/ffmpeg/0003-libavutil-Fix-mips-build.patch
-+++ b/package/ffmpeg/0003-libavutil-Fix-mips-build.patch
-@@ -10,7 +10,8 @@ Fixes https://trac.ffmpeg.org/ticket/9138
- Patch sent upstream:
- http://ffmpeg.org/pipermail/ffmpeg-devel/2021-June/281272.html
- 
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+[Bernd: rebased for version 6.1.2]
-+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
- [Dario: make the patch to be applied with fuzz factor 0]
- Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
- ---
-@@ -23,9 +24,9 @@ index a89cfa6d959d..6ec00df75312 100755
- --- a/configure
- +++ b/configure
- @@ -2227,6 +2227,7 @@ HEADERS_LIST="
--     opencv2_core_core_c_h
-      OpenGL_gl3_h
-      poll_h
-+     pthread_np_h
- +    sys_auxv_h
-      sys_param_h
-      sys_resource_h
-diff --git a/package/ffmpeg/ffmpeg.hash b/package/ffmpeg/ffmpeg.hash
-index f70ff5da83..630bd70c56 100644
---- a/package/ffmpeg/ffmpeg.hash
-+++ b/package/ffmpeg/ffmpeg.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  8684f4b00f94b85461884c3719382f1261f0d9eb3d59640a1f4ac0873616f968  ffmpeg-6.1.1.tar.xz
-+sha256  3b624649725ecdc565c903ca6643d41f33bd49239922e45c9b1442c63dca4e38  ffmpeg-6.1.2.tar.xz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPLv2
- sha256  b634ab5640e258563c536e658cad87080553df6f34f62269a21d554844e58bfe  COPYING.LGPLv2.1
- sha256  cb48bf09a11f5fb576cddb0431c8f5ed0a60157a9ec942adffc13907cbe083f2  LICENSE.md
-diff --git a/package/ffmpeg/ffmpeg.mk b/package/ffmpeg/ffmpeg.mk
-index 5b2d33883d..19c270a14b 100644
---- a/package/ffmpeg/ffmpeg.mk
-+++ b/package/ffmpeg/ffmpeg.mk
+diff --git a/package/tvheadend/tvheadend.hash b/package/tvheadend/tvheadend.hash
+index f0140aefdc..871fc9ca01 100644
+--- a/package/tvheadend/tvheadend.hash
++++ b/package/tvheadend/tvheadend.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  b613319b01db2f7e08f735dd1da318041265a6f44b435491f3e8b0e32efd6d2f  tvheadend-b774bdd25351e51eba0282ccf7c65904dc1b5655.tar.gz
++sha256  192cf8d181eb03cbf18e4fd4beb16edf89ef34aa25bc1c73c891bc904342aade  tvheadend-078a822cf548b37bc474475fa57e48e9604090ee.tar.gz
+ sha256  16aaf037a2d00e6e7804de64619887fc7539f1ede99e3282c86dfbc61c2af63e  LICENSE.md
+diff --git a/package/tvheadend/tvheadend.mk b/package/tvheadend/tvheadend.mk
+index 46a082838f..ee82ecb1e6 100644
+--- a/package/tvheadend/tvheadend.mk
++++ b/package/tvheadend/tvheadend.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--FFMPEG_VERSION = 6.1.1
-+FFMPEG_VERSION = 6.1.2
- FFMPEG_SOURCE = ffmpeg-$(FFMPEG_VERSION).tar.xz
- FFMPEG_SITE = https://ffmpeg.org/releases
- FFMPEG_INSTALL_STAGING = YES
+-TVHEADEND_VERSION = b774bdd25351e51eba0282ccf7c65904dc1b5655
++TVHEADEND_VERSION = 078a822cf548b37bc474475fa57e48e9604090ee
+ TVHEADEND_SITE = $(call github,tvheadend,tvheadend,$(TVHEADEND_VERSION))
+ TVHEADEND_LICENSE = GPL-3.0+
+ TVHEADEND_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
