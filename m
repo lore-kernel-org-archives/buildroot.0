@@ -1,69 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E13EC3DA7F
-	for <buildroot@archiver.kernel.org>; Mon,  5 Aug 2024 07:24:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E8FA9C3DA4A
+	for <buildroot@archiver.kernel.org>; Mon,  5 Aug 2024 07:31:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 26FB58083C;
-	Mon,  5 Aug 2024 07:24:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 89AC460730;
+	Mon,  5 Aug 2024 07:31:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id a42Gwg_CE2ty; Mon,  5 Aug 2024 07:24:55 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id k0tOe0-ROMj0; Mon,  5 Aug 2024 07:31:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 350E0808E7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8CFAF60739
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 350E0808E7;
-	Mon,  5 Aug 2024 07:24:55 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 58E2D1BF333
- for <buildroot@lists.busybox.net>; Mon,  5 Aug 2024 07:24:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8CFAF60739;
+	Mon,  5 Aug 2024 07:31:14 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id A07CC1BF333
+ for <buildroot@lists.busybox.net>; Mon,  5 Aug 2024 07:31:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 52AAF402AD
- for <buildroot@lists.busybox.net>; Mon,  5 Aug 2024 07:24:54 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8EF8960739
+ for <buildroot@lists.busybox.net>; Mon,  5 Aug 2024 07:31:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ArH912z8m8hi for <buildroot@lists.busybox.net>;
- Mon,  5 Aug 2024 07:24:53 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=89.238.66.15;
- helo=helium.openadk.org; envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org C3098402AA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C3098402AA
-Received: from helium.openadk.org (helium.openadk.org [89.238.66.15])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C3098402AA
- for <buildroot@buildroot.org>; Mon,  5 Aug 2024 07:24:52 +0000 (UTC)
-Received: by helium.openadk.org (Postfix, from userid 1000)
- id 1DF1C35363D0; Mon,  5 Aug 2024 09:24:50 +0200 (CEST)
-Date: Mon, 5 Aug 2024 09:24:49 +0200
-From: Waldemar Brodkorb <wbx@openadk.org>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Message-ID: <ZrB+QUlNw6G1wbV4@waldemar-brodkorb.de>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id gi-brL0Fsfij for <buildroot@lists.busybox.net>;
+ Mon,  5 Aug 2024 07:31:10 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.196;
+ helo=relay4-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org EDC7C60730
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EDC7C60730
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id EDC7C60730
+ for <buildroot@buildroot.org>; Mon,  5 Aug 2024 07:31:09 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 29E51E000B;
+ Mon,  5 Aug 2024 07:31:08 +0000 (UTC)
+Date: Mon, 5 Aug 2024 09:31:06 +0200
+To: Waldemar Brodkorb <wbx@openadk.org>
+Message-ID: <20240805093106.20d6716d@windsurf>
+In-Reply-To: <ZrB+QUlNw6G1wbV4@waldemar-brodkorb.de>
 References: <Zq9j8m3YPt0Xh0gY@waldemar-brodkorb.de>
  <20240804231254.6301c5df@windsurf>
+ <ZrB+QUlNw6G1wbV4@waldemar-brodkorb.de>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20240804231254.6301c5df@windsurf>
-X-Operating-System: Linux 5.10.0-31-amd64 x86_64
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=openadk.org; s=2022; 
- t=1722842690; bh=dVml31kIOD35AGvqXYlxddz/MSpEqAK1ba/WpRh6fms=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=aCTOUJQqihmfNZAd1MmdAy8W9of83VfOgzLxyEhWI0SVSZyJVPA9FvgQTUNmybHoT
- +ccE6lFSTBonNeD30oqpUPEDPxkmnkJSMgXB+KAHfp4QcRYDjU6iPwfNvUVgY1R8E3
- 0L162DDCDpCYjblrh6MrRj8idY/VwH8dc/VmqP78ezsWNECSVBk2cN88WelVoGwcAa
- HmbfIRWH/QK4BoN5qzAndrnQRE1z//IY6fqPUJEOv9okYSy4cIEYNr9zXYn8u2OCXt
- yzhURGrlYaQ5Z/kUvH8rh22c8Lp70+OKacY+H0KiCSOpjGgxjTa4TyPFhjWjCKn48h
- MD/jTIQwsrumw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=openadk.org
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=openadk.org header.i=@openadk.org
- header.a=rsa-sha256 header.s=2022 header.b=aCTOUJQq
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1722843068;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=15JQxE94GWFOlvmG9QXxkfvV/axY4SxVlQtLQEWg6LU=;
+ b=ozQDQI591df8+3V0/K2q9vSyrWgYUl0WnjJiroTkDizfxZRfJFqcG4wh8LqjsGAuKSeUWM
+ Fxgp2N02ZcfAn9X8aAy1U2Z6RK/xZA5TylSHRNIvkQ9emn4nWy0uOHa2kcMboPC6hmPJLS
+ nlBpP6QHj/7Ka4g+x7YOgiWE/DiVOu71+cU08PNUVp0rqfudq8+k5sqUD6KNPQcSfAZyKh
+ AkI/pmU9AWVXZkw9lU8dGWwpfHcfYdEcAzSG6/AEgSRYXPlhHt78YLPXZq8fyRLbdVPark
+ /gXoRp7ocJMOxEGENsPCA87A0QdwbLp4z0616N8rRNC/58tWrrrWMj/OVFstGg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=ozQDQI59
 Subject: Re: [Buildroot] [PATCH] package/nginx: fix sparc compile
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -76,62 +82,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Thomas,
-Thomas Petazzoni wrote,
+On Mon, 5 Aug 2024 09:24:49 +0200
+Waldemar Brodkorb <wbx@openadk.org> wrote:
 
-> On Sun, 4 Aug 2024 13:20:18 +0200
-> Waldemar Brodkorb <wbx@openadk.org> wrote:
-> 
-> > When libatomic_ops are enabled the shared library is using symbols
-> > from libatomic.
-> > 
-> > In output/build/nginx-1.24.0/objs/autoconf.err
-> > You get:
-> > checking for atomic_ops library
-> > 
-> > /home/wbx/buildroot/output/host/lib/gcc/sparc-buildroot-linux-uclibc/13.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld:
-> > /tmp/ccx4rHjO.o: in function `main':
-> > autotest.c:(.text.startup+0x30): undefined reference to
-> > `__atomic_fetch_add_4'
-> > collect2: error: ld returned 1 exit status
-> > 
-> > Fixes:
-> >  - http://autobuild.buildroot.net/results/5de/5de45530bbc615b1c44cc73a0ae7bf4cff5f1a56/
-> 
-> Do you have a minimal reproducer for this issue?
-> 
-> >  NGINX_CONF_ENV += ngx_force_have_libatomic=yes
-> >  ifeq ($(BR2_sparc_v8)$(BR2_sparc_leon3),y)
-> >  NGINX_CFLAGS += "-DAO_NO_SPARC_V9"
-> > +NGINX_LDFLAGS += -latomic
-> >  endif
-> 
-> Basically, I am wondering if this is the correct condition to put this.
-> Other architecture than SPARC may need to link against libatomic. So
-> perhaps it should instead be:
-> 
-> ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-> NGINX_LDFLAGS += -latomic
-> endif
-> 
-> but as I am not 100% sure, I wanted to first reproduce the issue.
+> The minimal reproducer is:
+> BR2_sparc=y
+> BR2_PACKAGE_NGINX=y
 
-The minimal reproducer is:
-BR2_sparc=y
-BR2_PACKAGE_NGINX=y
+Weird, I didn't reproduce it with the Bootlin SPARC toolchain.
 
-For sparc only libatomic_ops is selected via
-package/nginx/Config.in. So I think the build issue is unique to
-sparcv8/leon.
+> For sparc only libatomic_ops is selected via
+> package/nginx/Config.in. So I think the build issue is unique to
+> sparcv8/leon.
 
-best regards
- Waldemar
+Correct, but in the .mk file we have:
+
+ifeq ($(BR2_PACKAGE_LIBATOMIC_OPS),y)
+NGINX_DEPENDENCIES += libatomic_ops
+NGINX_CONF_OPTS += --with-libatomic
+NGINX_CONF_ENV += ngx_force_have_libatomic=yes
+ifeq ($(BR2_sparc_v8)$(BR2_sparc_leon3),y)
+NGINX_CFLAGS += "-DAO_NO_SPARC_V9"
+endif
+else
+NGINX_CONF_ENV += ngx_force_have_libatomic=no
+endif
+
+and BR2_PACKAGE_LIBATOMIC_OPS can very well be enabled on non-SPARC
+architectures. Yes nginx only forces BR2_PACKAGE_LIBATOMIC_OPS on
+Sparc, but nothing prevents another package (or even the user) to
+enable BR2_PACKAGE_LIBATOMIC_OPS on non-Sparc architectures.
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
