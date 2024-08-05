@@ -1,51 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97277C3DA4A
-	for <buildroot@archiver.kernel.org>; Mon,  5 Aug 2024 11:12:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8E41C3DA7F
+	for <buildroot@archiver.kernel.org>; Mon,  5 Aug 2024 11:34:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 332DE400E4;
-	Mon,  5 Aug 2024 11:12:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 77F8860749;
+	Mon,  5 Aug 2024 11:34:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5ldaL-oVlrwk; Mon,  5 Aug 2024 11:12:53 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zxvx4487JsOg; Mon,  5 Aug 2024 11:34:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 009E1400F1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6A33160731
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 009E1400F1;
-	Mon,  5 Aug 2024 11:12:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6A33160731;
+	Mon,  5 Aug 2024 11:34:20 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5D3711BF329
- for <buildroot@lists.busybox.net>; Mon,  5 Aug 2024 11:12:51 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id EA2001BF3AD
+ for <buildroot@lists.busybox.net>; Mon,  5 Aug 2024 11:34:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4A1E04027D
- for <buildroot@lists.busybox.net>; Mon,  5 Aug 2024 11:12:51 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D78B240253
+ for <buildroot@lists.busybox.net>; Mon,  5 Aug 2024 11:34:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WoaU2bqsXC3X for <buildroot@lists.busybox.net>;
- Mon,  5 Aug 2024 11:12:50 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id 1_cyijF7Edes for <buildroot@lists.busybox.net>;
+ Mon,  5 Aug 2024 11:34:17 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::223;
+ helo=relay3-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 307A240263
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 307A240263
- for <buildroot@buildroot.org>; Mon,  5 Aug 2024 11:12:50 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1C09084091; Mon,  5 Aug 2024 11:12:50 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 5 Aug 2024 13:12:11 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 327312359a742f40d35c241958602b2026f0a1ba
-X-Git-Newrev: 9ef47358431814d752f1005f99415f3f3e205fe6
-X-Patchwork-Hint: ignore
-Message-Id: <20240805111250.1C09084091@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/nethogs: new package
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 5E01E4024E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5E01E4024E
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 5E01E4024E
+ for <buildroot@buildroot.org>; Mon,  5 Aug 2024 11:34:17 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 49C8960003;
+ Mon,  5 Aug 2024 11:34:14 +0000 (UTC)
+Date: Mon, 5 Aug 2024 13:34:13 +0200
+To: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
+Message-ID: <20240805133413.6df83574@windsurf>
+In-Reply-To: <20240213120452.2465425-1-buildroot@bubu1.eu>
+References: <20240213120452.2465425-1-buildroot@bubu1.eu>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1722857654;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=sD8HWbC4QH/R+1D6Cv70+r2rHB1/vRvSP7q8pIAtCG0=;
+ b=n33Z7LpmVQgTBlxv0O4sODFIY6aduX5tiI+cp8tS2J95hE4IMO+1gpJny9R0MYiFTdZ6/p
+ rUm34W8PetuErxap0cqMtuxJPacsbWmm/gg6dib/Y9PEeslsnyUY+FyWDeQinuEZxtg641
+ za/vVeD/GZTJrEMAqhAZX+sA1EeNPMBtqPZXMZGzC35/MWeg4uWeA41PVdQONvFEV3X99c
+ u9H2qOETeGnNts8Jcl/AgLYImMK76NpDeYhXs18f7FmUBZhothPeVohBjuaK2czkxyM2Ih
+ wS3elRZHguP/iScYwkjKIuPx7wC0QYY0GHlnwfm3YrTRWxFUeIFz3EdlDw8Jvw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=n33Z7Lpm
+Subject: Re: [Buildroot] [PATCH] package/nethogs: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,101 +82,74 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Marcus Hoffmann <buildroot@bubu1.eu>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9ef47358431814d752f1005f99415f3f3e205fe6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Marcus,
 
-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- DEVELOPERS                   |  1 +
- package/Config.in            |  1 +
- package/nethogs/Config.in    | 10 ++++++++++
- package/nethogs/nethogs.hash |  3 +++
- package/nethogs/nethogs.mk   | 21 +++++++++++++++++++++
- 5 files changed, 36 insertions(+)
+On Tue, 13 Feb 2024 13:04:51 +0100
+Marcus Hoffmann via buildroot <buildroot@buildroot.org> wrote:
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 68729f721b..8e46beff00 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2204,6 +2204,7 @@ F:	utils/config
- F:	utils/diffconfig
- 
- N:	Marcus Hoffmann <bubu@bubu1.eu>
-+F:	package/nethogs/
- F:	package/pico-sdk/
- F:	package/picotool/
- F:	package/python-jc/
-diff --git a/package/Config.in b/package/Config.in
-index e21987717f..2ac351cce5 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2527,6 +2527,7 @@ endif
- 	source "package/netcalc/Config.in"
- 	source "package/netcat/Config.in"
- 	source "package/netcat-openbsd/Config.in"
-+	source "package/nethogs/Config.in"
- 	source "package/netplug/Config.in"
- 	source "package/netsnmp/Config.in"
- 	source "package/netstat-nat/Config.in"
-diff --git a/package/nethogs/Config.in b/package/nethogs/Config.in
-new file mode 100644
-index 0000000000..2d6b44739c
---- /dev/null
-+++ b/package/nethogs/Config.in
-@@ -0,0 +1,10 @@
-+config BR2_PACKAGE_NETHOGS
-+	bool "nethogs"
-+	select BR2_PACKAGE_LIBPCAP
-+	select BR2_PACKAGE_NCURSES
-+	help
-+	  NetHogs is a small 'net top' tool. Instead of breaking the
-+	  traffic down per protocol or per subnet, like most tools
-+	  do, it groups bandwidth by process.
-+
-+          https://github.com/raboof/nethogs
-diff --git a/package/nethogs/nethogs.hash b/package/nethogs/nethogs.hash
-new file mode 100644
-index 0000000000..fd1f236250
---- /dev/null
-+++ b/package/nethogs/nethogs.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256  957d6afcc220dfbba44c819162f44818051c5b4fb793c47ba98294393986617d  nethogs-0.8.7.tar.gz
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/nethogs/nethogs.mk b/package/nethogs/nethogs.mk
-new file mode 100644
-index 0000000000..98c4f5f008
---- /dev/null
-+++ b/package/nethogs/nethogs.mk
-@@ -0,0 +1,21 @@
-+################################################################################
-+#
-+# nethogs
-+#
-+################################################################################
-+
-+NETHOGS_VERSION = 0.8.7
-+NETHOGS_SITE = $(call github,raboof,nethogs,v$(NETHOGS_VERSION))
-+NETHOGS_LICENSE = GPL-2.0+
-+NETHOGS_LICENSE_FILES = COPYING
-+NETHOGS_DEPENDENCIES = libpcap ncurses
-+
-+define NETHOGS_BUILD_CMDS
-+	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) nethogs
-+endef
-+
-+define NETHOGS_INSTALL_TARGET_CMDS
-+	$(INSTALL) -D -m 0755 $(@D)/src/nethogs $(TARGET_DIR)/usr/sbin/nethogs
-+endef
-+
-+$(eval $(generic-package))
+> Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+
+Thanks for the patch, which I have applied, after making a few changes.
+See below.
+
+> ---
+>  package/Config.in            |  1 +
+>  package/nethogs/Config.in    | 10 ++++++++++
+>  package/nethogs/nethogs.hash |  3 +++
+>  package/nethogs/nethogs.mk   | 21 +++++++++++++++++++++
+>  4 files changed, 35 insertions(+)
+
+Entry in the DEVELOPERS file was missing.
+
+> diff --git a/package/Config.in b/package/Config.in
+> index bf0fe078b9..2d352dd8cc 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -2476,6 +2476,7 @@ endif
+>  	source "package/ndisc6/Config.in"
+>  	source "package/net-tools/Config.in"
+>  	source "package/netatalk/Config.in"
+> +	source "package/nethogs/Config.in"
+>  	source "package/netcalc/Config.in"
+>  	source "package/netcat/Config.in"
+>  	source "package/netcat-openbsd/Config.in"
+
+As you noted in your replied, alphabetic ordering was not correct here.
+
+> +NETHOGS_VERSION = 0.8.7
+> +NETHOGS_SITE = $(call github,raboof,nethogs,v$(NETHOGS_VERSION))
+> +NETHOGS_LICENSE = GPL-2.0
+
+License is GPL-2.0+ (they use the "or later")
+
+> +NETHOGS_LICENSE_FILES = COPYING
+> +NETHOGS_DEPENDENCIES = libpcap ncurses
+> +
+> +define NETHOGS_BUILD_CMDS
+> +	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) nethogs
+> +endef
+> +
+> +define NETHOGS_INSTALL_TARGET_CMDS
+> +	$(INSTALL) -D -m 0755 $(@D)/src/nethogs $(TARGET_DIR)/usr/sbin
+
+$(TARGET_DIR)/usr/sbin should have been $(TARGET_DIR)/usr/sbin/nethogs,
+to avoid having 'nethogs' installed as a file called 'sbin' in
+$(TARGET_DIR)/usr if by lack of luck $(TARGET_DIR)/usr/sbin doesn't
+already exist as a directory.
+
+Thanks a lot for this contribution!
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
