@@ -4,67 +4,75 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5DA4BC3DA7F
-	for <buildroot@archiver.kernel.org>; Mon,  5 Aug 2024 13:02:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3C2F5C3DA7F
+	for <buildroot@archiver.kernel.org>; Mon,  5 Aug 2024 13:20:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E605A40281;
-	Mon,  5 Aug 2024 13:02:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C925740281;
+	Mon,  5 Aug 2024 13:20:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DsRkyP9zoY3w; Mon,  5 Aug 2024 13:02:01 +0000 (UTC)
+ id g0FS9Hi2Dtd2; Mon,  5 Aug 2024 13:20:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9FCAB40263
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6867A40287
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9FCAB40263;
-	Mon,  5 Aug 2024 13:02:01 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 80A051BF381
- for <buildroot@lists.busybox.net>; Mon,  5 Aug 2024 13:02:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6867A40287;
+	Mon,  5 Aug 2024 13:20:04 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 2F4A31BF334
+ for <buildroot@lists.busybox.net>; Mon,  5 Aug 2024 13:20:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6E6F560747
- for <buildroot@lists.busybox.net>; Mon,  5 Aug 2024 13:02:00 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1C09D4054B
+ for <buildroot@lists.busybox.net>; Mon,  5 Aug 2024 13:20:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wsbCxMhA-GHa for <buildroot@lists.busybox.net>;
- Mon,  5 Aug 2024 13:01:59 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1828:2000:679::23; helo=helium.openadk.org;
- envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org D92466062C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D92466062C
-Received: from helium.openadk.org (helium.openadk.org
- [IPv6:2a00:1828:2000:679::23])
- by smtp3.osuosl.org (Postfix) with ESMTPS id D92466062C
- for <buildroot@buildroot.org>; Mon,  5 Aug 2024 13:01:57 +0000 (UTC)
-Received: by helium.openadk.org (Postfix, from userid 1000)
- id 3364935360B6; Mon,  5 Aug 2024 15:01:54 +0200 (CEST)
-Date: Mon, 5 Aug 2024 15:01:54 +0200
-From: Waldemar Brodkorb <wbx@openadk.org>
-To: buildroot@buildroot.org
-Message-ID: <ZrDNQvSIPQNosVmQ@waldemar-brodkorb.de>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JCKe6cMGjqF7 for <buildroot@lists.busybox.net>;
+ Mon,  5 Aug 2024 13:20:02 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=178.60.130.6;
+ helo=fanzine2.igalia.com; envelope-from=aperez@igalia.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 4F08340290
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4F08340290
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 4F08340290
+ for <buildroot@buildroot.org>; Mon,  5 Aug 2024 13:19:57 +0000 (UTC)
+Received: from 91-153-34-210.elisa-laajakaista.fi ([91.153.34.210] helo=kodama)
+ by fanzine2.igalia.com with esmtpsa 
+ (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+ id 1saxcw-0087AA-Cs; Mon, 05 Aug 2024 15:19:54 +0200
+Received: from localhost (kodama [local])
+ by kodama (OpenSMTPD) with ESMTPA id a4f20cbb;
+ Mon, 5 Aug 2024 13:19:52 +0000 (UTC)
+Date: Mon, 5 Aug 2024 16:19:48 +0300
+Message-ID: <20240805161948.GB3474121@igalia.com>
+From: Adrian Perez de Castro <aperez@igalia.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+In-Reply-To: <20240712230553.23f75095@windsurf>
+References: <20240522091608.3659847-1-aperez@igalia.com>
+ <20240522091608.3659847-4-aperez@igalia.com>
+ <20240712230553.23f75095@windsurf>
 MIME-Version: 1.0
-Content-Disposition: inline
-X-Operating-System: Linux 5.10.0-31-amd64 x86_64
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=openadk.org; s=2022; 
- t=1722862914; bh=+0E3xoUPfX0ihZbUlUF+4mdF2aRCZIRVeDSCLEpwlFg=;
- h=Date:From:To:Subject:From;
- b=vs3nCMpWLH7tH2aY9TNv5v0Z/FCNH9c5C0wUL+rG+AsRqWsaCb2axkiSba5CCG/Yc
- zTy29dKmp09Pm23vIqY4R64cpM9is+U/DyJ1BNamUoJ1S6IQom1GikM928N7uCuSYj
- gdZMoP/VUTK31/Sf4B3IKrIqqKEi9CbM8vMNvRwDFj3d160hYNRs30ACxnYsRZApHQ
- jSQ+AJuy8Fxk3VtR2nCmQcs57DKWbEndfT9xu8wZznlek/np27rNTqjTMtNBdEeQG+
- hUiO/1j772duwFRspjhgyETsfIGkXzHKmfKNUSV8Cb9fT0UckwINinmDYclN8lQTqG
- psA8MrGom5Vyw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
+ c=relaxed/relaxed; d=igalia.com; 
+ s=20170329; h=Content-Type:MIME-Version:References:In-Reply-To:Subject:Cc:To:
+ From:Message-ID:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+ Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+ :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+ List-Post:List-Owner:List-Archive;
+ bh=cRaLAKHm1HKesh9fyWWAW50EJxgyGJojA+orwdrb2g8=; b=aE1laEMvrc/uOcWHPcrok93QAl
+ CYMEhgo8LR91ZCBhrn2t24x3qncQDi8QhUGEwfF5lD6iFAXtcNpME2fa3VFS73+wBlEQp8BcUf3Ku
+ q1l7H5nrmfrTih4eHhNZp33WR+PDXZtIN8YvERok9YpXv5z6Kit9n3mPKVNCAhorxv1k4m9MJFbFX
+ bPMwknKQJ2BeOkuZAWQw+QGvCTBj/5td7rL6PQ+ED4pXcdGhppzu2rxvvKpEm1zYwuYXrxFWiSx1B
+ QcOuiL4yMLe7zzhceBdTWeMWPzCp7nLWgxafUeMfcH+b3NwiekSBT+h1GrjOYAQe8iYZneec8IwZU
+ NK4djKzQ==;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=none (p=none dis=none)
- header.from=openadk.org
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ header.from=igalia.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=openadk.org header.i=@openadk.org header.a=rsa-sha256
- header.s=2022 header.b=vs3nCMpW
-Subject: [Buildroot] [PATCH] package/nginx: security update to 1.26.1
+ unprotected) header.d=igalia.com header.i=@igalia.com header.a=rsa-sha256
+ header.s=20170329 header.b=aE1laEMv
+Subject: Re: [Buildroot] [PATCH 3/4] package/libavif: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,442 +84,65 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Samuel Martin <s.martin49@gmail.com>, buildroot@buildroot.org
+Content-Type: multipart/mixed; boundary="===============1553402883398390185=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-See here for a Changelog and CVE's:
-http://nginx.org/en/CHANGES-1.26
 
-Patch 0006 is no longer required as the openssl library is found without
-this patch, which does not apply anymore.
+--===============1553402883398390185==
+Content-Type: multipart/signed; boundary="YkJkcpSni+sbdJWB"; micalg="pgp-ripemd160"; protocol="application/pgp-signature"
 
-Patch 0009 is no longer required as it was fixed in another way upstream:
-https://hg.nginx.org/nginx/rev/fb989e24c60a
 
-Patch 0011 is upstream:
-https://hg.nginx.org/nginx/rev/f58b6f636238
+--YkJkcpSni+sbdJWB
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: base64
 
-Reorder the remaining patches and update .checkpackageignore accordingly.
+SGVsbG8hCgooQ29taW5nIGJhY2sgc2xvd2x5IGZyb20gYmVpbmcgb25lIG1vbnRoIEFGSywgc29y
+cnkgZm9yIHRoZSBkZWxheSByZXBseWluZy4pCgpPbiBGcmksIDEyIEp1bCAyMDI0IDIzOjA1OjUz
+ICswMjAwIFRob21hcyBQZXRhenpvbmkgdmlhIGJ1aWxkcm9vdCA8YnVpbGRyb290QGJ1aWxkcm9v
+dC5vcmc+IHdyb3RlOgo+IE9uIFdlZCwgMjIgTWF5IDIwMjQgMTI6MTY6MDYgKzAzMDAKPiBBZHJp
+YW4gUGVyZXogZGUgQ2FzdHJvIDxhcGVyZXpAaWdhbGlhLmNvbT4gd3JvdGU6Cj4gCj4gPiBsaWJh
+dmlmIGlzIGFuIGltcGxlbWVudGF0aW9uIG9mIHRoZSBBVjFGIGltYWdlIGZvcm1hdCwgd2hpY2gg
+bWF5IGJlIGEKPiA+IGZyb250ZW5kIGZvciBkaWZmZXJlbnQgZW5jb2RlcnMgYW5kIGRlY29kZXJz
+LiBBdCB0aGUgbW9tZW50IG9ubHkgZGF2MWQKPiA+IGlzIHBhY2thZ2VkIHNvIHRoYXQgaXMgdGhl
+IG9uZSBjb25maWd1cmVkLgo+ID4gCj4gPiBTaWduZWQtb2ZmLWJ5OiBBZHJpYW4gUGVyZXogZGUg
+Q2FzdHJvIDxhcGVyZXpAaWdhbGlhLmNvbT4KPiAKPiBUaGFua3MsIGFwcGxpZWQsIHdpdGggb25l
+IGNoYW5nZS4gU2VlIGJlbG93Lgo+IAo+ID4gK0xJQkFWSUZfVkVSU0lPTiA9IDEuMC40Cj4gPiAr
+TElCQVZJRl9TSVRFID0gJChjYWxsIGdpdGh1YixBT01lZGlhQ29kZWMsbGliYXZpZix2JChMSUJB
+VklGX1ZFUlNJT04pKQo+ID4gK0xJQkFWSUZfTElDRU5TRSA9Cj4gCj4gVG9vIGxhenkgdG8gZmln
+dXJlIG91dCB0aGUgbGljZW5zZSB0ZXJtcz8gOi0pKQo+IAo+IEkgY2hhbmdlZCB0bzoKPiAKPiAr
+TElCQVZJRl9MSUNFTlNFID0gQlNELTItQ2xhdXNlLCBJSkcsIEFwYWNoZS0yLjAKCk91Y2gsIHdo
+ZW4gSSBzdGFydGVkIHdyaXRpbmcgdGhlIHBhY2thZ2UgSSB0aG91Z2h0ICJ3aWxsIGZpbGwgdGhp
+cyBsYXRlciwKbGV0J3MgZmlndXJlIG91dCBob3cgdG8gYnVpbGQgZmlyc3QiIGFuZCB0aGVuIGNv
+bXBsZXRlbHkgZm9yZ290IHRvIHVwZGF0ZQp0aGUgZW1wdHkgdmFyaWFibGUuIFRoYW5rcyEKCk9u
+IGEgcmVsYXRlZCBub3RlLCBJIHN1Ym1pdHRlZCBhIHZlcnNpb24gYnVtcCBmb3IgbGliYXZpZiBl
+YXJsaWVyIHRvZGF5OgoKICBodHRwczovL3BhdGNod29yay5vemxhYnMub3JnL3Byb2plY3QvYnVp
+bGRyb290L3BhdGNoLzIwMjQwODA1MTE1MjI0LjM0NzM0MzEtMS1hcGVyZXpAaWdhbGlhLmNvbS8K
+CgpDaGVlcnMsCuKAlEFkcmnDoW4K
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
----
- .checkpackageignore                           |   8 +-
- ...-auto-lib-libgd-conf-use-pkg-config.patch} |   0
- ...auto-lib-openssl-conf-use-pkg-config.patch | 251 ------------------
- ...inux_config.h-only-include-dlfcn.h-.patch} |   0
- ...of-endianness-for-cross-compilation.patch} |   0
- ...to-os-linux-fix-build-with-libxcrypt.patch |  38 ---
- ...ix-compile-error-in-configure-script.patch |  33 ---
- package/nginx/nginx.hash                      |   2 +-
- package/nginx/nginx.mk                        |   2 +-
- 9 files changed, 5 insertions(+), 329 deletions(-)
- rename package/nginx/{0007-auto-lib-libgd-conf-use-pkg-config.patch => 0006-auto-lib-libgd-conf-use-pkg-config.patch} (100%)
- delete mode 100644 package/nginx/0006-auto-lib-openssl-conf-use-pkg-config.patch
- rename package/nginx/{0008-src-os-unix-ngx_linux_config.h-only-include-dlfcn.h-.patch => 0007-src-os-unix-ngx_linux_config.h-only-include-dlfcn.h-.patch} (100%)
- rename package/nginx/{0010-Allow-forcing-of-endianness-for-cross-compilation.patch => 0008-Allow-forcing-of-endianness-for-cross-compilation.patch} (100%)
- delete mode 100644 package/nginx/0009-auto-os-linux-fix-build-with-libxcrypt.patch
- delete mode 100644 package/nginx/0011-Fix-compile-error-in-configure-script.patch
+--YkJkcpSni+sbdJWB
+Content-Type: application/pgp-signature; name="signature.asc"
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 10662bb11e..290eb2cbf5 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -959,11 +959,9 @@ package/nginx/0002-auto-feature-add-mechanism-allowing-to-force-feature.patch li
- package/nginx/0003-auto-set-ngx_feature_run_force_result-for-each-featu.patch lib_patch.Upstream
- package/nginx/0004-auto-lib-libxslt-conf-use-pkg-config.patch lib_patch.Upstream
- package/nginx/0005-auto-unix-make-sys_nerr-guessing-cross-friendly.patch lib_patch.Upstream
--package/nginx/0006-auto-lib-openssl-conf-use-pkg-config.patch lib_patch.Upstream
--package/nginx/0007-auto-lib-libgd-conf-use-pkg-config.patch lib_patch.Upstream
--package/nginx/0008-src-os-unix-ngx_linux_config.h-only-include-dlfcn.h-.patch lib_patch.Upstream
--package/nginx/0009-auto-os-linux-fix-build-with-libxcrypt.patch lib_patch.Upstream
--package/nginx/0010-Allow-forcing-of-endianness-for-cross-compilation.patch lib_patch.Upstream
-+package/nginx/0006-auto-lib-libgd-conf-use-pkg-config.patch lib_patch.Upstream
-+package/nginx/0007-src-os-unix-ngx_linux_config.h-only-include-dlfcn.h-.patch lib_patch.Upstream
-+package/nginx/0008-Allow-forcing-of-endianness-for-cross-compilation.patch lib_patch.Upstream
- package/nginx/S50nginx lib_sysv.Indent lib_sysv.Variables
- package/nilfs-utils/0001-nilfs_cleanerd-link-dynamically.patch lib_patch.Upstream
- package/nmap/0001-libdnet-always-build-a-static-library.patch lib_patch.Upstream
-diff --git a/package/nginx/0007-auto-lib-libgd-conf-use-pkg-config.patch b/package/nginx/0006-auto-lib-libgd-conf-use-pkg-config.patch
-similarity index 100%
-rename from package/nginx/0007-auto-lib-libgd-conf-use-pkg-config.patch
-rename to package/nginx/0006-auto-lib-libgd-conf-use-pkg-config.patch
-diff --git a/package/nginx/0006-auto-lib-openssl-conf-use-pkg-config.patch b/package/nginx/0006-auto-lib-openssl-conf-use-pkg-config.patch
-deleted file mode 100644
-index 4338729658..0000000000
---- a/package/nginx/0006-auto-lib-openssl-conf-use-pkg-config.patch
-+++ /dev/null
-@@ -1,251 +0,0 @@
--From 4ba4b1e0bd1b69e124eb34c95ae9e7c087370efa Mon Sep 17 00:00:00 2001
--From: Martin Bark <martin@barkynet.com>
--Date: Fri, 6 May 2016 14:48:31 +0100
--Subject: [PATCH] auto/lib/openssl/conf: use pkg-config
--
--Change to using pkg-config to find the path to openssl and its
--dependencies.
--
--Signed-off-by: Martin Bark <martin@barkynet.com>
-----
-- auto/lib/openssl/conf | 187 +++++++++++++++++++++---------------------
-- 1 file changed, 94 insertions(+), 93 deletions(-)
--
--diff --git a/auto/lib/openssl/conf b/auto/lib/openssl/conf
--index 4fb52df7..9f30490d 100644
----- a/auto/lib/openssl/conf
--+++ b/auto/lib/openssl/conf
--@@ -1,4 +1,3 @@
---
-- # Copyright (C) Igor Sysoev
-- # Copyright (C) Nginx, Inc.
-- 
--@@ -7,123 +6,125 @@ if [ $OPENSSL != NONE ]; then
-- 
--     case "$CC" in
-- 
---        cl | bcc32)
---            have=NGX_OPENSSL . auto/have
---            have=NGX_SSL . auto/have
---
---            CFLAGS="$CFLAGS -DNO_SYS_TYPES_H"
---
---            CORE_INCS="$CORE_INCS $OPENSSL/openssl/include"
---            CORE_DEPS="$CORE_DEPS $OPENSSL/openssl/include/openssl/ssl.h"
---
---            if [ -f $OPENSSL/ms/do_ms.bat ]; then
---                # before OpenSSL 1.1.0
---                CORE_LIBS="$CORE_LIBS $OPENSSL/openssl/lib/ssleay32.lib"
---                CORE_LIBS="$CORE_LIBS $OPENSSL/openssl/lib/libeay32.lib"
---            else
---                # OpenSSL 1.1.0+
---                CORE_LIBS="$CORE_LIBS $OPENSSL/openssl/lib/libssl.lib"
---                CORE_LIBS="$CORE_LIBS $OPENSSL/openssl/lib/libcrypto.lib"
---            fi
---
---            # libeay32.lib requires gdi32.lib
---            CORE_LIBS="$CORE_LIBS gdi32.lib"
---            # OpenSSL 1.0.0 requires crypt32.lib
---            CORE_LIBS="$CORE_LIBS crypt32.lib"
---        ;;
---
---        *)
---            have=NGX_OPENSSL . auto/have
---            have=NGX_SSL . auto/have
---
---            CORE_INCS="$CORE_INCS $OPENSSL/.openssl/include"
---            CORE_DEPS="$CORE_DEPS $OPENSSL/.openssl/include/openssl/ssl.h"
---            CORE_LIBS="$CORE_LIBS $OPENSSL/.openssl/lib/libssl.a"
---            CORE_LIBS="$CORE_LIBS $OPENSSL/.openssl/lib/libcrypto.a"
---            CORE_LIBS="$CORE_LIBS $NGX_LIBDL"
---            CORE_LIBS="$CORE_LIBS $NGX_LIBPTHREAD"
---
---            if [ "$NGX_PLATFORM" = win32 ]; then
---                CORE_LIBS="$CORE_LIBS -lgdi32 -lcrypt32 -lws2_32"
---            fi
---        ;;
--+	cl | bcc32)
--+	    have=NGX_OPENSSL . auto/have
--+	    have=NGX_SSL . auto/have
--+
--+	    CFLAGS="$CFLAGS -DNO_SYS_TYPES_H"
--+
--+	    CORE_INCS="$CORE_INCS $OPENSSL/openssl/include"
--+	    CORE_DEPS="$CORE_DEPS $OPENSSL/openssl/include/openssl/ssl.h"
--+
--+	    if [ -f $OPENSSL/ms/do_ms.bat ]; then
--+		# before OpenSSL 1.1.0
--+		CORE_LIBS="$CORE_LIBS $OPENSSL/openssl/lib/ssleay32.lib"
--+		CORE_LIBS="$CORE_LIBS $OPENSSL/openssl/lib/libeay32.lib"
--+	    else
--+		# OpenSSL 1.1.0+
--+		CORE_LIBS="$CORE_LIBS $OPENSSL/openssl/lib/libssl.lib"
--+		CORE_LIBS="$CORE_LIBS $OPENSSL/openssl/lib/libcrypto.lib"
--+	    fi
--+
--+	    # libeay32.lib requires gdi32.lib
--+	    CORE_LIBS="$CORE_LIBS gdi32.lib"
--+	    # OpenSSL 1.0.0 requires crypt32.lib
--+	    CORE_LIBS="$CORE_LIBS crypt32.lib"
--+	;;
--+
--+	*)
--+	    have=NGX_OPENSSL . auto/have
--+	    have=NGX_SSL . auto/have
--+
--+	    CORE_INCS="$CORE_INCS $OPENSSL/.openssl/include"
--+	    CORE_DEPS="$CORE_DEPS $OPENSSL/.openssl/include/openssl/ssl.h"
--+	    CORE_LIBS="$CORE_LIBS $OPENSSL/.openssl/lib/libssl.a"
--+	    CORE_LIBS="$CORE_LIBS $OPENSSL/.openssl/lib/libcrypto.a"
--+	    CORE_LIBS="$CORE_LIBS $NGX_LIBDL"
--+	    CORE_LIBS="$CORE_LIBS $NGX_LIBPTHREAD"
--+
--+	    if [ "$NGX_PLATFORM" = win32 ]; then
--+		CORE_LIBS="$CORE_LIBS -lgdi32 -lcrypt32 -lws2_32"
--+	    fi
--+	;;
--     esac
-- 
-- else
-- 
--     if [ "$NGX_PLATFORM" != win32 ]; then
-- 
---        OPENSSL=NO
--+	OPENSSL=NO
-- 
---        ngx_feature="OpenSSL library"
---        ngx_feature_name="NGX_OPENSSL"
---        ngx_feature_run=no
---        ngx_feature_incs="#include <openssl/ssl.h>"
---        ngx_feature_path=
---        ngx_feature_libs="-lssl -lcrypto $NGX_LIBDL $NGX_LIBPTHREAD"
---        ngx_feature_test="SSL_CTX_set_options(NULL, 0)"
---        . auto/feature
--+	ngx_feature="OpenSSL library"
--+	ngx_feature_name="NGX_OPENSSL"
--+	ngx_feature_run=no
--+	ngx_feature_incs="#include <openssl/ssl.h>"
--+	ngx_feature_path=
--+	ngx_feature_path="$(${PKG_CONFIG:=pkg-config} --cflags-only-I openssl|
--+			    sed -re 's/(^|\s)-I\s*(\S+)/\1\2/g')"
--+	ngx_feature_libs="$(${PKG_CONFIG:=pkg-config} --libs openssl)"
--+	ngx_feature_test="SSL_CTX_set_options(NULL, 0)"
--+	. auto/feature
-- 
---        if [ $ngx_found = no ]; then
--+	if [ $ngx_found = no ]; then
-- 
---            # FreeBSD port
--+	    # FreeBSD port
-- 
---            ngx_feature="OpenSSL library in /usr/local/"
---            ngx_feature_path="/usr/local/include"
--+	    ngx_feature="OpenSSL library in /usr/local/"
--+	    ngx_feature_path="/usr/local/include"
-- 
---            if [ $NGX_RPATH = YES ]; then
---                ngx_feature_libs="-R/usr/local/lib -L/usr/local/lib -lssl -lcrypto"
---            else
---                ngx_feature_libs="-L/usr/local/lib -lssl -lcrypto"
---            fi
--+	    if [ $NGX_RPATH = YES ]; then
--+		ngx_feature_libs="-R/usr/local/lib -L/usr/local/lib -lssl -lcrypto"
--+	    else
--+		ngx_feature_libs="-L/usr/local/lib -lssl -lcrypto"
--+	    fi
-- 
---            ngx_feature_libs="$ngx_feature_libs $NGX_LIBDL $NGX_LIBPTHREAD"
--+	    ngx_feature_libs="$ngx_feature_libs $NGX_LIBDL $NGX_LIBPTHREAD"
-- 
---            . auto/feature
---        fi
--+	    . auto/feature
--+	fi
-- 
---        if [ $ngx_found = no ]; then
--+	if [ $ngx_found = no ]; then
-- 
---            # NetBSD port
--+	    # NetBSD port
-- 
---            ngx_feature="OpenSSL library in /usr/pkg/"
---            ngx_feature_path="/usr/pkg/include"
--+	    ngx_feature="OpenSSL library in /usr/pkg/"
--+	    ngx_feature_path="/usr/pkg/include"
-- 
---            if [ $NGX_RPATH = YES ]; then
---                ngx_feature_libs="-R/usr/pkg/lib -L/usr/pkg/lib -lssl -lcrypto"
---            else
---                ngx_feature_libs="-L/usr/pkg/lib -lssl -lcrypto"
---            fi
--+	    if [ $NGX_RPATH = YES ]; then
--+		ngx_feature_libs="-R/usr/pkg/lib -L/usr/pkg/lib -lssl -lcrypto"
--+	    else
--+		ngx_feature_libs="-L/usr/pkg/lib -lssl -lcrypto"
--+	    fi
-- 
---            ngx_feature_libs="$ngx_feature_libs $NGX_LIBDL $NGX_LIBPTHREAD"
--+	    ngx_feature_libs="$ngx_feature_libs $NGX_LIBDL $NGX_LIBPTHREAD"
-- 
---            . auto/feature
---        fi
--+	    . auto/feature
--+	fi
-- 
---        if [ $ngx_found = no ]; then
--+	if [ $ngx_found = no ]; then
-- 
---            # MacPorts
--+	    # MacPorts
-- 
---            ngx_feature="OpenSSL library in /opt/local/"
---            ngx_feature_path="/opt/local/include"
--+	    ngx_feature="OpenSSL library in /opt/local/"
--+	    ngx_feature_path="/opt/local/include"
-- 
---            if [ $NGX_RPATH = YES ]; then
---                ngx_feature_libs="-R/opt/local/lib -L/opt/local/lib -lssl -lcrypto"
---            else
---                ngx_feature_libs="-L/opt/local/lib -lssl -lcrypto"
---            fi
--+	    if [ $NGX_RPATH = YES ]; then
--+		ngx_feature_libs="-R/opt/local/lib -L/opt/local/lib -lssl -lcrypto"
--+	    else
--+		ngx_feature_libs="-L/opt/local/lib -lssl -lcrypto"
--+	    fi
-- 
---            ngx_feature_libs="$ngx_feature_libs $NGX_LIBDL $NGX_LIBPTHREAD"
--+	    ngx_feature_libs="$ngx_feature_libs $NGX_LIBDL $NGX_LIBPTHREAD"
-- 
---            . auto/feature
---        fi
--+	    . auto/feature
--+	fi
-- 
---        if [ $ngx_found = yes ]; then
---            have=NGX_SSL . auto/have
---            CORE_INCS="$CORE_INCS $ngx_feature_path"
---            CORE_LIBS="$CORE_LIBS $ngx_feature_libs"
---            OPENSSL=YES
---        fi
--+	if [ $ngx_found = yes ]; then
--+	    have=NGX_SSL . auto/have
--+	    CORE_INCS="$CORE_INCS $ngx_feature_path"
--+	    CORE_LIBS="$CORE_LIBS $ngx_feature_libs"
--+	    OPENSSL=YES
--+	fi
--     fi
-- 
--     if [ $OPENSSL != YES ]; then
--@@ -136,7 +137,7 @@ into the system, or build the OpenSSL library statically from the source
-- with nginx by using --with-openssl=<path> option.
-- 
-- END
---        exit 1
--+	exit 1
--     fi
-- 
-- fi
---- 
--2.17.1
--
-diff --git a/package/nginx/0008-src-os-unix-ngx_linux_config.h-only-include-dlfcn.h-.patch b/package/nginx/0007-src-os-unix-ngx_linux_config.h-only-include-dlfcn.h-.patch
-similarity index 100%
-rename from package/nginx/0008-src-os-unix-ngx_linux_config.h-only-include-dlfcn.h-.patch
-rename to package/nginx/0007-src-os-unix-ngx_linux_config.h-only-include-dlfcn.h-.patch
-diff --git a/package/nginx/0010-Allow-forcing-of-endianness-for-cross-compilation.patch b/package/nginx/0008-Allow-forcing-of-endianness-for-cross-compilation.patch
-similarity index 100%
-rename from package/nginx/0010-Allow-forcing-of-endianness-for-cross-compilation.patch
-rename to package/nginx/0008-Allow-forcing-of-endianness-for-cross-compilation.patch
-diff --git a/package/nginx/0009-auto-os-linux-fix-build-with-libxcrypt.patch b/package/nginx/0009-auto-os-linux-fix-build-with-libxcrypt.patch
-deleted file mode 100644
-index 8b368d946f..0000000000
---- a/package/nginx/0009-auto-os-linux-fix-build-with-libxcrypt.patch
-+++ /dev/null
-@@ -1,38 +0,0 @@
--From 79f1fe5251afc4e22a138b0c8f44fc9c94093b8b Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Fri, 2 Apr 2021 09:18:26 +0200
--Subject: [PATCH] auto/os/linux: fix build with libxcrypt
--
--If crypt_r is found in libcrypt, add -lcrypt to CORE_LIBS to avoid the
--following build failure with libxcrypt:
--
--objs/ngx_modules.o \
---lpcre -L/home/giuliobenetti/autobuild/run/instance-3/output-1/host/bin/../xtensa-buildroot-linux-uclibc/sysroot/usr/lib -lssl -lcrypto -L/home/giuliobenetti/autobuild/run/instance-3/output-1/host/bin/../xtensa-buildroot-linux-uclibc/sysroot/usr/lib -lxslt -lxml2 -lGeoIP \
---Wl,-E
--/home/giuliobenetti/autobuild/run/instance-3/output-1/host/lib/gcc/xtensa-buildroot-linux-uclibc/9.3.0/../../../../xtensa-buildroot-linux-uclibc/bin/ld: objs/src/os/unix/ngx_user.o:/home/giuliobenetti/autobuild/run/instance-3/output-1/build/nginx-1.18.0/src/os/unix/ngx_user.c:18: undefined reference to `crypt_r'
--
--Fixes:
-- - http://autobuild.buildroot.org/results/79a51b0d348e756517b5c9ce815a67f5c657e7e6
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- auto/os/linux | 3 +++
-- 1 file changed, 3 insertions(+)
--
--diff --git a/auto/os/linux b/auto/os/linux
--index 5e280eca..04682812 100644
----- a/auto/os/linux
--+++ b/auto/os/linux
--@@ -232,6 +232,9 @@ ngx_feature_test="struct crypt_data  cd;
--                   crypt_r(\"key\", \"salt\", &cd);"
-- . auto/feature
-- 
--+if [ $ngx_found = yes ]; then
--+    CORE_LIBS="$CORE_LIBS $ngx_feature_libs"
--+fi
-- 
-- ngx_include="sys/vfs.h";     . auto/include
-- 
---- 
--2.30.2
--
-diff --git a/package/nginx/0011-Fix-compile-error-in-configure-script.patch b/package/nginx/0011-Fix-compile-error-in-configure-script.patch
-deleted file mode 100644
-index 672162759e..0000000000
---- a/package/nginx/0011-Fix-compile-error-in-configure-script.patch
-+++ /dev/null
-@@ -1,33 +0,0 @@
--From e1bcac837f6aeabc4ddece06ecbcf2bcca8dd651 Mon Sep 17 00:00:00 2001
--From: Edgar Bonet <bonet@grenoble.cnrs.fr>
--Date: Thu, 16 May 2024 11:15:10 +0200
--Subject: [PATCH] Configure: fixed building libatomic test.
--
--Using "long *" instead of "AO_t *" leads either to -Wincompatible-pointer-types
--or -Wpointer-sign warnings, depending on whether long and size_t are compatible
--types (e.g., ILP32 versus LP64 data models).  Notably, -Wpointer-sign warnings
--are enabled by default in Clang only, and -Wincompatible-pointer-types is an
--error starting from GCC 14.
--
--Signed-off-by: Edgar Bonet <bonet@grenoble.cnrs.fr>
--Upstream: https://hg.nginx.org/nginx/rev/f58b6f636238
-----
-- auto/lib/libatomic/conf | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/auto/lib/libatomic/conf b/auto/lib/libatomic/conf
--index d1e484a..0f12b9c 100644
----- a/auto/lib/libatomic/conf
--+++ b/auto/lib/libatomic/conf
--@@ -20,7 +20,7 @@ else
--                       #include <atomic_ops.h>"
--     ngx_feature_path=
--     ngx_feature_libs="-latomic_ops"
---    ngx_feature_test="long  n = 0;
--+    ngx_feature_test="AO_t  n = 0;
--                       if (!AO_compare_and_swap(&n, 0, 1))
--                           return 1;
--                       if (AO_fetch_and_add(&n, 1) != 1)
---- 
--2.34.1
--
-diff --git a/package/nginx/nginx.hash b/package/nginx/nginx.hash
-index 24bc588d85..6245a20304 100644
---- a/package/nginx/nginx.hash
-+++ b/package/nginx/nginx.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--sha256  77a2541637b92a621e3ee76776c8b7b40cf6d707e69ba53a940283e30ff2f55d  nginx-1.24.0.tar.gz
-+sha256  f9187468ff2eb159260bfd53867c25ff8e334726237acf227b9e870e53d3e36b  nginx-1.26.1.tar.gz
- # License files, locally calculated
- sha256  ececed0b0e7243a4766cbc62b26df4bd3513b41de3a07425da1679c836d06320  LICENSE
-diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
-index 7bd2173b48..e63acc7b16 100644
---- a/package/nginx/nginx.mk
-+++ b/package/nginx/nginx.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--NGINX_VERSION = 1.24.0
-+NGINX_VERSION = 1.26.1
- NGINX_SITE = https://nginx.org/download
- NGINX_LICENSE = BSD-2-Clause
- NGINX_LICENSE_FILES = LICENSE
--- 
-2.39.2
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABEDAB0WIQRao7wzT9fjNp58d7KRxVnb5MkSOwUCZrDRdAAKCRCRxVnb5MkS
+O2j4AJ43WD9vNx4iKo72k6V9Nj6scKEdTQCfQpeeaazsg2XbY6i/LfR8S6SmDUU=
+=IM9f
+-----END PGP SIGNATURE-----
+
+--YkJkcpSni+sbdJWB--
+
+--===============1553402883398390185==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1553402883398390185==--
