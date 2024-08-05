@@ -4,49 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 987C7C3DA4A
-	for <buildroot@archiver.kernel.org>; Mon,  5 Aug 2024 20:40:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0C260C3DA7F
+	for <buildroot@archiver.kernel.org>; Mon,  5 Aug 2024 20:40:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5AF9680A95;
-	Mon,  5 Aug 2024 20:40:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9565C80BDD;
+	Mon,  5 Aug 2024 20:40:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jTOC2lSBKkSB; Mon,  5 Aug 2024 20:40:52 +0000 (UTC)
+ id rjaFuW0FS5pM; Mon,  5 Aug 2024 20:40:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5BEA180ACB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1FC7C80897
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5BEA180ACB;
-	Mon,  5 Aug 2024 20:40:52 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A01281BF335
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1FC7C80897;
+	Mon,  5 Aug 2024 20:40:55 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D5CAD1BF335
  for <buildroot@lists.busybox.net>; Mon,  5 Aug 2024 20:40:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9B31C80A95
+ by smtp3.osuosl.org (Postfix) with ESMTP id C3CC960730
  for <buildroot@lists.busybox.net>; Mon,  5 Aug 2024 20:40:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SHQOfVRNNCbj for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id GkasyjGff4fm for <buildroot@lists.busybox.net>;
  Mon,  5 Aug 2024 20:40:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C1E3880897
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D233860621
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id C1E3880897
+ by smtp3.osuosl.org (Postfix) with ESMTP id D233860621
  for <buildroot@buildroot.org>; Mon,  5 Aug 2024 20:40:50 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B6CE684527; Mon,  5 Aug 2024 20:40:50 +0000 (UTC)
+ id C979B84529; Mon,  5 Aug 2024 20:40:50 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 5 Aug 2024 15:49:17 +0200
+Date: Mon, 5 Aug 2024 15:49:21 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9ef47358431814d752f1005f99415f3f3e205fe6
-X-Git-Newrev: f6a975f24e044ffdb717a96537395cc40c43aa70
+X-Git-Oldrev: f6a975f24e044ffdb717a96537395cc40c43aa70
+X-Git-Newrev: 61ad5516485a1b4518c4997c9a146a5faa96e6d2
 X-Patchwork-Hint: ignore
-Message-Id: <20240805204050.B6CE684527@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/fluent-bit: fix SSP compile issues
- with uClibc-ng
+Message-Id: <20240805204050.C979B84529@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/openldap: update to 2.5.18
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,33 +65,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f6a975f24e044ffdb717a96537395cc40c43aa70
+commit: https://git.buildroot.net/buildroot/commit/?id=61ad5516485a1b4518c4997c9a146a5faa96e6d2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Let's disable Security flags for the Buildsystem and
-let it handled by Buildroot itself.
-
-Fixes:
- - http://autobuild.buildroot.net/results/c9e/c9ed27a51a68429b2ed2d8eebb1afc919ecbead1/
+See here for a Changelog:
+https://openldap.org/software/release/changes_lts.html
 
 Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/fluent-bit/fluent-bit.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/openldap/openldap.hash | 4 ++--
+ package/openldap/openldap.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/fluent-bit/fluent-bit.mk b/package/fluent-bit/fluent-bit.mk
-index 5463682e45..10e639a3d5 100644
---- a/package/fluent-bit/fluent-bit.mk
-+++ b/package/fluent-bit/fluent-bit.mk
-@@ -15,6 +15,7 @@ FLUENT_BIT_DEPENDENCIES = host-bison host-flex libyaml openssl
- FLUENT_BIT_CONF_OPTS += \
- 	-DFLB_DEBUG=No \
- 	-DFLB_RELEASE=Yes \
-+	-DFLB_SECURITY=No \
- 	-DFLB_EXAMPLES=No \
- 	-DFLB_CHUNK_TRACE=No \
- 	-DFLB_PREFER_SYSTEM_LIBS=Yes \
+diff --git a/package/openldap/openldap.hash b/package/openldap/openldap.hash
+index 1383c6aef8..32bd83f349 100644
+--- a/package/openldap/openldap.hash
++++ b/package/openldap/openldap.hash
+@@ -1,5 +1,5 @@
+ # Verified by locally checking against the SHA3-512 hash available in
+-# https://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.5.16.sha3-512
++# https://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.5.18.sha3-512
+ # Locally computed
+-sha256  546ba591822e8bb0e467d40c4d4a30f89d937c3a507fe83a578f582f6a211327  openldap-2.5.16.tgz
++sha256  2670ae43d8d99dd6b1ba182101d982350d613d09c098eb1607ea6b36e6b51d3e  openldap-2.5.18.tgz
+ sha256  310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569  LICENSE
+diff --git a/package/openldap/openldap.mk b/package/openldap/openldap.mk
+index 9cebff99dc..68cfb89c41 100644
+--- a/package/openldap/openldap.mk
++++ b/package/openldap/openldap.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-OPENLDAP_VERSION = 2.5.16
++OPENLDAP_VERSION = 2.5.18
+ OPENLDAP_SOURCE = openldap-$(OPENLDAP_VERSION).tgz
+ OPENLDAP_SITE = https://www.openldap.org/software/download/OpenLDAP/openldap-release
+ OPENLDAP_LICENSE = OpenLDAP Public License
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
