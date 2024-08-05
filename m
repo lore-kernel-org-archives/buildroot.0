@@ -4,73 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 331C4C3DA7F
-	for <buildroot@archiver.kernel.org>; Mon,  5 Aug 2024 22:22:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31F7AC3DA4A
+	for <buildroot@archiver.kernel.org>; Mon,  5 Aug 2024 22:40:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E717440182;
-	Mon,  5 Aug 2024 22:22:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C26644018E;
+	Mon,  5 Aug 2024 22:39:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id D0oCRdLc-D35; Mon,  5 Aug 2024 22:22:00 +0000 (UTC)
+ id kz4D90xWygIg; Mon,  5 Aug 2024 22:39:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A865940196
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9665740200
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A865940196;
-	Mon,  5 Aug 2024 22:22:00 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B3D481BF313
- for <buildroot@lists.busybox.net>; Mon,  5 Aug 2024 22:21:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9665740200;
+	Mon,  5 Aug 2024 22:39:58 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 4E6291BF313
+ for <buildroot@lists.busybox.net>; Mon,  5 Aug 2024 22:39:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9FBB580F8B
- for <buildroot@lists.busybox.net>; Mon,  5 Aug 2024 22:21:59 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3AC5E405BA
+ for <buildroot@lists.busybox.net>; Mon,  5 Aug 2024 22:39:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Cwc19_taFZa2 for <buildroot@lists.busybox.net>;
- Mon,  5 Aug 2024 22:21:58 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.198;
- helo=relay6-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 538B780F56
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 538B780F56
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [217.70.183.198])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 538B780F56
- for <buildroot@buildroot.org>; Mon,  5 Aug 2024 22:21:57 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 4B530C0004;
- Mon,  5 Aug 2024 22:21:55 +0000 (UTC)
-Date: Tue, 6 Aug 2024 00:21:54 +0200
-To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Message-ID: <20240806002154.2498f917@windsurf>
-In-Reply-To: <20240510214957.7961fff9@windsurf>
-References: <20240324185659.1777379-1-bernd@kuhls.net>
- <20240510214957.7961fff9@windsurf>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ExVhCkoAHVZf for <buildroot@lists.busybox.net>;
+ Mon,  5 Aug 2024 22:39:56 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=178.60.130.6;
+ helo=fanzine2.igalia.com; envelope-from=aperez@igalia.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org B64E1402F3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B64E1402F3
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B64E1402F3
+ for <buildroot@buildroot.org>; Mon,  5 Aug 2024 22:39:50 +0000 (UTC)
+Received: from 91-153-34-210.elisa-laajakaista.fi ([91.153.34.210] helo=kodama)
+ by fanzine2.igalia.com with esmtpsa 
+ (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+ id 1sb6Ml-008JAb-OD
+ for <buildroot@buildroot.org>; Tue, 06 Aug 2024 00:39:47 +0200
+Received: from localhost (kodama [local])
+ by kodama (OpenSMTPD) with ESMTPA id ec3480fa
+ for <buildroot@buildroot.org>; Mon, 5 Aug 2024 22:39:46 +0000 (UTC)
+From: Adrian Perez de Castro <aperez@igalia.com>
+To: buildroot@buildroot.org
+Date: Tue,  6 Aug 2024 01:39:44 +0300
+Message-ID: <20240805223946.116873-1-aperez@igalia.com>
+X-Mailer: git-send-email 2.46.0
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1722896515;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=54kxUAOrno402jFRTEjHkU/1P2m/cXeaFdXz9COcQpY=;
- b=K+MGWuDqO3kaxl1sZGqtMUYb3LeDUC0N2bTr8LsZ4N7H6oYaA0h7DS04NNkCObDNRKeoXU
- xD8ScIXMASq7SgYK7f1oFgG01HiIoGAa4+0P6W+EHdoQ3LYT+QkXqa3MSjj0Hf9xTBLXyw
- 4h+N/fnWoVZpU9gV8+e17n/NtiZibUvVu444HaJuPdveFkjYdlKvJ/gcH6nReqO0+OrOxM
- yc+yXzJeYrRpDNXuuZksm73cXrNlp5XAQXH7bXFi3k1hCsZBE8dyM7nHNep1AEg445AV7z
- LVfPOttnTa4vtDIuzHOOERYTfE+SG3WmsR1tFeorJ5yrkQkEW650U57w2z+Heg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
+ c=relaxed/relaxed; d=igalia.com; 
+ s=20170329; h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:
+ To:From:Sender:Reply-To:Cc:Content-Type:Content-ID:Content-Description:
+ Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+ In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+ List-Post:List-Owner:List-Archive;
+ bh=c3XztxeyZNBMTHqUkEbRZJj8FJUKEMuRj1FiqUcstcY=; b=QbdKFKSP/Va2be2OJt17c7WAEa
+ HtBns1p21+evLjA3ZFEAyjq2OnLmj0eewLW/YoumW7rknrEjVtgcgJ3ko8mhlcfnNYT50EWLzMrqF
+ RwoitDV4xCT9EtOTsBwswlpMzg6bQuX2yQAR0NPTnNFD8XJFhe4Rr2m8Y/aUuzJSjvtzJgHfpezP8
+ X/BBx3DHkClXhp3u/0ZUS3VAXIoF68y+ASaqeyWqnGBiDD3mw/VU2tnqXAu53kvsNxHc3ALI+Hfy6
+ 9QC3J2dpOyubrN4nXJt8uvrYy1FgqerKYJgMY1lx6ljI9NPH+Qjop+gF6Y6EDEXmYzOsjjxvFIIuU
+ 55/SEtTQ==;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=igalia.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=K+MGWuDq
-Subject: Re: [Buildroot] [PATCH 1/1] package/mjpg-streamer: fix undefined
- symbol error
+ unprotected) header.d=igalia.com header.i=@igalia.com header.a=rsa-sha256
+ header.s=20170329 header.b=QbdKFKSP
+Subject: [Buildroot] [PATCH 1/1] DEVELOPERS: assign Adrian Perez for sysprof
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,68 +82,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Bernd Kuhls <bernd@kuhls.net>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Bernd,
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+---
+ DEVELOPERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Fri, 10 May 2024 21:49:57 +0200
-Thomas Petazzoni via buildroot <buildroot@buildroot.org> wrote:
-
-> Thanks for the patch. Are you sure this is the right fix?
-> 
-> Indeed, the way I understand it is that there is a main executable
-> (mjpg-streamer), which loads using dlopen() a number of plugins. This
-> symbol resolutions_help is already provided by the mjpg-streamer main
-> executable itself, so why can't the dlopen()'ed plugin use it? Here
-> you're basically duplicating this symbol into the plugin itself. Is
-> that the right way to fix this issue? I am not sure 100% clear on what
-> are the rules that allow a dlopen() library to use the symbols of the
-> "thing" that dlopen()s the plugin, but it seems like it is possible.
-> 
-> Also, there is another plugin, input_opencv, which uses the exact same
-> symbol, so it would also need to be fixed.
-> 
-> Opinion from upstream here would be greatly appreciated to see how they
-> chose to design their code base.
-
-Since I had no feedback from you on this question, I had a deeper look,
-and indeed your proposed fix is incorrect: the plugin should really
-call into the resolutions_help() function of the mjpg_streamer
-executable.
-
-It doesn't work because the resolutions_help() symbol is not explicitly
-exported *and* we are stripping our executables.
-
-An easy solution is to export all symbols of the main binary, which can
-be achieved by adding:
-
-set_property(TARGET mjpg_streamer PROPERTY ENABLE_EXPORTS ON)
-
-into the CMakeLists.txt file. A better solution would be to only export
-those symbols which are needed by the plugins, but obviously it
-requires a bit more work.
-
-I couldn't test at runtime, but before my patch, I can clearly see that
-the stripped mjpg_streamer no longer has any symbol table containing
-resolutions_help(), while after my patch it contains a symbol table
-with this symbol.
-
-Could you give it a try and report back?
-
-Thanks a lot!
-
-Thomas
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 8e46beff00..76f7fc5ed6 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -61,6 +61,7 @@ F:	package/libepoxy/
+ F:	package/libmanette/
+ F:	package/libpsl/
+ F:	package/libwpe/
++F:	package/sysprof/
+ F:	package/webkitgtk/
+ F:	package/wlroots/
+ F:	package/woff2/
+@@ -3295,7 +3296,6 @@ N:	Will Newton <will.newton@gmail.com>
+ F:	package/enchant/
+ F:	package/erlang/
+ F:	package/libmicrohttpd/
+-F:	package/sysprof/
+ F:	package/time/
+ 
+ N:	Will Wagner <will_wagner@carallon.com>
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+2.46.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
