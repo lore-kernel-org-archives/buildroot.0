@@ -4,93 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A26A6C3DA4A
-	for <buildroot@archiver.kernel.org>; Mon,  5 Aug 2024 22:16:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 331C4C3DA7F
+	for <buildroot@archiver.kernel.org>; Mon,  5 Aug 2024 22:22:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 59B77401E8;
-	Mon,  5 Aug 2024 22:16:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E717440182;
+	Mon,  5 Aug 2024 22:22:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sKji4KCZcpP0; Mon,  5 Aug 2024 22:16:15 +0000 (UTC)
+ id D0oCRdLc-D35; Mon,  5 Aug 2024 22:22:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1FE714025A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A865940196
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1FE714025A;
-	Mon,  5 Aug 2024 22:16:15 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4607D1BF313
- for <buildroot@lists.busybox.net>; Mon,  5 Aug 2024 22:16:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A865940196;
+	Mon,  5 Aug 2024 22:22:00 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B3D481BF313
+ for <buildroot@lists.busybox.net>; Mon,  5 Aug 2024 22:21:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 346E06078C
- for <buildroot@lists.busybox.net>; Mon,  5 Aug 2024 22:16:13 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9FBB580F8B
+ for <buildroot@lists.busybox.net>; Mon,  5 Aug 2024 22:21:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Hu0WhuCh3Sci for <buildroot@lists.busybox.net>;
- Mon,  5 Aug 2024 22:16:12 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.21;
- helo=mout.gmx.net; envelope-from=j.neuschaefer@gmx.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org EBB6860774
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EBB6860774
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
- by smtp3.osuosl.org (Postfix) with ESMTPS id EBB6860774
- for <buildroot@buildroot.org>; Mon,  5 Aug 2024 22:16:10 +0000 (UTC)
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from probook ([87.78.127.77]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MhlKy-1rxea831RQ-00nF5e; Tue, 06
- Aug 2024 00:16:08 +0200
-Date: Tue, 06 Aug 2024 00:16:05 +0200
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Cwc19_taFZa2 for <buildroot@lists.busybox.net>;
+ Mon,  5 Aug 2024 22:21:58 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.198;
+ helo=relay6-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 538B780F56
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 538B780F56
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [217.70.183.198])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 538B780F56
+ for <buildroot@buildroot.org>; Mon,  5 Aug 2024 22:21:57 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 4B530C0004;
+ Mon,  5 Aug 2024 22:21:55 +0000 (UTC)
+Date: Tue, 6 Aug 2024 00:21:54 +0200
+To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Message-ID: <20240806002154.2498f917@windsurf>
+In-Reply-To: <20240510214957.7961fff9@windsurf>
+References: <20240324185659.1777379-1-bernd@kuhls.net>
+ <20240510214957.7961fff9@windsurf>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Message-Id: <20240806-tipidee-fixes-v1-1-7f50779b0484@gmx.net>
-To: buildroot@buildroot.org
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1722896168; l=881;
- i=j.neuschaefer@gmx.net; s=20240329; h=from:subject:message-id;
- bh=jSukim2gvVerP89am0SSO52quyqlNX7saIVPfrULXFs=;
- b=2/fQuDuK0pfx1dSKGSkjS2oQdhOF6n4nGQdcmy/vSqtlHI/OGzS3+EgTpXx8EwRDoNLjxuITU
- p4Cc9JRKO4BAsNNkzQcVdUNIJq96C/fDd09XQUXAWLhWiP6xcTb4KeJ
-X-Developer-Key: i=j.neuschaefer@gmx.net; a=ed25519;
- pk=NIe0bK42wNaX/C4bi6ezm7NJK0IQE+8MKBm7igFMIS4=
-X-Provags-ID: V03:K1:CLnccN9lmfNl/F33kHLZpCNiG8s+uZAeiaQhI9KvncvZfv1TwcD
- z6AgTS7hdkv6SxJb+Fkxdl4bl6HFogIiBOcr9hhC4IT4c4HTQYkP6DEFRyxGOwPX3daspch
- YA/WeXHZmyj1KAXIH65vOKVA2lmgm9lZxYw8VayBYS4gnnmTcbfhpWf0DAej4rqp3Y8ofwj
- 5otMcaS2PPyOQujCqFL/w==
-UI-OutboundReport: notjunk:1;M01:P0:axh1WhTiBL4=;IwLllC+7igmk4iUczRtqw0gTqJ4
- sDPw0KKa+u30HThnUtEEY/WXPTugTIZYAlLRcjfdkgf0Jy1zdlGFih0uRLsgxeTS2l+cgcRLI
- TqEepY96GELgQrpNl9TIiXLJHQ1l67XJsTY+X2g4bVklnsCQaSZsM22HbnWDjdysrujdvkopP
- ugiP/jqs7hU8ubOtsh+LcxjeKuHR+mL2Z7E8I+WtqhjtP80SuBNPak7uiJzY9GOkAvM2dGNaD
- zTmooS9IKHOemeoAjTSep/lpCqsk5PDB0vX5QOJVBn0EPlOaS+9Ec9KHlHsInEKWRHl1WRy67
- N52WZRvPWTACyTZSy2Sb0puGwCChTpdYlEgQM3lMf8Os0PvVF2wR5qs8U1OAgNghRdOdDu50z
- Zw4AAK1qON4EwP5jtXAOGAzQ5EixkK99E89m6spbWMVfke/31fit5xbd6MubT+M3RRXIKIggO
- HmiUEcR/zFANX6x4xm1siDRMTzEkFkRf30M/qb9QcAS1ycoJ8XQ1N1jpH0KVfFoWZNUH+W613
- VCvDoaSrWk65tzLrj0fCgUs7WOFkdeTZPbPxf7bERX42PdDUEtSBft9UPjIohUrGUffGTq3AV
- 1PawCgzkuwC5p+cEUiboAHQaH+Q9LYG87Ji4jInPsmr2L+GK0wDLgjjAgtff3hs7OwdyZYMHz
- 5VfUFc/jGkFtvmBnEqftyroDahMkdYfDMgPC+BTFI0fGnlDEbfJYSDPLyNYOsLzDeEfiAAB4d
- Onje5IcU/hNGiW8Yv3aYJWu7fQpTT0UbKiF3wFTHKXXXozYSpJ/ips3vQQdh+KB62ue4vsUSW
- 9gk1JHkfE3fp30ErpqI8plOA==
+X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmx.net; 
- s=s31663417; t=1722896168; x=1723500968; i=j.neuschaefer@gmx.net;
- bh=O5IMCkgVr+1LG5K+7mj07B/VtjasdAW44Ga6BlBSM5s=;
- h=X-UI-Sender-Class:From:Date:Subject:MIME-Version:Content-Type:
- Content-Transfer-Encoding:Message-Id:To:Cc:cc:
- content-transfer-encoding:content-type:date:from:message-id:
- mime-version:reply-to:subject:to;
- b=bWBLdhRx01t81LN8UkZ9x9nD2zj0VTtvozaeEKpn+JSSscLtQj4wW67IIpqlyeZL
- I0rrKqb0qu//R5fXjYdzyi9T94Lmc5abiLes6tZndLIbToDoNS14kwRN9TIxstR0A
- aIHzDRtGABgMyCpj8XuW7UhP5NsLZvv+xAuvTCe9l+BFiW5StgZC40qCuMRcXZj2r
- d83yLEMlV1hHvS7KKp+/9FfBpYdcPOprQCxVaqACE699zI3zZbxaYzl3vULT7yRFW
- iFLC6EvUX13b0GDhVY8GWgR09bcKlshhIftnZGQwzSP/qnr959ZJTkN+d3SwO5zk3
- fB3akG97aVy+sc9Wwg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=gmx.net
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmx.net header.i=j.neuschaefer@gmx.net
- header.a=rsa-sha256 header.s=s31663417 header.b=bWBLdhRx
-Subject: [Buildroot] [PATCH RESEND] package/tipidee: Load config from /etc,
- not /usr/etc
+ d=bootlin.com; s=gm1; t=1722896515;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=54kxUAOrno402jFRTEjHkU/1P2m/cXeaFdXz9COcQpY=;
+ b=K+MGWuDqO3kaxl1sZGqtMUYb3LeDUC0N2bTr8LsZ4N7H6oYaA0h7DS04NNkCObDNRKeoXU
+ xD8ScIXMASq7SgYK7f1oFgG01HiIoGAa4+0P6W+EHdoQ3LYT+QkXqa3MSjj0Hf9xTBLXyw
+ 4h+N/fnWoVZpU9gV8+e17n/NtiZibUvVu444HaJuPdveFkjYdlKvJ/gcH6nReqO0+OrOxM
+ yc+yXzJeYrRpDNXuuZksm73cXrNlp5XAQXH7bXFi3k1hCsZBE8dyM7nHNep1AEg445AV7z
+ LVfPOttnTa4vtDIuzHOOERYTfE+SG3WmsR1tFeorJ5yrkQkEW650U57w2z+Heg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=K+MGWuDq
+Subject: Re: [Buildroot] [PATCH 1/1] package/mjpg-streamer: fix undefined
+ symbol error
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,29 +82,69 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: =?utf-8?q?J=2E_Neusch=C3=A4fer_via_buildroot?= <buildroot@buildroot.org>
-Reply-To: =?utf-8?q?J=2E_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-Cc: =?utf-8?q?J=2E_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Bernd Kuhls <bernd@kuhls.net>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-LS1wcmVmaXggaW5mbHVlbmNlcyB0aGUgZGVmYXVsdCBvZiAtLXN5c2NvbmZkaXIsIHNvIHdlIG5l
-ZWQgdG8gc3BlY2lmeQotLXN5c2NvbmZkaXI9L2V0YyBleHBsaWNpdGx5LgoKRml4ZXM6IDE3ZGVh
-ZjYwZjYgKCJ0aXBpZGVlOiBuZXcgcGFja2FnZSIpClNpZ25lZC1vZmYtYnk6IEouIE5ldXNjaMOk
-ZmVyIDxqLm5ldXNjaGFlZmVyQGdteC5uZXQ+Ci0tLQogcGFja2FnZS90aXBpZGVlL3RpcGlkZWUu
-bWsgfCAxICsKIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKQoKZGlmZiAtLWdpdCBhL3Bh
-Y2thZ2UvdGlwaWRlZS90aXBpZGVlLm1rIGIvcGFja2FnZS90aXBpZGVlL3RpcGlkZWUubWsKaW5k
-ZXggMWUxNTc4MmFhNC4uNzQ4YzI5YzRmMSAxMDA2NDQKLS0tIGEvcGFja2FnZS90aXBpZGVlL3Rp
-cGlkZWUubWsKKysrIGIvcGFja2FnZS90aXBpZGVlL3RpcGlkZWUubWsKQEAgLTEyLDYgKzEyLDcg
-QEAgVElQSURFRV9ERVBFTkRFTkNJRVMgPSBza2FsaWJzCgogVElQSURFRV9DT05GX09QVFMgPSBc
-CiAJLS1wcmVmaXg9L3VzciBcCisJLS1zeXNjb25mZGlyPS9ldGMgXAogCS0td2l0aC1zeXNkZXBz
-PSQoU1RBR0lOR19ESVIpL2xpYi9za2FsaWJzL3N5c2RlcHMgXAogCS0td2l0aC1pbmNsdWRlPSQo
-U1RBR0lOR19ESVIpL2luY2x1ZGUgXAogCS0td2l0aC1keW5saWI9JChTVEFHSU5HX0RJUikvbGli
-IFwKCi0tLQpiYXNlLWNvbW1pdDogZWI1MTlhZDdjYzcxNjM0N2RiZjBmOTcwN2ZmMjgyYTk3YjIx
-ZjYyMwpjaGFuZ2UtaWQ6IDIwMjQwNzE4LXRpcGlkZWUtZml4ZXMtNTI5OWMzOWNhMmJiCgpCZXN0
-IHJlZ2FyZHMsCi0tCkouIE5ldXNjaMOkZmVyIDxqLm5ldXNjaGFlZmVyQGdteC5uZXQ+CgpfX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFp
-bGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290
-Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+Hello Bernd,
+
+On Fri, 10 May 2024 21:49:57 +0200
+Thomas Petazzoni via buildroot <buildroot@buildroot.org> wrote:
+
+> Thanks for the patch. Are you sure this is the right fix?
+> 
+> Indeed, the way I understand it is that there is a main executable
+> (mjpg-streamer), which loads using dlopen() a number of plugins. This
+> symbol resolutions_help is already provided by the mjpg-streamer main
+> executable itself, so why can't the dlopen()'ed plugin use it? Here
+> you're basically duplicating this symbol into the plugin itself. Is
+> that the right way to fix this issue? I am not sure 100% clear on what
+> are the rules that allow a dlopen() library to use the symbols of the
+> "thing" that dlopen()s the plugin, but it seems like it is possible.
+> 
+> Also, there is another plugin, input_opencv, which uses the exact same
+> symbol, so it would also need to be fixed.
+> 
+> Opinion from upstream here would be greatly appreciated to see how they
+> chose to design their code base.
+
+Since I had no feedback from you on this question, I had a deeper look,
+and indeed your proposed fix is incorrect: the plugin should really
+call into the resolutions_help() function of the mjpg_streamer
+executable.
+
+It doesn't work because the resolutions_help() symbol is not explicitly
+exported *and* we are stripping our executables.
+
+An easy solution is to export all symbols of the main binary, which can
+be achieved by adding:
+
+set_property(TARGET mjpg_streamer PROPERTY ENABLE_EXPORTS ON)
+
+into the CMakeLists.txt file. A better solution would be to only export
+those symbols which are needed by the plugins, but obviously it
+requires a bit more work.
+
+I couldn't test at runtime, but before my patch, I can clearly see that
+the stripped mjpg_streamer no longer has any symbol table containing
+resolutions_help(), while after my patch it contains a symbol table
+with this symbol.
+
+Could you give it a try and report back?
+
+Thanks a lot!
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
