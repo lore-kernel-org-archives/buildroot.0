@@ -4,49 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B94AC3DA7F
-	for <buildroot@archiver.kernel.org>; Mon,  5 Aug 2024 20:41:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22271C3DA7F
+	for <buildroot@archiver.kernel.org>; Mon,  5 Aug 2024 20:41:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E3F0881149;
-	Mon,  5 Aug 2024 20:41:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DC5BE811E4;
+	Mon,  5 Aug 2024 20:41:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xD1PlCRrOTVn; Mon,  5 Aug 2024 20:41:25 +0000 (UTC)
+ id C-5WSIsPnfeP; Mon,  5 Aug 2024 20:41:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7632D811C4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2C465811D2
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7632D811C4;
-	Mon,  5 Aug 2024 20:41:24 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0201B1BF335
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2C465811D2;
+	Mon,  5 Aug 2024 20:41:28 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id D6E411BF335
  for <buildroot@lists.busybox.net>; Mon,  5 Aug 2024 20:40:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A9F7F4023C
+ by smtp2.osuosl.org (Postfix) with ESMTP id ABAA240096
  for <buildroot@lists.busybox.net>; Mon,  5 Aug 2024 20:40:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GsIDRhsu-Zwt for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id uL-M-F2nIyvZ for <buildroot@lists.busybox.net>;
  Mon,  5 Aug 2024 20:40:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9C18D4025F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A687C402C3
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9C18D4025F
+ by smtp2.osuosl.org (Postfix) with ESMTP id A687C402C3
  for <buildroot@buildroot.org>; Mon,  5 Aug 2024 20:40:52 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8677684527; Mon,  5 Aug 2024 20:40:52 +0000 (UTC)
+ id 9F4A284529; Mon,  5 Aug 2024 20:40:52 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 5 Aug 2024 22:33:31 +0200
+Date: Mon, 5 Aug 2024 22:33:37 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0eb09e7d377f30b54b329e20ccf4340d493eabde
-X-Git-Newrev: 279bf93cd2bc6b384e3e0c71c7cfedc32c445dea
+X-Git-Oldrev: 279bf93cd2bc6b384e3e0c71c7cfedc32c445dea
+X-Git-Newrev: f9f2ade9bb207d2481b12a325bba7cee5a3e9cbf
 X-Patchwork-Hint: ignore
-Message-Id: <20240805204052.8677684527@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libopenmpt: security bump to
- version 0.7.9
+Message-Id: <20240805204052.9F4A284529@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/fluidsynth: bump to version 2.3.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,44 +65,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=279bf93cd2bc6b384e3e0c71c7cfedc32c445dea
+commit: https://git.buildroot.net/buildroot/commit/?id=f9f2ade9bb207d2481b12a325bba7cee5a3e9cbf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For release note, see:
-https://lib.openmpt.org/libopenmpt/2024/07/21/security-updates-0.7.9-0.6.18-0.5.32-0.4.44/
-
-Note: this release is flagged as a "security" update from the release
-note. There is no CVE allocated.
+For change log since v2.3.5, see:
+- https://github.com/FluidSynth/fluidsynth/releases/tag/v2.3.6
 
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libopenmpt/libopenmpt.hash | 2 +-
- package/libopenmpt/libopenmpt.mk   | 2 +-
+ package/fluidsynth/fluidsynth.hash | 2 +-
+ package/fluidsynth/fluidsynth.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libopenmpt/libopenmpt.hash b/package/libopenmpt/libopenmpt.hash
-index df0b43096a..cc5519806c 100644
---- a/package/libopenmpt/libopenmpt.hash
-+++ b/package/libopenmpt/libopenmpt.hash
+diff --git a/package/fluidsynth/fluidsynth.hash b/package/fluidsynth/fluidsynth.hash
+index 91d8778cbf..0f54ad254e 100644
+--- a/package/fluidsynth/fluidsynth.hash
++++ b/package/fluidsynth/fluidsynth.hash
 @@ -1,3 +1,3 @@
- # computed locally
--sha256  87778c8046a226c6cbfb114f4c8e3e27c121b7b3dccce5cb7de45899250274cc  libopenmpt-0.7.8+release.autotools.tar.gz
-+sha256  0386e918d75d797e79d5b14edd0847165d8b359e9811ef57652c0a356a2dfcf4  libopenmpt-0.7.9+release.autotools.tar.gz
- sha256  e3d7e76c6b441ddd9fff0a397e7b5e055a11678bd7c3b246a0ce13e352eb15e8  LICENSE
-diff --git a/package/libopenmpt/libopenmpt.mk b/package/libopenmpt/libopenmpt.mk
-index c52f5b04c2..aff67f6935 100644
---- a/package/libopenmpt/libopenmpt.mk
-+++ b/package/libopenmpt/libopenmpt.mk
+ # Locally computed
+-sha256  f89e8e983ecfb4a5b4f5d8c2b9157ed18d15ed2e36246fa782f18abaea550e0d  fluidsynth-2.3.5.tar.gz
++sha256  3340d73286b28fe6e5150fbe12648d4640e86c64c228878b572773bd08cac531  fluidsynth-2.3.6.tar.gz
+ sha256  9b872a8a070b8ad329c4bd380fb1bf0000f564c75023ec8e1e6803f15364b9e9  LICENSE
+diff --git a/package/fluidsynth/fluidsynth.mk b/package/fluidsynth/fluidsynth.mk
+index ef05b6a569..3105162bda 100644
+--- a/package/fluidsynth/fluidsynth.mk
++++ b/package/fluidsynth/fluidsynth.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBOPENMPT_VERSION = 0.7.8
-+LIBOPENMPT_VERSION = 0.7.9
- LIBOPENMPT_SITE = https://lib.openmpt.org/files/libopenmpt/src
- LIBOPENMPT_SOURCE = libopenmpt-$(LIBOPENMPT_VERSION)+release.autotools.tar.gz
- LIBOPENMPT_LICENSE = BSD-3-Clause
+-FLUIDSYNTH_VERSION = 2.3.5
++FLUIDSYNTH_VERSION = 2.3.6
+ FLUIDSYNTH_SITE = $(call github,FluidSynth,fluidsynth,v$(FLUIDSYNTH_VERSION))
+ FLUIDSYNTH_LICENSE = LGPL-2.1+
+ FLUIDSYNTH_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
