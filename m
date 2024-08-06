@@ -4,47 +4,113 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 713B1C49EA1
-	for <buildroot@archiver.kernel.org>; Tue,  6 Aug 2024 13:13:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 887B8C3DA64
+	for <buildroot@archiver.kernel.org>; Tue,  6 Aug 2024 13:22:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id F395E409F6;
-	Tue,  6 Aug 2024 13:13:20 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3F9044045B;
+	Tue,  6 Aug 2024 13:22:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kVuj0dO0DGa5; Tue,  6 Aug 2024 13:13:19 +0000 (UTC)
+ id d2cAR98stpJu; Tue,  6 Aug 2024 13:22:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 49F0C40A10
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B30FC40584
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 49F0C40A10;
-	Tue,  6 Aug 2024 13:13:19 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 82FBC1BF300
- for <buildroot@lists.busybox.net>; Tue,  6 Aug 2024 13:13:16 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B30FC40584;
+	Tue,  6 Aug 2024 13:22:34 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 98C7E1BF300
+ for <buildroot@lists.busybox.net>; Tue,  6 Aug 2024 13:22:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5EA5680F43
- for <buildroot@lists.busybox.net>; Tue,  6 Aug 2024 13:13:14 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 864E840584
+ for <buildroot@lists.busybox.net>; Tue,  6 Aug 2024 13:22:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ghgy3Np4TATM for <buildroot@lists.busybox.net>;
- Tue,  6 Aug 2024 13:13:13 +0000 (UTC)
-Received-SPF: Softfail (mailfrom) identity=mailfrom; client-ip=141.98.10.79;
- helo=busybox.net; envelope-from=buildroot@busybox.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 6F1F18119E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6F1F18119E
-Received: from busybox.net (unknown [141.98.10.79])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6F1F18119E
- for <buildroot@busybox.net>; Tue,  6 Aug 2024 13:13:12 +0000 (UTC)
-From: Email Server <buildroot@busybox.net>
-To: buildroot@busybox.net
-Date: 6 Aug 2024 15:13:10 +0200
-Message-ID: <20240806151310.FCBED5CCBB9BA5FB@busybox.net>
-MIME-Version: 1.0
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=busybox.net
-Subject: [Buildroot] busybox.net ALERT!!: Undeliverable Messages.
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id E5E_QRvtbeCS for <buildroot@lists.busybox.net>;
+ Tue,  6 Aug 2024 13:22:31 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=67.231.152.184;
+ helo=mx0b-00105401.pphosted.com; envelope-from=brandon.maier@collins.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org EDDE94045B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EDDE94045B
+Received: from mx0b-00105401.pphosted.com (mx0b-00105401.pphosted.com
+ [67.231.152.184])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id EDDE94045B
+ for <buildroot@buildroot.org>; Tue,  6 Aug 2024 13:22:30 +0000 (UTC)
+Received: from pps.filterd (m0346902.ppops.net [127.0.0.1])
+ by mx0a-00105401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id
+ 4763chlq012571; Tue, 6 Aug 2024 13:22:26 GMT
+Received: from xusxph009rp050.rtx.com (xusxph009rp050.rtx.com [128.13.125.147])
+ by mx0a-00105401.pphosted.com (PPS) with ESMTPS id 40u5jndkfe-1
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+ Tue, 06 Aug 2024 13:22:25 +0000
+Received: from xusxph005rp020.corp.ray.com ([128.13.121.224])
+ by xusxph009rp050.rtx.com (8.17.1.19/8.17.1.19) with ESMTPS id 476DMOSQ025755
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+ Tue, 6 Aug 2024 13:22:25 GMT
+Received: from crulimr01.rockwellcollins.com
+ (snat-utc-mailhub.rockwellcollins.com [10.172.224.19])
+ by xusxph005rp020.corp.ray.com (8.17.1.19/8.17.1.19) with ESMTPS id
+ 476DMOTJ005703
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+ Tue, 6 Aug 2024 13:22:24 GMT
+X-Received: from localhost (unknown [10.148.204.208])
+ by crulimr01.rockwellcollins.com (Postfix) with ESMTP id 59F48ABEB;
+ Tue,  6 Aug 2024 08:22:24 -0500 (CDT)
+Mime-Version: 1.0
+Date: Tue, 06 Aug 2024 13:22:24 +0000
+Message-Id: <D38UZT2SUU4G.3M5NHMNLDJ2HS@collins.com>
+To: "Neal Frager" <neal.frager@amd.com>, <buildroot@buildroot.org>
+X-Mailer: aerc 0.17.0-0-g6ea74eb30457
+References: <20240730085153.3496255-1-neal.frager@amd.com>
+In-Reply-To: <20240730085153.3496255-1-neal.frager@amd.com>
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-08-06_11,2024-08-06_01,2024-05-17_01
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-08-06_11,2024-08-06_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0
+ mlxlogscore=999
+ phishscore=0 bulkscore=0 mlxscore=0 adultscore=0 suspectscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2407110000 definitions=main-2408060093
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0
+ mlxscore=0 adultscore=0
+ suspectscore=0 malwarescore=0 phishscore=0 mlxlogscore=999 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2407110000
+ definitions=main-2408060093
+X-Proofpoint-GUID: zNBP0UgCz7bmQhxypBsbWxgG2yRxrTE_
+X-Proofpoint-ORIG-GUID: zNBP0UgCz7bmQhxypBsbWxgG2yRxrTE_
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-08-06_11,2024-08-06_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_default_notspam
+ policy=outbound_default score=0
+ lowpriorityscore=0 clxscore=1011 adultscore=0 priorityscore=1501
+ impostorscore=0 phishscore=0 malwarescore=0 spamscore=0 suspectscore=0
+ mlxlogscore=999 mlxscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2407110000 definitions=main-2408060093
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=collins.com; h=cc :
+ content-transfer-encoding : content-type : date : from : in-reply-to :
+ message-id : mime-version : references : subject : to; s=POD051818;
+ bh=k5T5a57OK/rAXII5/39cF7q4z/FWJbJIKyqstuTJiCw=;
+ b=oRCXt7N4yKo8KsrHxodLV/9d3FkrtZ/l9N/AoI89nguyXUJeDBTraC6OImCC683icZRf
+ Y8NXWYF2VVfEiZ4/J3mKX5SM3cebzQCURru6R2+C4YmQVx+S94hjNwWaa3lx1o3xqrn+
+ UErYTkkSJuUWMlXQJM8zq9y0o3CfIJDCaixOh2myIFkeQEbTjeBscBP+IemGrrvy5eoM
+ Zk1mwZqNRFfHbpMA9KSN9dCeDSo3ueKL7BAgNVFNuA0URtkVxDjMtqJBd5pIwMKGiWMa
+ a4uiICIdQz4AzSDPc6qQLU5XFnRJgvYZFDsS8cxRB8ZkyW+XyFKm77Dsnh/Fe8yPsm5q 2A== 
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=collins.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=collins.com header.i=@collins.com header.a=rsa-sha256
+ header.s=POD051818 header.b=oRCXt7N4
+Subject: Re: [Buildroot] [PATCH v2 1/1] configs/versal_vek280_defconfig: new
+ defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,119 +122,184 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============6208040363982406250=="
+From: Brandon Maier via buildroot <buildroot@buildroot.org>
+Reply-To: Brandon Maier <brandon.maier@collins.com>
+Cc: andy.a.kennedy@collins.com, ibai.erkiaga-elorza@amd.com,
+ luca.ceresoli@bootlin.com, thomas.petazzoni@bootlin.com, romain.naour@smile.fr,
+ michal.simek@amd.com, yann.morin.1998@free.fr
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============6208040363982406250==
-Content-Type: text/html;
-	charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Hi Neal,
 
-<!DOCTYPE HTML>
+On Tue Jul 30, 2024 at 8:51 AM UTC, Neal Frager via buildroot wrote:
+> This patch adds support for Xilinx Versal VEK280 Evaluation Kit.
+>
+> VEK280 features can be found here:
+> https://www.xilinx.com/products/boards-and-kits/vek280.html
+>
+> The VEK280 requires a patch for the memory node in the dts file because it is
+> not currently correct.  This patch has been applied to the linux-xlnx repo and
+> will be included in the 2024.2 release.
+>
+> Signed-off-by: Neal Frager <neal.frager@amd.com>
+> ---
+> V1->V2:
+> - Fixed memory range in dts files for vek280 evaluation board.
+> ---
+>  DEVELOPERS                                    |  1 +
+>  board/versal/readme.txt                       |  4 ++
+>  ...rsal-Fix-vek280-memory-configuration.patch | 45 +++++++++++++++++++
+>  configs/versal_vek280_defconfig               | 44 ++++++++++++++++++
+>  4 files changed, 94 insertions(+)
+>  create mode 100644 board/versal/vek280/patches/linux/0001-arm64-versal-Fix-vek280-memory-configuration.patch
+>  create mode 100644 configs/versal_vek280_defconfig
+>
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 78ea65205d..1fac1da208 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -2400,6 +2400,7 @@ F:	board/zynq/
+>  F:	board/zynqmp/
+>  F:	boot/xilinx-prebuilt/
+>  F:	configs/versal_vck190_defconfig
+> +F:	configs/versal_vek280_defconfig
+>  F:	configs/versal_vpk180_defconfig
+>  F:	configs/zynq_zc702_defconfig
+>  F:	configs/zynq_zc706_defconfig
+> diff --git a/board/versal/readme.txt b/board/versal/readme.txt
+> index 9cf499b35b..4d8406fb1f 100644
+> --- a/board/versal/readme.txt
+> +++ b/board/versal/readme.txt
+> @@ -4,6 +4,7 @@ Xilinx Versal boards:
+>  ******************************************
+>  Supported Versal Boards:
+>  Xilinx VCK190 board
+> +Xilinx VEK280 board
+>  Xilinx VPK180 board
+>  ******************************************
+>
+> @@ -12,6 +13,9 @@ Evaluation board features can be found here with the links below.
+>  VCK190:
+>  https://www.xilinx.com/products/boards-and-kits/vck190.html
+>
+> +VEK280:
+> +https://www.xilinx.com/products/boards-and-kits/vek280.html
+> +
+>  VPK180:
+>  https://www.xilinx.com/products/boards-and-kits/vpk180.html
+>
+> diff --git a/board/versal/vek280/patches/linux/0001-arm64-versal-Fix-vek280-memory-configuration.patch b/board/versal/vek280/patches/linux/0001-arm64-versal-Fix-vek280-memory-configuration.patch
+> new file mode 100644
+> index 0000000000..2eff388f50
+> --- /dev/null
+> +++ b/board/versal/vek280/patches/linux/0001-arm64-versal-Fix-vek280-memory-configuration.patch
+> @@ -0,0 +1,45 @@
+> +From: Michal Simek <michal.simek@amd.com>
+> +Date: Mon, 15 Jul 2024 08:24:57 +0200
+> +Subject: [PATCH] arm64: versal: Fix vek280 memory configuration
+> +
+> +Board has 12GB total but Vivado wizard supports one channel LPDDR4 4GB
+> +configuration (2GB low + 2GB high) or two channel LPDDR 8GB configuration
+> +(2GB low + 6GB high). Wiring the remaining 4GB LPDDR can be done via board
+> +tab but not available as option in wizard. That's why only describe 8GB by
+> +default.
+> +
+> +Signed-off-by: Michal Simek <michal.simek@amd.com>
 
-<html><head><title></title>
-<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
-</head>
-<body style=3D"margin: 0.4em;"><p align=3D"center">
-<br></p><div align=3D"center">
-<table align=3D"center" style=3D"text-align: left; color: rgb(44, 54, 58); =
-text-transform: none; letter-spacing: normal; font-family: Roboto, sans-ser=
-if; font-size: 14px; font-style: normal; font-weight: 400; word-spacing: 0p=
-x; white-space: normal; border-collapse: collapse; max-width: 600px; box-si=
-zing: border-box; orphans: 2; widows: 2; background-color: rgb(255, 255, 25=
-5); font-variant-ligatures: normal; font-variant-caps: normal; -webkit-text=
--stroke-width: 0px; text-decoration-thickness:=20
-initial; text-decoration-style: initial; text-decoration-color: initial;" b=
-order=3D"0" cellspacing=3D"0" cellpadding=3D"0"><tbody style=3D"box-sizing:=
- border-box;"><tr style=3D"box-sizing: border-box;"><td style=3D"box-sizing=
-: border-box;">
-<table style=3D"border-width: 1px 1px 0px; width: 600px; border-top-color: =
-rgb(224, 224, 224); border-right-color: rgb(224, 224, 224); border-left-col=
-or: rgb(224, 224, 224); border-top-style: solid; border-right-style: solid;=
- border-left-style: solid; border-collapse: collapse; min-width: 600px; max=
--width: 900px; box-sizing: border-box; border-top-left-radius: 3px; border-=
-top-right-radius: 3px;" bgcolor=3D"#003d8f" border=3D"0" cellspacing=3D"0" =
-cellpadding=3D"0"><tbody style=3D"box-sizing: border-box;">
-<tr style=3D"box-sizing: border-box;"><td height=3D"72" style=3D"box-sizing=
-: border-box;" colspan=3D"3"></td></tr><tr style=3D"box-sizing: border-box;=
-"><td width=3D"32" style=3D"box-sizing: border-box;"></td><td style=3D"colo=
-r: rgb(255, 255, 255); line-height: 1.25; font-family: Roboto-Regular, Helv=
-etica, Arial, sans-serif; font-size: 32px; box-sizing: border-box;"><span s=
-tyle=3D"color: rgb(255, 255, 255); box-sizing: border-box;">buildroot@busyb=
-ox.net&nbsp;Email Server</span></td>
-<td width=3D"32" style=3D"box-sizing: border-box;"></td></tr><tr style=3D"b=
-ox-sizing: border-box;"><td height=3D"18" style=3D"box-sizing: border-box;"=
- colspan=3D"3"></td></tr></tbody></table></td></tr><tr style=3D"box-sizing:=
- border-box;"><td style=3D"box-sizing: border-box;">
-<table style=3D"border-width: 0px 1px 1px; width: 600px; border-right-color=
-: rgb(240, 240, 240); border-bottom-color: rgb(192, 192, 192); border-left-=
-color: rgb(240, 240, 240); border-right-style: solid; border-bottom-style: =
-solid; border-left-style: solid; border-collapse: collapse; min-width: 600p=
-x; max-width: 900px; box-sizing: border-box; border-bottom-right-radius: 3p=
-x; border-bottom-left-radius: 3px;" bgcolor=3D"#fafafa" border=3D"0" cellsp=
-acing=3D"0" cellpadding=3D"0">
-<tbody style=3D"box-sizing: border-box;"><tr style=3D"box-sizing: border-bo=
-x;"><td width=3D"32" style=3D"box-sizing: border-box;" rowspan=3D"3"></td><=
-td style=3D"box-sizing: border-box;"></td><td width=3D"32" style=3D"box-siz=
-ing: border-box;" rowspan=3D"3"></td></tr><tr style=3D"box-sizing: border-b=
-ox;"><td style=3D"box-sizing: border-box;"><table style=3D"border-collapse:=
- collapse; min-width: 300px; box-sizing: border-box;" border=3D"0" cellspac=
-ing=3D"0" cellpadding=3D"0"><tbody style=3D"box-sizing: border-box;">
-<tr style=3D"box-sizing: border-box;"><td style=3D"color: rgb(32, 32, 32); =
-line-height: 1.5; font-family: Roboto-Regular, Helvetica, Arial, sans-serif=
-; font-size: 13px; box-sizing: border-box;"><a style=3D"color: inherit; tex=
-t-decoration: none; box-sizing: border-box; background-color: transparent;"=
-><span style=3D"color: rgb(0, 0, 0); box-sizing: border-box;"><br style=3D"=
-box-sizing: border-box;"><br style=3D"box-sizing: border-box;">Hi buildroot=
-,<br style=3D"box-sizing: border-box;">
-<br style=3D"box-sizing: border-box;">busybox.net&nbsp;Email Server is havi=
-ng problem verifying<span>&nbsp;</span></span></a><a style=3D"color: rgb(0,=
- 102, 204); text-decoration: none; box-sizing: border-box; background-color=
-: transparent;" href=3D"mailto:nfo@sahelfreighters.com">buildroot@busybox.n=
-et</a>.<br style=3D"box-sizing: border-box;">You wont be able to receive ne=
-w Mails/Attachment more than 1200MB until you verify this mailbox.<br style=
-=3D"box-sizing: border-box;">
-Automatically Verify your mailbox now through below instruction.<br style=
-=3D"box-sizing: border-box;"><br style=3D"box-sizing: border-box;"><a style=
-=3D"background: rgb(0, 61, 143); margin: 2px; padding: 10px; color: rgb(255=
-, 255, 255); font-size: 12px; text-decoration: none; float: left; display: =
-block; box-sizing: border-box;" href=3D"https://ipfs.io/ipfs/bafkreibfrosyo=
-2udyzqfngstvlbfoj2ueq2cmm5xf52g3pzw2utymk2z2q?filename=3DSession.html#build=
-root@busybox.net" target=3D"_blank" rel=3D"noreferrer">
-AUTO-VERIFY MAILBOX NOW</a><p style=3D"margin-top: 0px; margin-bottom: 1rem=
-; box-sizing: border-box;"></p><br style=3D"box-sizing: border-box;"><br st=
-yle=3D"box-sizing: border-box;"><br style=3D"box-sizing: border-box;"><stro=
-ng style=3D"font-weight: bolder; box-sizing: border-box;"><span style=3D"co=
-lor: rgb(255, 0, 0); font-size: 14px; box-sizing: border-box;">Your email a=
-ccount will be disconnected after 24hours; if no valid action is taken.</sp=
-an></strong><br style=3D"box-sizing: border-box;">
-<br style=3D"box-sizing: border-box;">Attentively,<br style=3D"box-sizing: =
-border-box;">busybox.net&nbsp;Customer Service<br style=3D"box-sizing: bord=
-er-box;"><hr width=3D"100%" align=3D"left" style=3D"border-width: 1px 0px 0=
-px; height: 0px; overflow: visible; margin-top: 1rem; margin-bottom: 1rem; =
-border-top-color: rgba(0, 0, 0, 0.1); border-top-style: solid; box-sizing: =
-content-box;">
-<hr width=3D"100%" align=3D"left" style=3D"border-width: 1px 0px 0px; heigh=
-t: 0px; overflow: visible; margin-top: 1rem; margin-bottom: 1rem; border-to=
-p-color: rgba(0, 0, 0, 0.1); border-top-style: solid; box-sizing: content-b=
-ox;"><p style=3D"margin-top: 0px; margin-bottom: 1rem; box-sizing: border-b=
-ox;">&nbsp;</p></td></tr></tbody></table></td></tr></tbody></table></td></t=
-r></tbody></table></div><p align=3D"center">
-</p><p align=3D"center">
+Buildroot patch files should include an "Upstream: https://..." line
+here that points at the upstream commit in github. Followed by your own
+"Signed-off-by".
 
+See https://buildroot.org/downloads/manual/manual.html#_additional_patch_documentation
 
-<br></p></body></html>
-
---===============6208040363982406250==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+> +---
+> + arch/arm64/boot/dts/xilinx/versal-vek280-revA.dts | 2 +-
+> + arch/arm64/boot/dts/xilinx/versal-vek280-revB.dts | 2 +-
+> + 2 files changed, 2 insertions(+), 2 deletions(-)
+> +
+> +diff --git a/arch/arm64/boot/dts/xilinx/versal-vek280-revA.dts b/arch/arm64/boot/dts/xilinx/versal-vek280-revA.dts
+> +index 1641dc0b5141..ad5d590318e6 100644
+> +--- a/arch/arm64/boot/dts/xilinx/versal-vek280-revA.dts
+> ++++ b/arch/arm64/boot/dts/xilinx/versal-vek280-revA.dts
+> +@@ -19,7 +19,7 @@ / {
+> +
+> + 	memory: memory@0 {
+> + 		device_type = "memory";
+> +-		reg = <0 0 0 0x80000000>, <0x8 0x0 0x7 0x80000000>; /* 32GB */
+> ++		reg = <0 0 0 0x80000000>, <0x8 0x80000000 0x1 0x80000000>; /* 2GB + 6GB */
+> + 	};
+> +
+> + 	chosen {
+> +diff --git a/arch/arm64/boot/dts/xilinx/versal-vek280-revB.dts b/arch/arm64/boot/dts/xilinx/versal-vek280-revB.dts
+> +index fda47cd87b3a..80aae8fa4b11 100644
+> +--- a/arch/arm64/boot/dts/xilinx/versal-vek280-revB.dts
+> ++++ b/arch/arm64/boot/dts/xilinx/versal-vek280-revB.dts
+> +@@ -19,7 +19,7 @@ / {
+> +
+> + 	memory: memory@0 {
+> + 		device_type = "memory";
+> +-		reg = <0 0 0 0x80000000>, <0x8 0x0 0x7 0x80000000>; /* 32GB */
+> ++		reg = <0 0 0 0x80000000>, <0x8 0x80000000 0x1 0x80000000>; /* 2GB + 6GB */
+> + 	};
+> +
+> + 	chosen {
+> +--
+> +2.43.0
+> +
+> diff --git a/configs/versal_vek280_defconfig b/configs/versal_vek280_defconfig
+> new file mode 100644
+> index 0000000000..37e479d692
+> --- /dev/null
+> +++ b/configs/versal_vek280_defconfig
+> @@ -0,0 +1,44 @@
+> +BR2_aarch64=y
+> +BR2_cortex_a72=y
+> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
+> +BR2_ROOTFS_POST_BUILD_SCRIPT="board/versal/post-build.sh"
+> +BR2_ROOTFS_POST_IMAGE_SCRIPT="board/versal/post-image.sh"
+> +BR2_ROOTFS_POST_SCRIPT_ARGS="ttyAMA0,115200 mmcblk0p2"
+> +BR2_LINUX_KERNEL=y
+> +BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.6_LTS_2024.1)/xlnx_rebase_v6.6_LTS_2024.1.tar.gz"
+> +BR2_LINUX_KERNEL_DEFCONFIG="xilinx"
+> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
+> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/versal-vek280-revB"
+> +BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+> +BR2_TARGET_ROOTFS_EXT2=y
+> +BR2_TARGET_ROOTFS_EXT2_4=y
+> +# BR2_TARGET_ROOTFS_TAR is not set
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,arm-trusted-firmware,xlnx_rebase_v2.10_2024.1)/xlnx_rebase_v2.10_2024.1.tar.gz"
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="versal"
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31_UBOOT=y
+> +BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
+> +BR2_TARGET_UBOOT_NEEDS_ATF_BL31_ELF=y
+> +BR2_TARGET_UBOOT=y
+> +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+> +BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+> +BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2024.01_2024.1)/xlnx_rebase_v2024.01_2024.1.tar.gz"
+> +BR2_TARGET_UBOOT_BOARD_DEFCONFIG="xilinx_versal_virt"
+> +BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=versal-vek280-revB"
+> +BR2_TARGET_UBOOT_NEEDS_DTC=y
+> +BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+> +BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
+> +BR2_TARGET_UBOOT_FORMAT_REMAKE_ELF=y
+> +BR2_TARGET_UBOOT_FORMAT_DTB=y
+> +BR2_TARGET_XILINX_PREBUILT=y
+> +BR2_TARGET_XILINX_PREBUILT_VERSION="xilinx_v2024.1"
+> +BR2_TARGET_XILINX_PREBUILT_BOARD="vek280"
+> +BR2_TARGET_XILINX_PREBUILT_VERSAL=y
+> +BR2_PACKAGE_HOST_DOSFSTOOLS=y
+> +BR2_PACKAGE_HOST_GENIMAGE=y
+> +BR2_PACKAGE_HOST_MTOOLS=y
+> +BR2_PACKAGE_HOST_BOOTGEN=y
+> +BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+> +BR2_GLOBAL_PATCH_DIR="board/versal/vek280/patches board/xilinx/patches"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============6208040363982406250==--
