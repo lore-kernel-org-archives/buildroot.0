@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F394C52D6F
-	for <buildroot@archiver.kernel.org>; Tue,  6 Aug 2024 22:45:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A6460C49EA1
+	for <buildroot@archiver.kernel.org>; Tue,  6 Aug 2024 22:45:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2F5FA608A0;
-	Tue,  6 Aug 2024 22:45:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5F70E60883;
+	Tue,  6 Aug 2024 22:45:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ldNd5XVULlEC; Tue,  6 Aug 2024 22:45:26 +0000 (UTC)
+ id 7gw6LRTgy-Hl; Tue,  6 Aug 2024 22:45:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9C4C9606F1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 868466088C
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9C4C9606F1;
-	Tue,  6 Aug 2024 22:45:25 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 986761BF302
- for <buildroot@lists.busybox.net>; Tue,  6 Aug 2024 22:45:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 868466088C;
+	Tue,  6 Aug 2024 22:45:28 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 224A11BF302
+ for <buildroot@lists.busybox.net>; Tue,  6 Aug 2024 22:45:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 85DDE40457
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1B2B180BAD
  for <buildroot@lists.busybox.net>; Tue,  6 Aug 2024 22:45:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sXBfEIT_nKBw for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id bBj4-HB9Rgoo for <buildroot@lists.busybox.net>;
  Tue,  6 Aug 2024 22:45:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3D59840343
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4F2A280BD2
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3D59840343
- for <buildroot@buildroot.org>; Tue,  6 Aug 2024 22:45:05 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4F2A280BD2
+ for <buildroot@buildroot.org>; Tue,  6 Aug 2024 22:45:06 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9437684341; Tue,  6 Aug 2024 22:45:05 +0000 (UTC)
+ id 1104484349; Tue,  6 Aug 2024 22:45:06 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 7 Aug 2024 00:12:04 +0200
+Date: Wed, 7 Aug 2024 00:44:01 +0200
 X-Git-Refname: refs/heads/2024.05.x
-X-Git-Oldrev: 50b13c9f865ab820cb6166a220f4eb524bdf5125
-X-Git-Newrev: 9a118c766437a2419fdc267fcf871d18369eb4fa
+X-Git-Oldrev: 7b148d9d25602e63f298e2b73bc296cb4889821f
+X-Git-Newrev: 8e63d76db9101b55e57d79fc157bee70da34a454
 X-Patchwork-Hint: ignore
-Message-Id: <20240806224505.9437684341@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.05.x] package/gpm: update the
- patches to be applied with fuzz 0
+Message-Id: <20240806224506.1104484349@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.05.x] package/kexec: fix link
+ error when BR2_OPTIMIZE_0=y
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,88 +65,55 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9a118c766437a2419fdc267fcf871d18369eb4fa
+commit: https://git.buildroot.net/buildroot/commit/?id=8e63d76db9101b55e57d79fc157bee70da34a454
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.05.x
 
-Commit 8f88a644ed7d6 ("support/scripts/apply-patches.sh: set the maximum
-fuzz factor to 0") reduced the fuzz factor.
+When BR2_OPTIMIZE_0, -O0 is passed in compiler CFLAGS. This means no
+code optimization will be performed.
 
-Due to this change, gpm fails to build with output:
+kexec code uses a trick to detect unaligned accesses at link time
+which needs at least dead-code-removal to work. See
+put/get_unaligned() macros in kexec/kexec.h. This code was re-enabled
+in upstream commit [1].
 
-    Applying 0003-src-Makefile.in-Really-install-unversioned-solibrary.patch using patch:
-    patching file src/Makefile.in
-    Hunk #1 FAILED at 115.
-    1 out of 1 hunk FAILED -- saving rejects to file src/Makefile.in.rej
+This commit sets at least -O1 (which include the sufficient
+dead-code-removal) when BR2_OPTIMIZE_0=y, to fix those issues.
 
-This commit refreshes the package patch on the current package version.
+Fixes:
+- http://autobuild.buildroot.org/results/8f8/8f8532f1dfbd71e52c51c00118934af9fa45e7cb
+- http://autobuild.buildroot.org/results/528/528fd7baf9b0ad5549d22ec8e0623c5fa1f2d117
+- http://autobuild.buildroot.org/results/499/499115439680adfb4b40042468e5bbb65d91ce6c
+- ...and many others
 
-While we're at it, change to use a proper Upstream: tag and remove from
-.checkpackageignore.
+[1] https://git.kernel.org/pub/scm/utils/kernel/kexec/kexec-tools.git/commit/?id=0723defb5308ac7fce296f8b596bff4df6803f01
 
-Fixes: 8f88a644ed7d6c9ea55fd4fbe9d7f37055920016
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit d47ae17adfca2f07a6a575d84e1137d87afd961c)
+(cherry picked from commit a411588b582ad6a0c8573ec9f59f737473d69bee)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .checkpackageignore                                          |  1 -
- ...rc-Makefile.in-Really-install-unversioned-solibrary.patch | 12 +++++++-----
- 2 files changed, 7 insertions(+), 6 deletions(-)
+ package/kexec/kexec.mk | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 1faaba7431..9eba20f24e 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -699,7 +699,6 @@ package/gobject-introspection/0002-Add-rpath-links-to-ccompiler.patch lib_patch.
- package/gobject-introspection/0003-giscanner-ignore-error-return-codes-from-ldd-wrapper.patch lib_patch.Upstream
- package/gpm/0001-Added-musl-support-to-libgpm-and-the-daemon.patch lib_patch.Upstream
- package/gpm/0002-Install-unversioned-solibrary.patch lib_patch.Upstream
--package/gpm/0003-src-Makefile.in-Really-install-unversioned-solibrary.patch lib_patch.Upstream
- package/gpm/0004-Use-sigemptyset-API-instead-of-__sigemptyset.patch lib_patch.Upstream
- package/gpm/0005-fix-building-w-newer-glibc.patch lib_patch.Upstream
- package/gpm/0006-src-headers-daemon.h-avoid-redefinition-of-last_sele.patch lib_patch.Upstream
-diff --git a/package/gpm/0003-src-Makefile.in-Really-install-unversioned-solibrary.patch b/package/gpm/0003-src-Makefile.in-Really-install-unversioned-solibrary.patch
-index 2591801976..3806fe7e89 100644
---- a/package/gpm/0003-src-Makefile.in-Really-install-unversioned-solibrary.patch
-+++ b/package/gpm/0003-src-Makefile.in-Really-install-unversioned-solibrary.patch
-@@ -1,4 +1,4 @@
--From 445be05fba32c512fd87a0c98b4e9936629ef95e Mon Sep 17 00:00:00 2001
-+From 5b83edaa20f6ecf97d16e323be1ed555d8fa2c01 Mon Sep 17 00:00:00 2001
- From: Bernd Kuhls <bernd.kuhls@t-online.de>
- Date: Sat, 20 Feb 2016 17:59:52 +0100
- Subject: [PATCH] src/Makefile.in: Really install unversioned solibrary
-@@ -7,25 +7,27 @@ This commit is a follow-up to
- https://github.com/telmich/gpm/commit/06b00d53d8bd513ad5d262dc94a016c6fbf2d3aa
- which created libgpm.so but failed to include it in the install target.
+diff --git a/package/kexec/kexec.mk b/package/kexec/kexec.mk
+index df14b2d711..1fd8c0f0ab 100644
+--- a/package/kexec/kexec.mk
++++ b/package/kexec/kexec.mk
+@@ -16,6 +16,14 @@ KEXEC_SELINUX_MODULES = kdump
+ # Makefile expects $STRIP -o to work, so needed for !BR2_STRIP_strip
+ KEXEC_MAKE_OPTS = STRIP="$(TARGET_CROSS)strip"
  
--Patch sent upstream: https://github.com/telmich/gpm/pull/11
-+Upstream: https://github.com/telmich/gpm/pull/11
- 
- Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-+[Dario: make the patch to be applied with fuzz factor 0]
-+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
- ---
-  src/Makefile.in | 1 +
-  1 file changed, 1 insertion(+)
- 
- diff --git a/src/Makefile.in b/src/Makefile.in
--index 7e9e2ef..bca226f 100644
-+index b63e4f4489bd..a1838c300312 100644
- --- a/src/Makefile.in
- +++ b/src/Makefile.in
- @@ -115,6 +115,7 @@ install:	check
-  	if test "x@SHLIB@" != "x" ; then \
-- 		$(INSTALL_DATA) -m 755 lib/libgpm.so.@abi_full@ $(libdir)/libgpm.so.@abi_full@	;	\
-+ 		$(INSTALL_DATA) -m 644 lib/libgpm.so.@abi_full@ $(libdir)/libgpm.so.@abi_full@	;	\
-  		cd $(libdir) && $(LN_S) -f libgpm.so.@abi_full@ libgpm.so.@abi_lev@ 					;	\
- +		cd $(libdir) && $(LN_S) -f libgpm.so.@abi_full@ libgpm.so 					;	\
-        echo "WARNING: We installed a lib, you should now call ldconfig" 						; 	\
-        echo "f.i.: ldconfig -n -l $(libdir)/libgpm.so.@abi_full@" 								;	\
-        echo "Or to update everything just type ldconfig"											;	\
- -- 
--2.7.0
-+2.43.0
- 
++# kexec requires at least -O1 optimization level. Its code uses a
++# trick to detect unaligned accesses at link time which needs at least
++# dead-code-removal to work. See put/get_unaligned() macros in
++# kexec/kexec.h
++ifeq ($(BR2_OPTIMIZE_0),y)
++KEXEC_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -O1"
++endif
++
+ ifeq ($(BR2_PACKAGE_KEXEC_ZLIB),y)
+ KEXEC_CONF_OPTS += --with-zlib
+ KEXEC_DEPENDENCIES += zlib
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
