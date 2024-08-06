@@ -4,49 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 013EFC3DA64
-	for <buildroot@archiver.kernel.org>; Tue,  6 Aug 2024 10:16:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BEED0C3DA64
+	for <buildroot@archiver.kernel.org>; Tue,  6 Aug 2024 10:16:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BC82B400CA;
-	Tue,  6 Aug 2024 10:16:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8295B400FB;
+	Tue,  6 Aug 2024 10:16:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2OLcU86PBEis; Tue,  6 Aug 2024 10:16:34 +0000 (UTC)
+ id 0up_9Gl7i-4Z; Tue,  6 Aug 2024 10:16:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8A733400E7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5F03740119
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8A733400E7;
-	Tue,  6 Aug 2024 10:16:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5F03740119;
+	Tue,  6 Aug 2024 10:16:44 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0AD011BF288
- for <buildroot@lists.busybox.net>; Tue,  6 Aug 2024 10:16:33 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 13D7B1BF288
+ for <buildroot@lists.busybox.net>; Tue,  6 Aug 2024 10:16:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EC6BF400CA
- for <buildroot@lists.busybox.net>; Tue,  6 Aug 2024 10:16:32 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 51778400FB
+ for <buildroot@lists.busybox.net>; Tue,  6 Aug 2024 10:16:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kgatIgBmfgYR for <buildroot@lists.busybox.net>;
- Tue,  6 Aug 2024 10:16:31 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id 4WtqeHg5IAxh for <buildroot@lists.busybox.net>;
+ Tue,  6 Aug 2024 10:16:41 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.195;
+ helo=relay3-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D4B8D400A3
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id D4B8D400A3
- for <buildroot@buildroot.org>; Tue,  6 Aug 2024 10:16:31 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BEDD084112; Tue,  6 Aug 2024 10:16:31 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 6 Aug 2024 12:16:08 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: bd035872be9948515ee50ae034bda4a2e044ff22
-X-Git-Newrev: 1498da3deeb64faa8afed2c715667cec496f72dd
-X-Patchwork-Hint: ignore
-Message-Id: <20240806101631.BEDD084112@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/tipidee: load config from /etc
- instead of /usr/etc
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 12C1D40311
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 12C1D40311
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 12C1D40311
+ for <buildroot@buildroot.org>; Tue,  6 Aug 2024 10:16:40 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 3801A60004;
+ Tue,  6 Aug 2024 10:16:39 +0000 (UTC)
+Date: Tue, 6 Aug 2024 12:16:38 +0200
+To: "J. =?UTF-8?B?TmV1c2Now6RmZXI=?= via buildroot" <buildroot@buildroot.org>
+Message-ID: <20240806121638.7f767d1f@windsurf>
+In-Reply-To: <20240806-tipidee-fixes-v1-1-7f50779b0484@gmx.net>
+References: <20240806-tipidee-fixes-v1-1-7f50779b0484@gmx.net>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1722939399;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=00g2QlTsv3D/H8PIFpB+pb7NJDsYUssZLALAbY3yhd8=;
+ b=D7aBf9n/onAcMGUeNeRYVGF1e1MIwKYe1HeKzsqmeo2wNy7A5mGjUeBgb+Wq8u5bDLPM86
+ T/zurs1qDZFBCqDKh4Xscqmmce4Hq91NtA0ihUHA6e5Edsg6IuUWAsyQLPGxIRUg+lCqyx
+ oBvH1RxmA9WGbaNFpbdHwI2fgqgWSrHj08jNFvtlxmKWRJLVb6A473KQCMnfumi7z1u4If
+ /ViLiPYD/MPySyjq1b5SYgqxziUBbAmC1kfxvVGy6WJ7GGiPzH7O2mEJ4dy8I8hkjYXuDG
+ UFetQXwcjyI0cusL6MKJfeAa2hUULfno47MZGY3cKSDKYeeZsDsPUeE2U+zsCQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=D7aBf9n/
+Subject: Re: [Buildroot] [PATCH RESEND] package/tipidee: Load config from
+ /etc, not /usr/etc
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,49 +83,21 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============6678600310146545715=="
+Cc: "J. =?UTF-8?B?TmV1c2Now6RmZXI=?=" <j.neuschaefer@gmx.net>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============6678600310146545715==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=1498da3deeb64faa8afed2c715667cec496f72dd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
---prefix influences the default of --sysconfdir, so we need to specify
---sysconfdir=/etc explicitly.
-
-Fixes: 17deaf60f6 ("tipidee: new package")
-Signed-off-by: J. Neuschäfer <j.neuschaefer@gmx.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/tipidee/tipidee.mk | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/tipidee/tipidee.mk b/package/tipidee/tipidee.mk
-index 915b4f84bd..8ae18edd8d 100644
---- a/package/tipidee/tipidee.mk
-+++ b/package/tipidee/tipidee.mk
-@@ -12,6 +12,7 @@ TIPIDEE_DEPENDENCIES = skalibs
- 
- TIPIDEE_CONF_OPTS = \
- 	--prefix=/usr \
-+	--sysconfdir=/etc \
- 	--with-sysdeps=$(STAGING_DIR)/lib/skalibs/sysdeps \
- 	--with-include=$(STAGING_DIR)/include \
- 	--with-dynlib=$(STAGING_DIR)/lib \
-
---===============6678600310146545715==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============6678600310146545715==--
+T24gVHVlLCAwNiBBdWcgMjAyNCAwMDoxNjowNSArMDIwMApKLiBOZXVzY2jDpGZlciB2aWEgYnVp
+bGRyb290IDxidWlsZHJvb3RAYnVpbGRyb290Lm9yZz4gd3JvdGU6Cgo+IC0tcHJlZml4IGluZmx1
+ZW5jZXMgdGhlIGRlZmF1bHQgb2YgLS1zeXNjb25mZGlyLCBzbyB3ZSBuZWVkIHRvIHNwZWNpZnkK
+PiAtLXN5c2NvbmZkaXI9L2V0YyBleHBsaWNpdGx5Lgo+IAo+IEZpeGVzOiAxN2RlYWY2MGY2ICgi
+dGlwaWRlZTogbmV3IHBhY2thZ2UiKQo+IFNpZ25lZC1vZmYtYnk6IEouIE5ldXNjaMOkZmVyIDxq
+Lm5ldXNjaGFlZmVyQGdteC5uZXQ+Cj4gLS0tCj4gIHBhY2thZ2UvdGlwaWRlZS90aXBpZGVlLm1r
+IHwgMSArCj4gIDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKQoKQXBwbGllZCB0byBtYXN0
+ZXIsIHRoYW5rcy4KClRob21hcwotLSAKVGhvbWFzIFBldGF6em9uaSwgQ1RPLCBCb290bGluCkVt
+YmVkZGVkIExpbnV4IGFuZCBLZXJuZWwgZW5naW5lZXJpbmcKaHR0cHM6Ly9ib290bGluLmNvbQpf
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3Qg
+bWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRy
+b290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
