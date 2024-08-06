@@ -4,97 +4,114 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8B86FC52D70
-	for <buildroot@archiver.kernel.org>; Tue,  6 Aug 2024 15:50:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7D8B2C52D70
+	for <buildroot@archiver.kernel.org>; Tue,  6 Aug 2024 15:54:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 34EDE40533;
-	Tue,  6 Aug 2024 15:50:10 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1B6BA400C7;
+	Tue,  6 Aug 2024 15:54:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4eTUDOY5yiin; Tue,  6 Aug 2024 15:50:09 +0000 (UTC)
+ id a7wUXdbk8618; Tue,  6 Aug 2024 15:54:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C72EB40556
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A0EEE40533
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C72EB40556;
-	Tue,  6 Aug 2024 15:50:08 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 3044E1BF408
- for <buildroot@lists.busybox.net>; Tue,  6 Aug 2024 15:50:08 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A0EEE40533;
+	Tue,  6 Aug 2024 15:54:24 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 62D7F1BF408
+ for <buildroot@lists.busybox.net>; Tue,  6 Aug 2024 15:54:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1BC7A40556
- for <buildroot@lists.busybox.net>; Tue,  6 Aug 2024 15:50:08 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5077D607A3
+ for <buildroot@lists.busybox.net>; Tue,  6 Aug 2024 15:54:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PN2vjQ5VPCxa for <buildroot@lists.busybox.net>;
- Tue,  6 Aug 2024 15:50:06 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::92c; helo=mail-ua1-x92c.google.com;
- envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 9915C400C7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9915C400C7
-Received: from mail-ua1-x92c.google.com (mail-ua1-x92c.google.com
- [IPv6:2607:f8b0:4864:20::92c])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 9915C400C7
- for <buildroot@buildroot.org>; Tue,  6 Aug 2024 15:50:06 +0000 (UTC)
-Received: by mail-ua1-x92c.google.com with SMTP id
- a1e0cc1a2514c-8318b4d9539so246148241.2
- for <buildroot@buildroot.org>; Tue, 06 Aug 2024 08:50:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1722959405; x=1723564205;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=nv7jNcTB0aK8fvtiXOGjh4t4EqNX1/4dWceqjGJBZio=;
- b=obKhEBAn8fJRFxbY0DX3Q3C1YVgsYSgDAdWo01qPxC96U88anm/wgNS3Qn0xI4rs23
- /AauRsxz0WBXT9u/rZ0hkD5/Oj7v98uhf5DzKMaZ/aDFvGPl5aVJzly9tzLygsafL6VV
- g8cSHPOhp3AQolL2LDD7ihURzsQudkqREPFxEHFu2oaqjuv9NhzU9ht9pQUc3dhAQ0uH
- IZOn8Ql7hTyqHwdkS9gaMU7oW2IRnJsrNorEb/OdG6ylmCTgH1XFxtipywdO5ziaPM9/
- V0DPprOjfjgo1k6i0Ri0A7TCT0nAgAUA5WtAO/jFgG8DGZTnxUxoxmwOdbxmrGxwgtdr
- 66ow==
-X-Forwarded-Encrypted: i=1;
- AJvYcCUzDqylN8SDeab3P7FrddfAHoKfpV82SGNRJ6e/vlpHpra+opM+kZ6WQ6L2vHID7lmxbCJfIr6dv5TN+6PRF3eSHmDC5Tk3cQ==
-X-Gm-Message-State: AOJu0YweDegE/sNw2ymSUWFUzl6DMyDrtUuJKv8qENenKtrvDj8YZNme
- pbQEvhYKsHF9S0SF7ottHAGj9rJ8CGqJQDBi49VD+hZOM4etUf48O7tlDQiiPrQsB4d+mZV/MZe
- DoXQ++4sHU10u32wdRcghMWCvsIB7Bj7JGSp5hg==
-X-Google-Smtp-Source: AGHT+IHCVcBUIqal8Gfux+Ilj1djubSRt2+PfMyUN5pNYSJQW/I90jCnvAQsRXIlsbqWi0MjI76i/a6eDKxSwqwvGYc=
-X-Received: by 2002:a05:6102:162c:b0:493:e587:3251 with SMTP id
- ada2fe7eead31-4945bea8d82mr17576492137.20.1722959405252; Tue, 06 Aug 2024
- 08:50:05 -0700 (PDT)
-MIME-Version: 1.0
-References: <20240805163133.4126564-1-james.hilliard1@gmail.com>
- <CA+h8R2oQGKFFH-vMX27WUO1uEAGyt4cz9MCwn9Cofwyujx1xDA@mail.gmail.com>
- <20240805223152.09ed915b@windsurf>
- <CADvTj4o_CnzCth+QqoxhVovBRinvYfbMf7r+SWnnY0tfVbKgbw@mail.gmail.com>
- <CA+h8R2obsR-CzMhWDpQ-A0oeEPaG-P=aCwF7BS4J-3eShmHJgg@mail.gmail.com>
- <20240806165050.234235b4@windsurf>
-In-Reply-To: <20240806165050.234235b4@windsurf>
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Tue, 6 Aug 2024 09:49:53 -0600
-Message-ID: <CADvTj4pOK8-2YXy0POUg1qOKa1MrjsxbnS-r1F7YMk_YXFmEAQ@mail.gmail.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id RKvNi7hV4-94 for <buildroot@lists.busybox.net>;
+ Tue,  6 Aug 2024 15:54:22 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=67.231.144.184;
+ helo=mx0a-00105401.pphosted.com; envelope-from=brandon.maier@collins.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 1276960639
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1276960639
+Received: from mx0a-00105401.pphosted.com (mx0a-00105401.pphosted.com
+ [67.231.144.184])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 1276960639
+ for <buildroot@buildroot.org>; Tue,  6 Aug 2024 15:54:21 +0000 (UTC)
+Received: from pps.filterd (m0346908.ppops.net [127.0.0.1])
+ by mx0a-00105401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id
+ 476ChdHY012900; Tue, 6 Aug 2024 15:54:17 GMT
+Received: from xusxph009rp050.rtx.com (xusxph009rp050.rtx.com [128.13.125.147])
+ by mx0a-00105401.pphosted.com (PPS) with ESMTPS id 40u6hny2yf-1
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+ Tue, 06 Aug 2024 15:54:17 +0000
+Received: from xusxph008rp020.corp.ray.com ([128.13.124.224])
+ by xusxph009rp050.rtx.com (8.17.1.19/8.17.1.19) with ESMTPS id 476FsFAR027696
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+ Tue, 6 Aug 2024 15:54:15 GMT
+Received: from dtulimr02.rockwellcollins.com
+ (snat-utc-mailhub.rockwellcollins.com [10.172.224.19])
+ by xusxph008rp020.corp.ray.com (8.17.1.19/8.17.1.19) with ESMTPS id
+ 476FsE01010854
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+ Tue, 6 Aug 2024 15:54:14 GMT
+X-Received: from localhost (unknown [10.148.204.208])
+ by dtulimr02.rockwellcollins.com (Postfix) with ESMTP id 23A513026D7E;
+ Tue,  6 Aug 2024 10:54:14 -0500 (CDT)
+Mime-Version: 1.0
+Date: Tue, 06 Aug 2024 15:54:13 +0000
+Message-Id: <D38Y81ZOPDSH.2KADZPH41AYQH@collins.com>
+To: "Neal Frager" <neal.frager@amd.com>, <buildroot@buildroot.org>
+X-Mailer: aerc 0.17.0-0-g6ea74eb30457
+References: <20240806151001.2307572-1-neal.frager@amd.com>
+In-Reply-To: <20240806151001.2307572-1-neal.frager@amd.com>
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-08-06_12,2024-08-06_01,2024-05-17_01
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-08-06_12,2024-08-06_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0
+ mlxlogscore=999
+ phishscore=0 bulkscore=0 mlxscore=0 adultscore=0 suspectscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2407110000 definitions=main-2408060110
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0
+ suspectscore=0
+ mlxlogscore=999 spamscore=0 adultscore=0 malwarescore=0 bulkscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2407110000 definitions=main-2408060111
+X-Proofpoint-ORIG-GUID: IOqxR46vKjNUvypYB0lPrXgyp5DzL3nF
+X-Proofpoint-GUID: IOqxR46vKjNUvypYB0lPrXgyp5DzL3nF
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-08-06_12,2024-08-06_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_default_notspam
+ policy=outbound_default score=0
+ malwarescore=0 spamscore=0 bulkscore=0 adultscore=0 lowpriorityscore=0
+ phishscore=0 suspectscore=0 priorityscore=1501 impostorscore=0
+ mlxlogscore=999 mlxscore=0 clxscore=1015 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.12.0-2407110000
+ definitions=main-2408060111
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1722959405; x=1723564205; darn=buildroot.org;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=nv7jNcTB0aK8fvtiXOGjh4t4EqNX1/4dWceqjGJBZio=;
- b=W33EZpZvg0R8tDEGVe+eEW+hRuqfqqgBBrT7TS4lQfJ0ezszSvHPqT5a6X90D/m1CL
- ysLxe1Ddb87je+ilzQr/NXhUHMehHQowuwYgZp1z+dsN6bOpJ7gbuhbD4cDhn0k7v9M8
- gYs9nFOkRcr8G5QSLJKZF8IePVTJjm9OAeTimRb0My52uDpa4Rlx7Sq4ik9y2EZWcT7E
- tDPTQ6/7N3XjdPMW0k1Ze/O+wQXC8ra+NzoMwIpd7tyJ4bI/hH85Z+DO2DUU8sb1UNi7
- z41ikRlrGEUHUG6pxo2xDMT2KnUzq0D7Ec9mKJ3IrTV+s8rsxxqyfk0tTd1yCft9BiSc
- tftQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=collins.com; h=cc :
+ content-transfer-encoding : content-type : date : from : in-reply-to :
+ message-id : mime-version : references : subject : to; s=POD051818;
+ bh=+ryHLGFzg5NcZ8gbfa97P+kvjrTadoOQ/0jQkJl15fQ=;
+ b=VwzGypHfzrydaMENpK6A3sH0isXla4ssnNZ+/vGj21qKeTs76JHNtREEWlUwmu59BynP
+ SkfoHzaQP5/6/FpV2lCp4g51nO7uzTFa7ebhsHDBeBQG15m3EzfrHBkKSPigZxL73r1+
+ /uCaCGEmpCi3FL7yrQFbxX8gOSWp9dZvlRiZg8x42CJ6VfDhbmuVEoeOPht5BXHxbata
+ np3adgh+P82qyp/xg/Ul5Kcz5lXXoN12CX65glbpMQ2goXAWTgGJHKVL7l3VKDJ6nWCb
+ j7uLa0cXx3HkeJDxuj6WZZ9039HuOrT0CA8Uk5R7Yg2q2sUHkzPGuBApHkA9/p4LRNHj Uw== 
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=collins.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=W33EZpZv
-Subject: Re: [Buildroot] [PATCH v4 1/2] package/pkg-golang.mk: allow
- packages to override download GOPROXY
+ unprotected) header.d=collins.com header.i=@collins.com header.a=rsa-sha256
+ header.s=POD051818 header.b=VwzGypHf
+Subject: Re: [Buildroot] [PATCH v3 1/1] configs/versal_vek280_defconfig: new
+ defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -106,54 +123,186 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Anisse Astier <anisse@astier.eu>, Christian Stewart <christian@aperture.us>,
- Christian Stewart via buildroot <buildroot@buildroot.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Brandon Maier via buildroot <buildroot@buildroot.org>
+Reply-To: Brandon Maier <brandon.maier@collins.com>
+Cc: andy.a.kennedy@collins.com, ibai.erkiaga-elorza@amd.com,
+ luca.ceresoli@bootlin.com, thomas.petazzoni@bootlin.com, romain.naour@smile.fr,
+ michal.simek@amd.com, yann.morin.1998@free.fr
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gVHVlLCBBdWcgNiwgMjAyNCBhdCA4OjUw4oCvQU0gVGhvbWFzIFBldGF6em9uaQo8dGhvbWFz
-LnBldGF6em9uaUBib290bGluLmNvbT4gd3JvdGU6Cj4KPiBPbiBNb24sIDUgQXVnIDIwMjQgMTg6
-MDc6MzcgLTA3MDAKPiBDaHJpc3RpYW4gU3Rld2FydCA8Y2hyaXN0aWFuQGFwZXJ0dXJlLnVzPiB3
-cm90ZToKPgo+ID4gTXkgc3VnZ2VzdGlvbiBpcyB0byBlaXRoZXIgc2V0IEdPUFJPWFk9ZGlyZWN0
-IGZvciBhbGwgcGFja2FnZXMsIG9yIGZvcgo+ID4gbm9uZSBvZiB0aGVtLgo+ID4KPiA+IFdlIGNv
-dWxkIGRlZmF1bHQgdG8gc2V0dGluZyBHT1BST1hZIHRvIGVtcHR5LCB3aGljaCB1c2VzIHRoZSBk
-ZWZhdWx0Cj4gPiBHb29nbGUgcHJveHkuCgpXaHkgd2VyZW4ndCB3ZSBqdXN0IHVzaW5nIHRoZSBk
-ZWZhdWx0IHNldHRpbmdzIGluIHRoZSBmaXJzdCBwbGFjZT8gSSBtZWFuCmlmIHVwc3RyZWFtcyBi
-YXNpY2FsbHkgb25seSB0ZXN0IHdpdGggZGVmYXVsdCBzZXR0aW5ncyBoZXJlIHRoZW4gdXNpbmcK
-c29tZXRoaW5nIGRpZmZlcmVudCBzZWVtcyBwcm9ibGVtYXRpYyBpbiBnZW5lcmFsLgoKPiA+Cj4g
-PiBUaGUgYmVzdCBhcHByb2FjaCBpcyBsaWtlbHkgdG8gYWRkIGEgQ29uZmlnLmluIG9wdGlvbjoK
-PiA+Cj4gPiBTb21ldGhpbmcgbGlrZTogSE9TVF9HT19HT1BST1hZCj4gPgo+ID4gVGhlbiB3ZSBj
-YW4gZGVmYXVsdCB0aGF0IHRvOiAiaHR0cHM6Ly9wcm94eS5nb2xhbmcub3JnLGRpcmVjdCIKPiA+
-Cj4gPiBXaGljaCBpcyB0aGUgZGVmYXVsdCB2YWx1ZSBpbiB0aGUgR28gc291cmNlIGNvZGUuCj4g
-Pgo+ID4gSSB0aGluayB0aGlzIHdvdWxkIGJlIHRoZSBiZXN0IGFwcHJvYWNoIGlmIHdlIGRvIHdh
-bnQgdG8gZW5hYmxlCj4gPiBHT1BST1hZLiBUaGlzIHdheSwgdXNlcnMgdGhhdCBkb24ndCB3YW50
-IHRvIHVzZSB0aGUgcHJveHkgY2FuIG92ZXJyaWRlCj4gPiBIT1NUX0dPX0dPUFJPWFkgdG8gImRp
-cmVjdCIKPgo+IEJ1dCB0aGF0IGlzIGluZGVwZW5kZW50IG9mIHRoZSBjdXJyZW50IHByb2JsZW0g
-d2UncmUgdHJ5aW5nIHRvIHNvbHZlCj4gd2l0aCB0YWlsc2NhbGUuCj4KPiA+IFdlIGNvdWxkIGtl
-ZXAgaXQgYXMgImRpcmVjdCIgb25jZSB0aGlzIGlzc3VlIGlzIGNsb3NlZDoKPiA+IGh0dHBzOi8v
-Z2l0aHViLmNvbS90YWlsc2NhbGUvdGFpbHNjYWxlL2lzc3Vlcy8xMjg1OQo+Cj4gU3RpbGwsIEkg
-dGhpbmsgaXQncyBhIHByb2JsZW0gaWYgd2UgY2FuJ3QgZml4IHByb2JsZW1zIG9uIG91ciBzaWRl
-IGFuZAo+IHRoYXQgd2UgaGF2ZSB0byB3YWl0IGZvciB1cHN0cmVhbSB0byBtYWtlIGEgbmV3IHJl
-bGVhc2UuIEZvciBhbGwgb3RoZXIKPiBwcm9ibGVtcywgd2UgY2FuIGFwcGx5IGEgcGF0Y2ggaW4g
-QnVpbGRyb290IHRoYXQgZ2V0cyB1cyBnb2luZyB1bnRpbAo+IHVwc3RyZWFtIGZpeGVzIHRoZSBw
-cm9ibGVtIGFuZCBtYWtlcyBhIHJlbGVhc2UuIEkgd291bGQgbGlrZSB0byBoYXZlCj4gdGhlIHNh
-bWUgYWJpbGl0eSB0byBmaXggR28gdmVuZG9yaW5nIGlzc3Vlcy4KClRvIG1lIGl0IHNvdW5kcyBs
-aWtlIGp1c3Qgc3dpdGNoaW5nIHRvIHRoZSBkZWZhdWx0IEdPUFJPWFkgc2V0dGluZ3MKbWF5IGJl
-IHRoZSBiZXN0IHNvbHV0aW9uIHNpbmNlIHRoYXQncyB0eXBpY2FsbHkgd2hhdCBtb3N0IHByb2pl
-Y3RzIHVzZS4KClRoZXJlJ3MgcmVwb3J0cyB0aGF0IEdPUFJPWFk9ZGlyZWN0IGlzIGtpbmRhIGJy
-b2tlbjoKaHR0cHM6Ly9kcmV3ZGV2YXVsdC5jb20vMjAyMS8wOC8wNi9nb3Byb3h5LWJyZWFrcy1n
-by5odG1sCgo+Cj4gQ291bGQgeW91IGV4cGxhaW4gdG8gYSBHbyBpZ25vcmFudCBsaWtlIG1lIGhv
-dyBpcyB0aGlzIHByb3h5IHRoaW5nCj4gaGVscGluZyBpbiBzb2x2aW5nIHRoaXMgaXNzdWU/IFNo
-b3VsZCBhIHByb3h5IGp1c3QgInNwZWVkIHVwIiB0aGUKPiBkb3dubG9hZD8gV2h5IGRvZXMgaXQg
-ZXhoaWJpdCBhIGRpZmZlcmVudCBiZWhhdmlvciBiZXR3ZWVuIGEKPiBHT1BST1hZPWRpcmVjdCBi
-dWlsZCBhbmQgYSBHT1BST1hZPXNvbWV0aGluZ2Vsc2UgPwoKUHJlc3VtYWJseSB0aGUgcHJveHkg
-YWN0cyBhcyBhIGNhY2hlIHdoaWNoIHByZXZlbnRzIGJyZWFrYWdlIGlmCnRoZSBkZXBlbmRlbmN5
-IGRpcmVjdCBzb3VyY2UgY2hhbmdlcyBvciBzb21ldGhpbmcgbGlrZSB0aGF0LgoKPgo+IFRoYW5r
-cyEKPgo+IFRob21hcwo+IC0tCj4gVGhvbWFzIFBldGF6em9uaSwgY28tb3duZXIgYW5kIENFTywg
-Qm9vdGxpbgo+IEVtYmVkZGVkIExpbnV4IGFuZCBLZXJuZWwgZW5naW5lZXJpbmcgYW5kIHRyYWlu
-aW5nCj4gaHR0cHM6Ly9ib290bGluLmNvbQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJv
-b3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxk
-cm9vdAo=
+On Tue Aug 6, 2024 at 3:10 PM UTC, Neal Frager via buildroot wrote:
+> This patch adds support for Xilinx Versal VEK280 Evaluation Kit.
+>
+> VEK280 features can be found here:
+> https://www.xilinx.com/products/boards-and-kits/vek280.html
+>
+> The VEK280 requires a patch for the memory node in the dts file because it is
+> not currently correct.  This patch has been applied to the linux-xlnx repo and
+> will be included in the 2024.2 release.
+>
+> Upstream: https://github.com/Xilinx/linux-xlnx/commit/3c7a97d99bdb3dd6b1f36d7d87d3a3c113dfe2ea
+> Signed-off-by: Neal Frager <neal.frager@amd.com>
+
+Thanks!
+
+Reviewed-by: Brandon Maier <brandon.maier@collins.com>
+
+> ---
+> V1->V2:
+> - Fixed memory range in dts files for vek280 evaluation board.
+> V2->V3:
+> - Added Upstream link to vek280 patch.
+> ---
+>  DEVELOPERS                                    |  1 +
+>  board/versal/readme.txt                       |  4 ++
+>  ...rsal-Fix-vek280-memory-configuration.patch | 47 +++++++++++++++++++
+>  configs/versal_vek280_defconfig               | 44 +++++++++++++++++
+>  4 files changed, 96 insertions(+)
+>  create mode 100644 board/versal/vek280/patches/linux/0001-arm64-versal-Fix-vek280-memory-configuration.patch
+>  create mode 100644 configs/versal_vek280_defconfig
+>
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 76f7fc5ed6..d07f41fe91 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -2403,6 +2403,7 @@ F:	board/zynq/
+>  F:	board/zynqmp/
+>  F:	boot/xilinx-prebuilt/
+>  F:	configs/versal_vck190_defconfig
+> +F:	configs/versal_vek280_defconfig
+>  F:	configs/versal_vpk180_defconfig
+>  F:	configs/zynq_zc702_defconfig
+>  F:	configs/zynq_zc706_defconfig
+> diff --git a/board/versal/readme.txt b/board/versal/readme.txt
+> index 9cf499b35b..4d8406fb1f 100644
+> --- a/board/versal/readme.txt
+> +++ b/board/versal/readme.txt
+> @@ -4,6 +4,7 @@ Xilinx Versal boards:
+>  ******************************************
+>  Supported Versal Boards:
+>  Xilinx VCK190 board
+> +Xilinx VEK280 board
+>  Xilinx VPK180 board
+>  ******************************************
+>  
+> @@ -12,6 +13,9 @@ Evaluation board features can be found here with the links below.
+>  VCK190:
+>  https://www.xilinx.com/products/boards-and-kits/vck190.html
+>  
+> +VEK280:
+> +https://www.xilinx.com/products/boards-and-kits/vek280.html
+> +
+>  VPK180:
+>  https://www.xilinx.com/products/boards-and-kits/vpk180.html
+>  
+> diff --git a/board/versal/vek280/patches/linux/0001-arm64-versal-Fix-vek280-memory-configuration.patch b/board/versal/vek280/patches/linux/0001-arm64-versal-Fix-vek280-memory-configuration.patch
+> new file mode 100644
+> index 0000000000..d894ad35d1
+> --- /dev/null
+> +++ b/board/versal/vek280/patches/linux/0001-arm64-versal-Fix-vek280-memory-configuration.patch
+> @@ -0,0 +1,47 @@
+> +From: Michal Simek <michal.simek@amd.com>
+> +Date: Mon, 15 Jul 2024 08:24:57 +0200
+> +Subject: [PATCH] arm64: versal: Fix vek280 memory configuration
+> +
+> +Board has 12GB total but Vivado wizard supports one channel LPDDR4 4GB
+> +configuration (2GB low + 2GB high) or two channel LPDDR 8GB configuration
+> +(2GB low + 6GB high). Wiring the remaining 4GB LPDDR can be done via board
+> +tab but not available as option in wizard. That's why only describe 8GB by
+> +default.
+> +
+> +Signed-off-by: Michal Simek <michal.simek@amd.com>
+> +Signed-off-by: Neal Frager <neal.frager@amd.com>
+> +Upstream: https://github.com/Xilinx/linux-xlnx/commit/3c7a97d99bdb3dd6b1f36d7d87d3a3c113dfe2ea
+> +---
+> + arch/arm64/boot/dts/xilinx/versal-vek280-revA.dts | 2 +-
+> + arch/arm64/boot/dts/xilinx/versal-vek280-revB.dts | 2 +-
+> + 2 files changed, 2 insertions(+), 2 deletions(-)
+> +
+> +diff --git a/arch/arm64/boot/dts/xilinx/versal-vek280-revA.dts b/arch/arm64/boot/dts/xilinx/versal-vek280-revA.dts
+> +index 1641dc0b5141..ad5d590318e6 100644
+> +--- a/arch/arm64/boot/dts/xilinx/versal-vek280-revA.dts
+> ++++ b/arch/arm64/boot/dts/xilinx/versal-vek280-revA.dts
+> +@@ -19,7 +19,7 @@ / {
+> + 
+> + 	memory: memory@0 {
+> + 		device_type = "memory";
+> +-		reg = <0 0 0 0x80000000>, <0x8 0x0 0x7 0x80000000>; /* 32GB */
+> ++		reg = <0 0 0 0x80000000>, <0x8 0x80000000 0x1 0x80000000>; /* 2GB + 6GB */
+> + 	};
+> + 
+> + 	chosen {
+> +diff --git a/arch/arm64/boot/dts/xilinx/versal-vek280-revB.dts b/arch/arm64/boot/dts/xilinx/versal-vek280-revB.dts
+> +index fda47cd87b3a..80aae8fa4b11 100644
+> +--- a/arch/arm64/boot/dts/xilinx/versal-vek280-revB.dts
+> ++++ b/arch/arm64/boot/dts/xilinx/versal-vek280-revB.dts
+> +@@ -19,7 +19,7 @@ / {
+> + 
+> + 	memory: memory@0 {
+> + 		device_type = "memory";
+> +-		reg = <0 0 0 0x80000000>, <0x8 0x0 0x7 0x80000000>; /* 32GB */
+> ++		reg = <0 0 0 0x80000000>, <0x8 0x80000000 0x1 0x80000000>; /* 2GB + 6GB */
+> + 	};
+> + 
+> + 	chosen {
+> +-- 
+> +2.43.0
+> +
+> diff --git a/configs/versal_vek280_defconfig b/configs/versal_vek280_defconfig
+> new file mode 100644
+> index 0000000000..37e479d692
+> --- /dev/null
+> +++ b/configs/versal_vek280_defconfig
+> @@ -0,0 +1,44 @@
+> +BR2_aarch64=y
+> +BR2_cortex_a72=y
+> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
+> +BR2_ROOTFS_POST_BUILD_SCRIPT="board/versal/post-build.sh"
+> +BR2_ROOTFS_POST_IMAGE_SCRIPT="board/versal/post-image.sh"
+> +BR2_ROOTFS_POST_SCRIPT_ARGS="ttyAMA0,115200 mmcblk0p2"
+> +BR2_LINUX_KERNEL=y
+> +BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.6_LTS_2024.1)/xlnx_rebase_v6.6_LTS_2024.1.tar.gz"
+> +BR2_LINUX_KERNEL_DEFCONFIG="xilinx"
+> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
+> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/versal-vek280-revB"
+> +BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+> +BR2_TARGET_ROOTFS_EXT2=y
+> +BR2_TARGET_ROOTFS_EXT2_4=y
+> +# BR2_TARGET_ROOTFS_TAR is not set
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,arm-trusted-firmware,xlnx_rebase_v2.10_2024.1)/xlnx_rebase_v2.10_2024.1.tar.gz"
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="versal"
+> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31_UBOOT=y
+> +BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
+> +BR2_TARGET_UBOOT_NEEDS_ATF_BL31_ELF=y
+> +BR2_TARGET_UBOOT=y
+> +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+> +BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+> +BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,u-boot-xlnx,xlnx_rebase_v2024.01_2024.1)/xlnx_rebase_v2024.01_2024.1.tar.gz"
+> +BR2_TARGET_UBOOT_BOARD_DEFCONFIG="xilinx_versal_virt"
+> +BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=versal-vek280-revB"
+> +BR2_TARGET_UBOOT_NEEDS_DTC=y
+> +BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+> +BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
+> +BR2_TARGET_UBOOT_FORMAT_REMAKE_ELF=y
+> +BR2_TARGET_UBOOT_FORMAT_DTB=y
+> +BR2_TARGET_XILINX_PREBUILT=y
+> +BR2_TARGET_XILINX_PREBUILT_VERSION="xilinx_v2024.1"
+> +BR2_TARGET_XILINX_PREBUILT_BOARD="vek280"
+> +BR2_TARGET_XILINX_PREBUILT_VERSAL=y
+> +BR2_PACKAGE_HOST_DOSFSTOOLS=y
+> +BR2_PACKAGE_HOST_GENIMAGE=y
+> +BR2_PACKAGE_HOST_MTOOLS=y
+> +BR2_PACKAGE_HOST_BOOTGEN=y
+> +BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+> +BR2_GLOBAL_PATCH_DIR="board/versal/vek280/patches board/xilinx/patches"
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
