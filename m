@@ -4,71 +4,113 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2BBCAC52D70
-	for <buildroot@archiver.kernel.org>; Tue,  6 Aug 2024 17:43:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 86888C52D70
+	for <buildroot@archiver.kernel.org>; Tue,  6 Aug 2024 18:53:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D0FA74042F;
-	Tue,  6 Aug 2024 17:43:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1CC88404BF;
+	Tue,  6 Aug 2024 18:53:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CpwlKXJ73UoW; Tue,  6 Aug 2024 17:43:48 +0000 (UTC)
+ id dh6Eye09x2hN; Tue,  6 Aug 2024 18:53:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 43D6E403FB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A63D3404C5
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 43D6E403FB;
-	Tue,  6 Aug 2024 17:43:48 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 9984D1BF3BF
- for <buildroot@lists.busybox.net>; Tue,  6 Aug 2024 17:43:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A63D3404C5;
+	Tue,  6 Aug 2024 18:53:53 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id AF7591BF388
+ for <buildroot@lists.busybox.net>; Tue,  6 Aug 2024 18:53:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 85F8860842
- for <buildroot@lists.busybox.net>; Tue,  6 Aug 2024 17:43:45 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9C806404C5
+ for <buildroot@lists.busybox.net>; Tue,  6 Aug 2024 18:53:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1fSv2Gh3eiVO for <buildroot@lists.busybox.net>;
- Tue,  6 Aug 2024 17:43:44 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::225;
- helo=relay5-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org DFF696082F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DFF696082F
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::225])
- by smtp3.osuosl.org (Postfix) with ESMTPS id DFF696082F
- for <buildroot@buildroot.org>; Tue,  6 Aug 2024 17:43:43 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 287431C0002;
- Tue,  6 Aug 2024 17:43:41 +0000 (UTC)
-Date: Tue, 6 Aug 2024 19:43:40 +0200
-To: Julien Olivain <ju.o@free.fr>
-Message-ID: <20240806194340.2e542192@windsurf>
-In-Reply-To: <20240207225100.1320837-1-ju.o@free.fr>
-References: <20240207225100.1320837-1-ju.o@free.fr>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id B12SRFlg1gk5 for <buildroot@lists.busybox.net>;
+ Tue,  6 Aug 2024 18:53:50 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::62e; helo=mail-ej1-x62e.google.com;
+ envelope-from=christian@aperture.us; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 0A5B5404BF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0A5B5404BF
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com
+ [IPv6:2a00:1450:4864:20::62e])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0A5B5404BF
+ for <buildroot@buildroot.org>; Tue,  6 Aug 2024 18:53:49 +0000 (UTC)
+Received: by mail-ej1-x62e.google.com with SMTP id
+ a640c23a62f3a-a7a94478a4eso19297666b.1
+ for <buildroot@buildroot.org>; Tue, 06 Aug 2024 11:53:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1722970427; x=1723575227;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=JjlG/nmDdji0TP8e/gDecjoeKdLA+A9/j8IvhLqwTrY=;
+ b=moRHRlb6BqPsAU5rxvj+5ooBxoEf0JolIyWf+BCJTGBvnfwG9b1mcGz5tgg/hqotmT
+ ximxXGBI/brRgZMpBP9D9ZyhaOJSN4gRoimYTnaDVkG1E9InPyP/9CUh/e3afamXVVKX
+ aDKfM4fFfyQ1ArTxTYj5CotjfPXw1wr+k0Hi3yWU1HIIEyTkbbFBmk+P0uJWUps88f/E
+ nqGMzvW8zStxpaXNhPwq0qg74vnSfrDn5xt+xf0HVMdiQVBpTWhPaS7VBri0TX9MGTLJ
+ 9KEpsjYW69DgHuiRxIbp30GiWXcux4MgpF9LcboKikerHi00UjAKwCuoNAQWGNt8K8eq
+ Sswg==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCWhxMLfn1ZLreG0H4ozKIlhIFQbmgX7TN6Wh5HiY+4r/IroOznajKAYlg5qPBrxN1zFKcdBn+t206K+XtmpzdolEMZv9ONqUg==
+X-Gm-Message-State: AOJu0YzAElV9Z/zdPvLEw6K2dDLZp3W2b43sF7QFD7kEyYrO0r2q/uIu
+ NAu+XciaPquyHYJmAfJeglckzkQOqv97z2Yy9rROdo+L6myiaP6eeICkL4ZfhKoarF8ulWYtggO
+ D9GSUKg==
+X-Google-Smtp-Source: AGHT+IEZiAiI8JbmtwSI3WndcLpL9yaD24ZMhIFgtgzV2YrzlOwwXIaLg5sBBHWGbSNCIWaZkbr1zA==
+X-Received: by 2002:a17:906:6a24:b0:a7a:afe8:1013 with SMTP id
+ a640c23a62f3a-a7dc5f65b17mr1200524766b.1.1722970426876; 
+ Tue, 06 Aug 2024 11:53:46 -0700 (PDT)
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com.
+ [209.85.218.51]) by smtp.gmail.com with ESMTPSA id
+ a640c23a62f3a-a7dc9c0c0casm565469366b.47.2024.08.06.11.53.45
+ for <buildroot@buildroot.org>
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Tue, 06 Aug 2024 11:53:46 -0700 (PDT)
+Received: by mail-ej1-f51.google.com with SMTP id
+ a640c23a62f3a-a7aada2358fso28893766b.0
+ for <buildroot@buildroot.org>; Tue, 06 Aug 2024 11:53:45 -0700 (PDT)
+X-Forwarded-Encrypted: i=1;
+ AJvYcCUSDpu/YD3l025M0UK+idczSegnzcWEyDSbe/Zpa4zmBr7b4t2KuftlpIUGpnu4bTQ0wvxVA0D/IuY1oHBCUhoALW6pwJcgBw==
+X-Received: by 2002:a17:906:6a24:b0:a7a:afe8:1013 with SMTP id
+ a640c23a62f3a-a7dc5f65b17mr1200522266b.1.1722970425550; Tue, 06 Aug 2024
+ 11:53:45 -0700 (PDT)
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
+References: <20240805163133.4126564-1-james.hilliard1@gmail.com>
+ <CA+h8R2oQGKFFH-vMX27WUO1uEAGyt4cz9MCwn9Cofwyujx1xDA@mail.gmail.com>
+ <20240805223152.09ed915b@windsurf>
+ <CADvTj4o_CnzCth+QqoxhVovBRinvYfbMf7r+SWnnY0tfVbKgbw@mail.gmail.com>
+ <CA+h8R2obsR-CzMhWDpQ-A0oeEPaG-P=aCwF7BS4J-3eShmHJgg@mail.gmail.com>
+ <20240806165050.234235b4@windsurf>
+ <CADvTj4pOK8-2YXy0POUg1qOKa1MrjsxbnS-r1F7YMk_YXFmEAQ@mail.gmail.com>
+ <CA+h8R2reErtSWPO1hGpX7tT5Xejb_SNqiuSCnXvJZKHwhzdcZg@mail.gmail.com>
+ <20240806185731.372f8f3e@windsurf>
+In-Reply-To: <20240806185731.372f8f3e@windsurf>
+Date: Tue, 6 Aug 2024 11:53:35 -0700
+X-Gmail-Original-Message-ID: <CA+h8R2rnNhM0nKyZm4_y6ZFrNyn7YzFa7BHeH57cLif38FSrxA@mail.gmail.com>
+Message-ID: <CA+h8R2rnNhM0nKyZm4_y6ZFrNyn7YzFa7BHeH57cLif38FSrxA@mail.gmail.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1722966221;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=2QNq6MEmU8ruH1ksnqya6It5or/A8CzwNnYppE/Ww5E=;
- b=HvLQo/Y0u6ktYGDMeW2qpwSdpsG73uQsMx6nW10PuUdMQk2nbxXUEN4Q+IOgUpntDEgvQV
- F4raRr0ym6v6WyC2go8vJMEhRDwtt9CTSXf8hwImilgRSZPzNfBZ0hVnG35RaVbJXMuBGJ
- QrIhSA4tnjbMR1wxez3H8Vap6GWbTEAtU29esZdbWZe4hW78dzREBwM5VSnWz8l780vnEW
- /RbciBRemDYqZejObcUDQuRJJ/DQ9Vn5DbVG4nEFiz2NBf0aRyDWCmh6LVf9pns6Rfp5Qf
- 2y+yw4yVjobEqV1uBDPzT5xT+wetff1pnqPYZmOZk2N3hOaNzZh7XVcGGLyUOw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=aperture.us; s=google; t=1722970427; x=1723575227; darn=buildroot.org;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=JjlG/nmDdji0TP8e/gDecjoeKdLA+A9/j8IvhLqwTrY=;
+ b=FXEEIFW7gv3a/e0E6B2xvay3BAek4zAzjvlwEntDcGvvbo8apSuPtpifk7rLYEUKmk
+ xtZMqRJTb+uRaP87Ov+hA1WCExgpezBo5uWLExV+TPxpgTdfhPx08dCYcMHCmF2lup3v
+ ZwS6cIcIimq2DCzGNqOhJsr2aRY/KXvK9VqiQOX6GoHtqMgzzUATyBOgjq1stWrOjI6p
+ q2dIv114LW2AsvvMAIbr5/FHz5sv+EXl1nhR9ZKIaJdGLBSjXfjIdYC9Ite/6GH6bPMb
+ 99g+uz6bdjSC01a8BaRGfGhunTQ4xyzkEPPj9chG87XkIfyrBF6ChD9j/1y+1ZotPljF
+ RrYw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ header.from=aperture.us
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=HvLQo/Y0
-Subject: Re: [Buildroot] [PATCH v2 1/1] package/swipl: new package
+ unprotected) header.d=aperture.us header.i=@aperture.us header.a=rsa-sha256
+ header.s=google header.b=FXEEIFW7
+Subject: Re: [Buildroot] [PATCH v4 1/2] package/pkg-golang.mk: allow
+ packages to override download GOPROXY
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,114 +122,99 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Christian Stewart via buildroot <buildroot@buildroot.org>
+Reply-To: Christian Stewart <christian@aperture.us>
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ Anisse Astier <anisse@astier.eu>,
+ Christian Stewart via buildroot <buildroot@buildroot.org>
+Content-Type: multipart/mixed; boundary="===============2588195380375233902=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Julien,
+--===============2588195380375233902==
+Content-Type: multipart/alternative; boundary="0000000000002c7a12061f085016"
 
-On Wed,  7 Feb 2024 23:51:00 +0100
-Julien Olivain <ju.o@free.fr> wrote:
+--0000000000002c7a12061f085016
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-> SWI-Prolog offers a comprehensive free Prolog environment. Since its
-> start in 1987, SWI-Prolog development has been driven by the needs of
-> real world applications. SWI-Prolog is widely used in research and
-> education as well as commercial applications.
-> 
-> Signed-off-by: Julien Olivain <ju.o@free.fr>
+Thomas,
 
-I've finally applied, with some minor changes.
+On Tue, Aug 6, 2024, 9:57=E2=80=AFAM Thomas Petazzoni <thomas.petazzoni@boo=
+tlin.com>
+wrote:
 
-> diff --git a/package/Config.in b/package/Config.in
-> index 91a6f1de00..b1a9d74af1 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1443,6 +1443,7 @@ endmenu
->  endif
->  	source "package/quickjs/Config.in"
->  	source "package/ruby/Config.in"
-> +	source "package/swipl/Config.in"
->  	source "package/tcl/Config.in"
->  if BR2_PACKAGE_TCL
->  menu "Tcl libraries/modules"
-> diff --git a/package/swipl/Config.in b/package/swipl/Config.in
-> new file mode 100644
-> index 0000000000..f0fb2d786d
-> --- /dev/null
-> +++ b/package/swipl/Config.in
-> @@ -0,0 +1,38 @@
-> +# swipl supports arch for which libc fenv.h provides all four macros:
-> +# FE_DOWNWARD, FE_TONEAREST, FE_TOWARDZERO, FE_UPWARD
-> +# See for example in glibc https://sourceware.org/git/glibc.git
-> +# git grep -E '^[[:space:]]*#[[:space:]]*define[[:space:]]+FE_(TONEAREST|UPWARD|DOWNWARD|TOWARDZERO)' sysdeps/
-> +config BR2_PACKAGE_SWIPL_ARCH_SUPPORTS
-> +	bool
-> +	default y if BR2_aarch64 || BR2_aarch64_be
-> +	default y if BR2_arceb || BR2_arcle
-> +	default y if BR2_arm || BR2_armeb
-> +	default y if BR2_i386
-> +	default y if BR2_m68k
-> +	# BR2_microblaze has only FE_TONEAREST
-> +	default y if BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
-> +	# BR2_nios2 has only FE_TONEAREST
-> +	default y if BR2_or1k
-> +	default y if BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le
-> +	default y if BR2_riscv
-> +	default y if BR2_s390x
-> +	# BR2_sh has only FE_{TONEAREST,TOWARDZERO}
-> +	default y if BR2_sparc || BR2_sparc64
-> +	default y if BR2_x86_64
-> +	# BR2_xtensa supports only uclibc which does not have fenv.h
-> +
-> +config BR2_PACKAGE_SWIPL
-> +	bool "SWI-Prolog"
-> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # __has_attribute()
-> +	depends on BR2_PACKAGE_SWIPL_ARCH_SUPPORTS
-> +	# swipl needs fenv.h which is not provided by uclibc
-> +	depends on !BR2_TOOLCHAIN_USES_UCLIBC
-> +	select BR2_PACKAGE_ZLIB
-> +	help
-> +	  SWI-Prolog offers a comprehensive free Prolog
-> +	  environment. Since its start in 1987, SWI-Prolog development
-> +	  has been driven by the needs of real world
-> +	  applications. SWI-Prolog is widely used in research and
-> +	  education as well as commercial applications.
-> +
-> +	  https://www.swi-prolog.org
+> > For now we can just include the latest commit hash of tailscale until
+> they
+> > make a new release and nothing else needs to be changed.
+>
+> Don't understand this last part. What is your proposal to fix the
+> tailscale situation?
+>
 
-The Config.in comment here was missing, about the gcc >= 5 dependency
-and the glibc or musl dependency, so I added it.
+They fixed the issue upstream and now the main branch of tailscale works
+fine with GOPROXY=3Ddirect. See:
 
+https://github.com/tailscale/tailscale/issues/12859#issuecomment-2239157563
 
-> +# swipl uses cmake macros try_run() and check_c_source_runs(), which
-> +# are not suitable for cross compilation. We add results in cache to
-> +# avoid running those tests. The SWIPL_NATIVE_FRIEND variable, is
-> +# meant to point to build directory of a host native swipl, rather
-> +# than the binary itself. The Cmake macro will append "src/swipl" to
-> +# the path set to this variable. Therefore, we cannot use the host
-> +# "swipl" binary installed in $(HOST_DIR)/usr/bin.
-> +SWIPL_CONF_OPTS = \
-> +	-DBUILD_PDF_DOCUMENTATION=OFF \
-> +	-DHAVE_WEAK_ATTRIBUTE=1 \
-> +	-DLLROUND_OK=1 \
-> +	-DMODF_OK=1 \
-> +	-DQSORT_R_GNU=1 \
-> +	-DSWIPL_NATIVE_FRIEND=$(BUILD_DIR)/host-swipl-$(SWIPL_VERSION) \
+It is fine to use the main branch of tailscale here even if it's an
+external service as tailscale keeps compatibility between releases - I even
+have many machines running quite out of date tailscale clients which still
+connect and run perfectly. The same can be said for forwards compatibility.
 
-I've used $(HOST_SWIPL_SRCDIR) instead.
+All that I ask with regards to GOPROXY is that:
 
-Applied with those changes. Thanks!
+- we do not override it per package,
+- if we do decide to change the default to use Google, please make it a
+configurable option (like BR2_MIRROR) so that I (and other users) can
+override it back to be direct.
 
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+Best regards,
+Christian Stewart
+
+--0000000000002c7a12061f085016
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"auto"><div>Thomas,<br><br><div class=3D"gmail_quote"><div dir=
+=3D"ltr" class=3D"gmail_attr">On Tue, Aug 6, 2024, 9:57=E2=80=AFAM Thomas P=
+etazzoni &lt;<a href=3D"mailto:thomas.petazzoni@bootlin.com">thomas.petazzo=
+ni@bootlin.com</a>&gt; wrote:</div><blockquote class=3D"gmail_quote" style=
+=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-left:1ex">
+&gt; For now we can just include the latest commit hash of tailscale until =
+they<br>
+&gt; make a new release and nothing else needs to be changed.<br>
+<br>
+Don&#39;t understand this last part. What is your proposal to fix the<br>
+tailscale situation?<br></blockquote></div></div><div dir=3D"auto"><br></di=
+v><div dir=3D"auto">They fixed the issue upstream and now the main branch o=
+f tailscale works fine with GOPROXY=3Ddirect. See:</div><div dir=3D"auto"><=
+br></div><div dir=3D"auto"><a href=3D"https://github.com/tailscale/tailscal=
+e/issues/12859#issuecomment-2239157563">https://github.com/tailscale/tailsc=
+ale/issues/12859#issuecomment-2239157563</a></div><div dir=3D"auto"><br></d=
+iv><div dir=3D"auto">It is fine to use the main branch of tailscale here ev=
+en if it&#39;s an external service as tailscale keeps compatibility between=
+ releases - I even have many machines running quite out of date tailscale c=
+lients which still connect and run perfectly. The same can be said for forw=
+ards compatibility.</div><div dir=3D"auto"><br></div><div dir=3D"auto">All =
+that I ask with regards to GOPROXY is that:</div><div dir=3D"auto"><br></di=
+v><div dir=3D"auto">- we do not override it per package,</div><div dir=3D"a=
+uto">- if we do decide to change the default to use Google, please make it =
+a configurable option (like BR2_MIRROR) so that I (and other users) can ove=
+rride it back to be direct.</div><div dir=3D"auto"><br></div><div dir=3D"au=
+to">Best regards,</div><div dir=3D"auto">Christian Stewart</div></div>
+
+--0000000000002c7a12061f085016--
+
+--===============2588195380375233902==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============2588195380375233902==--
