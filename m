@@ -4,68 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 16FA0C52D6F
-	for <buildroot@archiver.kernel.org>; Tue,  6 Aug 2024 21:29:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E9903C49EA1
+	for <buildroot@archiver.kernel.org>; Tue,  6 Aug 2024 21:33:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C490C6086C;
-	Tue,  6 Aug 2024 21:29:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A1B9C6061F;
+	Tue,  6 Aug 2024 21:33:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SeD6CrrvSftL; Tue,  6 Aug 2024 21:29:07 +0000 (UTC)
+ id z6S1tuaf74nT; Tue,  6 Aug 2024 21:33:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E11306085A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9FF3F60657
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E11306085A;
-	Tue,  6 Aug 2024 21:29:06 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D0B861BF30B
- for <buildroot@lists.busybox.net>; Tue,  6 Aug 2024 21:29:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9FF3F60657;
+	Tue,  6 Aug 2024 21:33:29 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 7189B1BF30B
+ for <buildroot@lists.busybox.net>; Tue,  6 Aug 2024 21:33:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BE89240507
- for <buildroot@lists.busybox.net>; Tue,  6 Aug 2024 21:29:04 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5FA4560657
+ for <buildroot@lists.busybox.net>; Tue,  6 Aug 2024 21:33:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 95MKArzTQsHg for <buildroot@lists.busybox.net>;
- Tue,  6 Aug 2024 21:29:03 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 4502740506
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4502740506
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4502740506
- for <buildroot@buildroot.org>; Tue,  6 Aug 2024 21:29:02 +0000 (UTC)
-Received: from home.juju.sh (unknown
- [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 3A47BB0053D;
- Tue,  6 Aug 2024 23:28:58 +0200 (CEST)
-From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Tue,  6 Aug 2024 23:28:50 +0200
-Message-ID: <20240806212850.467698-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.45.2
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ryfdzCZbF0ZC for <buildroot@lists.busybox.net>;
+ Tue,  6 Aug 2024 21:33:26 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.195;
+ helo=relay3-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 3B7CF6061F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3B7CF6061F
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3B7CF6061F
+ for <buildroot@buildroot.org>; Tue,  6 Aug 2024 21:33:25 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 3F8F160003;
+ Tue,  6 Aug 2024 21:33:23 +0000 (UTC)
+Date: Tue, 6 Aug 2024 23:33:22 +0200
+To: <nick.whitlock@eizo.com>
+Message-ID: <20240806233322.679a8d3a@windsurf>
+In-Reply-To: <OSAPR01MB45613F3A13D852BB4C96256D84E22@OSAPR01MB4561.jpnprd01.prod.outlook.com>
+References: <20240513155907.104270-1-nick.whitlock@eizo.com>
+ <PH1P110MB1603A56A788CF657472E9F8C9FE2A@PH1P110MB1603.NAMP110.PROD.OUTLOOK.COM>
+ <OSAPR01MB45613F3A13D852BB4C96256D84E22@OSAPR01MB4561.jpnprd01.prod.outlook.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1722979739;
- bh=1Kk0WlvRV0AevHtAq8dKZkpq5OhSJM0ftOvp0Boz/5s=;
- h=From:To:Cc:Subject:Date:From;
- b=u/8n3qbfm88F05eArEM13KtZ61oyggpywS4WCP48Ko6czOqShLq6BAHsRCGNRtPmj
- 00L6Ph7zUjr2mEAOCg8igZEgh/aNQkAWhAC+sZag3+yGhTo+DtDGdX5u66n9ocF8SK
- ABa/qFmoMWFpsWdAD4baIG735jOweRY3irjV1Tb7qST+hdShMV0B/JGCNmXhlf8kWg
- uemMfOTQDcH4sNsRk2EdoVNDrjZ4/GtHob7nvqdE4Jn7TZCsp/jeWbR1XdHBY9kKJ9
- lo1P4I/Ksrs78cGmlwGoQDe48NLccGAKNgwOLFvuwqErpwJeZXWnomUhvZlWhZkeW+
- prjFGAx4FiOsA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1722980004;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=JM910KZEX/a0opRADVmix7SoPnox3HZhzQNwKLE2W/g=;
+ b=iEcjgtrRSOfRb5EdL69Ptg1cQn5jVIC9PWjacGyepfuU+tJZCbzbldkHIsKv/NHhQydoUx
+ za+GfZLVWLIY7XShgZz37fANuF5XZ5RGARdZL+wY1rauY9Er4ZY6dFETHvseekN/SRhdXT
+ R2//J77da0slIR94C00AAwCpJrL6LOKLpF2PMDHQA+ji6WqFkO/MiBXKWMvxmeIN3Nq0ez
+ NxYv1QWmsEQRZRV3P0lrEX+FGtDeQqiIusZiJ7GW+EQbnI/nt0w0CWhiRhVhIu2H+6ladn
+ eBVcq9XgSJ6/bUwPJ1xyVs9VuQrw7ToYUXUNLmnZ6xIq1WWQCqv+N/dy8Gtgyw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=u/8n3qbf
-Subject: [Buildroot] [PATCH 1/1] support/testing: package: gpsd: fix test by
- enabling python support
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=iEcjgtrR
+Subject: Re: [Buildroot] [External] - [PATCH] package/nvidia-driver: bump
+ version to 550.78
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,44 +83,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: vfazio@xes-inc.com, yann.morin.1998@free.fr, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Commit 9696d27756 "package/gpsd: condition python stuff to the proper
-kconfig option" changed the condition in which the gpsd python scripts
-are installed. After that change, the "gpsfake" command (which is a
-python script) is no longer found and the runtime test is failing.
+Hello Nick,
 
-This commit fixes the issue by reflecting the change in the runtime
-test Buildroot configuration.
+Sorry for the delay in getting back to you. Thanks as well to Vincent
+for the review.
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
-Patch testing in:
-https://gitlab.com/jolivain/buildroot/-/jobs/7520716177
----
- support/testing/tests/package/test_gpsd.py | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Mon, 13 May 2024 20:03:56 +0000
+<nick.whitlock@eizo.com> wrote:
 
-diff --git a/support/testing/tests/package/test_gpsd.py b/support/testing/tests/package/test_gpsd.py
-index 7ca5973981..2c44e25cec 100644
---- a/support/testing/tests/package/test_gpsd.py
-+++ b/support/testing/tests/package/test_gpsd.py
-@@ -11,7 +11,7 @@ class TestGpsd(infra.basetest.BRTest):
-     config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-         f"""
-         BR2_PACKAGE_GPSD=y
--        BR2_PACKAGE_PYTHON3=y
-+        BR2_PACKAGE_GPSD_PYTHON=y
-         BR2_ROOTFS_OVERLAY="{rootfs_overlay}"
-         BR2_TARGET_ROOTFS_CPIO=y
-         # BR2_TARGET_ROOTFS_TAR is not set
+> If a selectable (or user-enterable) version number is the consensus,
+> then I'm all for that.
+> 
+> There isn't currently a way to use recent NVIDIA discrete GPUs (read:
+> Ampere and up) for GPGPU in embedded spaces until this gets resolved
+> though. 
+
+I think a version selection is the only approach that we have. Indeed
+keeping support for older GPUs is important, but supporting newer ones
+is also important, so we will have to live with a more complicated
+package that supports different generations of the driver.
+
+Nick, do you think you could prepare a new iteration with such a
+version selection, but also taking into account the rest of the
+feedback from Vincent?
+
+> > +config BR2_PACKAGE_NVIDIA_DRIVER_GTK
+> > +       bool "nvidia GTK acceleration"
+
+Could you also give a little bit more details about this GTK
+acceleration? How come two additional .so files can "accelerate GTK" ?
+How do they interact with GTK ?
+
+Thanks a lot,
+
+Thomas
 -- 
-2.45.2
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
