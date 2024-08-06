@@ -4,67 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B588C49EA1
-	for <buildroot@archiver.kernel.org>; Tue,  6 Aug 2024 22:03:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CEED4C49EA1
+	for <buildroot@archiver.kernel.org>; Tue,  6 Aug 2024 22:15:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6D3DB60657;
-	Tue,  6 Aug 2024 22:03:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8657360625;
+	Tue,  6 Aug 2024 22:15:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EoVdyvV8_S7T; Tue,  6 Aug 2024 22:03:03 +0000 (UTC)
+ id SRnErBuf8IyS; Tue,  6 Aug 2024 22:15:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8591460792
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A633B606AE
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8591460792;
-	Tue,  6 Aug 2024 22:03:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A633B606AE;
+	Tue,  6 Aug 2024 22:15:09 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 8D5CF1BF30B
- for <buildroot@lists.busybox.net>; Tue,  6 Aug 2024 22:03:02 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id EDF161BF302
+ for <buildroot@lists.busybox.net>; Tue,  6 Aug 2024 22:15:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7AC6860657
- for <buildroot@lists.busybox.net>; Tue,  6 Aug 2024 22:03:02 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E8C01606AE
+ for <buildroot@lists.busybox.net>; Tue,  6 Aug 2024 22:15:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3lzFcrATFrIV for <buildroot@lists.busybox.net>;
- Tue,  6 Aug 2024 22:03:01 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 8A78060792
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8A78060792
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8A78060792
- for <buildroot@buildroot.org>; Tue,  6 Aug 2024 22:03:01 +0000 (UTC)
-Received: from home.juju.sh (unknown
- [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 592F7B0051E;
- Wed,  7 Aug 2024 00:02:57 +0200 (CEST)
-From: Julien Olivain <ju.o@free.fr>
-To: buildroot@buildroot.org
-Date: Wed,  7 Aug 2024 00:02:50 +0200
-Message-ID: <20240806220250.525433-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.45.2
+ id D4qfv19sCns1 for <buildroot@lists.busybox.net>;
+ Tue,  6 Aug 2024 22:15:04 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::224;
+ helo=relay4-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org DAF8160625
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DAF8160625
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::224])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id DAF8160625
+ for <buildroot@buildroot.org>; Tue,  6 Aug 2024 22:15:02 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 18D49E0003;
+ Tue,  6 Aug 2024 22:15:00 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1sbSSK-0004eJ-1Y;
+ Wed, 07 Aug 2024 00:15:00 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+References: <20240702070232.2373630-1-dario.binacchi@amarulasolutions.com>
+Date: Wed, 07 Aug 2024 00:15:00 +0200
+In-Reply-To: <20240702070232.2373630-1-dario.binacchi@amarulasolutions.com>
+ (Dario Binacchi's message of "Tue, 2 Jul 2024 09:02:32 +0200")
+Message-ID: <87ed71qowr.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1722981778;
- bh=9PluETmAUJX/G9q+DaH/U/Y/Nm2TEQjOZVirdM1FJD0=;
- h=From:To:Cc:Subject:Date:From;
- b=vJ+dXHlL3izQ+JgII6H6qzjBQ7BSe+i67xajsUwll5SGrq/cNKqJd9/37iC1pc9Xu
- UpN/m1mKOoBuFJq1K1gJ2QhxvqKET+bs/QbctgR56t1hoAnlOat3JmehTRu5t7Ob2w
- WuVczdY93GmZkg8Q2SBdhuXfdQx1Z8Wq+Ya91uHrSYuzp9dqWGuavnZzHB6gUJMA4b
- vh1JMOZ8CL1UMNvH7UJOxq2P66yKCpQI7aF3htj1XpqZrMLp48ipaSiX81NYIjZRCH
- G4qlJ9XVCn65diMPDWURP1AdF4YeLRa8Jd3Lmvr1wzpz+cfkY05VNaPjIEhWfw2glI
- OD4tqfYIK+xvw==
+X-GND-Sasl: peter@korsgaard.com
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=vJ+dXHlL
-Subject: [Buildroot] [PATCH 1/1] package/swipl: host-swipl needs host-zlib
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: Re: [Buildroot] [PATCH 1/1] package/gpm: update the patches to be
+ applied with fuzz 0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,43 +69,34 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>
+Cc: Julien Boibessot <julien.boibessot@armadeus.com>,
+ linux-amarula@amarulasolutions.com, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-host-swipl fails to configure with CMake error message:
+>>>>> "Dario" == Dario Binacchi <dario.binacchi@amarulasolutions.com> writes:
 
-    Could NOT find ZLIB (missing: ZLIB_LIBRARY ZLIB_INCLUDE_DIR)
+ > Commit 8f88a644ed7d6 ("support/scripts/apply-patches.sh: set the maximum
+ > fuzz factor to 0") reduced the fuzz factor.
 
-This commit fixes the issue by adding the missing host-zlib
-dependency.
+ > Due to this change, gpm fails to build with output:
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
-Patch tested in:
-https://gitlab.com/jolivain/buildroot/-/jobs/7520944006
----
- package/swipl/swipl.mk | 2 ++
- 1 file changed, 2 insertions(+)
+ >     Applying 0003-src-Makefile.in-Really-install-unversioned-solibrary.patch using patch:
+ >     patching file src/Makefile.in
+ >     Hunk #1 FAILED at 115.
+ >     1 out of 1 hunk FAILED -- saving rejects to file src/Makefile.in.rej
 
-diff --git a/package/swipl/swipl.mk b/package/swipl/swipl.mk
-index 9ba841084e..595f5e975b 100644
---- a/package/swipl/swipl.mk
-+++ b/package/swipl/swipl.mk
-@@ -9,6 +9,8 @@ SWIPL_SITE = https://www.swi-prolog.org/download/stable/src
- SWIPL_LICENSE = BSD-2-Clause
- SWIPL_LICENSE_FILES = LICENSE
- 
-+HOST_SWIPL_DEPENDENCIES = host-zlib
-+
- SWIPL_DEPENDENCIES = host-swipl zlib
- 
- # A host-swipl is needed to compile the target prolog boot
+ > This commit refreshes the package patch on the current package version.
+
+ > Fixes: 8f88a644ed7d6c9ea55fd4fbe9d7f37055920016
+ > Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+
+Committed to 2024.05.x, thanks.
+
 -- 
-2.45.2
-
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
