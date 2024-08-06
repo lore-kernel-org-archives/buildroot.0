@@ -4,72 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1D5AFC52D70
-	for <buildroot@archiver.kernel.org>; Tue,  6 Aug 2024 15:03:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4CD5FC3DA64
+	for <buildroot@archiver.kernel.org>; Tue,  6 Aug 2024 15:04:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CFD754052E;
-	Tue,  6 Aug 2024 15:03:57 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0BB2240373;
+	Tue,  6 Aug 2024 15:04:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id W0ViXVO18IQH; Tue,  6 Aug 2024 15:03:57 +0000 (UTC)
+ id 5nF8SWlVDM4H; Tue,  6 Aug 2024 15:04:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CD1FE405C7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 93A0A4052E
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CD1FE405C7;
-	Tue,  6 Aug 2024 15:03:56 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2DD671BF2B0
- for <buildroot@lists.busybox.net>; Tue,  6 Aug 2024 15:03:55 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 93A0A4052E;
+	Tue,  6 Aug 2024 15:04:30 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 2E8EA1BF3BF
+ for <buildroot@lists.busybox.net>; Tue,  6 Aug 2024 15:04:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5CDD44052E
- for <buildroot@lists.busybox.net>; Tue,  6 Aug 2024 15:03:54 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 28F09606B4
+ for <buildroot@lists.busybox.net>; Tue,  6 Aug 2024 15:04:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1K0sjI4RHR_e for <buildroot@lists.busybox.net>;
- Tue,  6 Aug 2024 15:03:53 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::228;
- helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id AElhNU3t9fkD for <buildroot@lists.busybox.net>;
+ Tue,  6 Aug 2024 15:04:28 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0EFCC40A21
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0EFCC40A21
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::228])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0EFCC40A21
- for <buildroot@buildroot.org>; Tue,  6 Aug 2024 15:03:52 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 410AB1BF20C;
- Tue,  6 Aug 2024 15:03:51 +0000 (UTC)
-Date: Tue, 6 Aug 2024 17:03:50 +0200
-To: Markus Mayer via buildroot <buildroot@buildroot.org>
-Message-ID: <20240806170350.34b8af72@windsurf>
-In-Reply-To: <20240806030701.618378-1-mmayer@broadcom.com>
-References: <20240806030701.618378-1-mmayer@broadcom.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1722956631;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=BA/KTkgVW0jooWK1zVUXb9JfZLiFUk9+jJgWtAVq6hU=;
- b=CIzIB6LQQeUDERf9fEj/b/FWdL6RD8Dro5tzztsWUCSoxxYb6rB6hH9af0GH1pyXMfE/i9
- 3YzDnLD9qgxYsCPhC+Jp6KhCNxJ2PAmKrNvyt+oD0Ph/nCUzyywv1Z3yWD2VP7PUNrT9hC
- XoitDbJV9h8OIbT/8+H+ucP7aGM5uHcNqYK34b+cKE+76oc0L5xuzQz5t06dEjbtUTQDY/
- HB/Yctq3CKO08+ASjonC4KwdShsdFkvmVVnLPMBB+PGb99Vd97dfgexACjawTSl0LcQsn2
- f1qFKa/EhAfeyPFGzlSMvS7KLca4R1J1Twj+oD3Lxw22HWh/77wCn/Wx81rRwQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=CIzIB6LQ
-Subject: Re: [Buildroot] [PATCH] package/xz: avoid cicular dependency on
- autoconf for host builds
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 59105606B3
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 59105606B3
+ for <buildroot@buildroot.org>; Tue,  6 Aug 2024 15:04:28 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 41416841DB; Tue,  6 Aug 2024 15:04:28 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 6 Aug 2024 17:04:15 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: a3a7e673de82adbd324b23cc90ffb09923eb9956
+X-Git-Newrev: 7c11f0b3a6eb11f32b82f8478f74d423f15ecf39
+X-Patchwork-Hint: ignore
+Message-Id: <20240806150428.41416841DB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libressl: disable asm for
+ mips64/mips64el
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,40 +60,40 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- Markus Mayer <mmayer@broadcom.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon,  5 Aug 2024 20:06:59 -0700
-Markus Mayer via buildroot <buildroot@buildroot.org> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=7c11f0b3a6eb11f32b82f8478f74d423f15ecf39
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> autoconf has an implicit dependency on HOST_XZ due to extracting a
-> tar.xz archive. By enabling XZ_AUTORECONF we create a reverse dependency
-> for xz on autoconf. This is fine for target builds, but it won't work
-> for host builds, as the two packages now depend on each other.
-> 
-> This problem only occurs if host tools are being built by Buildroot. If
-> the build relies on host tools provided by the distro, there is no
-> circular dependency problem.
-> 
-> Fixes:
-> 4703a7ae9176 package/xz: fix musl static build
-> 
-> Signed-off-by: Markus Mayer <mmayer@broadcom.com>
-> ---
->  package/xz/xz.mk | 7 +++++++
->  1 file changed, 7 insertions(+)
+LibreSSL fails in the same way as powerpc, so disable
+asm too for these architectures.
 
-Applied to master, thanks.
+Fixes:
+ - http://autobuild.buildroot.net/results/788/7883ffe9ed96f38f9ca359e99a18a548b6f35c24/
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libressl/libressl.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/libressl/libressl.mk b/package/libressl/libressl.mk
+index 5a78ec839a..7e92ea3a11 100644
+--- a/package/libressl/libressl.mk
++++ b/package/libressl/libressl.mk
+@@ -14,7 +14,7 @@ LIBRESSL_CONF_OPTS = -DLIBRESSL_TESTS=OFF -DOPENSSLDIR="/etc/ssl"
+ 
+ # Otherwise fails to build with undefined reference to
+ # `bn_mul_add_words'
+-ifeq ($(BR2_powerpc),y)
++ifeq ($(BR2_powerpc)$(BR2_mips64)$(BR2_mips64el),y)
+ LIBRESSL_CONF_OPTS += -DENABLE_ASM=OFF
+ endif
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
