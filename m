@@ -1,52 +1,57 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 37D84C3DA64
-	for <buildroot@archiver.kernel.org>; Tue,  6 Aug 2024 12:04:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93975C49EA1
+	for <buildroot@archiver.kernel.org>; Tue,  6 Aug 2024 13:06:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D097860594;
-	Tue,  6 Aug 2024 12:04:55 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 43492400F6;
+	Tue,  6 Aug 2024 13:06:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id n-v8Cjp63Y9u; Tue,  6 Aug 2024 12:04:55 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id npOfAgWR-Jm2; Tue,  6 Aug 2024 13:06:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CC85A6074F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 018AA409EC
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CC85A6074F;
-	Tue,  6 Aug 2024 12:04:54 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 018AA409EC;
+	Tue,  6 Aug 2024 13:06:24 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3073F1BF2FE
- for <buildroot@lists.busybox.net>; Tue,  6 Aug 2024 12:04:53 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8E4921BF300;
+ Tue,  6 Aug 2024 13:06:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1984E8059D
- for <buildroot@lists.busybox.net>; Tue,  6 Aug 2024 12:04:53 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7C3AC81194;
+ Tue,  6 Aug 2024 13:06:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JDZCmM4NI0Al for <buildroot@lists.busybox.net>;
- Tue,  6 Aug 2024 12:04:52 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id 7GboaOFTogtI; Tue,  6 Aug 2024 13:06:21 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
+ helo=sendmail.purelymail.com; envelope-from=git@douglass.dev;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3CCB08059B
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3CCB08059B
- for <buildroot@buildroot.org>; Tue,  6 Aug 2024 12:04:52 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 23CFC8415D; Tue,  6 Aug 2024 12:04:52 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 7764E81190
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7764E81190
+Received: from sendmail.purelymail.com (sendmail.purelymail.com
+ [34.202.193.197])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 7764E81190
+ for <buildroot@buildroot.org>; Tue,  6 Aug 2024 13:06:21 +0000 (UTC)
+Feedback-ID: 3578:1022:null:purelymail
+X-Pm-Original-To: buildroot@buildroot.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 304458;
+ (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+ Tue, 06 Aug 2024 13:06:16 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 6 Aug 2024 13:59:38 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d70bbedd0d284744521ca3bc68984f6d8057ee50
-X-Git-Newrev: cc7fb688b06fd67c7fff6dfea0fae33c740f9dbd
-X-Patchwork-Hint: ignore
-Message-Id: <20240806120452.23CFC8415D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libavif: security bump to version
- 1.1.1
+Date: Tue,  6 Aug 2024 09:05:53 -0400
+Message-Id: <20240806130553.981094-1-wdouglass@carnegierobotics.com>
+X-Mailer: git-send-email 2.39.2
+MIME-Version: 1.0
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=fail (p=quarantine dis=none)
+ header.from=carnegierobotics.com
+Subject: [Buildroot] [PATCH] package/chicken: pass TARGET_CFLAGS to chicken
+ build system explicitly
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,82 +63,88 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+From: Woodrow Douglass via buildroot <buildroot@buildroot.org>
+Reply-To: Woodrow Douglass <wdouglass@carnegierobotics.com>
+Cc: Woodrow Douglass <wdouglass@carnegierobotics.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cc7fb688b06fd67c7fff6dfea0fae33c740f9dbd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Chicken Scheme's build system wants cflags to be passed as a make variable
+in a way that's different then what buildroot expects. this bridges
+the gap.
 
-The release notes for version 1.1.0 mention fixes for memory handling
-issues and bugs found out by fuzzing, which is the reason why this may
-be considered a security update, despite them not having CVEs assigned:
+This commit also fixes the xtensa build problems, negating the need
+for the xtensa build patch
 
-  https://github.com/AOMediaCodec/libavif/releases/tag/v1.1.0
-  https://github.com/AOMediaCodec/libavif/releases/tag/v1.1.1
-
-The change checksum for the LICENSE file is caused by a path change for
-one of the submodules, and the addition of the licensing terms for the
-bundled libyuv sources. The latter are never built from the libavif tree
-as there is a separate libyuv package, so BSD-3-Clause does not need to
-be added to LIBAVIF_LICENSE.
-
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Woodrow Douglass <wdouglass@carnegierobotics.com>
 ---
- package/libavif/libavif.hash | 4 ++--
- package/libavif/libavif.mk   | 9 +++++----
- 2 files changed, 7 insertions(+), 6 deletions(-)
+ .../0001-xtensa-text-section-literals.patch   | 30 -------------------
+ package/chicken/chicken.mk                    |  3 +-
+ 2 files changed, 1 insertion(+), 32 deletions(-)
+ delete mode 100644 package/chicken/0001-xtensa-text-section-literals.patch
 
-diff --git a/package/libavif/libavif.hash b/package/libavif/libavif.hash
-index f4599cdb0b..b26e678abf 100644
---- a/package/libavif/libavif.hash
-+++ b/package/libavif/libavif.hash
-@@ -1,3 +1,3 @@
--sha256  dc56708c83a4b934a8af2b78f67f866ba2fb568605c7cf94312acf51ee57d146  libavif-1.0.4.tar.gz
-+sha256  914662e16245e062ed73f90112fbb4548241300843a7772d8d441bb6859de45b  libavif-1.1.1.tar.gz
- 
--sha256  10952217a6d404de8bf8a997fbea9b88f682df1fe98cb9b9f467ade641525639  LICENSE
-+sha256  165abf92cc04b39e80d29cadea7a6a7e8fddf59407d4ad2616507a7ebe8216f9  LICENSE
-diff --git a/package/libavif/libavif.mk b/package/libavif/libavif.mk
-index 1ca3add82b..0c2a8e4dae 100644
---- a/package/libavif/libavif.mk
-+++ b/package/libavif/libavif.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBAVIF_VERSION = 1.0.4
-+LIBAVIF_VERSION = 1.1.1
- LIBAVIF_SITE = $(call github,AOMediaCodec,libavif,v$(LIBAVIF_VERSION))
- LIBAVIF_LICENSE = BSD-2-Clause, IJG, Apache-2.0
- LIBAVIF_LICENSE_FILES = LICENSE
-@@ -19,17 +19,18 @@ LIBAVIF_CONF_OPTS = \
- 	-DAVIF_BUILD_MAN_PAGES=OFF \
- 	-DAVIF_BUILD_TESTS=OFF \
- 	-DAVIF_CODEC_AOM=OFF \
--	-DAVIF_CODEC_DAV1D=ON \
-+	-DAVIF_CODEC_DAV1D=SYSTEM \
- 	-DAVIF_CODEC_LIBGAV1=OFF \
- 	-DAVIF_CODEC_RAV1E=OFF \
- 	-DAVIF_CODEC_SVT=OFF \
- 	-DAVIF_CODEC_AVM=OFF \
- 	-DAVIF_ENABLE_GTEST=OFF
- 
--# There is no CMake options to explicitly enable/disable usage of
--# libyuv, only autodetection :-(
- ifeq ($(BR2_PACKAGE_LIBYUV),y)
- LIBAVIF_DEPENDENCIES += libyuv
-+LIBAVIF_CONF_OPTS += -DAVIF_LIBYUV=SYSTEM
-+else
-+LIBAVIF_CONF_OPTS += -DAVIF_LIBYUV=OFF
+diff --git a/package/chicken/0001-xtensa-text-section-literals.patch b/package/chicken/0001-xtensa-text-section-literals.patch
+deleted file mode 100644
+index b93aaf9e21..0000000000
+--- a/package/chicken/0001-xtensa-text-section-literals.patch
++++ /dev/null
+@@ -1,30 +0,0 @@
+-From e8d177f4d4e1c6bc41787ea1621e323ff4ad493e Mon Sep 17 00:00:00 2001
+-From: Woodrow Douglass <wdouglass@carnegierobotics.com>
+-Date: Mon, 22 Jul 2024 08:50:37 -0400
+-Subject: [PATCH] Move literals into text section for xtensa architecture
+-
+-Upstream: https://bugs.call-cc.org/ticket/1840
+-Signed-off-by: Woodrow Douglass <wdouglass@carnegierobotics.com>
+----
+- Makefile.linux | 5 +++++
+- 1 file changed, 5 insertions(+)
+-
+-diff --git a/Makefile.linux b/Makefile.linux
+-index b628cda4..e97c2b94 100644
+---- a/Makefile.linux
+-+++ b/Makefile.linux
+-@@ -52,6 +52,11 @@ USES_SONAME = yes
+- 
+- # architectures
+- 
+-+ifeq ($(ARCH),xtensa)
+-+C_COMPILER_OPTIONS += -mtext-section-literals
+-+LINKER_OPTIONS += -mtext-section-literals
+-+endif
+-+
+- ifeq ($(ARCH),x32)
+- C_COMPILER_OPTIONS += -mx32
+- LINKER_OPTIONS += -mx32
+--- 
+-2.39.2
+-
+diff --git a/package/chicken/chicken.mk b/package/chicken/chicken.mk
+index 0520280134..e7a2384f5a 100644
+--- a/package/chicken/chicken.mk
++++ b/package/chicken/chicken.mk
+@@ -16,8 +16,6 @@ CHICKEN_INSTALL_STAGING = YES
+ # values that have an effect, or pass "unused" here
+ ifeq ($(NORMALIZED_ARCH),x86_64)
+ CHICKEN_ARCH = x86-64
+-else ifeq ($(NORMALIZED_ARCH),xtensa)
+-CHICKEN_ARCH = xtensa
+ else
+ CHICKEN_ARCH = unused
  endif
- 
- $(eval $(cmake-package))
+@@ -25,6 +23,7 @@ endif
+ CHICKEN_MAKE_OPTS = \
+ 	ARCH="$(CHICKEN_ARCH)" \
+ 	C_COMPILER="$(TARGET_CC)" \
++	C_COMPILER_OPTIONS="$(TARGET_CFLAGS) -fwrapv -DHAVE_CHICKEN_CONFIG_H -DC_ENABLE_PTABLES" \
+ 	CXX_COMPILER="$(TARGET_CXX)" \
+ 	PREFIX=/usr \
+ 	PLATFORM=linux \
+-- 
+2.39.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
