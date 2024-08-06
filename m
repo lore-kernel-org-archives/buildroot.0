@@ -4,49 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72B54C52D6F
-	for <buildroot@archiver.kernel.org>; Tue,  6 Aug 2024 20:15:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD23AC52D6F
+	for <buildroot@archiver.kernel.org>; Tue,  6 Aug 2024 20:20:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 75226404DF;
-	Tue,  6 Aug 2024 20:15:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 733DE40222;
+	Tue,  6 Aug 2024 20:20:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jfU73pCMQ_21; Tue,  6 Aug 2024 20:15:06 +0000 (UTC)
+ id YEkinD36j7X2; Tue,  6 Aug 2024 20:20:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 926B0404A3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 37244402B0
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 926B0404A3;
-	Tue,  6 Aug 2024 20:15:05 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 9D20E1BF33D
- for <buildroot@lists.busybox.net>; Tue,  6 Aug 2024 20:15:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 37244402B0;
+	Tue,  6 Aug 2024 20:20:11 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 7694D1BF33D
+ for <buildroot@lists.busybox.net>; Tue,  6 Aug 2024 20:20:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9618B40283
- for <buildroot@lists.busybox.net>; Tue,  6 Aug 2024 20:15:01 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6382D402B0
+ for <buildroot@lists.busybox.net>; Tue,  6 Aug 2024 20:20:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bH7q55484Gjf for <buildroot@lists.busybox.net>;
- Tue,  6 Aug 2024 20:15:00 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zaPWDw9x-eCV for <buildroot@lists.busybox.net>;
+ Tue,  6 Aug 2024 20:20:08 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::229;
+ helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4492A40261
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4492A40261
- for <buildroot@buildroot.org>; Tue,  6 Aug 2024 20:15:00 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3DE04842D4; Tue,  6 Aug 2024 20:15:00 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 6 Aug 2024 22:13:55 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4dc5c45bd283991912a3536d044ec1f36756f505
-X-Git-Newrev: 21f312a53e49a3338db870df778665e42cf72dbf
-X-Patchwork-Hint: ignore
-Message-Id: <20240806201500.3DE04842D4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/htop: fix BR2_SHARED_STATIC_LIBS
- build
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 204B740222
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 204B740222
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 204B740222
+ for <buildroot@buildroot.org>; Tue,  6 Aug 2024 20:20:07 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 5FBDFFF806;
+ Tue,  6 Aug 2024 20:20:05 +0000 (UTC)
+Date: Tue, 6 Aug 2024 22:20:04 +0200
+To: Julien Olivain <ju.o@free.fr>
+Message-ID: <20240806222004.263622fe@windsurf>
+In-Reply-To: <01746f497e80b9a6b6efd1f50276a8cc@free.fr>
+References: <20240207225100.1320837-1-ju.o@free.fr>
+ <20240806194340.2e542192@windsurf>
+ <01746f497e80b9a6b6efd1f50276a8cc@free.fr>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1722975605;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=4rJwBiePUrg4cF3x/vcJXCbJIbowoWCElx4xO2E27Bs=;
+ b=MhSvDi500CRJ6/Ec0OHXNZ0jjv9TwCqv+gqzT86tnSen0wqsQN9YHJ0uM1BLFp46fUOZgI
+ JVITKLs/qTweK3ckCZtiNI5JQfej/e2ghiyfR2aoDJoy5aERAw+xJDc8dhlSh0qQZxTZrK
+ xPbxNA7qvXo+0r5QKI6mlMP/LcPUiBcJzt+2MdFM1mqGJcgHsXEkwZobSANieIgqWxK2h1
+ DKLibROVPcxopJdmCNp2UnjmmA59ZswQ+griKAcfEjRk0NIJ65gRQ/DfnIlPrcM4uBsQSd
+ 3BZm0GQwFJhk/eOBNn+u3D5xkTe9QDoW7nPeApjFMlxbylHUNANoUZ9AqaObcA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=MhSvDi50
+Subject: Re: [Buildroot] [PATCH v2 1/1] package/swipl: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,62 +84,40 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=21f312a53e49a3338db870df778665e42cf72dbf
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-With BR2_SHARED_STATIC_LIBS=y, the generic infrastructure adds a
---enable-static flags causing htop to be built as a static binary.
-Adding a --disable-static reverts this. This will fix the following
-build failure with hwloc raised since bump to version 3.3.0 in commit
-09243186df3168022f0b23b8a9677c6313033769 and
-https://github.com/htop-dev/htop/commit/c8a61850dd31ab64eb8ad83929ce86d2adbeb96c:
+On Tue, 06 Aug 2024 21:33:00 +0200
+Julien Olivain <ju.o@free.fr> wrote:
 
-/home/autobuild/autobuild/instance-3/output-1/host/bin/mipsel-buildroot-linux-gnu-gcc -std=c99 -pedantic -D_DEFAULT_SOURCE -D_XOPEN_SOURCE=600 -I/home/autobuild/autobuild/instance-3/output-1/host/mipsel-buildroot-linux-gnu/sysroot/usr/bin/../../usr/include -I/home/autobuild/autobuild/instance-3/output-1/host/bin/../mipsel-buildroot-linux-gnu/sysroot/usr/include/libxml2  -Wall -Wcast-align -Wcast-qual -Wextra -Wfloat-equal -Wformat=2 -Winit-self -Wmissing-format-attribute -Wmissing-noreturn -Wmissing-prototypes -Wpointer-arith -Wshadow -Wstrict-prototypes -Wundef -Wunused -Wwrite-strings -Wnull-dereference -D_XOPEN_SOURCE_EXTENDED -DSYSCONFDIR="\"/etc\"" -I"./linux" -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os -g0 -D_FORTIFY_SOURCE=2 -static -rdynamic  -static -o htop htop.o   Action.o Affinity.o AffinityPanel.o AvailableColumnsPanel.o AvailableMetersPanel.o BatteryMeter.o CategoriesPanel.o ClockMeter.o ColorsPanel.o ColumnsPanel.o CommandLine.o CommandScreen.
- o Compat.o CPUMeter.o CRT.o DateMeter.o DateTimeMeter.o DiskIOMeter.o DisplayOptionsPanel.o DynamicColumn.o DynamicMeter.o DynamicScreen.o EnvScreen.o FileDescriptorMeter.o FunctionBar.o Hashtable.o Header.o HeaderOptionsPanel.o HostnameMeter.o IncSet.o InfoScreen.o ListItem.o LoadAverageMeter.o Machine.o MainPanel.o MemoryMeter.o MemorySwapMeter.o Meter.o MetersPanel.o NetworkIOMeter.o Object.o OpenFilesScreen.o OptionItem.o Panel.o Process.o ProcessLocksScreen.o ProcessTable.o Row.o RichString.o Scheduling.o ScreenManager.o ScreensPanel.o ScreenTabsPanel.o Settings.o SignalsPanel.o SwapMeter.o SysArchMeter.o Table.o TasksMeter.o TraceScreen.o UptimeMeter.o UsersTable.o Vector.o XUtils.o generic/gettime.o generic/hostname.o generic/uname.o linux/CGroupUtils.o linux/HugePageMeter.o linux/IOPriorityPanel.o linux/LibSensors.o linux/LinuxMachine.o linux/LinuxProcess.o linux/LinuxProcessTable.o linux/Platform.o linux/PressureStallMeter.o linux/SELinuxMeter.o linux/SystemdMeter.o linux/Z
- ramMeter.o zfs/ZfsArcMeter.o zfs/ZfsCompressedArcMeter.o   -lcap -llzma -L/home/autobuild/autobuild/instance-3/output-1/host/mipsel-buildroot-linux-gnu/sysroot/usr/bin/../../usr/lib -lncurses -lm   -L/home/autobuild/autobuild/instance-3/output-1/host/bin/../mipsel-buildroot-linux-gnu/sysroot/usr/lib -lhwloc
-/home/autobuild/autobuild/instance-3/output-1/host/lib/gcc/mipsel-buildroot-linux-gnu/12.3.0/../../../../mipsel-buildroot-linux-gnu/bin/ld: Action.o: in function `Action_setUserOnly':
-Action.c:(.text+0x2490): warning: Using 'getpwnam' in statically linked applications requires at runtime the shared libraries from the glibc version used for linking
-/home/autobuild/autobuild/instance-3/output-1/host/lib/gcc/mipsel-buildroot-linux-gnu/12.3.0/../../../../mipsel-buildroot-linux-gnu/bin/ld: Settings.o: in function `Settings_new':
-Settings.c:(.text+0x2dd0): warning: Using 'getpwuid' in statically linked applications requires at runtime the shared libraries from the glibc version used for linking
-/home/autobuild/autobuild/instance-3/output-1/host/lib/gcc/mipsel-buildroot-linux-gnu/12.3.0/../../../../mipsel-buildroot-linux-gnu/bin/ld: /home/autobuild/autobuild/instance-3/output-1/host/mipsel-buildroot-linux-gnu/sysroot/usr/bin/../../usr/lib/libhwloc.a(topology-xml-libxml.o): in function `hwloc_libxml_free_buffer':
-topology-xml-libxml.c:(.text+0x2c): undefined reference to `xmlFree'
+> The test files from my original submission at:
+> https://patchwork.ozlabs.org/project/buildroot/patch/20240207225100.1320837-1-ju.o@free.fr/
+> were not applied.
+> 
+> Running: utils/get-developers -v
+> outputs:
+> 
+>      WARNING: 'support/testing/tests/package/test_swipl.py' doesn't match 
+> any file, line 1966
+>      WARNING: 'support/testing/tests/package/test_swipl/' doesn't match 
+> any file, line 1967
+> 
+> Do you want me to resend those?
 
-Fixes:
- - http://autobuild.buildroot.org/results/04bd5633750ff5cef048ea78c9de043d3ffcfa32
+Sorry, the patch didn't apply, so I applied it manually, and forgot to
+git add those files. I just did a separate commit with the test files.
+Sorry about that.
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/htop/htop.mk | 10 ++++++++++
- 1 file changed, 10 insertions(+)
-
-diff --git a/package/htop/htop.mk b/package/htop/htop.mk
-index 6dbaae3796..4fa8e4fb5f 100644
---- a/package/htop/htop.mk
-+++ b/package/htop/htop.mk
-@@ -17,6 +17,16 @@ HTOP_LICENSE_FILES = COPYING
- # provided by autoconf relies on wchar_t.
- HTOP_CONF_ENV += ac_cv_prog_cc_c99=-std=gnu99
- 
-+# --enable-static has a non-standard semantic in htop, and causes the
-+# main binary to be linked statically, not just the production of
-+# static libraries. This causes issues with BR2_SHARED_STATIC_LIBS as
-+# htop is linked statically, but pkg-config returns results relevant
-+# for a shared library build. Since htop is only building an
-+# application, let's disable this bogus behavior.
-+ifeq ($(BR2_SHARED_STATIC_LIBS),y)
-+HTOP_CONF_OPTS += --disable-static
-+endif
-+
- ifeq ($(BR2_PACKAGE_HWLOC),y)
- HTOP_CONF_OPTS += --enable-hwloc
- HTOP_DEPENDENCIES += hwloc
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
