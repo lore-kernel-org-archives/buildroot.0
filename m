@@ -4,72 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1277CC52D70
-	for <buildroot@archiver.kernel.org>; Tue,  6 Aug 2024 21:28:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 16FA0C52D6F
+	for <buildroot@archiver.kernel.org>; Tue,  6 Aug 2024 21:29:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BD0BD60608;
-	Tue,  6 Aug 2024 21:28:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C490C6086C;
+	Tue,  6 Aug 2024 21:29:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vtiRYSYBkr1d; Tue,  6 Aug 2024 21:28:52 +0000 (UTC)
+ id SeD6CrrvSftL; Tue,  6 Aug 2024 21:29:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B1FB760612
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E11306085A
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B1FB760612;
-	Tue,  6 Aug 2024 21:28:52 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 253E11BF30B
- for <buildroot@lists.busybox.net>; Tue,  6 Aug 2024 21:28:51 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E11306085A;
+	Tue,  6 Aug 2024 21:29:06 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id D0B861BF30B
+ for <buildroot@lists.busybox.net>; Tue,  6 Aug 2024 21:29:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 125D740373
- for <buildroot@lists.busybox.net>; Tue,  6 Aug 2024 21:28:51 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id BE89240507
+ for <buildroot@lists.busybox.net>; Tue,  6 Aug 2024 21:29:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yWIdeQgCf-jj for <buildroot@lists.busybox.net>;
- Tue,  6 Aug 2024 21:28:49 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::224;
- helo=relay4-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 669B540288
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 669B540288
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::224])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 669B540288
- for <buildroot@buildroot.org>; Tue,  6 Aug 2024 21:28:46 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 0E96BE0002;
- Tue,  6 Aug 2024 21:28:43 +0000 (UTC)
-Date: Tue, 6 Aug 2024 23:28:42 +0200
-To: Dong Wang <wangdong115@foxmail.com>
-Message-ID: <20240806232842.4a04d4ca@windsurf>
-In-Reply-To: <tencent_7E39529BBE1BB50CB4AA2A429702629C0808@qq.com>
-References: <tencent_7E39529BBE1BB50CB4AA2A429702629C0808@qq.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 95MKArzTQsHg for <buildroot@lists.busybox.net>;
+ Tue,  6 Aug 2024 21:29:03 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 4502740506
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4502740506
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 4502740506
+ for <buildroot@buildroot.org>; Tue,  6 Aug 2024 21:29:02 +0000 (UTC)
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 3A47BB0053D;
+ Tue,  6 Aug 2024 23:28:58 +0200 (CEST)
+From: Julien Olivain <ju.o@free.fr>
+To: buildroot@buildroot.org
+Date: Tue,  6 Aug 2024 23:28:50 +0200
+Message-ID: <20240806212850.467698-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.45.2
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1722979724;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=xHESXuwMew05At+dP+HE/c2+OAyqNcVjpniXkzYa28U=;
- b=Q3ZKH8dohi9FdZC+0omZtU+OTjtO/oKicgT4HI+e5OVANwxGLzHHcCkpoBzGbrRP9ujNQ2
- tgStd/ugtmtmcsmxYgAHS1gmnTDg5Mt/UvxvS5Yd/CDNWUoLMgr0jCZ/9wmiz6YlzpirxG
- Yt4AaXYin/sJdtFBv2tSxbxO9okz9Go+QSIzch53/2enYv3LBxDCjfjmNoeYU45xUrGK7G
- FyI65TYRyPq5lohkA2MiKrJ8RQ28gNdZ/ex21oDPJ7SCH4ESqx1YB3hSU6bzSrMRgQtEEQ
- 7ocNsOldBbu42CdP2hMDvI1f9A3tu3RbCC/B2QOV7+Gnl1co01B8xpAMajSYPw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1722979739;
+ bh=1Kk0WlvRV0AevHtAq8dKZkpq5OhSJM0ftOvp0Boz/5s=;
+ h=From:To:Cc:Subject:Date:From;
+ b=u/8n3qbfm88F05eArEM13KtZ61oyggpywS4WCP48Ko6czOqShLq6BAHsRCGNRtPmj
+ 00L6Ph7zUjr2mEAOCg8igZEgh/aNQkAWhAC+sZag3+yGhTo+DtDGdX5u66n9ocF8SK
+ ABa/qFmoMWFpsWdAD4baIG735jOweRY3irjV1Tb7qST+hdShMV0B/JGCNmXhlf8kWg
+ uemMfOTQDcH4sNsRk2EdoVNDrjZ4/GtHob7nvqdE4Jn7TZCsp/jeWbR1XdHBY9kKJ9
+ lo1P4I/Ksrs78cGmlwGoQDe48NLccGAKNgwOLFvuwqErpwJeZXWnomUhvZlWhZkeW+
+ prjFGAx4FiOsA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Q3ZKH8do
-Subject: Re: [Buildroot] [PATCH] configs/friendlyarm_nanopi_neo_defconfig:
- new defconfig
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=u/8n3qbf
+Subject: [Buildroot] [PATCH 1/1] support/testing: package: gpsd: fix test by
+ enabling python support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,114 +77,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+Cc: Julien Olivain <ju.o@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Dong,
+Commit 9696d27756 "package/gpsd: condition python stuff to the proper
+kconfig option" changed the condition in which the gpsd python scripts
+are installed. After that change, the "gpsfake" command (which is a
+python script) is no longer found and the runtime test is failing.
 
-First of all, thanks a lot for your contribution and patch submission,
-and sorry for the delay with which we are getting back to you. I only
-have a few comments below.
+This commit fixes the issue by reflecting the change in the runtime
+test Buildroot configuration.
 
-On Wed, 15 May 2024 08:52:31 +0800
-Dong Wang <wangdong115@foxmail.com> wrote:
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+Patch testing in:
+https://gitlab.com/jolivain/buildroot/-/jobs/7520716177
+---
+ support/testing/tests/package/test_gpsd.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> This patch adds a new defconfig for the NanoPi NEO board made by
-> FriendlyARM. This board is based on the Allwinner H3 SoC.
-> 
-> See: https://wiki.friendlyelec.com/wiki/index.php/NanoPi_NEO
-> 
-> .
-
-This empty line with a dot seems quite useless, could you drop it?
-
-> 
-> This patch uses the mainline kernel and u-boot for the board.
-> 
-> The configurations are based on the previously dropped defconfig
-> maintained by Yann E. MORIN <yann.morin.1998@free.fr>.
-> 
-> Signed-off-by: Dong Wang <wangdong115@foxmail.com>
-
-
-> diff --git a/board/friendlyarm/nanopi-neo/boot.cmd b/board/friendlyarm/nanopi-neo/boot.cmd
-> new file mode 100644
-> index 0000000000..8c199ed480
-> --- /dev/null
-> +++ b/board/friendlyarm/nanopi-neo/boot.cmd
-> @@ -0,0 +1,5 @@
-> +setenv bootargs console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p2 rootwait panic=10
-> +
-> +load mmc 0:1 ${fdt_addr_r} ${fdtfile}
-> +load mmc 0:1 ${kernel_addr_r} zImage
-> +bootz ${kernel_addr_r} - ${fdt_addr_r}
-
-Could you drop this custom U-Boot script, and use extlinux.conf like we
-try to do in most new defconfigs?
-
-> diff --git a/board/friendlyarm/nanopi-neo/genimage.cfg b/board/friendlyarm/nanopi-neo/genimage.cfg
-> new file mode 100644
-> index 0000000000..4cfd8c8fc2
-> --- /dev/null
-> +++ b/board/friendlyarm/nanopi-neo/genimage.cfg
-> @@ -0,0 +1,36 @@
-> +# Minimal SD card image for the NanoPi NEO.
-> +image boot.vfat {
-> +	vfat {
-> +		files = {
-> +			"zImage",
-> +			"sun8i-h3-nanopi-neo.dtb",
-> +			"boot.scr"
-> +		}
-> +	}
-> +
-> +	size = 16M
-> +}
-> +
-> +image sdcard.img {
-> +	hdimage {
-> +	}
-> +
-> +	partition u-boot {
-> +		in-partition-table = false
-> +		image = "u-boot-sunxi-with-spl.bin"
-> +		offset = 8K
-> +		size = 1000K # 1MB - 8KB(offset) - 16KB(GPT)
-> +	}
-> +
-> +	partition boot {
-> +		partition-type = 0xC
-> +		bootable = "true"
-> +		image = "boot.vfat"
-> +	}
-
-Could you drop entirely this VFAT partition, and have the kernel + DTB
-+ extlinux.conf directly in the rootfs, and U-Boot directly load
-extlinux.conf from this ext4 filesystem?
-
-> +	partition rootfs {
-> +		partition-type = 0x83
-> +		image = "rootfs.ext4"
-> +		size = 512M
-
-Leave out the size = argument, it isn't very useful to have a larger
-partition, but a filesystem that is smaller than that size.
-
-All of the rest really looks good to me. Could you just address the
-above comments, and submit a v2 ?
-
-Thanks a lot for your contribution and effort!
-
-Thomas
+diff --git a/support/testing/tests/package/test_gpsd.py b/support/testing/tests/package/test_gpsd.py
+index 7ca5973981..2c44e25cec 100644
+--- a/support/testing/tests/package/test_gpsd.py
++++ b/support/testing/tests/package/test_gpsd.py
+@@ -11,7 +11,7 @@ class TestGpsd(infra.basetest.BRTest):
+     config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
+         f"""
+         BR2_PACKAGE_GPSD=y
+-        BR2_PACKAGE_PYTHON3=y
++        BR2_PACKAGE_GPSD_PYTHON=y
+         BR2_ROOTFS_OVERLAY="{rootfs_overlay}"
+         BR2_TARGET_ROOTFS_CPIO=y
+         # BR2_TARGET_ROOTFS_TAR is not set
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+2.45.2
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
