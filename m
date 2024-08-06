@@ -4,48 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4BC60C52D70
-	for <buildroot@archiver.kernel.org>; Tue,  6 Aug 2024 20:30:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2CB70C52D70
+	for <buildroot@archiver.kernel.org>; Tue,  6 Aug 2024 20:30:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EAA2840233;
-	Tue,  6 Aug 2024 20:30:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 24AE1402E0;
+	Tue,  6 Aug 2024 20:30:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id L2neyLpxRdaG; Tue,  6 Aug 2024 20:30:13 +0000 (UTC)
+ id Sey2yytVXlpB; Tue,  6 Aug 2024 20:30:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B1B9A40253
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7BBD4404A5
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B1B9A40253;
-	Tue,  6 Aug 2024 20:30:13 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 80F6A1BF33D
- for <buildroot@lists.busybox.net>; Tue,  6 Aug 2024 20:30:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7BBD4404A5;
+	Tue,  6 Aug 2024 20:30:16 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 280D01BF33D
+ for <buildroot@lists.busybox.net>; Tue,  6 Aug 2024 20:30:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6E2BC40233
- for <buildroot@lists.busybox.net>; Tue,  6 Aug 2024 20:30:11 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1423F6062E
+ for <buildroot@lists.busybox.net>; Tue,  6 Aug 2024 20:30:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hZrFBEH-50BR for <buildroot@lists.busybox.net>;
- Tue,  6 Aug 2024 20:30:10 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id V7rLm-ozX98G for <buildroot@lists.busybox.net>;
+ Tue,  6 Aug 2024 20:30:14 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.193;
+ helo=relay1-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6A59140253
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6A59140253
- for <buildroot@buildroot.org>; Tue,  6 Aug 2024 20:30:10 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6219384279; Tue,  6 Aug 2024 20:30:10 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 6 Aug 2024 22:29:06 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 21f312a53e49a3338db870df778665e42cf72dbf
-X-Git-Newrev: 33d45b9c672df06b7157be957f81b2cf17dccdd7
-X-Patchwork-Hint: ignore
-Message-Id: <20240806203010.6219384279@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/swipl: bump version to 9.2.6
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org DB81E60625
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DB81E60625
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id DB81E60625
+ for <buildroot@buildroot.org>; Tue,  6 Aug 2024 20:30:13 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id D39C9240007;
+ Tue,  6 Aug 2024 20:30:11 +0000 (UTC)
+Date: Tue, 6 Aug 2024 22:30:11 +0200
+To: Julien Olivain <ju.o@free.fr>
+Message-ID: <20240806223011.770ffced@windsurf>
+In-Reply-To: <20240806192524.180436-1-ju.o@free.fr>
+References: <20240806192524.180436-1-ju.o@free.fr>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1722976212;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=dCZWlP+gMMUi9GyoBMDaRURzuIXOZGTtfAxR43g5uNo=;
+ b=GO8V2GDK9bPHvmvmp2HVOvTgj96HKfbt+0S7qbW4kaQzFsjfhjvgkm5cFx0f71qJk1pVxj
+ GLlokiKcXltj4cUsgS6N+wFLNMUr8bhYnmYS+gP1JCo+I1hVXK6XTfcmy7zSSTYmDHndaP
+ 6e+1DAAh6bEtgq51H7DL66y2Rhqcwxfk8fod6RjDPcnYqTE9Z3f/2IV+dIS6VgcbCrrRKW
+ TMGnCtda2FeQjPE70/YtPtmocqFjNPu609Q703uZFIj/lckStuHq2RNFVPsndGIMPZcMOS
+ 62lN6RGopwWwKr6Ox6/XVDTGVGIcLhXKN2LlR6iAHLxTc32bZ7Uly8Iz0H+nuQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=GO8V2GDK
+Subject: Re: [Buildroot] [PATCH 1/1] package/swipl: bump version to 9.2.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,48 +82,31 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=33d45b9c672df06b7157be957f81b2cf17dccdd7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Tue,  6 Aug 2024 21:25:24 +0200
+Julien Olivain <ju.o@free.fr> wrote:
 
-For change log, see:
-https://www.swi-prolog.org/ChangeLog?branch=stable&from=9.2.0&to=9.2.6
+> For change log, see:
+> https://www.swi-prolog.org/ChangeLog?branch=stable&from=9.2.0&to=9.2.6
+> 
+> Signed-off-by: Julien Olivain <ju.o@free.fr>
+> ---
+>  package/swipl/swipl.hash | 2 +-
+>  package/swipl/swipl.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/swipl/swipl.hash | 2 +-
- package/swipl/swipl.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Applied to master, thanks.
 
-diff --git a/package/swipl/swipl.hash b/package/swipl/swipl.hash
-index 9f980654ba..98611ffcda 100644
---- a/package/swipl/swipl.hash
-+++ b/package/swipl/swipl.hash
-@@ -1,4 +1,4 @@
- # From https://www.swi-prolog.org/download/stable
--sha256  10d90b15734d14d0d7972dc11a3584defd300d65a9f0b1185821af8c3896da5e  swipl-9.2.0.tar.gz
-+sha256  0cb9b80b9922be8165cbac384ebe050d94553e72cf7aebfc980b4395ff01d05d  swipl-9.2.6.tar.gz
- # Locally calculated
- sha256  770594d0f4463b71f1485f00e4bc5cf4b6f667d62ef6bc9bde2fee236541992a  LICENSE
-diff --git a/package/swipl/swipl.mk b/package/swipl/swipl.mk
-index d4263a6aa8..9ba841084e 100644
---- a/package/swipl/swipl.mk
-+++ b/package/swipl/swipl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SWIPL_VERSION = 9.2.0
-+SWIPL_VERSION = 9.2.6
- SWIPL_SITE = https://www.swi-prolog.org/download/stable/src
- SWIPL_LICENSE = BSD-2-Clause
- SWIPL_LICENSE_FILES = LICENSE
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
