@@ -4,82 +4,98 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 07B1EC52D71
-	for <buildroot@archiver.kernel.org>; Tue,  6 Aug 2024 16:40:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E5688C52D70
+	for <buildroot@archiver.kernel.org>; Tue,  6 Aug 2024 16:44:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 02AA540325;
-	Tue,  6 Aug 2024 16:40:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 187184038B;
+	Tue,  6 Aug 2024 16:44:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Z0YbIjmPXNpo; Tue,  6 Aug 2024 16:40:15 +0000 (UTC)
+ id LadqIYNaTb27; Tue,  6 Aug 2024 16:44:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8B2F54037A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6927540325
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8B2F54037A;
-	Tue,  6 Aug 2024 16:40:15 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 7AB5D1BF32A
- for <buildroot@lists.busybox.net>; Tue,  6 Aug 2024 16:40:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6927540325;
+	Tue,  6 Aug 2024 16:44:09 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id B9FD01BF32A
+ for <buildroot@lists.busybox.net>; Tue,  6 Aug 2024 16:44:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 708A640A20
- for <buildroot@lists.busybox.net>; Tue,  6 Aug 2024 16:40:13 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id A7BAE607B8
+ for <buildroot@lists.busybox.net>; Tue,  6 Aug 2024 16:44:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AL6X-i_9r1qv for <buildroot@lists.busybox.net>;
- Tue,  6 Aug 2024 16:40:11 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2aNf6DmuBLb5 for <buildroot@lists.busybox.net>;
+ Tue,  6 Aug 2024 16:44:06 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::533; helo=mail-ed1-x533.google.com;
- envelope-from=eszpotanski@antmicro.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 2974B40972
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2974B40972
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com
- [IPv6:2a00:1450:4864:20::533])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 2974B40972
- for <buildroot@buildroot.org>; Tue,  6 Aug 2024 16:40:10 +0000 (UTC)
-Received: by mail-ed1-x533.google.com with SMTP id
- 4fb4d7f45d1cf-5b01af9b0c9so963370a12.3
- for <buildroot@buildroot.org>; Tue, 06 Aug 2024 09:40:10 -0700 (PDT)
+ client-ip=2607:f8b0:4864:20::a30; helo=mail-vk1-xa30.google.com;
+ envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 5FE726079F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5FE726079F
+Received: from mail-vk1-xa30.google.com (mail-vk1-xa30.google.com
+ [IPv6:2607:f8b0:4864:20::a30])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5FE726079F
+ for <buildroot@buildroot.org>; Tue,  6 Aug 2024 16:44:06 +0000 (UTC)
+Received: by mail-vk1-xa30.google.com with SMTP id
+ 71dfb90a1353d-4f6abcf0567so349424e0c.0
+ for <buildroot@buildroot.org>; Tue, 06 Aug 2024 09:44:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1722962409; x=1723567209;
- h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
- :from:to:cc:subject:date:message-id:reply-to;
- bh=+uyB1ylH8lvyLSB89k21hIenB+ee0leNTIm8DPidq3w=;
- b=D7/M6E8N2AHz0oe0WhDip7uNTlkCpagyPL7vfZHD97jt++q9sIoonrf6jrh1jp2gXw
- edPvaXxx9xT2E/kGBFyXnuhOkFy0LPyC4tLJSyYlCkByH58iW0ESjPNm267TZt5EuSGd
- mhrdtLTdwkspErB+mJGAPN4Oy3cb73H/7Ek9jwqkqqaZd6YmU5DvqOUjByKiFU5t/1yE
- bZ66ALcX9uHyVFKEZtmqXbbjCM6faROBJT7FLmWYMR4Ev8uziYMoi0EZDnUk2I2OTY8L
- uBe1Od68IcnJWjO48SNBhVI9+8FwoaraYGP6vhLq9rQoO1tTsbpTqZ58eZI81yxAcIqa
- XjpQ==
-X-Gm-Message-State: AOJu0YxaIvMe+KpEvDwD3tTgFIwuD2u1m13FXlnE6kSFCgOEQv280jV+
- QKjW91p5tnL+gJzJUh1nahWSXT1V08yyv2C2vOQgqM63u/A3RXmnq7lXLeLUFLhMd3k+G7bvbbE
- dNPuinZk1dgVJk8qB8AHyS4aawK0j8i+HoOHHMLn6Wj4okPH3KnK0rw==
-X-Google-Smtp-Source: AGHT+IF8RyWuPrwHb+BkkZAF5WDRmrmQJUkdBqKuuiqkVrQNlW4I7liaONHVBPkrGcJiNYD6CSDJsgyJXxzleIX1mXY=
-X-Received: by 2002:a17:906:7315:b0:a7a:af5d:f314 with SMTP id
- a640c23a62f3a-a7dc51bd623mr1188443766b.63.1722962408754; Tue, 06 Aug 2024
- 09:40:08 -0700 (PDT)
+ d=1e100.net; s=20230601; t=1722962645; x=1723567445;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=gac5nJvSvshV1d0vHIg8M17voGurdPKFnqVsTsKvt7k=;
+ b=Pidxdz8TkR2yafHGabqRp5mQydQuLjDy/QnafSLnuPsklpoJleWLeQOr6C5qncEs2p
+ zp/qnuld7KHS6Fe5IzjyB24ibLJkiAcIHwpwZrDt2BVjew1IIZDt9hCm44hnk7Zs/UJ9
+ rR1jf0xXEbXAQhZspuis2Dlr+LhLtJDdLzG5TNXrGfQ52E/jXDEcCAfJDxrCNNa4oCVb
+ Bm3HVSbYByHa6fEKtu2lMaIZyVqFNuYcg2FqJ9suW0rJucFX7m8kz8YSX+/vfuEKLKWL
+ CL5qhQv7EqY//DGDwAOJpYPo6d2bRo7C2hnzS7g4XxfhfkJ11dMYw6aNCoUIt1zI3Kse
+ bGjg==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCVpDHIlLGYkRdijh1iZ8xtthcXCf3883xIGyQwpDmcbZvGePD9avEYu9ji8xRvLIBQ+cTgcW4ORhtadQSFeuefkDfZOBdhYGg==
+X-Gm-Message-State: AOJu0YyjNRzCwoQyradMYNZpqWWEoBV4lwVC8039KVt/AN0jlhOVEepg
+ Lukj38EpR+jGRGPW4zF3hx/BZT/D9tyPk/ywzE1mzY8Pgxr5jtChtTVhg9PS3X0DqVUbcJT0eKR
+ vuUnOTEEkZOfKiCFsVIeh5NQcrMTSbdcQq4T/5A==
+X-Google-Smtp-Source: AGHT+IH1zi67z99bET73QiRypsPNugPmvksTEKJFQUP8X4yaVLsbAfJCqY9hZnx16WK2++sj04lFUQdObARyhXtByY8=
+X-Received: by 2002:a05:6122:4105:b0:4df:1d06:eeb7 with SMTP id
+ 71dfb90a1353d-4f89ff1625emr17978214e0c.1.1722962644865; Tue, 06 Aug 2024
+ 09:44:04 -0700 (PDT)
 MIME-Version: 1.0
-Date: Tue, 6 Aug 2024 18:39:58 +0200
-Message-ID: <CAG9w5kMVs04gOeqXtsjYUPJCgcpGNFkpi6C4J7fnsJgVdCvRqw@mail.gmail.com>
-To: buildroot@buildroot.org
+References: <20240805163133.4126564-1-james.hilliard1@gmail.com>
+ <CA+h8R2oQGKFFH-vMX27WUO1uEAGyt4cz9MCwn9Cofwyujx1xDA@mail.gmail.com>
+ <20240805223152.09ed915b@windsurf>
+ <CADvTj4o_CnzCth+QqoxhVovBRinvYfbMf7r+SWnnY0tfVbKgbw@mail.gmail.com>
+ <CA+h8R2obsR-CzMhWDpQ-A0oeEPaG-P=aCwF7BS4J-3eShmHJgg@mail.gmail.com>
+ <20240806165050.234235b4@windsurf>
+ <CADvTj4pOK8-2YXy0POUg1qOKa1MrjsxbnS-r1F7YMk_YXFmEAQ@mail.gmail.com>
+ <CA+h8R2reErtSWPO1hGpX7tT5Xejb_SNqiuSCnXvJZKHwhzdcZg@mail.gmail.com>
+In-Reply-To: <CA+h8R2reErtSWPO1hGpX7tT5Xejb_SNqiuSCnXvJZKHwhzdcZg@mail.gmail.com>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Tue, 6 Aug 2024 10:43:53 -0600
+Message-ID: <CADvTj4pTnPfJtpyiwzvRUo4gUpuaBBOw3PfT4gbOA06LDjQ+NQ@mail.gmail.com>
+To: Christian Stewart <christian@aperture.us>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=antmicro.com; s=google; t=1722962409; x=1723567209; darn=buildroot.org;
- h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
- :date:message-id:reply-to;
- bh=+uyB1ylH8lvyLSB89k21hIenB+ee0leNTIm8DPidq3w=;
- b=FiApyaK88luAmc8BljesXDMrMlF7xnIIoR19wWOPsgRu01hJFhSO9ESTk3ZqQUFGgU
- recpnaQZFX5kXlYjhVLsVVOS2K/lSi0LiWsVdDqTwanmZopnHbwOz8BQ1jv2XGGFPkfb
- 0pgHBqd3UBltNwAODs4q9myQRlBG01B5cNuF4=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=antmicro.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=antmicro.com header.i=@antmicro.com header.a=rsa-sha256
- header.s=google header.b=FiApyaK8
-Subject: [Buildroot] [PATCH 1/1] package/riscv-coremark: Create package with
- CoreMark benchmark for RISC-V
+ d=gmail.com; s=20230601; t=1722962645; x=1723567445; darn=buildroot.org;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=gac5nJvSvshV1d0vHIg8M17voGurdPKFnqVsTsKvt7k=;
+ b=WfAifoGtB4CUtlUNEb8yoT9nxhP6yqH0kSbJhhmS8fVvUByoCy+5pfCClmCVSKAB/D
+ S5fm9GH36tq6iGvjYYKw7ymEVSjoAzmQnREpevXEtUaf0dwXq9T+9NYtBlgeL6yyBt8r
+ V+ml6mi/Dp4inlA6oNXdYHpwjI8+fIi6gdQS4GkU8934Y8ZezBEGFeyIY5f0lOGRtQ3b
+ dotVu7DzH88+vGjsvxhgZPrW3+iYSwtPNNt9FIjTVdgPD3AqnmRDqqIuvkG6S9kBDxEp
+ z8o4Y+ec/EEegJYG9M2jA1DcRG5/m6pcqVlf8qBCyNxjB9iUJ3sTrxjR+1MefzIZDDJ9
+ voHA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=WfAifoGt
+Subject: Re: [Buildroot] [PATCH v4 1/2] package/pkg-golang.mk: allow
+ packages to override download GOPROXY
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,252 +107,94 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Eryk Szpotanski via buildroot <buildroot@buildroot.org>
-Reply-To: Eryk Szpotanski <eszpotanski@antmicro.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: multipart/mixed; boundary="===============4804069647838639164=="
+Cc: Anisse Astier <anisse@astier.eu>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Christian Stewart via buildroot <buildroot@buildroot.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============4804069647838639164==
-Content-Type: multipart/alternative; boundary="00000000000055e66d061f067237"
-
---00000000000055e66d061f067237
-Content-Type: text/plain; charset="UTF-8"
-
-From 3c09f5c971248c8c9c05a8bab79a5ddb45b40eb7 Mon Sep 17 00:00:00 2001
-From: Eryk Szpotanski <eszpotanski@antmicro.com>
-Date: Thu, 9 May 2024 12:34:08 +0200
-Subject: [PATCH 1/1] package/riscv-coremark: Create package with CoreMark
- benchmark for RISC-V
-
-Signed-off-by: Eryk Szpotanski <eszpotanski@antmicro.com>
----
- package/Config.in                             |  1 +
- ...ype-to-match-it-with-definition-from.patch | 27 +++++++++++++++++++
- package/riscv-coremark/Config.in              |  8 ++++++
- package/riscv-coremark/riscv-coremark.hash    |  3 +++
- package/riscv-coremark/riscv-coremark.mk      | 22 +++++++++++++++
- 5 files changed, 61 insertions(+)
- create mode 100644
-package/riscv-coremark/0001-Update-clock_t-type-to-match-it-with-definition-from.patch
- create mode 100644 package/riscv-coremark/Config.in
- create mode 100644 package/riscv-coremark/riscv-coremark.hash
- create mode 100644 package/riscv-coremark/riscv-coremark.mk
-
-diff --git a/package/Config.in b/package/Config.in
-index 2ac351cce5..09dab28ef3 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -145,6 +145,7 @@ menu "Debugging, profiling and benchmark"
-  source "package/racehound/Config.in"
-  source "package/ramsmp/Config.in"
-  source "package/ramspeed/Config.in"
-+ source "package/riscv-coremark/Config.in"
-  source "package/rt-tests/Config.in"
-  source "package/rwmem/Config.in"
-  source "package/sentry-native/Config.in"
-diff --git
-a/package/riscv-coremark/0001-Update-clock_t-type-to-match-it-with-definition-from.patch
-b/package/riscv-coremark/0001-Update-clock_t-type-to-match-it-with-definition-from.patch
-new file mode 100644
-index 0000000000..fda488198d
---- /dev/null
-+++
-b/package/riscv-coremark/0001-Update-clock_t-type-to-match-it-with-definition-from.patch
-@@ -0,0 +1,27 @@
-+From a6c8e2e00e5534b340885181d99ecf19286a9ff8 Mon Sep 17 00:00:00 2001
-+From: Eryk Szpotanski <eszpotanski@antmicro.com>
-+Date: Tue, 6 Aug 2024 13:44:21 +0200
-+Subject: [PATCH] Update clock_t type, to match it with external definition
-+Upstream: N/A This patch adjust the clock_t type to match it with the
-definition from RISC-V toolchain
-+
-+Signed-off-by: Eryk Szpotanski <eszpotanski@antmicro.com>
-+---
-+ riscv64/core_portme.h | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/riscv64/core_portme.h b/riscv64/core_portme.h
-+index 4e28afd..1e7708e 100755
-+--- a/riscv64/core_portme.h
-++++ b/riscv64/core_portme.h
-+@@ -71,7 +71,7 @@ typedef clock_t CORE_TICKS;
-+      Note these need to match the size of the clock output and the xLen
-the processor supports
-+  */
-+ typedef unsigned long int size_t;
-+-typedef unsigned long int clock_t;
-++typedef long int clock_t;
-+ typedef clock_t CORE_TICKS;
-+ #endif
-+
-+--
-+2.45.2
-+
-diff --git a/package/riscv-coremark/Config.in
-b/package/riscv-coremark/Config.in
-new file mode 100644
-index 0000000000..c9ed47befa
---- /dev/null
-+++ b/package/riscv-coremark/Config.in
-@@ -0,0 +1,8 @@
-+config BR2_PACKAGE_RISCV_COREMARK
-+ bool "riscv-coremark"
-+ depends on BR2_RISCV_64
-+ help
-+  CoreMark benchmark with utility files provided to
-+  support RISC-V architecture
-+
-+  https://github.com/riscv-boom/riscv-coremark/
-diff --git a/package/riscv-coremark/riscv-coremark.hash
-b/package/riscv-coremark/riscv-coremark.hash
-new file mode 100644
-index 0000000000..5be3db6bf8
---- /dev/null
-+++ b/package/riscv-coremark/riscv-coremark.hash
-@@ -0,0 +1,3 @@
-+# Locally computed
-+sha256  0dde3285b9a1e6bb22bab82e485b5cf58a3e6a026d9cdc22102619a5584a6c7f
- riscv-coremark-6e1d72b864e45f67031ffaedb0b01b5d030d6d3c-br1.tar.gz
-+sha256  fc8a88c0c1b5a6bc7358f18c43cdd562c1bfd83b08d81a43f726917582c0e260
- LICENSE
-diff --git a/package/riscv-coremark/riscv-coremark.mk
-b/package/riscv-coremark/riscv-coremark.mk
-new file mode 100644
-index 0000000000..819fac2313
---- /dev/null
-+++ b/package/riscv-coremark/riscv-coremark.mk
-@@ -0,0 +1,22 @@
-+################################################################################
-+#
-+# RISC-V Coremark
-+#
-+################################################################################
-+
-+RISCV_COREMARK_SITE_METHOD = git
-+RISCV_COREMARK_GIT_SUBMODULES = YES
-+RISCV_COREMARK_VERSION = 6e1d72b864e45f67031ffaedb0b01b5d030d6d3c
-+RISCV_COREMARK_SITE = https://github.com/riscv-boom/riscv-coremark.git
-+RISCV_COREMARK_LICENSE = BSD-3
-+RISCV_COREMARK_LICENSE_FILE = LICENSE
-+
-+define RISCV_COREMARK_BUILD_CMDS
-+ $(TARGET_MAKE_ENV) $(MAKE) CC="$(TARGET_CC)" -C $(@D)/coremark
-PORT_DIR=$(@D)/riscv64 compile
-+endef
-+
-+define RISCV_COREMARK_INSTALL_TARGET_CMDS
-+ $(INSTALL) -D $(@D)/coremark/coremark.riscv
-$(TARGET_DIR)/usr/bin/coremark.riscv
-+endef
-+
-+$(eval $(generic-package))
--- 
-2.45.2
-
---00000000000055e66d061f067237
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">From 3c09f5c971248c8c9c05a8bab79a5ddb45b40eb7 Mon Sep 17 0=
-0:00:00 2001<div class=3D"gmail_quote"><div dir=3D"ltr"><div class=3D"gmail=
-_quote"><div dir=3D"ltr">From: Eryk Szpotanski &lt;<a href=3D"mailto:eszpot=
-anski@antmicro.com" target=3D"_blank">eszpotanski@antmicro.com</a>&gt;<br>D=
-ate: Thu, 9 May 2024 12:34:08 +0200<br>Subject: [PATCH 1/1] package/riscv-c=
-oremark: Create package with CoreMark<br>=C2=A0benchmark for RISC-V<br><br>=
-Signed-off-by: Eryk Szpotanski &lt;<a href=3D"mailto:eszpotanski@antmicro.c=
-om" target=3D"_blank">eszpotanski@antmicro.com</a>&gt;<br>---<br>=C2=A0pack=
-age/Config.in =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 | =C2=A01 +<br>=C2=A0...ype-to-match=
--it-with-definition-from.patch | 27 +++++++++++++++++++<br>=C2=A0package/ri=
-scv-coremark/Config.in =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0| =
-=C2=A08 ++++++<br>=C2=A0package/riscv-coremark/riscv-coremark.hash =C2=A0 =
-=C2=A0| =C2=A03 +++<br>=C2=A0package/riscv-coremark/<a href=3D"http://riscv=
--coremark.mk" target=3D"_blank">riscv-coremark.mk</a> =C2=A0 =C2=A0 =C2=A0|=
- 22 +++++++++++++++<br>=C2=A05 files changed, 61 insertions(+)<br>=C2=A0cre=
-ate mode 100644 package/riscv-coremark/0001-Update-clock_t-type-to-match-it=
--with-definition-from.patch<br>=C2=A0create mode 100644 package/riscv-corem=
-ark/Config.in<br>=C2=A0create mode 100644 package/riscv-coremark/riscv-core=
-mark.hash<br>=C2=A0create mode 100644 package/riscv-coremark/<a href=3D"htt=
-p://riscv-coremark.mk" target=3D"_blank">riscv-coremark.mk</a><br><br>diff =
---git a/package/Config.in b/package/Config.in<br>index 2ac351cce5..09dab28e=
-f3 100644<br>--- a/package/Config.in<br>+++ b/package/Config.in<br>@@ -145,=
-6 +145,7 @@ menu &quot;Debugging, profiling and benchmark&quot;<br>=C2=A0	s=
-ource &quot;package/racehound/Config.in&quot;<br>=C2=A0	source &quot;packag=
-e/ramsmp/Config.in&quot;<br>=C2=A0	source &quot;package/ramspeed/Config.in&=
-quot;<br>+	source &quot;package/riscv-coremark/Config.in&quot;<br>=C2=A0	so=
-urce &quot;package/rt-tests/Config.in&quot;<br>=C2=A0	source &quot;package/=
-rwmem/Config.in&quot;<br>=C2=A0	source &quot;package/sentry-native/Config.i=
-n&quot;<br>diff --git a/package/riscv-coremark/0001-Update-clock_t-type-to-=
-match-it-with-definition-from.patch b/package/riscv-coremark/0001-Update-cl=
-ock_t-type-to-match-it-with-definition-from.patch<br>new file mode 100644<b=
-r>index 0000000000..fda488198d<br>--- /dev/null<br>+++ b/package/riscv-core=
-mark/0001-Update-clock_t-type-to-match-it-with-definition-from.patch<br>@@ =
--0,0 +1,27 @@<br>+From a6c8e2e00e5534b340885181d99ecf19286a9ff8 Mon Sep 17 =
-00:00:00 2001<br>+From: Eryk Szpotanski &lt;<a href=3D"mailto:eszpotanski@a=
-ntmicro.com" target=3D"_blank">eszpotanski@antmicro.com</a>&gt;<br>+Date: T=
-ue, 6 Aug 2024 13:44:21 +0200<br>+Subject: [PATCH] Update clock_t type, to =
-match it with external definition<br>+Upstream: N/A This patch adjust the c=
-lock_t type to match it with the definition from RISC-V toolchain<br>+<br>+=
-Signed-off-by: Eryk Szpotanski &lt;<a href=3D"mailto:eszpotanski@antmicro.c=
-om" target=3D"_blank">eszpotanski@antmicro.com</a>&gt;<br>+---<br>+ riscv64=
-/core_portme.h | 2 +-<br>+ 1 file changed, 1 insertion(+), 1 deletion(-)<br=
->+<br>+diff --git a/riscv64/core_portme.h b/riscv64/core_portme.h<br>+index=
- 4e28afd..1e7708e 100755<br>+--- a/riscv64/core_portme.h<br>++++ b/riscv64/=
-core_portme.h<br>+@@ -71,7 +71,7 @@ typedef clock_t CORE_TICKS;<br>+ =C2=A0=
- =C2=A0 =C2=A0Note these need to match the size of the clock output and the=
- xLen the processor supports<br>+ =C2=A0*/<br>+ typedef unsigned long int s=
-ize_t;<br>+-typedef unsigned long int clock_t;<br>++typedef long int clock_=
-t;<br>+ typedef clock_t CORE_TICKS;<br>+ #endif<br>+ <br>+-- <br>+2.45.2<br=
->+<br>diff --git a/package/riscv-coremark/Config.in b/package/riscv-coremar=
-k/Config.in<br>new file mode 100644<br>index 0000000000..c9ed47befa<br>--- =
-/dev/null<br>+++ b/package/riscv-coremark/Config.in<br>@@ -0,0 +1,8 @@<br>+=
-config BR2_PACKAGE_RISCV_COREMARK<br>+	bool &quot;riscv-coremark&quot;<br>+=
-	depends on BR2_RISCV_64<br>+	help<br>+	 =C2=A0CoreMark benchmark with util=
-ity files provided to<br>+	 =C2=A0support RISC-V architecture<br>+<br>+	 =
-=C2=A0<a href=3D"https://github.com/riscv-boom/riscv-coremark/" target=3D"_=
-blank">https://github.com/riscv-boom/riscv-coremark/</a><br>diff --git a/pa=
-ckage/riscv-coremark/riscv-coremark.hash b/package/riscv-coremark/riscv-cor=
-emark.hash<br>new file mode 100644<br>index 0000000000..5be3db6bf8<br>--- /=
-dev/null<br>+++ b/package/riscv-coremark/riscv-coremark.hash<br>@@ -0,0 +1,=
-3 @@<br>+# Locally computed<br>+sha256 =C2=A00dde3285b9a1e6bb22bab82e485b5c=
-f58a3e6a026d9cdc22102619a5584a6c7f =C2=A0riscv-coremark-6e1d72b864e45f67031=
-ffaedb0b01b5d030d6d3c-br1.tar.gz<br>+sha256 =C2=A0fc8a88c0c1b5a6bc7358f18c4=
-3cdd562c1bfd83b08d81a43f726917582c0e260 =C2=A0LICENSE<br>diff --git a/packa=
-ge/riscv-coremark/<a href=3D"http://riscv-coremark.mk" target=3D"_blank">ri=
-scv-coremark.mk</a> b/package/riscv-coremark/<a href=3D"http://riscv-corema=
-rk.mk" target=3D"_blank">riscv-coremark.mk</a><br>new file mode 100644<br>i=
-ndex 0000000000..819fac2313<br>--- /dev/null<br>+++ b/package/riscv-coremar=
-k/<a href=3D"http://riscv-coremark.mk" target=3D"_blank">riscv-coremark.mk<=
-/a><br>@@ -0,0 +1,22 @@<br>+###############################################=
-#################################<br>+#<br>+# RISC-V Coremark<br>+#<br>+###=
-###########################################################################=
-##<br>+<br>+RISCV_COREMARK_SITE_METHOD =3D git<br>+RISCV_COREMARK_GIT_SUBMO=
-DULES =3D YES<br>+RISCV_COREMARK_VERSION =3D 6e1d72b864e45f67031ffaedb0b01b=
-5d030d6d3c<br>+RISCV_COREMARK_SITE =3D <a href=3D"https://github.com/riscv-=
-boom/riscv-coremark.git" target=3D"_blank">https://github.com/riscv-boom/ri=
-scv-coremark.git</a><br>+RISCV_COREMARK_LICENSE =3D BSD-3<br>+RISCV_COREMAR=
-K_LICENSE_FILE =3D LICENSE<br>+<br>+define RISCV_COREMARK_BUILD_CMDS<br>+	$=
-(TARGET_MAKE_ENV) $(MAKE) CC=3D&quot;$(TARGET_CC)&quot; -C $(@D)/coremark P=
-ORT_DIR=3D$(@D)/riscv64 compile<br>+endef<br>+<br>+define RISCV_COREMARK_IN=
-STALL_TARGET_CMDS<br>+	$(INSTALL) -D $(@D)/coremark/coremark.riscv $(TARGET=
-_DIR)/usr/bin/coremark.riscv<br>+endef<br>+<br>+$(eval $(generic-package))<=
-br>-- <br>2.45.2<br><br></div>
-</div></div>
-</div></div>
-
---00000000000055e66d061f067237--
-
---===============4804069647838639164==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============4804069647838639164==--
+T24gVHVlLCBBdWcgNiwgMjAyNCBhdCAxMDoxNOKAr0FNIENocmlzdGlhbiBTdGV3YXJ0IDxjaHJp
+c3RpYW5AYXBlcnR1cmUudXM+IHdyb3RlOgo+Cj4gVGhvbWFzLCBKYW1lcywKPgo+IE9uIFR1ZSwg
+QXVnIDYsIDIwMjQsIDg6NDnigK9BTSBKYW1lcyBIaWxsaWFyZCA8amFtZXMuaGlsbGlhcmQxQGdt
+YWlsLmNvbT4gd3JvdGU6Cj4+Cj4+IE9uIFR1ZSwgQXVnIDYsIDIwMjQgYXQgODo1MOKAr0FNIFRo
+b21hcyBQZXRhenpvbmkKPj4gPHRob21hcy5wZXRhenpvbmlAYm9vdGxpbi5jb20+IHdyb3RlOgo+
+PiA+Cj4+ID4gT24gTW9uLCA1IEF1ZyAyMDI0IDE4OjA3OjM3IC0wNzAwCj4+ID4gQ2hyaXN0aWFu
+IFN0ZXdhcnQgPGNocmlzdGlhbkBhcGVydHVyZS51cz4gd3JvdGU6Cj4+ID4KPj4gPiA+IE15IHN1
+Z2dlc3Rpb24gaXMgdG8gZWl0aGVyIHNldCBHT1BST1hZPWRpcmVjdCBmb3IgYWxsIHBhY2thZ2Vz
+LCBvciBmb3IKPj4gPiA+IG5vbmUgb2YgdGhlbS4KPj4gPiA+Cj4+ID4gPiBXZSBjb3VsZCBkZWZh
+dWx0IHRvIHNldHRpbmcgR09QUk9YWSB0byBlbXB0eSwgd2hpY2ggdXNlcyB0aGUgZGVmYXVsdAo+
+PiA+ID4gR29vZ2xlIHByb3h5Lgo+Pgo+PiBXaHkgd2VyZW4ndCB3ZSBqdXN0IHVzaW5nIHRoZSBk
+ZWZhdWx0IHNldHRpbmdzIGluIHRoZSBmaXJzdCBwbGFjZT8gSSBtZWFuCj4+IGlmIHVwc3RyZWFt
+cyBiYXNpY2FsbHkgb25seSB0ZXN0IHdpdGggZGVmYXVsdCBzZXR0aW5ncyBoZXJlIHRoZW4gdXNp
+bmcKPj4gc29tZXRoaW5nIGRpZmZlcmVudCBzZWVtcyBwcm9ibGVtYXRpYyBpbiBnZW5lcmFsLgo+
+Pgo+Pgo+PiBUaGVyZSdzIHJlcG9ydHMgdGhhdCBHT1BST1hZPWRpcmVjdCBpcyBraW5kYSBicm9r
+ZW46Cj4+IGh0dHBzOi8vZHJld2RldmF1bHQuY29tLzIwMjEvMDgvMDYvZ29wcm94eS1icmVha3Mt
+Z28uaHRtbAo+Pgo+PiA+Cj4+ID4gQ291bGQgeW91IGV4cGxhaW4gdG8gYSBHbyBpZ25vcmFudCBs
+aWtlIG1lIGhvdyBpcyB0aGlzIHByb3h5IHRoaW5nCj4+ID4gaGVscGluZyBpbiBzb2x2aW5nIHRo
+aXMgaXNzdWU/IFNob3VsZCBhIHByb3h5IGp1c3QgInNwZWVkIHVwIiB0aGUKPj4gPiBkb3dubG9h
+ZD8gV2h5IGRvZXMgaXQgZXhoaWJpdCBhIGRpZmZlcmVudCBiZWhhdmlvciBiZXR3ZWVuIGEKPj4g
+PiBHT1BST1hZPWRpcmVjdCBidWlsZCBhbmQgYSBHT1BST1hZPXNvbWV0aGluZ2Vsc2UgPwo+Pgo+
+PiBQcmVzdW1hYmx5IHRoZSBwcm94eSBhY3RzIGFzIGEgY2FjaGUgd2hpY2ggcHJldmVudHMgYnJl
+YWthZ2UgaWYKPj4gdGhlIGRlcGVuZGVuY3kgZGlyZWN0IHNvdXJjZSBjaGFuZ2VzIG9yIHNvbWV0
+aGluZyBsaWtlIHRoYXQuCj4KPgo+IFRoZSByZWFzb25pbmcgZm9yIHVzaW5nIEdPUFJPWFk9ZGly
+ZWN0IGlzIGFzIGZvbGxvd3M6Cj4KPiBXaGVuIHdlIGVuYWJsZSB0aGUgcHJveHksIHRoZSBHbyB0
+b29sIHdpbGwgZG93bmxvYWQgdGhlIHNvdXJjZXMgZm9yIHRoZSBkZXBlbmRlbmNpZXMgZnJvbSBH
+b29nbGUuCj4KPiBUaGlzIGlzIE9LIGluIGdlbmVyYWwsIGJ1dCBpbiB0aGUgY29udGV4dCBvZiBi
+dWlsZHJvb3Qgd2UgdHlwaWNhbGx5IGRvd25sb2FkIHNvdXJjZXMgZnJvbSB0aGVpciB1cHN0cmVh
+bSByZWxlYXNlcyBvciBHaXQgcmVwb3NpdG9yaWVzLgoKRm9yIGNhcmdvIHdoaWNoIEkgdGhpbmsg
+aXMgdGhlIG1vc3Qgc2ltaWxhciB0byBob3cgd2UgaGFuZGxlIGRlcGVuZGVuY2llcwpmb3IgZ29s
+YW5nIHdlIHZlbmRvciBkZXBlbmRlbmNpZXMgZnJvbSBodHRwczovL2NyYXRlcy5pby8gZG93bmxv
+YWRzIEFGQUlVLgoKU28gSSBkb24ndCB0aGluayBpdCdzIG5vcm1hbCBmb3IgdXMgdG8gZG93bmxv
+YWQgdmVuZG9yZWQgc291cmNlcyBmcm9tIHRoZWlyCnVwc3RyZWFtIGxvY2F0aW9ucyBkaXJlY3Rs
+eS4KCj4KPiBHT1BST1hZIGlzIG5vdCBicm9rZW4uCj4KPiBUaGF0IHNhaWQsIGEgbG90IG9mIGRl
+cGVuZGVuY2llcyBjYXVzZSBwcm9ibGVtcyB3aGVuIHRoZXkgY2hhbmdlIHdoYXQgdGFnIGEgZ2l0
+IHJlbGVhc2UgcG9pbnRzIHRvIHJldHJvYWN0aXZlbHkgKHJhcmUgYnV0IGhhcHBlbnMpLCBvciBk
+ZWxldGUgYSBvbGRlciBjb21taXQgZnJvbSB0aGVpciByZXBvc2l0b3J5ICh3aGljaCBoYXBwZW5z
+IGV4dHJlbWVseSByYXJlbHkpLgo+Cj4gVGhlIHByb3h5IHNtb290aHMgdGhpcyBvdmVyIGJ5IGFs
+d2F5cyBzZXJ2aW5nIHRoZSBzYW1lIHRoaW5nIGZvciBhIGdpdCB0YWcgb3IgY29tbWl0IGhhc2gu
+CgpTbyB1cHN0cmVhbXMgc2VlbSB0byBleHBlY3QgdGhpcyBjYWNoaW5nIGJlaGF2aW9yLgoKPgo+
+IFRoZSBwcm9ibGVtIHdpdGggdGhpcyBpcywgbm93IHdlIGhhdmUgc29tZXRoaW5nIGRpZmZlcmVu
+dCBiZWluZyByZXR1cm5lZCBmb3IgYSBkZXBlbmRlbmN5IHRoYW4gd2hhdCBpdCBzYXlzIGluIGdv
+Lm1vZC4KPgo+IFRoZSBnby5tb2QgbWlnaHQgc2F5IHdlIGFyZSBmZXRjaGluZyBmb28gYXQgdmVy
+c2lvbiAxLjAuMCwgYnV0IGluIGZhY3QsIGlmIHlvdSBnbyB0byB0aGUgcmVwb3NpdG9yeSBmb3Ig
+Zm9vLCBhbmQgZ28gdG8gdmVyc2lvbiAxLjAuMCwgaXQgY291bGQgYmUgYSBjb21wbGV0ZWx5IGRp
+ZmZlcmVudCBzb3VyY2UgdHJlZSBmcm9tIHRoZSBvbmUgd2UgZ2V0IGluIHRoZSBwcm94aWVkIGRv
+d25sb2FkLgo+Cj4gVGhpcyBvcGVucyB1cCB0aGUgb3Bwb3J0dW5pdHkgZm9yIGJhZCBhY3RvcnMg
+dG8gaGlkZSBjb2RlIGluIHRoZSBwcm94aWVkIHZlcnNpb24gYW5kIHRoZW4gcmV0cm9hY3RpdmVs
+eSBjaGFuZ2UgdGhlIGdpdCB0YWcgdG8gaGlkZSB0aGF0IGJhZCBjb2RlLgoKSSBtZWFuLCB0aGUg
+ZGVwZW5kZW5jaWVzIGFyZSBhbGwgbG9ja2VkIHRvIHRoZSB1cHN0cmVhbSBoYXNoZXMgZWl0aGVy
+IHdheS4KCj4KPiBGb3IgdGhpcyByZWFzb24gdGhlIGRlZmF1bHQgd2FzIHNldCB0byBhbHdheXMg
+dXNlIEdpdCB0byBmZXRjaCB0aGUgZGVwZW5kZW5jaWVzIGZvciBCdWlsZHJvb3QgYXMgd2Ugd291
+bGQgcHJlZmVyIHRvIGRldGVjdCB0aGUgbWlzbWF0Y2ggYW5kIGRlYWwgd2l0aCBpdCB1cCBmcm9u
+dCwgcG9zc2libHkgZmFsbGluZyBiYWNrIHRvIGZldGNoaW5nIHRoZSAudGFyLmd6IGZyb20gb3Vy
+IG93biBtaXJyb3IsIHJhdGhlciB0aGFuIGRlcGVuZCBvbiB0aGlzIGJlaGF2aW9yIGZyb20gdGhl
+IEdvb2dsZSBwcm94eSB0byBhbHdheXMgYmUgdGhlcmUgYW5kIHNhdmUgdXMuCgpJIGRvbid0IHJl
+YWxseSBzZWUgYW55dGhpbmcgd3Jvbmcgd2l0aCB1c2luZyBnb29nbGUgaWYgdGhhdCdzIHdoYXQg
+YWxsCnVwc3RyZWFtcyBzZWVtIHRvIGV4cGVjdC4KCj4KPiBBcyB5b3UgY2FuIHNlZSB3ZSBoYXZl
+IG5ldmVyIGhhZCBhbiBpc3N1ZSB3aXRoIHRoaXMgc2V0dGluZyB1bnRpbCBub3csIHdoZW4gd2Ug
+aGF2ZSBhbiBhY3R1YWwgYnJva2VuIGRlcGVuZGVuY3kgc29tZXdoZXJlLCBhbmQgaXRzIHdoZW4g
+d2UgYXJlIGFkZGluZyB0aGUgcGFja2FnZSwgbm90IHJldHJvYWN0aXZlbHksIHRoYXQgdGhlIGlz
+c3VlIGlzIGZvdW5kIGFuZCBzb2x2ZWQuCgpXZSBhbHNvIGRvbid0IHNlZW0gdG8gaGF2ZSBhIGxv
+dCBvZiBnb2xhbmcgcGFja2FnZXMuCgo+Cj4gVGhpcyBpcyBteSBwaXRjaCBmb3Iga2VlcGluZyBH
+T1BST1hZPWRpcmVjdC4gSWYgd2Ugd2FudCB0byB1c2UgdGhlIEdvb2dsZSBwcm94eSB3aXRoIGFs
+bCB0aGUgY2F2ZXRzIEkgbWVudGlvbmVkIGFib3ZlLCB3ZSBjb3VsZCBhZGQgdGhlIG9wdGlvbiBI
+T1NUX0dPX0dPUFJPWFkgYW5kIGRlZmF1bHQgaXQgdG8gdGhlIEdvb2dsZSBwcm94eS4gQnV0IHBl
+cnNvbmFsbHkgSSB3aWxsIHN0aWxsIGFsd2F5cyBvdmVycmlkZSB0aGlzIHZhbHVlIHRvIGRpcmVj
+dCBpbiBteSBwcm9qZWN0cy4KCkknbSBub3Qgc2VlaW5nIG11Y2ggZGlmZmVyZW5jZSB3aGVuIHRo
+ZSB1cHN0cmVhbSBwcm9qZWN0IGlzIHVzaW5nIGhhc2gKYmFzZWQgZGVwZW5kZW5jeSBsb2NrIGZp
+bGVzIGhvd2V2ZXIsIGxpa2UgYXMgbG9uZyBhcyB0aGUgaGFzaGVzIG1hdGNoCndlIGtub3cgd2Ug
+aGF2ZSB0aGUgc291cmNlcyBzcGVjaWZpZWQgYnkgdGhlIHVwc3RyZWFtLiBJZiB0aGUgdXBzdHJl
+YW0KaXRzZWxmIGNhbid0IGJlIHRydXN0ZWQgdGhlbiB0aGF0J3MgYSB3aG9sZSBkaWZmZXJlbnQg
+aXNzdWUgSU1PIGFuZCB0aGUKR09QUk9YWSBzZXR0aW5ncyB3b24ndCBtYWtlIG11Y2ggb2YgYSBk
+aWZmZXJlbmNlIHRoZXJlLgoKPgo+IEZvciBub3cgd2UgY2FuIGp1c3QgaW5jbHVkZSB0aGUgbGF0
+ZXN0IGNvbW1pdCBoYXNoIG9mIHRhaWxzY2FsZSB1bnRpbCB0aGV5IG1ha2UgYSBuZXcgcmVsZWFz
+ZSBhbmQgbm90aGluZyBlbHNlIG5lZWRzIHRvIGJlIGNoYW5nZWQuCgpJTU8gc3dpdGNoaW5nIHRv
+IHRoZSBkZWZhdWx0IEdPUFJPWFkgc2V0dGluZ3MgaXMgcHJvYmFibHkgYmVzdC4KCkknbSBzb21l
+d2hhdCB3YXJ5IG9mIHVzaW5nIGEgY29tbWl0IGhhc2ggZm9yIHNvbWV0aGluZyBsaWtlIHRhaWxz
+Y2FsZQp3aGljaCBpbnRlcmZhY2VzIHdpdGggYW4gZXh0ZXJuYWwgc2VydmljZS4KCj4KPiBUaGFu
+a3MsCj4gQ2hyaXN0aWFuIFN0ZXdhcnQKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290
+Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJv
+b3QK
