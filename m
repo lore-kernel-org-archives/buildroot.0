@@ -4,79 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E00D8C52D71
-	for <buildroot@archiver.kernel.org>; Tue,  6 Aug 2024 16:57:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 296A9C52D71
+	for <buildroot@archiver.kernel.org>; Tue,  6 Aug 2024 17:42:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7C7C640362;
-	Tue,  6 Aug 2024 16:57:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BEA27401CC;
+	Tue,  6 Aug 2024 17:42:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rvbpNDZv6RnA; Tue,  6 Aug 2024 16:57:41 +0000 (UTC)
+ id WKEPiL8ggRnF; Tue,  6 Aug 2024 17:42:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EFF54402EA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 122AF401F3
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EFF54402EA;
-	Tue,  6 Aug 2024 16:57:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 122AF401F3;
+	Tue,  6 Aug 2024 17:42:40 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 146F41BF32A
- for <buildroot@lists.busybox.net>; Tue,  6 Aug 2024 16:57:39 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D0A701BF3BF
+ for <buildroot@lists.busybox.net>; Tue,  6 Aug 2024 17:42:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 025A1607B8
- for <buildroot@lists.busybox.net>; Tue,  6 Aug 2024 16:57:39 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id BC8FD60842
+ for <buildroot@lists.busybox.net>; Tue,  6 Aug 2024 17:42:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rfWBVsAVxe0Y for <buildroot@lists.busybox.net>;
- Tue,  6 Aug 2024 16:57:38 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.194;
- helo=relay2-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id a487Kc0PtmCQ for <buildroot@lists.busybox.net>;
+ Tue,  6 Aug 2024 17:42:37 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 719E5605EE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 719E5605EE
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 719E5605EE
- for <buildroot@buildroot.org>; Tue,  6 Aug 2024 16:57:37 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 0008740003;
- Tue,  6 Aug 2024 16:57:32 +0000 (UTC)
-Date: Tue, 6 Aug 2024 18:57:31 +0200
-To: Christian Stewart <christian@aperture.us>
-Message-ID: <20240806185731.372f8f3e@windsurf>
-In-Reply-To: <CA+h8R2reErtSWPO1hGpX7tT5Xejb_SNqiuSCnXvJZKHwhzdcZg@mail.gmail.com>
-References: <20240805163133.4126564-1-james.hilliard1@gmail.com>
- <CA+h8R2oQGKFFH-vMX27WUO1uEAGyt4cz9MCwn9Cofwyujx1xDA@mail.gmail.com>
- <20240805223152.09ed915b@windsurf>
- <CADvTj4o_CnzCth+QqoxhVovBRinvYfbMf7r+SWnnY0tfVbKgbw@mail.gmail.com>
- <CA+h8R2obsR-CzMhWDpQ-A0oeEPaG-P=aCwF7BS4J-3eShmHJgg@mail.gmail.com>
- <20240806165050.234235b4@windsurf>
- <CADvTj4pOK8-2YXy0POUg1qOKa1MrjsxbnS-r1F7YMk_YXFmEAQ@mail.gmail.com>
- <CA+h8R2reErtSWPO1hGpX7tT5Xejb_SNqiuSCnXvJZKHwhzdcZg@mail.gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1722963453;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=g0TOTugiwIlylUnQ4TU9GKP3XWwv5UreuVvTQdACAgo=;
- b=gnqcbtbZLIf7wRsV7YUA7WW8CdYcT5FxM6apD08voq1tCjSAnjTcvf08bm6irxSCdRigv2
- xIcN8xbKQx+5dqEr48txRv8cazl2H8XZkzEutOYhbxy52Jbtx+wPYz8rLZ16TbppeHIfCM
- pI0L7fTbLjDo4bnfZF4ETL0qs39EyZ6R+nxKbqszQSH3LzbV1/BjUcKiSwH/+RXb0Y7NHF
- uttxpBqTpOVDzUE7YYqKQMLy7vZdhTQg0/PoiDFrgBlPO26aOP+5tXrJgBJKUC4cDxvD5Q
- 0NYRYCtPQEYRUBsB1fCYr9CHZ5UvA/0UdfmtHpSL0idQsdUw1qKzM5N2Anbs9w==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=gnqcbtbZ
-Subject: Re: [Buildroot] [PATCH v4 1/2] package/pkg-golang.mk: allow
- packages to override download GOPROXY
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9139B60657
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9139B60657
+ for <buildroot@buildroot.org>; Tue,  6 Aug 2024 17:42:37 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 3F9C88423D; Tue,  6 Aug 2024 17:42:37 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 6 Aug 2024 19:04:34 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: bede54c774ef59640cc1b4d9fd1dabfc69e4ecdb
+X-Git-Newrev: 69710addd121a18ff662c5a6dcb1d8f329f39d69
+X-Patchwork-Hint: ignore
+Message-Id: <20240806174237.3F9C88423D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/swipl: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,87 +59,183 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Anisse Astier <anisse@astier.eu>,
- Christian Stewart via buildroot <buildroot@buildroot.org>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=69710addd121a18ff662c5a6dcb1d8f329f39d69
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Tue, 6 Aug 2024 09:13:50 -0700
-Christian Stewart <christian@aperture.us> wrote:
+SWI-Prolog offers a comprehensive free Prolog environment. Since its
+start in 1987, SWI-Prolog development has been driven by the needs of
+real world applications. SWI-Prolog is widely used in research and
+education as well as commercial applications.
 
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS               |  3 +++
+ package/Config.in        |  1 +
+ package/swipl/Config.in  | 43 +++++++++++++++++++++++++++++++++++++
+ package/swipl/swipl.hash |  4 ++++
+ package/swipl/swipl.mk   | 55 ++++++++++++++++++++++++++++++++++++++++++++++++
+ 5 files changed, 106 insertions(+)
 
-> The reasoning for using GOPROXY=direct is as follows:
-> 
-> When we enable the proxy, the Go tool will download the sources for the
-> dependencies from Google.
-> 
-> This is OK in general, but in the context of buildroot we typically
-> download sources from their upstream releases or Git repositories.
-> 
-> GOPROXY is not broken.
-> 
-> That said, a lot of dependencies cause problems when they change what tag a
-> git release points to retroactively (rare but happens), or delete a older
-> commit from their repository (which happens extremely rarely).
-
-Crap, those projects do that? They change a tag, or remove an older
-commit from their repo? Yikes for reproducibility :-/
-
-> The proxy smooths this over by always serving the same thing for a git tag
-> or commit hash.
-> 
-> The problem with this is, now we have something different being returned
-> for a dependency than what it says in go.mod.
-> 
-> The go.mod might say we are fetching foo at version 1.0.0, but in fact, if
-> you go to the repository for foo, and go to version 1.0.0, it could be a
-> completely different source tree from the one we get in the proxied
-> download.
-
-And that obviously sucks, and using a proxy doesn't seem like a great
-workaround.
-
-> This opens up the opportunity for bad actors to hide code in the proxied
-> version and then retroactively change the git tag to hide that bad code.
-> 
-> For this reason the default was set to always use Git to fetch the
-> dependencies for Buildroot as we would prefer to detect the mismatch and
-> deal with it up front, possibly falling back to fetching the .tar.gz from
-> our own mirror, rather than depend on this behavior from the Google proxy
-> to always be there and save us.
-> 
-> As you can see we have never had an issue with this setting until now, when
-> we have an actual broken dependency somewhere, and its when we are adding
-> the package, not retroactively, that the issue is found and solved.
-
-I'm not sure to follow you on this. Why would this only happen when we
-add the package? If we use GOPROXY=direct, and 3 months after we've
-added the package some upstream dependency decides to change its tag or
-remove some commits, then it will start failing (of course,
-sources.buildroot.net will have a backup, but sources.buildroot.net is
-not meant to really be used in "normal" circumstances).
-
-> This is my pitch for keeping GOPROXY=direct. If we want to use the Google
-> proxy with all the cavets I mentioned above, we could add the option
-> HOST_GO_GOPROXY and default it to the Google proxy. But personally I will
-> still always override this value to direct in my projects.
-> 
-> For now we can just include the latest commit hash of tailscale until they
-> make a new release and nothing else needs to be changed.
-
-Don't understand this last part. What is your proposal to fix the
-tailscale situation?
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 76f7fc5ed6..90c34e51f5 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1818,6 +1818,7 @@ F:	package/python-pyalsa/
+ F:	package/python-spake2/
+ F:	package/rdma-core/
+ F:	package/riscv-isa-sim/
++F:	package/swipl/
+ F:	package/tig/
+ F:	package/tinycompress/
+ F:	package/z3/
+@@ -1962,6 +1963,8 @@ F:	support/testing/tests/package/test_sox.py
+ F:	support/testing/tests/package/test_sqlite.py
+ F:	support/testing/tests/package/test_strace.py
+ F:	support/testing/tests/package/test_stress_ng.py
++F:	support/testing/tests/package/test_swipl.py
++F:	support/testing/tests/package/test_swipl/
+ F:	support/testing/tests/package/test_tcl.py
+ F:	support/testing/tests/package/test_tcl/
+ F:	support/testing/tests/package/test_tcpdump.py
+diff --git a/package/Config.in b/package/Config.in
+index 2ac351cce5..0d51c6af1e 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1476,6 +1476,7 @@ endmenu
+ endif
+ 	source "package/quickjs/Config.in"
+ 	source "package/ruby/Config.in"
++	source "package/swipl/Config.in"
+ 	source "package/tcl/Config.in"
+ if BR2_PACKAGE_TCL
+ menu "Tcl libraries/modules"
+diff --git a/package/swipl/Config.in b/package/swipl/Config.in
+new file mode 100644
+index 0000000000..84b6ace47f
+--- /dev/null
++++ b/package/swipl/Config.in
+@@ -0,0 +1,43 @@
++# swipl supports arch for which libc fenv.h provides all four macros:
++# FE_DOWNWARD, FE_TONEAREST, FE_TOWARDZERO, FE_UPWARD
++# See for example in glibc https://sourceware.org/git/glibc.git
++# git grep -E '^[[:space:]]*#[[:space:]]*define[[:space:]]+FE_(TONEAREST|UPWARD|DOWNWARD|TOWARDZERO)' sysdeps/
++config BR2_PACKAGE_SWIPL_ARCH_SUPPORTS
++	bool
++	default y if BR2_aarch64 || BR2_aarch64_be
++	default y if BR2_arceb || BR2_arcle
++	default y if BR2_arm || BR2_armeb
++	default y if BR2_i386
++	default y if BR2_m68k
++	# BR2_microblaze has only FE_TONEAREST
++	default y if BR2_mips || BR2_mipsel || BR2_mips64 || BR2_mips64el
++	# BR2_nios2 has only FE_TONEAREST
++	default y if BR2_or1k
++	default y if BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le
++	default y if BR2_riscv
++	default y if BR2_s390x
++	# BR2_sh has only FE_{TONEAREST,TOWARDZERO}
++	default y if BR2_sparc || BR2_sparc64
++	default y if BR2_x86_64
++	# BR2_xtensa supports only uclibc which does not have fenv.h
++
++config BR2_PACKAGE_SWIPL
++	bool "swipl"
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # __has_attribute()
++	depends on BR2_PACKAGE_SWIPL_ARCH_SUPPORTS
++	# swipl needs fenv.h which is not provided by uclibc
++	depends on !BR2_TOOLCHAIN_USES_UCLIBC
++	select BR2_PACKAGE_ZLIB
++	help
++	  SWI-Prolog offers a comprehensive free Prolog
++	  environment. Since its start in 1987, SWI-Prolog development
++	  has been driven by the needs of real world
++	  applications. SWI-Prolog is widely used in research and
++	  education as well as commercial applications.
++
++	  https://www.swi-prolog.org
++
++comment "swipl needs a glibc or musl toolchain w/ gcc >= 5"
++	depends on BR2_PACKAGE_SWIPL_ARCH_SUPPORTS
++	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_5 || \
++		BR2_TOOLCHAIN_USES_UCLIBC
+diff --git a/package/swipl/swipl.hash b/package/swipl/swipl.hash
+new file mode 100644
+index 0000000000..9f980654ba
+--- /dev/null
++++ b/package/swipl/swipl.hash
+@@ -0,0 +1,4 @@
++# From https://www.swi-prolog.org/download/stable
++sha256  10d90b15734d14d0d7972dc11a3584defd300d65a9f0b1185821af8c3896da5e  swipl-9.2.0.tar.gz
++# Locally calculated
++sha256  770594d0f4463b71f1485f00e4bc5cf4b6f667d62ef6bc9bde2fee236541992a  LICENSE
+diff --git a/package/swipl/swipl.mk b/package/swipl/swipl.mk
+new file mode 100644
+index 0000000000..d4263a6aa8
+--- /dev/null
++++ b/package/swipl/swipl.mk
+@@ -0,0 +1,55 @@
++################################################################################
++#
++# swipl
++#
++################################################################################
++
++SWIPL_VERSION = 9.2.0
++SWIPL_SITE = https://www.swi-prolog.org/download/stable/src
++SWIPL_LICENSE = BSD-2-Clause
++SWIPL_LICENSE_FILES = LICENSE
++
++SWIPL_DEPENDENCIES = host-swipl zlib
++
++# A host-swipl is needed to compile the target prolog boot
++# boot.prl file.
++HOST_SWIPL_CONF_OPTS = \
++	-DBUILD_PDF_DOCUMENTATION=OFF \
++	-DSWIPL_PACKAGES=OFF \
++	-DUSE_GMP=OFF \
++	-DUSE_TCMALLOC=OFF
++
++# swipl uses cmake macros try_run() and check_c_source_runs(), which
++# are not suitable for cross compilation. We add results in cache to
++# avoid running those tests. The SWIPL_NATIVE_FRIEND variable, is
++# meant to point to build directory of a host native swipl, rather
++# than the binary itself. The Cmake macro will append "src/swipl" to
++# the path set to this variable. Therefore, we cannot use the host
++# "swipl" binary installed in $(HOST_DIR)/usr/bin.
++SWIPL_CONF_OPTS = \
++	-DBUILD_PDF_DOCUMENTATION=OFF \
++	-DHAVE_WEAK_ATTRIBUTE=1 \
++	-DLLROUND_OK=1 \
++	-DMODF_OK=1 \
++	-DQSORT_R_GNU=1 \
++	-DSWIPL_NATIVE_FRIEND=$(HOST_SWIPL_SRCDIR) \
++	-DSWIPL_PACKAGES=OFF \
++	-DUSE_TCMALLOC=OFF
++
++ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
++SWIPL_CONF_OPTS += -DCMAKE_EXE_LINKER_FLAGS=-latomic
++endif
++
++ifeq ($(BR2_PACKAGE_GMP),y)
++SWIPL_CONF_OPTS += -DUSE_GMP=ON
++SWIPL_DEPENDENCIES += gmp
++else
++SWIPL_CONF_OPTS += -DUSE_GMP=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_NCURSES),y)
++SWIPL_DEPENDENCIES += ncurses
++endif
++
++$(eval $(cmake-package))
++$(eval $(host-cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
