@@ -4,73 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B99DCC52D6F
-	for <buildroot@archiver.kernel.org>; Wed,  7 Aug 2024 19:36:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EDAF7C3DA7F
+	for <buildroot@archiver.kernel.org>; Wed,  7 Aug 2024 19:39:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3766980E69;
-	Wed,  7 Aug 2024 19:36:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AFDD0808A7;
+	Wed,  7 Aug 2024 19:39:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RM9e5sPTDIig; Wed,  7 Aug 2024 19:36:11 +0000 (UTC)
+ id nHNOge3cOwWl; Wed,  7 Aug 2024 19:39:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3DF918136B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C86BC808AD
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3DF918136B;
-	Wed,  7 Aug 2024 19:36:11 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 145FE1BF2E3
- for <buildroot@lists.busybox.net>; Wed,  7 Aug 2024 19:36:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C86BC808AD;
+	Wed,  7 Aug 2024 19:39:58 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id D55251BF2E3
+ for <buildroot@lists.busybox.net>; Wed,  7 Aug 2024 19:39:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 00F7B406BF
- for <buildroot@lists.busybox.net>; Wed,  7 Aug 2024 19:36:09 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id CEB7C40385
+ for <buildroot@lists.busybox.net>; Wed,  7 Aug 2024 19:39:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CeqPod_xLClH for <buildroot@lists.busybox.net>;
- Wed,  7 Aug 2024 19:36:05 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::229;
- helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7u1HudbmpQtO for <buildroot@lists.busybox.net>;
+ Wed,  7 Aug 2024 19:39:56 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::223;
+ helo=relay3-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 1E639406B0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1E639406B0
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1E639406B0
- for <buildroot@buildroot.org>; Wed,  7 Aug 2024 19:36:02 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id E1E79FF802;
- Wed,  7 Aug 2024 19:35:59 +0000 (UTC)
-Date: Wed, 7 Aug 2024 21:35:58 +0200
-To: Julien Olivain <ju.o@free.fr>
-Message-ID: <20240807213558.4abc7e85@windsurf>
-In-Reply-To: <bad5f692bff295e22fdebc46c043a661@free.fr>
-References: <20240615091612.9579-1-ju.o@free.fr> <Zm3Y7Fd-Zpga_LAv@landeda>
- <bad5f692bff295e22fdebc46c043a661@free.fr>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 488D24025E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 488D24025E
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 488D24025E
+ for <buildroot@buildroot.org>; Wed,  7 Aug 2024 19:39:56 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 78EA460005;
+ Wed,  7 Aug 2024 19:39:53 +0000 (UTC)
+Date: Wed, 7 Aug 2024 21:39:52 +0200
+To: Mattias =?UTF-8?B?V2Fsc3Ryw7Zt?= <lazzer@gmail.com>
+Message-ID: <20240807213952.67a49e15@windsurf>
+In-Reply-To: <20240807140441.3795948-1-lazzer@gmail.com>
+References: <20240807140441.3795948-1-lazzer@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1723059360;
+ d=bootlin.com; s=gm1; t=1723059593;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=RNWFj83XukvzdVTcqyT2OhBQB2azl0aKmD+1IM/P2+s=;
- b=VD19KO+V9aqyAtGMF1lHY+qZWy3fV4sGb5t/F8J+cA6qG6cLGhHyRNWSRx8TLfyjYrF1AS
- tXJElki/x9Rsq7Kw910MKu7JFR+YH5p4PWDkiYxOi8J2TggUyrQYVj9fb2wEW3Emfm3eHO
- lpkLkS8gUKgL4pRW0Qi3JaUoMLSQz3cgwc96bQfsSKjikwDWvsroorYuUVExNG4HHpJ6yA
- KDQGB+tq3fT8Pt+cqPniVKZAcXFhv/K+6nzE/+91duDlx+OjxDRO8f+/Ss0BMe68WhiuWK
- QIfRjcQ4vxyUvFFVko5ZR4h71i5B+TZHYcp7zoHXL7qWUgB5ey6q5GtTScLdKQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=HhH3hRTz1LV6MxVsxYYYniRExeNTyhsRl6arp01isxw=;
+ b=Z1lNnQbdux2sGZrGY3n+BJ20Eu6X/CT/p5aWmaBaSq3MZ9A1izTOy57eBgGwIu7Z5RtuDw
+ XcjD0lIh8q9uE/qZK2tvTN34HarawtYvHotyXHQg7dLwFVt4onUu+YE0TAXHa9HKWQ4bxp
+ AeAjiSxdlqKc0aalM3MVJ+Q+zVMzQhltZJ317kGUvvQ75gFtfbisKN75OLo+BycPOJVXy3
+ diL+p7spNh2KHMYaMQxqk3p09ogDQ/DWVIrUONX9NNzT8NpfPVBEpdvu6WeJEk1yhynTDI
+ 1y1s9vBrf7npjI1EVAlpYCVk3u7qTIrY/MQRatlz92kJAGyms4Bk2XmxcAjILQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=VD19KO+V
-Subject: Re: [Buildroot] [PATCH 1/2] support/testing:
- test_audio_codec_base.py: new helper class
+ header.s=gm1 header.b=Z1lNnQbd
+Subject: Re: [Buildroot] [PATCH 1/2] package/uboot-tools: Bump to version
+ 2024.04
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,56 +83,38 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Julien,
-
-On Fri, 21 Jun 2024 14:40:20 +0000
-Julien Olivain <ju.o@free.fr> wrote:
-
-> Renaming the "test_audio_codec_base.py" file to "audio_codec_base.py",
-> and the "TestAudioCodecBase" class to "AudioCodecBase" will not
-> prevent the test to be discovered by Nose2. This will prevent the file
-> and class to be selected at first. But if "__test__ = False" is not
-> present, it will still be indirectly loaded from the TestLame
-> import. This can be seen by adding "--log-level debug" in nose2
-> arguments.
-> 
-> While I do agree we could rename the file and class to better show the
-> intent this is an "abstract" class which does not include a test, I
-> think the "__test__ = False" needs to stay here to really prevent it
-> being loaded.
-
-Apparently, not. Look at:
-
-  https://patchwork.ozlabs.org/project/buildroot/patch/f57167b1488b3c5ad76362dd8bca1b12d281aa19.1696522656.git.yann.morin.1998@free.fr/
-
-proposed by Yann. The abstract class doesn't start with Test, it
-doesn't have __test__ = false, and it isn't considered as a test by
-nose2.
-
-Now, look at:
-
-  https://patchwork.ozlabs.org/project/buildroot/patch/33ee4b08c20f9c4566cfe82c648f01599cab70b5.1696522656.git.yann.morin.1998@free.fr/
-
-which uses multiple inheritance, doesn't defined __test__ = true, and
-is properly considered by nose2.
-
-Could you have a look as to why this pattern wouldn't work for your
-audio codec situation?
-
-Thanks a lot,
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gTWF0dGlhcywKClRoYW5rcyBmb3IgdGhpcyBjb250cmlidXRpb24hCgpPbiBXZWQsICA3
+IEF1ZyAyMDI0IDE2OjA0OjQwICswMjAwCk1hdHRpYXMgV2Fsc3Ryw7ZtIDxsYXp6ZXJAZ21haWwu
+Y29tPiB3cm90ZToKCj4gU2lnbmVkLW9mZi1ieTogTWF0dGlhcyBXYWxzdHLDtm0gPGxhenplckBn
+bWFpbC5jb20+Cj4gLS0tCj4gIC4uLi8wMDAxLWRyb3AtY29uZmlnaC1mcm9tLXRvb2xzLnBhdGNo
+ICAgICAgICB8IDIwICsrKysrKysrKysrKysrKysKPiAgLi4uLXRvb2xzLW9ubHktaW4tbm8tZG90
+LWNvbmZpZy10YXJnZXRzLnBhdGNoIHwgMTEgKysrKy0tLS0tCj4gIHBhY2thZ2UvdWJvb3QtdG9v
+bHMvQ29uZmlnLmluICAgICAgICAgICAgICAgICB8ICAxICsKPiAgcGFja2FnZS91Ym9vdC10b29s
+cy91Ym9vdC10b29scy5oYXNoICAgICAgICAgIHwgIDIgKy0KPiAgcGFja2FnZS91Ym9vdC10b29s
+cy91Ym9vdC10b29scy5tayAgICAgICAgICAgIHwgMjMgKysrKysrKysrKysrKy0tLS0tLQo+ICA1
+IGZpbGVzIGNoYW5nZWQsIDQyIGluc2VydGlvbnMoKyksIDE1IGRlbGV0aW9ucygtKQoKSSB0aGlu
+ayBJJ2QgbGlrZSB0byBtZXJnZSB0aGlzIHVwZGF0ZSwgYnV0IEkgd291bGQgbGlrZSBmaXJzdCB0
+bwp1bmRlcnN0YW5kIHdoYXQncyBnb2luZyBvbiB3aXRoOgoKICBodHRwczovL3BhdGNod29yay5v
+emxhYnMub3JnL3Byb2plY3QvYnVpbGRyb290L3BhdGNoLzIwMjQwMzAzMTcxOTM3LjQ5MDU1My0x
+LWZvbnRhaW5lLmZhYnJpY2VAZ21haWwuY29tLwoKSSBoYXZlbid0IGJlZW4gYWJsZSB0byByZXBy
+b2R1Y2UgdGhlIGlzc3VlIG9uIG15IHNpZGUgd2l0aCBzaW1wbGUKYnVpbGRzLCBzbyBJIGNvdWxk
+bid0IGludmVzdGlnYXRlLiBCdXQgdGhpcyBpc3N1ZSBjb250aW51ZXMgdG8gb2NjdXIgaW4KdGhl
+IGF1dG9idWlsZGVyczoKCiAgaHR0cDovL2F1dG9idWlsZC5idWlsZHJvb3QubmV0Lz9yZWFzb249
+dWJvb3QtdG9vbHMlCgpJJ2QgbGlrZSB0byB1bmRlcnN0YW5kIHRoZSBpc3N1ZSBiZWZvcmUgYXBw
+bHlpbmcgdGhlIGJ1bXAsIGJlY2F1c2UgdGhlCmlzc3VlIGV4aXN0cyBpbiBvdXIgMjAyNC4wMi54
+IG1haW50ZW5hbmNlIGJyYW5jaCwgc28gd2Ugd2FudCB0bwp1bmRlcnN0YW5kIGlmIGl0IGNhbiBi
+ZSBmaXhlZCBvbiB0aGlzIGJyYW5jaCwgaW5kZXBlbmRlbnRseSBvciBub3QgZnJvbQp0aGUgdmVy
+c2lvbiBidW1wLgoKUmVnYXJkaW5nIHlvdXIgcGF0Y2g6IGNhbiB3ZSBtYWtlIE1LRUZJQ0FQU1VM
+RSBjb25maWd1cmFibGUgaW4KaG9zdC11Ym9vdC10b29scywganVzdCBsaWtlIGl0IGlzIGZvciB0
+YXJnZXQgdWJvb3QtdG9vbHM/IFRoaXMgd291bGQKYWxsb3cgdG8gbm90IGhhdmUgaG9zdC1nbnV0
+bHMgYXMgYSBtYW5kYXRvcnkgZGVwZW5kZW5jeS4KClRob21hcwotLSAKVGhvbWFzIFBldGF6em9u
+aSwgQ1RPLCBCb290bGluCkVtYmVkZGVkIExpbnV4IGFuZCBLZXJuZWwgZW5naW5lZXJpbmcKaHR0
+cHM6Ly9ib290bGluLmNvbQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0
+dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
