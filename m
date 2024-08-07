@@ -4,95 +4,165 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9F408C52D71
-	for <buildroot@archiver.kernel.org>; Wed,  7 Aug 2024 14:05:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7AA59C3DA7F
+	for <buildroot@archiver.kernel.org>; Wed,  7 Aug 2024 14:26:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A258E4060F;
-	Wed,  7 Aug 2024 14:05:14 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 22975400B1;
+	Wed,  7 Aug 2024 14:26:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uuTrS_ar6aZM; Wed,  7 Aug 2024 14:05:12 +0000 (UTC)
+ id MyNeFLSYqTMD; Wed,  7 Aug 2024 14:26:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1C58040603
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BBE27400B8
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1C58040603;
-	Wed,  7 Aug 2024 14:05:12 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E5C6C1BF2BC
- for <buildroot@lists.busybox.net>; Wed,  7 Aug 2024 14:05:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BBE27400B8;
+	Wed,  7 Aug 2024 14:26:31 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id EF75E1BF2BC
+ for <buildroot@lists.busybox.net>; Wed,  7 Aug 2024 14:26:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E0DD56070A
- for <buildroot@lists.busybox.net>; Wed,  7 Aug 2024 14:05:10 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id E916040273
+ for <buildroot@lists.busybox.net>; Wed,  7 Aug 2024 14:26:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id t9M7lo6-0Dko for <buildroot@lists.busybox.net>;
- Wed,  7 Aug 2024 14:05:10 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QIgEjg7QwGGv for <buildroot@lists.busybox.net>;
+ Wed,  7 Aug 2024 14:26:29 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::131; helo=mail-lf1-x131.google.com;
- envelope-from=lazzer@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org EC289606F7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EC289606F7
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com
- [IPv6:2a00:1450:4864:20::131])
- by smtp3.osuosl.org (Postfix) with ESMTPS id EC289606F7
- for <buildroot@buildroot.org>; Wed,  7 Aug 2024 14:05:09 +0000 (UTC)
-Received: by mail-lf1-x131.google.com with SMTP id
- 2adb3069b0e04-52f025bc147so2486736e87.3
- for <buildroot@buildroot.org>; Wed, 07 Aug 2024 07:05:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1723039507; x=1723644307;
- h=content-transfer-encoding:organization:mime-version:references
- :in-reply-to:message-id:date:subject:cc:to:from:x-gm-message-state
- :from:to:cc:subject:date:message-id:reply-to;
- bh=lvGuGUj3/QSy8Yd0ccpA4+Ht3xP+BcI12onUqs4fOls=;
- b=k3ByPAjI/V1a70kQyR3EFSJUTzedbzZRKC8rbcwVl7HSA4MO1a5yEpfX3LI1t2EGQm
- /8oVzaBE5b9SUllT2GFmQiLrY0xPxG4VA5ivD79C6q+n7GEGqycqHE0MMlitL3NzLxhb
- jgwM4Q9ONqzSHaVC8FtR4nKS8wY/c1u/rsukPp5ZFq7tGEb4XGozO66wEsLyJ2nCnjSz
- L0Mt2XD6MCMm/1yM2yMGKpSHDJ3ONpMb5c5TmdKS13eyNM+z0p6ZEQQBrYXeT0xG+SQa
- y/ZGYXOO2rHXyvJ/8SWoxN0qNfYHdv5JkZ+D/+4rdj2NZRJMI4BQyiF1n8KnuEYSPACH
- fMug==
-X-Gm-Message-State: AOJu0YwbtO3/Zf2eIgovYnEBu+vSiLm+xi4rkqw6GBAgnvR5wfRzWG+w
- oL27dRtxygJ1+S6YBZ97g/pscnYS/wyWZtk+Wy9cax5lpIpZ7aLizr3GrQ==
-X-Google-Smtp-Source: AGHT+IH0Rmr0lRZmGtkLn5jpqC3RE915GeHzRCFZZNbesV1g6yJeRqWTncK+DkisAVOP1KbR39oU/A==
-X-Received: by 2002:a05:6512:3b8b:b0:52e:9b92:4999 with SMTP id
- 2adb3069b0e04-530bb3630a8mr13080388e87.2.1723039506936; 
- Wed, 07 Aug 2024 07:05:06 -0700 (PDT)
-Received: from tollan.addiva.ad (h-79-136-22-50.NA.cust.bahnhof.se.
- [79.136.22.50]) by smtp.gmail.com with ESMTPSA id
- 2adb3069b0e04-530de466b6dsm262700e87.217.2024.08.07.07.05.06
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 07 Aug 2024 07:05:06 -0700 (PDT)
-From: =?UTF-8?q?Mattias=20Walstr=C3=B6m?= <lazzer@gmail.com>
-To: buildroot@buildroot.org
-Date: Wed,  7 Aug 2024 16:04:41 +0200
-Message-ID: <20240807140441.3795948-2-lazzer@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240807140441.3795948-1-lazzer@gmail.com>
-References: <20240807140441.3795948-1-lazzer@gmail.com>
+ client-ip=2a01:111:f400:7e88::62a;
+ helo=nam10-dm6-obe.outbound.protection.outlook.com;
+ envelope-from=neal.frager@amd.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 484C540184
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 484C540184
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com
+ (mail-dm6nam10on2062a.outbound.protection.outlook.com
+ [IPv6:2a01:111:f400:7e88::62a])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 484C540184
+ for <buildroot@buildroot.org>; Wed,  7 Aug 2024 14:26:28 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=VW4lwLFE9L5IeR0uCvDkQeMIJrgWaXxL18n85cKNwAHJCbvbVhvuBEhkyjWDciJ0s8g83H0zxfIr7kZrHMmvkVq65B2rKCO6JIoBe3X1yPOiXav1VtyD8aLivPWOmFhTZAY4LNQNppJ0aF2QA8rEVAYrFAG3kc3PNtGTc7E4gw1V4zV85I2dJkD5WnnG7pBKRnPzKiFMe2B3tKFHms5VL05UNO6YMUTTbbL337CRON0nnIBm3hBDbdG3vNmGkUsBw+92e+IqPU9qrJRTUn4ua4Z8N0f981mc1Br6xIi/a0bCIRoU2d57hDvKY8hk9PbyiC0TLSrgvGcinFxeobWh1g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2e7j9XETZQEFf2+53XP7IPJdiwV5oUVo0FClMQWo8DQ=;
+ b=CW8bCbHwQcPd3xer8SwsVIHUMKyyMvOBNx4CAcGG7cheUvpiJ1rEl19TydKXjJEYT+UBGk9pJJJIAeSseC/Ix/JjCHjI3uXeghP2cthQ1U/5VdU6VSrBvPz1ixWqohzJDN1Czl466CRtQq4ZNenKcTjim+LXB/3fAQP8RzMnICmGRFXkg/MLq+LThB9yMLdAMCUwshoSrKWM/ByNSgKIoA+FGlOBk1obHr3cSUEZUklmMKXY0tF0RTJDXZ8QpwwQGlU5HvKd/YiNoHQu2hKploMM5A4MKkhWrGlFIBzupntmngBSCo9EUdhmkB8K9vJgEahfY28n8+PoWZqYIL1Wzw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+Received: from CH2PR12MB5004.namprd12.prod.outlook.com (2603:10b6:610:62::16)
+ by MN2PR12MB4141.namprd12.prod.outlook.com (2603:10b6:208:1d5::22)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7849.13; Wed, 7 Aug
+ 2024 14:26:24 +0000
+Received: from CH2PR12MB5004.namprd12.prod.outlook.com
+ ([fe80::e6c1:191b:641d:4d1b]) by CH2PR12MB5004.namprd12.prod.outlook.com
+ ([fe80::e6c1:191b:641d:4d1b%5]) with mapi id 15.20.7849.008; Wed, 7 Aug 2024
+ 14:26:24 +0000
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, Neal Frager via buildroot
+ <buildroot@buildroot.org>
+Thread-Topic: [Buildroot] [PATCH v1 1/5] board/xilinx/patches/linux: add linux
+ 6.6.40 hash
+Thread-Index: AQHa6Li55XsRTBDAbUymX+ME1mR6K7IbuDoAgAAhcgA=
+Date: Wed, 7 Aug 2024 14:26:24 +0000
+Message-ID: <CH2PR12MB5004D0D6722981F95A9C6D17F0B82@CH2PR12MB5004.namprd12.prod.outlook.com>
+References: <20240807105813.3844985-1-neal.frager@amd.com>
+ <20240807142506.45de55d8@windsurf>
+In-Reply-To: <20240807142506.45de55d8@windsurf>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: CH2PR12MB5004:EE_|MN2PR12MB4141:EE_
+x-ms-office365-filtering-correlation-id: 032d18f0-1295-4040-e85f-08dcb6eceaaa
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+ ARA:13230040|376014|366016|1800799024|38070700018|41080700001; 
+x-microsoft-antispam-message-info: =?us-ascii?Q?xHl8wtuZK+dDRCPI97oPrWZePC9nOjdlP93+JZs6QDOYMTGY11fbf31XyA5f?=
+ =?us-ascii?Q?znhzLCGXBxgGioEMbCOq65IQHHaSi32yVRY8wC8XuKQ3CiLBYG6twn7eIpTS?=
+ =?us-ascii?Q?n2XxBD44kG3eQjJiIaeXr9FL872stnFhDLtMn1dhPciGcsY9bsYm1t5cDoSZ?=
+ =?us-ascii?Q?ocErR0340Sotuzlw5wCQdTykhFJi0Njr8ZuzX1vz1i4n+RWStNqtaorIrEnJ?=
+ =?us-ascii?Q?JP+Sm4wk8Hb09POp1pwytoKyghd6Iy4jwTRyCDxvxufR1Ywf+rMdQMn0ABW4?=
+ =?us-ascii?Q?UHOjeeRrR9d175tO1rRaplCNRIx2/F0qq5NAKtpjAbPXh6HaEcBA11FF/mT3?=
+ =?us-ascii?Q?XOUlbnIPGqgqKOmIO7Y+qjClB3ieQoXgY9e3kwidIIr6l/5xCnTyOUhcrGA/?=
+ =?us-ascii?Q?7FsZCMWOFmcMGWlyh353OReB5sNn3WWg5E2rfPDvgeDUluv+puHUF5EXvOt4?=
+ =?us-ascii?Q?dux+Y3Am7g0vkzG7x0cQCfVFVFfVM5aU6dCKNrkg+PpJt6NplOkIYCDNxgSQ?=
+ =?us-ascii?Q?vUxp8OUUsRa0x112M4WUXPeaVemTwORSjfJ35lqLESZOQt0zEDD7Vngawrsk?=
+ =?us-ascii?Q?huTg0Wd6bTrOlBE1o5YXxZ9pulDczNZmDzFczMj3t0SgWjskciNny3vV81W9?=
+ =?us-ascii?Q?j0GYkbPjFaCWnlfSC3QIs+8q9aA42N5VVhaDK9eC9ZAL5XRsR7JlRm3T8Dlo?=
+ =?us-ascii?Q?ayqSGw8OBEksqpw3Efuigx8egneDZ7mflUfKcsWgQ3brxjY/8VY7Zb3AJeJW?=
+ =?us-ascii?Q?pW7SPUsPr1JJq5UYnrBZVPAUYT3ZAwyNnsv/EipiKOuv1jtk6ph/Q5K7/4Ll?=
+ =?us-ascii?Q?q1P+2A3ox+7Dr62pcgFGsvYXLUoKHOJU38lgCn/huf1HH1vF/keBmqzG7Wd9?=
+ =?us-ascii?Q?dWRPN8UIq4NaBU4Ejj6MeMHcavqymtilRynYyyhrxIuBCsxiv6yc6BTPCayT?=
+ =?us-ascii?Q?jX9hb4v8HsD3dyzmOC+xBFiJJGxHZA/Ar8x5LJ2s+Dh7yatKhDGgMP268XBo?=
+ =?us-ascii?Q?g620hEAB7UMkiI4V0ZACdwoq8Ggf3lPZry5eqhRMP1+0NQ78JJGYlotygHYt?=
+ =?us-ascii?Q?FuVrQFSPDRYT04H2Kg1YpxBZnv3FUCJF5Wj77ce9+bdyLEKuMw/U81nztSWM?=
+ =?us-ascii?Q?2nW8KAYBA+MrigPEshwMNYp5H57lbbakiLW1ZMZ5YJcGQabzimY0MQ/DSC/N?=
+ =?us-ascii?Q?xqt/p1WMxEcQRuwlmF0Evc7jzspfXAqNzyUeYufnFL3guVUlRLFqGu8fZMXZ?=
+ =?us-ascii?Q?15drOG/1yYogqp2wy0NuWS/W0Fsm5bAEYPqjzoYs/OJoqJ5w0yIlxNsLMHqn?=
+ =?us-ascii?Q?oQohXuirrAj+Nkynvbsh+Z1M7zMATId/4nyQ3ZjkgC5e0MY0YCqFS7iFSFRb?=
+ =?us-ascii?Q?1qu9sJXL82QteU02VYp+2pQA6PQs?=
+x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:CH2PR12MB5004.namprd12.prod.outlook.com; PTR:; CAT:NONE;
+ SFS:(13230040)(376014)(366016)(1800799024)(38070700018)(41080700001); DIR:OUT;
+ SFP:1101; 
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?+2eQ/04VC40H0UnV5kv1XvB7pTUQ3bdv7L2Y9y4qAUUNK6TgJBiLb/NtriIh?=
+ =?us-ascii?Q?rE7nqfi9ZRiyDK4/V+ca3JgRYBDPLyxx0rgvUmoO28Sx7Ps0DVZvd7viW1QA?=
+ =?us-ascii?Q?NVCLUFPabQUDuH8Zd1g3/rfAa+Y/VJVtzlBCbGCyNxgPk/rgb/sm4frcLGOP?=
+ =?us-ascii?Q?m0YYx4sDcR0GEuyAN8HNbA3+BM6tCWbfdiAfXgF6E8oX7CWjRVZzvFFw/fl6?=
+ =?us-ascii?Q?fpit39VIhn8WE458Hz/ZPWOi4G8+mqvhCTzx/dg5Iestx2USi4GfGR+CMjXk?=
+ =?us-ascii?Q?njy5NBHmEnhF/b4f840HT3Ze8CIdLqRm9gnQRyHrRE6kTATrOdpAg9wl44VM?=
+ =?us-ascii?Q?KgWzsn5D4XoKa0Okf5gVgr6eg/+E82xcLOv+eKaYUek859zvIxXoB0r6vWFE?=
+ =?us-ascii?Q?xkssr2WGnv4ktHPeABpRks7mGkFecaR0ryf2ALm9n23nzdUS2zFXJpKrl9Zh?=
+ =?us-ascii?Q?D3p4XiJDSgwJ+7H7YvlFdtOvLLJokx0j2euHeWCiHYyJMP9QP/X7mPGyrHGU?=
+ =?us-ascii?Q?D0hoVcs9ltJEjSPh065N4Jmxbvigy2T8a2Xzie3EKBFDoPU3G2QcSu3tuPcX?=
+ =?us-ascii?Q?5shUtzIf3SN0z62ntfD9J14VgLZtli3/GAJS7lrF20NYOtv1RQ0Ye40UYO7L?=
+ =?us-ascii?Q?GDLQ6Jdv7IRrTdJxcAucODopZqPle+5duerc+ssNqagZIcH1wb2U9m6eInLb?=
+ =?us-ascii?Q?VZhLCYTd5i5BgifsWf6nhlZCw0prQ9wHuepNMn1QUimT5dMwcvarKhoxd4WQ?=
+ =?us-ascii?Q?kkRIzEI+1dAArY9EJTh5+WkaEBPrPiIllQEx6liGo3HA/yPpRT2OP0tLdSbJ?=
+ =?us-ascii?Q?C2W7zBTaWeEE1et8ymJOdf/ieXcfHJCpiB05Sro8JJGT9a3tGUag7uGqczMe?=
+ =?us-ascii?Q?jRtHU7yiSnJKNMs6+PSknawxIcqZfPCQ4C9ZEUxppeWH8DK6Ow59BBuKjrB+?=
+ =?us-ascii?Q?XfBGCj6JSwK4ghi1jwoZa0bTUcWpD4ekWGj076CxIWHHQMeb5I7v75M6eWwl?=
+ =?us-ascii?Q?369p9kqbLpXbf1O9jdjzH9+wnl58MENwJjsmmAP8lgb45kmXycU8L3Nx605o?=
+ =?us-ascii?Q?L6MNeGIKAAnHkx9j0Kmiea9pFVR2wM0RwrSTTUeWec5qgbnQ5gt9Y+1VK/oo?=
+ =?us-ascii?Q?gSMgvokN8OdJuhT5SW+Bz3N8bH4MDHFBuDYTvaapbzmGwYdoehrB60/CNmP2?=
+ =?us-ascii?Q?Qkgvc/Ad9xSmks/VInn9kyMoXRYuCyUjLojDoIKgz3EybMQ2aS9lXGud6fGv?=
+ =?us-ascii?Q?aI6RnJLxB09bwDbAPJTTMgAypE6m8M1SkFPM0/Qyum+6vNUIPr643LQFKS4S?=
+ =?us-ascii?Q?j/A7Y71KI4Da/oqMSWodW+adyn8nGbeweZ45hGmMGUOlc4h8lri66oPwh/qc?=
+ =?us-ascii?Q?AlTeLw9qQIyslfpj5v3VYJoyp9ubH7cUYCVCeVuONQxWfyJJMv0tzZZevH8D?=
+ =?us-ascii?Q?FzxVdzo1gA7uqAhtISE5VsKDHu/ZNA73RIFnC0o/vu+LysYWz8sb6BAlUPHd?=
+ =?us-ascii?Q?v1LWGdjQUHMCSaORdXneguLh4xRHiO/MTHaG9EdGLZwoi21ednKS3RSG69XM?=
+ =?us-ascii?Q?0te50bGxTYU0vTWdUi0=3D?=
 MIME-Version: 1.0
-Organization: Addiva Elektronik
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CH2PR12MB5004.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 032d18f0-1295-4040-e85f-08dcb6eceaaa
+X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Aug 2024 14:26:24.5202 (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: klZM3VqIOPqSyRF4k0iOMMWLk8YhQEarAp8l4+ssDOK4ae8Bqud8NG4ZJlrCZZYu
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4141
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1723039507; x=1723644307; darn=buildroot.org;
- h=content-transfer-encoding:organization:mime-version:references
- :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
- :date:message-id:reply-to;
- bh=lvGuGUj3/QSy8Yd0ccpA4+Ht3xP+BcI12onUqs4fOls=;
- b=GWdMM9WczpIjqzMF9kw7n/zdBaMPL2LhWIEOUTg2ncfTAbmTZo4j0KWhpjXnNmybMa
- kjjwE5BZhhC4Z2SuI07vCTnaqwO/bMNItqV6Ja+7P0sgkzCqqnUPBCs9lXxSdLMfZufW
- DG6npQWLEaMfUDAhCTh4rWhXBFSsKivGe7f75kBaRk5P0W6ba+uV+SuTMwi8+Foklz0y
- 2L7Ej6D0XFI+gg3BQqFngIL6PCFULzJK4ouE9teKJpYvHPkJqYQYhmPNToJvXa3wxnlO
- emwq6CQeKuIQq7tOULoDvYEejro1nz6w1/3TdHMvfhFf6oSQY4kG0eTiD3xCShkxCYgF
- zcTQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=GWdMM9Wc
-Subject: [Buildroot] [PATCH 2/2] package/uboot-tools: Add new tool
- fdt_add_pubkey
+ d=amd.com; s=selector1; 
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2e7j9XETZQEFf2+53XP7IPJdiwV5oUVo0FClMQWo8DQ=;
+ b=kXiXEjV3wqVJD/dmZtpghPgIoOZ/Oz+zsWhDdb6w/4GnrZxeMmSWfrGVkC63iNeSo832eygHDMajyV/9WU1qcY8ien2qDq6ANO8RfGL70EjaqI7mZo/Zbl6VxWAf/oQ6rqZUx5XM6yBVCIX4x1OlThXVzuVYsaPkUBip3xT1Ey0=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=amd.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
+ header.s=selector1 header.b=kXiXEjV3
+X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Subject: Re: [Buildroot] [PATCH v1 1/5] board/xilinx/patches/linux: add
+ linux 6.6.40 hash
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -104,52 +174,68 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: =?UTF-8?q?Mattias=20Walstr=C3=B6m?= <lazzer@gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: "Frager, Neal via buildroot" <buildroot@buildroot.org>
+Reply-To: "Frager, Neal" <neal.frager@amd.com>
+Cc: "Simek, Michal" <michal.simek@amd.com>,
+ "romain.naour@smile.fr" <romain.naour@smile.fr>,
+ "luca.ceresoli@bootlin.com" <luca.ceresoli@bootlin.com>,
+ "yann.morin.1998@free.fr" <yann.morin.1998@free.fr>,
+ "brandon.maier@collins.com" <brandon.maier@collins.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-ZmR0X2FkZF9wdWJrZXkgaXMgdXNlZnVsIHRvIGluc3RhbGwgdHJ1c3RlZCBzaWduYXR1cmVzIGlu
-c2lkZQphbiBleGlzdGluZyB1Ym9vdCBkZXZpY2UgdHJlZS4KClNpZ25lZC1vZmYtYnk6IE1hdHRp
-YXMgV2Fsc3Ryw7ZtIDxsYXp6ZXJAZ21haWwuY29tPgotLS0KIHBhY2thZ2UvdWJvb3QtdG9vbHMv
-Q29uZmlnLmluICAgICAgfCA3ICsrKysrKysKIHBhY2thZ2UvdWJvb3QtdG9vbHMvdWJvb3QtdG9v
-bHMubWsgfCA4ICsrKysrKysrCiAyIGZpbGVzIGNoYW5nZWQsIDE1IGluc2VydGlvbnMoKykKCmRp
-ZmYgLS1naXQgYS9wYWNrYWdlL3Vib290LXRvb2xzL0NvbmZpZy5pbiBiL3BhY2thZ2UvdWJvb3Qt
-dG9vbHMvQ29uZmlnLmluCmluZGV4IGMzYjAzNDFlY2QuLmZiY2Q2Mzc5YzUgMTAwNjQ0Ci0tLSBh
-L3BhY2thZ2UvdWJvb3QtdG9vbHMvQ29uZmlnLmluCisrKyBiL3BhY2thZ2UvdWJvb3QtdG9vbHMv
-Q29uZmlnLmluCkBAIC0xMDIsNCArMTAyLDExIEBAIGNvbmZpZyBCUjJfUEFDS0FHRV9VQk9PVF9U
-T09MU19EVU1QSU1BR0UKIAkgIFRoZSBkdW1waW1hZ2UgdG9vbCBmcm9tIERhcyBVLUJvb3QgYm9v
-dGxvYWRlciwgd2hpY2ggYWxsb3dzCiAJICBleHRyYWN0aW9uIG9mIGRhdGEgZnJvbSBVLUJvb3Qg
-aW1hZ2VzLgogCitjb25maWcgQlIyX1BBQ0tBR0VfVUJPT1RfVE9PTFNfRkRUX0FERF9QVUJLRVkK
-Kwlib29sICJmZHRfYWRkX2tleSIKKwloZWxwCisJICBJbnN0YWxsIHRoZSBmZHRfYWRkX2tleSB0
-b29sIG9uIHRoZSB0YXJnZXQgc3lzdGVtCisKKwkgIFRoZSBmZHRfYWRkX3B1YmtleSBpcyB1c2Vk
-IHRvIGFkZCBhIHB1YmxpYyBrZXkgdG8gdGhlIGZkdC4KKwogZW5kaWYKZGlmZiAtLWdpdCBhL3Bh
-Y2thZ2UvdWJvb3QtdG9vbHMvdWJvb3QtdG9vbHMubWsgYi9wYWNrYWdlL3Vib290LXRvb2xzL3Vi
-b290LXRvb2xzLm1rCmluZGV4IDBmNmIwOTcyYzkuLjZkYWQ1ZWI2NjQgMTAwNjQ0Ci0tLSBhL3Bh
-Y2thZ2UvdWJvb3QtdG9vbHMvdWJvb3QtdG9vbHMubWsKKysrIGIvcGFja2FnZS91Ym9vdC10b29s
-cy91Ym9vdC10b29scy5tawpAQCAtODIsNiArODIsMTIgQEAgZGVmaW5lIFVCT09UX1RPT0xTX0lO
-U1RBTExfTUtFTlZJTUFHRQogZW5kZWYKIGVuZGlmCiAKK2lmZXEgKCQoQlIyX1BBQ0tBR0VfVUJP
-T1RfVE9PTFNfRkRUX0FERF9QVUJLRVkpLHkpCitkZWZpbmUgVUJPT1RfVE9PTFNfSU5TVEFMTF9G
-RFRfQUREX1BVQktFWQorCSQoSU5TVEFMTCkgLW0gMDc1NSAtRCAkKEBEKS90b29scy9mZHRfYWRk
-X3B1YmtleSAkKFRBUkdFVF9ESVIpL3Vzci9iaW4vZmR0X2FkZF9wdWJrZXkKK2VuZGVmCitlbmRp
-ZgorCiBpZmVxICgkKEJSMl9QQUNLQUdFX1VCT09UX1RPT0xTX0ZXUFJJTlRFTlYpLHkpCiBkZWZp
-bmUgVUJPT1RfVE9PTFNfSU5TVEFMTF9GV1BSSU5URU5WCiAJJChJTlNUQUxMKSAtbSAwNzU1IC1E
-ICQoQEQpL3Rvb2xzL2Vudi9md19wcmludGVudiAkKFRBUkdFVF9ESVIpL3Vzci9zYmluL2Z3X3By
-aW50ZW52CkBAIC0xMDcsNiArMTEzLDcgQEAgZGVmaW5lIFVCT09UX1RPT0xTX0lOU1RBTExfVEFS
-R0VUX0NNRFMKIAkkKFVCT09UX1RPT0xTX0lOU1RBTExfRldQUklOVEVOVikKIAkkKFVCT09UX1RP
-T0xTX0lOU1RBTExfRFVNUElNQUdFKQogCSQoVUJPT1RfVE9PTFNfSU5TVEFMTF9GSVRfQ0hFQ0tf
-U0lHTikKKwkkKFVCT09UX1RPT0xTX0lOU1RBTExfRkRUX0FERF9QVUJLRVkpCiBlbmRlZgogCiAj
-IGhvc3QtdWJvb3QtdG9vbHMKQEAgLTIyNyw2ICsyMzQsNyBAQCBkZWZpbmUgSE9TVF9VQk9PVF9U
-T09MU19JTlNUQUxMX0NNRFMKIAkkKElOU1RBTEwpIC1tIDA3NTUgLUQgJChARCkvdG9vbHMvbWtl
-ZmljYXBzdWxlICQoSE9TVF9ESVIpL2Jpbi9ta2VmaWNhcHN1bGUKIAkkKElOU1RBTEwpIC1tIDA3
-NTUgLUQgJChARCkvdG9vbHMvbWtlbnZpbWFnZSAkKEhPU1RfRElSKS9iaW4vbWtlbnZpbWFnZQog
-CSQoSU5TVEFMTCkgLW0gMDc1NSAtRCAkKEBEKS90b29scy9kdW1waW1hZ2UgJChIT1NUX0RJUikv
-YmluL2R1bXBpbWFnZQorCSQoSU5TVEFMTCkgLW0gMDc1NSAtRCAkKEBEKS90b29scy9mZHRfYWRk
-X3B1YmtleSAkKEhPU1RfRElSKS9iaW4vZmR0X2FkZF9wdWJrZXkKIAkkKEhPU1RfVUJPT1RfVE9P
-TFNfSU5TVEFMTF9GSVRfQ0hFQ0tfU0lHTikKIAkkKElOU1RBTEwpIC1tIDA3NTUgLUQgJChARCkv
-dG9vbHMvZW52L2Z3X3ByaW50ZW52ICQoSE9TVF9ESVIpL2Jpbi9md19wcmludGVudgogCWxuIC1z
-ZiAkKEhPU1RfRElSKS9iaW4vZndfcHJpbnRlbnYgJChIT1NUX0RJUikvYmluL2Z3X3NldGVudgot
-LSAKMi40My4wCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-XwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8v
-bGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+Hi Thomas,
+
+> Add the hash for the Linux 6.6.40 release for Xilinx products.
+> 
+> The release tag was missing a patch, so it is being added here for users that
+> bump to Linux 6.6.40.  The patch has already been committed to the linux-xlnx
+> repo.
+> 
+> Upstream: https://github.com/Xilinx/linux-xlnx/commit/5365c13a86998da06d845c918f849b30b8735538
+> 
+> Signed-off-by: Neal Frager <neal.frager@amd.com>
+
+> I'm not sure I'm a big fan of the approach of doing this addition in
+> PATCH 1/5, and then changing the defconfigs one after the other. I see
+> two problems:
+
+> - In PATCH 1/5, you're adding a kernel patch, but do you realize that
+>   with only PATCH 1/5 applied, your kernel patch will be applied to the
+>  existing defconfigs, that use the xlnx_rebase_v6.6_LTS_2024.1 kernel ?
+
+>  It turns out you're lucky, as the patch applies fine on
+>  xlnx_rebase_v6.6_LTS_2024.1, but in the general case that would not
+>  work.
+
+Yes, I was aware of this, and verified that it would be ok before submitting
+the patch set like this.  However, I see your point and I will re-submit.
+
+> - After applying all patches, you still have the hash of
+>   xlnx_rebase_v6.6_LTS_2024.1.tar.gz, but I don't know if it's still
+>  used by some other defconfigs.
+
+> So I see several approaches here:
+
+> - Don't use a shared board/xilinx/patches/ folder, and use one per
+>  board, like is done in board/freescale/. This allows to update
+>  defconfigs independently from each other.
+
+> - Update all defconfigs that use board/xilinx/patches/ in one single
+>  commit.
+
+From my view, it is best to keep the shared hash files since there are now 12
+xilinx defconfigs using this and soon to be 13.
+
+Since it only requires a single line change in the defconfig files, I will
+squash this into a single patch that updates all 12 defconfigs to Linux 6.6.40.
+
+Best regards,
+Neal Frager
+AMD
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
