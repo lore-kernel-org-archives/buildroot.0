@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49EA5C3DA7F
-	for <buildroot@archiver.kernel.org>; Wed,  7 Aug 2024 20:53:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66ABFC3DA7F
+	for <buildroot@archiver.kernel.org>; Wed,  7 Aug 2024 20:53:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DD361600C7;
-	Wed,  7 Aug 2024 20:53:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BE19B608D6;
+	Wed,  7 Aug 2024 20:53:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id q86m_3q6Zs3n; Wed,  7 Aug 2024 20:53:19 +0000 (UTC)
+ id lGzvXR9RjJCO; Wed,  7 Aug 2024 20:53:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 182E660805
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CB030608E7
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 182E660805;
-	Wed,  7 Aug 2024 20:53:19 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8EED81BF308
- for <buildroot@lists.busybox.net>; Wed,  7 Aug 2024 20:53:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CB030608E7;
+	Wed,  7 Aug 2024 20:53:23 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id A61F31BF308
+ for <buildroot@lists.busybox.net>; Wed,  7 Aug 2024 20:53:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 620968146F
- for <buildroot@lists.busybox.net>; Wed,  7 Aug 2024 20:53:17 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8E46440BDE
+ for <buildroot@lists.busybox.net>; Wed,  7 Aug 2024 20:53:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EEeZFFV3io4I for <buildroot@lists.busybox.net>;
- Wed,  7 Aug 2024 20:53:12 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id vujld61UnkOL for <buildroot@lists.busybox.net>;
+ Wed,  7 Aug 2024 20:53:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C485581492
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7C429402DC
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id C485581492
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7C429402DC
  for <buildroot@buildroot.org>; Wed,  7 Aug 2024 20:53:12 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 729ED84692; Wed,  7 Aug 2024 20:53:12 +0000 (UTC)
+ id 6159A8468E; Wed,  7 Aug 2024 20:53:12 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 7 Aug 2024 22:52:04 +0200
+Date: Wed, 7 Aug 2024 22:48:54 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7c4f3014ef9128a1d743e96452d388a3343c1150
-X-Git-Newrev: 698c9f12c48463c6c39a747109e8b39d5a4fa660
+X-Git-Oldrev: 359b3228e24642ee9d7603af8f664b1832c5f98b
+X-Git-Newrev: 7c4f3014ef9128a1d743e96452d388a3343c1150
 X-Patchwork-Hint: ignore
-Message-Id: <20240807205312.729ED84692@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/grantlee: enable building for Qt6
+Message-Id: <20240807205312.6159A8468E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/grantlee: bump to 5.3.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,52 +65,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=698c9f12c48463c6c39a747109e8b39d5a4fa660
+commit: https://git.buildroot.net/buildroot/commit/?id=7c4f3014ef9128a1d743e96452d388a3343c1150
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+The hash of the license file has changed due to the addition of this
+line:
+
++Grantlee is copyright Stephen Kelly <steveire@gmail.com> and others.
 
 Signed-off-by: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/grantlee/Config.in   | 8 +++++---
- package/grantlee/grantlee.mk | 8 +++++++-
- 2 files changed, 12 insertions(+), 4 deletions(-)
+ package/grantlee/grantlee.hash | 4 ++--
+ package/grantlee/grantlee.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/grantlee/Config.in b/package/grantlee/Config.in
-index 779306bc2e..7849cfd9f2 100644
---- a/package/grantlee/Config.in
-+++ b/package/grantlee/Config.in
-@@ -1,8 +1,10 @@
- config BR2_PACKAGE_GRANTLEE
- 	bool "grantlee"
--	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE && BR2_PACKAGE_QT5
--	select BR2_PACKAGE_QT5SCRIPT
--	select BR2_PACKAGE_QT5BASE_GUI
-+	depends on (BR2_PACKAGE_QT5_JSCORE_AVAILABLE && BR2_PACKAGE_QT5) || BR2_PACKAGE_QT6
-+	select BR2_PACKAGE_QT5SCRIPT if BR2_PACKAGE_QT5
-+	select BR2_PACKAGE_QT5BASE_GUI if BR2_PACKAGE_QT5
-+	select BR2_PACKAGE_QT6BASE_GUI if BR2_PACKAGE_QT6
-+	select BR2_PACKAGE_QT6DECLARATIVE if BR2_PACKAGE_QT6
- 	help
- 	  Qt implementation of the Django template framework
+diff --git a/package/grantlee/grantlee.hash b/package/grantlee/grantlee.hash
+index 6508aa70cc..6ff509f0dd 100644
+--- a/package/grantlee/grantlee.hash
++++ b/package/grantlee/grantlee.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  139acee5746b957bdf1327ec0d97c604d4c0b9be42aec5d584297cb5ed6a990a  grantlee-5.2.0.tar.gz
++sha256  ba288ae9ed37ec0c3622ceb40ae1f7e1e6b2ea89216ad8587f0863d64be24f06  grantlee-5.3.1.tar.gz
  
+ # Hash for license file
+-sha256  a9bdde5616ecdd1e980b44f360600ee8783b1f99b8cc83a2beb163a0a390e861  COPYING.LIB
++sha256  4c3b163159fe524dc992489c5bc52aaf0231b5ff41fb6234adb7f10373da24c4  COPYING.LIB
 diff --git a/package/grantlee/grantlee.mk b/package/grantlee/grantlee.mk
-index 7e36334902..9e78664559 100644
+index 7079679ca4..7e36334902 100644
 --- a/package/grantlee/grantlee.mk
 +++ b/package/grantlee/grantlee.mk
-@@ -9,6 +9,12 @@ GRANTLEE_SITE = $(call github,steveire,grantlee,v$(GRANTLEE_VERSION))
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-GRANTLEE_VERSION = 5.2.0
++GRANTLEE_VERSION = 5.3.1
+ GRANTLEE_SITE = $(call github,steveire,grantlee,v$(GRANTLEE_VERSION))
  GRANTLEE_INSTALL_STAGING = YES
  GRANTLEE_LICENSE = LGPL-2.1+
- GRANTLEE_LICENSE_FILES = COPYING.LIB
--GRANTLEE_DEPENDENCIES = qt5base qt5script
-+
-+ifeq ($(BR2_PACKAGE_QT5BASE),y)
-+GRANTLEE_DEPENDENCIES += qt5base qt5script
-+else ifeq ($(BR2_PACKAGE_QT6BASE),y)
-+GRANTLEE_DEPENDENCIES += qt6base qt6declarative
-+GRANTLEE_CONF_OPTS += -DGRANTLEE_BUILD_WITH_QT6=ON
-+endif
- 
- $(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
