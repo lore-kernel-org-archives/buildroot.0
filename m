@@ -4,93 +4,167 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71CFAC52D71
-	for <buildroot@archiver.kernel.org>; Wed,  7 Aug 2024 14:35:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D74C9C52D71
+	for <buildroot@archiver.kernel.org>; Wed,  7 Aug 2024 14:39:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0FE8C60A63;
-	Wed,  7 Aug 2024 14:35:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 776DA606A2;
+	Wed,  7 Aug 2024 14:39:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nJZmfx-MyOAZ; Wed,  7 Aug 2024 14:35:22 +0000 (UTC)
+ id 1Phd4-rWougu; Wed,  7 Aug 2024 14:39:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2792C60A66
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 764526070A
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2792C60A66;
-	Wed,  7 Aug 2024 14:35:22 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 115F31BF2BC
- for <buildroot@lists.busybox.net>; Wed,  7 Aug 2024 14:34:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 764526070A;
+	Wed,  7 Aug 2024 14:39:58 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id BA7BC1BF2BC
+ for <buildroot@lists.busybox.net>; Wed,  7 Aug 2024 14:39:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 01C0C608CB
- for <buildroot@lists.busybox.net>; Wed,  7 Aug 2024 14:34:54 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id A820240201
+ for <buildroot@lists.busybox.net>; Wed,  7 Aug 2024 14:39:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GfYGMixENImH for <buildroot@lists.busybox.net>;
- Wed,  7 Aug 2024 14:34:52 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ybbItdpt7zNC for <buildroot@lists.busybox.net>;
+ Wed,  7 Aug 2024 14:39:56 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::236; helo=mail-lj1-x236.google.com;
- envelope-from=johan.oudinet@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A3C156088E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A3C156088E
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com
- [IPv6:2a00:1450:4864:20::236])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A3C156088E
- for <buildroot@buildroot.org>; Wed,  7 Aug 2024 14:34:51 +0000 (UTC)
-Received: by mail-lj1-x236.google.com with SMTP id
- 38308e7fff4ca-2f040733086so22051231fa.1
- for <buildroot@buildroot.org>; Wed, 07 Aug 2024 07:34:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1723041289; x=1723646089;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=9AEJmt4Tk46WGUyt6jybYt61rjunp9XIuo7KTKazkrY=;
- b=sZebGQIgZn7yBURgGkBFQ7kFb6N3Z0T+GCsxSFfSBX8lnImwO8P/Fp3enxFVxGN76j
- tnzYloMEGOYvuI3WHSM/DmsLZ9ayzrJo7cUubRJiwt3oMUjn7W1+ds2MVP5+D+JFaq6B
- fUfs2k/0+QRB5TGpSvSBo2+K2gcgZvwSFlplpqNxsdn13BgxWyX/PbOpqhCTHr9U82Jt
- tc1RDhdd/Y7ayYe8YMn5+cwqo5LbZwfyRjEipJAD3am4ROKwOy0qzBdLP8EV3InFq+4f
- IjYaQ8NNMN5xFdUdzTQneOmP9WXXJCsFWK8o4DPW/VSFoMjjxur5dmh+C22+2rwvn57Z
- VG4g==
-X-Gm-Message-State: AOJu0YxgglgdCU3E8KLQGg5lsgcrAQ6HiMqb0EP8Rm8q1ESF46TnZiy+
- q8cHemy3vIyHaBIdg2Vy391Q3NcEtjBo5IfQjHpJBJHnF3zZ3LaE/0pzFw==
-X-Google-Smtp-Source: AGHT+IFnrvUrc/TFfY/eV2+k575Bi2pGDnuzKk8mm/4XyZSm0brwZSoWhP060uEH26uwxOUyhMS8UQ==
-X-Received: by 2002:a2e:6a1a:0:b0:2ef:295b:4946 with SMTP id
- 38308e7fff4ca-2f15aa87067mr126303741fa.4.1723041288872; 
- Wed, 07 Aug 2024 07:34:48 -0700 (PDT)
-Received: from shrek.. ([2a01:e0a:acf:1a32:b409:e7b0:306e:2d45])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-42905796a29sm33289995e9.10.2024.08.07.07.34.48
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 07 Aug 2024 07:34:48 -0700 (PDT)
-From: Johan Oudinet <johan.oudinet@gmail.com>
-To: buildroot@buildroot.org
-Date: Wed,  7 Aug 2024 16:33:18 +0200
-Message-Id: <20240807143318.439619-19-johan.oudinet@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240807143318.439619-1-johan.oudinet@gmail.com>
-References: <20240807143318.439619-1-johan.oudinet@gmail.com>
+ client-ip=2a01:111:f403:2415::601;
+ helo=nam11-dm6-obe.outbound.protection.outlook.com;
+ envelope-from=neal.frager@amd.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 97D14400B8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 97D14400B8
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com
+ (mail-dm6nam11on20601.outbound.protection.outlook.com
+ [IPv6:2a01:111:f403:2415::601])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 97D14400B8
+ for <buildroot@buildroot.org>; Wed,  7 Aug 2024 14:39:56 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=bAY5KXl1mZF1noQGTcnZvqlaed6BGFukgPptUQFmpx9ilXkXlnDbdocGRJ6w/Q9RM/mW/adOw6l/YuYAjQjP1XCjeJPuE4YtZz6fuddGGlSI6ZmIuFkaBvKLmWOhYz+6rOMEySFmE83vtZyWs8AUFJVBLZcWS//nib4hOuNtfBymQUlggevoVbZY3dTepcpREopO5UaDSaGprVw1gf37uWDGsc/rmRZ2KJ8j8t7tjsXmaGsSdIIfBroxOie6Wf7fx4A4TTpDHbBVLpsLAGnNNiVGqZ4J/WGmvbkdowFI+w7LjazUcfOT2HlSgk+t9eSnxS2a4EF+iMTahlQYqAApCA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=UzmBo5LrHkGN5f9QBoPZ/qDKsAv/OfruIRSVSEN+PPE=;
+ b=H2YVEuJkwniTGc7o0BCHDSiKpY4R2MCDAY13KddOAKOZvxeXw9Vc+QjJseU4Yyp/T9ItZNr51vH4CkdLE/KzgDUf0Upd30lyItRrsN73akgi8z4OPNuZ17dStgDF43jzCuEEcDraQILEZ2xOEq/t4uKlNJBiSj0Ch4kZaDYVXLji+1sQhFLQwYEQGNUC/Qmjy2Z8bdx1TLK2STG1WBnNAA6EoFFeX1hY0L88GjE/ojZTLJXiYtGzMoyNBxz9aVLbZOBEFKvsWbgGtNh2OHbMf1DBBdWBTN86X5egnuxeJMfXGOSwtpBZcNIw8t5lc/RpdIBXGZz6qQ7NRR8iH9LQUw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+Received: from CH2PR12MB5004.namprd12.prod.outlook.com (2603:10b6:610:62::16)
+ by SA1PR12MB6896.namprd12.prod.outlook.com (2603:10b6:806:24f::5)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7828.23; Wed, 7 Aug
+ 2024 14:39:52 +0000
+Received: from CH2PR12MB5004.namprd12.prod.outlook.com
+ ([fe80::e6c1:191b:641d:4d1b]) by CH2PR12MB5004.namprd12.prod.outlook.com
+ ([fe80::e6c1:191b:641d:4d1b%5]) with mapi id 15.20.7849.008; Wed, 7 Aug 2024
+ 14:39:52 +0000
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Thread-Topic: [Buildroot] [PATCH v1 1/5] board/xilinx/patches/linux: add linux
+ 6.6.40 hash
+Thread-Index: AQHa6Li55XsRTBDAbUymX+ME1mR6K7IbuDoAgAAhcgCAAAEVgIAAAFJA
+Date: Wed, 7 Aug 2024 14:39:52 +0000
+Message-ID: <CH2PR12MB50042ED67EA2441FE635D585F0B82@CH2PR12MB5004.namprd12.prod.outlook.com>
+References: <20240807105813.3844985-1-neal.frager@amd.com>
+ <20240807142506.45de55d8@windsurf>
+ <CH2PR12MB5004D0D6722981F95A9C6D17F0B82@CH2PR12MB5004.namprd12.prod.outlook.com>
+ <20240807162841.52d0481d@windsurf>
+In-Reply-To: <20240807162841.52d0481d@windsurf>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: CH2PR12MB5004:EE_|SA1PR12MB6896:EE_
+x-ms-office365-filtering-correlation-id: acf39f90-0aa4-492f-f2d3-08dcb6eecc64
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+ ARA:13230040|366016|1800799024|376014|38070700018|41080700001; 
+x-microsoft-antispam-message-info: =?us-ascii?Q?lwNZgJpaO1iady0EBMwK/dvqgnt1jLda3g+gAwCBu6ovArJ42BNhTqJ3ts6i?=
+ =?us-ascii?Q?kdiGptUyHpSWJo4jlHqNeQmkuuP5pgfKSLg9jSMCFW/+5iwNH9vow62rBIcM?=
+ =?us-ascii?Q?RbWOAklc5mz8pZNvGiCS65VE2w7k8qy42wp/kSVVHjl7gB0gUmlV03f+JOPo?=
+ =?us-ascii?Q?3wuJn8fvcjjqYmNw34peeHo3eZJdqZfd6JQ0z061KyJKEBkxPGQQLjmg0OP4?=
+ =?us-ascii?Q?LSPXUUTwykOOhQ6+LNeyHv0ireH6UuBkMoEho+L4LmKmX6zt7JVH40cAq6bK?=
+ =?us-ascii?Q?3LHVnwGf0EnPwY96+2Gb69cZqZnctwJGtjNAtGezvI/faR77c8UXBDxd7dp0?=
+ =?us-ascii?Q?tRmtupY9m1ageLKymU9DRMI4VlAjNzvuAyMiRz0UnE83Maxiwvo2qnqhqAIZ?=
+ =?us-ascii?Q?GoIwgrSONWh0u25ge32av/TYpv/nEr2MEbCF7MpvRMoj3qq+APQ0lgt9C1x/?=
+ =?us-ascii?Q?pAd2QUNiWYfFiizBYclafJjHyLr113j4xNDiXv1iksjwvuHnk3tbDSeQGl6A?=
+ =?us-ascii?Q?3IRs++kM/D8r2F2GAZwQ2nMCnlbgNG334pxjZB0vXuy1DuB3P0YoDU4RAdCf?=
+ =?us-ascii?Q?YwYxr7KabidruUqDfrYCvVW0jyVo97Ebq7TNyuen96MBR7kFOo//Q7XWRkw+?=
+ =?us-ascii?Q?yX8JEFkgh2+jgI2MeRiNBHrLb3Pl6SiQYk5JRKQwA3gbXM6hnLGRpTZJuwts?=
+ =?us-ascii?Q?wIbkLQPkc6qe0lkqto/MdYDiahXF1q9A4b157HRKGjCC9yw3xNIJXiKrTK3m?=
+ =?us-ascii?Q?0tAQ0fn/Rw3P4cN261a6WRz+0dIlcqOCKMmpWKblM3+4HhBruKO0isdcG0Hc?=
+ =?us-ascii?Q?cPK587iSdIQnlM96J8b5sNBicrheD1I8tOGbMjt9SO7nKgVQ4dnwlBDo8tcn?=
+ =?us-ascii?Q?ADb/fGpXH/LO6ctMeY7b+Q+6sLXFL+xCJ0l9vVv+2NuUsQtj5w/32shRPVuY?=
+ =?us-ascii?Q?M5kgrJYf+t1sF7wrJsasE7zsaihnNq5BnFR0svLkhmrRlgq72oVlVAfmRXJu?=
+ =?us-ascii?Q?PTDOFKQWJ9TraQ1M7ZtFFLCI6Bha/NulROelckDwBmh9vVQkylchDNIuH8kT?=
+ =?us-ascii?Q?f5hZxRSPl71BIt+wRZ7Ls7ss+GLF5jErvP0DfKhXfLVzMvE6Y7KYG2Xl6pVi?=
+ =?us-ascii?Q?f+KAlMsZ9Dw3O/Bxl833qVGSxW6VIFgeia3KL8AKxPSs59kyUJxdu1v2g6Dp?=
+ =?us-ascii?Q?x55VeVs9dZLnzrkPrvlD++12sDD90w8qL2kkbbst1PL3ZeuTaXf8MUeThyjD?=
+ =?us-ascii?Q?o7Dw+EndfEdIUEAlObIsAePxxSGnbOio01u7G2rGY4OP1k+ZWaaOzPRcB7Pi?=
+ =?us-ascii?Q?hJJWMMVeYlWWysmelYsbmvufFeFwVZlYX7j4G7KTOkvcgIl2RnmP8txY5Xiz?=
+ =?us-ascii?Q?gEniB3aqEVyoAimspk5vI9rNnRGmI2jWjWOd4RI1lQBskXfNcDLt2rbPm+ws?=
+ =?us-ascii?Q?4mJASDnpPEA=3D?=
+x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:CH2PR12MB5004.namprd12.prod.outlook.com; PTR:; CAT:NONE;
+ SFS:(13230040)(366016)(1800799024)(376014)(38070700018)(41080700001); DIR:OUT;
+ SFP:1101; 
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?h982KtwYPJ9K3k3fJKOadRMmla9bQzOgG6hAF9A/wrfcS4SU0u89X8xBQihg?=
+ =?us-ascii?Q?R8DpKaJ/P2WPDnezTiQICsIq2pIvyfesSMoJUpoHWRRUJoD+fNVawZvv6wYF?=
+ =?us-ascii?Q?QkBB91Kj5LpL5vPIKRKG8+EruyKQsY4G+CJH0w9rVcEF1QUb+LIRLHlPT9w2?=
+ =?us-ascii?Q?G7cjR0WGAIwWUxNwGJsllfX5a9FFrUAw9psElBQCpMrYuEOrWu3DQe91C9yF?=
+ =?us-ascii?Q?F0whsqiQWW/p2L/I+eUSdUoQaBkYSVJpTDiOuDamPywD8zwp7OaioilVtPG4?=
+ =?us-ascii?Q?bHF2J/GcKfE046aS7UP7/V8B4OqXGwYukd4LM53REdDvkpjQPFaFiIWnPGr/?=
+ =?us-ascii?Q?bdirfvZUa7t4aJk67L5R4T6nt+6P6fciTSUTdXXpb+xoNCs8T/2FJvY1MQf1?=
+ =?us-ascii?Q?2tTyDieY0+xUqPOm8vD296+MexrOGpBiDK3stjJhS0UjmWrQAwOHObhWcrmF?=
+ =?us-ascii?Q?1C9T5vycXwjIt3yqj2f+gvLFQweSRaxYH6mMNPbkrV0wrgamPZ0tCEqlUiIJ?=
+ =?us-ascii?Q?sMIE+L6B1kx+2mwa74HerlaNDAK+nrS+DRyhgHoO18uQ/238nXYLmz62/ieA?=
+ =?us-ascii?Q?X+oTx3/7HbW829kvuO3YQurinKS8IqaKre3I5CXvt4lREodiLQ3rDf2am7fO?=
+ =?us-ascii?Q?1+M5HmzPbuyo9554vh74CRDvG1Ti7kVnAm/hQ/9EmssH1ocngNLUUtqznA4l?=
+ =?us-ascii?Q?UX0eD7IqxzVP8Q6HWb0eDhPGwxnkPNgGDwQUoU6/nuE61gpRoCZf8ghk2Aho?=
+ =?us-ascii?Q?z/QFzHkq37jqDgmI8/lEcMO+H/BcdojXo5esgWMy4tAbqKiLKhdn26a26j4m?=
+ =?us-ascii?Q?Ap2M0/4sRqq7091+dRQD8Dw9GAVez0xGbmi/YTlmEqwk1IQ8DIgEbKm3a1gq?=
+ =?us-ascii?Q?SMeAdEMIg4eHDiW29C36JwBsV5ZL5zhTIMbbYAcSD5DsRlkRRlozOSEN59y/?=
+ =?us-ascii?Q?ymKIygOQxJD09u4jUpHpnDCr3xflAE8R741icskZJcr9dRYTIhiSgnCkmWTV?=
+ =?us-ascii?Q?az6oVvUcYVz2NdeiGVmJYUbY7h7CrKWlwIOf/aCrq8kjJo7246sdKxHSiWFb?=
+ =?us-ascii?Q?fddXFmFOq1/ejz0Vavkgz9IXescvWlxU/sP31rsKqdpC85svUFGHY2g7WQs5?=
+ =?us-ascii?Q?IiMhQ++y5p8iG2Uw6P6dP2+Qu5Tr8bjn6TgsJfQFuIfn24ozSA6zxRlCH0ZC?=
+ =?us-ascii?Q?h2JUtFfSSGOmoR4MCoG5JE1b3z2UZ00OYRwpIaHAvzfMCfwpGcBwOEbxpxRl?=
+ =?us-ascii?Q?4wLyt7oXCJhVRMpVNLdBBpYfXDdMkPJAoANoack2RuzMga0Tq89l+cOSYoGP?=
+ =?us-ascii?Q?Zjnr6asVOih8NPLxFAQZAX/0+7E3HDlqSHs4GNBwH1tqAh6iO8p97YLXP5oS?=
+ =?us-ascii?Q?Mg6thj/eL2oSPM8mpJlu25LEhZyhf7jNKI/Un/clj6f1vgGNsanDUVWkuUmj?=
+ =?us-ascii?Q?BIRd1CBCPI6NwQxC/00Q5L72tbu9mvjC6/NDt4GQMCmKcsYmrcdvF+hcgAMO?=
+ =?us-ascii?Q?ASxEuNFBIPK77ARzKKafich5vzeQlBGtBLHxefM6ojSiFlK3geU/ksMr43n9?=
+ =?us-ascii?Q?KcwAJ3G75wcdJukNjTs=3D?=
 MIME-Version: 1.0
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CH2PR12MB5004.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: acf39f90-0aa4-492f-f2d3-08dcb6eecc64
+X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Aug 2024 14:39:52.6853 (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 2QP/xHor8z4v5CGIlm7rU+88NFA6Zan3Hfa+kgaBthocQ7LdYD3mLamPJpXF97hG
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB6896
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1723041289; x=1723646089; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=9AEJmt4Tk46WGUyt6jybYt61rjunp9XIuo7KTKazkrY=;
- b=dFSlNFMtLJho/A/0ez2jOlclFKFJRxbUu/Kd1xANMtmqesSfLAZy54v9P8Y0tQJmU1
- MPoahnENFNM7mQAeGC7p0ZzyBJysoD6EH8+KeFKult7SqCPubIcTQDOhgi06iupyEABX
- iYyHvCx8ebBsOGQYNylMZRihU33yzstEJy9p//ViMXC/vM3ZTXIkp/A6hQtBWywl0/n7
- HAStWab7K23Psyreu2wucJYaRzRqGlMqPLe42TDzzRRfWmqYvbwdw+qND9nTEwBDyMMp
- w2RKQI2PAoLWycXb5gWIz0G3maR2E31p1LGe8VpXyL2aKao0FVptc2PgWMg/0NKau1H6
- rhFg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=dFSlNFMt
-Subject: [Buildroot] [PATCH 18/18] package/ejabberd: bump version to 24.07
+ d=amd.com; s=selector1; 
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=UzmBo5LrHkGN5f9QBoPZ/qDKsAv/OfruIRSVSEN+PPE=;
+ b=mV8SgfbV9S5sES8ma4NqSksGRqTakOH0RYNFSxZV685BiST8FTHV3PRXiTEwUCzMaC7HqYCjIGeksMUUTSdr4yYhKZYAo/v7dK5o50OHk4oCDKqrm/Rtou8EsX3Xu8yNp5py6H3F++WI6YzyiVZ361yFYY8CO/5cjBzitJJuTGw=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=amd.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
+ header.s=selector1 header.b=mV8SgfbV
+X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Subject: Re: [Buildroot] [PATCH v1 1/5] board/xilinx/patches/linux: add
+ linux 6.6.40 hash
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,322 +176,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Johan Oudinet <johan.oudinet@gmail.com>
+From: "Frager, Neal via buildroot" <buildroot@buildroot.org>
+Reply-To: "Frager, Neal" <neal.frager@amd.com>
+Cc: "luca.ceresoli@bootlin.com" <luca.ceresoli@bootlin.com>,
+ "brandon.maier@collins.com" <brandon.maier@collins.com>,
+ Neal Frager via buildroot <buildroot@buildroot.org>,
+ "romain.naour@smile.fr" <romain.naour@smile.fr>, "Simek,
+ Michal" <michal.simek@amd.com>,
+ "yann.morin.1998@free.fr" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-and update the two patches accordingly. Ejabberd now uses rebar3 by
-default, so use the --with-rebar configure option to set the correct
-rebar binary to use. Take the opportunity to fix warnings reported by
-utils/check-package.
+Hi Thomas,
 
-Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
----
- ...not-download-or-compile-dependencies.patch | 23 +++---
- package/ejabberd/0002-fix-ejabberdctl.patch   | 19 +++--
- package/ejabberd/S50ejabberd                  | 72 ++++++++++---------
- package/ejabberd/check-erlang-lib             | 39 +++++-----
- package/ejabberd/ejabberd.hash                |  4 +-
- package/ejabberd/ejabberd.mk                  |  5 +-
- 6 files changed, 82 insertions(+), 80 deletions(-)
+> From my view, it is best to keep the shared hash files since there are now 12
+> xilinx defconfigs using this and soon to be 13.
+> 
+> Since it only requires a single line change in the defconfig files, I will
+> squash this into a single patch that updates all 12 defconfigs to Linux 6.6.40.
 
-diff --git a/package/ejabberd/0001-Makefile.in-do-not-download-or-compile-dependencies.patch b/package/ejabberd/0001-Makefile.in-do-not-download-or-compile-dependencies.patch
-index abcc8975b2..69f25304b5 100644
---- a/package/ejabberd/0001-Makefile.in-do-not-download-or-compile-dependencies.patch
-+++ b/package/ejabberd/0001-Makefile.in-do-not-download-or-compile-dependencies.patch
-@@ -1,37 +1,36 @@
--From bf3571da4a68a6a857ab7ad8256f8276b3687a38 Mon Sep 17 00:00:00 2001
--From: Johan Oudinet <johan.oudinet@gmail.com>
--Date: Fri, 13 May 2022 14:22:37 +0200
-+From bfcc72e5bb96fc9fc1f3558191a1a3f40c7f159a Mon Sep 17 00:00:00 2001
-+From: Johan Oudinet <johan.oudinet@gmail.com>
-+Date: Fri, 2 Aug 2024 17:32:37 +0200
- Subject: [PATCH] Makefile.in: do not download or compile dependencies
- 
--Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
--[Bernd: updated for version 23.04]
--Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
-+Upstream: N/A, not upstreamable
- ---
-  Makefile.in | 4 ++--
-  1 file changed, 2 insertions(+), 2 deletions(-)
- 
- diff --git a/Makefile.in b/Makefile.in
--index ab0e9d967..6e54168a7 100644
-+index 5adf241d5..74aad3156 100644
- --- a/Makefile.in
- +++ b/Makefile.in
--@@ -155,7 +155,7 @@ else
-- endif
-- endif
-+@@ -201,7 +201,7 @@ endif
-+ #' main targets
-+ #
-  
- -all: scripts deps src
- +all: scripts src
-  
-  deps: $(DEPSDIR)/.got
-  
--@@ -169,7 +169,7 @@ $(DEPSDIR)/.built: $(DEPSDIR)/.got
-+@@ -215,7 +215,7 @@ $(DEPSDIR)/.got:
-  $(DEPSDIR)/.built: $(DEPSDIR)/.got
-  	$(REBAR) compile && :> $(DEPSDIR)/.built
-  
- -src: $(DEPSDIR)/.built
- +src:
-  	$(REBAR) $(SKIPDEPS) compile
-+ 	$(EXPLICIT_ELIXIR_COMPILE)
-  
-- update:
- -- 
- 2.34.1
- 
-diff --git a/package/ejabberd/0002-fix-ejabberdctl.patch b/package/ejabberd/0002-fix-ejabberdctl.patch
-index ae28f3a632..89504d11c5 100644
---- a/package/ejabberd/0002-fix-ejabberdctl.patch
-+++ b/package/ejabberd/0002-fix-ejabberdctl.patch
-@@ -1,30 +1,29 @@
--From 4283f675f21d3923e200092cec6418014a03ad52 Mon Sep 17 00:00:00 2001
--From: Johan Oudinet <johan.oudinet@gmail.com>
--Date: Thu, 26 Dec 2019 17:06:34 +0100
-+From d403c0bca48f2678c70763c3faca41c9adc76658 Mon Sep 17 00:00:00 2001
-+From: Johan Oudinet <johan.oudinet@gmail.com>
-+Date: Fri, 2 Aug 2024 17:39:07 +0200
- Subject: [PATCH] fix ejabberdctl
- 
- Change default values so ejabberdctl run commands as ejabberd user.
- 
--Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
--[Bernd: updated for version 23.04]
--Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
-+Upstream: N/A (specific to buildroot)
- ---
-  ejabberdctl.template | 2 +-
-  1 file changed, 1 insertion(+), 1 deletion(-)
- 
- diff --git a/ejabberdctl.template b/ejabberdctl.template
--index a940c3df7..5166e5a27 100755
-+index 83ec7e1bd..513c48c25 100755
- --- a/ejabberdctl.template
- +++ b/ejabberdctl.template
--@@ -17,7 +17,7 @@ SCRIPT_DIR=$(cd "${0%/*}" && pwd)
-+@@ -17,7 +17,7 @@ ERTS_VSN="{{erts_vsn}}"
-  ERL="{{erl}}"
-- IEX="{{bindir}}/iex"
-  EPMD="{{epmd}}"
-+ IEX="{{iexpath}}"
- -INSTALLUSER="{{installuser}}"
- +INSTALLUSER=ejabberd
-  
-  # check the proper system user is used
-  case $(id -un) in
- -- 
--2.20.1
-+2.34.1
- 
-diff --git a/package/ejabberd/S50ejabberd b/package/ejabberd/S50ejabberd
-index 83513bdc83..5d01034fb2 100644
---- a/package/ejabberd/S50ejabberd
-+++ b/package/ejabberd/S50ejabberd
-@@ -3,52 +3,54 @@
- # Start/stop ejabberd
- #
- 
-+DAEMON=ejabberd
- CTL=/usr/sbin/ejabberdctl
- DEFAULT=/etc/ejabberd/ejabberdctl.cfg
- INSTALLUSER=ejabberd
- RUNDIR=/var/run/ejabberd
- 
- # Read default configuration file if present.
-+# shellcheck source=/dev/null
- [ -r "$DEFAULT" ] && . "$DEFAULT"
- 
- # Create RUNDIR.
- mkrundir() {
--    install -d -o "$INSTALLUSER" -g "$INSTALLUSER" "$RUNDIR"
-+	install -d -o "$INSTALLUSER" -g "$INSTALLUSER" "$RUNDIR"
- }
- 
- case "$1" in
--    start)
--        mkrundir || exit 1
--        printf "Starting ejabberd... "
--        "$CTL" start
--        # Wait until ejabberd is up and running.
--        if "$CTL" started; then
--            echo "done"
--        else
--            echo "failed"
--        fi
--        ;;
--    stop)
--        printf "Stopping ejabberd... "
--        "$CTL" stop > /dev/null
--        if [ $? -eq 3 ] || "$CTL" stopped; then
--            echo "OK"
--        else
--            echo "failed"
--        fi
--        ;;
--    status)
--        "$CTL" status
--        ;;
--    restart|force-reload)
--        "$0" stop || true
--        "$0" start
--        ;;
--    live)
--        mkrundir || exit 1
--        "$CTL" live
--        ;;
--    *)
--        echo "Usage: $0 {start|stop|status|restart|force-reload|live}"
--        exit 1
-+	start)
-+		mkrundir || exit 1
-+		printf 'Starting %s: ' "$DAEMON"
-+		"$CTL" start
-+		# Wait until ejabberd is up and running.
-+		if "$CTL" started; then
-+			echo "done"
-+		else
-+			echo "failed"
-+		fi
-+		;;
-+	stop)
-+		printf 'Stopping %s: ' "$DAEMON"
-+		"$CTL" stop > /dev/null
-+		if [ $? -eq 3 ] || "$CTL" stopped; then
-+			echo "OK"
-+		else
-+			echo "failed"
-+		fi
-+		;;
-+	status)
-+		"$CTL" status
-+		;;
-+	restart|force-reload)
-+		"$0" stop || true
-+		"$0" start
-+		;;
-+	live)
-+		mkrundir || exit 1
-+		"$CTL" live
-+		;;
-+	*)
-+		echo "Usage: $0 {start|stop|status|restart|force-reload|live}"
-+		exit 1
- esac
-diff --git a/package/ejabberd/check-erlang-lib b/package/ejabberd/check-erlang-lib
-index 63f8bf1926..4e51b54294 100755
---- a/package/ejabberd/check-erlang-lib
-+++ b/package/ejabberd/check-erlang-lib
-@@ -9,9 +9,9 @@
- # without calling erlang.
- 
- usage() {
--    cat <<EOF
-+	cat <<EOF
- Usage:
--        $0 library
-+		$0 library
- Look for Erlang's library in TARGET_DIR/usr/lib/erlang/lib.
- 
- If the library is found, it returns the path to the latest version,
-@@ -24,15 +24,15 @@ EOF
- }
- 
- die () {
--    echo "$@" >&2
--    exit 1
-+	echo "$@" >&2
-+	exit 1
- }
- 
- if [ $# -ne 1 ]; then
--    usage
--    exit 0
-+	usage
-+	exit 0
- else
--    library="$1"
-+	library="$1"
- fi
- 
- target_dir="${TARGET_DIR:-output/target}"
-@@ -40,16 +40,17 @@ target_dir="${TARGET_DIR:-output/target}"
- [ -d "$target_dir" ] || die "TARGET_DIR is not a directory. Please \
- specify the TARGET_DIR environment variable."
- 
--case "$(ls -1d -- "$target_dir/usr/lib/erlang/lib/$library-"* | wc -l)" in
--    0)
--        echo "not found"
--        ;;
--    1)
--        echo "$target_dir/usr/lib/erlang/lib/$library-"* \
--            | sed -e "s,^$target_dir,,"
--        ;;
--    *)
--        die "Several versions of $library have been found. Please \
--        remove the unused ones."
--        ;;
-+case "$(find "$target_dir/usr/lib/erlang/lib" -maxdepth 1 \
-+		-name "$library-*" -type d | wc -l)" in
-+	0)
-+		echo "not found"
-+		;;
-+	1)
-+		echo "$target_dir/usr/lib/erlang/lib/$library-"* \
-+			| sed -e "s,^$target_dir,,"
-+		;;
-+	*)
-+		die "Several versions of $library have been found. Please \
-+		remove the unused ones."
-+		;;
- esac
-diff --git a/package/ejabberd/ejabberd.hash b/package/ejabberd/ejabberd.hash
-index 15e879be19..e6d9b2560e 100644
---- a/package/ejabberd/ejabberd.hash
-+++ b/package/ejabberd/ejabberd.hash
-@@ -1,4 +1,4 @@
--# From https://static.process-one.net/ejabberd/downloads/23.04/ejabberd-23.04.tar.gz.sum
--sha256  6ff1d41a1ff6261a0c846193647d8ec143e82142859bf1cfdc62299022ceb2ad  ejabberd-23.04.tar.gz
-+# From https://static.process-one.net/ejabberd/downloads/24.07/ejabberd-24.07.tar.gz.sum
-+sha256  c0fb746acba81a5db41de97c03968c1f681a13b1b6c1a895b7182e33820c18d9  ejabberd-24.07.tar.gz
- # Locally computed
- sha256  469bb8cfa3ef22c102875ff31932450c075e6908ff3f7d36893485c0c30898eb  COPYING
-diff --git a/package/ejabberd/ejabberd.mk b/package/ejabberd/ejabberd.mk
-index 58b544fb84..df9fc1c1d0 100644
---- a/package/ejabberd/ejabberd.mk
-+++ b/package/ejabberd/ejabberd.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--EJABBERD_VERSION = 23.04
-+EJABBERD_VERSION = 24.07
- EJABBERD_SITE = https://static.process-one.net/ejabberd/downloads/$(EJABBERD_VERSION)
- EJABBERD_LICENSE = GPL-2.0+ with OpenSSL exception
- EJABBERD_LICENSE_FILES = COPYING
-@@ -36,7 +36,8 @@ EJABBERD_CONF_ENV = \
- 
- EJABBERD_CONF_OPTS = \
- 	--enable-system-deps \
--	--disable-erlang-version-check
-+	--disable-erlang-version-check \
-+	--with-rebar="$(HOST_DIR)/bin/rebar"
- 
- define EJABBERD_INSTALL_TARGET_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) DESTDIR=$(TARGET_DIR) all install -C $(@D)
--- 
-2.34.1
+> But are you able to test that those 12 (soon 13) defconfigs all build
+> and boot fine when doing such updates to all defconfigs at the same time?
 
+I have 10 of the 12 boards (11 of 13 when the versal_vek280 is added).
+
+I do not actually have a zynq_microzed or a zynq_zed board, but these are
+mature enough that I believe testing on the zynq_zc702 and zynq_zc706 should
+be sufficient for covering these boards.
+
+So far, I have tested the 6.6.40 release on the zynq_zc702 and zynq_zc706
+boards, which is why I only submitted the zynq defconfigs so far.  Now that I
+will squash all of them into one patch, I will go through zynqmp and versal
+testing as well.
+
+I will create the squashed patch, and then go through the build and run
+process on all the boards.  Once complete, I will submit the patch.  It will
+probably take me a couple days.
+
+Please note that outside of my testing, our software team has already tested
+this 6.6.40 release on all of the boards, so I am really just doing a sanity
+check.
+
+Please let me know if you have any further questions.
+
+Best regards,
+Neal Frager
+AMD
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
