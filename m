@@ -4,72 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EDAF7C3DA7F
-	for <buildroot@archiver.kernel.org>; Wed,  7 Aug 2024 19:39:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1D5BDC3DA7F
+	for <buildroot@archiver.kernel.org>; Wed,  7 Aug 2024 19:41:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AFDD0808A7;
-	Wed,  7 Aug 2024 19:39:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C66B5809EC;
+	Wed,  7 Aug 2024 19:41:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nHNOge3cOwWl; Wed,  7 Aug 2024 19:39:59 +0000 (UTC)
+ id zMIt0G43X2yZ; Wed,  7 Aug 2024 19:41:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C86BC808AD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D190680AF0
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C86BC808AD;
-	Wed,  7 Aug 2024 19:39:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D190680AF0;
+	Wed,  7 Aug 2024 19:41:24 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D55251BF2E3
- for <buildroot@lists.busybox.net>; Wed,  7 Aug 2024 19:39:57 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3A9DF1BF2E3
+ for <buildroot@lists.busybox.net>; Wed,  7 Aug 2024 19:41:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id CEB7C40385
- for <buildroot@lists.busybox.net>; Wed,  7 Aug 2024 19:39:57 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 273D0400FB
+ for <buildroot@lists.busybox.net>; Wed,  7 Aug 2024 19:41:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7u1HudbmpQtO for <buildroot@lists.busybox.net>;
- Wed,  7 Aug 2024 19:39:56 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::223;
- helo=relay3-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id 5ztmGiVKD1gP for <buildroot@lists.busybox.net>;
+ Wed,  7 Aug 2024 19:41:22 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 488D24025E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 488D24025E
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 488D24025E
- for <buildroot@buildroot.org>; Wed,  7 Aug 2024 19:39:56 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 78EA460005;
- Wed,  7 Aug 2024 19:39:53 +0000 (UTC)
-Date: Wed, 7 Aug 2024 21:39:52 +0200
-To: Mattias =?UTF-8?B?V2Fsc3Ryw7Zt?= <lazzer@gmail.com>
-Message-ID: <20240807213952.67a49e15@windsurf>
-In-Reply-To: <20240807140441.3795948-1-lazzer@gmail.com>
-References: <20240807140441.3795948-1-lazzer@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1723059593;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=HhH3hRTz1LV6MxVsxYYYniRExeNTyhsRl6arp01isxw=;
- b=Z1lNnQbdux2sGZrGY3n+BJ20Eu6X/CT/p5aWmaBaSq3MZ9A1izTOy57eBgGwIu7Z5RtuDw
- XcjD0lIh8q9uE/qZK2tvTN34HarawtYvHotyXHQg7dLwFVt4onUu+YE0TAXHa9HKWQ4bxp
- AeAjiSxdlqKc0aalM3MVJ+Q+zVMzQhltZJ317kGUvvQ75gFtfbisKN75OLo+BycPOJVXy3
- diL+p7spNh2KHMYaMQxqk3p09ogDQ/DWVIrUONX9NNzT8NpfPVBEpdvu6WeJEk1yhynTDI
- 1y1s9vBrf7npjI1EVAlpYCVk3u7qTIrY/MQRatlz92kJAGyms4Bk2XmxcAjILQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Z1lNnQbd
-Subject: Re: [Buildroot] [PATCH 1/2] package/uboot-tools: Bump to version
- 2024.04
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 06BE6400D1
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 06BE6400D1
+ for <buildroot@buildroot.org>; Wed,  7 Aug 2024 19:41:21 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 6EE1F84554; Wed,  7 Aug 2024 19:41:21 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 7 Aug 2024 21:40:58 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: d84d9241c8e0e4cbe872d4e8bb86dcfa3781f974
+X-Git-Newrev: 359b3228e24642ee9d7603af8f664b1832c5f98b
+X-Patchwork-Hint: ignore
+Message-Id: <20240807194121.6EE1F84554@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libjcat: fix linking,
+ add missing intl library
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,38 +60,45 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gTWF0dGlhcywKClRoYW5rcyBmb3IgdGhpcyBjb250cmlidXRpb24hCgpPbiBXZWQsICA3
-IEF1ZyAyMDI0IDE2OjA0OjQwICswMjAwCk1hdHRpYXMgV2Fsc3Ryw7ZtIDxsYXp6ZXJAZ21haWwu
-Y29tPiB3cm90ZToKCj4gU2lnbmVkLW9mZi1ieTogTWF0dGlhcyBXYWxzdHLDtm0gPGxhenplckBn
-bWFpbC5jb20+Cj4gLS0tCj4gIC4uLi8wMDAxLWRyb3AtY29uZmlnaC1mcm9tLXRvb2xzLnBhdGNo
-ICAgICAgICB8IDIwICsrKysrKysrKysrKysrKysKPiAgLi4uLXRvb2xzLW9ubHktaW4tbm8tZG90
-LWNvbmZpZy10YXJnZXRzLnBhdGNoIHwgMTEgKysrKy0tLS0tCj4gIHBhY2thZ2UvdWJvb3QtdG9v
-bHMvQ29uZmlnLmluICAgICAgICAgICAgICAgICB8ICAxICsKPiAgcGFja2FnZS91Ym9vdC10b29s
-cy91Ym9vdC10b29scy5oYXNoICAgICAgICAgIHwgIDIgKy0KPiAgcGFja2FnZS91Ym9vdC10b29s
-cy91Ym9vdC10b29scy5tayAgICAgICAgICAgIHwgMjMgKysrKysrKysrKysrKy0tLS0tLQo+ICA1
-IGZpbGVzIGNoYW5nZWQsIDQyIGluc2VydGlvbnMoKyksIDE1IGRlbGV0aW9ucygtKQoKSSB0aGlu
-ayBJJ2QgbGlrZSB0byBtZXJnZSB0aGlzIHVwZGF0ZSwgYnV0IEkgd291bGQgbGlrZSBmaXJzdCB0
-bwp1bmRlcnN0YW5kIHdoYXQncyBnb2luZyBvbiB3aXRoOgoKICBodHRwczovL3BhdGNod29yay5v
-emxhYnMub3JnL3Byb2plY3QvYnVpbGRyb290L3BhdGNoLzIwMjQwMzAzMTcxOTM3LjQ5MDU1My0x
-LWZvbnRhaW5lLmZhYnJpY2VAZ21haWwuY29tLwoKSSBoYXZlbid0IGJlZW4gYWJsZSB0byByZXBy
-b2R1Y2UgdGhlIGlzc3VlIG9uIG15IHNpZGUgd2l0aCBzaW1wbGUKYnVpbGRzLCBzbyBJIGNvdWxk
-bid0IGludmVzdGlnYXRlLiBCdXQgdGhpcyBpc3N1ZSBjb250aW51ZXMgdG8gb2NjdXIgaW4KdGhl
-IGF1dG9idWlsZGVyczoKCiAgaHR0cDovL2F1dG9idWlsZC5idWlsZHJvb3QubmV0Lz9yZWFzb249
-dWJvb3QtdG9vbHMlCgpJJ2QgbGlrZSB0byB1bmRlcnN0YW5kIHRoZSBpc3N1ZSBiZWZvcmUgYXBw
-bHlpbmcgdGhlIGJ1bXAsIGJlY2F1c2UgdGhlCmlzc3VlIGV4aXN0cyBpbiBvdXIgMjAyNC4wMi54
-IG1haW50ZW5hbmNlIGJyYW5jaCwgc28gd2Ugd2FudCB0bwp1bmRlcnN0YW5kIGlmIGl0IGNhbiBi
-ZSBmaXhlZCBvbiB0aGlzIGJyYW5jaCwgaW5kZXBlbmRlbnRseSBvciBub3QgZnJvbQp0aGUgdmVy
-c2lvbiBidW1wLgoKUmVnYXJkaW5nIHlvdXIgcGF0Y2g6IGNhbiB3ZSBtYWtlIE1LRUZJQ0FQU1VM
-RSBjb25maWd1cmFibGUgaW4KaG9zdC11Ym9vdC10b29scywganVzdCBsaWtlIGl0IGlzIGZvciB0
-YXJnZXQgdWJvb3QtdG9vbHM/IFRoaXMgd291bGQKYWxsb3cgdG8gbm90IGhhdmUgaG9zdC1nbnV0
-bHMgYXMgYSBtYW5kYXRvcnkgZGVwZW5kZW5jeS4KClRob21hcwotLSAKVGhvbWFzIFBldGF6em9u
-aSwgQ1RPLCBCb290bGluCkVtYmVkZGVkIExpbnV4IGFuZCBLZXJuZWwgZW5naW5lZXJpbmcKaHR0
-cHM6Ly9ib290bGluLmNvbQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0
-dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+commit: https://git.buildroot.net/buildroot/commit/?id=359b3228e24642ee9d7603af8f664b1832c5f98b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+For musl/uClibc-ng toolchains we need to explicitely link
+libintl. The problem exist since the addition of the package
+in commit e52605c092d8eaa926da8720ae498a38eddb5205.
+
+Fixes:
+ - http://autobuild.buildroot.net/results/58c/58c7ecbcfab96ebbc7a20291d4712cf64094b9f7/
+ - http://autobuild.buildroot.net/results/5d7/5d7c5dea0213f5a24489c397c5703c0601b2f12d/
+
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libjcat/libjcat.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/package/libjcat/libjcat.mk b/package/libjcat/libjcat.mk
+index e13e5dbfb7..c365c1914b 100644
+--- a/package/libjcat/libjcat.mk
++++ b/package/libjcat/libjcat.mk
+@@ -10,7 +10,9 @@ LIBJCAT_SOURCE = libjcat-$(LIBJCAT_VERSION).tar.xz
+ LIBJCAT_LICENSE = LGPL-2.1+
+ LIBJCAT_LICENSE_FILES = LICENSE
+ LIBJCAT_INSTALL_STAGING = YES
+-LIBJCAT_DEPENDENCIES = host-pkgconf json-glib libglib2
++LIBJCAT_DEPENDENCIES = host-pkgconf json-glib libglib2 $(TARGET_NLS_DEPENDENCIES)
++
++LIBJCAT_LDFLAGS = $(TARGET_NLS_LIBS)
+ 
+ LIBJCAT_CONF_OPTS = \
+ 	-Dgtkdoc=false \
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
