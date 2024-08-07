@@ -4,48 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2F61C3DA7F
-	for <buildroot@archiver.kernel.org>; Wed,  7 Aug 2024 20:56:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 311FDC52D6F
+	for <buildroot@archiver.kernel.org>; Wed,  7 Aug 2024 20:57:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 356B560900;
-	Wed,  7 Aug 2024 20:56:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D9D4E608CA;
+	Wed,  7 Aug 2024 20:57:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RfSM5w1AhTEM; Wed,  7 Aug 2024 20:56:13 +0000 (UTC)
+ id RL6YlAB8oYEm; Wed,  7 Aug 2024 20:57:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B36C5608D5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 03BE2608DD
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B36C5608D5;
-	Wed,  7 Aug 2024 20:56:10 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id F08771BF308
- for <buildroot@lists.busybox.net>; Wed,  7 Aug 2024 20:56:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 03BE2608DD;
+	Wed,  7 Aug 2024 20:57:31 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 577891BF308
+ for <buildroot@lists.busybox.net>; Wed,  7 Aug 2024 20:57:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DE60C400FB
- for <buildroot@lists.busybox.net>; Wed,  7 Aug 2024 20:56:07 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id AE8B0814B5
+ for <buildroot@lists.busybox.net>; Wed,  7 Aug 2024 20:57:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DnWqfKU9w8Ge for <buildroot@lists.busybox.net>;
- Wed,  7 Aug 2024 20:56:04 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id SQUOOHMt29_7 for <buildroot@lists.busybox.net>;
+ Wed,  7 Aug 2024 20:57:24 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.194;
+ helo=relay2-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2C540400D1
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2C540400D1
- for <buildroot@buildroot.org>; Wed,  7 Aug 2024 20:56:04 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 17D51846E1; Wed,  7 Aug 2024 20:56:04 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 7 Aug 2024 22:54:20 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e506946347430e8bc721b55248e625d6668f4c72
-X-Git-Newrev: 9dff7ad7da4e31d09450a049371ac12f1ebd146f
-X-Patchwork-Hint: ignore
-Message-Id: <20240807205604.17D51846E1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-tomli-w: new package
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 3076181362
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3076181362
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [217.70.183.194])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3076181362
+ for <buildroot@buildroot.org>; Wed,  7 Aug 2024 20:57:23 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 7C04E40006;
+ Wed,  7 Aug 2024 20:57:20 +0000 (UTC)
+Date: Wed, 7 Aug 2024 22:57:19 +0200
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Message-ID: <20240807225719.42d8a4c1@windsurf>
+In-Reply-To: <cover.1696522656.git.yann.morin.1998@free.fr>
+References: <cover.1696522656.git.yann.morin.1998@free.fr>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1723064240;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=+n5mZ+h7bOTiR9bDIiKalGLfXOE8QOyW0ClnrGfVVEk=;
+ b=lHGJzm+mF3fcjREQ1wHq2UPa9GPWll4mgvUfvWmLe7xlfD3/jiqtulgaRQ9mTvlJaPrcaC
+ dojxNJrwFBZ2+1sWiWLO/R6Il6kgIlZcDlBJtHsSU5T580AN8bBHx+MZv89KCD0YPb3LD+
+ Bm/cQ14kI/pVvtQ2M1OYBGgaFg9U5YunHJHar83EX4J84PjrLZxs5VfxG1Fd8vOz+EGHe8
+ MGppnWE30UWTxAbXS1Bjj6joI8uAGfYFTK8drKERgtEwX+dGMsJUucCj5PEmFCQFQHsk36
+ d8WCGUsN6Wxh+urHR+42r4jEzcx0MlZPDFflWwn6z4XCEn6OGPuGqQeCj539eA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=lHGJzm+m
+Subject: Re: [Buildroot] [PATCH 0/2 v2] support/runtime-test: extend graphic
+ testing for weston + flutter (branch yem/flutter)
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,79 +83,37 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Julien Olivain <ju.o@free.fr>, Adam Duskett <aduskett@gmail.com>,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9dff7ad7da4e31d09450a049371ac12f1ebd146f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello,
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/Config.in                          |  1 +
- package/python-tomli-w/Config.in           |  6 ++++++
- package/python-tomli-w/python-tomli-w.hash |  5 +++++
- package/python-tomli-w/python-tomli-w.mk   | 14 ++++++++++++++
- 4 files changed, 26 insertions(+)
+On Thu,  5 Oct 2023 18:17:38 +0200
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-diff --git a/package/Config.in b/package/Config.in
-index 0472ec2daf..f2c63ffb6e 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1408,6 +1408,7 @@ menu "External python modules"
- 	source "package/python-tomako/Config.in"
- 	source "package/python-toml/Config.in"
- 	source "package/python-tomli/Config.in"
-+	source "package/python-tomli-w/Config.in"
- 	source "package/python-tomlkit/Config.in"
- 	source "package/python-tornado/Config.in"
- 	source "package/python-tortoise-orm/Config.in"
-diff --git a/package/python-tomli-w/Config.in b/package/python-tomli-w/Config.in
-new file mode 100644
-index 0000000000..83fe937eba
---- /dev/null
-+++ b/package/python-tomli-w/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PYTHON_TOMLI_W
-+	bool "python-tomli-w"
-+	help
-+	  A lil' TOML writer.
-+
-+	  https://github.com/hukkin/tomli-w
-diff --git a/package/python-tomli-w/python-tomli-w.hash b/package/python-tomli-w/python-tomli-w.hash
-new file mode 100644
-index 0000000000..778c22583a
---- /dev/null
-+++ b/package/python-tomli-w/python-tomli-w.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/tomli-w/json
-+md5  2c050134d4842b449ec4129c97d51e62  tomli_w-1.0.0.tar.gz
-+sha256  f463434305e0336248cac9c2dc8076b707d8a12d019dd349f5c1e382dd1ae1b9  tomli_w-1.0.0.tar.gz
-+# Locally computed sha256 checksums
-+sha256  b80816b0d530b8accb4c2211783790984a6e3b61922c2b5ee92f3372ab2742fe  LICENSE
-diff --git a/package/python-tomli-w/python-tomli-w.mk b/package/python-tomli-w/python-tomli-w.mk
-new file mode 100644
-index 0000000000..d5d7ab9f2c
---- /dev/null
-+++ b/package/python-tomli-w/python-tomli-w.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-tomli-w
-+#
-+################################################################################
-+
-+PYTHON_TOMLI_W_VERSION = 1.0.0
-+PYTHON_TOMLI_W_SOURCE = tomli_w-$(PYTHON_TOMLI_W_VERSION).tar.gz
-+PYTHON_TOMLI_W_SITE = https://files.pythonhosted.org/packages/49/05/6bf21838623186b91aedbda06248ad18f03487dc56fbc20e4db384abde6c
-+PYTHON_TOMLI_W_SETUP_TYPE = flit
-+PYTHON_TOMLI_W_LICENSE = MIT
-+PYTHON_TOMLI_W_LICENSE_FILES = LICENSE
-+
-+$(eval $(python-package))
+> Yann E. MORIN (2):
+>       support/runtime-test: add helper to test graphics rendering
+>       suport/runtime-test: extend flutter test to check rendering is happening
+
+Thanks, I have applied this series!
+
+Some changes:
+
+- On PATCH 1/2, I made an addition to the DEVELOPERS to add you (Yann)
+  as the contact for the graphics base class
+
+- On PATCH 2/2, some rebasing was needed, as the test case no longer
+  uses flutter-gallery, but flutter-markdown-example
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
