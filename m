@@ -4,48 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 74096C52D6F
-	for <buildroot@archiver.kernel.org>; Wed,  7 Aug 2024 12:18:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D17EDC3DA7F
+	for <buildroot@archiver.kernel.org>; Wed,  7 Aug 2024 12:20:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CF2B5404D6;
-	Wed,  7 Aug 2024 12:18:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 74C0840217;
+	Wed,  7 Aug 2024 12:20:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xKMIFa1FwnIl; Wed,  7 Aug 2024 12:18:55 +0000 (UTC)
+ id Bk7yY6EWxQQA; Wed,  7 Aug 2024 12:20:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C5A9D402AE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4DDBC40224
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C5A9D402AE;
-	Wed,  7 Aug 2024 12:18:54 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 342511BF342
- for <buildroot@lists.busybox.net>; Wed,  7 Aug 2024 12:18:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4DDBC40224;
+	Wed,  7 Aug 2024 12:20:37 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id F00D01BF342
+ for <buildroot@lists.busybox.net>; Wed,  7 Aug 2024 12:20:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2ED756070A
- for <buildroot@lists.busybox.net>; Wed,  7 Aug 2024 12:18:52 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id DB4DF80DBE
+ for <buildroot@lists.busybox.net>; Wed,  7 Aug 2024 12:20:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7D_b9zq97mIJ for <buildroot@lists.busybox.net>;
- Wed,  7 Aug 2024 12:18:49 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ImIrLYDbjcdG for <buildroot@lists.busybox.net>;
+ Wed,  7 Aug 2024 12:20:35 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.198;
+ helo=relay6-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B3B83606F7
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id B3B83606F7
- for <buildroot@buildroot.org>; Wed,  7 Aug 2024 12:18:49 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9E9EB84555; Wed,  7 Aug 2024 12:18:49 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 7 Aug 2024 14:16:48 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: bd15cdda9be3a7dea6cc80ef4707af244864d992
-X-Git-Newrev: 202e644b2698ac9b2e7a85dd23acfa3df5f6bd74
-X-Patchwork-Hint: ignore
-Message-Id: <20240807121849.9E9EB84555@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/nethogs: needs toolchain with C++
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 66A6880DBD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 66A6880DBD
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [217.70.183.198])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 66A6880DBD
+ for <buildroot@buildroot.org>; Wed,  7 Aug 2024 12:20:34 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 74281C0003;
+ Wed,  7 Aug 2024 12:20:31 +0000 (UTC)
+Date: Wed, 7 Aug 2024 14:20:29 +0200
+To: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
+Message-ID: <20240807142029.52ffdc53@windsurf>
+In-Reply-To: <20240807103900.125819-1-buildroot@bubu1.eu>
+References: <20240807103900.125819-1-buildroot@bubu1.eu>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1723033231;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=1NQvuxRJqPmLtAyTIN6jG4UK/BRXncf4BlxZEW+7QLo=;
+ b=iKFhFl+tHlETTsoLQZC9AhqJNFSshJTdUqgdZRtXXx+J+SqHS3lYTyjP/hlLuvXia+/U1o
+ 0GYYVaSZNHhlOi7Qf+AWpbWMVpGBXf+HJyGy8jMMtOhbAEatfKQXxfhgPx1Y55PFAj+Ixb
+ H+MvSW2A13e82V8YNZzB0pWpAsSZz3Vq9uSiEfv/RD1OvdZRHg9Y2EKcXlVEI7UQMQuxP+
+ SBYtyPCJpfxm/FNRRbVj/kI0/j+DCrYpYroIiBAJmRIDJvp6tN8qhWp/8sOOfuqqGbrjGB
+ 7FzzIW8aIntu8t0/aC+AEYxbemR2LGw8+wDGXwJ4PRcKjBF4r2psYCc9fuv0bQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=iKFhFl+t
+Subject: Re: [Buildroot] [PATCH] package/nethogs: needs toolchain with C++
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,50 +82,27 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Marcus Hoffmann <buildroot@bubu1.eu>, Marcus Hoffmann <bubu@bubu1.eu>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=202e644b2698ac9b2e7a85dd23acfa3df5f6bd74
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Wed,  7 Aug 2024 12:39:00 +0200
+Marcus Hoffmann via buildroot <buildroot@buildroot.org> wrote:
 
-Fixes:
+> Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+> ---
+>  package/nethogs/Config.in | 4 ++++
+>  1 file changed, 4 insertions(+)
 
-http://autobuild.buildroot.net/results/a250f6f3e93ceddad2d4c7cd1f29233fce2b327e
-http://autobuild.buildroot.net/results/b68e8c601b31c70bc30cdfe913f7988f54255dbf
-http://autobuild.buildroot.net/results/298090dfb9db42ba9f219d2c268bc798373142c7
-http://autobuild.buildroot.net/results/b59851d542418ad0f40d86b32dc7573248233de4
-http://autobuild.buildroot.net/results/18cc7058d567916c7d2bfb16b7808b71ed731948
-http://autobuild.buildroot.net/results/786e68c8c397038511db4e8bea589839a7d9b056
-http://autobuild.buildroot.net/results/8eddfca525f6951e6d11184e312cffccfc443ba8
-http://autobuild.buildroot.net/results/bdfc7b723abdf4aea48e40e789883405061e4e1c
+Applied to master with the reference to the autobuilder failures, thanks.
 
-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/nethogs/Config.in | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/package/nethogs/Config.in b/package/nethogs/Config.in
-index 2d6b44739c..fe5a4cdba4 100644
---- a/package/nethogs/Config.in
-+++ b/package/nethogs/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_NETHOGS
- 	bool "nethogs"
-+	depends on BR2_INSTALL_LIBSTDCPP
- 	select BR2_PACKAGE_LIBPCAP
- 	select BR2_PACKAGE_NCURSES
- 	help
-@@ -8,3 +9,6 @@ config BR2_PACKAGE_NETHOGS
- 	  do, it groups bandwidth by process.
- 
-           https://github.com/raboof/nethogs
-+
-+comment "nethogs needs a toolchain w/ C++"
-+	depends on !BR2_INSTALL_LIBSTDCPP
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
