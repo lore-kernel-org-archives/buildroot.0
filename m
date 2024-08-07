@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72669C52D6F
-	for <buildroot@archiver.kernel.org>; Wed,  7 Aug 2024 12:18:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 74096C52D6F
+	for <buildroot@archiver.kernel.org>; Wed,  7 Aug 2024 12:18:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1AD5340091;
-	Wed,  7 Aug 2024 12:18:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CF2B5404D6;
+	Wed,  7 Aug 2024 12:18:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jtq0KwFn8fOH; Wed,  7 Aug 2024 12:18:52 +0000 (UTC)
+ id xKMIFa1FwnIl; Wed,  7 Aug 2024 12:18:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DC5A0400BB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C5A9D402AE
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DC5A0400BB;
-	Wed,  7 Aug 2024 12:18:51 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E506D1BF342
- for <buildroot@lists.busybox.net>; Wed,  7 Aug 2024 12:18:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C5A9D402AE;
+	Wed,  7 Aug 2024 12:18:54 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 342511BF342
+ for <buildroot@lists.busybox.net>; Wed,  7 Aug 2024 12:18:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DF1B7401E1
- for <buildroot@lists.busybox.net>; Wed,  7 Aug 2024 12:18:50 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2ED756070A
+ for <buildroot@lists.busybox.net>; Wed,  7 Aug 2024 12:18:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rVat4sWyLsCF for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7D_b9zq97mIJ for <buildroot@lists.busybox.net>;
  Wed,  7 Aug 2024 12:18:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BCAB64014D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B3B83606F7
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id BCAB64014D
+ by smtp3.osuosl.org (Postfix) with ESMTP id B3B83606F7
  for <buildroot@buildroot.org>; Wed,  7 Aug 2024 12:18:49 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A9CE784557; Wed,  7 Aug 2024 12:18:49 +0000 (UTC)
+ id 9E9EB84555; Wed,  7 Aug 2024 12:18:49 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 7 Aug 2024 14:17:09 +0200
+Date: Wed, 7 Aug 2024 14:16:48 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 202e644b2698ac9b2e7a85dd23acfa3df5f6bd74
-X-Git-Newrev: d84d9241c8e0e4cbe872d4e8bb86dcfa3781f974
+X-Git-Oldrev: bd15cdda9be3a7dea6cc80ef4707af244864d992
+X-Git-Newrev: 202e644b2698ac9b2e7a85dd23acfa3df5f6bd74
 X-Patchwork-Hint: ignore
-Message-Id: <20240807121849.A9CE784557@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/mpg123: update to 1.32.6
+Message-Id: <20240807121849.9E9EB84555@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/nethogs: needs toolchain with C++
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,46 +65,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d84d9241c8e0e4cbe872d4e8bb86dcfa3781f974
+commit: https://git.buildroot.net/buildroot/commit/?id=202e644b2698ac9b2e7a85dd23acfa3df5f6bd74
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-See the homepage for News and Changes:
-http://mpg123.de/
+Fixes:
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+http://autobuild.buildroot.net/results/a250f6f3e93ceddad2d4c7cd1f29233fce2b327e
+http://autobuild.buildroot.net/results/b68e8c601b31c70bc30cdfe913f7988f54255dbf
+http://autobuild.buildroot.net/results/298090dfb9db42ba9f219d2c268bc798373142c7
+http://autobuild.buildroot.net/results/b59851d542418ad0f40d86b32dc7573248233de4
+http://autobuild.buildroot.net/results/18cc7058d567916c7d2bfb16b7808b71ed731948
+http://autobuild.buildroot.net/results/786e68c8c397038511db4e8bea589839a7d9b056
+http://autobuild.buildroot.net/results/8eddfca525f6951e6d11184e312cffccfc443ba8
+http://autobuild.buildroot.net/results/bdfc7b723abdf4aea48e40e789883405061e4e1c
+
+Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/mpg123/mpg123.hash | 6 +++---
- package/mpg123/mpg123.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/nethogs/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/mpg123/mpg123.hash b/package/mpg123/mpg123.hash
-index 0fe4699606..5a83f29586 100644
---- a/package/mpg123/mpg123.hash
-+++ b/package/mpg123/mpg123.hash
-@@ -1,6 +1,6 @@
--# From https://sourceforge.net/projects/mpg123/files/mpg123/1.32.3/
--sha1  3a94848a620db7917c757cb21e261c711e44618f  mpg123-1.32.3.tar.bz2
-+# From https://sourceforge.net/projects/mpg123/files/mpg123/1.32.6/
-+sha1  886c8c5f100caccfb4fefabc1c75ff6e2a834128  mpg123-1.32.6.tar.bz2
- # Locally calculated
--sha256  2d9913a57d4ee8f497a182c6e82582602409782a4fb481e989feebf4435867b4  mpg123-1.32.3.tar.bz2
-+sha256  ccdd1d0abc31d73d8b435fc658c79049d0a905b30669b6a42a03ad169dc609e6  mpg123-1.32.6.tar.bz2
- # License file
- sha256  c22482728a634a8dfdb4ff72a96d4c1ed64cd8f3e79335c401751ac591609366  COPYING
-diff --git a/package/mpg123/mpg123.mk b/package/mpg123/mpg123.mk
-index 4de5f99bdf..af036132d2 100644
---- a/package/mpg123/mpg123.mk
-+++ b/package/mpg123/mpg123.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/nethogs/Config.in b/package/nethogs/Config.in
+index 2d6b44739c..fe5a4cdba4 100644
+--- a/package/nethogs/Config.in
++++ b/package/nethogs/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_NETHOGS
+ 	bool "nethogs"
++	depends on BR2_INSTALL_LIBSTDCPP
+ 	select BR2_PACKAGE_LIBPCAP
+ 	select BR2_PACKAGE_NCURSES
+ 	help
+@@ -8,3 +9,6 @@ config BR2_PACKAGE_NETHOGS
+ 	  do, it groups bandwidth by process.
  
--MPG123_VERSION = 1.32.3
-+MPG123_VERSION = 1.32.6
- MPG123_SOURCE = mpg123-$(MPG123_VERSION).tar.bz2
- MPG123_SITE = https://downloads.sourceforge.net/project/mpg123/mpg123/$(MPG123_VERSION)
- MPG123_INSTALL_STAGING = YES
+           https://github.com/raboof/nethogs
++
++comment "nethogs needs a toolchain w/ C++"
++	depends on !BR2_INSTALL_LIBSTDCPP
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
