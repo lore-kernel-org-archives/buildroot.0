@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2BE89C52D6F
-	for <buildroot@archiver.kernel.org>; Wed,  7 Aug 2024 09:24:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59CDCC52D7B
+	for <buildroot@archiver.kernel.org>; Wed,  7 Aug 2024 09:24:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 802FA40654;
-	Wed,  7 Aug 2024 09:24:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2260B4062A;
+	Wed,  7 Aug 2024 09:24:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id s5s35VXZbyVN; Wed,  7 Aug 2024 09:24:34 +0000 (UTC)
+ id ylksT_OgOYsw; Wed,  7 Aug 2024 09:24:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A8E7A40647
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CABA64065E
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A8E7A40647;
-	Wed,  7 Aug 2024 09:24:33 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 00B1C1BF982
+	by smtp4.osuosl.org (Postfix) with ESMTP id CABA64065E;
+	Wed,  7 Aug 2024 09:24:36 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 53E591BF2CE
  for <buildroot@lists.busybox.net>; Wed,  7 Aug 2024 09:24:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DF9F9404F8
+ by smtp3.osuosl.org (Postfix) with ESMTP id AADDC606E0
  for <buildroot@lists.busybox.net>; Wed,  7 Aug 2024 09:24:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1kIldivImUqg for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id EOvYar6bJ600 for <buildroot@lists.busybox.net>;
  Wed,  7 Aug 2024 09:24:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D984840A7F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B430A60685
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id D984840A7F
+ by smtp3.osuosl.org (Postfix) with ESMTP id B430A60685
  for <buildroot@buildroot.org>; Wed,  7 Aug 2024 09:24:25 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C6AA8843E7; Wed,  7 Aug 2024 09:24:25 +0000 (UTC)
+ id AECC6843EC; Wed,  7 Aug 2024 09:24:25 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 7 Aug 2024 10:57:41 +0200
+Date: Wed, 7 Aug 2024 10:52:14 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 40b20e5feb582f3c330f3713c4803f5af5e58ffa
-X-Git-Newrev: 35381a360a244cee266c17873678097a65a48dd2
+X-Git-Oldrev: 0f4f8c12c719732487bd7a15a1969c7f600eee59
+X-Git-Newrev: 2e90483e44a0f6151f8488fe7571dcaa69b00b1c
 X-Patchwork-Hint: ignore
-Message-Id: <20240807092425.C6AA8843E7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/libarchive: add
- bsdunzip option
+Message-Id: <20240807092425.AECC6843EC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/tcf-agent: fix
+ uClibc-ng compile on ARM
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,68 +65,78 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=35381a360a244cee266c17873678097a65a48dd2
+commit: https://git.buildroot.net/buildroot/commit/?id=2e90483e44a0f6151f8488fe7571dcaa69b00b1c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-Add bsdunzip option to avoid the following build failure raised since
-bump to version 3.7.1 in commit 7991d2c48a859f9c0333ade8192868c21b1a8a31 and
-https://github.com/libarchive/libarchive/commit/c157e4ce8eb170a92945cc2d292fd7106bdfcce1:
+When a shared build is used, we can use getauxval and no ARM only
+instuctions are in use.
 
-  CCLD     bsdunzip
-/home/autobuild/autobuild/instance-4/output-1/host/lib/gcc/powerpc-buildroot-linux-musl/12.3.0/../../../../powerpc-buildroot-linux-musl/bin/ld: cannot find -lz: No such file or directory
-
-By handling it explicitly, we can specify whether the dynamic or static
-library should be used, according to what we actually have available.
+When a static build is used, we need to override CFLAGS to use
+arm instructions, as uClibc-ng only supports getauxval for shared case.
 
 Fixes:
- - http://autobuild.buildroot.org/results/aaf7fdefa0b7bd7e5ac743487c197544c1a2ce6f
+ - http://autobuild.buildroot.net/results/3b5/3b5c5519a3e5ee490308bc1a1b9579ce13417235
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Tested-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit bbc08b15ae60c3008fb8cbff59dc329d8357c563)
+(cherry picked from commit 408352207c18084c331b23aa739cde98cd52d000)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libarchive/Config.in     |  6 ++++++
- package/libarchive/libarchive.mk | 10 ++++++++++
- 2 files changed, 16 insertions(+)
+ package/tcf-agent/0001-fix-uClibc-ng-compile.patch | 27 ++++++++++++++++++++++
+ package/tcf-agent/tcf-agent.mk                     |  7 ++++++
+ 2 files changed, 34 insertions(+)
 
-diff --git a/package/libarchive/Config.in b/package/libarchive/Config.in
-index ffa4cff7b3..2c8d813ccb 100644
---- a/package/libarchive/Config.in
-+++ b/package/libarchive/Config.in
-@@ -30,4 +30,10 @@ config BR2_PACKAGE_LIBARCHIVE_BSDCAT
- 	  The 'bsdcat' program is a simple replacement tool
- 	  for zcat, bzcat, xzcat, and such.
- 
-+config BR2_PACKAGE_LIBARCHIVE_BSDUNZIP
-+	bool "bsdunzip"
-+	help
-+	  The 'bsdunzip' program is a simple replacement tool
-+	  for Info-ZIP.
+diff --git a/package/tcf-agent/0001-fix-uClibc-ng-compile.patch b/package/tcf-agent/0001-fix-uClibc-ng-compile.patch
+new file mode 100644
+index 0000000000..b8f46f3c48
+--- /dev/null
++++ b/package/tcf-agent/0001-fix-uClibc-ng-compile.patch
+@@ -0,0 +1,27 @@
++From a78007cd139e1dea3d893f5fe1d1c3a47503e6a2 Mon Sep 17 00:00:00 2001
++From: Waldemar Brodkorb <wbx@openadk.org>
++Date: Sat, 12 Aug 2023 18:27:02 +0200
++Subject: [PATCH] fix uClibc-ng compile
 +
- endif
-diff --git a/package/libarchive/libarchive.mk b/package/libarchive/libarchive.mk
-index 1a50b0472d..7d58b5c69f 100644
---- a/package/libarchive/libarchive.mk
-+++ b/package/libarchive/libarchive.mk
-@@ -46,6 +46,16 @@ else
- LIBARCHIVE_CONF_OPTS += --disable-bsdcat
- endif
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++Upstream: N/A only mail available
++---
++ agent/machine/arm/tcf/cpudefs-mdep.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/agent/machine/arm/tcf/cpudefs-mdep.c b/agent/machine/arm/tcf/cpudefs-mdep.c
++index 051631a0..7c4fbf3e 100644
++--- a/agent/machine/arm/tcf/cpudefs-mdep.c
+++++ b/agent/machine/arm/tcf/cpudefs-mdep.c
++@@ -21,7 +21,7 @@
++ 
++ #ifndef USE_getauxval
++ #  include <features.h>
++-#  define USE_getauxval (defined(__GLIBC__) && (__GLIBC__ > 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 16)))
+++#  define USE_getauxval (defined(__GLIBC__) && (__GLIBC__ > 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 16)) || (defined(__UCLIBC__) && defined(__HAVE_SHARED__)))
++ #endif
++ 
++ #include <stddef.h>
++-- 
++2.39.2
++
+diff --git a/package/tcf-agent/tcf-agent.mk b/package/tcf-agent/tcf-agent.mk
+index 9d955d4b6f..cc998d82d6 100644
+--- a/package/tcf-agent/tcf-agent.mk
++++ b/package/tcf-agent/tcf-agent.mk
+@@ -20,6 +20,13 @@ TCF_AGENT_CONF_OPTS = \
+ 	-DBUILD_SHARED_LIBS=OFF \
+ 	-DTCF_MACHINE=$(call qstrip,$(BR2_PACKAGE_TCF_AGENT_ARCH))
  
-+ifeq ($(BR2_PACKAGE_LIBARCHIVE_BSDUNZIP),y)
-+ifeq ($(BR2_STATIC_LIBS),y)
-+LIBARCHIVE_CONF_OPTS += --enable-bsdunzip=static
-+else
-+LIBARCHIVE_CONF_OPTS += --enable-bsdunzip=shared
-+endif
-+else
-+LIBARCHIVE_CONF_OPTS += --disable-bsdunzip
++# tcf-agent uses some arm instructions in case getauxval is not available.
++# unfortunately the uClibc-ng implementation of getauxval uses some features
++# of ld.so to work
++ifeq ($(BR2_STATIC_LIBS)$(BR2_TOOLCHAIN_USES_UCLIBC)$(BR2_ARM_INSTRUCTIONS_THUMB),yyy)
++TCF_AGENT_CONF_OPTS += -DCMAKE_C_FLAGS="$(TARGET_CFLAGS) -marm"
 +endif
 +
- ifeq ($(BR2_PACKAGE_ACL),y)
- LIBARCHIVE_DEPENDENCIES += acl
- else
+ define TCF_AGENT_INSTALL_INIT_SYSTEMD
+ 	$(INSTALL) -D -m 644 package/tcf-agent/tcf-agent.service \
+ 		$(TARGET_DIR)/usr/lib/systemd/system/tcf-agent.service
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
