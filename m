@@ -4,71 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71133C52D6F
-	for <buildroot@archiver.kernel.org>; Wed,  7 Aug 2024 19:52:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C80ADC52D7B
+	for <buildroot@archiver.kernel.org>; Wed,  7 Aug 2024 19:53:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2640D8122A;
-	Wed,  7 Aug 2024 19:52:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8875881224;
+	Wed,  7 Aug 2024 19:53:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id q-18QV4G45sj; Wed,  7 Aug 2024 19:52:03 +0000 (UTC)
+ id vTp5hH3cDUOd; Wed,  7 Aug 2024 19:53:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 14EFA8121F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8FFC48122A
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 14EFA8121F;
-	Wed,  7 Aug 2024 19:52:03 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 667F51BF2E3
- for <buildroot@lists.busybox.net>; Wed,  7 Aug 2024 19:52:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8FFC48122A;
+	Wed,  7 Aug 2024 19:53:15 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 42BB31BF2E3
+ for <buildroot@lists.busybox.net>; Wed,  7 Aug 2024 19:53:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 546AB608A0
- for <buildroot@lists.busybox.net>; Wed,  7 Aug 2024 19:52:01 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2E6EE8122A
+ for <buildroot@lists.busybox.net>; Wed,  7 Aug 2024 19:53:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id d_XRBrp0XUdi for <buildroot@lists.busybox.net>;
- Wed,  7 Aug 2024 19:52:00 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::225;
- helo=relay5-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id MvY5L2ALKZXu for <buildroot@lists.busybox.net>;
+ Wed,  7 Aug 2024 19:53:13 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::222;
+ helo=relay2-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 332E16068F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 332E16068F
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::225])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 332E16068F
- for <buildroot@buildroot.org>; Wed,  7 Aug 2024 19:51:59 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 248DA1C0004;
- Wed,  7 Aug 2024 19:51:56 +0000 (UTC)
-Date: Wed, 7 Aug 2024 21:51:56 +0200
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org EC97681224
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EC97681224
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id EC97681224
+ for <buildroot@buildroot.org>; Wed,  7 Aug 2024 19:53:12 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id C703E40006;
+ Wed,  7 Aug 2024 19:53:09 +0000 (UTC)
+Date: Wed, 7 Aug 2024 21:53:08 +0200
 To: Johan Oudinet <johan.oudinet@gmail.com>
-Message-ID: <20240807215156.35ad1fdc@windsurf>
-In-Reply-To: <20240807143318.439619-1-johan.oudinet@gmail.com>
+Message-ID: <20240807215308.72682195@windsurf>
+In-Reply-To: <20240807143318.439619-19-johan.oudinet@gmail.com>
 References: <20240807143318.439619-1-johan.oudinet@gmail.com>
+ <20240807143318.439619-19-johan.oudinet@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1723060317;
+ d=bootlin.com; s=gm1; t=1723060390;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=f5yNrz19NDMU6+ISYXkpIU4mGlVdZVQZkI8DHY5jqxA=;
- b=eTYTmIIFHHsral0meZNUYYqFUb2bfGjsXQvQ1uhYB41Fb+D1dCOtRIcIguYn1xXfLx9Ue7
- hAL6Bmxi5/1PS77brjlEdJ83x0ldVLJLF56Bt9VGypYsbrkzyQ0aVbqedVAnpnJo+R/Nz5
- JlL7MenxptEEe23wJd5SP8XIEplfwZyfLMDbfGVl9IhBoxQvn3vSyYuSKNliSawm85v8ii
- SjlfdbMpkbqFc223KjJTZm2wD70DEtSMyw237txatpB6PP3HZdZVI8gXIJZ7boFzY2Lach
- QvK6hKPe3POmgVoZtfzX7x4X56DOJyCmwxDbwjCTB8mKRSD1H22l7wJ8kkBsUQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=E8ZEGRJp6nvT0xvOSK6C8w0KKqqQalM+wA27nc/bK/A=;
+ b=RcqqLktltzDZswPpSYs1w9LsEfuOqmzl6zoXSKFXlNB/0MGjbcyqAXkbwE8hdM1GaM6CYS
+ 18yIZeacAFf5fB37p35bFQSfGI7tAUV239+nKEBivL5GhOiJQG9Z5mSK6Bkqtr9MvJgTyq
+ J3El2fs0mmE+HXMK5SJpSQOr3qlFqu+jVRrSRvQLqKEYlflh3yI61XFtQ0cAnM13RPT3+Z
+ rqU7N37D3FokxZCM+GiYcjQ0Ihiw9UlKj+cP9l7theT99vu9+AY1h4BilB9kEP9O3/+CCf
+ pw3Wb6T1cnHFu8BnTPNGxrVbd3swgP7RHwBKBFmzd37wONzihiBEd4oJnXjzsQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=eTYTmIIF
-Subject: Re: [Buildroot] [PATCH 00/18] Update Ejabberd and its dependencies
+ header.s=gm1 header.b=RcqqLktl
+Subject: Re: [Buildroot] [PATCH 18/18] package/ejabberd: bump version to
+ 24.07
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,40 +92,26 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Hello Johan,
 
-Thanks for the patch series.
-
-On Wed,  7 Aug 2024 16:33:00 +0200
+On Wed,  7 Aug 2024 16:33:18 +0200
 Johan Oudinet <johan.oudinet@gmail.com> wrote:
 
-> Johan Oudinet (18):
->   package/erlang-stun: renamed from erlang-p1-stun
->   package/erlang-fast-xml: renamed from erlang-p1-xml
->   package/erlang-xmpp: renamed from erlang-p1-xmpp
+> and update the two patches accordingly. Ejabberd now uses rebar3 by
+> default, so use the --with-rebar configure option to set the correct
+> rebar binary to use. Take the opportunity to fix warnings reported by
+> utils/check-package.
 
-I was a bit confused about these patches. I was wondering why the name
-of the package mattered, and why it was influencing where the files
-installed by this package are actually installed...
+Would it be possible to split the changes into multiple patches, i.e
+fix the check-package warnings first, and then bump (or the other
+around) ?
 
-If I understand correctly, it all comes from:
+Also, if you fix some check-package warnings, make sure to remove the
+corresponding ignore lines from .checkpackageignore:
 
-$(2)_ERLANG_APP = $(subst -,_,$(patsubst erlang-%,%,$(patsubst host-%,%,$(1))))
-
-which derives the ERLANG_APP name from the package name, so
-erlang-p1-stun becomes p1_stun. Is that correct?
-
-I think it's quite unique in Buildroot to do something like this. Other
-packages normally install their stuff into a location that isn't
-dependent on the package name chosen by Buildroot.
-
-That being said, I assume your changes are OK, but:
-
-- Why are we renaming only those 3 packages, and not the numerous other
-  erlang-p1 packages ?
-
-- Can we separate the rename from the bump?
-
-- We should add Config.in.legacy entries matching the name of the old
-  packages, so that the new packages get automatically selected
+package/ejabberd/0001-Makefile.in-do-not-download-or-compile-dependencies.patch lib_patch.Upstream
+package/ejabberd/0002-fix-ejabberdctl.patch lib_patch.Upstream
+package/ejabberd/0003-correct-includes.patch lib_patch.Upstream
+package/ejabberd/S50ejabberd Shellcheck lib_sysv.Indent lib_sysv.Variables
+package/ejabberd/check-erlang-lib Shellcheck
 
 Thanks!
 
