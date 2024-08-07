@@ -1,92 +1,97 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B5E2C3DA7F
-	for <buildroot@archiver.kernel.org>; Wed,  7 Aug 2024 04:54:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 505BBC3DA7F
+	for <buildroot@archiver.kernel.org>; Wed,  7 Aug 2024 05:18:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D5DDF605E4;
-	Wed,  7 Aug 2024 04:54:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E039D80D63;
+	Wed,  7 Aug 2024 05:18:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uvBzs7VcqS10; Wed,  7 Aug 2024 04:54:20 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id auXvdB9ceiTd; Wed,  7 Aug 2024 05:18:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 25973605F8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C4BDD80DF7
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 25973605F8;
-	Wed,  7 Aug 2024 04:54:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C4BDD80DF7;
+	Wed,  7 Aug 2024 05:18:28 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 03B201BF21A
- for <buildroot@lists.busybox.net>; Wed,  7 Aug 2024 04:54:19 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B96CA1BF36E
+ for <buildroot@lists.busybox.net>; Wed,  7 Aug 2024 05:18:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E495D404E3
- for <buildroot@lists.busybox.net>; Wed,  7 Aug 2024 04:54:18 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id A6A9F404D9
+ for <buildroot@lists.busybox.net>; Wed,  7 Aug 2024 05:18:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mxHgHrW5X40d for <buildroot@lists.busybox.net>;
- Wed,  7 Aug 2024 04:54:16 +0000 (UTC)
+ id SqsG4M-2z4vZ for <buildroot@lists.busybox.net>;
+ Wed,  7 Aug 2024 05:18:25 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::112c; helo=mail-yw1-x112c.google.com;
- envelope-from=softwarej@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 522DE404D2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 522DE404D2
-Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com
- [IPv6:2607:f8b0:4864:20::112c])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 522DE404D2
- for <buildroot@buildroot.org>; Wed,  7 Aug 2024 04:54:15 +0000 (UTC)
-Received: by mail-yw1-x112c.google.com with SMTP id
- 00721157ae682-699d8dc6744so236387b3.0
- for <buildroot@buildroot.org>; Tue, 06 Aug 2024 21:54:15 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::130; helo=mail-lf1-x130.google.com;
+ envelope-from=salvador.joseluis@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 70B5C404D8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 70B5C404D8
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com
+ [IPv6:2a00:1450:4864:20::130])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 70B5C404D8
+ for <buildroot@buildroot.org>; Wed,  7 Aug 2024 05:18:24 +0000 (UTC)
+Received: by mail-lf1-x130.google.com with SMTP id
+ 2adb3069b0e04-52efd855adbso2014508e87.2
+ for <buildroot@buildroot.org>; Tue, 06 Aug 2024 22:18:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1723006454; x=1723611254;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=oj7kzAaCJIHU3WCnOVhnNponE9/3DJSvNTHJvufDBUQ=;
- b=HtpaW5EVP+tNw5xm8L57h3gXu7o4DkQZW/xRojd5Qq8+n8sn7YC0/rbjjYbO9wFEpX
- mYskW/L9+aHrzuk+qrnDYLbXAHBy2jAp2Ytl8qe0zVnO3ihIwDJlrqDVLZFPLxb6zXww
- 6LiYMPJ6BJgtj84YnnslptOmvG9SLzlpPdUqsJdvpSaJY7S/yeDoBKbFR9MAjTPJqU40
- PejNSu9RdlDwGx7fkiMnIX+/NDLj6wxHzHY9xzV7sXOqjUQ7QjRmjMGDiv6SDZ+gS8E3
- xI9Yn7E54XhA9rg3psoawHbaXVKn6WnWSmGZJSLmmdVSStFrdb13I+NM5MqUcjPczZ6r
- dQaw==
-X-Gm-Message-State: AOJu0YwrFB4kY2k86nBxtAxpCz34zqHm9zJyPEvHYFLbSxJNXW7tMkRk
- KXmVxWvvBAhkwFA3gQ/g87W7643//nON25pYxhnegUTKQU+kviDBimd0l8UGxx7B02YljvcsqEj
- Bz+9STcnh551d1Kg/LvoCnk4BhOafYw==
-X-Google-Smtp-Source: AGHT+IGnVUxso5cNWAHa1gVqXZXTurv2uQTip9GQ3StRMpBOs4P95pWaerbMDZoWGm2e/xxIIMGBvYTz0+CxzQEcJ8I=
-X-Received: by 2002:a25:8487:0:b0:e0b:a699:bc9a with SMTP id
- 3f1490d57ef6-e0e877882f7mr841148276.16.1723006454179; Tue, 06 Aug 2024
- 21:54:14 -0700 (PDT)
-MIME-Version: 1.0
-References: <20240807013442.1514937-2-salvador.joseluis@gmail.com>
- <874j7x2c1k.fsf@tarshish>
+ d=1e100.net; s=20230601; t=1723007902; x=1723612702;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=Jyz3cOqiaryNFmdBbPNZoGlEbcCudylGuG79cnF1F7s=;
+ b=fXslHu3njKYiX4AH0YiekbbLeJkoOpczDNfXRRR+ilSEO0DXNh5ma1i7EmvMy6DjVV
+ vFRJG9BfwPxqa8OaGFbwSXzsYa+XlpY1dTQI/CsiLe7tMeqp5Ou0ZJ/Z9bjRsMflRQqm
+ rRGy5Z7ENmn4Z9BtQQZNyIaS9IVbUXyZ1Rp6uFBUbwd+LAsAqjEwSrYnFum6qSjL0DBh
+ f3Z2mPpKULzYmpcrAqtlnjt7N/qK329U7lGImW2TdfXkZ0KRx5efBt6jeAxgQqB+PanY
+ sE2JlPDSGyuv0Y4z8lOaP1mFEgFjpgCa4fuQ/++UllGu+93Mt8/a9GUkfNDzukV2u8Vn
+ 6mUQ==
+X-Gm-Message-State: AOJu0YzaOSOl+FnwnWFiAty5VOwn3wvGsiqG85X0KuaANG9wQcYTrH3S
+ hsWdA7siphltbK58BZDLDJ9cF53O+rpECDTaFKHOW2mPSOsejm6YyCnvFTIH
+X-Google-Smtp-Source: AGHT+IGv4C4kbhGeBMDk86Md1JGro6HJexQ8HE527vdstbaZhpGfb1gy8Ku4G3ip06DHZg7aZuElow==
+X-Received: by 2002:a05:6512:3d14:b0:52c:e00c:d3a9 with SMTP id
+ 2adb3069b0e04-530bb367759mr12113714e87.1.1723007901584; 
+ Tue, 06 Aug 2024 22:18:21 -0700 (PDT)
+Received: from cuervo.intranet.jlsalvador.online ([78.30.23.54])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-36bbd06dfa9sm14677708f8f.102.2024.08.06.22.18.20
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 06 Aug 2024 22:18:21 -0700 (PDT)
+From: =?UTF-8?q?Jos=C3=A9=20Luis=20Salvador=20Rufo?=
+ <salvador.joseluis@gmail.com>
+To: buildroot@buildroot.org
+Date: Wed,  7 Aug 2024 07:14:13 +0200
+Message-ID: <20240807051411.299665-3-salvador.joseluis@gmail.com>
+X-Mailer: git-send-email 2.46.0
 In-Reply-To: <874j7x2c1k.fsf@tarshish>
-From: =?UTF-8?Q?Jos=C3=A9_Luis_Salvador_Rufo?= <salvador.joseluis@gmail.com>
-Date: Wed, 7 Aug 2024 06:54:02 +0200
-Message-ID: <CAH+XeQbv57h775JFt00UgzsUPMD7LNC9h3Rk9W9Zq=bD1g7y0w@mail.gmail.com>
-To: Baruch Siach <baruch@tkos.co.il>
+References: <874j7x2c1k.fsf@tarshish>
+MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1723006454; x=1723611254; darn=buildroot.org;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=oj7kzAaCJIHU3WCnOVhnNponE9/3DJSvNTHJvufDBUQ=;
- b=aekENqgWq2IERLxwgUTqEP1PuGlNwK/hxv+Uvz9FWUs1NZDLlu1DtG1ggMHDzdKk0b
- VP0aUoGqQRgczmldlVpVV2B3A2AtniKQBUJGOCJ73DGPBMA/XKP5YbgIaPZplHn9Lwnx
- D754bYaxhcS+uGMAIGPnQNMUuZucYY7Xva7qlLOkQbqL+SSkDN8wn/t5kBheMd8RDYbz
- laZiF0eKUg/4k4lIlv8FJUHZyJEnam/XqIk35r2OVvhUZQxfHoBg84aW2mbouNcSzkpX
- XAg+WfZV6ojckFIBrEAUnoBmfUSXXlDA33CmBCY81TXaBhsRF2PHiFJRWrnyW2uBSKkJ
- mRFg==
+ d=gmail.com; s=20230601; t=1723007902; x=1723612702; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=Jyz3cOqiaryNFmdBbPNZoGlEbcCudylGuG79cnF1F7s=;
+ b=GR2KaJ8m2zGBRtQrnZxvCsMN7bS9lrhufO6053HbFuI+o8VHt7L2XFtXWxXUuPnSzT
+ 9bog2sCVgqs29RrEQUNu9kJpPOcbX2AV2kgnpaNsCQ09h0VgKwXTKuyhrgTKdDOgUJHT
+ mboCIb0XOEo/9Ugx/zhraKNzKAw7dzdbD2e/G3XBOrzcIHc6IJS3b3AZdvS0vTI4lCET
+ U1UcSGlA+XZv9wgDySkK/HJAhY6K8TgaL0lSLcTGeOgACExmrmAOL+QH8Yiraw7MDubp
+ G0cdQgDcFdc0OrspouSJ4sbPEB/MsaEyStoSR/kzp13jMwq4XmnqEYh9DgUdDzMOYj8M
+ bgEg==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=aekENqgW
-Subject: Re: [Buildroot] [PATCH 1/2] package/zfs: replace wip patch by
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=GR2KaJ8m
+Subject: [Buildroot] [PATCH v2 1/2] package/zfs: replace wip patch by
  upstream patch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -100,749 +105,190 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: Alexander Mukhin <alexander.i.mukhin@gmail.com>,
- Baruch Siach via buildroot <buildroot@buildroot.org>
-Content-Type: multipart/mixed; boundary="===============1890840529826583478=="
+ =?UTF-8?q?Jos=C3=A9=20Luis=20Salvador=20Rufo?=
+ <salvador.joseluis@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1890840529826583478==
-Content-Type: multipart/alternative; boundary="000000000000a5b3df061f10b375"
-
---000000000000a5b3df061f10b375
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-Hi Baruch,
-
-You are right, AUTORECONF is not required.
-
-I'm going to send a V2 PATCH with this fix. Thank you Baruch.
-
-El mi=C3=A9, 7 ago 2024, 6:26, Baruch Siach <baruch@tkos.co.il> escribi=C3=
-=B3:
-
-> Hi Jos=C3=A9,
->
-> On Wed, Aug 07 2024, Jos=C3=A9 Luis Salvador Rufo wrote:
-> > Signed-off-by: Jos=C3=A9 Luis Salvador Rufo <salvador.joseluis@gmail.co=
-m>
-> > ---
-> >  ...ll-fix-for-SEEK_DATA-SEEK_HOLE-tests.patch |  69 ++++++++
-> >  ...s-ignore-if-SEEK_DATA-is-not-defined.patch | 162 ------------------
-> >  package/zfs/zfs.mk                            |   2 +-
-> >  3 files changed, 70 insertions(+), 163 deletions(-)
-> >  create mode 100644
-> package/zfs/0001-ZTS-small-fix-for-SEEK_DATA-SEEK_HOLE-tests.patch
-> >  delete mode 100644
-> package/zfs/0001-tests-cp_files-ignore-if-SEEK_DATA-is-not-defined.patch
-> >
-> > diff --git
-> > a/package/zfs/0001-ZTS-small-fix-for-SEEK_DATA-SEEK_HOLE-tests.patch
-> > b/package/zfs/0001-ZTS-small-fix-for-SEEK_DATA-SEEK_HOLE-tests.patch
-> > new file mode 100644
-> > index 0000000000..9a7a139a9e
-> > --- /dev/null
-> > +++ b/package/zfs/0001-ZTS-small-fix-for-SEEK_DATA-SEEK_HOLE-tests.patc=
-h
-> > @@ -0,0 +1,69 @@
-> > +From 2ccefd4aff98cf355c7d13b3f92bb4d390dfa522 Mon Sep 17 00:00:00 2001
-> > +From: Tino Reichardt <milky-zfs@mcmilk.de>
-> > +Date: Sun, 4 Aug 2024 11:58:13 +0200
-> > +Subject: [PATCH] ZTS: small fix for SEEK_DATA/SEEK_HOLE tests
-> > +
-> > +Some libc's like uClibc lag the proper definition of SEEK_DATA
-> > +and SEEK_HOLE. Since we have only two files in ZTS which use
-> > +these definitons, let's define them by hand:
-> > +
-> > +```
-> > +#ifndef SEEK_DATA
-> > +#define SEEK_DATA 3
-> > +#endif
-> > +#ifndef SEEK_HOLE
-> > +#define SEEK_HOLE 4
-> > +#endif
-> > +```
-> > +
-> > +There should be no failures, because:
-> > +- FreeBSD has support for SEEK_DATA/SEEK_HOLE since FreeBSD 8
-> > +- Linux has it since Linux 3.1
-> > +- the libc will submit the parameters unchanged to the kernel
-> > +
-> > +Signed-off-by: Tino Reichardt <milky-zfs@mcmilk.de>
-> > +Upstream: https://github.com/openzfs/zfs/pull/16413
-> > +---
-> > + tests/zfs-tests/cmd/mmap_seek.c                       | 10 ++++++++++
-> > + tests/zfs-tests/tests/functional/cp_files/seekflood.c |  7 +++++++
-> > + 2 files changed, 17 insertions(+)
-> > +
-> > +diff --git a/tests/zfs-tests/cmd/mmap_seek.c
-> b/tests/zfs-tests/cmd/mmap_seek.c
-> > +index 7be92d109565..2d250554a13f 100644
-> > +--- a/tests/zfs-tests/cmd/mmap_seek.c
-> > ++++ b/tests/zfs-tests/cmd/mmap_seek.c
-> > +@@ -35,6 +35,16 @@
-> > + #include <linux/fs.h>
-> > + #endif
-> > +
-> > ++/* some older uClibc's lack the defines, so we'll manually define the=
-m
-> */
-> > ++#ifdef      __UCLIBC__
-> > ++#ifndef     SEEK_DATA
-> > ++#define     SEEK_DATA 3
-> > ++#endif
-> > ++#ifndef     SEEK_HOLE
-> > ++#define     SEEK_HOLE 4
-> > ++#endif
-> > ++#endif
-> > ++
-> > + static void
-> > + seek_data(int fd, off_t offset, off_t expected)
-> > + {
-> > +diff --git a/tests/zfs-tests/tests/functional/cp_files/seekflood.c
-> > b/tests/zfs-tests/tests/functional/cp_files/seekflood.c
-> > +index 02c2c8e6eca5..f832db85970d 100644
-> > +--- a/tests/zfs-tests/tests/functional/cp_files/seekflood.c
-> > ++++ b/tests/zfs-tests/tests/functional/cp_files/seekflood.c
-> > +@@ -36,6 +36,13 @@
-> > + #include <sys/stat.h>
-> > + #include <sys/wait.h>
-> > +
-> > ++/* some older uClibc's lack the defines, so we'll manually define the=
-m
-> */
-> > ++#ifdef      __UCLIBC__
-> > ++#ifndef     SEEK_DATA
-> > ++#define     SEEK_DATA 3
-> > ++#endif
-> > ++#endif
-> > ++
-> > + #define     DATASIZE        (4096)
-> > + char data[DATASIZE];
-> > +
-> > diff --git
-> >
-> a/package/zfs/0001-tests-cp_files-ignore-if-SEEK_DATA-is-not-defined.patc=
-h
-> >
-> b/package/zfs/0001-tests-cp_files-ignore-if-SEEK_DATA-is-not-defined.patc=
-h
-> > deleted file mode 100644
-> > index f47c615d10..0000000000
-> > ---
-> a/package/zfs/0001-tests-cp_files-ignore-if-SEEK_DATA-is-not-defined.patc=
-h
-> > +++ /dev/null
-> > @@ -1,162 +0,0 @@
-> > -From 93e7f8889072047276da11fe6a525d3f0ea16205 Mon Sep 17 00:00:00 2001
-> > -From: =3D?UTF-8?q?Jos=3DC3=3DA9=3D20Luis=3D20Salvador=3D20Rufo?=3D
-> > - <salvador.joseluis@gmail.com>
-> > -Date: Sat, 11 May 2024 22:40:12 +0200
-> > -Subject: [PATCH] tests/cp_files: ignore if SEEK_DATA is not defined
-> > -MIME-Version: 1.0
-> > -Content-Type: text/plain; charset=3DUTF-8
-> > -Content-Transfer-Encoding: 8bit
-> > -
-> > -Not all C libraries support SEEK_DATA (e.g., uClibc). Skip the test ca=
-se
-> > -cp_files if SEEK_DATA is not defined.
-> > -
-> > -Signed-off-by: Jos=C3=A9 Luis Salvador Rufo <salvador.joseluis@gmail.c=
-om>
-> > -Upstream: https://github.com/openzfs/zfs/pull/16169
-> > ----
-> > - config/user-unistd.m4                  | 24 ++++++++++++++++++++++++
-> > - config/user.m4                         |  1 +
-> > - config/zfs-build.m4                    |  1 +
-> > - tests/test-runner/bin/zts-report.py.in |  1 +
-> > - tests/zfs-tests/Makefile.am            |  2 ++
-> > - tests/zfs-tests/cmd/Makefile.am        |  6 +++++-
-> > - tests/zfs-tests/tests/Makefile.am      | 14 +++++++++-----
-> > - 7 files changed, 43 insertions(+), 6 deletions(-)
-> > - create mode 100644 config/user-unistd.m4
-> > -
-> > -diff --git a/config/user-unistd.m4 b/config/user-unistd.m4
-> > -new file mode 100644
-> > -index 000000000..302bc0bde
-> > ---- /dev/null
-> > -+++ b/config/user-unistd.m4
-> > -@@ -0,0 +1,24 @@
-> > -+dnl #
-> > -+dnl # Check for SEEK_DATA - only used for cp_files/seekflood test cas=
-e.
-> > -+dnl #
-> > -+AC_DEFUN([ZFS_AC_CONFIG_USER_UNISTD_SEEK_DATA], [
-> > -+    AC_MSG_CHECKING(whether host toolchain supports SEEK_DATA)
-> > -+
-> > -+    AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
-> > -+            #ifndef _GNU_SOURCE
-> > -+            #define _GNU_SOURCE
-> > -+            #endif
-> > -+            #include <unistd.h>
-> > -+            #if defined(SEEK_DATA)
-> > -+                    int ok;
-> > -+            #else
-> > -+                    error fail
-> > -+            #endif
-> > -+    ]])], [
-> > -+            user_unistd_seek_data=3Dyes
-> > -+            AC_MSG_RESULT([yes])
-> > -+    ], [
-> > -+            user_unistd_seek_data=3Dno
-> > -+            AC_MSG_RESULT([no])
-> > -+    ])
-> > -+])
-> > -diff --git a/config/user.m4 b/config/user.m4
-> > -index 6ec27a5b2..2326a44be 100644
-> > ---- a/config/user.m4
-> > -+++ b/config/user.m4
-> > -@@ -23,6 +23,7 @@ AC_DEFUN([ZFS_AC_CONFIG_USER], [
-> > -     ZFS_AC_CONFIG_USER_LIBAIO
-> > -     ZFS_AC_CONFIG_USER_LIBATOMIC
-> > -     ZFS_AC_CONFIG_USER_LIBFETCH
-> > -+    ZFS_AC_CONFIG_USER_UNISTD_SEEK_DATA
-> > -     ZFS_AC_CONFIG_USER_AIO_H
-> > -     ZFS_AC_CONFIG_USER_CLOCK_GETTIME
-> > -     ZFS_AC_CONFIG_USER_PAM
-> > -diff --git a/config/zfs-build.m4 b/config/zfs-build.m4
-> > -index bb5a85d81..578692676 100644
-> > ---- a/config/zfs-build.m4
-> > -+++ b/config/zfs-build.m4
-> > -@@ -294,6 +294,7 @@ AC_DEFUN([ZFS_AC_CONFIG], [
-> > -         [test "x$qatsrc" !=3D x ])
-> > -     AM_CONDITIONAL([WANT_DEVNAME2DEVID], [test "x$user_libudev" =3D x=
-yes
-> ])
-> > -     AM_CONDITIONAL([WANT_MMAP_LIBAIO], [test "x$user_libaio" =3D xyes=
- ])
-> > -+    AM_CONDITIONAL([WANT_UNISTD_SEEK_DATA], [test
-> "x$user_unistd_seek_data" =3D xyes ])
-> > -     AM_CONDITIONAL([PAM_ZFS_ENABLED], [test "x$enable_pam" =3D xyes])
-> > - ])
-> > -
-> > -diff --git a/tests/test-runner/bin/zts-report.py.in
-> b/tests/test-runner/bin/zts-report.py.in
-> > -index ecc50f487..3a00345ed 100755
-> > ---- a/tests/test-runner/bin/zts-report.py.in
-> > -+++ b/tests/test-runner/bin/zts-report.py.in
-> > -@@ -162,6 +162,7 @@ known =3D {
-> > -         ['FAIL', rewind_reason],
-> > -     'cli_user/misc/zfs_share_001_neg': ['SKIP', na_reason],
-> > -     'cli_user/misc/zfs_unshare_001_neg': ['SKIP', na_reason],
-> > -+    'cp_files/cp_stress': ['SKIP', 16169],
-> > -     'pool_checkpoint/checkpoint_discard_busy': ['SKIP', 12053],
-> > -     'privilege/setup': ['SKIP', na_reason],
-> > -     'refreserv/refreserv_004_pos': ['FAIL', known_reason],
-> > -diff --git a/tests/zfs-tests/Makefile.am b/tests/zfs-tests/Makefile.am
-> > -index 3dd1a6452..8ae790057 100644
-> > ---- a/tests/zfs-tests/Makefile.am
-> > -+++ b/tests/zfs-tests/Makefile.am
-> > -@@ -13,8 +13,10 @@ scripts_zfs_tests_functional_hkdf_PROGRAMS =3D
-> %D%/tests/functional/hkdf/hkdf_test
-> > - %C%_tests_functional_hkdf_hkdf_test_LDADD =3D \
-> > -     libzpool.la
-> > -
-> > -+if WANT_UNISTD_SEEK_DATA
-> > - scripts_zfs_tests_functional_cp_filesdir =3D
-> $(datadir)/$(PACKAGE)/zfs-tests/tests/functional/cp_files
-> > - scripts_zfs_tests_functional_cp_files_PROGRAMS =3D
-> %D%/tests/functional/cp_files/seekflood
-> > -+endif
-> > -
-> > - if BUILD_LINUX
-> > - scripts_zfs_tests_functional_tmpfiledir =3D
-> $(datadir)/$(PACKAGE)/zfs-tests/tests/functional/tmpfile
-> > -diff --git a/tests/zfs-tests/cmd/Makefile.am
-> b/tests/zfs-tests/cmd/Makefile.am
-> > -index 23848a82f..69bba3039 100644
-> > ---- a/tests/zfs-tests/cmd/Makefile.am
-> > -+++ b/tests/zfs-tests/cmd/Makefile.am
-> > -@@ -5,7 +5,6 @@ scripts_zfs_tests_bin_PROGRAMS  =3D %D%/chg_usr_exec
-> > - scripts_zfs_tests_bin_PROGRAMS +=3D %D%/clonefile
-> > - scripts_zfs_tests_bin_PROGRAMS +=3D %D%/clone_mmap_cached
-> > - scripts_zfs_tests_bin_PROGRAMS +=3D %D%/clone_mmap_write
-> > --scripts_zfs_tests_bin_PROGRAMS +=3D %D%/cp_files
-> > - scripts_zfs_tests_bin_PROGRAMS +=3D %D%/ctime
-> > - scripts_zfs_tests_bin_PROGRAMS +=3D %D%/dir_rd_update
-> > - scripts_zfs_tests_bin_PROGRAMS +=3D %D%/dosmode_readonly_write
-> > -@@ -16,6 +15,11 @@ scripts_zfs_tests_bin_PROGRAMS +=3D %D%/truncate_te=
-st
-> > - scripts_zfs_tests_bin_PROGRAMS +=3D %D%/zfs_diff-socket
-> > -
-> > -
-> > -+if WANT_UNISTD_SEEK_DATA
-> > -+scripts_zfs_tests_bin_PROGRAMS +=3D %D%/cp_files
-> > -+endif
-> > -+
-> > -+
-> > - scripts_zfs_tests_bin_PROGRAMS +=3D %D%/badsend
-> > - %C%_badsend_LDADD =3D \
-> > -     libzfs_core.la \
-> > -diff --git a/tests/zfs-tests/tests/Makefile.am
-> b/tests/zfs-tests/tests/Makefile.am
-> > -index cc66d762f..1e9f06a7e 100644
-> > ---- a/tests/zfs-tests/tests/Makefile.am
-> > -+++ b/tests/zfs-tests/tests/Makefile.am
-> > -@@ -1394,11 +1394,6 @@ nobase_dist_datadir_zfs_tests_tests_SCRIPTS +=
-=3D \
-> > -     functional/compression/l2arc_encrypted.ksh \
-> > -     functional/compression/l2arc_encrypted_no_compressed_arc.ksh \
-> > -     functional/compression/setup.ksh \
-> > --    functional/cp_files/cleanup.ksh \
-> > --    functional/cp_files/cp_files_001_pos.ksh \
-> > --    functional/cp_files/cp_files_002_pos.ksh \
-> > --    functional/cp_files/cp_stress.ksh \
-> > --    functional/cp_files/setup.ksh \
-> > -     functional/crtime/cleanup.ksh \
-> > -     functional/crtime/crtime_001_pos.ksh \
-> > -     functional/crtime/setup.ksh \
-> > -@@ -2108,3 +2103,12 @@ nobase_dist_datadir_zfs_tests_tests_SCRIPTS +=
-=3D \
-> > -     functional/idmap_mount/idmap_mount_003.ksh \
-> > -     functional/idmap_mount/idmap_mount_004.ksh \
-> > -     functional/idmap_mount/idmap_mount_005.ksh
-> > -+
-> > -+if WANT_UNISTD_SEEK_DATA
-> > -+nobase_dist_datadir_zfs_tests_tests_SCRIPTS +=3D \
-> > -+    functional/cp_files/cleanup.ksh \
-> > -+    functional/cp_files/cp_files_001_pos.ksh \
-> > -+    functional/cp_files/cp_files_002_pos.ksh \
-> > -+    functional/cp_files/cp_stress.ksh \
-> > -+    functional/cp_files/setup.ksh
-> > -+endif
-> > ---
-> > -2.45.2
-> > -
-> > diff --git a/package/zfs/zfs.mk b/package/zfs/zfs.mk
-> > index e0fa392670..32c4c07838 100644
-> > --- a/package/zfs/zfs.mk
-> > +++ b/package/zfs/zfs.mk
-> > @@ -12,7 +12,7 @@ ZFS_LICENSE_FILES =3D LICENSE COPYRIGHT
-> >  ZFS_CPE_ID_VENDOR =3D openzfs
-> >  ZFS_CPE_ID_PRODUCT =3D openzfs
-> >
-> > -# 0001-tests-cp_files-ignore-if-SEEK_DATA-is-not-defined.patch
-> > +# 0001-ZTS-small-fix-for-SEEK_DATA-SEEK_HOLE-tests.patch
-> >  ZFS_AUTORECONF =3D YES
->
-> The new patch doesn't touch .m4 or .am files. Can we just drop
-> AUTORECONF?
->
-> baruch
->
-> >
-> >  ZFS_DEPENDENCIES =3D libaio openssl udev util-linux zlib libcurl linux
->
-> --
->                                                      ~. .~   Tk Open
-> Systems
-> =3D}------------------------------------------------ooO--U--Ooo----------=
---{=3D
->    - baruch@tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
->
-
---000000000000a5b3df061f10b375
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"auto"><p dir=3D"ltr">Hi Baruch,</p>
-<p dir=3D"ltr">You are right, AUTORECONF is not required.</p>
-<p dir=3D"ltr">I&#39;m going to send a V2 PATCH with this fix. Thank you Ba=
-ruch.</p></div><br><div class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gma=
-il_attr">El mi=C3=A9, 7 ago 2024, 6:26, Baruch Siach &lt;<a href=3D"mailto:=
-baruch@tkos.co.il">baruch@tkos.co.il</a>&gt; escribi=C3=B3:<br></div><block=
-quote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1=
-px solid rgb(204,204,204);padding-left:1ex">Hi Jos=C3=A9,<br>
-<br>
-On Wed, Aug 07 2024, Jos=C3=A9 Luis Salvador Rufo wrote:<br>
-&gt; Signed-off-by: Jos=C3=A9 Luis Salvador Rufo &lt;<a href=3D"mailto:salv=
-ador.joseluis@gmail.com" target=3D"_blank" rel=3D"noreferrer">salvador.jose=
-luis@gmail.com</a>&gt;<br>
-&gt; ---<br>
-&gt;=C2=A0 ...ll-fix-for-SEEK_DATA-SEEK_HOLE-tests.patch |=C2=A0 69 +++++++=
-+<br>
-&gt;=C2=A0 ...s-ignore-if-SEEK_DATA-is-not-defined.patch | 162 ------------=
-------<br>
-&gt;=C2=A0 package/zfs/<a href=3D"http://zfs.mk" rel=3D"noreferrer noreferr=
-er" target=3D"_blank">zfs.mk</a>=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 |=C2=A0 =C2=A02 +-<=
-br>
-&gt;=C2=A0 3 files changed, 70 insertions(+), 163 deletions(-)<br>
-&gt;=C2=A0 create mode 100644 package/zfs/0001-ZTS-small-fix-for-SEEK_DATA-=
-SEEK_HOLE-tests.patch<br>
-&gt;=C2=A0 delete mode 100644 package/zfs/0001-tests-cp_files-ignore-if-SEE=
-K_DATA-is-not-defined.patch<br>
-&gt;<br>
-&gt; diff --git<br>
-&gt; a/package/zfs/0001-ZTS-small-fix-for-SEEK_DATA-SEEK_HOLE-tests.patch<b=
-r>
-&gt; b/package/zfs/0001-ZTS-small-fix-for-SEEK_DATA-SEEK_HOLE-tests.patch<b=
-r>
-&gt; new file mode 100644<br>
-&gt; index 0000000000..9a7a139a9e<br>
-&gt; --- /dev/null<br>
-&gt; +++ b/package/zfs/0001-ZTS-small-fix-for-SEEK_DATA-SEEK_HOLE-tests.pat=
-ch<br>
-&gt; @@ -0,0 +1,69 @@<br>
-&gt; +From 2ccefd4aff98cf355c7d13b3f92bb4d390dfa522 Mon Sep 17 00:00:00 200=
-1<br>
-&gt; +From: Tino Reichardt &lt;<a href=3D"mailto:milky-zfs@mcmilk.de" targe=
-t=3D"_blank" rel=3D"noreferrer">milky-zfs@mcmilk.de</a>&gt;<br>
-&gt; +Date: Sun, 4 Aug 2024 11:58:13 +0200<br>
-&gt; +Subject: [PATCH] ZTS: small fix for SEEK_DATA/SEEK_HOLE tests<br>
-&gt; +<br>
-&gt; +Some libc&#39;s like uClibc lag the proper definition of SEEK_DATA<br=
->
-&gt; +and SEEK_HOLE. Since we have only two files in ZTS which use<br>
-&gt; +these definitons, let&#39;s define them by hand:<br>
-&gt; +<br>
-&gt; +```<br>
-&gt; +#ifndef SEEK_DATA<br>
-&gt; +#define SEEK_DATA 3<br>
-&gt; +#endif<br>
-&gt; +#ifndef SEEK_HOLE<br>
-&gt; +#define SEEK_HOLE 4<br>
-&gt; +#endif<br>
-&gt; +```<br>
-&gt; +<br>
-&gt; +There should be no failures, because:<br>
-&gt; +- FreeBSD has support for SEEK_DATA/SEEK_HOLE since FreeBSD 8<br>
-&gt; +- Linux has it since Linux 3.1<br>
-&gt; +- the libc will submit the parameters unchanged to the kernel<br>
-&gt; +<br>
-&gt; +Signed-off-by: Tino Reichardt &lt;<a href=3D"mailto:milky-zfs@mcmilk.=
-de" target=3D"_blank" rel=3D"noreferrer">milky-zfs@mcmilk.de</a>&gt;<br>
-&gt; +Upstream: <a href=3D"https://github.com/openzfs/zfs/pull/16413" rel=
-=3D"noreferrer noreferrer" target=3D"_blank">https://github.com/openzfs/zfs=
-/pull/16413</a><br>
-&gt; +---<br>
-&gt; + tests/zfs-tests/cmd/mmap_seek.c=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0| 10 ++++++++++<br>
-&gt; + tests/zfs-tests/tests/functional/cp_files/seekflood.c |=C2=A0 7 ++++=
-+++<br>
-&gt; + 2 files changed, 17 insertions(+)<br>
-&gt; +<br>
-&gt; +diff --git a/tests/zfs-tests/cmd/mmap_seek.c b/tests/zfs-tests/cmd/mm=
-ap_seek.c<br>
-&gt; +index 7be92d109565..2d250554a13f 100644<br>
-&gt; +--- a/tests/zfs-tests/cmd/mmap_seek.c<br>
-&gt; ++++ b/tests/zfs-tests/cmd/mmap_seek.c<br>
-&gt; +@@ -35,6 +35,16 @@<br>
-&gt; + #include &lt;linux/fs.h&gt;<br>
-&gt; + #endif<br>
-&gt; + <br>
-&gt; ++/* some older uClibc&#39;s lack the defines, so we&#39;ll manually d=
-efine them */<br>
-&gt; ++#ifdef=C2=A0 =C2=A0 =C2=A0 __UCLIBC__<br>
-&gt; ++#ifndef=C2=A0 =C2=A0 =C2=A0SEEK_DATA<br>
-&gt; ++#define=C2=A0 =C2=A0 =C2=A0SEEK_DATA 3<br>
-&gt; ++#endif<br>
-&gt; ++#ifndef=C2=A0 =C2=A0 =C2=A0SEEK_HOLE<br>
-&gt; ++#define=C2=A0 =C2=A0 =C2=A0SEEK_HOLE 4<br>
-&gt; ++#endif<br>
-&gt; ++#endif<br>
-&gt; ++<br>
-&gt; + static void<br>
-&gt; + seek_data(int fd, off_t offset, off_t expected)<br>
-&gt; + {<br>
-&gt; +diff --git a/tests/zfs-tests/tests/functional/cp_files/seekflood.c<br=
->
-&gt; b/tests/zfs-tests/tests/functional/cp_files/seekflood.c<br>
-&gt; +index 02c2c8e6eca5..f832db85970d 100644<br>
-&gt; +--- a/tests/zfs-tests/tests/functional/cp_files/seekflood.c<br>
-&gt; ++++ b/tests/zfs-tests/tests/functional/cp_files/seekflood.c<br>
-&gt; +@@ -36,6 +36,13 @@<br>
-&gt; + #include &lt;sys/stat.h&gt;<br>
-&gt; + #include &lt;sys/wait.h&gt;<br>
-&gt; + <br>
-&gt; ++/* some older uClibc&#39;s lack the defines, so we&#39;ll manually d=
-efine them */<br>
-&gt; ++#ifdef=C2=A0 =C2=A0 =C2=A0 __UCLIBC__<br>
-&gt; ++#ifndef=C2=A0 =C2=A0 =C2=A0SEEK_DATA<br>
-&gt; ++#define=C2=A0 =C2=A0 =C2=A0SEEK_DATA 3<br>
-&gt; ++#endif<br>
-&gt; ++#endif<br>
-&gt; ++<br>
-&gt; + #define=C2=A0 =C2=A0 =C2=A0DATASIZE=C2=A0 =C2=A0 =C2=A0 =C2=A0 (4096=
-)<br>
-&gt; + char data[DATASIZE];<br>
-&gt; + <br>
-&gt; diff --git<br>
-&gt; a/package/zfs/0001-tests-cp_files-ignore-if-SEEK_DATA-is-not-defined.p=
-atch<br>
-&gt; b/package/zfs/0001-tests-cp_files-ignore-if-SEEK_DATA-is-not-defined.p=
-atch<br>
-&gt; deleted file mode 100644<br>
-&gt; index f47c615d10..0000000000<br>
-&gt; --- a/package/zfs/0001-tests-cp_files-ignore-if-SEEK_DATA-is-not-defin=
-ed.patch<br>
-&gt; +++ /dev/null<br>
-&gt; @@ -1,162 +0,0 @@<br>
-&gt; -From 93e7f8889072047276da11fe6a525d3f0ea16205 Mon Sep 17 00:00:00 200=
-1<br>
-&gt; -From: =3D?UTF-8?q?Jos=3DC3=3DA9=3D20Luis=3D20Salvador=3D20Rufo?=3D<br=
->
-&gt; - &lt;<a href=3D"mailto:salvador.joseluis@gmail.com" target=3D"_blank"=
- rel=3D"noreferrer">salvador.joseluis@gmail.com</a>&gt;<br>
-&gt; -Date: Sat, 11 May 2024 22:40:12 +0200<br>
-&gt; -Subject: [PATCH] tests/cp_files: ignore if SEEK_DATA is not defined<b=
-r>
-&gt; -MIME-Version: 1.0<br>
-&gt; -Content-Type: text/plain; charset=3DUTF-8<br>
-&gt; -Content-Transfer-Encoding: 8bit<br>
-&gt; -<br>
-&gt; -Not all C libraries support SEEK_DATA (e.g., uClibc). Skip the test c=
-ase<br>
-&gt; -cp_files if SEEK_DATA is not defined.<br>
-&gt; -<br>
-&gt; -Signed-off-by: Jos=C3=A9 Luis Salvador Rufo &lt;<a href=3D"mailto:sal=
-vador.joseluis@gmail.com" target=3D"_blank" rel=3D"noreferrer">salvador.jos=
-eluis@gmail.com</a>&gt;<br>
-&gt; -Upstream: <a href=3D"https://github.com/openzfs/zfs/pull/16169" rel=
-=3D"noreferrer noreferrer" target=3D"_blank">https://github.com/openzfs/zfs=
-/pull/16169</a><br>
-&gt; ----<br>
-&gt; - config/user-unistd.m4=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 | 24 ++++++++++++++++++++++++<br>
-&gt; - config/user.m4=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0|=C2=A0 1 +<br>
-&gt; - config/zfs-build.m4=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 |=C2=A0 1 +<br>
-&gt; - tests/test-runner/bin/<a href=3D"http://zts-report.py.in" rel=3D"nor=
-eferrer noreferrer" target=3D"_blank">zts-report.py.in</a> |=C2=A0 1 +<br>
-&gt; - tests/zfs-tests/Makefile.am=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
- |=C2=A0 2 ++<br>
-&gt; - tests/zfs-tests/cmd/Makefile.am=C2=A0 =C2=A0 =C2=A0 =C2=A0 |=C2=A0 6=
- +++++-<br>
-&gt; - tests/zfs-tests/tests/Makefile.am=C2=A0 =C2=A0 =C2=A0 | 14 +++++++++=
------<br>
-&gt; - 7 files changed, 43 insertions(+), 6 deletions(-)<br>
-&gt; - create mode 100644 config/user-unistd.m4<br>
-&gt; -<br>
-&gt; -diff --git a/config/user-unistd.m4 b/config/user-unistd.m4<br>
-&gt; -new file mode 100644<br>
-&gt; -index 000000000..302bc0bde<br>
-&gt; ---- /dev/null<br>
-&gt; -+++ b/config/user-unistd.m4<br>
-&gt; -@@ -0,0 +1,24 @@<br>
-&gt; -+dnl #<br>
-&gt; -+dnl # Check for SEEK_DATA - only used for cp_files/seekflood test ca=
-se.<br>
-&gt; -+dnl #<br>
-&gt; -+AC_DEFUN([ZFS_AC_CONFIG_USER_UNISTD_SEEK_DATA], [<br>
-&gt; -+=C2=A0 =C2=A0 AC_MSG_CHECKING(whether host toolchain supports SEEK_D=
-ATA)<br>
-&gt; -+<br>
-&gt; -+=C2=A0 =C2=A0 AC_COMPILE_IFELSE([AC_LANG_SOURCE([[<br>
-&gt; -+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 #ifndef _GNU_SOURCE<br>
-&gt; -+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 #define _GNU_SOURCE<br>
-&gt; -+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 #endif<br>
-&gt; -+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 #include &lt;unistd.h&gt;<=
-br>
-&gt; -+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 #if defined(SEEK_DATA)<br>
-&gt; -+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 int ok;<br>
-&gt; -+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 #else<br>
-&gt; -+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 error fail<br>
-&gt; -+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 #endif<br>
-&gt; -+=C2=A0 =C2=A0 ]])], [<br>
-&gt; -+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 user_unistd_seek_data=3Dye=
-s<br>
-&gt; -+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 AC_MSG_RESULT([yes])<br>
-&gt; -+=C2=A0 =C2=A0 ], [<br>
-&gt; -+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 user_unistd_seek_data=3Dno=
-<br>
-&gt; -+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 AC_MSG_RESULT([no])<br>
-&gt; -+=C2=A0 =C2=A0 ])<br>
-&gt; -+])<br>
-&gt; -diff --git a/config/user.m4 b/config/user.m4<br>
-&gt; -index 6ec27a5b2..2326a44be 100644<br>
-&gt; ---- a/config/user.m4<br>
-&gt; -+++ b/config/user.m4<br>
-&gt; -@@ -23,6 +23,7 @@ AC_DEFUN([ZFS_AC_CONFIG_USER], [<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0ZFS_AC_CONFIG_USER_LIBAIO<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0ZFS_AC_CONFIG_USER_LIBATOMIC<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0ZFS_AC_CONFIG_USER_LIBFETCH<br>
-&gt; -+=C2=A0 =C2=A0 ZFS_AC_CONFIG_USER_UNISTD_SEEK_DATA<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0ZFS_AC_CONFIG_USER_AIO_H<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0ZFS_AC_CONFIG_USER_CLOCK_GETTIME<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0ZFS_AC_CONFIG_USER_PAM<br>
-&gt; -diff --git a/config/zfs-build.m4 b/config/zfs-build.m4<br>
-&gt; -index bb5a85d81..578692676 100644<br>
-&gt; ---- a/config/zfs-build.m4<br>
-&gt; -+++ b/config/zfs-build.m4<br>
-&gt; -@@ -294,6 +294,7 @@ AC_DEFUN([ZFS_AC_CONFIG], [<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0[test &quot;x$qatsrc&quot; !=3D x ]=
-)<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0AM_CONDITIONAL([WANT_DEVNAME2DEVID], [test &quot;=
-x$user_libudev&quot; =3D xyes ])<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0AM_CONDITIONAL([WANT_MMAP_LIBAIO], [test &quot;x$=
-user_libaio&quot; =3D xyes ])<br>
-&gt; -+=C2=A0 =C2=A0 AM_CONDITIONAL([WANT_UNISTD_SEEK_DATA], [test &quot;x$=
-user_unistd_seek_data&quot; =3D xyes ])<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0AM_CONDITIONAL([PAM_ZFS_ENABLED], [test &quot;x$e=
-nable_pam&quot; =3D xyes])<br>
-&gt; - ])<br>
-&gt; - <br>
-&gt; -diff --git a/tests/test-runner/bin/<a href=3D"http://zts-report.py.in=
-" rel=3D"noreferrer noreferrer" target=3D"_blank">zts-report.py.in</a> b/te=
-sts/test-runner/bin/<a href=3D"http://zts-report.py.in" rel=3D"noreferrer n=
-oreferrer" target=3D"_blank">zts-report.py.in</a><br>
-&gt; -index ecc50f487..3a00345ed 100755<br>
-&gt; ---- a/tests/test-runner/bin/<a href=3D"http://zts-report.py.in" rel=
-=3D"noreferrer noreferrer" target=3D"_blank">zts-report.py.in</a><br>
-&gt; -+++ b/tests/test-runner/bin/<a href=3D"http://zts-report.py.in" rel=
-=3D"noreferrer noreferrer" target=3D"_blank">zts-report.py.in</a><br>
-&gt; -@@ -162,6 +162,7 @@ known =3D {<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0[&#39;FAIL&#39;, rewind_reason],<br=
->
-&gt; -=C2=A0 =C2=A0 =C2=A0&#39;cli_user/misc/zfs_share_001_neg&#39;: [&#39;=
-SKIP&#39;, na_reason],<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0&#39;cli_user/misc/zfs_unshare_001_neg&#39;: [&#3=
-9;SKIP&#39;, na_reason],<br>
-&gt; -+=C2=A0 =C2=A0 &#39;cp_files/cp_stress&#39;: [&#39;SKIP&#39;, 16169],=
-<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0&#39;pool_checkpoint/checkpoint_discard_busy&#39;=
-: [&#39;SKIP&#39;, 12053],<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0&#39;privilege/setup&#39;: [&#39;SKIP&#39;, na_re=
-ason],<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0&#39;refreserv/refreserv_004_pos&#39;: [&#39;FAIL=
-&#39;, known_reason],<br>
-&gt; -diff --git a/tests/zfs-tests/Makefile.am b/tests/zfs-tests/Makefile.a=
-m<br>
-&gt; -index 3dd1a6452..8ae790057 100644<br>
-&gt; ---- a/tests/zfs-tests/Makefile.am<br>
-&gt; -+++ b/tests/zfs-tests/Makefile.am<br>
-&gt; -@@ -13,8 +13,10 @@ scripts_zfs_tests_functional_hkdf_PROGRAMS =3D %D%=
-/tests/functional/hkdf/hkdf_test<br>
-&gt; - %C%_tests_functional_hkdf_hkdf_test_LDADD =3D \<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0<a href=3D"http://libzpool.la" rel=3D"noreferrer =
-noreferrer" target=3D"_blank">libzpool.la</a><br>
-&gt; - <br>
-&gt; -+if WANT_UNISTD_SEEK_DATA<br>
-&gt; - scripts_zfs_tests_functional_cp_filesdir =3D $(datadir)/$(PACKAGE)/z=
-fs-tests/tests/functional/cp_files<br>
-&gt; - scripts_zfs_tests_functional_cp_files_PROGRAMS =3D %D%/tests/functio=
-nal/cp_files/seekflood<br>
-&gt; -+endif<br>
-&gt; - <br>
-&gt; - if BUILD_LINUX<br>
-&gt; - scripts_zfs_tests_functional_tmpfiledir =3D $(datadir)/$(PACKAGE)/zf=
-s-tests/tests/functional/tmpfile<br>
-&gt; -diff --git a/tests/zfs-tests/cmd/Makefile.am b/tests/zfs-tests/cmd/Ma=
-kefile.am<br>
-&gt; -index 23848a82f..69bba3039 100644<br>
-&gt; ---- a/tests/zfs-tests/cmd/Makefile.am<br>
-&gt; -+++ b/tests/zfs-tests/cmd/Makefile.am<br>
-&gt; -@@ -5,7 +5,6 @@ scripts_zfs_tests_bin_PROGRAMS=C2=A0 =3D %D%/chg_usr_=
-exec<br>
-&gt; - scripts_zfs_tests_bin_PROGRAMS +=3D %D%/clonefile<br>
-&gt; - scripts_zfs_tests_bin_PROGRAMS +=3D %D%/clone_mmap_cached<br>
-&gt; - scripts_zfs_tests_bin_PROGRAMS +=3D %D%/clone_mmap_write<br>
-&gt; --scripts_zfs_tests_bin_PROGRAMS +=3D %D%/cp_files<br>
-&gt; - scripts_zfs_tests_bin_PROGRAMS +=3D %D%/ctime<br>
-&gt; - scripts_zfs_tests_bin_PROGRAMS +=3D %D%/dir_rd_update<br>
-&gt; - scripts_zfs_tests_bin_PROGRAMS +=3D %D%/dosmode_readonly_write<br>
-&gt; -@@ -16,6 +15,11 @@ scripts_zfs_tests_bin_PROGRAMS +=3D %D%/truncate_t=
-est<br>
-&gt; - scripts_zfs_tests_bin_PROGRAMS +=3D %D%/zfs_diff-socket<br>
-&gt; - <br>
-&gt; - <br>
-&gt; -+if WANT_UNISTD_SEEK_DATA<br>
-&gt; -+scripts_zfs_tests_bin_PROGRAMS +=3D %D%/cp_files<br>
-&gt; -+endif<br>
-&gt; -+<br>
-&gt; -+<br>
-&gt; - scripts_zfs_tests_bin_PROGRAMS +=3D %D%/badsend<br>
-&gt; - %C%_badsend_LDADD =3D \<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0<a href=3D"http://libzfs_core.la" rel=3D"noreferr=
-er noreferrer" target=3D"_blank">libzfs_core.la</a> \<br>
-&gt; -diff --git a/tests/zfs-tests/tests/Makefile.am b/tests/zfs-tests/test=
-s/Makefile.am<br>
-&gt; -index cc66d762f..1e9f06a7e 100644<br>
-&gt; ---- a/tests/zfs-tests/tests/Makefile.am<br>
-&gt; -+++ b/tests/zfs-tests/tests/Makefile.am<br>
-&gt; -@@ -1394,11 +1394,6 @@ nobase_dist_datadir_zfs_tests_tests_SCRIPTS +=
-=3D \<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0functional/compression/l2arc_encrypted.ksh \<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0functional/compression/l2arc_encrypted_no_compres=
-sed_arc.ksh \<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0functional/compression/setup.ksh \<br>
-&gt; --=C2=A0 =C2=A0 functional/cp_files/cleanup.ksh \<br>
-&gt; --=C2=A0 =C2=A0 functional/cp_files/cp_files_001_pos.ksh \<br>
-&gt; --=C2=A0 =C2=A0 functional/cp_files/cp_files_002_pos.ksh \<br>
-&gt; --=C2=A0 =C2=A0 functional/cp_files/cp_stress.ksh \<br>
-&gt; --=C2=A0 =C2=A0 functional/cp_files/setup.ksh \<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0functional/crtime/cleanup.ksh \<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0functional/crtime/crtime_001_pos.ksh \<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0functional/crtime/setup.ksh \<br>
-&gt; -@@ -2108,3 +2103,12 @@ nobase_dist_datadir_zfs_tests_tests_SCRIPTS +=
-=3D \<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0functional/idmap_mount/idmap_mount_003.ksh \<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0functional/idmap_mount/idmap_mount_004.ksh \<br>
-&gt; -=C2=A0 =C2=A0 =C2=A0functional/idmap_mount/idmap_mount_005.ksh<br>
-&gt; -+<br>
-&gt; -+if WANT_UNISTD_SEEK_DATA<br>
-&gt; -+nobase_dist_datadir_zfs_tests_tests_SCRIPTS +=3D \<br>
-&gt; -+=C2=A0 =C2=A0 functional/cp_files/cleanup.ksh \<br>
-&gt; -+=C2=A0 =C2=A0 functional/cp_files/cp_files_001_pos.ksh \<br>
-&gt; -+=C2=A0 =C2=A0 functional/cp_files/cp_files_002_pos.ksh \<br>
-&gt; -+=C2=A0 =C2=A0 functional/cp_files/cp_stress.ksh \<br>
-&gt; -+=C2=A0 =C2=A0 functional/cp_files/setup.ksh<br>
-&gt; -+endif<br>
-&gt; --- <br>
-&gt; -2.45.2<br>
-&gt; -<br>
-&gt; diff --git a/package/zfs/<a href=3D"http://zfs.mk" rel=3D"noreferrer n=
-oreferrer" target=3D"_blank">zfs.mk</a> b/package/zfs/<a href=3D"http://zfs=
-.mk" rel=3D"noreferrer noreferrer" target=3D"_blank">zfs.mk</a><br>
-&gt; index e0fa392670..32c4c07838 100644<br>
-&gt; --- a/package/zfs/<a href=3D"http://zfs.mk" rel=3D"noreferrer noreferr=
-er" target=3D"_blank">zfs.mk</a><br>
-&gt; +++ b/package/zfs/<a href=3D"http://zfs.mk" rel=3D"noreferrer noreferr=
-er" target=3D"_blank">zfs.mk</a><br>
-&gt; @@ -12,7 +12,7 @@ ZFS_LICENSE_FILES =3D LICENSE COPYRIGHT<br>
-&gt;=C2=A0 ZFS_CPE_ID_VENDOR =3D openzfs<br>
-&gt;=C2=A0 ZFS_CPE_ID_PRODUCT =3D openzfs<br>
-&gt;=C2=A0 <br>
-&gt; -# 0001-tests-cp_files-ignore-if-SEEK_DATA-is-not-defined.patch<br>
-&gt; +# 0001-ZTS-small-fix-for-SEEK_DATA-SEEK_HOLE-tests.patch<br>
-&gt;=C2=A0 ZFS_AUTORECONF =3D YES<br>
-<br>
-The new patch doesn&#39;t touch .m4 or .am files. Can we just drop<br>
-AUTORECONF?<br>
-<br>
-baruch<br>
-<br>
-&gt;=C2=A0 <br>
-&gt;=C2=A0 ZFS_DEPENDENCIES =3D libaio openssl udev util-linux zlib libcurl=
- linux<br>
-<br>
--- <br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0~. .~=C2=A0 =C2=A0Tk Open Systems<=
-br>
-=3D}------------------------------------------------ooO--U--Ooo------------=
-{=3D<br>
-=C2=A0 =C2=A0- <a href=3D"mailto:baruch@tkos.co.il" target=3D"_blank" rel=
-=3D"noreferrer">baruch@tkos.co.il</a> - tel: +972.52.368.4656, <a href=3D"h=
-ttp://www.tkos.co.il" rel=3D"noreferrer noreferrer" target=3D"_blank">http:=
-//www.tkos.co.il</a> -<br>
-</blockquote></div>
-
---000000000000a5b3df061f10b375--
-
---===============1890840529826583478==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============1890840529826583478==--
+U2lnbmVkLW9mZi1ieTogSm9zw6kgTHVpcyBTYWx2YWRvciBSdWZvIDxzYWx2YWRvci5qb3NlbHVp
+c0BnbWFpbC5jb20+Ci0tLQpDaGFuZ2VzIHYxIC0+IHYyOgogICAgLSBSZW1vdmVkIFpGU19BVVRP
+UkVDT05GIChzdWdnZXN0ZWQgYnkgQmFydWNoIFNpYWNoKQoKIC4uLmxsLWZpeC1mb3ItU0VFS19E
+QVRBLVNFRUtfSE9MRS10ZXN0cy5wYXRjaCB8ICA2OSArKysrKysrKwogLi4ucy1pZ25vcmUtaWYt
+U0VFS19EQVRBLWlzLW5vdC1kZWZpbmVkLnBhdGNoIHwgMTYyIC0tLS0tLS0tLS0tLS0tLS0tLQog
+cGFja2FnZS96ZnMvemZzLm1rICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgICAzIC0KIDMg
+ZmlsZXMgY2hhbmdlZCwgNjkgaW5zZXJ0aW9ucygrKSwgMTY1IGRlbGV0aW9ucygtKQogY3JlYXRl
+IG1vZGUgMTAwNjQ0IHBhY2thZ2UvemZzLzAwMDEtWlRTLXNtYWxsLWZpeC1mb3ItU0VFS19EQVRB
+LVNFRUtfSE9MRS10ZXN0cy5wYXRjaAogZGVsZXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvemZzLzAw
+MDEtdGVzdHMtY3BfZmlsZXMtaWdub3JlLWlmLVNFRUtfREFUQS1pcy1ub3QtZGVmaW5lZC5wYXRj
+aAoKZGlmZiAtLWdpdCBhL3BhY2thZ2UvemZzLzAwMDEtWlRTLXNtYWxsLWZpeC1mb3ItU0VFS19E
+QVRBLVNFRUtfSE9MRS10ZXN0cy5wYXRjaCBiL3BhY2thZ2UvemZzLzAwMDEtWlRTLXNtYWxsLWZp
+eC1mb3ItU0VFS19EQVRBLVNFRUtfSE9MRS10ZXN0cy5wYXRjaApuZXcgZmlsZSBtb2RlIDEwMDY0
+NAppbmRleCAwMDAwMDAwMDAwLi45YTdhMTM5YTllCi0tLSAvZGV2L251bGwKKysrIGIvcGFja2Fn
+ZS96ZnMvMDAwMS1aVFMtc21hbGwtZml4LWZvci1TRUVLX0RBVEEtU0VFS19IT0xFLXRlc3RzLnBh
+dGNoCkBAIC0wLDAgKzEsNjkgQEAKK0Zyb20gMmNjZWZkNGFmZjk4Y2YzNTVjN2QxM2IzZjkyYmI0
+ZDM5MGRmYTUyMiBNb24gU2VwIDE3IDAwOjAwOjAwIDIwMDEKK0Zyb206IFRpbm8gUmVpY2hhcmR0
+IDxtaWxreS16ZnNAbWNtaWxrLmRlPgorRGF0ZTogU3VuLCA0IEF1ZyAyMDI0IDExOjU4OjEzICsw
+MjAwCitTdWJqZWN0OiBbUEFUQ0hdIFpUUzogc21hbGwgZml4IGZvciBTRUVLX0RBVEEvU0VFS19I
+T0xFIHRlc3RzCisKK1NvbWUgbGliYydzIGxpa2UgdUNsaWJjIGxhZyB0aGUgcHJvcGVyIGRlZmlu
+aXRpb24gb2YgU0VFS19EQVRBCithbmQgU0VFS19IT0xFLiBTaW5jZSB3ZSBoYXZlIG9ubHkgdHdv
+IGZpbGVzIGluIFpUUyB3aGljaCB1c2UKK3RoZXNlIGRlZmluaXRvbnMsIGxldCdzIGRlZmluZSB0
+aGVtIGJ5IGhhbmQ6CisKK2BgYAorI2lmbmRlZiBTRUVLX0RBVEEKKyNkZWZpbmUgU0VFS19EQVRB
+IDMKKyNlbmRpZgorI2lmbmRlZiBTRUVLX0hPTEUKKyNkZWZpbmUgU0VFS19IT0xFIDQKKyNlbmRp
+ZgorYGBgCisKK1RoZXJlIHNob3VsZCBiZSBubyBmYWlsdXJlcywgYmVjYXVzZToKKy0gRnJlZUJT
+RCBoYXMgc3VwcG9ydCBmb3IgU0VFS19EQVRBL1NFRUtfSE9MRSBzaW5jZSBGcmVlQlNEIDgKKy0g
+TGludXggaGFzIGl0IHNpbmNlIExpbnV4IDMuMQorLSB0aGUgbGliYyB3aWxsIHN1Ym1pdCB0aGUg
+cGFyYW1ldGVycyB1bmNoYW5nZWQgdG8gdGhlIGtlcm5lbAorCitTaWduZWQtb2ZmLWJ5OiBUaW5v
+IFJlaWNoYXJkdCA8bWlsa3ktemZzQG1jbWlsay5kZT4KK1Vwc3RyZWFtOiBodHRwczovL2dpdGh1
+Yi5jb20vb3Blbnpmcy96ZnMvcHVsbC8xNjQxMworLS0tCisgdGVzdHMvemZzLXRlc3RzL2NtZC9t
+bWFwX3NlZWsuYyAgICAgICAgICAgICAgICAgICAgICAgfCAxMCArKysrKysrKysrCisgdGVzdHMv
+emZzLXRlc3RzL3Rlc3RzL2Z1bmN0aW9uYWwvY3BfZmlsZXMvc2Vla2Zsb29kLmMgfCAgNyArKysr
+KysrCisgMiBmaWxlcyBjaGFuZ2VkLCAxNyBpbnNlcnRpb25zKCspCisKK2RpZmYgLS1naXQgYS90
+ZXN0cy96ZnMtdGVzdHMvY21kL21tYXBfc2Vlay5jIGIvdGVzdHMvemZzLXRlc3RzL2NtZC9tbWFw
+X3NlZWsuYworaW5kZXggN2JlOTJkMTA5NTY1Li4yZDI1MDU1NGExM2YgMTAwNjQ0CistLS0gYS90
+ZXN0cy96ZnMtdGVzdHMvY21kL21tYXBfc2Vlay5jCisrKysgYi90ZXN0cy96ZnMtdGVzdHMvY21k
+L21tYXBfc2Vlay5jCitAQCAtMzUsNiArMzUsMTYgQEAKKyAjaW5jbHVkZSA8bGludXgvZnMuaD4K
+KyAjZW5kaWYKKyAKKysvKiBzb21lIG9sZGVyIHVDbGliYydzIGxhY2sgdGhlIGRlZmluZXMsIHNv
+IHdlJ2xsIG1hbnVhbGx5IGRlZmluZSB0aGVtICovCisrI2lmZGVmCV9fVUNMSUJDX18KKysjaWZu
+ZGVmCVNFRUtfREFUQQorKyNkZWZpbmUJU0VFS19EQVRBIDMKKysjZW5kaWYKKysjaWZuZGVmCVNF
+RUtfSE9MRQorKyNkZWZpbmUJU0VFS19IT0xFIDQKKysjZW5kaWYKKysjZW5kaWYKKysKKyBzdGF0
+aWMgdm9pZAorIHNlZWtfZGF0YShpbnQgZmQsIG9mZl90IG9mZnNldCwgb2ZmX3QgZXhwZWN0ZWQp
+CisgeworZGlmZiAtLWdpdCBhL3Rlc3RzL3pmcy10ZXN0cy90ZXN0cy9mdW5jdGlvbmFsL2NwX2Zp
+bGVzL3NlZWtmbG9vZC5jIGIvdGVzdHMvemZzLXRlc3RzL3Rlc3RzL2Z1bmN0aW9uYWwvY3BfZmls
+ZXMvc2Vla2Zsb29kLmMKK2luZGV4IDAyYzJjOGU2ZWNhNS4uZjgzMmRiODU5NzBkIDEwMDY0NAor
+LS0tIGEvdGVzdHMvemZzLXRlc3RzL3Rlc3RzL2Z1bmN0aW9uYWwvY3BfZmlsZXMvc2Vla2Zsb29k
+LmMKKysrKyBiL3Rlc3RzL3pmcy10ZXN0cy90ZXN0cy9mdW5jdGlvbmFsL2NwX2ZpbGVzL3NlZWtm
+bG9vZC5jCitAQCAtMzYsNiArMzYsMTMgQEAKKyAjaW5jbHVkZSA8c3lzL3N0YXQuaD4KKyAjaW5j
+bHVkZSA8c3lzL3dhaXQuaD4KKyAKKysvKiBzb21lIG9sZGVyIHVDbGliYydzIGxhY2sgdGhlIGRl
+ZmluZXMsIHNvIHdlJ2xsIG1hbnVhbGx5IGRlZmluZSB0aGVtICovCisrI2lmZGVmCV9fVUNMSUJD
+X18KKysjaWZuZGVmCVNFRUtfREFUQQorKyNkZWZpbmUJU0VFS19EQVRBIDMKKysjZW5kaWYKKysj
+ZW5kaWYKKysKKyAjZGVmaW5lCURBVEFTSVpFCSg0MDk2KQorIGNoYXIgZGF0YVtEQVRBU0laRV07
+CisgCmRpZmYgLS1naXQgYS9wYWNrYWdlL3pmcy8wMDAxLXRlc3RzLWNwX2ZpbGVzLWlnbm9yZS1p
+Zi1TRUVLX0RBVEEtaXMtbm90LWRlZmluZWQucGF0Y2ggYi9wYWNrYWdlL3pmcy8wMDAxLXRlc3Rz
+LWNwX2ZpbGVzLWlnbm9yZS1pZi1TRUVLX0RBVEEtaXMtbm90LWRlZmluZWQucGF0Y2gKZGVsZXRl
+ZCBmaWxlIG1vZGUgMTAwNjQ0CmluZGV4IGY0N2M2MTVkMTAuLjAwMDAwMDAwMDAKLS0tIGEvcGFj
+a2FnZS96ZnMvMDAwMS10ZXN0cy1jcF9maWxlcy1pZ25vcmUtaWYtU0VFS19EQVRBLWlzLW5vdC1k
+ZWZpbmVkLnBhdGNoCisrKyAvZGV2L251bGwKQEAgLTEsMTYyICswLDAgQEAKLUZyb20gOTNlN2Y4
+ODg5MDcyMDQ3Mjc2ZGExMWZlNmE1MjVkM2YwZWExNjIwNSBNb24gU2VwIDE3IDAwOjAwOjAwIDIw
+MDEKLUZyb206ID0/VVRGLTg/cT9Kb3M9QzM9QTk9MjBMdWlzPTIwU2FsdmFkb3I9MjBSdWZvPz0K
+LSA8c2FsdmFkb3Iuam9zZWx1aXNAZ21haWwuY29tPgotRGF0ZTogU2F0LCAxMSBNYXkgMjAyNCAy
+Mjo0MDoxMiArMDIwMAotU3ViamVjdDogW1BBVENIXSB0ZXN0cy9jcF9maWxlczogaWdub3JlIGlm
+IFNFRUtfREFUQSBpcyBub3QgZGVmaW5lZAotTUlNRS1WZXJzaW9uOiAxLjAKLUNvbnRlbnQtVHlw
+ZTogdGV4dC9wbGFpbjsgY2hhcnNldD1VVEYtOAotQ29udGVudC1UcmFuc2Zlci1FbmNvZGluZzog
+OGJpdAotCi1Ob3QgYWxsIEMgbGlicmFyaWVzIHN1cHBvcnQgU0VFS19EQVRBIChlLmcuLCB1Q2xp
+YmMpLiBTa2lwIHRoZSB0ZXN0IGNhc2UKLWNwX2ZpbGVzIGlmIFNFRUtfREFUQSBpcyBub3QgZGVm
+aW5lZC4KLQotU2lnbmVkLW9mZi1ieTogSm9zw6kgTHVpcyBTYWx2YWRvciBSdWZvIDxzYWx2YWRv
+ci5qb3NlbHVpc0BnbWFpbC5jb20+Ci1VcHN0cmVhbTogaHR0cHM6Ly9naXRodWIuY29tL29wZW56
+ZnMvemZzL3B1bGwvMTYxNjkKLS0tLQotIGNvbmZpZy91c2VyLXVuaXN0ZC5tNCAgICAgICAgICAg
+ICAgICAgIHwgMjQgKysrKysrKysrKysrKysrKysrKysrKysrCi0gY29uZmlnL3VzZXIubTQgICAg
+ICAgICAgICAgICAgICAgICAgICAgfCAgMSArCi0gY29uZmlnL3pmcy1idWlsZC5tNCAgICAgICAg
+ICAgICAgICAgICAgfCAgMSArCi0gdGVzdHMvdGVzdC1ydW5uZXIvYmluL3p0cy1yZXBvcnQucHku
+aW4gfCAgMSArCi0gdGVzdHMvemZzLXRlc3RzL01ha2VmaWxlLmFtICAgICAgICAgICAgfCAgMiAr
+KwotIHRlc3RzL3pmcy10ZXN0cy9jbWQvTWFrZWZpbGUuYW0gICAgICAgIHwgIDYgKysrKystCi0g
+dGVzdHMvemZzLXRlc3RzL3Rlc3RzL01ha2VmaWxlLmFtICAgICAgfCAxNCArKysrKysrKystLS0t
+LQotIDcgZmlsZXMgY2hhbmdlZCwgNDMgaW5zZXJ0aW9ucygrKSwgNiBkZWxldGlvbnMoLSkKLSBj
+cmVhdGUgbW9kZSAxMDA2NDQgY29uZmlnL3VzZXItdW5pc3RkLm00Ci0KLWRpZmYgLS1naXQgYS9j
+b25maWcvdXNlci11bmlzdGQubTQgYi9jb25maWcvdXNlci11bmlzdGQubTQKLW5ldyBmaWxlIG1v
+ZGUgMTAwNjQ0Ci1pbmRleCAwMDAwMDAwMDAuLjMwMmJjMGJkZQotLS0tIC9kZXYvbnVsbAotKysr
+IGIvY29uZmlnL3VzZXItdW5pc3RkLm00Ci1AQCAtMCwwICsxLDI0IEBACi0rZG5sICMKLStkbmwg
+IyBDaGVjayBmb3IgU0VFS19EQVRBIC0gb25seSB1c2VkIGZvciBjcF9maWxlcy9zZWVrZmxvb2Qg
+dGVzdCBjYXNlLgotK2RubCAjCi0rQUNfREVGVU4oW1pGU19BQ19DT05GSUdfVVNFUl9VTklTVERf
+U0VFS19EQVRBXSwgWwotKwlBQ19NU0dfQ0hFQ0tJTkcod2hldGhlciBob3N0IHRvb2xjaGFpbiBz
+dXBwb3J0cyBTRUVLX0RBVEEpCi0rCi0rCUFDX0NPTVBJTEVfSUZFTFNFKFtBQ19MQU5HX1NPVVJD
+RShbWwotKwkJI2lmbmRlZiBfR05VX1NPVVJDRQotKwkJI2RlZmluZSBfR05VX1NPVVJDRQotKwkJ
+I2VuZGlmCi0rCQkjaW5jbHVkZSA8dW5pc3RkLmg+Ci0rCQkjaWYgZGVmaW5lZChTRUVLX0RBVEEp
+Ci0rCQkJaW50IG9rOwotKwkJI2Vsc2UKLSsJCQllcnJvciBmYWlsCi0rCQkjZW5kaWYKLSsJXV0p
+XSwgWwotKwkJdXNlcl91bmlzdGRfc2Vla19kYXRhPXllcwotKwkJQUNfTVNHX1JFU1VMVChbeWVz
+XSkKLSsJXSwgWwotKwkJdXNlcl91bmlzdGRfc2Vla19kYXRhPW5vCi0rCQlBQ19NU0dfUkVTVUxU
+KFtub10pCi0rCV0pCi0rXSkKLWRpZmYgLS1naXQgYS9jb25maWcvdXNlci5tNCBiL2NvbmZpZy91
+c2VyLm00Ci1pbmRleCA2ZWMyN2E1YjIuLjIzMjZhNDRiZSAxMDA2NDQKLS0tLSBhL2NvbmZpZy91
+c2VyLm00Ci0rKysgYi9jb25maWcvdXNlci5tNAotQEAgLTIzLDYgKzIzLDcgQEAgQUNfREVGVU4o
+W1pGU19BQ19DT05GSUdfVVNFUl0sIFsKLSAJWkZTX0FDX0NPTkZJR19VU0VSX0xJQkFJTwotIAla
+RlNfQUNfQ09ORklHX1VTRVJfTElCQVRPTUlDCi0gCVpGU19BQ19DT05GSUdfVVNFUl9MSUJGRVRD
+SAotKwlaRlNfQUNfQ09ORklHX1VTRVJfVU5JU1REX1NFRUtfREFUQQotIAlaRlNfQUNfQ09ORklH
+X1VTRVJfQUlPX0gKLSAJWkZTX0FDX0NPTkZJR19VU0VSX0NMT0NLX0dFVFRJTUUKLSAJWkZTX0FD
+X0NPTkZJR19VU0VSX1BBTQotZGlmZiAtLWdpdCBhL2NvbmZpZy96ZnMtYnVpbGQubTQgYi9jb25m
+aWcvemZzLWJ1aWxkLm00Ci1pbmRleCBiYjVhODVkODEuLjU3ODY5MjY3NiAxMDA2NDQKLS0tLSBh
+L2NvbmZpZy96ZnMtYnVpbGQubTQKLSsrKyBiL2NvbmZpZy96ZnMtYnVpbGQubTQKLUBAIC0yOTQs
+NiArMjk0LDcgQEAgQUNfREVGVU4oW1pGU19BQ19DT05GSUddLCBbCi0gCSAgICBbdGVzdCAieCRx
+YXRzcmMiICE9IHggXSkKLSAJQU1fQ09ORElUSU9OQUwoW1dBTlRfREVWTkFNRTJERVZJRF0sIFt0
+ZXN0ICJ4JHVzZXJfbGlidWRldiIgPSB4eWVzIF0pCi0gCUFNX0NPTkRJVElPTkFMKFtXQU5UX01N
+QVBfTElCQUlPXSwgW3Rlc3QgIngkdXNlcl9saWJhaW8iID0geHllcyBdKQotKwlBTV9DT05ESVRJ
+T05BTChbV0FOVF9VTklTVERfU0VFS19EQVRBXSwgW3Rlc3QgIngkdXNlcl91bmlzdGRfc2Vla19k
+YXRhIiA9IHh5ZXMgXSkKLSAJQU1fQ09ORElUSU9OQUwoW1BBTV9aRlNfRU5BQkxFRF0sIFt0ZXN0
+ICJ4JGVuYWJsZV9wYW0iID0geHllc10pCi0gXSkKLSAKLWRpZmYgLS1naXQgYS90ZXN0cy90ZXN0
+LXJ1bm5lci9iaW4venRzLXJlcG9ydC5weS5pbiBiL3Rlc3RzL3Rlc3QtcnVubmVyL2Jpbi96dHMt
+cmVwb3J0LnB5LmluCi1pbmRleCBlY2M1MGY0ODcuLjNhMDAzNDVlZCAxMDA3NTUKLS0tLSBhL3Rl
+c3RzL3Rlc3QtcnVubmVyL2Jpbi96dHMtcmVwb3J0LnB5LmluCi0rKysgYi90ZXN0cy90ZXN0LXJ1
+bm5lci9iaW4venRzLXJlcG9ydC5weS5pbgotQEAgLTE2Miw2ICsxNjIsNyBAQCBrbm93biA9IHsK
+LSAgICAgICAgIFsnRkFJTCcsIHJld2luZF9yZWFzb25dLAotICAgICAnY2xpX3VzZXIvbWlzYy96
+ZnNfc2hhcmVfMDAxX25lZyc6IFsnU0tJUCcsIG5hX3JlYXNvbl0sCi0gICAgICdjbGlfdXNlci9t
+aXNjL3pmc191bnNoYXJlXzAwMV9uZWcnOiBbJ1NLSVAnLCBuYV9yZWFzb25dLAotKyAgICAnY3Bf
+ZmlsZXMvY3Bfc3RyZXNzJzogWydTS0lQJywgMTYxNjldLAotICAgICAncG9vbF9jaGVja3BvaW50
+L2NoZWNrcG9pbnRfZGlzY2FyZF9idXN5JzogWydTS0lQJywgMTIwNTNdLAotICAgICAncHJpdmls
+ZWdlL3NldHVwJzogWydTS0lQJywgbmFfcmVhc29uXSwKLSAgICAgJ3JlZnJlc2Vydi9yZWZyZXNl
+cnZfMDA0X3Bvcyc6IFsnRkFJTCcsIGtub3duX3JlYXNvbl0sCi1kaWZmIC0tZ2l0IGEvdGVzdHMv
+emZzLXRlc3RzL01ha2VmaWxlLmFtIGIvdGVzdHMvemZzLXRlc3RzL01ha2VmaWxlLmFtCi1pbmRl
+eCAzZGQxYTY0NTIuLjhhZTc5MDA1NyAxMDA2NDQKLS0tLSBhL3Rlc3RzL3pmcy10ZXN0cy9NYWtl
+ZmlsZS5hbQotKysrIGIvdGVzdHMvemZzLXRlc3RzL01ha2VmaWxlLmFtCi1AQCAtMTMsOCArMTMs
+MTAgQEAgc2NyaXB0c196ZnNfdGVzdHNfZnVuY3Rpb25hbF9oa2RmX1BST0dSQU1TID0gJUQlL3Rl
+c3RzL2Z1bmN0aW9uYWwvaGtkZi9oa2RmX3Rlc3QKLSAlQyVfdGVzdHNfZnVuY3Rpb25hbF9oa2Rm
+X2hrZGZfdGVzdF9MREFERCA9IFwKLSAJbGlienBvb2wubGEKLSAKLStpZiBXQU5UX1VOSVNURF9T
+RUVLX0RBVEEKLSBzY3JpcHRzX3pmc190ZXN0c19mdW5jdGlvbmFsX2NwX2ZpbGVzZGlyID0gJChk
+YXRhZGlyKS8kKFBBQ0tBR0UpL3pmcy10ZXN0cy90ZXN0cy9mdW5jdGlvbmFsL2NwX2ZpbGVzCi0g
+c2NyaXB0c196ZnNfdGVzdHNfZnVuY3Rpb25hbF9jcF9maWxlc19QUk9HUkFNUyA9ICVEJS90ZXN0
+cy9mdW5jdGlvbmFsL2NwX2ZpbGVzL3NlZWtmbG9vZAotK2VuZGlmCi0gCi0gaWYgQlVJTERfTElO
+VVgKLSBzY3JpcHRzX3pmc190ZXN0c19mdW5jdGlvbmFsX3RtcGZpbGVkaXIgPSAkKGRhdGFkaXIp
+LyQoUEFDS0FHRSkvemZzLXRlc3RzL3Rlc3RzL2Z1bmN0aW9uYWwvdG1wZmlsZQotZGlmZiAtLWdp
+dCBhL3Rlc3RzL3pmcy10ZXN0cy9jbWQvTWFrZWZpbGUuYW0gYi90ZXN0cy96ZnMtdGVzdHMvY21k
+L01ha2VmaWxlLmFtCi1pbmRleCAyMzg0OGE4MmYuLjY5YmJhMzAzOSAxMDA2NDQKLS0tLSBhL3Rl
+c3RzL3pmcy10ZXN0cy9jbWQvTWFrZWZpbGUuYW0KLSsrKyBiL3Rlc3RzL3pmcy10ZXN0cy9jbWQv
+TWFrZWZpbGUuYW0KLUBAIC01LDcgKzUsNiBAQCBzY3JpcHRzX3pmc190ZXN0c19iaW5fUFJPR1JB
+TVMgID0gJUQlL2NoZ191c3JfZXhlYwotIHNjcmlwdHNfemZzX3Rlc3RzX2Jpbl9QUk9HUkFNUyAr
+PSAlRCUvY2xvbmVmaWxlCi0gc2NyaXB0c196ZnNfdGVzdHNfYmluX1BST0dSQU1TICs9ICVEJS9j
+bG9uZV9tbWFwX2NhY2hlZAotIHNjcmlwdHNfemZzX3Rlc3RzX2Jpbl9QUk9HUkFNUyArPSAlRCUv
+Y2xvbmVfbW1hcF93cml0ZQotLXNjcmlwdHNfemZzX3Rlc3RzX2Jpbl9QUk9HUkFNUyArPSAlRCUv
+Y3BfZmlsZXMKLSBzY3JpcHRzX3pmc190ZXN0c19iaW5fUFJPR1JBTVMgKz0gJUQlL2N0aW1lCi0g
+c2NyaXB0c196ZnNfdGVzdHNfYmluX1BST0dSQU1TICs9ICVEJS9kaXJfcmRfdXBkYXRlCi0gc2Ny
+aXB0c196ZnNfdGVzdHNfYmluX1BST0dSQU1TICs9ICVEJS9kb3Ntb2RlX3JlYWRvbmx5X3dyaXRl
+Ci1AQCAtMTYsNiArMTUsMTEgQEAgc2NyaXB0c196ZnNfdGVzdHNfYmluX1BST0dSQU1TICs9ICVE
+JS90cnVuY2F0ZV90ZXN0Ci0gc2NyaXB0c196ZnNfdGVzdHNfYmluX1BST0dSQU1TICs9ICVEJS96
+ZnNfZGlmZi1zb2NrZXQKLSAKLSAKLStpZiBXQU5UX1VOSVNURF9TRUVLX0RBVEEKLStzY3JpcHRz
+X3pmc190ZXN0c19iaW5fUFJPR1JBTVMgKz0gJUQlL2NwX2ZpbGVzCi0rZW5kaWYKLSsKLSsKLSBz
+Y3JpcHRzX3pmc190ZXN0c19iaW5fUFJPR1JBTVMgKz0gJUQlL2JhZHNlbmQKLSAlQyVfYmFkc2Vu
+ZF9MREFERCA9IFwKLSAJbGliemZzX2NvcmUubGEgXAotZGlmZiAtLWdpdCBhL3Rlc3RzL3pmcy10
+ZXN0cy90ZXN0cy9NYWtlZmlsZS5hbSBiL3Rlc3RzL3pmcy10ZXN0cy90ZXN0cy9NYWtlZmlsZS5h
+bQotaW5kZXggY2M2NmQ3NjJmLi4xZTlmMDZhN2UgMTAwNjQ0Ci0tLS0gYS90ZXN0cy96ZnMtdGVz
+dHMvdGVzdHMvTWFrZWZpbGUuYW0KLSsrKyBiL3Rlc3RzL3pmcy10ZXN0cy90ZXN0cy9NYWtlZmls
+ZS5hbQotQEAgLTEzOTQsMTEgKzEzOTQsNiBAQCBub2Jhc2VfZGlzdF9kYXRhZGlyX3pmc190ZXN0
+c190ZXN0c19TQ1JJUFRTICs9IFwKLSAJZnVuY3Rpb25hbC9jb21wcmVzc2lvbi9sMmFyY19lbmNy
+eXB0ZWQua3NoIFwKLSAJZnVuY3Rpb25hbC9jb21wcmVzc2lvbi9sMmFyY19lbmNyeXB0ZWRfbm9f
+Y29tcHJlc3NlZF9hcmMua3NoIFwKLSAJZnVuY3Rpb25hbC9jb21wcmVzc2lvbi9zZXR1cC5rc2gg
+XAotLQlmdW5jdGlvbmFsL2NwX2ZpbGVzL2NsZWFudXAua3NoIFwKLS0JZnVuY3Rpb25hbC9jcF9m
+aWxlcy9jcF9maWxlc18wMDFfcG9zLmtzaCBcCi0tCWZ1bmN0aW9uYWwvY3BfZmlsZXMvY3BfZmls
+ZXNfMDAyX3Bvcy5rc2ggXAotLQlmdW5jdGlvbmFsL2NwX2ZpbGVzL2NwX3N0cmVzcy5rc2ggXAot
+LQlmdW5jdGlvbmFsL2NwX2ZpbGVzL3NldHVwLmtzaCBcCi0gCWZ1bmN0aW9uYWwvY3J0aW1lL2Ns
+ZWFudXAua3NoIFwKLSAJZnVuY3Rpb25hbC9jcnRpbWUvY3J0aW1lXzAwMV9wb3Mua3NoIFwKLSAJ
+ZnVuY3Rpb25hbC9jcnRpbWUvc2V0dXAua3NoIFwKLUBAIC0yMTA4LDMgKzIxMDMsMTIgQEAgbm9i
+YXNlX2Rpc3RfZGF0YWRpcl96ZnNfdGVzdHNfdGVzdHNfU0NSSVBUUyArPSBcCi0gCWZ1bmN0aW9u
+YWwvaWRtYXBfbW91bnQvaWRtYXBfbW91bnRfMDAzLmtzaCBcCi0gCWZ1bmN0aW9uYWwvaWRtYXBf
+bW91bnQvaWRtYXBfbW91bnRfMDA0LmtzaCBcCi0gCWZ1bmN0aW9uYWwvaWRtYXBfbW91bnQvaWRt
+YXBfbW91bnRfMDA1LmtzaAotKwotK2lmIFdBTlRfVU5JU1REX1NFRUtfREFUQQotK25vYmFzZV9k
+aXN0X2RhdGFkaXJfemZzX3Rlc3RzX3Rlc3RzX1NDUklQVFMgKz0gXAotKwlmdW5jdGlvbmFsL2Nw
+X2ZpbGVzL2NsZWFudXAua3NoIFwKLSsJZnVuY3Rpb25hbC9jcF9maWxlcy9jcF9maWxlc18wMDFf
+cG9zLmtzaCBcCi0rCWZ1bmN0aW9uYWwvY3BfZmlsZXMvY3BfZmlsZXNfMDAyX3Bvcy5rc2ggXAot
+KwlmdW5jdGlvbmFsL2NwX2ZpbGVzL2NwX3N0cmVzcy5rc2ggXAotKwlmdW5jdGlvbmFsL2NwX2Zp
+bGVzL3NldHVwLmtzaAotK2VuZGlmCi0tLSAKLTIuNDUuMgotCmRpZmYgLS1naXQgYS9wYWNrYWdl
+L3pmcy96ZnMubWsgYi9wYWNrYWdlL3pmcy96ZnMubWsKaW5kZXggZTBmYTM5MjY3MC4uZTUxYWRl
+NTVhNCAxMDA2NDQKLS0tIGEvcGFja2FnZS96ZnMvemZzLm1rCisrKyBiL3BhY2thZ2UvemZzL3pm
+cy5tawpAQCAtMTIsOSArMTIsNiBAQCBaRlNfTElDRU5TRV9GSUxFUyA9IExJQ0VOU0UgQ09QWVJJ
+R0hUCiBaRlNfQ1BFX0lEX1ZFTkRPUiA9IG9wZW56ZnMKIFpGU19DUEVfSURfUFJPRFVDVCA9IG9w
+ZW56ZnMKIAotIyAwMDAxLXRlc3RzLWNwX2ZpbGVzLWlnbm9yZS1pZi1TRUVLX0RBVEEtaXMtbm90
+LWRlZmluZWQucGF0Y2gKLVpGU19BVVRPUkVDT05GID0gWUVTCi0KIFpGU19ERVBFTkRFTkNJRVMg
+PSBsaWJhaW8gb3BlbnNzbCB1ZGV2IHV0aWwtbGludXggemxpYiBsaWJjdXJsIGxpbnV4CiAKICMg
+c3lzdmluaXQgaW5zdGFsbHMgb25seSBhIGNvbW1lbnRlZC1vdXQgbW9kdWxlcy1sb2FkLmQvIGNv
+bmZpZyBmaWxlCi0tIAoyLjQ2LjAKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5v
+cmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290
+Cg==
