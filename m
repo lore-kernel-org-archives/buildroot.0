@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59CDCC52D7B
-	for <buildroot@archiver.kernel.org>; Wed,  7 Aug 2024 09:24:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 69D7DC52D6F
+	for <buildroot@archiver.kernel.org>; Wed,  7 Aug 2024 09:24:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2260B4062A;
-	Wed,  7 Aug 2024 09:24:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A3ACE40679;
+	Wed,  7 Aug 2024 09:24:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ylksT_OgOYsw; Wed,  7 Aug 2024 09:24:37 +0000 (UTC)
+ id jZy2nd3u6TUR; Wed,  7 Aug 2024 09:24:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CABA64065E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6B1714066B
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CABA64065E;
-	Wed,  7 Aug 2024 09:24:36 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 53E591BF2CE
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6B1714066B;
+	Wed,  7 Aug 2024 09:24:39 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 6EBF21BF982
  for <buildroot@lists.busybox.net>; Wed,  7 Aug 2024 09:24:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id AADDC606E0
- for <buildroot@lists.busybox.net>; Wed,  7 Aug 2024 09:24:26 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5CEC180BEA
+ for <buildroot@lists.busybox.net>; Wed,  7 Aug 2024 09:24:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EOvYar6bJ600 for <buildroot@lists.busybox.net>;
- Wed,  7 Aug 2024 09:24:25 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 62tiNKtSpSHf for <buildroot@lists.busybox.net>;
+ Wed,  7 Aug 2024 09:24:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B430A60685
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2FE2680CC3
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id B430A60685
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2FE2680CC3
  for <buildroot@buildroot.org>; Wed,  7 Aug 2024 09:24:25 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AECC6843EC; Wed,  7 Aug 2024 09:24:25 +0000 (UTC)
+ id D325A843EA; Wed,  7 Aug 2024 09:24:25 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 7 Aug 2024 10:52:14 +0200
+Date: Wed, 7 Aug 2024 10:58:46 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 0f4f8c12c719732487bd7a15a1969c7f600eee59
-X-Git-Newrev: 2e90483e44a0f6151f8488fe7571dcaa69b00b1c
+X-Git-Oldrev: 35381a360a244cee266c17873678097a65a48dd2
+X-Git-Newrev: 95583af63202a5fa254a10d4a47edfeb41d6a2e0
 X-Patchwork-Hint: ignore
-Message-Id: <20240807092425.AECC6843EC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/tcf-agent: fix
- uClibc-ng compile on ARM
+Message-Id: <20240807092425.D325A843EA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/check: don't
+ build shared lib when disabled
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,78 +65,286 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2e90483e44a0f6151f8488fe7571dcaa69b00b1c
+commit: https://git.buildroot.net/buildroot/commit/?id=95583af63202a5fa254a10d4a47edfeb41d6a2e0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-When a shared build is used, we can use getauxval and no ARM only
-instuctions are in use.
-
-When a static build is used, we need to override CFLAGS to use
-arm instructions, as uClibc-ng only supports getauxval for shared case.
+The build system of check was unconditionally building a shared
+library, even when BUILD_SHARED_LIBS=OFF. This commit brings a patch,
+submitted upstream, which fixes this issue, and allows to fix the
+build in BR2_STATIC_LIBS=y configurations.
 
 Fixes:
- - http://autobuild.buildroot.net/results/3b5/3b5c5519a3e5ee490308bc1a1b9579ce13417235
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit 408352207c18084c331b23aa739cde98cd52d000)
+  http://autobuild.buildroot.net/results/d4a1c6d49dd15ce6b73cfade2557d49733e9318b/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 526b89b981cb3fa3da7644482d1f140f1fb25e27)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/tcf-agent/0001-fix-uClibc-ng-compile.patch | 27 ++++++++++++++++++++++
- package/tcf-agent/tcf-agent.mk                     |  7 ++++++
- 2 files changed, 34 insertions(+)
+ ...sts.txt-don-t-build-shared-libraries-when.patch | 255 +++++++++++++++++++++
+ 1 file changed, 255 insertions(+)
 
-diff --git a/package/tcf-agent/0001-fix-uClibc-ng-compile.patch b/package/tcf-agent/0001-fix-uClibc-ng-compile.patch
+diff --git a/package/check/0001-src-CMakeLists.txt-don-t-build-shared-libraries-when.patch b/package/check/0001-src-CMakeLists.txt-don-t-build-shared-libraries-when.patch
 new file mode 100644
-index 0000000000..b8f46f3c48
+index 0000000000..6ed01f5401
 --- /dev/null
-+++ b/package/tcf-agent/0001-fix-uClibc-ng-compile.patch
-@@ -0,0 +1,27 @@
-+From a78007cd139e1dea3d893f5fe1d1c3a47503e6a2 Mon Sep 17 00:00:00 2001
-+From: Waldemar Brodkorb <wbx@openadk.org>
-+Date: Sat, 12 Aug 2023 18:27:02 +0200
-+Subject: [PATCH] fix uClibc-ng compile
++++ b/package/check/0001-src-CMakeLists.txt-don-t-build-shared-libraries-when.patch
+@@ -0,0 +1,255 @@
++From 2ae2137d724d5f3a70d5d2856cb979d389c4cbd8 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Date: Fri, 12 Jul 2024 21:30:43 +0200
++Subject: [PATCH] src/CMakeLists.txt: don't build shared libraries when not
++ enabled
 +
-+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-+Upstream: N/A only mail available
++BUILD_SHARED_LIBS is a standard CMake option [1] that specifies
++whether shared libraries should be built or not. This commit adjusts
++src/CMakeLists.txt to observe this variable to decide whether the
++shared library variant should be built or not. This allows check to
++only build a static library in environments where only a static
++library can be compiled.
++
++This needs a bit of refactoring to avoid duplication:
++
++- Additional source files from libcompat are directly added to the
++  ${SOURCES} variable as needed
++
++- Additional libraries are collected into ${ADDITIONAL_LIBS} before
++  being associated to the static library and shared library (if enabled)
++
++[1] https://cmake.org/cmake/help/latest/variable/BUILD_SHARED_LIBS.html
++
++Fixes:
++
++__uClibc_main.c:(.text+0x12c): undefined reference to `__fini_array_end'
++/home/autobuild/autobuild/instance-20/output-1/host/lib/gcc/sparc-buildroot-linux-uclibc/13.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: __uClibc_main.c:(.text+0x130): undefined reference to `__fini_array_start'
++/home/autobuild/autobuild/instance-20/output-1/host/lib/gcc/sparc-buildroot-linux-uclibc/13.3.0/../../../../sparc-buildroot-linux-uclibc/bin/ld: __uClibc_main.c:(.text+0x134): undefined reference to `__fini_array_end'
++
++Upstream: https://github.com/libcheck/check/pull/355
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 +---
-+ agent/machine/arm/tcf/cpudefs-mdep.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++ src/CMakeLists.txt | 137 ++++++++++++++++++++++-----------------------
++ 1 file changed, 67 insertions(+), 70 deletions(-)
 +
-+diff --git a/agent/machine/arm/tcf/cpudefs-mdep.c b/agent/machine/arm/tcf/cpudefs-mdep.c
-+index 051631a0..7c4fbf3e 100644
-+--- a/agent/machine/arm/tcf/cpudefs-mdep.c
-++++ b/agent/machine/arm/tcf/cpudefs-mdep.c
-+@@ -21,7 +21,7 @@
++diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
++index 4a02dbe..e0cf32b 100644
++--- a/src/CMakeLists.txt
+++++ b/src/CMakeLists.txt
++@@ -31,117 +31,106 @@ set(SOURCES
++   check_run.c
++   check_str.c)
 + 
-+ #ifndef USE_getauxval
-+ #  include <features.h>
-+-#  define USE_getauxval (defined(__GLIBC__) && (__GLIBC__ > 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 16)))
-++#  define USE_getauxval (defined(__GLIBC__) && (__GLIBC__ > 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 16)) || (defined(__UCLIBC__) && defined(__HAVE_SHARED__)))
-+ #endif
++-set(HEADERS
++-  ${CONFIG_HEADER}
++-  ${CMAKE_CURRENT_BINARY_DIR}/check.h
++-  check.h.in
++-  check_error.h
++-  check_impl.h
++-  check_list.h
++-  check_log.h
++-  check_msg.h
++-  check_pack.h
++-  check_print.h
++-  check_str.h)
++-
++-configure_file(check.h.in check.h @ONLY)
++-
++-# To maintain compatibility with the Autotools installation
++-# we specifically create both shared and static libraries
++-# as that is what Autotools script has been doing.
++-# Normally CMake would create the system's native default library type.
++-
++-add_library(check STATIC ${SOURCES} ${HEADERS})
++-add_library(Check::check ALIAS check)
++-
++-
++-# We would like to create an OBJECT library but currently they are
++-# too unreliable and cumbersome,
++-# especially with target_link_libraries and install(EXPORT...
++-# https://stackoverflow.com/questions/38832528/transitive-target-include-directories-on-object-libraries
++-# So we instead do the work twice.
++-add_library(checkShared SHARED ${SOURCES} ${HEADERS})
++-add_library(Check::checkShared ALIAS checkShared)
++-
++ # Add parts of libcompat as required
++-target_sources(check PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../lib/fpclassify.c)
++-target_sources(checkShared PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../lib/fpclassify.c)
+++list(APPEND SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/../lib/fpclassify.c)
 + 
-+ #include <stddef.h>
++ if (NOT HAVE_LIBRT)
++-  target_sources(check PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../lib/clock_gettime.c)
++-  target_sources(check PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../lib/timer_create.c)
++-  target_sources(check PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../lib/timer_delete.c)
++-  target_sources(check PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../lib/timer_settime.c)
++-  target_sources(checkShared PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../lib/clock_gettime.c)
++-  target_sources(checkShared PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../lib/timer_create.c)
++-  target_sources(checkShared PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../lib/timer_delete.c)
++-  target_sources(checkShared PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../lib/timer_settime.c)
+++  list(APPEND SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/../lib/clock_gettime.c)
+++  list(APPEND SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/../lib/timer_create.c)
+++  list(APPEND SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/../lib/timer_delete.c)
+++  list(APPEND SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/../lib/timer_settime.c)
++ endif(NOT HAVE_LIBRT)
++ 
++ if(NOT HAVE_GETLINE)
++-  target_sources(check PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../lib/getline.c)
++-  target_sources(checkShared PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../lib/getline.c)
+++  list(APPEND SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/../lib/getline.c)
++ endif(NOT HAVE_GETLINE)
++ 
++ if(NOT HAVE_GETTIMEOFDAY)
++-  target_sources(check PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../lib/gettimeofday.c)
++-  target_sources(checkShared PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../lib/gettimeofday.c)
+++  list(APPEND SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/../lib/gettimeofday.c)
++ endif(NOT HAVE_GETTIMEOFDAY)
++ 
++ if(NOT HAVE_DECL_LOCALTIME_R)
++-  target_sources(check PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../lib/localtime_r.c)
++-  target_sources(checkShared PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../lib/localtime_r.c)
+++  list(APPEND SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/../lib/localtime_r.c)
++ endif(NOT HAVE_DECL_LOCALTIME_R)
++ 
++ if(NOT HAVE_MALLOC)
++-  target_sources(check PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../lib/malloc.c)
++-  target_sources(checkShared PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../lib/malloc.c)
+++  list(APPEND SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/../lib/malloc.c)
++ endif(NOT HAVE_MALLOC)
++ 
++ if(NOT HAVE_REALLOC)
++-  target_sources(check PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../lib/realloc.c)
++-  target_sources(checkShared PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../lib/realloc.c)
+++  list(APPEND SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/../lib/realloc.c)
++ endif(NOT HAVE_REALLOC)
++ 
++ if(NOT HAVE_SNPRINTF)
++-  target_sources(check PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../lib/snprintf.c)
++-  target_sources(checkShared PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../lib/snprintf.c)
+++  list(APPEND SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/../lib/snprintf.c)
++ endif(NOT HAVE_SNPRINTF)
++ 
++ if(NOT HAVE_DECL_STRDUP AND NOT HAVE__STRDUP)
++-  target_sources(check PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../lib/strdup.c)
++-  target_sources(checkShared PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../lib/snprintf.c)
+++  list(APPEND SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/../lib/strdup.c)
++ endif(NOT HAVE_DECL_STRDUP AND NOT HAVE__STRDUP)
++ 
++ if(NOT HAVE_DECL_STRSIGNAL)
++-  target_sources(check PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../lib/strsignal.c)
++-  target_sources(checkShared PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../lib/strsignal.c)
+++  list(APPEND SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/../lib/strsignal.c)
++ endif(NOT HAVE_DECL_STRSIGNAL)
++ 
++ if(NOT HAVE_DECL_ALARM)
++-  target_sources(check PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../lib/alarm.c)
++-  target_sources(checkShared PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../lib/alarm.c)
+++  list(APPEND SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/../lib/alarm.c)
++ endif(NOT HAVE_DECL_ALARM)
++ 
++ if(NOT HAVE_PTHREAD)
++-  target_sources(check PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../lib/pthread_mutex.c)
++-  target_sources(checkShared PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../lib/pthread_mutex.c)
+++  list(APPEND SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/../lib/pthread_mutex.c)
++ endif()
++ 
+++set(HEADERS
+++  ${CONFIG_HEADER}
+++  ${CMAKE_CURRENT_BINARY_DIR}/check.h
+++  check.h.in
+++  check_error.h
+++  check_impl.h
+++  check_list.h
+++  check_log.h
+++  check_msg.h
+++  check_pack.h
+++  check_print.h
+++  check_str.h)
+++
+++configure_file(check.h.in check.h @ONLY)
+++
+++# To maintain compatibility with the Autotools installation
+++# we specifically create both shared and static libraries
+++# as that is what Autotools script has been doing.
+++# Normally CMake would create the system's native default library type.
+++
+++add_library(check STATIC ${SOURCES} ${HEADERS})
+++add_library(Check::check ALIAS check)
+++
+++# We would like to create an OBJECT library but currently they are
+++# too unreliable and cumbersome,
+++# especially with target_link_libraries and install(EXPORT...
+++# https://stackoverflow.com/questions/38832528/transitive-target-include-directories-on-object-libraries
+++# So we instead do the work twice.
+++if (BUILD_SHARED_LIBS)
+++  add_library(checkShared SHARED ${SOURCES} ${HEADERS})
+++  add_library(Check::checkShared ALIAS checkShared)
+++endif (BUILD_SHARED_LIBS)
+++
++ # Include libraries if available
++ if (HAVE_LIBM)
++-  target_link_libraries(check PUBLIC m)
++-  target_link_libraries(checkShared PUBLIC m)
+++  list(APPEND ADDITIONAL_LIBS m)
++ endif (HAVE_LIBM)
++ if (HAVE_LIBRT)
++-  target_link_libraries(check PUBLIC rt)
++-  target_link_libraries(checkShared PUBLIC rt)
+++  list(APPEND ADDITIONAL_LIBS rt)
++ endif (HAVE_LIBRT)
++ if (HAVE_SUBUNIT)
++-  target_link_libraries(check PUBLIC subunit)
++-  target_link_libraries(checkShared PUBLIC subunit)
+++  list(APPEND ADDITIONAL_LIBS subunit)
++ endif (HAVE_SUBUNIT)
++ 
+++target_link_libraries(check PUBLIC ${ADDITIONAL_LIBS})
+++if (BUILD_SHARED_LIBS)
+++  target_link_libraries(checkShared PUBLIC m)
+++endif (BUILD_SHARED_LIBS)
+++
+++
++ if(MSVC)
++   target_compile_definitions(checkShared
++     PRIVATE "CK_DLL_EXP=_declspec(dllexport)"
++@@ -168,27 +157,35 @@ if (MSVC)
++   # So we call it this:
++   set(LIBRARY_OUTPUT_NAME "checkDynamic")
++ endif (MSVC)
+++if (BUILD_SHARED_LIBS)
++ set_target_properties(checkShared PROPERTIES
++   OUTPUT_NAME ${LIBRARY_OUTPUT_NAME}
++   VERSION ${PROJECT_VERSION}
++   SOVERSION ${PROJECT_VERSION_MAJOR}
++   PUBLIC_HEADER "${public_headers}"
++ )
+++endif (BUILD_SHARED_LIBS)
++ target_include_directories(check
++   PUBLIC
++     $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
++     $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/..>
++     $<INSTALL_INTERFACE:include>
++ )
+++if (BUILD_SHARED_LIBS)
++ target_include_directories(checkShared
++   PUBLIC
++     $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
++     $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/..>
++     $<INSTALL_INTERFACE:include>
++-)
+++ )
+++endif (BUILD_SHARED_LIBS)
++ 
++ if(NOT THIS_IS_SUBPROJECT)
++-  install(TARGETS check checkShared
+++  if (BUILD_SHARED_LIBS)
+++    set(SHARED_LIBNAME checkShared)
+++  endif ()
+++
+++  install(TARGETS check ${SHARED_LIBNAME}
++     EXPORT check-targets
++     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
++     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
 +-- 
-+2.39.2
++2.45.2
 +
-diff --git a/package/tcf-agent/tcf-agent.mk b/package/tcf-agent/tcf-agent.mk
-index 9d955d4b6f..cc998d82d6 100644
---- a/package/tcf-agent/tcf-agent.mk
-+++ b/package/tcf-agent/tcf-agent.mk
-@@ -20,6 +20,13 @@ TCF_AGENT_CONF_OPTS = \
- 	-DBUILD_SHARED_LIBS=OFF \
- 	-DTCF_MACHINE=$(call qstrip,$(BR2_PACKAGE_TCF_AGENT_ARCH))
- 
-+# tcf-agent uses some arm instructions in case getauxval is not available.
-+# unfortunately the uClibc-ng implementation of getauxval uses some features
-+# of ld.so to work
-+ifeq ($(BR2_STATIC_LIBS)$(BR2_TOOLCHAIN_USES_UCLIBC)$(BR2_ARM_INSTRUCTIONS_THUMB),yyy)
-+TCF_AGENT_CONF_OPTS += -DCMAKE_C_FLAGS="$(TARGET_CFLAGS) -marm"
-+endif
-+
- define TCF_AGENT_INSTALL_INIT_SYSTEMD
- 	$(INSTALL) -D -m 644 package/tcf-agent/tcf-agent.service \
- 		$(TARGET_DIR)/usr/lib/systemd/system/tcf-agent.service
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
