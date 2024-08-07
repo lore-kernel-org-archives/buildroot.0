@@ -4,62 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1CE1C52D6F
-	for <buildroot@archiver.kernel.org>; Wed,  7 Aug 2024 08:51:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 32A38C3DA7F
+	for <buildroot@archiver.kernel.org>; Wed,  7 Aug 2024 08:53:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6B49F80BAE;
-	Wed,  7 Aug 2024 08:51:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DD9358126B;
+	Wed,  7 Aug 2024 08:53:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tt0jY1tIDBaX; Wed,  7 Aug 2024 08:51:06 +0000 (UTC)
+ id GPi3ucbllhum; Wed,  7 Aug 2024 08:53:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 75AB280D1F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 00CC48126D
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 75AB280D1F;
-	Wed,  7 Aug 2024 08:51:06 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 0E7461BF329
- for <buildroot@lists.busybox.net>; Wed,  7 Aug 2024 08:51:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 00CC48126D;
+	Wed,  7 Aug 2024 08:53:21 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 82DB01BF329
+ for <buildroot@lists.busybox.net>; Wed,  7 Aug 2024 08:53:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0963B60705
- for <buildroot@lists.busybox.net>; Wed,  7 Aug 2024 08:51:05 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6ED91404D0
+ for <buildroot@lists.busybox.net>; Wed,  7 Aug 2024 08:53:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id aSVwMb4r2tyh for <buildroot@lists.busybox.net>;
- Wed,  7 Aug 2024 08:51:04 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.193;
- helo=relay1-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2duoJSkUC7uQ for <buildroot@lists.busybox.net>;
+ Wed,  7 Aug 2024 08:53:19 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.198;
+ helo=relay6-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E1CE6606AA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E1CE6606AA
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E1CE6606AA
- for <buildroot@buildroot.org>; Wed,  7 Aug 2024 08:51:03 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id DB35F240009;
- Wed,  7 Aug 2024 08:51:00 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 31714404CB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 31714404CB
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [217.70.183.198])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 31714404CB
+ for <buildroot@buildroot.org>; Wed,  7 Aug 2024 08:53:18 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 30DD6C0007;
+ Wed,  7 Aug 2024 08:53:15 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1sbcNo-001aun-1U;
- Wed, 07 Aug 2024 10:51:00 +0200
+ (envelope-from <peter@korsgaard.com>) id 1sbcPz-001bJU-16;
+ Wed, 07 Aug 2024 10:53:15 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-References: <ZNkWXvyVT1DnVHG0@waldemar-brodkorb.de>
- <fc53aba5-aca9-4fd6-96f1-906708e59b4c@mind.be>
-Date: Wed, 07 Aug 2024 10:51:00 +0200
-In-Reply-To: <fc53aba5-aca9-4fd6-96f1-906708e59b4c@mind.be> (Arnout
- Vandecappelle via buildroot's message of "Fri, 12 Jul 2024 21:44:14
- +0200")
-Message-ID: <87y158ogwb.fsf@dell.be.48ers.dk>
+To: Waldemar Brodkorb <wbx@openadk.org>
+References: <ZN4z+n37WMFvHgsF@waldemar-brodkorb.de>
+Date: Wed, 07 Aug 2024 10:53:15 +0200
+In-Reply-To: <ZN4z+n37WMFvHgsF@waldemar-brodkorb.de> (Waldemar Brodkorb's
+ message of "Thu, 17 Aug 2023 16:51:38 +0200")
+Message-ID: <87sevgogsk.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH] package/ntpsec: fix compile issue for some
- toolchains
+Subject: Re: [Buildroot] [PATCHv2 2/2] package/tcf-agent: fix uClibc-ng
+ compile on ARM
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,31 +69,28 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Eugene Tarassov <eugene@largest.net>, Norbert Lange <nolange79@gmail.com>,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Arnout" == Arnout Vandecappelle via buildroot <buildroot@buildroot.org> writes:
+>>>>> "Waldemar" == Waldemar Brodkorb <wbx@openadk.org> writes:
 
- > On 13/08/2023 19:43, Waldemar Brodkorb wrote:
- >> Ntpsec unconditionally uses PIE to compile code.
- >> This breaks compilation for at least microblaze-uclibc and
- >> m68k-uclibc toolchains.
+ > When a shared build is used, we can use getauxval and no ARM only
+ > instuctions are in use.
 
- >  Also, in Buildroot we anyway have BR2_PIC_PIE to handle this
- >  appropriately according to toolchain capabilities.
+ > When a static build is used, we need to override CFLAGS to use
+ > arm instructions, as uClibc-ng only supports getauxval for shared case.
 
- >> It would be better to add a configure option to allow to disable pie
- >> support,
- >> but this is something for an waf expert.
- >> When accepted, should be backported to older releases of Buildroot.
- >> Fixes:
- >> - http://autobuild.buildroot.net/results/77f/77f4e4065874d022a2ae98d82508242f551e224c
- >> - http://autobuild.buildroot.net/results/e45/e45b65f2aa323df075d54ff43b0401b5ac7c6eb5
- >> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+ > Fixes:
+ >  - http://autobuild.buildroot.net/results/3b5/3b5c5519a3e5ee490308bc1a1b9579ce13417235
 
- >  Applied to master, thanks.
+ > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+ > ---
+ > v1 -> v2:
+ >   - musl is not affected, change requested by Thomas Petazzoni
 
 Committed to 2024.02.x and 2024.05.x, thanks.
 
