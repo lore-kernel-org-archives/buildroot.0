@@ -4,72 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7B37C3DA7F
-	for <buildroot@archiver.kernel.org>; Wed,  7 Aug 2024 20:06:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C4F67C3DA7F
+	for <buildroot@archiver.kernel.org>; Wed,  7 Aug 2024 20:16:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 665BC8128A;
-	Wed,  7 Aug 2024 20:06:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8B90981434;
+	Wed,  7 Aug 2024 20:16:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RhaJL7VFGzKt; Wed,  7 Aug 2024 20:06:05 +0000 (UTC)
+ id m2_0-Kp7EBNS; Wed,  7 Aug 2024 20:16:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 60D738131C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A55FF81438
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 60D738131C;
-	Wed,  7 Aug 2024 20:06:05 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 533641BF2BE
- for <buildroot@lists.busybox.net>; Wed,  7 Aug 2024 20:06:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A55FF81438;
+	Wed,  7 Aug 2024 20:16:20 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 9103B1BF2BE
+ for <buildroot@lists.busybox.net>; Wed,  7 Aug 2024 20:16:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3CDB840633
- for <buildroot@lists.busybox.net>; Wed,  7 Aug 2024 20:06:04 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7D43440026
+ for <buildroot@lists.busybox.net>; Wed,  7 Aug 2024 20:16:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4RwRzvNVPehJ for <buildroot@lists.busybox.net>;
- Wed,  7 Aug 2024 20:06:03 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.201;
- helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fFwJHhP0lzcv for <buildroot@lists.busybox.net>;
+ Wed,  7 Aug 2024 20:16:18 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::226;
+ helo=relay6-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9910240632
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9910240632
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 9910240632
- for <buildroot@buildroot.org>; Wed,  7 Aug 2024 20:06:02 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 939EA1BF203;
- Wed,  7 Aug 2024 20:05:59 +0000 (UTC)
-Date: Wed, 7 Aug 2024 22:05:57 +0200
-To: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
-Message-ID: <20240807220557.604f9e3f@windsurf>
-In-Reply-To: <20240807150952.765978-1-buildroot@bubu1.eu>
-References: <20240807150952.765978-1-buildroot@bubu1.eu>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org B4F14400D1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B4F14400D1
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::226])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B4F14400D1
+ for <buildroot@buildroot.org>; Wed,  7 Aug 2024 20:16:16 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id E1C9BC0005;
+ Wed,  7 Aug 2024 20:16:13 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1sbn4v-002qAE-0e;
+ Wed, 07 Aug 2024 22:16:13 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: James Hilliard <james.hilliard1@gmail.com>
+References: <20240705011114.1313589-1-james.hilliard1@gmail.com>
+Date: Wed, 07 Aug 2024 22:16:13 +0200
+In-Reply-To: <20240705011114.1313589-1-james.hilliard1@gmail.com> (James
+ Hilliard's message of "Thu, 4 Jul 2024 19:11:14 -0600")
+Message-ID: <87v80cm6lu.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1723061160;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=nXVK30gtpxhLgS1FmV/xTBiVXaWd8/SVh+TUX2bUYSc=;
- b=Tm83GPM/b8A/Cdq0dYLIsEBQhrn66R01NiqNMmdZQzB/9ZT/Qtdf4AwgptLQac8Zs4Ee8v
- AFjSAn/M+1ZH80qiAXJAup88sotV7zhk27SHuvD4rhB9Py3yawxyI8GH9RzntpB0S2jiiq
- 2TG5BK6+GG8PQ0YW6/dVqH97tpa1ZSq86cVSra8VLS6fnVa2fB1SC5bChluNttvdJ/ymxK
- nFHao0aUEeJVl0+cwnPmM7yvgEVBj5VCk4OJSkxDMek9MwSr6eCpGhxxii7o4pvCNOc2Y3
- rCUhbH49Tn9Yubqke77tdCriVOrsEjvpcl7sJ1/makkOKH3MCOi5Ueix7lZIow==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Tm83GPM/
-Subject: Re: [Buildroot] [PATCH] package/picotool: add patch to fix sparc
- static build
+X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: Re: [Buildroot] [PATCH v2 1/1] package/systemd: enable required
+ oomd kernel options
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,93 +69,31 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Marcus Hoffmann <buildroot@bubu1.eu>, Marcus Hoffmann <bubu@bubu1.eu>
+Cc: Sen Hastings <sen@hastings.org>, Norbert Lange <nolange79@gmail.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Marcus,
+>>>>> "James" == James Hilliard <james.hilliard1@gmail.com> writes:
 
-On Wed,  7 Aug 2024 17:09:52 +0200
-Marcus Hoffmann via buildroot <buildroot@buildroot.org> wrote:
+ > In order for systemd-oomd to run CONFIG_PSI and CONFIG_MEMCG must be
+ > enabled in the kernel config.
 
-> +diff --git a/CMakeLists.txt b/CMakeLists.txt
-> +index ff3e787..d6e41da 100644
-> +--- a/CMakeLists.txt
-> ++++ b/CMakeLists.txt
-> +@@ -58,7 +58,8 @@ else()
-> +             pico_platform_headers
-> +             pico_usb_reset_interface_headers
-> +             picoboot_connection_cxx
-> +-            ${LIBUSB_LIBRARIES})
-> ++            ${LIBUSB_LIBRARIES}
-> ++            ${PC_LIBUSB_LIBRARIES})
+ > See:
+ > https://github.com/systemd/systemd/commit/e7b3f1a6c358dd3eaf0b50547bd52130ad4126ae
+ > https://github.com/systemd/systemd/commit/aa329b89223a79793cde8288b1bc6e93db174938
 
-Thanks for working on this. Unfortunately, while this patch perhaps
-works for you, it might breaks things for systems where pkg-config is
-not available: you unconditionally use ${PC_LIBUSB_LIBRARIES}, which
-will only have a value if pkg-config is used. Instead could you try
-something like this:
+ > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+ > ---
+ > Changes v1 -> v2:
+ >   - add links to readme commits
 
-diff --git a/cmake/FindLIBUSB.cmake b/cmake/FindLIBUSB.cmake
-index 169f594..7ae02b3 100644
---- a/cmake/FindLIBUSB.cmake
-+++ b/cmake/FindLIBUSB.cmake
-@@ -17,14 +17,18 @@ else (LIBUSB_INCLUDE_DIR AND LIBUSB_LIBRARIES)
-         # in the FIND_PATH() and FIND_LIBRARY() calls
-         find_package(PkgConfig)
-         pkg_check_modules(PC_LIBUSB libusb-1.0)
-+	IF (${PC_LIBUSB_FOUND})
-+	  SET(LIBUSB_INCLUDE_DIR ${PC_LIBUSB_INCLUDE_DIRS})
-+	  SET(LIBUSB_LIBRARIES ${PC_LIBUSB_LIBRARIES})
-+	ENDIF ()
-+    ENDIF ()
-+    IF (NOT ${PC_LIBUSB_FOUND})
-+      FIND_PATH(LIBUSB_INCLUDE_DIR libusb.h
-+        HINTS $ENV{LIBUSB_ROOT}/include/libusb-1.0)
-+      FIND_LIBRARY(LIBUSB_LIBRARIES NAMES libusb-1.0 usb-1.0 usb
-+        HINTS $ENV{LIBUSB_ROOT}/VS2019/MS32/static)
-+      include(FindPackageHandleStandardArgs)
-+      FIND_PACKAGE_HANDLE_STANDARD_ARGS(LIBUSB DEFAULT_MSG LIBUSB_LIBRARIES LIBUSB_INCLUDE_DIR)
-+      MARK_AS_ADVANCED(LIBUSB_INCLUDE_DIR LIBUSB_LIBRARIES)
-     ENDIF ()
--    FIND_PATH(LIBUSB_INCLUDE_DIR libusb.h
--            HINTS $ENV{LIBUSB_ROOT}/include/libusb-1.0
--            PATHS ${PC_LIBUSB_INCLUDEDIR} ${PC_LIBUSB_INCLUDE_DIRS})
--    FIND_LIBRARY(LIBUSB_LIBRARIES NAMES libusb-1.0 usb-1.0 usb
--            HINTS $ENV{LIBUSB_ROOT}/VS2019/MS32/static
--            PATHS ${PC_LIBUSB_LIBDIR} ${PC_LIBUSB_LIBRARY_DIRS})
--    include(FindPackageHandleStandardArgs)
--    FIND_PACKAGE_HANDLE_STANDARD_ARGS(LIBUSB DEFAULT_MSG LIBUSB_LIBRARIES LIBUSB_INCLUDE_DIR)
--    MARK_AS_ADVANCED(LIBUSB_INCLUDE_DIR LIBUSB_LIBRARIES)
- endif (LIBUSB_INCLUDE_DIR AND LIBUSB_LIBRARIES)
+Committed to 2024.02.x and 2024.05.x, thanks.
 
-
-The logic is:
-
-- If pkg-config has found the library, assign LIBUSB_INCLUDE_DIR and
-  LIBUSB_LIBRARIES to the values found by pkg-config
-
-- If pkg-config has not found the library, proceed with find_path() and
-  find_library().
-
-Of course, we drop the hints passed to find_path() and find_library()
-that were results of pkg-config... as if pkg-config has returned
-meaningful results, we will no longer be calling find_path() and
-find_library().
-
-I am not 100% sure of my change (I did not even test it), but I believe
-it is closer to something that has a chance of being acceptable
-upstream.
-
-Thomas
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
