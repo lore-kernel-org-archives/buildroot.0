@@ -1,53 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99C13C52D6F
-	for <buildroot@archiver.kernel.org>; Wed,  7 Aug 2024 20:26:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49EA5C3DA7F
+	for <buildroot@archiver.kernel.org>; Wed,  7 Aug 2024 20:53:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 55EC8812E3;
-	Wed,  7 Aug 2024 20:26:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DD361600C7;
+	Wed,  7 Aug 2024 20:53:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id S3_oxVU8eT_I; Wed,  7 Aug 2024 20:26:17 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id q86m_3q6Zs3n; Wed,  7 Aug 2024 20:53:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A8AA18134C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 182E660805
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A8AA18134C;
-	Wed,  7 Aug 2024 20:26:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 182E660805;
+	Wed,  7 Aug 2024 20:53:19 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8AE821BF308
- for <buildroot@lists.busybox.net>; Wed,  7 Aug 2024 20:26:13 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8EED81BF308
+ for <buildroot@lists.busybox.net>; Wed,  7 Aug 2024 20:53:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 78C2A8117B
- for <buildroot@lists.busybox.net>; Wed,  7 Aug 2024 20:26:13 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 620968146F
+ for <buildroot@lists.busybox.net>; Wed,  7 Aug 2024 20:53:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RBhmoTxh9Sez for <buildroot@lists.busybox.net>;
- Wed,  7 Aug 2024 20:26:12 +0000 (UTC)
+ id EEeZFFV3io4I for <buildroot@lists.busybox.net>;
+ Wed,  7 Aug 2024 20:53:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 405C480F28
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C485581492
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 405C480F28
- for <buildroot@buildroot.org>; Wed,  7 Aug 2024 20:26:12 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id C485581492
+ for <buildroot@buildroot.org>; Wed,  7 Aug 2024 20:53:12 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2DE89846B2; Wed,  7 Aug 2024 20:26:12 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id 729ED84692; Wed,  7 Aug 2024 20:53:12 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 7 Aug 2024 22:17:10 +0200
-X-Git-Refname: refs/heads/2024.05.x
-X-Git-Oldrev: 5703b1a03ea1c21eace4e577040407847b5c8ff8
-X-Git-Newrev: abf5e2571d1b1e5d787b9e9ac2215347916c9aa2
+Date: Wed, 7 Aug 2024 22:52:04 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 7c4f3014ef9128a1d743e96452d388a3343c1150
+X-Git-Newrev: 698c9f12c48463c6c39a747109e8b39d5a4fa660
 X-Patchwork-Hint: ignore
-Message-Id: <20240807202612.2DE89846B2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.05.x] package/fwts: fix build
- with host make >= 4.4
+Message-Id: <20240807205312.729ED84692@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/grantlee: enable building for Qt6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,175 +57,60 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=abf5e2571d1b1e5d787b9e9ac2215347916c9aa2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=698c9f12c48463c6c39a747109e8b39d5a4fa660
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-When build host has a many CPUs (more that 20) and GNU Make 4.4
-(included for example in Fedora 40), fwts can randomly fail to build.
-
-This commit adds a package patch to fix the issue.
-
-Fixes:
-
-    mv: cannot stat 'dtcompilerparser.tab.c': No such file or directory
-    mv: cannot stat 'prparser.tab.c': No such file or directory
-
-See also:
-https://github.com/fwts/fwts/issues/7
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit f6d9fa3692b0e5dd75bb1fee5d151fe58da7800d)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...iasl-fix-parallel-build-with-GNU-Make-4.4.patch | 133 +++++++++++++++++++++
- 1 file changed, 133 insertions(+)
+ package/grantlee/Config.in   | 8 +++++---
+ package/grantlee/grantlee.mk | 8 +++++++-
+ 2 files changed, 12 insertions(+), 4 deletions(-)
 
-diff --git a/package/fwts/0002-libfwtsiasl-fix-parallel-build-with-GNU-Make-4.4.patch b/package/fwts/0002-libfwtsiasl-fix-parallel-build-with-GNU-Make-4.4.patch
-new file mode 100644
-index 0000000000..a5568d1fd9
---- /dev/null
-+++ b/package/fwts/0002-libfwtsiasl-fix-parallel-build-with-GNU-Make-4.4.patch
-@@ -0,0 +1,133 @@
-+From 65a89b6253ef527ab4bc951eb8f9deba12f0121a Mon Sep 17 00:00:00 2001
-+From: Julien Olivain <ju.o@free.fr>
-+Date: Mon, 20 May 2024 11:14:02 +0200
-+Subject: [PATCH] libfwtsiasl: fix parallel build with GNU Make >= 4.4
+diff --git a/package/grantlee/Config.in b/package/grantlee/Config.in
+index 779306bc2e..7849cfd9f2 100644
+--- a/package/grantlee/Config.in
++++ b/package/grantlee/Config.in
+@@ -1,8 +1,10 @@
+ config BR2_PACKAGE_GRANTLEE
+ 	bool "grantlee"
+-	depends on BR2_PACKAGE_QT5_JSCORE_AVAILABLE && BR2_PACKAGE_QT5
+-	select BR2_PACKAGE_QT5SCRIPT
+-	select BR2_PACKAGE_QT5BASE_GUI
++	depends on (BR2_PACKAGE_QT5_JSCORE_AVAILABLE && BR2_PACKAGE_QT5) || BR2_PACKAGE_QT6
++	select BR2_PACKAGE_QT5SCRIPT if BR2_PACKAGE_QT5
++	select BR2_PACKAGE_QT5BASE_GUI if BR2_PACKAGE_QT5
++	select BR2_PACKAGE_QT6BASE_GUI if BR2_PACKAGE_QT6
++	select BR2_PACKAGE_QT6DECLARATIVE if BR2_PACKAGE_QT6
+ 	help
+ 	  Qt implementation of the Django template framework
+ 
+diff --git a/package/grantlee/grantlee.mk b/package/grantlee/grantlee.mk
+index 7e36334902..9e78664559 100644
+--- a/package/grantlee/grantlee.mk
++++ b/package/grantlee/grantlee.mk
+@@ -9,6 +9,12 @@ GRANTLEE_SITE = $(call github,steveire,grantlee,v$(GRANTLEE_VERSION))
+ GRANTLEE_INSTALL_STAGING = YES
+ GRANTLEE_LICENSE = LGPL-2.1+
+ GRANTLEE_LICENSE_FILES = COPYING.LIB
+-GRANTLEE_DEPENDENCIES = qt5base qt5script
 +
-+When a build host has a large number of cores (like 20+) and GNU Make
-+version is >= 4.4, fwts randomly fail to build in parallel, with a
-+"make -j$(nproc)" command, with error:
-+
-+    mv: cannot stat 'dtcompilerparser.tab.c': No such file or directory
-+    mv: cannot stat 'prparser.tab.c': No such file or directory
-+
-+This issue has been reported here:
-+https://github.com/fwts/fwts/issues/7
-+
-+The Makefile.am of libfwtsiasl is using the GNU Make ".NOTPARALLEL"
-+special target with prerequisites to handle commands generating
-+multiple outputs (like lex/yacc invocations). See:
-+https://github.com/fwts/fwts/blob/V24.03.00/src/libfwtsiasl/Makefile.am#L61
-+
-+First, the .NOTPARALLEL special target _with_ prerequisites is a
-+feature added in GNU Make 4.4. See:
-+https://git.savannah.gnu.org/cgit/make.git/commit/?id=f6ea899d83bf00fe9201fde0ca9cf7af8e443677
-+https://lists.gnu.org/archive/html/help-make/2022-10/msg00020.html
-+
-+GNU Make version < 4.4 will interpret it as if it was written without
-+prerequisite (as a standalone ".NOTPARALLEL:"). The effect is that the
-+parallel compilation is disabled for the whole libfwtsiasl. The
-+standalone .NOTPARALLEL special target was introduced in GNU Make 3.79
-+in 2000. This is why parallel builds are working with Make older than
-+version 4.4.
-+
-+Secondly, the reason why the build is failing on GNU Make >= 4.4 is
-+because the usage of .NOTPARALLEL in incorrect.
-+
-+Quoting the Make manual:
-+https://www.gnu.org/software/make/manual/html_node/Parallel-Disable.html
-+"""
-+If the .NOTPARALLEL special target has prerequisites, then each of those
-+prerequisites will be considered a target and all prerequisites of these
-+targets will be run serially.
-+"""
-+
-+Note the serialization will happen on the prerequisites of the targets
-+set as prerequisites of .NOTPARALLEL.
-+
-+The targets will not be correctly marked to disable parallel
-+execution.
-+
-+Thirdly, the use of multiple targets in a rule is incorrect here. See
-+Make manual:
-+https://www.gnu.org/software/make/manual/html_node/Multiple-Targets.html
-+The construct used in Makefile.am of libfwtsiasl for lex/yacc parsers
-+assumes they are independant targets (so they can be executed in
-+parallel). Finally, the "mv" command is failing, because there will be
-+one parallel execution per target, the first mv will suceed and the
-+other ones will fail. Multiple independant targets are often used in
-+Makefiles for lex/yacc, they are working because they are not using
-+"mv". Even in multiple execution, files are just overwritten.
-+
-+Fixing this .NOTPARALLEL usage with prerequisites would require Make
-+version 4.4 or greater. This is a strong requirement, as there is
-+still many Linux distros with older Make version (as an example Ubuntu
-+22.04 LTS has Make 4.3).
-+
-+The .WAIT special target could be used, but was also introduced in
-+Make version 4.4. See:
-+https://git.savannah.gnu.org/cgit/make.git/commit/?id=f6ea899d83bf00fe9201fde0ca9cf7af8e443677
-+
-+GNU Make 4.3 also introduced "Grouped Targets" for that purpose. See:
-+https://www.gnu.org/software/make/manual/html_node/Multiple-Targets.html
-+But this would add a requirement on a recent Make version.
-+
-+This commit fixes the issue by declaring the first generated file as a
-+dependency of the other extra generated files. This has the effect of
-+completely solving the parallel build for all GNU Make versions. Also,
-+this enables parallel build for libfwtsiasl (except for the parser
-+generation) and makes the whole build faster.
-+
-+Signed-off-by: Julien Olivain <ju.o@free.fr>
-+Upstream: https://github.com/fwts/fwts/commit/c0962cd74c725418523c46ca44101e0e70201f81
-+---
-+ src/libfwtsiasl/Makefile.am | 16 ++++++++--------
-+ 1 file changed, 8 insertions(+), 8 deletions(-)
-+
-+diff --git a/src/libfwtsiasl/Makefile.am b/src/libfwtsiasl/Makefile.am
-+index cb10bc58..ac54f621 100644
-+--- a/src/libfwtsiasl/Makefile.am
-++++ b/src/libfwtsiasl/Makefile.am
-+@@ -58,32 +58,32 @@ aslcompiler.y: $(ASL_PARSER)
-+ aslcompilerlex.c: $(ASL_LEXER)
-+ 	${LEX} ${AM_LFLAGS} -PAslCompiler -o$@ $(top_srcdir)/src/acpica/source/compiler/aslcompiler.l
-+ 
-+-.NOTPARALLEL: aslcompiler.c
-+-aslcompiler.c aslcompiler.y.h: aslcompiler.y
-++aslcompiler.c: aslcompiler.y
-+ 	${YACC} ${AM_YFLAGS} -d -baslcompiler -pAslCompiler $^
-+ 	mv aslcompiler.tab.c aslcompiler.c
-+ 	cp aslcompiler.tab.h aslcompiler.y.h
-++aslcompiler.y.h: aslcompiler.c
-+ 
-+-.NOTPARALLEL: dtcompilerparserlex.c
-+-dtcompilerparserlex.c dtcompilerparser.c dtcompilerparser.y.h: $(top_srcdir)/src/acpica/source/compiler/dtcompilerparser.l $(top_srcdir)/src/acpica/source/compiler/dtcompilerparser.y
-++dtcompilerparserlex.c: $(top_srcdir)/src/acpica/source/compiler/dtcompilerparser.l $(top_srcdir)/src/acpica/source/compiler/dtcompilerparser.y
-+ 	${LEX} ${AM_LFLAGS} -PDtCompilerParser -odtcompilerparserlex.c $<
-+ 	${YACC} ${AM_YFLAGS} -bdtcompilerparser -pDtCompilerParser $(top_srcdir)/src/acpica/source/compiler/dtcompilerparser.y
-+ 	mv dtcompilerparser.tab.c dtcompilerparser.c
-+ 	cp dtcompilerparser.tab.h dtcompilerparser.y.h
-++dtcompilerparser.c dtcompilerparser.y.h: dtcompilerparserlex.c
-+ 
-+-.NOTPARALLEL: dtparserlex.c
-+-dtparserlex.c dtparser.c dtparser.y.h: $(top_srcdir)/src/acpica/source/compiler/dtparser.l $(top_srcdir)/src/acpica/source/compiler/dtparser.y
-++dtparserlex.c: $(top_srcdir)/src/acpica/source/compiler/dtparser.l $(top_srcdir)/src/acpica/source/compiler/dtparser.y
-+ 	${LEX} ${AM_LFLAGS} -PDtParser -odtparserlex.c $<
-+ 	${YACC} ${AM_YFLAGS} -bdtparser -pDtParser $(top_srcdir)/src/acpica/source/compiler/dtparser.y
-+ 	mv dtparser.tab.c dtparser.c
-+ 	cp dtparser.tab.h dtparser.y.h
-++dtparser.c dtparser.y.h: dtparserlex.c
-+ 
-+-.NOTPARALLEL: prparserlex.c
-+-prparserlex.c prparser.c prparser.y.h: $(top_srcdir)/src/acpica/source/compiler/prparser.l $(top_srcdir)/src/acpica/source/compiler/prparser.y
-++prparserlex.c: $(top_srcdir)/src/acpica/source/compiler/prparser.l $(top_srcdir)/src/acpica/source/compiler/prparser.y
-+ 	${LEX} ${AM_LFLAGS} -PPrParser -oprparserlex.c $<
-+ 	${YACC} ${AM_YFLAGS} -bprparser -pPrParser $(top_srcdir)/src/acpica/source/compiler/prparser.y
-+ 	mv prparser.tab.c prparser.c
-+ 	cp prparser.tab.h prparser.y.h
-++prparser.c prparser.y.h: prparserlex.c
-+ 
-+ pkglib_LTLIBRARIES = libfwtsiasl.la
-+ 
-+-- 
-+2.45.1
-+
++ifeq ($(BR2_PACKAGE_QT5BASE),y)
++GRANTLEE_DEPENDENCIES += qt5base qt5script
++else ifeq ($(BR2_PACKAGE_QT6BASE),y)
++GRANTLEE_DEPENDENCIES += qt6base qt6declarative
++GRANTLEE_CONF_OPTS += -DGRANTLEE_BUILD_WITH_QT6=ON
++endif
+ 
+ $(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
