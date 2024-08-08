@@ -1,65 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0EADFC52D73
-	for <buildroot@archiver.kernel.org>; Thu,  8 Aug 2024 06:28:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5DAF3C52D71
+	for <buildroot@archiver.kernel.org>; Thu,  8 Aug 2024 08:36:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 761754071D;
-	Thu,  8 Aug 2024 06:28:58 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 070E4400E7;
+	Thu,  8 Aug 2024 08:36:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id G8tghX7gtWSM; Thu,  8 Aug 2024 06:28:57 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id dRS26xAbb-wN; Thu,  8 Aug 2024 08:36:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4B52A40721
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EA54F40194
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4B52A40721;
-	Thu,  8 Aug 2024 06:28:57 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5A3351BF870
- for <buildroot@lists.busybox.net>; Thu,  8 Aug 2024 06:28:55 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id EA54F40194;
+	Thu,  8 Aug 2024 08:36:06 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 0EF8F1BF2BF
+ for <buildroot@lists.busybox.net>; Thu,  8 Aug 2024 08:36:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 54B3481772
- for <buildroot@lists.busybox.net>; Thu,  8 Aug 2024 06:28:55 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id F058C40194
+ for <buildroot@lists.busybox.net>; Thu,  8 Aug 2024 08:36:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5M22rSqiWYrO for <buildroot@lists.busybox.net>;
- Thu,  8 Aug 2024 06:28:54 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a01:4f8:1c0c:5073::1; helo=mail.heine.tech;
- envelope-from=buildroot@heine.tech; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org C25968176B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C25968176B
-Received: from mail.heine.tech (mail.heine.tech [IPv6:2a01:4f8:1c0c:5073::1])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C25968176B
- for <buildroot@buildroot.org>; Thu,  8 Aug 2024 06:28:53 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
- with ESMTPSA id 19B021814B9; Thu,  8 Aug 2024 08:28:48 +0200 (CEST)
-To: buildroot@buildroot.org
-Date: Thu,  8 Aug 2024 08:28:33 +0200
-Message-Id: <20240808062834.47791-1-buildroot@heine.tech>
-X-Mailer: git-send-email 2.34.1
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id y6grqg2Eg9-e for <buildroot@lists.busybox.net>;
+ Thu,  8 Aug 2024 08:36:03 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.197;
+ helo=relay5-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 2774E400E7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2774E400E7
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 2774E400E7
+ for <buildroot@buildroot.org>; Thu,  8 Aug 2024 08:36:02 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id ECADF1C0002;
+ Thu,  8 Aug 2024 08:35:59 +0000 (UTC)
+Date: Thu, 8 Aug 2024 10:35:57 +0200
+To: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
+Message-ID: <20240808103557.5c1b1f37@windsurf>
+In-Reply-To: <087ec276f1e5357bd8bbb90fe4725dd4@zgyarmati.de>
+References: <20240808052443.86164-1-zgyarmati@zgyarmati.de>
+ <087ec276f1e5357bd8bbb90fe4725dd4@zgyarmati.de>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-X-Last-TLS-Session-Version: TLSv1.3
+X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=heine.tech; s=dkim; 
- t=1723098530; h=from:subject:date:message-id:to:cc:mime-version:
- content-transfer-encoding; bh=LMcB9mm49V1nAAisqDuZdVC24Ez07LIr8WYjSSC846g=;
- b=kAZZeaS6o/HGD0tGhkDtV0mB3QCy7ik4AHQ31ntGQFoBY7xfhnK8XMRQS/76IGrIXS1UD1
- uwtqyts3vLzEsxqCqFbXGy/WmCLbvE3iInNU9uTJRzQ6xpctOFXg79iIc3K0ouGf2E6qRi
- fwEh2l07gIFzW+LV5OD59RPHbqdDpeA=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=heine.tech
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=heine.tech header.i=@heine.tech header.a=rsa-sha256
- header.s=dkim header.b=kAZZeaS6
-Subject: [Buildroot] [PATCH] package/fmt: bump to version 11.0.2
+ d=bootlin.com; s=gm1; t=1723106160;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=E4H515uGGfw9W8C4aqL87H3f9MaWZIovCYV7rPxxoMw=;
+ b=CO0Fldcy/w6bN7JQcWuKhMtBllJiZlolGIS7LpnrXnJJ8LOz6qS7tjyJEdZSBEr3S/oAhR
+ zGOlBAzMb4DXKf4ZFavAUapDXCX/6GR3CdkR+BTG13LRdGOqtC4qAO5DiYSx/NI76KlHge
+ /4XpexTKSaktJ6nSlV8A6Yz0ylkPKt6jdl7eGouyiEUGVSx8y8WFjExy8v5b/mfqn3xV1g
+ f87h5b4fPK9vpl7QfJKjTtyeyPWmtMFpP/mOrmzjxtDQMRaEBYJA43WKkBsltXxt7RdGcu
+ yLg/LkBXbL9OS4mqpDlTxlyqnZyxRtxDvKOkBrxiSe8q5xM9LfHMbEmoWAWEIw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=CO0Fldcy
+Subject: Re: [Buildroot] [PATCH 1/1] package/simple-mail: bump to 3.0.0,
+ enable for qt6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,45 +82,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Michael Nosthoff via buildroot <buildroot@buildroot.org>
-Reply-To: Michael Nosthoff <buildroot@heine.tech>
-Cc: Semyon Kolganov <semenak94@mail.ru>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
----
- package/fmt/fmt.hash | 2 +-
- package/fmt/fmt.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hello Zoltan,
 
-diff --git a/package/fmt/fmt.hash b/package/fmt/fmt.hash
-index 90d78dd989..aff52ccb6e 100644
---- a/package/fmt/fmt.hash
-+++ b/package/fmt/fmt.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  62ca45531814109b5d6cef0cf2fd17db92c32a30dd23012976e768c685534814  fmt-11.0.1.zip
-+sha256  40fc58bebcf38c759e11a7bd8fdc163507d2423ef5058bba7f26280c5b9c5465  fmt-11.0.2.zip
- sha256  07580f2a3b35709ce703d523f447b242f6dfec7582a8c0df102c7fa2849375f8  LICENSE
-diff --git a/package/fmt/fmt.mk b/package/fmt/fmt.mk
-index d33b5b1bff..113652e911 100644
---- a/package/fmt/fmt.mk
-+++ b/package/fmt/fmt.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FMT_VERSION = 11.0.1
-+FMT_VERSION = 11.0.2
- FMT_SITE = https://github.com/fmtlib/fmt/releases/download/$(FMT_VERSION)
- FMT_SOURCE = fmt-$(FMT_VERSION).zip
- FMT_LICENSE = MIT with exception
+On Thu, 08 Aug 2024 07:30:38 +0200
+Zoltan Gyarmati <zgyarmati@zgyarmati.de> wrote:
+
+> please disregard this patch, i've just  read your e-mail about splitting 
+> my grantlee bump&qt6 patch into 2, gonna do the same with this one...
+
+Correct. Could you also verify legal-info after this bump, and use:
+
+ifeq ($(BR2_PACKAGE_QT5),y)
+...
+else ifeq ($(BR2_PACKAGE_QT6),y)
+...
+endif
+
+in the .mk file? Indeed BR2_PACKAGE_QT5 and BR2_PACKAGE_QT6 are
+mutually exclusive.
+
+Thanks!
+
+Thomas
 -- 
-2.34.1
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
