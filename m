@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0E5F2C52D71
-	for <buildroot@archiver.kernel.org>; Thu,  8 Aug 2024 19:40:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 448DBC3DA4A
+	for <buildroot@archiver.kernel.org>; Thu,  8 Aug 2024 19:40:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DEDD840D17;
-	Thu,  8 Aug 2024 19:39:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9730140D0F;
+	Thu,  8 Aug 2024 19:40:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ef_14V_Jo4Oj; Thu,  8 Aug 2024 19:39:56 +0000 (UTC)
+ id Y6DKvXmjnhyP; Thu,  8 Aug 2024 19:40:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 25CF940D2B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 891C540D6B
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 25CF940D2B;
-	Thu,  8 Aug 2024 19:39:56 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3D0C61BF2A3
- for <buildroot@lists.busybox.net>; Thu,  8 Aug 2024 19:39:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 891C540D6B;
+	Thu,  8 Aug 2024 19:39:59 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 7238C1BF2A3
+ for <buildroot@lists.busybox.net>; Thu,  8 Aug 2024 19:39:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2AE4460B43
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5BBC540E78
  for <buildroot@lists.busybox.net>; Thu,  8 Aug 2024 19:39:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sqjMQwVJP0Dh for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id OE56pmdfI5S0 for <buildroot@lists.busybox.net>;
  Thu,  8 Aug 2024 19:39:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2F39960A68
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 455F840E83
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2F39960A68
+ by smtp2.osuosl.org (Postfix) with ESMTP id 455F840E83
  for <buildroot@buildroot.org>; Thu,  8 Aug 2024 19:39:50 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 24E5B848C5; Thu,  8 Aug 2024 19:39:50 +0000 (UTC)
+ id 33002848BF; Thu,  8 Aug 2024 19:39:50 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 8 Aug 2024 19:08:21 +0200
+Date: Thu, 8 Aug 2024 19:13:21 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7f7a5f0374e51812b17b08d5e45d544d70bb974e
-X-Git-Newrev: dbd1dce67dd2deacaea726dd3380cc348c602cfc
+X-Git-Oldrev: dbd1dce67dd2deacaea726dd3380cc348c602cfc
+X-Git-Newrev: 0b771887ca01a076b9169c1ac880e523c5fe6f44
 X-Patchwork-Hint: ignore
-Message-Id: <20240808193950.24E5B848C5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/flutter-engine: bump version to
- 3.24.0
+Message-Id: <20240808193950.33002848BF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/flutter-pi: bump version to
+ 37bd9773c1938e5f76208bc4e8632fdbbb4190ff
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,129 +66,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=dbd1dce67dd2deacaea726dd3380cc348c602cfc
+commit: https://git.buildroot.net/buildroot/commit/?id=0b771887ca01a076b9169c1ac880e523c5fe6f44
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Add `"download_fuchsia_deps": False` to the dot-gclient file as this is
-for linux, not fuchsia, so the dependencies are not necessary.
-
-Also, change various paths in flutter-engine.mk to ensure that the package
-builds correctly.
-
-Remove patch
-0005-skip-configuration-dependency-if-unit-tests-are-disa.patch which
-is upstream.
-
-Tested with tests.package.test_flutter.TestFlutter.test_run
 
 Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...uration-dependency-if-unit-tests-are-disa.patch | 32 ----------------------
- package/flutter-engine/dot-gclient                 |  3 +-
- package/flutter-engine/flutter-engine.mk           | 10 +++----
- 3 files changed, 7 insertions(+), 38 deletions(-)
+ package/flutter-pi/flutter-pi.hash | 2 +-
+ package/flutter-pi/flutter-pi.mk   | 5 +++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/flutter-engine/0005-skip-configuration-dependency-if-unit-tests-are-disa.patch b/package/flutter-engine/0005-skip-configuration-dependency-if-unit-tests-are-disa.patch
-deleted file mode 100644
-index 125bfc6910..0000000000
---- a/package/flutter-engine/0005-skip-configuration-dependency-if-unit-tests-are-disa.patch
-+++ /dev/null
-@@ -1,32 +0,0 @@
--From 2252a85e59669b5826019f60a98b7a69939dacfd Mon Sep 17 00:00:00 2001
--From: Greg Spencer <gspencer@google.com>
--Date: Mon, 4 Mar 2024 12:30:41 -0800
--Subject: [PATCH] Skip configuration dependency if unit tests are disabled.
--
--Commit 88baf62f made gtk+-3.0 an unconditional requirement, see:
--
--Issue: https://github.com/flutter/flutter/issues/144421
--Upstream: Merged. https://github.com/flutter/engine/pull/51179
--
--Signed-off-by: Greg Spencer <gspencer@google.com>
--Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
-----
-- flutter/testing/BUILD.gn | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/flutter/testing/BUILD.gn b/flutter/testing/BUILD.gn
--index 9eac29452..a7d094695 100644
----- a/flutter/testing/BUILD.gn
--+++ b/flutter/testing/BUILD.gn
--@@ -51,7 +51,7 @@ source_set("testing") {
-- 
--   sources = [ "run_all_unittests.cc" ]
-- 
---  if (is_linux) {
--+  if (enable_unittests && is_linux) {
--     # So that we can call gtk_init in main().
--     configs += [ "//flutter/shell/platform/linux/config:gtk" ]
--   }
---- 
--2.44.0
--
-diff --git a/package/flutter-engine/dot-gclient b/package/flutter-engine/dot-gclient
-index ba9590a7f5..6ead80c8c2 100644
---- a/package/flutter-engine/dot-gclient
-+++ b/package/flutter-engine/dot-gclient
-@@ -8,6 +8,7 @@ solutions = [{
-     "custom_vars": {
-         "download_android_deps": False,
-         "download_windows_deps": False,
--        "download_linux_deps": False
-+        "download_linux_deps": False,
-+        "download_fuchsia_deps": False
-     },
- }]
-diff --git a/package/flutter-engine/flutter-engine.mk b/package/flutter-engine/flutter-engine.mk
-index dfc3c03ef9..020fa2ee8a 100644
---- a/package/flutter-engine/flutter-engine.mk
-+++ b/package/flutter-engine/flutter-engine.mk
-@@ -21,7 +21,7 @@
+diff --git a/package/flutter-pi/flutter-pi.hash b/package/flutter-pi/flutter-pi.hash
+index 135a0deb32..6a73524745 100644
+--- a/package/flutter-pi/flutter-pi.hash
++++ b/package/flutter-pi/flutter-pi.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  a7ce5c8d960735923f6897dd9852b89c8010a01b9a29f4f6bbbf7c016dac623c  flutter-pi-783db32ec6441b878783bfa241777d3bfe6b35e2-git4.tar.gz
++sha256  c3c7df5712cd7c45539b325b0d8d58d0942b08a6f66c55e3f53aa5225cbe86af  flutter-pi-37bd9773c1938e5f76208bc4e8632fdbbb4190ff-git4.tar.gz
+ sha256  b34df9d3e1b4e5d1ba70b1740ec74b69f1189b44efd0c96b898b074ef8db1c70  LICENSE
+diff --git a/package/flutter-pi/flutter-pi.mk b/package/flutter-pi/flutter-pi.mk
+index ee54a2bf4e..fad1da3215 100644
+--- a/package/flutter-pi/flutter-pi.mk
++++ b/package/flutter-pi/flutter-pi.mk
+@@ -4,7 +4,7 @@
  #
- # There is no hash provided, as the gn binary (used for configuration) relies
- # on the .git directories. As such, a reproducible tarball is not possible.
--FLUTTER_ENGINE_VERSION = 3.19.5
-+FLUTTER_ENGINE_VERSION = 3.24.0
+ ################################################################################
  
- # There is nothing for Buildroot to download. This is handled by gclient.
- FLUTTER_ENGINE_SITE =
-@@ -67,7 +67,7 @@ FLUTTER_ENGINE_INSTALL_FILES = libflutter_engine.so
+-FLUTTER_PI_VERSION = 783db32ec6441b878783bfa241777d3bfe6b35e2
++FLUTTER_PI_VERSION = 37bd9773c1938e5f76208bc4e8632fdbbb4190ff
+ FLUTTER_PI_SITE = https://github.com/ardera/flutter-pi.git
+ FLUTTER_PI_SITE_METHOD = git
+ FLUTTER_PI_LICENSE = MIT
+@@ -33,7 +33,8 @@ FLUTTER_PI_CONF_OPTS = \
+ 	-DTRY_ENABLE_VULKAN=OFF \
+ 	-DVULKAN_DEBUG="OFF" \
+ 	-DUSE_LEGACY_KMS=OFF \
+-	-DWARN_MISSING_FIELD_INITIALIZERS=OFF
++	-DWARN_MISSING_FIELD_INITIALIZERS=OFF \
++	-DBUILD_SENTRY_PLUGIN=OFF
  
- # Flutter engine includes a bundled patched clang that must be used for
- # compiling or else there are linking errors.
--FLUTTER_ENGINE_CLANG_PATH = $(@D)/buildtools/linux-x64/clang
-+FLUTTER_ENGINE_CLANG_PATH = $(@D)/flutter/buildtools/linux-x64/clang
- 
- FLUTTER_ENGINE_CONF_OPTS = \
- 	--clang \
-@@ -126,7 +126,7 @@ endif
- 
- ifeq ($(BR2_PACKAGE_HAS_LIBGLES),y)
- FLUTTER_ENGINE_DEPENDENCIES += libgles
--FLUTTER_ENGINE_CONF_OPTS += --enable-impeller-opengles
-+FLUTTER_ENGINE_CONF_OPTS += --enable-impeller-3d
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBGLFW),y)
-@@ -153,7 +153,7 @@ FLUTTER_ENGINE_DEPENDENCIES += libxcb
- else
- define FLUTTER_ENGINE_VULKAN_X11_SUPPORT_FIXUP
- 	$(SED) "s%vulkan_use_x11.*%vulkan_use_x11 = false%g" -i \
--		$(@D)/build_overrides/vulkan_headers.gni
-+		$(@D)/flutter/build_overrides/vulkan_headers.gni
- 
- 	$(SED) "s%ozone_platform_x11.*%ozone_platform_x11 = false%g" \
- 		$(@D)/build/config/BUILDCONFIG.gn
-@@ -166,7 +166,7 @@ FLUTTER_ENGINE_DEPENDENCIES += wayland
- else
- define FLUTTER_ENGINE_VULKAN_WAYLAND_SUPPORT_FIXUP
- 	$(SED) "s%vulkan_use_wayland.*%vulkan_use_wayland = false%g" \
--		$(@D)/build_overrides/vulkan_headers.gni
-+		$(@D)/flutter/build_overrides/vulkan_headers.gni
- 
- 	$(SED) "s%ozone_platform_wayland.*%ozone_platform_wayland = false%g" \
- 		$(@D)/build/config/BUILDCONFIG.gn
+ ifeq ($(BR2_ENABLE_LTO),y)
+ FLUTTER_PI_CONF_OPTS += -DLTO=ON
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
