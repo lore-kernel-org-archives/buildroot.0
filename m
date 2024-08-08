@@ -4,50 +4,80 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D70C7C3DA4A
-	for <buildroot@archiver.kernel.org>; Thu,  8 Aug 2024 09:59:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EE18DC3DA4A
+	for <buildroot@archiver.kernel.org>; Thu,  8 Aug 2024 10:50:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 26F4880B23;
-	Thu,  8 Aug 2024 09:59:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6480180D36;
+	Thu,  8 Aug 2024 10:50:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6gmlNNY-rgSj; Thu,  8 Aug 2024 09:59:52 +0000 (UTC)
+ id yKcdZ6bjpYVO; Thu,  8 Aug 2024 10:50:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2852080D1D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7C06F8175F
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2852080D1D;
-	Thu,  8 Aug 2024 09:59:52 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id EAC8A1BF21A
- for <buildroot@lists.busybox.net>; Thu,  8 Aug 2024 09:59:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7C06F8175F;
+	Thu,  8 Aug 2024 10:50:46 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 0FF431BF868
+ for <buildroot@lists.busybox.net>; Thu,  8 Aug 2024 10:50:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D84C840DBB
- for <buildroot@lists.busybox.net>; Thu,  8 Aug 2024 09:59:49 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id EE74F40932
+ for <buildroot@lists.busybox.net>; Thu,  8 Aug 2024 10:50:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LsS4r7Vq9MGu for <buildroot@lists.busybox.net>;
- Thu,  8 Aug 2024 09:59:48 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9C0A740CA5
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9C0A740CA5
- for <buildroot@buildroot.org>; Thu,  8 Aug 2024 09:59:48 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 88D8C81025; Thu,  8 Aug 2024 09:59:48 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Wed, 7 Aug 2024 23:10:21 +0200
-X-Git-Refname: refs/heads/2024.05.x
-X-Git-Oldrev: abf5e2571d1b1e5d787b9e9ac2215347916c9aa2
-X-Git-Newrev: 886cdf6c91652bb533ec714b0b29dd23ea8ed829
-X-Patchwork-Hint: ignore
-Message-Id: <20240808095948.88D8C81025@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.05.x] package/go: security bump
- version to go1.22.5
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id v6IQn1Sruvdn for <buildroot@lists.busybox.net>;
+ Thu,  8 Aug 2024 10:50:44 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=68.232.154.123;
+ helo=esa.microchip.iphmx.com;
+ envelope-from=prvs=94397a82f=jamie.gibbons@microchip.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org AF0434091F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AF0434091F
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com
+ [68.232.154.123])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id AF0434091F
+ for <buildroot@buildroot.org>; Thu,  8 Aug 2024 10:50:42 +0000 (UTC)
+X-CSE-ConnectionGUID: oOcZrOpmQ46aHYlHIWM4Dw==
+X-CSE-MsgGUID: CIwZhpLtSGKnflPSOOVhgQ==
+X-IronPort-AV: E=Sophos;i="6.09,272,1716274800"; d="scan'208";a="197670505"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+ by esa6.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256;
+ 08 Aug 2024 03:50:41 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
+ chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Thu, 8 Aug 2024 03:50:18 -0700
+Received: from jamie-dev.microchip.com (10.10.85.11) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2507.35 via Frontend Transport; Thu, 8 Aug 2024 03:50:17 -0700
+To: <buildroot@buildroot.org>
+Date: Thu, 8 Aug 2024 11:52:19 +0100
+Message-ID: <20240808105221.2776341-1-jamie.gibbons@microchip.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+ t=1723114243; x=1754650243;
+ h=from:to:cc:subject:date:message-id:mime-version:
+ content-transfer-encoding;
+ bh=xNEeUbGLRaBtx8FD2f44Do8BqZgG58DY2aGS373fYyY=;
+ b=DRYmPwLymZFLgkoeDmMv5OHIMtRw6licEBnmdyLZx3FB7KEDWWgWYcTo
+ E3nUeB3t8WGxks6KUO6wyaMypAKewcWG8vEQwdBBMIxse+USvhmUpHw4H
+ Ii8JhAJv00DTzBXDxRJEyZ62YnsdPnkEtdrcbUMpe0cfHBHMqOKp3JXI8
+ SdszOSuzWwO1/CHAH26yWqk9UhnQkKPHc/SlGrPnyH2XVJoQ2OtHVaadN
+ HeJ/clIQSF5zXo9aJNQrwvo0CK6InLEXcuR2IMmDgLdsk0zwri80Yu/s4
+ MFXsjC3vpynvQmpaN+gT2rAotiVfwBXFlBk01MgZiKJu/r9FeR98hOLJi
+ g==;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=microchip.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=microchip.com header.i=@microchip.com
+ header.a=rsa-sha256 header.s=mchp header.b=DRYmPwLy
+Subject: [Buildroot] [PATCH v2 0/2] fix mpfs custom tarballs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,52 +89,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+From: Jamie Gibbons via buildroot <buildroot@buildroot.org>
+Reply-To: Jamie Gibbons <jamie.gibbons@microchip.com>
+Cc: Jamie Gibbons <jamie.gibbons@microchip.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=886cdf6c91652bb533ec714b0b29dd23ea8ed829
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.05.x
+Hi all,
 
-Fixes CVE:
+The following patchset updates the Linux kernel and U-Boot custom tarballs as
+they were updated incorrectly. Previously, they were retrieving from a branch,
+and storing it into a tarball. This is not the desired functionality. Now, the
+custom tarballs retrieve specific release tags instead, as intended. 
+This has also meant an additional update to the U-Boot hash is required to
+match changes as the content has been updated.
 
-CVE-2024-24791: net/http: denial of service due to improper 100-continue handling
+Thanks Thomas for your feedback on v1, greatly appreciated.
 
-https://go.dev/doc/devel/release#go1.22.5
+Thanks,
+Jamie
 
-Signed-off-by: Christian Stewart <christian@aperture.us>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 5d02277884e406625c0142e7c3e68dfe30bdf6c4)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/go/go.hash | 2 +-
- package/go/go.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Jamie Gibbons (2):
+  fix: configs/beaglev_fire: update custom tarballs
+  fix: configs/microchip_mpfs_icicle: update custom tarballs
 
-diff --git a/package/go/go.hash b/package/go/go.hash
-index 7952461f2d..d300f6e2c9 100644
---- a/package/go/go.hash
-+++ b/package/go/go.hash
-@@ -1,3 +1,3 @@
- # From https://go.dev/dl
--sha256  fed720678e728a7ca30ba8d1ded1caafe27d16028fab0232b8ba8e22008fb784  go1.22.4.src.tar.gz
-+sha256  ac9c723f224969aee624bc34fd34c9e13f2a212d75c71c807de644bb46e112f6  go1.22.5.src.tar.gz
- sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  LICENSE
-diff --git a/package/go/go.mk b/package/go/go.mk
-index 461a472dd4..e6f61d643b 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GO_VERSION = 1.22.4
-+GO_VERSION = 1.22.5
- GO_SITE = https://storage.googleapis.com/golang
- GO_SOURCE = go$(GO_VERSION).src.tar.gz
- 
+ board/beagleboard/beaglev_fire/patches/linux/linux.hash | 2 +-
+ board/beagleboard/beaglev_fire/patches/uboot/uboot.hash | 2 +-
+ board/microchip/mpfs_icicle/patches/linux/linux.hash    | 2 +-
+ board/microchip/mpfs_icicle/patches/uboot/uboot.hash    | 2 +-
+ configs/beaglev_fire_defconfig                          | 4 ++--
+ configs/microchip_mpfs_icicle_defconfig                 | 4 ++--
+ 6 files changed, 8 insertions(+), 8 deletions(-)
+
+-- 
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
