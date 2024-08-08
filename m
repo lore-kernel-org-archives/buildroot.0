@@ -4,94 +4,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22177C3DA4A
-	for <buildroot@archiver.kernel.org>; Thu,  8 Aug 2024 16:09:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A152C3DA4A
+	for <buildroot@archiver.kernel.org>; Thu,  8 Aug 2024 16:39:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C669360593;
-	Thu,  8 Aug 2024 16:09:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C505E60AFE;
+	Thu,  8 Aug 2024 16:39:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id r3S2-QvDQJqo; Thu,  8 Aug 2024 16:09:32 +0000 (UTC)
+ id amowQcI1y3_v; Thu,  8 Aug 2024 16:39:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C8EC060ACB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8B44560ABB
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C8EC060ACB;
-	Thu,  8 Aug 2024 16:09:31 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 040CC1BF28E
- for <buildroot@lists.busybox.net>; Thu,  8 Aug 2024 16:09:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8B44560ABB;
+	Thu,  8 Aug 2024 16:39:56 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id E15C11BF29F
+ for <buildroot@lists.busybox.net>; Thu,  8 Aug 2024 16:39:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 72B4360593
- for <buildroot@lists.busybox.net>; Thu,  8 Aug 2024 16:09:28 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id CEAED80C03
+ for <buildroot@lists.busybox.net>; Thu,  8 Aug 2024 16:39:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yb3PyGG9tZRW for <buildroot@lists.busybox.net>;
- Thu,  8 Aug 2024 16:09:27 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::331; helo=mail-wm1-x331.google.com;
- envelope-from=salvador.joseluis@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 4F92B60AD5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4F92B60AD5
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
- [IPv6:2a00:1450:4864:20::331])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 4F92B60AD5
- for <buildroot@buildroot.org>; Thu,  8 Aug 2024 16:09:27 +0000 (UTC)
-Received: by mail-wm1-x331.google.com with SMTP id
- 5b1f17b1804b1-42817f1eb1fso7794345e9.1
- for <buildroot@buildroot.org>; Thu, 08 Aug 2024 09:09:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1723133365; x=1723738165;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=Z2QddF77mm9FfIgYgFQTPOZIDy7RydTha4J+fvNTaso=;
- b=ovPM1mOD0SpzL4018jElZLO65Xv3HDl5k/K8nnUOJ1Q8RpuIIq+xPONDS9GM7gAwV8
- 0RljcwZzN1qzOUpByu/W48a2MbQ75BwN0eA/U8iMHmJ5CqDm0lU+fA76ex7kKEUg8xUc
- C36Z8BYf209FKq14ODtdkZtWIvpJVd01RvFz0wTCkVnm/2o03HMUSap7/wSaj0itAO5L
- iWSQM90p8Pr0cneedItxc0qiH56Dkg0gumACCYPj4DIzjHaHa9eCkpUZ63CCODd4H5iY
- flGkPw5nO+tjStcxV3Hj/BESj+USfAqx2BFIrtFqByFSvbm/nA+U6b8nNruG+TuR3G8y
- xryA==
-X-Gm-Message-State: AOJu0YzwcoUWysDqlYD6Kd++6golFA3olgnp1I1SaD+1l5RDop/xoqGs
- /6sLP/XvkJrdOxO1rKvy4Y1rA965GBnDaqbwzmU3rB7E4xmKsRfaoNZQEs1P
-X-Google-Smtp-Source: AGHT+IEzvb3ekfYusfNTeDHIWVfH0FBEBWo+PxiQmNWOTpPQhjNMdzP0W8gmSI6nzmFiZZvnnV/VXA==
-X-Received: by 2002:a05:600c:5493:b0:428:16a0:1c3d with SMTP id
- 5b1f17b1804b1-4290aec8fdamr18330915e9.19.1723133364829; 
- Thu, 08 Aug 2024 09:09:24 -0700 (PDT)
-Received: from cuervo.intranet.jlsalvador.online ([78.30.23.54])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-429059cbea0sm81835855e9.43.2024.08.08.09.09.24
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 08 Aug 2024 09:09:24 -0700 (PDT)
-From: =?UTF-8?q?Jos=C3=A9=20Luis=20Salvador=20Rufo?=
- <salvador.joseluis@gmail.com>
-To: buildroot@buildroot.org
-Date: Thu,  8 Aug 2024 18:06:10 +0200
-Message-ID: <20240808160606.60188-6-salvador.joseluis@gmail.com>
-X-Mailer: git-send-email 2.46.0
-In-Reply-To: <20240807120619.66304f2e@windsurf>
-References: <20240807120619.66304f2e@windsurf>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3a6fR2LyAQ_b for <buildroot@lists.busybox.net>;
+ Thu,  8 Aug 2024 16:39:55 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=198.47.19.142;
+ helo=fllv0016.ext.ti.com; envelope-from=bb@ti.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org A5D6980BDE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A5D6980BDE
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A5D6980BDE
+ for <buildroot@buildroot.org>; Thu,  8 Aug 2024 16:39:53 +0000 (UTC)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+ by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 478GdjBS010879;
+ Thu, 8 Aug 2024 11:39:46 -0500
+Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
+ by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 478Gdjku116852
+ (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+ Thu, 8 Aug 2024 11:39:45 -0500
+Received: from DFLE100.ent.ti.com (10.64.6.21) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 8
+ Aug 2024 11:39:45 -0500
+Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Thu, 8 Aug 2024 11:39:45 -0500
+Received: from localhost (bb.dhcp.ti.com [128.247.81.12])
+ by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 478GdjI5060967;
+ Thu, 8 Aug 2024 11:39:45 -0500
+Date: Thu, 8 Aug 2024 11:39:45 -0500
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Message-ID: <20240808163945.u24qofwqk33v2zn2@bryanbrattlof.com>
+X-PGP-Fingerprint: D3D1 77E4 0A38 DF4D 1853 FEEF 41B9 0D5D 71D5 6CE0
+References: <20240807-tfa-src-update-v2-0-f2cd6166db5f@ti.com>
+ <20240807-tfa-src-update-v2-1-f2cd6166db5f@ti.com>
+ <20240808001230.39ca2187@windsurf>
 MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20240808001230.39ca2187@windsurf>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1723133365; x=1723738165; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=Z2QddF77mm9FfIgYgFQTPOZIDy7RydTha4J+fvNTaso=;
- b=D4wWyQIqWmpYw/VsDZs4UNRrtlBcZ6KU+TpYbZiiNAySQ8KYszqW9xqLvxT3LTAqo5
- 6rS19c+ZBhhLDgixL80jZSE3SGm3KdzNRmX9gRMVsDr/l0SYu70cYUJTANzZ9H7MhRjF
- Z9ah1y7/CrZKb4Snrp678bPLDJ2WY8WNnXzm+JasPQsZvqJ3+JNAaCVEDN5z9G/8eec/
- v/x44zpn2Yvg7z2Av6rGxSXFZth5JaZd6sDGd34U6Yholo4MGTKav8YVQfh/6hr6xC97
- 64dIIOrgT+nknmgB4bNP9BZ2W91EcemRlLxGXnvmd2SWflQP3XFaVn4rr6z3Qc3TFs24
- 9sCg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=D4wWyQIq
-Subject: [Buildroot] [PATCH v3 2/2] package/zfs: bump version to 2.2.5
+ d=ti.com; s=ti-com-17Q1; t=1723135186;
+ bh=+e6i/qUUMmHOU/kLEYEq9MdZMnniD/fARnMNIxOGG+c=;
+ h=Date:From:To:CC:Subject:References:In-Reply-To;
+ b=pk4yYv5cC9+KaN+2Wg6N70cVDj/X6WejFjp7a3Kkmbfg7ejVYQIwFNbTNvX6GNEbH
+ h0KyXJVgTeosL6YZEdqLapF7QAYxXYMgWQDy7t5hxulZ+z4JrMqQWjzEC0G63WjOqJ
+ y2kOi8SLD/9Gs9f+IqAtMjlxllzhQQZJ0aIvKd90=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=ti.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=ti.com header.i=@ti.com header.a=rsa-sha256
+ header.s=ti-com-17Q1 header.b=pk4yYv5c
+Subject: Re: [Buildroot] [PATCH v2 1/4] boot/arm-trusted-firmware: move to
+ official source for tf-a
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,34 +92,71 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Alexander Mukhin <alexander.i.mukhin@gmail.com>,
- =?UTF-8?q?Jos=C3=A9=20Luis=20Salvador=20Rufo?=
- <salvador.joseluis@gmail.com>, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Bryan Brattlof via buildroot <buildroot@buildroot.org>
+Reply-To: Bryan Brattlof <bb@ti.com>
+Cc: Vincent =?utf-8?Q?Stehl=C3=A9?= <vincent.stehle@arm.com>,
+ Marleen Vos <marleen.vos@mind.be>,
+ Michael Trimarchi <michael@amarulasolutions.com>,
+ Sergey Matyukevich <geomatsi@gmail.com>,
+ Ariel D'Alessandro <ariel@vanguardiasur.com.ar>,
+ Xuanhao Shi <X15000177@gmail.com>,
+ Bryan Brattlof via buildroot <buildroot@buildroot.org>,
+ Romain Naour <romain.naour@gmail.com>,
+ Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+ Anand Gadiyar <gadiyar@ti.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-U2lnbmVkLW9mZi1ieTogSm9zw6kgTHVpcyBTYWx2YWRvciBSdWZvIDxzYWx2YWRvci5qb3NlbHVp
-c0BnbWFpbC5jb20+Ci0tLQogcGFja2FnZS96ZnMvemZzLmhhc2ggfCAyICstCiBwYWNrYWdlL3pm
-cy96ZnMubWsgICB8IDIgKy0KIDIgZmlsZXMgY2hhbmdlZCwgMiBpbnNlcnRpb25zKCspLCAyIGRl
-bGV0aW9ucygtKQoKZGlmZiAtLWdpdCBhL3BhY2thZ2UvemZzL3pmcy5oYXNoIGIvcGFja2FnZS96
-ZnMvemZzLmhhc2gKaW5kZXggOWM4ZDRjZWM4NS4uOTU5OGFlZDk5MiAxMDA2NDQKLS0tIGEvcGFj
-a2FnZS96ZnMvemZzLmhhc2gKKysrIGIvcGFja2FnZS96ZnMvemZzLmhhc2gKQEAgLTEsNSArMSw1
-IEBACiAjIEZyb20gaHR0cHM6Ly9naXRodWIuY29tL29wZW56ZnMvemZzL3JlbGVhc2VzL2Rvd25s
-b2FkL3pmcy0yLjIuNC96ZnMtMi4yLjQuc2hhMjU2LmFzYwotc2hhMjU2ICA5NzkwOTA1Zjc2ODNk
-NDE3NTk0MThlMWVmMzQzMjgyOGMzMTExNjY1NGZmMDQwZTkxMzU2ZmYxYzIxYzMxZWMwICB6ZnMt
-Mi4yLjQudGFyLmd6CitzaGEyNTYgIDIzODhjZjZmMjljZDc1ZTg3ZDZkMDVlNDg1OGEwOWQ0MTlj
-NGY4ODNhNjU4ZDUxZWY1Nzc5NjEyMWNkMDg4OTcgIHpmcy0yLjIuNS50YXIuZ3oKIAogIyBIYXNo
-IGZvciBsaWNlbnNlIGZpbGVzOgogc2hhMjU2ICAxZmZiNzBjMzNjNGY3OWYwNGU5NDdmYWNjNWM3
-ODUxZjI4OTYwOTI1NmFhY2I0N2ZjMTE1ZjcwMDQyN2Q5NTIwICBMSUNFTlNFCmRpZmYgLS1naXQg
-YS9wYWNrYWdlL3pmcy96ZnMubWsgYi9wYWNrYWdlL3pmcy96ZnMubWsKaW5kZXggZTUxYWRlNTVh
-NC4uNTQ5Zjg2NDFiOSAxMDA2NDQKLS0tIGEvcGFja2FnZS96ZnMvemZzLm1rCisrKyBiL3BhY2th
-Z2UvemZzL3pmcy5tawpAQCAtNCw3ICs0LDcgQEAKICMKICMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-CiAKLVpGU19WRVJTSU9OID0gMi4yLjQKK1pGU19WRVJTSU9OID0gMi4yLjUKIFpGU19TSVRFID0g
-aHR0cHM6Ly9naXRodWIuY29tL29wZW56ZnMvemZzL3JlbGVhc2VzL2Rvd25sb2FkL3pmcy0kKFpG
-U19WRVJTSU9OKQogWkZTX1NFTElOVVhfTU9EVUxFUyA9IHpmcwogWkZTX0xJQ0VOU0UgPSBDRERM
-Ci0tIAoyLjQ2LjAKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6
-Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+On August  8, 2024 thus sayeth Thomas Petazzoni via buildroot:
+> On Wed, 7 Aug 2024 12:48:19 -0500
+> Bryan Brattlof via buildroot <buildroot@buildroot.org> wrote:
+> 
+> > ARM_TRUSTED_FIRMWARE_SITE is currently pointing to the deprecated
+> > ARM-software github read-only mirror[0] which is no longer publishing
+> > new tags. They do have a newer github mirror under the TrustedFirmware-A
+> > organization[1] which continues to receive tag updates we could use
+> > however because of the way github generates tarballs changing the SITE
+> > to point to TrustedFormware-A changes the pre-calculated hash values
+> > for every version for everyone.
+> > 
+> > Without much way around changing all hash values if we want these latest
+> > tags, lets drop the github mirrors and move to the official git
+> > source[2] so we can download real tarballs which shouldn't change even
+> > if the ARM_TRUSTED_FIRMWARE_SITE moves again and hopefully preventing
+> > this from ever happening again.
+> > 
+> > [2] https://git.trustedfirmware.org/TF-A/trusted-firmware-a.git/
+> > [1] https://github.com/TrustedFirmware-A/trusted-firmware-a
+> > [0] https://github.com/ARM-software/arm-trusted-firmware
+> > 
+> > Signed-off-by: Bryan Brattlof <bb@ti.com>
+> > ---
+> >  .../fvp-ebbr/patches/arm-trusted-firmware/arm-trusted-firmware.hash   | 2 +-
+> >  .../patches/arm-trusted-firmware/arm-trusted-firmware.hash            | 2 +-
+> >  .../beagleplay/patches/arm-trusted-firmware/arm-trusted-firmware.hash | 2 +-
+> >  .../patches/arm-trusted-firmware/arm-trusted-firmware.hash            | 2 +-
+> >  .../patches/arm-trusted-firmware/arm-trusted-firmware.hash            | 2 +-
+> >  board/qemu/patches/arm-trusted-firmware/arm-trusted-firmware.hash     | 2 +-
+> >  .../stm32mp157/patches/arm-trusted-firmware/arm-trusted-firmware.hash | 2 +-
+> >  .../am62ax-sk/patches/arm-trusted-firmware/arm-trusted-firmware.hash  | 2 +-
+> >  .../am62x-sk/patches/arm-trusted-firmware/arm-trusted-firmware.hash   | 2 +-
+> >  .../am64x-sk/patches/arm-trusted-firmware/arm-trusted-firmware.hash   | 2 +-
+> >  boot/arm-trusted-firmware/arm-trusted-firmware.hash                   | 4 ++--
+> >  boot/arm-trusted-firmware/arm-trusted-firmware.mk                     | 3 ++-
+> >  12 files changed, 14 insertions(+), 13 deletions(-)
+> 
+> Applied to master, thanks! Note that your patch didn't apply as-is to
+> master, one defconfig had changed in the mean time. If possible make
+> sure to send patches that apply on the latest master.
+>
+
+Ah thank you for all the fixups. I may have hit send a little too fast 
+on this one :)
+
+~Bryan
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
