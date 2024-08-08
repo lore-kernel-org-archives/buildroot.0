@@ -4,59 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 185AAC3DA4A
-	for <buildroot@archiver.kernel.org>; Thu,  8 Aug 2024 12:02:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 45D5BC52D6F
+	for <buildroot@archiver.kernel.org>; Thu,  8 Aug 2024 12:04:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B51B360A92;
-	Thu,  8 Aug 2024 12:02:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F1C6260610;
+	Thu,  8 Aug 2024 12:04:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id b28znQb_w73z; Thu,  8 Aug 2024 12:02:47 +0000 (UTC)
+ id dDs8DX1nTOXs; Thu,  8 Aug 2024 12:04:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C467160A81
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0831E60A81
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C467160A81;
-	Thu,  8 Aug 2024 12:02:46 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 306361BF2AB
- for <buildroot@lists.busybox.net>; Thu,  8 Aug 2024 12:02:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0831E60A81;
+	Thu,  8 Aug 2024 12:04:43 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 256361BF2A6
+ for <buildroot@lists.busybox.net>; Thu,  8 Aug 2024 12:04:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1B34860A81
- for <buildroot@lists.busybox.net>; Thu,  8 Aug 2024 12:02:45 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1296E80B1D
+ for <buildroot@lists.busybox.net>; Thu,  8 Aug 2024 12:04:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Jg_c3NZ32l8p for <buildroot@lists.busybox.net>;
- Thu,  8 Aug 2024 12:02:44 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::222;
- helo=relay2-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JWx_Q1iVnN6M for <buildroot@lists.busybox.net>;
+ Thu,  8 Aug 2024 12:04:41 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 80F4A605E1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 80F4A605E1
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::222])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 80F4A605E1
- for <buildroot@buildroot.org>; Thu,  8 Aug 2024 12:02:42 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 5573A40002;
- Thu,  8 Aug 2024 12:02:40 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1sc1qp-007Uzj-1s;
- Thu, 08 Aug 2024 14:02:39 +0200
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3E9DD80AE7
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3E9DD80AE7
+ for <buildroot@buildroot.org>; Thu,  8 Aug 2024 12:04:41 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 28931845EC; Thu,  8 Aug 2024 12:04:41 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-References: <20240712220254.DF24A8624E@busybox.osuosl.org>
-Date: Thu, 08 Aug 2024 14:02:39 +0200
-In-Reply-To: <20240712220254.DF24A8624E@busybox.osuosl.org> (Thomas Petazzoni
- via buildroot's message of "Sat, 13 Jul 2024 00:02:39 +0200")
-Message-ID: <87h6bvmdcw.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [git commit] package/uvw: bump to 3.4.0
+To: buildroot@buildroot.org
+Date: Thu, 8 Aug 2024 14:01:21 +0200
+X-Git-Refname: refs/heads/2024.05.x
+X-Git-Oldrev: 886cdf6c91652bb533ec714b0b29dd23ea8ed829
+X-Git-Newrev: 09766aab583750b2227bff45c5f51460b36eb7a7
+X-Patchwork-Hint: ignore
+Message-Id: <20240808120441.28931845EC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.05.x] package/uvw: bump to 3.4.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,31 +58,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Thomas" == Thomas Petazzoni via buildroot <buildroot@buildroot.org> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=09766aab583750b2227bff45c5f51460b36eb7a7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.05.x
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=c54134bf6914593caaa9ed4aa11cbe3a17c59eca
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+This allows uvw to be again in sync with the libuv package, following
+the bump of libuv to v1.48 in commit
+bd2f99246c253739a3d44d8345f2fbb5362b3fb5 ("package/libuv: security
+bump to version 1.48")
 
- > This allows uvw to be again in sync with the libuv package, following
- > the bump of libuv to v1.48 in commit
- > bd2f99246c253739a3d44d8345f2fbb5362b3fb5 ("package/libuv: security
- > bump to version 1.48")
+The hash of the license file has changed due to a copyright year
+update.
 
- > The hash of the license file has changed due to a copyright year
- > update.
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit c54134bf6914593caaa9ed4aa11cbe3a17c59eca)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/uvw/uvw.hash | 4 ++--
+ package/uvw/uvw.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-
-Committed to 2024.02.x and 2024.05.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/uvw/uvw.hash b/package/uvw/uvw.hash
+index 2dc6e879e1..d346ac1619 100644
+--- a/package/uvw/uvw.hash
++++ b/package/uvw/uvw.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  bd5aed741765950074b1ea2507291dce81e528abdf56c406991ad4a27d8d1714  uvw-3.2.0_libuv_v1.46.tar.gz
+-sha256  e2a4062818ab05e2a0908737ad49b7c01202247364e900167ac81105de8713f3  LICENSE
++sha256  c16600573871a5feeb524234b378ab832c8971b2a68d030c6bd0e3077d416ade  uvw-3.4.0_libuv_v1.48.tar.gz
++sha256  5e439d0ad6e1b16f2f14023872c49cb2cf1b62a172c30b864cb45a5aa6533454  LICENSE
+diff --git a/package/uvw/uvw.mk b/package/uvw/uvw.mk
+index 12149d43ca..a1eff0e4dd 100644
+--- a/package/uvw/uvw.mk
++++ b/package/uvw/uvw.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-UVW_VERSION = 3.2.0_libuv_v1.46
++UVW_VERSION = 3.4.0_libuv_v1.48
+ UVW_SITE = $(call github,skypjack,uvw,v$(UVW_VERSION))
+ UVW_INSTALL_STAGING = YES
+ UVW_INSTALL_TARGET = NO
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
