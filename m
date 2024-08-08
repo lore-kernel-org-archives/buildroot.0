@@ -1,76 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7969CC3DA4A
-	for <buildroot@archiver.kernel.org>; Thu,  8 Aug 2024 20:06:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D7B26C3DA4A
+	for <buildroot@archiver.kernel.org>; Thu,  8 Aug 2024 20:27:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 36B1540D3F;
-	Thu,  8 Aug 2024 20:06:20 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id B8Lont3V8bqD; Thu,  8 Aug 2024 20:06:19 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B8E2F40D53
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B8E2F40D53;
-	Thu,  8 Aug 2024 20:06:18 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E312C1BF86C
- for <buildroot@lists.busybox.net>; Thu,  8 Aug 2024 20:06:16 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DA78C8117B
- for <buildroot@lists.busybox.net>; Thu,  8 Aug 2024 20:06:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 90D1381ABB;
+	Thu,  8 Aug 2024 20:27:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id C5pDHAaoPcur for <buildroot@lists.busybox.net>;
- Thu,  8 Aug 2024 20:06:16 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::225;
- helo=relay5-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8ABA580B6D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8ABA580B6D
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::225])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8ABA580B6D
- for <buildroot@buildroot.org>; Thu,  8 Aug 2024 20:06:15 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 426021C0003;
- Thu,  8 Aug 2024 20:06:12 +0000 (UTC)
-Date: Thu, 8 Aug 2024 22:06:10 +0200
-To: Jamie Gibbons via buildroot <buildroot@buildroot.org>
-Message-ID: <20240808220610.14cab4c7@windsurf>
-In-Reply-To: <20240808105221.2776341-2-jamie.gibbons@microchip.com>
-References: <20240808105221.2776341-1-jamie.gibbons@microchip.com>
- <20240808105221.2776341-2-jamie.gibbons@microchip.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+ id yy2V5amXgWaC; Thu,  8 Aug 2024 20:27:03 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A32F881D34
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id A32F881D34;
+	Thu,  8 Aug 2024 20:27:03 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C3D7F1BF86C
+ for <buildroot@lists.busybox.net>; Thu,  8 Aug 2024 20:27:01 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id CD64840BFD
+ for <buildroot@lists.busybox.net>; Thu,  8 Aug 2024 20:27:00 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id s1jQaLzYOGAZ for <buildroot@lists.busybox.net>;
+ Thu,  8 Aug 2024 20:26:59 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.158.102;
+ helo=smtpcmd02102.aruba.it;
+ envelope-from=giulio.benetti@benettiengineering.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org F3F484015F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F3F484015F
+Received: from smtpcmd02102.aruba.it (smtpcmd02102.aruba.it [62.149.158.102])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id F3F484015F
+ for <buildroot@buildroot.org>; Thu,  8 Aug 2024 20:26:56 +0000 (UTC)
+Received: from localhost.localdomain ([84.33.84.190])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id c9insD6jBNKTWc9insbpsM; Thu, 08 Aug 2024 22:26:54 +0200
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+To: buildroot@buildroot.org
+Date: Thu,  8 Aug 2024 22:26:52 +0200
+Message-Id: <20240808202652.23100-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1723147572;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=LaJFZ8DTOJsNYNbv9LllSySQONZTWQOaT7E9gLKLg6Q=;
- b=nmoJg8seP1DQuDbTaszlPEmuglsG5069/ICYnu1NG3Hv2bRde4lTXck94zqmS5fj575/rb
- J3Exn2YGLxjm5AZ70V015EopVYcER/4U8ObdTDJkAAUFHCLAjpwjxPvcp4Eg7SAnmy0gn4
- IipVf4lvEsfsqHEgyPfLWkE0iRj/mtq51063MrTgBX24AAcIQr4FNu4IKv6lGEloyM6KTc
- IyCart1J9JfOclpHqyLqViWBZGPU+lr96e2U3qxN9y8mrsD8AnK50kEVikaIG6ETteBH56
- rrKDAuf5YsMDBkD+JEc725mGuM6hZPBZlCMBLyxwLW/K1mT+I55A2k2JdCbNrg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-CMAE-Envelope: MS4xfNj8OoxfjnSyzal8EGtCY3lUs+JEoL/DAD4wRSb0qqAH8kRyCO7xi2iYEnoQXD4DeAXYKKk6mnnhO4/kI3RFhELInkGd8GXU81GcdaVmi+lAa5M35AG6
+ V0XorJefHp3nkvwgMPOlQi+imAMVoNnUKIZ7UGX/pNvCWG4P1p4QzD2oQf6QulIHdArIHPcTnawDtDEPlHtmNawCl0RhCZykHArmlBKP4VqGPhfhMqa61Cyg
+ 3KgqDvA9yM6SQ0zJ3hl1V4ATJWR15QUByqmeX1KuA7k=
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=aruba.it; s=a1; 
+ t=1723148814; bh=UvKoWjkvWPOSN+dmjgdUFZI18ryvOXdKzgLJT5hIphU=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=iIF8i3vb1sMEcqhiDt6P2km5H3rxTlTthpxonS2QzTtYPv5oDTww0LgZPbUMgf+PJ
+ eAB9Ft0jzgPPOxYpJ2V7xkBbMupkegitfkOJqkEO2SsaTducxfK6CxvXw6rmG5wUlL
+ FykSicfS+nFJepZQjxq/X5ro5c0Qcq+46LrNBehC1bpZCGHEdYrhzYxBBeNnqCzvVC
+ RNLX0qmITW3DYU6+feRHqIG60fZ3ZEM4SXjmq6Y9hSkutQ/SzRwZDB10wXeWUn8q/U
+ lXtSWl54VdPkAVXAMdMfRb6DIvpQGaR0DdByBi1x5KOtpdJ3fkOrbTQi2VkTwuNwfD
+ 5624Q1NS9kPMQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=benettiengineering.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=nmoJg8se
-Subject: Re: [Buildroot] [PATCH v2 1/2] fix: configs/beaglev_fire: update
- custom tarballs
+ unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
+ header.s=a1 header.b=iIF8i3vb
+Subject: [Buildroot] [PATCH] package/libnvme: bump to version 1.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,97 +78,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Jamie Gibbons <jamie.gibbons@microchip.com>,
- Prajna Rajendra Kumar <prajna.rajendrakumar@microchip.com>
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Jamie,
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+---
+ package/libnvme/libnvme.hash | 2 +-
+ package/libnvme/libnvme.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-I was about to apply but had some second thoughts. See below.
-
-First, please don't add this "fix: " at the beginning of the commit
-title. The commit title should be just:
-
-	configs/beaglev_fire: update custom tarballs
-
-On Thu, 8 Aug 2024 11:52:20 +0100
-Jamie Gibbons via buildroot <buildroot@buildroot.org> wrote:
-
-> The Linux kernel and  U-Boot custom tarballs were updated incorrectly.
-
-Please change to "were updated incorrectly in commit 8ce97fd550d6".
-
-> Update these to select specific release tags instead of branches. Update
-> the U-Boot hash to match changes.
-
-Why do you mention that update the U-Boot hash here, while the Linux
-hash is also updated?
-
-> 
-> Fixes:8ce97fd550d6("configs/beaglev_fire: bump Linux and U-Boot")
-
-Space after "Fixes:", space after the commit hash.
-
-But now, the real issue (because I had already fixed locally the above
-minor details).
-
-
-> index 809e00ff92..93b6aa7f26 100644
-> --- a/configs/beaglev_fire_defconfig
-> +++ b/configs/beaglev_fire_defconfig
-> @@ -8,7 +8,7 @@ BR2_ROOTFS_OVERLAY="board/beagleboard/beaglev_fire/rootfs-overlay/"
->  BR2_ROOTFS_POST_IMAGE_SCRIPT="board/beagleboard/beaglev_fire/post-image.sh"
->  BR2_LINUX_KERNEL=y
->  BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
-> -BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4microchip,linux,linux-6.6-mchp+fpga)/linux4microchip+fpga-2024.06.tar.gz"
-> +BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4microchip,linux,linux4microchip+fpga-2024.06)/linux4microchip+fpga-2024.06.tar.gz"
-
-Please change the name of the tarball to
-linux-linux4microchip+fpga-2024.06.tar.gz, i.e this line should be:
-
-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4microchip,linux,linux4microchip+fpga-2024.06)/linux-linux4microchip+fpga-2024.06.tar.gz"
-
->  BR2_LINUX_KERNEL_DEFCONFIG="mpfs"
->  BR2_LINUX_KERNEL_DTS_SUPPORT=y
->  BR2_LINUX_KERNEL_INTREE_DTS_NAME="microchip/mpfs-beaglev-fire"
-> @@ -18,7 +18,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
->  BR2_TARGET_UBOOT=y
->  BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
->  BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
-> -BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,linux4microchip,u-boot-mchp,u-boot-2023.07-mchp)/linux4microchip+fpga-2024.06.tar.gz"
-> +BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,linux4microchip,u-boot-mchp,linux4microchip+fpga-2024.06)/linux4microchip+fpga-2024.06.tar.gz"
-
-Please change the name of the tarball to
-uboot-linux4microchip+fpga-2024.06.tar.gz, so this line should become:
-
-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,linux4microchip,u-boot-mchp,linux4microchip+fpga-2024.06)/uboot-linux4microchip+fpga-2024.06.tar.gz"
-
-The motivation for this is that otherwise we have two tarballs with
-exactly the same name "linux4microchip+fpga-2024.06.tar.gz", for Linux
-and U-Boot, which can be confusing.
-
-Also, it is customary in Buildroot to name tarballe
-<package>-<version>.tar.gz, which is exactly what I'm asking you to do
-here.
-
-(I could have fixed that myself, but I'm working on a not very fast DSL
-connection at the moment, so downloading all those kernel tarballs takes
-quite a while...)
-
-Could you take into account those comments also for PATCH 2/2 ?
-
-Thanks!
-
-Thomas
+diff --git a/package/libnvme/libnvme.hash b/package/libnvme/libnvme.hash
+index 99c633882a..05727f7cb3 100644
+--- a/package/libnvme/libnvme.hash
++++ b/package/libnvme/libnvme.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated sha256 checksums
+-sha256  455867060d2b7563eab59fe21779dff469d98465028997178c7efbe4b8763206  libnvme-1.9.tar.gz
++sha256  add9efa968e8341459fcaa2d96f2594a6f871e1fb3f57c02ce1c8ba5424f3960  libnvme-1.10.tar.gz
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/libnvme/libnvme.mk b/package/libnvme/libnvme.mk
+index da8707db7d..93de76e83e 100644
+--- a/package/libnvme/libnvme.mk
++++ b/package/libnvme/libnvme.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBNVME_VERSION = 1.9
++LIBNVME_VERSION = 1.10
+ LIBNVME_SITE = $(call github,linux-nvme,libnvme,v$(LIBNVME_VERSION))
+ LIBNVME_LICENSE = LGPL-2.1
+ LIBNVME_LICENSE_FILES = COPYING
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
