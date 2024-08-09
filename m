@@ -4,60 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA0DFC52D7C
-	for <buildroot@archiver.kernel.org>; Fri,  9 Aug 2024 11:41:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C42DC3DA4A
+	for <buildroot@archiver.kernel.org>; Fri,  9 Aug 2024 11:41:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7EA224132B;
-	Fri,  9 Aug 2024 11:41:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6335C4134A;
+	Fri,  9 Aug 2024 11:41:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tRxGJ6E2FicS; Fri,  9 Aug 2024 11:41:03 +0000 (UTC)
+ id 5L4gFqYaEz1H; Fri,  9 Aug 2024 11:41:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6B8654132C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2A2A241363
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6B8654132C;
-	Fri,  9 Aug 2024 11:41:03 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id AD6181BF336
- for <buildroot@lists.busybox.net>; Fri,  9 Aug 2024 11:41:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2A2A241363;
+	Fri,  9 Aug 2024 11:41:22 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id E64BC1BF336
+ for <buildroot@lists.busybox.net>; Fri,  9 Aug 2024 11:41:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9A61F4133F
- for <buildroot@lists.busybox.net>; Fri,  9 Aug 2024 11:41:01 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id D45BC60AD5
+ for <buildroot@lists.busybox.net>; Fri,  9 Aug 2024 11:41:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xEwr_mAhxNJs for <buildroot@lists.busybox.net>;
- Fri,  9 Aug 2024 11:41:00 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.196;
- helo=relay4-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id oqCdttx8K8UX for <buildroot@lists.busybox.net>;
+ Fri,  9 Aug 2024 11:41:20 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6F8D64132C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6F8D64132C
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6F8D64132C
- for <buildroot@buildroot.org>; Fri,  9 Aug 2024 11:41:00 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 3192EE0005;
- Fri,  9 Aug 2024 11:40:57 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1scNzM-000AIM-1Z;
- Fri, 09 Aug 2024 13:40:56 +0200
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 18B06608F7
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 18B06608F7
+ for <buildroot@buildroot.org>; Fri,  9 Aug 2024 11:41:20 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 099F884D85; Fri,  9 Aug 2024 11:41:20 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20231002165235.346092-1-fontaine.fabrice@gmail.com>
-Date: Fri, 09 Aug 2024 13:40:56 +0200
-In-Reply-To: <20231002165235.346092-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Mon, 2 Oct 2023 18:52:35 +0200")
-Message-ID: <87frrdq5yv.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/sunxi-tools: sunxi-fel needs
- dynamic library
+To: buildroot@buildroot.org
+Date: Fri, 9 Aug 2024 13:37:37 +0200
+X-Git-Refname: refs/heads/2024.02.x
+X-Git-Oldrev: b85c9eb7540c0aa202f26991152164aec3bbad8d
+X-Git-Newrev: ee8bc6384075c4d2097c7451d8a733b5c1415a36
+X-Patchwork-Hint: ignore
+Message-Id: <20240809114120.099F884D85@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/btrfs-progs:
+ update Kconfig package homepage URL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,30 +59,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=ee8bc6384075c4d2097c7451d8a733b5c1415a36
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
- > Fix the following build failure raised since bump to version
- > 1.4.2-168-ged3039c in commit 2e330dff6a7ce7965ceb0dccdc9dcbcb329167bb:
+The btrfs-progs homepage [1] show a banner:
 
- > /home/buildroot/autobuild/run/instance-1/output-1/host/lib/gcc/arm-buildroot-linux-musleabihf/12.3.0/../../../../arm-buildroot-linux-musleabihf/bin/ld:
- > attempted static link of dynamic object `libfdt/libfdt-1.6.1.so'
+    OBSOLETE CONTENT
+    This wiki has been archived and the content is no longer updated.
 
- > Fixes:
- >  - http://autobuild.buildroot.org/results/6788d86c10d551b3d617e33c85083b817eb5d0b2
+    NOTE: this wiki is archived and not updated anymore (02/2023).
+    Contents will be migrated to https://btrfs.readthedocs.io
 
- > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+This commit updates the URL to the new one at [2].
 
-Committed to 2024.02.x and 2024.05.x, thanks.
+[1] https://btrfs.wiki.kernel.org/index.php/Main_Page
+[2] https://btrfs.readthedocs.io
 
--- 
-Bye, Peter Korsgaard
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 91cd9488005e7f0fce7ead126f1e637deefcaf02)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/btrfs-progs/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/btrfs-progs/Config.in b/package/btrfs-progs/Config.in
+index 35dfc39193..bae096061d 100644
+--- a/package/btrfs-progs/Config.in
++++ b/package/btrfs-progs/Config.in
+@@ -10,7 +10,7 @@ config BR2_PACKAGE_BTRFS_PROGS
+ 	help
+ 	  Btrfs filesystem utilities
+ 
+-	  https://btrfs.wiki.kernel.org/index.php/Main_Page
++	  https://btrfs.readthedocs.io
+ 
+ comment "btrfs-progs needs a toolchain w/ threads"
+ 	depends on BR2_USE_MMU
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
