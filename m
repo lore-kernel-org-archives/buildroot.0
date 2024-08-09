@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C42DC3DA4A
-	for <buildroot@archiver.kernel.org>; Fri,  9 Aug 2024 11:41:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E20EC3DA4A
+	for <buildroot@archiver.kernel.org>; Fri,  9 Aug 2024 11:41:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6335C4134A;
-	Fri,  9 Aug 2024 11:41:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1A20441365;
+	Fri,  9 Aug 2024 11:41:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5L4gFqYaEz1H; Fri,  9 Aug 2024 11:41:22 +0000 (UTC)
+ id snPduQp4Rr8s; Fri,  9 Aug 2024 11:41:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2A2A241363
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9AE3241374
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2A2A241363;
-	Fri,  9 Aug 2024 11:41:22 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E64BC1BF336
- for <buildroot@lists.busybox.net>; Fri,  9 Aug 2024 11:41:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9AE3241374;
+	Fri,  9 Aug 2024 11:41:25 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 54A501BF336
+ for <buildroot@lists.busybox.net>; Fri,  9 Aug 2024 11:41:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D45BC60AD5
- for <buildroot@lists.busybox.net>; Fri,  9 Aug 2024 11:41:20 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 422494049C
+ for <buildroot@lists.busybox.net>; Fri,  9 Aug 2024 11:41:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oqCdttx8K8UX for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id vuERaKuXZkqW for <buildroot@lists.busybox.net>;
  Fri,  9 Aug 2024 11:41:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 18B06608F7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 33AA140163
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 18B06608F7
+ by smtp2.osuosl.org (Postfix) with ESMTP id 33AA140163
  for <buildroot@buildroot.org>; Fri,  9 Aug 2024 11:41:20 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 099F884D85; Fri,  9 Aug 2024 11:41:20 +0000 (UTC)
+ id 1F0AB84D86; Fri,  9 Aug 2024 11:41:20 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 9 Aug 2024 13:37:37 +0200
+Date: Fri, 9 Aug 2024 13:38:40 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: b85c9eb7540c0aa202f26991152164aec3bbad8d
-X-Git-Newrev: ee8bc6384075c4d2097c7451d8a733b5c1415a36
+X-Git-Oldrev: ee8bc6384075c4d2097c7451d8a733b5c1415a36
+X-Git-Newrev: c8eeb96df2d2a3e76537e88768d7fce4e1dfce6b
 X-Patchwork-Hint: ignore
-Message-Id: <20240809114120.099F884D85@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/btrfs-progs:
- update Kconfig package homepage URL
+Message-Id: <20240809114120.1F0AB84D86@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/octave: add
+ optional libsndfile support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,43 +65,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ee8bc6384075c4d2097c7451d8a733b5c1415a36
+commit: https://git.buildroot.net/buildroot/commit/?id=c8eeb96df2d2a3e76537e88768d7fce4e1dfce6b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-The btrfs-progs homepage [1] show a banner:
+GNU Octave supports the --with-sndfile configure option since v4.0.0.
 
-    OBSOLETE CONTENT
-    This wiki has been archived and the content is no longer updated.
+For reference, commit 40ea68b4b2 "package/octave: new package"
+introduced the package at v7.1.0.
 
-    NOTE: this wiki is archived and not updated anymore (02/2023).
-    Contents will be migrated to https://btrfs.readthedocs.io
-
-This commit updates the URL to the new one at [2].
-
-[1] https://btrfs.wiki.kernel.org/index.php/Main_Page
-[2] https://btrfs.readthedocs.io
+This commits adds this optional support.
 
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 91cd9488005e7f0fce7ead126f1e637deefcaf02)
+(cherry picked from commit a5ce48fe456d790612c9b63990f0a4f3e2faa554)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/btrfs-progs/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/octave/octave.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/btrfs-progs/Config.in b/package/btrfs-progs/Config.in
-index 35dfc39193..bae096061d 100644
---- a/package/btrfs-progs/Config.in
-+++ b/package/btrfs-progs/Config.in
-@@ -10,7 +10,7 @@ config BR2_PACKAGE_BTRFS_PROGS
- 	help
- 	  Btrfs filesystem utilities
+diff --git a/package/octave/octave.mk b/package/octave/octave.mk
+index e5b1b2607d..f050546709 100644
+--- a/package/octave/octave.mk
++++ b/package/octave/octave.mk
+@@ -43,6 +43,13 @@ else
+ OCTAVE_CONF_OPTS += --without-curl
+ endif
  
--	  https://btrfs.wiki.kernel.org/index.php/Main_Page
-+	  https://btrfs.readthedocs.io
- 
- comment "btrfs-progs needs a toolchain w/ threads"
- 	depends on BR2_USE_MMU
++ifeq ($(BR2_PACKAGE_LIBSNDFILE),y)
++OCTAVE_CONF_OPTS += --with-sndfile
++OCTAVE_DEPENDENCIES += libsndfile
++else
++OCTAVE_CONF_OPTS += --without-sndfile
++endif
++
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ OCTAVE_CONF_OPTS += --with-openssl=yes
+ OCTAVE_DEPENDENCIES += openssl
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
