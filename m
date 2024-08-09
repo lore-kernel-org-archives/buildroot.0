@@ -4,50 +4,92 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BEE7AC3DA4A
-	for <buildroot@archiver.kernel.org>; Fri,  9 Aug 2024 11:42:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53D92C3DA4A
+	for <buildroot@archiver.kernel.org>; Fri,  9 Aug 2024 11:44:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8189B4049C;
-	Fri,  9 Aug 2024 11:42:47 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1A6D640163;
+	Fri,  9 Aug 2024 11:44:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tGMV-VBfjynq; Fri,  9 Aug 2024 11:42:46 +0000 (UTC)
+ id kPMmFV6MSGRE; Fri,  9 Aug 2024 11:44:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3A4AB410B2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D1ED341056
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3A4AB410B2;
-	Fri,  9 Aug 2024 11:42:46 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5ECC81BF336
- for <buildroot@lists.busybox.net>; Fri,  9 Aug 2024 11:42:40 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D1ED341056;
+	Fri,  9 Aug 2024 11:44:04 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 54A9B1BF336
+ for <buildroot@lists.busybox.net>; Fri,  9 Aug 2024 11:44:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5FC0340163
- for <buildroot@lists.busybox.net>; Fri,  9 Aug 2024 11:42:39 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 733FE60AF2
+ for <buildroot@lists.busybox.net>; Fri,  9 Aug 2024 11:44:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eTgMGL9CWnck for <buildroot@lists.busybox.net>;
- Fri,  9 Aug 2024 11:42:38 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4E6884049C
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4E6884049C
- for <buildroot@buildroot.org>; Fri,  9 Aug 2024 11:42:38 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3B26784DD2; Fri,  9 Aug 2024 11:42:38 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZUzLhI7SAp-J for <buildroot@lists.busybox.net>;
+ Fri,  9 Aug 2024 11:43:58 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::429; helo=mail-wr1-x429.google.com;
+ envelope-from=gael.portay@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 7AEBE608F7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7AEBE608F7
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
+ [IPv6:2a00:1450:4864:20::429])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7AEBE608F7
+ for <buildroot@buildroot.org>; Fri,  9 Aug 2024 11:43:57 +0000 (UTC)
+Received: by mail-wr1-x429.google.com with SMTP id
+ ffacd0b85a97d-36bcc168cdaso1310662f8f.0
+ for <buildroot@buildroot.org>; Fri, 09 Aug 2024 04:43:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1723203835; x=1723808635;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=THgtoCQCWs59ojhVikFUAoQsykYhNWjEE+5qPN+RRy4=;
+ b=fENxFQfLsHJ9B+R2YQz5SqIqnWbpVnqzJarFByZp7yS31WRWm6HFmxh56ltHyNn0rX
+ fhuaWEUlK7JDFu/TaJoaZlw8qzEtpfe+3kHhfs95wQWcF0atEJGCM45APqKmreXwwTUp
+ OWPkvvR2d+fBnQqBEff/JkiSBWWS5+f1llRNQFmD06OPA+XHA9UOzFvHSpiXbrbqTwe2
+ 20njoAcZa6Fzn1+1FlvVLqylzkTSRuEMYzQyGOoRDODHLsspF44zRjAImZ/XMMyNpBgP
+ K4gpmcylzUFS+0LABRNSBSdPSwwyX+IojFIKq6e+dqSwsetFtR2yWUXox3sFXFuahCF8
+ Ww3Q==
+X-Gm-Message-State: AOJu0YwpwPe+xktDqOzutJASaAzNyyLso1flYCOo5wDdpvycdIW9bOFO
+ kp5pDeUjOjlTShNpzNbeb98jMBbfg72/0o1+KTcT73HVN0ugL5hz8VTf7CbD7xJ04Q==
+X-Google-Smtp-Source: AGHT+IHtE+O8PCGhk/R21xZ2G1Qkyba85bZHrqevtiFdISgmuGQDKZAQqyxXVdTP665Zb/hWfrFY7g==
+X-Received: by 2002:a5d:4985:0:b0:368:6f64:307c with SMTP id
+ ffacd0b85a97d-36d5e1c7a02mr1124877f8f.15.1723203835028; 
+ Fri, 09 Aug 2024 04:43:55 -0700 (PDT)
+Received: from localhost.localdomain ([2a01:e0a:ce:f2f0:2a6b:35ff:feb8:77d9])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-36d27208c81sm5081233f8f.73.2024.08.09.04.43.54
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 09 Aug 2024 04:43:54 -0700 (PDT)
+From: "=?UTF-8?q?Ga=C3=ABl=20PORTAY?=" <gael.portay@gmail.com>
+X-Google-Original-From: =?UTF-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@rtone.fr>
 To: buildroot@buildroot.org
-Date: Fri, 9 Aug 2024 13:39:14 +0200
-X-Git-Refname: refs/heads/2024.05.x
-X-Git-Oldrev: c4f8ae4a1a6bed2b1abfb2b7148ee95c3013b713
-X-Git-Newrev: 177b4deb3d6866a1c39f42303fb4c53953104cf9
-X-Patchwork-Hint: ignore
-Message-Id: <20240809114238.3B26784DD2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.05.x] package/sunxi-tools:
- sunxi-fel needs dynamic library
+Date: Fri,  9 Aug 2024 13:43:45 +0200
+Message-ID: <20240809114345.693108-1-gael.portay@rtone.fr>
+X-Mailer: git-send-email 2.46.0
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1723203835; x=1723808635; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=THgtoCQCWs59ojhVikFUAoQsykYhNWjEE+5qPN+RRy4=;
+ b=bWHgYAK0XGpSgBj8BtgLQwv9mEJ4fJSTcD2kIyUen/cvTpfHx4VEFbitJDYV6KCiFx
+ kP9UL/RxjDUwYNN+zg06ZocdJnENwm8LNXOS54nS+BSNSGsFdwEWCz34/ASD8QKCoBD+
+ IVB2VMk6ndosv9mjXAVE8/zV2d17GAGHtgAsbq4iu5CA9SmJZimGZ/ERWtHrK3xRVL2P
+ V/uu2kaFbaefuzsqBOfqsdktORn3U4UHbR3Js8m3YzgUfMbNa7CzemK6OPbU3enHd4F/
+ Fpb1gV4jO8i/UYuvSCpt/G+Fm0rtVhRsa5ywAC9Mh/7s2VRXrNxAIN6wpSLMaLNpA2KS
+ 3/BA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=bWHgYAK0
+Subject: [Buildroot] [PATCH 1/1] configs/raspberrypi5_defconfig: use correct
+ CPU
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,55 +101,34 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Athaariq Ardhiansyah <foss@athaariq.my.id>,
+ =?UTF-8?q?Ga=C3=ABl=20PORTAY?= <gael.portay@rtone.fr>,
+ Martin Bark <martin@barkynet.com>,
+ Julien Grossholtz <julien.grossholtz@openest.io>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=177b4deb3d6866a1c39f42303fb4c53953104cf9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.05.x
-
-Fix the following build failure raised since bump to version
-1.4.2-168-ged3039c in commit 2e330dff6a7ce7965ceb0dccdc9dcbcb329167bb:
-
-/home/buildroot/autobuild/run/instance-1/output-1/host/lib/gcc/arm-buildroot-linux-musleabihf/12.3.0/../../../../arm-buildroot-linux-musleabihf/bin/ld: attempted static link of dynamic object `libfdt/libfdt-1.6.1.so'
-
-Fixes:
- - http://autobuild.buildroot.org/results/6788d86c10d551b3d617e33c85083b817eb5d0b2
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit e167800979b48a449c168c229448e7069d2045e7)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/sunxi-tools/Config.in | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/package/sunxi-tools/Config.in b/package/sunxi-tools/Config.in
-index 14f7da5bf2..16550f4e55 100644
---- a/package/sunxi-tools/Config.in
-+++ b/package/sunxi-tools/Config.in
-@@ -23,6 +23,7 @@ config BR2_PACKAGE_SUNXI_TOOLS_BOOTINFO
- 
- config BR2_PACKAGE_SUNXI_TOOLS_FEL
- 	bool "sunxi-fel"
-+	depends on !BR2_STATIC_LIBS # dtc
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libusb
- 	select BR2_PACKAGE_DTC
-@@ -33,8 +34,8 @@ config BR2_PACKAGE_SUNXI_TOOLS_FEL
- 	  fel mode. This allows do download code to memory and execute
- 	  it.
- 
--comment "sunxi-fel needs a toolchain w/ threads, gcc >= 4.9"
--	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
-+comment "sunxi-fel needs a toolchain w/ dynamic library, threads, gcc >= 4.9"
-+	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS || \
- 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
- 
- config BR2_PACKAGE_SUNXI_TOOLS_NAND_PART
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+RnJvbTogQXRoYWFyaXEgQXJkaGlhbnN5YWggPGZvc3NAYXRoYWFyaXEubXkuaWQ+CgpUaGUgUmFz
+cGJlcnJ5IFBpIDUgdXNlcyBhIHF1YWQtY29yZSBBUk0gQ29ydGV4LUE3NiBDUFUgY2x1c3Rlclsx
+XS4KClRoaXMgZml4ZXMgaW5jb3JyZWN0IENQVSBhcyBpdCBpcyBubyBiaWcuTElUVExFIENQVS4K
+ClsxXTogaHR0cHM6Ly93d3cucmFzcGJlcnJ5cGkuY29tL2RvY3VtZW50YXRpb24vY29tcHV0ZXJz
+L3Byb2Nlc3NvcnMuaHRtbCNiY20yNzEyCgpTaWduZWQtb2ZmLWJ5OiBBdGhhYXJpcSBBcmRoaWFu
+c3lhaCA8Zm9zc0BhdGhhYXJpcS5teS5pZD4KU2lnbmVkLW9mZi1ieTogR2HDq2wgUE9SVEFZIDxn
+YWVsLnBvcnRheUBydG9uZS5mcj4KLS0tCkhlbGxvIEF0aGFhcmlxLAoKSSBob3BlIHlvdSBkbyBu
+b3QgbWluZCBpZiBJIHVwc3RyZWFtIHRoZSBmaXggeW91IG1hZGUgYWJvdXQgdGhlIENQVT8KCgkj
+IGZvciBpIGluIC9wcm9jL2RldmljZS10cmVlL2NwdXMvY3B1QCovY29tcGF0aWJsZTsgZG8gY2F0
+ICIkaSI7IGVjaG87IGRvbmUKCWFybSxjb3J0ZXgtYTc2Cglhcm0sY29ydGV4LWE3NgoJYXJtLGNv
+cnRleC1hNzYKCWFybSxjb3J0ZXgtYTc2CgpSZWdhcmRzLApHYcOrbAoKIGNvbmZpZ3MvcmFzcGJl
+cnJ5cGk1X2RlZmNvbmZpZyB8IDMgKy0tCiAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyks
+IDIgZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEvY29uZmlncy9yYXNwYmVycnlwaTVfZGVmY29u
+ZmlnIGIvY29uZmlncy9yYXNwYmVycnlwaTVfZGVmY29uZmlnCmluZGV4IDBkNzUzMzk5ZTIuLmQ0
+MzUwM2FiMjYgMTAwNjQ0Ci0tLSBhL2NvbmZpZ3MvcmFzcGJlcnJ5cGk1X2RlZmNvbmZpZworKysg
+Yi9jb25maWdzL3Jhc3BiZXJyeXBpNV9kZWZjb25maWcKQEAgLTEsNiArMSw1IEBACiBCUjJfYWFy
+Y2g2ND15Ci1CUjJfY29ydGV4X2E3Nl9hNTU9eQotQlIyX0FSTV9GUFVfVkZQVjQ9eQorQlIyX2Nv
+cnRleF9hNzY9eQogCiAjIHBhdGNoZXMKIEJSMl9HTE9CQUxfUEFUQ0hfRElSPSJib2FyZC9yYXNw
+YmVycnlwaS9wYXRjaGVzIgotLSAKMi40Ni4wCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWls
+ZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1
+aWxkcm9vdAo=
