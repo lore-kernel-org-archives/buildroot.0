@@ -4,49 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48E9BC52D7C
-	for <buildroot@archiver.kernel.org>; Fri,  9 Aug 2024 22:00:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5BA7C52D7C
+	for <buildroot@archiver.kernel.org>; Fri,  9 Aug 2024 22:00:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1326381359;
-	Fri,  9 Aug 2024 22:00:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4ADFD8146C;
+	Fri,  9 Aug 2024 22:00:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jMOb0sWqyU6m; Fri,  9 Aug 2024 22:00:18 +0000 (UTC)
+ id WaZJZBvSJQYe; Fri,  9 Aug 2024 22:00:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D5CA78143C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D20278164B
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D5CA78143C;
-	Fri,  9 Aug 2024 22:00:17 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 7916A1BF286
- for <buildroot@lists.busybox.net>; Fri,  9 Aug 2024 22:00:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D20278164B;
+	Fri,  9 Aug 2024 22:00:20 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 3C0441BF286
+ for <buildroot@lists.busybox.net>; Fri,  9 Aug 2024 22:00:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 74773613C8
- for <buildroot@lists.busybox.net>; Fri,  9 Aug 2024 22:00:16 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 37109414EB
+ for <buildroot@lists.busybox.net>; Fri,  9 Aug 2024 22:00:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2_PNmXZ8ypre for <buildroot@lists.busybox.net>;
- Fri,  9 Aug 2024 22:00:15 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QI3eeBiuRYMM for <buildroot@lists.busybox.net>;
+ Fri,  9 Aug 2024 22:00:19 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.193;
+ helo=relay1-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9FDBB606B1
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9FDBB606B1
- for <buildroot@buildroot.org>; Fri,  9 Aug 2024 22:00:15 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8EFEE84F7B; Fri,  9 Aug 2024 22:00:15 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 9 Aug 2024 23:59:13 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: d2f1985994da4dc95a67f1513e9f186324533bc5
-X-Git-Newrev: fde4729cc1fc635198e2db504998aef3050d13a3
-X-Patchwork-Hint: ignore
-Message-Id: <20240809220015.8EFEE84F7B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-sqlalchemy:
- bump version to 2.0.32
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E1DB5414D3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E1DB5414D3
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E1DB5414D3
+ for <buildroot@buildroot.org>; Fri,  9 Aug 2024 22:00:18 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 00152240006;
+ Fri,  9 Aug 2024 22:00:15 +0000 (UTC)
+Date: Sat, 10 Aug 2024 00:00:15 +0200
+To: Neal Frager via buildroot <buildroot@buildroot.org>
+Message-ID: <20240810000015.42bfa535@windsurf>
+In-Reply-To: <20240809155527.3821320-1-neal.frager@amd.com>
+References: <20240809155527.3821320-1-neal.frager@amd.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1723240816;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=hs/iEoZ4nsSGi60MR+id2ZomUR8U/+8rJQdeDT1C3r4=;
+ b=AC0afGT0D/IGp6vXOA5HraAyn9uHiXrrOJdEpZ/3fBNJMQOtrYwyLSKSK4dyVzkjihXGTo
+ SKR7i3XyGVPiGx0LwxtUPN8HxPF/ASIZYqVTRbGQAlapWDiMRtuoqrRLQv6A0FECfYcpqh
+ 3wMmUciMdGR5W3/WecXLq/0pvwiL3/yN0gKj1I524QzQu0KxTd/BjLp51S4+ljlodKFp4l
+ HNa+klBtGTN92/N0VeL6hND4MYvZxrNaX3v4BASYkEKy6gJixWtg2PbbgPuQ9PVkEMNHSN
+ OhLmW+6S4SEpLB1hjkOpnRGbrll1Duqd+gsZ6+P3xeiYKVOfAtv7PCM1wRuS8g==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=AC0afGT0
+Subject: Re: [Buildroot] [PATCH v1 1/1] configs/zynqmp_zcu106_defconfig:
+ move to board rev1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,62 +83,46 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============1518169613368692063=="
+Cc: luca.ceresoli@bootlin.com, brandon.maier@collins.com,
+ Neal Frager <neal.frager@amd.com>, romain.naour@smile.fr, michal.simek@amd.com,
+ yann.morin.1998@free.fr
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1518169613368692063==
-Content-Type: text/plain
+On Fri, 9 Aug 2024 16:55:27 +0100
+Neal Frager via buildroot <buildroot@buildroot.org> wrote:
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fde4729cc1fc635198e2db504998aef3050d13a3
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+> Migrate the zynqmp_zcu106_defconfig to rev1.0 ddr memory, since all new boards
+> will be using the rev1.0 ddr memory.
+> 
+> This patch also adds documentation in the board/zynqmp/readme.txt explaining
+> the issue related to the change in ddr memory.  Should users not see anything
+> printing from the board during boot, the most likely issue is that the board
+> has the original ddr memory and the u-boot device tree needs to be configured
+> accordingly to revA.
+> 
+> Original DDR Memory:
+> BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=zynqmp-zcu106-revA"
+> 
+> More information regarding this issue can be found here:
+> https://support.xilinx.com/s/article/71961?language=en_US
+> 
+> Signed-off-by: Neal Frager <neal.frager@amd.com>
+> ---
+>  board/zynqmp/readme.txt         | 26 ++++++++++++++++++++++++++
+>  configs/zynqmp_zcu106_defconfig |  2 +-
+>  2 files changed, 27 insertions(+), 1 deletion(-)
 
-Signed-off-by: Flávio Tapajós <flavio.tapajos@newtesc.com.br>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/python-sqlalchemy/python-sqlalchemy.hash | 4 ++--
- package/python-sqlalchemy/python-sqlalchemy.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Applied to master, thanks.
 
-diff --git a/package/python-sqlalchemy/python-sqlalchemy.hash b/package/python-sqlalchemy/python-sqlalchemy.hash
-index a413fcc266..d9227f0528 100644
---- a/package/python-sqlalchemy/python-sqlalchemy.hash
-+++ b/package/python-sqlalchemy/python-sqlalchemy.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/sqlalchemy/json
--md5  dfa687701ddf1416cba19024e6f9ec3d  SQLAlchemy-2.0.31.tar.gz
--sha256  b607489dd4a54de56984a0c7656247504bd5523d9d0ba799aef59d4add009484  SQLAlchemy-2.0.31.tar.gz
-+md5  fd9ed38144fce479ea96b661e048a02f  SQLAlchemy-2.0.32.tar.gz
-+sha256  c1b88cc8b02b6a5f0efb0345a03672d4c897dc7d92585176f88c67346f565ea8  SQLAlchemy-2.0.32.tar.gz
- # Locally computed sha256 checksums
- sha256  3c0f59ab887d041de6a4e52ffe3e9edb5d9522de909fae9a6cd7adb6e7be3293  LICENSE
-diff --git a/package/python-sqlalchemy/python-sqlalchemy.mk b/package/python-sqlalchemy/python-sqlalchemy.mk
-index 567ffbbb87..3f4e20e669 100644
---- a/package/python-sqlalchemy/python-sqlalchemy.mk
-+++ b/package/python-sqlalchemy/python-sqlalchemy.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_SQLALCHEMY_VERSION = 2.0.31
-+PYTHON_SQLALCHEMY_VERSION = 2.0.32
- PYTHON_SQLALCHEMY_SOURCE = SQLAlchemy-$(PYTHON_SQLALCHEMY_VERSION).tar.gz
--PYTHON_SQLALCHEMY_SITE = https://files.pythonhosted.org/packages/ba/7d/e3312ae374fe7a4af7e1494735125a714a0907317c829ab8d8a31d89ded4
-+PYTHON_SQLALCHEMY_SITE = https://files.pythonhosted.org/packages/af/6f/967e987683908af816aa3072c1a6997ac9933cf38d66b0474fb03f253323
- PYTHON_SQLALCHEMY_SETUP_TYPE = setuptools
- PYTHON_SQLALCHEMY_LICENSE = MIT
- PYTHON_SQLALCHEMY_LICENSE_FILES = LICENSE
-
---===============1518169613368692063==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============1518169613368692063==--
