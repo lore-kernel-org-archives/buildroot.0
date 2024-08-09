@@ -4,50 +4,62 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64340C3DA4A
-	for <buildroot@archiver.kernel.org>; Fri,  9 Aug 2024 19:34:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A67FC52D7C
+	for <buildroot@archiver.kernel.org>; Fri,  9 Aug 2024 19:34:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DC20484498;
-	Fri,  9 Aug 2024 19:34:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F3B69844CE;
+	Fri,  9 Aug 2024 19:34:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WwhWeQ-gj_TP; Fri,  9 Aug 2024 19:34:10 +0000 (UTC)
+ id 8RnGDCNLD0Wh; Fri,  9 Aug 2024 19:34:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F3CEF844A8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8B0E8844B3
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F3CEF844A8;
-	Fri,  9 Aug 2024 19:34:08 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 864871BF2F5
- for <buildroot@lists.busybox.net>; Fri,  9 Aug 2024 19:34:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8B0E8844B3;
+	Fri,  9 Aug 2024 19:34:14 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 565D71BF990
+ for <buildroot@lists.busybox.net>; Fri,  9 Aug 2024 19:34:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5F072414C3
- for <buildroot@lists.busybox.net>; Fri,  9 Aug 2024 19:34:01 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 425404038E
+ for <buildroot@lists.busybox.net>; Fri,  9 Aug 2024 19:34:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HjlVT7uW3bEi for <buildroot@lists.busybox.net>;
- Fri,  9 Aug 2024 19:34:00 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Kwn25IcgWx-w for <buildroot@lists.busybox.net>;
+ Fri,  9 Aug 2024 19:34:11 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::223;
+ helo=relay3-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ECA65414BC
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id ECA65414BC
- for <buildroot@buildroot.org>; Fri,  9 Aug 2024 19:33:59 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E6F9784CF1; Fri,  9 Aug 2024 19:33:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org DFA9540342
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DFA9540342
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id DFA9540342
+ for <buildroot@buildroot.org>; Fri,  9 Aug 2024 19:34:10 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 72AB760002;
+ Fri,  9 Aug 2024 19:34:05 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1scVNE-000JkK-1Y;
+ Fri, 09 Aug 2024 21:34:04 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Fri, 9 Aug 2024 21:27:34 +0200
-X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: c8eeb96df2d2a3e76537e88768d7fce4e1dfce6b
-X-Git-Newrev: 6c59e71386fddb9e71d2b97c43ad0e7b40637676
-X-Patchwork-Hint: ignore
-Message-Id: <20240809193359.E6F9784CF1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/x265: replace
- patch fixing gcc option
+To: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+References: <20221223133401.97844-1-buildroot@heine.tech>
+ <3f2f76fc-6474-4054-8a60-a8223e3b0cd0@mind.be>
+Date: Fri, 09 Aug 2024 21:34:04 +0200
+In-Reply-To: <3f2f76fc-6474-4054-8a60-a8223e3b0cd0@mind.be> (Arnout
+ Vandecappelle via buildroot's message of "Sat, 13 Jul 2024 11:36:26
+ +0200")
+Message-ID: <87sevdo5hv.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: Re: [Buildroot] [PATCH v2] package/boost: Boost.Atomic needs atomic
+ intrinsics
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,230 +71,66 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>, Marcin Bis <marcin@bis.org.pl>,
+ Bartosz Golaszewski <brgl@bgdev.pl>,
+ Gwenhael Goavec-Merou <gwenhael.goavec-merou@trabucayre.com>,
+ Fabrice Fontaine <fabrice.fontaine@orange.com>,
+ Maxim Kochetkov <fido_max@inbox.ru>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Fabio Urquiza <fabiorush@gmail.com>, Romain Naour <romain.naour@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6c59e71386fddb9e71d2b97c43ad0e7b40637676
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
+>>>>> "Arnout" == Arnout Vandecappelle via buildroot <buildroot@buildroot.org> writes:
 
-As we're about to do some other fixes in x265 ARM build, let's replace
-the patch fixing gcc option by:
+ > On 23/12/2022 14:34, Michael Nosthoff via buildroot wrote:
+ >> From: Michael <buildroot@heine.tech>
+ >> similar to previous problems with nios2 and not-available atomic
+ >> ints
+ >> the build for Boost.Atomics also fails for ARC Targets which don't
+ >> have the ATOMICS_EXT flag set.
+ >> according to [0] "Boost.Atomic has a hard requirement of the native
+ >> atomic operations on bytes". The same tests mentioned there fail for
+ >> ARC.
 
-- A patch generated by git format-patch now that x265 upstream uses
-  Git
+ >  Based on that comment, the option
+ >  BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS was introduced. So
+ >  that one should have been used instead.
 
-- Is re-submitted upstream
 
-- Only drops the flags, and does not add bogus ARM architecture
-  aliases that don't exist in the CMake world.
+ >> so introduce a dependency on BR2_ARC_ATOMIC_EXT for BR2_arc.
+ >> add depends clause for all packages using boost-atomic/filesystem.
+ >> Fixes:
+ >> http://autobuild.buildroot.net/results/4ca54a85672d7b9328b1909b457e548c6032a493
+ >> [0]
+ >> https://github.com/boostorg/atomic/issues/42#issuecomment-734130348
+ >> Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 9d62687d0024f7e3bac68157f1250970ef45abff)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- .checkpackageignore                                |  1 -
- ...MakeLists.txt-do-not-force-compiler-flags.patch | 83 ++++++++++++++++++++
- package/x265/0001-fix-gcc-options.patch            | 88 ----------------------
- 3 files changed, 83 insertions(+), 89 deletions(-)
+ >  I changed the entire patch to this:
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 3533b1df33..e349e31812 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -1386,7 +1386,6 @@ package/x11r7/xserver_xorg-server/0001-include-misc.h-fix-uClibc-build.patch Ups
- package/x11r7/xserver_xorg-server/S40xorg Shellcheck Variables
- package/x11vnc/0001-Fix-build-on-32bit-arches-with-64bit-time_t.patch Upstream
- package/x11vnc/0002-scan-limit-access-to-shared-memory-segments-to-current-user.patch Upstream
--package/x265/0001-fix-gcc-options.patch Upstream
- package/xen/0001-9pfs-include-linux-limits.h-for-XATTR_SIZE_MAX.patch Upstream
- package/xen/0002-Fix-build-with-64-bits-time_t.patch Upstream
- package/xen/0003-libs-light-fix-tv_sec-printf-format.patch Upstream
-diff --git a/package/x265/0001-CMakeLists.txt-do-not-force-compiler-flags.patch b/package/x265/0001-CMakeLists.txt-do-not-force-compiler-flags.patch
-new file mode 100644
-index 0000000000..af0e57f206
---- /dev/null
-+++ b/package/x265/0001-CMakeLists.txt-do-not-force-compiler-flags.patch
-@@ -0,0 +1,83 @@
-+From b56e9125db34614b2157516df3ee724180f2084f Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Date: Sat, 13 Jul 2024 09:59:26 +0200
-+Subject: [PATCH] CMakeLists.txt: do not force compiler flags
-+
-+The compiler flags enforced by CMakeLists.txt can be problematic:
-+
-+- When CROSS_COMPILE_ARM is set, one is not necessarily building for
-+  armv6 with soft float-abi: one may be using ARMv7 with hard float
-+
-+- When CROSS_COMPILE_ARM is not set, forcing -mfloat-abi=hard is
-+  similarly wrong
-+
-+Those compiler flags should be passed by the user depending on the
-+exact target platform.
-+
-+Inspired from
-+https://gitweb.gentoo.org/repo/gentoo.git/tree/media-libs/x265/files/arm-r1.patch,
-+and earlier work from Bertrand Jacquin <bertrand@jacquin.bzh> and
-+Bernd Kuhls <bernd.kuhls@t-online.de>.
-+
-+Upstream: https://bitbucket.org/multicoreware/x265_git/pull-requests/26
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ source/CMakeLists.txt              | 10 +++-------
-+ source/dynamicHDR10/CMakeLists.txt |  6 +++---
-+ 2 files changed, 6 insertions(+), 10 deletions(-)
-+
-+diff --git a/source/CMakeLists.txt b/source/CMakeLists.txt
-+index a407271b4..a34bf4d4f 100755
-+--- a/source/CMakeLists.txt
-++++ b/source/CMakeLists.txt
-+@@ -239,11 +239,7 @@ if(GCC)
-+         endif()
-+     endif()
-+     if(ARM AND CROSS_COMPILE_ARM)
-+-        if(ARM64)
-+-            set(ARM_ARGS -fPIC)
-+-        else()
-+-            set(ARM_ARGS -march=armv6 -mfloat-abi=soft -mfpu=vfp -marm -fPIC)
-+-        endif()
-++        set(ARM_ARGS -fPIC)
-+         message(STATUS "cross compile arm")
-+     elseif(ARM)
-+         if(ARM64)
-+@@ -252,10 +248,10 @@ if(GCC)
-+         else()
-+             find_package(Neon)
-+             if(CPU_HAS_NEON)
-+-                set(ARM_ARGS -mcpu=native -mfloat-abi=hard -mfpu=neon -marm -fPIC)
-++                set(ARM_ARGS -mfpu=neon -fPIC)
-+                 add_definitions(-DHAVE_NEON)
-+             else()
-+-                set(ARM_ARGS -mcpu=native -mfloat-abi=hard -mfpu=vfp -marm)
-++	        set(ARM_ARGS -fPIC)
-+             endif()
-+         endif()
-+     endif()
-+diff --git a/source/dynamicHDR10/CMakeLists.txt b/source/dynamicHDR10/CMakeLists.txt
-+index 22fb79d44..2cea7c48a 100644
-+--- a/source/dynamicHDR10/CMakeLists.txt
-++++ b/source/dynamicHDR10/CMakeLists.txt
-+@@ -43,14 +43,14 @@ if(GCC)
-+         endif()
-+     endif()
-+     if(ARM AND CROSS_COMPILE_ARM)
-+-        set(ARM_ARGS -march=armv6 -mfloat-abi=soft -mfpu=vfp -marm -fPIC)
-++        set(ARM_ARGS -fPIC)
-+     elseif(ARM)
-+         find_package(Neon)
-+         if(CPU_HAS_NEON)
-+-            set(ARM_ARGS -mcpu=native -mfloat-abi=hard -mfpu=neon -marm -fPIC)
-++            set(ARM_ARGS -fPIC)
-+             add_definitions(-DHAVE_NEON)
-+         else()
-+-            set(ARM_ARGS -mcpu=native -mfloat-abi=hard -mfpu=vfp -marm)
-++            set(ARM_ARGS -fPIC)
-+         endif()
-+     endif()
-+     add_definitions(${ARM_ARGS})
-+-- 
-+2.45.2
-+
-diff --git a/package/x265/0001-fix-gcc-options.patch b/package/x265/0001-fix-gcc-options.patch
-deleted file mode 100644
-index 0283da25ea..0000000000
---- a/package/x265/0001-fix-gcc-options.patch
-+++ /dev/null
-@@ -1,88 +0,0 @@
--# HG changeset patch
--# User Bertrand Jacquin <bertrand@jacquin.bzh>
--# Date 1444431941 -3600
--# Node ID 5c6d2a6f2f9a0534933cc999b3845be4344e1af0
--# Parent  b6156a08b1def3584647f26096866c1a0c11e54a
--build: Disable -march selection from CMakeLists.txt
--
--x32 arch as defined on https://sites.google.com/site/x32abi is neither
--X86 nor X64, then forcing -march=i686 leads to build failure as wrong
---march is used.
--
--Forcing -march, -mfloat-abi and -mfpu for ARM is also wrong
--
--As a global sanity sake, disable all forced -march in CMakeLists
--
--Backported from upstream pull request:
--https://bitbucket.org/multicoreware/x265/pull-requests/21
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--[Bernd: rebased for 3.5 based on
-- https://gitweb.gentoo.org/repo/gentoo.git/tree/media-libs/x265/files/arm-r1.patch]
--
--diff -r 58dddcf01b7d source/CMakeLists.txt
----- a/source/CMakeLists.txt	Mon Jan 23 09:50:33 2017 +0530
--+++ b/source/CMakeLists.txt	Mon Jan 23 21:03:10 2017 +0100
--@@ -40,7 +40,7 @@ SET(CMAKE_MODULE_PATH "${PROJECT_SOURCE_
-- # System architecture detection
-- string(TOLOWER "${CMAKE_SYSTEM_PROCESSOR}" SYSPROC)
-- set(X86_ALIASES x86 i386 i686 x86_64 amd64)
---set(ARM_ALIASES armv6l armv7l aarch64)
--+set(ARM_ALIASES armv6l armv6l armv7l armv7a aarch64)
-- list(FIND X86_ALIASES "${SYSPROC}" X86MATCH)
-- list(FIND ARM_ALIASES "${SYSPROC}" ARMMATCH)
-- set(POWER_ALIASES ppc64 ppc64le)
--@@ -239,11 +239,7 @@ if(GCC)
--         endif()
--     endif()
--     if(ARM AND CROSS_COMPILE_ARM)
---        if(ARM64)
---            set(ARM_ARGS -fPIC)
---        else()
---            set(ARM_ARGS -march=armv6 -mfloat-abi=soft -mfpu=vfp -marm -fPIC)
---        endif()
--+        set(ARM_ARGS -fPIC)
--         message(STATUS "cross compile arm")
--     elseif(ARM)
--         if(ARM64)
--@@ -252,10 +248,10 @@ if(GCC)
--         else()
--             find_package(Neon)
--             if(CPU_HAS_NEON)
---                set(ARM_ARGS -mcpu=native -mfloat-abi=hard -mfpu=neon -marm -fPIC)
--+                set(ARM_ARGS -mfpu=neon -fPIC)
--                 add_definitions(-DHAVE_NEON)
--             else()
---                set(ARM_ARGS -mcpu=native -mfloat-abi=hard -mfpu=vfp -marm)
--+	        set(ARM_ARGS -fPIC)
--             endif()
--         endif()
--     endif()
----- a/source/dynamicHDR10/CMakeLists.txt
--+++ b/source/dynamicHDR10/CMakeLists.txt
--@@ -43,14 +43,14 @@ if(GCC)
--         endif()
--     endif()
--     if(ARM AND CROSS_COMPILE_ARM)
---        set(ARM_ARGS -march=armv6 -mfloat-abi=soft -mfpu=vfp -marm -fPIC)
--+        set(ARM_ARGS -fPIC)
--     elseif(ARM)
--         find_package(Neon)
--         if(CPU_HAS_NEON)
---            set(ARM_ARGS -mcpu=native -mfloat-abi=hard -mfpu=neon -marm -fPIC)
--+            set(ARM_ARGS -fPIC)
--             add_definitions(-DHAVE_NEON)
--         else()
---            set(ARM_ARGS -mcpu=native -mfloat-abi=hard -mfpu=vfp -marm)
--+            set(ARM_ARGS -fPIC)
--         endif()
--     endif()
--     add_definitions(${ARM_ARGS})
--@@ -150,4 +150,4 @@ set(BIN_INSTALL_DIR bin CACHE STRING "Install location of executables")
-- option(ENABLE_SHARED "Build shared library" OFF)
-- 
-- install(FILES hdr10plus.h DESTINATION include)
---endif()
--\ No newline at end of file
--+endif()
--
+ > diff --git a/toolchain/Config.in b/toolchain/Config.in
+ > index 1aa17cbfbd..8acdc62fc2 100644
+ > --- a/toolchain/Config.in
+ > +++ b/toolchain/Config.in
+ > @@ -94,6 +94,7 @@ config BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
+ >         depends on !BR2_ARM_CPU_ARMV5
+ >         depends on !BR2_sparc_v8
+ >         depends on !BR2_m68k_cf5208
+ > +       depends on !(BR2_arc && !BR2_ARC_ATOMIC_EXT)
+
+ >  # GCC uses thunk functions to adjust the 'this' pointer when calling
+ >  # C++ member functions in classes derived with multiple inheritance.
+
+
+ > and applied to master, thanks.
+
+Committed to 2024.02.x and 2024.05.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
