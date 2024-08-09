@@ -4,60 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B101C52D7C
-	for <buildroot@archiver.kernel.org>; Fri,  9 Aug 2024 19:35:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2D27C52D7C
+	for <buildroot@archiver.kernel.org>; Fri,  9 Aug 2024 19:37:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 682EF80EE1;
-	Fri,  9 Aug 2024 19:35:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9EA758448D;
+	Fri,  9 Aug 2024 19:37:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PZv8kIfcQwfZ; Fri,  9 Aug 2024 19:35:46 +0000 (UTC)
+ id SBZE0woDJFoe; Fri,  9 Aug 2024 19:37:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6D99C841D1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A78AE84484
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6D99C841D1;
-	Fri,  9 Aug 2024 19:35:46 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id DEEE21BF2F5
- for <buildroot@lists.busybox.net>; Fri,  9 Aug 2024 19:35:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A78AE84484;
+	Fri,  9 Aug 2024 19:37:07 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id F2F171BF2F5
+ for <buildroot@lists.busybox.net>; Fri,  9 Aug 2024 19:37:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8061F40242
- for <buildroot@lists.busybox.net>; Fri,  9 Aug 2024 19:35:43 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id DF9618448D
+ for <buildroot@lists.busybox.net>; Fri,  9 Aug 2024 19:37:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vS0K_hwx2C9y for <buildroot@lists.busybox.net>;
- Fri,  9 Aug 2024 19:35:42 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.200;
- helo=relay7-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id nCtmO9sE8E6W for <buildroot@lists.busybox.net>;
+ Fri,  9 Aug 2024 19:37:06 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 31F7840342
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 31F7840342
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 31F7840342
- for <buildroot@buildroot.org>; Fri,  9 Aug 2024 19:35:41 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 41D9020004;
- Fri,  9 Aug 2024 19:35:39 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1scVOk-000Jw2-1R;
- Fri, 09 Aug 2024 21:35:38 +0200
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1E3AD8447F
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1E3AD8447F
+ for <buildroot@buildroot.org>; Fri,  9 Aug 2024 19:37:06 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 0202784E01; Fri,  9 Aug 2024 19:37:05 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-References: <20240713094126.0915F8634A@busybox.osuosl.org>
-Date: Fri, 09 Aug 2024 21:35:38 +0200
-In-Reply-To: <20240713094126.0915F8634A@busybox.osuosl.org> (Thomas Petazzoni
- via buildroot's message of "Sat, 13 Jul 2024 11:39:12 +0200")
-Message-ID: <87frrdo5f9.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [git commit] package/cdrkit: convert first patch to
- Git formatted one
+To: buildroot@buildroot.org
+Date: Fri, 9 Aug 2024 21:33:44 +0200
+X-Git-Refname: refs/heads/2024.05.x
+X-Git-Oldrev: db06ee93b98b019a458104f73fc1bf7fb5eeaada
+X-Git-Newrev: 5fd4d3757c96d1b5cfdfb69aec1a48f022bd9c06
+X-Patchwork-Hint: ignore
+Message-Id: <20240809193706.0202784E01@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.05.x] package/boost:
+ Boost.Atomic needs atomic intrinsics
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,23 +59,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Thomas" == Thomas Petazzoni via buildroot <buildroot@buildroot.org> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=5fd4d3757c96d1b5cfdfb69aec1a48f022bd9c06
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.05.x
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=347def2fd1f062be5d335d06aaaec577c5fa1d68
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+similar to previous problems with nios2 and not-available atomic ints
+the build for Boost.Atomics also fails for ARC Targets which don't
+have the ATOMICS_EXT flag set.
 
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+according to [0] "Boost.Atomic has a hard requirement of the native
+atomic operations on bytes". The same tests mentioned there fail for
+ARC without the atomic extension.
 
-Committed to 2024.05.x, thanks.
+Disable BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS for BR2_arc
+without BR2_ARC_ATOMIC_EXT.
 
--- 
-Bye, Peter Korsgaard
+Fixes:
+  http://autobuild.buildroot.net/results/4ca54a85672d7b9328b1909b457e548c6032a493
+
+[0] https://github.com/boostorg/atomic/issues/42#issuecomment-734130348
+
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+[Arnout: add to BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
+         instead of updating all packages]
+Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+(cherry picked from commit ad71b415c1bdf1bbf4c37b04c772dc3104187b58)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ toolchain/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/toolchain/Config.in b/toolchain/Config.in
+index baf69ce463..33a88ff738 100644
+--- a/toolchain/Config.in
++++ b/toolchain/Config.in
+@@ -94,6 +94,7 @@ config BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
+ 	depends on !BR2_ARM_CPU_ARMV5
+ 	depends on !BR2_sparc_v8
+ 	depends on !BR2_m68k_cf5208
++	depends on !(BR2_arc && !BR2_ARC_ATOMIC_EXT)
+ 
+ # GCC uses thunk functions to adjust the 'this' pointer when calling
+ # C++ member functions in classes derived with multiple inheritance.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
