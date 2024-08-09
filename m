@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98AB2C3DA4A
-	for <buildroot@archiver.kernel.org>; Fri,  9 Aug 2024 11:40:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BA0DFC52D7C
+	for <buildroot@archiver.kernel.org>; Fri,  9 Aug 2024 11:41:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 611484131E;
-	Fri,  9 Aug 2024 11:40:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7EA224132B;
+	Fri,  9 Aug 2024 11:41:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xbHVh5zSjyHz; Fri,  9 Aug 2024 11:40:48 +0000 (UTC)
+ id tRxGJ6E2FicS; Fri,  9 Aug 2024 11:41:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4983841347
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6B8654132C
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4983841347;
-	Fri,  9 Aug 2024 11:40:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6B8654132C;
+	Fri,  9 Aug 2024 11:41:03 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 14A071BF336
- for <buildroot@lists.busybox.net>; Fri,  9 Aug 2024 11:40:47 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id AD6181BF336
+ for <buildroot@lists.busybox.net>; Fri,  9 Aug 2024 11:41:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D02B04132B
- for <buildroot@lists.busybox.net>; Fri,  9 Aug 2024 11:40:46 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9A61F4133F
+ for <buildroot@lists.busybox.net>; Fri,  9 Aug 2024 11:41:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lO6X30VF0qGM for <buildroot@lists.busybox.net>;
- Fri,  9 Aug 2024 11:40:46 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::227;
- helo=relay7-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+ id xEwr_mAhxNJs for <buildroot@lists.busybox.net>;
+ Fri,  9 Aug 2024 11:41:00 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.196;
+ helo=relay4-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org AB2CA4131E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AB2CA4131E
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp4.osuosl.org (Postfix) with ESMTPS id AB2CA4131E
- for <buildroot@buildroot.org>; Fri,  9 Aug 2024 11:40:45 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 9B2F520003;
- Fri,  9 Aug 2024 11:40:42 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6F8D64132C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6F8D64132C
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 6F8D64132C
+ for <buildroot@buildroot.org>; Fri,  9 Aug 2024 11:41:00 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 3192EE0005;
+ Fri,  9 Aug 2024 11:40:57 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1scNz8-000AHk-0E;
- Fri, 09 Aug 2024 13:40:42 +0200
+ (envelope-from <peter@korsgaard.com>) id 1scNzM-000AIM-1Z;
+ Fri, 09 Aug 2024 13:40:56 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Julien Olivain <ju.o@free.fr>
-References: <20240712214838.446517-1-ju.o@free.fr>
-Date: Fri, 09 Aug 2024 13:40:42 +0200
-In-Reply-To: <20240712214838.446517-1-ju.o@free.fr> (Julien Olivain's message
- of "Fri, 12 Jul 2024 23:48:38 +0200")
-Message-ID: <87jzgpq5z9.fsf@dell.be.48ers.dk>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20231002165235.346092-1-fontaine.fabrice@gmail.com>
+Date: Fri, 09 Aug 2024 13:40:56 +0200
+In-Reply-To: <20231002165235.346092-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Mon, 2 Oct 2023 18:52:35 +0200")
+Message-ID: <87frrdq5yv.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/octave: add optional libsndfile
- support
+Subject: Re: [Buildroot] [PATCH 1/1] package/sunxi-tools: sunxi-fel needs
+ dynamic library
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,21 +69,25 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Julien" == Julien Olivain <ju.o@free.fr> writes:
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > GNU Octave supports the --with-sndfile configure option since v4.0.0.
- > For reference, commit 40ea68b4b2 "package/octave: new package"
- > introduced the package at v7.1.0.
+ > Fix the following build failure raised since bump to version
+ > 1.4.2-168-ged3039c in commit 2e330dff6a7ce7965ceb0dccdc9dcbcb329167bb:
 
- > This commits adds this optional support.
+ > /home/buildroot/autobuild/run/instance-1/output-1/host/lib/gcc/arm-buildroot-linux-musleabihf/12.3.0/../../../../arm-buildroot-linux-musleabihf/bin/ld:
+ > attempted static link of dynamic object `libfdt/libfdt-1.6.1.so'
 
- > Signed-off-by: Julien Olivain <ju.o@free.fr>
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/6788d86c10d551b3d617e33c85083b817eb5d0b2
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
 Committed to 2024.02.x and 2024.05.x, thanks.
 
