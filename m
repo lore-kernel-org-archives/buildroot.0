@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A73AC52D7C
-	for <buildroot@archiver.kernel.org>; Fri,  9 Aug 2024 21:14:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EFE4EC3DA4A
+	for <buildroot@archiver.kernel.org>; Fri,  9 Aug 2024 21:15:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E6C9C61318;
-	Fri,  9 Aug 2024 21:14:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BD7BA61318;
+	Fri,  9 Aug 2024 21:15:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9uArRkoS8iZI; Fri,  9 Aug 2024 21:14:19 +0000 (UTC)
+ id MLjP9gtBLhCR; Fri,  9 Aug 2024 21:15:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DE8256134C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C75136134C
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DE8256134C;
-	Fri,  9 Aug 2024 21:14:18 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id ED2761BF286
- for <buildroot@lists.busybox.net>; Fri,  9 Aug 2024 21:14:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C75136134C;
+	Fri,  9 Aug 2024 21:15:25 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 49B881BF286
+ for <buildroot@lists.busybox.net>; Fri,  9 Aug 2024 21:15:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E7B6D4023B
- for <buildroot@lists.busybox.net>; Fri,  9 Aug 2024 21:14:17 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 44247414DE
+ for <buildroot@lists.busybox.net>; Fri,  9 Aug 2024 21:15:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cFjkvt22wQNV for <buildroot@lists.busybox.net>;
- Fri,  9 Aug 2024 21:14:16 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 44NM1dBZn-11 for <buildroot@lists.busybox.net>;
+ Fri,  9 Aug 2024 21:15:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CED2B4018E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2F709413CB
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id CED2B4018E
- for <buildroot@buildroot.org>; Fri,  9 Aug 2024 21:14:16 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2F709413CB
+ for <buildroot@buildroot.org>; Fri,  9 Aug 2024 21:15:23 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C516E84E64; Fri,  9 Aug 2024 21:14:16 +0000 (UTC)
+ id 1D2C984EA7; Fri,  9 Aug 2024 21:15:23 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 9 Aug 2024 23:06:23 +0200
-X-Git-Refname: refs/heads/2024.05.x
-X-Git-Oldrev: a3ec7bb68fd0f650f4c8aa2d78ad67d0592d66f6
-X-Git-Newrev: d3b6f8fa3cbc9c245c85a0963a8b446455f15e6c
+Date: Fri, 9 Aug 2024 23:05:52 +0200
+X-Git-Refname: refs/heads/2024.02.x
+X-Git-Oldrev: a7ce3d11c9cc30c1af4187be49c1c2d38b6d45d8
+X-Git-Newrev: 30a8aab0f853c0f508f7cce34f5993b6ed5f41c9
 X-Patchwork-Hint: ignore
-Message-Id: <20240809211416.C516E84E64@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.05.x] package/openssl: add and
+Message-Id: <20240809211523.1D2C984EA7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/openssl: add and
  use BR2_PACKAGE_LIBRESSL_ARCH_SUPPORTS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -65,8 +65,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d3b6f8fa3cbc9c245c85a0963a8b446455f15e6c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=30a8aab0f853c0f508f7cce34f5993b6ed5f41c9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
 libressl doesn't support all architectures since bump to version 3.8.2
 in commit 21eca49ed5110872407b76ab9337d2877c4cda24 and
