@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AA427C3DA4A
-	for <buildroot@archiver.kernel.org>; Fri,  9 Aug 2024 19:34:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3697C52D7C
+	for <buildroot@archiver.kernel.org>; Fri,  9 Aug 2024 19:34:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7775D80E38;
-	Fri,  9 Aug 2024 19:34:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 70A6784481;
+	Fri,  9 Aug 2024 19:34:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WlBzlAXtz9U2; Fri,  9 Aug 2024 19:34:02 +0000 (UTC)
+ id VcSY4l1YvOYD; Fri,  9 Aug 2024 19:34:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 79DAE80ED0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0B33D8449E
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 79DAE80ED0;
-	Fri,  9 Aug 2024 19:34:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0B33D8449E;
+	Fri,  9 Aug 2024 19:34:06 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 2AC8D1BF2F5
- for <buildroot@lists.busybox.net>; Fri,  9 Aug 2024 19:34:01 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 75EF91BF2F5
+ for <buildroot@lists.busybox.net>; Fri,  9 Aug 2024 19:34:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 25503414CC
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4736A414C9
  for <buildroot@lists.busybox.net>; Fri,  9 Aug 2024 19:34:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lZRWmM90W5Ws for <buildroot@lists.busybox.net>;
+ id VLxUzWDFq08R for <buildroot@lists.busybox.net>;
  Fri,  9 Aug 2024 19:34:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2D02B414C9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0BCBB414C3
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2D02B414C9
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0BCBB414C3
  for <buildroot@buildroot.org>; Fri,  9 Aug 2024 19:34:00 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1827884CF1; Fri,  9 Aug 2024 19:34:00 +0000 (UTC)
+ id 079AA84CF8; Fri,  9 Aug 2024 19:34:00 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 9 Aug 2024 21:28:26 +0200
+Date: Fri, 9 Aug 2024 21:27:59 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: f112f05b8ff4da7fb7b53dcbc296fad9e058df27
-X-Git-Newrev: ab1facc33a5f0f29e1854de4066a8c1e6677454f
+X-Git-Oldrev: 6c59e71386fddb9e71d2b97c43ad0e7b40637676
+X-Git-Newrev: f112f05b8ff4da7fb7b53dcbc296fad9e058df27
 X-Patchwork-Hint: ignore
-Message-Id: <20240809193400.1827884CF1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x]
- toolchain/toolchain-wrapper: make gcc --help -v work correctly
+Message-Id: <20240809193400.079AA84CF8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/x265: fix runtime
+ issue on ARMv6, ensure correctness on ARMv7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,43 +65,117 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ab1facc33a5f0f29e1854de4066a8c1e6677454f
+commit: https://git.buildroot.net/buildroot/commit/?id=f112f05b8ff4da7fb7b53dcbc296fad9e058df27
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-make "gcc --help -v" display all the options, some packages depend on this
-https://bugs.busybox.net/show_bug.cgi?id=15231
+The build logic in source/cmake/FindNeon.cmake caused the x265 build
+system to always think that the CPU supports neon: it was looking in
+/proc/cpuinfo, which of course is wrong when cross-compilation, but
+then the sequence of grep was interacting badly with CMake, causing
+the build system to always conclude that the CPU supports NEON.
 
-Signed-off-by: Sagi Mor <sagimor6@gmail.com>
-[Arnout: move the handling to the beginning and directly call execv]
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit 9954315fc5b2026552a0f0175307ec8784b51578)
+This causes runtime issues on ARMv6.
+
+Setting -DCROSS_COMPILE_ARM=1 fixes this, as it tells the x265 build
+system we are cross-compiling and it skips its bogus NEON check. So
+for ARMv6, we pass -DCROSS_COMPILE_ARM=1.
+
+But then, we still want NEON for ARMv7 processors with NEON, so this
+commit adds a patch that allows to explicitly specify whether the CPU
+supports NEON, in the -DCROSS_COMPILE_ARM=1 case, and we use this
+option when BR2_ARM_CPU_HAS_NEON.
+
+For those wondering why -DCROSS_COMPILE_ARM=1 is not passed for all
+ARM platforms: it's because from the perspective of x265, only ARM >=
+v6 is ARM: it has assembly code that needs at least ARMv6. Earlier ARM
+platforms are not detected as ARM by the x265 build logic, and
+therefore fallback on generic code.
+
+This has been build-tested on:
+- ARMv5: generic code is used, no assembly
+- ARMv6: assembly code is used, but not with NEON support
+- ARMv7 with NEON: assembly code is used, with NEON support
+
+Reported-by: David Barbion <davidb@230ruedubac.fr>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 1fbd26f83169a206bdf9c36c85510a33c0e7a864)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- toolchain/toolchain-wrapper.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ ...eLists.txt-allow-setting-CPU_HAS_NEON-whe.patch | 40 ++++++++++++++++++++++
+ package/x265/x265.mk                               | 14 ++++++++
+ 2 files changed, 54 insertions(+)
 
-diff --git a/toolchain/toolchain-wrapper.c b/toolchain/toolchain-wrapper.c
-index f66e588bfd..e436889760 100644
---- a/toolchain/toolchain-wrapper.c
-+++ b/toolchain/toolchain-wrapper.c
-@@ -310,6 +310,17 @@ int main(int argc, char **argv)
- 		perror(__FILE__ ": overflow");
- 		return 3;
- 	}
+diff --git a/package/x265/0002-source-CMakeLists.txt-allow-setting-CPU_HAS_NEON-whe.patch b/package/x265/0002-source-CMakeLists.txt-allow-setting-CPU_HAS_NEON-whe.patch
+new file mode 100644
+index 0000000000..51be8f2d02
+--- /dev/null
++++ b/package/x265/0002-source-CMakeLists.txt-allow-setting-CPU_HAS_NEON-whe.patch
+@@ -0,0 +1,40 @@
++From 0088d29e7c75ea7f100a100aea4e2a797469427f Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Date: Sat, 13 Jul 2024 10:10:54 +0200
++Subject: [PATCH] source/CMakeLists.txt: allow setting CPU_HAS_NEON when
++ CROSS_COMPILE_ARM
 +
-+	/* skip all processing --help is specified */
-+	for (i = 1; i < argc; i++) {
-+		if (!strcmp(argv[i], "--help")) {
-+			argv[0] = path;
-+			if (execv(path, argv))
-+				perror(path);
-+			return 1;
-+		}
-+	}
++The logic in source/cmake/FindNeon.cmake is not appropriate for
++cross-compilation scenarios, so in order to allow cross-compiling for
++ARM, CROSS_COMPILE_ARM needs to be defined. However that currently
++doesn't allow the enabling of NEON support, so let's allow the user to
++manually set CPU_HAS_NEON in this case.
 +
- #ifdef BR_CCACHE
- 	ret = snprintf(ccache_path, sizeof(ccache_path), "%s/bin/ccache", absbasedir);
- 	if (ret >= sizeof(ccache_path)) {
++Upstream: https://bitbucket.org/multicoreware/x265_git/pull-requests/26
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ source/CMakeLists.txt | 7 ++++++-
++ 1 file changed, 6 insertions(+), 1 deletion(-)
++
++diff --git a/source/CMakeLists.txt b/source/CMakeLists.txt
++index a34bf4d4f..072bf62ab 100755
++--- a/source/CMakeLists.txt
+++++ b/source/CMakeLists.txt
++@@ -239,8 +239,13 @@ if(GCC)
++         endif()
++     endif()
++     if(ARM AND CROSS_COMPILE_ARM)
++-        set(ARM_ARGS -fPIC)
++         message(STATUS "cross compile arm")
+++        if(CPU_HAS_NEON)
+++          set(ARM_ARGS -mfpu=neon -fPIC)
+++          add_definitions(-DHAVE_NEON)
+++        else()
+++	  set(ARM_ARGS -fPIC)
+++	endif()
++     elseif(ARM)
++         if(ARM64)
++             set(ARM_ARGS -fPIC)
++-- 
++2.45.2
++
+diff --git a/package/x265/x265.mk b/package/x265/x265.mk
+index 51c39df4cd..bd5180b24b 100644
+--- a/package/x265/x265.mk
++++ b/package/x265/x265.mk
+@@ -13,6 +13,20 @@ X265_CPE_ID_VENDOR = multicorewareinc
+ X265_SUBDIR = source
+ X265_INSTALL_STAGING = YES
+ 
++# For CPUs before ARMv6, x265 does not consider them "ARM" but generic
++# CPUs for which no optimized assembly is provided, hence we don't
++# pass -DCROSS_COMPILE_ARM=1.
++ifeq ($(BR2_ARM_CPU_ARMV6),y)
++X265_CONF_OPTS += -DCROSS_COMPILE_ARM=1
++endif
++
++ifeq ($(BR2_ARM_CPU_ARMV7A),y)
++X265_CONF_OPTS += -DCROSS_COMPILE_ARM=1
++ifeq ($(BR2_ARM_CPU_HAS_NEON),y)
++X265_CONF_OPTS += -DCPU_HAS_NEON=1
++endif
++endif
++
+ ifeq ($(BR2_i386)$(BR2_x86_64),y)
+ X265_DEPENDENCIES += host-nasm
+ endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
