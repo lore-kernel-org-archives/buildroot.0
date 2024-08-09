@@ -4,49 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D03B7C3DA4A
-	for <buildroot@archiver.kernel.org>; Fri,  9 Aug 2024 22:03:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D24FC3DA4A
+	for <buildroot@archiver.kernel.org>; Fri,  9 Aug 2024 22:03:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6151E80C16;
-	Fri,  9 Aug 2024 22:03:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0C34F8177C;
+	Fri,  9 Aug 2024 22:03:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lNADyaxngpA8; Fri,  9 Aug 2024 22:03:16 +0000 (UTC)
+ id roR45x_qfL1W; Fri,  9 Aug 2024 22:03:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AB5728136E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5AB8A81CE3
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AB5728136E;
-	Fri,  9 Aug 2024 22:03:16 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5B7481BF286
- for <buildroot@lists.busybox.net>; Fri,  9 Aug 2024 22:03:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5AB8A81CE3;
+	Fri,  9 Aug 2024 22:03:31 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 209F21BF286
+ for <buildroot@lists.busybox.net>; Fri,  9 Aug 2024 22:03:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 49BA3403B7
- for <buildroot@lists.busybox.net>; Fri,  9 Aug 2024 22:03:15 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1C376605EB
+ for <buildroot@lists.busybox.net>; Fri,  9 Aug 2024 22:03:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GVYbOTM7ugTg for <buildroot@lists.busybox.net>;
- Fri,  9 Aug 2024 22:03:13 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Z6gHxKkznpVx for <buildroot@lists.busybox.net>;
+ Fri,  9 Aug 2024 22:03:28 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.195;
+ helo=relay3-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C0B924038B
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id C0B924038B
- for <buildroot@buildroot.org>; Fri,  9 Aug 2024 22:03:13 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AB68884F81; Fri,  9 Aug 2024 22:03:13 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 10 Aug 2024 00:01:00 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 33557477c06bbbb24754210b7606c186f1e8a31e
-X-Git-Newrev: 3a39e706a91ad6191e499e46bdcaacbe590a144a
-X-Patchwork-Hint: ignore
-Message-Id: <20240809220313.AB68884F81@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/Makefile.in: work around buggy
- buildsystems wrt LDFLAGS
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 39CDB605A2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 39CDB605A2
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 39CDB605A2
+ for <buildroot@buildroot.org>; Fri,  9 Aug 2024 22:03:27 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 3EC9460003;
+ Fri,  9 Aug 2024 22:03:26 +0000 (UTC)
+Date: Sat, 10 Aug 2024 00:03:25 +0200
+To: <yann.morin@orange.com>
+Message-ID: <20240810000325.055e85dc@windsurf>
+In-Reply-To: <0907a7f51a6681bf626ab27febd4a32ddd7e617d.1723208902.git.yann.morin@orange.com>
+References: <0907a7f51a6681bf626ab27febd4a32ddd7e617d.1723208902.git.yann.morin@orange.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1723241006;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=taQGMtPlc30TQaASGMxgxUe0ekXV1d84uO3TGMb+Phs=;
+ b=Mi5Cscyhxomz5NC1uzM4FqrmYTlw1/MuUcdfkDkR6X9PTADyiWwulCGHVQGA0UOYrgUqDp
+ XVGkdsOJiaSQN5R+s1Av9PuG9KK6FxcKSE67qaNAL8JZCQcX1h7iXaUrT625qqSraZDbp2
+ Tf7ly4C32gpPIKSCby/SQ/4LeYimO0pFxo5stsXL98qU2Azs9APHDxTPV/SOKG76NL0WMp
+ 6P6etqXlzG9YmAwj6kztDLktF5veZ+bAg4wVPlXhfquX3i/brEAgqnUp6umK/oaA45kAt4
+ FSQu9J3S/yCsrY2gTHortVpWZVRRxw3+v71r4FIcnTWb38aVGoTR0cjQ4mWw5Q==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=Mi5Cscyh
+Subject: Re: [Buildroot] [PATCH] package/Makefile.in: work around buggy
+ filesystem wrt LDFLAGS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,168 +83,122 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============5283426859778353967=="
+Cc: "J . =?UTF-8?B?TmV1c2Now6RmZXI=?=" <j.neuschaefer@gmx.net>,
+ buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============5283426859778353967==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=3a39e706a91ad6191e499e46bdcaacbe590a144a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Some buildsystems (or their use of it by packages) will cause flags in
-LDFLAGS to be re-orderded, or even dropped, causing some
-incomprehensible mayhem... For example, gpsd [0] has this in its
-SConscript [1](typoes not mines, for once):
-
-    591 # scons uses gcc, or clang, to link. Thus LDFLAGS does not serve its
-    592 # traditional function of providing arguments to ln. LDFLAGS set in the
-    593 # environment before running scons get moved into CCFLAGS by scons.
-    594 # LDFLAGS set while running scons get ignored.
-    [--SNIP--]
-    611 for i in ["ARFLAGS",
-    612           "CCFLAGS",
-    613           "CFLAGS",
-    614           "CPPFLAGS",
-    615           "CXXFLAGS",
-    616           "LDFLAGS",
-    617           "LINKFLAGS",
-    618           "SHLINKFLAGS",
-    619           ]:
-    620     if i in os.environ:
-    621         # MergeFlags() puts the options where scons wants them, not
-    622         # where you asked them to go.
-    623         env.MergeFlags(Split(os.getenv(i)))
-
-So, when LDFLAGS (our TARGET_LDFLAGS) contains "-z text"  (without the
-quotes), that gets turned into a command line like (line-splitted for
-readability):
-
-    [...]/buildroot/output/host/bin/aarch64_be-buildroot-linux-musl-gcc \
-        -o gpsd-3.25/drivers/driver_rtcm2.os \
-        -c \
-        --sysroot=[...]/buildroot/output/host/aarch64_be-buildroot-linux-musl/sysroot \
-        -O3 -g0 \
-        -z \
-        -fPIC -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 \
-        gpsd-3.25/drivers/driver_rtcm2.c
-
-Notice how there is a lone "-z" without any following keyword.
-
-This then causes a build failure that looks totally unrelated [2]:
-
-    In file included from gpsd-3.25/drivers/../include/gpsd.h:36,
-                     from gpsd-3.25/drivers/driver_rtcm2.c:65:
-    gpsd-3.25/drivers/../include/os_compat.h:40:8: error: redefinition of ‘struct timespec’
-       40 | struct timespec {
-          |        ^~~~~~~~
-    In file included from [...]/buildroot/output/host/aarch64_be-buildroot-linux-musl/sysroot/usr/include/sys/select.h:16,
-                     from gpsd-3.25/drivers/../include/gpsd.h:31:
-    [...]/buildroot/output/host/aarch64_be-buildroot-linux-musl/sysroot/usr/include/bits/alltypes.h:237:8: note: originally defined here
-      237 | struct timespec { time_t tv_sec; int :8*(sizeof(time_t)-sizeof(long))*(__BYTE_ORDER==4321); long tv_nsec; int :8*(sizeof(time_t)-sizeof(long))*(__BYTE_ORDER!=4321); };
-          |        ^~~~~~~~
-    gpsd-3.25/drivers/../include/os_compat.h:48:5: error: conflicting types for ‘clock_gettime’; have ‘int(clockid_t,  struct timespec *)’ {aka ‘int(int,  struct timespec *)’}
-       48 | int clock_gettime(clockid_t, struct timespec *);
-          |     ^~~~~~~~~~~~~
-    In file included from gpsd-3.25/drivers/../include/gpsd.h:33:
-    [...]/buildroot/output/host/aarch64_be-buildroot-linux-musl/sysroot/usr/include/time.h:104:5: note: previous declaration of ‘clock_gettime’ with type ‘int(clockid_t,  struct timespec *)’ {aka ‘int(int,  struct timespec *)’}
-      104 | int clock_gettime (clockid_t, struct timespec *);
-          |     ^~~~~~~~~~~~~
-    scons: *** [gpsd-3.25/drivers/driver_rtcm2.os] Error 1
-    scons: building terminated because of errors.
-    make[1]: *** [package/pkg-generic.mk:289: [...]/buildroot/output/build/gpsd-3.25/.stamp_built] Error 2
-    make: *** [Makefile:83: _all] Error 2
-
-Although undocumented, neither in gcc not ld (clang unchecked by lack of
-a clang toolchain here, and by lack of clang knowledge), -z accepts the
-keyword to be snatch-glued onto it, like -zkeyword, rather than be
-spearated with a space. So, use that to pass -ztext.
-
-Fixes:
-    http://autobuild.buildroot.org/results/c03/c039989947b960ac6af17c87090366abc26dcb6d/
-    http://autobuild.buildroot.net/results/bc35d3e7b0e8c59c776652070650af3c749250ee/
-
-[0] Our other scons-based package, mongodb, does not build for another
-reason that probably hides the same issue as seen with gpsd.
-
-[1] As explained in gpsd's SConscript (se above), Scons does play tricks
-with variables:
-    https://scons.org/doc/production/HTML/scons-man.html#f-MergeFlags
-    https://scons.org/doc/production/HTML/scons-man.html#f-ParseFlags
-
-Quoting:
-    Flag values are translated according to the prefix found, and added
-    to the following construction variables:
-    [...]
-    -Wl,                    LINKFLAGS
-    [...]
-    -                       CCFLAGS
-    [...]
-    Any other strings not associated with options are assumed to be the
-    names of libraries and added to the $LIBS construction variable.
-
-So in our case, it finds that -z is an unknown option that matches the
-'-' prefix, so it is added to CFLAGS, while 'text' is a string on its
-own, so added to LIBS, and thus it would try to link with -ltext
-(supposedly, because we do not even go that far). Funnily enough, we can
-se that "-Wl," is a known option prefix, that is added to LINKFLAGS (to
-properly be used with gcc or clang, not ld).
-
-As a consequence, gpsd's buildsystem does drop -ztext from the link
-flags, and only passes it to the compile flags, which brings us back to
-before we banned textrels in a1a2f498d7ec (package/Makefile.in: ban
-textrels on musl toolchains). Fixing gpsd is a task for another,
-separate patch...
-
-[2] I spent quite some time to look at recent, time-related changes in
-Buildroot, especially due to the infamous time64_t issues... Alas, that
-was not related, and only a git-bisect pinpointed the actual issue. Poor
-polar bears...
-
-Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
-Cc: J. Neuschäfer <j.neuschaefer@gmx.net>
-Reviewed-by: J. Neuschäfer <j.neuschaefer@gmx.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/Makefile.in | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
-
-diff --git a/package/Makefile.in b/package/Makefile.in
-index 43a5c279c0..808b71a93e 100644
---- a/package/Makefile.in
-+++ b/package/Makefile.in
-@@ -155,12 +155,17 @@ TARGET_LDFLAGS = $(call qstrip,$(BR2_TARGET_LDFLAGS))
- #
- # See also: https://www.openwall.com/lists/musl/2020/09/25/4
- #
--# NOTE: We're using "-z text" instead of "-Wl,-z,text" here, because some
-+# NOTE: We're using "-ztext" instead of "-Wl,-z,text" here, because some
- # packages pass TARGET_LDFLAGS directly to ld rather than gcc, and ld doesn't
- # support -Wl,[...]. -z is supported by both gcc and clang, so it probably
- # won't cause us problems.
-+#
-+# We're using "-ztext" instead of "-z text" here, because some buildsystems
-+# (like scons, for gpsd) will reorder and/or drop LDFLAGS, causing a lone
-+# "-z" to be passed and the "text" keyword to be dropped otherwise. Both
-+# gcc and ld supports that, so it probably won't cause us problems.
- ifeq ($(BR2_TOOLCHAIN_USES_MUSL):$(BR2_STATIC_LIBS),y:)
--TARGET_LDFLAGS += -z text
-+TARGET_LDFLAGS += -ztext
- endif
- 
- # By design, _FORTIFY_SOURCE requires gcc optimization to be enabled.
-
---===============5283426859778353967==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============5283426859778353967==--
+T24gRnJpLCA5IEF1ZyAyMDI0IDE1OjA4OjIyICswMjAwCjx5YW5uLm1vcmluQG9yYW5nZS5jb20+
+IHdyb3RlOgoKPiBGcm9tOiAiWWFubiBFLiBNT1JJTiIgPHlhbm4ubW9yaW5Ab3JhbmdlLmNvbT4K
+PiAKPiBTb21lIGJ1aWxkc3lzdGVtcyAob3IgdGhlaXIgdXNlIG9mIGl0IGJ5IHBhY2thZ2VzKSB3
+aWxsIGNhdXNlIGZsYWdzIGluCj4gTERGTEFHUyB0byBiZSByZS1vcmRlcmRlZCwgb3IgZXZlbiBk
+cm9wcGVkLCBjYXVzaW5nIHNvbWUgaW5jb21wcmVtc2libGUKPiBtYXloZW0uLi4gRm9yIGV4YW1w
+bGUsIGdwc2QgWzBdIGhhcyB0aGlzIGluIGl0cyBTQ29uc2NyaXB0IFsxXSh0eXBvZXMKPiBub3Qg
+bWluZXMsIGZvciBvbmNlKToKPiAKPiAgICAgNTkxICMgc2NvbnMgdXNlcyBnY2MsIG9yIGNsYW5n
+LCB0byBsaW5rLiBUaHVzIExERkxBR1MgZG9lcyBub3Qgc2VydmUgaXRzCj4gICAgIDU5MiAjIHRy
+YWRpdGlvbmFsIGZ1bmN0aW9uIG9mIHByb3ZpZGluZyBhcmd1bWVudHMgdG8gbG4uIExERkxBR1Mg
+c2V0IGluIHRoZQo+ICAgICA1OTMgIyBlbnZpcm9ubWVudCBiZWZvcmUgcnVubmluZyBzY29ucyBn
+ZXQgbW92ZWQgaW50byBDQ0ZMQUdTIGJ5IHNjb25zLgo+ICAgICA1OTQgIyBMREZMQUdTIHNldCB3
+aGlsZSBydW5uaW5nIHNjb25zIGdldCBpZ25vcmVkLgo+ICAgICBbLS1TTklQLS1dCj4gICAgIDYx
+MSBmb3IgaSBpbiBbIkFSRkxBR1MiLAo+ICAgICA2MTIgICAgICAgICAgICJDQ0ZMQUdTIiwKPiAg
+ICAgNjEzICAgICAgICAgICAiQ0ZMQUdTIiwKPiAgICAgNjE0ICAgICAgICAgICAiQ1BQRkxBR1Mi
+LAo+ICAgICA2MTUgICAgICAgICAgICJDWFhGTEFHUyIsCj4gICAgIDYxNiAgICAgICAgICAgIkxE
+RkxBR1MiLAo+ICAgICA2MTcgICAgICAgICAgICJMSU5LRkxBR1MiLAo+ICAgICA2MTggICAgICAg
+ICAgICJTSExJTktGTEFHUyIsCj4gICAgIDYxOSAgICAgICAgICAgXToKPiAgICAgNjIwICAgICBp
+ZiBpIGluIG9zLmVudmlyb246Cj4gICAgIDYyMSAgICAgICAgICMgTWVyZ2VGbGFncygpIHB1dHMg
+dGhlIG9wdGlvbnMgd2hlcmUgc2NvbnMgd2FudHMgdGhlbSwgbm90Cj4gICAgIDYyMiAgICAgICAg
+ICMgd2hlcmUgeW91IGFza2VkIHRoZW0gdG8gZ28uCj4gICAgIDYyMyAgICAgICAgIGVudi5NZXJn
+ZUZsYWdzKFNwbGl0KG9zLmdldGVudihpKSkpCj4gCj4gU28sIHdoZW4gTERGTEFHUyAob3VyIFRB
+UkdFVF9MREZMQUdTKSBjb250YWlucyAiLXogdGV4dCIgICh3aXRob3V0IHRoZQo+IHF1b3Rlcyks
+IHRoYXQgZ2V0cyB0dXJuZWQgaW50byBhIGNvbW1hbmQgbGluZSBsaWtlIChsaW5lLXNwbGl0dGVk
+IGZvcgo+IHJlYWRhYmlsaXR5KToKPiAKPiAgICAgWy4uLl0vYnVpbGRyb290L291dHB1dC9ob3N0
+L2Jpbi9hYXJjaDY0X2JlLWJ1aWxkcm9vdC1saW51eC1tdXNsLWdjYyBcCj4gICAgICAgICAtbyBn
+cHNkLTMuMjUvZHJpdmVycy9kcml2ZXJfcnRjbTIub3MgXAo+ICAgICAgICAgLWMgXAo+ICAgICAg
+ICAgLS1zeXNyb290PVsuLi5dL2J1aWxkcm9vdC9vdXRwdXQvaG9zdC9hYXJjaDY0X2JlLWJ1aWxk
+cm9vdC1saW51eC1tdXNsL3N5c3Jvb3QgXAo+ICAgICAgICAgLU8zIC1nMCBcCj4gICAgICAgICAt
+eiBcCj4gICAgICAgICAtZlBJQyAtRF9MQVJHRUZJTEVfU09VUkNFIC1EX0xBUkdFRklMRTY0X1NP
+VVJDRSAtRF9GSUxFX09GRlNFVF9CSVRTPTY0IFwKPiAgICAgICAgIGdwc2QtMy4yNS9kcml2ZXJz
+L2RyaXZlcl9ydGNtMi5jCj4gCj4gTm90aWNlIGhvdyB0aGVyZSBpcyBhIGxvbmUgIi16IiB3aXRo
+b3V0IGFueSBmb2xsb3dpbmcga2V5d29yZC4KPiAKPiBUaGlzIHRoZW4gY2F1c2VzIGEgYnVpbGQg
+ZmFpbHVyZSB0aGF0IGxvb2tzIHRvdGFsbHkgdW5yZWxhdGVkIFsyXToKPiAKPiAgICAgSW4gZmls
+ZSBpbmNsdWRlZCBmcm9tIGdwc2QtMy4yNS9kcml2ZXJzLy4uL2luY2x1ZGUvZ3BzZC5oOjM2LAo+
+ICAgICAgICAgICAgICAgICAgICAgIGZyb20gZ3BzZC0zLjI1L2RyaXZlcnMvZHJpdmVyX3J0Y20y
+LmM6NjU6Cj4gICAgIGdwc2QtMy4yNS9kcml2ZXJzLy4uL2luY2x1ZGUvb3NfY29tcGF0Lmg6NDA6
+ODogZXJyb3I6IHJlZGVmaW5pdGlvbiBvZiDigJhzdHJ1Y3QgdGltZXNwZWPigJkKPiAgICAgICAg
+NDAgfCBzdHJ1Y3QgdGltZXNwZWMgewo+ICAgICAgICAgICB8ICAgICAgICBefn5+fn5+fgo+ICAg
+ICBJbiBmaWxlIGluY2x1ZGVkIGZyb20gWy4uLl0vYnVpbGRyb290L291dHB1dC9ob3N0L2FhcmNo
+NjRfYmUtYnVpbGRyb290LWxpbnV4LW11c2wvc3lzcm9vdC91c3IvaW5jbHVkZS9zeXMvc2VsZWN0
+Lmg6MTYsCj4gICAgICAgICAgICAgICAgICAgICAgZnJvbSBncHNkLTMuMjUvZHJpdmVycy8uLi9p
+bmNsdWRlL2dwc2QuaDozMToKPiAgICAgWy4uLl0vYnVpbGRyb290L291dHB1dC9ob3N0L2FhcmNo
+NjRfYmUtYnVpbGRyb290LWxpbnV4LW11c2wvc3lzcm9vdC91c3IvaW5jbHVkZS9iaXRzL2FsbHR5
+cGVzLmg6MjM3Ojg6IG5vdGU6IG9yaWdpbmFsbHkgZGVmaW5lZCBoZXJlCj4gICAgICAgMjM3IHwg
+c3RydWN0IHRpbWVzcGVjIHsgdGltZV90IHR2X3NlYzsgaW50IDo4KihzaXplb2YodGltZV90KS1z
+aXplb2YobG9uZykpKihfX0JZVEVfT1JERVI9PTQzMjEpOyBsb25nIHR2X25zZWM7IGludCA6OCoo
+c2l6ZW9mKHRpbWVfdCktc2l6ZW9mKGxvbmcpKSooX19CWVRFX09SREVSIT00MzIxKTsgfTsKPiAg
+ICAgICAgICAgfCAgICAgICAgXn5+fn5+fn4KPiAgICAgZ3BzZC0zLjI1L2RyaXZlcnMvLi4vaW5j
+bHVkZS9vc19jb21wYXQuaDo0ODo1OiBlcnJvcjogY29uZmxpY3RpbmcgdHlwZXMgZm9yIOKAmGNs
+b2NrX2dldHRpbWXigJk7IGhhdmUg4oCYaW50KGNsb2NraWRfdCwgIHN0cnVjdCB0aW1lc3BlYyAq
+KeKAmSB7YWthIOKAmGludChpbnQsICBzdHJ1Y3QgdGltZXNwZWMgKinigJl9Cj4gICAgICAgIDQ4
+IHwgaW50IGNsb2NrX2dldHRpbWUoY2xvY2tpZF90LCBzdHJ1Y3QgdGltZXNwZWMgKik7Cj4gICAg
+ICAgICAgIHwgICAgIF5+fn5+fn5+fn5+fn4KPiAgICAgSW4gZmlsZSBpbmNsdWRlZCBmcm9tIGdw
+c2QtMy4yNS9kcml2ZXJzLy4uL2luY2x1ZGUvZ3BzZC5oOjMzOgo+ICAgICBbLi4uXS9idWlsZHJv
+b3Qvb3V0cHV0L2hvc3QvYWFyY2g2NF9iZS1idWlsZHJvb3QtbGludXgtbXVzbC9zeXNyb290L3Vz
+ci9pbmNsdWRlL3RpbWUuaDoxMDQ6NTogbm90ZTogcHJldmlvdXMgZGVjbGFyYXRpb24gb2Yg4oCY
+Y2xvY2tfZ2V0dGltZeKAmSB3aXRoIHR5cGUg4oCYaW50KGNsb2NraWRfdCwgIHN0cnVjdCB0aW1l
+c3BlYyAqKeKAmSB7YWthIOKAmGludChpbnQsICBzdHJ1Y3QgdGltZXNwZWMgKinigJl9Cj4gICAg
+ICAgMTA0IHwgaW50IGNsb2NrX2dldHRpbWUgKGNsb2NraWRfdCwgc3RydWN0IHRpbWVzcGVjICop
+Owo+ICAgICAgICAgICB8ICAgICBefn5+fn5+fn5+fn5+Cj4gICAgIHNjb25zOiAqKiogW2dwc2Qt
+My4yNS9kcml2ZXJzL2RyaXZlcl9ydGNtMi5vc10gRXJyb3IgMQo+ICAgICBzY29uczogYnVpbGRp
+bmcgdGVybWluYXRlZCBiZWNhdXNlIG9mIGVycm9ycy4KPiAgICAgbWFrZVsxXTogKioqIFtwYWNr
+YWdlL3BrZy1nZW5lcmljLm1rOjI4OTogWy4uLl0vYnVpbGRyb290L291dHB1dC9idWlsZC9ncHNk
+LTMuMjUvLnN0YW1wX2J1aWx0XSBFcnJvciAyCj4gICAgIG1ha2U6ICoqKiBbTWFrZWZpbGU6ODM6
+IF9hbGxdIEVycm9yIDIKPiAKPiBBbHRob3VnaCB1bmRvY3VtZW50ZWQsIG5laXRoZXIgaW4gZ2Nj
+IG5vdCBsZCAoY2xhbmcgdW5jaGVja2VkIGJ5IGxhY2sgb2YKPiBhIGNsYW5nIHRvb2xjaGFpbiBo
+ZXJlLCBhbmQgYnkgbGFjayBvZiBjbGFuZyBrbm93bGVkZ2UpLCAteiBhY2NlcHRzIHRoZQo+IGtl
+eXdvcmQgdG8gYmUgc25hdGNoLWdsdWVkIG9udG8gaXQsIGxpa2UgLXprZXl3b3JkLCByYXRoZXIg
+dGhhbiBiZQo+IHNwZWFyYXRlZCB3aXRoIGEgc3BhY2UuIFNvLCB1c2UgdGhhdCB0byBwYXNzIC16
+dGV4dC4KPiAKPiBGaXhlczoKPiAgICAgaHR0cDovL2F1dG9idWlsZC5idWlsZHJvb3Qub3JnL3Jl
+c3VsdHMvYzAzL2MwMzk5ODk5NDdiOTYwYWM2YWYxN2M4NzA5MDM2NmFiYzI2ZGNiNmQvCj4gICAg
+IGh0dHA6Ly9hdXRvYnVpbGQuYnVpbGRyb290Lm5ldC9yZXN1bHRzL2JjMzVkM2U3YjBlOGM1OWM3
+NzY2NTIwNzA2NTBhZjNjNzQ5MjUwZWUvCj4gCj4gWzBdIE91ciBvdGhlciBzY29ucy1iYXNlZCBw
+YWNrYWdlLCBtb25nb2RiLCBkb2VzIG5vdCBidWlsZCBmb3IgYW5vdGhlcgo+IHJlYXNvbiB0aGF0
+IHByb2JhYmx5IGhpZGVzIHRoZSBzYW1lIGlzc3VlIGFzIHNlZW4gd2l0aCBncHNkLgo+IAo+IFsx
+XSBBcyBleHBsYWluZWQgaW4gZ3BzZCdzIFNDb25zY3JpcHQgKHNlIGFib3ZlKSwgU2NvbnMgZG9l
+cyBwbGF5IHRyaWNrcwo+IHdpdGggdmFyaWFibGVzOgo+ICAgICBodHRwczovL3Njb25zLm9yZy9k
+b2MvcHJvZHVjdGlvbi9IVE1ML3Njb25zLW1hbi5odG1sI2YtTWVyZ2VGbGFncwo+ICAgICBodHRw
+czovL3Njb25zLm9yZy9kb2MvcHJvZHVjdGlvbi9IVE1ML3Njb25zLW1hbi5odG1sI2YtUGFyc2VG
+bGFncwo+IAo+IFF1b3Rpbmc6Cj4gICAgIEZsYWcgdmFsdWVzIGFyZSB0cmFuc2xhdGVkIGFjY29y
+ZGluZyB0byB0aGUgcHJlZml4IGZvdW5kLCBhbmQgYWRkZWQKPiAgICAgdG8gdGhlIGZvbGxvd2lu
+ZyBjb25zdHJ1Y3Rpb24gdmFyaWFibGVzOgo+ICAgICBbLi4uXQo+ICAgICAtV2wsICAgICAgICAg
+ICAgICAgICAgICBMSU5LRkxBR1MKPiAgICAgWy4uLl0KPiAgICAgLSAgICAgICAgICAgICAgICAg
+ICAgICAgQ0NGTEFHUwo+ICAgICBbLi4uXQo+ICAgICBBbnkgb3RoZXIgc3RyaW5ncyBub3QgYXNz
+b2NpYXRlZCB3aXRoIG9wdGlvbnMgYXJlIGFzc3VtZWQgdG8gYmUgdGhlCj4gICAgIG5hbWVzIG9m
+IGxpYnJhcmllcyBhbmQgYWRkZWQgdG8gdGhlICRMSUJTIGNvbnN0cnVjdGlvbiB2YXJpYWJsZS4K
+PiAKPiBTbyBpbiBvdXIgY2FzZSwgaXQgZmluZHMgdGhhdCAteiBpcyBhbiB1bmtub3duIG9wdGlv
+biB0aGF0IG1hdGNoZXMgdGhlCj4gJy0nIHByZWZpeCwgc28gaXQgaXMgYWRkZWQgdG8gQ0ZMQUdT
+LCB3aGlsZSAndGV4dCcgaXMgYSBzdHJpbmcgb24gaXRzCj4gb3duLCBzbyBhZGRlZCB0byBMSUJT
+LCBhbmQgdGh1cyBpdCB3b3VsZCB0cnkgdG8gbGluayB3aXRoIC1sdGV4dAo+IChzdXBwb3NlZGx5
+LCBiZWNhdXNlIHdlIGRvIG5vdCBldmVuIGdvIHRoYXQgZmFyKS4gRnVubmlseSBlbm91Z2gsIHdl
+IGNhbgo+IHNlIHRoYXQgIi1XbCwiIGlzIGEga25vd24gb3B0aW9uIHByZWZpeCwgdGhhdCBpcyBh
+ZGRlZCB0byBMSU5LRkxBR1MgKHRvCj4gcHJvcGVybHkgYmUgdXNlZCB3aXRoIGdjYyBvciBjbGFu
+Zywgbm90IGxkKS4KPiAKPiBBcyBhIGNvbnNlcXVlbmNlLCBncHNkJ3MgYnVpbGRzeXN0ZW0gZG9l
+cyBkcm9wIC16dGV4dCBmcm9tIHRoZSBsaW5rCj4gZmxhZ3MsIGFuZCBvbmx5IHBhc3NlcyBpdCB0
+byB0aGUgY29tcGlsZSBmbGFncywgd2hpY2ggYnJpbmdzIHVzIGJhY2sgdG8KPiBiZWZvcmUgd2Ug
+YmFubmVkIHRleHRyZWxzIGluIGExYTJmNDk4ZDdlYyAocGFja2FnZS9NYWtlZmlsZS5pbjogYmFu
+Cj4gdGV4dHJlbHMgb24gbXVzbCB0b29sY2hhaW5zKS4gRml4aW5nIGdwc2QgaXMgYSB0YXNrIGZv
+ciBhbm90aGVyLAo+IHNlcGFyYXRlIHBhdGNoLi4uCj4gCj4gWzJdIEkgc3BlbnQgcXVpdGUgc29t
+ZSB0aW1lIHRvIGxvb2sgYXQgcmVjZW50LCB0aW1lLXJlbGF0ZWQgY2hhbmdlcyBpbgo+IEJ1aWxk
+cm9vdCwgZXNwZWNpYWxseSBkdWUgdG8gdGhlIGluZmFtb3VzIHRpbWU2NF90IGlzc3Vlcy4uLiBB
+bGFzLCB0aGF0Cj4gd2FzIG5vdCByZWxhdGVkLCBhbmQgb25seSBhIGdpdC1iaXNlY3QgcGlucG9p
+bnRlZCB0aGUgYWN0dWFsIGlzc3VlLiBQb29yCj4gcG9sYXIgYmVhcnMuLi4KPiAKPiBTaWduZWQt
+b2ZmLWJ5OiBZYW5uIEUuIE1PUklOIDx5YW5uLm1vcmluQG9yYW5nZS5jb20+Cj4gQ2M6IEouIE5l
+dXNjaMOkZmVyIDxqLm5ldXNjaGFlZmVyQGdteC5uZXQ+Cj4gLS0tCj4gIHBhY2thZ2UvTWFrZWZp
+bGUuaW4gfCA5ICsrKysrKystLQo+ICAxIGZpbGUgY2hhbmdlZCwgNyBpbnNlcnRpb25zKCspLCAy
+IGRlbGV0aW9ucygtKQoKQXBwbGllZCB0byBtYXN0ZXIsIHRoYW5rcy4KClRob21hcwotLSAKVGhv
+bWFzIFBldGF6em9uaSwgQ1RPLCBCb290bGluCkVtYmVkZGVkIExpbnV4IGFuZCBLZXJuZWwgZW5n
+aW5lZXJpbmcKaHR0cHM6Ly9ib290bGluLmNvbQpfX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWls
+ZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1
+aWxkcm9vdAo=
