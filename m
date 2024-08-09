@@ -1,89 +1,68 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD3A2C3DA4A
-	for <buildroot@archiver.kernel.org>; Fri,  9 Aug 2024 13:14:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 550B9C3DA4A
+	for <buildroot@archiver.kernel.org>; Fri,  9 Aug 2024 13:59:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 311E94036A;
-	Fri,  9 Aug 2024 13:14:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4DB3F61319;
+	Fri,  9 Aug 2024 13:59:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8fcZwvVlXSIQ; Fri,  9 Aug 2024 13:14:35 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wxREfjqgqjhk; Fri,  9 Aug 2024 13:59:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7114B404A5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B07DA612F4
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7114B404A5;
-	Fri,  9 Aug 2024 13:14:35 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 388881BF296
- for <buildroot@lists.busybox.net>; Fri,  9 Aug 2024 13:14:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B07DA612F4;
+	Fri,  9 Aug 2024 13:59:17 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 692061BF21A
+ for <buildroot@lists.busybox.net>; Fri,  9 Aug 2024 13:59:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 26B7980AAC
- for <buildroot@lists.busybox.net>; Fri,  9 Aug 2024 13:14:34 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 55EF9409FB
+ for <buildroot@lists.busybox.net>; Fri,  9 Aug 2024 13:59:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nSs6PXCoJyyC for <buildroot@lists.busybox.net>;
- Fri,  9 Aug 2024 13:14:32 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.210.121;
- helo=smtp-out.orange.com; envelope-from=yann.morin@orange.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 6859480A86
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6859480A86
-Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.210.121])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6859480A86
- for <buildroot@buildroot.org>; Fri,  9 Aug 2024 13:14:32 +0000 (UTC)
-Received: from unknown (HELO opfedv3rlp0d.nor.fr.ftgroup) ([x.x.x.x]) by
- smtp-out.orange.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
- 09 Aug 2024 15:14:31 +0200
-Received: from unknown (HELO OPE16NORMBX305.corporate.adroot.infra.ftgroup)
- ([x.x.x.x]) by opfedv3rlp0d.nor.fr.ftgroup with
- ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 09 Aug 2024 15:14:31 +0200
-Received: from tl-lnx-nyma7486-2 [x.x.x.x] by
- OPE16NORMBX305.corporate.adroot.infra.ftgroup [x.x.x.x] with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39; Fri, 9 Aug 2024 15:14:29 +0200
-Received: by tl-lnx-nyma7486-2 (sSMTP sendmail emulation);
- Fri, 09 Aug 2024 15:14:29 +0200
-From: yann.morin@orange.com
-X-IronPort-AV: E=Sophos;i="6.09,276,1716242400"; d="scan'208";a="184733375"
-Date: Fri, 9 Aug 2024 15:14:29 +0200
-To: <buildroot@buildroot.org>
-Message-ID: <ZrYWNdkywKEdEBHR@tl-lnx-nyma7486-2>
-References: <0907a7f51a6681bf626ab27febd4a32ddd7e617d.1723208902.git.yann.morin@orange.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id D_-6ODM4Z7N5 for <buildroot@lists.busybox.net>;
+ Fri,  9 Aug 2024 13:59:14 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=89.238.66.15;
+ helo=helium.openadk.org; envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 07E7641296
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 07E7641296
+Received: from helium.openadk.org (helium.openadk.org [89.238.66.15])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 07E7641296
+ for <buildroot@buildroot.org>; Fri,  9 Aug 2024 13:59:13 +0000 (UTC)
+Received: by helium.openadk.org (Postfix, from userid 1000)
+ id 2EE323537291; Fri,  9 Aug 2024 15:59:11 +0200 (CEST)
+Date: Fri, 9 Aug 2024 15:59:11 +0200
+From: Waldemar Brodkorb <wbx@openadk.org>
+To: buildroot@buildroot.org
+Message-ID: <ZrYgrzSPAcUueLsj@waldemar-brodkorb.de>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <0907a7f51a6681bf626ab27febd4a32ddd7e617d.1723208902.git.yann.morin@orange.com>
-X-Originating-IP: [10.115.26.51]
-X-ClientProxiedBy: OPE16NORMBX402.corporate.adroot.infra.ftgroup
- (10.115.26.15) To OPE16NORMBX305.corporate.adroot.infra.ftgroup
- (10.115.27.10)
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
- t=1723209273; x=1754745273;
- h=date:to:cc:subject:message-id:references:mime-version:
- in-reply-to:content-transfer-encoding:from;
- bh=xJ7k3dgGG1n2y7KSTicB58FQ3977qlPSm8aXHQtmjF0=;
- b=EeDiyVc8v4/dubtl75AoMwPepUbqm8FQIVlOxtEu9nZmy/FC/OaL4158
- ndLgcB6038Duv2TbGAPXJ/58C0ofOcErv/aZpJAFXZQvIJRuJRYUHbc1B
- icQ7+aAFxiot5xvMKSVPY4/mcJKUaBdbQby9W1ZxU2QMmTbg1oOuqXpUt
- aCjKl3aa4TQORQPAe7X5RJLdTPNzeiVBA+cv/N/MhQbescyyicdhTdTiz
- 1pHXtCVsMLk4gz1I9HA7fxo3xoIHpq6Xzz63vRZtSGbf3NNRIPCreR30G
- 0+eUaEZIOSaY5p150PXFt4CTOKUpXGV8Bd9BYBOyL+k5HjuAxE0k8WdFP
- Q==;
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=orange.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Operating-System: Linux 5.10.0-31-amd64 x86_64
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=openadk.org; s=2022; 
+ t=1723211951; bh=QCZzjlhHNQzJKbhVmd6BGldbr66JuSALNhyoFqiMwO0=;
+ h=Date:From:To:Cc:Subject:From;
+ b=m08vMhWwzCa3733O1CWxFb4yW5i+a6pu+oIYSbrlp0qbJLN9jz8dJ5cHqtCfamq84
+ H/5qlC0kMK0lXDp7CNz+zVaejuCkLJSa0rZv9eJNwKvqMqIRWJbeQPE5h2npUmYFNd
+ TEgDhoS5wPUmo401KNYPrxBSfj2kJL4mSz8II+/0LMQ03VJZpRHsq25d2bviDV2+nO
+ goNLe6bL32Fhyr2O7j88gaacXX6wEJl9dTSYOlzUdkn3klVo9oGF5YqjkwOxQegLYz
+ 03fD0A6oNRShjM/9C5Xy1GDGj9Enas20AXMNr8SjDTBTA1fOncQBVUEKmsILXAmxaK
+ v4DvSMEQykmtg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=openadk.org
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=orange.com header.i=@orange.com header.a=rsa-sha256
- header.s=orange002 header.b=EeDiyVc8
-Subject: Re: [Buildroot] [PATCH] package/Makefile.in: work around buggy
- filesystem wrt LDFLAGS
+ unprotected) header.d=openadk.org header.i=@openadk.org header.a=rsa-sha256
+ header.s=2022 header.b=m08vMhWw
+Subject: [Buildroot] [PATCH] package/rpm: update to 4.19.1.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,168 +74,271 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: J =?utf-8?Q?=2E_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: James Knight <james.knight@collins.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-QWxsLAoKT24gMjAyNC0wOC0wOSAxNTowOCArMDIwMCwgeWFubi5tb3JpbkBvcmFuZ2UuY29tIHNw
-YWtlIHRodXNseToKPiBGcm9tOiAiWWFubiBFLiBNT1JJTiIgPHlhbm4ubW9yaW5Ab3JhbmdlLmNv
-bT4KClRoZSBjb21taXQgdGl0bGUgbWVudGlvbnMgImZpbGVzeXN0ZW1zIjsgdGhhdCdzIG9mIGNv
-dXJzZSBpbmNvcnJlY3QsIGFuZApzaG91bGQgbWVudGlvbiAiYnVpbGRzeXN0ZW1zIi4KClNvcnJ5
-IGZvciB0aGUgY29uZnVzaW9uLgoKUmVnYXJkcywKWWFubiBFLiBNT1JJTi4KCj4gU29tZSBidWls
-ZHN5c3RlbXMgKG9yIHRoZWlyIHVzZSBvZiBpdCBieSBwYWNrYWdlcykgd2lsbCBjYXVzZSBmbGFn
-cyBpbgo+IExERkxBR1MgdG8gYmUgcmUtb3JkZXJkZWQsIG9yIGV2ZW4gZHJvcHBlZCwgY2F1c2lu
-ZyBzb21lIGluY29tcHJlbXNpYmxlCj4gbWF5aGVtLi4uIEZvciBleGFtcGxlLCBncHNkIFswXSBo
-YXMgdGhpcyBpbiBpdHMgU0NvbnNjcmlwdCBbMV0odHlwb2VzCj4gbm90IG1pbmVzLCBmb3Igb25j
-ZSk6Cj4gCj4gICAgIDU5MSAjIHNjb25zIHVzZXMgZ2NjLCBvciBjbGFuZywgdG8gbGluay4gVGh1
-cyBMREZMQUdTIGRvZXMgbm90IHNlcnZlIGl0cwo+ICAgICA1OTIgIyB0cmFkaXRpb25hbCBmdW5j
-dGlvbiBvZiBwcm92aWRpbmcgYXJndW1lbnRzIHRvIGxuLiBMREZMQUdTIHNldCBpbiB0aGUKPiAg
-ICAgNTkzICMgZW52aXJvbm1lbnQgYmVmb3JlIHJ1bm5pbmcgc2NvbnMgZ2V0IG1vdmVkIGludG8g
-Q0NGTEFHUyBieSBzY29ucy4KPiAgICAgNTk0ICMgTERGTEFHUyBzZXQgd2hpbGUgcnVubmluZyBz
-Y29ucyBnZXQgaWdub3JlZC4KPiAgICAgWy0tU05JUC0tXQo+ICAgICA2MTEgZm9yIGkgaW4gWyJB
-UkZMQUdTIiwKPiAgICAgNjEyICAgICAgICAgICAiQ0NGTEFHUyIsCj4gICAgIDYxMyAgICAgICAg
-ICAgIkNGTEFHUyIsCj4gICAgIDYxNCAgICAgICAgICAgIkNQUEZMQUdTIiwKPiAgICAgNjE1ICAg
-ICAgICAgICAiQ1hYRkxBR1MiLAo+ICAgICA2MTYgICAgICAgICAgICJMREZMQUdTIiwKPiAgICAg
-NjE3ICAgICAgICAgICAiTElOS0ZMQUdTIiwKPiAgICAgNjE4ICAgICAgICAgICAiU0hMSU5LRkxB
-R1MiLAo+ICAgICA2MTkgICAgICAgICAgIF06Cj4gICAgIDYyMCAgICAgaWYgaSBpbiBvcy5lbnZp
-cm9uOgo+ICAgICA2MjEgICAgICAgICAjIE1lcmdlRmxhZ3MoKSBwdXRzIHRoZSBvcHRpb25zIHdo
-ZXJlIHNjb25zIHdhbnRzIHRoZW0sIG5vdAo+ICAgICA2MjIgICAgICAgICAjIHdoZXJlIHlvdSBh
-c2tlZCB0aGVtIHRvIGdvLgo+ICAgICA2MjMgICAgICAgICBlbnYuTWVyZ2VGbGFncyhTcGxpdChv
-cy5nZXRlbnYoaSkpKQo+IAo+IFNvLCB3aGVuIExERkxBR1MgKG91ciBUQVJHRVRfTERGTEFHUykg
-Y29udGFpbnMgIi16IHRleHQiICAod2l0aG91dCB0aGUKPiBxdW90ZXMpLCB0aGF0IGdldHMgdHVy
-bmVkIGludG8gYSBjb21tYW5kIGxpbmUgbGlrZSAobGluZS1zcGxpdHRlZCBmb3IKPiByZWFkYWJp
-bGl0eSk6Cj4gCj4gICAgIFsuLi5dL2J1aWxkcm9vdC9vdXRwdXQvaG9zdC9iaW4vYWFyY2g2NF9i
-ZS1idWlsZHJvb3QtbGludXgtbXVzbC1nY2MgXAo+ICAgICAgICAgLW8gZ3BzZC0zLjI1L2RyaXZl
-cnMvZHJpdmVyX3J0Y20yLm9zIFwKPiAgICAgICAgIC1jIFwKPiAgICAgICAgIC0tc3lzcm9vdD1b
-Li4uXS9idWlsZHJvb3Qvb3V0cHV0L2hvc3QvYWFyY2g2NF9iZS1idWlsZHJvb3QtbGludXgtbXVz
-bC9zeXNyb290IFwKPiAgICAgICAgIC1PMyAtZzAgXAo+ICAgICAgICAgLXogXAo+ICAgICAgICAg
-LWZQSUMgLURfTEFSR0VGSUxFX1NPVVJDRSAtRF9MQVJHRUZJTEU2NF9TT1VSQ0UgLURfRklMRV9P
-RkZTRVRfQklUUz02NCBcCj4gICAgICAgICBncHNkLTMuMjUvZHJpdmVycy9kcml2ZXJfcnRjbTIu
-Ywo+IAo+IE5vdGljZSBob3cgdGhlcmUgaXMgYSBsb25lICIteiIgd2l0aG91dCBhbnkgZm9sbG93
-aW5nIGtleXdvcmQuCj4gCj4gVGhpcyB0aGVuIGNhdXNlcyBhIGJ1aWxkIGZhaWx1cmUgdGhhdCBs
-b29rcyB0b3RhbGx5IHVucmVsYXRlZCBbMl06Cj4gCj4gICAgIEluIGZpbGUgaW5jbHVkZWQgZnJv
-bSBncHNkLTMuMjUvZHJpdmVycy8uLi9pbmNsdWRlL2dwc2QuaDozNiwKPiAgICAgICAgICAgICAg
-ICAgICAgICBmcm9tIGdwc2QtMy4yNS9kcml2ZXJzL2RyaXZlcl9ydGNtMi5jOjY1Ogo+ICAgICBn
-cHNkLTMuMjUvZHJpdmVycy8uLi9pbmNsdWRlL29zX2NvbXBhdC5oOjQwOjg6IGVycm9yOiByZWRl
-ZmluaXRpb24gb2Yg4oCYc3RydWN0IHRpbWVzcGVj4oCZCj4gICAgICAgIDQwIHwgc3RydWN0IHRp
-bWVzcGVjIHsKPiAgICAgICAgICAgfCAgICAgICAgXn5+fn5+fn4KPiAgICAgSW4gZmlsZSBpbmNs
-dWRlZCBmcm9tIFsuLi5dL2J1aWxkcm9vdC9vdXRwdXQvaG9zdC9hYXJjaDY0X2JlLWJ1aWxkcm9v
-dC1saW51eC1tdXNsL3N5c3Jvb3QvdXNyL2luY2x1ZGUvc3lzL3NlbGVjdC5oOjE2LAo+ICAgICAg
-ICAgICAgICAgICAgICAgIGZyb20gZ3BzZC0zLjI1L2RyaXZlcnMvLi4vaW5jbHVkZS9ncHNkLmg6
-MzE6Cj4gICAgIFsuLi5dL2J1aWxkcm9vdC9vdXRwdXQvaG9zdC9hYXJjaDY0X2JlLWJ1aWxkcm9v
-dC1saW51eC1tdXNsL3N5c3Jvb3QvdXNyL2luY2x1ZGUvYml0cy9hbGx0eXBlcy5oOjIzNzo4OiBu
-b3RlOiBvcmlnaW5hbGx5IGRlZmluZWQgaGVyZQo+ICAgICAgIDIzNyB8IHN0cnVjdCB0aW1lc3Bl
-YyB7IHRpbWVfdCB0dl9zZWM7IGludCA6OCooc2l6ZW9mKHRpbWVfdCktc2l6ZW9mKGxvbmcpKSoo
-X19CWVRFX09SREVSPT00MzIxKTsgbG9uZyB0dl9uc2VjOyBpbnQgOjgqKHNpemVvZih0aW1lX3Qp
-LXNpemVvZihsb25nKSkqKF9fQllURV9PUkRFUiE9NDMyMSk7IH07Cj4gICAgICAgICAgIHwgICAg
-ICAgIF5+fn5+fn5+Cj4gICAgIGdwc2QtMy4yNS9kcml2ZXJzLy4uL2luY2x1ZGUvb3NfY29tcGF0
-Lmg6NDg6NTogZXJyb3I6IGNvbmZsaWN0aW5nIHR5cGVzIGZvciDigJhjbG9ja19nZXR0aW1l4oCZ
-OyBoYXZlIOKAmGludChjbG9ja2lkX3QsICBzdHJ1Y3QgdGltZXNwZWMgKinigJkge2FrYSDigJhp
-bnQoaW50LCAgc3RydWN0IHRpbWVzcGVjICop4oCZfQo+ICAgICAgICA0OCB8IGludCBjbG9ja19n
-ZXR0aW1lKGNsb2NraWRfdCwgc3RydWN0IHRpbWVzcGVjICopOwo+ICAgICAgICAgICB8ICAgICBe
-fn5+fn5+fn5+fn5+Cj4gICAgIEluIGZpbGUgaW5jbHVkZWQgZnJvbSBncHNkLTMuMjUvZHJpdmVy
-cy8uLi9pbmNsdWRlL2dwc2QuaDozMzoKPiAgICAgWy4uLl0vYnVpbGRyb290L291dHB1dC9ob3N0
-L2FhcmNoNjRfYmUtYnVpbGRyb290LWxpbnV4LW11c2wvc3lzcm9vdC91c3IvaW5jbHVkZS90aW1l
-Lmg6MTA0OjU6IG5vdGU6IHByZXZpb3VzIGRlY2xhcmF0aW9uIG9mIOKAmGNsb2NrX2dldHRpbWXi
-gJkgd2l0aCB0eXBlIOKAmGludChjbG9ja2lkX3QsICBzdHJ1Y3QgdGltZXNwZWMgKinigJkge2Fr
-YSDigJhpbnQoaW50LCAgc3RydWN0IHRpbWVzcGVjICop4oCZfQo+ICAgICAgIDEwNCB8IGludCBj
-bG9ja19nZXR0aW1lIChjbG9ja2lkX3QsIHN0cnVjdCB0aW1lc3BlYyAqKTsKPiAgICAgICAgICAg
-fCAgICAgXn5+fn5+fn5+fn5+fgo+ICAgICBzY29uczogKioqIFtncHNkLTMuMjUvZHJpdmVycy9k
-cml2ZXJfcnRjbTIub3NdIEVycm9yIDEKPiAgICAgc2NvbnM6IGJ1aWxkaW5nIHRlcm1pbmF0ZWQg
-YmVjYXVzZSBvZiBlcnJvcnMuCj4gICAgIG1ha2VbMV06ICoqKiBbcGFja2FnZS9wa2ctZ2VuZXJp
-Yy5tazoyODk6IFsuLi5dL2J1aWxkcm9vdC9vdXRwdXQvYnVpbGQvZ3BzZC0zLjI1Ly5zdGFtcF9i
-dWlsdF0gRXJyb3IgMgo+ICAgICBtYWtlOiAqKiogW01ha2VmaWxlOjgzOiBfYWxsXSBFcnJvciAy
-Cj4gCj4gQWx0aG91Z2ggdW5kb2N1bWVudGVkLCBuZWl0aGVyIGluIGdjYyBub3QgbGQgKGNsYW5n
-IHVuY2hlY2tlZCBieSBsYWNrIG9mCj4gYSBjbGFuZyB0b29sY2hhaW4gaGVyZSwgYW5kIGJ5IGxh
-Y2sgb2YgY2xhbmcga25vd2xlZGdlKSwgLXogYWNjZXB0cyB0aGUKPiBrZXl3b3JkIHRvIGJlIHNu
-YXRjaC1nbHVlZCBvbnRvIGl0LCBsaWtlIC16a2V5d29yZCwgcmF0aGVyIHRoYW4gYmUKPiBzcGVh
-cmF0ZWQgd2l0aCBhIHNwYWNlLiBTbywgdXNlIHRoYXQgdG8gcGFzcyAtenRleHQuCj4gCj4gRml4
-ZXM6Cj4gICAgIGh0dHA6Ly9hdXRvYnVpbGQuYnVpbGRyb290Lm9yZy9yZXN1bHRzL2MwMy9jMDM5
-OTg5OTQ3Yjk2MGFjNmFmMTdjODcwOTAzNjZhYmMyNmRjYjZkLwo+ICAgICBodHRwOi8vYXV0b2J1
-aWxkLmJ1aWxkcm9vdC5uZXQvcmVzdWx0cy9iYzM1ZDNlN2IwZThjNTljNzc2NjUyMDcwNjUwYWYz
-Yzc0OTI1MGVlLwo+IAo+IFswXSBPdXIgb3RoZXIgc2NvbnMtYmFzZWQgcGFja2FnZSwgbW9uZ29k
-YiwgZG9lcyBub3QgYnVpbGQgZm9yIGFub3RoZXIKPiByZWFzb24gdGhhdCBwcm9iYWJseSBoaWRl
-cyB0aGUgc2FtZSBpc3N1ZSBhcyBzZWVuIHdpdGggZ3BzZC4KPiAKPiBbMV0gQXMgZXhwbGFpbmVk
-IGluIGdwc2QncyBTQ29uc2NyaXB0IChzZSBhYm92ZSksIFNjb25zIGRvZXMgcGxheSB0cmlja3MK
-PiB3aXRoIHZhcmlhYmxlczoKPiAgICAgaHR0cHM6Ly9zY29ucy5vcmcvZG9jL3Byb2R1Y3Rpb24v
-SFRNTC9zY29ucy1tYW4uaHRtbCNmLU1lcmdlRmxhZ3MKPiAgICAgaHR0cHM6Ly9zY29ucy5vcmcv
-ZG9jL3Byb2R1Y3Rpb24vSFRNTC9zY29ucy1tYW4uaHRtbCNmLVBhcnNlRmxhZ3MKPiAKPiBRdW90
-aW5nOgo+ICAgICBGbGFnIHZhbHVlcyBhcmUgdHJhbnNsYXRlZCBhY2NvcmRpbmcgdG8gdGhlIHBy
-ZWZpeCBmb3VuZCwgYW5kIGFkZGVkCj4gICAgIHRvIHRoZSBmb2xsb3dpbmcgY29uc3RydWN0aW9u
-IHZhcmlhYmxlczoKPiAgICAgWy4uLl0KPiAgICAgLVdsLCAgICAgICAgICAgICAgICAgICAgTElO
-S0ZMQUdTCj4gICAgIFsuLi5dCj4gICAgIC0gICAgICAgICAgICAgICAgICAgICAgIENDRkxBR1MK
-PiAgICAgWy4uLl0KPiAgICAgQW55IG90aGVyIHN0cmluZ3Mgbm90IGFzc29jaWF0ZWQgd2l0aCBv
-cHRpb25zIGFyZSBhc3N1bWVkIHRvIGJlIHRoZQo+ICAgICBuYW1lcyBvZiBsaWJyYXJpZXMgYW5k
-IGFkZGVkIHRvIHRoZSAkTElCUyBjb25zdHJ1Y3Rpb24gdmFyaWFibGUuCj4gCj4gU28gaW4gb3Vy
-IGNhc2UsIGl0IGZpbmRzIHRoYXQgLXogaXMgYW4gdW5rbm93biBvcHRpb24gdGhhdCBtYXRjaGVz
-IHRoZQo+ICctJyBwcmVmaXgsIHNvIGl0IGlzIGFkZGVkIHRvIENGTEFHUywgd2hpbGUgJ3RleHQn
-IGlzIGEgc3RyaW5nIG9uIGl0cwo+IG93biwgc28gYWRkZWQgdG8gTElCUywgYW5kIHRodXMgaXQg
-d291bGQgdHJ5IHRvIGxpbmsgd2l0aCAtbHRleHQKPiAoc3VwcG9zZWRseSwgYmVjYXVzZSB3ZSBk
-byBub3QgZXZlbiBnbyB0aGF0IGZhcikuIEZ1bm5pbHkgZW5vdWdoLCB3ZSBjYW4KPiBzZSB0aGF0
-ICItV2wsIiBpcyBhIGtub3duIG9wdGlvbiBwcmVmaXgsIHRoYXQgaXMgYWRkZWQgdG8gTElOS0ZM
-QUdTICh0bwo+IHByb3Blcmx5IGJlIHVzZWQgd2l0aCBnY2Mgb3IgY2xhbmcsIG5vdCBsZCkuCj4g
-Cj4gQXMgYSBjb25zZXF1ZW5jZSwgZ3BzZCdzIGJ1aWxkc3lzdGVtIGRvZXMgZHJvcCAtenRleHQg
-ZnJvbSB0aGUgbGluawo+IGZsYWdzLCBhbmQgb25seSBwYXNzZXMgaXQgdG8gdGhlIGNvbXBpbGUg
-ZmxhZ3MsIHdoaWNoIGJyaW5ncyB1cyBiYWNrIHRvCj4gYmVmb3JlIHdlIGJhbm5lZCB0ZXh0cmVs
-cyBpbiBhMWEyZjQ5OGQ3ZWMgKHBhY2thZ2UvTWFrZWZpbGUuaW46IGJhbgo+IHRleHRyZWxzIG9u
-IG11c2wgdG9vbGNoYWlucykuIEZpeGluZyBncHNkIGlzIGEgdGFzayBmb3IgYW5vdGhlciwKPiBz
-ZXBhcmF0ZSBwYXRjaC4uLgo+IAo+IFsyXSBJIHNwZW50IHF1aXRlIHNvbWUgdGltZSB0byBsb29r
-IGF0IHJlY2VudCwgdGltZS1yZWxhdGVkIGNoYW5nZXMgaW4KPiBCdWlsZHJvb3QsIGVzcGVjaWFs
-bHkgZHVlIHRvIHRoZSBpbmZhbW91cyB0aW1lNjRfdCBpc3N1ZXMuLi4gQWxhcywgdGhhdAo+IHdh
-cyBub3QgcmVsYXRlZCwgYW5kIG9ubHkgYSBnaXQtYmlzZWN0IHBpbnBvaW50ZWQgdGhlIGFjdHVh
-bCBpc3N1ZS4gUG9vcgo+IHBvbGFyIGJlYXJzLi4uCj4gCj4gU2lnbmVkLW9mZi1ieTogWWFubiBF
-LiBNT1JJTiA8eWFubi5tb3JpbkBvcmFuZ2UuY29tPgo+IENjOiBKLiBOZXVzY2jDpGZlciA8ai5u
-ZXVzY2hhZWZlckBnbXgubmV0Pgo+IC0tLQo+ICBwYWNrYWdlL01ha2VmaWxlLmluIHwgOSArKysr
-KysrLS0KPiAgMSBmaWxlIGNoYW5nZWQsIDcgaW5zZXJ0aW9ucygrKSwgMiBkZWxldGlvbnMoLSkK
-PiAKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9NYWtlZmlsZS5pbiBiL3BhY2thZ2UvTWFrZWZpbGUu
-aW4KPiBpbmRleCA0M2E1YzI3OWMwLi44MDhiNzFhOTNlIDEwMDY0NAo+IC0tLSBhL3BhY2thZ2Uv
-TWFrZWZpbGUuaW4KPiArKysgYi9wYWNrYWdlL01ha2VmaWxlLmluCj4gQEAgLTE1NSwxMiArMTU1
-LDE3IEBAIFRBUkdFVF9MREZMQUdTID0gJChjYWxsIHFzdHJpcCwkKEJSMl9UQVJHRVRfTERGTEFH
-UykpCj4gICMKPiAgIyBTZWUgYWxzbzogaHR0cHM6Ly93d3cub3BlbndhbGwuY29tL2xpc3RzL211
-c2wvMjAyMC8wOS8yNS80Cj4gICMKPiAtIyBOT1RFOiBXZSdyZSB1c2luZyAiLXogdGV4dCIgaW5z
-dGVhZCBvZiAiLVdsLC16LHRleHQiIGhlcmUsIGJlY2F1c2Ugc29tZQo+ICsjIE5PVEU6IFdlJ3Jl
-IHVzaW5nICItenRleHQiIGluc3RlYWQgb2YgIi1XbCwteix0ZXh0IiBoZXJlLCBiZWNhdXNlIHNv
-bWUKPiAgIyBwYWNrYWdlcyBwYXNzIFRBUkdFVF9MREZMQUdTIGRpcmVjdGx5IHRvIGxkIHJhdGhl
-ciB0aGFuIGdjYywgYW5kIGxkIGRvZXNuJ3QKPiAgIyBzdXBwb3J0IC1XbCxbLi4uXS4gLXogaXMg
-c3VwcG9ydGVkIGJ5IGJvdGggZ2NjIGFuZCBjbGFuZywgc28gaXQgcHJvYmFibHkKPiAgIyB3b24n
-dCBjYXVzZSB1cyBwcm9ibGVtcy4KPiArIwo+ICsjIFdlJ3JlIHVzaW5nICItenRleHQiIGluc3Rl
-YWQgb2YgIi16IHRleHQiIGhlcmUsIGJlY2F1c2Ugc29tZSBidWlsZHN5c3RlbXMKPiArIyAobGlr
-ZSBzY29ucywgZm9yIGdwc2QpIHdpbGwgcmVvcmRlciBhbmQvb3IgZHJvcCBMREZMQUdTLCBjYXVz
-aW5nIGEgbG9uZQo+ICsjICIteiIgdG8gYmUgcGFzc2VkIGFuZCB0aGUgInRleHQiIGtleXdvcmQg
-dG8gYmUgZHJvcHBlZCBvdGhlcndpc2UuIEJvdGgKPiArIyBnY2MgYW5kIGxkIHN1cHBvcnRzIHRo
-YXQsIHNvIGl0IHByb2JhYmx5IHdvbid0IGNhdXNlIHVzIHByb2JsZW1zLgo+ICBpZmVxICgkKEJS
-Ml9UT09MQ0hBSU5fVVNFU19NVVNMKTokKEJSMl9TVEFUSUNfTElCUykseTopCj4gLVRBUkdFVF9M
-REZMQUdTICs9IC16IHRleHQKPiArVEFSR0VUX0xERkxBR1MgKz0gLXp0ZXh0Cj4gIGVuZGlmCj4g
-IAo+ICAjIEJ5IGRlc2lnbiwgX0ZPUlRJRllfU09VUkNFIHJlcXVpcmVzIGdjYyBvcHRpbWl6YXRp
-b24gdG8gYmUgZW5hYmxlZC4KPiAtLSAKPiAyLjM0LjEKPiAKCi0tIAogICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgX19fX19fX19fX19fCi4tLS0tLS0tLS0tLS0tLS0tLS4t
-LS0tLS0tLS0tLS0tLS0tLS0tLTogICAgICAgXyAgICA6LS0tLS0tLS0tLS0tLS0tLS0tLgp8ICBZ
-YW5uIEUuIE1PUklOICB8IFJlYWwtVGltZSBFbWJlZGRlZCB8ICAgIF9fLyApICAgfCAvIlwgQVND
-SUkgUklCQk9OIHwKfCAgICAgICAgICAgICAgICAgfCBTb2Z0d2FyZSAgRGVzaWduZXIgfCAgXy8g
-LSAvJyAgIHwgXCAvIENBTVBBSUdOICAgICB8CnwgKzMzIDYzOC40MTEuMjQ1ICctLS0tLS0tLS0t
-LS0tLS0tLS0tLTogKF8gICAgYC0tLCB8ICBYICBBR0FJTlNUICAgICAgfAp8IHlhbm4ubW9yaW4g
-KGF0KSBvcmFuZ2UuY29tICAgICAgICAgICB8Xz0iICAgICwtLScgfCAvIFwgSFRNTCBNQUlMICAg
-IHwKJy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tOl9fX19fXy9fX19fXzot
-LS0tLS0tLS0tLS0tLS0tLS0nCgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX18NCkNlIG1lc3NhZ2UgZXQgc2VzIHBpZWNlcyBqb2ludGVzIHBldXZlbnQg
-Y29udGVuaXIgZGVzIGluZm9ybWF0aW9ucyBjb25maWRlbnRpZWxsZXMgb3UgcHJpdmlsZWdpZWVz
-IGV0IG5lIGRvaXZlbnQgZG9uYw0KcGFzIGV0cmUgZGlmZnVzZXMsIGV4cGxvaXRlcyBvdSBjb3Bp
-ZXMgc2FucyBhdXRvcmlzYXRpb24uIFNpIHZvdXMgYXZleiByZWN1IGNlIG1lc3NhZ2UgcGFyIGVy
-cmV1ciwgdmV1aWxsZXogbGUgc2lnbmFsZXINCmEgbCdleHBlZGl0ZXVyIGV0IGxlIGRldHJ1aXJl
-IGFpbnNpIHF1ZSBsZXMgcGllY2VzIGpvaW50ZXMuIExlcyBtZXNzYWdlcyBlbGVjdHJvbmlxdWVz
-IGV0YW50IHN1c2NlcHRpYmxlcyBkJ2FsdGVyYXRpb24sDQpPcmFuZ2UgZGVjbGluZSB0b3V0ZSBy
-ZXNwb25zYWJpbGl0ZSBzaSBjZSBtZXNzYWdlIGEgZXRlIGFsdGVyZSwgZGVmb3JtZSBvdSBmYWxz
-aWZpZS4gTWVyY2kuDQoNClRoaXMgbWVzc2FnZSBhbmQgaXRzIGF0dGFjaG1lbnRzIG1heSBjb250
-YWluIGNvbmZpZGVudGlhbCBvciBwcml2aWxlZ2VkIGluZm9ybWF0aW9uIHRoYXQgbWF5IGJlIHBy
-b3RlY3RlZCBieSBsYXc7DQp0aGV5IHNob3VsZCBub3QgYmUgZGlzdHJpYnV0ZWQsIHVzZWQgb3Ig
-Y29waWVkIHdpdGhvdXQgYXV0aG9yaXNhdGlvbi4NCklmIHlvdSBoYXZlIHJlY2VpdmVkIHRoaXMg
-ZW1haWwgaW4gZXJyb3IsIHBsZWFzZSBub3RpZnkgdGhlIHNlbmRlciBhbmQgZGVsZXRlIHRoaXMg
-bWVzc2FnZSBhbmQgaXRzIGF0dGFjaG1lbnRzLg0KQXMgZW1haWxzIG1heSBiZSBhbHRlcmVkLCBP
-cmFuZ2UgaXMgbm90IGxpYWJsZSBmb3IgbWVzc2FnZXMgdGhhdCBoYXZlIGJlZW4gbW9kaWZpZWQs
-IGNoYW5nZWQgb3IgZmFsc2lmaWVkLg0KVGhhbmsgeW91LgpfX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9v
-dEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3Rp
-bmZvL2J1aWxkcm9vdAo=
+For a full Changelog see:
+https://github.com/rpm-software-management/rpm/compare/rpm-4.18.1-release...rpm-4.19.1.1-release
+
+Upstream project switched to Cmake buildsystem.
+Patch 0001 is already upstream.
+
+To make use of rpm on the target /var/lib/rpm/rpmrc and other macros
+must exist, so modify top level Makefile so that this directory is
+not removed when package rpm is choosen. The removal was added in
+commit 960fc93df2f7981e13a1bb7fb76fd958e36b8611.
+
+Use old deprecated openpgp implementation as the newer rpm-sequoia
+needs rust / cargo library support. See the comment in the rpm.mk file.
+
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+---
+ Makefile                                      |  5 +-
+ .../0001-fix-var-declare-in-label-error.patch | 40 ---------
+ package/rpm/rpm.hash                          |  4 +-
+ package/rpm/rpm.mk                            | 82 +++++++++----------
+ 4 files changed, 44 insertions(+), 87 deletions(-)
+ delete mode 100644 package/rpm/0001-fix-var-declare-in-label-error.patch
+
+diff --git a/Makefile b/Makefile
+index f51e8f690f..8755831bd3 100644
+--- a/Makefile
++++ b/Makefile
+@@ -734,10 +734,13 @@ target-finalize: $(PACKAGES) $(TARGET_DIR) host-finalize
+ 	rm -rf $(TARGET_DIR)/usr/include $(TARGET_DIR)/usr/share/aclocal \
+ 		$(TARGET_DIR)/usr/lib/pkgconfig $(TARGET_DIR)/usr/share/pkgconfig \
+ 		$(TARGET_DIR)/usr/lib/cmake $(TARGET_DIR)/usr/share/cmake \
+-		$(TARGET_DIR)/usr/lib/rpm $(TARGET_DIR)/usr/doc
++		$(TARGET_DIR)/usr/doc
+ 	find $(TARGET_DIR)/usr/{lib,share}/ -name '*.cmake' -print0 | xargs -0 rm -f
+ 	find $(TARGET_DIR)/lib/ $(TARGET_DIR)/usr/lib/ $(TARGET_DIR)/usr/libexec/ \
+ 		\( -name '*.a' -o -name '*.la' -o -name '*.prl' \) -print0 | xargs -0 rm -f
++ifneq ($(BR2_PACKAGE_RPM),y)
++	rm -rf $(TARGET_DIR)/usr/lib/rpm
++endif
+ ifneq ($(BR2_PACKAGE_GDB),y)
+ 	rm -rf $(TARGET_DIR)/usr/share/gdb
+ endif
+diff --git a/package/rpm/0001-fix-var-declare-in-label-error.patch b/package/rpm/0001-fix-var-declare-in-label-error.patch
+deleted file mode 100644
+index 648040c663..0000000000
+--- a/package/rpm/0001-fix-var-declare-in-label-error.patch
++++ /dev/null
+@@ -1,40 +0,0 @@
+-From b960c0b43a080287a7c13533eeb2d9f288db1414 Mon Sep 17 00:00:00 2001
+-From: Florian Festi <ffesti@redhat.com>
+-Date: Thu, 16 Mar 2023 19:05:04 +0100
+-Subject: [PATCH] Fix compiler error on clang
+-
+-Turns out variable declarations are not allowed after a label, even in
+-C99. And while some compilers don't seem to care others do.
+-
+-Moving the declaration of mayopen to the start of the function to avoid
+-this problem.
+-
+-Resolves: #2435
+-
+-Upstream: b960c0b43a080287a7c13533eeb2d9f288db1414
+-Signed-off-by: James Knight <james.d.knight@live.com>
+----
+- lib/fsm.c | 3 ++-
+- 1 file changed, 2 insertions(+), 1 deletion(-)
+-
+-diff --git a/lib/fsm.c b/lib/fsm.c
+-index 5671ac642d..183293edb0 100644
+---- a/lib/fsm.c
+-+++ b/lib/fsm.c
+-@@ -879,6 +879,7 @@ int rpmPackageFilesInstall(rpmts ts, rpmte te, rpmfiles files,
+-     int nodigest = (rpmtsFlags(ts) & RPMTRANS_FLAG_NOFILEDIGEST) ? 1 : 0;
+-     int nofcaps = (rpmtsFlags(ts) & RPMTRANS_FLAG_NOCAPS) ? 1 : 0;
+-     int firstlinkfile = -1;
+-+    int mayopen = 0;
+-     char *tid = NULL;
+-     struct filedata_s *fdata = xcalloc(fc, sizeof(*fdata));
+-     struct filedata_s *firstlink = NULL;
+-@@ -1016,7 +1017,7 @@ int rpmPackageFilesInstall(rpmts ts, rpmte te, rpmfiles files,
+- 
+- setmeta:
+- 	    /* Special files require path-based ops */
+--	    int mayopen = S_ISREG(fp->sb.st_mode) || S_ISDIR(fp->sb.st_mode);
+-+	    mayopen = S_ISREG(fp->sb.st_mode) || S_ISDIR(fp->sb.st_mode);
+- 	    if (!rc && fd == -1 && mayopen) {
+- 		int flags = O_RDONLY;
+- 		/* Only follow safe symlinks, and never on temporary files */
+diff --git a/package/rpm/rpm.hash b/package/rpm/rpm.hash
+index fd03f062bc..59cc66bba6 100644
+--- a/package/rpm/rpm.hash
++++ b/package/rpm/rpm.hash
+@@ -1,5 +1,5 @@
+-# From https://rpm.org/wiki/Releases/4.18.1.html
+-sha256  37f3b42c0966941e2ad3f10fde3639824a6591d07197ba8fd0869ca0779e1f56  rpm-4.18.1.tar.bz2
++# From https://rpm.org/wiki/Releases/4.19.1.1.html
++sha256  874091b80efe66f9de8e3242ae2337162e2d7131e3aa4ac99ac22155e9c521e5  rpm-4.19.1.1.tar.bz2
+ 
+ # Hash for license file
+ sha256  171d94d9f1641316bff7f157a903237dc69cdb5fca405fed8c832c76ed8370f9  COPYING
+diff --git a/package/rpm/rpm.mk b/package/rpm/rpm.mk
+index c66ce6992d..46467fc4e0 100644
+--- a/package/rpm/rpm.mk
++++ b/package/rpm/rpm.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-RPM_VERSION_MAJOR = 4.18
+-RPM_VERSION = $(RPM_VERSION_MAJOR).1
++RPM_VERSION_MAJOR = 4.19
++RPM_VERSION = $(RPM_VERSION_MAJOR).1.1
+ RPM_SOURCE = rpm-$(RPM_VERSION).tar.bz2
+ RPM_SITE = http://ftp.rpm.org/releases/rpm-$(RPM_VERSION_MAJOR).x
+ RPM_DEPENDENCIES = \
+@@ -23,98 +23,92 @@ RPM_LICENSE_FILES = COPYING
+ RPM_CPE_ID_VENDOR = rpm
+ RPM_SELINUX_MODULES = rpm
+ 
+-# Don't set --{dis,en}-openmp as upstream wants to abort the build if
+-# --enable-openmp is provided and OpenMP is < 4.5:
+-# https://github.com/rpm-software-management/rpm/pull/1433
+ RPM_CONF_OPTS = \
+-	--disable-rpath \
+-	--with-gnu-ld \
+-	--without-fapolicyd \
+-	--without-fsverity \
+-	--without-imaevm
++	-DWITH_FSVERITY=OFF \
++	-DWITH_FAPOLICYD=OFF \
++	-DWITH_IMAEVM=OFF \
++	-DENABLE_TESTSUITE=OFF
++
++# use deprecated openpgp implementation instead of rpm-sequoia,
++# because otherwise we need to use a rust library, which is not yet
++# supported by cargo-package infrastructure
++RPM_CONF_OPTS += -DWITH_INTERNAL_OPENPGP=ON
++
++ifeq ($(BR2_TOOLCHAIN_HAS_OPENMP),y)
++RPM_CONF_OPTS += -DENABLE_OPENMP=ON
++else
++RPM_CONF_OPTS += -DENABLE_OPENMP=OFF
++endif
+ 
+ ifeq ($(BR2_PACKAGE_ACL),y)
+ RPM_DEPENDENCIES += acl
+-RPM_CONF_OPTS += --with-acl
++RPM_CONF_OPTS += -DWITH_ACL=ON
+ else
+-RPM_CONF_OPTS += --without-acl
++RPM_CONF_OPTS += -DWITH_ACL=OFF
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_AUDIT),y)
+ RPM_DEPENDENCIES += audit
+-RPM_CONF_OPTS += --with-audit
++RPM_CONF_OPTS += -DWITH_AUDIT=ON
+ else
+-RPM_CONF_OPTS += --without-audit
++RPM_CONF_OPTS += -DWITH_AUDIT=OFF
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_DBUS),y)
+ RPM_DEPENDENCIES += dbus
+-RPM_CONF_OPTS += --enable-plugins
++RPM_CONF_OPTS += -DWITH_DBUS=ON
+ else
+-RPM_CONF_OPTS += --disable-plugins
++RPM_CONF_OPTS += -DWITH_DBUS=OFF
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBCAP),y)
+ RPM_DEPENDENCIES += libcap
+-RPM_CONF_OPTS += --with-cap
++RPM_CONF_OPTS += -DWITH_CAP=ON
+ else
+-RPM_CONF_OPTS += --without-cap
++RPM_CONF_OPTS += -DWITH_CAP=OFF
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
+ RPM_DEPENDENCIES += libgcrypt
+-RPM_CONF_OPTS += --with-crypto=libgcrypt
++RPM_CONF_OPTS += -DWITH_OPENSSL=OFF
+ else
+ RPM_DEPENDENCIES += openssl
+-RPM_CONF_OPTS += --with-crypto=openssl
+-endif
+-
+-ifeq ($(BR2_PACKAGE_GETTEXT_PROVIDES_LIBINTL),y)
+-RPM_CONF_OPTS += --with-libintl-prefix=$(STAGING_DIR)/usr
+-else
+-RPM_CONF_OPTS += --without-libintl-prefix
++RPM_CONF_OPTS += -DWITH_OPENSSL=ON
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
+ RPM_DEPENDENCIES += libselinux
+-RPM_CONF_OPTS += --with-selinux
++RPM_CONF_OPTS += -DWITH_SELINUX=ON
+ else
+-RPM_CONF_OPTS += --without-selinux
++RPM_CONF_OPTS += -DWITH_SELINUX=OFF
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_PYTHON3),y)
+ RPM_DEPENDENCIES += python3
+-RPM_CONF_OPTS += --enable-python
++RPM_CONF_OPTS += -DENABLE_PYTHON=ON
+ else
+-RPM_CONF_OPTS += --disable-python
++RPM_CONF_OPTS += -DENABLE_PYTHON=OFF
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_READLINE),y)
+ RPM_DEPENDENCIES += readline
+-RPM_CONF_OPTS += --with-readline
++RPM_CONF_OPTS += -DWITH_READLINE=ON
+ else
+-RPM_CONF_OPTS += --without-readline
++RPM_CONF_OPTS += -DWITH_READLINE=OFF
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_SQLITE),y)
+ RPM_DEPENDENCIES += sqlite
+-RPM_CONF_OPTS += --enable-sqlite
+-else
+-RPM_CONF_OPTS += --disable-sqlite
+-endif
+-
+-ifeq ($(BR2_PACKAGE_ZSTD),y)
+-RPM_DEPENDENCIES += zstd
+-RPM_CONF_OPTS += --enable-zstd
++RPM_CONF_OPTS += -DENABLE_SQLITE=ON
+ else
+-RPM_CONF_OPTS += --disable-zstd
++RPM_CONF_OPTS += -DENABLE_SQLITE=OFF
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_RPM_RPM2ARCHIVE),y)
+ RPM_DEPENDENCIES += libarchive
+-RPM_CONF_OPTS += --with-archive
++RPM_CONF_OPTS += -DWITH_ARCHIVE=ON
+ else
+-RPM_CONF_OPTS += --without-archive
++RPM_CONF_OPTS += -DWITH_ARCHIVE=OFF
+ endif
+ 
+ # ac_cv_prog_cc_c99: RPM uses non-standard GCC extensions (ex. `asm`).
+@@ -122,4 +116,4 @@ RPM_CONF_ENV = \
+ 	ac_cv_prog_cc_c99='-std=gnu99' \
+ 	LIBS=$(TARGET_NLS_LIBS)
+ 
+-$(eval $(autotools-package))
++$(eval $(cmake-package))
+-- 
+2.30.2
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
