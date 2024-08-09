@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3697C52D7C
-	for <buildroot@archiver.kernel.org>; Fri,  9 Aug 2024 19:34:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64340C3DA4A
+	for <buildroot@archiver.kernel.org>; Fri,  9 Aug 2024 19:34:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 70A6784481;
-	Fri,  9 Aug 2024 19:34:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DC20484498;
+	Fri,  9 Aug 2024 19:34:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VcSY4l1YvOYD; Fri,  9 Aug 2024 19:34:06 +0000 (UTC)
+ id WwhWeQ-gj_TP; Fri,  9 Aug 2024 19:34:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0B33D8449E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F3CEF844A8
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0B33D8449E;
-	Fri,  9 Aug 2024 19:34:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F3CEF844A8;
+	Fri,  9 Aug 2024 19:34:08 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 75EF91BF2F5
- for <buildroot@lists.busybox.net>; Fri,  9 Aug 2024 19:34:02 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 864871BF2F5
+ for <buildroot@lists.busybox.net>; Fri,  9 Aug 2024 19:34:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4736A414C9
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5F072414C3
  for <buildroot@lists.busybox.net>; Fri,  9 Aug 2024 19:34:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VLxUzWDFq08R for <buildroot@lists.busybox.net>;
+ id HjlVT7uW3bEi for <buildroot@lists.busybox.net>;
  Fri,  9 Aug 2024 19:34:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0BCBB414C3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ECA65414BC
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0BCBB414C3
- for <buildroot@buildroot.org>; Fri,  9 Aug 2024 19:34:00 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id ECA65414BC
+ for <buildroot@buildroot.org>; Fri,  9 Aug 2024 19:33:59 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 079AA84CF8; Fri,  9 Aug 2024 19:34:00 +0000 (UTC)
+ id E6F9784CF1; Fri,  9 Aug 2024 19:33:59 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 9 Aug 2024 21:27:59 +0200
+Date: Fri, 9 Aug 2024 21:27:34 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 6c59e71386fddb9e71d2b97c43ad0e7b40637676
-X-Git-Newrev: f112f05b8ff4da7fb7b53dcbc296fad9e058df27
+X-Git-Oldrev: c8eeb96df2d2a3e76537e88768d7fce4e1dfce6b
+X-Git-Newrev: 6c59e71386fddb9e71d2b97c43ad0e7b40637676
 X-Patchwork-Hint: ignore
-Message-Id: <20240809193400.079AA84CF8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/x265: fix runtime
- issue on ARMv6, ensure correctness on ARMv7
+Message-Id: <20240809193359.E6F9784CF1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/x265: replace
+ patch fixing gcc option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,117 +65,224 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f112f05b8ff4da7fb7b53dcbc296fad9e058df27
+commit: https://git.buildroot.net/buildroot/commit/?id=6c59e71386fddb9e71d2b97c43ad0e7b40637676
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-The build logic in source/cmake/FindNeon.cmake caused the x265 build
-system to always think that the CPU supports neon: it was looking in
-/proc/cpuinfo, which of course is wrong when cross-compilation, but
-then the sequence of grep was interacting badly with CMake, causing
-the build system to always conclude that the CPU supports NEON.
+As we're about to do some other fixes in x265 ARM build, let's replace
+the patch fixing gcc option by:
 
-This causes runtime issues on ARMv6.
+- A patch generated by git format-patch now that x265 upstream uses
+  Git
 
-Setting -DCROSS_COMPILE_ARM=1 fixes this, as it tells the x265 build
-system we are cross-compiling and it skips its bogus NEON check. So
-for ARMv6, we pass -DCROSS_COMPILE_ARM=1.
+- Is re-submitted upstream
 
-But then, we still want NEON for ARMv7 processors with NEON, so this
-commit adds a patch that allows to explicitly specify whether the CPU
-supports NEON, in the -DCROSS_COMPILE_ARM=1 case, and we use this
-option when BR2_ARM_CPU_HAS_NEON.
+- Only drops the flags, and does not add bogus ARM architecture
+  aliases that don't exist in the CMake world.
 
-For those wondering why -DCROSS_COMPILE_ARM=1 is not passed for all
-ARM platforms: it's because from the perspective of x265, only ARM >=
-v6 is ARM: it has assembly code that needs at least ARMv6. Earlier ARM
-platforms are not detected as ARM by the x265 build logic, and
-therefore fallback on generic code.
-
-This has been build-tested on:
-- ARMv5: generic code is used, no assembly
-- ARMv6: assembly code is used, but not with NEON support
-- ARMv7 with NEON: assembly code is used, with NEON support
-
-Reported-by: David Barbion <davidb@230ruedubac.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 1fbd26f83169a206bdf9c36c85510a33c0e7a864)
+(cherry picked from commit 9d62687d0024f7e3bac68157f1250970ef45abff)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...eLists.txt-allow-setting-CPU_HAS_NEON-whe.patch | 40 ++++++++++++++++++++++
- package/x265/x265.mk                               | 14 ++++++++
- 2 files changed, 54 insertions(+)
+ .checkpackageignore                                |  1 -
+ ...MakeLists.txt-do-not-force-compiler-flags.patch | 83 ++++++++++++++++++++
+ package/x265/0001-fix-gcc-options.patch            | 88 ----------------------
+ 3 files changed, 83 insertions(+), 89 deletions(-)
 
-diff --git a/package/x265/0002-source-CMakeLists.txt-allow-setting-CPU_HAS_NEON-whe.patch b/package/x265/0002-source-CMakeLists.txt-allow-setting-CPU_HAS_NEON-whe.patch
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 3533b1df33..e349e31812 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -1386,7 +1386,6 @@ package/x11r7/xserver_xorg-server/0001-include-misc.h-fix-uClibc-build.patch Ups
+ package/x11r7/xserver_xorg-server/S40xorg Shellcheck Variables
+ package/x11vnc/0001-Fix-build-on-32bit-arches-with-64bit-time_t.patch Upstream
+ package/x11vnc/0002-scan-limit-access-to-shared-memory-segments-to-current-user.patch Upstream
+-package/x265/0001-fix-gcc-options.patch Upstream
+ package/xen/0001-9pfs-include-linux-limits.h-for-XATTR_SIZE_MAX.patch Upstream
+ package/xen/0002-Fix-build-with-64-bits-time_t.patch Upstream
+ package/xen/0003-libs-light-fix-tv_sec-printf-format.patch Upstream
+diff --git a/package/x265/0001-CMakeLists.txt-do-not-force-compiler-flags.patch b/package/x265/0001-CMakeLists.txt-do-not-force-compiler-flags.patch
 new file mode 100644
-index 0000000000..51be8f2d02
+index 0000000000..af0e57f206
 --- /dev/null
-+++ b/package/x265/0002-source-CMakeLists.txt-allow-setting-CPU_HAS_NEON-whe.patch
-@@ -0,0 +1,40 @@
-+From 0088d29e7c75ea7f100a100aea4e2a797469427f Mon Sep 17 00:00:00 2001
++++ b/package/x265/0001-CMakeLists.txt-do-not-force-compiler-flags.patch
+@@ -0,0 +1,83 @@
++From b56e9125db34614b2157516df3ee724180f2084f Mon Sep 17 00:00:00 2001
 +From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Date: Sat, 13 Jul 2024 10:10:54 +0200
-+Subject: [PATCH] source/CMakeLists.txt: allow setting CPU_HAS_NEON when
-+ CROSS_COMPILE_ARM
++Date: Sat, 13 Jul 2024 09:59:26 +0200
++Subject: [PATCH] CMakeLists.txt: do not force compiler flags
 +
-+The logic in source/cmake/FindNeon.cmake is not appropriate for
-+cross-compilation scenarios, so in order to allow cross-compiling for
-+ARM, CROSS_COMPILE_ARM needs to be defined. However that currently
-+doesn't allow the enabling of NEON support, so let's allow the user to
-+manually set CPU_HAS_NEON in this case.
++The compiler flags enforced by CMakeLists.txt can be problematic:
++
++- When CROSS_COMPILE_ARM is set, one is not necessarily building for
++  armv6 with soft float-abi: one may be using ARMv7 with hard float
++
++- When CROSS_COMPILE_ARM is not set, forcing -mfloat-abi=hard is
++  similarly wrong
++
++Those compiler flags should be passed by the user depending on the
++exact target platform.
++
++Inspired from
++https://gitweb.gentoo.org/repo/gentoo.git/tree/media-libs/x265/files/arm-r1.patch,
++and earlier work from Bertrand Jacquin <bertrand@jacquin.bzh> and
++Bernd Kuhls <bernd.kuhls@t-online.de>.
 +
 +Upstream: https://bitbucket.org/multicoreware/x265_git/pull-requests/26
 +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 +---
-+ source/CMakeLists.txt | 7 ++++++-
-+ 1 file changed, 6 insertions(+), 1 deletion(-)
++ source/CMakeLists.txt              | 10 +++-------
++ source/dynamicHDR10/CMakeLists.txt |  6 +++---
++ 2 files changed, 6 insertions(+), 10 deletions(-)
 +
 +diff --git a/source/CMakeLists.txt b/source/CMakeLists.txt
-+index a34bf4d4f..072bf62ab 100755
++index a407271b4..a34bf4d4f 100755
 +--- a/source/CMakeLists.txt
 ++++ b/source/CMakeLists.txt
-+@@ -239,8 +239,13 @@ if(GCC)
++@@ -239,11 +239,7 @@ if(GCC)
 +         endif()
 +     endif()
 +     if(ARM AND CROSS_COMPILE_ARM)
-+-        set(ARM_ARGS -fPIC)
++-        if(ARM64)
++-            set(ARM_ARGS -fPIC)
++-        else()
++-            set(ARM_ARGS -march=armv6 -mfloat-abi=soft -mfpu=vfp -marm -fPIC)
++-        endif()
+++        set(ARM_ARGS -fPIC)
 +         message(STATUS "cross compile arm")
-++        if(CPU_HAS_NEON)
-++          set(ARM_ARGS -mfpu=neon -fPIC)
-++          add_definitions(-DHAVE_NEON)
-++        else()
-++	  set(ARM_ARGS -fPIC)
-++	endif()
 +     elseif(ARM)
 +         if(ARM64)
-+             set(ARM_ARGS -fPIC)
++@@ -252,10 +248,10 @@ if(GCC)
++         else()
++             find_package(Neon)
++             if(CPU_HAS_NEON)
++-                set(ARM_ARGS -mcpu=native -mfloat-abi=hard -mfpu=neon -marm -fPIC)
+++                set(ARM_ARGS -mfpu=neon -fPIC)
++                 add_definitions(-DHAVE_NEON)
++             else()
++-                set(ARM_ARGS -mcpu=native -mfloat-abi=hard -mfpu=vfp -marm)
+++	        set(ARM_ARGS -fPIC)
++             endif()
++         endif()
++     endif()
++diff --git a/source/dynamicHDR10/CMakeLists.txt b/source/dynamicHDR10/CMakeLists.txt
++index 22fb79d44..2cea7c48a 100644
++--- a/source/dynamicHDR10/CMakeLists.txt
+++++ b/source/dynamicHDR10/CMakeLists.txt
++@@ -43,14 +43,14 @@ if(GCC)
++         endif()
++     endif()
++     if(ARM AND CROSS_COMPILE_ARM)
++-        set(ARM_ARGS -march=armv6 -mfloat-abi=soft -mfpu=vfp -marm -fPIC)
+++        set(ARM_ARGS -fPIC)
++     elseif(ARM)
++         find_package(Neon)
++         if(CPU_HAS_NEON)
++-            set(ARM_ARGS -mcpu=native -mfloat-abi=hard -mfpu=neon -marm -fPIC)
+++            set(ARM_ARGS -fPIC)
++             add_definitions(-DHAVE_NEON)
++         else()
++-            set(ARM_ARGS -mcpu=native -mfloat-abi=hard -mfpu=vfp -marm)
+++            set(ARM_ARGS -fPIC)
++         endif()
++     endif()
++     add_definitions(${ARM_ARGS})
 +-- 
 +2.45.2
 +
-diff --git a/package/x265/x265.mk b/package/x265/x265.mk
-index 51c39df4cd..bd5180b24b 100644
---- a/package/x265/x265.mk
-+++ b/package/x265/x265.mk
-@@ -13,6 +13,20 @@ X265_CPE_ID_VENDOR = multicorewareinc
- X265_SUBDIR = source
- X265_INSTALL_STAGING = YES
- 
-+# For CPUs before ARMv6, x265 does not consider them "ARM" but generic
-+# CPUs for which no optimized assembly is provided, hence we don't
-+# pass -DCROSS_COMPILE_ARM=1.
-+ifeq ($(BR2_ARM_CPU_ARMV6),y)
-+X265_CONF_OPTS += -DCROSS_COMPILE_ARM=1
-+endif
-+
-+ifeq ($(BR2_ARM_CPU_ARMV7A),y)
-+X265_CONF_OPTS += -DCROSS_COMPILE_ARM=1
-+ifeq ($(BR2_ARM_CPU_HAS_NEON),y)
-+X265_CONF_OPTS += -DCPU_HAS_NEON=1
-+endif
-+endif
-+
- ifeq ($(BR2_i386)$(BR2_x86_64),y)
- X265_DEPENDENCIES += host-nasm
- endif
+diff --git a/package/x265/0001-fix-gcc-options.patch b/package/x265/0001-fix-gcc-options.patch
+deleted file mode 100644
+index 0283da25ea..0000000000
+--- a/package/x265/0001-fix-gcc-options.patch
++++ /dev/null
+@@ -1,88 +0,0 @@
+-# HG changeset patch
+-# User Bertrand Jacquin <bertrand@jacquin.bzh>
+-# Date 1444431941 -3600
+-# Node ID 5c6d2a6f2f9a0534933cc999b3845be4344e1af0
+-# Parent  b6156a08b1def3584647f26096866c1a0c11e54a
+-build: Disable -march selection from CMakeLists.txt
+-
+-x32 arch as defined on https://sites.google.com/site/x32abi is neither
+-X86 nor X64, then forcing -march=i686 leads to build failure as wrong
+--march is used.
+-
+-Forcing -march, -mfloat-abi and -mfpu for ARM is also wrong
+-
+-As a global sanity sake, disable all forced -march in CMakeLists
+-
+-Backported from upstream pull request:
+-https://bitbucket.org/multicoreware/x265/pull-requests/21
+-
+-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
+-[Bernd: rebased for 3.5 based on
+- https://gitweb.gentoo.org/repo/gentoo.git/tree/media-libs/x265/files/arm-r1.patch]
+-
+-diff -r 58dddcf01b7d source/CMakeLists.txt
+---- a/source/CMakeLists.txt	Mon Jan 23 09:50:33 2017 +0530
+-+++ b/source/CMakeLists.txt	Mon Jan 23 21:03:10 2017 +0100
+-@@ -40,7 +40,7 @@ SET(CMAKE_MODULE_PATH "${PROJECT_SOURCE_
+- # System architecture detection
+- string(TOLOWER "${CMAKE_SYSTEM_PROCESSOR}" SYSPROC)
+- set(X86_ALIASES x86 i386 i686 x86_64 amd64)
+--set(ARM_ALIASES armv6l armv7l aarch64)
+-+set(ARM_ALIASES armv6l armv6l armv7l armv7a aarch64)
+- list(FIND X86_ALIASES "${SYSPROC}" X86MATCH)
+- list(FIND ARM_ALIASES "${SYSPROC}" ARMMATCH)
+- set(POWER_ALIASES ppc64 ppc64le)
+-@@ -239,11 +239,7 @@ if(GCC)
+-         endif()
+-     endif()
+-     if(ARM AND CROSS_COMPILE_ARM)
+--        if(ARM64)
+--            set(ARM_ARGS -fPIC)
+--        else()
+--            set(ARM_ARGS -march=armv6 -mfloat-abi=soft -mfpu=vfp -marm -fPIC)
+--        endif()
+-+        set(ARM_ARGS -fPIC)
+-         message(STATUS "cross compile arm")
+-     elseif(ARM)
+-         if(ARM64)
+-@@ -252,10 +248,10 @@ if(GCC)
+-         else()
+-             find_package(Neon)
+-             if(CPU_HAS_NEON)
+--                set(ARM_ARGS -mcpu=native -mfloat-abi=hard -mfpu=neon -marm -fPIC)
+-+                set(ARM_ARGS -mfpu=neon -fPIC)
+-                 add_definitions(-DHAVE_NEON)
+-             else()
+--                set(ARM_ARGS -mcpu=native -mfloat-abi=hard -mfpu=vfp -marm)
+-+	        set(ARM_ARGS -fPIC)
+-             endif()
+-         endif()
+-     endif()
+---- a/source/dynamicHDR10/CMakeLists.txt
+-+++ b/source/dynamicHDR10/CMakeLists.txt
+-@@ -43,14 +43,14 @@ if(GCC)
+-         endif()
+-     endif()
+-     if(ARM AND CROSS_COMPILE_ARM)
+--        set(ARM_ARGS -march=armv6 -mfloat-abi=soft -mfpu=vfp -marm -fPIC)
+-+        set(ARM_ARGS -fPIC)
+-     elseif(ARM)
+-         find_package(Neon)
+-         if(CPU_HAS_NEON)
+--            set(ARM_ARGS -mcpu=native -mfloat-abi=hard -mfpu=neon -marm -fPIC)
+-+            set(ARM_ARGS -fPIC)
+-             add_definitions(-DHAVE_NEON)
+-         else()
+--            set(ARM_ARGS -mcpu=native -mfloat-abi=hard -mfpu=vfp -marm)
+-+            set(ARM_ARGS -fPIC)
+-         endif()
+-     endif()
+-     add_definitions(${ARM_ARGS})
+-@@ -150,4 +150,4 @@ set(BIN_INSTALL_DIR bin CACHE STRING "Install location of executables")
+- option(ENABLE_SHARED "Build shared library" OFF)
+- 
+- install(FILES hdr10plus.h DESTINATION include)
+--endif()
+-\ No newline at end of file
+-+endif()
+-
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
