@@ -4,45 +4,45 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AFEC0C3DA7F
-	for <buildroot@archiver.kernel.org>; Sat, 10 Aug 2024 21:56:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1EEB9C3DA7F
+	for <buildroot@archiver.kernel.org>; Sat, 10 Aug 2024 21:56:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6F6C56076A;
-	Sat, 10 Aug 2024 21:56:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DB33260904;
+	Sat, 10 Aug 2024 21:56:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JdEv6i3XOuew; Sat, 10 Aug 2024 21:56:52 +0000 (UTC)
+ id gLmlB4lAyG36; Sat, 10 Aug 2024 21:56:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 43685607B1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2723A60748
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 43685607B1;
-	Sat, 10 Aug 2024 21:56:51 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2723A60748;
+	Sat, 10 Aug 2024 21:56:55 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1E1B51BF865
- for <buildroot@lists.busybox.net>; Sat, 10 Aug 2024 21:56:37 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 118E81BF2C4
+ for <buildroot@lists.busybox.net>; Sat, 10 Aug 2024 21:56:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 12D5D606B9
+ by smtp3.osuosl.org (Postfix) with ESMTP id 64DE2606B9
  for <buildroot@lists.busybox.net>; Sat, 10 Aug 2024 21:56:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NxXkhR_4DZv8 for <buildroot@lists.busybox.net>;
+ id K_5H6-TMeYdp for <buildroot@lists.busybox.net>;
  Sat, 10 Aug 2024 21:56:36 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::229;
  helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 8E2A060676
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8E2A060676
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 443026072C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 443026072C
 Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8E2A060676
- for <buildroot@buildroot.org>; Sat, 10 Aug 2024 21:56:35 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPA id C723FFF803;
- Sat, 10 Aug 2024 21:56:33 +0000 (UTC)
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 443026072C
+ for <buildroot@buildroot.org>; Sat, 10 Aug 2024 21:56:36 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPA id 980E6FF802;
+ Sat, 10 Aug 2024 21:56:34 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 10 Aug 2024 23:56:19 +0200
-Message-ID: <20240810215624.482529-6-thomas.petazzoni@bootlin.com>
+Date: Sat, 10 Aug 2024 23:56:20 +0200
+Message-ID: <20240810215624.482529-7-thomas.petazzoni@bootlin.com>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20240810215624.482529-1-thomas.petazzoni@bootlin.com>
 References: <20240810215624.482529-1-thomas.petazzoni@bootlin.com>
@@ -54,22 +54,21 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  to:to:cc:cc:mime-version:mime-version:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=MY7p6NoIKiNOBNh/ITVYkSTYldj7pwZNWnaXdbotvxU=;
- b=Pj3PsZjd7mHBRE3JQwdhMJ6k7uLpX5rL7Jm9tjg97L6HeyfLDxXxNQQMZ7R429vGJ9r9GM
- xos8RthqcYJjNFCrY1+4hfuA1xns2LGDpG278QL6QNLCegI1jMoM6JjkR1b803epyjtMnS
- GDBnY8WpcK6hewU2rwfJfZ1X7ppqXfS62W0STEKMCuHfRcfSJcMWiXD6P5w7d5DcuKNo+a
- 1g7wkEAxoVP+HUuPE+2Cy9BfqMh+fq+19vc5XfxM4R1wQnChe4St8bJp/PUgEhWMnDwrlJ
- t/QT102WpnyNFWk5hVukXlmTPFL2TnoW3WLvRFHrkfiqMqAQoFEHlHVafWSa9w==
+ bh=l3H+LpDmObG0EWQG3C9JjBymTDBBmg2XtBl7Jn98Yqw=;
+ b=T0w9UaRJISHFSqcTCxjsIe0up0Rmsr0tcX0abOMhpqqlNro6CCwL4qeezLaRkY5YkzFa9s
+ 7Ig7NeDLTgERNuvMIuAgp4WQQnN9iYfVLxDdksKDvObXvi4AYWFd9Hcgjkq05kkzM4kaPK
+ bNDuICCttfDXhOp05ITcXZm19VXbJat+togE2yu2DgYlBCI5duycCKiQPXHImDtb8YU2T+
+ A/knf4O5xpQYmEHU8X3dl6asKtG6bU3dwS6NRvWNSG+gsHS55k+aH9iO06u9b+mvCOGQCU
+ G8a9l0YfdV+jQk2sLZSSpDUVNtR7Vx1i7eCo7VpbOdy0eYa65cM0gpEMDTfBeA==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Pj3PsZjd
-Subject: [Buildroot] [PATCH next 5/7]
- toolchain/toolchain-external/toolchain-external-synopsys-arc: bump to
- 2024.06
+ header.s=gm1 header.b=T0w9UaRJ
+Subject: [Buildroot] [PATCH next 6/7]
+ support/testing/tests/toolchain/test_external_arm.py: new test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,148 +82,80 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Romain Naour <romain.naour@gmail.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Until now only one option was shown, and we were automatically
-selecting the ARC700/ARChs and LE/BE toolchains based on the
-architecture selection. However now, Synopsys offers glibc/uClibc
-toolchains, and we can't decide that automatically, so let's add an
-explicit choice for the user to chose between the different variants
-of Synopsys toolchains available.
+Test the 3 ARM toolchains: ARM, AArch64 and AArch64 BE.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../toolchain-external-synopsys-arc/Config.in | 13 +++-----
- .../Config.in.options                         | 32 +++++++++++++++++++
- .../toolchain-external-synopsys-arc.hash      | 12 ++++---
- .../toolchain-external-synopsys-arc.mk        | 13 +++++---
- 4 files changed, 52 insertions(+), 18 deletions(-)
+ DEVELOPERS                                    |  1 +
+ .../tests/toolchain/test_external_arm.py      | 41 +++++++++++++++++++
+ 2 files changed, 42 insertions(+)
+ create mode 100644 support/testing/tests/toolchain/test_external_arm.py
 
-diff --git a/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in b/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in
-index 292e652fb0..dc333f8474 100644
---- a/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in
-+++ b/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in
-@@ -1,17 +1,12 @@
- config BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC
--	bool "Synopsys ARC 2019.09 toolchain"
-+	bool "Synopsys ARC 2024.06 toolchain"
- 	depends on BR2_arc
- 	depends on BR2_HOSTARCH = "x86_64"
--	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_10
--	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
-+	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_15
- 	select BR2_INSTALL_LIBSTDCPP
--	select BR2_USE_WCHAR
--	select BR2_TOOLCHAIN_HAS_THREADS
--	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
--	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
- 	select BR2_TOOLCHAIN_HAS_SSP
--	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_15
--	select BR2_TOOLCHAIN_GCC_AT_LEAST_9
-+	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_16
-+	select BR2_TOOLCHAIN_GCC_AT_LEAST_14
- 	help
- 	  Toolchain for the ARC cores, from
- 	  https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/releases
-diff --git a/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in.options b/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in.options
-index ceb7dd0081..faedaf2ffb 100644
---- a/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in.options
-+++ b/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in.options
-@@ -1,5 +1,37 @@
- if BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC
+diff --git a/DEVELOPERS b/DEVELOPERS
+index d7d0af3543..bf98a7642b 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -3190,6 +3190,7 @@ F:	support/testing/tests/package/test_python_flask.py
+ F:	support/testing/tests/package/test_python_flask_expects_json.py
+ F:	support/testing/tests/package/test_python_git.py
+ F:	support/testing/tests/package/test_python_unittest_xml_reporting.py
++F:	support/testing/tests/toolchain/test_external_arm.py
+ F:	toolchain/
  
-+choice
-+	prompt "Synopsys toolchain variant"
+ N:	Timo Ketola <timo.ketola@exertus.fi>
+diff --git a/support/testing/tests/toolchain/test_external_arm.py b/support/testing/tests/toolchain/test_external_arm.py
+new file mode 100644
+index 0000000000..1f8e5b4e56
+--- /dev/null
++++ b/support/testing/tests/toolchain/test_external_arm.py
+@@ -0,0 +1,41 @@
++from tests.toolchain.test_external import TestExternalToolchain
 +
-+config BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC700
-+	bool "Linux/uClibc ARC 700"
-+	depends on BR2_arc750d || BR2_arc770d
-+	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
-+	select BR2_USE_WCHAR
-+	select BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
-+	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
 +
-+config BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARCHS_UCLIBC
-+	bool "Linux/uClibc ARC HS"
-+	depends on BR2_archs38_64mpy || BR2_archs38_full || \
-+		BR2_archs4x_rel31 || BR2_archs4x
-+	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
-+	select BR2_USE_WCHAR
-+	select BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
-+	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
-+	select BR2_TOOLCHAIN_HAS_FORTRAN
++class TestExternalToolchainArmArm(TestExternalToolchain):
++    config = """
++        BR2_arm=y
++        BR2_cortex_a8=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TOOLCHAIN_EXTERNAL_ARM_ARM=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++    toolchain_prefix = "arm-none-linux-gnueabihf"
 +
-+config BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARCHS_GLIBC
-+	bool "Linux/glibc ARC 700"
-+	depends on BR2_archs38_64mpy || BR2_archs38_full || \
-+		BR2_archs4x_rel31 || BR2_archs4x
-+	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-+	select BR2_TOOLCHAIN_HAS_FORTRAN
++    def test_run(self):
++        TestExternalToolchain.common_check(self)
 +
-+endchoice
 +
- config BR2_TOOLCHAIN_EXTERNAL_PREFIX
- 	default "arc-linux"		 if BR2_arcle
- 	default "arceb-linux"		 if BR2_arceb
-diff --git a/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.hash b/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.hash
-index 3c22723833..52273871ab 100644
---- a/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.hash
-+++ b/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.hash
-@@ -1,5 +1,7 @@
--# From https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/releases/tag/arc-2019.09-release
--sha256  f7cbf68ef251943db7baf63535e0ec98dafbdf5d925017b4e1d4fc64d9b38a26  arc_gnu_2019.09_prebuilt_uclibc_le_arc700_linux_install.tar.gz
--sha256  ac09f0a21f9d50146a5e542f4a6abc93e5a1dcb0a1372cb5c3ba86bbefaaec7d  arc_gnu_2019.09_prebuilt_uclibc_be_arc700_linux_install.tar.gz
--sha256  245ca49fe8ea2456617541b18bb96e52e6c0dc619f00e293fcaad519fc436c35  arc_gnu_2019.09_prebuilt_uclibc_le_archs_linux_install.tar.gz
--sha256  6f039a0158c03af398ada31fae96009e47f0d7b7f7d52e12eb419492fc3f27e7  arc_gnu_2019.09_prebuilt_uclibc_be_archs_linux_install.tar.gz
-+# From https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/releases/tag/arc-2024.06-release
-+sha256  080bbf8c0747d221314d04b0fcef89f91dc82710afa1aa66a88f04c93719663a  arc_gnu_2024.06_prebuilt_uclibc_le_arc700_linux_install.tar.bz2
-+sha256  37ad59b2624608cd126fab3a83a188edc18ad9e2bba8bbb778d46cdd49ad2ffe  arc_gnu_2024.06_prebuilt_glibc_le_archs_linux_install.tar.bz2
-+sha256  6867bc6f895c29b053020423923ead2054b8474816f1d067f2726b13e8ee16c0  arc_gnu_2024.06_prebuilt_uclibc_le_archs_linux_install.tar.bz2
-+sha256  6efd9025e4b226bf1b4a4d448670e00f928e61e0051a0b209b7adaa327945a32  arc_gnu_2024.06_prebuilt_uclibc_be_arc700_linux_install.tar.bz2
-+sha256  ae2ffb5fbe8d6002341dd87d005400010e85dfc1df1e8db070a19ab7300d738f  arc_gnu_2024.06_prebuilt_glibc_be_archs_linux_install.tar.bz2
-+sha256  892a576acdf962afafde345d2c830317cb14ff8ef95da7cadc79177c226db269  arc_gnu_2024.06_prebuilt_uclibc_be_archs_linux_install.tar.bz2
-diff --git a/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.mk b/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.mk
-index c8f141e45d..c88ca35c43 100644
---- a/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.mk
-+++ b/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.mk
-@@ -4,13 +4,18 @@
- #
- ################################################################################
- 
--TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_VERSION = 2019.09
-+TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_VERSION = 2024.06
- TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_SITE = https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/releases/download/arc-$(TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_VERSION)-release
- 
--ifeq ($(BR2_arc750d)$(BR2_arc770d),y)
-+ifeq ($(BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC700),y)
- TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_CORE = arc700
--else
-+TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_LIBC = uclibc
-+else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARCHS_UCLIBC),y)
-+TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_CORE = archs
-+TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_LIBC = uclibc
-+else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARCHS_GLIBC),y)
- TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_CORE = archs
-+TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_LIBC = glibc
- endif
- 
- ifeq ($(BR2_arcle),y)
-@@ -19,6 +24,6 @@ else
- TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_ENDIANESS = be
- endif
- 
--TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_SOURCE = arc_gnu_$(TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_VERSION)_prebuilt_uclibc_$(TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_ENDIANESS)_$(TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_CORE)_linux_install.tar.gz
-+TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_SOURCE = arc_gnu_$(TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_VERSION)_prebuilt_$(TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_LIBC)_$(TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_ENDIANESS)_$(TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_CORE)_linux_install.tar.bz2
- 
- $(eval $(toolchain-external-package))
++class TestExternalToolchainArmAarch64(TestExternalToolchain):
++    config = """
++        BR2_aarch64=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TOOLCHAIN_EXTERNAL_ARM_AARCH64=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++    toolchain_prefix = "aarch64-none-linux-gnu"
++
++    def test_run(self):
++        TestExternalToolchain.common_check(self)
++
++
++class TestExternalToolchainArmAarch64Be(TestExternalToolchain):
++    config = """
++        BR2_aarch64_be=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++    toolchain_prefix = "aarch64_be-none-linux-gnu"
++
++    def test_run(self):
++        TestExternalToolchain.common_check(self)
 -- 
 2.45.2
 
