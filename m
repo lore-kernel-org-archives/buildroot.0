@@ -1,70 +1,94 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8230FC3DA4A
-	for <buildroot@archiver.kernel.org>; Sat, 10 Aug 2024 15:51:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D885C3DA7F
+	for <buildroot@archiver.kernel.org>; Sat, 10 Aug 2024 17:13:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 02455413FC;
-	Sat, 10 Aug 2024 15:51:23 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2409581B23;
+	Sat, 10 Aug 2024 17:13:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GEPB-VxYuuBg; Sat, 10 Aug 2024 15:51:20 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Q32TrHB97sF5; Sat, 10 Aug 2024 17:13:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3ACC4413BA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DE25381819
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3ACC4413BA;
-	Sat, 10 Aug 2024 15:51:20 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6271B1BF27E
- for <buildroot@lists.busybox.net>; Sat, 10 Aug 2024 15:51:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DE25381819;
+	Sat, 10 Aug 2024 17:13:46 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 8EDBD1BF831
+ for <buildroot@lists.busybox.net>; Sat, 10 Aug 2024 17:13:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4DCC5413BA
- for <buildroot@lists.busybox.net>; Sat, 10 Aug 2024 15:51:19 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 88AAA40144
+ for <buildroot@lists.busybox.net>; Sat, 10 Aug 2024 17:13:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DwaN1H3XioqY for <buildroot@lists.busybox.net>;
- Sat, 10 Aug 2024 15:51:17 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id G5W0eaq6BeF9 for <buildroot@lists.busybox.net>;
+ Sat, 10 Aug 2024 17:13:44 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1828:2000:679::23; helo=helium.openadk.org;
- envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 1DD3C413B6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1DD3C413B6
-Received: from helium.openadk.org (helium.openadk.org
- [IPv6:2a00:1828:2000:679::23])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1DD3C413B6
- for <buildroot@buildroot.org>; Sat, 10 Aug 2024 15:51:15 +0000 (UTC)
-Received: by helium.openadk.org (Postfix, from userid 1000)
- id 54E10353D100; Sat, 10 Aug 2024 17:51:12 +0200 (CEST)
-Date: Sat, 10 Aug 2024 17:51:12 +0200
-From: Waldemar Brodkorb <wbx@openadk.org>
+ client-ip=2607:f8b0:4864:20::430; helo=mail-pf1-x430.google.com;
+ envelope-from=baxiche@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 1962440025
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1962440025
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com
+ [IPv6:2607:f8b0:4864:20::430])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1962440025
+ for <buildroot@buildroot.org>; Sat, 10 Aug 2024 17:13:43 +0000 (UTC)
+Received: by mail-pf1-x430.google.com with SMTP id
+ d2e1a72fcca58-710ec581999so406182b3a.2
+ for <buildroot@buildroot.org>; Sat, 10 Aug 2024 10:13:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1723310023; x=1723914823;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=A62E7AA2R2g2G9ny6JGkZB23AwfyYexYuFuFPyZr9LY=;
+ b=QTtnUTtzVTkZY3AafAbk1qs26WfIFCrnMXZgokshdvQUxmPoPOiVMMU4n0jCD7cjBS
+ nmskN2Iae2Qg5028lXUw+QqU90HZH55l4PGvyoY/KLUfoJeqfHgECAHYwECdnGXEaTX8
+ Pv2301lTAa/JNkL2Mena2JE8bnO3MUuPBSCe8sIuXiWN03M5K6XUk4bJ0XUOd5zJSsy3
+ jkYbsEiVq2966cHTp6gj0iQan5sjYDaOKHHIg7bFt/ulSPSTnw/zKRK1JnBwKdICKcjU
+ kcOFu801RF9podoZkeGqM06pFQaTDDXvOdqeZpmA7mIwSNQKCQDkhsRfkntTcSG448mJ
+ MkLA==
+X-Gm-Message-State: AOJu0YxuBmkV4Gl1m/BiGXY7aW+ym7c2u5OG4I3Fm7FkhobhhVgSR1WM
+ HWGwaS06wJvo9aaJj6B67hWqe1MvL7OAEr+oD5OzC5VHFbhS8cA7CJGUDjem
+X-Google-Smtp-Source: AGHT+IEp6ztwDWKJzkRucxh+TGmeV9WPR//8cBA5NZjUQHDQNRl5zyaaMzeXViEzZ3M+HsHo7YDB6g==
+X-Received: by 2002:a05:6a20:9f9b:b0:1c4:87b2:e07d with SMTP id
+ adf61e73a8af0-1c89ff243a9mr7041635637.16.1723310022813; 
+ Sat, 10 Aug 2024 10:13:42 -0700 (PDT)
+Received: from localhost.localdomain ([150.116.45.17])
+ by smtp.gmail.com with ESMTPSA id
+ 41be03b00d2f7-7c3dbe3cd6bsm1543223a12.56.2024.08.10.10.13.41
+ (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+ Sat, 10 Aug 2024 10:13:42 -0700 (PDT)
+From: baxiche@gmail.com
 To: buildroot@buildroot.org
-Message-ID: <ZreMcIb1cZbWA5ww@waldemar-brodkorb.de>
+Date: Sun, 11 Aug 2024 01:13:35 +0800
+Message-ID: <20240810171335.19227-1-baxiche@gmail.com>
+X-Mailer: git-send-email 2.45.1
 MIME-Version: 1.0
-Content-Disposition: inline
-X-Operating-System: Linux 5.10.0-31-amd64 x86_64
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=openadk.org; s=2022; 
- t=1723305072; bh=PNeWluUsNmmPxFCxIzE2K6bb+MHN8pbRA/rkCsIsdEo=;
- h=Date:From:To:Subject:From;
- b=hIL2rs1T9WywNrTyqaYt8D7yi4+dDLp/qnmwrso0ALTU6maLtCH2W5CqF+6F6HOqD
- pE2zOcIHYzKDG5gvrhi/Dhmoe8+fI1I02zcorn/0dsQYxzl/sGy/2JAfmxumc0Zq6F
- 9SBKWuyhXutE0SkNUj4uMqDIDbXvVttlQTuCs+Rxuyx0Il2larwe65ZG2Rc5LaKpwz
- HwRsFdV6MMJ5ZGvd26MVNT843gDkI5LDQetjGgm/ynJ+xcgkspmN9xzwStfXtebijE
- WQHABWZ629HmD7NRx8qC7dz4VLvx78PQjzqT1MxLIOk+uK3on6kTzaXuJOxISYpYhY
- CV54D2hD/nsIg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=openadk.org
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1723310023; x=1723914823; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=A62E7AA2R2g2G9ny6JGkZB23AwfyYexYuFuFPyZr9LY=;
+ b=cpdA6WTY06ZmEKkM8RPh5pXz0gv0tsPQqMTrUmyYaSpV9suJvk/Z+HwMWhDAi6NTX4
+ onqS+DDEPZQe+UCWHfgQBVYRV7NvRMS6tBl+7bkiNQGGu93E5/8R1RJBbaPBKK797TOS
+ K/Uutj5D399JxgYg3zqmMtsL1IiIludW/tXu1s3X6hgKFqd88j4QReI7nAlNesvrXtsz
+ bdIahzexCU7jcuXPMT25y6qy1il9fH2JwWUj/GVhAmVQPo88GwH+37GekN/Pt52lz2OV
+ Sjs7gzMPH5BXdjG3q1LtgTFvY3hsSs6d3S3nskM3MlDLzF9GOR/clroMn1m6evsD7n2M
+ Cehw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=openadk.org header.i=@openadk.org header.a=rsa-sha256
- header.s=2022 header.b=hIL2rs1T
-Subject: [Buildroot] [PATCH] package/stress-ng: update to 0.18.02
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=cpdA6WTY
+Subject: [Buildroot] [PATCH 1/1] package/qt6: add qt6 multimedia
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,180 +100,159 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: baxiche su <baxiche@gmail.com>, Jesse Van Gavere <jesseevg@gmail.com>,
+ Samuel Martin <s.martin49@gmail.com>,
+ Roy Kollen Svendsen <roykollensvendsen@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Patches 0001/0002 are upstream.
-Stress-ng requires Thread support.
+From: baxiche su <baxiche@gmail.com>
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: baxiche su <baxiche@gmail.com>
 ---
- ...sock.c-fix-build-without-SO_ZEROCOPY.patch | 56 -------------------
- ...002-core-sched.c-fix-uclibc-ng-build.patch | 40 -------------
- package/stress-ng/Config.in                   |  5 +-
- package/stress-ng/stress-ng.hash              |  2 +-
- package/stress-ng/stress-ng.mk                |  2 +-
- 5 files changed, 5 insertions(+), 100 deletions(-)
- delete mode 100644 package/stress-ng/0001-stress-sock.c-fix-build-without-SO_ZEROCOPY.patch
- delete mode 100644 package/stress-ng/0002-core-sched.c-fix-uclibc-ng-build.patch
+ package/qt6/Config.in                        |  1 +
+ package/qt6/qt6multimedia/Config.in          | 15 +++++
+ package/qt6/qt6multimedia/qt6multimedia.hash | 13 ++++
+ package/qt6/qt6multimedia/qt6multimedia.mk   | 71 ++++++++++++++++++++
+ 4 files changed, 100 insertions(+)
+ create mode 100644 package/qt6/qt6multimedia/Config.in
+ create mode 100644 package/qt6/qt6multimedia/qt6multimedia.hash
+ create mode 100644 package/qt6/qt6multimedia/qt6multimedia.mk
 
-diff --git a/package/stress-ng/0001-stress-sock.c-fix-build-without-SO_ZEROCOPY.patch b/package/stress-ng/0001-stress-sock.c-fix-build-without-SO_ZEROCOPY.patch
-deleted file mode 100644
-index f1f4ab5636..0000000000
---- a/package/stress-ng/0001-stress-sock.c-fix-build-without-SO_ZEROCOPY.patch
-+++ /dev/null
-@@ -1,56 +0,0 @@
--From 142c3b2414f0adfb13b59dea993054a0daa6cd52 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sat, 4 May 2024 10:04:20 +0200
--Subject: [PATCH] stress-sock.c: fix build without SO_ZEROCOPY
--
--uclibc-ng defines MSG_ZEROCOPY but not SO_ZEROCOPY resulting in the
--following build failure since version 0.17.04 and
--https://github.com/ColinIanKing/stress-ng/commit/2ad8aff9bc1ab822cf615c72712c6031a8f60bbd:
--
--stress-sock.c: In function 'stress_sock_client':
--stress-sock.c:656:35: error: 'SO_ZEROCOPY' undeclared (first use in this function); did you mean 'MSG_ZEROCOPY'?
--  656 |    if (setsockopt(fd, SOL_SOCKET, SO_ZEROCOPY, &so_zerocopy, sizeof(so_zerocopy)) == 0) {
--      |                                   ^~~~~~~~~~~
--      |                                   MSG_ZEROCOPY
--stress-sock.c:656:35: note: each undeclared identifier is reported only once for each function it appears in
--CC stress-sockfd.c
--stress-sock.c: In function 'stress_sock_server':
--stress-sock.c:1060:34: error: 'SO_ZEROCOPY' undeclared (first use in this function); did you mean 'MSG_ZEROCOPY'?
-- 1060 |   if (setsockopt(fd, SOL_SOCKET, SO_ZEROCOPY, &so_zerocopy, sizeof(so_zerocopy)) == 0) {
--      |                                  ^~~~~~~~~~~
--      |                                  MSG_ZEROCOPY
--
--Fixes:
-- - http://autobuild.buildroot.org/results/bcff31bd9820cf0b95f8d8c6de44fd4ab8e2f065
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Upstream: https://github.com/ColinIanKing/stress-ng/commit/142c3b2414f0adfb13b59dea993054a0daa6cd52
-----
-- stress-sock.c | 4 ++--
-- 1 file changed, 2 insertions(+), 2 deletions(-)
--
--diff --git a/stress-sock.c b/stress-sock.c
--index 253730168..880530d04 100644
----- a/stress-sock.c
--+++ b/stress-sock.c
--@@ -649,7 +649,7 @@ retry:
-- 				args->name, errno, strerror(errno));
-- 			goto free_controls;
-- 		}
---#if defined(MSG_ZEROCOPY)
--+#if defined(MSG_ZEROCOPY) && defined(SO_ZEROCOPY)
-- 		if (sock_zerocopy) {
-- 			int so_zerocopy = 1;
--
--@@ -1053,7 +1053,7 @@ static int OPTIMIZE3 stress_sock_server(
-- 		goto die;
-- 	}
--
---#if defined(MSG_ZEROCOPY)
--+#if defined(MSG_ZEROCOPY) && defined(SO_ZEROCOPY)
-- 	if (sock_zerocopy) {
-- 		int so_zerocopy = 1;
--
----
--2.43.0
--
-diff --git a/package/stress-ng/0002-core-sched.c-fix-uclibc-ng-build.patch b/package/stress-ng/0002-core-sched.c-fix-uclibc-ng-build.patch
-deleted file mode 100644
-index c9c4e22603..0000000000
---- a/package/stress-ng/0002-core-sched.c-fix-uclibc-ng-build.patch
-+++ /dev/null
-@@ -1,40 +0,0 @@
--From f8dc9f790251562c3a4635edd29d7674298cd5f7 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sat, 4 May 2024 17:52:32 +0200
--Subject: [PATCH] core-sched.c: fix uclibc-ng build
--
--Since version 0.17.02 and commit
--e75ecbc8994e94b9e151b1191c1888bd2821fe72, sched.h is not included before
--including core-shim.h. The issue is that core-shim.h defines its own
--sched_priority parameter in shim_sched_attr. When sched.h is included
--after core-shim.h, the build will fail because __sched_priority will not
--be found:
--
--In file included from core-sched.c:25:
--core-sched.c: In function 'stress_set_sched':
--core-sched.c:170:22: error: 'struct shim_sched_attr' has no member named '__sched_priority'; did you mean 'sched_priority'?
--  170 |                 attr.sched_priority = (unsigned int)sched_priority;
--      |                      ^~~~~~~~~~~~~~
--
--Fixes:
-- - http://autobuild.buildroot.org/results/d7d38dbb10f7f188da8dccc44a84a3c46a720bed
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Upstream: https://github.com/ColinIanKing/stress-ng/commit/f8dc9f790251562c3a4635edd29d7674298cd5f7
-----
-- core-shim.h | 2 ++
-- 1 file changed, 2 insertions(+)
--
--diff --git a/core-shim.h b/core-shim.h
--index bed4cf2f6..475aac512 100644
----- a/core-shim.h
--+++ b/core-shim.h
--@@ -23,6 +23,8 @@
-- #include <sys/uio.h>
-- #endif
-- 
--+#include <sched.h>
--+
-- /*
--  *  BeagleBoneBlack with 4.1.15 kernel does not
--  *  define the following, these should be defined
-diff --git a/package/stress-ng/Config.in b/package/stress-ng/Config.in
-index 918c3db194..faed3cedd1 100644
---- a/package/stress-ng/Config.in
-+++ b/package/stress-ng/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_STRESS_NG
- 	# perf.c needs PERF_COUNT_HW_REF_CPU_CYCLES
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_3
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
- 	# fenv.h lacks FE_INVALID, FE_OVERFLOW & FE_UNDERFLOW on nios2 and ARC
- 	depends on !BR2_nios2
- 	depends on !BR2_arc
-@@ -15,8 +16,8 @@ config BR2_PACKAGE_STRESS_NG
+diff --git a/package/qt6/Config.in b/package/qt6/Config.in
+index 29c1c25c7f..5b55e67b26 100644
+--- a/package/qt6/Config.in
++++ b/package/qt6/Config.in
+@@ -57,5 +57,6 @@ source "package/qt6/qt6tools/Config.in"
+ source "package/qt6/qt6virtualkeyboard/Config.in"
+ source "package/qt6/qt6wayland/Config.in"
+ source "package/qt6/qt6websockets/Config.in"
++source "package/qt6/qt6multimedia/Config.in"
  
- 	  https://github.com/ColinIanKing/stress-ng
- 
--comment "stress-ng needs a toolchain w/ headers >= 3.3"
-+comment "stress-ng needs a toolchain w/ threads, headers >= 3.3"
- 	depends on !BR2_nios2 && !BR2_arc
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
- 	depends on BR2_USE_MMU
--	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_3
-+	depends on (!BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_3 || !BR2_TOOLCHAIN_HAS_THREADS)
-diff --git a/package/stress-ng/stress-ng.hash b/package/stress-ng/stress-ng.hash
-index 1f704809de..bd4f3c8ba8 100644
---- a/package/stress-ng/stress-ng.hash
-+++ b/package/stress-ng/stress-ng.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  b0bc1495adce6c7a1f82d53f363682b243d6d7e93a06be7f94c9559c0a311a6f  stress-ng-0.17.07.tar.gz
-+sha256  45eac8d354df5be26c9675ec7fc24910f846e47eb6b151e9955d6eae30cfe060  stress-ng-0.18.02.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/stress-ng/stress-ng.mk b/package/stress-ng/stress-ng.mk
-index 04427f70ec..659904a9dd 100644
---- a/package/stress-ng/stress-ng.mk
-+++ b/package/stress-ng/stress-ng.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--STRESS_NG_VERSION = 0.17.07
-+STRESS_NG_VERSION = 0.18.02
- STRESS_NG_SITE = $(call github,ColinIanKing,stress-ng,V$(STRESS_NG_VERSION))
- STRESS_NG_LICENSE = GPL-2.0+
- STRESS_NG_LICENSE_FILES = COPYING
+ endif
+diff --git a/package/qt6/qt6multimedia/Config.in b/package/qt6/qt6multimedia/Config.in
+new file mode 100644
+index 0000000000..3d0bf4c70b
+--- /dev/null
++++ b/package/qt6/qt6multimedia/Config.in
+@@ -0,0 +1,15 @@
++config BR2_PACKAGE_QT6MULTIMEDIA
++	bool "qt6multimedia"
++	select BR2_PACKAGE_QT6BASE_GUI
++	select BR2_PACKAGE_QT6BASE_NETWORK
++	select BR2_PACKAGE_QT6BASE_WIDGETS
++	select BR2_PACKAGE_QT6BASE_CONCURRENT
++	select BR2_PACKAGE_QT6SHADERTOOLS
++
++	help
++	  Qt is a cross-platform application and UI framework for
++	  developers using C++.
++
++	  This package corresponds to the qt6multimedia module.
++
++	  https://doc.qt.io/qt-6/qtmultimedia-index.html
+diff --git a/package/qt6/qt6multimedia/qt6multimedia.hash b/package/qt6/qt6multimedia/qt6multimedia.hash
+new file mode 100644
+index 0000000000..04a8c0cb7d
+--- /dev/null
++++ b/package/qt6/qt6multimedia/qt6multimedia.hash
+@@ -0,0 +1,13 @@
++# Hash from: https://download.qt.io/official_releases/qt/6.7/6.7.2/submodules/qtmultimedia-everywhere-src-6.7.2.tar.xz.sha256
++sha256  8ef835115acb9a1d3d2c9f23cfacb43f2c537e3786a8ab822299a2a7765651d3  qtmultimedia-everywhere-src-6.7.2.tar.xz
++
++# Hashes for license files:
++sha256  9f0490f18656c6f2435bd14f603ef0c96434d1825615363dce43abb42ed1dcce  LICENSES/BSD-3-Clause.txt
++sha256  3abd6471b9a9a08d65ce771143f8e278bb4c1aeb10c1c2d476935a6b049653f5  LICENSES/BSL-1.0.txt
++sha256  110535522396708cea37c72a802c5e7e81391139f5f7985631c93ef242b206a4  LICENSES/GFDL-1.3-no-invariants-only.txt
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSES/GPL-2.0-only.txt
++sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSES/GPL-3.0-only.txt
++sha256  da7eabb7bafdf7d3ae5e9f223aa5bdc1eece45ac569dc21b3b037520b4464768  LICENSES/LGPL-3.0-only.txt
++sha256  d040359701c01996a017d5c515678929cd1b0625e64cb86db44025fbb6cdf1fc  LICENSES/MIT.txt
++sha256  9b1f50aae6267f9d5e0ceb6775ee86450262c25ec7c0573e151fe5d3f18a4700  LICENSES/LicenseRef-Qt-Commercial.txt
++sha256  40678d338ce53cd93f8b22b281a2ecbcaa3ee65ce60b25ffb0c462b0530846b2  LICENSES/Qt-GPL-exception-1.0.txt
+\ No newline at end of file
+diff --git a/package/qt6/qt6multimedia/qt6multimedia.mk b/package/qt6/qt6multimedia/qt6multimedia.mk
+new file mode 100644
+index 0000000000..a7e9bd22a0
+--- /dev/null
++++ b/package/qt6/qt6multimedia/qt6multimedia.mk
+@@ -0,0 +1,71 @@
++################################################################################
++#
++# qt6multimedia
++#
++################################################################################
++
++QT6MULTIMEDIA_VERSION = $(QT6_VERSION)
++QT6MULTIMEDIA_SITE = $(QT6_SITE)
++QT6MULTIMEDIA_SOURCE = qtmultimedia-$(QT6_SOURCE_TARBALL_PREFIX)-$(QT6MULTIMEDIA_VERSION).tar.xz
++QT6MULTIMEDIA_INSTALL_STAGING = YES
++
++QT6MULTIMEDIA_SUPPORTS_IN_SOURCE_BUILD = NO
++
++QT6MULTIMEDIA_CMAKE_BACKEND = ninja
++
++QT6MULTIMEDIA_LICENSE = \
++	LGPL-3.0 or GPL-2.0 or GPL-3.0, \
++	LGPL-2.1+, \
++	BSD-3-Clause (docs), \
++	GFDL-1.3 no invariants (docs), \
++	BSD-3-Clause (examples), \
++	BSL-1.0, \
++	MPL-2.0 \
++	MIT
++
++QT6MULTIMEDIA_LICENSE_FILES = \
++	LICENSES/GPL-2.0-only.txt \
++	LICENSES/GPL-3.0-only.txt \
++	LICENSES/LGPL-3.0-only.txt \
++	LICENSES/GFDL-1.3-no-invariants-only.txt \
++	LICENSES/BSL-1.0.txt \
++	LICENSES/BSD-3-Clause.txt \
++	LICENSES/MIT.txt \
++	LICENSES/Qt-GPL-exception-1.0.txt \
++	LICENSES/MPL-2.0.txt \
++	LICENSES/IJG.txt \
++	LICENSES/ISC.txt \
++	LICENSES/zlib.txt \
++
++QT6MULTIMEDIA_CONF_OPTS = \
++	-DQT_HOST_PATH=$(HOST_DIR) \
++	-DBUILD_WITH_PCH=OFF \
++	-DQT_BUILD_EXAMPLES=OFF \
++	-DQT_BUILD_TESTS=OFF
++
++QT6MULTIMEDIA_DEPENDENCIES = \
++	qt6base \
++	qt6shadertools
++
++ifeq ($(BR2_PACKAGE_QT6DECLARATIVE),y)
++QT6MULTIMEDIA_DEPENDENCIES += qt6declarative
++endif
++
++ifeq ($(BR2_PACKAGE_PULSEAUDIO),y)
++QT6MULTIMEDIA_DEPENDENCIES += pulseaudio
++endif
++
++ifeq ($(BR2_PACKAGE_FFMPEG)$(BR2_PACKAGE_PULSEAUDIO),yy)
++QT6MULTIMEDIA_CONF_OPTS += -DFFMPEG_DIR=$(BUILD_DIR)/ffmpeg-$(FFMPEG_VERSION) -DQT_DEPLOY_FFMPEG=ON
++QT6MULTIMEDIA_DEPENDENCIES += ffmpeg
++endif
++
++ifeq ($(BR2_PACKAGE_GSTREAMER1),y)
++QT6MULTIMEDIA_DEPENDENCIES += gstreamer1
++endif
++
++ifeq ($(BR2_PACKAGE_LIBVA),y)
++QT6MULTIMEDIA_DEPENDENCIES += libva
++endif
++
++$(eval $(cmake-package))
 -- 
-2.39.2
+2.45.1
 
 _______________________________________________
 buildroot mailing list
