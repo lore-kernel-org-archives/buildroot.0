@@ -1,63 +1,53 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF3D6C3DA4A
-	for <buildroot@archiver.kernel.org>; Sat, 10 Aug 2024 09:12:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7120BC3DA4A
+	for <buildroot@archiver.kernel.org>; Sat, 10 Aug 2024 09:53:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7B9E8412B0;
-	Sat, 10 Aug 2024 09:12:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0403B8415C;
+	Sat, 10 Aug 2024 09:53:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mW7MdRh-Teo0; Sat, 10 Aug 2024 09:12:37 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id AQul_c-vX4Sr; Sat, 10 Aug 2024 09:53:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 56949412F0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1F3858415D
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 56949412F0;
-	Sat, 10 Aug 2024 09:12:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1F3858415D;
+	Sat, 10 Aug 2024 09:53:29 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id BA8861BF85D
- for <buildroot@lists.busybox.net>; Sat, 10 Aug 2024 09:12:35 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 167251BF5F8
+ for <buildroot@lists.busybox.net>; Sat, 10 Aug 2024 09:53:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A81AA606E3
- for <buildroot@lists.busybox.net>; Sat, 10 Aug 2024 09:12:35 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 04705606AF
+ for <buildroot@lists.busybox.net>; Sat, 10 Aug 2024 09:53:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nj87lqjKptN5 for <buildroot@lists.busybox.net>;
- Sat, 10 Aug 2024 09:12:34 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::223;
- helo=relay3-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+ id Mig6k2zq9FBl for <buildroot@lists.busybox.net>;
+ Sat, 10 Aug 2024 09:53:26 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 6D037606D9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6D037606D9
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6D037606D9
- for <buildroot@buildroot.org>; Sat, 10 Aug 2024 09:12:33 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 1E5C760002;
- Sat, 10 Aug 2024 09:12:30 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1sci9G-000OvA-0X;
- Sat, 10 Aug 2024 11:12:30 +0200
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1EE42605A8
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1EE42605A8
+ for <buildroot@buildroot.org>; Sat, 10 Aug 2024 09:53:25 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id BE27484A80; Sat, 10 Aug 2024 09:53:25 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-References: <20240711213435.1172955-1-thomas.petazzoni@bootlin.com>
-Date: Sat, 10 Aug 2024 11:12:30 +0200
-In-Reply-To: <20240711213435.1172955-1-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni via buildroot's message of "Thu, 11 Jul 2024 23:34:34
- +0200")
-Message-ID: <87plqgn3lt.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH] package/gcc: bump 12.x series to 12.4
+To: buildroot@buildroot.org
+Date: Sat, 10 Aug 2024 10:50:21 +0200
+X-Git-Refname: refs/heads/2024.02.x
+X-Git-Oldrev: cd727e38f044aaf4c8f841a124008bb39bc16b3f
+X-Git-Newrev: 200326a1944cc8092838b9f5aa3e8a56431aa83e
+X-Patchwork-Hint: ignore
+Message-Id: <20240810095325.BE27484A80@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] DEVELOPERS: drop
+ duplicated libnfc entry
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,36 +59,38 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Romain Naour <romain.naour@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Thomas" == Thomas Petazzoni via buildroot <buildroot@buildroot.org> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=200326a1944cc8092838b9f5aa3e8a56431aa83e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
- > https://gcc.gnu.org/gcc-12/changes.html describes the changes of gcc
- > 12.4 as follows:
+The patch removes one of the two occurrences of libnfc from the list of
+packages managed by Simon Dawson.
 
- >   This is the list of problem reports (PRs) from GCC's bug tracking
- >   system that are known to be fixed in the 12.4 release. This list
- >   might not be complete (that is, it is possible that some PRs that
- >   have been fixed are not listed here).
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 673d371cf22262509e8f764615864be31b3e146e)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ DEVELOPERS | 1 -
+ 1 file changed, 1 deletion(-)
 
- > With a link to
- > https://gcc.gnu.org/bugzilla/buglist.cgi?bug_status=RESOLVED&resolution=FIXED&target_milestone=12.4
-
- > There are 654 relevant commits (ignoring the "daily bumps") between
- > gcc 12.3.0 and 12.4.0, which is too much to list exhaustively here.
-
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-
-Committed to 2024.02.x and 2024.05.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 1c466967f0..e48a4733c8 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2839,7 +2839,6 @@ F:	package/lcdapi/
+ F:	package/libfreefare/
+ F:	package/libjson/
+ F:	package/libnfc/
+-F:	package/libnfc/
+ F:	package/libserial/
+ F:	package/libsigsegv/
+ F:	package/macchanger/
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
