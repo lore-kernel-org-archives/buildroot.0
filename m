@@ -4,59 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1002CC3DA4A
-	for <buildroot@archiver.kernel.org>; Sat, 10 Aug 2024 08:48:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C0436C3DA4A
+	for <buildroot@archiver.kernel.org>; Sat, 10 Aug 2024 08:51:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AA7F44136F;
-	Sat, 10 Aug 2024 08:48:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 598534136F;
+	Sat, 10 Aug 2024 08:51:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ROf-STH8hS_W; Sat, 10 Aug 2024 08:48:25 +0000 (UTC)
+ id Ku58j1-Bs2c2; Sat, 10 Aug 2024 08:51:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 74F15413AA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 31F74413A6
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 74F15413AA;
-	Sat, 10 Aug 2024 08:48:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 31F74413A6;
+	Sat, 10 Aug 2024 08:51:26 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 7A9D41BF3DB
- for <buildroot@lists.busybox.net>; Sat, 10 Aug 2024 08:48:23 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2F6321BF3DB
+ for <buildroot@lists.busybox.net>; Sat, 10 Aug 2024 08:51:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 69104606D9
- for <buildroot@lists.busybox.net>; Sat, 10 Aug 2024 08:48:23 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2A57A606E3
+ for <buildroot@lists.busybox.net>; Sat, 10 Aug 2024 08:51:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cp7iNNMLpgGj for <buildroot@lists.busybox.net>;
- Sat, 10 Aug 2024 08:48:22 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::227;
- helo=relay7-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+ id p1JyiuetHjat for <buildroot@lists.busybox.net>;
+ Sat, 10 Aug 2024 08:51:24 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
+ helo=relay9-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org D524F606A6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D524F606A6
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp3.osuosl.org (Postfix) with ESMTPS id D524F606A6
- for <buildroot@buildroot.org>; Sat, 10 Aug 2024 08:48:20 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 5B8BF20003;
- Sat, 10 Aug 2024 08:48:18 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 1B278606D9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1B278606D9
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 1B278606D9
+ for <buildroot@buildroot.org>; Sat, 10 Aug 2024 08:51:23 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id E5232FF805;
+ Sat, 10 Aug 2024 08:51:20 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1schlp-000MfW-2b;
- Sat, 10 Aug 2024 10:48:17 +0200
+ (envelope-from <peter@korsgaard.com>) id 1schom-000Mt8-0J;
+ Sat, 10 Aug 2024 10:51:20 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Waldemar Brodkorb <wbx@openadk.org>
-References: <ZpJIyk4HUUwuvaTE@waldemar-brodkorb.de>
-Date: Sat, 10 Aug 2024 10:48:17 +0200
-In-Reply-To: <ZpJIyk4HUUwuvaTE@waldemar-brodkorb.de> (Waldemar Brodkorb's
- message of "Sat, 13 Jul 2024 11:28:42 +0200")
-Message-ID: <87y154n4q6.fsf@dell.be.48ers.dk>
+To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+References: <20240713132532.4099578-1-dario.binacchi@amarulasolutions.com>
+Date: Sat, 10 Aug 2024 10:51:20 +0200
+In-Reply-To: <20240713132532.4099578-1-dario.binacchi@amarulasolutions.com>
+ (Dario Binacchi's message of "Sat, 13 Jul 2024 15:25:32 +0200")
+Message-ID: <87ttfsn4l3.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH] package/squid: update to 6.10
+Subject: Re: [Buildroot] [PATCH 1/1] DEVELOPERS: drop duplicated libnfc entry
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,19 +68,18 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: linux-amarula@amarulasolutions.com, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Waldemar" == Waldemar Brodkorb <wbx@openadk.org> writes:
+>>>>> "Dario" == Dario Binacchi <dario.binacchi@amarulasolutions.com> writes:
 
- > The ESI feature is now disabled by default. Use --enable-esi if needed.
- > See here for other changes:
- > https://github.com/squid-cache/squid/commits/v6
+ > The patch removes one of the two occurrences of libnfc from the list of
+ > packages managed by Simon Dawson.
 
- > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+ > Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 
 Committed to 2024.02.x and 2024.05.x, thanks.
 
