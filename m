@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5B642C3DA4A
-	for <buildroot@archiver.kernel.org>; Sun, 11 Aug 2024 20:17:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0016EC3DA4A
+	for <buildroot@archiver.kernel.org>; Sun, 11 Aug 2024 20:18:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9576C40294;
-	Sun, 11 Aug 2024 20:17:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B9309404B6;
+	Sun, 11 Aug 2024 20:18:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id P3jwdiUNle8z; Sun, 11 Aug 2024 20:17:00 +0000 (UTC)
+ id aSsPeafXSGWr; Sun, 11 Aug 2024 20:18:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 060CA402DD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6EFFC404B9
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 060CA402DD;
-	Sun, 11 Aug 2024 20:17:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6EFFC404B9;
+	Sun, 11 Aug 2024 20:18:05 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 2E6451BF20D
- for <buildroot@lists.busybox.net>; Sun, 11 Aug 2024 20:16:56 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B2FBE1BF20D
+ for <buildroot@lists.busybox.net>; Sun, 11 Aug 2024 20:18:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1B6084027C
- for <buildroot@lists.busybox.net>; Sun, 11 Aug 2024 20:16:56 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9F8AC404B9
+ for <buildroot@lists.busybox.net>; Sun, 11 Aug 2024 20:18:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id n2GqAGVBZE0r for <buildroot@lists.busybox.net>;
- Sun, 11 Aug 2024 20:16:55 +0000 (UTC)
+ id pR0LVh6-qZCo for <buildroot@lists.busybox.net>;
+ Sun, 11 Aug 2024 20:18:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0F60640268
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9BD74404B6
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0F60640268
- for <buildroot@buildroot.org>; Sun, 11 Aug 2024 20:16:55 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9BD74404B6
+ for <buildroot@buildroot.org>; Sun, 11 Aug 2024 20:18:02 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 06A9184E64; Sun, 11 Aug 2024 20:16:55 +0000 (UTC)
+ id 96E4B84EC9; Sun, 11 Aug 2024 20:18:02 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 11 Aug 2024 21:42:07 +0200
-X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: d644ce0f94ee758d3eb8f64a1a0681342bffff22
-X-Git-Newrev: de8fdc4fc754ebd3abc83009910745030992eae9
+Date: Sun, 11 Aug 2024 21:42:33 +0200
+X-Git-Refname: refs/heads/2024.05.x
+X-Git-Oldrev: 77ebe1795c934a2fbe9f1521a37588f250b24ecc
+X-Git-Newrev: 051df65fd5e60e81b61262b408d442d98d15acc8
 X-Patchwork-Hint: ignore
-Message-Id: <20240811201655.06A9184E64@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/gdb: remove stale
+Message-Id: <20240811201802.96E4B84EC9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.05.x] package/gdb: remove stale
  hashes from GDB 10.x and 11.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -65,8 +65,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=de8fdc4fc754ebd3abc83009910745030992eae9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=051df65fd5e60e81b61262b408d442d98d15acc8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.05.x
 
 In commit 809fdb3a7a3e4da8e7734a0d7cec48a4b3b99ec5 ("package/gdb:
 remove gdb 10.x") and
