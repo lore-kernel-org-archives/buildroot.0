@@ -4,65 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4D280C3DA4A
-	for <buildroot@archiver.kernel.org>; Sun, 11 Aug 2024 07:16:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 738A0C3DA4A
+	for <buildroot@archiver.kernel.org>; Sun, 11 Aug 2024 07:33:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B647581344;
-	Sun, 11 Aug 2024 07:16:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D65B0810DB;
+	Sun, 11 Aug 2024 07:33:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2WHfbEzsliy9; Sun, 11 Aug 2024 07:16:38 +0000 (UTC)
+ id vtbh_M9WOMNu; Sun, 11 Aug 2024 07:33:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7E1DD81337
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D92DF81127
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7E1DD81337;
-	Sun, 11 Aug 2024 07:16:38 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 840731BF31A
- for <buildroot@lists.busybox.net>; Sun, 11 Aug 2024 07:16:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D92DF81127;
+	Sun, 11 Aug 2024 07:33:09 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C5F751BF870
+ for <buildroot@lists.busybox.net>; Sun, 11 Aug 2024 07:33:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7C8C881337
- for <buildroot@lists.busybox.net>; Sun, 11 Aug 2024 07:16:37 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id A734440562
+ for <buildroot@lists.busybox.net>; Sun, 11 Aug 2024 07:33:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3i7fb-Tq5K7t for <buildroot@lists.busybox.net>;
- Sun, 11 Aug 2024 07:16:36 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=89.238.66.15;
- helo=helium.openadk.org; envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org ADF318132F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ADF318132F
-Received: from helium.openadk.org (helium.openadk.org [89.238.66.15])
- by smtp1.osuosl.org (Postfix) with ESMTPS id ADF318132F
- for <buildroot@buildroot.org>; Sun, 11 Aug 2024 07:16:34 +0000 (UTC)
-Received: by helium.openadk.org (Postfix, from userid 1000)
- id 272A735282F0; Sun, 11 Aug 2024 09:16:31 +0200 (CEST)
-Date: Sun, 11 Aug 2024 09:16:31 +0200
-From: Waldemar Brodkorb <wbx@openadk.org>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id uSPWW0kA6fSm for <buildroot@lists.busybox.net>;
+ Sun, 11 Aug 2024 07:33:07 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2E8464027D
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2E8464027D
+ for <buildroot@buildroot.org>; Sun, 11 Aug 2024 07:33:07 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 19C8B84BDD; Sun, 11 Aug 2024 07:33:07 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Message-ID: <ZrhlT1NAkvCmXNAS@waldemar-brodkorb.de>
-MIME-Version: 1.0
-Content-Disposition: inline
-X-Operating-System: Linux 5.10.0-31-amd64 x86_64
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=openadk.org; s=2022; 
- t=1723360591; bh=o4S2p67NEF7HIbQQa3s8witmJdAWGJOSpWkNnXvdiCw=;
- h=Date:From:To:Subject:From;
- b=WgpCkueSCdzv0+1FXTrknSoLqeal4XFZ9bDktvZIZzqpL98dnGlPCddLyxivH714x
- 2Wk7wztDP8v1Pn4w4K58LC4LAYUVnKaH3IEjSJW3bC3XhZV3JhJW+CZD0qhiVqEmlG
- aimpRqG4yn1nvIguNVkcwKn4DqDQvWDPuTqa633G0vVfH1IdOfVXccfxtcrzfFw9dc
- J0Djv2WOJaIwET1x/Nc2/fi8X3rw7fNfsHA1j65XA0wkceLXslvmLBM0ymoKGttgfq
- y2rTOXpDm4ZG/T3dWz4zUOAC5rpv0JnCdZDFox+4N+3JDSY5KaV8SmDCyh2EoeoF2p
- ReznfvuUvftZQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=openadk.org
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=openadk.org header.i=@openadk.org header.a=rsa-sha256
- header.s=2022 header.b=WgpCkueS
-Subject: [Buildroot] [PATCH next] package/bird: update to 2.15.1
+Date: Sun, 11 Aug 2024 09:32:56 +0200
+X-Git-Refname: refs/heads/2024.02.x
+X-Git-Oldrev: 1c98218005276dd2607526495f9ed9446384af4f
+X-Git-Newrev: d644ce0f94ee758d3eb8f64a1a0681342bffff22
+X-Patchwork-Hint: ignore
+Message-Id: <20240811073307.19C8B84BDD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/sunxi-tools:
+ sunxi-fel needs dynamic library
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,56 +59,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-See here for a changelog:
-https://gitlab.nic.cz/labs/bird/-/blob/master/NEWS
+commit: https://git.buildroot.net/buildroot/commit/?id=d644ce0f94ee758d3eb8f64a1a0681342bffff22
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-An uClibc-ng based system needs _GNU_SOURCE in the CFLAGS to
-provide getrandom().
+Fix the following build failure raised since bump to version
+1.4.2-168-ged3039c in commit 2e330dff6a7ce7965ceb0dccdc9dcbcb329167bb:
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+/home/buildroot/autobuild/run/instance-1/output-1/host/lib/gcc/arm-buildroot-linux-musleabihf/12.3.0/../../../../arm-buildroot-linux-musleabihf/bin/ld: attempted static link of dynamic object `libfdt/libfdt-1.6.1.so'
+
+Fixes:
+ - http://autobuild.buildroot.org/results/6788d86c10d551b3d617e33c85083b817eb5d0b2
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+(cherry picked from commit e167800979b48a449c168c229448e7069d2045e7)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/bird/bird.hash | 2 +-
- package/bird/bird.mk   | 4 +++-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ package/sunxi-tools/Config.in | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/package/bird/bird.hash b/package/bird/bird.hash
-index a62fbba630..a781e314df 100644
---- a/package/bird/bird.hash
-+++ b/package/bird/bird.hash
-@@ -1,2 +1,2 @@
--sha256  3ec462a237d06d1f4455d6ec00a42f0b1686061fc988e5c89a841d01dd753b53  bird-2.0.12.tar.gz
-+sha256  48e85c622de164756c132ea77ad1a8a95cc9fd0137ffd0d882746589ce75c75d  bird-2.15.1.tar.gz
- sha256  94c53c84320078920ac1f0d49c81a4e9004512f534521a58bdf145acbcbc2cd2  README
-diff --git a/package/bird/bird.mk b/package/bird/bird.mk
-index f1b2ee6c5e..34d7912954 100644
---- a/package/bird/bird.mk
-+++ b/package/bird/bird.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/sunxi-tools/Config.in b/package/sunxi-tools/Config.in
+index 14f7da5bf2..16550f4e55 100644
+--- a/package/sunxi-tools/Config.in
++++ b/package/sunxi-tools/Config.in
+@@ -23,6 +23,7 @@ config BR2_PACKAGE_SUNXI_TOOLS_BOOTINFO
  
--BIRD_VERSION = 2.0.12
-+BIRD_VERSION = 2.15.1
- BIRD_SITE = https://bird.network.cz/download
- BIRD_LICENSE = GPL-2.0+
- BIRD_LICENSE_FILES = README
-@@ -12,6 +12,8 @@ BIRD_CPE_ID_VENDOR = nic
- BIRD_SELINUX_MODULES = bird
- BIRD_DEPENDENCIES = host-flex host-bison
+ config BR2_PACKAGE_SUNXI_TOOLS_FEL
+ 	bool "sunxi-fel"
++	depends on !BR2_STATIC_LIBS # dtc
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libusb
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libusb
+ 	select BR2_PACKAGE_DTC
+@@ -33,8 +34,8 @@ config BR2_PACKAGE_SUNXI_TOOLS_FEL
+ 	  fel mode. This allows do download code to memory and execute
+ 	  it.
  
-+BIRD_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE"
-+
- # 0001-configure.ac-fix-build-with-autoconf-2.70.patch
- BIRD_AUTORECONF = YES
+-comment "sunxi-fel needs a toolchain w/ threads, gcc >= 4.9"
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
++comment "sunxi-fel needs a toolchain w/ dynamic library, threads, gcc >= 4.9"
++	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS || \
+ 		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
  
--- 
-2.39.2
-
+ config BR2_PACKAGE_SUNXI_TOOLS_NAND_PART
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
