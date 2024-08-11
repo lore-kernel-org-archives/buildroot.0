@@ -1,70 +1,68 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D693C3DA4A
-	for <buildroot@archiver.kernel.org>; Sun, 11 Aug 2024 14:14:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7F186C3DA4A
+	for <buildroot@archiver.kernel.org>; Sun, 11 Aug 2024 18:28:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 088B640632;
-	Sun, 11 Aug 2024 14:14:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DE89F81006;
+	Sun, 11 Aug 2024 18:28:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0DNd_hwN-Atw; Sun, 11 Aug 2024 14:14:14 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pQD942Y8mUq2; Sun, 11 Aug 2024 18:28:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 38C0A40633
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3DF8E8111C
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 38C0A40633;
-	Sun, 11 Aug 2024 14:14:14 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B59651BF409
- for <buildroot@lists.busybox.net>; Sun, 11 Aug 2024 14:14:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3DF8E8111C;
+	Sun, 11 Aug 2024 18:28:03 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 2F4141BF239
+ for <buildroot@lists.busybox.net>; Sun, 11 Aug 2024 18:28:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A32C140633
- for <buildroot@lists.busybox.net>; Sun, 11 Aug 2024 14:14:12 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 26DEA40179
+ for <buildroot@lists.busybox.net>; Sun, 11 Aug 2024 18:28:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YhqubsuADrZq for <buildroot@lists.busybox.net>;
- Sun, 11 Aug 2024 14:14:11 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 7EE5C40632
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7EE5C40632
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7EE5C40632
- for <buildroot@buildroot.org>; Sun, 11 Aug 2024 14:14:09 +0000 (UTC)
-Received: from home.juju.sh (unknown
- [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id EDFD3B0051B;
- Sun, 11 Aug 2024 16:14:03 +0200 (CEST)
-From: Julien Olivain <ju.o@free.fr>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5FLoAcgpdbWj for <buildroot@lists.busybox.net>;
+ Sun, 11 Aug 2024 18:27:59 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=89.238.66.15;
+ helo=helium.openadk.org; envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 23DA740106
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 23DA740106
+Received: from helium.openadk.org (helium.openadk.org [89.238.66.15])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 23DA740106
+ for <buildroot@buildroot.org>; Sun, 11 Aug 2024 18:27:57 +0000 (UTC)
+Received: by helium.openadk.org (Postfix, from userid 1000)
+ id 3B687353DA9B; Sun, 11 Aug 2024 20:27:54 +0200 (CEST)
+Date: Sun, 11 Aug 2024 20:27:54 +0200
+From: Waldemar Brodkorb <wbx@openadk.org>
 To: buildroot@buildroot.org
-Date: Sun, 11 Aug 2024 16:13:56 +0200
-Message-ID: <20240811141356.1201929-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.46.0
+Message-ID: <ZrkCqifa1uXZ6QBQ@waldemar-brodkorb.de>
 MIME-Version: 1.0
+Content-Disposition: inline
+X-Operating-System: Linux 5.10.0-31-amd64 x86_64
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1723385646;
- bh=FsPzGEk35tgeSAAfnXiK/Jq0sQrHJ1otl9fMtZHjc6I=;
- h=From:To:Cc:Subject:Date:From;
- b=LV0duJmz8JIL/pb61t3gvWihsUVZNmAk19jfaXJTzoijy/hVjrIcQvGwEelisWJQu
- uv/7r6SUNQZqypF20PdJy9oh0vlv2nR73rmy4CEvRHVkx9iETteMrrZ3k9Gnr1viOQ
- DehIumdxRybjuxTIb3T5OOzAC1tXWhuutRS8qGV6hGiLAyWxqhTeWe3J5xHWP/SVWq
- KLbds942OCAtGifeBpRkA3bZwbRrbt/MaGEn2A9HP92+fUBDrUiBQRVs+2fID1kiMK
- LW46wdiRiDF1DArJuNsformWH+jBa4xordhpttUaywacNgxnzPj+z68uSO1EfBFwSW
- KFPJEQzHY7YCw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=openadk.org; s=2022; 
+ t=1723400874; bh=sFMw5pcyVNpi82l9aERxyYubZNOqBFZ4pTdEG2h8LQU=;
+ h=Date:From:To:Subject:From;
+ b=om+z0BJsyODmJnGsLKyIR9fDKilYVQTzQlyaGAIWC8+N2J8sfSFSUFQFqjUJewnAI
+ pKVnAe7I5hzkOPpEkD1Q0yVGDtQr+TSkGR30kCkqBdaGvMcNBv9v/NOfuehz9r2q1I
+ wJZv7zDeBq1eXz0+dC40345vIIv1k9e4lyDPu5OR0NvcTCIlug1ZvibnZUi9aU0CTt
+ Wu5Lu3Rkx2x/vaRK3GbXHBVQ3c6kv/S3JszW1U9Qlv/ypkJk2+kQF5O5iqmWGG1kUI
+ CX0zSWO9h/3MYNGzNEfb0XqT8wSKQLr/JUZt98uJDXMvOPJFAEr9h7Y+1fB5lb/V9H
+ pqcXNU0KYvgfg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=openadk.org
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=LV0duJmz
-Subject: [Buildroot] [PATCH 1/1] package/libgpg-error: needs MMU
+ unprotected) header.d=openadk.org header.i=@openadk.org header.a=rsa-sha256
+ header.s=2022 header.b=om+z0BJs
+Subject: [Buildroot] [PATCH] package/uclibc: add memfd_create syscall wrapper
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,234 +74,492 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>,
- Marcus Folkesson <marcus.folkesson@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-libgpg-error imported code using fork() in commit [1] and enabled it
-soon after in [2]. Those commits were first included in libgpg-error
-version 1.28.
-
-For reference, the libgpg-error Buildroot package was updated to that
-version in commit [3].
-
-When Buildroot configuration has no MMU support (e.g. BR2_USE_MMU is
-not set), libgpg-error fails to build with error:
-
-    /build/host/opt/ext-toolchain/arm-buildroot-uclinux-uclibcgnueabi/bin/ld.real: ./.libs/libgpg-error.a(libgpg_error_la-spawn-posix.o): in function '_gpgrt_process_spawn':
-    spawn-posix.c:(.text+0x630): undefined reference to 'fork'
-
-This issue can be observed with the command:
-
-    utils/test-pkg -a -p libgpg-error
-
-It will show few build failures:
-
-    ...
-       bootlin-armv7m-uclibc [ 6/41]: FAILED
-    ...
-    bootlin-m68k-5208-uclibc [ 8/41]: FAILED
-    ...
-
-This commit fixes the issue by adding the package dependency on
-BR2_USE_MMU.
-
-This commit also propagates this dependency on the libgcrypt and
-libksba packages. They are requiring libgpg-error but had no
-dependency on MMU.
-
-Finally, for completeness, for all other packages requiring
-libgpg-error which already had the dependency on BR2_USE_MMU, the
-corresponding comment is updated to reflect that change. Namely: gcr,
-gnupg2, libassuan, libgpgme, libostree, netatalk, pinentry, vpnc, and
-wireshark. Note: for simplifity, few packages already depending on
-BR2_USE_MMU but having libgpg-error as an optional dependency are not
-updated (libjcat, mutt and opkg).
-
-Fixes:
-http://autobuild.buildroot.org/results/dbc82ba08e6a30c2f558c8c36ad7eeb0e3cab090/
-http://autobuild.buildroot.org/results/074a803de0f48cd86b9135cca50f136cccf1bcea/
-http://autobuild.buildroot.org/results/4c1966a71020af31c1dc1b0a13a3928c84e75874/
-...and many others.
-
-[1] https://git.gnupg.org/cgi-bin/gitweb.cgi?p=libgpg-error.git;a=commitdiff;h=8f41cc23b12485404203be5881aaaadb78696b4d
-[2] https://git.gnupg.org/cgi-bin/gitweb.cgi?p=libgpg-error.git;a=commitdiff;h=1865c0ba1769b407a3c504f1ab0a4278704a9fc1
-[3] https://gitlab.com/buildroot.org/buildroot/-/commit/692d191c8b0b3c86022e6a6ba3bd2d8f53b39f03
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
- package/gcr/Config.in          | 2 +-
- package/gnupg2/Config.in       | 2 +-
- package/libassuan/Config.in    | 2 +-
- package/libgcrypt/Config.in    | 1 +
- package/libgpg-error/Config.in | 1 +
- package/libgpgme/Config.in     | 2 +-
- package/libksba/Config.in      | 1 +
- package/libostree/Config.in    | 2 +-
- package/netatalk/Config.in     | 2 +-
- package/pinentry/Config.in     | 2 +-
- package/vpnc/Config.in         | 2 +-
- package/wireshark/Config.in    | 2 +-
- 12 files changed, 12 insertions(+), 9 deletions(-)
+ ...005-add-memfd_create-syscall-wrapper.patch | 467 ++++++++++++++++++
+ 1 file changed, 467 insertions(+)
+ create mode 100644 package/uclibc/0005-add-memfd_create-syscall-wrapper.patch
 
-diff --git a/package/gcr/Config.in b/package/gcr/Config.in
-index dbc22cf478..e4a90a5550 100644
---- a/package/gcr/Config.in
-+++ b/package/gcr/Config.in
-@@ -3,7 +3,7 @@ config BR2_PACKAGE_GCR
- 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt -> libgpg-error
- 	depends on BR2_USE_WCHAR # libglib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
--	depends on BR2_USE_MMU # libglib2
-+	depends on BR2_USE_MMU # libglib2, libgpg-error
- 	depends on !BR2_STATIC_LIBS # p11-kit
- 	select BR2_PACKAGE_GNUPG2 if BR2_PACKAGE_GNUPG2_DEPENDS && !BR2_PACKAGE_GNUPG # runtime
- 	select BR2_PACKAGE_GNUPG if !BR2_PACKAGE_GNUPG2_DEPENDS # runtime
-diff --git a/package/gnupg2/Config.in b/package/gnupg2/Config.in
-index 043d53554c..b282520dd8 100644
---- a/package/gnupg2/Config.in
-+++ b/package/gnupg2/Config.in
-@@ -11,7 +11,7 @@ config BR2_PACKAGE_GNUPG2_DEPENDS
- 	default y
- 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgpg-error
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libnpth
--	depends on BR2_USE_MMU # libassuan, libnpth
-+	depends on BR2_USE_MMU # libassuan, libgpg-error, libnpth
- 	depends on !BR2_STATIC_LIBS
- 
- config BR2_PACKAGE_GNUPG2
-diff --git a/package/libassuan/Config.in b/package/libassuan/Config.in
-index 012e65c4b6..8e860e86a1 100644
---- a/package/libassuan/Config.in
-+++ b/package/libassuan/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_LIBASSUAN
- 	bool "libassuan"
- 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgpg-error
--	depends on BR2_USE_MMU # fork()
-+	depends on BR2_USE_MMU # fork(), libgpg-error
- 	select BR2_PACKAGE_LIBGPG_ERROR
- 	help
- 	  Libassuan is a small library implementing the so-called
-diff --git a/package/libgcrypt/Config.in b/package/libgcrypt/Config.in
-index d3e5d4f7a2..a4df65a37c 100644
---- a/package/libgcrypt/Config.in
-+++ b/package/libgcrypt/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_LIBGCRYPT
- 	bool "libgcrypt"
- 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgpg-error
-+	depends on BR2_USE_MMU # libgpg-error
- 	select BR2_PACKAGE_LIBGPG_ERROR
- 	help
- 	  LibGCrypt is GNU's basic cryptographic library.
-diff --git a/package/libgpg-error/Config.in b/package/libgpg-error/Config.in
-index 5a2c14ead8..8e466e86e0 100644
---- a/package/libgpg-error/Config.in
-+++ b/package/libgpg-error/Config.in
-@@ -19,6 +19,7 @@ config BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS
- config BR2_PACKAGE_LIBGPG_ERROR
- 	bool "libgpg-error"
- 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS
-+	depends on BR2_USE_MMU # fork()
- 	help
- 	  Libgpg-error is a small library with error codes and
- 	  descriptions shared by most GnuPG related software.
-diff --git a/package/libgpgme/Config.in b/package/libgpgme/Config.in
-index 16ce27d0ef..51c4f228e4 100644
---- a/package/libgpgme/Config.in
-+++ b/package/libgpgme/Config.in
-@@ -1,7 +1,7 @@
- config BR2_PACKAGE_LIBGPGME
- 	bool "libgpgme"
- 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgpg-error
--	depends on BR2_USE_MMU # libassuan
-+	depends on BR2_USE_MMU # libassuan, libgpg-error
- 	select BR2_PACKAGE_GNUPG2 if BR2_PACKAGE_GNUPG2_DEPENDS && !BR2_PACKAGE_GNUPG # runtime
- 	select BR2_PACKAGE_GNUPG if !BR2_PACKAGE_GNUPG2_DEPENDS # runtime
- 	select BR2_PACKAGE_LIBGPG_ERROR
-diff --git a/package/libksba/Config.in b/package/libksba/Config.in
-index 1f25d6dbe2..7d764c2461 100644
---- a/package/libksba/Config.in
-+++ b/package/libksba/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_LIBKSBA
- 	bool "libksba"
- 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgpg-error
-+	depends on BR2_USE_MMU # libgpg-error
- 	select BR2_PACKAGE_LIBGPG_ERROR
- 	help
- 	  CMS and X.509 library
-diff --git a/package/libostree/Config.in b/package/libostree/Config.in
-index 49eed6517e..847a9ed17b 100644
---- a/package/libostree/Config.in
-+++ b/package/libostree/Config.in
-@@ -3,7 +3,7 @@ config BR2_PACKAGE_LIBOSTREE
- 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgpgme, libgpg-error
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
- 	depends on BR2_USE_WCHAR # libglib2
--	depends on BR2_USE_MMU # e2fsprogs, libglib2, libgpgme
-+	depends on BR2_USE_MMU # e2fsprogs, libglib2, libgpgme, libgpg-error
- 	# doesn't build with musl due to lack of TEMP_FAILURE_RETRY()
- 	depends on !BR2_TOOLCHAIN_USES_MUSL
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_8 # loop_config
-diff --git a/package/netatalk/Config.in b/package/netatalk/Config.in
-index 225d5891c7..60189f320e 100644
---- a/package/netatalk/Config.in
-+++ b/package/netatalk/Config.in
-@@ -2,7 +2,7 @@ config BR2_PACKAGE_NETATALK
- 	bool "netatalk"
- 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgpg-error
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
--	depends on BR2_USE_MMU # fork()
-+	depends on BR2_USE_MMU # fork(), libgpg-error
- 	depends on !BR2_STATIC_LIBS
- 	select BR2_PACKAGE_BERKELEYDB
- 	select BR2_PACKAGE_OPENSSL
-diff --git a/package/pinentry/Config.in b/package/pinentry/Config.in
-index bd5e3af5a1..401c60323d 100644
---- a/package/pinentry/Config.in
-+++ b/package/pinentry/Config.in
-@@ -1,7 +1,7 @@
- menuconfig BR2_PACKAGE_PINENTRY
- 	bool "pinentry"
- 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgpg-error
--	depends on BR2_USE_MMU # libassuan
-+	depends on BR2_USE_MMU # libassuan, libgpg-error
- 	select BR2_PACKAGE_LIBASSUAN
- 	select BR2_PACKAGE_LIBGPG_ERROR
- 	# At least one backend is needed to avoid build breakage
-diff --git a/package/vpnc/Config.in b/package/vpnc/Config.in
-index 6455b0d87a..b71c0e613e 100644
---- a/package/vpnc/Config.in
-+++ b/package/vpnc/Config.in
-@@ -2,7 +2,7 @@ config BR2_PACKAGE_VPNC
- 	bool "vpnc"
- 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt
- 	depends on !BR2_STATIC_LIBS # gnutls
--	depends on BR2_USE_MMU # fork()
-+	depends on BR2_USE_MMU # fork(), libgpg-error
- 	depends on BR2_USE_WCHAR # gnutls
- 	select BR2_PACKAGE_LIBGCRYPT
- 	select BR2_PACKAGE_LIBGPG_ERROR
-diff --git a/package/wireshark/Config.in b/package/wireshark/Config.in
-index 8b05599ecb..ce9d41bf00 100644
---- a/package/wireshark/Config.in
-+++ b/package/wireshark/Config.in
-@@ -2,7 +2,7 @@ config BR2_PACKAGE_WIRESHARK
- 	bool "wireshark"
- 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt -> libgpg-error
- 	depends on !BR2_STATIC_LIBS
--	depends on BR2_USE_MMU # fork(), glib2
-+	depends on BR2_USE_MMU # fork(), glib2, libgcrypt -> libgpg-error
- 	depends on BR2_USE_WCHAR # glib2
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
- 	depends on BR2_INSTALL_LIBSTDCPP
+diff --git a/package/uclibc/0005-add-memfd_create-syscall-wrapper.patch b/package/uclibc/0005-add-memfd_create-syscall-wrapper.patch
+new file mode 100644
+index 0000000000..75309d195a
+--- /dev/null
++++ b/package/uclibc/0005-add-memfd_create-syscall-wrapper.patch
+@@ -0,0 +1,467 @@
++From 811cd361e144dd7bdf75bcad8b4572ec786af5c7 Mon Sep 17 00:00:00 2001
++From: Waldemar Brodkorb <wbx@openadk.org>
++Date: Sun, 11 Aug 2024 20:22:48 +0200
++Subject: [PATCH] add memfd_create syscall wrapper
++
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++Upstream: https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?id=811cd361e144dd7bdf75bcad8b4572ec786af5c7
++---
++ libc/sysdeps/linux/aarch64/bits/fcntl.h      |  3 ++
++ libc/sysdeps/linux/alpha/bits/fcntl.h        |  2 ++
++ libc/sysdeps/linux/arc/bits/fcntl.h          |  3 ++
++ libc/sysdeps/linux/arm/bits/fcntl.h          |  2 ++
++ libc/sysdeps/linux/avr32/bits/fcntl.h        |  3 ++
++ libc/sysdeps/linux/bfin/bits/fcntl.h         |  2 ++
++ libc/sysdeps/linux/c6x/bits/fcntl.h          |  3 ++
++ libc/sysdeps/linux/common/Makefile.in        |  1 +
++ libc/sysdeps/linux/common/bits/fcntl-linux.h | 34 ++++++++++++++++++++
++ libc/sysdeps/linux/common/bits/mman-shared.h |  2 --
++ libc/sysdeps/linux/common/memfd_create.c     | 13 ++++++++
++ libc/sysdeps/linux/cris/bits/fcntl.h         |  2 ++
++ libc/sysdeps/linux/csky/bits/fcntl.h         |  2 ++
++ libc/sysdeps/linux/frv/bits/fcntl.h          |  2 ++
++ libc/sysdeps/linux/h8300/bits/fcntl.h        |  2 ++
++ libc/sysdeps/linux/hppa/bits/fcntl.h         |  2 ++
++ libc/sysdeps/linux/i386/bits/fcntl.h         |  2 ++
++ libc/sysdeps/linux/ia64/bits/fcntl.h         |  2 ++
++ libc/sysdeps/linux/kvx/bits/fcntl.h          |  3 ++
++ libc/sysdeps/linux/lm32/bits/fcntl.h         |  2 ++
++ libc/sysdeps/linux/m68k/bits/fcntl.h         |  2 ++
++ libc/sysdeps/linux/metag/bits/fcntl.h        |  2 ++
++ libc/sysdeps/linux/microblaze/bits/fcntl.h   |  2 ++
++ libc/sysdeps/linux/mips/bits/fcntl.h         |  2 ++
++ libc/sysdeps/linux/nds32/bits/fcntl.h        |  2 ++
++ libc/sysdeps/linux/nios2/bits/fcntl.h        |  2 ++
++ libc/sysdeps/linux/or1k/bits/fcntl.h         |  3 ++
++ libc/sysdeps/linux/powerpc/bits/fcntl.h      |  2 ++
++ libc/sysdeps/linux/riscv32/bits/fcntl.h      |  3 ++
++ libc/sysdeps/linux/riscv64/bits/fcntl.h      |  3 ++
++ libc/sysdeps/linux/sh/bits/fcntl.h           |  2 ++
++ libc/sysdeps/linux/sparc/bits/fcntl.h        |  2 ++
++ libc/sysdeps/linux/sparc64/bits/fcntl.h      |  2 ++
++ libc/sysdeps/linux/tile/bits/fcntl.h         |  3 ++
++ libc/sysdeps/linux/x86_64/bits/fcntl.h       |  2 ++
++ libc/sysdeps/linux/xtensa/bits/fcntl.h       |  2 ++
++ 36 files changed, 121 insertions(+), 2 deletions(-)
++ create mode 100644 libc/sysdeps/linux/common/bits/fcntl-linux.h
++ create mode 100644 libc/sysdeps/linux/common/memfd_create.c
++
++diff --git a/libc/sysdeps/linux/aarch64/bits/fcntl.h b/libc/sysdeps/linux/aarch64/bits/fcntl.h
++index dbe929351..024344eec 100644
++--- a/libc/sysdeps/linux/aarch64/bits/fcntl.h
+++++ b/libc/sysdeps/linux/aarch64/bits/fcntl.h
++@@ -289,3 +289,6 @@ extern int fallocate64 (int __fd, int __mode, __off64_t __offset,
++ #endif	/* use GNU */
++ 
++ __END_DECLS
+++
+++/* Include generic Linux declarations.  */
+++#include <bits/fcntl-linux.h>
++diff --git a/libc/sysdeps/linux/alpha/bits/fcntl.h b/libc/sysdeps/linux/alpha/bits/fcntl.h
++index 11e68214e..7d06c76b7 100644
++--- a/libc/sysdeps/linux/alpha/bits/fcntl.h
+++++ b/libc/sysdeps/linux/alpha/bits/fcntl.h
++@@ -236,3 +236,5 @@ extern ssize_t tee (int __fdin, int __fdout, size_t __len,
++ #endif
++ __END_DECLS
++ 
+++/* Include generic Linux declarations.  */
+++#include <bits/fcntl-linux.h>
++diff --git a/libc/sysdeps/linux/arc/bits/fcntl.h b/libc/sysdeps/linux/arc/bits/fcntl.h
++index beb32e41e..b02849691 100755
++--- a/libc/sysdeps/linux/arc/bits/fcntl.h
+++++ b/libc/sysdeps/linux/arc/bits/fcntl.h
++@@ -230,3 +230,6 @@ extern ssize_t tee (int __fdin, int __fdout, size_t __len,
++ 
++ #endif
++ __END_DECLS
+++
+++/* Include generic Linux declarations.  */
+++#include <bits/fcntl-linux.h>
++diff --git a/libc/sysdeps/linux/arm/bits/fcntl.h b/libc/sysdeps/linux/arm/bits/fcntl.h
++index 823660648..52dee4287 100644
++--- a/libc/sysdeps/linux/arm/bits/fcntl.h
+++++ b/libc/sysdeps/linux/arm/bits/fcntl.h
++@@ -244,3 +244,5 @@ extern ssize_t tee (int __fdin, int __fdout, size_t __len,
++ #endif
++ __END_DECLS
++ 
+++/* Include generic Linux declarations.  */
+++#include <bits/fcntl-linux.h>
++diff --git a/libc/sysdeps/linux/avr32/bits/fcntl.h b/libc/sysdeps/linux/avr32/bits/fcntl.h
++index ec0a3b55d..9e41550be 100644
++--- a/libc/sysdeps/linux/avr32/bits/fcntl.h
+++++ b/libc/sysdeps/linux/avr32/bits/fcntl.h
++@@ -218,3 +218,6 @@ extern ssize_t tee (int __fdin, int __fdout, size_t __len,
++ 
++ __END_DECLS
++ #endif
+++
+++/* Include generic Linux declarations.  */
+++#include <bits/fcntl-linux.h>
++diff --git a/libc/sysdeps/linux/bfin/bits/fcntl.h b/libc/sysdeps/linux/bfin/bits/fcntl.h
++index 0909ae6c4..67d2c5245 100644
++--- a/libc/sysdeps/linux/bfin/bits/fcntl.h
+++++ b/libc/sysdeps/linux/bfin/bits/fcntl.h
++@@ -244,3 +244,5 @@ extern ssize_t tee (int __fdin, int __fdout, size_t __len,
++ #endif
++ __END_DECLS
++ 
+++/* Include generic Linux declarations.  */
+++#include <bits/fcntl-linux.h>
++diff --git a/libc/sysdeps/linux/c6x/bits/fcntl.h b/libc/sysdeps/linux/c6x/bits/fcntl.h
++index 14aea565e..00f3b34e0 100644
++--- a/libc/sysdeps/linux/c6x/bits/fcntl.h
+++++ b/libc/sysdeps/linux/c6x/bits/fcntl.h
++@@ -237,3 +237,6 @@ extern ssize_t tee (int __fdin, int __fdout, size_t __len,
++ 
++ #endif
++ __END_DECLS
+++
+++/* Include generic Linux declarations.  */
+++#include <bits/fcntl-linux.h>
++diff --git a/libc/sysdeps/linux/common/Makefile.in b/libc/sysdeps/linux/common/Makefile.in
++index 848bc1e4a..83be2691e 100644
++--- a/libc/sysdeps/linux/common/Makefile.in
+++++ b/libc/sysdeps/linux/common/Makefile.in
++@@ -30,6 +30,7 @@ CSRC-$(UCLIBC_LINUX_SPECIFIC) += \
++ 	inotify.c \
++ 	ioperm.c \
++ 	iopl.c \
+++	memfd_create.c \
++ 	modify_ldt.c \
++ 	module.c \
++ 	name_to_handle_at.c \
++diff --git a/libc/sysdeps/linux/common/bits/fcntl-linux.h b/libc/sysdeps/linux/common/bits/fcntl-linux.h
++new file mode 100644
++index 000000000..d0236fd8b
++--- /dev/null
+++++ b/libc/sysdeps/linux/common/bits/fcntl-linux.h
++@@ -0,0 +1,34 @@
+++/* O_*, F_*, FD_* bit values for Linux.
+++   Copyright (C) 2001-2024 Free Software Foundation, Inc.
+++
+++   The GNU C Library is free software; you can redistribute it and/or
+++   modify it under the terms of the GNU Lesser General Public
+++   License as published by the Free Software Foundation; either
+++   version 2.1 of the License, or (at your option) any later version.
+++
+++   The GNU C Library is distributed in the hope that it will be useful,
+++   but WITHOUT ANY WARRANTY; without even the implied warranty of
+++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+++   Lesser General Public License for more details.
+++
+++   You should have received a copy of the GNU Lesser General Public
+++   License along with the GNU C Library; if not, see
+++   <https://www.gnu.org/licenses/>.  */
+++
+++#ifndef	_FCNTL_H
+++# error "Never use <bits/fcntl-linux.h> directly; include <fcntl.h> instead."
+++#endif
+++
+++#ifdef __USE_GNU
+++/* Types of seals.  */
+++# define F_SEAL_SEAL	0x0001	/* Prevent further seals from being set.  */
+++# define F_SEAL_SHRINK	0x0002	/* Prevent file from shrinking.  */
+++# define F_SEAL_GROW	0x0004	/* Prevent file from growing.  */
+++# define F_SEAL_WRITE	0x0008	/* Prevent writes.  */
+++# define F_SEAL_FUTURE_WRITE	0x0010	/* Prevent future writes while
+++					   mapped.  */
+++# define F_SEAL_EXEC	0x0020	/* Prevent chmod modifying exec bits. */
+++
+++# define F_ADD_SEALS	1033	/* Add seals to file.  */
+++# define F_GET_SEALS	1034	/* Get seals for file.  */
+++#endif
++diff --git a/libc/sysdeps/linux/common/bits/mman-shared.h b/libc/sysdeps/linux/common/bits/mman-shared.h
++index 98c9e1d3c..c40ae2d1e 100644
++--- a/libc/sysdeps/linux/common/bits/mman-shared.h
+++++ b/libc/sysdeps/linux/common/bits/mman-shared.h
++@@ -40,11 +40,9 @@
++ 
++ __BEGIN_DECLS
++ 
++-#if 0
++ /* Create a new memory file descriptor.  NAME is a name for debugging.
++    FLAGS is a combination of the MFD_* constants.  */
++ int memfd_create (const char *__name, unsigned int __flags) __THROW;
++-#endif
++ 
++ /* Lock pages from ADDR (inclusive) to ADDR + LENGTH (exclusive) into
++    memory.  FLAGS is a combination of the MLOCK_* flags above.  */
++diff --git a/libc/sysdeps/linux/common/memfd_create.c b/libc/sysdeps/linux/common/memfd_create.c
++new file mode 100644
++index 000000000..7165f3278
++--- /dev/null
+++++ b/libc/sysdeps/linux/common/memfd_create.c
++@@ -0,0 +1,13 @@
+++/*
+++ * memfd_create() for uClibc-ng
+++ *
+++ * Copyright (C) 2024 Waldemar Brodkorb <wbx@uclibc-ng.org>
+++ *
+++ * Licensed under the LGPL v2.1, see the file COPYING.LIB in this tarball.
+++ */
+++
+++#include <sys/syscall.h>
+++#include <sys/mman.h>
+++#if defined(__NR_memfd_create)
+++_syscall2(int, memfd_create, const char *, name, unsigned int, flags)
+++#endif
++diff --git a/libc/sysdeps/linux/cris/bits/fcntl.h b/libc/sysdeps/linux/cris/bits/fcntl.h
++index e9bc90ea9..e1d4ee1a6 100644
++--- a/libc/sysdeps/linux/cris/bits/fcntl.h
+++++ b/libc/sysdeps/linux/cris/bits/fcntl.h
++@@ -245,3 +245,5 @@ extern ssize_t tee (int __fdin, int __fdout, size_t __len,
++ #endif
++ __END_DECLS
++ 
+++/* Include generic Linux declarations.  */
+++#include <bits/fcntl-linux.h>
++diff --git a/libc/sysdeps/linux/csky/bits/fcntl.h b/libc/sysdeps/linux/csky/bits/fcntl.h
++index b36f41569..25f4491ba 100644
++--- a/libc/sysdeps/linux/csky/bits/fcntl.h
+++++ b/libc/sysdeps/linux/csky/bits/fcntl.h
++@@ -232,3 +232,5 @@ extern ssize_t tee (int __fdin, int __fdout, size_t __len,
++ #endif
++ __END_DECLS
++ 
+++/* Include generic Linux declarations.  */
+++#include <bits/fcntl-linux.h>
++diff --git a/libc/sysdeps/linux/frv/bits/fcntl.h b/libc/sysdeps/linux/frv/bits/fcntl.h
++index 02c8ac310..81a1bcd99 100644
++--- a/libc/sysdeps/linux/frv/bits/fcntl.h
+++++ b/libc/sysdeps/linux/frv/bits/fcntl.h
++@@ -226,3 +226,5 @@ extern ssize_t tee (int __fdin, int __fdout, size_t __len,
++ #endif
++ __END_DECLS
++ 
+++/* Include generic Linux declarations.  */
+++#include <bits/fcntl-linux.h>
++diff --git a/libc/sysdeps/linux/h8300/bits/fcntl.h b/libc/sysdeps/linux/h8300/bits/fcntl.h
++index 2062f7cda..7cbe04e15 100644
++--- a/libc/sysdeps/linux/h8300/bits/fcntl.h
+++++ b/libc/sysdeps/linux/h8300/bits/fcntl.h
++@@ -244,3 +244,5 @@ extern ssize_t tee (int __fdin, int __fdout, size_t __len,
++ #endif
++ __END_DECLS
++ 
+++/* Include generic Linux declarations.  */
+++#include <bits/fcntl-linux.h>
++diff --git a/libc/sysdeps/linux/hppa/bits/fcntl.h b/libc/sysdeps/linux/hppa/bits/fcntl.h
++index 4ce76ce5f..bcd6618b2 100644
++--- a/libc/sysdeps/linux/hppa/bits/fcntl.h
+++++ b/libc/sysdeps/linux/hppa/bits/fcntl.h
++@@ -234,3 +234,5 @@ extern ssize_t tee (int __fdin, int __fdout, size_t __len,
++ #endif
++ __END_DECLS
++ 
+++/* Include generic Linux declarations.  */
+++#include <bits/fcntl-linux.h>
++diff --git a/libc/sysdeps/linux/i386/bits/fcntl.h b/libc/sysdeps/linux/i386/bits/fcntl.h
++index f3c08bbe5..5caf66114 100644
++--- a/libc/sysdeps/linux/i386/bits/fcntl.h
+++++ b/libc/sysdeps/linux/i386/bits/fcntl.h
++@@ -245,3 +245,5 @@ extern ssize_t tee (int __fdin, int __fdout, size_t __len,
++ #endif
++ __END_DECLS
++ 
+++/* Include generic Linux declarations.  */
+++#include <bits/fcntl-linux.h>
++diff --git a/libc/sysdeps/linux/ia64/bits/fcntl.h b/libc/sysdeps/linux/ia64/bits/fcntl.h
++index a20f44ff7..53263c3d3 100644
++--- a/libc/sysdeps/linux/ia64/bits/fcntl.h
+++++ b/libc/sysdeps/linux/ia64/bits/fcntl.h
++@@ -238,3 +238,5 @@ extern ssize_t tee (int __fdin, int __fdout, size_t __len,
++ #endif
++ __END_DECLS
++ 
+++/* Include generic Linux declarations.  */
+++#include <bits/fcntl-linux.h>
++diff --git a/libc/sysdeps/linux/kvx/bits/fcntl.h b/libc/sysdeps/linux/kvx/bits/fcntl.h
++index ea0c59d09..79cd3f14e 100644
++--- a/libc/sysdeps/linux/kvx/bits/fcntl.h
+++++ b/libc/sysdeps/linux/kvx/bits/fcntl.h
++@@ -227,3 +227,6 @@ extern ssize_t tee (int __fdin, int __fdout, size_t __len,
++ 
++ #endif
++ __END_DECLS
+++
+++/* Include generic Linux declarations.  */
+++#include <bits/fcntl-linux.h>
++diff --git a/libc/sysdeps/linux/lm32/bits/fcntl.h b/libc/sysdeps/linux/lm32/bits/fcntl.h
++index 0bfea6e7a..049c7fd83 100644
++--- a/libc/sysdeps/linux/lm32/bits/fcntl.h
+++++ b/libc/sysdeps/linux/lm32/bits/fcntl.h
++@@ -244,3 +244,5 @@ extern ssize_t tee (int __fdin, int __fdout, size_t __len,
++ #endif
++ __END_DECLS
++ 
+++/* Include generic Linux declarations.  */
+++#include <bits/fcntl-linux.h>
++diff --git a/libc/sysdeps/linux/m68k/bits/fcntl.h b/libc/sysdeps/linux/m68k/bits/fcntl.h
++index 5a56c8781..92c0964d9 100644
++--- a/libc/sysdeps/linux/m68k/bits/fcntl.h
+++++ b/libc/sysdeps/linux/m68k/bits/fcntl.h
++@@ -244,3 +244,5 @@ extern ssize_t tee (int __fdin, int __fdout, size_t __len,
++ #endif
++ __END_DECLS
++ 
+++/* Include generic Linux declarations.  */
+++#include <bits/fcntl-linux.h>
++diff --git a/libc/sysdeps/linux/metag/bits/fcntl.h b/libc/sysdeps/linux/metag/bits/fcntl.h
++index bdd697348..471938b7d 100644
++--- a/libc/sysdeps/linux/metag/bits/fcntl.h
+++++ b/libc/sysdeps/linux/metag/bits/fcntl.h
++@@ -244,3 +244,5 @@ extern ssize_t tee (int __fdin, int __fdout, size_t __len,
++ #endif
++ __END_DECLS
++ 
+++/* Include generic Linux declarations.  */
+++#include <bits/fcntl-linux.h>
++diff --git a/libc/sysdeps/linux/microblaze/bits/fcntl.h b/libc/sysdeps/linux/microblaze/bits/fcntl.h
++index 110927d95..8c9c2ceef 100644
++--- a/libc/sysdeps/linux/microblaze/bits/fcntl.h
+++++ b/libc/sysdeps/linux/microblaze/bits/fcntl.h
++@@ -244,3 +244,5 @@ extern ssize_t tee (int __fdin, int __fdout, size_t __len,
++ #endif
++ __END_DECLS
++ 
+++/* Include generic Linux declarations.  */
+++#include <bits/fcntl-linux.h>
++diff --git a/libc/sysdeps/linux/mips/bits/fcntl.h b/libc/sysdeps/linux/mips/bits/fcntl.h
++index 33251c74d..a98b8c2e5 100644
++--- a/libc/sysdeps/linux/mips/bits/fcntl.h
+++++ b/libc/sysdeps/linux/mips/bits/fcntl.h
++@@ -268,3 +268,5 @@ extern ssize_t tee (int __fdin, int __fdout, size_t __len,
++ #endif
++ __END_DECLS
++ 
+++/* Include generic Linux declarations.  */
+++#include <bits/fcntl-linux.h>
++diff --git a/libc/sysdeps/linux/nds32/bits/fcntl.h b/libc/sysdeps/linux/nds32/bits/fcntl.h
++index 2e6a95ec8..cfce8ab27 100644
++--- a/libc/sysdeps/linux/nds32/bits/fcntl.h
+++++ b/libc/sysdeps/linux/nds32/bits/fcntl.h
++@@ -249,3 +249,5 @@ extern ssize_t tee (int __fdin, int __fdout, size_t __len,
++ #endif
++ __END_DECLS
++ 
+++/* Include generic Linux declarations.  */
+++#include <bits/fcntl-linux.h>
++diff --git a/libc/sysdeps/linux/nios2/bits/fcntl.h b/libc/sysdeps/linux/nios2/bits/fcntl.h
++index 200a35443..0c11c3aba 100644
++--- a/libc/sysdeps/linux/nios2/bits/fcntl.h
+++++ b/libc/sysdeps/linux/nios2/bits/fcntl.h
++@@ -244,3 +244,5 @@ extern ssize_t tee (int __fdin, int __fdout, size_t __len,
++ #endif
++ __END_DECLS
++ 
+++/* Include generic Linux declarations.  */
+++#include <bits/fcntl-linux.h>
++diff --git a/libc/sysdeps/linux/or1k/bits/fcntl.h b/libc/sysdeps/linux/or1k/bits/fcntl.h
++index c9599ef3a..78eed9d5f 100644
++--- a/libc/sysdeps/linux/or1k/bits/fcntl.h
+++++ b/libc/sysdeps/linux/or1k/bits/fcntl.h
++@@ -244,3 +244,6 @@ extern ssize_t tee (int __fdin, int __fdout, size_t __len,
++ 
++ #endif
++ __END_DECLS
+++
+++/* Include generic Linux declarations.  */
+++#include <bits/fcntl-linux.h>
++diff --git a/libc/sysdeps/linux/powerpc/bits/fcntl.h b/libc/sysdeps/linux/powerpc/bits/fcntl.h
++index ef1beeca0..54e4894ec 100644
++--- a/libc/sysdeps/linux/powerpc/bits/fcntl.h
+++++ b/libc/sysdeps/linux/powerpc/bits/fcntl.h
++@@ -245,3 +245,5 @@ extern ssize_t tee (int __fdin, int __fdout, size_t __len,
++ #endif
++ __END_DECLS
++ 
+++/* Include generic Linux declarations.  */
+++#include <bits/fcntl-linux.h>
++diff --git a/libc/sysdeps/linux/riscv32/bits/fcntl.h b/libc/sysdeps/linux/riscv32/bits/fcntl.h
++index a9d7c84e0..fdfb1805d 100644
++--- a/libc/sysdeps/linux/riscv32/bits/fcntl.h
+++++ b/libc/sysdeps/linux/riscv32/bits/fcntl.h
++@@ -229,3 +229,6 @@ extern ssize_t tee (int __fdin, int __fdout, size_t __len,
++ 
++ #endif
++ __END_DECLS
+++
+++/* Include generic Linux declarations.  */
+++#include <bits/fcntl-linux.h>
++diff --git a/libc/sysdeps/linux/riscv64/bits/fcntl.h b/libc/sysdeps/linux/riscv64/bits/fcntl.h
++index a9d7c84e0..fdfb1805d 100644
++--- a/libc/sysdeps/linux/riscv64/bits/fcntl.h
+++++ b/libc/sysdeps/linux/riscv64/bits/fcntl.h
++@@ -229,3 +229,6 @@ extern ssize_t tee (int __fdin, int __fdout, size_t __len,
++ 
++ #endif
++ __END_DECLS
+++
+++/* Include generic Linux declarations.  */
+++#include <bits/fcntl-linux.h>
++diff --git a/libc/sysdeps/linux/sh/bits/fcntl.h b/libc/sysdeps/linux/sh/bits/fcntl.h
++index 0d687f04f..4ae682425 100644
++--- a/libc/sysdeps/linux/sh/bits/fcntl.h
+++++ b/libc/sysdeps/linux/sh/bits/fcntl.h
++@@ -245,3 +245,5 @@ extern ssize_t tee (int __fdin, int __fdout, size_t __len,
++ #endif
++ __END_DECLS
++ 
+++/* Include generic Linux declarations.  */
+++#include <bits/fcntl-linux.h>
++diff --git a/libc/sysdeps/linux/sparc/bits/fcntl.h b/libc/sysdeps/linux/sparc/bits/fcntl.h
++index 935495937..35224cdb3 100644
++--- a/libc/sysdeps/linux/sparc/bits/fcntl.h
+++++ b/libc/sysdeps/linux/sparc/bits/fcntl.h
++@@ -252,3 +252,5 @@ extern ssize_t tee (int __fdin, int __fdout, size_t __len,
++ #endif
++ __END_DECLS
++ 
+++/* Include generic Linux declarations.  */
+++#include <bits/fcntl-linux.h>
++diff --git a/libc/sysdeps/linux/sparc64/bits/fcntl.h b/libc/sysdeps/linux/sparc64/bits/fcntl.h
++index 395c95baf..00e91a671 100644
++--- a/libc/sysdeps/linux/sparc64/bits/fcntl.h
+++++ b/libc/sysdeps/linux/sparc64/bits/fcntl.h
++@@ -248,3 +248,5 @@ extern ssize_t tee (int __fdin, int __fdout, size_t __len,
++ #endif
++ __END_DECLS
++ 
+++/* Include generic Linux declarations.  */
+++#include <bits/fcntl-linux.h>
++diff --git a/libc/sysdeps/linux/tile/bits/fcntl.h b/libc/sysdeps/linux/tile/bits/fcntl.h
++index 818da5c4a..28fda899d 100644
++--- a/libc/sysdeps/linux/tile/bits/fcntl.h
+++++ b/libc/sysdeps/linux/tile/bits/fcntl.h
++@@ -229,3 +229,6 @@ extern ssize_t tee (int __fdin, int __fdout, size_t __len,
++ 
++ #endif
++ __END_DECLS
+++
+++/* Include generic Linux declarations.  */
+++#include <bits/fcntl-linux.h>
++diff --git a/libc/sysdeps/linux/x86_64/bits/fcntl.h b/libc/sysdeps/linux/x86_64/bits/fcntl.h
++index 3547a2046..821b2e3cc 100644
++--- a/libc/sysdeps/linux/x86_64/bits/fcntl.h
+++++ b/libc/sysdeps/linux/x86_64/bits/fcntl.h
++@@ -259,3 +259,5 @@ extern ssize_t tee (int __fdin, int __fdout, size_t __len,
++ #endif
++ __END_DECLS
++ 
+++/* Include generic Linux declarations.  */
+++#include <bits/fcntl-linux.h>
++diff --git a/libc/sysdeps/linux/xtensa/bits/fcntl.h b/libc/sysdeps/linux/xtensa/bits/fcntl.h
++index 5af9d2124..9bc5fa893 100644
++--- a/libc/sysdeps/linux/xtensa/bits/fcntl.h
+++++ b/libc/sysdeps/linux/xtensa/bits/fcntl.h
++@@ -245,3 +245,5 @@ extern ssize_t tee (int __fdin, int __fdout, size_t __len,
++ #endif
++ __END_DECLS
++ 
+++/* Include generic Linux declarations.  */
+++#include <bits/fcntl-linux.h>
++-- 
++2.30.2
++
 -- 
-2.46.0
+2.30.2
 
 _______________________________________________
 buildroot mailing list
