@@ -1,70 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 61F9EC3DA4A
-	for <buildroot@archiver.kernel.org>; Sun, 11 Aug 2024 13:17:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D693C3DA4A
+	for <buildroot@archiver.kernel.org>; Sun, 11 Aug 2024 14:14:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8575081113;
-	Sun, 11 Aug 2024 13:17:13 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sxOkup1aXNYG; Sun, 11 Aug 2024 13:17:12 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3D86A810F7
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3D86A810F7;
-	Sun, 11 Aug 2024 13:17:12 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 91C3C1BF397
- for <buildroot@lists.busybox.net>; Sun, 11 Aug 2024 13:17:11 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8A0D1403AC
- for <buildroot@lists.busybox.net>; Sun, 11 Aug 2024 13:17:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 088B640632;
+	Sun, 11 Aug 2024 14:14:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SHAtDnTJK-Tm for <buildroot@lists.busybox.net>;
- Sun, 11 Aug 2024 13:17:10 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1828:2000:679::23; helo=helium.openadk.org;
- envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 7D540403A6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7D540403A6
-Received: from helium.openadk.org (helium.openadk.org
- [IPv6:2a00:1828:2000:679::23])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7D540403A6
- for <buildroot@buildroot.org>; Sun, 11 Aug 2024 13:17:08 +0000 (UTC)
-Received: by helium.openadk.org (Postfix, from userid 1000)
- id 700A7353DA99; Sun, 11 Aug 2024 15:17:04 +0200 (CEST)
-Date: Sun, 11 Aug 2024 15:17:04 +0200
-From: Waldemar Brodkorb <wbx@openadk.org>
+ id 0DNd_hwN-Atw; Sun, 11 Aug 2024 14:14:14 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 38C0A40633
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 38C0A40633;
+	Sun, 11 Aug 2024 14:14:14 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id B59651BF409
+ for <buildroot@lists.busybox.net>; Sun, 11 Aug 2024 14:14:12 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id A32C140633
+ for <buildroot@lists.busybox.net>; Sun, 11 Aug 2024 14:14:12 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id YhqubsuADrZq for <buildroot@lists.busybox.net>;
+ Sun, 11 Aug 2024 14:14:11 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 7EE5C40632
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7EE5C40632
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7EE5C40632
+ for <buildroot@buildroot.org>; Sun, 11 Aug 2024 14:14:09 +0000 (UTC)
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id EDFD3B0051B;
+ Sun, 11 Aug 2024 16:14:03 +0200 (CEST)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Message-ID: <Zri50N1KfTZ1bLqc@waldemar-brodkorb.de>
+Date: Sun, 11 Aug 2024 16:13:56 +0200
+Message-ID: <20240811141356.1201929-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.46.0
 MIME-Version: 1.0
-Content-Disposition: inline
-X-Operating-System: Linux 5.10.0-31-amd64 x86_64
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=openadk.org; s=2022; 
- t=1723382224; bh=stfCGcm8QnU/SQIHtja8YmPU4cPetJIAeSYda/DJnks=;
- h=Date:From:To:Subject:From;
- b=LbaRZDPf2hKCog2GkMcWQ+mfIPpe1wVuyNAky/RbrmkSfRWrn5mXzrPzrcLWJlSIO
- NWggDeP9jTb3Sk1OjP5GLiP33CMBO1do7efHlY3WYpP/34PJR3dTorioHkBPa3N4CN
- 9NtYHUyvhmo/UhoQUdkxNivTZiURXKJr9BurRWDUhi5erGB+M3+q6OUp0YWLaQYN80
- SgxYkwMUh6kiQrsVv25Rp/aIuVDSBx7kz7V5OkkutBvSKu7oz5oPf4TVPHKQZWX8Le
- k24oaQl9VH0W15Omk37TaSpK6jZRt7YCwCQS7H8mOoKhbh4pyHR3c4WAHaH+Svg/W2
- Lbu9R9soiq3fw==
+ d=free.fr; s=smtp-20201208; t=1723385646;
+ bh=FsPzGEk35tgeSAAfnXiK/Jq0sQrHJ1otl9fMtZHjc6I=;
+ h=From:To:Cc:Subject:Date:From;
+ b=LV0duJmz8JIL/pb61t3gvWihsUVZNmAk19jfaXJTzoijy/hVjrIcQvGwEelisWJQu
+ uv/7r6SUNQZqypF20PdJy9oh0vlv2nR73rmy4CEvRHVkx9iETteMrrZ3k9Gnr1viOQ
+ DehIumdxRybjuxTIb3T5OOzAC1tXWhuutRS8qGV6hGiLAyWxqhTeWe3J5xHWP/SVWq
+ KLbds942OCAtGifeBpRkA3bZwbRrbt/MaGEn2A9HP92+fUBDrUiBQRVs+2fID1kiMK
+ LW46wdiRiDF1DArJuNsformWH+jBa4xordhpttUaywacNgxnzPj+z68uSO1EfBFwSW
+ KFPJEQzHY7YCw==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=openadk.org
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=openadk.org header.i=@openadk.org header.a=rsa-sha256
- header.s=2022 header.b=LbaRZDPf
-Subject: [Buildroot] [PATCH next] package/bind: update to 9.18.28
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=LV0duJmz
+Subject: [Buildroot] [PATCH 1/1] package/libgpg-error: needs MMU
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,122 +76,234 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Julien Olivain <ju.o@free.fr>,
+ Marcus Folkesson <marcus.folkesson@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Bind 9.16.x is EOL since April 2024.
-See here for what version should be used in production:
-https://kb.isc.org/docs/aa-01540
+libgpg-error imported code using fork() in commit [1] and enabled it
+soon after in [2]. Those commits were first included in libgpg-error
+version 1.28.
 
-Remove patch 0001 as CC_FOR_BUILD is used in upstream code
-to compile host utility gen.
+For reference, the libgpg-error Buildroot package was updated to that
+version in commit [3].
 
-See here for a changelog:
-https://downloads.isc.org/isc/bind9/9.18.28/doc/arm/html/notes.html
+When Buildroot configuration has no MMU support (e.g. BR2_USE_MMU is
+not set), libgpg-error fails to build with error:
 
-COPYRIGHT file has been updated, following Copyright holders were
-added:
-Copyright Joyent, Inc. and other Node contributors. All rights reserved.
+    /build/host/opt/ext-toolchain/arm-buildroot-uclinux-uclibcgnueabi/bin/ld.real: ./.libs/libgpg-error.a(libgpg_error_la-spawn-posix.o): in function '_gpgrt_process_spawn':
+    spawn-posix.c:(.text+0x630): undefined reference to 'fork'
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+This issue can be observed with the command:
+
+    utils/test-pkg -a -p libgpg-error
+
+It will show few build failures:
+
+    ...
+       bootlin-armv7m-uclibc [ 6/41]: FAILED
+    ...
+    bootlin-m68k-5208-uclibc [ 8/41]: FAILED
+    ...
+
+This commit fixes the issue by adding the package dependency on
+BR2_USE_MMU.
+
+This commit also propagates this dependency on the libgcrypt and
+libksba packages. They are requiring libgpg-error but had no
+dependency on MMU.
+
+Finally, for completeness, for all other packages requiring
+libgpg-error which already had the dependency on BR2_USE_MMU, the
+corresponding comment is updated to reflect that change. Namely: gcr,
+gnupg2, libassuan, libgpgme, libostree, netatalk, pinentry, vpnc, and
+wireshark. Note: for simplifity, few packages already depending on
+BR2_USE_MMU but having libgpg-error as an optional dependency are not
+updated (libjcat, mutt and opkg).
+
+Fixes:
+http://autobuild.buildroot.org/results/dbc82ba08e6a30c2f558c8c36ad7eeb0e3cab090/
+http://autobuild.buildroot.org/results/074a803de0f48cd86b9135cca50f136cccf1bcea/
+http://autobuild.buildroot.org/results/4c1966a71020af31c1dc1b0a13a3928c84e75874/
+...and many others.
+
+[1] https://git.gnupg.org/cgi-bin/gitweb.cgi?p=libgpg-error.git;a=commitdiff;h=8f41cc23b12485404203be5881aaaadb78696b4d
+[2] https://git.gnupg.org/cgi-bin/gitweb.cgi?p=libgpg-error.git;a=commitdiff;h=1865c0ba1769b407a3c504f1ab0a4278704a9fc1
+[3] https://gitlab.com/buildroot.org/buildroot/-/commit/692d191c8b0b3c86022e6a6ba3bd2d8f53b39f03
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- .checkpackageignore           |  1 -
- package/bind/0001-cross.patch | 34 ----------------------------------
- package/bind/bind.hash        |  8 ++++----
- package/bind/bind.mk          |  3 ++-
- 4 files changed, 6 insertions(+), 40 deletions(-)
- delete mode 100644 package/bind/0001-cross.patch
+ package/gcr/Config.in          | 2 +-
+ package/gnupg2/Config.in       | 2 +-
+ package/libassuan/Config.in    | 2 +-
+ package/libgcrypt/Config.in    | 1 +
+ package/libgpg-error/Config.in | 1 +
+ package/libgpgme/Config.in     | 2 +-
+ package/libksba/Config.in      | 1 +
+ package/libostree/Config.in    | 2 +-
+ package/netatalk/Config.in     | 2 +-
+ package/pinentry/Config.in     | 2 +-
+ package/vpnc/Config.in         | 2 +-
+ package/wireshark/Config.in    | 2 +-
+ 12 files changed, 12 insertions(+), 9 deletions(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 8fe4a16eb8..4f78f7d4aa 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -338,7 +338,6 @@ package/benejson/0001-c-std.patch lib_patch.Upstream
- package/benejson/0002-Use-print-as-a-function-for-Py3-compatibility.patch lib_patch.Upstream
- package/berkeleydb/0001-cwd-db_config.patch lib_patch.Upstream
- package/berkeleydb/0002-atomic_compare_exchange.patch lib_patch.Upstream
--package/bind/0001-cross.patch lib_patch.Upstream
- package/bind/S81named Shellcheck lib_sysv.Indent lib_sysv.Variables
- package/bird/0001-configure.ac-fix-build-with-autoconf-2.70.patch lib_patch.Upstream
- package/bmx7/0001-Fix-schedule.c-378-36-error-SIOCGSTAMP-undeclared.patch lib_patch.Upstream
-diff --git a/package/bind/0001-cross.patch b/package/bind/0001-cross.patch
-deleted file mode 100644
-index f39be2f837..0000000000
---- a/package/bind/0001-cross.patch
-+++ /dev/null
-@@ -1,34 +0,0 @@
--From 505cc9fcadda5607dc4c5bacb03928c0b35162a8 Mon Sep 17 00:00:00 2001
--From: Gustavo Zacarias <gustavo@zacarias.com.ar>
--Date: Wed, 4 Nov 2020 17:51:38 +0100
--Subject: [PATCH] Use host compiler to build 'gen' since it's run when
-- building.
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
--[Fabrice: updated for 9.11.10]
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-----
-- lib/dns/Makefile.in | 6 ++----
-- 1 file changed, 2 insertions(+), 4 deletions(-)
--
--diff --git a/lib/dns/Makefile.in b/lib/dns/Makefile.in
--index 8fc4e94f26..4ac92857e0 100644
----- a/lib/dns/Makefile.in
--+++ b/lib/dns/Makefile.in
--@@ -184,10 +184,8 @@ code.h:	gen
-- 	./gen -s ${srcdir} > code.h || { rm -f $@ ; exit 1; }
-- 
-- gen: gen.c
---	${BUILD_CC} ${BUILD_CFLAGS} -I${top_srcdir}/lib/isc/include \
---	${LFS_CFLAGS} ${LFS_LDFLAGS} \
---	${BUILD_CPPFLAGS} ${BUILD_LDFLAGS} -o $@ ${srcdir}/gen.c \
---	${BUILD_LIBS} ${LFS_LIBS}
--+	${HOSTCC} ${HOST_CFLAGS} -I${top_srcdir}/lib/isc/include \
--+	${HOST_LDFLAGS} -o $@ ${srcdir}/gen.c
-- 
-- timestamp: include libdns.@A@
-- 	touch timestamp
---- 
--2.29.1
--
-diff --git a/package/bind/bind.hash b/package/bind/bind.hash
-index 482b046c8d..feb3430a73 100644
---- a/package/bind/bind.hash
-+++ b/package/bind/bind.hash
-@@ -1,4 +1,4 @@
--# Verified from https://ftp.isc.org/isc/bind9/9.16.48/bind-9.16.48.tar.xz.asc
--# with key AADBBA5074F1402F7B69D56BC5B4EE931A9F9DFD
--sha256  8d3814582348f90dead1ad410b1019094cd399d3d83930abebb2b3b1eb0b2bbb  bind-9.16.48.tar.xz
--sha256  13491a682dc0f5ee2273cebd3949e2be62f9470fe659419a03a308d4f444773b  COPYRIGHT
-+# Verified from https://ftp.isc.org/isc/bind9/9.18.28/bind-9.18.28.tar.xz.asc
-+# with key 706B6C28620E76F91D11F7DF510A642A06C52CEC
-+sha256  e7cce9a165f7b619eefc4832f0a8dc16b005d29e3890aed6008c506ea286a5e7  bind-9.18.28.tar.xz
-+sha256  9734825d67a3ac967b2c2f7c9a83c9e5db1c2474dbe9599157c3a4188749ebd4  COPYRIGHT
-diff --git a/package/bind/bind.mk b/package/bind/bind.mk
-index 0d81ffabd6..b6a2ee272b 100644
---- a/package/bind/bind.mk
-+++ b/package/bind/bind.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/gcr/Config.in b/package/gcr/Config.in
+index dbc22cf478..e4a90a5550 100644
+--- a/package/gcr/Config.in
++++ b/package/gcr/Config.in
+@@ -3,7 +3,7 @@ config BR2_PACKAGE_GCR
+ 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt -> libgpg-error
+ 	depends on BR2_USE_WCHAR # libglib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
+-	depends on BR2_USE_MMU # libglib2
++	depends on BR2_USE_MMU # libglib2, libgpg-error
+ 	depends on !BR2_STATIC_LIBS # p11-kit
+ 	select BR2_PACKAGE_GNUPG2 if BR2_PACKAGE_GNUPG2_DEPENDS && !BR2_PACKAGE_GNUPG # runtime
+ 	select BR2_PACKAGE_GNUPG if !BR2_PACKAGE_GNUPG2_DEPENDS # runtime
+diff --git a/package/gnupg2/Config.in b/package/gnupg2/Config.in
+index 043d53554c..b282520dd8 100644
+--- a/package/gnupg2/Config.in
++++ b/package/gnupg2/Config.in
+@@ -11,7 +11,7 @@ config BR2_PACKAGE_GNUPG2_DEPENDS
+ 	default y
+ 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgpg-error
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libnpth
+-	depends on BR2_USE_MMU # libassuan, libnpth
++	depends on BR2_USE_MMU # libassuan, libgpg-error, libnpth
+ 	depends on !BR2_STATIC_LIBS
  
--BIND_VERSION = 9.16.48
-+BIND_VERSION = 9.18.28
- BIND_SOURCE= bind-$(BIND_VERSION).tar.xz
- BIND_SITE = https://ftp.isc.org/isc/bind9/$(BIND_VERSION)
- # bind does not support parallel builds.
-@@ -31,6 +31,7 @@ BIND_CONF_OPTS = \
- 	--without-cmocka \
- 	--without-lmdb \
- 	--enable-epoll \
-+	--disable-doh \
- 	--disable-backtrace \
- 	--with-openssl=$(STAGING_DIR)/usr
- 
+ config BR2_PACKAGE_GNUPG2
+diff --git a/package/libassuan/Config.in b/package/libassuan/Config.in
+index 012e65c4b6..8e860e86a1 100644
+--- a/package/libassuan/Config.in
++++ b/package/libassuan/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_LIBASSUAN
+ 	bool "libassuan"
+ 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgpg-error
+-	depends on BR2_USE_MMU # fork()
++	depends on BR2_USE_MMU # fork(), libgpg-error
+ 	select BR2_PACKAGE_LIBGPG_ERROR
+ 	help
+ 	  Libassuan is a small library implementing the so-called
+diff --git a/package/libgcrypt/Config.in b/package/libgcrypt/Config.in
+index d3e5d4f7a2..a4df65a37c 100644
+--- a/package/libgcrypt/Config.in
++++ b/package/libgcrypt/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_LIBGCRYPT
+ 	bool "libgcrypt"
+ 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgpg-error
++	depends on BR2_USE_MMU # libgpg-error
+ 	select BR2_PACKAGE_LIBGPG_ERROR
+ 	help
+ 	  LibGCrypt is GNU's basic cryptographic library.
+diff --git a/package/libgpg-error/Config.in b/package/libgpg-error/Config.in
+index 5a2c14ead8..8e466e86e0 100644
+--- a/package/libgpg-error/Config.in
++++ b/package/libgpg-error/Config.in
+@@ -19,6 +19,7 @@ config BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS
+ config BR2_PACKAGE_LIBGPG_ERROR
+ 	bool "libgpg-error"
+ 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS
++	depends on BR2_USE_MMU # fork()
+ 	help
+ 	  Libgpg-error is a small library with error codes and
+ 	  descriptions shared by most GnuPG related software.
+diff --git a/package/libgpgme/Config.in b/package/libgpgme/Config.in
+index 16ce27d0ef..51c4f228e4 100644
+--- a/package/libgpgme/Config.in
++++ b/package/libgpgme/Config.in
+@@ -1,7 +1,7 @@
+ config BR2_PACKAGE_LIBGPGME
+ 	bool "libgpgme"
+ 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgpg-error
+-	depends on BR2_USE_MMU # libassuan
++	depends on BR2_USE_MMU # libassuan, libgpg-error
+ 	select BR2_PACKAGE_GNUPG2 if BR2_PACKAGE_GNUPG2_DEPENDS && !BR2_PACKAGE_GNUPG # runtime
+ 	select BR2_PACKAGE_GNUPG if !BR2_PACKAGE_GNUPG2_DEPENDS # runtime
+ 	select BR2_PACKAGE_LIBGPG_ERROR
+diff --git a/package/libksba/Config.in b/package/libksba/Config.in
+index 1f25d6dbe2..7d764c2461 100644
+--- a/package/libksba/Config.in
++++ b/package/libksba/Config.in
+@@ -1,6 +1,7 @@
+ config BR2_PACKAGE_LIBKSBA
+ 	bool "libksba"
+ 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgpg-error
++	depends on BR2_USE_MMU # libgpg-error
+ 	select BR2_PACKAGE_LIBGPG_ERROR
+ 	help
+ 	  CMS and X.509 library
+diff --git a/package/libostree/Config.in b/package/libostree/Config.in
+index 49eed6517e..847a9ed17b 100644
+--- a/package/libostree/Config.in
++++ b/package/libostree/Config.in
+@@ -3,7 +3,7 @@ config BR2_PACKAGE_LIBOSTREE
+ 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgpgme, libgpg-error
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
+ 	depends on BR2_USE_WCHAR # libglib2
+-	depends on BR2_USE_MMU # e2fsprogs, libglib2, libgpgme
++	depends on BR2_USE_MMU # e2fsprogs, libglib2, libgpgme, libgpg-error
+ 	# doesn't build with musl due to lack of TEMP_FAILURE_RETRY()
+ 	depends on !BR2_TOOLCHAIN_USES_MUSL
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_8 # loop_config
+diff --git a/package/netatalk/Config.in b/package/netatalk/Config.in
+index 225d5891c7..60189f320e 100644
+--- a/package/netatalk/Config.in
++++ b/package/netatalk/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_NETATALK
+ 	bool "netatalk"
+ 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgpg-error
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+-	depends on BR2_USE_MMU # fork()
++	depends on BR2_USE_MMU # fork(), libgpg-error
+ 	depends on !BR2_STATIC_LIBS
+ 	select BR2_PACKAGE_BERKELEYDB
+ 	select BR2_PACKAGE_OPENSSL
+diff --git a/package/pinentry/Config.in b/package/pinentry/Config.in
+index bd5e3af5a1..401c60323d 100644
+--- a/package/pinentry/Config.in
++++ b/package/pinentry/Config.in
+@@ -1,7 +1,7 @@
+ menuconfig BR2_PACKAGE_PINENTRY
+ 	bool "pinentry"
+ 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgpg-error
+-	depends on BR2_USE_MMU # libassuan
++	depends on BR2_USE_MMU # libassuan, libgpg-error
+ 	select BR2_PACKAGE_LIBASSUAN
+ 	select BR2_PACKAGE_LIBGPG_ERROR
+ 	# At least one backend is needed to avoid build breakage
+diff --git a/package/vpnc/Config.in b/package/vpnc/Config.in
+index 6455b0d87a..b71c0e613e 100644
+--- a/package/vpnc/Config.in
++++ b/package/vpnc/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_VPNC
+ 	bool "vpnc"
+ 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt
+ 	depends on !BR2_STATIC_LIBS # gnutls
+-	depends on BR2_USE_MMU # fork()
++	depends on BR2_USE_MMU # fork(), libgpg-error
+ 	depends on BR2_USE_WCHAR # gnutls
+ 	select BR2_PACKAGE_LIBGCRYPT
+ 	select BR2_PACKAGE_LIBGPG_ERROR
+diff --git a/package/wireshark/Config.in b/package/wireshark/Config.in
+index 8b05599ecb..ce9d41bf00 100644
+--- a/package/wireshark/Config.in
++++ b/package/wireshark/Config.in
+@@ -2,7 +2,7 @@ config BR2_PACKAGE_WIRESHARK
+ 	bool "wireshark"
+ 	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # libgcrypt -> libgpg-error
+ 	depends on !BR2_STATIC_LIBS
+-	depends on BR2_USE_MMU # fork(), glib2
++	depends on BR2_USE_MMU # fork(), glib2, libgcrypt -> libgpg-error
+ 	depends on BR2_USE_WCHAR # glib2
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # glib2
+ 	depends on BR2_INSTALL_LIBSTDCPP
 -- 
-2.39.2
+2.46.0
 
 _______________________________________________
 buildroot mailing list
