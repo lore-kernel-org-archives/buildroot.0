@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0BEA8C52D7C
-	for <buildroot@archiver.kernel.org>; Mon, 12 Aug 2024 09:17:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D792BC52D7C
+	for <buildroot@archiver.kernel.org>; Mon, 12 Aug 2024 09:17:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CB17B40404;
-	Mon, 12 Aug 2024 09:17:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8D1304055C;
+	Mon, 12 Aug 2024 09:17:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ts6I2g26rC7B; Mon, 12 Aug 2024 09:17:06 +0000 (UTC)
+ id VxW_dvgz17UA; Mon, 12 Aug 2024 09:17:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 662914050D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1AFD24043A
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 662914050D;
-	Mon, 12 Aug 2024 09:17:06 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 36BF51BF951
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1AFD24043A;
+	Mon, 12 Aug 2024 09:17:09 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 41A421BF955
  for <buildroot@lists.busybox.net>; Mon, 12 Aug 2024 09:16:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2360C40198
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2EEB0404C3
  for <buildroot@lists.busybox.net>; Mon, 12 Aug 2024 09:16:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2Dn2-L-zknyl for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id RI5-97a9337H for <buildroot@lists.busybox.net>;
  Mon, 12 Aug 2024 09:16:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 212DD40196
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2EEF640274
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 212DD40196
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2EEF640274
  for <buildroot@buildroot.org>; Mon, 12 Aug 2024 09:16:57 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0E41484495; Mon, 12 Aug 2024 09:16:57 +0000 (UTC)
+ id 1A66184496; Mon, 12 Aug 2024 09:16:57 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 12 Aug 2024 11:13:33 +0200
+Date: Mon, 12 Aug 2024 11:13:41 +0200
 X-Git-Refname: refs/heads/2024.05.x
-X-Git-Oldrev: 4be8ba1629b5ec8606806f4573d81bd37693106c
-X-Git-Newrev: ef7cf5871451666a4bc1357a90f5798afd1d58a8
+X-Git-Oldrev: ef7cf5871451666a4bc1357a90f5798afd1d58a8
+X-Git-Newrev: aeced848bd5588dd62a1556d2d8093615d349cfa
 X-Patchwork-Hint: ignore
-Message-Id: <20240812091657.0E41484495@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.05.x] package/mupdf: fix
- building shared libraries
+Message-Id: <20240812091657.1A66184496@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.05.x] package/mupdf: drop
+ MUPDF_CFLAGS/MUPDF_LDFLAGS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,67 +60,49 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============2231786478924963570=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============2231786478924963570==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=ef7cf5871451666a4bc1357a90f5798afd1d58a8
+commit: https://git.buildroot.net/buildroot/commit/?id=aeced848bd5588dd62a1556d2d8093615d349cfa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.05.x
 
-By default mupdf generates static libraries, shared libraries must be
-enabled explicitely.
+Now that MUPDF_CFLAGS and MUPDF_LDFLAGS are just TARGET_CFLAGS and
+TARGET_LDFLAGS, drop them.
 
-Also, when building shared libraries, mupdf's Makefile properly passes
--fPIC, so adding it manually to MUPDF_CFLAGS is not needed.
-
-Signed-off-by: Raphaël Mélotte <raphael.melotte@mind.be>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 401162d4a947184654d8202392425a625d000172)
+(cherry picked from commit 90f0a484671098f9a94ce66b8f8af94e106ae106)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mupdf/mupdf.mk | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ package/mupdf/mupdf.mk | 10 ++--------
+ 1 file changed, 2 insertions(+), 8 deletions(-)
 
 diff --git a/package/mupdf/mupdf.mk b/package/mupdf/mupdf.mk
-index 4aef0f99e7..e3fe66e396 100644
+index e3fe66e396..5f73b680a6 100644
 --- a/package/mupdf/mupdf.mk
 +++ b/package/mupdf/mupdf.mk
-@@ -23,8 +23,7 @@ MUPDF_DEPENDENCIES = \
+@@ -22,17 +22,11 @@ MUPDF_DEPENDENCIES = \
+ 	xlib_libX11 \
  	zlib
  
- MUPDF_CFLAGS = \
--	$(TARGET_CFLAGS) \
--	-fPIC # -fPIC is needed because the Makefile doesn't append it.
-+	$(TARGET_CFLAGS)
+-MUPDF_CFLAGS = \
+-	$(TARGET_CFLAGS)
+-
+-MUPDF_LDFLAGS = \
+-	$(TARGET_LDFLAGS)
+-
+ # mupdf doesn't use CFLAGS and LIBS but XCFLAGS and XLIBS instead.
+ # with USE_SYSTEM_LIBS it will try to use system libraries instead of the bundled ones.
+ MUPDF_MAKE_ENV = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) \
+-	XCFLAGS="$(MUPDF_CFLAGS)" \
+-	XLIBS="$(MUPDF_LDFLAGS)" \
++	XCFLAGS="$(TARGET_CFLAGS)" \
++	XLIBS="$(TARGET_LDFLAGS)" \
+ 	USE_SYSTEM_LIBS=yes
  
- MUPDF_LDFLAGS = \
- 	$(TARGET_LDFLAGS)
-@@ -40,6 +39,12 @@ MUPDF_MAKE_OPTS = \
- 	HAVE_OBJCOPY=no \
- 	prefix="/usr"
- 
-+ifeq ($(BR2_STATIC_LIBS),y)
-+MUPDF_MAKE_OPTS += shared=no
-+else
-+MUPDF_MAKE_OPTS += shared=yes
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBFREEGLUT),y)
- MUPDF_DEPENDENCIES += libfreeglut
- else
-
---===============2231786478924963570==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+ MUPDF_MAKE_OPTS = \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============2231786478924963570==--
