@@ -4,48 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 42F15C3DA7F
-	for <buildroot@archiver.kernel.org>; Mon, 12 Aug 2024 20:20:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7A3C5C3DA7F
+	for <buildroot@archiver.kernel.org>; Mon, 12 Aug 2024 20:22:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1024F60812;
-	Mon, 12 Aug 2024 20:20:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3BCB260814;
+	Mon, 12 Aug 2024 20:22:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MC337J70cJd1; Mon, 12 Aug 2024 20:20:22 +0000 (UTC)
+ id e5Dm3oLmhHBs; Mon, 12 Aug 2024 20:22:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2D29760814
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5592360818
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2D29760814;
-	Mon, 12 Aug 2024 20:20:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5592360818;
+	Mon, 12 Aug 2024 20:22:10 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 7C5921BF344
- for <buildroot@lists.busybox.net>; Mon, 12 Aug 2024 20:20:21 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A25FA1BF344
+ for <buildroot@lists.busybox.net>; Mon, 12 Aug 2024 20:22:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 68E5F60814
- for <buildroot@lists.busybox.net>; Mon, 12 Aug 2024 20:20:21 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8F55E60818
+ for <buildroot@lists.busybox.net>; Mon, 12 Aug 2024 20:22:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gL1FBFt3Abam for <buildroot@lists.busybox.net>;
- Mon, 12 Aug 2024 20:20:20 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id g6wUgaFZ2Nkq for <buildroot@lists.busybox.net>;
+ Mon, 12 Aug 2024 20:22:07 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.194;
+ helo=relay2-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A081760812
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id A081760812
- for <buildroot@buildroot.org>; Mon, 12 Aug 2024 20:20:20 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8A544853F2; Mon, 12 Aug 2024 20:20:20 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 12 Aug 2024 22:15:17 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: e26f9345603b500b2ed0f290fd42c65131ea72e8
-X-Git-Newrev: 9173306d2428a49d9d12686c4be02729920371e0
-X-Patchwork-Hint: ignore
-Message-Id: <20240812202020.8A544853F2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/bird: update to 2.15.1
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 7163C60814
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7163C60814
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [217.70.183.194])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7163C60814
+ for <buildroot@buildroot.org>; Mon, 12 Aug 2024 20:22:07 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 0402340003;
+ Mon, 12 Aug 2024 20:22:03 +0000 (UTC)
+Date: Mon, 12 Aug 2024 22:22:02 +0200
+To: Waldemar Brodkorb <wbx@openadk.org>
+Message-ID: <20240812222202.4b8ddc88@windsurf>
+In-Reply-To: <ZrhlT1NAkvCmXNAS@waldemar-brodkorb.de>
+References: <ZrhlT1NAkvCmXNAS@waldemar-brodkorb.de>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1723494124;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=f0bRfecUsJDE6rkgprDaAadJxp6ztGi4VO2weownfHQ=;
+ b=cH7rUEEUfPPa5stn9R4BhTud366L9NL2q/0+m1lqcTpjtfWCY1GUYGryU3uLGLP3IHhepu
+ DFbLSBELGWRkqPGEpowaBz3y3JMQEYM8PZvhRV0N12WsUfeRomIH+Wt0hhXo13AxmrzQBZ
+ af+qYBUZiYUmgeaHLrhp2EbKy6qXQIEGHzKUBXFQrPnZ7NLEca54pjnTV2bbTVy28pGCNX
+ G3fCXryGHPtxFZuQjYyzhqQwa+eaR+SbmC9tJfhwzQ8l5u8CF4nXCUoWulsxz/dqlZO509
+ K6SIgOFxZl9eWkhdga9xYy3aqzzJMOUQUBK1EWF5+AHG8bLR068LVLJYA3Ek1g==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=cH7rUEEU
+Subject: Re: [Buildroot] [PATCH next] package/bird: update to 2.15.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,58 +82,50 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9173306d2428a49d9d12686c4be02729920371e0
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello,
 
-See here for a changelog:
-https://gitlab.nic.cz/labs/bird/-/blob/master/NEWS
++Fabrice in Cc, as there is a request below :-)
 
-An uClibc-ng based system needs _GNU_SOURCE in the CFLAGS to
-provide getrandom().
+On Sun, 11 Aug 2024 09:16:31 +0200
+Waldemar Brodkorb <wbx@openadk.org> wrote:
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/bird/bird.hash | 2 +-
- package/bird/bird.mk   | 4 +++-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+> See here for a changelog:
+> https://gitlab.nic.cz/labs/bird/-/blob/master/NEWS
+> 
+> An uClibc-ng based system needs _GNU_SOURCE in the CFLAGS to
+> provide getrandom().
+> 
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 
-diff --git a/package/bird/bird.hash b/package/bird/bird.hash
-index a62fbba630..a781e314df 100644
---- a/package/bird/bird.hash
-+++ b/package/bird/bird.hash
-@@ -1,2 +1,2 @@
--sha256  3ec462a237d06d1f4455d6ec00a42f0b1686061fc988e5c89a841d01dd753b53  bird-2.0.12.tar.gz
-+sha256  48e85c622de164756c132ea77ad1a8a95cc9fd0137ffd0d882746589ce75c75d  bird-2.15.1.tar.gz
- sha256  94c53c84320078920ac1f0d49c81a4e9004512f534521a58bdf145acbcbc2cd2  README
-diff --git a/package/bird/bird.mk b/package/bird/bird.mk
-index f1b2ee6c5e..34d7912954 100644
---- a/package/bird/bird.mk
-+++ b/package/bird/bird.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BIRD_VERSION = 2.0.12
-+BIRD_VERSION = 2.15.1
- BIRD_SITE = https://bird.network.cz/download
- BIRD_LICENSE = GPL-2.0+
- BIRD_LICENSE_FILES = README
-@@ -12,6 +12,8 @@ BIRD_CPE_ID_VENDOR = nic
- BIRD_SELINUX_MODULES = bird
- BIRD_DEPENDENCIES = host-flex host-bison
- 
-+BIRD_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE"
-+
- # 0001-configure.ac-fix-build-with-autoconf-2.70.patch
- BIRD_AUTORECONF = YES
- 
+Thanks, I've applied to next, but I have some comments below.
+
+> +BIRD_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -D_GNU_SOURCE"
+
+This seems to be a workaround for an issue in uClibc. Indeed, I don't
+see in the manpage of getrandom() anything that indicates that defining
+_GNU_SOURCE is needed to get the definition of getrandom(). Why uClibc
+is guarding the definition of getrandom() on _GNU_SOURCE, and not glibc
+or musl?
+
+>  # 0001-configure.ac-fix-build-with-autoconf-2.70.patch
+>  BIRD_AUTORECONF = YES
+
+Could you work on upstreaming this patch perhaps? Or maybe convince
+Fabrice to upstream it? :-)
+
+Thanks a lot!
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
