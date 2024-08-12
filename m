@@ -1,75 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13617C52D7C
-	for <buildroot@archiver.kernel.org>; Mon, 12 Aug 2024 20:58:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D387FC52D7C
+	for <buildroot@archiver.kernel.org>; Mon, 12 Aug 2024 21:40:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D35EF804E0;
-	Mon, 12 Aug 2024 20:58:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 689DB606C0;
+	Mon, 12 Aug 2024 21:40:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DNFqy9kGrC_W; Mon, 12 Aug 2024 20:58:50 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id EQByA5-iL7KG; Mon, 12 Aug 2024 21:40:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 071D1804F9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 73C5860632
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 071D1804F9;
-	Mon, 12 Aug 2024 20:58:50 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C46DF1BF344
- for <buildroot@lists.busybox.net>; Mon, 12 Aug 2024 20:58:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 73C5860632;
+	Mon, 12 Aug 2024 21:40:31 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 651211BF330
+ for <buildroot@lists.busybox.net>; Mon, 12 Aug 2024 21:40:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BDB5E804F9
- for <buildroot@lists.busybox.net>; Mon, 12 Aug 2024 20:58:48 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5FF6260632
+ for <buildroot@lists.busybox.net>; Mon, 12 Aug 2024 21:40:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8zaWaYARF2kW for <buildroot@lists.busybox.net>;
- Mon, 12 Aug 2024 20:58:48 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::229;
- helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B2724804E0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B2724804E0
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B2724804E0
- for <buildroot@buildroot.org>; Mon, 12 Aug 2024 20:58:47 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 2BB6FFF802;
- Mon, 12 Aug 2024 20:58:46 +0000 (UTC)
-Date: Mon, 12 Aug 2024 22:58:44 +0200
-To: Waldemar Brodkorb <wbx@openadk.org>
-Message-ID: <20240812225844.161f0c86@windsurf>
-In-Reply-To: <Zrmdc57gS6XDpKzt@waldemar-brodkorb.de>
-References: <Zrmdc57gS6XDpKzt@waldemar-brodkorb.de>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id gkUnBk6Vi2yS for <buildroot@lists.busybox.net>;
+ Mon, 12 Aug 2024 21:40:29 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E236460628
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E236460628
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id E236460628
+ for <buildroot@buildroot.org>; Mon, 12 Aug 2024 21:40:28 +0000 (UTC)
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 0A6DFB00563;
+ Mon, 12 Aug 2024 23:40:23 +0200 (CEST)
+From: Julien Olivain <ju.o@free.fr>
+To: buildroot@buildroot.org
+Date: Mon, 12 Aug 2024 23:40:14 +0200
+Message-ID: <20240812214014.2434246-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.46.0
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1723496326;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=XVgOF2xxFbHAfAgDBPLLynlKBgXxidBcR0q3PwdKxgI=;
- b=IknE+Q7YeJtKiBXoBa4eUbHpVQYMdM5zGeOdyE5q6DvnUPyyU7PMQ1qoA1wKCW/G6eKmDi
- pbrYEAqh4SHbr9US0v+bjcVXV7MurDZvEf6lEIFjaOWr4QnNzkgIhWbqs12kYLmxXAaGVM
- tjbd8qTXikrCdc6dj/OnGL61370LHrVqEok6s+ME12AhmO+mzEBYN077ANa7sYDCK07Obx
- T77B1yXMOGgRm/opVyJ5iYxJT3lbyb58zNb2TyRsA6v3yfpEw/6zrYyDs04JWdJfx+94Nk
- 5XINwau7QvkGVwzQxPyjfp0/ulbKiS4V7runQwS0RlnLl2fMDPIUZ2EIwE2eyA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1723498825;
+ bh=N4mcIjAz3vMpgD6j/fwILOLvWNOIIrp85zryGmExyMg=;
+ h=From:To:Cc:Subject:Date:From;
+ b=O44UHXP2P1eio/2A51C2rShuNA4HFU3tklcMX+YgwzDKtQIip1jDCBf4gRNLXh7QH
+ de8r7fm21MY1s1cAPLcN/x473LIXCYQAOGFGJfghygz9uHdnTG9ZYLVs09ZytAcdVC
+ pN+AzCGpn59woBvDfCOHr1zhgxWDY4JlQ7iY2emObfnZmV587Hnsfcf5FwwX1MNAW6
+ F0cwlPn/w9WyJYMlQuQOzAGk9jLr9ucN7SlXbDYz53q39PKC4/gbN6Co+snmUKjEhy
+ 8u//Lk4ZhU8amMY4BhPeVNug0kFRbiAdFSVbJ7bWclP3zD7kdWanaURlwHREyAYb/B
+ kNt2qngzG+zxA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=IknE+Q7Y
-Subject: Re: [Buildroot] [PATCH v2] configs/solidrun_clearfog: update U-Boot
- and Linux
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=O44UHXP2
+Subject: [Buildroot] [PATCH v2 1/1] package/libgpg-error: needs MMU
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,35 +76,76 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+Cc: Julien Olivain <ju.o@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+libgpg-error imported code using fork() in commit [1] and enabled it
+soon after in [2]. Those commits were first included in libgpg-error
+version 1.28.
 
-On Mon, 12 Aug 2024 07:28:19 +0200
-Waldemar Brodkorb <wbx@openadk.org> wrote:
+For reference, the libgpg-error Buildroot package was updated to that
+version in commit [3].
 
->  .checkpackageignore                                    |  1 -
->  board/solidrun/clearfog/genimage.cfg                   |  2 +-
->  .../clearfog/patches/linux-headers/linux-headers.hash  |  2 ++
->  board/solidrun/clearfog/patches/linux/linux.hash       |  2 ++
+When Buildroot configuration has no MMU support (e.g. BR2_USE_MMU is
+not set), libgpg-error fails to build with error:
 
-Did you use utils/add-custom-hashes to generate the custom hashes? I
-think it normally creates linux-headers.hash as a symlink to linux.hash
-if they are identical. Could you do this here as well?
+    /build/host/opt/ext-toolchain/arm-buildroot-uclinux-uclibcgnueabi/bin/ld.real: ./.libs/libgpg-error.a(libgpg_error_la-spawn-posix.o): in function '_gpgrt_process_spawn':
+    spawn-posix.c:(.text+0x630): undefined reference to 'fork'
 
-Thanks!
+This issue can be observed with the command:
 
-Thomas
+    utils/test-pkg -a -p libgpg-error
+
+It will show few build failures:
+
+    ...
+       bootlin-armv7m-uclibc [ 6/41]: FAILED
+    ...
+    bootlin-m68k-5208-uclibc [ 8/41]: FAILED
+    ...
+
+This commit fixes the issue by adding the dependency on BR2_USE_MMU
+in BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS. Doing so will
+automatically propagates this dependency to all packages using
+libgpg-error (and thus, already depending on this _ARCH_SUPPORTS).
+
+Fixes:
+http://autobuild.buildroot.org/results/dbc82ba08e6a30c2f558c8c36ad7eeb0e3cab090/
+http://autobuild.buildroot.org/results/074a803de0f48cd86b9135cca50f136cccf1bcea/
+http://autobuild.buildroot.org/results/4c1966a71020af31c1dc1b0a13a3928c84e75874/
+...and many others.
+
+[1] https://git.gnupg.org/cgi-bin/gitweb.cgi?p=libgpg-error.git;a=commitdiff;h=8f41cc23b12485404203be5881aaaadb78696b4d
+[2] https://git.gnupg.org/cgi-bin/gitweb.cgi?p=libgpg-error.git;a=commitdiff;h=1865c0ba1769b407a3c504f1ab0a4278704a9fc1
+[3] https://gitlab.com/buildroot.org/buildroot/-/commit/692d191c8b0b3c86022e6a6ba3bd2d8f53b39f03
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+Changes v1 -> v2: Suggested by Thomas:
+- Moved the BR2_USE_MMU dependency in _ARCH_SUPPORTS
+- Removed all package updates, since they are now unneeded
+---
+ package/libgpg-error/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/libgpg-error/Config.in b/package/libgpg-error/Config.in
+index 5a2c14ead8..a0ee7ec531 100644
+--- a/package/libgpg-error/Config.in
++++ b/package/libgpg-error/Config.in
+@@ -15,6 +15,7 @@ config BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS
+ 		BR2_sh4a	|| BR2_sh4aeb		|| \
+ 		BR2_sparc	|| BR2_sparc64		|| \
+ 		BR2_x86_64
++	depends on BR2_USE_MMU # fork()
+ 
+ config BR2_PACKAGE_LIBGPG_ERROR
+ 	bool "libgpg-error"
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+2.46.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
