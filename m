@@ -4,52 +4,52 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D8BBC52D7C
-	for <buildroot@archiver.kernel.org>; Mon, 12 Aug 2024 12:46:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95304C3DA7F
+	for <buildroot@archiver.kernel.org>; Mon, 12 Aug 2024 12:57:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 99C4240622;
-	Mon, 12 Aug 2024 12:46:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4D278402F3;
+	Mon, 12 Aug 2024 12:57:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3_Xs0VsC0AzH; Mon, 12 Aug 2024 12:46:29 +0000 (UTC)
+ id ja-I-gkVsQmE; Mon, 12 Aug 2024 12:57:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 47CA9405FA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EA2C94033C
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 47CA9405FA;
-	Mon, 12 Aug 2024 12:46:29 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 62E231BF301;
- Mon, 12 Aug 2024 12:46:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EA2C94033C;
+	Mon, 12 Aug 2024 12:57:12 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id AB2CE1BF301;
+ Mon, 12 Aug 2024 12:57:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5E0CC607AD;
- Mon, 12 Aug 2024 12:46:26 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 97FF0403E5;
+ Mon, 12 Aug 2024 12:57:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JkMb_m5rEoHD; Mon, 12 Aug 2024 12:46:25 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id La8n7f3OELyG; Mon, 12 Aug 2024 12:57:10 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=34.202.193.197;
  helo=sendmail.purelymail.com; envelope-from=git@douglass.dev;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 5B25660759
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5B25660759
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 3DA4940602
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3DA4940602
 Received: from sendmail.purelymail.com (sendmail.purelymail.com
  [34.202.193.197])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5B25660759
- for <buildroot@buildroot.org>; Mon, 12 Aug 2024 12:46:25 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3DA4940602
+ for <buildroot@buildroot.org>; Mon, 12 Aug 2024 12:57:10 +0000 (UTC)
 Feedback-ID: 3578:1022:null:purelymail
 X-Pm-Original-To: buildroot@buildroot.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 1253438995; 
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -1921901446; 
  (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
- Mon, 12 Aug 2024 12:46:20 +0000 (UTC)
+ Mon, 12 Aug 2024 12:57:02 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 12 Aug 2024 08:46:12 -0400
-Message-Id: <20240812124613.12879-1-wdouglass@carnegierobotics.com>
+Date: Mon, 12 Aug 2024 08:56:54 -0400
+Message-Id: <20240812125655.14438-1-wdouglass@carnegierobotics.com>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240812124432.12506-1-wdouglass@carnegierobotics.com>
-References: <20240812124432.12506-1-wdouglass@carnegierobotics.com>
+In-Reply-To: <20240812124613.12879-1-wdouglass@carnegierobotics.com>
+References: <20240812124613.12879-1-wdouglass@carnegierobotics.com>
 MIME-Version: 1.0
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=fail (p=quarantine dis=none)
  header.from=carnegierobotics.com
 Subject: [Buildroot] [PATCH] package/chicken: pass TARGET_CFLAGS to chicken
@@ -124,7 +124,7 @@ index b93aaf9e21..0000000000
 -2.39.2
 -
 diff --git a/package/chicken/chicken.mk b/package/chicken/chicken.mk
-index 0520280134..2bd1181fc6 100644
+index 0520280134..f596129a18 100644
 --- a/package/chicken/chicken.mk
 +++ b/package/chicken/chicken.mk
 @@ -16,8 +16,6 @@ CHICKEN_INSTALL_STAGING = YES
@@ -140,7 +140,7 @@ index 0520280134..2bd1181fc6 100644
  CHICKEN_MAKE_OPTS = \
  	ARCH="$(CHICKEN_ARCH)" \
  	C_COMPILER="$(TARGET_CC)" \
-+	C_COMPILER_OPTIMIZATION_OPTIONS="$(TARGET_CFLAGS) -fwrapv -DHAVE_CHICKEN_CONFIG_H -DC_ENABLE_PTABLES" \
++	C_COMPILER_OPTIMIZATION_OPTIONS="$(TARGET_CFLAGS)" \
  	CXX_COMPILER="$(TARGET_CXX)" \
  	PREFIX=/usr \
  	PLATFORM=linux \
