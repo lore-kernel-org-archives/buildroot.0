@@ -4,48 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 585F4C52D7C
-	for <buildroot@archiver.kernel.org>; Mon, 12 Aug 2024 19:38:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 88DFBC3DA7F
+	for <buildroot@archiver.kernel.org>; Mon, 12 Aug 2024 19:41:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 176F36077D;
-	Mon, 12 Aug 2024 19:38:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 430CE60763;
+	Mon, 12 Aug 2024 19:41:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fh2Nwnna5qTY; Mon, 12 Aug 2024 19:38:48 +0000 (UTC)
+ id EORErc00APUq; Mon, 12 Aug 2024 19:41:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F364960783
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0B6B260783
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F364960783;
-	Mon, 12 Aug 2024 19:38:47 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2C99C1BF59A
- for <buildroot@lists.busybox.net>; Mon, 12 Aug 2024 19:38:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0B6B260783;
+	Mon, 12 Aug 2024 19:41:30 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id C544D1BF59A
+ for <buildroot@lists.busybox.net>; Mon, 12 Aug 2024 19:41:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 18B064028D
- for <buildroot@lists.busybox.net>; Mon, 12 Aug 2024 19:38:47 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B1BB760783
+ for <buildroot@lists.busybox.net>; Mon, 12 Aug 2024 19:41:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dnolMl2VR0bo for <buildroot@lists.busybox.net>;
- Mon, 12 Aug 2024 19:38:46 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Pkyi-1zt10Zx for <buildroot@lists.busybox.net>;
+ Mon, 12 Aug 2024 19:41:27 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
+ helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1C08B400B8
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1C08B400B8
- for <buildroot@buildroot.org>; Mon, 12 Aug 2024 19:38:46 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 048B684493; Mon, 12 Aug 2024 19:38:46 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 12 Aug 2024 21:31:08 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3f58e17fa952b9f15a7aaf060ec440b73556ecce
-X-Git-Newrev: 2a700617cc1aa14deb9f4e4f5c63e19c77901389
-X-Patchwork-Hint: ignore
-Message-Id: <20240812193846.048B684493@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/aer-inject: fix build error due to
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 7044360763
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7044360763
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7044360763
+ for <buildroot@buildroot.org>; Mon, 12 Aug 2024 19:41:27 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 50A0AFF802;
+ Mon, 12 Aug 2024 19:41:25 +0000 (UTC)
+Date: Mon, 12 Aug 2024 21:41:24 +0200
+To: "J. =?UTF-8?B?TmV1c2Now6RmZXI=?= via buildroot" <buildroot@buildroot.org>
+Message-ID: <20240812214124.2a7b520f@windsurf>
+In-Reply-To: <20240811-aer-inject-v1-1-9cee7e3bd9b2@gmx.net>
+References: <20240811-aer-inject-v1-1-9cee7e3bd9b2@gmx.net>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1723491685;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=GbtqcZCxzK6erD7TmbsH/MFl6rgcylrROaCHp5KXUKY=;
+ b=QsKx35ThZblsro+2/kY8h/ic2WQDFsMIcnMa9i8HPFknYFB1AGefOQbUX9oFcGOSUaYwlQ
+ NPdM3+wmHJdRr3WDLGxj+qpAvXXJhOcqy1hhEl5lAl4Cd1v5ayi1JpC3413HwOjyzEF0ye
+ NFzlZzqTgzk7cCvV2bL/xZjHNTbGTmxWYBSdUJOL+7yzu1KHI+RaDZ84RiWZ+YCvxBLghc
+ +gJsDt/acL7z3NyYfohhWIht+ndsxNc/VQ3PSYbZcQOM3+vQwP8hviO60vSs9qmJzYD2j3
+ IKk9pmEPwXuV9X2njPkBCdcXC2EAxqv5y8OhD3Wd+mwEuq8ErJJFbOsyqTaKVA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=QsKx35Th
+Subject: Re: [Buildroot] [PATCH] package/aer-inject: Fix build error due to
  missing basename() prototype
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -60,78 +83,39 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============5098415632500363555=="
+Cc: "J. =?UTF-8?B?TmV1c2Now6RmZXI=?=" <j.neuschaefer@gmx.net>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============5098415632500363555==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=2a700617cc1aa14deb9f4e4f5c63e19c77901389
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/e613fc777051be6325d7e3c088d5f723fab518fa/
-
-Signed-off-by: J. Neuschäfer <j.neuschaefer@gmx.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/aer-inject/0001-libgen-basename.patch | 35 +++++++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
-
-diff --git a/package/aer-inject/0001-libgen-basename.patch b/package/aer-inject/0001-libgen-basename.patch
-new file mode 100644
-index 0000000000..0762f5e305
---- /dev/null
-+++ b/package/aer-inject/0001-libgen-basename.patch
-@@ -0,0 +1,35 @@
-+From 197f51d29a01f46750fa6928409301aa8f1163d7 Mon Sep 17 00:00:00 2001
-+From: Khem Raj <raj.khem@gmail.com>
-+Date: Mon, 25 Mar 2024 09:04:40 -0700
-+Subject: aer-inject: Include libgen.h for explicit basename prototype
-+
-+The prototype for basename has been removed from string.h in the latest
-+versions of musl [1]. This absence of prototype is flagged as an error
-+by some compilers, such as clang-18. To resolve this, include libgen.h
-+explicitly, which provides the prototype for basename.
-+
-+[1] https://git.musl-libc.org/cgit/musl/commit/?id=725e17ed6dff4d0cd22487bb64470881e86a92e7
-+Signed-off-by: Khem Raj <raj.khem@gmail.com>
-+[sathya: Updated the commit log]
-+Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-+Upstream: https://git.kernel.org/pub/scm/linux/kernel/git/knsathya/aer-inject.git/commit/?id=197f51d29a01f46750fa6928409301aa8f1163d7
-+Signed-off-by: J. Neuschaefer <j.neuschaefer@gmx.net>
-+---
-+ aer-inject.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/aer-inject.c b/aer-inject.c
-+index 74e7f72..eed1211 100644
-+--- a/aer-inject.c
-++++ b/aer-inject.c
-+@@ -11,6 +11,7 @@
-+  */
-+
-+ #include <stdio.h>
-++#include <libgen.h>
-+ #include <stdlib.h>
-+ #include <string.h>
-+ #include <fcntl.h>
-+--
-+cgit 1.2.3-korg
-+
-
---===============5098415632500363555==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============5098415632500363555==--
+SGVsbG8gSiwKClRoYW5rcyBhIGxvdCBmb3IgeW91ciBwYXRjaCwgd2hpY2ggSSBoYXZlIGFwcGxp
+ZWQuIEkganVzdCBoYXZlIGEgZmV3CnZlcnksIHZlcnkgbWlub3Igc3VnZ2VzdGlvbnMgdG8gZnVy
+dGhlciBpbXByb3ZlIHlvdXIgbmV4dCBwYXRjaGVzLgoKRmlyc3Qgb2YgYWxsLCBJIHBlcnNvbmFs
+bHkgbGlrZSB0aGF0IHRoZSBjb21taXQgdGl0bGUgc3RhcnRzIHdpdGggYQpsb3dlci1jYXNlIGxl
+dHRlciwgaS5lOiAicGFja2FnZS9hZXItaW5qZWN0OiBmaXggLi4uIiByYXRoZXIgdGhhbgoicGFj
+a2FnZS9hZXItaW5qZWN0OiBGaXggLi4uIi4KCk9uIFN1biwgMTEgQXVnIDIwMjQgMTI6MzQ6MjUg
+KzAyMDAKSi4gTmV1c2Now6RmZXIgdmlhIGJ1aWxkcm9vdCA8YnVpbGRyb290QGJ1aWxkcm9vdC5v
+cmc+IHdyb3RlOgoKPiBGaXhlcyBzZXZlcmFsIGJ1aWxkIGZhaWx1cmVzIHN1Y2ggYXM6CgpQbGVh
+c2Ugd3JpdGUganVzdCAiRml4ZXM6Ii4gVGhpcyB3YXksIHBhdGNod29yayBkZXRlY3RzIGl0J3Mg
+YSBwYXRjaApmaXhlcyBzb21ldGhpbmcsIGFuZCBpdCBmbGFncyBpdCBhcyBzdWNoLgpTZWUgaHR0
+cHM6Ly9wYXRjaHdvcmsub3psYWJzLm9yZy9wcm9qZWN0L2J1aWxkcm9vdC9saXN0Lywgd2hlcmUg
+dGhlIGNvbHVtbiBBL0YvUi9UIGZsYWdzIHRoZSBwYXRjaGVzIHRoYXQgaGF2ZSBhIEFja2VkLWJ5
+OiwgYSBGaXhlczosIGEgUmV2aWV3ZWQtYnk6IG9yIGEgVGVzdGVkLWJ5Oi4KCj4gICBodHRwOi8v
+YXV0b2J1aWxkLmJ1aWxkcm9vdC5uZXQvcmVzdWx0cy9lNjEvZTYxM2ZjNzc3MDUxYmU2MzI1ZDdl
+M2MwODhkNWY3MjNmYWI1MThmYS9idWlsZC1lbmQubG9nCgpXZSBsaWtlIHRvIGhhdmUganVzdDoK
+CiAgaHR0cDovL2F1dG9idWlsZC5idWlsZHJvb3QubmV0L3Jlc3VsdHMvZTYxM2ZjNzc3MDUxYmU2
+MzI1ZDdlM2MwODhkNWY3MjNmYWI1MThmYS8KCmkuZSBkb24ndCBwb2ludCB0byBidWlsZC1lbmQu
+bG9nLCBidXQgdG8gdGhlIGJ1aWxkIHJlc3VsdCwgYW5kIGRyb3AgdGhlCmV4dHJhIC9lNjEvIGlu
+IHRoZSBVUkwuCgo+IFRoaXMgcGF0Y2ggaXMgZnJvbSBLdXBwdXN3YW15IFNhdGh5YW5hcmF5YW5h
+bidzIGZvcmsgb2YgYWVyLWluamVjdC4gQW4KPiBhbHRlcm5hdGl2ZSB0byBpbmNsdWRpbmcgdGhl
+IHBhdGNoIHdvdWxkIGJlIHRvIHN3aXRjaCB0byB0aGlzIGZvcmsgYXMKPiBCdWlsZHJvb3QncyBp
+ZGVhIG9mIHVwc3RyZWFtLiBDdXJyZW50bHksIGl0IGlzIHRoZSBvbmx5IGNoYW5nZSBpbiB0aGUK
+PiBmb3JrLCB0aG91Z2guCgpJIGd1ZXNzIGF0IHRoaXMgcG9pbnQsIGl0J3MgZmluZSB0byBrZWVw
+IHRoaW5ncyBhcyB0aGV5IGFyZS4gSG93CiJvZmZpY2lhbCIgaXMgZWFjaCBvZiB0aG9zZSB0d28g
+YWVyLWluamVjdCBHaXQgcmVwb3M/CgpUaGFua3MgYSBsb3QhCgpUaG9tYXMKLS0gClRob21hcyBQ
+ZXRhenpvbmksIGNvLW93bmVyIGFuZCBDRU8sIEJvb3RsaW4KRW1iZWRkZWQgTGludXggYW5kIEtl
+cm5lbCBlbmdpbmVlcmluZyBhbmQgdHJhaW5pbmcKaHR0cHM6Ly9ib290bGluLmNvbQpfX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGlu
+ZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9y
+Zy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
