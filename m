@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3340C3DA7F
-	for <buildroot@archiver.kernel.org>; Mon, 12 Aug 2024 11:27:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AC27CC52D7C
+	for <buildroot@archiver.kernel.org>; Mon, 12 Aug 2024 11:27:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 68EC3403C0;
-	Mon, 12 Aug 2024 11:27:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E741D4059A;
+	Mon, 12 Aug 2024 11:27:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jnNlJHsMUZJG; Mon, 12 Aug 2024 11:27:41 +0000 (UTC)
+ id ca60CAG0VeDA; Mon, 12 Aug 2024 11:27:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 329F5403C2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1F37A405B0
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 329F5403C2;
-	Mon, 12 Aug 2024 11:27:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1F37A405B0;
+	Mon, 12 Aug 2024 11:27:48 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 569821BF2A5
- for <buildroot@lists.busybox.net>; Mon, 12 Aug 2024 11:27:39 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 67CE21BF2A5
+ for <buildroot@lists.busybox.net>; Mon, 12 Aug 2024 11:27:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 43D7F403C7
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4B247403C0
  for <buildroot@lists.busybox.net>; Mon, 12 Aug 2024 11:27:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3sO59k-96nja for <buildroot@lists.busybox.net>;
+ id Lkfe1gCrTsBQ for <buildroot@lists.busybox.net>;
  Mon, 12 Aug 2024 11:27:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 404B1403C0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 59256403C2
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 404B1403C0
+ by smtp4.osuosl.org (Postfix) with ESMTP id 59256403C2
  for <buildroot@buildroot.org>; Mon, 12 Aug 2024 11:27:38 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3AEFF84AE9; Mon, 12 Aug 2024 11:27:38 +0000 (UTC)
+ id 4800E84BB7; Mon, 12 Aug 2024 11:27:38 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 12 Aug 2024 13:20:18 +0200
+Date: Mon, 12 Aug 2024 13:20:26 +0200
 X-Git-Refname: refs/heads/2024.05.x
-X-Git-Oldrev: d9bddddd2341cd8dd841a09884c808b6e57af5de
-X-Git-Newrev: 65af7b6ee47a5eb611441e52210a7912c4124dcc
+X-Git-Oldrev: 65af7b6ee47a5eb611441e52210a7912c4124dcc
+X-Git-Newrev: a70ac746fefb044febdc2bff56a89a3495782b78
 X-Patchwork-Hint: ignore
-Message-Id: <20240812112738.3AEFF84AE9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.05.x] package/pkg-cmake: remove
- override of CMAKE_ASM_COMPILER
+Message-Id: <20240812112738.4800E84BB7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.05.x]
+ package/llvm-project/llvm: remove overriding the ASM compiler
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,40 +65,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=65af7b6ee47a5eb611441e52210a7912c4124dcc
+commit: https://git.buildroot.net/buildroot/commit/?id=a70ac746fefb044febdc2bff56a89a3495782b78
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.05.x
 
-CMAKE_ASM_COMPILER is supposed to point to a compiler wrapper (i.e.
-gcc), _not_ to as directly. If it is not set, it will use the value of
-CMAKE_C_COMPILER. That's exactly what we want, so there is no need to
-set CMAKE_ASM_COMPILER at all.
-
-For target, we don't set CMAKE_ASM_COMPILER either.
-
-Setting CMAKE_ASM_COMPILER leads to build failures for any package that
-actually tries to build .S files for the host - like llvm. This is why
-llvm has an override for it.
+There was an error in the pkg-cmake infra file regarding the selection
+of the ASM compiler. Now that this has been fixed, overwriting the
+ASM compiler selection is no longer necessary.
 
 Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit 22af5f2939089b996aeda9ce072ab2f9b3ee6c2d)
+(cherry picked from commit 638474478093831d76ab70e0cb3bd2d65d4a4511)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pkg-cmake.mk | 1 -
- 1 file changed, 1 deletion(-)
+ package/llvm-project/llvm/llvm.mk | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
-index 8f391eb4c9..c7032312fb 100644
---- a/package/pkg-cmake.mk
-+++ b/package/pkg-cmake.mk
-@@ -147,7 +147,6 @@ define $(2)_CONFIGURE_CMDS
- 		-DCMAKE_CXX_FLAGS="$$(HOST_CXXFLAGS)" \
- 		-DCMAKE_EXE_LINKER_FLAGS="$$(HOST_LDFLAGS)" \
- 		-DCMAKE_SHARED_LINKER_FLAGS="$$(HOST_LDFLAGS)" \
--		-DCMAKE_ASM_COMPILER="$$(HOSTAS)" \
- 		-DCMAKE_C_COMPILER="$$(CMAKE_HOST_C_COMPILER)" \
- 		-DCMAKE_CXX_COMPILER="$$(CMAKE_HOST_CXX_COMPILER)" \
- 		$(if $$(CMAKE_HOST_C_COMPILER_LAUNCHER),\
+diff --git a/package/llvm-project/llvm/llvm.mk b/package/llvm-project/llvm/llvm.mk
+index 6598d8b6c1..b0515474d8 100644
+--- a/package/llvm-project/llvm/llvm.mk
++++ b/package/llvm-project/llvm/llvm.mk
+@@ -20,10 +20,6 @@ LLVM_DEPENDENCIES = host-llvm
+ HOST_LLVM_CONF_OPTS += -DCMAKE_MODULE_PATH=$(HOST_DIR)/lib/cmake/llvm
+ LLVM_CONF_OPTS += -DCMAKE_MODULE_PATH=$(HOST_DIR)/lib/cmake/llvm
+ 
+-# Assembly files for x64 in lib/Support/BLAKE3 need to be compiled
+-# by a C compiler
+-HOST_LLVM_CONF_OPTS += -DCMAKE_ASM_COMPILER="$(CMAKE_HOST_C_COMPILER)"
+-
+ # Don't build clang libcxx libcxxabi lldb compiler-rt lld polly as llvm subprojects
+ # This flag assumes that projects are checked out side-by-side and not nested
+ HOST_LLVM_CONF_OPTS += -DLLVM_ENABLE_PROJECTS=""
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
