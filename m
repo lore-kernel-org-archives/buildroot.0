@@ -4,50 +4,62 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B523CC3DA7F
-	for <buildroot@archiver.kernel.org>; Mon, 12 Aug 2024 09:18:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3694EC52D7F
+	for <buildroot@archiver.kernel.org>; Mon, 12 Aug 2024 09:51:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 84239405D8;
-	Mon, 12 Aug 2024 09:18:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C9EA840083;
+	Mon, 12 Aug 2024 09:51:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8XWhYKAqz8BN; Mon, 12 Aug 2024 09:18:30 +0000 (UTC)
+ id vNtpXv9zjJRQ; Mon, 12 Aug 2024 09:51:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 64C3C405F9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8F76C40023
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 64C3C405F9;
-	Mon, 12 Aug 2024 09:18:30 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E8AD51BF27C
- for <buildroot@lists.busybox.net>; Mon, 12 Aug 2024 09:18:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8F76C40023;
+	Mon, 12 Aug 2024 09:51:32 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id F21371BF27C
+ for <buildroot@lists.busybox.net>; Mon, 12 Aug 2024 09:51:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D63AA8114F
- for <buildroot@lists.busybox.net>; Mon, 12 Aug 2024 09:18:20 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id DF6E740448
+ for <buildroot@lists.busybox.net>; Mon, 12 Aug 2024 09:51:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eBMjUsaQ4pbe for <buildroot@lists.busybox.net>;
- Mon, 12 Aug 2024 09:18:20 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id eudSxWr7ffTN for <buildroot@lists.busybox.net>;
+ Mon, 12 Aug 2024 09:51:29 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.196;
+ helo=relay4-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F07FB8101F
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id F07FB8101F
- for <buildroot@buildroot.org>; Mon, 12 Aug 2024 09:18:19 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EB9298456E; Mon, 12 Aug 2024 09:18:19 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org A63A140425
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A63A140425
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A63A140425
+ for <buildroot@buildroot.org>; Mon, 12 Aug 2024 09:51:28 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 4CDE7E0004;
+ Mon, 12 Aug 2024 09:51:25 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1sdRi0-006tyn-2a;
+ Mon, 12 Aug 2024 11:51:24 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Mon, 12 Aug 2024 11:12:35 +0200
-X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: d9c2b374ec4c8224a7f7a2f4d1518f001684c403
-X-Git-Newrev: cc63dd68dd5ce0aad83990baa7b7d0295878de2b
-X-Patchwork-Hint: ignore
-Message-Id: <20240812091819.EB9298456E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/mupdf: drop
- MUPDF_CFLAGS/MUPDF_LDFLAGS
+To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+References: <20240216211344.1807353-2-raphael.melotte@mind.be>
+ <20240607163208.1445715-1-raphael.melotte@mind.be>
+ <20240713223430.039c274c@windsurf>
+Date: Mon, 12 Aug 2024 11:51:24 +0200
+In-Reply-To: <20240713223430.039c274c@windsurf> (Thomas Petazzoni via
+ buildroot's message of "Sat, 13 Jul 2024 22:34:30 +0200")
+Message-ID: <87cymekr1f.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: Re: [Buildroot] [PATCH v2 1/5] package: python-pymupdf: add missing
+ python-zlib dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,50 +71,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Asaf Kahlon <asafka7@gmail.com>, James Hilliard <james.hilliard1@gmail.com>,
+ =?utf-8?Q?Rapha=C3=ABl_M=C3=A9lotte?= <raphael.melotte@mind.be>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cc63dd68dd5ce0aad83990baa7b7d0295878de2b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
-
-Now that MUPDF_CFLAGS and MUPDF_LDFLAGS are just TARGET_CFLAGS and
-TARGET_LDFLAGS, drop them.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 90f0a484671098f9a94ce66b8f8af94e106ae106)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/mupdf/mupdf.mk | 10 ++--------
- 1 file changed, 2 insertions(+), 8 deletions(-)
-
-diff --git a/package/mupdf/mupdf.mk b/package/mupdf/mupdf.mk
-index e3fe66e396..5f73b680a6 100644
---- a/package/mupdf/mupdf.mk
-+++ b/package/mupdf/mupdf.mk
-@@ -22,17 +22,11 @@ MUPDF_DEPENDENCIES = \
- 	xlib_libX11 \
- 	zlib
- 
--MUPDF_CFLAGS = \
--	$(TARGET_CFLAGS)
--
--MUPDF_LDFLAGS = \
--	$(TARGET_LDFLAGS)
--
- # mupdf doesn't use CFLAGS and LIBS but XCFLAGS and XLIBS instead.
- # with USE_SYSTEM_LIBS it will try to use system libraries instead of the bundled ones.
- MUPDF_MAKE_ENV = $(TARGET_MAKE_ENV) $(TARGET_CONFIGURE_OPTS) \
--	XCFLAGS="$(MUPDF_CFLAGS)" \
--	XLIBS="$(MUPDF_LDFLAGS)" \
-+	XCFLAGS="$(TARGET_CFLAGS)" \
-+	XLIBS="$(TARGET_LDFLAGS)" \
- 	USE_SYSTEM_LIBS=yes
- 
- MUPDF_MAKE_OPTS = \
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+Pj4+Pj4gIlRob21hcyIgPT0gVGhvbWFzIFBldGF6em9uaSB2aWEgYnVpbGRyb290IDxidWlsZHJv
+b3RAYnVpbGRyb290Lm9yZz4gd3JpdGVzOgoKID4gT24gRnJpLCAgNyBKdW4gMjAyNCAxODozMjow
+MiArMDIwMAogPiBSYXBoYcOrbCBNw6lsb3R0ZSB2aWEgYnVpbGRyb290IDxidWlsZHJvb3RAYnVp
+bGRyb290Lm9yZz4gd3JvdGU6CgogPj4gSXQgdHVybnMgb3V0IHRoYXQgcHl0aG9uLXB5bXVwZGYg
+ZG9lc24ndCByZXF1aXJlIHpsaWIgZGlyZWN0bHksIGJ1dCBpdAogPj4gZG9lcyByZXF1aXJlIHRo
+ZSB6bGliIHB5dGhvbiBtb2R1bGUuCiA+PiAKID4+IFRoaXMgZml4ZXMgdGhlIGZvbGxvd2luZyBy
+dW50aW1lIGVycm9yOgogPj4gCiA+PiBUcmFjZWJhY2sgKG1vc3QgcmVjZW50IGNhbGwgbGFzdCk6
+CiA+PiBGaWxlICI8c3RkaW4+IiwgbGluZSAxLCBpbiA8bW9kdWxlPgogPj4gRmlsZSAiL3Vzci9s
+aWIvcHl0aG9uMy4xMS9zaXRlLXBhY2thZ2VzL2ZpdHovX19pbml0X18ucHkiLCBsaW5lIDIyLCBp
+biA8bW9kdWxlPgogPj4gRmlsZSAiL3Vzci9saWIvcHl0aG9uMy4xMS9zaXRlLXBhY2thZ2VzL2Zp
+dHovZml0ei5weSIsIGxpbmUgMzQwMiwgaW4gPG1vZHVsZT4KID4+IEZpbGUgIi91c3IvbGliL3B5
+dGhvbjMuMTEvZ3ppcC5weSIsIGxpbmUgOSwgaW4gPG1vZHVsZT4KID4+IE1vZHVsZU5vdEZvdW5k
+RXJyb3I6IE5vIG1vZHVsZSBuYW1lZCAnemxpYicKID4+IAogPj4gU2lnbmVkLW9mZi1ieTogUmFw
+aGHDq2wgTcOpbG90dGUgPHJhcGhhZWwubWVsb3R0ZUBtaW5kLmJlPgoKID4gWW91IGhhZCBmb3Jn
+b3R0ZW4gdG8gZHJvcCB0aGUgInpsaWIiIGRlcGVuZGVuY3kgaW4gTVVQREZfREVQRU5ERU5DSUVT
+LAogPiBzbyBJIGRyb3BwZWQgaXQgYXMgd2VsbC4gQW5kIGFwcGxpZWQgeW91ciBwYXRjaCEKCiA+
+IEFuZCBpbiBmYWN0IHRoaXMgbGVhZCBtZSB0byBsb29rIG1vcmUgaW50byBtdXBkZiwgYW5kIEkg
+d2FzIGN1cmlvdXMgdG8KID4gc2VlIHdoeSBpdCBkZXBlbmRlZCBvbiBYMTEuIEV4Y2VwdCBpdCBk
+b2VzIG5vdDogaXQgaXMgYSBwdXJlbHkgb3B0aW9uYWwKID4gZGVwZW5kZW5jeS4gQW5kIEkgZm91
+bmQgb3RoZXIgdGhpbmdzIHRoYXQgd2VyZSBub3QgY29ycmVjdC91c2VmdWwKID4gYW55bW9yZSBp
+biB0aGUgcGFja2FnZSBzbyBJIGRpZCBhIGZldyBwcmVwYXJhdGlvbiBjb21taXRzOgoKID4gaHR0
+cHM6Ly9naXRsYWIuY29tL2J1aWxkcm9vdC5vcmcvYnVpbGRyb290Ly0vY29tbWl0L2Y3ZGVhYTEz
+MzBiYWFkMzAzYWZiNzZhNzcxMWZhZWViMWRkZmVlNWQKID4gaHR0cHM6Ly9naXRsYWIuY29tL2J1
+aWxkcm9vdC5vcmcvYnVpbGRyb290Ly0vY29tbWl0LzkwZjBhNDg0NjcxMDk4ZjlhOTRjZTY2Yjhm
+OGFmOTRlMTA2YWUxMDYKID4gaHR0cHM6Ly9naXRsYWIuY29tL2J1aWxkcm9vdC5vcmcvYnVpbGRy
+b290Ly0vY29tbWl0LzJjMGQ3YjcyYzA5OTNhNTVjOGRjYjdiMzhkODU3OTJlMWJmNmU4YmMKCiA+
+IGFuZCB1bHRpbWF0ZWx5LCBJIGRyb3BwZWQgdGhlIFgub3JnIGRlcGVuZGVuY3kgYWxzbyBvbiBw
+eXRob24tcHltdXBkZjoKCiA+IGh0dHBzOi8vZ2l0bGFiLmNvbS9idWlsZHJvb3Qub3JnL2J1aWxk
+cm9vdC8tL2NvbW1pdC9lZGZhNmYyOTc4NWU2MThiNzU3MzliNzAyZmM4NjNlZTI0MTA5MDhkCgpD
+b21taXR0ZWQgYWxsIDQgdG8gMjAyNC4wMi54IGFuZCAyMDI0LjA1LngsIHRoYW5rcy4KCi0tIApC
+eWUsIFBldGVyIEtvcnNnYWFyZApfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3Jn
+Cmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
