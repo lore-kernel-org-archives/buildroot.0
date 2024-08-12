@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 80983C52D7C
-	for <buildroot@archiver.kernel.org>; Mon, 12 Aug 2024 19:29:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A2775C52D7C
+	for <buildroot@archiver.kernel.org>; Mon, 12 Aug 2024 19:29:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4F40F60759;
-	Mon, 12 Aug 2024 19:29:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 67B7F60703;
+	Mon, 12 Aug 2024 19:29:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HdsYYTU0SDSi; Mon, 12 Aug 2024 19:28:59 +0000 (UTC)
+ id 9xbyC14m_IZu; Mon, 12 Aug 2024 19:29:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5041D60703
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8DAED607F8
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5041D60703;
-	Mon, 12 Aug 2024 19:28:59 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 5D1A11BF59A
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8DAED607F8;
+	Mon, 12 Aug 2024 19:29:01 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id EAFBC1BF59A
  for <buildroot@lists.busybox.net>; Mon, 12 Aug 2024 19:28:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 47EBD60763
+ by smtp4.osuosl.org (Postfix) with ESMTP id E4C5C405D0
  for <buildroot@lists.busybox.net>; Mon, 12 Aug 2024 19:28:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Uc7zJkHg1P5z for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1JLEooaWbHUX for <buildroot@lists.busybox.net>;
  Mon, 12 Aug 2024 19:28:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 65CF560703
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 725E040582
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 65CF560703
+ by smtp4.osuosl.org (Postfix) with ESMTP id 725E040582
  for <buildroot@buildroot.org>; Mon, 12 Aug 2024 19:28:57 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4E00B8531C; Mon, 12 Aug 2024 19:28:57 +0000 (UTC)
+ id 5D16C85367; Mon, 12 Aug 2024 19:28:57 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 12 Aug 2024 21:27:50 +0200
+Date: Mon, 12 Aug 2024 21:27:52 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: ab92eaa04bf8ec29dced04063ba1dc626b7d5789
-X-Git-Newrev: 25ef4c7d708b882d0433fe1e82ae470135479469
+X-Git-Oldrev: 25ef4c7d708b882d0433fe1e82ae470135479469
+X-Git-Newrev: 542b0dc4f601d550a69a209614520673fb4c0583
 X-Patchwork-Hint: ignore
-Message-Id: <20240812192857.4E00B8531C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/uclibc: fix ARC build
- with 4.x kernel headers
+Message-Id: <20240812192857.5D16C85367@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/uclibc: fix st_mtim
+ issue
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -61,66 +61,177 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============7765365653722381449=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=25ef4c7d708b882d0433fe1e82ae470135479469
+--===============7765365653722381449==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=542b0dc4f601d550a69a209614520673fb4c0583
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Provide correct grouping for preprocessor conditions to avoid building
-ld.so with undefined macroses which are in use. This is a fix for
-package/uclibc/0002-Fix-compilation-with-4.x-kernel-headers.patch.
+The first patch to fix this issue was incomplete.
+Add a patch to also fix all other architectures.
 
-Signed-off-by: Dmitry Chestnykh <dm.chestnykh@gmail.com>
+Fixes:
+ - http://autobuild.buildroot.net/results/f3b/f3b3942b6b645d9523ab08d179a3f8aca7d6641c
+
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Reviewed-by: J. Neuschäfer <j.neuschaefer@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- ...004-Fix-arc-build-with-4.x-kernel-headers.patch | 35 ++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
+ ...-Declare-st_mtim-if-defined-__USE_XOPEN2K.patch | 132 +++++++++++++++++++++
+ 1 file changed, 132 insertions(+)
 
-diff --git a/package/uclibc/0004-Fix-arc-build-with-4.x-kernel-headers.patch b/package/uclibc/0004-Fix-arc-build-with-4.x-kernel-headers.patch
+diff --git a/package/uclibc/0005-bits-stat.h-Declare-st_mtim-if-defined-__USE_XOPEN2K.patch b/package/uclibc/0005-bits-stat.h-Declare-st_mtim-if-defined-__USE_XOPEN2K.patch
 new file mode 100644
-index 0000000000..02a04a42dc
+index 0000000000..749a098406
 --- /dev/null
-+++ b/package/uclibc/0004-Fix-arc-build-with-4.x-kernel-headers.patch
-@@ -0,0 +1,35 @@
-+From 1afc19eb6a7948afbcf3dd19091ce127a355ebcb Mon Sep 17 00:00:00 2001
-+From: Dmitry Chestnykh <dm.chestnykh@gmail.com>
-+Date: Sun, 28 Jul 2024 14:12:39 +0300
-+Subject: [PATCH] [ldso] Group conditions after `&&`
++++ b/package/uclibc/0005-bits-stat.h-Declare-st_mtim-if-defined-__USE_XOPEN2K.patch
+@@ -0,0 +1,132 @@
++From 354129807db12c792696b74d0cd38f2c5d2fd704 Mon Sep 17 00:00:00 2001
++From: Waldemar Brodkorb <wbx@openadk.org>
++Date: Fri, 9 Aug 2024 06:16:02 +0200
++Subject: [PATCH] bits/stat.h: Declare st_mtim if defined(__USE_XOPEN2K8),
++ add missing
 +
-+If the conditions are not grouped we can reach
-+this block even if `__NR_stat` is not defined.
++d0c8c185b439187b12644457bb2aa0326f25aaf7 was not complete, add
++missing architectures.
 +
-+`defined __NR_stat && ((!defined(__UCLIBC_USE_TIME64__) || defined(__sparc__))`
-+gives us false but `LINUX_VERSION_CODE <= KERNEL_VERSION(5,1,0))`
-+may give us true. So if linux headers version is below 5.1.0 and
-+__NR_stat is not defined we can have compilation error
-+
-+Signed-off-by: Dmitry Chestnykh <dm.chestnykh@gmail.com>
-+Upstream: https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?id=841d0729883ee0de606de161c1d6a5c37cedf575
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++Upstream: https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?id=354129807db12c792696b74d0cd38f2c5d2fd704
 +---
-+ ldso/include/dl-syscall.h | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
++ libc/sysdeps/linux/mips/bits/stat.h    | 4 ++--
++ libc/sysdeps/linux/sparc/bits/stat.h   | 4 ++--
++ libc/sysdeps/linux/sparc64/bits/stat.h | 4 ++--
++ libc/sysdeps/linux/x86_64/bits/stat.h  | 4 ++--
++ libc/sysdeps/linux/xtensa/bits/stat.h  | 4 ++--
++ 5 files changed, 10 insertions(+), 10 deletions(-)
 +
-+diff --git a/ldso/include/dl-syscall.h b/ldso/include/dl-syscall.h
-+index 9ec0eac60..180d03012 100644
-+--- a/ldso/include/dl-syscall.h
-++++ b/ldso/include/dl-syscall.h
-+@@ -141,7 +141,7 @@ static __always_inline int _dl_stat(const char *file_name,
-+ {
-+ 	return _dl_newfstatat(AT_FDCWD, file_name, buf, 0);
-+ }
-+-#elif defined __NR_stat && (!defined(__UCLIBC_USE_TIME64__) || defined(__sparc__)) || (LINUX_VERSION_CODE <= KERNEL_VERSION(5,1,0))
-++#elif defined __NR_stat && (!defined(__UCLIBC_USE_TIME64__) || defined(__sparc__) || (LINUX_VERSION_CODE <= KERNEL_VERSION(5,1,0)))
-+ # define __NR__dl_stat __NR_stat
-+ static __always_inline _syscall2(int, _dl_stat, const char *, file_name,
-+                         struct stat *, buf)
++diff --git a/libc/sysdeps/linux/mips/bits/stat.h b/libc/sysdeps/linux/mips/bits/stat.h
++index bad2a0244..81d2e4687 100644
++--- a/libc/sysdeps/linux/mips/bits/stat.h
+++++ b/libc/sysdeps/linux/mips/bits/stat.h
++@@ -145,7 +145,7 @@ struct stat64
++     __dev_t st_rdev;	/* Device number, if device.  */
++     long int st_pad2[2];
++     __off64_t st_size;		/* Size of file, in bytes.  */
++-#ifdef __USE_MISC
+++#if defined(__USE_MISC) || defined(__USE_XOPEN2K8)
++     /* Nanosecond resolution timestamps are stored in a format
++        equivalent to 'struct timespec'.  This is the type used
++        whenever possible but the Unix namespace rules do not allow the
++@@ -184,7 +184,7 @@ struct stat64 {
++     unsigned int st_rdev;	/* Device number, if device.  */
++     int st_pad2[3];
++     __off_t st_size;		/* Size of file, in bytes.  */
++-#ifdef __USE_MISC
+++#if defined(__USE_MISC) || defined(__USE_XOPEN2K8)
++     /* Nanosecond resolution timestamps are stored in a format
++        equivalent to 'struct timespec'.  This is the type used
++        whenever possible but the Unix namespace rules do not allow the
++diff --git a/libc/sysdeps/linux/sparc/bits/stat.h b/libc/sysdeps/linux/sparc/bits/stat.h
++index b88885fe2..0fbef8b3f 100644
++--- a/libc/sysdeps/linux/sparc/bits/stat.h
+++++ b/libc/sysdeps/linux/sparc/bits/stat.h
++@@ -53,7 +53,7 @@ struct stat
++ #else
++     __blkcnt64_t st_blocks;		/* Number 512-byte blocks allocated. */
++ #endif
++-#ifdef __USE_MISC
+++#if defined(__USE_MISC) || defined(__USE_XOPEN2K8)
++     /* Nanosecond resolution timestamps are stored in a format
++        equivalent to 'struct timespec'.  This is the type used
++        whenever possible but the Unix namespace rules do not allow the
++@@ -93,7 +93,7 @@ struct stat64
++     __blksize_t st_blksize;		/* Optimal block size for I/O.  */
++ 
++     __blkcnt64_t st_blocks;		/* Number 512-byte blocks allocated. */
++-#ifdef __USE_MISC
+++#if defined(__USE_MISC) || defined(__USE_XOPEN2K8)
++     /* Nanosecond resolution timestamps are stored in a format
++        equivalent to 'struct timespec'.  This is the type used
++        whenever possible but the Unix namespace rules do not allow the
++diff --git a/libc/sysdeps/linux/sparc64/bits/stat.h b/libc/sysdeps/linux/sparc64/bits/stat.h
++index 8516b159c..62b48b745 100644
++--- a/libc/sysdeps/linux/sparc64/bits/stat.h
+++++ b/libc/sysdeps/linux/sparc64/bits/stat.h
++@@ -58,7 +58,7 @@ struct stat
++ #else
++     __blkcnt64_t st_blocks;		/* Number 512-byte blocks allocated. */
++ #endif
++-#ifdef __USE_MISC
+++#if defined(__USE_MISC) || defined(__USE_XOPEN2K8)
++     /* Nanosecond resolution timestamps are stored in a format
++        equivalent to 'struct timespec'.  This is the type used
++        whenever possible but the Unix namespace rules do not allow the
++@@ -101,7 +101,7 @@ struct stat64
++     __blksize_t st_blksize;		/* Optimal block size for I/O.  */
++ 
++     __blkcnt64_t st_blocks;		/* Number 512-byte blocks allocated. */
++-#ifdef __USE_MISC
+++#if defined(__USE_MISC) || defined(__USE_XOPEN2K8)
++     /* Nanosecond resolution timestamps are stored in a format
++        equivalent to 'struct timespec'.  This is the type used
++        whenever possible but the Unix namespace rules do not allow the
++diff --git a/libc/sysdeps/linux/x86_64/bits/stat.h b/libc/sysdeps/linux/x86_64/bits/stat.h
++index a7412c8f9..a8c75feaa 100644
++--- a/libc/sysdeps/linux/x86_64/bits/stat.h
+++++ b/libc/sysdeps/linux/x86_64/bits/stat.h
++@@ -77,7 +77,7 @@ struct stat
++ #else
++     __blkcnt64_t st_blocks;		/* Number 512-byte blocks allocated. */
++ #endif
++-#ifdef __USE_MISC
+++#if defined(__USE_MISC) || defined(__USE_XOPEN2K8)
++     /* Nanosecond resolution timestamps are stored in a format
++        equivalent to 'struct timespec'.  This is the type used
++        whenever possible but the Unix namespace rules do not allow the
++@@ -138,7 +138,7 @@ struct stat64
++ #endif
++     __blksize_t st_blksize;	/* Optimal block size for I/O.  */
++     __blkcnt64_t st_blocks;	/* Nr. 512-byte blocks allocated.  */
++-#ifdef __USE_MISC
+++#if defined(__USE_MISC) || defined(__USE_XOPEN2K8)
++     /* Nanosecond resolution timestamps are stored in a format
++        equivalent to 'struct timespec'.  This is the type used
++        whenever possible but the Unix namespace rules do not allow the
++diff --git a/libc/sysdeps/linux/xtensa/bits/stat.h b/libc/sysdeps/linux/xtensa/bits/stat.h
++index 045a017fd..43af825ec 100644
++--- a/libc/sysdeps/linux/xtensa/bits/stat.h
+++++ b/libc/sysdeps/linux/xtensa/bits/stat.h
++@@ -54,7 +54,7 @@ struct stat
++     unsigned long __pad2;
++     __blkcnt64_t st_blocks;		/* Number 512-byte blocks allocated. */
++ #endif
++-#ifdef __USE_MISC
+++#if defined(__USE_MISC) || defined(__USE_XOPEN2K8)
++     /* Nanosecond resolution timestamps are stored in a format
++        equivalent to 'struct timespec'.  This is the type used
++        whenever possible but the Unix namespace rules do not allow the
++@@ -94,7 +94,7 @@ struct stat64
++ 
++     unsigned long __pad2;
++     __blkcnt64_t st_blocks;		/* Number 512-byte blocks allocated. */
++-#ifdef __USE_MISC
+++#if defined(__USE_MISC) || defined(__USE_XOPEN2K8)
++     /* Nanosecond resolution timestamps are stored in a format
++        equivalent to 'struct timespec'.  This is the type used
++        whenever possible but the Unix namespace rules do not allow the
 +-- 
-+2.45.2
++2.30.2
 +
+
+--===============7765365653722381449==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============7765365653722381449==--
