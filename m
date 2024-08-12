@@ -4,61 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ABB42C3DA7F
-	for <buildroot@archiver.kernel.org>; Mon, 12 Aug 2024 11:22:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E11D2C3DA7F
+	for <buildroot@archiver.kernel.org>; Mon, 12 Aug 2024 11:22:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1D01E40334;
-	Mon, 12 Aug 2024 11:22:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A07B340506;
+	Mon, 12 Aug 2024 11:22:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Iz4SvkWPCPeH; Mon, 12 Aug 2024 11:22:17 +0000 (UTC)
+ id VTLjEP3q6xhT; Mon, 12 Aug 2024 11:22:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E8F4A40336
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 77B2840520
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E8F4A40336;
-	Mon, 12 Aug 2024 11:22:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 77B2840520;
+	Mon, 12 Aug 2024 11:22:38 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 47CFE1BF2A5
- for <buildroot@lists.busybox.net>; Mon, 12 Aug 2024 11:22:16 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6B7911BF2A5
+ for <buildroot@lists.busybox.net>; Mon, 12 Aug 2024 11:22:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2F71680F1A
- for <buildroot@lists.busybox.net>; Mon, 12 Aug 2024 11:22:16 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6496280F1A
+ for <buildroot@lists.busybox.net>; Mon, 12 Aug 2024 11:22:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EATD2yzLE_Uo for <buildroot@lists.busybox.net>;
- Mon, 12 Aug 2024 11:22:15 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::222;
- helo=relay2-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+ id CHh_lfIN0Atm for <buildroot@lists.busybox.net>;
+ Mon, 12 Aug 2024 11:22:37 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.200;
+ helo=relay7-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org BBD0A80EB4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BBD0A80EB4
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::222])
- by smtp1.osuosl.org (Postfix) with ESMTPS id BBD0A80EB4
- for <buildroot@buildroot.org>; Mon, 12 Aug 2024 11:22:14 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 05DA140009;
- Mon, 12 Aug 2024 11:22:10 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 752EA80EB4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 752EA80EB4
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 752EA80EB4
+ for <buildroot@buildroot.org>; Mon, 12 Aug 2024 11:22:35 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id A283220007;
+ Mon, 12 Aug 2024 11:22:32 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1sdT7q-0072Gz-1R;
- Mon, 12 Aug 2024 13:22:10 +0200
+ (envelope-from <peter@korsgaard.com>) id 1sdT8C-0072Jy-0g;
+ Mon, 12 Aug 2024 13:22:32 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Heiko Thiery <heiko.thiery@gmail.com>
-References: <20240713054213.228070-1-heiko.thiery@gmail.com>
- <20240713054213.228070-2-heiko.thiery@gmail.com>
-Date: Mon, 12 Aug 2024 13:22:10 +0200
-In-Reply-To: <20240713054213.228070-2-heiko.thiery@gmail.com> (Heiko Thiery's
- message of "Sat, 13 Jul 2024 07:42:15 +0200")
-Message-ID: <87y152j89p.fsf@dell.be.48ers.dk>
+References: <20240713054407.229084-1-heiko.thiery@gmail.com>
+Date: Mon, 12 Aug 2024 13:22:32 +0200
+In-Reply-To: <20240713054407.229084-1-heiko.thiery@gmail.com> (Heiko Thiery's
+ message of "Sat, 13 Jul 2024 07:44:08 +0200")
+Message-ID: <87ttfqj893.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/2] package/pkg-cmake: remove override of
- CMAKE_ASM_COMPILER
+Subject: Re: [Buildroot] [PATCH 2/2] package/llvm-project/llvm: remove
+ overriding the ASM compiler
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,26 +80,11 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Heiko" == Heiko Thiery <heiko.thiery@gmail.com> writes:
 
- > Overriding the ASM is wrong and leads to failures e.g. for the llvm
- > package. Therefore the ASM compiler was overwritten there.
+ > There was an error in the pkg-cmake infra file regarding the selection
+ > of the ASM compiler. Now that this has been fixed, overwriting the
+ > ASM compiler selection is no longer necessary.
 
  > Signed-off-by: Heiko Thiery <heiko.thiery@gmail.com>
- > ---
- >  package/pkg-cmake.mk | 1 -
- >  1 file changed, 1 deletion(-)
-
- > diff --git a/package/pkg-cmake.mk b/package/pkg-cmake.mk
- > index 8f391eb4c9..c7032312fb 100644
- > --- a/package/pkg-cmake.mk
- > +++ b/package/pkg-cmake.mk
- > @@ -147,7 +147,6 @@ define $(2)_CONFIGURE_CMDS
- >  		-DCMAKE_CXX_FLAGS="$$(HOST_CXXFLAGS)" \
- >  		-DCMAKE_EXE_LINKER_FLAGS="$$(HOST_LDFLAGS)" \
- >  		-DCMAKE_SHARED_LINKER_FLAGS="$$(HOST_LDFLAGS)" \
- > -		-DCMAKE_ASM_COMPILER="$$(HOSTAS)" \
- >  		-DCMAKE_C_COMPILER="$$(CMAKE_HOST_C_COMPILER)" \
- >  		-DCMAKE_CXX_COMPILER="$$(CMAKE_HOST_CXX_COMPILER)" \
- >  		$(if $$(CMAKE_HOST_C_COMPILER_LAUNCHER),\
 
 Committed to 2024.02.x and 2024.05.x, thanks.
 
