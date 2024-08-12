@@ -4,49 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67981C52D7C
-	for <buildroot@archiver.kernel.org>; Mon, 12 Aug 2024 20:23:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DC26EC52D7C
+	for <buildroot@archiver.kernel.org>; Mon, 12 Aug 2024 20:23:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9937681376;
-	Mon, 12 Aug 2024 20:23:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A9C0F8136A;
+	Mon, 12 Aug 2024 20:23:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RYf7h5Pzq8Nj; Mon, 12 Aug 2024 20:23:11 +0000 (UTC)
+ id 0zx_GyKgCSsX; Mon, 12 Aug 2024 20:23:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 52C8981378
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CBC4B81373
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 52C8981378;
-	Mon, 12 Aug 2024 20:23:11 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B3A0C1BF344
- for <buildroot@lists.busybox.net>; Mon, 12 Aug 2024 20:23:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CBC4B81373;
+	Mon, 12 Aug 2024 20:23:20 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 8A2441BF344
+ for <buildroot@lists.busybox.net>; Mon, 12 Aug 2024 20:23:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DC56C81365
- for <buildroot@lists.busybox.net>; Mon, 12 Aug 2024 20:23:06 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 845C06081D
+ for <buildroot@lists.busybox.net>; Mon, 12 Aug 2024 20:23:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IJ9ONHykCoaC for <buildroot@lists.busybox.net>;
- Mon, 12 Aug 2024 20:23:06 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id l3gTuYC5C4JB for <buildroot@lists.busybox.net>;
+ Mon, 12 Aug 2024 20:23:18 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.200;
+ helo=relay7-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0731681366
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0731681366
- for <buildroot@buildroot.org>; Mon, 12 Aug 2024 20:23:06 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E4B2D85446; Mon, 12 Aug 2024 20:23:05 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 12 Aug 2024 22:22:44 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2a700617cc1aa14deb9f4e4f5c63e19c77901389
-X-Git-Newrev: b62d671a1b5a12ae95b4bef7a1f30f85af6cd2ed
-X-Patchwork-Hint: ignore
-Message-Id: <20240812202305.E4B2D85446@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] Revert "package/chicken: move literals
- into text section for xtensa architecture"
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 6EBE2605AC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6EBE2605AC
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6EBE2605AC
+ for <buildroot@buildroot.org>; Mon, 12 Aug 2024 20:23:16 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 9802720003;
+ Mon, 12 Aug 2024 20:23:14 +0000 (UTC)
+Date: Mon, 12 Aug 2024 22:23:13 +0200
+To: Max Filippov <jcmvbkbc@gmail.com>
+Message-ID: <20240812222313.0d04d3cb@windsurf>
+In-Reply-To: <20240811000029.1956409-1-jcmvbkbc@gmail.com>
+References: <20240811000029.1956409-1-jcmvbkbc@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1723494194;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=Qt5625b8gseUW+ikeLD0EfFqjwkdhk5FcvtXOd7ygys=;
+ b=HbIkUBrfX3PmHM3JYR85LE+nzZFcpPVQWL4aRbWH8icIUUzD5UycKypo5BhFCJO3KpODdj
+ ReyUSU26OMu39GXzfz0k0D64T/tpeDvlGH2IZtX8cXOzgOX9ktEpwnVTddtjLLcKOe1pUv
+ T8PGVimKHyIBkJBnT6iDpTvXqovEJzko6itTzoLhNoqf+ynRr0wYD+r4UHj5GWE/A2fPxb
+ rWR1MeUeq5LFiISxQmYAFejM3OXcNSyPvvZg9cUcP2l0J3ywGFw0xfysjBDn4N2eTgapyR
+ makkgZR01UysnkL8oMPVZiegqbdNUrNzgzId18fGv8lIXxI0bfGec9quo2vWsA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=HbIkUBrf
+Subject: Re: [Buildroot] [PATCH 0/2] package/chicken: pass TARGET_CFLAGS to
+ the build system
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,85 +83,27 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Woodrow Douglass <wdouglass@carnegierobotics.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b62d671a1b5a12ae95b4bef7a1f30f85af6cd2ed
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sat, 10 Aug 2024 17:00:27 -0700
+Max Filippov <jcmvbkbc@gmail.com> wrote:
 
-This reverts commit 86e51fd5fe2810bbf833b48c4914dcd2de01bdbe.
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- .../0001-xtensa-text-section-literals.patch        | 30 ----------------------
- package/chicken/chicken.mk                         | 14 ++--------
- 2 files changed, 2 insertions(+), 42 deletions(-)
+> Max Filippov (2):
+>   Revert "package/chicken: move literals into text section for xtensa
+>     architecture"
+>   package/chicken: pass TARGET_CFLAGS to the build system
 
-diff --git a/package/chicken/0001-xtensa-text-section-literals.patch b/package/chicken/0001-xtensa-text-section-literals.patch
-deleted file mode 100644
-index b93aaf9e21..0000000000
---- a/package/chicken/0001-xtensa-text-section-literals.patch
-+++ /dev/null
-@@ -1,30 +0,0 @@
--From e8d177f4d4e1c6bc41787ea1621e323ff4ad493e Mon Sep 17 00:00:00 2001
--From: Woodrow Douglass <wdouglass@carnegierobotics.com>
--Date: Mon, 22 Jul 2024 08:50:37 -0400
--Subject: [PATCH] Move literals into text section for xtensa architecture
--
--Upstream: https://bugs.call-cc.org/ticket/1840
--Signed-off-by: Woodrow Douglass <wdouglass@carnegierobotics.com>
-----
-- Makefile.linux | 5 +++++
-- 1 file changed, 5 insertions(+)
--
--diff --git a/Makefile.linux b/Makefile.linux
--index b628cda4..e97c2b94 100644
----- a/Makefile.linux
--+++ b/Makefile.linux
--@@ -52,6 +52,11 @@ USES_SONAME = yes
-- 
-- # architectures
-- 
--+ifeq ($(ARCH),xtensa)
--+C_COMPILER_OPTIONS += -mtext-section-literals
--+LINKER_OPTIONS += -mtext-section-literals
--+endif
--+
-- ifeq ($(ARCH),x32)
-- C_COMPILER_OPTIONS += -mx32
-- LINKER_OPTIONS += -mx32
---- 
--2.39.2
--
-diff --git a/package/chicken/chicken.mk b/package/chicken/chicken.mk
-index 0520280134..2667f7823d 100644
---- a/package/chicken/chicken.mk
-+++ b/package/chicken/chicken.mk
-@@ -11,19 +11,9 @@ CHICKEN_LICENSE_FILES = LICENSE
- CHICKEN_CPE_ID_VENDOR = call-cc
- CHICKEN_INSTALL_STAGING = YES
- 
--# Chicken only uses the "arch" variable for some special-case compile
--# arguments If it's empty, it tries to detect the arch host Filter out
--# values that have an effect, or pass "unused" here
--ifeq ($(NORMALIZED_ARCH),x86_64)
--CHICKEN_ARCH = x86-64
--else ifeq ($(NORMALIZED_ARCH),xtensa)
--CHICKEN_ARCH = xtensa
--else
--CHICKEN_ARCH = unused
--endif
--
-+# If ARCH is not set, it attempts to autodiscover. But it is anyway not used.
- CHICKEN_MAKE_OPTS = \
--	ARCH="$(CHICKEN_ARCH)" \
-+	ARCH=unused \
- 	C_COMPILER="$(TARGET_CC)" \
- 	CXX_COMPILER="$(TARGET_CXX)" \
- 	PREFIX=/usr \
+Thanks, both applied to master!
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
