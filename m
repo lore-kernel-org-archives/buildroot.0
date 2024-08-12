@@ -4,72 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E0981C52D7C
-	for <buildroot@archiver.kernel.org>; Mon, 12 Aug 2024 20:50:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3234BC52D7C
+	for <buildroot@archiver.kernel.org>; Mon, 12 Aug 2024 20:50:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AFC1E8109F;
-	Mon, 12 Aug 2024 20:50:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E900680CAF;
+	Mon, 12 Aug 2024 20:50:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id g1qwNCDg7vPf; Mon, 12 Aug 2024 20:50:40 +0000 (UTC)
+ id eIy2fMzdBEs2; Mon, 12 Aug 2024 20:50:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BB431810A8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EB64C80CE8
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BB431810A8;
-	Mon, 12 Aug 2024 20:50:39 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 018261BF344
- for <buildroot@lists.busybox.net>; Mon, 12 Aug 2024 20:50:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EB64C80CE8;
+	Mon, 12 Aug 2024 20:50:55 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 701321BF344
+ for <buildroot@lists.busybox.net>; Mon, 12 Aug 2024 20:50:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E243D401B2
- for <buildroot@lists.busybox.net>; Mon, 12 Aug 2024 20:50:38 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5C0E9405B5
+ for <buildroot@lists.busybox.net>; Mon, 12 Aug 2024 20:50:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eUxnQVIR0jNn for <buildroot@lists.busybox.net>;
- Mon, 12 Aug 2024 20:50:38 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.201;
- helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id szAPWW9diQLg for <buildroot@lists.busybox.net>;
+ Mon, 12 Aug 2024 20:50:52 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org A42B3400B5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A42B3400B5
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp2.osuosl.org (Postfix) with ESMTPS id A42B3400B5
- for <buildroot@buildroot.org>; Mon, 12 Aug 2024 20:50:37 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id C24001BF205;
- Mon, 12 Aug 2024 20:50:34 +0000 (UTC)
-Date: Mon, 12 Aug 2024 22:50:33 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Message-ID: <20240812225033.18fd8e2d@windsurf>
-In-Reply-To: <20240810174645.709425-1-bernd@kuhls.net>
-References: <20240810174645.709425-1-bernd@kuhls.net>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1723495834;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=2f69YmzjH1Nv1mxmllTktWcV++REKO1MdkdZC067UAk=;
- b=Lq428K/CiMOZNr7y500x18w9pC4J85jHXjX5kDsEtUozlBxagz/NSRCOgPKjFK2XemtIMr
- f/8hXDa3W65gEGjS5gX3qpW0K0JEinP9s0hgJveGVnJTj+UxBPURGhcMJUakbFQpwp+/3A
- ddeo5Y9ByVNRE9lY+Ej+SA7j1TKEtK2KxWG8b8UFyjIpkp9DNCmwsjenX8ofAiJ7+6moEk
- MyV7+y/op4IZlc/zmKewJps7dl89NexQANJvFL56yW93Vh98SCaZbWbyx/krnnqiFI3V5K
- +7BLN0ZzHA/o5HdEjfC0fm+8ni2Ma9Zg//lyz/lKkIFdMfkSaHsLXOCxxEvdog==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Lq428K/C
-Subject: Re: [Buildroot] [PATCH 1/1] package/gnutls: security bump version
- to 3.8.6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9F801405B0
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9F801405B0
+ for <buildroot@buildroot.org>; Mon, 12 Aug 2024 20:50:52 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 9AF79855EE; Mon, 12 Aug 2024 20:50:52 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
+To: buildroot@buildroot.org
+Date: Mon, 12 Aug 2024 22:17:41 +0200
+X-Git-Refname: refs/heads/2024.02.x
+X-Git-Oldrev: 6beb77d27e8c0085c16743ffb177ed3dc9b8f350
+X-Git-Newrev: 279bd4993d3890c9b156eb156a69308197ff2481
+X-Patchwork-Hint: ignore
+Message-Id: <20240812205052.9AF79855EE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/wolfssl: security
+ bump to version 5.7.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,37 +59,66 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat, 10 Aug 2024 19:46:45 +0200
-Bernd Kuhls <bernd@kuhls.net> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=279bd4993d3890c9b156eb156a69308197ff2481
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-> Version 3.8.4 fixes CVE-2024-28834 & CVE-2024-28835.
-> 
-> Release notes:
-> 3.8.4: https://lists.gnupg.org/pipermail/gnutls-help/2024-March/004845.html
-> 3.8.5: https://lists.gnupg.org/pipermail/gnutls-help/2024-April/004846.html
-> 3.8.6: https://lists.gnupg.org/pipermail/gnutls-help/2024-July/004848.html
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-> ---
->  package/gnutls/gnutls.hash | 4 ++--
->  package/gnutls/gnutls.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+- Fix CVE-2024-1544, CVE-2024-5288, CVE-2024-5991 and CVE-2024-5814
+- Disable option checking which is enabled by default since
+  https://github.com/wolfSSL/wolfssl/commit/412447ac416ce76ba2a9bebbea8917258ed4c81e
 
-Applied to master, thanks.
+https://github.com/wolfSSL/wolfssl/releases/tag/v5.7.2-stable
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit f13e0014a548244cd0e617ab60b47c68c872f823)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/wolfssl/wolfssl.hash | 2 +-
+ package/wolfssl/wolfssl.mk   | 7 +++++--
+ 2 files changed, 6 insertions(+), 3 deletions(-)
+
+diff --git a/package/wolfssl/wolfssl.hash b/package/wolfssl/wolfssl.hash
+index e705bba9fd..9a1e8bfd4a 100644
+--- a/package/wolfssl/wolfssl.hash
++++ b/package/wolfssl/wolfssl.hash
+@@ -1,5 +1,5 @@
+ # Locally computed:
+-sha256  2de93e8af588ee856fe67a6d7fce23fc1b226b74d710b0e3946bc8061f6aa18f  wolfssl-5.7.0.tar.gz
++sha256  0f2ed82e345b833242705bbc4b08a2a2037a33f7bf9c610efae6464f6b10e305  wolfssl-5.7.2.tar.gz
+ 
+ # Hash for license files:
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+diff --git a/package/wolfssl/wolfssl.mk b/package/wolfssl/wolfssl.mk
+index 893408eca4..91ab7ca08a 100644
+--- a/package/wolfssl/wolfssl.mk
++++ b/package/wolfssl/wolfssl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-WOLFSSL_VERSION = 5.7.0
++WOLFSSL_VERSION = 5.7.2
+ WOLFSSL_SITE = $(call github,wolfSSL,wolfssl,v$(WOLFSSL_VERSION)-stable)
+ WOLFSSL_INSTALL_STAGING = YES
+ 
+@@ -16,7 +16,10 @@ WOLFSSL_CONFIG_SCRIPTS = wolfssl-config
+ WOLFSSL_AUTORECONF = YES
+ WOLFSSL_DEPENDENCIES = host-pkgconf
+ 
+-WOLFSSL_CONF_OPTS = --disable-examples --disable-crypttests
++WOLFSSL_CONF_OPTS = \
++	--disable-examples \
++	--disable-crypttests \
++	--disable-option-checking
+ 
+ ifeq ($(BR2_PACKAGE_WOLFSSL_ALL),y)
+ WOLFSSL_CONF_OPTS += --enable-all
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
