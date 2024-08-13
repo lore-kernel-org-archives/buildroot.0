@@ -1,136 +1,89 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 21C33C52D7C
-	for <buildroot@archiver.kernel.org>; Tue, 13 Aug 2024 13:54:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 14DCFC52D7B
+	for <buildroot@archiver.kernel.org>; Tue, 13 Aug 2024 17:21:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A1C5780B0D;
-	Tue, 13 Aug 2024 13:54:12 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7026740AE8;
+	Tue, 13 Aug 2024 17:21:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2P8KFI0svKXp; Tue, 13 Aug 2024 13:54:11 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id F9M2r_p-cgQp; Tue, 13 Aug 2024 17:21:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DF9D681980
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D8ABE403C4
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DF9D681980;
-	Tue, 13 Aug 2024 13:54:10 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D8ABE403C4;
+	Tue, 13 Aug 2024 17:21:11 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 2B6321BF275
- for <buildroot@lists.busybox.net>; Tue, 13 Aug 2024 13:54:10 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 46DE31BF5AD
+ for <buildroot@lists.busybox.net>; Tue, 13 Aug 2024 17:21:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 17CA340395
- for <buildroot@lists.busybox.net>; Tue, 13 Aug 2024 13:54:10 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with UTF8SMTP id 34165403C7
+ for <buildroot@lists.busybox.net>; Tue, 13 Aug 2024 17:21:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id I0C6i1VVVWDL for <buildroot@lists.busybox.net>;
- Tue, 13 Aug 2024 13:54:09 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.20;
- helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 4EC0140471
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4EC0140471
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4EC0140471
- for <buildroot@buildroot.org>; Tue, 13 Aug 2024 13:54:06 +0000 (UTC)
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.7.2] ([85.22.116.209]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1N95eJ-1s9OXr1Ki7-014rYm; Tue, 13
- Aug 2024 15:54:04 +0200
-Message-ID: <e0ee0dca-132f-4f29-93ed-e272b6767867@gmx.de>
-Date: Tue, 13 Aug 2024 15:54:03 +0200
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024)
+ with UTF8SMTP id zui_IMX8JgrG for <buildroot@lists.busybox.net>;
+ Tue, 13 Aug 2024 17:21:08 +0000 (UTC)
+X-Greylist: delayed 489 seconds by postgrey-1.37 at util1.osuosl.org;
+ Tue, 13 Aug 2024 17:21:07 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org B4142406F9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B4142406F9
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=203.205.221.155;
+ helo=out203-205-221-155.mail.qq.com; envelope-from=wangdong115@foxmail.com;
+ receiver=<UNKNOWN> 
+Received: from out203-205-221-155.mail.qq.com (out203-205-221-155.mail.qq.com
+ [203.205.221.155])
+ by smtp4.osuosl.org (Postfix) with UTF8SMTPS id B4142406F9
+ for <buildroot@buildroot.org>; Tue, 13 Aug 2024 17:21:07 +0000 (UTC)
+Received: from localhost.localdomain ([106.120.7.242])
+ by newxmesmtplogicsvrszc13-0.qq.com (NewEsmtp) with SMTP
+ id 3341AC12; Wed, 14 Aug 2024 01:12:52 +0800
+X-QQ-mid: xmsmtpt1723569172tch0k9wdw
+Message-ID: <tencent_96D562A129814C4EA71CECCDB60D1B060707@qq.com>
+X-QQ-XMAILINFO: OW5zxOp0HHYwNRs+FGjzY+vkQ+1osi6+AsCAbOSeSpoKtjdCpHvzaWEtvHYBPb
+ cOdfGrVqbrqDeD6VgKjZatd+6h6d5lleKDccPqA+toS+KTYLeQJ5ZkhdIaFCi60L+sk3bDN0eqi/
+ cUjVOYltVnRvPi516+ajnx8ykz7qwMsLrkysTPEXyEwDHi7kAA/DqUdR9ihMtJ+eOF8aQb8hLgNa
+ 8BFo/yk1EpW0Tk8rj4ChZLIxZoTQP0HGJsbxx9653AGrK1G2E4kK732sRvJRQgtOtTpSLJPuNiNI
+ TDqOCv4oFNc73SbY5qA4au0lHDEKFpZIkJ0fHfp1H815uqTCMPml2bKCUOJoJSw/6gsMgKbBRWYI
+ 8JzGMbJcve+VHNTf6rRbiMZI7bkh6nPAyGHeu+eU7YENFDfYZLENUoPYcjCp2jV8hBe4YUmS55su
+ yHXVMnvCZnM89FtzLp/5hPIhTU4CSC9KA04mE+UA+SgBq6YfCuCvTiYN5JwhZAbjIYHCQrTfHl6c
+ pG/N+DEUDxkPfxLXURDp5vY6Z/iJO6HAeBBRzS5BeoUnZoK6nhHh+MtYlLdNgcQBa1zcjSxFNRsu
+ YuZncNRInDLvyDBtf6sWqYu5XFzL7sg3mrTuBlLehU1bdVYbtzUEsJBtAJbDUKKzAAh85dvVlfSV
+ 5sedUzdB5wB012dRFvW3HhNopIx+Shmf4ubvFvO1UabI8jaxf1tslMpnGYxxcO9QVRrFLjDGq8xR
+ adVaevzm8CxEN+TMwS+D5kHWlaJxjw79w7UzFjAPeA1e3VOK2NQu3x1lfmzUjXp8k/F3y+0b/0jB
+ z/SSwKwt+1EKSkDRFvbEv8MVQonO58mWSiYxNWYwl2Z3+/rHX7QVH/3C0VZvnVs+dw+mjlN7b9+D
+ gnGzgAeCjmNVWFUqm8zDgubgeGCQadPG4T55POfs8Yzwa2f0O/K02jx4MlJaN++kKtbDvYwShl6g
+ bGsiSxAC5yXsw/12KwpGZ84yvpthQBd1qmzM9LvyOoBWkJLuaS5C64uZ0FGZpol2uQzE503Jo=
+X-QQ-XMRINFO: NyFYKkN4Ny6FSmKK/uo/jdU=
+From: Dong Wang <wangdong115@foxmail.com>
+To: buildroot@buildroot.org
+Date: Wed, 14 Aug 2024 01:02:44 +0800
+X-OQ-MSGID: <20240813170241.29243-1-wangdong115@foxmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <tencent_7E39529BBE1BB50CB4AA2A429702629C0808@qq.com>
+References: <tencent_7E39529BBE1BB50CB4AA2A429702629C0808@qq.com>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: buildroot@buildroot.org, =?UTF-8?Q?Jos=C3=A9_Mendes?=
- <jp.baltazar.mendes@gmail.com>
-References: <CAFAK9+dq5Sru4npWX=u1P3y70a5bveavSLRhBoB-6r7wZZyg7A@mail.gmail.com>
-Content-Language: en-US, de-DE-1901, de-DE
-Autocrypt: addr=fiona.klute@gmx.de; keydata=
- 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
-In-Reply-To: <CAFAK9+dq5Sru4npWX=u1P3y70a5bveavSLRhBoB-6r7wZZyg7A@mail.gmail.com>
-X-Provags-ID: V03:K1:AAqrlW7yBYrORqGSyO4upQzz/4IznhwMOkoOOmmLs3xPoHkle0B
- HVepFlDa1l5Ixx/oNCyYFZjy+OKhCVOr5+KQCELoDiPhcTAqUjkO3CXbSLUZOCd50DYw9Vb
- 2QqevrGKLu1rz/1t9izjWjE4+QqYCkyBHO1dCn2xYc+sWscKhiVkQ2Wmtu3/tdce8aXMn7Y
- 3odtPrjpvJiAMR7HyOfyg==
-UI-OutboundReport: notjunk:1;M01:P0:V4ELtc4afXM=;qxLThyveQiOJqFgsV8abzX6maQ4
- xoAeyMcJFr6l0ctOp06yIpRyutBDm/vI/O6N8gBUya5MQpxQjw3emhVMSL3zVsxy3ZR08hnnY
- lz5Qn24hW4j9FMU/m2YdM6wx5VcW6SD58dtVmSrlHOiUvl6or7pimYWIwhj7Xx4KW+uVVCNik
- utOCAsCHsNBS0Y3Al/t3GnW3Rr2JvpfSzQEy2kaWAW4zx2kjlBhl+f9ru2KNSSJnJwso0fOTX
- BBZzN815x3UYKurkcW+R2mg4+1D0tx9ffQwgWKIG9o3yPv599+AxItUeA51Tax1LIVbcURcLW
- tSCWr6eH+fC+W8NquP7kW77TSpD684V7V5Kj6XaXuq7fudcHfiokU8NiICPdgzt8qUYJWISNi
- YaYz1Cw1oCQum8sz0vp2PCVZsFkQaEW2mXpG5iNQDkVKKCyKIgAWndWDp95qTB/PBHgs7trnh
- VBIdOc/i6M00zebIsrAjtnYlUZQ/iQ5KerSuT2ugBPnBa/0yb6ehvr3z75GiN6H1xcGbSY1HQ
- p9wz5ld3OT3jfVYLbRqtaXhiVZk0Qv1R2VAwNdMCWqgpatg0AU5fXAXBMkrA7pgThbFHoL2Og
- ct3IP0ywhN66HHjcXQJbUrm8JjJktWHITUalZXCdORIChelnzEIXnIEMpJ6xEIq4i0YxiPNBP
- 55whQ/NWxuU1ccO5v5v6HaVY/YcqFKeLAxXc0B3RVaR5d2fiWDADiOxw3Lu8S2PEmO9oIIg2h
- Ok5M3y6IEM3hPFYTeAFYdbFINFkWE0MizbyTD/i/vRYVvwnDljCFiFR8CYcD2Raqi89UFVdZ5
- 9EV1/mPlpYvHQhUhkVyeClhw==
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmx.de; 
- s=s31663417; t=1723557244; x=1724162044; i=fiona.klute@gmx.de;
- bh=zNxJZ0aZR1ijsIl2SeuQ2jKLRQJ3KX2GV3H4GfGH848=;
- h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:
- References:From:In-Reply-To:Content-Type:
- Content-Transfer-Encoding:cc:content-transfer-encoding:
- content-type:date:from:message-id:mime-version:reply-to:subject:
- to;
- b=AlN0qltSP5a+Y89FVE4+KLdT2XKQRIF82vDZdMZ+YlQTuV16tVO9sPKPIUpXikP3
- CnVEwfU86FIuN7iLt3dEI/X2TwpfORRuJIxlE1NLEXfB+LAbjQoBaFftbPax4JSSb
- nv3KgUIPbi+FErOn6fidmiy9b7MyL1elfdljL4g2jpjmxhTMDL34G6vZQEbVHuhie
- Me5GJXwfWbC0DIG4DTpXeYYAvZSflgiD4jY/smgzu/fB5TGW1zBuxZxtVgkByClSs
- ugF8MT+1S7G827kJcYKnESNd9zdCTjXo3pvkrJfLFDqV0nlZZdMrIA2DMxnzO65E0
- lfgA6UbUHrEBBWbTyA==
+ d=foxmail.com; s=s201512; t=1723569662;
+ bh=Xup6ibh4Hs8B3W3kb3AuWOrr8GkLyZWIkm32/9ZxWzE=;
+ h=From:To:Cc:Subject:Date:In-Reply-To:References;
+ b=mEtDJ6puCAqXndA+H7ppSXVFqxfvNvi8MIMopUN6tWyoRAydIUlWR9ygecs4N862V
+ 1ruSEvR3MIPgzmy2cMhzaIbx1K0Y3a/44eqm2rWJrdi3x+TW2hwMxxL4no9bmAb5kk
+ 5fTq9NB0P2cPJCrlstZ3G6U5tTa2RNrAgrdBgc1Y=
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=gmx.de
+ dmarc=pass (p=none dis=none)
+ header.from=foxmail.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmx.de header.i=fiona.klute@gmx.de
- header.a=rsa-sha256 header.s=s31663417 header.b=AlN0qltS
-Subject: Re: [Buildroot] Raspberry Pi SPL
+ dkim=pass (1024-bit key,
+ unprotected) header.d=foxmail.com header.i=@foxmail.com header.a=rsa-sha256
+ header.s=s201512 header.b=mEtDJ6pu
+Subject: [Buildroot] [PATCH v2] configs/friendlyarm_nanopi_neo_defconfig:
+ new defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -142,45 +95,234 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Fiona Klute via buildroot <buildroot@buildroot.org>
-Reply-To: Fiona Klute <fiona.klute@gmx.de>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Cc: Dong Wang <wangdong115@foxmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgSm9zw6khCgpBbSAxMy4wOC4yNCB1bSAxMToyMSBzY2hyaWViIEpvc8OpIE1lbmRlczoKPiBI
-aSBhbGwsCj4KPiBJJ20gdHJ5aW5nIHRvIGFkZCBTUEwgYW5kIGtlcm5lbCByZWR1bmRhbmN5IHRv
-IG15IHN5c3RlbS4gQ3VycmVudGx5IHRoZQo+IHN5c3RlbSBhbHJlYWR5IGhhcyByb290IGZpbGUg
-c3lzdGVtIHJlZHVuZGFuY3kgYnV0IFNQTCBzZWVtcyBoYXJkZXIuCj4KPiBUaGUgY3VycmVudCBw
-YXJ0aXRpb24gbGF5b3V0IGlzIHRoZSBmb2xsb3dpbmc6Cj4KPiB8IFUtQm9vdCArIEltYWdlICsg
-cnBpX2Zpcm13YXJlIHwgUm9vdGZzQSB8IFJvb3Rmc0IgfCBEYXRhIHBhcnRpdGlvbiB8Cj4KPiBJ
-biBteSBtaW5kIHRoZXJlIGFyZSAyIHdheXMgb2YgZG9pbmcgdGhpczoKPgo+IEVpdGhlciBVLUJv
-b3QgaXMgbW92ZWQgdG8gaXRzIG93biBwYXJ0aXRpb24gYW5kIEkgaGF2ZSB0aGUgSW1hZ2UgYW5k
-Cj4gcnBpX2Zpcm13YXJlIGluIGl0cyBvd24gcGxhY2UuCgpXaGF0IHBhcnRzIG9mIHJwaS1maXJt
-d2FyZSBhcmUgeW91IHVzaW5nIGhlcmU/IERUQi9vdmVybGF5cz8gRmlybXdhcmUKZm9yIHRoZSBr
-ZXJuZWw/IFRoZSBsYXR0ZXIgZ29lcyBpbnRvIHRoZSByb290ZnMgYW55d2F5LgoKPiB8IFUtQm9v
-dCB8IEltYWdlICsgcnBpIEEgfCBJbWFnZSArIHJwaSBCIHwgUm9vdGZzQSB8IFJvb3Rmc0IgfCBE
-YXRhCj4gcGFydGl0aW9uIHwKPgo+IE9yIEkgaGF2ZSBhbiBhY3R1YWwgc2VwYXJhdGUgdW5pdCB0
-aGF0IGNhbiBzZWxlY3RpdmVseSBib290IGEga2VybmVsIC8gcnVuCj4gYSBCb290bG9hZGVyOgo+
-Cj4gfCBTUEwgfCBVLUJvb3QgKyBJbWFnZSArIHJwaSBBIHwgVS1Cb290ICsgSW1hZ2UgKyBycGkg
-QiB8IFJvb3Rmc0EgfAo+IFJvb3Rmc0IgfCBEYXRhIHBhcnRpdGlvbiB8Cj4KPiBLZWVwIGluIG1p
-bmQgSSBoYXZlIG5vIGlkZWEgaG93IHRvIGRvIGVpdGhlciBvZiB0aGVzZSBhcyBJJ20gc3RpbGwg
-cXVpdGUKPiB1bmZhbWlsaWFyIHdpdGggdGhlIGFjdHVhbCBsb3cgbGV2ZWwgYm9vdGluZyBpbnRy
-aWNhY2llcy4KQXMgZm9yIGtlcm5lbC9EVEI6IFlvdSdyZSB1c2luZyBVLUJvb3QsIHNvIGFzc3Vt
-aW5nIHlvdSB3YW50IHRvIHVwZGF0ZQprZXJuZWwgYW5kIHJvb3RmcyB0b2dldGhlciB0aGUgZWFz
-aWVzdCB3YXkgbWF5IGJlIHdoYXQgSSdtIGRvaW5nOiBVc2UgYQpGSVQgaW1hZ2UgWzFdIHRoYXQg
-aG9sZHMgYm90aCB0aGUga2VybmVsLCBEVEIsIGFuZCBhbnkgb3ZlcmxheXMgeW91Cm5lZWQsIGFu
-ZCBpbmNsdWRlIHRoYXQgaW4gdGhlIHJvb3Rmcy4gVGhlbiBjb25maWd1cmUgVS1Cb290IHRvIGxv
-YWQgdGhlCkZJVCBpbWFnZSBmcm9tIHRoZSBzZWxlY3RlZCByb290ZnMuCgpUaGVyZSdzIG9uZSBj
-YXRjaDogVS1Cb290IGRvZXMgKm5vdCogc3VwcG9ydCBvdmVybGF5IHBhcmFtZXRlcnMgKHRob3Nl
-CmFyZSBhbiBSUGkgdGhpbmcsIG5vdCBzdGFuZGFyZCkuIFlvdSBtYXkgaGF2ZSB0byByZXdyaXRl
-IG92ZXJsYXlzIHRoYXQKdXNlIHBhcmFtZXRlcnMgZm9yIHRoaXMgYXBwcm9hY2ggKG9yIGNyZWF0
-ZSBhIERUQiB0aGF0IGluY2x1ZGVzIGFueXRoaW5nCnlvdSdkIHVzZSBvdmVybGF5cyBmb3IpLgoK
-SWYgeW91IHdhbnQgdG8gaGF2ZSByZWR1bmRhbnQgVS1Cb290IHRoYXQnbGwgcHJvYmFibHkgcmVx
-dWlyZSB0aGUKInRyeWJvb3QiIGZlYXR1cmUgb2YgdGhlIFJQaSBib290bG9hZGVyLCBidXQgSSBo
-YXZlbid0IHRyaWVkIHRoYXQgbXlzZWxmCnlldC4KCkJlc3QgcmVnYXJkcywKRmlvbmEKClsxXSBo
-dHRwczovL2RvY3MudS1ib290Lm9yZy9lbi9sYXRlc3QvdXNhZ2UvZml0L2luZGV4Lmh0bWwKX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1h
-aWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9v
-dC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+This patch adds a new defconfig for the NanoPi NEO board made by
+FriendlyARM. This board is based on the Allwinner H3 SoC.
+
+See: https://wiki.friendlyelec.com/wiki/index.php/NanoPi_NEO
+
+This patch uses the mainline kernel and u-boot for the board.
+
+The configurations are based on the previously dropped defconfig
+maintained by Yann E. MORIN <yann.morin.1998@free.fr>.
+
+Signed-off-by: Dong Wang <wangdong115@foxmail.com>
+---
+
+Changes v1 -> v2:
+  - Use extlinux.conf instead of boot.scr (suggested by Thomas)
+  - Drop boot.vfat partition (suggested by Thomas)
+  - Remove 'size' argument for rootfs partition (suggested by Thomas)
+  - Fix missing dependecies for uboot after running utils/docker-run
+  - Add hashes for linux and uboot as suggested by check-package
+  - Bump linux and uboot version 
+  
+
+ DEVELOPERS                                    |  4 ++
+ board/friendlyarm/nanopi-neo/extlinux.conf    |  4 ++
+ board/friendlyarm/nanopi-neo/genimage.cfg     | 17 +++++++
+ .../friendlyarm/nanopi-neo/patches/linux.hash |  2 +
+ .../friendlyarm/nanopi-neo/patches/uboot.hash |  2 +
+ board/friendlyarm/nanopi-neo/post-build.sh    |  5 ++
+ board/friendlyarm/nanopi-neo/readme.txt       | 41 +++++++++++++++
+ configs/friendlyarm_nanopi_neo_defconfig      | 50 +++++++++++++++++++
+ 8 files changed, 125 insertions(+)
+ create mode 100644 board/friendlyarm/nanopi-neo/extlinux.conf
+ create mode 100644 board/friendlyarm/nanopi-neo/genimage.cfg
+ create mode 100644 board/friendlyarm/nanopi-neo/patches/linux.hash
+ create mode 100644 board/friendlyarm/nanopi-neo/patches/uboot.hash
+ create mode 100755 board/friendlyarm/nanopi-neo/post-build.sh
+ create mode 100644 board/friendlyarm/nanopi-neo/readme.txt
+ create mode 100644 configs/friendlyarm_nanopi_neo_defconfig
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index d7d0af3543..9eb54bc2bc 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -868,6 +868,10 @@ F:	package/logsurfer/
+ N:	Dominik Michael Rauh <dmrauh@posteo.de>
+ F:	package/gdal/
+ 
++N:	Dong Wang <wangdong115@foxmail.com>
++F:	board/friendlyarm/nanopi-neo
++F:	configs/friendlyarm_nanopi_neo_defconfig
++
+ N:	Doug Kehn <rdkehn@gmail.com>
+ F:	package/nss-pam-ldapd/
+ F:	package/sp-oops-extract/
+diff --git a/board/friendlyarm/nanopi-neo/extlinux.conf b/board/friendlyarm/nanopi-neo/extlinux.conf
+new file mode 100644
+index 0000000000..e65951f9d9
+--- /dev/null
++++ b/board/friendlyarm/nanopi-neo/extlinux.conf
+@@ -0,0 +1,4 @@
++label NanoPi NEO linux
++  kernel /boot/zImage
++  devicetree /boot/sun8i-h3-nanopi-neo.dtb
++  append console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p1 rootwait panic=10
+diff --git a/board/friendlyarm/nanopi-neo/genimage.cfg b/board/friendlyarm/nanopi-neo/genimage.cfg
+new file mode 100644
+index 0000000000..ec78fd0e56
+--- /dev/null
++++ b/board/friendlyarm/nanopi-neo/genimage.cfg
+@@ -0,0 +1,17 @@
++# Minimal SD card image for the NanoPi NEO.
++image sdcard.img {
++	hdimage {
++	}
++
++	partition u-boot {
++		in-partition-table = false
++		image = "u-boot-sunxi-with-spl.bin"
++		offset = 8K
++		size = 1000K # 1MB - 8KB(offset) - 16KB(GPT)
++	}
++
++	partition rootfs {
++		partition-type = 0x83
++		image = "rootfs.ext4"
++	}
++}
+diff --git a/board/friendlyarm/nanopi-neo/patches/linux.hash b/board/friendlyarm/nanopi-neo/patches/linux.hash
+new file mode 100644
+index 0000000000..fe059dcd03
+--- /dev/null
++++ b/board/friendlyarm/nanopi-neo/patches/linux.hash
+@@ -0,0 +1,2 @@
++# From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
++sha256  93218296934915636fe6ba08e125948424cc270fd8948502c0ab91087a9fccd8  linux-6.6.44.tar.xz
+diff --git a/board/friendlyarm/nanopi-neo/patches/uboot.hash b/board/friendlyarm/nanopi-neo/patches/uboot.hash
+new file mode 100644
+index 0000000000..e86d9c9b8a
+--- /dev/null
++++ b/board/friendlyarm/nanopi-neo/patches/uboot.hash
+@@ -0,0 +1,2 @@
++# Locally computed:
++sha256  f591da9ab90ef3d6b3d173766d0ddff90c4ed7330680897486117df390d83c8f  u-boot-2024.07.tar.bz2
+diff --git a/board/friendlyarm/nanopi-neo/post-build.sh b/board/friendlyarm/nanopi-neo/post-build.sh
+new file mode 100755
+index 0000000000..d84a5da0b0
+--- /dev/null
++++ b/board/friendlyarm/nanopi-neo/post-build.sh
+@@ -0,0 +1,5 @@
++#!/bin/sh
++
++BOARD_DIR="$(dirname "$0")"
++
++install -m 0644 -D "$BOARD_DIR"/extlinux.conf "$TARGET_DIR"/boot/extlinux/extlinux.conf
+diff --git a/board/friendlyarm/nanopi-neo/readme.txt b/board/friendlyarm/nanopi-neo/readme.txt
+new file mode 100644
+index 0000000000..cfe7714a41
+--- /dev/null
++++ b/board/friendlyarm/nanopi-neo/readme.txt
+@@ -0,0 +1,41 @@
++Nanopi NEO
++
++Intro
++=====
++
++This default configuration will allow you to start experimenting with the
++buildroot environment for the NanoPi NEO. With the current configuration
++it will bring-up the board, and allow access through the serial console.
++
++FriendlyARM Nanopi NEO link:
++https://wiki.friendlyelec.com/wiki/index.php/NanoPi_NEO
++
++How to build
++============
++
++    $ make friendlyarm_nanopi_neo_defconfig
++    $ make
++
++Note: you will need access to the internet to download the required
++sources.
++
++How to write the SD card
++========================
++
++Once the build process is finished you will have an image called "sdcard.img"
++in the output/images/ directory.
++
++Copy the bootable "sdcard.img" onto an SD card with "dd":
++
++  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
++  $ sudo sync
++
++Insert the micro SD card in your Nanopi NEO and power it up. The console
++is on the debug TTL UART, 115200 8N1.
++
++Ethernet
++==========
++
++  # udhcpc -i eth0
++
++Enjoy!
+diff --git a/configs/friendlyarm_nanopi_neo_defconfig b/configs/friendlyarm_nanopi_neo_defconfig
+new file mode 100644
+index 0000000000..8d1dde247d
+--- /dev/null
++++ b/configs/friendlyarm_nanopi_neo_defconfig
+@@ -0,0 +1,50 @@
++# Architecture
++BR2_arm=y
++BR2_cortex_a7=y
++BR2_ARM_FPU_VFPV4=y
++
++# Linux headers same as kernel, a 6.6 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
++
++# Hashes
++BR2_GLOBAL_PATCH_DIR="board/friendlyarm/nanopi-neo/patches"
++BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
++
++# System
++BR2_TARGET_GENERIC_HOSTNAME="nanopi-neo"
++BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the NanoPi NEO"
++
++# Image
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/friendlyarm/nanopi-neo/post-build.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/friendlyarm/nanopi-neo/genimage.cfg"
++
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.44"
++BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun8i-h3-nanopi-neo"
++BR2_LINUX_KERNEL_INSTALL_TARGET=y
++
++# Filesystem
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++
++# Bootloader
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.07"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nanopi_neo"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
++BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
++BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
++BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-sunxi-with-spl.bin"
++
++# Host utilities
++BR2_PACKAGE_HOST_DOSFSTOOLS=y
++BR2_PACKAGE_HOST_GENIMAGE=y
++BR2_PACKAGE_HOST_MTOOLS=y
+-- 
+2.25.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
