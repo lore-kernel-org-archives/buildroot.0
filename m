@@ -4,67 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3D8C1C3DA4A
-	for <buildroot@archiver.kernel.org>; Wed, 14 Aug 2024 13:09:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D46C5C3DA4A
+	for <buildroot@archiver.kernel.org>; Wed, 14 Aug 2024 13:25:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CA63880A4F;
-	Wed, 14 Aug 2024 13:09:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7D6E380DAD;
+	Wed, 14 Aug 2024 13:25:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YsuLJpy6FuSU; Wed, 14 Aug 2024 13:09:30 +0000 (UTC)
+ id F12iu5tXOuJI; Wed, 14 Aug 2024 13:25:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E84EC81BE3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8657680DBB
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E84EC81BE3;
-	Wed, 14 Aug 2024 13:09:29 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 9383C1BF32E
- for <buildroot@lists.busybox.net>; Wed, 14 Aug 2024 13:09:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8657680DBB;
+	Wed, 14 Aug 2024 13:25:10 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id AA2CC1BF32E
+ for <buildroot@lists.busybox.net>; Wed, 14 Aug 2024 13:25:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8BED481BC2
- for <buildroot@lists.busybox.net>; Wed, 14 Aug 2024 13:09:27 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 979E140404
+ for <buildroot@lists.busybox.net>; Wed, 14 Aug 2024 13:25:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Yu804ZdwezlR for <buildroot@lists.busybox.net>;
- Wed, 14 Aug 2024 13:09:26 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1828:2000:679::23; helo=helium.openadk.org;
- envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 11F3781010
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 11F3781010
-Received: from helium.openadk.org (helium.openadk.org
- [IPv6:2a00:1828:2000:679::23])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 11F3781010
- for <buildroot@buildroot.org>; Wed, 14 Aug 2024 13:09:25 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5mQrnaEH56Gc for <buildroot@lists.busybox.net>;
+ Wed, 14 Aug 2024 13:25:08 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=89.238.66.15;
+ helo=helium.openadk.org; envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6F51140402
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6F51140402
+Received: from helium.openadk.org (helium.openadk.org [89.238.66.15])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 6F51140402
+ for <buildroot@buildroot.org>; Wed, 14 Aug 2024 13:25:08 +0000 (UTC)
 Received: by helium.openadk.org (Postfix, from userid 1000)
- id 9CD0035206C6; Wed, 14 Aug 2024 15:09:20 +0200 (CEST)
-Date: Wed, 14 Aug 2024 15:09:20 +0200
+ id 3E0C235206C6; Wed, 14 Aug 2024 15:25:06 +0200 (CEST)
+Date: Wed, 14 Aug 2024 15:25:06 +0200
 From: Waldemar Brodkorb <wbx@openadk.org>
 To: buildroot@buildroot.org
-Message-ID: <ZrysgCNIRtUzTjbG@waldemar-brodkorb.de>
+Message-ID: <ZrywMhZuGZwfeXvU@waldemar-brodkorb.de>
 MIME-Version: 1.0
 Content-Disposition: inline
 X-Operating-System: Linux 5.10.0-31-amd64 x86_64
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=openadk.org; s=2022; 
- t=1723640960; bh=OozY6KeQZKWKy64jSQkxFNKRwaYWgX1d45KX4Udtkjs=;
+ t=1723641906; bh=NiB3YLCE+rHXze2yvkmA5GN6HRqD/KEQ0k5nqkG3C9k=;
  h=Date:From:To:Subject:From;
- b=FDI6CN8r7Vn9H2dr108NDg9SUEjRF5nLhjd22pbo9A8rrIBTen3Ng/gUBrcuFWXS7
- /JhV3jaL2tXXJ/RMCPepLhURY0iMB17J0gcbri9hvcVHLBYzwl8PsfecEh4OyFFNYc
- aNzYn2pF+7rQy7FSKF3KBVjGCnu2XsADpKtQ2kGcuHphzdJHDwuNW2jOmN8r74asdJ
- /GL0BB42nVKX6s5HyFIMg8hEVQ/EaYdTe67fBD8QoiE/fYPEnhiRNLajKSOFgspoSj
- Y1XjBgyVO6qlZ1nbh+ngkC82BEenNZvQ2iRgfgS0ueleiPR7DBIlyGyWattW8f9uQi
- wSH7GbOfszFjg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=IhGLpdPpgh9XhPK654REapTU7U0r90GoMSg0FrFJPTtTsyOS4OgSP1V289Z10/xIG
+ aFwq/py9SJViWF3RzZNsntQpucloJu0xmBSFs4jfTSJ8GBZgw7OhnCXMbcoj1zdOLZ
+ AvHZdYw8XbQMD15+Zxl+9CNFc3u+U97Sr9z3PSYjdY4fvQaekAEVtIEfTk9AwyxewJ
+ Q8EzajzfnyMmqf0cG7bbduyiZpEfs8HEjUP0KzrQ750/phGoAnvqdmTU7zndDGaIc9
+ 7c64EILnUNyOuK5D0P+5u9/+D8SNh5r5/mCQ+9YpsZXZVyrgNSSKsPzFyuMFcQbxIL
+ ismb5TmdPAyTA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=openadk.org
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=openadk.org header.i=@openadk.org header.a=rsa-sha256
- header.s=2022 header.b=FDI6CN8r
-Subject: [Buildroot] [PATCH] package/libpcap: fix m68k-cf compile issue
+ header.s=2022 header.b=IhGLpdPp
+Subject: [Buildroot] [PATCH] package/hiawatha: update homepage URL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,34 +79,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Compilation with -Os triggers this assembler problem.
-
-Fixes:
- - http://autobuild.buildroot.net/results/db5/db58215fb3c7f30b6c0f0764a84271010346edfb
+The download and homepage URL for this project have been
+updated. The old site no longer works.
 
 Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
- package/libpcap/libpcap.mk | 6 ++++++
- 1 file changed, 6 insertions(+)
+ package/hiawatha/Config.in   | 2 +-
+ package/hiawatha/hiawatha.mk | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libpcap/libpcap.mk b/package/libpcap/libpcap.mk
-index a4523f2218..257ec77e08 100644
---- a/package/libpcap/libpcap.mk
-+++ b/package/libpcap/libpcap.mk
-@@ -57,5 +57,11 @@ ifeq ($(BR2_microblaze)$(BR2_sparc)$(BR2_sparc64),y)
- LIBPCAP_CFLAGS += -fPIC
- endif
+diff --git a/package/hiawatha/Config.in b/package/hiawatha/Config.in
+index 0c35734c34..8bcee3f098 100644
+--- a/package/hiawatha/Config.in
++++ b/package/hiawatha/Config.in
+@@ -27,7 +27,7 @@ config BR2_PACKAGE_HIAWATHA
+ 	  pipelining, keep alive connections, URL rewriting and many
+ 	  more.
  
-+# Enable default optimizations to not run into "Error: value -602 out of range"
-+# assembler issues. -Os triggers the issue.
-+ifeq ($(BR2_m68k_cf),y)
-+LIBPCAP_CFLAGS += -O2
-+endif
-+
- $(eval $(autotools-package))
- $(eval $(host-autotools-package))
+-	  http://www.hiawatha-webserver.org/
++	  https://hiawatha.leisink.net/
+ 
+ if BR2_PACKAGE_HIAWATHA
+ 
+diff --git a/package/hiawatha/hiawatha.mk b/package/hiawatha/hiawatha.mk
+index 3e9cf2571b..4c94f0067e 100644
+--- a/package/hiawatha/hiawatha.mk
++++ b/package/hiawatha/hiawatha.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ HIAWATHA_VERSION = 11.2
+-HIAWATHA_SITE = https://www.hiawatha-webserver.org/files
++HIAWATHA_SITE = https://hiawatha.leisink.net/files
+ HIAWATHA_DEPENDENCIES = zlib
+ HIAWATHA_LICENSE = GPL-2.0
+ HIAWATHA_LICENSE_FILES = LICENSE
 -- 
-2.39.2
+2.30.2
 
 _______________________________________________
 buildroot mailing list
