@@ -4,73 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AF5D7C52D7F
-	for <buildroot@archiver.kernel.org>; Wed, 14 Aug 2024 21:16:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9EA14C52D7F
+	for <buildroot@archiver.kernel.org>; Wed, 14 Aug 2024 21:17:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 719D1608E9;
-	Wed, 14 Aug 2024 21:16:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 672A2608E9;
+	Wed, 14 Aug 2024 21:17:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mjXXMdkNIgjw; Wed, 14 Aug 2024 21:16:24 +0000 (UTC)
+ id ruGh4YtHV4eb; Wed, 14 Aug 2024 21:17:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 938D2608EA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8A9A2608EA
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 938D2608EA;
-	Wed, 14 Aug 2024 21:16:24 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 7430D1BF4DB
- for <buildroot@lists.busybox.net>; Wed, 14 Aug 2024 21:16:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8A9A2608EA;
+	Wed, 14 Aug 2024 21:17:28 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 74F291BF4DB
+ for <buildroot@lists.busybox.net>; Wed, 14 Aug 2024 21:17:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6242E8106A
- for <buildroot@lists.busybox.net>; Wed, 14 Aug 2024 21:16:23 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6F6BD608EA
+ for <buildroot@lists.busybox.net>; Wed, 14 Aug 2024 21:17:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xQxZUoEO7eht for <buildroot@lists.busybox.net>;
- Wed, 14 Aug 2024 21:16:22 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::229;
- helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PyiP4PIPer6y for <buildroot@lists.busybox.net>;
+ Wed, 14 Aug 2024 21:17:23 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org CD15281036
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CD15281036
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp1.osuosl.org (Postfix) with ESMTPS id CD15281036
- for <buildroot@buildroot.org>; Wed, 14 Aug 2024 21:16:21 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 8EB32FF803;
- Wed, 14 Aug 2024 21:16:18 +0000 (UTC)
-Date: Wed, 14 Aug 2024 23:16:17 +0200
-To: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
-Message-ID: <20240814231617.48c69688@windsurf>
-In-Reply-To: <20240814204912.7116-2-zgyarmati@zgyarmati.de>
-References: <20240814204912.7116-1-zgyarmati@zgyarmati.de>
- <20240814204912.7116-2-zgyarmati@zgyarmati.de>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1723670178;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=0Vuo7uY+Kpkz+bjwF9WcaXyclvZtppBoh7M63a7AvFc=;
- b=VJA3OlX818vZo5R6xPDuHv5ZXHP3ZF21gjutroh5gLwN+W4ktd0O2J775TFZVazGg+Qkmq
- /8VHjsh8lvoNQyqzJJgly/bOesGQvhcL9wzOUO/1k2i5cFFRvbduoHDD1uRPG/kqNWAXkn
- hG9bZ35eii8XcN6DA+HdG+OnU56CGJHyjJQvn47eIuoFyKiPn6TLcvfWQIvskpeMVwbz3+
- fObTSBsg17KVXwLtRkFfkIj25g3zoNC/YZ52KLDYVOWJlk94EUldjetqF7227ejRAAZ4Xg
- cW1ac0RAu8NzzLueQaL8Oe5ADg9h9vX7yRSaYJ9XYeDXLe2jxMlrqly2J0g5jQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=VJA3OlX8
-Subject: Re: [Buildroot] [RFC 1/1] package/libusb: set dependency on
- BR2_ARC_ATOMIC_EXT
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 63126608E9
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 63126608E9
+ for <buildroot@buildroot.org>; Wed, 14 Aug 2024 21:17:23 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 4CCA985D33; Wed, 14 Aug 2024 21:17:23 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 14 Aug 2024 23:17:03 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: 439ddbc5bbd56ab15d4edc0573092af3a724d7fb
+X-Git-Newrev: 5f76c30024dab07cad46f952c74e171733a32730
+X-Patchwork-Hint: ignore
+Message-Id: <20240814211723.4CCA985D33@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/eudev: support
+ configuration via /etc/default/udevd
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,82 +60,56 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Alexey Brodkin <Alexey.Brodkin@synopsys.com>,
- Yuriy Kolerov <Yuriy.Kolerov@synopsys.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Zoltan,
+commit: https://git.buildroot.net/buildroot/commit/?id=5f76c30024dab07cad46f952c74e171733a32730
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Alexey, Yuriy, there is a potentially ARC-specific issue below.
+Take the arguments for the daemon and the "udevadm settle" command
+from variables and support defining them in /etc/default/udevd.
 
-On Wed, 14 Aug 2024 22:49:11 +0200
-Zoltan Gyarmati <zgyarmati@zgyarmati.de> wrote:
+Signed-off-by: Simon Rowe <simon.rowe@nutanix.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/eudev/S10udev | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
 
-> diff --git a/package/libusb/Config.in b/package/libusb/Config.in
-> index 5a04ac128b..637a0c7d4d 100644
-> --- a/package/libusb/Config.in
-> +++ b/package/libusb/Config.in
-> @@ -2,6 +2,7 @@ config BR2_PACKAGE_LIBUSB
->  	bool "libusb"
->  	depends on BR2_TOOLCHAIN_HAS_THREADS
->  	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # _Thread_local
-> +	depends on !(BR2_arc && !BR2_ARC_ATOMIC_EXT)
-
-Thanks a lot for looking into this issue!
-
-However, this is not the right fix. First, because other architecture
-can be affected: sparcv8 most likely would suffer from the same issue.
-
-Second because the proper solution is to ensure that libusb links
-against libatomic, which contains the implementation of
-__atomic_fetch_add_4 for architectures for which it is not a compiler
-built-in.
-
-There is already some provision for this in configure.ac:
-
-        dnl Check for new-style atomic builtins. We first check without linking to -latomic.
-        AC_MSG_CHECKING(whether __atomic_load_n is supported)
-        AC_LINK_IFELSE([AC_LANG_SOURCE([[
-        #include <stdint.h>
-        int main() {
-                struct {
-                        uint64_t *v;
-                } x;
-                return (int)__atomic_load_n(x.v, __ATOMIC_ACQUIRE) &
-                       (int)__atomic_add_fetch(x.v, (uint64_t)1, __ATOMIC_ACQ_REL);
-        }]])], GCC_ATOMIC_BUILTINS_SUPPORTED=yes, GCC_ATOMIC_BUILTINS_SUPPORTED=no)
-        AC_MSG_RESULT($GCC_ATOMIC_BUILTINS_SUPPORTED)
-        if test "x$GCC_ATOMIC_BUILTINS_SUPPORTED" != xyes; then
-                AC_SEARCH_LIBS([__atomic_fetch_add_4], [atomic])
-        fi
-
-But it doesn't seem to work in this case:
-
-checking whether __atomic_load_n is supported... no
-checking for library containing __atomic_fetch_add_4... no
-
-The configure test fails like this:
-
-configure:17559: /home/autobuild/autobuild/instance-13/output-1/per-package/libusb/host/bin/arc-buildroot-linux-uclibc-gcc -o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -O2 -g0  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  conftest.c -latomic   >&5
-conftest.c:33:6: warning: conflicting types for built-in function '__atomic_fetch_add_4'; expected 'unsigned int(volatile void *, unsigned int,  int)' [-Wbuiltin-declaration-mismatch]
-   33 | char __atomic_fetch_add_4 ();
-      |      ^~~~~~~~~~~~~~~~~~~~
-/home/autobuild/autobuild/instance-13/output-1/per-package/libusb/host/bin/../lib/gcc/arc-buildroot-linux-uclibc/14.2.0/../../../../arc-buildroot-linux-uclibc/bin/ld: /home/autobuild/autobuild/instance-13/output-1/per-package/libusb/host/bin/../lib/gcc/arc-buildroot-linux-uclibc/14.2.0/../../../../arc-buildroot-linux-uclibc/lib/libatomic.so: undefined reference to `__atomic_test_and_set'
-collect2: error: ld returned 1 exit status
-
-This is rather odd. Is there a bug in ARC's libatomic implementation?
-Alexey, Yuriy, what do you think?
-
-Thanks a lot,
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/package/eudev/S10udev b/package/eudev/S10udev
+index 4e799d6507..6f20fc51f5 100644
+--- a/package/eudev/S10udev
++++ b/package/eudev/S10udev
+@@ -16,6 +16,14 @@
+ #	/dev/zero, /dev/null -- that's needed to boot and run this script.
+ #
+ 
++DAEMON="udevd"
++
++SETTLE_TIMEOUT=30
++UDEVD_ARGS="-d"
++
++# shellcheck source=/dev/null
++[ -r "/etc/default/$DAEMON" ] && . "/etc/default/$DAEMON"
++
+ # Check for config file and read it
+ UDEV_CONFIG=/etc/udev/udev.conf
+ test -r $UDEV_CONFIG || exit 6
+@@ -25,10 +33,10 @@ case "$1" in
+     start)
+         printf "Populating %s using udev: " "${udev_root:-/dev}"
+         [ -e /proc/sys/kernel/hotplug ] && printf '\000\000\000\000' > /proc/sys/kernel/hotplug
+-        /sbin/udevd -d || { echo "FAIL"; exit 1; }
++        /sbin/udevd $UDEVD_ARGS || { echo "FAIL"; exit 1; }
+         udevadm trigger --type=subsystems --action=add
+         udevadm trigger --type=devices --action=add
+-        udevadm settle --timeout=30 || echo "udevadm settle failed"
++        udevadm settle --timeout=$SETTLE_TIMEOUT || echo "udevadm settle failed"
+         echo "done"
+         ;;
+     stop)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
