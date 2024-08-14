@@ -4,71 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A0508C52D7F
-	for <buildroot@archiver.kernel.org>; Wed, 14 Aug 2024 20:19:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 11348C3DA4A
+	for <buildroot@archiver.kernel.org>; Wed, 14 Aug 2024 20:50:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 59D16608CD;
-	Wed, 14 Aug 2024 20:19:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B75E7608D9;
+	Wed, 14 Aug 2024 20:50:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cC_IXpwAU4gM; Wed, 14 Aug 2024 20:19:56 +0000 (UTC)
+ id OOtcTcwHfZUA; Wed, 14 Aug 2024 20:50:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5E47C608CE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C62EE608DF
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5E47C608CE;
-	Wed, 14 Aug 2024 20:19:56 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id CDBAC1BF471
- for <buildroot@lists.busybox.net>; Wed, 14 Aug 2024 20:19:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C62EE608DF;
+	Wed, 14 Aug 2024 20:49:59 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id EF46A1BF471
+ for <buildroot@lists.busybox.net>; Wed, 14 Aug 2024 20:49:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C793680B91
- for <buildroot@lists.busybox.net>; Wed, 14 Aug 2024 20:19:54 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id DD752608DD
+ for <buildroot@lists.busybox.net>; Wed, 14 Aug 2024 20:49:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5wr4dPxDefD3 for <buildroot@lists.busybox.net>;
- Wed, 14 Aug 2024 20:19:54 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::226;
- helo=relay6-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qzjUk8BUIK7H for <buildroot@lists.busybox.net>;
+ Wed, 14 Aug 2024 20:49:55 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.103.80.155;
+ helo=mx.kolabnow.com; envelope-from=zgyarmati@zgyarmati.de;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org A6AC580B8D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A6AC580B8D
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::226])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A6AC580B8D
- for <buildroot@buildroot.org>; Wed, 14 Aug 2024 20:19:53 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id E136FC0002;
- Wed, 14 Aug 2024 20:19:51 +0000 (UTC)
-Date: Wed, 14 Aug 2024 22:19:50 +0200
-To: Waldemar Brodkorb <wbx@openadk.org>
-Message-ID: <20240814221950.458101ad@windsurf>
-In-Reply-To: <Zrz+JUwTsNaKI8sK@waldemar-brodkorb.de>
-References: <Zrz+JUwTsNaKI8sK@waldemar-brodkorb.de>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 6EC1F608D9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6EC1F608D9
+Received: from mx.kolabnow.com (mx.kolabnow.com [212.103.80.155])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6EC1F608D9
+ for <buildroot@buildroot.org>; Wed, 14 Aug 2024 20:49:54 +0000 (UTC)
+Received: from localhost (unknown [127.0.0.1])
+ by mx.kolabnow.com (Postfix) with ESMTP id 28B79313A6D6
+ for <buildroot@buildroot.org>; Wed, 14 Aug 2024 22:49:52 +0200 (CEST)
+X-Virus-Scanned: amavis at mykolab.com
+Received: from mx.kolabnow.com ([127.0.0.1])
+ by localhost (ext-mx-out011.mykolab.com [127.0.0.1]) (amavis, port 10024)
+ with ESMTP id q88QsB9p5GzH for <buildroot@buildroot.org>;
+ Wed, 14 Aug 2024 22:49:47 +0200 (CEST)
+Received: from int-mx011.mykolab.com (unknown [10.9.13.11])
+ by mx.kolabnow.com (Postfix) with ESMTPS id EA5F9313A6D5
+ for <buildroot@buildroot.org>; Wed, 14 Aug 2024 22:49:46 +0200 (CEST)
+Received: from ext-subm010.mykolab.com (unknown [10.9.6.10])
+ by int-mx011.mykolab.com (Postfix) with ESMTPS id BAF13315B75B
+ for <buildroot@buildroot.org>; Wed, 14 Aug 2024 22:49:46 +0200 (CEST)
+From: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
+To: buildroot@buildroot.org
+Date: Wed, 14 Aug 2024 22:49:11 +0200
+Message-Id: <20240814204912.7116-2-zgyarmati@zgyarmati.de>
+In-Reply-To: <20240814204912.7116-1-zgyarmati@zgyarmati.de>
+References: <20240814204912.7116-1-zgyarmati@zgyarmati.de>
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1723666792;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=XA1cF1YJIy4kVfFDHFUm1AHA0mHwYjQsLWDDG9tEe3E=;
- b=JhbPNkqtW7qjkXMyEKN26GrmhqhZiO19p3DYPzO30XfGr6S6tMkWd2Pl2eBqfeUt3MaAW1
- +LuYzlqY0XYx9gCfPRnJs9hSWMlvTZ48+8G6wRyxBeLjgWLSw27uogkXkNAJCyIcAw4ZTn
- H00ZMNCK/mYxE4D1UqS90WfJFVPT0oQIedCgswf0jaGHMFzzXk8dWrVdZJqOKdC9cT9ZBg
- B0Q6qZG18nh+EGfaFMcT7SmZtCSlmmvf5inkZppd+qDsMbDZzQfaQM676X+M8//b7bfxHI
- fwY1QTusG8X6PR/LCN6Tg2aOf13bEPuoGWwGahlnKmDqe6sxmNgUhkD9sZPEDw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=kolabnow.com; h=
+ content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:date:subject:subject:from:from:received
+ :received:received; s=dkim20240523; t=1723668587; x=1725482988;
+ bh=KlB5Bgu0UyMX9I86cCqb1cqMot+wN/XNQ/+mh8I/FhQ=; b=AF+dSdHNuzAQ
+ L0GBssWSRBJcdmguQEH9knKYUzlMuggt8vQAflO4KSSC4/W7fcs1BsNFs3HnvYOX
+ s0GQ3dkICHt/2ulZ339Lls+E/dN2eHiAN/KQRPYcr3hduy7WRIDuObImiYit6bRG
+ HhiTMvJ4mVrHxJjJ+nbuyb3qVUcCkMm3KMF5amlvt73nUFvCo5kfo19NwEy4JscY
+ eX76d+ZepEnohorxAnY3k4UkoSOf6AsVcybtw4t0D6Y9pvXWuSg2HfVu2Il3tV3k
+ Dx0LQ3wjq83GE7dh2Wgj4ZzuVVj3tfQG70/U4ZvnVa2LrRjVn0mZU3BnmkCu0+9o
+ tKCXi9DxDQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=zgyarmati.de
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=JhbPNkqt
-Subject: Re: [Buildroot] [PATCH] package/iproute2: fix musl compile errors
+ unprotected) header.d=kolabnow.com header.i=@kolabnow.com header.a=rsa-sha256
+ header.s=dkim20240523 header.b=AF+dSdHN
+X-Mailman-Original-Authentication-Results: ext-mx-out011.mykolab.com (amavis); 
+ dkim=pass (2048-bit key)
+ reason="pass (just generated, assumed good)"
+ header.d=kolabnow.com
+Subject: [Buildroot] [RFC 1/1] package/libusb: set dependency on
+ BR2_ARC_ATOMIC_EXT
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,62 +94,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+Cc: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Waldemar,
+Fixes:
+  - http://autobuild.buildroot.net/results/459401bab825acf764cdbb156d1ce012183e9b94
+Signed-off-by: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
+---
+ package/libusb/Config.in | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-I've applied to master, but I have a couple of nitpicks, and one real
-request.
-
-On Wed, 14 Aug 2024 20:57:41 +0200
-Waldemar Brodkorb <wbx@openadk.org> wrote:
-
-> Add two patches to fix musl compile errors.
-> 
-> Fixes:
->  - http://autobuild.buildroot.net/results/8d7/8d713bd911f8d6b97272a7bb5dc2c188aeb99b05
-                                            ^^^^ you can drop this part of the URL
-
-Also, there should be an empty line *before* the Signed-off-by line.
-
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> ---
->  ...laration-of-function-htobe64-in-gcc-.patch | 43 +++++++++++++++++++
->  ...laration-of-function-basename-in-gcc.patch | 30 +++++++++++++
->  2 files changed, 73 insertions(+)
->  create mode 100644 package/iproute2/0001-Fix-implicit-declaration-of-function-htobe64-in-gcc-.patch
->  create mode 100644 package/iproute2/0002-Fix-implicit-declaration-of-function-basename-in-gcc.patch
-> +From Alpine Linux.
-> +
-> +Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> +Upstream: https://gitlab.alpinelinux.org/alpine/aports/-/blob/master/main/iproute2/basename.patch?ref_type=heads
-
-This really isn't an "Upstream:" URL, it's really a "downstream" thing.
-Indeed, what we want to see is patches submitted to the upstream
-project, so that at some point in the future, we can drop them from
-Buildroot.
-
-So could you submit this patch to the upstream iproute2 project, and
-then updated the link in this patch?
-
-"man 3 basename" says <libgen.h> should be included for get the
-prototype for basename(), so it shouldn't be too difficult to convince
-upstream that it's the right thing to do, and not just a musl-related
-fix.
-
-Thanks a lot!
-
-Thomas
+diff --git a/package/libusb/Config.in b/package/libusb/Config.in
+index 5a04ac128b..637a0c7d4d 100644
+--- a/package/libusb/Config.in
++++ b/package/libusb/Config.in
+@@ -2,6 +2,7 @@ config BR2_PACKAGE_LIBUSB
+ 	bool "libusb"
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # _Thread_local
++	depends on !(BR2_arc && !BR2_ARC_ATOMIC_EXT)
+ 	help
+ 	  Userspace library for accessing USB devices
+ 
+@@ -14,6 +15,7 @@ config BR2_PACKAGE_LIBUSB_EXAMPLES
+ 
+ endif
+ 
+-comment "libusb needs a toolchain w/ threads, gcc >= 4.9"
++comment "libusb needs a toolchain w/ threads, gcc >= 4.9, on ARC the atomic extension"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
++		(BR2_arc && !BR2_ARC_ATOMIC_EXT)
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
