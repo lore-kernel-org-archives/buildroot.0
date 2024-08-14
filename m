@@ -4,71 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D7791C52D7F
-	for <buildroot@archiver.kernel.org>; Wed, 14 Aug 2024 22:04:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8BB56C52D7F
+	for <buildroot@archiver.kernel.org>; Wed, 14 Aug 2024 22:06:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 691EF403B9;
-	Wed, 14 Aug 2024 22:04:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2557D40546;
+	Wed, 14 Aug 2024 22:06:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Jy7__2aJCaYC; Wed, 14 Aug 2024 22:04:09 +0000 (UTC)
+ id 3AQkuWHGSdOV; Wed, 14 Aug 2024 22:06:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DAAE8403D1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 30BA1404D8
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DAAE8403D1;
-	Wed, 14 Aug 2024 22:04:08 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 89B191BF32E
- for <buildroot@lists.busybox.net>; Wed, 14 Aug 2024 22:04:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 30BA1404D8;
+	Wed, 14 Aug 2024 22:06:08 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id A6F8E1BF2A7
+ for <buildroot@lists.busybox.net>; Wed, 14 Aug 2024 22:06:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8160A811DC
- for <buildroot@lists.busybox.net>; Wed, 14 Aug 2024 22:04:07 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id A010F608F0
+ for <buildroot@lists.busybox.net>; Wed, 14 Aug 2024 22:06:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id r_t8raESkQgB for <buildroot@lists.busybox.net>;
- Wed, 14 Aug 2024 22:04:03 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::227;
- helo=relay7-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id f0BWuzqWK8-k for <buildroot@lists.busybox.net>;
+ Wed, 14 Aug 2024 22:06:01 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org EFA51811D9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EFA51811D9
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp1.osuosl.org (Postfix) with ESMTPS id EFA51811D9
- for <buildroot@busybox.net>; Wed, 14 Aug 2024 22:04:02 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id B06BD20004;
- Wed, 14 Aug 2024 22:03:59 +0000 (UTC)
-Date: Thu, 15 Aug 2024 00:03:58 +0200
-To: Francois Perrad <francois.perrad@gadz.org>
-Message-ID: <20240815000358.6887f1bf@windsurf>
-In-Reply-To: <20240814063932.2630721-1-francois.perrad@gadz.org>
-References: <20240814063932.2630721-1-francois.perrad@gadz.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1723673040;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=OSbtBoC1hzlmgNlMcGmAi9qUQezm2Py3phdeiyd5c3U=;
- b=l1d4yX/I/2APmvSSg/fiuZCLp/WGO+JsPfd1xl7UqjRzabR4gyyU8YRXIWi1421W7WQJie
- peMFrquAQm4Z5GJfgFuDdiJLpdFx5uZ3XrFl7jmaSwc2F+codD2x69BYdJ1+M9ZntvNlfv
- zx38BHwXG5qqV7wEUajnq/DhovN2P1BWfCCdLQru7rFpmhc31KiH2lhrteaejZtmlpTtvx
- FjWqnYIPBkBLhWIsy5uxEj5ZwOxHT+9vdDI1uTHMvF1YJ7tdvyJK0f9WqCS1ocrZfpvFIJ
- +xhkyUk3mmndL1wj73UDC+RUf+2l6dhSaVnZHTddy+YJQ8729nJH77ADWBqX4A==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=l1d4yX/I
-Subject: Re: [Buildroot] [PATCH] package/libgtk4: missing dependencies
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 77BD8608BB
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 77BD8608BB
+ for <buildroot@buildroot.org>; Wed, 14 Aug 2024 22:06:01 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 60CCD85DA7; Wed, 14 Aug 2024 22:06:01 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Thu, 15 Aug 2024 00:04:47 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: 52e9d8785a33b5fd3aa3dd8f1af60fa17a17f4d0
+X-Git-Newrev: 4265790541e925708364e1e86038bd2884eec3a5
+X-Patchwork-Hint: ignore
+Message-Id: <20240814220601.60CCD85DA7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next]
+ configs/friendlyarm_nanopi_neo_defconfig: new defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,54 +60,223 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@busybox.net
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, 14 Aug 2024 08:39:31 +0200
-Francois Perrad <francois.perrad@gadz.org> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=4265790541e925708364e1e86038bd2884eec3a5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> libgtk4 needs png & pdf support (like libgtk3)
-> 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+This patch adds a new defconfig for the NanoPi NEO board made by
+FriendlyARM. This board is based on the Allwinner H3 SoC.
 
-Could you provide a bit more details about the issues encountered?
+See: https://wiki.friendlyelec.com/wiki/index.php/NanoPi_NEO
 
-First build issue I had is:
+This patch uses the mainline kernel and u-boot for the board.
 
-Found CMake: /home/thomas/buildroot/buildroot/output/host/bin/cmake (3.30.0)
-Run-time dependency libpng found: NO (tried pkgconfig and cmake)
-Run-time dependency png found: NO (tried pkgconfig and cmake)
-Looking for a fallback subproject for the dependency libpng
+The configurations are based on the previously dropped defconfig
+maintained by Yann E. MORIN <yann.morin.1998@free.fr>.
 
-which gets solved by enabling LIBPNG (not PNG support in Cairo). That
-being said, Cairo's header file complain with a warning when no PNG
-support is enabled:
+Signed-off-by: Dong Wang <wangdong115@foxmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ DEVELOPERS                                         |  4 ++
+ board/friendlyarm/nanopi-neo/extlinux.conf         |  4 ++
+ board/friendlyarm/nanopi-neo/genimage.cfg          | 17 ++++++++
+ .../patches/linux-headers/linux-headers.hash       |  1 +
+ .../nanopi-neo/patches/linux/linux.hash            |  2 +
+ .../nanopi-neo/patches/uboot/uboot.hash            |  2 +
+ board/friendlyarm/nanopi-neo/post-build.sh         |  5 +++
+ board/friendlyarm/nanopi-neo/readme.txt            | 41 ++++++++++++++++++
+ configs/friendlyarm_nanopi_neo_defconfig           | 48 ++++++++++++++++++++++
+ 9 files changed, 124 insertions(+)
 
-/home/thomas/buildroot/buildroot/output/host/arm-buildroot-linux-gnueabihf/sysroot/usr/include/cairo/cairo.h:2597:5: warning: "CAIRO_HAS_PNG_FUNCTIO
-NS" is not defined, evaluates to 0 [-Wundef]
-
-This is a bug that should be reported to upstream Cairo.
-
-Then second build issue was an include of <cairo-pdf.h>, which means
-PDF support in Cairo is needed, but that should have triggered an issue
-at configure time, not at build time. This bug should be reported to
-gtk4 upstream.
-
-We try as much as possible to "go the extra mile" and not just paper
-over the problem, but provide bug reports/fixes upstream where needed.
-
-Could you have a look into this?
-
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/DEVELOPERS b/DEVELOPERS
+index d7d0af3543..754f153b39 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -868,6 +868,10 @@ F:	package/logsurfer/
+ N:	Dominik Michael Rauh <dmrauh@posteo.de>
+ F:	package/gdal/
+ 
++N:	Dong Wang <wangdong115@foxmail.com>
++F:	board/friendlyarm/nanopi-neo/
++F:	configs/friendlyarm_nanopi_neo_defconfig
++
+ N:	Doug Kehn <rdkehn@gmail.com>
+ F:	package/nss-pam-ldapd/
+ F:	package/sp-oops-extract/
+diff --git a/board/friendlyarm/nanopi-neo/extlinux.conf b/board/friendlyarm/nanopi-neo/extlinux.conf
+new file mode 100644
+index 0000000000..e65951f9d9
+--- /dev/null
++++ b/board/friendlyarm/nanopi-neo/extlinux.conf
+@@ -0,0 +1,4 @@
++label NanoPi NEO linux
++  kernel /boot/zImage
++  devicetree /boot/sun8i-h3-nanopi-neo.dtb
++  append console=ttyS0,115200 earlyprintk root=/dev/mmcblk0p1 rootwait panic=10
+diff --git a/board/friendlyarm/nanopi-neo/genimage.cfg b/board/friendlyarm/nanopi-neo/genimage.cfg
+new file mode 100644
+index 0000000000..ec78fd0e56
+--- /dev/null
++++ b/board/friendlyarm/nanopi-neo/genimage.cfg
+@@ -0,0 +1,17 @@
++# Minimal SD card image for the NanoPi NEO.
++image sdcard.img {
++	hdimage {
++	}
++
++	partition u-boot {
++		in-partition-table = false
++		image = "u-boot-sunxi-with-spl.bin"
++		offset = 8K
++		size = 1000K # 1MB - 8KB(offset) - 16KB(GPT)
++	}
++
++	partition rootfs {
++		partition-type = 0x83
++		image = "rootfs.ext4"
++	}
++}
+diff --git a/board/friendlyarm/nanopi-neo/patches/linux-headers/linux-headers.hash b/board/friendlyarm/nanopi-neo/patches/linux-headers/linux-headers.hash
+new file mode 120000
+index 0000000000..5808d92afe
+--- /dev/null
++++ b/board/friendlyarm/nanopi-neo/patches/linux-headers/linux-headers.hash
+@@ -0,0 +1 @@
++../linux/linux.hash
+\ No newline at end of file
+diff --git a/board/friendlyarm/nanopi-neo/patches/linux/linux.hash b/board/friendlyarm/nanopi-neo/patches/linux/linux.hash
+new file mode 100644
+index 0000000000..ecff37638a
+--- /dev/null
++++ b/board/friendlyarm/nanopi-neo/patches/linux/linux.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256  93218296934915636fe6ba08e125948424cc270fd8948502c0ab91087a9fccd8  linux-6.6.44.tar.xz
+diff --git a/board/friendlyarm/nanopi-neo/patches/uboot/uboot.hash b/board/friendlyarm/nanopi-neo/patches/uboot/uboot.hash
+new file mode 100644
+index 0000000000..fe9b4f53dc
+--- /dev/null
++++ b/board/friendlyarm/nanopi-neo/patches/uboot/uboot.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256  f591da9ab90ef3d6b3d173766d0ddff90c4ed7330680897486117df390d83c8f  u-boot-2024.07.tar.bz2
+diff --git a/board/friendlyarm/nanopi-neo/post-build.sh b/board/friendlyarm/nanopi-neo/post-build.sh
+new file mode 100755
+index 0000000000..d84a5da0b0
+--- /dev/null
++++ b/board/friendlyarm/nanopi-neo/post-build.sh
+@@ -0,0 +1,5 @@
++#!/bin/sh
++
++BOARD_DIR="$(dirname "$0")"
++
++install -m 0644 -D "$BOARD_DIR"/extlinux.conf "$TARGET_DIR"/boot/extlinux/extlinux.conf
+diff --git a/board/friendlyarm/nanopi-neo/readme.txt b/board/friendlyarm/nanopi-neo/readme.txt
+new file mode 100644
+index 0000000000..cfe7714a41
+--- /dev/null
++++ b/board/friendlyarm/nanopi-neo/readme.txt
+@@ -0,0 +1,41 @@
++Nanopi NEO
++
++Intro
++=====
++
++This default configuration will allow you to start experimenting with the
++buildroot environment for the NanoPi NEO. With the current configuration
++it will bring-up the board, and allow access through the serial console.
++
++FriendlyARM Nanopi NEO link:
++https://wiki.friendlyelec.com/wiki/index.php/NanoPi_NEO
++
++How to build
++============
++
++    $ make friendlyarm_nanopi_neo_defconfig
++    $ make
++
++Note: you will need access to the internet to download the required
++sources.
++
++How to write the SD card
++========================
++
++Once the build process is finished you will have an image called "sdcard.img"
++in the output/images/ directory.
++
++Copy the bootable "sdcard.img" onto an SD card with "dd":
++
++  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
++  $ sudo sync
++
++Insert the micro SD card in your Nanopi NEO and power it up. The console
++is on the debug TTL UART, 115200 8N1.
++
++Ethernet
++==========
++
++  # udhcpc -i eth0
++
++Enjoy!
+diff --git a/configs/friendlyarm_nanopi_neo_defconfig b/configs/friendlyarm_nanopi_neo_defconfig
+new file mode 100644
+index 0000000000..754af777fb
+--- /dev/null
++++ b/configs/friendlyarm_nanopi_neo_defconfig
+@@ -0,0 +1,48 @@
++# Architecture
++BR2_arm=y
++BR2_cortex_a7=y
++BR2_ARM_FPU_VFPV4=y
++
++# Linux headers same as kernel, a 6.6 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
++
++# Hashes
++BR2_GLOBAL_PATCH_DIR="board/friendlyarm/nanopi-neo/patches"
++BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
++
++# System
++BR2_TARGET_GENERIC_HOSTNAME="nanopi-neo"
++BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the NanoPi NEO"
++
++# Image
++BR2_ROOTFS_POST_BUILD_SCRIPT="board/friendlyarm/nanopi-neo/post-build.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
++BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/friendlyarm/nanopi-neo/genimage.cfg"
++
++# Kernel
++BR2_LINUX_KERNEL=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.44"
++BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
++BR2_LINUX_KERNEL_DTS_SUPPORT=y
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun8i-h3-nanopi-neo"
++BR2_LINUX_KERNEL_INSTALL_TARGET=y
++
++# Filesystem
++BR2_TARGET_ROOTFS_EXT2=y
++BR2_TARGET_ROOTFS_EXT2_4=y
++
++# Bootloader
++BR2_TARGET_UBOOT=y
++BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION=y
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.07"
++BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nanopi_neo"
++BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
++BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
++BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
++BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-sunxi-with-spl.bin"
++
++# Host utilities
++BR2_PACKAGE_HOST_GENIMAGE=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
