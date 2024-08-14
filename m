@@ -4,71 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F3B8C3DA4A
-	for <buildroot@archiver.kernel.org>; Wed, 14 Aug 2024 21:49:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25EC3C52D7F
+	for <buildroot@archiver.kernel.org>; Wed, 14 Aug 2024 21:51:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 124EC608C3;
-	Wed, 14 Aug 2024 21:49:51 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D6699608FC;
+	Wed, 14 Aug 2024 21:51:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0wSFiYWbxbTg; Wed, 14 Aug 2024 21:49:47 +0000 (UTC)
+ id OURKOoFoEQEq; Wed, 14 Aug 2024 21:51:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 30C5E608F4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 14BD8608F0
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 30C5E608F4;
-	Wed, 14 Aug 2024 21:49:47 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 789FB1BF4DB
- for <buildroot@lists.busybox.net>; Wed, 14 Aug 2024 21:49:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 14BD8608F0;
+	Wed, 14 Aug 2024 21:51:15 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 63E311BF4DB
+ for <buildroot@lists.busybox.net>; Wed, 14 Aug 2024 21:51:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 656E040392
- for <buildroot@lists.busybox.net>; Wed, 14 Aug 2024 21:49:45 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5D58181463
+ for <buildroot@lists.busybox.net>; Wed, 14 Aug 2024 21:51:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fHha6_qloi76 for <buildroot@lists.busybox.net>;
- Wed, 14 Aug 2024 21:49:41 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
- helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Uj9R7hOiHJhx for <buildroot@lists.busybox.net>;
+ Wed, 14 Aug 2024 21:51:08 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.195;
+ helo=relay3-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org C54D24032E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C54D24032E
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C54D24032E
- for <buildroot@buildroot.org>; Wed, 14 Aug 2024 21:49:40 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id E7D20FF803;
- Wed, 14 Aug 2024 21:49:38 +0000 (UTC)
-Date: Wed, 14 Aug 2024 23:49:38 +0200
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 667EC81423
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 667EC81423
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 667EC81423
+ for <buildroot@buildroot.org>; Wed, 14 Aug 2024 21:51:08 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id AC72560002;
+ Wed, 14 Aug 2024 21:51:05 +0000 (UTC)
+Date: Wed, 14 Aug 2024 23:51:04 +0200
 To: Waldemar Brodkorb <wbx@openadk.org>
-Message-ID: <20240814234938.651915c6@windsurf>
-In-Reply-To: <ZrrZvTetrbgQqpCL@waldemar-brodkorb.de>
-References: <ZrrZvTetrbgQqpCL@waldemar-brodkorb.de>
+Message-ID: <20240814235104.7e0ed31b@windsurf>
+In-Reply-To: <ZrrOn5qI/Wr44k8F@waldemar-brodkorb.de>
+References: <ZrrOn5qI/Wr44k8F@waldemar-brodkorb.de>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1723672179;
+ d=bootlin.com; s=gm1; t=1723672265;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=l5HTBtNCpkFbnc7ipCoftVmpb6edzoSdPq7wZUMPauQ=;
- b=deGXyAKtSuF60+E6hYtHI20gZ/09jB/2YPhO5imcKWpEesTAHhSCOJtEXdvASj+cfQaaFl
- 73aEvC+lWpK8szxlZaikTcJTak0egj6rOFNumTi7GTcBboMBHxy2j0GM3sc+C9OD4vVcXQ
- m3Wf9vKKYLL1XkUX7gb9mY24Rj5GS8u0aHdJqc0qVbRhbFyo9RhhGPTXh18Nfix0HhpA9T
- etrzfFLXWn5I4FAWpXd2N74JXmsv9XX3eus87nir4IYwuy/3qfYcxFbOLJ/hDV+n6wHA4K
- EV8G8gLEmq/rcdEjESRIXIaZ49KP5tpiw54saG9ZLTtOiMmZ5/RuYWPLL4Z5YA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=acEn8lr0B4DSVamzM0iWa1XyIZOBOm1wPJWu7LCV8eM=;
+ b=X+tZ1t11pJnOpn5RGBq5ZmXt0BArDvRXJTNvDHxMLPuJDL4KY5tFnfLOcKzSTEfVsftwU5
+ zsM1N9aKFuxuDTDldhC4oKsU+UVPRr0F3X0sOdNf2iQdwGYAI9Ghpd04yUcQw7Bm4Y8wnn
+ XLtF/ss4B/eGzb9utJiiIs486uImGVN6W5FYzA8BefqHiKKz7Th5PS2dSGbb/kQ4YRPL0b
+ xdN1FoJNTbv3c0OXB/dIvyfgA4Ri6nCBs322us1t16bhe8AD9/+IlX9PAB30XjjK2VWEsl
+ Qveh5MsGnY3iIuPclANhb4PB35vJZK7J+M74UYamO8rEEvrRnl9Q9ljx5qTOFw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=deGXyAKt
-Subject: Re: [Buildroot] [PATCH] package/uclibc: update to 1.0.50
+ header.s=gm1 header.b=X+tZ1t11
+Subject: Re: [Buildroot] [PATCH v2 next] package/bind: update to 9.18.28
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,50 +83,54 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gVHVlLCAxMyBBdWcgMjAyNCAwNTo1Nzo0OSArMDIwMApXYWxkZW1hciBCcm9ka29yYiA8d2J4
-QG9wZW5hZGsub3JnPiB3cm90ZToKCj4gU2VlIHRoaXMgZ2l0IHNob3J0bG9nIGZvciBjaGFuZ2Vz
-Ogo+IAo+IERtaXRyeSBDaGVzdG55a2ggKDIpOgo+ICAgICAgIEZpeCBjb21waWxhdGlvbiB3aXRo
-IDQueCBrZXJuZWwgaGVhZGVycwo+ICAgICAgIEdyb3VwIGNvbmRpdGlvbnMgYWZ0ZXIgYCYmYAo+
-IAo+IEZyYW5rIE1laG5lcnQgKDYpOgo+ICAgICAgIGxpYmRsOiBwcm9wZXJseSBjYXN0IHBhcmFt
-ZXRlcnMgZm9yICVwIGZvcm1hdCBzdHJpbmcgc3BlY2lmaWVyCj4gICAgICAgaWNvbnY6IGV4cGxp
-Y2l0IGNhc3QgdG8gYHVuc2lnbmVkIGNoYXIqYAo+ICAgICAgIGljb252OiBleHBsaWNpdGx5IHN0
-YXRlIG9wZXJhdG9yIHByZWNlZGVuY2UKPiAgICAgICBsZHNvLmM6IHVzZSAndW5zaWduZWQgaW50
-JyBhcyBsb29wIHZhcmlhYmxlIHR5cGUKPiAgICAgICBpY29udjogZml4IHBhcmFtZXRlciB0eXBl
-IG9mIHV0ZjhzZXFfaXNfe292ZXJsb25nLHN1cnJvZ2F0ZSxpbGxlZ2FsfQo+ICAgICAgIGljb252
-OiBwcmV2ZW50IGNvbXBpbGVyIHdhcm5pbmcgZHVyaW5nIGluaXRpYWxpemF0aW9uIHdpdGggamlz
-MDIwOAo+IAo+IEouIE5ldXNjaMOkZmVyICgxKToKPiAgICAgICBiaXRzL3N0YXQuaDogRGVjbGFy
-ZSBzdF9tdGltIGlmIGRlZmluZWQoX19VU0VfWE9QRU4ySzgpLCBldmVyeXdoZXJlCj4gCj4gTWFy
-Y3VzIEhhZWhuZWwgKDUpOgo+ICAgICAgIGxkc28vZGwtdmRzbzogYXZvaWQgY29tcGlsZXIgd2Fy
-bmluZyBpZiBjb25maWd1cmVkIHdpdGhvdXQgdmRzbwo+ICAgICAgIHVjbGliYzogRml4IGRvdWJs
-ZSBwcm9tb3Rpb24gd2FybmluZwo+ICAgICAgIGxpYm06IEZpeCBmbG9hdCBjb252ZXJzaW9uIGNv
-bXBpbGVyIHdhcm5pbmcKPiAgICAgICBmZWF0dXJlcy5oOiBhZGQgY2xhbmcgcHJlcmVxdWlzaXRl
-IG1hY3JvCj4gICAgICAgYnVpbGRzeXM6IGFsbG93IGJ1aWxkaW5nIHdpdGggZ2NjLTE0Cj4gCj4g
-U3ZlbiBMaW5rZXIgKDEpOgo+ICAgICAgIGMrKzogUmVtb3ZlIGRlcHJlY2F0ZWQgZHluYW1pYyBl
-eGNlcHRpb24gc3BlY2lmaWNhdGlvbgo+IAo+IFZhbGVudGluIEdlaHJrZSAoMSk6Cj4gICAgICAg
-YXJtOiBSZXBsYWNlIGRlcHJlY2F0ZWQgYXNtIGluc3RydWN0aW9ucyBmb3IgQVJNdjggQUFyY2gz
-Mgo+IAo+IFdhbGRlbWFyIEJyb2Rrb3JiICg5KToKPiAgICAgICBDbGFuZyBzdXBwb3J0IGZvciBn
-bnVfaW5saW5lIGF0dHJpYnV0ZQo+ICAgICAgIGFsbG93IHRvIHVzZSA8c3lzL3Vjb250ZXh0Lmg+
-Cj4gICAgICAgYWRkIFNFRUtfREFUQS9TRUVLX0hPTEUKPiAgICAgICBsc2VlazogYWxsb3cgU0VF
-S19EQVRBL1NFRUtfSE9MRSB0byBiZSB1c2VkCj4gICAgICAgYml0cy9zdGF0Lmg6IERlY2xhcmUg
-c3RfbXRpbSBpZiBkZWZpbmVkKF9fVVNFX1hPUEVOMks4KSwgYWRkIG1pc3NpbmcKPiAgICAgICBy
-aXNjdjogcmVtb3ZlIGluY29tcGxldGUgY29udGV4dCBpbXBsZW1lbnRhdGlvbiwgdXNlIGxpYnVj
-b250ZXh0Cj4gICAgICAgYWRkIG1lbWZkX2NyZWF0ZSBzeXNjYWxsIHdyYXBwZXIKPiAgICAgICBn
-ZXRyYW5kb206IHJlbW92ZSBfX1VTRV9HTlUgLyBhZGQgR1JORF9JTlNFQ1VSRQo+ICAgICAgIGJ1
-bXAgdmVyc2lvbiBmb3IgMS4wLjUwIHJlbGVhc2UKPiAKPiBZYW5uIExlIER1ICgxKToKPiAgICAg
-ICBzdGRsaWI6IGluY3JlYXNlIG51bWJlciBvZiBzdGF0aWMgYXRleGl0IGhhbmRsZXJzIHRvIDMy
-Cj4gCj4gQWxsIGJ1aWxkcm9vdCBwYXRjaGVzIGFyZSB1cHN0cmVhbS4KPiAKPiBTaWduZWQtb2Zm
-LWJ5OiBXYWxkZW1hciBCcm9ka29yYiA8d2J4QG9wZW5hZGsub3JnPgo+IC0tLQoKSXQncyBhIHZl
-cnNpb24gYnVtcCBvZiBhIGNyaXRpY2FsIGNvbXBvbmVudCwgaW4gbWFzdGVyLCBxdWl0ZSBsYXRl
-IGluCnRoZSByZWxlYXNlIGN5Y2xlLCBidXQgcmVhbGx5IHRoZSBudW1iZXIgb2YgY2hhbmdlcyB1
-cHN0cmVhbSBpcwpsaW1pdGVkLCBzbyBsZXQncyBnaXZlIGl0IGEgdHJ5IGFuZCBob3BlIGl0IHdv
-bid0IGJyZWFrIGFueXRoaW5nIDotKQoKQXBwbGllZCB0byBtYXN0ZXIsIHRoYW5rcyEKClRob21h
-cwotLSAKVGhvbWFzIFBldGF6em9uaSwgQ1RPLCBCb290bGluCkVtYmVkZGVkIExpbnV4IGFuZCBL
-ZXJuZWwgZW5naW5lZXJpbmcKaHR0cHM6Ly9ib290bGluLmNvbQpfX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxk
-cm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xp
-c3RpbmZvL2J1aWxkcm9vdAo=
+On Tue, 13 Aug 2024 05:10:23 +0200
+Waldemar Brodkorb <wbx@openadk.org> wrote:
+
+> Bind 9.16.x is EOL since April 2024.
+> See here for what version should be used in production:
+> https://kb.isc.org/docs/aa-01540
+> 
+> Remove patch 0001 as CC_FOR_BUILD is used in upstream code
+> to compile host utility gen.
+> 
+> Add new patch 0001 to fix a rndc linking error.
+> 
+> See here for a changelog:
+> https://downloads.isc.org/isc/bind9/9.18.28/doc/arm/html/notes.html
+> 
+> COPYRIGHT file has been updated, following Copyright holders were
+> added:
+> Copyright Joyent, Inc. and other Node contributors. All rights reserved.
+> 
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> ---
+> v1->v2:
+>  - add patch to fix a linking error reported by Thomas P.
+> ---
+>  .checkpackageignore                           |  1 -
+>  package/bind/0001-cross.patch                 | 34 -------------------
+>  ...1-rndc-add-missing-libns-CFLAGS-LIBS.patch | 34 +++++++++++++++++++
+>  package/bind/bind.hash                        |  8 ++---
+>  package/bind/bind.mk                          |  5 ++-
+>  5 files changed, 42 insertions(+), 40 deletions(-)
+>  delete mode 100644 package/bind/0001-cross.patch
+>  create mode 100644 package/bind/0001-rndc-add-missing-libns-CFLAGS-LIBS.patch
+
+Thanks a lot, but your patch fixing the issue has been rejected
+upstream, claiming the issue is elsewhere, so it looks like more
+investigation is needed I'm afraid :/
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
