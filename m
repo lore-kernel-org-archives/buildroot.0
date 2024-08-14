@@ -4,49 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BAF84E6FE47
-	for <buildroot@archiver.kernel.org>; Fri,  6 Sep 2024 19:59:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35191E6FE48
+	for <buildroot@archiver.kernel.org>; Fri,  6 Sep 2024 19:59:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E962384186;
-	Fri,  6 Sep 2024 19:59:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BBE1C84388;
+	Fri,  6 Sep 2024 19:59:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Szd0CY6qPsXC; Fri,  6 Sep 2024 19:59:53 +0000 (UTC)
+ id c0dxf4wWE4qf; Fri,  6 Sep 2024 19:59:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DEAE78437F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9963384135
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DEAE78437F;
-	Fri,  6 Sep 2024 19:59:51 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9963384135;
+	Fri,  6 Sep 2024 19:59:56 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 157DF1BF980
- for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 19:58:59 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 141C71BF37F
+ for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 19:59:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 318876077B
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7199C60E11
  for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 19:58:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PPhwGrw0_pvJ for <buildroot@lists.busybox.net>;
- Fri,  6 Sep 2024 19:58:53 +0000 (UTC)
+ id pCUuAHT5v-U3 for <buildroot@lists.busybox.net>;
+ Fri,  6 Sep 2024 19:58:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 35DF4606F8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6988360755
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 35DF4606F8
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6988360755
  for <buildroot@buildroot.org>; Fri,  6 Sep 2024 19:58:53 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2931486EE1; Fri,  6 Sep 2024 19:58:53 +0000 (UTC)
+ id 65FD586EE5; Fri,  6 Sep 2024 19:58:53 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 12 Aug 2024 22:54:30 +0200
+Date: Wed, 14 Aug 2024 21:40:58 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ee9d0183413ef1bec03b0703e1b917f3335aeda5
-X-Git-Newrev: 74cb378aff231c4f4605d7f479b9ae1a7a4e1fb6
+X-Git-Oldrev: 7321a732c2faa64713cb392b6e274546500add6e
+X-Git-Newrev: 4715ed5970e2956646f7dbb4a576c7997e0b8181
 X-Patchwork-Hint: ignore
-Message-Id: <20240906195853.2931486EE1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/{glibc,
- localdef}: bump to version 2.40
+Message-Id: <20240906195853.65FD586EE5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/uhd: bump to version 4.7.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,235 +65,254 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=74cb378aff231c4f4605d7f479b9ae1a7a4e1fb6
+commit: https://git.buildroot.net/buildroot/commit/?id=4715ed5970e2956646f7dbb4a576c7997e0b8181
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This commit bumps glibc to version 2.40. See the release notes at:
+For change log since 4.3.0.0, see:
+https://github.com/EttusResearch/uhd/blob/v4.7.0.0/CHANGELOG
 
-https://sourceware.org/pipermail/libc-alpha/2024-July/158467.html
+This commit removes the package patch 0002, which is now included in
+this new version.
 
-The patches against localedef are refreshed. The patch 0003 requires a
-small change: the macro to tweak is no longer _ISOC2K_SOURCE, but
-_ISOC23_SOURCE.
+Also, uhd version 4.5.0.0 raised the minimal gcc version requirement
+to 7.3.0. This change is reflected in the package dependencies.
 
+Also, some UHD Kconfig sub-options (B100, B200, USB, USRP1) had
+dependencies on gcc >= 4.9. Since the whole uhd package raised the
+gcc dependency to gcc >= 7, those sub-options dependencies are now
+useless. This commit removes those.
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/glibc/glibc.hash                           |  2 +-
- package/glibc/glibc.mk                             |  2 +-
- ...001-HACK-only-build-and-install-localedef.patch | 30 +++++++++++-----------
- ...ndency-on-GCC-to-4.8-and-binutils-to-2.24.patch | 16 ++++++------
- ...SOC23_SOURCE-undefined-to-build-localede.patch} | 17 +++++++-----
- package/localedef/localedef.mk                     |  2 +-
- 6 files changed, 36 insertions(+), 33 deletions(-)
+ ...d-with-GCC-13-add-missing-cstdint-include.patch | 117 ---------------------
+ package/uhd/Config.in                              |  22 +---
+ package/uhd/uhd.hash                               |   2 +-
+ package/uhd/uhd.mk                                 |   2 +-
+ 4 files changed, 5 insertions(+), 138 deletions(-)
 
-diff --git a/package/glibc/glibc.hash b/package/glibc/glibc.hash
-index aaf7848a7c..bfb2942abb 100644
---- a/package/glibc/glibc.hash
-+++ b/package/glibc/glibc.hash
+diff --git a/package/uhd/0002-Fix-build-with-GCC-13-add-missing-cstdint-include.patch b/package/uhd/0002-Fix-build-with-GCC-13-add-missing-cstdint-include.patch
+deleted file mode 100644
+index acf720a15d..0000000000
+--- a/package/uhd/0002-Fix-build-with-GCC-13-add-missing-cstdint-include.patch
++++ /dev/null
+@@ -1,117 +0,0 @@
+-From 3acf784e988608cbce34cd0be0a8703ba53ea515 Mon Sep 17 00:00:00 2001
+-From: Sam James <sam@gentoo.org>
+-Date: Tue, 3 Jan 2023 23:04:52 +0000
+-Subject: [PATCH] Fix build with GCC 13 (add missing <cstdint> include)
+-
+-GCC 13 (as usual for new compiler releases) shuffles around some
+-internal includes and so <cstdint> is no longer transitively included.
+-
+-Explicitly include <cstdint> for uint8_t.
+-
+-```
+-/var/tmp/portage/net-wireless/uhd-4.3.0.0/work/uhd-4.3.0.0/host/include/uhd/rfnoc/defaults.hpp:43:14: error: 'uint32_t' does not name a type
+-   43 | static const uint32_t DEFAULT_NOC_ID  = 0xFFFFFFFF;
+-      |              ^~~~~~~~
+-/var/tmp/portage/net-wireless/uhd-4.3.0.0/work/uhd-4.3.0.0/host/include/uhd/rfnoc/defaults.hpp:1:1: note: 'uint32_t' is defined in header '<cstdint>'; did you forget to '#include <cstdint>'?
+-  +++ |+#include <cstdint>
+-    1 | //
+-```
+-
+-Signed-off-by: Sam James <sam@gentoo.org>
+-
+-Upstream: https://github.com/EttusResearch/uhd/commit/3acf784e988608cbce34cd0be0a8703ba53ea515
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+----
+- host/include/uhd/cal/database.hpp                      | 1 +
+- host/include/uhd/rfnoc/defaults.hpp                    | 1 +
+- host/include/uhd/types/eeprom.hpp                      | 1 +
+- host/include/uhd/usrp/zbx_tune_map_item.hpp            | 1 +
+- host/lib/usrp/dboard/magnesium/magnesium_constants.hpp | 1 +
+- host/lib/usrp/dboard/rhodium/rhodium_constants.hpp     | 1 +
+- host/lib/utils/serial_number.cpp                       | 1 +
+- 7 files changed, 7 insertions(+)
+-
+-diff --git a/host/include/uhd/cal/database.hpp b/host/include/uhd/cal/database.hpp
+-index b6abbb6df7..9d47febedd 100644
+---- a/host/include/uhd/cal/database.hpp
+-+++ b/host/include/uhd/cal/database.hpp
+-@@ -8,6 +8,7 @@
+- 
+- #include <uhd/config.hpp>
+- #include <stddef.h>
+-+#include <cstdint>
+- #include <string>
+- #include <vector>
+- #include <functional>
+-diff --git a/host/include/uhd/rfnoc/defaults.hpp b/host/include/uhd/rfnoc/defaults.hpp
+-index aa7778aacf..6c878a8d70 100644
+---- a/host/include/uhd/rfnoc/defaults.hpp
+-+++ b/host/include/uhd/rfnoc/defaults.hpp
+-@@ -8,6 +8,7 @@
+- 
+- #pragma once
+- 
+-+#include <cstdint>
+- #include <string>
+- 
+- namespace uhd { namespace rfnoc {
+-diff --git a/host/include/uhd/types/eeprom.hpp b/host/include/uhd/types/eeprom.hpp
+-index 3a7605d3cb..420440aa64 100644
+---- a/host/include/uhd/types/eeprom.hpp
+-+++ b/host/include/uhd/types/eeprom.hpp
+-@@ -6,6 +6,7 @@
+- 
+- #pragma once
+- 
+-+#include <cstdint>
+- #include <map>
+- #include <string>
+- #include <vector>
+-diff --git a/host/include/uhd/usrp/zbx_tune_map_item.hpp b/host/include/uhd/usrp/zbx_tune_map_item.hpp
+-index e49f49f785..ce95623de2 100644
+---- a/host/include/uhd/usrp/zbx_tune_map_item.hpp
+-+++ b/host/include/uhd/usrp/zbx_tune_map_item.hpp
+-@@ -6,6 +6,7 @@
+- 
+- #pragma once
+- #include <uhd/config.hpp>
+-+#include <cstdint>
+- #include <cstring>
+- #include <string>
+- #include <vector>
+-diff --git a/host/lib/usrp/dboard/magnesium/magnesium_constants.hpp b/host/lib/usrp/dboard/magnesium/magnesium_constants.hpp
+-index 99f2b910c6..99f5a4933f 100644
+---- a/host/lib/usrp/dboard/magnesium/magnesium_constants.hpp
+-+++ b/host/lib/usrp/dboard/magnesium/magnesium_constants.hpp
+-@@ -9,6 +9,7 @@
+- 
+- #include <uhd/types/ranges.hpp>
+- #include <cstddef>
+-+#include <cstdint>
+- #include <string>
+- #include <vector>
+- 
+-diff --git a/host/lib/usrp/dboard/rhodium/rhodium_constants.hpp b/host/lib/usrp/dboard/rhodium/rhodium_constants.hpp
+-index 591d02d305..1577e02d9e 100644
+---- a/host/lib/usrp/dboard/rhodium/rhodium_constants.hpp
+-+++ b/host/lib/usrp/dboard/rhodium/rhodium_constants.hpp
+-@@ -9,6 +9,7 @@
+- 
+- #include <array>
+- #include <cstddef>
+-+#include <cstdint>
+- #include <string>
+- #include <vector>
+- 
+-diff --git a/host/lib/utils/serial_number.cpp b/host/lib/utils/serial_number.cpp
+-index 61296a9139..c07730e24d 100644
+---- a/host/lib/utils/serial_number.cpp
+-+++ b/host/lib/utils/serial_number.cpp
+-@@ -5,6 +5,7 @@
+- //
+- 
+- #include <uhdlib/utils/serial_number.hpp>
+-+#include <cstdint>
+- #include <stdexcept>
+- #include <string>
+- 
+diff --git a/package/uhd/Config.in b/package/uhd/Config.in
+index 2ccfe3ccb8..58bf91c1df 100644
+--- a/package/uhd/Config.in
++++ b/package/uhd/Config.in
+@@ -1,9 +1,9 @@
+-comment "uhd needs a toolchain w/ C++, NPTL, wchar, dynamic library, gcc >= 5"
++comment "uhd needs a toolchain w/ C++, NPTL, wchar, dynamic library, gcc >= 7"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || \
+ 		!BR2_TOOLCHAIN_HAS_THREADS_NPTL || BR2_STATIC_LIBS || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_5
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_7
+ 
+ comment "uhd needs a toolchain not affected by GCC bug 64735"
+ 	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+@@ -17,7 +17,7 @@ config BR2_PACKAGE_UHD
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
+ 	depends on BR2_USE_MMU # use fork()
+ 	depends on BR2_USE_WCHAR # boost
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_5 # boost-math
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7
+ 	select BR2_PACKAGE_BOOST
+ 	select BR2_PACKAGE_BOOST_ATOMIC
+ 	select BR2_PACKAGE_BOOST_CHRONO
+@@ -37,24 +37,16 @@ if BR2_PACKAGE_UHD
+ 
+ config BR2_PACKAGE_UHD_B100
+ 	bool "b100 support"
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libusb
+ 	select BR2_PACKAGE_UHD_USB
+ 	help
+ 	  enable B100 support
+ 
+-comment "B100 support needs a toolchain w/ gcc >= 4.9"
+-	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+-
+ config BR2_PACKAGE_UHD_B200
+ 	bool "b200 support"
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libusb
+ 	select BR2_PACKAGE_UHD_USB
+ 	help
+ 	  enable B200 support
+ 
+-comment "B200 support needs a toolchain w/ gcc >= 4.9"
+-	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+-
+ config BR2_PACKAGE_UHD_E300
+ 	bool "E300 support"
+ 	select BR2_PACKAGE_UHD_MPMD
+@@ -115,24 +107,16 @@ config BR2_PACKAGE_UHD_PYTHON
+ 
+ config BR2_PACKAGE_UHD_USB
+ 	bool "USB support"
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libusb
+ 	select BR2_PACKAGE_LIBUSB
+ 	help
+ 	  enable UHD USB support
+ 
+-comment "USB support needs a toolchain w/ gcc >= 4.9"
+-	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+-
+ config BR2_PACKAGE_UHD_USRP1
+ 	bool "USRP1 support"
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # libusb
+ 	select BR2_PACKAGE_UHD_USB
+ 	help
+ 	  enable USRP1 support
+ 
+-comment "USRP1 support needs a toolchain w/ gcc >= 4.9"
+-	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+-
+ config BR2_PACKAGE_UHD_USRP2
+ 	bool "USRP2 support"
+ 	help
+diff --git a/package/uhd/uhd.hash b/package/uhd/uhd.hash
+index 3af1bc9251..3282da2ec7 100644
+--- a/package/uhd/uhd.hash
++++ b/package/uhd/uhd.hash
 @@ -1,5 +1,5 @@
- # Locally calculated (fetched from Github)
--sha256  2858e8e47c4c0df32b526c56d5590ec939e8178201ee9526bb070999ce4aa1f2  glibc-2.39-74-g198632a05f6c7b9ab67d3331d8caace9ceabb685.tar.gz
-+sha256  6426766187d177412e7f3daed793dec93fce417db5ae99296c0d880aa808091e  glibc-2.40-18-g5641780762723156b0d20a0b9f7df1d76831bab0.tar.gz
+ # Locally calculated:
+-sha256  8695800d593c58b557cbf9905b02bbf65a74ca68674e8c8c8c28bb6e203635ad  uhd-4.3.0.0.tar.gz
++sha256  afe56842587ce72d6a57535a2b15c061905f0a039abcc9d79f0106f072a00d10  uhd-4.7.0.0.tar.gz
+ sha256  94cc36ada2641d037980bf6c2418a750ac10a115ae11de5a5cda6177769dbd4c  LICENSE.md
+ sha256  70bf7e79c8cd73a81f97ce81745ea0719a617eebe299a61868165daeae71fff2  host/LICENSE
+ sha256  206adc03412b6c5b71b9c9df9c1f2e60e11833e89393877d5031fd11d332b1d4  fpga/usrp3/LICENSE.md
+diff --git a/package/uhd/uhd.mk b/package/uhd/uhd.mk
+index a9d711acd4..52ea06a394 100644
+--- a/package/uhd/uhd.mk
++++ b/package/uhd/uhd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- # Hashes for license files
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/glibc/glibc.mk b/package/glibc/glibc.mk
-index db6fa55819..cee03a16fd 100644
---- a/package/glibc/glibc.mk
-+++ b/package/glibc/glibc.mk
-@@ -7,7 +7,7 @@
- # Generate version string using:
- #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
- # When updating the version, please also update localedef
--GLIBC_VERSION = 2.39-74-g198632a05f6c7b9ab67d3331d8caace9ceabb685
-+GLIBC_VERSION = 2.40-18-g5641780762723156b0d20a0b9f7df1d76831bab0
- # Upstream doesn't officially provide an https download link.
- # There is one (https://sourceware.org/git/glibc.git) but it's not reliable,
- # sometimes the connection times out. So use an unofficial github mirror.
-diff --git a/package/localedef/0001-HACK-only-build-and-install-localedef.patch b/package/localedef/0001-HACK-only-build-and-install-localedef.patch
-index a65c896eb7..ef126c6bd3 100644
---- a/package/localedef/0001-HACK-only-build-and-install-localedef.patch
-+++ b/package/localedef/0001-HACK-only-build-and-install-localedef.patch
-@@ -1,4 +1,4 @@
--From bd5a87ea4a0cc0ba393a16bbeb166903e4085e8b Mon Sep 17 00:00:00 2001
-+From 03b1573ca341f1852ac05a884a68ed375cceccc0 Mon Sep 17 00:00:00 2001
- From: Michael Olbrich <m.olbrich@pengutronix.de>
- Date: Mon, 21 May 2018 16:45:02 +0200
- Subject: [PATCH] HACK: only build and install localedef
-@@ -13,16 +13,16 @@ Signed-off-by: Romain Naour <romain.naour@gmail.com>
- Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
- ---
-  Rules           | 14 ++++++++++----
-- locale/Makefile |  6 +++---
-- 2 files changed, 13 insertions(+), 7 deletions(-)
-+ locale/Makefile |  3 ---
-+ 2 files changed, 10 insertions(+), 7 deletions(-)
- 
- diff --git a/Rules b/Rules
--index 279ae490ac..1321956be6 100644
-+index 9010c5d5b2..f5e5525061 100644
- --- a/Rules
- +++ b/Rules
--@@ -221,10 +221,16 @@ binaries-shared-notests = $(filter-out $(binaries-pie) $(binaries-static), \
-+@@ -223,10 +223,16 @@ binaries-shared-notests = $(filter-out $(binaries-pie) $(binaries-static), \
-  				       $(binaries-all-notests))
--
-+ 
-  ifneq "$(strip $(binaries-shared-notests))" ""
- -$(addprefix $(objpfx),$(binaries-shared-notests)): %: %.o \
- -  $(sort $(filter $(common-objpfx)lib%,$(link-libc))) \
-@@ -39,13 +39,13 @@ index 279ae490ac..1321956be6 100644
- +			   $(common-objpfx)libc% $(+postinit),$^) \
- +	      $(link-extra-libs)
-  endif
--
-+ 
-  ifneq "$(strip $(binaries-shared-tests))" ""
- diff --git a/locale/Makefile b/locale/Makefile
--index d7036b0855..68afdddc7f 100644
-+index 2810f28605..6b4cc9e831 100644
- --- a/locale/Makefile
- +++ b/locale/Makefile
--@@ -76,7 +76,6 @@
-+@@ -76,7 +76,6 @@ aux = \
-    xlocale \
-    # aux
-  others = \
-@@ -53,7 +53,7 @@ index d7036b0855..68afdddc7f 100644
-    localedef \
-    # others
-  #others-static = \
--@@ -84,7 +83,6 @@
-+@@ -84,7 +83,6 @@ others = \
-  # locale \
-  # # others-static
-  install-bin = \
-@@ -61,14 +61,14 @@ index d7036b0855..68afdddc7f 100644
-    localedef \
-    # install-bin
-  extra-objs = \
--@@ -96,7 +94,6 @@
-+@@ -96,7 +94,6 @@ extra-objs = \
-  generated += C-translit.h
-  before-compile += $(objpfx)C-translit.h
--
-+ 
- -extra-libs = libBrokenLocale
-  extra-libs-others = $(extra-libs)
--
-+ 
-  libBrokenLocale-routines = broken_cur_max
----
--2.41.0
-+-- 
-+2.45.2
- 
-diff --git a/package/localedef/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch b/package/localedef/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch
-index 1aecc24405..b8e53a23a6 100644
---- a/package/localedef/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch
-+++ b/package/localedef/0002-relax-dependency-on-GCC-to-4.8-and-binutils-to-2.24.patch
-@@ -1,4 +1,4 @@
--From add730a680075ed611797b9ea771bf977667a7de Mon Sep 17 00:00:00 2001
-+From 1ddee6fdcde6b12df22619380d51b47e6c8f2c08 Mon Sep 17 00:00:00 2001
- From: Matt Weber <matthew.weber@rockwellcollins.com>
- Date: Thu, 6 Feb 2020 14:36:21 -0600
- Subject: [PATCH] relax dependency on GCC to 4.8 and binutils to 2.24
-@@ -35,10 +35,10 @@ Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-  1 file changed, 2 insertions(+), 2 deletions(-)
- 
- diff --git a/configure b/configure
--index 4ef387146d..4c6f91117d 100755
-+index 1d543548cd..3e13c46b2e 100755
- --- a/configure
- +++ b/configure
--@@ -5157,7 +5157,7 @@ printf %s "checking version of $LD... " >&6; }
-+@@ -5302,7 +5302,7 @@ printf %s "checking version of $LD... " >&6; }
-    ac_prog_version=`$LD --version 2>&1 | sed -n 's/^.*GNU ld.* \([0-9][0-9]*\.[0-9.]*\).*$/\1/p'`
-    case $ac_prog_version in
-      '') ac_prog_version="v. ?.??, bad"; ac_verc_fail=yes;;
-@@ -46,16 +46,16 @@ index 4ef387146d..4c6f91117d 100755
- +    2.1[0-9][0-9]*|2.2[4-9]*|2.[3-9][0-9]*|[3-9].*|[1-9][0-9]*)
-         ac_prog_version="$ac_prog_version, ok"; ac_verc_fail=no;;
-      *) ac_prog_version="$ac_prog_version, bad"; ac_verc_fail=yes;;
--
--@@ -5599,7 +5599,7 @@ int
-+ 
-+@@ -5750,7 +5750,7 @@ int
-  main (void)
-  {
--
-+ 
- -#if !defined __GNUC__ || __GNUC__ < 6 || (__GNUC__ == 6 && __GNUC_MINOR__ < 2)
- +#if !defined __GNUC__ || __GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ < 8)
-  #error insufficient compiler
-  #endif
-    ;
----
--2.41.0
-+-- 
-+2.45.2
- 
-diff --git a/package/localedef/0003-HACK-keep-_ISOC2X_SOURCE-undefined-to-build-localede.patch b/package/localedef/0003-HACK-keep-_ISOC23_SOURCE-undefined-to-build-localede.patch
-similarity index 63%
-rename from package/localedef/0003-HACK-keep-_ISOC2X_SOURCE-undefined-to-build-localede.patch
-rename to package/localedef/0003-HACK-keep-_ISOC23_SOURCE-undefined-to-build-localede.patch
-index 741bd7b47f..57a8f8e35c 100644
---- a/package/localedef/0003-HACK-keep-_ISOC2X_SOURCE-undefined-to-build-localede.patch
-+++ b/package/localedef/0003-HACK-keep-_ISOC23_SOURCE-undefined-to-build-localede.patch
-@@ -1,7 +1,7 @@
--From babfa64585bef6c53c1d399a1c244aea89437c9e Mon Sep 17 00:00:00 2001
-+From efc989e7e5dcbc38ccc32634e49cfc2881c5a318 Mon Sep 17 00:00:00 2001
- From: Romain Naour <romain.naour@gmail.com>
- Date: Sat, 9 Sep 2023 23:58:50 +0200
--Subject: [PATCH] HACK: keep _ISOC2X_SOURCE undefined to build localedef with
-+Subject: [PATCH] HACK: keep _ISOC23_SOURCE undefined to build localedef with
-  old glibc
- 
- Fixes:
-@@ -11,22 +11,25 @@ ld-ctype.c:(.text+0x6cef): undefined reference to `__isoc23_strtoul'
- Upstream: Not applicable
- 
- Signed-off-by: Romain Naour <romain.naour@gmail.com>
-+[Thomas: adapted to glibc 2.40, which required the logic to be changed
-+to _ISOC23_SOURCE]
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- ---
-  include/features.h | 1 -
-  1 file changed, 1 deletion(-)
- 
- diff --git a/include/features.h b/include/features.h
--index 7c51b4a2e4..f385370d18 100644
-+index 093de6f44c..8d9ca6e402 100644
- --- a/include/features.h
- +++ b/include/features.h
--@@ -207,7 +207,6 @@
-+@@ -215,7 +215,6 @@
-  # undef  _ISOC11_SOURCE
-  # define _ISOC11_SOURCE	1
-- # undef  _ISOC2X_SOURCE
---# define _ISOC2X_SOURCE	1
-+ # undef  _ISOC23_SOURCE
-+-# define _ISOC23_SOURCE	1
-  # undef  _POSIX_SOURCE
-  # define _POSIX_SOURCE	1
-  # undef  _POSIX_C_SOURCE
- -- 
--2.41.0
-+2.45.2
- 
-diff --git a/package/localedef/localedef.mk b/package/localedef/localedef.mk
-index 6940900f8d..b3e8ab5a1b 100644
---- a/package/localedef/localedef.mk
-+++ b/package/localedef/localedef.mk
-@@ -7,7 +7,7 @@
- # Use the same VERSION and SITE as target glibc
- # As in glibc.mk, generate version string using:
- #   git describe --match 'glibc-*' --abbrev=40 origin/release/MAJOR.MINOR/master | cut -d '-' -f 2-
--LOCALEDEF_VERSION = 2.39-74-g198632a05f6c7b9ab67d3331d8caace9ceabb685
-+LOCALEDEF_VERSION = 2.40-18-g5641780762723156b0d20a0b9f7df1d76831bab0
- LOCALEDEF_SOURCE = glibc-$(LOCALEDEF_VERSION).tar.gz
- LOCALEDEF_SITE = $(call github,bminor,glibc,$(LOCALEDEF_VERSION))
- HOST_LOCALEDEF_DL_SUBDIR = glibc
+-UHD_VERSION = 4.3.0.0
++UHD_VERSION = 4.7.0.0
+ UHD_SITE = $(call github,EttusResearch,uhd,v$(UHD_VERSION))
+ UHD_LICENSE = GPL-3.0+, LGPL-3.0+ (fpga/usrp3)
+ UHD_LICENSE_FILES = LICENSE.md host/LICENSE fpga/usrp3/LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
