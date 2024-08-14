@@ -1,76 +1,73 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1EB71C3DA4A
-	for <buildroot@archiver.kernel.org>; Wed, 14 Aug 2024 22:12:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C5AFC3DA4A
+	for <buildroot@archiver.kernel.org>; Wed, 14 Aug 2024 23:41:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C3FC94034A;
-	Wed, 14 Aug 2024 22:12:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C61576089F;
+	Wed, 14 Aug 2024 23:41:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GM6i9_6P8O6k; Wed, 14 Aug 2024 22:12:50 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2g-46wcqzpJQ; Wed, 14 Aug 2024 23:41:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D48724035B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BC132608A8
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D48724035B;
-	Wed, 14 Aug 2024 22:12:49 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C5AAE1BF2A7
- for <buildroot@lists.busybox.net>; Wed, 14 Aug 2024 22:12:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BC132608A8;
+	Wed, 14 Aug 2024 23:41:18 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id C74461BF599
+ for <buildroot@lists.busybox.net>; Wed, 14 Aug 2024 23:41:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B1E2181229
- for <buildroot@lists.busybox.net>; Wed, 14 Aug 2024 22:12:47 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B476F608A8
+ for <buildroot@lists.busybox.net>; Wed, 14 Aug 2024 23:41:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tGM1gkFuGhHp for <buildroot@lists.busybox.net>;
- Wed, 14 Aug 2024 22:12:42 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.197;
- helo=relay5-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 04EAE81223
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 04EAE81223
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 04EAE81223
- for <buildroot@buildroot.org>; Wed, 14 Aug 2024 22:12:41 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id EB5661C0002;
- Wed, 14 Aug 2024 22:12:38 +0000 (UTC)
-Date: Thu, 15 Aug 2024 00:12:37 +0200
-To: Dong Wang <wangdong115@foxmail.com>
-Message-ID: <20240815001237.6404eab5@windsurf>
-In-Reply-To: <tencent_96D562A129814C4EA71CECCDB60D1B060707@qq.com>
-References: <tencent_7E39529BBE1BB50CB4AA2A429702629C0808@qq.com>
- <tencent_96D562A129814C4EA71CECCDB60D1B060707@qq.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qrlvTOiZ-8rZ for <buildroot@lists.busybox.net>;
+ Wed, 14 Aug 2024 23:41:16 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1828:2000:679::23; helo=helium.openadk.org;
+ envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org D5A316089F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D5A316089F
+Received: from helium.openadk.org (helium.openadk.org
+ [IPv6:2a00:1828:2000:679::23])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id D5A316089F
+ for <buildroot@buildroot.org>; Wed, 14 Aug 2024 23:41:14 +0000 (UTC)
+Received: by helium.openadk.org (Postfix, from userid 1000)
+ id 9777A3535C0F; Thu, 15 Aug 2024 01:41:10 +0200 (CEST)
+Date: Thu, 15 Aug 2024 01:41:10 +0200
+From: Waldemar Brodkorb <wbx@openadk.org>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Message-ID: <Zr1AlnZfmJyJGFRC@waldemar-brodkorb.de>
+References: <ZrrZvTetrbgQqpCL@waldemar-brodkorb.de>
+ <20240814234938.651915c6@windsurf>
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1723673559;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=/iQ977/fqqRybdl5HH0RxNCM3wMa1f3h/SyLLWBsFJQ=;
- b=XpQcdua75CWRHPRIA63pTV9vE/RAtnGs/9A2qjr9inCoR1+VTIiRcN5n4GKzs3sDYWAWEs
- EWetDxfclqCQYs0ZZl8OK/QHYAFEvvLY5jCFkK9ppJhSD55j+J3MawhYuEx2k9gsnfHALx
- jGJvX/H9Yf3KW+WMDOj3upJE3sEuqnTLhF2L9WEYTfqBEIZcwAeis8/IWXZjKhC2dIaStg
- uZMnHTjwZPQW7NTxNRKpRQVNt+E/FJvdlqmxvMY+dGfKaSswGkqXwgqNBScBHyDQGj/MuQ
- 04DiHKi9OeAQshtFKXUEstbmYIYvVG0aVWhV2B2OBoSeIJKMNg+CTuCgjiqX9g==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+Content-Disposition: inline
+In-Reply-To: <20240814234938.651915c6@windsurf>
+X-Operating-System: Linux 5.10.0-31-amd64 x86_64
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=openadk.org; s=2022; 
+ t=1723678870; bh=RJM7XJUJT9CgE7eFl1Ezyf7NkqmKcSANZE227qgqA3w=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=ehfj5vKbaZxcbK9MfDdIHqf/MePQr582faz/G2kygv++WqZDxxS793OmZ7ayYP+1R
+ +tx0kOuv1ciMukAP8x8S354tq/Tt2UYKkoXfq91jDNQDngHI9wOM/6eWLHkVXUphMi
+ KelF2q2ONqa8ZV8XedVT2RkXxBK3jkvthVJwiXnXyIJfWZF6mojUmeVrHs0NU1IJXv
+ H6TkqDbHzEJwrENLF8pYESypD8MmH/6X8OPZ738mIvgc19nwKnxMemvSbBf4mRUd0R
+ rUwwNrQxQZTWAqz7IambpV/7ykZZqIJu0LdJwNaGqp0GN/8rJCUPfMdPtdClLZ0NI8
+ whXCTYhlK9hDQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=openadk.org
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=XpQcdua7
-Subject: Re: [Buildroot] [PATCH v2]
- configs/friendlyarm_nanopi_neo_defconfig: new defconfig
+ unprotected) header.d=openadk.org header.i=@openadk.org header.a=rsa-sha256
+ header.s=2022 header.b=ehfj5vKb
+Subject: Re: [Buildroot] [PATCH] package/uclibc: update to 1.0.50
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,156 +79,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Dong,
-
-On Wed, 14 Aug 2024 01:02:44 +0800
-Dong Wang <wangdong115@foxmail.com> wrote:
-
-> This patch adds a new defconfig for the NanoPi NEO board made by
-> FriendlyARM. This board is based on the Allwinner H3 SoC.
-> 
-> See: https://wiki.friendlyelec.com/wiki/index.php/NanoPi_NEO
-> 
-> This patch uses the mainline kernel and u-boot for the board.
-> 
-> The configurations are based on the previously dropped defconfig
-> maintained by Yann E. MORIN <yann.morin.1998@free.fr>.
-> 
-> Signed-off-by: Dong Wang <wangdong115@foxmail.com>
-
-Thanks a lot for this v2, which I applied to next, but after fixing a
-number of things (see below). Also, there's one remaining fix to fix as
-a follow-up, see below as well.
-
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index d7d0af3543..9eb54bc2bc 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -868,6 +868,10 @@ F:	package/logsurfer/
->  N:	Dominik Michael Rauh <dmrauh@posteo.de>
->  F:	package/gdal/
->  
-> +N:	Dong Wang <wangdong115@foxmail.com>
-> +F:	board/friendlyarm/nanopi-neo
-
-We like directory paths to end with a final / in the DEVELOPERS file,
-so I fixed this.
-
-> diff --git a/board/friendlyarm/nanopi-neo/genimage.cfg b/board/friendlyarm/nanopi-neo/genimage.cfg
-> new file mode 100644
-> index 0000000000..ec78fd0e56
-> --- /dev/null
-> +++ b/board/friendlyarm/nanopi-neo/genimage.cfg
-> @@ -0,0 +1,17 @@
-> +# Minimal SD card image for the NanoPi NEO.
-> +image sdcard.img {
-> +	hdimage {
-> +	}
-> +
-> +	partition u-boot {
-> +		in-partition-table = false
-> +		image = "u-boot-sunxi-with-spl.bin"
-> +		offset = 8K
-> +		size = 1000K # 1MB - 8KB(offset) - 16KB(GPT)
-
-I don't understand this "size" value, and especially the - 16KB(GPT),
-since this image is not using a GPT partition table. Could you clarify,
-and perhaps send a follow-up patch to fix this?
-
-> diff --git a/board/friendlyarm/nanopi-neo/patches/linux.hash b/board/friendlyarm/nanopi-neo/patches/linux.hash
-
-The files for those hashes were wrong, I don't know how you generated
-them, but they need to be in a subdir for each package:
-
-board
- + friendlyarm
-   + nanopi-neo
-     + patches
-       + linux
-         + linux.hash
-
-Also, the hash for linux-headers was missing (as a symlink to linux). I
-fixed those issues by just running ./utils/add-custom-hashes.
-
-
-> diff --git a/configs/friendlyarm_nanopi_neo_defconfig b/configs/friendlyarm_nanopi_neo_defconfig
-> new file mode 100644
-> index 0000000000..8d1dde247d
-> --- /dev/null
-> +++ b/configs/friendlyarm_nanopi_neo_defconfig
-> @@ -0,0 +1,50 @@
-> +# Architecture
-> +BR2_arm=y
-> +BR2_cortex_a7=y
-> +BR2_ARM_FPU_VFPV4=y
-> +
-> +# Linux headers same as kernel, a 6.6 series
-> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
-> +
-> +# Hashes
-> +BR2_GLOBAL_PATCH_DIR="board/friendlyarm/nanopi-neo/patches"
-> +BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
-> +
-> +# System
-> +BR2_TARGET_GENERIC_HOSTNAME="nanopi-neo"
-> +BR2_TARGET_GENERIC_ISSUE="Welcome to Buildroot for the NanoPi NEO"
-> +
-> +# Image
-> +BR2_ROOTFS_POST_BUILD_SCRIPT="board/friendlyarm/nanopi-neo/post-build.sh"
-> +BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-> +BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/friendlyarm/nanopi-neo/genimage.cfg"
-> +
-> +# Kernel
-> +BR2_LINUX_KERNEL=y
-> +BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.44"
-> +BR2_LINUX_KERNEL_DEFCONFIG="sunxi"
-> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
-> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="allwinner/sun8i-h3-nanopi-neo"
-> +BR2_LINUX_KERNEL_INSTALL_TARGET=y
-> +
-> +# Filesystem
-> +BR2_TARGET_ROOTFS_EXT2=y
-> +BR2_TARGET_ROOTFS_EXT2_4=y
-> +
-> +# Bootloader
-> +BR2_TARGET_UBOOT=y
-> +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-> +BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-> +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.07"
-> +BR2_TARGET_UBOOT_BOARD_DEFCONFIG="nanopi_neo"
-> +BR2_TARGET_UBOOT_NEEDS_DTC=y
-> +BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
-> +BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-> +BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
-> +BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-sunxi-with-spl.bin"
-> +
-> +# Host utilities
-> +BR2_PACKAGE_HOST_DOSFSTOOLS=y
-
-dosfstools is no longer needed, as you no longer have a FAT partition.
-
-> +BR2_PACKAGE_HOST_GENIMAGE=y
-> +BR2_PACKAGE_HOST_MTOOLS=y
-
-mtools is also no longer needed.
-
-Thanks again!
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGkgVGhvbWFzLApUaG9tYXMgUGV0YXp6b25pIHdyb3RlLAoKPiBPbiBUdWUsIDEzIEF1ZyAyMDI0
+IDA1OjU3OjQ5ICswMjAwCj4gV2FsZGVtYXIgQnJvZGtvcmIgPHdieEBvcGVuYWRrLm9yZz4gd3Jv
+dGU6Cj4gCj4gPiBTZWUgdGhpcyBnaXQgc2hvcnRsb2cgZm9yIGNoYW5nZXM6Cj4gPiAKPiA+IERt
+aXRyeSBDaGVzdG55a2ggKDIpOgo+ID4gICAgICAgRml4IGNvbXBpbGF0aW9uIHdpdGggNC54IGtl
+cm5lbCBoZWFkZXJzCj4gPiAgICAgICBHcm91cCBjb25kaXRpb25zIGFmdGVyIGAmJmAKPiA+IAo+
+ID4gRnJhbmsgTWVobmVydCAoNik6Cj4gPiAgICAgICBsaWJkbDogcHJvcGVybHkgY2FzdCBwYXJh
+bWV0ZXJzIGZvciAlcCBmb3JtYXQgc3RyaW5nIHNwZWNpZmllcgo+ID4gICAgICAgaWNvbnY6IGV4
+cGxpY2l0IGNhc3QgdG8gYHVuc2lnbmVkIGNoYXIqYAo+ID4gICAgICAgaWNvbnY6IGV4cGxpY2l0
+bHkgc3RhdGUgb3BlcmF0b3IgcHJlY2VkZW5jZQo+ID4gICAgICAgbGRzby5jOiB1c2UgJ3Vuc2ln
+bmVkIGludCcgYXMgbG9vcCB2YXJpYWJsZSB0eXBlCj4gPiAgICAgICBpY29udjogZml4IHBhcmFt
+ZXRlciB0eXBlIG9mIHV0ZjhzZXFfaXNfe292ZXJsb25nLHN1cnJvZ2F0ZSxpbGxlZ2FsfQo+ID4g
+ICAgICAgaWNvbnY6IHByZXZlbnQgY29tcGlsZXIgd2FybmluZyBkdXJpbmcgaW5pdGlhbGl6YXRp
+b24gd2l0aCBqaXMwMjA4Cj4gPiAKPiA+IEouIE5ldXNjaMOkZmVyICgxKToKPiA+ICAgICAgIGJp
+dHMvc3RhdC5oOiBEZWNsYXJlIHN0X210aW0gaWYgZGVmaW5lZChfX1VTRV9YT1BFTjJLOCksIGV2
+ZXJ5d2hlcmUKPiA+IAo+ID4gTWFyY3VzIEhhZWhuZWwgKDUpOgo+ID4gICAgICAgbGRzby9kbC12
+ZHNvOiBhdm9pZCBjb21waWxlciB3YXJuaW5nIGlmIGNvbmZpZ3VyZWQgd2l0aG91dCB2ZHNvCj4g
+PiAgICAgICB1Y2xpYmM6IEZpeCBkb3VibGUgcHJvbW90aW9uIHdhcm5pbmcKPiA+ICAgICAgIGxp
+Ym06IEZpeCBmbG9hdCBjb252ZXJzaW9uIGNvbXBpbGVyIHdhcm5pbmcKPiA+ICAgICAgIGZlYXR1
+cmVzLmg6IGFkZCBjbGFuZyBwcmVyZXF1aXNpdGUgbWFjcm8KPiA+ICAgICAgIGJ1aWxkc3lzOiBh
+bGxvdyBidWlsZGluZyB3aXRoIGdjYy0xNAo+ID4gCj4gPiBTdmVuIExpbmtlciAoMSk6Cj4gPiAg
+ICAgICBjKys6IFJlbW92ZSBkZXByZWNhdGVkIGR5bmFtaWMgZXhjZXB0aW9uIHNwZWNpZmljYXRp
+b24KPiA+IAo+ID4gVmFsZW50aW4gR2VocmtlICgxKToKPiA+ICAgICAgIGFybTogUmVwbGFjZSBk
+ZXByZWNhdGVkIGFzbSBpbnN0cnVjdGlvbnMgZm9yIEFSTXY4IEFBcmNoMzIKPiA+IAo+ID4gV2Fs
+ZGVtYXIgQnJvZGtvcmIgKDkpOgo+ID4gICAgICAgQ2xhbmcgc3VwcG9ydCBmb3IgZ251X2lubGlu
+ZSBhdHRyaWJ1dGUKPiA+ICAgICAgIGFsbG93IHRvIHVzZSA8c3lzL3Vjb250ZXh0Lmg+Cj4gPiAg
+ICAgICBhZGQgU0VFS19EQVRBL1NFRUtfSE9MRQo+ID4gICAgICAgbHNlZWs6IGFsbG93IFNFRUtf
+REFUQS9TRUVLX0hPTEUgdG8gYmUgdXNlZAo+ID4gICAgICAgYml0cy9zdGF0Lmg6IERlY2xhcmUg
+c3RfbXRpbSBpZiBkZWZpbmVkKF9fVVNFX1hPUEVOMks4KSwgYWRkIG1pc3NpbmcKPiA+ICAgICAg
+IHJpc2N2OiByZW1vdmUgaW5jb21wbGV0ZSBjb250ZXh0IGltcGxlbWVudGF0aW9uLCB1c2UgbGli
+dWNvbnRleHQKPiA+ICAgICAgIGFkZCBtZW1mZF9jcmVhdGUgc3lzY2FsbCB3cmFwcGVyCj4gPiAg
+ICAgICBnZXRyYW5kb206IHJlbW92ZSBfX1VTRV9HTlUgLyBhZGQgR1JORF9JTlNFQ1VSRQo+ID4g
+ICAgICAgYnVtcCB2ZXJzaW9uIGZvciAxLjAuNTAgcmVsZWFzZQo+ID4gCj4gPiBZYW5uIExlIER1
+ICgxKToKPiA+ICAgICAgIHN0ZGxpYjogaW5jcmVhc2UgbnVtYmVyIG9mIHN0YXRpYyBhdGV4aXQg
+aGFuZGxlcnMgdG8gMzIKPiA+IAo+ID4gQWxsIGJ1aWxkcm9vdCBwYXRjaGVzIGFyZSB1cHN0cmVh
+bS4KPiA+IAo+ID4gU2lnbmVkLW9mZi1ieTogV2FsZGVtYXIgQnJvZGtvcmIgPHdieEBvcGVuYWRr
+Lm9yZz4KPiA+IC0tLQo+IAo+IEl0J3MgYSB2ZXJzaW9uIGJ1bXAgb2YgYSBjcml0aWNhbCBjb21w
+b25lbnQsIGluIG1hc3RlciwgcXVpdGUgbGF0ZSBpbgo+IHRoZSByZWxlYXNlIGN5Y2xlLCBidXQg
+cmVhbGx5IHRoZSBudW1iZXIgb2YgY2hhbmdlcyB1cHN0cmVhbSBpcwo+IGxpbWl0ZWQsIHNvIGxl
+dCdzIGdpdmUgaXQgYSB0cnkgYW5kIGhvcGUgaXQgd29uJ3QgYnJlYWsgYW55dGhpbmcgOi0pCj4g
+Cj4gQXBwbGllZCB0byBtYXN0ZXIsIHRoYW5rcyEKClRoYW5rcyEKTm93IGl0IHdvdWxkIGJlIGdy
+ZWF0IGlmIHlvdSBjb3VsZCB1cGRhdGUgdGhlIEJvb3RsaW4gVG9vbGNoYWlucyB0bwp1c2UgMS4w
+LjUwLiBUaGFua3MgaW4gYWR2YW5jZSEKClN1bnNoaW5lIQogV2FsZGVtYXIKX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlz
+dApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFp
+bG1hbi9saXN0aW5mby9idWlsZHJvb3QK
