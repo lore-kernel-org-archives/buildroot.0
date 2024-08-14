@@ -4,72 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E90C2C3DA4A
-	for <buildroot@archiver.kernel.org>; Wed, 14 Aug 2024 20:08:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8C510C3DA4A
+	for <buildroot@archiver.kernel.org>; Wed, 14 Aug 2024 20:09:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B2900608E3;
-	Wed, 14 Aug 2024 20:08:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4113D608C9;
+	Wed, 14 Aug 2024 20:09:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IJFBKHBalc_d; Wed, 14 Aug 2024 20:07:59 +0000 (UTC)
+ id Vpxwl06Nai7C; Wed, 14 Aug 2024 20:09:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AB2C5608DF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 46F50608CD
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AB2C5608DF;
-	Wed, 14 Aug 2024 20:07:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 46F50608CD;
+	Wed, 14 Aug 2024 20:09:57 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2ABA21BF471
- for <buildroot@lists.busybox.net>; Wed, 14 Aug 2024 20:07:58 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2E1B81BF471
+ for <buildroot@lists.busybox.net>; Wed, 14 Aug 2024 20:09:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 187E14038E
- for <buildroot@lists.busybox.net>; Wed, 14 Aug 2024 20:07:58 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 19A8140DD0
+ for <buildroot@lists.busybox.net>; Wed, 14 Aug 2024 20:09:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wizkI7Bg6DLa for <buildroot@lists.busybox.net>;
- Wed, 14 Aug 2024 20:07:57 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
- helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id FTUnufAVD8xW for <buildroot@lists.busybox.net>;
+ Wed, 14 Aug 2024 20:09:54 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D65B440342
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D65B440342
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D65B440342
- for <buildroot@buildroot.org>; Wed, 14 Aug 2024 20:07:56 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 2B69AFF802;
- Wed, 14 Aug 2024 20:07:55 +0000 (UTC)
-Date: Wed, 14 Aug 2024 22:07:54 +0200
-To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <20240814220754.0590bb22@windsurf>
-In-Reply-To: <20240813180425.274055-1-james.hilliard1@gmail.com>
-References: <20240813180425.274055-1-james.hilliard1@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1723666075;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=PiVRnxA5ecYed9GQ8ToS1qQZoOSLUu7YPMsnj4lTt58=;
- b=Cf5StiiBnPYajIMMv2ZMYcqwLlrtImTQxp10ebhlVC4BTYOQldfooKXdwV6shFUPvgst/O
- b9AVokuQVOpb788gC7SgiOxJ8E8wSYsEBMrPm8xiYbgh8rY+k01I+M8hm9CCAgD8qHMrHw
- PxEs/S/Yf41VfrgyWk/CRUW9vRXnaKqQDYocXDi35VfIpoOMNT0BNZZEWHdVrUA9rNe07x
- yJSKT0D+ORljCnD2cmrIp8/t3dWrTcVAwwU6hNcCAkzVKg2IT+pPOM/CbrWeWZuq7zW7nG
- WDSBO0v74MR6Tf6KydbobACAstVLpngIgua0FbyA3kDYJCIYe0c+a+fyJfSNyA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Cf5StiiB
-Subject: Re: [Buildroot] [PATCH 1/1] package/vboot-utils: bump to version
- 4b12d392e5b12de29c582df4e717b1228e9f1594
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DEA3D40DCE
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id DEA3D40DCE
+ for <buildroot@buildroot.org>; Wed, 14 Aug 2024 20:09:53 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id C85CA82238; Wed, 14 Aug 2024 20:09:53 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 14 Aug 2024 22:09:32 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: 101e7b69da88148fa8333af05444e47bae631833
+X-Git-Newrev: 439ddbc5bbd56ab15d4edc0573092af3a724d7fb
+X-Patchwork-Hint: ignore
+Message-Id: <20240814200953.C85CA82238@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] configs/solidrun_clearfog:
+ update U-Boot and Linux
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,61 +60,114 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello James,
+commit: https://git.buildroot.net/buildroot/commit/?id=439ddbc5bbd56ab15d4edc0573092af3a724d7fb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Tue, 13 Aug 2024 12:04:25 -0600
-James Hilliard <james.hilliard1@gmail.com> wrote:
+Tested on Solidrun Clearfog.
 
-> Drop patches which are now upstream/not relevant.
-> 
-> Add a patch adding missing USE_FLASHROM guards.
-> 
-> Set USE_FLASHROM=0 make option to disable flashrom support.
-> 
-> Fixes:
->  - http://autobuild.buildroot.net/results/e55/e55af8335ef38e172e56544901510ae4dbdbff9b
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
->  ...missing-definition-of-MTD_CHAR_MAJOR.patch |  10 +-
->  ...d-missing-header-include-for-ssize_t.patch |  27 --
->  ...m_csme-add-missing-USE_FLASHROM-guar.patch |  76 +++++
->  .../0003-Avoid-RSA-type-redefinition.patch    |  44 ---
->  .../0004-Disable-static-futility.patch        |  30 --
->  ...05-include-sys-sysmacros.h-for-major.patch |  53 ----
->  .../0006-Update-for-openssl-1.1.patch         | 268 ------------------
->  ...-Make-vboot_version-extern-in-header.patch |  50 ----
->  package/vboot-utils/vboot-utils.hash          |   2 +-
->  package/vboot-utils/vboot-utils.mk            |  11 +-
->  10 files changed, 89 insertions(+), 482 deletions(-)
->  delete mode 100644 package/vboot-utils/0002-Add-missing-header-include-for-ssize_t.patch
->  create mode 100644 package/vboot-utils/0002-futility-platform_csme-add-missing-USE_FLASHROM-guar.patch
->  delete mode 100644 package/vboot-utils/0003-Avoid-RSA-type-redefinition.patch
->  delete mode 100644 package/vboot-utils/0004-Disable-static-futility.patch
->  delete mode 100644 package/vboot-utils/0005-include-sys-sysmacros.h-for-major.patch
->  delete mode 100644 package/vboot-utils/0006-Update-for-openssl-1.1.patch
->  delete mode 100644 package/vboot-utils/0007-Make-vboot_version-extern-in-header.patch
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .checkpackageignore                                            |  1 -
+ board/solidrun/clearfog/genimage.cfg                           |  2 +-
+ .../solidrun/clearfog/patches/linux-headers/linux-headers.hash |  1 +
+ board/solidrun/clearfog/patches/linux/linux.hash               |  2 ++
+ board/solidrun/clearfog/patches/uboot/uboot.hash               |  2 ++
+ configs/solidrun_clearfog_defconfig                            | 10 +++++++---
+ 6 files changed, 13 insertions(+), 5 deletions(-)
 
-I don't like very much applying version bumps to master now, but this
-fixes a build issue, and drops a lot of patches, so: applied to master,
-thanks!
-
-Please note that you had forgotten to update the .checkpackageignore
-file, so I had to do it when applying.
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 8fe4a16eb8..a44817578d 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -255,7 +255,6 @@ configs/snps_archs38_axs103_defconfig lib_defconfig.ForceCheckHash
+ configs/snps_archs38_haps_defconfig lib_defconfig.ForceCheckHash
+ configs/snps_archs38_hsdk_defconfig lib_defconfig.ForceCheckHash
+ configs/socrates_cyclone5_defconfig lib_defconfig.ForceCheckHash
+-configs/solidrun_clearfog_defconfig lib_defconfig.ForceCheckHash
+ configs/solidrun_clearfog_gt_8k_defconfig lib_defconfig.ForceCheckHash
+ configs/solidrun_macchiatobin_defconfig lib_defconfig.ForceCheckHash
+ configs/stm32mp157c_odyssey_defconfig lib_defconfig.ForceCheckHash
+diff --git a/board/solidrun/clearfog/genimage.cfg b/board/solidrun/clearfog/genimage.cfg
+index 8963619cc5..35aab62a8c 100644
+--- a/board/solidrun/clearfog/genimage.cfg
++++ b/board/solidrun/clearfog/genimage.cfg
+@@ -4,7 +4,7 @@ image sdcard.img {
+ 
+ 	partition u-boot {
+ 		in-partition-table = "no"
+-		image = "u-boot-spl.kwb"
++		image = "u-boot-with-spl.kwb"
+ 		offset = 512
+ 	}
+ 
+diff --git a/board/solidrun/clearfog/patches/linux-headers/linux-headers.hash b/board/solidrun/clearfog/patches/linux-headers/linux-headers.hash
+new file mode 120000
+index 0000000000..5808d92afe
+--- /dev/null
++++ b/board/solidrun/clearfog/patches/linux-headers/linux-headers.hash
+@@ -0,0 +1 @@
++../linux/linux.hash
+\ No newline at end of file
+diff --git a/board/solidrun/clearfog/patches/linux/linux.hash b/board/solidrun/clearfog/patches/linux/linux.hash
+new file mode 100644
+index 0000000000..b8935a250a
+--- /dev/null
++++ b/board/solidrun/clearfog/patches/linux/linux.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256  0ad83b1a1a780a1aad948d55aa55ee63c50c626f2d46910b9d2180028d100a5e  linux-6.6.43.tar.xz
+diff --git a/board/solidrun/clearfog/patches/uboot/uboot.hash b/board/solidrun/clearfog/patches/uboot/uboot.hash
+new file mode 100644
+index 0000000000..fe9b4f53dc
+--- /dev/null
++++ b/board/solidrun/clearfog/patches/uboot/uboot.hash
+@@ -0,0 +1,2 @@
++# Locally calculated
++sha256  f591da9ab90ef3d6b3d173766d0ddff90c4ed7330680897486117df390d83c8f  u-boot-2024.07.tar.bz2
+diff --git a/configs/solidrun_clearfog_defconfig b/configs/solidrun_clearfog_defconfig
+index 7f633d30d5..56d5c1d354 100644
+--- a/configs/solidrun_clearfog_defconfig
++++ b/configs/solidrun_clearfog_defconfig
+@@ -5,6 +5,10 @@ BR2_ARM_ENABLE_NEON=y
+ BR2_ARM_ENABLE_VFP=y
+ BR2_ARM_FPU_NEON=y
+ 
++# Hashes
++BR2_GLOBAL_PATCH_DIR="board/solidrun/clearfog/patches"
++BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
++
+ # Linux headers same as kernel, a 6.6 series
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
+ 
+@@ -16,7 +20,7 @@ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/solidrun/clearfog/genimage.cfg"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.28"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.43"
+ BR2_LINUX_KERNEL_DEFCONFIG="mvebu_v7"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/solidrun/clearfog/linux.fragment"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+@@ -33,10 +37,10 @@ BR2_PACKAGE_HOST_GENIMAGE=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.07"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.07"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="clearfog"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+ # BR2_TARGET_UBOOT_FORMAT_BIN is not set
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+-BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-spl.kwb"
++BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-with-spl.kwb"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
