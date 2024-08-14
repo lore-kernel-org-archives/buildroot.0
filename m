@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 49C6AE6FE46
-	for <buildroot@archiver.kernel.org>; Fri,  6 Sep 2024 19:59:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 86C00E6FE47
+	for <buildroot@archiver.kernel.org>; Fri,  6 Sep 2024 19:59:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F094684179;
-	Fri,  6 Sep 2024 19:59:34 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 539D38419F;
+	Fri,  6 Sep 2024 19:59:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id k77JC6spfg57; Fri,  6 Sep 2024 19:59:33 +0000 (UTC)
+ id bpoH4SIqTAh4; Fri,  6 Sep 2024 19:59:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E2FC3841D2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D6FCC8432E
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E2FC3841D2;
-	Fri,  6 Sep 2024 19:59:32 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 16FE71BF37F
+	by smtp1.osuosl.org (Postfix) with ESMTP id D6FCC8432E;
+	Fri,  6 Sep 2024 19:59:36 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 1BF6F1BF980
  for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 19:58:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A5137408C5
- for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 19:58:55 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B72B56079C
+ for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 19:58:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gA4x2FXpyZyh for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id M_dN7Fqb8rlg for <buildroot@lists.busybox.net>;
  Fri,  6 Sep 2024 19:58:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 450D3407AA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5C15D60736
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 450D3407AA
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5C15D60736
  for <buildroot@buildroot.org>; Fri,  6 Sep 2024 19:58:53 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 40D8986EE4; Fri,  6 Sep 2024 19:58:53 +0000 (UTC)
+ id 4CF1786EE3; Fri,  6 Sep 2024 19:58:53 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 14 Aug 2024 21:25:15 +0200
+Date: Wed, 14 Aug 2024 21:25:41 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8c8b3d0391bf4e74bf3c8c698c9210e4addbd0ca
-X-Git-Newrev: 896d0e21994400e0c36bec6bff92028c18e9999d
+X-Git-Oldrev: 896d0e21994400e0c36bec6bff92028c18e9999d
+X-Git-Newrev: 62803c66e7ca4857d12489747e385e3f657daf98
 X-Patchwork-Hint: ignore
-Message-Id: <20240906195853.40D8986EE4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-uvicorn: bump to 0.30.6
+Message-Id: <20240906195853.4CF1786EE3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-jc: bump to 1.25.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,46 +65,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=896d0e21994400e0c36bec6bff92028c18e9999d
+commit: https://git.buildroot.net/buildroot/commit/?id=62803c66e7ca4857d12489747e385e3f657daf98
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog: https://github.com/encode/uvicorn/blob/master/CHANGELOG.md#0306-2024-08-13
+Changelog: https://github.com/kellyjonbrazil/jc/releases/tag/v1.25.3
 
 Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-uvicorn/python-uvicorn.hash | 4 ++--
- package/python-uvicorn/python-uvicorn.mk   | 4 ++--
+ package/python-jc/python-jc.hash | 4 ++--
+ package/python-jc/python-jc.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-uvicorn/python-uvicorn.hash b/package/python-uvicorn/python-uvicorn.hash
-index e662adda1e..57839debd2 100644
---- a/package/python-uvicorn/python-uvicorn.hash
-+++ b/package/python-uvicorn/python-uvicorn.hash
+diff --git a/package/python-jc/python-jc.hash b/package/python-jc/python-jc.hash
+index 6bcb886a47..75d64da7bf 100644
+--- a/package/python-jc/python-jc.hash
++++ b/package/python-jc/python-jc.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/uvicorn/json
--md5  c43ec29f83c3706b99c48a7eeb0208ac  uvicorn-0.30.5.tar.gz
--sha256  ac6fdbd4425c5fd17a9fe39daf4d4d075da6fdc80f653e5894cdc2fd98752bee  uvicorn-0.30.5.tar.gz
-+md5  d75153180f8c19a1bf8299818d3acdb2  uvicorn-0.30.6.tar.gz
-+sha256  4b15decdda1e72be08209e860a1e10e92439ad5b97cf44cc945fcbee66fc5788  uvicorn-0.30.6.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/jc/json
+-md5  e042a82acf978e5dc16dd1ac9371e97a  jc-1.25.2.tar.gz
+-sha256  97ada193495f79550f06fe0cbfb119ff470bcca57c1cc593a5cdb0008720e0b3  jc-1.25.2.tar.gz
++md5  7e9454e01eafa7c8c6e415fddc7d2638  jc-1.25.3.tar.gz
++sha256  fa3140ceda6cba1210d1362f363cd79a0514741e8a1dd6167db2b2e2d5f24f7b  jc-1.25.3.tar.gz
  # Locally computed sha256 checksums
- sha256  efe1acf3e62fb99c288b0ec73e5a773b7268ef4320fe757ea994214e4b63c371  LICENSE.md
-diff --git a/package/python-uvicorn/python-uvicorn.mk b/package/python-uvicorn/python-uvicorn.mk
-index 276aa89804..e9676d3765 100644
---- a/package/python-uvicorn/python-uvicorn.mk
-+++ b/package/python-uvicorn/python-uvicorn.mk
+ sha256  6493f2db400f4166ca0956cf192a41aa092bd1396ff463e7fdaf51f257c10497  LICENSE.md
+diff --git a/package/python-jc/python-jc.mk b/package/python-jc/python-jc.mk
+index c57c9e8acc..202884f3dc 100644
+--- a/package/python-jc/python-jc.mk
++++ b/package/python-jc/python-jc.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_UVICORN_VERSION = 0.30.5
-+PYTHON_UVICORN_VERSION = 0.30.6
- PYTHON_UVICORN_SOURCE = uvicorn-$(PYTHON_UVICORN_VERSION).tar.gz
--PYTHON_UVICORN_SITE = https://files.pythonhosted.org/packages/c3/ad/02b1b412e43605aa6aac8d0392c383ff3f6ae8267b7864e48e3b5f3f601e
-+PYTHON_UVICORN_SITE = https://files.pythonhosted.org/packages/5a/01/5e637e7aa9dd031be5376b9fb749ec20b86f5a5b6a49b87fabd374d5fa9f
- PYTHON_UVICORN_SETUP_TYPE = pep517
- PYTHON_UVICORN_LICENSE = BSD-3-Clause
- PYTHON_UVICORN_LICENSE_FILES = LICENSE.md
+-PYTHON_JC_VERSION = 1.25.2
++PYTHON_JC_VERSION = 1.25.3
+ PYTHON_JC_SOURCE = jc-$(PYTHON_JC_VERSION).tar.gz
+-PYTHON_JC_SITE = https://files.pythonhosted.org/packages/39/2e/c0d557b2ee673e2e0aef24a01e732aa232f6b1e180f339058f674f391ab8
++PYTHON_JC_SITE = https://files.pythonhosted.org/packages/a5/82/bfb1ec7d9667bc2f922254bc62e12fd460a5de3b711518f5089df0a17180
+ PYTHON_JC_SETUP_TYPE = setuptools
+ PYTHON_JC_LICENSE = MIT, BSD-3-Clause (bundled pbPlist)
+ PYTHON_JC_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
