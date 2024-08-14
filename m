@@ -4,49 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3DDE8C52D7F
-	for <buildroot@archiver.kernel.org>; Wed, 14 Aug 2024 21:02:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93A11C3DA4A
+	for <buildroot@archiver.kernel.org>; Wed, 14 Aug 2024 21:04:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D1B1160637;
-	Wed, 14 Aug 2024 21:02:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5B993608E3;
+	Wed, 14 Aug 2024 21:04:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1850oO3kQIZm; Wed, 14 Aug 2024 21:02:45 +0000 (UTC)
+ id 7gK6CwGdxE_T; Wed, 14 Aug 2024 21:04:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 23471608E3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 06F0D608E9
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 23471608E3;
-	Wed, 14 Aug 2024 21:02:45 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C68C31BF471
- for <buildroot@lists.busybox.net>; Wed, 14 Aug 2024 21:02:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 06F0D608E9;
+	Wed, 14 Aug 2024 21:04:09 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id E01581BF471
+ for <buildroot@lists.busybox.net>; Wed, 14 Aug 2024 21:04:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B42BA60637
- for <buildroot@lists.busybox.net>; Wed, 14 Aug 2024 21:02:42 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id CCE5140386
+ for <buildroot@lists.busybox.net>; Wed, 14 Aug 2024 21:04:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5Dm7LvJ3zuHh for <buildroot@lists.busybox.net>;
- Wed, 14 Aug 2024 21:02:38 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id oJRAc948L6An for <buildroot@lists.busybox.net>;
+ Wed, 14 Aug 2024 21:04:03 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::226;
+ helo=relay6-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 722CE608E3
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 722CE608E3
- for <buildroot@buildroot.org>; Wed, 14 Aug 2024 21:02:38 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5C4D481EE7; Wed, 14 Aug 2024 21:02:38 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 14 Aug 2024 23:01:46 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9a57fab586cdfc3b991384b65cb46b941de46a20
-X-Git-Newrev: f31e860ae4cd29fd3d23871797d91b4f3667c806
-X-Patchwork-Hint: ignore
-Message-Id: <20240814210238.5C4D481EE7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/ncurses: fix uClibc-ng compile
- error
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 4E6FB40388
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4E6FB40388
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::226])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 4E6FB40388
+ for <buildroot@buildroot.org>; Wed, 14 Aug 2024 21:04:03 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 60121C0002;
+ Wed, 14 Aug 2024 21:04:01 +0000 (UTC)
+Date: Wed, 14 Aug 2024 23:03:58 +0200
+To: Waldemar Brodkorb <wbx@openadk.org>
+Message-ID: <20240814230358.576be4cc@windsurf>
+In-Reply-To: <Zrz8vdUIY6wBPD7m@waldemar-brodkorb.de>
+References: <Zrz8vdUIY6wBPD7m@waldemar-brodkorb.de>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1723669441;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=fdNAXJ/QJTCdk2Cn6j3l7PzmULPum6xtmbhZcg5PnwE=;
+ b=AZbrWiULytz7oAetGCkNc9xlZTTRQ8K1xH7eGR2qZlXwYb4cvf0eZL7kg55gJS+afyZeIR
+ ftyLIZFo4eNtZGvgodpMBfkaDmqZC0ZC6leugojCzOLQzZ1HrwUjfgh5ug3AM+ya5wCSl0
+ 5TT4/cOhXbj1DTMSOapCb7PFamnhVyqtZywlgxhPy2TDGCpseicQKsjsMmEzJnhxmCp28I
+ az+Xu2qLqTells98TePtLcBLYYlqFt8lyZt9VFskDdIY8Ou+A2hx1Zsm06d64BepmsoDld
+ Tu5rC54fETW6hHYtRW+RIpfHSYPej7LX9v8cG3cwPJz9TuXEBl5vmPQDz3ZREA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=AZbrWiUL
+Subject: Re: [Buildroot] [PATCH] package/ncurses: fix uClibc-ng compile error
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,56 +82,47 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f31e860ae4cd29fd3d23871797d91b4f3667c806
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Waldemar!
 
-Unfortunately upstream does not use any SCM.
-See here for the Changelog:
-https://invisible-island.net/ncurses/NEWS.html#index-t20231014
+On Wed, 14 Aug 2024 20:51:41 +0200
+Waldemar Brodkorb <wbx@openadk.org> wrote:
 
-"+ updated configure script macro CF_XOPEN_SOURCE, for uClibc-ng"
+> Unfortunately upstream does not use any SCM.
 
-Fixes:
- - http://autobuild.buildroot.net/results/01c/01cbc188c70f53fe492128100b430857f1cd98f2
- - http://autobuild.buildroot.net/results/e2b/e2ba6a5554bfa0bf9b4c2eaf9222d041204f00e9
+Yeah, kind of crazy.
 
-And many more.
+> See here for the Changelog:
+> https://invisible-island.net/ncurses/NEWS.html#index-t20231014
+> 
+> "+ updated configure script macro CF_XOPEN_SOURCE, for uClibc-ng"
+> 
+> Fixes:
+>  - http://autobuild.buildroot.net/results/01c/01cbc188c70f53fe492128100b430857f1cd98f2
+>  - http://autobuild.buildroot.net/results/e2b/e2ba6a5554bfa0bf9b4c2eaf9222d041204f00e9
+> 
+> And many more.
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/ncurses/0001-fix-XOPEN_SOURCE-detection.patch | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+So I've applied to master, but to me this is not the "perfect" patch.
+The perfect patch would have researched when this issue was introduced,
+so that we know if it needs to be backported to a LTS branch. Could you
+try to think about this for next fixes?
 
-diff --git a/package/ncurses/0001-fix-XOPEN_SOURCE-detection.patch b/package/ncurses/0001-fix-XOPEN_SOURCE-detection.patch
-new file mode 100644
-index 0000000000..130ef524b4
---- /dev/null
-+++ b/package/ncurses/0001-fix-XOPEN_SOURCE-detection.patch
-@@ -0,0 +1,17 @@
-+Fix detection of XOPEN_SOURCE
-+
-+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-+Upstream: fixed in latest release, no git/svn/hg
-+
-+diff -Nur ncurses-snapshots-6_4_20230603.orig/configure ncurses-snapshots-6_4_20230603/configure
-+--- ncurses-snapshots-6_4_20230603.orig/configure	2023-06-04 00:07:40.000000000 +0200
-++++ ncurses-snapshots-6_4_20230603/configure	2024-08-14 20:38:03.426905460 +0200
-+@@ -10411,7 +10411,7 @@
-+ 	cf_xopen_source="-D_SGI_SOURCE"
-+ 	cf_XOPEN_SOURCE=
-+ 	;;
-+-(linux*gnu|linux*gnuabi64|linux*gnuabin32|linux*gnueabi|linux*gnueabihf|linux*gnux32|uclinux*|gnu*|mint*|k*bsd*-gnu|cygwin|msys|mingw*)
-++(linux*gnu|linux*gnuabi64|linux*gnuabin32|linux*gnueabi|linux*gnueabihf|linux*gnux32|uclinux*|gnu*|mint*|k*bsd*-gnu|cygwin|msys|mingw*|linux*uclibc)
-+ 
-+ cf_gnu_xopen_source=$cf_XOPEN_SOURCE
-+ 
+Another suggestion: I see that ncurses 6.5 has been released, perhaps
+time to update? (But of course that will be for our 'next' branch).
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
