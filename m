@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 19968E6FE47
-	for <buildroot@archiver.kernel.org>; Fri,  6 Sep 2024 20:02:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8B53EE6FE47
+	for <buildroot@archiver.kernel.org>; Fri,  6 Sep 2024 20:02:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E2C3C8473B;
-	Fri,  6 Sep 2024 20:02:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5937684784;
+	Fri,  6 Sep 2024 20:02:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2agX1lyoTSWG; Fri,  6 Sep 2024 20:02:06 +0000 (UTC)
+ id AuPs858sBnJv; Fri,  6 Sep 2024 20:02:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6CEE684751
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B5EC384758
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6CEE684751;
-	Fri,  6 Sep 2024 20:02:05 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 39B391BF20B
+	by smtp1.osuosl.org (Postfix) with ESMTP id B5EC384758;
+	Fri,  6 Sep 2024 20:02:08 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 820991BF37F
  for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 19:59:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B6C48409FD
- for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 19:58:58 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id CFA5C60781
+ for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 19:58:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id m-03N86dseDF for <buildroot@lists.busybox.net>;
- Fri,  6 Sep 2024 19:58:58 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id LU249BWRduNP for <buildroot@lists.busybox.net>;
+ Fri,  6 Sep 2024 19:58:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 36D30407AF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 29B386066B
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 36D30407AF
- for <buildroot@buildroot.org>; Fri,  6 Sep 2024 19:58:57 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 29B386066B
+ for <buildroot@buildroot.org>; Fri,  6 Sep 2024 19:58:54 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 27BAF828CC; Fri,  6 Sep 2024 19:58:57 +0000 (UTC)
+ id 2069B86EE1; Fri,  6 Sep 2024 19:58:54 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 25 Aug 2024 15:07:48 +0200
+Date: Thu, 15 Aug 2024 14:53:28 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8bd00c16d8af2b4b620a0b2c136e6830b9d6b3a0
-X-Git-Newrev: 60da48c3b70d8ed8dcc9d77143c1462bdf839ab6
+X-Git-Oldrev: ef5947774f04dbdf8edffb88b8688917cd6b71b2
+X-Git-Newrev: 65c8e4c65168b6c17af1e797252693e4190c934f
 X-Patchwork-Hint: ignore
-Message-Id: <20240906195857.27BAF828CC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/imx6-sabreauto: update U-Boot and
- kernel
+Message-Id: <20240906195854.2069B86EE1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/docker-engine: add wrapper script
+ for logging to syslog
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,52 +66,73 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=60da48c3b70d8ed8dcc9d77143c1462bdf839ab6
+commit: https://git.buildroot.net/buildroot/commit/?id=65c8e4c65168b6c17af1e797252693e4190c934f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update to U-Boot 2024.07 and kernel 6.6.47 versions.
+Dockerd logs only to stdout/stderr [1], which is lost with
+--background. The upstream SysV init script [2] logs to a file by
+passing --no-close to start-stop-daemon and redirecting the output,
+but that option is not supported by Busybox' start-stop-daemon.
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
+The wrapper script added with this commit captures the output of
+dockerd (or whatever other command it is given) and forwards each line
+to syslog.
+
+[1] https://github.com/moby/moby/discussions/48260
+[2] https://github.com/moby/moby/blob/50c3d19179e69f9e7ff01f688c4dbf32c5129ced/contrib/init/sysvinit-debian/docker
+
+Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- configs/imx6-sabreauto_defconfig | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ package/docker-engine/S60dockerd                | 8 ++++++--
+ package/docker-engine/docker-engine.mk          | 2 ++
+ package/docker-engine/dockerd-syslog-wrapper.sh | 4 ++++
+ 3 files changed, 12 insertions(+), 2 deletions(-)
 
-diff --git a/configs/imx6-sabreauto_defconfig b/configs/imx6-sabreauto_defconfig
-index 24b3fd387f..337a5ae9bb 100644
---- a/configs/imx6-sabreauto_defconfig
-+++ b/configs/imx6-sabreauto_defconfig
-@@ -4,8 +4,8 @@ BR2_ARM_ENABLE_NEON=y
- BR2_ARM_ENABLE_VFP=y
- BR2_ARM_FPU_VFPV3=y
+diff --git a/package/docker-engine/S60dockerd b/package/docker-engine/S60dockerd
+index aab50d84d4..dda6dc7474 100644
+--- a/package/docker-engine/S60dockerd
++++ b/package/docker-engine/S60dockerd
+@@ -10,10 +10,14 @@ DOCKERD_ARGS=""
  
--# Linux headers same as kernel, a 5.15 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
-+# Linux headers same as kernel, a 6.6 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
+ start() {
+ 	printf 'Starting %s: ' "$DAEMON"
++	# Dockerd logs only to stdout/stderr, which is lost with
++	# --background. The wrapper script runs the given command
++	# (after "--", including dockerd) and forwards stdout/stderr
++	# to syslog.
+ 	# shellcheck disable=SC2086 # we need word splitting for DOCKERD_ARGS
+ 	start-stop-daemon --start --background --pidfile "$PIDFILE" \
+-		--exec "/usr/bin/$DAEMON" \
+-		-- --pidfile "$PIDFILE" $DOCKERD_ARGS
++		--exec /usr/libexec/dockerd-syslog-wrapper.sh \
++		-- "/usr/bin/$DAEMON" --pidfile "$PIDFILE" $DOCKERD_ARGS
+ 	status=$?
+ 	if [ "$status" -eq 0 ]; then
+ 		echo "OK"
+diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
+index c7c51c5ef5..268b851520 100644
+--- a/package/docker-engine/docker-engine.mk
++++ b/package/docker-engine/docker-engine.mk
+@@ -72,6 +72,8 @@ endef
+ define DOCKER_ENGINE_INSTALL_INIT_SYSV
+ 	$(INSTALL) -D -m 755 package/docker-engine/S60dockerd \
+ 		$(TARGET_DIR)/etc/init.d/S60dockerd
++	$(INSTALL) -D -m 755 package/docker-engine/dockerd-syslog-wrapper.sh \
++		$(TARGET_DIR)/usr/libexec/dockerd-syslog-wrapper.sh
+ endef
  
- # System
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc3"
-@@ -24,7 +24,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="mx6sabreauto"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.10"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.07"
- BR2_TARGET_UBOOT_NEEDS_LZOP=y
- BR2_TARGET_UBOOT_FORMAT_IMG=y
- BR2_TARGET_UBOOT_SPL=y
-@@ -34,8 +34,8 @@ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.1"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.47"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-sabreauto imx6dl-sabreauto imx6qp-sabreauto"
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="nxp/imx/imx6q-sabreauto nxp/imx/imx6dl-sabreauto nxp/imx/imx6qp-sabreauto"
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ define DOCKER_ENGINE_USERS
+diff --git a/package/docker-engine/dockerd-syslog-wrapper.sh b/package/docker-engine/dockerd-syslog-wrapper.sh
+new file mode 100644
+index 0000000000..3d6a80a739
+--- /dev/null
++++ b/package/docker-engine/dockerd-syslog-wrapper.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh
++"${@}" 2>&1 | while read -r LINE; do
++	logger -t "$(basename "${1}")" "$LINE";
++done
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
