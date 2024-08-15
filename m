@@ -4,48 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CD721E6FE46
-	for <buildroot@archiver.kernel.org>; Fri,  6 Sep 2024 20:00:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 44B6FE6FE47
+	for <buildroot@archiver.kernel.org>; Fri,  6 Sep 2024 20:00:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 98D618444A;
-	Fri,  6 Sep 2024 20:00:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0C54E8454C;
+	Fri,  6 Sep 2024 20:00:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id p7pxZP6Glk-R; Fri,  6 Sep 2024 20:00:46 +0000 (UTC)
+ id fVA4hC3Mew3v; Fri,  6 Sep 2024 20:00:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D121B8450A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 768828454A
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D121B8450A;
-	Fri,  6 Sep 2024 20:00:45 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1381E1BF20B
- for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 19:59:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 768828454A;
+	Fri,  6 Sep 2024 20:00:42 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 8E0901BF20B
+ for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 19:59:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 73B4361101
- for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 19:58:56 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 425E140929
+ for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 19:58:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 26gNlltG5oky for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id OivFDQxQSohr for <buildroot@lists.busybox.net>;
  Fri,  6 Sep 2024 19:58:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 31AA460778
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 837B6407D6
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 31AA460778
+ by smtp4.osuosl.org (Postfix) with ESMTP id 837B6407D6
  for <buildroot@buildroot.org>; Fri,  6 Sep 2024 19:58:54 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2EC8586EE3; Fri,  6 Sep 2024 19:58:54 +0000 (UTC)
+ id 7FF2086EE5; Fri,  6 Sep 2024 19:58:54 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 15 Aug 2024 15:26:43 +0200
+Date: Thu, 15 Aug 2024 22:15:02 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 65c8e4c65168b6c17af1e797252693e4190c934f
-X-Git-Newrev: 6eff762f5f57b945db394e11bee829779fa413ea
+X-Git-Oldrev: ff7787eadfc116f59a1f73cae8c47065810cb9d5
+X-Git-Newrev: e929d75d7eed66f4aff4b57d0192d6332fb21257
 X-Patchwork-Hint: ignore
-Message-Id: <20240906195854.2EC8586EE3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-immutabledict: new package
+Message-Id: <20240906195854.7FF2086EE5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/rsyslog: extra plugins option
+ introduced
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,94 +61,210 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============6980958165128133268=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6eff762f5f57b945db394e11bee829779fa413ea
+--===============6980958165128133268==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=e929d75d7eed66f4aff4b57d0192d6332fb21257
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+The rsyslog package enables extra plugins based on the availability of
+external dependencies. However, there are many cases where those
+plugins are not needed, even when some of those external dependencies
+are enabled. Allow disabling the build of plugins. This option is
+useful in embedded systems to achieve compact footprint.
+
+Signed-off-by: Konstantin Menyaev <KAMenyaev@salutedevices.com>
+Signed-off-by: Flávio Tapajós <flavio.tapajos@newtesc.com.br>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- DEVELOPERS                                             |  1 +
- package/Config.in                                      |  1 +
- package/python-immutabledict/Config.in                 |  7 +++++++
- package/python-immutabledict/python-immutabledict.hash |  5 +++++
- package/python-immutabledict/python-immutabledict.mk   | 15 +++++++++++++++
- 5 files changed, 29 insertions(+)
+ package/rsyslog/Config.in  | 12 ++++++++++++
+ package/rsyslog/rsyslog.mk | 35 +++++++++++++++++++----------------
+ 2 files changed, 31 insertions(+), 16 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index e87031b598..9c119f2d6e 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2220,6 +2220,7 @@ N:	Marcus Hoffmann <bubu@bubu1.eu>
- F:	package/nethogs/
- F:	package/pico-sdk/
- F:	package/picotool/
-+F:	package/python-immutabledict/
- F:	package/python-jc/
- F:	package/python-ruamel-yaml-clib/
- F:	support/testing/tests/package/test_python_fastapi.py
-diff --git a/package/Config.in b/package/Config.in
-index f2c63ffb6e..07bd1499d8 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1151,6 +1151,7 @@ menu "External python modules"
- 	source "package/python-ibmiotf/Config.in"
- 	source "package/python-idna/Config.in"
- 	source "package/python-ifaddr/Config.in"
-+	source "package/python-immutabledict/Config.in"
- 	source "package/python-incremental/Config.in"
- 	source "package/python-inflect/Config.in"
- 	source "package/python-inflection/Config.in"
-diff --git a/package/python-immutabledict/Config.in b/package/python-immutabledict/Config.in
-new file mode 100644
-index 0000000000..51b180bf29
---- /dev/null
-+++ b/package/python-immutabledict/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_IMMUTABLEDICT
-+	bool "python-immutabledict"
+diff --git a/package/rsyslog/Config.in b/package/rsyslog/Config.in
+index d9e8b1ab6f..3c23de8346 100644
+--- a/package/rsyslog/Config.in
++++ b/package/rsyslog/Config.in
+@@ -17,6 +17,18 @@ config BR2_PACKAGE_RSYSLOG
+ 
+ 	  http://www.rsyslog.com
+ 
++if BR2_PACKAGE_RSYSLOG
++
++config BR2_PACKAGE_RSYSLOG_EXTRA_PLUGINS
++	bool "extra plugins"
++	default y
 +	help
-+	  Immutable wrapper around dictionaries (a fork of
-+	  frozendict).
++	  Enable rsyslog plugins that require external
++	  dependencies. The different plugins will be automatically
++	  enabled if their dependencies are enabled.
 +
-+	  https://github.com/corenting/immutabledict
-diff --git a/package/python-immutabledict/python-immutabledict.hash b/package/python-immutabledict/python-immutabledict.hash
-new file mode 100644
-index 0000000000..8232bc6e0e
---- /dev/null
-+++ b/package/python-immutabledict/python-immutabledict.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/immutabledict/json
-+md5  6796be00860cc5cf45ae839b9ed2de52  immutabledict-4.2.0.tar.gz
-+sha256  e003fd81aad2377a5a758bf7e1086cf3b70b63e9a5cc2f46bce8d0a2b4727c5f  immutabledict-4.2.0.tar.gz
-+# Locally computed sha256 checksums
-+sha256  347f918d37d4e0556a0695d34b9fb87fa9bbe808d54949851789c6c1fc91c61f  LICENSE
-diff --git a/package/python-immutabledict/python-immutabledict.mk b/package/python-immutabledict/python-immutabledict.mk
-new file mode 100644
-index 0000000000..4d782aace6
---- /dev/null
-+++ b/package/python-immutabledict/python-immutabledict.mk
-@@ -0,0 +1,15 @@
-+################################################################################
-+#
-+# python-immutabledict
-+#
-+################################################################################
++endif # BR2_PACKAGE_RSYSLOG
 +
-+PYTHON_IMMUTABLEDICT_VERSION = 4.2.0
-+PYTHON_IMMUTABLEDICT_SOURCE = immutabledict-$(PYTHON_IMMUTABLEDICT_VERSION).tar.gz
-+PYTHON_IMMUTABLEDICT_SITE = https://files.pythonhosted.org/packages/55/f4/710c84db4d77767176342913ac6b25f43aaed6d0a0bdb9168a8d2936d9c7
-+PYTHON_IMMUTABLEDICT_SETUP_TYPE = pep517
-+PYTHON_IMMUTABLEDICT_LICENSE = MIT
-+PYTHON_IMMUTABLEDICT_LICENSE_FILES = LICENSE
-+PYTHON_IMMUTABLEDICT_DEPENDENCIES = host-python-poetry-core
+ comment "rsyslog needs a toolchain w/ threads, dynamic library"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
+index fac78795c2..98e5a8f8e8 100644
+--- a/package/rsyslog/rsyslog.mk
++++ b/package/rsyslog/rsyslog.mk
+@@ -15,12 +15,15 @@ RSYSLOG_CPE_ID_VENDOR = rsyslog
+ RSYSLOG_IGNORE_CVES += CVE-2015-3243
+ RSYSLOG_DEPENDENCIES = zlib libestr liblogging libfastjson host-pkgconf
+ RSYSLOG_CONF_ENV = ac_cv_prog_cc_c99='-std=c99'
 +
-+$(eval $(python-package))
++ifeq ($(BR2_PACKAGE_RSYSLOG_EXTRA_PLUGINS),y)
+ RSYSLOG_PLUGINS = imdiag imfile impstats imptcp \
+ 	mmanon mmaudit mmfields mmjsonparse mmpstrucdata mmsequence mmutf8fix \
+ 	mail omprog omruleset omstdout omuxsock \
+ 	pmaixforwardedfrom pmciscoios pmcisconames pmlastmsg pmsnare
++endif
+ 
+-ifeq ($(BR2_PACKAGE_LIBRELP),y)
++ifeq ($(BR2_PACKAGE_LIBRELP)$(BR2_PACKAGE_RSYSLOG_EXTRA_PLUGINS),yy)
+ RSYSLOG_DEPENDENCIES += librelp
+ RSYSLOG_PLUGINS += relp
+ endif
+@@ -33,7 +36,7 @@ RSYSLOG_CONF_OPTS += \
+ 	--disable-mmkubernetes \
+ 	--disable-mmnormalize
+ 
+-ifeq ($(BR2_PACKAGE_LIBCURL),y)
++ifeq ($(BR2_PACKAGE_LIBCURL)$(BR2_PACKAGE_RSYSLOG_EXTRA_PLUGINS),yy)
+ RSYSLOG_DEPENDENCIES += libcurl
+ RSYSLOG_CONF_OPTS += \
+ 	--enable-clickhouse \
+@@ -52,35 +55,35 @@ RSYSLOG_CONF_OPTS += \
+ 	--disable-omhttpfs
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_CIVETWEB_LIB),y)
++ifeq ($(BR2_PACKAGE_CIVETWEB_LIB)$(BR2_PACKAGE_RSYSLOG_EXTRA_PLUGINS),yy)
+ RSYSLOG_DEPENDENCIES += apr-util civetweb
+ RSYSLOG_CONF_OPTS += --enable-imhttp
+ else
+ RSYSLOG_CONF_OPTS += --disable-imhttp
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_CZMQ),y)
++ifeq ($(BR2_PACKAGE_CZMQ)$(BR2_PACKAGE_RSYSLOG_EXTRA_PLUGINS),yy)
+ RSYSLOG_DEPENDENCIES += czmq
+ RSYSLOG_CONF_OPTS += --enable-imczmq --enable-omczmq
+ else
+ RSYSLOG_CONF_OPTS += --disable-imczmq --disable-omczmq
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_GNUTLS),y)
++ifeq ($(BR2_PACKAGE_GNUTLS)$(BR2_PACKAGE_RSYSLOG_EXTRA_PLUGINS),yy)
+ RSYSLOG_DEPENDENCIES += gnutls
+ RSYSLOG_CONF_OPTS += --enable-gnutls
+ else
+ RSYSLOG_CONF_OPTS += --disable-gnutls
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_HIREDIS),y)
++ifeq ($(BR2_PACKAGE_HIREDIS)$(BR2_PACKAGE_RSYSLOG_EXTRA_PLUGINS),yy)
+ RSYSLOG_DEPENDENCIES += hiredis
+ RSYSLOG_CONF_OPTS += --enable-omhiredis
+ else
+ RSYSLOG_CONF_OPTS += --disable-omhiredis
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
++ifeq ($(BR2_PACKAGE_LIBGCRYPT)$(BR2_PACKAGE_RSYSLOG_EXTRA_PLUGINS),yy)
+ RSYSLOG_DEPENDENCIES += libgcrypt
+ RSYSLOG_CONF_ENV += LIBGCRYPT_CONFIG=$(STAGING_DIR)/usr/bin/libgcrypt-config
+ RSYSLOG_CONF_OPTS += --enable-libgcrypt
+@@ -88,21 +91,21 @@ else
+ RSYSLOG_CONF_OPTS += --disable-libgcrypt
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_LIBMAXMINDDB),y)
++ifeq ($(BR2_PACKAGE_LIBMAXMINDDB)$(BR2_PACKAGE_RSYSLOG_EXTRA_PLUGINS),yy)
+ RSYSLOG_DEPENDENCIES += libmaxminddb
+ RSYSLOG_CONF_OPTS += --enable-mmdblookup
+ else
+ RSYSLOG_CONF_OPTS += --disable-mmdblookup
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_LIBPCAP),y)
++ifeq ($(BR2_PACKAGE_LIBPCAP)$(BR2_PACKAGE_RSYSLOG_EXTRA_PLUGINS),yy)
+ RSYSLOG_DEPENDENCIES += libpcap
+ RSYSLOG_CONF_OPTS += --enable-impcap
+ else
+ RSYSLOG_CONF_OPTS += --disable-impcap
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_MARIADB),y)
++ifeq ($(BR2_PACKAGE_MARIADB)$(BR2_PACKAGE_RSYSLOG_EXTRA_PLUGINS),yy)
+ RSYSLOG_DEPENDENCIES += mariadb
+ RSYSLOG_CONF_OPTS += --enable-mysql
+ RSYSLOG_CONF_ENV += ac_cv_prog_MYSQL_CONFIG=$(STAGING_DIR)/usr/bin/mysql_config
+@@ -110,7 +113,7 @@ else
+ RSYSLOG_CONF_OPTS += --disable-mysql
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_POSTGRESQL),y)
++ifeq ($(BR2_PACKAGE_POSTGRESQL)$(BR2_PACKAGE_RSYSLOG_EXTRA_PLUGINS),yy)
+ RSYSLOG_DEPENDENCIES += postgresql
+ RSYSLOG_CONF_OPTS += --enable-pgsql
+ RSYSLOG_CONF_ENV += ac_cv_prog_PG_CONFIG=$(STAGING_DIR)/usr/bin/pg_config
+@@ -118,28 +121,28 @@ else
+ RSYSLOG_CONF_OPTS += --disable-pgsql
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_QPID_PROTON),y)
++ifeq ($(BR2_PACKAGE_QPID_PROTON)$(BR2_PACKAGE_RSYSLOG_EXTRA_PLUGINS),yy)
+ RSYSLOG_DEPENDENCIES += qpid-proton
+ RSYSLOG_CONF_OPTS += --enable-omamqp1
+ else
+ RSYSLOG_CONF_OPTS += --disable-omamqp1
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_RABBITMQ_C),y)
++ifeq ($(BR2_PACKAGE_RABBITMQ_C)$(BR2_PACKAGE_RSYSLOG_EXTRA_PLUGINS),yy)
+ RSYSLOG_DEPENDENCIES += rabbitmq-c
+ RSYSLOG_CONF_OPTS += --enable-omrabbitmq
+ else
+ RSYSLOG_CONF_OPTS += --disable-omrabbitmq
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBUUID),y)
++ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBUUID)$(BR2_PACKAGE_RSYSLOG_EXTRA_PLUGINS),yy)
+ RSYSLOG_DEPENDENCIES += util-linux
+ RSYSLOG_CONF_OPTS += --enable-uuid
+ else
+ RSYSLOG_CONF_OPTS += --disable-uuid
+ endif
+ 
+-ifeq ($(BR2_INIT_SYSTEMD),y)
++ifeq ($(BR2_INIT_SYSTEMD)$(BR2_PACKAGE_RSYSLOG_EXTRA_PLUGINS),yy)
+ RSYSLOG_CONF_OPTS += \
+ 	--enable-imjournal \
+ 	--enable-omjournal \
+@@ -151,7 +154,7 @@ RSYSLOG_CONF_OPTS += \
+ 	--disable-omjournal
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_LIBDBI_DRIVERS),y)
++ifeq ($(BR2_PACKAGE_LIBDBI_DRIVERS)$(BR2_PACKAGE_RSYSLOG_EXTRA_PLUGINS),yy)
+ RSYSLOG_CONF_OPTS += --enable-libdbi
+ RSYSLOG_DEPENDENCIES += libdbi-drivers
+ else
+
+--===============6980958165128133268==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============6980958165128133268==--
