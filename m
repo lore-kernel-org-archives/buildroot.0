@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E4115C52D7F
-	for <buildroot@archiver.kernel.org>; Thu, 15 Aug 2024 20:04:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A05CC3DA7F
+	for <buildroot@archiver.kernel.org>; Thu, 15 Aug 2024 20:05:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 119D360AD5;
-	Thu, 15 Aug 2024 20:04:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0A70860B06;
+	Thu, 15 Aug 2024 20:05:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wX5A-f6qA7Cs; Thu, 15 Aug 2024 20:04:54 +0000 (UTC)
+ id kabsmxBS7BAG; Thu, 15 Aug 2024 20:04:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0DDAE60AD4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4A2E660B25
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0DDAE60AD4;
-	Thu, 15 Aug 2024 20:04:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4A2E660B25;
+	Thu, 15 Aug 2024 20:04:59 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0EF931BF98E
- for <buildroot@lists.busybox.net>; Thu, 15 Aug 2024 20:04:47 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 4012F1BF3F4
+ for <buildroot@lists.busybox.net>; Thu, 15 Aug 2024 20:04:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 09AC740FB4
+ by smtp2.osuosl.org (Postfix) with ESMTP id B583E408C9
  for <buildroot@lists.busybox.net>; Thu, 15 Aug 2024 20:04:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gJH1lpwLO0jf for <buildroot@lists.busybox.net>;
+ id k-5nKPNX-ovX for <buildroot@lists.busybox.net>;
  Thu, 15 Aug 2024 20:04:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6A28B408C9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 82E54408CF
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6A28B408C9
+ by smtp2.osuosl.org (Postfix) with ESMTP id 82E54408CF
  for <buildroot@buildroot.org>; Thu, 15 Aug 2024 20:04:45 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 533A4814B9; Thu, 15 Aug 2024 20:04:45 +0000 (UTC)
+ id 7A976831C4; Thu, 15 Aug 2024 20:04:45 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 15 Aug 2024 22:04:31 +0200
+Date: Thu, 15 Aug 2024 22:04:33 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 6374fd70e35314f86cc8de2f8c3579c5ced0df7e
-X-Git-Newrev: 9724eab2328f5de9621942c8cff30b45a76643c8
+X-Git-Oldrev: 5e12bce591115c8735ee52162e9c0aeed0afb13c
+X-Git-Newrev: 5598920390da361b0bea4d07e2c05eb8b0d69ea6
 X-Patchwork-Hint: ignore
-Message-Id: <20240815200445.533A4814B9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] configs/ti_am62x_sk: bump tfa,
- uboot and linux version
+Message-Id: <20240815200445.7A976831C4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] configs/ti_am64x_sk: bump tfa,
+ uboot and linux versions
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,34 +66,35 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9724eab2328f5de9621942c8cff30b45a76643c8
+commit: https://git.buildroot.net/buildroot/commit/?id=5598920390da361b0bea4d07e2c05eb8b0d69ea6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Bump to the latest versions of tfa, uboot and the linux kernel to pull
-in the latest fixes and features for the am62x-sk reference board
+Bump the tfa, uboot and linux kernel versions used by the am64x-sk
+reference board to pull in the latest bug fixes and feature additions
 
 Signed-off-by: Bryan Brattlof <bb@ti.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
  .../arm-trusted-firmware/arm-trusted-firmware.hash |  2 +-
  ...e-sci-clk-Adding-support-for-non-contiguo.patch | 75 ----------------------
- board/ti/am62x-sk/patches/linux/linux.hash         |  2 +-
+ board/ti/am64x-sk/patches/linux/linux.hash         |  2 +-
  .../patches/ti-k3-r5-loader/ti-k3-r5-loader.hash   |  3 +-
- configs/ti_am62x_sk_defconfig                      |  6 +-
- 5 files changed, 6 insertions(+), 82 deletions(-)
+ board/ti/am64x-sk/patches/uboot/uboot.hash         |  2 +-
+ configs/ti_am64x_sk_defconfig                      | 12 ++--
+ 6 files changed, 10 insertions(+), 86 deletions(-)
 
-diff --git a/board/ti/am62x-sk/patches/arm-trusted-firmware/arm-trusted-firmware.hash b/board/ti/am62x-sk/patches/arm-trusted-firmware/arm-trusted-firmware.hash
+diff --git a/board/ti/am64x-sk/patches/arm-trusted-firmware/arm-trusted-firmware.hash b/board/ti/am64x-sk/patches/arm-trusted-firmware/arm-trusted-firmware.hash
 index d68ac4bd30..8b77e1f165 100644
---- a/board/ti/am62x-sk/patches/arm-trusted-firmware/arm-trusted-firmware.hash
-+++ b/board/ti/am62x-sk/patches/arm-trusted-firmware/arm-trusted-firmware.hash
+--- a/board/ti/am64x-sk/patches/arm-trusted-firmware/arm-trusted-firmware.hash
++++ b/board/ti/am64x-sk/patches/arm-trusted-firmware/arm-trusted-firmware.hash
 @@ -1,2 +1,2 @@
  # Locally calculated
 -sha256  d7194687d13335f832a48c1b87ad4f15ffb983365ca2aba4afda57843fb01cb6  arm-trusted-firmware-lts-v2.10.4-git4.tar.gz
 +sha256  c0f23ccc71c49989e9ad238acf334473c17b7c88f79a20c829c3d443e3794a22  arm-trusted-firmware-v2.11-git4.tar.gz
-diff --git a/board/ti/am62x-sk/patches/linux/0001-clk-keystone-sci-clk-Adding-support-for-non-contiguo.patch b/board/ti/am62x-sk/patches/linux/0001-clk-keystone-sci-clk-Adding-support-for-non-contiguo.patch
+diff --git a/board/ti/am64x-sk/patches/linux/0001-clk-keystone-sci-clk-Adding-support-for-non-contiguo.patch b/board/ti/am64x-sk/patches/linux/0001-clk-keystone-sci-clk-Adding-support-for-non-contiguo.patch
 deleted file mode 100644
 index 788b6439d8..0000000000
---- a/board/ti/am62x-sk/patches/linux/0001-clk-keystone-sci-clk-Adding-support-for-non-contiguo.patch
+--- a/board/ti/am64x-sk/patches/linux/0001-clk-keystone-sci-clk-Adding-support-for-non-contiguo.patch
 +++ /dev/null
 @@ -1,75 +0,0 @@
 -From 750cdf4cb6791c45d479ed73a97728100394fb32 Mon Sep 17 00:00:00 2001
@@ -171,52 +172,62 @@ index 788b6439d8..0000000000
 --- 
 -2.43.2
 -
-diff --git a/board/ti/am62x-sk/patches/linux/linux.hash b/board/ti/am62x-sk/patches/linux/linux.hash
-index 5e9df51ecd..53eb143894 100644
---- a/board/ti/am62x-sk/patches/linux/linux.hash
-+++ b/board/ti/am62x-sk/patches/linux/linux.hash
+diff --git a/board/ti/am64x-sk/patches/linux/linux.hash b/board/ti/am64x-sk/patches/linux/linux.hash
+index 2e9aad399e..53eb143894 100644
+--- a/board/ti/am64x-sk/patches/linux/linux.hash
++++ b/board/ti/am64x-sk/patches/linux/linux.hash
 @@ -1,2 +1,2 @@
  # Locally calculated
--sha256  19b31956d229b5b9ca5671fa1c74320179682a3d8d00fc86794114b21da86039  linux-6.8.12.tar.xz
+-sha256  1c4cdcb9d560fad1fb95db2cb8afbedc922f9ead848371fe40363b13f9f631ba  linux-6.8.8.tar.xz
 +sha256  774698422ee54c5f1e704456f37c65c06b51b4e9a8b0866f34580d86fef8e226  linux-6.10.tar.xz
-diff --git a/board/ti/am62x-sk/patches/ti-k3-r5-loader/ti-k3-r5-loader.hash b/board/ti/am62x-sk/patches/ti-k3-r5-loader/ti-k3-r5-loader.hash
+diff --git a/board/ti/am64x-sk/patches/ti-k3-r5-loader/ti-k3-r5-loader.hash b/board/ti/am64x-sk/patches/ti-k3-r5-loader/ti-k3-r5-loader.hash
 deleted file mode 100644
-index fe9b4f53dc..0000000000
---- a/board/ti/am62x-sk/patches/ti-k3-r5-loader/ti-k3-r5-loader.hash
+index 97a2b4eaf9..0000000000
+--- a/board/ti/am64x-sk/patches/ti-k3-r5-loader/ti-k3-r5-loader.hash
 +++ /dev/null
 @@ -1,2 +0,0 @@
 -# Locally calculated
--sha256  f591da9ab90ef3d6b3d173766d0ddff90c4ed7330680897486117df390d83c8f  u-boot-2024.07.tar.bz2
-diff --git a/board/ti/am62x-sk/patches/ti-k3-r5-loader/ti-k3-r5-loader.hash b/board/ti/am62x-sk/patches/ti-k3-r5-loader/ti-k3-r5-loader.hash
+-sha256  18a853fe39fad7ad03a90cc2d4275aeaed6da69735defac3492b80508843dd4a  u-boot-2024.04.tar.bz2
+diff --git a/board/ti/am64x-sk/patches/ti-k3-r5-loader/ti-k3-r5-loader.hash b/board/ti/am64x-sk/patches/ti-k3-r5-loader/ti-k3-r5-loader.hash
 new file mode 120000
 index 0000000000..b89e91d3e8
 --- /dev/null
-+++ b/board/ti/am62x-sk/patches/ti-k3-r5-loader/ti-k3-r5-loader.hash
++++ b/board/ti/am64x-sk/patches/ti-k3-r5-loader/ti-k3-r5-loader.hash
 @@ -0,0 +1 @@
 +../uboot/uboot.hash
 \ No newline at end of file
-diff --git a/configs/ti_am62x_sk_defconfig b/configs/ti_am62x_sk_defconfig
-index f56669c24f..e11b803b73 100644
---- a/configs/ti_am62x_sk_defconfig
-+++ b/configs/ti_am62x_sk_defconfig
-@@ -1,5 +1,5 @@
+diff --git a/board/ti/am64x-sk/patches/uboot/uboot.hash b/board/ti/am64x-sk/patches/uboot/uboot.hash
+index 97a2b4eaf9..fe9b4f53dc 100644
+--- a/board/ti/am64x-sk/patches/uboot/uboot.hash
++++ b/board/ti/am64x-sk/patches/uboot/uboot.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  18a853fe39fad7ad03a90cc2d4275aeaed6da69735defac3492b80508843dd4a  u-boot-2024.04.tar.bz2
++sha256  f591da9ab90ef3d6b3d173766d0ddff90c4ed7330680897486117df390d83c8f  u-boot-2024.07.tar.bz2
+diff --git a/configs/ti_am64x_sk_defconfig b/configs/ti_am64x_sk_defconfig
+index 1e8b8c9c02..a9ec5e3d53 100644
+--- a/configs/ti_am64x_sk_defconfig
++++ b/configs/ti_am64x_sk_defconfig
+@@ -1,14 +1,14 @@
  BR2_aarch64=y
 -BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_8=y
 +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_10=y
- BR2_GLOBAL_PATCH_DIR="board/ti/am62x-sk/patches"
+ BR2_GLOBAL_PATCH_DIR="board/ti/am64x-sk/patches"
  BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
  BR2_ROOTFS_POST_BUILD_SCRIPT="board/ti/common/am6xx/post-build.sh"
-@@ -8,7 +8,7 @@ BR2_ROOTFS_POST_BUILD_SCRIPT_ARGS="-c ttyS2,115200n8 -d k3-am625-sk.dtb -l am62x
- BR2_ROOTFS_POST_IMAGE_SCRIPT_ARGS="-c board/ti/am62x-sk/genimage.cfg"
+-BR2_ROOTFS_POST_BUILD_SCRIPT_ARGS="-c ttyS2,115200n8 -d k3-am642-sk.dtb -l am64x-sk-buildroot -r /dev/mmcblk1p2 -x earlycon=ns16550a,mmio32,0x02800000"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
++BR2_ROOTFS_POST_BUILD_SCRIPT_ARGS="-c ttyS2,115200n8 -d k3-am642-sk.dtb -l am64x-sk-buildroot -r /dev/mmcblk1p2 -x earlycon=ns16550a,mmio32,0x02800000"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT_ARGS="-c board/ti/am64x-sk/genimage.cfg"
  BR2_LINUX_KERNEL=y
  BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.8.12"
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.8.8"
 +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.10"
  BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
  BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="ti/k3-am625-sk"
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="ti/k3-am642-sk"
 @@ -19,7 +19,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_ROOTFS_EXT2_SIZE="256M"
+ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
  BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
  BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
 -BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="lts-v2.10.4"
@@ -224,6 +235,21 @@ index f56669c24f..e11b803b73 100644
  BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="k3"
  BR2_TARGET_ARM_TRUSTED_FIRMWARE_TARGET_BOARD="lite"
  BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL32_OPTEE=y
+@@ -27,12 +27,12 @@ BR2_TARGET_OPTEE_OS=y
+ BR2_TARGET_OPTEE_OS_PLATFORM="k3-am64x"
+ BR2_TARGET_TI_K3_R5_LOADER=y
+ BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_VERSION=y
+-BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_VERSION_VALUE="2024.04"
++BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_VERSION_VALUE="2024.07"
+ BR2_TARGET_TI_K3_R5_LOADER_BOARD_DEFCONFIG="am64x_evm_r5"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.04"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.07"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="am64x_evm_a53"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
