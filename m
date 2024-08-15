@@ -4,49 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD3EFC3DA7F
-	for <buildroot@archiver.kernel.org>; Thu, 15 Aug 2024 20:18:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40B56C52D7F
+	for <buildroot@archiver.kernel.org>; Thu, 15 Aug 2024 20:19:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5D58F60AD4;
-	Thu, 15 Aug 2024 20:18:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0E45060AFD;
+	Thu, 15 Aug 2024 20:19:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ve-1axY0wDNk; Thu, 15 Aug 2024 20:18:54 +0000 (UTC)
+ id Rgvxe3UpnubW; Thu, 15 Aug 2024 20:19:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4D6E260B2C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 272DE60B21
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4D6E260B2C;
-	Thu, 15 Aug 2024 20:18:54 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 514DF1BF3F4
- for <buildroot@lists.busybox.net>; Thu, 15 Aug 2024 20:18:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 272DE60B21;
+	Thu, 15 Aug 2024 20:19:17 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id F35071BF3F4
+ for <buildroot@lists.busybox.net>; Thu, 15 Aug 2024 20:19:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3FA0740249
- for <buildroot@lists.busybox.net>; Thu, 15 Aug 2024 20:18:48 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id ED3CF60B21
+ for <buildroot@lists.busybox.net>; Thu, 15 Aug 2024 20:19:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UYv-jiLmUXQO for <buildroot@lists.busybox.net>;
- Thu, 15 Aug 2024 20:18:47 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1X41z8pEPByo for <buildroot@lists.busybox.net>;
+ Thu, 15 Aug 2024 20:19:15 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::223;
+ helo=relay3-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DC9FB40144
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id DC9FB40144
- for <buildroot@buildroot.org>; Thu, 15 Aug 2024 20:18:46 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 53F8085F2C; Thu, 15 Aug 2024 20:18:46 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 15 Aug 2024 22:15:02 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: ff7787eadfc116f59a1f73cae8c47065810cb9d5
-X-Git-Newrev: e929d75d7eed66f4aff4b57d0192d6332fb21257
-X-Patchwork-Hint: ignore
-Message-Id: <20240815201846.53F8085F2C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/rsyslog: extra plugins
- option introduced
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org D05AF60B61
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D05AF60B61
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id D05AF60B61
+ for <buildroot@buildroot.org>; Thu, 15 Aug 2024 20:19:14 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id DC21B60002;
+ Thu, 15 Aug 2024 20:19:12 +0000 (UTC)
+Date: Thu, 15 Aug 2024 22:19:11 +0200
+To: =?UTF-8?B?RmzDoXZpbyBUYXBhasOzcw==?= <flavio.tapajos@newtesc.com.br>
+Message-ID: <20240815221911.74d91831@windsurf>
+In-Reply-To: <20240725153743.101494-1-flavio.tapajos@newtesc.com.br>
+References: <20240725153743.101494-1-flavio.tapajos@newtesc.com.br>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1723753153;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=ONOUfVfKll/lVT3MGVJaH4jakdZR9RHBI58eJZ/aviM=;
+ b=KDNPPGXUnZuJ0Q9qrG3ZyKQlqPikN+7qgndH0Xlf0qUGz95msR5HiT7ymWgkB3sdUQmF4g
+ 16LKj4uE952ECNyqzP4++9i6Ip6qvhTEp10+BfZWg1lWUCjPbd2Qv+L8oJZTQnWnHEwlEZ
+ nEhZjdg5vJq4lL9yH5/ATM0+DzyxT/2quZPZHk1QHKjrDpTM4j2BzQtE3ylT3eXr5kCUWb
+ S8Iat9oRvrlDqQTq7WE5DGTi1tCvx7pQzqrTQZttG7EfJ3DcChD5Xw/CtSWxPZPSi6VsIB
+ AgDvlR5Ftmuq+CLn45SK5SB3HjSLI9+7bIKGIJUo1aPte3d0Fq3XPAGEn+k4tA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=KDNPPGXU
+Subject: Re: [Buildroot] [PATCH 1/3] Revert "rsyslog: not available on musl"
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,211 +82,25 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============6250815584661186804=="
+Cc: Konstantin Menyaev <KAMenyaev@salutedevices.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============6250815584661186804==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=e929d75d7eed66f4aff4b57d0192d6332fb21257
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-The rsyslog package enables extra plugins based on the availability of
-external dependencies. However, there are many cases where those
-plugins are not needed, even when some of those external dependencies
-are enabled. Allow disabling the build of plugins. This option is
-useful in embedded systems to achieve compact footprint.
-
-Signed-off-by: Konstantin Menyaev <KAMenyaev@salutedevices.com>
-Signed-off-by: Flávio Tapajós <flavio.tapajos@newtesc.com.br>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/rsyslog/Config.in  | 12 ++++++++++++
- package/rsyslog/rsyslog.mk | 35 +++++++++++++++++++----------------
- 2 files changed, 31 insertions(+), 16 deletions(-)
-
-diff --git a/package/rsyslog/Config.in b/package/rsyslog/Config.in
-index d9e8b1ab6f..3c23de8346 100644
---- a/package/rsyslog/Config.in
-+++ b/package/rsyslog/Config.in
-@@ -17,6 +17,18 @@ config BR2_PACKAGE_RSYSLOG
- 
- 	  http://www.rsyslog.com
- 
-+if BR2_PACKAGE_RSYSLOG
-+
-+config BR2_PACKAGE_RSYSLOG_EXTRA_PLUGINS
-+	bool "extra plugins"
-+	default y
-+	help
-+	  Enable rsyslog plugins that require external
-+	  dependencies. The different plugins will be automatically
-+	  enabled if their dependencies are enabled.
-+
-+endif # BR2_PACKAGE_RSYSLOG
-+
- comment "rsyslog needs a toolchain w/ threads, dynamic library"
- 	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
-index fac78795c2..98e5a8f8e8 100644
---- a/package/rsyslog/rsyslog.mk
-+++ b/package/rsyslog/rsyslog.mk
-@@ -15,12 +15,15 @@ RSYSLOG_CPE_ID_VENDOR = rsyslog
- RSYSLOG_IGNORE_CVES += CVE-2015-3243
- RSYSLOG_DEPENDENCIES = zlib libestr liblogging libfastjson host-pkgconf
- RSYSLOG_CONF_ENV = ac_cv_prog_cc_c99='-std=c99'
-+
-+ifeq ($(BR2_PACKAGE_RSYSLOG_EXTRA_PLUGINS),y)
- RSYSLOG_PLUGINS = imdiag imfile impstats imptcp \
- 	mmanon mmaudit mmfields mmjsonparse mmpstrucdata mmsequence mmutf8fix \
- 	mail omprog omruleset omstdout omuxsock \
- 	pmaixforwardedfrom pmciscoios pmcisconames pmlastmsg pmsnare
-+endif
- 
--ifeq ($(BR2_PACKAGE_LIBRELP),y)
-+ifeq ($(BR2_PACKAGE_LIBRELP)$(BR2_PACKAGE_RSYSLOG_EXTRA_PLUGINS),yy)
- RSYSLOG_DEPENDENCIES += librelp
- RSYSLOG_PLUGINS += relp
- endif
-@@ -33,7 +36,7 @@ RSYSLOG_CONF_OPTS += \
- 	--disable-mmkubernetes \
- 	--disable-mmnormalize
- 
--ifeq ($(BR2_PACKAGE_LIBCURL),y)
-+ifeq ($(BR2_PACKAGE_LIBCURL)$(BR2_PACKAGE_RSYSLOG_EXTRA_PLUGINS),yy)
- RSYSLOG_DEPENDENCIES += libcurl
- RSYSLOG_CONF_OPTS += \
- 	--enable-clickhouse \
-@@ -52,35 +55,35 @@ RSYSLOG_CONF_OPTS += \
- 	--disable-omhttpfs
- endif
- 
--ifeq ($(BR2_PACKAGE_CIVETWEB_LIB),y)
-+ifeq ($(BR2_PACKAGE_CIVETWEB_LIB)$(BR2_PACKAGE_RSYSLOG_EXTRA_PLUGINS),yy)
- RSYSLOG_DEPENDENCIES += apr-util civetweb
- RSYSLOG_CONF_OPTS += --enable-imhttp
- else
- RSYSLOG_CONF_OPTS += --disable-imhttp
- endif
- 
--ifeq ($(BR2_PACKAGE_CZMQ),y)
-+ifeq ($(BR2_PACKAGE_CZMQ)$(BR2_PACKAGE_RSYSLOG_EXTRA_PLUGINS),yy)
- RSYSLOG_DEPENDENCIES += czmq
- RSYSLOG_CONF_OPTS += --enable-imczmq --enable-omczmq
- else
- RSYSLOG_CONF_OPTS += --disable-imczmq --disable-omczmq
- endif
- 
--ifeq ($(BR2_PACKAGE_GNUTLS),y)
-+ifeq ($(BR2_PACKAGE_GNUTLS)$(BR2_PACKAGE_RSYSLOG_EXTRA_PLUGINS),yy)
- RSYSLOG_DEPENDENCIES += gnutls
- RSYSLOG_CONF_OPTS += --enable-gnutls
- else
- RSYSLOG_CONF_OPTS += --disable-gnutls
- endif
- 
--ifeq ($(BR2_PACKAGE_HIREDIS),y)
-+ifeq ($(BR2_PACKAGE_HIREDIS)$(BR2_PACKAGE_RSYSLOG_EXTRA_PLUGINS),yy)
- RSYSLOG_DEPENDENCIES += hiredis
- RSYSLOG_CONF_OPTS += --enable-omhiredis
- else
- RSYSLOG_CONF_OPTS += --disable-omhiredis
- endif
- 
--ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
-+ifeq ($(BR2_PACKAGE_LIBGCRYPT)$(BR2_PACKAGE_RSYSLOG_EXTRA_PLUGINS),yy)
- RSYSLOG_DEPENDENCIES += libgcrypt
- RSYSLOG_CONF_ENV += LIBGCRYPT_CONFIG=$(STAGING_DIR)/usr/bin/libgcrypt-config
- RSYSLOG_CONF_OPTS += --enable-libgcrypt
-@@ -88,21 +91,21 @@ else
- RSYSLOG_CONF_OPTS += --disable-libgcrypt
- endif
- 
--ifeq ($(BR2_PACKAGE_LIBMAXMINDDB),y)
-+ifeq ($(BR2_PACKAGE_LIBMAXMINDDB)$(BR2_PACKAGE_RSYSLOG_EXTRA_PLUGINS),yy)
- RSYSLOG_DEPENDENCIES += libmaxminddb
- RSYSLOG_CONF_OPTS += --enable-mmdblookup
- else
- RSYSLOG_CONF_OPTS += --disable-mmdblookup
- endif
- 
--ifeq ($(BR2_PACKAGE_LIBPCAP),y)
-+ifeq ($(BR2_PACKAGE_LIBPCAP)$(BR2_PACKAGE_RSYSLOG_EXTRA_PLUGINS),yy)
- RSYSLOG_DEPENDENCIES += libpcap
- RSYSLOG_CONF_OPTS += --enable-impcap
- else
- RSYSLOG_CONF_OPTS += --disable-impcap
- endif
- 
--ifeq ($(BR2_PACKAGE_MARIADB),y)
-+ifeq ($(BR2_PACKAGE_MARIADB)$(BR2_PACKAGE_RSYSLOG_EXTRA_PLUGINS),yy)
- RSYSLOG_DEPENDENCIES += mariadb
- RSYSLOG_CONF_OPTS += --enable-mysql
- RSYSLOG_CONF_ENV += ac_cv_prog_MYSQL_CONFIG=$(STAGING_DIR)/usr/bin/mysql_config
-@@ -110,7 +113,7 @@ else
- RSYSLOG_CONF_OPTS += --disable-mysql
- endif
- 
--ifeq ($(BR2_PACKAGE_POSTGRESQL),y)
-+ifeq ($(BR2_PACKAGE_POSTGRESQL)$(BR2_PACKAGE_RSYSLOG_EXTRA_PLUGINS),yy)
- RSYSLOG_DEPENDENCIES += postgresql
- RSYSLOG_CONF_OPTS += --enable-pgsql
- RSYSLOG_CONF_ENV += ac_cv_prog_PG_CONFIG=$(STAGING_DIR)/usr/bin/pg_config
-@@ -118,28 +121,28 @@ else
- RSYSLOG_CONF_OPTS += --disable-pgsql
- endif
- 
--ifeq ($(BR2_PACKAGE_QPID_PROTON),y)
-+ifeq ($(BR2_PACKAGE_QPID_PROTON)$(BR2_PACKAGE_RSYSLOG_EXTRA_PLUGINS),yy)
- RSYSLOG_DEPENDENCIES += qpid-proton
- RSYSLOG_CONF_OPTS += --enable-omamqp1
- else
- RSYSLOG_CONF_OPTS += --disable-omamqp1
- endif
- 
--ifeq ($(BR2_PACKAGE_RABBITMQ_C),y)
-+ifeq ($(BR2_PACKAGE_RABBITMQ_C)$(BR2_PACKAGE_RSYSLOG_EXTRA_PLUGINS),yy)
- RSYSLOG_DEPENDENCIES += rabbitmq-c
- RSYSLOG_CONF_OPTS += --enable-omrabbitmq
- else
- RSYSLOG_CONF_OPTS += --disable-omrabbitmq
- endif
- 
--ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBUUID),y)
-+ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBUUID)$(BR2_PACKAGE_RSYSLOG_EXTRA_PLUGINS),yy)
- RSYSLOG_DEPENDENCIES += util-linux
- RSYSLOG_CONF_OPTS += --enable-uuid
- else
- RSYSLOG_CONF_OPTS += --disable-uuid
- endif
- 
--ifeq ($(BR2_INIT_SYSTEMD),y)
-+ifeq ($(BR2_INIT_SYSTEMD)$(BR2_PACKAGE_RSYSLOG_EXTRA_PLUGINS),yy)
- RSYSLOG_CONF_OPTS += \
- 	--enable-imjournal \
- 	--enable-omjournal \
-@@ -151,7 +154,7 @@ RSYSLOG_CONF_OPTS += \
- 	--disable-omjournal
- endif
- 
--ifeq ($(BR2_PACKAGE_LIBDBI_DRIVERS),y)
-+ifeq ($(BR2_PACKAGE_LIBDBI_DRIVERS)$(BR2_PACKAGE_RSYSLOG_EXTRA_PLUGINS),yy)
- RSYSLOG_CONF_OPTS += --enable-libdbi
- RSYSLOG_DEPENDENCIES += libdbi-drivers
- else
-
---===============6250815584661186804==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============6250815584661186804==--
+T24gVGh1LCAyNSBKdWwgMjAyNCAxMjozNzo0MCAtMDMwMApGbMOhdmlvIFRhcGFqw7NzIDxmbGF2
+aW8udGFwYWpvc0BuZXd0ZXNjLmNvbS5icj4gd3JvdGU6Cgo+IEZyb206IEtvbnN0YW50aW4gTWVu
+eWFldiA8S0FNZW55YWV2QHNhbHV0ZWRldmljZXMuY29tPgo+IAo+IFRoaXMgcmV2ZXJ0cyBjb21t
+aXQgY2VhODFiNjkyNWRlMTY2ZTJmZDJjNzVhNTFhZWE5NDQyMGY3ZjA2YS4KPiAKPiByc3lzbG9n
+IG5vdyBidWlsZHMgc3VjY2Vzc2Z1bGx5IHdpdGggbXVzbAo+IAo+IFNpZ25lZC1vZmYtYnk6IEtv
+bnN0YW50aW4gTWVueWFldiA8S0FNZW55YWV2QHNhbHV0ZWRldmljZXMuY29tPgo+IFNpZ25lZC1v
+ZmYtYnk6IEZsw6F2aW8gVGFwYWrDs3MgPGZsYXZpby50YXBham9zQG5ld3Rlc2MuY29tLmJyPgo+
+IC0tLQo+ICBwYWNrYWdlL3JzeXNsb2cvQ29uZmlnLmluIHwgNiArKy0tLS0KPiAgMSBmaWxlIGNo
+YW5nZWQsIDIgaW5zZXJ0aW9ucygrKSwgNCBkZWxldGlvbnMoLSkKClNlcmllcyBhcHBsaWVkIHRv
+IG5leHQuIEkgZGlkIHNvbWUgc21hbGwgaW1wcm92ZW1lbnRzIG9uIFBBVENIIDIvMzoKc2ltcGxp
+ZmllZCB0aGUgb3B0aW9uIG5hbWUsIGZpeGVkIHRoZSBpbmRlbnRhdGlvbiwgaW1wcm92ZWQgdGhl
+IGNvbW1pdApsb2cuCgpUaGFua3MhCgpUaG9tYXMKLS0gClRob21hcyBQZXRhenpvbmksIENUTywg
+Qm9vdGxpbgpFbWJlZGRlZCBMaW51eCBhbmQgS2VybmVsIGVuZ2luZWVyaW5nCmh0dHBzOi8vYm9v
+dGxpbi5jb20KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18K
+YnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xp
+c3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
