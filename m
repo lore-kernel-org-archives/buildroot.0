@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90CB4C3DA7F
-	for <buildroot@archiver.kernel.org>; Thu, 15 Aug 2024 08:58:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1DC64C52D7D
+	for <buildroot@archiver.kernel.org>; Thu, 15 Aug 2024 08:58:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1EBD360A69;
-	Thu, 15 Aug 2024 08:58:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9B34D60A66;
+	Thu, 15 Aug 2024 08:58:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ocqcTt_cd1Sr; Thu, 15 Aug 2024 08:58:08 +0000 (UTC)
+ id XC8WkTUIAY1X; Thu, 15 Aug 2024 08:58:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 47D5E60A6E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5AC6460A7D
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 47D5E60A6E;
-	Thu, 15 Aug 2024 08:58:07 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 793481BF2B6
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5AC6460A7D;
+	Thu, 15 Aug 2024 08:58:10 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 7D58D1BF98E
  for <buildroot@lists.busybox.net>; Thu, 15 Aug 2024 08:58:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7294E407A3
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6B1CB40485
  for <buildroot@lists.busybox.net>; Thu, 15 Aug 2024 08:58:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id K-UBECLV_8Jt for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wquCmKN_J7PS for <buildroot@lists.busybox.net>;
  Thu, 15 Aug 2024 08:58:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7249B40228
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5A375403C2
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7249B40228
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5A375403C2
  for <buildroot@buildroot.org>; Thu, 15 Aug 2024 08:58:02 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5CDDA85E29; Thu, 15 Aug 2024 08:58:02 +0000 (UTC)
+ id 50F4C7FCF9; Thu, 15 Aug 2024 08:58:02 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 15 Aug 2024 10:57:32 +0200
+Date: Thu, 15 Aug 2024 10:57:24 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: ef8ed5ccfec1cced0132f03df26b94d656b6ce72
-X-Git-Newrev: a6599dbd7dafdf31e1ca101224c0d5aeec597cec
+X-Git-Oldrev: f21db2bd83bf3073a50b8bcd79af6e7aed6fb000
+X-Git-Newrev: ef8ed5ccfec1cced0132f03df26b94d656b6ce72
 X-Patchwork-Hint: ignore
-Message-Id: <20240815085802.5CDDA85E29@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/s6-portable-utils: add
- option to build multicall binary
+Message-Id: <20240815085802.50F4C7FCF9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/execline: add option
+ to build multicall binary
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -61,58 +61,60 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============9103011484407278308=="
+Content-Type: multipart/mixed; boundary="===============4078940482474678956=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============9103011484407278308==
+--===============4078940482474678956==
 Content-Type: text/plain
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a6599dbd7dafdf31e1ca101224c0d5aeec597cec
+commit: https://git.buildroot.net/buildroot/commit/?id=ef8ed5ccfec1cced0132f03df26b94d656b6ce72
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Since version 2.3.0.0, with another bugfix in 2.3.0.3, s6-portable-utils
-can be built as a multicall binary, similar to busybox.
+Since version 2.9.2.0, with another bugfix in 2.9.4.0, execline can
+be built as a multicall binary, similar to busybox. According to
+the author[1], this results in space savings of 66-87% on Linux.
+
+[1]: https://skarnet.org/software/execline/execline.html
 
 Signed-off-by: J. Neuschäfer <j.neuschaefer@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/s6-portable-utils/Config.in            | 10 ++++++++++
- package/s6-portable-utils/s6-portable-utils.mk |  1 +
- 2 files changed, 11 insertions(+)
+ package/execline/Config.in   | 9 +++++++++
+ package/execline/execline.mk | 1 +
+ 2 files changed, 10 insertions(+)
 
-diff --git a/package/s6-portable-utils/Config.in b/package/s6-portable-utils/Config.in
-index 8521ecfa8a..d4ecfcc38b 100644
---- a/package/s6-portable-utils/Config.in
-+++ b/package/s6-portable-utils/Config.in
-@@ -10,3 +10,13 @@ config BR2_PACKAGE_S6_PORTABLE_UTILS
- 	  they work everywhere.
+diff --git a/package/execline/Config.in b/package/execline/Config.in
+index 7a2278fa5a..a7cbba1bb0 100644
+--- a/package/execline/Config.in
++++ b/package/execline/Config.in
+@@ -10,3 +10,12 @@ config BR2_PACKAGE_EXECLINE
+ 	  essentially useful inside an execlineb script.
  
- 	  http://skarnet.org/software/s6-portable-utils/
+ 	  http://skarnet.org/software/execline/
 +
-+if BR2_PACKAGE_S6_PORTABLE_UTILS
++if BR2_PACKAGE_EXECLINE
 +
-+config BR2_PACKAGE_S6_PORTABLE_UTILS_MULTICALL
-+	bool "s6-portable-utils multicall binary"
++config BR2_PACKAGE_EXECLINE_MULTICALL
++	bool "execline multicall binary"
 +	help
-+	  Build s6-portable-utils as a multicall binary to save disk
-+	  space.
++	  Build execline as a multicall binary to save disk space.
 +
 +endif
-diff --git a/package/s6-portable-utils/s6-portable-utils.mk b/package/s6-portable-utils/s6-portable-utils.mk
-index c40100b06c..826750f387 100644
---- a/package/s6-portable-utils/s6-portable-utils.mk
-+++ b/package/s6-portable-utils/s6-portable-utils.mk
-@@ -17,6 +17,7 @@ S6_PORTABLE_UTILS_CONF_OPTS = \
+diff --git a/package/execline/execline.mk b/package/execline/execline.mk
+index ee38d3ed3c..922fc7b5af 100644
+--- a/package/execline/execline.mk
++++ b/package/execline/execline.mk
+@@ -19,6 +19,7 @@ EXECLINE_CONF_OPTS = \
  	--with-dynlib=$(STAGING_DIR)/lib \
  	--with-lib=$(STAGING_DIR)/lib/skalibs \
  	$(if $(BR2_STATIC_LIBS),,--disable-allstatic) \
-+	$(if $(BR2_PACKAGE_S6_PORTABLE_UTILS_MULTICALL),--enable-multicall,) \
++	$(if $(BR2_PACKAGE_EXECLINE_MULTICALL),--enable-multicall,) \
  	$(SHARED_STATIC_LIBS_OPTS)
  
- define S6_PORTABLE_UTILS_CONFIGURE_CMDS
+ define EXECLINE_CONFIGURE_CMDS
 
---===============9103011484407278308==
+--===============4078940482474678956==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -123,4 +125,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============9103011484407278308==--
+--===============4078940482474678956==--
