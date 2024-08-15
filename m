@@ -4,49 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ED9F9C52D7F
-	for <buildroot@archiver.kernel.org>; Thu, 15 Aug 2024 08:58:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 230E9C52D7D
+	for <buildroot@archiver.kernel.org>; Thu, 15 Aug 2024 08:58:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BD8D860A8B;
-	Thu, 15 Aug 2024 08:58:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CB67D60A8A;
+	Thu, 15 Aug 2024 08:58:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RNdTqL_jr8ti; Thu, 15 Aug 2024 08:58:14 +0000 (UTC)
+ id C7uyMox3M2LT; Thu, 15 Aug 2024 08:58:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0C0AE60A8C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5FADC60A43
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0C0AE60A8C;
-	Thu, 15 Aug 2024 08:58:14 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 945F31BF2B6
- for <buildroot@lists.busybox.net>; Thu, 15 Aug 2024 08:58:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5FADC60A43;
+	Thu, 15 Aug 2024 08:58:33 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id E44FA1BF2B6
+ for <buildroot@lists.busybox.net>; Thu, 15 Aug 2024 08:58:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7E3BC40228
- for <buildroot@lists.busybox.net>; Thu, 15 Aug 2024 08:58:03 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id C793A81E8D
+ for <buildroot@lists.busybox.net>; Thu, 15 Aug 2024 08:58:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4I2ErqvWTlxt for <buildroot@lists.busybox.net>;
- Thu, 15 Aug 2024 08:58:02 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TgBPtYXhF5Fj for <buildroot@lists.busybox.net>;
+ Thu, 15 Aug 2024 08:58:27 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
+ helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 741FD40260
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 741FD40260
- for <buildroot@buildroot.org>; Thu, 15 Aug 2024 08:58:02 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6C52B80F88; Thu, 15 Aug 2024 08:58:02 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 15 Aug 2024 10:57:37 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: a6599dbd7dafdf31e1ca101224c0d5aeec597cec
-X-Git-Newrev: 5b54c1166b78fa0b36183d58be2fd0ff140ee41f
-X-Patchwork-Hint: ignore
-Message-Id: <20240815085802.6C52B80F88@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/s6-linux-utils: add
- option to build multicall binary
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 142C581E8B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 142C581E8B
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 142C581E8B
+ for <buildroot@buildroot.org>; Thu, 15 Aug 2024 08:58:26 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 51895FF802;
+ Thu, 15 Aug 2024 08:58:25 +0000 (UTC)
+Date: Thu, 15 Aug 2024 10:58:24 +0200
+To: "J. =?UTF-8?B?TmV1c2Now6RmZXI=?= via buildroot" <buildroot@buildroot.org>
+Message-ID: <20240815105824.37914b70@windsurf>
+In-Reply-To: <20240811-s6-multicall-v2-0-14249fd20cbd@gmx.net>
+References: <20240811-s6-multicall-v2-0-14249fd20cbd@gmx.net>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1723712305;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=a9cruItajIlF23do1E5iBAIerRya0qV/bBAZp7ajIu8=;
+ b=J5baqyyy6nTvg7RX1nyTUeCCHlYdnPWbdXf0RIPVVYIZ8uF0JWYYrb6fUAuJAEbOXnWYnS
+ ao5hHMe+FjRzpEFbkk+d9M1cSO6Br71TUMXpNF1h1k7BnIEc2Bxm6OyAHwRI1v0CbqHykg
+ mFJCsXjmHlernH38r3Yd8ZVY23sqZYax3nD7vHb75jZ/CUgqJ/TROi74LZJPzlOllwILfn
+ r3y8QCQp5SnqWrbocEacJDBBf2RJwodlS/1pvebFmB5urre1ykFjqMDVKKitx310kDUfyF
+ av45Zoh787+mXIzZlE42wcirI4d7u763IL3pR9xrx/Dkr3AUxJAufelaYZCElQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=J5baqyyy
+Subject: Re: [Buildroot] [PATCH v2 0/4] Optionally build some skarnet.org
+ packages as multicall binaries
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,67 +83,23 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============5596842657889166216=="
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ "J. =?UTF-8?B?TmV1c2Now6RmZXI=?=" <j.neuschaefer@gmx.net>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============5596842657889166216==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=5b54c1166b78fa0b36183d58be2fd0ff140ee41f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-Since version 2.6.1.0, with another bugfix in 2.6.2.0, s6-linux-utils
-can be built as a multicall binary, similar to busybox.
-
-Signed-off-by: J. Neuschäfer <j.neuschaefer@gmx.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/s6-linux-utils/Config.in         | 10 ++++++++++
- package/s6-linux-utils/s6-linux-utils.mk |  1 +
- 2 files changed, 11 insertions(+)
-
-diff --git a/package/s6-linux-utils/Config.in b/package/s6-linux-utils/Config.in
-index 43e6bb9144..f716e852b9 100644
---- a/package/s6-linux-utils/Config.in
-+++ b/package/s6-linux-utils/Config.in
-@@ -7,3 +7,13 @@ config BR2_PACKAGE_S6_LINUX_UTILS
- 	  system utilities.
- 
- 	  http://skarnet.org/software/s6-linux-utils/
-+
-+if BR2_PACKAGE_S6_LINUX_UTILS
-+
-+config BR2_PACKAGE_S6_LINUX_UTILS_MULTICALL
-+	bool "s6-linux-utils multicall binary"
-+	help
-+	  Build s6-linux-utils as a multicall binary to save disk
-+	  space.
-+
-+endif
-diff --git a/package/s6-linux-utils/s6-linux-utils.mk b/package/s6-linux-utils/s6-linux-utils.mk
-index f83f47ac3e..04e08c3d43 100644
---- a/package/s6-linux-utils/s6-linux-utils.mk
-+++ b/package/s6-linux-utils/s6-linux-utils.mk
-@@ -17,6 +17,7 @@ S6_LINUX_UTILS_CONF_OPTS = \
- 	--with-dynlib=$(STAGING_DIR)/lib \
- 	--with-lib=$(STAGING_DIR)/lib/skalibs \
- 	$(if $(BR2_STATIC_LIBS),,--disable-allstatic) \
-+	$(if $(BR2_PACKAGE_S6_LINUX_UTILS_MULTICALL),--enable-multicall,) \
- 	$(SHARED_STATIC_LIBS_OPTS)
- 
- define S6_LINUX_UTILS_CONFIGURE_CMDS
-
---===============5596842657889166216==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============5596842657889166216==--
+T24gU3VuLCAxMSBBdWcgMjAyNCAxMjowMToxMCArMDIwMApKLiBOZXVzY2jDpGZlciB2aWEgYnVp
+bGRyb290IDxidWlsZHJvb3RAYnVpbGRyb290Lm9yZz4gd3JvdGU6Cgo+IEouIE5ldXNjaMOkZmVy
+ICg0KToKPiAgICAgICBwYWNrYWdlL2V4ZWNsaW5lOiBBZGQgb3B0aW9uIHRvIGJ1aWxkIG11bHRp
+Y2FsbCBiaW5hcnkKPiAgICAgICBwYWNrYWdlL3M2LXBvcnRhYmxlLXV0aWxzOiBBZGQgb3B0aW9u
+IHRvIGJ1aWxkIG11bHRpY2FsbCBiaW5hcnkKPiAgICAgICBwYWNrYWdlL3M2LWxpbnV4LXV0aWxz
+OiBBZGQgb3B0aW9uIHRvIGJ1aWxkIG11bHRpY2FsbCBiaW5hcnkKPiAgICAgICBERVZFTE9QRVJT
+OiBBZGQgc2thcm5ldC5vcmcgcGFja2FnZXMgdG8gSi4gTmV1c2Now6RmZXIncyBlbnRyeQoKVGhh
+bmtzLCBzZXJpZXMgYXBwbGllZCB0byBuZXh0IQoKVGhvbWFzCi0tIApUaG9tYXMgUGV0YXp6b25p
+LCBjby1vd25lciBhbmQgQ0VPLCBCb290bGluCkVtYmVkZGVkIExpbnV4IGFuZCBLZXJuZWwgZW5n
+aW5lZXJpbmcgYW5kIHRyYWluaW5nCmh0dHBzOi8vYm9vdGxpbi5jb20KX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApi
+dWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1h
+bi9saXN0aW5mby9idWlsZHJvb3QK
