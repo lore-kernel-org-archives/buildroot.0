@@ -4,72 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7FB0CC52D7C
-	for <buildroot@archiver.kernel.org>; Thu, 15 Aug 2024 12:52:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4FB21C3DA7F
+	for <buildroot@archiver.kernel.org>; Thu, 15 Aug 2024 12:53:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4609940711;
-	Thu, 15 Aug 2024 12:52:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1670740711;
+	Thu, 15 Aug 2024 12:53:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id amSjIRMANtPe; Thu, 15 Aug 2024 12:52:37 +0000 (UTC)
+ id HXUKNA-88bQF; Thu, 15 Aug 2024 12:53:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 32286406B9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C792D40824
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 32286406B9;
-	Thu, 15 Aug 2024 12:52:37 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A9A421BF574
- for <buildroot@lists.busybox.net>; Thu, 15 Aug 2024 12:52:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C792D40824;
+	Thu, 15 Aug 2024 12:53:43 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 5868B1BF574
+ for <buildroot@lists.busybox.net>; Thu, 15 Aug 2024 12:53:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 96A774039D
- for <buildroot@lists.busybox.net>; Thu, 15 Aug 2024 12:52:35 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 453F440824
+ for <buildroot@lists.busybox.net>; Thu, 15 Aug 2024 12:53:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Lg-9Hb0mRaSp for <buildroot@lists.busybox.net>;
- Thu, 15 Aug 2024 12:52:34 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.200;
- helo=relay7-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id LOR5Ijd0piRm for <buildroot@lists.busybox.net>;
+ Thu, 15 Aug 2024 12:53:40 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 3B51E4026E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3B51E4026E
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 3B51E4026E
- for <buildroot@buildroot.org>; Thu, 15 Aug 2024 12:52:33 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 5891020004;
- Thu, 15 Aug 2024 12:52:32 +0000 (UTC)
-Date: Thu, 15 Aug 2024 14:52:31 +0200
-To: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
-Message-ID: <20240815145231.500ab55e@windsurf>
-In-Reply-To: <20240815092616.1201832-1-roykollensvendsen@gmail.com>
-References: <20240815062841.1051418-1-roykollensvendsen@gmail.com>
- <20240815092616.1201832-1-roykollensvendsen@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1723726352;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=qTso8yzX0mT0oeerpptvLB9JjVKgSw58NhMo/AZUCuw=;
- b=gFkA1raW5gYq6EMrDoUKSuctBkpNkMc5jLQLwceJH/2fWZVrN0X7iGif5Y5EroDBJdaCPF
- MJ13UvUzQ6pwcf+O7p/gOTzwDHntidrIqlD7Em83vcWWYsnWG64PyoO3EUeu9fmy2toSUF
- 8lHS6PA6h/ubD3gFLHihKx8TOC+39l9vJgQM5t4xZZhi90aVVdvcJYbzpzYWVraXbFbBfW
- c2cLwWEsy0xf0lOMK/4ioC6r1MprRmtLsv2r0CIoGknrMJ8mARxsPp1OKAPFtdNrFn1/6G
- as0G6uUS5dWzr1Wm3PQZQK/MCl4vcnCY8qvs0g1ByZAacUtVq93wvBvhBUnIhQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=gFkA1raW
-Subject: Re: [Buildroot] [PATCH v2] package/qt6base: fix CVE-2024-39936
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3B7E140711
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3B7E140711
+ for <buildroot@buildroot.org>; Thu, 15 Aug 2024 12:53:40 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 2708184F84; Thu, 15 Aug 2024 12:53:40 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Thu, 15 Aug 2024 14:53:28 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: ef5947774f04dbdf8edffb88b8688917cd6b71b2
+X-Git-Newrev: 65c8e4c65168b6c17af1e797252693e4190c934f
+X-Patchwork-Hint: ignore
+Message-Id: <20240815125340.2708184F84@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/docker-engine: add
+ wrapper script for logging to syslog
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,53 +60,79 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Jesse Van Gavere <jesseevg@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Roy,
+commit: https://git.buildroot.net/buildroot/commit/?id=65c8e4c65168b6c17af1e797252693e4190c934f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Thu, 15 Aug 2024 11:26:14 +0200
-Roy Kollen Svendsen <roykollensvendsen@gmail.com> wrote:
+Dockerd logs only to stdout/stderr [1], which is lost with
+--background. The upstream SysV init script [2] logs to a file by
+passing --no-close to start-stop-daemon and redirecting the output,
+but that option is not supported by Busybox' start-stop-daemon.
 
-> Fixes:
-> https://security-tracker.debian.org/tracker/CVE-2024-39936
-> 
-> Got patch from:
-> https://github.com/qt/qtbase/commit/2b1e36e183ce75c224305c7a94457b92f7a5cf58
-> 
-> Signed-off-by: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
+The wrapper script added with this commit captures the output of
+dockerd (or whatever other command it is given) and forwards each line
+to syslog.
 
-Thanks, applied to master, after doing two tweaks. First,
-package/qt6/qt6base: as the prefix in the commit title (to match the
-real location of the package).
+[1] https://github.com/moby/moby/discussions/48260
+[2] https://github.com/moby/moby/blob/50c3d19179e69f9e7ff01f688c4dbf32c5129ced/contrib/init/sysvinit-debian/docker
 
-> diff --git a/package/qt6/qt6base/qt6base.mk b/package/qt6/qt6base/qt6base.mk
-> index 5ab61ba3e0..71dff3e672 100644
-> --- a/package/qt6/qt6base/qt6base.mk
-> +++ b/package/qt6/qt6base/qt6base.mk
-> @@ -10,6 +10,8 @@ QT6BASE_SOURCE = qtbase-$(QT6_SOURCE_TARBALL_PREFIX)-$(QT6BASE_VERSION).tar.xz
->  QT6BASE_CPE_ID_VENDOR = qt
->  QT6BASE_CPE_ID_PRODUCT = qt
->  
-> +QT6BASE_IGNORE_CVES += CVE-2024-39936
+Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/docker-engine/S60dockerd                | 8 ++++++--
+ package/docker-engine/docker-engine.mk          | 2 ++
+ package/docker-engine/dockerd-syslog-wrapper.sh | 4 ++++
+ 3 files changed, 12 insertions(+), 2 deletions(-)
 
-And second, after adding a comment above this line that clarifies why
-this CVE is ignored (just mentioning the patch file name is enough).
-
-Indeed, not all CVEs are ignored because we have patches. Sometimes, we
-ignore CVEs because they are irrelevant in the Buildroot context for
-example, in which case we have a comment that explains why.
-
-Thanks!
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/package/docker-engine/S60dockerd b/package/docker-engine/S60dockerd
+index aab50d84d4..dda6dc7474 100644
+--- a/package/docker-engine/S60dockerd
++++ b/package/docker-engine/S60dockerd
+@@ -10,10 +10,14 @@ DOCKERD_ARGS=""
+ 
+ start() {
+ 	printf 'Starting %s: ' "$DAEMON"
++	# Dockerd logs only to stdout/stderr, which is lost with
++	# --background. The wrapper script runs the given command
++	# (after "--", including dockerd) and forwards stdout/stderr
++	# to syslog.
+ 	# shellcheck disable=SC2086 # we need word splitting for DOCKERD_ARGS
+ 	start-stop-daemon --start --background --pidfile "$PIDFILE" \
+-		--exec "/usr/bin/$DAEMON" \
+-		-- --pidfile "$PIDFILE" $DOCKERD_ARGS
++		--exec /usr/libexec/dockerd-syslog-wrapper.sh \
++		-- "/usr/bin/$DAEMON" --pidfile "$PIDFILE" $DOCKERD_ARGS
+ 	status=$?
+ 	if [ "$status" -eq 0 ]; then
+ 		echo "OK"
+diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
+index c7c51c5ef5..268b851520 100644
+--- a/package/docker-engine/docker-engine.mk
++++ b/package/docker-engine/docker-engine.mk
+@@ -72,6 +72,8 @@ endef
+ define DOCKER_ENGINE_INSTALL_INIT_SYSV
+ 	$(INSTALL) -D -m 755 package/docker-engine/S60dockerd \
+ 		$(TARGET_DIR)/etc/init.d/S60dockerd
++	$(INSTALL) -D -m 755 package/docker-engine/dockerd-syslog-wrapper.sh \
++		$(TARGET_DIR)/usr/libexec/dockerd-syslog-wrapper.sh
+ endef
+ 
+ define DOCKER_ENGINE_USERS
+diff --git a/package/docker-engine/dockerd-syslog-wrapper.sh b/package/docker-engine/dockerd-syslog-wrapper.sh
+new file mode 100644
+index 0000000000..3d6a80a739
+--- /dev/null
++++ b/package/docker-engine/dockerd-syslog-wrapper.sh
+@@ -0,0 +1,4 @@
++#!/bin/sh
++"${@}" 2>&1 | while read -r LINE; do
++	logger -t "$(basename "${1}")" "$LINE";
++done
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
