@@ -1,68 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6CCAEC3DA7F
-	for <buildroot@archiver.kernel.org>; Thu, 15 Aug 2024 12:12:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01A97C3DA7F
+	for <buildroot@archiver.kernel.org>; Thu, 15 Aug 2024 12:37:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EFC1660A6B;
-	Thu, 15 Aug 2024 12:12:09 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bWlUTr8XwMS3; Thu, 15 Aug 2024 12:12:08 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 587CA60A70
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 587CA60A70;
-	Thu, 15 Aug 2024 12:12:08 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id DF12D1BF3E1
- for <buildroot@lists.busybox.net>; Thu, 15 Aug 2024 12:12:06 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CCC544073C
- for <buildroot@lists.busybox.net>; Thu, 15 Aug 2024 12:12:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 968E9401A2;
+	Thu, 15 Aug 2024 12:37:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fA5zsaRdgjlj for <buildroot@lists.busybox.net>;
- Thu, 15 Aug 2024 12:12:05 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=89.238.66.15;
- helo=helium.openadk.org; envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9B1BF40714
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9B1BF40714
-Received: from helium.openadk.org (helium.openadk.org [89.238.66.15])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 9B1BF40714
- for <buildroot@buildroot.org>; Thu, 15 Aug 2024 12:12:04 +0000 (UTC)
-Received: by helium.openadk.org (Postfix, from userid 1000)
- id E63763535BF0; Thu, 15 Aug 2024 14:12:00 +0200 (CEST)
-Date: Thu, 15 Aug 2024 14:12:00 +0200
-From: Waldemar Brodkorb <wbx@openadk.org>
-To: buildroot@buildroot.org
-Message-ID: <Zr3wkHvltQqq4L7Q@waldemar-brodkorb.de>
+ id E0RJhMBkytK2; Thu, 15 Aug 2024 12:36:59 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5A4FD401B4
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5A4FD401B4;
+	Thu, 15 Aug 2024 12:36:59 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B17711BF3E1
+ for <buildroot@lists.busybox.net>; Thu, 15 Aug 2024 12:36:58 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id AA16F80E94
+ for <buildroot@lists.busybox.net>; Thu, 15 Aug 2024 12:36:58 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id vxyv7q6QUOvW for <buildroot@lists.busybox.net>;
+ Thu, 15 Aug 2024 12:36:57 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.194;
+ helo=relay2-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 94A1080E3E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 94A1080E3E
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [217.70.183.194])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 94A1080E3E
+ for <buildroot@buildroot.org>; Thu, 15 Aug 2024 12:36:56 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id D1B0C40003;
+ Thu, 15 Aug 2024 12:36:53 +0000 (UTC)
+Date: Thu, 15 Aug 2024 14:36:52 +0200
+To: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
+Message-ID: <20240815143652.7265bd45@windsurf>
+In-Reply-To: <CA+R_deriCwom9cj5cYO3R4P9NXXJrHdCvYCTqzkH1UAAOCwdOA@mail.gmail.com>
+References: <20240815062841.1051418-1-roykollensvendsen@gmail.com>
+ <20240815094738.266ac1f9@windsurf>
+ <CA+R_deriCwom9cj5cYO3R4P9NXXJrHdCvYCTqzkH1UAAOCwdOA@mail.gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Disposition: inline
-X-Operating-System: Linux 5.10.0-31-amd64 x86_64
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=openadk.org; s=2022; 
- t=1723723920; bh=HXLKM9X6F6NQykRfsh7KUh4agGt9MCHW4oeMWdGw1ls=;
- h=Date:From:To:Subject:From;
- b=dDNt+jBoOMES5qgtn/oFFnesjfLVvFe2F+WHN/IznmGV2jJ9OnInKcyMaIVesTQan
- QRpAB7M8hmlrGukVwxHg5zPB5p0otM05MxGg0C1TqvWCLtLGVaVpH9xyMeWe4yFMI4
- 7g1UrVcHr9QNEWfqZP64/Cyp7a5TrfrTOQILr1pPwaQapFZt88e8uU00R41i5eycPj
- sup3ESmOl8H6AXSCOlLF5AuwXIxvXEoxj4975b4a0aFqYJjmAA3wz67RXYsjH8J5R6
- DvEIvFzhSwDPPqO9m3WS379vqbdctROZxEqXhy0HYKu2i7imU3AYtfz6xOjSxgw3gi
- SCyWWQmRL+CEA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=openadk.org
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1723725414;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=ZxgMoegCPiSiabZSY/7QgZGDkDpy4rBAH3Fgvrh0QKA=;
+ b=ODDGAjr8xp8X4AcSrAwr/DeX3b5UZh80BP6+HE/qmy8N1/bCQSc6cl3/lmUj3amC3KD0T3
+ dKApttTDUE7HV8ORFTAYujrcLfwKXYJEDmXbhwmI59tGF6Z+i8tARh3yC3ZQIBYdgQz6TG
+ usVx4Ds0WvU/Ptc1Es91YAcsfFr1eW91vDjXbWYwL1jtLmOGgVU1cWtqzNya376A8zhtyk
+ 50gDFxSqJT4KgDjyutgjFzCvcznnoPv4yFgxkeyndNKVj5Ho/nT9c1YWsaWdOwKk3jBJOp
+ ijSnbTGLkzoGYTxVRHaaNowPeJi3YrBx/zuAvO++07Abntj5hU9gXrTviBO56g==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=openadk.org header.i=@openadk.org header.a=rsa-sha256
- header.s=2022 header.b=dDNt+jBo
-Subject: [Buildroot] [PATCH] package/iproute2: fixup Upstream url
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=ODDGAjr8
+Subject: Re: [Buildroot] [PATCH 1/1] package/qt6base: fix CVE-2024-39936
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,37 +82,41 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Jesse Van Gavere <jesseevg@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
----
- ...ix-implicit-declaration-of-function-basename-in-gcc.patch | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+Hello Roy,
 
-diff --git a/package/iproute2/0002-Fix-implicit-declaration-of-function-basename-in-gcc.patch b/package/iproute2/0002-Fix-implicit-declaration-of-function-basename-in-gcc.patch
-index 7ebbb49816..ff1ddd144a 100644
---- a/package/iproute2/0002-Fix-implicit-declaration-of-function-basename-in-gcc.patch
-+++ b/package/iproute2/0002-Fix-implicit-declaration-of-function-basename-in-gcc.patch
-@@ -4,9 +4,12 @@ Date: Wed, 14 Aug 2024 19:43:44 +0200
- Subject: [PATCH] Fix implicit declaration of function basename in gcc-14.x
- 
- From Alpine Linux.
-+https://gitlab.alpinelinux.org/alpine/aports/-/blob/master/main/iproute2/basename.patch?ref_type=heads
-+
-+But also reported Upstream via netdev mailinglist by Gentoo people.
- 
- Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
--Upstream: https://gitlab.alpinelinux.org/alpine/aports/-/blob/master/main/iproute2/basename.patch?ref_type=heads
-+Upstream: https://marc.info/?l=linux-netdev&m=172278781323421&w=2
- ---
-  rdma/rdma.c | 3 +++
-  1 file changed, 3 insertions(+)
+On Thu, 15 Aug 2024 13:19:08 +0200
+Roy Kollen Svendsen <roykollensvendsen@gmail.com> wrote:
+
+> CVE-2024-36048-qtnetworkauth-6.7.diff:
+>   - Does not apply since we have not yet added a package for the
+> qtnetworkauth module.
+> 
+> CVE-2024-33861-qtbase-6.7.diff:
+>   - It is already in 6.7.2:
+>     $ git branch --contains 7c4e1357e49baebdd2d20710fccb5604cbb36c0d
+>       6.7.1
+>       6.7.2
+> 
+>   - As Jesse pointed out earlier the bugzilla report dos not mention 6.4.x:
+>     https://bugzilla.suse.com/show_bug.cgi?id=1223917
+> 
+>     The patch applies without warnings/errors to 6.4.3 though.
+
+ACK, thanks, makes sense!
+
+Thomas
 -- 
-2.30.2
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
