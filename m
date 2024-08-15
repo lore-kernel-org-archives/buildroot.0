@@ -4,48 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2628CC52D7C
-	for <buildroot@archiver.kernel.org>; Thu, 15 Aug 2024 12:53:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id ED893C3DA7F
+	for <buildroot@archiver.kernel.org>; Thu, 15 Aug 2024 12:54:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C278F408D8;
-	Thu, 15 Aug 2024 12:53:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AFB4F40711;
+	Thu, 15 Aug 2024 12:54:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NOuOBGuZBz80; Thu, 15 Aug 2024 12:53:47 +0000 (UTC)
+ id Y4E2S5Mm7kMD; Thu, 15 Aug 2024 12:54:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 45810409F7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8A9344083F
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 45810409F7;
-	Thu, 15 Aug 2024 12:53:46 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 76E0E1BF574
- for <buildroot@lists.busybox.net>; Thu, 15 Aug 2024 12:53:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8A9344083F;
+	Thu, 15 Aug 2024 12:54:01 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 0224D1BF574
+ for <buildroot@lists.busybox.net>; Thu, 15 Aug 2024 12:54:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 645784039D
- for <buildroot@lists.busybox.net>; Thu, 15 Aug 2024 12:53:41 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E38B34083F
+ for <buildroot@lists.busybox.net>; Thu, 15 Aug 2024 12:53:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VtGrf61XkJ0G for <buildroot@lists.busybox.net>;
- Thu, 15 Aug 2024 12:53:40 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id uLP7VxxPzf4t for <buildroot@lists.busybox.net>;
+ Thu, 15 Aug 2024 12:53:59 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.200;
+ helo=relay7-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2B3AC4026E
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2B3AC4026E
- for <buildroot@buildroot.org>; Thu, 15 Aug 2024 12:53:40 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 14FE285EA1; Thu, 15 Aug 2024 12:53:40 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 15 Aug 2024 14:53:25 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: fcfdfb276d1711577e8aca61a3f80d7439e2ae86
-X-Git-Newrev: ef5947774f04dbdf8edffb88b8688917cd6b71b2
-X-Patchwork-Hint: ignore
-Message-Id: <20240815125340.14FE285EA1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/docker-engine: rewrite
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org C1B8F40711
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C1B8F40711
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C1B8F40711
+ for <buildroot@buildroot.org>; Thu, 15 Aug 2024 12:53:58 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id C7AAB20002;
+ Thu, 15 Aug 2024 12:53:56 +0000 (UTC)
+Date: Thu, 15 Aug 2024 14:53:55 +0200
+To: Fiona Klute via buildroot <buildroot@buildroot.org>
+Message-ID: <20240815145355.718e6265@windsurf>
+In-Reply-To: <20240731181334.3717996-1-fiona.klute@gmx.de>
+References: <20240731181334.3717996-1-fiona.klute@gmx.de>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1723726437;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=Jwc/8DVnq4Lu1P7LGSMrB1HI0Md/oRbqHm1oZ3TsxOM=;
+ b=i903yzDuZHkVQ1hXnKNyRYmJOZso6Rov4QfiW+KfXLCKlDLefysoA11M+w4BiSGZl3rknd
+ 6Z1u1I3LO+9e1c1OT4eVgg+OZ5P4154ZQpo0R+T45r9hwzfEpyRyu7EEeYtAiYcqER9biW
+ 2ImkdCccD3xaYEeHZy3xydhlGf7Qn4ac1ZceHZDkCTeZKzW79kNupDiOT58a2KfTCatG9d
+ v9dVR2q7T8cSuH1WKy99VRCJGRUO7v4PAoobvYlM6OAzEODrVoS6hcS85DtHwlG066Q8tF
+ kF5P+XE3CgKrEE7/sI/phnVfHfUTCo9t0GETNMVleCGqvaNVVtxW3ycg6TCFlw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=i903yzDu
+Subject: Re: [Buildroot] [PATCH v2 1/2] package/docker-engine: rewrite
  dockerd init script
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -60,143 +83,36 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Fiona Klute <fiona.klute@gmx.de>, Christian Stewart <christian@aperture.us>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ef5947774f04dbdf8edffb88b8688917cd6b71b2
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On Wed, 31 Jul 2024 20:13:33 +0200
+Fiona Klute via buildroot <buildroot@buildroot.org> wrote:
 
-This brings the dockerd init script in line with the standard
-Buildroot init script pattern.
+> From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
+> 
+> This brings the dockerd init script in line with the standard
+> Buildroot init script pattern.
+> 
+> Reload using SIGHUP is also supported now, note that the Docker
+> documentation cautions that not all parameters can be changed at
+> runtime (without a full restart).
+> 
+> Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
+> ---
+> Changes v1 -> v2:
+> * drop wait loop for startup
 
-Reload using SIGHUP is also supported now, note that the Docker
-documentation cautions that not all parameters can be changed at
-runtime (without a full restart).
+Thanks, both patches applied to the next branch!
 
-Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- .checkpackageignore              |  1 -
- package/docker-engine/S60dockerd | 88 +++++++++++++++++++++++++++-------------
- 2 files changed, 59 insertions(+), 30 deletions(-)
-
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 203cfb4a2c..3580d49430 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -439,7 +439,6 @@ package/dmalloc/0004-Makefile-use-the-configure-detected-or-user-supplied.patch
- package/dmalloc/0005-configure-use-LD-instead-of-hard-coding-ld.patch lib_patch.Upstream
- package/dmraid/0001-fix-compilation-under-musl.patch lib_patch.Upstream
- package/dmraid/S20dmraid lib_sysv.Variables
--package/docker-engine/S60dockerd Shellcheck lib_sysv.Indent lib_sysv.Variables
- package/docopt-cpp/0001-only-build-one-target-use-BUILD_SHARED_LIBS-where-appropriate.patch lib_patch.Upstream
- package/domoticz/S99domoticz Shellcheck
- package/dovecot/0001-auth-Fix-handling-passdbs-with-identical-driver-args.patch lib_patch.Upstream
-diff --git a/package/docker-engine/S60dockerd b/package/docker-engine/S60dockerd
-index def8bea149..aab50d84d4 100644
---- a/package/docker-engine/S60dockerd
-+++ b/package/docker-engine/S60dockerd
-@@ -1,38 +1,68 @@
- #!/bin/sh
- 
--NAME=dockerd
--DAEMON=/usr/bin/$NAME
--PIDFILE=/var/run/$NAME.pid
--DAEMON_ARGS=""
--
--[ -r /etc/default/$NAME ] && . /etc/default/$NAME $1
--
--do_start() {
--        echo -n "Starting $NAME: "
--        start-stop-daemon --start --quiet --background --make-pidfile \
--		--pidfile $PIDFILE --exec $DAEMON -- $DAEMON_ARGS \
--                && echo "OK" || echo "FAIL"
-+DAEMON="dockerd"
-+PIDFILE="/var/run/$DAEMON.pid"
-+
-+DOCKERD_ARGS=""
-+
-+# shellcheck source=/dev/null
-+[ -r "/etc/default/$DAEMON" ] && . "/etc/default/$DAEMON"
-+
-+start() {
-+	printf 'Starting %s: ' "$DAEMON"
-+	# shellcheck disable=SC2086 # we need word splitting for DOCKERD_ARGS
-+	start-stop-daemon --start --background --pidfile "$PIDFILE" \
-+		--exec "/usr/bin/$DAEMON" \
-+		-- --pidfile "$PIDFILE" $DOCKERD_ARGS
-+	status=$?
-+	if [ "$status" -eq 0 ]; then
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+	fi
-+	return "$status"
-+}
-+
-+stop() {
-+	printf 'Stopping %s: ' "$DAEMON"
-+	start-stop-daemon --stop --pidfile "$PIDFILE" --exec "/usr/bin/$DAEMON"
-+	status=$?
-+	if [ "$status" -eq 0 ]; then
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+		return "$status"
-+	fi
-+	while start-stop-daemon --stop --test --quiet --pidfile "$PIDFILE" \
-+		--exec "/usr/bin/$DAEMON"; do
-+		sleep 0.1
-+	done
-+	rm -f "$PIDFILE"
-+	return "$status"
-+}
-+
-+restart() {
-+	stop
-+	start
- }
- 
--do_stop() {
--        echo -n "Stopping $NAME: "
--        start-stop-daemon --stop --quiet --pidfile $PIDFILE \
--                && echo "OK" || echo "FAIL"
-+reload() {
-+	printf "Reloading %s config: " "$DAEMON"
-+	start-stop-daemon --stop --signal HUP -q --pidfile "$PIDFILE" \
-+		--exec "/usr/bin/$DAEMON"
-+	status=$?
-+	if [ "$status" -eq 0 ]; then
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+	fi
-+	return "$status"
- }
- 
- case "$1" in
--        start)
--                do_start
--                ;;
--        stop)
--                do_stop
--                ;;
--        restart)
--                do_stop
--                sleep 1
--                do_start
--                ;;
-+	start|stop|restart|reload)
-+		"$1";;
- 	*)
--                echo "Usage: $0 {start|stop|restart}"
--                exit 1
-+		echo "Usage: $0 {start|stop|restart|reload}"
-+		exit 1
- esac
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
