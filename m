@@ -4,49 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8B53EE6FE47
-	for <buildroot@archiver.kernel.org>; Fri,  6 Sep 2024 20:02:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95DE6E6FE46
+	for <buildroot@archiver.kernel.org>; Fri,  6 Sep 2024 20:02:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5937684784;
-	Fri,  6 Sep 2024 20:02:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6010A84371;
+	Fri,  6 Sep 2024 20:02:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AuPs858sBnJv; Fri,  6 Sep 2024 20:02:09 +0000 (UTC)
+ id vmKbzhhy9YI8; Fri,  6 Sep 2024 20:02:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B5EC384758
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C9FED8179A
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B5EC384758;
-	Fri,  6 Sep 2024 20:02:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C9FED8179A;
+	Fri,  6 Sep 2024 20:02:11 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 820991BF37F
- for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 19:59:18 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2D9121BF20B
+ for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 19:59:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CFA5C60781
+ by smtp3.osuosl.org (Postfix) with ESMTP id EDA376111D
  for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 19:58:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LU249BWRduNP for <buildroot@lists.busybox.net>;
- Fri,  6 Sep 2024 19:58:55 +0000 (UTC)
+ id zaYtxZ1wpUrX for <buildroot@lists.busybox.net>;
+ Fri,  6 Sep 2024 19:58:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 29B386066B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 76EA66078B
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 29B386066B
+ by smtp3.osuosl.org (Postfix) with ESMTP id 76EA66078B
  for <buildroot@buildroot.org>; Fri,  6 Sep 2024 19:58:54 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2069B86EE1; Fri,  6 Sep 2024 19:58:54 +0000 (UTC)
+ id 7410286EE3; Fri,  6 Sep 2024 19:58:54 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 15 Aug 2024 14:53:28 +0200
+Date: Thu, 15 Aug 2024 22:06:02 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ef5947774f04dbdf8edffb88b8688917cd6b71b2
-X-Git-Newrev: 65c8e4c65168b6c17af1e797252693e4190c934f
+X-Git-Oldrev: 5598920390da361b0bea4d07e2c05eb8b0d69ea6
+X-Git-Newrev: ff7787eadfc116f59a1f73cae8c47065810cb9d5
 X-Patchwork-Hint: ignore
-Message-Id: <20240906195854.2069B86EE1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/docker-engine: add wrapper script
- for logging to syslog
+Message-Id: <20240906195854.7410286EE3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] Revert "rsyslog: not available on musl"
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -61,79 +60,61 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============0215711139402768085=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=65c8e4c65168b6c17af1e797252693e4190c934f
+--===============0215711139402768085==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=ff7787eadfc116f59a1f73cae8c47065810cb9d5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Dockerd logs only to stdout/stderr [1], which is lost with
---background. The upstream SysV init script [2] logs to a file by
-passing --no-close to start-stop-daemon and redirecting the output,
-but that option is not supported by Busybox' start-stop-daemon.
+This reverts commit cea81b6925de166e2fd2c75a51aea94420f7f06a.
 
-The wrapper script added with this commit captures the output of
-dockerd (or whatever other command it is given) and forwards each line
-to syslog.
+rsyslog now builds successfully with musl
 
-[1] https://github.com/moby/moby/discussions/48260
-[2] https://github.com/moby/moby/blob/50c3d19179e69f9e7ff01f688c4dbf32c5129ced/contrib/init/sysvinit-debian/docker
-
-Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
+Signed-off-by: Konstantin Menyaev <KAMenyaev@salutedevices.com>
+Signed-off-by: Flávio Tapajós <flavio.tapajos@newtesc.com.br>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/docker-engine/S60dockerd                | 8 ++++++--
- package/docker-engine/docker-engine.mk          | 2 ++
- package/docker-engine/dockerd-syslog-wrapper.sh | 4 ++++
- 3 files changed, 12 insertions(+), 2 deletions(-)
+ package/rsyslog/Config.in | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/package/docker-engine/S60dockerd b/package/docker-engine/S60dockerd
-index aab50d84d4..dda6dc7474 100644
---- a/package/docker-engine/S60dockerd
-+++ b/package/docker-engine/S60dockerd
-@@ -10,10 +10,14 @@ DOCKERD_ARGS=""
+diff --git a/package/rsyslog/Config.in b/package/rsyslog/Config.in
+index 3ba326191a..d9e8b1ab6f 100644
+--- a/package/rsyslog/Config.in
++++ b/package/rsyslog/Config.in
+@@ -3,7 +3,6 @@ config BR2_PACKAGE_RSYSLOG
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_USE_MMU # fork()
+ 	depends on !BR2_STATIC_LIBS # modules
+-	depends on !BR2_TOOLCHAIN_USES_MUSL # GLOB_BRACE
+ 	# Propagate the exact same dependency from libfastjson,
+ 	# even though rsyslog already depends on threads for itself:
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || BR2_TOOLCHAIN_HAS_THREADS
+@@ -18,9 +17,8 @@ config BR2_PACKAGE_RSYSLOG
  
- start() {
- 	printf 'Starting %s: ' "$DAEMON"
-+	# Dockerd logs only to stdout/stderr, which is lost with
-+	# --background. The wrapper script runs the given command
-+	# (after "--", including dockerd) and forwards stdout/stderr
-+	# to syslog.
- 	# shellcheck disable=SC2086 # we need word splitting for DOCKERD_ARGS
- 	start-stop-daemon --start --background --pidfile "$PIDFILE" \
--		--exec "/usr/bin/$DAEMON" \
--		-- --pidfile "$PIDFILE" $DOCKERD_ARGS
-+		--exec /usr/libexec/dockerd-syslog-wrapper.sh \
-+		-- "/usr/bin/$DAEMON" --pidfile "$PIDFILE" $DOCKERD_ARGS
- 	status=$?
- 	if [ "$status" -eq 0 ]; then
- 		echo "OK"
-diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
-index c7c51c5ef5..268b851520 100644
---- a/package/docker-engine/docker-engine.mk
-+++ b/package/docker-engine/docker-engine.mk
-@@ -72,6 +72,8 @@ endef
- define DOCKER_ENGINE_INSTALL_INIT_SYSV
- 	$(INSTALL) -D -m 755 package/docker-engine/S60dockerd \
- 		$(TARGET_DIR)/etc/init.d/S60dockerd
-+	$(INSTALL) -D -m 755 package/docker-engine/dockerd-syslog-wrapper.sh \
-+		$(TARGET_DIR)/usr/libexec/dockerd-syslog-wrapper.sh
- endef
+ 	  http://www.rsyslog.com
  
- define DOCKER_ENGINE_USERS
-diff --git a/package/docker-engine/dockerd-syslog-wrapper.sh b/package/docker-engine/dockerd-syslog-wrapper.sh
-new file mode 100644
-index 0000000000..3d6a80a739
---- /dev/null
-+++ b/package/docker-engine/dockerd-syslog-wrapper.sh
-@@ -0,0 +1,4 @@
-+#!/bin/sh
-+"${@}" 2>&1 | while read -r LINE; do
-+	logger -t "$(basename "${1}")" "$LINE";
-+done
+-comment "rsyslog needs a uClibc or glibc toolchain w/ threads, dynamic library"
++comment "rsyslog needs a toolchain w/ threads, dynamic library"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS \
+-		|| BR2_TOOLCHAIN_USES_MUSL
++	depends on !BR2_TOOLCHAIN_HAS_THREADS || BR2_STATIC_LIBS
+ 	depends on BR2_PACKAGE_BUSYBOX_SHOW_OTHERS
+
+--===============0215711139402768085==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============0215711139402768085==--
