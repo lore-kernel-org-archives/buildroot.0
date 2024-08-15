@@ -4,72 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 230E9C52D7D
-	for <buildroot@archiver.kernel.org>; Thu, 15 Aug 2024 08:58:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 506BCC3DA7F
+	for <buildroot@archiver.kernel.org>; Thu, 15 Aug 2024 09:02:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CB67D60A8A;
-	Thu, 15 Aug 2024 08:58:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 12C8760726;
+	Thu, 15 Aug 2024 09:02:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id C7uyMox3M2LT; Thu, 15 Aug 2024 08:58:33 +0000 (UTC)
+ id y2bR7UGMFzyr; Thu, 15 Aug 2024 09:02:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5FADC60A43
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1BA5460A43
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5FADC60A43;
-	Thu, 15 Aug 2024 08:58:33 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E44FA1BF2B6
- for <buildroot@lists.busybox.net>; Thu, 15 Aug 2024 08:58:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1BA5460A43;
+	Thu, 15 Aug 2024 09:02:38 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 0066C1BF2B6
+ for <buildroot@lists.busybox.net>; Thu, 15 Aug 2024 09:02:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C793A81E8D
- for <buildroot@lists.busybox.net>; Thu, 15 Aug 2024 08:58:28 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id E27C260726
+ for <buildroot@lists.busybox.net>; Thu, 15 Aug 2024 09:02:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TgBPtYXhF5Fj for <buildroot@lists.busybox.net>;
- Thu, 15 Aug 2024 08:58:27 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
- helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8oR5Pe-kfES4 for <buildroot@lists.busybox.net>;
+ Thu, 15 Aug 2024 09:02:35 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 142C581E8B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 142C581E8B
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 142C581E8B
- for <buildroot@buildroot.org>; Thu, 15 Aug 2024 08:58:26 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 51895FF802;
- Thu, 15 Aug 2024 08:58:25 +0000 (UTC)
-Date: Thu, 15 Aug 2024 10:58:24 +0200
-To: "J. =?UTF-8?B?TmV1c2Now6RmZXI=?= via buildroot" <buildroot@buildroot.org>
-Message-ID: <20240815105824.37914b70@windsurf>
-In-Reply-To: <20240811-s6-multicall-v2-0-14249fd20cbd@gmx.net>
-References: <20240811-s6-multicall-v2-0-14249fd20cbd@gmx.net>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1723712305;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=a9cruItajIlF23do1E5iBAIerRya0qV/bBAZp7ajIu8=;
- b=J5baqyyy6nTvg7RX1nyTUeCCHlYdnPWbdXf0RIPVVYIZ8uF0JWYYrb6fUAuJAEbOXnWYnS
- ao5hHMe+FjRzpEFbkk+d9M1cSO6Br71TUMXpNF1h1k7BnIEc2Bxm6OyAHwRI1v0CbqHykg
- mFJCsXjmHlernH38r3Yd8ZVY23sqZYax3nD7vHb75jZ/CUgqJ/TROi74LZJPzlOllwILfn
- r3y8QCQp5SnqWrbocEacJDBBf2RJwodlS/1pvebFmB5urre1ykFjqMDVKKitx310kDUfyF
- av45Zoh787+mXIzZlE42wcirI4d7u763IL3pR9xrx/Dkr3AUxJAufelaYZCElQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=J5baqyyy
-Subject: Re: [Buildroot] [PATCH v2 0/4] Optionally build some skarnet.org
- packages as multicall binaries
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 809EB60A43
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 809EB60A43
+ for <buildroot@buildroot.org>; Thu, 15 Aug 2024 09:02:35 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 795BD85E49; Thu, 15 Aug 2024 09:02:35 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Thu, 15 Aug 2024 11:02:12 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: f7eabe00058013c2135a4084fd622b2e1c511ff3
+X-Git-Newrev: fd88b0104fd0e0e39edf80518f3454d94f671405
+X-Patchwork-Hint: ignore
+Message-Id: <20240815090235.795BD85E49@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/microchip_mpfs_icicle: update
+ custom tarballs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,23 +60,71 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
- "J. =?UTF-8?B?TmV1c2Now6RmZXI=?=" <j.neuschaefer@gmx.net>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gU3VuLCAxMSBBdWcgMjAyNCAxMjowMToxMCArMDIwMApKLiBOZXVzY2jDpGZlciB2aWEgYnVp
-bGRyb290IDxidWlsZHJvb3RAYnVpbGRyb290Lm9yZz4gd3JvdGU6Cgo+IEouIE5ldXNjaMOkZmVy
-ICg0KToKPiAgICAgICBwYWNrYWdlL2V4ZWNsaW5lOiBBZGQgb3B0aW9uIHRvIGJ1aWxkIG11bHRp
-Y2FsbCBiaW5hcnkKPiAgICAgICBwYWNrYWdlL3M2LXBvcnRhYmxlLXV0aWxzOiBBZGQgb3B0aW9u
-IHRvIGJ1aWxkIG11bHRpY2FsbCBiaW5hcnkKPiAgICAgICBwYWNrYWdlL3M2LWxpbnV4LXV0aWxz
-OiBBZGQgb3B0aW9uIHRvIGJ1aWxkIG11bHRpY2FsbCBiaW5hcnkKPiAgICAgICBERVZFTE9QRVJT
-OiBBZGQgc2thcm5ldC5vcmcgcGFja2FnZXMgdG8gSi4gTmV1c2Now6RmZXIncyBlbnRyeQoKVGhh
-bmtzLCBzZXJpZXMgYXBwbGllZCB0byBuZXh0IQoKVGhvbWFzCi0tIApUaG9tYXMgUGV0YXp6b25p
-LCBjby1vd25lciBhbmQgQ0VPLCBCb290bGluCkVtYmVkZGVkIExpbnV4IGFuZCBLZXJuZWwgZW5n
-aW5lZXJpbmcgYW5kIHRyYWluaW5nCmh0dHBzOi8vYm9vdGxpbi5jb20KX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApi
-dWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1h
-bi9saXN0aW5mby9idWlsZHJvb3QK
+commit: https://git.buildroot.net/buildroot/commit/?id=fd88b0104fd0e0e39edf80518f3454d94f671405
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+The Linux kernel and U-Boot custom tarballs were updated incorrectly
+in commit 45db64545742. Update these to select specific release tags
+instead of branches. Update the U-Boot and Linux hashes to match
+these changes.
+
+Fixes: 45db64545742 ("configs/microchip_mpfs_icicle: bump Linux and
+U-Boot, add hashes")
+
+Signed-off-by: Jamie Gibbons <jamie.gibbons@microchip.com>
+Tested-by: Prajna Rajendra Kumar <prajna.rajendrakumar@microchip.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ board/microchip/mpfs_icicle/patches/linux/linux.hash | 2 +-
+ board/microchip/mpfs_icicle/patches/uboot/uboot.hash | 2 +-
+ configs/microchip_mpfs_icicle_defconfig              | 4 ++--
+ 3 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/board/microchip/mpfs_icicle/patches/linux/linux.hash b/board/microchip/mpfs_icicle/patches/linux/linux.hash
+index 025d630f7d..416a8b1550 100644
+--- a/board/microchip/mpfs_icicle/patches/linux/linux.hash
++++ b/board/microchip/mpfs_icicle/patches/linux/linux.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  a45642bd69b11d9312c15faac67fbd15b0ef90a6d90662d18c0760e37165c7cc  linux4microchip+fpga-2024.06.tar.gz
++sha256  dcb7b41fd363729675c34545fcb514d5a94dbb3714ee10f527a26ca7716c2579  linux-linux4microchip+fpga-2024.06.tar.gz
+diff --git a/board/microchip/mpfs_icicle/patches/uboot/uboot.hash b/board/microchip/mpfs_icicle/patches/uboot/uboot.hash
+index ddb73b9a71..2628d4b4fd 100644
+--- a/board/microchip/mpfs_icicle/patches/uboot/uboot.hash
++++ b/board/microchip/mpfs_icicle/patches/uboot/uboot.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  5d9bcbebe9723ab12cbf2b60277268741e84e4aadbe7ecd8c05be046f202d8a1  linux4microchip+fpga-2024.06.tar.gz
++sha256  d461c45a9c5acd019776cdcf8ab2b571315282a880dd6580431f7dd5bfac3889  uboot-linux4microchip+fpga-2024.06.tar.gz
+diff --git a/configs/microchip_mpfs_icicle_defconfig b/configs/microchip_mpfs_icicle_defconfig
+index 30d07550ac..4337ac34b4 100644
+--- a/configs/microchip_mpfs_icicle_defconfig
++++ b/configs/microchip_mpfs_icicle_defconfig
+@@ -7,7 +7,7 @@ BR2_TARGET_GENERIC_HOSTNAME="mpfs_icicle"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/microchip/mpfs_icicle/post-image.sh"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4microchip,linux,linux-6.6-mchp+fpga)/linux4microchip+fpga-2024.06.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,linux4microchip,linux,linux4microchip+fpga-2024.06)/linux-linux4microchip+fpga-2024.06.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="mpfs"
+ BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/microchip/mpfs_icicle/linux.fragment"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+@@ -17,7 +17,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,linux4microchip,u-boot-mchp,u-boot-2023.07-mchp)/linux4microchip+fpga-2024.06.tar.gz"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,linux4microchip,u-boot-mchp,linux4microchip+fpga-2024.06)/uboot-linux4microchip+fpga-2024.06.tar.gz"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="microchip_mpfs_icicle"
+ BR2_TARGET_UBOOT_CONFIG_FRAGMENT_FILES="board/microchip/mpfs_icicle/uboot-fragment-rootfs.config"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
