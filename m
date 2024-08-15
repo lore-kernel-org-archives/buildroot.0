@@ -4,70 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9BDF8C3DA7F
-	for <buildroot@archiver.kernel.org>; Thu, 15 Aug 2024 07:23:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60C9CC3DA7F
+	for <buildroot@archiver.kernel.org>; Thu, 15 Aug 2024 07:47:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 531FB400B5;
-	Thu, 15 Aug 2024 07:23:06 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id ECFD2400B5;
+	Thu, 15 Aug 2024 07:47:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NWPCwsNmhjZC; Thu, 15 Aug 2024 07:23:05 +0000 (UTC)
+ id flL8qgdeJNi2; Thu, 15 Aug 2024 07:47:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0650B40375
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 919F240485
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0650B40375;
-	Thu, 15 Aug 2024 07:23:05 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id CDCBB1BF5A9
- for <buildroot@lists.busybox.net>; Thu, 15 Aug 2024 07:23:03 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 919F240485;
+	Thu, 15 Aug 2024 07:47:44 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id CC86A1BF5A9
+ for <buildroot@lists.busybox.net>; Thu, 15 Aug 2024 07:47:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C82E8402C4
- for <buildroot@lists.busybox.net>; Thu, 15 Aug 2024 07:23:03 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id BB23A805A2
+ for <buildroot@lists.busybox.net>; Thu, 15 Aug 2024 07:47:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xs_nc9JCPASw for <buildroot@lists.busybox.net>;
- Thu, 15 Aug 2024 07:23:02 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1828:2000:679::23; helo=helium.openadk.org;
- envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 1D6D3402A9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1D6D3402A9
-Received: from helium.openadk.org (helium.openadk.org
- [IPv6:2a00:1828:2000:679::23])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1D6D3402A9
- for <buildroot@buildroot.org>; Thu, 15 Aug 2024 07:23:01 +0000 (UTC)
-Received: by helium.openadk.org (Postfix, from userid 1000)
- id 915D63535C10; Thu, 15 Aug 2024 09:22:59 +0200 (CEST)
-Date: Thu, 15 Aug 2024 09:22:59 +0200
-From: Waldemar Brodkorb <wbx@openadk.org>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Message-ID: <Zr2s0yK7LbaHn+Uq@waldemar-brodkorb.de>
-References: <Zrz+JUwTsNaKI8sK@waldemar-brodkorb.de>
- <20240814221950.458101ad@windsurf>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id a9qSjOIWm_JA for <buildroot@lists.busybox.net>;
+ Thu, 15 Aug 2024 07:47:42 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.196;
+ helo=relay4-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9AB6B8058F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9AB6B8058F
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 9AB6B8058F
+ for <buildroot@buildroot.org>; Thu, 15 Aug 2024 07:47:41 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 965F0E0002;
+ Thu, 15 Aug 2024 07:47:39 +0000 (UTC)
+Date: Thu, 15 Aug 2024 09:47:38 +0200
+To: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
+Message-ID: <20240815094738.266ac1f9@windsurf>
+In-Reply-To: <20240815062841.1051418-1-roykollensvendsen@gmail.com>
+References: <20240815062841.1051418-1-roykollensvendsen@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20240814221950.458101ad@windsurf>
-X-Operating-System: Linux 5.10.0-31-amd64 x86_64
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=openadk.org; s=2022; 
- t=1723706579; bh=ckHpmnbpEcSwJzkI4n3dR1ge8RdVfumhmNqtFNPuh2E=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=dW/nBcActXDMfGqyzab32RhpRK9GjHGc3pwoBKLrYpTpLWl4Tav0QN0kt0/UkEXrJ
- Ers5gN8yDu4ZncHnVeiC+7RPhZL6e2Z3Fh40cXMpUtFHGcebOQCeqYKtMFVDsRHQib
- yJYNbli5KVNBxesiLwsqh6uPh7T9oNzEXJQ9YI5bpP+z3Eut6vyfSrSrSYhX/H/KGs
- LzFS4Dw1wY34gnRH6x6n1wu4QinN9t9fX4BXEdcgMynOgHSJh6bzL/bz6ODIPzZogd
- F5+ZsejW9lNy2jnN73k3TfQgnZ3DtyzFnVmzTlH0Za3FSoGiJQHwA4Rj346NHfkHLs
- oM4DNT+TZDHug==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=openadk.org
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1723708059;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=TvRMwP1PZ5UfdQHjfPlqOJTkoZg3JcL6JaPV8hrg4vE=;
+ b=lMbun6Wmbz18rovYCg8XEsgR/GzzbeYp4nced/vh2XPnx+qmQdzQRnLXSOjkX9ui7goT6e
+ UOp57r4kH8Ki2gTUxsBB34389OdcjCJABk2p/YLiNVIW3dx0/4+QyqnYtXfDBCZYXHzeNc
+ VTVhL1BWyYxgr2fLiSP62C+9ytE8EBjjKSpDsB2modC2MWOLDx8Ozg/aopcnCmCFxNO1M4
+ mYGWxU0eo3aUsv3mWEwIx0iDqCrbgMiJRmq4aoMVm/gyiR+t6TrAnqKWhNlkFjZPNQaizl
+ DlNFlrFgEJXG7a/GxMGeNCAz7t+1yIsto1zbNfxzE7RMH96CoLnT/lJ84K184Q==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=openadk.org header.i=@openadk.org header.a=rsa-sha256
- header.s=2022 header.b=dW/nBcAc
-Subject: Re: [Buildroot] [PATCH] package/iproute2: fix musl compile errors
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=lMbun6Wm
+Subject: Re: [Buildroot] [PATCH 1/1] package/qt6base: fix CVE-2024-39936
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,66 +80,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Jesse Van Gavere <jesseevg@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Thomas,
-Thomas Petazzoni wrote,
+Hello Roy,
 
-> Hello Waldemar,
-> 
-> I've applied to master, but I have a couple of nitpicks, and one real
-> request.
-> 
-> On Wed, 14 Aug 2024 20:57:41 +0200
-> Waldemar Brodkorb <wbx@openadk.org> wrote:
-> 
-> > Add two patches to fix musl compile errors.
-> > 
-> > Fixes:
-> >  - http://autobuild.buildroot.net/results/8d7/8d713bd911f8d6b97272a7bb5dc2c188aeb99b05
->                                             ^^^^ you can drop this part of the URL
-> 
-> Also, there should be an empty line *before* the Signed-off-by line.
-> 
-> > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> > ---
-> >  ...laration-of-function-htobe64-in-gcc-.patch | 43 +++++++++++++++++++
-> >  ...laration-of-function-basename-in-gcc.patch | 30 +++++++++++++
-> >  2 files changed, 73 insertions(+)
-> >  create mode 100644 package/iproute2/0001-Fix-implicit-declaration-of-function-htobe64-in-gcc-.patch
-> >  create mode 100644 package/iproute2/0002-Fix-implicit-declaration-of-function-basename-in-gcc.patch
-> > +From Alpine Linux.
-> > +
-> > +Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> > +Upstream: https://gitlab.alpinelinux.org/alpine/aports/-/blob/master/main/iproute2/basename.patch?ref_type=heads
-> 
-> This really isn't an "Upstream:" URL, it's really a "downstream" thing.
-> Indeed, what we want to see is patches submitted to the upstream
-> project, so that at some point in the future, we can drop them from
-> Buildroot.
-> 
-> So could you submit this patch to the upstream iproute2 project, and
-> then updated the link in this patch?
-> 
-> "man 3 basename" says <libgen.h> should be included for get the
-> prototype for basename(), so it shouldn't be too difficult to convince
-> upstream that it's the right thing to do, and not just a musl-related
-> fix.
-> 
-> Thanks a lot!
+On Thu, 15 Aug 2024 08:28:39 +0200
+Roy Kollen Svendsen <roykollensvendsen@gmail.com> wrote:
 
-It seems the Gentoo People already reported it upstream:
-https://marc.info/?l=linux-netdev&w=2&r=1&s=musl&q=b
+> Fixes:
+> https://security-tracker.debian.org/tracker/CVE-2024-39936
+> 
+> Got patch from:
+> https://download.qt.io/official_releases/qt/6.7/CVE-2024-39936-qtbase-6.7.patch
+> 
+> Signed-off-by: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
 
-Would you like to update to this link or wait until the commits are
-upstream in git?
+Thanks for the fix, but I actually have a request, see below.
 
-best regards
- Waldemar
+> diff --git a/package/qt6/qt6base/0001-fix-CVE-2024-39936.patch b/package/qt6/qt6base/0001-fix-CVE-2024-39936.patch
+> new file mode 100644
+> index 0000000000..1d11eb9fd9
+> --- /dev/null
+> +++ b/package/qt6/qt6base/0001-fix-CVE-2024-39936.patch
+> @@ -0,0 +1,155 @@
+> +From 627617b002a34a9a0a63bcd9529c655e93d6246e Mon Sep 17 00:00:00 2001
+> +From: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
+
+The patch is not from you. I know the patch
+at https://download.qt.io/official_releases/qt/6.7/CVE-2024-39936-qtbase-6.7.patch
+does not have any author information (which is kind of crappy from the
+Qt people), but it would be really really better to use the real
+upstream patch. So instead, could you cherry
+pick https://github.com/qt/qtbase/commit/2b1e36e183ce75c224305c7a94457b92f7a5cf58,
+adding the Upstream: link and your Signed-off-by ?
+
+Another question: in https://download.qt.io/official_releases/qt/6.7/,
+I see two other patches for CVEs. Do we want them?
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
