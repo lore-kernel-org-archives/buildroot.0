@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E6EE1C3DA7F
-	for <buildroot@archiver.kernel.org>; Thu, 15 Aug 2024 12:49:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A2292C52D7D
+	for <buildroot@archiver.kernel.org>; Thu, 15 Aug 2024 12:49:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8937340292;
-	Thu, 15 Aug 2024 12:49:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6E2DE409F6;
+	Thu, 15 Aug 2024 12:49:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id egTAzkU7P-BT; Thu, 15 Aug 2024 12:49:49 +0000 (UTC)
+ id c2hVMtC-6VMY; Thu, 15 Aug 2024 12:49:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3F2C740335
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EA99340B35
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3F2C740335;
-	Thu, 15 Aug 2024 12:49:49 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0F6771BF574
+	by smtp4.osuosl.org (Postfix) with ESMTP id EA99340B35;
+	Thu, 15 Aug 2024 12:49:51 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 1B27C1BF98E
  for <buildroot@lists.busybox.net>; Thu, 15 Aug 2024 12:49:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id F1C5C4044B
- for <buildroot@lists.busybox.net>; Thu, 15 Aug 2024 12:49:47 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 07D7740335
+ for <buildroot@lists.busybox.net>; Thu, 15 Aug 2024 12:49:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lPwTdzE8cA4S for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UKXerZokXuNT for <buildroot@lists.busybox.net>;
  Thu, 15 Aug 2024 12:49:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EA6F24026E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0207E40292
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id EA6F24026E
- for <buildroot@buildroot.org>; Thu, 15 Aug 2024 12:49:46 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0207E40292
+ for <buildroot@buildroot.org>; Thu, 15 Aug 2024 12:49:47 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D8861817AD; Thu, 15 Aug 2024 12:49:46 +0000 (UTC)
+ id EE10085E85; Thu, 15 Aug 2024 12:49:46 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 15 Aug 2024 14:49:05 +0200
+Date: Thu, 15 Aug 2024 14:49:25 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 48e7affffa06bbe23a1cd190d0a765956cf179b0
-X-Git-Newrev: c810fb6e1157656e03e982db68230a7a2e500b19
+X-Git-Oldrev: c810fb6e1157656e03e982db68230a7a2e500b19
+X-Git-Newrev: 8f31fea6d038c3390ab480e4c27837b8c720597b
 X-Patchwork-Hint: ignore
-Message-Id: <20240815124946.D8861817AD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/iproute2: fixup Upstream url
+Message-Id: <20240815124946.EE10085E85@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/nginx: security update to 1.26.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,33 +65,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c810fb6e1157656e03e982db68230a7a2e500b19
+commit: https://git.buildroot.net/buildroot/commit/?id=8f31fea6d038c3390ab480e4c27837b8c720597b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Changes with nginx 1.26.2                              14 Aug 2024
+
+    *) Security: processing of a specially crafted mp4 file by the
+       ngx_http_mp4_module might cause a worker process crash
+       (CVE-2024-7347).
+       Thanks to Nils Bars.
 
 Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../0002-Fix-implicit-declaration-of-function-basename-in-gcc.patch  | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ package/nginx/nginx.hash | 2 +-
+ package/nginx/nginx.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/iproute2/0002-Fix-implicit-declaration-of-function-basename-in-gcc.patch b/package/iproute2/0002-Fix-implicit-declaration-of-function-basename-in-gcc.patch
-index 7ebbb49816..3bce4b15bb 100644
---- a/package/iproute2/0002-Fix-implicit-declaration-of-function-basename-in-gcc.patch
-+++ b/package/iproute2/0002-Fix-implicit-declaration-of-function-basename-in-gcc.patch
-@@ -4,9 +4,12 @@ Date: Wed, 14 Aug 2024 19:43:44 +0200
- Subject: [PATCH] Fix implicit declaration of function basename in gcc-14.x
+diff --git a/package/nginx/nginx.hash b/package/nginx/nginx.hash
+index 0b45f96a45..4cf859dadc 100644
+--- a/package/nginx/nginx.hash
++++ b/package/nginx/nginx.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after checking pgp signature
+-sha256  f9187468ff2eb159260bfd53867c25ff8e334726237acf227b9e870e53d3e36b  nginx-1.26.1.tar.gz
++sha256  627fe086209bba80a2853a0add9d958d7ebbdffa1a8467a5784c9a6b4f03d738  nginx-1.26.2.tar.gz
+ # License files, locally calculated
+ sha256  f19c4caea60247490199c5a6d0134281e3fb20b3d7577e6873c628597f5381d9  LICENSE
+diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
+index e63acc7b16..d3b042c59b 100644
+--- a/package/nginx/nginx.mk
++++ b/package/nginx/nginx.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- From Alpine Linux.
-+https://gitlab.alpinelinux.org/alpine/aports/-/blob/master/main/iproute2/basename.patch?ref_type=heads
-+
-+But also reported Upstream via netdev mailinglist by Gentoo people.
- 
- Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
--Upstream: https://gitlab.alpinelinux.org/alpine/aports/-/blob/master/main/iproute2/basename.patch?ref_type=heads
-+Upstream: https://marc.info/?l=linux-netdev&m=172278781323421&w=2
- ---
-  rdma/rdma.c | 3 +++
-  1 file changed, 3 insertions(+)
+-NGINX_VERSION = 1.26.1
++NGINX_VERSION = 1.26.2
+ NGINX_SITE = https://nginx.org/download
+ NGINX_LICENSE = BSD-2-Clause
+ NGINX_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
