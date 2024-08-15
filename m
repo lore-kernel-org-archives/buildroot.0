@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4FB21C3DA7F
-	for <buildroot@archiver.kernel.org>; Thu, 15 Aug 2024 12:53:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2628CC52D7C
+	for <buildroot@archiver.kernel.org>; Thu, 15 Aug 2024 12:53:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1670740711;
-	Thu, 15 Aug 2024 12:53:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C278F408D8;
+	Thu, 15 Aug 2024 12:53:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HXUKNA-88bQF; Thu, 15 Aug 2024 12:53:44 +0000 (UTC)
+ id NOuOBGuZBz80; Thu, 15 Aug 2024 12:53:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C792D40824
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 45810409F7
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C792D40824;
-	Thu, 15 Aug 2024 12:53:43 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5868B1BF574
+	by smtp4.osuosl.org (Postfix) with ESMTP id 45810409F7;
+	Thu, 15 Aug 2024 12:53:46 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 76E0E1BF574
  for <buildroot@lists.busybox.net>; Thu, 15 Aug 2024 12:53:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 453F440824
+ by smtp2.osuosl.org (Postfix) with ESMTP id 645784039D
  for <buildroot@lists.busybox.net>; Thu, 15 Aug 2024 12:53:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LOR5Ijd0piRm for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id VtGrf61XkJ0G for <buildroot@lists.busybox.net>;
  Thu, 15 Aug 2024 12:53:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3B7E140711
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2B3AC4026E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3B7E140711
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2B3AC4026E
  for <buildroot@buildroot.org>; Thu, 15 Aug 2024 12:53:40 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2708184F84; Thu, 15 Aug 2024 12:53:40 +0000 (UTC)
+ id 14FE285EA1; Thu, 15 Aug 2024 12:53:40 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 15 Aug 2024 14:53:28 +0200
+Date: Thu, 15 Aug 2024 14:53:25 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: ef5947774f04dbdf8edffb88b8688917cd6b71b2
-X-Git-Newrev: 65c8e4c65168b6c17af1e797252693e4190c934f
+X-Git-Oldrev: fcfdfb276d1711577e8aca61a3f80d7439e2ae86
+X-Git-Newrev: ef5947774f04dbdf8edffb88b8688917cd6b71b2
 X-Patchwork-Hint: ignore
-Message-Id: <20240815125340.2708184F84@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/docker-engine: add
- wrapper script for logging to syslog
+Message-Id: <20240815125340.14FE285EA1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/docker-engine: rewrite
+ dockerd init script
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,73 +66,137 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=65c8e4c65168b6c17af1e797252693e4190c934f
+commit: https://git.buildroot.net/buildroot/commit/?id=ef5947774f04dbdf8edffb88b8688917cd6b71b2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Dockerd logs only to stdout/stderr [1], which is lost with
---background. The upstream SysV init script [2] logs to a file by
-passing --no-close to start-stop-daemon and redirecting the output,
-but that option is not supported by Busybox' start-stop-daemon.
+This brings the dockerd init script in line with the standard
+Buildroot init script pattern.
 
-The wrapper script added with this commit captures the output of
-dockerd (or whatever other command it is given) and forwards each line
-to syslog.
-
-[1] https://github.com/moby/moby/discussions/48260
-[2] https://github.com/moby/moby/blob/50c3d19179e69f9e7ff01f688c4dbf32c5129ced/contrib/init/sysvinit-debian/docker
+Reload using SIGHUP is also supported now, note that the Docker
+documentation cautions that not all parameters can be changed at
+runtime (without a full restart).
 
 Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/docker-engine/S60dockerd                | 8 ++++++--
- package/docker-engine/docker-engine.mk          | 2 ++
- package/docker-engine/dockerd-syslog-wrapper.sh | 4 ++++
- 3 files changed, 12 insertions(+), 2 deletions(-)
+ .checkpackageignore              |  1 -
+ package/docker-engine/S60dockerd | 88 +++++++++++++++++++++++++++-------------
+ 2 files changed, 59 insertions(+), 30 deletions(-)
 
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 203cfb4a2c..3580d49430 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -439,7 +439,6 @@ package/dmalloc/0004-Makefile-use-the-configure-detected-or-user-supplied.patch
+ package/dmalloc/0005-configure-use-LD-instead-of-hard-coding-ld.patch lib_patch.Upstream
+ package/dmraid/0001-fix-compilation-under-musl.patch lib_patch.Upstream
+ package/dmraid/S20dmraid lib_sysv.Variables
+-package/docker-engine/S60dockerd Shellcheck lib_sysv.Indent lib_sysv.Variables
+ package/docopt-cpp/0001-only-build-one-target-use-BUILD_SHARED_LIBS-where-appropriate.patch lib_patch.Upstream
+ package/domoticz/S99domoticz Shellcheck
+ package/dovecot/0001-auth-Fix-handling-passdbs-with-identical-driver-args.patch lib_patch.Upstream
 diff --git a/package/docker-engine/S60dockerd b/package/docker-engine/S60dockerd
-index aab50d84d4..dda6dc7474 100644
+index def8bea149..aab50d84d4 100644
 --- a/package/docker-engine/S60dockerd
 +++ b/package/docker-engine/S60dockerd
-@@ -10,10 +10,14 @@ DOCKERD_ARGS=""
+@@ -1,38 +1,68 @@
+ #!/bin/sh
  
- start() {
- 	printf 'Starting %s: ' "$DAEMON"
-+	# Dockerd logs only to stdout/stderr, which is lost with
-+	# --background. The wrapper script runs the given command
-+	# (after "--", including dockerd) and forwards stdout/stderr
-+	# to syslog.
- 	# shellcheck disable=SC2086 # we need word splitting for DOCKERD_ARGS
- 	start-stop-daemon --start --background --pidfile "$PIDFILE" \
--		--exec "/usr/bin/$DAEMON" \
--		-- --pidfile "$PIDFILE" $DOCKERD_ARGS
-+		--exec /usr/libexec/dockerd-syslog-wrapper.sh \
-+		-- "/usr/bin/$DAEMON" --pidfile "$PIDFILE" $DOCKERD_ARGS
- 	status=$?
- 	if [ "$status" -eq 0 ]; then
- 		echo "OK"
-diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
-index c7c51c5ef5..268b851520 100644
---- a/package/docker-engine/docker-engine.mk
-+++ b/package/docker-engine/docker-engine.mk
-@@ -72,6 +72,8 @@ endef
- define DOCKER_ENGINE_INSTALL_INIT_SYSV
- 	$(INSTALL) -D -m 755 package/docker-engine/S60dockerd \
- 		$(TARGET_DIR)/etc/init.d/S60dockerd
-+	$(INSTALL) -D -m 755 package/docker-engine/dockerd-syslog-wrapper.sh \
-+		$(TARGET_DIR)/usr/libexec/dockerd-syslog-wrapper.sh
- endef
+-NAME=dockerd
+-DAEMON=/usr/bin/$NAME
+-PIDFILE=/var/run/$NAME.pid
+-DAEMON_ARGS=""
+-
+-[ -r /etc/default/$NAME ] && . /etc/default/$NAME $1
+-
+-do_start() {
+-        echo -n "Starting $NAME: "
+-        start-stop-daemon --start --quiet --background --make-pidfile \
+-		--pidfile $PIDFILE --exec $DAEMON -- $DAEMON_ARGS \
+-                && echo "OK" || echo "FAIL"
++DAEMON="dockerd"
++PIDFILE="/var/run/$DAEMON.pid"
++
++DOCKERD_ARGS=""
++
++# shellcheck source=/dev/null
++[ -r "/etc/default/$DAEMON" ] && . "/etc/default/$DAEMON"
++
++start() {
++	printf 'Starting %s: ' "$DAEMON"
++	# shellcheck disable=SC2086 # we need word splitting for DOCKERD_ARGS
++	start-stop-daemon --start --background --pidfile "$PIDFILE" \
++		--exec "/usr/bin/$DAEMON" \
++		-- --pidfile "$PIDFILE" $DOCKERD_ARGS
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return "$status"
++}
++
++stop() {
++	printf 'Stopping %s: ' "$DAEMON"
++	start-stop-daemon --stop --pidfile "$PIDFILE" --exec "/usr/bin/$DAEMON"
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		echo "OK"
++	else
++		echo "FAIL"
++		return "$status"
++	fi
++	while start-stop-daemon --stop --test --quiet --pidfile "$PIDFILE" \
++		--exec "/usr/bin/$DAEMON"; do
++		sleep 0.1
++	done
++	rm -f "$PIDFILE"
++	return "$status"
++}
++
++restart() {
++	stop
++	start
+ }
  
- define DOCKER_ENGINE_USERS
-diff --git a/package/docker-engine/dockerd-syslog-wrapper.sh b/package/docker-engine/dockerd-syslog-wrapper.sh
-new file mode 100644
-index 0000000000..3d6a80a739
---- /dev/null
-+++ b/package/docker-engine/dockerd-syslog-wrapper.sh
-@@ -0,0 +1,4 @@
-+#!/bin/sh
-+"${@}" 2>&1 | while read -r LINE; do
-+	logger -t "$(basename "${1}")" "$LINE";
-+done
+-do_stop() {
+-        echo -n "Stopping $NAME: "
+-        start-stop-daemon --stop --quiet --pidfile $PIDFILE \
+-                && echo "OK" || echo "FAIL"
++reload() {
++	printf "Reloading %s config: " "$DAEMON"
++	start-stop-daemon --stop --signal HUP -q --pidfile "$PIDFILE" \
++		--exec "/usr/bin/$DAEMON"
++	status=$?
++	if [ "$status" -eq 0 ]; then
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
++	return "$status"
+ }
+ 
+ case "$1" in
+-        start)
+-                do_start
+-                ;;
+-        stop)
+-                do_stop
+-                ;;
+-        restart)
+-                do_stop
+-                sleep 1
+-                do_start
+-                ;;
++	start|stop|restart|reload)
++		"$1";;
+ 	*)
+-                echo "Usage: $0 {start|stop|restart}"
+-                exit 1
++		echo "Usage: $0 {start|stop|restart|reload}"
++		exit 1
+ esac
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
