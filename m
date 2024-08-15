@@ -4,50 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D729EC52D7C
-	for <buildroot@archiver.kernel.org>; Thu, 15 Aug 2024 18:18:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C0C85C52D7C
+	for <buildroot@archiver.kernel.org>; Thu, 15 Aug 2024 18:19:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 76D1B40714;
-	Thu, 15 Aug 2024 18:18:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7691040C57;
+	Thu, 15 Aug 2024 18:19:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FYbhhKKQqeYP; Thu, 15 Aug 2024 18:18:17 +0000 (UTC)
+ id W5E30Cl-Tsdg; Thu, 15 Aug 2024 18:19:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3A18140743
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 150A640AB9
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3A18140743;
-	Thu, 15 Aug 2024 18:18:17 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E7BB41BF573
- for <buildroot@lists.busybox.net>; Thu, 15 Aug 2024 18:18:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 150A640AB9;
+	Thu, 15 Aug 2024 18:19:35 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 364DB1BF573
+ for <buildroot@lists.busybox.net>; Thu, 15 Aug 2024 18:19:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E1D8240EFD
- for <buildroot@lists.busybox.net>; Thu, 15 Aug 2024 18:18:15 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2FAF780AB8
+ for <buildroot@lists.busybox.net>; Thu, 15 Aug 2024 18:19:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WWEuYviP3x9L for <buildroot@lists.busybox.net>;
- Thu, 15 Aug 2024 18:18:15 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id E65uVSQn_h4u for <buildroot@lists.busybox.net>;
+ Thu, 15 Aug 2024 18:19:32 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
+ helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DBDF740243
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id DBDF740243
- for <buildroot@buildroot.org>; Thu, 15 Aug 2024 18:18:14 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CEEE385ED0; Thu, 15 Aug 2024 18:18:14 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Thu, 15 Aug 2024 20:17:28 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 6eff762f5f57b945db394e11bee829779fa413ea
-X-Git-Newrev: 62041c338618457ea14ab7c7a2c1c82ef0f0340b
-X-Patchwork-Hint: ignore
-Message-Id: <20240815181814.CEEE385ED0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] board/friendlyarm/nanopi-neo:
- fix uboot partition size
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 5CA8480A5D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5CA8480A5D
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5CA8480A5D
+ for <buildroot@buildroot.org>; Thu, 15 Aug 2024 18:19:32 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 1A29813F88E;
+ Thu, 15 Aug 2024 20:19:27 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Thu, 15 Aug 2024 20:19:26 +0200
+Date: Thu, 15 Aug 2024 20:19:26 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Dong Wang <wangdong115@foxmail.com>
+Message-ID: <Zr5GroPU1KwertMc@landeda>
+References: <tencent_C2D6061483906AA710B3001B277F4EE62606@qq.com>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <tencent_C2D6061483906AA710B3001B277F4EE62606@qq.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1723745970;
+ bh=dzKp1uQmLHFdB2fWYSiI1rEw6ytIYK3d3h2nwbqyips=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=uz+8Ad4z/D0WzfVrE8l5KpW8uPewuZS8xWEI4ubvtQlj8XijuDuHCGYmptdbsYITd
+ K+CC6tuuDX9nG4kZKJObnoQ8SP6ou8vo5TTq2FcCL98ipSUoeUIlsAYKVAkWHVTRbV
+ /rjWVZvDpZMMyRJttHguplEgaF3lWItZ1Abk4WYioftO5B3X/F7KEVg4gxLm5e5vd/
+ 4V+hpx1LQc8Htiad4sYRC9IlsQTW1YsmWjxAzCrtYcwSFU0tZo5dBD1w01uJoTVSZ4
+ PqMOcq/vGmlaFIJJ2SkqFlemmlAU8N6ycRkKHyVGxN1s2CgJqHWXS/dY1ehsvinNGA
+ 5IduI0FKx2Y3Q==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=uz+8Ad4z
+Subject: Re: [Buildroot] [PATCH next] board/friendlyarm/nanopi-neo: fix
+ uboot partition size
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,38 +81,60 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=62041c338618457ea14ab7c7a2c1c82ef0f0340b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Dong Wang, All,
 
-This patch fixes the wrongly calculated uboot partition size in
-genimage.cfg. The size should be 1016K, which is
-1MB (typical partition start) - 8K(offset dictated by the bootrom).
+On 2024-08-16 01:28 +0800, Dong Wang spake thusly:
+> This patch fixes the wrongly calculated uboot partition size in
+> genimage.cfg. The size should be 1016K, which is
+> 1MB (typical partition start) - 8K(offset dictated by the bootrom).
+> 
+> Signed-off-by: Dong Wang <wangdong115@foxmail.com>
 
-Signed-off-by: Dong Wang <wangdong115@foxmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- board/friendlyarm/nanopi-neo/genimage.cfg | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Applied to next, thanks!
 
-diff --git a/board/friendlyarm/nanopi-neo/genimage.cfg b/board/friendlyarm/nanopi-neo/genimage.cfg
-index ec78fd0e56..8d6bdd3295 100644
---- a/board/friendlyarm/nanopi-neo/genimage.cfg
-+++ b/board/friendlyarm/nanopi-neo/genimage.cfg
-@@ -7,7 +7,7 @@ image sdcard.img {
- 		in-partition-table = false
- 		image = "u-boot-sunxi-with-spl.bin"
- 		offset = 8K
--		size = 1000K # 1MB - 8KB(offset) - 16KB(GPT)
-+		size = 1016K # 1MB - 8KB(offset)
- 	}
- 
- 	partition rootfs {
+Again, sorry for the confusion.
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  board/friendlyarm/nanopi-neo/genimage.cfg | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/board/friendlyarm/nanopi-neo/genimage.cfg b/board/friendlyarm/nanopi-neo/genimage.cfg
+> index ec78fd0e56..8d6bdd3295 100644
+> --- a/board/friendlyarm/nanopi-neo/genimage.cfg
+> +++ b/board/friendlyarm/nanopi-neo/genimage.cfg
+> @@ -7,7 +7,7 @@ image sdcard.img {
+>  		in-partition-table = false
+>  		image = "u-boot-sunxi-with-spl.bin"
+>  		offset = 8K
+> -		size = 1000K # 1MB - 8KB(offset) - 16KB(GPT)
+> +		size = 1016K # 1MB - 8KB(offset)
+>  	}
+>  
+>  	partition rootfs {
+> -- 
+> 2.25.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
