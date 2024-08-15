@@ -4,73 +4,82 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F1D2DC3DA7F
-	for <buildroot@archiver.kernel.org>; Thu, 15 Aug 2024 17:28:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D88CDC3DA7F
+	for <buildroot@archiver.kernel.org>; Thu, 15 Aug 2024 17:38:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 96C65409F1;
-	Thu, 15 Aug 2024 17:28:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8B85E40C5F;
+	Thu, 15 Aug 2024 17:38:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GaD3G1tHAI72; Thu, 15 Aug 2024 17:28:12 +0000 (UTC)
+ id S5MciEQidxmw; Thu, 15 Aug 2024 17:38:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 43D5E409F2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 48F5A40C63
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 43D5E409F2;
-	Thu, 15 Aug 2024 17:28:12 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id BE6F41BF475
- for <buildroot@lists.busybox.net>; Thu, 15 Aug 2024 17:28:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 48F5A40C63;
+	Thu, 15 Aug 2024 17:38:38 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 895BA1BF475
+ for <buildroot@lists.busybox.net>; Thu, 15 Aug 2024 17:38:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id AC0BB409F2
- for <buildroot@lists.busybox.net>; Thu, 15 Aug 2024 17:28:10 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with UTF8SMTP id 7638240253
+ for <buildroot@lists.busybox.net>; Thu, 15 Aug 2024 17:38:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id e65JCLSF41ea for <buildroot@lists.busybox.net>;
- Thu, 15 Aug 2024 17:28:08 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
- helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024)
+ with UTF8SMTP id i_qjH0KzeteP for <buildroot@lists.busybox.net>;
+ Thu, 15 Aug 2024 17:38:35 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=203.205.221.236;
+ helo=out203-205-221-236.mail.qq.com; envelope-from=wangdong115@foxmail.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 828E4409F1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 828E4409F1
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 828E4409F1
- for <buildroot@buildroot.org>; Thu, 15 Aug 2024 17:28:07 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id E540C13F81D;
- Thu, 15 Aug 2024 19:28:00 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Thu, 15 Aug 2024 19:28:00 +0200
-Date: Thu, 15 Aug 2024 19:28:00 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: George Kiagiadakis <george.kiagiadakis@collabora.com>
-Message-ID: <Zr46oBQNQctbUKjM@landeda>
-References: <20240815150344.241837-1-george.kiagiadakis@collabora.com>
- <20240815150344.241837-3-george.kiagiadakis@collabora.com>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 515B640243
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 515B640243
+Received: from out203-205-221-236.mail.qq.com (out203-205-221-236.mail.qq.com
+ [203.205.221.236])
+ by smtp2.osuosl.org (Postfix) with UTF8SMTPS id 515B640243
+ for <buildroot@buildroot.org>; Thu, 15 Aug 2024 17:38:33 +0000 (UTC)
+Received: from localhost.localdomain ([106.120.7.242])
+ by newxmesmtplogicsvrsza15-1.qq.com (NewEsmtp) with SMTP
+ id 78D2589A; Fri, 16 Aug 2024 01:30:13 +0800
+X-QQ-mid: xmsmtpt1723743013t5vgohpjy
+Message-ID: <tencent_C2D6061483906AA710B3001B277F4EE62606@qq.com>
+X-QQ-XMAILINFO: NDRJhlKLIrRLAnnNlzdZV3K36Kb6/KvwHwykjOmoRuW3iZvGhxjEpue42+7NHy
+ 0vFysdaJNlxrgGawCjxVDEvKxkD9M1O/orrfWA3vgEJov0XsFI7UQIdSjGRgiEVLp3ykJVn2+CuH
+ El7iXEAIVKREW7GPufeJXT0DEYc8M9CVQssbDkWrDKDrpfp44AzP8X+kcUO+MVuAvsWwxNCs/8ba
+ FrQ00tIuQ3HOb9OX7aVt+V1h68Qne5yjHLGtrNS8byI6PN/kw1BNTwI0x1ueaMjgirNWabOZgu1Q
+ 5wVSF3yaLOHLhQFK/i6KfUdBLNrkDa0AKVVCy8U2u8enjlRUCRlEfI82mEZLlDSTIGqz6zfrUK0M
+ MxzGV2ICjxnmS8dUhUrDzM72Ng/sV/4rkcCxTt8p6AFZLKt89iQlv3Omkg800EoBNgruLz+4Y2wV
+ G2dLOsSm2/nBcm+18oPwLhT+m/j33tV+FxGqdk5h+KplfNOymzRyP/AqMqc8TT2K+jnyHa2A9nru
+ h+33H9qkDvzsBWeSvZmXRM9BskwpqCNiOcoenf7ZLcGQclwKLJlXiIcBxTTmz/P4mjW0AdjA+OOX
+ M3mBQ5FSxS6GF2oIe+c2eC4LAF+Ejuh7MS41pGU7kbvpxcPnpGUIhVNvuZ8hvUAo3EhMKvU9zd7n
+ 8IEAOz1nlAInpvvghxuktqXRH7HegEqEGFQ9Eec0fTRN/qgQHSPd+sfHvur5eKScgQFLx/fzB+/E
+ b60dB23nHFy5BXODDJ2izMWR5zzWpXmoHt71xB5ZnWI1kH0pWtqSZRchgRz7KXp+rDbuyaIIIPtC
+ 5lDOcoVQctiRKjYN3pmqwqE25NETzTwycpsTfOV3hNPs6WM0klEHh0bbwmH+7TppmNLxbEv7oS/4
+ RjsDmx677TnoIcBXFKzDHTlPFyGFP9oh02/y8sUyH2P02xQNhopmr8xwyAze5HOYoeIMTqw2r4FI
+ QQVzZp5J4hmJUQKcDaqxVm500610pDjNBOdaET1PA9FdAzEZsNENW+n5RTLPIIXLJm83sdFLM=
+X-QQ-XMRINFO: MPJ6Tf5t3I/ycC2BItcBVIA=
+From: Dong Wang <wangdong115@foxmail.com>
+To: buildroot@buildroot.org
+Date: Fri, 16 Aug 2024 01:28:26 +0800
+X-OQ-MSGID: <20240815172823.1250256-1-wangdong115@foxmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20240815150344.241837-3-george.kiagiadakis@collabora.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1723742884;
- bh=62EbKm8bm7v0dtkrJYEjw73kfPAfLSNOwxdD0s41IzE=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=ZFlSiuL21mNRi1ps/U5KgyIPp/mtnerPoFluHscMLwnRU6qD9SKinAobCTlqugIro
- ZDytUT16/OMbOhWr2lFAq8xnSBbd1xDvnsZNyJoOjSKjvNpk0XhoDLVx/Nutzd98pg
- XWTuDcBnfaSk0TriF5U45yo56+IYVWNpnQVGP8Ghbl9betonvyYo/u9iDxOpcDXPER
- u2eFEbDkCqpC7CbQ0NC5P/42sZmb3w0vIJG5arOE/VskoBp4pN5OXvsCUU6PjdxK23
- B9XAYu+t9p2sVF0NdKEfTNmGikOnIiPrIU2XsNPpQobRyhxt3bysU1q4HYOs4bVRcx
- TYW1jch1rL2kQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=foxmail.com; s=s201512; t=1723743511;
+ bh=thVNqp8SJ1Z2bQT0fb3V8vu3cnMpnsx79Fl7zJfBvE4=;
+ h=From:To:Cc:Subject:Date;
+ b=HLs14ezvu1my1020lWP4FroyvA609Y4gO0FLrUTVQHGylfydn8dgqjSWmTOM7Kkox
+ R7IgGlRhnsJQvoYCGv86C7jWNLK6pcJEuqeN2e/48YeMv/pNBzZY+fKH+0GAEwLTjS
+ BZ/ZCql8xEL3KRxHDt5pK0AzzeN9AUBkl2DPdioI=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=ZFlSiuL2
-Subject: Re: [Buildroot] [PATCH 3/4] package: add wireplumber in the config
- system
+ header.from=foxmail.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=foxmail.com header.i=@foxmail.com header.a=rsa-sha256
+ header.s=s201512 header.b=HLs14ezv
+Subject: [Buildroot] [PATCH next] board/friendlyarm/nanopi-neo: fix uboot
+ partition size
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,65 +91,38 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
+Cc: Dong Wang <wangdong115@foxmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-George, All,
+This patch fixes the wrongly calculated uboot partition size in
+genimage.cfg. The size should be 1016K, which is
+1MB (typical partition start) - 8K(offset dictated by the bootrom).
 
-Thank you for your contributoin!
+Signed-off-by: Dong Wang <wangdong115@foxmail.com>
+---
+ board/friendlyarm/nanopi-neo/genimage.cfg | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On 2024-08-15 18:03 +0300, George Kiagiadakis spake thusly:
-> Signed-off-by: George Kiagiadakis <george.kiagiadakis@collabora.com>
-> ---
->  package/Config.in | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/package/Config.in b/package/Config.in
-> index f2c63ffb6e..33cb50522f 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -61,6 +61,7 @@ menu "Audio and video applications"
->  	source "package/vlc/Config.in"
->  	source "package/vorbis-tools/Config.in"
->  	source "package/wavpack/Config.in"
-> +	source "package/wireplumber/Config.in"
-
-AFAICS, wireplumber is already sourced, on line 1766, in the
-Libraries->Graphics sub-menu.
-
-You can search for Kconfig symbol by hitting '/' in the menuconfig, and
-then enter a query (regexp), which opens a list of results, and for each
-there is a numbe ryou can hit to directly jump there (or at least see
-the dependencies tha tare not met).
-
-If you believe that's not a good location, then please send another
-patch moving it around, with a commit log that explains why you believe
-it should be moved around.
-
-Regards,
-Yann E. MORIN.
-
->  	source "package/yavta/Config.in"
->  	source "package/ympd/Config.in"
->  	source "package/zynaddsubfx/Config.in"
-> -- 
-> 2.30.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
+diff --git a/board/friendlyarm/nanopi-neo/genimage.cfg b/board/friendlyarm/nanopi-neo/genimage.cfg
+index ec78fd0e56..8d6bdd3295 100644
+--- a/board/friendlyarm/nanopi-neo/genimage.cfg
++++ b/board/friendlyarm/nanopi-neo/genimage.cfg
+@@ -7,7 +7,7 @@ image sdcard.img {
+ 		in-partition-table = false
+ 		image = "u-boot-sunxi-with-spl.bin"
+ 		offset = 8K
+-		size = 1000K # 1MB - 8KB(offset) - 16KB(GPT)
++		size = 1016K # 1MB - 8KB(offset)
+ 	}
+ 
+ 	partition rootfs {
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.25.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
