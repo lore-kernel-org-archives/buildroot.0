@@ -4,48 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04175E6FE46
-	for <buildroot@archiver.kernel.org>; Fri,  6 Sep 2024 20:00:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E724BE6FE46
+	for <buildroot@archiver.kernel.org>; Fri,  6 Sep 2024 20:01:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C67A484583;
-	Fri,  6 Sep 2024 20:00:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B81AC84160;
+	Fri,  6 Sep 2024 20:01:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OKF8mP11bUr2; Fri,  6 Sep 2024 20:00:56 +0000 (UTC)
+ id NSAImZMmdd-Z; Fri,  6 Sep 2024 20:00:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 89BF4846B7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 35324846B7
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 89BF4846B7;
-	Fri,  6 Sep 2024 20:00:56 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E25CE1BF20B
- for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 19:59:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 35324846B7;
+	Fri,  6 Sep 2024 20:00:59 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 1378A1BF20B
+ for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 19:59:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8BCE740958
- for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 19:58:57 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id A93686077D
+ for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 19:58:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5cj31lx3Oo2F for <buildroot@lists.busybox.net>;
- Fri,  6 Sep 2024 19:58:55 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id sOImuqaVWUnR for <buildroot@lists.busybox.net>;
+ Fri,  6 Sep 2024 19:58:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CCA3140879
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C592B60774
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id CCA3140879
- for <buildroot@buildroot.org>; Fri,  6 Sep 2024 19:58:54 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C592B60774
+ for <buildroot@buildroot.org>; Fri,  6 Sep 2024 19:58:53 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C358686EE4; Fri,  6 Sep 2024 19:58:54 +0000 (UTC)
+ id C2C1086EE3; Fri,  6 Sep 2024 19:58:53 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 19 Aug 2024 12:49:12 +0200
+Date: Thu, 15 Aug 2024 09:48:56 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 71899d72204a9171203e8d3a45c4e6b2a5beddb0
-X-Git-Newrev: 9052f9608bbbf7668aa1f33dfe01bcf7055d2383
+X-Git-Oldrev: a0b8ca1c214c3e250c7c242121ff1e2c88644920
+X-Git-Newrev: f21db2bd83bf3073a50b8bcd79af6e7aed6fb000
 X-Patchwork-Hint: ignore
-Message-Id: <20240906195854.C358686EE4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/sdl2: bump version to 2.30.6
+Message-Id: <20240906195853.C2C1086EE3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit]
+ board/stmicroelectronics/common/stm32mp157: rename folder
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,40 +66,139 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9052f9608bbbf7668aa1f33dfe01bcf7055d2383
+commit: https://git.buildroot.net/buildroot/commit/?id=f21db2bd83bf3073a50b8bcd79af6e7aed6fb000
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Michael Fischer <mf@go-sys.de>
+STM32MP15x and STM32MP13 can use almost of the same configuration
+regarding bootloaders and the Linux kernel. To make profit of the
+commont folder, rename it to 'stm32mp1xx' and change dependencies
+accordingly.
+
+Signed-off-by: Raphael Gallais-Pou <rgallaispou@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/sdl2/sdl2.hash | 4 ++--
- package/sdl2/sdl2.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ .checkpackageignore                                                   | 2 +-
+ DEVELOPERS                                                            | 2 +-
+ .../common/{stm32mp157 => stm32mp1xx}/genimage.cfg.template           | 0
+ .../patches/arm-trusted-firmware/arm-trusted-firmware.hash            | 0
+ .../patches/linux-headers/linux-headers.hash                          | 0
+ .../common/{stm32mp157 => stm32mp1xx}/patches/linux/linux.hash        | 0
+ .../common/{stm32mp157 => stm32mp1xx}/patches/uboot/uboot.hash        | 0
+ .../common/{stm32mp157 => stm32mp1xx}/post-image.sh                   | 2 +-
+ configs/avenger96_defconfig                                           | 2 +-
+ configs/stm32mp157a_dk1_defconfig                                     | 4 ++--
+ configs/stm32mp157c_dk2_defconfig                                     | 4 ++--
+ 11 files changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/package/sdl2/sdl2.hash b/package/sdl2/sdl2.hash
-index 30235844e7..d45ed1c73e 100644
---- a/package/sdl2/sdl2.hash
-+++ b/package/sdl2/sdl2.hash
-@@ -1,4 +1,4 @@
--# Locally calculated after checking http://www.libsdl.org/release/SDL2-2.30.5.tar.gz.sig
--sha256  f374f3fa29c37dfcc20822d4a7d7dc57e58924d1a5f2ad511bfab4c8193de63b  SDL2-2.30.5.tar.gz
-+# Locally calculated after checking http://www.libsdl.org/release/SDL2-2.30.6.tar.gz.sig
-+sha256  c6ef64ca18a19d13df6eb22df9aff19fb0db65610a74cc81dae33a82235cacd4  SDL2-2.30.6.tar.gz
- # Locally calculated
- sha256  9b9e1764f06701bcf7ce21e942c682d5921ba0900c6fca760321b1c8837a9662  LICENSE.txt
-diff --git a/package/sdl2/sdl2.mk b/package/sdl2/sdl2.mk
-index d19bc0fb8f..6b7d19bae5 100644
---- a/package/sdl2/sdl2.mk
-+++ b/package/sdl2/sdl2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/.checkpackageignore b/.checkpackageignore
+index a44817578d..203cfb4a2c 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -82,7 +82,7 @@ board/solidrun/clearfog/post-build.sh Shellcheck
+ board/solidrun/macchiatobin/post-build-mainline.sh Shellcheck
+ board/solidrun/macchiatobin/post-build.sh Shellcheck
+ board/stmicroelectronics/common/stm32f4xx/stm32-post-build.sh Shellcheck
+-board/stmicroelectronics/common/stm32mp157/post-image.sh Shellcheck
++board/stmicroelectronics/common/stm32mp1xx/post-image.sh Shellcheck
+ board/stmicroelectronics/stm32f429-disco/flash.sh Shellcheck
+ board/stmicroelectronics/stm32f469-disco/flash_sd.sh Shellcheck
+ board/stmicroelectronics/stm32f469-disco/flash_xip.sh Shellcheck
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 754f153b39..837d42bb4f 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2240,7 +2240,7 @@ F:	configs/qemu_riscv32_virt_defconfig
+ F:	configs/qemu_riscv64_virt_defconfig
  
--SDL2_VERSION = 2.30.5
-+SDL2_VERSION = 2.30.6
- SDL2_SOURCE = SDL2-$(SDL2_VERSION).tar.gz
- SDL2_SITE = http://www.libsdl.org/release
- SDL2_LICENSE = Zlib
+ N:	Marleen Vos <marleen.vos@mind.be>
+-F:	board/stmicroelectronics/common/stm32mp157/
++F:	board/stmicroelectronics/common/stm32mp1xx/
+ F:	configs/avenger96_defconfig
+ F:	configs/stm32mp157a_dk1_defconfig
+ F:	configs/stm32mp157c_dk2_defconfig
+diff --git a/board/stmicroelectronics/common/stm32mp157/genimage.cfg.template b/board/stmicroelectronics/common/stm32mp1xx/genimage.cfg.template
+similarity index 100%
+rename from board/stmicroelectronics/common/stm32mp157/genimage.cfg.template
+rename to board/stmicroelectronics/common/stm32mp1xx/genimage.cfg.template
+diff --git a/board/stmicroelectronics/common/stm32mp157/patches/arm-trusted-firmware/arm-trusted-firmware.hash b/board/stmicroelectronics/common/stm32mp1xx/patches/arm-trusted-firmware/arm-trusted-firmware.hash
+similarity index 100%
+rename from board/stmicroelectronics/common/stm32mp157/patches/arm-trusted-firmware/arm-trusted-firmware.hash
+rename to board/stmicroelectronics/common/stm32mp1xx/patches/arm-trusted-firmware/arm-trusted-firmware.hash
+diff --git a/board/stmicroelectronics/common/stm32mp157/patches/linux-headers/linux-headers.hash b/board/stmicroelectronics/common/stm32mp1xx/patches/linux-headers/linux-headers.hash
+similarity index 100%
+rename from board/stmicroelectronics/common/stm32mp157/patches/linux-headers/linux-headers.hash
+rename to board/stmicroelectronics/common/stm32mp1xx/patches/linux-headers/linux-headers.hash
+diff --git a/board/stmicroelectronics/common/stm32mp157/patches/linux/linux.hash b/board/stmicroelectronics/common/stm32mp1xx/patches/linux/linux.hash
+similarity index 100%
+rename from board/stmicroelectronics/common/stm32mp157/patches/linux/linux.hash
+rename to board/stmicroelectronics/common/stm32mp1xx/patches/linux/linux.hash
+diff --git a/board/stmicroelectronics/common/stm32mp157/patches/uboot/uboot.hash b/board/stmicroelectronics/common/stm32mp1xx/patches/uboot/uboot.hash
+similarity index 100%
+rename from board/stmicroelectronics/common/stm32mp157/patches/uboot/uboot.hash
+rename to board/stmicroelectronics/common/stm32mp1xx/patches/uboot/uboot.hash
+diff --git a/board/stmicroelectronics/common/stm32mp157/post-image.sh b/board/stmicroelectronics/common/stm32mp1xx/post-image.sh
+similarity index 93%
+rename from board/stmicroelectronics/common/stm32mp157/post-image.sh
+rename to board/stmicroelectronics/common/stm32mp1xx/post-image.sh
+index 0cf52f4564..77547832ab 100755
+--- a/board/stmicroelectronics/common/stm32mp157/post-image.sh
++++ b/board/stmicroelectronics/common/stm32mp1xx/post-image.sh
+@@ -22,7 +22,7 @@ main()
+ 	GENIMAGE_CFG="$(mktemp --suffix genimage.cfg)"
+ 
+ 	sed -e "s/%ATFBIN%/${ATFBIN}/" \
+-		board/stmicroelectronics/common/stm32mp157/genimage.cfg.template > ${GENIMAGE_CFG}
++		board/stmicroelectronics/common/stm32mp1xx/genimage.cfg.template > ${GENIMAGE_CFG}
+ 
+ 	support/scripts/genimage.sh -c ${GENIMAGE_CFG}
+ 
+diff --git a/configs/avenger96_defconfig b/configs/avenger96_defconfig
+index 64cfb3c2b0..3b471109f7 100644
+--- a/configs/avenger96_defconfig
++++ b/configs/avenger96_defconfig
+@@ -7,7 +7,7 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
+ 
+ # System configuration
+ BR2_ROOTFS_OVERLAY="board/arrow/avenger96/overlay/"
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="board/stmicroelectronics/common/stm32mp157/post-image.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/stmicroelectronics/common/stm32mp1xx/post-image.sh"
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+diff --git a/configs/stm32mp157a_dk1_defconfig b/configs/stm32mp157a_dk1_defconfig
+index 310e179cf7..e2dd48bb17 100644
+--- a/configs/stm32mp157a_dk1_defconfig
++++ b/configs/stm32mp157a_dk1_defconfig
+@@ -6,10 +6,10 @@ BR2_cortex_a7=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_9=y
+ 
+ # System configuration
+-BR2_GLOBAL_PATCH_DIR="board/stmicroelectronics/common/stm32mp157/patches"
++BR2_GLOBAL_PATCH_DIR="board/stmicroelectronics/common/stm32mp1xx/patches"
+ BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+ BR2_ROOTFS_OVERLAY="board/stmicroelectronics/stm32mp157a-dk1/overlay/"
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="board/stmicroelectronics/common/stm32mp157/post-image.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/stmicroelectronics/common/stm32mp1xx/post-image.sh"
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
+diff --git a/configs/stm32mp157c_dk2_defconfig b/configs/stm32mp157c_dk2_defconfig
+index 2a9c31df37..d6085583d3 100644
+--- a/configs/stm32mp157c_dk2_defconfig
++++ b/configs/stm32mp157c_dk2_defconfig
+@@ -6,10 +6,10 @@ BR2_cortex_a7=y
+ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_9=y
+ 
+ # System configuration
+-BR2_GLOBAL_PATCH_DIR="board/stmicroelectronics/common/stm32mp157/patches"
++BR2_GLOBAL_PATCH_DIR="board/stmicroelectronics/common/stm32mp1xx/patches"
+ BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+ BR2_ROOTFS_OVERLAY="board/stmicroelectronics/stm32mp157c-dk2/overlay/"
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="board/stmicroelectronics/common/stm32mp157/post-image.sh"
++BR2_ROOTFS_POST_IMAGE_SCRIPT="board/stmicroelectronics/common/stm32mp1xx/post-image.sh"
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
