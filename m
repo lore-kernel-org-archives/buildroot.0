@@ -1,70 +1,90 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3D26FC531DC
-	for <buildroot@archiver.kernel.org>; Fri, 16 Aug 2024 15:50:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B59CEC3DA4A
+	for <buildroot@archiver.kernel.org>; Fri, 16 Aug 2024 16:16:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DC3B760ED4;
-	Fri, 16 Aug 2024 15:50:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5EB1781E4A;
+	Fri, 16 Aug 2024 16:16:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vujgcChlUlfE; Fri, 16 Aug 2024 15:50:43 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id eJMBXv92GksK; Fri, 16 Aug 2024 16:16:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E3EFE60ED5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 450CE81E71
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E3EFE60ED5;
-	Fri, 16 Aug 2024 15:50:42 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id CEA6F1BF5A2
- for <buildroot@lists.busybox.net>; Fri, 16 Aug 2024 15:50:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 450CE81E71;
+	Fri, 16 Aug 2024 16:16:25 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 21EEA1BF5A7
+ for <buildroot@lists.busybox.net>; Fri, 16 Aug 2024 16:16:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BABFE4014E
- for <buildroot@lists.busybox.net>; Fri, 16 Aug 2024 15:50:41 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with UTF8SMTP id 0F63481E71
+ for <buildroot@lists.busybox.net>; Fri, 16 Aug 2024 16:16:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1rR2wMDqvjOH for <buildroot@lists.busybox.net>;
- Fri, 16 Aug 2024 15:50:40 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
- helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 6221D400D3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6221D400D3
-Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 6221D400D3
- for <buildroot@buildroot.org>; Fri, 16 Aug 2024 15:50:40 +0000 (UTC)
-Received: from tuxedoOT.fritz.box (unknown [212.37.174.96])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
- (No client certificate requested)
- by smtp.bubu1.eu (Postfix) with ESMTPSA id C1DAC2C800D1;
- Fri, 16 Aug 2024 17:50:37 +0200 (CEST)
-To: buildroot@buildroot.org
-Date: Fri, 16 Aug 2024 17:50:36 +0200
-Message-Id: <20240816155037.66309-1-buildroot@bubu1.eu>
-X-Mailer: git-send-email 2.34.1
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024)
+ with UTF8SMTP id Rmymr7C9aQXI for <buildroot@lists.busybox.net>;
+ Fri, 16 Aug 2024 16:16:22 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=43.163.128.50;
+ helo=xmbghk7.mail.qq.com; envelope-from=wangdong115@foxmail.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org DDC8181E4A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DDC8181E4A
+Received: from xmbghk7.mail.qq.com (xmbghk7.mail.qq.com [43.163.128.50])
+ by smtp1.osuosl.org (Postfix) with UTF8SMTPS id DDC8181E4A
+ for <buildroot@buildroot.org>; Fri, 16 Aug 2024 16:16:11 +0000 (UTC)
+Received: from [192.168.100.247] ([106.120.7.242])
+ by newxmesmtplogicsvrszb9-0.qq.com (NewEsmtp) with SMTP
+ id 3F9AE8D3; Sat, 17 Aug 2024 00:15:57 +0800
+X-QQ-mid: xmsmtpt1723824957tp1sdlsz6
+Message-ID: <tencent_A1F36423924149B55F08484081B33DC77805@qq.com>
+X-QQ-XMAILINFO: NwIPvWX4YDag+DgnOdAITKZtNPOmHZKWfV9cetc6qShc2f1I3ZnPINQnGuKY4R
+ GUh8vcu9qXBE5iZ4PSEfsBTD0d4udEtHpOjJnu6VBu1ybbHOMNu26oXKHmE4A1kfWn31f4p64J3P
+ rZ3FGelFl1MjntcbXAlZLyvzV+1hOptHo2vw59tD1/xMoHrDL7n1ONQo9nQm0K+ma1ETIRLh9Aya
+ IgGGBmt7YMiaSq/JbTPtN884GEQi1IvpDzIpQq98kJXajJCwAW5oCLZ/f8sO5L/krNIgGkfI3Uhz
+ FpHTCF5JaCoDC+sRw5mXet2S+Y0hLffQf9MfaEHPk9cTDzt6+uga0gPl7tSWmwE76K90hksfYlY7
+ ymfwNIbAvSJG2WV/cK7aG+/8Lk38PdaqnzJK2GE3PBG5E8BCbr9wq7dLku5SETQ7a4rmoSFvXJ76
+ toroc6RCmJOeU+gMeuYJwwWSUBbqu3BTE6AEk7fBdimOEo9WwwKYjCemzzDdnWv4ek/WIJiWEXgn
+ Zq3piLFJlJFupKaBVhByfJ4VpVCTx5cDq/dyZiAryUQPsQSKzabhuWnnDJVjOz+5bFWldc/HhoRg
+ sVAqRMr6LHSN5GJKQ6/HUpIWoqxRUG9ngVE0a2eDGgOCnqlVaAYe7M9V+eJWNOyrMhNcqBPyESo6
+ lhvrGxvHr8WMw68ElQ/BGomXXw5oWnJHEa5zaGXduE+Pd7J32ZAQDn7GvMqOKxDLIR8kvyjsmDju
+ EX3m+/mxgXKXdrJgEdZ/b3HE7ppUdS6ai6+JhhCaCok7U5iYpnwDX2GgfaWvixXtIsen9hAA0yXL
+ pOKbcML/P6TJLNRkApeQ99IZ2bhjUF41+hEGybsHq+OZnwUiNs9YiZJQEbh5l94rCop5rvSlryOq
+ RnCp2GCDlR+mngedhpQ1WKkoZCaEsRpTi/B+5e5ZxqOH/4/xBbwSsy8tUpWD8qIya3HXena/pSbx
+ fdfPh51nT57dA/03n8LdRI2eq+/+xn2yLfahII9lNzl1MnbF7PvfV1TuE3OigxYa5IR2utt/NzP0
+ GASJnPiLTYkthRb4woiliQ4vOpMhY=
+X-QQ-XMRINFO: NS+P29fieYNw95Bth2bWPxk=
+X-OQ-MSGID: <9a3837f6-ae04-4ec8-96da-8b4e0206ff52@foxmail.com>
+Date: Sat, 17 Aug 2024 00:15:57 +0800
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=bubu1.eu; s=bubu; 
- t=1723823438; bh=T8hjt8/rYuy3aK05XRc+8pZ8pBaXa9q54IGyVYhLVWI=;
- h=From:To:Cc:Subject:Date;
- b=RQDSP4Vbc0q4TknqjY3FL+FsLz7i1Q7PwfKCX5kZsNJp823QjG8ufbBcjmsElRPDO
- 4cxXhF06Mze2ffcD4WolzuQgU10ksBvrlUnZTootVxMoNLW531Pj76AYrovFZ7iXgT
- i3rUMv/gYkpGr0EB1+OfoQq2bXKXNOFkc4SNjTJSvGPNZuC+kwGXkWC1Tn15DvrTC4
- cSRGBxdiGSu1pSJHwoSqizfbzNt0bYlbcgiWkLMrbkhHKyJDohfIv2a6NhVtxbD1NL
- oenbGDH3NQVyAdXOX4FNwaVVAq9Wk3zL3hn3lwLCrRirvjxaLxOE2zOwJpDZT+QiuF
- mvcRFkvQHfUFg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bubu1.eu
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bubu1.eu header.i=@bubu1.eu header.a=rsa-sha256
- header.s=bubu header.b=RQDSP4Vb
-Subject: [Buildroot] [PATCH] package/python-uvloop: bump to 0.20.0
+User-Agent: Mozilla Thunderbird
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <tencent_C2D6061483906AA710B3001B277F4EE62606@qq.com>
+ <20240815215040.0908cb47@windsurf> <Zr5eZO21C1avtmSz@landeda>
+Content-Language: en-US
+From: Dong Wang <wangdong115@foxmail.com>
+In-Reply-To: <Zr5eZO21C1avtmSz@landeda>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=foxmail.com; s=s201512; t=1723824959;
+ bh=dqy2Gj00BWDuFxxWK8ZQxNSz8PogB1JIv3qrNgOMugA=;
+ h=Date:Subject:To:Cc:References:From:In-Reply-To;
+ b=RYojMxH5XABLK6h+rl/WAvbo1TKg5BL32QzHkkUggWe1io0XlnJ/iiqxYbcOG81sC
+ vgWorGlbuPm/x+mjyB3HxPpdAH6DxKCAzQXf7Ka0+4H74bq1Ltt0sPGMZXZPkC3Geb
+ VTP3PTDbNQkE5K5tcpGDPFVxy07OTHvOGzkz18vk=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=foxmail.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=foxmail.com header.i=@foxmail.com header.a=rsa-sha256
+ header.s=s201512 header.b=RYojMxH5
+Subject: Re: [Buildroot] [PATCH next] board/friendlyarm/nanopi-neo: fix
+ uboot partition size
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,55 +96,66 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
-Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
+Cc: buildroot@buildroot.org
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Changelog:
-* https://github.com/MagicStack/uvloop/releases/tag/v0.20.0
+Yann, All,
 
-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
----
- package/python-uvloop/python-uvloop.hash | 4 ++--
- package/python-uvloop/python-uvloop.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+On 2024/8/16 04:00, Yann E. MORIN wrote:
+> Thomas, All,
+> 
+> On 2024-08-15 21:50 +0200, Thomas Petazzoni via buildroot spake thusly:
+>> On Fri, 16 Aug 2024 01:28:26 +0800
+>> Dong Wang <wangdong115@foxmail.com> wrote:
+>>> This patch fixes the wrongly calculated uboot partition size in
+>>> genimage.cfg. The size should be 1016K, which is
+>>> 1MB (typical partition start) - 8K(offset dictated by the bootrom).
+> [--SNIP--]
+>>> -		size = 1000K # 1MB - 8KB(offset) - 16KB(GPT)
+>>> +		size = 1016K # 1MB - 8KB(offset)
+>> Actually, does this size argument really make sense? This space will
+>> automatically take the size of the "u-boot-sunxi-with-spl.bin" file I
+>> believe. Or is it needed to make sure that the next partition doesn't
+>> start before 1 MB?
+>>
+>> Why is it important that the size is 1MB - 8KB, and not 1MB or 2MB ?
+> 
+> The above has two effects:
+>    - ensure the uboot image is not bigger than the allocated space,
+>    - the filesystem image (rootfs) is aligned to a 1MiB boundary.
+> 
+> The latter could be achieved by setting offset=1MiB (or 2MiB or
+> whatever). I'm not sure how genimage would handle the case where the
+> uboot image would be too big that the offset of the next partition could
+> not be honored...
 
-diff --git a/package/python-uvloop/python-uvloop.hash b/package/python-uvloop/python-uvloop.hash
-index 481dbd0569..8b522afb90 100644
---- a/package/python-uvloop/python-uvloop.hash
-+++ b/package/python-uvloop/python-uvloop.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/uvloop/json
--md5  0107f6e04c23bdcd93a0a712a0e52ffb  uvloop-0.19.0.tar.gz
--sha256  0246f4fd1bf2bf702e06b0d45ee91677ee5c31242f39aab4ea6fe0c51aedd0fd  uvloop-0.19.0.tar.gz
-+md5  c3395ddc1746e2bf4b2987d88c4707e8  uvloop-0.20.0.tar.gz
-+sha256  4603ca714a754fc8d9b197e325db25b2ea045385e8a3ad05d3463de725fdf469  uvloop-0.20.0.tar.gz
- # Locally computed sha256 checksums
- sha256  377025287798f9dcd819e1f826fa5fc5e2f382528691ab0528c5cf8c8c282c27  LICENSE-APACHE
- sha256  6dd4c399f26de043d77a2ad7e31db4cb5bf08ea8368b0a42d6e158635cc8ab62  LICENSE-MIT
-diff --git a/package/python-uvloop/python-uvloop.mk b/package/python-uvloop/python-uvloop.mk
-index aaeab2805f..3e2a84de39 100644
---- a/package/python-uvloop/python-uvloop.mk
-+++ b/package/python-uvloop/python-uvloop.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_UVLOOP_VERSION = 0.19.0
-+PYTHON_UVLOOP_VERSION = 0.20.0
- PYTHON_UVLOOP_SOURCE = uvloop-$(PYTHON_UVLOOP_VERSION).tar.gz
--PYTHON_UVLOOP_SITE = https://files.pythonhosted.org/packages/9c/16/728cc5dde368e6eddb299c5aec4d10eaf25335a5af04e8c0abd68e2e9d32
-+PYTHON_UVLOOP_SITE = https://files.pythonhosted.org/packages/bc/f1/dc9577455e011ad43d9379e836ee73f40b4f99c02946849a44f7ae64835e
- PYTHON_UVLOOP_SETUP_TYPE = setuptools
- PYTHON_UVLOOP_LICENSE = Apache-2.0, MIT
- PYTHON_UVLOOP_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
--- 
-2.34.1
+ From the doc of the genimage project, yes, sanity checks are done so 
+that no partitions overlap.
+
+https://github.com/pengutronix/genimage/blob/v18/README.rst#the-image-section
+
+"The partition must not overlap any other partition, or the areas 
+occupied by the partition table."
+
+I also verified this behavior by changing the offset to a smaller one 
+(rootfs offset=128K < uboot image size ~500K). genimage.sh would fail 
+with the log:
+
+ERROR: hdimage(sdcard.img): partition rootfs (offset 0x20000, size 
+0x3c00000) overlaps previous partition u-boot (offset 0x2000, size 0x7cca8)
+
+Maybe I can send another patch to use offset=1M for rootfs?
+
+> 
+> Regards,
+> Yann E. MORIN.
+> 
+
+Thanks,
+Dong
 
 _______________________________________________
 buildroot mailing list
