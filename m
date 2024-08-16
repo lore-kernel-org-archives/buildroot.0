@@ -4,87 +4,83 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B59CEC3DA4A
-	for <buildroot@archiver.kernel.org>; Fri, 16 Aug 2024 16:16:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60D0AC531DC
+	for <buildroot@archiver.kernel.org>; Fri, 16 Aug 2024 16:25:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5EB1781E4A;
-	Fri, 16 Aug 2024 16:16:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0B54F81B23;
+	Fri, 16 Aug 2024 16:25:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eJMBXv92GksK; Fri, 16 Aug 2024 16:16:25 +0000 (UTC)
+ id jAWSdqAWPzGA; Fri, 16 Aug 2024 16:25:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 450CE81E71
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 24E4081C38
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 450CE81E71;
-	Fri, 16 Aug 2024 16:16:25 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 21EEA1BF5A7
- for <buildroot@lists.busybox.net>; Fri, 16 Aug 2024 16:16:24 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 24E4081C38;
+	Fri, 16 Aug 2024 16:25:46 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 22EE51BF5A7
+ for <buildroot@lists.busybox.net>; Fri, 16 Aug 2024 16:25:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with UTF8SMTP id 0F63481E71
- for <buildroot@lists.busybox.net>; Fri, 16 Aug 2024 16:16:24 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with UTF8SMTP id 1D16560E06
+ for <buildroot@lists.busybox.net>; Fri, 16 Aug 2024 16:25:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024)
- with UTF8SMTP id Rmymr7C9aQXI for <buildroot@lists.busybox.net>;
- Fri, 16 Aug 2024 16:16:22 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=43.163.128.50;
- helo=xmbghk7.mail.qq.com; envelope-from=wangdong115@foxmail.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024)
+ with UTF8SMTP id I2hlhg1_yvLM for <buildroot@lists.busybox.net>;
+ Fri, 16 Aug 2024 16:25:44 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=203.205.221.239;
+ helo=out203-205-221-239.mail.qq.com; envelope-from=wangdong115@foxmail.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org DDC8181E4A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DDC8181E4A
-Received: from xmbghk7.mail.qq.com (xmbghk7.mail.qq.com [43.163.128.50])
- by smtp1.osuosl.org (Postfix) with UTF8SMTPS id DDC8181E4A
- for <buildroot@buildroot.org>; Fri, 16 Aug 2024 16:16:11 +0000 (UTC)
-Received: from [192.168.100.247] ([106.120.7.242])
- by newxmesmtplogicsvrszb9-0.qq.com (NewEsmtp) with SMTP
- id 3F9AE8D3; Sat, 17 Aug 2024 00:15:57 +0800
-X-QQ-mid: xmsmtpt1723824957tp1sdlsz6
-Message-ID: <tencent_A1F36423924149B55F08484081B33DC77805@qq.com>
-X-QQ-XMAILINFO: NwIPvWX4YDag+DgnOdAITKZtNPOmHZKWfV9cetc6qShc2f1I3ZnPINQnGuKY4R
- GUh8vcu9qXBE5iZ4PSEfsBTD0d4udEtHpOjJnu6VBu1ybbHOMNu26oXKHmE4A1kfWn31f4p64J3P
- rZ3FGelFl1MjntcbXAlZLyvzV+1hOptHo2vw59tD1/xMoHrDL7n1ONQo9nQm0K+ma1ETIRLh9Aya
- IgGGBmt7YMiaSq/JbTPtN884GEQi1IvpDzIpQq98kJXajJCwAW5oCLZ/f8sO5L/krNIgGkfI3Uhz
- FpHTCF5JaCoDC+sRw5mXet2S+Y0hLffQf9MfaEHPk9cTDzt6+uga0gPl7tSWmwE76K90hksfYlY7
- ymfwNIbAvSJG2WV/cK7aG+/8Lk38PdaqnzJK2GE3PBG5E8BCbr9wq7dLku5SETQ7a4rmoSFvXJ76
- toroc6RCmJOeU+gMeuYJwwWSUBbqu3BTE6AEk7fBdimOEo9WwwKYjCemzzDdnWv4ek/WIJiWEXgn
- Zq3piLFJlJFupKaBVhByfJ4VpVCTx5cDq/dyZiAryUQPsQSKzabhuWnnDJVjOz+5bFWldc/HhoRg
- sVAqRMr6LHSN5GJKQ6/HUpIWoqxRUG9ngVE0a2eDGgOCnqlVaAYe7M9V+eJWNOyrMhNcqBPyESo6
- lhvrGxvHr8WMw68ElQ/BGomXXw5oWnJHEa5zaGXduE+Pd7J32ZAQDn7GvMqOKxDLIR8kvyjsmDju
- EX3m+/mxgXKXdrJgEdZ/b3HE7ppUdS6ai6+JhhCaCok7U5iYpnwDX2GgfaWvixXtIsen9hAA0yXL
- pOKbcML/P6TJLNRkApeQ99IZ2bhjUF41+hEGybsHq+OZnwUiNs9YiZJQEbh5l94rCop5rvSlryOq
- RnCp2GCDlR+mngedhpQ1WKkoZCaEsRpTi/B+5e5ZxqOH/4/xBbwSsy8tUpWD8qIya3HXena/pSbx
- fdfPh51nT57dA/03n8LdRI2eq+/+xn2yLfahII9lNzl1MnbF7PvfV1TuE3OigxYa5IR2utt/NzP0
- GASJnPiLTYkthRb4woiliQ4vOpMhY=
-X-QQ-XMRINFO: NS+P29fieYNw95Bth2bWPxk=
-X-OQ-MSGID: <9a3837f6-ae04-4ec8-96da-8b4e0206ff52@foxmail.com>
-Date: Sat, 17 Aug 2024 00:15:57 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <tencent_C2D6061483906AA710B3001B277F4EE62606@qq.com>
- <20240815215040.0908cb47@windsurf> <Zr5eZO21C1avtmSz@landeda>
-Content-Language: en-US
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org F1E0B60651
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F1E0B60651
+Received: from out203-205-221-239.mail.qq.com (out203-205-221-239.mail.qq.com
+ [203.205.221.239])
+ by smtp3.osuosl.org (Postfix) with UTF8SMTPS id F1E0B60651
+ for <buildroot@buildroot.org>; Fri, 16 Aug 2024 16:25:43 +0000 (UTC)
+Received: from localhost.localdomain ([106.120.7.242])
+ by newxmesmtplogicsvrsza15-1.qq.com (NewEsmtp) with SMTP
+ id 6608C0BD; Sat, 17 Aug 2024 00:25:32 +0800
+X-QQ-mid: xmsmtpt1723825532tvbd9unp0
+Message-ID: <tencent_92439641515553684D208B3331676FB36C05@qq.com>
+X-QQ-XMAILINFO: NoSKVpKsmOWeFohbQD/g3+0HxYmqNQ/09imv5B9tEjwwqi0OTnlW96ELAaLITW
+ 54qz1SGy63myu4BCMCI7VUcTlEmHrrYdUD5SNK5QXwxgc2rcevb3bK3+gi6J0xSBkKTs5SNYJaK5
+ pEXylwEnmcWuCPWSAhkKDy+KiYUUPpTsOTmWDynlzg5ieihvGi+BNxe2/ovP7Ctfv0tAHzcUfcGL
+ cP24EkN52+83vd9SGjPVzSLBtkoC/XL091tmAqefIJ3xfwA55AZ0263TWNYBsm85RcAzCfxfLKiP
+ zGBWm7fOlpMd0wJb4DZzJl4BarCr0DIWZFI50aE5ZRiJzR0cRAGA/4dUmOFvqrzubQPq4ChQJAVJ
+ hXBcZLv7ysVo4nEHartezc/hTooGyKbfRjX4Q2xiUHI5Lf2IrS2mXb1D6zqHaQMGSFsGvCmJrjL/
+ ffYrqQZ8ugzfnvyCvl6pQeTJyBoCAic45R73CFSsSFdUArmsudBXht7raz0ygUudW8f8xeRS7YS4
+ 69jhqPp9fZ5KgLViDm0MV/w5b1Y8IYAmy6gx3ztfJDf2VuixT9BHXsrix0PTLy4jL5f/KSjOwq4y
+ Eemz2bTVF2jqJV6tiNn9pRyW3ZfLYQJmrlFaeTNXehgHhpbwX9OOFd+oXDnr8DQS4auoLlZjtQS+
+ f8DxAcYRwWDq8HICWG+lh+q1jgO6B0U6WeejJjIGxp96kJTq/G1IJumhpz1VvLmHpYU+mLZycM1H
+ QKNRq6cBUq9tUCg0LuEx3Remp6pKpIHrdseIYkRfrk5CtnEzKdZrKEhVjK90XFKkq0BdYq3D2DdK
+ 1Q6SbxRNAFQrdXhL7u5lJHjS64XKEkcG1ijvfRv/QWnP8Ng8zpZFtW/UQpKOaddS7NRllglUkzEK
+ 8pv9O+/jC0vjDb/zUISoOw8O7KEFSp5RVioyb6tuHSA14DFe6ppYEdtlRDmy8TUAfx6Vv8SDuu0s
+ gFPcZ+UrJuZEnnZWreC05eZ1C1B1P51J9YtddqG9U2FOMF/1Qk5lPmW8TpRemyRHijNbaV0unk7h
+ IGzia4dqfqCDajpPJ/xZOq6lx54GOewc9ZkC77OkOKTIxoc7B1I6xqJK2jECA=
+X-QQ-XMRINFO: NyFYKkN4Ny6FSmKK/uo/jdU=
 From: Dong Wang <wangdong115@foxmail.com>
-In-Reply-To: <Zr5eZO21C1avtmSz@landeda>
+To: buildroot@buildroot.org
+Date: Sat, 17 Aug 2024 00:07:56 +0800
+X-OQ-MSGID: <20240816160753.64519-1-wangdong115@foxmail.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=foxmail.com; s=s201512; t=1723824959;
- bh=dqy2Gj00BWDuFxxWK8ZQxNSz8PogB1JIv3qrNgOMugA=;
- h=Date:Subject:To:Cc:References:From:In-Reply-To;
- b=RYojMxH5XABLK6h+rl/WAvbo1TKg5BL32QzHkkUggWe1io0XlnJ/iiqxYbcOG81sC
- vgWorGlbuPm/x+mjyB3HxPpdAH6DxKCAzQXf7Ka0+4H74bq1Ltt0sPGMZXZPkC3Geb
- VTP3PTDbNQkE5K5tcpGDPFVxy07OTHvOGzkz18vk=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=foxmail.com; s=s201512; t=1723825535;
+ bh=4F3iFZbXENeh5k1CuWKvoF1OhUFOA0DyluuAh2oOk+I=;
+ h=From:To:Cc:Subject:Date;
+ b=mk1KC9i5Z5D5Lqnj7TierODwwbTgEgty16w20EGdzwkzBE37GevWhoZmc3PuL/7aX
+ sqqdOlV/sIqkffbx8/vpW8CSMiSRTInAf4SGKlFgmRBUwRJp8KnsMZr7gI9ROuG7Yq
+ nnsf5HBk+/lLmjvC0EUGedmObKlnCoAT6MFUXMoM=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=foxmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (1024-bit key,
  unprotected) header.d=foxmail.com header.i=@foxmail.com header.a=rsa-sha256
- header.s=s201512 header.b=RYojMxH5
-Subject: Re: [Buildroot] [PATCH next] board/friendlyarm/nanopi-neo: fix
- uboot partition size
+ header.s=s201512 header.b=mk1KC9i5
+Subject: [Buildroot] [PATCH next] board/friendlyarm/nanopi-neo: refine
+ genimage.cfg
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,66 +92,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Dong Wang <wangdong115@foxmail.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Yann, All,
+This patch adds the offset argument for rootfs partiton so that it's
+aligned to a 1MiB boundary, instead of using the size of the previous
+u-boot partition to achieve this.
 
-On 2024/8/16 04:00, Yann E. MORIN wrote:
-> Thomas, All,
-> 
-> On 2024-08-15 21:50 +0200, Thomas Petazzoni via buildroot spake thusly:
->> On Fri, 16 Aug 2024 01:28:26 +0800
->> Dong Wang <wangdong115@foxmail.com> wrote:
->>> This patch fixes the wrongly calculated uboot partition size in
->>> genimage.cfg. The size should be 1016K, which is
->>> 1MB (typical partition start) - 8K(offset dictated by the bootrom).
-> [--SNIP--]
->>> -		size = 1000K # 1MB - 8KB(offset) - 16KB(GPT)
->>> +		size = 1016K # 1MB - 8KB(offset)
->> Actually, does this size argument really make sense? This space will
->> automatically take the size of the "u-boot-sunxi-with-spl.bin" file I
->> believe. Or is it needed to make sure that the next partition doesn't
->> start before 1 MB?
->>
->> Why is it important that the size is 1MB - 8KB, and not 1MB or 2MB ?
-> 
-> The above has two effects:
->    - ensure the uboot image is not bigger than the allocated space,
->    - the filesystem image (rootfs) is aligned to a 1MiB boundary.
-> 
-> The latter could be achieved by setting offset=1MiB (or 2MiB or
-> whatever). I'm not sure how genimage would handle the case where the
-> uboot image would be too big that the offset of the next partition could
-> not be honored...
+Genimage will make sure no partitions overlap. So we don't need a size
+argument to limit the size of the u-boot image.
 
- From the doc of the genimage project, yes, sanity checks are done so 
-that no partitions overlap.
+Signed-off-by: Dong Wang <wangdong115@foxmail.com>
+---
 
-https://github.com/pengutronix/genimage/blob/v18/README.rst#the-image-section
+This one looks a little bit neater.
 
-"The partition must not overlap any other partition, or the areas 
-occupied by the partition table."
+ board/friendlyarm/nanopi-neo/genimage.cfg | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I also verified this behavior by changing the offset to a smaller one 
-(rootfs offset=128K < uboot image size ~500K). genimage.sh would fail 
-with the log:
-
-ERROR: hdimage(sdcard.img): partition rootfs (offset 0x20000, size 
-0x3c00000) overlaps previous partition u-boot (offset 0x2000, size 0x7cca8)
-
-Maybe I can send another patch to use offset=1M for rootfs?
-
-> 
-> Regards,
-> Yann E. MORIN.
-> 
-
-Thanks,
-Dong
+diff --git a/board/friendlyarm/nanopi-neo/genimage.cfg b/board/friendlyarm/nanopi-neo/genimage.cfg
+index 8d6bdd3295..6d57dd9088 100644
+--- a/board/friendlyarm/nanopi-neo/genimage.cfg
++++ b/board/friendlyarm/nanopi-neo/genimage.cfg
+@@ -7,11 +7,11 @@ image sdcard.img {
+ 		in-partition-table = false
+ 		image = "u-boot-sunxi-with-spl.bin"
+ 		offset = 8K
+-		size = 1016K # 1MB - 8KB(offset)
+ 	}
+ 
+ 	partition rootfs {
+ 		partition-type = 0x83
+ 		image = "rootfs.ext4"
++		offset = 1M
+ 	}
+ }
+-- 
+2.25.1
 
 _______________________________________________
 buildroot mailing list
