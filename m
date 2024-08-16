@@ -1,70 +1,80 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5FF80C3DA4A
-	for <buildroot@archiver.kernel.org>; Fri, 16 Aug 2024 08:35:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB709C531DC
+	for <buildroot@archiver.kernel.org>; Fri, 16 Aug 2024 09:11:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5855E80D83;
-	Fri, 16 Aug 2024 08:35:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EE5626067E;
+	Fri, 16 Aug 2024 09:11:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jzwdiyWrFUC4; Fri, 16 Aug 2024 08:35:10 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id MjwHy6a2WjcE; Fri, 16 Aug 2024 09:11:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 03CCD80D39
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 09AAF60698
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 03CCD80D39;
-	Fri, 16 Aug 2024 08:35:10 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5B2DD1BF3FD
- for <buildroot@lists.busybox.net>; Fri, 16 Aug 2024 08:35:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 09AAF60698;
+	Fri, 16 Aug 2024 09:11:38 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 0A4EB1BF292
+ for <buildroot@lists.busybox.net>; Fri, 16 Aug 2024 09:11:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5658680D37
- for <buildroot@lists.busybox.net>; Fri, 16 Aug 2024 08:35:08 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id EC9E660698
+ for <buildroot@lists.busybox.net>; Fri, 16 Aug 2024 09:11:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Eryh45stTIKJ for <buildroot@lists.busybox.net>;
- Fri, 16 Aug 2024 08:35:07 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1828:2000:679::23; helo=helium.openadk.org;
- envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 339A280D42
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 339A280D42
-Received: from helium.openadk.org (helium.openadk.org
- [IPv6:2a00:1828:2000:679::23])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 339A280D42
- for <buildroot@buildroot.org>; Fri, 16 Aug 2024 08:35:05 +0000 (UTC)
-Received: by helium.openadk.org (Postfix, from userid 1000)
- id BEB9635211D8; Fri, 16 Aug 2024 10:35:01 +0200 (CEST)
-Date: Fri, 16 Aug 2024 10:35:01 +0200
-From: Waldemar Brodkorb <wbx@openadk.org>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5Z70Avw-aRSt for <buildroot@lists.busybox.net>;
+ Fri, 16 Aug 2024 09:11:35 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=136.143.188.14;
+ helo=sender4-op-o14.zoho.com; envelope-from=george.kiagiadakis@collabora.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 1589C6067E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1589C6067E
+Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com
+ [136.143.188.14])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 1589C6067E
+ for <buildroot@buildroot.org>; Fri, 16 Aug 2024 09:11:34 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; t=1723799491; cv=none; 
+ d=zohomail.com; s=zohoarc; 
+ b=l3C1UyjdjrPIZxkwyCtHbKNtg8kX3H+NRImhQHQMSkt40r+Xm/V1YXKjED0SeQ1vLGfsRiBb/hoOOIqmG5OxxSGt5LuyUQoUekDhmnYq105lq+TTGJWlou6llPgON21YB+vPfgDKSzn1Xi7yqln2xi07itP6TwOwj6kvEDimA9Q=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com;
+ s=zohoarc; t=1723799491;
+ h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To;
+ bh=rp5aHGkxNQ7J9e2usjnooHFiCTZLju4Lyle8BUbv9TQ=; 
+ b=kjXYAg1OkNxZBeIJHeso+KopIcBP0v97veSVHYDsTmqsmDyU1rIS/9VALFeKzEw0OZ0eyOev3ydRyTbo3E7hsTkz7AYeYKvJ2oOu64NtiHzSP6L3HD2EQ8YZYW1xQI1xQ9K4QXyIB8kIdhLP6d3HhB3tsxIcbCJSH71/2bAwePs=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+ dkim=pass  header.i=collabora.com;
+ spf=pass  smtp.mailfrom=george.kiagiadakis@collabora.com;
+ dmarc=pass header.from=<george.kiagiadakis@collabora.com>
+Received: by mx.zohomail.com with SMTPS id 1723799490118950.3205293237243;
+ Fri, 16 Aug 2024 02:11:30 -0700 (PDT)
+From: George Kiagiadakis <george.kiagiadakis@collabora.com>
 To: buildroot@buildroot.org
-Message-ID: <Zr8PNUDzJOp3zuii@waldemar-brodkorb.de>
+Date: Fri, 16 Aug 2024 12:06:57 +0300
+Message-ID: <20240816091119.38036-1-george.kiagiadakis@collabora.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-Content-Disposition: inline
-X-Operating-System: Linux 5.10.0-31-amd64 x86_64
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=openadk.org; s=2022; 
- t=1723797301; bh=g6leOfl3jPfJ3o8lcfIz0j9RkgTo+kQ4R+T2ciHQ43E=;
- h=Date:From:To:Cc:Subject:From;
- b=CK7KBNFVAHil4mC+5t37/UixYvy2u/1rbCtCcDHSc7o9nn8cY1Spaj/ARXHXkgJzF
- y0iFZI83c5Yd+hT10bpBLT/4FpJK5HkeJGhLhowRvbu2wn6r2CQ9LWe8dFlKxeFPiq
- V4eppC3qTFmsWlZni1SWu5fCKsgfxSJfK/2v/fYgsm4rO9b1eQNWnSLUP2gZndxg8y
- jeFTa3/H277KisRKtdRcndrKu9JPvx+kffG3p4G0NcKKyrujhCBhHcOnzk+xKaOSSB
- yyi7bSPbdIoyWBpU3lziWEXW5hRBMzbJyclBO13KBuSTjtUIx/fGGVe+9lKVP26nye
- udvkBZnPXvkHw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=openadk.org
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=openadk.org header.i=@openadk.org header.a=rsa-sha256
- header.s=2022 header.b=CK7KBNFV
-Subject: [Buildroot] [PATCH next] package/gerbera: update to 2.2.0
+X-ZohoMailClient: External
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
+ c=relaxed/relaxed; t=1723799491; 
+ s=zohomail; d=collabora.com; i=george.kiagiadakis@collabora.com;
+ h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:MIME-Version:Content-Transfer-Encoding:Message-Id:Reply-To;
+ bh=rp5aHGkxNQ7J9e2usjnooHFiCTZLju4Lyle8BUbv9TQ=;
+ b=CCs5s/vcaLMP20OlqI9Uv46Amcj7hXEHtZfYYhCoS7/PAAGOycKvjNTKb3VR8YZr
+ L9IOXdg4ufDgtmYlQ4jln95Ue99EEOk8DtFSUMNSJmlZPpnjMwwGZEFqx/uO0Fl3uoi
+ 7GqKPxYolwV2jhMNP8lKk2aEX1Uo/Pk16zgjEnds=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=collabora.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=collabora.com header.i=george.kiagiadakis@collabora.com
+ header.a=rsa-sha256 header.s=zohomail header.b=CCs5s/vc
+Subject: [Buildroot] [PATCH v2 1/4] package/pipewire: bump version to 1.2.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,223 +86,91 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ George Kiagiadakis <george.kiagiadakis@collabora.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-See here for changelogs:
-https://github.com/gerbera/gerbera/releases/tag/v2.2.0
-https://github.com/gerbera/gerbera/releases/tag/v2.1.0
-https://github.com/gerbera/gerbera/releases/tag/v2.0.0
+Disabled roc & snap dependencies, which don't exist in buildroot.
+Added libselinux dependency option.
+Added missing libglib2 dependency pulled by the bluez plugin.
 
-Patch 0001 is no longer required.
-
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: George Kiagiadakis <george.kiagiadakis@collabora.com>
 ---
- .../0001-buildfix-support-fmtlib-10.patch     | 166 ------------------
- package/gerbera/gerbera.hash                  |   2 +-
- package/gerbera/gerbera.mk                    |   2 +-
- 3 files changed, 2 insertions(+), 168 deletions(-)
- delete mode 100644 package/gerbera/0001-buildfix-support-fmtlib-10.patch
+Changes since v1:
+  - None
 
-diff --git a/package/gerbera/0001-buildfix-support-fmtlib-10.patch b/package/gerbera/0001-buildfix-support-fmtlib-10.patch
-deleted file mode 100644
-index b274aab75b..0000000000
---- a/package/gerbera/0001-buildfix-support-fmtlib-10.patch
-+++ /dev/null
-@@ -1,166 +0,0 @@
--From 37957aac0aea776e6f843af2358916f81056a405 Mon Sep 17 00:00:00 2001
--From: Mamoru TASAKA <mtasaka@fedoraproject.org>
--Date: Thu, 29 Jun 2023 22:09:15 +0900
--Subject: [PATCH] buildfix: support fmtlib 10
--
--With fmtlib10, fmt::format does not accept pugi::xml_node as it is.
--Use name() member function, as this usage appear on other places of
--gerbera source code.
--
--Closes #2839 .
--
--Upstream: https://github.com/gerbera/gerbera/commit/37957aac0aea776e6f843af2358916f81056a405
--
--Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-----
-- src/config/setup/config_setup_array.cc       | 6 +++---
-- src/config/setup/config_setup_autoscan.cc    | 2 +-
-- src/config/setup/config_setup_client.cc      | 2 +-
-- src/config/setup/config_setup_dictionary.cc  | 6 +++---
-- src/config/setup/config_setup_dynamic.cc     | 2 +-
-- src/config/setup/config_setup_transcoding.cc | 2 +-
-- src/config/setup/config_setup_tweak.cc       | 2 +-
-- src/config/setup/config_setup_vector.cc      | 4 ++--
-- 8 files changed, 13 insertions(+), 13 deletions(-)
--
--diff --git a/src/config/setup/config_setup_array.cc b/src/config/setup/config_setup_array.cc
--index 62dd5c9a7..a5f8958ce 100644
----- a/src/config/setup/config_setup_array.cc
--+++ b/src/config/setup/config_setup_array.cc
--@@ -137,11 +137,11 @@ std::vector<std::string> ConfigArraySetup::getXmlContent(const pugi::xml_node& o
--     std::vector<std::string> result;
--     if (initArray) {
--         if (!initArray(optValue, result, ConfigDefinition::mapConfigOption(nodeOption))) {
---            throw_std_runtime_error("Invalid {} array value '{}'", xpath, optValue);
--+            throw_std_runtime_error("Invalid {} array value '{}'", xpath, optValue.name());
--         }
--     } else {
--         if (!createOptionFromNode(optValue, result)) {
---            throw_std_runtime_error("Invalid {} array value '{}'", xpath, optValue);
--+            throw_std_runtime_error("Invalid {} array value '{}'", xpath, optValue.name());
--         }
--     }
--     if (result.empty()) {
--@@ -150,7 +150,7 @@ std::vector<std::string> ConfigArraySetup::getXmlContent(const pugi::xml_node& o
--         result = defaultEntries;
--     }
--     if (notEmpty && result.empty()) {
---        throw_std_runtime_error("Invalid array {} empty '{}'", xpath, optValue);
--+        throw_std_runtime_error("Invalid array {} empty '{}'", xpath, optValue.name());
--     }
--     return result;
-- }
--diff --git a/src/config/setup/config_setup_autoscan.cc b/src/config/setup/config_setup_autoscan.cc
--index 9ae4e61f8..5e1394585 100644
----- a/src/config/setup/config_setup_autoscan.cc
--+++ b/src/config/setup/config_setup_autoscan.cc
--@@ -245,7 +245,7 @@ std::shared_ptr<ConfigOption> ConfigAutoscanSetup::newOption(const pugi::xml_nod
-- {
--     auto result = std::vector<AutoscanDirectory>();
--     if (!createOptionFromNode(optValue, result)) {
---        throw_std_runtime_error("Init {} autoscan failed '{}'", xpath, optValue);
--+        throw_std_runtime_error("Init {} autoscan failed '{}'", xpath, optValue.name());
--     }
--     optionValue = std::make_shared<AutoscanListOption>(result);
--     return optionValue;
--diff --git a/src/config/setup/config_setup_client.cc b/src/config/setup/config_setup_client.cc
--index ffd12fc01..857db3c3e 100644
----- a/src/config/setup/config_setup_client.cc
--+++ b/src/config/setup/config_setup_client.cc
--@@ -183,7 +183,7 @@ std::shared_ptr<ConfigOption> ConfigClientSetup::newOption(const pugi::xml_node&
--     auto result = std::make_shared<ClientConfigList>();
-- 
--     if (!createOptionFromNode(isEnabled ? optValue : pugi::xml_node(nullptr), result)) {
---        throw_std_runtime_error("Init {} client config failed '{}'", xpath, optValue);
--+        throw_std_runtime_error("Init {} client config failed '{}'", xpath, optValue.name());
--     }
--     optionValue = std::make_shared<ClientConfigListOption>(result);
--     return optionValue;
--diff --git a/src/config/setup/config_setup_dictionary.cc b/src/config/setup/config_setup_dictionary.cc
--index 003b4cc59..69d1a7255 100644
----- a/src/config/setup/config_setup_dictionary.cc
--+++ b/src/config/setup/config_setup_dictionary.cc
--@@ -163,11 +163,11 @@ std::map<std::string, std::string> ConfigDictionarySetup::getXmlContent(const pu
--     std::map<std::string, std::string> result;
--     if (initDict) {
--         if (!initDict(optValue, result)) {
---            throw_std_runtime_error("Init {} dictionary failed '{}'", xpath, optValue);
--+            throw_std_runtime_error("Init {} dictionary failed '{}'", xpath, optValue.name());
--         }
--     } else {
--         if (!createOptionFromNode(optValue, result) && required) {
---            throw_std_runtime_error("Init {} dictionary failed '{}'", xpath, optValue);
--+            throw_std_runtime_error("Init {} dictionary failed '{}'", xpath, optValue.name());
--         }
--     }
--     if (result.empty()) {
--@@ -176,7 +176,7 @@ std::map<std::string, std::string> ConfigDictionarySetup::getXmlContent(const pu
--         result = defaultEntries;
--     }
--     if (notEmpty && result.empty()) {
---        throw_std_runtime_error("Invalid dictionary {} empty '{}'", xpath, optValue);
--+        throw_std_runtime_error("Invalid dictionary {} empty '{}'", xpath, optValue.name());
--     }
--     return result;
-- }
--diff --git a/src/config/setup/config_setup_dynamic.cc b/src/config/setup/config_setup_dynamic.cc
--index 0074cb6d3..d6962afe6 100644
----- a/src/config/setup/config_setup_dynamic.cc
--+++ b/src/config/setup/config_setup_dynamic.cc
--@@ -192,7 +192,7 @@ std::shared_ptr<ConfigOption> ConfigDynamicContentSetup::newOption(const pugi::x
--     auto result = std::make_shared<DynamicContentList>();
-- 
--     if (!createOptionFromNode(optValue, result)) {
---        throw_std_runtime_error("Init {} DynamicContentList failed '{}'", xpath, optValue);
--+        throw_std_runtime_error("Init {} DynamicContentList failed '{}'", xpath, optValue.name());
--     }
--     optionValue = std::make_shared<DynamicContentListOption>(result);
--     return optionValue;
--diff --git a/src/config/setup/config_setup_transcoding.cc b/src/config/setup/config_setup_transcoding.cc
--index 17d1780dc..1f6fb0604 100644
----- a/src/config/setup/config_setup_transcoding.cc
--+++ b/src/config/setup/config_setup_transcoding.cc
--@@ -501,7 +501,7 @@ std::shared_ptr<ConfigOption> ConfigTranscodingSetup::newOption(const pugi::xml_
--     auto result = std::make_shared<TranscodingProfileList>();
-- 
--     if (!createOptionFromNode(isEnabled ? optValue : pugi::xml_node(nullptr), result)) {
---        throw_std_runtime_error("Init {} transcoding failed '{}'", xpath, optValue);
--+        throw_std_runtime_error("Init {} transcoding failed '{}'", xpath, optValue.name());
--     }
--     optionValue = std::make_shared<TranscodingProfileListOption>(result);
--     return optionValue;
--diff --git a/src/config/setup/config_setup_tweak.cc b/src/config/setup/config_setup_tweak.cc
--index 65dae2759..4da9fca1b 100644
----- a/src/config/setup/config_setup_tweak.cc
--+++ b/src/config/setup/config_setup_tweak.cc
--@@ -257,7 +257,7 @@ std::shared_ptr<ConfigOption> ConfigDirectorySetup::newOption(const pugi::xml_no
--     auto result = std::make_shared<DirectoryConfigList>();
-- 
--     if (!createOptionFromNode(optValue, result)) {
---        throw_std_runtime_error("Init {} DirectoryConfigList failed '{}'", xpath, optValue);
--+        throw_std_runtime_error("Init {} DirectoryConfigList failed '{}'", xpath, optValue.name());
--     }
--     optionValue = std::make_shared<DirectoryTweakOption>(result);
--     return optionValue;
--diff --git a/src/config/setup/config_setup_vector.cc b/src/config/setup/config_setup_vector.cc
--index e5efe2767..9a9670569 100644
----- a/src/config/setup/config_setup_vector.cc
--+++ b/src/config/setup/config_setup_vector.cc
--@@ -181,7 +181,7 @@ std::vector<std::vector<std::pair<std::string, std::string>>> ConfigVectorSetup:
-- {
--     std::vector<std::vector<std::pair<std::string, std::string>>> result;
--     if (!createOptionFromNode(optValue, result) && required) {
---        throw_std_runtime_error("Init {} vector failed '{}'", xpath, optValue);
--+        throw_std_runtime_error("Init {} vector failed '{}'", xpath, optValue.name());
--     }
--     if (result.empty()) {
--         log_debug("{} assigning {} default values", xpath, defaultEntries.size());
--@@ -189,7 +189,7 @@ std::vector<std::vector<std::pair<std::string, std::string>>> ConfigVectorSetup:
--         result = defaultEntries;
--     }
--     if (notEmpty && result.empty()) {
---        throw_std_runtime_error("Invalid vector {} empty '{}'", xpath, optValue);
--+        throw_std_runtime_error("Invalid vector {} empty '{}'", xpath, optValue.name());
--     }
--     return result;
-- }
-diff --git a/package/gerbera/gerbera.hash b/package/gerbera/gerbera.hash
-index ee6e3d9b3a..8a0f052e9e 100644
---- a/package/gerbera/gerbera.hash
-+++ b/package/gerbera/gerbera.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  2144a7c4a13e8b43aa0c911fbeae65f05e2c42254ddd03be5c41f5fcf103a93c  gerbera-1.12.1.tar.gz
-+sha256  c77f4a8ccbed5e18499c0854803fec65ae2f26af633818b52584651fbd3eec13  gerbera-2.2.0.tar.gz
- sha256  cae4138373be41fd2be75faf41ce7efbcf49fb17d0e05ad1c51cc01ac335b9b6  LICENSE.md
-diff --git a/package/gerbera/gerbera.mk b/package/gerbera/gerbera.mk
-index 6616a83e74..b6122610df 100644
---- a/package/gerbera/gerbera.mk
-+++ b/package/gerbera/gerbera.mk
+ package/pipewire/pipewire.hash |  2 +-
+ package/pipewire/pipewire.mk   | 17 +++++++++++++----
+ 2 files changed, 14 insertions(+), 5 deletions(-)
+
+diff --git a/package/pipewire/pipewire.hash b/package/pipewire/pipewire.hash
+index 3370d86641..8ea3890675 100644
+--- a/package/pipewire/pipewire.hash
++++ b/package/pipewire/pipewire.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  2b6e0c4d2e544f5030fa7f4ecf1edd9e5eed15dda1c97135e8a1fded9f3425fe  pipewire-0.3.81.tar.bz2
++sha256  b3817f7b9abf14a6dbcb6ea18b186ba8771f703cb395e4a38366b4e051c40054  pipewire-1.2.2.tar.bz2
+ sha256  8909c319a7e27dbb33a15b9035f89ab3b7b2f6a12f8bcddc755206a8db1ada44  COPYING
+ sha256  be4be5d77424833edf31f53fc1f1cecb6996b9e2d747d9e6fb8f878362ebc92b  LICENSE
+diff --git a/package/pipewire/pipewire.mk b/package/pipewire/pipewire.mk
+index f0f3cd847c..8df2d03758 100644
+--- a/package/pipewire/pipewire.mk
++++ b/package/pipewire/pipewire.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--GERBERA_VERSION = 1.12.1
-+GERBERA_VERSION = 2.2.0
- GERBERA_SITE = $(call github,gerbera,gerbera,v$(GERBERA_VERSION))
- GERBERA_LICENSE = GPL-2.0
- GERBERA_LICENSE_FILES = LICENSE.md
+-PIPEWIRE_VERSION = 0.3.81
++PIPEWIRE_VERSION = 1.2.2
+ PIPEWIRE_SOURCE = pipewire-$(PIPEWIRE_VERSION).tar.bz2
+ PIPEWIRE_SITE = https://gitlab.freedesktop.org/pipewire/pipewire/-/archive/$(PIPEWIRE_VERSION)
+ PIPEWIRE_LICENSE = MIT, LGPL-2.1+ (libspa-alsa), GPL-2.0 (libjackserver)
+@@ -34,10 +34,12 @@ PIPEWIRE_CONF_OPTS += \
+ 	-Dsession-managers=[] \
+ 	-Dlegacy-rtkit=false \
+ 	-Davb=disabled \
++	-Droc=disabled \
+ 	-Dlibcanberra=disabled \
+ 	-Dlibmysofa=disabled \
+ 	-Dlibffado=disabled \
+-	-Dflatpak=disabled
++	-Dflatpak=disabled \
++	-Dsnap=disabled
+ 
+ ifeq ($(BR2_PACKAGE_DBUS),y)
+ PIPEWIRE_CONF_OPTS += -Ddbus=enabled
+@@ -105,9 +107,9 @@ else
+ PIPEWIRE_CONF_OPTS += -Dpipewire-jack=disabled -Djack=disabled
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS)$(BR2_PACKAGE_SBC),yy)
++ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS)$(BR2_PACKAGE_SBC)$(BR2_PACKAGE_LIBGLIB2),yyy)
+ PIPEWIRE_CONF_OPTS += -Dbluez5=enabled
+-PIPEWIRE_DEPENDENCIES += bluez5_utils sbc
++PIPEWIRE_DEPENDENCIES += bluez5_utils sbc libglib2
+ ifeq ($(BR2_PACKAGE_MODEM_MANAGER),y)
+ PIPEWIRE_CONF_OPTS += -Dbluez5-backend-native-mm=enabled
+ PIPEWIRE_DEPENDENCIES += modem-manager
+@@ -239,6 +241,13 @@ else
+ PIPEWIRE_CONF_OPTS += -Draop=disabled
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LIBSELINUX),y)
++PIPEWIRE_CONF_OPTS += -Dselinux=enabled
++PIPEWIRE_DEPENDENCIES += libselinux
++else
++PIPEWIRE_CONF_OPTS += -Dselinux=disabled
++endif
++
+ define PIPEWIRE_USERS
+ 	pipewire -1 pipewire -1 * - - audio,video PipeWire System Daemon
+ endef
 -- 
-2.39.2
+2.43.0
 
 _______________________________________________
 buildroot mailing list
