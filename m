@@ -4,83 +4,115 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60D0AC531DC
-	for <buildroot@archiver.kernel.org>; Fri, 16 Aug 2024 16:25:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A608C531DC
+	for <buildroot@archiver.kernel.org>; Fri, 16 Aug 2024 16:37:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0B54F81B23;
-	Fri, 16 Aug 2024 16:25:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BC16684156;
+	Fri, 16 Aug 2024 16:37:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jAWSdqAWPzGA; Fri, 16 Aug 2024 16:25:46 +0000 (UTC)
+ id xngMyBE1K7Hy; Fri, 16 Aug 2024 16:37:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 24E4081C38
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B4B2D8445B
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 24E4081C38;
-	Fri, 16 Aug 2024 16:25:46 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 22EE51BF5A7
- for <buildroot@lists.busybox.net>; Fri, 16 Aug 2024 16:25:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B4B2D8445B;
+	Fri, 16 Aug 2024 16:37:40 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id B01F71BF5A7
+ for <buildroot@lists.busybox.net>; Fri, 16 Aug 2024 16:37:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with UTF8SMTP id 1D16560E06
- for <buildroot@lists.busybox.net>; Fri, 16 Aug 2024 16:25:45 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9B50B40509
+ for <buildroot@lists.busybox.net>; Fri, 16 Aug 2024 16:37:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024)
- with UTF8SMTP id I2hlhg1_yvLM for <buildroot@lists.busybox.net>;
- Fri, 16 Aug 2024 16:25:44 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=203.205.221.239;
- helo=out203-205-221-239.mail.qq.com; envelope-from=wangdong115@foxmail.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id R5BWv2BIrrhJ for <buildroot@lists.busybox.net>;
+ Fri, 16 Aug 2024 16:37:38 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=67.231.144.184;
+ helo=mx0a-00105401.pphosted.com; envelope-from=brandon.maier@collins.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org F1E0B60651
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F1E0B60651
-Received: from out203-205-221-239.mail.qq.com (out203-205-221-239.mail.qq.com
- [203.205.221.239])
- by smtp3.osuosl.org (Postfix) with UTF8SMTPS id F1E0B60651
- for <buildroot@buildroot.org>; Fri, 16 Aug 2024 16:25:43 +0000 (UTC)
-Received: from localhost.localdomain ([106.120.7.242])
- by newxmesmtplogicsvrsza15-1.qq.com (NewEsmtp) with SMTP
- id 6608C0BD; Sat, 17 Aug 2024 00:25:32 +0800
-X-QQ-mid: xmsmtpt1723825532tvbd9unp0
-Message-ID: <tencent_92439641515553684D208B3331676FB36C05@qq.com>
-X-QQ-XMAILINFO: NoSKVpKsmOWeFohbQD/g3+0HxYmqNQ/09imv5B9tEjwwqi0OTnlW96ELAaLITW
- 54qz1SGy63myu4BCMCI7VUcTlEmHrrYdUD5SNK5QXwxgc2rcevb3bK3+gi6J0xSBkKTs5SNYJaK5
- pEXylwEnmcWuCPWSAhkKDy+KiYUUPpTsOTmWDynlzg5ieihvGi+BNxe2/ovP7Ctfv0tAHzcUfcGL
- cP24EkN52+83vd9SGjPVzSLBtkoC/XL091tmAqefIJ3xfwA55AZ0263TWNYBsm85RcAzCfxfLKiP
- zGBWm7fOlpMd0wJb4DZzJl4BarCr0DIWZFI50aE5ZRiJzR0cRAGA/4dUmOFvqrzubQPq4ChQJAVJ
- hXBcZLv7ysVo4nEHartezc/hTooGyKbfRjX4Q2xiUHI5Lf2IrS2mXb1D6zqHaQMGSFsGvCmJrjL/
- ffYrqQZ8ugzfnvyCvl6pQeTJyBoCAic45R73CFSsSFdUArmsudBXht7raz0ygUudW8f8xeRS7YS4
- 69jhqPp9fZ5KgLViDm0MV/w5b1Y8IYAmy6gx3ztfJDf2VuixT9BHXsrix0PTLy4jL5f/KSjOwq4y
- Eemz2bTVF2jqJV6tiNn9pRyW3ZfLYQJmrlFaeTNXehgHhpbwX9OOFd+oXDnr8DQS4auoLlZjtQS+
- f8DxAcYRwWDq8HICWG+lh+q1jgO6B0U6WeejJjIGxp96kJTq/G1IJumhpz1VvLmHpYU+mLZycM1H
- QKNRq6cBUq9tUCg0LuEx3Remp6pKpIHrdseIYkRfrk5CtnEzKdZrKEhVjK90XFKkq0BdYq3D2DdK
- 1Q6SbxRNAFQrdXhL7u5lJHjS64XKEkcG1ijvfRv/QWnP8Ng8zpZFtW/UQpKOaddS7NRllglUkzEK
- 8pv9O+/jC0vjDb/zUISoOw8O7KEFSp5RVioyb6tuHSA14DFe6ppYEdtlRDmy8TUAfx6Vv8SDuu0s
- gFPcZ+UrJuZEnnZWreC05eZ1C1B1P51J9YtddqG9U2FOMF/1Qk5lPmW8TpRemyRHijNbaV0unk7h
- IGzia4dqfqCDajpPJ/xZOq6lx54GOewc9ZkC77OkOKTIxoc7B1I6xqJK2jECA=
-X-QQ-XMRINFO: NyFYKkN4Ny6FSmKK/uo/jdU=
-From: Dong Wang <wangdong115@foxmail.com>
-To: buildroot@buildroot.org
-Date: Sat, 17 Aug 2024 00:07:56 +0800
-X-OQ-MSGID: <20240816160753.64519-1-wangdong115@foxmail.com>
-X-Mailer: git-send-email 2.25.1
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 7AB47404F9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7AB47404F9
+Received: from mx0a-00105401.pphosted.com (mx0a-00105401.pphosted.com
+ [67.231.144.184])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7AB47404F9
+ for <buildroot@buildroot.org>; Fri, 16 Aug 2024 16:37:38 +0000 (UTC)
+Received: from pps.filterd (m0346910.ppops.net [127.0.0.1])
+ by mx0a-00105401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id
+ 47GF1VqZ001263; Fri, 16 Aug 2024 16:37:33 GMT
+Received: from xusxph009rp050.rtx.com (xusxph009rp050.rtx.com [128.13.125.147])
+ by mx0a-00105401.pphosted.com (PPS) with ESMTPS id 411mb6apew-1
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+ Fri, 16 Aug 2024 16:37:33 +0000
+Received: from xusxph004rp020.corp.ray.com ([128.13.120.224])
+ by xusxph009rp050.rtx.com (8.17.1.19/8.17.1.19) with ESMTPS id 47GGbVOD016134
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+ Fri, 16 Aug 2024 16:37:31 GMT
+Received: from ciulimr01.rockwellcollins.com
+ (snat-utc-mailhub.rockwellcollins.com [10.172.224.19])
+ by xusxph004rp020.corp.ray.com (8.17.1.19/8.17.1.19) with ESMTPS id
+ 47GGbVuo009595
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+ Fri, 16 Aug 2024 16:37:31 GMT
+X-Received: from localhost (unknown [10.148.204.208])
+ by ciulimr01.rockwellcollins.com (Postfix) with ESMTP id 46F303003B7A;
+ Fri, 16 Aug 2024 11:37:31 -0500 (CDT)
+Date: Fri, 16 Aug 2024 16:37:30 +0000
 MIME-Version: 1.0
+Message-Id: <20240816-zynqmp-kria-defconfig-add-missing-uboot-build-dep-v1-1-30867a0e6f72@collins.com>
+X-B4-Tracking: v=1; b=H4sIAEqAv2YC/x2NQQrCMBAAv1L27EITqhW/Ih6S7iYu2iRmrailf
+ zd4HBhmVlCuwgqnboXKL1HJqYHZdTBdXYqMQo3B9nboj+aA3096zAVvVRwShymnIBEdEc6iKin
+ i4nN+ol/kTs0o6PzoeLRmsLSH1i2Vg7z/z/Nl234O4WfJgwAAAA==
+To: buildroot@buildroot.org
+X-Mailer: b4 0.14.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-08-16_11,2024-08-16_01,2024-05-17_01
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-08-16_11,2024-08-16_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=2 mlxlogscore=173
+ mlxscore=2 phishscore=0
+ malwarescore=0 adultscore=0 spamscore=2 suspectscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2407110000
+ definitions=main-2408160117
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=3 suspectscore=0
+ phishscore=0 bulkscore=0
+ spamscore=3 mlxlogscore=145 malwarescore=0 mlxscore=3 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2407110000
+ definitions=main-2408160117
+X-Proofpoint-ORIG-GUID: sbtDvS3zscA5vYyt-OseV8C7JXcVyJgY
+X-Proofpoint-GUID: sbtDvS3zscA5vYyt-OseV8C7JXcVyJgY
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-08-16_11,2024-08-16_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_default_notspam
+ policy=outbound_default score=0
+ impostorscore=0 adultscore=0 clxscore=1015 suspectscore=0
+ lowpriorityscore=0 priorityscore=1501 mlxscore=0 bulkscore=0 spamscore=0
+ malwarescore=0 mlxlogscore=234 phishscore=0 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.12.0-2407110000
+ definitions=main-2408160117
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=foxmail.com; s=s201512; t=1723825535;
- bh=4F3iFZbXENeh5k1CuWKvoF1OhUFOA0DyluuAh2oOk+I=;
- h=From:To:Cc:Subject:Date;
- b=mk1KC9i5Z5D5Lqnj7TierODwwbTgEgty16w20EGdzwkzBE37GevWhoZmc3PuL/7aX
- sqqdOlV/sIqkffbx8/vpW8CSMiSRTInAf4SGKlFgmRBUwRJp8KnsMZr7gI9ROuG7Yq
- nnsf5HBk+/lLmjvC0EUGedmObKlnCoAT6MFUXMoM=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=foxmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=foxmail.com header.i=@foxmail.com header.a=rsa-sha256
- header.s=s201512 header.b=mk1KC9i5
-Subject: [Buildroot] [PATCH next] board/friendlyarm/nanopi-neo: refine
- genimage.cfg
+ d=collins.com; h=cc :
+ content-transfer-encoding : content-type : date : from : message-id :
+ mime-version : subject : to; s=POD051818;
+ bh=m0Id4ISUXHpzie2KUputEYIel8XtGcu438uwOCZlnoo=;
+ b=nmPdiZjM1pmldfWPsEN3UNBx5WpXdPsqMoNgQVsRxO8pq/FyrmZsbtnQ3q79E3iL8qdI
+ YxPbxMjAOF1ptu2BdAjJpnLJ/aedDHBRwfLFgE9bJApXaJIhI3uTfv8nC8WGBAO4GJy5
+ XjLbLdmeyCv8vJPhSNa6DVwPL76l5HY1OoyaZ5qfnZdihxm8TuBXfczmBuiXmYMymRL5
+ 8S/1sj0++q/S63YJzM+304CRkZdykxcTtPdsPnHRnUSrRqkILZiSJbX0Fh54iFctrAcn
+ 7JzDOiCd4xwsWZvkGOsj+v4pCyo8Mu1AzsHULZ1ZPiSwXRpK9FxxSPzJi+MJUst/ePtp Kw== 
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=collins.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=collins.com header.i=@collins.com header.a=rsa-sha256
+ header.s=POD051818 header.b=nmPdiZjM
+Subject: [Buildroot] [PATCH] configs/zynqmp_kria_*_defconfig: add missing
+ U-Boot build dependency
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -92,48 +124,83 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Dong Wang <wangdong115@foxmail.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Brandon Maier via buildroot <buildroot@buildroot.org>
+Reply-To: Brandon Maier <brandon.maier@collins.com>
+Cc: Brandon Maier <brandon.maier@collins.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Neal Frager <neal.frager@amd.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This patch adds the offset argument for rootfs partiton so that it's
-aligned to a 1MiB boundary, instead of using the size of the previous
-u-boot partition to achieve this.
+From: Brandon Maier <Brandon.Maier@collins.com>
 
-Genimage will make sure no partitions overlap. So we don't need a size
-argument to limit the size of the u-boot image.
+When building these boards with BR2_PER_PACKAGE_DIRECTORIES enabled,
+the following error occurs from U-Boot.
 
-Signed-off-by: Dong Wang <wangdong115@foxmail.com>
+  tools/mkeficapsule.c:18:10: fatal error: uuid/uuid.h: No such file or directory
+     18 | #include <uuid/uuid.h>
+        |          ^~~~~~~~~~~~~
+
+The U-Boot defconfig these boards use 'xilinx_zynqmp_kria' enables
+CONFIG_EFI_CAPSULE_ON_DISK, which requires util-linux.
+
+This doesn't fail when BR2_PER_PACKAGE_DIRECTORIES is disabled. This
+is because host-e2fsprogs requires host-util-linux, and
+host-util-linux always builds before host-uboot when single-threaded.
+
+Signed-off-by: Brandon Maier <brandon.maier@collins.com>
 ---
+ configs/zynqmp_kria_kd240_defconfig | 1 +
+ configs/zynqmp_kria_kr260_defconfig | 1 +
+ configs/zynqmp_kria_kv260_defconfig | 1 +
+ 3 files changed, 3 insertions(+)
 
-This one looks a little bit neater.
+diff --git a/configs/zynqmp_kria_kd240_defconfig b/configs/zynqmp_kria_kd240_defconfig
+index dff49b9837..ce76805638 100644
+--- a/configs/zynqmp_kria_kd240_defconfig
++++ b/configs/zynqmp_kria_kd240_defconfig
+@@ -28,6 +28,7 @@ BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=zynqmp-smk-k24-revA"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+ BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
++BR2_TARGET_UBOOT_NEEDS_UTIL_LINUX=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
+ BR2_TARGET_UBOOT_ZYNQMP=y
+diff --git a/configs/zynqmp_kria_kr260_defconfig b/configs/zynqmp_kria_kr260_defconfig
+index 24fdea9c30..21d01e5f2a 100644
+--- a/configs/zynqmp_kria_kr260_defconfig
++++ b/configs/zynqmp_kria_kr260_defconfig
+@@ -28,6 +28,7 @@ BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=zynqmp-smk-k26-revA"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+ BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
++BR2_TARGET_UBOOT_NEEDS_UTIL_LINUX=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
+ BR2_TARGET_UBOOT_ZYNQMP=y
+diff --git a/configs/zynqmp_kria_kv260_defconfig b/configs/zynqmp_kria_kv260_defconfig
+index a16da66e38..f83ef35be3 100644
+--- a/configs/zynqmp_kria_kv260_defconfig
++++ b/configs/zynqmp_kria_kv260_defconfig
+@@ -28,6 +28,7 @@ BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="DEVICE_TREE=zynqmp-smk-k26-revA"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+ BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
++BR2_TARGET_UBOOT_NEEDS_UTIL_LINUX=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="spl/boot.bin"
+ BR2_TARGET_UBOOT_ZYNQMP=y
 
- board/friendlyarm/nanopi-neo/genimage.cfg | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+---
+base-commit: c025a655c6adba41df0d8cba0009bbfd5a95ac24
+change-id: 20240816-zynqmp-kria-defconfig-add-missing-uboot-build-dep-ab7ae72142d5
 
-diff --git a/board/friendlyarm/nanopi-neo/genimage.cfg b/board/friendlyarm/nanopi-neo/genimage.cfg
-index 8d6bdd3295..6d57dd9088 100644
---- a/board/friendlyarm/nanopi-neo/genimage.cfg
-+++ b/board/friendlyarm/nanopi-neo/genimage.cfg
-@@ -7,11 +7,11 @@ image sdcard.img {
- 		in-partition-table = false
- 		image = "u-boot-sunxi-with-spl.bin"
- 		offset = 8K
--		size = 1016K # 1MB - 8KB(offset)
- 	}
- 
- 	partition rootfs {
- 		partition-type = 0x83
- 		image = "rootfs.ext4"
-+		offset = 1M
- 	}
- }
+Best regards,
 -- 
-2.25.1
+Brandon Maier <brandon.maier@collins.com>
 
 _______________________________________________
 buildroot mailing list
