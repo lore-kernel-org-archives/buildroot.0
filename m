@@ -4,67 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A2E7C531DC
-	for <buildroot@archiver.kernel.org>; Fri, 16 Aug 2024 16:55:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 17334C3DA4A
+	for <buildroot@archiver.kernel.org>; Fri, 16 Aug 2024 17:33:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1393E80E00;
-	Fri, 16 Aug 2024 16:55:59 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id ADD7A844C9;
+	Fri, 16 Aug 2024 17:33:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uf85Wa6luI_l; Fri, 16 Aug 2024 16:55:58 +0000 (UTC)
+ id SSwM_HiMpz-v; Fri, 16 Aug 2024 17:33:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 16F8D840F9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C097E844CC
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 16F8D840F9;
-	Fri, 16 Aug 2024 16:55:58 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id AE3D71BF5A7
- for <buildroot@lists.busybox.net>; Fri, 16 Aug 2024 16:55:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C097E844CC;
+	Fri, 16 Aug 2024 17:33:20 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B808D1BF84C
+ for <buildroot@lists.busybox.net>; Fri, 16 Aug 2024 17:33:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9B9B340438
- for <buildroot@lists.busybox.net>; Fri, 16 Aug 2024 16:55:56 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id A6090844CC
+ for <buildroot@lists.busybox.net>; Fri, 16 Aug 2024 17:33:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nrmNjiLH6yto for <buildroot@lists.busybox.net>;
- Fri, 16 Aug 2024 16:55:54 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1828:2000:679::23; helo=helium.openadk.org;
- envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 075634024D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 075634024D
-Received: from helium.openadk.org (helium.openadk.org
- [IPv6:2a00:1828:2000:679::23])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 075634024D
- for <buildroot@buildroot.org>; Fri, 16 Aug 2024 16:55:53 +0000 (UTC)
-Received: by helium.openadk.org (Postfix, from userid 1000)
- id 5F0053521185; Fri, 16 Aug 2024 18:55:50 +0200 (CEST)
-Date: Fri, 16 Aug 2024 18:55:50 +0200
-From: Waldemar Brodkorb <wbx@openadk.org>
-To: buildroot@buildroot.org
-Message-ID: <Zr+Eli3+h4ys5Clf@waldemar-brodkorb.de>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tgEqpzJ-d2X1 for <buildroot@lists.busybox.net>;
+ Fri, 16 Aug 2024 17:33:17 +0000 (UTC)
+X-Greylist: delayed 533 seconds by postgrey-1.37 at util1.osuosl.org;
+ Fri, 16 Aug 2024 17:33:15 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org C9024844C9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C9024844C9
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.84.136;
+ helo=mail.desaster-games.net; envelope-from=jubalh@iodoru.org;
+ receiver=<UNKNOWN> 
+Received: from mail.desaster-games.net (mail.desaster-games.net [176.9.84.136])
+ by smtp1.osuosl.org (Postfix) with ESMTP id C9024844C9
+ for <buildroot@busybox.net>; Fri, 16 Aug 2024 17:33:15 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by mail.desaster-games.net (Postfix) with ESMTP id F19121300C;
+ Fri, 16 Aug 2024 19:24:19 +0200 (CEST)
+X-Virus-Scanned: Amavis at mail.desaster-games.com
+Received: from mail.desaster-games.net ([127.0.0.1])
+ by localhost (mail.desaster-games.net [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id VCLqLlyU6Lm6; Fri, 16 Aug 2024 19:24:06 +0200 (CEST)
+Received: from ymir.nue2.suse.org (unknown [81.95.8.245])
+ by mail.desaster-games.net (Postfix) with ESMTPSA id A1D9F13006;
+ Fri, 16 Aug 2024 19:24:06 +0200 (CEST)
+From: Michael Vetter <jubalh@iodoru.org>
+To: buildroot@busybox.net
+Date: Fri, 16 Aug 2024 19:23:44 +0200
+Message-Id: <20240816172344.13041-1-jubalh@iodoru.org>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-Disposition: inline
-X-Operating-System: Linux 5.10.0-31-amd64 x86_64
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=openadk.org; s=2022; 
- t=1723827350; bh=mTOW9x7A/VN+ucWxkJHY3TSKuePSG0j4imzLLKPunY8=;
- h=Date:From:To:Subject:From;
- b=lIMeu1c7aCmnAUOFYKnqkt33mp2ullVDVLWRB1vvd+AahwDYUgy5oGSpE6TM7z5jv
- mrO4uef8qix5+7A+Js3NgCQPs9gBWfpj23U7nzXHJxP2FpN73j/7cT/X3JgeDtdzp6
- o5w8w3GeBjGSdCbtgdHLO5c65y2QAJFoSgohHrqA5dh1uLW7MkvQDrQNDEn6vzm9K8
- taQGKxn2ajcDVq5WYfrIK0Ss7KfWEQ4VESfoOWyHwhVhwRjqe7JB9R6qbu4xSDpBMJ
- /SLwns69YCg2peKZR2fnbGMlgykhi6xU+KILROYDq7r3j8s/9HWcESpB7XzmRey8Xe
- kH6IO8/mXgjvw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=none (p=none dis=none)
- header.from=openadk.org
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=openadk.org header.i=@openadk.org header.a=rsa-sha256
- header.s=2022 header.b=lIMeu1c7
-Subject: [Buildroot] [PATCH] package/uclibc: disable time64 for mips64 n32
+ header.from=iodoru.org
+Subject: [Buildroot] [PATCH 1/1] package/shadow: bump to version 4.16.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,55 +70,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: jubalh@iodoru.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Michael Vetter <jubalh@iodoru.org>
 ---
-We need to wait until Dmitry is back, if he knows a real fix.
----
- ...r-n32-ABI-breaks-a-lot-of-tests-disa.patch | 28 +++++++++++++++++++
- 1 file changed, 28 insertions(+)
- create mode 100644 package/uclibc/0001-mips64-time64-for-n32-ABI-breaks-a-lot-of-tests-disa.patch
+ package/shadow/shadow.hash | 2 +-
+ package/shadow/shadow.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/uclibc/0001-mips64-time64-for-n32-ABI-breaks-a-lot-of-tests-disa.patch b/package/uclibc/0001-mips64-time64-for-n32-ABI-breaks-a-lot-of-tests-disa.patch
-new file mode 100644
-index 0000000000..5a12231b42
---- /dev/null
-+++ b/package/uclibc/0001-mips64-time64-for-n32-ABI-breaks-a-lot-of-tests-disa.patch
-@@ -0,0 +1,28 @@
-+From dd01754e21da71706af07f3e56eade66fc9164fb Mon Sep 17 00:00:00 2001
-+From: Waldemar Brodkorb <wbx@openadk.org>
-+Date: Fri, 16 Aug 2024 16:59:28 +0200
-+Subject: [PATCH] mips64: time64 for n32 ABI breaks a lot of tests, disable it
-+ for now
-+
-+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-+Upstream: https://cgit.uclibc-ng.org/cgi/cgit/uclibc-ng.git/commit/?id=dd01754e21da71706af07f3e56eade66fc9164fb
-+---
-+ extra/Configs/Config.in | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/extra/Configs/Config.in b/extra/Configs/Config.in
-+index 454b6ddb8..86bd20d76 100644
-+--- a/extra/Configs/Config.in
-++++ b/extra/Configs/Config.in
-+@@ -1032,7 +1032,7 @@ config UCLIBC_USE_TIME64
-+ 		   TARGET_i386                           || \
-+ 		   TARGET_m68k                           || \
-+ 		   TARGET_microblaze                     || \
-+-		   (TARGET_mips && !CONFIG_MIPS_N64_ABI) || \
-++		   (TARGET_mips && !(CONFIG_MIPS_N64_ABI || CONFIG_MIPS_N32_ABI)) || \
-+ 		   TARGET_or1k                           || \
-+ 		   TARGET_powerpc                        || \
-+ 		   TARGET_riscv32                        || \
-+-- 
-+2.30.2
-+
+diff --git a/package/shadow/shadow.hash b/package/shadow/shadow.hash
+index 1d83272cec..7155baff07 100644
+--- a/package/shadow/shadow.hash
++++ b/package/shadow/shadow.hash
+@@ -1,4 +1,4 @@
+ # Verified from https://github.com/shadow-maint/shadow/releases/download/4.14.5/shadow-4.14.5.tar.xz.asc
+ # with key 66D0387DB85D320F8408166DB175CFA98F192AF2
+-sha256  bb5f70639a0581f9d626f227ce45b31ac137daa7c451c0f672ce14f2731a96ee  shadow-4.15.1.tar.xz
++sha256  b78e3921a95d53282a38e90628880624736bf6235e36eea50c50835f59a3530b  shadow-4.16.0.tar.xz
+ sha256  3d25ab8f43fdc14624296a56ff8dc3e72e499ad35f32ae0c803f4959cfe17c0a  COPYING
+diff --git a/package/shadow/shadow.mk b/package/shadow/shadow.mk
+index 59771b9182..f0a2b57b4d 100644
+--- a/package/shadow/shadow.mk
++++ b/package/shadow/shadow.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SHADOW_VERSION = 4.15.1
++SHADOW_VERSION = 4.16.0
+ SHADOW_SITE = https://github.com/shadow-maint/shadow/releases/download/$(SHADOW_VERSION)
+ SHADOW_SOURCE = shadow-$(SHADOW_VERSION).tar.xz
+ SHADOW_LICENSE = BSD-3-Clause
 -- 
-2.30.2
+2.35.3
 
 _______________________________________________
 buildroot mailing list
