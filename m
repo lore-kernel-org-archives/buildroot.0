@@ -1,68 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD9B9C52D7F
-	for <buildroot@archiver.kernel.org>; Sat, 17 Aug 2024 17:42:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5BBFCC531DF
+	for <buildroot@archiver.kernel.org>; Sat, 17 Aug 2024 19:37:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 701CE401DF;
-	Sat, 17 Aug 2024 17:42:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BA39D81094;
+	Sat, 17 Aug 2024 19:37:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3GSV7Usg2ImL; Sat, 17 Aug 2024 17:42:10 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qpnWuioCgx2P; Sat, 17 Aug 2024 19:37:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3306D401F0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A6873810AD
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3306D401F0;
-	Sat, 17 Aug 2024 17:42:10 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 600D81BF863
- for <buildroot@lists.busybox.net>; Sat, 17 Aug 2024 17:42:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A6873810AD;
+	Sat, 17 Aug 2024 19:37:40 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 5B31A1BF4D7
+ for <buildroot@lists.busybox.net>; Sat, 17 Aug 2024 19:37:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4D899401F0
- for <buildroot@lists.busybox.net>; Sat, 17 Aug 2024 17:42:08 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 49AB8605EF
+ for <buildroot@lists.busybox.net>; Sat, 17 Aug 2024 19:37:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qZoqBsRcqGR0 for <buildroot@lists.busybox.net>;
- Sat, 17 Aug 2024 17:42:07 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=89.238.66.15;
- helo=helium.openadk.org; envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 29102401DF
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 29102401DF
-Received: from helium.openadk.org (helium.openadk.org [89.238.66.15])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 29102401DF
- for <buildroot@buildroot.org>; Sat, 17 Aug 2024 17:42:05 +0000 (UTC)
-Received: by helium.openadk.org (Postfix, from userid 1000)
- id 19D873537904; Sat, 17 Aug 2024 19:42:01 +0200 (CEST)
-Date: Sat, 17 Aug 2024 19:42:01 +0200
-From: Waldemar Brodkorb <wbx@openadk.org>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id uSVkrdLGRu3N for <buildroot@lists.busybox.net>;
+ Sat, 17 Aug 2024 19:37:38 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::222;
+ helo=relay2-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org DA54B605EE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DA54B605EE
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id DA54B605EE
+ for <buildroot@buildroot.org>; Sat, 17 Aug 2024 19:37:37 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPA id 7C0BE40004;
+ Sat, 17 Aug 2024 19:37:34 +0000 (UTC)
 To: buildroot@buildroot.org
-Message-ID: <ZsDg6V61COGNWtyT@waldemar-brodkorb.de>
+Date: Sat, 17 Aug 2024 21:37:32 +0200
+Message-ID: <20240817193733.858704-1-thomas.petazzoni@bootlin.com>
+X-Mailer: git-send-email 2.46.0
 MIME-Version: 1.0
-Content-Disposition: inline
-X-Operating-System: Linux 5.10.0-31-amd64 x86_64
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=openadk.org; s=2022; 
- t=1723916522; bh=gNEsctwqmmcsVyV647W3ca7SXHQdqiR7z/4akgAnbMs=;
- h=Date:From:To:Subject:From;
- b=lslWs9dE6V5MQKZulOgIdDqSetXwWCN3zx682LCub/Pa13woa1AfGYRgKuOHyuUjZ
- Gm8su07iggDNOUz68DSIh3xb9efTxb6ehyquTcWpF+0kmke7g6IIChALaPkgeNJCzP
- BvtS0hh3TKdWJrPBKvag+WDiJfFn0CjtzhSTw44Ubk104h/R6FL5pkf958imU6XabI
- SA5QqEMVfw0xrAv6OEcE2eeF1YPU78hXoRdFowlKbi+b3BD6up7gsYquA/fR4iOEph
- 2YH9cT63ljjpE4PQQkGcQvdn7MAup/jInL91WqmhP97Hp4FBjcHKd8naDIby0JXc2F
- F7GQUSaUXe9xg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=openadk.org
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1723923454;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=VpXjfelRlKP1Ul2Khy9G5tUBjUPFUFW6nbJBPT1Xebc=;
+ b=AmQojqQsT70u2Vopcwg21reBd+CInpa9deCb86dE9PUxuXMnG0Ur0jCg8/fIMDGm7yJTt2
+ Mb+8ybau9hMi2Y3DElFbtVZ1MuXquiy1SMsfb2TqN6gBpnsriJtS4C9rotKzJRzZ+8Una8
+ zYUTde6daNOMiIjq7XTJmpqSajtiimR5lZa7+zIZUADTY0O2q4we0P+fCQduhG8XAfNXBK
+ G7jq3AXJ+Ul+WVI4YDiyg1tVwtU7mWZfq/LU5qMmU2Jea+gDljocCSIZ4oJzHI2YDwGQ6H
+ j1DzqxTptVxQ3r58CncKR5K3sqY9wwMTBssltZMDYxZn/WJfujK+nXGjRRSWXQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=openadk.org header.i=@openadk.org header.a=rsa-sha256
- header.s=2022 header.b=lslWs9dE
-Subject: [Buildroot] [PATCH] package/libsepol: fix reallocarray detection
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=AmQojqQs
+Subject: [Buildroot] [PATCH] package/python-huepy: add patch to fix LICENSE
+ file installation
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,60 +77,86 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Louis Aussedat <aussedat.louis@gmail.com>,
+ James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-For some toolchains the detection of reallocarray fails with:
-ld: final link failed: file truncated
+The python-huepy has an incorrect data_files statement in its
+setup.py, causing the LICENSE file to be installed directly as
+$(TARGET_DIR)/LICENSE. This was detected because several packages were
+doing this, and the second package doing
+it (python-unittest-xml-reporting, fixed separately) was erroring out
+when trying to overwrite this already existing file.
 
-It is hard to tell if it is a new feature of gcc or binutils
-or even an architecture specific bug.
-See here for example for an old bug where it was a HPPA specific
-binutils problem:
-https://sourceware.org/bugzilla/show_bug.cgi?id=19526
+This commit fixes the case of python-huepy by adding a patch that has
+been submitted upstream.
 
-Fixes:
- - http://autobuild.buildroot.net/results/335/335aad5ecba2a4d21772767aa3a80d7d5631f4e4
+There are no autobuilder failures related to python-huepy, but this
+was detected while fixing
+http://autobuild.buildroot.net/results/2c91243b440087bbc7d051d65f553f59d05dd207/
+for python-unittest-xml-reporting.
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+This bug has been in huepy since at least 2018, so this patch can be
+backported to previous Buildroot versions.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libsepol/0002-remove-o-dev-null.patch | 23 +++++++++++++++++++
- 1 file changed, 23 insertions(+)
- create mode 100644 package/libsepol/0002-remove-o-dev-null.patch
+ ...ta_files-installs-LICENSE-to-incorre.patch | 38 +++++++++++++++++++
+ 1 file changed, 38 insertions(+)
+ create mode 100644 package/python-huepy/0001-setup.py-drop-data_files-installs-LICENSE-to-incorre.patch
 
-diff --git a/package/libsepol/0002-remove-o-dev-null.patch b/package/libsepol/0002-remove-o-dev-null.patch
+diff --git a/package/python-huepy/0001-setup.py-drop-data_files-installs-LICENSE-to-incorre.patch b/package/python-huepy/0001-setup.py-drop-data_files-installs-LICENSE-to-incorre.patch
 new file mode 100644
-index 0000000000..b6559f6dbd
+index 0000000000..3c50a44377
 --- /dev/null
-+++ b/package/libsepol/0002-remove-o-dev-null.patch
-@@ -0,0 +1,23 @@
-+From 7a9b8b4329285215e5608c3393394bef435b2220 Mon Sep 17 00:00:00 2001
-+From: Waldemar Brodkorb <wbx@openadk.org>
-+Date: Sat, 17 Aug 2024 19:05:42 +0200
-+Subject: [PATCH] remove -o /dev/null
++++ b/package/python-huepy/0001-setup.py-drop-data_files-installs-LICENSE-to-incorre.patch
+@@ -0,0 +1,38 @@
++From ee3010004a005bc852e6b9318807f373bd89e901 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Date: Sat, 17 Aug 2024 14:10:16 +0200
++Subject: [PATCH] setup.py: drop data_files, installs LICENSE to incorrect
++ place
 +
-+With -o /dev/null there is following error happening:
-+ld: final link failed: file truncated
++The data_files statement in the setup() calls installs the LICENSE
++file in the wrong place: in /usr/LICENSE, or even /LICENSE depending
++on the configuration.
 +
-+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-+Upstream: https://github.com/SELinuxProject/selinux/issues/438
++So let's drop this, and let setuptools install the LICENSE file
++automatically: since setuptools v56, the license_files attribute is
++automatically assigned to a default value, which includes "LICENSE",
++so there is in fact nothing to do to the get the LICENSE file
++installed at the correct location. See
++https://setuptools.pypa.io/en/latest/history.html#v56-0-0.
++
++Upstream: https://github.com/s0md3v/huepy/pull/42
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 +---
-+diff -Nur libsepol-3.6.orig/src/Makefile libsepol-3.6/src/Makefile
-+--- libsepol-3.6.orig/src/Makefile	2023-12-13 15:46:22.000000000 +0100
-++++ libsepol-3.6/src/Makefile	2024-08-17 19:37:14.447327553 +0200
-+@@ -31,7 +31,7 @@
-+ 
-+ # check for reallocarray(3) availability
-+ H := \#
-+-ifeq (yes,$(shell printf '${H}define _GNU_SOURCE\n${H}include <stdlib.h>\nint main(void){void*p=reallocarray(NULL, 1, sizeof(char));return 0;}' | $(CC) -x c -o /dev/null - >/dev/null 2>&1 && echo yes))
-++ifeq (yes,$(shell printf '${H}define _GNU_SOURCE\n${H}include <stdlib.h>\nint main(void){void*p=reallocarray(NULL, 1, sizeof(char));return 0;}' | $(CC) -x c - >/dev/null 2>&1 && echo yes))
-+ override CFLAGS += -DHAVE_REALLOCARRAY
-+ endif
-+ 
++ setup.py | 1 -
++ 1 file changed, 1 deletion(-)
++
++diff --git a/setup.py b/setup.py
++index 8b5a726..bd41f1c 100644
++--- a/setup.py
+++++ b/setup.py
++@@ -30,7 +30,6 @@ setup(
++     keywords='hue, color, terminal color, colorama',
++     packages=find_packages(),
++     py_modules=['huepy'],
++-    data_files=[('', ['LICENSE'])],
++     include_package_data=True,
++     classifiers=[
++         'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
++-- 
++2.46.0
++
 -- 
-2.30.2
+2.46.0
 
 _______________________________________________
 buildroot mailing list
