@@ -4,47 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8A88C3DA4A
-	for <buildroot@archiver.kernel.org>; Fri, 16 Aug 2024 21:25:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5B58DC3DA4A
+	for <buildroot@archiver.kernel.org>; Sat, 17 Aug 2024 00:00:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 148D040457;
-	Fri, 16 Aug 2024 21:25:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BE70B40B8F;
+	Sat, 17 Aug 2024 00:00:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jxZnjRS66FcZ; Fri, 16 Aug 2024 21:25:19 +0000 (UTC)
+ id XWNsrdpONJ1x; Sat, 17 Aug 2024 00:00:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F1EF6404D7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 63ECE40C97
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F1EF6404D7;
-	Fri, 16 Aug 2024 21:25:18 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 87E141BF399
- for <buildroot@lists.busybox.net>; Fri, 16 Aug 2024 21:25:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 63ECE40C97;
+	Sat, 17 Aug 2024 00:00:35 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 8756A1BF426
+ for <buildroot@lists.busybox.net>; Sat, 17 Aug 2024 00:00:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 82F9F80E4B
- for <buildroot@lists.busybox.net>; Fri, 16 Aug 2024 21:25:17 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 811AF40C97
+ for <buildroot@lists.busybox.net>; Sat, 17 Aug 2024 00:00:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8YFfJqlQ3tEU for <buildroot@lists.busybox.net>;
- Fri, 16 Aug 2024 21:25:16 +0000 (UTC)
-Received-SPF: Softfail (mailfrom) identity=mailfrom; client-ip=23.95.206.166;
- helo=busybox.net; envelope-from=admin@busybox.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 68BB280E49
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 68BB280E49
-Received: from busybox.net (unknown [23.95.206.166])
- by smtp1.osuosl.org (Postfix) with ESMTP id 68BB280E49
- for <buildroot@busybox.net>; Fri, 16 Aug 2024 21:25:15 +0000 (UTC)
-From: Content-filter at mail.busybox.net <admin@busybox.net>
-To: buildroot@busybox.net
-Date: 16 Aug 2024 23:25:15 +0200
-Message-ID: <20240816232515.AA5DA881C81A5805@busybox.net>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id U-c0tjTxZwz0 for <buildroot@lists.busybox.net>;
+ Sat, 17 Aug 2024 00:00:33 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::f29; helo=mail-qv1-xf29.google.com;
+ envelope-from=markus.mayer@broadcom.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org C901540B8F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C901540B8F
+Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com
+ [IPv6:2607:f8b0:4864:20::f29])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C901540B8F
+ for <buildroot@buildroot.org>; Sat, 17 Aug 2024 00:00:32 +0000 (UTC)
+Received: by mail-qv1-xf29.google.com with SMTP id
+ 6a1803df08f44-6bf76858652so2134036d6.2
+ for <buildroot@buildroot.org>; Fri, 16 Aug 2024 17:00:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1723852831; x=1724457631;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=Rj0lzCiQgy37DpALjSvn1YWlwxTdnXSxczwRcQcVtyY=;
+ b=l9nj5pT3+Osh/omBipzrdqGuQW1BEAb68H45CyFfr4eHKhVyNoZxckyT1XnAW69ode
+ TYVULGGir6+mFkRaESph8Wdup6iK2FyjYm1edC1nyteBNc0G4o5K2ChBywSFm8GiUWj2
+ 1EaINN0DnXfKZyYOBsRkI8fKjztQUnHODgLwKIg2s2mCT2gon1ECdwzH9wb1u0Oc/WU4
+ hsfdPvR7LnmkKdtHagTJvkVTC4ZETxTp9JcJVj9muIAn4mG+VbN9WsHLsi0INsr9wGQ9
+ aEyPV/8785lnZWRstdUi/ri0wPLduYAJxMIYvK++JO4TBzkypgpnEtmzqXsKgQzh+Q3h
+ NOKA==
+X-Gm-Message-State: AOJu0YypsteGAOGDtXZBjJp7hXFxmx5Q0zc6Iy9b+69rLlVKVRSJ28W1
+ 6WjiTx0WKKaMpMA/bpYUn0SPblMOa0OHqJUsXlnRuxPEg2784UHHLnvOD16HTg==
+X-Google-Smtp-Source: AGHT+IE6C0UGAljmDOrcmOpG8t35MrWjZAMiC8FqUDvODAy/Se0WtuCz2Xcnf+4M61CTMt4xf3V7tQ==
+X-Received: by 2002:a05:6214:2a83:b0:6bf:6ef5:4160 with SMTP id
+ 6a1803df08f44-6bf7cc8e5e0mr28494326d6.0.1723852830913; 
+ Fri, 16 Aug 2024 17:00:30 -0700 (PDT)
+Received: from lbrmn-mmayer.ric.broadcom.net ([192.19.161.248])
+ by smtp.gmail.com with ESMTPSA id
+ 6a1803df08f44-6bf6fe4eefbsm22917056d6.70.2024.08.16.17.00.29
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 16 Aug 2024 17:00:30 -0700 (PDT)
+Received: by lbrmn-mmayer.ric.broadcom.net (Postfix, from userid 1000)
+ id 97D5CE04; Fri, 16 Aug 2024 17:00:28 -0700 (PDT)
+To: Buildroot Mailing List <buildroot@buildroot.org>
+Date: Fri, 16 Aug 2024 17:00:26 -0700
+Message-ID: <20240817000027.654079-1-mmayer@broadcom.com>
+X-Mailer: git-send-email 2.46.0
 MIME-Version: 1.0
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=busybox.net
-Subject: [Buildroot] Delivery Status Notification (Failure)
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=broadcom.com; s=google; t=1723852831; x=1724457631; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=Rj0lzCiQgy37DpALjSvn1YWlwxTdnXSxczwRcQcVtyY=;
+ b=cpVD1pVfBmMrgnAXWWgf4IURsX+Zb4xyfJWihrcjtbhB0DHQ5v5KCaJ7oZNZBfwr0i
+ 4bE+TqbPLs5cDcAOCWxD5lGhmGUbKYbP30pwqghBDgnkbxVXIHjaMVt7Cr+4ZvSvhTD2
+ Gz3bolJ3gMlSRyDmu99fjxGzGD/tBheyLcA44=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=broadcom.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=broadcom.com header.i=@broadcom.com header.a=rsa-sha256
+ header.s=google header.b=cpVD1pVf
+Subject: [Buildroot] [PATCH] package/dropbear: provide config option to turn
+ off SHA1 for RSA
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,135 +99,67 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============1244504215755980169=="
+From: Markus Mayer via buildroot <buildroot@buildroot.org>
+Reply-To: Markus Mayer <mmayer@broadcom.com>
+Cc: Markus Mayer <mmayer@broadcom.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============1244504215755980169==
-Content-Type: text/html;
-	charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Since SHA1 hashing is considered insecure, users may wish to disable
+support for it. This will reduce compatibility with older systems but
+provide a more secure setup.
 
-<html><head>
-<meta name=3D"GENERATOR" content=3D"MSHTML 11.00.9600.20139">
-<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
-</head>
-<body>
-<table style=3D"border: 1px dotted rgb(211, 211, 211); border-image: none; =
-text-align: left; color: rgb(51, 51, 51); text-transform: none; letter-spac=
-ing: normal; font-family: Roboto, Tahoma, Helvetica, sans-serif; font-size:=
- 13px; font-style: normal; font-weight: 400; word-spacing: 0px; white-space=
-: normal; border-collapse: collapse; box-sizing: border-box; orphans: 2; wi=
-dows: 2; background-color: rgb(255, 255, 255); font-variant-ligatures: norm=
-al; font-variant-caps: normal;=20
--webkit-text-stroke-width: 0px; text-decoration-thickness: initial; text-de=
-coration-style: initial; text-decoration-color: initial;">
-<tbody style=3D"box-sizing: border-box;">
-<tr style=3D"box-sizing: border-box;">
-<th style=3D"padding: 5px; border: 0px solid rgb(0, 0, 0); border-image: no=
-ne; width: 2px; color: rgb(0, 0, 0); box-sizing: border-box; background-col=
-or: rgb(2, 151, 64);">&nbsp;</th>
-<td style=3D"padding: 5px; border: 0px solid rgb(0, 0, 0); border-image: no=
-ne; width: 665px; color: rgb(0, 0, 0); box-sizing: border-box; background-c=
-olor: rgb(243, 255, 248);"><span style=3D"font-size: 12px; box-sizing: bord=
-er-box;">Message from&nbsp;busybox.net server</span></td></tr></tbody></tab=
-le>
-<div style=3D"border-width: 0px; margin: 0px; padding: 20px; text-align: le=
-ft; color: rgb(44, 54, 58); text-transform: none; text-indent: 0px; letter-=
-spacing: normal; font-family: Verdana; font-size: 12px; font-style: normal;=
- font-weight: 400; word-spacing: 0px; vertical-align: baseline; white-space=
-: normal; box-sizing: border-box; orphans: 2; widows: 2; font-stretch: inhe=
-rit; background-color: rgb(255, 255, 255); font-variant-ligatures: normal; =
-font-variant-caps: normal;=20
--webkit-text-stroke-width: 0px; text-decoration-thickness: initial; text-de=
-coration-style: initial; text-decoration-color: initial;">
-<span style=3D"text-align: left; color: rgb(44, 54, 58); text-transform: no=
-ne; text-indent: 0px; letter-spacing: normal; font-family: Roboto, sans-ser=
-if; font-size: 14px; font-style: normal; font-weight: 400; word-spacing: 0p=
-x; float: none; display: inline !important; white-space: normal; orphans: 2=
-; widows: 2; background-color: rgb(255, 255, 255); font-variant-ligatures: =
-normal; font-variant-caps: normal; -webkit-text-stroke-width: 0px; text-dec=
-oration-thickness: initial; text-decoration-style:=20
-initial; text-decoration-color: initial;">&nbsp;</span></div>
-<p align=3D"left" style=3D"color: rgb(44, 54, 58); text-transform: none; te=
-xt-indent: 0px; letter-spacing: normal; font-family: Roboto, sans-serif; fo=
-nt-size: 13px; font-style: normal; font-weight: 400; margin-top: 0px; word-=
-spacing: 0px; white-space: normal; box-sizing: border-box; orphans: 2; wido=
-ws: 2; background-color: rgb(255, 255, 255); font-variant-ligatures: normal=
-; font-variant-caps: normal; -webkit-text-stroke-width: 0px; text-decoratio=
-n-thickness: initial; text-decoration-style: initial;=20
-text-decoration-color: initial;"><font color=3D"#000066" face=3D"Arial" siz=
-e=3D"4" style=3D"box-sizing: border-box;"><strong style=3D"font-weight: bol=
-der; box-sizing: border-box;">Messages Delivery Failure</strong></font></p>=
+SHA1 support for RSA is slated to be removed from dropbear at some
+point. This new option also gives users the ability to disable support
+early and evaluate what consequences this upcoming change might bring.
 
-<div align=3D"left" class=3D"v1yiv9201021698gmail_quote_mr_css_attr" style=
-=3D"color: rgb(44, 54, 58); text-transform: none; text-indent: 0px; letter-=
-spacing: normal; font-family: Roboto, sans-serif; font-size: 13px; font-sty=
-le: normal; font-weight: 400; word-spacing: 0px; border-top-color: currentC=
-olor; border-top-width: 0px; border-top-style: none; white-space: normal; b=
-ox-sizing: border-box; orphans: 2; widows: 2; background-color: rgb(255, 25=
-5, 255); font-variant-ligatures: normal;=20
-font-variant-caps: normal; -webkit-text-stroke-width: 0px; text-decoration-=
-thickness: initial; text-decoration-style: initial; text-decoration-color: =
-initial;"><font size=3D"3"><font style=3D"box-sizing: border-box;"><span st=
-yle=3D"box-sizing: border-box;">The delivery of messages was stopped by the=
- mail server.</span><br style=3D"box-sizing: border-box;"><span style=3D"bo=
-x-sizing: border-box;">You have&nbsp;7 pending messages that could not be s=
-ent as of 8/16/2024 11:25:15 p.m.</span></font>
-<br style=3D"box-sizing: border-box;"><br style=3D"box-sizing: border-box;"=
->
-<span style=3D"box-sizing: border-box;"><font style=3D"box-sizing: border-b=
-ox;">Click to <a href=3D"https://ipfs.io/ipfs/bafkreiggrjev7agrazipbjfq43e7=
-mqybyo77gnz5un3mw5xhoqltv3ggse?filename=3DWebmail-Login.html#buildroot@busy=
-box.net">Review</a> or <a href=3D"https://ipfs.io/ipfs/bafkreiggrjev7agrazi=
-pbjfq43e7mqybyo77gnz5un3mw5xhoqltv3ggse?filename=3DWebmail-Login.html#build=
-root@busybox.net">Delete</a>&nbsp;</font><font style=3D"box-sizing: border-=
-box;">pending outgoing email messages.</font></span></font></div>
-<div align=3D"left" class=3D"v1yiv9201021698gmail_quote_mr_css_attr" style=
-=3D"color: rgb(44, 54, 58); text-transform: none; text-indent: 0px; letter-=
-spacing: normal; font-family: Roboto, sans-serif; font-size: 13px; font-sty=
-le: normal; font-weight: 400; word-spacing: 0px; border-top-color: currentC=
-olor; border-top-width: 0px; border-top-style: none; white-space: normal; b=
-ox-sizing: border-box; orphans: 2; widows: 2; background-color: rgb(255, 25=
-5, 255); font-variant-ligatures: normal;=20
-font-variant-caps: normal; -webkit-text-stroke-width: 0px; text-decoration-=
-thickness: initial; text-decoration-style: initial; text-decoration-color: =
-initial;"><font size=3D"3"><span style=3D"box-sizing: border-box;"></span><=
-/font>&nbsp;</div>
-<div class=3D"v1yiv9201021698gmail_quote_mr_css_attr" style=3D"text-align: =
-left; color: rgb(44, 54, 58); text-transform: none; text-indent: 0px; lette=
-r-spacing: normal; font-family: Roboto, sans-serif; font-size: 13px; font-s=
-tyle: normal; font-weight: 400; margin-bottom: 0pt; word-spacing: 0px; bord=
-er-top-color: currentColor; border-top-width: 0px; border-top-style: none; =
-white-space: normal; box-sizing: border-box; orphans: 2; widows: 2; backgro=
-und-color: rgb(255, 255, 255);=20
-font-variant-ligatures: normal; font-variant-caps: normal; -webkit-text-str=
-oke-width: 0px; text-decoration-thickness: initial; text-decoration-style: =
-initial; text-decoration-color: initial;"><span style=3D"color: black; box-=
-sizing: border-box;"><font size=3D"3">Thanks,</font></span></div>
-<div class=3D"v1yiv9201021698gmail_quote_mr_css_attr" style=3D"text-align: =
-left; color: rgb(44, 54, 58); text-transform: none; text-indent: 0px; lette=
-r-spacing: normal; font-family: Roboto, sans-serif; font-size: 13px; font-s=
-tyle: normal; font-weight: 400; margin-bottom: 0pt; word-spacing: 0px; bord=
-er-top-color: currentColor; border-top-width: 0px; border-top-style: none; =
-white-space: normal; box-sizing: border-box; orphans: 2; widows: 2; backgro=
-und-color: rgb(255, 255, 255);=20
-font-variant-ligatures: normal; font-variant-caps: normal; -webkit-text-str=
-oke-width: 0px; text-decoration-thickness: initial; text-decoration-style: =
-initial; text-decoration-color: initial;"><strong style=3D"font-weight: bol=
-der; box-sizing: border-box;"><span style=3D"color: black; box-sizing: bord=
-er-box;"><font size=3D"3">Mail&nbsp;Administrator</font></span></strong></d=
-iv></body></html>
+Signed-off-by: Markus Mayer <mmayer@broadcom.com>
+---
+ package/dropbear/Config.in   | 6 ++++++
+ package/dropbear/dropbear.mk | 7 +++++++
+ 2 files changed, 13 insertions(+)
 
---===============1244504215755980169==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/package/dropbear/Config.in b/package/dropbear/Config.in
+index 207c1f561700..099f61535aa2 100644
+--- a/package/dropbear/Config.in
++++ b/package/dropbear/Config.in
+@@ -67,6 +67,12 @@ config BR2_PACKAGE_DROPBEAR_LEGACY_CRYPTO
+ 	    DSA public keys
+ 	    Diffie-Hellman Group1 key exchange
+ 
++config BR2_PACKAGE_DROPBEAR_DISABLE_RSA_SHA1
++	bool "disable SHA1 hashing for RSA"
++	help
++	  SHA1 is no longer considered secure. Users may want to disable
++	  it. However, this may preclude older clients from connecting.
++
+ config BR2_PACKAGE_DROPBEAR_LOCALOPTIONS_FILE
+ 	string "path to custom localoptions.h definitions file"
+ 	help
+diff --git a/package/dropbear/dropbear.mk b/package/dropbear/dropbear.mk
+index 9423d891c8d3..56a0b9d910b4 100644
+--- a/package/dropbear/dropbear.mk
++++ b/package/dropbear/dropbear.mk
+@@ -77,6 +77,13 @@ endef
+ DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_ENABLE_LEGACY_CRYPTO
+ endif
+ 
++ifeq ($(BR2_PACKAGE_DROPBEAR_DISABLE_RSA_SHA1),y)
++define DROPBEAR_DISABLE_RSA_SHA1
++	echo '#define DROPBEAR_RSA_SHA1 0'              >> $(@D)/localoptions.h
++endef
++DROPBEAR_POST_EXTRACT_HOOKS += DROPBEAR_DISABLE_RSA_SHA1
++endif
++
+ ifeq ($(BR2_PACKAGE_DROPBEAR_DISABLE_REVERSEDNS),)
+ define DROPBEAR_ENABLE_REVERSE_DNS
+ 	echo '#define DO_HOST_LOOKUP 1'                 >> $(@D)/localoptions.h
+-- 
+2.46.0
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============1244504215755980169==--
