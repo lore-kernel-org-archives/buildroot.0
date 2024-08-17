@@ -4,68 +4,86 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5BBFCC531DF
-	for <buildroot@archiver.kernel.org>; Sat, 17 Aug 2024 19:37:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4742EC531DF
+	for <buildroot@archiver.kernel.org>; Sat, 17 Aug 2024 19:49:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BA39D81094;
-	Sat, 17 Aug 2024 19:37:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 01CB080B50;
+	Sat, 17 Aug 2024 19:49:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qpnWuioCgx2P; Sat, 17 Aug 2024 19:37:40 +0000 (UTC)
+ id YrRD9I4DwXz4; Sat, 17 Aug 2024 19:49:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A6873810AD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ECB6080B54
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A6873810AD;
-	Sat, 17 Aug 2024 19:37:40 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 5B31A1BF4D7
- for <buildroot@lists.busybox.net>; Sat, 17 Aug 2024 19:37:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id ECB6080B54;
+	Sat, 17 Aug 2024 19:49:55 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 568D41BF4D7
+ for <buildroot@lists.busybox.net>; Sat, 17 Aug 2024 19:49:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 49AB8605EF
- for <buildroot@lists.busybox.net>; Sat, 17 Aug 2024 19:37:39 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4321680B50
+ for <buildroot@lists.busybox.net>; Sat, 17 Aug 2024 19:49:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uSVkrdLGRu3N for <buildroot@lists.busybox.net>;
- Sat, 17 Aug 2024 19:37:38 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::222;
- helo=relay2-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org DA54B605EE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DA54B605EE
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::222])
- by smtp3.osuosl.org (Postfix) with ESMTPS id DA54B605EE
- for <buildroot@buildroot.org>; Sat, 17 Aug 2024 19:37:37 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPA id 7C0BE40004;
- Sat, 17 Aug 2024 19:37:34 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 17 Aug 2024 21:37:32 +0200
-Message-ID: <20240817193733.858704-1-thomas.petazzoni@bootlin.com>
-X-Mailer: git-send-email 2.46.0
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id La39YdNlDMo9 for <buildroot@lists.busybox.net>;
+ Sat, 17 Aug 2024 19:49:53 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::102e; helo=mail-pj1-x102e.google.com;
+ envelope-from=markus.mayer@broadcom.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 418E780B1C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 418E780B1C
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com
+ [IPv6:2607:f8b0:4864:20::102e])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 418E780B1C
+ for <buildroot@buildroot.org>; Sat, 17 Aug 2024 19:49:52 +0000 (UTC)
+Received: by mail-pj1-x102e.google.com with SMTP id
+ 98e67ed59e1d1-2d3ed48c748so347783a91.3
+ for <buildroot@buildroot.org>; Sat, 17 Aug 2024 12:49:52 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1723924192; x=1724528992;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=FntvPYMfc7rX1nuFFvznfuBAq3XLFQqCapprFzHQurM=;
+ b=ujb8xuu8YLgmmf35WGGp7BX9VTHjf60nINLc7JJlEWQibGaPUWDYSTHdQAQ7qzmB6e
+ a6SE+Aj17b22BkgmSKybZkULuh3tJniYdGwSGeoDW21OBbd0pw2d1+vaOAcwZ/RBe+xy
+ /5TMrKs0IysmU5qrpNzJ7Pv+qBdU99rTKRJQR+ZANt2BA7alqEG8jwyfy9DyDpX8dDrt
+ gd/llir6XLc7Qw7xDzLEWVxNbSjaYIGNz+WGGn9E3lwN277pECVEOLR3doYu3qWxAKrQ
+ Jo2xiITuF2vJFEVJBEw/JhypPEmEIbW6MfL/UuIUC/VCexqEzUzusMAJcMDMO7oDW4nO
+ i+KA==
+X-Gm-Message-State: AOJu0YzElfdAesTtnapSnGpjthWxFhqvVyNOb708alHRK7nI3anU+7Z9
+ i58ve5TvlpUa8nsHW1kiQrh1RnH/q9GKJpjtxF/YQbo8v0VPZF7wwKm5mawfYBmLMj8HBHJOjGq
+ aQCqJSwHPqgQBHCCxDWmReGUKNArmQEsttm3LuHaI1NQKBeh0d8XP
+X-Google-Smtp-Source: AGHT+IHXyeZpNjCNTfD/xc/a+TFWXPpBoT87+OpdLjeaQE8k5ZmkU3G6OREVBSmHXMhTh3uhQwHs6tpbunFTZ1Vgh0g=
+X-Received: by 2002:a17:90a:fd01:b0:2d3:da94:171 with SMTP id
+ 98e67ed59e1d1-2d3e05610a9mr4254656a91.5.1723924191945; Sat, 17 Aug 2024
+ 12:49:51 -0700 (PDT)
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
+References: <20240817000027.654079-1-mmayer@broadcom.com>
+ <20240817121031.55afa6c1@windsurf>
+In-Reply-To: <20240817121031.55afa6c1@windsurf>
+Date: Sat, 17 Aug 2024 12:49:40 -0700
+Message-ID: <CAGt4E5vBfMfDgNyf6mbD2QHD=oeOkYx=Z1r494UaZ7_-ynv=YA@mail.gmail.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1723923454;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding;
- bh=VpXjfelRlKP1Ul2Khy9G5tUBjUPFUFW6nbJBPT1Xebc=;
- b=AmQojqQsT70u2Vopcwg21reBd+CInpa9deCb86dE9PUxuXMnG0Ur0jCg8/fIMDGm7yJTt2
- Mb+8ybau9hMi2Y3DElFbtVZ1MuXquiy1SMsfb2TqN6gBpnsriJtS4C9rotKzJRzZ+8Una8
- zYUTde6daNOMiIjq7XTJmpqSajtiimR5lZa7+zIZUADTY0O2q4we0P+fCQduhG8XAfNXBK
- G7jq3AXJ+Ul+WVI4YDiyg1tVwtU7mWZfq/LU5qMmU2Jea+gDljocCSIZ4oJzHI2YDwGQ6H
- j1DzqxTptVxQ3r58CncKR5K3sqY9wwMTBssltZMDYxZn/WJfujK+nXGjRRSWXQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=AmQojqQs
-Subject: [Buildroot] [PATCH] package/python-huepy: add patch to fix LICENSE
- file installation
+ d=broadcom.com; s=google; t=1723924192; x=1724528992; darn=buildroot.org;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=FntvPYMfc7rX1nuFFvznfuBAq3XLFQqCapprFzHQurM=;
+ b=LqQB9aLoADmCGQ1wiD7S2OViOSLgU2re3cm7XZvFvErNSa6S+iN6RjvUXUhjawkXUv
+ hlf+AOjSO7ymRaAyjd5+9ZDHNqEX5cA98nqhpfax4R0shZSixem+0wWsVfVXrQW0Opq+
+ 9PwasvfmhjLC5b1Gfr9lRI2ZZ4efeC0t+f/jg=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=broadcom.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=broadcom.com header.i=@broadcom.com header.a=rsa-sha256
+ header.s=google header.b=LqQB9aLo
+Subject: Re: [Buildroot] [PATCH] package/dropbear: provide config option to
+ turn off SHA1 for RSA
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,87 +95,67 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Louis Aussedat <aussedat.louis@gmail.com>,
- James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Markus Mayer via buildroot <buildroot@buildroot.org>
+Reply-To: Markus Mayer <mmayer@broadcom.com>
+Cc: Markus Mayer via buildroot <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The python-huepy has an incorrect data_files statement in its
-setup.py, causing the LICENSE file to be installed directly as
-$(TARGET_DIR)/LICENSE. This was detected because several packages were
-doing this, and the second package doing
-it (python-unittest-xml-reporting, fixed separately) was erroring out
-when trying to overwrite this already existing file.
+On Sat, 17 Aug 2024 at 03:10, Thomas Petazzoni
+<thomas.petazzoni@bootlin.com> wrote:
 
-This commit fixes the case of python-huepy by adding a patch that has
-been submitted upstream.
+> > diff --git a/package/dropbear/Config.in b/package/dropbear/Config.in
+> > index 207c1f561700..099f61535aa2 100644
+> > --- a/package/dropbear/Config.in
+> > +++ b/package/dropbear/Config.in
+> > @@ -67,6 +67,12 @@ config BR2_PACKAGE_DROPBEAR_LEGACY_CRYPTO
+> >           DSA public keys
+> >           Diffie-Hellman Group1 key exchange
+> >
+> > +config BR2_PACKAGE_DROPBEAR_DISABLE_RSA_SHA1
+> > +     bool "disable SHA1 hashing for RSA"
+> > +     help
+> > +       SHA1 is no longer considered secure. Users may want to disable
+> > +       it. However, this may preclude older clients from connecting.
+>
+> Inverted logic options are always a bit annoying. Wouldn't it be better
+> to do:
+>
+> config
+>         bool "SHA1 hashing for RSA"
+>         default y
+>         help
+>           SHA1 is no longer considered secure, so users may want to
+>           disable it, but the lack of SHA1 support for RSA might
+>           preclude older clients from connecting
+>
+>           This option defaults to enabled to preserve backward
+>           compatibility.
+>
+> Peter, what do you think? Or should we break backward compatibility for
+> the sake of security, and leave SHA1 support disabled by default?
 
-There are no autobuilder failures related to python-huepy, but this
-was detected while fixing
-http://autobuild.buildroot.net/results/2c91243b440087bbc7d051d65f553f59d05dd207/
-for python-unittest-xml-reporting.
+I don't mind either way.
 
-This bug has been in huepy since at least 2018, so this patch can be
-backported to previous Buildroot versions.
+The reason I chose this approach was so that the default behaviour
+doesn't require a Buildroot configuration setting to be enabled. Also,
+because the Dropbear project is saying that SHA1 will be removed in
+the future, this config option will likely go away again when that
+happens. I thought it would be preferable to not introduce a config
+setting that is "y" by default when the setting will be removed again
+in the future. However, at the end of the day, I guess it doesn't
+really matter all that much if old config files contain
+    BR2_PACKAGE_DROPBEAR_RSA_SHA1=y
+versus
+    # BR2_PACKAGE_DROPBEAR_DISABLE_RSA_SHA1 is not set
+when the option does get removed. Kconfig will strip it out either way.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- ...ta_files-installs-LICENSE-to-incorre.patch | 38 +++++++++++++++++++
- 1 file changed, 38 insertions(+)
- create mode 100644 package/python-huepy/0001-setup.py-drop-data_files-installs-LICENSE-to-incorre.patch
+So, I am okay either way. Just let me know which way you prefer.
 
-diff --git a/package/python-huepy/0001-setup.py-drop-data_files-installs-LICENSE-to-incorre.patch b/package/python-huepy/0001-setup.py-drop-data_files-installs-LICENSE-to-incorre.patch
-new file mode 100644
-index 0000000000..3c50a44377
---- /dev/null
-+++ b/package/python-huepy/0001-setup.py-drop-data_files-installs-LICENSE-to-incorre.patch
-@@ -0,0 +1,38 @@
-+From ee3010004a005bc852e6b9318807f373bd89e901 Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Date: Sat, 17 Aug 2024 14:10:16 +0200
-+Subject: [PATCH] setup.py: drop data_files, installs LICENSE to incorrect
-+ place
-+
-+The data_files statement in the setup() calls installs the LICENSE
-+file in the wrong place: in /usr/LICENSE, or even /LICENSE depending
-+on the configuration.
-+
-+So let's drop this, and let setuptools install the LICENSE file
-+automatically: since setuptools v56, the license_files attribute is
-+automatically assigned to a default value, which includes "LICENSE",
-+so there is in fact nothing to do to the get the LICENSE file
-+installed at the correct location. See
-+https://setuptools.pypa.io/en/latest/history.html#v56-0-0.
-+
-+Upstream: https://github.com/s0md3v/huepy/pull/42
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ setup.py | 1 -
-+ 1 file changed, 1 deletion(-)
-+
-+diff --git a/setup.py b/setup.py
-+index 8b5a726..bd41f1c 100644
-+--- a/setup.py
-++++ b/setup.py
-+@@ -30,7 +30,6 @@ setup(
-+     keywords='hue, color, terminal color, colorama',
-+     packages=find_packages(),
-+     py_modules=['huepy'],
-+-    data_files=[('', ['LICENSE'])],
-+     include_package_data=True,
-+     classifiers=[
-+         'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
-+-- 
-+2.46.0
-+
--- 
-2.46.0
-
+Regards,
+-Markus
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
