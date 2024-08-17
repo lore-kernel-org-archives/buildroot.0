@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 87413E6FE46
-	for <buildroot@archiver.kernel.org>; Fri,  6 Sep 2024 20:01:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B3F7E6FE47
+	for <buildroot@archiver.kernel.org>; Fri,  6 Sep 2024 20:01:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 552528176A;
-	Fri,  6 Sep 2024 20:01:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0EEE281A34;
+	Fri,  6 Sep 2024 20:01:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0WMWm-VzpVbv; Fri,  6 Sep 2024 20:01:21 +0000 (UTC)
+ id rJk18p2Xphvr; Fri,  6 Sep 2024 20:01:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C08D881846
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5771A81A23
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C08D881846;
-	Fri,  6 Sep 2024 20:01:20 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4C0501BF20B
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5771A81A23;
+	Fri,  6 Sep 2024 20:01:23 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 74F591BF20B
  for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 19:59:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 05462407A1
- for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 19:58:58 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3CA4261110
+ for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 19:58:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KyNfjQb-1T9g for <buildroot@lists.busybox.net>;
- Fri,  6 Sep 2024 19:58:57 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wyIEQTq0HAJY for <buildroot@lists.busybox.net>;
+ Fri,  6 Sep 2024 19:58:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AE3AB408F8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9A8EB6078F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id AE3AB408F8
- for <buildroot@buildroot.org>; Fri,  6 Sep 2024 19:58:56 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9A8EB6078F
+ for <buildroot@buildroot.org>; Fri,  6 Sep 2024 19:58:54 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AB4AC828CC; Fri,  6 Sep 2024 19:58:56 +0000 (UTC)
+ id 96A5386EE3; Fri,  6 Sep 2024 19:58:54 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 23 Aug 2024 19:09:15 +0200
+Date: Sat, 17 Aug 2024 11:40:35 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 07d182ce40bfb06619248aabc60e98ba46aea409
-X-Git-Newrev: 6ff3768333f224f81a6afa4802755de9b125ca84
+X-Git-Oldrev: c9e2ddf5ed8dc0d63ce84ba028f614dafbf9fc41
+X-Git-Newrev: bdb38723ad832dd1c28b028a0f48a938f6d20c7a
 X-Patchwork-Hint: ignore
-Message-Id: <20240906195856.AB4AC828CC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-wrapt: bump to 1.16.0
+Message-Id: <20240906195854.96A5386EE3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-starlette: bump to 0.38.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,53 +65,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6ff3768333f224f81a6afa4802755de9b125ca84
+commit: https://git.buildroot.net/buildroot/commit/?id=bdb38723ad832dd1c28b028a0f48a938f6d20c7a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Changelog:
-* https://wrapt.readthedocs.io/en/latest/changes.html#version-1-15-0
-* https://wrapt.readthedocs.io/en/latest/changes.html#version-1-16-0
-
-LICENSE hash changed due to updated copyright year [1].
-
-[1] https://github.com/GrahamDumpleton/wrapt/commit/dc5afd39533ce0daf933507f8a90c095448a5cbc
+* https://github.com/encode/starlette/releases/tag/0.38.0
+* https://github.com/encode/starlette/releases/tag/0.38.1
+* https://github.com/encode/starlette/releases/tag/0.38.2
 
 Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-wrapt/python-wrapt.hash | 6 +++---
- package/python-wrapt/python-wrapt.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-starlette/python-starlette.hash | 4 ++--
+ package/python-starlette/python-starlette.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-wrapt/python-wrapt.hash b/package/python-wrapt/python-wrapt.hash
-index cb62e19aa7..b89c805bf6 100644
---- a/package/python-wrapt/python-wrapt.hash
-+++ b/package/python-wrapt/python-wrapt.hash
+diff --git a/package/python-starlette/python-starlette.hash b/package/python-starlette/python-starlette.hash
+index f04aaea7c0..eca8cb8fd1 100644
+--- a/package/python-starlette/python-starlette.hash
++++ b/package/python-starlette/python-starlette.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/wrapt/json
--md5  6e7340264f038efdefcba707250c91c2  wrapt-1.14.1.tar.gz
--sha256  380a85cf89e0e69b7cfbe2ea9f765f004ff419f34194018a6827ac0e3edfed4d  wrapt-1.14.1.tar.gz
-+md5  3e370b4bc08f7dcc518cf8895673b19c  wrapt-1.16.0.tar.gz
-+sha256  5f370f952971e7d17c7d1ead40e49f32345a7f7a5373571ef44d800d06b1899d  wrapt-1.16.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/starlette/json
+-md5  b0ba8178dd4bf2cdff53c8702212be52  starlette-0.37.2.tar.gz
+-sha256  9af890290133b79fc3db55474ade20f6220a364a0402e0b556e7cd5e1e093823  starlette-0.37.2.tar.gz
++md5  c56bd58a7ed1320677cff4b1055dff18  starlette-0.38.2.tar.gz
++sha256  c7c0441065252160993a1a37cf2a73bb64d271b17303e0b0c1eb7191cfb12d75  starlette-0.38.2.tar.gz
  # Locally computed sha256 checksums
--sha256  77d2a9159cffe12473f539a71a3e741f35117e61bfd005ebd60c3a1778e2c1f1  LICENSE
-+sha256  5974efbbc8b626b2050810d63c3a907ee21c92bf64b3740fc623ad05eb3448ab  LICENSE
-diff --git a/package/python-wrapt/python-wrapt.mk b/package/python-wrapt/python-wrapt.mk
-index 406f6c3aa1..ed4a911e14 100644
---- a/package/python-wrapt/python-wrapt.mk
-+++ b/package/python-wrapt/python-wrapt.mk
+ sha256  dcb95677a02240243187e964f941847d19b17821cf99e5afae684fab328c19bf  LICENSE.md
+diff --git a/package/python-starlette/python-starlette.mk b/package/python-starlette/python-starlette.mk
+index af2c2d4ac7..bf38b1375b 100644
+--- a/package/python-starlette/python-starlette.mk
++++ b/package/python-starlette/python-starlette.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_WRAPT_VERSION = 1.14.1
-+PYTHON_WRAPT_VERSION = 1.16.0
- PYTHON_WRAPT_SOURCE = wrapt-$(PYTHON_WRAPT_VERSION).tar.gz
--PYTHON_WRAPT_SITE = https://files.pythonhosted.org/packages/11/eb/e06e77394d6cf09977d92bff310cb0392930c08a338f99af6066a5a98f92
-+PYTHON_WRAPT_SITE = https://files.pythonhosted.org/packages/95/4c/063a912e20bcef7124e0df97282a8af3ff3e4b603ce84c481d6d7346be0a
- PYTHON_WRAPT_SETUP_TYPE = setuptools
- PYTHON_WRAPT_LICENSE = BSD-2-Clause
- PYTHON_WRAPT_LICENSE_FILES = LICENSE
+-PYTHON_STARLETTE_VERSION = 0.37.2
++PYTHON_STARLETTE_VERSION = 0.38.2
+ PYTHON_STARLETTE_SOURCE = starlette-$(PYTHON_STARLETTE_VERSION).tar.gz
+-PYTHON_STARLETTE_SITE = https://files.pythonhosted.org/packages/61/b5/6bceb93ff20bd7ca36e6f7c540581abb18f53130fabb30ba526e26fd819b
++PYTHON_STARLETTE_SITE = https://files.pythonhosted.org/packages/43/e2/d49a94ecb665b3a1c34b40c78165a737abc384fcabc843ccb14a3bd3dc37
+ PYTHON_STARLETTE_SETUP_TYPE = pep517
+ PYTHON_STARLETTE_LICENSE = BSD-3-Clause
+ PYTHON_STARLETTE_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
