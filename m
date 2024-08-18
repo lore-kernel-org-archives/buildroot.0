@@ -1,94 +1,95 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 02F68C52D7C
-	for <buildroot@archiver.kernel.org>; Sun, 18 Aug 2024 19:48:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1BD45C5320E
+	for <buildroot@archiver.kernel.org>; Sun, 18 Aug 2024 20:31:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5B74C40021;
-	Sun, 18 Aug 2024 19:48:16 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BA08D4012E;
+	Sun, 18 Aug 2024 20:31:44 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XawNS-kSig3l; Sun, 18 Aug 2024 20:31:43 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6F0E040145
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6F0E040145;
+	Sun, 18 Aug 2024 20:31:43 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 686B31BF41C
+ for <buildroot@lists.busybox.net>; Sun, 18 Aug 2024 20:31:42 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5641B400BF
+ for <buildroot@lists.busybox.net>; Sun, 18 Aug 2024 20:31:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nCgVD3Vav3Cp; Sun, 18 Aug 2024 19:48:15 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2D4704004A
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2D4704004A;
-	Sun, 18 Aug 2024 19:48:15 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id CF3B51BF3C5
- for <buildroot@lists.busybox.net>; Sun, 18 Aug 2024 19:48:13 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CA30860602
- for <buildroot@lists.busybox.net>; Sun, 18 Aug 2024 19:48:13 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Y8eQmNLlJSHf for <buildroot@lists.busybox.net>;
- Sun, 18 Aug 2024 19:48:13 +0000 (UTC)
+ id fmN8-iBBgWH3 for <buildroot@lists.busybox.net>;
+ Sun, 18 Aug 2024 20:31:41 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::22e; helo=mail-lj1-x22e.google.com;
- envelope-from=petr.vorel@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A303C605D5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A303C605D5
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com
- [IPv6:2a00:1450:4864:20::22e])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A303C605D5
- for <buildroot@buildroot.org>; Sun, 18 Aug 2024 19:48:12 +0000 (UTC)
-Received: by mail-lj1-x22e.google.com with SMTP id
- 38308e7fff4ca-2f189a2a7f8so37746561fa.2
- for <buildroot@buildroot.org>; Sun, 18 Aug 2024 12:48:12 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::22c; helo=mail-lj1-x22c.google.com;
+ envelope-from=geomatsi@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 424F140021
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 424F140021
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com
+ [IPv6:2a00:1450:4864:20::22c])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 424F140021
+ for <buildroot@buildroot.org>; Sun, 18 Aug 2024 20:31:41 +0000 (UTC)
+Received: by mail-lj1-x22c.google.com with SMTP id
+ 38308e7fff4ca-2f3bfcc2727so3954561fa.0
+ for <buildroot@buildroot.org>; Sun, 18 Aug 2024 13:31:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1724010490; x=1724615290;
+ d=1e100.net; s=20230601; t=1724013098; x=1724617898;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=LHVbBHB0npPnC16dAok3ei9k7r60q381NEHTXCD1C9E=;
- b=aBVEo2qcnxUZ0aIaArwOe7AUPAdZ5hInqJwe3YGviKclMknlU5UAbIak+pGvq0cUMS
- Ucm/c9mUB5Gr3pBXKg+GgtrRXDD/ZIF6cVrk08cScFYqXnNG3fW6QmlOf27VABZ3bNYe
- 8PlsoWNPQ5cR6MsPxM3VelW6U6ENhhznEL+MTGnuw/CLJiEsvOvP8FHay0m/oZqf3S+o
- ELLpYgb3dGOuZSTD2t0HwdQEuixLqIJ8cfO0UUy+616RVkN5D2U7FKEJAxPqRFDnW6QM
- yEm0ptTTRXaEFl9Tv5aluZIuyPeI9fxWs3jL7b/VR9a6o9V5rUcTqazcy29vlZCdObSh
- dHOQ==
-X-Gm-Message-State: AOJu0YydmhgS/C7PjxhdQT18XVegSaNpTA1bVhxnFj+4JhmwqVxx1gj6
- HqiTtnLf1F0d+oMx282QRMfTKM3T2oFKQL3HMFyyLAJPMH9Wdg20yMfLYEhx
-X-Google-Smtp-Source: AGHT+IHkRjx/Je/s7IxUaROTyF74yacDrBqfIeLlpwLs2EZ7CNIITRUwmsQKMEXg8ZegRLV0DUGS2g==
-X-Received: by 2002:a2e:91d1:0:b0:2f2:9f39:3e58 with SMTP id
- 38308e7fff4ca-2f3be614169mr50080901fa.48.1724010489441; 
- Sun, 18 Aug 2024 12:48:09 -0700 (PDT)
-Received: from localhost.localdomain (gw1.ms-free.net. [185.243.124.10])
- by smtp.gmail.com with ESMTPSA id
- 4fb4d7f45d1cf-5bece947f46sm3364875a12.18.2024.08.18.12.48.08
+ bh=Xs4bo1x57K5e7B4eEC+w9Q/OUgx9PQj2XWL8Zsj/7I0=;
+ b=EX75Me2yttFr/m9PjdPkN1vs7UeldUuLv1F0To1Qoa42Jw4U0iTk3KJ/tcqqwtmqlK
+ xYUCWpWdqpbnOge+Fdm9/d+GXsBB58DxHS9MHVl/v46RHlpFjgRZ6G8+/mtrM3a5Wz19
+ PPtRsoY93QnZd8iEiPptHAPUvrIJE3oHn7sOywLb2rdD5IOAMaam7WqokxU2OaNt6T8V
+ cN0c1nINfBP/Y3kys3NIQfvlLYA1KfIm2NPOicwJdGBn6z5PsnUTFZs1/GZEJyhJwiBY
+ ZiIhxDWM9yVr+0QNPgIod9+YO1mody7braFmbacjFIhDvd6b0/sUBFBoIQgauEkynrnf
+ OCIA==
+X-Gm-Message-State: AOJu0YzLgDm/xWrP1xxZLfkVMPIBBQNgDeuTkD70OqD7X+NTFi7v6olZ
+ Dw/u8rOwV9zQc0/h1Yezg70Os6PaVxWQ88SwOjUCgpazAkfzL5HPbtKYSUZTYnc=
+X-Google-Smtp-Source: AGHT+IFl7tNadB8EzkczjRlplUkbFWphHN9lt0r5SvN/7Cbi6GRv8xHJkbFfqGuPS5UJ0rp37cS/fA==
+X-Received: by 2002:a2e:9151:0:b0:2ef:2dfd:15db with SMTP id
+ 38308e7fff4ca-2f3be58428bmr68345061fa.19.1724013097688; 
+ Sun, 18 Aug 2024 13:31:37 -0700 (PDT)
+Received: from localhost.localdomain ([5.188.167.245])
+ by smtp.googlemail.com with ESMTPSA id
+ 38308e7fff4ca-2f3b746cd4bsm13023451fa.11.2024.08.18.13.31.36
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 18 Aug 2024 12:48:09 -0700 (PDT)
-From: Petr Vorel <petr.vorel@gmail.com>
+ Sun, 18 Aug 2024 13:31:36 -0700 (PDT)
+From: Sergey Matyukevich <geomatsi@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 18 Aug 2024 21:47:50 +0200
-Message-ID: <20240818194750.818808-1-petr.vorel@gmail.com>
+Date: Sun, 18 Aug 2024 23:31:28 +0300
+Message-ID: <20240818203134.1512793-1-geomatsi@gmail.com>
 X-Mailer: git-send-email 2.45.2
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1724010490; x=1724615290; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1724013098; x=1724617898; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=LHVbBHB0npPnC16dAok3ei9k7r60q381NEHTXCD1C9E=;
- b=Hoz+ZHjERwTwG8y3RUqRtg5VFjigm3Nms/9Wn1dykoF0jBX038XnNKI8P6L4SYTMuV
- inpFrUigmK5HohFqg6Rdr5ELBGRC2xI4xD8ukGnsQ6SSMRnmknLemVrug1SLaGgpFlsV
- JvX3d1HCFrXeV0XOJzKnxW/29fTQQmjyIhmugIaNlVOrk4ezAiTi0ijFrAEhHy7wSvxI
- eKJPsIP6N6qojMyswtsRH4fsTclbiKLQk859nErJBZlqk4bU7SQAfgo6ckLahordJYKV
- fPxjGFd+o7ZHIxlufJwUXqeeXdJe+bPI6mJd9fsUdjnFYP5rBdZrp3lLS+r4M+lmdxwx
- 9sdQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=Xs4bo1x57K5e7B4eEC+w9Q/OUgx9PQj2XWL8Zsj/7I0=;
+ b=FF+VC3zB5vYQ1hcoFfL/CO2FwTo8FNo+kIcuR3gCbBpIIXVxHc9vXb33k44aOpWaF4
+ ZkT7GX9dKPJ3a7D6c+5YkCoYqkUzYi3Q1OqxIocrnb5GXVNchW4HOyyrkIOnP+3zzeEO
+ QF0DyFb9TKuNy34tyuGkKK0Cf9i1SUrwvn9uf2ZQ5QLmSHGSfgj6EvmxSKMExkT4OXys
+ 58G9lCraUPFcH/tGMQJxWtcEKSrBRiWUH2Qp2s9Q0c2Ai4RgM1xjUIBraAwFiq4nOsem
+ IODeb2jNfvwxoJo4RM4ciG0Uoz88kjac8NinAC1UR5QtID6VbMm4bDBxr1/YYZSwD/bZ
+ +Xpg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=Hoz+ZHjE
-Subject: [Buildroot] [PATCH 1/1] package/fping: bump version to 5.2
+ header.s=20230601 header.b=FF+VC3zB
+Subject: [Buildroot] [PATCH 0/2] package/wpa_supplicant: follow-up fixes for
+ v2.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,43 +101,33 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Petr Vorel <petr.vorel@gmail.com>,
- Pierre-Jean Texier <texier.pj2@gmail.com>
+Cc: Sergey Matyukevich <geomatsi@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
----
- package/fping/fping.hash | 2 +-
- package/fping/fping.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Hi all,
 
-diff --git a/package/fping/fping.hash b/package/fping/fping.hash
-index 4671cd77cf..8b68798409 100644
---- a/package/fping/fping.hash
-+++ b/package/fping/fping.hash
-@@ -1,5 +1,5 @@
- # Locally calculated
--sha256  1ee5268c063d76646af2b4426052e7d81a42b657e6a77d8e7d3d2e60fd7409fe  fping-5.1.tar.gz
-+sha256  a7692d10d73fb0bb76e1f7459aa7f19bbcdbfc5adbedef02f468974b18b0e42f  fping-5.2.tar.gz
- 
- # Hash for license file
- sha256  6051b27e4b4a648f7bc8b329024da53a6e95ce88fcf0ccc259c371a74b741757  COPYING
-diff --git a/package/fping/fping.mk b/package/fping/fping.mk
-index 5986d05b93..dc43261be8 100644
---- a/package/fping/fping.mk
-+++ b/package/fping/fping.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--FPING_VERSION = 5.1
-+FPING_VERSION = 5.2
- FPING_SITE = http://fping.org/dist
- FPING_LICENSE = BSD-like
- FPING_LICENSE_FILES = COPYING
+Some issues have been discovered after wpa_supplicant update to v2.11:
+
+- wired driver fails to build with kernel headers less than v5.7
+  -- detected by Buildroot autobuilder
+- wpa_supplicant fails to complete wpa2-psk connection on brcmfmac hardware
+
+This patch series provides fixes for them:
+- bump kernel headers restrictions for wired driver
+- upstream patch revert to fix brcmfmac
+
+Sergey Matyukevich (2):
+  package/wpa_supplicant: wired driver needs headers >= 5.7
+  package/wpa_supplicant: revert upstream patch to fix brcmfmac
+
+ ...orization-completed-on-driver-indica.patch | 55 +++++++++++++++++++
+ package/wpa_supplicant/Config.in              |  6 +-
+ 2 files changed, 58 insertions(+), 3 deletions(-)
+ create mode 100644 package/wpa_supplicant/0001-Revert-Mark-authorization-completed-on-driver-indica.patch
+
 -- 
 2.45.2
 
