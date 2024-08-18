@@ -4,68 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CEAF9C52D7C
-	for <buildroot@archiver.kernel.org>; Sun, 18 Aug 2024 21:56:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5EFFDC52D7C
+	for <buildroot@archiver.kernel.org>; Sun, 18 Aug 2024 21:56:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 692C140021;
-	Sun, 18 Aug 2024 21:56:35 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 95A5C40319;
+	Sun, 18 Aug 2024 21:56:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id T5IGXw1z4xz9; Sun, 18 Aug 2024 21:56:34 +0000 (UTC)
+ id bU2XaklWdfNc; Sun, 18 Aug 2024 21:56:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 222AD402E5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B9233403E9
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 222AD402E5;
-	Sun, 18 Aug 2024 21:56:34 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0D5841BF407
+	by smtp2.osuosl.org (Postfix) with ESMTP id B9233403E9;
+	Sun, 18 Aug 2024 21:56:36 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id C3B861BF407
  for <buildroot@lists.busybox.net>; Sun, 18 Aug 2024 21:56:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 038C080E78
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8FAB540051
  for <buildroot@lists.busybox.net>; Sun, 18 Aug 2024 21:56:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id snbOByhecLs4 for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id obLg52jCo5mC for <buildroot@lists.busybox.net>;
  Sun, 18 Aug 2024 21:56:32 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.201;
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::228;
  helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 1C94680D35
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1C94680D35
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 48DC34021B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 48DC34021B
 Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1C94680D35
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 48DC34021B
  for <buildroot@buildroot.org>; Sun, 18 Aug 2024 21:56:31 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPA id F0CD51BF203;
- Sun, 18 Aug 2024 21:56:28 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPA id A53841BF204;
+ Sun, 18 Aug 2024 21:56:29 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 18 Aug 2024 23:56:25 +0200
-Message-ID: <20240818215627.1055491-1-thomas.petazzoni@bootlin.com>
+Date: Sun, 18 Aug 2024 23:56:26 +0200
+Message-ID: <20240818215627.1055491-2-thomas.petazzoni@bootlin.com>
 X-Mailer: git-send-email 2.46.0
+In-Reply-To: <20240818215627.1055491-1-thomas.petazzoni@bootlin.com>
+References: <20240818215627.1055491-1-thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=bootlin.com; s=gm1; t=1724018189;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding;
- bh=lxZ6YBPZnT7oJZuYmyVQVdMQSe2JqJPW3HTGzqGxH44=;
- b=Ir4VI9/+IDXpNzA2Ua+e5Y9IW0Fq0JC88mmMUll6q3MfmKU0FHBm/uyerSo+191WJqqEjW
- 7bxpe8qkIC/ztUt/gkRAYNICenRCsQXDzj3EZZAUXgyISaxOceHjOtduCR3/fo/Kw0rhOo
- VlA8nSTLxuWJhmfjDsK83V3gDFrCYUWaidhjpDCL1h1RjxN1gv1rmSks2GTN/BIY67hVx2
- +/+af/TecddNxC5+ExTW7Cj+nQheC0xJMJPLjdWonqiONiQlq+WkxxHOtOWzlY9Ykjtb04
- ChfShWLpR0citki1noVyRBVWp6epxueTdjb3iHPMPWDxHAz7ST52AAkupEvhFQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=dvVAAG4EnRB9QcW7aQ2XMhq2X7DoKQEQRfQwkjK3XhA=;
+ b=RUX+n+UXNmoveYTO4IF/5mrhFLwknoqFIIaZ5rXpjnwwkoCdEBjktbQDkQOQY4yIPQUzXU
+ YrAAtWfIPyJpfVcIng4RNIs7nDf3kI3LykbFRjz+8MH7NKVQeELUOTOc2knNCkwj1T1Q2+
+ P3AeyU5kIyhqsiD9HyiLXpBAxz5wgTSvY/fiEpFu1/zDD2TjhQfLD/D/cVdjjGgk852jLx
+ jTRB720X8Tsq1PrP+PII6S4WTthN4Q+o+8+DbHqOs1doSCExd7NUiSA+8NYQZ6OP5qNEQK
+ f8qXwVRMJ/wNKU3M0krFtTlpWHjiXlArHPFeO5UvUbIr8kM3vVxAb66IjZm/gA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Ir4VI9/+
-Subject: [Buildroot] [PATCH 1/2] package/flashrom: bump to final 1.4.0
- release
+ header.s=gm1 header.b=RUX+n+UX
+Subject: [Buildroot] [PATCH 2/2] package/flashrom: disable documentation and
+ man-pages
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,44 +88,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This commit is suitable for master because:
+The build of the manpage currently fails with:
 
-$ git log --format=oneline v1.4.0-rc2..v1.4.0
-eace095b15eb034e42d97202cad70ce979d8ca38 VERSION: Update version to 1.4.0
-30c85a62c1abe07d57d5a7b523ef62c2c5b825c9 doc: Release notes for version 1.4.0
-e4e0fd0d8232260af052fde52a9fb636181b2e2e meson: Fix project name as flashrom
+ERROR: File 'doc/man8' could not be found
+FAILED: meson-internal__install
 
-And it looks nicer to have a final 1.4.0 release than a 1.4.0-rc2
-release candidate.
+As we don't care about man pages and documentation in Buildroot, let's
+disable them. The issue has nevertheless been reported at
+https://github.com/flashrom/flashrom/issues/329.
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/885a957d1b5305d3b91339487cc2a0d64dc74f5e/
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/flashrom/flashrom.hash | 2 +-
- package/flashrom/flashrom.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/flashrom/flashrom.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/package/flashrom/flashrom.hash b/package/flashrom/flashrom.hash
-index cecec5273f..17ebdee3af 100644
---- a/package/flashrom/flashrom.hash
-+++ b/package/flashrom/flashrom.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  318c54a4143a1a05b30cecd64fbff41a0f5cd35a020622864c11fb44f8ed04d4  flashrom-1.4.0-rc2.tar.gz
-+sha256  b77ce458b3b874387270a71805e899ac63f057d7553dc320da7e4c58e750577c  flashrom-1.4.0.tar.gz
- sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
 diff --git a/package/flashrom/flashrom.mk b/package/flashrom/flashrom.mk
-index 1e7d332dae..46d42640e9 100644
+index 46d42640e9..8648965303 100644
 --- a/package/flashrom/flashrom.mk
 +++ b/package/flashrom/flashrom.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+@@ -14,7 +14,9 @@ FLASHROM_CONF_OPTS = \
+ 	-Dich_descriptors_tool=enabled \
+ 	-Dtests=disabled \
+ 	-Duse_internal_dmi=true \
+-	-Dwerror=false
++	-Dwerror=false \
++	-Dman-pages=disabled \
++	-Ddocumentation=disabled
  
--FLASHROM_VERSION = 1.4.0-rc2
-+FLASHROM_VERSION = 1.4.0
- FLASHROM_SITE = $(call github,flashrom,flashrom,v$(FLASHROM_VERSION))
- FLASHROM_LICENSE = GPL-2.0+
- FLASHROM_LICENSE_FILES = COPYING
+ FLASHROM_PROGRAMMERS = \
+ 	buspirate_spi \
 -- 
 2.46.0
 
