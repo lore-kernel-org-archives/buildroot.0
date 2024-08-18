@@ -4,68 +4,69 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B505CC5320E
-	for <buildroot@archiver.kernel.org>; Sun, 18 Aug 2024 09:56:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 91EEBC52D7C
+	for <buildroot@archiver.kernel.org>; Sun, 18 Aug 2024 10:11:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 671B280DD8;
-	Sun, 18 Aug 2024 09:56:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2B1DC80F14;
+	Sun, 18 Aug 2024 10:11:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id p32JvYXuLvgf; Sun, 18 Aug 2024 09:56:56 +0000 (UTC)
+ id 7jaBhpwNYlVg; Sun, 18 Aug 2024 10:11:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7399680DE4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 320AD80F17
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7399680DE4;
-	Sun, 18 Aug 2024 09:56:56 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id DAC211BF479
- for <buildroot@lists.busybox.net>; Sun, 18 Aug 2024 09:56:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 320AD80F17;
+	Sun, 18 Aug 2024 10:11:22 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id BC2A11BF297
+ for <buildroot@lists.busybox.net>; Sun, 18 Aug 2024 10:11:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C75DE80DE4
- for <buildroot@lists.busybox.net>; Sun, 18 Aug 2024 09:56:54 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B64CA4026A
+ for <buildroot@lists.busybox.net>; Sun, 18 Aug 2024 10:11:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MGtPY9YkW70g for <buildroot@lists.busybox.net>;
- Sun, 18 Aug 2024 09:56:54 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id agt2YymYyNkg for <buildroot@lists.busybox.net>;
+ Sun, 18 Aug 2024 10:11:19 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
  client-ip=2a00:1828:2000:679::23; helo=helium.openadk.org;
  envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org F421180DD8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F421180DD8
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 5008F40268
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5008F40268
 Received: from helium.openadk.org (helium.openadk.org
  [IPv6:2a00:1828:2000:679::23])
- by smtp1.osuosl.org (Postfix) with ESMTPS id F421180DD8
- for <buildroot@buildroot.org>; Sun, 18 Aug 2024 09:56:53 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 5008F40268
+ for <buildroot@buildroot.org>; Sun, 18 Aug 2024 10:11:18 +0000 (UTC)
 Received: by helium.openadk.org (Postfix, from userid 1000)
- id D8D3D3521185; Sun, 18 Aug 2024 11:56:51 +0200 (CEST)
-Date: Sun, 18 Aug 2024 11:56:51 +0200
+ id A7AF635211C6; Sun, 18 Aug 2024 12:11:15 +0200 (CEST)
+Date: Sun, 18 Aug 2024 12:11:15 +0200
 From: Waldemar Brodkorb <wbx@openadk.org>
-To: buildroot@buildroot.org
-Message-ID: <ZsHFY4nLrUaZgEDD@waldemar-brodkorb.de>
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Message-ID: <ZsHIw+TLPfA7tort@waldemar-brodkorb.de>
+References: <ZsCjPIEVSPj9R2Eo@waldemar-brodkorb.de> <ZsG9eKK5aBo4DSjF@landeda>
 MIME-Version: 1.0
 Content-Disposition: inline
+In-Reply-To: <ZsG9eKK5aBo4DSjF@landeda>
 X-Operating-System: Linux 5.10.0-31-amd64 x86_64
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=openadk.org; s=2022; 
- t=1723975011; bh=L5itxkPKBeGo2VH49wstby5CodwNLubeGznhMGcpISY=;
- h=Date:From:To:Subject:From;
- b=QI3Sz/XlDjqSYklT37lB0NQN4NiQNV8KQpuJx3y1nJi76OumCKLTQ1sX3F5pext5F
- QtVWwwkhnx3UyYSfdfotyMBdUTU238UNISBVMmddbJApJvlL4AypPsXq5upF3qFcX3
- IEtQKLXy9yOi/KSmB9U33pVGbsFQD68w6cfnEugdXR1tOxcpTpEUCBIhf/wlem0BJ7
- jL8iS6tjyYa5T5TVaiozm2TDnCVW09bXiA8Trjhrw6pHPX1AVVdLHQyUb+GAZwOszO
- cu9LoctDwcKo0LKDT8bw3Pv48tzlvU9bL8b51IuqvruMtXJzGiPy7NlSFe7BZDAZY5
- T95WAqPo3T3BA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ t=1723975875; bh=D454v70iLXebibiGurwDUYuFCj7YkfZSmttXuIWCLbo=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=qmrjeB/MrZASB46f3ITHs43lTyoAmwxZWTCLXdOsN0+6kRrLW4XLTVghMWhur3oY0
+ Oyx3h7ZfIS4RjumhD8d83JutpAx/aEvpRlGu2vDe/D5sjisMMb8afft+lQk44hhljT
+ QvTuTU6LHshtVXZ1QPJ4gwILTKlu9JRzwvW6N1VFlab5//TZFd5cW05vQz5BIlHlRV
+ +c8uZEKpd5KZ8azOgio9Qso7pzmpZFHIhsBc96hO3XVVKyyXR9NuPedxh1WhyDws8w
+ bbco8wmzdpGVeUSDjaaD34js9orEvBwRpoT0QsYKn5bdm2/vi0U9bx2s4lDZ4IDp0B
+ 6AFVRTigXchfQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=openadk.org
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=openadk.org header.i=@openadk.org header.a=rsa-sha256
- header.s=2022 header.b=QI3Sz/Xl
-Subject: [Buildroot] [PATCH next] package/e2fsprogs: allow uclibc toolchains
- for e4defrag
+ header.s=2022 header.b=qmrjeB/M
+Subject: Re: [Buildroot] [PATCH] package/avahi: fix python install issue
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,45 +78,91 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Since 2014 e4defrag was only available for musl/glibc
-toolchains in commit d770abad335a85884cfc2ec7574a331c29522810.
+Hi Yann,
+Yann E. MORIN wrote,
 
-I believe sync_file_range() was already available in 2015 in the uClibc time.
+> Waldemar, All,
+> 
+> On 2024-08-17 15:18 +0200, Waldemar Brodkorb spake thusly:
+> > Since the update of Python to 3.12.4 in commit
+> > 76cd14167f5eb3ffe22e131ddbbecf9bc61f2ef1 avahi fails to install
+> > python subcomponents. The reason is that the obsolete imp
+> > python modul is used. Add a patch to remove the imp dependency.
+> > 
+> > Fixes:
+> >  - http://autobuild.buildroot.net/results/2bf/2bf391b93362204917a560705bc402585334ab3c
+> > 
+> > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> 
+> Applied to master, thanks.
 
-So enable e4defrag. Tested in Qemu on a ext4 filesystem.
-
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
----
- package/e2fsprogs/Config.in | 5 -----
- 1 file changed, 5 deletions(-)
-
-diff --git a/package/e2fsprogs/Config.in b/package/e2fsprogs/Config.in
-index 23c4ef30b3..a45767d506 100644
---- a/package/e2fsprogs/Config.in
-+++ b/package/e2fsprogs/Config.in
-@@ -47,14 +47,9 @@ comment "e2scrub needs bash, coreutils, lvm2, and util-linux"
- config BR2_PACKAGE_E2FSPROGS_E4DEFRAG
- 	bool "e4defrag"
- 	depends on !BR2_nios2 # fallocate not implemented
--	depends on !BR2_TOOLCHAIN_USES_UCLIBC # sync_file_range not impl
- 	help
- 	  Online defragmenter for ext4 filesystem
+Thanks you.
  
--comment "e4defrag needs a glibc or musl toolchain"
--	depends on !BR2_nios2
--	depends on BR2_TOOLCHAIN_USES_UCLIBC
--
- config BR2_PACKAGE_E2FSPROGS_FSCK
- 	bool "fsck"
- 	default y
--- 
-2.39.2
+> But see below
+> 
+> > ---
+> >  .../0002-remove-imp-from-py-compile.patch     | 50 +++++++++++++++++++
+> >  1 file changed, 50 insertions(+)
+> >  create mode 100644 package/avahi/0002-remove-imp-from-py-compile.patch
+> > 
+> > diff --git a/package/avahi/0002-remove-imp-from-py-compile.patch b/package/avahi/0002-remove-imp-from-py-compile.patch
+> > new file mode 100644
+> > index 0000000000..37534a3f7a
+> > --- /dev/null
+> > +++ b/package/avahi/0002-remove-imp-from-py-compile.patch
+> > @@ -0,0 +1,50 @@
+> > +Remove optional imp python module dependency.
+> > +
+> > +Upstream already removed py-compile entirely in their git repository,
+> > +so the patch is not appropiate for upstream.
+> 
+> This is really weird: the git tree removed the py-comple in 2005, and it
+> is not present in the v0.8 tag, but then the release tarball, that we
+> use, does carry that file.
+> 
+> Could you see with upstream how they end up with py-compile in the
+> released archive, while it is not in git?
+> 
+> There is a risk that that file gets added somehow by the autotools
+> packagng process, so it will eventually be present in the next release
+> as well, and we'd have to carry that patch forever and ever...
 
+You are right, py-compile is generated.
+But in avahi git you get one with following code:
+
+python_major=`$PYTHON -V 2>&1 | sed -e 's/.* //;s/\..*$//;1q'`
+if test -z "$python_major"; then
+  echo "$me: could not determine $PYTHON major version, guessing 3" >&2
+  python_major=3
+fi
+
+# The old way to import libraries was deprecated.
+if test "$python_major" -le 2; then
+  import_lib=imp
+  import_test="hasattr(imp, 'get_tag')"
+  import_call=imp.cache_from_source
+  import_arg2=', False' # needed in one call and not the other
+else
+  import_lib=importlib
+  import_test="hasattr(sys.implementation, 'cache_tag')"
+  import_call=importlib.util.cache_from_source
+  import_arg2=
+fi
+
+$PYTHON -c "
+import sys, os, py_compile, $import_lib
+...
+
+So I believe newer Python version is handled there.
+
+best regards
+ Waldemar
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
