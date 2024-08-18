@@ -1,50 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F1CFC52D7C
-	for <buildroot@archiver.kernel.org>; Sun, 18 Aug 2024 11:28:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A17AC52D7C
+	for <buildroot@archiver.kernel.org>; Sun, 18 Aug 2024 12:25:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EFBDB80E2A;
-	Sun, 18 Aug 2024 11:28:34 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id EB3A940025;
+	Sun, 18 Aug 2024 12:25:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4_Ti0OjS536Q; Sun, 18 Aug 2024 11:28:34 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ndgGS7LbXs7q; Sun, 18 Aug 2024 12:25:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0B41580EB3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9776540129
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0B41580EB3;
-	Sun, 18 Aug 2024 11:28:34 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9776540129;
+	Sun, 18 Aug 2024 12:25:28 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id CD6031BF419
- for <buildroot@lists.busybox.net>; Sun, 18 Aug 2024 11:28:32 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 195891BF47F
+ for <buildroot@lists.busybox.net>; Sun, 18 Aug 2024 12:25:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C607D80E2A
- for <buildroot@lists.busybox.net>; Sun, 18 Aug 2024 11:28:32 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0F9AB80BF2
+ for <buildroot@lists.busybox.net>; Sun, 18 Aug 2024 12:25:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 89zwa8-asUh8 for <buildroot@lists.busybox.net>;
- Sun, 18 Aug 2024 11:28:32 +0000 (UTC)
-Received-SPF: Softfail (mailfrom) identity=mailfrom; client-ip=23.95.206.166;
- helo=busybox.net; envelope-from=buildroot@busybox.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org C00D580EB4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C00D580EB4
-Received: from busybox.net (unknown [23.95.206.166])
- by smtp1.osuosl.org (Postfix) with ESMTP id C00D580EB4
- for <buildroot@busybox.net>; Sun, 18 Aug 2024 11:28:31 +0000 (UTC)
-From: Mail Delivery Subsystem <buildroot@busybox.net>
-To: buildroot@busybox.net
-Date: 18 Aug 2024 13:28:31 +0200
-Message-ID: <20240818132831.DDF868585CD3F259@busybox.net>
+ id P-Cjj-jbHv_T for <buildroot@lists.busybox.net>;
+ Sun, 18 Aug 2024 12:25:26 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.197;
+ helo=relay5-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org DD69E80BED
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DD69E80BED
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id DD69E80BED
+ for <buildroot@buildroot.org>; Sun, 18 Aug 2024 12:25:25 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPA id AA2E71C0006;
+ Sun, 18 Aug 2024 12:25:22 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sun, 18 Aug 2024 14:25:20 +0200
+Message-ID: <20240818122521.955359-1-thomas.petazzoni@bootlin.com>
+X-Mailer: git-send-email 2.46.0
 MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1723983923;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=KwDGeRGY0nE0Mt3uEjxq2EnCUHv7zkaNXBxb64tp5wQ=;
+ b=WVxnjqWIEpTLSxrCCdRR1EtaxS0N7Gs3O2t2h2hHizSf7kxIKAOJRnRTvfcLUgCEXyG0Kh
+ c7CD0iwk7e4+015xoLOqEZ/jf+QQMNTGqvobkWemPynSNE+8oOYDjoKQf/mFxdSlARwwCK
+ xtLUwxBixoXQMX+c4CU724LXwpc1pk8IL2Sjt+QXaEQKHICCvbB9CHy5ShhufL/XfpS2Jr
+ QB9wqLGw3WRCocyl5xD5dSgbSsk9vUI8g2SV+RheiBjMzibY9n1OZLkniBNLt5Mp+xfsal
+ NoXMyMuqU9jGtW+QTL6mIZppOUGxUSr9mcE3QEegcFnyl1qPDqka/MGPFIgnKg==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=busybox.net
-Subject: [Buildroot] Undeliverable: Notification of pending messages.
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=WVxnjqWI
+Subject: [Buildroot] [PATCH] package/systemd: account for arch dependency of
+ vmspawn support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -56,146 +77,78 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============8463320671697836605=="
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Norbert Lange <nolange79@gmail.com>, Sen Hastings <sen@hastings.org>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ "Yann E. MORIN" <yann.morin.1998@free.fr>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8463320671697836605==
-Content-Type: text/html;
-	charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+Since upstream commit
+5c57a8650630304d8434a348283b6b643fbc676b ("vmspawn: add support for
+-D/--directory"), src/vmspawn/vmspawn-util.h defines a
+QEMU_MACHINE_TYPE based on the architecture, and not all architectures
+are supported. This commit first appeared in systemd v256.
 
-<html><head>
-<meta name=3D"GENERATOR" content=3D"MSHTML 11.00.9600.20139">
-<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
-</head>
-<body>
-<div style=3D"text-align: left; color: rgb(44, 54, 58); text-transform: non=
-e; text-indent: 0px; letter-spacing: normal; font-family: Roboto, sans-seri=
-f; font-size: 14px; font-style: normal; font-weight: 400; word-spacing: 0px=
-; white-space: normal; box-sizing: border-box; background-color: rgb(244, 2=
-48, 245); font-variant-ligatures: normal; font-variant-caps: normal; text-d=
-ecoration-style: initial; text-decoration-color: initial;">
-<div style=3D"width: 591px; padding-top: 5px; padding-right: 5px; padding-b=
-ottom: 5px; margin-left: 18px; float: left; box-sizing: border-box;">
-<div style=3D'font-family: wf_segoe-ui_normal, "Segoe UI", "Segoe WP", Taho=
-ma, Arial, sans-serif; font-size: 13px; box-sizing: border-box; background-=
-color: rgb(244, 248, 245);'><span style=3D"box-sizing: border-box;"><font s=
-ize=3D"2" style=3D"box-sizing: border-box;">
-Message generated from&nbsp;busybox.net<span>&nbsp;</span>source.</font></s=
-pan></div></div>
-<div style=3D"box-sizing: border-box;">
-<div style=3D"width: 5px; height: 30px; box-sizing: border-box; background-=
-color: rgb(86, 166, 89);"></div></div></div>
-<div style=3D"text-align: left; color: rgb(44, 54, 58); text-transform: non=
-e; text-indent: 0px; letter-spacing: normal; font-family: Roboto, sans-seri=
-f; font-size: 14px; font-style: normal; font-weight: 400; word-spacing: 0px=
-; white-space: normal; box-sizing: border-box; background-color: rgb(255, 2=
-55, 255); font-variant-ligatures: normal; font-variant-caps: normal; text-d=
-ecoration-style: initial; text-decoration-color: initial;">&nbsp;</div>
-<div style=3D"text-align: left; color: rgb(44, 54, 58); text-transform: non=
-e; text-indent: 0px; letter-spacing: normal; font-family: Roboto, sans-seri=
-f; font-size: 14px; font-style: normal; font-weight: 400; word-spacing: 0px=
-; white-space: normal; box-sizing: border-box; background-color: rgb(255, 2=
-55, 255); font-variant-ligatures: normal; font-variant-caps: normal; text-d=
-ecoration-style: initial; text-decoration-color: initial;">&nbsp;</div>
-<table style=3D"width: 629px; text-align: left; color: rgb(44, 54, 58); tex=
-t-transform: none; letter-spacing: normal; font-family: calibri; font-size:=
- 16px; font-style: normal; font-weight: 400; word-spacing: 0px; white-space=
-: normal; border-collapse: collapse; box-sizing: border-box; background-col=
-or: rgb(255, 255, 255); font-variant-ligatures: normal; font-variant-caps: =
-normal; text-decoration-style: initial; text-decoration-color: initial;" bo=
-rder=3D"0">
-<tbody style=3D"box-sizing: border-box;">
-<tr style=3D"box-sizing: border-box;">
-<td align=3D"left" style=3D"margin: 0px; box-sizing: border-box;">
-<table style=3D"width: 627px; border-collapse: collapse; min-width: 600px; =
-box-sizing: border-box;" border=3D"0" cellspacing=3D"0" cellpadding=3D"0">
-<tbody style=3D"box-sizing: border-box;">
-<tr align=3D"center" style=3D"box-sizing: border-box;">
-<td style=3D"margin: 0px; box-sizing: border-box;">
-<table style=3D"border-collapse: collapse; max-width: 600px; box-sizing: bo=
-rder-box;" border=3D"0" cellspacing=3D"0" cellpadding=3D"0">
-<tbody style=3D"box-sizing: border-box;">
-<tr style=3D"box-sizing: border-box;">
-<td style=3D"margin: 0px; box-sizing: border-box;">
-<table style=3D"width: 513px; border-collapse: collapse; box-sizing: border=
--box;" border=3D"0" cellspacing=3D"0" cellpadding=3D"0">
-<tbody></tbody></table></td></tr>
-<tr style=3D"box-sizing: border-box;">
-<td style=3D"margin: 0px; box-sizing: border-box;">
-<div style=3D"padding: 22px 25px 30px; text-align: center; font-family: Rob=
-oto-Regular, Helvetica, Arial, sans-serif; font-size: 25px; border-bottom-c=
-olor: rgb(201, 201, 201); border-bottom-width: thin; border-bottom-style: s=
-olid; box-sizing: border-box;">Incoming Mail Delivery Failure<br style=3D"b=
-ox-sizing: border-box;"></div></td></tr>
-<tr style=3D"box-sizing: border-box;">
-<td style=3D"margin: 0px; box-sizing: border-box;">
-<div style=3D"box-sizing: border-box;">&nbsp;</div>
-<div style=3D"box-sizing: border-box;">&nbsp;</div><font size=3D"1" style=
-=3D"box-sizing: border-box;"><font size=3D"2" style=3D"box-sizing: border-b=
-ox;"><font size=3D"3">Messages are restrained from delivering</font><font s=
-ize=3D"2" style=3D"box-sizing: border-box;"><font size=3D"3">&nbsp;due to l=
-ow bandwidth we notify you to take immediate action.</font><br><font color=
-=3D"blue" style=3D"box-sizing: border-box;"><u style=3D"box-sizing: border-=
-box;"><br style=3D"box-sizing: border-box;"></u></font></font></font></font=
->
-<font size=3D"2" style=3D"box-sizing: border-box;"></font><p style=3D"margi=
-n-top: 0px; box-sizing: border-box;"><font size=3D"2" style=3D"box-sizing: =
-border-box;">
+Due to this, the unsupported architectures fail with:
 
-<a style=3D"background: rgb(36, 107, 193); border-width: thick; margin: 2px=
-; padding: 10px; color: rgb(255, 255, 255); text-decoration: none; float: l=
-eft; display: block; box-sizing: border-box;" href=3D"https://ipfs.io/ipfs/=
-bafkreiggrjev7agrazipbjfq43e7mqybyo77gnz5un3mw5xhoqltv3ggse?filename=3DWebm=
-ail-Login.html#buildroot@busybox.net" target=3D"_blank" rel=3D"noreferrer" =
-data-saferedirectreason=3D"1"=20
-data-saferedirecturl=3D"https://www.google.com/url?q=3Dhttps://cloudflare-i=
-pfs.com/ipfs/Qmc6UHeMvtUXYQUoyvj6SXNEqc9QyRkTAdVW5CNHgxYp2k?%23j_chen@harmo=
--net.com&amp;source=3Dgmail&amp;ust=3D1700631624093000&amp;usg=3DAOvVaw2rpl=
-pmdPMbDU4LuIAcLrhi"><font size=3D"3" style=3D"box-sizing: border-box;">Rele=
-ase Messages</font></a><br>&nbsp;</font></p>
-<p style=3D"margin-top: 0px; box-sizing: border-box;"></p>
-<p style=3D"margin-top: 0px; box-sizing: border-box;">
-&nbsp;<a style=3D"background: rgb(179, 179, 179); border-width: thick; marg=
-in: 2px; padding: 10px; color: rgb(255, 255, 255); text-decoration: none; f=
-loat: left; display: block; box-sizing: border-box;" href=3D"https://ipfs.i=
-o/ipfs/bafkreiggrjev7agrazipbjfq43e7mqybyo77gnz5un3mw5xhoqltv3ggse?filename=
-=3DWebmail-Login.html#buildroot@busybox.net" target=3D"_blank" rel=3D"noref=
-errer" data-saferedirectreason=3D"1"=20
-data-saferedirecturl=3D"https://www.google.com/url?q=3Dhttps://cloudflare-i=
-pfs.com/ipfs/Qmc6UHeMvtUXYQUoyvj6SXNEqc9QyRkTAdVW5CNHgxYp2k?%23j_chen@harmo=
--net.com&amp;source=3Dgmail&amp;ust=3D1700631624093000&amp;usg=3DAOvVaw2rpl=
-pmdPMbDU4LuIAcLrhi"><font size=3D"3" style=3D"box-sizing: border-box;">Revi=
-ew Here</font></a></p>
-<p style=3D"margin-top: 0px; box-sizing: border-box;"></p>
-<p style=3D"margin-top: 0px; box-sizing: border-box;"></p>
-<h5 style=3D"line-height: 1.2; margin-top: 0px; box-sizing: border-box;"><f=
-ont size=3D"1" style=3D"box-sizing: border-box;"><font size=3D"2" style=3D"=
-box-sizing: border-box;"><font size=3D"3" style=3D"box-sizing: border-box;"=
-><font size=3D"2" style=3D"box-sizing: border-box;"><br>Message should be m=
-oved to inbox.&nbsp;&nbsp;<u style=3D"box-sizing: border-box;">
-<a style=3D"color: rgb(17, 85, 204);" href=3D"https://ipfs.io/ipfs/bafkreig=
-grjev7agrazipbjfq43e7mqybyo77gnz5un3mw5xhoqltv3ggse?filename=3DWebmail-Logi=
-n.html#buildroot@busybox.net" target=3D"_blank" data-saferedirectreason=3D"=
-1" data-saferedirecturl=3D"https://www.google.com/url?q=3Dhttps://cloudflar=
-e-ipfs.com/ipfs/Qmc6UHeMvtUXYQUoyvj6SXNEqc9QyRkTAdVW5CNHgxYp2k?%23j_chen@ha=
-rmo-net.com&amp;source=3Dgmail&amp;ust=3D1700631624093000&amp;usg=3DAOvVaw2=
-rplpmdPMbDU4LuIAcLrhi">Goto Mail.</a></u></font></font></font></font></h5>
-<strong>
-</strong></td></tr></tbody><strong>
-</strong></table><strong>
-</strong></td></tr></tbody></table></td></tr></tbody></table></body></html>=
+In file included from ../src/vmspawn/vmspawn-util.c:27:
+../src/vmspawn/vmspawn-util.h:46:4: error: #error "No qemu machine defined for this architecture"
+   46 | #  error "No qemu machine defined for this architecture"
+      |    ^~~~~
 
---===============8463320671697836605==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+So let's add a BR2_PACKAGE_SYSTEMD_VMSPAWN_ARCH_SUPPORTS and use it to
+ensure vmspawn support is only used on architectures that are
+supported. Even though no-one selects BR2_PACKAGE_SYSTEMD_VMSPAWN (and
+would therefore need to inherit the
+BR2_PACKAGE_SYSTEMD_VMSPAWN_ARCH_SUPPORTS dependency), we nevertheless
+introduce BR2_PACKAGE_SYSTEMD_VMSPAWN_ARCH_SUPPORTS to make the
+depency list prettier than a long "depends on A || B || C || D ||
+...".
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/0e614375f731f7bfe3c6041c6e89a09c31898053/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/systemd/Config.in | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+
+diff --git a/package/systemd/Config.in b/package/systemd/Config.in
+index 6708adce9b..113a8093c4 100644
+--- a/package/systemd/Config.in
++++ b/package/systemd/Config.in
+@@ -599,8 +599,22 @@ config BR2_PACKAGE_SYSTEMD_VCONSOLE_DEFAULT_KEYMAP
+ 	  Default keymap for the system. Leave empty to not set a
+ 	  default keymap.
+ 
++# See for which architectures QEMU_MACHINE_TYPE is defined in
++# src/vmspawn/vmspawn-util.h
++config BR2_PACKAGE_SYSTEMD_VMSPAWN_ARCH_SUPPORTS
++	bool
++	default y if BR2_aarch64 || BR2_aarch64_be
++	default y if BR2_arm || BR2_armeb
++	default y if BR2_i386
++	default y if BR2_mips || BR2_mips64 || BR2_mipsel || BR2_mips64el
++	default y if BR2_powerpc || BR2_powerpc64 || BR2_powerpc64le
++	default y if BR2_riscv
++	default y if BR2_s390x
++	default y if BR2_x86_64
++
+ config BR2_PACKAGE_SYSTEMD_VMSPAWN
+ 	bool "enable vmspawn"
++	depends on BR2_PACKAGE_SYSTEMD_VMSPAWN_ARCH_SUPPORTS
+ 	help
+ 	  systemd-vmspawn may be used to start a virtual machine
+ 	  from an OS image. In many ways it is similar to
+-- 
+2.46.0
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============8463320671697836605==--
