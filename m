@@ -4,50 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 194A3C5320E
-	for <buildroot@archiver.kernel.org>; Sun, 18 Aug 2024 07:31:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4ED64C52D7C
+	for <buildroot@archiver.kernel.org>; Sun, 18 Aug 2024 07:59:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D033E40385;
-	Sun, 18 Aug 2024 07:31:49 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DE75C40129;
+	Sun, 18 Aug 2024 07:59:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5diwKGfC5NL8; Sun, 18 Aug 2024 07:31:48 +0000 (UTC)
+ id 4ag57FIVcMkN; Sun, 18 Aug 2024 07:59:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 711B8403CC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7D8B1401B1
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 711B8403CC;
-	Sun, 18 Aug 2024 07:31:48 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7D8B1401B1;
+	Sun, 18 Aug 2024 07:59:54 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B2C531BF41A
- for <buildroot@lists.busybox.net>; Sun, 18 Aug 2024 07:31:47 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 247621BF228
+ for <buildroot@lists.busybox.net>; Sun, 18 Aug 2024 07:59:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9F96F40385
- for <buildroot@lists.busybox.net>; Sun, 18 Aug 2024 07:31:47 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1E847401B1
+ for <buildroot@lists.busybox.net>; Sun, 18 Aug 2024 07:59:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zVOSsvFZm9tu for <buildroot@lists.busybox.net>;
- Sun, 18 Aug 2024 07:31:46 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id dTuFDxghBFS4 for <buildroot@lists.busybox.net>;
+ Sun, 18 Aug 2024 07:59:51 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
+ helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 871D64028D
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 871D64028D
- for <buildroot@buildroot.org>; Sun, 18 Aug 2024 07:31:46 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7B0DE85FA1; Sun, 18 Aug 2024 07:31:46 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Sun, 18 Aug 2024 09:30:24 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 463f4c6cb86a3ab7ef5ada2d0eb27367d135277d
-X-Git-Newrev: 182d3556a6838c01b0d1f4e6a36da84260605298
-X-Patchwork-Hint: ignore
-Message-Id: <20240818073146.7B0DE85FA1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-unittest-xml-reporting: add
- patch to fix LICENSE file installation
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 919D640129
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 919D640129
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 919D640129
+ for <buildroot@buildroot.org>; Sun, 18 Aug 2024 07:59:51 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 5E4B813F81D;
+ Sun, 18 Aug 2024 09:59:45 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sun, 18 Aug 2024 09:59:45 +0200
+Date: Sun, 18 Aug 2024 09:59:45 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Message-ID: <ZsGp8VSleNiIxs-H@landeda>
+References: <20240816120635.606346-1-thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20240816120635.606346-1-thomas.petazzoni@bootlin.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1723967988;
+ bh=qpjE//ZLX2fzCybNscKz4w3h+jNteTjBEK/6y+3v+LE=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=aBDDsOEV+Z/Z8/VTgGi0K7RPL1fF+jG3tvXRzHhhktickP2pAV/aEqOytOZNrTQLI
+ T6hiJtg/ekRBIwYmWrCuFmNfiAxY/Sc4kXW7GLUsDpi2Dw/CelEw1a9/gH8A2r0z3z
+ eR7tS6A04cXLTI40m44Rzb1q2+MDQhycgvSYgogFx5AiRtvUyRrRkfGIDxVtjUSR86
+ /oy2R48YMZj2xV8X39sFC/00WctUcPrWLtV3qvH4Df7bzKv49zZGXAYFz3/2y5r2Vc
+ oK+msMg8Cc4meKPEJCEYJ7bKGPDhb3tOoByep45RlL6Ic+Mqw7F4e7o5rPib0mxpii
+ QShFchg5f0dCQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=aBDDsOEV
+Subject: Re: [Buildroot] [PATCH 0/5] Misc utils/genrandconfig improvements
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,85 +81,89 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ Buildroot List <buildroot@buildroot.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=182d3556a6838c01b0d1f4e6a36da84260605298
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Thomas, All,
 
-The LICENSE file gets installed directly to the root of $(TARGET_DIR),
-which clashes with other packages:
+On 2024-08-16 14:06 +0200, Thomas Petazzoni via buildroot spake thusly:
+> My starting point for this series was that I wanted to create some
+> configurations that have BR2_BACKUP_SITE="", so that we do not use the
+> Buildroot backup mirror, to ensure that upstream locations are still
+> around.
+> 
+> While implementing this, I realized that all the semi-random
+> configuration tweaks that we do in gen_config() are in fact completely
+> overridden by "make randconfig", when genrandconfig is used without
+> any toolchain CSV.
 
-FileExistsError: File already exists: /home/autobuild/autobuild/instance-3/output-1/target/LICENSE
+So, I have not tried to bisect the series, but here genrandconfig is no
+longer random at all:
 
-This commit fixes this issue for the python-unittest-xml-reporting
-package. Other fixes will be needed for the other patches.
+    $ ./utils/genrandconfig -o pouet
+    $ ./utils/genrandconfig -o blark
+    $ sha1sum pouet/.config blark/.config
+    d60e28f2da3cda03c41a40c24d2f783a38cce2bc  pouet/.config
+    d60e28f2da3cda03c41a40c24d2f783a38cce2bc  blark/.config
 
-The issue in python-unittest-xml-reporting was introduced in upstream
-commit c43427611390fba83ca13fbb5311bd8fece5048f, which first appeared
-in v3.1.0. We switched from a pre-3.1.0 version to 3.2.0 in Buildroot
-in commit 69ba1562d5bef8d58b430fd7d67d0f3e77acfefc, which was merged
-in 2023.02.
+Regards,
+Yann E. MORIN.
 
-Fixes:
+> So I thought it was time for a bit of clean-up:
+> 
+> - Drop some fixups related to toolchains that are no longer tested
+>   (patch 1)
+> 
+> - Completely remove the support for using a toolchain CSV file. "make
+>   randconfig" support has been around for quite a while, it gives good
+>   results, so let's use that as the default now and only use fully
+>   random configurations (patch 2)
+> 
+> - Adapt the fine-tuning logic to the fact that "make randconfig"
+>   overwrites everything: move the fine-tuning logic *after* "make
+>   randconfig", but keep only what makes sense, since "make randconfig"
+>   already randomizes everything (patch 3)
+> 
+> - Implement what I wanted: set BR2_BACKUP_SITE="" for some builds
+>   (patch 4)
+> 
+> - Rework the logging of genrandconfig, as it is quite noisy right now,
+>   but only with irrelevant messages (patch 5)
+> 
+> Let me know what you think.
+> 
+> Thomas
+> 
+> Thomas Petazzoni (5):
+>   utils/genrandconfig: remove fixups related to untested CT-NG
+>     toolchains
+>   utils/genrandconfig: remove support for toolchain CSV
+>   utils/genrandconfig: rework fine-tuning logic
+>   utils/genrandconfig: do not use BR2_BACKUP_SITE for some builds
+>   utils/genrandconfig: improve logging
+> 
+>  utils/genrandconfig | 268 ++++++++------------------------------------
+>  1 file changed, 44 insertions(+), 224 deletions(-)
+> 
+> -- 
+> 2.46.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 
-  http://autobuild.buildroot.net/results/2c91243b440087bbc7d051d65f553f59d05dd207/
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- ...op-data_files-installs-LICENSE-to-incorre.patch | 40 ++++++++++++++++++++++
- 1 file changed, 40 insertions(+)
-
-diff --git a/package/python-unittest-xml-reporting/0001-setup.py-drop-data_files-installs-LICENSE-to-incorre.patch b/package/python-unittest-xml-reporting/0001-setup.py-drop-data_files-installs-LICENSE-to-incorre.patch
-new file mode 100644
-index 0000000000..4bc005f448
---- /dev/null
-+++ b/package/python-unittest-xml-reporting/0001-setup.py-drop-data_files-installs-LICENSE-to-incorre.patch
-@@ -0,0 +1,40 @@
-+From 662cd67695c31126d72035a818b0f5f1da5a31ca Mon Sep 17 00:00:00 2001
-+From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+Date: Sat, 17 Aug 2024 12:24:28 +0200
-+Subject: [PATCH] setup.py: drop data_files, installs LICENSE to incorrect
-+ place
-+
-+As reported in issue
-+https://github.com/xmlrunner/unittest-xml-reporting/issues/284, the
-+data_files statement in the setup() calls installs the LICENSE file in
-+the wrong place: in /usr/LICENSE, or even /LICENSE depending on the
-+configuration.
-+
-+So let's drop this, and let setuptools install the LICENSE file
-+automatically: since setuptools v56, the license_files attribute is
-+automatically assigned to a default value, which includes "LICENSE",
-+so there is in fact nothing to do to the get the LICENSE file
-+installed at the correct location. See
-+https://setuptools.pypa.io/en/latest/history.html#v56-0-0.
-+
-+Upstream: https://github.com/xmlrunner/unittest-xml-reporting/pull/287
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ setup.py | 1 -
-+ 1 file changed, 1 deletion(-)
-+
-+diff --git a/setup.py b/setup.py
-+index c524ed4..afa5925 100755
-+--- a/setup.py
-++++ b/setup.py
-+@@ -27,7 +27,6 @@ setup(
-+     description = 'unittest-based test runner with Ant/JUnit like XML reporting.',
-+     long_description = long_description,
-+     long_description_content_type = 'text/markdown',
-+-    data_files = [('', ['LICENSE'])],
-+     install_requires = ['lxml'],
-+     license = 'BSD',
-+     platforms = ['Any'],
-+-- 
-+2.46.0
-+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
