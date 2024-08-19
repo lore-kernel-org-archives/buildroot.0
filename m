@@ -4,49 +4,88 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EE7B6C3DA4A
-	for <buildroot@archiver.kernel.org>; Mon, 19 Aug 2024 20:33:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 63829C3DA4A
+	for <buildroot@archiver.kernel.org>; Mon, 19 Aug 2024 20:33:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B9A8D80E52;
-	Mon, 19 Aug 2024 20:33:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2272B80F6D;
+	Mon, 19 Aug 2024 20:33:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DLdk_MuN0R3g; Mon, 19 Aug 2024 20:33:39 +0000 (UTC)
+ id usYirL3l8ggr; Mon, 19 Aug 2024 20:33:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A33DE80E57
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E7D39810CC
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A33DE80E57;
-	Mon, 19 Aug 2024 20:33:39 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 83EC21BF3C9
- for <buildroot@lists.busybox.net>; Mon, 19 Aug 2024 20:33:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E7D39810CC;
+	Mon, 19 Aug 2024 20:33:47 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 7DC181BF3C9
+ for <buildroot@lists.busybox.net>; Mon, 19 Aug 2024 20:33:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7B30B404F9
- for <buildroot@lists.busybox.net>; Mon, 19 Aug 2024 20:33:37 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6B012605AA
+ for <buildroot@lists.busybox.net>; Mon, 19 Aug 2024 20:33:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id foTCWjzCW9c5 for <buildroot@lists.busybox.net>;
- Mon, 19 Aug 2024 20:33:36 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 234E0404F7
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 234E0404F7
- for <buildroot@buildroot.org>; Mon, 19 Aug 2024 20:33:36 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 06E44860E2; Mon, 19 Aug 2024 20:33:36 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NWzXSCgmKWPS for <buildroot@lists.busybox.net>;
+ Mon, 19 Aug 2024 20:33:45 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::42b; helo=mail-pf1-x42b.google.com;
+ envelope-from=christian@aperture.us; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 2C59F60839
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2C59F60839
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com
+ [IPv6:2607:f8b0:4864:20::42b])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 2C59F60839
+ for <buildroot@buildroot.org>; Mon, 19 Aug 2024 20:33:45 +0000 (UTC)
+Received: by mail-pf1-x42b.google.com with SMTP id
+ d2e1a72fcca58-7106cf5771bso3848332b3a.2
+ for <buildroot@buildroot.org>; Mon, 19 Aug 2024 13:33:44 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1724099624; x=1724704424;
+ h=cc:to:subject:message-id:date:mime-version:from:x-gm-message-state
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=73rHZtZcYimAF/1oDbMZlfbcfOpJHwXr5eWgo/MKa3o=;
+ b=rzfg8CFCE8rmhzelyMl/6vW7nDi+qzJb9BEU62zGLpmryxxJl4x9lFbbYinOsHT4Ft
+ X2EmE75AYvEZu13iiSSlpI0+Hh7xzeP2TQfMCjCADv2OghVLTbyNFnscRoeGj3XCE1uW
+ NsQ4TWGB3lmOUW97hPv6i9blTv4IyqNTiq+O5IWjQjnr5tD/q2y2k1nfdV9z+dQdrt9n
+ OJajju6VuM966oHYsOmL0c6/FMJqCuiPF872o/V0UXi3qPTRLnvplTK+o2PlGVYKnaRt
+ sBKUz1TI1vPDiik822nsjUHx+g3m6JgeXqJ1PumKaV7OUmv/P3U49e1VddLD84i4ASKr
+ d0lg==
+X-Gm-Message-State: AOJu0YxqoA4UhUfHVU6nfQxm9jJv9IFrb/ClsMz5KduhDyVqYyw0qVP+
+ cPqtpZtbTtSqZ+XSbAKsigttAaX9+6jkf5IMzLcsJi5dSXG6TaRjMbPLC69hLJyiyTTt42D7E4x
+ Oru54dUSbFLuQ9iKAP0OCkylChBxQvRIpgOgxGQPlSVjf2vjc7O5/PQ==
+X-Google-Smtp-Source: AGHT+IE6GIe5i4216tuZ6Kq7X33HylOd+B8nPjfwEBMoh7gR29yI/zK+6q00zuV25192ihhs50o3mZaRcgtxjtuKPPk=
+X-Received: by 2002:a05:6300:4043:b0:1c6:fb2a:4696 with SMTP id
+ adf61e73a8af0-1c904f98efamr10717595637.19.1724099623926; Mon, 19 Aug 2024
+ 13:33:43 -0700 (PDT)
+Received: from 432080191184 named unknown by gmailapi.google.com with
+ HTTPREST; Mon, 19 Aug 2024 13:33:43 -0700
+X-Mailer: git-send-email 2.46.0
+MIME-Version: 1.0
+Date: Mon, 19 Aug 2024 13:33:43 -0700
+Message-ID: <CAEpB38NWKuFapnjbEofugLm-csmkwq1dUbvh0jRbcPRVO5K19Q@mail.gmail.com>
 To: buildroot@buildroot.org
-Date: Mon, 19 Aug 2024 22:29:53 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: b5a0f58640047738adb2bce8daef6c53ef36677f
-X-Git-Newrev: 1e5abb71310e12be5fedb5bfea2aa6543e345aa5
-X-Patchwork-Hint: ignore
-Message-Id: <20240819203336.06E44860E2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/nushell: update to
- 0.96.1
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=aperture.us; s=google; t=1724099624; x=1724704424; darn=buildroot.org;
+ h=cc:to:subject:message-id:date:mime-version:from:from:to:cc:subject
+ :date:message-id:reply-to;
+ bh=73rHZtZcYimAF/1oDbMZlfbcfOpJHwXr5eWgo/MKa3o=;
+ b=ABwb501oiBMrUlPqfd4Qi6zMfgdqm8ooGflLQQBCXuM4ikZzgdN9WXpka+gb15M2pI
+ ZX7vZpRC8hwiZ8wPN3EUORD0zfFh2puHpPvjqj8asiivhN8QBMyPzMiwCsTgjEhW6GSQ
+ YkO/AwC62QWIkbGobzCa+4JHFY3EHH+A3FCORpUrSWp74xSEpPB+iuX6+G7p1NS+OC7Q
+ +QOH9q0PfSc4O2+vNgL+SSds0fx/u8zm4b7sDtO8ir6VnBlJnuWQwGE/TsWRMQnwmW4D
+ R6qsPLOwKSvAVWjFwCyjCK/OAXdOnB/j5WbbeC3+oE7/vNAZgvyXOygEC4RWfzLhafly
+ dwkQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=aperture.us
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=aperture.us header.i=@aperture.us header.a=rsa-sha256
+ header.s=google header.b=ABwb501o
+Subject: [Buildroot] [PATCH v8 1/1] package/go: use host compiler when
+ go-bootstrap unsupported
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,133 +97,174 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+From: Christian Stewart via buildroot <buildroot@buildroot.org>
+Reply-To: Christian Stewart <christian@aperture.us>
+Cc: Christian Stewart <christian@aperture.us>, Anisse Astier <anisse@astier.eu>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1e5abb71310e12be5fedb5bfea2aa6543e345aa5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+All Go compiler versions > 1.4.x (old) are written in Go, and require a existing
+compiled Go version to use to build from source.
 
-For changes see the nushell blog:
-https://www.nushell.sh/blog/
+https://golang.org/doc/install/source#bootstrapFromSource
 
-Broken since the update of rust in -next.
-Patch for sparc64 no longer required.
+The process for "bootstrapping" the Go compiler in Buildroot is:
 
-Fixes:
- - http://autobuild.buildroot.org/results/f11/f11c62f504e9ce68ed9e3fb3533d53942cb87092
+1. Compile a C/C++ cross-compiler (gcc) as the host toolchain.
+2. Build go-bootstrap-stage1 (which is Go 1.4.x and written in C)
+3. Build go-bootstrap-stage2 (which is Go 1.19.x and written in Go)
+4. Build go-bootstrap-stage3 (which is Go 1.21.x and written in Go)
+5. Build go-src (written in Go) using go-bootstrap-stage3.
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+go-bootstrap-stage1 does not work on 64-bit arm. The Go 1.4.x bootstrap compiler
+is compatible with x86, x86_64, and arm (32 bit) only.
+
+This patch adds a fallback to require a host Go compiler to build host-go-src
+when BR2_PACKAGE_HOST_GO_BOOTSTRAP_STAGE3_ARCH_SUPPORTS is not set.
+
+Recent changes added go-src with the intent of adding go-bin later. This
+commit changes go-src to depend on the host Go compiler to bootstrap
+go-src on architectures that cannot build go-bootstrap-stage1 (such as arm64).
+
+Signed-off-by: Christian Stewart <christian@aperture.us>
+
 ---
- .../0001-uucore-add-support-for-sparc64.patch      | 59 ----------------------
- package/nushell/nushell.hash                       |  2 +-
- package/nushell/nushell.mk                         |  9 +---
- 3 files changed, 2 insertions(+), 68 deletions(-)
 
-diff --git a/package/nushell/0001-uucore-add-support-for-sparc64.patch b/package/nushell/0001-uucore-add-support-for-sparc64.patch
-deleted file mode 100644
-index ad7e70a56d..0000000000
---- a/package/nushell/0001-uucore-add-support-for-sparc64.patch
-+++ /dev/null
-@@ -1,59 +0,0 @@
--From 9f4330f94cc471d880df7d9089ee1105b27fd321 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sat, 6 Jan 2024 10:26:54 +0100
--Subject: [PATCH] uucore: add support for sparc64
--
--Add support for sparc64 in uucore to avoid the following build failure
--with nushell:
--
--error[E0308]: mismatched types
--   --> /home/autobuild/autobuild/instance-7/output-1/build/nushell-0.85.0/VENDOR/uucore/src/lib/features/fs.rs:121:16
--    |
--111 |     pub fn number_of_links(&self) -> u64 {
--    |                                      --- expected `u64` because of return type
--...
--121 |         return self.0.st_nlink;
--    |                ^^^^^^^^^^^^^^^ expected `u64`, found `u32`
--    |
--help: you can convert a `u32` to a `u64`
--    |
--121 |         return self.0.st_nlink.into();
--    |                               +++++++
--
--For more information about this error, try `rustc --explain E0308`.
--error: could not compile `uucore` (lib) due to previous error
--
--Fixes:
-- - http://autobuild.buildroot.org/results/f9f0287a8e39c65895014ca513ed25071f020add
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Upstream: https://github.com/uutils/coreutils/commit/d158f1a396d19cc2aed68131b80ec3b7325d108e
--[Dario: make the patch to be applied with fuzz factor 0]
--Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-----
-- src/uucore/src/lib/features/fs.rs | 2 ++
-- 1 file changed, 2 insertions(+)
--
--diff --git a/VENDOR/uucore/src/lib/features/fs.rs b/VENDOR/uucore/src/lib/features/fs.rs
--index 20cc9e13d..3b9170bc3 100644
----- a/VENDOR/uucore/src/lib/features/fs.rs
--+++ b/VENDOR/uucore/src/lib/features/fs.rs
--@@ -116,6 +116,7 @@
--             not(target_os = "freebsd"),
--             not(target_arch = "aarch64"),
--             not(target_arch = "riscv64"),
--+            not(target_arch = "sparc64"),
--             target_pointer_width = "64"
--         ))]
--         return self.0.st_nlink;
--@@ -127,6 +128,7 @@
--                 target_os = "freebsd",
--                 target_arch = "aarch64",
--                 target_arch = "riscv64",
--+                target_arch = "sparc64",
--                 not(target_pointer_width = "64")
--             )
--         ))]
---- 
--2.43.0
--
-diff --git a/package/nushell/nushell.hash b/package/nushell/nushell.hash
-index c125a6c652..8336054455 100644
---- a/package/nushell/nushell.hash
-+++ b/package/nushell/nushell.hash
-@@ -1,3 +1,3 @@
- # Locally generated
--sha256  9175b7e25a93a35c4f2690a63e7c36ac2dc31a9d762f59de01aac8ac1075b02f  nushell-0.85.0-cargo2.tar.gz
-+sha256  592f3b74156be0e65f8ef01fbc2e947480b91407190f93761d7c9531f381bfac  nushell-0.96.1-cargo2.tar.gz
- sha256  2dc1f03f729c21902d869b4d8f8dc528fc730f4c6ad83fc128672bda0ad69196  LICENSE
-diff --git a/package/nushell/nushell.mk b/package/nushell/nushell.mk
-index 7b538da4e2..a05eaa9829 100644
---- a/package/nushell/nushell.mk
-+++ b/package/nushell/nushell.mk
-@@ -4,19 +4,12 @@
- #
- ################################################################################
- 
--NUSHELL_VERSION = 0.85.0
-+NUSHELL_VERSION = 0.96.1
- NUSHELL_SITE = $(call github,nushell,nushell,$(NUSHELL_VERSION))
- NUSHELL_LICENSE = MIT
- NUSHELL_LICENSE_FILES = LICENSE
- NUSHELL_DEPENDENCIES = host-pkgconf openssl ncurses
- 
--# 0001-uucore-add-support-for-sparc64.patch
--define NUSHELL_PATCH_CHECKSUM_FILE
--	$(SED) 's/b0390ae7bca8b31f0db289a5d064bba36d45e4d137674e9df2c6ab6256f926f4/f8ce2ad571e1482f6833cb147eafeb724776e7887ebabf339a5f3e79860583cb/' \
--		$(@D)/VENDOR/uucore/.cargo-checksum.json
--endef
--NUSHELL_POST_PATCH_HOOKS += NUSHELL_PATCH_CHECKSUM_FILE
--
- # Add /usr/bin/nu to /etc/shells as in package/bash/bash.mk
- define NUSHELL_ADD_NU_TO_SHELLS
- 	grep -qsE '^/usr/bin/nu$$' $(TARGET_DIR)/etc/shells \
+changes prior to inclusion in this series:
+
+ - thanks Thomas for the review & suggestions
+ - added NEEDS_HOST_GO boolean
+ - added dependency checks to support/dependencies/dependencies.sh
+ - removed unnecessary changes to go-bootstrap package
+ - add dependency on toolchain if Cgo is enabled
+ - updates for go1.20
+ - updates for go-bootstrap-stage{1,2}
+
+changes from v1 -> v2:
+
+ - remove whitespace fix in bootstrap stage2
+
+changes from v2 -> v3:
+
+ - rebase
+
+changes from v7 -> v8:
+
+- rebase on go-src changes
+- Discussion related to adding go-src and go-bin:
+  - https://patchwork.ozlabs.org/project/buildroot/patch/20230711220849.1702358-4-christian@aperture.us/
+
+Signed-off-by: Christian Stewart <christian@aperture.us>
+---
+ Config.in                            |  4 ++++
+ package/go/Config.in.host            |  3 +--
+ package/go/go-src/go-src.mk          | 12 ++++++++----
+ support/dependencies/dependencies.sh |  4 ++++
+ 4 files changed, 17 insertions(+), 6 deletions(-)
+
+diff --git a/Config.in b/Config.in
+index df43db7eff..bd7227a049 100644
+--- a/Config.in
++++ b/Config.in
+@@ -68,6 +68,10 @@ config BR2_HOST_GCC_AT_LEAST_11
+ # When adding new entries above, be sure to update
+ # the HOSTCC_MAX_VERSION variable in the Makefile.
+
++# Hidden boolean selected if bootstrapping Go w/ GCC is not supported.
++config BR2_NEEDS_HOST_GO
++	bool
++
+ # Hidden boolean selected by packages in need of Java in order to build
+ # (example: kodi)
+ config BR2_NEEDS_HOST_JAVA
+diff --git a/package/go/Config.in.host b/package/go/Config.in.host
+index 11ce6df369..e006dfc830 100644
+--- a/package/go/Config.in.host
++++ b/package/go/Config.in.host
+@@ -2,7 +2,6 @@
+ config BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
+ 	bool
+ 	default y
+-	depends on BR2_PACKAGE_HOST_GO_BOOTSTRAP_STAGE3_ARCH_SUPPORTS
+ 	# See https://go.dev/doc/install/source#environment
+ 	# See src/go/build/syslist.go for the list of supported architectures
+ 	depends on (BR2_arm && BR2_TOOLCHAIN_SUPPORTS_PIE) || BR2_aarch64 \
+@@ -34,7 +33,6 @@ config BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
+ config BR2_PACKAGE_HOST_GO_HOST_ARCH_SUPPORTS
+ 	bool
+ 	default y
+-	depends on BR2_PACKAGE_HOST_GO_BOOTSTRAP_STAGE3_ARCH_SUPPORTS
+
+ # Go packages should select BR2_PACKAGE_HOST_GO
+ config BR2_PACKAGE_HOST_GO
+@@ -53,6 +51,7 @@ choice
+
+ config BR2_PACKAGE_HOST_GO_SRC
+ 	bool "host go (source)"
++	select BR2_NEEDS_HOST_GO if
+!BR2_PACKAGE_HOST_GO_BOOTSTRAP_STAGE3_ARCH_SUPPORTS
+ 	help
+ 	  This package will build the go compiler for the host.
+
+diff --git a/package/go/go-src/go-src.mk b/package/go/go-src/go-src.mk
+index 0d1a9b3187..7e78f6e4d2 100644
+--- a/package/go/go-src/go-src.mk
++++ b/package/go/go-src/go-src.mk
+@@ -12,9 +12,7 @@ GO_SRC_LICENSE_FILES = LICENSE
+ GO_SRC_CPE_ID_VENDOR = golang
+
+ HOST_GO_SRC_PROVIDES = host-go
+-HOST_GO_SRC_DEPENDENCIES = \
+-	host-go-bootstrap-stage3 \
+-	$(HOST_GO_DEPENDENCIES_CGO)
++HOST_GO_SRC_DEPENDENCIES = $(HOST_GO_DEPENDENCIES_CGO)
+
+ ifeq ($(BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS),y)
+
+@@ -34,7 +32,6 @@ endif
+ HOST_GO_SRC_MAKE_ENV = \
+ 	GO111MODULE=off \
+ 	GOCACHE=$(HOST_GO_HOST_CACHE) \
+-	GOROOT_BOOTSTRAP=$(HOST_GO_BOOTSTRAP_STAGE3_ROOT) \
+ 	GOROOT_FINAL=$(HOST_GO_ROOT) \
+ 	GOROOT="$(@D)" \
+ 	GOBIN="$(@D)/bin" \
+@@ -44,6 +41,13 @@ HOST_GO_SRC_MAKE_ENV = \
+ 	CGO_ENABLED=$(HOST_GO_CGO_ENABLED) \
+ 	$(HOST_GO_SRC_CROSS_ENV)
+
++# Use the Go compiler bootstrapped by Buildroot if available.
++# Otherwise, use the host Go compiler.
++ifeq ($(BR2_PACKAGE_HOST_GO_BOOTSTRAP_STAGE3_ARCH_SUPPORTS),y)
++HOST_GO_DEPENDENCIES += host-go-bootstrap-stage3
++HOST_GO_MAKE_ENV += GOROOT_BOOTSTRAP=$(HOST_GO_BOOTSTRAP_STAGE3_ROOT)
++endif
++
+ define HOST_GO_SRC_BUILD_CMDS
+ 	cd $(@D)/src && \
+ 		$(HOST_GO_SRC_MAKE_ENV) ./make.bash $(if $(VERBOSE),-v)
+diff --git a/support/dependencies/dependencies.sh
+b/support/dependencies/dependencies.sh
+index 6d5fc36037..7b1c51b4f1 100755
+--- a/support/dependencies/dependencies.sh
++++ b/support/dependencies/dependencies.sh
+@@ -217,6 +217,10 @@ if grep -q ^BR2_NEEDS_HOST_UTF8_LOCALE=y $BR2_CONFIG ; then
+ 	fi
+ fi
+
++if grep -q ^BR2_NEEDS_HOST_GO=y $BR2_CONFIG ; then
++	check_prog_host "go"
++fi
++
+ if grep -q ^BR2_NEEDS_HOST_JAVA=y $BR2_CONFIG ; then
+ 	check_prog_host "java"
+ 	JAVA_GCJ=$(java -version 2>&1 | grep gcj)
+-- 
+2.45.2
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
