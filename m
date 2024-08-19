@@ -4,69 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1C2EC3DA4A
-	for <buildroot@archiver.kernel.org>; Mon, 19 Aug 2024 22:20:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4961DC3DA4A
+	for <buildroot@archiver.kernel.org>; Mon, 19 Aug 2024 22:32:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6CA7D60868;
-	Mon, 19 Aug 2024 22:20:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 740F060861;
+	Mon, 19 Aug 2024 22:32:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JWmQP2m8KtQr; Mon, 19 Aug 2024 22:20:34 +0000 (UTC)
+ id HRu6yrrdqRo9; Mon, 19 Aug 2024 22:32:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 25B6260839
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 362706083E
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 25B6260839;
-	Mon, 19 Aug 2024 22:20:34 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 22D3E1BF3C8
- for <buildroot@lists.busybox.net>; Mon, 19 Aug 2024 22:20:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 362706083E;
+	Mon, 19 Aug 2024 22:32:06 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id E7CB41BF3C8
+ for <buildroot@lists.busybox.net>; Mon, 19 Aug 2024 22:32:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1D5E74026D
- for <buildroot@lists.busybox.net>; Mon, 19 Aug 2024 22:20:32 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D36DE401D5
+ for <buildroot@lists.busybox.net>; Mon, 19 Aug 2024 22:32:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id a575bxmXUlZY for <buildroot@lists.busybox.net>;
- Mon, 19 Aug 2024 22:20:31 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
- helo=smtp4-g21.free.fr; envelope-from=vjardin@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 9A44B400AF
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9A44B400AF
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 9A44B400AF
- for <buildroot@buildroot.org>; Mon, 19 Aug 2024 22:20:30 +0000 (UTC)
-Received: from [192.168.128.62] (unknown [93.7.88.243])
- (Authenticated sender: vjardin@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPSA id 9DCD019F574;
- Tue, 20 Aug 2024 00:20:25 +0200 (CEST)
-From: Vincent Jardin <vjardin@free.fr>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Date: Tue, 20 Aug 2024 00:20:25 +0200
-Message-ID: <1916cba2828.2856.ffe91ee9dc07baa0c1c4561a0e181c1b@free.fr>
-In-Reply-To: <20240817102923.18f56e24@windsurf>
-References: <20240815212658.48933-1-vjardin@free.fr>
- <20240817102923.18f56e24@windsurf>
-User-Agent: AquaMail/1.51.5 (build: 105105504)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9smTd7dwhO2D for <buildroot@lists.busybox.net>;
+ Mon, 19 Aug 2024 22:32:02 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
+ helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 35E1B40169
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 35E1B40169
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 35E1B40169
+ for <buildroot@buildroot.org>; Mon, 19 Aug 2024 22:32:01 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id D99BB13F861;
+ Tue, 20 Aug 2024 00:31:55 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Tue, 20 Aug 2024 00:31:55 +0200
+Date: Tue, 20 Aug 2024 00:31:55 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Christian Stewart <christian@aperture.us>
+Message-ID: <ZsPH2xAvcIc7oBUA@landeda>
+References: <CAEpB38NWKuFapnjbEofugLm-csmkwq1dUbvh0jRbcPRVO5K19Q@mail.gmail.com>
+ <ZsO2bDVn41vsZfq1@landeda>
+ <CA+h8R2q9ueiNE+SKXNJGq4zGnquRZ=jN-8MHKOwUNVNcBj7yXA@mail.gmail.com>
 MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <CA+h8R2q9ueiNE+SKXNJGq4zGnquRZ=jN-8MHKOwUNVNcBj7yXA@mail.gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1724106028;
- bh=IoMc//McgDw1775T7CLqrMnfiC43SL4h+184kKnj+S4=;
- h=From:To:CC:Date:In-Reply-To:References:Subject:From;
- b=SNuCAd4QHHF9UG5vMsyMbcAyYxWtmUu3o/hx5isajhw35Kd4lrGP0neCo8n/nBTjE
- vsH3Z6RDl4uU5rIZFq+YJPaMwTQ4eI5qA7n/RmFpZxyHz5CUed4OUXtoZ9fExj5lrm
- yXQONnHibev+6OY9BYbMrcqs01rBVqV3+gqlNnlck3BJvF+DgxjKrr47KCvoDtOgEs
- ZoTmjj9SzQzPqL+pT9rkprITcEidaqqEwKKYtpcaWOGsHTA17fx587FwvBt0zI9k+V
- iWqIB8K3v1oxXIJYRTMMbqBxZ7mv8xCgSWToKWjdfhth7u2QbXpEIDagDBY19wJ49N
- 9yWvPRkzrbbww==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=free.fr; s=smtp-20201208; t=1724106720;
+ bh=3a35IN2sWqS77n1OkldNUhTcfD6TqDBE3VSRLoAtc1s=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=DL7TPU0CRwMP+6EjuEVZmLmFbB5Ydle21tl/BsczbmdKXlPaI8CzEzLafgPPvMmFX
+ ZQtXrjQ4CdOb96JyR1pGmtSw6fbGUw5ihgicFFmOtkS6sl+GsmA2pNbYdu8dY6VqJl
+ M6TCw49fQroLfELD+Uwd7mEJ5gadCPxQsOTqWsgg6CTZk6Bd5UjpYa11jF00Basr1A
+ taeEyJL+w2wEcxtNSm/B48CzLJ9Go1zU7rqpe2HoGSL0WYsUBWPxNaZyTS0RR/eGjE
+ +B40GDy4nWTOni2nENBrRDYrFq1q9DlliI5JSkidaNMnikT+uJBMnQm2pRFGaib8tI
+ I3T/FP4cPnsKA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=SNuCAd4Q
-Subject: Re: [Buildroot] [PATCH 1/1] package/dpdk: add 24.03
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=DL7TPU0C
+Subject: Re: [Buildroot] [PATCH v8 1/1] package/go: use host compiler when
+ go-bootstrap unsupported
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,128 +83,86 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>, buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============7905770878100449766=="
+Cc: Anisse Astier <anisse@astier.eu>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This is a multi-part message in MIME format.
---===============7905770878100449766==
-Content-Type: multipart/alternative; boundary="1916cba29f12c6d28563357852"
-
-This is a multi-part message in MIME format.
---1916cba29f12c6d28563357852
-Content-Type: text/plain; format=flowed; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-
-Hi Thomas,
-
-Le 17 août 2024 10:29:25 Thomas Petazzoni <thomas.petazzoni@bootlin.com> a 
-écrit :
-
-> Hello Vincent,
->
-> Thanks for your patch, nice to see a Buildroot patch from you! See some
-> comments below.
-
-You welcome ;) You did help me to bootstrap, now I can follow up with some 
-contributions.
-
->
->
-> On Thu, 15 Aug 2024 23:26:58 +0200
-> Vincent Jardin <vjardin@free.fr> wrote:
->
->> Importantly, this commit does not enforce the use of UIO or VFIO
->> kernel frameworks, as DPDK's architecture supports userland memory
->> mappings that do not require these technologies. By maintaining this
->> flexibility, DPDK can operate with a broader range of hardware and
->> software configurations, making it suitable for diverse Buildroot's
->> deployment scenarios.
->
-> Do you intend to follow-up with additional patches supporting the other
-> use-cases?
-
-Yes I will but first I'd like to iterate with some early steps. See the v2. 
-Once merge, I'll keep adding more cases.
-
-Meanwhile, there is a build CI on github for some early checks:
-    https://github.com/vjardin/br_dpdk/actions
-
-Best regards,
-  Vincent
-
---1916cba29f12c6d28563357852
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.=
-w3.org/TR/html4/loose.dtd">
-<html>
-<body>
-<div dir=3D"auto">
-<div dir=3D"auto">Hi Thomas,</div><div dir=3D"auto"><br></div>
-<div id=3D"aqm-original" style=3D"color: black;">
-<div dir=3D"auto">Le 17 ao=C3=BBt 2024 10:29:25 Thomas Petazzoni &lt;thomas=
-.petazzoni@bootlin.com&gt; a =C3=A9crit :</div>
-<div><br></div>
-<blockquote type=3D"cite" class=3D"gmail_quote" style=3D"margin: 0 0 0 0.75=
-ex; border-left: 1px solid #808080; padding-left: 0.75ex;">
-<div dir=3D"auto">Hello Vincent,</div>
-<div dir=3D"auto"><br></div>
-<div dir=3D"auto">Thanks for your patch, nice to see a Buildroot patch from=
- you! See some</div>
-<div dir=3D"auto">comments below.</div></blockquote></div><div dir=3D"auto"=
-><br></div><div dir=3D"auto">You welcome ;) You did help me to bootstrap, n=
-ow I can follow up with some contributions.</div><div dir=3D"auto"><br></di=
-v><div id=3D"aqm-original" style=3D"color: black;" dir=3D"auto"><blockquote=
- type=3D"cite" class=3D"gmail_quote" style=3D"margin: 0 0 0 0.75ex; border-=
-left: 1px solid #808080; padding-left: 0.75ex;"><div dir=3D"auto"></div>
-<div dir=3D"auto"><br></div>
-<div dir=3D"auto">On Thu, 15 Aug 2024 23:26:58 +0200</div>
-<div dir=3D"auto">Vincent Jardin &lt;vjardin@free.fr&gt; wrote:</div>
-<div dir=3D"auto"><br></div>
-<blockquote type=3D"cite" class=3D"gmail_quote" style=3D"margin: 0 0 0 0.75=
-ex; border-left: 1px solid #0099CC; padding-left: 0.75ex;">
-<div dir=3D"auto">Importantly, this commit does not enforce the use of UIO =
-or VFIO</div>
-<div dir=3D"auto">kernel frameworks, as DPDK's architecture supports userla=
-nd memory</div>
-<div dir=3D"auto">mappings that do not require these technologies. By maint=
-aining this</div>
-<div dir=3D"auto">flexibility, DPDK can operate with a broader range of har=
-dware and</div>
-<div dir=3D"auto">software configurations, making it suitable for diverse B=
-uildroot's</div>
-<div dir=3D"auto">deployment scenarios.</div>
-</blockquote>
-<div dir=3D"auto"><br></div>
-<div dir=3D"auto">Do you intend to follow-up with additional patches suppor=
-ting the other</div>
-<div dir=3D"auto">use-cases?</div></blockquote></div><div dir=3D"auto"><br>=
-</div><div dir=3D"auto">Yes I will but first I'd like to iterate with some =
-early steps. See the v2. Once merge, I'll keep adding more cases.</div><div=
- dir=3D"auto"><br></div><div dir=3D"auto">Meanwhile, there is a build CI on=
- github for some early checks:</div><div dir=3D"auto">    <a href=3D"https:=
-//github.com/vjardin/br_dpdk/actions">https://github.com/vjardin/br_dpdk/ac=
-tions</a></div><div dir=3D"auto"><br></div><div dir=3D"auto">Best regards,<=
-/div><div dir=3D"auto">&nbsp; Vincent&nbsp;</div>
-</div></body>
-</html>
-
---1916cba29f12c6d28563357852--
-
-
---===============7905770878100449766==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============7905770878100449766==--
-
+Q2hyaXN0aWFuLCBBbGwsCgpPbiAyMDI0LTA4LTE5IDE0OjM0IC0wNzAwLCBDaHJpc3RpYW4gU3Rl
+d2FydCBzcGFrZSB0aHVzbHk6Cj4gT24gTW9uLCBBdWcgMTksIDIwMjQgYXQgMjoxN+KAr1BNIFlh
+bm4gRS4gTU9SSU4gPHlhbm4ubW9yaW4uMTk5OEBmcmVlLmZyPiB3cm90ZToKPiA+ID4gUmVjZW50
+IGNoYW5nZXMgYWRkZWQgZ28tc3JjIHdpdGggdGhlIGludGVudCBvZiBhZGRpbmcgZ28tYmluIGxh
+dGVyLiBUaGlzCj4gPiA+IGNvbW1pdCBjaGFuZ2VzIGdvLXNyYyB0byBkZXBlbmQgb24gdGhlIGhv
+c3QgR28gY29tcGlsZXIgdG8gYm9vdHN0cmFwCj4gPiA+IGdvLXNyYyBvbiBhcmNoaXRlY3R1cmVz
+IHRoYXQgY2Fubm90IGJ1aWxkIGdvLWJvb3RzdHJhcC1zdGFnZTEgKHN1Y2ggYXMgYXJtNjQpLgo+
+ID4gPgo+ID4gPiBTaWduZWQtb2ZmLWJ5OiBDaHJpc3RpYW4gU3Rld2FydCA8Y2hyaXN0aWFuQGFw
+ZXJ0dXJlLnVzPgo+ID4KPiA+IFRoYW5rcyBmb3IgdGhpcyBuZXcgaXRlcmF0aW9uLiBCdXQgSSdk
+IHJhdGhlciBmaXJzdCBoYXZlIHRoZSBzdXBwb3J0IGZvcgo+ID4gaG9zdC1nby1iaW4sIHJhdGhl
+ciB0aGFuIHJlbHkgb24gdGhlIHN5c3RlbSBnby4KPiA+Cj4gPiBJbmRlZWQsIHVzbmcgaG9zdC1n
+by1iaW4gd291bGQgbm90IHJlcXVpcmUgdGhlIHVzZXIgdG8gaW5zdGFsbCBnbyBvbgo+ID4gdGhl
+aXIgc3lzdGVtOyBob3N0LWdvLWJpbiBjYW4gYmUgdXNlZCBvbiBvZGVyIGRpc3RyaWJ1dGlvbnMg
+d2hlcmUgYSBnbwo+ID4gY29tcGlsZXIgaXMgbm90IGF2YWlsYWJsZSwgb3Igd2hlcmUgdGhlIGdv
+IGNvbXBpbGVyIGlzIHRvbyBvbGQgdG8gYnVpbGQKPiA+IGdvLXNyYy4KPiA+Cj4gPiBTbywgSSBh
+bSBub3QgY29udmluY2VkIGFib3V0IHRoaXMgInVzZSB0aGUgc3lzdGVtIGdvIiBzb2x1dGlvbi4K
+PiAKPiBUaGVzZSBhcmUgdHdvIGRpZmZlcmVudCB1c2UgY2FzZXMuCj4gCj4gV2hhdCB5b3UgYXJl
+IGRlc2NyaWJpbmcgaXMgZG93bmxvYWRpbmcgYW5kIHVzaW5nIHRoZSBwcmUtYnVpbHQgR28gZm9y
+Cj4gZXZlcnl0aGluZy4KPiAKPiBXaGF0IHRoaXMgcGF0Y2ggYWNjb21wbGlzaGVzIGlzIGJvb3Rz
+dHJhcHBpbmcgaG9zdC1nby1zcmMgdXNpbmcgdGhlCj4gc3lzdGVtIEdvIGNvbXBpbGVyLgo+IAo+
+IEJvdGggY2FuIGJlIHN1cHBvcnRlZCwgdGhpcyBwYXRjaCBmaXhlcyB3aGVuIHdlIHNlbGVjdCBo
+b3N0LWdvLXNyYyBvbgo+IGFuIGFybTY0IG1hY2hpbmUuCgpTb3JyeSwgSSB3YXMgbm90IGNsZWFy
+IGVub3VnaCwgbXkgYmFkLgoKU28sIHRvIG1ha2UgaXQgY2xlYXIgYW5kIGV4cGxpY2l0LCBoZXJl
+IGlzIHdoYXQgSSB0aGluayB3ZSBzaG91bGQKc3VwcG9ydDoKCiAgLSBmdWxsIGJvb3RzdHJhcCBj
+aGFpbiB1cCB0byBob3N0LWdvLXNyYywgYXQgbGVhc3Qgd2hlcmUgcG9zc2libGUKICAtIGxhc3Qt
+c3RhZ2UgYm9vdHN0cmFwIHdpdGggaG9zdC1nby1ib290c3RyYXAtc3RhZ2UzLWJpbiBhbmQgaG9z
+dC1nby1zcmMKICAtIGhvc3QtZ28tYmluCgpBcyBmYXIgYXMgSSBjYW4gc2VlLCB0aGVyZSBhcmUg
+YmluYXJ5IHJlbGVhc2VzIGZvciBhbGwgbWVhbmluZ2Z1bAphcmNoaXRlY3R1cmVzOgogICAgaHR0
+cHM6Ly9nby5kZXYvZGwvCgogICogZ28gMS4xOS4xMyAob3VyIHN0YWdlLTIgYm9vdHN0cmFwKSBo
+YXM6CiAgICAgIC0gZ28xLjE5LjEzLmxpbnV4LTM4Ni50YXIuZ3oKICAgICAgLSBnbzEuMTkuMTMu
+bGludXgtYW1kNjQudGFyLmd6CiAgICAgIC0gZ28xLjE5LjEzLmxpbnV4LWFybTY0LnRhci5negog
+ICAgICAtIGdvMS4xOS4xMy5saW51eC1hcm12NmwudGFyLmd6CiAgICAgIC0gZ28xLjE5LjEzLmxp
+bnV4LXBwYzY0bGUudGFyLmd6CiAgICAgIC0gZ28xLjE5LjEzLmxpbnV4LXMzOTB4LnRhci5negoK
+ICAqIGdvIDEuMjEuOCAob3VyIHN0YWdlLTMgYm9vdHN0cmFwKSBoYXM6CiAgICAgIC0gZ28xLjIx
+LjgubGludXgtMzg2LnRhci5negogICAgICAtIGdvMS4yMS44LmxpbnV4LWFtZDY0LnRhci5negog
+ICAgICAtIGdvMS4yMS44LmxpbnV4LWFybTY0LnRhci5negogICAgICAtIGdvMS4yMS44LmxpbnV4
+LWFybXY2bC50YXIuZ3oKICAgICAgLSBnbzEuMjEuOC5saW51eC1sb29uZzY0LnRhci5negogICAg
+ICAtIGdvMS4yMS44LmxpbnV4LW1pcHMudGFyLmd6CiAgICAgIC0gZ28xLjIxLjgubGludXgtbWlw
+czY0LnRhci5negogICAgICAtIGdvMS4yMS44LmxpbnV4LW1pcHM2NGxlLnRhci5negogICAgICAt
+IGdvMS4yMS44LmxpbnV4LW1pcHNsZS50YXIuZ3oKICAgICAgLSBnbzEuMjEuOC5saW51eC1wcGM2
+NC50YXIuZ3oKICAgICAgLSBnbzEuMjEuOC5saW51eC1wcGM2NGxlLnRhci5negogICAgICAtIGdv
+MS4yMS44LmxpbnV4LXJpc2N2NjQudGFyLmd6CiAgICAgIC0gZ28xLjIxLjgubGludXgtczM5MHgu
+dGFyLmd6CgpTbyBpZiB3ZSBpbnRyb2R1Y2UgaG9zdC1nby1ib290c3RyYXAtc3RhZ2UzLWJpbiB3
+aXRoIGdvIDEuMjEuOCwgd2UKYmFzaWNhbGx5IGdldCBzdXBwb3J0IGZvciBhbGwgYXJjaGl0ZWN0
+dXJlcyAoYW5kIG1vcmUpIHdoZXJlIHdlCmV4cGVjdCBCdWlsZHJvb3QgdG8gcnVuICh0byBydW4s
+IG5vdCB0byBnZW5lcmF0ZSBjb2RlIGZvciEpLiBNYXliZSBvbmUKY291bGQgYXJndWUgdGhhdCBy
+aXNjdjMyIGlzIG1pc3NpbmcsIGJ1dCBJIGRvdWJ0IGFueW9uZSBoYXMgYSByaXNjdjMyCm1hY2hp
+bmUgcG93ZXJmdWwgZW5vdWdoIHRvIHJ1biBCdWlsZHJvb3Qgb24gKHJpc2N2NjQgc3VyZSwgcmlz
+Y3YzMiBtdWNoCmxlc3MpLCBzbyB0aGF0IGlzIG5vdCBhIGNvbmNlcm4gZWl0aGVyIChJTUhPKS4K
+ClRoaXMgd291bGQgYWxzbyBmaXggdGhlIGlzc3VlIHlvdSBhcmUgcmVwb3J0aW5nIG9mIHJ1bm5p
+bmcgQnVpbGRyb290IG9uCmFuIEFBcmNoNjQgKGFrYSBhcm02NCkgbWFjaGluZS4KCj4gVGhpcyBp
+cyBubyBkaWZmZXJlbnQgZnJvbSB1c2luZyB0aGUgaG9zdCBnY2MgdG8gYm9vdHN0cmFwIHRoZQo+
+IEJ1aWxkcm9vdCBnY2MsIG5vPwoKQXMgSSBleHBsYWluZWQgcHJldmlvdXNseSwgdGhlIHN1Z2dl
+c3Rpb24gYWJvdmUgd291bGQgYWxsb3cgaGF2aW5nIGEKImZpbmFsIiBnbyBjb21waWxlciBldmVy
+eXdoZXJlLCBldmVuIGZvciB0aG9zZSBkaXN0cmlidXRpb25zIHdoZXJlCnRoZXJlIGlzIG5vbmUs
+IG9yIHdoZXJlIGl0IGlzIHRvbyBvbGQsIGZvciB3aGljaCB5b3VyIHByb3Bvc2FsIGRvZXMgbm90
+CndvcmsuCgpDdXJyZW50bHksIHRoZSBvbGRlc3QgZ2NjIHN1cHBvcnRlZCB0byBidWlsZCBnY2Mg
+MTQueCwgaXMgZ2NjIDQuOC4zIFswXQpyZWxlYXNlZCAyMDE0LTA1LTIyLCBqdXN0IHRlbiB5ZWFy
+cyBhZ28sIHNvIHZpcnR1YWxseSBhbGwgZGlzdHJpYnV0aW9ucwp0aGF0IG1ha2Ugc2Vuc2UgdG9k
+YXkgaGF2ZSBzdWNoIGEgZ2NjIG9yIG1vcmUgcmVjZW50LCBzbyB0aGUgYm9vdHN0cmFwCmNhc2Ug
+aXMgbm90IHJlYWxseSBhbiBpc3N1ZSwgYW5kIGEgQyBjb21waWxlciByZWFsbHkgaXMgYSBiYXNp
+YyB0b29sIHdlCmNhbiBleHBlY3QgZXZlcnl3aGVyZSwgd2hpbGUgYSBnbyBjb21waWxlciBpcyBk
+ZWZpbml0ZWx5IG5vdCBhIGJhc2ljCnRvb2wgd2UgY2FuIGV4cGVjdCBvciByZWx5IG9uLgoKWzBd
+IGh0dHBzOi8vZ2NjLmdudS5vcmcvaW5zdGFsbC9wcmVyZXF1aXNpdGVzLmh0bWwKClJlZ2FyZHMs
+Cllhbm4gRS4gTU9SSU4uCgotLSAKLi0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0t
+LS0tLi0tLS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0tLS4KfCAgWWFubiBFLiBN
+T1JJTiAgfCBSZWFsLVRpbWUgRW1iZWRkZWQgfCAvIlwgQVNDSUkgUklCQk9OIHwgRXJpY3MnIGNv
+bnNwaXJhY3k6IHwKfCArMzMgNjYyIDM3NiAwNTYgfCBTb2Z0d2FyZSAgRGVzaWduZXIgfCBcIC8g
+Q0FNUEFJR04gICAgIHwgIF9fXyAgICAgICAgICAgICAgIHwKfCArMzMgNTYxIDA5OSA0MjcgYC0t
+LS0tLS0tLS0tLS4tLS0tLS0tOiAgWCAgQUdBSU5TVCAgICAgIHwgIFxlLyAgVGhlcmUgaXMgbm8g
+IHwKfCBodHRwOi8veW1vcmluLmlzLWEtZ2Vlay5vcmcvIHwgXy8qXF8gfCAvIFwgSFRNTCBNQUlM
+ICAgIHwgICB2ICAgY29uc3BpcmFjeS4gIHwKJy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LV4tLS0tLS0tXi0tLS0tLS0tLS0tLS0tLS0tLV4tLS0tLS0tLS0tLS0tLS0tLS0tLScKX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxp
+bmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5v
+cmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
