@@ -4,49 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F09AEC3DA4A
-	for <buildroot@archiver.kernel.org>; Mon, 19 Aug 2024 21:31:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6EE9FC3DA4A
+	for <buildroot@archiver.kernel.org>; Mon, 19 Aug 2024 21:31:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9303D605E0;
-	Mon, 19 Aug 2024 21:31:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2FAB76083F;
+	Mon, 19 Aug 2024 21:31:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VOyUuxd9CdIC; Mon, 19 Aug 2024 21:31:38 +0000 (UTC)
+ id SrlcKgMWoQ6E; Mon, 19 Aug 2024 21:31:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9A20360600
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1BE1860600
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9A20360600;
-	Mon, 19 Aug 2024 21:31:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1BE1860600;
+	Mon, 19 Aug 2024 21:31:52 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 18FC81BF398
- for <buildroot@lists.busybox.net>; Mon, 19 Aug 2024 21:31:37 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D40FC1BF398
+ for <buildroot@lists.busybox.net>; Mon, 19 Aug 2024 21:31:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 03EA840083
- for <buildroot@lists.busybox.net>; Mon, 19 Aug 2024 21:31:37 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id C152740174
+ for <buildroot@lists.busybox.net>; Mon, 19 Aug 2024 21:31:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EAqsRGMcibgH for <buildroot@lists.busybox.net>;
- Mon, 19 Aug 2024 21:31:36 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id tKSi3dKBsbYz for <buildroot@lists.busybox.net>;
+ Mon, 19 Aug 2024 21:31:48 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::227;
+ helo=relay7-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F27F7400C7
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id F27F7400C7
- for <buildroot@buildroot.org>; Mon, 19 Aug 2024 21:31:35 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 57FF786112; Mon, 19 Aug 2024 21:31:35 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 19 Aug 2024 23:31:21 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 10a70b1af67cf79986c2e401f7a54aa850ea82d6
-X-Git-Newrev: 89d512729cfa5b2ef5c5165492789ba4441add19
-X-Patchwork-Hint: ignore
-Message-Id: <20240819213135.57FF786112@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/strongswan: work-around wolfssl
- compile issue
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 250DB40170
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 250DB40170
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::227])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 250DB40170
+ for <buildroot@buildroot.org>; Mon, 19 Aug 2024 21:31:47 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 084FD20003;
+ Mon, 19 Aug 2024 21:31:44 +0000 (UTC)
+Date: Mon, 19 Aug 2024 23:31:44 +0200
+To: Waldemar Brodkorb <wbx@openadk.org>
+Message-ID: <20240819233144.5a3ed08f@windsurf>
+In-Reply-To: <ZsM3ZxeXudm/p3Jf@waldemar-brodkorb.de>
+References: <ZsM3ZxeXudm/p3Jf@waldemar-brodkorb.de>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1724103105;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=R3WD47JwXbiZqc3NU+9H6QOLnJINfPuDjrIEiBbRJ4M=;
+ b=X3dnk/6+MIFOp0Pao+DYXtEhZHURLqbQo6PTpDMIpIt2u4DUbSbmzx98pa9tL6HT9dtnmu
+ a72XHwUlHvUQI2+/3F8B35LTK9jH8H7pnbpt43E/Gh/8h003YqJ3yt3ka5rTDeZWz0e1iW
+ I9TpLkk7eF5pvJKBXezy2iXV7OiPRROvwAxEahwZj7/zimTMGaNuipyym5/dlCBP4HM/eh
+ mzG9ly3VIqO6WA2Yd1pc0qWH3PhL8I4VRhn2hP76YVESsrnFZa+I7Fi1Hq0layV78SOZz0
+ 9vsgKCA1kFub8546OAERJPlUhl1d2Tfi4YD3nh8SjNXIohC4dn4TTphGvetXzg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=X3dnk/6+
+Subject: Re: [Buildroot] [PATCH] package/strongswan: fix wolfssl compile
+ issue
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,78 +83,67 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=89d512729cfa5b2ef5c5165492789ba4441add19
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon, 19 Aug 2024 14:15:35 +0200
+Waldemar Brodkorb <wbx@openadk.org> wrote:
 
-Disable RNG support so that following build failure does not happen:
-In file included from ../../../../src/libstrongswan/plugins/plugin.h:28,
-                 from wolfssl_plugin.h:34,
-                 from wolfssl_plugin.c:29:
-wolfssl_plugin.c: In function 'get_features':
-../../../../src/libstrongswan/plugins/plugin_feature.h:321:119: error: 'FEATURE_WC_RNG' undeclared (first use in this function); did you mean 'FEATURE_RNG'?
-  321 | #define __PLUGIN_FEATURE_REGISTER(type, _f)                                     (plugin_feature_t){ FEATURE_REGISTER, FEATURE_##type, .arg.reg.f = _f }
-      |                                                                                                                       ^~~~~~~~
-../../../../src/libstrongswan/plugins/plugin_feature.h:332:73: note: in expansion of macro '__PLUGIN_FEATURE_REGISTER'
-  332 | #define _PLUGIN_FEATURE_REGISTER_RNG(type, f)                           __PLUGIN_FEATURE_REGISTER(type, f)
-      |                                                                         ^~~~~~~~~~~~~~~~~~~~~~~~~
-../../../../src/libstrongswan/plugins/plugin_feature.h:248:39: note: in expansion of macro '_PLUGIN_FEATURE_REGISTER_RNG'
-  248 | #define PLUGIN_REGISTER(type, f, ...) _PLUGIN_FEATURE_REGISTER_##type(type, f, ##__VA_ARGS__)
-      |                                       ^~~~~~~~~~~~~~~~~~~~~~~~~
-wolfssl_plugin.c:510:17: note: in expansion of macro 'PLUGIN_REGISTER'
-  510 |                 PLUGIN_REGISTER(RNG, wolfssl_rng_create),
-      |                 ^~~~~~~~~~~~~~~
-../../../../src/libstrongswan/plugins/plugin_feature.h:321:119: note: each undeclared identifier is reported only once for each function it appears in
-  321 | #define __PLUGIN_FEATURE_REGISTER(type, _f)                                     (plugin_feature_t){ FEATURE_REGISTER, FEATURE_##type, .arg.reg.f = _f }
-      |                                                                                                                       ^~~~~~~~
-../../../../src/libstrongswan/plugins/plugin_feature.h:332:73: note: in expansion of macro '__PLUGIN_FEATURE_REGISTER'
-  332 | #define _PLUGIN_FEATURE_REGISTER_RNG(type, f)                           __PLUGIN_FEATURE_REGISTER(type, f)
-      |                                                                         ^~~~~~~~~~~~~~~~~~~~~~~~~
-../../../../src/libstrongswan/plugins/plugin_feature.h:248:39: note: in expansion of macro '_PLUGIN_FEATURE_REGISTER_RNG'
-  248 | #define PLUGIN_REGISTER(type, f, ...) _PLUGIN_FEATURE_REGISTER_##type(type, f, ##__VA_ARGS__)
-      |                                       ^~~~~~~~~~~~~~~~~~~~~~~~~
-wolfssl_plugin.c:510:17: note: in expansion of macro 'PLUGIN_REGISTER'
-  510 |                 PLUGIN_REGISTER(RNG, wolfssl_rng_create),
-      |                 ^~~~~~~~~~~~~~~
-make[6]: *** [Makefile:659: wolfssl_plugin.lo] Error 1
+> Disable RNG support so that following build failure does not happen:
+> In file included from ../../../../src/libstrongswan/plugins/plugin.h:28,
+>                  from wolfssl_plugin.h:34,
+>                  from wolfssl_plugin.c:29:
+> wolfssl_plugin.c: In function 'get_features':
+> ../../../../src/libstrongswan/plugins/plugin_feature.h:321:119: error: 'FEATURE_WC_RNG' undeclared (first use in this function); did you mean 'FEATURE_RNG'?
+>   321 | #define __PLUGIN_FEATURE_REGISTER(type, _f)                                     (plugin_feature_t){ FEATURE_REGISTER, FEATURE_##type, .arg.reg.f = _f }
+>       |                                                                                                                       ^~~~~~~~
+> ../../../../src/libstrongswan/plugins/plugin_feature.h:332:73: note: in expansion of macro '__PLUGIN_FEATURE_REGISTER'
+>   332 | #define _PLUGIN_FEATURE_REGISTER_RNG(type, f)                           __PLUGIN_FEATURE_REGISTER(type, f)
+>       |                                                                         ^~~~~~~~~~~~~~~~~~~~~~~~~
+> ../../../../src/libstrongswan/plugins/plugin_feature.h:248:39: note: in expansion of macro '_PLUGIN_FEATURE_REGISTER_RNG'
+>   248 | #define PLUGIN_REGISTER(type, f, ...) _PLUGIN_FEATURE_REGISTER_##type(type, f, ##__VA_ARGS__)
+>       |                                       ^~~~~~~~~~~~~~~~~~~~~~~~~
+> wolfssl_plugin.c:510:17: note: in expansion of macro 'PLUGIN_REGISTER'
+>   510 |                 PLUGIN_REGISTER(RNG, wolfssl_rng_create),
+>       |                 ^~~~~~~~~~~~~~~
+> ../../../../src/libstrongswan/plugins/plugin_feature.h:321:119: note: each undeclared identifier is reported only once for each function it appears in
+>   321 | #define __PLUGIN_FEATURE_REGISTER(type, _f)                                     (plugin_feature_t){ FEATURE_REGISTER, FEATURE_##type, .arg.reg.f = _f }
+>       |                                                                                                                       ^~~~~~~~
+> ../../../../src/libstrongswan/plugins/plugin_feature.h:332:73: note: in expansion of macro '__PLUGIN_FEATURE_REGISTER'
+>   332 | #define _PLUGIN_FEATURE_REGISTER_RNG(type, f)                           __PLUGIN_FEATURE_REGISTER(type, f)
+>       |                                                                         ^~~~~~~~~~~~~~~~~~~~~~~~~
+> ../../../../src/libstrongswan/plugins/plugin_feature.h:248:39: note: in expansion of macro '_PLUGIN_FEATURE_REGISTER_RNG'
+>   248 | #define PLUGIN_REGISTER(type, f, ...) _PLUGIN_FEATURE_REGISTER_##type(type, f, ##__VA_ARGS__)
+>       |                                       ^~~~~~~~~~~~~~~~~~~~~~~~~
+> wolfssl_plugin.c:510:17: note: in expansion of macro 'PLUGIN_REGISTER'
+>   510 |                 PLUGIN_REGISTER(RNG, wolfssl_rng_create),
+>       |                 ^~~~~~~~~~~~~~~
+> make[6]: *** [Makefile:659: wolfssl_plugin.lo] Error 1
+> 
+> Reported Upstream:
+> https://github.com/strongswan/strongswan/issues/2410
+> 
+> This build failure started since 5.9.11 update in commit
+> 78959665b94b412d7a82ee43e3ede14278a5d924.
+> 
+> Fixes:
+>  - http://autobuild.buildroot.net/results/278/278b3f74c48c858ae368d59069752adb69c05246
+> 
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> ---
+>  package/strongswan/strongswan.mk | 5 +++++
+>  1 file changed, 5 insertions(+)
 
-Reported Upstream:
-https://github.com/strongswan/strongswan/issues/2410
+Applied to master, thanks.
 
-This build failure started since 5.9.11 update in commit
-78959665b94b412d7a82ee43e3ede14278a5d924.
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/278b3f74c48c858ae368d59069752adb69c05246
-
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/strongswan/strongswan.mk | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/package/strongswan/strongswan.mk b/package/strongswan/strongswan.mk
-index 41959793a3..57cadd3a0c 100644
---- a/package/strongswan/strongswan.mk
-+++ b/package/strongswan/strongswan.mk
-@@ -83,6 +83,11 @@ STRONGSWAN_DEPENDENCIES += \
- 	$(if $(BR2_PACKAGE_MARIADB),mariadb)
- endif
- 
-+# https://github.com/strongswan/strongswan/issues/2410
-+ifeq ($(BR2_PACKAGE_STRONGSWAN_WOLFSSL),y)
-+STRONGSWAN_CONF_ENV += CPPFLAGS="$(TARGET_CPPFLAGS) -DWC_NO_RNG"
-+endif
-+
- # disable connmark/forecast until net/if.h vs. linux/if.h conflict resolved
- # problem exist since linux 4.5 header changes
- STRONGSWAN_CONF_OPTS += \
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
