@@ -4,48 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B6D97C3DA4A
-	for <buildroot@archiver.kernel.org>; Mon, 19 Aug 2024 11:13:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CC5BBC5320E
+	for <buildroot@archiver.kernel.org>; Mon, 19 Aug 2024 11:13:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 84CCA80BD6;
-	Mon, 19 Aug 2024 11:13:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0E10F80F3F;
+	Mon, 19 Aug 2024 11:13:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kY099D2-wxUE; Mon, 19 Aug 2024 11:13:15 +0000 (UTC)
+ id OocOmq8MuV5H; Mon, 19 Aug 2024 11:13:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A23F780C13
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3805680F51
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A23F780C13;
-	Mon, 19 Aug 2024 11:13:15 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 8CCF11BF3DF
- for <buildroot@lists.busybox.net>; Mon, 19 Aug 2024 11:13:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3805680F51;
+	Mon, 19 Aug 2024 11:13:18 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id C4A861BF3DF
+ for <buildroot@lists.busybox.net>; Mon, 19 Aug 2024 11:13:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7970E401E1
- for <buildroot@lists.busybox.net>; Mon, 19 Aug 2024 11:13:14 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B3F80605AA
+ for <buildroot@lists.busybox.net>; Mon, 19 Aug 2024 11:13:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PKv3urTKhQGd for <buildroot@lists.busybox.net>;
- Mon, 19 Aug 2024 11:13:13 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xYmeWJiWDvYR for <buildroot@lists.busybox.net>;
+ Mon, 19 Aug 2024 11:13:15 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
+ helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8E3FD401C2
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8E3FD401C2
- for <buildroot@buildroot.org>; Mon, 19 Aug 2024 11:13:13 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7792886080; Mon, 19 Aug 2024 11:13:13 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 19 Aug 2024 13:13:00 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e7b3286c79436bc145fd97e78a582cab81f98e87
-X-Git-Newrev: 2c00d0f2342d4de6cca108bcc347bd6f6fef94c6
-X-Patchwork-Hint: ignore
-Message-Id: <20240819111313.7792886080@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/mdadm: quote TARGET_LDFLAGS
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 95B336000A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 95B336000A
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 95B336000A
+ for <buildroot@buildroot.org>; Mon, 19 Aug 2024 11:13:14 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id E904BFF806;
+ Mon, 19 Aug 2024 11:13:12 +0000 (UTC)
+Date: Mon, 19 Aug 2024 13:13:12 +0200
+To: Waldemar Brodkorb <wbx@openadk.org>
+Message-ID: <20240819131312.66ddc4c0@windsurf>
+In-Reply-To: <ZsCF118LHasdCmy7@waldemar-brodkorb.de>
+References: <ZsCF118LHasdCmy7@waldemar-brodkorb.de>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1724065993;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=0q9cPyEUEQaeEZSRefpzFM4R9kmXs60VpAIkqUD5XVs=;
+ b=nYpNF3QSKXFaR5y1Ec+HHGZNUPELtDNfsQs0RFt6UjQJKwiq54QUebh9FelnutDGQfAeWH
+ KtVjz0ofnJ4xBqJFp3svlsFDQ0+UziQ0gMku90jpp3FUDOktEzPg/A6NjISc7g2kzsooww
+ GMyMWMyBwCRRJgtK6Zcf6+VkcnZbZvlB6uqUbPrMM8aGj4cg0MMCyR/AxlTrvM2sI2IhwS
+ PYIPW/TCZLJCJ+sNby8REATC8KuFywMJ0ehtUtKIkowmF+QiCDeI/hi8qx91ZTDVnL1by/
+ FvBnQWmcSgwogWtpuNn0CYKfyg9nDEFYZObVVkXofBK3zfpuW5pRTSbhzhi9Yw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=nYpNF3QS
+Subject: Re: [Buildroot] [PATCH] package/mdadm: quote TARGET_LDFLAGS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,37 +82,30 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2c00d0f2342d4de6cca108bcc347bd6f6fef94c6
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Sat, 17 Aug 2024 13:13:27 +0200
+Waldemar Brodkorb <wbx@openadk.org> wrote:
 
-Fixes:
- - http://autobuild.buildroot.net/results/4a6/4a692e5aa5ac5cb409282a69f664c35611101b32
+> Fixes:
+>  - http://autobuild.buildroot.net/results/4a6/4a692e5aa5ac5cb409282a69f664c35611101b32
+> 
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> ---
+>  package/mdadm/mdadm.mk | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/mdadm/mdadm.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Applied to master, thanks.
 
-diff --git a/package/mdadm/mdadm.mk b/package/mdadm/mdadm.mk
-index 153395d32a..421f06d695 100644
---- a/package/mdadm/mdadm.mk
-+++ b/package/mdadm/mdadm.mk
-@@ -21,7 +21,7 @@ MDADM_BUILD_OPTS = \
- 	CXFLAGS="$(MDADM_CXFLAGS)" \
- 	CPPFLAGS="$(TARGET_CPPFLAGS) -DBINDIR=\\\"/sbin\\\"" \
- 	CHECK_RUN_DIR=0 \
--	LDFLAGS=$(TARGET_LDFLAGS)
-+	LDFLAGS="$(TARGET_LDFLAGS)"
- 
- MDADM_INSTALL_TARGET_OPTS = install-bin
- 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
