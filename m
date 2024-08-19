@@ -4,72 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3EBDAC5320E
-	for <buildroot@archiver.kernel.org>; Mon, 19 Aug 2024 10:48:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8A07DC3DA4A
+	for <buildroot@archiver.kernel.org>; Mon, 19 Aug 2024 10:49:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DBE9D80BBB;
-	Mon, 19 Aug 2024 10:48:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5916680573;
+	Mon, 19 Aug 2024 10:49:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cOPhxJJWEFLr; Mon, 19 Aug 2024 10:48:28 +0000 (UTC)
+ id 17kYgBNLsf75; Mon, 19 Aug 2024 10:48:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C3A4D80F28
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3D78080EC0
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C3A4D80F28;
-	Mon, 19 Aug 2024 10:48:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3D78080EC0;
+	Mon, 19 Aug 2024 10:48:56 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B28851BF39D
- for <buildroot@lists.busybox.net>; Mon, 19 Aug 2024 10:48:25 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6123C1BF39D
+ for <buildroot@lists.busybox.net>; Mon, 19 Aug 2024 10:48:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id AA76240444
- for <buildroot@lists.busybox.net>; Mon, 19 Aug 2024 10:48:24 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4D3D0404F9
+ for <buildroot@lists.busybox.net>; Mon, 19 Aug 2024 10:48:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id n2ZmbjZBunrA for <buildroot@lists.busybox.net>;
- Mon, 19 Aug 2024 10:48:23 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::221;
- helo=relay1-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id iEpHOHgxgMWV for <buildroot@lists.busybox.net>;
+ Mon, 19 Aug 2024 10:48:54 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::225;
+ helo=relay5-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 2FC8D404F9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2FC8D404F9
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 2FC8D404F9
- for <buildroot@buildroot.org>; Mon, 19 Aug 2024 10:48:22 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id A648D240005;
- Mon, 19 Aug 2024 10:48:19 +0000 (UTC)
-Date: Mon, 19 Aug 2024 12:48:18 +0200
-To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <20240819124818.1de270f6@windsurf>
-In-Reply-To: <20240819084352.905082-1-james.hilliard1@gmail.com>
-References: <20240819084352.905082-1-james.hilliard1@gmail.com>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0B4ED40444
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0B4ED40444
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 0B4ED40444
+ for <buildroot@buildroot.org>; Mon, 19 Aug 2024 10:48:53 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 06B971C0007;
+ Mon, 19 Aug 2024 10:48:51 +0000 (UTC)
+Date: Mon, 19 Aug 2024 12:48:51 +0200
+To: Waldemar Brodkorb <wbx@openadk.org>
+Message-ID: <20240819124851.0462e835@windsurf>
+In-Reply-To: <ZsMUGMbnR2mwtwj6@waldemar-brodkorb.de>
+References: <ZsMUGMbnR2mwtwj6@waldemar-brodkorb.de>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1724064499;
+ d=bootlin.com; s=gm1; t=1724064532;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=zE5ElBwRETqcgtwWDd5JPhi8lBb/hx7QxEMgOVpzq2s=;
- b=a2Tsy30vzewMyjF155c85jP6vVPk0NvGlhOmjWwgfCjux/hAITmnVgsA3eMa2gnXuYqS2Y
- 8kH2YOGRTKo2rdMvxQVhNxIN2lOgKxgage4DbUt16HH77eXS5u0kzs25Lla4um07jSOoFs
- rfCuNfGop+9uLA9MCiFAu+ysWzDMKKQ2r2tTsBNcAuugp7CEnbq5knKZXNFkikDeBYwigR
- 4w5zzxMrHajx0VwLmxmAnZgeHPOb0AhFitNwgI25jWoKjv/jE/Uf5Eb3RLsbmC28I4FAg+
- 22DsE2Lk7I6ncAJVm4Bqw0q7Nfd4pFNTp614VLdZ76UBKJeg0ev3jjA2l+xP3g==
+ bh=xyZ1ShzF3jD2AwSKnwWZc9rk3sklkHR3bO/WBEXkNmQ=;
+ b=IPZ7q4mj+RZu013W3O16p6rIvATFUgxc6Yr8afDhcPKS8dufpL32rQe+QINYfk/Ql6CxHk
+ E1GuJi7wEZR21iS+/K+J24wQNnkAt5uRcaE3/AHz4aIh0FdIpGUHJkhl286EdY6Y/iGERg
+ 3KcUH/53Nwo9PKF0AgPH1vAm39Rnp7wZa+todKnBILkvfVOCw7F6MGdHuTgoHZUrSYRNQs
+ HY/mXfLdIoR11dqMYV6qD1rbwRXrZuaPkLSHxnXHxbyEoym+2W9/KX4pRTg63noM+NaXWk
+ ivTWbK6sTpHiUsz6HjiFk56Jl15POLVZGHJ0903CmHyQWAlQdYvURcDpzi1+8g==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=a2Tsy30v
-Subject: Re: [Buildroot] [PATCH v2 1/1] package/flashrom: fix cli with
- BR2_SHARED_LIBS
+ header.s=gm1 header.b=IPZ7q4mj
+Subject: Re: [Buildroot] [PATCH] package/botan: needs thread support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -89,24 +88,19 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, 19 Aug 2024 02:43:52 -0600
-James Hilliard <james.hilliard1@gmail.com> wrote:
+On Mon, 19 Aug 2024 11:44:56 +0200
+Waldemar Brodkorb <wbx@openadk.org> wrote:
 
-> Flashrom requires --default-library=both for the cli when building
-> with BR2_SHARED_LIBS.
+> Botan commit 313e439c786d68bcf374b2cb0edfe3ffd891db94 added a
+> dependency to pthread.h. Add a dependency to thread support.
 > 
-> As such set --default-library=both instead of disabling it.
+> Fixes:
+>  - http://autobuild.buildroot.org/results/205/205d7505803990508bbd545393902789063ababd
 > 
-> The cli was disabled in 8637884057ddc3c1aeb9f0dd285fc6fcf378c26b to
-> work around a cli build issue which this fixes.
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 > ---
-> Changes v1 -> v2:
->   - add some additional details
-> ---
->  package/flashrom/flashrom.mk | 7 +++----
->  1 file changed, 3 insertions(+), 4 deletions(-)
+>  package/botan/Config.in | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
 
