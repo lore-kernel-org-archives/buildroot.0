@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B6FB5C3DA4A
-	for <buildroot@archiver.kernel.org>; Mon, 19 Aug 2024 11:08:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E899AC5320E
+	for <buildroot@archiver.kernel.org>; Mon, 19 Aug 2024 11:08:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 81C2F80D5C;
-	Mon, 19 Aug 2024 11:08:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id ACC5580F2A;
+	Mon, 19 Aug 2024 11:08:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 73cPwdp9DiDu; Mon, 19 Aug 2024 11:08:07 +0000 (UTC)
+ id AgE9CCLEX8zM; Mon, 19 Aug 2024 11:08:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A5A5380F2A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D523B80F68
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A5A5380F2A;
-	Mon, 19 Aug 2024 11:08:07 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D776C1BF3DF
+	by smtp1.osuosl.org (Postfix) with ESMTP id D523B80F68;
+	Mon, 19 Aug 2024 11:08:09 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id DB6681BF955
  for <buildroot@lists.busybox.net>; Mon, 19 Aug 2024 11:08:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C6476606DC
+ by smtp1.osuosl.org (Postfix) with ESMTP id CA72380F2A
  for <buildroot@lists.busybox.net>; Mon, 19 Aug 2024 11:08:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1NYdQ5B6ZhCR for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id VVZUxCDE5y7O for <buildroot@lists.busybox.net>;
  Mon, 19 Aug 2024 11:08:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EFC04606D4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F284880D5C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id EFC04606D4
+ by smtp1.osuosl.org (Postfix) with ESMTP id F284880D5C
  for <buildroot@buildroot.org>; Mon, 19 Aug 2024 11:08:04 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5AFEA8602D; Mon, 19 Aug 2024 11:08:04 +0000 (UTC)
+ id 6509C86031; Mon, 19 Aug 2024 11:08:04 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 19 Aug 2024 13:06:31 +0200
+Date: Mon, 19 Aug 2024 13:06:36 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 9052f9608bbbf7668aa1f33dfe01bcf7055d2383
-X-Git-Newrev: ffdbab36425592a300565d266a86ff21fbc7d576
+X-Git-Oldrev: ffdbab36425592a300565d266a86ff21fbc7d576
+X-Git-Newrev: 1d2a3715d5ef3c8b434c2fd6de283e8c1568e39f
 X-Patchwork-Hint: ignore
-Message-Id: <20240819110804.5AFEA8602D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libtirpc: bump version
- to 1.3.5
+Message-Id: <20240819110804.6509C86031@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/fping: bump version to
+ 5.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,41 +66,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ffdbab36425592a300565d266a86ff21fbc7d576
+commit: https://git.buildroot.net/buildroot/commit/?id=1d2a3715d5ef3c8b434c2fd6de283e8c1568e39f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libtirpc/libtirpc.hash | 4 ++--
- package/libtirpc/libtirpc.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/fping/fping.hash | 2 +-
+ package/fping/fping.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libtirpc/libtirpc.hash b/package/libtirpc/libtirpc.hash
-index 40e59f9bcb..b1113264ae 100644
---- a/package/libtirpc/libtirpc.hash
-+++ b/package/libtirpc/libtirpc.hash
+diff --git a/package/fping/fping.hash b/package/fping/fping.hash
+index 4671cd77cf..8b68798409 100644
+--- a/package/fping/fping.hash
++++ b/package/fping/fping.hash
 @@ -1,5 +1,5 @@
- # From sourceforge's info on download page:
--sha1  63c800f81f823254d2706637bab551dec176b99b  libtirpc-1.3.4.tar.bz2
-+sha1  f5b209b2a7f3ffcdcff5b5b54fefc6a90ddec0d3  libtirpc-1.3.5.tar.bz2
- # Locally computed
--sha256  1e0b0c7231c5fa122e06c0609a76723664d068b0dba3b8219b63e6340b347860  libtirpc-1.3.4.tar.bz2
-+sha256  9b31370e5a38d3391bf37edfa22498e28fe2142467ae6be7a17c9068ec0bf12f  libtirpc-1.3.5.tar.bz2
- sha256  17cf6098f95bdbb269f0bbc68e76c88fe20487ca7ec53f454923ab4256ecd2e7  COPYING
-diff --git a/package/libtirpc/libtirpc.mk b/package/libtirpc/libtirpc.mk
-index 04196f2f7c..1020c512a0 100644
---- a/package/libtirpc/libtirpc.mk
-+++ b/package/libtirpc/libtirpc.mk
+ # Locally calculated
+-sha256  1ee5268c063d76646af2b4426052e7d81a42b657e6a77d8e7d3d2e60fd7409fe  fping-5.1.tar.gz
++sha256  a7692d10d73fb0bb76e1f7459aa7f19bbcdbfc5adbedef02f468974b18b0e42f  fping-5.2.tar.gz
+ 
+ # Hash for license file
+ sha256  6051b27e4b4a648f7bc8b329024da53a6e95ce88fcf0ccc259c371a74b741757  COPYING
+diff --git a/package/fping/fping.mk b/package/fping/fping.mk
+index 5986d05b93..dc43261be8 100644
+--- a/package/fping/fping.mk
++++ b/package/fping/fping.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBTIRPC_VERSION = 1.3.4
-+LIBTIRPC_VERSION = 1.3.5
- LIBTIRPC_SOURCE = libtirpc-$(LIBTIRPC_VERSION).tar.bz2
- LIBTIRPC_SITE = http://downloads.sourceforge.net/project/libtirpc/libtirpc/$(LIBTIRPC_VERSION)
- LIBTIRPC_LICENSE = BSD-3-Clause
+-FPING_VERSION = 5.1
++FPING_VERSION = 5.2
+ FPING_SITE = http://fping.org/dist
+ FPING_LICENSE = BSD-like
+ FPING_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
