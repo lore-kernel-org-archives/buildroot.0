@@ -1,119 +1,107 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 37127C52D7C
-	for <buildroot@archiver.kernel.org>; Mon, 19 Aug 2024 19:41:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 250ABC3DA4A
+	for <buildroot@archiver.kernel.org>; Mon, 19 Aug 2024 19:58:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id ED6BE40263;
-	Mon, 19 Aug 2024 19:41:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DB78380D90;
+	Mon, 19 Aug 2024 19:58:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LvLhA99FtND8; Mon, 19 Aug 2024 19:41:14 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qhHVFPhRojlC; Mon, 19 Aug 2024 19:58:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A14D040259
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E201980FD7
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A14D040259;
-	Mon, 19 Aug 2024 19:41:14 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 21A371BF355
- for <buildroot@lists.busybox.net>; Mon, 19 Aug 2024 19:41:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E201980FD7;
+	Mon, 19 Aug 2024 19:58:10 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id DBD4A1BF404
+ for <buildroot@lists.busybox.net>; Mon, 19 Aug 2024 19:58:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0F1D54025C
- for <buildroot@lists.busybox.net>; Mon, 19 Aug 2024 19:41:13 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id C9BC880FD7
+ for <buildroot@lists.busybox.net>; Mon, 19 Aug 2024 19:58:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JbFALzjSel-6 for <buildroot@lists.busybox.net>;
- Mon, 19 Aug 2024 19:41:12 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=67.231.152.184;
- helo=mx0b-00105401.pphosted.com; envelope-from=brandon.maier@collins.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0ECE640257
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0ECE640257
-Received: from mx0b-00105401.pphosted.com (mx0b-00105401.pphosted.com
- [67.231.152.184])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0ECE640257
- for <buildroot@buildroot.org>; Mon, 19 Aug 2024 19:41:11 +0000 (UTC)
-Received: from pps.filterd (m0346903.ppops.net [127.0.0.1])
- by mx0a-00105401.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 47JEqV1V032489;
- Mon, 19 Aug 2024 19:41:07 GMT
-Received: from xusxph008rp050.rtx.com (xusxph008rp050.rtx.com [128.13.124.147])
- by mx0a-00105401.pphosted.com (PPS) with ESMTPS id 412m96q7cy-1
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
- Mon, 19 Aug 2024 19:41:07 +0000
-Received: from xusxph008rp020.corp.ray.com ([128.13.124.224])
- by xusxph008rp050.rtx.com (8.17.1.19/8.17.1.19) with ESMTPS id 47JJf5Fm021580
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
- Mon, 19 Aug 2024 19:41:05 GMT
-Received: from ciulimr01.rockwellcollins.com
- (snat-utc-mailhub.rockwellcollins.com [10.172.224.19])
- by xusxph008rp020.corp.ray.com (8.17.1.19/8.17.1.19) with ESMTPS id
- 47JJf5K3001774
- (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
- Mon, 19 Aug 2024 19:41:05 GMT
-X-Received: from localhost (unknown [10.148.204.208])
- by ciulimr01.rockwellcollins.com (Postfix) with ESMTP id 30ADE300049F;
- Mon, 19 Aug 2024 14:41:05 -0500 (CDT)
-Mime-Version: 1.0
-Date: Mon, 19 Aug 2024 19:41:05 +0000
-Message-Id: <D3K56TUK6WZB.3US46FGAHBH98@collins.com>
-To: "Luca Ceresoli" <luca.ceresoli@bootlin.com>
-X-Mailer: aerc 0.17.0-0-g6ea74eb30457
-References: <20240815-boot-uboot-clean-for-pmufw-v1-0-3f0d9909c0b4@collins.com>
- <20240815-boot-uboot-clean-for-pmufw-v1-2-3f0d9909c0b4@collins.com>
- <20240819103803.35e5cea1@booty>
-In-Reply-To: <20240819103803.35e5cea1@booty>
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-08-19_16,2024-08-19_03,2024-05-17_01
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-08-19_16,2024-08-19_03,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0
- bulkscore=0 suspectscore=0
- spamscore=0 mlxlogscore=734 adultscore=0 malwarescore=0 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2407110000
- definitions=main-2408190134
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0
- bulkscore=0
- mlxlogscore=704 mlxscore=0 malwarescore=0 suspectscore=0 spamscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2407110000 definitions=main-2408190134
-X-Proofpoint-GUID: zG6y4KjOG03zh_YbCdigkKdWF-ZUZCMU
-X-Proofpoint-ORIG-GUID: zG6y4KjOG03zh_YbCdigkKdWF-ZUZCMU
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-08-19_16,2024-08-19_03,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_default_notspam
- policy=outbound_default score=0
- priorityscore=1501 lowpriorityscore=0 suspectscore=0 impostorscore=0
- adultscore=0 spamscore=0 clxscore=1015 mlxscore=0 malwarescore=0
- bulkscore=0 phishscore=0 mlxlogscore=806 classifier=spam adjust=0
- reason=mlx scancount=1 engine=8.12.0-2407110000
- definitions=main-2408190134
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id BEH163HxLGJ9 for <buildroot@lists.busybox.net>;
+ Mon, 19 Aug 2024 19:58:08 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::62d; helo=mail-ej1-x62d.google.com;
+ envelope-from=christian@aperture.us; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org A60D180D90
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A60D180D90
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com
+ [IPv6:2a00:1450:4864:20::62d])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A60D180D90
+ for <buildroot@buildroot.org>; Mon, 19 Aug 2024 19:58:07 +0000 (UTC)
+Received: by mail-ej1-x62d.google.com with SMTP id
+ a640c23a62f3a-a7ab5fc975dso470435966b.1
+ for <buildroot@buildroot.org>; Mon, 19 Aug 2024 12:58:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1724097485; x=1724702285;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=wNJ1Y2JqG1H3cnakRjD2dSf+2GANq6MxOlkWpopKisk=;
+ b=S7AXszDelZG8lega76/Xn46pnzvJz3WKI1/LEnIxWjF+Ax9xgNZWebFye+vosgeCty
+ K/lCxHsRLb/4pbwsKluhChsKp2o0Zr6vR14hrKwCKJwf6yvVsB9oZwWRquDs7af0JF0k
+ Yvds95iOre/qRqwb/KLFeMI0skG74NyFQmu+p3V0KGpiZgmQNDToXWSQMEl0MFHzqQbS
+ Qf8kjw4nfHT+CTeRsgdeIpg3x+2UISIh3T6icQkoaSVQKNVD/vrCWn5DBOc75KHTZsoh
+ qJAHeFSqoi4MleR4FNLBD8FvHq7ea48O9/CwhmS+wxUQ/ChXCiUKLIpYc8I01k/9mgtk
+ oiVA==
+X-Gm-Message-State: AOJu0Yy6kp8JEpRbKn83CC+qnwDppnQEybTyX6XXn+M9nfLERTNoE+aS
+ gw67vQlC4T7FmZGFQSu1UsHYhWsdkBVZmUqDWDj/45acoYbAsk+bH2jHjmr8ZT+E/yjdZFk9w9x
+ 9JKwTyA==
+X-Google-Smtp-Source: AGHT+IGMil/FuWrmRgQdo6oD+J0/IebJh1hnzDfo56FY/KPKcKhsDNBHI+X6elQg1rHVD77KzzbmTQ==
+X-Received: by 2002:a17:906:6a25:b0:a7a:8c8d:40ac with SMTP id
+ a640c23a62f3a-a83928a6250mr899163866b.4.1724097484708; 
+ Mon, 19 Aug 2024 12:58:04 -0700 (PDT)
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com.
+ [209.85.208.45]) by smtp.gmail.com with ESMTPSA id
+ a640c23a62f3a-a838393457asm664516666b.117.2024.08.19.12.58.03
+ for <buildroot@buildroot.org>
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Mon, 19 Aug 2024 12:58:04 -0700 (PDT)
+Received: by mail-ed1-f45.google.com with SMTP id
+ 4fb4d7f45d1cf-5becc379f3fso3342556a12.3
+ for <buildroot@buildroot.org>; Mon, 19 Aug 2024 12:58:03 -0700 (PDT)
+X-Received: by 2002:a17:907:2d88:b0:a7a:81b6:ea55 with SMTP id
+ a640c23a62f3a-a8392a479dcmr840940166b.56.1724097483474; Mon, 19 Aug 2024
+ 12:58:03 -0700 (PDT)
+MIME-Version: 1.0
+References: <20240805163133.4126564-1-james.hilliard1@gmail.com>
+ <20240805163133.4126564-2-james.hilliard1@gmail.com>
+ <CA+h8R2pN8q8iF5JZy7BTkcVU0Qnn8-LV+OJbNa-WJ0-uGCxVKQ@mail.gmail.com>
+ <CA+h8R2rW4UEADdjQVduCRx8c3LpxkmLKL8JMPwOd_dBH2+0mfw@mail.gmail.com>
+In-Reply-To: <CA+h8R2rW4UEADdjQVduCRx8c3LpxkmLKL8JMPwOd_dBH2+0mfw@mail.gmail.com>
+Date: Mon, 19 Aug 2024 12:57:52 -0700
+X-Gmail-Original-Message-ID: <CA+h8R2pLdwYugM=8wKufUSBNxri1WT4dkE2KD374M141jxm+Vw@mail.gmail.com>
+Message-ID: <CA+h8R2pLdwYugM=8wKufUSBNxri1WT4dkE2KD374M141jxm+Vw@mail.gmail.com>
+To: James Hilliard <james.hilliard1@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=collins.com; h=cc :
- content-transfer-encoding : content-type : date : from : in-reply-to :
- message-id : mime-version : references : subject : to; s=POD051818;
- bh=DhOgW+NLDDAMlIz5eUMHPKle43rBE+ouFebV8fpbzWE=;
- b=m4yCQtrYoYlcwD+hjDzJUmluBp+93lUb8+HkJkikyppxpOKTKpVU3iU2Jmmxl6e89evm
- 2/0/4tJ4uO7mzwdv8XzvZhA93MWiofW2HPI7LJkkiplN0D1d6dxySarjfMgMRrVt5WzE
- C/X3rkc4kPJSEowwII2iQ02JPOxhnJ5KIg5v/37TMKvT/cfnUwM7qLG7GD/luJFbYC3Q
- 5bBpbqtGo7Zz4KywOanvJM+1ZYYf62hR5ZfuH9xsx+R7otZwooK+mav87dxxFqneoHr9
- Imbos6RrLNvJGKBHMQLUHsnp3X/8SGFmVNhrQkWELoFOPh7XXaP2rdiJFfC2mJNXNgLB lA== 
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=aperture.us; s=google; t=1724097485; x=1724702285; darn=buildroot.org;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=wNJ1Y2JqG1H3cnakRjD2dSf+2GANq6MxOlkWpopKisk=;
+ b=B1i/Sk8jOVnas+mSsk/UTOJsgTLCYtEcgv2xxOGl6qG5tdj07tpK9Ju5x07CjDw4Va
+ uELRb1HdUgehdISJpCvn68x3ka/5ZdO7mQn+EtO5rzKsZSaEiy/F5lb+zY3YEUwYfLMO
+ f/g0Z+mAzhrxrwE7cPaOgssCOyzP3Mdz7sslqfCc4qpvx4OlzCnAVmYVFpgQJ5bgJREZ
+ +rVxBG7awrKYzgw/SpLXqCHTi7e2XXLYSuK1hmnsEKRQgSzcLaBrFmTw0ZVrR1gSa50q
+ 8N3w3l6qm0itsBNngCRLIo4Zm8x/iyxLM3ProdvEwBYyxFinr23CL7TtTaJOiR9mJNC9
+ yqWQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
- header.from=collins.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ header.from=aperture.us
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=collins.com header.i=@collins.com header.a=rsa-sha256
- header.s=POD051818 header.b=m4yCQtrY
-Subject: Re: [Buildroot] [PATCH 2/2] boot/uboot: use $(TARGET_OBJCOPY) for
- ZynqMP pmufw.elf
+ unprotected) header.d=aperture.us header.i=@aperture.us header.a=rsa-sha256
+ header.s=google header.b=B1i/Sk8j
+Subject: Re: [Buildroot] [PATCH v4 2/2] package/tailscale: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -125,62 +113,32 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Brandon Maier via buildroot <buildroot@buildroot.org>
-Reply-To: Brandon Maier <brandon.maier@collins.com>
-Cc: buildroot@buildroot.org, Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Neal Frager <neal.frager@amd.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Christian Stewart via buildroot <buildroot@buildroot.org>
+Reply-To: Christian Stewart <christian@aperture.us>
+Cc: Anisse Astier <anisse@astier.eu>, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Luca,
-
-On Mon Aug 19, 2024 at 8:38 AM UTC, Luca Ceresoli via buildroot wrote:
-> Hello Brandon,
->
-> On Thu, 15 Aug 2024 14:22:31 +0000
-> Brandon Maier <brandon.maier@collins.com> wrote:
->
-> > Converting the pmufw.elf to a binary works with any objcopy, regardless
-> > if it's from the host or cross-compiler. Prefer to use the
-> > $(TARGET_OBJCOPY) as it's always available and reproducible.
-> >
-> > Signed-off-by: Brandon Maier <brandon.maier@collins.com>
-> > ---
-> >  boot/uboot/uboot.mk | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-> > index 9de0776ace..08493996e5 100644
-> > --- a/boot/uboot/uboot.mk
-> > +++ b/boot/uboot/uboot.mk
-> > @@ -463,7 +463,7 @@ endif #BR2_TARGET_UBOOT_ZYNQMP_PMUFW_PREBUILT
-> >  ifeq ($(suffix $(UBOOT_ZYNQMP_PMUFW_PATH)),.elf)
-> >  UBOOT_ZYNQMP_PMUFW_PATH_FINAL = $(basename $(UBOOT_ZYNQMP_PMUFW_PATH)).bin
-> >  define UBOOT_ZYNQMP_PMUFW_CONVERT
-> > -	objcopy -O binary -I elf32-little $(UBOOT_ZYNQMP_PMUFW_PATH) $(UBOOT_ZYNQMP_PMUFW_PATH_FINAL)
-> > +	$(TARGET_OBJCOPY) -O binary -I elf32-little $(UBOOT_ZYNQMP_PMUFW_PATH) $(UBOOT_ZYNQMP_PMUFW_PATH_FINAL)
->
-> As I wrote earlier today (way after you sent this patch, so surely not
-> blaming you!) a short comment would help understand why we are using
-> the "wrong" objcopy.
->
-> E.g.:
->
->  # objcopy is arch-agnostic so we can use $(TARGET_OBJCOPY) in lack of
->  # a microblaze objcopy
-
-Agreed a comment would be good, I sent a v2 with this change.
-
-Thank you!
-Brandon Maier
-
->
-> But this can be added later, or in v2 in case you send one, so:
->
-> Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGkgSmFtZXMsIGFsbCwKCk9uIE1vbiwgQXVnIDEyLCAyMDI0IGF0IDE6MTfigK9QTSBDaHJpc3Rp
+YW4gU3Rld2FydCA8Y2hyaXN0aWFuQGFwZXJ0dXJlLnVzPiB3cm90ZToKPgo+IEhpIGFsbCwKPgo+
+IE9uIE1vbiwgQXVnIDUsIDIwMjQgYXQgNjoxNOKAr1BNIENocmlzdGlhbiBTdGV3YXJ0IDxjaHJp
+c3RpYW5AYXBlcnR1cmUudXM+IHdyb3RlOgo+ID4gVGhlIGlzc3VlIHdpdGggR09QUk9YWT1kaXJl
+Y3QgaXMgZml4ZWQgYXMgb2YgdGFpbHNjYWxlIG1haW4gYnJhbmNoIGF0Cj4gPiBjb21taXQgMjI3
+NTA5NTQ3ZjBlNzE5ZWY2Y2UyZWMzMGQ5NTZmZGU1MThjMDM2Nwo+ID4KPiA+IEkgcmVxdWVzdGVk
+IHRoYXQgdGhleSBzcGluIGEgbmV3IHJlbGVhc2UgaGVyZToKPiA+Cj4gPiBodHRwczovL2dpdGh1
+Yi5jb20vdGFpbHNjYWxlL3RhaWxzY2FsZS9pc3N1ZXMvMTI4NTkjaXNzdWVjb21tZW50LTIyNzAx
+Nzc4MTEKCj4gVGFpbHNjYWxlIHNheXMgdGhleSB3aWxsIHJlbGVhc2UgYSBuZXcgcG9pbnQgcmVs
+ZWFzZSB0aGlzIHdlZWsuCj4KPiBXZSBjYW4gbWVyZ2UgdGhlIHRhaWxzY2FsZSBwYWNrYWdlIG9u
+Y2UgdGhhdCBoYXBwZW5zIHcvbyBjaGFuZ2luZyBhbnl0aGluZy4KClRhaWxzY2FsZSBoYXMgcmVs
+ZWFzZWQgdGhlIG5ldyB2ZXJzaW9uIHdoaWNoIHNob3VsZCB3b3JrIGZpbmUgd2l0aApHT1BST1hZ
+IGRpcmVjdC4KCmh0dHBzOi8vZ2l0aHViLmNvbS90YWlsc2NhbGUvdGFpbHNjYWxlL3JlbGVhc2Vz
+L3RhZy92MS43Mi4wCgpKYW1lcywgcGxlYXNlIHJlLXN1Ym1pdCB0aGUgcGFja2FnZSB3aXRoIHRo
+ZSBuZXdlciB2ZXJzaW9uLgoKQmVzdCByZWdhcmRzLApDaHJpc3RpYW4gU3Rld2FydAoKPiBUaGF0
+IHNhaWQgSSB3aWxsIHRyeSB0byBzdWJtaXQgYSBwYXRjaCBzb29uIHRoYXQgc3dpdGNoZXMgdGhl
+IGRlZmF1bHQKPiB0byB1c2UgdGhlIHVzdWFsIEdvb2dsZSBHT1BST1hZLCBhbmQgYWRkcyBhIENv
+bmZpZy5pbiBvcHRpb24gdG8KPiBvdmVycmlkZSB0aGlzLgpfX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9v
+dEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3Rp
+bmZvL2J1aWxkcm9vdAo=
