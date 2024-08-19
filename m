@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E81EC3DA4A
-	for <buildroot@archiver.kernel.org>; Mon, 19 Aug 2024 11:10:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0059C5320E
+	for <buildroot@archiver.kernel.org>; Mon, 19 Aug 2024 11:10:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0064A80BC9;
-	Mon, 19 Aug 2024 11:10:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C03F780C11;
+	Mon, 19 Aug 2024 11:10:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wlf7dmAupqTN; Mon, 19 Aug 2024 11:10:17 +0000 (UTC)
+ id rx4-SugPgmWg; Mon, 19 Aug 2024 11:10:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8454580C62
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 205C380D5C
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8454580C62;
-	Mon, 19 Aug 2024 11:10:16 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 797D81BF955
- for <buildroot@lists.busybox.net>; Mon, 19 Aug 2024 11:10:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 205C380D5C;
+	Mon, 19 Aug 2024 11:10:20 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 7A4A21BF3DF
+ for <buildroot@lists.busybox.net>; Mon, 19 Aug 2024 11:10:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 680E8403F4
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6129B4056A
  for <buildroot@lists.busybox.net>; Mon, 19 Aug 2024 11:10:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id v6ZxiQ0CRugz for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id OlCWwxfDQhpi for <buildroot@lists.busybox.net>;
  Mon, 19 Aug 2024 11:10:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4362C401E1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 698C64056F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4362C401E1
+ by smtp2.osuosl.org (Postfix) with ESMTP id 698C64056F
  for <buildroot@buildroot.org>; Mon, 19 Aug 2024 11:10:08 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2D00F8607A; Mon, 19 Aug 2024 11:10:08 +0000 (UTC)
+ id 56B788607B; Mon, 19 Aug 2024 11:10:08 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 19 Aug 2024 13:07:32 +0200
+Date: Mon, 19 Aug 2024 13:09:42 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 1d2a3715d5ef3c8b434c2fd6de283e8c1568e39f
-X-Git-Newrev: 25139754098ba3a69c060ac19edf79f393d3f197
+X-Git-Oldrev: 9794795401ccf39f6b4ba8a8c2dd81c7aa73ebfc
+X-Git-Newrev: 3c7855026c32eafc6155837bb5cf2146fc99ffa5
 X-Patchwork-Hint: ignore
-Message-Id: <20240819111008.2D00F8607A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libssh: update to
- 0.11.0
+Message-Id: <20240819111008.56B788607B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/e2fsprogs: update to
+ 1.47.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,48 +66,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=25139754098ba3a69c060ac19edf79f393d3f197
+commit: https://git.buildroot.net/buildroot/commit/?id=3c7855026c32eafc6155837bb5cf2146fc99ffa5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-For a changelog see here:
-https://www.libssh.org/2024/08/08/libssh-0-11-0-release/
+See here for a detailed changelog:
+https://e2fsprogs.sourceforge.net/e2fsprogs-release.html#1.47.1
 
 Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libssh/libssh.hash | 6 +++---
- package/libssh/libssh.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/e2fsprogs/e2fsprogs.hash | 4 ++--
+ package/e2fsprogs/e2fsprogs.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/libssh/libssh.hash b/package/libssh/libssh.hash
-index e5eba219b5..2931c8357d 100644
---- a/package/libssh/libssh.hash
-+++ b/package/libssh/libssh.hash
+diff --git a/package/e2fsprogs/e2fsprogs.hash b/package/e2fsprogs/e2fsprogs.hash
+index 28a47c15d1..94ce2d5bc9 100644
+--- a/package/e2fsprogs/e2fsprogs.hash
++++ b/package/e2fsprogs/e2fsprogs.hash
 @@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://www.libssh.org/files/0.10/libssh-0.10.6.tar.xz.asc
--# with key 8DFF53E18F2ABC8D8F3C92237EE0FC4DCC014E3D
--sha256  1861d498f5b6f1741b6abc73e608478491edcf9c9d4b6630eef6e74596de9dc1  libssh-0.10.6.tar.xz
-+# https://www.libssh.org/files/0.11/libssh-0.11.0.tar.xz.asc
-+# with key 88A228D89B07C2C77D0C780903D5DF8CFDD3E8E7
-+sha256  860e814579e7606f3fc3db98c5807bef2ab60f793ec871d81bcd23acdcdd3e91  libssh-0.11.0.tar.xz
- sha256  1656186e951db1c010a8485481fa94587f7e53a26d24976bef97945ad0c4df5a  COPYING
-diff --git a/package/libssh/libssh.mk b/package/libssh/libssh.mk
-index 8b995c3555..932ab2de83 100644
---- a/package/libssh/libssh.mk
-+++ b/package/libssh/libssh.mk
-@@ -4,8 +4,8 @@
+-# From https://mirrors.edge.kernel.org/pub/linux/kernel/people/tytso/e2fsprogs/v1.47.0/sha256sums.asc
+-sha256  144af53f2bbd921cef6f8bea88bb9faddca865da3fbc657cc9b4d2001097d5db  e2fsprogs-1.47.0.tar.xz
++# From https://mirrors.edge.kernel.org/pub/linux/kernel/people/tytso/e2fsprogs/v1.47.1/sha256sums.asc
++sha256  5a33dc047fd47284bca4bb10c13cfe7896377ae3d01cb81a05d406025d99e0d1  e2fsprogs-1.47.1.tar.xz
+ # Locally calculated
+ sha256  5da5ef153e559c1d990d4c3eedbedd4442db892d37eae1f35fff069de8ec9020  NOTICE
+ sha256  032989b508f1a72ebee5b3417e55d06d473f9ee203e45ab11864a7e49cdec63d  lib/ss/mit-sipb-copyright.h
+diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
+index cbaac4f40b..7e2d9a739d 100644
+--- a/package/e2fsprogs/e2fsprogs.mk
++++ b/package/e2fsprogs/e2fsprogs.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBSSH_VERSION_MAJOR = 0.10
--LIBSSH_VERSION = $(LIBSSH_VERSION_MAJOR).6
-+LIBSSH_VERSION_MAJOR = 0.11
-+LIBSSH_VERSION = $(LIBSSH_VERSION_MAJOR).0
- LIBSSH_SOURCE = libssh-$(LIBSSH_VERSION).tar.xz
- LIBSSH_SITE = https://www.libssh.org/files/$(LIBSSH_VERSION_MAJOR)
- LIBSSH_LICENSE = LGPL-2.1
+-E2FSPROGS_VERSION = 1.47.0
++E2FSPROGS_VERSION = 1.47.1
+ E2FSPROGS_SOURCE = e2fsprogs-$(E2FSPROGS_VERSION).tar.xz
+ E2FSPROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/tytso/e2fsprogs/v$(E2FSPROGS_VERSION)
+ E2FSPROGS_LICENSE = GPL-2.0, MIT-like with advertising clause (libss and libet)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
