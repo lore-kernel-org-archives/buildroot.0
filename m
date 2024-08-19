@@ -4,71 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CC25BC5320E
-	for <buildroot@archiver.kernel.org>; Mon, 19 Aug 2024 11:07:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B6FB5C3DA4A
+	for <buildroot@archiver.kernel.org>; Mon, 19 Aug 2024 11:08:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9171C80F51;
-	Mon, 19 Aug 2024 11:07:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 81C2F80D5C;
+	Mon, 19 Aug 2024 11:08:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Z9TEEL8YGH8Q; Mon, 19 Aug 2024 11:07:21 +0000 (UTC)
+ id 73cPwdp9DiDu; Mon, 19 Aug 2024 11:08:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B080580F60
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A5A5380F2A
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B080580F60;
-	Mon, 19 Aug 2024 11:07:21 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D81721BF3DF
- for <buildroot@lists.busybox.net>; Mon, 19 Aug 2024 11:07:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A5A5380F2A;
+	Mon, 19 Aug 2024 11:08:07 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D776C1BF3DF
+ for <buildroot@lists.busybox.net>; Mon, 19 Aug 2024 11:08:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C831580F69
- for <buildroot@lists.busybox.net>; Mon, 19 Aug 2024 11:07:20 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C6476606DC
+ for <buildroot@lists.busybox.net>; Mon, 19 Aug 2024 11:08:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jQhVc2wXZH1y for <buildroot@lists.busybox.net>;
- Mon, 19 Aug 2024 11:07:20 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::224;
- helo=relay4-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1NYdQ5B6ZhCR for <buildroot@lists.busybox.net>;
+ Mon, 19 Aug 2024 11:08:05 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org BD24C80F2A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BD24C80F2A
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::224])
- by smtp1.osuosl.org (Postfix) with ESMTPS id BD24C80F2A
- for <buildroot@buildroot.org>; Mon, 19 Aug 2024 11:07:19 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 680E4E0007;
- Mon, 19 Aug 2024 11:07:16 +0000 (UTC)
-Date: Mon, 19 Aug 2024 13:07:15 +0200
-To: Petr Vorel <petr.vorel@gmail.com>
-Message-ID: <20240819130715.1a5305b2@windsurf>
-In-Reply-To: <20240818171054.780381-1-petr.vorel@gmail.com>
-References: <20240818171054.780381-1-petr.vorel@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1724065636;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=2dMDe7aAD+72dBKMHPgzTTB2/wfMHCPLasQyrhS8AKE=;
- b=H7cxdyW+Vdajs6Jpx1qCjWqQ/aez7Dy9kbZUuJaeCdlbMWNp+9wtE1pg5uWkL6aBe47KeC
- WREFx0XzS/dzj/+4VJae9JQcUeBYI2zuuOzzmMdEwYiGFuku88rXa7mFXH43GXPfcxeSED
- qQ1oKQXyVcsNmlIzggozpYAIe56ZrXk5aXEwH20QSE3yFrfELQEpc6iKwg8Ll4JIdH7pfm
- xSpOq3sv4pQr5wRhXqbLX63RWAUzz+h0UJEdv2ZSjz9D+XTx2TuaU5n/khHM6zfuOpOpdJ
- dCLogIE9ELHofnPsmjDNGLcmmGRA2i6uq5IXEWes1rLfko9Th0vXN4OoArsIIg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=H7cxdyW+
-Subject: Re: [Buildroot] [PATCH 1/1] package/libtirpc: bump version to 1.3.5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EFC04606D4
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id EFC04606D4
+ for <buildroot@buildroot.org>; Mon, 19 Aug 2024 11:08:04 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 5AFEA8602D; Mon, 19 Aug 2024 11:08:04 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Mon, 19 Aug 2024 13:06:31 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: 9052f9608bbbf7668aa1f33dfe01bcf7055d2383
+X-Git-Newrev: ffdbab36425592a300565d266a86ff21fbc7d576
+X-Patchwork-Hint: ignore
+Message-Id: <20240819110804.5AFEA8602D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libtirpc: bump version
+ to 1.3.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,28 +60,47 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, 18 Aug 2024 19:10:54 +0200
-Petr Vorel <petr.vorel@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=ffdbab36425592a300565d266a86ff21fbc7d576
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-> ---
->  package/libtirpc/libtirpc.hash | 4 ++--
->  package/libtirpc/libtirpc.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libtirpc/libtirpc.hash | 4 ++--
+ package/libtirpc/libtirpc.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Applied to next, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libtirpc/libtirpc.hash b/package/libtirpc/libtirpc.hash
+index 40e59f9bcb..b1113264ae 100644
+--- a/package/libtirpc/libtirpc.hash
++++ b/package/libtirpc/libtirpc.hash
+@@ -1,5 +1,5 @@
+ # From sourceforge's info on download page:
+-sha1  63c800f81f823254d2706637bab551dec176b99b  libtirpc-1.3.4.tar.bz2
++sha1  f5b209b2a7f3ffcdcff5b5b54fefc6a90ddec0d3  libtirpc-1.3.5.tar.bz2
+ # Locally computed
+-sha256  1e0b0c7231c5fa122e06c0609a76723664d068b0dba3b8219b63e6340b347860  libtirpc-1.3.4.tar.bz2
++sha256  9b31370e5a38d3391bf37edfa22498e28fe2142467ae6be7a17c9068ec0bf12f  libtirpc-1.3.5.tar.bz2
+ sha256  17cf6098f95bdbb269f0bbc68e76c88fe20487ca7ec53f454923ab4256ecd2e7  COPYING
+diff --git a/package/libtirpc/libtirpc.mk b/package/libtirpc/libtirpc.mk
+index 04196f2f7c..1020c512a0 100644
+--- a/package/libtirpc/libtirpc.mk
++++ b/package/libtirpc/libtirpc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBTIRPC_VERSION = 1.3.4
++LIBTIRPC_VERSION = 1.3.5
+ LIBTIRPC_SOURCE = libtirpc-$(LIBTIRPC_VERSION).tar.bz2
+ LIBTIRPC_SITE = http://downloads.sourceforge.net/project/libtirpc/libtirpc/$(LIBTIRPC_VERSION)
+ LIBTIRPC_LICENSE = BSD-3-Clause
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
