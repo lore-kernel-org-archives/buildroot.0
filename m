@@ -4,74 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C8A2C3DA4A
-	for <buildroot@archiver.kernel.org>; Mon, 19 Aug 2024 08:40:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EBBABC52D7C
+	for <buildroot@archiver.kernel.org>; Mon, 19 Aug 2024 08:43:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6A7F8607A5;
-	Mon, 19 Aug 2024 08:40:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B8B30605AA;
+	Mon, 19 Aug 2024 08:43:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id feSDUq0-jb-Q; Mon, 19 Aug 2024 08:40:02 +0000 (UTC)
+ id 3_zqXyBzaJaj; Mon, 19 Aug 2024 08:43:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7916C607B5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CDC2B607DE
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7916C607B5;
-	Mon, 19 Aug 2024 08:40:02 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 7095D1BF3EF
- for <buildroot@lists.busybox.net>; Mon, 19 Aug 2024 08:40:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CDC2B607DE;
+	Mon, 19 Aug 2024 08:43:26 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 0C6401BF3EF
+ for <buildroot@lists.busybox.net>; Mon, 19 Aug 2024 08:43:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5C169404F6
- for <buildroot@lists.busybox.net>; Mon, 19 Aug 2024 08:40:00 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id EFD43607DF
+ for <buildroot@lists.busybox.net>; Mon, 19 Aug 2024 08:43:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RJudrtXcPvqp for <buildroot@lists.busybox.net>;
- Mon, 19 Aug 2024 08:39:59 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
- helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QiKfG3mcZTrA for <buildroot@lists.busybox.net>;
+ Mon, 19 Aug 2024 08:43:24 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.194;
+ helo=relay2-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 1B00640132
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1B00640132
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 1B00640132
- for <buildroot@buildroot.org>; Mon, 19 Aug 2024 08:39:58 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 6F76BFF80C;
- Mon, 19 Aug 2024 08:39:55 +0000 (UTC)
-Date: Mon, 19 Aug 2024 10:39:54 +0200
-To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <20240819103954.5810fdd8@windsurf>
-In-Reply-To: <CADvTj4pX3pQQavPnVyzR+R92DsjjJ0+SBoD8wXuhBk4drJmFrA@mail.gmail.com>
-References: <20240819040213.3563422-1-james.hilliard1@gmail.com>
- <20240819102733.13fccbc0@windsurf>
- <CADvTj4pX3pQQavPnVyzR+R92DsjjJ0+SBoD8wXuhBk4drJmFrA@mail.gmail.com>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org BAC85605AA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BAC85605AA
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [217.70.183.194])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id BAC85605AA
+ for <buildroot@buildroot.org>; Mon, 19 Aug 2024 08:43:23 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id C616C4000D;
+ Mon, 19 Aug 2024 08:43:21 +0000 (UTC)
+Date: Mon, 19 Aug 2024 10:43:20 +0200
+To: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Message-ID: <20240819104320.18538f1d@windsurf>
+In-Reply-To: <20240819103226.4895c5e3@booty>
+References: <20240815-boot-uboot-clean-for-pmufw-v1-0-3f0d9909c0b4@collins.com>
+ <20240815-boot-uboot-clean-for-pmufw-v1-1-3f0d9909c0b4@collins.com>
+ <20240819103226.4895c5e3@booty>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1724056795;
+ d=bootlin.com; s=gm1; t=1724057002;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=MldaSUMKx7/lxiI38bgfZPWKrCVS1UUemuTZBwwptBc=;
- b=Jb2oY2vVGSPr8P8zApFbG50NoQ69IojRQLvd6VRvF6BCUFQswc3+NnfhdyaLYkLzoNjOBc
- sLJSzSyxiaFWIYxzyrPcUHlmO+nWg4eJnzHCZyvbrsfoFEKRo+rePuCoxqGmGGtiybV6Ii
- uVQp7adzTgT5xfnlYInolPvnQEACTv8EoQE/1VObbgvA15YrnA8URWdjNmvitBpu2JePe8
- LhZOpyX9BXuj7FMJKqpZHYdmbgcUPDujnl23az0cfpe0sNHOFJfUqWLpyFYTSo+OcGh5E3
- BtF3HoObRajAir0wsYnj18HzHhbG22uzA18ynPYLiE53qLWk2zGB3pKfalfk+w==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=VeNgtxQuau/3AvVKnqhe4NS7sZ0++FJXcWgADL0BSwQ=;
+ b=XpfD2jbN36Hym5JmpuP9EWoUmjkqU21oLd8EH2gcAhvN1Iz9qqzE5XujulDxe5W8kqkoaF
+ rcXsHurzMjkFY2IlX2luVeoRoVBrDFHGZ23XF5pKtYgHLYY5/zLiC9E77U5oK3//hcT+K8
+ wdEEK7i5NshWq0FUdgBA+pRknJCqI4OPZIRj2Ccgf9NMpiSUJOTCg62vuENl2+Pu8dxOB6
+ ZfHNJzOe+9/WVqP3FDhKVbBJmrcIosjmrh83sQN1vBXTAiVgXntklTZzNMMg2FXftYdYil
+ apf48hA4RDwAwWp/zystjK1gW3PRRBlQjUewr3BNhPA+bkzus1EdKcKTfeapbQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Jb2oY2vV
-Subject: Re: [Buildroot] [PATCH 1/1] package/flashrom: fix cli with
- BR2_SHARED_LIBS
+ header.s=gm1 header.b=XpfD2jbN
+Subject: Re: [Buildroot] [PATCH 1/2] boot/uboot: avoid setting
+ PMUFW_INIT_FILE when not used
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,34 +85,43 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+Cc: Neal Frager <neal.frager@amd.com>,
+ Brandon Maier <brandon.maier@collins.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello James,
+Hello,
 
-On Mon, 19 Aug 2024 02:31:02 -0600
-James Hilliard <james.hilliard1@gmail.com> wrote:
+On Mon, 19 Aug 2024 10:32:26 +0200
+Luca Ceresoli <luca.ceresoli@bootlin.com> wrote:
 
-> > Is this fixing a build issue? If so, which one, which defconfig? Or
-> > perhaps an autobuilder failure reference?
+> I think there are two potential reasons for applying this patch:
 > 
-> It fixes an issue where the flashlib cli was not being built at all,
-> only the library was for BR2_SHARED_LIBS systems.
-
-So there is no build issue, but parts that are expect to be built are
-not built?
-
-> > When was this problem introduced?
+>  1. setting an empty string lets the build finish apparently
+>     successfully, but the output binaries are not working
 > 
-> When bumping flashrom to version 1.4.0-rc2:
-> https://github.com/buildroot/buildroot/commit/8637884057ddc3c1aeb9f0dd285fc6fcf378c26b
+>  2. allowing users to set CONFIG_PMUFW_INIT_FILE in their U-Boot config
+>     and have Buildroot let it pass through
+> 
+> For point 1, as I wrote earlier today I think this won't happen, based
+> on the U-Boot code.
+> 
+> For point 2, which is the motivation you present in this patch, I don't
+> see a valid use case. Without a use case, I'd rather not add code to
+> uboot.mk, no matter if it is only a few lines. With a use case, I'd be
+> totally OK.
 
-Thanks. Could you clarify both aspects in the commit log?
+My initial point was that I found it odd that:
 
-Thanks!
+	$(call KCONFIG_SET_OPT,CONFIG_PMUFW_INIT_FILE,"$(UBOOT_ZYNQMP_PMUFW_PATH_FINAL)")
+
+was done unconditionally. But in fact, it's done under the condition:
+
+ifeq ($(BR2_TARGET_UBOOT_ZYNQMP),y)
+
+so I think the code is indeed fine as it is.
 
 Thomas
 -- 
