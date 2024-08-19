@@ -4,70 +4,69 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34013C3DA4A
-	for <buildroot@archiver.kernel.org>; Mon, 19 Aug 2024 22:16:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1C2EC3DA4A
+	for <buildroot@archiver.kernel.org>; Mon, 19 Aug 2024 22:20:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D550F60861;
-	Mon, 19 Aug 2024 22:16:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6CA7D60868;
+	Mon, 19 Aug 2024 22:20:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8lu146KJttxw; Mon, 19 Aug 2024 22:16:56 +0000 (UTC)
+ id JWmQP2m8KtQr; Mon, 19 Aug 2024 22:20:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AE1506083E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 25B6260839
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AE1506083E;
-	Mon, 19 Aug 2024 22:16:56 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id AF4AA1BF3C8
- for <buildroot@lists.busybox.net>; Mon, 19 Aug 2024 22:16:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 25B6260839;
+	Mon, 19 Aug 2024 22:20:34 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 22D3E1BF3C8
+ for <buildroot@lists.busybox.net>; Mon, 19 Aug 2024 22:20:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 99D29401C5
- for <buildroot@lists.busybox.net>; Mon, 19 Aug 2024 22:16:54 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1D5E74026D
+ for <buildroot@lists.busybox.net>; Mon, 19 Aug 2024 22:20:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UKjjx-EP3Fk3 for <buildroot@lists.busybox.net>;
- Mon, 19 Aug 2024 22:16:53 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
- helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 08259401A0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 08259401A0
-Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 08259401A0
- for <buildroot@buildroot.org>; Mon, 19 Aug 2024 22:16:52 +0000 (UTC)
-Received: from [192.168.178.36] (unknown [212.37.174.96])
- (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
- key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
- (No client certificate requested)
- by smtp.bubu1.eu (Postfix) with ESMTPSA id 08E802C83186;
- Tue, 20 Aug 2024 00:16:49 +0200 (CEST)
-Message-ID: <1a14c38e-2d3e-4a63-8f03-9bd6cc1861ff@bubu1.eu>
-Date: Tue, 20 Aug 2024 00:16:49 +0200
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id a575bxmXUlZY for <buildroot@lists.busybox.net>;
+ Mon, 19 Aug 2024 22:20:31 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
+ helo=smtp4-g21.free.fr; envelope-from=vjardin@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 9A44B400AF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9A44B400AF
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 9A44B400AF
+ for <buildroot@buildroot.org>; Mon, 19 Aug 2024 22:20:30 +0000 (UTC)
+Received: from [192.168.128.62] (unknown [93.7.88.243])
+ (Authenticated sender: vjardin@free.fr)
+ by smtp4-g21.free.fr (Postfix) with ESMTPSA id 9DCD019F574;
+ Tue, 20 Aug 2024 00:20:25 +0200 (CEST)
+From: Vincent Jardin <vjardin@free.fr>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Date: Tue, 20 Aug 2024 00:20:25 +0200
+Message-ID: <1916cba2828.2856.ffe91ee9dc07baa0c1c4561a0e181c1b@free.fr>
+In-Reply-To: <20240817102923.18f56e24@windsurf>
+References: <20240815212658.48933-1-vjardin@free.fr>
+ <20240817102923.18f56e24@windsurf>
+User-Agent: AquaMail/1.51.5 (build: 105105504)
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Fiona Klute <fiona.klute@gmx.de>, buildroot@buildroot.org
-References: <44f9f8a3-9ebf-4cad-acd8-1b6331581c72@gmx.de>
-Content-Language: en-US
-In-Reply-To: <44f9f8a3-9ebf-4cad-acd8-1b6331581c72@gmx.de>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=bubu1.eu; s=bubu; 
- t=1724105810; bh=L809tQLQ9Vm2lDqYuI7G5ThxeMBkTkWy1mrVq+0bvNQ=;
- h=Date:Subject:To:Cc:References:From:In-Reply-To;
- b=tKsl0I01VY4ICGQHGzU0Z5Xnxk58EUOK5ggPUWXG1ZjCExDfJKMNHk7A86DMi0hgS
- D5XdH/+v1t9aOd4uGSH7v7gQNvy9e7W6bWF/oZfTJEz65MpWZmPOSp1bsmOWj7/vt2
- xkvRqpB1vyzUdUzZHdhYwxkWcrUfsSfUFnvSrJfv8Du7V4JMZQM87LWf50FDNcv/lb
- ex4lgjpM4Ycw82GpnEKiEXRpzyA2uoXk8/z/K4Oi+q51g/hkQ/lauQa5fPG7zKvaG+
- OMkXZB0Nmnbll1+8QUMK1Tdq4KTuKCrfvo641JSjavrbFmtrfwWxDcsYXPaM2R/DyW
- P5O1WmfqjuQiw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bubu1.eu
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=free.fr; s=smtp-20201208; t=1724106028;
+ bh=IoMc//McgDw1775T7CLqrMnfiC43SL4h+184kKnj+S4=;
+ h=From:To:CC:Date:In-Reply-To:References:Subject:From;
+ b=SNuCAd4QHHF9UG5vMsyMbcAyYxWtmUu3o/hx5isajhw35Kd4lrGP0neCo8n/nBTjE
+ vsH3Z6RDl4uU5rIZFq+YJPaMwTQ4eI5qA7n/RmFpZxyHz5CUed4OUXtoZ9fExj5lrm
+ yXQONnHibev+6OY9BYbMrcqs01rBVqV3+gqlNnlck3BJvF+DgxjKrr47KCvoDtOgEs
+ ZoTmjj9SzQzPqL+pT9rkprITcEidaqqEwKKYtpcaWOGsHTA17fx587FwvBt0zI9k+V
+ iWqIB8K3v1oxXIJYRTMMbqBxZ7mv8xCgSWToKWjdfhth7u2QbXpEIDagDBY19wJ49N
+ 9yWvPRkzrbbww==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=bubu1.eu header.i=@bubu1.eu header.a=rsa-sha256
- header.s=bubu header.b=tKsl0I01
-Subject: Re: [Buildroot] GLib/GObject-introspection bootstrap
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=SNuCAd4Q
+Subject: Re: [Buildroot] [PATCH 1/1] package/dpdk: add 24.03
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,66 +78,128 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
-Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>, buildroot@buildroot.org
+Content-Type: multipart/mixed; boundary="===============7905770878100449766=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Fiona,
+This is a multi-part message in MIME format.
+--===============7905770878100449766==
+Content-Type: multipart/alternative; boundary="1916cba29f12c6d28563357852"
 
-I looked into this a few weeks back as well (but am unlikely to find 
-time to continue working on this in the near future).
+This is a multi-part message in MIME format.
+--1916cba29f12c6d28563357852
+Content-Type: text/plain; format=flowed; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-The conclusion we came to on IRC was, that introducing a 
-libglib2-initial package similar to gcc-initial  would be the best/only 
-option. (Which gets added as a dependency to gobject-introspection which 
-then gets used to build the final libglib2.)
-I didn't actually get to trying this out, so no guarantees :).
+Hi Thomas,
 
-Best,
-Marcus
+Le 17 août 2024 10:29:25 Thomas Petazzoni <thomas.petazzoni@bootlin.com> a 
+écrit :
 
-On 19.08.24 19:52, Fiona Klute via buildroot wrote:
-> Hi everyone,
-> 
-> I'm currently trying to upgrade GLib & GObject-introspection to their
-> current versions (1.80.4 and 1.80.1), not least because those work with
-> musl without patching. The difficulty is that GLib now needs a sort of
-> bootstrap process:
-> 
-> * Build GLib with -Dintrospection=disabled
-> * Build GObject-introspection
-> * Build GLib with -Dintrospection=enabled
-> 
-> Description in the GLib NEWS file:
-> https://gitlab.gnome.org/GNOME/glib/-/ 
-> blob/17d1bf3c4962d942feea0830aeee6833104fef5d/NEWS#L429-438
-> 
-> What would be the preferred way to implement this in Buildroot? Is there
-> a built-in way to rebuild a package with different config after building
-> another package for such situations? Or should I include that bootstrap
-> build of GObject-introspection in libglib2.mk (like Alpine does)? In the
-> latter case the GLib package would share the source archive with
-> GObject-introspection and I remember reading on the ML that there's
-> support for that, would be great if someone could point me at it if
-> relevant.
-> 
-> Also, when I prepare patches, should I just drop the glibc requirement
-> for GObject-introspection, or add musl? I have no idea if it works with
-> uClibc. Likewise, are the checks for (ancient) GCC versions still relevant?
-> 
-> Best regards,
-> Fiona
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+> Hello Vincent,
+>
+> Thanks for your patch, nice to see a Buildroot patch from you! See some
+> comments below.
+
+You welcome ;) You did help me to bootstrap, now I can follow up with some 
+contributions.
+
+>
+>
+> On Thu, 15 Aug 2024 23:26:58 +0200
+> Vincent Jardin <vjardin@free.fr> wrote:
+>
+>> Importantly, this commit does not enforce the use of UIO or VFIO
+>> kernel frameworks, as DPDK's architecture supports userland memory
+>> mappings that do not require these technologies. By maintaining this
+>> flexibility, DPDK can operate with a broader range of hardware and
+>> software configurations, making it suitable for diverse Buildroot's
+>> deployment scenarios.
+>
+> Do you intend to follow-up with additional patches supporting the other
+> use-cases?
+
+Yes I will but first I'd like to iterate with some early steps. See the v2. 
+Once merge, I'll keep adding more cases.
+
+Meanwhile, there is a build CI on github for some early checks:
+    https://github.com/vjardin/br_dpdk/actions
+
+Best regards,
+  Vincent
+
+--1916cba29f12c6d28563357852
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.=
+w3.org/TR/html4/loose.dtd">
+<html>
+<body>
+<div dir=3D"auto">
+<div dir=3D"auto">Hi Thomas,</div><div dir=3D"auto"><br></div>
+<div id=3D"aqm-original" style=3D"color: black;">
+<div dir=3D"auto">Le 17 ao=C3=BBt 2024 10:29:25 Thomas Petazzoni &lt;thomas=
+.petazzoni@bootlin.com&gt; a =C3=A9crit :</div>
+<div><br></div>
+<blockquote type=3D"cite" class=3D"gmail_quote" style=3D"margin: 0 0 0 0.75=
+ex; border-left: 1px solid #808080; padding-left: 0.75ex;">
+<div dir=3D"auto">Hello Vincent,</div>
+<div dir=3D"auto"><br></div>
+<div dir=3D"auto">Thanks for your patch, nice to see a Buildroot patch from=
+ you! See some</div>
+<div dir=3D"auto">comments below.</div></blockquote></div><div dir=3D"auto"=
+><br></div><div dir=3D"auto">You welcome ;) You did help me to bootstrap, n=
+ow I can follow up with some contributions.</div><div dir=3D"auto"><br></di=
+v><div id=3D"aqm-original" style=3D"color: black;" dir=3D"auto"><blockquote=
+ type=3D"cite" class=3D"gmail_quote" style=3D"margin: 0 0 0 0.75ex; border-=
+left: 1px solid #808080; padding-left: 0.75ex;"><div dir=3D"auto"></div>
+<div dir=3D"auto"><br></div>
+<div dir=3D"auto">On Thu, 15 Aug 2024 23:26:58 +0200</div>
+<div dir=3D"auto">Vincent Jardin &lt;vjardin@free.fr&gt; wrote:</div>
+<div dir=3D"auto"><br></div>
+<blockquote type=3D"cite" class=3D"gmail_quote" style=3D"margin: 0 0 0 0.75=
+ex; border-left: 1px solid #0099CC; padding-left: 0.75ex;">
+<div dir=3D"auto">Importantly, this commit does not enforce the use of UIO =
+or VFIO</div>
+<div dir=3D"auto">kernel frameworks, as DPDK's architecture supports userla=
+nd memory</div>
+<div dir=3D"auto">mappings that do not require these technologies. By maint=
+aining this</div>
+<div dir=3D"auto">flexibility, DPDK can operate with a broader range of har=
+dware and</div>
+<div dir=3D"auto">software configurations, making it suitable for diverse B=
+uildroot's</div>
+<div dir=3D"auto">deployment scenarios.</div>
+</blockquote>
+<div dir=3D"auto"><br></div>
+<div dir=3D"auto">Do you intend to follow-up with additional patches suppor=
+ting the other</div>
+<div dir=3D"auto">use-cases?</div></blockquote></div><div dir=3D"auto"><br>=
+</div><div dir=3D"auto">Yes I will but first I'd like to iterate with some =
+early steps. See the v2. Once merge, I'll keep adding more cases.</div><div=
+ dir=3D"auto"><br></div><div dir=3D"auto">Meanwhile, there is a build CI on=
+ github for some early checks:</div><div dir=3D"auto">    <a href=3D"https:=
+//github.com/vjardin/br_dpdk/actions">https://github.com/vjardin/br_dpdk/ac=
+tions</a></div><div dir=3D"auto"><br></div><div dir=3D"auto">Best regards,<=
+/div><div dir=3D"auto">&nbsp; Vincent&nbsp;</div>
+</div></body>
+</html>
+
+--1916cba29f12c6d28563357852--
+
+
+--===============7905770878100449766==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============7905770878100449766==--
+
