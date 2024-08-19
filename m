@@ -4,73 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8BE7AC3DA4A
-	for <buildroot@archiver.kernel.org>; Mon, 19 Aug 2024 08:38:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9654C3DA4A
+	for <buildroot@archiver.kernel.org>; Mon, 19 Aug 2024 08:39:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 43845607C9;
-	Mon, 19 Aug 2024 08:38:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 94BDD607A5;
+	Mon, 19 Aug 2024 08:39:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZyBMPkGS74Zg; Mon, 19 Aug 2024 08:38:10 +0000 (UTC)
+ id a-G98MdLWEle; Mon, 19 Aug 2024 08:39:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4AFC0607DE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A31A1607B5
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4AFC0607DE;
-	Mon, 19 Aug 2024 08:38:10 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id BF96E1BF3EF
- for <buildroot@lists.busybox.net>; Mon, 19 Aug 2024 08:38:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A31A1607B5;
+	Mon, 19 Aug 2024 08:39:31 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 6D2121BF3EF
+ for <buildroot@lists.busybox.net>; Mon, 19 Aug 2024 08:39:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BB8D5607DF
- for <buildroot@lists.busybox.net>; Mon, 19 Aug 2024 08:38:08 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6804E403A1
+ for <buildroot@lists.busybox.net>; Mon, 19 Aug 2024 08:39:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Mk80he7wPDKE for <buildroot@lists.busybox.net>;
- Mon, 19 Aug 2024 08:38:07 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::228;
- helo=relay8-d.mail.gandi.net; envelope-from=luca.ceresoli@bootlin.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XadUcgkBD6DX for <buildroot@lists.busybox.net>;
+ Mon, 19 Aug 2024 08:39:29 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.197;
+ helo=relay5-d.mail.gandi.net; envelope-from=luca.ceresoli@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 95786607DE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 95786607DE
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::228])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 95786607DE
- for <buildroot@buildroot.org>; Mon, 19 Aug 2024 08:38:07 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 656DF1BF204;
- Mon, 19 Aug 2024 08:38:04 +0000 (UTC)
-Date: Mon, 19 Aug 2024 10:38:03 +0200
-To: Brandon Maier <brandon.maier@collins.com>
-Message-ID: <20240819103803.35e5cea1@booty>
-In-Reply-To: <20240815-boot-uboot-clean-for-pmufw-v1-2-3f0d9909c0b4@collins.com>
-References: <20240815-boot-uboot-clean-for-pmufw-v1-0-3f0d9909c0b4@collins.com>
- <20240815-boot-uboot-clean-for-pmufw-v1-2-3f0d9909c0b4@collins.com>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 09778401FC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 09778401FC
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 09778401FC
+ for <buildroot@buildroot.org>; Mon, 19 Aug 2024 08:39:28 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id B3C2B1C0005;
+ Mon, 19 Aug 2024 08:39:25 +0000 (UTC)
+Date: Mon, 19 Aug 2024 10:39:24 +0200
+To: Neal Frager <neal.frager@amd.com>
+Message-ID: <20240819103924.58e40ed9@booty>
+In-Reply-To: <20240812052101.2920141-1-neal.frager@amd.com>
+References: <20240812052101.2920141-1-neal.frager@amd.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: luca.ceresoli@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1724056684;
+ d=bootlin.com; s=gm1; t=1724056766;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=K1h/RRy3hp9OxeRKKapzaNATz9e4SvUL/VNJuJIUl80=;
- b=R9+tHGpwGWWdgFE3vI3jaWsiZLU5ILl5cMfG9fclPd2HoAlKYC2je3kw9SUuo/D1WRODfB
- emJslDceNOKfgBpm4lmtmmt+/hfRcjgd8//HGJgD7QsEsMQ5DThxk/VVTCnQpg7nFAD685
- SCub87txHQKSpsrfzdHqVUm2ywDflydr5pqZURsQZQA0ps0CFHEfLCWiNBBCYE9/xODRu/
- WYILTDccmNRGPTb1tFa+R+fUNVyaq790OB1YYathRuYIjHR+hSGKTjw0IUb08I49UMPOm6
- WkGwiN207gRt/ICHraL5HZMrBzfXEBDXXDFmlg6CD6FcCscsS7J6ZhpoM909xg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=PMcoMAtpUoW0S6pQgl3e1S+Vf9jqTXN50SpIAlENn18=;
+ b=nVbeDT1i7wpTnVv6kgnhAb/Ns3aY0rpZUCZXZDjSSTyDjvyPWLu7A/8XVehAH7tYxj8/iW
+ AC8svRTukA8n3+IFPGi3VJ/7tygupe4bYIH/7PuEJfOg0/Bn+YP0b1IaXK7geqUQYD4Egg
+ vXWFoWr1sVgXFklkYI4OiiWL1t80ydFXNE4ZCSOwG6SPG8vLYypCaSse1+tk7QtQbc0OKP
+ BYmS2+5Ufj1tV7pIHlKKshO0A16fcJOJagVl1l/2MVAi92vdrTLrkM7VVRuEwn5+fCH3nX
+ a/8leMUC4vX1bczoSjs2wYQMijfMtlj/GI7jzytPV8+mfmeByV1eI0ZXJE7yyQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=R9+tHGpw
-Subject: Re: [Buildroot] [PATCH 2/2] boot/uboot: use $(TARGET_OBJCOPY) for
- ZynqMP pmufw.elf
+ header.s=gm1 header.b=nVbeDT1i
+Subject: Re: [Buildroot] [PATCH v4 1/1] configs/versal_vek280_defconfig: new
+ defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,48 +83,29 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Luca Ceresoli via buildroot <buildroot@buildroot.org>
 Reply-To: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Cc: Neal Frager <neal.frager@amd.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Cc: brandon.maier@collins.com, thomas.petazzoni@bootlin.com,
+ buildroot@buildroot.org, romain.naour@smile.fr, michal.simek@amd.com,
+ yann.morin.1998@free.fr
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Brandon,
+On Mon, 12 Aug 2024 06:21:01 +0100
+Neal Frager <neal.frager@amd.com> wrote:
 
-On Thu, 15 Aug 2024 14:22:31 +0000
-Brandon Maier <brandon.maier@collins.com> wrote:
-
-> Converting the pmufw.elf to a binary works with any objcopy, regardless
-> if it's from the host or cross-compiler. Prefer to use the
-> $(TARGET_OBJCOPY) as it's always available and reproducible.
+> This patch adds support for Xilinx Versal VEK280 Evaluation Kit.
 > 
-> Signed-off-by: Brandon Maier <brandon.maier@collins.com>
-> ---
->  boot/uboot/uboot.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> VEK280 features can be found here:
+> https://www.xilinx.com/products/boards-and-kits/vek280.html
 > 
-> diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-> index 9de0776ace..08493996e5 100644
-> --- a/boot/uboot/uboot.mk
-> +++ b/boot/uboot/uboot.mk
-> @@ -463,7 +463,7 @@ endif #BR2_TARGET_UBOOT_ZYNQMP_PMUFW_PREBUILT
->  ifeq ($(suffix $(UBOOT_ZYNQMP_PMUFW_PATH)),.elf)
->  UBOOT_ZYNQMP_PMUFW_PATH_FINAL = $(basename $(UBOOT_ZYNQMP_PMUFW_PATH)).bin
->  define UBOOT_ZYNQMP_PMUFW_CONVERT
-> -	objcopy -O binary -I elf32-little $(UBOOT_ZYNQMP_PMUFW_PATH) $(UBOOT_ZYNQMP_PMUFW_PATH_FINAL)
-> +	$(TARGET_OBJCOPY) -O binary -I elf32-little $(UBOOT_ZYNQMP_PMUFW_PATH) $(UBOOT_ZYNQMP_PMUFW_PATH_FINAL)
-
-As I wrote earlier today (way after you sent this patch, so surely not
-blaming you!) a short comment would help understand why we are using
-the "wrong" objcopy.
-
-E.g.:
-
- # objcopy is arch-agnostic so we can use $(TARGET_OBJCOPY) in lack of
- # a microblaze objcopy
-
-But this can be added later, or in v2 in case you send one, so:
+> The VEK280 requires a patch for the memory node in the dts file because it is
+> not currently correct.  This patch has been applied to the linux-xlnx repo and
+> will be included in the 2024.2 release.
+> 
+> Upstream: https://github.com/Xilinx/linux-xlnx/commit/3c7a97d99bdb3dd6b1f36d7d87d3a3c113dfe2ea
+> 
+> Signed-off-by: Neal Frager <neal.frager@amd.com>
 
 Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
 
