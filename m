@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F0059C5320E
-	for <buildroot@archiver.kernel.org>; Mon, 19 Aug 2024 11:10:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 51003C5321E
+	for <buildroot@archiver.kernel.org>; Mon, 19 Aug 2024 11:10:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C03F780C11;
-	Mon, 19 Aug 2024 11:10:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1831980C6D;
+	Mon, 19 Aug 2024 11:10:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rx4-SugPgmWg; Mon, 19 Aug 2024 11:10:20 +0000 (UTC)
+ id b4_kM-Ur6ym1; Mon, 19 Aug 2024 11:10:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 205C380D5C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8058080D20
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 205C380D5C;
-	Mon, 19 Aug 2024 11:10:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8058080D20;
+	Mon, 19 Aug 2024 11:10:23 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 7A4A21BF3DF
- for <buildroot@lists.busybox.net>; Mon, 19 Aug 2024 11:10:10 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id AC6071BF3DF
+ for <buildroot@lists.busybox.net>; Mon, 19 Aug 2024 11:10:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6129B4056A
- for <buildroot@lists.busybox.net>; Mon, 19 Aug 2024 11:10:09 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 95ACC40550
+ for <buildroot@lists.busybox.net>; Mon, 19 Aug 2024 11:10:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OlCWwxfDQhpi for <buildroot@lists.busybox.net>;
+ id K0TEInpPAWIY for <buildroot@lists.busybox.net>;
  Mon, 19 Aug 2024 11:10:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 698C64056F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4080F40578
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 698C64056F
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4080F40578
  for <buildroot@buildroot.org>; Mon, 19 Aug 2024 11:10:08 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 56B788607B; Mon, 19 Aug 2024 11:10:08 +0000 (UTC)
+ id 374D98607B; Mon, 19 Aug 2024 11:10:08 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 19 Aug 2024 13:09:42 +0200
+Date: Mon, 19 Aug 2024 13:07:58 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 9794795401ccf39f6b4ba8a8c2dd81c7aa73ebfc
-X-Git-Newrev: 3c7855026c32eafc6155837bb5cf2146fc99ffa5
+X-Git-Oldrev: 25139754098ba3a69c060ac19edf79f393d3f197
+X-Git-Newrev: 56574a950b443638949d35d9f6999503291b206b
 X-Patchwork-Hint: ignore
-Message-Id: <20240819111008.56B788607B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/e2fsprogs: update to
- 1.47.1
+Message-Id: <20240819111008.374D98607B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/erofs-utils: bump to
+ version 1.8.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,44 +66,84 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3c7855026c32eafc6155837bb5cf2146fc99ffa5
+commit: https://git.buildroot.net/buildroot/commit/?id=56574a950b443638949d35d9f6999503291b206b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-See here for a detailed changelog:
-https://e2fsprogs.sourceforge.net/e2fsprogs-release.html#1.47.1
+For a change log since 1.7.1, see:
+https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs-utils.git/tree/ChangeLog?h=v1.8.1
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Version 1.8 introduced a preliminary Zstd support, so this commit adds
+this new optional dependency for target, and disable this option for the
+host variant.
+
+Version 1.8 also introduced a use of atomic operations, in commit [1].
+This commit adds linking with libatomic when appropriate.
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs-utils.git/commit/?id=0d6f9835ce27ead0f23848408366d9ca7f2b0d15
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/e2fsprogs/e2fsprogs.hash | 4 ++--
- package/e2fsprogs/e2fsprogs.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/erofs-utils/erofs-utils.hash |  2 +-
+ package/erofs-utils/erofs-utils.mk   | 14 +++++++++++++-
+ 2 files changed, 14 insertions(+), 2 deletions(-)
 
-diff --git a/package/e2fsprogs/e2fsprogs.hash b/package/e2fsprogs/e2fsprogs.hash
-index 28a47c15d1..94ce2d5bc9 100644
---- a/package/e2fsprogs/e2fsprogs.hash
-+++ b/package/e2fsprogs/e2fsprogs.hash
+diff --git a/package/erofs-utils/erofs-utils.hash b/package/erofs-utils/erofs-utils.hash
+index 063d384511..8140dad83b 100644
+--- a/package/erofs-utils/erofs-utils.hash
++++ b/package/erofs-utils/erofs-utils.hash
 @@ -1,5 +1,5 @@
--# From https://mirrors.edge.kernel.org/pub/linux/kernel/people/tytso/e2fsprogs/v1.47.0/sha256sums.asc
--sha256  144af53f2bbd921cef6f8bea88bb9faddca865da3fbc657cc9b4d2001097d5db  e2fsprogs-1.47.0.tar.xz
-+# From https://mirrors.edge.kernel.org/pub/linux/kernel/people/tytso/e2fsprogs/v1.47.1/sha256sums.asc
-+sha256  5a33dc047fd47284bca4bb10c13cfe7896377ae3d01cb81a05d406025d99e0d1  e2fsprogs-1.47.1.tar.xz
- # Locally calculated
- sha256  5da5ef153e559c1d990d4c3eedbedd4442db892d37eae1f35fff069de8ec9020  NOTICE
- sha256  032989b508f1a72ebee5b3417e55d06d473f9ee203e45ab11864a7e49cdec63d  lib/ss/mit-sipb-copyright.h
-diff --git a/package/e2fsprogs/e2fsprogs.mk b/package/e2fsprogs/e2fsprogs.mk
-index cbaac4f40b..7e2d9a739d 100644
---- a/package/e2fsprogs/e2fsprogs.mk
-+++ b/package/e2fsprogs/e2fsprogs.mk
+ # Locally computed
+-sha256  196083d63e5e231fb5799e7ce86a944bbca564daabce3de9225a8aca9dcaff15  erofs-utils-1.7.1.tar.gz
++sha256  5dbf7b492f7682462b97a77121d43ca7609cd90e65f8c96931aefc820a6f0da3  erofs-utils-1.8.1.tar.gz
+ sha256  0df042de29b44887355db86c79708a4489ce6e6666f6e33ad02040293f09e6a2  COPYING
+ sha256  a400f85dd06d230f1b308cde4290a53f345b6e320a376b7904b31c51c2fd4b1a  LICENSES/Apache-2.0
+ sha256  feee3b3157dcdf78d4f50edefbd5dd7adf8b6d52c11bfaaa746a85a373256713  LICENSES/GPL-2.0
+diff --git a/package/erofs-utils/erofs-utils.mk b/package/erofs-utils/erofs-utils.mk
+index f994ea9d07..7033be4a06 100644
+--- a/package/erofs-utils/erofs-utils.mk
++++ b/package/erofs-utils/erofs-utils.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--E2FSPROGS_VERSION = 1.47.0
-+E2FSPROGS_VERSION = 1.47.1
- E2FSPROGS_SOURCE = e2fsprogs-$(E2FSPROGS_VERSION).tar.xz
- E2FSPROGS_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/people/tytso/e2fsprogs/v$(E2FSPROGS_VERSION)
- E2FSPROGS_LICENSE = GPL-2.0, MIT-like with advertising clause (libss and libet)
+-EROFS_UTILS_VERSION = 1.7.1
++EROFS_UTILS_VERSION = 1.8.1
+ EROFS_UTILS_SITE = https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs-utils.git/snapshot
+ EROFS_UTILS_LICENSE = GPL-2.0+, GPL-2.0+ or Apache-2.0 (liberofs)
+ EROFS_UTILS_LICENSE_FILES = COPYING LICENSES/Apache-2.0 LICENSES/GPL-2.0
+@@ -14,6 +14,10 @@ EROFS_UTILS_AUTORECONF = YES
+ 
+ EROFS_UTILS_DEPENDENCIES = host-pkgconf util-linux
+ 
++ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
++EROFS_UTILS_CONF_ENV += LIBS=-latomic
++endif
++
+ ifeq ($(BR2_PACKAGE_EROFS_UTILS_LZ4),y)
+ EROFS_UTILS_DEPENDENCIES += lz4
+ EROFS_UTILS_CONF_OPTS += --enable-lz4
+@@ -56,12 +60,20 @@ else
+ EROFS_UTILS_CONF_OPTS += --without-zlib
+ endif
+ 
++ifeq ($(BR2_PACKAGE_ZSTD),y)
++EROFS_UTILS_DEPENDENCIES += zstd
++EROFS_UTILS_CONF_OPTS += --with-libzstd
++else
++EROFS_UTILS_CONF_OPTS += --without-libzstd
++endif
++
+ HOST_EROFS_UTILS_DEPENDENCIES = host-pkgconf host-util-linux host-lz4 host-xz
+ HOST_EROFS_UTILS_CONF_OPTS += \
+ 	--enable-lz4 \
+ 	--enable-lzma \
+ 	--disable-fuse \
+ 	--without-libdeflate \
++	--without-libzstd \
+ 	--without-selinux \
+ 	--without-zlib
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
