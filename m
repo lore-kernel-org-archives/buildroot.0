@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C496DE6FE46
-	for <buildroot@archiver.kernel.org>; Fri,  6 Sep 2024 20:03:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CC41DE6FE46
+	for <buildroot@archiver.kernel.org>; Fri,  6 Sep 2024 20:03:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 968C784897;
-	Fri,  6 Sep 2024 20:03:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 585D584886;
+	Fri,  6 Sep 2024 20:03:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Bg95QD1zt1XJ; Fri,  6 Sep 2024 20:03:44 +0000 (UTC)
+ id PaaJw055Nygs; Fri,  6 Sep 2024 20:03:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 57A8F84886
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 17E378489B
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 57A8F84886;
-	Fri,  6 Sep 2024 20:03:44 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 57BB71BF20B
+	by smtp1.osuosl.org (Postfix) with ESMTP id 17E378489B;
+	Fri,  6 Sep 2024 20:03:47 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id DD0BC1BF20B
  for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 19:59:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2931E40BAF
- for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 19:59:00 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9D3E260664
+ for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 19:58:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FAYeZDkZdkF2 for <buildroot@lists.busybox.net>;
- Fri,  6 Sep 2024 19:58:59 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WzaYlU5GcYG1 for <buildroot@lists.busybox.net>;
+ Fri,  6 Sep 2024 19:58:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 436CA409EE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 32B8C60DB7
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 436CA409EE
- for <buildroot@buildroot.org>; Fri,  6 Sep 2024 19:58:58 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 32B8C60DB7
+ for <buildroot@buildroot.org>; Fri,  6 Sep 2024 19:58:55 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 402F7869F2; Fri,  6 Sep 2024 19:58:58 +0000 (UTC)
+ id 2F51186EE4; Fri,  6 Sep 2024 19:58:55 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 3 Sep 2024 21:51:28 +0200
+Date: Mon, 19 Aug 2024 13:13:30 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f0d9f976e5a9bce04d737f981c902615eb2083d3
-X-Git-Newrev: c7c2aa477fe9b70bfa9ddcd52c0d27a96b7fdec6
+X-Git-Oldrev: 3c7855026c32eafc6155837bb5cf2146fc99ffa5
+X-Git-Newrev: d1ea297e930c9d4548415b835d0135a29debc6c0
 X-Patchwork-Hint: ignore
-Message-Id: <20240906195858.402F7869F2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/pine64: bump TF-A version to 2.10.5
+Message-Id: <20240906195855.2F51186EE4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-uvloop: bump to 0.20.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,30 +65,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c7c2aa477fe9b70bfa9ddcd52c0d27a96b7fdec6
+commit: https://git.buildroot.net/buildroot/commit/?id=d1ea297e930c9d4548415b835d0135a29debc6c0
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Mattia Narducci <mattianarducci1@gmail.com>
+Changelog:
+* https://github.com/MagicStack/uvloop/releases/tag/v0.20.0
+
+Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- configs/pine64_defconfig | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ package/python-uvloop/python-uvloop.hash | 4 ++--
+ package/python-uvloop/python-uvloop.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/configs/pine64_defconfig b/configs/pine64_defconfig
-index a6ddf6e57b..fb3a468f2d 100644
---- a/configs/pine64_defconfig
-+++ b/configs/pine64_defconfig
-@@ -8,9 +8,8 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_0=y
- # Firmware
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.7"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="lts-v2.10.5"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="sun50i_a64"
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
+diff --git a/package/python-uvloop/python-uvloop.hash b/package/python-uvloop/python-uvloop.hash
+index 481dbd0569..8b522afb90 100644
+--- a/package/python-uvloop/python-uvloop.hash
++++ b/package/python-uvloop/python-uvloop.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/uvloop/json
+-md5  0107f6e04c23bdcd93a0a712a0e52ffb  uvloop-0.19.0.tar.gz
+-sha256  0246f4fd1bf2bf702e06b0d45ee91677ee5c31242f39aab4ea6fe0c51aedd0fd  uvloop-0.19.0.tar.gz
++md5  c3395ddc1746e2bf4b2987d88c4707e8  uvloop-0.20.0.tar.gz
++sha256  4603ca714a754fc8d9b197e325db25b2ea045385e8a3ad05d3463de725fdf469  uvloop-0.20.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  377025287798f9dcd819e1f826fa5fc5e2f382528691ab0528c5cf8c8c282c27  LICENSE-APACHE
+ sha256  6dd4c399f26de043d77a2ad7e31db4cb5bf08ea8368b0a42d6e158635cc8ab62  LICENSE-MIT
+diff --git a/package/python-uvloop/python-uvloop.mk b/package/python-uvloop/python-uvloop.mk
+index aaeab2805f..3e2a84de39 100644
+--- a/package/python-uvloop/python-uvloop.mk
++++ b/package/python-uvloop/python-uvloop.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- # Bootloader
- BR2_TARGET_UBOOT=y
+-PYTHON_UVLOOP_VERSION = 0.19.0
++PYTHON_UVLOOP_VERSION = 0.20.0
+ PYTHON_UVLOOP_SOURCE = uvloop-$(PYTHON_UVLOOP_VERSION).tar.gz
+-PYTHON_UVLOOP_SITE = https://files.pythonhosted.org/packages/9c/16/728cc5dde368e6eddb299c5aec4d10eaf25335a5af04e8c0abd68e2e9d32
++PYTHON_UVLOOP_SITE = https://files.pythonhosted.org/packages/bc/f1/dc9577455e011ad43d9379e836ee73f40b4f99c02946849a44f7ae64835e
+ PYTHON_UVLOOP_SETUP_TYPE = setuptools
+ PYTHON_UVLOOP_LICENSE = Apache-2.0, MIT
+ PYTHON_UVLOOP_LICENSE_FILES = LICENSE-APACHE LICENSE-MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
