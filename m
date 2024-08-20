@@ -4,67 +4,65 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25DB4C3DA4A
-	for <buildroot@archiver.kernel.org>; Tue, 20 Aug 2024 07:45:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93D35C3DA4A
+	for <buildroot@archiver.kernel.org>; Tue, 20 Aug 2024 07:47:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C984580C6A;
-	Tue, 20 Aug 2024 07:45:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 57C8480DCE;
+	Tue, 20 Aug 2024 07:47:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id txB54xYnxi_3; Tue, 20 Aug 2024 07:45:28 +0000 (UTC)
+ id vWT1BXIfCvK1; Tue, 20 Aug 2024 07:47:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D182480CC5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3F1FC810E2
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D182480CC5;
-	Tue, 20 Aug 2024 07:45:27 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C80E91BF41C
- for <buildroot@lists.busybox.net>; Tue, 20 Aug 2024 07:45:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3F1FC810E2;
+	Tue, 20 Aug 2024 07:47:34 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 967951BF41C
+ for <buildroot@lists.busybox.net>; Tue, 20 Aug 2024 07:47:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B4FF24091F
- for <buildroot@lists.busybox.net>; Tue, 20 Aug 2024 07:45:26 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 916A2605E6
+ for <buildroot@lists.busybox.net>; Tue, 20 Aug 2024 07:47:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0jVPN4wEXhJt for <buildroot@lists.busybox.net>;
- Tue, 20 Aug 2024 07:45:25 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1828:2000:679::23; helo=helium.openadk.org;
- envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 18529408BD
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 18529408BD
-Received: from helium.openadk.org (helium.openadk.org
- [IPv6:2a00:1828:2000:679::23])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 18529408BD
- for <buildroot@buildroot.org>; Tue, 20 Aug 2024 07:45:24 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ROsjdpEr7i1K for <buildroot@lists.busybox.net>;
+ Tue, 20 Aug 2024 07:47:32 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=89.238.66.15;
+ helo=helium.openadk.org; envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 614DF60595
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 614DF60595
+Received: from helium.openadk.org (helium.openadk.org [89.238.66.15])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 614DF60595
+ for <buildroot@buildroot.org>; Tue, 20 Aug 2024 07:47:31 +0000 (UTC)
 Received: by helium.openadk.org (Postfix, from userid 1000)
- id F00053536436; Tue, 20 Aug 2024 09:45:20 +0200 (CEST)
-Date: Tue, 20 Aug 2024 09:45:20 +0200
+ id 736453536430; Tue, 20 Aug 2024 09:47:29 +0200 (CEST)
+Date: Tue, 20 Aug 2024 09:47:29 +0200
 From: Waldemar Brodkorb <wbx@openadk.org>
 To: buildroot@buildroot.org
-Message-ID: <ZsRJkHnGdaJ0DBy8@waldemar-brodkorb.de>
+Message-ID: <ZsRKETwc6ShZJ4yX@waldemar-brodkorb.de>
 MIME-Version: 1.0
 Content-Disposition: inline
 X-Operating-System: Linux 5.10.0-31-amd64 x86_64
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=openadk.org; s=2022; 
- t=1724139921; bh=B1A+mtmgqPD1FE1ao8eURXrbL4OI4vA0GB+h+rhX/OU=;
+ t=1724140049; bh=EeR6nHnszJ8vm4GBcbpx+0Eo0nawu5zgzsltZnUykqY=;
  h=Date:From:To:Subject:From;
- b=Xy0T+yzK1TM+cp+bn5l2JpN2Tvbm1abpFRC3ZO+jA/ZLRKAsHPgRbkwoRywC39yNX
- W7xlbldG3TnfKD9tLLy8q+GLGoQp043KIrmegkq/7grvCw4p0xBf8VXNK3kq9zgSYP
- OG+9KQ0K5I1VA2mpQuTPUktcTwdlkT4qW3OPpd/A8+tWFNrBq1AboChqF/OSwB/3qY
- mMdQeYJG8SMxtwdNBJj/uXCRU2gcDW7OSpBfTOsrQgBXxewUMICyBAxWBU5hoNIN2y
- KoVnvYbubL5m4bolcCnZ9pFTH/5WZzdBD6MVFu7V/5ENA0Dc1w2vC9Dn43YD78UMhs
- Vquh8nZ76b00g==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=rYx/j845bogsIm6rw14hS7bWFILteEL5cbfwqHUFhenVyppPuQ+ToLC70w83YgSJC
+ 9MRqbVt7pQ6viraaVrtJVmKQWg5no+f+BpzDkMFExYk6VYIHnbmYwL/vDEqdL6bRDe
+ JQgNDILNa5I0RBNW+y3HjsWga7LUugFcCoxqa4/SkumGrNWKSBLwEo0tiTMNeHO/j7
+ ujqTex22a+wKIeXUv1ap1DocCd1lfjeOufQzj7X8SaIujQCgl4CBs2AOBm89j8URkm
+ BQAdSaoWslYAk8hsn5ZdBp86WSoyzLesbwYUNUoe2D0ymJTmqINYjNSlaxU+bkxpe5
+ fTsrcFV4CpM7w==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=openadk.org
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=openadk.org header.i=@openadk.org header.a=rsa-sha256
- header.s=2022 header.b=Xy0T+yzK
-Subject: [Buildroot] [PATCH] package/aumix: update AUMIX_SITE
+ header.s=2022 header.b=rYx/j845
+Subject: [Buildroot] [PATCH next] package/binutils: update to 2.43.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,30 +79,62 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The old URL gives 403 forbidden.
-Use a working sourceforge URL.
-
-Fixes:
- - http://autobuild.buildroot.org/results/c0c/c0c3945cade7a6d7a615ac23523c93b02dbb056f
+See here the release announcement for changes:
+https://sourceware.org/pipermail/binutils/2024-August/136396.html
 
 Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
- package/aumix/aumix.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/binutils/{2.43 => 2.43.1}/0001-sh-conf.patch          | 0
+ .../{2.43 => 2.43.1}/0002-poison-system-directories.patch     | 0
+ package/binutils/Config.in.host                               | 4 ++--
+ package/binutils/binutils.hash                                | 2 +-
+ 4 files changed, 3 insertions(+), 3 deletions(-)
+ rename package/binutils/{2.43 => 2.43.1}/0001-sh-conf.patch (100%)
+ rename package/binutils/{2.43 => 2.43.1}/0002-poison-system-directories.patch (100%)
 
-diff --git a/package/aumix/aumix.mk b/package/aumix/aumix.mk
-index 03072d5d35..d5c2831dcd 100644
---- a/package/aumix/aumix.mk
-+++ b/package/aumix/aumix.mk
-@@ -6,7 +6,7 @@
+diff --git a/package/binutils/2.43/0001-sh-conf.patch b/package/binutils/2.43.1/0001-sh-conf.patch
+similarity index 100%
+rename from package/binutils/2.43/0001-sh-conf.patch
+rename to package/binutils/2.43.1/0001-sh-conf.patch
+diff --git a/package/binutils/2.43/0002-poison-system-directories.patch b/package/binutils/2.43.1/0002-poison-system-directories.patch
+similarity index 100%
+rename from package/binutils/2.43/0002-poison-system-directories.patch
+rename to package/binutils/2.43.1/0002-poison-system-directories.patch
+diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
+index 36fd2bd377..16a57a5cb4 100644
+--- a/package/binutils/Config.in.host
++++ b/package/binutils/Config.in.host
+@@ -23,7 +23,7 @@ config BR2_BINUTILS_VERSION_2_42_X
+ 	bool "binutils 2.42"
  
- AUMIX_VERSION = 2.9.1
- AUMIX_SOURCE = aumix-$(AUMIX_VERSION).tar.bz2
--AUMIX_SITE = http://jpj.net/~trevor/aumix/releases
-+AUMIX_SITE = https://sourceforge.net/projects/aumix/files/aumix/$(AUMIX_VERSION)
- AUMIX_AUTORECONF = YES
- AUMIX_AUTOPOINT = YES
- AUMIX_LICENSE = GPL-2.0+
+ config BR2_BINUTILS_VERSION_2_43_X
+-	bool "binutils 2.43"
++	bool "binutils 2.43.1"
+ 
+ endchoice
+ 
+@@ -32,7 +32,7 @@ config BR2_BINUTILS_VERSION
+ 	default "arc-2023.09-release"	if BR2_BINUTILS_VERSION_ARC
+ 	default "2.41"		if BR2_BINUTILS_VERSION_2_41_X
+ 	default "2.42"		if BR2_BINUTILS_VERSION_2_42_X
+-	default "2.43"		if BR2_BINUTILS_VERSION_2_43_X
++	default "2.43.1"	if BR2_BINUTILS_VERSION_2_43_X
+ 
+ config BR2_BINUTILS_GPROFNG
+ 	bool "gprofng support"
+diff --git a/package/binutils/binutils.hash b/package/binutils/binutils.hash
+index 74765a4fbf..084793fc9f 100644
+--- a/package/binutils/binutils.hash
++++ b/package/binutils/binutils.hash
+@@ -1,7 +1,7 @@
+ # From https://gcc.gnu.org/pub/binutils/releases/sha512.sum
+ sha512  5df45d0bd6ddabdce4f35878c041e46a92deef01e7dea5facc97fd65cc06b59abc6fba0eb454b68e571c7e14038dc823fe7f2263843e6e627b7444eaf0fe9374  binutils-2.41.tar.xz
+ sha512  155f3ba14cd220102f4f29a4f1e5cfee3c48aa03b74603460d05afb73c70d6657a9d87eee6eb88bf13203fe6f31177a5c9addc04384e956e7da8069c8ecd20a6  binutils-2.42.tar.xz
+-sha512  93e063163e54d6a6ee2bd48dc754270bf757a3635b49a702ed6b310e929e94063958512d191e66beaf44275f7ea60865dbde138b624626739679fcc306b133bb  binutils-2.43.tar.xz
++sha512  20977ad17729141a2c26d358628f44a0944b84dcfefdec2ba029c2d02f40dfc41cc91c0631044560d2bd6f9a51e1f15846b4b311befbe14f1239f14ff7d57824  binutils-2.43.1.tar.xz
+ 
+ # Locally calculated (fetched from Github)
+ sha512  3518b47d5c11d1fb478ee152bde1719363f9391db73f3b9f5491217c17742bef8ebca6a51a40302dfaa9476c5a32a8b8f70a4bf64289422dea5f750ae53ab88d  binutils-gdb-arc-2023.09-release.tar.gz
 -- 
 2.39.2
 
