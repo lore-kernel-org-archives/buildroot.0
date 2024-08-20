@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DDD86C531DC
-	for <buildroot@archiver.kernel.org>; Tue, 20 Aug 2024 20:07:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 69AD5C3DA4A
+	for <buildroot@archiver.kernel.org>; Tue, 20 Aug 2024 20:07:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0442B40B39;
-	Tue, 20 Aug 2024 20:07:19 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3B1AA40B09;
+	Tue, 20 Aug 2024 20:07:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MJCe6GKrjmZT; Tue, 20 Aug 2024 20:07:18 +0000 (UTC)
+ id XkXZafx5rp8O; Tue, 20 Aug 2024 20:07:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 792E040BAF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 876D740BC2
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 792E040BAF;
-	Tue, 20 Aug 2024 20:07:17 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0FA491BF97A
+	by smtp2.osuosl.org (Postfix) with ESMTP id 876D740BC2;
+	Tue, 20 Aug 2024 20:07:24 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 42FA51BF97A
  for <buildroot@lists.busybox.net>; Tue, 20 Aug 2024 20:07:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 09A0E80DC7
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3D95D40585
  for <buildroot@lists.busybox.net>; Tue, 20 Aug 2024 20:07:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LLQPhBZNXb9j for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id H2u0mtnCdBTw for <buildroot@lists.busybox.net>;
  Tue, 20 Aug 2024 20:07:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 14BAC80EA8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3D3F9403A6
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 14BAC80EA8
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3D3F9403A6
  for <buildroot@buildroot.org>; Tue, 20 Aug 2024 20:07:12 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 01B4A86191; Tue, 20 Aug 2024 20:07:12 +0000 (UTC)
+ id 270EF86194; Tue, 20 Aug 2024 20:07:12 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 20 Aug 2024 20:47:38 +0200
+Date: Tue, 20 Aug 2024 21:45:36 +0200
 X-Git-Refname: refs/heads/2024.05.x
-X-Git-Oldrev: 9fca029008d332b888ccb27f8c556bdab4b06519
-X-Git-Newrev: 88212cba65eb2943336832d04ad72ac8e281acbb
+X-Git-Oldrev: 2432073c2367aade005a097230bac1b013d43397
+X-Git-Newrev: 663b0c49f3564cead9a31caf2eef9740f258c6d8
 X-Patchwork-Hint: ignore
-Message-Id: <20240820200712.01B4A86191@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.05.x] package/boost: cleanup
- boost-context/fiber/math
+Message-Id: <20240820200712.270EF86194@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.05.x] support/testing: add
+ python-msgpack runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,109 +65,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=88212cba65eb2943336832d04ad72ac8e281acbb
+commit: https://git.buildroot.net/buildroot/commit/?id=663b0c49f3564cead9a31caf2eef9740f258c6d8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.05.x
 
-boost-context
-- requires C++11 (gcc 4.8) since 1.61 see [0]
-- dropped the dependency on (boost) thread in 1.77 see [1]
-boost-fiber
-- needed C++11 since it's creation in 1.61 [2]
-boost-math
-- add comment for gcc version
-
-[0] https://www.boost.org/doc/libs/1_82_0/libs/context/doc/html/context/requirements.html
-[1] https://github.com/boostorg/context/commit/8425e830eab0ad550db937027392c4b4a54df695
-[2] https://www.boost.org/doc/libs/1_62_0/libs/fiber/doc/html/fiber/overview.html
-
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
+Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit 16abf80368b660b4ec59778ca5060529b77a42c5)
+(cherry picked from commit d429d5d399acc9921a9a86f4ae3d589d599605e4)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/boost/Config.in | 25 ++++++++++++++++---------
- 1 file changed, 16 insertions(+), 9 deletions(-)
+ support/testing/tests/package/sample_python_msgpack.py |  5 +++++
+ support/testing/tests/package/test_python_msgpack.py   | 12 ++++++++++++
+ 2 files changed, 17 insertions(+)
 
-diff --git a/package/boost/Config.in b/package/boost/Config.in
-index 60cc0a11a2..908a53fea0 100644
---- a/package/boost/Config.in
-+++ b/package/boost/Config.in
-@@ -50,13 +50,14 @@ config BR2_PACKAGE_BOOST_CONTEXT_ARCH_SUPPORTS
- config BR2_PACKAGE_BOOST_CONTEXT
- 	bool "boost-context"
- 	depends on BR2_PACKAGE_BOOST_CONTEXT_ARCH_SUPPORTS
--	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS \
--		|| BR2_TOOLCHAIN_GCC_AT_LEAST_6 # boost-thread
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735
--	select BR2_PACKAGE_BOOST_THREAD if !BR2_TOOLCHAIN_GCC_AT_LEAST_6
- 	help
- 	  C++11 context switching library.
- 
-+comment "boost-context needs a toolchain w/ C++11, gcc>=4.8"
-+	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+diff --git a/support/testing/tests/package/sample_python_msgpack.py b/support/testing/tests/package/sample_python_msgpack.py
+new file mode 100644
+index 0000000000..1940f70821
+--- /dev/null
++++ b/support/testing/tests/package/sample_python_msgpack.py
+@@ -0,0 +1,5 @@
++import msgpack
 +
- config BR2_PACKAGE_BOOST_CONTRACT
- 	bool "boost-contract"
- 	# pthread_condattr_setclock
-@@ -72,16 +73,20 @@ config BR2_PACKAGE_BOOST_COROUTINE
- 	bool "boost-coroutine"
- 	depends on BR2_PACKAGE_BOOST_CONTEXT_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS # boost-thread
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # boost-context
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # boost-context, boost-thread
- 	select BR2_PACKAGE_BOOST_CHRONO
- 	select BR2_PACKAGE_BOOST_CONTEXT
- 	select BR2_PACKAGE_BOOST_SYSTEM
- 	select BR2_PACKAGE_BOOST_THREAD
- 	help
--	  deprecated coroutine library, the non-depricated coroutine2
-+	  deprecated coroutine library, the non-deprecated coroutine2
- 	  library is a header-only library and does not need to be
- 	  selected.
- 
-+comment "boost-coroutine needs a toolchain w/ C++11, gcc>=4.8"
-+	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++packaed = msgpack.packb([1, 2, 3], use_bin_type=True)
 +
- comment "boost-coroutine needs a toolchain not affected by GCC bug 64735"
- 	depends on BR2_PACKAGE_BOOST_CONTEXT_ARCH_SUPPORTS
- 	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
-@@ -109,21 +114,20 @@ config BR2_PACKAGE_BOOST_FIBER
- 	depends on !BR2_MIPS_CPU_MIPS32 && !BR2_MIPS_CPU_MIPS64
- 	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS # boost-filesystem
- 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # boost-context
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
- 	select BR2_PACKAGE_BOOST_CONTEXT
- 	select BR2_PACKAGE_BOOST_FILESYSTEM
- 	select BR2_PACKAGE_BOOST_SYSTEM
- 	help
- 	  C++11 userland threads library.
- 
--comment "boost-fiber needs a toolchain w/ NPTL"
-+comment "boost-fiber needs a toolchain w/ NPTL, C++11, gcc>=4.8"
- 	depends on BR2_PACKAGE_BOOST_CONTEXT_ARCH_SUPPORTS
--	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
--	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL \
-+		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
- 
- comment "boost-fiber needs a toolchain not affected by GCC bug 64735"
- 	depends on BR2_PACKAGE_BOOST_CONTEXT_ARCH_SUPPORTS
--	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS \
--		|| BR2_TOOLCHAIN_GCC_AT_LEAST_6
- 	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
- 
- config BR2_PACKAGE_BOOST_FILESYSTEM
-@@ -242,6 +246,9 @@ config BR2_PACKAGE_BOOST_MATH
- 	  Octonions, like quaternions, are a relative of complex
- 	  numbers.
- 
-+comment "boost-math needs a toolchain w/ C++14, gcc>=5.0"
-+	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_5
++assert msgpack.unpackb(packaed, raw=False) == [1, 2, 3]
+diff --git a/support/testing/tests/package/test_python_msgpack.py b/support/testing/tests/package/test_python_msgpack.py
+new file mode 100644
+index 0000000000..e5876e400d
+--- /dev/null
++++ b/support/testing/tests/package/test_python_msgpack.py
+@@ -0,0 +1,12 @@
++from tests.package.test_python import TestPythonPackageBase
 +
- config BR2_PACKAGE_BOOST_MPI
- 	bool "boost-mpi"
- 	help
++
++class TestPythonPy3MsgPack(TestPythonPackageBase):
++    __test__ = True
++    config = TestPythonPackageBase.config + \
++        """
++        BR2_PACKAGE_PYTHON3=y
++        BR2_PACKAGE_PYTHON_MSGPACK=y
++        """
++    sample_scripts = ["tests/package/sample_python_msgpack.py"]
++    timeout = 40
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
