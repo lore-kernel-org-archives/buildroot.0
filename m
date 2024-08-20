@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 32404C531DC
-	for <buildroot@archiver.kernel.org>; Tue, 20 Aug 2024 17:21:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1144EC5321D
+	for <buildroot@archiver.kernel.org>; Tue, 20 Aug 2024 17:21:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B894F40AEB;
-	Tue, 20 Aug 2024 17:21:27 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C311B40AEE;
+	Tue, 20 Aug 2024 17:21:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QITK1uWfinaE; Tue, 20 Aug 2024 17:21:26 +0000 (UTC)
+ id uLGHrYxWHqCB; Tue, 20 Aug 2024 17:21:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 94F1C40B09
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 158D340B13
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 94F1C40B09;
-	Tue, 20 Aug 2024 17:21:26 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 158D340B13;
+	Tue, 20 Aug 2024 17:21:29 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 823F41BF37C
- for <buildroot@lists.busybox.net>; Tue, 20 Aug 2024 17:21:23 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 921561BF37C
+ for <buildroot@lists.busybox.net>; Tue, 20 Aug 2024 17:21:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 079056088D
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1AC38608F9
  for <buildroot@lists.busybox.net>; Tue, 20 Aug 2024 17:21:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UCQy81HXLzrH for <buildroot@lists.busybox.net>;
+ id OG2V8JjoI1KO for <buildroot@lists.busybox.net>;
  Tue, 20 Aug 2024 17:21:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 28DEB608F9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3614D608FA
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 28DEB608F9
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3614D608FA
  for <buildroot@buildroot.org>; Tue, 20 Aug 2024 17:21:21 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 215348614D; Tue, 20 Aug 2024 17:21:21 +0000 (UTC)
+ id 2CE928614E; Tue, 20 Aug 2024 17:21:21 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 20 Aug 2024 19:13:43 +0200
+Date: Tue, 20 Aug 2024 19:18:10 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 53e5169e863532455a53ff5c030d6ffa1d230670
-X-Git-Newrev: e61425fd6448b2d46216fabb5936b0383ed1ea96
+X-Git-Oldrev: e61425fd6448b2d46216fabb5936b0383ed1ea96
+X-Git-Newrev: 11f75a23099835ac6c59416f6b83e797240e0da7
 X-Patchwork-Hint: ignore
-Message-Id: <20240820172121.215348614D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/ncftp: use
- correct SPDX license code
+Message-Id: <20240820172121.2CE928614E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] support/scripts/mkusers:
+ accept user tables without terminating \n
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,36 +65,33 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e61425fd6448b2d46216fabb5936b0383ed1ea96
+commit: https://git.buildroot.net/buildroot/commit/?id=11f75a23099835ac6c59416f6b83e797240e0da7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-According to https://spdx.org/licenses/, the correct license code for
-the "Clarified Artistic License" is ClArtistic.
-
-The only other package in Buildroot containing code under this license
-is google-breakpad, and it is already using the ClArtistic SPDX code.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit 2ca698051c50546a70e9f7b625f2ee9a2a6a2840)
+(cherry picked from commit 5d8445138bd466f80dd45dab1b9fb7279f1536eb)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ncftp/ncftp.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ support/scripts/mkusers | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/package/ncftp/ncftp.mk b/package/ncftp/ncftp.mk
-index d380ebae02..789da1f454 100644
---- a/package/ncftp/ncftp.mk
-+++ b/package/ncftp/ncftp.mk
-@@ -10,7 +10,7 @@ NCFTP_VERSION = 3.2.6
- NCFTP_SOURCE = ncftp-$(NCFTP_VERSION)-src.tar.gz
- NCFTP_SITE = https://www.ncftp.com/public_ftp/ncftp/older_versions
- NCFTP_TARGET_BINS = ncftp
--NCFTP_LICENSE = Clarified Artistic License
-+NCFTP_LICENSE = ClArtistic
- NCFTP_LICENSE_FILES = doc/LICENSE.txt
+diff --git a/support/scripts/mkusers b/support/scripts/mkusers
+index ee09bbd1f2..08f3344518 100755
+--- a/support/scripts/mkusers
++++ b/support/scripts/mkusers
+@@ -409,9 +409,8 @@ main() {
+     fi
  
- NCFTP_DEPENDENCIES = host-autoconf
+     # Read in all the file in memory, exclude empty lines and comments
+-    while read -r line; do
+-        ENTRIES+=( "${line}" )
+-    done < <( sed -r -e 's/#.*//; /^[[:space:]]*$/d;' "${USERS_TABLE}" )
++    # mapfile reads all lines, even the last one if it is missing a \n
++    mapfile -t ENTRIES < <( sed -r -e 's/#.*//; /^[[:space:]]*$/d;' "${USERS_TABLE}" )
+ 
+     # We first create groups whose gid is positive, and then we create groups
+     # whose gid is automatic, so that, if a group is defined both with
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
