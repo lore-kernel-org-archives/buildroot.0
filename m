@@ -4,71 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9B36C3DA4A
-	for <buildroot@archiver.kernel.org>; Tue, 20 Aug 2024 21:24:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 377EDC531DC
+	for <buildroot@archiver.kernel.org>; Tue, 20 Aug 2024 21:25:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4C9EF40B38;
-	Tue, 20 Aug 2024 21:24:32 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id EBF5240B5E;
+	Tue, 20 Aug 2024 21:25:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5x4CMD8-nRYY; Tue, 20 Aug 2024 21:24:31 +0000 (UTC)
+ id Han8ZOEsB_gf; Tue, 20 Aug 2024 21:25:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1261940B4A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B73EE40B87
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1261940B4A;
-	Tue, 20 Aug 2024 21:24:31 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B1F601BF3B8
- for <buildroot@lists.busybox.net>; Tue, 20 Aug 2024 21:24:29 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B73EE40B87;
+	Tue, 20 Aug 2024 21:25:08 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 737AF1BF3B8
+ for <buildroot@lists.busybox.net>; Tue, 20 Aug 2024 21:25:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id ABD6581210
- for <buildroot@lists.busybox.net>; Tue, 20 Aug 2024 21:24:29 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 615F16071E
+ for <buildroot@lists.busybox.net>; Tue, 20 Aug 2024 21:25:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KSSQGDK1wbKM for <buildroot@lists.busybox.net>;
- Tue, 20 Aug 2024 21:24:29 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.197;
- helo=relay5-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id O33o-CejzNE2 for <buildroot@lists.busybox.net>;
+ Tue, 20 Aug 2024 21:25:06 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 976E581222
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 976E581222
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 976E581222
- for <buildroot@buildroot.org>; Tue, 20 Aug 2024 21:24:28 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id C19141C0002;
- Tue, 20 Aug 2024 21:24:26 +0000 (UTC)
-Date: Tue, 20 Aug 2024 23:24:25 +0200
-To: Waldemar Brodkorb <wbx@openadk.org>
-Message-ID: <20240820232425.52502981@windsurf>
-In-Reply-To: <ZsRJkHnGdaJ0DBy8@waldemar-brodkorb.de>
-References: <ZsRJkHnGdaJ0DBy8@waldemar-brodkorb.de>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1724189067;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=QucVaGX4PVh0PGBdjE0F34Xnqx2t3Q3CYVx5dOSWwx0=;
- b=pdeoG5SRJwkAfj21Xv/yYRhxD3LJXnJYdkJD/xqa38WaDEwSq1gib+trOzRSKPOGHie1kz
- xX2IR/Esao8k+9zkjhX3fVFPqU03g+mx9eqSIdQcclCDxDNzvswz6Nzck1kwamqs/z9JhI
- YWX9VsNVQALEUe+t0MD/YZnaku5R9b4JnfCz+a/w2uhvBUZxUywONDPgE0SM2iPPpoQAdj
- aszaz7rZ6r/2g1lA1Du/P0LmdrMlebKHTP9vEtR2f892fhz2zs1YwnsmrSfXLgc042uDzJ
- 9h08wEJaQrSSkrZALIXIxTGKmi/Nu1frtX9qYUFX+p4kY4y/jm8curInH2fi2A==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=pdeoG5SR
-Subject: Re: [Buildroot] [PATCH] package/aumix: update AUMIX_SITE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 98CD260622
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 98CD260622
+ for <buildroot@buildroot.org>; Tue, 20 Aug 2024 21:25:06 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 827A5861BE; Tue, 20 Aug 2024 21:25:06 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 20 Aug 2024 23:23:43 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 4dbb87bb6676b82f34981f6adedccfa03a9667cd
+X-Git-Newrev: 77512bba98e09c7231a2629652e464dbf882fd23
+X-Patchwork-Hint: ignore
+Message-Id: <20240820212506.827A5861BE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/aumix: update AUMIX_SITE
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,35 +59,52 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 20 Aug 2024 09:45:20 +0200
-Waldemar Brodkorb <wbx@openadk.org> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=77512bba98e09c7231a2629652e464dbf882fd23
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> The old URL gives 403 forbidden.
-> Use a working sourceforge URL.
-> 
-> Fixes:
->  - http://autobuild.buildroot.org/results/c0c/c0c3945cade7a6d7a615ac23523c93b02dbb056f
-> 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> ---
->  package/aumix/aumix.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+The old URL gives 403 forbidden.
+Use a working sourceforge URL.
 
-Thanks for the patch! In addition to AUMIX_SITE, one also needed to fix
-the URL in the Config.in help text, so I did that and applied to
-master, thanks!
+Fixes:
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+  http://autobuild.buildroot.org/results/c0c3945cade7a6d7a615ac23523c93b02dbb056f
+
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/aumix/Config.in | 2 +-
+ package/aumix/aumix.mk  | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/aumix/Config.in b/package/aumix/Config.in
+index 3d3208250c..058e73d7ee 100644
+--- a/package/aumix/Config.in
++++ b/package/aumix/Config.in
+@@ -9,4 +9,4 @@ config BR2_PACKAGE_AUMIX
+ 	  automatically save and restore the mixer settings at shutdown
+ 	  and boot.
+ 
+-	  http://jpj.net/~trevor/aumix.html
++	  https://sourceforge.net/projects/aumix/
+diff --git a/package/aumix/aumix.mk b/package/aumix/aumix.mk
+index 03072d5d35..d5c2831dcd 100644
+--- a/package/aumix/aumix.mk
++++ b/package/aumix/aumix.mk
+@@ -6,7 +6,7 @@
+ 
+ AUMIX_VERSION = 2.9.1
+ AUMIX_SOURCE = aumix-$(AUMIX_VERSION).tar.bz2
+-AUMIX_SITE = http://jpj.net/~trevor/aumix/releases
++AUMIX_SITE = https://sourceforge.net/projects/aumix/files/aumix/$(AUMIX_VERSION)
+ AUMIX_AUTORECONF = YES
+ AUMIX_AUTOPOINT = YES
+ AUMIX_LICENSE = GPL-2.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
