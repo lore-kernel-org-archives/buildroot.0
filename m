@@ -4,71 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 282DAC531DC
-	for <buildroot@archiver.kernel.org>; Fri, 23 Aug 2024 14:33:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 578E9C52D7C
+	for <buildroot@archiver.kernel.org>; Fri, 23 Aug 2024 14:33:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E5F0581F21;
-	Fri, 23 Aug 2024 14:33:25 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1D6E981F21;
+	Fri, 23 Aug 2024 14:33:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id knpWOIkXJvGt; Fri, 23 Aug 2024 14:33:25 +0000 (UTC)
+ id dUekrA7JDVov; Fri, 23 Aug 2024 14:33:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E8C6381F22
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2DBD6840A2
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E8C6381F22;
-	Fri, 23 Aug 2024 14:33:24 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2DBD6840A2;
+	Fri, 23 Aug 2024 14:33:42 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6C93B1BF2E5
- for <buildroot@lists.busybox.net>; Fri, 23 Aug 2024 14:33:24 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8BC151BF2E5
+ for <buildroot@lists.busybox.net>; Fri, 23 Aug 2024 14:33:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 660F2412F8
- for <buildroot@lists.busybox.net>; Fri, 23 Aug 2024 14:33:24 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 78D0B412F6
+ for <buildroot@lists.busybox.net>; Fri, 23 Aug 2024 14:33:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VGLyR-09gH62 for <buildroot@lists.busybox.net>;
- Fri, 23 Aug 2024 14:33:23 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::225;
- helo=relay5-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id z8DKx7SKS7xY for <buildroot@lists.busybox.net>;
+ Fri, 23 Aug 2024 14:33:24 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 24F93412F6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 24F93412F6
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::225])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 24F93412F6
- for <buildroot@buildroot.org>; Fri, 23 Aug 2024 14:33:22 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id B5C921C000D;
- Fri, 23 Aug 2024 14:33:19 +0000 (UTC)
-Date: Fri, 23 Aug 2024 16:33:18 +0200
-To: Waldemar Brodkorb <wbx@openadk.org>
-Message-ID: <20240823163318.7e8876e1@windsurf>
-In-Reply-To: <ZsTTRhsNDiMsnH1z@waldemar-brodkorb.de>
-References: <ZsTTRhsNDiMsnH1z@waldemar-brodkorb.de>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1724423599;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=ZzqF7QvqUx0T6G5rHDrPMY1kKAfW+67R/6zVWaFp9y8=;
- b=ZuTIG9UoFg4E4PZKlOFsFu/py2LaBWxFIe9OPXRsSo7GUqZ710jIDWgh76kP7E2342Hbcy
- pltD6h4jZImNS651hUedws5fF/CbDR2Ja1tSRHaaf/mh/ID8Q7afjrx3CL2csD0axudyD1
- uCNhqFl0kxuiSHKvFAfSZAGF6TKYgUnRHeTUZ0vwjGVZiHddU5aurTkpxHWLrqwSfgjpCZ
- v0BKgcWAr2QeHhSqo7gAUti9eBs8P/lqv0lKaQ/lwPjbwdUq8U+7L+N9P6sSknPCoyYcQR
- BWTxCQ4r71apMFfEeAxHR0+2nCLTMthNooO9vow536ofRUzOh3PrN6P+hyS+jg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=ZuTIG9Uo
-Subject: Re: [Buildroot] [PATCH next] package/babeld: update to 1.13
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 569A1412F7
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 569A1412F7
+ for <buildroot@buildroot.org>; Fri, 23 Aug 2024 14:33:24 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 4301E8633D; Fri, 23 Aug 2024 14:33:24 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 20 Aug 2024 23:47:42 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: d7d717145c6c796758a391ddde9e14ed2236b4d2
+X-Git-Newrev: 3527691d0b6a3212e5a794cf723f13b0fcdbbc8d
+X-Patchwork-Hint: ignore
+Message-Id: <20240823143324.4301E8633D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/babeld: bump version
+ to 1.13
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,33 +60,61 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 20 Aug 2024 19:32:54 +0200
-Waldemar Brodkorb <wbx@openadk.org> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=3527691d0b6a3212e5a794cf723f13b0fcdbbc8d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> Update Homepage and Download URL.
-> For changes see here:
-> https://github.com/jech/babeld/blob/master/CHANGES
-> 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> ---
->  package/babeld/Config.in   | 2 +-
->  package/babeld/babeld.hash | 2 +-
->  package/babeld/babeld.mk   | 4 ++--
->  3 files changed, 4 insertions(+), 4 deletions(-)
+Update Homepage and Download URL.
+For changes see here:
+https://github.com/jech/babeld/blob/master/CHANGES
 
-Applied to next, thanks.
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/babeld/Config.in   | 2 +-
+ package/babeld/babeld.hash | 2 +-
+ package/babeld/babeld.mk   | 4 ++--
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/babeld/Config.in b/package/babeld/Config.in
+index c7010e1fb1..80d2708230 100644
+--- a/package/babeld/Config.in
++++ b/package/babeld/Config.in
+@@ -5,4 +5,4 @@ config BR2_PACKAGE_BABELD
+ 	  Babel is a loop-avoiding distance-vector routing protocol for
+ 	  IPv6 and IPv4 with fast convergence properties.
+ 
+-	  http://www.pps.univ-paris-diderot.fr/~jch/software/babel/
++	  https://www.irif.fr/~jch/software/babel/
+diff --git a/package/babeld/babeld.hash b/package/babeld/babeld.hash
+index 2e0513efa0..3eb5d22081 100644
+--- a/package/babeld/babeld.hash
++++ b/package/babeld/babeld.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  154f00e0a8bf35d6ea9028886c3dc5c3c342dd1a367df55ef29a547b75867f07  babeld-1.9.2.tar.gz
++sha256  d085ccccfb06a11d7fa5b54c51d9c410f5f3b0a9389f584951336ff178f293b8  babeld-1.13.tar.gz
+ sha256  b415c41292cedef6c97b243609e50552887c29343566c639f23282d31efd2afd  LICENCE
+diff --git a/package/babeld/babeld.mk b/package/babeld/babeld.mk
+index 785fa2bce9..67ff553b8b 100644
+--- a/package/babeld/babeld.mk
++++ b/package/babeld/babeld.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-BABELD_VERSION = 1.9.2
+-BABELD_SITE = http://www.pps.univ-paris-diderot.fr/~jch/software/files
++BABELD_VERSION = 1.13
++BABELD_SITE = https://www.irif.fr/~jch/software/files
+ BABELD_LICENSE = MIT
+ BABELD_LICENSE_FILES = LICENCE
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
