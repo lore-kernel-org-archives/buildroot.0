@@ -4,49 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AA162E6FE46
-	for <buildroot@archiver.kernel.org>; Fri,  6 Sep 2024 20:02:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB45ACE7B11
+	for <buildroot@archiver.kernel.org>; Fri,  6 Sep 2024 20:02:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7A22A844EF;
-	Fri,  6 Sep 2024 20:02:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 984D8847D9;
+	Fri,  6 Sep 2024 20:02:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id W3V3mRROxG3u; Fri,  6 Sep 2024 20:02:48 +0000 (UTC)
+ id bCZ3h8fQEQk1; Fri,  6 Sep 2024 20:02:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7CD82847E0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 00475847E7
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7CD82847E0;
-	Fri,  6 Sep 2024 20:02:47 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6BD301BF37F
+	by smtp1.osuosl.org (Postfix) with ESMTP id 00475847E7;
+	Fri,  6 Sep 2024 20:02:50 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id C4B201BF20B
  for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 19:59:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7214C40B41
- for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 19:58:59 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id BAED961126
+ for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 19:58:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4xT4Ae4tlR2S for <buildroot@lists.busybox.net>;
- Fri,  6 Sep 2024 19:58:57 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id cGvc8SpgkBDo for <buildroot@lists.busybox.net>;
+ Fri,  6 Sep 2024 19:58:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 049DD40926
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A18C960E16
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 049DD40926
- for <buildroot@buildroot.org>; Fri,  6 Sep 2024 19:58:57 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id A18C960E16
+ for <buildroot@buildroot.org>; Fri,  6 Sep 2024 19:58:55 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F09AA828CC; Fri,  6 Sep 2024 19:58:56 +0000 (UTC)
+ id 97EDA86EE5; Fri,  6 Sep 2024 19:58:55 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 23 Aug 2024 19:35:29 +0200
+Date: Tue, 20 Aug 2024 23:39:51 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 33b9374d222598230802025dc3025692cc4e3653
-X-Git-Newrev: 7866b382bc7e1adc93925076f0b9719d78886e40
+X-Git-Oldrev: 55908bcd47aca9193be16f3eb8cdb9a041a450ef
+X-Git-Newrev: d7d717145c6c796758a391ddde9e14ed2236b4d2
 X-Patchwork-Hint: ignore
-Message-Id: <20240906195856.F09AA828CC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-can: add option to install
- the viewer tool
+Message-Id: <20240906195855.97EDA86EE5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/rsyslog: bump version to 8.2408.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -61,59 +60,57 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============8816312289355103110=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7866b382bc7e1adc93925076f0b9719d78886e40
+--===============8816312289355103110==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=d7d717145c6c796758a391ddde9e14ed2236b4d2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Enabling the option correctly select the python-curses module dependency
-of the viewer tool.
-
-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+Signed-off-by: Flávio Tapajós <flavio.tapajos@newtesc.com.br>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-can/Config.in     | 10 ++++++++++
- package/python-can/python-can.mk |  7 +++++++
- 2 files changed, 17 insertions(+)
+ package/rsyslog/rsyslog.hash | 2 +-
+ package/rsyslog/rsyslog.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-can/Config.in b/package/python-can/Config.in
-index 61955a2b00..34ba35bad2 100644
---- a/package/python-can/Config.in
-+++ b/package/python-can/Config.in
-@@ -11,3 +11,13 @@ config BR2_PACKAGE_PYTHON_CAN
- 	  Python.
+diff --git a/package/rsyslog/rsyslog.hash b/package/rsyslog/rsyslog.hash
+index caf411c322..24748eab19 100644
+--- a/package/rsyslog/rsyslog.hash
++++ b/package/rsyslog/rsyslog.hash
+@@ -1,5 +1,5 @@
+ # From http://www.rsyslog.com/downloads/download-v8-stable/
+-sha256  1343e0269dd32166ffde04d7ceebfa0e7146cf1dbc6962c56bf428c61f01a7df  rsyslog-8.2406.0.tar.gz
++sha256  8bb2f15f9bf9bb7e635182e3d3e370bfc39d08bf35a367dce9714e186f787206  rsyslog-8.2408.0.tar.gz
  
- 	  https://github.com/hardbyte/python-can
-+
-+if BR2_PACKAGE_PYTHON_CAN
-+
-+config BR2_PACKAGE_PYTHON_CAN_VIEWER
-+	bool "python-can-viewer"
-+	select BR2_PACKAGE_PYTHON3_CURSES # runtime
-+	help
-+	  Also install the viewer tool (requires ncurses).
-+
-+endif
-diff --git a/package/python-can/python-can.mk b/package/python-can/python-can.mk
-index b6547a4d3f..bc67be4f8c 100644
---- a/package/python-can/python-can.mk
-+++ b/package/python-can/python-can.mk
-@@ -11,4 +11,11 @@ PYTHON_CAN_SETUP_TYPE = setuptools
- PYTHON_CAN_LICENSE = LGPL-3.0
- PYTHON_CAN_LICENSE_FILES = LICENSE.txt
+ # Locally calculated
+ sha256  054b3a047d9232376a46b87356b19b0c0c2924cb5e6911ab96a01fc4b515f083  COPYING
+diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
+index 17dca4c8e4..86d87a5d93 100644
+--- a/package/rsyslog/rsyslog.mk
++++ b/package/rsyslog/rsyslog.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+ifneq ($(BR2_PACKAGE_PYTHON_CAN_VIEWER),y)
-+define PYTHON_CAN_REMOVE_VIEWER
-+	rm -f $(TARGET_DIR)/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages/can/viewer.py
-+endef
-+PYTHON_CAN_POST_INSTALL_TARGET_HOOKS += PYTHON_CAN_REMOVE_VIEWER
-+endif
-+
- $(eval $(python-package))
+-RSYSLOG_VERSION = 8.2406.0
++RSYSLOG_VERSION = 8.2408.0
+ RSYSLOG_SITE = http://rsyslog.com/files/download/rsyslog
+ RSYSLOG_LICENSE = GPL-3.0, LGPL-3.0, Apache-2.0
+ RSYSLOG_LICENSE_FILES = COPYING COPYING.LESSER COPYING.ASL20
+
+--===============8816312289355103110==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8816312289355103110==--
