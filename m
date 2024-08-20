@@ -4,71 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20576C531DC
-	for <buildroot@archiver.kernel.org>; Tue, 20 Aug 2024 21:34:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B8BFC531DC
+	for <buildroot@archiver.kernel.org>; Tue, 20 Aug 2024 21:36:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DA0C940B7F;
-	Tue, 20 Aug 2024 21:34:23 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C27B940B91;
+	Tue, 20 Aug 2024 21:36:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0JnwB4WbXOK3; Tue, 20 Aug 2024 21:34:22 +0000 (UTC)
+ id PDVSScy9a7oQ; Tue, 20 Aug 2024 21:36:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B78AB40BAE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 60F0440B38
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B78AB40BAE;
-	Tue, 20 Aug 2024 21:34:22 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 61CDC1BF3B8
- for <buildroot@lists.busybox.net>; Tue, 20 Aug 2024 21:34:21 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 60F0440B38;
+	Tue, 20 Aug 2024 21:36:22 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 5E7271BF3B8
+ for <buildroot@lists.busybox.net>; Tue, 20 Aug 2024 21:36:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 50206811D0
- for <buildroot@lists.busybox.net>; Tue, 20 Aug 2024 21:34:21 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4C4DC606FF
+ for <buildroot@lists.busybox.net>; Tue, 20 Aug 2024 21:36:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7sOr6JCCQ6sp for <buildroot@lists.busybox.net>;
- Tue, 20 Aug 2024 21:34:20 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::227;
- helo=relay7-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Ba8isyS89saV for <buildroot@lists.busybox.net>;
+ Tue, 20 Aug 2024 21:36:20 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4B08880FB7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4B08880FB7
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4B08880FB7
- for <buildroot@buildroot.org>; Tue, 20 Aug 2024 21:34:20 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 2951920009;
- Tue, 20 Aug 2024 21:34:17 +0000 (UTC)
-Date: Tue, 20 Aug 2024 23:34:17 +0200
-To: Waldemar Brodkorb <wbx@openadk.org>
-Message-ID: <20240820233417.6016bac0@windsurf>
-In-Reply-To: <ZsSwnkkSQUhjoTEH@waldemar-brodkorb.de>
-References: <ZsSwnkkSQUhjoTEH@waldemar-brodkorb.de>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1724189658;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=NGc2teeFCgeiPo4fQmavNLvrRpNsu19qh1O5BllUsPw=;
- b=V7jUHY0MDoyrP/ho9D7GoK3qVoxuMWESkC4POJlEXMsXLlPo+qWgbsITEXSAWu73NtgB5O
- HpAnqlQvIzZtexlhdaoKCejbkloGKAjeR4c69Rrd7mHdGysDNvt5yJXRGGYdN6XfU8tF18
- lAjfQdNZxkiJ5qsWpHTafdYWVpEra9b0Ab46yHoimC0lDGhxj2r5HOyB0NQxTZjJhXIj6t
- jTZEcz4bubUY6zs/UPVAxX7X4z/YxtK2E0gyZpwCaNQyMAWh1NmEIZ3YLWr8FDt3jLTEt6
- chjCuFOeCMtPo+QU9sRMAdFYD7n8ct4i7NyfMqoJcdxoxHw3WjFC6pDrz5wCHw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=V7jUHY0M
-Subject: Re: [Buildroot] [PATCH next] package/batman-adv: update to 2024.2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 876AC606EA
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 876AC606EA
+ for <buildroot@buildroot.org>; Tue, 20 Aug 2024 21:36:20 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 6D375861F0; Tue, 20 Aug 2024 21:36:20 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 20 Aug 2024 23:35:59 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 77512bba98e09c7231a2629652e464dbf882fd23
+X-Git-Newrev: 064e4c09fa788ccf0927fcaf3987e0f0fdc08eb7
+X-Patchwork-Hint: ignore
+Message-Id: <20240820213620.6D375861F0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/ntpsec: fix host building
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,28 +59,51 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Christian Stewart <christian@aperture.us>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 20 Aug 2024 17:05:02 +0200
-Waldemar Brodkorb <wbx@openadk.org> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=064e4c09fa788ccf0927fcaf3987e0f0fdc08eb7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> ---
->  package/batman-adv/batman-adv.hash | 6 +++---
->  package/batman-adv/batman-adv.mk   | 2 +-
->  2 files changed, 4 insertions(+), 4 deletions(-)
+The following build failure on xtensa:
 
-Applied to next, thanks.
+Waf: Entering directory `/home/buildroot/instance-0/output-1/build/ntpsec-1.2.3/build/host'
+[1/2] Processing ntpd/ntp_parser.y
+[2/2] Compiling build/host/ntpd/ntp_parser.tab.c
+gcc: error: unrecognized command-line option '-mlongcalls'
+gcc: error: unrecognized command-line option '-mauto-litpools'
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+reveals that the target's CFLAGS are being used for host compilation.
+The patch fixes the host compilation by correctly setting the CFLAGS to
+be used.
+
+It should be noted that the build script used by ntpsec applies CFLAGS
+for host compilation and --cross-cflags for target compilation.
+
+Fixes:
+ - http://autobuild.buildroot.org/results/9321a637f2c340ce8dcb24249676bb6c44d0dfc6
+
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/ntpsec/ntpsec.mk | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/package/ntpsec/ntpsec.mk b/package/ntpsec/ntpsec.mk
+index 661af78842..3acf7745cf 100644
+--- a/package/ntpsec/ntpsec.mk
++++ b/package/ntpsec/ntpsec.mk
+@@ -42,6 +42,7 @@ NTPSEC_DEPENDENCIES = \
+ # --cross-compiler
+ NTPSEC_CONF_OPTS = \
+ 	CC="$(HOSTCC)" \
++	CFLAGS="$(HOST_CFLAGS)" \
+ 	PYTHON_CONFIG="$(STAGING_DIR)/usr/bin/python3-config" \
+ 	--libdir=/usr/lib/python$(PYTHON3_VERSION_MAJOR)/site-packages/ntp \
+ 	--cross-compiler="$(TARGET_CC)" \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
