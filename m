@@ -4,71 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2EA41C3DA4A
-	for <buildroot@archiver.kernel.org>; Tue, 20 Aug 2024 21:22:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9EACC3DA4A
+	for <buildroot@archiver.kernel.org>; Tue, 20 Aug 2024 21:23:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C46CC40B38;
-	Tue, 20 Aug 2024 21:22:34 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8993140B77;
+	Tue, 20 Aug 2024 21:23:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id A3Xyj7n-B05j; Tue, 20 Aug 2024 21:22:33 +0000 (UTC)
+ id 0G3wBEZrsuy5; Tue, 20 Aug 2024 21:23:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 820BA40B46
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3FEBD40B82
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 820BA40B46;
-	Tue, 20 Aug 2024 21:22:33 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 84F761BF3B8
- for <buildroot@lists.busybox.net>; Tue, 20 Aug 2024 21:22:31 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3FEBD40B82;
+	Tue, 20 Aug 2024 21:23:18 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 291781BF3B8
+ for <buildroot@lists.busybox.net>; Tue, 20 Aug 2024 21:23:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7F048401D8
- for <buildroot@lists.busybox.net>; Tue, 20 Aug 2024 21:22:31 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1623840B77
+ for <buildroot@lists.busybox.net>; Tue, 20 Aug 2024 21:23:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vv0jSjUOmPfn for <buildroot@lists.busybox.net>;
- Tue, 20 Aug 2024 21:22:30 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
- helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id V_pUWmyC6SFz for <buildroot@lists.busybox.net>;
+ Tue, 20 Aug 2024 21:23:16 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 45987401D3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 45987401D3
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 45987401D3
- for <buildroot@buildroot.org>; Tue, 20 Aug 2024 21:22:30 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 92658FF802;
- Tue, 20 Aug 2024 21:22:27 +0000 (UTC)
-Date: Tue, 20 Aug 2024 23:22:26 +0200
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Message-ID: <20240820232226.00c650a9@windsurf>
-In-Reply-To: <20240820064531.3680998-1-yann.morin.1998@free.fr>
-References: <20240820064531.3680998-1-yann.morin.1998@free.fr>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1724188947;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=xfrLG3vzGLjsNSA4okowo2QbJWeowrEl9NurZSlJ1/Q=;
- b=dDZ9ZDkM+KL8rn04D5bLQxXeF8CS+QWc48ZnVbDMf1dl0xNOpLPscznj0P/+r8H6priA0p
- cF0xPiI/kIcpjwcy4fmD95e7MbMyzb+qfyazP7x08wcF2GP6mem3F+f17kyhcXVnWdU0vP
- UxtbjVtpv4LKhabR/Ucds3UWJd45Q17LfRLHsdB4+Xn9B2Kzu0Gwz1QwtVoVvlhPE1x3Kv
- ktd3v1ZjwoSoFWaDtMjIivLl/1bg6eKRhKY0YNxT7EIIt6iueEpG26GsZ8nTXa71VtWsni
- 67so+E45XflSyHU6haOA0gHZQqGruSeP2i3JIAXOfRLT9b7cap3JQbBe+CKgJw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=dDZ9ZDkM
-Subject: Re: [Buildroot] [PATCH] utils/genrandconfig: fix fallout of
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1DFA440B85
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1DFA440B85
+ for <buildroot@buildroot.org>; Tue, 20 Aug 2024 21:23:16 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 147FF861B4; Tue, 20 Aug 2024 21:23:15 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 20 Aug 2024 23:22:59 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: c06d8be7e324ff3ec69db9b2fdca5305dbc54bf3
+X-Git-Newrev: 4dbb87bb6676b82f34981f6adedccfa03a9667cd
+X-Patchwork-Hint: ignore
+Message-Id: <20240820212316.147FF861B4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] utils/genrandconfig: fix fallout of
  dropping toolchain CSV
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -83,38 +60,45 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 20 Aug 2024 08:45:31 +0200
-"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=4dbb87bb6676b82f34981f6adedccfa03a9667cd
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Commit 2f260084d577 (utils/genrandconfig: remove support for toolchain
-> CSV) kept the --no-toolchains-csv option, but in the rework forgot to
-> keep it as a bool, while argparse default is to expect a string.
-> 
-> Rather than re-introduce the action="store_true" which implies the
-> argument is a bool, explicit make it a bool.
-> 
-> Fixes: 2f260084d5771728f3340ff6a86a23391133a635
-> 
-> Reported-by: James Hilliard <james.hilliard1@gmail.com>
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
->  utils/genrandconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Commit 2f260084d577 (utils/genrandconfig: remove support for toolchain
+CSV) kept the --no-toolchains-csv option, but in the rework forgot to
+keep it as a bool, while argparse default is to expect a string.
 
-Applied to master, thanks.
+Rather than re-introduce the action="store_true" which implies the
+argument is a bool, explicit make it a bool.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Fixes: 2f260084d5771728f3340ff6a86a23391133a635
+
+Reported-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ utils/genrandconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/utils/genrandconfig b/utils/genrandconfig
+index 8e60fd3f9e..ae1f0f85de 100755
+--- a/utils/genrandconfig
++++ b/utils/genrandconfig
+@@ -611,7 +611,7 @@ if __name__ == '__main__':
+                         help="Buildroot directory (relative to current directory)",
+                         type=str, default='.')
+     parser.add_argument("--toolchains-csv", help="Legacy, unused", type=str)
+-    parser.add_argument("--no-toolchains-csv", help="Legacy, unused")
++    parser.add_argument("--no-toolchains-csv", help="Legacy, unused", type=bool)
+ 
+     args = parser.parse_args()
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
