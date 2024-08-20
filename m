@@ -4,49 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99064C531DC
-	for <buildroot@archiver.kernel.org>; Tue, 20 Aug 2024 21:34:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64B38C3DA4A
+	for <buildroot@archiver.kernel.org>; Tue, 20 Aug 2024 21:34:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5A93940B91;
-	Tue, 20 Aug 2024 21:34:05 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2FE0040B5E;
+	Tue, 20 Aug 2024 21:34:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1qOKmAk8LfTi; Tue, 20 Aug 2024 21:34:04 +0000 (UTC)
+ id DUrV6kTeT7Iz; Tue, 20 Aug 2024 21:34:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1AEE540B9D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E5B9740474
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1AEE540B9D;
-	Tue, 20 Aug 2024 21:34:03 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5B13E1BF3B8
- for <buildroot@lists.busybox.net>; Tue, 20 Aug 2024 21:33:59 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E5B9740474;
+	Tue, 20 Aug 2024 21:34:17 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id B42481BF3B8
+ for <buildroot@lists.busybox.net>; Tue, 20 Aug 2024 21:34:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 47BE24067F
- for <buildroot@lists.busybox.net>; Tue, 20 Aug 2024 21:33:59 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id AF27E606FF
+ for <buildroot@lists.busybox.net>; Tue, 20 Aug 2024 21:34:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8T5Zzg_GJ43v for <buildroot@lists.busybox.net>;
- Tue, 20 Aug 2024 21:33:58 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WRGTKOjYatOu for <buildroot@lists.busybox.net>;
+ Tue, 20 Aug 2024 21:34:16 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.200;
+ helo=relay7-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 40D8240679
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 40D8240679
- for <buildroot@buildroot.org>; Tue, 20 Aug 2024 21:33:57 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8F201861E8; Tue, 20 Aug 2024 21:33:57 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 20 Aug 2024 23:33:05 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 46d9fdff48c106c22f6d96cad8b9011f28baf653
-X-Git-Newrev: ac837c91ff979b49fe569962e1bd657d17a96e75
-X-Patchwork-Hint: ignore
-Message-Id: <20240820213357.8F201861E8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/batctl: update to
- 2024.2
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A5118606AF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A5118606AF
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A5118606AF
+ for <buildroot@buildroot.org>; Tue, 20 Aug 2024 21:34:15 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id E1E2F20003;
+ Tue, 20 Aug 2024 21:34:13 +0000 (UTC)
+Date: Tue, 20 Aug 2024 23:34:13 +0200
+To: Waldemar Brodkorb <wbx@openadk.org>
+Message-ID: <20240820233413.28bd2486@windsurf>
+In-Reply-To: <ZsSwLoXXYTo8VPiX@waldemar-brodkorb.de>
+References: <ZsSwLoXXYTo8VPiX@waldemar-brodkorb.de>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1724189654;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=GKaq1WGNOe4o0osMHopfupXXY1FD5WElH6vDhnwW5RM=;
+ b=iOUj3NYrt+i5BIsDUw20tJqeywgxAuYYVaf26XUWUgplSSDZWZtuCwyNhUT9FnEPg5J3JP
+ ASr7jLGIqTNNbOn4PX0ZmnfITUG/bpfJ5pOll6EgLVfBLu29UOgYu+yEsdrm04KpU/1jZI
+ 8CSfKuXWIz/ZsVfl7HeFH2B9CpdjbOkqxmlUS841nQyf5+wIBY0wdfQ4pkBD2hUbVTLvgh
+ kiKAnJi+NTYRj53PZz6eP0S7NkrDmAQM15/iLVHXKszvc1A5dQMdYDLoq9753i5rTBuMVN
+ P0wZoH+1MMFIm9Ooy86KYQfbqEPWp+s1TYq3505emAUJQ8nK05WA3LSEA13IlQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=iOUj3NYr
+Subject: Re: [Buildroot] [PATCH next] package/batctl: update to 2024.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,49 +82,28 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Jens Zettelmeyer <zettelmeyerj@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ac837c91ff979b49fe569962e1bd657d17a96e75
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On Tue, 20 Aug 2024 17:03:10 +0200
+Waldemar Brodkorb <wbx@openadk.org> wrote:
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/batctl/batctl.hash | 6 +++---
- package/batctl/batctl.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> ---
+>  package/batctl/batctl.hash | 6 +++---
+>  package/batctl/batctl.mk   | 2 +-
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/batctl/batctl.hash b/package/batctl/batctl.hash
-index 7bc6fee67f..b5d71fe894 100644
---- a/package/batctl/batctl.hash
-+++ b/package/batctl/batctl.hash
-@@ -1,6 +1,6 @@
--# From https://downloads.open-mesh.org/batman/releases/batman-adv-2023.1/batctl-2023.1.tar.gz.sha1
--sha1  8d899c6323e228b9b370caf28e6d67621cb7d35d  batctl-2023.1.tar.gz
-+# From https://downloads.open-mesh.org/batman/releases/batman-adv-2024.2/batctl-2024.2.tar.gz.sha1
-+sha1  a0eb5c0d55ee04518db7b2ee5da14bc4c912e30f  batctl-2024.2.tar.gz
- # Locally calculated
--sha256  e5bf47305d955abb199244bd0e5fffab96108b1affabd0d9705533f8059395f1  batctl-2023.1.tar.gz
-+sha256  cb02953093ffc2c700d122c03a3d9e4d867f646d3038f31d0a901e58ff995d07  batctl-2024.2.tar.gz
- sha256  cecbf53d1148e13256ac29f8b900655b7fc8dc12d59939a95bc2323ea1747025  LICENSES/preferred/GPL-2.0
- sha256  323c587d0ccf10e376f8bf9a7f31fb4ca6078105194b42e0b1e0ee2bc9bde71f  LICENSES/preferred/MIT
-diff --git a/package/batctl/batctl.mk b/package/batctl/batctl.mk
-index 197e4beb72..182f32c71c 100644
---- a/package/batctl/batctl.mk
-+++ b/package/batctl/batctl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BATCTL_VERSION = 2023.1
-+BATCTL_VERSION = 2024.2
- BATCTL_SITE = http://downloads.open-mesh.org/batman/releases/batman-adv-$(BATCTL_VERSION)
- BATCTL_LICENSE = GPL-2.0, MIT (batman_adv.h, list.h)
- BATCTL_LICENSE_FILES = LICENSES/preferred/GPL-2.0 LICENSES/preferred/MIT
+Applied to next, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
