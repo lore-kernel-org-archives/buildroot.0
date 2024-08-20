@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F8D2C3DA4A
-	for <buildroot@archiver.kernel.org>; Tue, 20 Aug 2024 20:07:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DDD86C531DC
+	for <buildroot@archiver.kernel.org>; Tue, 20 Aug 2024 20:07:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CC1D340B27;
-	Tue, 20 Aug 2024 20:07:15 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0442B40B39;
+	Tue, 20 Aug 2024 20:07:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id j2CFKphUfH7Q; Tue, 20 Aug 2024 20:07:14 +0000 (UTC)
+ id MJCe6GKrjmZT; Tue, 20 Aug 2024 20:07:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8803940B8D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 792E040BAF
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8803940B8D;
-	Tue, 20 Aug 2024 20:07:14 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 792E040BAF;
+	Tue, 20 Aug 2024 20:07:17 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id F28CB1BF376
- for <buildroot@lists.busybox.net>; Tue, 20 Aug 2024 20:07:12 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0FA491BF97A
+ for <buildroot@lists.busybox.net>; Tue, 20 Aug 2024 20:07:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E12EE80D79
- for <buildroot@lists.busybox.net>; Tue, 20 Aug 2024 20:07:12 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 09A0E80DC7
+ for <buildroot@lists.busybox.net>; Tue, 20 Aug 2024 20:07:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hJQIoHsDSSOC for <buildroot@lists.busybox.net>;
+ id LLQPhBZNXb9j for <buildroot@lists.busybox.net>;
  Tue, 20 Aug 2024 20:07:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0FB9B812B7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 14BAC80EA8
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0FB9B812B7
+ by smtp1.osuosl.org (Postfix) with ESMTP id 14BAC80EA8
  for <buildroot@buildroot.org>; Tue, 20 Aug 2024 20:07:12 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EACCE86190; Tue, 20 Aug 2024 20:07:11 +0000 (UTC)
+ id 01B4A86191; Tue, 20 Aug 2024 20:07:12 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 20 Aug 2024 20:47:20 +0200
+Date: Tue, 20 Aug 2024 20:47:38 +0200
 X-Git-Refname: refs/heads/2024.05.x
-X-Git-Oldrev: 10babcbf2d105035990f664012f2701eb8ab4bc0
-X-Git-Newrev: 9fca029008d332b888ccb27f8c556bdab4b06519
+X-Git-Oldrev: 9fca029008d332b888ccb27f8c556bdab4b06519
+X-Git-Newrev: 88212cba65eb2943336832d04ad72ac8e281acbb
 X-Patchwork-Hint: ignore
-Message-Id: <20240820200711.EACCE86190@busybox.osuosl.org>
+Message-Id: <20240820200712.01B4A86191@busybox.osuosl.org>
 Subject: [Buildroot] [git commit branch/2024.05.x] package/boost: cleanup
- HOST_BOOST_FLAGS
+ boost-context/fiber/math
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,70 +65,109 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9fca029008d332b888ccb27f8c556bdab4b06519
+commit: https://git.buildroot.net/buildroot/commit/?id=88212cba65eb2943336832d04ad72ac8e281acbb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.05.x
 
-- fix alphabetical ordering
-- put one module per line
-- add comment explaining why options are enabled
+boost-context
+- requires C++11 (gcc 4.8) since 1.61 see [0]
+- dropped the dependency on (boost) thread in 1.77 see [1]
+boost-fiber
+- needed C++11 since it's creation in 1.61 [2]
+boost-math
+- add comment for gcc version
+
+[0] https://www.boost.org/doc/libs/1_82_0/libs/context/doc/html/context/requirements.html
+[1] https://github.com/boostorg/context/commit/8425e830eab0ad550db937027392c4b4a54df695
+[2] https://www.boost.org/doc/libs/1_62_0/libs/fiber/doc/html/fiber/overview.html
 
 Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit 5c20804afa42cb2efd57a4a333841290d35d9df6)
+(cherry picked from commit 16abf80368b660b4ec59778ca5060529b77a42c5)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/boost/boost.mk | 37 ++++++++++++++++++++++++++++++++-----
- 1 file changed, 32 insertions(+), 5 deletions(-)
+ package/boost/Config.in | 25 ++++++++++++++++---------
+ 1 file changed, 16 insertions(+), 9 deletions(-)
 
-diff --git a/package/boost/boost.mk b/package/boost/boost.mk
-index 9b1baec5bf..bb73edfda6 100644
---- a/package/boost/boost.mk
-+++ b/package/boost/boost.mk
-@@ -13,12 +13,39 @@ BOOST_LICENSE_FILES = LICENSE_1_0.txt
- BOOST_CPE_ID_VENDOR = boost
+diff --git a/package/boost/Config.in b/package/boost/Config.in
+index 60cc0a11a2..908a53fea0 100644
+--- a/package/boost/Config.in
++++ b/package/boost/Config.in
+@@ -50,13 +50,14 @@ config BR2_PACKAGE_BOOST_CONTEXT_ARCH_SUPPORTS
+ config BR2_PACKAGE_BOOST_CONTEXT
+ 	bool "boost-context"
+ 	depends on BR2_PACKAGE_BOOST_CONTEXT_ARCH_SUPPORTS
+-	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS \
+-		|| BR2_TOOLCHAIN_GCC_AT_LEAST_6 # boost-thread
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+-	select BR2_PACKAGE_BOOST_THREAD if !BR2_TOOLCHAIN_GCC_AT_LEAST_6
+ 	help
+ 	  C++11 context switching library.
  
- # keep host variant as minimal as possible
-+# regex & system are needed by host-riscv-isa-sim
- HOST_BOOST_FLAGS = --without-icu --with-toolset=gcc \
--	--without-libraries=$(subst $(space),$(comma),atomic chrono context \
--	contract container coroutine date_time exception fiber filesystem graph \
--	graph_parallel iostreams json locale log math mpi nowide program_options \
--	python random serialization stacktrace test thread timer \
--	type_erasure url wave)
-+	--without-libraries=$(subst $(space),$(comma),\
-+	atomic \
-+	chrono container \
-+	context \
-+	contract \
-+	coroutine \
-+	date_time \
-+	exception \
-+	fiber \
-+	filesystem \
-+	graph \
-+	graph_parallel \
-+	iostreams \
-+	json \
-+	locale \
-+	log \
-+	math \
-+	mpi \
-+	nowide \
-+	program_options \
-+	python \
-+	random \
-+	serialization \
-+	stacktrace \
-+	test \
-+	thread \
-+	timer \
-+	type_erasure \
-+	url \
-+	wave\
-+	)
++comment "boost-context needs a toolchain w/ C++11, gcc>=4.8"
++	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++
+ config BR2_PACKAGE_BOOST_CONTRACT
+ 	bool "boost-contract"
+ 	# pthread_condattr_setclock
+@@ -72,16 +73,20 @@ config BR2_PACKAGE_BOOST_COROUTINE
+ 	bool "boost-coroutine"
+ 	depends on BR2_PACKAGE_BOOST_CONTEXT_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS # boost-thread
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # boost-context
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # boost-context, boost-thread
+ 	select BR2_PACKAGE_BOOST_CHRONO
+ 	select BR2_PACKAGE_BOOST_CONTEXT
+ 	select BR2_PACKAGE_BOOST_SYSTEM
+ 	select BR2_PACKAGE_BOOST_THREAD
+ 	help
+-	  deprecated coroutine library, the non-depricated coroutine2
++	  deprecated coroutine library, the non-deprecated coroutine2
+ 	  library is a header-only library and does not need to be
+ 	  selected.
  
- BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_ATOMIC),,atomic)
- BOOST_WITHOUT_FLAGS += $(if $(BR2_PACKAGE_BOOST_CHRONO),,chrono)
++comment "boost-coroutine needs a toolchain w/ C++11, gcc>=4.8"
++	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++
+ comment "boost-coroutine needs a toolchain not affected by GCC bug 64735"
+ 	depends on BR2_PACKAGE_BOOST_CONTEXT_ARCH_SUPPORTS
+ 	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
+@@ -109,21 +114,20 @@ config BR2_PACKAGE_BOOST_FIBER
+ 	depends on !BR2_MIPS_CPU_MIPS32 && !BR2_MIPS_CPU_MIPS64
+ 	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS # boost-filesystem
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # boost-context
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+ 	select BR2_PACKAGE_BOOST_CONTEXT
+ 	select BR2_PACKAGE_BOOST_FILESYSTEM
+ 	select BR2_PACKAGE_BOOST_SYSTEM
+ 	help
+ 	  C++11 userland threads library.
+ 
+-comment "boost-fiber needs a toolchain w/ NPTL"
++comment "boost-fiber needs a toolchain w/ NPTL, C++11, gcc>=4.8"
+ 	depends on BR2_PACKAGE_BOOST_CONTEXT_ARCH_SUPPORTS
+-	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS
+-	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL
++	depends on !BR2_TOOLCHAIN_HAS_THREADS_NPTL \
++		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
+ 
+ comment "boost-fiber needs a toolchain not affected by GCC bug 64735"
+ 	depends on BR2_PACKAGE_BOOST_CONTEXT_ARCH_SUPPORTS
+-	depends on BR2_TOOLCHAIN_SUPPORTS_ALWAYS_LOCKFREE_ATOMIC_INTS \
+-		|| BR2_TOOLCHAIN_GCC_AT_LEAST_6
+ 	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+ 
+ config BR2_PACKAGE_BOOST_FILESYSTEM
+@@ -242,6 +246,9 @@ config BR2_PACKAGE_BOOST_MATH
+ 	  Octonions, like quaternions, are a relative of complex
+ 	  numbers.
+ 
++comment "boost-math needs a toolchain w/ C++14, gcc>=5.0"
++	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_5
++
+ config BR2_PACKAGE_BOOST_MPI
+ 	bool "boost-mpi"
+ 	help
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
