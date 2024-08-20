@@ -4,49 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 44B6FE6FE47
-	for <buildroot@archiver.kernel.org>; Fri,  6 Sep 2024 20:00:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D44ABE6FE48
+	for <buildroot@archiver.kernel.org>; Fri,  6 Sep 2024 20:00:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0C54E8454C;
-	Fri,  6 Sep 2024 20:00:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A0BB084485;
+	Fri,  6 Sep 2024 20:00:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fVA4hC3Mew3v; Fri,  6 Sep 2024 20:00:42 +0000 (UTC)
+ id b1Q9zelu6MAj; Fri,  6 Sep 2024 20:00:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 768828454A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 821578456F
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 768828454A;
-	Fri,  6 Sep 2024 20:00:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 821578456F;
+	Fri,  6 Sep 2024 20:00:49 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 8E0901BF20B
- for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 19:59:05 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id DF64A1BF20B
+ for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 19:59:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 425E140929
+ by smtp4.osuosl.org (Postfix) with ESMTP id 779274094B
  for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 19:58:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OivFDQxQSohr for <buildroot@lists.busybox.net>;
- Fri,  6 Sep 2024 19:58:55 +0000 (UTC)
+ id 3-JlCGiZxeVp for <buildroot@lists.busybox.net>;
+ Fri,  6 Sep 2024 19:58:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 837B6407D6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8EEA440731
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 837B6407D6
- for <buildroot@buildroot.org>; Fri,  6 Sep 2024 19:58:54 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8EEA440731
+ for <buildroot@buildroot.org>; Fri,  6 Sep 2024 19:58:55 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7FF2086EE5; Fri,  6 Sep 2024 19:58:54 +0000 (UTC)
+ id 8B7E686EE1; Fri,  6 Sep 2024 19:58:55 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 15 Aug 2024 22:15:02 +0200
+Date: Tue, 20 Aug 2024 23:33:12 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ff7787eadfc116f59a1f73cae8c47065810cb9d5
-X-Git-Newrev: e929d75d7eed66f4aff4b57d0192d6332fb21257
+X-Git-Oldrev: ac837c91ff979b49fe569962e1bd657d17a96e75
+X-Git-Newrev: 55908bcd47aca9193be16f3eb8cdb9a041a450ef
 X-Patchwork-Hint: ignore
-Message-Id: <20240906195854.7FF2086EE5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/rsyslog: extra plugins option
- introduced
+Message-Id: <20240906195855.8B7E686EE1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/batman-adv: update to 2024.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -61,210 +60,50 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============6980958165128133268=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============6980958165128133268==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=e929d75d7eed66f4aff4b57d0192d6332fb21257
+commit: https://git.buildroot.net/buildroot/commit/?id=55908bcd47aca9193be16f3eb8cdb9a041a450ef
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The rsyslog package enables extra plugins based on the availability of
-external dependencies. However, there are many cases where those
-plugins are not needed, even when some of those external dependencies
-are enabled. Allow disabling the build of plugins. This option is
-useful in embedded systems to achieve compact footprint.
-
-Signed-off-by: Konstantin Menyaev <KAMenyaev@salutedevices.com>
-Signed-off-by: Flávio Tapajós <flavio.tapajos@newtesc.com.br>
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/rsyslog/Config.in  | 12 ++++++++++++
- package/rsyslog/rsyslog.mk | 35 +++++++++++++++++++----------------
- 2 files changed, 31 insertions(+), 16 deletions(-)
+ package/batman-adv/batman-adv.hash | 6 +++---
+ package/batman-adv/batman-adv.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/rsyslog/Config.in b/package/rsyslog/Config.in
-index d9e8b1ab6f..3c23de8346 100644
---- a/package/rsyslog/Config.in
-+++ b/package/rsyslog/Config.in
-@@ -17,6 +17,18 @@ config BR2_PACKAGE_RSYSLOG
+diff --git a/package/batman-adv/batman-adv.hash b/package/batman-adv/batman-adv.hash
+index b95dfa34dd..b4e3e44ea6 100644
+--- a/package/batman-adv/batman-adv.hash
++++ b/package/batman-adv/batman-adv.hash
+@@ -1,7 +1,7 @@
+-# From https://downloads.open-mesh.org/batman/stable/sources/batman-adv/batman-adv-2023.1.tar.gz.sha1
+-sha1  e3d6e8d4db772156d7ad021b9a166832633a2ea5  batman-adv-2023.1.tar.gz
++# From https://downloads.open-mesh.org/batman/stable/sources/batman-adv/batman-adv-2024.2.tar.gz.sha1
++sha1  de2a55d8d15b350efa6e6d3e6d29b6e3a6f4c04f  batman-adv-2024.2.tar.gz
+ # locally computed
+-sha256  f46a7286660a5ec3506a1be7ef60b471c51ac70550597d598040479ab7b936b8  batman-adv-2022.3.tar.gz
++sha256  7692a6dee7a2f3f66732e9aec8c7164e0c1818167f3af063bff3fffbb0199643  batman-adv-2024.2.tar.gz
  
- 	  http://www.rsyslog.com
+ # Hash for license files
+ sha256  cecbf53d1148e13256ac29f8b900655b7fc8dc12d59939a95bc2323ea1747025  LICENSES/preferred/GPL-2.0
+diff --git a/package/batman-adv/batman-adv.mk b/package/batman-adv/batman-adv.mk
+index 5b50572d11..9893da7e9f 100644
+--- a/package/batman-adv/batman-adv.mk
++++ b/package/batman-adv/batman-adv.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+if BR2_PACKAGE_RSYSLOG
-+
-+config BR2_PACKAGE_RSYSLOG_EXTRA_PLUGINS
-+	bool "extra plugins"
-+	default y
-+	help
-+	  Enable rsyslog plugins that require external
-+	  dependencies. The different plugins will be automatically
-+	  enabled if their dependencies are enabled.
-+
-+endif # BR2_PACKAGE_RSYSLOG
-+
- comment "rsyslog needs a toolchain w/ threads, dynamic library"
- 	depends on BR2_USE_MMU
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-diff --git a/package/rsyslog/rsyslog.mk b/package/rsyslog/rsyslog.mk
-index fac78795c2..98e5a8f8e8 100644
---- a/package/rsyslog/rsyslog.mk
-+++ b/package/rsyslog/rsyslog.mk
-@@ -15,12 +15,15 @@ RSYSLOG_CPE_ID_VENDOR = rsyslog
- RSYSLOG_IGNORE_CVES += CVE-2015-3243
- RSYSLOG_DEPENDENCIES = zlib libestr liblogging libfastjson host-pkgconf
- RSYSLOG_CONF_ENV = ac_cv_prog_cc_c99='-std=c99'
-+
-+ifeq ($(BR2_PACKAGE_RSYSLOG_EXTRA_PLUGINS),y)
- RSYSLOG_PLUGINS = imdiag imfile impstats imptcp \
- 	mmanon mmaudit mmfields mmjsonparse mmpstrucdata mmsequence mmutf8fix \
- 	mail omprog omruleset omstdout omuxsock \
- 	pmaixforwardedfrom pmciscoios pmcisconames pmlastmsg pmsnare
-+endif
- 
--ifeq ($(BR2_PACKAGE_LIBRELP),y)
-+ifeq ($(BR2_PACKAGE_LIBRELP)$(BR2_PACKAGE_RSYSLOG_EXTRA_PLUGINS),yy)
- RSYSLOG_DEPENDENCIES += librelp
- RSYSLOG_PLUGINS += relp
- endif
-@@ -33,7 +36,7 @@ RSYSLOG_CONF_OPTS += \
- 	--disable-mmkubernetes \
- 	--disable-mmnormalize
- 
--ifeq ($(BR2_PACKAGE_LIBCURL),y)
-+ifeq ($(BR2_PACKAGE_LIBCURL)$(BR2_PACKAGE_RSYSLOG_EXTRA_PLUGINS),yy)
- RSYSLOG_DEPENDENCIES += libcurl
- RSYSLOG_CONF_OPTS += \
- 	--enable-clickhouse \
-@@ -52,35 +55,35 @@ RSYSLOG_CONF_OPTS += \
- 	--disable-omhttpfs
- endif
- 
--ifeq ($(BR2_PACKAGE_CIVETWEB_LIB),y)
-+ifeq ($(BR2_PACKAGE_CIVETWEB_LIB)$(BR2_PACKAGE_RSYSLOG_EXTRA_PLUGINS),yy)
- RSYSLOG_DEPENDENCIES += apr-util civetweb
- RSYSLOG_CONF_OPTS += --enable-imhttp
- else
- RSYSLOG_CONF_OPTS += --disable-imhttp
- endif
- 
--ifeq ($(BR2_PACKAGE_CZMQ),y)
-+ifeq ($(BR2_PACKAGE_CZMQ)$(BR2_PACKAGE_RSYSLOG_EXTRA_PLUGINS),yy)
- RSYSLOG_DEPENDENCIES += czmq
- RSYSLOG_CONF_OPTS += --enable-imczmq --enable-omczmq
- else
- RSYSLOG_CONF_OPTS += --disable-imczmq --disable-omczmq
- endif
- 
--ifeq ($(BR2_PACKAGE_GNUTLS),y)
-+ifeq ($(BR2_PACKAGE_GNUTLS)$(BR2_PACKAGE_RSYSLOG_EXTRA_PLUGINS),yy)
- RSYSLOG_DEPENDENCIES += gnutls
- RSYSLOG_CONF_OPTS += --enable-gnutls
- else
- RSYSLOG_CONF_OPTS += --disable-gnutls
- endif
- 
--ifeq ($(BR2_PACKAGE_HIREDIS),y)
-+ifeq ($(BR2_PACKAGE_HIREDIS)$(BR2_PACKAGE_RSYSLOG_EXTRA_PLUGINS),yy)
- RSYSLOG_DEPENDENCIES += hiredis
- RSYSLOG_CONF_OPTS += --enable-omhiredis
- else
- RSYSLOG_CONF_OPTS += --disable-omhiredis
- endif
- 
--ifeq ($(BR2_PACKAGE_LIBGCRYPT),y)
-+ifeq ($(BR2_PACKAGE_LIBGCRYPT)$(BR2_PACKAGE_RSYSLOG_EXTRA_PLUGINS),yy)
- RSYSLOG_DEPENDENCIES += libgcrypt
- RSYSLOG_CONF_ENV += LIBGCRYPT_CONFIG=$(STAGING_DIR)/usr/bin/libgcrypt-config
- RSYSLOG_CONF_OPTS += --enable-libgcrypt
-@@ -88,21 +91,21 @@ else
- RSYSLOG_CONF_OPTS += --disable-libgcrypt
- endif
- 
--ifeq ($(BR2_PACKAGE_LIBMAXMINDDB),y)
-+ifeq ($(BR2_PACKAGE_LIBMAXMINDDB)$(BR2_PACKAGE_RSYSLOG_EXTRA_PLUGINS),yy)
- RSYSLOG_DEPENDENCIES += libmaxminddb
- RSYSLOG_CONF_OPTS += --enable-mmdblookup
- else
- RSYSLOG_CONF_OPTS += --disable-mmdblookup
- endif
- 
--ifeq ($(BR2_PACKAGE_LIBPCAP),y)
-+ifeq ($(BR2_PACKAGE_LIBPCAP)$(BR2_PACKAGE_RSYSLOG_EXTRA_PLUGINS),yy)
- RSYSLOG_DEPENDENCIES += libpcap
- RSYSLOG_CONF_OPTS += --enable-impcap
- else
- RSYSLOG_CONF_OPTS += --disable-impcap
- endif
- 
--ifeq ($(BR2_PACKAGE_MARIADB),y)
-+ifeq ($(BR2_PACKAGE_MARIADB)$(BR2_PACKAGE_RSYSLOG_EXTRA_PLUGINS),yy)
- RSYSLOG_DEPENDENCIES += mariadb
- RSYSLOG_CONF_OPTS += --enable-mysql
- RSYSLOG_CONF_ENV += ac_cv_prog_MYSQL_CONFIG=$(STAGING_DIR)/usr/bin/mysql_config
-@@ -110,7 +113,7 @@ else
- RSYSLOG_CONF_OPTS += --disable-mysql
- endif
- 
--ifeq ($(BR2_PACKAGE_POSTGRESQL),y)
-+ifeq ($(BR2_PACKAGE_POSTGRESQL)$(BR2_PACKAGE_RSYSLOG_EXTRA_PLUGINS),yy)
- RSYSLOG_DEPENDENCIES += postgresql
- RSYSLOG_CONF_OPTS += --enable-pgsql
- RSYSLOG_CONF_ENV += ac_cv_prog_PG_CONFIG=$(STAGING_DIR)/usr/bin/pg_config
-@@ -118,28 +121,28 @@ else
- RSYSLOG_CONF_OPTS += --disable-pgsql
- endif
- 
--ifeq ($(BR2_PACKAGE_QPID_PROTON),y)
-+ifeq ($(BR2_PACKAGE_QPID_PROTON)$(BR2_PACKAGE_RSYSLOG_EXTRA_PLUGINS),yy)
- RSYSLOG_DEPENDENCIES += qpid-proton
- RSYSLOG_CONF_OPTS += --enable-omamqp1
- else
- RSYSLOG_CONF_OPTS += --disable-omamqp1
- endif
- 
--ifeq ($(BR2_PACKAGE_RABBITMQ_C),y)
-+ifeq ($(BR2_PACKAGE_RABBITMQ_C)$(BR2_PACKAGE_RSYSLOG_EXTRA_PLUGINS),yy)
- RSYSLOG_DEPENDENCIES += rabbitmq-c
- RSYSLOG_CONF_OPTS += --enable-omrabbitmq
- else
- RSYSLOG_CONF_OPTS += --disable-omrabbitmq
- endif
- 
--ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBUUID),y)
-+ifeq ($(BR2_PACKAGE_UTIL_LINUX_LIBUUID)$(BR2_PACKAGE_RSYSLOG_EXTRA_PLUGINS),yy)
- RSYSLOG_DEPENDENCIES += util-linux
- RSYSLOG_CONF_OPTS += --enable-uuid
- else
- RSYSLOG_CONF_OPTS += --disable-uuid
- endif
- 
--ifeq ($(BR2_INIT_SYSTEMD),y)
-+ifeq ($(BR2_INIT_SYSTEMD)$(BR2_PACKAGE_RSYSLOG_EXTRA_PLUGINS),yy)
- RSYSLOG_CONF_OPTS += \
- 	--enable-imjournal \
- 	--enable-omjournal \
-@@ -151,7 +154,7 @@ RSYSLOG_CONF_OPTS += \
- 	--disable-omjournal
- endif
- 
--ifeq ($(BR2_PACKAGE_LIBDBI_DRIVERS),y)
-+ifeq ($(BR2_PACKAGE_LIBDBI_DRIVERS)$(BR2_PACKAGE_RSYSLOG_EXTRA_PLUGINS),yy)
- RSYSLOG_CONF_OPTS += --enable-libdbi
- RSYSLOG_DEPENDENCIES += libdbi-drivers
- else
-
---===============6980958165128133268==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-BATMAN_ADV_VERSION = 2023.1
++BATMAN_ADV_VERSION = 2024.2
+ BATMAN_ADV_SITE = https://downloads.open-mesh.org/batman/stable/sources/batman-adv
+ BATMAN_ADV_LICENSE = GPL-2.0, MIT (batman_adv.h)
+ BATMAN_ADV_LICENSE_FILES = LICENSES/preferred/GPL-2.0 LICENSES/preferred/MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============6980958165128133268==--
