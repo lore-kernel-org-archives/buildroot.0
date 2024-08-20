@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D0E94C531DC
-	for <buildroot@archiver.kernel.org>; Tue, 20 Aug 2024 20:07:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E5060C531DC
+	for <buildroot@archiver.kernel.org>; Tue, 20 Aug 2024 20:07:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8F9FD40BED;
-	Tue, 20 Aug 2024 20:07:39 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id AACB640BDA;
+	Tue, 20 Aug 2024 20:07:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id v8SrB8ZajJ_x; Tue, 20 Aug 2024 20:07:38 +0000 (UTC)
+ id XmIU4b9HfPu9; Tue, 20 Aug 2024 20:07:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9223A40BE2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3C45540C03
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9223A40BE2;
-	Tue, 20 Aug 2024 20:07:37 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 0FE5D1BF376
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3C45540C03;
+	Tue, 20 Aug 2024 20:07:41 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 8A8441BF376
  for <buildroot@lists.busybox.net>; Tue, 20 Aug 2024 20:07:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A3ADF403A6
- for <buildroot@lists.busybox.net>; Tue, 20 Aug 2024 20:07:13 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id A974F60AB7
+ for <buildroot@lists.busybox.net>; Tue, 20 Aug 2024 20:07:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id I4z15B0PDklU for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6_Q-NM71wVXt for <buildroot@lists.busybox.net>;
  Tue, 20 Aug 2024 20:07:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5F28D4029B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 517AE60AFC
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5F28D4029B
+ by smtp3.osuosl.org (Postfix) with ESMTP id 517AE60AFC
  for <buildroot@buildroot.org>; Tue, 20 Aug 2024 20:07:12 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5BF4586194; Tue, 20 Aug 2024 20:07:12 +0000 (UTC)
+ id 402A486191; Tue, 20 Aug 2024 20:07:12 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 20 Aug 2024 22:05:15 +0200
+Date: Tue, 20 Aug 2024 21:56:15 +0200
 X-Git-Refname: refs/heads/2024.05.x
-X-Git-Oldrev: 4d68f0d040c47a98e008e28ba146c6d12000262c
-X-Git-Newrev: 38b8112733e51ec23ab33a5b2ab14ca0b780b816
+X-Git-Oldrev: 287067a8703e13eaacb97bf4e7df8f56c45108dc
+X-Git-Newrev: 4170afa998c2cc4531bba7abae39b04d5c265830
 X-Patchwork-Hint: ignore
-Message-Id: <20240820200712.5BF4586194@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.05.x] package/dhrystone: fix
- build with GCC 14.x
+Message-Id: <20240820200712.402A486191@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.05.x] package/tar: properly
+ handle autoreconf
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,207 +60,77 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============4958534351139468587=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============4958534351139468587==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=38b8112733e51ec23ab33a5b2ab14ca0b780b816
+commit: https://git.buildroot.net/buildroot/commit/?id=4170afa998c2cc4531bba7abae39b04d5c265830
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.05.x
 
-GCC14 will give errors for missing function declarations and
-missing return types :
+Commit 9a66711be1786b90f94cbb1648fa470def3486f8 ("package/tar: fix
+linking with libiconv") added two patches that patch Makefile.am
+files, but it forgot to add TAR_AUTORECONF = YES.
 
-dhry_1.c:75:1: error: return type defaults to ‘int’ [-Wimplicit-int]
-   75 | main(int argc, char *argv[])
-      | ^~~~
-dhry_1.c: In function ‘main’:
-dhry_1.c:159:5: error: implicit declaration of function ‘Proc_5’ [-Wimplicit-function-declaration]
-  159 |     Proc_5();
-      |     ^~~~~~
+However, a gotcha is that TAR_AUTORECONF = YES would apply to both the
+target tar, but also the host tar. But for host-tar, we can't accept
+to do an autoreconf, because this would cause host-tar to have a
+dependency on host-{autoconf,automake,libtool}, which in turn would
+have a dependency on host-tar.
+
+Since anyway the patches 0002/0003 that modify Makefile.am are only
+useful to fix a libiconv problem that occurs when building target tar,
+we disable autoreconf for host-tar, and we prevent automatic
+autoreconf by touching the right Makefile.in files. This mess can be
+dropped next time we update tar, as 0002/0003 will be part of the next
+tar release.
 
 Fixes:
 
-  http://autobuild.buildroot.net/results/8e65ba30efd5a6bca197f24ced2db1f8226b2c51/
+  http://autobuild.buildroot.net/results/efdf7cf9ede810ed7f766cc4138b16054bc0c18a/
 
-Signed-off-by: Steffen Persvold <spersvold@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 3847a145c23234b3bddae3a9ceb9d2d4e6a90fc5)
+(cherry picked from commit 69cbb563a124002fcb3e2725c3516b502587f9cc)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0006-Add-missing-function-declarations.patch   | 152 +++++++++++++++++++++
- 1 file changed, 152 insertions(+)
+ package/tar/tar.mk | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
-diff --git a/package/dhrystone/0006-Add-missing-function-declarations.patch b/package/dhrystone/0006-Add-missing-function-declarations.patch
-new file mode 100644
-index 0000000000..0518340e3f
---- /dev/null
-+++ b/package/dhrystone/0006-Add-missing-function-declarations.patch
-@@ -0,0 +1,152 @@
-+From fd7ce4b6a9e268e60071c94852f7f00f6e60ef11 Mon Sep 17 00:00:00 2001
-+From: Steffen Persvold <spersvold@gmail.com>
-+Date: Mon, 15 Jul 2024 11:16:36 +0200
-+Subject: [PATCH] Add missing function declarations
-+MIME-Version: 1.0
-+Content-Type: text/plain; charset=UTF-8
-+Content-Transfer-Encoding: 8bit
+diff --git a/package/tar/tar.mk b/package/tar/tar.mk
+index a7e85afb72..bf3f1b6acb 100644
+--- a/package/tar/tar.mk
++++ b/package/tar/tar.mk
+@@ -12,6 +12,9 @@ TAR_LICENSE_FILES = COPYING
+ TAR_CPE_ID_VENDOR = gnu
+ TAR_DEPENDENCIES = $(TARGET_NLS_DEPENDENCIES)
+ TAR_CONF_ENV = LIBS=$(TARGET_NLS_LIBS)
++# 0002-Fix-savannah-bug-#64441.patch
++# 0003-tests-fix-LDADD.patch
++TAR_AUTORECONF = YES
+ 
+ # busybox installs in /bin, so we need tar to install as well in /bin
+ # so that we don't end up with two different tar
+@@ -58,4 +61,19 @@ HOST_TAR_CONF_ENV = \
+ 	CC="$(HOSTCC_NOCCACHE)" \
+ 	CXX="$(HOSTCXX_NOCCACHE)"
+ 
++# Patches 0002-Fix-savannah-bug-#64441.patch and
++# 0003-tests-fix-LDADD.patch are patching Makefile.am, so they do
++# require TAR_AUTORECONF = YES above. However, for the host-tar
++# package we can't do this: we can't have host-tar depend on
++# host-{autoconf,automake,libtool} as those in turn might depend on
++# host-tar. Since the patches 0002 and 0003 are only related to
++# linking against libiconv, which is only an issue for the target tar,
++# we do not autoreconf, and touch the corresponding Makefile.in to
++# prevent them from being re-generated.
++HOST_TAR_AUTORECONF = NO
++define HOST_TAR_NO_AUTORECONF
++	touch $(@D)/src/Makefile.in $(@D)/tests/Makefile.in
++endef
++HOST_TAR_POST_PATCH_HOOKS += HOST_TAR_NO_AUTORECONF
 +
-+Fixes:
-+
-+GCC14 will give errors for missing function declarations and
-+missing return types :
-+
-+dhry_1.c:75:1: error: return type defaults to ‘int’ [-Wimplicit-int]
-+   75 | main(int argc, char *argv[])
-+      | ^~~~
-+dhry_1.c: In function ‘main’:
-+dhry_1.c:159:5: error: implicit declaration of function ‘Proc_5’ [-Wimplicit-function-declaration]
-+  159 |     Proc_5();
-+      |     ^~~~~~
-+
-+Upstream: dead
-+Signed-off-by: Steffen Persvold <spersvold@gmail.com>
-+---
-+ dhry_1.c | 26 +++++++++++++++++---------
-+ dhry_2.c |  8 ++++----
-+ 2 files changed, 21 insertions(+), 13 deletions(-)
-+
-+diff --git a/dhry_1.c b/dhry_1.c
-+index 3ed1716..cad5840 100644
-+--- a/dhry_1.c
-++++ b/dhry_1.c
-+@@ -32,6 +32,7 @@ int             Arr_2_Glob [50] [50];
-+ extern char     *malloc ();
-+ #endif
-+ Enumeration     Func_1 ();
-++Boolean         Func_2 ();
-+   /* forward declaration necessary since Enumeration may not simply be int */
-+ 
-+ #ifndef REG
-+@@ -71,8 +72,17 @@ float           Microseconds,
-+ 
-+ /* end of variables for time measurement */
-+ 
-+-
-+-main(int argc, char *argv[])
-++/* forward declarations */
-++void Proc_1 ();
-++void Proc_2 ();
-++void Proc_3 ();
-++void Proc_4 ();
-++void Proc_5 ();
-++void Proc_6 ();
-++void Proc_7 ();
-++void Proc_8 ();
-++
-++int main(int argc, char *argv[])
-+ /*****/
-+ 
-+   /* main program, corresponds to procedures        */
-+@@ -295,7 +305,7 @@ main(int argc, char *argv[])
-+ }
-+ 
-+ 
-+-Proc_1 (Ptr_Val_Par)
-++void Proc_1 (Ptr_Val_Par)
-+ /******************/
-+ 
-+ REG Rec_Pointer Ptr_Val_Par;
-+@@ -329,7 +339,7 @@ REG Rec_Pointer Ptr_Val_Par;
-+ } /* Proc_1 */
-+ 
-+ 
-+-Proc_2 (Int_Par_Ref)
-++void Proc_2 (Int_Par_Ref)
-+ /******************/
-+     /* executed once */
-+     /* *Int_Par_Ref == 1, becomes 4 */
-+@@ -352,7 +362,7 @@ One_Fifty   *Int_Par_Ref;
-+ } /* Proc_2 */
-+ 
-+ 
-+-Proc_3 (Ptr_Ref_Par)
-++void Proc_3 (Ptr_Ref_Par)
-+ /******************/
-+     /* executed once */
-+     /* Ptr_Ref_Par becomes Ptr_Glob */
-+@@ -367,7 +377,7 @@ Rec_Pointer *Ptr_Ref_Par;
-+ } /* Proc_3 */
-+ 
-+ 
-+-Proc_4 () /* without parameters */
-++void Proc_4 () /* without parameters */
-+ /*******/
-+     /* executed once */
-+ {
-+@@ -379,7 +389,7 @@ Proc_4 () /* without parameters */
-+ } /* Proc_4 */
-+ 
-+ 
-+-Proc_5 () /* without parameters */
-++void Proc_5 () /* without parameters */
-+ /*******/
-+     /* executed once */
-+ {
-+@@ -399,5 +409,3 @@ register int    l;
-+         while (l--) *d++ = *s++;
-+ }
-+ #endif
-+-
-+-
-+diff --git a/dhry_2.c b/dhry_2.c
-+index 63a3d3e..25051e7 100644
-+--- a/dhry_2.c
-++++ b/dhry_2.c
-+@@ -26,8 +26,9 @@
-+ extern  int     Int_Glob;
-+ extern  char    Ch_1_Glob;
-+ 
-++Boolean Func_3 ();
-+ 
-+-Proc_6 (Enum_Val_Par, Enum_Ref_Par)
-++void Proc_6 (Enum_Val_Par, Enum_Ref_Par)
-+ /*********************************/
-+     /* executed once */
-+     /* Enum_Val_Par == Ident_3, Enum_Ref_Par becomes Ident_2 */
-+@@ -61,7 +62,7 @@ Enumeration *Enum_Ref_Par;
-+ } /* Proc_6 */
-+ 
-+ 
-+-Proc_7 (Int_1_Par_Val, Int_2_Par_Val, Int_Par_Ref)
-++void Proc_7 (Int_1_Par_Val, Int_2_Par_Val, Int_Par_Ref)
-+ /**********************************************/
-+     /* executed three times                                      */ 
-+     /* first call:      Int_1_Par_Val == 2, Int_2_Par_Val == 3,  */
-+@@ -81,7 +82,7 @@ One_Fifty      *Int_Par_Ref;
-+ } /* Proc_7 */
-+ 
-+ 
-+-Proc_8 (Arr_1_Par_Ref, Arr_2_Par_Ref, Int_1_Par_Val, Int_2_Par_Val)
-++void Proc_8 (Arr_1_Par_Ref, Arr_2_Par_Ref, Int_1_Par_Val, Int_2_Par_Val)
-+ /*********************************************************************/
-+     /* executed once      */
-+     /* Int_Par_Val_1 == 3 */
-+@@ -189,4 +190,3 @@ Enumeration Enum_Par_Val;
-+   else /* not executed */
-+     return (false);
-+ } /* Func_3 */
-+-
-+-- 
-+2.45.2
-+
-
---===============4958534351139468587==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+ $(eval $(host-autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============4958534351139468587==--
