@@ -1,68 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93D35C3DA4A
-	for <buildroot@archiver.kernel.org>; Tue, 20 Aug 2024 07:47:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B92FCC3DA4A
+	for <buildroot@archiver.kernel.org>; Tue, 20 Aug 2024 08:58:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 57C8480DCE;
-	Tue, 20 Aug 2024 07:47:35 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vWT1BXIfCvK1; Tue, 20 Aug 2024 07:47:34 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3F1FC810E2
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3F1FC810E2;
-	Tue, 20 Aug 2024 07:47:34 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 967951BF41C
- for <buildroot@lists.busybox.net>; Tue, 20 Aug 2024 07:47:33 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 916A2605E6
- for <buildroot@lists.busybox.net>; Tue, 20 Aug 2024 07:47:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 50C7B60590;
+	Tue, 20 Aug 2024 08:58:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ROsjdpEr7i1K for <buildroot@lists.busybox.net>;
- Tue, 20 Aug 2024 07:47:32 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=89.238.66.15;
- helo=helium.openadk.org; envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 614DF60595
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 614DF60595
-Received: from helium.openadk.org (helium.openadk.org [89.238.66.15])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 614DF60595
- for <buildroot@buildroot.org>; Tue, 20 Aug 2024 07:47:31 +0000 (UTC)
-Received: by helium.openadk.org (Postfix, from userid 1000)
- id 736453536430; Tue, 20 Aug 2024 09:47:29 +0200 (CEST)
-Date: Tue, 20 Aug 2024 09:47:29 +0200
-From: Waldemar Brodkorb <wbx@openadk.org>
-To: buildroot@buildroot.org
-Message-ID: <ZsRKETwc6ShZJ4yX@waldemar-brodkorb.de>
+ id KFMAvS4QG_5c; Tue, 20 Aug 2024 08:58:41 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 63EBA60595
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 63EBA60595;
+	Tue, 20 Aug 2024 08:58:41 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 491741BF341
+ for <buildroot@lists.busybox.net>; Tue, 20 Aug 2024 08:58:39 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 34DEB810FB
+ for <buildroot@lists.busybox.net>; Tue, 20 Aug 2024 08:58:39 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UOa_aIEjh9Qb for <buildroot@lists.busybox.net>;
+ Tue, 20 Aug 2024 08:58:38 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::224;
+ helo=relay4-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org EE17B810D7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EE17B810D7
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::224])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id EE17B810D7
+ for <buildroot@buildroot.org>; Tue, 20 Aug 2024 08:58:37 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 2766FE0002;
+ Tue, 20 Aug 2024 08:58:35 +0000 (UTC)
+Date: Tue, 20 Aug 2024 10:58:34 +0200
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Message-ID: <20240820105834.01fe6286@windsurf>
+In-Reply-To: <ZsO1UYTTOIY7UuJn@landeda>
+References: <ZsOw2IzdkaSTp+Ot@waldemar-brodkorb.de> <ZsO1UYTTOIY7UuJn@landeda>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Disposition: inline
-X-Operating-System: Linux 5.10.0-31-amd64 x86_64
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=openadk.org; s=2022; 
- t=1724140049; bh=EeR6nHnszJ8vm4GBcbpx+0Eo0nawu5zgzsltZnUykqY=;
- h=Date:From:To:Subject:From;
- b=rYx/j845bogsIm6rw14hS7bWFILteEL5cbfwqHUFhenVyppPuQ+ToLC70w83YgSJC
- 9MRqbVt7pQ6viraaVrtJVmKQWg5no+f+BpzDkMFExYk6VYIHnbmYwL/vDEqdL6bRDe
- JQgNDILNa5I0RBNW+y3HjsWga7LUugFcCoxqa4/SkumGrNWKSBLwEo0tiTMNeHO/j7
- ujqTex22a+wKIeXUv1ap1DocCd1lfjeOufQzj7X8SaIujQCgl4CBs2AOBm89j8URkm
- BQAdSaoWslYAk8hsn5ZdBp86WSoyzLesbwYUNUoe2D0ymJTmqINYjNSlaxU+bkxpe5
- fTsrcFV4CpM7w==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=openadk.org
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1724144315;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=sjhRkTXNBS8mMSNAfEGHD3a9TurbJc8/4nkKLT9ljzQ=;
+ b=M9psy7Gus1vCovW5r6A/RMp1K3U9gkqcJVfpcEB+SYX2NjR7/EJSg4c7PQ9wcamll0ZmtX
+ leSm5p45cEompNnMxnGkNPm4WPBzOLgA+1eZpN4Q2mBRoHM5SDYzJBkofOcfozwgHFjGmP
+ BOgpz4eXZZEf8s2E9sTBpcn+dytNMrJoVpfnJ9t8EVzs8dWBTL/LUNOMnH77CNGxEHNYia
+ kDTadjNWE2mpW/FCgFDWdVolQYhDszp5fzMLwddNVP5YvpYA7MdOzhlc04Vb6Sco9HYnwp
+ DkxSo8ccPQ+FEZvFAkNSQoeLKN1WBs1lp0zSLi7epghGA0J8HH7PK8y3KTaviw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=openadk.org header.i=@openadk.org header.a=rsa-sha256
- header.s=2022 header.b=rYx/j845
-Subject: [Buildroot] [PATCH next] package/binutils: update to 2.43.1
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=M9psy7Gu
+Subject: Re: [Buildroot] [PATCH] package/botan: avoid compile error with gcc
+ 10.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,70 +81,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-See here the release announcement for changes:
-https://sourceware.org/pipermail/binutils/2024-August/136396.html
+Hello Waldemar, Hello Yann,
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
----
- package/binutils/{2.43 => 2.43.1}/0001-sh-conf.patch          | 0
- .../{2.43 => 2.43.1}/0002-poison-system-directories.patch     | 0
- package/binutils/Config.in.host                               | 4 ++--
- package/binutils/binutils.hash                                | 2 +-
- 4 files changed, 3 insertions(+), 3 deletions(-)
- rename package/binutils/{2.43 => 2.43.1}/0001-sh-conf.patch (100%)
- rename package/binutils/{2.43 => 2.43.1}/0002-poison-system-directories.patch (100%)
+On Mon, 19 Aug 2024 23:12:49 +0200
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-diff --git a/package/binutils/2.43/0001-sh-conf.patch b/package/binutils/2.43.1/0001-sh-conf.patch
-similarity index 100%
-rename from package/binutils/2.43/0001-sh-conf.patch
-rename to package/binutils/2.43.1/0001-sh-conf.patch
-diff --git a/package/binutils/2.43/0002-poison-system-directories.patch b/package/binutils/2.43.1/0002-poison-system-directories.patch
-similarity index 100%
-rename from package/binutils/2.43/0002-poison-system-directories.patch
-rename to package/binutils/2.43.1/0002-poison-system-directories.patch
-diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
-index 36fd2bd377..16a57a5cb4 100644
---- a/package/binutils/Config.in.host
-+++ b/package/binutils/Config.in.host
-@@ -23,7 +23,7 @@ config BR2_BINUTILS_VERSION_2_42_X
- 	bool "binutils 2.42"
- 
- config BR2_BINUTILS_VERSION_2_43_X
--	bool "binutils 2.43"
-+	bool "binutils 2.43.1"
- 
- endchoice
- 
-@@ -32,7 +32,7 @@ config BR2_BINUTILS_VERSION
- 	default "arc-2023.09-release"	if BR2_BINUTILS_VERSION_ARC
- 	default "2.41"		if BR2_BINUTILS_VERSION_2_41_X
- 	default "2.42"		if BR2_BINUTILS_VERSION_2_42_X
--	default "2.43"		if BR2_BINUTILS_VERSION_2_43_X
-+	default "2.43.1"	if BR2_BINUTILS_VERSION_2_43_X
- 
- config BR2_BINUTILS_GPROFNG
- 	bool "gprofng support"
-diff --git a/package/binutils/binutils.hash b/package/binutils/binutils.hash
-index 74765a4fbf..084793fc9f 100644
---- a/package/binutils/binutils.hash
-+++ b/package/binutils/binutils.hash
-@@ -1,7 +1,7 @@
- # From https://gcc.gnu.org/pub/binutils/releases/sha512.sum
- sha512  5df45d0bd6ddabdce4f35878c041e46a92deef01e7dea5facc97fd65cc06b59abc6fba0eb454b68e571c7e14038dc823fe7f2263843e6e627b7444eaf0fe9374  binutils-2.41.tar.xz
- sha512  155f3ba14cd220102f4f29a4f1e5cfee3c48aa03b74603460d05afb73c70d6657a9d87eee6eb88bf13203fe6f31177a5c9addc04384e956e7da8069c8ecd20a6  binutils-2.42.tar.xz
--sha512  93e063163e54d6a6ee2bd48dc754270bf757a3635b49a702ed6b310e929e94063958512d191e66beaf44275f7ea60865dbde138b624626739679fcc306b133bb  binutils-2.43.tar.xz
-+sha512  20977ad17729141a2c26d358628f44a0944b84dcfefdec2ba029c2d02f40dfc41cc91c0631044560d2bd6f9a51e1f15846b4b311befbe14f1239f14ff7d57824  binutils-2.43.1.tar.xz
- 
- # Locally calculated (fetched from Github)
- sha512  3518b47d5c11d1fb478ee152bde1719363f9391db73f3b9f5491217c17742bef8ebca6a51a40302dfaa9476c5a32a8b8f70a4bf64289422dea5f750ae53ab88d  binutils-gdb-arc-2023.09-release.tar.gz
+> > Compile successfully tested with internal Buildroot toolchain for
+> > sparc with gcc 12.x as gcc 11.x is not available anymore.
+> > 
+> > The autobuild failure will be avoided now and fixed with newer external
+> > bootlin toolchains.
+> > 
+> > Fixes:
+> >  - http://autobuild.buildroot.org/results/ab8/ab83b920156f5a1e51ef960e4007769b5c27d0a1
+> > 
+> > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>  
+> 
+> Applied to master, thanks.
+
+If I may chime in, one critical thing that is missing from this commit
+message is since when this problem is occurring. Is it since the update
+of the package in 3ba9ac62052c99d7557adf2bbad1bab0c5577a81 ? Or since
+2fcc74594c457bed7f0f2a4826ada265861be6bf ?
+
+Indeed 11a577c19e23d0b774f357b2d62ac3c41b7f201f already added a
+dependency on gcc 10, so I guess it's something after that?
+
+Again, this is important to understand if the patch needs to be
+backported to LTS or not, as usual.
+
+Thanks!
+
+Thomas
 -- 
-2.39.2
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
