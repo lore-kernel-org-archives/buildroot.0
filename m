@@ -4,72 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9014AC3DA4A
-	for <buildroot@archiver.kernel.org>; Tue, 20 Aug 2024 21:41:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AFEDEC531DC
+	for <buildroot@archiver.kernel.org>; Tue, 20 Aug 2024 21:41:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 538FA40B8C;
-	Tue, 20 Aug 2024 21:41:22 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6B8F740B38;
+	Tue, 20 Aug 2024 21:41:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XQ9pYm59yqGd; Tue, 20 Aug 2024 21:41:21 +0000 (UTC)
+ id OmWEwsIOllZB; Tue, 20 Aug 2024 21:41:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 24ECC40B9D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 07E3740B9A
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 24ECC40B9D;
-	Tue, 20 Aug 2024 21:41:21 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 07E3740B9A;
+	Tue, 20 Aug 2024 21:41:50 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C36BC1BF3B8
- for <buildroot@lists.busybox.net>; Tue, 20 Aug 2024 21:41:19 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 803831BF3B8
+ for <buildroot@lists.busybox.net>; Tue, 20 Aug 2024 21:41:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BD6DF6071E
- for <buildroot@lists.busybox.net>; Tue, 20 Aug 2024 21:41:19 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6DAE860725
+ for <buildroot@lists.busybox.net>; Tue, 20 Aug 2024 21:41:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zq5NyNxfA3aM for <buildroot@lists.busybox.net>;
- Tue, 20 Aug 2024 21:41:19 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
- helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
+ id OGIcOlOsIbOI for <buildroot@lists.busybox.net>;
+ Tue, 20 Aug 2024 21:41:47 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
+ helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A3D22606FF
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A3D22606FF
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A3D22606FF
- for <buildroot@buildroot.org>; Tue, 20 Aug 2024 21:41:18 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 6394113F86E;
- Tue, 20 Aug 2024 23:41:12 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Tue, 20 Aug 2024 23:41:12 +0200
-Date: Tue, 20 Aug 2024 23:41:12 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Message-ID: <ZsUNeFXH9a5adqFJ@landeda>
-References: <20240820172343.2124306-1-dario.binacchi@amarulasolutions.com>
- <ZsUMb1U7cYJvrODe@landeda>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 5E422606FF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5E422606FF
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 5E422606FF
+ for <buildroot@buildroot.org>; Tue, 20 Aug 2024 21:41:47 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 872E5FF802;
+ Tue, 20 Aug 2024 21:41:44 +0000 (UTC)
+Date: Tue, 20 Aug 2024 23:41:43 +0200
+To: =?UTF-8?B?RmzDoXZpbyBUYXBhasOzcw==?= <flavio.tapajos@newtesc.com.br>
+Message-ID: <20240820234143.0d665272@windsurf>
+In-Reply-To: <20240820165115.53193-1-flavio.tapajos@newtesc.com.br>
+References: <20240820165115.53193-1-flavio.tapajos@newtesc.com.br>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <ZsUMb1U7cYJvrODe@landeda>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1724190076;
- bh=POSaUT9OiZ98BzRTDRHYZzuncEv+dg/N3cQ7DP9ZZNk=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=d+llRwnHIfjRXN+l824ZFShS2XDhlWxkgWlra7//lMamLlnMzwIySyJs87ibDS4We
- 1SmaBLgiCIRviLEp5223ZXMmwhkMxMYyGDA1R8xmfemCwezR+SOF+6EH72sEXT6l/s
- rjGwdd8yvTZ80rehFC4Z+cBR3dlU1GttFRoUHNx2sURcBnZRyNPbJ4Jqfoz4dAU2DU
- +5q59CgbDNqWzZ4jCz0iP6sx/5JLAiPqvWU3bChBmw5Iv7iytOMjfIMVa2R/svbLgr
- YYAWDqoTzQyEGoHxtM5ZVmb3soveA6e35+15tw3l+fdMtd0kMIU7tEN1uX6YAG6n1h
- DojZGUvA9Sgbg==
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1724190105;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=N7l3/Q8oeTQerFj8KvIc/eevoqdyQRyfLod2VIVhF4U=;
+ b=UkI/+HOWctVJ/hvpBrpJbu3qvbiyq949Q7EecXR95rzUfgyW0Eq9+7/RfBr0DhPriu8FXm
+ U0AX5WzQ6KBHNzT5bFuYuShGQ6Th9YpjBTeqas2SsG5RnnaytqxKmQS20FYcE1gJssmtDE
+ GICyu+MnepzdZg7wLm1Y/kNTwYFAnVXA0G74UPILodbfWpu/YPs0s7ZMf/TQiRJ5QZo1R8
+ bidClHkvpOaIBkQLCzs4OUCDjQwhGP/A+M019AVNQtWhPx9WGwVAQFLTdUKO4y466ENeUA
+ XotH0HaxO9Sry8qMRNODLvQncuUSuoo0Tbq16u4SWKpk0wwUOy1URpnjsOv6Gw==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=d+llRwnH
-Subject: Re: [Buildroot] [PATCH v2] package/ntpsec: fix host building
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=UkI/+HOW
+Subject: Re: [Buildroot] [PATCH 1/1] package/rsyslog: bump version to
+ 8.2408.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,39 +81,29 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: linux-amarula@amarulasolutions.com,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Dario, All,
-
-On 2024-08-20 23:36 +0200, Yann E. MORIN spake thusly:
-> On 2024-08-20 19:23 +0200, Dario Binacchi spake thusly:
-> > The following build failure on xtensa:
-[--SNIP--]
-> > Fixes:
-> >  - http://autobuild.buildroot.org/results/9321a637f2c340ce8dcb24249676bb6c44d0dfc6
-> I've added a little blurb that explains how long it has been happening,
-> so what branches it should be backported to.
-> > Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-> Applied to master, thanks.
-
-Thomas was slightly faster than me, so he pushed to master.
-
-Regards,
-Yann E. MORIN.
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+T24gVHVlLCAyMCBBdWcgMjAyNCAxMzo1MToxNSAtMDMwMApGbMOhdmlvIFRhcGFqw7NzIDxmbGF2
+aW8udGFwYWpvc0BuZXd0ZXNjLmNvbS5icj4gd3JvdGU6Cgo+IFNpZ25lZC1vZmYtYnk6IEZsw6F2
+aW8gVGFwYWrDs3MgPGZsYXZpby50YXBham9zQG5ld3Rlc2MuY29tLmJyPgo+IC0tLQo+ICBwYWNr
+YWdlL3JzeXNsb2cvcnN5c2xvZy5oYXNoIHwgMiArLQo+ICBwYWNrYWdlL3JzeXNsb2cvcnN5c2xv
+Zy5tayAgIHwgMiArLQo+ICAyIGZpbGVzIGNoYW5nZWQsIDIgaW5zZXJ0aW9ucygrKSwgMiBkZWxl
+dGlvbnMoLSkKCllvdXIgcGF0Y2ggd2FzIG5vdCBhcHBseWluZyBjbGVhbmx5IHRvIHRoZSBuZXh0
+IGJyYW5jaCwgYmVjYXVzZSB0aGVyZQpoYXMgYWxyZWFkeSBiZWVuIGFub3RoZXIgYnVtcCBvZiBy
+c3lzbG9nLCBzbyBJIGZpeGVkIHRoYXQgdXAgd2hlbgphcHBseWluZy4gQWZ0ZXIgLXJjMSBpcyBy
+ZWxlYXNlZCwgdmVyc2lvbiBidW1wcyBhcmUgYXBwbGllZCBpbiB0aGUKIm5leHQiIGJyYW5jaCwg
+c28gdGhhdCB3ZSBjYW4gc3RvcCB1cGRhdGluZyB0aGluZ3MgaW4gIm1hc3RlciIgYW5kCnN0YWJp
+bGl6ZSBmb3IgdGhlIHJlbGVhc2UsIHNvIGR1cmluZyB0aGF0IHBlcmlvZCwgeW91IHNob3VsZCBp
+ZGVhbGx5CmJhc2VkIHRoZSBwYXRjaGVzIHRoYXQgdGFyZ2V0IHRoZSAibmV4dCIgYnJhbmNoLi4u
+IG9uIHRoZSBuZXh0IGJyYW5jaCA6LSkKClRoYW5rcyBhIGxvdCEKClRob21hcwotLSAKVGhvbWFz
+IFBldGF6em9uaSwgQ1RPLCBCb290bGluCkVtYmVkZGVkIExpbnV4IGFuZCBLZXJuZWwgZW5naW5l
+ZXJpbmcKaHR0cHM6Ly9ib290bGluLmNvbQpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJv
+b3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxk
+cm9vdAo=
