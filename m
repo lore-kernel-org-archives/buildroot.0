@@ -4,67 +4,70 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BF267C5321D
-	for <buildroot@archiver.kernel.org>; Wed, 21 Aug 2024 13:15:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9AA8AC52D7C
+	for <buildroot@archiver.kernel.org>; Wed, 21 Aug 2024 13:15:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 721A24015F;
-	Wed, 21 Aug 2024 13:15:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CFD8A405BE;
+	Wed, 21 Aug 2024 13:15:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mOVEAEnVBfWP; Wed, 21 Aug 2024 13:15:34 +0000 (UTC)
+ id FaxIIMB9QC5q; Wed, 21 Aug 2024 13:15:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 37F794016A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D90F9405D9
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 37F794016A;
-	Wed, 21 Aug 2024 13:15:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D90F9405D9;
+	Wed, 21 Aug 2024 13:15:37 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1B9101BF3C0
- for <buildroot@lists.busybox.net>; Wed, 21 Aug 2024 13:15:32 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D71D21BF3C0
+ for <buildroot@lists.busybox.net>; Wed, 21 Aug 2024 13:15:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2AE044015F
+ by smtp4.osuosl.org (Postfix) with ESMTP id C6CA94016A
  for <buildroot@lists.busybox.net>; Wed, 21 Aug 2024 13:15:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id F-zKn5XTAoca for <buildroot@lists.busybox.net>;
+ id tF4z6bSr6gbA for <buildroot@lists.busybox.net>;
  Wed, 21 Aug 2024 13:15:30 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::229;
  helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org EDA044016A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EDA044016A
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6707340216
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6707340216
 Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp4.osuosl.org (Postfix) with ESMTPS id EDA044016A
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 6707340216
  for <buildroot@buildroot.org>; Wed, 21 Aug 2024 13:15:29 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPA id 1109FFF805;
- Wed, 21 Aug 2024 13:15:26 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPA id BAD08FF809;
+ Wed, 21 Aug 2024 13:15:27 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 21 Aug 2024 15:15:23 +0200
-Message-ID: <20240821131525.2038862-1-thomas.petazzoni@bootlin.com>
+Date: Wed, 21 Aug 2024 15:15:24 +0200
+Message-ID: <20240821131525.2038862-2-thomas.petazzoni@bootlin.com>
 X-Mailer: git-send-email 2.46.0
+In-Reply-To: <20240821131525.2038862-1-thomas.petazzoni@bootlin.com>
+References: <20240821131525.2038862-1-thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=bootlin.com; s=gm1; t=1724246127;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding;
- bh=JTs0Wt1GO9CL34YHJmEs3WUy/PgqcuC5GKyTpZQhQ5o=;
- b=Ze5g4W+yqec+brjQkQY9238m2zprSM+NbIzlw7R6nvcEtEU5OBsh9ZhHowhfmtPW/AhXlF
- 6lCSDFQXoCugUBLxVntcZyi3T6zxPNp6R0JlIodiGYwH5LZz9Pu+GhqgQWIhPp6KRNSsX4
- 62BneJLYn7PBtpGUFke8cZ+4TF/BhG/5xNgQgntQES1Onm1awAHBBhgOuZ+vMS8lswb4SA
- yMxMjn3Iu0BJDUMPPlRDu0ej4RVx6ipOrUQG06Cph+ODS9T4hNoMXMX0TZ9dzpwsAEHHib
- uDUd3mQzFV6NASLVdv41wg5Fcp7wvnF5vjJ14Cka0cpz8YI3YY/hkTCRLrSqPw==
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=dAOZR789RhqBXnaDEaj9WFgtBMIHBvItbilzS5nDb68=;
+ b=JfLbcvh913k8BagnrP26VhODq9mVdK4MeEQUUBA1TFOKANssuHEtUWV5CNsnnK7dFhcIEe
+ /9vmbuFYqBvBDpnmqhxaErzmyNZYDSwISTFJyyuWej5N0wuzhJ2vPFE/LwDEFG72aR2p/N
+ 0Z9GXKq8LTI2R9e06V+Ixny2C4pz3JkQ8KzYNUmSLKrsMRn4AKu8q0FnEmcBu+719TEhYB
+ uQsz1WYbJzBMPJYVQSXW8k71n/uBNxPxg80TohKTzwn0JzMkDTM7Sw3mz31rQj7iqF8qFx
+ dx7CGt1P3cu2L6qWPjwzTixmmjyPvl1gSVwjdPj9h77IwpGztutTaF+hh3fs3w==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Ze5g4W+y
-Subject: [Buildroot] [PATCH 1/2] boot/grub2: ignore CVE-2024-1048
+ header.s=gm1 header.b=JfLbcvh9
+Subject: [Buildroot] [PATCH 2/2] boot/grub2: ignore CVE-2023-4001
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,14 +87,13 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-As explained in:
+This vulnerability is irrelevant to Buildroot, as it affects only some
+downstream changes from Redhat.
 
-  https://security-tracker.debian.org/tracker/CVE-2024-1048
-  https://www.openwall.com/lists/oss-security/2024/02/06/3
+See:
 
-CVE-2024-1048 is related to a tool called grub-set-bootflag which only
-exists in the Redhat fork of Grub, and which we don't use in
-Buildroot, so this CVE should be ignored.
+  https://security-tracker.debian.org/tracker/CVE-2023-4001
+  https://www.openwall.com/lists/oss-security/2024/01/15/3
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
@@ -99,19 +101,19 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
  1 file changed, 3 insertions(+)
 
 diff --git a/boot/grub2/grub2.mk b/boot/grub2/grub2.mk
-index 6d0d71c47d..19544b6e12 100644
+index 19544b6e12..1263c63cfd 100644
 --- a/boot/grub2/grub2.mk
 +++ b/boot/grub2/grub2.mk
 @@ -25,6 +25,9 @@ GRUB2_IGNORE_CVES += CVE-2019-14865
  GRUB2_IGNORE_CVES += CVE-2020-15705
  # vulnerability is specific to the SUSE distribution
  GRUB2_IGNORE_CVES += CVE-2021-46705
-+# vulnerability is specific to the Redhat distribution, affects the
-+# grub2-set-bootflag tool, which doesn't exist upstream
-+GRUB2_IGNORE_CVES += CVE-2024-1048
- 
- ifeq ($(BR2_TARGET_GRUB2_INSTALL_TOOLS),y)
- GRUB2_INSTALL_TARGET = YES
++# vulnerability is specific to the Redhat distribution, affects a
++# downstream change from Redhat related to password authentication
++GRUB2_IGNORE_CVES += CVE-2023-4001
+ # vulnerability is specific to the Redhat distribution, affects the
+ # grub2-set-bootflag tool, which doesn't exist upstream
+ GRUB2_IGNORE_CVES += CVE-2024-1048
 -- 
 2.46.0
 
