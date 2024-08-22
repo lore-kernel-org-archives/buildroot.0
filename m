@@ -4,72 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB257C52D7C
-	for <buildroot@archiver.kernel.org>; Thu, 22 Aug 2024 18:08:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CE538C3DA4A
+	for <buildroot@archiver.kernel.org>; Thu, 22 Aug 2024 18:15:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 02CC18183D;
-	Thu, 22 Aug 2024 18:08:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 924F580D9C;
+	Thu, 22 Aug 2024 18:15:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id C8fIIPE1En4e; Thu, 22 Aug 2024 18:08:54 +0000 (UTC)
+ id jL6B_CqmI-RQ; Thu, 22 Aug 2024 18:15:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D0A6D817AD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A0BA380E61
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D0A6D817AD;
-	Thu, 22 Aug 2024 18:08:53 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 808351BF381
- for <buildroot@lists.busybox.net>; Thu, 22 Aug 2024 18:08:52 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A0BA380E61;
+	Thu, 22 Aug 2024 18:15:52 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id ECE0A1BF381
+ for <buildroot@lists.busybox.net>; Thu, 22 Aug 2024 18:15:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6C2CF817AD
- for <buildroot@lists.busybox.net>; Thu, 22 Aug 2024 18:08:52 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D970740C4F
+ for <buildroot@lists.busybox.net>; Thu, 22 Aug 2024 18:15:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id a1jx42R3Am6k for <buildroot@lists.busybox.net>;
- Thu, 22 Aug 2024 18:08:51 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id gs1fYMU8vl2E for <buildroot@lists.busybox.net>;
+ Thu, 22 Aug 2024 18:15:50 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 3406C817A7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3406C817A7
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org C494440BEB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C494440BEB
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3406C817A7
- for <buildroot@buildroot.org>; Thu, 22 Aug 2024 18:08:50 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C494440BEB
+ for <buildroot@buildroot.org>; Thu, 22 Aug 2024 18:15:49 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a0a54.dip0.t-ipconnect.de [91.58.10.84])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id EC2A2A4C20FB
- for <buildroot@buildroot.org>; Thu, 22 Aug 2024 20:08:47 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:46988)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 5DAA2A4C2545;
+ Thu, 22 Aug 2024 20:15:47 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:44610)
  by fli4l.lan.fli4l with esmtp (Exim 4.98)
- (envelope-from <bernd@kuhls.net>) id 1shCEp-000000004BR-18oU
- for buildroot@buildroot.org; Thu, 22 Aug 2024 18:08:47 +0000
+ (envelope-from <bernd@kuhls.net>) id 1shCLa-000000005D0-2dXp;
+ Thu, 22 Aug 2024 18:15:47 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Thu, 22 Aug 2024 20:08:47 +0200
-Message-Id: <20240822180847.62512-1-bernd@kuhls.net>
+Date: Thu, 22 Aug 2024 20:15:41 +0200
+Message-Id: <20240822181546.64900-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-Spamd-Bar: +
+X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202406071026; t=1724350127;
- bh=w3Qo0nH6qJorqja6oh/MI+ktmSlCd+KchJmEIycUg4w=;
- h=From:To:Subject:Date:From;
- b=Z6tdMk2t1g7U35MLBJZTAsQfiHn0sVNb71opeL6cLOzOndFzeH0jccJ5YU9Irr9K3
- FHi0rxqiFwbcmx9mzs5u3VWSDLi/uAK+XJO6Zrs751E3SC0UQc2YsuZEjC9M2+3xPc
- Yl/bOG8BxST964PhwNqdv1ipHQjUt/gVDGEUwcyTRvr+J983wKeewPtPHQ9DxSEY9Y
- PjZIsdceP/3jVwp6n7SMhH3M/OLnio7+ELmRlKswBV581tCCdVKsDFpj66VASpwBIJ
- CEWi+B1Xaog+S6QIvgoCmjJDrnI5khV15Jf5bN+C7PQtKRdDTwTRZE7Rjs9hbS+xE1
- 1qbFEk5dWIfMA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ s=kas202406071026; t=1724350547;
+ bh=IY/YRclNP50vHNz+vK9w45X0FqrkvabGB59XdCVasrs=;
+ h=From:To:Cc:Subject:Date:From;
+ b=XxgfqYCJJX+KcVauuuIoEHtaCBIEvwIVhsDKleF1J12tIsz4a34TK0H9zyMIUg4gt
+ qiPoFIlQkiES+VmQYV2UPhXWgFmkhnTaAnFg0hI31d+blQwtPkMY6I1M+zX2pgTpdg
+ ebuXXMEW4jScfewCusXjoIajejPztpNPpwn65BnlvgZJtFisOtz8vd8BIjYCkCprDG
+ V43LGJOuPC+l2TIWDvIrLLSVOoE+B9crFEGaCBlOZtqGc5iFbkmRGJhzV2UFwO1S8G
+ aXGT5zAE1tGbGQ49pDNxwQs7zNIWNlvAhT2OVpWYmze0w50YyA40EZTS+jzKiw/yp4
+ rkunKpsWwM1gQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202406071026 header.b=Z6tdMk2t
-Subject: [Buildroot] [PATCH 1/1] {linux, linux-headers}: bump 4.19.x / 5.{4,
- 10, 15}.x / 6.{1, 6, 10}.x series
+ header.s=kas202406071026 header.b=XxgfqYCJ
+Subject: [Buildroot] [PATCH/next 1/6] package/libdrm: add host variant
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,81 +80,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>, Daniel Lang <dalang@gmx.at>,
+ Samuel Martin <s.martin49@gmail.com>, Romain Naour <romain.naour@gmail.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Valentin Korenblit <valentinkorenblit@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Needed for mesa3d bump to 24.1.0.
+
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- linux/Config.in                      |  2 +-
- linux/linux.hash                     | 14 +++++++-------
- package/linux-headers/Config.in.host | 14 +++++++-------
- 3 files changed, 15 insertions(+), 15 deletions(-)
+ package/libdrm/libdrm.mk | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 429a7eabef..eab5cb8511 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -134,7 +134,7 @@ config BR2_LINUX_KERNEL_CUSTOM_REPO_GIT_SUBMODULES
+diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
+index ea956de15b..1cf754227e 100644
+--- a/package/libdrm/libdrm.mk
++++ b/package/libdrm/libdrm.mk
+@@ -116,4 +116,25 @@ else
+ LIBDRM_CONF_OPTS += -Dtests=false
+ endif
  
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "6.10.3" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "6.10.6" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "5.10.162-cip24" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "5.10.162-cip24-rt10" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 4e05f4a765..e8a9e0f0eb 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,13 +1,13 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
--sha256  fa5f22fd67dd05812d39dca579320c493048e26c4a556048a12385e7ae6fc698  linux-6.10.3.tar.xz
--sha256  93218296934915636fe6ba08e125948424cc270fd8948502c0ab91087a9fccd8  linux-6.6.44.tar.xz
--sha256  5eb4706f898f50881552ff5146d892132d3ffc5298033bffe27087d3a44c4573  linux-6.1.103.tar.xz
-+sha256  e0d50d5b74f8599375660e79f187af7493864dba5ff6671b14983376a070b3d1  linux-6.10.6.tar.xz
-+sha256  d43376c9e9eaa92bb1b926054bd160d329c58a62d64bd65fe1222c11c6564f50  linux-6.6.47.tar.xz
-+sha256  3773c9052c7ba7432e8337ca84bee115c1a94ccef9d62b72b99ae30c4cd5f80f  linux-6.1.106.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
--sha256  ec6098faed64b8a47ba1772e812a6eb444385f7aa3c60d3e4739ab2fd3b29186  linux-5.15.164.tar.xz
--sha256  ca09d86a6b79706c33382d3f8606f476eb07918417a87fb1815f6a4aa81f2ba1  linux-5.10.223.tar.xz
--sha256  44a0c3e76031f7513ce43e22e2a9dcbf7d6a6dee065dca9b8001843a075272b2  linux-5.4.281.tar.xz
-+sha256  a36dd3e82ceb634afded31f2656568f57c4d9c4b399859f298b18116df11c6fe  linux-5.15.165.tar.xz
-+sha256  19b099c67324bba6378e22dc51ad3906e4dcd6a908d137766b4bfa9174ddd11a  linux-5.10.224.tar.xz
-+sha256  5582770976d33bb7bf9494e0fa0c49f449aa02b0133d00a5a198b6c208dd7de0  linux-5.4.282.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
--sha256  544ddc7339cf1b1d1ead1992e67d11a0834ad3bc77faa063e06b5d18c682eb30  linux-4.19.319.tar.xz
-+sha256  9d671a12b00301b7ce63022d4e4afa3e40aa318f8f7f25a1147e602fdb1047a1  linux-4.19.320.tar.xz
- # Locally computed
- sha256  fb0edc3c18e47d2b6974cb0880a0afb5c3fa08f50ee87dfdf24349405ea5f8ae  linux-cip-5.10.162-cip24.tar.gz
- sha256  b5539243f187e3d478d76d44ae13aab83952c94b885ad889df6fa9997e16a441  linux-cip-5.10.162-cip24-rt10.tar.gz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 83b8d1267e..934f427e4e 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -423,13 +423,13 @@ endchoice
- 
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "4.19.319"	if BR2_KERNEL_HEADERS_4_19
--	default "5.4.281"	if BR2_KERNEL_HEADERS_5_4
--	default "5.10.223"	if BR2_KERNEL_HEADERS_5_10
--	default "5.15.164"	if BR2_KERNEL_HEADERS_5_15
--	default "6.1.103"	if BR2_KERNEL_HEADERS_6_1
--	default "6.6.44"	if BR2_KERNEL_HEADERS_6_6
--	default "6.10.3"	if BR2_KERNEL_HEADERS_6_10
-+	default "4.19.320"	if BR2_KERNEL_HEADERS_4_19
-+	default "5.4.282"	if BR2_KERNEL_HEADERS_5_4
-+	default "5.10.224"	if BR2_KERNEL_HEADERS_5_10
-+	default "5.15.165"	if BR2_KERNEL_HEADERS_5_15
-+	default "6.1.106"	if BR2_KERNEL_HEADERS_6_1
-+	default "6.6.47"	if BR2_KERNEL_HEADERS_6_6
-+	default "6.10.6"	if BR2_KERNEL_HEADERS_6_10
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
++HOST_LIBDRM_CONF_OPTS = \
++	-Damdgpu=disabled \
++	-Dcairo-tests=disabled \
++	-Detnaviv=disabled \
++	-Dexynos=disabled \
++	-Dfreedreno=disabled \
++	-Dfreedreno-kgsl=false \
++	-Dinstall-test-programs=false \
++	-Dintel=disabled \
++	-Dman-pages=disabled \
++	-Dnouveau=disabled \
++	-Domap=disabled \
++	-Dradeon=disabled \
++	-Dtegra=disabled \
++	-Dvc4=disabled \
++	-Dvmwgfx=disabled \
++	-Dtests=false \
++	-Dudev=false \
++	-Dvalgrind=disabled
++
+ $(eval $(meson-package))
++$(eval $(host-meson-package))
 -- 
 2.39.2
 
