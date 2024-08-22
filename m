@@ -4,69 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EFAB8C3DA4A
-	for <buildroot@archiver.kernel.org>; Thu, 22 Aug 2024 10:20:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2F3CC3DA4A
+	for <buildroot@archiver.kernel.org>; Thu, 22 Aug 2024 10:20:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8E8C5605AC;
-	Thu, 22 Aug 2024 10:20:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C223C60B5D;
+	Thu, 22 Aug 2024 10:20:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RyRKGvGdHa87; Thu, 22 Aug 2024 10:20:48 +0000 (UTC)
+ id gXNUi66gPBVF; Thu, 22 Aug 2024 10:20:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8B55360B29
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AD59460B4C
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8B55360B29;
-	Thu, 22 Aug 2024 10:20:48 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 7BE5C1BF346
+	by smtp3.osuosl.org (Postfix) with ESMTP id AD59460B4C;
+	Thu, 22 Aug 2024 10:20:50 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B1C191BF346
  for <buildroot@lists.busybox.net>; Thu, 22 Aug 2024 10:20:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 750CD407C6
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9F06440DE6
  for <buildroot@lists.busybox.net>; Thu, 22 Aug 2024 10:20:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lROPfBKAEs85 for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id KFmgAAaQIsCj for <buildroot@lists.busybox.net>;
  Thu, 22 Aug 2024 10:20:45 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.198;
  helo=relay6-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org F391240789
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F391240789
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org F34B740DE3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F34B740DE3
 Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
  [217.70.183.198])
- by smtp4.osuosl.org (Postfix) with ESMTPS id F391240789
+ by smtp2.osuosl.org (Postfix) with ESMTPS id F34B740DE3
  for <buildroot@buildroot.org>; Thu, 22 Aug 2024 10:20:44 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPA id B294BC0003;
- Thu, 22 Aug 2024 10:20:41 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPA id 92C80C0006;
+ Thu, 22 Aug 2024 10:20:42 +0000 (UTC)
 To: Buildroot List <buildroot@buildroot.org>,
  Peter Korsgaard <peter@korsgaard.com>,
  Roy Kollen Svendsen <roykollensvendsen@gmail.com>
-Date: Thu, 22 Aug 2024 12:20:25 +0200
-Message-ID: <20240822102040.2083799-1-thomas.petazzoni@bootlin.com>
+Date: Thu, 22 Aug 2024 12:20:26 +0200
+Message-ID: <20240822102040.2083799-2-thomas.petazzoni@bootlin.com>
 X-Mailer: git-send-email 2.46.0
+In-Reply-To: <20240822102040.2083799-1-thomas.petazzoni@bootlin.com>
+References: <20240822102040.2083799-1-thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1724322042;
+ d=bootlin.com; s=gm1; t=1724322043;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding;
- bh=Ntcvp9GytbQFpTtYSZ7Qf+fcReu0dW9Ug0DLQ5sSWqE=;
- b=SgYoe/qtTAyy2YG8U5OISY/ETQg6Fs7q7TtRDyBwocBbKbSgWuCG3GgdjzmqzyMp2DwZMM
- ObIYkFm3Aa7oPUQHiUgJVDdhbQuwSnkJBdbKUEvg7VqlEwt9XpczE02LFiv3lrFlp4DPQY
- LF45QyyqLLDVPFkxcEYK3jaPgh9tjehpY2pHuYl2YrnY2y+3ZsFln9RRcbM6za+uHpj4OB
- Uf+HEEOew2kG0GZ4S0boIQMad6Dr47idTRK9gasua5SjEjqxlmQO1dtduWUuox/DC4Zenq
- ixBS5lghFER0mVwOidWOW/wlYV/XnYOvMBElzpD8z674Wm+JKF6AqKvMF1ZCDQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=ukVmsF/nIosv/R7jWm/e9QpNUdwVXBBrdC2iN2ZAOIU=;
+ b=Vs/5sJiagDBNm8utyvFr1z1NO2RsmUfs5yjHMm4p1Npi/J88L6GF9Kk3cKAWa5PKfKpPFb
+ TGTYznLVbWRK+rXZ+WWlVWK2oi76sUZHfw0TT2OFazpMk8lqiUJbW/kqYzS9fFZKNUGmZM
+ +2L/iINFV6fuXAG6en/nh9gRLagFQyd+jmUpTMOf4IjqId9bsP4YnA+DsI8gCBZ8gsg55s
+ +jc9Z3AgzZ0385I+FkJYFE7Y7xnMcYn6ULRqjtbL4EIPaB9bQf2GFAlZjLi8stqbf112Sn
+ vQ6O08h6JRXvxaTvuvxIwDIAxtazpJzmtbQyA1rIan4+HZ34SSZ1pihz+z71zQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=SgYoe/qt
-Subject: [Buildroot] [PATCH 2024.02.x 0/9] Fix Qt6 CVEs in 2024.02.x
+ header.s=gm1 header.b=Vs/5sJia
+Subject: [Buildroot] [PATCH 2024.02.x 1/9] package/qt6/qt6svg: backport fix
+ for CVE-2023-32573
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,82 +84,106 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Jesse Van Gavere <jesseevg@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+This commit backports an upstream patch fixing CVE-2023-32573.
 
-The Qt6 version currently packaged in Buildroot 2024.02.x is affected
-by a number of CVEs. This series of patches fixes all reported CVEs
-affecting Qt6, by backporting the relevant patches from upstream.
-
-Some of the fixes do require bringing along some related changes, as
-they would not otherwise apply without significant rework.
-
-All of the CVEs expect CVE-2024-39936 only affect 2024.02.x, as
-Buildroot 2024.05 has a newer Qt6 version that isn't affected by those
-CVEs. CVE-2024-39936 is already fixed in master (commit
-b866afa68405564497dd60c1f8f33cdf71d22728), but this patch series
-provides a fix that applies cleanly on the the Qt6 version packaged in
-2024.02.x, so it should be considered as a replacement for backporting
-b866afa68405564497dd60c1f8f33cdf71d22728 to 2024.02.x.
-
-Thanks,
-
-Thomas
-
-Thomas Petazzoni (9):
-  package/qt6/qt6svg: backport fix for CVE-2023-32573
-  package/qt6/qt6base: backport fix for CVE-2023-33285
-  package/qt6/qt6base: backport fix for CVE-2023-32762
-  package/qt6/qt6base: backport fix for CVE-2023-32763
-  package/qt6/qt6base: backport fix for CVE-2023-38197
-  package/qt6/qt6base: backport fix for CVE-2023-51714
-  package/qt6/qt6base: backport fix for CVE-2023-37369
-  package/qt6/qt6base: backport fix for CVE-2023-34410
-  package/qt6/qt6base: backport fix for CVE-2024-39936
-
- ...make-sure-we-don-t-overflow-the-buff.patch | 106 +++++
- ...atch-header-names-case-insensitively.patch |  57 +++
- ...maximumWidth-for-a-text-containing-s.patch |  88 ++++
- ...maximumWidth-for-a-text-containing-l.patch | 168 ++++++++
- ...Fix-specific-overflow-in-qtextlayout.patch |  79 ++++
- ...ay-fix-ambiguous-qOffsetStringArray-.patch |  49 +++
- ...gArray-fix-size_t-qsizetype-mismatch.patch |  37 ++
- ...-use-qOffsetStringArray-for-storing-.patch | 114 +++++
- ...der-Raise-error-on-unexpected-tokens.patch | 406 ++++++++++++++++++
- .../0010-HPack-fix-a-Yoda-Condition.patch     |  43 ++
- ...fix-incorrect-integer-overflow-check.patch |  48 +++
- ...-change-fastScanName-to-take-a-Value.patch | 112 +++++
- ...-make-fastScanName-indicate-parsing-.patch | 277 ++++++++++++
- ...certificate-not-signed-by-a-configur.patch | 295 +++++++++++++
- ...demand-cert-loading-bool-from-defaul.patch | 116 +++++
- ...communication-until-encrypted-can-be.patch | 248 +++++++++++
- package/qt6/qt6base/qt6base.mk                |  17 +
- ...Initialize-used-member-remove-unused.patch |  62 +++
- package/qt6/qt6svg/qt6svg.mk                  |   2 +
- 19 files changed, 2324 insertions(+)
- create mode 100644 package/qt6/qt6base/0001-QDnsLookup-Unix-make-sure-we-don-t-overflow-the-buff.patch
- create mode 100644 package/qt6/qt6base/0002-Hsts-match-header-names-case-insensitively.patch
- create mode 100644 package/qt6/qt6base/0003-QTextLayout-fix-maximumWidth-for-a-text-containing-s.patch
- create mode 100644 package/qt6/qt6base/0004-QTextLayout-fix-maximumWidth-for-a-text-containing-l.patch
- create mode 100644 package/qt6/qt6base/0005-Fix-specific-overflow-in-qtextlayout.patch
- create mode 100644 package/qt6/qt6base/0006-QOffsetStringArray-fix-ambiguous-qOffsetStringArray-.patch
- create mode 100644 package/qt6/qt6base/0007-QOffsetStringArray-fix-size_t-qsizetype-mismatch.patch
- create mode 100644 package/qt6/qt6base/0008-QXmlStreamReader-use-qOffsetStringArray-for-storing-.patch
- create mode 100644 package/qt6/qt6base/0009-QXmlStreamReader-Raise-error-on-unexpected-tokens.patch
- create mode 100644 package/qt6/qt6base/0010-HPack-fix-a-Yoda-Condition.patch
- create mode 100644 package/qt6/qt6base/0011-HPack-fix-incorrect-integer-overflow-check.patch
- create mode 100644 package/qt6/qt6base/0012-QXmlStreamReader-change-fastScanName-to-take-a-Value.patch
- create mode 100644 package/qt6/qt6base/0013-QXmlStreamReader-make-fastScanName-indicate-parsing-.patch
- create mode 100644 package/qt6/qt6base/0014-Schannel-Reject-certificate-not-signed-by-a-configur.patch
- create mode 100644 package/qt6/qt6base/0015-Ssl-Copy-the-on-demand-cert-loading-bool-from-defaul.patch
- create mode 100644 package/qt6/qt6base/0016-HTTP2-Delay-any-communication-until-encrypted-can-be.patch
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+Only applicable to 2024.02.x, since >= 2024.05 use a Qt6 version that
+already has the fix.
+---
+ ...Initialize-used-member-remove-unused.patch | 62 +++++++++++++++++++
+ package/qt6/qt6svg/qt6svg.mk                  |  2 +
+ 2 files changed, 64 insertions(+)
  create mode 100644 package/qt6/qt6svg/0001-QSvgFont-Initialize-used-member-remove-unused.patch
 
+diff --git a/package/qt6/qt6svg/0001-QSvgFont-Initialize-used-member-remove-unused.patch b/package/qt6/qt6svg/0001-QSvgFont-Initialize-used-member-remove-unused.patch
+new file mode 100644
+index 0000000000..590b586f9a
+--- /dev/null
++++ b/package/qt6/qt6svg/0001-QSvgFont-Initialize-used-member-remove-unused.patch
+@@ -0,0 +1,62 @@
++From 3497a6b81f561f61ab784b2847f718e912b4d80c Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?Robert=20L=C3=B6hning?= <robert.loehning@qt.io>
++Date: Mon, 24 Apr 2023 15:27:17 +0200
++Subject: [PATCH] QSvgFont: Initialize used member, remove unused
++
++Credit to OSS-Fuzz
++
++[ChangeLog][QtSvg] Fixed undefined behavior from using uninitialized
++variable.
++
++Pick-to: 6.5 6.2 5.15
++Coverity-Id: 22618
++Change-Id: Id52277bb0e2845f4d342e187dbb8093e9276b70c
++Reviewed-by: Eskil Abrahamsen Blomfeldt <eskil.abrahamsen-blomfeldt@qt.io>
++
++Fixes: https://security-tracker.debian.org/tracker/CVE-2023-32573
++Upstream: https://codereview.qt-project.org/gitweb?p=qt%2Fqtsvg.git;a=commit;h=ff22c3ccf8ccf813fdcfda23f7740ba73ba5ce0a
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ src/svg/qsvgfont_p.h    | 5 ++---
++ src/svg/qsvghandler.cpp | 2 +-
++ 2 files changed, 3 insertions(+), 4 deletions(-)
++
++diff --git a/src/svg/qsvgfont_p.h b/src/svg/qsvgfont_p.h
++index a7cc98b1..9cf3dfe3 100644
++--- a/src/svg/qsvgfont_p.h
+++++ b/src/svg/qsvgfont_p.h
++@@ -38,6 +38,7 @@ public:
++ class Q_SVG_PRIVATE_EXPORT QSvgFont : public QSvgRefCounted
++ {
++ public:
+++    static constexpr qreal DEFAULT_UNITS_PER_EM = 1000;
++     QSvgFont(qreal horizAdvX);
++ 
++     void setFamilyName(const QString &name);
++@@ -50,9 +51,7 @@ public:
++     void draw(QPainter *p, const QPointF &point, const QString &str, qreal pixelSize, Qt::Alignment alignment) const;
++ public:
++     QString m_familyName;
++-    qreal m_unitsPerEm;
++-    qreal m_ascent;
++-    qreal m_descent;
+++    qreal m_unitsPerEm = DEFAULT_UNITS_PER_EM;
++     qreal m_horizAdvX;
++     QHash<QChar, QSvgGlyph> m_glyphs;
++ };
++diff --git a/src/svg/qsvghandler.cpp b/src/svg/qsvghandler.cpp
++index 29ca7332..a8918489 100644
++--- a/src/svg/qsvghandler.cpp
+++++ b/src/svg/qsvghandler.cpp
++@@ -2622,7 +2622,7 @@ static bool parseFontFaceNode(QSvgStyleProperty *parent,
++ 
++     qreal unitsPerEm = toDouble(unitsPerEmStr);
++     if (!unitsPerEm)
++-        unitsPerEm = 1000;
+++        unitsPerEm = QSvgFont::DEFAULT_UNITS_PER_EM;
++ 
++     if (!name.isEmpty())
++         font->setFamilyName(name);
++-- 
++2.46.0
++
+diff --git a/package/qt6/qt6svg/qt6svg.mk b/package/qt6/qt6svg/qt6svg.mk
+index 25e87dd208..4386556548 100644
+--- a/package/qt6/qt6svg/qt6svg.mk
++++ b/package/qt6/qt6svg/qt6svg.mk
+@@ -9,6 +9,8 @@ QT6SVG_SITE = $(QT6_SITE)
+ QT6SVG_SOURCE = qtsvg-$(QT6_SOURCE_TARBALL_PREFIX)-$(QT6SVG_VERSION).tar.xz
+ QT6SVG_INSTALL_STAGING = YES
+ QT6SVG_SUPPORTS_IN_SOURCE_BUILD = NO
++# 0001-QSvgFont-Initialize-used-member-remove-unused.patch
++QT6SVG_IGNORE_CVES += CVE-2023-32573
+ 
+ QT6SVG_CMAKE_BACKEND = ninja
+ 
 -- 
 2.46.0
 
