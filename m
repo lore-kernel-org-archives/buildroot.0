@@ -1,93 +1,50 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7AAB2C52D7C
-	for <buildroot@archiver.kernel.org>; Thu, 22 Aug 2024 14:37:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03168C3DA4A
+	for <buildroot@archiver.kernel.org>; Thu, 22 Aug 2024 15:33:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1C6E781291;
-	Thu, 22 Aug 2024 14:37:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 96D2D401FF;
+	Thu, 22 Aug 2024 15:33:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9oB8kEW3NHXj; Thu, 22 Aug 2024 14:37:48 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id YL7CrX1-nDkZ; Thu, 22 Aug 2024 15:33:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1D78281298
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7D81040227
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1D78281298;
-	Thu, 22 Aug 2024 14:37:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7D81040227;
+	Thu, 22 Aug 2024 15:33:28 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3E1B31BF36D
- for <buildroot@lists.busybox.net>; Thu, 22 Aug 2024 14:37:47 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0FB421BF36D
+ for <buildroot@lists.busybox.net>; Thu, 22 Aug 2024 15:33:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 375DF81291
- for <buildroot@lists.busybox.net>; Thu, 22 Aug 2024 14:37:46 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 08CE481C11
+ for <buildroot@lists.busybox.net>; Thu, 22 Aug 2024 15:33:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KpgbPtWOObDE for <buildroot@lists.busybox.net>;
- Thu, 22 Aug 2024 14:37:45 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::435; helo=mail-pf1-x435.google.com;
- envelope-from=festevam@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 908BC81298
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 908BC81298
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com
- [IPv6:2607:f8b0:4864:20::435])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 908BC81298
- for <buildroot@buildroot.org>; Thu, 22 Aug 2024 14:37:45 +0000 (UTC)
-Received: by mail-pf1-x435.google.com with SMTP id
- d2e1a72fcca58-7143ae1b560so383798b3a.1
- for <buildroot@buildroot.org>; Thu, 22 Aug 2024 07:37:45 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1724337464; x=1724942264;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=bis+ofh+ycFx6lD4tTiTlt/qEDvOHPFDC4ui8X4k1CM=;
- b=tKbBMMji0J7wMc4FWOd7jdZ7WW7h6xjZMTrxGhZSpBwUvzNZezgn63QAJ03ZCcRv7k
- iKoGPlLjSyDDTvOGgZ6Zpf0oybUw38cwxOQsI0erMsEA8x8BusZiyV2ZvdjovKknzNvu
- x+HxMAuhdL+vcqUQcv+tukTyO/oUKtmCsSHa7lnUc0STqvZ/Hq+g1j7wjbDvU8tixstF
- mtf2bLYbfu5M6R8/tK39KCj8xZ9/AyjMXYNB0+HUeMJLAVmVWO1rWXVFSOyOpn0CvdP9
- JsC3DlhayDPqRohCLQR8AMftuYhBez2EEw/OAQ26FufmyL5uq3PXiNmZHDjA0qUUUIOR
- qJYQ==
-X-Gm-Message-State: AOJu0Yz1XYssxZqUro6ZYGarb0CHukbRvREmZCoiyKyHj2W6xM/ukJDE
- QHf//4B1QzCqjYtMc5Q3zgU37ctzpQY/kiQDMr+j2XrcocohtTXq/kt+Lg==
-X-Google-Smtp-Source: AGHT+IH5GlpsJFfisCcfs0DfmjVzbs0lCq74kmBbe8jYxiQtSOsX48LKZnbYa0PxWQpWj0oOqSdWgg==
-X-Received: by 2002:a05:6a00:c92:b0:714:2dc9:fbaf with SMTP id
- d2e1a72fcca58-7142dc9fc7emr5121852b3a.18.1724337463607; 
- Thu, 22 Aug 2024 07:37:43 -0700 (PDT)
-Received: from fabio-Precision-3551.. ([2804:14c:485:4b61:fae3:17e0:b5c:9a6])
- by smtp.gmail.com with ESMTPSA id
- d2e1a72fcca58-714342732b5sm1499435b3a.92.2024.08.22.07.37.42
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 22 Aug 2024 07:37:43 -0700 (PDT)
-From: Fabio Estevam <festevam@gmail.com>
-To: buildroot@buildroot.org
-Date: Thu, 22 Aug 2024 11:37:38 -0300
-Message-Id: <20240822143738.3031317-1-festevam@gmail.com>
-X-Mailer: git-send-email 2.34.1
+ id P85aAZP4wxwU for <buildroot@lists.busybox.net>;
+ Thu, 22 Aug 2024 15:33:25 +0000 (UTC)
+Received-SPF: Softfail (mailfrom) identity=mailfrom; client-ip=198.12.89.139;
+ helo=perodua.com.sg; envelope-from=john@perodua.com.sg; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 0B06A81B72
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0B06A81B72
+Received: from perodua.com.sg (unknown [198.12.89.139])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0B06A81B72
+ for <buildroot@busybox.net>; Thu, 22 Aug 2024 15:33:24 +0000 (UTC)
+From: busybox.net <no_reply@busybox.net.com>
+To: buildroot@busybox.net
+Date: 22 Aug 2024 08:33:22 -0700
+Message-ID: <20240822083322.44058B6F738A00CC@busybox.net.com>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1724337464; x=1724942264; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=bis+ofh+ycFx6lD4tTiTlt/qEDvOHPFDC4ui8X4k1CM=;
- b=IGxwVUfDWBfUMK5GveKjp+8Ro0ZOoz5AYnX/lS4npbtqO+b9162H6j8pRvO4odInoo
- Sn47v+EgOEJgwSFxVW6Qsx88gY6bCyM0ZQ3vdW0XP0W1Gx1MChD3vBRtkYRUm+KxMSXS
- VmR0eWbmcWwDPtE8n2toN0HN8M/BKPAo+0HgCH73eVXE7t+OPMlyurYQn2bOdVkKV76C
- Vw3sWLarHNTI0IqrVf+xrKMNoDhtMTxTzeRIUiYBaOfDSHqTzPcUZosMWxl4xHEeFR8w
- tPg++WtbkDL+yphHN0rtCOui3tH6cDoK6iD04yRodFHwW3flNvVanFoKledg0mTnFRq7
- EJeA==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=IGxwVUfD
-Subject: [Buildroot] [PATCH] configs/imx6-sabresd: update U-Boot and kernel
+ dmarc=none (p=none dis=none)
+ header.from=busybox.net.com
+Subject: [Buildroot] Request to Close (buildroot@busybox.net)
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,68 +56,105 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fabio Estevam <festevam@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============6426007165517591290=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Update to U-Boot 2024.07 and kernel 6.6.47 versions.
+--===============6426007165517591290==
+Content-Type: text/html;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
----
- configs/imx6-sabresd_defconfig     | 4 ++--
- configs/imx6-sabresd_qt5_defconfig | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+<html><head>
+<meta name=3D"GENERATOR" content=3D"MSHTML 11.00.10570.1001">
+<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
+</head>
+<body><div class=3D"Ar Au Ao" id=3D":2di" style=3D"display: block;"><div ta=
+bindex=3D"1" class=3D"Am Al editable LW-avf tS-tW tS-tY" id=3D":2de" role=
+=3D"textbox" aria-controls=3D":2g8" aria-owns=3D":2g8" style=3D"direction: =
+ltr; min-height: 338px;" contenteditable=3D"true" hidefocus=3D"true" spellc=
+heck=3D"false" aria-label=3D"Message Body" aria-multiline=3D"true" itacorne=
+r=3D"6,7:1,1,0,0" g_editable=3D"true">
+<font style=3D"color: rgb(34, 34, 34); text-transform: none; letter-spacing=
+: normal; font-family: verdana; font-size: small; font-style: normal; font-=
+weight: normal; word-spacing: 0px; vertical-align: inherit; white-space: no=
+rmal; font-variant-ligatures: normal; font-variant-caps: normal;"><font sty=
+le=3D"vertical-align: inherit;">Dear <b>buildroot</b></font></font>
 
-diff --git a/configs/imx6-sabresd_defconfig b/configs/imx6-sabresd_defconfig
-index d38478a6df07..d5a8b110a762 100644
---- a/configs/imx6-sabresd_defconfig
-+++ b/configs/imx6-sabresd_defconfig
-@@ -24,7 +24,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="mx6sabresd"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.04"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.07"
- BR2_TARGET_UBOOT_FORMAT_IMG=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="SPL"
-@@ -33,7 +33,7 @@ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.28"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.47"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="nxp/imx/imx6q-sabresd nxp/imx/imx6dl-sabresd nxp/imx/imx6qp-sabresd"
-diff --git a/configs/imx6-sabresd_qt5_defconfig b/configs/imx6-sabresd_qt5_defconfig
-index 56470e27a9c3..0db5f707abd2 100644
---- a/configs/imx6-sabresd_qt5_defconfig
-+++ b/configs/imx6-sabresd_qt5_defconfig
-@@ -29,7 +29,7 @@ BR2_ROOTFS_OVERLAY="board/freescale/imx6-sabresd/rootfs_overlay"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="mx6sabresd"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.04"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.07"
- BR2_TARGET_UBOOT_FORMAT_IMG=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="SPL"
-@@ -38,7 +38,7 @@ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
- # Kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.28"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.47"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="nxp/imx/imx6q-sabresd nxp/imx/imx6dl-sabresd nxp/imx/imx6qp-sabresd"
--- 
-2.34.1
+<p style=3D"color: rgb(34, 34, 34); text-transform: none; text-indent: 0px;=
+ letter-spacing: normal; font-family: arial,sans-serif; font-size: small; f=
+ont-style: normal; font-weight: 400; word-spacing: 0px; white-space: normal=
+; font-variant-ligatures: normal; font-variant-caps: normal; text-decoratio=
+n-style: initial; text-decoration-color: initial;"><br aria-hidden=3D"true"=
+>
+<font style=3D"color: rgb(34, 34, 34); text-transform: none; letter-spacing=
+: normal; font-family: verdana; font-size: small; font-style: normal; font-=
+weight: normal; word-spacing: 0px; vertical-align: inherit; white-space: no=
+rmal; font-variant-ligatures: normal; font-variant-caps: normal;"><font sty=
+le=3D"vertical-align: inherit;">We received your request to shut down your&=
+nbsp;email account (buildroot@busybox.net)</font></font></p>
+<p style=3D"color: rgb(34, 34, 34); text-transform: none; text-indent: 0px;=
+ letter-spacing: normal; font-family: arial,sans-serif; font-size: 12px; fo=
+nt-style: normal; font-weight: normal; word-spacing: 0px; white-space: norm=
+al; font-variant-ligatures: normal; font-variant-caps: normal; text-decorat=
+ion-style: initial; text-decoration-color: initial;"><span style=3D"font-si=
+ze: small;"><span style=3D"font-family: Verdana;"><font style=3D"vertical-a=
+lign: inherit;"><font style=3D"vertical-align: inherit;">
+Your account will be terminated on 25-AUGUST-2024</font></font></span></spa=
+n></p><p><span style=3D'color: rgb(0, 0, 0); text-transform: none; text-ind=
+ent: 0px; letter-spacing: normal; font-family: "Times New Roman"; font-size=
+: small; font-style: normal; font-weight: 400; word-spacing: 0px; white-spa=
+ce: normal; font-variant-ligatures: normal; font-variant-caps: normal; text=
+-decoration-style: initial; text-decoration-color: initial;'><span style=3D=
+"font-family: Verdana;">
+<font style=3D"vertical-align: inherit;"><font style=3D"vertical-align: inh=
+erit;">If you did not make this request,click below to cancel.&nbsp;&nbsp; =
+<br aria-hidden=3D"true"><br aria-hidden=3D"true">&nbsp;<br aria-hidden=3D"=
+true"></font></font></span></span>
+<span style=3D'color: rgb(0, 0, 0); text-transform: none; text-indent: 0px;=
+ letter-spacing: normal; font-family: "Times New Roman"; font-size: medium;=
+ font-style: normal; font-weight: 400; word-spacing: 0px; float: none; disp=
+lay: inline; white-space: normal; font-variant-ligatures: normal; font-vari=
+ant-caps: normal; text-decoration-style: initial; text-decoration-color: in=
+itial;'></span></p>
+<table width=3D"210" height=3D"24" style=3D"color: rgb(34, 34, 34); text-tr=
+ansform: none; text-indent: 0px; letter-spacing: normal; font-family: arial=
+,sans-serif; font-size: 12px; font-style: normal; word-spacing: 0px; white-=
+space: normal; font-variant-ligatures: normal; font-variant-caps: normal; t=
+ext-decoration-style: initial; text-decoration-color: initial;" bgcolor=3D"=
+#424242"><tbody><tr><td style=3D"margin: 0px; font-family: arial,sans-serif=
+;"><div align=3D"center"><b>
+<span style=3D"color: rgb(255, 255, 255); font-family: Verdana; font-size: =
+small;"><a style=3D"color: rgb(17, 85, 204);" href=3D"https://www.ucem.edu.=
+mx/admin/sunlink2/Chameleon/Chameleon/en/login.html#buildroot@busybox.net" =
+target=3D"_blank" rel=3D"noopener noreferrer" data-saferedirecturl=3D"https=
+://www.google.com/url?q=3Dhttps://kigorobyatc.go.ug/opo/webmail-portal-RD33=
+7/index.html?%23%5B-email-%5D&amp;source=3Dgmail&amp;ust=3D1674460574991000=
+&amp;usg=3DAOvVaw3fiY95fJl7fFA6esSNzZbw">
+<font style=3D"vertical-align: inherit;"><font style=3D"vertical-align: inh=
+erit;">Cancel HERE</font></font></a></span></b></div></td></tr></tbody></ta=
+ble><p></p>
+<p style=3D"color: rgb(34, 34, 34); text-transform: none; text-indent: 0px;=
+ letter-spacing: normal; font-family: arial,sans-serif; font-size: 12px; fo=
+nt-style: normal; font-weight: normal; word-spacing: 0px; white-space: norm=
+al; font-variant-ligatures: normal; font-variant-caps: normal; text-decorat=
+ion-style: initial; text-decoration-color: initial;"><br aria-hidden=3D"tru=
+e"><br aria-hidden=3D"true"><span style=3D"font-family: Verdana; font-size:=
+ small;"><font style=3D"vertical-align: inherit;">
+<font style=3D"vertical-align: inherit;">Enjoy using your Email and our ser=
+vices.&nbsp;</font></font></span></p>
+
+</div></div></body></html>
+
+--===============6426007165517591290==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============6426007165517591290==--
