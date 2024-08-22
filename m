@@ -4,47 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 952FFC3DA4A
-	for <buildroot@archiver.kernel.org>; Thu, 22 Aug 2024 10:21:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5EA3FC5320E
+	for <buildroot@archiver.kernel.org>; Thu, 22 Aug 2024 10:21:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 19FEF60B5B;
-	Thu, 22 Aug 2024 10:21:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DFBF460E28;
+	Thu, 22 Aug 2024 10:21:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id G2Ho1gw2EhmH; Thu, 22 Aug 2024 10:21:22 +0000 (UTC)
+ id erbmGveFjjR2; Thu, 22 Aug 2024 10:21:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 703FE60BBE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3E0F560E3D
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 703FE60BBE;
-	Thu, 22 Aug 2024 10:21:21 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 75D251BF346
- for <buildroot@lists.busybox.net>; Thu, 22 Aug 2024 10:20:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3E0F560E3D;
+	Thu, 22 Aug 2024 10:21:26 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 2CA541BF346
+ for <buildroot@lists.busybox.net>; Thu, 22 Aug 2024 10:20:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6338B407C6
- for <buildroot@lists.busybox.net>; Thu, 22 Aug 2024 10:20:53 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1657A60B64
+ for <buildroot@lists.busybox.net>; Thu, 22 Aug 2024 10:20:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HGND8EUoJDZy for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TXJakmZEaep0 for <buildroot@lists.busybox.net>;
  Thu, 22 Aug 2024 10:20:51 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::226;
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.198;
  helo=relay6-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 54C3640789
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 54C3640789
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 7E15360B31
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7E15360B31
 Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::226])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 54C3640789
- for <buildroot@buildroot.org>; Thu, 22 Aug 2024 10:20:51 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPA id 82508C0006;
- Thu, 22 Aug 2024 10:20:49 +0000 (UTC)
+ [217.70.183.198])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7E15360B31
+ for <buildroot@buildroot.org>; Thu, 22 Aug 2024 10:20:50 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPA id 9ED46C0004;
+ Thu, 22 Aug 2024 10:20:48 +0000 (UTC)
 To: Buildroot List <buildroot@buildroot.org>,
  Peter Korsgaard <peter@korsgaard.com>,
  Roy Kollen Svendsen <roykollensvendsen@gmail.com>
-Date: Thu, 22 Aug 2024 12:20:34 +0200
-Message-ID: <20240822102040.2083799-10-thomas.petazzoni@bootlin.com>
+Date: Thu, 22 Aug 2024 12:20:33 +0200
+Message-ID: <20240822102040.2083799-9-thomas.petazzoni@bootlin.com>
 X-Mailer: git-send-email 2.46.0
 In-Reply-To: <20240822102040.2083799-1-thomas.petazzoni@bootlin.com>
 References: <20240822102040.2083799-1-thomas.petazzoni@bootlin.com>
@@ -56,21 +56,21 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  to:to:cc:cc:mime-version:mime-version:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=ahW4UMImrB3d+QZaHU/g+7blnG0up5AHfKUd8RGwZuU=;
- b=ZNQ4rxgk1YWsUJbnDzNlN66w5kevEcALCYN5vyNIMjTRoI31TcqRAGfrma1pteQDjuhKvA
- Fa9w4bCDCvO3PrzayNoF5Bo6tkJAdOuhSYWCDULyx2UC41pJI14dixPxGsGGvwGvWJT8qT
- c+jy9HPtsU0QvkxgxC5SbISxFngg4BiqaqNEwwJVpD8b1/hePJrRDB5Ga4vV4vhxgclPVC
- FiOUghgGd8+THiOQNBks0iwa/HKUAu4X+knqQgho0kH88i4NJywb5SdJjlGiK+njCvpcXU
- fZjtdWLjoCW2eiDdnbvM2FW6ijWjcme7IW+c8uHGwh1K6pSdi60f3XLbxFDfGA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=+JNZ5SejF1x2BWUnrIElDwstfz3Mq4QBQE7dCDNyWJk=;
+ b=fs5+xk0VfS491zrTFfAdvMtN0m7B7uC7FQeXf4KwooDSq0twqzAysIoAVpfVVw2yatlBQl
+ l6azutwI4zDPrNtRaZ9UKOATlzHLqhaQtwaMMVgXLIgo/B0DMPDrYnsbk+ibTI5a8qdolM
+ 3z5/0GB87V58xcqyUxOepKrbzaEiqRIGS9t8ZRT0DKbs9oEFUSKFPNWMDgR5qNFvaY86QK
+ JZhHTcmB09c7CkxVcV4C5qN4zYsrEElDfRLYphQTeImVyIqmBZntUDmRaPZXtBFRyFMWOA
+ CTBL/00DQ1GX2CMqJsZEPC6Fp81yHkxpJ9WxG8K9hy0wxzfE+wphaSMZ9R4S7A==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=ZNQ4rxgk
-Subject: [Buildroot] [PATCH 2024.02.x 9/9] package/qt6/qt6base: backport fix
- for CVE-2024-39936
+ header.s=gm1 header.b=fs5+xk0V
+Subject: [Buildroot] [PATCH 2024.02.x 8/9] package/qt6/qt6base: backport fix
+ for CVE-2023-34410
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,286 +91,456 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This commit backports an upstream patch to fix CVE-2024-39936.
+This commit backports two upstream patches needed to fix
+CVE-2023-34410. According to the CVE details, both patches are needed
+for the fix.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
-This is already fixed in master as of
-b866afa68405564497dd60c1f8f33cdf71d22728 ("package/qt6/qt6base: fix
-CVE-2024-39936"), however this patch is suitable for 2024.02.x as it
-will cleanly apply to the Qt6 version in 2024.02.x. For Buildroot
-2024.05, the commit b866afa68405564497dd60c1f8f33cdf71d22728 can be
-backported instead.
+Only applicable to 2024.02.x, since >= 2024.05 use a Qt6 version that
+already has the fix.
 ---
- ...communication-until-encrypted-can-be.patch | 248 ++++++++++++++++++
- package/qt6/qt6base/qt6base.mk                |   2 +
- 2 files changed, 250 insertions(+)
- create mode 100644 package/qt6/qt6base/0016-HTTP2-Delay-any-communication-until-encrypted-can-be.patch
+ ...certificate-not-signed-by-a-configur.patch | 295 ++++++++++++++++++
+ ...demand-cert-loading-bool-from-defaul.patch | 116 +++++++
+ package/qt6/qt6base/qt6base.mk                |   3 +
+ 3 files changed, 414 insertions(+)
+ create mode 100644 package/qt6/qt6base/0014-Schannel-Reject-certificate-not-signed-by-a-configur.patch
+ create mode 100644 package/qt6/qt6base/0015-Ssl-Copy-the-on-demand-cert-loading-bool-from-defaul.patch
 
-diff --git a/package/qt6/qt6base/0016-HTTP2-Delay-any-communication-until-encrypted-can-be.patch b/package/qt6/qt6base/0016-HTTP2-Delay-any-communication-until-encrypted-can-be.patch
+diff --git a/package/qt6/qt6base/0014-Schannel-Reject-certificate-not-signed-by-a-configur.patch b/package/qt6/qt6base/0014-Schannel-Reject-certificate-not-signed-by-a-configur.patch
 new file mode 100644
-index 0000000000..ab8a46a95e
+index 0000000000..f956e783e4
 --- /dev/null
-+++ b/package/qt6/qt6base/0016-HTTP2-Delay-any-communication-until-encrypted-can-be.patch
-@@ -0,0 +1,248 @@
-+From 6d2a5ad09074bd77b2de09adf7147107ee0db026 Mon Sep 17 00:00:00 2001
++++ b/package/qt6/qt6base/0014-Schannel-Reject-certificate-not-signed-by-a-configur.patch
+@@ -0,0 +1,295 @@
++From 4b68a00933a9803a8a374ef5bcfc0406538600c6 Mon Sep 17 00:00:00 2001
 +From: =?UTF-8?q?M=C3=A5rten=20Nordheim?= <marten.nordheim@qt.io>
-+Date: Tue, 25 Jun 2024 17:09:35 +0200
-+Subject: [PATCH] HTTP2: Delay any communication until encrypted() can be
-+ responded to
++Date: Wed, 10 May 2023 16:43:41 +0200
++Subject: [PATCH] Schannel: Reject certificate not signed by a configured CA
++ certificate
 +
-+We have the encrypted() signal that lets users do extra checks on the
-+established connection. It is emitted as BlockingQueued, so the HTTP
-+thread stalls until it is done emitting. Users can potentially call
-+abort() on the QNetworkReply at that point, which is passed as a Queued
-+call back to the HTTP thread. That means that any currently queued
-+signal emission will be processed before the abort() call is processed.
++Not entirely clear why, but when building the certificate chain for a
++peer the system certificate store is searched for root certificates.
++General expectation is that after calling
++`sslConfiguration.setCaCertificates()` the system certificates will
++not be taken into consideration.
 +
-+In the case of HTTP2 it is a little special since it is multiplexed and
-+the code is built to start requests as they are available. This means
-+that, while the code worked fine for HTTP1, since one connection only
-+has one request, it is not working for HTTP2, since we try to send more
-+requests in-between the encrypted() signal and the abort() call.
++To work around this behavior, we do a manual check that the root of the
++chain is part of the configured CA certificates.
 +
-+This patch changes the code to delay any communication until the
-+encrypted() signal has been emitted and processed, for HTTP2 only.
-+It's done by adding a few booleans, both to know that we have to return
-+early and so we can keep track of what events arose and what we need to
-+resume once enough time has passed that any abort() call must have been
-+processed.
-+
-+Fixes: QTBUG-126610
-+Pick-to: 6.5 6.2 5.15 5.12
-+Change-Id: Ic25a600c278203256e35f541026f34a8783235ae
-+Reviewed-by: Marc Mutz <marc.mutz@qt.io>
++Pick-to: 6.5 6.2 5.15
++Change-Id: I03666a4d9b0eac39ae97e150b4743120611a11b3
++Reviewed-by: Edward Welbourne <edward.welbourne@qt.io>
 +Reviewed-by: Volker Hilsheimer <volker.hilsheimer@qt.io>
-+(cherry picked from commit b1e75376cc3adfc7da5502a277dfe9711f3e0536)
-+Reviewed-by: Qt Cherry-pick Bot <cherrypick_bot@qt-project.org>
-+(cherry picked from commit 0fb43e4395da34d561814242a0186999e4956e28)
 +
-+Fixes: https://security-tracker.debian.org/tracker/CVE-2024-39936
-+Upstream: https://github.com/qt/qtbase/commit/2b1e36e183ce75c224305c7a94457b92f7a5cf58
++Fixes: https://security-tracker.debian.org/tracker/CVE-2023-34410
++Upstream: https://codereview.qt-project.org/gitweb?p=qt%2Fqtbase.git;a=commit;h=ada2c573c1a25f8d96577734968fe317ddfa292a
 +Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 +---
-+ src/network/access/qhttp2protocolhandler.cpp  |  6 +--
-+ .../access/qhttpnetworkconnectionchannel.cpp  | 48 ++++++++++++++++++-
-+ .../access/qhttpnetworkconnectionchannel_p.h  |  6 +++
-+ tests/auto/network/access/http2/tst_http2.cpp | 44 +++++++++++++++++
-+ 4 files changed, 99 insertions(+), 5 deletions(-)
++ src/plugins/tls/schannel/qtls_schannel.cpp    |  21 ++++
++ .../network/ssl/client-auth/CMakeLists.txt    |  24 ++++
++ .../network/ssl/client-auth/certs/.gitignore  |   4 +
++ .../client-auth/certs/accepted-client.conf    |  14 +++
++ .../network/ssl/client-auth/certs/generate.sh |  33 +++++
++ .../tst_manual_ssl_client_auth.cpp            | 118 ++++++++++++++++++
++ 6 files changed, 214 insertions(+)
++ create mode 100644 tests/manual/network/ssl/client-auth/CMakeLists.txt
++ create mode 100644 tests/manual/network/ssl/client-auth/certs/.gitignore
++ create mode 100644 tests/manual/network/ssl/client-auth/certs/accepted-client.conf
++ create mode 100755 tests/manual/network/ssl/client-auth/certs/generate.sh
++ create mode 100644 tests/manual/network/ssl/client-auth/tst_manual_ssl_client_auth.cpp
 +
-+diff --git a/src/network/access/qhttp2protocolhandler.cpp b/src/network/access/qhttp2protocolhandler.cpp
-+index 562b883242f..8c543efc742 100644
-+--- a/src/network/access/qhttp2protocolhandler.cpp
-++++ b/src/network/access/qhttp2protocolhandler.cpp
-+@@ -335,12 +335,12 @@ bool QHttp2ProtocolHandler::sendRequest()
-+         }
-+     }
++diff --git a/src/plugins/tls/schannel/qtls_schannel.cpp b/src/plugins/tls/schannel/qtls_schannel.cpp
++index 0372d4973b4..f0b2ca69a16 100644
++--- a/src/plugins/tls/schannel/qtls_schannel.cpp
+++++ b/src/plugins/tls/schannel/qtls_schannel.cpp
++@@ -2104,6 +2104,27 @@ bool TlsCryptographSchannel::verifyCertContext(CERT_CONTEXT *certContext)
++         verifyDepth = DWORD(q->peerVerifyDepth());
 + 
-+-    if (!prefaceSent && !sendClientPreface())
-+-        return false;
-+-
-+     if (!requests.size())
-+         return true;
-+ 
-++    if (!prefaceSent && !sendClientPreface())
-++        return false;
++     const auto &caCertificates = q->sslConfiguration().caCertificates();
 ++
-+     m_channel->state = QHttpNetworkConnectionChannel::WritingState;
-+     // Check what was promised/pushed, maybe we do not have to send a request
-+     // and have a response already?
-+diff --git a/src/network/access/qhttpnetworkconnectionchannel.cpp b/src/network/access/qhttpnetworkconnectionchannel.cpp
-+index 1e036bdc450..a64d1a25898 100644
-+--- a/src/network/access/qhttpnetworkconnectionchannel.cpp
-++++ b/src/network/access/qhttpnetworkconnectionchannel.cpp
-+@@ -209,6 +209,10 @@ void QHttpNetworkConnectionChannel::abort()
-+ bool QHttpNetworkConnectionChannel::sendRequest()
-+ {
-+     Q_ASSERT(protocolHandler);
-++    if (waitingForPotentialAbort) {
-++        needInvokeSendRequest = true;
-++        return false; // this return value is unused
+++    if (!rootCertOnDemandLoadingAllowed()
+++            && !(chain->TrustStatus.dwErrorStatus & CERT_TRUST_IS_PARTIAL_CHAIN)
+++            && (q->peerVerifyMode() == QSslSocket::VerifyPeer
+++                    || (isClient && q->peerVerifyMode() == QSslSocket::AutoVerifyPeer))) {
+++        // When verifying a peer Windows "helpfully" builds a chain that
+++        // may include roots from the system store. But we don't want that if
+++        // the user has set their own CA certificates.
+++        // Since Windows claims this is not a partial chain the root is included
+++        // and we have to check that it is one of our configured CAs.
+++        CERT_CHAIN_ELEMENT *element = chain->rgpElement[chain->cElement - 1];
+++        QSslCertificate certificate = getCertificateFromChainElement(element);
+++        if (!caCertificates.contains(certificate)) {
+++            auto error = QSslError(QSslError::CertificateUntrusted, certificate);
+++            sslErrors += error;
+++            emit q->peerVerifyError(error);
+++            if (q->state() != QAbstractSocket::ConnectedState)
+++                return false;
+++        }
 ++    }
-+     return protocolHandler->sendRequest();
-+ }
-+ 
-+@@ -221,21 +225,28 @@ bool QHttpNetworkConnectionChannel::sendRequest()
-+ void QHttpNetworkConnectionChannel::sendRequestDelayed()
-+ {
-+     QMetaObject::invokeMethod(this, [this] {
-+-        Q_ASSERT(protocolHandler);
-+         if (reply)
-+-            protocolHandler->sendRequest();
-++            sendRequest();
-+     }, Qt::ConnectionType::QueuedConnection);
-+ }
-+ 
-+ void QHttpNetworkConnectionChannel::_q_receiveReply()
-+ {
-+     Q_ASSERT(protocolHandler);
-++    if (waitingForPotentialAbort) {
-++        needInvokeReceiveReply = true;
-++        return;
-++    }
-+     protocolHandler->_q_receiveReply();
-+ }
-+ 
-+ void QHttpNetworkConnectionChannel::_q_readyRead()
-+ {
-+     Q_ASSERT(protocolHandler);
-++    if (waitingForPotentialAbort) {
-++        needInvokeReadyRead = true;
-++        return;
-++    }
-+     protocolHandler->_q_readyRead();
-+ }
-+ 
-+@@ -1232,7 +1243,18 @@ void QHttpNetworkConnectionChannel::_q_encrypted()
-+             // Similar to HTTP/1.1 counterpart below:
-+             const auto &h2Pairs = h2RequestsToSend.values(); // (request, reply)
-+             const auto &pair = h2Pairs.first();
-++            waitingForPotentialAbort = true;
-+             emit pair.second->encrypted();
 ++
-++            // We don't send or handle any received data until any effects from
-++            // emitting encrypted() have been processed. This is necessary
-++            // because the user may have called abort(). We may also abort the
-++            // whole connection if the request has been aborted and there is
-++            // no more requests to send.
-++            QMetaObject::invokeMethod(this,
-++                                      &QHttpNetworkConnectionChannel::checkAndResumeCommunication,
-++                                      Qt::QueuedConnection);
++     QList<QSslCertificate> peerCertificateChain;
++     for (DWORD i = 0; i < verifyDepth; i++) {
++         CERT_CHAIN_ELEMENT *element = chain->rgpElement[i];
++diff --git a/tests/manual/network/ssl/client-auth/CMakeLists.txt b/tests/manual/network/ssl/client-auth/CMakeLists.txt
++new file mode 100644
++index 00000000000..67ecc20bf4d
++--- /dev/null
+++++ b/tests/manual/network/ssl/client-auth/CMakeLists.txt
++@@ -0,0 +1,24 @@
+++# Copyright (C) 2023 The Qt Company Ltd.
+++# SPDX-License-Identifier: BSD-3-Clause
 ++
-+             // In case our peer has sent us its settings (window size, max concurrent streams etc.)
-+             // let's give _q_receiveReply a chance to read them first ('invokeMethod', QueuedConnection).
-+             QMetaObject::invokeMethod(connection, "_q_startNextRequest", Qt::QueuedConnection);
-+@@ -1250,6 +1272,28 @@ void QHttpNetworkConnectionChannel::_q_encrypted()
-+     }
-+ }
-+ 
+++qt_internal_add_manual_test(tst_manual_ssl_client_auth
+++    SOURCES
+++        tst_manual_ssl_client_auth.cpp
+++    LIBRARIES
+++        Qt::Network
+++)
 ++
-++void QHttpNetworkConnectionChannel::checkAndResumeCommunication()
+++qt_internal_add_resource(tst_manual_ssl_client_auth "tst_manual_ssl_client_auth"
+++    PREFIX
+++        "/"
+++    FILES
+++        "certs/127.0.0.1.pem"
+++        "certs/127.0.0.1-key.pem"
+++        "certs/127.0.0.1-client.pem"
+++        "certs/127.0.0.1-client-key.pem"
+++        "certs/accepted-client.pem"
+++        "certs/accepted-client-key.pem"
+++        "certs/rootCA.pem"
+++    BASE
+++        "certs"
+++)
++diff --git a/tests/manual/network/ssl/client-auth/certs/.gitignore b/tests/manual/network/ssl/client-auth/certs/.gitignore
++new file mode 100644
++index 00000000000..5866f7b609c
++--- /dev/null
+++++ b/tests/manual/network/ssl/client-auth/certs/.gitignore
++@@ -0,0 +1,4 @@
+++*
+++!/.gitignore
+++!/generate.sh
+++!/accepted-client.conf
++diff --git a/tests/manual/network/ssl/client-auth/certs/accepted-client.conf b/tests/manual/network/ssl/client-auth/certs/accepted-client.conf
++new file mode 100644
++index 00000000000..a88b276efec
++--- /dev/null
+++++ b/tests/manual/network/ssl/client-auth/certs/accepted-client.conf
++@@ -0,0 +1,14 @@
+++[req]
+++default_md = sha512
+++basicConstraints = CA:FALSE
+++extendedKeyUsage = clientAuth
+++[req]
+++distinguished_name = client_distinguished_name
+++prompt = no
+++[client_distinguished_name]
+++C   = NO
+++ST  = Oslo
+++L   = Oslo
+++O   = The Qt Project
+++OU  = The Qt Project
+++CN  = Fake Qt Project Client Certificate
++diff --git a/tests/manual/network/ssl/client-auth/certs/generate.sh b/tests/manual/network/ssl/client-auth/certs/generate.sh
++new file mode 100755
++index 00000000000..5dbe3b3712a
++--- /dev/null
+++++ b/tests/manual/network/ssl/client-auth/certs/generate.sh
++@@ -0,0 +1,33 @@
+++#!/bin/bash
+++# Copyright (C) 2023 The Qt Company Ltd.
+++# SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only WITH Qt-GPL-exception-1.0
+++
+++# Requires mkcert and openssl
+++
+++warn () { echo "$@" >&2; }
+++die () { warn "$@"; exit 1; }
+++
+++
+++command -v mkcert 1>/dev/null 2>&1 || die "Failed to find mkcert"
+++command -v openssl 1>/dev/null 2>&1 || die "Failed to find openssl"
+++
+++SCRIPT=$(realpath "$0")
+++SCRIPTPATH=$(dirname "$SCRIPT")
+++
+++pushd "$SCRIPTPATH" || die "Unable to pushd to $SCRIPTPATH"
+++mkcert 127.0.0.1
+++mkcert -client 127.0.0.1
+++warn "Remember to run mkcert -install if you haven't already"
+++
+++# Generate CA
+++openssl genrsa -out ca-key.pem 2048
+++openssl req -new -x509 -noenc -days 365 -key ca-key.pem -out rootCA.pem
+++
+++# Generate accepted client certificate
+++openssl genrsa -out accepted-client-key.pem 2048
+++openssl req -new -sha512 -nodes -key accepted-client-key.pem -out accepted-client.csr -config accepted-client.conf
+++openssl x509 -req -sha512 -days 45 -in accepted-client.csr -CA rootCA.pem -CAkey ca-key.pem -CAcreateserial -out accepted-client.pem
+++rm accepted-client.csr
+++rm rootCA.srl
+++
+++popd || die "Unable to popd"
++diff --git a/tests/manual/network/ssl/client-auth/tst_manual_ssl_client_auth.cpp b/tests/manual/network/ssl/client-auth/tst_manual_ssl_client_auth.cpp
++new file mode 100644
++index 00000000000..2307cbb1911
++--- /dev/null
+++++ b/tests/manual/network/ssl/client-auth/tst_manual_ssl_client_auth.cpp
++@@ -0,0 +1,118 @@
+++// Copyright (C) 2023 The Qt Company Ltd.
+++// SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only WITH Qt-GPL-exception-1.0
+++
+++#include <QtCore/qcoreapplication.h>
+++
+++#include <QtCore/qthread.h>
+++#include <QtCore/qfile.h>
+++#include <QtCore/qdir.h>
+++
+++#include <QtNetwork/qsslsocket.h>
+++#include <QtNetwork/qsslserver.h>
+++#include <QtNetwork/qsslconfiguration.h>
+++#include <QtNetwork/qsslkey.h>
+++
+++// Client and/or server presents a certificate signed by a system-trusted CA
+++// but the other side presents a certificate signed by a different CA.
+++constexpr bool TestServerPresentsIncorrectCa = false;
+++constexpr bool TestClientPresentsIncorrectCa = true;
+++
+++class ServerThread : public QThread
 ++{
-++    Q_ASSERT(connection->connectionType() == QHttpNetworkConnection::ConnectionTypeHTTP2
-++             || connection->connectionType() == QHttpNetworkConnection::ConnectionTypeHTTP2Direct);
+++    Q_OBJECT
+++public:
+++    void run() override
+++    {
+++        QSslServer server;
 ++
-++    // Because HTTP/2 requires that we send a SETTINGS frame as the first thing we do, and respond
-++    // to a SETTINGS frame with an ACK, we need to delay any handling until we can ensure that any
-++    // effects from emitting encrypted() have been processed.
-++    // This function is called after encrypted() was emitted, so check for changes.
+++        QSslConfiguration config = server.sslConfiguration();
+++        QList<QSslCertificate> certs = QSslCertificate::fromPath(QStringLiteral(":/rootCA.pem"));
+++        config.setCaCertificates(certs);
+++        config.setLocalCertificate(QSslCertificate::fromPath(QStringLiteral(":/127.0.0.1.pem"))
+++                                           .first());
+++        QFile keyFile(QStringLiteral(":/127.0.0.1-key.pem"));
+++        if (!keyFile.open(QIODevice::ReadOnly))
+++            qFatal("Failed to open key file");
+++        config.setPrivateKey(QSslKey(&keyFile, QSsl::Rsa));
+++        config.setPeerVerifyMode(QSslSocket::VerifyPeer);
+++        server.setSslConfiguration(config);
 ++
-++    if (!reply && h2RequestsToSend.isEmpty())
-++        abort();
-++    waitingForPotentialAbort = false;
-++    if (needInvokeReadyRead)
-++        _q_readyRead();
-++    if (needInvokeReceiveReply)
-++        _q_receiveReply();
-++    if (needInvokeSendRequest)
-++        sendRequest();
-++}
+++        connect(&server, &QSslServer::pendingConnectionAvailable, [&server]() {
+++            QSslSocket *socket = static_cast<QSslSocket *>(server.nextPendingConnection());
+++            qDebug() << "[s] newConnection" << socket->peerAddress() << socket->peerPort();
+++            socket->disconnectFromHost();
+++            qApp->quit();
+++        });
+++        connect(&server, &QSslServer::startedEncryptionHandshake, [](QSslSocket *socket) {
+++            qDebug() << "[s] new handshake" << socket->peerAddress() << socket->peerPort();
+++        });
+++        connect(&server, &QSslServer::errorOccurred,
+++                [](QSslSocket *socket, QAbstractSocket::SocketError error) {
+++                    qDebug() << "[s] errorOccurred" << socket->peerAddress() << socket->peerPort()
+++                             << error << socket->errorString();
+++                });
+++        connect(&server, &QSslServer::peerVerifyError,
+++                [](QSslSocket *socket, const QSslError &error) {
+++                    qDebug() << "[s] peerVerifyError" << socket->peerAddress() << socket->peerPort()
+++                             << error;
+++                });
+++        server.listen(QHostAddress::LocalHost, 24242);
 ++
-+ void QHttpNetworkConnectionChannel::requeueHttp2Requests()
-+ {
-+     QList<HttpMessagePair> h2Pairs = h2RequestsToSend.values();
-+diff --git a/src/network/access/qhttpnetworkconnectionchannel_p.h b/src/network/access/qhttpnetworkconnectionchannel_p.h
-+index 0772a4452b3..2a5336ca8a4 100644
-+--- a/src/network/access/qhttpnetworkconnectionchannel_p.h
-++++ b/src/network/access/qhttpnetworkconnectionchannel_p.h
-+@@ -73,6 +73,10 @@ public:
-+     QAbstractSocket *socket;
-+     bool ssl;
-+     bool isInitialized;
-++    bool waitingForPotentialAbort = false;
-++    bool needInvokeReceiveReply = false;
-++    bool needInvokeReadyRead = false;
-++    bool needInvokeSendRequest = false;
-+     ChannelState state;
-+     QHttpNetworkRequest request; // current request, only used for HTTP
-+     QHttpNetworkReply *reply; // current reply for this request, only used for HTTP
-+@@ -145,6 +149,8 @@ public:
-+     void closeAndResendCurrentRequest();
-+     void resendCurrentRequest();
-+ 
-++    void checkAndResumeCommunication();
+++        exec();
 ++
-+     bool isSocketBusy() const;
-+     bool isSocketWriting() const;
-+     bool isSocketWaiting() const;
-+diff --git a/tests/auto/network/access/http2/tst_http2.cpp b/tests/auto/network/access/http2/tst_http2.cpp
-+index 9c1a63bae1e..30abbb0d3ed 100644
-+--- a/tests/auto/network/access/http2/tst_http2.cpp
-++++ b/tests/auto/network/access/http2/tst_http2.cpp
-+@@ -99,6 +99,8 @@ private slots:
-+     void redirect_data();
-+     void redirect();
-+ 
-++    void abortOnEncrypted();
+++        server.close();
+++    }
+++};
 ++
-+ protected slots:
-+     // Slots to listen to our in-process server:
-+     void serverStarted(quint16 port);
-+@@ -1280,6 +1282,48 @@ void tst_Http2::redirect()
-+     QTRY_VERIFY(serverGotSettingsACK);
-+ }
-+ 
-++void tst_Http2::abortOnEncrypted()
+++int main(int argc, char **argv)
 ++{
-++#if !QT_CONFIG(ssl)
-++    QSKIP("TLS support is needed for this test");
-++#else
-++    clearHTTP2State();
-++    serverPort = 0;
+++    QCoreApplication app(argc, argv);
 ++
-++    ServerPtr targetServer(newServer(defaultServerSettings, H2Type::h2Direct));
+++    using namespace Qt::StringLiterals;
 ++
-++    QMetaObject::invokeMethod(targetServer.data(), "startServer", Qt::QueuedConnection);
-++    runEventLoop();
+++    if (!QFileInfo(u":/rootCA.pem"_s).exists())
+++        qFatal("rootCA.pem not found. Did you run generate.sh in the certs directory?");
 ++
-++    nRequests = 1;
-++    nSentRequests = 0;
+++    ServerThread serverThread;
+++    serverThread.start();
 ++
-++    const auto url = requestUrl(H2Type::h2Direct);
-++    QNetworkRequest request(url);
-++    request.setAttribute(QNetworkRequest::Http2DirectAttribute, true);
+++    QSslSocket socket;
+++    QSslConfiguration config = socket.sslConfiguration();
+++    QString certificatePath;
+++    QString keyFileName;
+++    if constexpr (TestClientPresentsIncorrectCa) { // true: Present cert signed with incorrect CA: should fail
+++        certificatePath = u":/127.0.0.1-client.pem"_s;
+++        keyFileName = u":/127.0.0.1-client-key.pem"_s;
+++    } else { // false: Use correct CA: should succeed
+++        certificatePath = u":/accepted-client.pem"_s;
+++        keyFileName = u":/accepted-client-key.pem"_s;
+++    }
+++    config.setLocalCertificate(QSslCertificate::fromPath(certificatePath).first());
+++    if (TestServerPresentsIncorrectCa) // true: Verify server using incorrect CA: should fail
+++        config.setCaCertificates(QSslCertificate::fromPath(u":/rootCA.pem"_s));
+++    QFile keyFile(keyFileName);
+++    if (!keyFile.open(QIODevice::ReadOnly))
+++        qFatal("Failed to open key file");
+++    config.setPrivateKey(QSslKey(&keyFile, QSsl::Rsa));
+++    socket.setSslConfiguration(config);
 ++
-++    std::unique_ptr<QNetworkReply> reply{manager->get(request)};
-++    reply->ignoreSslErrors();
-++    connect(reply.get(), &QNetworkReply::encrypted, reply.get(), [reply = reply.get()](){
-++        reply->abort();
+++    QObject::connect(&socket, &QSslSocket::encrypted, []() { qDebug() << "[c] encrypted"; });
+++    QObject::connect(&socket, &QSslSocket::errorOccurred,
+++            [&socket](QAbstractSocket::SocketError error) {
+++                qDebug() << "[c] errorOccurred" << error << socket.errorString();
+++                qApp->quit();
+++            });
+++    QObject::connect(&socket, &QSslSocket::sslErrors, [](const QList<QSslError> &errors) {
+++        qDebug() << "[c] sslErrors" << errors;
 ++    });
-++    connect(reply.get(), &QNetworkReply::errorOccurred, this, &tst_Http2::replyFinishedWithError);
+++    QObject::connect(&socket, &QSslSocket::connected, []() { qDebug() << "[c] connected"; });
 ++
-++    runEventLoop();
-++    STOP_ON_FAILURE
+++    socket.connectToHostEncrypted(QStringLiteral("127.0.0.1"), 24242);
 ++
-++    QCOMPARE(nRequests, 0);
-++    QCOMPARE(reply->error(), QNetworkReply::OperationCanceledError);
-++
-++    const bool res = QTest::qWaitFor(
-++            [this, server = targetServer.get()]() {
-++                return serverGotSettingsACK || prefaceOK || nSentRequests > 0;
-++            },
-++            500);
-++    QVERIFY(!res);
-++#endif // QT_CONFIG(ssl)
+++    const int res = app.exec();
+++    serverThread.quit();
+++    serverThread.wait();
+++    return res;
 ++}
 ++
-+ void tst_Http2::serverStarted(quint16 port)
+++#include "tst_manual_ssl_client_auth.moc"
++-- 
++2.46.0
++
+diff --git a/package/qt6/qt6base/0015-Ssl-Copy-the-on-demand-cert-loading-bool-from-defaul.patch b/package/qt6/qt6base/0015-Ssl-Copy-the-on-demand-cert-loading-bool-from-defaul.patch
+new file mode 100644
+index 0000000000..7863f0c208
+--- /dev/null
++++ b/package/qt6/qt6base/0015-Ssl-Copy-the-on-demand-cert-loading-bool-from-defaul.patch
+@@ -0,0 +1,116 @@
++From 99a9f2eccb5de9843dc956dd380dcf7515cbce27 Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?M=C3=A5rten=20Nordheim?= <marten.nordheim@qt.io>
++Date: Thu, 25 May 2023 14:40:29 +0200
++Subject: [PATCH] Ssl: Copy the on-demand cert loading bool from default config
++
++Otherwise individual sockets will still load system certificates when
++a chain doesn't match against the configured CA certificates.
++That's not intended behavior, since specifically setting the CA
++certificates means you don't want the system certificates to be used.
++
++Follow-up to/amends ada2c573c1a25f8d96577734968fe317ddfa292a
++
++This is potentially a breaking change because now, if you ever add a
++CA to the default config, it will disable loading system certificates
++on demand for all sockets. And the only way to re-enable it is to
++create a null-QSslConfiguration and set it as the new default.
++
++Pick-to: 6.5 6.2 5.15
++Change-Id: Ic3b2ab125c0cdd58ad654af1cb36173960ce2d1e
++Reviewed-by: Timur Pocheptsov <timur.pocheptsov@qt.io>
++
++Fixes: https://security-tracker.debian.org/tracker/CVE-2023-34410
++Upstream: https://codereview.qt-project.org/gitweb?p=qt%2Fqtbase.git;a=commit;h=57ba6260c0801055b7188fdaa1818b940590f5f1
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ src/network/ssl/qsslsocket.cpp                |  5 ++++
++ .../tst_manual_ssl_client_auth.cpp            | 24 ++++++++++++++++---
++ 2 files changed, 26 insertions(+), 3 deletions(-)
++
++diff --git a/src/network/ssl/qsslsocket.cpp b/src/network/ssl/qsslsocket.cpp
++index 4eefe439293..0563fd06634 100644
++--- a/src/network/ssl/qsslsocket.cpp
+++++ b/src/network/ssl/qsslsocket.cpp
++@@ -1973,6 +1973,10 @@ QSslSocketPrivate::QSslSocketPrivate()
++     , flushTriggered(false)
 + {
-+     serverPort = port;
++     QSslConfigurationPrivate::deepCopyDefaultConfiguration(&configuration);
+++    // If the global configuration doesn't allow root certificates to be loaded
+++    // on demand then we have to disable it for this socket as well.
+++    if (!configuration.allowRootCertOnDemandLoading)
+++        allowRootCertOnDemandLoading = false;
++ 
++     const auto *tlsBackend = tlsBackendInUse();
++     if (!tlsBackend) {
++@@ -2281,6 +2285,7 @@ void QSslConfigurationPrivate::deepCopyDefaultConfiguration(QSslConfigurationPri
++     ptr->sessionProtocol = global->sessionProtocol;
++     ptr->ciphers = global->ciphers;
++     ptr->caCertificates = global->caCertificates;
+++    ptr->allowRootCertOnDemandLoading = global->allowRootCertOnDemandLoading;
++     ptr->protocol = global->protocol;
++     ptr->peerVerifyMode = global->peerVerifyMode;
++     ptr->peerVerifyDepth = global->peerVerifyDepth;
++diff --git a/tests/manual/network/ssl/client-auth/tst_manual_ssl_client_auth.cpp b/tests/manual/network/ssl/client-auth/tst_manual_ssl_client_auth.cpp
++index 2307cbb1911..4d4aaca7e34 100644
++--- a/tests/manual/network/ssl/client-auth/tst_manual_ssl_client_auth.cpp
+++++ b/tests/manual/network/ssl/client-auth/tst_manual_ssl_client_auth.cpp
++@@ -16,6 +16,9 @@
++ // but the other side presents a certificate signed by a different CA.
++ constexpr bool TestServerPresentsIncorrectCa = false;
++ constexpr bool TestClientPresentsIncorrectCa = true;
+++// Decides whether or not to put the root CA into the global ssl configuration
+++// or into the socket's specific ssl configuration.
+++constexpr bool UseGlobalConfiguration = true;
++ 
++ class ServerThread : public QThread
++ {
++@@ -26,8 +29,10 @@ public:
++         QSslServer server;
++ 
++         QSslConfiguration config = server.sslConfiguration();
++-        QList<QSslCertificate> certs = QSslCertificate::fromPath(QStringLiteral(":/rootCA.pem"));
++-        config.setCaCertificates(certs);
+++        if (!UseGlobalConfiguration) {
+++            QList<QSslCertificate> certs = QSslCertificate::fromPath(QStringLiteral(":/rootCA.pem"));
+++            config.setCaCertificates(certs);
+++        }
++         config.setLocalCertificate(QSslCertificate::fromPath(QStringLiteral(":/127.0.0.1.pem"))
++                                            .first());
++         QFile keyFile(QStringLiteral(":/127.0.0.1-key.pem"));
++@@ -73,6 +78,12 @@ int main(int argc, char **argv)
++     if (!QFileInfo(u":/rootCA.pem"_s).exists())
++         qFatal("rootCA.pem not found. Did you run generate.sh in the certs directory?");
++ 
+++    if (UseGlobalConfiguration) {
+++        QSslConfiguration config = QSslConfiguration::defaultConfiguration();
+++        config.setCaCertificates(QSslCertificate::fromPath(u":/rootCA.pem"_s));
+++        QSslConfiguration::setDefaultConfiguration(config);
+++    }
+++
++     ServerThread serverThread;
++     serverThread.start();
++ 
++@@ -88,12 +99,19 @@ int main(int argc, char **argv)
++         keyFileName = u":/accepted-client-key.pem"_s;
++     }
++     config.setLocalCertificate(QSslCertificate::fromPath(certificatePath).first());
++-    if (TestServerPresentsIncorrectCa) // true: Verify server using incorrect CA: should fail
+++    if (!UseGlobalConfiguration && TestServerPresentsIncorrectCa) {
+++        // Verify server using incorrect CA: should fail
++         config.setCaCertificates(QSslCertificate::fromPath(u":/rootCA.pem"_s));
+++    } else if (UseGlobalConfiguration && !TestServerPresentsIncorrectCa) {
+++        // Verify server using correct CA, we need to explicitly set the
+++        // system CAs when the global config is overridden.
+++        config.setCaCertificates(QSslConfiguration::systemCaCertificates());
+++    }
++     QFile keyFile(keyFileName);
++     if (!keyFile.open(QIODevice::ReadOnly))
++         qFatal("Failed to open key file");
++     config.setPrivateKey(QSslKey(&keyFile, QSsl::Rsa));
+++
++     socket.setSslConfiguration(config);
++ 
++     QObject::connect(&socket, &QSslSocket::encrypted, []() { qDebug() << "[c] encrypted"; });
 +-- 
 +2.46.0
 +
 diff --git a/package/qt6/qt6base/qt6base.mk b/package/qt6/qt6base/qt6base.mk
-index 291ac4a821..471edfb4f9 100644
+index 7cfcc708d8..291ac4a821 100644
 --- a/package/qt6/qt6base/qt6base.mk
 +++ b/package/qt6/qt6base/qt6base.mk
-@@ -24,6 +24,8 @@ QT6BASE_IGNORE_CVES += CVE-2023-37369
- # 0014-Schannel-Reject-certificate-not-signed-by-a-configur.patch
- # 0015-Ssl-Copy-the-on-demand-cert-loading-bool-from-defaul.patch
- QT6BASE_IGNORE_CVES += CVE-2023-34410
-+# 0016-HTTP2-Delay-any-communication-until-encrypted-can-be.patch
-+QT6BASE_IGNORE_CVES += CVE-2024-39936
+@@ -21,6 +21,9 @@ QT6BASE_IGNORE_CVES += CVE-2023-38197
+ QT6BASE_IGNORE_CVES += CVE-2023-38197
+ # 0013-QXmlStreamReader-make-fastScanName-indicate-parsing-.patch
+ QT6BASE_IGNORE_CVES += CVE-2023-37369
++# 0014-Schannel-Reject-certificate-not-signed-by-a-configur.patch
++# 0015-Ssl-Copy-the-on-demand-cert-loading-bool-from-defaul.patch
++QT6BASE_IGNORE_CVES += CVE-2023-34410
  
  QT6BASE_CMAKE_BACKEND = ninja
  
