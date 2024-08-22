@@ -4,90 +4,93 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2CF12C3DA4A
-	for <buildroot@archiver.kernel.org>; Thu, 22 Aug 2024 18:37:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB367C5321E
+	for <buildroot@archiver.kernel.org>; Thu, 22 Aug 2024 18:37:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D4E0A60E34;
-	Thu, 22 Aug 2024 18:37:51 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3362360E4B;
+	Thu, 22 Aug 2024 18:37:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OELxSxAh1FGs; Thu, 22 Aug 2024 18:37:51 +0000 (UTC)
+ id Saa9IfZDi8Wo; Thu, 22 Aug 2024 18:37:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B712E60E4B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0675A60E51
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B712E60E4B;
-	Thu, 22 Aug 2024 18:37:50 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id EE50E1BF381
- for <buildroot@lists.busybox.net>; Thu, 22 Aug 2024 18:37:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0675A60E51;
+	Thu, 22 Aug 2024 18:37:53 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id D8B881BF381
+ for <buildroot@lists.busybox.net>; Thu, 22 Aug 2024 18:37:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D9E0860E4B
- for <buildroot@lists.busybox.net>; Thu, 22 Aug 2024 18:37:48 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id C145981A46
+ for <buildroot@lists.busybox.net>; Thu, 22 Aug 2024 18:37:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TUVQt8tNE4BO for <buildroot@lists.busybox.net>;
- Thu, 22 Aug 2024 18:37:48 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WXJj2XUK3s02 for <buildroot@lists.busybox.net>;
+ Thu, 22 Aug 2024 18:37:49 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::432; helo=mail-wr1-x432.google.com;
+ client-ip=2a00:1450:4864:20::435; helo=mail-wr1-x435.google.com;
  envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 862D260E34
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 862D260E34
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com
- [IPv6:2a00:1450:4864:20::432])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 862D260E34
- for <buildroot@buildroot.org>; Thu, 22 Aug 2024 18:37:47 +0000 (UTC)
-Received: by mail-wr1-x432.google.com with SMTP id
- ffacd0b85a97d-37193ef72a4so649728f8f.1
- for <buildroot@buildroot.org>; Thu, 22 Aug 2024 11:37:47 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9D87B81142
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9D87B81142
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com
+ [IPv6:2a00:1450:4864:20::435])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 9D87B81142
+ for <buildroot@buildroot.org>; Thu, 22 Aug 2024 18:37:48 +0000 (UTC)
+Received: by mail-wr1-x435.google.com with SMTP id
+ ffacd0b85a97d-371b97cfd6fso700958f8f.2
+ for <buildroot@buildroot.org>; Thu, 22 Aug 2024 11:37:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1724351865; x=1724956665;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=UJEQIQLo+rlGP192bQCWyrnmgs94wKAV7pHc9eiTLz0=;
- b=N0JxsGIb3WhDkjYMa4ntLStc+WD/REc3+A0FXusIpJ7QKhWwli4MCOVkXzJxhKkcGY
- WV7wONcYeb1FzZTNtn1QRMARW97FacWdckWBxhBNYDzVL8qDT3wSNadxwL5/SRbiKUvo
- WnADZtfEtZCWqOGI38R4+cSe8NWXRDERD3E6Nntq0EhG5TiaTduedfr64XdrM3v81nxP
- tIYNyVwGqU6i66JXlaE9HteEi2d/qfkC7n6OK4vDiz9AiP5w47oUligUesVVvqaRdDL+
- LqK/RkoVMLXVkpiUCmEMvi668aBkgQxnAqwWJD+7Iq43DXQpkISvYg6JaV0dmUZ1JwZA
- 1jgg==
-X-Gm-Message-State: AOJu0YzmEPi80PJnTzcarKJBOqDd2KcGpOcqWS8QPPC3FmWe3Zd20VMN
- BOkgAaaPfEUgdgxyPnLBQhKFO3HfJ8Jl2VEza3rOAdkviGa/G2ytMCw5gIpbuwexTN1gaxGcMPg
- y1fI=
-X-Google-Smtp-Source: AGHT+IEx8N3rm8ZlJ71o5X6NV9XyB9n3gUlmQxhIw1qGKwC3nzL27O2VVr5TiWAPkXRIlLs6TzSgQQ==
-X-Received: by 2002:a5d:68c9:0:b0:367:96d2:5756 with SMTP id
- ffacd0b85a97d-372fd82b8f5mr4068127f8f.62.1724351865190; 
- Thu, 22 Aug 2024 11:37:45 -0700 (PDT)
+ d=1e100.net; s=20230601; t=1724351866; x=1724956666;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=rKzCjo3qdZIf2pi418S63Vz2bGbb0Xdz5SnU/PMgetQ=;
+ b=j9kSBVL2ZCMBkaLSnqIg2x1E4sxLpgcjtySEE+qdHKm6WyLQiKS0li3FieEeZu692i
+ 1fR0sw6IEj5k/4jZC6Lx2CVv7K5EZF+J1JoDVJylr+QUpHBSPAfC1ydPecH59aN5/gos
+ P2BmfdZ7Y7+1CUGROu76OWzM6CmMBaRh/1et2QSgI9dKE/STaUY6tznSyNIu4JdhHpkk
+ GfvtgJCLO1MWQeh7ICQacHfOWGEiJkbDji7f20dwdBwmbi2Whj+JxErGBTevgjhydKmi
+ kOilk8vHUe9gsumWomB1kFlaIbCekzJfSDWiaq2xCOQXoK6m2xY+HaPRalJFYd1BJnUS
+ d6Bw==
+X-Gm-Message-State: AOJu0Yz+W1gbHKFa4qxbF+d1Yd49nOy8BAO0pK/BoXr+rjUK/3zwnEJa
+ DEiYQeO+uNtV2owdlRqV18k3boDLfcrCcSth54hNwFSayG1mMw5c0NXWbHGtYlaizpVIHNGWi4Q
+ oFxY=
+X-Google-Smtp-Source: AGHT+IERlVEJSV3yn2vmWwgGbsZ4s1y+uJGrdkeKojE6+wBGhQBLmnaYnMFyS+q8G8wo6xjrNyaKoQ==
+X-Received: by 2002:adf:a3d0:0:b0:371:8a74:4170 with SMTP id
+ ffacd0b85a97d-372fd6d5744mr4225924f8f.24.1724351866197; 
+ Thu, 22 Aug 2024 11:37:46 -0700 (PDT)
 Received: from dario-ThinkPad-T14s-Gen-2i.. ([2.196.40.166])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3730811001fsm2276397f8f.20.2024.08.22.11.37.44
+ ffacd0b85a97d-3730811001fsm2276397f8f.20.2024.08.22.11.37.45
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 22 Aug 2024 11:37:44 -0700 (PDT)
+ Thu, 22 Aug 2024 11:37:45 -0700 (PDT)
 From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Thu, 22 Aug 2024 20:37:39 +0200
-Message-ID: <20240822183742.3550055-1-dario.binacchi@amarulasolutions.com>
+Date: Thu, 22 Aug 2024 20:37:40 +0200
+Message-ID: <20240822183742.3550055-2-dario.binacchi@amarulasolutions.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240822183742.3550055-1-dario.binacchi@amarulasolutions.com>
+References: <20240822183742.3550055-1-dario.binacchi@amarulasolutions.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1724351865; x=1724956665;
+ d=amarulasolutions.com; s=google; t=1724351866; x=1724956666;
  darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=UJEQIQLo+rlGP192bQCWyrnmgs94wKAV7pHc9eiTLz0=;
- b=UZSeNCTjZRmg9hdJYxclwvjxGm+tig99KJ/3vm9IysyIfV+WOSx2pn4wXeTM4u8dnC
- GoEXvCFd1unfyWJOrfR7fLTxvSYY2E6+gQnPPLpqVIpG/4L23lj91KBu1YANRFbRMiQ+
- uH1NW/nwVgjTydop66tYCr3sYLVwpslZH5+pM=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=rKzCjo3qdZIf2pi418S63Vz2bGbb0Xdz5SnU/PMgetQ=;
+ b=XTUvchDoUMkK3xWrY5IPVgmBLqa2pAxt4Ca7B4La0Ykj18yUYsGfFuNaa5YUVZA7ze
+ ZmCAcYIGMfCnDNzJ6C0l6oHXvSKOS3VVDSRrgZBbh5uaPoeA8BbLwZl6HLkrr69MA0JQ
+ owwQ4myw5+ft0fu1l2FChTsb1OvT+XHcIr/gM=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (1024-bit key,
  unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=UZSeNCTj
-Subject: [Buildroot] [PATCH v3 0/3] tinyinit and stm32f746_disco_sd_defconfig
+ header.a=rsa-sha256 header.s=google header.b=XTUvchDo
+Subject: [Buildroot] [PATCH v3 1/3] package/tinyinit: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -108,65 +111,129 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This series is inspired by reading the following topic:
+This package contains a Linux init script suitable for resource-limited
+systems which can be used as an alternative to the one provided by
+Busybox.
 
-https://lore.kernel.org/buildroot/20230206230203.70e2dbd8@windsurf/T
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+---
 
-Starting from that patch, and following Thomas Petazzoni's suggestions
-regarding the possibility of using a single minimal script without
-duplicating it within Buildroot, I developed these three patches.
-Meanwhile, the configuration for the stm32f746_disco board was useful
-for developing the display support for the board, which was later
-merged into Linux.
+Changes v2 -> v3:
+ - Add the init script
+ - Drop the entry in the init selection in system/Config.in.
 
-Dario Binacchi (3):
-  package/tinyinit: new package
-  configs/stm32f746_disco_sd: new defconfig
-  board/canaan/k210-soc: use tinyinit as Linux init process
+Changes v1 -> v2:
+ - Rename tinit to tinyinit.
+ - Put the script inside the tinyinit package without the need to use
+   a github repo.
+ - Update the commit message.
 
- .checkpackageignore                           |  1 -
- DEVELOPERS                                    |  3 ++
- board/canaan/k210-soc/rootfs_overlay/init     |  1 -
- .../stm32f746-disco/extlinux.conf             |  4 +++
- .../stm32f746-disco/flash_sd.sh               | 22 +++++++++++++
- .../stm32f746-disco/genimage.cfg              | 27 ++++++++++++++++
- .../stm32f746-disco/linux.fragment            | 13 ++++++++
- .../patches/linux-headers/linux-headers.hash  |  1 +
- .../stm32f746-disco/patches/linux/linux.hash  |  2 ++
- .../stm32f746-disco/patches/uboot/uboot.hash  |  2 ++
- .../stm32f746-disco/post-build.sh             |  9 ++++++
- .../stm32f746-disco/readme.txt                | 31 ++++++++++++++++++
- configs/canaan_kd233_defconfig                |  2 +-
- configs/sipeed_maix_bit_defconfig             |  2 +-
- configs/sipeed_maix_bit_sdcard_defconfig      |  2 +-
- configs/sipeed_maix_dock_defconfig            |  2 +-
- configs/sipeed_maix_dock_sdcard_defconfig     |  2 +-
- configs/sipeed_maix_go_defconfig              |  2 +-
- configs/sipeed_maix_go_sdcard_defconfig       |  2 +-
- configs/sipeed_maixduino_defconfig            |  2 +-
- configs/sipeed_maixduino_sdcard_defconfig     |  2 +-
- configs/stm32f746_disco_sd_defconfig          | 32 +++++++++++++++++++
- package/Config.in                             |  1 +
- package/tinyinit/Config.in                    | 10 ++++++
- .../sbin => package/tinyinit}/init            | 11 +------
- package/tinyinit/tinyinit.mk                  | 12 +++++++
- 26 files changed, 179 insertions(+), 21 deletions(-)
- delete mode 120000 board/canaan/k210-soc/rootfs_overlay/init
- create mode 100644 board/stmicroelectronics/stm32f746-disco/extlinux.conf
- create mode 100755 board/stmicroelectronics/stm32f746-disco/flash_sd.sh
- create mode 100644 board/stmicroelectronics/stm32f746-disco/genimage.cfg
- create mode 100644 board/stmicroelectronics/stm32f746-disco/linux.fragment
- create mode 120000 board/stmicroelectronics/stm32f746-disco/patches/linux-headers/linux-headers.hash
- create mode 100644 board/stmicroelectronics/stm32f746-disco/patches/linux/linux.hash
- create mode 100644 board/stmicroelectronics/stm32f746-disco/patches/uboot/uboot.hash
- create mode 100755 board/stmicroelectronics/stm32f746-disco/post-build.sh
- create mode 100644 board/stmicroelectronics/stm32f746-disco/readme.txt
- create mode 100644 configs/stm32f746_disco_sd_defconfig
+ DEVELOPERS                   |  1 +
+ package/Config.in            |  1 +
+ package/tinyinit/Config.in   | 10 ++++++++++
+ package/tinyinit/init        | 32 ++++++++++++++++++++++++++++++++
+ package/tinyinit/tinyinit.mk | 12 ++++++++++++
+ 5 files changed, 56 insertions(+)
  create mode 100644 package/tinyinit/Config.in
- rename {board/canaan/k210-soc/rootfs_overlay/sbin => package/tinyinit}/init (75%)
- mode change 100755 => 100644
+ create mode 100644 package/tinyinit/init
  create mode 100644 package/tinyinit/tinyinit.mk
 
+diff --git a/DEVELOPERS b/DEVELOPERS
+index d7d0af35431b..45cc1cc48996 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -791,6 +791,7 @@ F:	configs/imx8mn_bsh_smm_s2_defconfig
+ F:	configs/imx8mn_bsh_smm_s2_pro_defconfig
+ F:	configs/stm32f769_disco_sd_defconfig
+ F:	package/sscep/
++F:	package/tinyinit/
+ F:	package/uuu/
+ 
+ N:	Dario Binacchi <dariobin@libero.it>
+diff --git a/package/Config.in b/package/Config.in
+index 317f859684fe..ddf378b13e01 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2869,6 +2869,7 @@ menu "System tools"
+ 	source "package/tar/Config.in"
+ 	source "package/tealdeer/Config.in"
+ 	source "package/thermald/Config.in"
++	source "package/tinyinit/Config.in"
+ 	source "package/tpm-tools/Config.in"
+ 	source "package/tpm2-abrmd/Config.in"
+ 	source "package/tpm2-tools/Config.in"
+diff --git a/package/tinyinit/Config.in b/package/tinyinit/Config.in
+new file mode 100644
+index 000000000000..2ceb8e191e23
+--- /dev/null
++++ b/package/tinyinit/Config.in
+@@ -0,0 +1,10 @@
++config BR2_PACKAGE_TINYINIT
++	bool "tinyinit"
++	depends on BR2_INIT_NONE
++	help
++	  A Linux tiny initialization script suitable for resource
++	  limited systems, which can be used as an alternative to the
++	  one provided by Busybox.
++
++comment "tinyinit needs BR2_INIT_NONE, i. e. no init system installed"
++	depends on !BR2_INIT_NONE
+diff --git a/package/tinyinit/init b/package/tinyinit/init
+new file mode 100644
+index 000000000000..fbcb481010c2
+--- /dev/null
++++ b/package/tinyinit/init
+@@ -0,0 +1,32 @@
++#!/bin/sh
++
++# This script replaces the default busybox init process to avoid having that
++# process staying alive and sleeping in the background, (uselessly) consuming
++# precious memory.
++
++# Mount procfs and sysfs
++/bin/mount -t proc proc /proc
++/bin/mount -t sysfs sysfs /sys
++
++# When the kernel is directly booted, devtmpfs is not automatically mounted.
++# Manually mount it if needed.
++devmnt=$(mount | grep -c devtmpfs)
++if [ "${devmnt}" -eq 0 ]; then
++    /bin/mount -t devtmpfs devtmpfs /dev
++fi
++
++# Use the /dev/console device node from devtmpfs if possible to not
++# confuse glibc's ttyname_r().
++# This may fail (E.G. booted with console=), and errors from exec will
++# terminate the shell, so use a subshell for the test
++if (exec 0</dev/console) 2>/dev/null; then
++    exec 0</dev/console
++    exec 1>/dev/console
++    exec 2>/dev/console
++fi
++
++# Clear memory to reduce page fragmentation
++echo 3 > /proc/sys/vm/drop_caches
++
++# Finally, let's start an interactive shell
++exec /bin/sh
+diff --git a/package/tinyinit/tinyinit.mk b/package/tinyinit/tinyinit.mk
+new file mode 100644
+index 000000000000..c7bb144dee68
+--- /dev/null
++++ b/package/tinyinit/tinyinit.mk
+@@ -0,0 +1,12 @@
++################################################################################
++#
++# tinyinit
++#
++################################################################################
++
++define TINYINIT_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 0755 -D $(TINYINIT_PKGDIR)/init $(TARGET_DIR)/sbin/init
++	(cd $(TARGET_DIR); ln -sf /sbin/init init)
++endef
++
++$(eval $(generic-package))
 -- 
 2.43.0
 
