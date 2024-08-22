@@ -4,71 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43D59C52D7C
-	for <buildroot@archiver.kernel.org>; Thu, 22 Aug 2024 18:18:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31DC4C52D7C
+	for <buildroot@archiver.kernel.org>; Thu, 22 Aug 2024 18:18:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0E13980D9C;
-	Thu, 22 Aug 2024 18:18:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0321E80D9C;
+	Thu, 22 Aug 2024 18:18:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Kuf9-0jeSGsS; Thu, 22 Aug 2024 18:18:35 +0000 (UTC)
+ id IEWl7O8E1bb9; Thu, 22 Aug 2024 18:18:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1334E810D6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0CB86813DC
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1334E810D6;
-	Thu, 22 Aug 2024 18:18:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0CB86813DC;
+	Thu, 22 Aug 2024 18:18:49 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id BDA8F1BF381
- for <buildroot@lists.busybox.net>; Thu, 22 Aug 2024 18:18:33 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 99D9A1BF381
+ for <buildroot@lists.busybox.net>; Thu, 22 Aug 2024 18:18:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B84D0810D6
- for <buildroot@lists.busybox.net>; Thu, 22 Aug 2024 18:18:33 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7FC2681A39
+ for <buildroot@lists.busybox.net>; Thu, 22 Aug 2024 18:18:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sC-gYiqTgS3l for <buildroot@lists.busybox.net>;
- Thu, 22 Aug 2024 18:18:32 +0000 (UTC)
+ id i9XYnC29YKRD for <buildroot@lists.busybox.net>;
+ Thu, 22 Aug 2024 18:18:45 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8A41780D9C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8A41780D9C
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org AD951813DC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AD951813DC
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8A41780D9C
- for <buildroot@buildroot.org>; Thu, 22 Aug 2024 18:18:32 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id AD951813DC
+ for <buildroot@buildroot.org>; Thu, 22 Aug 2024 18:18:44 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a0a54.dip0.t-ipconnect.de [91.58.10.84])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id CE4B2A4C2545
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id DFA1EA4C25D1
  for <buildroot@buildroot.org>; Thu, 22 Aug 2024 20:18:30 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:55196)
  by fli4l.lan.fli4l with esmtp (Exim 4.98)
- (envelope-from <bernd@kuhls.net>) id 1shCOE-000000005cF-0trU
+ (envelope-from <bernd@kuhls.net>) id 1shCOE-000000005cF-1AgV
  for buildroot@buildroot.org; Thu, 22 Aug 2024 18:18:30 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Thu, 22 Aug 2024 20:18:24 +0200
-Message-Id: <20240822181830.65052-1-bernd@kuhls.net>
+Date: Thu, 22 Aug 2024 20:18:25 +0200
+Message-Id: <20240822181830.65052-2-bernd@kuhls.net>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20240822181830.65052-1-bernd@kuhls.net>
+References: <20240822181830.65052-1-bernd@kuhls.net>
 MIME-Version: 1.0
 X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202406071026; t=1724350710;
- bh=j0+iO1rpCc3cELIOkkzwWM1SMRbvPKIdiV+GqKibjB0=;
- h=From:To:Subject:Date:From;
- b=UQiw0zQNHD+n31tvRJd26qNPFKUpsK7g/ynaYcRFbxSZ2zLvyurGytaaWJDf3oijk
- IZMijYb3EM6VFD4HpGllCv9BXD1OQRARsh8x2IMiGFIpBKbwWpFTaMHHDA6K5PUKoe
- 9gGmzdgeFkaTtzJfnB+BAvvilxQdUzgz8ubBlUZkeHl+oHKcfPpFk5+9zLKeVZRng3
- XSRoN9m3Ggk6y6cgU1sIUgxcR/g5hspNV1UGwi/8VM2Xf0DMcKkRNxKXO7hQTVY5mm
- ZYLaFT9uMAn4q/6z5jeJrdRyZigRL+0BYJ8LzRCe6n5yrBXysZzpqIUxvtp6c8QM6S
- XaT7XcXza4obw==
+ bh=yshVmF4S1Hsd0k5LPTW2aTQrOQEba0Zb0tRt6RJ/1AU=;
+ h=From:To:Subject:Date:In-Reply-To:References:From;
+ b=vCEoo/EICLoPpLXwjUhMjI8L8TM7sIH5Ot88XZCBFq4EfA8PYwq1ITsf5qILPepkj
+ EpYm3qXxY9sdN3ini183F4MqAXTAKr89DLMx8hNDLw2Fj7g9SYi8P1YqCaOR8Bg8JW
+ Xi4lMLYRmYk6+ejEKQxLrSH/VGYMOlLESE3glSGsVqcsL5mbMURWnv1RBfPCX9GVpA
+ HRjJVEBhw9K9SdIUBhmWeSUUONctxW2O9LkkDzyED8Ng3Z2LPG0uIWVBNYqsfVPxH6
+ lrcGCHq9vPEKqg1XLWStE14cO2rPQmRr4vee9/rdbqsDlPK2HrLrQKSx1+ASYRLCu1
+ 8Re+O0a2JWdkw==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202406071026 header.b=UQiw0zQN
-Subject: [Buildroot] [PATCH/next 1/7] package/kodi-inputstream-adaptive:
- bump version to 21.5.2-Omega
+ header.a=rsa-sha256 header.s=kas202406071026 header.b=vCEoo/EI
+Subject: [Buildroot] [PATCH/next 2/7] package/kodi-pvr-nextpvr: bump version
+ to 21.2.0-Omega
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,34 +89,32 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- .../kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash    | 2 +-
- package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk  | 2 +-
+ package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash | 2 +-
+ package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-index 82325ab014..af88728c73 100644
---- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-+++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-@@ -1,5 +1,5 @@
+diff --git a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash
+index 5b8b6b7e4d..130bcbe5b2 100644
+--- a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash
++++ b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash
+@@ -1,3 +1,3 @@
  # Locally computed
--sha256  caf71b67cf242c600878718dab8227947062a28485078b8bf68ac72aef51e12c  kodi-inputstream-adaptive-21.4.10-Omega.tar.gz
-+sha256  b27121f9ec64c43dfb9beca56b045c6ec198b04ae5d006001916b9acbee63c0c  kodi-inputstream-adaptive-21.5.2-Omega.tar.gz
- sha256  48632d57fbb6ab8f50cbf4deced5c91e733fa7ff292687c4816b77f28e483df9  LICENSE.md
- sha256  02f864f3e07456785625968022ce811c5640301bfd2ae70963efea89d306790a  LICENSES/README.md
- sha256  0b7f5dcb3d2c28ff78d999786028930e762df0baa2f52955782e378ec5b636a8  LICENSES/BSD-2-Clause-Views
-diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-index b6825c1ff0..66375affc8 100644
---- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-+++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
+-sha256  dd4974d3bf664067787da271ad8f76a8ecf61e73909050991aae99e0c2863eaa  kodi-pvr-nextpvr-21.1.1-Omega.tar.gz
++sha256  3df0ed9a1f7dd61feba1fd8281cdd5b6e3ee153f78eba3e645e5d2213f7c5793  kodi-pvr-nextpvr-21.2.0-Omega.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk
+index 788415b896..cd0378bff8 100644
+--- a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk
++++ b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KODI_INPUTSTREAM_ADAPTIVE_VERSION = 21.4.10-Omega
-+KODI_INPUTSTREAM_ADAPTIVE_VERSION = 21.5.2-Omega
- KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,xbmc,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
- KODI_INPUTSTREAM_ADAPTIVE_LICENSE = \
- 	BSD-2-Clause-Views \
+-KODI_PVR_NEXTPVR_VERSION = 21.1.1-Omega
++KODI_PVR_NEXTPVR_VERSION = 21.2.0-Omega
+ KODI_PVR_NEXTPVR_SITE = $(call github,kodi-pvr,pvr.nextpvr,$(KODI_PVR_NEXTPVR_VERSION))
+ KODI_PVR_NEXTPVR_LICENSE = GPL-2.0+
+ KODI_PVR_NEXTPVR_LICENSE_FILES = LICENSE.md
 -- 
 2.39.2
 
