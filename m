@@ -4,66 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01603C3DA4A
-	for <buildroot@archiver.kernel.org>; Thu, 22 Aug 2024 11:33:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 250A7C52D7C
+	for <buildroot@archiver.kernel.org>; Thu, 22 Aug 2024 11:52:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8A9868179D;
-	Thu, 22 Aug 2024 11:33:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C922D817AE;
+	Thu, 22 Aug 2024 11:52:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5vU3DutYYj84; Thu, 22 Aug 2024 11:33:35 +0000 (UTC)
+ id 7QefLc2M9IRK; Thu, 22 Aug 2024 11:52:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7D975817A2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DF841817AF
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7D975817A2;
-	Thu, 22 Aug 2024 11:33:35 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 589E01BF361
- for <buildroot@lists.busybox.net>; Thu, 22 Aug 2024 11:33:34 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DF841817AF;
+	Thu, 22 Aug 2024 11:52:01 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 4BC981BF361
+ for <buildroot@lists.busybox.net>; Thu, 22 Aug 2024 11:51:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 46AB1817A2
- for <buildroot@lists.busybox.net>; Thu, 22 Aug 2024 11:33:34 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 38466402A5
+ for <buildroot@lists.busybox.net>; Thu, 22 Aug 2024 11:51:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8aJlLW8-NWWN for <buildroot@lists.busybox.net>;
- Thu, 22 Aug 2024 11:33:33 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
- helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 3C2DE8179D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3C2DE8179D
-Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3C2DE8179D
- for <buildroot@buildroot.org>; Thu, 22 Aug 2024 11:33:32 +0000 (UTC)
-Received: from tuxedoOT.fritz.box (unknown [212.37.174.96])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
- (No client certificate requested)
- by smtp.bubu1.eu (Postfix) with ESMTPSA id 566802C85C6D;
- Thu, 22 Aug 2024 13:33:30 +0200 (CEST)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id m-nK6cGVz5oc for <buildroot@lists.busybox.net>;
+ Thu, 22 Aug 2024 11:51:58 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::225;
+ helo=relay5-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org AA84B4027F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AA84B4027F
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id AA84B4027F
+ for <buildroot@buildroot.org>; Thu, 22 Aug 2024 11:51:57 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPA id 4BB7A1C0008;
+ Thu, 22 Aug 2024 11:51:54 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 22 Aug 2024 13:33:29 +0200
-Message-Id: <20240822113329.695395-1-buildroot@bubu1.eu>
-X-Mailer: git-send-email 2.34.1
+Date: Thu, 22 Aug 2024 13:51:51 +0200
+Message-ID: <20240822115152.2120669-1-thomas.petazzoni@bootlin.com>
+X-Mailer: git-send-email 2.46.0
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=bubu1.eu; s=bubu; 
- t=1724326410; bh=p9NCapa44X7CLed98w2FoeT6az9SWlCHpkk5RZrmO9E=;
- h=From:To:Cc:Subject:Date;
- b=M33lqRPlShjrNfr/Z3v1oRnYzuJ8RLLGjiW/rdfH8sMDK8qEepfPc8lyHUaeZv03I
- /C+rXhW+G4XjU3pK+gpQzT0/Orog4AwebRUnAZ4xmFdMeDffkEavPIJL88BxAYH/Fn
- ulIturhduFm8bY1S4ckobbOA8tU3ZhibflhWTDeHsME2EyZs9SX5gQow4q/ugr/Y0G
- 3/TpIi97Nxh1gwwE/aZJ4Bv+oOY43J6haA7+SxluK2DmPcQmR8U628G2z/4CndsSi6
- soRfMjxfg7wd7Rg6oXs93gySkhtH4xKRytv01wNlTh4ljjUhitzXVSDNJTSkxidJeS
- SZVknPCVQFdhA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1724327514;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=3ALoEgAaOjr0oNa6IB7zMvxmHdXl7Uyz2lpcM0dB098=;
+ b=TX5x8mx4Gd5s5pv2HY3PCWpNSa2CrX+Ax2FVUhHOP41Cli8h5xjM23EJVMSjT5fGRIUy2V
+ P/baGbKTekFjSQ887u8YZBmI5y+9F+BM6/ksqqbA+FH7nsX9cooZXZli3V7vKyF5EjvU2A
+ 5AazFJ6gzL+KK9kPimrkJ967naFI5w7c+W8dk1zFK5TzqQdW5RzFtuxKjotCdJgFse/QOw
+ ERkx3ppE1kzZLIIqH8s1hGjLIvLJhoVe4nHRUKk2YwQ+eZqcWPsi20y13ZJzbO9KJChxh7
+ 2NeChA6sSrbzq0GtWED43NP/QOen7xNApc72IB1A/CNU0f9XziOCLuq3Z7S0gA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
- header.from=bubu1.eu
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=bubu1.eu header.i=@bubu1.eu
- header.a=rsa-sha256 header.s=bubu header.b=M33lqRPl
-Subject: [Buildroot] [PATCH] package/python-django: bump to 5.1
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=TX5x8mx4
+Subject: [Buildroot] [PATCH] package/double-conversion: bump to 3.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,75 +76,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
-Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Oli Vogt <oli.vogt.pub01@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes: https://docs.djangoproject.com/en/5.1/releases/5.1/
+Changes between 3.2.1 and 3.3.0:
 
-We need to add --skip-dependency-check to build options as django
-currently pins setuptools <69.3 [1] and buildroot uses a newer version.
+- Fix some compile warnings in Visual Studio by @Ono-Sendai in #188
 
-The Django pin is likely to not be affected by PEP-625 [2] handling,
-which was added to setuptools 69.3 [3][4]. We don't really care about
-the sdist name changing for django though, so we can use a newer version
-of setuptools as well.
+- Set permissions for github workflows by @joycebrum in #191
 
-Django has been confirmed to still install and work correctly by running
-the runtime test.
+- Add flags to control trailing decimal and zero in exponent form when
+  input has one significant digit by @ianmcook in #195
 
-[1] https://github.com/django/django/commit/4686541691dbe986f58ac87630c3b7a04db4ff93
-[2] https://peps.python.org/pep-0625/
-[3] https://github.com/pypa/setuptools/issues/3593
-[4] https://github.com/pypa/setuptools/blob/main/NEWS.rst#v6930
+See https://github.com/google/double-conversion/releases/tag/v3.3.0
 
-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-django/python-django.hash | 4 ++--
- package/python-django/python-django.mk   | 5 +++--
- 2 files changed, 5 insertions(+), 4 deletions(-)
+ package/double-conversion/double-conversion.hash | 2 +-
+ package/double-conversion/double-conversion.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
-index a5a8c7426d..8ddc221973 100644
---- a/package/python-django/python-django.hash
-+++ b/package/python-django/python-django.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/django/json
--md5  fb167eef987a98421cad62036868a1ca  Django-5.0.8.tar.gz
--sha256  ebe859c9da6fead9c9ee6dbfa4943b04f41342f4cea2c4d8c978ef0d10694f2b  Django-5.0.8.tar.gz
-+md5  77f44885427c09458e1abd0b48e09517  Django-5.1.tar.gz
-+sha256  848a5980e8efb76eea70872fb0e4bc5e371619c70fffbe48e3e1b50b2c09455d  Django-5.1.tar.gz
- # Locally computed sha256 checksums
- sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
-diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
-index 2c5c20ee4d..de5d2a9d06 100644
---- a/package/python-django/python-django.mk
-+++ b/package/python-django/python-django.mk
-@@ -4,14 +4,15 @@
+diff --git a/package/double-conversion/double-conversion.hash b/package/double-conversion/double-conversion.hash
+index a2ecd4422c..e3a5754933 100644
+--- a/package/double-conversion/double-conversion.hash
++++ b/package/double-conversion/double-conversion.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  e40d236343cad807e83d192265f139481c51fc83a1c49e406ac6ce0a0ba7cd35  double-conversion-3.2.1.tar.gz
++sha256  04ec44461850abbf33824da84978043b22554896b552c5fd11a9c5ae4b4d296e  double-conversion-3.3.0.tar.gz
+ sha256  4af93c12062c58058378de2397dc1c92bbff9ddfb1d583a01c84127557ce97ca  COPYING
+diff --git a/package/double-conversion/double-conversion.mk b/package/double-conversion/double-conversion.mk
+index af1fbab078..74e90d30d7 100644
+--- a/package/double-conversion/double-conversion.mk
++++ b/package/double-conversion/double-conversion.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_DJANGO_VERSION = 5.0.8
-+PYTHON_DJANGO_VERSION = 5.1
- PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
- # The official Django site has an unpractical URL
--PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/79/1c/55733805bb735e26fee0430045efdb61df6fd704b6aebf2154875ef9e6a9
-+PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/1e/0c/d854d25bb74a8a3b41e642bbd27fe6af12fadd0edfd07d487809cf0ef719
- PYTHON_DJANGO_LICENSE = BSD-3-Clause
- PYTHON_DJANGO_LICENSE_FILES = LICENSE
- PYTHON_DJANGO_CPE_ID_VENDOR = djangoproject
- PYTHON_DJANGO_CPE_ID_PRODUCT = django
- PYTHON_DJANGO_SETUP_TYPE = setuptools
-+PYTHON_DJANGO_BUILD_OPTS = --skip-dependency-check
- 
- $(eval $(python-package))
+-DOUBLE_CONVERSION_VERSION = 3.2.1
++DOUBLE_CONVERSION_VERSION = 3.3.0
+ DOUBLE_CONVERSION_SITE = $(call github,google,double-conversion,v$(DOUBLE_CONVERSION_VERSION))
+ DOUBLE_CONVERSION_LICENSE = BSD-3-Clause
+ DOUBLE_CONVERSION_LICENSE_FILES = COPYING
 -- 
-2.34.1
+2.46.0
 
 _______________________________________________
 buildroot mailing list
