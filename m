@@ -1,76 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF462C3DA4A
-	for <buildroot@archiver.kernel.org>; Thu, 22 Aug 2024 10:01:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EFAB8C3DA4A
+	for <buildroot@archiver.kernel.org>; Thu, 22 Aug 2024 10:20:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 804E580BFB;
-	Thu, 22 Aug 2024 10:01:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8E8C5605AC;
+	Thu, 22 Aug 2024 10:20:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gHMx8l6bb3Sn; Thu, 22 Aug 2024 10:01:28 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id RyRKGvGdHa87; Thu, 22 Aug 2024 10:20:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9C5F480B76
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8B55360B29
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9C5F480B76;
-	Thu, 22 Aug 2024 10:01:28 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 3A5E11BF35A
- for <buildroot@lists.busybox.net>; Thu, 22 Aug 2024 10:01:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8B55360B29;
+	Thu, 22 Aug 2024 10:20:48 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 7BE5C1BF346
+ for <buildroot@lists.busybox.net>; Thu, 22 Aug 2024 10:20:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2745A40231
- for <buildroot@lists.busybox.net>; Thu, 22 Aug 2024 10:01:27 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 750CD407C6
+ for <buildroot@lists.busybox.net>; Thu, 22 Aug 2024 10:20:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IJdmCo0N8bKw for <buildroot@lists.busybox.net>;
- Thu, 22 Aug 2024 10:01:26 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
- helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org B7252400EA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B7252400EA
-Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B7252400EA
- for <buildroot@buildroot.org>; Thu, 22 Aug 2024 10:01:25 +0000 (UTC)
-Received: from [192.168.178.36] (unknown [212.37.174.96])
- (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
- key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
- (No client certificate requested)
- by smtp.bubu1.eu (Postfix) with ESMTPSA id C82692C85C6D;
- Thu, 22 Aug 2024 12:01:22 +0200 (CEST)
-Message-ID: <7c94a664-eea1-4244-9338-6d4ca208d3dc@bubu1.eu>
-Date: Thu, 22 Aug 2024 12:01:21 +0200
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id lROPfBKAEs85 for <buildroot@lists.busybox.net>;
+ Thu, 22 Aug 2024 10:20:45 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.198;
+ helo=relay6-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org F391240789
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F391240789
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [217.70.183.198])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id F391240789
+ for <buildroot@buildroot.org>; Thu, 22 Aug 2024 10:20:44 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPA id B294BC0003;
+ Thu, 22 Aug 2024 10:20:41 +0000 (UTC)
+To: Buildroot List <buildroot@buildroot.org>,
+ Peter Korsgaard <peter@korsgaard.com>,
+ Roy Kollen Svendsen <roykollensvendsen@gmail.com>
+Date: Thu, 22 Aug 2024 12:20:25 +0200
+Message-ID: <20240822102040.2083799-1-thomas.petazzoni@bootlin.com>
+X-Mailer: git-send-email 2.46.0
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Marcus Hoffmann via buildroot <buildroot@buildroot.org>
-References: <20240213123753.2471309-1-buildroot@bubu1.eu>
- <20240213123753.2471309-2-buildroot@bubu1.eu>
- <20240722223748.5893f728@windsurf>
-Content-Language: en-US
-In-Reply-To: <20240722223748.5893f728@windsurf>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=bubu1.eu; s=bubu; 
- t=1724320883; bh=mxzVtk61UWmdXyI0uxuFAaLWzvaJCrgohAn7rCtnJUg=;
- h=Date:Subject:To:Cc:References:From:In-Reply-To;
- b=oGiFg5MTBA0VdcMCsuKs89gL1y8cU778ABJ7hIgqEu+JiHZIU7+wJlyydsWUYLNj6
- NMdRdxUkluqjBNcn2X2QNd3/+mM38JVTh5ghRah0sanJ37UPsO0x60lirsWYuqvLyW
- An9+7nbRNqhYfHfF+CCAiLzhwDS+HequkQWRjGtjJSIiN23TP9YAoOK3kg7eJm43hm
- 2mAxDtaFBifiFX7qwknywnS1BvMUc8DLHegCEwkJYE8re/MJU+gCsyL1ID4oFmHHR3
- qjLNev3UTMlqc0PJFOwLxK4eXcOed/1HbVe6SRRBHfb8jG73Ydo2dC1wjYfl8EHfUU
- vb6/TRSl1ZxiQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1724322042;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=Ntcvp9GytbQFpTtYSZ7Qf+fcReu0dW9Ug0DLQ5sSWqE=;
+ b=SgYoe/qtTAyy2YG8U5OISY/ETQg6Fs7q7TtRDyBwocBbKbSgWuCG3GgdjzmqzyMp2DwZMM
+ ObIYkFm3Aa7oPUQHiUgJVDdhbQuwSnkJBdbKUEvg7VqlEwt9XpczE02LFiv3lrFlp4DPQY
+ LF45QyyqLLDVPFkxcEYK3jaPgh9tjehpY2pHuYl2YrnY2y+3ZsFln9RRcbM6za+uHpj4OB
+ Uf+HEEOew2kG0GZ4S0boIQMad6Dr47idTRK9gasua5SjEjqxlmQO1dtduWUuox/DC4Zenq
+ ixBS5lghFER0mVwOidWOW/wlYV/XnYOvMBElzpD8z674Wm+JKF6AqKvMF1ZCDQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
- header.from=bubu1.eu
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=bubu1.eu header.i=@bubu1.eu header.a=rsa-sha256
- header.s=bubu header.b=oGiFg5MT
-Subject: Re: [Buildroot] [PATCH 2/2] package/python-can: needs PYTHON3_CURSES
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=SgYoe/qt
+Subject: [Buildroot] [PATCH 2024.02.x 0/9] Fix Qt6 CVEs in 2024.02.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,62 +78,86 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
-Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
-Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>,
- James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Thomas,
+Hello,
 
-On 22.07.24 22:37, Thomas Petazzoni wrote:
-> On Tue, 13 Feb 2024 13:37:53 +0100
-> Marcus Hoffmann via buildroot <buildroot@buildroot.org> wrote:
-> 
->> The can.viewer tool requires curses support. [1]
->>
->> [1] https://github.com/hardbyte/python-can/blob/v4.3.1/can/viewer.py#L44-L53
->>
->> Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
->> ---
->>   package/python-can/Config.in | 1 +
->>   1 file changed, 1 insertion(+)
->>
->> diff --git a/package/python-can/Config.in b/package/python-can/Config.in
->> index 61955a2b00..106da4560c 100644
->> --- a/package/python-can/Config.in
->> +++ b/package/python-can/Config.in
->> @@ -1,5 +1,6 @@
->>   config BR2_PACKAGE_PYTHON_CAN
->>   	bool "python-can"
->> +	select BR2_PACKAGE_PYTHON3_CURSES # runtime for can.viewer tool
-> 
-> I am not 100% sure on this one. Do we want to make this dependency
-> mandatory, while it is only needed for a viewer tool, which probably
-> most users of python-can won't use?
-> 
-> I see two alternatives here:
-> 
-> 1. Leave things are they are today, i.e let users figure out that they
->     need to enable curses support for the viewer.
-> 
-> 2. Add an explicit BR2_PACKAGE_PYTHON_CAN_VIEWER option, which selects
->     BR2_PACKAGE_PYTHON3_CURSES and enables the installation of the viewer
->     tool. When this option is disabled, viewer.py is not installed (or
->     removed if disabling installation is not possible)
-> 
-> Thoughts? This is not a hard feeling on my side.
+The Qt6 version currently packaged in Buildroot 2024.02.x is affected
+by a number of CVEs. This series of patches fixes all reported CVEs
+affecting Qt6, by backporting the relevant patches from upstream.
 
-I didn't really have a strong opinion either, but I went ahead and 
-submitted a patch with the second options now. Hope this makes sense :).
+Some of the fixes do require bringing along some related changes, as
+they would not otherwise apply without significant rework.
 
-Marcus
+All of the CVEs expect CVE-2024-39936 only affect 2024.02.x, as
+Buildroot 2024.05 has a newer Qt6 version that isn't affected by those
+CVEs. CVE-2024-39936 is already fixed in master (commit
+b866afa68405564497dd60c1f8f33cdf71d22728), but this patch series
+provides a fix that applies cleanly on the the Qt6 version packaged in
+2024.02.x, so it should be considered as a replacement for backporting
+b866afa68405564497dd60c1f8f33cdf71d22728 to 2024.02.x.
 
-> 
-> Thomas
+Thanks,
+
+Thomas
+
+Thomas Petazzoni (9):
+  package/qt6/qt6svg: backport fix for CVE-2023-32573
+  package/qt6/qt6base: backport fix for CVE-2023-33285
+  package/qt6/qt6base: backport fix for CVE-2023-32762
+  package/qt6/qt6base: backport fix for CVE-2023-32763
+  package/qt6/qt6base: backport fix for CVE-2023-38197
+  package/qt6/qt6base: backport fix for CVE-2023-51714
+  package/qt6/qt6base: backport fix for CVE-2023-37369
+  package/qt6/qt6base: backport fix for CVE-2023-34410
+  package/qt6/qt6base: backport fix for CVE-2024-39936
+
+ ...make-sure-we-don-t-overflow-the-buff.patch | 106 +++++
+ ...atch-header-names-case-insensitively.patch |  57 +++
+ ...maximumWidth-for-a-text-containing-s.patch |  88 ++++
+ ...maximumWidth-for-a-text-containing-l.patch | 168 ++++++++
+ ...Fix-specific-overflow-in-qtextlayout.patch |  79 ++++
+ ...ay-fix-ambiguous-qOffsetStringArray-.patch |  49 +++
+ ...gArray-fix-size_t-qsizetype-mismatch.patch |  37 ++
+ ...-use-qOffsetStringArray-for-storing-.patch | 114 +++++
+ ...der-Raise-error-on-unexpected-tokens.patch | 406 ++++++++++++++++++
+ .../0010-HPack-fix-a-Yoda-Condition.patch     |  43 ++
+ ...fix-incorrect-integer-overflow-check.patch |  48 +++
+ ...-change-fastScanName-to-take-a-Value.patch | 112 +++++
+ ...-make-fastScanName-indicate-parsing-.patch | 277 ++++++++++++
+ ...certificate-not-signed-by-a-configur.patch | 295 +++++++++++++
+ ...demand-cert-loading-bool-from-defaul.patch | 116 +++++
+ ...communication-until-encrypted-can-be.patch | 248 +++++++++++
+ package/qt6/qt6base/qt6base.mk                |  17 +
+ ...Initialize-used-member-remove-unused.patch |  62 +++
+ package/qt6/qt6svg/qt6svg.mk                  |   2 +
+ 19 files changed, 2324 insertions(+)
+ create mode 100644 package/qt6/qt6base/0001-QDnsLookup-Unix-make-sure-we-don-t-overflow-the-buff.patch
+ create mode 100644 package/qt6/qt6base/0002-Hsts-match-header-names-case-insensitively.patch
+ create mode 100644 package/qt6/qt6base/0003-QTextLayout-fix-maximumWidth-for-a-text-containing-s.patch
+ create mode 100644 package/qt6/qt6base/0004-QTextLayout-fix-maximumWidth-for-a-text-containing-l.patch
+ create mode 100644 package/qt6/qt6base/0005-Fix-specific-overflow-in-qtextlayout.patch
+ create mode 100644 package/qt6/qt6base/0006-QOffsetStringArray-fix-ambiguous-qOffsetStringArray-.patch
+ create mode 100644 package/qt6/qt6base/0007-QOffsetStringArray-fix-size_t-qsizetype-mismatch.patch
+ create mode 100644 package/qt6/qt6base/0008-QXmlStreamReader-use-qOffsetStringArray-for-storing-.patch
+ create mode 100644 package/qt6/qt6base/0009-QXmlStreamReader-Raise-error-on-unexpected-tokens.patch
+ create mode 100644 package/qt6/qt6base/0010-HPack-fix-a-Yoda-Condition.patch
+ create mode 100644 package/qt6/qt6base/0011-HPack-fix-incorrect-integer-overflow-check.patch
+ create mode 100644 package/qt6/qt6base/0012-QXmlStreamReader-change-fastScanName-to-take-a-Value.patch
+ create mode 100644 package/qt6/qt6base/0013-QXmlStreamReader-make-fastScanName-indicate-parsing-.patch
+ create mode 100644 package/qt6/qt6base/0014-Schannel-Reject-certificate-not-signed-by-a-configur.patch
+ create mode 100644 package/qt6/qt6base/0015-Ssl-Copy-the-on-demand-cert-loading-bool-from-defaul.patch
+ create mode 100644 package/qt6/qt6base/0016-HTTP2-Delay-any-communication-until-encrypted-can-be.patch
+ create mode 100644 package/qt6/qt6svg/0001-QSvgFont-Initialize-used-member-remove-unused.patch
+
+-- 
+2.46.0
 
 _______________________________________________
 buildroot mailing list
