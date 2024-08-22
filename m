@@ -4,96 +4,95 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0ACF8C3DA4A
-	for <buildroot@archiver.kernel.org>; Thu, 22 Aug 2024 20:14:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50FD6C52D7C
+	for <buildroot@archiver.kernel.org>; Thu, 22 Aug 2024 20:16:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B4338805B5;
-	Thu, 22 Aug 2024 20:14:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0A55981D4F;
+	Thu, 22 Aug 2024 20:16:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id L__q8gRkUYnV; Thu, 22 Aug 2024 20:14:39 +0000 (UTC)
+ id WdltNkPNgHJX; Thu, 22 Aug 2024 20:16:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BADEE80868
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0A23081D5F
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BADEE80868;
-	Thu, 22 Aug 2024 20:14:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0A23081D5F;
+	Thu, 22 Aug 2024 20:16:49 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 9DB221BF59F
- for <buildroot@lists.busybox.net>; Thu, 22 Aug 2024 20:14:38 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D15181BF59F
+ for <buildroot@lists.busybox.net>; Thu, 22 Aug 2024 20:16:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9800960612
- for <buildroot@lists.busybox.net>; Thu, 22 Aug 2024 20:14:38 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id BED9D6063F
+ for <buildroot@lists.busybox.net>; Thu, 22 Aug 2024 20:16:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dTHFyxLyfeku for <buildroot@lists.busybox.net>;
- Thu, 22 Aug 2024 20:14:38 +0000 (UTC)
+ id r7P8JAqc1tDJ for <buildroot@lists.busybox.net>;
+ Thu, 22 Aug 2024 20:16:47 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::633; helo=mail-ej1-x633.google.com;
+ client-ip=2a00:1450:4864:20::52e; helo=mail-ed1-x52e.google.com;
  envelope-from=petr.vorel@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org BA79B6060C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BA79B6060C
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com
- [IPv6:2a00:1450:4864:20::633])
- by smtp3.osuosl.org (Postfix) with ESMTPS id BA79B6060C
- for <buildroot@buildroot.org>; Thu, 22 Aug 2024 20:14:37 +0000 (UTC)
-Received: by mail-ej1-x633.google.com with SMTP id
- a640c23a62f3a-a8666734767so159434366b.1
- for <buildroot@buildroot.org>; Thu, 22 Aug 2024 13:14:37 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 8F91760612
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8F91760612
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com
+ [IPv6:2a00:1450:4864:20::52e])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 8F91760612
+ for <buildroot@buildroot.org>; Thu, 22 Aug 2024 20:16:46 +0000 (UTC)
+Received: by mail-ed1-x52e.google.com with SMTP id
+ 4fb4d7f45d1cf-5bf01bdaff0so1496983a12.3
+ for <buildroot@buildroot.org>; Thu, 22 Aug 2024 13:16:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1724357676; x=1724962476;
+ d=1e100.net; s=20230601; t=1724357804; x=1724962604;
  h=in-reply-to:content-disposition:mime-version:references:reply-to
  :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=GNqJl/GosC5WJ7vxeb46DJp69Moo6nu1KMyLHXjz8t0=;
- b=HBIo6TXZuya3J+RcMv1yKtKurvoUdAzBDtqatitjAk4wr8E4O8yY+Rezn24wXjWmen
- jdIMNur56wgW9eyZHyyIkVK0DgUkN+KdBOH/ZI3RTUCLKISD3vSiqLyUSB711G+pJio1
- bMEHLh3mGGxWjUmkUdONTzuMLxiEIn8kBjrydSluwpodTu8bYv5Q63avSOIH+Rn3yxkz
- CG7G7fWh2veNzdUyf4eq860z78EP595C7ZkREeBsWHe7SxEi0kGTHIlXiXhXJqsXhtDA
- MzYk/z7w5/PoQnDSC05cfsuTxHdV37DT7EY7cJ+DzAuxs2OBclBqI7l4i2s1D3B/xX8T
- 5QCg==
-X-Gm-Message-State: AOJu0YzDii04LmBlXb7Xgk0ghnFtJq2n9JndwdPu3Al3XKtXGuiSERIt
- 5DQ2TzWwDhcjKafE1Soz4H2n2eQjY3YlOajrPseORY4zILRsd3ZE
-X-Google-Smtp-Source: AGHT+IHpzW4ybYYOe6KGToOojqZD7eF2NbBwWTlL+snGKuA3sakXpWe0wFQJftH8ZfAZuCa1wgmfOg==
-X-Received: by 2002:a17:907:3e1a:b0:a86:93fe:7a94 with SMTP id
- a640c23a62f3a-a8693fe7b5amr262161566b.47.1724357675242; 
- Thu, 22 Aug 2024 13:14:35 -0700 (PDT)
+ bh=ufSDurMtRa13ZJ1p+lbRXN5HWEez2M2Ny0WdscOfkNw=;
+ b=e1O4tnwLJxkpDu9hqRmYq3vk+PoKb10rGpuFdyDsm9fyd514SiRAx/hFq5wI5o9jOD
+ AS+iaaET4kAF5xcC2yiNnM1N0I5qZjrCX+QeYPMFQtJXyYyQyRWyzS9ASE0cOvKMY1yp
+ qLBPC1dgPrOpBHACVygNYS5Cx9rfajvH9hR2izQzoN4bjA0qXx8N3IzAM6+2YrCK7DMl
+ guh2r18XdEASenPBmSnJyQXdgLdARTZIhU8a2IWsrldxJG7TpPgKGniGN6ADt1+3WQL/
+ 5j0hRH8fkHgkICZpZLOgHYt2pbXt4drZ3KfZfgIM897VvoypGXu/jILN8W1OrG37IG3A
+ eeJg==
+X-Gm-Message-State: AOJu0YwLM3ecN6RT8m1qAfvhAvJDechs6X1VLvLt2XfEksfv8fGeV00C
+ Lj4JmyFPUJ1e0V8/B1VdHg9+TRq+hzYqWxe/n/YwGunlIBG4K7C8
+X-Google-Smtp-Source: AGHT+IEnuh0Fziq4Yr8of3HTtYHQ1Xc95vQdyw1eAepulkHwABb/EqUmVTX05CA00itI/bVgVbWYjA==
+X-Received: by 2002:a17:907:c25:b0:a77:e2e3:354d with SMTP id
+ a640c23a62f3a-a8691af9888mr314530066b.23.1724357804006; 
+ Thu, 22 Aug 2024 13:16:44 -0700 (PDT)
 Received: from pevik (gw1.ms-free.net. [185.243.124.10])
  by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-a868f29a4c7sm159863766b.65.2024.08.22.13.14.34
+ a640c23a62f3a-a868f220ce6sm162238066b.10.2024.08.22.13.16.42
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 22 Aug 2024 13:14:34 -0700 (PDT)
-Date: Thu, 22 Aug 2024 22:14:32 +0200
+ Thu, 22 Aug 2024 13:16:43 -0700 (PDT)
+Date: Thu, 22 Aug 2024 22:16:39 +0200
 From: Petr Vorel <petr.vorel@gmail.com>
 To: Bernd Kuhls <bernd@kuhls.net>
-Message-ID: <20240822201432.GD1160317@pevik>
+Message-ID: <20240822201639.GE1160317@pevik>
 References: <20240822182050.65230-1-bernd@kuhls.net>
- <20240822182050.65230-3-bernd@kuhls.net>
+ <20240822182050.65230-4-bernd@kuhls.net>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20240822182050.65230-3-bernd@kuhls.net>
+In-Reply-To: <20240822182050.65230-4-bernd@kuhls.net>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1724357676; x=1724962476; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1724357804; x=1724962604; darn=buildroot.org;
  h=in-reply-to:content-disposition:mime-version:references:reply-to
  :message-id:subject:cc:to:from:date:from:to:cc:subject:date
  :message-id:reply-to;
- bh=GNqJl/GosC5WJ7vxeb46DJp69Moo6nu1KMyLHXjz8t0=;
- b=P3ZcMadYmpx+2BEnKVq8vJawCfg/JxVASImOd2DPwq2eepdopGPSYNFqVlxWLmRTpS
- jZMB+89XojBpeH/xpm/L8FOfXPBqFquATcqzkluEPAtUCcB8E0vxsgOYPtQrhg2VnA9d
- Myagdh4pYr0JSfPGF6o6paHNFWaG06Yf8xwAN0mvGHYWE/PZEc0ILQq1Ze3D9DpfErRM
- YMAeD4J7mkK7/6YLlDv8kUdHAW9vX0lwu6EA28s/LAaD779NOHQFaEil8EuaS8kWVNpq
- ompfIn86L1jjzWcZBhOXu9uUcIIcfRl428lqRt79hUEvwr10UGcxa0061Dcxlz6VBfwv
- +UaQ==
+ bh=ufSDurMtRa13ZJ1p+lbRXN5HWEez2M2Ny0WdscOfkNw=;
+ b=hYDK6PjLZ2SPVVLopUrkyhQ/am2tTJwXuqlGgEByJz7qNBj0LvftkGlB+a5/4v4v4K
+ dJPI8G6jhmQU15m3feOpycUIW4hYAy32GSScNDPkIqcs0vjDlsGbGePjhlef7fYG/sIv
+ 8vlw49Xf9n9q7BEXlzdqsgkmxr3nh0ZXzQJ58chcPh+X97Psv2sF4MGbR00fs0kqE4mb
+ +o4zezZVoZXFoQ+10o6XQn44LyXk0aZF0mvnqZL1YengkYMISbPOh83OXjv53ePJhBgL
+ 8iLDiWmgDXuouq186e0sV4/lLLDNDbG15EreDWJbE8fHw5wC+WyJgX0cb9olzg2OD4wu
+ qdww==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=P3ZcMadY
-Subject: Re: [Buildroot] [PATCH/next 03/13] package/libheif: bump version to
- 1.18.2
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=hYDK6PjL
+Subject: Re: [Buildroot] [PATCH/next 04/13] package/samba4: bump version to
+ 4.20.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -120,6 +119,26 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 Hi Bernd,
 
 Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
+
+NOTE: it'd be nice to fix old warnings (not related to this update):
+
+$ ./utils/check-package package/samba4/*
+package/samba4/S91smb:33: should be indented with tabs (https://nightly.buildroot.org/#adding-packages-start-script)
+package/samba4/S91smb:39: should be indented with tabs (https://nightly.buildroot.org/#adding-packages-start-script)
+package/samba4/S91smb:40: should be indented with tabs (https://nightly.buildroot.org/#adding-packages-start-script)
+package/samba4/S91smb:42: should be indented with tabs (https://nightly.buildroot.org/#adding-packages-start-script)
+package/samba4/S91smb:43: should be indented with tabs (https://nightly.buildroot.org/#adding-packages-start-script)
+package/samba4/S91smb:45: should be indented with tabs (https://nightly.buildroot.org/#adding-packages-start-script)
+package/samba4/S91smb:46: should be indented with tabs (https://nightly.buildroot.org/#adding-packages-start-script)
+package/samba4/S91smb:48: should be indented with tabs (https://nightly.buildroot.org/#adding-packages-start-script)
+package/samba4/S91smb:49: should be indented with tabs (https://nightly.buildroot.org/#adding-packages-start-script)
+package/samba4/S91smb:51: should be indented with tabs (https://nightly.buildroot.org/#adding-packages-start-script)
+package/samba4/S91smb:0: DAEMON variable not defined (https://nightly.buildroot.org/#adding-packages-start-script)
+package/samba4/S91smb:0: run 'shellcheck' and fix the warnings
+package/samba4/0001-build-find-pre-built-heimdal-build-tools-in-case-of-.patch:0: missing Upstream in the header (https://nightly.buildroot.org/#_additional_patch_documentation)
+package/samba4/0002-ldap_message_test.c-include-stdint.h-before-cmoka.h.patch:0: missing Upstream in the header (https://nightly.buildroot.org/#_additional_patch_documentation)
+427 lines processed
+14 warnings generated
 
 Kind regards,
 Petr
