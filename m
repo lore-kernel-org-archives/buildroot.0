@@ -4,73 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 829AAC5321D
-	for <buildroot@archiver.kernel.org>; Thu, 22 Aug 2024 10:20:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1C770C5320E
+	for <buildroot@archiver.kernel.org>; Thu, 22 Aug 2024 10:21:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F273D60D72;
-	Thu, 22 Aug 2024 10:20:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C5DFA60B49;
+	Thu, 22 Aug 2024 10:20:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id s9gMcZ9NFIGE; Thu, 22 Aug 2024 10:20:55 +0000 (UTC)
+ id uFqIJ0vuOJm6; Thu, 22 Aug 2024 10:20:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C618B60B4F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EF05660D93
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C618B60B4F;
-	Thu, 22 Aug 2024 10:20:54 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E48021BF346
- for <buildroot@lists.busybox.net>; Thu, 22 Aug 2024 10:20:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EF05660D93;
+	Thu, 22 Aug 2024 10:20:57 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 0BF031BF346
+ for <buildroot@lists.busybox.net>; Thu, 22 Aug 2024 10:20:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D0C15813EC
- for <buildroot@lists.busybox.net>; Thu, 22 Aug 2024 10:20:46 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id ED21D40DE3
+ for <buildroot@lists.busybox.net>; Thu, 22 Aug 2024 10:20:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wScLksFzzQab for <buildroot@lists.busybox.net>;
- Thu, 22 Aug 2024 10:20:45 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id nGMIe087DbBW for <buildroot@lists.busybox.net>;
+ Thu, 22 Aug 2024 10:20:46 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.198;
  helo=relay6-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 55A01813E7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 55A01813E7
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 4139B40DE5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4139B40DE5
 Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
  [217.70.183.198])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 55A01813E7
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 4139B40DE5
  for <buildroot@buildroot.org>; Thu, 22 Aug 2024 10:20:45 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPA id 7FB1AC0007;
- Thu, 22 Aug 2024 10:20:43 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPA id 5C4CDC000A;
+ Thu, 22 Aug 2024 10:20:44 +0000 (UTC)
 To: Buildroot List <buildroot@buildroot.org>,
  Peter Korsgaard <peter@korsgaard.com>,
  Roy Kollen Svendsen <roykollensvendsen@gmail.com>
-Date: Thu, 22 Aug 2024 12:20:27 +0200
-Message-ID: <20240822102040.2083799-3-thomas.petazzoni@bootlin.com>
+Date: Thu, 22 Aug 2024 12:20:28 +0200
+Message-ID: <20240822102040.2083799-4-thomas.petazzoni@bootlin.com>
 X-Mailer: git-send-email 2.46.0
 In-Reply-To: <20240822102040.2083799-1-thomas.petazzoni@bootlin.com>
 References: <20240822102040.2083799-1-thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1724322043;
+ d=bootlin.com; s=gm1; t=1724322044;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ to:to:cc:cc:mime-version:mime-version:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=magY8vNJNl8rrQmYyrubKux/Uf+jYH5N3iyquY6BcbQ=;
- b=oKkAXEy0KGH4czvEw7fMVpH85GaB5J9UeHAdXqpRswM0hUZPDe6zj7S9OIVwbvOcYhLi3L
- WvpBl3v5WfZbgXp+ediLFqtDWZ7qG7hg9uPERl8eV3OyRoE/p2tdmI/dz81+gNZ++ZWmIn
- r6io+FpyQzDV16WL0nRzIDhy42lyscgwHUrZGEgjr0wtgHswLJpDCNg5RtwMLnBDMbPNW5
- 5Vt4RVXqOGfByAv+Md4JOHeayKEmGnIzb4qRQtE9GIXH7CSYPeutQ6S5P6mJM5S42AfDuX
- EeWmDYRIpk3Dd4MEDv6b0APLTK0M6N5lnQYhz20FivsjWw+ZXPOjoihqnSi4ng==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=fZ1rHatQRt1dX1nvbUDeGE9CVJ0fwdssBb7wTzZlRNc=;
+ b=FrDmNC7XqnHrtXIAeLNBT7bl2AKY4HQoF9GbfgFujchxqSfWSAdW2LgoWaNE4KVz6nk66L
+ Yp5lOgO2NCsL7YuFukd7ovsjBEKudJ+xl9ZhC/GWKeiPcGWUFSxRwWHfrUua2OpjxQ1kSw
+ BkdWWsM9vhes0A+YcAy/z5ey0zZjX2NLlY4GvpjMRaj9sHCfHJW9+EX4jhbnyFtNjOvEWg
+ nlunxQI4L+dbsdJ2zCA9WURiHj7lfPOd0dZrzwGzl5iSp+OCt/QC5EDUOXP99XsGvhC1pl
+ vM/pSyx4Z/l/ndz73e8b49ykU4aFf+6ExJTvyRK41OPuJFbR6dGXqX8tkluoIg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=oKkAXEy0
-Subject: [Buildroot] [PATCH 2024.02.x 2/9] package/qt6/qt6base: backport fix
- for CVE-2023-33285
+ header.s=gm1 header.b=FrDmNC7X
+Subject: [Buildroot] [PATCH 2024.02.x 3/9] package/qt6/qt6base: backport fix
+ for CVE-2023-32762
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,115 +86,103 @@ From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: Jesse Van Gavere <jesseevg@gmail.com>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-VGhpcyBjb21taXQgYmFja3BvcnRzIGFuIHVwc3RyZWFtIHBhdGNoIHRoYXQgZml4ZXMgQ1ZFLTIw
-MjMtMzMyODUuCgpTaWduZWQtb2ZmLWJ5OiBUaG9tYXMgUGV0YXp6b25pIDx0aG9tYXMucGV0YXp6
-b25pQGJvb3RsaW4uY29tPgotLS0KT25seSBhcHBsaWNhYmxlIHRvIDIwMjQuMDIueCwgc2luY2Ug
-Pj0gMjAyNC4wNSB1c2UgYSBRdDYgdmVyc2lvbiB0aGF0CmFscmVhZHkgaGFzIHRoZSBmaXguCi0t
-LQogLi4ubWFrZS1zdXJlLXdlLWRvbi10LW92ZXJmbG93LXRoZS1idWZmLnBhdGNoIHwgMTA2ICsr
-KysrKysrKysrKysrKysrKwogcGFja2FnZS9xdDYvcXQ2YmFzZS9xdDZiYXNlLm1rICAgICAgICAg
-ICAgICAgIHwgICAyICsKIDIgZmlsZXMgY2hhbmdlZCwgMTA4IGluc2VydGlvbnMoKykKIGNyZWF0
-ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL3F0Ni9xdDZiYXNlLzAwMDEtUURuc0xvb2t1cC1Vbml4LW1h
-a2Utc3VyZS13ZS1kb24tdC1vdmVyZmxvdy10aGUtYnVmZi5wYXRjaAoKZGlmZiAtLWdpdCBhL3Bh
-Y2thZ2UvcXQ2L3F0NmJhc2UvMDAwMS1RRG5zTG9va3VwLVVuaXgtbWFrZS1zdXJlLXdlLWRvbi10
-LW92ZXJmbG93LXRoZS1idWZmLnBhdGNoIGIvcGFja2FnZS9xdDYvcXQ2YmFzZS8wMDAxLVFEbnNM
-b29rdXAtVW5peC1tYWtlLXN1cmUtd2UtZG9uLXQtb3ZlcmZsb3ctdGhlLWJ1ZmYucGF0Y2gKbmV3
-IGZpbGUgbW9kZSAxMDA2NDQKaW5kZXggMDAwMDAwMDAwMC4uZjRlODFiODU3NgotLS0gL2Rldi9u
-dWxsCisrKyBiL3BhY2thZ2UvcXQ2L3F0NmJhc2UvMDAwMS1RRG5zTG9va3VwLVVuaXgtbWFrZS1z
-dXJlLXdlLWRvbi10LW92ZXJmbG93LXRoZS1idWZmLnBhdGNoCkBAIC0wLDAgKzEsMTA2IEBACitG
-cm9tIGZjMjMzZWZhZDg2MTAxZDQ5Y2QzMTJiMTZjNWEyNWU2YTAxN2U5NzcgTW9uIFNlcCAxNyAw
-MDowMDowMCAyMDAxCitGcm9tOiBUaGlhZ28gTWFjaWVpcmEgPHRoaWFnby5tYWNpZWlyYUBpbnRl
-bC5jb20+CitEYXRlOiBUaHUsIDExIE1heSAyMDIzIDIxOjQwOjE1IC0wNzAwCitTdWJqZWN0OiBb
-UEFUQ0hdIFFEbnNMb29rdXAvVW5peDogbWFrZSBzdXJlIHdlIGRvbid0IG92ZXJmbG93IHRoZSBi
-dWZmZXIKK01JTUUtVmVyc2lvbjogMS4wCitDb250ZW50LVR5cGU6IHRleHQvcGxhaW47IGNoYXJz
-ZXQ9VVRGLTgKK0NvbnRlbnQtVHJhbnNmZXItRW5jb2Rpbmc6IDhiaXQKKworVGhlIEROUyBSZWNv
-cmRzIGFyZSB2YXJpYWJsZSBsZW5ndGggYW5kIGVuY29kZSB0aGVpciBzaXplIGluIDE2IGJpdHMK
-K2JlZm9yZSB0aGUgUmVjb3JkIERhdGEgKFJEQVRBKS4gRW5zdXJlIHRoYXQgYm90aCB0aGUgUkRB
-VEEgYW5kIHRoZQorUmVjb3JkIGhlYWRlciBmaWVsZHMgYmVmb3JlIGl0IGZhbGwgaW5zaWRlIHRo
-ZSBidWZmZXIgd2UgaGF2ZS4KKworQWRkaXRpb25hbGx5IHJlamVjdCBhbnkgcmVwbGllcyBjb250
-YWluaW5nIG1vcmUgdGhhbiBvbmUgcXVlcnkgcmVjb3Jkcy4KKworW0NoYW5nZUxvZ11bUXROZXR3
-b3JrXVtRRG5zTG9va3VwXSBGaXhlZCBhIGJ1ZyB0aGF0IGNvdWxkIGNhdXNlIGEgYnVmZmVyCitv
-dmVyZmxvdyBpbiBVbml4IHN5c3RlbXMgd2hpbGUgcGFyc2luZyBjb3JydXB0LCBtYWxpY2lvdXMs
-IG9yIHRydW5jYXRlZAorcmVwbGllcy4KKworUGljay10bzogNS4xNSA2LjIgNi41IDYuNS4xCitD
-aGFuZ2UtSWQ6IEkzZTNiZmVmNjMzYWY0MTMwYTAzYWZmZmQxNzVlNGI5NTQ3NjU0Yjk1CitSZXZp
-ZXdlZC1ieTogTcOlcnRlbiBOb3JkaGVpbSA8bWFydGVuLm5vcmRoZWltQHF0LmlvPgorUmV2aWV3
-ZWQtYnk6IEphbmkgSGVpa2tpbmVuIDxqYW5pLmhlaWtraW5lbkBxdC5pbz4KKworRml4ZXM6IGh0
-dHBzOi8vc2VjdXJpdHktdHJhY2tlci5kZWJpYW4ub3JnL3RyYWNrZXIvQ1ZFLTIwMjMtMzMyODUK
-K1Vwc3RyZWFtOiBodHRwczovL2NvZGVyZXZpZXcucXQtcHJvamVjdC5vcmcvZ2l0d2ViP3A9cXQv
-cXRiYXNlLmdpdDthPWNvbW1pdGRpZmY7aD03ZGJhMmM4NzYxOWQ1NThhNjFhMzBlYjMwY2MxZDlj
-M2ZlNmRmOTRjCitbVGhvbWFzOiBjaGFuZ2VzIG5lZWRlZCB0byBiYWNrcG9ydCBvbiA2LjQuMzog
-dXNlIGxvY2FsX2RuX2V4cGFuZCgpCitpbnN0ZWFkIG9mIGRuX2V4cGFuZCgpLCBzaW5jZSB3ZSBk
-aWRuJ3QgYmFja3BvcnQgdGhlIGNoYW5nZXMgaW4KKzY4YjYyNTkwMWY5ZWI3YzM0ZTNkN2FhMzAy
-ZTFjMGE0NTRkMzE5MGIgdGhhdCBhcmUgdG9vIGludmFzaXZlXQorU2lnbmVkLW9mZi1ieTogVGhv
-bWFzIFBldGF6em9uaSA8dGhvbWFzLnBldGF6em9uaUBib290bGluLmNvbT4KKy0tLQorIHNyYy9u
-ZXR3b3JrL2tlcm5lbC9xZG5zbG9va3VwX3VuaXguY3BwIHwgMzEgKysrKysrKysrKysrKysrKysr
-KysrLS0tLS0KKyAxIGZpbGUgY2hhbmdlZCwgMjUgaW5zZXJ0aW9ucygrKSwgNiBkZWxldGlvbnMo
-LSkKKworZGlmZiAtLWdpdCBhL3NyYy9uZXR3b3JrL2tlcm5lbC9xZG5zbG9va3VwX3VuaXguY3Bw
-IGIvc3JjL25ldHdvcmsva2VybmVsL3FkbnNsb29rdXBfdW5peC5jcHAKK2luZGV4IDc1ZjdjNmM0
-NDBlLi5kZTAxMTM0OTRmYyAxMDA2NDQKKy0tLSBhL3NyYy9uZXR3b3JrL2tlcm5lbC9xZG5zbG9v
-a3VwX3VuaXguY3BwCisrKysgYi9zcmMvbmV0d29yay9rZXJuZWwvcWRuc2xvb2t1cF91bml4LmNw
-cAorQEAgLTE5Myw3ICsxOTMsNiBAQCB2b2lkIFFEbnNMb29rdXBSdW5uYWJsZTo6cXVlcnkoY29u
-c3QgaW50IHJlcXVlc3RUeXBlLCBjb25zdCBRQnl0ZUFycmF5ICZyZXF1ZXN0TgorICAgICAvLyBy
-ZXNwb25zZUxlbmd0aCBpbiBjYXNlIG9mIGVycm9yLCB3ZSBzdGlsbCBjYW4gZXh0cmFjdCB0aGUK
-KyAgICAgLy8gZXhhY3QgZXJyb3IgY29kZSBmcm9tIHRoZSByZXNwb25zZS4KKyAgICAgSEVBREVS
-ICpoZWFkZXIgPSAoSEVBREVSKilyZXNwb25zZTsKKy0gICAgY29uc3QgaW50IGFuc3dlckNvdW50
-ID0gbnRvaHMoaGVhZGVyLT5hbmNvdW50KTsKKyAgICAgc3dpdGNoIChoZWFkZXItPnJjb2RlKSB7
-CisgICAgIGNhc2UgTk9FUlJPUjoKKyAgICAgICAgIGJyZWFrOworQEAgLTIyNiwxOCArMjI1LDMx
-IEBAIHZvaWQgUURuc0xvb2t1cFJ1bm5hYmxlOjpxdWVyeShjb25zdCBpbnQgcmVxdWVzdFR5cGUs
-IGNvbnN0IFFCeXRlQXJyYXkgJnJlcXVlc3ROCisgICAgICAgICByZXR1cm47CisgICAgIH0KKyAK
-Ky0gICAgLy8gU2tpcCB0aGUgcXVlcnkgaG9zdCwgdHlwZSAoMiBieXRlcykgYW5kIGNsYXNzICgy
-IGJ5dGVzKS4KKyAgICAgY2hhciBob3N0W1BBQ0tFVFNaXSwgYW5zd2VyW1BBQ0tFVFNaXTsKKyAg
-ICAgdW5zaWduZWQgY2hhciAqcCA9IHJlc3BvbnNlICsgc2l6ZW9mKEhFQURFUik7CistICAgIGlu
-dCBzdGF0dXMgPSBsb2NhbF9kbl9leHBhbmQocmVzcG9uc2UsIHJlc3BvbnNlICsgcmVzcG9uc2VM
-ZW5ndGgsIHAsIGhvc3QsIHNpemVvZihob3N0KSk7CistICAgIGlmIChzdGF0dXMgPCAwKSB7Cisr
-ICAgIGludCBzdGF0dXM7CisrCisrICAgIGlmIChudG9ocyhoZWFkZXItPnFkY291bnQpID09IDEp
-IHsKKysgICAgICAgIC8vIFNraXAgdGhlIHF1ZXJ5IGhvc3QsIHR5cGUgKDIgYnl0ZXMpIGFuZCBj
-bGFzcyAoMiBieXRlcykuCisrICAgICAgICBzdGF0dXMgPSBsb2NhbF9kbl9leHBhbmQocmVzcG9u
-c2UsIHJlc3BvbnNlICsgcmVzcG9uc2VMZW5ndGgsIHAsIGhvc3QsIHNpemVvZihob3N0KSk7Cisr
-ICAgICAgICBpZiAoc3RhdHVzIDwgMCkgeworKyAgICAgICAgICAgIHJlcGx5LT5lcnJvciA9IFFE
-bnNMb29rdXA6OkludmFsaWRSZXBseUVycm9yOworKyAgICAgICAgICAgIHJlcGx5LT5lcnJvclN0
-cmluZyA9IHRyKCJDb3VsZCBub3QgZXhwYW5kIGRvbWFpbiBuYW1lIik7CisrICAgICAgICAgICAg
-cmV0dXJuOworKyAgICAgICAgfQorKyAgICAgICAgaWYgKChwIC0gcmVzcG9uc2UpICsgc3RhdHVz
-ICsgNCA+PSByZXNwb25zZUxlbmd0aCkKKysgICAgICAgICAgICBoZWFkZXItPnFkY291bnQgPSAw
-eGZmZmY7ICAgLy8gaW52YWxpZCByZXBseSBiZWxvdworKyAgICAgICAgZWxzZQorKyAgICAgICAg
-ICAgIHAgKz0gc3RhdHVzICsgNDsKKysgICAgfQorKyAgICBpZiAobnRvaHMoaGVhZGVyLT5xZGNv
-dW50KSA+IDEpIHsKKyAgICAgICAgIHJlcGx5LT5lcnJvciA9IFFEbnNMb29rdXA6OkludmFsaWRS
-ZXBseUVycm9yOworLSAgICAgICAgcmVwbHktPmVycm9yU3RyaW5nID0gdHIoIkNvdWxkIG5vdCBl
-eHBhbmQgZG9tYWluIG5hbWUiKTsKKysgICAgICAgIHJlcGx5LT5lcnJvclN0cmluZyA9IHRyKCJJ
-bnZhbGlkIHJlcGx5IHJlY2VpdmVkIik7CisgICAgICAgICByZXR1cm47CisgICAgIH0KKy0gICAg
-cCArPSBzdGF0dXMgKyA0OworIAorICAgICAvLyBFeHRyYWN0IHJlc3VsdHMuCisrICAgIGNvbnN0
-IGludCBhbnN3ZXJDb3VudCA9IG50b2hzKGhlYWRlci0+YW5jb3VudCk7CisgICAgIGludCBhbnN3
-ZXJJbmRleCA9IDA7CisgICAgIHdoaWxlICgocCA8IHJlc3BvbnNlICsgcmVzcG9uc2VMZW5ndGgp
-ICYmIChhbnN3ZXJJbmRleCA8IGFuc3dlckNvdW50KSkgeworICAgICAgICAgc3RhdHVzID0gbG9j
-YWxfZG5fZXhwYW5kKHJlc3BvbnNlLCByZXNwb25zZSArIHJlc3BvbnNlTGVuZ3RoLCBwLCBob3N0
-LCBzaXplb2YoaG9zdCkpOworQEAgLTI0OSw2ICsyNjEsMTEgQEAgdm9pZCBRRG5zTG9va3VwUnVu
-bmFibGU6OnF1ZXJ5KGNvbnN0IGludCByZXF1ZXN0VHlwZSwgY29uc3QgUUJ5dGVBcnJheSAmcmVx
-dWVzdE4KKyAgICAgICAgIGNvbnN0IFFTdHJpbmcgbmFtZSA9IFFVcmw6OmZyb21BY2UoaG9zdCk7
-CisgCisgICAgICAgICBwICs9IHN0YXR1czsKKysKKysgICAgICAgIGlmICgocCAtIHJlc3BvbnNl
-KSArIDEwID4gcmVzcG9uc2VMZW5ndGgpIHsKKysgICAgICAgICAgICAvLyBwcm9iYWJseSBqdXN0
-IGEgdHJ1bmNhdGVkIHJlcGx5LCByZXR1cm4gd2hhdCB3ZSBoYXZlCisrICAgICAgICAgICAgcmV0
-dXJuOworKyAgICAgICAgfQorICAgICAgICAgY29uc3QgcXVpbnQxNiB0eXBlID0gKHBbMF0gPDwg
-OCkgfCBwWzFdOworICAgICAgICAgcCArPSAyOyAvLyBSUiB0eXBlCisgICAgICAgICBwICs9IDI7
-IC8vIFJSIGNsYXNzCitAQCAtMjU2LDYgKzI3Myw4IEBAIHZvaWQgUURuc0xvb2t1cFJ1bm5hYmxl
-OjpxdWVyeShjb25zdCBpbnQgcmVxdWVzdFR5cGUsIGNvbnN0IFFCeXRlQXJyYXkgJnJlcXVlc3RO
-CisgICAgICAgICBwICs9IDQ7CisgICAgICAgICBjb25zdCBxdWludDE2IHNpemUgPSAocFswXSA8
-PCA4KSB8IHBbMV07CisgICAgICAgICBwICs9IDI7CisrICAgICAgICBpZiAoKHAgLSByZXNwb25z
-ZSkgKyBzaXplID4gcmVzcG9uc2VMZW5ndGgpCisrICAgICAgICAgICAgcmV0dXJuOyAgICAgICAg
-ICAgICAvLyB0cnVuY2F0ZWQKKyAKKyAgICAgICAgIGlmICh0eXBlID09IFFEbnNMb29rdXA6OkEp
-IHsKKyAgICAgICAgICAgICBpZiAoc2l6ZSAhPSA0KSB7CistLSAKKzIuNDYuMAorCmRpZmYgLS1n
-aXQgYS9wYWNrYWdlL3F0Ni9xdDZiYXNlL3F0NmJhc2UubWsgYi9wYWNrYWdlL3F0Ni9xdDZiYXNl
-L3F0NmJhc2UubWsKaW5kZXggMjExODA4ZDJhZi4uYTM4ZWRjZjhhYyAxMDA2NDQKLS0tIGEvcGFj
-a2FnZS9xdDYvcXQ2YmFzZS9xdDZiYXNlLm1rCisrKyBiL3BhY2thZ2UvcXQ2L3F0NmJhc2UvcXQ2
-YmFzZS5tawpAQCAtOSw2ICs5LDggQEAgUVQ2QkFTRV9TSVRFID0gJChRVDZfU0lURSkKIFFUNkJB
-U0VfU09VUkNFID0gcXRiYXNlLSQoUVQ2X1NPVVJDRV9UQVJCQUxMX1BSRUZJWCktJChRVDZCQVNF
-X1ZFUlNJT04pLnRhci54egogUVQ2QkFTRV9DUEVfSURfVkVORE9SID0gcXQKIFFUNkJBU0VfQ1BF
-X0lEX1BST0RVQ1QgPSBxdAorIyAwMDAxLVFEbnNMb29rdXAtVW5peC1tYWtlLXN1cmUtd2UtZG9u
-LXQtb3ZlcmZsb3ctdGhlLWJ1ZmYucGF0Y2gKK1FUNkJBU0VfSUdOT1JFX0NWRVMgKz0gQ1ZFLTIw
-MjMtMzMyODUKIAogUVQ2QkFTRV9DTUFLRV9CQUNLRU5EID0gbmluamEKIAotLSAKMi40Ni4wCgpf
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3Qg
-bWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRy
-b290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+This commit backports an upstream patch that fixes CVE-2023-32762.
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+Only applicable to 2024.02.x, since >= 2024.05 use a Qt6 version that
+already has the fix.
+---
+ ...atch-header-names-case-insensitively.patch | 57 +++++++++++++++++++
+ package/qt6/qt6base/qt6base.mk                |  2 +
+ 2 files changed, 59 insertions(+)
+ create mode 100644 package/qt6/qt6base/0002-Hsts-match-header-names-case-insensitively.patch
+
+diff --git a/package/qt6/qt6base/0002-Hsts-match-header-names-case-insensitively.patch b/package/qt6/qt6base/0002-Hsts-match-header-names-case-insensitively.patch
+new file mode 100644
+index 0000000000..16332d7914
+--- /dev/null
++++ b/package/qt6/qt6base/0002-Hsts-match-header-names-case-insensitively.patch
+@@ -0,0 +1,57 @@
++From 5e8697e3aa4e92643c52d34aacfa26890e7d417d Mon Sep 17 00:00:00 2001
++From: =?UTF-8?q?M=C3=A5rten=20Nordheim?= <marten.nordheim@qt.io>
++Date: Fri, 5 May 2023 11:07:26 +0200
++Subject: [PATCH] Hsts: match header names case insensitively
++
++Header field names are always considered to be case-insensitive.
++
++Pick-to: 6.5 6.5.1 6.2 5.15
++Fixes: QTBUG-113392
++Change-Id: Ifb4def4bb7f2ac070416cdc76581a769f1e52b43
++Reviewed-by: Qt CI Bot <qt_ci_bot@qt-project.org>
++Reviewed-by: Edward Welbourne <edward.welbourne@qt.io>
++Reviewed-by: Volker Hilsheimer <volker.hilsheimer@qt.io>
++
++Fixes: https://security-tracker.debian.org/tracker/CVE-2023-32762
++Upstream: https://github.com/qt/qtbase/commit/1b736a815be0222f4b24289cf17575fc15707305
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ src/network/access/qhsts.cpp                 | 4 ++--
++ tests/auto/network/access/hsts/tst_qhsts.cpp | 6 ++++++
++ 2 files changed, 8 insertions(+), 2 deletions(-)
++
++diff --git a/src/network/access/qhsts.cpp b/src/network/access/qhsts.cpp
++index 39905f35480..82deede1729 100644
++--- a/src/network/access/qhsts.cpp
+++++ b/src/network/access/qhsts.cpp
++@@ -327,8 +327,8 @@ quoted-pair    = "\" CHAR
++ bool QHstsHeaderParser::parse(const QList<QPair<QByteArray, QByteArray>> &headers)
++ {
++     for (const auto &h : headers) {
++-        // We use '==' since header name was already 'trimmed' for us:
++-        if (h.first == "Strict-Transport-Security") {
+++        // We compare directly because header name was already 'trimmed' for us:
+++        if (h.first.compare("Strict-Transport-Security", Qt::CaseInsensitive) == 0) {
++             header = h.second;
++             // RFC6797, 8.1:
++             //
++diff --git a/tests/auto/network/access/hsts/tst_qhsts.cpp b/tests/auto/network/access/hsts/tst_qhsts.cpp
++index 252f5e8f579..97a2d2889e5 100644
++--- a/tests/auto/network/access/hsts/tst_qhsts.cpp
+++++ b/tests/auto/network/access/hsts/tst_qhsts.cpp
++@@ -216,6 +216,12 @@ void tst_QHsts::testSTSHeaderParser()
++     QVERIFY(parser.expirationDate() > QDateTime::currentDateTimeUtc());
++     QVERIFY(parser.includeSubDomains());
++ 
+++    list.pop_back();
+++    list << Header("strict-transport-security", "includeSubDomains;max-age=1000");
+++    QVERIFY(parser.parse(list));
+++    QVERIFY(parser.expirationDate() > QDateTime::currentDateTimeUtc());
+++    QVERIFY(parser.includeSubDomains());
+++
++     list.pop_back();
++     // Invalid (includeSubDomains twice):
++     list << Header("Strict-Transport-Security", "max-age = 1000 ; includeSubDomains;includeSubDomains");
++-- 
++2.46.0
++
+diff --git a/package/qt6/qt6base/qt6base.mk b/package/qt6/qt6base/qt6base.mk
+index a38edcf8ac..9143a36d9e 100644
+--- a/package/qt6/qt6base/qt6base.mk
++++ b/package/qt6/qt6base/qt6base.mk
+@@ -11,6 +11,8 @@ QT6BASE_CPE_ID_VENDOR = qt
+ QT6BASE_CPE_ID_PRODUCT = qt
+ # 0001-QDnsLookup-Unix-make-sure-we-don-t-overflow-the-buff.patch
+ QT6BASE_IGNORE_CVES += CVE-2023-33285
++# 0002-Hsts-match-header-names-case-insensitively.patch
++QT6BASE_IGNORE_CVES += CVE-2023-32762
+ 
+ QT6BASE_CMAKE_BACKEND = ninja
+ 
+-- 
+2.46.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
