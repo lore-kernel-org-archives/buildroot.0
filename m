@@ -4,73 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5A589C5320E
-	for <buildroot@archiver.kernel.org>; Thu, 22 Aug 2024 10:21:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C266C5320E
+	for <buildroot@archiver.kernel.org>; Thu, 22 Aug 2024 10:21:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A3DE160E0A;
-	Thu, 22 Aug 2024 10:21:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4367A60E31;
+	Thu, 22 Aug 2024 10:21:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4ctzw4sq8vDb; Thu, 22 Aug 2024 10:21:11 +0000 (UTC)
+ id nIERwfsLUDnX; Thu, 22 Aug 2024 10:21:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EA33560E1D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2404F60E3E
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EA33560E1D;
-	Thu, 22 Aug 2024 10:21:10 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 72A1C1BF346
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2404F60E3E;
+	Thu, 22 Aug 2024 10:21:14 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 93F401BF346
  for <buildroot@lists.busybox.net>; Thu, 22 Aug 2024 10:20:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6E16B813EC
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8149940DE5
  for <buildroot@lists.busybox.net>; Thu, 22 Aug 2024 10:20:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KVWGSP8TA21J for <buildroot@lists.busybox.net>;
- Thu, 22 Aug 2024 10:20:50 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id acomJMaYH3zW for <buildroot@lists.busybox.net>;
+ Thu, 22 Aug 2024 10:20:48 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::226;
  helo=relay6-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 852A9813E7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 852A9813E7
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 5D3DE40DE3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5D3DE40DE3
 Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
  [IPv6:2001:4b98:dc4:8::226])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 852A9813E7
- for <buildroot@buildroot.org>; Thu, 22 Aug 2024 10:20:49 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPA id BF606C0007;
- Thu, 22 Aug 2024 10:20:47 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 5D3DE40DE3
+ for <buildroot@buildroot.org>; Thu, 22 Aug 2024 10:20:48 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPA id 0DE5BC0003;
+ Thu, 22 Aug 2024 10:20:46 +0000 (UTC)
 To: Buildroot List <buildroot@buildroot.org>,
  Peter Korsgaard <peter@korsgaard.com>,
  Roy Kollen Svendsen <roykollensvendsen@gmail.com>
-Date: Thu, 22 Aug 2024 12:20:32 +0200
-Message-ID: <20240822102040.2083799-8-thomas.petazzoni@bootlin.com>
+Date: Thu, 22 Aug 2024 12:20:30 +0200
+Message-ID: <20240822102040.2083799-6-thomas.petazzoni@bootlin.com>
 X-Mailer: git-send-email 2.46.0
 In-Reply-To: <20240822102040.2083799-1-thomas.petazzoni@bootlin.com>
 References: <20240822102040.2083799-1-thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1724322048;
+ d=bootlin.com; s=gm1; t=1724322046;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=dbJhA7xfqkEhUespufwHVfrG7cjun6Mvm0dckWuErkY=;
- b=eMCeFaOpS6n82Z+njb/q67qlk+ECdf9X/ir2kAnjVG8PXHhnU3rPmiVK8DpjGNlBoLV33h
- by0A0Unng+JROUmm9WmEWH1nfHmdH7dQ4zWFfvUzaYEv6d2xcU0Ynsu+DurP+RUcSlT8hc
- 2ZBJj69W//Q/AsPyp90Ly+9exDIoMovBUL1J8jr0XI0lBLiLjBmStKINI8K1V7FG1Z5QJs
- jhDfHK7mY8tBB5ODo+mcejRHMXmSd83Rfy0EHs2p9g9s6xXEwXW73KWLKik0HAHK16kVT7
- gJn+14yLQKdBGW82xmAFwES+SVFlt1/9UvmwjdqN/21TQLzaJyvkPsfsOxkHfQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=1HXRQLI91mWDe3RSDCuHOUY820/cdOa4EV4PitzO1Gs=;
+ b=GeDMKMvLSr3Y8wkpyfppE6LWl8Pr/qwMCwMXW7OWwsunfTobGtvh7B+2h6ZrdYHzOGTOe3
+ rEAnTyIAgZ08ND2odtivNj/QC7Hm7spLxS+WlZZcwb1c47iiXGbd3Ca9OlbBoklva3R3Ap
+ nrKODZfDZ7S5QKbmw/dUsXdJpniIH9DDxSxtdw3pxkd7eeHISevrLHAM2rIm10JbZ/fpKQ
+ OOBqQVTkGWkdyJO8QgXc0iKXPv1u/e0ip0g1SBW1IFhG0XeuXCeRh41VZjz+N9UtmeSxeu
+ 1Wi5GZFF5OkCnoVUGsPe381oQWdUo4bGldyTHg0ah5bBoXrV1A/MHp3pIWsZIA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=eMCeFaOp
-Subject: [Buildroot] [PATCH 2024.02.x 7/9] package/qt6/qt6base: backport fix
- for CVE-2023-37369
+ header.s=gm1 header.b=GeDMKMvL
+Subject: [Buildroot] [PATCH 2024.02.x 5/9] package/qt6/qt6base: backport fix
+ for CVE-2023-38197
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,445 +86,451 @@ From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: Jesse Van Gavere <jesseevg@gmail.com>,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This commit backports upstream patches that are needed to fix
-CVE-2023-37369. The second one is the actual CVE fix, the first one is
-needed to only backporting the second patch in a reasonable way.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
-Only applicable to 2024.02.x, since >= 2024.05 use a Qt6 version that
-already has the fix.
----
- ...-change-fastScanName-to-take-a-Value.patch | 112 +++++++
- ...-make-fastScanName-indicate-parsing-.patch | 277 ++++++++++++++++++
- package/qt6/qt6base/qt6base.mk                |   2 +
- 3 files changed, 391 insertions(+)
- create mode 100644 package/qt6/qt6base/0012-QXmlStreamReader-change-fastScanName-to-take-a-Value.patch
- create mode 100644 package/qt6/qt6base/0013-QXmlStreamReader-make-fastScanName-indicate-parsing-.patch
-
-diff --git a/package/qt6/qt6base/0012-QXmlStreamReader-change-fastScanName-to-take-a-Value.patch b/package/qt6/qt6base/0012-QXmlStreamReader-change-fastScanName-to-take-a-Value.patch
-new file mode 100644
-index 0000000000..a105abd5bf
---- /dev/null
-+++ b/package/qt6/qt6base/0012-QXmlStreamReader-change-fastScanName-to-take-a-Value.patch
-@@ -0,0 +1,112 @@
-+From 4a19ee001b0a80318860af4bc042382c7ffb6bbb Mon Sep 17 00:00:00 2001
-+From: Ahmad Samir <a.samirh78@gmail.com>
-+Date: Wed, 12 Apr 2023 13:10:26 +0200
-+Subject: [PATCH] QXmlStreamReader: change fastScanName() to take a Value*
-+
-+For easier debugging, e.g. to print out value.len and value.prefix.
-+
-+Pick-to: 6.6 6.5 6.5.2 6.2 5.15
-+Change-Id: Ib0eed38772f899502962f578775d34ea2744fdde
-+Reviewed-by: Marc Mutz <marc.mutz@qt.io>
-+
-+Upstream: https://github.com/qt/qtbase/commit/1a423ce4372d18a779f3c0d746d5283d9a425839
-+[Thomas: needed to fix
-+https://security-tracker.debian.org/tracker/CVE-2023-37369]
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ src/corelib/serialization/qxmlstream.cpp       | 16 ++++++++--------
-+ src/corelib/serialization/qxmlstream.g         |  3 ++-
-+ src/corelib/serialization/qxmlstream_p.h       |  2 +-
-+ src/corelib/serialization/qxmlstreamparser_p.h |  3 ++-
-+ 4 files changed, 13 insertions(+), 11 deletions(-)
-+
-+diff --git a/src/corelib/serialization/qxmlstream.cpp b/src/corelib/serialization/qxmlstream.cpp
-+index ac5b291c278..466f456ee63 100644
-+--- a/src/corelib/serialization/qxmlstream.cpp
-++++ b/src/corelib/serialization/qxmlstream.cpp
-+@@ -1247,7 +1247,7 @@ inline qsizetype QXmlStreamReaderPrivate::fastScanContentCharList()
-+     return n;
-+ }
-+ 
-+-inline qsizetype QXmlStreamReaderPrivate::fastScanName(qint16 *prefix)
-++inline qsizetype QXmlStreamReaderPrivate::fastScanName(Value *val)
-+ {
-+     qsizetype n = 0;
-+     uint c;
-+@@ -1284,16 +1284,16 @@ inline qsizetype QXmlStreamReaderPrivate::fastScanName(qint16 *prefix)
-+         case '+':
-+         case '*':
-+             putChar(c);
-+-            if (prefix && *prefix == n+1) {
-+-                *prefix = 0;
-++            if (val && val->prefix == n + 1) {
-++                val->prefix = 0;
-+                 putChar(':');
-+                 --n;
-+             }
-+             return n;
-+         case ':':
-+-            if (prefix) {
-+-                if (*prefix == 0) {
-+-                    *prefix = qint16(n + 2);
-++            if (val) {
-++                if (val->prefix == 0) {
-++                    val->prefix = qint16(n + 2);
-+                 } else { // only one colon allowed according to the namespace spec.
-+                     putChar(c);
-+                     return n;
-+@@ -1309,8 +1309,8 @@ inline qsizetype QXmlStreamReaderPrivate::fastScanName(qint16 *prefix)
-+         }
-+     }
-+ 
-+-    if (prefix)
-+-        *prefix = 0;
-++    if (val)
-++        val->prefix = 0;
-+     qsizetype pos = textBuffer.size() - n;
-+     putString(textBuffer, pos);
-+     textBuffer.resize(pos);
-+diff --git a/src/corelib/serialization/qxmlstream.g b/src/corelib/serialization/qxmlstream.g
-+index d06c371eb87..f3152bff378 100644
-+--- a/src/corelib/serialization/qxmlstream.g
-++++ b/src/corelib/serialization/qxmlstream.g
-+@@ -1419,7 +1419,8 @@ space_opt ::= space;
-+ qname ::= LETTER;
-+ /.
-+         case $rule_number: {
-+-            sym(1).len += fastScanName(&sym(1).prefix);
-++            Value &val = sym(1);
-++            val.len += fastScanName(&val);
-+             if (atEnd) {
-+                 resume($rule_number);
-+                 return false;
-+diff --git a/src/corelib/serialization/qxmlstream_p.h b/src/corelib/serialization/qxmlstream_p.h
-+index f5059f8fcf9..efee742963b 100644
-+--- a/src/corelib/serialization/qxmlstream_p.h
-++++ b/src/corelib/serialization/qxmlstream_p.h
-+@@ -482,7 +482,7 @@ public:
-+     qsizetype fastScanLiteralContent();
-+     qsizetype fastScanSpace();
-+     qsizetype fastScanContentCharList();
-+-    qsizetype fastScanName(qint16 *prefix = nullptr);
-++    qsizetype fastScanName(Value *val = nullptr);
-+     inline qsizetype fastScanNMTOKEN();
-+ 
-+ 
-+diff --git a/src/corelib/serialization/qxmlstreamparser_p.h b/src/corelib/serialization/qxmlstreamparser_p.h
-+index e3ae6faa442..59370a93106 100644
-+--- a/src/corelib/serialization/qxmlstreamparser_p.h
-++++ b/src/corelib/serialization/qxmlstreamparser_p.h
-+@@ -947,7 +947,8 @@ bool QXmlStreamReaderPrivate::parse()
-+         break;
-+ 
-+         case 262: {
-+-            sym(1).len += fastScanName(&sym(1).prefix);
-++            Value &val = sym(1);
-++            val.len += fastScanName(&val);
-+             if (atEnd) {
-+                 resume(262);
-+                 return false;
-+-- 
-+2.46.0
-+
-diff --git a/package/qt6/qt6base/0013-QXmlStreamReader-make-fastScanName-indicate-parsing-.patch b/package/qt6/qt6base/0013-QXmlStreamReader-make-fastScanName-indicate-parsing-.patch
-new file mode 100644
-index 0000000000..c17a1a2e1f
---- /dev/null
-+++ b/package/qt6/qt6base/0013-QXmlStreamReader-make-fastScanName-indicate-parsing-.patch
-@@ -0,0 +1,277 @@
-+From 87f0d5c9212df3087b053a36165453f10205924d Mon Sep 17 00:00:00 2001
-+From: Ahmad Samir <a.samirh78@gmail.com>
-+Date: Thu, 22 Jun 2023 15:56:07 +0300
-+Subject: [PATCH] QXmlStreamReader: make fastScanName() indicate parsing status
-+ to callers
-+
-+This fixes a crash while parsing an XML file with garbage data, the file
-+starts with '<' then garbage data:
-+- The loop in the parse() keeps iterating until it hits "case 262:",
-+  which calls fastScanName()
-+- fastScanName() iterates over the text buffer scanning for the
-+  attribute name (e.g. "xml:lang"), until it finds ':'
-+- Consider a Value val, fastScanName() is called on it, it would set
-+  val.prefix to a number > val.len, then it would hit the 4096 condition
-+  and return (returned 0, now it returns the equivalent of
-+  std::null_opt), which means that val.len doesn't get modified, making
-+  it smaller than val.prefix
-+- The code would try constructing an XmlStringRef with negative length,
-+  which would hit an assert in one of QStringView's constructors
-+
-+Add an assert to the XmlStringRef constructor.
-+
-+Add unittest based on the file from the bug report.
-+
-+Later on I will replace FastScanNameResult with std::optional<qsizetype>
-+(std::optional is C++17, which isn't required by Qt 5.15, and we want to
-+backport this fix).
-+
-+Credit to OSS-Fuzz.
-+
-+Fixes: QTBUG-109781
-+Fixes: QTBUG-114829
-+Pick-to: 6.6 6.5 6.2 5.15
-+Change-Id: I455a5eeb47870c2ac9ffd0cbcdcd99c1ae2dd374
-+Reviewed-by: Allan Sandfeld Jensen <allan.jensen@qt.io>
-+
-+Fixes: https://security-tracker.debian.org/tracker/CVE-2023-37369
-+Upstream: https://github.com/qt/qtbase/commit/6326bec46a618c72feba4a2bb994c4d475050aed
-+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-+---
-+ src/corelib/serialization/qxmlstream.cpp      | 23 ++++++++---
-+ src/corelib/serialization/qxmlstream.g        | 12 +++++-
-+ src/corelib/serialization/qxmlstream_p.h      | 14 ++++++-
-+ .../serialization/qxmlstreamparser_p.h        | 12 +++++-
-+ .../qxmlstream/tst_qxmlstream.cpp             | 39 +++++++++++++++++++
-+ 5 files changed, 88 insertions(+), 12 deletions(-)
-+
-+diff --git a/src/corelib/serialization/qxmlstream.cpp b/src/corelib/serialization/qxmlstream.cpp
-+index 466f456ee63..2c879fb4c20 100644
-+--- a/src/corelib/serialization/qxmlstream.cpp
-++++ b/src/corelib/serialization/qxmlstream.cpp
-+@@ -1247,7 +1247,9 @@ inline qsizetype QXmlStreamReaderPrivate::fastScanContentCharList()
-+     return n;
-+ }
-+ 
-+-inline qsizetype QXmlStreamReaderPrivate::fastScanName(Value *val)
-++// Fast scan an XML attribute name (e.g. "xml:lang").
-++inline QXmlStreamReaderPrivate::FastScanNameResult
-++QXmlStreamReaderPrivate::fastScanName(Value *val)
-+ {
-+     qsizetype n = 0;
-+     uint c;
-+@@ -1255,7 +1257,8 @@ inline qsizetype QXmlStreamReaderPrivate::fastScanName(Value *val)
-+         if (n >= 4096) {
-+             // This is too long to be a sensible name, and
-+             // can exhaust memory, or the range of decltype(*prefix)
-+-            return 0;
-++            raiseNamePrefixTooLongError();
-++            return {};
-+         }
-+         switch (c) {
-+         case '\n':
-+@@ -1289,18 +1292,18 @@ inline qsizetype QXmlStreamReaderPrivate::fastScanName(Value *val)
-+                 putChar(':');
-+                 --n;
-+             }
-+-            return n;
-++            return FastScanNameResult(n);
-+         case ':':
-+             if (val) {
-+                 if (val->prefix == 0) {
-+                     val->prefix = qint16(n + 2);
-+                 } else { // only one colon allowed according to the namespace spec.
-+                     putChar(c);
-+-                    return n;
-++                    return FastScanNameResult(n);
-+                 }
-+             } else {
-+                 putChar(c);
-+-                return n;
-++                return FastScanNameResult(n);
-+             }
-+             Q_FALLTHROUGH();
-+         default:
-+@@ -1314,7 +1317,7 @@ inline qsizetype QXmlStreamReaderPrivate::fastScanName(Value *val)
-+     qsizetype pos = textBuffer.size() - n;
-+     putString(textBuffer, pos);
-+     textBuffer.resize(pos);
-+-    return 0;
-++    return FastScanNameResult(0);
-+ }
-+ 
-+ enum NameChar { NameBeginning, NameNotBeginning, NotName };
-+@@ -1795,6 +1798,14 @@ void QXmlStreamReaderPrivate::raiseWellFormedError(const QString &message)
-+     raiseError(QXmlStreamReader::NotWellFormedError, message);
-+ }
-+ 
-++void QXmlStreamReaderPrivate::raiseNamePrefixTooLongError()
-++{
-++    // TODO: add a ImplementationLimitsExceededError and use it instead
-++    raiseError(QXmlStreamReader::NotWellFormedError,
-++               QXmlStream::tr("Length of XML attribute name exceeds implemnetation limits (4KiB "
-++                              "characters)."));
-++}
-++
-+ void QXmlStreamReaderPrivate::parseError()
-+ {
-+ 
-+diff --git a/src/corelib/serialization/qxmlstream.g b/src/corelib/serialization/qxmlstream.g
-+index f3152bff378..fc122e66811 100644
-+--- a/src/corelib/serialization/qxmlstream.g
-++++ b/src/corelib/serialization/qxmlstream.g
-+@@ -1420,7 +1420,11 @@ qname ::= LETTER;
-+ /.
-+         case $rule_number: {
-+             Value &val = sym(1);
-+-            val.len += fastScanName(&val);
-++            if (auto res = fastScanName(&val))
-++                val.len += *res;
-++            else
-++                return false;
-++
-+             if (atEnd) {
-+                 resume($rule_number);
-+                 return false;
-+@@ -1431,7 +1435,11 @@ qname ::= LETTER;
-+ name ::= LETTER;
-+ /.
-+         case $rule_number:
-+-            sym(1).len += fastScanName();
-++            if (auto res = fastScanName())
-++                sym(1).len += *res;
-++            else
-++                return false;
-++
-+             if (atEnd) {
-+                 resume($rule_number);
-+                 return false;
-+diff --git a/src/corelib/serialization/qxmlstream_p.h b/src/corelib/serialization/qxmlstream_p.h
-+index efee742963b..be69921c7c3 100644
-+--- a/src/corelib/serialization/qxmlstream_p.h
-++++ b/src/corelib/serialization/qxmlstream_p.h
-+@@ -38,7 +38,7 @@ public:
-+ 
-+     constexpr XmlStringRef() = default;
-+     constexpr inline XmlStringRef(const QString *string, qsizetype pos, qsizetype length)
-+-        : m_string(string), m_pos(pos), m_size(length)
-++        : m_string(string), m_pos(pos), m_size((Q_ASSERT(length >= 0), length))
-+     {
-+     }
-+     XmlStringRef(const QString *string)
-+@@ -482,7 +482,16 @@ public:
-+     qsizetype fastScanLiteralContent();
-+     qsizetype fastScanSpace();
-+     qsizetype fastScanContentCharList();
-+-    qsizetype fastScanName(Value *val = nullptr);
-++
-++    struct FastScanNameResult {
-++        FastScanNameResult() : ok(false) {}
-++        explicit FastScanNameResult(qsizetype len) : addToLen(len), ok(true) { }
-++        operator bool() { return ok; }
-++        qsizetype operator*() { Q_ASSERT(ok); return addToLen; }
-++        qsizetype addToLen;
-++        bool ok;
-++    };
-++    FastScanNameResult fastScanName(Value *val = nullptr);
-+     inline qsizetype fastScanNMTOKEN();
-+ 
-+ 
-+@@ -491,6 +500,7 @@ public:
-+ 
-+     void raiseError(QXmlStreamReader::Error error, const QString& message = QString());
-+     void raiseWellFormedError(const QString &message);
-++    void raiseNamePrefixTooLongError();
-+ 
-+     QXmlStreamEntityResolver *entityResolver;
-+ 
-+diff --git a/src/corelib/serialization/qxmlstreamparser_p.h b/src/corelib/serialization/qxmlstreamparser_p.h
-+index 59370a93106..afd83381b3f 100644
-+--- a/src/corelib/serialization/qxmlstreamparser_p.h
-++++ b/src/corelib/serialization/qxmlstreamparser_p.h
-+@@ -948,7 +948,11 @@ bool QXmlStreamReaderPrivate::parse()
-+ 
-+         case 262: {
-+             Value &val = sym(1);
-+-            val.len += fastScanName(&val);
-++            if (auto res = fastScanName(&val))
-++                val.len += *res;
-++            else
-++                return false;
-++
-+             if (atEnd) {
-+                 resume(262);
-+                 return false;
-+@@ -956,7 +960,11 @@ bool QXmlStreamReaderPrivate::parse()
-+         } break;
-+ 
-+         case 263:
-+-            sym(1).len += fastScanName();
-++            if (auto res = fastScanName())
-++                sym(1).len += *res;
-++            else
-++                return false;
-++
-+             if (atEnd) {
-+                 resume(263);
-+                 return false;
-+diff --git a/tests/auto/corelib/serialization/qxmlstream/tst_qxmlstream.cpp b/tests/auto/corelib/serialization/qxmlstream/tst_qxmlstream.cpp
-+index 8d2738700ea..ac41528e2a8 100644
-+--- a/tests/auto/corelib/serialization/qxmlstream/tst_qxmlstream.cpp
-++++ b/tests/auto/corelib/serialization/qxmlstream/tst_qxmlstream.cpp
-+@@ -581,6 +581,8 @@ private slots:
-+     void readBack() const;
-+     void roundTrip() const;
-+     void roundTrip_data() const;
-++    void test_fastScanName_data() const;
-++    void test_fastScanName() const;
-+ 
-+     void entityExpansionLimit() const;
-+ 
-+@@ -1757,6 +1759,43 @@ void tst_QXmlStream::roundTrip() const
-+     QCOMPARE(out, in);
-+ }
-+ 
-++void tst_QXmlStream::test_fastScanName_data() const
-++{
-++    QTest::addColumn<QByteArray>("data");
-++    QTest::addColumn<QXmlStreamReader::Error>("errorType");
-++
-++    // 4096 is the limit in QXmlStreamReaderPrivate::fastScanName()
-++
-++    QByteArray arr = "<a"_ba + ":" + QByteArray("b").repeated(4096 - 1);
-++    QTest::newRow("data1") << arr << QXmlStreamReader::PrematureEndOfDocumentError;
-++
-++    arr = "<a"_ba + ":" + QByteArray("b").repeated(4096);
-++    QTest::newRow("data2") << arr << QXmlStreamReader::NotWellFormedError;
-++
-++    arr = "<"_ba + QByteArray("a").repeated(4000) + ":" + QByteArray("b").repeated(96);
-++    QTest::newRow("data3") << arr << QXmlStreamReader::PrematureEndOfDocumentError;
-++
-++    arr = "<"_ba + QByteArray("a").repeated(4000) + ":" + QByteArray("b").repeated(96 + 1);
-++    QTest::newRow("data4") << arr << QXmlStreamReader::NotWellFormedError;
-++
-++    arr = "<"_ba + QByteArray("a").repeated(4000 + 1) + ":" + QByteArray("b").repeated(96);
-++    QTest::newRow("data5") << arr << QXmlStreamReader::NotWellFormedError;
-++}
-++
-++void tst_QXmlStream::test_fastScanName() const
-++{
-++    QFETCH(QByteArray, data);
-++    QFETCH(QXmlStreamReader::Error, errorType);
-++
-++    QXmlStreamReader reader(data);
-++    QXmlStreamReader::TokenType tokenType;
-++    while (!reader.atEnd())
-++        tokenType = reader.readNext();
-++
-++    QCOMPARE(tokenType, QXmlStreamReader::Invalid);
-++    QCOMPARE(reader.error(), errorType);
-++}
-++
-+ void tst_QXmlStream::tokenErrorHandling_data() const
-+ {
-+     QTest::addColumn<QString>("fileName");
-+-- 
-+2.46.0
-+
-diff --git a/package/qt6/qt6base/qt6base.mk b/package/qt6/qt6base/qt6base.mk
-index 0bb9a197ec..7cfcc708d8 100644
---- a/package/qt6/qt6base/qt6base.mk
-+++ b/package/qt6/qt6base/qt6base.mk
-@@ -19,6 +19,8 @@ QT6BASE_IGNORE_CVES += CVE-2023-32763
- QT6BASE_IGNORE_CVES += CVE-2023-38197
- # 0011-HPack-fix-incorrect-integer-overflow-check.patch
- QT6BASE_IGNORE_CVES += CVE-2023-38197
-+# 0013-QXmlStreamReader-make-fastScanName-indicate-parsing-.patch
-+QT6BASE_IGNORE_CVES += CVE-2023-37369
- 
- QT6BASE_CMAKE_BACKEND = ninja
- 
--- 
-2.46.0
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+VGhpcyBjb21taXQgYmFja3BvcnRzIGFuIHVwc3RyZWFtIHBhdGNoIHRvIGZpeCBDVkUtMjAyMy0z
+ODE5Nywgd2hpY2gKcmVxdWlyZXMgMyBvdGhlciBwYXRjaGVzIHRvIGJlIGJhY2twb3J0ZWQgaW4g
+b3JkZXIgdG8gd29yayBwcm9wZXJseS4KClNpZ25lZC1vZmYtYnk6IFRob21hcyBQZXRhenpvbmkg
+PHRob21hcy5wZXRhenpvbmlAYm9vdGxpbi5jb20+Ci0tLQpPbmx5IGFwcGxpY2FibGUgdG8gMjAy
+NC4wMi54LCBzaW5jZSA+PSAyMDI0LjA1IHVzZSBhIFF0NiB2ZXJzaW9uIHRoYXQKYWxyZWFkeSBo
+YXMgdGhlIGZpeC4KLS0tCiAuLi5heS1maXgtYW1iaWd1b3VzLXFPZmZzZXRTdHJpbmdBcnJheS0u
+cGF0Y2ggfCAgNDkgKysrCiAuLi5nQXJyYXktZml4LXNpemVfdC1xc2l6ZXR5cGUtbWlzbWF0Y2gu
+cGF0Y2ggfCAgMzcgKysKIC4uLi11c2UtcU9mZnNldFN0cmluZ0FycmF5LWZvci1zdG9yaW5nLS5w
+YXRjaCB8IDExNCArKysrKwogLi4uZGVyLVJhaXNlLWVycm9yLW9uLXVuZXhwZWN0ZWQtdG9rZW5z
+LnBhdGNoIHwgNDA2ICsrKysrKysrKysrKysrKysrKwogcGFja2FnZS9xdDYvcXQ2YmFzZS9xdDZi
+YXNlLm1rICAgICAgICAgICAgICAgIHwgICAyICsKIDUgZmlsZXMgY2hhbmdlZCwgNjA4IGluc2Vy
+dGlvbnMoKykKIGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL3F0Ni9xdDZiYXNlLzAwMDYtUU9m
+ZnNldFN0cmluZ0FycmF5LWZpeC1hbWJpZ3VvdXMtcU9mZnNldFN0cmluZ0FycmF5LS5wYXRjaAog
+Y3JlYXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvcXQ2L3F0NmJhc2UvMDAwNy1RT2Zmc2V0U3RyaW5n
+QXJyYXktZml4LXNpemVfdC1xc2l6ZXR5cGUtbWlzbWF0Y2gucGF0Y2gKIGNyZWF0ZSBtb2RlIDEw
+MDY0NCBwYWNrYWdlL3F0Ni9xdDZiYXNlLzAwMDgtUVhtbFN0cmVhbVJlYWRlci11c2UtcU9mZnNl
+dFN0cmluZ0FycmF5LWZvci1zdG9yaW5nLS5wYXRjaAogY3JlYXRlIG1vZGUgMTAwNjQ0IHBhY2th
+Z2UvcXQ2L3F0NmJhc2UvMDAwOS1RWG1sU3RyZWFtUmVhZGVyLVJhaXNlLWVycm9yLW9uLXVuZXhw
+ZWN0ZWQtdG9rZW5zLnBhdGNoCgpkaWZmIC0tZ2l0IGEvcGFja2FnZS9xdDYvcXQ2YmFzZS8wMDA2
+LVFPZmZzZXRTdHJpbmdBcnJheS1maXgtYW1iaWd1b3VzLXFPZmZzZXRTdHJpbmdBcnJheS0ucGF0
+Y2ggYi9wYWNrYWdlL3F0Ni9xdDZiYXNlLzAwMDYtUU9mZnNldFN0cmluZ0FycmF5LWZpeC1hbWJp
+Z3VvdXMtcU9mZnNldFN0cmluZ0FycmF5LS5wYXRjaApuZXcgZmlsZSBtb2RlIDEwMDY0NAppbmRl
+eCAwMDAwMDAwMDAwLi5jMmJlYmZjNGYwCi0tLSAvZGV2L251bGwKKysrIGIvcGFja2FnZS9xdDYv
+cXQ2YmFzZS8wMDA2LVFPZmZzZXRTdHJpbmdBcnJheS1maXgtYW1iaWd1b3VzLXFPZmZzZXRTdHJp
+bmdBcnJheS0ucGF0Y2gKQEAgLTAsMCArMSw0OSBAQAorRnJvbSAwZTBlMDc1YWViNGQ4YTFlZmEy
+MTc4YzBkZTMwODRiODAwYWI2MmVkIE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQorRnJvbTogTWFy
+YyBNdXR6IDxtYXJjLm11dHpAcXQuaW8+CitEYXRlOiBTdW4sIDQgU2VwIDIwMjIgMTI6MzE6MTAg
+KzAyMDAKK1N1YmplY3Q6IFtQQVRDSF0gUU9mZnNldFN0cmluZ0FycmF5OiBmaXggYW1iaWd1b3Vz
+IHFPZmZzZXRTdHJpbmdBcnJheQorIG92ZXJsb2FkcworCitUaGVyZSBhcmUgdHdvIHFPZmZzZXRT
+dHJpbmdBcnJheSBvdmVybG9hZHM6IG9uZSBpbiBRVF9OQU1FU1BBQ0UsIHRoZQorb3RoZXIgaW4g
+UVRfUFJFUEVORF9OQU1FU1BBQ0UoUXRQcml2YXRlKS4gSW4gVFVzIHdoaWNoIHVzZSB1c2luZwor
+bmFtZXNwYWNlIFF0UHJpdmF0ZSwgYSBjYWxsIHRvIHFPZmZzZXRTdHJpbmdBcnJheSgpIG1heSBi
+ZWNvbWUKK2FtYmlndW91cy4KKworRml4IGJ5IHJlbmFtaW5nIHRoZSBxT2Zmc2V0U3RyaW5nQXJy
+YXkoKSB0byBtYWtlT2Zmc2V0U3RyaW5nQXJyYXkoKS4KKworUGljay10bzogNi40IDYuMyA2LjIK
+K0NoYW5nZS1JZDogSTI0MmE5NjlmMzYzZTIzMGQ2YThkZmIwNDg2MDFhMGMwMjQ3MjRmNmEKK1Jl
+dmlld2VkLWJ5OiBUaGlhZ28gTWFjaWVpcmEgPHRoaWFnby5tYWNpZWlyYUBpbnRlbC5jb20+CisK
+K1Vwc3RyZWFtOiBodHRwczovL2dpdGh1Yi5jb20vcXQvcXRiYXNlL2NvbW1pdC8yMWM1ZWViYTY3
+MzY5NGY4NjViYWRmZDEzN2VlOWZjNDc0MTc3YWUwCitbVGhvbWFzOiBuZWVkZWQgdG8gYmFja3Bv
+cnQgZml4IGZvciBDVkUtMjAyMy0zODE5N10KK1NpZ25lZC1vZmYtYnk6IFRob21hcyBQZXRhenpv
+bmkgPHRob21hcy5wZXRhenpvbmlAYm9vdGxpbi5jb20+CistLS0KKyBzcmMvY29yZWxpYi90b29s
+cy9xb2Zmc2V0c3RyaW5nYXJyYXlfcC5oIHwgNCArKy0tCisgMSBmaWxlIGNoYW5nZWQsIDIgaW5z
+ZXJ0aW9ucygrKSwgMiBkZWxldGlvbnMoLSkKKworZGlmZiAtLWdpdCBhL3NyYy9jb3JlbGliL3Rv
+b2xzL3FvZmZzZXRzdHJpbmdhcnJheV9wLmggYi9zcmMvY29yZWxpYi90b29scy9xb2Zmc2V0c3Ry
+aW5nYXJyYXlfcC5oCitpbmRleCA0NjFkNjFhMmJhZS4uZmUzZjdmYmQ1ZmYgMTAwNjQ0CistLS0g
+YS9zcmMvY29yZWxpYi90b29scy9xb2Zmc2V0c3RyaW5nYXJyYXlfcC5oCisrKysgYi9zcmMvY29y
+ZWxpYi90b29scy9xb2Zmc2V0c3RyaW5nYXJyYXlfcC5oCitAQCAtMTE4LDcgKzExOCw3IEBAIHRl
+bXBsYXRlIDxzaXplX3QgS0wsIHNpemVfdCBWTD4gc3RydWN0IFN0YXRpY01hcEVudHJ5CisgfTsK
+KyAKKyB0ZW1wbGF0ZSA8dHlwZW5hbWUgU3RyaW5nRXh0cmFjdG9yLCB0eXBlbmFtZS4uLiBUPgor
+LWNvbnN0ZXhwciBhdXRvIHFPZmZzZXRTdHJpbmdBcnJheShTdHJpbmdFeHRyYWN0b3IgZXh0cmFj
+dFN0cmluZywgY29uc3QgVCAmLi4uIGVudHJpZXMpCisrY29uc3RleHByIGF1dG8gbWFrZU9mZnNl
+dFN0cmluZ0FycmF5KFN0cmluZ0V4dHJhY3RvciBleHRyYWN0U3RyaW5nLCBjb25zdCBUICYuLi4g
+ZW50cmllcykKKyB7CisgICAgIGNvbnN0ZXhwciBzaXplX3QgQ291bnQgPSBzaXplb2YuLi4oVCk7
+CisgICAgIGNvbnN0ZXhwciBxc2l6ZXR5cGUgU3RyaW5nTGVuZ3RoID0gKHNpemVvZihleHRyYWN0
+U3RyaW5nKFR7fSkpICsgLi4uKTsKK0BAIC0xNDIsNyArMTQyLDcgQEAgdGVtcGxhdGU8aW50IC4u
+LiBOeD4KKyBjb25zdGV4cHIgYXV0byBxT2Zmc2V0U3RyaW5nQXJyYXkoY29uc3QgY2hhciAoJi4u
+LnN0cmluZ3MpW054XSkgbm9leGNlcHQKKyB7CisgICAgIGF1dG8gZXh0cmFjdFN0cmluZyA9IFtd
+KGNvbnN0IGF1dG8gJnMpIC0+IGRlY2x0eXBlKGF1dG8pIHsgcmV0dXJuIHM7IH07CistICAgIHJl
+dHVybiBRdFByaXZhdGU6OnFPZmZzZXRTdHJpbmdBcnJheShleHRyYWN0U3RyaW5nLCBRdFByaXZh
+dGU6OlN0YXRpY1N0cmluZyhzdHJpbmdzKS4uLik7CisrICAgIHJldHVybiBRdFByaXZhdGU6Om1h
+a2VPZmZzZXRTdHJpbmdBcnJheShleHRyYWN0U3RyaW5nLCBRdFByaXZhdGU6OlN0YXRpY1N0cmlu
+ZyhzdHJpbmdzKS4uLik7CisgfQorIAorIFFUX1dBUk5JTkdfUE9QCistLSAKKzIuNDYuMAorCmRp
+ZmYgLS1naXQgYS9wYWNrYWdlL3F0Ni9xdDZiYXNlLzAwMDctUU9mZnNldFN0cmluZ0FycmF5LWZp
+eC1zaXplX3QtcXNpemV0eXBlLW1pc21hdGNoLnBhdGNoIGIvcGFja2FnZS9xdDYvcXQ2YmFzZS8w
+MDA3LVFPZmZzZXRTdHJpbmdBcnJheS1maXgtc2l6ZV90LXFzaXpldHlwZS1taXNtYXRjaC5wYXRj
+aApuZXcgZmlsZSBtb2RlIDEwMDY0NAppbmRleCAwMDAwMDAwMDAwLi5hNjAzZDYzYmI4Ci0tLSAv
+ZGV2L251bGwKKysrIGIvcGFja2FnZS9xdDYvcXQ2YmFzZS8wMDA3LVFPZmZzZXRTdHJpbmdBcnJh
+eS1maXgtc2l6ZV90LXFzaXpldHlwZS1taXNtYXRjaC5wYXRjaApAQCAtMCwwICsxLDM3IEBACitG
+cm9tIDA3ODdiZTIxYTc5ZGMzZDAyNzhhYzc3ZjhmNDVlZDlmYzg2NDFkZmUgTW9uIFNlcCAxNyAw
+MDowMDowMCAyMDAxCitGcm9tOiBNYXJjIE11dHogPG1hcmMubXV0ekBxdC5pbz4KK0RhdGU6IE1v
+biwgNSBTZXAgMjAyMiAwODo1OToyMyArMDIwMAorU3ViamVjdDogW1BBVENIXSBRT2Zmc2V0U3Ry
+aW5nQXJyYXk6IGZpeCBzaXplX3QvcXNpemV0eXBlIG1pc21hdGNoCisKK1RoZSBzaXplb2Ygb3Bl
+cmF0b3IgcmV0dXJucywgYW5kIGJvdGggbWluaWZ5VmFsdWUgYW5kIG1ha2VTdGF0aWNTdHJpbmcK
+K2FjY2VwdCwgc2l6ZV90LiBEb24ndCBmdW5uZWwgaXQgdGhyb3VnaCBhIHFzaXpldHlwZSB2YXJp
+YWJsZSwgdGhlbiwKK2J1dCBtYWludGFpbiBpdCBhcyBhIHNpemVfdCBhbGwgdGhlIHdheS4KKwor
+UGljay10bzogNi40IDYuMyA2LjIKK1Rhc2stbnVtYmVyOiBRVEJVRy0xMDM1MzMKK0NoYW5nZS1J
+ZDogSTA1YzZhNmM1ZGEzZDAyZGFhYmJmMWQyNWExNTUzMWM2ZjQ0YTgwY2UKK1Jldmlld2VkLWJ5
+OiBTb25hIEt1cmF6eWFuIDxzb25hLmt1cmF6eWFuQHF0LmlvPgorCitVcHN0cmVhbTogaHR0cHM6
+Ly9naXRodWIuY29tL3F0L3F0YmFzZS9jb21taXQvODkzMmVlZTlhNjUyZDhhMzI1NDEwYjE0Nzk1
+NWM5OTM5Mjc4ZjllZAorW1Rob21hczogbmVlZGVkIHRvIGJhY2twb3J0IGZpeCBmb3IgQ1ZFLTIw
+MjMtMzgxOTddCitTaWduZWQtb2ZmLWJ5OiBUaG9tYXMgUGV0YXp6b25pIDx0aG9tYXMucGV0YXp6
+b25pQGJvb3RsaW4uY29tPgorLS0tCisgc3JjL2NvcmVsaWIvdG9vbHMvcW9mZnNldHN0cmluZ2Fy
+cmF5X3AuaCB8IDIgKy0KKyAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDEgZGVsZXRp
+b24oLSkKKworZGlmZiAtLWdpdCBhL3NyYy9jb3JlbGliL3Rvb2xzL3FvZmZzZXRzdHJpbmdhcnJh
+eV9wLmggYi9zcmMvY29yZWxpYi90b29scy9xb2Zmc2V0c3RyaW5nYXJyYXlfcC5oCitpbmRleCBm
+ZTNmN2ZiZDVmZi4uMTc3YWI5YzlmNDUgMTAwNjQ0CistLS0gYS9zcmMvY29yZWxpYi90b29scy9x
+b2Zmc2V0c3RyaW5nYXJyYXlfcC5oCisrKysgYi9zcmMvY29yZWxpYi90b29scy9xb2Zmc2V0c3Ry
+aW5nYXJyYXlfcC5oCitAQCAtMTIxLDcgKzEyMSw3IEBAIHRlbXBsYXRlIDx0eXBlbmFtZSBTdHJp
+bmdFeHRyYWN0b3IsIHR5cGVuYW1lLi4uIFQ+CisgY29uc3RleHByIGF1dG8gbWFrZU9mZnNldFN0
+cmluZ0FycmF5KFN0cmluZ0V4dHJhY3RvciBleHRyYWN0U3RyaW5nLCBjb25zdCBUICYuLi4gZW50
+cmllcykKKyB7CisgICAgIGNvbnN0ZXhwciBzaXplX3QgQ291bnQgPSBzaXplb2YuLi4oVCk7Cist
+ICAgIGNvbnN0ZXhwciBxc2l6ZXR5cGUgU3RyaW5nTGVuZ3RoID0gKHNpemVvZihleHRyYWN0U3Ry
+aW5nKFR7fSkpICsgLi4uKTsKKysgICAgY29uc3RleHByIHNpemVfdCBTdHJpbmdMZW5ndGggPSAo
+c2l6ZW9mKGV4dHJhY3RTdHJpbmcoVHt9KSkgKyAuLi4pOworICAgICB1c2luZyBNaW5pZmllZE9m
+ZnNldFR5cGUgPSBkZWNsdHlwZShRdFByaXZhdGU6Om1pbmlmeVZhbHVlPFN0cmluZ0xlbmd0aD4o
+KSk7CisgCisgICAgIHNpemVfdCBvZmZzZXQgPSAwOworLS0gCisyLjQ2LjAKKwpkaWZmIC0tZ2l0
+IGEvcGFja2FnZS9xdDYvcXQ2YmFzZS8wMDA4LVFYbWxTdHJlYW1SZWFkZXItdXNlLXFPZmZzZXRT
+dHJpbmdBcnJheS1mb3Itc3RvcmluZy0ucGF0Y2ggYi9wYWNrYWdlL3F0Ni9xdDZiYXNlLzAwMDgt
+UVhtbFN0cmVhbVJlYWRlci11c2UtcU9mZnNldFN0cmluZ0FycmF5LWZvci1zdG9yaW5nLS5wYXRj
+aApuZXcgZmlsZSBtb2RlIDEwMDY0NAppbmRleCAwMDAwMDAwMDAwLi42ZDlmZTExMTExCi0tLSAv
+ZGV2L251bGwKKysrIGIvcGFja2FnZS9xdDYvcXQ2YmFzZS8wMDA4LVFYbWxTdHJlYW1SZWFkZXIt
+dXNlLXFPZmZzZXRTdHJpbmdBcnJheS1mb3Itc3RvcmluZy0ucGF0Y2gKQEAgLTAsMCArMSwxMTQg
+QEAKK0Zyb20gN2U1MDkyN2QxMzNlMjU1NzdhMGMzNDgxYzAwYjY4NzdiNTgxZjQxMSBNb24gU2Vw
+IDE3IDAwOjAwOjAwIDIwMDEKK0Zyb206IFNvbmEgS3VyYXp5YW4gPHNvbmEua3VyYXp5YW5AcXQu
+aW8+CitEYXRlOiBGcmksIDIgU2VwIDIwMjIgMTY6NTI6MDQgKzAyMDAKK1N1YmplY3Q6IFtQQVRD
+SF0gUVhtbFN0cmVhbVJlYWRlcjogdXNlIHFPZmZzZXRTdHJpbmdBcnJheSBmb3Igc3RvcmluZyB0
+b2tlbgorIHR5cGVzCitNSU1FLVZlcnNpb246IDEuMAorQ29udGVudC1UeXBlOiB0ZXh0L3BsYWlu
+OyBjaGFyc2V0PVVURi04CitDb250ZW50LVRyYW5zZmVyLUVuY29kaW5nOiA4Yml0CisKK0NoYW5n
+ZS1JZDogSTllNThjMTdkOTdjNDRlMWIxMzg5OWQzMDM5NmY2NWI0NTJkODYwMGYKK1Jldmlld2Vk
+LWJ5OiBNw6VydGVuIE5vcmRoZWltIDxtYXJ0ZW4ubm9yZGhlaW1AcXQuaW8+CisKK1Vwc3RyZWFt
+OiBodHRwczovL2dpdGh1Yi5jb20vcXQvcXRiYXNlL2NvbW1pdC9kNjc0ZjNmNTQ1NGZiMzlkZTk0
+MDU0ODRhOGMwMWZiOTI4NTIzZjY3CitbVGhvbWFzOiBuZWVkZWQgdG8gYmFja3BvcnQgZml4IGZv
+ciBDVkUtMjAyMy0zODE5N10KK1NpZ25lZC1vZmYtYnk6IFRob21hcyBQZXRhenpvbmkgPHRob21h
+cy5wZXRhenpvbmlAYm9vdGxpbi5jb20+CistLS0KKyBzcmMvY29yZWxpYi9zZXJpYWxpemF0aW9u
+L3F4bWxzdHJlYW0uY3BwIHwgNjcgKysrKysrLS0tLS0tLS0tLS0tLS0tLS0tCisgMSBmaWxlIGNo
+YW5nZWQsIDE2IGluc2VydGlvbnMoKyksIDUxIGRlbGV0aW9ucygtKQorCitkaWZmIC0tZ2l0IGEv
+c3JjL2NvcmVsaWIvc2VyaWFsaXphdGlvbi9xeG1sc3RyZWFtLmNwcCBiL3NyYy9jb3JlbGliL3Nl
+cmlhbGl6YXRpb24vcXhtbHN0cmVhbS5jcHAKK2luZGV4IDcwZTY1ZGY5OTU3Li5hMzFiZDE2ZjFj
+ZSAxMDA2NDQKKy0tLSBhL3NyYy9jb3JlbGliL3NlcmlhbGl6YXRpb24vcXhtbHN0cmVhbS5jcHAK
+KysrKyBiL3NyYy9jb3JlbGliL3NlcmlhbGl6YXRpb24vcXhtbHN0cmVhbS5jcHAKK0BAIC0xNSw2
+ICsxNSw4IEBACisgI2luY2x1ZGUgPHFzY29wZWd1YXJkLmg+CisgI2luY2x1ZGUgPHFjb3JlYXBw
+bGljYXRpb24uaD4KKyAKKysjaW5jbHVkZSA8cHJpdmF0ZS9xb2Zmc2V0c3RyaW5nYXJyYXlfcC5o
+PgorKworICNpbmNsdWRlIDxpdGVyYXRvcj4KKyAjaW5jbHVkZSAicXhtbHN0cmVhbV9wLmgiCisg
+I2luY2x1ZGUgInF4bWxzdHJlYW1wYXJzZXJfcC5oIgorQEAgLTY0Miw1NSArNjQ0LDE5IEBAIHZv
+aWQgUVhtbFN0cmVhbVJlYWRlcjo6c2tpcEN1cnJlbnRFbGVtZW50KCkKKyAgICAgfQorIH0KKyAK
+Ky0vKgorLSAqIFVzZSB0aGUgZm9sbG93aW5nIFBlcmwgc2NyaXB0IHRvIGdlbmVyYXRlIHRoZSBl
+cnJvciBzdHJpbmcgaW5kZXggbGlzdDoKKy09PT09PSBQRVJMIFNDUklQVCA9PT09CistcHJpbnQg
+InN0YXRpYyBjb25zdCBjaGFyIFFYbWxTdHJlYW1SZWFkZXJfdG9rZW5UeXBlU3RyaW5nX3N0cmlu
+Z1tdID1cbiI7CistJGNvdW50ZXIgPSAwOworLSRpID0gMDsKKy13aGlsZSAoPFNURElOPikgewor
+LSAgICBjaG9tcDsKKy0gICAgcHJpbnQgIiAgICBcIiRfXFwwXCJcbiI7CistICAgICRzaXplc1sk
+aSsrXSA9ICRjb3VudGVyOworLSAgICAkY291bnRlciArPSBsZW5ndGggMSArICRfOworLX0KKy1w
+cmludCAiICAgIFwiXFwwXCI7XG5cbnN0YXRpYyBjb25zdCBzaG9ydCBRWG1sU3RyZWFtUmVhZGVy
+X3Rva2VuVHlwZVN0cmluZ19pbmRpY2VzW10gPSB7XG4gICAgIjsKKy1mb3IgKCRqID0gMDsgJGog
+PCAkaTsgKyskaikgeworLSAgICBwcmludGYgIiRzaXplc1skal0sICI7CistfQorLXByaW50ICIw
+XG59O1xuIjsKKy09PT09PSBQRVJMIFNDUklQVCA9PT09CistCistICogVGhlIGlucHV0IGRhdGEg
+aXMgYXMgZm9sbG93cyAoY29waWVkIGZyb20gcXhtbHN0cmVhbS5oKToKKy1Ob1Rva2VuCistSW52
+YWxpZAorLVN0YXJ0RG9jdW1lbnQKKy1FbmREb2N1bWVudAorLVN0YXJ0RWxlbWVudAorLUVuZEVs
+ZW1lbnQKKy1DaGFyYWN0ZXJzCistQ29tbWVudAorLURURAorLUVudGl0eVJlZmVyZW5jZQorLVBy
+b2Nlc3NpbmdJbnN0cnVjdGlvbgorLSovCistc3RhdGljIGNvbnN0IGNoYXIgUVhtbFN0cmVhbVJl
+YWRlcl90b2tlblR5cGVTdHJpbmdfc3RyaW5nW10gPQorLSAgICAiTm9Ub2tlblwwIgorLSAgICAi
+SW52YWxpZFwwIgorLSAgICAiU3RhcnREb2N1bWVudFwwIgorLSAgICAiRW5kRG9jdW1lbnRcMCIK
+Ky0gICAgIlN0YXJ0RWxlbWVudFwwIgorLSAgICAiRW5kRWxlbWVudFwwIgorLSAgICAiQ2hhcmFj
+dGVyc1wwIgorLSAgICAiQ29tbWVudFwwIgorLSAgICAiRFREXDAiCistICAgICJFbnRpdHlSZWZl
+cmVuY2VcMCIKKy0gICAgIlByb2Nlc3NpbmdJbnN0cnVjdGlvblwwIjsKKy0KKy1zdGF0aWMgY29u
+c3Qgc2hvcnQgUVhtbFN0cmVhbVJlYWRlcl90b2tlblR5cGVTdHJpbmdfaW5kaWNlc1tdID0gewor
+LSAgICAwLCA4LCAxNiwgMzAsIDQyLCA1NSwgNjYsIDc3LCA4NSwgODksIDEwNSwgMAorLX07Cist
+Cisrc3RhdGljIGNvbnN0ZXhwciBhdXRvIFFYbWxTdHJlYW1SZWFkZXJfdG9rZW5UeXBlU3RyaW5n
+ID0gcU9mZnNldFN0cmluZ0FycmF5KAorKyAgICAiTm9Ub2tlbiIsCisrICAgICJJbnZhbGlkIiwK
+KysgICAgIlN0YXJ0RG9jdW1lbnQiLAorKyAgICAiRW5kRG9jdW1lbnQiLAorKyAgICAiU3RhcnRF
+bGVtZW50IiwKKysgICAgIkVuZEVsZW1lbnQiLAorKyAgICAiQ2hhcmFjdGVycyIsCisrICAgICJD
+b21tZW50IiwKKysgICAgIkRURCIsCisrICAgICJFbnRpdHlSZWZlcmVuY2UiLAorKyAgICAiUHJv
+Y2Vzc2luZ0luc3RydWN0aW9uIgorKyk7CisgCisgLyohCisgICAgIFxwcm9wZXJ0eSAgUVhtbFN0
+cmVhbVJlYWRlcjo6bmFtZXNwYWNlUHJvY2Vzc2luZworQEAgLTcyMyw4ICs2ODksNyBAQCBib29s
+IFFYbWxTdHJlYW1SZWFkZXI6Om5hbWVzcGFjZVByb2Nlc3NpbmcoKSBjb25zdAorIFFTdHJpbmcg
+UVhtbFN0cmVhbVJlYWRlcjo6dG9rZW5TdHJpbmcoKSBjb25zdAorIHsKKyAgICAgUV9EKGNvbnN0
+IFFYbWxTdHJlYW1SZWFkZXIpOworLSAgICByZXR1cm4gUUxhdGluMVN0cmluZ1ZpZXcoUVhtbFN0
+cmVhbVJlYWRlcl90b2tlblR5cGVTdHJpbmdfc3RyaW5nICsKKy0gICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgIFFYbWxTdHJlYW1SZWFkZXJfdG9rZW5UeXBlU3RyaW5nX2luZGljZXNbZC0+dHlw
+ZV0pOworKyAgICByZXR1cm4gUUxhdGluMVN0cmluZ1ZpZXcoUVhtbFN0cmVhbVJlYWRlcl90b2tl
+blR5cGVTdHJpbmcuYXQoZC0+dHlwZSkpOworIH0KKyAKKyAjZW5kaWYgLy8gUVRfTk9fWE1MU1RS
+RUFNUkVBREVSCistLSAKKzIuNDYuMAorCmRpZmYgLS1naXQgYS9wYWNrYWdlL3F0Ni9xdDZiYXNl
+LzAwMDktUVhtbFN0cmVhbVJlYWRlci1SYWlzZS1lcnJvci1vbi11bmV4cGVjdGVkLXRva2Vucy5w
+YXRjaCBiL3BhY2thZ2UvcXQ2L3F0NmJhc2UvMDAwOS1RWG1sU3RyZWFtUmVhZGVyLVJhaXNlLWVy
+cm9yLW9uLXVuZXhwZWN0ZWQtdG9rZW5zLnBhdGNoCm5ldyBmaWxlIG1vZGUgMTAwNjQ0CmluZGV4
+IDAwMDAwMDAwMDAuLjA2ZjJlMzY3ZTcKLS0tIC9kZXYvbnVsbAorKysgYi9wYWNrYWdlL3F0Ni9x
+dDZiYXNlLzAwMDktUVhtbFN0cmVhbVJlYWRlci1SYWlzZS1lcnJvci1vbi11bmV4cGVjdGVkLXRv
+a2Vucy5wYXRjaApAQCAtMCwwICsxLDQwNiBAQAorRnJvbSBkYzI0Zjc2Y2M2MjFkNTZkMTFhYmIw
+MTU2NTRjNDI3ZjdhN2MwYTMxIE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQorRnJvbTogQXhlbCBT
+cG9lcmwgPGF4ZWwuc3BvZXJsQHF0LmlvPgorRGF0ZTogRnJpLCAzMCBKdW4gMjAyMyAxMjo0Mzo1
+OSArMDIwMAorU3ViamVjdDogW1BBVENIXSBRWG1sU3RyZWFtUmVhZGVyOiBSYWlzZSBlcnJvciBv
+biB1bmV4cGVjdGVkIHRva2VucworCitRWG1sU3RyZWFtUmVhZGVyIGFjY2VwdGVkIG11bHRpcGxl
+IERPQ1RZUEUgZWxlbWVudHMsIGNvbnRhaW5pbmcgRFRECitmcmFnbWVudHMgaW4gdGhlIFhNTCBw
+cm9sb2csIGFuZCBpbiB0aGUgWE1MIGJvZHkuCitXZWxsLWZvcm1lZCBidXQgaW52YWxpZCBYTUwg
+ZmlsZXMgLSB3aXRoIG11bHRpcGxlIERURCBmcmFnbWVudHMgaW4KK3Byb2xvZyBhbmQgYm9keSwg
+Y29tYmluZWQgd2l0aCByZWN1cnNpdmUgZW50aXR5IGV4cGFuc2lvbnMgLSBoYXZlCitjYXVzZWQg
+aW5maW5pdGUgbG9vcHMgaW4gUVhtbFN0cmVhbVJlYWRlci4KKworVGhpcyBwYXRjaCBpbXBsZW1l
+bnRzIGEgdG9rZW4gY2hlY2sgaW4gUVhtbFN0cmVhbVJlYWRlci4KK0Egc3RyZWFtIGlzIGFsbG93
+ZWQgdG8gc3RhcnQgd2l0aCBhbiBYTUwgcHJvbG9nLiBTdGFydERvY3VtZW50CithbmQgRE9DVFlQ
+RSBlbGVtZW50cyBhcmUgb25seSBhbGxvd2VkIGluIHRoaXMgcHJvbG9nLCB3aGljaAorbWF5IGFs
+c28gY29udGFpbiBQcm9jZXNzaW5nSW5zdHJ1Y3Rpb24gYW5kIENvbW1lbnQgZWxlbWVudHMuCitB
+cyBzb29uIGFzIGFueXRoaW5nIGVsc2UgaXMgc2VlbiwgdGhlIHByb2xvZyBlbmRzLgorQWZ0ZXIg
+dGhhdCwgdGhlIHByb2xvZy1zcGVjaWZpYyBlbGVtZW50cyBhcmUgdHJlYXRlZCBhcyB1bmV4cGVj
+dGVkLgorRnVydGhlcm1vcmUsIHRoZSBwcm9sb2cgY2FuIGNvbnRhaW4gYXQgbW9zdCBvbmUgRE9D
+VFlQRSBlbGVtZW50LgorCitVcGRhdGUgdGhlIGRvY3VtZW50YXRpb24gdG8gcmVmbGVjdCB0aGUg
+bmV3IGJlaGF2aW9yLgorQWRkIGFuIGF1dG90ZXN0IHRoYXQgY2hlY2tzIHRoZSBuZXcgZXJyb3Ig
+Y2FzZXMgYXJlIGNvcnJlY3RseSBkZXRlY3RlZCwKK2FuZCBubyBlcnJvciBpcyByYWlzZWQgZm9y
+IGxlZ2l0aW1hdGUgaW5wdXQuCisKK1RoZSBvcmlnaW5hbCBPU1MtRnV6eiBmaWxlcyAoc2VlIGJ1
+ZyByZXBvcnRzKSBhcmUgbm90IGluY2x1ZGVkIGluIHRoaXMKK3BhdGNoIGZvciBmaWxlIHNpemUg
+cmVhc29ucy4gVGhleSBoYXZlIGJlZW4gdGVzdGVkIG1hbnVhbGx5LiBFYWNoIG9mCit0aGVtIGhh
+cyBtb3JlIHRoYW4gb25lIERPQ1RZUEUgZWxlbWVudCwgY2F1c2luZyBpbmZpbml0ZSBsb29wcyBp
+bgorcmVjdXJzaXZlIGVudGl0eSBleHBhbnNpb25zLiBUaGUgbmV3bHkgaW1wbGVtZW50ZWQgZnVu
+Y3Rpb25hbGl0eQorZGV0ZWN0cyB0aG9zZSBpbnZhbGlkIERURCBmcmFnbWVudHMuIEJ5IHJhaXNp
+bmcgYW4gZXJyb3IsIGl0IGFib3J0cworc3RyZWFtIHJlYWRpbmcgYmVmb3JlIGFuIGluZmluaXRl
+IGxvb3Agb2NjdXJzLgorCitUaGFua3MgdG8gT1NTLUZ1enogZm9yIGZpbmRpbmcgdGhpcy4KKwor
+Rml4ZXM6IFFUQlVHLTkyMTEzCitGaXhlczogUVRCVUctOTUxODgKK1BpY2stdG86IDYuNiA2LjUg
+Ni4yIDUuMTUKK0NoYW5nZS1JZDogSTBhMDgyYjkxODhiMmVlZTUwYjM5NmM0ZDViMWM5ZTFmZDIz
+N2JiZGQKK1Jldmlld2VkLWJ5OiBWb2xrZXIgSGlsc2hlaW1lciA8dm9sa2VyLmhpbHNoZWltZXJA
+cXQuaW8+CisKK0ZpeGVzOiBodHRwczovL3NlY3VyaXR5LXRyYWNrZXIuZGViaWFuLm9yZy90cmFj
+a2VyL0NWRS0yMDIzLTM4MTk3CitVcHN0cmVhbTogaHR0cHM6Ly9naXRodWIuY29tL3F0L3F0YmFz
+ZS9jb21taXQvYzQzMDFiZTdkNWY5NDg1MmUxYjE3ZjJjMjk4OWQ1Y2E4MDc4NTVkNAorW1Rob21h
+czogbWlub3IgY29uZmxpY3RzIHJlc29sdmVkIHdoZW4gYmFja3BvcnRpbmddCitTaWduZWQtb2Zm
+LWJ5OiBUaG9tYXMgUGV0YXp6b25pIDx0aG9tYXMucGV0YXp6b25pQGJvb3RsaW4uY29tPgorLS0t
+Cisgc3JjL2NvcmVsaWIvc2VyaWFsaXphdGlvbi9xeG1sc3RyZWFtLmNwcCAgICAgIHwgMTQ1ICsr
+KysrKysrKysrKysrKysrLQorIHNyYy9jb3JlbGliL3NlcmlhbGl6YXRpb24vcXhtbHN0cmVhbV9w
+LmggICAgICB8ICAxMSArKworIC4uLi9xeG1sc3RyZWFtL3Rva2VuRXJyb3IvZHRkSW5Cb2R5Lnht
+bCAgICAgICB8ICAyMCArKysKKyAuLi4vcXhtbHN0cmVhbS90b2tlbkVycm9yL211bHRpcGxlRHRk
+LnhtbCAgICAgfCAgMjAgKysrCisgLi4uL3F4bWxzdHJlYW0vdG9rZW5FcnJvci93ZWxsRm9ybWVk
+LnhtbCAgICAgIHwgIDE1ICsrCisgLi4uL3F4bWxzdHJlYW0vdHN0X3F4bWxzdHJlYW0uY3BwICAg
+ICAgICAgICAgIHwgIDM5ICsrKysrCisgNiBmaWxlcyBjaGFuZ2VkLCAyNDIgaW5zZXJ0aW9ucygr
+KSwgOCBkZWxldGlvbnMoLSkKKyBjcmVhdGUgbW9kZSAxMDA2NDQgdGVzdHMvYXV0by9jb3JlbGli
+L3NlcmlhbGl6YXRpb24vcXhtbHN0cmVhbS90b2tlbkVycm9yL2R0ZEluQm9keS54bWwKKyBjcmVh
+dGUgbW9kZSAxMDA2NDQgdGVzdHMvYXV0by9jb3JlbGliL3NlcmlhbGl6YXRpb24vcXhtbHN0cmVh
+bS90b2tlbkVycm9yL211bHRpcGxlRHRkLnhtbAorIGNyZWF0ZSBtb2RlIDEwMDY0NCB0ZXN0cy9h
+dXRvL2NvcmVsaWIvc2VyaWFsaXphdGlvbi9xeG1sc3RyZWFtL3Rva2VuRXJyb3Ivd2VsbEZvcm1l
+ZC54bWwKKworZGlmZiAtLWdpdCBhL3NyYy9jb3JlbGliL3NlcmlhbGl6YXRpb24vcXhtbHN0cmVh
+bS5jcHAgYi9zcmMvY29yZWxpYi9zZXJpYWxpemF0aW9uL3F4bWxzdHJlYW0uY3BwCitpbmRleCBh
+MzFiZDE2ZjFjZS4uYWM1YjI5MWMyNzggMTAwNjQ0CistLS0gYS9zcmMvY29yZWxpYi9zZXJpYWxp
+emF0aW9uL3F4bWxzdHJlYW0uY3BwCisrKysgYi9zcmMvY29yZWxpYi9zZXJpYWxpemF0aW9uL3F4
+bWxzdHJlYW0uY3BwCitAQCAtMTI4LDcgKzEyOCw3IEBAIHZvaWQgcmV2ZXJzZWQoY29uc3QgUmFu
+Z2UgJiYpID0gZGVsZXRlOworICAgICBhZGREYXRhKCkgb3IgYnkgd2FpdGluZyBmb3IgaXQgdG8g
+YXJyaXZlIG9uIHRoZSBkZXZpY2UoKS4KKyAKKyAgICAgXHZhbHVlIFVuZXhwZWN0ZWRFbGVtZW50
+RXJyb3IgVGhlIHBhcnNlciBlbmNvdW50ZXJlZCBhbiBlbGVtZW50CistICAgIHRoYXQgd2FzIGRp
+ZmZlcmVudCB0byB0aG9zZSBpdCBleHBlY3RlZC4KKysgICAgb3IgdG9rZW4gdGhhdCB3YXMgZGlm
+ZmVyZW50IHRvIHRob3NlIGl0IGV4cGVjdGVkLgorIAorICovCisgCitAQCAtMjY1LDEzICsyNjUs
+MzQgQEAgUVhtbFN0cmVhbUVudGl0eVJlc29sdmVyICpRWG1sU3RyZWFtUmVhZGVyOjplbnRpdHlS
+ZXNvbHZlcigpIGNvbnN0CisgCisgICBRWG1sU3RyZWFtUmVhZGVyIGlzIGEgd2VsbC1mb3JtZWQg
+WE1MIDEuMCBwYXJzZXIgdGhhdCBkb2VzIFxlIG5vdAorICAgaW5jbHVkZSBleHRlcm5hbCBwYXJz
+ZWQgZW50aXRpZXMuIEFzIGxvbmcgYXMgbm8gZXJyb3Igb2NjdXJzLCB0aGUKKy0gIGFwcGxpY2F0
+aW9uIGNvZGUgY2FuIHRodXMgYmUgYXNzdXJlZCB0aGF0IHRoZSBkYXRhIHByb3ZpZGVkIGJ5IHRo
+ZQorLSAgc3RyZWFtIHJlYWRlciBzYXRpc2ZpZXMgdGhlIFczQydzIGNyaXRlcmlhIGZvciB3ZWxs
+LWZvcm1lZCBYTUwuIEZvcgorLSAgZXhhbXBsZSwgeW91IGNhbiBiZSBjZXJ0YWluIHRoYXQgYWxs
+IHRhZ3MgYXJlIGluZGVlZCBuZXN0ZWQgYW5kCistICBjbG9zZWQgcHJvcGVybHksIHRoYXQgcmVm
+ZXJlbmNlcyB0byBpbnRlcm5hbCBlbnRpdGllcyBoYXZlIGJlZW4KKy0gIHJlcGxhY2VkIHdpdGgg
+dGhlIGNvcnJlY3QgcmVwbGFjZW1lbnQgdGV4dCwgYW5kIHRoYXQgYXR0cmlidXRlcyBoYXZlCist
+ICBiZWVuIG5vcm1hbGl6ZWQgb3IgYWRkZWQgYWNjb3JkaW5nIHRvIHRoZSBpbnRlcm5hbCBzdWJz
+ZXQgb2YgdGhlCistICBEVEQuCisrICBhcHBsaWNhdGlvbiBjb2RlIGNhbiB0aHVzIGJlIGFzc3Vy
+ZWQsIHRoYXQKKysgIFxsaXN0CisrICBcbGkgdGhlIGRhdGEgcHJvdmlkZWQgYnkgdGhlIHN0cmVh
+bSByZWFkZXIgc2F0aXNmaWVzIHRoZSBXM0MncworKyAgICAgIGNyaXRlcmlhIGZvciB3ZWxsLWZv
+cm1lZCBYTUwsCisrICBcbGkgdG9rZW5zIGFyZSBwcm92aWRlZCBpbiBhIHZhbGlkIG9yZGVyLgor
+KyAgXGVuZGxpc3QKKysKKysgIFVubGVzcyBRWG1sU3RyZWFtUmVhZGVyIHJhaXNlcyBhbiBlcnJv
+ciwgaXQgZ3VhcmFudGVlcyB0aGUgZm9sbG93aW5nOgorKyAgXGxpc3QKKysgIFxsaSBBbGwgdGFn
+cyBhcmUgbmVzdGVkIGFuZCBjbG9zZWQgcHJvcGVybHkuCisrICBcbGkgUmVmZXJlbmNlcyB0byBp
+bnRlcm5hbCBlbnRpdGllcyBoYXZlIGJlZW4gcmVwbGFjZWQgd2l0aCB0aGUKKysgICAgICBjb3Jy
+ZWN0IHJlcGxhY2VtZW50IHRleHQuCisrICBcbGkgQXR0cmlidXRlcyBoYXZlIGJlZW4gbm9ybWFs
+aXplZCBvciBhZGRlZCBhY2NvcmRpbmcgdG8gdGhlCisrICAgICAgaW50ZXJuYWwgc3Vic2V0IG9m
+IHRoZSBcbCBEVEQuCisrICBcbGkgVG9rZW5zIG9mIHR5cGUgXGwgU3RhcnREb2N1bWVudCBoYXBw
+ZW4gYmVmb3JlIGFsbCBvdGhlcnMsCisrICAgICAgYXNpZGUgZnJvbSBjb21tZW50cyBhbmQgcHJv
+Y2Vzc2luZyBpbnN0cnVjdGlvbnMuCisrICBcbGkgQXQgbW9zdCBvbmUgRE9DVFlQRSBlbGVtZW50
+IChhIHRva2VuIG9mIHR5cGUgXGwgRFREKSBpcyBwcmVzZW50LgorKyAgXGxpIElmIHByZXNlbnQs
+IHRoZSBET0NUWVBFIGFwcGVhcnMgYmVmb3JlIGFsbCBvdGhlciBlbGVtZW50cywKKysgICAgICBh
+c2lkZSBmcm9tIFN0YXJ0RG9jdW1lbnQsIGNvbW1lbnRzIGFuZCBwcm9jZXNzaW5nIGluc3RydWN0
+aW9ucy4KKysgIFxlbmRsaXN0CisrCisrICBJbiBwYXJ0aWN1bGFyLCBvbmNlIGFueSB0b2tlbiBv
+ZiB0eXBlIFxsIFN0YXJ0RWxlbWVudCwgXGwgRW5kRWxlbWVudCwKKysgIFxsIENoYXJhY3RlcnMs
+IFxsIEVudGl0eVJlZmVyZW5jZSBvciBcbCBFbmREb2N1bWVudCBpcyBzZWVuLCBubworKyAgdG9r
+ZW5zIG9mIHR5cGUgU3RhcnREb2N1bWVudCBvciBEVEQgd2lsbCBiZSBzZWVuLiBJZiBvbmUgaXMg
+cHJlc2VudCBpbgorKyAgdGhlIGlucHV0IHN0cmVhbSwgb3V0IG9mIG9yZGVyLCBhbiBlcnJvciBp
+cyByYWlzZWQuCisrCisrICBcbm90ZSBUaGUgdG9rZW4gdHlwZXMgXGwgQ29tbWVudCBhbmQgXGwg
+UHJvY2Vzc2luZ0luc3RydWN0aW9uIG1heSBhcHBlYXIKKysgIGFueXdoZXJlIGluIHRoZSBzdHJl
+YW0uCisgCisgICBJZiBhbiBlcnJvciBvY2N1cnMgd2hpbGUgcGFyc2luZywgYXRFbmQoKSBhbmQg
+aGFzRXJyb3IoKSByZXR1cm4KKyAgIHRydWUsIGFuZCBlcnJvcigpIHJldHVybnMgdGhlIGVycm9y
+IHRoYXQgb2NjdXJyZWQuIFRoZSBmdW5jdGlvbnMKK0BAIC01NzQsNiArNTk1LDcgQEAgUVhtbFN0
+cmVhbVJlYWRlcjo6VG9rZW5UeXBlIFFYbWxTdHJlYW1SZWFkZXI6OnJlYWROZXh0KCkKKyAgICAg
+ICAgIGQtPnRva2VuID0gLTE7CisgICAgICAgICByZXR1cm4gcmVhZE5leHQoKTsKKyAgICAgfQor
+KyAgICBkLT5jaGVja1Rva2VuKCk7CisgICAgIHJldHVybiBkLT50eXBlOworIH0KKyAKK0BAIC02
+NTgsNiArNjgwLDExIEBAIHN0YXRpYyBjb25zdGV4cHIgYXV0byBRWG1sU3RyZWFtUmVhZGVyX3Rv
+a2VuVHlwZVN0cmluZyA9IHFPZmZzZXRTdHJpbmdBcnJheSgKKyAgICAgIlByb2Nlc3NpbmdJbnN0
+cnVjdGlvbiIKKyApOworIAorK3N0YXRpYyBjb25zdGV4cHIgYXV0byBRWG1sU3RyZWFtUmVhZGVy
+X1htbENvbnRleHRTdHJpbmcgPSBxT2Zmc2V0U3RyaW5nQXJyYXkoCisrICAgICJQcm9sb2ciLAor
+KyAgICAiQm9keSIKKyspOworKworIC8qIQorICAgICBccHJvcGVydHkgIFFYbWxTdHJlYW1SZWFk
+ZXI6Om5hbWVzcGFjZVByb2Nlc3NpbmcKKyAgICAgXGJyaWVmIHRoZSBuYW1lc3BhY2UtcHJvY2Vz
+c2luZyBmbGFnIG9mIHRoZSBzdHJlYW0gcmVhZGVyLgorQEAgLTY5Miw2ICs3MTksMTQgQEAgUVN0
+cmluZyBRWG1sU3RyZWFtUmVhZGVyOjp0b2tlblN0cmluZygpIGNvbnN0CisgICAgIHJldHVybiBR
+TGF0aW4xU3RyaW5nVmlldyhRWG1sU3RyZWFtUmVhZGVyX3Rva2VuVHlwZVN0cmluZy5hdChkLT50
+eXBlKSk7CisgfQorIAorKy8qIQorKyAgIFxpbnRlcm5hbAorKyAgIFxyZXR1cm4gXHBhcmFtIGxv
+YyAoUHJvbG9nL0JvZHkpIGFzIGEgc3RyaW5nLgorKyAqLworK3N0YXRpYyBjb25zdGV4cHIgUUxh
+dGluMVN0cmluZ1ZpZXcgY29udGV4dFN0cmluZyhRWG1sU3RyZWFtUmVhZGVyUHJpdmF0ZTo6WG1s
+Q29udGV4dCBjdHh0KQorK3sKKysgICAgcmV0dXJuIFFMYXRpbjFTdHJpbmdWaWV3KFFYbWxTdHJl
+YW1SZWFkZXJfWG1sQ29udGV4dFN0cmluZy5hdChzdGF0aWNfY2FzdDxpbnQ+KGN0eHQpKSk7Cisr
+fQorICNlbmRpZiAvLyBRVF9OT19YTUxTVFJFQU1SRUFERVIKKyAKKyBRWG1sU3RyZWFtUHJpdmF0
+ZVRhZ1N0YWNrOjpRWG1sU3RyZWFtUHJpdmF0ZVRhZ1N0YWNrKCkKK0BAIC03NzgsNiArODEzLDgg
+QEAgdm9pZCBRWG1sU3RyZWFtUmVhZGVyUHJpdmF0ZTo6aW5pdCgpCisgCisgICAgIHR5cGUgPSBR
+WG1sU3RyZWFtUmVhZGVyOjpOb1Rva2VuOworICAgICBlcnJvciA9IFFYbWxTdHJlYW1SZWFkZXI6
+Ok5vRXJyb3I7CisrICAgIGN1cnJlbnRDb250ZXh0ID0gWG1sQ29udGV4dDo6UHJvbG9nOworKyAg
+ICBmb3VuZERURCA9IGZhbHNlOworIH0KKyAKKyAvKgorQEAgLTM2ODQsNiArMzcyMSw5OCBAQCB2
+b2lkIFFYbWxTdHJlYW1Xcml0ZXI6OndyaXRlQ3VycmVudFRva2VuKGNvbnN0IFFYbWxTdHJlYW1S
+ZWFkZXIgJnJlYWRlcikKKyAgICAgfQorIH0KKyAKKytzdGF0aWMgY29uc3RleHByIGJvb2wgaXNU
+b2tlbkFsbG93ZWRJbkNvbnRleHQoUVhtbFN0cmVhbVJlYWRlcjo6VG9rZW5UeXBlIHR5cGUsCisr
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBRWG1sU3RyZWFt
+UmVhZGVyUHJpdmF0ZTo6WG1sQ29udGV4dCBsb2MpCisreworKyAgICBzd2l0Y2ggKHR5cGUpIHsK
+KysgICAgY2FzZSBRWG1sU3RyZWFtUmVhZGVyOjpTdGFydERvY3VtZW50OgorKyAgICBjYXNlIFFY
+bWxTdHJlYW1SZWFkZXI6OkRURDoKKysgICAgICAgIHJldHVybiBsb2MgPT0gUVhtbFN0cmVhbVJl
+YWRlclByaXZhdGU6OlhtbENvbnRleHQ6OlByb2xvZzsKKysKKysgICAgY2FzZSBRWG1sU3RyZWFt
+UmVhZGVyOjpTdGFydEVsZW1lbnQ6CisrICAgIGNhc2UgUVhtbFN0cmVhbVJlYWRlcjo6RW5kRWxl
+bWVudDoKKysgICAgY2FzZSBRWG1sU3RyZWFtUmVhZGVyOjpDaGFyYWN0ZXJzOgorKyAgICBjYXNl
+IFFYbWxTdHJlYW1SZWFkZXI6OkVudGl0eVJlZmVyZW5jZToKKysgICAgY2FzZSBRWG1sU3RyZWFt
+UmVhZGVyOjpFbmREb2N1bWVudDoKKysgICAgICAgIHJldHVybiBsb2MgPT0gUVhtbFN0cmVhbVJl
+YWRlclByaXZhdGU6OlhtbENvbnRleHQ6OkJvZHk7CisrCisrICAgIGNhc2UgUVhtbFN0cmVhbVJl
+YWRlcjo6Q29tbWVudDoKKysgICAgY2FzZSBRWG1sU3RyZWFtUmVhZGVyOjpQcm9jZXNzaW5nSW5z
+dHJ1Y3Rpb246CisrICAgICAgICByZXR1cm4gdHJ1ZTsKKysKKysgICAgY2FzZSBRWG1sU3RyZWFt
+UmVhZGVyOjpOb1Rva2VuOgorKyAgICBjYXNlIFFYbWxTdHJlYW1SZWFkZXI6OkludmFsaWQ6Cisr
+ICAgICAgICByZXR1cm4gZmFsc2U7CisrICAgIH0KKysKKysgICAgLy8gR0NDIDgueCBkb2VzIG5v
+dCB0cmVhdCBfX2J1aWx0aW5fdW5yZWFjaGFibGUoKSBhcyBjb25zdGV4cHIKKysjaWYgIWRlZmlu
+ZWQoUV9DQ19HTlVfT05MWSkgfHwgKFFfQ0NfR05VID49IDkwMCkKKysgICAgUV9VTlJFQUNIQUJM
+RSgpOworKyAgICByZXR1cm4gZmFsc2U7CisrI2Vsc2UKKysgICAgcmV0dXJuIGZhbHNlOworKyNl
+bmRpZgorK30KKysKKysvKiEKKysgICBcaW50ZXJuYWwKKysgICBcYnJpZWYgUVhtbFN0cmVhbVJl
+YWRlcjo6aXNWYWxpZFRva2VuCisrICAgXHJldHVybiBcYyB0cnVlIGlmIFxwYXJhbSB0eXBlIGlz
+IGEgdmFsaWQgdG9rZW4gdHlwZS4KKysgICBccmV0dXJuIFxjIGZhbHNlIGlmIFxwYXJhbSB0eXBl
+IGlzIGFuIHVuZXhwZWN0ZWQgdG9rZW4sCisrICAgd2hpY2ggaW5kaWNhdGVzIGEgbm9uLXdlbGwt
+Zm9ybWVkIG9yIGludmFsaWQgWE1MIHN0cmVhbS4KKysgKi8KKytib29sIFFYbWxTdHJlYW1SZWFk
+ZXJQcml2YXRlOjppc1ZhbGlkVG9rZW4oUVhtbFN0cmVhbVJlYWRlcjo6VG9rZW5UeXBlIHR5cGUp
+CisreworKyAgICAvLyBEb24ndCBjaGFuZ2UgY3VycmVudENvbnRleHQsIGlmIEludmFsaWQgb3Ig
+Tm9Ub2tlbiBvY2N1ciBpbiB0aGUgcHJvbG9nCisrICAgIGlmICh0eXBlID09IFFYbWxTdHJlYW1S
+ZWFkZXI6OkludmFsaWQgfHwgdHlwZSA9PSBRWG1sU3RyZWFtUmVhZGVyOjpOb1Rva2VuKQorKyAg
+ICAgICAgcmV0dXJuIGZhbHNlOworKworKyAgICAvLyBJZiBhIHRva2VuIHR5cGUgZ2V0cyByZWpl
+Y3RlZCBpbiB0aGUgYm9keSwgdGhlcmUgaXMgbm8gcmVjb3ZlcnkKKysgICAgY29uc3QgYm9vbCBy
+ZXN1bHQgPSBpc1Rva2VuQWxsb3dlZEluQ29udGV4dCh0eXBlLCBjdXJyZW50Q29udGV4dCk7Cisr
+ICAgIGlmIChyZXN1bHQgfHwgY3VycmVudENvbnRleHQgPT0gWG1sQ29udGV4dDo6Qm9keSkKKysg
+ICAgICAgIHJldHVybiByZXN1bHQ7CisrCisrICAgIC8vIEZpcnN0IG5vbi1Qcm9sb2cgdG9rZW4g
+b2JzZXJ2ZWQgPT4gc3dpdGNoIGNvbnRleHQgdG8gYm9keSBhbmQgY2hlY2sgYWdhaW4uCisrICAg
+IGN1cnJlbnRDb250ZXh0ID0gWG1sQ29udGV4dDo6Qm9keTsKKysgICAgcmV0dXJuIGlzVG9rZW5B
+bGxvd2VkSW5Db250ZXh0KHR5cGUsIGN1cnJlbnRDb250ZXh0KTsKKyt9CisrCisrLyohCisrICAg
+XGludGVybmFsCisrICAgQ2hlY2tzIHRva2VuIHR5cGUgYW5kIHJhaXNlcyBhbiBlcnJvciwgaWYg
+aXQgaXMgaW52YWxpZAorKyAgIGluIHRoZSBjdXJyZW50IGNvbnRleHQgKHByb2xvZy9ib2R5KS4K
+KysgKi8KKyt2b2lkIFFYbWxTdHJlYW1SZWFkZXJQcml2YXRlOjpjaGVja1Rva2VuKCkKKyt7Cisr
+ICAgIFFfUShRWG1sU3RyZWFtUmVhZGVyKTsKKysKKysgICAgLy8gVGhlIHRva2VuIHR5cGUgbXVz
+dCBiZSBjb25zdW1lZCwgdG8ga2VlcCB0cmFjayBpZiB0aGUgYm9keSBoYXMgYmVlbiByZWFjaGVk
+LgorKyAgICBjb25zdCBYbWxDb250ZXh0IGNvbnRleHQgPSBjdXJyZW50Q29udGV4dDsKKysgICAg
+Y29uc3QgYm9vbCBvayA9IGlzVmFsaWRUb2tlbih0eXBlKTsKKysKKysgICAgLy8gRG8gbm90aGlu
+ZyBpZiBhbiBlcnJvciBoYXMgYmVlbiByYWlzZWQgYWxyZWFkeSAoZ29pbmcgYWxvbmcgd2l0aCBh
+biB1bmV4cGVjdGVkIHRva2VuKQorKyAgICBpZiAoZXJyb3IgIT0gUVhtbFN0cmVhbVJlYWRlcjo6
+RXJyb3I6Ok5vRXJyb3IpCisrICAgICAgICByZXR1cm47CisrCisrICAgIGlmICghb2spIHsKKysg
+ICAgICAgIHJhaXNlRXJyb3IoUVhtbFN0cmVhbVJlYWRlcjo6VW5leHBlY3RlZEVsZW1lbnRFcnJv
+ciwKKysgICAgICAgICAgICAgICAgICAgUU9iamVjdDo6dHIoIlVuZXhwZWN0ZWQgdG9rZW4gdHlw
+ZSAlMSBpbiAlMi4iKQorKyAgICAgICAgICAgICAgICAgICAuYXJnKHEtPnRva2VuU3RyaW5nKCks
+IGNvbnRleHRTdHJpbmcoY29udGV4dCkpKTsKKysgICAgICAgIHJldHVybjsKKysgICAgfQorKwor
+KyAgICBpZiAodHlwZSAhPSBRWG1sU3RyZWFtUmVhZGVyOjpEVEQpCisrICAgICAgICByZXR1cm47
+CisrCisrICAgIC8vIFJhaXNlIGVycm9yIG9uIG11bHRpcGxlIERURCB0b2tlbnMKKysgICAgaWYg
+KGZvdW5kRFREKSB7CisrICAgICAgICByYWlzZUVycm9yKFFYbWxTdHJlYW1SZWFkZXI6OlVuZXhw
+ZWN0ZWRFbGVtZW50RXJyb3IsCisrICAgICAgICAgICAgICAgICAgIFFPYmplY3Q6OnRyKCJGb3Vu
+ZCBzZWNvbmQgRFREIHRva2VuIGluICUxLiIpLmFyZyhjb250ZXh0U3RyaW5nKGNvbnRleHQpKSk7
+CisrICAgIH0gZWxzZSB7CisrICAgICAgICBmb3VuZERURCA9IHRydWU7CisrICAgIH0KKyt9Cisr
+CisgLyohCisgIFxmbiBib29sIFFYbWxTdHJlYW1BdHRyaWJ1dGVzOjpoYXNBdHRyaWJ1dGUoY29u
+c3QgUVN0cmluZyAmcXVhbGlmaWVkTmFtZSkgY29uc3QKKyAgXHNpbmNlIDQuNQorZGlmZiAtLWdp
+dCBhL3NyYy9jb3JlbGliL3NlcmlhbGl6YXRpb24vcXhtbHN0cmVhbV9wLmggYi9zcmMvY29yZWxp
+Yi9zZXJpYWxpemF0aW9uL3F4bWxzdHJlYW1fcC5oCitpbmRleCAxZmQ2OWEyYzFmOC4uZjUwNTlm
+OGZjZjkgMTAwNjQ0CistLS0gYS9zcmMvY29yZWxpYi9zZXJpYWxpemF0aW9uL3F4bWxzdHJlYW1f
+cC5oCisrKysgYi9zcmMvY29yZWxpYi9zZXJpYWxpemF0aW9uL3F4bWxzdHJlYW1fcC5oCitAQCAt
+MjcwLDYgKzI3MCwxNyBAQCBwdWJsaWM6CisgICAgIFFTdHJpbmdEZWNvZGVyIGRlY29kZXI7Cisg
+ICAgIGJvb2wgYXRFbmQ7CisgCisrICAgIGVudW0gY2xhc3MgWG1sQ29udGV4dAorKyAgICB7Cisr
+ICAgICAgICBQcm9sb2csCisrICAgICAgICBCb2R5LAorKyAgICB9OworKworKyAgICBYbWxDb250
+ZXh0IGN1cnJlbnRDb250ZXh0ID0gWG1sQ29udGV4dDo6UHJvbG9nOworKyAgICBib29sIGZvdW5k
+RFREID0gZmFsc2U7CisrICAgIGJvb2wgaXNWYWxpZFRva2VuKFFYbWxTdHJlYW1SZWFkZXI6OlRv
+a2VuVHlwZSB0eXBlKTsKKysgICAgdm9pZCBjaGVja1Rva2VuKCk7CisrCisgICAgIC8qIQorICAg
+ICAgIFxzYSBzZXRUeXBlKCkKKyAgICAgICovCitkaWZmIC0tZ2l0IGEvdGVzdHMvYXV0by9jb3Jl
+bGliL3NlcmlhbGl6YXRpb24vcXhtbHN0cmVhbS90b2tlbkVycm9yL2R0ZEluQm9keS54bWwgYi90
+ZXN0cy9hdXRvL2NvcmVsaWIvc2VyaWFsaXphdGlvbi9xeG1sc3RyZWFtL3Rva2VuRXJyb3IvZHRk
+SW5Cb2R5LnhtbAorbmV3IGZpbGUgbW9kZSAxMDA2NDQKK2luZGV4IDAwMDAwMDAwMDAwLi4xYzNj
+YTRlMjcxMQorLS0tIC9kZXYvbnVsbAorKysrIGIvdGVzdHMvYXV0by9jb3JlbGliL3NlcmlhbGl6
+YXRpb24vcXhtbHN0cmVhbS90b2tlbkVycm9yL2R0ZEluQm9keS54bWwKK0BAIC0wLDAgKzEsMjAg
+QEAKKys8IURPQ1RZUEUgVEVTVCBbCisrICAgPCFFTEVNRU5UIFRFU1RBVFRSSUJVVEUgKENBU0Ur
+KT4KKysgICA8IUVMRU1FTlQgQ0FTRSAoQ0xBU1MsIEZVTkNUSU9OKT4KKysgICA8IUVMRU1FTlQg
+Q0xBU1MgKCNQQ0RBVEEpPgorKworKyAgIDwhLS0gYWRkaW5nIHJhbmRvbSBFTlRJVFkgc3RhdGVt
+ZW50LCBhcyB0aGlzIGlzIHR5cGljYWwgRFREIGNvbnRlbnQgLS0+CisrICAgPCFFTlRJVFkgdW5p
+dGUgIiYjeDIyMmE7Ij4KKysKKysgICA8IUFUVExJU1QgQ0FTRSBDTEFTUyBDREFUQSAjUkVRVUlS
+RUQ+CisrXT4KKys8VEVTVD4KKysgIDxDQVNFPgorKyAgICA8Q0xBU1M+dHN0X1FYbWxTdHJlYW08
+L0NMQVNTPgorKyAgPC9DQVNFPgorKyAgPCEtLSBpbnZhbGlkIERURCBpbiBYTUwgYm9keSBmb2xs
+b3dzIC0tPgorKyAgPCFET0NUWVBFIERURFRFU1QgWworKyAgICA8IUVMRU1FTlQgUkVTVUxUIChD
+QVNFKyk+CisrICAgIDwhQVRUTElTVCBSRVNVTFQgT1VUUFVUIENEQVRBICNSRVFVSVJFRD4KKysg
+IF0+CisrPC9URVNUPgorZGlmZiAtLWdpdCBhL3Rlc3RzL2F1dG8vY29yZWxpYi9zZXJpYWxpemF0
+aW9uL3F4bWxzdHJlYW0vdG9rZW5FcnJvci9tdWx0aXBsZUR0ZC54bWwgYi90ZXN0cy9hdXRvL2Nv
+cmVsaWIvc2VyaWFsaXphdGlvbi9xeG1sc3RyZWFtL3Rva2VuRXJyb3IvbXVsdGlwbGVEdGQueG1s
+CituZXcgZmlsZSBtb2RlIDEwMDY0NAoraW5kZXggMDAwMDAwMDAwMDAuLmNkMzk4YzBmOWZkCist
+LS0gL2Rldi9udWxsCisrKysgYi90ZXN0cy9hdXRvL2NvcmVsaWIvc2VyaWFsaXphdGlvbi9xeG1s
+c3RyZWFtL3Rva2VuRXJyb3IvbXVsdGlwbGVEdGQueG1sCitAQCAtMCwwICsxLDIwIEBACisrPCFE
+T0NUWVBFIFRFU1QgWworKyAgIDwhRUxFTUVOVCBURVNUQVRUUklCVVRFIChDQVNFKyk+CisrICAg
+PCFFTEVNRU5UIENBU0UgKENMQVNTLCBGVU5DVElPTiwgREFUQVNFVCwgQ09NTUVOVFMpPgorKyAg
+IDwhRUxFTUVOVCBDTEFTUyAoI1BDREFUQSk+CisrCisrICAgPCEtLSBhZGRpbmcgcmFuZG9tIEVO
+VElUWSBzdGF0ZW1lbnRzLCBhcyB0aGlzIGlzIHR5cGljYWwgRFREIGNvbnRlbnQgLS0+CisrICAg
+PCFFTlRJVFkgaWZmICImaEFycjsiPgorKworKyAgIDwhQVRUTElTVCBDQVNFIENMQVNTIENEQVRB
+ICNSRVFVSVJFRD4KKytdPgorKzwhLS0gaW52YWxpZCBzZWNvbmQgRFREIGZvbGxvd3MgLS0+Cisr
+PCFET0NUWVBFIFNFQ09ORCBbCisrICAgPCFFTEVNRU5UIFNFQ09OREFUVFJJQlVURSAoI1BDREFU
+QSk+CisrICAgPCFFTlRJVFkgb24gIiYjODcyODsiPgorK10+CisrPFRFU1Q+CisrICA8Q0FTRT4K
+KysgICAgPENMQVNTPnRzdF9RWG1sU3RyZWFtPC9DTEFTUz4KKysgIDwvQ0FTRT4KKys8L1RFU1Q+
+CitkaWZmIC0tZ2l0IGEvdGVzdHMvYXV0by9jb3JlbGliL3NlcmlhbGl6YXRpb24vcXhtbHN0cmVh
+bS90b2tlbkVycm9yL3dlbGxGb3JtZWQueG1sIGIvdGVzdHMvYXV0by9jb3JlbGliL3NlcmlhbGl6
+YXRpb24vcXhtbHN0cmVhbS90b2tlbkVycm9yL3dlbGxGb3JtZWQueG1sCituZXcgZmlsZSBtb2Rl
+IDEwMDY0NAoraW5kZXggMDAwMDAwMDAwMDAuLjFiNjFhM2YwNjIyCistLS0gL2Rldi9udWxsCisr
+KysgYi90ZXN0cy9hdXRvL2NvcmVsaWIvc2VyaWFsaXphdGlvbi9xeG1sc3RyZWFtL3Rva2VuRXJy
+b3Ivd2VsbEZvcm1lZC54bWwKK0BAIC0wLDAgKzEsMTUgQEAKKys8IURPQ1RZUEUgVEVTVCBbCisr
+ICAgPCFFTEVNRU5UIFRFU1RBVFRSSUJVVEUgKENBU0UrKT4KKysgICA8IUVMRU1FTlQgQ0FTRSAo
+Q0xBU1MsIEZVTkNUSU9OLCBEQVRBU0VULCBDT01NRU5UUyk+CisrICAgPCFFTEVNRU5UIENMQVNT
+ICgjUENEQVRBKT4KKysKKysgICA8IS0tIGFkZGluZyByYW5kb20gRU5USVRZIHN0YXRlbWVudHMs
+IGFzIHRoaXMgaXMgdHlwaWNhbCBEVEQgY29udGVudCAtLT4KKysgICA8IUVOVElUWSB1bml0ZSAi
+JiN4MjIyYTsiPgorKworKyAgIDwhQVRUTElTVCBDQVNFIENMQVNTIENEQVRBICNSRVFVSVJFRD4K
+KytdPgorKzxURVNUPgorKyAgPENBU0U+CisrICAgIDxDTEFTUz50c3RfUVhtbFN0cmVhbTwvQ0xB
+U1M+CisrICA8L0NBU0U+CisrPC9URVNUPgorZGlmZiAtLWdpdCBhL3Rlc3RzL2F1dG8vY29yZWxp
+Yi9zZXJpYWxpemF0aW9uL3F4bWxzdHJlYW0vdHN0X3F4bWxzdHJlYW0uY3BwIGIvdGVzdHMvYXV0
+by9jb3JlbGliL3NlcmlhbGl6YXRpb24vcXhtbHN0cmVhbS90c3RfcXhtbHN0cmVhbS5jcHAKK2lu
+ZGV4IGM2NDA4OGQ0Nzc0Li44ZDI3Mzg3MDBlYSAxMDA2NDQKKy0tLSBhL3Rlc3RzL2F1dG8vY29y
+ZWxpYi9zZXJpYWxpemF0aW9uL3F4bWxzdHJlYW0vdHN0X3F4bWxzdHJlYW0uY3BwCisrKysgYi90
+ZXN0cy9hdXRvL2NvcmVsaWIvc2VyaWFsaXphdGlvbi9xeG1sc3RyZWFtL3RzdF9xeG1sc3RyZWFt
+LmNwcAorQEAgLTU4NCw2ICs1ODQsOSBAQCBwcml2YXRlIHNsb3RzOgorIAorICAgICB2b2lkIGVu
+dGl0eUV4cGFuc2lvbkxpbWl0KCkgY29uc3Q7CisgCisrICAgIHZvaWQgdG9rZW5FcnJvckhhbmRs
+aW5nX2RhdGEoKSBjb25zdDsKKysgICAgdm9pZCB0b2tlbkVycm9ySGFuZGxpbmcoKSBjb25zdDsK
+KysKKyBwcml2YXRlOgorICAgICBzdGF0aWMgUUJ5dGVBcnJheSByZWFkRmlsZShjb25zdCBRU3Ry
+aW5nICZmaWxlbmFtZSk7CisgCitAQCAtMTc1NCw1ICsxNzU3LDQxIEBAIHZvaWQgdHN0X1FYbWxT
+dHJlYW06OnJvdW5kVHJpcCgpIGNvbnN0CisgICAgIFFDT01QQVJFKG91dCwgaW4pOworIH0KKyAK
+Kyt2b2lkIHRzdF9RWG1sU3RyZWFtOjp0b2tlbkVycm9ySGFuZGxpbmdfZGF0YSgpIGNvbnN0Cisr
+eworKyAgICBRVGVzdDo6YWRkQ29sdW1uPFFTdHJpbmc+KCJmaWxlTmFtZSIpOworKyAgICBRVGVz
+dDo6YWRkQ29sdW1uPFFYbWxTdHJlYW1SZWFkZXI6OkVycm9yPigiZXhwZWN0ZWRFcnJvciIpOwor
+KyAgICBRVGVzdDo6YWRkQ29sdW1uPFFTdHJpbmc+KCJlcnJvcktleVdvcmQiKTsKKysKKysgICAg
+Y29uc3RleHByIGF1dG8gaW52YWxpZCA9IFFYbWxTdHJlYW1SZWFkZXI6OkVycm9yOjpVbmV4cGVj
+dGVkRWxlbWVudEVycm9yOworKyAgICBjb25zdGV4cHIgYXV0byB2YWxpZCA9IFFYbWxTdHJlYW1S
+ZWFkZXI6OkVycm9yOjpOb0Vycm9yOworKyAgICBRVGVzdDo6bmV3Um93KCJEdGRJbkJvZHkiKSA8
+PCAiZHRkSW5Cb2R5LnhtbCIgPDwgaW52YWxpZCA8PCAiRFREIjsKKysgICAgUVRlc3Q6Om5ld1Jv
+dygibXVsdGlwbGVEVEQiKSA8PCAibXVsdGlwbGVEdGQueG1sIiA8PCBpbnZhbGlkIDw8ICJzZWNv
+bmQgRFREIjsKKysgICAgUVRlc3Q6Om5ld1Jvdygid2VsbEZvcm1lZCIpIDw8ICJ3ZWxsRm9ybWVk
+LnhtbCIgPDwgdmFsaWQgPDwgIiI7CisrfQorKworK3ZvaWQgdHN0X1FYbWxTdHJlYW06OnRva2Vu
+RXJyb3JIYW5kbGluZygpIGNvbnN0CisreworKyAgICBRRkVUQ0goY29uc3QgUVN0cmluZywgZmls
+ZU5hbWUpOworKyAgICBRRkVUQ0goY29uc3QgUVhtbFN0cmVhbVJlYWRlcjo6RXJyb3IsIGV4cGVj
+dGVkRXJyb3IpOworKyAgICBRRkVUQ0goY29uc3QgUVN0cmluZywgZXJyb3JLZXlXb3JkKTsKKysK
+KysgICAgY29uc3QgUURpciBkaXIoUUZJTkRURVNUREFUQSgidG9rZW5FcnJvciIpKTsKKysgICAg
+UUZpbGUgZmlsZShkaXIuYWJzb2x1dGVGaWxlUGF0aChmaWxlTmFtZSkpOworKworKyAgICAvLyBD
+cm9zcy1jb21waWxpbmc6IEZpbGUgd2lsbCBiZSBvbiBob3N0IG9ubHkKKysgICAgaWYgKCFmaWxl
+LmV4aXN0cygpKQorKyAgICAgICAgUVNLSVAoIlRlc3RmaWxlIG5vdCBmb3VuZC4iKTsKKysKKysg
+ICAgZmlsZS5vcGVuKFFJT0RldmljZTo6UmVhZE9ubHkpOworKyAgICBRWG1sU3RyZWFtUmVhZGVy
+IHJlYWRlcigmZmlsZSk7CisrICAgIHdoaWxlICghcmVhZGVyLmF0RW5kKCkpCisrICAgICAgICBy
+ZWFkZXIucmVhZE5leHQoKTsKKysKKysgICAgUUNPTVBBUkUocmVhZGVyLmVycm9yKCksIGV4cGVj
+dGVkRXJyb3IpOworKyAgICBpZiAoZXhwZWN0ZWRFcnJvciAhPSBRWG1sU3RyZWFtUmVhZGVyOjpF
+cnJvcjo6Tm9FcnJvcikKKysgICAgICAgIFFWRVJJRlkocmVhZGVyLmVycm9yU3RyaW5nKCkuY29u
+dGFpbnMoZXJyb3JLZXlXb3JkKSk7CisrfQorKworICNpbmNsdWRlICJ0c3RfcXhtbHN0cmVhbS5t
+b2MiCisgLy8gdmltOiBldDp0cz00OnN3PTQ6c3RzPTQKKy0tIAorMi40Ni4wCisKZGlmZiAtLWdp
+dCBhL3BhY2thZ2UvcXQ2L3F0NmJhc2UvcXQ2YmFzZS5tayBiL3BhY2thZ2UvcXQ2L3F0NmJhc2Uv
+cXQ2YmFzZS5tawppbmRleCBhMTRmMWRkNGZkLi45ZDIxYWVmYmZiIDEwMDY0NAotLS0gYS9wYWNr
+YWdlL3F0Ni9xdDZiYXNlL3F0NmJhc2UubWsKKysrIGIvcGFja2FnZS9xdDYvcXQ2YmFzZS9xdDZi
+YXNlLm1rCkBAIC0xNSw2ICsxNSw4IEBAIFFUNkJBU0VfSUdOT1JFX0NWRVMgKz0gQ1ZFLTIwMjMt
+MzMyODUKIFFUNkJBU0VfSUdOT1JFX0NWRVMgKz0gQ1ZFLTIwMjMtMzI3NjIKICMgMDAwNS1GaXgt
+c3BlY2lmaWMtb3ZlcmZsb3ctaW4tcXRleHRsYXlvdXQucGF0Y2gKIFFUNkJBU0VfSUdOT1JFX0NW
+RVMgKz0gQ1ZFLTIwMjMtMzI3NjMKKyMgMDAwOS1RWG1sU3RyZWFtUmVhZGVyLVJhaXNlLWVycm9y
+LW9uLXVuZXhwZWN0ZWQtdG9rZW5zLnBhdGNoCitRVDZCQVNFX0lHTk9SRV9DVkVTICs9IENWRS0y
+MDIzLTM4MTk3CiAKIFFUNkJBU0VfQ01BS0VfQkFDS0VORCA9IG5pbmphCiAKLS0gCjIuNDYuMAoK
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290
+IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxk
+cm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
