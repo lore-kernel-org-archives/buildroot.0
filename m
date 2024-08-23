@@ -4,72 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A6B7EC52D7C
-	for <buildroot@archiver.kernel.org>; Fri, 23 Aug 2024 16:17:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 570EAC531DC
+	for <buildroot@archiver.kernel.org>; Fri, 23 Aug 2024 16:20:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3856A840C1;
-	Fri, 23 Aug 2024 16:17:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 106EE81337;
+	Fri, 23 Aug 2024 16:20:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MxjTQMj8QPU0; Fri, 23 Aug 2024 16:17:47 +0000 (UTC)
+ id lPiXGkFG3o4y; Fri, 23 Aug 2024 16:20:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 786EA81EE2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 304ED81338
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 786EA81EE2;
-	Fri, 23 Aug 2024 16:17:47 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 753F21BF31F
- for <buildroot@lists.busybox.net>; Fri, 23 Aug 2024 16:17:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 304ED81338;
+	Fri, 23 Aug 2024 16:20:36 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id DF0651BF31F
+ for <buildroot@lists.busybox.net>; Fri, 23 Aug 2024 16:20:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 61F9A4064A
- for <buildroot@lists.busybox.net>; Fri, 23 Aug 2024 16:17:46 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id CC360612F7
+ for <buildroot@lists.busybox.net>; Fri, 23 Aug 2024 16:20:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gW5KgVWWyUJa for <buildroot@lists.busybox.net>;
- Fri, 23 Aug 2024 16:17:45 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::221;
- helo=relay1-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6nysImqvuOAy for <buildroot@lists.busybox.net>;
+ Fri, 23 Aug 2024 16:20:33 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.200;
+ helo=relay7-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org B2CBA4056C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B2CBA4056C
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B2CBA4056C
- for <buildroot@buildroot.org>; Fri, 23 Aug 2024 16:17:44 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id CF717240005;
- Fri, 23 Aug 2024 16:17:42 +0000 (UTC)
-Date: Fri, 23 Aug 2024 18:17:41 +0200
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 27D22612F6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 27D22612F6
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 27D22612F6
+ for <buildroot@buildroot.org>; Fri, 23 Aug 2024 16:20:27 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 0C6EF20004;
+ Fri, 23 Aug 2024 16:20:25 +0000 (UTC)
+Date: Fri, 23 Aug 2024 18:20:24 +0200
 To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Message-ID: <20240823181741.499173f2@windsurf>
-In-Reply-To: <20240822183742.3550055-2-dario.binacchi@amarulasolutions.com>
+Message-ID: <20240823182024.66981be7@windsurf>
+In-Reply-To: <20240822183742.3550055-3-dario.binacchi@amarulasolutions.com>
 References: <20240822183742.3550055-1-dario.binacchi@amarulasolutions.com>
- <20240822183742.3550055-2-dario.binacchi@amarulasolutions.com>
+ <20240822183742.3550055-3-dario.binacchi@amarulasolutions.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1724429863;
+ d=bootlin.com; s=gm1; t=1724430026;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=NhXez5oLQbugRS+zNNepeByht+35uzps8EJHm68BACo=;
- b=nOJwNZRH8S52ZHo//DNB+uk+A+QJRSXG7o1ocZkLk7CO5rjWx4v6+wQn3N2eTS079oa3VT
- vkWKsgNF+fdlfSp1lic5hxa/QOXdaGwUamtQrbe43CS9ATUDI2xm5jKi5gw/Dz4k4X97p2
- yycxMUvn/w0dS9TaEiLHp4FjasxNq8UmCL19lh4WcUqLqmHqKf1C803azTvKQlGOyhV3eK
- EEEvrs5P1w8V760m8rJJNTequwQbw4/5kstg2vpjCUpMFlnsFVptjcXwSl+93TedvsY7Tz
- aKVZBsHi8nHKbSpxC6010f9CseLFz21IdKFdgfGa78S7VGllkVLG+M0n5v8AIg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=5k6i2Hl5mWsQ3yU7EIQW4XYDPNE143TDKW8GdH5w2A8=;
+ b=XWAPpelLjmrthJA/Zk48x3PSL9Gx2hDEc6iFspZ5O2muGrJTeBV1bHg0PO7xIDGd5QnRj9
+ QiNu9jmgPjVqZBGleNd8w8hPidMO7bNYQW6EQPCenxMxO461TA2YjSwzJOtv9yOIo1u6y0
+ oK3TZvMpj/chtef3I0wipEQM4T2wE5n/LSTV7l92LIRR/i91jFFjds5GDJTquusm4Icnjf
+ H343eQnSN5nR2xcaNQ7WKBdTcadl+PGdCHdJmnSxsdwf8ScrZQdsjYmy+1Gh+jGtGXlHse
+ TGaXoI1vwLfGhmJEzCXzhDE/9PqwCTCg3Qp6fHlJ7lm0S94PCwhOlRwamhcadQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=nOJwNZRH
-Subject: Re: [Buildroot] [PATCH v3 1/3] package/tinyinit: new package
+ header.s=gm1 header.b=XWAPpelL
+Subject: Re: [Buildroot] [PATCH v3 2/3] configs/stm32f746_disco_sd: new
+ defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,89 +91,142 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu, 22 Aug 2024 20:37:40 +0200
+Hello,
+
+On Thu, 22 Aug 2024 20:37:41 +0200
 Dario Binacchi <dario.binacchi@amarulasolutions.com> wrote:
 
->  DEVELOPERS                   |  1 +
->  package/Config.in            |  1 +
->  package/tinyinit/Config.in   | 10 ++++++++++
->  package/tinyinit/init        | 32 ++++++++++++++++++++++++++++++++
->  package/tinyinit/tinyinit.mk | 12 ++++++++++++
->  5 files changed, 56 insertions(+)
-
-We also need to change busybox.mk to ensure that tinyinit is built
-before Busybox:
-
-# Packages that provide commands that may also be busybox applets:
-BUSYBOX_DEPENDENCIES = \
-	...
-	$(if $(BR2_PACKAGE_TINYINIT),tinyinit) \
-
-
-> diff --git a/package/tinyinit/Config.in b/package/tinyinit/Config.in
-> new file mode 100644
-> index 000000000000..2ceb8e191e23
+> diff --git a/board/stmicroelectronics/stm32f746-disco/flash_sd.sh b/board/stmicroelectronics/stm32f746-disco/flash_sd.sh
+> new file mode 100755
+> index 000000000000..4fe85448f984
 > --- /dev/null
-> +++ b/package/tinyinit/Config.in
-> @@ -0,0 +1,10 @@
-> +config BR2_PACKAGE_TINYINIT
-> +	bool "tinyinit"
-> +	depends on BR2_INIT_NONE
-> +	help
-> +	  A Linux tiny initialization script suitable for resource
-> +	  limited systems, which can be used as an alternative to the
-> +	  one provided by Busybox.
+> +++ b/board/stmicroelectronics/stm32f746-disco/flash_sd.sh
+> @@ -0,0 +1,22 @@
+> +#!/bin/bash
 > +
-> +comment "tinyinit needs BR2_INIT_NONE, i. e. no init system installed"
-> +	depends on !BR2_INIT_NONE
+> +if [ $# -eq 0 ]; then
+> +    OUTPUT_DIR=output
+> +else
+> +    OUTPUT_DIR=$1
+> +fi
+> +
+> +if ! test -d "${OUTPUT_DIR}" ; then
+> +    echo "ERROR: no output directory specified."
+> +    echo "Usage: $0 OUTPUT_DIR"
+> +    exit 1
+> +fi
+> +
+> +"${OUTPUT_DIR}"/host/bin/openocd -f board/stm32f746g-disco.cfg \
+> +  -c "init" \
+> +  -c "reset init" \
+> +  -c "flash probe 0" \
+> +  -c "flash info 0" \
+> +  -c "flash write_image erase ${OUTPUT_DIR}/images/u-boot.bin 0x08000000" \
+> +  -c "reset run" \
+> +  -c "shutdown"
 
-I find this a bit odd. In the end, shouldn't we simply promote tinyinit
-as an init implementation, and have its own BR2_INIT_TINYINIT entry?
+Could you keep the indentation consistent? Above you used 4 spaces, and
+here only 2.
 
-Also, should BR2_PACKAGE_TINYINIT select busybox? Or do we pretend that
-it is possible to use it with some other implementations of mount and
-other basic commands? Perhaps this is a good case to use "imply
-BR2_PACKAGE_BUSYBOX", so that BR2_PACKAGE_TINYINIT enables busybox by
-default, but still allows removing busybox if really the user knows
-what (s)he is doing?
+> diff --git a/board/stmicroelectronics/stm32f746-disco/genimage.cfg b/board/stmicroelectronics/stm32f746-disco/genimage.cfg
+> new file mode 100644
+> index 000000000000..6743d41972c0
+> --- /dev/null
+> +++ b/board/stmicroelectronics/stm32f746-disco/genimage.cfg
+> @@ -0,0 +1,27 @@
+> +image boot.vfat {
+> +	vfat {
+> +		files = {
+> +			"zImage",
+> +			"stm32f746-disco.dtb",
+> +			"extlinux"
+> +		}
+> +	}
+> +
+> +	size = 16M
+> +}
+> +
+> +image sdcard.img {
+> +	hdimage {
+> +	}
+> +
+> +	partition u-boot {
 
-> +define TINYINIT_INSTALL_TARGET_CMDS
-> +	$(INSTALL) -m 0755 -D $(TINYINIT_PKGDIR)/init $(TARGET_DIR)/sbin/init
-> +	(cd $(TARGET_DIR); ln -sf /sbin/init init)
+Why is this partition called u-boot? It doesn't contain anything u-boot
+related.
 
-Hmm. I initially thought this symlink shouldn't be needed, as it's
-created by fs/cpio/cpio.mk when you're building a cpio for initramfs:
+> +		partition-type = 0xC
+> +		image = "boot.vfat"
 
-ifeq ($(BR2_ROOTFS_DEVICE_CREATION_STATIC),y)
+But why is a VFAT partition needed in fact? Why can't U-Boot simply get
+the kernel+DTB from the ext4 rootfs partition?
 
-define ROOTFS_CPIO_ADD_INIT
-        if [ ! -e $(TARGET_DIR)/init ]; then \
-                ln -sf sbin/init $(TARGET_DIR)/init; \
-        fi
-endef
 
-else
-# devtmpfs does not get automounted when initramfs is used.
-# Add a pre-init script to mount it before running init
-# We must have /dev/console very early, even before /init runs,
-# for stdin/stdout/stderr
-define ROOTFS_CPIO_ADD_INIT
-        if [ ! -e $(TARGET_DIR)/init ]; then \
-                $(INSTALL) -m 0755 fs/cpio/init $(TARGET_DIR)/init; \
-        fi
-        mkdir -p $(TARGET_DIR)/dev
-        mknod -m 0622 $(TARGET_DIR)/dev/console c 5 1
-endef
+> diff --git a/board/stmicroelectronics/stm32f746-disco/post-build.sh b/board/stmicroelectronics/stm32f746-disco/post-build.sh
+> new file mode 100755
+> index 000000000000..2894ad851c66
+> --- /dev/null
+> +++ b/board/stmicroelectronics/stm32f746-disco/post-build.sh
+> @@ -0,0 +1,9 @@
+> +#!/bin/sh
+> +BOARD_DIR="$(dirname "$0")"
+> +
+> +install -m 0644 -D "${BOARD_DIR}"/extlinux.conf "${BINARIES_DIR}"/extlinux/extlinux.conf
+> +
+> +# finalize the init script
+> +INIT_PATH="${TARGET_DIR}/sbin/init"
+> +sed -i "/^# Clear memory to reduce page fragmentation/d" "${INIT_PATH}"
+> +sed -i "/^echo 3 > \/proc\/sys\/vm\/drop_caches/d" "${INIT_PATH}"
 
-But actually, in the case of a non-static /dev, it doesn't do a
-symlink, but adds a pre-init script, and your tinyinit already does the
-tasks of this pre-init provided by fs/cpio/init.
+Meh, this kind of sucks. tinyinit does one thing and we have to undo it
+here. Not great. Can we do better, i.e decide whether it makes sense to
+do it or not? To be honest, I am not sure if this is really useful to
+do at boot time.
 
-So I guess what you did is probably OK, but maybe a comment would be
-useful. The only downside of your approach is that it leaves a /init
-symlink that isn't used/needed for non-initramfs use-cases, but perhaps
-that's OK.
 
+> diff --git a/configs/stm32f746_disco_sd_defconfig b/configs/stm32f746_disco_sd_defconfig
+> new file mode 100644
+> index 000000000000..8c92afc5740e
+> --- /dev/null
+> +++ b/configs/stm32f746_disco_sd_defconfig
+> @@ -0,0 +1,32 @@
+> +BR2_arm=y
+> +BR2_cortex_m7=y
+> +BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
+> +BR2_GLOBAL_PATCH_DIR="board/stmicroelectronics/stm32f746-disco/patches"
+> +BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+> +BR2_INIT_NONE=y
+> +BR2_ROOTFS_POST_BUILD_SCRIPT="board/stmicroelectronics/stm32f746-disco/post-build.sh"
+> +BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+> +BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/stmicroelectronics/stm32f746-disco/genimage.cfg"
+> +BR2_LINUX_KERNEL=y
+> +BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+> +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.165"
+> +BR2_LINUX_KERNEL_DEFCONFIG="stm32"
+> +BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/stmicroelectronics/stm32f746-disco/linux.fragment"
+> +BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
+> +BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="zImage"
+> +BR2_LINUX_KERNEL_DTS_SUPPORT=y
+> +BR2_LINUX_KERNEL_INTREE_DTS_NAME="stm32f746-disco"
+> +BR2_PACKAGE_TINYINIT=y
+> +BR2_TARGET_ROOTFS_EXT2=y
+> +BR2_TARGET_ROOTFS_EXT2_SIZE="32M"
+> +# BR2_TARGET_ROOTFS_TAR is not set
+> +BR2_TARGET_UBOOT=y
+> +BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+> +BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+> +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.07"
+> +BR2_TARGET_UBOOT_BOARD_DEFCONFIG="stm32f746-disco"
+> +BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+> +BR2_PACKAGE_HOST_DOSFSTOOLS=y
+> +BR2_PACKAGE_HOST_GENIMAGE=y
+> +BR2_PACKAGE_HOST_MTOOLS=y
+> +BR2_PACKAGE_HOST_OPENOCD=y
+
+If you drop the FAT partition, you can drop BR2_PACKAGE_HOST_MTOOLS=y
+and BR2_PACKAGE_HOST_DOSFSTOOLS=y.
+
+Thanks!
 
 Thomas
 -- 
