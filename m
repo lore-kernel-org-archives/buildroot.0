@@ -4,72 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6560DC5321D
-	for <buildroot@archiver.kernel.org>; Fri, 23 Aug 2024 17:40:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5A839C52D7C
+	for <buildroot@archiver.kernel.org>; Fri, 23 Aug 2024 17:41:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DC122810FC;
-	Fri, 23 Aug 2024 17:40:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 21EB080B64;
+	Fri, 23 Aug 2024 17:41:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id x0IGaDDKYKkl; Fri, 23 Aug 2024 17:40:42 +0000 (UTC)
+ id qjegaRdJ0xzs; Fri, 23 Aug 2024 17:41:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AE5CE81A50
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 36CC9810FC
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AE5CE81A50;
-	Fri, 23 Aug 2024 17:40:42 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E92621BF34F
- for <buildroot@lists.busybox.net>; Fri, 23 Aug 2024 17:40:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 36CC9810FC;
+	Fri, 23 Aug 2024 17:41:20 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 8E3051BF34F
+ for <buildroot@lists.busybox.net>; Fri, 23 Aug 2024 17:41:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D6ABF612F6
- for <buildroot@lists.busybox.net>; Fri, 23 Aug 2024 17:40:40 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 884EE40179
+ for <buildroot@lists.busybox.net>; Fri, 23 Aug 2024 17:41:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PdIScR8bu-7B for <buildroot@lists.busybox.net>;
- Fri, 23 Aug 2024 17:40:40 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::225;
- helo=relay5-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9i7bgSXK-jtj for <buildroot@lists.busybox.net>;
+ Fri, 23 Aug 2024 17:41:18 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
+ helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E0D42612EC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E0D42612EC
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::225])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E0D42612EC
- for <buildroot@buildroot.org>; Fri, 23 Aug 2024 17:40:39 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 30AB11C0002;
- Fri, 23 Aug 2024 17:40:38 +0000 (UTC)
-Date: Fri, 23 Aug 2024 19:40:37 +0200
-To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <20240823194037.6bdee995@windsurf>
-In-Reply-To: <20240820000325.2453824-1-james.hilliard1@gmail.com>
-References: <20240820000325.2453824-1-james.hilliard1@gmail.com>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 66C8A4015E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 66C8A4015E
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 66C8A4015E
+ for <buildroot@buildroot.org>; Fri, 23 Aug 2024 17:41:18 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 8AFDEFF802;
+ Fri, 23 Aug 2024 17:41:16 +0000 (UTC)
+Date: Fri, 23 Aug 2024 19:41:15 +0200
+To: Fabio Estevam <festevam@gmail.com>
+Message-ID: <20240823194115.313117a2@windsurf>
+In-Reply-To: <20240821144928.2598045-1-festevam@gmail.com>
+References: <20240821144928.2598045-1-festevam@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1724434838;
+ d=bootlin.com; s=gm1; t=1724434876;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=xioc6fbca6z1rU/VM0EceYOqvw17WhiJgBNtKGDTA7Y=;
- b=ejabLQufHHcRB7rZl+/C3Brv/K+N8sMlrKLzkPGNwWmxnIbhf6nfBrQBYTF+zMBvaBb45Z
- VuREjCU7lS0L4nWTJaPmyEHn5kHB5TsmUwvU1WTGFcGd7fci2XnTIhY6zR60hFCwMcskSv
- 5pmNAp9zptvpGsD01iysrZPpE/leRWDSIn8M7Ju65blY6LL8hDXqKSpTYmiezxpshC5kzq
- Nq2rc9FdFw7Z3SlDUdjv1DqFRzeOj00bjZfgoq1ssfu9l4PSwhm2QRVaV0Llv43CftZQ/s
- wjl9CQj+mHipfuIp4QNwMPHlKW8nvLfLw458rT/1bwgluoI4SvAP3RpJ85yDbg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=7ePrGFKimBcvvJPNR8mzYsnox3iXK3nuyH5Atn71dQQ=;
+ b=h8M5beJDKSl/iPIU8oogazTI3qJ95akTTXLEWtu0yrzHQaP9WckVV1s04dNjZJskLBfd7T
+ i/OOZXMr3UymOkY5mv3gf1rNuy6znvoJIqEpiFW9MP+5C7rvCGcejje8T8RHIz0agMioxf
+ pbgEbfPcxVGsvqhnktaR+C0zhPj5M0lFpqBowxRf5X4ABuTWCC2tOrTraoyHBBz2fvIEI7
+ C9N/3/BiD6GKa4g8yrejS1pjC8G5YTO83vnSI7H1BQuozYEnQ2C63SYIsiepbc/3s5Laab
+ uKKtvWoOqvSg6vytrQBkUOhzeeaHQpaE7jXogzFdtphBIJx0M0ct/rOvp5V1SA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=ejabLQuf
-Subject: Re: [Buildroot] [PATCH v4 1/1] utils/genrandconfig: allow
- overriding KCONFIG_PROBABILITY
+ header.s=gm1 header.b=h8M5beJD
+Subject: Re: [Buildroot] [PATCH] configs/wandboard: update U-Boot and kernel
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -89,25 +88,17 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon, 19 Aug 2024 18:03:25 -0600
-James Hilliard <james.hilliard1@gmail.com> wrote:
+On Wed, 21 Aug 2024 11:49:28 -0300
+Fabio Estevam <festevam@gmail.com> wrote:
 
-> Tweaking this variable should allow us to get better coverage of
-> packages with larger dependency trees.
+> Update to U-Boot 2024.07 and kernel 6.6.47 versions.
 > 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> Signed-off-by: Fabio Estevam <festevam@gmail.com>
 > ---
-> Changes v3 -> v4:
->   - rebase
-> Changes v2 -> v3:
->   - rebase
-> Changes v1 -> v2:
->   - rebase
-> ---
->  utils/genrandconfig | 21 ++++++++++++++++++++-
->  1 file changed, 20 insertions(+), 1 deletion(-)
+>  configs/wandboard_defconfig | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-Applied to master, thanks.
+Applied to next, thanks.
 
 Thomas
 -- 
