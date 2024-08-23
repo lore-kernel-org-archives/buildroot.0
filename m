@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BB482C52D7C
-	for <buildroot@archiver.kernel.org>; Fri, 23 Aug 2024 17:07:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D0764C52D7C
+	for <buildroot@archiver.kernel.org>; Fri, 23 Aug 2024 17:07:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 81F26412F6;
-	Fri, 23 Aug 2024 17:07:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9DFC24133A;
+	Fri, 23 Aug 2024 17:07:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5fVYVb3sSulD; Fri, 23 Aug 2024 17:07:37 +0000 (UTC)
+ id EFAvu41PXj8E; Fri, 23 Aug 2024 17:07:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 701DE4133A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 48E5F41340
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 701DE4133A;
-	Fri, 23 Aug 2024 17:07:37 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 905161BF306
- for <buildroot@lists.busybox.net>; Fri, 23 Aug 2024 17:07:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 48E5F41340;
+	Fri, 23 Aug 2024 17:07:40 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id EB4DA1BF306
+ for <buildroot@lists.busybox.net>; Fri, 23 Aug 2024 17:07:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 88167840D9
- for <buildroot@lists.busybox.net>; Fri, 23 Aug 2024 17:07:23 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0708B4015E
+ for <buildroot@lists.busybox.net>; Fri, 23 Aug 2024 17:07:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tq9gnmTH0mr9 for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UGwvlx9gkL2H for <buildroot@lists.busybox.net>;
  Fri, 23 Aug 2024 17:07:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9BA26840D8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CF01D401EB
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9BA26840D8
+ by smtp2.osuosl.org (Postfix) with ESMTP id CF01D401EB
  for <buildroot@buildroot.org>; Fri, 23 Aug 2024 17:07:22 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8592686429; Fri, 23 Aug 2024 17:07:22 +0000 (UTC)
+ id BCC248642D; Fri, 23 Aug 2024 17:07:22 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 23 Aug 2024 19:05:00 +0200
+Date: Fri, 23 Aug 2024 19:06:00 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 73dd0cc1bf893c821b9ed185b8cf39bc83b5af02
-X-Git-Newrev: 5e151d91aeb2433c6ea51bbda9784528e75803a4
+X-Git-Oldrev: b17430622727642bf2f30f7ba876e94f02ea5d43
+X-Git-Newrev: 03c19f52cdc57b6d9358b8e2ec208e100a25ee6d
 X-Patchwork-Hint: ignore
-Message-Id: <20240823170722.8592686429@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next]
- package/kodi-inputstream-adaptive: bump version to 21.5.2-Omega
+Message-Id: <20240823170722.BCC248642D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/kodi: bump version to
+ 21.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,40 +66,70 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5e151d91aeb2433c6ea51bbda9784528e75803a4
+commit: https://git.buildroot.net/buildroot/commit/?id=03c19f52cdc57b6d9358b8e2ec208e100a25ee6d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash | 2 +-
- package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk | 2 +-
+ package/kodi-texturepacker/kodi-texturepacker.mk         | 2 +-
+ package/kodi/kodi.hash                                   | 2 +-
+ package/kodi/kodi.mk                                     | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-index 82325ab014..af88728c73 100644
---- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-+++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256  caf71b67cf242c600878718dab8227947062a28485078b8bf68ac72aef51e12c  kodi-inputstream-adaptive-21.4.10-Omega.tar.gz
-+sha256  b27121f9ec64c43dfb9beca56b045c6ec198b04ae5d006001916b9acbee63c0c  kodi-inputstream-adaptive-21.5.2-Omega.tar.gz
- sha256  48632d57fbb6ab8f50cbf4deced5c91e733fa7ff292687c4816b77f28e483df9  LICENSE.md
- sha256  02f864f3e07456785625968022ce811c5640301bfd2ae70963efea89d306790a  LICENSES/README.md
- sha256  0b7f5dcb3d2c28ff78d999786028930e762df0baa2f52955782e378ec5b636a8  LICENSES/BSD-2-Clause-Views
-diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-index b6825c1ff0..66375affc8 100644
---- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-+++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk b/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
+index ee94a52502..774c7e8e66 100644
+--- a/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
++++ b/package/kodi-jsonschemabuilder/kodi-jsonschemabuilder.mk
+@@ -6,7 +6,7 @@
  
--KODI_INPUTSTREAM_ADAPTIVE_VERSION = 21.4.10-Omega
-+KODI_INPUTSTREAM_ADAPTIVE_VERSION = 21.5.2-Omega
- KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,xbmc,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
- KODI_INPUTSTREAM_ADAPTIVE_LICENSE = \
- 	BSD-2-Clause-Views \
+ # Not possible to directly refer to kodi variables, because of
+ # first/second expansion trickery...
+-KODI_JSONSCHEMABUILDER_VERSION = 21.0-Omega
++KODI_JSONSCHEMABUILDER_VERSION = 21.1-Omega
+ KODI_JSONSCHEMABUILDER_SITE = $(call github,xbmc,xbmc,$(KODI_JSONSCHEMABUILDER_VERSION))
+ KODI_JSONSCHEMABUILDER_SOURCE = kodi-$(KODI_JSONSCHEMABUILDER_VERSION).tar.gz
+ KODI_JSONSCHEMABUILDER_DL_SUBDIR = kodi
+diff --git a/package/kodi-texturepacker/kodi-texturepacker.mk b/package/kodi-texturepacker/kodi-texturepacker.mk
+index c3c06d0210..426c8f1ed5 100644
+--- a/package/kodi-texturepacker/kodi-texturepacker.mk
++++ b/package/kodi-texturepacker/kodi-texturepacker.mk
+@@ -6,7 +6,7 @@
+ 
+ # Not possible to directly refer to kodi variables, because of
+ # first/second expansion trickery...
+-KODI_TEXTUREPACKER_VERSION = 21.0-Omega
++KODI_TEXTUREPACKER_VERSION = 21.1-Omega
+ KODI_TEXTUREPACKER_SITE = $(call github,xbmc,xbmc,$(KODI_TEXTUREPACKER_VERSION))
+ KODI_TEXTUREPACKER_SOURCE = kodi-$(KODI_TEXTUREPACKER_VERSION).tar.gz
+ KODI_TEXTUREPACKER_DL_SUBDIR = kodi
+diff --git a/package/kodi/kodi.hash b/package/kodi/kodi.hash
+index 15d1e471cd..5ece904a4a 100644
+--- a/package/kodi/kodi.hash
++++ b/package/kodi/kodi.hash
+@@ -3,7 +3,7 @@ sha512  743698979c801f3cfb36545888b5303e1e25dae5692bb45cab7ebbe102a6eda31f09abc6
+ sha512  8e7e62418a49ba810512c13a640a8bf35f878fcd54af32fdaab1111e37817f58b21b475980ba663fba4887e45ef8d88af8ff17796f20d202e929e8e2574546dc  commons-lang3-3.14.0-bin.tar.gz
+ sha512  2e94877000dd270b69e2e8cbf49f258a90b4c628b6b6b0814e300a2f0e9c391f0816dceb0707e596ae3b7c9532f93e7a4917df47c77f44b3a810e14042ce5f3f  commons-text-1.11.0-bin.tar.gz
+ # Locally computed
+-sha256  7f54c1fd8456ac46221fbc85e447362bdc209163c6cb19fca98d106560071b7c  kodi-21.0-Omega.tar.gz
++sha256  ad6e40b0912c8318635f0501dc1f7f27ce3a29e671f2ddb608cad34babae80ef  kodi-21.1-Omega.tar.gz
+ sha256  f38c4a4e7a4f4da6d8e83b8852489aa3bb6588a915dc41f5ee89d9aad305a06e  kodi-libdvdcss-1.4.3-Next-Nexus-Alpha2-2.tar.gz
+ sha256  584f62a3896794408d46368e2ecf2c6217ab9c676ce85921b2d68b8961f49dfc  kodi-libdvdnav-6.1.1-Next-Nexus-Alpha2-2.tar.gz
+ sha256  719130091e3adc9725ba72df808f24a14737a009dca5a4c38c601c0c76449b62  kodi-libdvdread-6.1.3-Next-Nexus-Alpha2-2.tar.gz
+diff --git a/package/kodi/kodi.mk b/package/kodi/kodi.mk
+index e941847f77..ae73cdffa6 100644
+--- a/package/kodi/kodi.mk
++++ b/package/kodi/kodi.mk
+@@ -6,7 +6,7 @@
+ 
+ # When updating the version, please also update kodi-jsonschemabuilder
+ # and kodi-texturepacker
+-KODI_VERSION_MAJOR = 21.0
++KODI_VERSION_MAJOR = 21.1
+ KODI_VERSION_NAME = Omega
+ KODI_VERSION = $(KODI_VERSION_MAJOR)-$(KODI_VERSION_NAME)
+ KODI_SITE = $(call github,xbmc,xbmc,$(KODI_VERSION))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
