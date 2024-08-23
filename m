@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3D721CE7B11
-	for <buildroot@archiver.kernel.org>; Fri,  6 Sep 2024 20:07:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67864CE7B11
+	for <buildroot@archiver.kernel.org>; Fri,  6 Sep 2024 20:07:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6DC4681B01;
-	Fri,  6 Sep 2024 20:07:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 168F784A70;
+	Fri,  6 Sep 2024 20:07:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pbprGvoLhQgR; Fri,  6 Sep 2024 20:07:07 +0000 (UTC)
+ id L2ZVBsxQ66Ai; Fri,  6 Sep 2024 20:07:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BB6BC8445B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EA8C184B59
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BB6BC8445B;
-	Fri,  6 Sep 2024 20:07:06 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 04D641BF20B
+	by smtp1.osuosl.org (Postfix) with ESMTP id EA8C184B59;
+	Fri,  6 Sep 2024 20:07:09 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D65FA1BF37F
  for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 20:00:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EC37E4089D
- for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 19:59:02 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id D4A3F61122
+ for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 19:59:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dlALXvP1lcVI for <buildroot@lists.busybox.net>;
- Fri,  6 Sep 2024 19:59:00 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Bw6Gh4MSd15x for <buildroot@lists.busybox.net>;
+ Fri,  6 Sep 2024 19:58:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9A106408D9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 59D73610EE
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9A106408D9
- for <buildroot@buildroot.org>; Fri,  6 Sep 2024 19:58:59 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 59D73610EE
+ for <buildroot@buildroot.org>; Fri,  6 Sep 2024 19:58:56 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 96E6D86B7A; Fri,  6 Sep 2024 19:58:59 +0000 (UTC)
+ id 548287FC62; Fri,  6 Sep 2024 19:58:56 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 3 Sep 2024 23:14:13 +0200
+Date: Fri, 23 Aug 2024 18:41:40 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 410995b7120b42790934ad35cf7656ade30d8539
-X-Git-Newrev: 41132c0541b0d69e88f9f720cac166e304d7b64d
+X-Git-Oldrev: b2a6044d8c200af3c1047a5685d53e0ed348f94e
+X-Git-Newrev: 73dd0cc1bf893c821b9ed185b8cf39bc83b5af02
 X-Patchwork-Hint: ignore
-Message-Id: <20240906195859.96E6D86B7A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/skopeo: bump version
+Message-Id: <20240906195856.548287FC62@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python3: bump version to 3.12.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,46 +57,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=41132c0541b0d69e88f9f720cac166e304d7b64d
+commit: https://git.buildroot.net/buildroot/commit/?id=73dd0cc1bf893c821b9ed185b8cf39bc83b5af02
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/skopeo/skopeo.hash | 2 +-
- package/skopeo/skopeo.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/python3/python3.hash | 6 +++---
+ package/python3/python3.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/skopeo/skopeo.hash b/package/skopeo/skopeo.hash
-index d40585d52f..ee42f18b80 100644
---- a/package/skopeo/skopeo.hash
-+++ b/package/skopeo/skopeo.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  0b788fc5725ac79327f7c29797821a2bafc1c3c87bbfcb2998c2a1be949e314d  skopeo-1.13.3-go2.tar.gz
-+sha256  fed91fd067605460ef33431163227471b1e85c8768203fc393345d6ffd645448  skopeo-1.16.0-go2.tar.gz
- sha256  716a8b80635c394681e652823e1e42e411ad2d254e1f202403422d74f4b0b106  LICENSE
-diff --git a/package/skopeo/skopeo.mk b/package/skopeo/skopeo.mk
-index 58631629b3..f09009d88c 100644
---- a/package/skopeo/skopeo.mk
-+++ b/package/skopeo/skopeo.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/python3/python3.hash b/package/python3/python3.hash
+index 598164dca6..d680a96810 100644
+--- a/package/python3/python3.hash
++++ b/package/python3/python3.hash
+@@ -1,5 +1,5 @@
+-# From https://www.python.org/downloads/release/python-3123/
+-md5  d68f25193eec491eb54bc2ea664a05bd  Python-3.12.4.tar.xz
++# From https://www.python.org/downloads/release/python-3125/
++md5  02c7d269e077f4034963bba6befdc715  Python-3.12.5.tar.xz
+ # Locally computed
+-sha256  f6d419a6d8743ab26700801b4908d26d97e8b986e14f95de31b32de2b0e79554  Python-3.12.4.tar.xz
++sha256  fa8a2e12c5e620b09f53e65bcd87550d2e5a1e2e04bf8ba991dcc55113876397  Python-3.12.5.tar.xz
+ sha256  3b2f81fe21d181c499c59a256c8e1968455d6689d269aa85373bfb6af41da3bf  LICENSE
+diff --git a/package/python3/python3.mk b/package/python3/python3.mk
+index 7d6c9fe93f..b31e6df141 100644
+--- a/package/python3/python3.mk
++++ b/package/python3/python3.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--SKOPEO_VERSION = 1.13.3
-+SKOPEO_VERSION = 1.16.0
- SKOPEO_SITE = $(call github,containers,skopeo,v$(SKOPEO_VERSION))
- 
- SKOPEO_LICENSE = Apache-2.0
+ PYTHON3_VERSION_MAJOR = 3.12
+-PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).4
++PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).5
+ PYTHON3_SOURCE = Python-$(PYTHON3_VERSION).tar.xz
+ PYTHON3_SITE = https://python.org/ftp/python/$(PYTHON3_VERSION)
+ PYTHON3_LICENSE = Python-2.0, others
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
