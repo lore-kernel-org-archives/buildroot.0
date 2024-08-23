@@ -4,49 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 036F0E6FE46
-	for <buildroot@archiver.kernel.org>; Fri,  6 Sep 2024 20:01:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 87413E6FE46
+	for <buildroot@archiver.kernel.org>; Fri,  6 Sep 2024 20:01:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C128D8118E;
-	Fri,  6 Sep 2024 20:01:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 552528176A;
+	Fri,  6 Sep 2024 20:01:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KCoByipDpB5c; Fri,  6 Sep 2024 20:01:17 +0000 (UTC)
+ id 0WMWm-VzpVbv; Fri,  6 Sep 2024 20:01:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AECD480C75
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C08D881846
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AECD480C75;
-	Fri,  6 Sep 2024 20:01:16 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E3A3A1BF20B
- for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 19:59:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C08D881846;
+	Fri,  6 Sep 2024 20:01:20 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 4C0501BF20B
+ for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 19:59:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0A8796110F
- for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 19:58:57 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 05462407A1
+ for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 19:58:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sclK-hY4sWPl for <buildroot@lists.busybox.net>;
- Fri,  6 Sep 2024 19:58:55 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id KyNfjQb-1T9g for <buildroot@lists.busybox.net>;
+ Fri,  6 Sep 2024 19:58:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5603960782
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AE3AB408F8
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5603960782
- for <buildroot@buildroot.org>; Fri,  6 Sep 2024 19:58:54 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id AE3AB408F8
+ for <buildroot@buildroot.org>; Fri,  6 Sep 2024 19:58:56 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 509B786EE3; Fri,  6 Sep 2024 19:58:54 +0000 (UTC)
+ id AB4AC828CC; Fri,  6 Sep 2024 19:58:56 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 15 Aug 2024 22:04:31 +0200
+Date: Fri, 23 Aug 2024 19:09:15 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6374fd70e35314f86cc8de2f8c3579c5ced0df7e
-X-Git-Newrev: 9724eab2328f5de9621942c8cff30b45a76643c8
+X-Git-Oldrev: 07d182ce40bfb06619248aabc60e98ba46aea409
+X-Git-Newrev: 6ff3768333f224f81a6afa4802755de9b125ca84
 X-Patchwork-Hint: ignore
-Message-Id: <20240906195854.509B786EE3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/ti_am62x_sk: bump tfa,
- uboot and linux version
+Message-Id: <20240906195856.AB4AC828CC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-wrapt: bump to 1.16.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,164 +65,53 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9724eab2328f5de9621942c8cff30b45a76643c8
+commit: https://git.buildroot.net/buildroot/commit/?id=6ff3768333f224f81a6afa4802755de9b125ca84
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Bump to the latest versions of tfa, uboot and the linux kernel to pull
-in the latest fixes and features for the am62x-sk reference board
+Changelog:
+* https://wrapt.readthedocs.io/en/latest/changes.html#version-1-15-0
+* https://wrapt.readthedocs.io/en/latest/changes.html#version-1-16-0
 
-Signed-off-by: Bryan Brattlof <bb@ti.com>
+LICENSE hash changed due to updated copyright year [1].
+
+[1] https://github.com/GrahamDumpleton/wrapt/commit/dc5afd39533ce0daf933507f8a90c095448a5cbc
+
+Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .../arm-trusted-firmware/arm-trusted-firmware.hash |  2 +-
- ...e-sci-clk-Adding-support-for-non-contiguo.patch | 75 ----------------------
- board/ti/am62x-sk/patches/linux/linux.hash         |  2 +-
- .../patches/ti-k3-r5-loader/ti-k3-r5-loader.hash   |  3 +-
- configs/ti_am62x_sk_defconfig                      |  6 +-
- 5 files changed, 6 insertions(+), 82 deletions(-)
+ package/python-wrapt/python-wrapt.hash | 6 +++---
+ package/python-wrapt/python-wrapt.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/board/ti/am62x-sk/patches/arm-trusted-firmware/arm-trusted-firmware.hash b/board/ti/am62x-sk/patches/arm-trusted-firmware/arm-trusted-firmware.hash
-index d68ac4bd30..8b77e1f165 100644
---- a/board/ti/am62x-sk/patches/arm-trusted-firmware/arm-trusted-firmware.hash
-+++ b/board/ti/am62x-sk/patches/arm-trusted-firmware/arm-trusted-firmware.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  d7194687d13335f832a48c1b87ad4f15ffb983365ca2aba4afda57843fb01cb6  arm-trusted-firmware-lts-v2.10.4-git4.tar.gz
-+sha256  c0f23ccc71c49989e9ad238acf334473c17b7c88f79a20c829c3d443e3794a22  arm-trusted-firmware-v2.11-git4.tar.gz
-diff --git a/board/ti/am62x-sk/patches/linux/0001-clk-keystone-sci-clk-Adding-support-for-non-contiguo.patch b/board/ti/am62x-sk/patches/linux/0001-clk-keystone-sci-clk-Adding-support-for-non-contiguo.patch
-deleted file mode 100644
-index 788b6439d8..0000000000
---- a/board/ti/am62x-sk/patches/linux/0001-clk-keystone-sci-clk-Adding-support-for-non-contiguo.patch
-+++ /dev/null
-@@ -1,75 +0,0 @@
--From 750cdf4cb6791c45d479ed73a97728100394fb32 Mon Sep 17 00:00:00 2001
--From: Udit Kumar <u-kumar1@ti.com>
--Date: Tue, 13 Feb 2024 13:56:40 +0530
--Subject: [PATCH] clk: keystone: sci-clk: Adding support for non contiguous
-- clocks
--X-Developer-Signature: v=1; a=openpgp-sha256; l=1876; i=bb@ti.com;
-- h=from:subject; bh=CKSvD6FpqwRzx8blynhoCEc3XUR5TlwjFJdcgjQwpgg=;
-- b=owNCWmg5MUFZJlNZHYzOLwAAZP/////7puP/r7v/9q9s+8t7wa8/97UZO//d+XvPsvfv2/+wA
-- RsYHaQAAAAAAAAGg09IPUGmgAaAANBoAAAGmnqAPU9Q0DQ0HqMQDQ8ptTeqeogaABoPU0NAPUAA
-- 0GgDJ6gANAAMg0GmgNGgDEGh6jR6h6hp6mgepoPU2oDTIGho0IaHqA00yDQNBoGTRoDTRkAZNAD
-- AmTIBkGjIGmQyAZDRkAaANAYIxBk0DQAAHODcFn1CAGBsJeG8ZtU3FQCBdLH7LjDIouHeAszY1j
-- AFkqjaWIFXEVi8NV3giRplb1JjCYunXimTaK06SgQRYsUGRSbKOVQP2t1LlAYS93QjOMWF6CHXK
-- 69KzHyBDpXR2mHAAkHcHX0X3SAYJkxPElwJ1ZnHK1RfDKRfJcRQKzxnryM+4x2mCxpIFIIjpVLk
-- nItd1Vl1SEF2QiWZIYV4b0lawcUqLGgTQZ0+qpJ5QORYrvPXE4DR89JlJYBU4DjxAoyACH6KN0o
-- AiaknqZTfMwmF8iREpU4SgDEVun3X3OFlkBp3hBO+Ynb12GJoLSFBSz9IWE2ooLKFalh5XJMZfl
-- +GthEEOnlrMQHOF8qCr+JAKqXEqSrwLGuEIMFbnGEjJYruo4ENGOmGVlkvW+kLRp5ibCXAAcDMM
-- TPOUZ/i7kinChIDsZnF4A==
--X-Developer-Key: i=bb@ti.com; a=openpgp;
-- fpr=D3D177E40A38DF4D1853FEEF41B90D5D71D56CE0
--
--Most of clocks and their parents are defined in contiguous range,
--But in few cases, there is gap in clock numbers[0].
--Driver assumes clocks to be in contiguous range, and add their clock
--ids incrementally.
--
--New firmware started returning error while calling get_freq and is_on
--API for non-available clock ids.
--
--In this fix, driver checks and adds only valid clock ids.
--
--[0] https://software-dl.ti.com/tisci/esd/latest/5_soc_doc/j7200/clocks.html
--Section Clocks for NAVSS0_CPTS_0 Device, clock id 12-15 not present.
--
--Fixes: 3c13933c6033 ("clk: keystone: sci-clk: add support for dynamically probing clocks")
--Signed-off-by: Udit Kumar <u-kumar1@ti.com>
--Reviewed-by: Nishanth Menon <nm@ti.com>
--Upstream: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ad3ac13c6ec318b43e769cc9ffde67528e58e555
--Signed-off-by: Bryan Brattlof <bb@ti.com>
-----
-- drivers/clk/keystone/sci-clk.c | 10 ++++++++++
-- 1 file changed, 10 insertions(+)
--
--diff --git a/drivers/clk/keystone/sci-clk.c b/drivers/clk/keystone/sci-clk.c
--index 35fe197dd303c..eb2ef44869b23 100644
----- a/drivers/clk/keystone/sci-clk.c
--+++ b/drivers/clk/keystone/sci-clk.c
--@@ -516,6 +516,7 @@ static int ti_sci_scan_clocks_from_dt(struct sci_clk_provider *provider)
-- 	struct sci_clk *sci_clk, *prev;
-- 	int num_clks = 0;
-- 	int num_parents;
--+	bool state;
-- 	int clk_id;
-- 	const char * const clk_names[] = {
-- 		"clocks", "assigned-clocks", "assigned-clock-parents", NULL
--@@ -586,6 +587,15 @@ static int ti_sci_scan_clocks_from_dt(struct sci_clk_provider *provider)
-- 				clk_id = args.args[1] + 1;
-- 
-- 				while (num_parents--) {
--+					/* Check if this clock id is valid */
--+					ret = provider->ops->is_auto(provider->sci,
--+						sci_clk->dev_id, clk_id, &state);
--+
--+					if (ret) {
--+						clk_id++;
--+						continue;
--+					}
--+
-- 					sci_clk = devm_kzalloc(dev,
-- 							       sizeof(*sci_clk),
-- 							       GFP_KERNEL);
--
--base-commit: 9fbb5fcb41e7e96fb8769a9f5a12a35a984c23bd
---- 
--2.43.2
--
-diff --git a/board/ti/am62x-sk/patches/linux/linux.hash b/board/ti/am62x-sk/patches/linux/linux.hash
-index 5e9df51ecd..53eb143894 100644
---- a/board/ti/am62x-sk/patches/linux/linux.hash
-+++ b/board/ti/am62x-sk/patches/linux/linux.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  19b31956d229b5b9ca5671fa1c74320179682a3d8d00fc86794114b21da86039  linux-6.8.12.tar.xz
-+sha256  774698422ee54c5f1e704456f37c65c06b51b4e9a8b0866f34580d86fef8e226  linux-6.10.tar.xz
-diff --git a/board/ti/am62x-sk/patches/ti-k3-r5-loader/ti-k3-r5-loader.hash b/board/ti/am62x-sk/patches/ti-k3-r5-loader/ti-k3-r5-loader.hash
-deleted file mode 100644
-index fe9b4f53dc..0000000000
---- a/board/ti/am62x-sk/patches/ti-k3-r5-loader/ti-k3-r5-loader.hash
-+++ /dev/null
-@@ -1,2 +0,0 @@
--# Locally calculated
--sha256  f591da9ab90ef3d6b3d173766d0ddff90c4ed7330680897486117df390d83c8f  u-boot-2024.07.tar.bz2
-diff --git a/board/ti/am62x-sk/patches/ti-k3-r5-loader/ti-k3-r5-loader.hash b/board/ti/am62x-sk/patches/ti-k3-r5-loader/ti-k3-r5-loader.hash
-new file mode 120000
-index 0000000000..b89e91d3e8
---- /dev/null
-+++ b/board/ti/am62x-sk/patches/ti-k3-r5-loader/ti-k3-r5-loader.hash
-@@ -0,0 +1 @@
-+../uboot/uboot.hash
-\ No newline at end of file
-diff --git a/configs/ti_am62x_sk_defconfig b/configs/ti_am62x_sk_defconfig
-index f56669c24f..e11b803b73 100644
---- a/configs/ti_am62x_sk_defconfig
-+++ b/configs/ti_am62x_sk_defconfig
+diff --git a/package/python-wrapt/python-wrapt.hash b/package/python-wrapt/python-wrapt.hash
+index cb62e19aa7..b89c805bf6 100644
+--- a/package/python-wrapt/python-wrapt.hash
++++ b/package/python-wrapt/python-wrapt.hash
 @@ -1,5 +1,5 @@
- BR2_aarch64=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_8=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_10=y
- BR2_GLOBAL_PATCH_DIR="board/ti/am62x-sk/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_ROOTFS_POST_BUILD_SCRIPT="board/ti/common/am6xx/post-build.sh"
-@@ -8,7 +8,7 @@ BR2_ROOTFS_POST_BUILD_SCRIPT_ARGS="-c ttyS2,115200n8 -d k3-am625-sk.dtb -l am62x
- BR2_ROOTFS_POST_IMAGE_SCRIPT_ARGS="-c board/ti/am62x-sk/genimage.cfg"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.8.12"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.10"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="ti/k3-am625-sk"
-@@ -19,7 +19,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_ROOTFS_EXT2_SIZE="256M"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="lts-v2.10.4"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.11"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="k3"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_TARGET_BOARD="lite"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL32_OPTEE=y
+ # md5, sha256 from https://pypi.org/pypi/wrapt/json
+-md5  6e7340264f038efdefcba707250c91c2  wrapt-1.14.1.tar.gz
+-sha256  380a85cf89e0e69b7cfbe2ea9f765f004ff419f34194018a6827ac0e3edfed4d  wrapt-1.14.1.tar.gz
++md5  3e370b4bc08f7dcc518cf8895673b19c  wrapt-1.16.0.tar.gz
++sha256  5f370f952971e7d17c7d1ead40e49f32345a7f7a5373571ef44d800d06b1899d  wrapt-1.16.0.tar.gz
+ # Locally computed sha256 checksums
+-sha256  77d2a9159cffe12473f539a71a3e741f35117e61bfd005ebd60c3a1778e2c1f1  LICENSE
++sha256  5974efbbc8b626b2050810d63c3a907ee21c92bf64b3740fc623ad05eb3448ab  LICENSE
+diff --git a/package/python-wrapt/python-wrapt.mk b/package/python-wrapt/python-wrapt.mk
+index 406f6c3aa1..ed4a911e14 100644
+--- a/package/python-wrapt/python-wrapt.mk
++++ b/package/python-wrapt/python-wrapt.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_WRAPT_VERSION = 1.14.1
++PYTHON_WRAPT_VERSION = 1.16.0
+ PYTHON_WRAPT_SOURCE = wrapt-$(PYTHON_WRAPT_VERSION).tar.gz
+-PYTHON_WRAPT_SITE = https://files.pythonhosted.org/packages/11/eb/e06e77394d6cf09977d92bff310cb0392930c08a338f99af6066a5a98f92
++PYTHON_WRAPT_SITE = https://files.pythonhosted.org/packages/95/4c/063a912e20bcef7124e0df97282a8af3ff3e4b603ce84c481d6d7346be0a
+ PYTHON_WRAPT_SETUP_TYPE = setuptools
+ PYTHON_WRAPT_LICENSE = BSD-2-Clause
+ PYTHON_WRAPT_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
