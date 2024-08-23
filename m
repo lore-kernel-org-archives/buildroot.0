@@ -4,49 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4657FE6FE47
-	for <buildroot@archiver.kernel.org>; Fri,  6 Sep 2024 20:01:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1A2CEE6FE46
+	for <buildroot@archiver.kernel.org>; Fri,  6 Sep 2024 20:02:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1097A84714;
-	Fri,  6 Sep 2024 20:01:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D939884462;
+	Fri,  6 Sep 2024 20:01:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tRdwpuMgJttH; Fri,  6 Sep 2024 20:01:56 +0000 (UTC)
+ id QLOC9Yagw32J; Fri,  6 Sep 2024 20:01:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7E20D8472B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A633B80D7C
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7E20D8472B;
-	Fri,  6 Sep 2024 20:01:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A633B80D7C;
+	Fri,  6 Sep 2024 20:01:58 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 75C2A1BF20B
- for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 19:59:16 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 78ED61BF20B
+ for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 19:59:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 66789409F8
+ by smtp4.osuosl.org (Postfix) with ESMTP id 961624091F
  for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 19:58:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mjpcpnV_M-a0 for <buildroot@lists.busybox.net>;
+ id 3YFBfzF0O6l4 for <buildroot@lists.busybox.net>;
  Fri,  6 Sep 2024 19:58:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CFC904086C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 16D9340881
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id CFC904086C
- for <buildroot@buildroot.org>; Fri,  6 Sep 2024 19:58:56 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 16D9340881
+ for <buildroot@buildroot.org>; Fri,  6 Sep 2024 19:58:57 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CCDB9828CC; Fri,  6 Sep 2024 19:58:56 +0000 (UTC)
+ id 1351E7FC62; Fri,  6 Sep 2024 19:58:57 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 23 Aug 2024 19:29:02 +0200
+Date: Fri, 23 Aug 2024 19:41:03 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b52487ee2f4e67a683d86d306f06937828f015a2
-X-Git-Newrev: d54687cc0f61c085cf94b601a37bd4d475515cc2
+X-Git-Oldrev: 4e492e449204274d25633b9c00c18e26c1ca7003
+X-Git-Newrev: 1ac296da266423d8fde22fb02b5fb8cf041d891a
 X-Patchwork-Hint: ignore
-Message-Id: <20240906195856.CCDB9828CC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-msgpack: bump to version
- 1.0.8
+Message-Id: <20240906195857.1351E7FC62@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/wandboard: update U-Boot and kernel
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,46 +65,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d54687cc0f61c085cf94b601a37bd4d475515cc2
+commit: https://git.buildroot.net/buildroot/commit/?id=1ac296da266423d8fde22fb02b5fb8cf041d891a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog: https://github.com/msgpack/msgpack-python/blob/main/ChangeLog.rst#108
+Update to U-Boot 2024.07 and kernel 6.6.47 versions.
 
-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-msgpack/python-msgpack.hash | 4 ++--
- package/python-msgpack/python-msgpack.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ configs/wandboard_defconfig | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-msgpack/python-msgpack.hash b/package/python-msgpack/python-msgpack.hash
-index 50462db8db..26599f2972 100644
---- a/package/python-msgpack/python-msgpack.hash
-+++ b/package/python-msgpack/python-msgpack.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/msgpack/json
--md5  a5a4172b2e89812ec28267dd8942b77d  msgpack-1.0.7.tar.gz
--sha256  572efc93db7a4d27e404501975ca6d2d9775705c2d922390d878fcf768d92c87  msgpack-1.0.7.tar.gz
-+md5  6f4d91b00537fd5069dc6bfc52ae5652  msgpack-1.0.8.tar.gz
-+sha256  95c02b0e27e706e48d0e5426d1710ca78e0f0628d6e89d5b5a5b91a5f12274f3  msgpack-1.0.8.tar.gz
- # Locally computed sha256 checksums
- sha256  492dedba85da5872f78e6091bcd1fea474d660d35acb4dee964b8aab3f007427  COPYING
-diff --git a/package/python-msgpack/python-msgpack.mk b/package/python-msgpack/python-msgpack.mk
-index 9cdf5263de..4e686a19a6 100644
---- a/package/python-msgpack/python-msgpack.mk
-+++ b/package/python-msgpack/python-msgpack.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_MSGPACK_VERSION = 1.0.7
-+PYTHON_MSGPACK_VERSION = 1.0.8
- PYTHON_MSGPACK_SOURCE = msgpack-$(PYTHON_MSGPACK_VERSION).tar.gz
--PYTHON_MSGPACK_SITE = https://files.pythonhosted.org/packages/c2/d5/5662032db1571110b5b51647aed4b56dfbd01bfae789fa566a2be1f385d1
-+PYTHON_MSGPACK_SITE = https://files.pythonhosted.org/packages/08/4c/17adf86a8fbb02c144c7569dc4919483c01a2ac270307e2d59e1ce394087
- PYTHON_MSGPACK_LICENSE = Apache-2.0
- PYTHON_MSGPACK_LICENSE_FILES = COPYING
- PYTHON_MSGPACK_SETUP_TYPE = setuptools
+diff --git a/configs/wandboard_defconfig b/configs/wandboard_defconfig
+index 22eb529945..39b9e96fdc 100644
+--- a/configs/wandboard_defconfig
++++ b/configs/wandboard_defconfig
+@@ -23,7 +23,7 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.04"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.07"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="wandboard"
+ BR2_TARGET_UBOOT_FORMAT_IMG=y
+ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+@@ -33,7 +33,7 @@ BR2_TARGET_UBOOT_SPL_NAME="SPL"
+ # Kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.27"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.47"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="nxp/imx/imx6q-wandboard nxp/imx/imx6dl-wandboard nxp/imx/imx6q-wandboard-revb1 nxp/imx/imx6dl-wandboard-revb1 nxp/imx/imx6q-wandboard-revd1 nxp/imx/imx6dl-wandboard-revd1 nxp/imx/imx6qp-wandboard-revd1"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
