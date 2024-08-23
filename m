@@ -4,48 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EBC6AE6FE46
-	for <buildroot@archiver.kernel.org>; Fri,  6 Sep 2024 20:01:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4657FE6FE47
+	for <buildroot@archiver.kernel.org>; Fri,  6 Sep 2024 20:01:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AB92B8445B;
-	Fri,  6 Sep 2024 20:01:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1097A84714;
+	Fri,  6 Sep 2024 20:01:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 48sSnON5Of5Q; Fri,  6 Sep 2024 20:01:52 +0000 (UTC)
+ id tRdwpuMgJttH; Fri,  6 Sep 2024 20:01:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2F73684721
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7E20D8472B
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2F73684721;
-	Fri,  6 Sep 2024 20:01:51 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 014581BF20B
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7E20D8472B;
+	Fri,  6 Sep 2024 20:01:55 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 75C2A1BF20B
  for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 19:59:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A814360777
- for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 19:58:57 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 66789409F8
+ for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 19:58:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Jda4VrUYLppJ for <buildroot@lists.busybox.net>;
- Fri,  6 Sep 2024 19:58:56 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id mjpcpnV_M-a0 for <buildroot@lists.busybox.net>;
+ Fri,  6 Sep 2024 19:58:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DBFE3608B4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CFC904086C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id DBFE3608B4
- for <buildroot@buildroot.org>; Fri,  6 Sep 2024 19:58:54 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id CFC904086C
+ for <buildroot@buildroot.org>; Fri,  6 Sep 2024 19:58:56 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D181086EE1; Fri,  6 Sep 2024 19:58:54 +0000 (UTC)
+ id CCDB9828CC; Fri,  6 Sep 2024 19:58:56 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 19 Aug 2024 13:06:31 +0200
+Date: Fri, 23 Aug 2024 19:29:02 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9052f9608bbbf7668aa1f33dfe01bcf7055d2383
-X-Git-Newrev: ffdbab36425592a300565d266a86ff21fbc7d576
+X-Git-Oldrev: b52487ee2f4e67a683d86d306f06937828f015a2
+X-Git-Newrev: d54687cc0f61c085cf94b601a37bd4d475515cc2
 X-Patchwork-Hint: ignore
-Message-Id: <20240906195854.D181086EE1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libtirpc: bump version to 1.3.5
+Message-Id: <20240906195856.CCDB9828CC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-msgpack: bump to version
+ 1.0.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,41 +66,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ffdbab36425592a300565d266a86ff21fbc7d576
+commit: https://git.buildroot.net/buildroot/commit/?id=d54687cc0f61c085cf94b601a37bd4d475515cc2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+Changelog: https://github.com/msgpack/msgpack-python/blob/main/ChangeLog.rst#108
+
+Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/libtirpc/libtirpc.hash | 4 ++--
- package/libtirpc/libtirpc.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-msgpack/python-msgpack.hash | 4 ++--
+ package/python-msgpack/python-msgpack.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libtirpc/libtirpc.hash b/package/libtirpc/libtirpc.hash
-index 40e59f9bcb..b1113264ae 100644
---- a/package/libtirpc/libtirpc.hash
-+++ b/package/libtirpc/libtirpc.hash
+diff --git a/package/python-msgpack/python-msgpack.hash b/package/python-msgpack/python-msgpack.hash
+index 50462db8db..26599f2972 100644
+--- a/package/python-msgpack/python-msgpack.hash
++++ b/package/python-msgpack/python-msgpack.hash
 @@ -1,5 +1,5 @@
- # From sourceforge's info on download page:
--sha1  63c800f81f823254d2706637bab551dec176b99b  libtirpc-1.3.4.tar.bz2
-+sha1  f5b209b2a7f3ffcdcff5b5b54fefc6a90ddec0d3  libtirpc-1.3.5.tar.bz2
- # Locally computed
--sha256  1e0b0c7231c5fa122e06c0609a76723664d068b0dba3b8219b63e6340b347860  libtirpc-1.3.4.tar.bz2
-+sha256  9b31370e5a38d3391bf37edfa22498e28fe2142467ae6be7a17c9068ec0bf12f  libtirpc-1.3.5.tar.bz2
- sha256  17cf6098f95bdbb269f0bbc68e76c88fe20487ca7ec53f454923ab4256ecd2e7  COPYING
-diff --git a/package/libtirpc/libtirpc.mk b/package/libtirpc/libtirpc.mk
-index 04196f2f7c..1020c512a0 100644
---- a/package/libtirpc/libtirpc.mk
-+++ b/package/libtirpc/libtirpc.mk
-@@ -4,7 +4,7 @@
+ # md5, sha256 from https://pypi.org/pypi/msgpack/json
+-md5  a5a4172b2e89812ec28267dd8942b77d  msgpack-1.0.7.tar.gz
+-sha256  572efc93db7a4d27e404501975ca6d2d9775705c2d922390d878fcf768d92c87  msgpack-1.0.7.tar.gz
++md5  6f4d91b00537fd5069dc6bfc52ae5652  msgpack-1.0.8.tar.gz
++sha256  95c02b0e27e706e48d0e5426d1710ca78e0f0628d6e89d5b5a5b91a5f12274f3  msgpack-1.0.8.tar.gz
+ # Locally computed sha256 checksums
+ sha256  492dedba85da5872f78e6091bcd1fea474d660d35acb4dee964b8aab3f007427  COPYING
+diff --git a/package/python-msgpack/python-msgpack.mk b/package/python-msgpack/python-msgpack.mk
+index 9cdf5263de..4e686a19a6 100644
+--- a/package/python-msgpack/python-msgpack.mk
++++ b/package/python-msgpack/python-msgpack.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--LIBTIRPC_VERSION = 1.3.4
-+LIBTIRPC_VERSION = 1.3.5
- LIBTIRPC_SOURCE = libtirpc-$(LIBTIRPC_VERSION).tar.bz2
- LIBTIRPC_SITE = http://downloads.sourceforge.net/project/libtirpc/libtirpc/$(LIBTIRPC_VERSION)
- LIBTIRPC_LICENSE = BSD-3-Clause
+-PYTHON_MSGPACK_VERSION = 1.0.7
++PYTHON_MSGPACK_VERSION = 1.0.8
+ PYTHON_MSGPACK_SOURCE = msgpack-$(PYTHON_MSGPACK_VERSION).tar.gz
+-PYTHON_MSGPACK_SITE = https://files.pythonhosted.org/packages/c2/d5/5662032db1571110b5b51647aed4b56dfbd01bfae789fa566a2be1f385d1
++PYTHON_MSGPACK_SITE = https://files.pythonhosted.org/packages/08/4c/17adf86a8fbb02c144c7569dc4919483c01a2ac270307e2d59e1ce394087
+ PYTHON_MSGPACK_LICENSE = Apache-2.0
+ PYTHON_MSGPACK_LICENSE_FILES = COPYING
+ PYTHON_MSGPACK_SETUP_TYPE = setuptools
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
