@@ -4,71 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5A839C52D7C
-	for <buildroot@archiver.kernel.org>; Fri, 23 Aug 2024 17:41:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8B6CCC531DC
+	for <buildroot@archiver.kernel.org>; Fri, 23 Aug 2024 17:41:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 21EB080B64;
-	Fri, 23 Aug 2024 17:41:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 35844810FC;
+	Fri, 23 Aug 2024 17:41:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qjegaRdJ0xzs; Fri, 23 Aug 2024 17:41:20 +0000 (UTC)
+ id RJHPLG70K60h; Fri, 23 Aug 2024 17:41:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 36CC9810FC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3A63C81A50
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 36CC9810FC;
-	Fri, 23 Aug 2024 17:41:20 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8E3051BF34F
- for <buildroot@lists.busybox.net>; Fri, 23 Aug 2024 17:41:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3A63C81A50;
+	Fri, 23 Aug 2024 17:41:45 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id C19341BF34F
+ for <buildroot@lists.busybox.net>; Fri, 23 Aug 2024 17:41:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 884EE40179
- for <buildroot@lists.busybox.net>; Fri, 23 Aug 2024 17:41:19 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id AF3AE81A50
+ for <buildroot@lists.busybox.net>; Fri, 23 Aug 2024 17:41:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9i7bgSXK-jtj for <buildroot@lists.busybox.net>;
- Fri, 23 Aug 2024 17:41:18 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
- helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id OLCFTt-SQQq0 for <buildroot@lists.busybox.net>;
+ Fri, 23 Aug 2024 17:41:43 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 66C8A4015E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 66C8A4015E
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 66C8A4015E
- for <buildroot@buildroot.org>; Fri, 23 Aug 2024 17:41:18 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 8AFDEFF802;
- Fri, 23 Aug 2024 17:41:16 +0000 (UTC)
-Date: Fri, 23 Aug 2024 19:41:15 +0200
-To: Fabio Estevam <festevam@gmail.com>
-Message-ID: <20240823194115.313117a2@windsurf>
-In-Reply-To: <20240821144928.2598045-1-festevam@gmail.com>
-References: <20240821144928.2598045-1-festevam@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1724434876;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=7ePrGFKimBcvvJPNR8mzYsnox3iXK3nuyH5Atn71dQQ=;
- b=h8M5beJDKSl/iPIU8oogazTI3qJ95akTTXLEWtu0yrzHQaP9WckVV1s04dNjZJskLBfd7T
- i/OOZXMr3UymOkY5mv3gf1rNuy6znvoJIqEpiFW9MP+5C7rvCGcejje8T8RHIz0agMioxf
- pbgEbfPcxVGsvqhnktaR+C0zhPj5M0lFpqBowxRf5X4ABuTWCC2tOrTraoyHBBz2fvIEI7
- C9N/3/BiD6GKa4g8yrejS1pjC8G5YTO83vnSI7H1BQuozYEnQ2C63SYIsiepbc/3s5Laab
- uKKtvWoOqvSg6vytrQBkUOhzeeaHQpaE7jXogzFdtphBIJx0M0ct/rOvp5V1SA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=h8M5beJD
-Subject: Re: [Buildroot] [PATCH] configs/wandboard: update U-Boot and kernel
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E2113810FC
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id E2113810FC
+ for <buildroot@buildroot.org>; Fri, 23 Aug 2024 17:41:42 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id CFDA086499; Fri, 23 Aug 2024 17:41:42 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Fri, 23 Aug 2024 19:41:31 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: ea6bb507b1d3841be052525936121f7e88c43fbd
+X-Git-Newrev: 1e8eca5e65f906207da77db8c972693f0ea92749
+X-Patchwork-Hint: ignore
+Message-Id: <20240823174142.CFDA086499@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/elf2flt: fix riscv64 C++
+ compilations
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,29 +60,61 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, 21 Aug 2024 11:49:28 -0300
-Fabio Estevam <festevam@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=1e8eca5e65f906207da77db8c972693f0ea92749
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Update to U-Boot 2024.07 and kernel 6.6.47 versions.
-> 
-> Signed-off-by: Fabio Estevam <festevam@gmail.com>
-> ---
->  configs/wandboard_defconfig | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+Fixes:
 
-Applied to next, thanks.
+ http://autobuild.buildroot.org/results/63f/63f32c9d5d4097ef2b3cbba1ce665e13e9dbd430
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...dle-R_RISCV_SET_ULEB128-R_RISCV_SUB_ULEB1.patch | 30 ++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
+
+diff --git a/package/elf2flt/0001-riscv64-handle-R_RISCV_SET_ULEB128-R_RISCV_SUB_ULEB1.patch b/package/elf2flt/0001-riscv64-handle-R_RISCV_SET_ULEB128-R_RISCV_SUB_ULEB1.patch
+new file mode 100644
+index 0000000000..3aba6eca08
+--- /dev/null
++++ b/package/elf2flt/0001-riscv64-handle-R_RISCV_SET_ULEB128-R_RISCV_SUB_ULEB1.patch
+@@ -0,0 +1,30 @@
++From 5b8288257c66c76cc578935276dc5b512010b6a3 Mon Sep 17 00:00:00 2001
++From: Waldemar Brodkorb <wbx@openadk.org>
++Date: Wed, 21 Aug 2024 07:23:19 +0200
++Subject: [PATCH] riscv64: handle R_RISCV_SET_ULEB128/R_RISCV_SUB_ULEB128
++
++For C++ applications or libraries like gdbserver or gmp
++we need to handle these relocations.
++
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++Upstream: https://github.com/uclinux-dev/elf2flt/pull/35
++---
++ elf2flt.c | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/elf2flt.c b/elf2flt.c
++index 04b6b43..d5e32ab 100644
++--- a/elf2flt.c
+++++ b/elf2flt.c
++@@ -840,6 +840,8 @@ output_relocs (
++ 				case R_RISCV_SET8:
++ 				case R_RISCV_SET16:
++ 				case R_RISCV_SET32:
+++				case R_RISCV_SET_ULEB128:
+++				case R_RISCV_SUB_ULEB128:
++ 					continue;
++ 				case R_RISCV_32:
++ 				case R_RISCV_64:
++-- 
++2.30.2
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
