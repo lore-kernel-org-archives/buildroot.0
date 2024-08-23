@@ -4,49 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 206FBC5321D
-	for <buildroot@archiver.kernel.org>; Fri, 23 Aug 2024 16:46:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1076EC531DC
+	for <buildroot@archiver.kernel.org>; Fri, 23 Aug 2024 16:46:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E242F41378;
-	Fri, 23 Aug 2024 16:46:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A6FF04014E;
+	Fri, 23 Aug 2024 16:46:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KNa-urLVU1Q1; Fri, 23 Aug 2024 16:46:11 +0000 (UTC)
+ id RWu80l-33mEx; Fri, 23 Aug 2024 16:46:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C5E6241370
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1B69A412EC
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C5E6241370;
-	Fri, 23 Aug 2024 16:46:10 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id AB3B61BF31F
- for <buildroot@lists.busybox.net>; Fri, 23 Aug 2024 16:45:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1B69A412EC;
+	Fri, 23 Aug 2024 16:46:33 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 821F31BF31F
+ for <buildroot@lists.busybox.net>; Fri, 23 Aug 2024 16:46:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 58E324026F
- for <buildroot@lists.busybox.net>; Fri, 23 Aug 2024 16:45:39 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6CA2941278
+ for <buildroot@lists.busybox.net>; Fri, 23 Aug 2024 16:46:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id glsOM66A8Wec for <buildroot@lists.busybox.net>;
- Fri, 23 Aug 2024 16:45:36 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 87WTI366MQL8 for <buildroot@lists.busybox.net>;
+ Fri, 23 Aug 2024 16:46:30 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::228;
+ helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CF3AA40173
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id CF3AA40173
- for <buildroot@buildroot.org>; Fri, 23 Aug 2024 16:45:36 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BD738863F6; Fri, 23 Aug 2024 16:45:36 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 23 Aug 2024 18:39:54 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: b5fe7088e842aaaed1730f2d50d60e514e052105
-X-Git-Newrev: 90c386d1ec4d9ac7aca2f7127543f4cc74ed1f8a
-X-Patchwork-Hint: ignore
-Message-Id: <20240823164536.BD738863F6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/rpcbind: bump version
- to 1.2.7
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 0B849412EC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0B849412EC
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0B849412EC
+ for <buildroot@buildroot.org>; Fri, 23 Aug 2024 16:46:29 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 7C4721BF205;
+ Fri, 23 Aug 2024 16:46:26 +0000 (UTC)
+Date: Fri, 23 Aug 2024 18:46:25 +0200
+To: Bernd Kuhls <bernd@kuhls.net>
+Message-ID: <20240823184625.6fa61813@windsurf>
+In-Reply-To: <20240822182050.65230-1-bernd@kuhls.net>
+References: <20240822182050.65230-1-bernd@kuhls.net>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1724431587;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=9CyNrXRVsZ1jg12g67JaM/P0eUiGo2ZCVchKIl2EfYE=;
+ b=gyKwWCuWGk4rh8iPWYxZ2yySuQdEdsue5XoCpavhAoIDG5rjMqWwlUpuZuiLZIUOuHfr6X
+ rn+Fw4BZ7exMDWL5Y5SOlY0fxTRYIlBrCvYJW9xG40xPUlTc3kZuoK7xx6bnTCGmgtFcTL
+ L+qAQ+/xbj8y2sxRG7sQmlQX0UnGJ/YFSifv/HHZcfRHpme+nOULraEebaIkNqw81X+ELr
+ e9JpVZRcl4xTkhGj4djXRrtrISbX3vYyLtAGqtiKJoXRB2Y46p3FGBIE4yhk9I6gBjednC
+ psNCiS61NPuVdFPK6WRTQJZ2rk3o/sXCK74gds+45WTMjpl2ALcRzn00AqqB1g==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=gyKwWCuW
+Subject: Re: [Buildroot] [PATCH/next 01/13] package/exfatprogs: bump version
+ to 1.2.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,52 +83,42 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>, Marcin Bis <marcin@bis.org.pl>,
+ Grzegorz Blach <grzegorz@blach.pl>, Asaf Kahlon <asafka7@gmail.com>,
+ Louis-Paul Cordier <lpdev@cordier.org>,
+ James Hilliard <james.hilliard1@gmail.com>, buildroot@buildroot.org,
+ Petr Vorel <petr.vorel@gmail.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=90c386d1ec4d9ac7aca2f7127543f4cc74ed1f8a
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On Thu, 22 Aug 2024 20:20:38 +0200
+Bernd Kuhls <bernd@kuhls.net> wrote:
 
-Changelog:
-https://sourceforge.net/projects/rpcbind/files/rpcbind/1.2.7/1.2.7-ChangeLog/download
+> Release notes:
+> https://github.com/exfatprogs/exfatprogs/blob/1.2.5/NEWS
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> ---
+>  package/exfatprogs/exfatprogs.hash | 4 ++--
+>  package/exfatprogs/exfatprogs.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-Switch _SITE to https.
+Thanks, series applied to next, except the libtirpc bump (already in
+next) and the libcurl bump (applied to master).
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/rpcbind/rpcbind.hash | 2 +-
- package/rpcbind/rpcbind.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+Hopefully the libv4l switch to meson will not break too many things,
+let's keep an eye on the autobuilders in the coming days.
 
-diff --git a/package/rpcbind/rpcbind.hash b/package/rpcbind/rpcbind.hash
-index b5f117db54..45bd394199 100644
---- a/package/rpcbind/rpcbind.hash
-+++ b/package/rpcbind/rpcbind.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  5613746489cae5ae23a443bb85c05a11741a5f12c8f55d2bb5e83b9defeee8de  rpcbind-1.2.6.tar.bz2
-+sha256  f6edf8cdf562aedd5d53b8bf93962d61623292bfc4d47eedd3f427d84d06f37e  rpcbind-1.2.7.tar.bz2
- sha256  2b9477d2f4ab277b29702958f0058546edc120aae4b5fb8b8d1a9652104e1ba3  COPYING
-diff --git a/package/rpcbind/rpcbind.mk b/package/rpcbind/rpcbind.mk
-index 2c158213ad..e553f54066 100644
---- a/package/rpcbind/rpcbind.mk
-+++ b/package/rpcbind/rpcbind.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--RPCBIND_VERSION = 1.2.6
--RPCBIND_SITE = http://downloads.sourceforge.net/project/rpcbind/rpcbind/$(RPCBIND_VERSION)
-+RPCBIND_VERSION = 1.2.7
-+RPCBIND_SITE = https://downloads.sourceforge.net/project/rpcbind/rpcbind/$(RPCBIND_VERSION)
- RPCBIND_SOURCE = rpcbind-$(RPCBIND_VERSION).tar.bz2
- RPCBIND_LICENSE = BSD-3-Clause
- RPCBIND_LICENSE_FILES = COPYING
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
