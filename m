@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A6CBEC52D7C
-	for <buildroot@archiver.kernel.org>; Fri, 23 Aug 2024 17:07:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A0B74C531DC
+	for <buildroot@archiver.kernel.org>; Fri, 23 Aug 2024 17:07:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 699574131F;
-	Fri, 23 Aug 2024 17:07:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3F42B41330;
+	Fri, 23 Aug 2024 17:07:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ebf6nTS7bErs; Fri, 23 Aug 2024 17:07:31 +0000 (UTC)
+ id wcScadMxLeyu; Fri, 23 Aug 2024 17:07:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2959041315
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1C68641308
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2959041315;
-	Fri, 23 Aug 2024 17:07:31 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C251D1BF306
- for <buildroot@lists.busybox.net>; Fri, 23 Aug 2024 17:07:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1C68641308;
+	Fri, 23 Aug 2024 17:07:34 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1A1991BF306
+ for <buildroot@lists.busybox.net>; Fri, 23 Aug 2024 17:07:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id AF08F412F6
+ by smtp2.osuosl.org (Postfix) with ESMTP id CA7854026A
  for <buildroot@lists.busybox.net>; Fri, 23 Aug 2024 17:07:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NpBb0dWrrRyt for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZqKAPtZTWvDO for <buildroot@lists.busybox.net>;
  Fri, 23 Aug 2024 17:07:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A77A94129C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B89574015E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id A77A94129C
+ by smtp2.osuosl.org (Postfix) with ESMTP id B89574015E
  for <buildroot@buildroot.org>; Fri, 23 Aug 2024 17:07:22 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 92A748642A; Fri, 23 Aug 2024 17:07:22 +0000 (UTC)
+ id B263886429; Fri, 23 Aug 2024 17:07:22 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 23 Aug 2024 19:05:04 +0200
+Date: Fri, 23 Aug 2024 19:05:14 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 5e151d91aeb2433c6ea51bbda9784528e75803a4
-X-Git-Newrev: aa29e2384e5686ebf4b7f42fc45be7a2b6b7fed9
+X-Git-Oldrev: 1683098d93e2e3ff0a7aa584cd138f1a8ac12271
+X-Git-Newrev: b17430622727642bf2f30f7ba876e94f02ea5d43
 X-Patchwork-Hint: ignore
-Message-Id: <20240823170722.92A748642A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/kodi-pvr-nextpvr: bump
- version to 21.2.0-Omega
+Message-Id: <20240823170722.B263886429@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/kodi-skin-confluence:
+ bump version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,38 +66,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=aa29e2384e5686ebf4b7f42fc45be7a2b6b7fed9
+commit: https://git.buildroot.net/buildroot/commit/?id=b17430622727642bf2f30f7ba876e94f02ea5d43
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash | 2 +-
- package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk   | 2 +-
+ package/kodi-skin-confluence/kodi-skin-confluence.hash | 2 +-
+ package/kodi-skin-confluence/kodi-skin-confluence.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash
-index 5b8b6b7e4d..130bcbe5b2 100644
---- a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash
-+++ b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash
+diff --git a/package/kodi-skin-confluence/kodi-skin-confluence.hash b/package/kodi-skin-confluence/kodi-skin-confluence.hash
+index ed53dd5015..487aa7e5f1 100644
+--- a/package/kodi-skin-confluence/kodi-skin-confluence.hash
++++ b/package/kodi-skin-confluence/kodi-skin-confluence.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  dd4974d3bf664067787da271ad8f76a8ecf61e73909050991aae99e0c2863eaa  kodi-pvr-nextpvr-21.1.1-Omega.tar.gz
-+sha256  3df0ed9a1f7dd61feba1fd8281cdd5b6e3ee153f78eba3e645e5d2213f7c5793  kodi-pvr-nextpvr-21.2.0-Omega.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk
-index 788415b896..cd0378bff8 100644
---- a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk
-+++ b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk
+-sha256  85550f949598d3904bcb77e3d2e6b7fa2d0d9334a7939b964a94d98ffe0e36ea  kodi-skin-confluence-b2f2fe26ab47ca3c317d5d7927687e41584e46ed.tar.gz
++sha256  816010973378faf7ad45e8b7fb97e190500fd5f8a6adaaea032f8c877424113c  kodi-skin-confluence-ae94e6e92c1c67861701e6e8a70f9ccc4dca9f13.tar.gz
+ sha256  89931c1fb1f3716694175763cf3221cfcd63d6935031cf6b4512d17ffe5d9860  LICENSE.txt
+diff --git a/package/kodi-skin-confluence/kodi-skin-confluence.mk b/package/kodi-skin-confluence/kodi-skin-confluence.mk
+index 2898c04539..59e5f10875 100644
+--- a/package/kodi-skin-confluence/kodi-skin-confluence.mk
++++ b/package/kodi-skin-confluence/kodi-skin-confluence.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KODI_PVR_NEXTPVR_VERSION = 21.1.1-Omega
-+KODI_PVR_NEXTPVR_VERSION = 21.2.0-Omega
- KODI_PVR_NEXTPVR_SITE = $(call github,kodi-pvr,pvr.nextpvr,$(KODI_PVR_NEXTPVR_VERSION))
- KODI_PVR_NEXTPVR_LICENSE = GPL-2.0+
- KODI_PVR_NEXTPVR_LICENSE_FILES = LICENSE.md
+-KODI_SKIN_CONFLUENCE_VERSION = b2f2fe26ab47ca3c317d5d7927687e41584e46ed
++KODI_SKIN_CONFLUENCE_VERSION = ae94e6e92c1c67861701e6e8a70f9ccc4dca9f13
+ KODI_SKIN_CONFLUENCE_SITE = $(call github,xbmc,skin.confluence,$(KODI_SKIN_CONFLUENCE_VERSION))
+ KODI_SKIN_CONFLUENCE_LICENSE = GPL-2.0
+ KODI_SKIN_CONFLUENCE_LICENSE_FILES = LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
