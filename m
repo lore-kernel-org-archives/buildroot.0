@@ -4,48 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 07E7BCE7B11
-	for <buildroot@archiver.kernel.org>; Fri,  6 Sep 2024 20:05:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0C0C5CE7B11
+	for <buildroot@archiver.kernel.org>; Fri,  6 Sep 2024 20:05:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CA02F849C0;
-	Fri,  6 Sep 2024 20:05:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BED5B849ED;
+	Fri,  6 Sep 2024 20:05:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id D4DryG3e9FcC; Fri,  6 Sep 2024 20:05:35 +0000 (UTC)
+ id fcbrk2Fe-CHG; Fri,  6 Sep 2024 20:05:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 286DB849E0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 119B0849F3
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 286DB849E0;
-	Fri,  6 Sep 2024 20:05:35 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 698031BF20B
- for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 19:59:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 119B0849F3;
+	Fri,  6 Sep 2024 20:05:39 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 18BB61BF20B
+ for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 19:59:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E25C860782
+ by smtp4.osuosl.org (Postfix) with ESMTP id D488F40B8F
  for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 19:59:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id D_Hqr_aEevbj for <buildroot@lists.busybox.net>;
- Fri,  6 Sep 2024 19:59:01 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9R-5jmc11M3f for <buildroot@lists.busybox.net>;
+ Fri,  6 Sep 2024 19:58:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 36FB46079C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9269A40729
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 36FB46079C
- for <buildroot@buildroot.org>; Fri,  6 Sep 2024 19:58:57 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9269A40729
+ for <buildroot@buildroot.org>; Fri,  6 Sep 2024 19:58:56 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 33DD586C5A; Fri,  6 Sep 2024 19:58:57 +0000 (UTC)
+ id 697BA86EE3; Fri,  6 Sep 2024 19:58:56 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 26 Aug 2024 18:42:17 +0200
+Date: Fri, 23 Aug 2024 19:05:04 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 60da48c3b70d8ed8dcc9d77143c1462bdf839ab6
-X-Git-Newrev: ff6a4f27b4a8475c49fe4514d23c7a23b38e671b
+X-Git-Oldrev: 5e151d91aeb2433c6ea51bbda9784528e75803a4
+X-Git-Newrev: aa29e2384e5686ebf4b7f42fc45be7a2b6b7fed9
 X-Patchwork-Hint: ignore
-Message-Id: <20240906195857.33DD586C5A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] configs/mx6udoo: update U-Boot and kernel
+Message-Id: <20240906195856.697BA86EE3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/kodi-pvr-nextpvr: bump version to
+ 21.2.0-Omega
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,122 +66,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ff6a4f27b4a8475c49fe4514d23c7a23b38e671b
+commit: https://git.buildroot.net/buildroot/commit/?id=aa29e2384e5686ebf4b7f42fc45be7a2b6b7fed9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Update to U-Boot 2024.07 and kernel 6.10.6 versions.
-
-As kernel 6.10 fixes the USB kernel hang, remove the original patch.
-
-Also convert it to use extlinux.conf file.
-
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- .checkpackageignore                                |  1 -
- .../patches/linux/0000-udoo-disable-usbh1.patch    | 26 ----------------------
- .../rootfs_overlay/boot/extlinux/extlinux.conf     |  4 ++++
- configs/mx6udoo_defconfig                          | 15 +++++--------
- 4 files changed, 10 insertions(+), 36 deletions(-)
+ package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash | 2 +-
+ package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 778e3b8651..8ce5047ae6 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -91,7 +91,6 @@ board/synopsys/axs10x/post-build.sh Shellcheck
- board/technologic/ts4900/post-image.sh Shellcheck
- board/toradex/apalis-imx6/post-image.sh Shellcheck
- board/udoo/common/post-build.sh Shellcheck
--board/udoo/mx6qdl/patches/linux/0000-udoo-disable-usbh1.patch lib_patch.Upstream
- boot/afboot-stm32/0003-Makefile-disable-stack-protector.patch lib_patch.Upstream
- boot/optee-os/3.13.0/0001-core-zlib-fix-build-warning-when-_LFS64_LARGEFILE-is.patch lib_patch.Upstream
- boot/syslinux/0001-bios-Fix-alignment-change-with-gcc-5.patch lib_patch.Upstream
-diff --git a/board/udoo/mx6qdl/patches/linux/0000-udoo-disable-usbh1.patch b/board/udoo/mx6qdl/patches/linux/0000-udoo-disable-usbh1.patch
-deleted file mode 100644
-index d151a40d6e..0000000000
---- a/board/udoo/mx6qdl/patches/linux/0000-udoo-disable-usbh1.patch
-+++ /dev/null
-@@ -1,26 +0,0 @@
--[PATCH] ARM: dts: imx6qdl-udoo: Disable usbh1 to avoid kernel hang
--
--Currently the kernel hangs when USB Host1 is enabled due to the lack of
--support for controlling the USB hub clock and GPIO reset line.
--
--Peter Chen has made several attempts to fix this problem, but his series
--has not been applied yet, so better disable USB host1 for now to avoid
--the kernel hang.
--
--Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
-----
--
--diff --git a/arch/arm/boot/dts/imx6qdl-udoo.dtsi b/arch/arm/boot/dts/imx6qdl-udoo.dtsi
--index 828dd20cd27d..c9e122865312 100644
----- a/arch/arm/boot/dts/imx6qdl-udoo.dtsi
--+++ b/arch/arm/boot/dts/imx6qdl-udoo.dtsi
--@@ -292,7 +292,8 @@ &usbh1 {
-- 	pinctrl-0 = <&pinctrl_usbh>;
-- 	vbus-supply = <&reg_usb_h1_vbus>;
-- 	clocks = <&clks IMX6QDL_CLK_CKO>;
---	status = "okay";
--+	/* currently USB support causes a kernel hang. Disable it for now */
--+	status = "disabled";
-- };
-- 
-- &usbotg {
-diff --git a/board/udoo/mx6qdl/rootfs_overlay/boot/extlinux/extlinux.conf b/board/udoo/mx6qdl/rootfs_overlay/boot/extlinux/extlinux.conf
-new file mode 100644
-index 0000000000..cbb284f91b
---- /dev/null
-+++ b/board/udoo/mx6qdl/rootfs_overlay/boot/extlinux/extlinux.conf
-@@ -0,0 +1,4 @@
-+Label imx6qdl-udoo buildroot
-+	kernel ../zImage
-+	fdtdir ../
-+	append root=/dev/mmcblk2p1 rootwait rw
-diff --git a/configs/mx6udoo_defconfig b/configs/mx6udoo_defconfig
-index 5092ef0fd1..6c84a41bfd 100644
---- a/configs/mx6udoo_defconfig
-+++ b/configs/mx6udoo_defconfig
-@@ -3,27 +3,26 @@ BR2_cortex_a9=y
- BR2_ARM_ENABLE_NEON=y
- BR2_ARM_ENABLE_VFP=y
- BR2_ARM_FPU_VFPV3=y
--BR2_GLOBAL_PATCH_DIR="board/udoo/mx6qdl/patches"
--# Linux headers same as kernel, a 5.10 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
-+# Linux headers same as kernel, a 6.10 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_10=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
--BR2_ROOTFS_POST_BUILD_SCRIPT="board/udoo/common/post-build.sh"
-+BR2_ROOTFS_OVERLAY="board/udoo/mx6qdl/rootfs_overlay"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/post-image.sh"
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="udoo"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.10"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.07"
- BR2_TARGET_UBOOT_FORMAT_IMG=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="SPL"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.84"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.10.6"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-udoo imx6dl-udoo"
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="nxp/imx/imx6q-udoo nxp/imx/imx6dl-udoo"
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
- # required tools to create the SD card image
-@@ -31,5 +30,3 @@ BR2_PACKAGE_HOST_DOSFSTOOLS=y
- BR2_PACKAGE_HOST_GENIMAGE=y
- BR2_PACKAGE_HOST_MTOOLS=y
- BR2_PACKAGE_HOST_UBOOT_TOOLS=y
--BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y
--BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/udoo/common/boot.scr.txt"
+diff --git a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash
+index 5b8b6b7e4d..130bcbe5b2 100644
+--- a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash
++++ b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  dd4974d3bf664067787da271ad8f76a8ecf61e73909050991aae99e0c2863eaa  kodi-pvr-nextpvr-21.1.1-Omega.tar.gz
++sha256  3df0ed9a1f7dd61feba1fd8281cdd5b6e3ee153f78eba3e645e5d2213f7c5793  kodi-pvr-nextpvr-21.2.0-Omega.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk
+index 788415b896..cd0378bff8 100644
+--- a/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk
++++ b/package/kodi-pvr-nextpvr/kodi-pvr-nextpvr.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-KODI_PVR_NEXTPVR_VERSION = 21.1.1-Omega
++KODI_PVR_NEXTPVR_VERSION = 21.2.0-Omega
+ KODI_PVR_NEXTPVR_SITE = $(call github,kodi-pvr,pvr.nextpvr,$(KODI_PVR_NEXTPVR_VERSION))
+ KODI_PVR_NEXTPVR_LICENSE = GPL-2.0+
+ KODI_PVR_NEXTPVR_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
