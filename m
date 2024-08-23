@@ -4,76 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48652C531DC
-	for <buildroot@archiver.kernel.org>; Fri, 23 Aug 2024 08:40:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA459C531DC
+	for <buildroot@archiver.kernel.org>; Fri, 23 Aug 2024 09:00:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E369E410BC;
-	Fri, 23 Aug 2024 08:40:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8135840C47;
+	Fri, 23 Aug 2024 09:00:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BpVQWFEVU25S; Fri, 23 Aug 2024 08:40:51 +0000 (UTC)
+ id jsZl0-VCL6oJ; Fri, 23 Aug 2024 09:00:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 899AB41244
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2FA2B41294
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 899AB41244;
-	Fri, 23 Aug 2024 08:40:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2FA2B41294;
+	Fri, 23 Aug 2024 09:00:37 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id DBD981BF366
- for <buildroot@lists.busybox.net>; Fri, 23 Aug 2024 08:40:49 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3B7081BF366
+ for <buildroot@lists.busybox.net>; Fri, 23 Aug 2024 09:00:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C9BB280DB4
- for <buildroot@lists.busybox.net>; Fri, 23 Aug 2024 08:40:49 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 28BB681E61
+ for <buildroot@lists.busybox.net>; Fri, 23 Aug 2024 09:00:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dfPGmTDAiPrf for <buildroot@lists.busybox.net>;
- Fri, 23 Aug 2024 08:40:49 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=209.85.128.47;
- helo=mail-wm1-f47.google.com; envelope-from=th.huth@gmail.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 6EAD980D9E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6EAD980D9E
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com
- [209.85.128.47])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6EAD980D9E
- for <buildroot@buildroot.org>; Fri, 23 Aug 2024 08:40:48 +0000 (UTC)
-Received: by mail-wm1-f47.google.com with SMTP id
- 5b1f17b1804b1-42817f1eb1fso13197135e9.1
- for <buildroot@buildroot.org>; Fri, 23 Aug 2024 01:40:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1724402446; x=1725007246;
- h=content-transfer-encoding:mime-version:message-id:date:subject:to
- :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=9hDoAvUqd/P+jOQdfkPrklQuO9iQy/3mHzYnET7eyss=;
- b=JNr3+/3CadTfAz/cMIi8h41NliI/Z4xz7wRRz5c4e46UrdpetA3uJ5XIUe66AMAp8h
- 8kxVG0EJeXzaoZBrA1jxH1e8wuEYT445nThi9TE2IIWhxD0RXkNIjtn9hOV7c0cYZDlH
- tEywRxnDZPP0GvL1GZAgwkkqNKdabDUC/vEtxJKl5tjdZNsuT8+M4n7aiUUCqjmg1jUn
- XdipoDecPw2CYASRS+oEljMAZxfd4atRRCo6ZSP1eOGmZNFNIcjysiOWHF62UNS0uvp/
- qEbq5HAsxPLXKDpXq7MaGWMS+6Gdk5Rm9DFRkNL+poSe6aqpUt6Angh9A8HFO2ZymUFh
- nl6A==
-X-Gm-Message-State: AOJu0YzgOFza3EEZckSwkGdYBcXkJHEuNr4SjYTqpuQSha69WR9ctPkO
- YIsY2sfAqS9beHgro9vVWBHsJWmsoH4xWZMxBqiJZRyL3TZrXEhU0PoHpg==
-X-Google-Smtp-Source: AGHT+IErhgalcyDZPidWPDACmPczJJqmb4jsfJHSNRir8BH7RX26fQ+Unov51GpyvI+hfC41nSd5Aw==
-X-Received: by 2002:a5d:6702:0:b0:368:5a86:c1b7 with SMTP id
- ffacd0b85a97d-3731191b603mr957294f8f.55.1724402445908; 
- Fri, 23 Aug 2024 01:40:45 -0700 (PDT)
-Received: from fedora.. (ip-109-43-177-41.web.vodafone.de. [109.43.177.41])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-373081ff5d0sm3623561f8f.72.2024.08.23.01.40.45
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 23 Aug 2024 01:40:45 -0700 (PDT)
-From: Thomas Huth <huth@tuxfamily.org>
+ id WOGH53i85BDW for <buildroot@lists.busybox.net>;
+ Fri, 23 Aug 2024 09:00:35 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=178.60.130.6;
+ helo=fanzine2.igalia.com; envelope-from=aperez@igalia.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9D5FE81B83
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9D5FE81B83
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 9D5FE81B83
+ for <buildroot@buildroot.org>; Fri, 23 Aug 2024 09:00:34 +0000 (UTC)
+Received: from 91-153-34-210.elisa-laajakaista.fi ([91.153.34.210] helo=kodama)
+ by fanzine2.igalia.com with esmtpsa 
+ (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+ id 1shQ9n-0040J0-Nm; Fri, 23 Aug 2024 11:00:31 +0200
+Received: from localhost (kodama [local])
+ by kodama (OpenSMTPD) with ESMTPA id 068274ba;
+ Fri, 23 Aug 2024 09:00:30 +0000 (UTC)
+From: Adrian Perez de Castro <aperez@igalia.com>
 To: buildroot@buildroot.org
-Date: Fri, 23 Aug 2024 10:40:40 +0200
-Message-ID: <20240823084040.74851-1-huth@tuxfamily.org>
+Date: Fri, 23 Aug 2024 12:00:28 +0300
+Message-ID: <20240823090030.2263352-1-aperez@igalia.com>
 X-Mailer: git-send-email 2.46.0
 MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
+ c=relaxed/relaxed; d=igalia.com; 
+ s=20170329; h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:
+ Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
+ Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+ In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+ List-Post:List-Owner:List-Archive;
+ bh=TT9S7SnIwaFF1ZOJgWAQJp9tzdUDDmdjba6mCn2qLQ4=; b=E/Z5/C0dMccIk9wOuwm4Sv5fmC
+ gDAA7kReXMMWPTxo8AU6/EU3OvnKI3OS3mlK+dg1xaHgFlD+Xa6sP2MTPbmakJfxsIzCk5vslwY91
+ 4N2WxXzqsjwNkeBN9pviVaJ2dyophu85EURrYOQ99NVdj6TqUVZ3lclNfOeoP4gWZPaDGq/JvsdvU
+ 3GE3jCLSXp2Z17jdDDq8O0ZhG1FqvLC0xFvXlqezmg5fvhctA3pcbnlWLwuhfUobiyK0sa9hdAAQC
+ HG5m/K6L9x4CY9dM4u3gWtAMaZWrun691b2Fw7/WL8VGPmQxTlWbaBUGYDXuMZYMzka0ZFBgQginP
+ QO7OoM/Q==;
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=none (p=none dis=none)
- header.from=tuxfamily.org
-Subject: [Buildroot] [PATCH] package/frotz: Remove the "frotz" package
+ header.from=igalia.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=igalia.com header.i=@igalia.com header.a=rsa-sha256
+ header.s=20170329 header.b=E/Z5/C0d
+Subject: [Buildroot] [PATCH] package/xdg-dbus-proxy: bump to version 0.1.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -85,103 +81,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Adrian Perez de Castro <aperez@igalia.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-I'm not much interested anymore in maintaining the "frotz" package
-in buildroot, and since I likely was the only one who really used
-it in the past years, I guess it's time remove it now.
+Maintenance release: fixes memory leaks, improves compatibility with
+sdbus, etc. Release notes:
 
-Signed-off-by: Thomas Huth <huth@tuxfamily.org>
+  https://github.com/flatpak/xdg-dbus-proxy/releases/tag/0.1.6
+
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 ---
- In case somebody else want's to take over the maintenance, feel free
- to ignore this patch.
+ package/xdg-dbus-proxy/xdg-dbus-proxy.hash | 4 ++--
+ package/xdg-dbus-proxy/xdg-dbus-proxy.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
- package/Config.in        |  1 -
- package/frotz/Config.in  | 10 ----------
- package/frotz/frotz.hash |  3 ---
- package/frotz/frotz.mk   | 31 -------------------------------
- 4 files changed, 45 deletions(-)
- delete mode 100644 package/frotz/Config.in
- delete mode 100644 package/frotz/frotz.hash
- delete mode 100644 package/frotz/frotz.mk
-
-diff --git a/package/Config.in b/package/Config.in
-index 317f859684..211080345a 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -293,7 +293,6 @@ menu "Games"
- 	source "package/doom-wad/Config.in"
- 	source "package/flare-engine/Config.in"
- 	source "package/flare-game/Config.in"
--	source "package/frotz/Config.in"
- 	source "package/gnuchess/Config.in"
- 	source "package/lbreakout2/Config.in"
- 	source "package/ltris/Config.in"
-diff --git a/package/frotz/Config.in b/package/frotz/Config.in
-deleted file mode 100644
-index 9473f5944d..0000000000
---- a/package/frotz/Config.in
-+++ /dev/null
-@@ -1,10 +0,0 @@
--config BR2_PACKAGE_FROTZ
--	bool "frotz"
--	select BR2_PACKAGE_NCURSES
--	help
--	  Frotz is an interpreter for old Infocom adventure games and
--	  other Z-code games. Note that frotz cannot be run as root.
--	  You must add a normal user to your buildroot configuration to
--	  be able to use it.
--
--	  https://661.org/proj/if/frotz/
-diff --git a/package/frotz/frotz.hash b/package/frotz/frotz.hash
-deleted file mode 100644
-index 145aa3800f..0000000000
---- a/package/frotz/frotz.hash
-+++ /dev/null
-@@ -1,3 +0,0 @@
--# Locally calculated
--sha256  bdf9131e6de49108c9f032200cea3cb4011e5ca0c9fbdbf5b0c05f7c56c81395  frotz-2.54.tar.bz2
--sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/frotz/frotz.mk b/package/frotz/frotz.mk
-deleted file mode 100644
-index 4c477c396d..0000000000
---- a/package/frotz/frotz.mk
-+++ /dev/null
-@@ -1,31 +0,0 @@
--################################################################################
--#
--# Frotz
--#
--################################################################################
--
--FROTZ_VERSION = 2.54
--FROTZ_SOURCE = frotz-$(FROTZ_VERSION).tar.bz2
--FROTZ_SITE = $(call gitlab,DavidGriffith,frotz,$(FROTZ_VERSION))
--FROTZ_DEPENDENCIES = host-pkgconf ncurses
--FROTZ_LICENSE = GPL-2.0+
--FROTZ_LICENSE_FILES = COPYING
--
--ifeq ($(BR2_PACKAGE_NCURSES_WCHAR),y)
--FROTZ_CURSES=ncursesw
--FROTZ_UTF8=yes
--else
--FROTZ_CURSES=ncurses
--endif
--
--define FROTZ_BUILD_CMDS
--	$(MAKE) -C $(@D) $(TARGET_CONFIGURE_OPTS) PREFIX=/usr CONFIG_DIR=/etc \
--		SOUND_TYPE=none CURSES="$(FROTZ_CURSES)" USE_UTF8=$(FROTZ_UTF8) \
--		CFLAGS="$(TARGET_CFLAGS) -std=gnu99"
--endef
--
--define FROTZ_INSTALL_TARGET_CMDS
--	$(INSTALL) -D -m 0755 $(@D)/frotz $(TARGET_DIR)/usr/bin/frotz
--endef
--
--$(eval $(generic-package))
+diff --git a/package/xdg-dbus-proxy/xdg-dbus-proxy.hash b/package/xdg-dbus-proxy/xdg-dbus-proxy.hash
+index f61a6a91ae..93d4bc05ce 100644
+--- a/package/xdg-dbus-proxy/xdg-dbus-proxy.hash
++++ b/package/xdg-dbus-proxy/xdg-dbus-proxy.hash
+@@ -1,5 +1,5 @@
+-# From https://github.com/flatpak/xdg-dbus-proxy/releases/tag/0.1.5
+-sha256  061dcfaf8a0650e5fd9d5432dfe88bda749ea0d079dc136304bfecfbce0661fb  xdg-dbus-proxy-0.1.5.tar.xz
++# From https://github.com/flatpak/xdg-dbus-proxy/releases/tag/0.1.6
++sha256  131bf59fce7c7ee7ecbc5d9106d6750f4f597bfe609966573240f7e4952973a1  xdg-dbus-proxy-0.1.6.tar.xz
+ 
+ # Hash for license files:
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
+diff --git a/package/xdg-dbus-proxy/xdg-dbus-proxy.mk b/package/xdg-dbus-proxy/xdg-dbus-proxy.mk
+index 2e8c054386..0e92946915 100644
+--- a/package/xdg-dbus-proxy/xdg-dbus-proxy.mk
++++ b/package/xdg-dbus-proxy/xdg-dbus-proxy.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XDG_DBUS_PROXY_VERSION = 0.1.5
++XDG_DBUS_PROXY_VERSION = 0.1.6
+ XDG_DBUS_PROXY_SITE = https://github.com/flatpak/xdg-dbus-proxy/releases/download/$(XDG_DBUS_PROXY_VERSION)
+ XDG_DBUS_PROXY_SOURCE = xdg-dbus-proxy-$(XDG_DBUS_PROXY_VERSION).tar.xz
+ XDG_DBUS_PROXY_DEPENDENCIES = host-pkgconf libglib2
 -- 
 2.46.0
 
