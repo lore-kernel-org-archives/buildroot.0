@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9EA32E6FE46
-	for <buildroot@archiver.kernel.org>; Fri,  6 Sep 2024 20:02:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 398AFE6FE46
+	for <buildroot@archiver.kernel.org>; Fri,  6 Sep 2024 20:02:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2B4C684366;
-	Fri,  6 Sep 2024 20:02:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0549D847AC;
+	Fri,  6 Sep 2024 20:02:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GZKAk-UbhUDK; Fri,  6 Sep 2024 20:02:27 +0000 (UTC)
+ id 1RQnesN40kcP; Fri,  6 Sep 2024 20:02:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BA102841D0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 54716847B2
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BA102841D0;
-	Fri,  6 Sep 2024 20:02:25 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 242801BF20B
+	by smtp1.osuosl.org (Postfix) with ESMTP id 54716847B2;
+	Fri,  6 Sep 2024 20:02:29 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id D51C81BF20B
  for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 19:59:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 227EB60787
- for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 19:58:58 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1E485407A3
+ for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 19:58:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CQMO1cLM_NdR for <buildroot@lists.busybox.net>;
- Fri,  6 Sep 2024 19:58:57 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UKnPA4ge1W06 for <buildroot@lists.busybox.net>;
+ Fri,  6 Sep 2024 19:58:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 030F9606B4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 23BEF4073D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 030F9606B4
- for <buildroot@buildroot.org>; Fri,  6 Sep 2024 19:58:55 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 23BEF4073D
+ for <buildroot@buildroot.org>; Fri,  6 Sep 2024 19:58:56 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F2AA486EE5; Fri,  6 Sep 2024 19:58:54 +0000 (UTC)
+ id 1CA107FC34; Fri,  6 Sep 2024 19:58:56 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 19 Aug 2024 13:07:58 +0200
+Date: Fri, 23 Aug 2024 18:40:55 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 25139754098ba3a69c060ac19edf79f393d3f197
-X-Git-Newrev: 56574a950b443638949d35d9f6999503291b206b
+X-Git-Oldrev: 90c386d1ec4d9ac7aca2f7127543f4cc74ed1f8a
+X-Git-Newrev: 41ce1cc690b0837a1822079317bf317ddaeac17b
 X-Patchwork-Hint: ignore
-Message-Id: <20240906195854.F2AA486EE5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/erofs-utils: bump to version 1.8.1
+Message-Id: <20240906195856.1CA107FC34@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libv4l: bump version to 1.28.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,84 +65,128 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=56574a950b443638949d35d9f6999503291b206b
+commit: https://git.buildroot.net/buildroot/commit/?id=41ce1cc690b0837a1822079317bf317ddaeac17b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For a change log since 1.7.1, see:
-https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs-utils.git/tree/ChangeLog?h=v1.8.1
+Upstream switched to xz tarball and meson.
 
-Version 1.8 introduced a preliminary Zstd support, so this commit adds
-this new optional dependency for target, and disable this option for the
-host variant.
+Changelog:
+https://git.linuxtv.org/v4l-utils.git/tree/ChangeLog?h=stable-1.28
 
-Version 1.8 also introduced a use of atomic operations, in commit [1].
-This commit adds linking with libatomic when appropriate.
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs-utils.git/commit/?id=0d6f9835ce27ead0f23848408366d9ca7f2b0d15
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/erofs-utils/erofs-utils.hash |  2 +-
- package/erofs-utils/erofs-utils.mk   | 14 +++++++++++++-
- 2 files changed, 14 insertions(+), 2 deletions(-)
+ package/libv4l/libv4l.hash |  4 ++--
+ package/libv4l/libv4l.mk   | 41 +++++++++++++----------------------------
+ 2 files changed, 15 insertions(+), 30 deletions(-)
 
-diff --git a/package/erofs-utils/erofs-utils.hash b/package/erofs-utils/erofs-utils.hash
-index 063d384511..8140dad83b 100644
---- a/package/erofs-utils/erofs-utils.hash
-+++ b/package/erofs-utils/erofs-utils.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256  196083d63e5e231fb5799e7ce86a944bbca564daabce3de9225a8aca9dcaff15  erofs-utils-1.7.1.tar.gz
-+sha256  5dbf7b492f7682462b97a77121d43ca7609cd90e65f8c96931aefc820a6f0da3  erofs-utils-1.8.1.tar.gz
- sha256  0df042de29b44887355db86c79708a4489ce6e6666f6e33ad02040293f09e6a2  COPYING
- sha256  a400f85dd06d230f1b308cde4290a53f345b6e320a376b7904b31c51c2fd4b1a  LICENSES/Apache-2.0
- sha256  feee3b3157dcdf78d4f50edefbd5dd7adf8b6d52c11bfaaa746a85a373256713  LICENSES/GPL-2.0
-diff --git a/package/erofs-utils/erofs-utils.mk b/package/erofs-utils/erofs-utils.mk
-index f994ea9d07..7033be4a06 100644
---- a/package/erofs-utils/erofs-utils.mk
-+++ b/package/erofs-utils/erofs-utils.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/libv4l/libv4l.hash b/package/libv4l/libv4l.hash
+index 4f694de34b..0c8ea1010b 100644
+--- a/package/libv4l/libv4l.hash
++++ b/package/libv4l/libv4l.hash
+@@ -1,7 +1,7 @@
+ # Locally calculated after checking signature
+-# https://linuxtv.org/downloads/v4l-utils/v4l-utils-1.20.0.tar.bz2.asc
++# https://linuxtv.org/downloads/v4l-utils/v4l-utils-1.28.1.tar.xz.asc
+ # with key 05D0169C26E41593418129DF199A64FADFB500FF
+-sha256  cbb7fe8a6307f5ce533a05cded70bb93c3ba06395ab9b6d007eb53b75d805f5b  v4l-utils-1.24.1.tar.bz2
++sha256  0fa075ce59b6618847af6ea191b6155565ccaa44de0504581ddfed795a328a82  v4l-utils-1.28.1.tar.xz
+ 
+ # Locally calculated
+ sha256  391e4da1c54a422a78d83be7bf84b2dfb8bacdd8ad256fa4374e128655584a8a  COPYING
+diff --git a/package/libv4l/libv4l.mk b/package/libv4l/libv4l.mk
+index 1142a7442f..072d7efcf3 100644
+--- a/package/libv4l/libv4l.mk
++++ b/package/libv4l/libv4l.mk
+@@ -4,19 +4,12 @@
  #
  ################################################################################
  
--EROFS_UTILS_VERSION = 1.7.1
-+EROFS_UTILS_VERSION = 1.8.1
- EROFS_UTILS_SITE = https://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs-utils.git/snapshot
- EROFS_UTILS_LICENSE = GPL-2.0+, GPL-2.0+ or Apache-2.0 (liberofs)
- EROFS_UTILS_LICENSE_FILES = COPYING LICENSES/Apache-2.0 LICENSES/GPL-2.0
-@@ -14,6 +14,10 @@ EROFS_UTILS_AUTORECONF = YES
+-LIBV4L_VERSION = 1.24.1
+-LIBV4L_SOURCE = v4l-utils-$(LIBV4L_VERSION).tar.bz2
++LIBV4L_VERSION = 1.28.1
++LIBV4L_SOURCE = v4l-utils-$(LIBV4L_VERSION).tar.xz
+ LIBV4L_SITE = https://linuxtv.org/downloads/v4l-utils
+ LIBV4L_INSTALL_STAGING = YES
+ LIBV4L_DEPENDENCIES = host-pkgconf
+-LIBV4L_CONF_OPTS = --disable-doxygen-doc --disable-qvidcap --disable-v4l2-tracer
+-# needed to get utils/qv4l link flags right
+-LIBV4L_AUTORECONF = YES
+-# add host-gettext for AM_ICONV macro
+-LIBV4L_DEPENDENCIES += host-gettext
+-
+-# fix uclibc-ng configure/compile
+-LIBV4L_CONF_ENV = ac_cv_prog_cc_c99='-std=gnu99'
++LIBV4L_CONF_OPTS = -Ddoxygen-doc=disabled -Dqvidcap=disabled -Dv4l2-tracer=disabled
  
- EROFS_UTILS_DEPENDENCIES = host-pkgconf util-linux
+ # v4l-utils components have different licences, see v4l-utils.spec for details
+ LIBV4L_LICENSE = GPL-2.0+ (utilities), LGPL-2.1+ (libraries)
+@@ -34,10 +27,10 @@ endif
+ LIBV4L_DEPENDENCIES += $(if $(BR2_PACKAGE_LIBICONV),libiconv)
  
-+ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
-+EROFS_UTILS_CONF_ENV += LIBS=-latomic
-+endif
-+
- ifeq ($(BR2_PACKAGE_EROFS_UTILS_LZ4),y)
- EROFS_UTILS_DEPENDENCIES += lz4
- EROFS_UTILS_CONF_OPTS += --enable-lz4
-@@ -56,12 +60,20 @@ else
- EROFS_UTILS_CONF_OPTS += --without-zlib
+ ifeq ($(BR2_PACKAGE_JPEG),y)
++LIBV4L_CONF_OPTS += -Djpeg=enabled
+ LIBV4L_DEPENDENCIES += jpeg
+-LIBV4L_CONF_OPTS += --with-jpeg
+ else
+-LIBV4L_CONF_OPTS += --without-jpeg
++LIBV4L_CONF_OPTS += -Djpeg=disabled
  endif
  
-+ifeq ($(BR2_PACKAGE_ZSTD),y)
-+EROFS_UTILS_DEPENDENCIES += zstd
-+EROFS_UTILS_CONF_OPTS += --with-libzstd
-+else
-+EROFS_UTILS_CONF_OPTS += --without-libzstd
-+endif
-+
- HOST_EROFS_UTILS_DEPENDENCIES = host-pkgconf host-util-linux host-lz4 host-xz
- HOST_EROFS_UTILS_CONF_OPTS += \
- 	--enable-lz4 \
- 	--enable-lzma \
- 	--disable-fuse \
- 	--without-libdeflate \
-+	--without-libzstd \
- 	--without-selinux \
- 	--without-zlib
+ ifeq ($(BR2_PACKAGE_HAS_LIBGL),y)
+@@ -45,10 +38,10 @@ LIBV4L_DEPENDENCIES += libgl
+ endif
  
+ ifeq ($(BR2_PACKAGE_HAS_UDEV),y)
+-LIBV4L_CONF_OPTS += --with-libudev --with-udevdir=/usr/lib/udev
++LIBV4L_CONF_OPTS += -Dlibdvbv5=enabled -Dudevdir=/usr/lib/udev
+ LIBV4L_DEPENDENCIES += udev
+ else
+-LIBV4L_CONF_OPTS += --without-libudev
++LIBV4L_CONF_OPTS += -Dlibdvbv5=disabled
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBGLU),y)
+@@ -56,33 +49,25 @@ LIBV4L_DEPENDENCIES += libglu
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_LIBV4L_UTILS),y)
+-LIBV4L_CONF_OPTS += --enable-v4l-utils
++LIBV4L_CONF_OPTS += -Dv4l-utils=true
+ LIBV4L_DEPENDENCIES += $(TARGET_NLS_DEPENDENCIES)
+ 
+-# v4l2-ctl needs c++11, use gnu++11 for typeof support
+-LIBV4L_CONF_ENV += CXXFLAGS="$(TARGET_CXXFLAGS) -std=gnu++11"
+-
+ # IR BPF decoder support needs toolchain with linux-headers >= 3.18
+ # libelf and clang support
+-LIBV4L_CONF_OPTS += --disable-bpf
++LIBV4L_CONF_OPTS += -Dbpf=disabled
+ 
+ ifeq ($(BR2_PACKAGE_QT5BASE)$(BR2_PACKAGE_QT5BASE_GUI)$(BR2_PACKAGE_QT5BASE_WIDGETS),yyy)
+-LIBV4L_CONF_OPTS += --enable-qv4l2
++LIBV4L_CONF_OPTS += -Dqv4l2=enabled
+ LIBV4L_DEPENDENCIES += qt5base
+-# protect against host version detection of moc-qt5/rcc-qt5/uic-qt5
+-LIBV4L_CONF_ENV += \
+-	ac_cv_prog_MOC=$(HOST_DIR)/bin/moc \
+-	ac_cv_prog_RCC=$(HOST_DIR)/bin/rcc \
+-	ac_cv_prog_UIC=$(HOST_DIR)/bin/uic
+ else
+-LIBV4L_CONF_OPTS += --disable-qv4l2
++LIBV4L_CONF_OPTS += -Dqv4l2=disabled
+ endif
+ else
+-LIBV4L_CONF_OPTS += --disable-v4l-utils
++LIBV4L_CONF_OPTS += -Dv4l-utils=false
+ endif
+ 
+ ifeq ($(BR2_PACKAGE_SDL2_IMAGE),y)
+ LIBV4L_DEPENDENCIES += sdl2_image
+ endif
+ 
+-$(eval $(autotools-package))
++$(eval $(meson-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
