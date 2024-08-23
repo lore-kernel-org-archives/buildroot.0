@@ -4,68 +4,116 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 011A7C531DC
-	for <buildroot@archiver.kernel.org>; Fri, 23 Aug 2024 15:17:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1233CC52D7C
+	for <buildroot@archiver.kernel.org>; Fri, 23 Aug 2024 15:26:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B55AA840DF;
-	Fri, 23 Aug 2024 15:17:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B9E8281EC0;
+	Fri, 23 Aug 2024 15:26:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZDRl6cytXNY5; Fri, 23 Aug 2024 15:17:28 +0000 (UTC)
+ id xwjlzHUo2sKD; Fri, 23 Aug 2024 15:26:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B2E17840E0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C337181EC1
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B2E17840E0;
-	Fri, 23 Aug 2024 15:17:28 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 179D91BF4E6
- for <buildroot@lists.busybox.net>; Fri, 23 Aug 2024 15:17:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C337181EC1;
+	Fri, 23 Aug 2024 15:26:10 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D80651BF4E6
+ for <buildroot@lists.busybox.net>; Fri, 23 Aug 2024 15:26:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 05880840E0
- for <buildroot@lists.busybox.net>; Fri, 23 Aug 2024 15:17:28 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C4633612F4
+ for <buildroot@lists.busybox.net>; Fri, 23 Aug 2024 15:26:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7Nq3QXsBi8Lg for <buildroot@lists.busybox.net>;
- Fri, 23 Aug 2024 15:17:27 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=89.238.66.15;
- helo=helium.openadk.org; envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 0D7A3840DF
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0D7A3840DF
-Received: from helium.openadk.org (helium.openadk.org [89.238.66.15])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0D7A3840DF
- for <buildroot@buildroot.org>; Fri, 23 Aug 2024 15:17:25 +0000 (UTC)
-Received: by helium.openadk.org (Postfix, from userid 1000)
- id E0D473535C26; Fri, 23 Aug 2024 17:17:23 +0200 (CEST)
-Date: Fri, 23 Aug 2024 17:17:23 +0200
-From: Waldemar Brodkorb <wbx@openadk.org>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Message-ID: <ZsioAzIzj7+DdKwe@waldemar-brodkorb.de>
-References: <ZsgdgdqUcwJzrrna@waldemar-brodkorb.de>
- <20240823095809.70b3bfec@windsurf>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id HuDw28y6UtQV for <buildroot@lists.busybox.net>;
+ Fri, 23 Aug 2024 15:26:08 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=148.163.156.19;
+ helo=mx0a-00230701.pphosted.com; envelope-from=yuriy.kolerov@synopsys.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 882A060630
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 882A060630
+Received: from mx0a-00230701.pphosted.com (mx0a-00230701.pphosted.com
+ [148.163.156.19])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 882A060630
+ for <buildroot@buildroot.org>; Fri, 23 Aug 2024 15:26:06 +0000 (UTC)
+Received: from pps.filterd (m0297266.ppops.net [127.0.0.1])
+ by mx0a-00230701.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 47NEJG2Y026270;
+ Fri, 23 Aug 2024 08:26:01 -0700
+Received: from smtprelay-out1.synopsys.com (smtprelay-out1.synopsys.com
+ [149.117.73.133])
+ by mx0a-00230701.pphosted.com (PPS) with ESMTPS id 414g8mcjxw-1
+ (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+ Fri, 23 Aug 2024 08:26:00 -0700 (PDT)
+Received: from mailhost.synopsys.com (eudc-mailhost1.synopsys.com
+ [10.213.161.16])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
+ client-signature RSA-PSS (2048 bits) client-digest SHA256)
+ (Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
+ by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id B7DD340130;
+ Fri, 23 Aug 2024 15:25:59 +0000 (UTC)
+Received: from SNPS-HRlPxd6IgG.internal.synopsys.com
+ (snps-hrlpxd6igg.internal.synopsys.com [10.120.15.181])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+ (Client did not present a certificate)
+ by mailhost.synopsys.com (Postfix) with ESMTPSA id 8B2C6C01E2;
+ Fri, 23 Aug 2024 15:25:57 +0000 (UTC)
+X-SNPS-Relay: synopsys.com
+To: buildroot@buildroot.org
+Date: Fri, 23 Aug 2024 18:25:47 +0300
+Message-Id: <20240823152547.1023215-1-ykolerov@synopsys.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20240823095809.70b3bfec@windsurf>
-X-Operating-System: Linux 5.10.0-31-amd64 x86_64
+X-Proofpoint-GUID: IwUA3Ml3aivAkFrgKjli1wbHL_F7_dop
+X-Authority-Analysis: v=2.4 cv=T4TeTOKQ c=1 sm=1 tr=0 ts=66c8aa08 cx=c_pps
+ a=8EbXvwLXkpGsT4ql/pYRAw==:117 a=8EbXvwLXkpGsT4ql/pYRAw==:17
+ a=yoJbH4e0A30A:10 a=jIQo8A4GAAAA:8 a=e4x6tBIcj2PwPzYWiAsA:9
+ a=Lf5xNeLK5dgiOs8hzIjU:22
+X-Proofpoint-ORIG-GUID: IwUA3Ml3aivAkFrgKjli1wbHL_F7_dop
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-08-23_11,2024-08-22_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_active_cloned_notspam
+ policy=outbound_active_cloned score=0
+ malwarescore=0 bulkscore=0 clxscore=1015 spamscore=0 lowpriorityscore=0
+ suspectscore=0 phishscore=0 mlxlogscore=809 impostorscore=0 mlxscore=0
+ priorityscore=1501 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.19.0-2407110000 definitions=main-2408230113
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=synopsys.com; h=
+ cc:content-transfer-encoding:date:from:message-id:mime-version
+ :subject:to; s=pfptdkimsnps; bh=efE3TxDw0jfsqIDlQlFt1PaGNFVx3LM2
+ WlVehKieiSk=; b=FcYXZCxfh3/q2kfWcD/MXq1jvK7PuEBr0yLB3SRlJ/uMo/U+
+ u/Ks7wUSGWuC5n3jWfAaba6ujyuHZNetQAyTmRqYAzySsfT4Eup9hKVlWo00JzmB
+ 0zeAWlHadaE6KQ1702m9E1/7Z7sxWmfowDiWmwOSMQKZjzrPqb0TxExSnhwIWmAD
+ 1NGyjB1zrCV/QtRyJb9v9GCs52xp0n4c8iZ5xUjdry+ltW6l+lJK0aAeUMRcMA6N
+ KzlW9t2MPGhVVqZkbZR/FdWRkAb68cNdFIdBYbHl/I3FpRWJndEDFbKW9m0Hilo9
+ zJq6FAHVFuhk9OE/+7sNmQGSUEbrWXL4SFasSA==
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=openadk.org; s=2022; 
- t=1724426243; bh=vEH1k7tp4XKH9FGsHMkHNCU/UTM5FXMUO6Bi1RegOnA=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=ahudnAbNFPoMrAm3tg0bSYR7Aj7W1MaizgFE4FHzvet84arH4mLeAvbPCiloPmYWD
- lboBlBuvUYk0eorUgxG7Oa9OZ4vNb0MYUkzqWikr7fFUMFiOrAoNSdr2CUQt8i38LF
- f2eA/q1Swmf6MlQojw1ht4FXnWfLxXLSnh+r3C05Qf3FtEkNXkz6oxJMJTdNgE8fnh
- zAvbKHXpV9H4XzBNUgOkICC/GNwlAlwwCuqf3ru1YOq+S2R1l/1e+LIhFiy8ps/YNN
- TEqirYj5WkQzfmGWjfnfF2ZM776SpTgdjIiqkmLIgubsOyRaDZ1OOA5A8IL8m2nW1m
- uUJ7TKHjU2xQg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=openadk.org
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=synopsys.com; s=mail; 
+ t=1724426760; bh=y0pSjeMf4GOpiZQfO+EBSWSJhH1Y95OCfCZp12NwyKs=;
+ h=From:To:Cc:Subject:Date:From;
+ b=b8WkP47+5nyQxhgvWVRaxMsAyLBpnV5poTIBfbbl7P9W+bpMeydjCyv1Lg/sRlMD4
+ jtU7r1jb+293UMolv5RioCMyesJV6yCg2ZJvs5vgZ3Pd6e9gDj8eVi+cp6+U71JBFI
+ fmpBgLpiJPhLQIlnld48ngFjDjYP2cpjiULLLGp/UA4qCwI+WFEGGnhvKEzQdvV8XA
+ euOKE+lGNYL0AOU3utq9Frv2+7zmzLlonazxqV64SmnULGtQLJqXm7j/21bssfKhjl
+ WvKGzLunk269XTx85jljM08uFyckqucsALAnhHK/ZhswDyPIQWoin843AUaDFrRvC4
+ L5EMxpIcqeNkg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=synopsys.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key, unprotected) header.d=synopsys.com
+ header.i=@synopsys.com header.a=rsa-sha256 header.s=pfptdkimsnps
+ header.b=FcYXZCxf; 
  dkim=pass (2048-bit key,
- unprotected) header.d=openadk.org header.i=@openadk.org header.a=rsa-sha256
- header.s=2022 header.b=ahudnAbN
-Subject: Re: [Buildroot] [PATCH next] package/fbv: update package
+ unprotected) header.d=synopsys.com header.i=@synopsys.com header.a=rsa-sha256
+ header.s=mail header.b=b8WkP47+
+Subject: [Buildroot] [PATCH 1/1] package/glibc: drop support of ARC 700
+ targets
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,96 +125,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+From: Yuriy Kolerov via buildroot <buildroot@buildroot.org>
+Reply-To: Yuriy Kolerov <Yuriy.Kolerov@synopsys.com>
+Cc: Romain Naour <romain.naour@gmail.com>,
+ Alexey Brodkin <Alexey.Brodkin@synopsys.com>,
+ Yuriy Kolerov <Yuriy.Kolerov@synopsys.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Thomas,
-Thomas Petazzoni wrote,
+Synopsys ARC 700 family is not supported by glibc. Thus, it is
+necessary to prevent selecting glibc while configuring for
+that processors family.
 
-> Hello Waldemar,
-> 
-> Thanks a lot, looks good. Just a few nits below.
-> 
-> On Fri, 23 Aug 2024 07:26:25 +0200
-> Waldemar Brodkorb <wbx@openadk.org> wrote:
-> 
-> > diff --git a/package/fbv/Config.in b/package/fbv/Config.in
-> > index 2206276334..1d11bfb3ef 100644
-> > --- a/package/fbv/Config.in
-> > +++ b/package/fbv/Config.in
-> > @@ -2,10 +2,10 @@ config BR2_PACKAGE_FBV
-> >  	bool "fbv"
-> >  	help
-> >  	  fbv is a very simple graphic file viewer for the framebuffer
-> > -	  console, capable of displaying GIF, JPEG, PNG and BMP files
-> > -	  using libungif, libjpeg and libpng.
-> > +	  console, capable of displaying JPEG, PNG and BMP files
-> > +	  using libjpeg and libpng.
-> >  
-> > -	  http://freshmeat.net/projects/fbv/
-> > +	  https://github.com/amadvance/fbv
-> >  
-> >  if BR2_PACKAGE_FBV
-> >  
-> > @@ -23,11 +23,4 @@ config BR2_PACKAGE_FBV_JPEG
-> >  	help
-> >  	  Enable support for JPEG using IJG's libjpeg.
-> >  
-> > -config BR2_PACKAGE_FBV_GIF
-> > -	bool "GIF support"
-> > -	default y
-> > -	select BR2_PACKAGE_GIFLIB
-> > -	help
-> > -	  Enable support for GIF using giflib.
-> 
-> When you remove an option, you should add an entry in Config.in.legacy.
-> 
-> 
-> > diff --git a/package/fbv/fbv.hash b/package/fbv/fbv.hash
-> > index 3f25465ba1..7cd9bb597f 100644
-> > --- a/package/fbv/fbv.hash
-> > +++ b/package/fbv/fbv.hash
-> > @@ -1,3 +1,3 @@
-> >  # Locally calculated
-> > -sha256  9b55b9dafd5eb01562060d860e267e309a1876e8ba5ce4d3303484b94129ab3c  fbv-1.0b.tar.gz
-> > +sha256  233b387bf110eaab94221e91bebc16365c70bf6ede01280164a875a7f460d0e0  fbv-7c2000804226ca860ca80f3baa993582e29aa1a2-git4.tar.gz
-> >  sha256  bf21d97bafcaacb5d6bc3d5502030c340f0e0593614078ab017af91e950083af  COPYING
-> 
-> Did you verify that legal-info was still working?
-> 
-> > diff --git a/package/fbv/fbv.mk b/package/fbv/fbv.mk
-> > index a69e4ad518..9c7d74b671 100644
-> > --- a/package/fbv/fbv.mk
-> > +++ b/package/fbv/fbv.mk
-> > @@ -4,12 +4,14 @@
-> >  #
-> >  ################################################################################
-> >  
-> > -FBV_VERSION = 1.0b
-> > -FBV_SITE = http://s-tech.elsat.net.pl/fbv
-> > -
-> > +FBV_VERSION = 7c2000804226ca860ca80f3baa993582e29aa1a2
-> > +FBV_SITE = https://github.com/amadvance/fbv
-> > +FBV_SITE_METHOD = git
-> 
-> Please use:
-> 
-> FBV_SITE = $(call github,amadvance,fbv,$(FBV_VERSION))
-> 
-> and drop FBV_SITE_METHOD
-> 
-> Also, with this commit, you are kind of "adopting" this package, so
-> perhaps add yourself in the DEVELOPERS file for this package?
-> 
-> Thanks!
+Signed-off-by: Yuriy Kolerov <ykolerov@synopsys.com>
+---
+ package/glibc/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-As always, thanks for the review. I have sent a v2.
+diff --git a/package/glibc/Config.in b/package/glibc/Config.in
+index 81c64083f4..6075d28874 100644
+--- a/package/glibc/Config.in
++++ b/package/glibc/Config.in
+@@ -21,7 +21,7 @@ config BR2_PACKAGE_GLIBC_ARCH_SUPPORTS
+ 	default y if BR2_x86_64
+ 	default y if BR2_microblaze
+ 	default y if BR2_nios2
+-	default y if BR2_arc && BR2_ARC_ATOMIC_EXT
++	default y if BR2_arc && BR2_ARC_ATOMIC_EXT && !BR2_arc750d && !BR2_arc770d
+ 	depends on !BR2_POWERPC_CPU_HAS_SPE
+ 	depends on BR2_RISCV_ISA_RVA || !BR2_riscv
+ 	depends on BR2_USE_MMU
+-- 
+2.34.1
 
-best regards
- Waldemar
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
