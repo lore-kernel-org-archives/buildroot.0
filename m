@@ -4,72 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 75ACAC52D7C
-	for <buildroot@archiver.kernel.org>; Fri, 23 Aug 2024 15:31:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E0B16C52D7C
+	for <buildroot@archiver.kernel.org>; Fri, 23 Aug 2024 15:33:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2DEBE81E73;
-	Fri, 23 Aug 2024 15:31:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A6C9381E73;
+	Fri, 23 Aug 2024 15:33:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ivRWqASePVQv; Fri, 23 Aug 2024 15:31:32 +0000 (UTC)
+ id v0EutFrwFgXZ; Fri, 23 Aug 2024 15:33:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 39D3181ECD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AC89D840E0
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 39D3181ECD;
-	Fri, 23 Aug 2024 15:31:32 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B9F061BF4E6
- for <buildroot@lists.busybox.net>; Fri, 23 Aug 2024 15:31:31 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AC89D840E0;
+	Fri, 23 Aug 2024 15:33:01 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id E396D1BF4E6
+ for <buildroot@lists.busybox.net>; Fri, 23 Aug 2024 15:33:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A584B81ECD
- for <buildroot@lists.busybox.net>; Fri, 23 Aug 2024 15:31:31 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id D02A240277
+ for <buildroot@lists.busybox.net>; Fri, 23 Aug 2024 15:33:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VgYezG8gTC_E for <buildroot@lists.busybox.net>;
- Fri, 23 Aug 2024 15:31:30 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.193;
- helo=relay1-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Jl01n__xrNen for <buildroot@lists.busybox.net>;
+ Fri, 23 Aug 2024 15:32:59 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::223;
+ helo=relay3-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 692CD81E73
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 692CD81E73
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 692CD81E73
- for <buildroot@buildroot.org>; Fri, 23 Aug 2024 15:31:30 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 803CD240005;
- Fri, 23 Aug 2024 15:31:28 +0000 (UTC)
-Date: Fri, 23 Aug 2024 17:31:27 +0200
-To: Yuriy Kolerov <Yuriy.Kolerov@synopsys.com>
-Message-ID: <20240823173127.36b44786@windsurf>
-In-Reply-To: <20240823152547.1023215-1-ykolerov@synopsys.com>
-References: <20240823152547.1023215-1-ykolerov@synopsys.com>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 7BF08401D8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7BF08401D8
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 7BF08401D8
+ for <buildroot@buildroot.org>; Fri, 23 Aug 2024 15:32:59 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 4918C60004;
+ Fri, 23 Aug 2024 15:32:56 +0000 (UTC)
+Date: Fri, 23 Aug 2024 17:32:55 +0200
+To: Waldemar Brodkorb <wbx@openadk.org>
+Message-ID: <20240823173255.32943822@windsurf>
+In-Reply-To: <ZsiGkIy9Mygzoexq@waldemar-brodkorb.de>
+References: <ZsiGkIy9Mygzoexq@waldemar-brodkorb.de>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1724427088;
+ d=bootlin.com; s=gm1; t=1724427176;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=61leqwqVSBKvDvn5+26upiHBXSkDy3CJnnLEgwpEnUw=;
- b=YM8cxoiTxwKgHSPsfbcTjicJqoOam3mzLzlb/8B/fRfyhabTCkoE9D9aCK/KOthhsF2NLB
- fGIDn5xqIALMlLXUOb3Kqqz7dIAsu8THJSahxolD1oeowvacbCTiMk9nHPLy6cbOZDH3vm
- pAsC25KIZDuMAC7XeG2QTAG7T3RIGuj0YeldpBuI11322aGDcouiOc3MXtgQ0/wr395sNa
- ZSgbBlTe5Cj2Q2FcKRnbohDzlvWdWbVDCXH1+545YEIRKNbf5CilRlix+Cix0AXEa7Dx5g
- jH3+LRvrQol/p5QWWeX5uoJyTrecNrQgvTlSG0eQZTMDmQOioH4OfFowSjNhjA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=xqXuYeDnBZiCWUZfd0ulB6YdVrUBu4G9BwXSdqACQTc=;
+ b=TZ7sk6G4DshX/HmYZ2mxIgT3tQjRF9opXLffN3ZKbMT7mmf744q4av7jDGDvCS0at5lvAL
+ hyCOE78kiMdY5YmutQRRE5ssskxhoSMNxN8r2GMjBlzo0rL2uKmMNJe/xUebYH8soc7kIU
+ fZGWplZziDfSelUtjOvtF4Vl03fe+FTPexCEg62TTc5GS17q8Fdn7Mb+h6CvyowAa0UihV
+ MiGPOW3hbeKcTDv9PySTnEiOtTqxim+bLtfAaEMbCwG5ekSnXQkHvCfvY+lWglnqxY5mm7
+ kvasDQP4B6ualOxNmeAWuHAtOpSPhiO1EnlJs06AHFW58HgGHi8b3tLupL66KA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=YM8cxoiT
-Subject: Re: [Buildroot] [PATCH 1/1] package/glibc: drop support of ARC 700
- targets
+ header.s=gm1 header.b=TZ7sk6G4
+Subject: Re: [Buildroot] [PATCH v2 next] package/fbv: update package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,34 +82,40 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Romain Naour <romain.naour@gmail.com>,
- Alexey Brodkin <Alexey.Brodkin@synopsys.com>, buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri, 23 Aug 2024 18:25:47 +0300
-Yuriy Kolerov <Yuriy.Kolerov@synopsys.com> wrote:
+On Fri, 23 Aug 2024 14:54:40 +0200
+Waldemar Brodkorb <wbx@openadk.org> wrote:
 
-> Synopsys ARC 700 family is not supported by glibc. Thus, it is
-> necessary to prevent selecting glibc while configuring for
-> that processors family.
+> After the official fbv download page is no longer available
+> switch to an hopefully active github fork.
 > 
-> Signed-off-by: Yuriy Kolerov <ykolerov@synopsys.com>
+> Changes made to the Buildroot package:
+> - new active upstream fork (6 month old commits)
+> - use autoreconf to create configure
+> - remove all patches because they are no longer required
+> - upstream removed GIF support, so remove it here too
+> - license is unchanged, but full COPYING file is now included
+> 
+> Tested on a RPI5 with a PNG, BMP and JPEG picture.
+> 
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 
-Is this fixing:
+Applied to next, thanks. You had forgotten to drop the entries in
+.checkpackageignore. Make sure to run "make check-package" prior to
+sending patches, or add https://paste.ack.tf/f4de07 as a post-commit
+hook in your Buildroot git repository to have automatic checking :-)
 
-  http://autobuild.buildroot.net/results/9f0a4d69aed71a840b1c278a9623c9687207ffc6/
-
- ?
-
-Thanks,
+Thanks!
 
 Thomas
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
 https://bootlin.com
 _______________________________________________
 buildroot mailing list
