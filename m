@@ -4,72 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DA459C531DC
-	for <buildroot@archiver.kernel.org>; Fri, 23 Aug 2024 09:00:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 870D6C531DC
+	for <buildroot@archiver.kernel.org>; Fri, 23 Aug 2024 09:01:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8135840C47;
-	Fri, 23 Aug 2024 09:00:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 39887401EF;
+	Fri, 23 Aug 2024 09:01:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jsZl0-VCL6oJ; Fri, 23 Aug 2024 09:00:37 +0000 (UTC)
+ id T3GlLAv05OJB; Fri, 23 Aug 2024 09:01:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2FA2B41294
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 13135401FD
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2FA2B41294;
-	Fri, 23 Aug 2024 09:00:37 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3B7081BF366
- for <buildroot@lists.busybox.net>; Fri, 23 Aug 2024 09:00:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 13135401FD;
+	Fri, 23 Aug 2024 09:01:58 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 28BAA1BF366
+ for <buildroot@lists.busybox.net>; Fri, 23 Aug 2024 09:01:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 28BB681E61
- for <buildroot@lists.busybox.net>; Fri, 23 Aug 2024 09:00:36 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 223D640469
+ for <buildroot@lists.busybox.net>; Fri, 23 Aug 2024 09:01:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WOGH53i85BDW for <buildroot@lists.busybox.net>;
- Fri, 23 Aug 2024 09:00:35 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=178.60.130.6;
- helo=fanzine2.igalia.com; envelope-from=aperez@igalia.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9D5FE81B83
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9D5FE81B83
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9D5FE81B83
- for <buildroot@buildroot.org>; Fri, 23 Aug 2024 09:00:34 +0000 (UTC)
-Received: from 91-153-34-210.elisa-laajakaista.fi ([91.153.34.210] helo=kodama)
- by fanzine2.igalia.com with esmtpsa 
- (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
- id 1shQ9n-0040J0-Nm; Fri, 23 Aug 2024 11:00:31 +0200
-Received: from localhost (kodama [local])
- by kodama (OpenSMTPD) with ESMTPA id 068274ba;
- Fri, 23 Aug 2024 09:00:30 +0000 (UTC)
-From: Adrian Perez de Castro <aperez@igalia.com>
-To: buildroot@buildroot.org
-Date: Fri, 23 Aug 2024 12:00:28 +0300
-Message-ID: <20240823090030.2263352-1-aperez@igalia.com>
-X-Mailer: git-send-email 2.46.0
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Hd_nMrNUmtzS for <buildroot@lists.busybox.net>;
+ Fri, 23 Aug 2024 09:01:55 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
+ helo=relay9-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org C2B8E40217
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C2B8E40217
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C2B8E40217
+ for <buildroot@buildroot.org>; Fri, 23 Aug 2024 09:01:54 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id DE9F1FF80A;
+ Fri, 23 Aug 2024 09:01:51 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1shQB5-007Cza-11;
+ Fri, 23 Aug 2024 11:01:51 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Julien Olivain <ju.o@free.fr>
+References: <20240810105606.415339-1-ju.o@free.fr>
+Date: Fri, 23 Aug 2024 11:01:51 +0200
+In-Reply-To: <20240810105606.415339-1-ju.o@free.fr> (Julien Olivain's message
+ of "Sat, 10 Aug 2024 12:56:06 +0200")
+Message-ID: <87cylzd340.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
- c=relaxed/relaxed; d=igalia.com; 
- s=20170329; h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:
- Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
- Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
- In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
- List-Post:List-Owner:List-Archive;
- bh=TT9S7SnIwaFF1ZOJgWAQJp9tzdUDDmdjba6mCn2qLQ4=; b=E/Z5/C0dMccIk9wOuwm4Sv5fmC
- gDAA7kReXMMWPTxo8AU6/EU3OvnKI3OS3mlK+dg1xaHgFlD+Xa6sP2MTPbmakJfxsIzCk5vslwY91
- 4N2WxXzqsjwNkeBN9pviVaJ2dyophu85EURrYOQ99NVdj6TqUVZ3lclNfOeoP4gWZPaDGq/JvsdvU
- 3GE3jCLSXp2Z17jdDDq8O0ZhG1FqvLC0xFvXlqezmg5fvhctA3pcbnlWLwuhfUobiyK0sa9hdAAQC
- HG5m/K6L9x4CY9dM4u3gWtAMaZWrun691b2Fw7/WL8VGPmQxTlWbaBUGYDXuMZYMzka0ZFBgQginP
- QO7OoM/Q==;
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=none (p=none dis=none)
- header.from=igalia.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=igalia.com header.i=@igalia.com header.a=rsa-sha256
- header.s=20170329 header.b=E/Z5/C0d
-Subject: [Buildroot] [PATCH] package/xdg-dbus-proxy: bump to version 0.1.6
+ header.from=korsgaard.com
+Subject: Re: [Buildroot] [PATCH 1/1] support/testing: package: mariadb: fix
+ test configuration
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,51 +69,36 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Adrian Perez de Castro <aperez@igalia.com>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Maintenance release: fixes memory leaks, improves compatibility with
-sdbus, etc. Release notes:
+>>>>> "Julien" == Julien Olivain <ju.o@free.fr> writes:
 
-  https://github.com/flatpak/xdg-dbus-proxy/releases/tag/0.1.6
+ > The mysql virtual package was removed in commit 8708f3a23a
+ > "package/mysql: drop virtual package".
 
-Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
----
- package/xdg-dbus-proxy/xdg-dbus-proxy.hash | 4 ++--
- package/xdg-dbus-proxy/xdg-dbus-proxy.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ > The mariadb runtime test was authored before this mysql virtual
+ > package removal, but was merged after it, in commit 5356754d1e
+ > "support/testing: add mariadb runtime test". Due to this, this test
+ > always failed with the error:
 
-diff --git a/package/xdg-dbus-proxy/xdg-dbus-proxy.hash b/package/xdg-dbus-proxy/xdg-dbus-proxy.hash
-index f61a6a91ae..93d4bc05ce 100644
---- a/package/xdg-dbus-proxy/xdg-dbus-proxy.hash
-+++ b/package/xdg-dbus-proxy/xdg-dbus-proxy.hash
-@@ -1,5 +1,5 @@
--# From https://github.com/flatpak/xdg-dbus-proxy/releases/tag/0.1.5
--sha256  061dcfaf8a0650e5fd9d5432dfe88bda749ea0d079dc136304bfecfbce0661fb  xdg-dbus-proxy-0.1.5.tar.xz
-+# From https://github.com/flatpak/xdg-dbus-proxy/releases/tag/0.1.6
-+sha256  131bf59fce7c7ee7ecbc5d9106d6750f4f597bfe609966573240f7e4952973a1  xdg-dbus-proxy-0.1.6.tar.xz
- 
- # Hash for license files:
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING
-diff --git a/package/xdg-dbus-proxy/xdg-dbus-proxy.mk b/package/xdg-dbus-proxy/xdg-dbus-proxy.mk
-index 2e8c054386..0e92946915 100644
---- a/package/xdg-dbus-proxy/xdg-dbus-proxy.mk
-+++ b/package/xdg-dbus-proxy/xdg-dbus-proxy.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XDG_DBUS_PROXY_VERSION = 0.1.5
-+XDG_DBUS_PROXY_VERSION = 0.1.6
- XDG_DBUS_PROXY_SITE = https://github.com/flatpak/xdg-dbus-proxy/releases/download/$(XDG_DBUS_PROXY_VERSION)
- XDG_DBUS_PROXY_SOURCE = xdg-dbus-proxy-$(XDG_DBUS_PROXY_VERSION).tar.xz
- XDG_DBUS_PROXY_DEPENDENCIES = host-pkgconf libglib2
+ >     Makefile.legacy:9: *** "You have legacy configuration in your .config! Please check your configuration.".  Stop.
+
+ > This commit fixes the issue by removing the legacy
+ > BR2_PACKAGE_MYSQL=y configuration directive.
+
+ > Fixes:
+ > https://gitlab.com/buildroot.org/buildroot/-/jobs/7540345406
+
+ > Signed-off-by: Julien Olivain <ju.o@free.fr>
+
+I was just about to send a similar patch to fix this - Committed, thanks.
+
 -- 
-2.46.0
-
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
