@@ -4,92 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CBDA3C52D7C
-	for <buildroot@archiver.kernel.org>; Fri, 23 Aug 2024 06:33:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 671CAC531DC
+	for <buildroot@archiver.kernel.org>; Fri, 23 Aug 2024 06:36:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 70EBD81E04;
-	Fri, 23 Aug 2024 06:33:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3164B80C06;
+	Fri, 23 Aug 2024 06:36:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 96C5cgRCbX95; Fri, 23 Aug 2024 06:33:36 +0000 (UTC)
+ id lnHysKyWSMge; Fri, 23 Aug 2024 06:36:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6C5E281E05
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2ADF881307
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6C5E281E05;
-	Fri, 23 Aug 2024 06:33:36 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 05CE41BF3D7
- for <buildroot@lists.busybox.net>; Fri, 23 Aug 2024 06:33:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2ADF881307;
+	Fri, 23 Aug 2024 06:36:30 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id A02B31BF3D7
+ for <buildroot@lists.busybox.net>; Fri, 23 Aug 2024 06:36:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id F2DCC81E05
- for <buildroot@lists.busybox.net>; Fri, 23 Aug 2024 06:33:34 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9985B410BC
+ for <buildroot@lists.busybox.net>; Fri, 23 Aug 2024 06:36:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8WNHcsyvKxzW for <buildroot@lists.busybox.net>;
- Fri, 23 Aug 2024 06:33:34 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::536; helo=mail-ed1-x536.google.com;
- envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org ACA5981E04
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ACA5981E04
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com
- [IPv6:2a00:1450:4864:20::536])
- by smtp1.osuosl.org (Postfix) with ESMTPS id ACA5981E04
- for <buildroot@buildroot.org>; Fri, 23 Aug 2024 06:33:33 +0000 (UTC)
-Received: by mail-ed1-x536.google.com with SMTP id
- 4fb4d7f45d1cf-5bec4fc82b0so4754724a12.1
- for <buildroot@buildroot.org>; Thu, 22 Aug 2024 23:33:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1724394811; x=1724999611;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=erXpa9CNT+zqYWyZO748pfIaMy3/Ai10ynJ5iGA7YGE=;
- b=uD2vHIxyfUveq7fFVaGClKP0dzDbmmIDsKbEcjs0pTHf1QAxG6udqEjAtAVYF5vb9b
- bglH4FPbQi5diCK+DjfpwrXxLVj+8SmAGvIkosVxq7uA1i1PSJo4xllN1xqSRFp5MH4C
- lp8heVHo2eGp7EldoMdURmpP2zSbPk8ymLbbHlD3SNivFtsSU6QbAde/lbQVvMrjedfx
- MMDiikOfopYv79U/5MV+cbObV85EhgOBUuijnM9et/EKNW5Onvy/QBteY9mX2+OOHPGZ
- fL89hJ7GaMesEjKOAsop7i6yMVqqoyxzmPnO8+97m2kx/FICLMlHxaQsnDvuPuij1/1t
- 1jlA==
-X-Gm-Message-State: AOJu0YyQnAgx8Lr4mIBlxBl1MFz8rWnWDI9w6CXXariVDMsqybYnfplY
- /9c8knKoszwH2ejwTOUr2WKT/XocXiCKRZF/Cfbemoh/uxy/RT2iETbBlC3J7PFZkRSbGh/oFHm
- iZDo=
-X-Google-Smtp-Source: AGHT+IH+ALFXdgVnhdVrtCuwp9Jrz2zZOeeBwGU03uZoIvjDbk+uSSa8TXqYtckDdAbOUOHKpI5GxA==
-X-Received: by 2002:a05:6402:249b:b0:5c0:8d62:bc7f with SMTP id
- 4fb4d7f45d1cf-5c08d62bee0mr287247a12.8.1724394811316; 
- Thu, 22 Aug 2024 23:33:31 -0700 (PDT)
-Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it
- (host-79-25-99-149.retail.telecomitalia.it. [79.25.99.149])
- by smtp.gmail.com with ESMTPSA id
- 4fb4d7f45d1cf-5c044ddbbabsm1661617a12.3.2024.08.22.23.33.30
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 22 Aug 2024 23:33:30 -0700 (PDT)
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Z2lrvz7H88ha for <buildroot@lists.busybox.net>;
+ Fri, 23 Aug 2024 06:36:27 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.195;
+ helo=relay3-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org CE289410A8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CE289410A8
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id CE289410A8
+ for <buildroot@buildroot.org>; Fri, 23 Aug 2024 06:36:26 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 7CC2360003
+ for <buildroot@buildroot.org>; Fri, 23 Aug 2024 06:36:23 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1shNuI-005gmr-35
+ for buildroot@buildroot.org; Fri, 23 Aug 2024 08:36:22 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 23 Aug 2024 08:33:18 +0200
-Message-ID: <20240823063318.961358-1-dario.binacchi@amarulasolutions.com>
-X-Mailer: git-send-email 2.43.0
+Date: Fri, 23 Aug 2024 08:36:22 +0200
+Message-ID: <87msl3d9uh.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1724394811; x=1724999611;
- darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=erXpa9CNT+zqYWyZO748pfIaMy3/Ai10ynJ5iGA7YGE=;
- b=I5e25A+HiqU/EhS9cnn4jFghumtHmnye0/1iw7uoa8zrq4jbBkcW1bPzQvPUNMbABQ
- 4VpvwoiYDoBGzdc5aMqXG7ypZ+1WBd42aHBo2KoTialUYFkFLrGQJ8KhqTlPqwSzQb93
- pf2xJisLbm9LdUm3qxz7LYnQnefBGdG7BjZ+0=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=I5e25A+H
-Subject: [Buildroot] [PATCH 1/1] package/ipmitool: add hash for
- enterprise-numbers.txt
+X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: [Buildroot] Buildroot 2024.08-rc2 released
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,35 +65,29 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Floris Bos <bos@je-eigen-domein.nl>, Heiko Thiery <heiko.thiery@gmail.com>,
- Dario Binacchi <dario.binacchi@amarulasolutions.com>,
- linux-amarula@amarulasolutions.com
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes:
-- http://autobuild.buildroot.org/results/5ae5ee948d99679cd50d1115a7d46f4368347b4f
-
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
----
- package/ipmitool/ipmitool.hash | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/package/ipmitool/ipmitool.hash b/package/ipmitool/ipmitool.hash
-index c3b298e3ba5d..c303afa0f5e7 100644
---- a/package/ipmitool/ipmitool.hash
-+++ b/package/ipmitool/ipmitool.hash
-@@ -1,3 +1,4 @@
- # Locally computed:
- sha256  48b010e7bcdf93e4e4b6e43c53c7f60aa6873d574cbd45a8d86fa7aaeebaff9c  ipmitool-1_8_19.tar.gz
- sha256  b7e2382a8be43b5f6cb092f2d2bda163bf1a1938be9300f821a845cbcd535f56  COPYING
-+sha256  ba2da37bd53a3c04df63c3e5dd1bed123e693ee37fdb9b834f61d2ff4df68a40  enterprise-numbers.txt
--- 
-2.43.0
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGksCgpCdWlsZHJvb3QgMjAyNC4wOC1yYzIgaXMgcmVsZWFzZWQgLSBHbyBkb3dubG9hZCBpdCBh
+dDoKCmh0dHA6Ly9idWlsZHJvb3QubmV0L2Rvd25sb2Fkcy9idWlsZHJvb3QtMjAyNC4wOC1yYzIu
+dGFyLmd6CgpvcgoKaHR0cDovL2J1aWxkcm9vdC5uZXQvZG93bmxvYWRzL2J1aWxkcm9vdC0yMDI0
+LjA4LXJjMi50YXIueHoKCk9yIGdldCBpdCBmcm9tIEdpdDoKCmh0dHBzOi8vZ2l0bGFiLmNvbS9i
+dWlsZHJvb3Qub3JnL2J1aWxkcm9vdC5naXQKCkFub3RoZXIgMiB3ZWVrcywgYW5vdGhlciByZWxl
+YXNlIGNhbmRpZGF0ZS4KClBsZWFzZSBnaXZlIGl0IGEgc3BpbiBhbmQgcmVwb3J0IGFueSBwcm9i
+bGVtcyB0byB0aGUgbWFpbGluZyBsaXN0IG9yCmJ1ZyB0cmFja2VyLiBNYW55IHRoYW5rcyB0byB0
+aGUgcGVvcGxlIGNvbnRyaWJ1dGluZyB0byB0aGlzIHJlbGVhc2U6CgpnaXQgc2hvcnRsb2cgLXNu
+IDIwMjQuMDgtcmMxLi4KCiAgICAyMiAgV2FsZGVtYXIgQnJvZGtvcmIKICAgIDE5ICBUaG9tYXMg
+UGV0YXp6b25pCiAgICAgNiAgUGV0ZXIgS29yc2dhYXJkCiAgICAgNCAgQnJhbmRvbiBNYWllcgog
+ICAgIDMgIEp1bGllbiBPbGl2YWluCiAgICAgMyAgWWFubiBFLiBNT1JJTgogICAgIDIgIEJlcm5k
+IEt1aGxzCiAgICAgMiAgSmFtZXMgSGlsbGlhcmQKICAgICAyICBKYW1pZSBHaWJib25zCiAgICAg
+MiAgTWF4IEZpbGlwcG92CiAgICAgMSAgQWRyaWFuIFBlcmV6IGRlIENhc3RybwogICAgIDEgIEF0
+aGFhcmlxIEFyZGhpYW5zeWFoCiAgICAgMSAgRGFyaW8gQmluYWNjaGkKICAgICAxICBEbWl0cnkg
+Q2hlc3RueWtoCiAgICAgMSAgR2HDq2wgUE9SVEFZCiAgICAgMSAgSi4gTmV1c2Now6RmZXIKICAg
+ICAxICBOZWFsIEZyYWdlcgogICAgIDEgIFJveSBLb2xsZW4gU3ZlbmRzZW4KICAgICAxICBTZXJn
+ZXkgTWF0eXVrZXZpY2gKICAgICAxICBUYW4gRW4gRGUKCkV4cGVjdCB0aGUgZmluYWwgMjAyNC4w
+OCByZWxlYXNlIGF0IHRoZSBlbmQgb2YgdGhlIG1vbnRoLgoKLS0gCkJ5ZSwgUGV0ZXIgS29yc2dh
+YXJkCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxk
+cm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5i
+dWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
