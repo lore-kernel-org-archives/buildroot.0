@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ADF51C52D7C
-	for <buildroot@archiver.kernel.org>; Fri, 23 Aug 2024 17:32:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35960C531DC
+	for <buildroot@archiver.kernel.org>; Fri, 23 Aug 2024 17:33:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6AE2F81882;
-	Fri, 23 Aug 2024 17:32:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 944F0840D9;
+	Fri, 23 Aug 2024 17:32:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RHxqFj_DAm0X; Fri, 23 Aug 2024 17:32:54 +0000 (UTC)
+ id jcHkZrCH5_uY; Fri, 23 Aug 2024 17:32:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 723BC81E79
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9E39A840E3
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 723BC81E79;
-	Fri, 23 Aug 2024 17:32:54 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 7B5D21BF314
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9E39A840E3;
+	Fri, 23 Aug 2024 17:32:56 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C82231BF314
  for <buildroot@lists.busybox.net>; Fri, 23 Aug 2024 17:32:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 68AFC81E79
+ by smtp2.osuosl.org (Postfix) with ESMTP id B506F4016F
  for <buildroot@lists.busybox.net>; Fri, 23 Aug 2024 17:32:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kx7-Sv1RYWPc for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id IqYp3Pt5lVX2 for <buildroot@lists.busybox.net>;
  Fri, 23 Aug 2024 17:32:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 83CCC81882
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9A5644015E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 83CCC81882
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9A5644015E
  for <buildroot@buildroot.org>; Fri, 23 Aug 2024 17:32:52 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7B9C58643F; Fri, 23 Aug 2024 17:32:52 +0000 (UTC)
+ id 8690786484; Fri, 23 Aug 2024 17:32:52 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 23 Aug 2024 19:28:59 +0200
+Date: Fri, 23 Aug 2024 19:29:02 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 26905d3d5802c8126b50ddff93a9bc73b3d30656
-X-Git-Newrev: b52487ee2f4e67a683d86d306f06937828f015a2
+X-Git-Oldrev: b52487ee2f4e67a683d86d306f06937828f015a2
+X-Git-Newrev: d54687cc0f61c085cf94b601a37bd4d475515cc2
 X-Patchwork-Hint: ignore
-Message-Id: <20240823173252.7B9C58643F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-asgiref: bump
- to 3.8.1
+Message-Id: <20240823173252.8690786484@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-msgpack: bump
+ to version 1.0.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,46 +66,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b52487ee2f4e67a683d86d306f06937828f015a2
+commit: https://git.buildroot.net/buildroot/commit/?id=d54687cc0f61c085cf94b601a37bd4d475515cc2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Changelog: https://github.com/django/asgiref/blob/main/CHANGELOG.txt
+Changelog: https://github.com/msgpack/msgpack-python/blob/main/ChangeLog.rst#108
 
 Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-asgiref/python-asgiref.hash | 4 ++--
- package/python-asgiref/python-asgiref.mk   | 4 ++--
+ package/python-msgpack/python-msgpack.hash | 4 ++--
+ package/python-msgpack/python-msgpack.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-asgiref/python-asgiref.hash b/package/python-asgiref/python-asgiref.hash
-index 7f3bca57c0..e3157c3e11 100644
---- a/package/python-asgiref/python-asgiref.hash
-+++ b/package/python-asgiref/python-asgiref.hash
+diff --git a/package/python-msgpack/python-msgpack.hash b/package/python-msgpack/python-msgpack.hash
+index 50462db8db..26599f2972 100644
+--- a/package/python-msgpack/python-msgpack.hash
++++ b/package/python-msgpack/python-msgpack.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/asgiref/json
--md5  7cd61836ec3c329f415309f88e92e0e3  asgiref-3.7.2.tar.gz
--sha256  9e0ce3aa93a819ba5b45120216b23878cf6e8525eb3848653452b4192b92afed  asgiref-3.7.2.tar.gz
-+md5  fb2927e26ea34c97e0a4c89612e80562  asgiref-3.8.1.tar.gz
-+sha256  c343bd80a0bec947a9860adb4c432ffa7db769836c64238fc34bdc3fec84d590  asgiref-3.8.1.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/msgpack/json
+-md5  a5a4172b2e89812ec28267dd8942b77d  msgpack-1.0.7.tar.gz
+-sha256  572efc93db7a4d27e404501975ca6d2d9775705c2d922390d878fcf768d92c87  msgpack-1.0.7.tar.gz
++md5  6f4d91b00537fd5069dc6bfc52ae5652  msgpack-1.0.8.tar.gz
++sha256  95c02b0e27e706e48d0e5426d1710ca78e0f0628d6e89d5b5a5b91a5f12274f3  msgpack-1.0.8.tar.gz
  # Locally computed sha256 checksums
- sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
-diff --git a/package/python-asgiref/python-asgiref.mk b/package/python-asgiref/python-asgiref.mk
-index abd8962476..0725ad6e38 100644
---- a/package/python-asgiref/python-asgiref.mk
-+++ b/package/python-asgiref/python-asgiref.mk
+ sha256  492dedba85da5872f78e6091bcd1fea474d660d35acb4dee964b8aab3f007427  COPYING
+diff --git a/package/python-msgpack/python-msgpack.mk b/package/python-msgpack/python-msgpack.mk
+index 9cdf5263de..4e686a19a6 100644
+--- a/package/python-msgpack/python-msgpack.mk
++++ b/package/python-msgpack/python-msgpack.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_ASGIREF_VERSION = 3.7.2
-+PYTHON_ASGIREF_VERSION = 3.8.1
- PYTHON_ASGIREF_SOURCE = asgiref-$(PYTHON_ASGIREF_VERSION).tar.gz
--PYTHON_ASGIREF_SITE = https://files.pythonhosted.org/packages/12/19/64e38c1c2cbf0da9635b7082bbdf0e89052e93329279f59759c24a10cc96
-+PYTHON_ASGIREF_SITE = https://files.pythonhosted.org/packages/29/38/b3395cc9ad1b56d2ddac9970bc8f4141312dbaec28bc7c218b0dfafd0f42
- PYTHON_ASGIREF_SETUP_TYPE = setuptools
- PYTHON_ASGIREF_LICENSE = BSD-3-Clause
- PYTHON_ASGIREF_LICENSE_FILES = LICENSE
+-PYTHON_MSGPACK_VERSION = 1.0.7
++PYTHON_MSGPACK_VERSION = 1.0.8
+ PYTHON_MSGPACK_SOURCE = msgpack-$(PYTHON_MSGPACK_VERSION).tar.gz
+-PYTHON_MSGPACK_SITE = https://files.pythonhosted.org/packages/c2/d5/5662032db1571110b5b51647aed4b56dfbd01bfae789fa566a2be1f385d1
++PYTHON_MSGPACK_SITE = https://files.pythonhosted.org/packages/08/4c/17adf86a8fbb02c144c7569dc4919483c01a2ac270307e2d59e1ce394087
+ PYTHON_MSGPACK_LICENSE = Apache-2.0
+ PYTHON_MSGPACK_LICENSE_FILES = COPYING
+ PYTHON_MSGPACK_SETUP_TYPE = setuptools
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
