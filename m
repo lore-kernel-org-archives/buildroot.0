@@ -4,65 +4,92 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 785A9C531DC
-	for <buildroot@archiver.kernel.org>; Fri, 23 Aug 2024 05:26:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CBDA3C52D7C
+	for <buildroot@archiver.kernel.org>; Fri, 23 Aug 2024 06:33:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0BB16818AC;
-	Fri, 23 Aug 2024 05:26:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 70EBD81E04;
+	Fri, 23 Aug 2024 06:33:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VbzpblM1rkWu; Fri, 23 Aug 2024 05:26:39 +0000 (UTC)
+ id 96C5cgRCbX95; Fri, 23 Aug 2024 06:33:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8C5B4818BE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6C5E281E05
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8C5B4818BE;
-	Fri, 23 Aug 2024 05:26:39 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 007961BF30D
- for <buildroot@lists.busybox.net>; Fri, 23 Aug 2024 05:26:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6C5E281E05;
+	Fri, 23 Aug 2024 06:33:36 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 05CE41BF3D7
+ for <buildroot@lists.busybox.net>; Fri, 23 Aug 2024 06:33:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E11654025B
- for <buildroot@lists.busybox.net>; Fri, 23 Aug 2024 05:26:37 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id F2DCC81E05
+ for <buildroot@lists.busybox.net>; Fri, 23 Aug 2024 06:33:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cuocYuUv8Vpi for <buildroot@lists.busybox.net>;
- Fri, 23 Aug 2024 05:26:35 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=89.238.66.15;
- helo=helium.openadk.org; envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 2646B400B5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2646B400B5
-Received: from helium.openadk.org (helium.openadk.org [89.238.66.15])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 2646B400B5
- for <buildroot@buildroot.org>; Fri, 23 Aug 2024 05:26:33 +0000 (UTC)
-Received: by helium.openadk.org (Postfix, from userid 1000)
- id D49613536702; Fri, 23 Aug 2024 07:26:25 +0200 (CEST)
-Date: Fri, 23 Aug 2024 07:26:25 +0200
-From: Waldemar Brodkorb <wbx@openadk.org>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8WNHcsyvKxzW for <buildroot@lists.busybox.net>;
+ Fri, 23 Aug 2024 06:33:34 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::536; helo=mail-ed1-x536.google.com;
+ envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org ACA5981E04
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ACA5981E04
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com
+ [IPv6:2a00:1450:4864:20::536])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id ACA5981E04
+ for <buildroot@buildroot.org>; Fri, 23 Aug 2024 06:33:33 +0000 (UTC)
+Received: by mail-ed1-x536.google.com with SMTP id
+ 4fb4d7f45d1cf-5bec4fc82b0so4754724a12.1
+ for <buildroot@buildroot.org>; Thu, 22 Aug 2024 23:33:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1724394811; x=1724999611;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=erXpa9CNT+zqYWyZO748pfIaMy3/Ai10ynJ5iGA7YGE=;
+ b=uD2vHIxyfUveq7fFVaGClKP0dzDbmmIDsKbEcjs0pTHf1QAxG6udqEjAtAVYF5vb9b
+ bglH4FPbQi5diCK+DjfpwrXxLVj+8SmAGvIkosVxq7uA1i1PSJo4xllN1xqSRFp5MH4C
+ lp8heVHo2eGp7EldoMdURmpP2zSbPk8ymLbbHlD3SNivFtsSU6QbAde/lbQVvMrjedfx
+ MMDiikOfopYv79U/5MV+cbObV85EhgOBUuijnM9et/EKNW5Onvy/QBteY9mX2+OOHPGZ
+ fL89hJ7GaMesEjKOAsop7i6yMVqqoyxzmPnO8+97m2kx/FICLMlHxaQsnDvuPuij1/1t
+ 1jlA==
+X-Gm-Message-State: AOJu0YyQnAgx8Lr4mIBlxBl1MFz8rWnWDI9w6CXXariVDMsqybYnfplY
+ /9c8knKoszwH2ejwTOUr2WKT/XocXiCKRZF/Cfbemoh/uxy/RT2iETbBlC3J7PFZkRSbGh/oFHm
+ iZDo=
+X-Google-Smtp-Source: AGHT+IH+ALFXdgVnhdVrtCuwp9Jrz2zZOeeBwGU03uZoIvjDbk+uSSa8TXqYtckDdAbOUOHKpI5GxA==
+X-Received: by 2002:a05:6402:249b:b0:5c0:8d62:bc7f with SMTP id
+ 4fb4d7f45d1cf-5c08d62bee0mr287247a12.8.1724394811316; 
+ Thu, 22 Aug 2024 23:33:31 -0700 (PDT)
+Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it
+ (host-79-25-99-149.retail.telecomitalia.it. [79.25.99.149])
+ by smtp.gmail.com with ESMTPSA id
+ 4fb4d7f45d1cf-5c044ddbbabsm1661617a12.3.2024.08.22.23.33.30
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 22 Aug 2024 23:33:30 -0700 (PDT)
+From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To: buildroot@buildroot.org
-Message-ID: <ZsgdgdqUcwJzrrna@waldemar-brodkorb.de>
+Date: Fri, 23 Aug 2024 08:33:18 +0200
+Message-ID: <20240823063318.961358-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-Content-Disposition: inline
-X-Operating-System: Linux 5.10.0-31-amd64 x86_64
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=openadk.org; s=2022; 
- t=1724390786; bh=8YE50h27jyVKst+J1SXCi8oYADY6SZO1tQtrpF9oRZ8=;
- h=Date:From:To:Subject:From;
- b=VsUZYjyTKrFPSTXBudI2mvOX0vfyHD/CdHvfgjxmtFvrWYNwcI7By47hBdqlS6Yst
- QJueEoWfeweHT95o7kC1yAZZbivmllVQbPwluG6atxdjqLRCKnXMjRVIyuihbnciVL
- Y5uVezMutcdpcuhFmxLQxWaJdD/1Hr1mVT3Cfdd6h61JCERQBbHoFHVdwF84wfSB/H
- 8rmgwfDtA+xsIFNB1xNB8qSZEqOc+Sdt7OuEzC6C/eR6Dsim+hyRA2fRCAELTrxc0F
- ccPchjJlemMQpl8lLg1hlBzmwNLoRWvqXIA+C1kYKMGnSlbXpT5A+tjYLbHxZPl+ma
- MMO45HNiDrn8Q==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=openadk.org
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=openadk.org header.i=@openadk.org header.a=rsa-sha256
- header.s=2022 header.b=VsUZYjyT
-Subject: [Buildroot] [PATCH next] package/fbv: update package
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=amarulasolutions.com; s=google; t=1724394811; x=1724999611;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=erXpa9CNT+zqYWyZO748pfIaMy3/Ai10ynJ5iGA7YGE=;
+ b=I5e25A+HiqU/EhS9cnn4jFghumtHmnye0/1iw7uoa8zrq4jbBkcW1bPzQvPUNMbABQ
+ 4VpvwoiYDoBGzdc5aMqXG7ypZ+1WBd42aHBo2KoTialUYFkFLrGQJ8KhqTlPqwSzQb93
+ pf2xJisLbm9LdUm3qxz7LYnQnefBGdG7BjZ+0=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=amarulasolutions.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
+ header.a=rsa-sha256 header.s=google header.b=I5e25A+H
+Subject: [Buildroot] [PATCH 1/1] package/ipmitool: add hash for
+ enterprise-numbers.txt
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,519 +101,33 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Floris Bos <bos@je-eigen-domein.nl>, Heiko Thiery <heiko.thiery@gmail.com>,
+ Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+ linux-amarula@amarulasolutions.com
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-After the official fbv download page is no longer available
-switch to an hopefully active github fork.
+Fixes:
+- http://autobuild.buildroot.org/results/5ae5ee948d99679cd50d1115a7d46f4368347b4f
 
-Changes made to the Buildroot package:
-- new active upstream fork (6 month old commits)
-- use autoreconf to create configure
-- remove all patches because they are no longer supported
-- upstream removed GIF support, so remove it here too
-
-Tested on a RPI5 with a PNG, BMP and JPEG picture.
-
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 ---
- package/fbv/0001-cross.patch                  | 44 ----------
- ...nstead-of-a-macro-for-jpeg-detection.patch | 29 +++++++
- ...0002-fix-24bpp-support-on-big-endian.patch | 32 -------
- package/fbv/0003-fix-bgr555.patch             | 64 --------------
- package/fbv/0004-giflib.patch                 | 84 -------------------
- package/fbv/0005-include.patch                | 20 -----
- package/fbv/0006-libpng15.patch               | 24 ------
- .../0007-gif.c-fic-build-with-gcc-10.patch    | 36 --------
- package/fbv/Config.in                         | 13 +--
- package/fbv/fbv.hash                          |  2 +-
- package/fbv/fbv.mk                            | 32 ++-----
- 11 files changed, 38 insertions(+), 342 deletions(-)
- delete mode 100644 package/fbv/0001-cross.patch
- create mode 100644 package/fbv/0001-use-a-function-instead-of-a-macro-for-jpeg-detection.patch
- delete mode 100644 package/fbv/0002-fix-24bpp-support-on-big-endian.patch
- delete mode 100644 package/fbv/0003-fix-bgr555.patch
- delete mode 100644 package/fbv/0004-giflib.patch
- delete mode 100644 package/fbv/0005-include.patch
- delete mode 100644 package/fbv/0006-libpng15.patch
- delete mode 100644 package/fbv/0007-gif.c-fic-build-with-gcc-10.patch
+ package/ipmitool/ipmitool.hash | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/fbv/0001-cross.patch b/package/fbv/0001-cross.patch
-deleted file mode 100644
-index ab5f0fb48c..0000000000
---- a/package/fbv/0001-cross.patch
-+++ /dev/null
-@@ -1,44 +0,0 @@
--diff -urpN fbv-1.0b.orig/configure fbv-1.0b/configure
----- fbv-1.0b.orig/configure	2004-09-07 13:29:27.000000000 +0200
--+++ fbv-1.0b/configure	2008-04-24 10:52:37.000000000 +0200
--@@ -80,6 +80,7 @@ while true ; do
-- 	esac
-- done
-- 
--+[ -z "$CC" ] && CC=cc
-- [ -z "$prefix" ] && prefix="/usr/local"
-- [ -z "$bindir" ] && bindir="${prefix}/bin"
-- [ -z "$mandir" ] && mandir="${prefix}/man"
--@@ -106,12 +107,12 @@ xdir="/usr/X11R6"
-- ungif="no"
-- echo "libungif check" >>./config.log
-- echo "  1st:" >>./config.log
---cc 2>>./config.log >>./config.log -o \$\$~test \$\$~test.c -lungif $libs
--+$CC 2>>./config.log >>./config.log -o \$\$~test \$\$~test.c -lungif $libs
-- if [ -e \$\$~test ]; then
-- 	libs="-lungif $libs" ; ungif="yes"
-- else
-- 	echo "  2nd: -lX11 -L$xdir/lib" >>./config.log
---	cc 2>>./config.log >>./config.log -o \$\$~test \$\$~test.c -lungif -lX11 -L$xdir/lib $libs
--+	$CC 2>>./config.log >>./config.log -o \$\$~test \$\$~test.c -lungif -lX11 -L$xdir/lib $libs
-- 	if [ -e \$\$~test ]; then
-- 	libs="-lungif -lX11 -L$xdir/lib $libs" ; ungif="yes"
-- 	fi
--@@ -124,7 +125,7 @@ echo "libungif: $ungif" >> ./config.log
-- echo -n "checking for libjpeg presence... "
-- if [ "$jpeg" != "disabled" ]; then
-- jpeg="no"
---cc 2>>./config.log >>./config.log -o \$\$~test \$\$~test.c -ljpeg $libs
--+$CC 2>>./config.log >>./config.log -o \$\$~test \$\$~test.c -ljpeg $libs
-- if [ -e \$\$~test ]; then
-- 	libs="-ljpeg $libs" ; jpeg="yes"
-- fi
--@@ -135,7 +136,7 @@ echo "libjpeg: $jpeg" >> ./config.log
-- echo -n "checking for libpng presence... "
-- if [ "$png" != "disabled" ]; then
-- png="no"
---cc 2>>./config.log >>./config.log -o \$\$~test \$\$~test.c -lpng $libs
--+$CC 2>>./config.log >>./config.log -o \$\$~test \$\$~test.c -lpng $libs
-- if [ -e \$\$~test ]; then
-- 	libs="-lpng $libs" ; png="yes"
-- fi
-diff --git a/package/fbv/0001-use-a-function-instead-of-a-macro-for-jpeg-detection.patch b/package/fbv/0001-use-a-function-instead-of-a-macro-for-jpeg-detection.patch
-new file mode 100644
-index 0000000000..131dafc5c1
---- /dev/null
-+++ b/package/fbv/0001-use-a-function-instead-of-a-macro-for-jpeg-detection.patch
-@@ -0,0 +1,29 @@
-+From 3547055ba135dc1d8aacea68f16456aabb8c0a91 Mon Sep 17 00:00:00 2001
-+From: Waldemar Brodkorb <wbx@openadk.org>
-+Date: Fri, 23 Aug 2024 06:11:43 +0200
-+Subject: [PATCH] use a function instead of a macro for jpeg detection
-+
-+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-+Upstream: https://github.com/amadvance/fbv/pull/1
-+---
-+ configure.ac | 4 ++--
-+ 1 file changed, 2 insertions(+), 2 deletions(-)
-+
-+diff --git a/configure.ac b/configure.ac
-+index 3fa4666..fc65903 100644
-+--- a/configure.ac
-++++ b/configure.ac
-+@@ -28,8 +28,8 @@ AC_SEARCH_LIBS([png_create_read_struct], [png], [
-+ 	]
-+ )
-+ 
-+-AC_SEARCH_LIBS([jpeg_create_decompress], [jpeg], [
-+-	LIBS="-ljpeg"
-++AC_SEARCH_LIBS([jpeg_start_decompress], [jpeg], [
-++	LIBS="$LIBS -ljpeg"
-+ 	CFLAGS="$CFLAGS -DFBV_SUPPORT_JPEG"
-+ 	], [
-+ 	]
-+-- 
-+2.39.2
-+
-diff --git a/package/fbv/0002-fix-24bpp-support-on-big-endian.patch b/package/fbv/0002-fix-24bpp-support-on-big-endian.patch
-deleted file mode 100644
-index 23185ac46b..0000000000
---- a/package/fbv/0002-fix-24bpp-support-on-big-endian.patch
-+++ /dev/null
-@@ -1,32 +0,0 @@
--diff -upr a/fb_display.c b/fb_display.c
----- a/fb_display.c	2007-06-01 16:52:45.000000000 +0200
--+++ b/fb_display.c	2007-06-01 16:51:43.000000000 +0200
--@@ -307,7 +307,7 @@ void* convertRGB2FB(int fh, unsigned cha
-- {
--     unsigned long i;
--     void *fbbuff = NULL;
---	u_int8_t  *c_fbbuff;
--+    u_int8_t  *c_fbbuff;
--     u_int16_t *s_fbbuff;
--     u_int32_t *i_fbbuff;
-- 
--@@ -335,6 +335,16 @@ void* convertRGB2FB(int fh, unsigned cha
-- 	    fbbuff = (void *) s_fbbuff;
-- 	    break;
-- 	case 24:
--+	    *cpp = 3;
--+	    c_fbbuff = (unsigned char *) malloc(count * 3 * sizeof(unsigned char));
--+	    for(i = 0; i < (3 * count); i += 3) {
--+		/* Big endian framebuffer. */
--+		c_fbbuff[i] = rgbbuff[i+2];
--+		c_fbbuff[i+1] = rgbbuff[i+1];
--+		c_fbbuff[i+2] = rgbbuff[i];
--+	    }
--+	    fbbuff = (void *) c_fbbuff;
--+	    break;
-- 	case 32:
-- 	    *cpp = 4;
-- 	    i_fbbuff = (unsigned int *) malloc(count * sizeof(unsigned int));
--Only in build_avr32/fbv-1.0b-modified: .fb_display.c.swp
--Binary files build_avr32/fbv-1.0b/fb_display.o and build_avr32/fbv-1.0b-modified/fb_display.o differ
--Binary files build_avr32/fbv-1.0b/fbv and build_avr32/fbv-1.0b-modified/fbv differ
-diff --git a/package/fbv/0003-fix-bgr555.patch b/package/fbv/0003-fix-bgr555.patch
-deleted file mode 100644
-index 8f185f0a37..0000000000
---- a/package/fbv/0003-fix-bgr555.patch
-+++ /dev/null
-@@ -1,64 +0,0 @@
--[PATCH] fbv: support bgr555 format
--
--Signed-off-by: Josh.Wu <josh.wu@atmel.com>
--diff -Naur fbv-1.0b-ori/fb_display.c fbv-1.0b/fb_display.c
----- fbv-1.0b-ori/fb_display.c	2010-04-02 09:38:15.000000000 +0800
--+++ fbv-1.0b/fb_display.c	2010-04-01 18:54:15.000000000 +0800
--@@ -297,6 +297,14 @@
-- 	 ((b >> 3) & 31)        );
-- }
-- 
--+inline static unsigned short make15color_bgr(unsigned char r, unsigned char g, unsigned char b)
--+{
--+    return (
--+	(((b >> 3) & 31) << 10) |
--+	(((g >> 3) & 31) << 5)  |
--+	 ((r >> 3) & 31)        );
--+}
--+
-- inline static unsigned short make16color(unsigned char r, unsigned char g, unsigned char b)
-- {
--     return (
--@@ -313,6 +321,14 @@
--     u_int16_t *s_fbbuff;
--     u_int32_t *i_fbbuff;
-- 
--+    int is_bgr555 = 0;
--+    struct fb_var_screeninfo var;
--+    getVarScreenInfo(fh, &var);
--+    if(var.red.offset == 0 && 
--+       var.green.offset == 5 && 
--+       var.blue.offset == 10)
--+	is_bgr555 = 1;
--+
--     switch(bpp)
--     {
-- 	case 8:
--@@ -325,15 +341,23 @@
-- 	case 15:
-- 	    *cpp = 2;
-- 	    s_fbbuff = (unsigned short *) malloc(count * sizeof(unsigned short));
---	    for(i = 0; i < count ; i++)
---		s_fbbuff[i] = make15color(rgbbuff[i*3], rgbbuff[i*3+1], rgbbuff[i*3+2]);
--+	    if(is_bgr555)
--+	    	for(i = 0; i < count ; i++)
--+		    s_fbbuff[i] = make15color_bgr(rgbbuff[i*3], rgbbuff[i*3+1], rgbbuff[i*3+2]);
--+	    else
--+	    	for(i = 0; i < count ; i++)
--+		    s_fbbuff[i] = make15color(rgbbuff[i*3], rgbbuff[i*3+1], rgbbuff[i*3+2]);
-- 	    fbbuff = (void *) s_fbbuff;
-- 	    break;
-- 	case 16:
-- 	    *cpp = 2;
-- 	    s_fbbuff = (unsigned short *) malloc(count * sizeof(unsigned short));
---	    for(i = 0; i < count ; i++)
---		s_fbbuff[i] = make16color(rgbbuff[i*3], rgbbuff[i*3+1], rgbbuff[i*3+2]);
--+	    if(is_bgr555)
--+	    	for(i = 0; i < count ; i++)
--+		    s_fbbuff[i] = make15color_bgr(rgbbuff[i*3], rgbbuff[i*3+1], rgbbuff[i*3+2]);
--+	    else
--+	    	for(i = 0; i < count ; i++)
--+		    s_fbbuff[i] = make16color(rgbbuff[i*3], rgbbuff[i*3+1], rgbbuff[i*3+2]);
-- 	    fbbuff = (void *) s_fbbuff;
-- 	    break;
-- 	case 24:
-diff --git a/package/fbv/0004-giflib.patch b/package/fbv/0004-giflib.patch
-deleted file mode 100644
-index 7043353586..0000000000
---- a/package/fbv/0004-giflib.patch
-+++ /dev/null
-@@ -1,84 +0,0 @@
--Adjust source code to work with giflib 5.1x
--
--Downloaded patch for gif.c from
--https://projects.archlinux.org/svntogit/community.git/plain/trunk/giflib-5.1.patch?h=packages/fbv
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
--
--diff -wbBur fbv-1.0b/gif.c fbv-1.0b.my/gif.c
----- fbv-1.0b/gif.c	2003-08-25 00:23:02.000000000 +0400
--+++ fbv-1.0b.my/gif.c	2014-05-29 18:39:41.337332872 +0400
--@@ -31,10 +31,10 @@
-- #include <string.h>
-- #define min(a,b) ((a) < (b) ? (a) : (b))
-- #define gflush return(FH_ERROR_FILE);
---#define grflush { DGifCloseFile(gft); return(FH_ERROR_FORMAT); }
---#define mgrflush { free(lb); free(slb); DGifCloseFile(gft); return(FH_ERROR_FORMAT); }
--+#define grflush { DGifCloseFile(gft, NULL); return(FH_ERROR_FORMAT); }
--+#define mgrflush { free(lb); free(slb); DGifCloseFile(gft, NULL); return(FH_ERROR_FORMAT); }
-- #define agflush return(FH_ERROR_FORMAT);
---#define agrflush { DGifCloseFile(gft); return(FH_ERROR_FORMAT); }
--+#define agrflush { DGifCloseFile(gft, NULL); return(FH_ERROR_FORMAT); }
-- 
-- 
-- int fh_gif_id(char *name)
--@@ -81,7 +81,7 @@
--     ColorMapObject *cmap;
--     int cmaps;
-- 
---    gft=DGifOpenFileName(name);
--+    gft=DGifOpenFileName(name, NULL);
--     if(gft==NULL){printf("err5\n"); gflush;} //////////
--     do
--     {
--@@ -170,7 +170,7 @@
-- 	}
--     }
--     while( rt!= TERMINATE_RECORD_TYPE );
---    DGifCloseFile(gft);
--+    DGifCloseFile(gft, NULL);
--     return(FH_ERROR_OK);
-- }
-- 
--@@ -184,7 +184,7 @@
--     int extcode;
--     GifRecordType rt;
-- 
---    gft=DGifOpenFileName(name);
--+    gft=DGifOpenFileName(name, NULL);
--     if(gft==NULL) gflush;
--     do
--     {
--@@ -197,7 +197,7 @@
-- 		px=gft->Image.Width;
-- 		py=gft->Image.Height;
-- 		*x=px; *y=py;
---		DGifCloseFile(gft);
--+		DGifCloseFile(gft, NULL);
-- 		return(FH_ERROR_OK);
-- 		break;
-- 	    case EXTENSION_RECORD_TYPE:
--@@ -210,7 +210,7 @@
-- 	}  
--     }
--     while( rt!= TERMINATE_RECORD_TYPE );
---    DGifCloseFile(gft);
--+    DGifCloseFile(gft, NULL);
--     return(FH_ERROR_FORMAT);
-- }
-- #endif
--diff -uNr fbv-1.0b.org/configure fbv-1.0b/configure
----- fbv-1.0b.org/configure	2004-09-07 13:29:27.000000000 +0200
--+++ fbv-1.0b/configure	2015-01-29 19:58:30.374599874 +0100
--@@ -106,9 +106,9 @@
-- ungif="no"
-- echo "libungif check" >>./config.log
-- echo "  1st:" >>./config.log
---$CC 2>>./config.log >>./config.log -o \$\$~test \$\$~test.c -lungif $libs
--+$CC 2>>./config.log >>./config.log -o \$\$~test \$\$~test.c -lgif $libs
-- if [ -e \$\$~test ]; then
---	libs="-lungif $libs" ; ungif="yes"
--+	libs="-lgif $libs" ; ungif="yes"
-- else
-- 	echo "  2nd: -lX11 -L$xdir/lib" >>./config.log
-- 	$CC 2>>./config.log >>./config.log -o \$\$~test \$\$~test.c -lungif -lX11 -L$xdir/lib $libs
-diff --git a/package/fbv/0005-include.patch b/package/fbv/0005-include.patch
-deleted file mode 100644
-index 3d1cc17f74..0000000000
---- a/package/fbv/0005-include.patch
-+++ /dev/null
-@@ -1,20 +0,0 @@
--diff -urpN fbv-1.0b.orig/fb_display.c fbv-1.0b/fb_display.c
----- fbv-1.0b.orig/fb_display.c	2004-09-07 14:09:43.000000000 +0200
--+++ fbv-1.0b/fb_display.c	2008-04-24 10:48:29.000000000 +0200
--@@ -18,8 +18,6 @@
--     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-- */
-- 
---#include <linux/fb.h>
---
-- #include <stdio.h>
-- #include <stdlib.h>
-- #include <sys/types.h>
--@@ -31,6 +29,7 @@
-- #include <asm/types.h>
-- #include <string.h>
-- #include <errno.h>
--+#include <linux/fb.h>
-- #include "config.h"
-- /* Public Use Functions:
--  *
-diff --git a/package/fbv/0006-libpng15.patch b/package/fbv/0006-libpng15.patch
-deleted file mode 100644
-index 7872a73cf6..0000000000
---- a/package/fbv/0006-libpng15.patch
-+++ /dev/null
-@@ -1,24 +0,0 @@
--Support for libpng 1.5+ shamelessly taken from Gentoo.
--
--Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
--
----- a/png.c
--+++ b/png.c
--@@ -69,7 +69,7 @@
--         fclose(fh); return(FH_ERROR_FORMAT);
--     }
--     rp=0;
---    if (setjmp(png_ptr->jmpbuf))
--+    if (setjmp(png_jmpbuf(png_ptr)))
--     {
-- 	png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp)NULL);
--         if(rp) free(rp);
--@@ -161,7 +161,7 @@
--         fclose(fh); return(FH_ERROR_FORMAT);
--     }
--     rp=0;
---    if (setjmp(png_ptr->jmpbuf))
--+    if (setjmp(png_jmpbuf(png_ptr)))
--     {
-- 	png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp)NULL);
--         if(rp) free(rp);
-diff --git a/package/fbv/0007-gif.c-fic-build-with-gcc-10.patch b/package/fbv/0007-gif.c-fic-build-with-gcc-10.patch
-deleted file mode 100644
-index 57d5777b61..0000000000
---- a/package/fbv/0007-gif.c-fic-build-with-gcc-10.patch
-+++ /dev/null
-@@ -1,36 +0,0 @@
--From 8877207b290da1c3bc100f2705c30e6bdafcd985 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Thu, 26 May 2022 23:59:46 +0200
--Subject: [PATCH] gif.c: fic build with gcc >= 10
--
--Fix the following build failure with gcc >= 10::
--
--/nvmedata/autobuild/instance-30/output-1/per-package/fbv/host/bin/../lib/gcc/powerpc-buildroot-linux-uclibc/11.3.0/../../../../powerpc-buildroot-linux-uclibc/bin/ld: gif.o: in function `fh_gif_load':
--gif.c:(.text+0x338): undefined reference to `m_rend_gif_decodecolormap'
--
--Fixes:
-- - http://autobuild.buildroot.org/results/dca603a61b1fd0558992b4a40152d23b5b9c0049
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: not upstreamable (most active fork dropped gif
--support: https://github.com/godspeed1989/fbv/pull/17)]
-----
-- gif.c | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/gif.c b/gif.c
--index 689e549..5560f25 100644
----- a/gif.c
--+++ b/gif.c
--@@ -48,7 +48,7 @@ int fh_gif_id(char *name)
--     return(0);
-- }
-- 
---inline void m_rend_gif_decodecolormap(unsigned char *cmb,unsigned char *rgbb,ColorMapObject *cm,int s,int l, int transparency)
--+static inline void m_rend_gif_decodecolormap(unsigned char *cmb,unsigned char *rgbb,ColorMapObject *cm,int s,int l, int transparency)
-- {
--     GifColorType *cmentry;
--     int i;
---- 
--2.35.1
--
-diff --git a/package/fbv/Config.in b/package/fbv/Config.in
-index 2206276334..1d11bfb3ef 100644
---- a/package/fbv/Config.in
-+++ b/package/fbv/Config.in
-@@ -2,10 +2,10 @@ config BR2_PACKAGE_FBV
- 	bool "fbv"
- 	help
- 	  fbv is a very simple graphic file viewer for the framebuffer
--	  console, capable of displaying GIF, JPEG, PNG and BMP files
--	  using libungif, libjpeg and libpng.
-+	  console, capable of displaying JPEG, PNG and BMP files
-+	  using libjpeg and libpng.
- 
--	  http://freshmeat.net/projects/fbv/
-+	  https://github.com/amadvance/fbv
- 
- if BR2_PACKAGE_FBV
- 
-@@ -23,11 +23,4 @@ config BR2_PACKAGE_FBV_JPEG
- 	help
- 	  Enable support for JPEG using IJG's libjpeg.
- 
--config BR2_PACKAGE_FBV_GIF
--	bool "GIF support"
--	default y
--	select BR2_PACKAGE_GIFLIB
--	help
--	  Enable support for GIF using giflib.
--
- endif # BR2_PACKAGE_FBV
-diff --git a/package/fbv/fbv.hash b/package/fbv/fbv.hash
-index 3f25465ba1..7cd9bb597f 100644
---- a/package/fbv/fbv.hash
-+++ b/package/fbv/fbv.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  9b55b9dafd5eb01562060d860e267e309a1876e8ba5ce4d3303484b94129ab3c  fbv-1.0b.tar.gz
-+sha256  233b387bf110eaab94221e91bebc16365c70bf6ede01280164a875a7f460d0e0  fbv-7c2000804226ca860ca80f3baa993582e29aa1a2-git4.tar.gz
- sha256  bf21d97bafcaacb5d6bc3d5502030c340f0e0593614078ab017af91e950083af  COPYING
-diff --git a/package/fbv/fbv.mk b/package/fbv/fbv.mk
-index a69e4ad518..9c7d74b671 100644
---- a/package/fbv/fbv.mk
-+++ b/package/fbv/fbv.mk
-@@ -4,12 +4,14 @@
- #
- ################################################################################
- 
--FBV_VERSION = 1.0b
--FBV_SITE = http://s-tech.elsat.net.pl/fbv
--
-+FBV_VERSION = 7c2000804226ca860ca80f3baa993582e29aa1a2
-+FBV_SITE = https://github.com/amadvance/fbv
-+FBV_SITE_METHOD = git
- FBV_LICENSE = GPL-2.0
- FBV_LICENSE_FILES = COPYING
- 
-+FBV_AUTORECONF = YES
-+
- ### image format dependencies and configure options
- FBV_DEPENDENCIES = # empty
- FBV_CONFIGURE_OPTS = # empty
-@@ -29,29 +31,5 @@ FBV_DEPENDENCIES += jpeg
- else
- FBV_CONFIGURE_OPTS += --without-libjpeg
- endif
--ifeq ($(BR2_PACKAGE_FBV_GIF),y)
--FBV_DEPENDENCIES += giflib
--else
--FBV_CONFIGURE_OPTS += --without-libungif
--endif
--
--#fbv doesn't support cross-compilation
--define FBV_CONFIGURE_CMDS
--	(cd $(FBV_DIR); rm -f config.cache; \
--		$(TARGET_CONFIGURE_OPTS) \
--		$(TARGET_CONFIGURE_ARGS) \
--		./configure \
--		--prefix=/usr \
--		$(FBV_CONFIGURE_OPTS) \
--	)
--endef
--
--define FBV_BUILD_CMDS
--	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
--endef
--
--define FBV_INSTALL_TARGET_CMDS
--	$(INSTALL) -D $(@D)/fbv $(TARGET_DIR)/usr/bin/fbv
--endef
- 
- $(eval $(autotools-package))
+diff --git a/package/ipmitool/ipmitool.hash b/package/ipmitool/ipmitool.hash
+index c3b298e3ba5d..c303afa0f5e7 100644
+--- a/package/ipmitool/ipmitool.hash
++++ b/package/ipmitool/ipmitool.hash
+@@ -1,3 +1,4 @@
+ # Locally computed:
+ sha256  48b010e7bcdf93e4e4b6e43c53c7f60aa6873d574cbd45a8d86fa7aaeebaff9c  ipmitool-1_8_19.tar.gz
+ sha256  b7e2382a8be43b5f6cb092f2d2bda163bf1a1938be9300f821a845cbcd535f56  COPYING
++sha256  ba2da37bd53a3c04df63c3e5dd1bed123e693ee37fdb9b834f61d2ff4df68a40  enterprise-numbers.txt
 -- 
-2.39.2
+2.43.0
 
 _______________________________________________
 buildroot mailing list
