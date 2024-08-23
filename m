@@ -4,72 +4,77 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0541DC52D7C
-	for <buildroot@archiver.kernel.org>; Fri, 23 Aug 2024 14:56:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EBA09C531DC
+	for <buildroot@archiver.kernel.org>; Fri, 23 Aug 2024 15:13:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BD6AB840BF;
-	Fri, 23 Aug 2024 14:56:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8EDB081E7B;
+	Fri, 23 Aug 2024 15:13:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qmutDElr7fhL; Fri, 23 Aug 2024 14:56:49 +0000 (UTC)
+ id H4PQyecIASr8; Fri, 23 Aug 2024 15:12:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BFD75840C0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B35AE81E99
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BFD75840C0;
-	Fri, 23 Aug 2024 14:56:49 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 269A51BF345
- for <buildroot@lists.busybox.net>; Fri, 23 Aug 2024 14:56:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B35AE81E99;
+	Fri, 23 Aug 2024 15:12:59 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 2A9721BF4E6
+ for <buildroot@lists.busybox.net>; Fri, 23 Aug 2024 15:12:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2096540327
- for <buildroot@lists.busybox.net>; Fri, 23 Aug 2024 14:56:48 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 17630412F7
+ for <buildroot@lists.busybox.net>; Fri, 23 Aug 2024 15:12:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 12baWAnYNyR9 for <buildroot@lists.busybox.net>;
- Fri, 23 Aug 2024 14:56:47 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.200;
- helo=relay7-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id j17sPSpzWpDd for <buildroot@lists.busybox.net>;
+ Fri, 23 Aug 2024 15:12:57 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=209.85.128.46;
+ helo=mail-wm1-f46.google.com; envelope-from=thomas.devoogdt@gmail.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org A24E840129
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A24E840129
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp2.osuosl.org (Postfix) with ESMTPS id A24E840129
- for <buildroot@buildroot.org>; Fri, 23 Aug 2024 14:56:45 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id EBB8120003;
- Fri, 23 Aug 2024 14:56:42 +0000 (UTC)
-Date: Fri, 23 Aug 2024 16:56:40 +0200
-To: Adrian Perez de Castro <aperez@igalia.com>
-Message-ID: <20240823165640.6f40aa58@windsurf>
-In-Reply-To: <20240823122919.3325906-1-aperez@igalia.com>
-References: <20240823122919.3325906-1-aperez@igalia.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org BDA2F41278
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BDA2F41278
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com
+ [209.85.128.46])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id BDA2F41278
+ for <buildroot@buildroot.org>; Fri, 23 Aug 2024 15:12:56 +0000 (UTC)
+Received: by mail-wm1-f46.google.com with SMTP id
+ 5b1f17b1804b1-428e0d18666so15868265e9.3
+ for <buildroot@buildroot.org>; Fri, 23 Aug 2024 08:12:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1724425974; x=1725030774;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=gByXiaISKbDcwo3+AzCq8PGjWJytIwB8P3cggtoy7u0=;
+ b=JONaqMqTFPC8Bj0YW3FpDpeHmXDj7xAiQaysjBZBd0GKPVbjNZzfmFgGsDh0+lW8Tb
+ /BobSpbHihtOUmDlGg67O5CJJYXzrGENhgPRg+OFdcLlY7kMuEwppZHehKJ5Y62qVQz7
+ eaEV7zJ7fNspNP6MppxtaHciov72FVLKW6IEuK5ZHu2BTsClrfXBbtlf4MtiMQjsft7P
+ 2W1dQlCF17pJghWrBn9BPBVg8hyzV5NvgHWgxmNJdRdTVdFhaSTz+8voviLg98yiOVSS
+ tWvSuAIdrEhDqkr0NcaJJiuvJwcDDEOYxQ5z8TfUBQCgESLPCEd/CVktKRmBiDmdBqdt
+ fYXQ==
+X-Gm-Message-State: AOJu0YzSZ0alrGBPVsjQgNEtxl0D2ij4Ebs9Bpr/l6jm2XPLi+exLpCU
+ NxZX3+faXuyAP/NkQ4tnjmqdAF1XWMtyqzp+QiNegjkLzWkxL963FsAn9EEC
+X-Google-Smtp-Source: AGHT+IFliGaYh5GKFeDU0hD0jsr4gCbPkojXngBKckHDOJAJp0puCiAVsVsJwow38MNkX+V6+61ueA==
+X-Received: by 2002:a05:600c:1c82:b0:426:61af:e1d6 with SMTP id
+ 5b1f17b1804b1-42acc900408mr21336815e9.29.1724425973942; 
+ Fri, 23 Aug 2024 08:12:53 -0700 (PDT)
+Received: from thomas-Precision-7670.barco.com
+ ([2a02:a03f:eb68:2f00:c742:1e66:4b5f:4ee9])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-3730811044bsm4362922f8f.23.2024.08.23.08.12.53
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 23 Aug 2024 08:12:53 -0700 (PDT)
+From: Thomas Devoogdt <thomas@devoogdt.com>
+To: buildroot@buildroot.org
+Date: Fri, 23 Aug 2024 17:12:49 +0200
+Message-ID: <20240823151249.1808674-1-thomas@devoogdt.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1724425003;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=89Og2Gx9buOFhTHeEMjR6iF9GwvPRDQCoE7FLJ97+uE=;
- b=EV6LG6CCocd+ce9BAYkfnXDJ0AQi8bphP6BlW2MpXpRGzOzypYFhFvCW4u8TIQzBXJ1wp2
- 9mhiPGb24qK0cFRDo1gu8E4jZ8tSRbf94ZHa7Dnr4niXwG1rwxZfqGTzowducPcC1bQWAC
- e8J8q5xHLrVXrykpN5R6FmmMlwLyldeutQoZqkwmQ9jzzFNFqiJ7wiEzvDm2zBFeJ7Aw5Y
- 6106nHnYpTKZoG+pMADaziYNyTmenE1m7zf6RuUrvjBKql85+2S9kUrBz25bmGtCefrPPb
- +j5aDRnB9n6A5O02LAcqxp7kmJwJo7WM+bSdIwtJX66wjnqQ/VCPW1PrfxzPAw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=EV6LG6CC
-Subject: Re: [Buildroot] [PATCH] package/wpewebkit: disable JIT for all MIPS
- CPUs
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=devoogdt.com
+Subject: [Buildroot] [PATCH v1] package/pv: bump to 1.8.13
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,70 +86,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+Cc: Thomas Devoogdt <thomas.devoogdt@barco.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Adrian,
+From: Thomas Devoogdt <thomas.devoogdt@barco.com>
 
-On Fri, 23 Aug 2024 15:29:16 +0300
-Adrian Perez de Castro <aperez@igalia.com> wrote:
+News: https://www.ivarch.com/programs/pv.shtml
 
-> -# JIT is not supported for MIPS r6, but the WebKit build system does not
-> -# have a check for these processors. The same goes for ARMv5 and ARMv6.
-> -# Disable JIT forcibly here and use the CLoop interpreter instead.
-> +# JIT is not supported for MIPS, ARMv5, and ARMv6, but the WebKit build
-> +# system does not have a check for these processors.
->  #
-> +# Disable JIT forcibly here and use the CLoop interpreter instead.
->  # Also, we have to disable the sampling profiler and WebAssembly, which
->  # do NOT work with ENABLE_C_LOOP.
->  #
-> -# Upstream bugs: https://bugs.webkit.org/show_bug.cgi?id=191258
-> -#                https://bugs.webkit.org/show_bug.cgi?id=172765
-> -#                https://bugs.webkit.org/show_bug.cgi?id=265218
-> +# Upstream bug: https://bugs.webkit.org/show_bug.cgi?id=278559
->  #
-> -ifeq ($(BR2_ARM_CPU_ARMV5)$(BR2_ARM_CPU_ARMV6)$(BR2_MIPS_CPU_MIPS32R6)$(BR2_MIPS_CPU_MIPS64R6),y)
-> +ifeq ($(BR2_ARM_CPU_ARMV5)$(BR2_ARM_CPU_ARMV6)$(BR2_mips)$(BR2_mipsel),y)
+Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
+---
+ package/pv/pv.hash | 2 +-
+ package/pv/pv.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-But then do we actually need a change?
-
-Keep in mind that here we are only disabling JIT explicitly for ARMv5,
-ARMv6 and MIPS32R6/MIPS64R6 because they were misdetected as supported
-by wpewebkit. Indeed wpewekit supported ARM and MIPS, but not some
-variants of it.
-
-For all other architectures, we do nothing, and wpewebit properly
-decides whether it supports JIT or not. So if JIT support for MIPS has
-been dropped I believe the correct change is:
-
--ifeq ($(BR2_ARM_CPU_ARMV5)$(BR2_ARM_CPU_ARMV6)$(BR2_MIPS_CPU_MIPS32R6)$(BR2_MIPS_CPU_MIPS64R6),y)
-+ifeq ($(BR2_ARM_CPU_ARMV5)$(BR2_ARM_CPU_ARMV6),y)
-
-but only of course once we use a version of wpewebkit that really has
-dropped MIPS support.
-
-As such, your change would potentially break: it re-enables JIT on
-BR2_MIPS_CPU_MIPS64R6=y, because you disable for BR2_mips and
-BR2_mipsel but there are the 32-bit variants of MIPS, and so
-BR2_MIPS_CPU_MIPS64R6=y would again allow JIT.
-
-Could you clarify if we have already updated to a version of wpewebkit
-that has dropped MIPS support for JIT? If so, we should simply apply
-the simpler change above.
-
-Thanks!
-
-Thomas
+diff --git a/package/pv/pv.hash b/package/pv/pv.hash
+index ed4cc21d89..cac506a83f 100644
+--- a/package/pv/pv.hash
++++ b/package/pv/pv.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-sha256  d22948d06be06a5be37336318de540a2215be10ab0163f8cd23a20149647b780  pv-1.8.5.tar.gz
++sha256  e2bde058d0d3bfe03e60a6eedef6a179991f5cc698d1bac01b64a86f5a8c17af  pv-1.8.13.tar.gz
+ 
+ # Hash for license file
+ sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  docs/COPYING
+diff --git a/package/pv/pv.mk b/package/pv/pv.mk
+index f7243da8be..1434f8a88b 100644
+--- a/package/pv/pv.mk
++++ b/package/pv/pv.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PV_VERSION = 1.8.5
++PV_VERSION = 1.8.13
+ PV_SITE = http://www.ivarch.com/programs/sources
+ PV_LICENSE = GPL-3.0+
+ PV_LICENSE_FILES = docs/COPYING
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+2.43.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
