@@ -4,67 +4,92 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 65E60C52D6F
-	for <buildroot@archiver.kernel.org>; Sat, 24 Aug 2024 05:21:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 14105C5472C
+	for <buildroot@archiver.kernel.org>; Sat, 24 Aug 2024 06:08:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EBF3F8136E;
-	Sat, 24 Aug 2024 05:21:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B0EFC809EC;
+	Sat, 24 Aug 2024 06:08:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id U01ACnzWD0zF; Sat, 24 Aug 2024 05:21:35 +0000 (UTC)
+ id pMFbYz6cTNsg; Sat, 24 Aug 2024 06:08:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B2DB38195C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BE4A281EBB
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B2DB38195C;
-	Sat, 24 Aug 2024 05:21:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BE4A281EBB;
+	Sat, 24 Aug 2024 06:08:08 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id F40B31BF359
- for <buildroot@lists.busybox.net>; Sat, 24 Aug 2024 05:21:33 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A10591BF349
+ for <buildroot@lists.busybox.net>; Sat, 24 Aug 2024 06:08:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id F034A400FE
- for <buildroot@lists.busybox.net>; Sat, 24 Aug 2024 05:21:33 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7C61F40135
+ for <buildroot@lists.busybox.net>; Sat, 24 Aug 2024 06:08:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id be_6vRWGtkWI for <buildroot@lists.busybox.net>;
- Sat, 24 Aug 2024 05:21:32 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=89.238.66.15;
- helo=helium.openadk.org; envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0FC5F400F3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0FC5F400F3
-Received: from helium.openadk.org (helium.openadk.org [89.238.66.15])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0FC5F400F3
- for <buildroot@buildroot.org>; Sat, 24 Aug 2024 05:21:31 +0000 (UTC)
-Received: by helium.openadk.org (Postfix, from userid 1000)
- id 1FD0D3536963; Sat, 24 Aug 2024 07:21:29 +0200 (CEST)
-Date: Sat, 24 Aug 2024 07:21:29 +0200
-From: Waldemar Brodkorb <wbx@openadk.org>
+ id V3z4AkN433nr for <buildroot@lists.busybox.net>;
+ Sat, 24 Aug 2024 06:08:03 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::232; helo=mail-lj1-x232.google.com;
+ envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org DC189400FE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DC189400FE
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com
+ [IPv6:2a00:1450:4864:20::232])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id DC189400FE
+ for <buildroot@buildroot.org>; Sat, 24 Aug 2024 06:08:02 +0000 (UTC)
+Received: by mail-lj1-x232.google.com with SMTP id
+ 38308e7fff4ca-2ef2c56da6cso24029071fa.1
+ for <buildroot@buildroot.org>; Fri, 23 Aug 2024 23:08:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1724479679; x=1725084479;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=KhPWqlRcxicePhLVPe0VFbGtFzrIIzulOK3wIRzTV7o=;
+ b=piX6sDLqntH7Aj8r55m3HCxUEayaxflZJ6huJipML0olclzi0XCcfq3YiB3Ggb9nSA
+ I6/3WWZdnG2R/xyf8XTaxqaGReakc2xX1SKHwwT3s2m439bJmJ3hOACV9x7UojGeWVWW
+ xXSaFLm73hvSHaaJnDHovhha9tqkeQr7gF36px8BgyO94x8SvC5G3By/DB1YGeSFUpl5
+ BBTTq96muoIWHWvhDQ0Rep5OHwWtWya0+BV0GWHwixpk5apOK53RCU4am+aiqv4rIqWe
+ ghjbrjRf2279Q639musv0O3r5IliVZkT7WpfzMDlTpA5s6dnbp7YZutd2aQ3VBJQMfSV
+ IPdw==
+X-Gm-Message-State: AOJu0YwsVoqwy4IAis/SJ8pvEvc5SLdMcn9R+Q2QBGsvevmDElZmPhfF
+ tZw/fyW/NoTee/ttlyUOzgfuXLwQfVPxqhYKIof8JTphyiDjVUsDbvlaMOEI0aGQKPVUrzrBnc+
+ +X/Y=
+X-Google-Smtp-Source: AGHT+IE3JLsA+qIo8jQKeRXebzFf/2ZZUpsoksq+Re1p4ngqCdj4OYpcYPEbKHYMiKDeCqF2avBzNQ==
+X-Received: by 2002:a2e:a992:0:b0:2ec:6639:120a with SMTP id
+ 38308e7fff4ca-2f4f48f0c00mr28317311fa.10.1724479679175; 
+ Fri, 23 Aug 2024 23:07:59 -0700 (PDT)
+Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it
+ (host-79-25-99-149.retail.telecomitalia.it. [79.25.99.149])
+ by smtp.gmail.com with ESMTPSA id
+ 4fb4d7f45d1cf-5c04a3ca798sm2898621a12.32.2024.08.23.23.07.57
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 23 Aug 2024 23:07:58 -0700 (PDT)
+From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To: buildroot@buildroot.org
-Message-ID: <Zslt2YDqpIUWBGY5@waldemar-brodkorb.de>
-References: <ZsljJIQp/OutgfPV@waldemar-brodkorb.de>
+Date: Sat, 24 Aug 2024 08:07:54 +0200
+Message-ID: <20240824060754.1929956-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <ZsljJIQp/OutgfPV@waldemar-brodkorb.de>
-X-Operating-System: Linux 5.10.0-31-amd64 x86_64
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=openadk.org; s=2022; 
- t=1724476889; bh=hYuu1wQnHm5YdytxcKCNRGt/vYwkqNBpB5QUmx+eGaI=;
- h=Date:From:To:Subject:References:In-Reply-To:From;
- b=YSOM2FlOF+NW7Vm2EbXtJ9+IidFOG1Quvu4GRJMXNgeVqG47GJtmC3EWRmXqagaQ3
- YBEROIHf3xrpd6fWH7VIeqBA2iHZB+J8YijyVAmF8+KlNdRFhDzLZH9j3rF4QRlyd3
- dsYQUl4t9SWfTkuMoOgiswmhab+FLvMZ5fRE+n008dKbEr8kf9Cp25fPU944OsJg6W
- VFWbrvO2wjbaNg75h1FMFcjGtx2arwz+UcHtfzxADgdEjRntnAoA3ncFnFiaQgF4aX
- 7nL0kWhcCCSd4WdUfuC++w1GoFpMQHiUeJIhYw4gQDJbryHqTCb/j8dV1xUnkW8rxl
- VhFKZTpTZcsRw==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=amarulasolutions.com; s=google; t=1724479679; x=1725084479;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=KhPWqlRcxicePhLVPe0VFbGtFzrIIzulOK3wIRzTV7o=;
+ b=TlMj/gRpcmzSPsAo6eBMvSTl6guFz1SYQg6HeunXEQ8ZkqN/F6rUaTwE6Iv2LwCjRn
+ 51ymm4SA+xdk1kVY5ns81WoFIyhXnelGMJ5rWyvxtZwczGrbTBeiyNgbiRhthsM7obCL
+ 4nIWsoFf+DRozWsfH+3YEJ1nboaRkD3+389HU=
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=openadk.org
+ dmarc=pass (p=none dis=none)
+ header.from=amarulasolutions.com
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=openadk.org header.i=@openadk.org header.a=rsa-sha256
- header.s=2022 header.b=YSOM2FlO
-Subject: Re: [Buildroot] Xorg on RPI5
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
+ header.a=rsa-sha256 header.s=google header.b=TlMj/gRp
+Subject: [Buildroot] [PATCH v2 1/1] package/libcuefile: fix build failure
+ due to implicit declaration
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,144 +101,62 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+ linux-amarula@amarulasolutions.com
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi,
+Fixes:
+- http://autobuild.buildroot.org/results/28f1e34166e836bf3b984f228bb09842840de82a
 
-answering my own question. I found this forum post:
-https://forum.manjaro.org/t/rpi4-issues-with-fbdev-driver-and-newer-kernel/159991/20
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+---
 
-And adding a /etc/X11/xorg.conf like this helped:
-# cat xorg.conf
-Section "OutputClass"
-  Identifier "vc4"
-  MatchDriver "vc4"
-  Driver "modesetting"
-  Option "PrimaryGPU" "true"
-EndSection
+Changes v1 -> v2:
+  - Add Dario Binacchi's Signed-off-by tag.
 
-best regards
- Waldemar
+ .../0002-libcuefile-fedora-c99.patch          | 27 +++++++++++++++++++
+ 1 file changed, 27 insertions(+)
+ create mode 100644 package/libcuefile/0002-libcuefile-fedora-c99.patch
 
-Waldemar Brodkorb wrote,
+diff --git a/package/libcuefile/0002-libcuefile-fedora-c99.patch b/package/libcuefile/0002-libcuefile-fedora-c99.patch
+new file mode 100644
+index 000000000000..3f76dd315c7c
+--- /dev/null
++++ b/package/libcuefile/0002-libcuefile-fedora-c99.patch
+@@ -0,0 +1,27 @@
++From 7dd8752f5aa2dccbaccb4c28a23f659df3bc0d19 Mon Sep 17 00:00:00 2001
++From: DJ Delorie <dj@redhat.com>
++Date: Thu, 27 Apr 2023 17:24:58 -0400
++Subject: [PATCH] Fix C99 compatibility issue
++
++Related to:
++
++  <https://fedoraproject.org/wiki/Changes/PortingToModernC>
++  <https://fedoraproject.org/wiki/Toolchain/PortingToModernC>
++
++See Also https://bugzilla.redhat.com/show_bug.cgi?id=2190307
++Signed-off-by: DJ Delorie <dj@redhat.com>
++Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
++Upstream: https://src.fedoraproject.org/rpms/libcuefile/blob/7dd8752f5aa2dccbaccb4c28a23f659df3bc0d19/f/libcuefile-fedora-c99.patch
++---
++diff -rup a/src/cue_parse.c b/src/cue_parse.c
++--- a/src/cue_parse.c	2011-06-18 07:28:43.000000000 -0400
+++++ b/src/cue_parse.c	2023-04-27 16:10:13.314263314 -0400
++@@ -1513,6 +1513,8 @@ void yyerror (char *s)
++ 	fprintf(stderr, "%d: %s\n", cue_lineno, s);
++ }
++ 
+++void cue_delete_buffer(void);
+++
++ Cd *cue_parse (FILE *fp)
++ {
++ 	cue_yyin = fp;
+-- 
+2.43.0
 
-> Hi,
-> 
-> does anyone use Xorg on RPI5?
-> 
-> I activated the vc4-kms-v3d-pi5 overlay in config.txt.
-> I have a /dev/dri directory on the device.
-> I am using Buildroot next branch.
-> 
-> But Xorg fails to start.
-> 
-> # cat /var/log/Xorg.0.log 
-> [   756.753] 
-> X.Org X Server 1.21.1.11
-> X Protocol Version 11, Revision 0
-> [   756.753] Current Operating System: Linux buildroot 6.6.28-v8-16k #1 SMP PREEMPT Fri Aug 23 10:05:16 CEST 2024 aarch64
-> [   756.753] Kernel command line: reboot=w coherent_pool=1M 8250.nr_uarts=1 pci=pcie_bus_safe snd_bcm2835.enable_compat_alsa=0 snd_bcm2835.enable_hdmi=1  smsc95xx.macaddr=D8:3A:DD:E2:F0:05 vc_mem.mem_base=0x3fc00000 vc_mem.mem_size=0x40000000  root=/dev/mmcblk0p2 rootwait console=tty1 console=ttyAMA10,115200
-> [   756.753]  
-> [   756.753] Current version of pixman: 0.42.2
-> [   756.753] 	Before reporting problems, check http://wiki.x.org
-> 	to make sure that you have the latest version.
-> [   756.753] Markers: (--) probed, (**) from config file, (==) default setting,
-> 	(++) from command line, (!!) notice, (II) informational,
-> 	(WW) warning, (EE) error, (NI) not implemented, (??) unknown.
-> [   756.753] (==) Log file: "/var/log/Xorg.0.log", Time: Thu Jan  1 00:34:46 1970
-> [   756.753] (==) Using system config directory "/usr/share/X11/xorg.conf.d"
-> [   756.753] (==) No Layout section.  Using the first Screen section.
-> [   756.753] (==) No screen section available. Using defaults.
-> [   756.753] (**) |-->Screen "Default Screen Section" (0)
-> [   756.753] (**) |   |-->Monitor "<default monitor>"
-> [   756.754] (==) No monitor specified for screen "Default Screen Section".
-> 	Using a default monitor configuration.
-> [   756.754] (==) Automatically adding devices
-> [   756.754] (==) Automatically enabling devices
-> [   756.754] (==) Automatically adding GPU devices
-> [   756.754] (==) Automatically binding GPU devices
-> [   756.754] (==) Max clients allowed: 256, resource mask: 0x1fffff
-> [   756.754] (WW) The directory "/usr/share/fonts/X11//TTF/" does not exist.
-> [   756.754] 	Entry deleted from font path.
-> [   756.754] (WW) The directory "/usr/share/fonts/X11//OTF/" does not exist.
-> [   756.754] 	Entry deleted from font path.
-> [   756.754] (WW) The directory "/usr/share/fonts/X11//Type1/" does not exist.
-> [   756.754] 	Entry deleted from font path.
-> [   756.754] (==) FontPath set to:
-> 	/usr/share/fonts/X11//misc/,
-> 	/usr/share/fonts/X11//100dpi/,
-> 	/usr/share/fonts/X11//75dpi/
-> [   756.754] (==) ModulePath set to "/usr/lib/xorg/modules"
-> [   756.754] (II) The server relies on udev to provide the list of input devices.
-> 	If no devices become available, reconfigure udev or disable AutoAddDevices.
-> [   756.754] (II) Loader magic: 0x55588d8010
-> [   756.754] (II) Module ABI versions:
-> [   756.754] 	X.Org ANSI C Emulation: 0.4
-> [   756.754] 	X.Org Video Driver: 25.2
-> [   756.754] 	X.Org XInput driver : 24.4
-> [   756.754] 	X.Org Server Extension : 10.0
-> [   756.754] (II) xfree86: Adding drm device (/dev/dri/card0)
-> [   756.754] (II) Platform probe for /sys/devices/platform/axi/1002000000.v3d/drm/card0
-> [   756.754] (II) xfree86: Adding drm device (/dev/dri/card1)
-> [   756.754] (II) Platform probe for /sys/devices/platform/axi/axi:gpu/drm/card1
-> [   756.762] (II) no primary bus or device found
-> [   756.762] 	falling back to /sys/devices/platform/axi/1002000000.v3d/drm/card0
-> [   756.762] (==) Matched modesetting as autoconfigured driver 0
-> [   756.762] (==) Matched fbdev as autoconfigured driver 1
-> [   756.762] (==) Assigned the driver to the xf86ConfigLayout
-> [   756.762] (II) LoadModule: "modesetting"
-> [   756.762] (II) Loading /usr/lib/xorg/modules/drivers/modesetting_drv.so
-> [   756.762] (II) Module modesetting: vendor="X.Org Foundation"
-> [   756.762] 	compiled for 1.21.1.11, module version = 1.21.1
-> [   756.762] 	Module class: X.Org Video Driver
-> [   756.762] 	ABI class: X.Org Video Driver, version 25.2
-> [   756.762] (II) LoadModule: "fbdev"
-> [   756.762] (II) Loading /usr/lib/xorg/modules/drivers/fbdev_drv.so
-> [   756.762] (EE) Failed to load /usr/lib/xorg/modules/drivers/fbdev_drv.so: /usr/lib/xorg/modules/drivers/fbdev_drv.so: undefined symbol: fbdevHWSave
-> [   756.762] (EE) Failed to load module "fbdev" (loader failed, 0)
-> [   756.762] (II) modesetting: Driver for Modesetting Kernel Drivers: kms
-> [   756.763] (++) using VT number 1
-> 
-> [   756.763] (WW) Falling back to old probe method for modesetting
-> [   756.763] (WW) Falling back to old probe method for modesetting
-> [   756.775] (II) modeset(G0): using drv /dev/dri/card1
-> [   756.775] (EE) No devices detected.
-> [   756.775] (EE) 
-> Fatal server error:
-> [   756.775] (EE) no screens found(EE) 
-> [   756.775] (EE) 
-> Please consult the The X.Org Foundation support 
-> 	 at http://wiki.x.org
->  for help. 
-> [   756.775] (EE) Please also check the log file at "/var/log/Xorg.0.log" for additional information.
-> [   756.775] (EE) 
-> [   756.816] (EE) Server terminated with error (1). Closing log file.
-> 
-> ls -la /dev/dri/
-> total 0
-> drwxr-xr-x    3 root     root           120 Jan  1 00:22 .
-> drwxr-xr-x   13 root     root          3640 Jan  1 00:22 ..
-> drwxr-xr-x    2 root     root           100 Jan  1 00:22 by-path
-> crw-rw----    1 root     video     226,   0 Jan  1 00:22 card0
-> crw-rw----    1 root     video     226,   1 Jan  1 00:22 card1
-> crw-rw-rw-    1 root     video     226, 128 Jan  1 00:22 renderD128
-> 
-> I am using busybox init, not systemd.
-> 
-> Anyone have an idea?
-> 
-> best regards
->  Waldemar
-> 
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-> 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
