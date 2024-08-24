@@ -1,70 +1,94 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CAE6BC52D6F
-	for <buildroot@archiver.kernel.org>; Sat, 24 Aug 2024 14:19:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4CB3AC5472C
+	for <buildroot@archiver.kernel.org>; Sat, 24 Aug 2024 15:15:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8042A605BD;
-	Sat, 24 Aug 2024 14:19:50 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C87904012B;
+	Sat, 24 Aug 2024 15:15:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tIgE7oNSTt9Z; Sat, 24 Aug 2024 14:19:49 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xCOsVfVQ04oE; Sat, 24 Aug 2024 15:15:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7A278605C7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9B8FD401ED
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7A278605C7;
-	Sat, 24 Aug 2024 14:19:49 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A44F11BF329
- for <buildroot@lists.busybox.net>; Sat, 24 Aug 2024 14:19:47 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9B8FD401ED;
+	Sat, 24 Aug 2024 15:15:21 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 8314D1BF2CE
+ for <buildroot@lists.busybox.net>; Sat, 24 Aug 2024 15:15:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 92DB6605C7
- for <buildroot@lists.busybox.net>; Sat, 24 Aug 2024 14:19:47 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 702AB401ED
+ for <buildroot@lists.busybox.net>; Sat, 24 Aug 2024 15:15:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TOwJHmDaLi1a for <buildroot@lists.busybox.net>;
- Sat, 24 Aug 2024 14:19:46 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 69E8F605BD
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 69E8F605BD
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 69E8F605BD
- for <buildroot@buildroot.org>; Sat, 24 Aug 2024 14:19:45 +0000 (UTC)
-Received: from home.juju.sh (unknown
- [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 2A78DB00592;
- Sat, 24 Aug 2024 16:19:41 +0200 (CEST)
-From: Julien Olivain <ju.o@free.fr>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3Cx_XrCdDuYh for <buildroot@lists.busybox.net>;
+ Sat, 24 Aug 2024 15:15:18 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::131; helo=mail-lf1-x131.google.com;
+ envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 013A44012B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 013A44012B
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com
+ [IPv6:2a00:1450:4864:20::131])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 013A44012B
+ for <buildroot@buildroot.org>; Sat, 24 Aug 2024 15:15:17 +0000 (UTC)
+Received: by mail-lf1-x131.google.com with SMTP id
+ 2adb3069b0e04-5334c4d6829so3947957e87.2
+ for <buildroot@buildroot.org>; Sat, 24 Aug 2024 08:15:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1724512515; x=1725117315;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=471eOqBqf+MgFMwgRwNOFHZ8vZaRtKNoUw5CXeTq9dE=;
+ b=I1sN3zY6J+C8j1J8KWS3F5cB3PfpvA9Nfv2P6MlBTL7Tcv3W+UO4j17R3yYa8Ks0CO
+ AggHHf9lKs1MBsdj4w6Lt5I48/vLlTmVA4F7mG68G4R57Z5VouvIdz42wAAcm8vS+bmh
+ AHRukGKXni/XaTv8pnW2RDocL2hRij0tCys62p66aMsBsDled8qojM5KB0mqI2w0LlVU
+ iimVzkBbgspd0Gb6vobMxj/9AYcHPyI+DR48caqxfkNJY2ioCm8Qqbuw9P5CLDwerx5T
+ mStPVWwKNUelagBDeHde4J5KvrGypBGiN8sMUa//QzIV/lCMgND20ZOhsjqz8BB4S3ti
+ 71TQ==
+X-Gm-Message-State: AOJu0YwVQzPf+iBNWfkaPkBgxPe1YyOEPRkEnYNq6A0j2I4C9cHQEA65
+ PCgragWVYt5tvpC9cCHrD+iU+JGlrofRtxTAAGKoyTcReo7baiyRzqd483t2nU+chDhxoYoBrZf
+ QDwA=
+X-Google-Smtp-Source: AGHT+IFXclvguiuUHWUoPj5x3ZfwJxBWhB/kkAEoby02sQXX1dW/8Fn5TkUz4wl/RMOvSGZq0gfSUQ==
+X-Received: by 2002:a05:6512:3e0d:b0:533:901:e441 with SMTP id
+ 2adb3069b0e04-534387683eamr3490174e87.10.1724512514501; 
+ Sat, 24 Aug 2024 08:15:14 -0700 (PDT)
+Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it
+ (host-79-25-99-149.retail.telecomitalia.it. [79.25.99.149])
+ by smtp.gmail.com with ESMTPSA id
+ a640c23a62f3a-a868f48ae53sm412450266b.187.2024.08.24.08.15.13
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 24 Aug 2024 08:15:14 -0700 (PDT)
+From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Sat, 24 Aug 2024 16:19:35 +0200
-Message-ID: <20240824141935.209950-1-ju.o@free.fr>
-X-Mailer: git-send-email 2.46.0
+Date: Sat, 24 Aug 2024 17:15:11 +0200
+Message-ID: <20240824151511.3178807-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1724509182;
- bh=ePySCRqFYPzis5pBq3U3Dc3bFXP59CivZ8TSiC0v0oc=;
- h=From:To:Cc:Subject:Date:From;
- b=dF9XbU6CHhPzSQNX8qdtvuECwWqD4XD2wzdnXmwmXZsHTrxSp7amlGCzA96Oo1upK
- pgebIaDSFs9b/Zrjvy9Qu/64LpHiO+vwqJjcxBAbJjU+fLrvhGretZKklbbED9yTvH
- sKY74KFmkluiVF2EdPe5WkRy/ijNEpxpnFDsWChmFA9MfejxCU3UcBjQzuRX5q36DZ
- y7eud41zwSiz/bQqGb9AyKiA67tswkZVQ+qvBLvHEPIjwePUE509S4aVZg5mFLyS9H
- UJTi4lFUhDabH3W+eozRkwo5Qt86cKEhO8oDaGV8xqqQiUKf9rr1O7dd+REj3JZJ4X
- xNNW9KYXDNpnw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=amarulasolutions.com; s=google; t=1724512515; x=1725117315;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=471eOqBqf+MgFMwgRwNOFHZ8vZaRtKNoUw5CXeTq9dE=;
+ b=BqiB5MdafdYhhJhy/u5GD/a8pDfQqs5ByIlZ4ZE4Bh32pQDVjJRZ/Zx8+vaONVdSL5
+ dKHIZ+K/J4E+Upjjdx0G/LBhbCxfJLvdb0bsrlFnB3qtAghvFSUdl1AFfczJQ7cupUI9
+ HmjwVHLSIrzJ3eIeLtEaFAcYaENOTNlRdVLOo=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=dF9XbU6C
-Subject: [Buildroot] [PATCH 1/1] support/testing: add pv runtime test
+ header.from=amarulasolutions.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
+ header.a=rsa-sha256 header.s=google header.b=BqiB5Mda
+Subject: [Buildroot] [PATCH 1/1] package/armadillo: bump to version 10.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,99 +100,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>
+Cc: linux-amarula@amarulasolutions.com,
+ Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+ Samuel Martin <s.martin49@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
-Patch tested in:
-https://gitlab.com/jolivain/buildroot/-/jobs/7657843473
----
- DEVELOPERS                               |  1 +
- support/testing/tests/package/test_pv.py | 57 ++++++++++++++++++++++++
- 2 files changed, 58 insertions(+)
- create mode 100644 support/testing/tests/package/test_pv.py
+- C++11 is now the minimum required C++ standard
+- faster handling of compound expressions by trimatu() and trimatl()
+- faster sparse matrix addition, subtraction and element-wise multiplication
+- expanded sparse submatrix views to handle the non-contiguous form of X.cols(vector_of_column_indices)
+- expanded eigs_sym() and eigs_gen() with optional fine-grained parameters
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 426590d5c5..419c3e75ec 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1937,6 +1937,7 @@ F:	support/testing/tests/package/test_pciutils.py
- F:	support/testing/tests/package/test_perftest.py
- F:	support/testing/tests/package/test_pigz.py
- F:	support/testing/tests/package/test_postgresql.py
-+F:	support/testing/tests/package/test_pv.py
- F:	support/testing/tests/package/test_python_distro.py
- F:	support/testing/tests/package/test_python_gnupg.py
- F:	support/testing/tests/package/test_python_hkdf.py
-diff --git a/support/testing/tests/package/test_pv.py b/support/testing/tests/package/test_pv.py
-new file mode 100644
-index 0000000000..cfa3c29392
---- /dev/null
-+++ b/support/testing/tests/package/test_pv.py
-@@ -0,0 +1,57 @@
-+import os
-+
-+import infra.basetest
-+
-+
-+class TestPv(infra.basetest.BRTest):
-+    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-+        """
-+        BR2_PACKAGE_PV=y
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
-+
-+    def test_run(self):
-+        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        self.emulator.boot(arch="armv5",
-+                           kernel="builtin",
-+                           options=["-initrd", cpio_file])
-+        self.emulator.login()
-+
-+        # We check the program can run.
-+        self.assertRunOk("pv --version")
-+
-+        # We check that "pv" works like the "cat" command. We print a
-+        # message on its standard input and redirect its output to a
-+        # file. We also force the pv terminal width to 80, since
-+        # "infra.emulator" is setting a large width to prevent
-+        # line wrapping.
-+        msg = "Hello Buildroot!"
-+        out_file = "/tmp/out.txt"
-+        cmd = f"echo '{msg}' | pv -w80 > {out_file}"
-+        self.assertRunOk(cmd)
-+
-+        # We check the pv output file contains exactly our message.
-+        cmd = f"cat {out_file}"
-+        out, ret = self.emulator.run(cmd)
-+        self.assertEqual(ret, 0)
-+        self.assertEqual(out[0], msg)
-+
-+        # Finally, we check that "pv" correctly shows a progress
-+        # bar. We print few lines, one per second into "pv" setup in
-+        # line mode. We check the last pv status line contains the
-+        # correct count and a "100%" string that shows completion.
-+        lines = 5
-+        print_ln_cmd = f"( for X in $(seq {lines}) ; do echo $X ; sleep 1 ; done )"
-+        cmd = f"{print_ln_cmd} | pv -s{lines} -l -w80 > /dev/null"
-+        out, ret = self.emulator.run(cmd, timeout=10)
-+        self.assertEqual(ret, 0)
-+        # pv updates status may contain extra spaces, and is updated
-+        # with carriage return characters. We strip lines and filter
-+        # out empty remaining lines, to make sure we get the last
-+        # meaningful status line.
-+        pv_out = [ln.strip() for ln in out]
-+        pv_out = [ln for ln in pv_out if ln]
-+        last_line = pv_out[-1]
-+        self.assertTrue(last_line.startswith(str(lines)))
-+        self.assertTrue(last_line.endswith("100%"))
+Fixes:
+- http://autobuild.buildroot.org/results/d4e9e7b453960a4f62a199344b30b729a4f235bc
+
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+---
+ package/armadillo/armadillo.hash | 2 +-
+ package/armadillo/armadillo.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/armadillo/armadillo.hash b/package/armadillo/armadillo.hash
+index cc91fb456aa0..d7a17f226f4e 100644
+--- a/package/armadillo/armadillo.hash
++++ b/package/armadillo/armadillo.hash
+@@ -1,4 +1,4 @@
+ # Locally computed:
+-sha256  d78658c9442addf7f718eb05881150ee3ec25604d06dd3af4942422b3ce26d05  armadillo-9.900.2.tar.xz
++sha256  72e3f1b4b4d1b4df70d9cb1e321a254ea04d7843f68a6c34d82691997d558395  armadillo-10.1.0.tar.xz
+ # License files, locally calculated
+ sha256  3ddf9be5c28fe27dad143a5dc76eea25222ad1dd68934a047064e56ed2fa40c5  LICENSE.txt
+diff --git a/package/armadillo/armadillo.mk b/package/armadillo/armadillo.mk
+index 8661bfd9da87..b3ae9ef68fa9 100644
+--- a/package/armadillo/armadillo.mk
++++ b/package/armadillo/armadillo.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ARMADILLO_VERSION = 9.900.2
++ARMADILLO_VERSION = 10.1.0
+ ARMADILLO_SOURCE = armadillo-$(ARMADILLO_VERSION).tar.xz
+ ARMADILLO_SITE = https://downloads.sourceforge.net/project/arma
+ ARMADILLO_INSTALL_STAGING = YES
 -- 
-2.46.0
+2.43.0
 
 _______________________________________________
 buildroot mailing list
