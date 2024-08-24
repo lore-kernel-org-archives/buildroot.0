@@ -1,94 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4CB3AC5472C
-	for <buildroot@archiver.kernel.org>; Sat, 24 Aug 2024 15:15:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 538ECC52D6F
+	for <buildroot@archiver.kernel.org>; Sat, 24 Aug 2024 16:25:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C87904012B;
-	Sat, 24 Aug 2024 15:15:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5715F4033D;
+	Sat, 24 Aug 2024 16:25:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xCOsVfVQ04oE; Sat, 24 Aug 2024 15:15:21 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qUR_spWWdN9u; Sat, 24 Aug 2024 16:25:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9B8FD401ED
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E2057402A0
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9B8FD401ED;
-	Sat, 24 Aug 2024 15:15:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E2057402A0;
+	Sat, 24 Aug 2024 16:25:38 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 8314D1BF2CE
- for <buildroot@lists.busybox.net>; Sat, 24 Aug 2024 15:15:19 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 700E21BF5DF
+ for <buildroot@lists.busybox.net>; Sat, 24 Aug 2024 16:25:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 702AB401ED
- for <buildroot@lists.busybox.net>; Sat, 24 Aug 2024 15:15:19 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5EB774010F
+ for <buildroot@lists.busybox.net>; Sat, 24 Aug 2024 16:25:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3Cx_XrCdDuYh for <buildroot@lists.busybox.net>;
- Sat, 24 Aug 2024 15:15:18 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::131; helo=mail-lf1-x131.google.com;
- envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 013A44012B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 013A44012B
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com
- [IPv6:2a00:1450:4864:20::131])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 013A44012B
- for <buildroot@buildroot.org>; Sat, 24 Aug 2024 15:15:17 +0000 (UTC)
-Received: by mail-lf1-x131.google.com with SMTP id
- 2adb3069b0e04-5334c4d6829so3947957e87.2
- for <buildroot@buildroot.org>; Sat, 24 Aug 2024 08:15:17 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1724512515; x=1725117315;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=471eOqBqf+MgFMwgRwNOFHZ8vZaRtKNoUw5CXeTq9dE=;
- b=I1sN3zY6J+C8j1J8KWS3F5cB3PfpvA9Nfv2P6MlBTL7Tcv3W+UO4j17R3yYa8Ks0CO
- AggHHf9lKs1MBsdj4w6Lt5I48/vLlTmVA4F7mG68G4R57Z5VouvIdz42wAAcm8vS+bmh
- AHRukGKXni/XaTv8pnW2RDocL2hRij0tCys62p66aMsBsDled8qojM5KB0mqI2w0LlVU
- iimVzkBbgspd0Gb6vobMxj/9AYcHPyI+DR48caqxfkNJY2ioCm8Qqbuw9P5CLDwerx5T
- mStPVWwKNUelagBDeHde4J5KvrGypBGiN8sMUa//QzIV/lCMgND20ZOhsjqz8BB4S3ti
- 71TQ==
-X-Gm-Message-State: AOJu0YwVQzPf+iBNWfkaPkBgxPe1YyOEPRkEnYNq6A0j2I4C9cHQEA65
- PCgragWVYt5tvpC9cCHrD+iU+JGlrofRtxTAAGKoyTcReo7baiyRzqd483t2nU+chDhxoYoBrZf
- QDwA=
-X-Google-Smtp-Source: AGHT+IFXclvguiuUHWUoPj5x3ZfwJxBWhB/kkAEoby02sQXX1dW/8Fn5TkUz4wl/RMOvSGZq0gfSUQ==
-X-Received: by 2002:a05:6512:3e0d:b0:533:901:e441 with SMTP id
- 2adb3069b0e04-534387683eamr3490174e87.10.1724512514501; 
- Sat, 24 Aug 2024 08:15:14 -0700 (PDT)
-Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it
- (host-79-25-99-149.retail.telecomitalia.it. [79.25.99.149])
- by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-a868f48ae53sm412450266b.187.2024.08.24.08.15.13
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 24 Aug 2024 08:15:14 -0700 (PDT)
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+ id NOgTFNHS0AZn for <buildroot@lists.busybox.net>;
+ Sat, 24 Aug 2024 16:25:37 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org E72FA4018D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E72FA4018D
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E72FA4018D
+ for <buildroot@buildroot.org>; Sat, 24 Aug 2024 16:25:36 +0000 (UTC)
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 9E68AB00571;
+ Sat, 24 Aug 2024 18:25:32 +0200 (CEST)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 24 Aug 2024 17:15:11 +0200
-Message-ID: <20240824151511.3178807-1-dario.binacchi@amarulasolutions.com>
-X-Mailer: git-send-email 2.43.0
+Date: Sat, 24 Aug 2024 18:25:23 +0200
+Message-ID: <20240824162523.356508-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.46.0
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1724512515; x=1725117315;
- darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=471eOqBqf+MgFMwgRwNOFHZ8vZaRtKNoUw5CXeTq9dE=;
- b=BqiB5MdafdYhhJhy/u5GD/a8pDfQqs5ByIlZ4ZE4Bh32pQDVjJRZ/Zx8+vaONVdSL5
- dKHIZ+K/J4E+Upjjdx0G/LBhbCxfJLvdb0bsrlFnB3qtAghvFSUdl1AFfczJQ7cupUI9
- HmjwVHLSIrzJ3eIeLtEaFAcYaENOTNlRdVLOo=
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1724516733;
+ bh=p4Qk4T/NWdu3FrWgRBz7AOqAOckgcXN0T07y9HW43xQ=;
+ h=From:To:Cc:Subject:Date:From;
+ b=bprZEsNkuqrWOSeq+8nc7FhQg3twcSUBJQtbEe0J5PsQLzP7L4Qs59t4ppj2DSGwZ
+ eCnbqxiUOS8R1yR5NORXwSXIpPnI+VN1Yi1sU6vACc21gGmUc4GZpB5wpmWR1avoAc
+ r5HRytroaHGJW7AQKl5taq5Tvf7W6+HvaTsOld2puTJzjA1W+HmcINaOyrSF1N4NXE
+ J1N0wawSWirj5dO8oLp/4IPx5kpeF/v+wO0D3kdqhWMEnQ9bSj4ivZlmvYkVAPyv/F
+ bJv3I2yVzFovOuQFSRa8IOp47CPUrmfndd+xsI7+tcpMjTAJU344gz2k2f2DmxtD+/
+ +2bxdBWcRJZLg==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=amarulasolutions.com
+ header.from=free.fr
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=BqiB5Mda
-Subject: [Buildroot] [PATCH 1/1] package/armadillo: bump to version 10.1.0
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=bprZEsNk
+Subject: [Buildroot] [PATCH 1/1] support/testing: add which runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,54 +76,95 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: linux-amarula@amarulasolutions.com,
- Dario Binacchi <dario.binacchi@amarulasolutions.com>,
- Samuel Martin <s.martin49@gmail.com>
+Cc: Julien Olivain <ju.o@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-- C++11 is now the minimum required C++ standard
-- faster handling of compound expressions by trimatu() and trimatl()
-- faster sparse matrix addition, subtraction and element-wise multiplication
-- expanded sparse submatrix views to handle the non-contiguous form of X.cols(vector_of_column_indices)
-- expanded eigs_sym() and eigs_gen() with optional fine-grained parameters
-
-Fixes:
-- http://autobuild.buildroot.org/results/d4e9e7b453960a4f62a199344b30b729a4f235bc
-
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- package/armadillo/armadillo.hash | 2 +-
- package/armadillo/armadillo.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Patch tested in:
+https://gitlab.com/jolivain/buildroot/-/jobs/7658080298
+---
+ DEVELOPERS                                  |  1 +
+ support/testing/tests/package/test_which.py | 53 +++++++++++++++++++++
+ 2 files changed, 54 insertions(+)
+ create mode 100644 support/testing/tests/package/test_which.py
 
-diff --git a/package/armadillo/armadillo.hash b/package/armadillo/armadillo.hash
-index cc91fb456aa0..d7a17f226f4e 100644
---- a/package/armadillo/armadillo.hash
-+++ b/package/armadillo/armadillo.hash
-@@ -1,4 +1,4 @@
- # Locally computed:
--sha256  d78658c9442addf7f718eb05881150ee3ec25604d06dd3af4942422b3ce26d05  armadillo-9.900.2.tar.xz
-+sha256  72e3f1b4b4d1b4df70d9cb1e321a254ea04d7843f68a6c34d82691997d558395  armadillo-10.1.0.tar.xz
- # License files, locally calculated
- sha256  3ddf9be5c28fe27dad143a5dc76eea25222ad1dd68934a047064e56ed2fa40c5  LICENSE.txt
-diff --git a/package/armadillo/armadillo.mk b/package/armadillo/armadillo.mk
-index 8661bfd9da87..b3ae9ef68fa9 100644
---- a/package/armadillo/armadillo.mk
-+++ b/package/armadillo/armadillo.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ARMADILLO_VERSION = 9.900.2
-+ARMADILLO_VERSION = 10.1.0
- ARMADILLO_SOURCE = armadillo-$(ARMADILLO_VERSION).tar.xz
- ARMADILLO_SITE = https://downloads.sourceforge.net/project/arma
- ARMADILLO_INSTALL_STAGING = YES
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 426590d5c5..4431927f0b 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1972,6 +1972,7 @@ F:	support/testing/tests/package/test_usbutils/
+ F:	support/testing/tests/package/test_vorbis_tools.py
+ F:	support/testing/tests/package/test_weston.py
+ F:	support/testing/tests/package/test_weston/
++F:	support/testing/tests/package/test_which.py
+ F:	support/testing/tests/package/test_wine.py
+ F:	support/testing/tests/package/test_xfsprogs.py
+ F:	support/testing/tests/package/test_xfsprogs/
+diff --git a/support/testing/tests/package/test_which.py b/support/testing/tests/package/test_which.py
+new file mode 100644
+index 0000000000..38f528aa7f
+--- /dev/null
++++ b/support/testing/tests/package/test_which.py
+@@ -0,0 +1,53 @@
++import os
++
++import infra.basetest
++
++
++class TestWhich(infra.basetest.BRTest):
++    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
++        """
++        BR2_PACKAGE_BUSYBOX_SHOW_OTHERS=y
++        BR2_PACKAGE_WHICH=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++
++    def test_run(self):
++        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
++        self.emulator.boot(arch="armv5",
++                           kernel="builtin",
++                           options=["-initrd", cpio_file])
++        self.emulator.login()
++
++        # We check the program can run. This also checks we are using
++        # the actual GNU which, since the BusyBox implementation does
++        # not accept this option.
++        self.assertRunOk("which --version")
++
++        # We check the primary usage is working.
++        out, ret = self.emulator.run("which sh")
++        self.assertEqual(ret, 0)
++        self.assertEqual(out[0], "/bin/sh")
++
++        alias_name = "buildoot_test_alias"
++
++        # We check "which" returns an error when the program is not
++        # found.
++        _, ret = self.emulator.run(f"which {alias_name}")
++        self.assertNotEqual(ret, 0)
++
++        # We define a shell alias.
++        alias_cmd = "/bin/true"
++        alias_def = f"{alias_name}='{alias_cmd}'"
++        self.assertRunOk(f"alias {alias_def}")
++
++        # We check our alias definition actually works, just by
++        # invoking it (since it's aliased to "true").
++        self.assertRunOk(alias_name)
++
++        # We check "which" is able to read aliases from the shell.
++        cmd = f"alias | which -i {alias_name}"
++        out, ret = self.emulator.run(cmd)
++        self.assertEqual(ret, 0)
++        self.assertEqual(out[0], alias_def)
++        self.assertEqual(out[1].strip(), alias_cmd)
 -- 
-2.43.0
+2.46.0
 
 _______________________________________________
 buildroot mailing list
