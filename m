@@ -1,95 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 14105C5472C
-	for <buildroot@archiver.kernel.org>; Sat, 24 Aug 2024 06:08:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7D10FC52D6F
+	for <buildroot@archiver.kernel.org>; Sat, 24 Aug 2024 07:08:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B0EFC809EC;
-	Sat, 24 Aug 2024 06:08:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1C7D840334;
+	Sat, 24 Aug 2024 07:08:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pMFbYz6cTNsg; Sat, 24 Aug 2024 06:08:08 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WB3SXFpgfMfO; Sat, 24 Aug 2024 07:08:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BE4A281EBB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D8DAE40335
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BE4A281EBB;
-	Sat, 24 Aug 2024 06:08:08 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A10591BF349
- for <buildroot@lists.busybox.net>; Sat, 24 Aug 2024 06:08:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D8DAE40335;
+	Sat, 24 Aug 2024 07:07:59 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 62B7C1BF2FE
+ for <buildroot@lists.busybox.net>; Sat, 24 Aug 2024 07:07:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7C61F40135
- for <buildroot@lists.busybox.net>; Sat, 24 Aug 2024 06:08:04 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5D9516060A
+ for <buildroot@lists.busybox.net>; Sat, 24 Aug 2024 07:07:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id V3z4AkN433nr for <buildroot@lists.busybox.net>;
- Sat, 24 Aug 2024 06:08:03 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::232; helo=mail-lj1-x232.google.com;
- envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org DC189400FE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DC189400FE
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com
- [IPv6:2a00:1450:4864:20::232])
- by smtp2.osuosl.org (Postfix) with ESMTPS id DC189400FE
- for <buildroot@buildroot.org>; Sat, 24 Aug 2024 06:08:02 +0000 (UTC)
-Received: by mail-lj1-x232.google.com with SMTP id
- 38308e7fff4ca-2ef2c56da6cso24029071fa.1
- for <buildroot@buildroot.org>; Fri, 23 Aug 2024 23:08:02 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1724479679; x=1725084479;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=KhPWqlRcxicePhLVPe0VFbGtFzrIIzulOK3wIRzTV7o=;
- b=piX6sDLqntH7Aj8r55m3HCxUEayaxflZJ6huJipML0olclzi0XCcfq3YiB3Ggb9nSA
- I6/3WWZdnG2R/xyf8XTaxqaGReakc2xX1SKHwwT3s2m439bJmJ3hOACV9x7UojGeWVWW
- xXSaFLm73hvSHaaJnDHovhha9tqkeQr7gF36px8BgyO94x8SvC5G3By/DB1YGeSFUpl5
- BBTTq96muoIWHWvhDQ0Rep5OHwWtWya0+BV0GWHwixpk5apOK53RCU4am+aiqv4rIqWe
- ghjbrjRf2279Q639musv0O3r5IliVZkT7WpfzMDlTpA5s6dnbp7YZutd2aQ3VBJQMfSV
- IPdw==
-X-Gm-Message-State: AOJu0YwsVoqwy4IAis/SJ8pvEvc5SLdMcn9R+Q2QBGsvevmDElZmPhfF
- tZw/fyW/NoTee/ttlyUOzgfuXLwQfVPxqhYKIof8JTphyiDjVUsDbvlaMOEI0aGQKPVUrzrBnc+
- +X/Y=
-X-Google-Smtp-Source: AGHT+IE3JLsA+qIo8jQKeRXebzFf/2ZZUpsoksq+Re1p4ngqCdj4OYpcYPEbKHYMiKDeCqF2avBzNQ==
-X-Received: by 2002:a2e:a992:0:b0:2ec:6639:120a with SMTP id
- 38308e7fff4ca-2f4f48f0c00mr28317311fa.10.1724479679175; 
- Fri, 23 Aug 2024 23:07:59 -0700 (PDT)
-Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it
- (host-79-25-99-149.retail.telecomitalia.it. [79.25.99.149])
- by smtp.gmail.com with ESMTPSA id
- 4fb4d7f45d1cf-5c04a3ca798sm2898621a12.32.2024.08.23.23.07.57
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 23 Aug 2024 23:07:58 -0700 (PDT)
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-To: buildroot@buildroot.org
-Date: Sat, 24 Aug 2024 08:07:54 +0200
-Message-ID: <20240824060754.1929956-1-dario.binacchi@amarulasolutions.com>
-X-Mailer: git-send-email 2.43.0
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id v4vIz0ZyW7m0 for <buildroot@lists.busybox.net>;
+ Sat, 24 Aug 2024 07:07:58 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.198;
+ helo=relay6-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 3FEB6605FF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3FEB6605FF
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [217.70.183.198])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3FEB6605FF
+ for <buildroot@buildroot.org>; Sat, 24 Aug 2024 07:07:56 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 3362FC0002;
+ Sat, 24 Aug 2024 07:07:54 +0000 (UTC)
+Date: Sat, 24 Aug 2024 09:07:53 +0200
+To: Woodrow Douglass via buildroot <buildroot@buildroot.org>
+Message-ID: <20240824090753.551ad073@windsurf>
+In-Reply-To: <20240821124414.8330-1-wdouglass@carnegierobotics.com>
+References: <20240820232730.60670833@windsurf>
+ <20240821124414.8330-1-wdouglass@carnegierobotics.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1724479679; x=1725084479;
- darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=KhPWqlRcxicePhLVPe0VFbGtFzrIIzulOK3wIRzTV7o=;
- b=TlMj/gRpcmzSPsAo6eBMvSTl6guFz1SYQg6HeunXEQ8ZkqN/F6rUaTwE6Iv2LwCjRn
- 51ymm4SA+xdk1kVY5ns81WoFIyhXnelGMJ5rWyvxtZwczGrbTBeiyNgbiRhthsM7obCL
- 4nIWsoFf+DRozWsfH+3YEJ1nboaRkD3+389HU=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=TlMj/gRp
-Subject: [Buildroot] [PATCH v2 1/1] package/libcuefile: fix build failure
- due to implicit declaration
+ d=bootlin.com; s=gm1; t=1724483274;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=xT7OQnkNzR0st3eZjoPItMb+A603P0UMCkQJdg0ITc8=;
+ b=Nx8xJbPCzyeF+BbaALsiRUgxW/2dDb8puYesilm1blNJ9Gy0J8f5olgi/GFGvTmBtId9Ew
+ 2wjgSKE6e0RhGK5ggjoh/tdfYFaeMz//ZfFop0MQv5qIIjMj029ernqVBUFfmCbYbifDNo
+ vhNoJvIOJfxPKk/i81rYb6mahlNd0DpCXsKfEMJQQ3zXj56+sEwYXoUwHnLeSpnWDS4XiW
+ xqnDdADK29JZatPYGdqMhWT9n59CY1qtU0F4S4bbyJd3dcqqn9uV7oGPXLCwNxS9m5CcKS
+ rZYhA5MouVA6GMuGeaWJzKbM9Zv/y6eELF6MWJTDYzjVXgfpN/y68kk1xLrBdA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=Nx8xJbPC
+Subject: Re: [Buildroot] [PATCH v3] package/chicken: security bump to 5.4.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,62 +81,63 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
- linux-amarula@amarulasolutions.com
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Woodrow Douglass <wdouglass@carnegierobotics.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes:
-- http://autobuild.buildroot.org/results/28f1e34166e836bf3b984f228bb09842840de82a
+On Wed, 21 Aug 2024 08:44:14 -0400
+Woodrow Douglass via buildroot <buildroot@buildroot.org> wrote:
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
----
+> This release includes a fix for CVE-2022-45145
+> 
+> Signed-off-by: Woodrow Douglass <wdouglass@carnegierobotics.com>
+> 
+> --
+> Changes v2 -> v3:
+>   - Add this changelog to commit message
+>   - Add Signed-off-by to commit message
+> 
+> Changes v1 -> v2:
+>   - Update version numbers in hash file
+> 
+> Signed-off-by: Woodrow Douglass <wdouglass@carnegierobotics.com>
+> ---
+>  package/chicken/chicken.hash | 4 ++--
+>  package/chicken/chicken.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 
-Changes v1 -> v2:
-  - Add Dario Binacchi's Signed-off-by tag.
+Sorry to be annoying, but this patch breaks the legal information for
+this package:
 
- .../0002-libcuefile-fedora-c99.patch          | 27 +++++++++++++++++++
- 1 file changed, 27 insertions(+)
- create mode 100644 package/libcuefile/0002-libcuefile-fedora-c99.patch
+>>> chicken 5.4.0 Patching
+>>> chicken 5.4.0 Collecting legal info
+ERROR: while checking hashes from package/chicken/chicken.hash
+ERROR: LICENSE has wrong sha256 hash:
+ERROR: expected: b434ac92e094214136a6b5032f0dc9da97f22cef084ac1d0131b02a09e2caa37
+ERROR: got     : c0ed699d5c4a8687f90a6488244f7f57d48a7f2d42bb7461b08a0d69a07d4f58
+ERROR: Incomplete download, or man-in-the-middle (MITM) attack
+make: *** [package/chicken/chicken.mk:46: chicken-legal-info] Error 1
 
-diff --git a/package/libcuefile/0002-libcuefile-fedora-c99.patch b/package/libcuefile/0002-libcuefile-fedora-c99.patch
-new file mode 100644
-index 000000000000..3f76dd315c7c
---- /dev/null
-+++ b/package/libcuefile/0002-libcuefile-fedora-c99.patch
-@@ -0,0 +1,27 @@
-+From 7dd8752f5aa2dccbaccb4c28a23f659df3bc0d19 Mon Sep 17 00:00:00 2001
-+From: DJ Delorie <dj@redhat.com>
-+Date: Thu, 27 Apr 2023 17:24:58 -0400
-+Subject: [PATCH] Fix C99 compatibility issue
-+
-+Related to:
-+
-+  <https://fedoraproject.org/wiki/Changes/PortingToModernC>
-+  <https://fedoraproject.org/wiki/Toolchain/PortingToModernC>
-+
-+See Also https://bugzilla.redhat.com/show_bug.cgi?id=2190307
-+Signed-off-by: DJ Delorie <dj@redhat.com>
-+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-+Upstream: https://src.fedoraproject.org/rpms/libcuefile/blob/7dd8752f5aa2dccbaccb4c28a23f659df3bc0d19/f/libcuefile-fedora-c99.patch
-+---
-+diff -rup a/src/cue_parse.c b/src/cue_parse.c
-+--- a/src/cue_parse.c	2011-06-18 07:28:43.000000000 -0400
-++++ b/src/cue_parse.c	2023-04-27 16:10:13.314263314 -0400
-+@@ -1513,6 +1513,8 @@ void yyerror (char *s)
-+ 	fprintf(stderr, "%d: %s\n", cue_lineno, s);
-+ }
-+ 
-++void cue_delete_buffer(void);
-++
-+ Cd *cue_parse (FILE *fp)
-+ {
-+ 	cue_yyin = fp;
+So the hash of the license file needs to be updated *and* an
+explanation about the changes in the license files must be added in the
+commit log.
+
+Also, please note that updating from 5.3.0 to 5.4.0 is OK as the
+package is new in 2024.08, but as it fixes a security issue, we need to
+have this fix in master, and therefore a more minimal update to 5.3.1
+would have been preferable for master (and the update to 5.4.0 in our
+next branch). But again, as this package is new, I think it is OK to
+upgrade to 5.4.0 even in our master branch.
+
+Thomas
 -- 
-2.43.0
-
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
