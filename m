@@ -4,73 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D7173C5472D
-	for <buildroot@archiver.kernel.org>; Sat, 24 Aug 2024 19:00:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9017FC52D6F
+	for <buildroot@archiver.kernel.org>; Sat, 24 Aug 2024 19:07:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6BEB4811E8;
-	Sat, 24 Aug 2024 19:00:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 40A2581768;
+	Sat, 24 Aug 2024 19:07:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ymLlGVl5rdPh; Sat, 24 Aug 2024 19:00:38 +0000 (UTC)
+ id hWdtfGpL9KvK; Sat, 24 Aug 2024 19:07:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4CA0F81190
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3179181E09
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4CA0F81190;
-	Sat, 24 Aug 2024 19:00:38 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 772341BF314
- for <buildroot@lists.busybox.net>; Sat, 24 Aug 2024 19:00:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3179181E09;
+	Sat, 24 Aug 2024 19:07:28 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id BC49D1BF40E
+ for <buildroot@lists.busybox.net>; Sat, 24 Aug 2024 19:07:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 65A14400F2
- for <buildroot@lists.busybox.net>; Sat, 24 Aug 2024 19:00:36 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id AAC4A402AB
+ for <buildroot@lists.busybox.net>; Sat, 24 Aug 2024 19:07:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id c6kOKtMnXJ6Y for <buildroot@lists.busybox.net>;
- Sat, 24 Aug 2024 19:00:35 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::228;
- helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id AaXib2-FFqm8 for <buildroot@lists.busybox.net>;
+ Sat, 24 Aug 2024 19:07:25 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.200;
+ helo=relay7-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org B95F64010C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B95F64010C
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::228])
- by smtp2.osuosl.org (Postfix) with ESMTPS id B95F64010C
- for <buildroot@buildroot.org>; Sat, 24 Aug 2024 19:00:31 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id B6D181BF206;
- Sat, 24 Aug 2024 19:00:18 +0000 (UTC)
-Date: Sat, 24 Aug 2024 21:00:17 +0200
-To: Vincent Jardin <vjardin@free.fr>
-Message-ID: <20240824210017.06355474@windsurf>
-In-Reply-To: <20240821095044.10038-2-vjardin@free.fr>
-References: <20240820233830.5927db8d@windsurf>
- <20240821095044.10038-1-vjardin@free.fr>
- <20240821095044.10038-2-vjardin@free.fr>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 51CA5402A6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 51CA5402A6
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 51CA5402A6
+ for <buildroot@buildroot.org>; Sat, 24 Aug 2024 19:07:24 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPA id 24CD220007;
+ Sat, 24 Aug 2024 19:07:21 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 24 Aug 2024 21:07:19 +0200
+Message-ID: <20240824190720.2370919-1-thomas.petazzoni@bootlin.com>
+X-Mailer: git-send-email 2.46.0
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1724526029;
+ d=bootlin.com; s=gm1; t=1724526442;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=jXtVNceSgG+MoiXaCyuWPliXN/CwLYPvPLw6MUdA5gA=;
- b=hYSroQ3xHNzEvtLSXjIgTdrZSkXv6S/GO2RoIPwKnPWwEIZznTObUppdybygPGgPvOw9Vd
- BHSBo4nBFBCGJkkwIslB5UZAHjBZF7W0yn0fLJrs/1WdUzD7InPIaNOevqSjZMXtM3t31O
- qIfmy+NPD7+XqJlDPwHpx6iJcWichHxfokyXYGXZYshab2Cu0wG8CeW0pQTPMpQfreEktl
- 8va6jElMhLiSziRdO56Y7nL8NQYE/UCcll5uXuSvtH6BvuV3KwQLVYchgbSQJ2Sa2l1Tqv
- PuyOr1TObp05qFxckAp41IIhOmH66f0ZIf1sZt1mto2Xe1DRbzkxCWVaBEAXmQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ to:to:cc:cc:mime-version:mime-version:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=k9cHCNDYhRA55cxaujbv+tU688JqYGLWE5T4nqatxgk=;
+ b=VHeXjpFuhlneGMeBhMsZFrsJulSx44tZDd2ltgv+y3RAO34bfj/CnY5M9vsEN8xOV2/GnX
+ o60KnX347ls6iwP805Usu5Ny28qrq7QH3WTbz20Y60bkaklxPfqpXI8oE7SOLRyyw6nlLQ
+ pbvNzU97eBPIgCuMOVZE/9waIEHJsqAljOBdAfjVLyMehCrlZ7a3HqoFnGK3chP/CvvJif
+ 8OHTQDv50/xvL1BdJRHDl4vi+bowoTPA3MzhwN7dSSwLRCMUoma8vs55Fw2Nby7KBuhzz9
+ ssS6blArlJYX4RFn6xN6Y7BDQztB3+fRytbLcS+NB7cmAF83RufDxobtTPea6g==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=hYSroQ3x
-Subject: Re: [Buildroot] [PATCH v2 1/1] package/lsuio: bump to 2020 version
+ header.s=gm1 header.b=VHeXjpFu
+Subject: [Buildroot] [PATCH] package/libuecc: switch to a functional Github
+ repo
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,39 +79,69 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: peter@digitalbrains.com, buildroot@buildroot.org
+Cc: Alexander Dahl <post@lespocky.de>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Vincent,
+The https://projects.universe-factory.net/attachments/download/85 URL
+no longer works, so let's switch to what appears to be the official
+Github repo:
 
-Thanks for this v2!
+  https://github.com/neocturne/libuecc
 
-On Wed, 21 Aug 2024 11:50:44 +0200
-Vincent Jardin <vjardin@free.fr> wrote:
+The v7 in this Github is 100% identical to the v7 that was available
+from https://projects.universe-factory.net/attachments/download/85.
 
-> diff --git a/package/lsuio/lsuio.hash b/package/lsuio/lsuio.hash
-> index 2df6d074f4..472aee6e3e 100644
-> --- a/package/lsuio/lsuio.hash
-> +++ b/package/lsuio/lsuio.hash
-> @@ -1,3 +1,4 @@
->  # Locally calculated
->  sha256  c88b3850248b2d3419e025abd7b9b0991c8bd33a2d4983f9608408a29900bfb5  lsuio-0.2.0.tar.gz
->  sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
-> +sha256  fe799ea2920f07b3d950ae9b6b3dec8c0838437f4571fc8091b94fd765b3d415  lsuio-ba46808da148552462e50ba66d8d15cc5b9a3a00.tar.gz
+Also at
+https://metadata.ftp-master.debian.org/changelogs//main/libu/libuecc/libuecc_7-5_copyright
+Debian lists https://github.com/NeoRaider/libuecc as the source, and
+this URL redirects to https://github.com/neocturne/libuecc.
 
-There was no need to keep the hash for lsuio-0.2.0.tar.gz, and we
-normally put the tarball hash before the license file hash. I've fixed
-those minor details, did a few small tweaks in the commit title/log and
-applied to next. Thanks!
+Thanks to the original tarball being a .tar.xz, and our Github macro
+generating a .tar.gz, the filename is different, and therefore the
+different hash will not be an issue.
 
-Thomas
+Fixes:
+
+  http://autobuild.buildroot.org/results/c4c24bd06bc7889c46d78e14d5bef528340d4463/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libuecc/libuecc.hash | 4 +---
+ package/libuecc/libuecc.mk   | 3 +--
+ 2 files changed, 2 insertions(+), 5 deletions(-)
+
+diff --git a/package/libuecc/libuecc.hash b/package/libuecc/libuecc.hash
+index b72519f167..7ac5860cd1 100644
+--- a/package/libuecc/libuecc.hash
++++ b/package/libuecc/libuecc.hash
+@@ -1,5 +1,3 @@
+-# from https://projects.universe-factory.net/projects/fastd/files
+-md5  5cd543cb8e7bce83a22c07a0579c95a1  libuecc-7.tar.xz
+ # computed locally
+-sha256  b94aef08eab5359d0facaa7ead2ce81b193eef0c61379d9835213ebc0a46257a  libuecc-7.tar.xz
++sha256  465a6584c991c13fddf36700328c44fee9a3baff9025fb5f232b34d003d715e0  libuecc-7.tar.gz
+ sha256  ec4d9fcc3a37a7998a9ea4decf38f4c0c91a44fd05bb17638c52fe16f2b12e23  COPYRIGHT
+diff --git a/package/libuecc/libuecc.mk b/package/libuecc/libuecc.mk
+index aad26e5aff..6251edb636 100644
+--- a/package/libuecc/libuecc.mk
++++ b/package/libuecc/libuecc.mk
+@@ -5,8 +5,7 @@
+ ################################################################################
+ 
+ LIBUECC_VERSION = 7
+-LIBUECC_SITE = https://projects.universe-factory.net/attachments/download/85
+-LIBUECC_SOURCE = libuecc-$(LIBUECC_VERSION).tar.xz
++LIBUECC_SITE = $(call github,neocturne,libuecc,v$(LIBUECC_VERSION))
+ LIBUECC_LICENSE = BSD-2-Clause
+ LIBUECC_LICENSE_FILES = COPYRIGHT
+ LIBUECC_INSTALL_STAGING = YES
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+2.46.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
