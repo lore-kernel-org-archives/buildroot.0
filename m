@@ -4,91 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B98DAC52D6F
-	for <buildroot@archiver.kernel.org>; Sat, 24 Aug 2024 17:59:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8CD1FC52D6F
+	for <buildroot@archiver.kernel.org>; Sat, 24 Aug 2024 18:03:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 58FDD606A5;
-	Sat, 24 Aug 2024 17:59:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D374A605C3;
+	Sat, 24 Aug 2024 18:03:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iZxpG-EdDQ1x; Sat, 24 Aug 2024 17:59:04 +0000 (UTC)
+ id QIW-GlIoH7RW; Sat, 24 Aug 2024 18:03:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4D0D2605C9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 90B63605CF
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4D0D2605C9;
-	Sat, 24 Aug 2024 17:59:04 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D53C21BF28A
- for <buildroot@lists.busybox.net>; Sat, 24 Aug 2024 17:59:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 90B63605CF;
+	Sat, 24 Aug 2024 18:03:18 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 6A9831BF359
+ for <buildroot@lists.busybox.net>; Sat, 24 Aug 2024 18:03:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C2F8381765
- for <buildroot@lists.busybox.net>; Sat, 24 Aug 2024 17:59:02 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 58F1640351
+ for <buildroot@lists.busybox.net>; Sat, 24 Aug 2024 18:03:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id b1s2uit26Y60 for <buildroot@lists.busybox.net>;
- Sat, 24 Aug 2024 17:59:02 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Q1QLt5ZlPP_5 for <buildroot@lists.busybox.net>;
+ Sat, 24 Aug 2024 18:03:16 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::136; helo=mail-il1-x136.google.com;
+ client-ip=2607:f8b0:4864:20::42f; helo=mail-pf1-x42f.google.com;
  envelope-from=festevam@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org C05B78175A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C05B78175A
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com
- [IPv6:2607:f8b0:4864:20::136])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C05B78175A
- for <buildroot@buildroot.org>; Sat, 24 Aug 2024 17:59:01 +0000 (UTC)
-Received: by mail-il1-x136.google.com with SMTP id
- e9e14a558f8ab-39d47a9ffd5so10390785ab.2
- for <buildroot@buildroot.org>; Sat, 24 Aug 2024 10:59:01 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 1FC6840246
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1FC6840246
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com
+ [IPv6:2607:f8b0:4864:20::42f])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1FC6840246
+ for <buildroot@buildroot.org>; Sat, 24 Aug 2024 18:03:15 +0000 (UTC)
+Received: by mail-pf1-x42f.google.com with SMTP id
+ d2e1a72fcca58-7141e20e31cso2558009b3a.3
+ for <buildroot@buildroot.org>; Sat, 24 Aug 2024 11:03:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1724522340; x=1725127140;
+ d=1e100.net; s=20230601; t=1724522595; x=1725127395;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=hvxGRk45gy1J63ry+OXkArivdzuEEwLWmj2DWegfkmw=;
- b=VXM6qDX8mXjOpmHKSVYZEjua+wYpntcT5NI32WB4z3UzckvR3apx6PCtNvqLM6Rker
- xlEfGQgIqxk1tLq9X2D7mFNV57ocbICbGjjNgEyTPGwSX6/hY6b6jWhbbUqk8s5qFFj5
- aKmiDr7uB+LzBE5l49AsGF5GajhprhpdK18Y5BM7TOX7gGd7iNMaxQq9XmsjgR3ufUag
- tW42/VNF5nZmY0/ir6YE3ixykiqtkS5/vnwYsZ74WSayHW15ecp/9c3aZp022/tbO7G8
- Maf/0ibgYkez/r1MB+lFnionS3GHufx2rarqP/RYCWD6ROzIOCpagXD0YSfyhDjxGeKG
- 4DKQ==
-X-Gm-Message-State: AOJu0YwCV4CLRx9yA8aojbnE063AZDHAn9w+59XOOHAzvg6FL77maJrs
- o5P/0tyC1A5FZwDsJZ1N/k5E1nzWynwry1Z4REQ2hUjeQVthrJqoU3rRAg==
-X-Google-Smtp-Source: AGHT+IEHH7L7E9a2O1sOjlhCqns37qoiTjmtUsnYTNtagd+0pruA9yhGrPckgfEFn/eHiCLh7qfsZQ==
-X-Received: by 2002:a05:6e02:168c:b0:39d:3b1d:96b8 with SMTP id
- e9e14a558f8ab-39e3c9e9ab8mr70401975ab.28.1724522339875; 
- Sat, 24 Aug 2024 10:58:59 -0700 (PDT)
+ bh=muZEf22afssPc+NeRhHP/NItHn15cE7G0H6hqsgXWgE=;
+ b=JoF6Hs3T9ChtKUjWYI6Zob349dr9M3DP9aqpPbbSBlY2bxDafZ7qr94960mfBqOcgF
+ HySf6onmLTkKIdOVhjGuE2X7owYHkTqUCRjEvBA5qDXEd9pnZ6oZCDO+UYS7lnMKPeY6
+ rxu/tASI46ZOAMA3CL+huPkgYuPnscb7K/eoblLyjDsMXBdr9pdIJfLQfqWiiNjoKqfC
+ OqboIpNn1fGJ5ACPHpIIwe5VrEj55CWjma8IUhPVdbJPgylHUviW1shZyFaEAJrjhK+8
+ QfMAQJ0aqpK8hwxXAUB69fU0tooWRsdBCdfQcUaNoZoRadZxyCIT/5Xeg8AmCb/Llo4F
+ oEjg==
+X-Gm-Message-State: AOJu0YyTfi83bl/rN9J+bExNiB1PZWRs/hiBEa7fa2EE0WjJImSg5bLB
+ 2lLUTqm4YomEbnJfTH4Ln99Fc2Cd1zHfjuv8UM1pXrpw9VLh58ikg9+jEg==
+X-Google-Smtp-Source: AGHT+IGg10yUMjFsDA8lZD+RUDH+mS/eLLV8I260M0cx0rE1Lj78AqSGeNWGYW2ejRHohO8JfDQBlA==
+X-Received: by 2002:a05:6a00:3ccd:b0:70d:2621:5808 with SMTP id
+ d2e1a72fcca58-714457706b0mr7431995b3a.9.1724522594673; 
+ Sat, 24 Aug 2024 11:03:14 -0700 (PDT)
 Received: from fabio-Precision-3551.. ([2804:14c:485:4b61:44ec:77f0:fcc9:d01d])
  by smtp.gmail.com with ESMTPSA id
- 41be03b00d2f7-7cd9ad55880sm4399152a12.69.2024.08.24.10.58.57
+ d2e1a72fcca58-7143423143bsm4919889b3a.17.2024.08.24.11.03.13
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 24 Aug 2024 10:58:58 -0700 (PDT)
+ Sat, 24 Aug 2024 11:03:14 -0700 (PDT)
 From: Fabio Estevam <festevam@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 24 Aug 2024 14:58:21 -0300
-Message-Id: <20240824175821.828808-1-festevam@gmail.com>
+Date: Sat, 24 Aug 2024 15:03:07 -0300
+Message-Id: <20240824180307.829708-1-festevam@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1724522340; x=1725127140; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1724522595; x=1725127395; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=hvxGRk45gy1J63ry+OXkArivdzuEEwLWmj2DWegfkmw=;
- b=kfZduXjZu9Rm2dT2FVLMqfsp5tXphTx02hIvNoi/awdek1hHZlISh0Qe3mKTHlizk1
- lM075vieXz3Ir9ZqOye7FCIRIDX/GzN0lv5vzcC8WtgckqgQXVlw04YWcTNbB+e9OdlM
- +MFMUn4AhuX2iur2rr0LRr+xIW5XdOUzxjK8PfG3xxOFqeoRyrnY3OwaaSq0wEx3XnBm
- Ny8ZbydAEDea9SNEHSf+hihRA7PnN1eGchsPRd/52o6x64co8ScEmbs/CXUv4LylPoB0
- t0yQq1/tX022UaZvQqdI/5PUTECjuUNESvjQzo5cvlzpEvr/q+xxfwsizQ+WK5mjvUAl
- yE8w==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=muZEf22afssPc+NeRhHP/NItHn15cE7G0H6hqsgXWgE=;
+ b=b7/vurnxCayoHZ3D/wLqrX/LdPq7KlRV89P8xciHBMSFGOw0oo8UX3QzFrX2cc+yHa
+ YNqUDK1MTGbOJlTE+Sk0c8XBV/SgT8Qc9u/w8sqCdk+hs2PZVBPyQZL4SucoC0+d+tuj
+ WGFTzQ447TUXgiPJEJszs2qnMRJlg8Hne6BdwYd/n6vD1tKsZwYm7PcuoZRd9UqRral3
+ 9KOZX/SR6loocvDJ3rzvODjG9GbBg7FiKiHB59O2Vr00ChFSSYKYAm4HWoRYe7ZrxN6S
+ Z3v38lBzf5z7EKKpkL+yuBlvZOR8VBfwEzuXSl2vPXC/6LyTFcbNjnXNib+nPSVWXjr2
+ i6xw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=kfZduXjZ
-Subject: [Buildroot] [PATCH] configs/mx6udoo: update U-Boot and kernel
+ header.s=20230601 header.b=b7/vurnx
+Subject: [Buildroot] [PATCH] configs/mx25pdk: remove defconfig
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -106,107 +106,174 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Update to U-Boot 2024.07 and kernel 6.10.6 versions.
+The imx25pdk board has been removed from U-Boot and I no
+longer have access to the board.
 
-As kernel 6.10 fixes the USB kernel hang, remove the original patch.
-
-Also convert it to use extlinux.conf file.
+Remove its support.
 
 Signed-off-by: Fabio Estevam <festevam@gmail.com>
 ---
- .../linux/0000-udoo-disable-usbh1.patch       | 26 -------------------
- .../boot/extlinux/extlinux.conf               |  4 +++
- configs/mx6udoo_defconfig                     | 15 +++++------
- 3 files changed, 10 insertions(+), 35 deletions(-)
- delete mode 100644 board/udoo/mx6qdl/patches/linux/0000-udoo-disable-usbh1.patch
- create mode 100644 board/udoo/mx6qdl/rootfs_overlay/boot/extlinux/extlinux.conf
+ .checkpackageignore                          |  1 -
+ DEVELOPERS                                   |  1 -
+ board/freescale/imx25pdk/readme.txt          | 54 --------------------
+ configs/mx25pdk_defconfig                    | 35 -------------
+ package/freescale-imx/Config.in              |  3 --
+ package/freescale-imx/firmware-imx/Config.in |  1 -
+ 6 files changed, 95 deletions(-)
+ delete mode 100644 board/freescale/imx25pdk/readme.txt
+ delete mode 100644 configs/mx25pdk_defconfig
 
-diff --git a/board/udoo/mx6qdl/patches/linux/0000-udoo-disable-usbh1.patch b/board/udoo/mx6qdl/patches/linux/0000-udoo-disable-usbh1.patch
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 778e3b865154..80445921444b 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -191,7 +191,6 @@ configs/microchip_sama5d2_icp_mmc_dev_defconfig lib_defconfig.ForceCheckHash
+ configs/microchip_sama7g5ek_mmc_defconfig lib_defconfig.ForceCheckHash
+ configs/microchip_sama7g5ek_mmc_dev_defconfig lib_defconfig.ForceCheckHash
+ configs/minnowboard_max_defconfig lib_defconfig.ForceCheckHash
+-configs/mx25pdk_defconfig lib_defconfig.ForceCheckHash
+ configs/mx53loco_defconfig lib_defconfig.ForceCheckHash
+ configs/mx6udoo_defconfig lib_defconfig.ForceCheckHash
+ configs/nexbox_a95x_defconfig lib_defconfig.ForceCheckHash
+diff --git a/DEVELOPERS b/DEVELOPERS
+index d2b64ee5c6f4..f3b3a21b79fd 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -984,7 +984,6 @@ F:	configs/imx6ulpico_defconfig
+ F:	configs/imx7d-sdb_defconfig
+ F:	configs/imx7dpico_defconfig
+ F:	configs/imx8mqevk_defconfig
+-F:	configs/mx25pdk_defconfig
+ F:	configs/mx51evk_defconfig
+ F:	configs/mx53loco_defconfig
+ F:	configs/mx6cubox_defconfig
+diff --git a/board/freescale/imx25pdk/readme.txt b/board/freescale/imx25pdk/readme.txt
 deleted file mode 100644
-index d151a40d6e2e..000000000000
---- a/board/udoo/mx6qdl/patches/linux/0000-udoo-disable-usbh1.patch
+index 1aece6c9b3c1..000000000000
+--- a/board/freescale/imx25pdk/readme.txt
 +++ /dev/null
-@@ -1,26 +0,0 @@
--[PATCH] ARM: dts: imx6qdl-udoo: Disable usbh1 to avoid kernel hang
+@@ -1,54 +0,0 @@
+-**************************
+-Freescale i.MX25 PDK board
+-**************************
 -
--Currently the kernel hangs when USB Host1 is enabled due to the lack of
--support for controlling the USB hub clock and GPIO reset line.
+-This file documents the Buildroot support for the Freescale i.MX25 PDK board.
 -
--Peter Chen has made several attempts to fix this problem, but his series
--has not been applied yet, so better disable USB host1 for now to avoid
--the kernel hang.
+-Build
+-=====
 -
--Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
-----
+-First, configure Buildroot for the i.MX25 PDK board:
 -
--diff --git a/arch/arm/boot/dts/imx6qdl-udoo.dtsi b/arch/arm/boot/dts/imx6qdl-udoo.dtsi
--index 828dd20cd27d..c9e122865312 100644
----- a/arch/arm/boot/dts/imx6qdl-udoo.dtsi
--+++ b/arch/arm/boot/dts/imx6qdl-udoo.dtsi
--@@ -292,7 +292,8 @@ &usbh1 {
-- 	pinctrl-0 = <&pinctrl_usbh>;
-- 	vbus-supply = <&reg_usb_h1_vbus>;
-- 	clocks = <&clks IMX6QDL_CLK_CKO>;
---	status = "okay";
--+	/* currently USB support causes a kernel hang. Disable it for now */
--+	status = "disabled";
-- };
-- 
-- &usbotg {
-diff --git a/board/udoo/mx6qdl/rootfs_overlay/boot/extlinux/extlinux.conf b/board/udoo/mx6qdl/rootfs_overlay/boot/extlinux/extlinux.conf
-new file mode 100644
-index 000000000000..cbb284f91b4f
---- /dev/null
-+++ b/board/udoo/mx6qdl/rootfs_overlay/boot/extlinux/extlinux.conf
-@@ -0,0 +1,4 @@
-+Label imx6qdl-udoo buildroot
-+	kernel ../zImage
-+	fdtdir ../
-+	append root=/dev/mmcblk2p1 rootwait rw
-diff --git a/configs/mx6udoo_defconfig b/configs/mx6udoo_defconfig
-index 5092ef0fd148..6c84a41bfdcf 100644
---- a/configs/mx6udoo_defconfig
-+++ b/configs/mx6udoo_defconfig
-@@ -3,27 +3,26 @@ BR2_cortex_a9=y
- BR2_ARM_ENABLE_NEON=y
- BR2_ARM_ENABLE_VFP=y
- BR2_ARM_FPU_VFPV3=y
--BR2_GLOBAL_PATCH_DIR="board/udoo/mx6qdl/patches"
--# Linux headers same as kernel, a 5.10 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
-+# Linux headers same as kernel, a 6.10 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_10=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
--BR2_ROOTFS_POST_BUILD_SCRIPT="board/udoo/common/post-build.sh"
-+BR2_ROOTFS_OVERLAY="board/udoo/mx6qdl/rootfs_overlay"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/post-image.sh"
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="udoo"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.10"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.07"
- BR2_TARGET_UBOOT_FORMAT_IMG=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="SPL"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.84"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.10.6"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-udoo imx6dl-udoo"
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="nxp/imx/imx6q-udoo nxp/imx/imx6dl-udoo"
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
- # required tools to create the SD card image
-@@ -31,5 +30,3 @@ BR2_PACKAGE_HOST_DOSFSTOOLS=y
- BR2_PACKAGE_HOST_GENIMAGE=y
- BR2_PACKAGE_HOST_MTOOLS=y
- BR2_PACKAGE_HOST_UBOOT_TOOLS=y
--BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y
--BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/udoo/common/boot.scr.txt"
+-  make mx25pdk_defconfig
+-
+-Build all components:
+-
+-  make
+-
+-You will find in output/images/ the following files:
+-  - imx25-pdk.dtb
+-  - rootfs.ext4
+-  - rootfs.tar
+-  - sdcard.img
+-  - u-boot.imx
+-  - zImage
+-
+-Create a bootable SD card
+-=========================
+-
+-To determine the device associated to the SD card have a look in the
+-/proc/partitions file:
+-
+-  cat /proc/partitions
+-
+-Buildroot prepares a bootable "sdcard.img" image in the output/images/
+-directory, ready to be dumped on a SD card. Launch the following
+-command as root:
+-
+-  dd if=output/images/sdcard.img of=/dev/<your-sd-device>
+-
+-*** WARNING! This will destroy all the card content. Use with care! ***
+-
+-For details about the medium image layout, see the definition in
+-board/freescale/common/imx/genimage.cfg.template.
+-
+-Boot the i.MX25 PDK board
+-=========================
+-
+-To boot your newly created system:
+-- insert the SD card in the SD slot of the board;
+-- put a USB cable into the Debug USB Port and connect using a terminal
+-  emulator at 115200 bps, 8n1;
+-- power on the board.
+-
+-Enjoy!
+diff --git a/configs/mx25pdk_defconfig b/configs/mx25pdk_defconfig
+deleted file mode 100644
+index ec4f8b8289d7..000000000000
+--- a/configs/mx25pdk_defconfig
++++ /dev/null
+@@ -1,35 +0,0 @@
+-# Architecture
+-BR2_arm=y
+-BR2_arm926t=y
+-
+-# Linux headers same as kernel, a 4.15 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_4_15=y
+-
+-# System
+-BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+-
+-# required tools to create the SD card image
+-BR2_PACKAGE_HOST_DOSFSTOOLS=y
+-BR2_PACKAGE_HOST_GENIMAGE=y
+-BR2_PACKAGE_HOST_MTOOLS=y
+-
+-# Filesystem
+-BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/post-image.sh"
+-BR2_TARGET_ROOTFS_EXT2=y
+-BR2_TARGET_ROOTFS_EXT2_4=y
+-
+-# Bootloader
+-BR2_TARGET_UBOOT=y
+-BR2_TARGET_UBOOT_BOARDNAME="mx25pdk"
+-BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2018.01"
+-BR2_TARGET_UBOOT_FORMAT_IMX=y
+-
+-# Kernel
+-BR2_LINUX_KERNEL=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="4.15.7"
+-BR2_LINUX_KERNEL_DEFCONFIG="imx_v4_v5"
+-BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx25-pdk"
+-BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+diff --git a/package/freescale-imx/Config.in b/package/freescale-imx/Config.in
+index 6d196a052dae..05a358723545 100644
+--- a/package/freescale-imx/Config.in
++++ b/package/freescale-imx/Config.in
+@@ -10,9 +10,6 @@ if BR2_PACKAGE_FREESCALE_IMX
+ choice
+ 	prompt "i.MX platform"
+ 
+-config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX25_3STACK
+-	bool "imx25-3stack"
+-
+ config BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX27ADS
+ 	bool "imx27ads"
+ 
+diff --git a/package/freescale-imx/firmware-imx/Config.in b/package/freescale-imx/firmware-imx/Config.in
+index 4a9986448f8b..7d27c8e14b07 100644
+--- a/package/freescale-imx/firmware-imx/Config.in
++++ b/package/freescale-imx/firmware-imx/Config.in
+@@ -14,7 +14,6 @@ if BR2_PACKAGE_FIRMWARE_IMX
+ 
+ config BR2_PACKAGE_FIRMWARE_IMX_SDMA_FW_NAME
+ 	string
+-	default "imx25" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX25_3STACK
+ 	default "imx51" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX51
+ 	default "imx53" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX53
+ 	default "imx6q" if BR2_PACKAGE_FREESCALE_IMX_PLATFORM_IMX6Q
 -- 
 2.34.1
 
