@@ -4,96 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 24143C5320E
-	for <buildroot@archiver.kernel.org>; Sun, 25 Aug 2024 13:56:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62A86C5321E
+	for <buildroot@archiver.kernel.org>; Sun, 25 Aug 2024 14:23:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E4F29606EE;
-	Sun, 25 Aug 2024 13:56:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0CB2560087;
+	Sun, 25 Aug 2024 14:23:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ND-SP7Cm9dkV; Sun, 25 Aug 2024 13:56:24 +0000 (UTC)
+ id nhPB4FRsbkb6; Sun, 25 Aug 2024 14:23:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AF08A60720
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0FADB605A8
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AF08A60720;
-	Sun, 25 Aug 2024 13:56:23 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 28C741BF2CC
- for <buildroot@lists.busybox.net>; Sun, 25 Aug 2024 13:56:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0FADB605A8;
+	Sun, 25 Aug 2024 14:23:29 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 9672B1BF2BF
+ for <buildroot@lists.busybox.net>; Sun, 25 Aug 2024 14:23:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 173124004A
- for <buildroot@lists.busybox.net>; Sun, 25 Aug 2024 13:56:14 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8314080F4D
+ for <buildroot@lists.busybox.net>; Sun, 25 Aug 2024 14:23:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BEtMXiJzk1vj for <buildroot@lists.busybox.net>;
- Sun, 25 Aug 2024 13:56:13 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.19;
- helo=mout.gmx.net; envelope-from=j.neuschaefer@gmx.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org BB63E4013C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BB63E4013C
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
- by smtp2.osuosl.org (Postfix) with ESMTPS id BB63E4013C
- for <buildroot@buildroot.org>; Sun, 25 Aug 2024 13:56:12 +0000 (UTC)
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from probook ([89.0.48.155]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1Mlw7V-1sH6201WXj-00jmxq; Sun, 25
- Aug 2024 15:55:59 +0200
-Date: Sun, 25 Aug 2024 15:55:51 +0200
-MIME-Version: 1.0
-Message-Id: <20240825-rgbmatrix-v1-3-0f2b0106f2ee@gmx.net>
-References: <20240825-rgbmatrix-v1-0-0f2b0106f2ee@gmx.net>
-In-Reply-To: <20240825-rgbmatrix-v1-0-0f2b0106f2ee@gmx.net>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id rb_DpStvC9s3 for <buildroot@lists.busybox.net>;
+ Sun, 25 Aug 2024 14:23:26 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 2583E80F4C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2583E80F4C
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2583E80F4C
+ for <buildroot@buildroot.org>; Sun, 25 Aug 2024 14:23:25 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p4fd6cce6.dip0.t-ipconnect.de [79.214.204.230])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id E1E14A4C11E2
+ for <buildroot@buildroot.org>; Sun, 25 Aug 2024 16:23:23 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:57698)
+ by fli4l.lan.fli4l with esmtp (Exim 4.98)
+ (envelope-from <bernd@kuhls.net>) id 1siE9L-000000001tc-1A0U
+ for buildroot@buildroot.org; Sun, 25 Aug 2024 14:23:23 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1724594157; l=579;
- i=j.neuschaefer@gmx.net; s=20240329; h=from:subject:message-id;
- bh=QM9f7KMI3UUiCUtYR5XDHWzO+WxJhbHt6pKvFNWJVZs=;
- b=iPUpAtebuvitSw7vGEaqansrLtvYT7tsRsYzroetE10Nb/vxamIL4sNiASmosb0E8uHu368Bh
- /GVGBMBX8hwDDSHGjqEx5dN8WA13rXeNgSPj+Xo2+tyzUmPrKnCcZj9
-X-Developer-Key: i=j.neuschaefer@gmx.net; a=ed25519;
- pk=NIe0bK42wNaX/C4bi6ezm7NJK0IQE+8MKBm7igFMIS4=
-X-Provags-ID: V03:K1:Q2FksEddfrw49XkCET/EHJHDy4TederqGIWdnq8okKa7zBTpsT/
- iFsUXLlGqDnM0OfFAF4GMQZr9X/jseV4hXkB+Uz/7we7Z0Ro6/g6ZC/OSJt2Mr6fnOlXrBr
- CE30+wPB1rEyP1xeez/o5P19jkj8ruvyAxxXkq/IiYFrCObvut71GcRfvj+BFLw5cUHop/e
- 3faqlZk/Bv8jtD0IrUuPw==
-UI-OutboundReport: notjunk:1;M01:P0:6eBHNNMSVyI=;gsV5r03vv5nvcKgYrMYYOHHVH/C
- tZ7K5FgnNeCWQOLsX7DHWdAqubEg6YzIu6Wgl18a+XlprX3jvSL/iCMhE/KSyWH9u2KZiKn/Y
- uyTO1nE/D9YWRuwhxnyPnEGqtrBevldtwnu1r9hIvSLg59Pj6tFcZJ3SnhWlPvj+nw26xDse4
- svslA2UjLNn2uujvW3H1/1bsyNUdPJ5w5/469+qjOGn38AIMFgoATl500DPeGxw/MH0VqIkYq
- 8A9pAHnmdkDcqpyk/toaxmBx2HWIozalgTo8xtWSOPNfDcaKLQQAM47lITXomhjcoJfjzhyL4
- oqPFM17Q3E/3W7R9Ywd705V/TQZ7ivmr04ZB0uyz6vYyG0bBX0Hu1SbEpM17CynUmXmHu2dSp
- U8mim/lgUf8sHQxc/mQvABjwb8tHaXMwEmRXiktW5iEsU3j+A0A/5Y8DsOyNqglyajTJjyyca
- oJ+sMee1wy069xD1TJW9b6sXJxz1x6xdfwGgZJsTcrW1Hf/ACTVRHYDcHvsKISX1Kmn0mplq+
- WDG6xN1EgOyuyYnvtDViZ/H9PuaRzkpsdOaGKbzuMRdV3BvruiEbAHbP17B2JxkBP0eX0nzzw
- Pr/2VlQI7mj8y5xwyiL781+e276YTAoJFjHw7LfFwWTZzW9hRNmLyhDf1AYA+VQo5pPlag0fL
- EUmEOe/qwd3xc9FTDYuFa1Yfi1V9O4yLyjnOthDg5osTeFAtDpY3nOwV+DWwlx1pYvpFImoNN
- ngXJPtiigItwIXywXJXffQ3nwFVNsL5do1sPLKjIegn2eGAw7Vag5I3hVIFQiqt1PVfu5IrWO
- 6r7rbEsMCppRlBuqHU/qtqbQ==
+Date: Sun, 25 Aug 2024 16:23:23 +0200
+Message-Id: <20240825142323.1780341-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.39.2
+MIME-Version: 1.0
+X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmx.net; 
- s=s31663417; t=1724594159; x=1725198959; i=j.neuschaefer@gmx.net;
- bh=2yZgrgJfe7QciC9Mx38T40hmadAsjgHz6Ffcrcla5I0=;
- h=X-UI-Sender-Class:From:Date:Subject:MIME-Version:Content-Type:
- Content-Transfer-Encoding:Message-Id:References:In-Reply-To:To:Cc:
- cc:content-transfer-encoding:content-type:date:from:message-id:
- mime-version:reply-to:subject:to;
- b=iih3KtZo/JqPXbCmptbqg/B1WjEEO4v1rypc9OD9Dq1e/kupx+/NxRI23qJpU8UO
- JMtivLDPapBywjPYFvm1ZF7W1BkGlKFbbfA8deJjGfogIcnbSKFuTyGyq73kRILs8
- YnsFxZ6kZNr4bw9ZlwoTr6nt8UMgpZJWjnURsf7ly6mi2DxrsWcAWQy1+7Yl/omAK
- gXOAlCfyQnd4bzKAII4OK6/fuYuDqnfMKnm9ANjkDs4u95T3tNusIBGdgI2Bn4bRY
- /c4nqv3beABIlB7x4Mza1CZusCR9eVAdcn3XJTbeuBlCPOUcVqR4Xae823KKPBcc0
- 71TBIgykkBojPLw9jQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=gmx.net
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=kuhls.net; 
+ s=kas202406071026; t=1724595803;
+ bh=fYtCissUcdCeMn2g0EytAvs1O3nrb9TlBbi3jP53FzY=;
+ h=From:To:Subject:Date:From;
+ b=GV8FAmmXq8oeQXrzkOUK2Fg+rI25O7Xn863Y0pI8fwdgePUa5Jbtmf1wQxTd7uCRi
+ IZn4jmWp59e/0ttQCJA7sZI+efL9jj4VdIWp5PRWbWL6biAzapzmoIAWNDvA4bfz85
+ U6Y/SFmmXSTxc8P3ozRh1V2CRD87qKSphT/9faaiX2iN0465ciXTkLBzpOdSuUHg7t
+ zqySToeRQEQpaR5BI+D337a9EauFyQ19Au7JzZL0qC9GfpImAJTk3Z2rLXy3/uXVOo
+ IOWtTzXmBLXX7OgIf/32lmnvsR/Q7blg1AHKQWKOQwptdbT6N9ZPb3xIxym1TKSip7
+ c8UypyIE1gOVw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=gmx.net header.i=j.neuschaefer@gmx.net
- header.a=rsa-sha256 header.s=s31663417 header.b=iih3KtZo
-Subject: [Buildroot] =?utf-8?q?=5BPATCH_3/3=5D_DEVELOPERS=3A_add_J=2E_Neu?=
- =?utf-8?q?sch=C3=A4fer_for_rpi-rgb-led-matrix/python-rgbmatrix?=
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202406071026 header.b=GV8FAmmX
+Subject: [Buildroot] [PATCH v2 1/1] package/php: Fix build on arm
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -105,27 +80,84 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: =?utf-8?q?J=2E_Neusch=C3=A4fer_via_buildroot?= <buildroot@buildroot.org>
-Reply-To: =?utf-8?q?J=2E_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-Cc: Grzegorz Blach <grzegorz@blach.pl>,
- =?utf-8?q?J=2E_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
- Asaf Kahlon <asafka7@gmail.com>, James Hilliard <james.hilliard1@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-QWRkIG15c2VsZiBhcyBtYWludGFpbmVyIHNvIEkgY2FuIGJlIG5vdGlmaWVkIG9mIHBhdGNoZXMv
-cHJvYmxlbXMvZXRjLgoKU2lnbmVkLW9mZi1ieTogSi4gTmV1c2Now6RmZXIgPGoubmV1c2NoYWVm
-ZXJAZ214Lm5ldD4KLS0tCiBERVZFTE9QRVJTIHwgMiArKwogMSBmaWxlIGNoYW5nZWQsIDIgaW5z
-ZXJ0aW9ucygrKQoKZGlmZiAtLWdpdCBhL0RFVkVMT1BFUlMgYi9ERVZFTE9QRVJTCmluZGV4IGQy
-YjY0ZWU1YzYuLjlmZmE5MTYzNjQgMTAwNjQ0Ci0tLSBhL0RFVkVMT1BFUlMKKysrIGIvREVWRUxP
-UEVSUwpAQCAtMTQ1NSw2ICsxNDU1LDggQEAgRjoJcGFja2FnZS9tYXdrLwogTjoJSi4gTmV1c2No
-w6RmZXIgPGoubmV1c2NoYWVmZXJAZ214Lm5ldD4KIEY6CXBhY2thZ2UvZXhlY2xpbmUvCiBGOglw
-YWNrYWdlL21kZXZkLworRjoJcGFja2FnZS9weXRob24tcmdibWF0cml4CitGOglwYWNrYWdlL3Jw
-aS1yZ2ItbGVkLW1hdHJpeAogRjoJcGFja2FnZS9zNi8KIEY6CXBhY2thZ2UvczYtbGludXgtaW5p
-dC8KIEY6CXBhY2thZ2UvczYtbGludXgtdXRpbHMvCgotLQoyLjQzLjAKCl9fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QK
-YnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxt
-YW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+Fixes:
+http://autobuild.buildroot.org/results/5e8ef91d84018ccdf85f2156292feb3460bfe698/
+
+Without this patch configure wrongfully detects aarch64 support:
+
+    checking for aarch64 CRC32 API... yes
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+v2: rewritten patch to fix configure.ac (Thomas)
+
+ ...onfigure-check-for-aarch64-CRC32-API.patch | 48 +++++++++++++++++++
+ 1 file changed, 48 insertions(+)
+ create mode 100644 package/php/0006-Autotools-fix-configure-check-for-aarch64-CRC32-API.patch
+
+diff --git a/package/php/0006-Autotools-fix-configure-check-for-aarch64-CRC32-API.patch b/package/php/0006-Autotools-fix-configure-check-for-aarch64-CRC32-API.patch
+new file mode 100644
+index 0000000000..f2cef640be
+--- /dev/null
++++ b/package/php/0006-Autotools-fix-configure-check-for-aarch64-CRC32-API.patch
+@@ -0,0 +1,48 @@
++From fc8136dc90e4c42a72666ab74f37e2fdc8794fee Mon Sep 17 00:00:00 2001
++From: Bernd Kuhls <bernd@kuhls.net>
++Date: Sun, 25 Aug 2024 15:56:37 +0200
++Subject: [PATCH] Autotools: fix configure check for aarch64 CRC32 API
++
++On arm32 bit the check succeeds leading to a build error later on:
++
++/home/autobuild/autobuild/instance-3/output-1/build/php-8.3.10/ext/standard/crc32.c:70:12:
++ error: 'armv8-a' does not support feature 'nothing'
++   70 | #   pragma GCC target ("+nothing+crc")
++
++Upstream: https://github.com/php/php-src/pull/15587
++
++Co-authored-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++[http://lists.busybox.net/pipermail/buildroot/2024-August/761151.html]
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++[Bernd: rebased for 8.3.10]
++---
++ configure.ac | 14 +++++++++++++-
++ 1 file changed, 13 insertions(+), 1 deletion(-)
++
++diff --git a/configure.ac b/configure.ac
++index 491963daae..2693ba09f4 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -754,7 +754,19 @@
++ PHP_CHECK_IN_ADDR_T
++ 
++ AC_CACHE_CHECK([for aarch64 CRC32 API], ac_cv_func___crc32d,
++-[AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <arm_acle.h>]],[[__crc32d(0, 0);]])],[ac_cv_func___crc32d=yes],[ac_cv_func___crc32d="no"])])
+++[AC_LINK_IFELSE([AC_LANG_PROGRAM([[
+++#include <arm_acle.h>
+++# if defined(__GNUC__)
+++#  if!defined(__clang__)
+++#   pragma GCC push_options
+++#   pragma GCC target ("+nothing+crc")
+++#  elif defined(__APPLE__)
+++#   pragma clang attribute push(__attribute__((target("crc"))), apply_to=function)
+++#  else
+++#   pragma clang attribute push(__attribute__((target("+nothing+crc"))), apply_to=function)
+++#  endif
+++# endif
+++]], [[__crc32d(0, 0);]])],[ac_cv_func___crc32d=yes],[ac_cv_func___crc32d="no"])])
++ if test "$ac_cv_func___crc32d" = "yes"; then
++   AC_DEFINE([HAVE_AARCH64_CRC32], [1], [Define when aarch64 CRC32 API is available.])
++ fi
++-- 
++2.39.2
+-- 
+2.39.2
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
