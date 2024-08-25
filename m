@@ -4,97 +4,56 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 543CBC5320E
-	for <buildroot@archiver.kernel.org>; Sun, 25 Aug 2024 13:56:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A41CC5321E
+	for <buildroot@archiver.kernel.org>; Sun, 25 Aug 2024 13:56:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E4118606CE;
-	Sun, 25 Aug 2024 13:56:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CC5B4605A7;
+	Sun, 25 Aug 2024 13:56:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oulh9-ZsdP7Y; Sun, 25 Aug 2024 13:56:12 +0000 (UTC)
+ id F7cAXztoeizt; Sun, 25 Aug 2024 13:56:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2139D605C9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E02B5605F4
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2139D605C9;
-	Sun, 25 Aug 2024 13:56:11 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 136501BF2CC
- for <buildroot@lists.busybox.net>; Sun, 25 Aug 2024 13:56:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E02B5605F4;
+	Sun, 25 Aug 2024 13:56:17 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id BD5E41BF2CC
+ for <buildroot@lists.busybox.net>; Sun, 25 Aug 2024 13:56:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 01EB24013C
- for <buildroot@lists.busybox.net>; Sun, 25 Aug 2024 13:56:08 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B9FA480A66
+ for <buildroot@lists.busybox.net>; Sun, 25 Aug 2024 13:56:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MtV5axV2fzA5 for <buildroot@lists.busybox.net>;
- Sun, 25 Aug 2024 13:56:05 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.15;
- helo=mout.gmx.net; envelope-from=j.neuschaefer@gmx.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 4647D4004A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4647D4004A
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4647D4004A
- for <buildroot@buildroot.org>; Sun, 25 Aug 2024 13:56:03 +0000 (UTC)
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from probook ([89.0.48.155]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MSc1L-1sWzHo3FkX-00TmKS; Sun, 25
- Aug 2024 15:55:57 +0200
-Date: Sun, 25 Aug 2024 15:55:48 +0200
-Message-Id: <20240825-rgbmatrix-v1-0-0f2b0106f2ee@gmx.net>
-MIME-Version: 1.0
-X-B4-Tracking: v=1; b=H4sIAOQ3y2YC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDIxMDcyNz3aL0pNzEkqLMCl2z1CRzQ8u0FHMLYwMloPqCotS0zAqwWdGxtbU
- ADpm2yFsAAAA=
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id nMY4xRfyXPVN for <buildroot@lists.busybox.net>;
+ Sun, 25 Aug 2024 13:56:09 +0000 (UTC)
+X-Greylist: delayed 459 seconds by postgrey-1.37 at util1.osuosl.org;
+ Sun, 25 Aug 2024 13:56:08 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org F140780A4E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F140780A4E
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.11.48.116;
+ helo=ngcobalt16.manitu.net; envelope-from=linux@ulli-kroll.de;
+ receiver=<UNKNOWN> 
+Received: from ngcobalt16.manitu.net (ngcobalt16.manitu.net [217.11.48.116])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id F140780A4E
+ for <buildroot@buildroot.org>; Sun, 25 Aug 2024 13:56:08 +0000 (UTC)
+Received: from localhost (ip-078-094-238-058.um19.pools.vodafone-ip.de
+ [78.94.238.58]) (Authenticated sender: linux@ulli-kroll.de)
+ by ngcobalt16.manitu.net (Postfix) with ESMTPSA id 99B0010E00AC;
+ Sun, 25 Aug 2024 15:48:28 +0200 (CEST)
+From: Hans Ulli Kroll <linux@ulli-kroll.de>
 To: buildroot@buildroot.org
-X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1724594157; l=1347;
- i=j.neuschaefer@gmx.net; s=20240329; h=from:subject:message-id;
- bh=OaPl6SJv9tslvLyVHPcs7OVqBzi5NqDz5IYdCKGc/y4=;
- b=dqC6mU0DAa0U0YeeXQOj0OnIXPLi8dR0vHly7p+FLf+07azZmmn3yKCGIbrae12Y3C3FI55kI
- iXQa8VJkeF1AKhW8DRaUhpHTLY1uSsF7RVUvzwz8VzDh6xXKYl0wdd/
-X-Developer-Key: i=j.neuschaefer@gmx.net; a=ed25519;
- pk=NIe0bK42wNaX/C4bi6ezm7NJK0IQE+8MKBm7igFMIS4=
-X-Provags-ID: V03:K1:/HHLgEsvNq8qmTrIZS9C16AxH1cXdX68ehyK1f6HuhTOlwdBfrV
- ByClEYZ3g5kCCIPk7CiH1rqPADyIrBfgJAqg2jp+GOLXCQanQyHm6W18fhlmwlZaICBvDgC
- CENsKW+t7bnLUrcNJdo21uCMCo4AmwCKt33X4Btk4UrcT05oxdCi8t5pUTtEnn6xTFyPW1w
- vhsoYnfxVEsNZLPgqCClQ==
-UI-OutboundReport: notjunk:1;M01:P0:/yReQMteREQ=;sW+p0iuJImBxrCTsy9Q6WSofYJH
- /otWk4VZtSuS07UqlfCpfbqcs7B5Pp/VQCstKdHQvNc4+FEuMyosUwwxwhQMx6L0N1D40TiiF
- UkNcflM08+8cbefXOwei7KluC2bba4NU6csAVPpAH5DDkQPup0I0OY5KKdu7AnuzA8OrfhLrY
- 9Ot6hEXz6+QwGdq6NL1HI7+EjxJsIkz9upoq6t2HV1HRYN4YI9LIr0XbXmoL3r7Bckwyb/+KV
- xxQvbiDLv0SfE+j6mXaFPq75PUGzogumQ5jBu3z+89BXCI4DjXJ47NZ+s9MAhRJh7dmDTScPb
- hlrWC8mO6u/5fSy57DaAGNCPtxn5nj4PjGAjDO2G/KwktX2lxMIx2XI2xDKE31QZVm+Vaq8b6
- rNHpg+is5cvQkX/DOEwjwmJ4/+0R02A6o9YTE+4cRny11SK/1u2JaxopiTYrUI8Jvz5uqaoQI
- Z5QSzuljfum5jRaPcHjLi4TQsSNvUxF9RH2sUlewROk0MuxPFkhye3qNnlodAyxxaT+8BrzNj
- DKWWv7W1wNfmYmpqi44PyVylWzaD7jNzwHlhONK6ic95eM64RMODdQ2EX1HfWi/xK9Wvd4THq
- rCUEKSKvJ4+YMonzBb8KaFl8myDJhz4HNUSMDZsgCLLI+MLqn0SCjhQ0vWjkt4Ew4hSnHSh+Q
- IlUSG/pNtZsbdHryI8Y4QsHEDLxySXtwFofbhMaL45xJsuHBK3qsQZapKFEhrj6L9nVVE88kN
- HcPVa9w506AAL8JjWGrnJvbfwAmCgfrkAPytyxT3Oq39lsSpGb6lBGSQzZ4xKyUYQL8g7P9tA
- 59H2TKt9w19qbeP4OPov3voQ==
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmx.net; 
- s=s31663417; t=1724594157; x=1725198957; i=j.neuschaefer@gmx.net;
- bh=EYFF2/vV5KYeOuHWpOCpXW7PhvgP+zyPUEF7OiQw5gY=;
- h=X-UI-Sender-Class:From:Subject:Date:Message-Id:MIME-Version:
- Content-Type:Content-Transfer-Encoding:To:Cc:cc:
- content-transfer-encoding:content-type:date:from:message-id:
- mime-version:reply-to:subject:to;
- b=L7HHkGLYHFrB7xrcFryBOTwc5J5Gu/TXWzd2difKWn2yxOxRz98hN4eIM3xGkOrl
- qWK36adyM4PKKFWHeQS1iRGNSt/v4IOD2TcFrln8eM2vc58wArC7ZGi1QYPLhckda
- PDFcAGdTx2wClj70/zrdG+C9fTW8ovCYLm6tF7ftk9+o8xdWPikXm7pZbvqe26U69
- pzJR0V1RURhm3/K/mK8SzwTE+HGs1Cd3zsfYDmS5rlIVJIitsxmLrrqfhHBSNvLIq
- iuAC0oNlerW62yJshebVtBwLgI8R6gCV4Tf4kq5jhUU8El5LjpI4t6ngV80VMBzEo
- g68CSWw1QdEyOwPc7w==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=gmx.net
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmx.net header.i=j.neuschaefer@gmx.net
- header.a=rsa-sha256 header.s=s31663417 header.b=L7HHkGLY
-Subject: [Buildroot] [PATCH 0/3] Version bump and python bindings for
- rpi-rgb-led-matrix
+Date: Sun, 25 Aug 2024 15:42:24 +0200
+Message-ID: <20240825134224.1443593-1-linux@ulli-kroll.de>
+X-Mailer: git-send-email 2.46.0
+MIME-Version: 1.0
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=ulli-kroll.de
+Subject: [Buildroot] [PATCH] toolchain:uclibc-ng:enable gnu hash for non
+ mips platforms
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -106,40 +65,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: =?utf-8?q?J=2E_Neusch=C3=A4fer_via_buildroot?= <buildroot@buildroot.org>
-Reply-To: =?utf-8?q?J=2E_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-Cc: Grzegorz Blach <grzegorz@blach.pl>,
- =?utf-8?q?J=2E_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
- Asaf Kahlon <asafka7@gmail.com>, James Hilliard <james.hilliard1@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Hans Ulli Kroll <linux@ulli-kroll.de>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-VGhpcyBwYXRjaHNldCB1cGRhdGVzIHRoZSBycGktcmdiLWxlZC1tYXRyaXggcGFja2FnZSBhbmQg
-YWRkcyB0aGUgcHl0aG9uCmJpbmRpbmdzLCB3aGljaCBhcmUgYnVpbHQgZnJvbSB0aGUgc2FtZSBz
-b3VyY2UgY29kZS4KCkknbSBub3QgZW50aXJlbHkgaGFwcHkgd2l0aCB0aGUgZHVwbGljYXRpb24g
-YmV0d2VlbiB0aGUgdHdvIHBhY2thZ2VzLiBJZgp0aGVyZSdzIGEgd2F5IHRvIG1lcmdlIHRoZW0g
-YW5kIHNwZWNpZnkgdGhlIHZlcnNpb24sIGhhc2hlcywgYW5kCmRlcGVuZGVuY2llcyBvbmx5IG9u
-Y2UsIEknbGwgZ2xhZGx5IGRvIHRoYXQuCgpTaWduZWQtb2ZmLWJ5OiBKLiBOZXVzY2jDpGZlciA8
-ai5uZXVzY2hhZWZlckBnbXgubmV0PgotLS0KU29ycnkgZm9yIHRoZSBkdXBsaWNhdGUgZW1haWws
-IEkgaGFkIHNvbWUgaXNzdWVzIHdpdGggbXkgZW1haWwKY29uZmlndXJhdGlvbi4KCi0tLQpKLiBO
-ZXVzY2jDpGZlciAoMyk6CiAgICAgIHBhY2thZ2UvcnBpLXJnYi1sZWQtbWF0cml4OiB1cGRhdGUg
-dG8gbGF0ZXN0IGNvbW1pdAogICAgICBbUkZDXSBwYWNrYWdlL3B5dGhvbi1yZ2JtYXRyaXg6IG5l
-dyBwYWNrYWdlCiAgICAgIERFVkVMT1BFUlM6IGFkZCBKLiBOZXVzY2jDpGZlciBmb3IgcnBpLXJn
-Yi1sZWQtbWF0cml4L3B5dGhvbi1yZ2JtYXRyaXgKCiBERVZFTE9QRVJTICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAyICsrCiBwYWNrYWdlL0NvbmZpZy5pbiAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAxICsKIHBhY2thZ2UvcHl0aG9uLXJnYm1h
-dHJpeC9Db25maWcuaW4gICAgICAgICAgICAgICAgIHwgIDggKysrKysrKysKIHBhY2thZ2UvcHl0
-aG9uLXJnYm1hdHJpeC9weXRob24tcmdibWF0cml4Lmhhc2ggICAgIHwgIDMgKysrCiBwYWNrYWdl
-L3B5dGhvbi1yZ2JtYXRyaXgvcHl0aG9uLXJnYm1hdHJpeC5tayAgICAgICB8IDIzICsrKysrKysr
-KysrKysrKysrKysrKysKIHBhY2thZ2UvcnBpLXJnYi1sZWQtbWF0cml4L3JwaS1yZ2ItbGVkLW1h
-dHJpeC5oYXNoIHwgIDIgKy0KIHBhY2thZ2UvcnBpLXJnYi1sZWQtbWF0cml4L3JwaS1yZ2ItbGVk
-LW1hdHJpeC5tayAgIHwgIDIgKy0KIDcgZmlsZXMgY2hhbmdlZCwgMzkgaW5zZXJ0aW9ucygrKSwg
-MiBkZWxldGlvbnMoLSkKLS0tCmJhc2UtY29tbWl0OiA4YmQwMGMxNmQ4YWYyYjRiNjIwYTBiMmMx
-MzZlNjgzMGI5ZDZiM2EwCmNoYW5nZS1pZDogMjAyNDA3MjctcmdibWF0cml4LTZlYjcxOWZkNzgz
-MAoKQmVzdCByZWdhcmRzLAotLQpKLiBOZXVzY2jDpGZlciA8ai5uZXVzY2hhZWZlckBnbXgubmV0
-PgoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRy
-b290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1
-aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
+In toolchain-wrapper.mk we use both sysv and gnu hash style for all 
+platforms, except MIPS which uses sysv only.
+
+However uClibc-ng has some extra knob to enable gnu hash via Kconfig, 
+which is set by default off.
+
+This leads to wrong symbol resolving on armv5 and output of devices,
+here on Pogoplug 4 detected with lcpci 3.10.
+
+Signed-off-by: Hans Ulli Kroll <linux@ulli-kroll.de>
+---
+ package/uclibc/uclibc.mk | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
+index de834bac4f..f48ebe6a16 100644
+--- a/package/uclibc/uclibc.mk
++++ b/package/uclibc/uclibc.mk
+@@ -205,6 +205,12 @@ define UCLIBC_X86_TYPE_CONFIG
+ endef
+ endif
+ 
++ifneq ($(UCLIBC_TARGET_ARCH),mips)
++define UCLIBC_LDSO_GNU_HASH_SUPPORT
++	$(call KCONFIG_ENABLE_OPT,LDSO_GNU_HASH_SUPPORT)
++endef
++endif
++
+ #
+ # Debug
+ #
+@@ -403,6 +409,7 @@ define UCLIBC_KCONFIG_FIXUP_CMDS
+ 	$(UCLIBC_SH_TYPE_CONFIG)
+ 	$(UCLIBC_SPARC_TYPE_CONFIG)
+ 	$(UCLIBC_POWERPC_TYPE_CONFIG)
++	$(UCLIBC_LDSO_GNU_HASH_SUPPORT)
+ 	$(UCLIBC_X86_TYPE_CONFIG)
+ 	$(UCLIBC_DEBUG_CONFIG)
+ 	$(UCLIBC_ENDIAN_CONFIG)
+-- 
+2.46.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
