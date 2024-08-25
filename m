@@ -4,91 +4,95 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A4976C5321E
-	for <buildroot@archiver.kernel.org>; Sun, 25 Aug 2024 19:41:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8E85C5321E
+	for <buildroot@archiver.kernel.org>; Sun, 25 Aug 2024 19:41:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 29ACF401F9;
-	Sun, 25 Aug 2024 19:41:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DAD9740274;
+	Sun, 25 Aug 2024 19:41:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YypEli25x3Cl; Sun, 25 Aug 2024 19:41:38 +0000 (UTC)
+ id H_l1UU67Z3rm; Sun, 25 Aug 2024 19:41:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E1021401DC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CD06040234
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E1021401DC;
-	Sun, 25 Aug 2024 19:41:37 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 49F551BF33A
+	by smtp4.osuosl.org (Postfix) with ESMTP id CD06040234;
+	Sun, 25 Aug 2024 19:41:40 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 673141BF33A
  for <buildroot@lists.busybox.net>; Sun, 25 Aug 2024 19:41:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 385F5606C6
+ by smtp2.osuosl.org (Postfix) with ESMTP id 55903402BC
  for <buildroot@lists.busybox.net>; Sun, 25 Aug 2024 19:41:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VpY36bdLs3ar for <buildroot@lists.busybox.net>;
- Sun, 25 Aug 2024 19:41:34 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id eOJbCQjCJVO0 for <buildroot@lists.busybox.net>;
+ Sun, 25 Aug 2024 19:41:35 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::134; helo=mail-lf1-x134.google.com;
+ client-ip=2a00:1450:4864:20::131; helo=mail-lf1-x131.google.com;
  envelope-from=geomatsi@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A97F3606BD
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A97F3606BD
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com
- [IPv6:2a00:1450:4864:20::134])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A97F3606BD
- for <buildroot@buildroot.org>; Sun, 25 Aug 2024 19:41:33 +0000 (UTC)
-Received: by mail-lf1-x134.google.com with SMTP id
- 2adb3069b0e04-5334fdabefbso3341417e87.1
- for <buildroot@buildroot.org>; Sun, 25 Aug 2024 12:41:33 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 5721840021
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5721840021
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com
+ [IPv6:2a00:1450:4864:20::131])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 5721840021
+ for <buildroot@buildroot.org>; Sun, 25 Aug 2024 19:41:35 +0000 (UTC)
+Received: by mail-lf1-x131.google.com with SMTP id
+ 2adb3069b0e04-5343e75c642so2061475e87.2
+ for <buildroot@buildroot.org>; Sun, 25 Aug 2024 12:41:35 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1724614890; x=1725219690;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=Rbnq0OLANw1HYtn1HIqZ6ScwmLvIQjxdpKh3nB34zVU=;
- b=XfkkEWCrMi+5yWg0YBZK43G67rq1J8crym7q5onrulWpSpkSigVbjNzMHaDM0oorWN
- 2PZcjaCPxWuft+1X53iIICQ3POlNaQviKWNQNkuiLsdzsE63En6fruz16mi3w0VTYlef
- wGG/5UzG4GQw/egZfb/9ujlY8uJvTXSOgKn0dsA43JK9xj82XVCDbv5qjURRjGaaBRQH
- ytrm3ZHjRCt9fxM9/4didUtIqRF7RQqE2XC54/OooBozgNjDRH677HGr6QS/NIkzVUVz
- 1Cn8qmBB6OwZ89Vmcl7JyLsBiamTZDRMsy9P/kCdzlKhPZzqTgipI4XhN3bg8MipsMjy
- ga2Q==
-X-Gm-Message-State: AOJu0YxAPbKLDZIG/sMeG73wpAJRCJHMkcBl5+0MxA331n1/EPDUrJiA
- /x/14jiE71Akz+1vSpPQF6dLPlmqSeR7kI+ZCoOBI+Ws7DaYERUZcPqpsKHI
-X-Google-Smtp-Source: AGHT+IEcYMYtWfPU/2XiGeYob5UGhCznBgcbPi4obNvtbon1JnApzJ1OVgjf0SpGT1eYEm94kc0m6A==
-X-Received: by 2002:a05:6512:2214:b0:530:aa6d:9ea0 with SMTP id
- 2adb3069b0e04-5334cab2324mr4083187e87.22.1724614890015; 
- Sun, 25 Aug 2024 12:41:30 -0700 (PDT)
+ d=1e100.net; s=20230601; t=1724614892; x=1725219692;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=PmqiZoPbGKYCB5J0SVRYbECOiZOmFlWgjWcb7MKzlFU=;
+ b=tGESjORTQIy106iZZoNSgl30/YZ8U3JLVorYzTNvoLXZ+0IS5Yzwm7BE+CPiGTqE3g
+ g1QlKUCmqMHs31sAJMzRa5aCaJMbSfh2rNknjCsUWKrRL1jw3rkCuIpvkfDsRVMd5wth
+ +RerzTl19ei2PGhGJ1eVtGoZWxCwa+UIKAMhEYmOz8lZZjzLICCQVf3WAb3YL3oFfqyc
+ vjXRbqPJAAE/SMU2DgMln2+SCUOAEBPPtGRc0LQvrOByA5kRtqpwh0TjO+rIdsk0Iz8i
+ oEPrf7RFVAyTccoJ2ZN4MKk+9xGofD9S2RsKWYPFPlrwabJ9Q6g6VI14HZugsSHMg3OF
+ 0HqA==
+X-Gm-Message-State: AOJu0YzgSM+0gCSrZiUUL50kJuysoDyp9EIKeSQr0MLiBhFWFEUSZxmg
+ zk6QfNxNmsJZZODeoLusmk72ziq5QUT3RkL95GeLE/Nt2vnxmhZYQCAU5rIw
+X-Google-Smtp-Source: AGHT+IG0YGfiKcw2d9M/1b+9hpdcmCDhGK8C4LoVZi+LbRH3spfTZP6Dzk93ed3ZSA2cs1fukk78lQ==
+X-Received: by 2002:a05:6512:159f:b0:52e:9f17:8418 with SMTP id
+ 2adb3069b0e04-5343882e162mr4923925e87.12.1724614891924; 
+ Sun, 25 Aug 2024 12:41:31 -0700 (PDT)
 Received: from localhost.localdomain ([5.188.167.4])
  by smtp.googlemail.com with ESMTPSA id
- 2adb3069b0e04-534365f8061sm1004737e87.250.2024.08.25.12.41.28
+ 2adb3069b0e04-534365f8061sm1004737e87.250.2024.08.25.12.41.30
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 25 Aug 2024 12:41:29 -0700 (PDT)
+ Sun, 25 Aug 2024 12:41:30 -0700 (PDT)
 From: Sergey Matyukevich <geomatsi@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 25 Aug 2024 22:41:07 +0300
-Message-ID: <20240825194124.4719-1-geomatsi@gmail.com>
+Date: Sun, 25 Aug 2024 22:41:08 +0300
+Message-ID: <20240825194124.4719-2-geomatsi@gmail.com>
 X-Mailer: git-send-email 2.46.0
+In-Reply-To: <20240825194124.4719-1-geomatsi@gmail.com>
+References: <20240825194124.4719-1-geomatsi@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1724614890; x=1725219690; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=Rbnq0OLANw1HYtn1HIqZ6ScwmLvIQjxdpKh3nB34zVU=;
- b=SlsTHWTDyueVOP5ATBQ8sJawk7bitzTBcpYejrnvr6BN3soQmx+BPyOBZIUtc2H07b
- JF8NHlIWhJN3xJzMlzEnHpDlkPL9sL7MfWw+xD2qOpjRe031HuR3S+8oKLK9gUUcHOZz
- XhZXNrvPgfIO1ScCqDSHgdbNL3myRFykaX3iK0MOdQG66ywF97P+mLUjXE6vII3AT4qo
- 5ziFMd7vGisS/LTRhEHu8P5HHTuYgK8Il6HjRZJmN7xgsUyJy5038q95v4L41YQ2UsLy
- ymnkaenDOKFM4FcY2fV/AI4V22Fn/EQ2R/I2MEYPGCPSHrHGzZKDpytQ0ZWcfb1p6Ouq
- HFNw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=gmail.com; s=20230601; t=1724614892; x=1725219692; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=PmqiZoPbGKYCB5J0SVRYbECOiZOmFlWgjWcb7MKzlFU=;
+ b=kCxEkPUt8IuwUyA95KMxxbM7cFmU9BKxmpARWx3w692V1wk6hF7nBxkeVoexrqgkDO
+ 4yx/KReyasv1mVhTc9z2PJGLAbPE81mYuwUorSuSTpCEI3SoZ05ay5yxVDdx2wL4pqP2
+ MrA4n1dJJjXQqUUgMF5ZvrLz9Crr40or8MsEfVNkDhcUs6TWVuNrg353amr7s2E4biMJ
+ GxebI3aERzRo1V594Nyj5Nr4JvmSJP3lD4NbOsRxujFLL6DIQqKKOLazq5WSK2/GebRi
+ xJmShXEqBK936HTohgXXp1RY8wuQQGSkG0T8qix3R7JGtCLjI87KutswtKgjsrJHeylV
+ eqwA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=SlsTHWTD
-Subject: [Buildroot] [PATCH 0/2] perf: add binutils support in new kernels
+ header.s=20230601 header.b=kCxEkPUt
+Subject: [Buildroot] [PATCH 1/2] package: binutils: install libsframe to
+ target
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -109,23 +113,31 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi all,
+Starting from v2.40, binutils provides libsframe, a library for
+manipulating the SFRAME debug format. Buildroot installs libsframe
+to the target image only if BR2_PACKAGE_BINUTILS_TARGET option is
+enabled. However other dynamic libraries from binutils are linked
+against libsframe, including libbfd and libopcodes. Any binary
+linked dynamically against libbfd, e.g. perf, will need libsframe
+as well. So always install libsframe the target.
 
-This patch series fixes libbfd (binutils) support in perf for the
-binutils >= 2.40 and the Linux kernels >= v6.4. New kernels have
-a new 'opted out' perf build option for libbfd support. At the same
-time, new binutils provides new libsframe library, which should
-be installed to the target together with libbfd and libopcodes.
+Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+---
+ package/binutils/binutils.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-Sergey Matyukevich (2):
-  package: binutils: install libsframe to target
-  package/linux-tools: perf: explicit option for libbfd support
-
- package/binutils/binutils.mk              | 1 +
- package/linux-tools/Config.in             | 6 ++++++
- package/linux-tools/linux-tool-perf.mk.in | 7 +++++++
- 3 files changed, 14 insertions(+)
-
+diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
+index d98dd7b830..b459d4a271 100644
+--- a/package/binutils/binutils.mk
++++ b/package/binutils/binutils.mk
+@@ -120,6 +120,7 @@ ifneq ($(BR2_PACKAGE_BINUTILS_TARGET),y)
+ define BINUTILS_INSTALL_TARGET_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/bfd DESTDIR=$(TARGET_DIR) install
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/opcodes DESTDIR=$(TARGET_DIR) install
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D)/libsframe DESTDIR=$(TARGET_DIR) install
+ endef
+ endif
+ 
 -- 
 2.46.0
 
