@@ -4,72 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 283E5C5320E
-	for <buildroot@archiver.kernel.org>; Sun, 25 Aug 2024 10:07:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9DE5C5320E
+	for <buildroot@archiver.kernel.org>; Sun, 25 Aug 2024 11:52:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BB74E4013C;
-	Sun, 25 Aug 2024 10:07:34 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5E1FF40118;
+	Sun, 25 Aug 2024 11:52:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nqu_HW8X0Lnv; Sun, 25 Aug 2024 10:07:33 +0000 (UTC)
+ id V2FXmvjkZrIz; Sun, 25 Aug 2024 11:52:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 935F44044D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 02A15401FE
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 935F44044D;
-	Sun, 25 Aug 2024 10:07:33 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C7A741BF317
- for <buildroot@lists.busybox.net>; Sun, 25 Aug 2024 10:07:31 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 02A15401FE;
+	Sun, 25 Aug 2024 11:52:57 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C5D7C1BF33C
+ for <buildroot@lists.busybox.net>; Sun, 25 Aug 2024 11:52:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C24DF8118A
- for <buildroot@lists.busybox.net>; Sun, 25 Aug 2024 10:07:31 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B4367401FE
+ for <buildroot@lists.busybox.net>; Sun, 25 Aug 2024 11:52:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id U-EpLiYqSDH5 for <buildroot@lists.busybox.net>;
- Sun, 25 Aug 2024 10:07:31 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::224;
- helo=relay4-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org BAF0481183
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BAF0481183
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::224])
- by smtp1.osuosl.org (Postfix) with ESMTPS id BAF0481183
- for <buildroot@buildroot.org>; Sun, 25 Aug 2024 10:07:30 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 2764DE0006;
- Sun, 25 Aug 2024 10:07:17 +0000 (UTC)
-Date: Sun, 25 Aug 2024 12:07:16 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Message-ID: <20240825120716.3cd46eb3@windsurf>
-In-Reply-To: <20240825081205.562228-1-bernd@kuhls.net>
-References: <20240825081205.562228-1-bernd@kuhls.net>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id U6rEfzQnFj-M for <buildroot@lists.busybox.net>;
+ Sun, 25 Aug 2024 11:52:54 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 44AB040118
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 44AB040118
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 44AB040118
+ for <buildroot@buildroot.org>; Sun, 25 Aug 2024 11:52:53 +0000 (UTC)
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 57FB6B0055E;
+ Sun, 25 Aug 2024 13:52:47 +0200 (CEST)
+From: Julien Olivain <ju.o@free.fr>
+To: buildroot@buildroot.org
+Date: Sun, 25 Aug 2024 13:52:39 +0200
+Message-ID: <20240825115239.158016-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.46.0
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1724580446;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=gGPZUkwdMEiPCZJjK1sGx3MPcvLK8Gf6mdaGHXXAD9s=;
- b=T3KdPdUYM+AJf4SGgu4SW3QiDMOtZvX/Ymg1ADryAx/rq/JoI29eVvHzDwL1Qzvy9I0TJk
- zRWRh2Nkh5vPBSbHqprYLmONJfP0fdK0cl53yubUDrG6gk8weaioydvC4c/5950p1BTe7N
- BG9yvM+gsgGv8fHSunych/9jbxCAa/DJI8CgstNkTXfb93XCe2T7R5fRZrNDDmDPNppB/I
- AxEOUaQxe7H3vJnrfXVwVbxFfhg9jUBwV/FCx+f9zm82yL/sZoNEeafVLqCOhAOnFUQUx3
- jkwz0Lw9V9KCIoH3Ph+1YVor0v/eMObmHEmQfs7I0gk1j5YNxIGBCVn+IogMLg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1724586770;
+ bh=+b+MQZal3sprvN17MTWUtCRPgaWd5IpNMFYXjBZNH/Q=;
+ h=From:To:Cc:Subject:Date:From;
+ b=f9cY4Gg1ZfghpHS3pn5VsI6jYWWjSUHgwidCC5iqJWfjwcmPGFP9TaiZtv2LwR727
+ iKqHarb3jRuCrN1KPP5CN+iYmj+czCWBmhxCOmRRQX3WnmVRT30LNMOenUxIgagBgB
+ 3cikQO3XWBf6UVoHEvckFbCuQRQBRMgAub+Y+DMTNtqTotuYAOBvuAMGyPUy3aUx+c
+ L3dTEpkVFUjIDR2rbQ/kFu1hdhT/TdDCn7LuZDGeyyIYgC6pvwx2ueu8DanR2r/knw
+ CUu9IIjrkzwV9x/Ymx7e5WA0ehK6E4s5n5o5uZkujIWBDghn8ha8aRNfMTJJ8PB6YA
+ hMM0jlOWCR52w==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=T3KdPdUY
-Subject: Re: [Buildroot] [PATCH 1/1] package/sofia-sip: fix static build
- with openssl >= 3.2.0
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=f9cY4Gg1
+Subject: [Buildroot] [PATCH 1/1] support/testing: add parted runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,35 +76,147 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Gregory Dymarek <gregd72002@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+Cc: Julien Olivain <ju.o@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, 25 Aug 2024 10:12:05 +0200
-Bernd Kuhls <bernd@kuhls.net> wrote:
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+ DEVELOPERS                                   |   1 +
+ support/testing/tests/package/test_parted.py | 107 +++++++++++++++++++
+ 2 files changed, 108 insertions(+)
+ create mode 100644 support/testing/tests/package/test_parted.py
 
-> Fixes:
-> http://autobuild.buildroot.org/results/de08bd5c68f5fcdaa5c0374a4f5051c4751ebb88/
-> and many others.
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-> ---
->  ...-fix-static-build-with-openssl-3.2.0.patch | 109 ++++++++++++++++++
->  1 file changed, 109 insertions(+)
->  create mode 100644 package/sofia-sip/0002-fix-static-build-with-openssl-3.2.0.patch
-
-Applied to master, thanks.
-
-Thomas
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 426590d5c5..208edc724c 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1933,6 +1933,7 @@ F:	support/testing/tests/package/test_octave.py
+ F:	support/testing/tests/package/test_ola.py
+ F:	support/testing/tests/package/test_ola/
+ F:	support/testing/tests/package/test_openblas.py
++F:	support/testing/tests/package/test_parted.py
+ F:	support/testing/tests/package/test_pciutils.py
+ F:	support/testing/tests/package/test_perftest.py
+ F:	support/testing/tests/package/test_pigz.py
+diff --git a/support/testing/tests/package/test_parted.py b/support/testing/tests/package/test_parted.py
+new file mode 100644
+index 0000000000..ca585b7e02
+--- /dev/null
++++ b/support/testing/tests/package/test_parted.py
+@@ -0,0 +1,107 @@
++import os
++import subprocess
++
++import infra.basetest
++
++
++class TestParted(infra.basetest.BRTest):
++    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
++        """
++        BR2_PACKAGE_E2FSPROGS=y
++        BR2_PACKAGE_PARTED=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++
++    def test_run(self):
++        # Prepare the disk image.
++        disk_file = os.path.join(self.builddir, "images", "disk.img")
++        self.emulator.logfile.write(f"Creating disk image: {disk_file}\n")
++        self.emulator.logfile.flush()
++        subprocess.check_call(
++            ["dd", "if=/dev/zero", f"of={disk_file}", "bs=1M", "count=256"],
++            stdout=self.emulator.logfile,
++            stderr=self.emulator.logfile)
++
++        # Run the emulator with a drive.
++        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
++        self.emulator.boot(arch="armv5",
++                           kernel="builtin",
++                           options=[
++                                "-initrd", cpio_file,
++                                "-drive", f"file={disk_file},format=raw"])
++        self.emulator.login()
++
++        # We check the program can run.
++        self.assertRunOk("parted --version")
++
++        dev = "/dev/sda"
++        parted = f"parted {dev}"
++
++        # We print the partition list of our drive. Since the drive is
++        # supposed to be blank, it should not have a partition table.
++        part_list_cmd = f"{parted} print list"
++        out, ret = self.emulator.run(part_list_cmd, timeout=10)
++        self.assertEqual(ret, 0)
++        self.assertIn("Partition Table: unknown", out)
++
++        # We create a GPT partition table.
++        mklabel_cmd = f"{parted} mklabel gpt"
++        self.assertRunOk(mklabel_cmd, timeout=10)
++
++        # We print again the partition list. We should now see our
++        # partition table.
++        out, ret = self.emulator.run(part_list_cmd, timeout=10)
++        self.assertEqual(ret, 0)
++        self.assertIn("Partition Table: gpt", out)
++
++        # We create 3 partitions on our drive.
++        partitions = [
++            "MyPart1 ext2 1MiB 25%",
++            "MyPart2 ext4 25% 50%",
++            "MyPart3 ext4 50% 100%"
++        ]
++        for part in partitions:
++            mkpart_cmd = f"{parted} mkpart {part}"
++            self.assertRunOk(mkpart_cmd, timeout=10)
++
++        # We print again the list of partitions, this time in machine
++        # parseable format. We check we have our 3 partitions.
++        cmd = f"parted -m {dev} print list"
++        out, ret = self.emulator.run(cmd, timeout=10)
++        self.assertEqual(ret, 0)
++        for part in range(1, 4):
++            self.assertTrue(out[1+part].startswith(f"{part}:"))
++            self.assertTrue(out[1+part].endswith(f":MyPart{part}:;"))
++
++        # We format our partitions.
++        self.assertRunOk(f"mkfs.ext2 {dev}1", timeout=10)
++        self.assertRunOk(f"mkfs.ext4 {dev}2", timeout=10)
++        self.assertRunOk(f"mkfs.ext4 {dev}3", timeout=10)
++
++        # We create a random data file in the temporary directory. It
++        # will be the reference source file that will be copied later
++        # on each of our filesystems.
++        data_file = "data.bin"
++        cmd = f"dd if=/dev/urandom of=/tmp/{data_file} bs=1M count=10"
++        self.assertRunOk(cmd)
++
++        # We compute the sha256 hash and save it for later.
++        hash_cmd = f"sha256sum {data_file}"
++        out, ret = self.emulator.run(f"( cd /tmp && {hash_cmd} )")
++        self.assertEqual(ret, 0)
++        data_sha256 = out[0]
++
++        # For each partition, we create a mount point directory, mount
++        # the filesystem, copy the reference data file in it, sync the
++        # filesystem, and compute the sha256 hash of the file. This
++        # sequence will exercise a bit the partitions and filesystems
++        # in read/write operations.
++        for part in range(1, 4):
++            self.assertRunOk(f"mkdir -p /tmp/MyPart{part}")
++            self.assertRunOk(f"mount {dev}{part} /tmp/MyPart{part}")
++            self.assertRunOk(f"cp /tmp/{data_file} /tmp/MyPart{part}/")
++            self.assertRunOk("sync")
++            out, ret = self.emulator.run(f"( cd /tmp/MyPart{part} && {hash_cmd} )")
++            self.assertEqual(ret, 0)
++            self.assertEqual(out[0], data_sha256)
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.46.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
