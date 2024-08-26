@@ -4,49 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20D67E6FE46
-	for <buildroot@archiver.kernel.org>; Fri,  6 Sep 2024 20:05:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E66F3E6FE46
+	for <buildroot@archiver.kernel.org>; Fri,  6 Sep 2024 20:05:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A7E41849A4;
-	Fri,  6 Sep 2024 20:05:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 740238454A;
+	Fri,  6 Sep 2024 20:05:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hB75uBPsEVTy; Fri,  6 Sep 2024 20:05:17 +0000 (UTC)
+ id f6Ittu5rmldO; Fri,  6 Sep 2024 20:05:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0567F84990
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A0551849A3
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0567F84990;
-	Fri,  6 Sep 2024 20:05:17 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 0D4821BF37F
+	by smtp1.osuosl.org (Postfix) with ESMTP id A0551849A3;
+	Fri,  6 Sep 2024 20:05:20 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id AB51F1BF20B
  for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 19:59:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 92BF56066C
+ by smtp4.osuosl.org (Postfix) with ESMTP id A1A7840C7B
  for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 19:59:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eW4jBVKdVl1d for <buildroot@lists.busybox.net>;
- Fri,  6 Sep 2024 19:58:59 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fsmZqXyerlYA for <buildroot@lists.busybox.net>;
+ Fri,  6 Sep 2024 19:58:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 68CC8610FD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 52F8D407D6
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 68CC8610FD
- for <buildroot@buildroot.org>; Fri,  6 Sep 2024 19:58:56 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 52F8D407D6
+ for <buildroot@buildroot.org>; Fri,  6 Sep 2024 19:58:57 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5F24A828CC; Fri,  6 Sep 2024 19:58:56 +0000 (UTC)
+ id 4EAB586587; Fri,  6 Sep 2024 19:58:57 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Fri, 23 Aug 2024 19:05:00 +0200
+Date: Mon, 26 Aug 2024 18:53:54 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 73dd0cc1bf893c821b9ed185b8cf39bc83b5af02
-X-Git-Newrev: 5e151d91aeb2433c6ea51bbda9784528e75803a4
+X-Git-Oldrev: 8c30fe396646ab462e7252f0f30f3100d1437651
+X-Git-Newrev: b3cdb0e36bf6451a80e5f35e00a31acfa3386ff4
 X-Patchwork-Hint: ignore
-Message-Id: <20240906195856.5F24A828CC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/kodi-inputstream-adaptive: bump
- version to 21.5.2-Omega
+Message-Id: <20240906195857.4EAB586587@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] support/testing: add parted runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,40 +65,141 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5e151d91aeb2433c6ea51bbda9784528e75803a4
+commit: https://git.buildroot.net/buildroot/commit/?id=b3cdb0e36bf6451a80e5f35e00a31acfa3386ff4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash | 2 +-
- package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ DEVELOPERS                                   |   1 +
+ support/testing/tests/package/test_parted.py | 107 +++++++++++++++++++++++++++
+ 2 files changed, 108 insertions(+)
 
-diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-index 82325ab014..af88728c73 100644
---- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-+++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.hash
-@@ -1,5 +1,5 @@
- # Locally computed
--sha256  caf71b67cf242c600878718dab8227947062a28485078b8bf68ac72aef51e12c  kodi-inputstream-adaptive-21.4.10-Omega.tar.gz
-+sha256  b27121f9ec64c43dfb9beca56b045c6ec198b04ae5d006001916b9acbee63c0c  kodi-inputstream-adaptive-21.5.2-Omega.tar.gz
- sha256  48632d57fbb6ab8f50cbf4deced5c91e733fa7ff292687c4816b77f28e483df9  LICENSE.md
- sha256  02f864f3e07456785625968022ce811c5640301bfd2ae70963efea89d306790a  LICENSES/README.md
- sha256  0b7f5dcb3d2c28ff78d999786028930e762df0baa2f52955782e378ec5b636a8  LICENSES/BSD-2-Clause-Views
-diff --git a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-index b6825c1ff0..66375affc8 100644
---- a/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-+++ b/package/kodi-inputstream-adaptive/kodi-inputstream-adaptive.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--KODI_INPUTSTREAM_ADAPTIVE_VERSION = 21.4.10-Omega
-+KODI_INPUTSTREAM_ADAPTIVE_VERSION = 21.5.2-Omega
- KODI_INPUTSTREAM_ADAPTIVE_SITE = $(call github,xbmc,inputstream.adaptive,$(KODI_INPUTSTREAM_ADAPTIVE_VERSION))
- KODI_INPUTSTREAM_ADAPTIVE_LICENSE = \
- 	BSD-2-Clause-Views \
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 07dafd5c4e..a4482e5eeb 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1946,6 +1946,7 @@ F:	support/testing/tests/package/test_octave.py
+ F:	support/testing/tests/package/test_ola.py
+ F:	support/testing/tests/package/test_ola/
+ F:	support/testing/tests/package/test_openblas.py
++F:	support/testing/tests/package/test_parted.py
+ F:	support/testing/tests/package/test_pciutils.py
+ F:	support/testing/tests/package/test_perftest.py
+ F:	support/testing/tests/package/test_pigz.py
+diff --git a/support/testing/tests/package/test_parted.py b/support/testing/tests/package/test_parted.py
+new file mode 100644
+index 0000000000..ca585b7e02
+--- /dev/null
++++ b/support/testing/tests/package/test_parted.py
+@@ -0,0 +1,107 @@
++import os
++import subprocess
++
++import infra.basetest
++
++
++class TestParted(infra.basetest.BRTest):
++    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
++        """
++        BR2_PACKAGE_E2FSPROGS=y
++        BR2_PACKAGE_PARTED=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++
++    def test_run(self):
++        # Prepare the disk image.
++        disk_file = os.path.join(self.builddir, "images", "disk.img")
++        self.emulator.logfile.write(f"Creating disk image: {disk_file}\n")
++        self.emulator.logfile.flush()
++        subprocess.check_call(
++            ["dd", "if=/dev/zero", f"of={disk_file}", "bs=1M", "count=256"],
++            stdout=self.emulator.logfile,
++            stderr=self.emulator.logfile)
++
++        # Run the emulator with a drive.
++        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
++        self.emulator.boot(arch="armv5",
++                           kernel="builtin",
++                           options=[
++                                "-initrd", cpio_file,
++                                "-drive", f"file={disk_file},format=raw"])
++        self.emulator.login()
++
++        # We check the program can run.
++        self.assertRunOk("parted --version")
++
++        dev = "/dev/sda"
++        parted = f"parted {dev}"
++
++        # We print the partition list of our drive. Since the drive is
++        # supposed to be blank, it should not have a partition table.
++        part_list_cmd = f"{parted} print list"
++        out, ret = self.emulator.run(part_list_cmd, timeout=10)
++        self.assertEqual(ret, 0)
++        self.assertIn("Partition Table: unknown", out)
++
++        # We create a GPT partition table.
++        mklabel_cmd = f"{parted} mklabel gpt"
++        self.assertRunOk(mklabel_cmd, timeout=10)
++
++        # We print again the partition list. We should now see our
++        # partition table.
++        out, ret = self.emulator.run(part_list_cmd, timeout=10)
++        self.assertEqual(ret, 0)
++        self.assertIn("Partition Table: gpt", out)
++
++        # We create 3 partitions on our drive.
++        partitions = [
++            "MyPart1 ext2 1MiB 25%",
++            "MyPart2 ext4 25% 50%",
++            "MyPart3 ext4 50% 100%"
++        ]
++        for part in partitions:
++            mkpart_cmd = f"{parted} mkpart {part}"
++            self.assertRunOk(mkpart_cmd, timeout=10)
++
++        # We print again the list of partitions, this time in machine
++        # parseable format. We check we have our 3 partitions.
++        cmd = f"parted -m {dev} print list"
++        out, ret = self.emulator.run(cmd, timeout=10)
++        self.assertEqual(ret, 0)
++        for part in range(1, 4):
++            self.assertTrue(out[1+part].startswith(f"{part}:"))
++            self.assertTrue(out[1+part].endswith(f":MyPart{part}:;"))
++
++        # We format our partitions.
++        self.assertRunOk(f"mkfs.ext2 {dev}1", timeout=10)
++        self.assertRunOk(f"mkfs.ext4 {dev}2", timeout=10)
++        self.assertRunOk(f"mkfs.ext4 {dev}3", timeout=10)
++
++        # We create a random data file in the temporary directory. It
++        # will be the reference source file that will be copied later
++        # on each of our filesystems.
++        data_file = "data.bin"
++        cmd = f"dd if=/dev/urandom of=/tmp/{data_file} bs=1M count=10"
++        self.assertRunOk(cmd)
++
++        # We compute the sha256 hash and save it for later.
++        hash_cmd = f"sha256sum {data_file}"
++        out, ret = self.emulator.run(f"( cd /tmp && {hash_cmd} )")
++        self.assertEqual(ret, 0)
++        data_sha256 = out[0]
++
++        # For each partition, we create a mount point directory, mount
++        # the filesystem, copy the reference data file in it, sync the
++        # filesystem, and compute the sha256 hash of the file. This
++        # sequence will exercise a bit the partitions and filesystems
++        # in read/write operations.
++        for part in range(1, 4):
++            self.assertRunOk(f"mkdir -p /tmp/MyPart{part}")
++            self.assertRunOk(f"mount {dev}{part} /tmp/MyPart{part}")
++            self.assertRunOk(f"cp /tmp/{data_file} /tmp/MyPart{part}/")
++            self.assertRunOk("sync")
++            out, ret = self.emulator.run(f"( cd /tmp/MyPart{part} && {hash_cmd} )")
++            self.assertEqual(ret, 0)
++            self.assertEqual(out[0], data_sha256)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
