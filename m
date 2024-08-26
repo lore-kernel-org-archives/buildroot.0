@@ -4,64 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1CD40C5321D
-	for <buildroot@archiver.kernel.org>; Mon, 26 Aug 2024 04:26:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9D7BC5321E
+	for <buildroot@archiver.kernel.org>; Mon, 26 Aug 2024 07:21:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9CC4180FB3;
-	Mon, 26 Aug 2024 04:26:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 622C080D75;
+	Mon, 26 Aug 2024 07:21:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id q7Sc_ZNHF-L3; Mon, 26 Aug 2024 04:26:37 +0000 (UTC)
+ id upmHOd10xBgF; Mon, 26 Aug 2024 07:21:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 402D780F41
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6C5B980E1C
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 402D780F41;
-	Mon, 26 Aug 2024 04:26:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6C5B980E1C;
+	Mon, 26 Aug 2024 07:21:27 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6CDE41BF2C0
- for <buildroot@lists.busybox.net>; Mon, 26 Aug 2024 04:26:35 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 14F731BF29F
+ for <buildroot@lists.busybox.net>; Mon, 26 Aug 2024 07:21:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 225FF4009A
- for <buildroot@lists.busybox.net>; Mon, 26 Aug 2024 04:26:35 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 02C7540200
+ for <buildroot@lists.busybox.net>; Mon, 26 Aug 2024 07:21:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kjdMO_7vZVbU for <buildroot@lists.busybox.net>;
- Mon, 26 Aug 2024 04:26:34 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=89.238.66.15;
- helo=helium.openadk.org; envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org CFF1A40289
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CFF1A40289
-Received: from helium.openadk.org (helium.openadk.org [89.238.66.15])
- by smtp4.osuosl.org (Postfix) with ESMTPS id CFF1A40289
- for <buildroot@buildroot.org>; Mon, 26 Aug 2024 04:26:33 +0000 (UTC)
-Received: by helium.openadk.org (Postfix, from userid 1000)
- id DD3E63536441; Mon, 26 Aug 2024 06:26:31 +0200 (CEST)
-Date: Mon, 26 Aug 2024 06:26:31 +0200
-From: Waldemar Brodkorb <wbx@openadk.org>
+ id 1LnyTEZxTMw5 for <buildroot@lists.busybox.net>;
+ Mon, 26 Aug 2024 07:21:25 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::534; helo=mail-pg1-x534.google.com;
+ envelope-from=fancp2007@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org C2899401D5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C2899401D5
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com
+ [IPv6:2607:f8b0:4864:20::534])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C2899401D5
+ for <buildroot@buildroot.org>; Mon, 26 Aug 2024 07:21:24 +0000 (UTC)
+Received: by mail-pg1-x534.google.com with SMTP id
+ 41be03b00d2f7-7cda2695893so1180620a12.1
+ for <buildroot@buildroot.org>; Mon, 26 Aug 2024 00:21:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1724656883; x=1725261683;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=1kXPdMsOM5RI3ZZhKSdQS9Nx7UjYFuMcPraotUjiloQ=;
+ b=HtkRZ3mFZ+SOdatVfl3lGHCeI7dQL7UhUqtF1txsefepYMzPtbdzOVN1jROm+QyMSA
+ hrFk544KCAmV5eV+SjWZgHbKmnF15X0rgxsb5FmpR7GBRTKIpMS4fjv/T8YL+w5ZMpwQ
+ Z0L2wQw6pDYIZHPr3ue6PbIYl9dw6UQ5sHmpu6/Lf3WR+0KHMRDAw3cuipiJBtAiTZAM
+ kzqZXdP3ZIX0OeGG9ZLSuTdzXZZU8HHk579/xpWFlJOpQTOw5GLG96Lvh2P3uZ6J23je
+ rZB+2K9eYToVv+x9Bm/aWHMwUdmvFvpC/6fNhfhBsDC//IhdPnN6AHxAi2FFrWjUHWuh
+ ugbw==
+X-Gm-Message-State: AOJu0YzUbla286xi5dZjWXgJ1Ax82VBWDaAVqYqFBsHH+XHB0xUb25og
+ vIqnS+GwteSW147RsZcQc2X63OMqimERVqnxAlYvUUgIz9iqFF/rsRz+pA==
+X-Google-Smtp-Source: AGHT+IFeyzxKlKd4ech7E55M/yuaz66ydhej6vYHRTSjSY2eV695vPMgGC8kyLO/u5/nROJY+M4QCw==
+X-Received: by 2002:a05:6a21:3983:b0:1c2:8fd1:a47d with SMTP id
+ adf61e73a8af0-1cc89d293e8mr9333100637.6.1724656883417; 
+ Mon, 26 Aug 2024 00:21:23 -0700 (PDT)
+Received: from localhost ([142.171.12.18]) by smtp.gmail.com with ESMTPSA id
+ 98e67ed59e1d1-2d613af1468sm9005267a91.44.2024.08.26.00.21.22
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 26 Aug 2024 00:21:22 -0700 (PDT)
+From: Scott Fan <fancp2007@gmail.com>
 To: buildroot@buildroot.org
-Message-ID: <ZswD9wfhJbZprySD@waldemar-brodkorb.de>
+Date: Mon, 26 Aug 2024 15:20:47 +0800
+Message-Id: <20240826072049.719043-1-fancp2007@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Disposition: inline
-X-Operating-System: Linux 5.10.0-31-amd64 x86_64
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=openadk.org; s=2022; 
- t=1724646391; bh=e29wZmwvoO+kfEfXwXaJ8MmLbEaadRmjIGir1hlJP0Q=;
- h=Date:From:To:Subject:From;
- b=CHyFbYvkMDu/5Oh2e9QX7YKAqMwX2+zB3JvKQeD9GWK7KhqKccTYWw/jed6sUw3Rz
- HhZjr/J5YrFQswJ8Pde+v8kHHbwA5fC7E9xT7jRMneEDRIpmnyGnC9jZv2lf6+LZs4
- Dtue4LCDySoAXsYPHb9InWnIztv/601Ue2PV94jgu3sMppCKHNfzubAk6ehbpU9LWO
- m6zhW5hwd6qcqajAuihgymbwLcd97Dy5mpouXXUd5A4ufRpFu9Maaa8698nvk1r/+e
- gyCGcff/BZOCteTL9ryjISPyz1OybAmOVnrnLEawfpl69m8ZZhYUT2BNQdykNmlAeV
- T0YUfnfYCYlWA==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1724656883; x=1725261683; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=1kXPdMsOM5RI3ZZhKSdQS9Nx7UjYFuMcPraotUjiloQ=;
+ b=iL6lgAQ61iQNtZ1nbhD5Bgdd++beno4zP95LVaoS1xYKxFrktnJYfcMEx83xMmfUYH
+ Z8bmqaywS2eY94ipcQ+WiAs7zE+TqT5ZZh5wvZ7EXmDOHg/Osin9MJIqRw53ek9zs5Ev
+ wpVp2/cPOeL5kVypavELCgOdbbY4a+Nq6rvJ5OPH5/HMRvFYqLZjVIlCWX+xaSsOP9Xw
+ hIUcxDoBOTW5KUYnipzdLLLNq5DD3vv5D4M7NmPpLvmih/s1jpk8yjA5A1U6/pj2wE3X
+ +6foCtXeIJ/luRQgOnXzUe3Rpy3i1F5Ln4QMXyfGwGEKe7OGIJ3bF21mNAV+WThGkS+r
+ Kxpw==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=openadk.org
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=openadk.org header.i=@openadk.org
- header.a=rsa-sha256 header.s=2022 header.b=CHyFbYvk
-Subject: [Buildroot] [PATCH next] package/evilwm: new package
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=iL6lgAQ6
+Subject: [Buildroot] [PATCH 1/2] package/postgresql: security bump version
+ to 16.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,113 +100,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Maxim Kochetkov <fido_max@inbox.ru>, Scott Fan <fancp2007@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Nice small and very fast Xorg windowmanager:
-https://www.6809.org.uk/evilwm/
+Release notes:
+ - https://www.postgresql.org/docs/release/16.4/
+ - https://www.postgresql.org/about/news/postgresql-164-158-1413-1316-1220-and-17-beta-3-released-2910/
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Fixes CVE-2024-7348:
+ - https://www.postgresql.org/support/security/CVE-2024-7348/
+
+Signed-off-by: Scott Fan <fancp2007@gmail.com>
 ---
- DEVELOPERS                 |  1 +
- package/Config.in          |  1 +
- package/evilwm/Config.in   |  9 +++++++++
- package/evilwm/evilwm.hash |  3 +++
- package/evilwm/evilwm.mk   | 21 +++++++++++++++++++++
- package/evilwm/xsession    |  2 ++
- 6 files changed, 37 insertions(+)
- create mode 100644 package/evilwm/Config.in
- create mode 100644 package/evilwm/evilwm.hash
- create mode 100644 package/evilwm/evilwm.mk
- create mode 100644 package/evilwm/xsession
+ package/postgresql/postgresql.hash | 4 ++--
+ package/postgresql/postgresql.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index d2b64ee5c6..8117e485d9 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -3298,6 +3298,7 @@ N:	Waldemar Brodkorb <wbx@openadk.org>
- F:	board/qemu/riscv32-virt/
- F:	configs/qemu_riscv32_nommu_virt_defconfig
- F:	package/asterisk/
-+F:	package/evilwm/
- F:	package/fbv/
- F:	package/libjwt/
- F:	package/mksh/
-diff --git a/package/Config.in b/package/Config.in
-index 07bd1499d8..77121612db 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -438,6 +438,7 @@ comment "X window managers"
- 	depends on BR2_PACKAGE_XORG7
+diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
+index d917a03ebb..1d9a9081b7 100644
+--- a/package/postgresql/postgresql.hash
++++ b/package/postgresql/postgresql.hash
+@@ -1,4 +1,4 @@
+-# From https://ftp.postgresql.org/pub/source/v16.2/postgresql-16.3.tar.bz2.sha256
+-sha256  331963d5d3dc4caf4216a049fa40b66d6bcb8c730615859411b9518764e60585  postgresql-16.3.tar.bz2
++# From https://ftp.postgresql.org/pub/source/v16.4/postgresql-16.4.tar.bz2.sha256
++sha256  971766d645aa73e93b9ef4e3be44201b4f45b5477095b049125403f9f3386d6f  postgresql-16.4.tar.bz2
+ # License file, Locally calculated
+ sha256  9bf20ee493926a7e17a74bc7f05089fbc014269667b1540bc35a6b194a40c9de  COPYRIGHT
+diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
+index 0a1d98079a..4021a54300 100644
+--- a/package/postgresql/postgresql.mk
++++ b/package/postgresql/postgresql.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- 	source "package/enlightenment/Config.in"
-+	source "package/evilwm/Config.in"
- 	source "package/fluxbox/Config.in"
- 	source "package/matchbox/Config.in"
- 	source "package/metacity/Config.in"
-diff --git a/package/evilwm/Config.in b/package/evilwm/Config.in
-new file mode 100644
-index 0000000000..86cc17dc76
---- /dev/null
-+++ b/package/evilwm/Config.in
-@@ -0,0 +1,9 @@
-+config BR2_PACKAGE_EVILWM
-+	bool "evilwm"
-+	depends on BR2_PACKAGE_XORG7
-+	depends on BR2_USE_MMU # fork()
-+	select BR2_PACKAGE_XLIB_LIBX11
-+	help
-+	  A minimalist window manager for the X Window System
-+
-+	  https://www.6809.org.uk/evilwm/
-diff --git a/package/evilwm/evilwm.hash b/package/evilwm/evilwm.hash
-new file mode 100644
-index 0000000000..7fede9641f
---- /dev/null
-+++ b/package/evilwm/evilwm.hash
-@@ -0,0 +1,3 @@
-+# Locally computed:
-+sha256  d5945b20b12c91db2412fac0dbda3fb9c3ec8debb8e1b109838992b2b1bbe5d4  evilwm-1.4.3.tar.gz
-+sha256  e98134d702e297c35e2b1150918a2b0cffea523f67644fa64e8dbb823fb55986  README
-diff --git a/package/evilwm/evilwm.mk b/package/evilwm/evilwm.mk
-new file mode 100644
-index 0000000000..8d9df47e5d
---- /dev/null
-+++ b/package/evilwm/evilwm.mk
-@@ -0,0 +1,21 @@
-+################################################################################
-+#
-+# evilwm
-+#
-+################################################################################
-+
-+EVILWM_VERSION = 1.4.3
-+EVILWM_SITE = https://www.6809.org.uk/evilwm/dl
-+EVILWM_LICENSE = MIT
-+EVILWM_LICENSE_FILES = README
-+
-+EVILWM_DEPENDENCIES = xlib_libX11
-+
-+define EVILWM_INSTALL_XSESSION_FILE
-+	$(INSTALL) -m 0755 -D package/evilwm/xsession \
-+		$(TARGET_DIR)/root/.xsession
-+endef
-+
-+EVILWM_POST_INSTALL_TARGET_HOOKS += EVILWM_INSTALL_XSESSION_FILE
-+
-+$(eval $(autotools-package))
-diff --git a/package/evilwm/xsession b/package/evilwm/xsession
-new file mode 100644
-index 0000000000..9892af719d
---- /dev/null
-+++ b/package/evilwm/xsession
-@@ -0,0 +1,2 @@
-+#!/bin/sh
-+exec evilwm -term xterm
+-POSTGRESQL_VERSION = 16.3
++POSTGRESQL_VERSION = 16.4
+ POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
+ POSTGRESQL_SITE = https://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
+ POSTGRESQL_LICENSE = PostgreSQL
 -- 
-2.39.2
+2.34.1
 
 _______________________________________________
 buildroot mailing list
