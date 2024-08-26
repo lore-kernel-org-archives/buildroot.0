@@ -4,60 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7C41DC5321D
-	for <buildroot@archiver.kernel.org>; Mon, 26 Aug 2024 09:32:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EBF1DC5321E
+	for <buildroot@archiver.kernel.org>; Mon, 26 Aug 2024 09:35:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0B30D40249;
-	Mon, 26 Aug 2024 09:32:09 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 897E54056F;
+	Mon, 26 Aug 2024 09:35:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id O-NUYJf4ae3H; Mon, 26 Aug 2024 09:32:08 +0000 (UTC)
+ id p6fINXQjYBU8; Mon, 26 Aug 2024 09:35:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C9C0E40111
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E79DC40420
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C9C0E40111;
-	Mon, 26 Aug 2024 09:32:07 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0B8EF1BF2BE
- for <buildroot@lists.busybox.net>; Mon, 26 Aug 2024 09:32:07 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E79DC40420;
+	Mon, 26 Aug 2024 09:35:53 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 830D31BF2BE
+ for <buildroot@lists.busybox.net>; Mon, 26 Aug 2024 09:35:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 069AA80F1A
- for <buildroot@lists.busybox.net>; Mon, 26 Aug 2024 09:32:07 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7E97C60730
+ for <buildroot@lists.busybox.net>; Mon, 26 Aug 2024 09:35:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CJ08yUYxrzku for <buildroot@lists.busybox.net>;
- Mon, 26 Aug 2024 09:32:06 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::229;
- helo=relay9-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id uPC2tzdYJ3m8 for <buildroot@lists.busybox.net>;
+ Mon, 26 Aug 2024 09:35:51 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 578C980F0B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 578C980F0B
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 578C980F0B
- for <buildroot@buildroot.org>; Mon, 26 Aug 2024 09:32:04 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 5DCFBFF802;
- Mon, 26 Aug 2024 09:31:57 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1siW4q-00G2UQ-2a;
- Mon, 26 Aug 2024 11:31:56 +0200
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7C65D60703
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7C65D60703
+ for <buildroot@buildroot.org>; Mon, 26 Aug 2024 09:35:51 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 2B7F28632F; Mon, 26 Aug 2024 09:35:51 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-References: <20240825084221.2438493-1-thomas.petazzoni@bootlin.com>
-Date: Mon, 26 Aug 2024 11:31:56 +0200
-In-Reply-To: <20240825084221.2438493-1-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni via buildroot's message of "Sun, 25 Aug 2024 10:42:20
- +0200")
-Message-ID: <8734mrbpf7.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH] package/norm: fix build issue with waf >=
+To: buildroot@buildroot.org
+Date: Mon, 26 Aug 2024 11:31:49 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 2383768cdf03ad78a89a0b4355c4e1a576c2d219
+X-Git-Newrev: cf647b69fbeec000663bd9b55047e7c2d69217f8
+X-Patchwork-Hint: ignore
+Message-Id: <20240826093551.2B7F28632F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/norm: fix build issue with waf >=
  2.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -70,41 +59,143 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Thomas" == Thomas Petazzoni via buildroot <buildroot@buildroot.org> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=cf647b69fbeec000663bd9b55047e7c2d69217f8
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > To fix build issues with modern Python versions, commit
- > 8012a86f5cf751f9c4d5d4a63f6502a6ac60d13a ("package/norm: use external
- > waf") switched the norm package from using its internal waf copy to
- > using our external waf package.
+To fix build issues with modern Python versions, commit
+8012a86f5cf751f9c4d5d4a63f6502a6ac60d13a ("package/norm: use external
+waf") switched the norm package from using its internal waf copy to
+using our external waf package.
 
- > Then, in fd5623150dcc23441c4f0bd586378daeb91d66ea ("package/waf: bump
- > to v2.1.1"), we updated out external waf to a newer version, which
- > breaks the API around ArgParse, see upstream commit:
+Then, in fd5623150dcc23441c4f0bd586378daeb91d66ea ("package/waf: bump
+to v2.1.1"), we updated out external waf to a newer version, which
+breaks the API around ArgParse, see upstream commit:
 
- >   https://gitlab.com/ita1024/waf/-/commit/bd5c22d484734f7c1b77e16c91a10c7a44fa6c8a:
+  https://gitlab.com/ita1024/waf/-/commit/bd5c22d484734f7c1b77e16c91a10c7a44fa6c8a:
 
- > This causes breakage when building the norm package. Fabrice had
- > already submitted patches upstream, to both the "protolib"
- > project (which is used as a submodule in norm) and to the "norm"
- > project. These pull requests are still pending, but let's backport the
- > patches that seem reasonable and that fix the build issue.
+This causes breakage when building the norm package. Fabrice had
+already submitted patches upstream, to both the "protolib"
+project (which is used as a submodule in norm) and to the "norm"
+project. These pull requests are still pending, but let's backport the
+patches that seem reasonable and that fix the build issue.
 
- > Fixes:
+Fixes:
 
- >   http://autobuild.buildroot.net/results/f005d513434d42d26e601096b94b4070586118b2/
+  http://autobuild.buildroot.net/results/f005d513434d42d26e601096b94b4070586118b2/
 
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...protolib-wscript-fix-build-with-waf-2.1.0.patch | 53 ++++++++++++++++++++++
+ .../0005-wscript-fix-build-with-waf-2.1.0.patch    | 35 ++++++++++++++
+ 2 files changed, 88 insertions(+)
 
-Committed, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/norm/0004-protolib-wscript-fix-build-with-waf-2.1.0.patch b/package/norm/0004-protolib-wscript-fix-build-with-waf-2.1.0.patch
+new file mode 100644
+index 0000000000..827a607fb0
+--- /dev/null
++++ b/package/norm/0004-protolib-wscript-fix-build-with-waf-2.1.0.patch
+@@ -0,0 +1,53 @@
++From c35a9dc031cda1406eff7de1f199ad55949b17c6 Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 24 Aug 2024 21:28:16 +0200
++Subject: [PATCH] protolib/wscript: fix build with waf >= 2.1.0
++
++Replace add_option_group by add_argument_group and add_option by
++add_argument to avoid the following build failure with waf 2.1.0 and
++https://gitlab.com/ita1024/waf/-/commit/bd5c22d484734f7c1b77e16c91a10c7a44fa6c8a:
++
++  File "/home/autobuild/autobuild/instance-21/output-1/build/norm-1.5.8/protolib/wscript", line 37, in options
++    bind_opts = ctx.parser.add_option_group('Language Bindings', 'Use during configure step.')
++                ^^^^^^^^^^^^^^^^^^^^^^^^^^^
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Upstream: https://github.com/USNavalResearchLaboratory/protolib/pull/47
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ protolib/wscript | 14 +++++++-------
++ 1 file changed, 7 insertions(+), 7 deletions(-)
++
++diff --git a/protolib/wscript b/protolib/wscript
++index 97dda93..97f65f6 100644
++--- a/protolib/wscript
+++++ b/protolib/wscript
++@@ -34,18 +34,18 @@ def options(ctx):
++     ctx.load('python')
++     ctx.load('java')
++ 
++-    bind_opts = ctx.parser.add_option_group('Language Bindings', 'Use during configure step.')
++-    bind_opts.add_option('--build-python', action='store_true',
+++    bind_opts = ctx.parser.add_argument_group('Language Bindings', 'Use during configure step.')
+++    bind_opts.add_argument('--build-python', action='store_true',
++             help='Build Python bindings [default:false]')
++-    bind_opts.add_option('--build-java', action='store_true',
+++    bind_opts.add_argument('--build-java', action='store_true',
++             help='Build Java bindings [default:false]')
++ 
++-    build_opts = ctx.parser.add_option_group('Compile Options', 'Use during build step.')
++-    build_opts.add_option('--debug', action='store_true',
+++    build_opts = ctx.parser.add_argument_group('Compile Options', 'Use during build step.')
+++    build_opts.add_argument('--debug', action='store_true',
++             help='Build in debug mode [default:release]')
++-    build_opts.add_option('--enable-wx', action='store_true',
+++    build_opts.add_argument('--enable-wx', action='store_true',
++             help='Enable checking for wxWidgets.')
++-    build_opts.add_option('--enable-static-library', action='store_true',
+++    build_opts.add_argument('--enable-static-library', action='store_true',
++             help='Enable installing static library. [default:false]')
++ 
++ def configure(ctx):
++-- 
++2.46.0
++
+diff --git a/package/norm/0005-wscript-fix-build-with-waf-2.1.0.patch b/package/norm/0005-wscript-fix-build-with-waf-2.1.0.patch
+new file mode 100644
+index 0000000000..7260beefc2
+--- /dev/null
++++ b/package/norm/0005-wscript-fix-build-with-waf-2.1.0.patch
+@@ -0,0 +1,35 @@
++From 9f7a9b72ff5a7313793bba86962f9677970c9b4c Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Sat, 27 Jul 2024 20:41:45 +0200
++Subject: [PATCH] wscript: fix build with waf >= 2.1.0
++
++Replace add_option_group by add_argument_group to a build failure with
++waf 2.1.0 and
++https://gitlab.com/ita1024/waf/-/commit/bd5c22d484734f7c1b77e16c91a10c7a44fa6c8a:
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Upstream: https://github.com/USNavalResearchLaboratory/norm/pull/86
++[Thomas: small change needed to backport on version 1.5.8]
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ wscript | 4 ++--
++ 1 file changed, 2 insertions(+), 2 deletions(-)
++
++diff --git a/wscript b/wscript
++index 0fdae96..6a8c22a 100644
++--- a/wscript
+++++ b/wscript
++@@ -47,8 +47,8 @@ system = platform.system().lower()
++ 
++ def options(ctx):
++     ctx.recurse('protolib')    
++-    build_opts = ctx.parser.add_option_group('Compile/install Options', 'Use during build/install step.')
++-    build_opts.add_option('--enable-static-library', action='store_true',
+++    build_opts = ctx.parser.add_argument_group('Compile/install Options', 'Use during build/install step.')
+++    build_opts.add_argument('--enable-static-library', action='store_true',
++             help='Enable building and installing static library. [default:false]')
++ 
++ 
++-- 
++2.46.0
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
