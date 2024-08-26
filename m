@@ -4,62 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EE7CDC5321D
-	for <buildroot@archiver.kernel.org>; Mon, 26 Aug 2024 11:53:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8AF8AC5321D
+	for <buildroot@archiver.kernel.org>; Mon, 26 Aug 2024 11:58:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9FEB2401B8;
-	Mon, 26 Aug 2024 11:53:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 28F4F4017D;
+	Mon, 26 Aug 2024 11:58:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4jtCkW7FX2in; Mon, 26 Aug 2024 11:53:25 +0000 (UTC)
+ id SPNJXBgQ0LVk; Mon, 26 Aug 2024 11:58:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4C6CE401C0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D494540189
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4C6CE401C0;
-	Mon, 26 Aug 2024 11:53:25 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A10B91BF308
- for <buildroot@lists.busybox.net>; Mon, 26 Aug 2024 11:53:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D494540189;
+	Mon, 26 Aug 2024 11:58:41 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D09821BF3AD
+ for <buildroot@lists.busybox.net>; Mon, 26 Aug 2024 11:58:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9CD3940202
- for <buildroot@lists.busybox.net>; Mon, 26 Aug 2024 11:53:23 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id BF72C60586
+ for <buildroot@lists.busybox.net>; Mon, 26 Aug 2024 11:58:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gvI2ViVziLaw for <buildroot@lists.busybox.net>;
- Mon, 26 Aug 2024 11:53:22 +0000 (UTC)
-X-Greylist: delayed 308 seconds by postgrey-1.37 at util1.osuosl.org;
- Mon, 26 Aug 2024 11:53:22 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 57444401B8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 57444401B8
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=89.234.176.197;
- helo=aposti.net; envelope-from=paul@crapouillou.net; receiver=<UNKNOWN> 
-Received: from aposti.net (aposti.net [89.234.176.197])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 57444401B8
- for <buildroot@buildroot.org>; Mon, 26 Aug 2024 11:53:22 +0000 (UTC)
-From: Paul Cercueil <paul@crapouillou.net>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7T736kg299Gy for <buildroot@lists.busybox.net>;
+ Mon, 26 Aug 2024 11:58:40 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1828:2000:679::23; helo=helium.openadk.org;
+ envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 4B68F600B3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4B68F600B3
+Received: from helium.openadk.org (helium.openadk.org
+ [IPv6:2a00:1828:2000:679::23])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 4B68F600B3
+ for <buildroot@buildroot.org>; Mon, 26 Aug 2024 11:58:38 +0000 (UTC)
+Received: by helium.openadk.org (Postfix, from userid 1000)
+ id 62DD43537AF7; Mon, 26 Aug 2024 13:58:36 +0200 (CEST)
+Date: Mon, 26 Aug 2024 13:58:36 +0200
+From: Waldemar Brodkorb <wbx@openadk.org>
 To: buildroot@buildroot.org
-Date: Mon, 26 Aug 2024 13:47:57 +0200
-Message-ID: <20240826114757.150278-1-paul@crapouillou.net>
+Message-ID: <Zsxt7Db6yjMX8x1x@waldemar-brodkorb.de>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=crapouillou.net; s=mail; t=1724672890;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding;
- bh=k/zRO0WONWbXia2OoXGS1Z23UiEsmM5ygoVCIynaYGY=;
- b=vxW4DB+VdQRYkoQ0TCVFrc5yIl6CU146vyQva5WLhz+EIJP1z0YENHjZtrPF/knOATJr6o
- 78hzJgaFkwLjEggrGkLTLp1DBNUks2MQ8SSd+qbcobXeep8Bz5PZBTU5j4Z/27sGuiyGLr
- nF5QwCrf3AqXHlJL/4xy9Bz5Aovjm+4=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=crapouillou.net
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=crapouillou.net header.i=@crapouillou.net
- header.a=rsa-sha256 header.s=mail header.b=vxW4DB+V
-Subject: [Buildroot] [PATCH 1/1] package/umtprd: bump to version 1.6.8
+Content-Disposition: inline
+X-Operating-System: Linux 5.10.0-31-amd64 x86_64
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=openadk.org; s=2022; 
+ t=1724673516; bh=4dByHPM+lQteEWW804flc1/unw48JDOBIeIzmzwO6i0=;
+ h=Date:From:To:Subject:From;
+ b=DcrU35aaz6dJFUThGoOp4GqsFakfLwXWWYNMgvkitPZ48uWIzW8+R+OjKolh7kHiC
+ YKBi9Sb4LgvjB2Bcgoh+OMtQckHhTZ44/eKqQ8uOA9WPo78Ax84ETsVSQvXkcD14lt
+ F3iuZF3OxGuuw8atjd8laOPuhwBOQrSbxaZyFHZEtcRrfnkdcN60Rw27OyDr8/RbLS
+ LZd6kTtHGAGOiMTOAUTbsIRLprZxnxFAzfz3Zq0R/d/sepIlFNYeqMi0KU2Gh94Pe+
+ st45eY0vYlx1T4uf8jWpyiA+ymjwRODgy0DeAAaYXYHlRIGvqKaqzBykaG2L/wTC9A
+ d1b1lTueOEBYw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=openadk.org
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=openadk.org header.i=@openadk.org header.a=rsa-sha256
+ header.s=2022 header.b=DcrU35aa
+Subject: [Buildroot] [PATCH] package/fbset: update download URL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,112 +76,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Paul Cercueil <paul@crapouillou.net>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-https://github.com/viveris/uMTP-Responder/blob/umtprd-1.6.8/Release-notes.txt
+Fixes:
 
-Drop the patch 0001-Fix-output_dir-make-dependency.patch which is not
-needed anymore.
+ http://autobuild.buildroot.org/results/13e/13e28650fc58fc62c801a664d79616c6dd39a8ac
 
-Swap "$(MAKE) $(TARGET_CONFIGURE_OPTS)" to
-"$(TARGET_CONFIGURE_OPTS) $(MAKE)", otherwise the package does not
-build.
-
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
- .../0001-Fix-output_dir-make-dependency.patch | 46 -------------------
- package/umtprd/umtprd.hash                    |  2 +-
- package/umtprd/umtprd.mk                      |  4 +-
- 3 files changed, 3 insertions(+), 49 deletions(-)
- delete mode 100644 package/umtprd/0001-Fix-output_dir-make-dependency.patch
+ package/fbset/Config.in | 2 +-
+ package/fbset/fbset.mk  | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/umtprd/0001-Fix-output_dir-make-dependency.patch b/package/umtprd/0001-Fix-output_dir-make-dependency.patch
-deleted file mode 100644
-index fcbca6b000..0000000000
---- a/package/umtprd/0001-Fix-output_dir-make-dependency.patch
-+++ /dev/null
-@@ -1,46 +0,0 @@
--From d84216a678edaca81c0899318231cdcca2100d38 Mon Sep 17 00:00:00 2001
--From: James Hilliard <james.hilliard1@gmail.com>
--Date: Mon, 17 Oct 2022 16:39:56 -0600
--Subject: [PATCH] Fix output_dir make dependency
--
--Object file targets need to depend on the output_dir target.
--
--Fixes:
--make --shuffle=reverse -j1
--cc -o obj/mtp_op_truncateobject.o src/mtp_operations/mtp_op_truncateobject.c -c  -I./inc -lpthread -Wall -O3
--Assembler messages:
--Fatal error: can't create obj/mtp_op_truncateobject.o: No such file or directory
--make: *** [Makefile:19: obj/mtp_op_truncateobject.o] Error 1 shuffle=reverse
--
--[paul@crapouillou.net: Backport from upstream commit d84216a]
--Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-----
-- Makefile | 6 +++---
-- 1 file changed, 3 insertions(+), 3 deletions(-)
--
--diff --git a/Makefile b/Makefile
--index 7c98b63..c28e186 100644
----- a/Makefile
--+++ b/Makefile
--@@ -7,15 +7,15 @@ objects := $(sources:src/%.c=obj/%.o)
-- ops_sources := $(wildcard src/mtp_operations/*.c)
-- ops_objects := $(ops_sources:src/mtp_operations/%.c=obj/%.o)
-- 
---all: output_dir umtprd
--+all: umtprd
-- 
-- umtprd: $(objects) $(ops_objects)
-- 	${CC} -o $@    $^ $(LDFLAGS) -lpthread
-- 
---$(objects): obj/%.o: src/%.c
--+$(objects): obj/%.o: src/%.c | output_dir
-- 	${CC} -o $@ $^ -c $(CPPFLAGS) $(CFLAGS)
-- 
---$(ops_objects): obj/%.o: src/mtp_operations/%.c
--+$(ops_objects): obj/%.o: src/mtp_operations/%.c | output_dir
-- 	${CC} -o $@ $^ -c $(CPPFLAGS) $(CFLAGS)
-- 
-- output_dir:
---- 
--2.35.1
--
-diff --git a/package/umtprd/umtprd.hash b/package/umtprd/umtprd.hash
-index 7cd75619ab..f682dd6d84 100644
---- a/package/umtprd/umtprd.hash
-+++ b/package/umtprd/umtprd.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  1de40511c1dd4618719cff2058dfe68a595f1b9284c80afa89d6d1a1c80aec29  umtprd-1.6.2.tar.gz
-+sha256  e0b3c308016595a5d956eaaa086d3bfe4c9af2270857181695338df9affb3574  umtprd-1.6.8.tar.gz
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE
-diff --git a/package/umtprd/umtprd.mk b/package/umtprd/umtprd.mk
-index c5e0ee512e..1f1f6bcd23 100644
---- a/package/umtprd/umtprd.mk
-+++ b/package/umtprd/umtprd.mk
-@@ -4,13 +4,13 @@
- #
+diff --git a/package/fbset/Config.in b/package/fbset/Config.in
+index b4ef41f0a4..9422d5bca4 100644
+--- a/package/fbset/Config.in
++++ b/package/fbset/Config.in
+@@ -7,4 +7,4 @@ config BR2_PACKAGE_FBSET
+ 	  simple and unique interface to access different kinds of
+ 	  graphic displays.
+ 
+-	  http://users.telenet.be/geertu/Linux/fbdev/
++	  http://g33rt.be/migrated/Linux/fbdev/
+diff --git a/package/fbset/fbset.mk b/package/fbset/fbset.mk
+index 8d2a477f8b..526cba40d3 100644
+--- a/package/fbset/fbset.mk
++++ b/package/fbset/fbset.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--UMTPRD_VERSION = 1.6.2
-+UMTPRD_VERSION = 1.6.8
- UMTPRD_SITE = https://github.com/viveris/uMTP-Responder/archive
- UMTPRD_LICENSE = GPL-3.0+
- UMTPRD_LICENSE_FILES = LICENSE
- 
- define UMTPRD_BUILD_CMDS
--	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
-+	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
- endef
- 
- define UMTPRD_INSTALL_TARGET_CMDS
+ FBSET_VERSION = 2.1
+-FBSET_SITE = http://users.telenet.be/geertu/Linux/fbdev
++FBSET_SITE = http://g33rt.be/migrated/Linux/fbdev
+ FBSET_DEPENDENCIES = host-bison host-flex
+ FBSET_LICENSE = GPL-2.0
+ FBSET_LICENSE_FILES = fbset.c
 -- 
-2.45.2
+2.30.2
 
 _______________________________________________
 buildroot mailing list
