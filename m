@@ -4,49 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 81426C5321D
-	for <buildroot@archiver.kernel.org>; Mon, 26 Aug 2024 16:42:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2FA6C5321D
+	for <buildroot@archiver.kernel.org>; Mon, 26 Aug 2024 16:43:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2205960748;
-	Mon, 26 Aug 2024 16:42:44 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7F22C60017;
+	Mon, 26 Aug 2024 16:43:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wLcRYtsJT9G3; Mon, 26 Aug 2024 16:42:43 +0000 (UTC)
+ id RhFd0cb2u5nx; Mon, 26 Aug 2024 16:43:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F2B5D6077C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8D6B160748
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F2B5D6077C;
-	Mon, 26 Aug 2024 16:42:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8D6B160748;
+	Mon, 26 Aug 2024 16:43:29 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B58F41BF33F
- for <buildroot@lists.busybox.net>; Mon, 26 Aug 2024 16:42:41 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8405C1BF33F
+ for <buildroot@lists.busybox.net>; Mon, 26 Aug 2024 16:43:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A209F40315
- for <buildroot@lists.busybox.net>; Mon, 26 Aug 2024 16:42:41 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 70D4640315
+ for <buildroot@lists.busybox.net>; Mon, 26 Aug 2024 16:43:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id alp7kEXCIrYs for <buildroot@lists.busybox.net>;
- Mon, 26 Aug 2024 16:42:40 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id QSfGSZniC5OS for <buildroot@lists.busybox.net>;
+ Mon, 26 Aug 2024 16:43:27 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::228;
+ helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3933C402FB
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3933C402FB
- for <buildroot@buildroot.org>; Mon, 26 Aug 2024 16:42:40 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 23D468649A; Mon, 26 Aug 2024 16:42:40 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 26 Aug 2024 18:42:17 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 60da48c3b70d8ed8dcc9d77143c1462bdf839ab6
-X-Git-Newrev: ff6a4f27b4a8475c49fe4514d23c7a23b38e671b
-X-Patchwork-Hint: ignore
-Message-Id: <20240826164240.23D468649A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] configs/mx6udoo: update U-Boot
- and kernel
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 27036402FB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 27036402FB
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 27036402FB
+ for <buildroot@buildroot.org>; Mon, 26 Aug 2024 16:43:26 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 126031BF205;
+ Mon, 26 Aug 2024 16:43:23 +0000 (UTC)
+Date: Mon, 26 Aug 2024 18:43:23 +0200
+To: Fabio Estevam <festevam@gmail.com>
+Message-ID: <20240826184323.4c998f31@windsurf>
+In-Reply-To: <20240824175821.828808-1-festevam@gmail.com>
+References: <20240824175821.828808-1-festevam@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1724690604;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=qQpBFNpbB2VQ+QMtuY5WISCkN/GB+6DwWtjzglbHTwM=;
+ b=TxBWodrJBHzepi11j7TnC1gNgFvuXylk5kQhrr3aT1UVWB6NwJD6ez+Q3WcUiuPQqwvtxb
+ WBn3UdS5F1675Ip3eyzmW6rLBkGx2Kh2yX3OiSsU/ZtacUkCYzk8NNwReRLUPLq/naN8Q3
+ b1YZPp9brvSE3OI+1oDTuFbzRzWtW/yF+FzSpdoolBN3DIxuvZFYDVtYTuZ85ZUmXZc2JQ
+ NF6pIJx1PsIVk9NEGSEsWbekjtoNB+zE5/MKo0y0lUnEUnq8hFqqTTe29LFu/A1enUmRz8
+ a12tPeDb5lSj2skwm0YSctKWs4LOBwxYrgg6wnvZzOjITQA36tSiCyZ3blkPOg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=TxBWodrJ
+Subject: Re: [Buildroot] [PATCH] configs/mx6udoo: update U-Boot and kernel
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,128 +82,45 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ff6a4f27b4a8475c49fe4514d23c7a23b38e671b
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello Fabio,
 
-Update to U-Boot 2024.07 and kernel 6.10.6 versions.
+On Sat, 24 Aug 2024 14:58:21 -0300
+Fabio Estevam <festevam@gmail.com> wrote:
 
-As kernel 6.10 fixes the USB kernel hang, remove the original patch.
+> Update to U-Boot 2024.07 and kernel 6.10.6 versions.
+> 
+> As kernel 6.10 fixes the USB kernel hang, remove the original patch.
+> 
+> Also convert it to use extlinux.conf file.
+> 
+> Signed-off-by: Fabio Estevam <festevam@gmail.com>
+> ---
+>  .../linux/0000-udoo-disable-usbh1.patch       | 26 -------------------
+>  .../boot/extlinux/extlinux.conf               |  4 +++
+>  configs/mx6udoo_defconfig                     | 15 +++++------
+>  3 files changed, 10 insertions(+), 35 deletions(-)
+>  delete mode 100644 board/udoo/mx6qdl/patches/linux/0000-udoo-disable-usbh1.patch
+>  create mode 100644 board/udoo/mx6qdl/rootfs_overlay/boot/extlinux/extlinux.conf
 
-Also convert it to use extlinux.conf file.
+Applied to next. You had forgotten to update .checkpackageignore, which
+was referencing a patch that you are removing here.
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- .checkpackageignore                                |  1 -
- .../patches/linux/0000-udoo-disable-usbh1.patch    | 26 ----------------------
- .../rootfs_overlay/boot/extlinux/extlinux.conf     |  4 ++++
- configs/mx6udoo_defconfig                          | 15 +++++--------
- 4 files changed, 10 insertions(+), 36 deletions(-)
+Also, while you're working on this defconfig, what about enabling
+BR2_DOWNLOAD_FORCE_CHECK_HASHES=y ?
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 778e3b8651..8ce5047ae6 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -91,7 +91,6 @@ board/synopsys/axs10x/post-build.sh Shellcheck
- board/technologic/ts4900/post-image.sh Shellcheck
- board/toradex/apalis-imx6/post-image.sh Shellcheck
- board/udoo/common/post-build.sh Shellcheck
--board/udoo/mx6qdl/patches/linux/0000-udoo-disable-usbh1.patch lib_patch.Upstream
- boot/afboot-stm32/0003-Makefile-disable-stack-protector.patch lib_patch.Upstream
- boot/optee-os/3.13.0/0001-core-zlib-fix-build-warning-when-_LFS64_LARGEFILE-is.patch lib_patch.Upstream
- boot/syslinux/0001-bios-Fix-alignment-change-with-gcc-5.patch lib_patch.Upstream
-diff --git a/board/udoo/mx6qdl/patches/linux/0000-udoo-disable-usbh1.patch b/board/udoo/mx6qdl/patches/linux/0000-udoo-disable-usbh1.patch
-deleted file mode 100644
-index d151a40d6e..0000000000
---- a/board/udoo/mx6qdl/patches/linux/0000-udoo-disable-usbh1.patch
-+++ /dev/null
-@@ -1,26 +0,0 @@
--[PATCH] ARM: dts: imx6qdl-udoo: Disable usbh1 to avoid kernel hang
--
--Currently the kernel hangs when USB Host1 is enabled due to the lack of
--support for controlling the USB hub clock and GPIO reset line.
--
--Peter Chen has made several attempts to fix this problem, but his series
--has not been applied yet, so better disable USB host1 for now to avoid
--the kernel hang.
--
--Signed-off-by: Fabio Estevam <fabio.estevam@nxp.com>
-----
--
--diff --git a/arch/arm/boot/dts/imx6qdl-udoo.dtsi b/arch/arm/boot/dts/imx6qdl-udoo.dtsi
--index 828dd20cd27d..c9e122865312 100644
----- a/arch/arm/boot/dts/imx6qdl-udoo.dtsi
--+++ b/arch/arm/boot/dts/imx6qdl-udoo.dtsi
--@@ -292,7 +292,8 @@ &usbh1 {
-- 	pinctrl-0 = <&pinctrl_usbh>;
-- 	vbus-supply = <&reg_usb_h1_vbus>;
-- 	clocks = <&clks IMX6QDL_CLK_CKO>;
---	status = "okay";
--+	/* currently USB support causes a kernel hang. Disable it for now */
--+	status = "disabled";
-- };
-- 
-- &usbotg {
-diff --git a/board/udoo/mx6qdl/rootfs_overlay/boot/extlinux/extlinux.conf b/board/udoo/mx6qdl/rootfs_overlay/boot/extlinux/extlinux.conf
-new file mode 100644
-index 0000000000..cbb284f91b
---- /dev/null
-+++ b/board/udoo/mx6qdl/rootfs_overlay/boot/extlinux/extlinux.conf
-@@ -0,0 +1,4 @@
-+Label imx6qdl-udoo buildroot
-+	kernel ../zImage
-+	fdtdir ../
-+	append root=/dev/mmcblk2p1 rootwait rw
-diff --git a/configs/mx6udoo_defconfig b/configs/mx6udoo_defconfig
-index 5092ef0fd1..6c84a41bfd 100644
---- a/configs/mx6udoo_defconfig
-+++ b/configs/mx6udoo_defconfig
-@@ -3,27 +3,26 @@ BR2_cortex_a9=y
- BR2_ARM_ENABLE_NEON=y
- BR2_ARM_ENABLE_VFP=y
- BR2_ARM_FPU_VFPV3=y
--BR2_GLOBAL_PATCH_DIR="board/udoo/mx6qdl/patches"
--# Linux headers same as kernel, a 5.10 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_10=y
-+# Linux headers same as kernel, a 6.10 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_10=y
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc1"
--BR2_ROOTFS_POST_BUILD_SCRIPT="board/udoo/common/post-build.sh"
-+BR2_ROOTFS_OVERLAY="board/udoo/mx6qdl/rootfs_overlay"
- BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/post-image.sh"
- BR2_TARGET_ROOTFS_EXT2=y
- BR2_TARGET_ROOTFS_EXT2_4=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="udoo"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2020.10"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.07"
- BR2_TARGET_UBOOT_FORMAT_IMG=y
- BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="SPL"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.10.84"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.10.6"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6q-udoo imx6dl-udoo"
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="nxp/imx/imx6q-udoo nxp/imx/imx6dl-udoo"
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
- # required tools to create the SD card image
-@@ -31,5 +30,3 @@ BR2_PACKAGE_HOST_DOSFSTOOLS=y
- BR2_PACKAGE_HOST_GENIMAGE=y
- BR2_PACKAGE_HOST_MTOOLS=y
- BR2_PACKAGE_HOST_UBOOT_TOOLS=y
--BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y
--BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/udoo/common/boot.scr.txt"
+Thanks a lot!
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
