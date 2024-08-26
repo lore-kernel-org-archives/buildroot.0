@@ -4,91 +4,92 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9D7BC5321E
-	for <buildroot@archiver.kernel.org>; Mon, 26 Aug 2024 07:21:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E9A2C5321E
+	for <buildroot@archiver.kernel.org>; Mon, 26 Aug 2024 07:21:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 622C080D75;
-	Mon, 26 Aug 2024 07:21:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C91F881069;
+	Mon, 26 Aug 2024 07:21:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id upmHOd10xBgF; Mon, 26 Aug 2024 07:21:27 +0000 (UTC)
+ id RXo_meL06PhR; Mon, 26 Aug 2024 07:21:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6C5B980E1C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C9D1481065
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6C5B980E1C;
-	Mon, 26 Aug 2024 07:21:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C9D1481065;
+	Mon, 26 Aug 2024 07:21:32 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 14F731BF29F
- for <buildroot@lists.busybox.net>; Mon, 26 Aug 2024 07:21:26 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 7E6491BF29F
+ for <buildroot@lists.busybox.net>; Mon, 26 Aug 2024 07:21:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 02C7540200
- for <buildroot@lists.busybox.net>; Mon, 26 Aug 2024 07:21:26 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6CB2640200
+ for <buildroot@lists.busybox.net>; Mon, 26 Aug 2024 07:21:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1LnyTEZxTMw5 for <buildroot@lists.busybox.net>;
- Mon, 26 Aug 2024 07:21:25 +0000 (UTC)
+ id t8monnJuieJF for <buildroot@lists.busybox.net>;
+ Mon, 26 Aug 2024 07:21:30 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::534; helo=mail-pg1-x534.google.com;
+ client-ip=2607:f8b0:4864:20::52f; helo=mail-pg1-x52f.google.com;
  envelope-from=fancp2007@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org C2899401D5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C2899401D5
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com
- [IPv6:2607:f8b0:4864:20::534])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C2899401D5
- for <buildroot@buildroot.org>; Mon, 26 Aug 2024 07:21:24 +0000 (UTC)
-Received: by mail-pg1-x534.google.com with SMTP id
- 41be03b00d2f7-7cda2695893so1180620a12.1
- for <buildroot@buildroot.org>; Mon, 26 Aug 2024 00:21:24 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org B66CB401D5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B66CB401D5
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com
+ [IPv6:2607:f8b0:4864:20::52f])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B66CB401D5
+ for <buildroot@buildroot.org>; Mon, 26 Aug 2024 07:21:30 +0000 (UTC)
+Received: by mail-pg1-x52f.google.com with SMTP id
+ 41be03b00d2f7-7c691c8f8dcso2421616a12.1
+ for <buildroot@buildroot.org>; Mon, 26 Aug 2024 00:21:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1724656883; x=1725261683;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=1kXPdMsOM5RI3ZZhKSdQS9Nx7UjYFuMcPraotUjiloQ=;
- b=HtkRZ3mFZ+SOdatVfl3lGHCeI7dQL7UhUqtF1txsefepYMzPtbdzOVN1jROm+QyMSA
- hrFk544KCAmV5eV+SjWZgHbKmnF15X0rgxsb5FmpR7GBRTKIpMS4fjv/T8YL+w5ZMpwQ
- Z0L2wQw6pDYIZHPr3ue6PbIYl9dw6UQ5sHmpu6/Lf3WR+0KHMRDAw3cuipiJBtAiTZAM
- kzqZXdP3ZIX0OeGG9ZLSuTdzXZZU8HHk579/xpWFlJOpQTOw5GLG96Lvh2P3uZ6J23je
- rZB+2K9eYToVv+x9Bm/aWHMwUdmvFvpC/6fNhfhBsDC//IhdPnN6AHxAi2FFrWjUHWuh
- ugbw==
-X-Gm-Message-State: AOJu0YzUbla286xi5dZjWXgJ1Ax82VBWDaAVqYqFBsHH+XHB0xUb25og
- vIqnS+GwteSW147RsZcQc2X63OMqimERVqnxAlYvUUgIz9iqFF/rsRz+pA==
-X-Google-Smtp-Source: AGHT+IFeyzxKlKd4ech7E55M/yuaz66ydhej6vYHRTSjSY2eV695vPMgGC8kyLO/u5/nROJY+M4QCw==
-X-Received: by 2002:a05:6a21:3983:b0:1c2:8fd1:a47d with SMTP id
- adf61e73a8af0-1cc89d293e8mr9333100637.6.1724656883417; 
- Mon, 26 Aug 2024 00:21:23 -0700 (PDT)
+ d=1e100.net; s=20230601; t=1724656889; x=1725261689;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=Z+4oTnLVoZqIpgnP8LZUD+5OBOz11ozQH7cgn8KX7kY=;
+ b=VVK41nHag72NRxyLBiZxUjiYkb5LEaqeERbqhbp2KQvQvxyxH3y2zg/fTe8ms4u2B+
+ yTk3k/KYPbvf90Jkz8Zbdj6Ksd/0Z6P/pzyRSVDXnHdZrNvY92bKcbXTKOU7bPaaKvol
+ GKO7ncBwnLuQ3PJw3HFBeCpPc0do9culNnX1lQLkCaFosAYBtcCvt3iA8hIOkrF9hZW/
+ f3Da+MdJqvcllN/TA2kFtNhc/0CCOz5vnbryr6dpaoDXxHBbNlwOLkzwpbVXDXN0yD02
+ rBibbBMSmOLZ+yw75Pz3qCPLyDx0ZrA3ZTNQp7LEClCj+TEt0P60OOhWT68KCGs/6a8Q
+ EtOg==
+X-Gm-Message-State: AOJu0Yy2NOYqMhU+mbRaFGb+Me2IkZDS8CaVlJT4RKiCadBvPPKHp86w
+ 9ewu5pio1i7DZ76Te8+16JQ2vy8k6SYuqTchbwh0bpD4TEc+vkm/o3yOmg==
+X-Google-Smtp-Source: AGHT+IElhkD4V9ck56oENPApj612hGERqEg7Fj3ki/Umivt44BCqwEMWkoylsVz6yfTRTXbu/zlUZQ==
+X-Received: by 2002:a05:6300:404c:b0:1c2:8f50:b450 with SMTP id
+ adf61e73a8af0-1cc89d4d12emr8611429637.18.1724656888694; 
+ Mon, 26 Aug 2024 00:21:28 -0700 (PDT)
 Received: from localhost ([142.171.12.18]) by smtp.gmail.com with ESMTPSA id
- 98e67ed59e1d1-2d613af1468sm9005267a91.44.2024.08.26.00.21.22
+ d9443c01a7336-20385609d6csm62499245ad.201.2024.08.26.00.21.27
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 26 Aug 2024 00:21:22 -0700 (PDT)
+ Mon, 26 Aug 2024 00:21:28 -0700 (PDT)
 From: Scott Fan <fancp2007@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon, 26 Aug 2024 15:20:47 +0800
-Message-Id: <20240826072049.719043-1-fancp2007@gmail.com>
+Date: Mon, 26 Aug 2024 15:20:48 +0800
+Message-Id: <20240826072049.719043-2-fancp2007@gmail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20240826072049.719043-1-fancp2007@gmail.com>
+References: <20240826072049.719043-1-fancp2007@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1724656883; x=1725261683; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=1kXPdMsOM5RI3ZZhKSdQS9Nx7UjYFuMcPraotUjiloQ=;
- b=iL6lgAQ61iQNtZ1nbhD5Bgdd++beno4zP95LVaoS1xYKxFrktnJYfcMEx83xMmfUYH
- Z8bmqaywS2eY94ipcQ+WiAs7zE+TqT5ZZh5wvZ7EXmDOHg/Osin9MJIqRw53ek9zs5Ev
- wpVp2/cPOeL5kVypavELCgOdbbY4a+Nq6rvJ5OPH5/HMRvFYqLZjVIlCWX+xaSsOP9Xw
- hIUcxDoBOTW5KUYnipzdLLLNq5DD3vv5D4M7NmPpLvmih/s1jpk8yjA5A1U6/pj2wE3X
- +6foCtXeIJ/luRQgOnXzUe3Rpy3i1F5Ln4QMXyfGwGEKe7OGIJ3bF21mNAV+WThGkS+r
- Kxpw==
+ d=gmail.com; s=20230601; t=1724656889; x=1725261689; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=Z+4oTnLVoZqIpgnP8LZUD+5OBOz11ozQH7cgn8KX7kY=;
+ b=LBp0o12TcfzGZ7Qs+qEfkcIOeH62u1SuWz0g+6nv9O1G4HhVOeLDST55BADURscPwt
+ RtB/i7Jh5VDmRkQzrxCUiqJNV7zEsk1mL8A21pGQIR3qKJx4NkS5JNXjLUrnmSREphQD
+ tGns5hh34rOtr64K+/p80BRx9oMJHV1wI3RRgGBKs1mkcqZe6aHoLYwARvmIKqnkIncS
+ cd+7S7JZmQeFO/Ju/+SOmawkpLjg/kZfe013InCyCPPlBEyVtXct/Er3YmDGzqLzqMhy
+ wmw02DLWGVnEzqeNuVbPfkw9PH8+gQFIM2nzVKOQK5bsYQ8V4at1F64wHW4DWwpCHa22
+ Vkcw==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=iL6lgAQ6
-Subject: [Buildroot] [PATCH 1/2] package/postgresql: security bump version
- to 16.4
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=LBp0o12T
+Subject: [Buildroot] [PATCH 2/2] package/postgresql: fix typos in init script
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -106,43 +107,24 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes:
- - https://www.postgresql.org/docs/release/16.4/
- - https://www.postgresql.org/about/news/postgresql-164-158-1413-1316-1220-and-17-beta-3-released-2910/
-
-Fixes CVE-2024-7348:
- - https://www.postgresql.org/support/security/CVE-2024-7348/
-
 Signed-off-by: Scott Fan <fancp2007@gmail.com>
 ---
- package/postgresql/postgresql.hash | 4 ++--
- package/postgresql/postgresql.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/postgresql/S50postgresql | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
-index d917a03ebb..1d9a9081b7 100644
---- a/package/postgresql/postgresql.hash
-+++ b/package/postgresql/postgresql.hash
-@@ -1,4 +1,4 @@
--# From https://ftp.postgresql.org/pub/source/v16.2/postgresql-16.3.tar.bz2.sha256
--sha256  331963d5d3dc4caf4216a049fa40b66d6bcb8c730615859411b9518764e60585  postgresql-16.3.tar.bz2
-+# From https://ftp.postgresql.org/pub/source/v16.4/postgresql-16.4.tar.bz2.sha256
-+sha256  971766d645aa73e93b9ef4e3be44201b4f45b5477095b049125403f9f3386d6f  postgresql-16.4.tar.bz2
- # License file, Locally calculated
- sha256  9bf20ee493926a7e17a74bc7f05089fbc014269667b1540bc35a6b194a40c9de  COPYRIGHT
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index 0a1d98079a..4021a54300 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/postgresql/S50postgresql b/package/postgresql/S50postgresql
+index 1ece4fca9e..f8077600de 100644
+--- a/package/postgresql/S50postgresql
++++ b/package/postgresql/S50postgresql
+@@ -6,7 +6,7 @@
+ umask 077
  
--POSTGRESQL_VERSION = 16.3
-+POSTGRESQL_VERSION = 16.4
- POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
- POSTGRESQL_SITE = https://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
- POSTGRESQL_LICENSE = PostgreSQL
+ if [ ! -f /var/lib/pgsql/PG_VERSION ]; then
+-	echo "Initializing postgresql data base..."
++	echo "Initializing postgresql database..."
+ 	su - postgres -c '/usr/bin/pg_ctl initdb -D /var/lib/pgsql'
+ 	echo "done"
+ fi
 -- 
 2.34.1
 
