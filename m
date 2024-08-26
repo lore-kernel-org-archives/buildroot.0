@@ -4,91 +4,95 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ECC66C5472C
-	for <buildroot@archiver.kernel.org>; Mon, 26 Aug 2024 21:44:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9F651C5472C
+	for <buildroot@archiver.kernel.org>; Mon, 26 Aug 2024 21:44:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8A83B808AC;
-	Mon, 26 Aug 2024 21:44:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3898480C19;
+	Mon, 26 Aug 2024 21:44:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id h4qXyUj6jDlt; Mon, 26 Aug 2024 21:44:44 +0000 (UTC)
+ id 21wTAUNeqo0B; Mon, 26 Aug 2024 21:44:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 879B780A07
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1180880C30
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 879B780A07;
-	Mon, 26 Aug 2024 21:44:44 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 648991BF331
- for <buildroot@lists.busybox.net>; Mon, 26 Aug 2024 21:44:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1180880C30;
+	Mon, 26 Aug 2024 21:44:49 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 2195A1BF331
+ for <buildroot@lists.busybox.net>; Mon, 26 Aug 2024 21:44:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 52231405C4
- for <buildroot@lists.busybox.net>; Mon, 26 Aug 2024 21:44:43 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0D8FB80A82
+ for <buildroot@lists.busybox.net>; Mon, 26 Aug 2024 21:44:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MeYxLn6YsQKY for <buildroot@lists.busybox.net>;
- Mon, 26 Aug 2024 21:44:42 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id HsQtAcwM0Y2E for <buildroot@lists.busybox.net>;
+ Mon, 26 Aug 2024 21:44:44 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::136; helo=mail-lf1-x136.google.com;
+ client-ip=2a00:1450:4864:20::12b; helo=mail-lf1-x12b.google.com;
  envelope-from=geomatsi@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 10BE14025D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 10BE14025D
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com
- [IPv6:2a00:1450:4864:20::136])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 10BE14025D
- for <buildroot@buildroot.org>; Mon, 26 Aug 2024 21:44:41 +0000 (UTC)
-Received: by mail-lf1-x136.google.com with SMTP id
- 2adb3069b0e04-533de5a88f8so4229785e87.3
- for <buildroot@buildroot.org>; Mon, 26 Aug 2024 14:44:41 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9DEF7808AC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9DEF7808AC
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com
+ [IPv6:2a00:1450:4864:20::12b])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 9DEF7808AC
+ for <buildroot@buildroot.org>; Mon, 26 Aug 2024 21:44:43 +0000 (UTC)
+Received: by mail-lf1-x12b.google.com with SMTP id
+ 2adb3069b0e04-5333b2fbedaso8000507e87.0
+ for <buildroot@buildroot.org>; Mon, 26 Aug 2024 14:44:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1724708679; x=1725313479;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=L0UlI2AJ8MutRdyMz8c6k9TO62D+2OhYBdeRlsceQ1E=;
- b=uXL8U5bg6W3BDHCLnDlKyABf+5bDHFcMatolu10me1B2dBN3xNGAGFONptKNsRrRUT
- ptBC5elUbNQbxWokbCbcBvXh/pKZGm8DRIgBMREJ7Onoqkp7tAfAVkLGwa7+jOku3AwH
- bImHpNBb0CrpqFOKNAmS6CO5BXBxhF2HBvqLkWsEakzt5JXP//8AiEsKp0h5AOGZ4OsF
- +1fmVuO3oNwSJSjm1zppox+CwfsHkU2H1p2PxF+W0zbI9fQZdnvuLcb7Tcfnas5zeeY3
- g7WRrlkK2Gv5Ckip31WZ5a7cX3fjOBk6zqj91Mp4J8sK2tDLp0WJFXcdAyGXzvqlhkIg
- g3/w==
-X-Gm-Message-State: AOJu0YwoCXky3AtWoyagZIi6p/S88QREmYId657mlE4kMTVpNOp6Q/cV
- XkIoHSriWGZojFVanYnaFj/Ne8nJ5LfcDmQqLCJaAJyBUSMkIflF0VS1Xg==
-X-Google-Smtp-Source: AGHT+IFWAxHWJtIYmfHm1kQZhkomSk0USObkexTbl8nlE6HiNYIikdy9Sgd++TSV9bn+OMzNsLY6ZA==
-X-Received: by 2002:a05:6512:3b27:b0:52e:f2a6:8e1a with SMTP id
- 2adb3069b0e04-5344e3de28emr455831e87.29.1724708678397; 
- Mon, 26 Aug 2024 14:44:38 -0700 (PDT)
+ d=1e100.net; s=20230601; t=1724708680; x=1725313480;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=RA5SPCnfH+dCPd/OzzCN/arODWEgVw6UeUfS8Eu1eXE=;
+ b=dU4bzRbaKZ+ge75Vm1/c4ATq2+XrU7ejRIw6Qp45Dcin0SbZMjF9Us1SjHRwVT1XGn
+ 5RVf9NB0Lw0ugaqgPiJpwuXG0T9/7RxnQ7biJNDXJdQUNqrTpnaVVnlPernunsqkl8nl
+ Rvgf8aVakjRvAu9qAK/XQJO5WGUmdt8nXugla1DFtZXL3x8vbwQk0WOEcuSEoMjlUMNU
+ aa5gpVzgO9Lvc3cBzAQ0zwCqosxZzJJK9LyuNkObnhK6icEwZk01lBwJfF3ZIsi78p9o
+ R11yeP/b78UHnOjmvzYcV2W0u3XDPniM90U+Nv4fBL5XOkiyNCJhNsfiukGwxo2Q5XzV
+ GTdQ==
+X-Gm-Message-State: AOJu0YyDoiE4bzJnrrXOUkFlrcn1406X9KB6iV/KGol6KAOMkzdN3g8l
+ cfpKw5kTcMRFTIbaJgIhfGMcd5dJVyt2W4U95hZRvccS7sPHqj718CrY4Q==
+X-Google-Smtp-Source: AGHT+IFETQsGYTgNVk4zxXiNvkSY3NTjFAP4reVT9/0SqqWLaVYfcdaAfqsVNTv7FyuCk9dffu/lMw==
+X-Received: by 2002:a05:6512:23a0:b0:52e:bf53:1c13 with SMTP id
+ 2adb3069b0e04-5344e3bbf8amr442375e87.7.1724708679717; 
+ Mon, 26 Aug 2024 14:44:39 -0700 (PDT)
 Received: from localhost.localdomain ([5.188.167.4])
  by smtp.googlemail.com with ESMTPSA id
- 2adb3069b0e04-5334ea59583sm1580182e87.169.2024.08.26.14.44.37
+ 2adb3069b0e04-5334ea59583sm1580182e87.169.2024.08.26.14.44.38
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 26 Aug 2024 14:44:37 -0700 (PDT)
+ Mon, 26 Aug 2024 14:44:39 -0700 (PDT)
 From: Sergey Matyukevich <geomatsi@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 27 Aug 2024 00:44:22 +0300
-Message-ID: <20240826214434.1530363-1-geomatsi@gmail.com>
+Date: Tue, 27 Aug 2024 00:44:23 +0300
+Message-ID: <20240826214434.1530363-2-geomatsi@gmail.com>
 X-Mailer: git-send-email 2.46.0
+In-Reply-To: <20240826214434.1530363-1-geomatsi@gmail.com>
+References: <20240826214434.1530363-1-geomatsi@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1724708679; x=1725313479; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=L0UlI2AJ8MutRdyMz8c6k9TO62D+2OhYBdeRlsceQ1E=;
- b=hFIcUPcVDctsgnPJ5byaIlQ+Q5utz4KGyTZ72Uk7vDIpjNZ5fEv3V5Z4Q+lrfWONF5
- fhB5bA3NoA0XAcZ9Wljzt2zHfz5NY7Hrzu1cuUlskozcD1Wj13vi/TiZwv64o7oE9q6D
- IVsy66plfOGza9NnbMVyZBE3S7VCSMoGU85iJVFkTH+JBO5CsYeEDA1t3/v+iQgPyr7X
- BINEmm8QaE2JIIty4+yw0C20+18yNiOvkWiQisiEOsnthcPEXc/rqu+N4kWlx5t/Svve
- bv0dug1Ze9KaGNBYo1GEt0D5J7PQXhmmqmvEkywVimZu5P4XImZDsm8XmsL9dZstzGIu
- XRzw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=gmail.com; s=20230601; t=1724708680; x=1725313480; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=RA5SPCnfH+dCPd/OzzCN/arODWEgVw6UeUfS8Eu1eXE=;
+ b=h1heZ4tQmZA2G+4YZZO/Wl0ROA5uTgYvuoW1LDgLkGo8BEwyoafaEgMaIKEpIryKAq
+ KvwctzDuYvPru54WpTqEKl6AHVDPtCBMF/IpUGDYX98MoSYIiXfQH9f145ob1p98lF/2
+ 0ixcu5It2veBB2bcyrmZy92W+hmh7KtcF6OWcF1Q2BHQPW1LaV/izM8cEX9TW859pG5a
+ G9KHFBuvxccalWEYmoqn9SsKZGx9X+G2b6qoHZogJDcjIaVc7k/+rS2ualBnZJGuX1yA
+ K6Nwuu6zkwdT0PJrwn7sgCaW7cDSx8fIBLPm71Z01ujSFD6wGzg4Y9BPSs9xPgWuFD1V
+ DDPQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=hFIcUPcV
-Subject: [Buildroot] [PATCH v2 0/2] perf: add binutils support in new kernels
+ header.s=20230601 header.b=h1heZ4tQ
+Subject: [Buildroot] [PATCH v2 1/2] package/linux-tools: perf: add explicit
+ option for libbfd support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -109,35 +113,90 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi all,
+Before Linux v6.4, libbfd support in perf was opted in by default and
+could be disabled using NO_LIBBFD=1. Starting from Linux v6.4, libbfd
+support in perf is opted out by default and can be enabled with new
+variable BUILD_NONDISTRO=1. For details see the kernel commit [1].
 
-This patch series updates libbfd (binutils) support in perf for the
-binutils >= 2.40 and the Linux kernels >= v6.4. New versions bring
-the following changes:
-- new kernels have a new 'opted out' perf build option for libbfd support
-- new binutils provide new libsframe library
+Linking perf against libbfd library may significantly speed up perf
+report and script commands for data recorded with call-graph information
+based on DWARF format. Without libbfd perf executes a new addr2line
+process for every address it needs to look up. However perf linked
+against libbfd may become undistributable since perf is licenced
+under GPLv2 and binutils libraries are licenced under GPLv3+.
+For more detais see Debian bug report [2].
 
-New libsframe library needs to be installed to the target images since
-libbfd and libopcodes are linked against it. Perf recipe needs to be
-updated to use new perf option for libbfd support in the new kernels.
+This commit adds a new BR2_PACKAGE_LINUX_TOOLS_PERF_LIBBFD option to
+perf to explicitly enable libbfd support when appropriate. Note that
+enabling binutils in the configuration does not implicitly enable libbfd
+support for perf anymore. Also note that if the new option is not
+enabled in the configuration, then the legacy NO_DEMANGLE and NO_LIBBFD
+options will be set for perf in order to explicitly disable libbfd
+support in pre-v6.4 Linux kernels.
 
-Regards,
-Sergey
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=dd317df072071903031ab5f91b4823858445c4a0
+[2] https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=911815
 
-v1 -> v2
-- update help message for a new perf configuration option
-- select binutils if libbfd perf support is enabled
-- update commit message
-
-Sergey Matyukevich (2):
-  package/linux-tools: perf: add explicit option for libbfd support
-  package: binutils: install libsframe to target
-
- package/binutils/binutils.mk              |  1 +
+Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+---
  package/linux-tools/Config.in             | 10 ++++++++++
  package/linux-tools/linux-tool-perf.mk.in | 15 +++++++++------
- 3 files changed, 20 insertions(+), 6 deletions(-)
+ 2 files changed, 19 insertions(+), 6 deletions(-)
 
+diff --git a/package/linux-tools/Config.in b/package/linux-tools/Config.in
+index 5a38f6dafe..de89238bca 100644
+--- a/package/linux-tools/Config.in
++++ b/package/linux-tools/Config.in
+@@ -112,6 +112,16 @@ config BR2_PACKAGE_LINUX_TOOLS_PERF_TUI
+ 	  enables zooming into DSOs and threads as well as other
+ 	  features.
+ 
++config BR2_PACKAGE_LINUX_TOOLS_PERF_LIBBFD
++	bool "link perf against libbfd"
++	select BR2_PACKAGE_BINUTILS
++	help
++	  Link perf against libbfd library from binutils. This option may
++	  significantly speed up perf report and script commands for data
++	  recorded with call-graph information based on DWARF debug format.
++	  However the result is undistributable since perf is licenced
++	  under GPLv2 and binutils libraries are licenced under GPLv3+.
++
+ config BR2_PACKAGE_LINUX_TOOLS_PERF_NEEDS_HOST_PYTHON3
+ 	bool "perf need python3 to build"
+ 	select BR2_PACKAGE_HOST_PYTHON3
+diff --git a/package/linux-tools/linux-tool-perf.mk.in b/package/linux-tools/linux-tool-perf.mk.in
+index 65aba2e9fe..ea98e56450 100644
+--- a/package/linux-tools/linux-tool-perf.mk.in
++++ b/package/linux-tools/linux-tool-perf.mk.in
+@@ -67,6 +67,15 @@ else
+ PERF_MAKE_FLAGS += NO_NEWT=1 NO_SLANG=1
+ endif
+ 
++ifeq ($(BR2_PACKAGE_LINUX_TOOLS_PERF_LIBBFD),y)
++PERF_DEPENDENCIES += binutils
++# Explicitely enable for Linux >= v6.4
++PERF_MAKE_FLAGS += BUILD_NONDISTRO=1
++else
++# Explicitely disable for Linux < v6.4
++PERF_MAKE_FLAGS += NO_DEMANGLE=1 NO_LIBBFD=1
++endif
++
+ ifeq ($(BR2_PACKAGE_AUDIT),y)
+ PERF_DEPENDENCIES += audit
+ else
+@@ -95,12 +104,6 @@ else
+ PERF_MAKE_FLAGS += NO_LIBELF=1 NO_DWARF=1
+ endif
+ 
+-ifeq ($(BR2_PACKAGE_BINUTILS),y)
+-PERF_DEPENDENCIES += binutils
+-else
+-PERF_MAKE_FLAGS += NO_DEMANGLE=1
+-endif
+-
+ ifeq ($(BR2_PACKAGE_OPENSSL),y)
+ PERF_DEPENDENCIES += openssl
+ else
 -- 
 2.46.0
 
