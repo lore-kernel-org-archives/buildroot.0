@@ -4,48 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E99EDC5321D
-	for <buildroot@archiver.kernel.org>; Mon, 26 Aug 2024 16:31:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3142EC5321E
+	for <buildroot@archiver.kernel.org>; Mon, 26 Aug 2024 16:31:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 56B2B60786;
-	Mon, 26 Aug 2024 16:31:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E791660783;
+	Mon, 26 Aug 2024 16:31:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id U9DkvtRR0mfZ; Mon, 26 Aug 2024 16:31:20 +0000 (UTC)
+ id 943otQtkCv-o; Mon, 26 Aug 2024 16:31:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AD22760747
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0D4DC6078D
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AD22760747;
-	Mon, 26 Aug 2024 16:31:20 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 83C1F1BF33F
- for <buildroot@lists.busybox.net>; Mon, 26 Aug 2024 16:31:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0D4DC6078D;
+	Mon, 26 Aug 2024 16:31:31 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id E9D341BF33F
+ for <buildroot@lists.busybox.net>; Mon, 26 Aug 2024 16:31:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7162E60747
- for <buildroot@lists.busybox.net>; Mon, 26 Aug 2024 16:31:19 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D669840315
+ for <buildroot@lists.busybox.net>; Mon, 26 Aug 2024 16:31:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CCTDiaQLoWxG for <buildroot@lists.busybox.net>;
- Mon, 26 Aug 2024 16:31:18 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Dcht6Yxe3cXr for <buildroot@lists.busybox.net>;
+ Mon, 26 Aug 2024 16:31:28 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.198;
+ helo=relay6-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7874D605A5
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7874D605A5
- for <buildroot@buildroot.org>; Mon, 26 Aug 2024 16:31:18 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 63EDB86352; Mon, 26 Aug 2024 16:31:18 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Mon, 26 Aug 2024 18:28:55 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: cf647b69fbeec000663bd9b55047e7c2d69217f8
-X-Git-Newrev: c1a6987da9bfebac25db0d05fa69a706a933889f
-X-Patchwork-Hint: ignore
-Message-Id: <20240826163118.63EDB86352@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/fbset: update download URL
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 65F2540313
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 65F2540313
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [217.70.183.198])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 65F2540313
+ for <buildroot@buildroot.org>; Mon, 26 Aug 2024 16:31:27 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 7D102C0006;
+ Mon, 26 Aug 2024 16:31:24 +0000 (UTC)
+Date: Mon, 26 Aug 2024 18:31:23 +0200
+To: Waldemar Brodkorb <wbx@openadk.org>
+Message-ID: <20240826183123.4fe30261@windsurf>
+In-Reply-To: <Zsxt7Db6yjMX8x1x@waldemar-brodkorb.de>
+References: <Zsxt7Db6yjMX8x1x@waldemar-brodkorb.de>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1724689884;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=GGkEIEnKcn0cgGwbkMsSIMoMpKU7JlX+4x/j9WBpFjE=;
+ b=QxcLtdoDA5MAFniGgsMUB/ttw6V0vBhIRcG0PyADyxo692TuEm8lX2l+eNTZNVi9VypQlb
+ tU+DtjaqTHEyMInay+gts1j4j1x6RlJSCaRKhf+1NVcpgzNNrUYleys6jxPK8BG5JrRTGe
+ RnMZPi8hcahuCWfbnuLvA41qX8paXRqdTm0UFCFasc/icu0aRpqydlQfbkSm/EE37jQ6l7
+ crUsa2M4P6xo2HLW2xHrKce9ypwlfPsCjDux4DG06kMB2nDd0A8B+W7aKtVkNZYrNSgncm
+ aGakpUxelQsSoyQE4x6P06u0Vu4xwtNeqo7yc9lMmjf29Q7WfJElMwL/zThh7g==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=QxcLtdoD
+Subject: Re: [Buildroot] [PATCH] package/fbset: update download URL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,49 +82,32 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c1a6987da9bfebac25db0d05fa69a706a933889f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon, 26 Aug 2024 13:58:36 +0200
+Waldemar Brodkorb <wbx@openadk.org> wrote:
 
-Fixes:
+> Fixes:
+> 
+>  http://autobuild.buildroot.org/results/13e/13e28650fc58fc62c801a664d79616c6dd39a8ac
+> 
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> ---
+>  package/fbset/Config.in | 2 +-
+>  package/fbset/fbset.mk  | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
- http://autobuild.buildroot.org/results/13e/13e28650fc58fc62c801a664d79616c6dd39a8ac
+Applied to master, thanks.
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/fbset/Config.in | 2 +-
- package/fbset/fbset.mk  | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/package/fbset/Config.in b/package/fbset/Config.in
-index b4ef41f0a4..9422d5bca4 100644
---- a/package/fbset/Config.in
-+++ b/package/fbset/Config.in
-@@ -7,4 +7,4 @@ config BR2_PACKAGE_FBSET
- 	  simple and unique interface to access different kinds of
- 	  graphic displays.
- 
--	  http://users.telenet.be/geertu/Linux/fbdev/
-+	  http://g33rt.be/migrated/Linux/fbdev/
-diff --git a/package/fbset/fbset.mk b/package/fbset/fbset.mk
-index 8d2a477f8b..526cba40d3 100644
---- a/package/fbset/fbset.mk
-+++ b/package/fbset/fbset.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- FBSET_VERSION = 2.1
--FBSET_SITE = http://users.telenet.be/geertu/Linux/fbdev
-+FBSET_SITE = http://g33rt.be/migrated/Linux/fbdev
- FBSET_DEPENDENCIES = host-bison host-flex
- FBSET_LICENSE = GPL-2.0
- FBSET_LICENSE_FILES = fbset.c
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
