@@ -1,75 +1,87 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C17A6C5321D
-	for <buildroot@archiver.kernel.org>; Mon, 26 Aug 2024 16:57:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C331CC5321D
+	for <buildroot@archiver.kernel.org>; Mon, 26 Aug 2024 17:30:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 669E460586;
-	Mon, 26 Aug 2024 16:57:48 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4EBE5402D7;
+	Mon, 26 Aug 2024 17:30:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Af3hvInjmiaD; Mon, 26 Aug 2024 16:57:47 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id paePlcUA-CIV; Mon, 26 Aug 2024 17:30:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7FF47605E6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E39D140374
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7FF47605E6;
-	Mon, 26 Aug 2024 16:57:47 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id CCA291BF33F
- for <buildroot@lists.busybox.net>; Mon, 26 Aug 2024 16:57:45 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E39D140374;
+	Mon, 26 Aug 2024 17:30:53 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 715371BF336
+ for <buildroot@lists.busybox.net>; Mon, 26 Aug 2024 17:30:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BA74A605E6
- for <buildroot@lists.busybox.net>; Mon, 26 Aug 2024 16:57:45 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6A28480ACE
+ for <buildroot@lists.busybox.net>; Mon, 26 Aug 2024 17:30:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id aS_hfNelU9YD for <buildroot@lists.busybox.net>;
- Mon, 26 Aug 2024 16:57:44 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.198;
- helo=relay6-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 91EDD60586
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 91EDD60586
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [217.70.183.198])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 91EDD60586
- for <buildroot@buildroot.org>; Mon, 26 Aug 2024 16:57:44 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id B4E7AC0008;
- Mon, 26 Aug 2024 16:57:42 +0000 (UTC)
-Date: Mon, 26 Aug 2024 18:57:41 +0200
-To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Message-ID: <20240826185741.7c68d235@windsurf>
-In-Reply-To: <20240824151511.3178807-1-dario.binacchi@amarulasolutions.com>
-References: <20240824151511.3178807-1-dario.binacchi@amarulasolutions.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3HWj68_hRqXi for <buildroot@lists.busybox.net>;
+ Mon, 26 Aug 2024 17:30:51 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::32d; helo=mail-ot1-x32d.google.com;
+ envelope-from=veredz72@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 96531804F6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 96531804F6
+Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com
+ [IPv6:2607:f8b0:4864:20::32d])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 96531804F6
+ for <buildroot@buildroot.org>; Mon, 26 Aug 2024 17:30:51 +0000 (UTC)
+Received: by mail-ot1-x32d.google.com with SMTP id
+ 46e09a7af769-70df4b5cdd8so3700372a34.1
+ for <buildroot@buildroot.org>; Mon, 26 Aug 2024 10:30:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1724693450; x=1725298250;
+ h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=QIvk8MOM4ncB2uURWazh7BX+qNORD9l0fMXGSTMJfPk=;
+ b=S5zxSgm2wpb80C+QuYEKbHf0byW1Sh0oQqGekNWx6efy3SU9eAuDYRftjHhsXDvAAe
+ ok5samt+Ae8rswBioET4zR0GHj28MdtdDUr52/xTV7AtLQ5FSABJDw5a7P5R6YqPzdYA
+ z3dp2i44V+pVr2LbfFDecMxdMtHeU5euI08YZXMO621bcmCfZYR3+YZ3y8OeHetixw62
+ STGNRjV5eI8eOD+aB8r03Zj1H/zaZePc6MzH/m3orZa9PoARFIF9OPYahNDdPV3zudNb
+ Cs+l4tkby2MpUcVy2gUel+TYe6nm0ykg99oLRqI9d3VZlRWtY0G6n5HPctEbccnJvHRw
+ LTHA==
+X-Gm-Message-State: AOJu0YxXwElVzT2jLqB+5J9FsfB7HCnKvI4KWuXvflu4JTlSzD5+/l7W
+ GPvAAL1CUgZxjwvMizzO+tDTsNPFQK972tXu1dzA8VxRr2Mx2keGz0LrgcNkJVIYIPw1s5MSxT9
+ MnA1x/rJNBgWFjit7gT0srR8j+qVl1W2l8Vk=
+X-Google-Smtp-Source: AGHT+IG75fxBYM4EEhPJ3iSZqjLSEjur6gT60x2QIjYTvYpp4oxOIm3ecoxjkIOTFHtyBHWV8ZdrxrwqyslTa6iPEcE=
+X-Received: by 2002:a05:6830:2a15:b0:709:3fb0:3bee with SMTP id
+ 46e09a7af769-70f48459161mr115404a34.27.1724693450348; Mon, 26 Aug 2024
+ 10:30:50 -0700 (PDT)
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
+From: Zvi Vered <veredz72@gmail.com>
+Date: Mon, 26 Aug 2024 20:33:38 +0300
+Message-ID: <CABRndgxTm1MSRGOhSayghfmwBo8bUJEeH_0icAsNyihN-Jt2rg@mail.gmail.com>
+To: buildroot@buildroot.org
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1724691463;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=Dtk4G7xn6NYGojua+vW+GCGX2shDaws7Xuy6CnKenZ8=;
- b=MvYnk2Kv8sZdzQG3QuDZx5GSYZ20zKTey7jLIHVLYnVeP+Ci9cR3qYN1hLWXcT0R+AoOU7
- vf81mtxOQf8GUpmo5as6YuGOwZ8jT0jH853Rs+3f0T0hVhM5OTxxhTOq4W2fp6vWNx/f+Z
- 2Ah2rflFWiCS6EM+ZY9m8tAO/S6Igb2FFk4OiSfq6Dmx4W8WBzld6A8zGx/Nw3OH1PcQ7D
- 4mxlaagvQN3EY7lw+HJ2CBhnEqZJhpoqZ91oJXLzhV2pRiKcJ6GhuqtWmiSrj5H3jNWQzc
- BtZo/Lq0eON1Epho1k2tvSR5T/Jfy2yEcZY/lF3q9cZo7ju1O0I98OaT8O/QwA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=MvYnk2Kv
-Subject: Re: [Buildroot] [PATCH 1/1] package/armadillo: bump to version
- 10.1.0
+ d=gmail.com; s=20230601; t=1724693450; x=1725298250; darn=buildroot.org;
+ h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+ :date:message-id:reply-to;
+ bh=QIvk8MOM4ncB2uURWazh7BX+qNORD9l0fMXGSTMJfPk=;
+ b=frokj8rigclkANB7NyZCZATwF4qbGeQ8VMqj/Gzvu+MnmD1KOaKdGXzDBK7AtG7g6k
+ 7MODDM10hxBQtthzsEd4Us4gt7Ry/ivwe7opodKK0ziCSPzvd7hguE4SXH+9lxrQ21os
+ L0poTgtl654Nq5LniVby1RInA0AwX4/cILwOyqKUWO/ZOt0LeJJluTZ9uj1VjvkmYF38
+ 7hiAHH3Ews7IN5GZGZfZtpou8yXa15645y6jbkGHfWXLvHJuviSRksCUMp9cxOglse54
+ 8H9h60HxXr5yFQq/7urQusTJmyVTELLPoRRanEujf2tMy5qjbUtSDWWYm1b0MTHvVRga
+ 0u6Q==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=frokj8ri
+Subject: [Buildroot] 2021.02 : luksFormat - Cannot initialize crypto backend
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,54 +93,95 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Samuel Martin <s.martin49@gmail.com>, linux-amarula@amarulasolutions.com,
- buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============7221440066687376096=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Dario,
+--===============7221440066687376096==
+Content-Type: multipart/alternative; boundary="0000000000007461370620997ca8"
 
-On Sat, 24 Aug 2024 17:15:11 +0200
-Dario Binacchi <dario.binacchi@amarulasolutions.com> wrote:
+--0000000000007461370620997ca8
+Content-Type: text/plain; charset="UTF-8"
 
-> - C++11 is now the minimum required C++ standard
-> - faster handling of compound expressions by trimatu() and trimatl()
-> - faster sparse matrix addition, subtraction and element-wise multiplication
-> - expanded sparse submatrix views to handle the non-contiguous form of X.cols(vector_of_column_indices)
-> - expanded eigs_sym() and eigs_gen() with optional fine-grained parameters
-> 
-> Fixes:
-> - http://autobuild.buildroot.org/results/d4e9e7b453960a4f62a199344b30b729a4f235bc
-> 
-> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-> ---
->  package/armadillo/armadillo.hash | 2 +-
->  package/armadillo/armadillo.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Hello,
 
-Same comment as for babeld: bumping to solve a download issue is not a
-good solution. Indeed, if we have to bump because upstream dropped the
-tarball, what tells us that they won't drop the new tarball again in
-the future? This can only be resolved either by finding an alternate
-upstream location or by talking with upstream so that they restore the
-previous tarball and understand the issues caused by moving/removing
-previous tarballs.
+I built rootfs for x86 CPU with buildroot 2021.02
+In order to use luks I included: BR2_PACKAGE_CRYPTSETUP
+Upon boot completion I ran:
+cryptsetup -v --debug luksFormat --key-file /tmp/keyfile /dev/sda3"
 
-Also, if they made C++11 required, then I'm pretty sure we will need a
-BR2_TOOLCHAIN_GCC_AT_LEAST_xyz dependency added, no?
+and got:
 
-Thanks!
+# cryptsetup 2.3.4 processing "cryptsetup -v --debug luksFormat --key-file
+/tmp/keyfile /dev/sda3"
+# Running command luksFormat.
+# Locking memory.
+# Installing SIGINT/SIGTERM handler.
+# Unblocking interruption on signal.
+# Allocating context for crypt device /dev/sda3.
+# Trying to open and read device /dev/sda3 with direct-io.
+# Initialising device-mapper backend library.
+WARNING: Device /dev/sda3 already contains a 'ext2' superblock signature.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+WARNING!
+========
+This will overwrite data on /dev/sda3 irrevocably.
+
+Are you sure? (Type 'yes' in capital letters): YES
+# File descriptor passphrase entry requested.
+Cannot initialize crypto backend.
+Failed to set pbkdf parameters.
+# Releasing crypt device /dev/sda3 context.
+# Releasing device-mapper backend.
+# Unlocking memory.
+Command failed with code -1 (wrong or missing parameters).
+
+Can you please tell what is the cause to this error ?
+I'm using vanilla 4.9.20 kernel with x86_64 defconfig.
+Should I add any component to buildroot ?
+
+Thank you,
+Zvika
+
+--0000000000007461370620997ca8
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">Hello,<div><br></div><div>I built rootfs for x86 CPU with =
+buildroot 2021.02</div><div>In order to use luks I included:=C2=A0<span sty=
+le=3D"color:rgb(0,0,255);font-size:14px;white-space:pre"><font face=3D"verd=
+ana, sans-serif">BR2_PACKAGE_CRYPTSETUP</font></span></div><div>Upon boot c=
+ompletion I ran:</div><div>cryptsetup -v --debug luksFormat --key-file /tmp=
+/keyfile /dev/sda3&quot;<br></div><div><br></div><div>and got:</div><div><b=
+r></div><div># cryptsetup 2.3.4 processing &quot;cryptsetup -v --debug luks=
+Format --key-file /tmp/keyfile /dev/sda3&quot;<br></div><div># Running comm=
+and luksFormat.<br># Locking memory.<br># Installing SIGINT/SIGTERM handler=
+.<br># Unblocking interruption on signal.<br># Allocating context for crypt=
+ device /dev/sda3.<br># Trying to open and read device /dev/sda3 with direc=
+t-io.<br># Initialising device-mapper backend library.<br>WARNING: Device /=
+dev/sda3 already contains a &#39;ext2&#39; superblock signature.<br><br>WAR=
+NING!<br>=3D=3D=3D=3D=3D=3D=3D=3D<br>This will overwrite data on /dev/sda3 =
+irrevocably.<br><br>Are you sure? (Type &#39;yes&#39; in capital letters): =
+YES<br># File descriptor passphrase entry requested.<br>Cannot initialize c=
+rypto backend.<br>Failed to set pbkdf parameters.<br># Releasing crypt devi=
+ce /dev/sda3 context.<br># Releasing device-mapper backend.<br># Unlocking =
+memory.<br>Command failed with code -1 (wrong or missing parameters).<br></=
+div><div><br></div><div>Can you please tell what is the cause to this error=
+ ?</div><div>I&#39;m using vanilla 4.9.20 kernel with x86_64 defconfig.=C2=
+=A0</div><div>Should I add any component to buildroot ?</div><div><br></div=
+><div>Thank you,</div><div>Zvika=C2=A0</div></div>
+
+--0000000000007461370620997ca8--
+
+--===============7221440066687376096==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============7221440066687376096==--
