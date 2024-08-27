@@ -4,72 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C45A4C5472F
-	for <buildroot@archiver.kernel.org>; Tue, 27 Aug 2024 16:59:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70775C54731
+	for <buildroot@archiver.kernel.org>; Tue, 27 Aug 2024 17:00:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3E1F84062C;
-	Tue, 27 Aug 2024 16:59:00 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3994C404E8;
+	Tue, 27 Aug 2024 17:00:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id u4i5Doac0t2p; Tue, 27 Aug 2024 16:58:58 +0000 (UTC)
+ id PSPsKWmr5Xfj; Tue, 27 Aug 2024 17:00:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6AF3C4061C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 142E0404EF
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6AF3C4061C;
-	Tue, 27 Aug 2024 16:58:58 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E919A1BF4E5
- for <buildroot@lists.busybox.net>; Tue, 27 Aug 2024 16:58:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 142E0404EF;
+	Tue, 27 Aug 2024 17:00:14 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id A6B661BF4E5
+ for <buildroot@lists.busybox.net>; Tue, 27 Aug 2024 17:00:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E412A608B1
- for <buildroot@lists.busybox.net>; Tue, 27 Aug 2024 16:58:56 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 93DFC402EA
+ for <buildroot@lists.busybox.net>; Tue, 27 Aug 2024 17:00:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kpqslgD4pXnD for <buildroot@lists.busybox.net>;
- Tue, 27 Aug 2024 16:58:56 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.198;
- helo=relay6-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id VN43qkOdwyRJ for <buildroot@lists.busybox.net>;
+ Tue, 27 Aug 2024 17:00:11 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org D6709608AD
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D6709608AD
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [217.70.183.198])
- by smtp3.osuosl.org (Postfix) with ESMTPS id D6709608AD
- for <buildroot@buildroot.org>; Tue, 27 Aug 2024 16:58:55 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id DDDE6C0003;
- Tue, 27 Aug 2024 16:58:53 +0000 (UTC)
-Date: Tue, 27 Aug 2024 18:58:53 +0200
-To: Waldemar Brodkorb <wbx@openadk.org>
-Message-ID: <20240827185853.069fd4f7@windsurf>
-In-Reply-To: <ZsmaBGJNjd4x9ymM@waldemar-brodkorb.de>
-References: <ZsmaBGJNjd4x9ymM@waldemar-brodkorb.de>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1724777934;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=7WOwUW5NK5IRda3NBK5TPXRD/NF81S+HKH413tz4vVg=;
- b=RNDtMtniJe4n89EvoFiQ/bO/VyuVOdPoyQtErXxVO9hHBJtkC5kY2Gf8wXXRAeBI1hfIdE
- osZIYewXLQIn+Y79RFORTIOzlaJ4aFOTwP3iWEFmgffjzJD/O6/d9h+X8y9yqTtsJhKI8i
- AZWBMeYWsoHhlItjZPaIyv111d2DOdYsBWCThM0Vzvv0dsdaBUPEE28cu8XNaS7xguoT3x
- rt3sIrmjtAGYVlI9dTkRnWZyCguOvVeiBQpEjItvz+sb1YuQRhG22aoOBKex2mzysvMlyQ
- qQqUl22SBKM7XpuzcB9An+eg9PvorPg738tqw2RxuKQhyEi/0RxspYaCDapTpA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=RNDtMtni
-Subject: Re: [Buildroot] [PATCH] package/comix-cursors: update
- COMIX_CURSORS_SITE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A579240131
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id A579240131
+ for <buildroot@buildroot.org>; Tue, 27 Aug 2024 17:00:11 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 92CA381809; Tue, 27 Aug 2024 17:00:11 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 27 Aug 2024 18:59:26 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 62ccb5b25d421f5df5a6ee7a88db21159f3c5e23
+X-Git-Newrev: 180216631a64d5319ab0420cf7b37acb4fa0799c
+X-Patchwork-Hint: ignore
+Message-Id: <20240827170011.92CA381809@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/szip: update SZIP_SITE
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,27 +59,43 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat, 24 Aug 2024 10:29:56 +0200
-Waldemar Brodkorb <wbx@openadk.org> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=180216631a64d5319ab0420cf7b37acb4fa0799c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
->  COMIX_CURSORS_VERSION = 0.9.1
-> -COMIX_CURSORS_SITE = https://limitland.gitlab.io/comixcursors
-> -COMIX_CURSORS_SOURCE = ComixCursors-$(COMIX_CURSORS_VERSION).tar.bz2
-> +COMIX_CURSORS_SITE = https://gitlab.com/limitland/comixcursors/-/archive/$(COMIX_CURSORS_VERSION)
+Fix broken link.
 
-I've use the $(gilab,...) helper macro instead, and applied to master. Thanks!
+While at it, use $(SZIP_VERSION) inside SZIP_SITE instead of
+duplicating the version.
 
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+Fixes:
+
+ http://autobuild.buildroot.org/results/35d/35d08103bbd0da22a5e111f1f86f28aba7062ee6
+
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/szip/szip.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/szip/szip.mk b/package/szip/szip.mk
+index 7a8a5a82e6..869fc9c358 100644
+--- a/package/szip/szip.mk
++++ b/package/szip/szip.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ SZIP_VERSION = 2.1.1
+-SZIP_SITE = http://www.hdfgroup.org/ftp/lib-external/szip/2.1.1/src
++SZIP_SITE = https://docs.hdfgroup.org/archive/support/ftp/lib-external/szip/$(SZIP_VERSION)/src
+ SZIP_LICENSE = szip license
+ SZIP_LICENSE_FILES = COPYING
+ SZIP_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
