@@ -4,49 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 29DA8C5472F
-	for <buildroot@archiver.kernel.org>; Tue, 27 Aug 2024 16:29:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B123CC5472F
+	for <buildroot@archiver.kernel.org>; Tue, 27 Aug 2024 16:29:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E874340654;
-	Tue, 27 Aug 2024 16:29:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 78F5F40634;
+	Tue, 27 Aug 2024 16:29:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2RAdl-7I8wWm; Tue, 27 Aug 2024 16:29:05 +0000 (UTC)
+ id a_Io82C9dYs8; Tue, 27 Aug 2024 16:29:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A593B4064B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 44E9240649
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A593B4064B;
-	Tue, 27 Aug 2024 16:29:04 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id AF8DF1BF4E5
- for <buildroot@lists.busybox.net>; Tue, 27 Aug 2024 16:28:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 44E9240649;
+	Tue, 27 Aug 2024 16:29:13 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 416431BF4E5
+ for <buildroot@lists.busybox.net>; Tue, 27 Aug 2024 16:29:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9CEC740131
- for <buildroot@lists.busybox.net>; Tue, 27 Aug 2024 16:28:57 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id BB2E26088E
+ for <buildroot@lists.busybox.net>; Tue, 27 Aug 2024 16:29:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fklPQeoHkLfY for <buildroot@lists.busybox.net>;
- Tue, 27 Aug 2024 16:28:56 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id L7ylD1y5MKTz for <buildroot@lists.busybox.net>;
+ Tue, 27 Aug 2024 16:29:11 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.194;
+ helo=relay2-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DBF52403A7
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id DBF52403A7
- for <buildroot@buildroot.org>; Tue, 27 Aug 2024 16:28:55 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C830586522; Tue, 27 Aug 2024 16:28:55 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 27 Aug 2024 18:28:22 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 4dff2511e6bf7ba93156f48614f91becc04ec534
-X-Git-Newrev: 6a569012a8ef012761fa8cb4002a1381055cdc2f
-X-Patchwork-Hint: ignore
-Message-Id: <20240827162855.C830586522@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/catch2: bump to
- version 3.7.0
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org B86A9605A3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B86A9605A3
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [217.70.183.194])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id B86A9605A3
+ for <buildroot@buildroot.org>; Tue, 27 Aug 2024 16:29:10 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id A919640002;
+ Tue, 27 Aug 2024 16:29:07 +0000 (UTC)
+Date: Tue, 27 Aug 2024 18:29:06 +0200
+To: Scott Fan <fancp2007@gmail.com>
+Message-ID: <20240827182906.4e223440@windsurf>
+In-Reply-To: <20240827015942.157139-1-fancp2007@gmail.com>
+References: <20240827015942.157139-1-fancp2007@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1724776148;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=HZ9AtMWKxXG0MUsHq3JlGcDw9JCRZCyM2VIYqoauxK0=;
+ b=hUQFKPSh/xBBLFKWIwzr9WVpMXxoZ5vhObTeyLwxkfX65Xi5DKnuPAV7eO+oB+wChL5MKe
+ tcVGUn/UMasZRQmkHQnY1Df/keaivlGxB+4FBWeCorp2JW19Oxv7dw8KvtpIGnKrN597Nt
+ DlaeszNiWvkDCD0t11DyEvL5m2UIbtNBRxupLzQNwf6KgAZCq1LkVWM6vyPrxJDel8D6FU
+ RC0w04zpi2g+I/RP7hKgFOimCOHlsSUhfxhckfFgatLa60/0EjlHqaff9R/n9jgkHswvBb
+ txaRgjfZfV/pWa4XKn4orbuXbeFjch6VmRI5ZoMLtUQyzHDr/MTBvj+RH25F5Q==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=hUQFKPSh
+Subject: Re: [Buildroot] [PATCH] package/timescaledb: bump version to 2.16.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,44 +82,30 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Maxim Kochetkov <fido_max@inbox.ru>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6a569012a8ef012761fa8cb4002a1381055cdc2f
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On Tue, 27 Aug 2024 09:59:40 +0800
+Scott Fan <fancp2007@gmail.com> wrote:
 
-Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/catch2/catch2.hash | 2 +-
- package/catch2/catch2.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+> Release notes: https://github.com/timescale/timescaledb/blob/2.16.1/CHANGELOG.md
+> 
+> Signed-off-by: Scott Fan <fancp2007@gmail.com>
+> ---
+>  package/timescaledb/timescaledb.hash | 2 +-
+>  package/timescaledb/timescaledb.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/catch2/catch2.hash b/package/catch2/catch2.hash
-index c7e264afdb..e34c426b37 100644
---- a/package/catch2/catch2.hash
-+++ b/package/catch2/catch2.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  485932259a75c7c6b72d4b874242c489ea5155d17efa345eb8cc72159f49f356  catch2-3.6.0.tar.gz
-+sha256  5b10cd536fa3818112a82820ce0787bd9f2a906c618429e7c4dea639983c8e88  catch2-3.7.0.tar.gz
- sha256  c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566  LICENSE.txt
-diff --git a/package/catch2/catch2.mk b/package/catch2/catch2.mk
-index 60812b2cff..e68bdec5e4 100644
---- a/package/catch2/catch2.mk
-+++ b/package/catch2/catch2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--CATCH2_VERSION = 3.6.0
-+CATCH2_VERSION = 3.7.0
- CATCH2_SITE = $(call github,catchorg,Catch2,v$(CATCH2_VERSION))
- CATCH2_INSTALL_STAGING = YES
- CATCH2_INSTALL_TARGET = NO
+Applied to next, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
