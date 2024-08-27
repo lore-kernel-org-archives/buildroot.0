@@ -4,48 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BFB64C5472F
-	for <buildroot@archiver.kernel.org>; Tue, 27 Aug 2024 16:26:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E0F68C54731
+	for <buildroot@archiver.kernel.org>; Tue, 27 Aug 2024 16:26:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 81BD96088E;
-	Tue, 27 Aug 2024 16:26:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id ADB66608AC;
+	Tue, 27 Aug 2024 16:26:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9l28_tPTv9FE; Tue, 27 Aug 2024 16:26:23 +0000 (UTC)
+ id 1u43SIvAnz_7; Tue, 27 Aug 2024 16:26:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 873E5608AC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A9DC8608B2
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 873E5608AC;
-	Tue, 27 Aug 2024 16:26:23 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A9DC8608B2;
+	Tue, 27 Aug 2024 16:26:28 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 045CA1BF4E5
- for <buildroot@lists.busybox.net>; Tue, 27 Aug 2024 16:26:22 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id F36951BF4E5
+ for <buildroot@lists.busybox.net>; Tue, 27 Aug 2024 16:26:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E5F60608AC
- for <buildroot@lists.busybox.net>; Tue, 27 Aug 2024 16:26:21 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id DFBB0608AD
+ for <buildroot@lists.busybox.net>; Tue, 27 Aug 2024 16:26:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BdzwqUCbVk4M for <buildroot@lists.busybox.net>;
- Tue, 27 Aug 2024 16:26:21 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id r24OeRPE6bpG for <buildroot@lists.busybox.net>;
+ Tue, 27 Aug 2024 16:26:26 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::225;
+ helo=relay5-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 266556088E
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 266556088E
- for <buildroot@buildroot.org>; Tue, 27 Aug 2024 16:26:21 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 11896864FF; Tue, 27 Aug 2024 16:26:21 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 27 Aug 2024 18:24:38 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 23b6c3f58c1bb577168e2a003bea6d310ed757ef
-X-Git-Newrev: e5cc7ad5fd04c080a81de1b857537f392ee88dbb
-X-Patchwork-Hint: ignore
-Message-Id: <20240827162621.11896864FF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python3: security bump to version
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 91E1F608B0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 91E1F608B0
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 91E1F608B0
+ for <buildroot@buildroot.org>; Tue, 27 Aug 2024 16:26:24 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 430CE1C0008;
+ Tue, 27 Aug 2024 16:26:21 +0000 (UTC)
+Date: Tue, 27 Aug 2024 18:26:20 +0200
+To: Peter Korsgaard <peter@korsgaard.com>
+Message-ID: <20240827182620.5dabfc06@windsurf>
+In-Reply-To: <20240826210228.57853-1-peter@korsgaard.com>
+References: <20240826210228.57853-1-peter@korsgaard.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1724775981;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=pzzZ2NSTITw/nbaWTZF6R+NcPQLGmtSJGrkJtxRknEE=;
+ b=CgWAZ5vWNz1hceZnlUaOZPk3bxC6MZoE+mLwUUPo26/vyRz5BOiccFVoY2mVPm8C6Jh0rV
+ SkEUcRPg97xZBvT7mc5GYO/pvotAgFy2Qx9Sn7R6IHvwr9AiGEm8w8K7LD5BcA9RcEmZrg
+ v1HUJZWln3QQqN2IwCuFiYiRme6CYaMmd26HRLEUXBd18WxhWVa+L0KyX9UZ1Ghjo0F215
+ NWK4npAFL4JKDoZnoMnDe8eWeCPIUJNcYvS/zZsBG9fLwgGVMCBaQAVVxFmkFikcoAdLHY
+ HjH7tnfXRTXq1DK7n/cfZlX6UnB3mEO95y4JGAfnQEN5/n30ng5xOg6LzVZtVA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=CgWAZ5vW
+Subject: Re: [Buildroot] [PATCH] package/python3: security bump to version
  3.12.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -60,60 +83,41 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e5cc7ad5fd04c080a81de1b857537f392ee88dbb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Mon, 26 Aug 2024 23:02:28 +0200
+Peter Korsgaard <peter@korsgaard.com> wrote:
 
-Fixes the following security issues:
+> Fixes the following security issues:
+> 
+> - gh-121957: Fixed missing audit events around interactive use of Python,
+>   now also properly firing for python -i, as well as for python -m asyncio.
+>   The event in question is cpython.run_stdin.
+> 
+>   https://github.com/python/cpython/issues/121957
+> 
+> For more details, see the changelog:
+> 
+> https://docs.python.org/release/3.12.5/whatsnew/changelog.html#python-3-12-5
+> 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  package/python3/python3.hash | 6 +++---
+>  package/python3/python3.mk   | 2 +-
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
-- gh-121957: Fixed missing audit events around interactive use of Python,
-  now also properly firing for python -i, as well as for python -m asyncio.
-  The event in question is cpython.run_stdin.
+Applied to master, thanks.
 
-  https://github.com/python/cpython/issues/121957
-
-For more details, see the changelog:
-
-https://docs.python.org/release/3.12.5/whatsnew/changelog.html#python-3-12-5
-
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/python3/python3.hash | 6 +++---
- package/python3/python3.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/package/python3/python3.hash b/package/python3/python3.hash
-index 598164dca6..d680a96810 100644
---- a/package/python3/python3.hash
-+++ b/package/python3/python3.hash
-@@ -1,5 +1,5 @@
--# From https://www.python.org/downloads/release/python-3123/
--md5  d68f25193eec491eb54bc2ea664a05bd  Python-3.12.4.tar.xz
-+# From https://www.python.org/downloads/release/python-3125/
-+md5  02c7d269e077f4034963bba6befdc715  Python-3.12.5.tar.xz
- # Locally computed
--sha256  f6d419a6d8743ab26700801b4908d26d97e8b986e14f95de31b32de2b0e79554  Python-3.12.4.tar.xz
-+sha256  fa8a2e12c5e620b09f53e65bcd87550d2e5a1e2e04bf8ba991dcc55113876397  Python-3.12.5.tar.xz
- sha256  3b2f81fe21d181c499c59a256c8e1968455d6689d269aa85373bfb6af41da3bf  LICENSE
-diff --git a/package/python3/python3.mk b/package/python3/python3.mk
-index 7d6c9fe93f..b31e6df141 100644
---- a/package/python3/python3.mk
-+++ b/package/python3/python3.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- PYTHON3_VERSION_MAJOR = 3.12
--PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).4
-+PYTHON3_VERSION = $(PYTHON3_VERSION_MAJOR).5
- PYTHON3_SOURCE = Python-$(PYTHON3_VERSION).tar.xz
- PYTHON3_SITE = https://python.org/ftp/python/$(PYTHON3_VERSION)
- PYTHON3_LICENSE = Python-2.0, others
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
