@@ -4,73 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12F52C54731
-	for <buildroot@archiver.kernel.org>; Tue, 27 Aug 2024 16:33:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9E91C5472F
+	for <buildroot@archiver.kernel.org>; Tue, 27 Aug 2024 16:39:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C77EE405F6;
-	Tue, 27 Aug 2024 16:33:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5AE7C40585;
+	Tue, 27 Aug 2024 16:39:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HM_DGt1PaU-p; Tue, 27 Aug 2024 16:33:05 +0000 (UTC)
+ id annz0Wx6FfxH; Tue, 27 Aug 2024 16:39:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 67FD3405FD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1260F40586
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 67FD3405FD;
-	Tue, 27 Aug 2024 16:33:05 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 590B31BF4E5
- for <buildroot@lists.busybox.net>; Tue, 27 Aug 2024 16:33:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1260F40586;
+	Tue, 27 Aug 2024 16:39:44 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 5847F1BF4E5
+ for <buildroot@lists.busybox.net>; Tue, 27 Aug 2024 16:39:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 45579405FD
- for <buildroot@lists.busybox.net>; Tue, 27 Aug 2024 16:33:04 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 451A7402EA
+ for <buildroot@lists.busybox.net>; Tue, 27 Aug 2024 16:39:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QhTRRN9Iubad for <buildroot@lists.busybox.net>;
- Tue, 27 Aug 2024 16:33:03 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::227;
- helo=relay7-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5I4_ZLFf1OHM for <buildroot@lists.busybox.net>;
+ Tue, 27 Aug 2024 16:39:41 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org EBC08405F6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EBC08405F6
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp4.osuosl.org (Postfix) with ESMTPS id EBC08405F6
- for <buildroot@buildroot.org>; Tue, 27 Aug 2024 16:33:02 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 3F2E920002;
- Tue, 27 Aug 2024 16:33:01 +0000 (UTC)
-Date: Tue, 27 Aug 2024 18:33:00 +0200
-To: Vincent Jardin <vjardin@free.fr>
-Message-ID: <20240827183300.593192bb@windsurf>
-In-Reply-To: <20240826131924.7702-2-vjardin@free.fr>
-References: <7kble6ezjwutfk3f6niiignnxgmq5rxhsvplayvlkj5ahczg7i@dyco5ij36lrp>
- <20240826131924.7702-1-vjardin@free.fr>
- <20240826131924.7702-2-vjardin@free.fr>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1724776381;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=Td1jaC1fUdx5VzS3eARV7/fJdN3JCrwDQF6ElvfLkNg=;
- b=JUqLLI1PmN9Cchitl7Km781T2FMlWJ/BUYvofqrByZKDzfiuTbypebv1y1TSff/NZkY0bF
- YjQieMnL7bfR4Vt1AV3axrrQ5bWmCJTKyYTFrhBFHWchZY0FMlFHfsGiQMQnNFixOtvnZ2
- 4D8lm4UJBEXUSmproUHYBu0TJmzEmGYU4MPW3RIhSm0NhOat3yfr862gxa4qJjzE1HGUgX
- v2btw3iVb+5l4+68A2KvGoPX2IdTQxAbjEtrukFsAcSHsE7Lzn/gmJFXY5y82zMEBDVA9q
- JdsM7EwDf4+fU9uGFFFy8goVZHmn02S0EQEzky16ohQnDOPyunXCua0n3RgJoQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=JUqLLI1P
-Subject: Re: [Buildroot] [PATCH v4 1/1] package/frr: update to 9.1.1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1055D40249
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1055D40249
+ for <buildroot@buildroot.org>; Tue, 27 Aug 2024 16:39:41 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id E98C286534; Tue, 27 Aug 2024 16:39:40 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 27 Aug 2024 18:33:52 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: bd29f403d8fe78d42f9eb03d902c40151f1ed1a0
+X-Git-Newrev: 89c04d7e12ce21d9ba77906ee1790687e5d034e4
+X-Patchwork-Hint: ignore
+Message-Id: <20240827163940.E98C286534@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/umtprd: bump to
+ version 1.6.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,62 +60,126 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Vadim Kochan <vadim4j@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+commit: https://git.buildroot.net/buildroot/commit/?id=89c04d7e12ce21d9ba77906ee1790687e5d034e4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On Mon, 26 Aug 2024 15:19:24 +0200
-Vincent Jardin <vjardin@free.fr> wrote:
+https://github.com/viveris/uMTP-Responder/blob/umtprd-1.6.8/Release-notes.txt
 
-> Update to the latest 9.x version. Protobuf is now mandatory.
-> 
-> Thanks to the suggestions from Thomas Petazzoni: Since there is
-> a dependency on BR2_PACKAGE_PROTOBUF_C, the dependencies of protobuf_c
-> should be imported into FRR's Config.in and the comment should be
-> aligned accordingly.
-> Note that in order to enable FRR, the following must be enabled
-> to support C++:
->  BR2_TOOLCHAIN_BUILDROOT_CXX=y
->  BR2_PACKAGE_FRR=y
+Drop the patch 0001-Fix-output_dir-make-dependency.patch which is not
+needed anymore.
 
-This paragraph wasn't really needed, as it's just stating the
-"obvious". In addition, it is not true that
-BR2_TOOLCHAIN_BUILDROOT_CXX=y is needed. Indeed, this option only
-exists if you use an internal/Buildroot toolchain. If you use an
-external toolchain, the option name is different. So I simply dropped
-this paragraph.
+Swap "$(MAKE) $(TARGET_CONFIGURE_OPTS)" to
+"$(TARGET_CONFIGURE_OPTS) $(MAKE)", otherwise the package does not
+build.
 
-> COPYING hash updated:
-> The COPYING file has evolved to expose more details: the respective
-> licenses are now listed, except for the GPLv3 license. The GPLv3
-> license is only required when FRR is compiled with the GCC plugin
-> that extends printf type checks. This plugin should not be enabled
-> for production code.
-> For more information, see FRR's workflow.rst document.
-> 
-> Signed-off-by: Vincent Jardin <vjardin@free.fr>
-> Suggested-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> 
-> frr/Config.in: enable CXX
-> 
-> Signed-off-by: Vincent Jardin <vjardin@free.fr>
+Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ .checkpackageignore                                |  1 -
+ .../0001-Fix-output_dir-make-dependency.patch      | 46 ----------------------
+ package/umtprd/umtprd.hash                         |  2 +-
+ package/umtprd/umtprd.mk                           |  4 +-
+ 4 files changed, 3 insertions(+), 50 deletions(-)
 
-Here you had some left-over from squashing patches I suppose?
-
-I fixed up those minor details, and applied the patch to our next
-branch. Thanks a lot for having persisted through 4 iterations!
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 8ce5047ae6..4380bc1a99 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -1296,7 +1296,6 @@ package/uemacs/01-clear-ixon-termios-flag.patch lib_patch.Upstream
+ package/uhd/0001-host-CMakeLists-add-boost-unit_test_framework-requir.patch lib_patch.Upstream
+ package/uhttpd/0001-Remove-Werror.patch lib_patch.Upstream
+ package/uhttpd/0002-Fix-TCP_FASTOPEN-related-compile-error.patch lib_patch.Upstream
+-package/umtprd/0001-Fix-output_dir-make-dependency.patch lib_patch.Upstream
+ package/unbound/S70unbound Shellcheck
+ package/unifdef/0001-Makefile-fix-error-on-install.patch lib_patch.Upstream
+ package/unscd/S46unscd Shellcheck lib_sysv.Indent lib_sysv.Variables
+diff --git a/package/umtprd/0001-Fix-output_dir-make-dependency.patch b/package/umtprd/0001-Fix-output_dir-make-dependency.patch
+deleted file mode 100644
+index fcbca6b000..0000000000
+--- a/package/umtprd/0001-Fix-output_dir-make-dependency.patch
++++ /dev/null
+@@ -1,46 +0,0 @@
+-From d84216a678edaca81c0899318231cdcca2100d38 Mon Sep 17 00:00:00 2001
+-From: James Hilliard <james.hilliard1@gmail.com>
+-Date: Mon, 17 Oct 2022 16:39:56 -0600
+-Subject: [PATCH] Fix output_dir make dependency
+-
+-Object file targets need to depend on the output_dir target.
+-
+-Fixes:
+-make --shuffle=reverse -j1
+-cc -o obj/mtp_op_truncateobject.o src/mtp_operations/mtp_op_truncateobject.c -c  -I./inc -lpthread -Wall -O3
+-Assembler messages:
+-Fatal error: can't create obj/mtp_op_truncateobject.o: No such file or directory
+-make: *** [Makefile:19: obj/mtp_op_truncateobject.o] Error 1 shuffle=reverse
+-
+-[paul@crapouillou.net: Backport from upstream commit d84216a]
+-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+----
+- Makefile | 6 +++---
+- 1 file changed, 3 insertions(+), 3 deletions(-)
+-
+-diff --git a/Makefile b/Makefile
+-index 7c98b63..c28e186 100644
+---- a/Makefile
+-+++ b/Makefile
+-@@ -7,15 +7,15 @@ objects := $(sources:src/%.c=obj/%.o)
+- ops_sources := $(wildcard src/mtp_operations/*.c)
+- ops_objects := $(ops_sources:src/mtp_operations/%.c=obj/%.o)
+- 
+--all: output_dir umtprd
+-+all: umtprd
+- 
+- umtprd: $(objects) $(ops_objects)
+- 	${CC} -o $@    $^ $(LDFLAGS) -lpthread
+- 
+--$(objects): obj/%.o: src/%.c
+-+$(objects): obj/%.o: src/%.c | output_dir
+- 	${CC} -o $@ $^ -c $(CPPFLAGS) $(CFLAGS)
+- 
+--$(ops_objects): obj/%.o: src/mtp_operations/%.c
+-+$(ops_objects): obj/%.o: src/mtp_operations/%.c | output_dir
+- 	${CC} -o $@ $^ -c $(CPPFLAGS) $(CFLAGS)
+- 
+- output_dir:
+--- 
+-2.35.1
+-
+diff --git a/package/umtprd/umtprd.hash b/package/umtprd/umtprd.hash
+index 7cd75619ab..f682dd6d84 100644
+--- a/package/umtprd/umtprd.hash
++++ b/package/umtprd/umtprd.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  1de40511c1dd4618719cff2058dfe68a595f1b9284c80afa89d6d1a1c80aec29  umtprd-1.6.2.tar.gz
++sha256  e0b3c308016595a5d956eaaa086d3bfe4c9af2270857181695338df9affb3574  umtprd-1.6.8.tar.gz
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE
+diff --git a/package/umtprd/umtprd.mk b/package/umtprd/umtprd.mk
+index c5e0ee512e..1f1f6bcd23 100644
+--- a/package/umtprd/umtprd.mk
++++ b/package/umtprd/umtprd.mk
+@@ -4,13 +4,13 @@
+ #
+ ################################################################################
+ 
+-UMTPRD_VERSION = 1.6.2
++UMTPRD_VERSION = 1.6.8
+ UMTPRD_SITE = https://github.com/viveris/uMTP-Responder/archive
+ UMTPRD_LICENSE = GPL-3.0+
+ UMTPRD_LICENSE_FILES = LICENSE
+ 
+ define UMTPRD_BUILD_CMDS
+-	$(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
++	$(TARGET_CONFIGURE_OPTS) $(MAKE) -C $(@D)
+ endef
+ 
+ define UMTPRD_INSTALL_TARGET_CMDS
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
