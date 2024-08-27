@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C678BC5472F
-	for <buildroot@archiver.kernel.org>; Tue, 27 Aug 2024 16:50:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 42324C5472F
+	for <buildroot@archiver.kernel.org>; Tue, 27 Aug 2024 16:58:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8432340651;
-	Tue, 27 Aug 2024 16:50:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 06FA640469;
+	Tue, 27 Aug 2024 16:58:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5Y9qvp1qE1QZ; Tue, 27 Aug 2024 16:50:37 +0000 (UTC)
+ id U96LdGEOJ0vd; Tue, 27 Aug 2024 16:58:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DC90B4063E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C1601404E8
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DC90B4063E;
-	Tue, 27 Aug 2024 16:50:36 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 425D71BF97C
- for <buildroot@lists.busybox.net>; Tue, 27 Aug 2024 16:50:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C1601404E8;
+	Tue, 27 Aug 2024 16:58:41 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id B39A71BF4E5
+ for <buildroot@lists.busybox.net>; Tue, 27 Aug 2024 16:58:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3D24F608AC
- for <buildroot@lists.busybox.net>; Tue, 27 Aug 2024 16:50:33 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id A054A40469
+ for <buildroot@lists.busybox.net>; Tue, 27 Aug 2024 16:58:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MGldOykp5vA1 for <buildroot@lists.busybox.net>;
- Tue, 27 Aug 2024 16:50:32 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id R7sv3QaXtcIA for <buildroot@lists.busybox.net>;
+ Tue, 27 Aug 2024 16:58:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6D91E6088E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9CCBC4039B
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6D91E6088E
- for <buildroot@buildroot.org>; Tue, 27 Aug 2024 16:50:32 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9CCBC4039B
+ for <buildroot@buildroot.org>; Tue, 27 Aug 2024 16:58:39 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5C40086578; Tue, 27 Aug 2024 16:50:32 +0000 (UTC)
+ id 87A5E8657F; Tue, 27 Aug 2024 16:58:39 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 27 Aug 2024 18:49:54 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 88c3ea5a08aa7393a110ecc39a7194d8b5a64685
-X-Git-Newrev: e3db27120f6e58ed96514bc925a12822e8b0a113
+Date: Tue, 27 Aug 2024 18:51:30 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 250a9b7c0a2eca4c46c192d2b7167e847d84adfe
+X-Git-Newrev: 62ccb5b25d421f5df5a6ee7a88db21159f3c5e23
 X-Patchwork-Hint: ignore
-Message-Id: <20240827165032.5C40086578@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/mongoose: bump to
- version 7.15
+Message-Id: <20240827165839.87A5E8657F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/comix-cursors: update
+ COMIX_CURSORS_SITE
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,40 +66,46 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e3db27120f6e58ed96514bc925a12822e8b0a113
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+commit: https://git.buildroot.net/buildroot/commit/?id=62ccb5b25d421f5df5a6ee7a88db21159f3c5e23
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-https://github.com/cesanta/mongoose/releases/tag/7.15
+The project moved to Gitlab and renamed it's archive.
+Fix the download URL and update the hash.
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Fixes:
+
+ http://autobuild.buildroot.org/results/734/734917ff9f613f07e6995c1f333eab1ee8bc5760
+
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/mongoose/mongoose.hash | 2 +-
- package/mongoose/mongoose.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/comix-cursors/comix-cursors.hash | 2 +-
+ package/comix-cursors/comix-cursors.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/mongoose/mongoose.hash b/package/mongoose/mongoose.hash
-index 8874ba4171..6e8d1e3804 100644
---- a/package/mongoose/mongoose.hash
-+++ b/package/mongoose/mongoose.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  7c4aecf92f7f27f1cbb2cbda3c185c385f2b7af84f6bd7c0ce31b84742b15691  mongoose-7.14.tar.gz
-+sha256  efcb5aa89b85d40373dcff3241316ddc0f2f130ad7f05c9c964f8cc1e2078a0b  mongoose-7.15.tar.gz
- sha256  7e2bc5dabbc27b431a530540161ba860906f12109d4b84b1e4bc8879f1afc3bc  LICENSE
-diff --git a/package/mongoose/mongoose.mk b/package/mongoose/mongoose.mk
-index d2cd45451e..e3c57c8e8a 100644
---- a/package/mongoose/mongoose.mk
-+++ b/package/mongoose/mongoose.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/comix-cursors/comix-cursors.hash b/package/comix-cursors/comix-cursors.hash
+index b66a61423b..b3975e1e3e 100644
+--- a/package/comix-cursors/comix-cursors.hash
++++ b/package/comix-cursors/comix-cursors.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  9e68ea8ff230dcc793528aa5da9a38b9bf61c478cd6868b4e4f5da659746a019  ComixCursors-0.9.1.tar.bz2
++sha256  7248f2da98fea475e590aa657d8581593516530d014a9ddbac8667d1b5f3a02b  comixcursors-0.9.1.tar.bz2
+diff --git a/package/comix-cursors/comix-cursors.mk b/package/comix-cursors/comix-cursors.mk
+index 7b034ccee7..3e06371182 100644
+--- a/package/comix-cursors/comix-cursors.mk
++++ b/package/comix-cursors/comix-cursors.mk
+@@ -5,8 +5,8 @@
  ################################################################################
  
--MONGOOSE_VERSION = 7.14
-+MONGOOSE_VERSION = 7.15
- MONGOOSE_SITE = $(call github,cesanta,mongoose,$(MONGOOSE_VERSION))
- MONGOOSE_LICENSE = GPL-2.0
- MONGOOSE_LICENSE_FILES = LICENSE
+ COMIX_CURSORS_VERSION = 0.9.1
+-COMIX_CURSORS_SITE = https://limitland.gitlab.io/comixcursors
+-COMIX_CURSORS_SOURCE = ComixCursors-$(COMIX_CURSORS_VERSION).tar.bz2
++COMIX_CURSORS_SITE = $(call gitlab,limitland,comixcursors,$(COMIX_CURSORS_VERSION))
++COMIX_CURSORS_SOURCE = comixcursors-$(COMIX_CURSORS_VERSION).tar.bz2
+ COMIX_CURSORS_LICENSE = GPL-3.0
+ COMIX_CURSORS_STRIP_COMPONENTS = 0
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
