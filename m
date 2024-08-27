@@ -4,59 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B1A8C54734
-	for <buildroot@archiver.kernel.org>; Tue, 27 Aug 2024 11:45:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F97AC54735
+	for <buildroot@archiver.kernel.org>; Tue, 27 Aug 2024 11:45:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3B94F4011A;
-	Tue, 27 Aug 2024 11:45:28 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id EA7CB4011A;
+	Tue, 27 Aug 2024 11:45:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FEGCr9yfmeg7; Tue, 27 Aug 2024 11:45:27 +0000 (UTC)
+ id 7ntFZ5dvPg-L; Tue, 27 Aug 2024 11:45:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 13C3840124
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AB8944048C
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 13C3840124;
-	Tue, 27 Aug 2024 11:45:27 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 14E031BF860
- for <buildroot@lists.busybox.net>; Tue, 27 Aug 2024 11:45:26 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id AB8944048C;
+	Tue, 27 Aug 2024 11:45:46 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 4373E1BF860
+ for <buildroot@lists.busybox.net>; Tue, 27 Aug 2024 11:45:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 015A780BB5
- for <buildroot@lists.busybox.net>; Tue, 27 Aug 2024 11:45:26 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 303D3403F0
+ for <buildroot@lists.busybox.net>; Tue, 27 Aug 2024 11:45:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GXKb4sd-N_W4 for <buildroot@lists.busybox.net>;
- Tue, 27 Aug 2024 11:45:25 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.200;
- helo=relay7-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id lVZzEtvZ6syZ for <buildroot@lists.busybox.net>;
+ Tue, 27 Aug 2024 11:45:37 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org CF7BF80BA4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CF7BF80BA4
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp1.osuosl.org (Postfix) with ESMTPS id CF7BF80BA4
- for <buildroot@buildroot.org>; Tue, 27 Aug 2024 11:45:24 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id B22BD2000D;
- Tue, 27 Aug 2024 11:45:21 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1siudV-001Gb5-03;
- Tue, 27 Aug 2024 13:45:21 +0200
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 29E03403E7
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 29E03403E7
+ for <buildroot@buildroot.org>; Tue, 27 Aug 2024 11:45:37 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 0D5AD864F2; Tue, 27 Aug 2024 11:45:37 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Waldemar Brodkorb <wbx@openadk.org>, skif@skif-web.ru
-References: <ZsYt+jha8qZGaSEB@waldemar-brodkorb.de>
-Date: Tue, 27 Aug 2024 13:45:20 +0200
-In-Reply-To: <ZsYt+jha8qZGaSEB@waldemar-brodkorb.de> (Waldemar Brodkorb's
- message of "Wed, 21 Aug 2024 20:12:10 +0200")
-Message-ID: <87bk1e9okv.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH] package/zabbix: fixup download URL
+To: buildroot@buildroot.org
+Date: Tue, 27 Aug 2024 13:41:41 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 4780e11726e392151677a60f5bb8afb581fa7221
+X-Git-Newrev: 345c94ad4e709116c7a22d143aae9ef815e8dfeb
+X-Patchwork-Hint: ignore
+Message-Id: <20240827114537.0D5AD864F2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/zabbix: fixup download URL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,31 +58,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Waldemar" == Waldemar Brodkorb <wbx@openadk.org> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=345c94ad4e709116c7a22d143aae9ef815e8dfeb
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Fixes:
- >  http://autobuild.buildroot.org/results/9ff/9ffb4a9e3b2291498d0ccf3c9124bebc466860bc
+Fixes:
+ http://autobuild.buildroot.org/results/9ff/9ffb4a9e3b2291498d0ccf3c9124bebc466860bc
 
-Committed after extending the commit message to mention that 6.2.x is
-EOL, thanks.
+Zabbix 6.2.x is EOL and the tarballs have now been moved under oldstable/.
 
-Do you use Zabbix? Given that 6.2.x was EOL'ed more than 1 year ago (and
-6.2.8 / 6.2.9 have fixes mentioning security issues) it sounds like it
-is pretty unmaintained in Buildroot.
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+[Peter: extend commit message]
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/zabbix/zabbix.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-We should move to the recently released 7.0.x series or alternatively
-drop the package.
-
-https://www.zabbix.com/life_cycle_and_release_policy
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/zabbix/zabbix.mk b/package/zabbix/zabbix.mk
+index 76568f5a18..18fb01deca 100644
+--- a/package/zabbix/zabbix.mk
++++ b/package/zabbix/zabbix.mk
+@@ -6,7 +6,7 @@
+ 
+ ZABBIX_VERSION_MAJOR = 6.2
+ ZABBIX_VERSION = $(ZABBIX_VERSION_MAJOR).7
+-ZABBIX_SITE = https://cdn.zabbix.com/zabbix/sources/stable/$(ZABBIX_VERSION_MAJOR)
++ZABBIX_SITE = https://cdn.zabbix.com/zabbix/sources/oldstable/$(ZABBIX_VERSION_MAJOR)
+ ZABBIX_SELINUX_MODULES = zabbix
+ ZABBIX_LICENSE = GPL-2.0+
+ ZABBIX_LICENSE_FILES = README COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
