@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9A324C54731
-	for <buildroot@archiver.kernel.org>; Tue, 27 Aug 2024 16:29:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 29DA8C5472F
+	for <buildroot@archiver.kernel.org>; Tue, 27 Aug 2024 16:29:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 15FB240612;
-	Tue, 27 Aug 2024 16:29:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E874340654;
+	Tue, 27 Aug 2024 16:29:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id aTFodDN51gzt; Tue, 27 Aug 2024 16:29:02 +0000 (UTC)
+ id 2RAdl-7I8wWm; Tue, 27 Aug 2024 16:29:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8242540621
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A593B4064B
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8242540621;
-	Tue, 27 Aug 2024 16:29:01 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D64AF1BF97C
- for <buildroot@lists.busybox.net>; Tue, 27 Aug 2024 16:28:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A593B4064B;
+	Tue, 27 Aug 2024 16:29:04 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id AF8DF1BF4E5
+ for <buildroot@lists.busybox.net>; Tue, 27 Aug 2024 16:28:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id CFD9D40585
- for <buildroot@lists.busybox.net>; Tue, 27 Aug 2024 16:28:56 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9CEC740131
+ for <buildroot@lists.busybox.net>; Tue, 27 Aug 2024 16:28:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3DKF4z8lgtEw for <buildroot@lists.busybox.net>;
- Tue, 27 Aug 2024 16:28:55 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fklPQeoHkLfY for <buildroot@lists.busybox.net>;
+ Tue, 27 Aug 2024 16:28:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D021340553
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DBF52403A7
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id D021340553
+ by smtp2.osuosl.org (Postfix) with ESMTP id DBF52403A7
  for <buildroot@buildroot.org>; Tue, 27 Aug 2024 16:28:55 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BC58086521; Tue, 27 Aug 2024 16:28:55 +0000 (UTC)
+ id C830586522; Tue, 27 Aug 2024 16:28:55 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 27 Aug 2024 18:28:19 +0200
+Date: Tue, 27 Aug 2024 18:28:22 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 95221974c80fe860b52111f61526013d29fef37e
-X-Git-Newrev: 4dff2511e6bf7ba93156f48614f91becc04ec534
+X-Git-Oldrev: 4dff2511e6bf7ba93156f48614f91becc04ec534
+X-Git-Newrev: 6a569012a8ef012761fa8cb4002a1381055cdc2f
 X-Patchwork-Hint: ignore
-Message-Id: <20240827162855.BC58086521@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/sqlitecpp: bump to
- version 3.3.2
+Message-Id: <20240827162855.C830586522@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/catch2: bump to
+ version 3.7.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,41 +66,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4dff2511e6bf7ba93156f48614f91becc04ec534
+commit: https://git.buildroot.net/buildroot/commit/?id=6a569012a8ef012761fa8cb4002a1381055cdc2f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
-
-LICENSE.txt hash update due to bumped license year.
 
 Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/sqlitecpp/sqlitecpp.hash | 4 ++--
- package/sqlitecpp/sqlitecpp.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/catch2/catch2.hash | 2 +-
+ package/catch2/catch2.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/sqlitecpp/sqlitecpp.hash b/package/sqlitecpp/sqlitecpp.hash
-index 1269abf61f..3ed6a3c40a 100644
---- a/package/sqlitecpp/sqlitecpp.hash
-+++ b/package/sqlitecpp/sqlitecpp.hash
+diff --git a/package/catch2/catch2.hash b/package/catch2/catch2.hash
+index c7e264afdb..e34c426b37 100644
+--- a/package/catch2/catch2.hash
++++ b/package/catch2/catch2.hash
 @@ -1,3 +1,3 @@
  # Locally computed:
--sha256  71f990f9fb4b004533b6859ce40729af823b87fe691dd99ca084a7fd40db54b9  sqlitecpp-3.3.1.tar.gz
--sha256  635de1440f6064c6ca9ca325c163d4d0771e783c6d77783d9470eaf56e346c67  LICENSE.txt
-+sha256  5aa8eda130d0689bd5ed9b2074714c2dbc610f710483c61ba6cf944cebfe03af  sqlitecpp-3.3.2.tar.gz
-+sha256  ecb10f021c51e9fd1dabaebd8a8e977934d47d9e3c74094f333060be2d6e023b  LICENSE.txt
-diff --git a/package/sqlitecpp/sqlitecpp.mk b/package/sqlitecpp/sqlitecpp.mk
-index 5571d325c3..1cf8281997 100644
---- a/package/sqlitecpp/sqlitecpp.mk
-+++ b/package/sqlitecpp/sqlitecpp.mk
+-sha256  485932259a75c7c6b72d4b874242c489ea5155d17efa345eb8cc72159f49f356  catch2-3.6.0.tar.gz
++sha256  5b10cd536fa3818112a82820ce0787bd9f2a906c618429e7c4dea639983c8e88  catch2-3.7.0.tar.gz
+ sha256  c9bff75738922193e67fa726fa225535870d2aa1059f91452c411736284ad566  LICENSE.txt
+diff --git a/package/catch2/catch2.mk b/package/catch2/catch2.mk
+index 60812b2cff..e68bdec5e4 100644
+--- a/package/catch2/catch2.mk
++++ b/package/catch2/catch2.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SQLITECPP_VERSION = 3.3.1
-+SQLITECPP_VERSION = 3.3.2
- SQLITECPP_SITE = $(call github,SRombauts,SQLiteCpp,$(SQLITECPP_VERSION))
- SQLITECPP_LICENSE = MIT
- SQLITECPP_LICENSE_FILES = LICENSE.txt
+-CATCH2_VERSION = 3.6.0
++CATCH2_VERSION = 3.7.0
+ CATCH2_SITE = $(call github,catchorg,Catch2,v$(CATCH2_VERSION))
+ CATCH2_INSTALL_STAGING = YES
+ CATCH2_INSTALL_TARGET = NO
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
