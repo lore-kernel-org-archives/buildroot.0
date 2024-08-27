@@ -4,71 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D29AC54731
-	for <buildroot@archiver.kernel.org>; Tue, 27 Aug 2024 18:04:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D1ABC5472F
+	for <buildroot@archiver.kernel.org>; Tue, 27 Aug 2024 18:05:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E998A40A27;
-	Tue, 27 Aug 2024 18:04:00 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 613D040131;
+	Tue, 27 Aug 2024 18:05:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BV2qOEd68Xq0; Tue, 27 Aug 2024 18:03:58 +0000 (UTC)
+ id m8mnlo5f_sua; Tue, 27 Aug 2024 18:05:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AAF8F40A22
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 41E2440240
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AAF8F40A22;
-	Tue, 27 Aug 2024 18:03:58 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 08D531BF281
- for <buildroot@lists.busybox.net>; Tue, 27 Aug 2024 18:03:57 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 41E2440240;
+	Tue, 27 Aug 2024 18:05:31 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 3D4011BF2B8
+ for <buildroot@lists.busybox.net>; Tue, 27 Aug 2024 18:05:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id EABF1608AA
- for <buildroot@lists.busybox.net>; Tue, 27 Aug 2024 18:03:56 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 37C9840240
+ for <buildroot@lists.busybox.net>; Tue, 27 Aug 2024 18:05:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bJs-BEC0j7Ua for <buildroot@lists.busybox.net>;
- Tue, 27 Aug 2024 18:03:56 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.2;
- helo=smtp2-g21.free.fr; envelope-from=vjardin@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org B53ED60849
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B53ED60849
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
- by smtp3.osuosl.org (Postfix) with ESMTPS id B53ED60849
- for <buildroot@buildroot.org>; Tue, 27 Aug 2024 18:03:55 +0000 (UTC)
-Received: from L25025.local (unknown [213.36.7.13])
- (Authenticated sender: vjardin@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPSA id 2ED722003D0;
- Tue, 27 Aug 2024 20:03:51 +0200 (CEST)
-Date: Tue, 27 Aug 2024 20:03:50 +0200
-From: Vincent Jardin <vjardin@free.fr>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Message-ID: <5rpa4qwta65s3yravp6w7dbdbv6uypidmfnyyfhkpnpdystqcf@n4fw3polq5az>
-References: <7kble6ezjwutfk3f6niiignnxgmq5rxhsvplayvlkj5ahczg7i@dyco5ij36lrp>
- <20240826131924.7702-1-vjardin@free.fr>
- <20240826131924.7702-2-vjardin@free.fr>
- <20240827183300.593192bb@windsurf>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id m6N3yDnZGOwZ for <buildroot@lists.busybox.net>;
+ Tue, 27 Aug 2024 18:05:28 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::229;
+ helo=relay9-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org BE71F40131
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BE71F40131
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id BE71F40131
+ for <buildroot@buildroot.org>; Tue, 27 Aug 2024 18:05:27 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 890E7FF802;
+ Tue, 27 Aug 2024 18:05:24 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1sj0ZI-0044gQ-0F;
+ Tue, 27 Aug 2024 20:05:24 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
+References: <20240212125649.210272-1-buildroot@bubu1.eu>
+Date: Tue, 27 Aug 2024 20:05:24 +0200
+In-Reply-To: <20240212125649.210272-1-buildroot@bubu1.eu> (Marcus Hoffmann via
+ buildroot's message of "Mon, 12 Feb 2024 13:56:49 +0100")
+Message-ID: <87y14h96zf.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20240827183300.593192bb@windsurf>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1724781832;
- bh=DOadfWnMjXiqeUD1MxSErhgBewG3N+jGxCU+SyRw6PQ=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=DTjOg1nO2nR91DBxjuzXCF546ovB5oN8/PUqS4GV2SlfQaqdPkEKCcdZS2Cq4YTan
- 4eQdR/t3FYzmhA1u9kPDtgQ9ypxpoULrmF4Jr1QL7YwtWCY5O7ePX9LV/5fUMjtpSx
- klKwKt5+ICRBBRGNuFO4G/Dt1g+QIJ4FbgAlnWmBUPR9IfgScQSPzoNEiaio7NMRc7
- e4jBDKnF9KNKgHE6Tno83KheTmPG1H8qOz4hLUmcmxecSQKV25lr9cgLBLsPwI8Prt
- 0xIoStB7hGoRFjsblarI1lX1Lar7mJ8Uwqe1a2JU2pOhmpL3GYqJ7pC7KHQv0k+vvq
- qCuWJwy0ctaow==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=DTjOg1nO
-Subject: Re: [Buildroot] [PATCH v4 1/1] package/frr: update to 9.1.1
+X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: Re: [Buildroot] [PATCH] support/testing: add python-asn1crypto
+ runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,47 +69,20 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Marcus Hoffmann <buildroot@bubu1.eu>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi,
+>>>>> "Marcus" == Marcus Hoffmann via buildroot <buildroot@buildroot.org> writes:
 
-On Tue, Aug 27, 2024 at 06:33:00PM UTC, Thomas Petazzoni wrote:
-> This paragraph wasn't really needed, as it's just stating the
-> "obvious". In addition, it is not true that
-> BR2_TOOLCHAIN_BUILDROOT_CXX=y is needed. Indeed, this option only
-> exists if you use an internal/Buildroot toolchain. If you use an
-> external toolchain, the option name is different. So I simply dropped
-> this paragraph.
+ > Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
 
-Maybe because I am new with Buildroot, but I did not find it "obvious"
-;) when I faced that issue. I thought some others would be interested to
-have some records about it.
+Committed to 2024.02.x and 2024.05.x, thanks.
 
-> > frr/Config.in: enable CXX
-> > 
-> > Signed-off-by: Vincent Jardin <vjardin@free.fr>
-> 
-> Here you had some left-over from squashing patches I suppose?
-
-Arf, right, my bad.
-
-Thanks for your:
-  https://git.buildroot.net/buildroot/commit/?id=bd29f403d8fe78d42f9eb03d902c40151f1ed1a0
-
-> 
-> I fixed up those minor details, and applied the patch to our next
-> branch. Thanks a lot for having persisted through 4 iterations!
-
-You welcome, I won't give up ;) , all my support.
-
-Next: finalize DPDK.
-
-Best regards,
-  Vincent
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
