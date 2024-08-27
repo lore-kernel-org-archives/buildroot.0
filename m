@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48536C5472F
-	for <buildroot@archiver.kernel.org>; Tue, 27 Aug 2024 16:29:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9A324C54731
+	for <buildroot@archiver.kernel.org>; Tue, 27 Aug 2024 16:29:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E351740553;
-	Tue, 27 Aug 2024 16:28:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 15FB240612;
+	Tue, 27 Aug 2024 16:29:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fRr9rSOcMwde; Tue, 27 Aug 2024 16:28:59 +0000 (UTC)
+ id aTFodDN51gzt; Tue, 27 Aug 2024 16:29:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BD80940585
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8242540621
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BD80940585;
-	Tue, 27 Aug 2024 16:28:58 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id CA1571BF4E5
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8242540621;
+	Tue, 27 Aug 2024 16:29:01 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id D64AF1BF97C
  for <buildroot@lists.busybox.net>; Tue, 27 Aug 2024 16:28:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C480B404DB
+ by smtp4.osuosl.org (Postfix) with ESMTP id CFD9D40585
  for <buildroot@lists.busybox.net>; Tue, 27 Aug 2024 16:28:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HxSfZ_QI44LH for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3DKF4z8lgtEw for <buildroot@lists.busybox.net>;
  Tue, 27 Aug 2024 16:28:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B68BA40131
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D021340553
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id B68BA40131
+ by smtp4.osuosl.org (Postfix) with ESMTP id D021340553
  for <buildroot@buildroot.org>; Tue, 27 Aug 2024 16:28:55 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B0D02864BF; Tue, 27 Aug 2024 16:28:55 +0000 (UTC)
+ id BC58086521; Tue, 27 Aug 2024 16:28:55 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 27 Aug 2024 18:28:10 +0200
+Date: Tue, 27 Aug 2024 18:28:19 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: b3cdb0e36bf6451a80e5f35e00a31acfa3386ff4
-X-Git-Newrev: 95221974c80fe860b52111f61526013d29fef37e
+X-Git-Oldrev: 95221974c80fe860b52111f61526013d29fef37e
+X-Git-Newrev: 4dff2511e6bf7ba93156f48614f91becc04ec534
 X-Patchwork-Hint: ignore
-Message-Id: <20240827162855.B0D02864BF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/timescaledb: bump
- version to 2.16.1
+Message-Id: <20240827162855.BC58086521@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/sqlitecpp: bump to
+ version 3.3.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,40 +66,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=95221974c80fe860b52111f61526013d29fef37e
+commit: https://git.buildroot.net/buildroot/commit/?id=4dff2511e6bf7ba93156f48614f91becc04ec534
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Release notes: https://github.com/timescale/timescaledb/blob/2.16.1/CHANGELOG.md
+LICENSE.txt hash update due to bumped license year.
 
-Signed-off-by: Scott Fan <fancp2007@gmail.com>
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/timescaledb/timescaledb.hash | 2 +-
- package/timescaledb/timescaledb.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/sqlitecpp/sqlitecpp.hash | 4 ++--
+ package/sqlitecpp/sqlitecpp.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/timescaledb/timescaledb.hash b/package/timescaledb/timescaledb.hash
-index ba81c74c7e..c7116028e7 100644
---- a/package/timescaledb/timescaledb.hash
-+++ b/package/timescaledb/timescaledb.hash
+diff --git a/package/sqlitecpp/sqlitecpp.hash b/package/sqlitecpp/sqlitecpp.hash
+index 1269abf61f..3ed6a3c40a 100644
+--- a/package/sqlitecpp/sqlitecpp.hash
++++ b/package/sqlitecpp/sqlitecpp.hash
 @@ -1,3 +1,3 @@
- # Locally calculated
--sha256  ff2019f734566f73af0a8041db50f7f1d0ad6967f7e2e7d796d388cd38c0b5bb  timescaledb-2.15.0.tar.gz
-+sha256  c1d27da11d0db3b947ed0cbf63d230427a532fd808600dea9ec3afc4ab5d730b  timescaledb-2.16.1.tar.gz
- sha256  0378e0948feefd85f579319c74d6e2b671194037f550c7176ef26649d94c895b  LICENSE
-diff --git a/package/timescaledb/timescaledb.mk b/package/timescaledb/timescaledb.mk
-index d6c8164234..37c7258a56 100644
---- a/package/timescaledb/timescaledb.mk
-+++ b/package/timescaledb/timescaledb.mk
+ # Locally computed:
+-sha256  71f990f9fb4b004533b6859ce40729af823b87fe691dd99ca084a7fd40db54b9  sqlitecpp-3.3.1.tar.gz
+-sha256  635de1440f6064c6ca9ca325c163d4d0771e783c6d77783d9470eaf56e346c67  LICENSE.txt
++sha256  5aa8eda130d0689bd5ed9b2074714c2dbc610f710483c61ba6cf944cebfe03af  sqlitecpp-3.3.2.tar.gz
++sha256  ecb10f021c51e9fd1dabaebd8a8e977934d47d9e3c74094f333060be2d6e023b  LICENSE.txt
+diff --git a/package/sqlitecpp/sqlitecpp.mk b/package/sqlitecpp/sqlitecpp.mk
+index 5571d325c3..1cf8281997 100644
+--- a/package/sqlitecpp/sqlitecpp.mk
++++ b/package/sqlitecpp/sqlitecpp.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--TIMESCALEDB_VERSION = 2.15.0
-+TIMESCALEDB_VERSION = 2.16.1
- TIMESCALEDB_SITE = $(call github,timescale,timescaledb,$(TIMESCALEDB_VERSION))
- TIMESCALEDB_LICENSE = Apache-2.0
- TIMESCALEDB_LICENSE_FILES = LICENSE
+-SQLITECPP_VERSION = 3.3.1
++SQLITECPP_VERSION = 3.3.2
+ SQLITECPP_SITE = $(call github,SRombauts,SQLiteCpp,$(SQLITECPP_VERSION))
+ SQLITECPP_LICENSE = MIT
+ SQLITECPP_LICENSE_FILES = LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
