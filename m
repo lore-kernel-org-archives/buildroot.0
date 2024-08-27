@@ -4,71 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84CBAC5472F
-	for <buildroot@archiver.kernel.org>; Tue, 27 Aug 2024 16:28:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 48536C5472F
+	for <buildroot@archiver.kernel.org>; Tue, 27 Aug 2024 16:29:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3C3B340553;
-	Tue, 27 Aug 2024 16:28:04 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E351740553;
+	Tue, 27 Aug 2024 16:28:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id M3eJrVCyJEdU; Tue, 27 Aug 2024 16:28:03 +0000 (UTC)
+ id fRr9rSOcMwde; Tue, 27 Aug 2024 16:28:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 23D3E405FB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BD80940585
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 23D3E405FB;
-	Tue, 27 Aug 2024 16:28:03 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 41F881BF4E5
- for <buildroot@lists.busybox.net>; Tue, 27 Aug 2024 16:28:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BD80940585;
+	Tue, 27 Aug 2024 16:28:58 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id CA1571BF4E5
+ for <buildroot@lists.busybox.net>; Tue, 27 Aug 2024 16:28:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2DDC68100C
- for <buildroot@lists.busybox.net>; Tue, 27 Aug 2024 16:28:02 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id C480B404DB
+ for <buildroot@lists.busybox.net>; Tue, 27 Aug 2024 16:28:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TuR20cn9RQ_s for <buildroot@lists.busybox.net>;
- Tue, 27 Aug 2024 16:28:01 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.196;
- helo=relay4-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id HxSfZ_QI44LH for <buildroot@lists.busybox.net>;
+ Tue, 27 Aug 2024 16:28:55 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 1133680EB5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1133680EB5
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1133680EB5
- for <buildroot@buildroot.org>; Tue, 27 Aug 2024 16:28:00 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id C9AACE0004;
- Tue, 27 Aug 2024 16:27:57 +0000 (UTC)
-Date: Tue, 27 Aug 2024 18:27:57 +0200
-To: Waldemar Brodkorb <wbx@openadk.org>
-Message-ID: <20240827182757.7b1028f9@windsurf>
-In-Reply-To: <Zs1ORw93VJBVAm5L@waldemar-brodkorb.de>
-References: <Zs1ORw93VJBVAm5L@waldemar-brodkorb.de>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1724776078;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=vSOpPwGA4lssPFRt/huwbCFVMaOrunQJmzKRpITvBos=;
- b=WFRVAqxY80zni0644HMpSa+y9o1xOhDZSMXUPzGnYWnlzy9pormP6NrN2vZnY7JOk31eE2
- 2PAx5RecDlS1l1I43JDjKUPtEuj9SYWF8VqecpVlJo9Ka9lHraLjlfyLehci6Ba0Jbfw01
- 96X1OFT5OR9GVg/TDA198SvvDK2PT1KkRKk8FzfO7aED7hoRGLVTZMBv1JWeinA+FAq56B
- dNLyIb8u/fzS5iO/pQWlOxWaWckER81dOjxXbw9gp1Y93T4rhHyN0/HdHocJmyp874wV3q
- ngtMtWvKq3LTIG9jYb1R+ykpgrotfK35jaJl/vhdar/pAspPE8fuL8xNDglaXg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=WFRVAqxY
-Subject: Re: [Buildroot] [PATCH] package/enscript: fix gcc 14.x compile issue
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B68BA40131
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id B68BA40131
+ for <buildroot@buildroot.org>; Tue, 27 Aug 2024 16:28:55 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id B0D02864BF; Tue, 27 Aug 2024 16:28:55 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 27 Aug 2024 18:28:10 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: b3cdb0e36bf6451a80e5f35e00a31acfa3386ff4
+X-Git-Newrev: 95221974c80fe860b52111f61526013d29fef37e
+X-Patchwork-Hint: ignore
+Message-Id: <20240827162855.B0D02864BF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/timescaledb: bump
+ version to 2.16.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,32 +60,46 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 27 Aug 2024 05:55:51 +0200
-Waldemar Brodkorb <wbx@openadk.org> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=95221974c80fe860b52111f61526013d29fef37e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> Fixes:
-> 
->  http://autobuild.buildroot.org/results/eb5/eb53b42db0d4bcaf574380d5a89a096cc4ce4b14
-> 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> ---
->  ...ible-implicit-declaration-of-built-i.patch | 29 +++++++++++++++++++
->  1 file changed, 29 insertions(+)
->  create mode 100644 package/enscript/0001-Solving-incompatible-implicit-declaration-of-built-i.patch
+Release notes: https://github.com/timescale/timescaledb/blob/2.16.1/CHANGELOG.md
 
-Applied to master, thanks.
+Signed-off-by: Scott Fan <fancp2007@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/timescaledb/timescaledb.hash | 2 +-
+ package/timescaledb/timescaledb.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/timescaledb/timescaledb.hash b/package/timescaledb/timescaledb.hash
+index ba81c74c7e..c7116028e7 100644
+--- a/package/timescaledb/timescaledb.hash
++++ b/package/timescaledb/timescaledb.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  ff2019f734566f73af0a8041db50f7f1d0ad6967f7e2e7d796d388cd38c0b5bb  timescaledb-2.15.0.tar.gz
++sha256  c1d27da11d0db3b947ed0cbf63d230427a532fd808600dea9ec3afc4ab5d730b  timescaledb-2.16.1.tar.gz
+ sha256  0378e0948feefd85f579319c74d6e2b671194037f550c7176ef26649d94c895b  LICENSE
+diff --git a/package/timescaledb/timescaledb.mk b/package/timescaledb/timescaledb.mk
+index d6c8164234..37c7258a56 100644
+--- a/package/timescaledb/timescaledb.mk
++++ b/package/timescaledb/timescaledb.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-TIMESCALEDB_VERSION = 2.15.0
++TIMESCALEDB_VERSION = 2.16.1
+ TIMESCALEDB_SITE = $(call github,timescale,timescaledb,$(TIMESCALEDB_VERSION))
+ TIMESCALEDB_LICENSE = Apache-2.0
+ TIMESCALEDB_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
