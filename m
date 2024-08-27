@@ -4,71 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0B2A0C54731
-	for <buildroot@archiver.kernel.org>; Tue, 27 Aug 2024 16:41:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50531C54731
+	for <buildroot@archiver.kernel.org>; Tue, 27 Aug 2024 16:42:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B66F1400CD;
-	Tue, 27 Aug 2024 16:41:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1745740570;
+	Tue, 27 Aug 2024 16:42:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SYa6N_I7NaQB; Tue, 27 Aug 2024 16:41:30 +0000 (UTC)
+ id kX-cF3FL_-xz; Tue, 27 Aug 2024 16:42:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A2330404E4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CC7A24057B
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A2330404E4;
-	Tue, 27 Aug 2024 16:41:30 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 802201BF4E5
- for <buildroot@lists.busybox.net>; Tue, 27 Aug 2024 16:41:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CC7A24057B;
+	Tue, 27 Aug 2024 16:42:53 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 45F7A1BF4E5
+ for <buildroot@lists.busybox.net>; Tue, 27 Aug 2024 16:42:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6D2FC4059B
- for <buildroot@lists.busybox.net>; Tue, 27 Aug 2024 16:41:29 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 411B4608AC
+ for <buildroot@lists.busybox.net>; Tue, 27 Aug 2024 16:42:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id U0fqaxULrQDY for <buildroot@lists.busybox.net>;
- Tue, 27 Aug 2024 16:41:21 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
- helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7I70u1FjMgPp for <buildroot@lists.busybox.net>;
+ Tue, 27 Aug 2024 16:42:51 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org C492C400CD
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C492C400CD
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C492C400CD
- for <buildroot@buildroot.org>; Tue, 27 Aug 2024 16:41:20 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id F3D22FF80A;
- Tue, 27 Aug 2024 16:41:17 +0000 (UTC)
-Date: Tue, 27 Aug 2024 18:41:17 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Message-ID: <20240827184117.380b6530@windsurf>
-In-Reply-To: <20240825134229.1323250-1-bernd@kuhls.net>
-References: <20240825134229.1323250-1-bernd@kuhls.net>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1724776878;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=MImr1jz3k07biGKxhmNrgIk9Ue7FJ74CoMXkcbM1x+g=;
- b=D8x3khRawt3qAAwmzCIwN0sYWMskNrNUfnoq4TYSfF7Bxidal1DHrUFEUgHsFdqhfoVTac
- X9aoo+lkTQv8TnDcZbQCGXqSBClsL/VyAX8YrbRbwGDchwBMG7UrBgWpQUZQW+UgfigvKo
- KfrnZdwSWIl5gRw99vW6QOzPYiRJYINAnM7Ye7gZa2ZuJhinBeniIHAhYWL+TJF/wmvlcT
- 2BVbPsXzm461pCD6100Mc2ou4sf+I7+lL3L2kFGUVob/RTRSHRnZLRhZuiwwcWC4RQKhie
- x0agC4lpqtasy/WN6gcIysGTMfIRmQ3hfAFe28eE0wAvnsx5gKAGSJBalYTy5Q==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=D8x3khRa
-Subject: Re: [Buildroot] [PATCH/next 1/1] package/xmrig: bump version to
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 62B486088E
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 62B486088E
+ for <buildroot@buildroot.org>; Tue, 27 Aug 2024 16:42:51 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 4AB2286550; Tue, 27 Aug 2024 16:42:51 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 27 Aug 2024 18:41:01 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: fa4ea2f723e27a0897a067428ad156161cad08b7
+X-Git-Newrev: ff07d22a8f5a2d3c2b2ce8edf23deba626263d3c
+X-Patchwork-Hint: ignore
+Message-Id: <20240827164251.4AB2286550@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/xmrig: bump version to
  6.22.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -83,30 +60,46 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, 25 Aug 2024 15:42:29 +0200
-Bernd Kuhls <bernd@kuhls.net> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=ff07d22a8f5a2d3c2b2ce8edf23deba626263d3c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> Changelog: https://github.com/xmrig/xmrig/blob/master/CHANGELOG.md
-> 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-> ---
->  package/xmrig/xmrig.hash | 2 +-
->  package/xmrig/xmrig.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Changelog: https://github.com/xmrig/xmrig/blob/master/CHANGELOG.md
 
-Applied to next, thanks.
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/xmrig/xmrig.hash | 2 +-
+ package/xmrig/xmrig.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/xmrig/xmrig.hash b/package/xmrig/xmrig.hash
+index d7fdbe0d0b..b7d201a1db 100644
+--- a/package/xmrig/xmrig.hash
++++ b/package/xmrig/xmrig.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  5d76fb19190956c564b405119315bc93db4ed8062b251d5e96bed70c5fa8033c  xmrig-6.21.3.tar.gz
++sha256  8a5b047cbbb67e508fd5c2cfb75e138d36b1eb19aaadcbe59a5034ca9af0ebb0  xmrig-6.22.0.tar.gz
+ sha256  589ed823e9a84c56feb95ac58e7cf384626b9cbf4fda2a907bc36e103de1bad2  LICENSE
+diff --git a/package/xmrig/xmrig.mk b/package/xmrig/xmrig.mk
+index d01b001817..b83ed7dae8 100644
+--- a/package/xmrig/xmrig.mk
++++ b/package/xmrig/xmrig.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-XMRIG_VERSION = 6.21.3
++XMRIG_VERSION = 6.22.0
+ XMRIG_SITE = $(call github,xmrig,xmrig,v$(XMRIG_VERSION))
+ XMRIG_LICENSE = GPL-3.0+
+ XMRIG_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
