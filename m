@@ -1,72 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A38CC54E93
-	for <buildroot@archiver.kernel.org>; Wed, 28 Aug 2024 10:21:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E46C8C54E71
+	for <buildroot@archiver.kernel.org>; Wed, 28 Aug 2024 10:36:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 67A2660A8F;
-	Wed, 28 Aug 2024 10:21:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 972D48118E;
+	Wed, 28 Aug 2024 10:36:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id viiThC4RHD_h; Wed, 28 Aug 2024 10:21:46 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id eUAhvdezRHHs; Wed, 28 Aug 2024 10:36:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6DEA560A52
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B2E268117F
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6DEA560A52;
-	Wed, 28 Aug 2024 10:21:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B2E268117F;
+	Wed, 28 Aug 2024 10:36:11 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id DA84B1BF3FC
- for <buildroot@lists.busybox.net>; Wed, 28 Aug 2024 10:21:21 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 064851BF3FC
+ for <buildroot@lists.busybox.net>; Wed, 28 Aug 2024 10:36:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C7254406E1
- for <buildroot@lists.busybox.net>; Wed, 28 Aug 2024 10:21:21 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id F22F240711
+ for <buildroot@lists.busybox.net>; Wed, 28 Aug 2024 10:36:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id J_mjYocZaX9o for <buildroot@lists.busybox.net>;
- Wed, 28 Aug 2024 10:21:20 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::11;
- helo=smtp2-g21.free.fr; envelope-from=vjardin@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 79226406C9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 79226406C9
-Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [IPv6:2a01:e0c:1:1599::11])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 79226406C9
- for <buildroot@buildroot.org>; Wed, 28 Aug 2024 10:21:19 +0000 (UTC)
-Received: from localhost.localdomain (unknown [213.36.7.13])
- (Authenticated sender: vjardin@free.fr)
- by smtp2-g21.free.fr (Postfix) with ESMTPSA id E12E4200385;
- Wed, 28 Aug 2024 12:21:12 +0200 (CEST)
-From: Vincent Jardin <vjardin@free.fr>
+ id GbAsAZoRPv29 for <buildroot@lists.busybox.net>;
+ Wed, 28 Aug 2024 10:36:10 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=195.201.24.99;
+ helo=mail.heine.tech; envelope-from=buildroot@heine.tech; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org BA40440710
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BA40440710
+Received: from mail.heine.tech (mail.heine.tech [195.201.24.99])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id BA40440710
+ for <buildroot@buildroot.org>; Wed, 28 Aug 2024 10:36:09 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon)
+ with ESMTPSA id 923851814B9; Wed, 28 Aug 2024 12:36:06 +0200 (CEST)
 To: buildroot@buildroot.org
-Date: Wed, 28 Aug 2024 12:21:06 +0200
-Message-ID: <20240828102106.55640-2-vjardin@free.fr>
-X-Mailer: git-send-email 2.46.0
-In-Reply-To: <20240828102106.55640-1-vjardin@free.fr>
-References: <20240827003813.30083-2-vjardin@free.fr>
- <20240828102106.55640-1-vjardin@free.fr>
+Date: Wed, 28 Aug 2024 12:35:37 +0200
+Message-Id: <20240828103538.7945-1-buildroot@heine.tech>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1724840477;
- bh=xGHgyU87+i8VrzFgaDHHfQA0XpdbMaiR4xAgrcvQnLk=;
- h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=d+pfEfex2t1zuEKzLCRheZzu7e48TdHx+MuWxPiK76bD7VU/8VBK5J2nzL6bf5x7B
- xUUoYi+/VwUpNc2H/SJchjlxPDjv7vnqqajwD2zZo7xEsDSxuhtCHG+FqW5gr35Znu
- 5yEodjJ/VqaNV1GgzhnkIuSkWvZkRqStsr1rcB0Z1NYDJIxs//J/AYOqR/K3P7oxLS
- ZB0HKgUpmlLyruJIi6n8loDJbj9QHOcJJNlzRfbCYKw+UO76zI0uAA3CNnr9k8A9wl
- qvEufog0e7v0M/vMbUHBvGYJz4/WZib1NQhM3blqraDFEfNMp/RQc998r6O7+VPODB
- 95UwIS0tYNhWw==
+X-Last-TLS-Session-Version: TLSv1.3
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=heine.tech; s=dkim; 
+ t=1724841366; h=from:subject:date:message-id:to:cc:mime-version:
+ content-transfer-encoding; bh=QmE0o7qOify7HNcz+yZK7d5+Am3Xunx5v0brY62ntKI=;
+ b=uhtsqG9+fJf8DsseAbuAC8IDCgDIVl03HNIR1t3s/0Jx4NEnBOy1os+5jy35NH0nqwg6MF
+ qJIQcTNXMT60Rb5dP3m7LX0hyhm7iAEnuOnYtHTW/UNY4p8hijD5RmWgnhiEO7ZYr8hTEV
+ X2/bF5ITen3FiYZ7N4riSQBcezFSLPI=
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
+ dmarc=pass (p=quarantine dis=none)
+ header.from=heine.tech
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=d+pfEfex
-Subject: [Buildroot] [PATCH v4 1/1] package/dpdk: add 24.07
+ dkim=pass (1024-bit key,
+ unprotected) header.d=heine.tech header.i=@heine.tech header.a=rsa-sha256
+ header.s=dkim header.b=uhtsqG9+
+Subject: [Buildroot] [PATCH] package/gtest: bump to version 1.15.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,325 +70,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Vincent Jardin <vjardin@free.fr>, Julien Olivain <ju.o@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Michael Nosthoff via buildroot <buildroot@buildroot.org>
+Reply-To: Michael Nosthoff <buildroot@heine.tech>
+Cc: Stephan Hoffmann <sho@relinux.de>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This commit adds the integration of the Data Plane Development Kit (DPDK),
-a suite of libraries and drivers designed for high-performance packet
-processing from the user space. DPDK enables direct packet steering from
-some network interfaces to the userland, bypassing the Linux kernel
-network stack. This is achieved through userland PCI drivers or by
-leveraging some userland memory mappings of the network devices.
-
-Originally inspired by RDMA (Remote Direct Memory Access) concepts, DPDK
-has been adapted to work with PCI devices that do not inherently support
-RDMA. This adaptation allows for low-latency, high-throughput data
-processing by minimizing the overhead typically associated with
-kernel-space network drivers.
-
-Importantly, this commit does not enforce the use of UIO or VFIO
-kernel frameworks, as DPDK's architecture supports userland memory
-mappings that do not require these technologies. By maintaining this
-flexibility, DPDK can operate with a broader range of hardware and
-software configurations, making it suitable for diverse Buildroot's
-deployment scenarios.
-
-Yocto patch imported from:
-  https://git.yoctoproject.org/meta-dpdk/plain/recipes-extended/dpdk/dpdk/0001-config-meson-get-cpu_instruction_set-from-meson-opti.patch
-
-Only the little endian targets are properly supported by DPDK. Big endian
-was supported, mostly on Power8, but it has not been used for a while and
-IBM is not strongly pushing any tests. Should big endian be supported
-again, DPDK community will be welcoming any  contributions.
-
-Some nice to have for the Kernel, but not mandatory:
-- CONFIG_VFIO_IOMMU_TYPE1=y
-- CONFIG_VFIO_VIRQFD=y
-- CONFIG_VFIO=y
-- CONFIG_VFIO_NOIOMMU=y
-- CONFIG_VFIO_PCI=y
-- CONFIG_VFIO_PCI_MMAP=y
-- CONFIG_HUGETLBFS=y
-- CONFIG_HUGETLB_PAGE=y
-- CONFIG_PROC_PAGE_MONITOR=y
-
-For x86 only, HPET and HPET_MMAP can be some nice to have too.
-
-Since they are some nice to have, but not mandatory ones, the following
-Kernel config fixups are not used:
-define DPDK_LINUX_CONFIG_FIXUPS
-	$(call KCONFIG_ENABLE_OPT, CONFIG_HUGETLBFS)
-	...
-endef
-
-Notes about license:
-
-DPDK was released with the BSD-3-Clause license.
-
-One network driver, the Google Virtual Ethernet (GVE) include files
-under the MIT license. See [2] and [3].
-
-DPDK had been including a Kernel Netdevice Interface (KNI) and an IGB_UIO
-kernel module under the GPL-2.0 license. Those modules were moved into a
-different repository [K]. Then, for instance, the KNI module was removed
-by [KNI]. This commit was first included in version v23.11. The IGB_UIO kernel
-module was removed by [UIO] since VFIO became capable of supporting all
-the required usecases for the DPDK. The main remaining issues had been
-the support of memory mapping within a VM or without the use of nested
-virtualization but those were fixed by the latest VFIO's kernel support.
-We can notice that the PMD drivers that are using the ibverbs (RDMA) APIs
-are not sharing this need of UIO/VFIO.
-
-There are also 2 files in "lib/eal/windows" under other licenses
-(namely BSD-2-Clause, ISC and MIT) but they are parts of the Environment
-Abstraction Library (EAL) for Microsoft Windows OS, it means they are
-not used when compiling for the Linux targets of Buildroot.
-
-The list of DPDK license exceptions is maintained at [3].
-
-[1] https://www.dpdk.org/
-[2] https://git.dpdk.org/dpdk/tree/doc/guides/nics/gve.rst?h=v24.07
-[3] https://git.dpdk.org/dpdk/tree/license/exceptions.txt?h=v24.07
-[KNI] https://git.dpdk.org/dpdk/commit/?id=f78c100bc87119c6a94130a6689d773afdaa9d98
-[UIO] https://git.dpdk.org/dpdk/commit/?id=56bb5841fd0608989101d933f091852a3126b4fe
-[K] https://git.dpdk.org/dpdk-kmods/commit/?id=d16f3b44987be181b6effee139558a084eaf9f8c
-
-Signed-off-by: Vincent Jardin <vjardin@free.fr>
-Reviewed-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Reviewed-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
 ---
- DEVELOPERS                                    |  3 +
- package/Config.in                             |  1 +
- ...-cpu_instruction_set-from-meson-opti.patch | 33 +++++++
- package/dpdk/Config.in                        | 34 ++++++++
- package/dpdk/dpdk.hash                        | 10 +++
- package/dpdk/dpdk.mk                          | 87 +++++++++++++++++++
- 6 files changed, 168 insertions(+)
- create mode 100644 package/dpdk/0001-config-meson-get-cpu_instruction_set-from-meson-opti.patch
- create mode 100644 package/dpdk/Config.in
- create mode 100644 package/dpdk/dpdk.hash
- create mode 100644 package/dpdk/dpdk.mk
+ package/gtest/gtest.hash | 2 +-
+ package/gtest/gtest.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 426590d5c5..7c3d858e40 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -3238,6 +3238,9 @@ F:	package/rtl8822cs/
- N:	Victor Huesca <victor.huesca@bootlin.com>
- F:	support/testing/tests/core/test_root_password.py
+diff --git a/package/gtest/gtest.hash b/package/gtest/gtest.hash
+index 5b1dcf44a8..e256c4dbfc 100644
+--- a/package/gtest/gtest.hash
++++ b/package/gtest/gtest.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  8ad598c73ad796e0d8280b082cebd82a630d73e73cd3c70057938a6501bba5d7  gtest-1.14.0.tar.gz
++sha256  7b42b4d6ed48810c5362c265a17faebe90dc2373c885e5216439d37927f02926  gtest-1.15.2.tar.gz
+ sha256  9702de7e4117a8e2b20dafab11ffda58c198aede066406496bef670d40a22138  LICENSE
+diff --git a/package/gtest/gtest.mk b/package/gtest/gtest.mk
+index c252ede818..fea2d7e8db 100644
+--- a/package/gtest/gtest.mk
++++ b/package/gtest/gtest.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-+N:	Vincent Jardin <vjardin@free.fr>
-+F:	package/dpdk/
-+
- N:	Vincent Prince <vincent.prince.fr@gmail.com>
- F:	package/nss-myhostname/
- F:	package/utp_com/
-diff --git a/package/Config.in b/package/Config.in
-index 211080345a..90e521330b 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1988,6 +1988,7 @@ menu "Networking"
- 	source "package/daq3/Config.in"
- 	source "package/davici/Config.in"
- 	source "package/dht/Config.in"
-+	source "package/dpdk/Config.in"
- 	source "package/enet/Config.in"
- 	source "package/filemq/Config.in"
- 	source "package/fmlib/Config.in"
-diff --git a/package/dpdk/0001-config-meson-get-cpu_instruction_set-from-meson-opti.patch b/package/dpdk/0001-config-meson-get-cpu_instruction_set-from-meson-opti.patch
-new file mode 100644
-index 0000000000..8e99379fb6
---- /dev/null
-+++ b/package/dpdk/0001-config-meson-get-cpu_instruction_set-from-meson-opti.patch
-@@ -0,0 +1,33 @@
-+From 121e5d019f0bb6dec0ace2b361611edd10fc8ff8 Mon Sep 17 00:00:00 2001
-+From: Lee Chee Yang <chee.yang.lee@intel.com>
-+Date: Wed, 6 Dec 2023 16:58:10 +0800
-+Subject: [PATCH] config/meson: get cpu_instruction_set from meson option
-+
-+Workaround error:
-+| ../git/config/meson.build:178:8: ERROR: Problem encountered: Compiler
-+does not support "x86_64" arch flag.
-+
-+Upstream-Status: Inappropriate [ yocto specific to set cpu_instruction_set ]
-+
-+Signed-off-by: Lee Chee Yang <chee.yang.lee@intel.com>
-+Upstream: https://git.yoctoproject.org/meta-dpdk/plain/recipes-extended/dpdk/dpdk/0001-config-meson-get-cpu_instruction_set-from-meson-opti.patch
-+---
-+ config/meson.build | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/config/meson.build b/config/meson.build
-+index a9ccd56deb..f310c7adf6 100644
-+--- a/config/meson.build
-++++ b/config/meson.build
-+@@ -105,7 +105,7 @@ platform = get_option('platform')
-+ 
-+ # set the cpu_instruction_set and cflags for it
-+ if meson.is_cross_build()
-+-    cpu_instruction_set = host_machine.cpu()
-++    cpu_instruction_set = get_option('cpu_instruction_set')
-+ else
-+     cpu_instruction_set = get_option('cpu_instruction_set')
-+     machine = get_option('machine')
-+-- 
-+2.37.3
-+
-diff --git a/package/dpdk/Config.in b/package/dpdk/Config.in
-new file mode 100644
-index 0000000000..82d9a0a798
---- /dev/null
-+++ b/package/dpdk/Config.in
-@@ -0,0 +1,34 @@
-+config BR2_PACKAGE_DPDK_ARCH_SUPPORTS
-+	bool
-+	default y
-+	# DPDK can be used for the following little endian architecture
-+	default y if BR2_RISCV_64
-+	default y if BR2_aarch64
-+	default y if BR2_powerpc64le
-+	# DPDK requires SSE4.2 for x86_64 since v17.08
-+	default y if BR2_x86_64 && BR2_X86_CPU_HAS_SSE42
-+
-+config BR2_PACKAGE_DPDK
-+	bool "dpdk"
-+	depends on BR2_PACKAGE_DPDK_ARCH_SUPPORTS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # DPDK design
-+	depends on BR2_USE_MMU # pthread() memory mappings
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C11/stdatomic.h
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_19
-+	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	select BR2_PACKAGE_LIBEXECINFO if !BR2_TOOLCHAIN_USES_GLIBC
-+	help
-+	  DPDK (Data Plane Development Kit) is a set of libraries
-+	  and drivers for fast packet processing.
-+
-+	  http://dpdk.org/
-+
-+comment "DPDK needs a toolchain w/ dynamic library, threads, wchar, kernel headers >= 4.19"
-+	depends on BR2_USE_MMU # pthread() memory mappings
-+	depends on BR2_PACKAGE_DPDK_ARCH_SUPPORTS
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C11/stdatomic.h
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_19
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_TOOLCHAIN_USES_GLIBC || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
-+		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_19
-diff --git a/package/dpdk/dpdk.hash b/package/dpdk/dpdk.hash
-new file mode 100644
-index 0000000000..4e98d9dc25
---- /dev/null
-+++ b/package/dpdk/dpdk.hash
-@@ -0,0 +1,10 @@
-+# Locally computed
-+sha256  9944f7e5f268e7ac9b4193e2cd54ef6d98f6e1d7dddc967c77ae4f6616d6fbbd  dpdk-24.07.tar.xz
-+sha256  1531b66affc3bae796d755e12850795e56e25ccedd685bf7d2644d8ddfadbad8  license/bsd-2-clause.txt
-+sha256  9acc4bc871a4742550158e3696dcb381953172ef808d04ca248184f9f6322712  license/bsd-3-clause.txt
-+sha256  e19808bccd90c238fac06da2fc3683e094c64f7ba647e9d86f03a98cf5f2ce05  license/exceptions.txt
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  license/gpl-2.0.txt
-+sha256  be8f198f2e1c9b30226e293255bbe6933ee6607a580ee5874185aa023bcc3c39  license/isc.txt
-+sha256  592987e8510228d546540b84a22444bde98e48d03078d3b2eefcd889bec5ce8c  license/lgpl-2.1.txt
-+sha256  6c54c4d44faf3cba829b3d0c21c6955953e758767018fd7244f809b01d4f4845  license/mit.txt
-+sha256  cae178052c96959741acb7f00634a09a8294e6cafb5ad53e158d63e3510875ab  license/README
-diff --git a/package/dpdk/dpdk.mk b/package/dpdk/dpdk.mk
-new file mode 100644
-index 0000000000..4be51ee763
---- /dev/null
-+++ b/package/dpdk/dpdk.mk
-@@ -0,0 +1,87 @@
-+################################################################################
-+#
-+# dpdk
-+#
-+################################################################################
-+
-+DPDK_VERSION = 24.07
-+DPDK_SOURCE = dpdk-$(DPDK_VERSION).tar.xz
-+DPDK_SITE = https://fast.dpdk.org/rel
-+DPDK_LICENSE = \
-+	BSD-3-Clause, \
-+	BSD-2-Clause,\
-+	GPL-2.0, \
-+	ISC, \
-+	LGPL-2.1, \
-+	MIT
-+
-+# Only the Windows target has the 2 following licenses:
-+# - license/bsd-2-clause.txt
-+# - license/isc.txt
-+# which is related to a Windows getopt.[ch] compatibility layer.
-+# Since Buildroot is not used for Windows target, it is not listed
-+# here.
-+#
-+# All the userland files of DPDK have dual licences BSD or GPL/LGPL
-+# Since the Linux kernel modules had been removed from the DPDK, there
-+# is no GPL only code into the DPDK anymore.
-+# The usage of DPDK with Buildroot is for userland only, it means
-+# that for the dual licenced files, BSD clause is used but not the
-+# following ones:
-+# - license/gpl-2.0.txt
-+# - license/lgpl-2.1.txt
-+# See the DPDK's license/README for more details.
-+#
-+# The legacy and historical license of the DPDK is BSD-3-clause.
-+DPDK_LICENSE_FILES = \
-+	license/README \
-+	license/bsd-3-clause.txt (legacy) \
-+	license/exceptions.txt \
-+	license/mit.txt (drivers/net/gve/base)
-+
-+DPDK_DEPENDENCIES = \
-+	host-pkgconf \
-+	host-python-pyelftools
-+
-+ifeq ($(BR2_PACKAGE_LIBBSD),y)
-+DPDK_DEPENDENCIES += libbsd
-+endif
-+
-+ifeq ($(BR2_PACKAGE_JANSSON),y)
-+DPDK_DEPENDENCIES += jansson
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBPCAP),y)
-+DPDK_DEPENDENCIES += libpcap
-+endif
-+
-+ifeq ($(BR2_PACKAGE_ZLIB),y)
-+DPDK_DEPENDENCIES += zlib
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBEXECINFO),y)
-+DPDK_DEPENDENCIES += libexecinfo
-+endif
-+
-+ifeq ($(BR2_PACKAGE_NUMACTL),y)
-+DPDK_DEPENDENCIES += numactl
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBARCHIVE),y)
-+DPDK_DEPENDENCIES += libarchive
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBBPF),y)
-+DPDK_DEPENDENCIES += libbpf
-+endif
-+
-+ifeq ($(BR2_PACKAGE_RDMA_CORE),y)
-+DPDK_DEPENDENCIES += rdma-core
-+endif
-+
-+# DPDK's meson shall need to be clean'd, hack here along the enclosed patch
-+DPDK_CONF_OPTS += -Dcpu_instruction_set=$(BR2_GCC_TARGET_ARCH)
-+# Keep the following, even if not mandatory, until the removal of the patch
-+DPDK_MESON_EXTRA_PROPERTIES += platform='generic'
-+
-+$(eval $(meson-package))
+-GTEST_VERSION = 1.14.0
++GTEST_VERSION = 1.15.2
+ GTEST_SITE = $(call github,google,googletest,v$(GTEST_VERSION))
+ GTEST_INSTALL_STAGING = YES
+ GTEST_INSTALL_TARGET = NO
 -- 
-2.46.0
+2.34.1
 
 _______________________________________________
 buildroot mailing list
