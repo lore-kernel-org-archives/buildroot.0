@@ -4,70 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9221C54F32
-	for <buildroot@archiver.kernel.org>; Wed, 28 Aug 2024 12:45:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E5100C54FAA
+	for <buildroot@archiver.kernel.org>; Wed, 28 Aug 2024 12:59:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 71163400D1;
-	Wed, 28 Aug 2024 12:45:48 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 93A4540B8B;
+	Wed, 28 Aug 2024 12:59:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jc5XZ5zEzpUc; Wed, 28 Aug 2024 12:45:47 +0000 (UTC)
+ id Nhold3mNjcX6; Wed, 28 Aug 2024 12:59:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 288CE4029B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1CDD04029B
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 288CE4029B;
-	Wed, 28 Aug 2024 12:45:47 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 32B3A1BF83A
- for <buildroot@lists.busybox.net>; Wed, 28 Aug 2024 12:45:45 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1CDD04029B;
+	Wed, 28 Aug 2024 12:59:45 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id EFA431BF215
+ for <buildroot@lists.busybox.net>; Wed, 28 Aug 2024 12:59:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1ECE940688
- for <buildroot@lists.busybox.net>; Wed, 28 Aug 2024 12:45:45 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id DBF57805A0
+ for <buildroot@lists.busybox.net>; Wed, 28 Aug 2024 12:59:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6Pbk7me9VMZX for <buildroot@lists.busybox.net>;
- Wed, 28 Aug 2024 12:45:44 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=220.197.31.4;
- helo=m16.mail.163.com; envelope-from=tianyuanhao3@163.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 2ED5440663
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2ED5440663
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.4])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2ED5440663
- for <buildroot@buildroot.org>; Wed, 28 Aug 2024 12:45:42 +0000 (UTC)
-Received: from ubuntu.localdomain (unknown [223.102.86.110])
- by gzga-smtp-mta-g3-3 (Coremail) with SMTP id _____wDn74DsG89msiu4Ag--.34232S2;
- Wed, 28 Aug 2024 20:45:33 +0800 (CST)
-From: TIAN Yuanhao <tianyuanhao3@163.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id LNfpDlqFmQwi for <buildroot@lists.busybox.net>;
+ Wed, 28 Aug 2024 12:59:43 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1828:2000:679::23; helo=helium.openadk.org;
+ envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org BD91680577
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BD91680577
+Received: from helium.openadk.org (helium.openadk.org
+ [IPv6:2a00:1828:2000:679::23])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id BD91680577
+ for <buildroot@buildroot.org>; Wed, 28 Aug 2024 12:59:42 +0000 (UTC)
+Received: by helium.openadk.org (Postfix, from userid 1000)
+ id A77D7352142F; Wed, 28 Aug 2024 14:59:40 +0200 (CEST)
+Date: Wed, 28 Aug 2024 14:59:40 +0200
+From: Waldemar Brodkorb <wbx@openadk.org>
 To: buildroot@buildroot.org
-Date: Wed, 28 Aug 2024 05:44:40 -0700
-Message-ID: <20240828124440.3882-1-tianyuanhao3@163.com>
-X-Mailer: git-send-email 2.44.1
+Message-ID: <Zs8fPOrOGtdUOvA9@waldemar-brodkorb.de>
 MIME-Version: 1.0
-X-CM-TRANSID: _____wDn74DsG89msiu4Ag--.34232S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7WF13Zw1xWrWDZryrCFW5Awb_yoW8tryDpa
- ya9wnI9Fy8KrW8trWkWrnakFy5Ka4vqr4Fg3WkJ3Z0yw13Jr4IvanFkF15XFy3Gw48A3y5
- ZF129rZrG3yUAFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
- 9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pRHa0gUUUUU=
-X-Originating-IP: [223.102.86.110]
-X-CM-SenderInfo: xwld05xxdqxtjrt6il2tof0z/1tbiXQ9JjWXAm+T+4gAAsQ
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=163.com; 
- s=s110527; h=From:Subject:Date:Message-ID:MIME-Version; bh=7tsef
- /2Fs14rxTHYCDY53EtVm+aGDtxMKg5QDvFF+zY=; b=DJ0pBrCoseyu9R+8vEF+u
- uW438QiRr+zV4LyO0JC7xVBP0NHna0qi0/AjyN668lhHFBHfWbe5Za0jU4c1KB3v
- u10GehvanyAcn6VGMnBY3k2wQnLR9DCU5ECdA9rVwyShocuEh1cm77DG/aiTV3B6
- t9uCawzjnWtapoejHaW4VQ=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=163.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=163.com header.i=@163.com header.a=rsa-sha256
- header.s=s110527 header.b=DJ0pBrCo
-Subject: [Buildroot] [PATCH 1/1] Makefile: move 'ppd-fixup-paths' to
- 'host-finalize'
+Content-Disposition: inline
+X-Operating-System: Linux 5.10.0-31-amd64 x86_64
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=openadk.org; s=2022; 
+ t=1724849980; bh=loIG3maihubVLeUhf9+w28tSEWUJDf0NFTUK6oi3PK8=;
+ h=Date:From:To:Subject:From;
+ b=C3M6sLTSI656okyIIH/fW4+b7TdRshtFLUhab1PCCR52BVRFfBqvHKcp7CZ4YtYzT
+ R3kLat+viddYRdd3qs9V6aJGV5JSGjy/pbhDa1tGdq2LPjZNPjp/Ryc60xpJGs3GXC
+ WADcSj9IpvO9kTDWhaoBbh2s8lS+8K4C/i8KIUbojn1ostwBsqPdpm5es/Rt5A5Jo5
+ Vw7HhEZoFKCFMqbZBhKukZIwrn6BXM65g0Ec6VS92i9hY1DwqSSg6N3bgzd/p5UZ+G
+ y3IGBZ/ekuWX5oe6jLG5G6Zqm/ELK62p2jgcfbwXuTZ/XHCxMUS0Seys6WLeWHAC4F
+ AM0Zw+iDYePow==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=openadk.org
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=openadk.org header.i=@openadk.org
+ header.a=rsa-sha256 header.s=2022 header.b=C3M6sLTS
+Subject: [Buildroot] [PATCH] package/fbdump: fix gcc 14.x issue
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,65 +75,63 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: TIAN Yuanhao <tianyuanhao3@163.com>,
- James Hilliard <james.hilliard1@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Brandon Maier <Brandon.Maier@collins.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-When using 'per-package', some python shebang in the host directory
-will point to the per-package directory. However, the python modules
-that are runtime dependencies will not be rsynced to the corresponding
-per-package directory, which may cause the python script to fail to
-find the python module.
+Following error is seen with gcc 14.x:
+/home/autobuild/autobuild/instance-0/output-1/host/bin/armeb-buildroot-linux-uclibcgnueabi-gcc -DHAVE_CONFIG_H -I. -I. -I..   -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Wall -O2 -fomit-frame-pointer -s -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os -g0  -c `test -f 'main.c' || echo './'`main.c
+main.c: In function 'main':
+main.c:82:49: error: passing argument 4 of 'Options_parse' from incompatible pointer type [-Wincompatible-pointer-types]
+   82 |   if( Options_parse( opt_template, &opts, argc, argv ) != 0 )
+      |                                                 ^~~~
+      |                                                 |
+      |                                                 char **
+In file included from main.c:17:
+options.h:32:83: note: expected 'const char **' but argument is of type 'char **'
+   32 | int Options_parse( const OptionTemplate *tmplt, void *opts, int argc, const char *argv[] );
+      |                                                                       ~~~~~~~~~~~~^~~~~~
+make[3]: *** [Makefile:240: main.o] Error 1
+make[3]: Leaving directory '/home/autobuild/autobuild/instance-0/output-1/build/fbdump-0.4.2/src'
+make[2]: *** [Makefile:201: all-recursive] Error 1
+make[2]: Leaving directory '/home/autobuild/autobuild/instance-0/output-1/build/fbdump-0.4.2'
+make[1]: *** [Makefile:156: all] Error 2
+make[1]: Leaving directory '/home/autobuild/autobuild/instance-0/output-1/build/fbdump-0.4.2'
 
-For example, when enabling BR2_PER_PACKAGE_DIRECTORIES and
-BR2_PACKAGE_HOST_BMAP_TOOLS, the following error will occur:
+Fixes:
 
-  ModuleNotFoundError: No module named 'six'
+  http://autobuild.buildroot.net/results/3a0/3a0abff75023e257f3d6048688485a380b72fbb3
 
-output/host/bin/bmaptool detects the presence of host-python-six in
-output/per-package/host-bmap-tools/host. However, host-python-six is
-not a required compile-time dependency for host-bmap-tools. Therefore,
-it will not be rsynced to output/per-package/host-bmap-tools/host, but
-only to output/host. This is the reason for the error.
-
-Move the 'ppd-fixup-paths' to 'host-finalize' to allow the host python
-script to search for python modules in output/host.
-
-Signed-off-by: TIAN Yuanhao <tianyuanhao3@163.com>
-Cc: Brandon Maier <Brandon.Maier@collins.com>
-Cc: James Hilliard <james.hilliard1@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
- Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/fbdump/0001-fix-gcc14-compile-issue.patch | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
+ create mode 100644 package/fbdump/0001-fix-gcc14-compile-issue.patch
 
-diff --git a/Makefile b/Makefile
-index 55aeafde23..f1fc3a4a52 100644
---- a/Makefile
-+++ b/Makefile
-@@ -604,7 +604,6 @@ prepare-sdk: world
- 	PARALLEL_JOBS=$(PARALLEL_JOBS) \
- 		PER_PACKAGE_DIR=$(PER_PACKAGE_DIR) \
- 		$(TOPDIR)/support/scripts/fix-rpath staging
--	$(call ppd-fixup-paths,$(BASE_DIR))
- 	$(INSTALL) -m 755 $(TOPDIR)/support/misc/relocate-sdk.sh $(HOST_DIR)/relocate-sdk.sh
- 	mkdir -p $(HOST_DIR)/share/buildroot
- 	echo $(HOST_DIR) > $(HOST_DIR)/share/buildroot/sdk-location
-@@ -722,6 +721,7 @@ STAGING_DIR_FILES_LISTS = $(sort $(wildcard $(BUILD_DIR)/*/.files-list-staging.t
- host-finalize: $(PACKAGES) $(HOST_DIR) $(HOST_DIR_SYMLINK)
- 	@$(call MESSAGE,"Finalizing host directory")
- 	$(call per-package-rsync,$(sort $(PACKAGES)),host,$(HOST_DIR),copy)
-+	$(call ppd-fixup-paths,$(BASE_DIR))
- 
- .PHONY: staging-finalize
- staging-finalize: $(STAGING_DIR_SYMLINK)
+diff --git a/package/fbdump/0001-fix-gcc14-compile-issue.patch b/package/fbdump/0001-fix-gcc14-compile-issue.patch
+new file mode 100644
+index 0000000000..a554b4faf6
+--- /dev/null
++++ b/package/fbdump/0001-fix-gcc14-compile-issue.patch
+@@ -0,0 +1,15 @@
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++Upstream: N/A no SCM, not active anymore
++
++diff -Nur fbdump-0.4.2.orig/src/main.c fbdump-0.4.2/src/main.c
++--- fbdump-0.4.2.orig/src/main.c	2007-03-03 04:14:37.000000000 +0100
+++++ fbdump-0.4.2/src/main.c	2024-08-16 09:25:42.828125778 +0200
++@@ -58,7 +58,7 @@
++ }
++ 
++ 
++-int main( int argc, char *argv[] )
+++int main( int argc, const char *argv[] )
++ {
++   Options  opts = {
++     .fbdev = DEFAULT_DEVICE,
 -- 
-2.45.1
+2.39.2
 
 _______________________________________________
 buildroot mailing list
