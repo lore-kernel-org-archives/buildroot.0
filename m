@@ -4,73 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D0531C54FAA
-	for <buildroot@archiver.kernel.org>; Wed, 28 Aug 2024 13:43:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B593AC54FAA
+	for <buildroot@archiver.kernel.org>; Wed, 28 Aug 2024 13:58:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3833D80EB9;
-	Wed, 28 Aug 2024 13:43:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F23F38132B;
+	Wed, 28 Aug 2024 13:58:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tHL8FEiQMmJ6; Wed, 28 Aug 2024 13:43:02 +0000 (UTC)
+ id 6Ogk68ildBqB; Wed, 28 Aug 2024 13:58:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 444D58118D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D8FAD81254
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 444D58118D;
-	Wed, 28 Aug 2024 13:43:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D8FAD81254;
+	Wed, 28 Aug 2024 13:58:28 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4F4791BF2BB
- for <buildroot@lists.busybox.net>; Wed, 28 Aug 2024 13:43:00 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id DDA381BF2BB
+ for <buildroot@lists.busybox.net>; Wed, 28 Aug 2024 13:58:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4954340B0B
- for <buildroot@lists.busybox.net>; Wed, 28 Aug 2024 13:43:00 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id CAB2640B0B
+ for <buildroot@lists.busybox.net>; Wed, 28 Aug 2024 13:58:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GJUIkZrQKACu for <buildroot@lists.busybox.net>;
- Wed, 28 Aug 2024 13:42:59 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.201;
- helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id rClJ5DB4YNZP for <buildroot@lists.busybox.net>;
+ Wed, 28 Aug 2024 13:58:26 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.198;
+ helo=relay6-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org C101B401FB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C101B401FB
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C101B401FB
- for <buildroot@buildroot.org>; Wed, 28 Aug 2024 13:42:58 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 6CB981BF20B;
- Wed, 28 Aug 2024 13:42:54 +0000 (UTC)
-Date: Wed, 28 Aug 2024 15:42:53 +0200
-To: Peter Korsgaard <peter@korsgaard.com>
-Message-ID: <20240828154253.206391b0@windsurf>
-In-Reply-To: <87r0a994or.fsf@dell.be.48ers.dk>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 429EA400C7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 429EA400C7
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [217.70.183.198])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 429EA400C7
+ for <buildroot@buildroot.org>; Wed, 28 Aug 2024 13:58:25 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 878F7C0005;
+ Wed, 28 Aug 2024 13:58:22 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1sjJBl-0055zV-2Q;
+ Wed, 28 Aug 2024 15:58:21 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 References: <20240421095353.208034-1-dario.binacchi@amarulasolutions.com>
  <20240421095353.208034-2-dario.binacchi@amarulasolutions.com>
- <20240715160555.6e88961e@windsurf>
- <87r0a994or.fsf@dell.be.48ers.dk>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+ <20240715160555.6e88961e@windsurf> <87r0a994or.fsf@dell.be.48ers.dk>
+ <20240828154253.206391b0@windsurf>
+Date: Wed, 28 Aug 2024 15:58:21 +0200
+In-Reply-To: <20240828154253.206391b0@windsurf> (Thomas Petazzoni's message of
+ "Wed, 28 Aug 2024 15:42:53 +0200")
+Message-ID: <87ttf47nr6.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1724852575;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=NIX5V4uqdJ72bW4JT8khje5PS6sUjjg3Zun3VQewxx4=;
- b=BoLtWUBIaIAnlh9RrBoyr9cRvUchG9rkhxJ8rMuDH54mmJXDw039MCOKVpQaHoaF6NTOsp
- ujXwD1ujTxZERnNONul/f6FXDJJV3zLthPO1T6SPOIWa2z77cRbE+hUnnNlm+306BYN1r2
- dRiXtkT0EYQDf8ARIpN582y+sqDoLcZt4ZDLBSLaiA2vkiBWbJ9u4PSTDeGD3fYCqNTD2J
- sShbTlA0k0HU7zqtxnbGT1Mi9WrGSbVepDBMzFk/0fzZ7kAuWm+jGiP6Gx0Q/qk/WT19Aw
- d10nnU6OvPdb46VYY6wB3RoIAhq9ldVE63qh4ejvDf5DqX3qVTm2gXwU5Bumfg==
+X-GND-Sasl: peter@korsgaard.com
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=BoLtWUBI
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
 Subject: Re: [Buildroot] [RFC PATCH 1/2] support/scripts/genimage.sh:
  support creating a bmap image
 X-BeenThere: buildroot@buildroot.org
@@ -84,8 +72,6 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Cc: michael@amarulasolutions.com, Xuanhao Shi <X15000177@gmail.com>,
  Thomas Petazzoni via buildroot <buildroot@buildroot.org>,
  Dario Binacchi <dario.binacchi@amarulasolutions.com>,
@@ -95,38 +81,77 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 27 Aug 2024 20:55:00 +0200
-Peter Korsgaard <peter@korsgaard.com> wrote:
+>>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
 
-> Sorry for the slow response, I only got to this now while backporting
-> for LTS, but I don't like the fact that it hardcodes gzip compression
-> (with a specific compression level), especially as it is
-> hidden/optionless now, E.G. it seems quite random that if you have a
-> genimage.cfg creating a sdcard.img (or whatever) and you then enable
-> host-bmaptools you all of a sudden don't have sdcard.img anymore, but
-> sdcard.img.gz (and sdcard.img.bmap) and "waste" time doing the
-> compression you may or may not want.
-> 
-> I would suggest to drop the gzip step and only create the .bmap files
-> (which presumably is quite fast?)
-> 
-> What do you say?
+Hi,
 
-I understand your concern, but compression is also what helps in making
-those sparse images small. Of course, as long as you keep them where
-Buildroot generated them, they are sparse, so they don't take much
-space. But as soon as you "distribute" them, they usually loose their
-sparse-ness, and this is where compressing the image + the bmap
-metadata file helps in lot in reducing the amount of data.
+ >> I would suggest to drop the gzip step and only create the .bmap files
+ >> (which presumably is quite fast?)
+ >> 
+ >> What do you say?
 
-But fair enough, I assume this compression can be done as a custom
-post-processing step by whoever needs it.
+ > I understand your concern, but compression is also what helps in making
+ > those sparse images small.
 
-Thomas
+NIT: No, it is the sparseness (E.G. the holes). Compression in fact
+breaks the holes (replaces them by zeros):
+
+truncate -s 1G disk.img
+du -hs disk.img
+0       disk.img
+
+gzip disk.img
+du -hs disk.img.gz
+1020K   disk.img.gz
+
+gunzip disk.img.gz
+du -hs disk.img
+1.0G    disk.img
+
+To transfer a file with holes without losing them you need an archival
+format that understands sparse files, E.G. tar -S:
+
+truncate -s 1G disk.img
+du -hs disk.img
+0       disk.img
+
+tar cfSz disk.tar.gz disk.img
+du -hs disk.tar.gz
+4.0K    disk.tar.gz
+
+rm disk.img
+tar zxf disk.tar.gz
+du -hs disk.img
+0       disk.img
+
+Notice also that the .tar.gz is a lot smaller than the img.gz
+
+
+ > Of course, as long as you keep them where Buildroot generated them,
+ > they are sparse, so they don't take much space. But as soon as you
+ > "distribute" them, they usually loose their sparse-ness, and this is
+ > where compressing the image + the bmap metadata file helps in lot in
+ > reducing the amount of data.
+
+Correct, unless an archival format supporting sparse files is used, so
+if anything we should make a tarball of the images - But that is also
+not so simple, E.G.:
+
+- Busybox tar cannot extract sparse tar files
+- One tarball for everything or a tarball for each image?
+- What compression algorithm and parameters to use?
+
+So it very fast ends up in a very use case specific setup, hence my
+suggestion to NOT do it and leave such customizations to a post-image
+script.
+
+ > But fair enough, I assume this compression can be done as a custom
+ > post-processing step by whoever needs it.
+
+Indeed.
+
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
