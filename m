@@ -4,65 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 23505C5AE5A
-	for <buildroot@archiver.kernel.org>; Wed, 28 Aug 2024 15:32:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CE1D6C5B54A
+	for <buildroot@archiver.kernel.org>; Wed, 28 Aug 2024 15:40:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B51DA40926;
-	Wed, 28 Aug 2024 15:32:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 56020406EA;
+	Wed, 28 Aug 2024 15:40:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OWRHKVIb8AVd; Wed, 28 Aug 2024 15:32:21 +0000 (UTC)
+ id SpWcmKN7tQ31; Wed, 28 Aug 2024 15:40:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9CB87406DD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 33E85406EC
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9CB87406DD;
-	Wed, 28 Aug 2024 15:32:21 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id EBE831BF2AA
- for <buildroot@lists.busybox.net>; Wed, 28 Aug 2024 15:32:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 33E85406EC;
+	Wed, 28 Aug 2024 15:40:24 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 106181BF2AA
+ for <buildroot@lists.busybox.net>; Wed, 28 Aug 2024 15:40:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D7709812DF
- for <buildroot@lists.busybox.net>; Wed, 28 Aug 2024 15:32:19 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id F291A607A6
+ for <buildroot@lists.busybox.net>; Wed, 28 Aug 2024 15:40:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wy_iw7O6LLdJ for <buildroot@lists.busybox.net>;
- Wed, 28 Aug 2024 15:32:19 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=89.238.66.15;
- helo=helium.openadk.org; envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 3CAEB812DC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3CAEB812DC
-Received: from helium.openadk.org (helium.openadk.org [89.238.66.15])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 3CAEB812DC
- for <buildroot@buildroot.org>; Wed, 28 Aug 2024 15:32:17 +0000 (UTC)
-Received: by helium.openadk.org (Postfix, from userid 1000)
- id 1F31F3535C40; Wed, 28 Aug 2024 17:32:14 +0200 (CEST)
-Date: Wed, 28 Aug 2024 17:32:14 +0200
-From: Waldemar Brodkorb <wbx@openadk.org>
-To: buildroot@buildroot.org
-Message-ID: <Zs9C/g1czFdKG5Kf@waldemar-brodkorb.de>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id A5o_HLHVwUTM for <buildroot@lists.busybox.net>;
+ Wed, 28 Aug 2024 15:40:22 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::228;
+ helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org C04BD606E2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C04BD606E2
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C04BD606E2
+ for <buildroot@buildroot.org>; Wed, 28 Aug 2024 15:40:21 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 81E801BF20B;
+ Wed, 28 Aug 2024 15:40:18 +0000 (UTC)
+Date: Wed, 28 Aug 2024 17:40:17 +0200
+To: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
+Message-ID: <20240828174017.3862c155@windsurf>
+In-Reply-To: <20240828110647.150583-1-roykollensvendsen@gmail.com>
+References: <20240828110647.150583-1-roykollensvendsen@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Disposition: inline
-X-Operating-System: Linux 5.10.0-31-amd64 x86_64
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=openadk.org; s=2022; 
- t=1724859134; bh=YDcqhug6cBPnvoR+f5NQ2X+lzXZMesA6tXcoDbsZUEg=;
- h=Date:From:To:Subject:From;
- b=WsXggR9FPKM8xg7GLKIX1xy2fejoUSYIlWDc8sjy2Dd8WzVCPLnAbtzzxEwXBpqlo
- DKp4U5wqOSxw0TR716LZd84J+MeZUjVt6SsunEnl20vBhutJ5p+Z+kjDWBmFi1sfQM
- TNu+yokpZSNejhgn/2n5Qv5jD54ICErQin/inwPiiq014cp/JSn20Im4b7fW7vAStc
- fw/WsIb1MvgcL/TkH8CZdR7927rcc28r9pdrNngRN5u0Ot7GmXblUwyBfMXTnJyTPi
- yjrw2FD5s51L0Id3Mw041ZVwFzrDueeR/mrUL5jDVq48cpn35gouE8Ry7vrpjQMi2I
- yb6rh1zPKbcQg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=openadk.org
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1724859618;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=+Rhzid6mjG08dlZtg+M5K/3wrRLlLdOyONsn4+xAoMQ=;
+ b=loVADjV1epdGR/OEA7i81DROH8tGbPYfz79dxUnjyM9nEKM3uk+OivAKe4N+2Mvf8MyQcB
+ nNfNrVIzjUFoyixdCtiDhXCbL8PW/tsVxvEQBSTXmG8i1kLJqHmUfsl1odnmcCsCIoWCFb
+ A//ZpYYweNZ9tF2k9j0nzuQsP/GZNXeLnMMZAOQJvxgzDl76b/7H6zITUQRfIhHRDOA35r
+ 4NgHdEzk0EaH3qsfwanXYzwBzlxO8fEFGOm27VOsDBLpBy10mVVi6QRGICwvokiEphoonb
+ MwGIYThapjgGYj1laYqK/D01bukQOUtAL+ZqAuyzzngS2YDQYP0oanXS8WjdQA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=openadk.org header.i=@openadk.org header.a=rsa-sha256
- header.s=2022 header.b=WsXggR9F
-Subject: [Buildroot] [PATCH] package/tllist: update download URL
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=loVADjV1
+Subject: Re: [Buildroot] [PATCH 1/1] package/qt6: fix license information
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,49 +80,33 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Zoltan Gyarmati <zgyarmati@zgyarmati.de>,
+ Jesse Van Gavere <jesseevg@gmail.com>,
+ Andreas Naumann <ANaumann@ultratronik.de>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fix download URL. Tarball is renamed, too.
+Hello Roy,
 
-Fixes:
+On Wed, 28 Aug 2024 13:06:46 +0200
+Roy Kollen Svendsen <roykollensvendsen@gmail.com> wrote:
 
- http://autobuild.buildroot.org/results/950/950688493021c12c4dea98ac4b220355d917ff69
+> Signed-off-by: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
----
- package/tllist/tllist.hash | 2 +-
- package/tllist/tllist.mk   | 3 +--
- 2 files changed, 2 insertions(+), 3 deletions(-)
+Do you have more details? There's no commit log, and it's just a huge
+change in the licensing. It is based on what?
 
-diff --git a/package/tllist/tllist.hash b/package/tllist/tllist.hash
-index 2806d62355..73d382767a 100644
---- a/package/tllist/tllist.hash
-+++ b/package/tllist/tllist.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  3f3fe2f7433719cec816c63937a7aa36e566bd317763ef46d11562073ab6361d  1.1.0.tar.gz
-+sha256  a1f0ce0dc4fcb4ce59c37202a1d914c853a8bd2d7c5d57d623b15a8dd9778767  tllist-1.1.0.tar.gz
- sha256  d534a23a31500a0ac958d9634b84f532bd73ff1aca1bb8f7debbcbebc16ff39a  LICENSE
-diff --git a/package/tllist/tllist.mk b/package/tllist/tllist.mk
-index 69a34a65ab..26e21ccbe1 100644
---- a/package/tllist/tllist.mk
-+++ b/package/tllist/tllist.mk
-@@ -5,8 +5,7 @@
- ################################################################################
- 
- TLLIST_VERSION = 1.1.0
--TLLIST_SOURCE = $(TLLIST_VERSION).tar.gz
--TLLIST_SITE = https://codeberg.org/dnkl/tllist/archive
-+TLLIST_SITE = https://codeberg.org/dnkl/tllist/releases/download/$(TLLIST_VERSION)
- TLLIST_LICENSE = MIT
- TLLIST_LICENSE_FILES = LICENSE
- # header only
+Thanks!
+
+Thomas
 -- 
-2.30.2
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
