@@ -4,61 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BB85CC54752
-	for <buildroot@archiver.kernel.org>; Wed, 28 Aug 2024 08:49:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3275EC54752
+	for <buildroot@archiver.kernel.org>; Wed, 28 Aug 2024 08:51:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6710D400D2;
-	Wed, 28 Aug 2024 08:49:28 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9027C400D2;
+	Wed, 28 Aug 2024 08:51:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TTgpRVEkA_ye; Wed, 28 Aug 2024 08:49:27 +0000 (UTC)
+ id uH6OVw1ww_VL; Wed, 28 Aug 2024 08:51:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2545D4062A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 05A164062A
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2545D4062A;
-	Wed, 28 Aug 2024 08:49:27 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 55BC01BF232
- for <buildroot@lists.busybox.net>; Wed, 28 Aug 2024 08:49:26 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 05A164062A;
+	Wed, 28 Aug 2024 08:51:33 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 6DB521BF232
+ for <buildroot@lists.busybox.net>; Wed, 28 Aug 2024 08:51:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 419C84062A
- for <buildroot@lists.busybox.net>; Wed, 28 Aug 2024 08:49:26 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5A35560A63
+ for <buildroot@lists.busybox.net>; Wed, 28 Aug 2024 08:51:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZVe9xzG0C073 for <buildroot@lists.busybox.net>;
- Wed, 28 Aug 2024 08:49:25 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.196;
- helo=relay4-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id u9vV_PEAvzER for <buildroot@lists.busybox.net>;
+ Wed, 28 Aug 2024 08:51:30 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 273D0400D2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 273D0400D2
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 273D0400D2
- for <buildroot@buildroot.org>; Wed, 28 Aug 2024 08:49:24 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id DEAD0E0004;
- Wed, 28 Aug 2024 08:49:21 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1sjEMj-004ilB-0p;
- Wed, 28 Aug 2024 10:49:21 +0200
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 57531605EE
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 57531605EE
+ for <buildroot@buildroot.org>; Wed, 28 Aug 2024 08:51:30 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 508BC865B9; Wed, 28 Aug 2024 08:51:30 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Fred Lefranc <fred.lefranc.evs@gmail.com>
-References: <20240716075933.1315047-1-fred.lefranc+evs@gmail.com>
- <20240717121147.1353901-1-fred.lefranc+evs@gmail.com>
-Date: Wed, 28 Aug 2024 10:49:21 +0200
-In-Reply-To: <20240717121147.1353901-1-fred.lefranc+evs@gmail.com> (Fred
- Lefranc's message of "Wed, 17 Jul 2024 14:11:46 +0200")
-Message-ID: <877cc18226.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH v4] package/busybox: fix build with glibc
- 2.39
+To: buildroot@buildroot.org
+Date: Wed, 28 Aug 2024 09:19:35 +0200
+X-Git-Refname: refs/heads/2024.02.x
+X-Git-Oldrev: d592786c37fe99162e65ce4c3b8322a281e68cbf
+X-Git-Newrev: d2865a73fa330c77cd099329ef6b4f327b68ce2b
+X-Patchwork-Hint: ignore
+Message-Id: <20240828085130.508BC865B9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/nodejs: security
+ bump to v20.15.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,42 +59,96 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Fred Lefranc <fred.lefranc+evs@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Fred" == Fred Lefranc <fred.lefranc.evs@gmail.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=d2865a73fa330c77cd099329ef6b4f327b68ce2b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
- > When glibc was bumped to version 2.39 in commit b5680f53d60acf8ff6010082f873438a39bd5d97,
- > it removed the deprecated libcrypt support.
+Release Notes: https://nodejs.org/en/blog/release/v20.15.1
 
- > In such a situation, until the upgrade of glibc to 2.39, Busybox could rely on the
- > libcrypt provided by glibc. Since version 2.39, glibc no longer provides libcrypt,
- > causing a build failure with Busybox configurations that have CONFIG_USE_BB_CRYPT
- > disabled.
+Fixes the following CVE's:
 
- > To fix this, add the libxcrypt dependency to Busybox when BR2_PACKAGE_LIBXCRYPT is
- > selected. The user is still responsible for enabling BR2_PACKAGE_LIBXCRYPT when
- > their Busybox configuration has CONFIG_USE_BB_CRYPT disabled.
+CVE-2024-36138 - Bypass incomplete fix of CVE-2024-27980 (High)
+CVE-2024-22020 - Bypass network import restriction via data URL (Medium)
+CVE-2024-22018 - fs.lstat bypasses permission model (Low)
+CVE-2024-36137 - fs.fchown/fchmod bypasses permission model (Low)
+CVE-2024-37372 - Permission model improperly processes UNC paths (Low)
 
- > Signed-off-by: Fred Lefranc <fred.lefranc+evs@gmail.com>
- > ---
- > Changes v3 -> v4
- >   - fix commit message to explain the non-working case
- > Changes v2 -> v3
- >   - fix commit message
- > Changes v1 -> v2
- >   - busybox.mk: fix BUSYBOX_DEPENDENCIES ident & remove the check
- > for BR2_TOOLCHAIN_USES_GLIBC (req by Thomas)
- >   - Config.in: remove libxcrypt mandatory dependency
- > (req by Thomas)
+Also these additional CVE's were fixed in the v20.12.1 and v20.12.2 releases [1][2]:
 
-Committed to 2024.05.x, thanks.
+CVE-2024-27983 - Assertion failed in node::http2::Http2Session::~Http2Session() leads to HTTP/2 server crash- (High)
+CVE-2024-27982 - HTTP Request Smuggling via Content Length Obfuscation - (Medium)
+CVE-2024-27980 - Command injection via args parameter of child_process.spawn without shell option enabled on Windows
 
--- 
-Bye, Peter Korsgaard
+NodeJS tests are passing:
+$ ./support/testing/run-tests -o ./outputs/ -k tests.package.test_nodejs -d dl
+12:02:58 TestNodeJSModuleHostSrc                  Starting
+12:02:58 TestNodeJSModuleHostSrc                  Building
+13:17:15 TestNodeJSModuleHostSrc                  Building done
+13:17:23 TestNodeJSModuleHostSrc                  Cleaning up
+.13:17:23 TestNodeJSModuleHostBin                  Starting
+13:17:23 TestNodeJSModuleHostBin                  Building
+14:06:15 TestNodeJSModuleHostBin                  Building done
+14:06:20 TestNodeJSModuleHostBin                  Cleaning up
+.14:06:20 TestNodeJSBasic                          Starting
+14:06:20 TestNodeJSBasic                          Building
+14:55:40 TestNodeJSBasic                          Building done
+14:55:45 TestNodeJSBasic                          Cleaning up
+
+LICENSE hash changed due to changes in vendored components:
+
+* copyright year update and adding spdx identifier [1]
+
+[1] https://nodejs.org/en/blog/release/v20.12.1
+[2] https://nodejs.org/en/blog/release/v20.12.2
+[3] https://github.com/nodejs/node/commit/d5a316f5ea3fade3140c2ae35c144b500fb5d758
+
+Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit bffb6a2339bbfe28a0ca2399716c3966af4a623c)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/nodejs/nodejs.hash | 14 +++++++-------
+ package/nodejs/nodejs.mk   |  2 +-
+ 2 files changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/package/nodejs/nodejs.hash b/package/nodejs/nodejs.hash
+index 2cbbf766f5..61bda55098 100644
+--- a/package/nodejs/nodejs.hash
++++ b/package/nodejs/nodejs.hash
+@@ -1,8 +1,8 @@
+-# From https://nodejs.org/dist/v20.12.0/SHASUMS256.txt.asc
+-sha256  007ca2699cf6e84290e5bed844ed66ef9d707d23561dfaf117212b7dce216ba7  node-v20.12.0-linux-arm64.tar.xz
+-sha256  668fb421a24be596c98f00a31049fbf6ada14d221b7382e0f1caa55ab421431a  node-v20.12.0-linux-armv7l.tar.xz
+-sha256  78dc3b7ad993c332684802e35c1f0de2b76193d13394bc89e3bab216828587c7  node-v20.12.0-linux-ppc64le.tar.xz
+-sha256  0a126adf5b6a5eb11a37bad76a0c626a18f20b6811322e68aae0e3cf9bf580bd  node-v20.12.0-linux-x64.tar.xz
+-sha256  76e5346cebfd581528f699f764f4d1a6e87cb818b696708f235ddcb625a0f78d  node-v20.12.0.tar.xz
++# From https://nodejs.org/dist/v20.15.1/SHASUMS256.txt.asc
++sha256  10d47a46ef208b3e4b226e4d595a82659123b22397ed77b7975d989114ec317e  node-v20.15.1-linux-arm64.tar.xz
++sha256  7bc120efdd8018f6915471b963d9b80adf4ed406d6dc9edb4ae944b85f505c4c  node-v20.15.1-linux-armv7l.tar.xz
++sha256  b33e684802251397ad62ad3f8a1836267ee8b7723f87f669470018ad0035287b  node-v20.15.1-linux-ppc64le.tar.xz
++sha256  26700f8d3e78112ad4a2618a9c8e2816e38a49ecf0213ece80e54c38cb02563f  node-v20.15.1-linux-x64.tar.xz
++sha256  fdd53a5729d936691a2a1151046fb4897721cb8b0fca2af957823a9b40fe0c34  node-v20.15.1.tar.xz
+ # Locally calculated
+-sha256  d3a9fbfe0a1fb78627ee296cd5ca5b498822d4d1c5da3b8e8100c41bd7b791fd  LICENSE
++sha256  49cd410e0fe6a8879a40d0764092d1e6114cc85fe41d4efed990d028eec25582  LICENSE
+diff --git a/package/nodejs/nodejs.mk b/package/nodejs/nodejs.mk
+index 9ed51fbe9b..104d2cf258 100644
+--- a/package/nodejs/nodejs.mk
++++ b/package/nodejs/nodejs.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # _VERSION, _SOURCE and _SITE must be kept empty to avoid downloading anything
+-NODEJS_COMMON_VERSION = 20.12.0
++NODEJS_COMMON_VERSION = 20.15.1
+ NODEJS_COMMON_SOURCE = node-v$(NODEJS_COMMON_VERSION).tar.xz
+ NODEJS_COMMON_SITE = http://nodejs.org/dist/v$(NODEJS_COMMON_VERSION)
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
