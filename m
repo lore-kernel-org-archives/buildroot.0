@@ -4,66 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E5100C54FAA
-	for <buildroot@archiver.kernel.org>; Wed, 28 Aug 2024 12:59:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20187C54FB3
+	for <buildroot@archiver.kernel.org>; Wed, 28 Aug 2024 13:14:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 93A4540B8B;
-	Wed, 28 Aug 2024 12:59:47 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C8415400D1;
+	Wed, 28 Aug 2024 13:14:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Nhold3mNjcX6; Wed, 28 Aug 2024 12:59:45 +0000 (UTC)
+ id S3D8rNAyVG3G; Wed, 28 Aug 2024 13:14:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1CDD04029B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7FC8A401FB
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1CDD04029B;
-	Wed, 28 Aug 2024 12:59:45 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id EFA431BF215
- for <buildroot@lists.busybox.net>; Wed, 28 Aug 2024 12:59:43 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7FC8A401FB;
+	Wed, 28 Aug 2024 13:14:56 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 6BF311BF980
+ for <buildroot@lists.busybox.net>; Wed, 28 Aug 2024 13:14:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DBF57805A0
- for <buildroot@lists.busybox.net>; Wed, 28 Aug 2024 12:59:43 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 64C3940709
+ for <buildroot@lists.busybox.net>; Wed, 28 Aug 2024 13:14:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LNfpDlqFmQwi for <buildroot@lists.busybox.net>;
- Wed, 28 Aug 2024 12:59:43 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1828:2000:679::23; helo=helium.openadk.org;
- envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org BD91680577
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BD91680577
-Received: from helium.openadk.org (helium.openadk.org
- [IPv6:2a00:1828:2000:679::23])
- by smtp1.osuosl.org (Postfix) with ESMTPS id BD91680577
- for <buildroot@buildroot.org>; Wed, 28 Aug 2024 12:59:42 +0000 (UTC)
-Received: by helium.openadk.org (Postfix, from userid 1000)
- id A77D7352142F; Wed, 28 Aug 2024 14:59:40 +0200 (CEST)
-Date: Wed, 28 Aug 2024 14:59:40 +0200
-From: Waldemar Brodkorb <wbx@openadk.org>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id e7RuQ4EIT4Js for <buildroot@lists.busybox.net>;
+ Wed, 28 Aug 2024 13:14:54 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
+ helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org A8529406EA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A8529406EA
+Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A8529406EA
+ for <buildroot@buildroot.org>; Wed, 28 Aug 2024 13:14:53 +0000 (UTC)
+Received: from tuxedoOT.fritz.box (unknown [212.37.174.96])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+ (No client certificate requested)
+ by smtp.bubu1.eu (Postfix) with ESMTPSA id A30CC2C83811;
+ Wed, 28 Aug 2024 15:14:50 +0200 (CEST)
 To: buildroot@buildroot.org
-Message-ID: <Zs8fPOrOGtdUOvA9@waldemar-brodkorb.de>
+Date: Wed, 28 Aug 2024 15:14:49 +0200
+Message-Id: <20240828131449.438553-1-buildroot@bubu1.eu>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Disposition: inline
-X-Operating-System: Linux 5.10.0-31-amd64 x86_64
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=openadk.org; s=2022; 
- t=1724849980; bh=loIG3maihubVLeUhf9+w28tSEWUJDf0NFTUK6oi3PK8=;
- h=Date:From:To:Subject:From;
- b=C3M6sLTSI656okyIIH/fW4+b7TdRshtFLUhab1PCCR52BVRFfBqvHKcp7CZ4YtYzT
- R3kLat+viddYRdd3qs9V6aJGV5JSGjy/pbhDa1tGdq2LPjZNPjp/Ryc60xpJGs3GXC
- WADcSj9IpvO9kTDWhaoBbh2s8lS+8K4C/i8KIUbojn1ostwBsqPdpm5es/Rt5A5Jo5
- Vw7HhEZoFKCFMqbZBhKukZIwrn6BXM65g0Ec6VS92i9hY1DwqSSg6N3bgzd/p5UZ+G
- y3IGBZ/ekuWX5oe6jLG5G6Zqm/ELK62p2jgcfbwXuTZ/XHCxMUS0Seys6WLeWHAC4F
- AM0Zw+iDYePow==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=openadk.org
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=openadk.org header.i=@openadk.org
- header.a=rsa-sha256 header.s=2022 header.b=C3M6sLTS
-Subject: [Buildroot] [PATCH] package/fbdump: fix gcc 14.x issue
+ d=bubu1.eu; s=bubu; 
+ t=1724850890; bh=ZdoUYt74Ve8HKoiaWClgN/7guKialZw0dd8H56pJomg=;
+ h=From:To:Cc:Subject:Date;
+ b=d1SgsILRZz8v1YxtWPlaA40hutXwsNbFNQY8v/Nd+GWsEhm84FZYC1MfpXQAfe2mo
+ OWkFeT2+5BqO8q+rOWrVAnZilQQFWa60+Re1hV7jxZMGKEIDBUg3zoYja5wwsgROpu
+ 0aQW6bznav0cz1auEHaEMzVWd6UMarEfRVw2Sah1MQMgX6cDY2a9dnReywz/SKSV0J
+ yvI9GuWptVgQmOHUuD3E0XVO9ZUpS203hC2XxzF3hKuRuWdUQVTGlvYQxDpFGGnNqV
+ Obw6H/6inF1f+gqqZx9iv/uGH2mqWpRKJgdkLovAUpFYAAfVgE5YZHLlblRETI4qOc
+ gz7jWuB2sK9Dw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bubu1.eu
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bubu1.eu header.i=@bubu1.eu header.a=rsa-sha256
+ header.s=bubu header.b=d1SgsILR
+Subject: [Buildroot] [PATCH] package/python-pymodbus: bump to 3.7.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,63 +76,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
+Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
+Cc: Falco Hyfing <hyfinglists@gmail.com>,
+ James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Following error is seen with gcc 14.x:
-/home/autobuild/autobuild/instance-0/output-1/host/bin/armeb-buildroot-linux-uclibcgnueabi-gcc -DHAVE_CONFIG_H -I. -I. -I..   -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -Wall -O2 -fomit-frame-pointer -s -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os -g0  -c `test -f 'main.c' || echo './'`main.c
-main.c: In function 'main':
-main.c:82:49: error: passing argument 4 of 'Options_parse' from incompatible pointer type [-Wincompatible-pointer-types]
-   82 |   if( Options_parse( opt_template, &opts, argc, argv ) != 0 )
-      |                                                 ^~~~
-      |                                                 |
-      |                                                 char **
-In file included from main.c:17:
-options.h:32:83: note: expected 'const char **' but argument is of type 'char **'
-   32 | int Options_parse( const OptionTemplate *tmplt, void *opts, int argc, const char *argv[] );
-      |                                                                       ~~~~~~~~~~~~^~~~~~
-make[3]: *** [Makefile:240: main.o] Error 1
-make[3]: Leaving directory '/home/autobuild/autobuild/instance-0/output-1/build/fbdump-0.4.2/src'
-make[2]: *** [Makefile:201: all-recursive] Error 1
-make[2]: Leaving directory '/home/autobuild/autobuild/instance-0/output-1/build/fbdump-0.4.2'
-make[1]: *** [Makefile:156: all] Error 2
-make[1]: Leaving directory '/home/autobuild/autobuild/instance-0/output-1/build/fbdump-0.4.2'
+Changelog:
+* https://github.com/pymodbus-dev/pymodbus/releases/tag/v3.7.1
+* https://github.com/pymodbus-dev/pymodbus/releases/tag/v3.7.2
 
-Fixes:
-
-  http://autobuild.buildroot.net/results/3a0/3a0abff75023e257f3d6048688485a380b72fbb3
-
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
 ---
- package/fbdump/0001-fix-gcc14-compile-issue.patch | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
- create mode 100644 package/fbdump/0001-fix-gcc14-compile-issue.patch
+ package/python-pymodbus/python-pymodbus.hash | 4 ++--
+ package/python-pymodbus/python-pymodbus.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/fbdump/0001-fix-gcc14-compile-issue.patch b/package/fbdump/0001-fix-gcc14-compile-issue.patch
-new file mode 100644
-index 0000000000..a554b4faf6
---- /dev/null
-+++ b/package/fbdump/0001-fix-gcc14-compile-issue.patch
-@@ -0,0 +1,15 @@
-+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-+Upstream: N/A no SCM, not active anymore
-+
-+diff -Nur fbdump-0.4.2.orig/src/main.c fbdump-0.4.2/src/main.c
-+--- fbdump-0.4.2.orig/src/main.c	2007-03-03 04:14:37.000000000 +0100
-++++ fbdump-0.4.2/src/main.c	2024-08-16 09:25:42.828125778 +0200
-+@@ -58,7 +58,7 @@
-+ }
-+ 
-+ 
-+-int main( int argc, char *argv[] )
-++int main( int argc, const char *argv[] )
-+ {
-+   Options  opts = {
-+     .fbdev = DEFAULT_DEVICE,
+diff --git a/package/python-pymodbus/python-pymodbus.hash b/package/python-pymodbus/python-pymodbus.hash
+index 7c8f352de4..6727fbc571 100644
+--- a/package/python-pymodbus/python-pymodbus.hash
++++ b/package/python-pymodbus/python-pymodbus.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/pymodbus/json
+-md5  3bdc2a574cbfd10ec6dddf38c3f26598  pymodbus-3.7.0.tar.gz
+-sha256  5c772babaa61a65ff908293faa668aedcd9d9e10f4bcf5c77a8fe51a6fd9ed47  pymodbus-3.7.0.tar.gz
++md5  1e1cc27f4a7911a8554190156a441089  pymodbus-3.7.2.tar.gz
++sha256  6cc63a14c8cca83f5b6d9dae3319565061bd49503ee7282df681201c16357eef  pymodbus-3.7.2.tar.gz
+ # Locally computed sha256 checksums
+ sha256  47f904249172e795a6b32de91f471073297befffd74e17cafc288d348a55972e  LICENSE
+diff --git a/package/python-pymodbus/python-pymodbus.mk b/package/python-pymodbus/python-pymodbus.mk
+index 6a7c384cf6..ab8f72fb8c 100644
+--- a/package/python-pymodbus/python-pymodbus.mk
++++ b/package/python-pymodbus/python-pymodbus.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_PYMODBUS_VERSION = 3.7.0
++PYTHON_PYMODBUS_VERSION = 3.7.2
+ PYTHON_PYMODBUS_SOURCE = pymodbus-$(PYTHON_PYMODBUS_VERSION).tar.gz
+-PYTHON_PYMODBUS_SITE = https://files.pythonhosted.org/packages/cc/83/de0c3596f17ac4833f591e96cafee7ae6109d846d607387b48f88d66759a
++PYTHON_PYMODBUS_SITE = https://files.pythonhosted.org/packages/a2/f1/10be9b46fa9389271eeec8cb022680ff701ef97bcdd47d0e4a1fa464c057
+ PYTHON_PYMODBUS_SETUP_TYPE = setuptools
+ PYTHON_PYMODBUS_LICENSE = BSD-3-Clause
+ PYTHON_PYMODBUS_LICENSE_FILES = LICENSE
 -- 
-2.39.2
+2.34.1
 
 _______________________________________________
 buildroot mailing list
