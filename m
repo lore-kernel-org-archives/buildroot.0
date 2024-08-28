@@ -4,62 +4,62 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D589C54FA6
-	for <buildroot@archiver.kernel.org>; Wed, 28 Aug 2024 12:31:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D452C54FA7
+	for <buildroot@archiver.kernel.org>; Wed, 28 Aug 2024 12:31:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1EC444029B;
-	Wed, 28 Aug 2024 12:31:28 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 561CF40BB2;
+	Wed, 28 Aug 2024 12:31:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Wb2e6X6FZ4IH; Wed, 28 Aug 2024 12:31:27 +0000 (UTC)
+ id 8w4rgKZk1yc5; Wed, 28 Aug 2024 12:31:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 03ED7403CC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9780D40B9C
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 03ED7403CC;
-	Wed, 28 Aug 2024 12:31:27 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 9485D1BF83A
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9780D40B9C;
+	Wed, 28 Aug 2024 12:31:29 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id C06411BF83A
  for <buildroot@lists.busybox.net>; Wed, 28 Aug 2024 12:31:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 81ACF60A55
+ by smtp4.osuosl.org (Postfix) with ESMTP id AC50F40621
  for <buildroot@lists.busybox.net>; Wed, 28 Aug 2024 12:31:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rW6lpPYcusos for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pMFGKlZ6wOXe for <buildroot@lists.busybox.net>;
  Wed, 28 Aug 2024 12:31:24 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::542; helo=mail-ed1-x542.google.com;
+ client-ip=2a00:1450:4864:20::543; helo=mail-ed1-x543.google.com;
  envelope-from=adam.duskett@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 6631360845
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6631360845
-Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com
- [IPv6:2a00:1450:4864:20::542])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6631360845
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6D9BE4061B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6D9BE4061B
+Received: from mail-ed1-x543.google.com (mail-ed1-x543.google.com
+ [IPv6:2a00:1450:4864:20::543])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 6D9BE4061B
  for <buildroot@buildroot.org>; Wed, 28 Aug 2024 12:31:24 +0000 (UTC)
-Received: by mail-ed1-x542.google.com with SMTP id
- 4fb4d7f45d1cf-5bec254f773so974350a12.0
+Received: by mail-ed1-x543.google.com with SMTP id
+ 4fb4d7f45d1cf-5beccb39961so1093682a12.3
  for <buildroot@buildroot.org>; Wed, 28 Aug 2024 05:31:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=1e100.net; s=20230601; t=1724848282; x=1725453082;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=QPunoxYZ69k07zC1GKp3xz1IJ6MhisnQ9mPKf4Ko1/g=;
- b=ZZ+zKp4aibW5XrKzDyXewR6+ZifqCMHemdqOXu+WZ9J/VrIU9vNvO2WqnAdh5V9/f6
- 5cH7G4Wn2IAuwCHdmVQIcJ4KbkYX6brt/t10qldlYMlVhWU3xWc854NrSeRVtJSP2sNp
- /1t9u6WE0GNDQIzt6/iRf36UnHb44R1EisdTF2hf2pkLNvulM3f/yyj832YFxbkodCC5
- aM0rHU/1fUoCzX0qH9G4aPmo1BtljlFEt1CaEv56Ux9FzM1g2S6rSJJ6yRgfv5jTYVU5
- WzXd5EyJElBimLmbbo61Rai63fK8C5OfDauKVK+0W/d4v46hcESX984aMWJ+um5gp+2F
- Dypw==
-X-Gm-Message-State: AOJu0YwxILbp+zaEMUQJ+7AU/e1dhtHR5wMoLdV5w+D2JYLQcVJeNI5i
- lGoM9rQenpqo8kLu4854TDcWaZsPoN4Yp0gfBxgmqXNpFe0uON1xlvYpgDT6ZIQDW9S8Hv09Vgv
- D7hywKw==
-X-Google-Smtp-Source: AGHT+IEncLmugE5ZgWuxatYYOldk023CJVm/dNE9jeTxqpRv1lJSt3oJ9cNkNc/nvAhKxU95Xps6PQ==
+ bh=k/Zz8b7nslL3d7iXuxT7yLXDFxaOcDcpI2kv6gmH3eA=;
+ b=dotUONSo8CzoSfu9Htau2+PemUF/h3KaDhCxfdNzYAL0Bebbn/vOgbHj2m+oMuv6Ct
+ UnYhGGV9pHqCJoEJUQCOSp12a3GM2LduLJbqsc9b/2mAz3BMEBYW1tL85DNSabPgqIJu
+ NuCbldJMYtNlDPjWzI3a2vQqNoJ0ko0h1eWMFaSzz6Hg3c2xmfsk5d09UWmwhZ/ChJRc
+ 10wsdl+eJTElKx+57bDh7ewaEUeDOyvrcakmkgJSHR+cZA0m5eRvw4+JTu48Khh8E8mD
+ eDgAmB25LCc/Hz8bidRMWBIC2PzvM7/EmsmCSIIPREcWmwPIvMIdC9J1irvSPE1Nwmkn
+ aJgA==
+X-Gm-Message-State: AOJu0Yz5h+4+ympjY/L5q7m4+r5QmDk98SOlTYHPOTTN8Yl+GYI97xWY
+ AMmw6PR7pnenisR6unxBYdw5w/QlqmZdVoOc9h+mVY2nPVpNH33CnLbiK/IoA3Inl7NowbHq4vF
+ YVuh5Iw==
+X-Google-Smtp-Source: AGHT+IHrBJOA+bQqbONruZ+uTh+D4SLOsOItIz/22xPSihN14rNXM+tkW/ExA1coi+B0JfNcHdGMsA==
 X-Received: by 2002:a17:907:7f2a:b0:a83:a86a:549a with SMTP id
- a640c23a62f3a-a86a5185ae4mr721634866b.1.1724848282018; 
- Wed, 28 Aug 2024 05:31:22 -0700 (PDT)
+ a640c23a62f3a-a86a5185ae4mr721633766b.1.1724848281534; 
+ Wed, 28 Aug 2024 05:31:21 -0700 (PDT)
 Received: from adam-laptop.arnhem.chello.nl
  (2a02-a210-041f-3480-f0d0-88f0-0971-2ba5.cable.dynamic.v6.ziggo.nl.
  [2a02:a210:41f:3480:f0d0:88f0:971:2ba5])
@@ -69,8 +69,8 @@ Received: from adam-laptop.arnhem.chello.nl
  Wed, 28 Aug 2024 05:31:21 -0700 (PDT)
 From: Adam Duskett <adam.duskett@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Wed, 28 Aug 2024 14:31:17 +0200
-Message-ID: <20240828123118.62315-3-adam.duskett@amarulasolutions.com>
+Date: Wed, 28 Aug 2024 14:31:16 +0200
+Message-ID: <20240828123118.62315-2-adam.duskett@amarulasolutions.com>
 X-Mailer: git-send-email 2.46.0
 In-Reply-To: <20240828123118.62315-1-adam.duskett@amarulasolutions.com>
 References: <20240828123118.62315-1-adam.duskett@amarulasolutions.com>
@@ -81,18 +81,18 @@ X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=QPunoxYZ69k07zC1GKp3xz1IJ6MhisnQ9mPKf4Ko1/g=;
- b=rocGSUQ+JwByvoQunZI4ciWe7E+k1i++i45ddQYlDRtw0dThs3xH9izgEcVRUoGN71
- pNPk+wwtMw3mo/xb3R472jCwudnJ7KHuCO2rEP058PUPJaq0lHys7l7j4w2p1Ve8fqDf
- E5IfiuVzp+9+QiwF6OKauPUeYxnnfdhIvMt2Y=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=k/Zz8b7nslL3d7iXuxT7yLXDFxaOcDcpI2kv6gmH3eA=;
+ b=B37SGlMQkKp+std5YU5WlAYVncOhjbi0rcCXlX6ctE5Fue7mxH04RIxgUPrv/jYCj5
+ g+W+aHKl0SgrXhbB1wohtDR4EUOCUqP5CxZgOIQgagDzujGWW8rem+7Ny1dwydOnjcFq
+ HN5ZPQERSu6fjT2uyEMXnVZREbCjQ1faR6nqQ=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key) header.d=amarulasolutions.com
- header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=rocGSUQ+
-Subject: [Buildroot] [PATCH 3/4] package/flutter-engine: bump version to
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
+ header.a=rsa-sha256 header.s=google header.b=B37SGlMQ
+Subject: [Buildroot] [PATCH 2/4] package/flutter-sdk-bin: bump version to
  3.24.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -113,22 +113,32 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 ---
- package/flutter-engine/flutter-engine.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/flutter-sdk-bin/flutter-sdk-bin.hash | 2 +-
+ package/flutter-sdk-bin/flutter-sdk-bin.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/flutter-engine/flutter-engine.mk b/package/flutter-engine/flutter-engine.mk
-index 020fa2ee8a..1d66a6fc11 100644
---- a/package/flutter-engine/flutter-engine.mk
-+++ b/package/flutter-engine/flutter-engine.mk
-@@ -21,7 +21,7 @@
+diff --git a/package/flutter-sdk-bin/flutter-sdk-bin.hash b/package/flutter-sdk-bin/flutter-sdk-bin.hash
+index 4f3622e725..65f2df2453 100644
+--- a/package/flutter-sdk-bin/flutter-sdk-bin.hash
++++ b/package/flutter-sdk-bin/flutter-sdk-bin.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  d52a5d12f17d8bcf868d1ccc01fe0f7ffb05b53d9628aa21b07a18f9d33621f2  flutter_linux_3.24.0-stable.tar.xz
++sha256  32daf9d5a8e430f57fb139921400c7ecf34e4e7e404818ac55658a5a0eaa28f0  flutter_linux_3.24.1-stable.tar.xz
+ sha256  a598db94b6290ffbe10b5ecf911057b6a943351c727fdda9e5f2891d68700a20  LICENSE
+diff --git a/package/flutter-sdk-bin/flutter-sdk-bin.mk b/package/flutter-sdk-bin/flutter-sdk-bin.mk
+index 26415551bc..003ad8b4b0 100644
+--- a/package/flutter-sdk-bin/flutter-sdk-bin.mk
++++ b/package/flutter-sdk-bin/flutter-sdk-bin.mk
+@@ -4,7 +4,7 @@
  #
- # There is no hash provided, as the gn binary (used for configuration) relies
- # on the .git directories. As such, a reproducible tarball is not possible.
--FLUTTER_ENGINE_VERSION = 3.24.0
-+FLUTTER_ENGINE_VERSION = 3.24.1
+ ################################################################################
  
- # There is nothing for Buildroot to download. This is handled by gclient.
- FLUTTER_ENGINE_SITE =
+-FLUTTER_SDK_BIN_VERSION = 3.24.0
++FLUTTER_SDK_BIN_VERSION = 3.24.1
+ FLUTTER_SDK_BIN_SITE = https://storage.googleapis.com/flutter_infra_release/releases/stable/linux
+ FLUTTER_SDK_BIN_SOURCE = flutter_linux_$(FLUTTER_SDK_BIN_VERSION)-stable.tar.xz
+ FLUTTER_SDK_BIN_LICENSE = BSD-3-Clause
 -- 
 2.46.0
 
