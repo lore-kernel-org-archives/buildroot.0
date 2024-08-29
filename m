@@ -4,61 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9686C83F16
-	for <buildroot@archiver.kernel.org>; Thu, 29 Aug 2024 16:05:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E4E6C83F2D
+	for <buildroot@archiver.kernel.org>; Thu, 29 Aug 2024 16:09:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 84B4A80B1D;
-	Thu, 29 Aug 2024 16:05:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E0FFD80BAB;
+	Thu, 29 Aug 2024 16:09:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6h3-Om-lfSjq; Thu, 29 Aug 2024 16:05:19 +0000 (UTC)
+ id xJdLCG-Hbjzw; Thu, 29 Aug 2024 16:09:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 853E080E84
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F1D3080AE6
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 853E080E84;
-	Thu, 29 Aug 2024 16:05:19 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4B4D91BF84C
- for <buildroot@lists.busybox.net>; Thu, 29 Aug 2024 16:05:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id F1D3080AE6;
+	Thu, 29 Aug 2024 16:09:40 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 504101BF84C
+ for <buildroot@lists.busybox.net>; Thu, 29 Aug 2024 16:09:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 463356115B
- for <buildroot@lists.busybox.net>; Thu, 29 Aug 2024 16:05:18 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3D91B41006
+ for <buildroot@lists.busybox.net>; Thu, 29 Aug 2024 16:09:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1Ek5z54KPL-B for <buildroot@lists.busybox.net>;
- Thu, 29 Aug 2024 16:05:17 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::221;
- helo=relay1-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wetR7xFlCIhl for <buildroot@lists.busybox.net>;
+ Thu, 29 Aug 2024 16:09:38 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::226;
+ helo=relay6-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 23E8261151
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 23E8261151
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 23E8261151
- for <buildroot@buildroot.org>; Thu, 29 Aug 2024 16:05:16 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id C3B34240009;
- Thu, 29 Aug 2024 16:05:13 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 085B840332
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 085B840332
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::226])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 085B840332
+ for <buildroot@buildroot.org>; Thu, 29 Aug 2024 16:09:37 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 21618C0008;
+ Thu, 29 Aug 2024 16:09:34 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1sjhe5-007Vqo-0d;
- Thu, 29 Aug 2024 18:05:13 +0200
+ (envelope-from <peter@korsgaard.com>) id 1sjhiI-007WE3-2F;
+ Thu, 29 Aug 2024 18:09:34 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20240721074053.90620-1-fontaine.fabrice@gmail.com>
- <20240721074053.90620-2-fontaine.fabrice@gmail.com>
-Date: Thu, 29 Aug 2024 18:05:13 +0200
-In-Reply-To: <20240721074053.90620-2-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 21 Jul 2024 09:40:53 +0200")
-Message-ID: <8734mn48na.fsf@dell.be.48ers.dk>
+References: <20240721150011.1437080-1-fontaine.fabrice@gmail.com>
+Date: Thu, 29 Aug 2024 18:09:34 +0200
+In-Reply-To: <20240721150011.1437080-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 21 Jul 2024 17:00:11 +0200")
+Message-ID: <87y14f2tvl.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 2/2] package/ibm-sw-tpm2: fix build with
- openssl 3.3.x
+Subject: Re: [Buildroot] [PATCH 1/1] package/unbound: select
+ BR2_PACKAGE_LIBOPENSSL_ENGINES
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,7 +69,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Philippe Reynes <philippe.reynes@softathome.com>, buildroot@buildroot.org
+Cc: Stefan Ott <stefan@ott.net>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -78,23 +77,21 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Fix the following build failure with openssl 3.3.x raised since commit
- > 6d5ce8609f17a3403d1148a0bbf7a2bdb5ec7f67:
+ > unbound unconditionally calls the (deprecated) ENGINE_* logic in
+ > libopenssl resulting in a build failure when
+ > !BR2_PACKAGE_LIBOPENSSL_ENGINES since commit
+ > 623d3bbe43e9193aa8e3395367d01af59071b859:
 
- > In file included from BnValues.h:327,
- >                  from Global.h:80,
- >                  from Tpm.h:78,
- >                  from AuditCommands.c:62:
- > TpmToOsslMath.h:83:5: error: #error Untested OpenSSL version
- >    83 | #   error Untested OpenSSL version
- >       |     ^~~~~
+ > sldns/keyraw.c:167:35: error: 'ENGINE_METHOD_ALL' undeclared (first use in this function)
+ >   167 |         if(!ENGINE_set_default(e, ENGINE_METHOD_ALL)) {
+ >       |                                   ^~~~~~~~~~~~~~~~~
 
- > Fixes: 6d5ce8609f17a3403d1148a0bbf7a2bdb5ec7f67
- >  - http://autobuild.buildroot.org/results/2fb5e1cb792fe25ef860ff8111622cd1ff3770bf
+ > Fixes: 623d3bbe43e9193aa8e3395367d01af59071b859
+ >  - http://autobuild.buildroot.org/results/b7782f5ba54543df53a835552632f58d4ad6c082
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-Committed to 2024.05.x, thanks.
+Committed to 2024.02.x and 2024.05.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
