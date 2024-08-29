@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C300C83F16
-	for <buildroot@archiver.kernel.org>; Thu, 29 Aug 2024 16:17:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 20A33C83F2D
+	for <buildroot@archiver.kernel.org>; Thu, 29 Aug 2024 16:17:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EA29081ED5;
-	Thu, 29 Aug 2024 16:17:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D1068840C0;
+	Thu, 29 Aug 2024 16:17:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PPonLIiH81D2; Thu, 29 Aug 2024 16:17:19 +0000 (UTC)
+ id NpMKGuBqHr05; Thu, 29 Aug 2024 16:17:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7216E840AC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8B1A981ECF
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7216E840AC;
-	Thu, 29 Aug 2024 16:17:18 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 357CF1BF98E
- for <buildroot@lists.busybox.net>; Thu, 29 Aug 2024 16:17:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8B1A981ECF;
+	Thu, 29 Aug 2024 16:17:21 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 33EFC1BF84C
+ for <buildroot@lists.busybox.net>; Thu, 29 Aug 2024 16:17:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A0E0881D72
+ by smtp3.osuosl.org (Postfix) with ESMTP id AB77C61161
  for <buildroot@lists.busybox.net>; Thu, 29 Aug 2024 16:17:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sFtrbRjOE3uZ for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4Ud4JSvpQRuS for <buildroot@lists.busybox.net>;
  Thu, 29 Aug 2024 16:17:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B740981E9F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D174B61162
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id B740981E9F
+ by smtp3.osuosl.org (Postfix) with ESMTP id D174B61162
  for <buildroot@buildroot.org>; Thu, 29 Aug 2024 16:17:01 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B3E948041A; Thu, 29 Aug 2024 16:17:01 +0000 (UTC)
+ id CE84B842D8; Thu, 29 Aug 2024 16:17:01 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 29 Aug 2024 18:08:55 +0200
+Date: Thu, 29 Aug 2024 18:16:13 +0200
 X-Git-Refname: refs/heads/2024.05.x
-X-Git-Oldrev: 6718560ed9a9cbf60a2042d4472656caa53e755e
-X-Git-Newrev: 453ed0edfec858bf63c32917e6a5bbfa3c8584ee
+X-Git-Oldrev: 55a126c8292eec04126bc5df8b6023d9682d7eac
+X-Git-Newrev: 3688161940abec23677499f79ff44d8f54465879
 X-Patchwork-Hint: ignore
-Message-Id: <20240829161701.B3E948041A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.05.x] package/unbound: security
- bump to version 1.20.0
+Message-Id: <20240829161701.CE84B842D8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.05.x] package/apr-util:
+ requires DES in openssl
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,52 +65,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=453ed0edfec858bf63c32917e6a5bbfa3c8584ee
+commit: https://git.buildroot.net/buildroot/commit/?id=3688161940abec23677499f79ff44d8f54465879
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.05.x
 
-This release has a fix for the DNSBomb issue CVE-2024-33655. This has a
-low severity for Unbound, since it makes Unbound complicit in targeting
-others, but does not affect Unbound so much.
-This security release also fixes CVE-2024-1931.
+Enable DES in openssl to avoid the following build failure raised since
+commit a83d41867c8d69a77d5cd0a665aa216af5340359:
 
-https://nlnetlabs.nl/news/2024/May/08/unbound-1.20.0-released
-https://nlnetlabs.nl/news/2024/Mar/14/unbound-1.19.3-released
-https://nlnetlabs.nl/news/2024/Mar/07/unbound-1.19.2-released
+crypto/apr_crypto_openssl.c: In function 'crypto_cipher_mechanism':
+crypto/apr_crypto_openssl.c:385:27: error: implicit declaration of function 'EVP_des_ede3_cbc'; did you mean 'NID_des_ede3_cbc'? [-Wimplicit-function-declaration]
+  385 |             key->cipher = EVP_des_ede3_cbc();
+      |                           ^~~~~~~~~~~~~~~~
+      |                           NID_des_ede3_cbc
+
+Fixes: a83d41867c8d69a77d5cd0a665aa216af5340359
+ - http://autobuild.buildroot.org/results/4b1088a705f8564f85e629316f5cfc92953f0047
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 7ce07b7b29d08e09f52ca81c9d25728726c87d57)
+Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+(cherry picked from commit 8bb67c230b9d32d91bc85e5563f3453cb50d7a38)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/unbound/unbound.hash | 4 ++--
- package/unbound/unbound.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/apr-util/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/unbound/unbound.hash b/package/unbound/unbound.hash
-index 843026abc7..96ee80b0ec 100644
---- a/package/unbound/unbound.hash
-+++ b/package/unbound/unbound.hash
-@@ -1,5 +1,5 @@
--# From https://nlnetlabs.nl/downloads/unbound/unbound-1.19.1.tar.gz.sha256
--sha256  bc1d576f3dd846a0739adc41ffaa702404c6767d2b6082deb9f2f97cbb24a3a9  unbound-1.19.1.tar.gz
-+# From https://nlnetlabs.nl/downloads/unbound/unbound-1.20.0.tar.gz.sha256
-+sha256  56b4ceed33639522000fd96775576ddf8782bb3617610715d7f1e777c5ec1dbf  unbound-1.20.0.tar.gz
- 
- # Locally calculated
- sha256  8eb9a16cbfb8703090bbfa3a2028fd46bb351509a2f90dc1001e51fbe6fd45db  LICENSE
-diff --git a/package/unbound/unbound.mk b/package/unbound/unbound.mk
-index 5128d0e420..ff0262bef1 100644
---- a/package/unbound/unbound.mk
-+++ b/package/unbound/unbound.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--UNBOUND_VERSION = 1.19.1
-+UNBOUND_VERSION = 1.20.0
- UNBOUND_SITE = https://www.unbound.net/downloads
- UNBOUND_INSTALL_STAGING = YES
- UNBOUND_DEPENDENCIES = host-pkgconf expat libevent openssl
+diff --git a/package/apr-util/Config.in b/package/apr-util/Config.in
+index f7c119db48..06b6c2684c 100644
+--- a/package/apr-util/Config.in
++++ b/package/apr-util/Config.in
+@@ -5,6 +5,7 @@ config BR2_PACKAGE_APR_UTIL
+ 	depends on BR2_USE_MMU # apr
+ 	select BR2_PACKAGE_APR
+ 	select BR2_PACKAGE_EXPAT
++	select BR2_PACKAGE_LIBOPENSSL_ENABLE_DES if BR2_PACKAGE_LIBOPENSSL
+ 	select BR2_PACKAGE_LIBOPENSSL_ENGINES if BR2_PACKAGE_LIBOPENSSL
+ 	help
+ 	  The utility library for the apache runtime project
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
