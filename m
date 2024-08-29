@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9E82C761AE
-	for <buildroot@archiver.kernel.org>; Thu, 29 Aug 2024 06:22:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B88DAC77B7A
+	for <buildroot@archiver.kernel.org>; Thu, 29 Aug 2024 06:22:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 98E9441324;
-	Thu, 29 Aug 2024 06:22:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 72A0241347;
+	Thu, 29 Aug 2024 06:22:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xxEWzYtuieHM; Thu, 29 Aug 2024 06:22:23 +0000 (UTC)
+ id 252Ko3RW6fQ3; Thu, 29 Aug 2024 06:22:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 25A2741302
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6BAE54133C
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 25A2741302;
-	Thu, 29 Aug 2024 06:22:23 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 773DE1BF867
- for <buildroot@lists.busybox.net>; Thu, 29 Aug 2024 06:22:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6BAE54133C;
+	Thu, 29 Aug 2024 06:22:25 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 2548B1BF867
+ for <buildroot@lists.busybox.net>; Thu, 29 Aug 2024 06:22:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2F34F6062C
+ by smtp4.osuosl.org (Postfix) with ESMTP id 262A140C9F
  for <buildroot@lists.busybox.net>; Thu, 29 Aug 2024 06:22:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vJdGdlnx3YyS for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id VBvGZo1RFo46 for <buildroot@lists.busybox.net>;
  Thu, 29 Aug 2024 06:22:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 24314610C5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F302F4082A
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 24314610C5
- for <buildroot@buildroot.org>; Thu, 29 Aug 2024 06:22:06 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id F302F4082A
+ for <buildroot@buildroot.org>; Thu, 29 Aug 2024 06:22:05 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1293786621; Thu, 29 Aug 2024 06:22:06 +0000 (UTC)
+ id EDBB686620; Thu, 29 Aug 2024 06:22:05 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 29 Aug 2024 08:07:52 +0200
+Date: Thu, 29 Aug 2024 08:05:59 +0200
 X-Git-Refname: refs/heads/2024.05.x
-X-Git-Oldrev: 40c35798dbd588c682d08544f79c081f105a13b3
-X-Git-Newrev: 3e47cc5995ccbbb1428e733867e7a4fccdb38f72
+X-Git-Oldrev: 96d32fd6564ee124b9d325cab7c301820e4363a1
+X-Git-Newrev: 3f0b87bf31154c5e93bed52a1a1d1d1d2d9a8fa1
 X-Patchwork-Hint: ignore
-Message-Id: <20240829062206.1293786621@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.05.x] package/libcli: fix build
- with gcc >= 14
+Message-Id: <20240829062205.EDBB686620@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.05.x] package/cpuload: fix
+ build with gcc >= 14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,130 +65,149 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3e47cc5995ccbbb1428e733867e7a4fccdb38f72
+commit: https://git.buildroot.net/buildroot/commit/?id=3f0b87bf31154c5e93bed52a1a1d1d1d2d9a8fa1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.05.x
 
 Fix the following build failure with gcc >= 14:
 
-libcli.c: In function 'cli_register_command':
-libcli.c:430:27: error: 'calloc' sizes specified with 'sizeof' in the earlier argument and not in the later argument [-Werror=calloc-transposed-args]
-  430 |   if (!(c = calloc(sizeof(struct cli_command), 1))) return NULL;
-      |                           ^~~~~~
-libcli.c:430:27: note: earlier argument should specify number of elements, later size of each element
+read_cpu_stat.c: In function 'cpudata_new':
+read_cpu_stat.c:49:17: error: implicit declaration of function 'error'; did you mean 'perror'? [-Wimplicit-function-declaration]
+   49 |                 error("too many cpus");
+      |                 ^~~~~
+      |                 perror
 
 Fixes:
- - http://autobuild.buildroot.org/results/a170d27689e069cf58f830bdd74f604364ee503b
+ - http://autobuild.buildroot.org/results/3bca2659011d123d7b7a0ca19c4e868643d45766
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit a5466a4303d7652c217139bf0dc0b1eb9d6ba0c5)
+(cherry picked from commit d3e1821cc6496bfab19e4fe3be9fe6223e8f8176)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...oc-parameters-for-Wcalloc-transposed-args.patch | 96 ++++++++++++++++++++++
- 1 file changed, 96 insertions(+)
+ .../0001-Changed-error-calls-to-perror.patch       | 115 +++++++++++++++++++++
+ 1 file changed, 115 insertions(+)
 
-diff --git a/package/libcli/0001-Swap-calloc-parameters-for-Wcalloc-transposed-args.patch b/package/libcli/0001-Swap-calloc-parameters-for-Wcalloc-transposed-args.patch
+diff --git a/package/cpuload/0001-Changed-error-calls-to-perror.patch b/package/cpuload/0001-Changed-error-calls-to-perror.patch
 new file mode 100644
-index 0000000000..909de2b74d
+index 0000000000..6672bec677
 --- /dev/null
-+++ b/package/libcli/0001-Swap-calloc-parameters-for-Wcalloc-transposed-args.patch
-@@ -0,0 +1,96 @@
-+From 42e798e3f8b4a092be26bc91c9f87e5593f0d302 Mon Sep 17 00:00:00 2001
-+From: Gwyn Ciesla <gwync@protonmail.com>
-+Date: Wed, 31 Jan 2024 14:40:42 -0600
-+Subject: [PATCH] Swap calloc parameters for -Wcalloc-transposed-args
++++ b/package/cpuload/0001-Changed-error-calls-to-perror.patch
+@@ -0,0 +1,115 @@
++From ffd61eaa72acf123dea0c80ed3774656289ab49f Mon Sep 17 00:00:00 2001
++From: roiec <roiec@D-H-ROIEC-LX-WW1.com>
++Date: Wed, 5 Jan 2022 17:12:05 +0200
++Subject: [PATCH] Changed 'error' calls to 'perror'
 +
-+Upstream: https://github.com/dparrish/libcli/pull/93
++Upstream: https://github.com/kelvincheung/cpuload/pull/1
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 +---
-+ libcli.c | 18 +++++++++---------
-+ 1 file changed, 9 insertions(+), 9 deletions(-)
++ .gitignore           | 60 ++++++++++++++++++++++++++++++++++++++++++++
++ src/graph_cpu_load.c |  4 +--
++ src/read_cpu_stat.c  |  2 +-
++ 3 files changed, 63 insertions(+), 3 deletions(-)
++ create mode 100644 .gitignore
 +
-+diff --git a/libcli.c b/libcli.c
-+index 88c23d8..32ceeae 100644
-+--- a/libcli.c
-++++ b/libcli.c
-+@@ -427,7 +427,7 @@ struct cli_command *cli_register_command(struct cli_def *cli, struct cli_command
-+   struct cli_command *c;
++diff --git a/.gitignore b/.gitignore
++new file mode 100644
++index 0000000..c2ae907
++--- /dev/null
+++++ b/.gitignore
++@@ -0,0 +1,60 @@
+++# Prerequisites
+++*.d
+++
+++# Object files
+++*.o
+++*.ko
+++*.obj
+++*.elf
+++
+++# Linker output
+++*.ilk
+++*.map
+++*.exp
+++
+++# Precompiled Headers
+++*.gch
+++*.pch
+++
+++# Libraries
+++*.lib
+++*.a
+++*.la
+++*.lo
+++
+++# Shared objects (inc. Windows DLLs)
+++*.dll
+++*.so
+++*.so.*
+++*.dylib
+++
+++# Executables
+++*.exe
+++*.out
+++*.app
+++*.i*86
+++*.x86_64
+++*.hex
+++
+++# Debug files
+++*.dSYM/
+++*.su
+++*.idb
+++*.pdb
+++
+++# Kernel Module Compile Results
+++*.mod*
+++*.cmd
+++.tmp_versions/
+++modules.order
+++Module.symvers
+++Mkfile.old
+++dkms.conf
+++
+++#images
+++*.tgz
+++*.img
+++
+++
+++#build
+++configure
++diff --git a/src/graph_cpu_load.c b/src/graph_cpu_load.c
++index e4b7785..525d9ed 100644
++--- a/src/graph_cpu_load.c
+++++ b/src/graph_cpu_load.c
++@@ -132,7 +132,7 @@ void graph_new_line(char *str, unsigned long color)
++ 	graph_last_x = graph_last_y = -1;
 + 
-+   if (!command) return NULL;
-+-  if (!(c = calloc(sizeof(struct cli_command), 1))) return NULL;
-++  if (!(c = calloc(1, sizeof(struct cli_command)))) return NULL;
-+   c->command_type = CLI_REGULAR_COMMAND;
-+   c->callback = callback;
-+   c->next = NULL;
-+@@ -597,7 +597,7 @@ struct cli_def *cli_init() {
-+   struct cli_def *cli;
-+   struct cli_command *c;
++ 	if (graph_data_index >= MAX_GRAPH_DATA - 2)
++-		error("Too many graph data.");
+++		perror("Too many graph data.");
 + 
-+-  if (!(cli = calloc(sizeof(struct cli_def), 1))) return 0;
-++  if (!(cli = calloc(1, sizeof(struct cli_def)))) return 0;
++ 	graph_data[graph_data_index++] = DATUM_COLOR;
++ 	graph_data[graph_data_index++] = color;
++@@ -145,7 +145,7 @@ void graph_new_line(char *str, unsigned long color)
++ void graph_add_point(int size, int amount)
++ {
++ 	if (graph_data_index >= MAX_GRAPH_DATA - 4)
++-		error("Too many graph data.");
+++		perror("Too many graph data.");
 + 
-+   cli->buf_size = 1024;
-+   if (!(cli->buffer = calloc(cli->buf_size, 1))) {
-+@@ -1957,7 +1957,7 @@ int cli_match_filter_init(struct cli_def *cli, int argc, char **argv, struct cli
-+   char *search_flags = cli_get_optarg_value(cli, "search_flags", NULL);
++ 	graph_data[graph_data_index++] = DATUM_SIZE;
++ 	graph_data[graph_data_index++] = size;
++diff --git a/src/read_cpu_stat.c b/src/read_cpu_stat.c
++index 3d014be..ff51d7f 100644
++--- a/src/read_cpu_stat.c
+++++ b/src/read_cpu_stat.c
++@@ -46,7 +46,7 @@ ProcessList *cpudata_new(void)
++ 	fclose(file);
 + 
-+   filt->filter = cli_match_filter;
-+-  filt->data = state = calloc(sizeof(struct cli_match_filter_state), 1);
-++  filt->data = state = calloc(1, sizeof(struct cli_match_filter_state));
-+   if (!state) return CLI_ERROR;
++ 	if (cpu > cpus -1) {
++-		error("too many cpus");
+++		perror("too many cpus");
++ 		exit(1);
++ 	}
 + 
-+   if (!strcmp(cli->pipeline->current_stage->words[0], "include")) {
-+@@ -2050,7 +2050,7 @@ int cli_range_filter_init(struct cli_def *cli, int argc, char **argv, struct cli
-+   //    from the command line processing and continue
-+ 
-+   filt->filter = cli_range_filter;
-+-  filt->data = state = calloc(sizeof(struct cli_range_filter_state), 1);
-++  filt->data = state = calloc(1, sizeof(struct cli_range_filter_state));
-+   if (state) {
-+     state->from = from;
-+     state->to = to;
-+@@ -2087,7 +2087,7 @@ int cli_count_filter_init(struct cli_def *cli, int argc, UNUSED(char **argv), st
-+   }
-+ 
-+   filt->filter = cli_count_filter;
-+-  if (!(filt->data = calloc(sizeof(int), 1))) return CLI_ERROR;
-++  if (!(filt->data = calloc(1, sizeof(int)))) return CLI_ERROR;
-+ 
-+   return CLI_OK;
-+ }
-+@@ -2144,7 +2144,7 @@ struct cli_command *cli_register_filter(struct cli_def *cli, const char *command
-+   struct cli_command *c;
-+ 
-+   if (!command) return NULL;
-+-  if (!(c = calloc(sizeof(struct cli_command), 1))) return NULL;
-++  if (!(c = calloc(1, sizeof(struct cli_command)))) return NULL;
-+ 
-+   c->command_type = CLI_FILTER_COMMAND;
-+   c->init = init;
-+@@ -2256,7 +2256,7 @@ struct cli_optarg *cli_register_optarg(struct cli_command *cmd, const char *name
-+       goto CLEANUP;
-+     }
-+   }
-+-  if (!(optarg = calloc(sizeof(struct cli_optarg), 1))) goto CLEANUP;
-++  if (!(optarg = calloc(1, sizeof(struct cli_optarg)))) goto CLEANUP;
-+   if (!(optarg->name = strdup(name))) goto CLEANUP;
-+   if (help && !(optarg->help = strdup(help))) goto CLEANUP;
-+ 
-+@@ -2532,7 +2532,7 @@ struct cli_command *cli_int_register_buildmode_command(struct cli_def *cli, stru
-+   struct cli_command *c;
-+ 
-+   if (!command) return NULL;
-+-  if (!(c = calloc(sizeof(struct cli_command), 1))) return NULL;
-++  if (!(c = calloc(1, sizeof(struct cli_command)))) return NULL;
-+ 
-+   c->flags = flags;
-+   c->callback = callback;
-+@@ -3095,7 +3095,7 @@ int cli_int_execute_pipeline(struct cli_def *cli, struct cli_pipeline *pipeline)
-+     struct cli_pipeline_stage *stage = &pipeline->stage[stage_num];
-+     pipeline->current_stage = stage;
-+     cli->found_optargs = stage->found_optargs;
-+-    *filt = calloc(sizeof(struct cli_filter), 1);
-++    *filt = calloc(1, sizeof(struct cli_filter));
-+     if (*filt) {
-+       if ((rc = stage->command->init(cli, stage->num_words, stage->words, *filt) != CLI_OK)) {
-+         break;
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
