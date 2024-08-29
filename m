@@ -1,53 +1,79 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E593EC8302B
-	for <buildroot@archiver.kernel.org>; Thu, 29 Aug 2024 10:21:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A402DC83F15
+	for <buildroot@archiver.kernel.org>; Thu, 29 Aug 2024 13:12:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B73C741982;
-	Thu, 29 Aug 2024 10:21:15 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3D80B40328;
+	Thu, 29 Aug 2024 13:12:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mqW7NiaZlbcw; Thu, 29 Aug 2024 10:21:14 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id edNftFAHcBbl; Thu, 29 Aug 2024 13:12:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B74064198F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EC12940359
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B74064198F;
-	Thu, 29 Aug 2024 10:21:14 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id AC47C1BF365
- for <buildroot@lists.busybox.net>; Thu, 29 Aug 2024 10:21:04 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id EC12940359;
+	Thu, 29 Aug 2024 13:12:46 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 6C2251BF8B4
+ for <buildroot@lists.busybox.net>; Thu, 29 Aug 2024 13:12:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 977BD81467
- for <buildroot@lists.busybox.net>; Thu, 29 Aug 2024 10:21:03 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 59B3C60663
+ for <buildroot@lists.busybox.net>; Thu, 29 Aug 2024 13:12:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VafKWl9Moe01 for <buildroot@lists.busybox.net>;
- Thu, 29 Aug 2024 10:21:02 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id EQHLy6yHNuqi for <buildroot@lists.busybox.net>;
+ Thu, 29 Aug 2024 13:12:43 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=209.85.221.52;
+ helo=mail-wr1-f52.google.com; envelope-from=thomas.devoogdt@gmail.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EE4CE81A81
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id EE4CE81A81
- for <buildroot@buildroot.org>; Thu, 29 Aug 2024 10:21:01 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DDA4686662; Thu, 29 Aug 2024 10:21:01 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 1D0DC60639
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1D0DC60639
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com
+ [209.85.221.52])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 1D0DC60639
+ for <buildroot@buildroot.org>; Thu, 29 Aug 2024 13:12:42 +0000 (UTC)
+Received: by mail-wr1-f52.google.com with SMTP id
+ ffacd0b85a97d-371afae614aso397750f8f.0
+ for <buildroot@buildroot.org>; Thu, 29 Aug 2024 06:12:42 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1724937161; x=1725541961;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=+kgt1EclLRllKZVNsddgcVl1fRqlbKr1Nt7sUpeOWsw=;
+ b=iNiApk2jqOUoaaBQo6i3xKAYyiNMdnp3570YPFf+yCmah+th8ik1i+M7BbfdNvVD1o
+ f1YIbW7Z3dLYngw+Oqxwd09YRKwGMHxe9X5MqaBj6oEEagSRJBOStfXxy2l10X97ZxgK
+ v6vi24Jizc0DFgRKgikdamAwL3yOmElWi26FiddtJFbdwFq6FwadhdTOaPW7WiPQTd7Y
+ rX8Gcr9W5/J9FF4ane0ugrAiwLj6WN4X6hY/QEzEDQ3HBOQN95QbLFQX1kHqpVMTw/3i
+ Ho3VhX6Fy8VBkcA2M4cM4372SRUmZuPhfUDKngPy/lL1z3DUZRKSjPRnr7H4yvRvZ3NT
+ VTTw==
+X-Gm-Message-State: AOJu0YxAPdl1xnaA1UBxMxpTz+GldIv1/4kOA+xL/aeQS7mz0D3dIrjR
+ aQMqr5KQxwegmjN82FVhNrwft+z+QKmTf3I/gpJwjpHRgvgB5ioP9eeR5I+9
+X-Google-Smtp-Source: AGHT+IHQlOmZLMspXvIG12RUwdquFoJncPztI3KkbXqLmcZQftqP3zFhEuRmgYfWJ3iYn8OpMFwyvw==
+X-Received: by 2002:a5d:6144:0:b0:367:9881:7d5e with SMTP id
+ ffacd0b85a97d-3749b52e5a5mr1904493f8f.8.1724937160205; 
+ Thu, 29 Aug 2024 06:12:40 -0700 (PDT)
+Received: from thomas-Precision-7670.barco.com (d528f5fdd.static.telenet.be.
+ [82.143.95.221]) by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-42bb6e273bcsm17119455e9.31.2024.08.29.06.12.39
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Thu, 29 Aug 2024 06:12:39 -0700 (PDT)
+From: Thomas Devoogdt <thomas@devoogdt.com>
 To: buildroot@buildroot.org
-Date: Thu, 29 Aug 2024 12:11:43 +0200
-X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 1eb219ffcebb8a98604e4b6692e72826d9304d9d
-X-Git-Newrev: d6b21427736be914c181a5599f82f26949640790
-X-Patchwork-Hint: ignore
-Message-Id: <20240829102101.DDA4686662@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/ksmbd-tools: bump
- to version 3.5.2
+Date: Thu, 29 Aug 2024 15:12:28 +0200
+Message-ID: <20240829131232.2132854-1-thomas@devoogdt.com>
+X-Mailer: git-send-email 2.43.0
+MIME-Version: 1.0
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=devoogdt.com
+Subject: [Buildroot] [PATCH v1] package/libsoup3: bump to 3.6.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,48 +85,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Adrian Perez de Castro <aperez@igalia.com>,
+ Thomas Devoogdt <thomas@devoogdt.com>,
+ Thomas Devoogdt <thomas.devoogdt@barco.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d6b21427736be914c181a5599f82f26949640790
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
+From: Thomas Devoogdt <thomas.devoogdt@barco.com>
 
-https://github.com/cifsd-team/ksmbd-tools/releases/tag/3.5.2
+News:
+ - https://download.gnome.org/sources/libsoup/3.5/libsoup-3.5.2.news
+ - https://download.gnome.org/sources/libsoup/3.6/libsoup-3.6.0.news
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit b409766234a3aabb33918b935b58704822345e9e)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
 ---
- package/ksmbd-tools/ksmbd-tools.hash | 2 +-
- package/ksmbd-tools/ksmbd-tools.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libsoup3/libsoup3.hash | 4 ++--
+ package/libsoup3/libsoup3.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/ksmbd-tools/ksmbd-tools.hash b/package/ksmbd-tools/ksmbd-tools.hash
-index c3e6ebefe5..3367886d55 100644
---- a/package/ksmbd-tools/ksmbd-tools.hash
-+++ b/package/ksmbd-tools/ksmbd-tools.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/libsoup3/libsoup3.hash b/package/libsoup3/libsoup3.hash
+index 139771a11e..37ecd2db84 100644
+--- a/package/libsoup3/libsoup3.hash
++++ b/package/libsoup3/libsoup3.hash
+@@ -1,4 +1,4 @@
+-# From https://download.gnome.org/sources/libsoup/3.5/libsoup-3.5.1.sha256sum
+-sha256  c1d7cfb89832d35c271f37d544f2cfe21fa60ae9faad4a7ac58996ae4031f7ba  libsoup-3.5.1.tar.xz
++# From https://download.gnome.org/sources/libsoup/3.6/libsoup-3.6.0.sha256sum
++sha256  62959f791e8e8442f8c13cedac8c4919d78f9120d5bb5301be67a5e53318b4a3  libsoup-3.6.0.tar.xz
  # Locally calculated
--sha256  ab377b3044c48382303f3f7ec95f2e1a17592c774d70b2a11f32952099dbb214  ksmbd-tools-3.5.1.tar.gz
-+sha256  5da7fb4cb4368f9abf56f6f9fbc17b25e387876bed9ff7ee0d6f1140ef07c8d7  ksmbd-tools-3.5.2.tar.gz
- sha256  576540abf5e95029ad4ad90e32071385a5e95b2c30708c706116f3eb87b9a3de  COPYING
-diff --git a/package/ksmbd-tools/ksmbd-tools.mk b/package/ksmbd-tools/ksmbd-tools.mk
-index c56c6e10bb..261eddad7c 100644
---- a/package/ksmbd-tools/ksmbd-tools.mk
-+++ b/package/ksmbd-tools/ksmbd-tools.mk
-@@ -4,7 +4,7 @@
+ sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
+diff --git a/package/libsoup3/libsoup3.mk b/package/libsoup3/libsoup3.mk
+index bc3ae4d0cb..f8a7e26159 100644
+--- a/package/libsoup3/libsoup3.mk
++++ b/package/libsoup3/libsoup3.mk
+@@ -4,8 +4,8 @@
  #
  ################################################################################
  
--KSMBD_TOOLS_VERSION = 3.5.1
-+KSMBD_TOOLS_VERSION = 3.5.2
- KSMBD_TOOLS_SITE = https://github.com/cifsd-team/ksmbd-tools/releases/download/$(KSMBD_TOOLS_VERSION)
- KSMBD_TOOLS_LICENSE = GPL-2.0+
- KSMBD_TOOLS_LICENSE_FILES = COPYING
+-LIBSOUP3_VERSION_MAJOR = 3.5
+-LIBSOUP3_VERSION = $(LIBSOUP3_VERSION_MAJOR).1
++LIBSOUP3_VERSION_MAJOR = 3.6
++LIBSOUP3_VERSION = $(LIBSOUP3_VERSION_MAJOR).0
+ LIBSOUP3_SOURCE = libsoup-$(LIBSOUP3_VERSION).tar.xz
+ LIBSOUP3_SITE = https://download.gnome.org/sources/libsoup/$(LIBSOUP3_VERSION_MAJOR)
+ LIBSOUP3_LICENSE = LGPL-2.0+
+-- 
+2.43.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
