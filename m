@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 72E70C83F2D
-	for <buildroot@archiver.kernel.org>; Thu, 29 Aug 2024 16:17:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D2D3C83F16
+	for <buildroot@archiver.kernel.org>; Thu, 29 Aug 2024 16:17:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 429C281D72;
-	Thu, 29 Aug 2024 16:17:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6DC61840A9;
+	Thu, 29 Aug 2024 16:17:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XM11DfkBRHGN; Thu, 29 Aug 2024 16:17:11 +0000 (UTC)
+ id 8b35ZriSBEEM; Thu, 29 Aug 2024 16:17:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E454284088
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B418A840AA
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E454284088;
-	Thu, 29 Aug 2024 16:17:09 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id F06361BF84C
- for <buildroot@lists.busybox.net>; Thu, 29 Aug 2024 16:17:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B418A840AA;
+	Thu, 29 Aug 2024 16:17:14 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 2349B1BF84C
+ for <buildroot@lists.busybox.net>; Thu, 29 Aug 2024 16:17:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EA8B6404B6
+ by smtp3.osuosl.org (Postfix) with ESMTP id 84E546115F
  for <buildroot@lists.busybox.net>; Thu, 29 Aug 2024 16:17:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5E-qrGP1iEtz for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4svfw8M7z1n7 for <buildroot@lists.busybox.net>;
  Thu, 29 Aug 2024 16:17:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8B298403ED
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B422C61161
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8B298403ED
+ by smtp3.osuosl.org (Postfix) with ESMTP id B422C61161
  for <buildroot@buildroot.org>; Thu, 29 Aug 2024 16:17:01 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 76B19866D1; Thu, 29 Aug 2024 16:17:01 +0000 (UTC)
+ id A1901866D0; Thu, 29 Aug 2024 16:17:01 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 29 Aug 2024 18:04:28 +0200
+Date: Thu, 29 Aug 2024 18:08:34 +0200
 X-Git-Refname: refs/heads/2024.05.x
-X-Git-Oldrev: 6aa0b165333fa0fc65d639989734630ef9827c5d
-X-Git-Newrev: 83601534d3ffbb1c32d2e0556681eed57b10743e
+X-Git-Oldrev: 32844c4ca256bd40d441a85dcf45769c8758dca5
+X-Git-Newrev: 6718560ed9a9cbf60a2042d4472656caa53e755e
 X-Patchwork-Hint: ignore
-Message-Id: <20240829161701.76B19866D1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.05.x] package/ibm-sw-tpm2: bump
- to version rev183-2024-03-27
+Message-Id: <20240829161701.A1901866D0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.05.x] package/unbound: select
+ BR2_PACKAGE_LIBOPENSSL_ENGINES
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,168 +65,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=83601534d3ffbb1c32d2e0556681eed57b10743e
+commit: https://git.buildroot.net/buildroot/commit/?id=6718560ed9a9cbf60a2042d4472656caa53e755e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.05.x
 
-- Refresh first patch
-- Drop second patch (fix differentl by
-  https://sourceforge.net/p/ibmswtpm2/tpm2/ci/ebe82ac82fef97feddc558f3c3ad16baf67e6921/)
+unbound unconditionally calls the (deprecated) ENGINE_* logic in
+libopenssl resulting in a build failure when
+!BR2_PACKAGE_LIBOPENSSL_ENGINES since commit
+623d3bbe43e9193aa8e3395367d01af59071b859:
+
+sldns/keyraw.c:167:35: error: 'ENGINE_METHOD_ALL' undeclared (first use in this function)
+  167 |         if(!ENGINE_set_default(e, ENGINE_METHOD_ALL)) {
+      |                                   ^~~~~~~~~~~~~~~~~
+
+Fixes: 623d3bbe43e9193aa8e3395367d01af59071b859
+ - http://autobuild.buildroot.org/results/b7782f5ba54543df53a835552632f58d4ad6c082
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit d00c2409a59ac7529b0175c7207a446713489cf3)
+(cherry picked from commit ec7ae882e048ce4ca5c2b72cb884b8d1ef33c6cc)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-Use-LONG_BIT-to-define-RADIX_BITS.patch   | 65 +++++++++++-----------
- .../0002-Add-support-for-OpenSSL-3-2-x.patch       | 28 ----------
- package/ibm-sw-tpm2/ibm-sw-tpm2.hash               |  2 +-
- package/ibm-sw-tpm2/ibm-sw-tpm2.mk                 |  2 +-
- 4 files changed, 33 insertions(+), 64 deletions(-)
+ package/unbound/Config.in | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/ibm-sw-tpm2/0001-Use-LONG_BIT-to-define-RADIX_BITS.patch b/package/ibm-sw-tpm2/0001-Use-LONG_BIT-to-define-RADIX_BITS.patch
-index bb5d3a96ee..8d83116dfc 100644
---- a/package/ibm-sw-tpm2/0001-Use-LONG_BIT-to-define-RADIX_BITS.patch
-+++ b/package/ibm-sw-tpm2/0001-Use-LONG_BIT-to-define-RADIX_BITS.patch
-@@ -14,52 +14,49 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- Signed-off-by: Vincent Fazio <vfazio@gmail.com>
- [Bernd: rebased for git rev 5452af422edeff70fcae8ea99dd28a0922051d7b]
- Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-+[Fabrice: rebase for rev183-2024-03-27]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- ---
-  src/LibSupport.h     | 21 +++------------------
-  src/TcpServerPosix.c |  1 +
-  src/makefile         |  2 ++
-  3 files changed, 6 insertions(+), 18 deletions(-)
- 
--diff --git a/src/LibSupport.h b/src/LibSupport.h
-+diff --git a/src/tpm_radix.h b/src/tpm_radix.h
- index 5055560..48b1e16 100644
----- a/src/LibSupport.h
--+++ b/src/LibSupport.h
--@@ -64,32 +64,9 @@
-- #ifndef _LIB_SUPPORT_H_
-- #define _LIB_SUPPORT_H_
-- 
---/* kgold added power and s390 */
-+--- a/src/tpm_radix.h
-++++ b/src/tpm_radix.h
-+@@ -61,27 +61,9 @@
-+ //** Introduction
-+ // Common defines for supporting large numbers and cryptographic buffer sizing.
-+ //*********************
- -#ifndef RADIX_BITS
---#   if defined(__x86_64__) || defined(__x86_64)				\
---    || defined(__amd64__) || defined(__amd64)				\
---    || defined(_WIN64) || defined(_M_X64)		 		\
---    || defined(_M_ARM64) || defined(__aarch64__) 			\
---    || defined(__powerpc64__) || defined(__PPC64__) || defined(__ppc64__) \
---    || defined(__s390x__)
---#       define RADIX_BITS                      64
---#   elif defined(__i386__) || defined(__i386) || defined(i386)		\
---    || defined(_WIN32) || defined(_M_IX86)				\
---    || defined(_M_ARM) || defined(__arm__) || defined(__thumb__)	\
---    || defined(__powerpc__) || defined(__PPC__)
---#       define RADIX_BITS                      32
---#   elif defined(__riscv) || defined(__riscv__)
---#       if __riscv_xlen == 32
---#            define RADIX_BITS                 32
---#       elif __riscv_xlen == 64
---#            define RADIX_BITS                 64
---#       else
---#            error Unsupported __riscv_xlen value
---#       endif
---#   else
---#       error Unable to determine RADIX_BITS from compiler environment
---#   endif
---#endif // RADIX_BITS
-+-#  if defined(__x86_64__) || defined(__x86_64) || defined(__amd64__)	\
-+-    || defined(__amd64) || defined(_WIN64) || defined(_M_X64) || defined(_M_ARM64) \
-+-    || defined(__aarch64__) || defined(__PPC64__) || defined(__s390x__) \
-+-    || defined(__powerpc64__) || defined(__ppc64__)
-+-#    define RADIX_BITS 64
-+-#  elif defined(__i386__) || defined(__i386) || defined(i386) || defined(_WIN32) \
-+-    || defined(_M_IX86)
-+-#    define RADIX_BITS 32
-+-#  elif defined(_M_ARM) || defined(__arm__) || defined(__thumb__)
-+-#    define RADIX_BITS 32
-+-#  elif defined(__riscv)
-+-// __riscv and __riscv_xlen are standardized by the RISC-V community and should be available
-+-// on any compliant compiler.
-+-//
-+-// https://github.com/riscv-non-isa/riscv-toolchain-conventions
-+-#    define RADIX_BITS __riscv_xlen
-+-#  else
-+-#    error Unable to determine RADIX_BITS from compiler environment
-+-#  endif
-+-#endif  // RADIX_BITS
- +#include <limits.h>
- +
- +#define RADIX_BITS LONG_BIT
-  
-- // These macros use the selected libraries to the proper include files.
-- #define LIB_QUOTE(_STRING_) #_STRING_
-+ #if RADIX_BITS == 64
-+ #  define RADIX_BYTES 8
- diff --git a/src/TcpServerPosix.c b/src/TcpServerPosix.c
- index cad0402..6293cdd 100644
- --- a/src/TcpServerPosix.c
-diff --git a/package/ibm-sw-tpm2/0002-Add-support-for-OpenSSL-3-2-x.patch b/package/ibm-sw-tpm2/0002-Add-support-for-OpenSSL-3-2-x.patch
-deleted file mode 100644
-index 6732efce8c..0000000000
---- a/package/ibm-sw-tpm2/0002-Add-support-for-OpenSSL-3-2-x.patch
-+++ /dev/null
-@@ -1,28 +0,0 @@
--From beea0f97b3c95ec69f3e269df1af87eb2cdd3c46 Mon Sep 17 00:00:00 2001
--From: Otto Hollmann <otto@hollmann.cz>
--Date: Tue, 12 Dec 2023 13:58:32 +0100
--Subject: [PATCH] Add support for OpenSSL 3.2.x
--
--Upstream: https://github.com/kgoldman/ibmswtpm2/pull/13
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-----
-- src/TpmToOsslMath.h | 4 ++--
-- 1 file changed, 2 insertions(+), 2 deletions(-)
--
--diff --git a/src/TpmToOsslMath.h b/src/TpmToOsslMath.h
--index 0b18191..1271937 100644
----- a/src/TpmToOsslMath.h
--+++ b/src/TpmToOsslMath.h
--@@ -76,10 +76,10 @@
--  * As of release 3.0.0, OPENSSL_VERSION_NUMBER is a combination of the
--  * major (M), minor (NN) and patch (PP) version into a single integer 0xMNN00PP0L
--  */
---#if OPENSSL_VERSION_NUMBER > 0x30100ff0L
--+#if OPENSSL_VERSION_NUMBER > 0x30200ff0L
-- // Check the bignum_st definition in crypto/bn/bn_lcl.h or crypto/bn/bn_local.h and either update
-- // the version check or provide the new definition for this version.
---// Currently safe for all 3.1.x
--+// Currently safe for all 3.2.x
-- #   error Untested OpenSSL version
-- #elif OPENSSL_VERSION_NUMBER >= 0x10100000L
-- // from crypto/bn/bn_lcl.h
-diff --git a/package/ibm-sw-tpm2/ibm-sw-tpm2.hash b/package/ibm-sw-tpm2/ibm-sw-tpm2.hash
-index 392fb59815..3c2d0e758f 100644
---- a/package/ibm-sw-tpm2/ibm-sw-tpm2.hash
-+++ b/package/ibm-sw-tpm2/ibm-sw-tpm2.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  da7799baa1d38cd9d2f491006de45d38805db9d5a77c38af6e78728bd318f93e  ibm-sw-tpm2-5452af422edeff70fcae8ea99dd28a0922051d7b-git4.tar.gz
-+sha256  239cea3ec99cb31fb25c1ba4fe9b98a862bb20daefefeba8908d370bedd42a31  ibm-sw-tpm2-rev183-2024-03-27-git4.tar.gz
- sha256  dd2d31b560011ea673e197251e710e52669d911367d83cd3cfd018f8ed58bde9  LICENSE
-diff --git a/package/ibm-sw-tpm2/ibm-sw-tpm2.mk b/package/ibm-sw-tpm2/ibm-sw-tpm2.mk
-index 4df61fe028..67ecd45923 100644
---- a/package/ibm-sw-tpm2/ibm-sw-tpm2.mk
-+++ b/package/ibm-sw-tpm2/ibm-sw-tpm2.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IBM_SW_TPM2_VERSION = 5452af422edeff70fcae8ea99dd28a0922051d7b
-+IBM_SW_TPM2_VERSION = rev183-2024-03-27
- IBM_SW_TPM2_SITE = https://git.code.sf.net/p/ibmswtpm2/tpm2
- IBM_SW_TPM2_SITE_METHOD = git
- IBM_SW_TPM2_LICENSE = BSD-3-Clause
+diff --git a/package/unbound/Config.in b/package/unbound/Config.in
+index ae2ebfd975..c8d697113c 100644
+--- a/package/unbound/Config.in
++++ b/package/unbound/Config.in
+@@ -3,6 +3,7 @@ config BR2_PACKAGE_UNBOUND
+ 	depends on !BR2_STATIC_LIBS
+ 	select BR2_PACKAGE_EXPAT
+ 	select BR2_PACKAGE_LIBEVENT
++	select BR2_PACKAGE_LIBOPENSSL_ENGINES if BR2_PACKAGE_LIBOPENSSL
+ 	select BR2_PACKAGE_OPENSSL
+ 	help
+ 	  Unbound is a validating, recursive, and caching DNS resolver.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
