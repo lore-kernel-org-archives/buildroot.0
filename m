@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E4E6C83F2D
-	for <buildroot@archiver.kernel.org>; Thu, 29 Aug 2024 16:09:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3EC74C83F16
+	for <buildroot@archiver.kernel.org>; Thu, 29 Aug 2024 16:09:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E0FFD80BAB;
-	Thu, 29 Aug 2024 16:09:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0BE9C80D2D;
+	Thu, 29 Aug 2024 16:09:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xJdLCG-Hbjzw; Thu, 29 Aug 2024 16:09:41 +0000 (UTC)
+ id yK4-u6rGkaQS; Thu, 29 Aug 2024 16:09:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F1D3080AE6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2C98980D33
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F1D3080AE6;
-	Thu, 29 Aug 2024 16:09:40 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 504101BF84C
- for <buildroot@lists.busybox.net>; Thu, 29 Aug 2024 16:09:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2C98980D33;
+	Thu, 29 Aug 2024 16:09:53 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 5CFA31BF84C
+ for <buildroot@lists.busybox.net>; Thu, 29 Aug 2024 16:09:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3D91B41006
- for <buildroot@lists.busybox.net>; Thu, 29 Aug 2024 16:09:39 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 48E71419B9
+ for <buildroot@lists.busybox.net>; Thu, 29 Aug 2024 16:09:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wetR7xFlCIhl for <buildroot@lists.busybox.net>;
- Thu, 29 Aug 2024 16:09:38 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id rlYl0uzx8P_J for <buildroot@lists.busybox.net>;
+ Thu, 29 Aug 2024 16:09:50 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::226;
  helo=relay6-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 085B840332
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 085B840332
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org DC84D419AB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DC84D419AB
 Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
  [IPv6:2001:4b98:dc4:8::226])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 085B840332
- for <buildroot@buildroot.org>; Thu, 29 Aug 2024 16:09:37 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 21618C0008;
- Thu, 29 Aug 2024 16:09:34 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id DC84D419AB
+ for <buildroot@buildroot.org>; Thu, 29 Aug 2024 16:09:49 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 2FA02C0002;
+ Thu, 29 Aug 2024 16:09:48 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1sjhiI-007WE3-2F;
- Thu, 29 Aug 2024 18:09:34 +0200
+ (envelope-from <peter@korsgaard.com>) id 1sjhiV-007WEL-2m;
+ Thu, 29 Aug 2024 18:09:47 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20240721150011.1437080-1-fontaine.fabrice@gmail.com>
-Date: Thu, 29 Aug 2024 18:09:34 +0200
-In-Reply-To: <20240721150011.1437080-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sun, 21 Jul 2024 17:00:11 +0200")
-Message-ID: <87y14f2tvl.fsf@dell.be.48ers.dk>
+References: <20240721150116.1438024-1-fontaine.fabrice@gmail.com>
+Date: Thu, 29 Aug 2024 18:09:47 +0200
+In-Reply-To: <20240721150116.1438024-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sun, 21 Jul 2024 17:01:16 +0200")
+Message-ID: <87ttf32tv8.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/unbound: select
- BR2_PACKAGE_LIBOPENSSL_ENGINES
+Subject: Re: [Buildroot] [PATCH 1/1] package/unbound: security bump to
+ version 1.20.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,17 +77,14 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > unbound unconditionally calls the (deprecated) ENGINE_* logic in
- > libopenssl resulting in a build failure when
- > !BR2_PACKAGE_LIBOPENSSL_ENGINES since commit
- > 623d3bbe43e9193aa8e3395367d01af59071b859:
+ > This release has a fix for the DNSBomb issue CVE-2024-33655. This has a
+ > low severity for Unbound, since it makes Unbound complicit in targeting
+ > others, but does not affect Unbound so much.
+ > This security release also fixes CVE-2024-1931.
 
- > sldns/keyraw.c:167:35: error: 'ENGINE_METHOD_ALL' undeclared (first use in this function)
- >   167 |         if(!ENGINE_set_default(e, ENGINE_METHOD_ALL)) {
- >       |                                   ^~~~~~~~~~~~~~~~~
-
- > Fixes: 623d3bbe43e9193aa8e3395367d01af59071b859
- >  - http://autobuild.buildroot.org/results/b7782f5ba54543df53a835552632f58d4ad6c082
+ > https://nlnetlabs.nl/news/2024/May/08/unbound-1.20.0-released
+ > https://nlnetlabs.nl/news/2024/Mar/14/unbound-1.19.3-released
+ > https://nlnetlabs.nl/news/2024/Mar/07/unbound-1.19.2-released
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
