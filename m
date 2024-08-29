@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BBB06C83F25
-	for <buildroot@archiver.kernel.org>; Thu, 29 Aug 2024 13:43:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E9224C83F23
+	for <buildroot@archiver.kernel.org>; Thu, 29 Aug 2024 13:43:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7B011412C4;
-	Thu, 29 Aug 2024 13:43:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BA1F640C5F;
+	Thu, 29 Aug 2024 13:43:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OESLqptIFomm; Thu, 29 Aug 2024 13:43:35 +0000 (UTC)
+ id jtxgod3nhsME; Thu, 29 Aug 2024 13:43:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7B5CC40B9F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 78C4E41963
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7B5CC40B9F;
-	Thu, 29 Aug 2024 13:43:35 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4AD621BF8B4
+	by smtp4.osuosl.org (Postfix) with ESMTP id 78C4E41963;
+	Thu, 29 Aug 2024 13:43:38 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 91E9C1BF8B4
  for <buildroot@lists.busybox.net>; Thu, 29 Aug 2024 13:43:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 45B68606A7
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8C99A40328
  for <buildroot@lists.busybox.net>; Thu, 29 Aug 2024 13:43:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vKrG6aA5cO4q for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id py1QpxYyskeo for <buildroot@lists.busybox.net>;
  Thu, 29 Aug 2024 13:43:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7C9656063F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 92DC640210
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7C9656063F
+ by smtp2.osuosl.org (Postfix) with ESMTP id 92DC640210
  for <buildroot@buildroot.org>; Thu, 29 Aug 2024 13:43:33 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7779C81355; Thu, 29 Aug 2024 13:43:33 +0000 (UTC)
+ id 8D612866A0; Thu, 29 Aug 2024 13:43:33 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 29 Aug 2024 15:38:47 +0200
+Date: Thu, 29 Aug 2024 15:40:34 +0200
 X-Git-Refname: refs/heads/2024.05.x
-X-Git-Oldrev: fa2f8886dfb822cce96c3fa25d6b0e2fdb737245
-X-Git-Newrev: 1519399c31dd514b3555f0807dd7472ae1eaf074
+X-Git-Oldrev: 24c56c6d88a641d2b79b91271b727bb71be2be00
+X-Git-Newrev: 69aa915c689650d2aabdc187dad0ed74c942ac8a
 X-Patchwork-Hint: ignore
-Message-Id: <20240829134333.7779C81355@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.05.x] support/testing: package:
- gpsd: fix gpsfake command line
+Message-Id: <20240829134333.8D612866A0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.05.x] package/micropython:
+ adjust name in description
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,44 +60,50 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============6070765333892074936=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1519399c31dd514b3555f0807dd7472ae1eaf074
+--===============6070765333892074936==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=69aa915c689650d2aabdc187dad0ed74c942ac8a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.05.x
 
-The gpsfake command line has a typo (a missing space), which makes the
-next gpsctl command to always fail.
+Change the name from "Micro Python" (two words) to "MicroPython"
+(camelcase), to match the official website and documentation.
 
-This commit fixes the issue by adding the missing space.
-
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/7391792948
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: J. Neuschäfer <j.neuschaefer@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 49156a0fa4a48d5d80f03c3854f631f312b486d4)
+(cherry picked from commit 161c25aee11650a4a6b22ca2a88fa0f84ee6b357)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/testing/tests/package/test_gpsd.py | 2 +-
+ package/micropython/Config.in | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/support/testing/tests/package/test_gpsd.py b/support/testing/tests/package/test_gpsd.py
-index deed586c17..7ca5973981 100644
---- a/support/testing/tests/package/test_gpsd.py
-+++ b/support/testing/tests/package/test_gpsd.py
-@@ -33,7 +33,7 @@ class TestGpsd(infra.basetest.BRTest):
-         # We start the "gpsfake" GPS emulator instead.
-         cmd = "gpsfake"
-         cmd += " --slow --cycle 0.1 --quiet"
--        cmd += "/root/udp-nmea.log &> /dev/null &"
-+        cmd += " /root/udp-nmea.log &> /dev/null &"
-         self.assertRunOk(cmd)
+diff --git a/package/micropython/Config.in b/package/micropython/Config.in
+index b466fbaf2d..f532b3bdb5 100644
+--- a/package/micropython/Config.in
++++ b/package/micropython/Config.in
+@@ -3,7 +3,7 @@ config BR2_PACKAGE_MICROPYTHON
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on !BR2_STATIC_LIBS
+ 	help
+-	  Micro Python is a lean and fast implementation of the Python
++	  MicroPython is a lean and fast implementation of the Python
+ 	  3 programming language that is optimised to run on a
+ 	  microcontroller.
  
-         # Wait a bit, to let the gpsfake and gpsd to settle...
+
+--===============6070765333892074936==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============6070765333892074936==--
