@@ -1,69 +1,64 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 636F8C71151
-	for <buildroot@archiver.kernel.org>; Thu, 29 Aug 2024 04:32:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1730C71151
+	for <buildroot@archiver.kernel.org>; Thu, 29 Aug 2024 06:01:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 259B860DFE;
-	Thu, 29 Aug 2024 04:32:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 41D7940733;
+	Thu, 29 Aug 2024 06:01:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Uxf8Fi5hrwtd; Thu, 29 Aug 2024 04:32:57 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 09EML8lqL2vL; Thu, 29 Aug 2024 06:01:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CF4DE607EC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 24BBD408F0
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CF4DE607EC;
-	Thu, 29 Aug 2024 04:32:56 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 059251BF370
- for <buildroot@lists.busybox.net>; Thu, 29 Aug 2024 04:32:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 24BBD408F0;
+	Thu, 29 Aug 2024 06:01:12 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 285E71BF357
+ for <buildroot@lists.busybox.net>; Thu, 29 Aug 2024 06:01:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E7152607EC
- for <buildroot@lists.busybox.net>; Thu, 29 Aug 2024 04:32:55 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 156CA404DB
+ for <buildroot@lists.busybox.net>; Thu, 29 Aug 2024 06:01:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id taFu308jU-h2 for <buildroot@lists.busybox.net>;
- Thu, 29 Aug 2024 04:32:54 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=84.110.109.230;
- helo=mail.tkos.co.il; envelope-from=baruch@tkos.co.il; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org B716F6072A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B716F6072A
-Received: from mail.tkos.co.il (golan.tkos.co.il [84.110.109.230])
- by smtp3.osuosl.org (Postfix) with ESMTPS id B716F6072A
- for <buildroot@buildroot.org>; Thu, 29 Aug 2024 04:32:53 +0000 (UTC)
-Received: from localhost (unknown [10.0.8.3])
- by mail.tkos.co.il (Postfix) with ESMTP id BA848440FA2;
- Thu, 29 Aug 2024 07:30:54 +0300 (IDT)
-To: Waldemar Brodkorb <wbx@openadk.org>
-In-Reply-To: <Zs+99wYrw042nBi/@waldemar-brodkorb.de> (Waldemar Brodkorb's
- message of "Thu, 29 Aug 2024 02:16:55 +0200")
-References: <Zs+99wYrw042nBi/@waldemar-brodkorb.de>
-Date: Thu, 29 Aug 2024 07:32:48 +0300
-Message-ID: <87a5gwuexb.fsf@tarshish>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id MEUkWNvJYzJJ for <buildroot@lists.busybox.net>;
+ Thu, 29 Aug 2024 06:01:09 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.198;
+ helo=relay6-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 52002403A7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 52002403A7
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [217.70.183.198])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 52002403A7
+ for <buildroot@buildroot.org>; Thu, 29 Aug 2024 06:01:07 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 90A95C0002;
+ Thu, 29 Aug 2024 06:01:04 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1sjYDP-006Ecz-2v;
+ Thu, 29 Aug 2024 08:01:03 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Gero =?utf-8?Q?Schw=C3=A4ricke?= <gero.schwaericke@posteo.de>
+References: <20240403213135.699268-1-gero.schwaericke@posteo.de>
+Date: Thu, 29 Aug 2024 08:01:03 +0200
+In-Reply-To: <20240403213135.699268-1-gero.schwaericke@posteo.de> ("Gero
+ =?utf-8?Q?Schw=C3=A4ricke=22's?= message of "Wed, 3 Apr 2024 21:30:38
+ +0000")
+Message-ID: <87jzfz7tr4.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=tkos.co.il; s=default; t=1724905854;
- bh=za/BbLFo9Dp+rVL3Z+XnazAB1/3VNMJ59iAGYrWBAeQ=;
- h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
- b=lcQvQz6YROjSjHwi0Qp0jWEtuiPP1WDFUB8N+pGk10JNRJtx+/0x7XLQYSiul9mdq
- AsYisAzhH6s7PvC4z52XheWvQiCh05Z3qzrN24j9MGWZG0V2yiJ269fPnF9CciRJXr
- wtiiMfnc1yM/eqn78CKPj4Ow+qpU50Po3Lykjtn9o2g+Wa8S0eDwuKXzFJF4pXMcBo
- QsshHqg4I8TneTcnx+1FUinBBRs+zK3+nTZQpNSc/PbT2vbSmcEpegpidLHF3usojn
- q5WsuuSn22X0EX4s5fC6m8LyJUd+LDrBdB/oKCN7GdG1701mKxRglfjnmdmXMRNNT+
- H9NzzhEGjF6gw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=tkos.co.il
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=tkos.co.il header.i=@tkos.co.il header.a=rsa-sha256
- header.s=default header.b=lcQvQz6Y
-Subject: Re: [Buildroot] [PATCH next] package/zabbix: update to 7.0.3
+X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: Re: [Buildroot] [PATCH] docs/manual: promote using fixed version
+ for kernel headers when contributing a board
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,208 +70,27 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Baruch Siach via buildroot <buildroot@buildroot.org>
-Reply-To: Baruch Siach <baruch@tkos.co.il>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>,
+ buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Waldemar,
-
-On Thu, Aug 29 2024, Waldemar Brodkorb wrote:
-
-> Update to maintained and stable 7.0.3 version.
->
-> Patch 0002 does no longer apply. Libressl support is not supported
-> for our version of Libressl.
->
-> It is required to start the daemons with -f otherwise they are
-> restarted every 30 seconds.
->
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-> ---
-> What is the correct way to disable libressl and only allow
-> openssl?
-
-Try
-
-  select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
-
-baruch
-
-> ---
->  DEVELOPERS                                    |  1 +
->  .../0002-fix-build-with-libressl-3.5.0.patch  | 71 -------------------
->  package/zabbix/zabbix-agent.service           |  2 +-
->  package/zabbix/zabbix-server.service          |  2 +-
->  package/zabbix/zabbix.hash                    |  2 +-
->  package/zabbix/zabbix.mk                      |  6 +-
->  6 files changed, 7 insertions(+), 77 deletions(-)
->  delete mode 100644 package/zabbix/0002-fix-build-with-libressl-3.5.0.patch
->
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 570f4ff115..566be87949 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -3308,6 +3308,7 @@ F:	package/mksh/
->  F:	package/ruby/
->  F:	package/uclibc/
->  F:	package/uclibc-ng-test/
-> +F:	package/zabbix/
->  F:	support/testing/tests/package/test_ruby.py
->  
->  N:	Will Newton <will.newton@gmail.com>
-> diff --git a/package/zabbix/0002-fix-build-with-libressl-3.5.0.patch
-> b/package/zabbix/0002-fix-build-with-libressl-3.5.0.patch
-> deleted file mode 100644
-> index ad6960f329..0000000000
-> --- a/package/zabbix/0002-fix-build-with-libressl-3.5.0.patch
-> +++ /dev/null
-> @@ -1,71 +0,0 @@
-> -From 5c8511384f1d41f9c2a131604d5cb2dbc1c0aec9 Mon Sep 17 00:00:00 2001
-> -From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> -Date: Fri, 24 Feb 2023 12:23:56 +0100
-> -Subject: [PATCH] fix build with libressl >= 3.5.0
-> -
-> -Fix the following build failure with libressl >= 3.5.0:
-> -
-> -tls.c:113:17: error: static declaration of 'OPENSSL_cleanup' follows non-static declaration
-> -  113 | static void     OPENSSL_cleanup(void)
-> -      |                 ^~~~~~~~~~~~~~~
-> -In file included from
-> /home/thomas/autobuild/instance-3/output-1/host/mips-buildroot-linux-gnu/sysroot/usr/include/openssl/bio.h:69,
-> - from
-> /home/thomas/autobuild/instance-3/output-1/host/mips-buildroot-linux-gnu/sysroot/usr/include/openssl/evp.h:67,
-> - from
-> /home/thomas/autobuild/instance-3/output-1/host/mips-buildroot-linux-gnu/sysroot/usr/include/openssl/hmac.h:67,
-> - from
-> /home/thomas/autobuild/instance-3/output-1/host/mips-buildroot-linux-gnu/sysroot/usr/include/openssl/ssl.h:150,
-> -                 from ../../../include/zbxcomms.h:65,
-> -                 from tls.c:20:
-> -/home/thomas/autobuild/instance-3/output-1/host/mips-buildroot-linux-gnu/sysroot/usr/include/openssl/crypto.h:565:6:
-> note: previous declaration of 'OPENSSL_cleanup' with type 'void(void)'
-> -  565 | void OPENSSL_cleanup(void);
-> -      |      ^~~~~~~~~~~~~~~
-> -In file included from tls.c:20:
-> -tls.c: In function 'zbx_log_ciphersuites':
-> -../../../include/zbxcomms.h:222:75: error: invalid use of incomplete typedef 'SSL_CTX' {aka 'struct ssl_ctx_st'}
-> -  222 | #       define SSL_CTX_get_ciphers(ciphers)                     ((ciphers)->cipher_list)
-> -      |                                                                           ^~
-> -tls.c:1415:31: note: in expansion of macro 'SSL_CTX_get_ciphers'
-> - 1415 |                 cipher_list = SSL_CTX_get_ciphers(ciphers);
-> -      |                               ^~~~~~~~~~~~~~~~~~~
-> -
-> -Fixes:
-> - - http://autobuild.buildroot.org/results/acdfcb17b39d438ccf5e4621707a10f60577d233
-> -
-> -Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-> -Upstream: not sent (no feedback on first patch)
-> ----
-> - include/zbxcomms.h      | 3 ++-
-> - src/libs/zbxcomms/tls.c | 5 +++--
-> - 2 files changed, 5 insertions(+), 3 deletions(-)
-> -
-> -diff --git a/include/zbxcomms.h b/include/zbxcomms.h
-> -index e7d74dbd0f..d6efa358fe 100644
-> ---- a/include/zbxcomms.h
-> -+++ b/include/zbxcomms.h
-> -@@ -253,7 +253,8 @@ int	zbx_telnet_execute(ZBX_SOCKET socket_fd, const char *command, AGENT_RESULT *
-> - /* TLS BLOCK */
-> - #if defined(HAVE_GNUTLS) || defined(HAVE_OPENSSL)
-> - 
-> --#if defined(HAVE_OPENSSL) && OPENSSL_VERSION_NUMBER < 0x1010000fL || defined(LIBRESSL_VERSION_NUMBER)
-> -+#if defined(HAVE_OPENSSL) && OPENSSL_VERSION_NUMBER < 0x1010000fL || \
-> -+	defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x3050000fL
-> - #	if !defined(LIBRESSL_VERSION_NUMBER)
-> - #		define OPENSSL_INIT_LOAD_SSL_STRINGS			0
-> - #		define OPENSSL_INIT_LOAD_CRYPTO_STRINGS		0
-> -diff --git a/src/libs/zbxcomms/tls.c b/src/libs/zbxcomms/tls.c
-> -index 54ab0a6ef4..bd4075b3e4 100644
-> ---- a/src/libs/zbxcomms/tls.c
-> -+++ b/src/libs/zbxcomms/tls.c
-> -@@ -28,8 +28,9 @@
-> - #include "log.h"
-> - #include "zbxcrypto.h"
-> - 
-> --#if defined(HAVE_OPENSSL) && OPENSSL_VERSION_NUMBER < 0x1010000fL || defined(LIBRESSL_VERSION_NUMBER)
-> --/* for OpenSSL 1.0.1/1.0.2 (before 1.1.0) or LibreSSL */
-> -+#if defined(HAVE_OPENSSL) && OPENSSL_VERSION_NUMBER < 0x1010000fL || \
-> -+	defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x3050000fL
-> -+/* for OpenSSL 1.0.1/1.0.2 (before 1.1.0) or LibreSSL (before 3.5.0) */
-> - 
-> - /* mutexes for multi-threaded OpenSSL (see "man 3ssl threads" and example in crypto/threads/mttest.c) */
-> - 
-> --- 
-> -2.39.1
-> -
-> diff --git a/package/zabbix/zabbix-agent.service b/package/zabbix/zabbix-agent.service
-> index 8b4f45a4fc..7e06636a2a 100644
-> --- a/package/zabbix/zabbix-agent.service
-> +++ b/package/zabbix/zabbix-agent.service
-> @@ -4,7 +4,7 @@ After=network.target
->   
->  [Service]
->  Type=forking
-> -ExecStart=/usr/sbin/zabbix_agentd
-> +ExecStart=/usr/sbin/zabbix_agentd -f
->  ExecReload=/usr/sbin/zabbix_agentd -R config_cache_reload
->  RuntimeDirectory=zabbix
->  PIDFile=/run/zabbix/zabbix_agentd.pid
-> diff --git a/package/zabbix/zabbix-server.service b/package/zabbix/zabbix-server.service
-> index b8ba0d1707..52ed5df1ea 100644
-> --- a/package/zabbix/zabbix-server.service
-> +++ b/package/zabbix/zabbix-server.service
-> @@ -4,7 +4,7 @@ After=network.target
->   
->  [Service]
->  Type=forking
-> -ExecStart=/usr/sbin/zabbix_server
-> +ExecStart=/usr/sbin/zabbix_server -f
->  ExecReload=/usr/sbin/zabbix_server -R config_cache_reload
->  RuntimeDirectory=zabbix
->  PIDFile=/run/zabbix/zabbix_server.pid
-> diff --git a/package/zabbix/zabbix.hash b/package/zabbix/zabbix.hash
-> index bb6127e5ec..4648ed8b71 100644
-> --- a/package/zabbix/zabbix.hash
-> +++ b/package/zabbix/zabbix.hash
-> @@ -1,4 +1,4 @@
->  # Locally computed
-> -sha256  6d423810667b948ed22052d9aa84a035e2d4b92cbe8efdb669cac529806b722d  zabbix-6.2.7.tar.gz
-> +sha256  173059f57f11716146da79345e5a6bc52eceee6a5c4410664b8500a955598b2a  zabbix-7.0.3.tar.gz
->  sha256  f8fc3fd12521b60d53d8c5d48a883eb3c9c5ddec9de986a273e1b77f69d811db  README
->  sha256  444fe54aecc95ac0f3314289c300afc73b3946a4dc9fbd7e022709b3e0924dd0  COPYING
-> diff --git a/package/zabbix/zabbix.mk b/package/zabbix/zabbix.mk
-> index 76568f5a18..9c21e9621d 100644
-> --- a/package/zabbix/zabbix.mk
-> +++ b/package/zabbix/zabbix.mk
-> @@ -4,8 +4,8 @@
->  #
->  ################################################################################
->  
-> -ZABBIX_VERSION_MAJOR = 6.2
-> -ZABBIX_VERSION = $(ZABBIX_VERSION_MAJOR).7
-> +ZABBIX_VERSION_MAJOR = 7.0
-> +ZABBIX_VERSION = $(ZABBIX_VERSION_MAJOR).3
->  ZABBIX_SITE = https://cdn.zabbix.com/zabbix/sources/stable/$(ZABBIX_VERSION_MAJOR)
->  ZABBIX_SELINUX_MODULES = zabbix
->  ZABBIX_LICENSE = GPL-2.0+
-> @@ -50,7 +50,7 @@ ZABBIX_CONF_OPTS += --without-libcurl
->  endif
->  
->  ifeq ($(BR2_PACKAGE_LIBXML2),y)
-> -ZABBIX_CONF_OPTS += --with-libxml2=$(STAGING_DIR)/usr/bin/xml2-config
-> +ZABBIX_CONF_OPTS += --with-libxml2=$(STAGING_DIR)/usr
->  ZABBIX_DEPENDENCIES += libxml2
->  else
->  ZABBIX_CONF_OPTS += --without-libxml2
-
--- 
-                                                     ~. .~   Tk Open Systems
-=}------------------------------------------------ooO--U--Ooo------------{=
-   - baruch@tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+Pj4+Pj4gIkdlcm8iID09IEdlcm8gU2Nod8Okcmlja2UgPGdlcm8uc2Nod2Flcmlja2VAcG9zdGVv
+LmRlPiB3cml0ZXM6CgogPiBXaGVuIHRoZSBkZWZhdWx0IChuZXdlc3QpIGtlcm5lbCBoZWFkZXJz
+IHNlcmllcyBjaGFuZ2VzIHRoZSBidWlsZCBjYW4KID4gYnJlYWsuIEV4YW1wbGUgZXJyb3IgbWVz
+c2FnZToKCiA+ICAgSW5jb3JyZWN0IHNlbGVjdGlvbiBvZiBrZXJuZWwgaGVhZGVyczogZXhwZWN0
+ZWQgNi44LngsIGdvdCA2LjUueAoKID4gSW4gdGhlIGFib3ZlIGNhc2UgdGhlIGRlZmNvbmZpZyB1
+c2VkOgoKID4gICBCUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9WRVJTSU9OPXkKID4gICBCUjJfTElO
+VVhfS0VSTkVMX0NVU1RPTV9WRVJTSU9OX1ZBTFVFPSI2LjUuOSIKCiA+IFRoZSBrZXJuZWwgaGVh
+ZGVycyB3ZXJlIG5vdCBzcGVjaWZpZWQsIHNvIHRoZSBidWlsZCBkZWZhdWx0ZWQgdG8gdXNpbmcK
+ID4gdGhlIGtlcm5lbCBzb3VyY2VzIGFzIGhlYWRlciBzb3VyY2UgYW5kIHRoZSBkZWZhdWx0IChu
+ZXdlc3QpIGhlYWRlcgogPiBzZXJpZXMuIEZyb20gLmNvbmZpZzoKCiA+ICAgQlIyX0tFUk5FTF9I
+RUFERVJTX0FTX0tFUk5FTD15CiA+ICAgQlIyX1BBQ0tBR0VfSE9TVF9MSU5VWF9IRUFERVJTX0NV
+U1RPTV82Xzg9eQoKID4gU2lnbmVkLW9mZi1ieTogR2VybyBTY2h3w6RyaWNrZSA8Z2Vyby5zY2h3
+YWVyaWNrZUBwb3N0ZW8uZGU+CgpDb21taXR0ZWQgdG8gMjAyNC4wMi54IGFuZCAyMDI0LjA1Lngs
+IHRoYW5rcy4KCi0tIApCeWUsIFBldGVyIEtvcnNnYWFyZApfX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9v
+dEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3Rp
+bmZvL2J1aWxkcm9vdAo=
