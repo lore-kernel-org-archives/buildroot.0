@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 678A5C761AE
-	for <buildroot@archiver.kernel.org>; Thu, 29 Aug 2024 06:22:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98816C761AE
+	for <buildroot@archiver.kernel.org>; Thu, 29 Aug 2024 06:22:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 314794124C;
-	Thu, 29 Aug 2024 06:22:12 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5C7604131B;
+	Thu, 29 Aug 2024 06:22:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bxXjDGTpnkFl; Thu, 29 Aug 2024 06:22:11 +0000 (UTC)
+ id LUVhCtMih5RD; Thu, 29 Aug 2024 06:22:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 14B9941270
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AB3574130C
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 14B9941270;
-	Thu, 29 Aug 2024 06:22:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AB3574130C;
+	Thu, 29 Aug 2024 06:22:13 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id F3BD11BF867
- for <buildroot@lists.busybox.net>; Thu, 29 Aug 2024 06:22:06 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 10A781BF98E
+ for <buildroot@lists.busybox.net>; Thu, 29 Aug 2024 06:22:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id EE93660E06
- for <buildroot@lists.busybox.net>; Thu, 29 Aug 2024 06:22:06 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0B73B6062C
+ for <buildroot@lists.busybox.net>; Thu, 29 Aug 2024 06:22:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id c1cOjokTRZ76 for <buildroot@lists.busybox.net>;
+ id sf-yW72B2AZa for <buildroot@lists.busybox.net>;
  Thu, 29 Aug 2024 06:22:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F16346062C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 22B186108E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id F16346062C
- for <buildroot@buildroot.org>; Thu, 29 Aug 2024 06:22:05 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 22B186108E
+ for <buildroot@buildroot.org>; Thu, 29 Aug 2024 06:22:06 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E04298661E; Thu, 29 Aug 2024 06:22:05 +0000 (UTC)
+ id 1E9D18661E; Thu, 29 Aug 2024 06:22:06 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 29 Aug 2024 08:04:55 +0200
+Date: Thu, 29 Aug 2024 08:13:35 +0200
 X-Git-Refname: refs/heads/2024.05.x
-X-Git-Oldrev: cdc2e042a1dbed4a197d54feac74f62577096bd6
-X-Git-Newrev: 96d32fd6564ee124b9d325cab7c301820e4363a1
+X-Git-Oldrev: 3e47cc5995ccbbb1428e733867e7a4fccdb38f72
+X-Git-Newrev: 0836bb91722daa27744ab28644f2b07a56047bf8
 X-Patchwork-Hint: ignore
-Message-Id: <20240829062205.E04298661E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.05.x] package/mpir: fix build
- with host gcc >= 14
+Message-Id: <20240829062206.1E9D18661E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.05.x] package/augeas: bump to
+ version 1.14.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,177 +65,57 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=96d32fd6564ee124b9d325cab7c301820e4363a1
+commit: https://git.buildroot.net/buildroot/commit/?id=0836bb91722daa27744ab28644f2b07a56047bf8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.05.x
 
-Fix the following build failure with host gcc >= 14 which enables
--Werror=implicit-function-declaration
-(https://gcc.gnu.org/gcc-14/porting_to.html):
+This bump will fix the following build failure with gcc >= 14 thanks to
+https://github.com/hercules-team/augeas/commit/792fb220a31a42043de6962fac6a1f6c030d67c5:
 
-configure:9998: checking build system compiler /usr/bin/gcc
-configure:10011: /usr/bin/gcc conftest.c
-conftest.c: In function 'main':
-conftest.c:4:3: error: implicit declaration of function 'exit' [-Wimplicit-function-declaration]
-    4 |   exit(0);
-      |   ^~~~
-conftest.c:1:1: note: include '<stdlib.h>' or provide a declaration of 'exit'
-  +++ |+#include <stdlib.h>
-    1 | int
-conftest.c:4:3: warning: incompatible implicit declaration of built-in function 'exit' [-Wbuiltin-declaration-mismatch]
-    4 |   exit(0);
-      |   ^~~~
-conftest.c:4:3: note: include '<stdlib.h>' or provide a declaration of 'exit'
-configure:10014: $? = 1
-configure:10021: result: no
-configure:10026: error: Specified CC_FOR_BUILD doesn't seem to work
+internal.c: In function 'xstrerror':
+internal.c:436:12: error: returning 'int' from a function with return type 'const char *' makes pointer from integer without a cast [-Wint-conversion]
+  436 |     return strerror_r(errnum, buf, len);
+      |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+https://github.com/hercules-team/augeas/blob/release-1.14.1/NEWS
 
 Fixes:
- - http://autobuild.buildroot.org/results/3ab381f06d5dc030039b6f6f8d19feb55cf3367d
+ - http://autobuild.buildroot.org/results/65014642966721115ae4050c23b083a7f39e1300
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 3bb426628c19f04cbad6821c1a68f008043d7808)
+(cherry picked from commit 321e065516a64198f586632bd83411767d98fe6c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0002-Fix-configure-failures-with-Xcode12.patch | 116 +++++++++++++++++++++
- package/mpir/mpir.mk                               |   2 +
- 2 files changed, 118 insertions(+)
+ package/augeas/augeas.hash | 5 ++---
+ package/augeas/augeas.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/package/mpir/0002-Fix-configure-failures-with-Xcode12.patch b/package/mpir/0002-Fix-configure-failures-with-Xcode12.patch
-new file mode 100644
-index 0000000000..453515f926
---- /dev/null
-+++ b/package/mpir/0002-Fix-configure-failures-with-Xcode12.patch
-@@ -0,0 +1,116 @@
-+From bbc43ca6ae0bec4f64e69c9cd4c967005d6470eb Mon Sep 17 00:00:00 2001
-+From: Mitchell Blank Jr <mitch@bodyfour.com>
-+Date: Mon, 21 Dec 2020 12:05:19 +0000
-+Subject: [PATCH] Fix configure failures with Xcode12
-+
-+Changes are needed becuase Xcode12 includes a default of
-+-Werror,-Wimplicit-function-declaration which means that
-+even something like calling "exit(0);" is a compile failure
-+if you haven't done a "#include <stdlib.h>" first (as C99
-+requires, but most other compilers will just warn about)
-+
-+I don't know if the "long long reliability test 2" test which
-+tries to provoke a crash on a particular gcc 3.3 build still
-+does what it was originally intended to do with my change.
-+Of course, I doubt anyone has tried to use that compiler in
-+years.
-+
-+Fixes #290
-+
-+Upstream: https://github.com/wbhart/mpir/commit/bbc43ca6ae0bec4f64e69c9cd4c967005d6470eb
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+---
-+ acinclude.m4 | 24 +++++++++++++-----------
-+ 1 file changed, 13 insertions(+), 11 deletions(-)
-+
-+diff --git a/acinclude.m4 b/acinclude.m4
-+index 91c35bc23..620a629ef 100644
-+--- a/acinclude.m4
-++++ b/acinclude.m4
-+@@ -589,9 +589,9 @@ extern
-+ #endif
-+ __inline__ t1 e(t2 rp,t2 up,int n,t1 v0)
-+ {t1 c,x,r;int i;if(v0){c=1;for(i=1;i<n;i++){x=up[i];r=x+1;rp[i]=r;}}return c;}
-+-f(){static const struct{t1 n;t1 src[9];t1 want[9];}d[]={{1,{0},{1}},};t1 got[9];int i;
-++void f(){static const struct{t1 n;t1 src[9];t1 want[9];}d[]={{1,{0},{1}},};t1 got[9];int i;
-+ for(i=0;i<1;i++){if(e(got,got,9,d[i].n)==0)h();g(i,d[i].src,d[i].n,got,d[i].want,9);if(d[i].n)h();}}
-+-h(){}g(){}
-++void h(){} void g(){}
-+ #else
-+ int dummy;
-+ #endif
-+@@ -603,8 +603,9 @@ GMP_PROG_CC_WORKS_PART([$1], [long long reliability test 2],
-+    1666 to get an ICE with -O1 -mpowerpc64.  */
-+ 
-+ #ifdef __GNUC__
-+-f(int u){int i;long long x;x=u?~0:0;if(x)for(i=0;i<9;i++);x&=g();if(x)g();}
-+-g(){}
-++extern int g();
-++void f(int u){int i;long long x;x=u?~0:0;if(x)for(i=0;i<9;i++);x&=g();if(x)g();}
-++int g(){return 0;}
-+ #else
-+ int dummy;
-+ #endif
-+@@ -3323,11 +3324,11 @@ check (va_alist)
-+   ret = vsnprintf (buf, 4, fmt, ap);
-+ 
-+   if (strcmp (buf, "hel") != 0)
-+-    exit (1);
-++    return 1;
-+ 
-+   /* allowed return values */
-+   if (ret != -1 && ret != 3 && ret != 11)
-+-    exit (2);
-++    return 2;
-+ 
-+   return 0;
-+ }
-+@@ -3336,7 +3337,7 @@ int
-+ main ()
-+ {
-+ $i
-+-  exit (0);
-++  return 0;
-+ }
-+ ],
-+       [:],
-+@@ -3469,7 +3470,7 @@ cat >conftest.c <<EOF
-+ int
-+ main ()
-+ {
-+-  exit(0);
-++  return 0;
-+ }
-+ EOF
-+ gmp_compile="$1 conftest.c"
-+@@ -3543,7 +3544,7 @@ AC_CACHE_CHECK([for build system executable suffix],
-+ int
-+ main ()
-+ {
-+-  exit (0);
-++  return 0;
-+ }
-+ EOF
-+ for i in .exe ,ff8 ""; do
-+@@ -3577,7 +3578,7 @@ AC_CACHE_CHECK([whether build system compiler is ANSI],
-+ int
-+ main (int argc, char *argv[])
-+ {
-+-  exit(0);
-++  return 0;
-+ }
-+ EOF
-+ gmp_compile="$CC_FOR_BUILD conftest.c"
-+@@ -3608,10 +3609,11 @@ AC_DEFUN([GMP_CHECK_LIBM_FOR_BUILD],
-+ AC_CACHE_CHECK([for build system compiler math library],
-+                gmp_cv_check_libm_for_build,
-+ [cat >conftest.c <<EOF
-++#include <math.h>
-+ int
-+ main ()
-+ {
-+-  exit(0);
-++  return 0;
-+ }
-+ double d;
-+ double
-diff --git a/package/mpir/mpir.mk b/package/mpir/mpir.mk
-index 5dbd760aa1..46cd35e436 100644
---- a/package/mpir/mpir.mk
-+++ b/package/mpir/mpir.mk
-@@ -11,6 +11,8 @@ MPIR_LICENSE = LGPL-3.0+
- MPIR_LICENSE_FILES = COPYING.LIB
- MPIR_INSTALL_STAGING = YES
- MPIR_DEPENDENCIES = gmp host-yasm
-+# 0002-Fix-configure-failures-with-Xcode12.patch
-+MPIR_AUTORECONF = YES
+diff --git a/package/augeas/augeas.hash b/package/augeas/augeas.hash
+index 03b71349ac..b3b2a2427c 100644
+--- a/package/augeas/augeas.hash
++++ b/package/augeas/augeas.hash
+@@ -1,4 +1,3 @@
+-# Locally calculated after checking pgp signature from
+-# http://download.augeas.net/augeas-1.12.0.tar.gz.sig
+-sha256  321942c9cc32185e2e9cb72d0a70eea106635b50269075aca6714e3ec282cb87  augeas-1.12.0.tar.gz
++# Locally calculated
++sha256  368bfdd782e4b9c7163baadd621359c82b162734864b667051ff6bcb57b9edff  augeas-1.14.1.tar.gz
+ sha256  ca0061fc1381a3ab242310e4b3f56389f28e3d460eb2fd822ed7a21c6f030532  COPYING
+diff --git a/package/augeas/augeas.mk b/package/augeas/augeas.mk
+index a0bc294565..ac4bc7d0be 100644
+--- a/package/augeas/augeas.mk
++++ b/package/augeas/augeas.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
  
- ifeq ($(BR2_MIPS_NABI32),y)
- MPIR_CONF_OPTS += ABI=n32
+-AUGEAS_VERSION = 1.12.0
+-AUGEAS_SITE = http://download.augeas.net
++AUGEAS_VERSION = 1.14.1
++AUGEAS_SITE = https://github.com/hercules-team/augeas/releases/download/release-$(AUGEAS_VERSION)
+ AUGEAS_INSTALL_STAGING = YES
+ AUGEAS_LICENSE = LGPL-2.1+
+ AUGEAS_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
