@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 221DCC83F2D
-	for <buildroot@archiver.kernel.org>; Thu, 29 Aug 2024 16:17:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE75DC83F2D
+	for <buildroot@archiver.kernel.org>; Thu, 29 Aug 2024 16:17:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E0126812E6;
-	Thu, 29 Aug 2024 16:17:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 79C3A81EBB;
+	Thu, 29 Aug 2024 16:17:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DNAwMvbstnV6; Thu, 29 Aug 2024 16:17:04 +0000 (UTC)
+ id Vd2zHVXEDuSb; Thu, 29 Aug 2024 16:17:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EC3CB81EBB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 25E5D81F22
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EC3CB81EBB;
-	Thu, 29 Aug 2024 16:17:03 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 6E2701BF84C
+	by smtp1.osuosl.org (Postfix) with ESMTP id 25E5D81F22;
+	Thu, 29 Aug 2024 16:17:06 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 9F8CB1BF84C
  for <buildroot@lists.busybox.net>; Thu, 29 Aug 2024 16:17:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5B5F66116E
+ by smtp1.osuosl.org (Postfix) with ESMTP id 960B481F22
  for <buildroot@lists.busybox.net>; Thu, 29 Aug 2024 16:17:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xB2t9zquwcEF for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jaA7Vcupr9HI for <buildroot@lists.busybox.net>;
  Thu, 29 Aug 2024 16:17:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6CDE56115F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A4F8381D72
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6CDE56115F
+ by smtp1.osuosl.org (Postfix) with ESMTP id A4F8381D72
  for <buildroot@buildroot.org>; Thu, 29 Aug 2024 16:17:01 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 543C9866CF; Thu, 29 Aug 2024 16:17:01 +0000 (UTC)
+ id 8F8A2866D2; Thu, 29 Aug 2024 16:17:01 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 29 Aug 2024 18:02:59 +0200
+Date: Thu, 29 Aug 2024 18:06:43 +0200
 X-Git-Refname: refs/heads/2024.05.x
-X-Git-Oldrev: 69aa915c689650d2aabdc187dad0ed74c942ac8a
-X-Git-Newrev: da80fbd0a77f130af8f0fc444d8d7528576e15d2
+X-Git-Oldrev: 3d5741d911f5a44263458c63cc989ffc14b80877
+X-Git-Newrev: 32844c4ca256bd40d441a85dcf45769c8758dca5
 X-Patchwork-Hint: ignore
-Message-Id: <20240829161701.543C9866CF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.05.x] package/iproute2: bump to
- version 6.9.0
+Message-Id: <20240829161701.8F8A2866D2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.05.x] package/tftpd: bump to
+ latest git commit
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,40 +65,71 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=da80fbd0a77f130af8f0fc444d8d7528576e15d2
+commit: https://git.buildroot.net/buildroot/commit/?id=32844c4ca256bd40d441a85dcf45769c8758dca5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.05.x
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit 4e39f5571304ba92fdfc8286fea6c50824b04e56)
+- Update hash of tftpd.c (changes not related to license)
+- --include=$(@D)/autoconf/m4 and --disable-tcpwrappers must be passed
+  since
+  https://git.kernel.org/pub/scm/network/tftp/tftp-hpa.git/commit/?id=fefaa2cc5c2ae1537fccbb552496787130feeeaa
+- This bump will also fix the following musl build failure raised since
+  latest bump in ee2b57e0c98acf1d02cf66a38c9ec82bd69bcbeb:
+
+  In file included from tftpsubs.h:41,
+                   from tftpsubs.c:34:
+  /home/autobuild/autobuild/instance-9/output-1/build/tftpd-e52af4207a6e09a1ba21f61d6f85d8b2b1e6efc0/config.h:209:13: error: conflicting types for 'socklen_t'; have 'int'
+    209 | typedef int socklen_t;
+        |             ^~~~~~~~~
+
+Fixes: ee2b57e0c98acf1d02cf66a38c9ec82bd69bcbeb
+ - http://autobuild.buildroot.org/results/4b5320013d8ab50499a459d64a71e0b71814fb2f
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit d4a84e61615553ff678d3c3b52ed33f898e9fcc9)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/iproute2/iproute2.hash | 2 +-
- package/iproute2/iproute2.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/tftpd/tftpd.hash | 4 ++--
+ package/tftpd/tftpd.mk   | 5 +++--
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/package/iproute2/iproute2.hash b/package/iproute2/iproute2.hash
-index d57a93de7d..a716bf75a1 100644
---- a/package/iproute2/iproute2.hash
-+++ b/package/iproute2/iproute2.hash
-@@ -1,3 +1,3 @@
- # From https://kernel.org/pub/linux/utils/net/iproute2/sha256sums.asc
--sha256  03a6cca3d71a908d1f15f7b495be2b8fe851f941458dc4664900d7f45fcf68ce  iproute2-6.8.0.tar.xz
-+sha256  2f643d09ea11a4a2a043c92e2b469b5f73228cbf241ae806760296ed0ec413d0  iproute2-6.9.0.tar.xz
- sha256  e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4  COPYING
-diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
-index 3db2ab925d..525101aff1 100644
---- a/package/iproute2/iproute2.mk
-+++ b/package/iproute2/iproute2.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/tftpd/tftpd.hash b/package/tftpd/tftpd.hash
+index 3fab9dba07..5a4e87f689 100644
+--- a/package/tftpd/tftpd.hash
++++ b/package/tftpd/tftpd.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  9bdb3e2ab2b68e4d8cd057d102395c362baf07c7b052f1d5e40e5190afecc15e  tftpd-e52af4207a6e09a1ba21f61d6f85d8b2b1e6efc0-git4.tar.gz
++sha256  452b2d630f884d80a7c4c324aa8248470224048ffb9473e3490460658b8ebea4  tftpd-2c86ff58dcc003107b47f2d35aa0fdc4a3fd95e1-git4.tar.gz
+ 
+ # Hash for license file
+-sha256  5936d0764cb6e8f2f5ce8a11c249d81037b5f275f5983e8538ee4fbe57195369  tftpd/tftpd.c
++sha256  9c46847a03d4cf290616a173d526b9bbdfcaf6846cbc01f361989b4e61f2d72e  tftpd/tftpd.c
+diff --git a/package/tftpd/tftpd.mk b/package/tftpd/tftpd.mk
+index 81b67f82ce..73ac7006a4 100644
+--- a/package/tftpd/tftpd.mk
++++ b/package/tftpd/tftpd.mk
+@@ -4,10 +4,10 @@
  #
  ################################################################################
  
--IPROUTE2_VERSION = 6.8.0
-+IPROUTE2_VERSION = 6.9.0
- IPROUTE2_SOURCE = iproute2-$(IPROUTE2_VERSION).tar.xz
- IPROUTE2_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/net/iproute2
- IPROUTE2_DEPENDENCIES = host-bison host-flex host-pkgconf \
+-TFTPD_VERSION = e52af4207a6e09a1ba21f61d6f85d8b2b1e6efc0
++TFTPD_VERSION = 2c86ff58dcc003107b47f2d35aa0fdc4a3fd95e1
+ TFTPD_SITE = https://git.kernel.org/pub/scm/network/tftp/tftp-hpa.git
+ TFTPD_SITE_METHOD = git
+-TFTPD_CONF_OPTS = --without-tcpwrappers
++TFTPD_CONF_OPTS = --disable-tcpwrappers
+ TFTPD_LICENSE = BSD-4-Clause
+ TFTPD_LICENSE_FILES = tftpd/tftpd.c
+ TFTPD_CPE_ID_VENDOR = tftpd-hpa_project
+@@ -15,6 +15,7 @@ TFTPD_CPE_ID_PRODUCT = tftpd-hpa
+ TFTPD_SELINUX_MODULES = tftp
+ # From git
+ TFTPD_AUTORECONF = YES
++TFTPD_AUTORECONF_OPTS = --include=$(@D)/autoconf/m4
+ 
+ define TFTPD_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -D $(@D)/tftp/tftp $(TARGET_DIR)/usr/bin/tftp
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
