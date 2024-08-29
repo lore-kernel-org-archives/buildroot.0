@@ -4,91 +4,94 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1577CC83F2D
-	for <buildroot@archiver.kernel.org>; Thu, 29 Aug 2024 14:50:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9A270C83F2F
+	for <buildroot@archiver.kernel.org>; Thu, 29 Aug 2024 14:50:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2B0F040B37;
-	Thu, 29 Aug 2024 14:50:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2884E418D2;
+	Thu, 29 Aug 2024 14:50:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8vVoE-15My8J; Thu, 29 Aug 2024 14:50:12 +0000 (UTC)
+ id Z2cRVBlIIYVm; Thu, 29 Aug 2024 14:50:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9844A418D2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 87ED641982
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9844A418D2;
-	Thu, 29 Aug 2024 14:50:11 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 43EC51BF31A
- for <buildroot@lists.busybox.net>; Thu, 29 Aug 2024 14:50:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 87ED641982;
+	Thu, 29 Aug 2024 14:50:14 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id E9AEA1BF31A
+ for <buildroot@lists.busybox.net>; Thu, 29 Aug 2024 14:50:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0D3B14016D
- for <buildroot@lists.busybox.net>; Thu, 29 Aug 2024 14:50:04 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id D75D0606A8
+ for <buildroot@lists.busybox.net>; Thu, 29 Aug 2024 14:50:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8Pp5xZxFd-DN for <buildroot@lists.busybox.net>;
- Thu, 29 Aug 2024 14:50:03 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id e6GEgPEYEX7u for <buildroot@lists.busybox.net>;
+ Thu, 29 Aug 2024 14:50:08 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42c; helo=mail-wr1-x42c.google.com;
+ client-ip=2a00:1450:4864:20::431; helo=mail-wr1-x431.google.com;
  envelope-from=johan.oudinet@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 9CD2540442
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9CD2540442
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
- [IPv6:2a00:1450:4864:20::42c])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 9CD2540442
- for <buildroot@buildroot.org>; Thu, 29 Aug 2024 14:50:02 +0000 (UTC)
-Received: by mail-wr1-x42c.google.com with SMTP id
- ffacd0b85a97d-371a92d8c90so466166f8f.3
- for <buildroot@buildroot.org>; Thu, 29 Aug 2024 07:50:02 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 2052D6069B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2052D6069B
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com
+ [IPv6:2a00:1450:4864:20::431])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 2052D6069B
+ for <buildroot@buildroot.org>; Thu, 29 Aug 2024 14:50:08 +0000 (UTC)
+Received: by mail-wr1-x431.google.com with SMTP id
+ ffacd0b85a97d-371bb8322b2so497272f8f.0
+ for <buildroot@buildroot.org>; Thu, 29 Aug 2024 07:50:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1724943000; x=1725547800;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=MiN5tldJ/Twui1pKIxgsMItB4uYoX2bbQT3rR0ZuDj8=;
- b=En2uOMv8quNQ3d5JnR6N1r/dttrztXk1dT02IqXwLQgw+v8j0pkZop1gb6XbfqUTsG
- 0IlkNkNjdgsBdH+X5kfME8expQY9Phr/b6uizHr294gM6hXa6QKMYTv9uEHPwqDmv2on
- inRhf5Nkaxm9j8eukcQsDoQtpMNgZIwiZoehjfmpnFeWCiBNW8KJuR2wu9+1paLbFJZr
- WmAuBNTQRCuJj4VvECzFKaecmgQi+Lj2UtfB6srkyZP9kBFky/CDQi25PqHq9ok7BMOP
- HwmffB46ijWCBC1kJ8xZFL1TkTM36peqXFbwq2hyZHwBwm3uJNEepoNIus85P4hLWCbL
- PQIA==
-X-Gm-Message-State: AOJu0YxrYDb32hfSPds66C2soGIRq6vBEi7N6UIzZ/AfbZZXBxi3vqYs
- Zvcsfrc6I0Tr0pBghnLw7Ljo8DcWWqww54dia+dWq3MXT3vjDjTRWfDREQ==
-X-Google-Smtp-Source: AGHT+IGzTBWo5PGzwZKu1tWo0ZaHzxZEmw6cJfR063jxI+GbXxa/Z9/qGS1V6phzaBRTeO+mf/tskQ==
-X-Received: by 2002:a5d:4e92:0:b0:371:9353:6132 with SMTP id
- ffacd0b85a97d-3749b552185mr1928934f8f.36.1724942999907; 
- Thu, 29 Aug 2024 07:49:59 -0700 (PDT)
+ d=1e100.net; s=20230601; t=1724943006; x=1725547806;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=jmOLfHjV/byovrj72E+9iv1ofPvzZMwdDNdnbNFCt7A=;
+ b=ZqpG1eHySqoC3rHj9dmw8KHNqWPqifc7dxRIxGvLS3o9N3uDG+OUIpAJW7OGpByJ09
+ mKatGDlEsWkC7P/phmyLAbPIMYHDWI+DRn2RxlCNKk12fY7hhuVKXIRtVWmM/gjDpC7U
+ sh4posU6Am/tgWlPOjXTlrl+f9nNhrV2rEYjnEvq7qXCJX/6ztY+AFxKpunXwvtucsSr
+ devJblZpDPQqyysccUEbRpMLfcO72oGuAxcrLXhDCoyXXK2R32Ky4pzN8fkcSFH3874F
+ eS6j/NBAOZGj96U0aq+WeXZKnOFKxWPcDueSh1KtnvEr9htyrGS8hqClIC//LzUfchbW
+ Fjow==
+X-Gm-Message-State: AOJu0YyNFQ4YUVyqgpPz6tk7yMaDMNGPFI3ovE0fvARBZvELAmKA2XVS
+ e/AANAvd2yI1egSzRzK3hxhGkzOzQxdDMWxK3mTUhVSVN9pTsv4NZAUBlA==
+X-Google-Smtp-Source: AGHT+IGGFEb0tIrLXnC1JH6wxQjbHROwl8s4op4xHg9xK//tluywEO491vgE2TB752lJ6I84osYe7g==
+X-Received: by 2002:a5d:61c4:0:b0:360:70e3:ef2b with SMTP id
+ ffacd0b85a97d-374a02318f1mr1542592f8f.26.1724943005274; 
+ Thu, 29 Aug 2024 07:50:05 -0700 (PDT)
 Received: from shrek.. ([2a01:e0a:acf:1a32:284b:b9b9:cca0:be3])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3749ee9c48csm1619241f8f.51.2024.08.29.07.49.59
+ ffacd0b85a97d-3749ee9c48csm1619241f8f.51.2024.08.29.07.50.04
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 29 Aug 2024 07:49:59 -0700 (PDT)
+ Thu, 29 Aug 2024 07:50:04 -0700 (PDT)
 From: Johan Oudinet <johan.oudinet@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu, 29 Aug 2024 16:49:16 +0200
-Message-Id: <20240829144940.209964-1-johan.oudinet@gmail.com>
+Date: Thu, 29 Aug 2024 16:49:18 +0200
+Message-Id: <20240829144940.209964-3-johan.oudinet@gmail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20240829144940.209964-1-johan.oudinet@gmail.com>
+References: <20240829144940.209964-1-johan.oudinet@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1724943000; x=1725547800; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=MiN5tldJ/Twui1pKIxgsMItB4uYoX2bbQT3rR0ZuDj8=;
- b=VlQVEBIjTE7jgnGEPufyFOFZi1zFfTw8mUmbOkE0e9Geds1x3LHndMXnm8c8H1aWkO
- uWab9JuIIQ8xO1OQ5EBoJdd2UyqqCH1QDL17ChvA+XiiPqKuEZ7SdRQRFUaTrSvWG8Pu
- Elfl77tzp4PqznfM1vscVv8R2iFZ8GkFIvWvFUt03JIV7TbTA5lH6kT1/baSu4KVAjPg
- g9ALNHOL6VtjfTN34Lu7+BnRo6KNpyfLBF6WJb92g2Wz5qXvFoWCaSC60PUhP8t7+2f9
- F1ohY8nu4PvbJ2vUFiXcE8VrPRo6IUuSx+R3D1QIA0jE7zZWO54koZr33gU87dlLnA6J
- d2Xw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=gmail.com; s=20230601; t=1724943006; x=1725547806; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=jmOLfHjV/byovrj72E+9iv1ofPvzZMwdDNdnbNFCt7A=;
+ b=WACq9cD6VzHqSTj9V1ojrJt1YS8/ZPFmnuey2+gs8fpQTj6p/1l7eGF93CjDgiJFNc
+ 0OIZJsWnQ2uN9kTxy4utHA2HgtBKoHGY34bz3jt8xc4LVoVqTMQZ4nsJNw2CLhPL8yJ/
+ TQc7FYgwzY4sCJSHjHxHlW9f7C9yoCKOZyfnDathyHrz7K8ogg4p6cL0tBrmSZkX3t6N
+ u4gUSy36XU5+4RQL6EU9yjNHOkN7ClmfmB2jsJxOffYqiMQgUbvg+N0k+aXed2dadqSf
+ 85pTUXIiBj7lURGay2+cXWyYsLJLW84Nyf0DqFBWFbYK9AVG+71/DVptOx5d+tQ4XTuE
+ 9BqQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=VlQVEBIj
-Subject: [Buildroot] [PATCH v2 00/23] Update Ejabberd and its dependencies
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=WACq9cD6
+Subject: [Buildroot] [PATCH v2 02/23] package/erlang-stun: bump version to
+ 1.2.14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -106,124 +109,34 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Ejabberd has many dependencies. Update all of them to the versions
-needed by ejabberd 24.07. Take the opportunity to rename the erlang
-packages that were misnamed so far in order to remove some patches.
-Such patches were here only to fix the location of such packages in
-other packages that expect to find them in a different place.
-
+Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
 ---
-Changes v1 -> v2:
-  - separate the renames from the bumps (suggested by Thomas)
-  - add corresponding entries to Config.in.legacy
-  - separate fixing check-package warnings from the bump
+ package/erlang-stun/erlang-stun.hash | 2 +-
+ package/erlang-stun/erlang-stun.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Johan Oudinet (23):
-  package/erlang-stun: renamed from erlang-p1-stun
-  package/erlang-stun: bump version to 1.2.14
-  package/erlang-fast-xml: renamed from erlang-p1-xml
-  package/erlang-fast-xml: bump version to 1.1.52
-  package/erlang-xmpp: renamed from erlang-p1-xmpp
-  package/erlang-xmpp: bump version to 1.8.3
-  package/erlang-p1-utils: bump version to 1.0.26
-  package/erlang-p1-cache-tab: bump version to 1.0.31
-  package/erlang-p1-tls: bump version to 1.1.21
-  package/erlang-p1-stringprep: bump version to 1.0.30
-  package/erlang-fast-yaml: renamed from erlang-p1-yaml
-  package/erlang-fast-yaml: bump version to 1.0.37
-  package/erlang-p1-yconf: bump version to 1.0.16
-  package/erlang-p1-oauth2: bump version to 0.6.14
-  package/erlang-p1-pkix: bump version to 1.0.10
-  package/erlang-eimp: bump version to 1.0.23
-  package/erlang-p1-mqtree: bump version to 1.0.17
-  package/erlang-jose: bump version to 1.11.10
-  package/erlang-p1-acme: bump version to 1.0.23
-  package/erlang-p1-sip: bump version to 1.0.54
-  package/erlang-p1-zlib: bump version to 1.0.13
-  package/ejabberd: bump version to 24.07
-  package/ejabberd: fix warnings reported by check-package
-
- .checkpackageignore                           |    5 -
- Config.in.legacy                              |   29 +
- DEVELOPERS                                    |    8 +-
- package/Config.in                             |    8 +-
- ...not-download-or-compile-dependencies.patch |   23 +-
- package/ejabberd/0002-fix-ejabberdctl.patch   |   19 +-
- package/ejabberd/0003-correct-includes.patch  | 1807 -----------------
- package/ejabberd/Config.in                    |    8 +-
- package/ejabberd/S50ejabberd                  |   72 +-
- package/ejabberd/check-erlang-lib             |   39 +-
- package/ejabberd/ejabberd.hash                |    4 +-
- package/ejabberd/ejabberd.mk                  |   11 +-
- package/erlang-eimp/erlang-eimp.hash          |    2 +-
- package/erlang-eimp/erlang-eimp.mk            |    2 +-
- package/erlang-fast-xml/Config.in             |    8 +
- .../erlang-fast-xml.hash}                     |    2 +-
- package/erlang-fast-xml/erlang-fast-xml.mk    |   18 +
- .../Config.in                                 |    6 +-
- .../erlang-fast-yaml.hash}                    |    2 +-
- package/erlang-fast-yaml/erlang-fast-yaml.mk  |   20 +
- package/erlang-jose/erlang-jose.hash          |    2 +-
- package/erlang-jose/erlang-jose.mk            |    2 +-
- package/erlang-p1-acme/erlang-p1-acme.hash    |    2 +-
- package/erlang-p1-acme/erlang-p1-acme.mk      |    2 +-
- .../erlang-p1-cache-tab.hash                  |    2 +-
- .../erlang-p1-cache-tab.mk                    |    2 +-
- .../erlang-p1-mqtree/erlang-p1-mqtree.hash    |    2 +-
- package/erlang-p1-mqtree/erlang-p1-mqtree.mk  |    2 +-
- .../erlang-p1-oauth2/erlang-p1-oauth2.hash    |    2 +-
- package/erlang-p1-oauth2/erlang-p1-oauth2.mk  |    2 +-
- package/erlang-p1-pkix/erlang-p1-pkix.hash    |    2 +-
- package/erlang-p1-pkix/erlang-p1-pkix.mk      |    2 +-
- .../erlang-p1-sip/0001-correct-include.patch  |   31 -
- package/erlang-p1-sip/Config.in               |    2 +-
- package/erlang-p1-sip/erlang-p1-sip.hash      |    2 +-
- package/erlang-p1-sip/erlang-p1-sip.mk        |    4 +-
- .../erlang-p1-stringprep.hash                 |    2 +-
- .../erlang-p1-stringprep.mk                   |    2 +-
- package/erlang-p1-stun/erlang-p1-stun.mk      |   14 -
- package/erlang-p1-tls/erlang-p1-tls.hash      |    4 +-
- package/erlang-p1-tls/erlang-p1-tls.mk        |    2 +-
- package/erlang-p1-utils/erlang-p1-utils.hash  |    2 +-
- package/erlang-p1-utils/erlang-p1-utils.mk    |    2 +-
- package/erlang-p1-xml/Config.in               |    8 -
- package/erlang-p1-xml/erlang-p1-xml.mk        |   18 -
- .../erlang-p1-xmpp/0001-fix-includes.patch    |   16 -
- package/erlang-p1-xmpp/erlang-p1-xmpp.mk      |   17 -
- package/erlang-p1-yaml/erlang-p1-yaml.mk      |   20 -
- package/erlang-p1-yconf/Config.in             |    2 +-
- package/erlang-p1-yconf/erlang-p1-yconf.hash  |    2 +-
- package/erlang-p1-yconf/erlang-p1-yconf.mk    |    4 +-
- package/erlang-p1-zlib/erlang-p1-zlib.hash    |    2 +-
- package/erlang-p1-zlib/erlang-p1-zlib.mk      |    2 +-
- .../{erlang-p1-stun => erlang-stun}/Config.in |    4 +-
- .../erlang-stun.hash}                         |    2 +-
- package/erlang-stun/erlang-stun.mk            |   14 +
- .../{erlang-p1-xmpp => erlang-xmpp}/Config.in |    8 +-
- .../erlang-xmpp.hash}                         |    2 +-
- package/erlang-xmpp/erlang-xmpp.mk            |   17 +
- 59 files changed, 247 insertions(+), 2075 deletions(-)
- delete mode 100644 package/ejabberd/0003-correct-includes.patch
- create mode 100644 package/erlang-fast-xml/Config.in
- rename package/{erlang-p1-yaml/erlang-p1-yaml.hash => erlang-fast-xml/erlang-fast-xml.hash} (50%)
- create mode 100644 package/erlang-fast-xml/erlang-fast-xml.mk
- rename package/{erlang-p1-yaml => erlang-fast-yaml}/Config.in (51%)
- rename package/{erlang-p1-stun/erlang-p1-stun.hash => erlang-fast-yaml/erlang-fast-yaml.hash} (50%)
- create mode 100644 package/erlang-fast-yaml/erlang-fast-yaml.mk
- delete mode 100644 package/erlang-p1-sip/0001-correct-include.patch
- delete mode 100644 package/erlang-p1-stun/erlang-p1-stun.mk
- delete mode 100644 package/erlang-p1-xml/Config.in
- delete mode 100644 package/erlang-p1-xml/erlang-p1-xml.mk
- delete mode 100644 package/erlang-p1-xmpp/0001-fix-includes.patch
- delete mode 100644 package/erlang-p1-xmpp/erlang-p1-xmpp.mk
- delete mode 100644 package/erlang-p1-yaml/erlang-p1-yaml.mk
- rename package/{erlang-p1-stun => erlang-stun}/Config.in (71%)
- rename package/{erlang-p1-xml/erlang-p1-xml.hash => erlang-stun/erlang-stun.hash} (51%)
- create mode 100644 package/erlang-stun/erlang-stun.mk
- rename package/{erlang-p1-xmpp => erlang-xmpp}/Config.in (70%)
- rename package/{erlang-p1-xmpp/erlang-p1-xmpp.hash => erlang-xmpp/erlang-xmpp.hash} (51%)
- create mode 100644 package/erlang-xmpp/erlang-xmpp.mk
-
+diff --git a/package/erlang-stun/erlang-stun.hash b/package/erlang-stun/erlang-stun.hash
+index 85dc6a42fa..c248e89ea8 100644
+--- a/package/erlang-stun/erlang-stun.hash
++++ b/package/erlang-stun/erlang-stun.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  d7e9d3d591a88a91abf053c068f7152495e37d17f4c9ac58992c544d6f8f5e86  erlang-stun-1.2.7.tar.gz
++sha256  110b06572c6208fdeaa60c32cd549e6798f0a719d51bef97608c2aaa61151c11  erlang-stun-1.2.14.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.txt
+diff --git a/package/erlang-stun/erlang-stun.mk b/package/erlang-stun/erlang-stun.mk
+index 9def30a857..abfb1c3853 100644
+--- a/package/erlang-stun/erlang-stun.mk
++++ b/package/erlang-stun/erlang-stun.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ERLANG_STUN_VERSION = 1.2.7
++ERLANG_STUN_VERSION = 1.2.14
+ ERLANG_STUN_SITE = $(call github,processone,stun,$(ERLANG_STUN_VERSION))
+ ERLANG_STUN_LICENSE = Apache-2.0
+ ERLANG_STUN_LICENSE_FILES = LICENSE.txt
 -- 
 2.34.1
 
