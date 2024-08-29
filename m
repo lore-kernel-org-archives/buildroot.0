@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D74BC71151
-	for <buildroot@archiver.kernel.org>; Thu, 29 Aug 2024 06:20:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 078C7C71151
+	for <buildroot@archiver.kernel.org>; Thu, 29 Aug 2024 06:20:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C8CAF40C97;
-	Thu, 29 Aug 2024 06:20:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 23DF7412F5;
+	Thu, 29 Aug 2024 06:20:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BC341pQcB9oc; Thu, 29 Aug 2024 06:20:36 +0000 (UTC)
+ id tH2OMZd6e82v; Thu, 29 Aug 2024 06:20:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ACD7B40C9F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BADA0412F6
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id ACD7B40C9F;
-	Thu, 29 Aug 2024 06:20:36 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 0EE101BF867
+	by smtp4.osuosl.org (Postfix) with ESMTP id BADA0412F6;
+	Thu, 29 Aug 2024 06:20:39 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 178951BF98E
  for <buildroot@lists.busybox.net>; Thu, 29 Aug 2024 06:20:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F0F7B60A4F
- for <buildroot@lists.busybox.net>; Thu, 29 Aug 2024 06:20:34 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 04DD2404DB
+ for <buildroot@lists.busybox.net>; Thu, 29 Aug 2024 06:20:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gFZ41mMZcSL4 for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xzoJkpOHI59H for <buildroot@lists.busybox.net>;
  Thu, 29 Aug 2024 06:20:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 32BDA60639
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 09ED040207
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 32BDA60639
+ by smtp2.osuosl.org (Postfix) with ESMTP id 09ED040207
  for <buildroot@buildroot.org>; Thu, 29 Aug 2024 06:20:34 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1C57486620; Thu, 29 Aug 2024 06:20:34 +0000 (UTC)
+ id F39B08661C; Thu, 29 Aug 2024 06:20:33 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 29 Aug 2024 08:18:52 +0200
+Date: Thu, 29 Aug 2024 08:00:43 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: feeb6ea3690f73eb3748c1970a69e1b53db03c9e
-X-Git-Newrev: ae32afab9b234a78d9b3a4015ea733c53e5d05b9
+X-Git-Oldrev: cd8402978f4562891ed47fb068b88d5d754797e4
+X-Git-Newrev: cc03fb2d1a83a89b4754c08430fb5a524d204507
 X-Patchwork-Hint: ignore
-Message-Id: <20240829062034.1C57486620@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/libcoap: enable
- required libopenssl options
+Message-Id: <20240829062033.F39B08661C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] docs/manual: promote
+ using fixed version for kernel headers when contributing a board
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,46 +60,68 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============1001662328128956034=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ae32afab9b234a78d9b3a4015ea733c53e5d05b9
+--===============1001662328128956034==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=cc03fb2d1a83a89b4754c08430fb5a524d204507
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-libcoap unconditionally calls the (deprecated) ENGINE_* logic in
-libopenssl resulting in a build failure when
-!BR2_PACKAGE_LIBOPENSSL_ENGINES since commit
-623d3bbe43e9193aa8e3395367d01af59071b859
+When the default (newest) kernel headers series changes the build can
+break. Example error message:
 
-libcoap also unconditionally uses PSK
+  Incorrect selection of kernel headers: expected 6.8.x, got 6.5.x
 
-Fixes: 623d3bbe43e9193aa8e3395367d01af59071b859
- - http://autobuild.buildroot.org/results/6bd3e1390cbbc59b9b3d030c2a401e45e9d173da
- - http://autobuild.buildroot.org/results/f243209454feed4f33f759786c2023c576a2cd3d
+In the above case the defconfig used:
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 33d25f08f97450cea7a415582dc2110b2bc828c2)
+  BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+  BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.5.9"
+
+The kernel headers were not specified, so the build defaulted to using
+the kernel sources as header source and the default (newest) header
+series. From .config:
+
+  BR2_KERNEL_HEADERS_AS_KERNEL=y
+  BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_8=y
+
+Signed-off-by: Gero Schwäricke <gero.schwaericke@posteo.de>
+Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+(cherry picked from commit eb519ad7cc716347dbf0f9707ff282a97b21f623)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libcoap/Config.in | 2 ++
- 1 file changed, 2 insertions(+)
+ docs/manual/adding-board-support.adoc | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/package/libcoap/Config.in b/package/libcoap/Config.in
-index 6e0c1905bc..950aee5279 100644
---- a/package/libcoap/Config.in
-+++ b/package/libcoap/Config.in
-@@ -1,5 +1,7 @@
- config BR2_PACKAGE_LIBCOAP
- 	bool "libcoap"
-+	select BR2_PACKAGE_LIBOPENSSL_ENABLE_PSK if BR2_PACKAGE_LIBOPENSSL
-+	select BR2_PACKAGE_LIBOPENSSL_ENGINES if BR2_PACKAGE_LIBOPENSSL
- 	help
- 	  libcoap is a C implementation of a lightweight
- 	  application-protocol for devices that are constrained their
+diff --git a/docs/manual/adding-board-support.adoc b/docs/manual/adding-board-support.adoc
+index 9501262086..be7699668d 100644
+--- a/docs/manual/adding-board-support.adoc
++++ b/docs/manual/adding-board-support.adoc
+@@ -32,7 +32,11 @@ Always use fixed versions or commit hashes for the different
+ components, not the "latest" version. For example, set
+ +BR2_LINUX_KERNEL_CUSTOM_VERSION=y+ and
+ +BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE+ to the kernel version you tested
+-with.
++with. If you are using the buildroot toolchain +BR2_TOOLCHAIN_BUILDROOT+
++(which is the default), additionally ensure that the same kernel headers
++are used (+BR2_KERNEL_HEADERS_AS_KERNEL+, which is also the default) and
++set the custom kernel headers series to match your kernel version
++(+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_*+).
+ 
+ It is recommended to use as much as possible upstream versions of the
+ Linux kernel and bootloaders, and to use as much as possible default
+
+--===============1001662328128956034==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1001662328128956034==--
