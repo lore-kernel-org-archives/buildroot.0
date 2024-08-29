@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 881A4C83031
-	for <buildroot@archiver.kernel.org>; Thu, 29 Aug 2024 10:21:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AF36FC83030
+	for <buildroot@archiver.kernel.org>; Thu, 29 Aug 2024 10:21:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4DB8D4180D;
-	Thu, 29 Aug 2024 10:21:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 791D4418AB;
+	Thu, 29 Aug 2024 10:21:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ciJG_s7Rn7AX; Thu, 29 Aug 2024 10:21:05 +0000 (UTC)
+ id HMHThjcSuaLW; Thu, 29 Aug 2024 10:21:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 07F1341884
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CBC7141980
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 07F1341884;
-	Thu, 29 Aug 2024 10:21:05 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D56561BF365
- for <buildroot@lists.busybox.net>; Thu, 29 Aug 2024 10:21:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CBC7141980;
+	Thu, 29 Aug 2024 10:21:07 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 59E121BF365
+ for <buildroot@lists.busybox.net>; Thu, 29 Aug 2024 10:21:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id CFE9181BC6
- for <buildroot@lists.busybox.net>; Thu, 29 Aug 2024 10:21:02 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5420F40194
+ for <buildroot@lists.busybox.net>; Thu, 29 Aug 2024 10:21:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IvItf5LMoPO4 for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id I0w94JsPl58U for <buildroot@lists.busybox.net>;
  Thu, 29 Aug 2024 10:21:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E532481A12
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EEC23400F3
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id E532481A12
+ by smtp2.osuosl.org (Postfix) with ESMTP id EEC23400F3
  for <buildroot@buildroot.org>; Thu, 29 Aug 2024 10:21:01 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D3DA886661; Thu, 29 Aug 2024 10:21:01 +0000 (UTC)
+ id E819186663; Thu, 29 Aug 2024 10:21:01 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 29 Aug 2024 12:10:56 +0200
+Date: Thu, 29 Aug 2024 12:13:46 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: fdbbe21c87e69835418b046b11cc876dbea58556
-X-Git-Newrev: 1eb219ffcebb8a98604e4b6692e72826d9304d9d
+X-Git-Oldrev: d6b21427736be914c181a5599f82f26949640790
+X-Git-Newrev: f7fc0d190445f669c34426409beda6b4c4f0de32
 X-Patchwork-Hint: ignore
-Message-Id: <20240829102101.D3DA886661@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/libxslt: bump to
- version 1.1.42
+Message-Id: <20240829102101.E819186663@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] support/testing: add mawk
+ runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,45 +65,150 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1eb219ffcebb8a98604e4b6692e72826d9304d9d
+commit: https://git.buildroot.net/buildroot/commit/?id=f7fc0d190445f669c34426409beda6b4c4f0de32
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-https://gitlab.gnome.org/GNOME/libxslt/-/blob/v1.1.42/NEWS
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit f3461d083b53ac262dd31e2b93281cecdc8d3147)
+(cherry picked from commit f04a95f79f087869a44ea3d63d55ce7b27b8e922)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libxslt/libxslt.hash | 4 ++--
- package/libxslt/libxslt.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ DEVELOPERS                                 |   1 +
+ support/testing/tests/package/test_mawk.py | 114 +++++++++++++++++++++++++++++
+ 2 files changed, 115 insertions(+)
 
-diff --git a/package/libxslt/libxslt.hash b/package/libxslt/libxslt.hash
-index 7597e7954d..dd67940c8a 100644
---- a/package/libxslt/libxslt.hash
-+++ b/package/libxslt/libxslt.hash
-@@ -1,5 +1,5 @@
--# From https://download.gnome.org/sources/libxslt/1.1/libxslt-1.1.39.sha256sum
--sha256  2a20ad621148339b0759c4d4e96719362dee64c9a096dbba625ba053846349f0  libxslt-1.1.39.tar.xz
-+# From https://download.gnome.org/sources/libxslt/1.1/libxslt-1.1.42.sha256sum
-+sha256  85ca62cac0d41fc77d3f6033da9df6fd73d20ea2fc18b0a3609ffb4110e1baeb  libxslt-1.1.42.tar.xz
- 
- # Hash for license file:
- sha256  7e48e290b6bfccc2ec1b297023a1d77f2fd87417f71fbb9f50aabef40a851819  COPYING
-diff --git a/package/libxslt/libxslt.mk b/package/libxslt/libxslt.mk
-index 8098937ef3..b5bb22f9ae 100644
---- a/package/libxslt/libxslt.mk
-+++ b/package/libxslt/libxslt.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBXSLT_VERSION = 1.1.39
-+LIBXSLT_VERSION = 1.1.42
- LIBXSLT_SOURCE = libxslt-$(LIBXSLT_VERSION).tar.xz
- LIBXSLT_SITE = https://download.gnome.org/sources/libxslt/1.1
- LIBXSLT_INSTALL_STAGING = YES
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 4325a712a3..3899f4aef9 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1829,6 +1829,7 @@ F:	support/testing/tests/package/test_lzip.py
+ F:	support/testing/tests/package/test_lsof.py
+ F:	support/testing/tests/package/test_lz4.py
+ F:	support/testing/tests/package/test_lzop.py
++F:	support/testing/tests/package/test_mawk.py
+ F:	support/testing/tests/package/test_mdadm.py
+ F:	support/testing/tests/package/test_mdadm/
+ F:	support/testing/tests/package/test_micropython.py
+diff --git a/support/testing/tests/package/test_mawk.py b/support/testing/tests/package/test_mawk.py
+new file mode 100644
+index 0000000000..5caf77c116
+--- /dev/null
++++ b/support/testing/tests/package/test_mawk.py
+@@ -0,0 +1,114 @@
++import os
++
++import infra.basetest
++
++
++class TestMawk(infra.basetest.BRTest):
++    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
++        """
++        BR2_PACKAGE_MAWK=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++
++    def basic_mawk_tests(self):
++        # Check the program can execute
++        self.assertRunOk("mawk --version")
++
++        # Check "mawk" can return a specific exit code
++        code = 123
++        cmd = "mawk 'BEGIN { exit(" + str(code) + "); }'"
++        _, exit_code = self.emulator.run(cmd)
++        self.assertEqual(exit_code, code)
++
++        # Run a basic print program
++        test_string = "Hello Buildroot"
++        cmd = "mawk 'BEGIN {print \"" + test_string + "\"; }'"
++        output, exit_code = self.emulator.run(cmd)
++        self.assertEqual(exit_code, 0)
++        self.assertEqual(output[0], test_string)
++
++    def create_test_data(self):
++        # Create some test data
++        entries = ["one", "two", "three", "four"]
++        for entry in entries:
++            self.assertRunOk(f"echo {entry} >> data1.txt")
++
++    def add_line_numbers(self):
++        # Add line numbers with mawk
++        cmd = "mawk '{ print NR \"\\t\" $1; }' data1.txt > data2.txt"
++        self.assertRunOk(cmd)
++
++    def sum_column(self):
++        # Check the sum of the first column is 1+2+3+4 == 10
++        awk_prg = "BEGIN { SUM = 0; } { SUM = SUM + $1; } END { print SUM; }"
++        cmd = f"mawk '{awk_prg}' data2.txt"
++        output, exit_code = self.emulator.run(cmd)
++        self.assertEqual(exit_code, 0)
++        self.assertEqual(int(output[0]), 10)
++
++    def uppercase_column(self):
++        # Extract only column 2 and convert it to upper case
++        cmd = "mawk '{ print toupper($2); }' data2.txt > data3.txt"
++        self.assertRunOk(cmd)
++
++        # Prepare the same output using "data1.txt" and the "tr" command,
++        # for verification
++        cmd = "tr a-z A-Z < data1.txt > data3-tr.txt"
++        self.assertRunOk(cmd)
++
++        # "mawk" and "tr" output are expected to be the same
++        self.assertRunOk("cmp data3.txt data3-tr.txt")
++
++    def mawk_head(self):
++        # Show the first 2 lines of a file
++        cmd = "mawk 'NR <= 2 { print $0; }' data2.txt > data4.txt"
++        self.assertRunOk(cmd)
++
++        # Prepare the same output using the "head" command
++        cmd = "head -2 data2.txt > data4-head.txt"
++        self.assertRunOk(cmd)
++
++        # "mawk" and "tr" output are expected to be the same
++        self.assertRunOk("cmp data4.txt data4-head.txt")
++
++    def mawk_specific(self):
++        # Use the "-W dump" mawk specific option.
++        # See: https://invisible-island.net/mawk/manpage/mawk.html
++        # We create an arbitrary awk program with an integer and
++        # string constant. We then check those constants are in the
++        # mawk "assembler" output.
++        awk_int = 12345
++        awk_str = "Buildroot"
++        awk_expr = f"print ($1 + {awk_int}) \"{awk_str}\";"
++        awk_prg = "BEGIN { " + awk_expr + " }"
++        cmd = f"mawk -W dump '{awk_prg}'"
++        output, exit_code = self.emulator.run(cmd)
++        self.assertEqual(exit_code, 0)
++        out_str = "\n".join(output)
++        self.assertIn(str(awk_int), out_str)
++        self.assertIn(awk_str, out_str)
++
++    def mawk_numeric(self):
++        value = 1234
++        squared_value = value * value
++        cmd = "mawk 'BEGIN { print sqrt(" + str(squared_value) + "); }'"
++        output, exit_code = self.emulator.run(cmd)
++        self.assertEqual(exit_code, 0)
++        self.assertEqual(int(output[0]), value)
++
++    def test_run(self):
++        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
++        self.emulator.boot(arch="armv5",
++                           kernel="builtin",
++                           options=["-initrd", cpio_file])
++        self.emulator.login()
++
++        self.basic_mawk_tests()
++        self.create_test_data()
++        self.add_line_numbers()
++        self.sum_column()
++        self.uppercase_column()
++        self.mawk_head()
++        self.mawk_specific()
++        self.mawk_numeric()
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
