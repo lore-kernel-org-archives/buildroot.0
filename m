@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B88DAC77B7A
-	for <buildroot@archiver.kernel.org>; Thu, 29 Aug 2024 06:22:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3BE60C761AE
+	for <buildroot@archiver.kernel.org>; Thu, 29 Aug 2024 06:22:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 72A0241347;
-	Thu, 29 Aug 2024 06:22:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F06C9409F6;
+	Thu, 29 Aug 2024 06:22:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 252Ko3RW6fQ3; Thu, 29 Aug 2024 06:22:26 +0000 (UTC)
+ id i9ugPfuDF2Ks; Thu, 29 Aug 2024 06:22:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6BAE54133C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 32A0A41333
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6BAE54133C;
-	Thu, 29 Aug 2024 06:22:25 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 2548B1BF867
+	by smtp4.osuosl.org (Postfix) with ESMTP id 32A0A41333;
+	Thu, 29 Aug 2024 06:22:29 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 53EBA1BF867
  for <buildroot@lists.busybox.net>; Thu, 29 Aug 2024 06:22:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 262A140C9F
- for <buildroot@lists.busybox.net>; Thu, 29 Aug 2024 06:22:07 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 448F781456
+ for <buildroot@lists.busybox.net>; Thu, 29 Aug 2024 06:22:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VBvGZo1RFo46 for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id RWf2CON1yvfH for <buildroot@lists.busybox.net>;
  Thu, 29 Aug 2024 06:22:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F302F4082A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 31E4D81457
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id F302F4082A
- for <buildroot@buildroot.org>; Thu, 29 Aug 2024 06:22:05 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 31E4D81457
+ for <buildroot@buildroot.org>; Thu, 29 Aug 2024 06:22:06 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EDBB686620; Thu, 29 Aug 2024 06:22:05 +0000 (UTC)
+ id 2CEEF86620; Thu, 29 Aug 2024 06:22:06 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 29 Aug 2024 08:05:59 +0200
+Date: Thu, 29 Aug 2024 08:15:12 +0200
 X-Git-Refname: refs/heads/2024.05.x
-X-Git-Oldrev: 96d32fd6564ee124b9d325cab7c301820e4363a1
-X-Git-Newrev: 3f0b87bf31154c5e93bed52a1a1d1d1d2d9a8fa1
+X-Git-Oldrev: 0836bb91722daa27744ab28644f2b07a56047bf8
+X-Git-Newrev: 006f172dd96603d88fdcf33d978927dfb5f4e3c5
 X-Patchwork-Hint: ignore
-Message-Id: <20240829062205.EDBB686620@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.05.x] package/cpuload: fix
- build with gcc >= 14
+Message-Id: <20240829062206.2CEEF86620@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.05.x] package/zsh: fix build
+ with gcc >= 14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,149 +65,105 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3f0b87bf31154c5e93bed52a1a1d1d1d2d9a8fa1
+commit: https://git.buildroot.net/buildroot/commit/?id=006f172dd96603d88fdcf33d978927dfb5f4e3c5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.05.x
 
 Fix the following build failure with gcc >= 14:
 
-read_cpu_stat.c: In function 'cpudata_new':
-read_cpu_stat.c:49:17: error: implicit declaration of function 'error'; did you mean 'perror'? [-Wimplicit-function-declaration]
-   49 |                 error("too many cpus");
-      |                 ^~~~~
-      |                 perror
+termcap.c:45:14: error: conflicting types for 'boolcodes'; have 'char *[]'
+   45 | static char *boolcodes[] = {
+      |              ^~~~~~~~~
+In file included from ../../Src/zshterm.h:1,
+                 from ../../Src/zsh_system.h:932,
+                 from ../../Src/zsh.mdh:17,
+                 from termcap.mdh:17,
+                 from termcap.c:38:
+/home/autobuild/autobuild/instance-0/output-1/host/or1k-buildroot-linux-uclibc/sysroot/usr/include/term.h:764:56: note: previous declaration of 'boolcodes' with type 'const char * const[]'
+  764 | extern NCURSES_EXPORT_VAR(NCURSES_CONST char * const ) boolcodes[];
+      |                                                        ^~~~~~~~~
 
 Fixes:
- - http://autobuild.buildroot.org/results/3bca2659011d123d7b7a0ca19c4e868643d45766
+ - http://autobuild.buildroot.org/results/fe2f7170465e96cc1de3dae139a25f615331f4b9
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit d3e1821cc6496bfab19e4fe3be9fe6223e8f8176)
+(cherry picked from commit 910e91f3b0311bc9dc5ef00c43b6e3c930eac300)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-Changed-error-calls-to-perror.patch       | 115 +++++++++++++++++++++
- 1 file changed, 115 insertions(+)
+ ...pointer-types-in-terminfo-global-variable.patch | 51 ++++++++++++++++++++++
+ package/zsh/zsh.mk                                 |  2 +
+ 2 files changed, 53 insertions(+)
 
-diff --git a/package/cpuload/0001-Changed-error-calls-to-perror.patch b/package/cpuload/0001-Changed-error-calls-to-perror.patch
+diff --git a/package/zsh/0001-52383-Avoid-incompatible-pointer-types-in-terminfo-global-variable.patch b/package/zsh/0001-52383-Avoid-incompatible-pointer-types-in-terminfo-global-variable.patch
 new file mode 100644
-index 0000000000..6672bec677
+index 0000000000..c67c374918
 --- /dev/null
-+++ b/package/cpuload/0001-Changed-error-calls-to-perror.patch
-@@ -0,0 +1,115 @@
-+From ffd61eaa72acf123dea0c80ed3774656289ab49f Mon Sep 17 00:00:00 2001
-+From: roiec <roiec@D-H-ROIEC-LX-WW1.com>
-+Date: Wed, 5 Jan 2022 17:12:05 +0200
-+Subject: [PATCH] Changed 'error' calls to 'perror'
++++ b/package/zsh/0001-52383-Avoid-incompatible-pointer-types-in-terminfo-global-variable.patch
+@@ -0,0 +1,51 @@
++From 4c89849c98172c951a9def3690e8647dae76308f Mon Sep 17 00:00:00 2001
++From: Florian Weimer <fweimer@redhat.com>
++Date: Fri, 8 Dec 2023 21:58:07 +0100
++Subject: [PATCH] 52383: Avoid incompatible pointer types in terminfo global
++ variable checks
 +
-+Upstream: https://github.com/kelvincheung/cpuload/pull/1
++Upstream: https://sourceforge.net/p/zsh/code/ci/4c89849c98172c951a9def3690e8647dae76308f
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 +---
-+ .gitignore           | 60 ++++++++++++++++++++++++++++++++++++++++++++
-+ src/graph_cpu_load.c |  4 +--
-+ src/read_cpu_stat.c  |  2 +-
-+ 3 files changed, 63 insertions(+), 3 deletions(-)
-+ create mode 100644 .gitignore
++ ChangeLog    |  3 +++
++ configure.ac | 12 ++++++------
++ 2 files changed, 9 insertions(+), 6 deletions(-)
 +
-+diff --git a/.gitignore b/.gitignore
-+new file mode 100644
-+index 0000000..c2ae907
-+--- /dev/null
-++++ b/.gitignore
-+@@ -0,0 +1,60 @@
-++# Prerequisites
-++*.d
-++
-++# Object files
-++*.o
-++*.ko
-++*.obj
-++*.elf
-++
-++# Linker output
-++*.ilk
-++*.map
-++*.exp
-++
-++# Precompiled Headers
-++*.gch
-++*.pch
-++
-++# Libraries
-++*.lib
-++*.a
-++*.la
-++*.lo
-++
-++# Shared objects (inc. Windows DLLs)
-++*.dll
-++*.so
-++*.so.*
-++*.dylib
-++
-++# Executables
-++*.exe
-++*.out
-++*.app
-++*.i*86
-++*.x86_64
-++*.hex
-++
-++# Debug files
-++*.dSYM/
-++*.su
-++*.idb
-++*.pdb
-++
-++# Kernel Module Compile Results
-++*.mod*
-++*.cmd
-++.tmp_versions/
-++modules.order
-++Module.symvers
-++Mkfile.old
-++dkms.conf
-++
-++#images
-++*.tgz
-++*.img
-++
-++
-++#build
-++configure
-+diff --git a/src/graph_cpu_load.c b/src/graph_cpu_load.c
-+index e4b7785..525d9ed 100644
-+--- a/src/graph_cpu_load.c
-++++ b/src/graph_cpu_load.c
-+@@ -132,7 +132,7 @@ void graph_new_line(char *str, unsigned long color)
-+ 	graph_last_x = graph_last_y = -1;
++diff --git a/configure.ac b/configure.ac
++index 2a8221e1f..2871dcb7c 100644
++--- a/configure.ac
+++++ b/configure.ac
++@@ -1768,27 +1768,27 @@ if test x$zsh_cv_path_term_header != xnone; then
++   fi
 + 
-+ 	if (graph_data_index >= MAX_GRAPH_DATA - 2)
-+-		error("Too many graph data.");
-++		perror("Too many graph data.");
++   AC_MSG_CHECKING(if boolcodes is available)
++-  AC_LINK_IFELSE([AC_LANG_PROGRAM([[$term_includes]], [[char **test = boolcodes; puts(*test);]])],[AC_DEFINE(HAVE_BOOLCODES) boolcodes=yes],[boolcodes=no])
+++  AC_LINK_IFELSE([AC_LANG_PROGRAM([[$term_includes]], [[char **test = (char **)boolcodes; puts(*test);]])],[AC_DEFINE(HAVE_BOOLCODES) boolcodes=yes],[boolcodes=no])
++   AC_MSG_RESULT($boolcodes)
 + 
-+ 	graph_data[graph_data_index++] = DATUM_COLOR;
-+ 	graph_data[graph_data_index++] = color;
-+@@ -145,7 +145,7 @@ void graph_new_line(char *str, unsigned long color)
-+ void graph_add_point(int size, int amount)
-+ {
-+ 	if (graph_data_index >= MAX_GRAPH_DATA - 4)
-+-		error("Too many graph data.");
-++		perror("Too many graph data.");
++   AC_MSG_CHECKING(if numcodes is available)
++-  AC_LINK_IFELSE([AC_LANG_PROGRAM([[$term_includes]], [[char **test = numcodes; puts(*test);]])],[AC_DEFINE(HAVE_NUMCODES) numcodes=yes],[numcodes=no])
+++  AC_LINK_IFELSE([AC_LANG_PROGRAM([[$term_includes]], [[char **test = (char **)numcodes; puts(*test);]])],[AC_DEFINE(HAVE_NUMCODES) numcodes=yes],[numcodes=no])
++   AC_MSG_RESULT($numcodes)
 + 
-+ 	graph_data[graph_data_index++] = DATUM_SIZE;
-+ 	graph_data[graph_data_index++] = size;
-+diff --git a/src/read_cpu_stat.c b/src/read_cpu_stat.c
-+index 3d014be..ff51d7f 100644
-+--- a/src/read_cpu_stat.c
-++++ b/src/read_cpu_stat.c
-+@@ -46,7 +46,7 @@ ProcessList *cpudata_new(void)
-+ 	fclose(file);
++   AC_MSG_CHECKING(if strcodes is available)
++-  AC_LINK_IFELSE([AC_LANG_PROGRAM([[$term_includes]], [[char **test = strcodes; puts(*test);]])],[AC_DEFINE(HAVE_STRCODES) strcodes=yes],[strcodes=no])
+++  AC_LINK_IFELSE([AC_LANG_PROGRAM([[$term_includes]], [[char **test = (char **)strcodes; puts(*test);]])],[AC_DEFINE(HAVE_STRCODES) strcodes=yes],[strcodes=no])
++   AC_MSG_RESULT($strcodes)
 + 
-+ 	if (cpu > cpus -1) {
-+-		error("too many cpus");
-++		perror("too many cpus");
-+ 		exit(1);
-+ 	}
++   AC_MSG_CHECKING(if boolnames is available)
++-  AC_LINK_IFELSE([AC_LANG_PROGRAM([[$term_includes]], [[char **test = boolnames; puts(*test);]])],[AC_DEFINE(HAVE_BOOLNAMES) boolnames=yes],[boolnames=no])
+++  AC_LINK_IFELSE([AC_LANG_PROGRAM([[$term_includes]], [[char **test = (char **)boolnames; puts(*test);]])],[AC_DEFINE(HAVE_BOOLNAMES) boolnames=yes],[boolnames=no])
++   AC_MSG_RESULT($boolnames)
 + 
++   AC_MSG_CHECKING(if numnames is available)
++-  AC_LINK_IFELSE([AC_LANG_PROGRAM([[$term_includes]], [[char **test = numnames; puts(*test);]])],[AC_DEFINE(HAVE_NUMNAMES) numnames=yes],[numnames=no])
+++  AC_LINK_IFELSE([AC_LANG_PROGRAM([[$term_includes]], [[char **test = (char **)numnames; puts(*test);]])],[AC_DEFINE(HAVE_NUMNAMES) numnames=yes],[numnames=no])
++   AC_MSG_RESULT($numnames)
++ 
++   AC_MSG_CHECKING(if strnames is available)
++-  AC_LINK_IFELSE([AC_LANG_PROGRAM([[$term_includes]], [[char **test = strnames; puts(*test);]])],[AC_DEFINE(HAVE_STRNAMES) strnames=yes],[strnames=no])
+++  AC_LINK_IFELSE([AC_LANG_PROGRAM([[$term_includes]], [[char **test = (char **)strnames; puts(*test);]])],[AC_DEFINE(HAVE_STRNAMES) strnames=yes],[strnames=no])
++   AC_MSG_RESULT($strnames)
++ 
++   dnl There are apparently defective terminal library headers on some
+diff --git a/package/zsh/zsh.mk b/package/zsh/zsh.mk
+index e790bf4c5e..7e577fa9e1 100644
+--- a/package/zsh/zsh.mk
++++ b/package/zsh/zsh.mk
+@@ -13,6 +13,8 @@ ZSH_CONF_ENV = zsh_cv_sys_nis=no zsh_cv_sys_nis_plus=no
+ ZSH_LICENSE = MIT-like
+ ZSH_LICENSE_FILES = LICENCE
+ ZSH_CPE_ID_VENDOR = zsh
++# 0001-52383-Avoid-incompatible-pointer-types-in-terminfo-global-variable.patch
++ZSH_AUTORECONF = YES
+ 
+ # zsh uses TRY_RUN to determine these
+ ZSH_CONF_OPTS += \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
