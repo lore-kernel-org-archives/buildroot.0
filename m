@@ -4,76 +4,78 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A402DC83F15
-	for <buildroot@archiver.kernel.org>; Thu, 29 Aug 2024 13:12:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 111CDC83F16
+	for <buildroot@archiver.kernel.org>; Thu, 29 Aug 2024 13:12:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3D80B40328;
-	Thu, 29 Aug 2024 13:12:48 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A09FC40359;
+	Thu, 29 Aug 2024 13:12:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id edNftFAHcBbl; Thu, 29 Aug 2024 13:12:47 +0000 (UTC)
+ id ZXlsgl1QVXRj; Thu, 29 Aug 2024 13:12:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EC12940359
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 68E4A40558
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EC12940359;
-	Thu, 29 Aug 2024 13:12:46 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 6C2251BF8B4
- for <buildroot@lists.busybox.net>; Thu, 29 Aug 2024 13:12:45 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 68E4A40558;
+	Thu, 29 Aug 2024 13:12:51 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 2EA2A1BF8B4
+ for <buildroot@lists.busybox.net>; Thu, 29 Aug 2024 13:12:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 59B3C60663
- for <buildroot@lists.busybox.net>; Thu, 29 Aug 2024 13:12:45 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1B74F403AD
+ for <buildroot@lists.busybox.net>; Thu, 29 Aug 2024 13:12:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EQHLy6yHNuqi for <buildroot@lists.busybox.net>;
- Thu, 29 Aug 2024 13:12:43 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=209.85.221.52;
- helo=mail-wr1-f52.google.com; envelope-from=thomas.devoogdt@gmail.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id DQOBwCQNOhX1 for <buildroot@lists.busybox.net>;
+ Thu, 29 Aug 2024 13:12:45 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=209.85.221.49;
+ helo=mail-wr1-f49.google.com; envelope-from=thomas.devoogdt@gmail.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 1D0DC60639
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1D0DC60639
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com
- [209.85.221.52])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 1D0DC60639
- for <buildroot@buildroot.org>; Thu, 29 Aug 2024 13:12:42 +0000 (UTC)
-Received: by mail-wr1-f52.google.com with SMTP id
- ffacd0b85a97d-371afae614aso397750f8f.0
- for <buildroot@buildroot.org>; Thu, 29 Aug 2024 06:12:42 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 10EE040210
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 10EE040210
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com
+ [209.85.221.49])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 10EE040210
+ for <buildroot@buildroot.org>; Thu, 29 Aug 2024 13:12:44 +0000 (UTC)
+Received: by mail-wr1-f49.google.com with SMTP id
+ ffacd0b85a97d-3717de33d58so394631f8f.1
+ for <buildroot@buildroot.org>; Thu, 29 Aug 2024 06:12:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1724937161; x=1725541961;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=+kgt1EclLRllKZVNsddgcVl1fRqlbKr1Nt7sUpeOWsw=;
- b=iNiApk2jqOUoaaBQo6i3xKAYyiNMdnp3570YPFf+yCmah+th8ik1i+M7BbfdNvVD1o
- f1YIbW7Z3dLYngw+Oqxwd09YRKwGMHxe9X5MqaBj6oEEagSRJBOStfXxy2l10X97ZxgK
- v6vi24Jizc0DFgRKgikdamAwL3yOmElWi26FiddtJFbdwFq6FwadhdTOaPW7WiPQTd7Y
- rX8Gcr9W5/J9FF4ane0ugrAiwLj6WN4X6hY/QEzEDQ3HBOQN95QbLFQX1kHqpVMTw/3i
- Ho3VhX6Fy8VBkcA2M4cM4372SRUmZuPhfUDKngPy/lL1z3DUZRKSjPRnr7H4yvRvZ3NT
- VTTw==
-X-Gm-Message-State: AOJu0YxAPdl1xnaA1UBxMxpTz+GldIv1/4kOA+xL/aeQS7mz0D3dIrjR
- aQMqr5KQxwegmjN82FVhNrwft+z+QKmTf3I/gpJwjpHRgvgB5ioP9eeR5I+9
-X-Google-Smtp-Source: AGHT+IHQlOmZLMspXvIG12RUwdquFoJncPztI3KkbXqLmcZQftqP3zFhEuRmgYfWJ3iYn8OpMFwyvw==
-X-Received: by 2002:a5d:6144:0:b0:367:9881:7d5e with SMTP id
- ffacd0b85a97d-3749b52e5a5mr1904493f8f.8.1724937160205; 
- Thu, 29 Aug 2024 06:12:40 -0700 (PDT)
+ d=1e100.net; s=20230601; t=1724937163; x=1725541963;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=p+jsOrsLfUhC1BVc0VpATgfjCwqw42a5fpMfqkdJA4Y=;
+ b=diHsv/3SrO0KRD4dAZridW3MaWcJe1ysh3gWy+LeV4deXweg0L/UaD0SXc0mWLH3WN
+ V4jDerCBiQ+x9vvoIh5huwtCEft8yWm3ywAbTztgaP5RhuYMCbbkPdi05FP2G9RSjt2b
+ 3ptHK2wDvv0dSc18k6pkU79gbTzEZTD6iF7H+i4zN7OxQL0375ti8XUV1EVq6DoLxTij
+ wwXuF+XH+qo4/y2vFEDi2jMJoTfe3rjbo27kfB7A1iuJahXBJm+E03niP/qExk1YmNFn
+ lKDeqoiJ1QpzJh2geLloXl6sda4XQ/0Z89SoHVWUx8nCLDNTQyPhAS2T8DhxjKEiUivA
+ Fa3w==
+X-Gm-Message-State: AOJu0YzhjKGqPeO+AzL1803Ww7s9yZIegjTLLCvgFQ3MovimrZWnU1ml
+ QtCayxj9Tg6VQxP2p3rI5/vHuAoZ0rIdDUMA1TcBJCYRRbsO+cbasZAXdazd
+X-Google-Smtp-Source: AGHT+IGux/J5r0m+UK+vJ38Yxq3kDrTyHfdvPbr/ogPnqWmPefPGyequaf5AMtl6pplnKE4d7Coa7w==
+X-Received: by 2002:a05:6000:104b:b0:371:93d2:ce49 with SMTP id
+ ffacd0b85a97d-3749b57eddbmr1964534f8f.44.1724937162126; 
+ Thu, 29 Aug 2024 06:12:42 -0700 (PDT)
 Received: from thomas-Precision-7670.barco.com (d528f5fdd.static.telenet.be.
  [82.143.95.221]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-42bb6e273bcsm17119455e9.31.2024.08.29.06.12.39
+ 5b1f17b1804b1-42bb6e273bcsm17119455e9.31.2024.08.29.06.12.41
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 29 Aug 2024 06:12:39 -0700 (PDT)
+ Thu, 29 Aug 2024 06:12:41 -0700 (PDT)
 From: Thomas Devoogdt <thomas@devoogdt.com>
 To: buildroot@buildroot.org
-Date: Thu, 29 Aug 2024 15:12:28 +0200
-Message-ID: <20240829131232.2132854-1-thomas@devoogdt.com>
+Date: Thu, 29 Aug 2024 15:12:29 +0200
+Message-ID: <20240829131232.2132854-2-thomas@devoogdt.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240829131232.2132854-1-thomas@devoogdt.com>
+References: <20240829131232.2132854-1-thomas@devoogdt.com>
 MIME-Version: 1.0
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=devoogdt.com
-Subject: [Buildroot] [PATCH v1] package/libsoup3: bump to 3.6.0
+Subject: [Buildroot] [PATCH v1] package/midori: drop package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,42 +97,263 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: Thomas Devoogdt <thomas.devoogdt@barco.com>
 
-News:
- - https://download.gnome.org/sources/libsoup/3.5/libsoup-3.5.2.news
- - https://download.gnome.org/sources/libsoup/3.6/libsoup-3.6.0.news
+The original WebKitGTK-based Midori is no longer maintained and doesn't build
+since WebKitGTK moved to libsoup3 as of commit 38a098df133aaa2ebf09742054b02db5a44f58e5.
+
+Last WebKitGTK based release: https://github.com/midori-browser/core/tree/v9.0.
+New browser, based on Gecko/Firefox: https://github.com/goastian/midori-desktop.
+
+The intention is also to start migrating WebKitGTK to GTK4, as this is now the default
+version. See: https://webkitgtk.org/2024/03/27/webkigit-2.44.html.
 
 Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
 ---
- package/libsoup3/libsoup3.hash | 4 ++--
- package/libsoup3/libsoup3.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ .checkpackageignore                           |  2 -
+ Config.in.legacy                              |  8 +++
+ package/Config.in                             |  1 -
+ .../0001-disable-vala-fatal-warnings.patch    | 30 -----------
+ ...ion-to-specify-path-to-g-ir-compiler.patch | 37 -------------
+ package/midori/Config.in                      | 52 -------------------
+ package/midori/midori.hash                    |  3 --
+ package/midori/midori.mk                      | 35 -------------
+ 8 files changed, 8 insertions(+), 160 deletions(-)
+ delete mode 100644 package/midori/0001-disable-vala-fatal-warnings.patch
+ delete mode 100644 package/midori/0002-add-option-to-specify-path-to-g-ir-compiler.patch
+ delete mode 100644 package/midori/Config.in
+ delete mode 100644 package/midori/midori.hash
+ delete mode 100644 package/midori/midori.mk
 
-diff --git a/package/libsoup3/libsoup3.hash b/package/libsoup3/libsoup3.hash
-index 139771a11e..37ecd2db84 100644
---- a/package/libsoup3/libsoup3.hash
-+++ b/package/libsoup3/libsoup3.hash
-@@ -1,4 +1,4 @@
--# From https://download.gnome.org/sources/libsoup/3.5/libsoup-3.5.1.sha256sum
--sha256  c1d7cfb89832d35c271f37d544f2cfe21fa60ae9faad4a7ac58996ae4031f7ba  libsoup-3.5.1.tar.xz
-+# From https://download.gnome.org/sources/libsoup/3.6/libsoup-3.6.0.sha256sum
-+sha256  62959f791e8e8442f8c13cedac8c4919d78f9120d5bb5301be67a5e53318b4a3  libsoup-3.6.0.tar.xz
- # Locally calculated
- sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
-diff --git a/package/libsoup3/libsoup3.mk b/package/libsoup3/libsoup3.mk
-index bc3ae4d0cb..f8a7e26159 100644
---- a/package/libsoup3/libsoup3.mk
-+++ b/package/libsoup3/libsoup3.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 4cfc202153..86a8f9bade 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -893,8 +893,6 @@ package/metacity/0001-add-libm-reference.patch lib_patch.Upstream
+ package/metacity/0002-gconf.patch lib_patch.Upstream
+ package/metacity/0003-mag-add-libm-reference.patch lib_patch.Upstream
+ package/mfgtools/0001-lnx_def.h-fix-conflicting-declaration-of-__time64_t.patch lib_patch.Upstream
+-package/midori/0001-disable-vala-fatal-warnings.patch lib_patch.Upstream
+-package/midori/0002-add-option-to-specify-path-to-g-ir-compiler.patch lib_patch.Upstream
+ package/mii-diag/0001-strchr.patch lib_patch.Sob lib_patch.Upstream
+ package/mimic/0001-Fix-linking-on-gcc-10.2.0-or-newer.patch lib_patch.Upstream
+ package/mini-snmpd/0001-linux.c-fix-musl-build.patch lib_patch.Upstream
+diff --git a/Config.in.legacy b/Config.in.legacy
+index d8480106ba..d1f892dded 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,14 @@ endif
  
--LIBSOUP3_VERSION_MAJOR = 3.5
--LIBSOUP3_VERSION = $(LIBSOUP3_VERSION_MAJOR).1
-+LIBSOUP3_VERSION_MAJOR = 3.6
-+LIBSOUP3_VERSION = $(LIBSOUP3_VERSION_MAJOR).0
- LIBSOUP3_SOURCE = libsoup-$(LIBSOUP3_VERSION).tar.xz
- LIBSOUP3_SITE = https://download.gnome.org/sources/libsoup/$(LIBSOUP3_VERSION_MAJOR)
- LIBSOUP3_LICENSE = LGPL-2.0+
+ comment "Legacy options removed in 2024.08"
+ 
++config BR2_PACKAGE_MIDORI
++	bool "midori has been removed"
++	select BR2_LEGACY
++	help
++	  The original WebKitGTK-based Midori is no longer maintained
++	  and doesn't build since WebKitGTK moved to libsoup3 as of
++	  commit 38a098df133aaa2ebf09742054b02db5a44f58e5.
++
+ config BR2_PACKAGE_FROTZ
+ 	bool "frotz has been removed"
+ 	select BR2_LEGACY
+diff --git a/package/Config.in b/package/Config.in
+index cacba7faa1..deaac48a56 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -332,7 +332,6 @@ comment "Graphic applications"
+ 	source "package/kmscube/Config.in"
+ 	source "package/libva-utils/Config.in"
+ 	source "package/mesa3d-demos/Config.in"
+-	source "package/midori/Config.in"
+ 	source "package/netsurf/Config.in"
+ 	source "package/pngquant/Config.in"
+ 	source "package/qt5cinex/Config.in"
+diff --git a/package/midori/0001-disable-vala-fatal-warnings.patch b/package/midori/0001-disable-vala-fatal-warnings.patch
+deleted file mode 100644
+index c3f245f141..0000000000
+--- a/package/midori/0001-disable-vala-fatal-warnings.patch
++++ /dev/null
+@@ -1,30 +0,0 @@
+-From be91b1260d3215119e4ab5b19012ab80d6ff788d Mon Sep 17 00:00:00 2001
+-From: Adam Duskett <aduskett@gmail.com>
+-Date: Mon, 11 Oct 2021 16:58:34 -0700
+-Subject: [PATCH] disable vala fatal warnings
+-
+-When building midori in a buildroot directory cloned from git, the git
+-descript --tags command return tags from buildroot, which in turn sets
+-the --fatal-warnings flag. Disable --fatal-warnings unconditionally.
+-
+-Signed-off-by: Adam Duskett <aduskett@gmail.com>
+----
+- CMakeLists.txt | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index 8e72f08..39941e2 100644
+---- a/CMakeLists.txt
+-+++ b/CMakeLists.txt
+-@@ -18,7 +18,7 @@ execute_process(COMMAND "git" "describe" "--tags"
+- if (REVISION)
+-     set(CORE_VERSION "${REVISION}")
+-     # All warnings are errors in development builds
+--    set(VALAFLAGS ${VALAFLAGS} --fatal-warnings)
+-+    set(VALAFLAGS ${VALAFLAGS} --disable-assert)
+- else ()
+-     # No runtime type checks
+-     set(VALAFLAGS ${VALAFLAGS} --disable-assert)
+--- 
+-2.30.2
+-
+diff --git a/package/midori/0002-add-option-to-specify-path-to-g-ir-compiler.patch b/package/midori/0002-add-option-to-specify-path-to-g-ir-compiler.patch
+deleted file mode 100644
+index 4bbcbaaf12..0000000000
+--- a/package/midori/0002-add-option-to-specify-path-to-g-ir-compiler.patch
++++ /dev/null
+@@ -1,37 +0,0 @@
+-From 118ac24b2c488f490ee8814336291a58eae45395 Mon Sep 17 00:00:00 2001
+-From: Adam Duskett <aduskett@gmail.com>
+-Date: Tue, 12 Oct 2021 13:21:19 -0700
+-Subject: [PATCH] add option to specify path to g-ir-compiler
+-
+-By default, find_program (GIR_COMPILER_BIN g-ir-compiler) returns the host path
+-to g-ir-compiler, which is undesirable in a cross-compile environment.
+-
+-Add an option to manually specify a path to the g-ir-compiler.
+-
+-Signed-off-by: Adam Duskett <aduskett@gmail.com>
+----
+- core/CMakeLists.txt | 8 +++++++-
+- 1 file changed, 7 insertions(+), 1 deletion(-)
+-
+-diff --git a/core/CMakeLists.txt b/core/CMakeLists.txt
+-index c4982de..6584229 100644
+---- a/core/CMakeLists.txt
+-+++ b/core/CMakeLists.txt
+-@@ -66,7 +66,13 @@ set_target_properties("${LIBCORE}" PROPERTIES
+-                       VERSION ${LIBCORE_VERSION}
+-                       )
+- 
+--find_program (GIR_COMPILER_BIN g-ir-compiler)
+-+option(GIR_COMPILER_PATH "Specify a path to g-ir-compiler" OFF)
+-+if(GIR_COMPILER_PATH)
+-+  set(GIR_COMPILER_BIN "${GIR_COMPILER_PATH}")
+-+else()
+-+  find_program (GIR_COMPILER_BIN g-ir-compiler)
+-+endif(GIR_COMPILER_PATH)
+-+
+- add_custom_target(${LIBCORE_GIR}.typelib ALL
+-                   COMMAND ${GIR_COMPILER_BIN} ${CMAKE_CURRENT_BINARY_DIR}/${LIBCORE_GIR}.gir
+-                   --output ${CMAKE_CURRENT_BINARY_DIR}/${LIBCORE_GIR}.typelib
+--- 
+-2.30.2
+-
+diff --git a/package/midori/Config.in b/package/midori/Config.in
+deleted file mode 100644
+index 6029c0a9df..0000000000
+--- a/package/midori/Config.in
++++ /dev/null
+@@ -1,52 +0,0 @@
+-config BR2_PACKAGE_MIDORI_ARCH_SUPPORTS
+-	bool
+-	default y
+-	depends on BR2_USE_MMU
+-	depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
+-	depends on BR2_PACKAGE_GOBJECT_INTROSPECTION_ARCH_SUPPORTS
+-	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # gcr -> libgcrypt -> libgpg-error
+-	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
+-	depends on !BR2_BINFMT_FLAT # webkitgtk -> icu
+-
+-comment "midori needs a glibc toolchain w/ C++, wchar, threads, dynamic library, gcc >= 7, host gcc >= 8"
+-	depends on BR2_PACKAGE_MIDORI_ARCH_SUPPORTS
+-	depends on !BR2_INSTALL_LIBSTDCPP || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_7 || \
+-		!BR2_HOST_GCC_AT_LEAST_8 || \
+-		!BR2_TOOLCHAIN_USES_GLIBC || !BR2_TOOLCHAIN_HAS_THREADS || \
+-		BR2_STATIC_LIBS || !BR2_USE_WCHAR
+-
+-comment "midori needs libgtk3 w/ X11 or wayland backend"
+-	depends on BR2_PACKAGE_MIDORI_ARCH_SUPPORTS
+-	depends on !BR2_PACKAGE_LIBGTK3_X11 && \
+-		!BR2_PACKAGE_LIBGTK3_WAYLAND
+-
+-config BR2_PACKAGE_MIDORI
+-	bool "midori"
+-	depends on BR2_PACKAGE_MIDORI_ARCH_SUPPORTS
+-	depends on !BR2_STATIC_LIBS # webkitgtk
+-	depends on BR2_INSTALL_LIBSTDCPP # webkitgtk
+-	depends on BR2_HOST_GCC_AT_LEAST_8 # gobject-introspection
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # webkitgtk
+-	depends on BR2_TOOLCHAIN_USES_GLIBC # webkitgtk
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
+-	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libgtk3
+-	depends on BR2_USE_WCHAR # granite, gcr, libsoup, libpeas, gobject-introspection
+-	depends on BR2_PACKAGE_LIBGTK3
+-	depends on BR2_PACKAGE_LIBGTK3_X11 || BR2_PACKAGE_LIBGTK3_WAYLAND
+-	select BR2_PACKAGE_GCR
+-	select BR2_PACKAGE_GRANITE
+-	select BR2_PACKAGE_JSON_GLIB
+-	select BR2_PACKAGE_LIBARCHIVE
+-	select BR2_PACKAGE_LIBPEAS
+-	select BR2_PACKAGE_LIBPEAS_WIDGETS
+-	select BR2_PACKAGE_LIBSOUP
+-	select BR2_PACKAGE_LIBXML2
+-	select BR2_PACKAGE_PYTHON3 # gobject-introspection
+-	select BR2_PACKAGE_SQLITE
+-	select BR2_PACKAGE_WEBKITGTK
+-	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+-	help
+-	  Midori is a lightweight web browser based on WebKit
+-
+-	  https://github.com/midori-browser/core
+diff --git a/package/midori/midori.hash b/package/midori/midori.hash
+deleted file mode 100644
+index f14ec6d929..0000000000
+--- a/package/midori/midori.hash
++++ /dev/null
+@@ -1,3 +0,0 @@
+-# Locally computed
+-sha256  5e0a531455c47b0ff7589940aa2b0d9c16f59c99ba933e5fcdcab68114262016  midori-v9.0.tar.gz
+-sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING
+diff --git a/package/midori/midori.mk b/package/midori/midori.mk
+deleted file mode 100644
+index aeafa9bfdc..0000000000
+--- a/package/midori/midori.mk
++++ /dev/null
+@@ -1,35 +0,0 @@
+-################################################################################
+-#
+-# midori
+-#
+-################################################################################
+-
+-MIDORI_VERSION = 9.0
+-MIDORI_SOURCE = midori-v$(MIDORI_VERSION).tar.gz
+-MIDORI_SITE = https://github.com/midori-browser/core/releases/download/v$(MIDORI_VERSION)
+-MIDORI_LICENSE = LGPL-2.1+
+-MIDORI_LICENSE_FILES = COPYING
+-MIDORI_CPE_ID_VENDOR = midori-browser
+-MIDORI_DEPENDENCIES = \
+-	host-intltool \
+-	host-librsvg \
+-	host-pkgconf \
+-	host-vala \
+-	host-python3 \
+-	gcr \
+-	gobject-introspection \
+-	granite \
+-	json-glib \
+-	libarchive \
+-	libgtk3 \
+-	libpeas \
+-	libsoup \
+-	libxml2 \
+-	sqlite \
+-	webkitgtk \
+-	$(TARGET_NLS_DEPENDENCIES) \
+-	$(if $(BR2_PACKAGE_LIBICONV),libiconv)
+-
+-MIDORI_CONF_OPTS += -DGIR_COMPILER_PATH=$(STAGING_DIR)/usr/bin/g-ir-compiler
+-
+-$(eval $(cmake-package))
 -- 
 2.43.0
 
