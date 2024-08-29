@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DAAFCC83F23
-	for <buildroot@archiver.kernel.org>; Thu, 29 Aug 2024 13:42:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0E9DC83F25
+	for <buildroot@archiver.kernel.org>; Thu, 29 Aug 2024 13:42:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AC64E4199B;
-	Thu, 29 Aug 2024 13:42:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7EC634198D;
+	Thu, 29 Aug 2024 13:42:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id e9eUj-0wfLuS; Thu, 29 Aug 2024 13:42:34 +0000 (UTC)
+ id LoeynJTseuF1; Thu, 29 Aug 2024 13:42:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 73BA841988
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3F3F0419A0
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 73BA841988;
-	Thu, 29 Aug 2024 13:42:34 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3F3F0419A0;
+	Thu, 29 Aug 2024 13:42:37 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 3B5E91BF8B4
- for <buildroot@lists.busybox.net>; Thu, 29 Aug 2024 13:42:28 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 694CA1BF8B4
+ for <buildroot@lists.busybox.net>; Thu, 29 Aug 2024 13:42:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5E44840407
- for <buildroot@lists.busybox.net>; Thu, 29 Aug 2024 13:42:27 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 35DD940359
+ for <buildroot@lists.busybox.net>; Thu, 29 Aug 2024 13:42:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bYW4V0fepS7R for <buildroot@lists.busybox.net>;
+ id AOG5an56UGJB for <buildroot@lists.busybox.net>;
  Thu, 29 Aug 2024 13:42:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2738D40359
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 48FC940423
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2738D40359
+ by smtp2.osuosl.org (Postfix) with ESMTP id 48FC940423
  for <buildroot@buildroot.org>; Thu, 29 Aug 2024 13:42:26 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1082286678; Thu, 29 Aug 2024 13:42:26 +0000 (UTC)
+ id 267DA8667C; Thu, 29 Aug 2024 13:42:26 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 29 Aug 2024 15:01:57 +0200
+Date: Thu, 29 Aug 2024 15:40:42 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: f7fc0d190445f669c34426409beda6b4c4f0de32
-X-Git-Newrev: fdce4439ae919c5b92c7db2191b637491de870dc
+X-Git-Oldrev: 37d82d410e3532b867749d29d9c52f80ac6b43f2
+X-Git-Newrev: 29db3dd6e5d51d2450c29accbee55091b2f82036
 X-Patchwork-Hint: ignore
-Message-Id: <20240829134226.1082286678@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] support/testing: add gpsd
- runtime testing
+Message-Id: <20240829134226.267DA8667C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/micropython:
+ change URL to HTTPS
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,112 +60,47 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============4737709161786614235=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fdce4439ae919c5b92c7db2191b637491de870dc
+--===============4737709161786614235==
+Content-Type: text/plain
+
+commit: https://git.buildroot.net/buildroot/commit/?id=29db3dd6e5d51d2450c29accbee55091b2f82036
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: J. Neuschäfer <j.neuschaefer@gmx.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 9c8f6dc5e4d7244b493e290c055202cadc9a12cb)
+(cherry picked from commit ade6e41831c2b1f82028dda9744c6b64907e20ef)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS                                         |  2 +
- support/testing/tests/package/test_gpsd.py         | 56 ++++++++++++++++++++++
- .../test_gpsd/rootfs-overlay/root/udp-nmea.log     |  6 +++
- 3 files changed, 64 insertions(+)
+ package/micropython/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 3899f4aef9..1b9fdd7b1c 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1798,6 +1798,8 @@ F:	support/testing/tests/package/test_gnuplot.py
- F:	support/testing/tests/package/test_gnuplot/
- F:	support/testing/tests/package/test_gnuradio.py
- F:	support/testing/tests/package/test_gnuradio/
-+F:	support/testing/tests/package/test_gpsd.py
-+F:	support/testing/tests/package/test_gpsd/
- F:	support/testing/tests/package/test_gzip.py
- F:	support/testing/tests/package/test_highway.py
- F:	support/testing/tests/package/test_hwloc.py
-diff --git a/support/testing/tests/package/test_gpsd.py b/support/testing/tests/package/test_gpsd.py
-new file mode 100644
-index 0000000000..deed586c17
---- /dev/null
-+++ b/support/testing/tests/package/test_gpsd.py
-@@ -0,0 +1,56 @@
-+import os
-+import time
-+
-+import infra.basetest
-+
-+
-+class TestGpsd(infra.basetest.BRTest):
-+    rootfs_overlay = \
-+        infra.filepath("tests/package/test_gpsd/rootfs-overlay")
-+    # This test is using the gpsfake Python script.
-+    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-+        f"""
-+        BR2_PACKAGE_GPSD=y
-+        BR2_PACKAGE_PYTHON3=y
-+        BR2_ROOTFS_OVERLAY="{rootfs_overlay}"
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
-+
-+    def test_run(self):
-+        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        self.emulator.boot(arch="armv5",
-+                           kernel="builtin",
-+                           options=["-initrd", cpio_file])
-+        self.emulator.login()
-+
-+        # We check the program can execute.
-+        self.assertRunOk("gpsd --version")
-+
-+        # Since gpsd needs a real GPS device, we stop the service.
-+        self.assertRunOk("/etc/init.d/S50gpsd stop")
-+
-+        # We start the "gpsfake" GPS emulator instead.
-+        cmd = "gpsfake"
-+        cmd += " --slow --cycle 0.1 --quiet"
-+        cmd += "/root/udp-nmea.log &> /dev/null &"
-+        self.assertRunOk(cmd)
-+
-+        # Wait a bit, to let the gpsfake and gpsd to settle...
-+        time.sleep(3 * self.timeout_multiplier)
-+
-+        # List the GPS devices. We should see our local UDP test GPS.
-+        out, ret = self.emulator.run("gpsctl")
-+        self.assertEqual(ret, 0)
-+        self.assertTrue(out[0].startswith("udp://127.0.0.1"))
-+        self.assertIn("NMEA0183", out[0])
-+
-+        # Collect some of our fake GPS data, and check we got the
-+        # coordinates from our test data file.
-+        # Our expected coordinates are:
-+        # https://www.openstreetmap.org/#map=19/43.60439/1.44336
-+        out, ret = self.emulator.run("gpscsv --header 0 --count 3")
-+        self.assertEqual(ret, 0)
-+        _, gps_lat, gps_long, _ = out[0].split(",")
-+        self.assertAlmostEqual(float(gps_lat), 43.60439)
-+        self.assertAlmostEqual(float(gps_long), 1.44336)
-diff --git a/support/testing/tests/package/test_gpsd/rootfs-overlay/root/udp-nmea.log b/support/testing/tests/package/test_gpsd/rootfs-overlay/root/udp-nmea.log
-new file mode 100644
-index 0000000000..f3730da7c5
---- /dev/null
-+++ b/support/testing/tests/package/test_gpsd/rootfs-overlay/root/udp-nmea.log
-@@ -0,0 +1,6 @@
-+# Name: NMEA 0183 messages for gpsd Buildroot test
-+# Transport: UDP
-+# For packet format, see:
-+# https://gpsd.gitlab.io/gpsd/NMEA.html
-+$GPGGA,123456.789,4336.2634,N,0126.6016,E,1,04,1.7,143.5,M,,,,*3A
-+$GPZDA,123456.789,20,07,2024,2,00*64
+diff --git a/package/micropython/Config.in b/package/micropython/Config.in
+index 849a5452f4..b466fbaf2d 100644
+--- a/package/micropython/Config.in
++++ b/package/micropython/Config.in
+@@ -7,7 +7,7 @@ config BR2_PACKAGE_MICROPYTHON
+ 	  3 programming language that is optimised to run on a
+ 	  microcontroller.
+ 
+-	  http://micropython.org
++	  https://micropython.org
+ 
+ if BR2_PACKAGE_MICROPYTHON
+ 
+
+--===============4737709161786614235==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============4737709161786614235==--
