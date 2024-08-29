@@ -4,59 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56FA7C761AE
-	for <buildroot@archiver.kernel.org>; Thu, 29 Aug 2024 06:06:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2C23C761AE
+	for <buildroot@archiver.kernel.org>; Thu, 29 Aug 2024 06:07:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 145E1412FF;
-	Thu, 29 Aug 2024 06:06:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 784B940B4B;
+	Thu, 29 Aug 2024 06:07:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Z8cVkoguFB9v; Thu, 29 Aug 2024 06:06:30 +0000 (UTC)
+ id XZ2lM0KJiPRB; Thu, 29 Aug 2024 06:07:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E889B412FD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4196040C97
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E889B412FD;
-	Thu, 29 Aug 2024 06:06:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4196040C97;
+	Thu, 29 Aug 2024 06:07:10 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 392461BF867
- for <buildroot@lists.busybox.net>; Thu, 29 Aug 2024 06:06:28 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 67BDA1BF867
+ for <buildroot@lists.busybox.net>; Thu, 29 Aug 2024 06:07:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 33E1481980
- for <buildroot@lists.busybox.net>; Thu, 29 Aug 2024 06:06:28 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5419381A3B
+ for <buildroot@lists.busybox.net>; Thu, 29 Aug 2024 06:07:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ir40YnU7o766 for <buildroot@lists.busybox.net>;
- Thu, 29 Aug 2024 06:06:27 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::227;
- helo=relay7-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+ id a_i4XdUY8srq for <buildroot@lists.busybox.net>;
+ Thu, 29 Aug 2024 06:07:06 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.195;
+ helo=relay3-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 276B38197D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 276B38197D
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 276B38197D
- for <buildroot@buildroot.org>; Thu, 29 Aug 2024 06:06:26 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id D4C8A20005;
- Thu, 29 Aug 2024 06:06:23 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4442C81A46
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4442C81A46
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4442C81A46
+ for <buildroot@buildroot.org>; Thu, 29 Aug 2024 06:07:06 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id C7D5660004;
+ Thu, 29 Aug 2024 06:07:03 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1sjYIZ-006FBV-0c;
- Thu, 29 Aug 2024 08:06:23 +0200
+ (envelope-from <peter@korsgaard.com>) id 1sjYJD-006FHW-1F;
+ Thu, 29 Aug 2024 08:07:03 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-References: <20240720124008.460751-1-fontaine.fabrice@gmail.com>
-Date: Thu, 29 Aug 2024 08:06:23 +0200
-In-Reply-To: <20240720124008.460751-1-fontaine.fabrice@gmail.com> (Fabrice
- Fontaine's message of "Sat, 20 Jul 2024 14:40:08 +0200")
-Message-ID: <87bk1b7ti8.fsf@dell.be.48ers.dk>
+References: <20240720142629.747083-1-fontaine.fabrice@gmail.com>
+Date: Thu, 29 Aug 2024 08:07:03 +0200
+In-Reply-To: <20240720142629.747083-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Sat, 20 Jul 2024 16:26:29 +0200")
+Message-ID: <877cbz7th4.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/cpuload: fix build with gcc >=
+Subject: Re: [Buildroot] [PATCH 1/1] package/autossh: fix build with gcc >=
  14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -77,16 +77,37 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
- > Fix the following build failure with gcc >= 14:
- > read_cpu_stat.c: In function 'cpudata_new':
- > read_cpu_stat.c:49:17: error: implicit declaration of function
- > 'error'; did you mean 'perror'? [-Wimplicit-function-declaration]
- >    49 |                 error("too many cpus");
- >       |                 ^~~~~
- >       |                 perror
+ > Include stdio.h to avoid that __progname check wrongly returned that
+ > the function is unavailable with gcc >= 14 which enables
+ > -Werror=implicit-function-declaration
+ > (https://gcc.gnu.org/gcc-14/porting_to.html):
+
+ > configure:5231: checking if libc defines __progname
+ > configure:5249:
+ > /home/autobuild/autobuild/instance-7/output-1/host/bin/sh4-buildroot-linux-musl-gcc
+ > -o conftest -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE
+ > -D_FILE_OFFSET_BITS=64 -Os -g0 -static -Wall -D_LARGEFILE_SOURCE
+ > -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -static conftest.c >&5
+ > conftest.c: In function 'main':
+ > conftest.c:73:27: error: implicit declaration of function 'printf' [-Wimplicit-function-declaration]
+ >    73 |  extern char *__progname; printf("%s", __progname);
+ >       |                           ^~~~~~
+ > conftest.c:1:1: note: include '<stdio.h>' or provide a declaration of 'printf'
+ >     1 | /* confdefs.h */
+ > conftest.c:73:27: warning: incompatible implicit declaration of built-in function 'printf' [-Wbuiltin-declaration-mismatch]
+ >    73 |  extern char *__progname; printf("%s", __progname);
+ >       |                           ^~~~~~
+ > conftest.c:73:27: note: include '<stdio.h>' or provide a declaration of 'printf'
+
+ > resulting in the following static build failure:
+
+ > /home/autobuild/autobuild/instance-7/output-1/host/lib/gcc/sh4-buildroot-linux-musl/14.1.0/../../../../sh4-buildroot-linux-musl/bin/ld:
+ > /home/autobuild/autobuild/instance-7/output-1/host/sh4-buildroot-linux-musl/sysroot/lib/libc.a(libc.o):(.bss.__progname+0x0):
+ > multiple definition of `__progname'; autossh.o:(.bss+0x120): first
+ > defined here
 
  > Fixes:
- >  - http://autobuild.buildroot.org/results/3bca2659011d123d7b7a0ca19c4e868643d45766
+ >  - http://autobuild.buildroot.org/results/5d80a8096d0f5529cbd86903a74f3bab3d230f4a
 
  > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
