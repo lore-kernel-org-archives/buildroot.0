@@ -1,70 +1,97 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4AF6EC71153
-	for <buildroot@archiver.kernel.org>; Thu, 29 Aug 2024 00:17:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 51BE5C7115D
+	for <buildroot@archiver.kernel.org>; Thu, 29 Aug 2024 02:31:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 66A72819E6;
-	Thu, 29 Aug 2024 00:17:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id ED1B86072A;
+	Thu, 29 Aug 2024 02:31:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DI6G9Pej6-vN; Thu, 29 Aug 2024 00:17:04 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id bs9eYn-3kGu8; Thu, 29 Aug 2024 02:31:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 28B3181985
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 04AE960A93
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 28B3181985;
-	Thu, 29 Aug 2024 00:17:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 04AE960A93;
+	Thu, 29 Aug 2024 02:31:29 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D29A51BF239
- for <buildroot@lists.busybox.net>; Thu, 29 Aug 2024 00:17:01 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 117E31BF859
+ for <buildroot@lists.busybox.net>; Thu, 29 Aug 2024 02:31:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BFDCD40179
- for <buildroot@lists.busybox.net>; Thu, 29 Aug 2024 00:17:01 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id F2E0A402E5
+ for <buildroot@lists.busybox.net>; Thu, 29 Aug 2024 02:31:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EsTuUiHp9Ahn for <buildroot@lists.busybox.net>;
- Thu, 29 Aug 2024 00:17:00 +0000 (UTC)
+ id ykTCSwyiSFGy for <buildroot@lists.busybox.net>;
+ Thu, 29 Aug 2024 02:31:26 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1828:2000:679::23; helo=helium.openadk.org;
- envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 5AF3740137
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5AF3740137
-Received: from helium.openadk.org (helium.openadk.org
- [IPv6:2a00:1828:2000:679::23])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5AF3740137
- for <buildroot@buildroot.org>; Thu, 29 Aug 2024 00:16:58 +0000 (UTC)
-Received: by helium.openadk.org (Postfix, from userid 1000)
- id 5112C352142E; Thu, 29 Aug 2024 02:16:55 +0200 (CEST)
-Date: Thu, 29 Aug 2024 02:16:55 +0200
-From: Waldemar Brodkorb <wbx@openadk.org>
+ client-ip=2a00:1450:4864:20::335; helo=mail-wm1-x335.google.com;
+ envelope-from=fede.evol@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 2AE8040179
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2AE8040179
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com
+ [IPv6:2a00:1450:4864:20::335])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 2AE8040179
+ for <buildroot@buildroot.org>; Thu, 29 Aug 2024 02:31:26 +0000 (UTC)
+Received: by mail-wm1-x335.google.com with SMTP id
+ 5b1f17b1804b1-427fc97a88cso1234545e9.0
+ for <buildroot@buildroot.org>; Wed, 28 Aug 2024 19:31:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1724898684; x=1725503484;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=TXIZMZwOC1q4WfhseICtPDLPYlTWlaMKgo8VHkI3qTw=;
+ b=UziIUE9l0zRD2vexTwu8l0bcs19v9nCrDQ/E31Q937T9EXqyAhExlQbdcm4e6Arg1B
+ JLsGgTuOXDTJLj/rd/OfqGYwbLLhMoPnOq4gGZDau1B8KfKip712DcUtgl64cdc+FoRa
+ IaHNdzc12vDGUkMScsnL3aBEIwqHndSLWktJrEnJRyebzNxpuPKD/Q2mj41jFcjnVkou
+ /84FzH1AP34sddXCWq/6FUKI+6FtDpUqpTYJxPgvM1W7ALQ8wixi4cit8VDsGSZBuhd9
+ SeNUXxGS2uy+iJnnUwtoWrxz+KtgZFeV3st1liK4YDxTyrRN3xbBZs72p38LVXEmhR87
+ CIew==
+X-Gm-Message-State: AOJu0Yycyjh6eStRCX+Mx9SbhyBFwL1Ax58G/NoDCToPY7gvvLqHjHtn
+ YxXXzepcqN7TCl42dfJ1PVanWrCM+sHYtayJGFjJkZvjyplvsL3ANgJrLQ==
+X-Google-Smtp-Source: AGHT+IFlbrRvcTHLmATYWUl5w3HbuwBt3+c2tHAP0okO2BcO2wHSwhLVegyNVtGr2e305qIC9uhKdw==
+X-Received: by 2002:a05:600c:4ece:b0:426:58cb:8ca3 with SMTP id
+ 5b1f17b1804b1-42bb0263758mr10042875e9.21.1724898683339; 
+ Wed, 28 Aug 2024 19:31:23 -0700 (PDT)
+Received: from rawyouth.fritz.box
+ (dynamic-2a02-3102-6876-004b-e606-e5b4-3658-7151.310.pool.telefonica.de.
+ [2a02:3102:6876:4b:e606:e5b4:3658:7151])
+ by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-42ba63abe8bsm36095215e9.26.2024.08.28.19.31.22
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 28 Aug 2024 19:31:22 -0700 (PDT)
+From: Federico Pellegrin <fede@evolware.org>
 To: buildroot@buildroot.org
-Message-ID: <Zs+99wYrw042nBi/@waldemar-brodkorb.de>
+Date: Thu, 29 Aug 2024 04:31:15 +0200
+Message-ID: <20240829023115.8437-1-fede@evolware.org>
+X-Mailer: git-send-email 2.46.0
 MIME-Version: 1.0
-Content-Disposition: inline
-X-Operating-System: Linux 5.10.0-31-amd64 x86_64
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=openadk.org; s=2022; 
- t=1724890615; bh=clPkW2u69ThJ/YphH8z9I4OPgNPic7I0BGp301eCGjs=;
- h=Date:From:To:Subject:From;
- b=IBEXCI2N7NNZoh3Q7zNMmcFpGv14sfvLsCSXkTyshxKOWUH/IbLzubVylmdwi7u4H
- i/117cwyeCGqFNraU9fgrAOlg0ilZ72F3kWfdrwQfe+4sxcrnPh3Ym/UDDNdcrESUv
- ed1iWhz3HB8ka3E9a4s3JkCevi68EC7nNu1GTybRL1CL9gFUZkXcQB1dwGplZW1cr+
- N6Hu1TvTvYADKDiv7or6daAt/tRvZYUXN6iOa+H+QVvkjfKMOtrAPR+0/8wgACLDpZ
- BDIKzpY734rwH41dBcK5SHmtTbKcVAWDt6Cp3bBbt/bDj1yBpO6K0ZpcPLNnslCl38
- k6qNUkMm8mPog==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1724898684; x=1725503484; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+ bh=TXIZMZwOC1q4WfhseICtPDLPYlTWlaMKgo8VHkI3qTw=;
+ b=IAPQzmn5ImWZe99Jm5VmXz1CNoTYquTmcJhoz7R6EczyyDYjSBt5gIKA7heTEN7kTb
+ DN2LZ3mthura6vI7BjlSprgFASmtdVs2+iBCG8mYBjitpC+v4E6HdI9FqIjyCHWfud/a
+ SiFCc/yh3Johv5JR2VuY/8HdZyWONBkLG9nF1bKQ9rcP7F9VHMAlACKQ7HLEmRrfPH8B
+ 2OgRT1zRy25qZNWrsJLKZLyVWEdN4oDv9lBkqjQhkixzYhV2RW5dQrykpYBkKTzd2Cmc
+ kKcPgy9lz3lHYhzuSd0u5RghoxdQuCMT+qqtJzbpgrScvgs8XZJ0x0aP3oiSLkEs4IVg
+ A3kw==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=openadk.org
+ dmarc=fail (p=none dis=none)
+ header.from=evolware.org
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=openadk.org header.i=@openadk.org header.a=rsa-sha256
- header.s=2022 header.b=IBEXCI2N
-Subject: [Buildroot] [PATCH next] package/zabbix: update to 7.0.3
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=IAPQzmn5
+Subject: [Buildroot] [PATCH 1/1] package/netsniff-ng: fix install when
+ building in parallel
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,184 +103,78 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Federico Pellegrin <fede@evolware.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Update to maintained and stable 7.0.3 version.
+When building in parallel, the package will randomly fail in
+install phase due to a missing make dependency.
 
-Patch 0002 does no longer apply. Libressl support is not supported
-for our version of Libressl.
+Already submitted and merged upstream:
+https://github.com/netsniff-ng/netsniff-ng/pull/239
 
-It is required to start the daemons with -f otherwise they are
-restarted every 30 seconds.
-
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Federico Pellegrin <fede@evolware.org>
 ---
-What is the correct way to disable libressl and only allow
-openssl?
----
- DEVELOPERS                                    |  1 +
- .../0002-fix-build-with-libressl-3.5.0.patch  | 71 -------------------
- package/zabbix/zabbix-agent.service           |  2 +-
- package/zabbix/zabbix-server.service          |  2 +-
- package/zabbix/zabbix.hash                    |  2 +-
- package/zabbix/zabbix.mk                      |  6 +-
- 6 files changed, 7 insertions(+), 77 deletions(-)
- delete mode 100644 package/zabbix/0002-fix-build-with-libressl-3.5.0.patch
+ .../0002-Fix_post_install_deps.patch          | 46 +++++++++++++++++++
+ 1 file changed, 46 insertions(+)
+ create mode 100644 package/netsniff-ng/0002-Fix_post_install_deps.patch
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 570f4ff115..566be87949 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -3308,6 +3308,7 @@ F:	package/mksh/
- F:	package/ruby/
- F:	package/uclibc/
- F:	package/uclibc-ng-test/
-+F:	package/zabbix/
- F:	support/testing/tests/package/test_ruby.py
- 
- N:	Will Newton <will.newton@gmail.com>
-diff --git a/package/zabbix/0002-fix-build-with-libressl-3.5.0.patch b/package/zabbix/0002-fix-build-with-libressl-3.5.0.patch
-deleted file mode 100644
-index ad6960f329..0000000000
---- a/package/zabbix/0002-fix-build-with-libressl-3.5.0.patch
-+++ /dev/null
-@@ -1,71 +0,0 @@
--From 5c8511384f1d41f9c2a131604d5cb2dbc1c0aec9 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Fri, 24 Feb 2023 12:23:56 +0100
--Subject: [PATCH] fix build with libressl >= 3.5.0
--
--Fix the following build failure with libressl >= 3.5.0:
--
--tls.c:113:17: error: static declaration of 'OPENSSL_cleanup' follows non-static declaration
--  113 | static void     OPENSSL_cleanup(void)
--      |                 ^~~~~~~~~~~~~~~
--In file included from /home/thomas/autobuild/instance-3/output-1/host/mips-buildroot-linux-gnu/sysroot/usr/include/openssl/bio.h:69,
--                 from /home/thomas/autobuild/instance-3/output-1/host/mips-buildroot-linux-gnu/sysroot/usr/include/openssl/evp.h:67,
--                 from /home/thomas/autobuild/instance-3/output-1/host/mips-buildroot-linux-gnu/sysroot/usr/include/openssl/hmac.h:67,
--                 from /home/thomas/autobuild/instance-3/output-1/host/mips-buildroot-linux-gnu/sysroot/usr/include/openssl/ssl.h:150,
--                 from ../../../include/zbxcomms.h:65,
--                 from tls.c:20:
--/home/thomas/autobuild/instance-3/output-1/host/mips-buildroot-linux-gnu/sysroot/usr/include/openssl/crypto.h:565:6: note: previous declaration of 'OPENSSL_cleanup' with type 'void(void)'
--  565 | void OPENSSL_cleanup(void);
--      |      ^~~~~~~~~~~~~~~
--In file included from tls.c:20:
--tls.c: In function 'zbx_log_ciphersuites':
--../../../include/zbxcomms.h:222:75: error: invalid use of incomplete typedef 'SSL_CTX' {aka 'struct ssl_ctx_st'}
--  222 | #       define SSL_CTX_get_ciphers(ciphers)                     ((ciphers)->cipher_list)
--      |                                                                           ^~
--tls.c:1415:31: note: in expansion of macro 'SSL_CTX_get_ciphers'
-- 1415 |                 cipher_list = SSL_CTX_get_ciphers(ciphers);
--      |                               ^~~~~~~~~~~~~~~~~~~
--
--Fixes:
-- - http://autobuild.buildroot.org/results/acdfcb17b39d438ccf5e4621707a10f60577d233
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Upstream: not sent (no feedback on first patch)
-----
-- include/zbxcomms.h      | 3 ++-
-- src/libs/zbxcomms/tls.c | 5 +++--
-- 2 files changed, 5 insertions(+), 3 deletions(-)
--
--diff --git a/include/zbxcomms.h b/include/zbxcomms.h
--index e7d74dbd0f..d6efa358fe 100644
----- a/include/zbxcomms.h
--+++ b/include/zbxcomms.h
--@@ -253,7 +253,8 @@ int	zbx_telnet_execute(ZBX_SOCKET socket_fd, const char *command, AGENT_RESULT *
-- /* TLS BLOCK */
-- #if defined(HAVE_GNUTLS) || defined(HAVE_OPENSSL)
-- 
---#if defined(HAVE_OPENSSL) && OPENSSL_VERSION_NUMBER < 0x1010000fL || defined(LIBRESSL_VERSION_NUMBER)
--+#if defined(HAVE_OPENSSL) && OPENSSL_VERSION_NUMBER < 0x1010000fL || \
--+	defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x3050000fL
-- #	if !defined(LIBRESSL_VERSION_NUMBER)
-- #		define OPENSSL_INIT_LOAD_SSL_STRINGS			0
-- #		define OPENSSL_INIT_LOAD_CRYPTO_STRINGS		0
--diff --git a/src/libs/zbxcomms/tls.c b/src/libs/zbxcomms/tls.c
--index 54ab0a6ef4..bd4075b3e4 100644
----- a/src/libs/zbxcomms/tls.c
--+++ b/src/libs/zbxcomms/tls.c
--@@ -28,8 +28,9 @@
-- #include "log.h"
-- #include "zbxcrypto.h"
-- 
---#if defined(HAVE_OPENSSL) && OPENSSL_VERSION_NUMBER < 0x1010000fL || defined(LIBRESSL_VERSION_NUMBER)
---/* for OpenSSL 1.0.1/1.0.2 (before 1.1.0) or LibreSSL */
--+#if defined(HAVE_OPENSSL) && OPENSSL_VERSION_NUMBER < 0x1010000fL || \
--+	defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x3050000fL
--+/* for OpenSSL 1.0.1/1.0.2 (before 1.1.0) or LibreSSL (before 3.5.0) */
-- 
-- /* mutexes for multi-threaded OpenSSL (see "man 3ssl threads" and example in crypto/threads/mttest.c) */
-- 
---- 
--2.39.1
--
-diff --git a/package/zabbix/zabbix-agent.service b/package/zabbix/zabbix-agent.service
-index 8b4f45a4fc..7e06636a2a 100644
---- a/package/zabbix/zabbix-agent.service
-+++ b/package/zabbix/zabbix-agent.service
-@@ -4,7 +4,7 @@ After=network.target
-  
- [Service]
- Type=forking
--ExecStart=/usr/sbin/zabbix_agentd
-+ExecStart=/usr/sbin/zabbix_agentd -f
- ExecReload=/usr/sbin/zabbix_agentd -R config_cache_reload
- RuntimeDirectory=zabbix
- PIDFile=/run/zabbix/zabbix_agentd.pid
-diff --git a/package/zabbix/zabbix-server.service b/package/zabbix/zabbix-server.service
-index b8ba0d1707..52ed5df1ea 100644
---- a/package/zabbix/zabbix-server.service
-+++ b/package/zabbix/zabbix-server.service
-@@ -4,7 +4,7 @@ After=network.target
-  
- [Service]
- Type=forking
--ExecStart=/usr/sbin/zabbix_server
-+ExecStart=/usr/sbin/zabbix_server -f
- ExecReload=/usr/sbin/zabbix_server -R config_cache_reload
- RuntimeDirectory=zabbix
- PIDFile=/run/zabbix/zabbix_server.pid
-diff --git a/package/zabbix/zabbix.hash b/package/zabbix/zabbix.hash
-index bb6127e5ec..4648ed8b71 100644
---- a/package/zabbix/zabbix.hash
-+++ b/package/zabbix/zabbix.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256  6d423810667b948ed22052d9aa84a035e2d4b92cbe8efdb669cac529806b722d  zabbix-6.2.7.tar.gz
-+sha256  173059f57f11716146da79345e5a6bc52eceee6a5c4410664b8500a955598b2a  zabbix-7.0.3.tar.gz
- sha256  f8fc3fd12521b60d53d8c5d48a883eb3c9c5ddec9de986a273e1b77f69d811db  README
- sha256  444fe54aecc95ac0f3314289c300afc73b3946a4dc9fbd7e022709b3e0924dd0  COPYING
-diff --git a/package/zabbix/zabbix.mk b/package/zabbix/zabbix.mk
-index 76568f5a18..9c21e9621d 100644
---- a/package/zabbix/zabbix.mk
-+++ b/package/zabbix/zabbix.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--ZABBIX_VERSION_MAJOR = 6.2
--ZABBIX_VERSION = $(ZABBIX_VERSION_MAJOR).7
-+ZABBIX_VERSION_MAJOR = 7.0
-+ZABBIX_VERSION = $(ZABBIX_VERSION_MAJOR).3
- ZABBIX_SITE = https://cdn.zabbix.com/zabbix/sources/stable/$(ZABBIX_VERSION_MAJOR)
- ZABBIX_SELINUX_MODULES = zabbix
- ZABBIX_LICENSE = GPL-2.0+
-@@ -50,7 +50,7 @@ ZABBIX_CONF_OPTS += --without-libcurl
- endif
- 
- ifeq ($(BR2_PACKAGE_LIBXML2),y)
--ZABBIX_CONF_OPTS += --with-libxml2=$(STAGING_DIR)/usr/bin/xml2-config
-+ZABBIX_CONF_OPTS += --with-libxml2=$(STAGING_DIR)/usr
- ZABBIX_DEPENDENCIES += libxml2
- else
- ZABBIX_CONF_OPTS += --without-libxml2
+diff --git a/package/netsniff-ng/0002-Fix_post_install_deps.patch b/package/netsniff-ng/0002-Fix_post_install_deps.patch
+new file mode 100644
+index 0000000000..9ed0744491
+--- /dev/null
++++ b/package/netsniff-ng/0002-Fix_post_install_deps.patch
+@@ -0,0 +1,46 @@
++From 18e111e06f5eaf074f1c1e0cff79a0e72dce7590 Mon Sep 17 00:00:00 2001
++From: Federico Pellegrin <fede@evolware.org>
++Date: Wed, 28 Aug 2024 06:23:35 +0200
++Subject: [PATCH] build: fix install dependencies in Makefile template
++
++post_install should execute after do_install otherwise when building
++in parallel (-j) this leads to sporadic failures of trafgen stddef
++header, since it is installed in do_install but then post_install
++does a mv supposing it is already there, for example:
++
++```
++  INST	netsniff-ng/netsniff-ng
++  INST	trafgen/trafgen
++mv: cannot stat '/tmp/a/pref/etc/netsniff-ng/trafgen_stddef.h': No such file or directory
++make: *** [trafgen/Makefile:57: trafgen_post_install] Error 1
++make: *** Waiting for unfinished jobs....
++  INST	netsniff-ng/netsniff-ng.8.gz
++  INST	trafgen/trafgen.8.gz
++  INST	ether.conf
++  INST	tcp.conf
++  INST	trafgen_stddef.h
++```
++
++(it is visible above that the stddef.h is installed later than the post
++is trying to move it away)
++
++Forcing the order of post after do will guarantee that it will be there
++when it needs to be moved and it will be safe to do a parallel install.
++Just relying on the ordering of the $(1)_install definition is wrong and
++dependant on make version (and luck!).
++---
++ Template | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/Template b/Template
++index 056f594a2..54b597291 100644
++--- a/Template
+++++ b/Template
++@@ -12,6 +12,7 @@ define TOOL_templ
++ 	$(Q)eval GZIP= gzip $(GZIP_ENV) $(1).8 > $(1)/$(1).8.gz
++ 	$(Q)$$(call INST,$(1)/$(1).8.gz,$$(DESTDIR)$$(MAN8DIR))
++ 	$(Q)$$(foreach file,$$($(1)-confs),$$(call INST,$$(file),$$(DESTDIR)$$(ETCDIRE));)
+++  $(1)_post_install: $(1)_do_install
++   $(1)_install: $(1)_do_install $(1)_post_install
++   $(1)_uninstall: $(1)_uninstall_custom
++ 	$(Q)$$(call RM,$$(DESTDIR)$$(SBINDIR)/$(1))
 -- 
-2.39.2
+2.46.0
 
 _______________________________________________
 buildroot mailing list
