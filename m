@@ -4,95 +4,94 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 81212C83F2D
-	for <buildroot@archiver.kernel.org>; Thu, 29 Aug 2024 14:51:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 44D9DC83F2D
+	for <buildroot@archiver.kernel.org>; Thu, 29 Aug 2024 14:51:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 128A3418D2;
-	Thu, 29 Aug 2024 14:51:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 101FB41E48;
+	Thu, 29 Aug 2024 14:51:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id e2oR-hiDS49M; Thu, 29 Aug 2024 14:51:14 +0000 (UTC)
+ id F7Gw84vPhwuc; Thu, 29 Aug 2024 14:51:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 03A3641E40
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 50DA341D94
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 03A3641E40;
-	Thu, 29 Aug 2024 14:51:14 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 49CED1BF31A
- for <buildroot@lists.busybox.net>; Thu, 29 Aug 2024 14:50:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 50DA341D94;
+	Thu, 29 Aug 2024 14:51:16 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 901BA1BF31A
+ for <buildroot@lists.busybox.net>; Thu, 29 Aug 2024 14:50:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7B03140223
- for <buildroot@lists.busybox.net>; Thu, 29 Aug 2024 14:50:47 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7E71E41A6A
+ for <buildroot@lists.busybox.net>; Thu, 29 Aug 2024 14:50:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fyrJET7Ckzrl for <buildroot@lists.busybox.net>;
- Thu, 29 Aug 2024 14:50:46 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id w7Kxem_Yw0LW for <buildroot@lists.busybox.net>;
+ Thu, 29 Aug 2024 14:50:52 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::330; helo=mail-wm1-x330.google.com;
+ client-ip=2a00:1450:4864:20::32e; helo=mail-wm1-x32e.google.com;
  envelope-from=johan.oudinet@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 589B44045C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 589B44045C
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com
- [IPv6:2a00:1450:4864:20::330])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 589B44045C
- for <buildroot@buildroot.org>; Thu, 29 Aug 2024 14:50:46 +0000 (UTC)
-Received: by mail-wm1-x330.google.com with SMTP id
- 5b1f17b1804b1-42bb885f97eso2437015e9.0
- for <buildroot@buildroot.org>; Thu, 29 Aug 2024 07:50:46 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 91C9841A8C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 91C9841A8C
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
+ [IPv6:2a00:1450:4864:20::32e])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 91C9841A8C
+ for <buildroot@buildroot.org>; Thu, 29 Aug 2024 14:50:51 +0000 (UTC)
+Received: by mail-wm1-x32e.google.com with SMTP id
+ 5b1f17b1804b1-42817f1eb1fso6893675e9.1
+ for <buildroot@buildroot.org>; Thu, 29 Aug 2024 07:50:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1724943044; x=1725547844;
+ d=1e100.net; s=20230601; t=1724943049; x=1725547849;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=mLqtWA2uyQFNIcUNDVyiXPi5Gzq2BuMjs/839c9YbOs=;
- b=gCEqDdLjegn+WWfczKOdZGCODab86RebmcbSNzTW5e8N754K7urp5PlPNLe0WUgtdm
- klYzKmYWrRyhPNWjNT0wWU3LK2pmZNFeOYu1QZBt8Xe4/DtMu5rgqk+9cLj9iQPe++/H
- /FYcUbCyxI5V32QYUPEpzP/7roIMZuwtQfNG5ACvzWPVR5l6RBtGe20KNnmo+i6pwHPQ
- 7rVDMO/SCGZqDOtXQw3wOdDq8vPHb7RW8Xe8LYMdsmq0aRYaxWBFrGBWZhru6NB+YQPw
- HYoqlDMjmAlLyrj9HLOQzXINhOQoXtW1pjO7J5rRJUJoE2PQZ1zDaNRgPWtSSLnh4eXB
- wAwQ==
-X-Gm-Message-State: AOJu0YxcleRL2H0IExr44vL00+FewpGVVO3iElB+CytczooXacePOERO
- HOS49KpjBORi9vZZ3AMQaEwqjR5dlu3ECqLUm7jtb99jGwnfcSnGzqMTvg==
-X-Google-Smtp-Source: AGHT+IE+HuwGjy96NCpWazK9/yIODwEwV8yyjdxf+7QTRohueuzH8t7stqcdOAf6kSQTiy3K3paPWw==
-X-Received: by 2002:adf:f001:0:b0:371:6fc7:d45d with SMTP id
- ffacd0b85a97d-3749fe439acmr1695878f8f.2.1724943044021; 
- Thu, 29 Aug 2024 07:50:44 -0700 (PDT)
+ bh=SqMfqblJIt+EhVoJBzc22Ru5DIUGsw2w+6BLwwpl6AI=;
+ b=sFT2vCM8SbepHbs8KAWhcsORGftuWqoaWYfQEG5MzAts8a4XgfUbQ4ur4g2I3SEmcy
+ el6X3WTWR855VAKT7Ou6InmDZjM5aLHRQpuLMAUazdhQyhxPMEE73kTG4ocbduRFWHWR
+ kuHAOCvqy+7uP8USr/QYIJfT3MuphcqiwErq9XQu6EOEMLEwaM/j0pIy7jE5g2r5COl/
+ Rf4EIH+gC/MIoDcrDX4zFssSkv9qMPMLeTyARExTdMvqmtQfRDw5S6Y/u4TXuNlTiBWo
+ dPs1noaqOuT2DTVAc4hOqTDSrebduAiyj5nEamjpVNSao5OgX+qdPuy5LCjnwFphPcVo
+ d4+A==
+X-Gm-Message-State: AOJu0Yx/dhRZ6hQclDA5sAe2tVfBsVLmfIms8xvo2g4Jcis5KYypefgD
+ xcOEhYEkQb99V0ylkxXbcZMRymfn971ITAwPpmTM/Qo/fdIda7raZ0WV/w==
+X-Google-Smtp-Source: AGHT+IH4Eta8IZFmWkEa3y2vnWpAYv0Ru39ld7hOppeqdD4CKe/zOdxWxBYzPNyDsVaIgk+5vsRiQg==
+X-Received: by 2002:a05:6000:1010:b0:371:8d47:c17b with SMTP id
+ ffacd0b85a97d-3749b54ce30mr2319041f8f.30.1724943049195; 
+ Thu, 29 Aug 2024 07:50:49 -0700 (PDT)
 Received: from shrek.. ([2a01:e0a:acf:1a32:284b:b9b9:cca0:be3])
  by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3749ee9c48csm1619241f8f.51.2024.08.29.07.50.43
+ ffacd0b85a97d-3749ee9c48csm1619241f8f.51.2024.08.29.07.50.48
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 29 Aug 2024 07:50:43 -0700 (PDT)
+ Thu, 29 Aug 2024 07:50:48 -0700 (PDT)
 From: Johan Oudinet <johan.oudinet@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu, 29 Aug 2024 16:49:32 +0200
-Message-Id: <20240829144940.209964-17-johan.oudinet@gmail.com>
+Date: Thu, 29 Aug 2024 16:49:35 +0200
+Message-Id: <20240829144940.209964-20-johan.oudinet@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240829144940.209964-1-johan.oudinet@gmail.com>
 References: <20240829144940.209964-1-johan.oudinet@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1724943044; x=1725547844; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1724943049; x=1725547849; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=mLqtWA2uyQFNIcUNDVyiXPi5Gzq2BuMjs/839c9YbOs=;
- b=KZP4gBgawHnWlerr713x0mdW8Z74zjtxyEHiXbsZd597xF4jSMYe5ooei+rldvHakK
- DaTovGUurFwiSJYDdHtudFckXEjV50utK61cgUP372SGvrWk3J/L5bWJoRc65D3csMrR
- sxMNWbWtdlOUQAkTjBRwjmZ8tDeAMxNQIYPeS8Rfw7aFxzhTR8GWbEW5S1EdGSqXpDqQ
- jKsoTgx5Fi+83wDC4dmgR2lHYFNPSJpATz8kyPGJbzGWAnQF08Jql2sygFbYyCFWlJWX
- 1crK/tLw+BqgL1opc3jasrnRQndiTcawkORCqpXypTz/aIjqeSzryaURgsrQO9q6ggSY
- 7nLg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=SqMfqblJIt+EhVoJBzc22Ru5DIUGsw2w+6BLwwpl6AI=;
+ b=m6JEynS9bTHzwVn+QAZafndean2UO2RyEq0DsPmuhCY9R9EBbNtzFQURSVWkKU2yMx
+ uxPEcBC57m2wr1C1XYBblVB4OKc88rK2I2KoPbIOyYLNHuuKrbWastIYD6xh1iC7Scxe
+ 9/3L5oya1T2cF5zEn1P639/pJcMxEw4XV/e93AwBkr+mcrvYw1hpFEgQvaRQN3SAG4Py
+ t3OlJGeAA7psg7L0G72Uygaad8SPPU6mtDs6J6bATveVunHxy8L2vr4WhxIUmEr06kKH
+ C+BdspsUrviX3sExUZGjOFJBEKea8j5sOA8GrnVZcTPDF1ekY8rXVlrf5KSNh2hapJmC
+ /9IQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=KZP4gBga
-Subject: [Buildroot] [PATCH v2 16/23] package/erlang-eimp: bump version to
- 1.0.23
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=m6JEynS9
+Subject: [Buildroot] [PATCH v2 19/23] package/erlang-p1-acme: bump version
+ to 1.0.23
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -112,32 +111,32 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
 ---
- package/erlang-eimp/erlang-eimp.hash | 2 +-
- package/erlang-eimp/erlang-eimp.mk   | 2 +-
+ package/erlang-p1-acme/erlang-p1-acme.hash | 2 +-
+ package/erlang-p1-acme/erlang-p1-acme.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/erlang-eimp/erlang-eimp.hash b/package/erlang-eimp/erlang-eimp.hash
-index 26e8addd2d..e9ef9c693e 100644
---- a/package/erlang-eimp/erlang-eimp.hash
-+++ b/package/erlang-eimp/erlang-eimp.hash
+diff --git a/package/erlang-p1-acme/erlang-p1-acme.hash b/package/erlang-p1-acme/erlang-p1-acme.hash
+index e417d4b181..0894176fbd 100644
+--- a/package/erlang-p1-acme/erlang-p1-acme.hash
++++ b/package/erlang-p1-acme/erlang-p1-acme.hash
 @@ -1,3 +1,3 @@
  # Locally calculated
--sha256  7023b86bc7cf3551fd876a1361ceb2443bdf1c1be9f98a4d9a9a90eda3353b51  erlang-eimp-1.0.22.tar.gz
-+sha256  923d9fb5abd7fca36188441e6871e2d2da2f8fc95ed42d78406eb431df587b28  erlang-eimp-1.0.23.tar.gz
+-sha256  a445b66e76acdf1342eda166344004473bf4f45ad7e7f5ae38fb0333d896eb2d  erlang-p1-acme-1.0.22.tar.gz
++sha256  59a0113022c87afe25a8664fba76739b0ad481e25081599e0b69a098f6d628ed  erlang-p1-acme-1.0.23.tar.gz
  sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.txt
-diff --git a/package/erlang-eimp/erlang-eimp.mk b/package/erlang-eimp/erlang-eimp.mk
-index 68d0d9e9ed..1e1a5ece43 100644
---- a/package/erlang-eimp/erlang-eimp.mk
-+++ b/package/erlang-eimp/erlang-eimp.mk
+diff --git a/package/erlang-p1-acme/erlang-p1-acme.mk b/package/erlang-p1-acme/erlang-p1-acme.mk
+index cb8c7a8a19..5c7c5cc9e9 100644
+--- a/package/erlang-p1-acme/erlang-p1-acme.mk
++++ b/package/erlang-p1-acme/erlang-p1-acme.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ERLANG_EIMP_VERSION = 1.0.22
-+ERLANG_EIMP_VERSION = 1.0.23
- ERLANG_EIMP_SITE = $(call github,processone,eimp,$(ERLANG_EIMP_VERSION))
- ERLANG_EIMP_LICENSE = Apache-2.0
- ERLANG_EIMP_LICENSE_FILES = LICENSE.txt
+-ERLANG_P1_ACME_VERSION = 1.0.22
++ERLANG_P1_ACME_VERSION = 1.0.23
+ ERLANG_P1_ACME_SITE = $(call github,processone,p1_acme,$(ERLANG_P1_ACME_VERSION))
+ ERLANG_P1_ACME_LICENSE = Apache-2.0
+ ERLANG_P1_ACME_LICENSE_FILES = LICENSE.txt
 -- 
 2.34.1
 
