@@ -4,60 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9F15CA0FF6
-	for <buildroot@archiver.kernel.org>; Fri, 30 Aug 2024 14:02:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92CB5CA0FF7
+	for <buildroot@archiver.kernel.org>; Fri, 30 Aug 2024 14:03:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8FFFC8149B;
-	Fri, 30 Aug 2024 14:02:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6109A81EB0;
+	Fri, 30 Aug 2024 14:03:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id v0cLRe4em6Pl; Fri, 30 Aug 2024 14:02:53 +0000 (UTC)
+ id i50co3jZGcWE; Fri, 30 Aug 2024 14:03:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AD3CF81EB0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6D35F844C9
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AD3CF81EB0;
-	Fri, 30 Aug 2024 14:02:53 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id DF29D1BF5B3
- for <buildroot@lists.busybox.net>; Fri, 30 Aug 2024 14:02:52 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6D35F844C9;
+	Fri, 30 Aug 2024 14:03:49 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 145901BF5B3
+ for <buildroot@lists.busybox.net>; Fri, 30 Aug 2024 14:03:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CD049611A1
- for <buildroot@lists.busybox.net>; Fri, 30 Aug 2024 14:02:52 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 029A2844BF
+ for <buildroot@lists.busybox.net>; Fri, 30 Aug 2024 14:03:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iVkxgnvDQW1R for <buildroot@lists.busybox.net>;
- Fri, 30 Aug 2024 14:02:52 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::224;
- helo=relay4-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8KtURIl5AUT6 for <buildroot@lists.busybox.net>;
+ Fri, 30 Aug 2024 14:03:47 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org F25216061D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F25216061D
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::224])
- by smtp3.osuosl.org (Postfix) with ESMTPS id F25216061D
- for <buildroot@buildroot.org>; Fri, 30 Aug 2024 14:02:51 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id F2397E000D;
- Fri, 30 Aug 2024 14:02:49 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1sk2DB-008Y3h-21;
- Fri, 30 Aug 2024 16:02:49 +0200
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 368D0844CE
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 368D0844CE
+ for <buildroot@buildroot.org>; Fri, 30 Aug 2024 14:03:47 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 201BA86729; Fri, 30 Aug 2024 14:03:47 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Vincent =?utf-8?Q?Stehl=C3=A9?= <vincent.stehle@arm.com>
-References: <20240722093710.1903540-1-vincent.stehle@arm.com>
-Date: Fri, 30 Aug 2024 16:02:49 +0200
-In-Reply-To: <20240722093710.1903540-1-vincent.stehle@arm.com> ("Vincent
- =?utf-8?Q?Stehl=C3=A9=22's?= message of "Mon, 22 Jul 2024 11:37:10 +0200")
-Message-ID: <87o75a152u.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH] configs/qemu_arm_ebbr: linux needs
- host-openssl
+To: buildroot@buildroot.org
+Date: Fri, 30 Aug 2024 15:58:20 +0200
+X-Git-Refname: refs/heads/2024.05.x
+X-Git-Oldrev: 56c02aa6c9a8b2f4eb564f0ccc073a588be51303
+X-Git-Newrev: 4737f8407e57f4eb7fd15d92b3d8c1622bef22d3
+X-Patchwork-Hint: ignore
+Message-Id: <20240830140347.201BA86729@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.05.x] package/apr: fix musl
+ build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,23 +59,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Pj4+Pj4gIlZpbmNlbnQiID09IFZpbmNlbnQgU3RlaGzDqSA8dmluY2VudC5zdGVobGVAYXJtLmNv
-bT4gd3JpdGVzOgoKID4gVGhlIGtlcm5lbCBidWlsZCBuZWVkcyBob3N0LW9wZW5zc2w7IGFkZCBp
-dCB0byB0aGUgY29uZmlndXJhdGlvbi4KID4gSW4gcHJhY3RpY2UgdGhlIGRvY3VtZW50ZWQgYnVp
-bGQgcmVjaXBlIHdvcmtzIGZpbmUgYW5kIHRoZSBidWlsZCBmYWlsdXJlcwogPiBjYW4gb25seSBi
-ZSBzZWVuIHdpdGggaGlnaGx5IHBhcmFsbGVsIGJ1aWxkcyB1c2luZyBwZXItcGFja2FnZSBkaXJl
-Y3Rvcmllcy4KCiA+IFRoaXMgZml4ZXMgdGhlIGZvbGxvd2luZyBjb21waWxhdGlvbiBlcnJvcjoK
-CiA+ICAgY2VydHMvZXh0cmFjdC1jZXJ0LmM6MjE6MTA6IGZhdGFsIGVycm9yOiBvcGVuc3NsL2Jp
-by5oOiBObyBzdWNoIGZpbGUgb3IgZGlyZWN0b3J5CgogPiBGaXhlczogNzExNWFiMzkxODlhNmM2
-NjA3NDUyNjdkOGJmMGJmNDFjZjhiM2RiNwoKQXJlIHlvdSBzdXJlPyBJc24ndCBpdCBmcm9tIHRo
-ZSBidW1wIHRvIDYuNi4zMiBpbiBjb21taXQgZDAzN2Q5YzJkNjNlOWMKKGNvbmZpZ3MvcWVtdTog
-VXBkYXRlIGRlZmNvbmZpZ3MgdG8gTGludXggNi42LjMyKT8KCi0tIApCeWUsIFBldGVyIEtvcnNn
-YWFyZApfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWls
-ZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMu
-YnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+commit: https://git.buildroot.net/buildroot/commit/?id=4737f8407e57f4eb7fd15d92b3d8c1622bef22d3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.05.x
+
+strerror_r on musl always returns an int since its addition back in 2011
+with
+https://git.musl-libc.org/cgit/musl/commit/src/string/strerror_r.c?id=0b44a0315b47dd8eced9f3b7f31580cf14bbfc01
+
+As a result, setting ac_cv_strerror_r_rc_int to no results in the
+following build failure since bump to version 1.7.2 in commit
+783cd8d90d37b5e0b59d6f0bfca6667855b2b9e1:
+
+misc/unix/errorcodes.c: In function 'native_strerror':
+misc/unix/errorcodes.c:385:9: error: assignment to 'const char *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  385 |     msg = strerror_r(statcode, buf, bufsize);
+      |         ^
+
+Fixes: 783cd8d90d37b5e0b59d6f0bfca6667855b2b9e1
+ - http://autobuild.buildroot.org/results/9a42a4427ff64d47da61c731abb99d7585781cdd
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 6f34e68217264fb62c48ce28c48bf759b30fef0e)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/apr/apr.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/apr/apr.mk b/package/apr/apr.mk
+index cb8c12dd65..d4526a4172 100644
+--- a/package/apr/apr.mk
++++ b/package/apr/apr.mk
+@@ -39,7 +39,7 @@ APR_CONF_ENV = \
+ 	ac_cv_sizeof_struct_iovec=8 \
+ 	ac_cv_sizeof_pid_t=4 \
+ 	ac_cv_struct_rlimit=yes \
+-	ac_cv_strerror_r_rc_int=no \
++	ac_cv_strerror_r_rc_int=$(if $(BR2_TOOLCHAIN_USES_MUSL),yes,no) \
+ 	ac_cv_o_nonblock_inherited=no \
+ 	apr_cv_mutex_recursive=yes \
+ 	apr_cv_epoll=yes \
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
