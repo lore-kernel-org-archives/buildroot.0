@@ -4,72 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 947CECA0EDC
-	for <buildroot@archiver.kernel.org>; Fri, 30 Aug 2024 17:09:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 02D3ECA0EFD
+	for <buildroot@archiver.kernel.org>; Fri, 30 Aug 2024 17:11:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4F6C0411C2;
-	Fri, 30 Aug 2024 17:09:35 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A639B411B8;
+	Fri, 30 Aug 2024 17:11:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pkRTPrEK9Xoj; Fri, 30 Aug 2024 17:09:34 +0000 (UTC)
+ id Wdw8LK6ihJTm; Fri, 30 Aug 2024 17:11:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 23924411C3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6F736411C3
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 23924411C3;
-	Fri, 30 Aug 2024 17:09:34 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D5CD21BF5A5
- for <buildroot@lists.busybox.net>; Fri, 30 Aug 2024 17:09:32 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6F736411C3;
+	Fri, 30 Aug 2024 17:11:38 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id D087D1BF5A5
+ for <buildroot@lists.busybox.net>; Fri, 30 Aug 2024 17:11:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D0E1D80A4C
- for <buildroot@lists.busybox.net>; Fri, 30 Aug 2024 17:09:32 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id C94F7401D1
+ for <buildroot@lists.busybox.net>; Fri, 30 Aug 2024 17:11:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nRIXgnpf-dlW for <buildroot@lists.busybox.net>;
- Fri, 30 Aug 2024 17:09:32 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::222;
- helo=relay2-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Edj5-aXT0AS3 for <buildroot@lists.busybox.net>;
+ Fri, 30 Aug 2024 17:11:35 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.195;
+ helo=relay3-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org CC8B080567
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CC8B080567
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::222])
- by smtp1.osuosl.org (Postfix) with ESMTPS id CC8B080567
- for <buildroot@buildroot.org>; Fri, 30 Aug 2024 17:09:31 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 0D7FE40003;
- Fri, 30 Aug 2024 17:09:29 +0000 (UTC)
-Date: Fri, 30 Aug 2024 19:09:29 +0200
-To: Peter Korsgaard <peter@korsgaard.com>
-Message-ID: <20240830190929.026208bc@windsurf>
-In-Reply-To: <20240830082650.1895430-1-peter@korsgaard.com>
-References: <20240830082650.1895430-1-peter@korsgaard.com>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 8FB8D400B1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8FB8D400B1
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 8FB8D400B1
+ for <buildroot@buildroot.org>; Fri, 30 Aug 2024 17:11:35 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 0593260002;
+ Fri, 30 Aug 2024 17:11:33 +0000 (UTC)
+Date: Fri, 30 Aug 2024 19:11:33 +0200
+To: TIAN Yuanhao <tianyuanhao3@163.com>
+Message-ID: <20240830191133.61f32008@windsurf>
+In-Reply-To: <20240830114319.4353-1-tianyuanhao3@163.com>
+References: <20240830114319.4353-1-tianyuanhao3@163.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1725037770;
+ d=bootlin.com; s=gm1; t=1725037894;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=SCSs0sWlDjOHbRZgjNtr2NgJlStDK97SQuWhh+MEp70=;
- b=l12Cv7cHH0GO46HIncpO3tWQu9rFvftlLLQVeLZVdZwL3UJ3zwk/Q9JwNLR4ZC7xqwp3MY
- ZEvc9QmxB94I95yjbO/NxY5wDOW5TtisZ3alyYAtRO9LpCCJICjtAUcCUg39kp/Cd6RLtp
- GkRjCaGvQC1C1oEkPQ8War5uQWQkb/IHlhelbk2OaIt4xYpQe70F1GqDa7Qshee0ROGTZ0
- Apvafg1NP4VS8OS8b+G4Esy64N97WfHZAwkOZZ5gv4rH1KcJDz+VDEPCi7K9Gy3HRiYOYr
- kiul+zVgw6Kn8FPBr8GtRZdaFvEWQy2yjpaviaZ282tdJZY2r/Dp62BiL2EN7Q==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=NqJ2z+mr/Ht3axqAZutfkY+rbXYfhfO6pCpH3RRSivw=;
+ b=EL+fKyzxtYsuQlX3aY1qgEhqvrYGGp8q8fxQ2ECiWUir3beUSxF6EyCK21q0JxCJxoNVSi
+ YJrtaWJDQiQ9Z/Hz4Vc2aFdHxXvL/CMy//ji9VPXUNVhBz1Ba04rWFROOVaa6KVHPE+Js7
+ DnqsETcmti8Sg6piERNNu04v4y43cIUpIU6ODN4Yc4cVntc86WkrZgjysZ3ZUR//cwA+6V
+ sNFmW9XIPD6j8ol9pAjein3ID9NUb4v6EfedRgiJ7FJNaOBrAGoTgeyHnQNmL2IPCfQYka
+ maJx2MsUlUeVz/6baaKh2l2ujcnRwEGs252P5zTyy/U6KCmcCSEWMyCS91NYwQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=l12Cv7cH
-Subject: Re: [Buildroot] [PATCH] support/scripts/genimage.sh: drop gzip
- compression
+ header.s=gm1 header.b=EL+fKyzx
+Subject: Re: [Buildroot] [PATCH 1/1] package/chrony: install default config
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -89,35 +88,35 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri, 30 Aug 2024 10:26:49 +0200
-Peter Korsgaard <peter@korsgaard.com> wrote:
+Hello,
 
-> Commit 6889056f1eb4 (support/scripts/genimage.sh: support creating a bmap
-> image) added unconditional gzip compression of the genimage outputs if
-> bmap-tools is enabled, which is problematic for a number of reasons:
-> 
-> - The gzip invocation is not reproducable (E.G. does not use -n)
-> 
-> - The original file is removed, dropping the sparse info
-> 
-> - It hardcodes policy, E.G.  bmap supports a number of different compression
->   algorithms / compression may not be desired for all images / different
->   compression levels may be desired
-> 
-> So drop the compression step.  If desired, compression can be done with a
-> post-image script.
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  support/scripts/genimage.sh | 1 -
->  1 file changed, 1 deletion(-)
+On Fri, 30 Aug 2024 04:43:19 -0700
+TIAN Yuanhao <tianyuanhao3@163.com> wrote:
 
-Applied to master, thanks.
+> chrony needs a config file to work:
+>   Could not open /etc/chrony.conf : No such file or directory
+> 
+> Signed-off-by: TIAN Yuanhao <tianyuanhao3@163.com>
+> Cc: Peter Korsgaard <peter@korsgaard.com>
+
+Thanks for this contribution. Question below.
+
+>  define CHRONY_INSTALL_TARGET_CMDS
+>  	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR="$(TARGET_DIR)" install
+> +	$(INSTALL) -D -m 644 $(@D)/examples/chrony.conf.example2 $(TARGET_DIR)/etc/chrony.conf
+>  endef
+
+I'm not super familiar with chrony, but the question is: is there a
+sensible "default configuration file" that makes sense for people as a
+starting point?
+
+For example, chrony ships with 3 example configuration files, and
+you've decided to install example2. Why not example1 or example3?
 
 Thomas
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
 https://bootlin.com
 _______________________________________________
 buildroot mailing list
