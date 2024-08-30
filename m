@@ -4,73 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96F78CA0EDC
-	for <buildroot@archiver.kernel.org>; Fri, 30 Aug 2024 16:57:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 45D5CCA0EFD
+	for <buildroot@archiver.kernel.org>; Fri, 30 Aug 2024 16:59:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5FB6C411DA;
-	Fri, 30 Aug 2024 16:57:53 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0ED5C400D6;
+	Fri, 30 Aug 2024 16:59:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2TZS5zjhAjAa; Fri, 30 Aug 2024 16:57:52 +0000 (UTC)
+ id lhcGowX1yf8z; Fri, 30 Aug 2024 16:59:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4A700411D1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D49904013C
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4A700411D1;
-	Fri, 30 Aug 2024 16:57:52 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D49904013C;
+	Fri, 30 Aug 2024 16:59:08 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 328991BF35F
- for <buildroot@lists.busybox.net>; Fri, 30 Aug 2024 16:57:50 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 9B78A1BF20F
+ for <buildroot@lists.busybox.net>; Fri, 30 Aug 2024 16:59:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1F02661463
- for <buildroot@lists.busybox.net>; Fri, 30 Aug 2024 16:57:50 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8940361468
+ for <buildroot@lists.busybox.net>; Fri, 30 Aug 2024 16:59:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id W3_mB9v8NYn6 for <buildroot@lists.busybox.net>;
- Fri, 30 Aug 2024 16:57:49 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::227;
- helo=relay7-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id GjeoE6AM6fZt for <buildroot@lists.busybox.net>;
+ Fri, 30 Aug 2024 16:59:06 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 15C106145F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 15C106145F
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 15C106145F
- for <buildroot@buildroot.org>; Fri, 30 Aug 2024 16:57:48 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 02E6220003;
- Fri, 30 Aug 2024 16:57:45 +0000 (UTC)
-Date: Fri, 30 Aug 2024 18:57:45 +0200
-To: Niklas Cassel via buildroot <buildroot@buildroot.org>
-Message-ID: <20240830185745.324994c3@windsurf>
-In-Reply-To: <20240830101327.2000179-5-niklas.cassel@wdc.com>
-References: <20240830101327.2000179-1-niklas.cassel@wdc.com>
- <20240830101327.2000179-5-niklas.cassel@wdc.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1725037066;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=UuzKbhFayAkKGunl0NTuVmWj0jH3yqeaG+MGytMldzk=;
- b=JgTtz8GweyjBSaebZSELw1NLtXbak56CqB+xVqI7/8/L6dJfB2kNW79QQqxuW1ubybAqtl
- vezSsENvBYUkxniFrx65lLRHA75p7DOOOuMf3Nl8kHgechPj/WC8G+wbR7cI133l2Eu1eL
- lYoQyA9o6oOib+f6rQhBi73xH2SzPfTW/drNxB7U+naWrs/AJPcrRD3rxj5BQiSJZcVJGR
- rhefqJLOkTJHOGleF6IpYzX80ez+Y5vf/16GvmIMN2ch4TxHE+5aPGKjApWbqZf5cEKoqR
- 7Sh4q0YhtcOK834XPomt8NveXc9yBq8NBtFsoagP7VZWRtoqIDuQ9VQrV/tjAg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=JgTtz8Gw
-Subject: Re: [Buildroot] [PATCH 4/4] configs/rock5b: add firmware for the
- RTL8125 NIC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BC89861466
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id BC89861466
+ for <buildroot@buildroot.org>; Fri, 30 Aug 2024 16:59:06 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 6F90886752; Fri, 30 Aug 2024 16:59:06 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Fri, 30 Aug 2024 18:58:50 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 180216631a64d5319ab0420cf7b37acb4fa0799c
+X-Git-Newrev: 6677d9c4e18107cbf3dc691dea3beb801e03df98
+X-Patchwork-Hint: ignore
+Message-Id: <20240830165906.6F90886752@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] docs/manual: fix description of how to
+ reply to <message-id>
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,39 +60,41 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Niklas Cassel <niklas.cassel@wdc.com>, Damien Le Moal <dlemoal@kernel.org>,
- Kilian Zinnecker <kilian.zinnecker@mail.de>, Niklas Cassel <cassel@kernel.org>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri, 30 Aug 2024 12:13:27 +0200
-Niklas Cassel via buildroot <buildroot@buildroot.org> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=6677d9c4e18107cbf3dc691dea3beb801e03df98
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> From: Niklas Cassel <cassel@kernel.org>
-> 
-> Add the proper firmware to avoid the following warning + error during
-> boot:
-> r8169 0004:41:00.0: Direct firmware load for rtl_nic/rtl8125b-2.fw failed with error -2
-> r8169 0004:41:00.0: Unable to load firmware rtl_nic/rtl8125b-2.fw (-2)
-> 
-> Note that the NIC appears functional even without the proper firmware.
-> However, add the firmware anyway, since the error messages are distracting
-> and clutters dmesg.
-> 
-> Signed-off-by: Niklas Cassel <cassel@kernel.org>
-> ---
->  configs/rock5b_defconfig | 2 ++
->  1 file changed, 2 insertions(+)
+Patch v1 not set to 'superseded' when replying to <message-id> with v2.
 
-Applied to next, thanks.
+I'm using git version 2.46.0. The manual says the following is the
+correct way to use the '--in-reply-to' option:
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+git send-email --in-reply-to=<message-id>
+
+Signed-off-by: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ docs/manual/contribute.adoc | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/docs/manual/contribute.adoc b/docs/manual/contribute.adoc
+index fe3ae963a5..ffaff6f857 100644
+--- a/docs/manual/contribute.adoc
++++ b/docs/manual/contribute.adoc
+@@ -517,7 +517,7 @@ address you register in
+ https://patchwork.ozlabs.org/project/buildroot/list/[patchwork] should
+ match the one you use for sending patches to the mailing list.
+ 
+-You can also add the +--in-reply-to <message-id>+ option when
++You can also add the +--in-reply-to=<message-id>+ option when
+ submitting a patch to the mailing list. The id of the mail to reply to
+ can be found under the "Message Id" tag on
+ https://patchwork.ozlabs.org/project/buildroot/list/[patchwork]. The
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
