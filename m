@@ -4,48 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9C4ECA0EDC
-	for <buildroot@archiver.kernel.org>; Fri, 30 Aug 2024 17:07:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9A220CA0EDC
+	for <buildroot@archiver.kernel.org>; Fri, 30 Aug 2024 17:09:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7ABBA411C9;
-	Fri, 30 Aug 2024 17:07:44 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 59D624038E;
+	Fri, 30 Aug 2024 17:09:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5QjwfZW3xJX3; Fri, 30 Aug 2024 17:07:43 +0000 (UTC)
+ id S1a1tJaH0qzh; Fri, 30 Aug 2024 17:09:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0F12E411CD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 24D5F411B8
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0F12E411CD;
-	Fri, 30 Aug 2024 17:07:43 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 24D5F411B8;
+	Fri, 30 Aug 2024 17:09:14 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A7CE01BF5A5
- for <buildroot@lists.busybox.net>; Fri, 30 Aug 2024 17:07:41 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D122A1BF5A5
+ for <buildroot@lists.busybox.net>; Fri, 30 Aug 2024 17:08:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9F5EE424D1
- for <buildroot@lists.busybox.net>; Fri, 30 Aug 2024 17:07:41 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id BC1B4424EF
+ for <buildroot@lists.busybox.net>; Fri, 30 Aug 2024 17:08:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Mpoh7-hXQEei for <buildroot@lists.busybox.net>;
- Fri, 30 Aug 2024 17:07:40 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id ZrU3nAuKaavR for <buildroot@lists.busybox.net>;
+ Fri, 30 Aug 2024 17:08:53 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::229;
+ helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8ACD94245C
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8ACD94245C
- for <buildroot@buildroot.org>; Fri, 30 Aug 2024 17:07:40 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 74C7786763; Fri, 30 Aug 2024 17:07:40 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 30 Aug 2024 19:07:27 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 6677d9c4e18107cbf3dc691dea3beb801e03df98
-X-Git-Newrev: 0b5feb52afd2165be21a1dfb8f8f870eab9b9acb
-X-Patchwork-Hint: ignore
-Message-Id: <20240830170740.74C7786763@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] {linux, linux-headers}: bump 6.{1, 6,
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 8005D424EE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8005D424EE
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 8005D424EE
+ for <buildroot@buildroot.org>; Fri, 30 Aug 2024 17:08:53 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 8DEE9FF803;
+ Fri, 30 Aug 2024 17:08:50 +0000 (UTC)
+Date: Fri, 30 Aug 2024 19:08:49 +0200
+To: Bernd Kuhls <bernd@kuhls.net>
+Message-ID: <20240830190849.41373039@windsurf>
+In-Reply-To: <20240829172057.3504356-1-bernd@kuhls.net>
+References: <20240829172057.3504356-1-bernd@kuhls.net>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1725037730;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=IESmOD/kQZZJ1J4maD0M3tCEghXK15vrdDVX0NDzYjU=;
+ b=RQ9Uk7H0F8s7kTVTKFAICCRk6jXAvkOXRv8b0ZNAQAcK7PkFTf0LziFrFa3E8eya9dmkRk
+ 1YsVtp03EyZqHa5zbW6AHtfBj5nH0NXhj5bZh5bbpc7+pu0/N/2aaEHpSSBUqIyOqT+E2j
+ INNAnbun/fjq1LXUt3bQggk3/Su65fP6qFUjEiDF8AX1Q1AO+OGy/Bu678K4/eJaQsN/6d
+ 37pteXapl6IIuQIrz02gnZRCsa3IfjhMRjltFvNzEtVnSxo8aBjOUFqckv622kTTMWv95e
+ HD4Qq6HKpqLUcTs/ci1tBv8tIj1y3WfjvEWp7TanwTDhQZuEkoOTOb62+ORw0A==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=RQ9Uk7H0
+Subject: Re: [Buildroot] [PATCH 1/1] {linux, linux-headers}: bump 6.{1, 6,
  10}.x series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -60,68 +83,29 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0b5feb52afd2165be21a1dfb8f8f870eab9b9acb
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Thu, 29 Aug 2024 19:20:57 +0200
+Bernd Kuhls <bernd@kuhls.net> wrote:
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- linux/Config.in                      | 2 +-
- linux/linux.hash                     | 6 +++---
- package/linux-headers/Config.in.host | 6 +++---
- 3 files changed, 7 insertions(+), 7 deletions(-)
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> ---
+>  linux/Config.in                      | 2 +-
+>  linux/linux.hash                     | 6 +++---
+>  package/linux-headers/Config.in.host | 6 +++---
+>  3 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index eab5cb8511..526dd9ff00 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -134,7 +134,7 @@ config BR2_LINUX_KERNEL_CUSTOM_REPO_GIT_SUBMODULES
- 
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "6.10.6" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "6.10.7" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "5.10.162-cip24" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "5.10.162-cip24-rt10" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-diff --git a/linux/linux.hash b/linux/linux.hash
-index e8a9e0f0eb..ebaad029b8 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,7 +1,7 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
--sha256  e0d50d5b74f8599375660e79f187af7493864dba5ff6671b14983376a070b3d1  linux-6.10.6.tar.xz
--sha256  d43376c9e9eaa92bb1b926054bd160d329c58a62d64bd65fe1222c11c6564f50  linux-6.6.47.tar.xz
--sha256  3773c9052c7ba7432e8337ca84bee115c1a94ccef9d62b72b99ae30c4cd5f80f  linux-6.1.106.tar.xz
-+sha256  900d567ff01824708ce24c3b37faaef03e6f6145411dd447a6ff2edc8c5db3a9  linux-6.10.7.tar.xz
-+sha256  6b16df7b2aba3116b78fdfd8aea0b6cd7abe8f0cb699b04a66d3169141772029  linux-6.6.48.tar.xz
-+sha256  f43229d1d73011fa0a37400320a26972946f8ff295c404c31c0dd0407228b0e8  linux-6.1.107.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
- sha256  a36dd3e82ceb634afded31f2656568f57c4d9c4b399859f298b18116df11c6fe  linux-5.15.165.tar.xz
- sha256  19b099c67324bba6378e22dc51ad3906e4dcd6a908d137766b4bfa9174ddd11a  linux-5.10.224.tar.xz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 934f427e4e..51706f582a 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -427,9 +427,9 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "5.4.282"	if BR2_KERNEL_HEADERS_5_4
- 	default "5.10.224"	if BR2_KERNEL_HEADERS_5_10
- 	default "5.15.165"	if BR2_KERNEL_HEADERS_5_15
--	default "6.1.106"	if BR2_KERNEL_HEADERS_6_1
--	default "6.6.47"	if BR2_KERNEL_HEADERS_6_6
--	default "6.10.6"	if BR2_KERNEL_HEADERS_6_10
-+	default "6.1.107"	if BR2_KERNEL_HEADERS_6_1
-+	default "6.6.48"	if BR2_KERNEL_HEADERS_6_6
-+	default "6.10.7"	if BR2_KERNEL_HEADERS_6_10
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+Applied to master, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
