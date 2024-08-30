@@ -4,81 +4,81 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8554FCA0EFB
-	for <buildroot@archiver.kernel.org>; Fri, 30 Aug 2024 10:21:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA2A7CA0EC5
+	for <buildroot@archiver.kernel.org>; Fri, 30 Aug 2024 10:21:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 479AA6123E;
-	Fri, 30 Aug 2024 10:21:01 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 97DD561242;
+	Fri, 30 Aug 2024 10:21:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dFaZtciHuQYP; Fri, 30 Aug 2024 10:21:00 +0000 (UTC)
+ id qr9UPnGJgwb2; Fri, 30 Aug 2024 10:21:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 29CEF61396
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 752EE6134F
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 29CEF61396;
-	Fri, 30 Aug 2024 10:21:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 752EE6134F;
+	Fri, 30 Aug 2024 10:21:03 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id C027F1BF3B0
- for <buildroot@lists.busybox.net>; Fri, 30 Aug 2024 10:20:51 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 19D4F1BF3B0
+ for <buildroot@lists.busybox.net>; Fri, 30 Aug 2024 10:20:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id ABBD5423E8
- for <buildroot@lists.busybox.net>; Fri, 30 Aug 2024 10:20:51 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 06521423DD
+ for <buildroot@lists.busybox.net>; Fri, 30 Aug 2024 10:20:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6u2UEhhUtE-y for <buildroot@lists.busybox.net>;
+ id 2eazYtKAa5RC for <buildroot@lists.busybox.net>;
  Fri, 30 Aug 2024 10:20:51 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=68.232.143.124;
  helo=esa2.hgst.iphmx.com; envelope-from=prvs=965de3954=niklas.cassel@wdc.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org C96D6423DD
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C96D6423DD
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 347DD423E0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 347DD423E0
 Received: from esa2.hgst.iphmx.com (esa2.hgst.iphmx.com [68.232.143.124])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C96D6423DD
- for <buildroot@buildroot.org>; Fri, 30 Aug 2024 10:20:50 +0000 (UTC)
-X-CSE-ConnectionGUID: O6Nhjfc9Rn2wuwDn/NW7BA==
-X-CSE-MsgGUID: cLj+7CY/RsmAZAgfzIH4hQ==
-X-IronPort-AV: E=Sophos;i="6.10,188,1719849600"; d="scan'208";a="25938673"
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 347DD423E0
+ for <buildroot@buildroot.org>; Fri, 30 Aug 2024 10:20:51 +0000 (UTC)
+X-CSE-ConnectionGUID: EmMhP/AbTW2Q2oSczEBl7Q==
+X-CSE-MsgGUID: wMtN9NnTQficKdq9PE7ygQ==
+X-IronPort-AV: E=Sophos;i="6.10,188,1719849600"; d="scan'208";a="25938674"
 Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com)
  ([199.255.45.14])
- by ob1.hgst.iphmx.com with ESMTP; 30 Aug 2024 18:13:44 +0800
-IronPort-SDR: 66d18e96_Ho+PnX34uEfda8dRDtdFfcjIY/viuzX2Uox1pucszK2Yqy3
- OtvDhS1ZCuwyNh+bXN3ydddh0SCH/32zOoSWLUQ==
+ by ob1.hgst.iphmx.com with ESMTP; 30 Aug 2024 18:13:46 +0800
+IronPort-SDR: 66d18e97_1Gj97qDc8wpwKRKCw1h9jlMwMC31xgJNgq3SUosNj/47rjl
+ 3xSuHXZlcZgMy4DgGgexXLrMRZ9i0vV0IVaMHdw==
 Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256;
- 30 Aug 2024 02:19:18 -0700
+ 30 Aug 2024 02:19:20 -0700
 WDCIronportException: Internal
 Received: from unknown (HELO ryzen.wdc.com) ([10.224.3.215])
- by uls-op-cesaip01.wdc.com with ESMTP; 30 Aug 2024 03:13:43 -0700
+ by uls-op-cesaip01.wdc.com with ESMTP; 30 Aug 2024 03:13:45 -0700
 To: buildroot@buildroot.org
-Date: Fri, 30 Aug 2024 12:13:26 +0200
-Message-ID: <20240830101327.2000179-4-niklas.cassel@wdc.com>
+Date: Fri, 30 Aug 2024 12:13:27 +0200
+Message-ID: <20240830101327.2000179-5-niklas.cassel@wdc.com>
 X-Mailer: git-send-email 2.46.0
 In-Reply-To: <20240830101327.2000179-1-niklas.cassel@wdc.com>
 References: <20240830101327.2000179-1-niklas.cassel@wdc.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
- t=1725013250; x=1756549250;
+ t=1725013251; x=1756549251;
  h=from:to:cc:subject:date:message-id:in-reply-to:
  references:mime-version:content-transfer-encoding;
- bh=y3J8hBrhtR6jr9f275KKWkKTSnLFYeW72bDP/X+LvU8=;
- b=aIX1IRSUPxvFzFNJNnhyt1q+f3cS0D4ElGH/Yq+Jep/bE9vVNpMjlry5
- pYDiKp8kUgr048D8UDrwByI+qGbGEUtLBjpFTTOeriR+4qsWDkf26C72I
- O53jfT+VnO/PSTVvB8iRkcAx2B6ErAxu6DrmFBbNxK/TThxovCLrJV2Cf
- I5NGmEnmEpx0OCGLtqntRR2b3aVbCCMX0TWBKco5CX6DPr9lpxTx6Qk4h
- ktUJ9cagebpf0qDecD0OPKv187ywSJJGg7yvmuup3QAU6GI7CpGlljtSs
- NZPlKLZ8g5uubX/A9eXFHNEJYLgidO9Lq3XcgGlG0Y1wMdqAVumGod/74
- A==;
+ bh=3Ru2VQ/iQtb7HMqESpB3y10NKVbon8KZaOeg4r0rA4Y=;
+ b=JjHVQefySGbIldsV67aW0uyTtzEqcs977mOqRkaPYxYYsKlwpkaFSMyU
+ M/w6K1EdjIGZqIkBi/aso4SIrw44h/CCQJRA7w5SIhAUJ60cQGwzI8VPc
+ RR5YicI0MBomSorgaw7Dyrqf9tQi2iL8sa1hjbSNvx8S6G3+pwlbKiVVB
+ GOV0rf5J7wFUI9b8E9ihzn82XBjXYUPOZrNB60z7ofIYPAd6L2J//vCE1
+ yB6xPeMu1xUnxa1o1xM7l6mH28fS0h7merhKw8abc0pAxkQbRTUEKX5r1
+ UUo9qWFsnTiZLDBX32/msUpnlbvUYmmrtuvUlFGfJRRIEuDNrJa04Qe1P
+ g==;
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=wdc.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=wdc.com header.i=@wdc.com
- header.a=rsa-sha256 header.s=dkim.wdc.com header.b=aIX1IRSU
-Subject: [Buildroot] [PATCH 3/4] board/radxa/rock5b: do not let the kernel
- mount the rootfs as rw
+ header.a=rsa-sha256 header.s=dkim.wdc.com header.b=JjHVQefy
+Subject: [Buildroot] [PATCH 4/4] configs/rock5b: add firmware for the
+ RTL8125 NIC
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,24 +101,33 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: Niklas Cassel <cassel@kernel.org>
 
-Do not let the kernel mount the rootfs as rw.
-There is no need for this, and init will remount the rootfs as rw anyway.
+Add the proper firmware to avoid the following warning + error during
+boot:
+r8169 0004:41:00.0: Direct firmware load for rtl_nic/rtl8125b-2.fw failed with error -2
+r8169 0004:41:00.0: Unable to load firmware rtl_nic/rtl8125b-2.fw (-2)
+
+Note that the NIC appears functional even without the proper firmware.
+However, add the firmware anyway, since the error messages are distracting
+and clutters dmesg.
 
 Signed-off-by: Niklas Cassel <cassel@kernel.org>
 ---
- board/radxa/rock5b/extlinux.conf | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ configs/rock5b_defconfig | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/board/radxa/rock5b/extlinux.conf b/board/radxa/rock5b/extlinux.conf
-index bca99a3aa8..c4198deaa0 100644
---- a/board/radxa/rock5b/extlinux.conf
-+++ b/board/radxa/rock5b/extlinux.conf
-@@ -1,4 +1,4 @@
- label Radxa Rock 5b Linux
-   kernel /boot/Image
-   devicetree /boot/rk3588-rock-5b.dtb
--  append root=PARTLABEL=rootfs rw earlycon rootwait
-+  append root=PARTLABEL=rootfs earlycon rootwait
+diff --git a/configs/rock5b_defconfig b/configs/rock5b_defconfig
+index 0778e8afdf..899537c001 100644
+--- a/configs/rock5b_defconfig
++++ b/configs/rock5b_defconfig
+@@ -22,6 +22,8 @@ BR2_TARGET_UBOOT_NEEDS_ROCKCHIP_RKBIN=y
+ BR2_PACKAGE_ROCKCHIP_RKBIN=y
+ BR2_PACKAGE_ROCKCHIP_RKBIN_TPL_FILENAME="bin/rk35/rk3588_ddr_lp4_2112MHz_lp5_2736MHz_v1.12.bin"
+ BR2_PACKAGE_ROCKCHIP_RKBIN_BL31_FILENAME="bin/rk35/rk3588_bl31_v1.40.elf"
++BR2_PACKAGE_LINUX_FIRMWARE=y
++BR2_PACKAGE_LINUX_FIRMWARE_RTL_8169=y
+ 
+ # Kernel
+ BR2_LINUX_KERNEL=y
 -- 
 2.46.0
 
