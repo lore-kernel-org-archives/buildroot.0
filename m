@@ -1,84 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA2A7CA0EC5
-	for <buildroot@archiver.kernel.org>; Fri, 30 Aug 2024 10:21:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0EE27CA0FE4
+	for <buildroot@archiver.kernel.org>; Fri, 30 Aug 2024 11:43:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 97DD561242;
-	Fri, 30 Aug 2024 10:21:04 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A0C164114D;
+	Fri, 30 Aug 2024 11:43:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qr9UPnGJgwb2; Fri, 30 Aug 2024 10:21:03 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id RdOlKKfqx98c; Fri, 30 Aug 2024 11:43:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 752EE6134F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5E8474112D
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 752EE6134F;
-	Fri, 30 Aug 2024 10:21:03 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5E8474112D;
+	Fri, 30 Aug 2024 11:43:39 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 19D4F1BF3B0
- for <buildroot@lists.busybox.net>; Fri, 30 Aug 2024 10:20:52 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1B19E1BF2C2
+ for <buildroot@lists.busybox.net>; Fri, 30 Aug 2024 11:43:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 06521423DD
- for <buildroot@lists.busybox.net>; Fri, 30 Aug 2024 10:20:52 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 148A842440
+ for <buildroot@lists.busybox.net>; Fri, 30 Aug 2024 11:43:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2eazYtKAa5RC for <buildroot@lists.busybox.net>;
- Fri, 30 Aug 2024 10:20:51 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=68.232.143.124;
- helo=esa2.hgst.iphmx.com; envelope-from=prvs=965de3954=niklas.cassel@wdc.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 347DD423E0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 347DD423E0
-Received: from esa2.hgst.iphmx.com (esa2.hgst.iphmx.com [68.232.143.124])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 347DD423E0
- for <buildroot@buildroot.org>; Fri, 30 Aug 2024 10:20:51 +0000 (UTC)
-X-CSE-ConnectionGUID: EmMhP/AbTW2Q2oSczEBl7Q==
-X-CSE-MsgGUID: wMtN9NnTQficKdq9PE7ygQ==
-X-IronPort-AV: E=Sophos;i="6.10,188,1719849600"; d="scan'208";a="25938674"
-Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com)
- ([199.255.45.14])
- by ob1.hgst.iphmx.com with ESMTP; 30 Aug 2024 18:13:46 +0800
-IronPort-SDR: 66d18e97_1Gj97qDc8wpwKRKCw1h9jlMwMC31xgJNgq3SUosNj/47rjl
- 3xSuHXZlcZgMy4DgGgexXLrMRZ9i0vV0IVaMHdw==
-Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
- by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256;
- 30 Aug 2024 02:19:20 -0700
-WDCIronportException: Internal
-Received: from unknown (HELO ryzen.wdc.com) ([10.224.3.215])
- by uls-op-cesaip01.wdc.com with ESMTP; 30 Aug 2024 03:13:45 -0700
+ id 0-l-KnhUnav6 for <buildroot@lists.busybox.net>;
+ Fri, 30 Aug 2024 11:43:37 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=117.135.210.4;
+ helo=m16.mail.163.com; envelope-from=tianyuanhao3@163.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 954654243F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 954654243F
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.4])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 954654243F
+ for <buildroot@buildroot.org>; Fri, 30 Aug 2024 11:43:36 +0000 (UTC)
+Received: from ubuntu.localdomain (unknown [223.102.86.110])
+ by gzsmtp5 (Coremail) with SMTP id tCgvCgB3nyZksNFmGfZjAQ--.24192S2;
+ Fri, 30 Aug 2024 19:43:32 +0800 (CST)
+From: TIAN Yuanhao <tianyuanhao3@163.com>
 To: buildroot@buildroot.org
-Date: Fri, 30 Aug 2024 12:13:27 +0200
-Message-ID: <20240830101327.2000179-5-niklas.cassel@wdc.com>
-X-Mailer: git-send-email 2.46.0
-In-Reply-To: <20240830101327.2000179-1-niklas.cassel@wdc.com>
-References: <20240830101327.2000179-1-niklas.cassel@wdc.com>
+Date: Fri, 30 Aug 2024 04:43:19 -0700
+Message-ID: <20240830114319.4353-1-tianyuanhao3@163.com>
+X-Mailer: git-send-email 2.44.1
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
- d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
- t=1725013251; x=1756549251;
- h=from:to:cc:subject:date:message-id:in-reply-to:
- references:mime-version:content-transfer-encoding;
- bh=3Ru2VQ/iQtb7HMqESpB3y10NKVbon8KZaOeg4r0rA4Y=;
- b=JjHVQefySGbIldsV67aW0uyTtzEqcs977mOqRkaPYxYYsKlwpkaFSMyU
- M/w6K1EdjIGZqIkBi/aso4SIrw44h/CCQJRA7w5SIhAUJ60cQGwzI8VPc
- RR5YicI0MBomSorgaw7Dyrqf9tQi2iL8sa1hjbSNvx8S6G3+pwlbKiVVB
- GOV0rf5J7wFUI9b8E9ihzn82XBjXYUPOZrNB60z7ofIYPAd6L2J//vCE1
- yB6xPeMu1xUnxa1o1xM7l6mH28fS0h7merhKw8abc0pAxkQbRTUEKX5r1
- UUo9qWFsnTiZLDBX32/msUpnlbvUYmmrtuvUlFGfJRRIEuDNrJa04Qe1P
- g==;
+X-CM-TRANSID: tCgvCgB3nyZksNFmGfZjAQ--.24192S2
+X-Coremail-Antispam: 1Uf129KBjvdXoW7Gw1ftrW7GFWrWF1xCF18Grg_yoW3Grb_GF
+ 18tr10krs5XrZ7Zr9YqFs3AFyfW345Cw40g3WxKrsIyry8Xw4j93s5Cr1agF4fWF129a43
+ Ar1fXFnIqr13ujkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+ 9fnUUvcSsGvfC2KfnxnUUI43ZEXa7VUbOzsJUUUUU==
+X-Originating-IP: [223.102.86.110]
+X-CM-SenderInfo: xwld05xxdqxtjrt6il2tof0z/1tbiXQVLjWXAnAfObQAAsD
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=163.com; 
+ s=s110527; h=From:Subject:Date:Message-ID:MIME-Version; bh=5O/tB
+ AjRyYmq/0K4jblSKtLNxZozuIuofnN8klOvHWk=; b=ccywOxM14CtFwIbAxX5km
+ KmULvc3+YI5CmIEjfO/rkb5F1je4PnIUGpzkj/APKDcRUzVxSN3sPVpRajfdDDho
+ zlyKN7XVze0bOd6T801S2b/Zzb8bme39jJNFNjA1rR0GoCJCgBDTEBWMg52pHIgC
+ BpYB+D7/9JqvD2vyGooENM=
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=wdc.com
+ dmarc=pass (p=none dis=none)
+ header.from=163.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=wdc.com header.i=@wdc.com
- header.a=rsa-sha256 header.s=dkim.wdc.com header.b=JjHVQefy
-Subject: [Buildroot] [PATCH 4/4] configs/rock5b: add firmware for the
- RTL8125 NIC
+ dkim=pass (1024-bit key,
+ unprotected) header.d=163.com header.i=@163.com header.a=rsa-sha256
+ header.s=s110527 header.b=ccywOxM1
+Subject: [Buildroot] [PATCH 1/1] package/chrony: install default config
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -90,46 +78,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Niklas Cassel via buildroot <buildroot@buildroot.org>
-Reply-To: Niklas Cassel <niklas.cassel@wdc.com>
-Cc: Niklas Cassel <cassel@kernel.org>, Damien Le Moal <dlemoal@kernel.org>,
- Kilian Zinnecker <kilian.zinnecker@mail.de>
+Cc: TIAN Yuanhao <tianyuanhao3@163.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Niklas Cassel <cassel@kernel.org>
+chrony needs a config file to work:
+  Could not open /etc/chrony.conf : No such file or directory
 
-Add the proper firmware to avoid the following warning + error during
-boot:
-r8169 0004:41:00.0: Direct firmware load for rtl_nic/rtl8125b-2.fw failed with error -2
-r8169 0004:41:00.0: Unable to load firmware rtl_nic/rtl8125b-2.fw (-2)
-
-Note that the NIC appears functional even without the proper firmware.
-However, add the firmware anyway, since the error messages are distracting
-and clutters dmesg.
-
-Signed-off-by: Niklas Cassel <cassel@kernel.org>
+Signed-off-by: TIAN Yuanhao <tianyuanhao3@163.com>
+Cc: Peter Korsgaard <peter@korsgaard.com>
 ---
- configs/rock5b_defconfig | 2 ++
- 1 file changed, 2 insertions(+)
+ package/chrony/chrony.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/configs/rock5b_defconfig b/configs/rock5b_defconfig
-index 0778e8afdf..899537c001 100644
---- a/configs/rock5b_defconfig
-+++ b/configs/rock5b_defconfig
-@@ -22,6 +22,8 @@ BR2_TARGET_UBOOT_NEEDS_ROCKCHIP_RKBIN=y
- BR2_PACKAGE_ROCKCHIP_RKBIN=y
- BR2_PACKAGE_ROCKCHIP_RKBIN_TPL_FILENAME="bin/rk35/rk3588_ddr_lp4_2112MHz_lp5_2736MHz_v1.12.bin"
- BR2_PACKAGE_ROCKCHIP_RKBIN_BL31_FILENAME="bin/rk35/rk3588_bl31_v1.40.elf"
-+BR2_PACKAGE_LINUX_FIRMWARE=y
-+BR2_PACKAGE_LINUX_FIRMWARE_RTL_8169=y
+diff --git a/package/chrony/chrony.mk b/package/chrony/chrony.mk
+index e7e6931a2a..9ed9dcff56 100644
+--- a/package/chrony/chrony.mk
++++ b/package/chrony/chrony.mk
+@@ -71,6 +71,7 @@ endef
  
- # Kernel
- BR2_LINUX_KERNEL=y
+ define CHRONY_INSTALL_TARGET_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) DESTDIR="$(TARGET_DIR)" install
++	$(INSTALL) -D -m 644 $(@D)/examples/chrony.conf.example2 $(TARGET_DIR)/etc/chrony.conf
+ endef
+ 
+ define CHRONY_INSTALL_INIT_SYSV
 -- 
-2.46.0
+2.45.1
 
 _______________________________________________
 buildroot mailing list
