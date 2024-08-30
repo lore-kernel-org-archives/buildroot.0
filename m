@@ -1,67 +1,78 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2DDE1CA0EE7
-	for <buildroot@archiver.kernel.org>; Fri, 30 Aug 2024 07:14:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3D905CA0EE8
+	for <buildroot@archiver.kernel.org>; Fri, 30 Aug 2024 07:33:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C225441884;
-	Fri, 30 Aug 2024 07:14:46 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id aTbHrOEcKs-u; Fri, 30 Aug 2024 07:14:45 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 832374188A
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 832374188A;
-	Fri, 30 Aug 2024 07:14:45 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 48BD91BF846
- for <buildroot@lists.busybox.net>; Fri, 30 Aug 2024 07:14:44 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 363224031F
- for <buildroot@lists.busybox.net>; Fri, 30 Aug 2024 07:14:44 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D913440AEB;
+	Fri, 30 Aug 2024 07:33:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Y4G_JpC2T1dN for <buildroot@lists.busybox.net>;
- Fri, 30 Aug 2024 07:14:43 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::229;
- helo=relay9-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+ id U6ob-6B8fzpC; Fri, 30 Aug 2024 07:33:04 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A2F0140446
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id A2F0140446;
+	Fri, 30 Aug 2024 07:33:04 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 5E42F1BF846
+ for <buildroot@lists.busybox.net>; Fri, 30 Aug 2024 07:33:03 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4AA80406FE
+ for <buildroot@lists.busybox.net>; Fri, 30 Aug 2024 07:33:03 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id seDMbD7qHUQc for <buildroot@lists.busybox.net>;
+ Fri, 30 Aug 2024 07:33:02 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
+ helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 552FC400FF
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 552FC400FF
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 552FC400FF
- for <buildroot@buildroot.org>; Fri, 30 Aug 2024 07:14:41 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 9B684FF806;
- Fri, 30 Aug 2024 07:14:38 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1sjvq9-007uIh-2m;
- Fri, 30 Aug 2024 09:14:37 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 84B0C40626
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 84B0C40626
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 84B0C40626
+ for <buildroot@buildroot.org>; Fri, 30 Aug 2024 07:33:00 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id B9FC913F86A;
+ Fri, 30 Aug 2024 09:32:52 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Fri, 30 Aug 2024 09:32:52 +0200
+Date: Fri, 30 Aug 2024 09:32:52 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20240421095353.208034-1-dario.binacchi@amarulasolutions.com>
- <20240421095353.208034-2-dario.binacchi@amarulasolutions.com>
- <20240715160555.6e88961e@windsurf> <87r0a994or.fsf@dell.be.48ers.dk>
- <20240828154253.206391b0@windsurf> <87ttf47nr6.fsf@dell.be.48ers.dk>
- <20240829234416.4131264b@windsurf>
-Date: Fri, 30 Aug 2024 09:14:37 +0200
-In-Reply-To: <20240829234416.4131264b@windsurf> (Thomas Petazzoni's message of
- "Thu, 29 Aug 2024 23:44:16 +0200")
-Message-ID: <87le0e32jm.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+Message-ID: <ZtF1pHPZqUkUit8N@landeda>
+References: <20240822183742.3550055-1-dario.binacchi@amarulasolutions.com>
+ <20240822183742.3550055-2-dario.binacchi@amarulasolutions.com>
+ <20240823181741.499173f2@windsurf> <Zs4x6LWMJfdWqApz@landeda>
+ <20240829234737.38039ef5@windsurf>
 MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [RFC PATCH 1/2] support/scripts/genimage.sh:
- support creating a bmap image
+Content-Disposition: inline
+In-Reply-To: <20240829234737.38039ef5@windsurf>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1725003178;
+ bh=aRn/rMDNf3AdoFJIXpW2tZB9pzADOg4yhnWRqNQ24a4=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=pteFCfBFeEBszH44PE0pGeGjmRRm2w3E0xNHztP6iNahuxVjC1v1uidTjVlu9TP5d
+ EyyzAfW2W8XrpQB4vdQ8qtR6yEuacigoM7MBL7MpylxNUgOOOfqGJNCNF8isCeBVA8
+ 82L74oLs8dBy+1UBySGgAQpYWlpHty4pqjkNQDVaOdeNSusySjnOitwhpZK+y6zSOQ
+ Kk98ngIqW8L+nEq5LqIys0FQL6JWMj/nmywPAK8e7jrIneyQao707XVBR5yZtZGJkR
+ L/nhE/IuUMrKJWwwBpGO+dCGaFB4pr4VS7udhj9XrPv5IHAQRNT4W64vfFFyXLlKF5
+ +B1edHGYnMJgQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=pteFCfBF
+Subject: Re: [Buildroot] [PATCH v3 1/3] package/tinyinit: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -73,77 +84,71 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: michael@amarulasolutions.com, Xuanhao Shi <X15000177@gmail.com>,
- Thomas Petazzoni via buildroot <buildroot@buildroot.org>,
+Cc: Damien Le Moal <dlemoal@kernel.org>,
  Dario Binacchi <dario.binacchi@amarulasolutions.com>,
- linux-amarula@amarulasolutions.com, Anand Gadiyar <gadiyar@ti.com>
+ linux-amarula@amarulasolutions.com, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
+Thomas, All,
 
-Hi,
+On 2024-08-29 23:47 +0200, Thomas Petazzoni spake thusly:
+> On Tue, 27 Aug 2024 22:07:04 +0200
+> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+> > As Dario already pointed out, that was my suggestion to drop it from the
+> > init selection.
+[--SNIP--]
+> I understand your point, but:
+> 
+> (1) It is really unclear for the user that they have to chose "None" as
+>     init to be able to use tinyinit (tinyinit is proposed with depends
+>     on BR2_INIT_NONE)
+> (2) Due to (1), Dario has added a "tinyinit needs BR2_INIT_NONE, i. e.
+>     no init system installed" Config.in comment, which I also find odd
 
- >> NIT: No, it is the sparseness (E.G. the holes). Compression in fact
- >> breaks the holes (replaces them by zeros):
+To me, it really all looked very obvious, exactly thanks to the comment.
 
- > You didn't understand my point, and Arnout explained it better on the
- > chat.
+tiniy-init is also not a reaper, which dos not really make it an init
+either...
 
- > My point is that it is *very* easy to lose the sparseness. You copy the
- > file around, you share it in Google Drive, or download it over HTTP or
- > what not, and bang the sparseness is lost.
+Note that tini does not install itself as /init or /sbin/init, but just
+as /usr/bin/tini (and a symlink in /usr/libexec/docker/docker-init);
+tini is also a reaper.
 
-Sure, but that is all about distribution, where as mentioned before you
-may want to compress it with gz/xz/zstd/.. and/or stick it in a sensible
-archival format like tar, ..
+> So while I understand your point that tinyinit or tini don't need as
+> much infrastructure/logic as busybox init/sysvinit/systemd/openrc, I
+> find the current way they are presented to be very weird (but I can
+> live with it).
 
-The specifics of that is very use case specific, so IMHO not something
-where we should enforce silly old .gz - Especially as bmap supports a
-number of different formats (by shelling out to the extractors). From
-bmaptool/TransRead.py:
+Then I think we should also organise the selection list, like:
 
-This module allows opening and reading local and remote files and decompress
-them on-the-fly if needed. Remote files are read using urllib (except of
-"ssh://" URLs, which are handled differently). Supported file extentions are:
-'bz2', 'gz', 'xz', 'lzo', 'zst' and a "tar" version of them: 'tar.bz2', 'tbz2',
-'tbz', 'tb2', 'tar.gz', 'tgz', 'tar.xz', 'txz', 'tar.lzo', 'tzo', 'tar.lz4',
-'tlz4', '.tar.zst', 'tzst'.
-This module uses the following system programs for decompressing: pbzip2, bzip2,
-gzip, pigz, xz, lzop, lz4, zstd, tar and unzip.
+    Init system
+        *** General purpose ***
+        ( ) BusyBox
+        ( ) systemV
+        ( ) OpenRC
+        ( ) systemd
+        *** Special purpose, read help ***
+        ( ) tini
+        ( ) tinyinit
+        ( ) Custom (aka none)
+        *** My br2-ext (in /path/to/my-br2-ext) ***
+        ( ) my-init
 
+(br2-external entries are added by support/scripts/br2-external).
 
- > Instead, with a compressed file, you get a file that has pretty much
- > the same size as the sparse file, but you can move it around, transfer
- > it, it won't consume its real size. And the bmap metadata file allows
- > to use/flash that compressed file with the same efficiency as the
- > original sparse file.
-
- > In fact, bmap is quite useless is the file sparseness is retained:
- > instead of using bmap metadata, you could just ask what are the holes
- > of the file and skip them when flashing. So really the whole point of
- > bmap metadata IMO is that they allow to do fast flashing (skipping
- > holes) even if the sparseness of the file has been lost.
-
-Does such a tool exist? I am not aware of one. If so, maybe we should
-recommend that instead of dd for writing sdcard.img from the host?
-
-Anyway, I find bmap a bit half-baked, E.G. rather than wasting time (and
-space) compressing and decompressing all the holes that are then just
-ignored it would make more sense to have a file format encoding the
-holes (E.G. tar --sparse or something custom), then optionally compress
-that for transmission and have something small and simple (E.G. not in
-python) on the host/target to write it to a device.
-
-But oh well, it is what it is. I don't need such a tool often enough to
-care to write it ;)
-
-I'll send a patch to drop the gzip step from genimage.sh.
+Regards,
+Yann E. MORIN.
 
 -- 
-Bye, Peter Korsgaard
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
