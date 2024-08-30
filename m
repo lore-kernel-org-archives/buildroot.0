@@ -4,49 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD468CA0EFD
-	for <buildroot@archiver.kernel.org>; Fri, 30 Aug 2024 16:57:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F207CA0EDC
+	for <buildroot@archiver.kernel.org>; Fri, 30 Aug 2024 16:57:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AB0D6411D9;
-	Fri, 30 Aug 2024 16:57:42 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id EB7D6411BE;
+	Fri, 30 Aug 2024 16:57:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 63UzLF-yvbyN; Fri, 30 Aug 2024 16:57:41 +0000 (UTC)
+ id S7FbM7I-PCOQ; Fri, 30 Aug 2024 16:57:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 06BDF411CF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B5D64411DC
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 06BDF411CF;
-	Fri, 30 Aug 2024 16:57:41 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 977EA1BF990
- for <buildroot@lists.busybox.net>; Fri, 30 Aug 2024 16:57:34 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B5D64411DC;
+	Fri, 30 Aug 2024 16:57:44 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 422AC1BF35F
+ for <buildroot@lists.busybox.net>; Fri, 30 Aug 2024 16:57:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 861D38410F
- for <buildroot@lists.busybox.net>; Fri, 30 Aug 2024 16:57:34 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2A23C4244C
+ for <buildroot@lists.busybox.net>; Fri, 30 Aug 2024 16:57:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JFiKBdKkQHud for <buildroot@lists.busybox.net>;
- Fri, 30 Aug 2024 16:57:33 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Bsez53xmUW4f for <buildroot@lists.busybox.net>;
+ Fri, 30 Aug 2024 16:57:41 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::224;
+ helo=relay4-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AD335813C3
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id AD335813C3
- for <buildroot@buildroot.org>; Fri, 30 Aug 2024 16:57:33 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9963A8674F; Fri, 30 Aug 2024 16:57:33 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Fri, 30 Aug 2024 18:57:20 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 3b104b805521ab529cef20c79b919d910718f20e
-X-Git-Newrev: b6d023bdc2bb8585e779c3a1a7fac75b93bc7d41
-X-Patchwork-Hint: ignore
-Message-Id: <20240830165733.9963A8674F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] configs/rock5b: add firmware
- for the RTL8125 NIC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org D8DDF42448
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D8DDF42448
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::224])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id D8DDF42448
+ for <buildroot@buildroot.org>; Fri, 30 Aug 2024 16:57:40 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 06803E0002;
+ Fri, 30 Aug 2024 16:57:37 +0000 (UTC)
+Date: Fri, 30 Aug 2024 18:57:37 +0200
+To: Niklas Cassel via buildroot <buildroot@buildroot.org>
+Message-ID: <20240830185737.568a1905@windsurf>
+In-Reply-To: <20240830101327.2000179-3-niklas.cassel@wdc.com>
+References: <20240830101327.2000179-1-niklas.cassel@wdc.com>
+ <20240830101327.2000179-3-niklas.cassel@wdc.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1725037058;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=MpYVMlzIB9xc1LOVD+RelAQRtGReIW6UH/IVj2SsqEk=;
+ b=JqJiaMyGqF3kztHt4ZclL9CN3rZqgpuL7D25qiNrpinPMr2RXyYg7G7SN5kksgCLvKS6Ds
+ 1pw4Zt58IZxfJSjXZJdoBmPFe4UH6iqOXWKRGAeQZ3GFQpLV4RtVwdoz/aaCRVoffNzQoc
+ oNePy7I2Ctam7rWjtZl/NsUXLi3dMwXX7aB+qMIyBJAztAXs2uroAZAwmveZlZM6cbXobm
+ IEsGE9PR5fqV6lRxhRgknyBB3ShwroWY8xWt8x6OydNiabXSnJhn0Buxf8OS9G6PKqiaXt
+ FJJqW7qNA7eah4nprOsua1uy47vuCEanuDJm4vFxrVnjNqzSqfz8/S0jazlIpQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=JqJiaMyG
+Subject: Re: [Buildroot] [PATCH 2/4] board/radxa/rock5b: there is no need to
+ specify rootfstype
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,43 +84,36 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Niklas Cassel <niklas.cassel@wdc.com>, Damien Le Moal <dlemoal@kernel.org>,
+ Kilian Zinnecker <kilian.zinnecker@mail.de>, Niklas Cassel <cassel@kernel.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b6d023bdc2bb8585e779c3a1a7fac75b93bc7d41
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On Fri, 30 Aug 2024 12:13:25 +0200
+Niklas Cassel via buildroot <buildroot@buildroot.org> wrote:
 
-Add the proper firmware to avoid the following warning + error during
-boot:
-r8169 0004:41:00.0: Direct firmware load for rtl_nic/rtl8125b-2.fw failed with error -2
-r8169 0004:41:00.0: Unable to load firmware rtl_nic/rtl8125b-2.fw (-2)
+> From: Niklas Cassel <cassel@kernel.org>
+> 
+> The ext4 rootfs is mounted as ext4 perfectly fine without rootfstype
+> specified on the kernel command line.
+> 
+> In order to keep the kernel command line clean, remove the superfluous
+> kernel parameter.
+> 
+> Signed-off-by: Niklas Cassel <cassel@kernel.org>
+> ---
+>  board/radxa/rock5b/extlinux.conf | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Note that the NIC appears functional even without the proper firmware.
-However, add the firmware anyway, since the error messages are distracting
-and clutters dmesg.
+Applied to next, thanks.
 
-Signed-off-by: Niklas Cassel <cassel@kernel.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- configs/rock5b_defconfig | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/configs/rock5b_defconfig b/configs/rock5b_defconfig
-index 0778e8afdf..899537c001 100644
---- a/configs/rock5b_defconfig
-+++ b/configs/rock5b_defconfig
-@@ -22,6 +22,8 @@ BR2_TARGET_UBOOT_NEEDS_ROCKCHIP_RKBIN=y
- BR2_PACKAGE_ROCKCHIP_RKBIN=y
- BR2_PACKAGE_ROCKCHIP_RKBIN_TPL_FILENAME="bin/rk35/rk3588_ddr_lp4_2112MHz_lp5_2736MHz_v1.12.bin"
- BR2_PACKAGE_ROCKCHIP_RKBIN_BL31_FILENAME="bin/rk35/rk3588_bl31_v1.40.elf"
-+BR2_PACKAGE_LINUX_FIRMWARE=y
-+BR2_PACKAGE_LINUX_FIRMWARE_RTL_8169=y
- 
- # Kernel
- BR2_LINUX_KERNEL=y
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
