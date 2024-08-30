@@ -4,73 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BD1B0CA0EF3
-	for <buildroot@archiver.kernel.org>; Fri, 30 Aug 2024 21:50:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A6BD5CA101B
+	for <buildroot@archiver.kernel.org>; Fri, 30 Aug 2024 22:23:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6BDAD6145C;
-	Fri, 30 Aug 2024 21:50:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 81BD160DB2;
+	Fri, 30 Aug 2024 22:23:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kVM3pS0xQv5g; Fri, 30 Aug 2024 21:50:47 +0000 (UTC)
+ id yf9vN6ruO_lp; Fri, 30 Aug 2024 22:23:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 80FE361483
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 54B40605E1
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 80FE361483;
-	Fri, 30 Aug 2024 21:50:47 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id ACF531BF295
- for <buildroot@lists.busybox.net>; Fri, 30 Aug 2024 21:50:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 54B40605E1;
+	Fri, 30 Aug 2024 22:23:19 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 263251BF990
+ for <buildroot@lists.busybox.net>; Fri, 30 Aug 2024 22:23:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 98C4C844CB
- for <buildroot@lists.busybox.net>; Fri, 30 Aug 2024 21:50:46 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 126BF424AC
+ for <buildroot@lists.busybox.net>; Fri, 30 Aug 2024 22:23:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id T2stWP0W8nby for <buildroot@lists.busybox.net>;
- Fri, 30 Aug 2024 21:50:45 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
- helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id it6hONrWBxsO for <buildroot@lists.busybox.net>;
+ Fri, 30 Aug 2024 22:23:16 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8A7A984252
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8A7A984252
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8A7A984252
- for <buildroot@buildroot.org>; Fri, 30 Aug 2024 21:50:45 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 81B4713F8C2;
- Fri, 30 Aug 2024 23:50:40 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Fri, 30 Aug 2024 23:50:40 +0200
-Date: Fri, 30 Aug 2024 23:50:40 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Fiona Klute <fiona.klute@gmx.de>
-Message-ID: <ZtI-sDH8r7jZVqrA@landeda>
-References: <20240618194001.1907396-1-fiona.klute@gmx.de>
- <20240618194001.1907396-3-fiona.klute@gmx.de>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20240618194001.1907396-3-fiona.klute@gmx.de>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1725054643;
- bh=kr7vMOq10xkmdzIIxmtcYCDJH7KoEwWdmDhsBh/2o1U=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=OywK/AZOGvIO35Z32bF6bbRIzN9g+JvRq5iTo16ibjJvTXLu6EkoYKd+Xoj0pLhfo
- YhLFGnNrt3uF6e+ir0NwdQ86yM+Sy+t/nMK6aH1NZ/9VTvFnCaxYYv1jr5c488EPfH
- FaaQy0ErJzjFJ1r0IBi6EmQT7IeGgnsOhTaUtIY5IYTpkoaeP4frSbgnOz8R4ICIrF
- cQvnHzNRJ0fsvQOrUyqPEeqfTLjVZhv6WIQyAsmRkPW/iyWw4ZoZRCRJrpdiw3tz7S
- LxSU76ylm5VKyJv1DQsgxhspO1GdtOkLgQfz6/HQzC7/NpM9aHlNswLDHsGAEOemhv
- 8pssWvpgyQ4+A==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=OywK/AZO
-Subject: Re: [Buildroot] [PATCH 2/2] board/raspberrypi: Enable nullglob for
- DTBs
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A72964247F
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id A72964247F
+ for <buildroot@buildroot.org>; Fri, 30 Aug 2024 22:23:16 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 9163586782; Fri, 30 Aug 2024 22:23:16 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sat, 31 Aug 2024 00:21:53 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: b6d023bdc2bb8585e779c3a1a7fac75b93bc7d41
+X-Git-Newrev: 37801767f68c05500f1d4495b5baac0e7340f7a9
+X-Patchwork-Hint: ignore
+Message-Id: <20240830222316.9163586782@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/gobject-introspection:
+ use objdump instead of prelink-cross
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,70 +59,127 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: =?utf-8?B?Sm9zw6k=?= Mendes <jp.baltazar.mendes@gmail.com>,
- buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fiona, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=37801767f68c05500f1d4495b5baac0e7340f7a9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On 2024-06-18 21:40 +0200, Fiona Klute via buildroot spake thusly:
-> With "nullglob" the post image script does not fail if there's no DTB
-> directly in BINARIES_DIR. This is required when using DTBs from the
-> rpi-firmware package (BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTBS=y),
-> because in that case the kernel build doesn't provide one.
-> 
-> Using pre-compiled DTBs is discouraged, but useful for using mainline
-> kernels until suitable DTS can be merged.
-> 
-> Signed-off-by: Fiona Klute <fiona.klute+wiwa@gmx.de>
-> ---
->  board/raspberrypi/post-image.sh | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/board/raspberrypi/post-image.sh b/board/raspberrypi/post-image.sh
-> index e4611d05dd..b7ccf5d0b3 100755
-> --- a/board/raspberrypi/post-image.sh
-> +++ b/board/raspberrypi/post-image.sh
-> @@ -1,6 +1,7 @@
->  #!/bin/bash
-> 
->  set -e
-> +shopt -s nullglob
+This commit switches the gobject-introspection package from using
+prelink-cross to simply using "objdump -p". This basically implements
+the same change as was done in OpenEmbedded commit:
 
-I'm not too fond of this. Indeed, when reading the glob itself, it is
-not obvious what happens when there's no file, as the usual behaviour is
-to expand with a single word where the glob character is not replaced.
+  https://git.openembedded.org/openembedded-core/commit/?id=767e0880d4d729e659e859dd99c1cdb084b8ba51
 
-Instead, I'd use the following:
+In particular, this allows to get rid of the architecture dependency
+of prelink-cross, which wasn't currently encoded, but that was
+actually causing failures such as:
 
-    for i in "${BINARIES_DIR}"/*.dtb "${BINARIES_DIR}"/rpi-firmware/*; do
-        [ -e "${i}" ] || continue
-        FILES+=( "${i#${BINARIES_DIR}/}" )
-    done
+/home/autobuild/autobuild/instance-17/output-1/host/sbin/prelink-rtld: error while loading shared libraries: /lib/libc.so.6: cannot handle TLS data
 
-Regards,
-Yann E. MORIN.
+It also paves the way for removing host-prelink-cross entirely, as the
+only remaining user of it now is dracut.
 
->  BOARD_DIR="$(dirname $0)"
->  BOARD_NAME="$(basename ${BOARD_DIR})"
-> --
-> 2.45.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+The test tests.package.test_python_gobject.TestPythonPy3Gobject (which
+uses gobject-introspection) has been tested to run fine after this
+commit.
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Fixes:
+
+  http://autobuild.buildroot.net/results/7efa6a18f543752dfe33577f74c20bda3f8b1e65/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Tested-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ .checkpackageignore                                |  1 -
+ ...gnore-error-return-codes-from-ldd-wrapper.patch | 31 ----------------------
+ .../g-ir-scanner-lddwrapper.in                     |  3 +--
+ .../gobject-introspection/gobject-introspection.mk |  3 ++-
+ 4 files changed, 3 insertions(+), 35 deletions(-)
+
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 4017438f5e..e86fd390e9 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -576,7 +576,6 @@ package/go/go-src/0001-build.go-explicit-option-for-crosscompilation.patch lib_p
+ package/gob2/0001-dont-include-from-prefix.patch lib_patch.Upstream
+ package/gobject-introspection/0001-disable-tests.patch lib_patch.Upstream
+ package/gobject-introspection/0002-Add-rpath-links-to-ccompiler.patch lib_patch.Upstream
+-package/gobject-introspection/0003-giscanner-ignore-error-return-codes-from-ldd-wrapper.patch lib_patch.Upstream
+ package/gpsd/S50gpsd Shellcheck lib_sysv.Indent lib_sysv.Variables
+ package/gptfdisk/0001-gptcurses-partially-revert-Tweaks-for-building-on-th.patch lib_patch.Upstream
+ package/graphite2/0001-don-t-install-a-libtool-file-with-static-library.patch lib_patch.Upstream
+diff --git a/package/gobject-introspection/0003-giscanner-ignore-error-return-codes-from-ldd-wrapper.patch b/package/gobject-introspection/0003-giscanner-ignore-error-return-codes-from-ldd-wrapper.patch
+deleted file mode 100644
+index f1ea518954..0000000000
+--- a/package/gobject-introspection/0003-giscanner-ignore-error-return-codes-from-ldd-wrapper.patch
++++ /dev/null
+@@ -1,31 +0,0 @@
+-From e0fc4a2a5161a36483ddc518be9bb14390f11b19 Mon Sep 17 00:00:00 2001
+-From: Alexander Kanavin <alex.kanavin@gmail.com>
+-Date: Wed, 5 Sep 2018 16:46:52 +0200
+-Subject: [PATCH] giscanner: ignore error return codes from ldd-wrapper
+-
+-prelink-rtld, which we use instead of ldd returns 127 when it can't find a library.
+-It is not an error per se, but it breaks subprocess.check_output().
+-
+-Upstream-Status: Inappropriate [oe-core specific]
+-Signed-off-by: Alexander Kanavin <alex.kanavin@gmail.com>
+-Signed-off-by: Adam Duskett <aduskett@gmail.com>
+----
+- giscanner/shlibs.py | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/giscanner/shlibs.py b/giscanner/shlibs.py
+-index 9f8ab5df..7a1a72fe 100644
+---- a/giscanner/shlibs.py
+-+++ b/giscanner/shlibs.py
+-@@ -103,7 +103,7 @@ def _resolve_non_libtool(options, binary, libraries):
+-             args.extend(['otool', '-L', binary.args[0]])
+-         else:
+-             args.extend(['ldd', binary.args[0]])
+--        output = subprocess.check_output(args)
+-+        output = subprocess.run(args, check=False, stdout=subprocess.PIPE).stdout
+-         if isinstance(output, bytes):
+-             output = output.decode("utf-8", "replace")
+- 
+--- 
+-2.25.1
+-
+diff --git a/package/gobject-introspection/g-ir-scanner-lddwrapper.in b/package/gobject-introspection/g-ir-scanner-lddwrapper.in
+index 2f09bca77a..7f3db67da4 100644
+--- a/package/gobject-introspection/g-ir-scanner-lddwrapper.in
++++ b/package/gobject-introspection/g-ir-scanner-lddwrapper.in
+@@ -1,3 +1,2 @@
+ #!/usr/bin/env sh
+-
+-"${HOST_DIR}"/sbin/prelink-rtld --root="$(dirname "$0")/../../" "$@"
++@TARGET_OBJDUMP@ -p "$@"
+diff --git a/package/gobject-introspection/gobject-introspection.mk b/package/gobject-introspection/gobject-introspection.mk
+index f0c7fcd2ca..ad72af22a2 100644
+--- a/package/gobject-introspection/gobject-introspection.mk
++++ b/package/gobject-introspection/gobject-introspection.mk
+@@ -15,7 +15,6 @@ GOBJECT_INTROSPECTION_LICENSE_FILES = COPYING.LGPL COPYING.GPL giscanner/scanner
+ GOBJECT_INTROSPECTION_DEPENDENCIES = \
+ 	host-autoconf-archive \
+ 	host-gobject-introspection \
+-	host-prelink-cross \
+ 	host-qemu \
+ 	libffi \
+ 	libglib2 \
+@@ -78,6 +77,8 @@ define GOBJECT_INTROSPECTION_INSTALL_PRE_WRAPPERS
+ 
+ 	$(INSTALL) -D -m 755 $(GOBJECT_INTROSPECTION_PKGDIR)/g-ir-scanner-lddwrapper.in \
+ 		$(STAGING_DIR)/usr/bin/g-ir-scanner-lddwrapper
++	$(SED) "s%@TARGET_OBJDUMP@%$(TARGET_OBJDUMP)%" \
++		$(STAGING_DIR)/usr/bin/g-ir-scanner-lddwrapper
+ 
+ 	$(INSTALL) -D -m 755 $(GOBJECT_INTROSPECTION_PKGDIR)/g-ir-scanner-qemuwrapper.in \
+ 		$(STAGING_DIR)/usr/bin/g-ir-scanner-qemuwrapper
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
