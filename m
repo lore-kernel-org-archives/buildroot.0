@@ -4,72 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3D0C4CA0EFD
-	for <buildroot@archiver.kernel.org>; Fri, 30 Aug 2024 17:00:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 78222CA0EDC
+	for <buildroot@archiver.kernel.org>; Fri, 30 Aug 2024 17:02:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0456C400D6;
-	Fri, 30 Aug 2024 17:00:22 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3726C4013C;
+	Fri, 30 Aug 2024 17:02:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kF91QS-sG6_k; Fri, 30 Aug 2024 17:00:21 +0000 (UTC)
+ id 1jh_0AhVXBBI; Fri, 30 Aug 2024 17:02:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B9CA54013C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EA2AF411BB
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B9CA54013C;
-	Fri, 30 Aug 2024 17:00:20 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 249A81BF35F
- for <buildroot@lists.busybox.net>; Fri, 30 Aug 2024 17:00:18 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id EA2AF411BB;
+	Fri, 30 Aug 2024 17:02:28 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id A7B9E1BF35F
+ for <buildroot@lists.busybox.net>; Fri, 30 Aug 2024 17:02:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 12D28813C3
- for <buildroot@lists.busybox.net>; Fri, 30 Aug 2024 17:00:18 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9498B4013C
+ for <buildroot@lists.busybox.net>; Fri, 30 Aug 2024 17:02:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id J_uPOR5kD6h9 for <buildroot@lists.busybox.net>;
- Fri, 30 Aug 2024 17:00:17 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.194;
- helo=relay2-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id R5FHFWO94EoI for <buildroot@lists.busybox.net>;
+ Fri, 30 Aug 2024 17:02:26 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.197;
+ helo=relay5-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 033A681362
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 033A681362
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 033A681362
- for <buildroot@buildroot.org>; Fri, 30 Aug 2024 17:00:16 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id CBC4240005;
- Fri, 30 Aug 2024 17:00:13 +0000 (UTC)
-Date: Fri, 30 Aug 2024 19:00:12 +0200
-To: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
-Message-ID: <20240830190012.4ba5a5dc@windsurf>
-In-Reply-To: <20240830135546.906135-1-roykollensvendsen@gmail.com>
-References: <20240830135546.906135-1-roykollensvendsen@gmail.com>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 3B466400D6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3B466400D6
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3B466400D6
+ for <buildroot@buildroot.org>; Fri, 30 Aug 2024 17:02:25 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id CD0D91C0009;
+ Fri, 30 Aug 2024 17:02:23 +0000 (UTC)
+Date: Fri, 30 Aug 2024 19:02:22 +0200
+To: Bin Meng <bmeng.cn@gmail.com>
+Message-ID: <20240830190222.6e2285cc@windsurf>
+In-Reply-To: <20240829154150.174934-1-bmeng.cn@gmail.com>
+References: <20240829154150.174934-1-bmeng.cn@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1725037214;
+ d=bootlin.com; s=gm1; t=1725037344;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=vddITwwbUuJuOkJT2Rce3sQPyLAxI8tWfntIgWVmXck=;
- b=KbWSO/TMJ9QNIEXJElY4VYc01AjDVFnXK+wl//8f8/Yq/gqjNTCOXTH6v7zLCW5kg74GcU
- bRKFYPB6zbauYYuopoPUUtvnd7xavoB2tv5XE+oUops7aiEMip0AKnndn8etsuoKQnAEeR
- tMUVUyprF6mEAqp8Q3CmwmhofjBoxzyJtcFST1I6z9SpE+mlWzPf2UssKICBwMJfHubJ9S
- frgBZfIr7GhmXG/yRuHxfNk8pbNJl7WGCnHIQMo71S6EgGR8cE0aHqkBcXGNhhYGEVVx9w
- 7C+Ly1RAkXY7WPVAvl9I6S/dRxgg4iKE+lF57FxFA6UvepMWAzb0mze39O8eGw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=nXgKKT40HaRlTAAXr23ne0AaUg3nrT1+DwBDLe6dtHg=;
+ b=FwoALXxhl91W64tfq0cFLb0c6sYqwx/jWTJexoqSdnLfuutTjzwrnubcjYB9Caw5NIulpR
+ PD8wZ+/7MRHdU8kiCuyZtG0b0vbxuOjXMn9S/NE2aR3CfEUp0S11YjeD/xIJxzojV5CM5h
+ TLo+EuIbDqy67WyGt0LJ46RdtdCcyHB9HSCTevNZ5ewh/17AKWRfgB011KnF3Wlr7enu1q
+ 9mdmAm0ny7x8gjtZYhMd1xdkVnGgHqQ/h6JyWDTCdHFJN1JQgXiuxRKdb15jM1jLGO1dwp
+ ptGPb3MuvK4wyELDyHYKBY9qqH6ZMfwMAPBWBmyFM8D6nL+2wynBjZRtF9tjrg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=KbWSO/TM
-Subject: Re: [Buildroot] [PATCH 1/1] docs/manual: fix description of how to
- reply to <message-id>
+ header.s=gm1 header.b=FwoALXxh
+Subject: Re: [Buildroot] [PATCH v2] configs: riscv: qemu: Drop
+ BR2_TARGET_OPENSBI_CUSTOM_VERSION
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,39 +83,48 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>,
- Romain Naour <romain.naour@smile.fr>, buildroot@buildroot.org
+Cc: Bin Meng <bmeng@tinylab.org>, Alistair Francis <alistair.francis@wdc.com>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+Hello Bin,
 
-+BR maintainers in Cc.
+On Thu, 29 Aug 2024 23:41:50 +0800
+Bin Meng <bmeng.cn@gmail.com> wrote:
 
-On Fri, 30 Aug 2024 15:55:45 +0200
-Roy Kollen Svendsen <roykollensvendsen@gmail.com> wrote:
-
-> Patch v1 not set to 'superseded' when replying to <message-id> with v2.
+> From: Bin Meng <bmeng@tinylab.org>
 > 
-> I'm using git version 2.46.0. The manual says the following is the
-> correct way to use the '--in-reply-to' option:
+> Update qemu_riscv32_virt_defconfig and qemu_riscv64_virt_defconfig
+> to use the latest OpenSBI due to the reason that:
 > 
-> git send-email --in-reply-to=<message-id>
+> 1. they are the main platforms to develop and test OpenSBI
+> 2. latest OpenSBI binaries are always integrated into QEMU as
+>    the default bios
 > 
-> Signed-off-by: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
+> Signed-off-by: Bin Meng <bmeng@tinylab.org>
 > ---
->  docs/manual/contribute.adoc | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> See v1 @ https://patchwork.ozlabs.org/project/buildroot/patch/20230626160030.93063-7-bmeng.cn@gmail.com/
 
-I have applied to master, because it fixes a bug in the doc. But on my
-side, I am not a big fan of subsequent iterations being sent as a reply
-to the previous iteration. I know it has the advantage that patchwork
-marks the previous iteration as Superseded, but I find it a bit
-annoying on the mailing list.
+Sorry but no. We _do_ want our defconfigs to specify a custom and fixed
+version of Linux, U-Boot, OpenSBI, TF-A, etc.
+See https://buildroot.org/downloads/manual/manual.html#adding-board-support:
 
-What do other BR maintainers think?
+"""
+Always use fixed versions or commit hashes for the different
+components, not the "latest" version. For example, set
+BR2_LINUX_KERNEL_CUSTOM_VERSION=y and
+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE to the kernel version you tested
+with.
+"""
+
+Do not hesitate to send patches to update the OpenSBI version used in
+those defconfigs, after testing that this update works fine for those
+particular platforms.
+
+Thanks!
 
 Thomas
 -- 
