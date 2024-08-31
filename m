@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1E13CD13D9
-	for <buildroot@archiver.kernel.org>; Sat, 31 Aug 2024 21:51:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73B10CD13D9
+	for <buildroot@archiver.kernel.org>; Sat, 31 Aug 2024 21:51:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A18A560765;
-	Sat, 31 Aug 2024 21:51:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 39AE560753;
+	Sat, 31 Aug 2024 21:51:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tFUIAmtdv2Gi; Sat, 31 Aug 2024 21:51:09 +0000 (UTC)
+ id SXMmLB9QyP2n; Sat, 31 Aug 2024 21:51:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3FD2360778
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2345C6078D
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3FD2360778;
-	Sat, 31 Aug 2024 21:51:09 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 609271BF588
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2345C6078D;
+	Sat, 31 Aug 2024 21:51:12 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id DD1EF1BF588
  for <buildroot@lists.busybox.net>; Sat, 31 Aug 2024 21:50:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4EDEE6073C
+ by smtp4.osuosl.org (Postfix) with ESMTP id D732B4199F
  for <buildroot@lists.busybox.net>; Sat, 31 Aug 2024 21:50:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id i9bpfZ2kfMLR for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id nlTTOqRztElB for <buildroot@lists.busybox.net>;
  Sat, 31 Aug 2024 21:50:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B734F60733
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 98907419A0
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id B734F60733
+ by smtp4.osuosl.org (Postfix) with ESMTP id 98907419A0
  for <buildroot@buildroot.org>; Sat, 31 Aug 2024 21:50:57 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7AF808687F; Sat, 31 Aug 2024 21:50:57 +0000 (UTC)
+ id 8644386878; Sat, 31 Aug 2024 21:50:57 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 31 Aug 2024 23:46:46 +0200
+Date: Sat, 31 Aug 2024 23:47:30 +0200
 X-Git-Refname: refs/heads/2024.05.x
-X-Git-Oldrev: 9d9b4bf57ce9158565b7579e9389ec3798ae45fa
-X-Git-Newrev: 96e0b1bd7a66fdad061bcb5bbf74d4f7389f76f3
+X-Git-Oldrev: 96e0b1bd7a66fdad061bcb5bbf74d4f7389f76f3
+X-Git-Newrev: 56393a6a44481d2f9c1fa0a18de0fc1f2f07c1a9
 X-Patchwork-Hint: ignore
-Message-Id: <20240831215057.7AF808687F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.05.x] package/fetchmail: bump
- version to 6.4.39
+Message-Id: <20240831215057.8644386878@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.05.x] package/tinyssh: fix
+ static-only build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,45 +65,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=96e0b1bd7a66fdad061bcb5bbf74d4f7389f76f3
+commit: https://git.buildroot.net/buildroot/commit/?id=56393a6a44481d2f9c1fa0a18de0fc1f2f07c1a9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.05.x
 
-Release notes:
-https://sourceforge.net/p/fetchmail/mailman/message/58797299/
+When using BR2_STATIC_LIBS=y, tinysshd's build was successful, but the
+binary didn't work on the final target: this is because a dynamically
+linked ELF was produced, on a target having no dynamic loader at all.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Using $(TARGET_CONFIGURE_OPTS) propagates all the options and not only
+"CC", resulting in a correct static binary able to run on the target.
+
+Without the patch:
+
+> tinysshd: ELF 32-bit LSB executable, ARM, EABI5 version 1 (SYSV),
+> dynamically linked, interpreter /lib/ld-musl-armhf.so.1, stripped
+
+With the patch:
+
+> tinysshd: ELF 32-bit LSB executable, ARM, EABI5 version 1 (SYSV),
+> statically linked, stripped
+
+Fixes: a7b3de8a3b1b446c081593192c3acb847f6f5f05
+Signed-off-by: Martin Wetterwald <martin@wetterwald.eu>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 5226e5f664e1ef59654fc70be94064f1614a9c25)
+(cherry picked from commit 90e22ff48bb5705c146a64b75556157667b551d3)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/fetchmail/fetchmail.hash | 4 ++--
- package/fetchmail/fetchmail.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/tinyssh/tinyssh.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/fetchmail/fetchmail.hash b/package/fetchmail/fetchmail.hash
-index 3c0403fa78..12612ecc48 100644
---- a/package/fetchmail/fetchmail.hash
-+++ b/package/fetchmail/fetchmail.hash
-@@ -1,4 +1,4 @@
--# From https://sourceforge.net/p/fetchmail/mailman/message/58731594/
--sha256  a6cb4ea863ac61d242ffb2db564a39123761578d3e40d71ce7b6f2905be609d9  fetchmail-6.4.38.tar.xz
-+# From https://sourceforge.net/p/fetchmail/mailman/message/58797299/
-+sha256  75109a1f307b538155fa05f5ef298e8298cb4deae95aed24c16b38d36ff0a186  fetchmail-6.4.39.tar.xz
- # Locally computed:
- sha256  6d87443b61041067a5eddb2cabf8aebff15b8b40771ad6b5e4754e607ec21b39  COPYING
-diff --git a/package/fetchmail/fetchmail.mk b/package/fetchmail/fetchmail.mk
-index c74b259698..a9239d0855 100644
---- a/package/fetchmail/fetchmail.mk
-+++ b/package/fetchmail/fetchmail.mk
-@@ -5,7 +5,7 @@
- ################################################################################
+diff --git a/package/tinyssh/tinyssh.mk b/package/tinyssh/tinyssh.mk
+index 80b6ccb850..e92ac628f2 100644
+--- a/package/tinyssh/tinyssh.mk
++++ b/package/tinyssh/tinyssh.mk
+@@ -10,7 +10,7 @@ TINYSSH_LICENSE = CC0-1.0
+ TINYSSH_LICENSE_FILES = LICENCE
  
- FETCHMAIL_VERSION_MAJOR = 6.4
--FETCHMAIL_VERSION = $(FETCHMAIL_VERSION_MAJOR).38
-+FETCHMAIL_VERSION = $(FETCHMAIL_VERSION_MAJOR).39
- FETCHMAIL_SOURCE = fetchmail-$(FETCHMAIL_VERSION).tar.xz
- FETCHMAIL_SITE = https://downloads.sourceforge.net/project/fetchmail/branch_$(FETCHMAIL_VERSION_MAJOR)
- FETCHMAIL_LICENSE = GPL-2.0; some exceptions are mentioned in COPYING
+ define TINYSSH_BUILD_CMDS
+-	$(TARGET_MAKE_ENV) CC="$(TARGET_CC)" $(MAKE) -C $(@D) cross-compile
++	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D) cross-compile
+ endef
+ 
+ define TINYSSH_INSTALL_TARGET_CMDS
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
