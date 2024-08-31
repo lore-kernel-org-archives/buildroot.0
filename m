@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3F67CD13D8
-	for <buildroot@archiver.kernel.org>; Sat, 31 Aug 2024 13:58:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF706CD13D2
+	for <buildroot@archiver.kernel.org>; Sat, 31 Aug 2024 13:58:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 15505605DB;
-	Sat, 31 Aug 2024 13:58:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A738B6076C;
+	Sat, 31 Aug 2024 13:58:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GFioH_Q7zMIk; Sat, 31 Aug 2024 13:58:18 +0000 (UTC)
+ id H1MaoU1WnCLw; Sat, 31 Aug 2024 13:58:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8039760616
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 47E1260772
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8039760616;
-	Sat, 31 Aug 2024 13:58:16 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id ACE8B1BF2C2
+	by smtp3.osuosl.org (Postfix) with ESMTP id 47E1260772;
+	Sat, 31 Aug 2024 13:58:21 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id BCF161BF867
  for <buildroot@lists.busybox.net>; Sat, 31 Aug 2024 13:58:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A5FF781EB0
+ by smtp2.osuosl.org (Postfix) with ESMTP id A797D40390
  for <buildroot@lists.busybox.net>; Sat, 31 Aug 2024 13:58:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jZ-fRFzHAskk for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id M72Kq7lqo4QM for <buildroot@lists.busybox.net>;
  Sat, 31 Aug 2024 13:58:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 86728816E3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 61660400AE
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 86728816E3
+ by smtp2.osuosl.org (Postfix) with ESMTP id 61660400AE
  for <buildroot@buildroot.org>; Sat, 31 Aug 2024 13:58:12 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 729A986661; Sat, 31 Aug 2024 13:58:12 +0000 (UTC)
+ id 58D5F8665E; Sat, 31 Aug 2024 13:58:12 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 31 Aug 2024 13:40:54 +0200
+Date: Sat, 31 Aug 2024 12:08:58 +0200
 X-Git-Refname: refs/heads/2024.05.x
-X-Git-Oldrev: 2736c84728154eb9ac7cddd6f887506f805becc7
-X-Git-Newrev: a5362fe2a5c94573526765ff8fac6d10a91e4782
+X-Git-Oldrev: d2777c335a3534a4771120af793d4216a6cb7b22
+X-Git-Newrev: 59f3f3222c014cec46b68c153ac92d7c5c03cf07
 X-Patchwork-Hint: ignore
-Message-Id: <20240831135812.729A986661@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.05.x] package/faifa: bump to
- latest git commit
+Message-Id: <20240831135812.58D5F8665E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.05.x] support/testing: add
+ iproute2 runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,217 +65,113 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a5362fe2a5c94573526765ff8fac6d10a91e4782
+commit: https://git.buildroot.net/buildroot/commit/?id=59f3f3222c014cec46b68c153ac92d7c5c03cf07
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.05.x
 
-- Drop patches (already in version)
-- libevent is mandatory since
-  https://github.com/ffainelli/faifa/commit/d2339c2a7680e7c87555650e19123e27e1f12031
-- This bump will fix the following build failure with gcc >= 14:
-
-  hpav_cfg.c: In function 'pushbutton_request':
-  hpav_cfg.c:256:37: error: passing argument 2 of 'send_vendor_pkt' makes pointer from integer without a cast [-Wint-conversion]
-    256 |         return send_vendor_pkt(ctx, mac, HPAV_MMTYPE_MS_PB_ENC,
-        |                                     ^~~
-        |                                     |
-        |                                     uint8_t {aka unsigned char}
-  hpav_cfg.c:123:64: note: expected 'const uint8_t *' {aka 'const unsigned char *'} but argument is of type 'uint8_t' {aka 'unsigned char'}
-    123 | static int send_vendor_pkt(struct context *ctx, const uint8_t *to,
-        |                                                 ~~~~~~~~~~~~~~~^~
-  hpav_cfg.c: In function 'main':
-  hpav_cfg.c:406:48: error: passing argument 2 of 'pushbutton_request' makes integer from pointer without a cast [-Wint-conversion]
-    406 |                 ret = pushbutton_request(&ctx, mac);
-        |                                                ^~~
-        |                                                |
-        |                                                uint8_t * {aka unsigned char *}
-  hpav_cfg.c:254:60: note: expected 'uint8_t' {aka 'unsigned char'} but argument is of type 'uint8_t *' {aka 'unsigned char *'}
-    254 | static int pushbutton_request(struct context *ctx, uint8_t mac)
-        |                                                    ~~~~~~~~^~~
-
-Fixes:
- - http://autobuild.buildroot.org/results/5a65337366e52c6234d8d154b7e9a0296e02f1dd
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 061b5806d13a4bb9c4941e4564c2e681ef36a618)
+(cherry picked from commit 91738f5093f80eeda8637b9a73636539d6937475)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .checkpackageignore                                |  3 --
- ...icitly-include-endian.h-for-BYTE_ORDER-ma.patch | 32 ----------------------
- ...do-not-include-linux-if_ether.h-for-musl-.patch | 32 ----------------------
- ...le.in-fix-asbolute-symlink-of-libfaifa.so.patch | 32 ----------------------
- package/faifa/Config.in                            |  1 +
- package/faifa/faifa.hash                           |  2 +-
- package/faifa/faifa.mk                             |  6 ++--
- 7 files changed, 5 insertions(+), 103 deletions(-)
+ DEVELOPERS                                     |  1 +
+ support/testing/tests/package/test_iproute2.py | 77 ++++++++++++++++++++++++++
+ 2 files changed, 78 insertions(+)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 5fd67b5c12..7dbe81fc26 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -588,9 +588,6 @@ package/exim/0003-Skip-version-check-and-symlink-installation.patch lib_patch.Up
- package/exim/S86exim lib_sysv.Indent lib_sysv.Variables
- package/expect/0001-enable-cross-compilation.patch lib_patch.Upstream
- package/expect/0002-allow-tcl-build-directory.patch lib_patch.Upstream
--package/faifa/0001-sha2.c-explicitly-include-endian.h-for-BYTE_ORDER-ma.patch lib_patch.Upstream
--package/faifa/0002-hpav_cfg.c-do-not-include-linux-if_ether.h-for-musl-.patch lib_patch.Upstream
--package/faifa/0003-Makefile.in-fix-asbolute-symlink-of-libfaifa.so.patch lib_patch.Upstream
- package/fail2ban/S60fail2ban Shellcheck lib_sysv.Variables
- package/fakedate/fakedate Shellcheck
- package/falcosecurity-libs/0001-cmake-Permit-setting-GRPC_CPP_PLUGIN.patch lib_patch.Upstream
-diff --git a/package/faifa/0001-sha2.c-explicitly-include-endian.h-for-BYTE_ORDER-ma.patch b/package/faifa/0001-sha2.c-explicitly-include-endian.h-for-BYTE_ORDER-ma.patch
-deleted file mode 100644
-index 79da360807..0000000000
---- a/package/faifa/0001-sha2.c-explicitly-include-endian.h-for-BYTE_ORDER-ma.patch
-+++ /dev/null
-@@ -1,32 +0,0 @@
--From bfe43f4b4f249cee8c77059d7c89ebbc521d4d93 Mon Sep 17 00:00:00 2001
--From: Peter Korsgaard <peter@korsgaard.com>
--Date: Mon, 14 Sep 2015 22:25:12 +0200
--Subject: [PATCH] sha2.c: explicitly include endian.h for BYTE_ORDER macro
--
--Fixes a build issue with the musl C library, which doesn't indirectly
--include endian.h from any of the included system headers:
--
--http://autobuild.buildroot.net/results/17b/17bde543db253c008079b04c5e341f804160f59c/build-end.log
--
--Upstream-Status: submitted (https://github.com/ffainelli/faifa/pull/12)
--
--Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-----
-- sha2.c | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/sha2.c b/sha2.c
--index f2f5132..4c8a72d 100644
----- a/sha2.c
--+++ b/sha2.c
--@@ -40,6 +40,7 @@
-- #include <inttypes.h>
-- #include <string.h>
-- 
--+#include "endian.h"
-- #include "sha2.h"
-- 
-- /*
---- 
--2.1.4
--
-diff --git a/package/faifa/0002-hpav_cfg.c-do-not-include-linux-if_ether.h-for-musl-.patch b/package/faifa/0002-hpav_cfg.c-do-not-include-linux-if_ether.h-for-musl-.patch
-deleted file mode 100644
-index c5547a5e10..0000000000
---- a/package/faifa/0002-hpav_cfg.c-do-not-include-linux-if_ether.h-for-musl-.patch
-+++ /dev/null
-@@ -1,32 +0,0 @@
--From 36eed08a3783df6bb8d92d3c80cd47d0660eeb12 Mon Sep 17 00:00:00 2001
--From: Bernd Kuhls <bernd.kuhls@t-online.de>
--Date: Sat, 30 Jan 2016 16:27:37 +0100
--Subject: [PATCH] hpav_cfg.c: do not include linux/if_ether.h for musl
-- compatibility
--
--Fixes a build issue with the musl C library
--http://autobuild.buildroot.net/results/dc6/dc6e4d7327d2031ef921cccd814605dec73a0f9c/build-end.log
--
--Patch sent upstream: https://github.com/ffainelli/faifa/pull/13
--
--Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
-----
-- hpav_cfg.c | 2 --
-- 1 file changed, 2 deletions(-)
--
--diff --git a/hpav_cfg.c b/hpav_cfg.c
--index 7cc53af..45d3f0a 100644
----- a/hpav_cfg.c
--+++ b/hpav_cfg.c
--@@ -53,8 +53,6 @@
-- #include <arpa/inet.h>
-- #include <net/if.h>
-- 
---#include <linux/if_ether.h>
---
-- #include "homeplug_av.h"
-- #include "crypto.h"
-- 
---- 
--2.7.0.rc3
--
-diff --git a/package/faifa/0003-Makefile.in-fix-asbolute-symlink-of-libfaifa.so.patch b/package/faifa/0003-Makefile.in-fix-asbolute-symlink-of-libfaifa.so.patch
-deleted file mode 100644
-index 876d2a60f4..0000000000
---- a/package/faifa/0003-Makefile.in-fix-asbolute-symlink-of-libfaifa.so.patch
-+++ /dev/null
-@@ -1,32 +0,0 @@
--From d16abf61049947c451a6411a13fc15dda32feb47 Mon Sep 17 00:00:00 2001
--From: Florian Fainelli <f.fainelli@gmail.com>
--Date: Sat, 6 Sep 2014 11:23:02 -0700
--Subject: [PATCH] Makefile.in: fix asbolute symlink of libfaifa.so
--
--Fixes #7
--
--Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
--[Upstream: da2e279fd736d05bcd0ee6e4609c44fece017ba8]
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-----
-- Makefile.in | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/Makefile.in b/Makefile.in
--index ba65bee..9dec7ee 100644
----- a/Makefile.in
--+++ b/Makefile.in
--@@ -98,9 +98,9 @@ install: installman strip
-- 	$(INSTALL) -m0755 hpav_cfg $(DESTDIR)$(sbindir)
-- 	$(INSTALL) -d $(DESTDIR)$(libdir)
-- 	$(INSTALL) -m0644 $(LIB_SONAME) $(DESTDIR)$(libdir)
---	ln -sf $(DESTDIR)$(libdir)/$(LIB_SONAME) $(DESTDIR)$(libdir)/$(LIB_SHARED_SO)
-- 	$(INSTALL) -d $(DESTDIR)$(includedir)/faifa
-- 	cp $(HEADERS) $(DESTDIR)$(includedir)/faifa
--+	cd $(DESTDIR)$(libdir) && ln -sf $(LIB_SONAME) $(LIB_SHARED_SO)
-- 
-- strip:
-- 	$(STRIP) $(APP)
---- 
--2.23.0
--
-diff --git a/package/faifa/Config.in b/package/faifa/Config.in
-index 486f35d508..202b69bcd2 100644
---- a/package/faifa/Config.in
-+++ b/package/faifa/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_FAIFA
- 	bool "faifa"
- 	depends on !BR2_STATIC_LIBS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	select BR2_PACKAGE_LIBEVENT
- 	select BR2_PACKAGE_LIBPCAP
- 	help
- 	  Faifa can configure any Intellon-based Power Line
-diff --git a/package/faifa/faifa.hash b/package/faifa/faifa.hash
-index 658dae4a71..1b0608b898 100644
---- a/package/faifa/faifa.hash
-+++ b/package/faifa/faifa.hash
-@@ -1,3 +1,3 @@
- # locally computed
--sha256  6eada81f3d21f80b5848338b627784981064d728f8e377e5cf973d31640d4489  faifa-0.1.tar.gz
-+sha256  bae36f77d02ea25a0f8e2fa3db0b0efe7e5cb7331cf0ea97470036b7f299a5c1  faifa-fb91bf684fd19f03115b8dc76b57bb5a5a4ec05b.tar.gz
- sha256  9b62e4601b2b9cd5719a393e88ed71a8304048862502db765ed9d6ff8cf38c5e  COPYING
-diff --git a/package/faifa/faifa.mk b/package/faifa/faifa.mk
-index e5dc157482..1cc7795e0f 100644
---- a/package/faifa/faifa.mk
-+++ b/package/faifa/faifa.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
- 
--FAIFA_VERSION = 0.1
--FAIFA_SITE = $(call github,ffainelli,faifa,v$(FAIFA_VERSION))
-+FAIFA_VERSION = fb91bf684fd19f03115b8dc76b57bb5a5a4ec05b
-+FAIFA_SITE = $(call github,ffainelli,faifa,$(FAIFA_VERSION))
- FAIFA_INSTALL_STAGING = YES
--FAIFA_DEPENDENCIES = libpcap host-autoconf
-+FAIFA_DEPENDENCIES = libevent libpcap host-autoconf
- FAIFA_LICENSE = BSD-3-Clause
- FAIFA_LICENSE_FILES = COPYING
- 
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 043e558652..9a97df47e5 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1841,6 +1841,7 @@ F:	support/testing/tests/package/test_hwloc.py
+ F:	support/testing/tests/package/test_iozone.py
+ F:	support/testing/tests/package/test_iperf.py
+ F:	support/testing/tests/package/test_iperf3.py
++F:	support/testing/tests/package/test_iproute2.py
+ F:	support/testing/tests/package/test_iptables.py
+ F:	support/testing/tests/package/test_jailhouse.py
+ F:	support/testing/tests/package/test_jq.py
+diff --git a/support/testing/tests/package/test_iproute2.py b/support/testing/tests/package/test_iproute2.py
+new file mode 100644
+index 0000000000..91d9006e23
+--- /dev/null
++++ b/support/testing/tests/package/test_iproute2.py
+@@ -0,0 +1,77 @@
++import os
++
++import infra.basetest
++
++
++class TestIpRoute2(infra.basetest.BRTest):
++    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
++        """
++        BR2_PACKAGE_IPROUTE2=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++
++    def test_run(self):
++        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
++        self.emulator.boot(arch="armv5",
++                           kernel="builtin",
++                           options=["-initrd", cpio_file])
++        self.emulator.login()
++
++        # Check the program can execute. This also check we are
++        # actually using the version from the iproute2 package, rather
++        # than the BusyBox version (which does not understand this
++        # option).
++        self.assertRunOk("ip -Version")
++
++        # We run simple invocations of iproute2 tools.
++        self.assertRunOk("ifstat")
++        self.assertRunOk("ip link show dev lo")
++
++        # Buildroot is supposed to have setup the loopback "lo"
++        # interface. We should be able to ping any address in
++        # the 127.0.0.0/8 subnet.
++        addrs = ["127.0.0.1", "127.0.1.2", "127.1.2.3"]
++        ping_cmd = "ping -c 3 -i 0.2"
++        for addr in addrs:
++            self.assertRunOk(f"{ping_cmd} {addr}")
++
++        # We now change this 127.0.0.1/8 to a /16.
++        self.assertRunOk("ip addr del 127.0.0.1/8 dev lo")
++        self.assertRunOk("ip addr add 127.0.0.1/16 dev lo")
++
++        # The IPs in the 127.0.0.0/16 subnet are still supposed to
++        # ping...
++        addrs = ["127.0.0.1", "127.0.1.2"]
++        for addr in addrs:
++            self.assertRunOk(f"{ping_cmd} {addr}")
++        # ...but the IP outside is supposed to fail.
++        _, ret = self.emulator.run(f"{ping_cmd} 127.1.2.3")
++        self.assertNotEqual(ret, 0)
++
++        # We add a prohibited route.
++        self.assertRunOk("ip route add prohibit 127.0.1.0/24")
++
++        # Now, only 127.0.0.1 is supposed to ping...
++        self.assertRunOk(f"{ping_cmd} 127.0.0.1")
++        # ...while the other IPs expected to fail.
++        addrs = ["127.0.1.2", "127.1.2.3"]
++        for addr in addrs:
++            _, ret = self.emulator.run(f"{ping_cmd} {addr}")
++            self.assertNotEqual(ret, 0)
++
++        # We should be able to see our prohibited route.
++        out, ret = self.emulator.run("ip route list")
++        self.assertEqual(ret, 0)
++        self.assertEqual(out[0].strip(), "prohibit 127.0.1.0/24")
++
++        # We create a new network namespace, and create a new shell
++        # process in it.
++        self.assertRunOk("ip netns add br-test")
++        self.assertRunOk("ip netns exec br-test /bin/sh")
++
++        # Since we are in a new namespace, we should no longer see the
++        # prohibited route. The route list output should be empty.
++        out, ret = self.emulator.run("ip route list")
++        self.assertEqual(ret, 0)
++        self.assertEqual(len(out), 0)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
