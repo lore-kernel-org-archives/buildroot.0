@@ -4,75 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99A2ACD13DD
-	for <buildroot@archiver.kernel.org>; Sat, 31 Aug 2024 18:14:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1B870CD13DD
+	for <buildroot@archiver.kernel.org>; Sat, 31 Aug 2024 18:21:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 34E35419DA;
-	Sat, 31 Aug 2024 18:14:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8976940291;
+	Sat, 31 Aug 2024 18:21:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NkfL0N162CiT; Sat, 31 Aug 2024 18:14:22 +0000 (UTC)
+ id Bl8hz08M3YQk; Sat, 31 Aug 2024 18:21:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A3650419A1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 378BF40298
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A3650419A1;
-	Sat, 31 Aug 2024 18:14:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 378BF40298;
+	Sat, 31 Aug 2024 18:21:27 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4323F1BF316
- for <buildroot@lists.busybox.net>; Sat, 31 Aug 2024 18:14:20 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id F21A21BF316
+ for <buildroot@lists.busybox.net>; Sat, 31 Aug 2024 18:21:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3D53B400FC
- for <buildroot@lists.busybox.net>; Sat, 31 Aug 2024 18:14:20 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id EC51A4026B
+ for <buildroot@lists.busybox.net>; Sat, 31 Aug 2024 18:21:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UdG_ivNu_sL0 for <buildroot@lists.busybox.net>;
- Sat, 31 Aug 2024 18:14:18 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
- helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 3A89D400E4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3A89D400E4
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 3A89D400E4
- for <buildroot@buildroot.org>; Sat, 31 Aug 2024 18:14:17 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id BF39F13F8A2;
- Sat, 31 Aug 2024 20:14:09 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 31 Aug 2024 20:14:09 +0200
-Date: Sat, 31 Aug 2024 20:14:09 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Fiona Klute <fiona.klute@gmx.de>
-Message-ID: <ZtNdccT-tuO4Epk2@landeda>
-References: <20240713192207.873065-1-fiona.klute@gmx.de>
- <ZtI7NyPyq9rU94RT@landeda>
- <ae8a1d19-00a8-4be4-a16f-a951cba5e9f9@gmx.de>
+ id L02cGQ4tqzPX for <buildroot@lists.busybox.net>;
+ Sat, 31 Aug 2024 18:21:25 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::130; helo=mail-lf1-x130.google.com;
+ envelope-from=geomatsi@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org B65AC400E4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B65AC400E4
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com
+ [IPv6:2a00:1450:4864:20::130])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B65AC400E4
+ for <buildroot@buildroot.org>; Sat, 31 Aug 2024 18:21:24 +0000 (UTC)
+Received: by mail-lf1-x130.google.com with SMTP id
+ 2adb3069b0e04-5334c4d6829so3710052e87.2
+ for <buildroot@buildroot.org>; Sat, 31 Aug 2024 11:21:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1725128482; x=1725733282;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=cwuRqJJVXRP3P1Zcg5uxKTh67diBAzdRzRNDKpPEIwA=;
+ b=uABDwjVVPPiUfF7Wmi+986O36WjbwtymQh5LVWmnmw3GNkqYXFth9NX4we5MbaFiXG
+ T59amBPHKmzb7ytvLmYd3/RT7oquFnRF86ULicFxik1Qr7740DRLv7GZ/fWO67n8xf79
+ Sark83k9EcQHNbk61b39HnDBDAXKWoxw5zxui+FG0G3jLo1uY2pGQ5kxD0Y8hqKekpqX
+ +ehrWJ/2AnHRzHH+xI44WddMMwW4fweFYHXFIGmvnQ1XKMeueWEBkWxe7QwoV7UqRPYF
+ mQMeeFCNmZdXviqWZ4HyIR2KOtMWWSN43yli1bIJVzbQufPhcuT1UH/S3vkt+L5cQR0f
+ grvg==
+X-Gm-Message-State: AOJu0YxU8QkH2tzVR/MBccf/B9mUuvGv5OJeAv+jKHrOfKn45PGUIHJp
+ C0vCQ4CFlsUxVctVnc/wcOkzOL9kwl+BDzmvSZ2dT4dSey5yK5R0Z7u8C7Jy
+X-Google-Smtp-Source: AGHT+IFw2sDkN0BjKzqvcugUIG2IViMjkyT4GxUqwbOrOwTkomJaqT9Qqo0LQOHtH+sEaL4V9DxSdQ==
+X-Received: by 2002:a05:6512:318d:b0:533:4652:9848 with SMTP id
+ 2adb3069b0e04-53546b4b20emr3607249e87.32.1725128481091; 
+ Sat, 31 Aug 2024 11:21:21 -0700 (PDT)
+Received: from localhost.localdomain ([5.188.167.4])
+ by smtp.googlemail.com with ESMTPSA id
+ 2adb3069b0e04-535407ac43fsm1012766e87.97.2024.08.31.11.21.20
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 31 Aug 2024 11:21:20 -0700 (PDT)
+From: Sergey Matyukevich <geomatsi@gmail.com>
+To: buildroot@buildroot.org
+Date: Sat, 31 Aug 2024 21:21:13 +0300
+Message-ID: <20240831182116.2462286-1-geomatsi@gmail.com>
+X-Mailer: git-send-email 2.46.0
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <ae8a1d19-00a8-4be4-a16f-a951cba5e9f9@gmx.de>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1725128055;
- bh=iXLqqSWWNKVje73+K04H1PZtpwQ84HlRrdZHOA+2jZ8=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=Yr5wn1Gn8pv4zHlyjv8PHFaFdipmsQE7oFXWKXZbwsLNZZHKTIWMqyR+ZAkPZW/P5
- 6AK61ox28pec2DjBxFKyN0wRIk1yNFktOZ2TnFmU5hhU5Gxm1wN2DV1NGvN7EQxy/j
- eQfEzPzigruCEtWYhYQV/LyWGXdv6w3rvq5hdwADxG6qxZY3UAu040k9C9TEUq+y36
- EZ9D4WZ8Ln1W7ZRkR559W/bC+kXRgCUl0qpxJfQk9SLg6pCCkROsa7LCZWheQHG6pr
- GHD59bCBqaQ2JvjfhNvJM11O/2quS61nTfFHnywuqH0WWpKeqZYT5zxJyT/KAmo0YR
- TfYJO/X4Z0upw==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1725128482; x=1725733282; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=cwuRqJJVXRP3P1Zcg5uxKTh67diBAzdRzRNDKpPEIwA=;
+ b=O2SZRxLw5XLx1PxqwMnGDrNs2LdZU7MfvrSqCxhvgNnt1fUl++kdvTUu0gOviaRWQS
+ j3PvFHAr/KuKvwULvsnxlqPyUo2PO5IccrUN8adda5nVLNTV4IhquEcVm0M85Ygq2P0/
+ Ogl8jEmaMGYlQ73WunDK/gRgUvcgwiLOJZgWA/xBC7nOaT4I+vGUNEsyMk2S3h4xYnfW
+ FSM6MM+Wq8u9m1StTLIoZnEB5hRpmiMFkZIKyjjIEcToI+ykoMrK2D9sK5Y65b96hxHn
+ YEP8j8I51AIpqvCXEm8N2aqNtVi1FHa+eG0U03WfK4a0E/sQiF+Le/SyigWkC64u79o9
+ tRzA==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=free.fr
+ header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=Yr5wn1Gn
-Subject: Re: [Buildroot] [PATCH v3 1/2] utils/docker-run: mount and pass
- BR2_EXTERNAL dirs
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=O2SZRxLw
+Subject: [Buildroot] [PATCH] package/elfutils: enable zstd for host package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,117 +100,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Ricardo Martincoski <ricardo.martincoski@datacom.com.br>,
- Brandon Maier <brandon.maier@collins.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Cc: Sergey Matyukevich <geomatsi@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fiona, All,
+Enable zstd support in host-elfutils by default. One possible use-case
+for this feature is building Linux kernel where BTF support is enabled
+together with compression of debugging information using zstd.
 
-On 2024-08-31 18:57 +0200, Fiona Klute spake thusly:
-> Am 30.08.24 um 23:35 schrieb Yann E. MORIN:
-> > On 2024-07-13 21:22 +0200, Fiona Klute via buildroot spake thusly:
-> > > From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
-> > > The BR2_EXTERNAL environment variable is passed into the container,
-> > > and each path listed in it mounted. This allows using external trees
-> > > when running a build using utils/docker-run. Testing the existence of
-> > > the variable instead of a non-empty value allows passing an empty
-> > > BR2_EXTERNAL variable to disable currently set external trees.
-[--SNIP--]
-> > This commit mixes multiple changes:
-> >    - using process substitution with a while-loop, instead of the
-> >      command substitution and a for-loop
-> >    - passing br2-external and mounting trees in the container
-> >    - handling br2-external trees with spaces in them
-> > 
-> > I see you have a second patch with support for br2-external trees with
-> > spaces in their paths. If at all, it should come before this one.
-> > 
-> > However, I don't think we should support paths with spaces. We currently
-> > do not, and the rest of the code base (as your second patch states) may
-> > or may not work (hint: it does not, it's broken in a lot of places, and
-> > the buildsystems of many packages do not support spaces in path either).
-> > 
-> > Also, BR2_EXTERNAL must be a space-separated list, as it needs to be
-> > split on space from Makefile context, so no br2-external tree with
-> > spaces in paths can even work... (unless I missed something...)
-> 
-> According to the manual multiple paths in BR2_EXTERNAL must be separated
-> by colons, not spaces, example copied verbatim from
-> docs/manual/customize-outside-br.adoc:
-> 
-> buildroot/ $ make BR2_EXTERNAL=/path/to/foo:/where/we/have/bar menuconfig
+Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
+---
+ package/elfutils/elfutils.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Supporting both colon- and space-separated lists was the worst idea I
-had when I implemented and coded support for mutliple br2-externals.
-
-In fact, the manual has an example with a colon, but nowhere does it
-explicitly states that it can be either.
-
-> support/scripts/br2-external splits BR2_EXTERNAL by colon, or rather
-> replaces colons with spaces in the variable value and then uses the
-> result unquoted to create a list of parameters.
-
-Note that the code (which you quoted in your reply to patch 2) is:
-
-    do_validate "${outputdir}" ${@//:/ }
-
-So, it is going to split the words on spaces. E.g. passing:
-    BR2_EXTERNAL=/path/to some/dir:/other/path
-
-will result in this call:
-
-    do_validate "${outputdir}" /path/to some/dir /other/path
-
-which will be three arguments. And that would fail:
-
-    $ BR2_EXTERNAL="/home/ymorin/dev/buildroot/misc/br2-external-tests/br2-external-1:/home/ymorin/dev/buildroot/misc/br2-external-tests/br2 external" make defconfig
-    Makefile:194: *** '/home/ymorin/dev/buildroot/misc/br2-external-tests/br2': no such file or directory.  Stop.
-    make: *** [Makefile:23: _all] Error 2
-
-(I need to polish and push my br2-external test trees to gitlab...)
-
-Also, internally, BR2_EXTERNAL is saved back as a space-separated list:
-
-    https://gitlab.com/buildroot.org/buildroot/-/blob/master/support/scripts/br2-external?ref_type=heads#L124
-
-    printf 'BR2_EXTERNAL ?='
-    for br2_name in "${BR2_EXT_NAMES[@]}"; do
-        eval br2_ext="\"\${BR2_EXT_PATHS_${br2_name}}\""
-        printf ' %s' "${br2_ext}"
-    done
-    printf '\n'
-
-... so that calling 'make' again without specifyig BR2_EXTERNAL will
-still use the BR2_EXTERNAL trees used at configure time.
-
-So, definitely, br2-external trees with spaces in them is not supported
-and is not working.
-
-> That means
-> utils/docker-run must split by colon, too, no matter if we want to make
-> the handling of the individual paths after splitting space-safe or not.
-
-Damn right you are, damit! ;-) So the code could just look like:
-
-     docker_opts+=( --env BR2_EXTERNAL )
-     for dir in ${BR2_EXTERNAL//:/ }; do
-         mountpoints+=( "${br2_ext}" )
-     done
-
-Regards,
-Yann E. MORIN.
-
+diff --git a/package/elfutils/elfutils.mk b/package/elfutils/elfutils.mk
+index 8738af7751..1a1aca37b3 100644
+--- a/package/elfutils/elfutils.mk
++++ b/package/elfutils/elfutils.mk
+@@ -12,7 +12,7 @@ ELFUTILS_LICENSE = GPL-2.0+ or LGPL-3.0+ (library)
+ ELFUTILS_LICENSE_FILES = COPYING COPYING-GPLV2 COPYING-LGPLV3
+ ELFUTILS_CPE_ID_VALID = YES
+ ELFUTILS_DEPENDENCIES = host-pkgconf zlib $(TARGET_NLS_DEPENDENCIES)
+-HOST_ELFUTILS_DEPENDENCIES = host-pkgconf host-zlib host-bzip2 host-xz
++HOST_ELFUTILS_DEPENDENCIES = host-pkgconf host-zlib host-bzip2 host-xz host-zstd
+ 
+ # We patch configure.ac
+ ELFUTILS_AUTORECONF = YES
+@@ -26,7 +26,7 @@ ELFUTILS_CONF_OPTS += \
+ HOST_ELFUTILS_CONF_OPTS = \
+ 	--with-bzlib \
+ 	--with-lzma \
+-	--without-zstd \
++	--with-zstd \
+ 	--disable-demangler \
+ 	--disable-progs
+ 
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.46.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
