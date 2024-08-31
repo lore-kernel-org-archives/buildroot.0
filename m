@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6224ECD13DE
-	for <buildroot@archiver.kernel.org>; Sat, 31 Aug 2024 17:24:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 165CACD13DE
+	for <buildroot@archiver.kernel.org>; Sat, 31 Aug 2024 17:25:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2EAA784170;
-	Sat, 31 Aug 2024 17:24:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DA2BD80F58;
+	Sat, 31 Aug 2024 17:25:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dze3sWRdukno; Sat, 31 Aug 2024 17:24:25 +0000 (UTC)
+ id JC0GnBVVlVfj; Sat, 31 Aug 2024 17:25:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 00ED38418C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E02CD80FA8
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 00ED38418C;
-	Sat, 31 Aug 2024 17:24:24 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 20BBB1BF5E6
- for <buildroot@lists.busybox.net>; Sat, 31 Aug 2024 17:24:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E02CD80FA8;
+	Sat, 31 Aug 2024 17:25:24 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id C2B4C1BF5E6
+ for <buildroot@lists.busybox.net>; Sat, 31 Aug 2024 17:25:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0E67A40042
- for <buildroot@lists.busybox.net>; Sat, 31 Aug 2024 17:24:17 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id BD89580FA8
+ for <buildroot@lists.busybox.net>; Sat, 31 Aug 2024 17:25:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id X66bv8BOWnr7 for <buildroot@lists.busybox.net>;
- Sat, 31 Aug 2024 17:24:15 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id gNsYoHcZ4yNE for <buildroot@lists.busybox.net>;
+ Sat, 31 Aug 2024 17:25:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CADB9400B9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CC7AA80F58
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id CADB9400B9
- for <buildroot@buildroot.org>; Sat, 31 Aug 2024 17:24:15 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id CC7AA80F58
+ for <buildroot@buildroot.org>; Sat, 31 Aug 2024 17:25:22 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B69D086800; Sat, 31 Aug 2024 17:24:15 +0000 (UTC)
+ id B92D986808; Sat, 31 Aug 2024 17:25:22 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 31 Aug 2024 19:15:57 +0200
-X-Git-Refname: refs/heads/2024.05.x
-X-Git-Oldrev: 22741d9eb6f7350650521d183a5c74810d1ae5f6
-X-Git-Newrev: 1160c791463809ac91797c93f0ec28bff0c42f06
+Date: Sat, 31 Aug 2024 19:15:31 +0200
+X-Git-Refname: refs/heads/2024.02.x
+X-Git-Oldrev: ae878fea3d5e50847c7a39a2ac87071bfeaf8fda
+X-Git-Newrev: b31bf8212475ef7bc5c92cab81e070730baf600e
 X-Patchwork-Hint: ignore
-Message-Id: <20240831172415.B69D086800@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.05.x] package/can-utils: fix
- build with gcc >= 14
+Message-Id: <20240831172522.B92D986808@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/libressl: fix
+ powerpc64 build
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,114 +65,60 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1160c791463809ac91797c93f0ec28bff0c42f06
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=b31bf8212475ef7bc5c92cab81e070730baf600e
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-Fix the following build failure with gcc >= 14:
+Fix the following build failure with powerpc64 raised since bump to
+version 3.8.2 in commit 21eca49ed5110872407b76ab9337d2877c4cda24:
 
-j1939acd.c: In function 'main':
-j1939acd.c:489:38: error: passing argument 1 of 'asprintf' from incompatible pointer type [-Wincompatible-pointer-types]
-  489 |                         if (asprintf(&program_invocation_name, "%s.%s",
-      |                                      ^~~~~~~~~~~~~~~~~~~~~~~~
-      |                                      |
-      |                                      const char **
+In file included from /home/autobuild/autobuild/instance-23/output-1/build/libressl-3.8.4/crypto/rc4/rc4_enc.c:61:
+/home/autobuild/autobuild/instance-23/output-1/build/libressl-3.8.4/crypto/../include/openssl/rc4.h:75:9: error: unknown type name 'RC4_INT'
+   75 |         RC4_INT x, y;
+      |         ^~~~~~~
 
-Fixes:
- - http://autobuild.buildroot.org/results/1e2a533a936624249cd79d34983c889c3c4c2e3b
+Fixes: 21eca49ed5110872407b76ab9337d2877c4cda24
+ - http://autobuild.buildroot.org/results/2533f8f642f435b40ce687b6df482c51a3fa0250
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 3720250420d6b35bd217950d7a0648a0ecd0a2b5)
+(cherry picked from commit ee00cfd09e4ffa97019c4e9384cc761995912e28)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...legacy-poption-prefix-to-use-when-logging.patch | 79 ++++++++++++++++++++++
- 1 file changed, 79 insertions(+)
+ ...MakeLists-txt-Fix-HOST-variable-for-ppc64.patch | 26 ++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
 
-diff --git a/package/can-utils/0002-j1939acd-remove-legacy-poption-prefix-to-use-when-logging.patch b/package/can-utils/0002-j1939acd-remove-legacy-poption-prefix-to-use-when-logging.patch
+diff --git a/package/libressl/0004-CMakeLists-txt-Fix-HOST-variable-for-ppc64.patch b/package/libressl/0004-CMakeLists-txt-Fix-HOST-variable-for-ppc64.patch
 new file mode 100644
-index 0000000000..36c96d59e4
+index 0000000000..8da8fedae2
 --- /dev/null
-+++ b/package/can-utils/0002-j1939acd-remove-legacy-poption-prefix-to-use-when-logging.patch
-@@ -0,0 +1,79 @@
-+From d337863d9189501dbbb15467cc3dcba85946a2a3 Mon Sep 17 00:00:00 2001
-+From: Peter Seiderer <ps.report@gmx.net>
-+Date: Mon, 22 Jul 2024 16:12:04 +0200
-+Subject: [PATCH] j1939acd: remove legacy '-p' option (prefix to use when
-+ logging)
++++ b/package/libressl/0004-CMakeLists-txt-Fix-HOST-variable-for-ppc64.patch
+@@ -0,0 +1,26 @@
++From e6c7de3f03c51fbdcf5ad88bf12fe9e128521f0d Mon Sep 17 00:00:00 2001
++From: OPNA2608 <opna2608@protonmail.com>
++Date: Fri, 19 Jul 2024 11:41:46 +0200
++Subject: [PATCH] CMakeLists.txt: Fix HOST variable for ppc64
 +
-+- remove legacy '-p' option (prefix to use when logging), fixes uclibc
-+  compile
++The code here defined HOST_PPC64, but the rest of the build system expects HOST_POWERPC64.
 +
-+Fixes:
-+
-+  j1939acd.c: In function 'main':
-+  j1939acd.c:489:38: error: passing argument 1 of 'asprintf' from incompatible pointer type [-Wincompatible-pointer-types]
-+    489 |                         if (asprintf(&program_invocation_name, "%s.%s",
-+        |                                      ^~~~~~~~~~~~~~~~~~~~~~~~
-+        |                                      |
-+        |                                      const char **
-+
-+Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-+Upstream: https://github.com/linux-can/can-utils/commit/d337863d9189501dbbb15467cc3dcba85946a2a3
++Upstream: https://github.com/libressl/portable/commit/e6c7de3f03c51fbdcf5ad88bf12fe9e128521f0d
 +Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 +---
-+ j1939acd.c | 16 +---------------
-+ 1 file changed, 1 insertion(+), 15 deletions(-)
++ CMakeLists.txt | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
 +
-+diff --git a/j1939acd.c b/j1939acd.c
-+index 44bb826c..ae4e58ac 100644
-+--- a/j1939acd.c
-++++ b/j1939acd.c
-+@@ -38,7 +38,6 @@ static const char help_msg[] =
-+ 	"			e.g. 80,50-100,200-210 (defaults to 0-253)" "\n"
-+ 	"  -c, --cache=FILE	Cache file to save/restore the source address" "\n"
-+ 	"  -a, --address=ADDRESS	Start with Source Address ADDRESS" "\n"
-+-	"  -p, --prefix=STR	Prefix to use when logging" "\n"
-+ 	"\n"
-+ 	"NAME is the 64bit nodename" "\n"
-+ 	"\n"
-+@@ -54,14 +53,13 @@ static struct option long_opts[] = {
-+ 	{ "range", required_argument, NULL, 'r', },
-+ 	{ "cache", required_argument, NULL, 'c', },
-+ 	{ "address", required_argument, NULL, 'a', },
-+-	{ "prefix", required_argument, NULL, 'p', },
-+ 	{ },
-+ };
-+ #else
-+ #define getopt_long(argc, argv, optstring, longopts, longindex) \
-+ 	getopt((argc), (argv), (optstring))
-+ #endif
-+-static const char optstring[] = "vr:c:a:p:?";
-++static const char optstring[] = "vr:c:a:?";
-+ 
-+ /* byte swap functions */
-+ static inline int host_is_little_endian(void)
-+@@ -466,9 +464,6 @@ int main(int argc, char *argv[])
-+ 	struct sockaddr_can saddr;
-+ 	uint64_t cmd_name;
-+ 
-+-#ifdef _GNU_SOURCE
-+-	program_invocation_name = program_invocation_short_name;
-+-#endif
-+ 	/* argument parsing */
-+ 	while ((opt = getopt_long(argc, argv, optstring, long_opts, NULL)) != -1)
-+ 		switch (opt) {
-+@@ -484,15 +479,6 @@ int main(int argc, char *argv[])
-+ 		case 'a':
-+ 			s.current_sa = strtoul(optarg, 0, 0);
-+ 			break;
-+-		case 'p':
-+-#ifdef _GNU_SOURCE
-+-			if (asprintf(&program_invocation_name, "%s.%s",
-+-				     program_invocation_short_name, optarg) < 0)
-+-				err(1, "asprintf(program invocation name)");
-+-#else
-+-			err(0, "compile with -D_GNU_SOURCE to use -p");
-+-#endif
-+-			break;
-+ 		default:
-+ 			fputs(help_msg, stderr);
-+ 			exit(1);
++diff --git a/CMakeLists.txt b/CMakeLists.txt
++index c496ad97b5..670aa9a1a0 100644
++--- a/CMakeLists.txt
+++++ b/CMakeLists.txt
++@@ -373,7 +373,7 @@ elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "mips")
++ elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "powerpc")
++ 	set(HOST_POWERPC true)
++ elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "ppc64")
++-	set(HOST_PPC64 true)
+++	set(HOST_POWERPC64 true)
++ elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "riscv64")
++ 	set(HOST_RISCV64 true)
++ elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "sparc64")
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
