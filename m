@@ -4,94 +4,95 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D90AECA101C
-	for <buildroot@archiver.kernel.org>; Sat, 31 Aug 2024 12:08:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03920CA101C
+	for <buildroot@archiver.kernel.org>; Sat, 31 Aug 2024 12:09:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A77F742425;
-	Sat, 31 Aug 2024 12:08:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8F90742401;
+	Sat, 31 Aug 2024 12:09:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ob5ROqCCIPos; Sat, 31 Aug 2024 12:08:55 +0000 (UTC)
+ id Sc0T-IpQThp8; Sat, 31 Aug 2024 12:08:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 00C4742445
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 196394242A
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 00C4742445;
-	Sat, 31 Aug 2024 12:08:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 196394242A;
+	Sat, 31 Aug 2024 12:08:58 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 527581BF5F5
- for <buildroot@lists.busybox.net>; Sat, 31 Aug 2024 12:08:48 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 36DE21BF5F5
+ for <buildroot@lists.busybox.net>; Sat, 31 Aug 2024 12:08:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3E55484129
- for <buildroot@lists.busybox.net>; Sat, 31 Aug 2024 12:08:48 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3028184120
+ for <buildroot@lists.busybox.net>; Sat, 31 Aug 2024 12:08:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id l2h-CRSVqEMW for <buildroot@lists.busybox.net>;
- Sat, 31 Aug 2024 12:08:47 +0000 (UTC)
+ id UbAwjeH9GiuT for <buildroot@lists.busybox.net>;
+ Sat, 31 Aug 2024 12:08:48 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::530; helo=mail-ed1-x530.google.com;
+ client-ip=2a00:1450:4864:20::52d; helo=mail-ed1-x52d.google.com;
  envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B23F484120
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B23F484120
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com
- [IPv6:2a00:1450:4864:20::530])
- by smtp1.osuosl.org (Postfix) with ESMTPS id B23F484120
- for <buildroot@buildroot.org>; Sat, 31 Aug 2024 12:08:46 +0000 (UTC)
-Received: by mail-ed1-x530.google.com with SMTP id
- 4fb4d7f45d1cf-5c0abaae174so2754050a12.1
- for <buildroot@buildroot.org>; Sat, 31 Aug 2024 05:08:46 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org DA5AB84127
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DA5AB84127
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com
+ [IPv6:2a00:1450:4864:20::52d])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id DA5AB84127
+ for <buildroot@buildroot.org>; Sat, 31 Aug 2024 12:08:47 +0000 (UTC)
+Received: by mail-ed1-x52d.google.com with SMTP id
+ 4fb4d7f45d1cf-5a10835487fso3719987a12.1
+ for <buildroot@buildroot.org>; Sat, 31 Aug 2024 05:08:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1725106124; x=1725710924;
+ d=1e100.net; s=20230601; t=1725106126; x=1725710926;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=TmBMI624XPvQVILDzBHHHhA6pjVilGnK++D3NnqAOmk=;
- b=gSG2565FBSNhZYVgjRI+0qeZYA62Mwk3qa9hcibswoTHQ37sXtJ0SOeUk149JMwKwo
- Oe4uiZrnmHEsdIzXdxkcXEepV+YspavL7NdUYtuDDR1XRTI0/fQIKzf7+0T6KngCi/3L
- qlITAZB8QJs3r8fGE0VivRZg/8BU3EZHpJ6CPbGN4gKf1TYPpHbi0RJw5MIWzmtQIR5d
- 8g7KO6+FPQ+lr3y6oB62wOuThOaFUZj+OBvST0ZTcnCyFK5S7T/QY4pNypv7o+Hy5Fno
- KWdPaROivDw4Aa+Eg2l6UbpTW0HDKfWfMckXtdUUJ+4I/QyH1UtvzkIsCekGEqBNCn+L
- kvjg==
-X-Gm-Message-State: AOJu0YymyafQt4OoohZZyiNicR9Sqw0VT7rEQp/11uJz2lxzd/vnFnkj
- IZm5wPIAwaxtcO9x+LMwD9NlBX6AIc0Tdeh2sltMab1kLU57Z87x/N3FIwVrFl1AeTupvtfse65
- E0mI=
-X-Google-Smtp-Source: AGHT+IGXHFD1ucq1KSNr/u2prI3mP17VW6uObivMx1ejoHFfrIed9bI6KHoR9atKUuBVAPIBKUtgLA==
-X-Received: by 2002:a05:6402:1d56:b0:5c0:9097:c0fc with SMTP id
- 4fb4d7f45d1cf-5c21ed89fe2mr7378470a12.26.1725106124369; 
- Sat, 31 Aug 2024 05:08:44 -0700 (PDT)
+ bh=JSKYc6C8TT6iYubA26m8JbSuDNI8sNNGFRv1JezIBfI=;
+ b=L6ef8CVg7yCUoZoLQOGeNUMAfRItyxaXcMeAcKLnKdT99odB09KKHuHok/vzvEKnNW
+ joLwSPnOfU1u+j7FzyEaaGOfTyWohr6vIFlmdSl3b97+53BHsTQ5QwKYLUJ8lpFkrX0d
+ XB5+ibS2hjgH/efwL9kdIEubq+0jHfgpwDIm02ch5mcLTfgNt/KlccAIjsShiFgEvdgb
+ d7Q3zq4t2pQxFNZMvg9HVvUD7VzYRlqRKMIvrgQSylT1L7A6f29JR0BFDcjmKeflvAsG
+ Vr17YUY9Mv4JJLAAj43MF03kaQenEuKS4WHm3PIbFHCh27+PP0CAjopXRlyPtXnf1V+S
+ qWNg==
+X-Gm-Message-State: AOJu0Yy8np3oanw/xjgVjwsFocLhrlbyyCBuQmvWspsSMgRO8rxM3lae
+ EkuCj+31RWJebB0hfuSHnlFlzSWscDeaDsffzFdJtf7EOZq7bfziJkCoMNQ9xxnSLkRyiy06goI
+ VCP4=
+X-Google-Smtp-Source: AGHT+IH/xgUb4JeEXeTgChvQB/vzVvEfrG5YMJ8ZxWB04MYs6eXqXmvf5wHSfvpYiAX+AgrGslJLFg==
+X-Received: by 2002:a05:6402:518a:b0:5c2:4dcc:b90a with SMTP id
+ 4fb4d7f45d1cf-5c24dccbb2emr368947a12.34.1725106125330; 
+ Sat, 31 Aug 2024 05:08:45 -0700 (PDT)
 Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it
  (host-82-48-52-249.retail.telecomitalia.it. [82.48.52.249])
  by smtp.gmail.com with ESMTPSA id
- 4fb4d7f45d1cf-5c226ce4f47sm2938178a12.88.2024.08.31.05.08.43
+ 4fb4d7f45d1cf-5c226ce4f47sm2938178a12.88.2024.08.31.05.08.44
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 31 Aug 2024 05:08:44 -0700 (PDT)
+ Sat, 31 Aug 2024 05:08:45 -0700 (PDT)
 From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Sat, 31 Aug 2024 14:08:32 +0200
-Message-ID: <20240831120833.2915529-3-dario.binacchi@amarulasolutions.com>
+Date: Sat, 31 Aug 2024 14:08:33 +0200
+Message-ID: <20240831120833.2915529-4-dario.binacchi@amarulasolutions.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240831120833.2915529-1-dario.binacchi@amarulasolutions.com>
 References: <20240831120833.2915529-1-dario.binacchi@amarulasolutions.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1725106124; x=1725710924;
+ d=amarulasolutions.com; s=google; t=1725106126; x=1725710926;
  darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=TmBMI624XPvQVILDzBHHHhA6pjVilGnK++D3NnqAOmk=;
- b=DSJAuMZUjPGR4fdS7Khou/jjmCzLYikw/5qGKjZO2VVDf/vFXpe9RKmbSa2m21RBY7
- bqemqAS5jhcEzoPYDzOCD0oc+7KP/Nor1xvPhpEAiaklragU4fTx25jvyW5mCwcKUtN3
- eBlPPgQSuGE42ClZGwLGREz19RBu1vML63KnM=
+ bh=JSKYc6C8TT6iYubA26m8JbSuDNI8sNNGFRv1JezIBfI=;
+ b=MWznTGL+nPrU4WdM5ja1HtQdLnLvx4KQkvFeOBNlqGbVc7wpceA4WCI6zWHsmiiMCx
+ OIt/905lx6Zk0sMzeD0QEtl777Wy2ML3Jyq3xR3Rc3rLeEXWzvliY2gtw3pcpolVK76q
+ 1sTkVS8fixtA7I2KGMbryiC2bGMNGDhBQCLAE=
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=amarulasolutions.com
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=DSJAuMZU
-Subject: [Buildroot] [PATCH v4 2/3] configs/stm32f746_disco_sd: new defconfig
+ dkim=pass (1024-bit key) header.d=amarulasolutions.com
+ header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
+ header.b=MWznTGL+
+Subject: [Buildroot] [PATCH v4 3/3] board/canaan/k210-soc: use tinyinit as
+ Linux init process
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,292 +104,243 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Damien Le Moal <dlemoal@kernel.org>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+Cc: linux-amarula@amarulasolutions.com, Damien Le Moal <dlemoal@kernel.org>,
  Dario Binacchi <dario.binacchi@amarulasolutions.com>,
- linux-amarula@amarulasolutions.com, "Yann E . MORIN" <yann.morin.1998@free.fr>
+ "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The commit adds support for STM32F746G-DISCO board. The discovery kit is
-a complete demonstration and development platform for STMicroelectronics
-Arm Cortex-M7-core-based STM32F746NG.
+The initialization script provided by the tinyinit package is the same
+as the one contained in board/canaan/k210-soc/rootfs_overlay/sbin/init
+except for the Linux logo, which has been removed. The patch reworks
+the configurations that use this overlay directory by replacing the
+initialization process contained within it with the one provided by
+the tinyinit package.
 
-Board support package includes the following components:
-- mainline Linux kernel 5.15.165
-- mainline U-Boot 2024.07
-- default packages from buildroot
-
-Link: https://www.st.com/en/evaluation-tools/32f746gdiscovery.html
-Co-Developed-by: Waldemar Brodkorb <wbx@openadk.org>
-Tested-by: Waldemar Brodkorb <wbx@openadk.org>
 Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 ---
 Changes v3 -> v4:
- - Fix indentation in board/stmicroelectronics/stm32f746-disco/flash_sd.sh
- - Remove from board/stmicroelectronics/stm32f746-disco/post-build.sh the
-   statements for finalizing the tinyinit script
  - Replace BR2_INIT_NONE=y and BR2_PACKAGE_TINYINIT=y with
    BR2_INIT_TINYINIT=y in stm32f746_disco_sd_defconfig
- - I ran some tests with a single partition, as suggested by Thomas, but
-   the system became less stable. Even with just an `ls` command, I
-   encountered issues with the device, whereas with two partitions, I can
-   execute more commands before running into problems.
-   The memory fragmentation has likely increased.
-   So I therefore preferred to keep the two-partition system.
 
 Changes v2 -> v3:
  - Replace BR2_INIT_TINYINIT=y with BR2_INIT_NONE=y and
    BR2_PACKAGE_TINYINIT=y in stm32f746_disco_sd_defconfig.
 
 Changes v1 -> v2:
- - Move Linux kernel from version 5.15.163 to 5.15.165.
- - Drop busybox-tiny.config and use package/busybox/busybox-minimal.config.
  - Remove the logo management.
- - Add the Tested-by tag.
- - Update the commit message
+ - Update the commit message.
 
- DEVELOPERS                                    |  2 ++
- .../stm32f746-disco/extlinux.conf             |  4 +++
- .../stm32f746-disco/flash_sd.sh               | 22 +++++++++++++
- .../stm32f746-disco/genimage.cfg              | 27 ++++++++++++++++
- .../stm32f746-disco/linux.fragment            | 13 ++++++++
- .../patches/linux-headers/linux-headers.hash  |  1 +
- .../stm32f746-disco/patches/linux/linux.hash  |  2 ++
- .../stm32f746-disco/patches/uboot/uboot.hash  |  2 ++
- .../stm32f746-disco/post-build.sh             |  4 +++
- .../stm32f746-disco/readme.txt                | 31 +++++++++++++++++++
- configs/stm32f746_disco_sd_defconfig          | 31 +++++++++++++++++++
- 11 files changed, 139 insertions(+)
- create mode 100644 board/stmicroelectronics/stm32f746-disco/extlinux.conf
- create mode 100755 board/stmicroelectronics/stm32f746-disco/flash_sd.sh
- create mode 100644 board/stmicroelectronics/stm32f746-disco/genimage.cfg
- create mode 100644 board/stmicroelectronics/stm32f746-disco/linux.fragment
- create mode 120000 board/stmicroelectronics/stm32f746-disco/patches/linux-headers/linux-headers.hash
- create mode 100644 board/stmicroelectronics/stm32f746-disco/patches/linux/linux.hash
- create mode 100644 board/stmicroelectronics/stm32f746-disco/patches/uboot/uboot.hash
- create mode 100755 board/stmicroelectronics/stm32f746-disco/post-build.sh
- create mode 100644 board/stmicroelectronics/stm32f746-disco/readme.txt
- create mode 100644 configs/stm32f746_disco_sd_defconfig
+ .checkpackageignore                           |  1 -
+ board/canaan/k210-soc/rootfs_overlay/init     |  1 -
+ .../canaan/k210-soc/rootfs_overlay/sbin/init  | 41 -------------------
+ configs/canaan_kd233_defconfig                |  3 +-
+ configs/sipeed_maix_bit_defconfig             |  3 +-
+ configs/sipeed_maix_bit_sdcard_defconfig      |  3 +-
+ configs/sipeed_maix_dock_defconfig            |  3 +-
+ configs/sipeed_maix_dock_sdcard_defconfig     |  3 +-
+ configs/sipeed_maix_go_defconfig              |  3 +-
+ configs/sipeed_maix_go_sdcard_defconfig       |  3 +-
+ configs/sipeed_maixduino_defconfig            |  3 +-
+ configs/sipeed_maixduino_sdcard_defconfig     |  3 +-
+ 12 files changed, 9 insertions(+), 61 deletions(-)
+ delete mode 120000 board/canaan/k210-soc/rootfs_overlay/init
+ delete mode 100755 board/canaan/k210-soc/rootfs_overlay/sbin/init
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index cf62d0ed65ae..70e57598486e 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -785,10 +785,12 @@ F:	package/xinetd/
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 4cfc202153c7..849bb2a55e47 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -22,7 +22,6 @@ board/bsh/imx8mn-bsh-smm-s2-pro/post-image.sh Shellcheck
+ board/bsh/imx8mn-bsh-smm-s2/flash.sh Shellcheck lib_shellscript.EmptyLastLine
+ board/bsh/imx8mn-bsh-smm-s2/post-build.sh Shellcheck
+ board/canaan/k210-soc/post-build.sh Shellcheck
+-board/canaan/k210-soc/rootfs_overlay/sbin/init Shellcheck
+ board/chromebook/elm/sign.sh Shellcheck
+ board/chromebook/mksd.sh Shellcheck
+ board/chromebook/snow/sign.sh Shellcheck
+diff --git a/board/canaan/k210-soc/rootfs_overlay/init b/board/canaan/k210-soc/rootfs_overlay/init
+deleted file mode 120000
+index a0b71977c06f..000000000000
+--- a/board/canaan/k210-soc/rootfs_overlay/init
++++ /dev/null
+@@ -1 +0,0 @@
+-/sbin/init
+\ No newline at end of file
+diff --git a/board/canaan/k210-soc/rootfs_overlay/sbin/init b/board/canaan/k210-soc/rootfs_overlay/sbin/init
+deleted file mode 100755
+index d4bf53d45231..000000000000
+--- a/board/canaan/k210-soc/rootfs_overlay/sbin/init
++++ /dev/null
+@@ -1,41 +0,0 @@
+-#!/bin/sh
+-
+-# This script replaces the default busybox init process to avoid having that
+-# process staying alive and sleeping in the background, (uselessly) consuming
+-# precious memory.
+-
+-# Mount procfs and sysfs
+-/bin/mount -t proc proc /proc
+-/bin/mount -t sysfs sysfs /sys
+-
+-# When the kernel is directly booted, devtmpfs is not automatically mounted.
+-# Manually mount it if needed.
+-devmnt=$(mount | grep -c devtmpfs)
+-if [ ${devmnt} -eq 0 ]; then
+-    /bin/mount -t devtmpfs devtmpfs /dev
+-fi
+-
+-# Use the /dev/console device node from devtmpfs if possible to not
+-# confuse glibc's ttyname_r().
+-# This may fail (E.G. booted with console=), and errors from exec will
+-# terminate the shell, so use a subshell for the test
+-if (exec 0</dev/console) 2>/dev/null; then
+-    exec 0</dev/console
+-    exec 1>/dev/console
+-    exec 2>/dev/console
+-fi
+-
+-# Clear memory to reduce page fragmentation
+-echo 3 > /proc/sys/vm/drop_caches
+-
+-# Print a fun logo :)
+-echo "          __  _"
+-echo "         / / (_) ____   _   _ __  __"
+-echo "        / /  | ||  _ \\ | | | |\\ \\/ /"
+-echo "       / /___| || | | || |_| | >  < "
+-echo "      /_____/|_||_| |_| \\____|/_/\\_\\"
+-echo "    64-bits RISC-V Kendryte K210 NOMMU"
+-echo ""
+-
+-# Finally, let's start an interactive shell
+-exec /bin/sh
+diff --git a/configs/canaan_kd233_defconfig b/configs/canaan_kd233_defconfig
+index 832f8363a75c..27624aff4a9a 100644
+--- a/configs/canaan_kd233_defconfig
++++ b/configs/canaan_kd233_defconfig
+@@ -32,6 +32,5 @@ BR2_PACKAGE_BUSYBOX_CONFIG_FRAGMENT_FILES="board/canaan/k210-soc/busybox-tiny.co
+ # BR2_PACKAGE_IFUPDOWN_SCRIPTS is not set
  
- N:	Dario Binacchi <dario.binacchi@amarulasolutions.com>
- F:	board/bsh/
-+F:	board/stmicroelectronics/stm32f746-disco/
- F:	board/stmicroelectronics/stm32f769-disco/
- F:	configs/imx6ulz_bsh_smm_m2_defconfig
- F:	configs/imx8mn_bsh_smm_s2_defconfig
- F:	configs/imx8mn_bsh_smm_s2_pro_defconfig
-+F:	configs/stm32f746_disco_sd_defconfig
- F:	configs/stm32f769_disco_sd_defconfig
- F:	package/sscep/
- F:	package/tinyinit/
-diff --git a/board/stmicroelectronics/stm32f746-disco/extlinux.conf b/board/stmicroelectronics/stm32f746-disco/extlinux.conf
-new file mode 100644
-index 000000000000..bb79c0b412a2
---- /dev/null
-+++ b/board/stmicroelectronics/stm32f746-disco/extlinux.conf
-@@ -0,0 +1,4 @@
-+label stm32f746-disco-buildroot
-+  kernel /zImage
-+  devicetree /stm32f746-disco.dtb
-+  append console=ttySTM0,115200 root=/dev/mmcblk0p2 rw rootwait consoleblank=0 ignore_loglevel
-diff --git a/board/stmicroelectronics/stm32f746-disco/flash_sd.sh b/board/stmicroelectronics/stm32f746-disco/flash_sd.sh
-new file mode 100755
-index 000000000000..b4858cb9dacb
---- /dev/null
-+++ b/board/stmicroelectronics/stm32f746-disco/flash_sd.sh
-@@ -0,0 +1,22 @@
-+#!/bin/bash
-+
-+if [ $# -eq 0 ]; then
-+    OUTPUT_DIR=output
-+else
-+    OUTPUT_DIR=$1
-+fi
-+
-+if ! test -d "${OUTPUT_DIR}" ; then
-+    echo "ERROR: no output directory specified."
-+    echo "Usage: $0 OUTPUT_DIR"
-+    exit 1
-+fi
-+
-+"${OUTPUT_DIR}"/host/bin/openocd -f board/stm32f746g-disco.cfg \
-+    -c "init" \
-+    -c "reset init" \
-+    -c "flash probe 0" \
-+    -c "flash info 0" \
-+    -c "flash write_image erase ${OUTPUT_DIR}/images/u-boot.bin 0x08000000" \
-+    -c "reset run" \
-+    -c "shutdown"
-diff --git a/board/stmicroelectronics/stm32f746-disco/genimage.cfg b/board/stmicroelectronics/stm32f746-disco/genimage.cfg
-new file mode 100644
-index 000000000000..6743d41972c0
---- /dev/null
-+++ b/board/stmicroelectronics/stm32f746-disco/genimage.cfg
-@@ -0,0 +1,27 @@
-+image boot.vfat {
-+	vfat {
-+		files = {
-+			"zImage",
-+			"stm32f746-disco.dtb",
-+			"extlinux"
-+		}
-+	}
-+
-+	size = 16M
-+}
-+
-+image sdcard.img {
-+	hdimage {
-+	}
-+
-+	partition u-boot {
-+		partition-type = 0xC
-+		image = "boot.vfat"
-+	}
-+
-+	partition rootfs {
-+		partition-type = 0x83
-+		image = "rootfs.ext2"
-+		size = 32M
-+	}
-+}
-diff --git a/board/stmicroelectronics/stm32f746-disco/linux.fragment b/board/stmicroelectronics/stm32f746-disco/linux.fragment
-new file mode 100644
-index 000000000000..625fdced9e8d
---- /dev/null
-+++ b/board/stmicroelectronics/stm32f746-disco/linux.fragment
-@@ -0,0 +1,13 @@
-+# CONFIG_PREEMPT is not set
-+# CONFIG_MULTIUSER is not set
-+# CONFIG_TIMERFD is not set
-+CONFIG_SET_MEM_PARAM=y
-+CONFIG_DRAM_BASE=0xC0000000
-+CONFIG_DRAM_SIZE=0x01000000
-+# CONFIG_GCC_PLUGINS is not set
-+# CONFIG_XIP_KERNEL is not set
-+# CONFIG_BLK_DEV is not set
-+# CONFIG_COMPAT_BRK is not set
-+# CONFIG_PROC_SYSCTL is not set
-+# CONFIG_CRYPTO is not set
-+CONFIG_RCU_TRACE=y
-\ No newline at end of file
-diff --git a/board/stmicroelectronics/stm32f746-disco/patches/linux-headers/linux-headers.hash b/board/stmicroelectronics/stm32f746-disco/patches/linux-headers/linux-headers.hash
-new file mode 120000
-index 000000000000..5808d92afe89
---- /dev/null
-+++ b/board/stmicroelectronics/stm32f746-disco/patches/linux-headers/linux-headers.hash
-@@ -0,0 +1 @@
-+../linux/linux.hash
-\ No newline at end of file
-diff --git a/board/stmicroelectronics/stm32f746-disco/patches/linux/linux.hash b/board/stmicroelectronics/stm32f746-disco/patches/linux/linux.hash
-new file mode 100644
-index 000000000000..7f78b950f35c
---- /dev/null
-+++ b/board/stmicroelectronics/stm32f746-disco/patches/linux/linux.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  a36dd3e82ceb634afded31f2656568f57c4d9c4b399859f298b18116df11c6fe  linux-5.15.165.tar.xz
-diff --git a/board/stmicroelectronics/stm32f746-disco/patches/uboot/uboot.hash b/board/stmicroelectronics/stm32f746-disco/patches/uboot/uboot.hash
-new file mode 100644
-index 000000000000..fe9b4f53dc63
---- /dev/null
-+++ b/board/stmicroelectronics/stm32f746-disco/patches/uboot/uboot.hash
-@@ -0,0 +1,2 @@
-+# Locally calculated
-+sha256  f591da9ab90ef3d6b3d173766d0ddff90c4ed7330680897486117df390d83c8f  u-boot-2024.07.tar.bz2
-diff --git a/board/stmicroelectronics/stm32f746-disco/post-build.sh b/board/stmicroelectronics/stm32f746-disco/post-build.sh
-new file mode 100755
-index 000000000000..5dcdb352eb3b
---- /dev/null
-+++ b/board/stmicroelectronics/stm32f746-disco/post-build.sh
-@@ -0,0 +1,4 @@
-+#!/bin/sh
-+BOARD_DIR="$(dirname "$0")"
-+
-+install -m 0644 -D "${BOARD_DIR}"/extlinux.conf "${BINARIES_DIR}"/extlinux/extlinux.conf
-diff --git a/board/stmicroelectronics/stm32f746-disco/readme.txt b/board/stmicroelectronics/stm32f746-disco/readme.txt
-new file mode 100644
-index 000000000000..4ac16da33132
---- /dev/null
-+++ b/board/stmicroelectronics/stm32f746-disco/readme.txt
-@@ -0,0 +1,31 @@
-+STM32F746-DISCO
-+===================
-+
-+This tutorial describes how to use the predefined Buildroot
-+configuration for the STM32F746-DISCO evaluation platform.
-+
-+Building
-+--------
-+
-+  make stm32f746_disco_sd_defconfig
-+  make
-+
-+Flashing
-+--------
-+
-+  ./board/stmicroelectronics/stm32f746-disco/flash_sd.sh output/
-+
-+It will flash the U-boot bootloader.
-+
-+Creating SD card
-+----------------
-+
-+Buildroot prepares an "sdcard.img" image in the output/images/ directory,
-+ready to be dumped on a SD card. Launch the following command as root:
-+
-+  dd if=output/images/sdcard.img of=/dev/<your-sd-device>
-+
-+*** WARNING! This will destroy all the card content. Use with care! ***
-+
-+For details about the medium image layout and its content, see the
-+definition in board/stmicroelectronics/stm32f746-disco/genimage.cfg.
-diff --git a/configs/stm32f746_disco_sd_defconfig b/configs/stm32f746_disco_sd_defconfig
-new file mode 100644
-index 000000000000..870dde318324
---- /dev/null
-+++ b/configs/stm32f746_disco_sd_defconfig
-@@ -0,0 +1,31 @@
-+BR2_arm=y
-+BR2_cortex_m7=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
-+BR2_GLOBAL_PATCH_DIR="board/stmicroelectronics/stm32f746-disco/patches"
-+BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+ # Filesystem
+-BR2_INIT_NONE=y
 +BR2_INIT_TINYINIT=y
-+BR2_ROOTFS_POST_BUILD_SCRIPT="board/stmicroelectronics/stm32f746-disco/post-build.sh"
-+BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-+BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/stmicroelectronics/stm32f746-disco/genimage.cfg"
-+BR2_LINUX_KERNEL=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.165"
-+BR2_LINUX_KERNEL_DEFCONFIG="stm32"
-+BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/stmicroelectronics/stm32f746-disco/linux.fragment"
-+BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
-+BR2_LINUX_KERNEL_IMAGE_TARGET_NAME="zImage"
-+BR2_LINUX_KERNEL_DTS_SUPPORT=y
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="stm32f746-disco"
-+BR2_TARGET_ROOTFS_EXT2=y
-+BR2_TARGET_ROOTFS_EXT2_SIZE="32M"
-+# BR2_TARGET_ROOTFS_TAR is not set
-+BR2_TARGET_UBOOT=y
-+BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.07"
-+BR2_TARGET_UBOOT_BOARD_DEFCONFIG="stm32f746-disco"
-+BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
-+BR2_PACKAGE_HOST_DOSFSTOOLS=y
-+BR2_PACKAGE_HOST_GENIMAGE=y
-+BR2_PACKAGE_HOST_MTOOLS=y
-+BR2_PACKAGE_HOST_OPENOCD=y
+ BR2_TARGET_ROOTFS_INITRAMFS=y
+-BR2_ROOTFS_OVERLAY="board/canaan/k210-soc/rootfs_overlay"
+diff --git a/configs/sipeed_maix_bit_defconfig b/configs/sipeed_maix_bit_defconfig
+index 238e082a3d40..5119307330de 100644
+--- a/configs/sipeed_maix_bit_defconfig
++++ b/configs/sipeed_maix_bit_defconfig
+@@ -32,6 +32,5 @@ BR2_PACKAGE_BUSYBOX_CONFIG_FRAGMENT_FILES="board/canaan/k210-soc/busybox-tiny.co
+ # BR2_PACKAGE_IFUPDOWN_SCRIPTS is not set
+ 
+ # Filesystem
+-BR2_INIT_NONE=y
++BR2_INIT_TINYINIT=y
+ BR2_TARGET_ROOTFS_INITRAMFS=y
+-BR2_ROOTFS_OVERLAY="board/canaan/k210-soc/rootfs_overlay"
+diff --git a/configs/sipeed_maix_bit_sdcard_defconfig b/configs/sipeed_maix_bit_sdcard_defconfig
+index 28aa143583bd..4047da159221 100644
+--- a/configs/sipeed_maix_bit_sdcard_defconfig
++++ b/configs/sipeed_maix_bit_sdcard_defconfig
+@@ -33,10 +33,9 @@ BR2_LINUX_KERNEL_INTREE_DTS_NAME="canaan/sipeed_maix_bit"
+ # BR2_PACKAGE_IFUPDOWN_SCRIPTS is not set
+ 
+ # Filesystem
+-BR2_INIT_NONE=y
++BR2_INIT_TINYINIT=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_SIZE="64M"
+-BR2_ROOTFS_OVERLAY="board/canaan/k210-soc/rootfs_overlay"
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/canaan/k210-soc/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/canaan/k210-soc/genimage.cfg"
+diff --git a/configs/sipeed_maix_dock_defconfig b/configs/sipeed_maix_dock_defconfig
+index ee1b0d837284..0caa4d4e3ae3 100644
+--- a/configs/sipeed_maix_dock_defconfig
++++ b/configs/sipeed_maix_dock_defconfig
+@@ -32,6 +32,5 @@ BR2_PACKAGE_BUSYBOX_CONFIG_FRAGMENT_FILES="board/canaan/k210-soc/busybox-tiny.co
+ # BR2_PACKAGE_IFUPDOWN_SCRIPTS is not set
+ 
+ # Filesystem
+-BR2_INIT_NONE=y
++BR2_INIT_TINYINIT=y
+ BR2_TARGET_ROOTFS_INITRAMFS=y
+-BR2_ROOTFS_OVERLAY="board/canaan/k210-soc/rootfs_overlay"
+diff --git a/configs/sipeed_maix_dock_sdcard_defconfig b/configs/sipeed_maix_dock_sdcard_defconfig
+index 41a062c7a179..ecb640a47bb2 100644
+--- a/configs/sipeed_maix_dock_sdcard_defconfig
++++ b/configs/sipeed_maix_dock_sdcard_defconfig
+@@ -33,10 +33,9 @@ BR2_LINUX_KERNEL_INTREE_DTS_NAME="canaan/sipeed_maix_dock"
+ # BR2_PACKAGE_IFUPDOWN_SCRIPTS is not set
+ 
+ # Filesystem
+-BR2_INIT_NONE=y
++BR2_INIT_TINYINIT=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_SIZE="64M"
+-BR2_ROOTFS_OVERLAY="board/canaan/k210-soc/rootfs_overlay"
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/canaan/k210-soc/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/canaan/k210-soc/genimage.cfg"
+diff --git a/configs/sipeed_maix_go_defconfig b/configs/sipeed_maix_go_defconfig
+index a5b09e17ac1c..21075a9ed004 100644
+--- a/configs/sipeed_maix_go_defconfig
++++ b/configs/sipeed_maix_go_defconfig
+@@ -32,6 +32,5 @@ BR2_PACKAGE_BUSYBOX_CONFIG_FRAGMENT_FILES="board/canaan/k210-soc/busybox-tiny.co
+ # BR2_PACKAGE_IFUPDOWN_SCRIPTS is not set
+ 
+ # Filesystem
+-BR2_INIT_NONE=y
++BR2_INIT_TINYINIT=y
+ BR2_TARGET_ROOTFS_INITRAMFS=y
+-BR2_ROOTFS_OVERLAY="board/canaan/k210-soc/rootfs_overlay"
+diff --git a/configs/sipeed_maix_go_sdcard_defconfig b/configs/sipeed_maix_go_sdcard_defconfig
+index 0e80d9c83ad8..5448bd0ce351 100644
+--- a/configs/sipeed_maix_go_sdcard_defconfig
++++ b/configs/sipeed_maix_go_sdcard_defconfig
+@@ -33,10 +33,9 @@ BR2_LINUX_KERNEL_INTREE_DTS_NAME="canaan/sipeed_maix_go"
+ # BR2_PACKAGE_IFUPDOWN_SCRIPTS is not set
+ 
+ # Filesystem
+-BR2_INIT_NONE=y
++BR2_INIT_TINYINIT=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_SIZE="64M"
+-BR2_ROOTFS_OVERLAY="board/canaan/k210-soc/rootfs_overlay"
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/canaan/k210-soc/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/canaan/k210-soc/genimage.cfg"
+diff --git a/configs/sipeed_maixduino_defconfig b/configs/sipeed_maixduino_defconfig
+index 7ba7653e8d5f..6c93b29b4343 100644
+--- a/configs/sipeed_maixduino_defconfig
++++ b/configs/sipeed_maixduino_defconfig
+@@ -32,6 +32,5 @@ BR2_PACKAGE_BUSYBOX_CONFIG_FRAGMENT_FILES="board/canaan/k210-soc/busybox-tiny.co
+ # BR2_PACKAGE_IFUPDOWN_SCRIPTS is not set
+ 
+ # Filesystem
+-BR2_INIT_NONE=y
++BR2_INIT_TINYINIT=y
+ BR2_TARGET_ROOTFS_INITRAMFS=y
+-BR2_ROOTFS_OVERLAY="board/canaan/k210-soc/rootfs_overlay"
+diff --git a/configs/sipeed_maixduino_sdcard_defconfig b/configs/sipeed_maixduino_sdcard_defconfig
+index 7bdd36e1d09f..0b42cae45df7 100644
+--- a/configs/sipeed_maixduino_sdcard_defconfig
++++ b/configs/sipeed_maixduino_sdcard_defconfig
+@@ -33,10 +33,9 @@ BR2_LINUX_KERNEL_INTREE_DTS_NAME="canaan/sipeed_maixduino"
+ # BR2_PACKAGE_IFUPDOWN_SCRIPTS is not set
+ 
+ # Filesystem
+-BR2_INIT_NONE=y
++BR2_INIT_TINYINIT=y
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_SIZE="64M"
+-BR2_ROOTFS_OVERLAY="board/canaan/k210-soc/rootfs_overlay"
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/canaan/k210-soc/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/canaan/k210-soc/genimage.cfg"
 -- 
 2.43.0
 
