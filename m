@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F2BD6CD13DF
-	for <buildroot@archiver.kernel.org>; Sat, 31 Aug 2024 21:50:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 799CECD13D9
+	for <buildroot@archiver.kernel.org>; Sat, 31 Aug 2024 21:51:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BE9C460779;
-	Sat, 31 Aug 2024 21:50:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 48FF060729;
+	Sat, 31 Aug 2024 21:51:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ytiKtoD8JBMr; Sat, 31 Aug 2024 21:50:08 +0000 (UTC)
+ id kTAPsLsWqhHv; Sat, 31 Aug 2024 21:50:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7BEF560770
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5B2AA60733
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7BEF560770;
-	Sat, 31 Aug 2024 21:50:08 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A4CE11BF588
- for <buildroot@lists.busybox.net>; Sat, 31 Aug 2024 21:49:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5B2AA60733;
+	Sat, 31 Aug 2024 21:50:59 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 3660D1BF588
+ for <buildroot@lists.busybox.net>; Sat, 31 Aug 2024 21:50:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 908C760591
- for <buildroot@lists.busybox.net>; Sat, 31 Aug 2024 21:49:54 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3208381769
+ for <buildroot@lists.busybox.net>; Sat, 31 Aug 2024 21:50:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xKTZxIXEZXob for <buildroot@lists.busybox.net>;
- Sat, 31 Aug 2024 21:49:53 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xDq87-rxXyyc for <buildroot@lists.busybox.net>;
+ Sat, 31 Aug 2024 21:50:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B274360629
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6AD8E81A12
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id B274360629
- for <buildroot@buildroot.org>; Sat, 31 Aug 2024 21:49:53 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6AD8E81A12
+ for <buildroot@buildroot.org>; Sat, 31 Aug 2024 21:50:57 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5B6078682F; Sat, 31 Aug 2024 21:49:53 +0000 (UTC)
+ id 663AE86879; Sat, 31 Aug 2024 21:50:57 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 31 Aug 2024 23:46:42 +0200
-X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 79dc5bc96c743da646f7fee48baf1065e868e4b1
-X-Git-Newrev: b9e9e91b70cdb8422d7c4952df294b775d62b34e
+Date: Sat, 31 Aug 2024 23:43:25 +0200
+X-Git-Refname: refs/heads/2024.05.x
+X-Git-Oldrev: bf5e5d27e30e2ecfce2a195c9df98c548ffb471f
+X-Git-Newrev: ce93c5756eaba72e5413b06a933471bf6ce5ac23
 X-Patchwork-Hint: ignore
-Message-Id: <20240831214953.5B6078682F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/fetchmail: bump
- version to 6.4.39
+Message-Id: <20240831215057.663AE86879@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.05.x] package/apache: security
+ bump version to 2.4.62
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,45 +65,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b9e9e91b70cdb8422d7c4952df294b775d62b34e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=ce93c5756eaba72e5413b06a933471bf6ce5ac23
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.05.x
 
-Release notes:
-https://sourceforge.net/p/fetchmail/mailman/message/58797299/
+Fixes CVE-2024-40725 & CVE-2024-40898.
+
+Changelog: https://downloads.apache.org/httpd/CHANGES_2.4.62
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 5226e5f664e1ef59654fc70be94064f1614a9c25)
+(cherry picked from commit bac05f9b21219a209484b7df8d3b89f5d90feb99)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/fetchmail/fetchmail.hash | 4 ++--
- package/fetchmail/fetchmail.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/apache/apache.hash | 6 +++---
+ package/apache/apache.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/fetchmail/fetchmail.hash b/package/fetchmail/fetchmail.hash
-index 3c0403fa78..12612ecc48 100644
---- a/package/fetchmail/fetchmail.hash
-+++ b/package/fetchmail/fetchmail.hash
-@@ -1,4 +1,4 @@
--# From https://sourceforge.net/p/fetchmail/mailman/message/58731594/
--sha256  a6cb4ea863ac61d242ffb2db564a39123761578d3e40d71ce7b6f2905be609d9  fetchmail-6.4.38.tar.xz
-+# From https://sourceforge.net/p/fetchmail/mailman/message/58797299/
-+sha256  75109a1f307b538155fa05f5ef298e8298cb4deae95aed24c16b38d36ff0a186  fetchmail-6.4.39.tar.xz
- # Locally computed:
- sha256  6d87443b61041067a5eddb2cabf8aebff15b8b40771ad6b5e4754e607ec21b39  COPYING
-diff --git a/package/fetchmail/fetchmail.mk b/package/fetchmail/fetchmail.mk
-index c74b259698..a9239d0855 100644
---- a/package/fetchmail/fetchmail.mk
-+++ b/package/fetchmail/fetchmail.mk
-@@ -5,7 +5,7 @@
+diff --git a/package/apache/apache.hash b/package/apache/apache.hash
+index 2ed9c17f9a..b281b4beab 100644
+--- a/package/apache/apache.hash
++++ b/package/apache/apache.hash
+@@ -1,5 +1,5 @@
+-# From https://downloads.apache.org/httpd/httpd-2.4.61.tar.bz2.{sha256,sha512}
+-sha256  ea8ba86fd95bd594d15e46d25ac5bbda82ae0c9122ad93998cc539c133eaceb6  httpd-2.4.61.tar.bz2
+-sha512  00656220ecc2b80788f539536553f0a3a57602fb981be22e63af87d0f98ffe5da3056e722ce52ae8cf9c2111ad1922b3aaea1fd7d69d0ed76795199203d593ff  httpd-2.4.61.tar.bz2
++# From https://downloads.apache.org/httpd/httpd-2.4.62.tar.bz2.{sha256,sha512}
++sha256  674188e7bf44ced82da8db522da946849e22080d73d16c93f7f4df89e25729ec  httpd-2.4.62.tar.bz2
++sha512  7db1876805d5c0f60f49bcb51f75cdf567120f2ff6349e68f084e9a86ae38265d9f1c67e7fca0082c9db136f3c408a88501ee11f26b1b68724ba240867171d77  httpd-2.4.62.tar.bz2
+ # Locally computed
+ sha256  47b8c2b6c3309282a99d4a3001575c790fead690cc14734628c4667d2bbffc43  LICENSE
+diff --git a/package/apache/apache.mk b/package/apache/apache.mk
+index 0319a96815..0a0a0b3de4 100644
+--- a/package/apache/apache.mk
++++ b/package/apache/apache.mk
+@@ -4,7 +4,7 @@
+ #
  ################################################################################
  
- FETCHMAIL_VERSION_MAJOR = 6.4
--FETCHMAIL_VERSION = $(FETCHMAIL_VERSION_MAJOR).38
-+FETCHMAIL_VERSION = $(FETCHMAIL_VERSION_MAJOR).39
- FETCHMAIL_SOURCE = fetchmail-$(FETCHMAIL_VERSION).tar.xz
- FETCHMAIL_SITE = https://downloads.sourceforge.net/project/fetchmail/branch_$(FETCHMAIL_VERSION_MAJOR)
- FETCHMAIL_LICENSE = GPL-2.0; some exceptions are mentioned in COPYING
+-APACHE_VERSION = 2.4.61
++APACHE_VERSION = 2.4.62
+ APACHE_SOURCE = httpd-$(APACHE_VERSION).tar.bz2
+ APACHE_SITE = https://dlcdn.apache.org/httpd
+ APACHE_LICENSE = Apache-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
