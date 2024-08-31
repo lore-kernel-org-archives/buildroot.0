@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6C899CD13DD
-	for <buildroot@archiver.kernel.org>; Sat, 31 Aug 2024 17:12:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98499CD13DD
+	for <buildroot@archiver.kernel.org>; Sat, 31 Aug 2024 17:12:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1F7FB840A9;
-	Sat, 31 Aug 2024 17:12:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 638DE840BB;
+	Sat, 31 Aug 2024 17:12:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fz7xpeVbgfS2; Sat, 31 Aug 2024 17:12:37 +0000 (UTC)
+ id E8dMyU7plTRy; Sat, 31 Aug 2024 17:12:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 775D7840B9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3686881178
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 775D7840B9;
-	Sat, 31 Aug 2024 17:12:36 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 543BC1BF5E6
- for <buildroot@lists.busybox.net>; Sat, 31 Aug 2024 17:12:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3686881178;
+	Sat, 31 Aug 2024 17:12:40 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 04CDB1BF5E6
+ for <buildroot@lists.busybox.net>; Sat, 31 Aug 2024 17:12:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3E0CB41A33
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3F53F60712
  for <buildroot@lists.busybox.net>; Sat, 31 Aug 2024 17:12:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ilfb5gl6ORVa for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id gFWUlb9xDx6X for <buildroot@lists.busybox.net>;
  Sat, 31 Aug 2024 17:12:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 456AB4072F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5373A60706
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 456AB4072F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5373A60706
  for <buildroot@buildroot.org>; Sat, 31 Aug 2024 17:12:28 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 310C5867D4; Sat, 31 Aug 2024 17:12:28 +0000 (UTC)
+ id 3EAA5867D5; Sat, 31 Aug 2024 17:12:28 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 31 Aug 2024 18:46:19 +0200
+Date: Sat, 31 Aug 2024 18:48:21 +0200
 X-Git-Refname: refs/heads/2024.05.x
-X-Git-Oldrev: 001e416759368b35c91b21f2099e800da3c7713a
-X-Git-Newrev: 5826cc2d9f33e47db6165ef12a2763a0b8a4aea4
+X-Git-Oldrev: 5826cc2d9f33e47db6165ef12a2763a0b8a4aea4
+X-Git-Newrev: d9e49f09b47e9b3601911cdee291f5f1d1022a0b
 X-Patchwork-Hint: ignore
-Message-Id: <20240831171228.310C5867D4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.05.x] package/coreutils: fix
- glibc build with gcc >= 14
+Message-Id: <20240831171228.3EAA5867D5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.05.x] package/fluent-bit: bump
+ to version 3.1.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,46 +65,103 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5826cc2d9f33e47db6165ef12a2763a0b8a4aea4
+commit: https://git.buildroot.net/buildroot/commit/?id=d9e49f09b47e9b3601911cdee291f5f1d1022a0b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.05.x
 
-ac_cv_func_strerror_r_char_p is hardcoded to no since commit
-74b9bf9945921a7b0504b4b546a4bc26f2adcc45 back in 2005 however strerror_r
-only returns an int with musl. With glibc or uclibc, strerror_r returns
-a char* or an int depending on _GNU_SOURCE value resulting in the
-following build failure with gcc >= 14:
+- Rebase second patch
+- This bump will fix the following build failure with gcc >= 14 thanks to
+  https://github.com/fluent/fluent-bit/commit/1f8a672dbd8121ff5fbbd955dfbdda7cf4357fd7:
 
-strerror_r.c: In function 'rpl_strerror_r':
-strerror_r.c:207:9: error: assignment to 'int' from 'char *' makes integer from pointer without a cast [-Wint-conversion]
-  207 |     ret = strerror_r (errnum, buf, buflen);
-      |         ^
+  In file included from /home/autobuild/autobuild/instance-12/output-1/build/fluent-bit-3.0.4/src/tls/flb_tls.c:24:
+  /home/autobuild/autobuild/instance-12/output-1/build/fluent-bit-3.0.4/src/tls/openssl.c: In function 'tls_context_server_alpn_select_callback':
+  /home/autobuild/autobuild/instance-12/output-1/build/fluent-bit-3.0.4/src/tls/openssl.c:220:40: error: passing argument 1 of 'SSL_select_next_proto' from incompatible pointer type [-Wincompatible-pointer-types]
+    220 |         result = SSL_select_next_proto(out,
+        |                                        ^~~
+        |                                        |
+        |                                        const unsigned char **
 
-To fix this build failure, don't hardcode ac_cv_func_strerror_r_char_p
-to let coreutils pick the correct value
+https://fluentbit.io/announcements/v3.1.3/
+https://fluentbit.io/announcements/v3.1.2/
+https://fluentbit.io/announcements/v3.1.1/
+https://fluentbit.io/announcements/v3.1.0/
+https://fluentbit.io/announcements/v3.0.7/
+https://fluentbit.io/announcements/v3.0.6/
+https://fluentbit.io/announcements/v3.0.5/
 
 Fixes:
- - http://autobuild.buildroot.org/results/8bc649ca5490b0c29c90383edfa2e693f154ebc4
+ - http://autobuild.buildroot.org/results/8f9fcc0ec9c915a40fe402d7c643fa83f7f6a261
 
 Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 2822fdd0bc2a961544e38cf0f8c6f4bd22855714)
+(cherry picked from commit 618aaf07af50bdf302c88716a8ff15d3aec3f024)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/coreutils/coreutils.mk | 1 -
- 1 file changed, 1 deletion(-)
+ ...-librdkafka-CMakeLists.txt-allow-compilation-with.patch | 14 ++++++++------
+ package/fluent-bit/fluent-bit.hash                         |  2 +-
+ package/fluent-bit/fluent-bit.mk                           |  2 +-
+ 3 files changed, 10 insertions(+), 8 deletions(-)
 
-diff --git a/package/coreutils/coreutils.mk b/package/coreutils/coreutils.mk
-index 846d4fa567..89f494310e 100644
---- a/package/coreutils/coreutils.mk
-+++ b/package/coreutils/coreutils.mk
-@@ -27,7 +27,6 @@ COREUTILS_CONF_ENV = ac_cv_c_restrict=no \
- 	ac_cv_func_getgroups=yes \
- 	ac_cv_func_getgroups_works=yes \
- 	ac_cv_func_getloadavg=no \
--	ac_cv_func_strerror_r_char_p=no \
- 	ac_cv_func_strnlen_working=yes \
- 	ac_cv_have_decl_strerror_r=yes \
- 	ac_cv_have_decl_strnlen=yes \
+diff --git a/package/fluent-bit/0002-lib-librdkafka-CMakeLists.txt-allow-compilation-with.patch b/package/fluent-bit/0002-lib-librdkafka-CMakeLists.txt-allow-compilation-with.patch
+index bcfe3ea859..fd3d9ce722 100644
+--- a/package/fluent-bit/0002-lib-librdkafka-CMakeLists.txt-allow-compilation-with.patch
++++ b/package/fluent-bit/0002-lib-librdkafka-CMakeLists.txt-allow-compilation-with.patch
+@@ -9,15 +9,17 @@ e.g. fluent-bit is a c-only library, so allow compilation without cxx
+ Upstream: https://github.com/confluentinc/librdkafka/pull/4366
+ Upstream: https://github.com/fluent/fluent-bit/pull/7765
+ Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
++[Fabrice: update for 3.1.3]
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+ ---
+  lib/librdkafka-2.3.0/CMakeLists.txt          | 18 ++++++++++--
+  lib/librdkafka-2.3.0/examples/CMakeLists.txt | 31 +++++++++++++-------
+  2 files changed, 35 insertions(+), 14 deletions(-)
+ 
+-diff --git a/lib/librdkafka-2.3.0/CMakeLists.txt b/lib/librdkafka-2.3.0/CMakeLists.txt
++diff --git a/lib/librdkafka-2.4.0/CMakeLists.txt b/lib/librdkafka-2.4.0/CMakeLists.txt
+ index 7f3dd0fc6..c1ee93062 100644
+---- a/lib/librdkafka-2.3.0/CMakeLists.txt
+-+++ b/lib/librdkafka-2.3.0/CMakeLists.txt
++--- a/lib/librdkafka-2.4.0/CMakeLists.txt
+++++ b/lib/librdkafka-2.4.0/CMakeLists.txt
+ @@ -3,7 +3,12 @@ cmake_minimum_required(VERSION 3.2)
+  include("packaging/cmake/parseversion.cmake")
+  parseversion("src/rdkafka.h")
+@@ -57,10 +59,10 @@ index 7f3dd0fc6..c1ee93062 100644
+  
+  if(RDKAFKA_BUILD_EXAMPLES)
+    add_subdirectory(examples)
+-diff --git a/lib/librdkafka-2.3.0/examples/CMakeLists.txt b/lib/librdkafka-2.3.0/examples/CMakeLists.txt
++diff --git a/lib/librdkafka-2.4.0/examples/CMakeLists.txt b/lib/librdkafka-2.4.0/examples/CMakeLists.txt
+ index 8c0079abe..c9336b729 100644
+---- a/lib/librdkafka-2.3.0/examples/CMakeLists.txt
+-+++ b/lib/librdkafka-2.3.0/examples/CMakeLists.txt
++--- a/lib/librdkafka-2.4.0/examples/CMakeLists.txt
+++++ b/lib/librdkafka-2.4.0/examples/CMakeLists.txt
+ @@ -5,8 +5,10 @@ endif(WIN32)
+  add_executable(producer producer.c ${win32_sources})
+  target_link_libraries(producer PUBLIC rdkafka)
+diff --git a/package/fluent-bit/fluent-bit.hash b/package/fluent-bit/fluent-bit.hash
+index 6fcf4fac3e..a3dbf5f544 100644
+--- a/package/fluent-bit/fluent-bit.hash
++++ b/package/fluent-bit/fluent-bit.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  b439f89e879e538849e9106fe450bcf58da5034dfc316af4d2a837423786ed11  fluent-bit-3.0.4.tar.gz
++sha256  4c745066223811047e3911c19db118eadec579ca62ef833a1b1fb573acd8cb85  fluent-bit-3.1.3.tar.gz
+ sha256  0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  LICENSE
+diff --git a/package/fluent-bit/fluent-bit.mk b/package/fluent-bit/fluent-bit.mk
+index 13bd4ddecb..5463682e45 100644
+--- a/package/fluent-bit/fluent-bit.mk
++++ b/package/fluent-bit/fluent-bit.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FLUENT_BIT_VERSION = 3.0.4
++FLUENT_BIT_VERSION = 3.1.3
+ FLUENT_BIT_SITE = $(call github,fluent,fluent-bit,v$(FLUENT_BIT_VERSION))
+ FLUENT_BIT_LICENSE = Apache-2.0
+ FLUENT_BIT_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
