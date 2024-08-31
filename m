@@ -4,71 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30159CD13DD
-	for <buildroot@archiver.kernel.org>; Sat, 31 Aug 2024 16:25:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B23A4CD13DE
+	for <buildroot@archiver.kernel.org>; Sat, 31 Aug 2024 16:45:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EFEB380DE2;
-	Sat, 31 Aug 2024 16:25:52 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6E1A081A34;
+	Sat, 31 Aug 2024 16:45:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TP9GalC_w2Z6; Sat, 31 Aug 2024 16:25:52 +0000 (UTC)
+ id kFA_0CUnCqI6; Sat, 31 Aug 2024 16:45:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EBA6A80E93
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 68C8381A39
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EBA6A80E93;
-	Sat, 31 Aug 2024 16:25:51 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id CE5941BF2C3
- for <buildroot@lists.busybox.net>; Sat, 31 Aug 2024 16:25:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 68C8381A39;
+	Sat, 31 Aug 2024 16:45:34 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id BE8491BF2C3
+ for <buildroot@lists.busybox.net>; Sat, 31 Aug 2024 16:45:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B977580DE2
- for <buildroot@lists.busybox.net>; Sat, 31 Aug 2024 16:25:49 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id AC7236072C
+ for <buildroot@lists.busybox.net>; Sat, 31 Aug 2024 16:45:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rrFeGjct6v_T for <buildroot@lists.busybox.net>;
- Sat, 31 Aug 2024 16:25:48 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
- helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UIgubS9nFUXY for <buildroot@lists.busybox.net>;
+ Sat, 31 Aug 2024 16:45:32 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::223;
+ helo=relay3-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 826F980D0C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 826F980D0C
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 826F980D0C
- for <buildroot@buildroot.org>; Sat, 31 Aug 2024 16:25:48 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 6D5DAFF803;
- Sat, 31 Aug 2024 16:25:46 +0000 (UTC)
-Date: Sat, 31 Aug 2024 18:25:45 +0200
-To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Message-ID: <20240831182545.6d9897ab@windsurf>
-In-Reply-To: <20240831145450.3162934-1-dario.binacchi@amarulasolutions.com>
-References: <20240831145450.3162934-1-dario.binacchi@amarulasolutions.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org D7F34606EB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D7F34606EB
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id D7F34606EB
+ for <buildroot@buildroot.org>; Sat, 31 Aug 2024 16:45:31 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 636D960004;
+ Sat, 31 Aug 2024 16:45:29 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1skRE8-00GWJz-2W;
+ Sat, 31 Aug 2024 18:45:28 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
+References: <20240213123753.2471309-1-buildroot@bubu1.eu>
+Date: Sat, 31 Aug 2024 18:45:28 +0200
+In-Reply-To: <20240213123753.2471309-1-buildroot@bubu1.eu> (Marcus Hoffmann
+ via buildroot's message of "Tue, 13 Feb 2024 13:37:52 +0100")
+Message-ID: <87ttf0y72v.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1725121546;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=vj6ncK6y9oF/1SIYcYK0hnLR+POf8ePw5HYcCCPIUUM=;
- b=epqYFyjunXuMv+vYN0M6ifOwPKqZuECWBEUzQouE/w+/v411HvJl5+a92cNmERV/Y7t9Xw
- EhfoNmoOqBDuB1ge49bp2Ma8uTjpdO2dKX+Np3U196660Y+ZPBA5/ksj4uj9Ah1XqqMESg
- vnrLoMZnRggOIoBDkh3UUMz+bxOxZSKziGGz67SmczNZKWqmtrsz5mwxh6vAHAlYeCjuzQ
- X/Ujs4ghP4+hC5VO+cXO3A1nyX6JvaFomRIkDSOkZE/Kd3l0pxDjyK4E/s+ndbhhy9WIOU
- FU5LpE19vNGuEkutw+jT1XDjWVvcNasitmsBSej025zY8orruEwqI/dicX/upg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=epqYFyju
-Subject: Re: [Buildroot] [PATCH v2 1/2] package/babeld: update URL site
+X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: Re: [Buildroot] [PATCH 1/2] package/python-can/Config.in: sort
+ selects
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,63 +69,23 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: linux-amarula@amarulasolutions.com, buildroot@buildroot.org
+Cc: Asaf Kahlon <asafka7@gmail.com>, James Hilliard <james.hilliard1@gmail.com>,
+ Marcus Hoffmann <buildroot@bubu1.eu>,
+ Angelo Compagnucci <angelo.compagnucci@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat, 31 Aug 2024 16:54:49 +0200
-Dario Binacchi <dario.binacchi@amarulasolutions.com> wrote:
+>>>>> "Marcus" == Marcus Hoffmann via buildroot <buildroot@buildroot.org> writes:
 
-> As reported in [1], version 1.9.2 has been moved to another archive, and
-> it is recommended to use https://github.com/jech/babeld as the official
-> repository.
-> 
-> It was also necessary to change the sha of the downloaded tar.gz.
-> 
-> Fixes:
-> - http://autobuild.buildroot.org/results/2447060c86acf1bd8d6ee0bcf8f9b6adcdfc50c9
-> 
-> [1] https://alioth-lists.debian.net/pipermail/babel-users/2024-August/004187.html
-> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-> ---
-> Changes v1 -> v2:
->   - Don't bump to 1.10.0 but update the URL site.
-> 
->  package/babeld/babeld.hash | 2 +-
->  package/babeld/babeld.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/babeld/babeld.hash b/package/babeld/babeld.hash
-> index 2e0513efa010..e725b1fe310c 100644
-> --- a/package/babeld/babeld.hash
-> +++ b/package/babeld/babeld.hash
-> @@ -1,3 +1,3 @@
->  # Locally computed
-> -sha256  154f00e0a8bf35d6ea9028886c3dc5c3c342dd1a367df55ef29a547b75867f07  babeld-1.9.2.tar.gz
-> +sha256  c8c8c3698afb00caa5a5c9bbbb0a22b56d79ad3f9775382915ba979ac88c4e8f  babeld-1.9.2.tar.gz
->  sha256  b415c41292cedef6c97b243609e50552887c29343566c639f23282d31efd2afd  LICENCE
-> diff --git a/package/babeld/babeld.mk b/package/babeld/babeld.mk
-> index 785fa2bce9f1..67d66da24f17 100644
-> --- a/package/babeld/babeld.mk
-> +++ b/package/babeld/babeld.mk
-> @@ -5,7 +5,7 @@
->  ################################################################################
->  
->  BABELD_VERSION = 1.9.2
-> -BABELD_SITE = http://www.pps.univ-paris-diderot.fr/~jch/software/files
-> +BABELD_SITE = $(call github,jech,babeld,refs/tags)
+ > Sort python builtin modules before external python libs.
+ > Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
 
-This looks odd. Isn't the version needed somewhere?
+Committed to 2024.02.x and 2024.05.x, thanks.
 
-Thomas
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
