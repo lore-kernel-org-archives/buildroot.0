@@ -4,50 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EE767CD13DE
-	for <buildroot@archiver.kernel.org>; Sat, 31 Aug 2024 17:13:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3CF5BCD13DE
+	for <buildroot@archiver.kernel.org>; Sat, 31 Aug 2024 17:13:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id BCA848414B;
-	Sat, 31 Aug 2024 17:13:07 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0BF5281F24;
+	Sat, 31 Aug 2024 17:13:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id flqq5tV0NfhY; Sat, 31 Aug 2024 17:13:06 +0000 (UTC)
+ id f09npD7wbOaD; Sat, 31 Aug 2024 17:13:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1F3C0840FA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1247F840BF
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1F3C0840FA;
-	Sat, 31 Aug 2024 17:13:06 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id BECD71BF5E6
- for <buildroot@lists.busybox.net>; Sat, 31 Aug 2024 17:12:33 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1247F840BF;
+	Sat, 31 Aug 2024 17:13:21 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B19931BF5E6
+ for <buildroot@lists.busybox.net>; Sat, 31 Aug 2024 17:13:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A2F154072F
- for <buildroot@lists.busybox.net>; Sat, 31 Aug 2024 17:12:30 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9DDEC840BF
+ for <buildroot@lists.busybox.net>; Sat, 31 Aug 2024 17:13:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ttJihgByYgmv for <buildroot@lists.busybox.net>;
- Sat, 31 Aug 2024 17:12:28 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id danKhl8jswb6 for <buildroot@lists.busybox.net>;
+ Sat, 31 Aug 2024 17:13:18 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
+ helo=relay9-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 85BFF41982
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 85BFF41982
- for <buildroot@buildroot.org>; Sat, 31 Aug 2024 17:12:28 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 72D99867D5; Sat, 31 Aug 2024 17:12:28 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 6911381F24
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6911381F24
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 6911381F24
+ for <buildroot@buildroot.org>; Sat, 31 Aug 2024 17:13:18 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 710A4FF803;
+ Sat, 31 Aug 2024 17:13:16 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1skRf1-00GYvL-2k;
+ Sat, 31 Aug 2024 19:13:15 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sat, 31 Aug 2024 18:58:16 +0200
-X-Git-Refname: refs/heads/2024.05.x
-X-Git-Oldrev: 6f7d3f3b803820f6f909c32f18bfc64f90072904
-X-Git-Newrev: b88bcdc9aa4284bf615076c9de45b9bd576bb517
-X-Patchwork-Hint: ignore
-Message-Id: <20240831171228.72D99867D5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.05.x] package/dvb-apps: fix
- build with gcc >= 14
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20240724085302.1821942-1-fontaine.fabrice@gmail.com>
+Date: Sat, 31 Aug 2024 19:13:15 +0200
+In-Reply-To: <20240724085302.1821942-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Wed, 24 Jul 2024 10:53:02 +0200")
+Message-ID: <87mskswr84.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: Re: [Buildroot] [PATCH 1/1] package/btrfs-progs: don't install host
+ udev files
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,61 +69,36 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b88bcdc9aa4284bf615076c9de45b9bd576bb517
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.05.x
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-Workaround for glibc 2.31 added by commit
-bbe170dbcf4ddb63e76299214e2c18b16e5cf016 back in 2020 is incorrect as it
-writes new_time (a pointer on time_t) into timespec.tv_sec (i.e. time_t).
-This mistake raises the following build failure with gcc >= 14:
+ > Pass an empty value for udevdir to avoid the following host build
+ > failure on one of the autobuilders:
 
-dvbdate.c: In function 'set_time':
-dvbdate.c:313:18: error: assignment to '__time_t' {aka 'long int'} from 'time_t *' {aka 'long int *'} makes integer from pointer without a cast [-Wint-conversion]
-  313 |         s.tv_sec = new_time;
-      |                  ^
+ > /usr/bin/install -c -m755 -d /usr/lib/udev/rules.d
+ > /usr/bin/install -c -m644 64-btrfs-dm.rules 64-btrfs-zoned.rules /usr/lib/udev/rules.d
+ > /usr/bin/install: cannot create regular file '/usr/lib/udev/rules.d/64-btrfs-dm.rules': Permission denied
+ > /usr/bin/install: cannot create regular file '/usr/lib/udev/rules.d/64-btrfs-zoned.rules': Permission denied
 
-It shall be noted that gentoo also spotted this mistake:
-https://gitweb.gentoo.org/repo/gentoo.git/commit/media-tv/linuxtv-dvb-apps/files?id=81e99f1c753d1cb564be29b22dcd8927830c4b9a
+ > This build failure can be raised since the addition of the host variant
+ > in commit ed69859a7261ee86e71aa666d30a28e374769e15. udev rules were
+ > added by upstream in 2016 by
+ > https://github.com/kdave/btrfs-progs/commit/62c0666378eb70285b6a3052bf4144d2132a5891
 
-Fixes: bbe170dbcf4ddb63e76299214e2c18b16e5cf016
- - http://autobuild.buildroot.org/results/e99b9ebf602d307fbc32f2a367e95177f53a68f9
+ > Fixes: ed69859a7261ee86e71aa666d30a28e374769e15
+ >  - http://autobuild.buildroot.org/results/c46238afe8d23cf4bff4e7290a5eaebd0640eb6e
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit fcfc399b1dfca3601a0d5734ad1ceaaf91f9f50f)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/dvb-apps/0006-fix-glibc-2.31.patch | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 
-diff --git a/package/dvb-apps/0006-fix-glibc-2.31.patch b/package/dvb-apps/0006-fix-glibc-2.31.patch
-index 079a24f149..51c03d3e2e 100644
---- a/package/dvb-apps/0006-fix-glibc-2.31.patch
-+++ b/package/dvb-apps/0006-fix-glibc-2.31.patch
-@@ -4,6 +4,8 @@ as stime func doesn't exists anymore in newer versions of glibc >= 2.31 due
- to obseletion, a replacment with clock_settime is inorder to fix the issue.
- 
- Signed-off-by: Dagg Stompler <daggs@gmx.com>
-+[Fabrice: fix for gcc >= 14]
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- 
- --- a/util/dvbdate/dvbdate.c
- +++ b/util/dvbdate/dvbdate.c
-@@ -13,7 +15,7 @@ Signed-off-by: Dagg Stompler <daggs@gmx.com>
-  {
- -	if (stime(new_time)) {
- +	struct timespec s = {0};
--+	s.tv_sec = new_time;
-++	s.tv_sec = *new_time;
- +
- +	if (clock_settime(CLOCK_REALTIME, &s)) {
-  		perror("Unable to set time");
+Committed to 2024.02.x and 2024.05.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
