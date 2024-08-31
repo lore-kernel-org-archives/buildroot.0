@@ -4,79 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C6978CA1018
-	for <buildroot@archiver.kernel.org>; Sat, 31 Aug 2024 11:36:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 07C8DCA101C
+	for <buildroot@archiver.kernel.org>; Sat, 31 Aug 2024 11:41:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9379840302;
-	Sat, 31 Aug 2024 11:36:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 7D733402A9;
+	Sat, 31 Aug 2024 11:41:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Igt-xZxk9h7J; Sat, 31 Aug 2024 11:36:38 +0000 (UTC)
+ id PdLs60GYC5xd; Sat, 31 Aug 2024 11:41:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9387440356
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 50456402BE
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9387440356;
-	Sat, 31 Aug 2024 11:36:38 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 174101BF484
- for <buildroot@lists.busybox.net>; Sat, 31 Aug 2024 11:36:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 50456402BE;
+	Sat, 31 Aug 2024 11:41:19 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 7E97B1BF484
+ for <buildroot@lists.busybox.net>; Sat, 31 Aug 2024 11:41:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 048F540251
- for <buildroot@lists.busybox.net>; Sat, 31 Aug 2024 11:36:36 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6C32D81858
+ for <buildroot@lists.busybox.net>; Sat, 31 Aug 2024 11:41:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QBvxZpod6lKh for <buildroot@lists.busybox.net>;
- Sat, 31 Aug 2024 11:36:35 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=209.85.221.50;
- helo=mail-wr1-f50.google.com; envelope-from=thomas.devoogdt@gmail.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tpAqJlABWyHw for <buildroot@lists.busybox.net>;
+ Sat, 31 Aug 2024 11:41:16 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::227;
+ helo=relay7-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 04A7540111
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 04A7540111
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com
- [209.85.221.50])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 04A7540111
- for <buildroot@buildroot.org>; Sat, 31 Aug 2024 11:36:34 +0000 (UTC)
-Received: by mail-wr1-f50.google.com with SMTP id
- ffacd0b85a97d-374c1e5fe79so135347f8f.1
- for <buildroot@buildroot.org>; Sat, 31 Aug 2024 04:36:34 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1725104192; x=1725708992;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=jFYOdA5s2hDJlIxT+kkrZCXYMhh6YPQKF2Jiyzwq4Wg=;
- b=kHIcFqa06qgua1CUs7gXwvwHB1stYe+sSSzwGDxuFtFtPPXTq9lR6ez6XI+/WKaOBT
- 0wNGMweiTuGlnR13kikdyDyRkcc0bMOYIgJg0AvB01u9OjCv64aPtqfiMwqRknNmHbsR
- NdM7ROfVP9mkQdYJksVjPoIyj3byYOOcJ5zsuPlw2gbnmKWtkBSnJiM5F+NC6YVEpJOh
- QFaT8ptqoAjq3xK3M0d7Nuu9wOH2qeyIAQNQ8Xs5KJ1ruEIUjKo+VVKuQMoBm/TTsVMG
- W3Dj8cLRVJDRIKlwWNiIUebIbaVTB52GAxRV9PBg7f3vO7Fiozmo15JYnR1bk4uh7VVD
- U0Fg==
-X-Gm-Message-State: AOJu0YxVK1HMUdesVuJ0yU7LFP+NCGmEyT82ijJ3qrtpW5QiL75AEGDn
- uFqPY0ZnE7k093PtxcfoiAAMUWDpH/B/P1RQYS4MdPySg/7ieE9EMyJNsPL/
-X-Google-Smtp-Source: AGHT+IHwNpYOhc8ov44+HGJZjJmYDt4iSm8OmGnq1th6LHqah5+eDkteFXf9idglMZpDSDQSvuJPFg==
-X-Received: by 2002:a05:6000:188a:b0:368:7fca:9040 with SMTP id
- ffacd0b85a97d-374a9652f91mr3665904f8f.39.1725104191892; 
- Sat, 31 Aug 2024 04:36:31 -0700 (PDT)
-Received: from localhost.localdomain
- ([2a02:a03f:eb68:2f00:d3c8:da3f:79f7:89e5])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-374c29aa150sm572196f8f.101.2024.08.31.04.36.31
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 31 Aug 2024 04:36:31 -0700 (PDT)
-From: Thomas Devoogdt <thomas@devoogdt.com>
-To: buildroot@buildroot.org
-Date: Sat, 31 Aug 2024 13:36:26 +0200
-Message-ID: <20240831113626.105125-2-thomas@devoogdt.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240831113626.105125-1-thomas@devoogdt.com>
-References: <20240831113626.105125-1-thomas@devoogdt.com>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4B0A1817D3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4B0A1817D3
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::227])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4B0A1817D3
+ for <buildroot@buildroot.org>; Sat, 31 Aug 2024 11:41:16 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 5E1E320004;
+ Sat, 31 Aug 2024 11:41:13 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1skMTg-009osW-1Y;
+ Sat, 31 Aug 2024 13:41:12 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+References: <20240722155909.53198-1-fontaine.fabrice@gmail.com>
+Date: Sat, 31 Aug 2024 13:41:12 +0200
+In-Reply-To: <20240722155909.53198-1-fontaine.fabrice@gmail.com> (Fabrice
+ Fontaine's message of "Mon, 22 Jul 2024 17:59:09 +0200")
+Message-ID: <87y14czzqf.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=none (p=none dis=none)
- header.from=devoogdt.com
-Subject: [Buildroot] [PATCH v1] package/libgtk4: fix execinfo compile error
+ header.from=korsgaard.com
+Subject: Re: [Buildroot] [PATCH 1/1] package/faifa: bump to latest git commit
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -88,37 +68,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Adrian Perez de Castro <aperez@igalia.com>,
- Thomas Devoogdt <thomas@devoogdt.com>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-../testsuite/reftests/gtk-reftest.c:28:10: fatal error: execinfo.h: No such file or directory
+>>>>> "Fabrice" == Fabrice Fontaine <fontaine.fabrice@gmail.com> writes:
 
-We don't need the test suite, so disable it.
+ > - Drop patches (already in version)
+ > - libevent is mandatory since
+ >   https://github.com/ffainelli/faifa/commit/d2339c2a7680e7c87555650e19123e27e1f12031
+ > - This bump will fix the following build failure with gcc >= 14:
 
-Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
----
- package/libgtk4/libgtk4.mk | 1 +
- 1 file changed, 1 insertion(+)
+ >   hpav_cfg.c: In function 'pushbutton_request':
+ >   hpav_cfg.c:256:37: error: passing argument 2 of 'send_vendor_pkt' makes pointer from integer without a cast [-Wint-conversion]
+ >     256 |         return send_vendor_pkt(ctx, mac, HPAV_MMTYPE_MS_PB_ENC,
+ >         |                                     ^~~
+ >         |                                     |
+ >         |                                     uint8_t {aka unsigned char}
+ >   hpav_cfg.c:123:64: note: expected 'const uint8_t *' {aka 'const
+ > unsigned char *'} but argument is of type 'uint8_t' {aka 'unsigned
+ > char'}
+ >     123 | static int send_vendor_pkt(struct context *ctx, const uint8_t *to,
+ >         |                                                 ~~~~~~~~~~~~~~~^~
+ >   hpav_cfg.c: In function 'main':
+ >   hpav_cfg.c:406:48: error: passing argument 2 of 'pushbutton_request'
+ > makes integer from pointer without a cast [-Wint-conversion]
+ >     406 |                 ret = pushbutton_request(&ctx, mac);
+ >         |                                                ^~~
+ >         |                                                |
+ >         |                                                uint8_t * {aka unsigned char *}
+ >   hpav_cfg.c:254:60: note: expected 'uint8_t' {aka 'unsigned char'}
+ > but argument is of type 'uint8_t *' {aka 'unsigned char *'}
+ >     254 | static int pushbutton_request(struct context *ctx, uint8_t mac)
+ >         |                                                    ~~~~~~~~^~~
 
-diff --git a/package/libgtk4/libgtk4.mk b/package/libgtk4/libgtk4.mk
-index 8cb7fd0384..48bfc80c00 100644
---- a/package/libgtk4/libgtk4.mk
-+++ b/package/libgtk4/libgtk4.mk
-@@ -26,6 +26,7 @@ LIBGTK4_DEPENDENCIES = \
- 
- LIBGTK4_CONF_OPTS = \
- 	-Dbuild-tests=false \
-+	-Dbuild-testsuite=false \
- 	-Dmedia-ffmpeg=disabled \
- 	-Dprint-cpdb=disabled \
- 	-Dvulkan=disabled \
+ > Fixes:
+ >  - http://autobuild.buildroot.org/results/5a65337366e52c6234d8d154b7e9a0296e02f1dd
+
+ > Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+
+Committed to 2024.05.x, thanks.
+
 -- 
-2.43.0
-
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
