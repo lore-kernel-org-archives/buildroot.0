@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8918BCD13D2
-	for <buildroot@archiver.kernel.org>; Sat, 31 Aug 2024 13:58:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1A6CBCD13D2
+	for <buildroot@archiver.kernel.org>; Sat, 31 Aug 2024 13:59:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 52343608BE;
-	Sat, 31 Aug 2024 13:58:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DEC5F60610;
+	Sat, 31 Aug 2024 13:59:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BFyz5I5Ew3Ym; Sat, 31 Aug 2024 13:58:29 +0000 (UTC)
+ id ad7ppAFiTHvU; Sat, 31 Aug 2024 13:59:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9746960862
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D2E5D60616
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9746960862;
-	Sat, 31 Aug 2024 13:58:28 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E48681BF2C2
- for <buildroot@lists.busybox.net>; Sat, 31 Aug 2024 13:58:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D2E5D60616;
+	Sat, 31 Aug 2024 13:59:27 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id A9BE51BF275
+ for <buildroot@lists.busybox.net>; Sat, 31 Aug 2024 13:59:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D076D816E3
- for <buildroot@lists.busybox.net>; Sat, 31 Aug 2024 13:58:13 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 96F46400AE
+ for <buildroot@lists.busybox.net>; Sat, 31 Aug 2024 13:59:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5XEgAjc_H0eM for <buildroot@lists.busybox.net>;
- Sat, 31 Aug 2024 13:58:12 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id e0FtzJ5-Jhyi for <buildroot@lists.busybox.net>;
+ Sat, 31 Aug 2024 13:59:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B990A813EE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6A3FB40065
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id B990A813EE
- for <buildroot@buildroot.org>; Sat, 31 Aug 2024 13:58:12 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6A3FB40065
+ for <buildroot@buildroot.org>; Sat, 31 Aug 2024 13:59:24 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6593B8665F; Sat, 31 Aug 2024 13:58:12 +0000 (UTC)
+ id 578BE8669F; Sat, 31 Aug 2024 13:59:24 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 31 Aug 2024 13:36:15 +0200
-X-Git-Refname: refs/heads/2024.05.x
-X-Git-Oldrev: 59f3f3222c014cec46b68c153ac92d7c5c03cf07
-X-Git-Newrev: 2736c84728154eb9ac7cddd6f887506f805becc7
+Date: Sat, 31 Aug 2024 12:09:02 +0200
+X-Git-Refname: refs/heads/2024.02.x
+X-Git-Oldrev: 1b5301c1d7d1bfef060a24ec520adfba4f8224db
+X-Git-Newrev: 6d0bfa6b8f90621d5315fecfcc005eff3dbbf715
 X-Patchwork-Hint: ignore
-Message-Id: <20240831135812.6593B8665F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.05.x] package/bandwidthd: fix
- build with gcc >= 14
+Message-Id: <20240831135924.578BE8669F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] support/testing: add
+ iproute2 runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,98 +65,113 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2736c84728154eb9ac7cddd6f887506f805becc7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.05.x
+commit: https://git.buildroot.net/buildroot/commit/?id=6d0bfa6b8f90621d5315fecfcc005eff3dbbf715
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-Fix the following build failure with gcc >= 14:
-
-parser.c: In function 'yyparse':
-parser.c:1196:16: error: implicit declaration of function 'yylex' [-Wimplicit-function-declaration]
- 1196 |       yychar = yylex ();
-      |                ^~~~~
-
-While at it, update Upstream tag of first patch
-
-Fixes:
- - http://autobuild.buildroot.org/results/33364071de4e5e51a2ac2337b82d145f71e0e64a
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 41cc0f22722e3fbb2581a4f399c2e304fdb061a1)
+(cherry picked from commit 91738f5093f80eeda8637b9a73636539d6937475)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .checkpackageignore                                |  1 -
- ...01-src-bandwidthd.h-fix-build-with-gcc-10.patch |  2 +-
- .../0002-src-parser.y-fix-build-with-gcc-14.patch  | 36 ++++++++++++++++++++++
- 3 files changed, 37 insertions(+), 2 deletions(-)
+ DEVELOPERS                                     |  1 +
+ support/testing/tests/package/test_iproute2.py | 77 ++++++++++++++++++++++++++
+ 2 files changed, 78 insertions(+)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 962ba03fe2..5fd67b5c12 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -402,7 +402,6 @@ package/avahi/S05avahi-setup.sh lib_sysv.Indent lib_sysv.Variables
- package/avahi/S50avahi-daemon lib_sysv.Indent lib_sysv.Variables
- package/babeld/S50babeld Shellcheck lib_sysv.Indent lib_sysv.Variables
- package/babeltrace2/0001-configure-simplify-warning-flags-detection.patch lib_patch.Upstream
--package/bandwidthd/0001-src-bandwidthd.h-fix-build-with-gcc-10.patch lib_patch.Upstream
- package/bash/0001-input.h-add-missing-include-on-stdio.h.patch lib_patch.Upstream
- package/bash/0002-parse.y-fix-compilation-for-non-multibyte-builds.patch lib_patch.Upstream
- package/bash/0003-configure-invert-condition-for-strtoimax-builtin.patch lib_patch.Upstream
-diff --git a/package/bandwidthd/0001-src-bandwidthd.h-fix-build-with-gcc-10.patch b/package/bandwidthd/0001-src-bandwidthd.h-fix-build-with-gcc-10.patch
-index e7d0dec8d6..727e18ea84 100644
---- a/package/bandwidthd/0001-src-bandwidthd.h-fix-build-with-gcc-10.patch
-+++ b/package/bandwidthd/0001-src-bandwidthd.h-fix-build-with-gcc-10.patch
-@@ -15,7 +15,7 @@ Fixes:
-  - http://autobuild.buildroot.org/results/6308c8ee38b6017215038d47c009b238113bd36f
- 
- Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/nroach44/bandwidthd/pull/1]
-+Upstream: https://github.com/nroach44/bandwidthd/commit/dde68ed77114d7b19bfed3068edefc9dc0644445
- ---
-  src/bandwidthd.h | 4 ++--
-  src/graph.c      | 1 +
-diff --git a/package/bandwidthd/0002-src-parser.y-fix-build-with-gcc-14.patch b/package/bandwidthd/0002-src-parser.y-fix-build-with-gcc-14.patch
+diff --git a/DEVELOPERS b/DEVELOPERS
+index a54d973018..f209f8b7af 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1806,6 +1806,7 @@ F:	support/testing/tests/package/test_hwloc.py
+ F:	support/testing/tests/package/test_iozone.py
+ F:	support/testing/tests/package/test_iperf.py
+ F:	support/testing/tests/package/test_iperf3.py
++F:	support/testing/tests/package/test_iproute2.py
+ F:	support/testing/tests/package/test_iptables.py
+ F:	support/testing/tests/package/test_jailhouse.py
+ F:	support/testing/tests/package/test_jq.py
+diff --git a/support/testing/tests/package/test_iproute2.py b/support/testing/tests/package/test_iproute2.py
 new file mode 100644
-index 0000000000..d31070855c
+index 0000000000..91d9006e23
 --- /dev/null
-+++ b/package/bandwidthd/0002-src-parser.y-fix-build-with-gcc-14.patch
-@@ -0,0 +1,36 @@
-+From 96f5ad56b1bb872c2c24f0c83d06d94ae2936838 Mon Sep 17 00:00:00 2001
-+From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Date: Mon, 22 Jul 2024 14:08:45 +0200
-+Subject: [PATCH] src/parser.y: fix build with gcc >= 14
++++ b/support/testing/tests/package/test_iproute2.py
+@@ -0,0 +1,77 @@
++import os
 +
-+Fix the following build failure with gcc >= 14:
++import infra.basetest
 +
-+parser.c: In function 'yyparse':
-+parser.c:1196:16: error: implicit declaration of function 'yylex' [-Wimplicit-function-declaration]
-+ 1196 |       yychar = yylex ();
-+      |                ^~~~~
 +
-+Fixes:
-+ - http://autobuild.buildroot.org/results/33364071de4e5e51a2ac2337b82d145f71e0e64a
++class TestIpRoute2(infra.basetest.BRTest):
++    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
++        """
++        BR2_PACKAGE_IPROUTE2=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
 +
-+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
-+Upstream: https://github.com/nroach44/bandwidthd/pull/3
-+---
-+ src/parser.y | 1 +
-+ 1 file changed, 1 insertion(+)
++    def test_run(self):
++        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
++        self.emulator.boot(arch="armv5",
++                           kernel="builtin",
++                           options=["-initrd", cpio_file])
++        self.emulator.login()
 +
-+diff --git a/src/parser.y b/src/parser.y
-+index d9acc10..15ce61c 100644
-+--- a/src/parser.y
-++++ b/src/parser.y
-+@@ -11,6 +11,7 @@
-+ #include <arpa/inet.h>
-+ #include "bandwidthd.h"
-+ 
-++extern int yylex (void);
-+ extern unsigned int SubnetCount;
-+ extern struct SubnetData SubnetTable[];
-+ extern struct config config;
-+-- 
-+2.43.0
++        # Check the program can execute. This also check we are
++        # actually using the version from the iproute2 package, rather
++        # than the BusyBox version (which does not understand this
++        # option).
++        self.assertRunOk("ip -Version")
 +
++        # We run simple invocations of iproute2 tools.
++        self.assertRunOk("ifstat")
++        self.assertRunOk("ip link show dev lo")
++
++        # Buildroot is supposed to have setup the loopback "lo"
++        # interface. We should be able to ping any address in
++        # the 127.0.0.0/8 subnet.
++        addrs = ["127.0.0.1", "127.0.1.2", "127.1.2.3"]
++        ping_cmd = "ping -c 3 -i 0.2"
++        for addr in addrs:
++            self.assertRunOk(f"{ping_cmd} {addr}")
++
++        # We now change this 127.0.0.1/8 to a /16.
++        self.assertRunOk("ip addr del 127.0.0.1/8 dev lo")
++        self.assertRunOk("ip addr add 127.0.0.1/16 dev lo")
++
++        # The IPs in the 127.0.0.0/16 subnet are still supposed to
++        # ping...
++        addrs = ["127.0.0.1", "127.0.1.2"]
++        for addr in addrs:
++            self.assertRunOk(f"{ping_cmd} {addr}")
++        # ...but the IP outside is supposed to fail.
++        _, ret = self.emulator.run(f"{ping_cmd} 127.1.2.3")
++        self.assertNotEqual(ret, 0)
++
++        # We add a prohibited route.
++        self.assertRunOk("ip route add prohibit 127.0.1.0/24")
++
++        # Now, only 127.0.0.1 is supposed to ping...
++        self.assertRunOk(f"{ping_cmd} 127.0.0.1")
++        # ...while the other IPs expected to fail.
++        addrs = ["127.0.1.2", "127.1.2.3"]
++        for addr in addrs:
++            _, ret = self.emulator.run(f"{ping_cmd} {addr}")
++            self.assertNotEqual(ret, 0)
++
++        # We should be able to see our prohibited route.
++        out, ret = self.emulator.run("ip route list")
++        self.assertEqual(ret, 0)
++        self.assertEqual(out[0].strip(), "prohibit 127.0.1.0/24")
++
++        # We create a new network namespace, and create a new shell
++        # process in it.
++        self.assertRunOk("ip netns add br-test")
++        self.assertRunOk("ip netns exec br-test /bin/sh")
++
++        # Since we are in a new namespace, we should no longer see the
++        # prohibited route. The route list output should be empty.
++        out, ret = self.emulator.run("ip route list")
++        self.assertEqual(ret, 0)
++        self.assertEqual(len(out), 0)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
