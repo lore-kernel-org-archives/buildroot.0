@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1B815CD13DE
-	for <buildroot@archiver.kernel.org>; Sat, 31 Aug 2024 17:12:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35BBBCD13DD
+	for <buildroot@archiver.kernel.org>; Sat, 31 Aug 2024 17:12:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D455D81F22;
-	Sat, 31 Aug 2024 17:12:51 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 07092840F7;
+	Sat, 31 Aug 2024 17:12:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EEtF0udxVoT1; Sat, 31 Aug 2024 17:12:50 +0000 (UTC)
+ id c3ICrYZ9eqm1; Sat, 31 Aug 2024 17:12:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 33FFD840C3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B312A84135
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 33FFD840C3;
-	Sat, 31 Aug 2024 17:12:50 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 152261BF5E6
+	by smtp1.osuosl.org (Postfix) with ESMTP id B312A84135;
+	Sat, 31 Aug 2024 17:12:53 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id AB6611BF5E6
  for <buildroot@lists.busybox.net>; Sat, 31 Aug 2024 17:12:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5928560706
+ by smtp4.osuosl.org (Postfix) with ESMTP id B902C41955
  for <buildroot@lists.busybox.net>; Sat, 31 Aug 2024 17:12:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yeDnaYWfC6zy for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id kSdSD6jyIB6E for <buildroot@lists.busybox.net>;
  Sat, 31 Aug 2024 17:12:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7820A6072E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 83BAC41963
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7820A6072E
+ by smtp4.osuosl.org (Postfix) with ESMTP id 83BAC41963
  for <buildroot@buildroot.org>; Sat, 31 Aug 2024 17:12:28 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6636C867D4; Sat, 31 Aug 2024 17:12:28 +0000 (UTC)
+ id 8050E867D6; Sat, 31 Aug 2024 17:12:28 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sat, 31 Aug 2024 18:56:03 +0200
+Date: Sat, 31 Aug 2024 18:59:24 +0200
 X-Git-Refname: refs/heads/2024.05.x
-X-Git-Oldrev: 26dbdb76f7238c5220c7d2ece7fe9995f7c76935
-X-Git-Newrev: 6f7d3f3b803820f6f909c32f18bfc64f90072904
+X-Git-Oldrev: b88bcdc9aa4284bf615076c9de45b9bd576bb517
+X-Git-Newrev: 38d3f5b4761b560d70709f63d06a793e16ce337a
 X-Patchwork-Hint: ignore
-Message-Id: <20240831171228.6636C867D4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.05.x]
- board/qemu/arm-vexpress-tz: fix typos in readme file
+Message-Id: <20240831171228.8050E867D6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.05.x] package/speex: ARM5E
+ needs ARM mode
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,51 +65,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6f7d3f3b803820f6f909c32f18bfc64f90072904
+commit: https://git.buildroot.net/buildroot/commit/?id=38d3f5b4761b560d70709f63d06a793e16ce337a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.05.x
 
-Fix typos in QEMU arm-vexpress-tz readme file where 'i.e.' occurrences
-should be replaced with 'e.g.'.
+Add a dependency on ARM mode for ARM5E to fix the following build
+failure on Cortex-M3 which only supports Thumb2 mode:
 
-Signed-off-by: Etienne Carriere <etienne.carriere@foss.st.com>
+/tmp/ccJHSu7y.s:158: Error: selected processor does not support `smulbb r1,r6,lr' in Thumb mode
+
+Fixes:
+ - http://autobuild.buildroot.org/results/1575da3a8ea2bcde7fa9885df317a12d5c36918f
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit bfa3c1932fd5127b73eae1549a84b9c4125e3e0a)
+(cherry picked from commit 28be64c1e0ad0ba014257cda116c2f07236d0d4b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- board/qemu/arm-vexpress-tz/readme.txt | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/speex/Config.in | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/board/qemu/arm-vexpress-tz/readme.txt b/board/qemu/arm-vexpress-tz/readme.txt
-index 3e84fe6391..920777afd4 100644
---- a/board/qemu/arm-vexpress-tz/readme.txt
-+++ b/board/qemu/arm-vexpress-tz/readme.txt
-@@ -26,7 +26,7 @@ If you want to emulate more cores, use "-smp {1|2|3|4}" to select the
- number of cores.
+diff --git a/package/speex/Config.in b/package/speex/Config.in
+index c4e3df5dcd..134e6e4b35 100644
+--- a/package/speex/Config.in
++++ b/package/speex/Config.in
+@@ -18,6 +18,7 @@ config BR2_PACKAGE_SPEEX_ARM4
+ config BR2_PACKAGE_SPEEX_ARM5E
+ 	bool
+ 	default y
+-	depends on BR2_arm && !BR2_PACKAGE_SPEEX_ARM4
++	depends on BR2_arm && BR2_ARM_CPU_HAS_ARM && \
++		!BR2_PACKAGE_SPEEX_ARM4
  
- Note: "-netdev user,id=vmnic -device virtio-net-device,netdev=vmnic"
--brings network support that is used i.e. in OP-TEE regression tests.
-+brings network support that is used e.g. in OP-TEE regression tests.
- 
- 
- -- Boot Details --
-@@ -38,7 +38,7 @@ non-secure bootloader (BL33 stage).
- QEMU natively hosts and loads in RAM the QEMU ARM target device tree. OP-TEE
- reads and modifies its content according to OP-TEE configuration.
- 
--Enable TF-A traces from LOG_LEVEL (I.e LOG_LEVEL=40) from
-+Enable TF-A traces from LOG_LEVEL (e.g. LOG_LEVEL=40) from
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_ADDITIONAL_VARIABLES.
- 
- 
-@@ -53,7 +53,7 @@ serial interface.
- The OP-TEE OS uses the QEMU second serial interface.
- 
- To get the OP-TEE OS traces, append a second -serial argument after
---serial stdio in the QEMU command line. I.e, the following enables 2 serial
-+-serial stdio in the QEMU command line. E.g., the following enables 2 serial
- consoles over telnet connections:
- 
-   cd output/images && ../host/bin/qemu-system-arm \
+ endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
