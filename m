@@ -4,88 +4,89 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 28F91CD3422
-	for <buildroot@archiver.kernel.org>; Sat, 31 Aug 2024 19:02:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71329CD13DF
+	for <buildroot@archiver.kernel.org>; Sat, 31 Aug 2024 19:02:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C779A40303;
-	Sat, 31 Aug 2024 19:01:58 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 69318419A6;
+	Sat, 31 Aug 2024 19:02:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ngv5lv6Op1fy; Sat, 31 Aug 2024 19:01:58 +0000 (UTC)
+ id x2qpQumf6UuQ; Sat, 31 Aug 2024 19:02:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AB5AF404A3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0FE4D405E6
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AB5AF404A3;
-	Sat, 31 Aug 2024 19:01:57 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 4090C1BF316
- for <buildroot@lists.busybox.net>; Sat, 31 Aug 2024 19:01:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0FE4D405E6;
+	Sat, 31 Aug 2024 19:02:00 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id A406C1BF316
+ for <buildroot@lists.busybox.net>; Sat, 31 Aug 2024 19:01:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2DE6181432
- for <buildroot@lists.busybox.net>; Sat, 31 Aug 2024 19:01:53 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9E9CF4026B
+ for <buildroot@lists.busybox.net>; Sat, 31 Aug 2024 19:01:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Tws3vgX3BIYd for <buildroot@lists.busybox.net>;
- Sat, 31 Aug 2024 19:01:52 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7utcqqP84Lly for <buildroot@lists.busybox.net>;
+ Sat, 31 Aug 2024 19:01:53 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.20;
  helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 018E981440
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 018E981440
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 32B08400E4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 32B08400E4
 Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 018E981440
- for <buildroot@buildroot.org>; Sat, 31 Aug 2024 19:01:51 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 32B08400E4
+ for <buildroot@buildroot.org>; Sat, 31 Aug 2024 19:01:52 +0000 (UTC)
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from haruka.lan ([85.22.123.38]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MnJlc-1sLHUO0t7M-00p3bd; Sat, 31
- Aug 2024 21:01:48 +0200
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MwQTF-1ruZgm1ho5-00xcDA; Sat, 31
+ Aug 2024 21:01:49 +0200
 To: buildroot@buildroot.org
-Date: Sat, 31 Aug 2024 21:01:24 +0200
-Message-ID: <20240831190126.366600-2-fiona.klute@gmx.de>
+Date: Sat, 31 Aug 2024 21:01:25 +0200
+Message-ID: <20240831190126.366600-3-fiona.klute@gmx.de>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20240831190126.366600-1-fiona.klute@gmx.de>
 References: <20240831190126.366600-1-fiona.klute@gmx.de>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:7d3a1VOBbaaJDajbu437TviKeV7SVXt96xmAKzjIoLeOaFfNTJo
- xZfiIpaZTiyq0zBE56xfhQFr2Lyxr2u7wd/TE+ihLXV7oFhvzHGKWHHA6pvI0BuU4edps9r
- l8ymywUHea3UuM8Xhq51IDLXYJXl6vAExZPQD143S5pzCyXs/aauM4IcKX2fs2i5f3x6dnS
- y42lj+lDkdzMWr6cHQf6g==
-UI-OutboundReport: notjunk:1;M01:P0:wgTGZ5zrpS0=;237LSRrW/7c5VJ9TKp7RrTQHgjp
- 5xnwp14u3/Kujcazq9qvUBB6K2MEeiYQ+ELncoDmB3Bk95V/GZqhRHVd2AmyXRa4IUutflh8Q
- w0N1n6OMm4y+jRhIoOMpZm5UOV9s8OvkjgeFgHLn+FHL8PWf9y1WXsa2udoeRUe79QVNiR0xj
- 5yosLYevWcgcnoMhbR0zqQK2UpO/76FeZB5mXcnX3xQfdN6/H5roe4iptprb5v7IlY+fIHxvQ
- B3TMUdO9NcKKmoT7zQkqjai0tQxvYkSW3NUAsa2f5Wnvg0NLgvrK6m24fANqHcfz7wdBSs5As
- QU45LBgNsM61ryQp5nPwi5ft+q6gFB/M/V/aHsvmB8PQpCiotEQ+lfwb1DC+XuP9m77jGi3jx
- mjMBGH+Z6N9f25iFoFeYJmgD7L912IpOGcIj4RoJQhnTWqu8kP43f7omlP1v2pes5FeVd3PTa
- /8D70KvhL9YpvluBCegFMB6APzGJB/SW1q2uAtXpkpg5SC8zXsnSCJaBzdT9OWZ49BMed5bXF
- NC1YCkp9cynW9xZRCjoUe9J1AtRfgs2ak2TlrwbMrABE5n1Af1DVyCEMujqtgPei23A5SZbht
- uQ76hUHOcZC/s/+QQ4nA6xupRNssgQHnS/Z5xPpfbnR0ko8wZnSwW/opDt8vI3vxvjjwnYBjc
- LrMF6Z6BRgRIUUSxl+DuplHPbAowU8rO+Oeav8IwAXMSLx/t9nkifEYp5RoGW2RziSIj5bR+E
- WQ7Z8jaU0+hexz2Lq0RwppW1utAwutkiPlS8VGxVZ/PgfRg0YPwc58ypkVJYOtSO5FxjurD0k
- MuP7wJ5dSMd7Dc4YJ8k9vi4Q==
+X-Provags-ID: V03:K1:4Sx7+UbIilHxRB1W6F7ZKHwl+tVcJBxda1h2kRE4wtWVESlmLtt
+ fggJseMI8M8xNX9dY1IcmwidexwEBfumrVnMFWYISRnFfv8P8PEJV/B9sT15ysWY8PxsdiY
+ OH78fdys1Il4vjiShTxyjvwGBTOu3lizPf8J/KLZBE/6JNczX210mNkOAIz+xl9MOtuR7GI
+ TlcT5pKH7tbV33ZcGRLkg==
+UI-OutboundReport: notjunk:1;M01:P0:2snym1W3meI=;0Iy7/0qJ3aSZ3kgnyNq1z8X1ZLq
+ Uh/C+PVxTZ+gn2E13Y6UDKq5Y+sJHRHIAAEE5RcJp84Kaejp48xy5sB7JNp5F4cw6D39PyTpH
+ rGCKyh5EbYQCyxsZVsn48VvEJw7rxyRuy05Ak95SQthO8KYbNkljQNqONhkT9dNog9ZIh/EJj
+ LUta3M7esNspBft/PXi4GFWFk1TR3BQUvt05ozIYv8LIMeanZb0SsyaCj6zZY3dLx70iucBWD
+ gLTCvPsxIib02+ePqsAswDqLEidndz58m8OzB1qiWeRTl7S419qvczzgEBK/9Vsz+zLMdaaEv
+ rPqiCKScGKTzmbBxatvToNroL9ClB4RCG2qXfAZ/JItpiSMEDqKTBrssIYGD+mXNejSNFGlF0
+ tdR9m4IU/EpV3dRklnADxZ/m9pu0hYCoK1s1Fs+ymNPzLU27rbQ63NGj95Ogazm2howp1ZYFu
+ CkzbcVIE66XV03YiBOhtCS4lKYpED4Fi3hdC5dIX98UW55Ys4f/+6sxOtdLpir5WqJWmY9Mbf
+ ELo+W5XCDkdz5hBxv0APH3v2edgv/FSiEDvoXToXgjYszESzhpjTlDggx/DFmLohfCtMYiNNi
+ U7+zmYEMJbWBglI0dQDz5wQ6fOpTxuWGYFOTBuNlcfrPnoxIem8QEbolr927lebyKiuipFPOh
+ dIIF8Ui84tnHMRo46Ioofl+/uLmrnNheEmGxaW+kIlfpttcx52orNY+/8NcfaSvQO+bTUyz93
+ MJ7GrmSXkEha23vCEWOMCCQLPx9ucEFRmhfcIsk4X49xxfwIGcz6A1xhK1g/Fy8NaaxY3Ick4
+ P0CoqKyDfB5/XVkXao0qgH1Q==
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmx.de; 
- s=s31663417; t=1725130908; x=1725735708; i=fiona.klute@gmx.de;
- bh=QXb6b12orPp4U6mauNspAWXupVxfISsMY29WjjS4o4I=;
+ s=s31663417; t=1725130909; x=1725735709; i=fiona.klute@gmx.de;
+ bh=bQjLBLiaBIrqpCsl+dORmGPJlCVZ2fProFo6u4MhRMw=;
  h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:In-Reply-To:
  References:MIME-Version:Content-Transfer-Encoding:cc:
  content-transfer-encoding:content-type:date:from:message-id:
  mime-version:reply-to:subject:to;
- b=iC9U7VUdhMmLjviFjUegFs6dR8KAdYeNMZ0cEnJDqHTl3Sx5MzoqlLjDLbbyBggi
- yh8NEwOsmV+l3cKlDqXlflxaSJf/dO6JB1BQgum78F0lGIujGyDgJTGGALJz/tvnf
- jxCni9+T/vr9penK6dXHNt3hkz8zXtKHAMJBxbaXRUB1nqVXTZdsUqfAm+gMZrBT9
- /eLjWYZekEKjJap7I9mdhO/6ZKA4Di4oZrlh/DwC3+YuYFcf2bojBMRch7nlTso6H
- /rfVGDol6l7VxQIMoTxCLN9UerTGj1Y8smNWH0nQflQ2tZ8pNp5SNMv5Oh51t3l76
- pMWFkJMxu6KzUjSaMQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=QmDi74sx8yEgQ9/e0TOgBkMHIrhhvdypuNa0NTN/S2WtQrMh6tVVuTz/k6QqGDuQ
+ pt9Expq7wmcnC09xrJFZlO3Uwt1RHHfSLFZYg+KZKf/NuJ2+WGXVmtYK58kQM+nSl
+ b6yUerxD4QGg9sNd0AsG2CiBBYx/S8rtkShqpT6JCvM5fT9hb14EvwqyQ0KPEOzH4
+ JELoNYjW6TDaB+AVtaBZU8PHlcePYFWU6bNtftxKI6ElWfFYjCV8l/Pfv4Arh3/ZC
+ naHXGnLgK1nu1SWBlO8zPIODB1CsEXFhCX/+0I5GgBdfa2grFzk3B/CnNy1MFfTq1
+ k6ePalaO7zgBdMLIkg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=gmx.de
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmx.de header.i=fiona.klute@gmx.de
- header.a=rsa-sha256 header.s=s31663417 header.b=iC9U7VUd
-Subject: [Buildroot] [PATCH next v2 1/3] board/raspberrypi: Support boot.scr
- for U-Boot
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmx.de header.i=fiona.klute@gmx.de header.a=rsa-sha256
+ header.s=s31663417 header.b=QmDi74sx
+Subject: [Buildroot] [PATCH next v2 2/3] board/raspberrypi: allow
+ non-matching globs for DTBs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -111,36 +112,37 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
 
-If using U-Boot as "kernel" for the raspberrypi bootloader, include
-boot.scr in the boot partition if it exists.
+When installing DTBs from the rpi-firmware package
+(BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTBS=y), there's no DTB directly in
+the images directory because the kernel build doesn't provide one.
 
-To use this, use BR2_PACKAGE_RPI_FIRMWARE_CONFIG_FILE to set a config
-file that uses U-Boot, and enable building a boot script in the U-Boot
-host tool settings.
+Using pre-compiled DTBs is discouraged, but useful for using mainline
+kernels until suitable DTS can be merged, or to provide U-Boot with a
+DTB (via the firmware bootloader) independent of whatever kernel DTB
+is in use.
 
 Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
-Reviewed-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- board/raspberrypi/post-image.sh | 6 ++++++
- 1 file changed, 6 insertions(+)
+Changes v1 -> v2:
+* Check for existance of paths returned by the DTB glob expressions
+  instead of changing shell glob behavior
+
+ board/raspberrypi/post-image.sh | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/board/raspberrypi/post-image.sh b/board/raspberrypi/post-image.sh
-index 9b9eac972b..e4611d05dd 100755
+index e4611d05dd..a3a2d8d620 100755
 --- a/board/raspberrypi/post-image.sh
 +++ b/board/raspberrypi/post-image.sh
-@@ -19,6 +19,12 @@ if [ ! -e "${GENIMAGE_CFG}" ]; then
- 	KERNEL=$(sed -n 's/^kernel=//p' "${BINARIES_DIR}/rpi-firmware/config.txt")
- 	FILES+=( "${KERNEL}" )
+@@ -13,6 +13,8 @@ if [ ! -e "${GENIMAGE_CFG}" ]; then
+ 	FILES=()
 
-+	# If config.txt calls for running U-Boot, include the boot
-+	# script if any.
-+	if [ "${KERNEL}" = "u-boot.bin" ] && [ -e "${BINARIES_DIR}/boot.scr" ]; then
-+		FILES+=( "boot.scr" )
-+	fi
-+
- 	BOOT_FILES=$(printf '\\t\\t\\t"%s",\\n' "${FILES[@]}")
- 	sed "s|#BOOT_FILES#|${BOOT_FILES}|" "${BOARD_DIR}/genimage.cfg.in" \
- 		> "${GENIMAGE_CFG}"
+ 	for i in "${BINARIES_DIR}"/*.dtb "${BINARIES_DIR}"/rpi-firmware/*; do
++		# ignore literal globs that didn't match anything
++		[ -e "${i}" ] || continue
+ 		FILES+=( "${i#${BINARIES_DIR}/}" )
+ 	done
+
 --
 2.45.2
 
