@@ -4,60 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D58EACA101E
-	for <buildroot@archiver.kernel.org>; Sun,  1 Sep 2024 14:53:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9713ECA101E
+	for <buildroot@archiver.kernel.org>; Sun,  1 Sep 2024 14:56:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8E76E40151;
-	Sun,  1 Sep 2024 14:53:50 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 66A0F40441;
+	Sun,  1 Sep 2024 14:56:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1ZyhjaXAFxDY; Sun,  1 Sep 2024 14:53:49 +0000 (UTC)
+ id aHz4lWcC8yTZ; Sun,  1 Sep 2024 14:56:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 767A24021C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 40AFE4021C
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 767A24021C;
-	Sun,  1 Sep 2024 14:53:49 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 7EDB31BF2B6
- for <buildroot@lists.busybox.net>; Sun,  1 Sep 2024 14:53:47 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 40AFE4021C;
+	Sun,  1 Sep 2024 14:56:47 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id DC5691BF2B6
+ for <buildroot@lists.busybox.net>; Sun,  1 Sep 2024 14:56:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 78D344035D
- for <buildroot@lists.busybox.net>; Sun,  1 Sep 2024 14:53:47 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id C933080F57
+ for <buildroot@lists.busybox.net>; Sun,  1 Sep 2024 14:56:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ABjnyvXYtteg for <buildroot@lists.busybox.net>;
- Sun,  1 Sep 2024 14:53:46 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::225;
- helo=relay5-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id HOWdsiT1XXfy for <buildroot@lists.busybox.net>;
+ Sun,  1 Sep 2024 14:56:44 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 1F8124034D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1F8124034D
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::225])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1F8124034D
- for <buildroot@buildroot.org>; Sun,  1 Sep 2024 14:53:45 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 0AF981C0002;
- Sun,  1 Sep 2024 14:53:42 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1sklxW-0015gA-1F;
- Sun, 01 Sep 2024 16:53:42 +0200
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C765F80F2B
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id C765F80F2B
+ for <buildroot@buildroot.org>; Sun,  1 Sep 2024 14:56:44 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id B468F868F8; Sun,  1 Sep 2024 14:56:44 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Bernd Kuhls <bernd@kuhls.net>
-References: <20240727174823.1733020-1-bernd@kuhls.net>
-Date: Sun, 01 Sep 2024 16:53:42 +0200
-In-Reply-To: <20240727174823.1733020-1-bernd@kuhls.net> (Bernd Kuhls's message
- of "Sat, 27 Jul 2024 19:48:23 +0200")
-Message-ID: <87ttezs9vt.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/intel-microcode: security bump
- version to 20240531
+To: buildroot@buildroot.org
+Date: Sun, 1 Sep 2024 16:41:38 +0200
+X-Git-Refname: refs/heads/2024.02.x
+X-Git-Oldrev: ce25286b993167fc6fb10b13723c4d6f245f66c2
+X-Git-Newrev: c38cb8488e9ff19d05833aff5b144f558f325fb0
+X-Patchwork-Hint: ignore
+Message-Id: <20240901145644.B468F868F8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/libcurl: security
+ bump to version 8.9.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,37 +59,120 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Bernd" == Bernd Kuhls <bernd@kuhls.net> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=c38cb8488e9ff19d05833aff5b144f558f325fb0
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
- > Release notes:
- > https://github.com/intel/Intel-Linux-Processor-Microcode-Data-Files/releases/tag/microcode-20240312
- > https://github.com/intel/Intel-Linux-Processor-Microcode-Data-Files/releases/tag/microcode-20240514
- > https://github.com/intel/Intel-Linux-Processor-Microcode-Data-Files/releases/tag/microcode-20240531
+Removed patch which is included in this release.
 
- > 20240312 fixes
- > CVE-2023-39368: https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-00972.html
- > CVE-2023-38575: https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-00982.html
- > CVE-2023-28746: https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-00898.html
- > CVE-2023-22655: https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-00960.html
- > CVE-2023-43490: https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-01045.html
+Changelog: https://curl.se/changes.html#8_9_0
 
- > 20240514 fixes
- > CVE-2023-45733: https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-01051.html
- > CVE-2023-46103: https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-01052.html
- > CVE-2023-45745: https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-01036.html
+Fixes
+CVE-2024-6197: https://curl.se/docs/CVE-2024-6197.html
+CVE-2024-6874 (Apple-only): https://curl.se/docs/CVE-2024-6874.html
 
- > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit e6816ece5b425fce6fc3e080178ff04060b8ef08)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ .../0001-mbedtls-check-version-for-cipher-id.patch | 56 ----------------------
+ package/libcurl/libcurl.hash                       |  4 +-
+ package/libcurl/libcurl.mk                         |  2 +-
+ 3 files changed, 3 insertions(+), 59 deletions(-)
 
-Committed to 2024.02.x and 2024.05.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libcurl/0001-mbedtls-check-version-for-cipher-id.patch b/package/libcurl/0001-mbedtls-check-version-for-cipher-id.patch
+deleted file mode 100644
+index b7d674acfe..0000000000
+--- a/package/libcurl/0001-mbedtls-check-version-for-cipher-id.patch
++++ /dev/null
+@@ -1,56 +0,0 @@
+-From 0c4b4c1e93c8e869af230090f32346fdfd548f21 Mon Sep 17 00:00:00 2001
+-From: Stefan Eissing <stefan@eissing.org>
+-Date: Wed, 22 May 2024 14:44:56 +0200
+-Subject: [PATCH] mbedtls: check version for cipher id
+-
+-mbedtls_ssl_get_ciphersuite_id_from_ssl() seems to have been added in
+-mbedtls 3.2.0. Check for that version.
+-
+-Closes #13749
+-
+-Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+-Upstream: https://github.com/curl/curl/commit/0c4b4c1e93c8e869af230090f32346fdfd548f21
+----
+- lib/vtls/mbedtls.c | 19 ++++++++++++-------
+- 1 file changed, 12 insertions(+), 7 deletions(-)
+-
+-diff --git a/lib/vtls/mbedtls.c b/lib/vtls/mbedtls.c
+-index ec0b10dd9a9f..98a4ea01b183 100644
+---- a/lib/vtls/mbedtls.c
+-+++ b/lib/vtls/mbedtls.c
+-@@ -902,8 +902,6 @@ mbed_connect_step2(struct Curl_cfilter *cf, struct Curl_easy *data)
+-     (struct mbed_ssl_backend_data *)connssl->backend;
+-   struct ssl_primary_config *conn_config = Curl_ssl_cf_get_primary_config(cf);
+-   const mbedtls_x509_crt *peercert;
+--  char cipher_str[64];
+--  uint16_t cipher_id;
+- #ifndef CURL_DISABLE_PROXY
+-   const char * const pinnedpubkey = Curl_ssl_cf_is_proxy(cf)?
+-     data->set.str[STRING_SSL_PINNEDPUBLICKEY_PROXY]:
+-@@ -932,11 +930,18 @@ mbed_connect_step2(struct Curl_cfilter *cf, struct Curl_easy *data)
+-     return CURLE_SSL_CONNECT_ERROR;
+-   }
+- 
+--  cipher_id = (uint16_t)
+--              mbedtls_ssl_get_ciphersuite_id_from_ssl(&backend->ssl);
+--  mbed_cipher_suite_get_str(cipher_id, cipher_str, sizeof(cipher_str), true);
+--  infof(data, "mbedTLS: Handshake complete, cipher is %s", cipher_str);
+--
+-+#if MBEDTLS_VERSION_NUMBER >= 0x03020000
+-+  {
+-+    char cipher_str[64];
+-+    uint16_t cipher_id;
+-+    cipher_id = (uint16_t)
+-+                mbedtls_ssl_get_ciphersuite_id_from_ssl(&backend->ssl);
+-+    mbed_cipher_suite_get_str(cipher_id, cipher_str, sizeof(cipher_str), true);
+-+    infof(data, "mbedTLS: Handshake complete, cipher is %s", cipher_str);
+-+  }
+-+#else
+-+  infof(data, "mbedTLS: Handshake complete");
+-+#endif
+-   ret = mbedtls_ssl_get_verify_result(&backend->ssl);
+- 
+-   if(!conn_config->verifyhost)
+--- 
+-2.43.0
+-
+diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
+index 7ba45b79d7..fa325efd7d 100644
+--- a/package/libcurl/libcurl.hash
++++ b/package/libcurl/libcurl.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-# https://curl.se/download/curl-8.8.0.tar.xz.asc
++# https://curl.se/download/curl-8.9.0.tar.xz.asc
+ # signed with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
+-sha256  0f58bb95fc330c8a46eeb3df5701b0d90c9d9bfcc42bd1cd08791d12551d4400  curl-8.8.0.tar.xz
++sha256  ff09b2791ca56d25fd5c3f3a4927dce7c8a9dc4182200c487ca889fba1fdd412  curl-8.9.0.tar.xz
+ sha256  adb1fc06547fd136244179809f7b7c2d2ae6c4534f160aa513af9b6a12866a32  COPYING
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index 172dd22071..966885aeda 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBCURL_VERSION = 8.8.0
++LIBCURL_VERSION = 8.9.0
+ LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
+ LIBCURL_SITE = https://curl.se/download
+ LIBCURL_DEPENDENCIES = host-pkgconf \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
