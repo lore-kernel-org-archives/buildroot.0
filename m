@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9713ECA101E
-	for <buildroot@archiver.kernel.org>; Sun,  1 Sep 2024 14:56:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1AFC6C54FC6
+	for <buildroot@archiver.kernel.org>; Sun,  1 Sep 2024 14:56:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 66A0F40441;
-	Sun,  1 Sep 2024 14:56:48 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B31A040433;
+	Sun,  1 Sep 2024 14:56:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id aHz4lWcC8yTZ; Sun,  1 Sep 2024 14:56:47 +0000 (UTC)
+ id JuksD7xOLfKZ; Sun,  1 Sep 2024 14:56:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 40AFE4021C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7A3F140525
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 40AFE4021C;
-	Sun,  1 Sep 2024 14:56:47 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id DC5691BF2B6
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7A3F140525;
+	Sun,  1 Sep 2024 14:56:50 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id EF60E1BF86B
  for <buildroot@lists.busybox.net>; Sun,  1 Sep 2024 14:56:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C933080F57
+ by smtp4.osuosl.org (Postfix) with ESMTP id E8FB5401C5
  for <buildroot@lists.busybox.net>; Sun,  1 Sep 2024 14:56:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HOWdsiT1XXfy for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id gDhzzV8buU4A for <buildroot@lists.busybox.net>;
  Sun,  1 Sep 2024 14:56:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C765F80F2B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D25BC4013C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id C765F80F2B
+ by smtp4.osuosl.org (Postfix) with ESMTP id D25BC4013C
  for <buildroot@buildroot.org>; Sun,  1 Sep 2024 14:56:44 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B468F868F8; Sun,  1 Sep 2024 14:56:44 +0000 (UTC)
+ id BF2BE868F9; Sun,  1 Sep 2024 14:56:44 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 1 Sep 2024 16:41:38 +0200
+Date: Sun, 1 Sep 2024 16:47:07 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: ce25286b993167fc6fb10b13723c4d6f245f66c2
-X-Git-Newrev: c38cb8488e9ff19d05833aff5b144f558f325fb0
+X-Git-Oldrev: c38cb8488e9ff19d05833aff5b144f558f325fb0
+X-Git-Newrev: d46b2f5feaf3926a47b664188668a812b6662003
 X-Patchwork-Hint: ignore
-Message-Id: <20240901145644.B468F868F8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/libcurl: security
- bump to version 8.9.0
+Message-Id: <20240901145644.BF2BE868F9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x]
+ support/testing/infra/emulator.py: add host load info in run log
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,114 +65,63 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c38cb8488e9ff19d05833aff5b144f558f325fb0
+commit: https://git.buildroot.net/buildroot/commit/?id=d46b2f5feaf3926a47b664188668a812b6662003
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-Removed patch which is included in this release.
+Runtime tests running on test runners are subject to a high
+variability in term of performance and timing. Most or the runtime
+test commands are executed with a timeout, in pexpect.
 
-Changelog: https://curl.se/changes.html#8_9_0
+Slow or very loaded test runners can use the timeout_multiplier to
+globally increase those timeouts.
 
-Fixes
-CVE-2024-6197: https://curl.se/docs/CVE-2024-6197.html
-CVE-2024-6874 (Apple-only): https://curl.se/docs/CVE-2024-6874.html
+Some runtime test commands sometimes needs to poll or query a state,
+rather than having purely sequential actions. It is sometimes hard to
+know, from the test writer point of view, the maximum timeout to set, or
+if a retry logic is needed.
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+In order to help debugging runtime tests failing due very slow
+execution, this commit adds extra information on the host test runner
+about its load in the run log. Relevant information are: number of
+cpus, the load average at the moment the emulator is started and the
+current timeout_multiplier.
+
+Note: this change was discussed in:
+https://lists.buildroot.org/pipermail/buildroot/2024-July/759119.html
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit e6816ece5b425fce6fc3e080178ff04060b8ef08)
+(cherry picked from commit 7a6edbc7b9166c799b43cf9a9b78422c8e20ccc0)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .../0001-mbedtls-check-version-for-cipher-id.patch | 56 ----------------------
- package/libcurl/libcurl.hash                       |  4 +-
- package/libcurl/libcurl.mk                         |  2 +-
- 3 files changed, 3 insertions(+), 59 deletions(-)
+ support/testing/infra/emulator.py | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/package/libcurl/0001-mbedtls-check-version-for-cipher-id.patch b/package/libcurl/0001-mbedtls-check-version-for-cipher-id.patch
-deleted file mode 100644
-index b7d674acfe..0000000000
---- a/package/libcurl/0001-mbedtls-check-version-for-cipher-id.patch
-+++ /dev/null
-@@ -1,56 +0,0 @@
--From 0c4b4c1e93c8e869af230090f32346fdfd548f21 Mon Sep 17 00:00:00 2001
--From: Stefan Eissing <stefan@eissing.org>
--Date: Wed, 22 May 2024 14:44:56 +0200
--Subject: [PATCH] mbedtls: check version for cipher id
--
--mbedtls_ssl_get_ciphersuite_id_from_ssl() seems to have been added in
--mbedtls 3.2.0. Check for that version.
--
--Closes #13749
--
--Signed-off-by: Baruch Siach <baruch@tkos.co.il>
--Upstream: https://github.com/curl/curl/commit/0c4b4c1e93c8e869af230090f32346fdfd548f21
-----
-- lib/vtls/mbedtls.c | 19 ++++++++++++-------
-- 1 file changed, 12 insertions(+), 7 deletions(-)
--
--diff --git a/lib/vtls/mbedtls.c b/lib/vtls/mbedtls.c
--index ec0b10dd9a9f..98a4ea01b183 100644
----- a/lib/vtls/mbedtls.c
--+++ b/lib/vtls/mbedtls.c
--@@ -902,8 +902,6 @@ mbed_connect_step2(struct Curl_cfilter *cf, struct Curl_easy *data)
--     (struct mbed_ssl_backend_data *)connssl->backend;
--   struct ssl_primary_config *conn_config = Curl_ssl_cf_get_primary_config(cf);
--   const mbedtls_x509_crt *peercert;
---  char cipher_str[64];
---  uint16_t cipher_id;
-- #ifndef CURL_DISABLE_PROXY
--   const char * const pinnedpubkey = Curl_ssl_cf_is_proxy(cf)?
--     data->set.str[STRING_SSL_PINNEDPUBLICKEY_PROXY]:
--@@ -932,11 +930,18 @@ mbed_connect_step2(struct Curl_cfilter *cf, struct Curl_easy *data)
--     return CURLE_SSL_CONNECT_ERROR;
--   }
-- 
---  cipher_id = (uint16_t)
---              mbedtls_ssl_get_ciphersuite_id_from_ssl(&backend->ssl);
---  mbed_cipher_suite_get_str(cipher_id, cipher_str, sizeof(cipher_str), true);
---  infof(data, "mbedTLS: Handshake complete, cipher is %s", cipher_str);
---
--+#if MBEDTLS_VERSION_NUMBER >= 0x03020000
--+  {
--+    char cipher_str[64];
--+    uint16_t cipher_id;
--+    cipher_id = (uint16_t)
--+                mbedtls_ssl_get_ciphersuite_id_from_ssl(&backend->ssl);
--+    mbed_cipher_suite_get_str(cipher_id, cipher_str, sizeof(cipher_str), true);
--+    infof(data, "mbedTLS: Handshake complete, cipher is %s", cipher_str);
--+  }
--+#else
--+  infof(data, "mbedTLS: Handshake complete");
--+#endif
--   ret = mbedtls_ssl_get_verify_result(&backend->ssl);
-- 
--   if(!conn_config->verifyhost)
---- 
--2.43.0
--
-diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
-index 7ba45b79d7..fa325efd7d 100644
---- a/package/libcurl/libcurl.hash
-+++ b/package/libcurl/libcurl.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://curl.se/download/curl-8.8.0.tar.xz.asc
-+# https://curl.se/download/curl-8.9.0.tar.xz.asc
- # signed with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
--sha256  0f58bb95fc330c8a46eeb3df5701b0d90c9d9bfcc42bd1cd08791d12551d4400  curl-8.8.0.tar.xz
-+sha256  ff09b2791ca56d25fd5c3f3a4927dce7c8a9dc4182200c487ca889fba1fdd412  curl-8.9.0.tar.xz
- sha256  adb1fc06547fd136244179809f7b7c2d2ae6c4534f160aa513af9b6a12866a32  COPYING
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 172dd22071..966885aeda 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/support/testing/infra/emulator.py b/support/testing/infra/emulator.py
+index 624740fcb1..2106d0e99b 100644
+--- a/support/testing/infra/emulator.py
++++ b/support/testing/infra/emulator.py
+@@ -2,6 +2,8 @@ import pexpect
  
--LIBCURL_VERSION = 8.8.0
-+LIBCURL_VERSION = 8.9.0
- LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
- LIBCURL_SITE = https://curl.se/download
- LIBCURL_DEPENDENCIES = host-pkgconf \
+ import infra
+ 
++import os
++
+ 
+ class Emulator(object):
+ 
+@@ -73,6 +75,11 @@ class Emulator(object):
+         if kernel_cmdline:
+             qemu_cmd += ["-append", " ".join(kernel_cmdline)]
+ 
++        self.logfile.write(f"> host cpu count: {os.cpu_count()}\n")
++        ldavg = os.getloadavg()
++        ldavg_str = f"{ldavg[0]:.2f}, {ldavg[1]:.2f}, {ldavg[2]:.2f}"
++        self.logfile.write(f"> host loadavg: {ldavg_str}\n")
++        self.logfile.write(f"> timeout multiplier: {self.timeout_multiplier}\n")
+         self.logfile.write("> starting qemu with '%s'\n" % " ".join(qemu_cmd))
+         self.qemu = pexpect.spawn(qemu_cmd[0], qemu_cmd[1:],
+                                   timeout=5 * self.timeout_multiplier,
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
