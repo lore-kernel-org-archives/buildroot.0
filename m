@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E6953CA101E
-	for <buildroot@archiver.kernel.org>; Sun,  1 Sep 2024 14:56:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 16B33CA101E
+	for <buildroot@archiver.kernel.org>; Sun,  1 Sep 2024 14:57:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B74494056E;
-	Sun,  1 Sep 2024 14:56:59 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C9B7640579;
+	Sun,  1 Sep 2024 14:57:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uU9Eb9NHuODw; Sun,  1 Sep 2024 14:56:58 +0000 (UTC)
+ id cSd9e2mF_FoT; Sun,  1 Sep 2024 14:57:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2D5294056F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 663044056F
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2D5294056F;
-	Sun,  1 Sep 2024 14:56:58 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 52C351BF2B6
+	by smtp2.osuosl.org (Postfix) with ESMTP id 663044056F;
+	Sun,  1 Sep 2024 14:57:01 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id A2AF61BF2B6
  for <buildroot@lists.busybox.net>; Sun,  1 Sep 2024 14:56:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3DE7A404C2
- for <buildroot@lists.busybox.net>; Sun,  1 Sep 2024 14:56:46 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9BFD860656
+ for <buildroot@lists.busybox.net>; Sun,  1 Sep 2024 14:56:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id l0lVva2fC2aZ for <buildroot@lists.busybox.net>;
- Sun,  1 Sep 2024 14:56:45 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id sU--iOP3okGo for <buildroot@lists.busybox.net>;
+ Sun,  1 Sep 2024 14:56:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 465884021C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BCF8160659
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 465884021C
+ by smtp3.osuosl.org (Postfix) with ESMTP id BCF8160659
  for <buildroot@buildroot.org>; Sun,  1 Sep 2024 14:56:44 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 973EA868F6; Sun,  1 Sep 2024 14:56:44 +0000 (UTC)
+ id A8132868CE; Sun,  1 Sep 2024 14:56:44 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 1 Sep 2024 16:41:25 +0200
+Date: Sun, 1 Sep 2024 16:41:33 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 44d86a7b53225341fc17a39e8a712864bc6b43a5
-X-Git-Newrev: 52ef35cd0c1df14e2074c062d4d9be68473d9f4d
+X-Git-Oldrev: 52ef35cd0c1df14e2074c062d4d9be68473d9f4d
+X-Git-Newrev: ce25286b993167fc6fb10b13723c4d6f245f66c2
 X-Patchwork-Hint: ignore
-Message-Id: <20240901145644.973EA868F6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/libcurl: bump
- version to 8.8.0
+Message-Id: <20240901145644.A8132868CE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/libcurl: fix
+ build with mbedtls
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,45 +65,88 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=52ef35cd0c1df14e2074c062d4d9be68473d9f4d
+commit: https://git.buildroot.net/buildroot/commit/?id=ce25286b993167fc6fb10b13723c4d6f245f66c2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-Changelog: https://curl.se/changes.html#8_8_0
+Add upstream patch to fix compatibility with mbedtls version 2.28.x, which
+is broken since commit 50bdb2a3b7 (package/libcurl: bump version to 8.8.0).
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 50bdb2a3b7ace71065dc0b8a81bebc173f84a8c4)
+Fixes:
+http://autobuild.buildroot.net/results/66ba878386e4e478645edb6a282e82820b8dad7f
+http://autobuild.buildroot.net/results/7a4d9595197cf23080a23dfe9bc0e60b8145af6e
+http://autobuild.buildroot.net/results/9add7283813388daa95b16ef76acb3c4e9ea7c2f
+
+[Peter: mention when this issue was introduced]
+Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+(cherry picked from commit d611acf8e9f9d598f001fec65c974b0c3f20a1f6)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libcurl/libcurl.hash | 4 ++--
- package/libcurl/libcurl.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ .../0001-mbedtls-check-version-for-cipher-id.patch | 56 ++++++++++++++++++++++
+ 1 file changed, 56 insertions(+)
 
-diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
-index 7fcad973c3..7ba45b79d7 100644
---- a/package/libcurl/libcurl.hash
-+++ b/package/libcurl/libcurl.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking pgp signature
--# https://curl.se/download/curl-8.7.1.tar.xz.asc
-+# https://curl.se/download/curl-8.8.0.tar.xz.asc
- # signed with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
--sha256  6fea2aac6a4610fbd0400afb0bcddbe7258a64c63f1f68e5855ebc0c659710cd  curl-8.7.1.tar.xz
-+sha256  0f58bb95fc330c8a46eeb3df5701b0d90c9d9bfcc42bd1cd08791d12551d4400  curl-8.8.0.tar.xz
- sha256  adb1fc06547fd136244179809f7b7c2d2ae6c4534f160aa513af9b6a12866a32  COPYING
-diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-index 99320c1315..172dd22071 100644
---- a/package/libcurl/libcurl.mk
-+++ b/package/libcurl/libcurl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--LIBCURL_VERSION = 8.7.1
-+LIBCURL_VERSION = 8.8.0
- LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
- LIBCURL_SITE = https://curl.se/download
- LIBCURL_DEPENDENCIES = host-pkgconf \
+diff --git a/package/libcurl/0001-mbedtls-check-version-for-cipher-id.patch b/package/libcurl/0001-mbedtls-check-version-for-cipher-id.patch
+new file mode 100644
+index 0000000000..b7d674acfe
+--- /dev/null
++++ b/package/libcurl/0001-mbedtls-check-version-for-cipher-id.patch
+@@ -0,0 +1,56 @@
++From 0c4b4c1e93c8e869af230090f32346fdfd548f21 Mon Sep 17 00:00:00 2001
++From: Stefan Eissing <stefan@eissing.org>
++Date: Wed, 22 May 2024 14:44:56 +0200
++Subject: [PATCH] mbedtls: check version for cipher id
++
++mbedtls_ssl_get_ciphersuite_id_from_ssl() seems to have been added in
++mbedtls 3.2.0. Check for that version.
++
++Closes #13749
++
++Signed-off-by: Baruch Siach <baruch@tkos.co.il>
++Upstream: https://github.com/curl/curl/commit/0c4b4c1e93c8e869af230090f32346fdfd548f21
++---
++ lib/vtls/mbedtls.c | 19 ++++++++++++-------
++ 1 file changed, 12 insertions(+), 7 deletions(-)
++
++diff --git a/lib/vtls/mbedtls.c b/lib/vtls/mbedtls.c
++index ec0b10dd9a9f..98a4ea01b183 100644
++--- a/lib/vtls/mbedtls.c
+++++ b/lib/vtls/mbedtls.c
++@@ -902,8 +902,6 @@ mbed_connect_step2(struct Curl_cfilter *cf, struct Curl_easy *data)
++     (struct mbed_ssl_backend_data *)connssl->backend;
++   struct ssl_primary_config *conn_config = Curl_ssl_cf_get_primary_config(cf);
++   const mbedtls_x509_crt *peercert;
++-  char cipher_str[64];
++-  uint16_t cipher_id;
++ #ifndef CURL_DISABLE_PROXY
++   const char * const pinnedpubkey = Curl_ssl_cf_is_proxy(cf)?
++     data->set.str[STRING_SSL_PINNEDPUBLICKEY_PROXY]:
++@@ -932,11 +930,18 @@ mbed_connect_step2(struct Curl_cfilter *cf, struct Curl_easy *data)
++     return CURLE_SSL_CONNECT_ERROR;
++   }
++ 
++-  cipher_id = (uint16_t)
++-              mbedtls_ssl_get_ciphersuite_id_from_ssl(&backend->ssl);
++-  mbed_cipher_suite_get_str(cipher_id, cipher_str, sizeof(cipher_str), true);
++-  infof(data, "mbedTLS: Handshake complete, cipher is %s", cipher_str);
++-
+++#if MBEDTLS_VERSION_NUMBER >= 0x03020000
+++  {
+++    char cipher_str[64];
+++    uint16_t cipher_id;
+++    cipher_id = (uint16_t)
+++                mbedtls_ssl_get_ciphersuite_id_from_ssl(&backend->ssl);
+++    mbed_cipher_suite_get_str(cipher_id, cipher_str, sizeof(cipher_str), true);
+++    infof(data, "mbedTLS: Handshake complete, cipher is %s", cipher_str);
+++  }
+++#else
+++  infof(data, "mbedTLS: Handshake complete");
+++#endif
++   ret = mbedtls_ssl_get_verify_result(&backend->ssl);
++ 
++   if(!conn_config->verifyhost)
++-- 
++2.43.0
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
