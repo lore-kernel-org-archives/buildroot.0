@@ -4,79 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A713EC54FC6
-	for <buildroot@archiver.kernel.org>; Sun,  1 Sep 2024 12:11:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8A93EC54FC6
+	for <buildroot@archiver.kernel.org>; Sun,  1 Sep 2024 14:13:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 45B4D6066B;
-	Sun,  1 Sep 2024 12:11:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 06F216076B;
+	Sun,  1 Sep 2024 14:13:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id h27hz7jG2hcp; Sun,  1 Sep 2024 12:11:40 +0000 (UTC)
+ id hzw66IHtYt8u; Sun,  1 Sep 2024 14:13:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3ABA360678
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E97926075A
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3ABA360678;
-	Sun,  1 Sep 2024 12:11:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E97926075A;
+	Sun,  1 Sep 2024 14:13:56 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B5CCE1BF40D
- for <buildroot@lists.busybox.net>; Sun,  1 Sep 2024 12:11:38 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C1F2E1BF2B6
+ for <buildroot@lists.busybox.net>; Sun,  1 Sep 2024 14:13:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A2DFD40162
- for <buildroot@lists.busybox.net>; Sun,  1 Sep 2024 12:11:38 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B8A7940167
+ for <buildroot@lists.busybox.net>; Sun,  1 Sep 2024 14:13:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Osb-2usER7zi for <buildroot@lists.busybox.net>;
- Sun,  1 Sep 2024 12:11:37 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=209.85.128.42;
- helo=mail-wm1-f42.google.com; envelope-from=thomas.devoogdt@gmail.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 10C1140139
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 10C1140139
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com
- [209.85.128.42])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 10C1140139
- for <buildroot@buildroot.org>; Sun,  1 Sep 2024 12:11:36 +0000 (UTC)
-Received: by mail-wm1-f42.google.com with SMTP id
- 5b1f17b1804b1-42bb72a5e0bso28842105e9.1
- for <buildroot@buildroot.org>; Sun, 01 Sep 2024 05:11:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1725192694; x=1725797494;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=Lw9TVS5GTqcaFjmXpCH01FFaHpS/Dxv20Pc5XxQKUfI=;
- b=FJ+jw3zQI+d056jxUmQSpoAP7gULrV/GFoZhxewfOnyUx8miORd5WNyi3hnVGgrA5s
- zf4MbLU1ycGgl6yCEQRF6GJkZ88Vevg6AT1rFdboi1hwg0HF697qMBy4Pxp1dzwM47U2
- IBH71UyZhns810FKgoBpgIPEEJaat9R6i35VAuoHouFIZ1fwZWHzVbq0Vtt9rkW0OgIw
- 3Zsr9osDYXzI9j598ENrVJM8LfpFNcvvdjgBNcXYYyLXi9ATDbxPbBNmpgx2GpPaQgKu
- iapH1HzK/Fjh2jaILOJotOMUKH8ga6joI5X1D+mCWq85r8ocd3urov/U0bu+ykG6BwmB
- EpzA==
-X-Gm-Message-State: AOJu0Yy42UpuRqvx/tuCc6x8drfv/ZjAO54viLVhMvhiciqq0gjkjONx
- rFPwYeH9letVcM3jpoqFUbLANXx6UzLPVPo2pWoH8pck8R9jaIbczyGTsJhK
-X-Google-Smtp-Source: AGHT+IHPS5ux1Nu1RY6cuoQPUU3XyKrmDO2q65T3wlIu152ohusHIrL+uJ91kPmwZywF62fEJSU3tw==
-X-Received: by 2002:a05:6000:2d01:b0:374:b6f4:d8d1 with SMTP id
- ffacd0b85a97d-374b6f4df4cmr4125613f8f.13.1725192693517; 
- Sun, 01 Sep 2024 05:11:33 -0700 (PDT)
-Received: from localhost.localdomain
- ([2a02:a03f:eb68:2f00:a4dd:9d4b:bf58:82c2])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-374c29aa150sm3064510f8f.101.2024.09.01.05.11.33
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 01 Sep 2024 05:11:33 -0700 (PDT)
-From: Thomas Devoogdt <thomas@devoogdt.com>
-To: buildroot@buildroot.org
-Date: Sun,  1 Sep 2024 14:11:22 +0200
-Message-ID: <20240901121122.3113482-1-thomas@devoogdt.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240829131232.2132854-2-thomas@devoogdt.com>
-References: <20240829131232.2132854-2-thomas@devoogdt.com>
+ id GaqEQRdZhPSK for <buildroot@lists.busybox.net>;
+ Sun,  1 Sep 2024 14:13:54 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=178.60.130.6;
+ helo=fanzine2.igalia.com; envelope-from=aperez@igalia.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D911F40015
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D911F40015
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id D911F40015
+ for <buildroot@buildroot.org>; Sun,  1 Sep 2024 14:13:51 +0000 (UTC)
+Received: from 91-152-140-108.elisa-laajakaista.fi ([91.152.140.108]
+ helo=momiji) by fanzine2.igalia.com with esmtpsa 
+ (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+ id 1sklKu-007zNG-1S; Sun, 01 Sep 2024 16:13:47 +0200
+Received: from localhost (momiji [local])
+ by momiji (OpenSMTPD) with ESMTPA id 95f20c81;
+ Sun, 1 Sep 2024 14:13:43 +0000 (UTC)
+Date: Sun, 1 Sep 2024 17:13:38 +0300
+Message-ID: <20240901171338.GB1275649@igalia.com>
+From: Adrian Perez de Castro <aperez@igalia.com>
+To: Thomas Devoogdt <thomas@devoogdt.com>
+In-Reply-To: <20240831120707.471306-1-thomas@devoogdt.com>
+References: <20240831120707.471306-1-thomas@devoogdt.com>
 MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
+ c=relaxed/relaxed; d=igalia.com; 
+ s=20170329; h=Content-Type:MIME-Version:References:In-Reply-To:Subject:Cc:To:
+ From:Message-ID:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+ Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+ :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+ List-Post:List-Owner:List-Archive;
+ bh=Y6cYRdCF7PIfZ3lP5con98OgYJzapH/D71WTlH0LO9Y=; b=Hkq33xBmkOm+kByVHAd2Et8thl
+ NRiY8mXhCqwDTUvUs6teT33qC4NyAzclgN2NRopiHpjDqLs/rbfkTKJ8LzkBkWDgUfMDOF61h7E9K
+ wzY0layoPS9wRQvmdXBKiq5CrusTe/cmyNNF+IsVRHDBvs3G7s8OPOW7LXGb44N0lVTkYkpT13mac
+ 5TCx8LuLSrntgiX5F926CryECs1GEFiRnJsq/Bg6LDrIeUnZwwx1pZX7Qwnlc974kIiCNSWLr8se9
+ kP+F8E5tqgYeIRJUuiFUIYxrwh2uD7XuyOSYQ1k+8TL9B7UVZpTiLIxJU+PEBZPDeip10ZaWgnStW
+ Wupuzr1w==;
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=devoogdt.com
-Subject: [Buildroot] [PATCH v1] package/webkitgtk: restore libsoup support
+ dmarc=pass (p=none dis=none)
+ header.from=igalia.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=igalia.com header.i=@igalia.com header.a=rsa-sha256
+ header.s=20170329 header.b=Hkq33xBm
+Subject: Re: [Buildroot] [PATCH v1] package/webkitgtk: bump to 2.44.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -88,98 +82,66 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Adrian Perez de Castro <aperez@igalia.com>,
- Thomas Devoogdt <thomas@devoogdt.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Thomas Devoogdt <thomas@devoogdt.com>, buildroot@buildroot.org
+Content-Type: multipart/mixed; boundary="===============7575598720194820296=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The midori browser still uses libsoup and was broken since commit
-38a098df133aaa2ebf09742054b02db5a44f58e5. This commit allows the
-use of libsoup, libsoup3 stays the default.
 
-Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
----
-This is a bit a replacement for https://patchwork.ozlabs.org/project/buildroot/patch/20240829131232.2132854-2-thomas@devoogdt.com/.
-I don't use midori or libsoup2, and it's still not maintained, so it's also fine to accept the other commit and drop midori altogether.
----
- package/webkitgtk/Config.in    | 11 ++++++-----
- package/webkitgtk/webkitgtk.mk | 12 ++++++++++--
- 2 files changed, 16 insertions(+), 7 deletions(-)
+--===============7575598720194820296==
+Content-Type: multipart/signed; boundary="s4LlKX5Kvt4MXsIw"; micalg="pgp-ripemd160"; protocol="application/pgp-signature"
 
-diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
-index a556fec194..5f9c24d610 100644
---- a/package/webkitgtk/Config.in
-+++ b/package/webkitgtk/Config.in
-@@ -33,9 +33,9 @@ config BR2_PACKAGE_WEBKITGTK
- 	depends on BR2_PACKAGE_HAS_LIBEGL
- 	depends on BR2_HOST_GCC_AT_LEAST_4_9 # icu, host-ruby
- 	depends on BR2_INSTALL_LIBSTDCPP
--	depends on BR2_TOOLCHAIN_HAS_THREADS # wayland, icu, libsoup3
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # wayland, icu, libsoup/libsoup3
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_10
--	depends on BR2_USE_WCHAR # icu, libsoup3
-+	depends on BR2_USE_WCHAR # icu, libsoup/libsoup3
- 	depends on BR2_PACKAGE_LIBGTK3 || BR2_PACKAGE_LIBGTK4
- 	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
- 	select BR2_PACKAGE_CAIRO
-@@ -47,7 +47,7 @@ config BR2_PACKAGE_WEBKITGTK
- 	select BR2_PACKAGE_LIBEPOXY
- 	select BR2_PACKAGE_LIBGCRYPT
- 	select BR2_PACKAGE_LIBSECRET
--	select BR2_PACKAGE_LIBSOUP3
-+	select BR2_PACKAGE_LIBSOUP3 if !BR2_PACKAGE_LIBSOUP
- 	select BR2_PACKAGE_LIBTASN1
- 	select BR2_PACKAGE_LIBXML2
- 	select BR2_PACKAGE_LIBXSLT
-@@ -100,9 +100,10 @@ comment "sandboxing support needs a toolchain w/ headers >= 3.12"
- 
- config BR2_PACKAGE_WEBKITGTK_HTTPS
- 	bool "HTTPS support"
--	depends on !BR2_STATIC_LIBS # libsoup3 -> glib-networking, gnutls
-+	depends on !BR2_STATIC_LIBS # libsoup/libsoup3 -> glib-networking, gnutls
- 	select BR2_PACKAGE_CA_CERTIFICATES # runtime
--	select BR2_PACKAGE_LIBSOUP3_SSL
-+	select BR2_PACKAGE_LIBSOUP_SSL if BR2_PACKAGE_LIBSOUP
-+	select BR2_PACKAGE_LIBSOUP3_SSL if BR2_PACKAGE_LIBSOUP3
- 	help
- 	  Enable HTTPS protocol support.
- 
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index ff39ee01e1..af49aad96e 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
-@@ -14,8 +14,8 @@ WEBKITGTK_LICENSE_FILES = \
- 	Source/WebCore/LICENSE-LGPL-2.1
- WEBKITGTK_CPE_ID_VENDOR = webkitgtk
- WEBKITGTK_DEPENDENCIES = host-ruby host-python3 host-gperf host-unifdef \
--	enchant harfbuzz icu jpeg libegl libepoxy libgcrypt libsecret \
--	libsoup3 libtasn1 libxml2 libxslt sqlite webp woff2
-+	enchant harfbuzz icu jpeg libegl libepoxy libgcrypt libsecret libtasn1 \
-+	libxml2 libxslt sqlite webp woff2
- 
- WEBKITGTK_CMAKE_BACKEND = ninja
- 
-@@ -31,6 +31,14 @@ WEBKITGTK_CONF_OPTS = \
- 	-DUSE_LIBHYPHEN=OFF \
- 	-DUSE_WOFF2=ON
- 
-+ifeq ($(BR2_PACKAGE_LIBSOUP),y)
-+WEBKITGTK_CONF_OPTS += -DUSE_SOUP2=ON
-+WEBKITGTK_DEPENDENCIES += libsoup
-+else
-+WEBKITGTK_CONF_OPTS += -DUSE_SOUP2=OFF
-+WEBKITGTK_DEPENDENCIES += libsoup3
-+endif
-+
- ifeq ($(BR2_PACKAGE_LIBGTK4),y)
- WEBKITGTK_CONF_OPTS += -DUSE_GTK4=ON
- WEBKITGTK_DEPENDENCIES += libgtk4
--- 
-2.43.0
+
+--s4LlKX5Kvt4MXsIw
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: base64
+
+SGkgVGhvbWFzLAoKVGhhbmtzIGZvciB3b3JraW5nIG9uIHRoaXMgdXBkYXRlLiBUaGVyZSBpcyBv
+bmUgaXNzdWUgdGhhdCBuZWVkcwphZGRyZXNzaW5nLCB0aG91Z2guLi4KCk9uIFNhdCwgMzEgQXVn
+IDIwMjQgMTQ6MDc6MDcgKzAyMDAgVGhvbWFzIERldm9vZ2R0IDx0aG9tYXNAZGV2b29nZHQuY29t
+PiB3cm90ZToKCj4gQnVnZml4IHJlbGVhc2Ugd2l0aCBtYW55IHNlY3VyaXR5IGZpeGVzLCBpbmNs
+dWRpbmcgKGJ1dCBub3QgbGltaXRlZCB0bykKPiBwYXRjaGVzIGZvciBDVkUtMjAyNC00MDc3Niwg
+Q1ZFLTIwMjQtNDA3NzksIENWRS0yMDI0LTQwNzgwLCBDVkUtMjAyNC00MDc4MiwKPiBDVkUtMjAy
+NC00MDc4OSwgYW5kIENWRS0yMDI0LTQ1NTguCj4gCj4gUmVsZWFzZSBub3RlczoKPiAKPiAgIGh0
+dHBzOi8vd2Via2l0Z3RrLm9yZy8yMDI0LzA4LzEzL3dlYmtpdGd0azIuNDQuMy1yZWxlYXNlZC5o
+dG1sLgoKQWxvbmdzaWRlIHdpdGggdGhlIGFubm91bmNlbWVudCwgd2UgZm91bmQgYSBjb3VwbGUg
+b2YgaXNzdWVzIHRoYXQgbmVlZAppbXBvcnRpbmcgYSBjb3VwbGUgb2YgcGF0Y2hlcywgYm90aCBv
+ZiB3aGljaCBhcmUgYWxyZWFkeSBwcmVzZW50IGluIHRoZQp3ZWJraXRnbGliLzIuNDQgcmVsZWFz
+ZSBicmFuY2guIEkgc2VudCBhbiBlLW1haWwgdG8gbGV0IHBhY2thZ2VycyBrbm93IGEKY291cGxl
+IG9mIHdlZWtzIGFnbzoKCiAgaHR0cHM6Ly9saXN0cy53ZWJraXQub3JnL3BpcGVybWFpbC93ZWJr
+aXQtZ3RrLzIwMjQtQXVndXN0LzAwNDAwMi5odG1sCgpUaGUgdHdvIHBhdGNoZXMgeW91IHdvdWxk
+IG5lZWQgdG8gYWRkIGFyZSB0aGVzZToKCiAgaHR0cHM6Ly9naXRodWIuY29tL1dlYktpdC9XZWJL
+aXQvY29tbWl0LzkxNDBjZTcxMmFhODcwOTE2MTM4NzRkODAyNzg3YWI0NzZiZTBlMzkKICBodHRw
+czovL2dpdGh1Yi5jb20vV2ViS2l0L1dlYktpdC9jb21taXQvNDg1NGI5NDRiMzQ1OTkwZTQxMDAz
+MTk2NjI3Nzc4NTZmZThlYTRhYQoKT3RoZXJ3aXNlLCBjaGFuZ2VzIExHVE0uCgpBbHNvLCBhbm90
+aGVyIHRpZGJpdDogSSBhbSBwbGFubmluZyB0byByZWxlYXNlIDIuNDQuNCBuZXh0IHdlZWssIHdo
+aWNoCndpbGwgYmUgdGhlIGxhc3QgdmVyc2lvbiBmcm9tIHRoZSBzZXJpZXMsIGFuZCBpbiBhIGZl
+dyB3ZWVrcyBtb3JlIHdlCmFyZSBwbGFubmluZyB0byByZWxlYXNlIDIuNDYuMCBhcyB3ZWxsIC0t
+IGp1c3QgYSBoZWFkcyB1cCBpbiBjYXNlIGl0IG1heQpiZSBwcmVmZXJhYmxlIHRvIHdhaXQgdW50
+aWwgZWl0aGVyIHZlcnNpb24uCgpDaGVlcnMsCuKAlEFkcmnDoW4K
+
+--s4LlKX5Kvt4MXsIw
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABEDAB0WIQRao7wzT9fjNp58d7KRxVnb5MkSOwUCZtR2kgAKCRCRxVnb5MkS
+O2nEAJ0aeOCMOigf6mJCa6ks3ikjcNg/7QCfdAuC162A6u0ChIYI7AJsFWQ+Aqs=
+=7+Lj
+-----END PGP SIGNATURE-----
+
+--s4LlKX5Kvt4MXsIw--
+
+--===============7575598720194820296==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============7575598720194820296==--
