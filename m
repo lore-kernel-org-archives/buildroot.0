@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1AFC6C54FC6
-	for <buildroot@archiver.kernel.org>; Sun,  1 Sep 2024 14:56:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90867CA101E
+	for <buildroot@archiver.kernel.org>; Sun,  1 Sep 2024 14:56:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B31A040433;
-	Sun,  1 Sep 2024 14:56:51 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DB29C40547;
+	Sun,  1 Sep 2024 14:56:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JuksD7xOLfKZ; Sun,  1 Sep 2024 14:56:50 +0000 (UTC)
+ id fkkKD55Mky1v; Sun,  1 Sep 2024 14:56:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7A3F140525
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4A3CB40534
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7A3F140525;
-	Sun,  1 Sep 2024 14:56:50 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4A3CB40534;
+	Sun,  1 Sep 2024 14:56:53 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id EF60E1BF86B
- for <buildroot@lists.busybox.net>; Sun,  1 Sep 2024 14:56:45 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2111B1BF2B6
+ for <buildroot@lists.busybox.net>; Sun,  1 Sep 2024 14:56:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E8FB5401C5
- for <buildroot@lists.busybox.net>; Sun,  1 Sep 2024 14:56:45 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0E0A14013C
+ for <buildroot@lists.busybox.net>; Sun,  1 Sep 2024 14:56:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gDhzzV8buU4A for <buildroot@lists.busybox.net>;
- Sun,  1 Sep 2024 14:56:44 +0000 (UTC)
+ id XuGmkoXIvNYI for <buildroot@lists.busybox.net>;
+ Sun,  1 Sep 2024 14:56:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D25BC4013C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F1994401A1
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id D25BC4013C
+ by smtp4.osuosl.org (Postfix) with ESMTP id F1994401A1
  for <buildroot@buildroot.org>; Sun,  1 Sep 2024 14:56:44 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id BF2BE868F9; Sun,  1 Sep 2024 14:56:44 +0000 (UTC)
+ id E04EF868F8; Sun,  1 Sep 2024 14:56:44 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 1 Sep 2024 16:47:07 +0200
+Date: Sun, 1 Sep 2024 16:53:18 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: c38cb8488e9ff19d05833aff5b144f558f325fb0
-X-Git-Newrev: d46b2f5feaf3926a47b664188668a812b6662003
+X-Git-Oldrev: 793946286cf8593e6a7e64ac60bf2ca930acf675
+X-Git-Newrev: 0f1290e907013abf9fb7847b8cfc7e9954cad60a
 X-Patchwork-Hint: ignore
-Message-Id: <20240901145644.BF2BE868F9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x]
- support/testing/infra/emulator.py: add host load info in run log
+Message-Id: <20240901145644.E04EF868F8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/intel-microcode:
+ security bump version to 20240531
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,63 +65,57 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d46b2f5feaf3926a47b664188668a812b6662003
+commit: https://git.buildroot.net/buildroot/commit/?id=0f1290e907013abf9fb7847b8cfc7e9954cad60a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-Runtime tests running on test runners are subject to a high
-variability in term of performance and timing. Most or the runtime
-test commands are executed with a timeout, in pexpect.
+Release notes:
+https://github.com/intel/Intel-Linux-Processor-Microcode-Data-Files/releases/tag/microcode-20240312
+https://github.com/intel/Intel-Linux-Processor-Microcode-Data-Files/releases/tag/microcode-20240514
+https://github.com/intel/Intel-Linux-Processor-Microcode-Data-Files/releases/tag/microcode-20240531
 
-Slow or very loaded test runners can use the timeout_multiplier to
-globally increase those timeouts.
+20240312 fixes
+CVE-2023-39368: https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-00972.html
+CVE-2023-38575: https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-00982.html
+CVE-2023-28746: https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-00898.html
+CVE-2023-22655: https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-00960.html
+CVE-2023-43490: https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-01045.html
 
-Some runtime test commands sometimes needs to poll or query a state,
-rather than having purely sequential actions. It is sometimes hard to
-know, from the test writer point of view, the maximum timeout to set, or
-if a retry logic is needed.
+20240514 fixes
+CVE-2023-45733: https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-01051.html
+CVE-2023-46103: https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-01052.html
+CVE-2023-45745: https://www.intel.com/content/www/us/en/security-center/advisory/intel-sa-01036.html
 
-In order to help debugging runtime tests failing due very slow
-execution, this commit adds extra information on the host test runner
-about its load in the run log. Relevant information are: number of
-cpus, the load average at the moment the emulator is started and the
-current timeout_multiplier.
-
-Note: this change was discussed in:
-https://lists.buildroot.org/pipermail/buildroot/2024-July/759119.html
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 7a6edbc7b9166c799b43cf9a9b78422c8e20ccc0)
+(cherry picked from commit 6eef18e6b06ab9daf79e09da5f12cd9070cabbc4)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/testing/infra/emulator.py | 7 +++++++
- 1 file changed, 7 insertions(+)
+ package/intel-microcode/intel-microcode.hash | 2 +-
+ package/intel-microcode/intel-microcode.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/support/testing/infra/emulator.py b/support/testing/infra/emulator.py
-index 624740fcb1..2106d0e99b 100644
---- a/support/testing/infra/emulator.py
-+++ b/support/testing/infra/emulator.py
-@@ -2,6 +2,8 @@ import pexpect
+diff --git a/package/intel-microcode/intel-microcode.hash b/package/intel-microcode/intel-microcode.hash
+index 742332d552..742be5ae79 100644
+--- a/package/intel-microcode/intel-microcode.hash
++++ b/package/intel-microcode/intel-microcode.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  cee26f311f7e2c039dd48cd30f995183bde9b98fb4c3039800e2ddaf5c090e55  intel-microcode-20231114.tar.gz
++sha256  c29eb35fdbd39e3ed8587e6f0b1275cc03265f230c2fcaf88e2a1556451e773f  intel-microcode-20240531.tar.gz
+ sha256  03efb1491c7e899feb2665fa299363e64035e5444c1b8bc1f6ebed30de964e12  license
+diff --git a/package/intel-microcode/intel-microcode.mk b/package/intel-microcode/intel-microcode.mk
+index a159baa93d..6862565bc8 100644
+--- a/package/intel-microcode/intel-microcode.mk
++++ b/package/intel-microcode/intel-microcode.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- import infra
- 
-+import os
-+
- 
- class Emulator(object):
- 
-@@ -73,6 +75,11 @@ class Emulator(object):
-         if kernel_cmdline:
-             qemu_cmd += ["-append", " ".join(kernel_cmdline)]
- 
-+        self.logfile.write(f"> host cpu count: {os.cpu_count()}\n")
-+        ldavg = os.getloadavg()
-+        ldavg_str = f"{ldavg[0]:.2f}, {ldavg[1]:.2f}, {ldavg[2]:.2f}"
-+        self.logfile.write(f"> host loadavg: {ldavg_str}\n")
-+        self.logfile.write(f"> timeout multiplier: {self.timeout_multiplier}\n")
-         self.logfile.write("> starting qemu with '%s'\n" % " ".join(qemu_cmd))
-         self.qemu = pexpect.spawn(qemu_cmd[0], qemu_cmd[1:],
-                                   timeout=5 * self.timeout_multiplier,
+-INTEL_MICROCODE_VERSION = 20231114
++INTEL_MICROCODE_VERSION = 20240531
+ INTEL_MICROCODE_SITE = $(call github,intel,Intel-Linux-Processor-Microcode-Data-Files,microcode-$(INTEL_MICROCODE_VERSION))
+ INTEL_MICROCODE_LICENSE = PROPRIETARY
+ INTEL_MICROCODE_LICENSE_FILES = license
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
