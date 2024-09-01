@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E4D8DCA101E
-	for <buildroot@archiver.kernel.org>; Sun,  1 Sep 2024 14:57:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D18BC54FC6
+	for <buildroot@archiver.kernel.org>; Sun,  1 Sep 2024 14:57:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B2E3540556;
-	Sun,  1 Sep 2024 14:57:09 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E68344021C;
+	Sun,  1 Sep 2024 14:57:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HGYL1_8AK5PT; Sun,  1 Sep 2024 14:57:08 +0000 (UTC)
+ id B8fsLIikbOJu; Sun,  1 Sep 2024 14:57:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2D31A40592
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 90E7540433
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2D31A40592;
-	Sun,  1 Sep 2024 14:57:08 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5B17E1BF2B6
- for <buildroot@lists.busybox.net>; Sun,  1 Sep 2024 14:56:48 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 90E7540433;
+	Sun,  1 Sep 2024 14:57:55 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id E27E91BF2B6
+ for <buildroot@lists.busybox.net>; Sun,  1 Sep 2024 14:57:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B2BFF404C2
- for <buildroot@lists.busybox.net>; Sun,  1 Sep 2024 14:56:46 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id DDB266068A
+ for <buildroot@lists.busybox.net>; Sun,  1 Sep 2024 14:57:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FIE0y3gS3cMA for <buildroot@lists.busybox.net>;
- Sun,  1 Sep 2024 14:56:45 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id K4GjF6adIMOB for <buildroot@lists.busybox.net>;
+ Sun,  1 Sep 2024 14:57:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 75F0140449
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2688460656
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 75F0140449
- for <buildroot@buildroot.org>; Sun,  1 Sep 2024 14:56:44 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2688460656
+ for <buildroot@buildroot.org>; Sun,  1 Sep 2024 14:57:54 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D4E9F868CE; Sun,  1 Sep 2024 14:56:44 +0000 (UTC)
+ id 159598691A; Sun,  1 Sep 2024 14:57:54 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 1 Sep 2024 16:52:42 +0200
-X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: b13a25259f192ad62b47cf133f61e6f880f1dd9a
-X-Git-Newrev: 793946286cf8593e6a7e64ac60bf2ca930acf675
+Date: Sun, 1 Sep 2024 16:40:35 +0200
+X-Git-Refname: refs/heads/2024.05.x
+X-Git-Oldrev: 7a9446201951d4991347c9f53238ebec26d58cb5
+X-Git-Newrev: aa3e78f18d4ea73a8242c41bca73fbe943b157c2
 X-Patchwork-Hint: ignore
-Message-Id: <20240901145644.D4E9F868CE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/open-iscsi:
- open-isns is optional, not mandatory
+Message-Id: <20240901145754.159598691A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.05.x] package/libcurl: bump
+ version to 8.8.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,57 +65,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=793946286cf8593e6a7e64ac60bf2ca930acf675
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=aa3e78f18d4ea73a8242c41bca73fbe943b157c2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.05.x
 
-open-isns is optional, not mandatory, since bump to version 2.1.9 in
-commit 2314928cf828ff02939b9c0041964c3ee2dd907d and
-https://github.com/open-iscsi/open-iscsi/commit/713524df809396e11f42d7691bd8ead2ffc1ca6b
+Changelog: https://curl.se/changes.html#8_8_0
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 948b1830423421e087f6aa4923a37ce077ed5904)
+(cherry picked from commit 50bdb2a3b7ace71065dc0b8a81bebc173f84a8c4)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/open-iscsi/Config.in     | 1 -
- package/open-iscsi/open-iscsi.mk | 9 ++++++++-
- 2 files changed, 8 insertions(+), 2 deletions(-)
+ package/libcurl/libcurl.hash | 4 ++--
+ package/libcurl/libcurl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/open-iscsi/Config.in b/package/open-iscsi/Config.in
-index e55bbfd867..01d83615c9 100644
---- a/package/open-iscsi/Config.in
-+++ b/package/open-iscsi/Config.in
-@@ -5,7 +5,6 @@ config BR2_PACKAGE_OPEN_ISCSI
- 	depends on !BR2_STATIC_LIBS # kmod
- 	select BR2_PACKAGE_KMOD
- 	select BR2_PACKAGE_OPENSSL
--	select BR2_PACKAGE_OPEN_ISNS
- 	select BR2_PACKAGE_UTIL_LINUX
- 	select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
- 	help
-diff --git a/package/open-iscsi/open-iscsi.mk b/package/open-iscsi/open-iscsi.mk
-index d1f40d3e20..1266db3d3f 100644
---- a/package/open-iscsi/open-iscsi.mk
-+++ b/package/open-iscsi/open-iscsi.mk
-@@ -9,10 +9,17 @@ OPEN_ISCSI_SITE = $(call github,open-iscsi,open-iscsi,$(OPEN_ISCSI_VERSION))
- OPEN_ISCSI_LICENSE = GPL-2.0+, GPL-3.0+, LGPL-3.0+
- OPEN_ISCSI_LICENSE_FILES = COPYING README libopeniscsiusr/COPYING
- OPEN_ISCSI_CPE_ID_VALID = YES
--OPEN_ISCSI_DEPENDENCIES = kmod open-isns openssl util-linux
-+OPEN_ISCSI_DEPENDENCIES = kmod openssl util-linux
+diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
+index 7fcad973c3..7ba45b79d7 100644
+--- a/package/libcurl/libcurl.hash
++++ b/package/libcurl/libcurl.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-# https://curl.se/download/curl-8.7.1.tar.xz.asc
++# https://curl.se/download/curl-8.8.0.tar.xz.asc
+ # signed with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
+-sha256  6fea2aac6a4610fbd0400afb0bcddbe7258a64c63f1f68e5855ebc0c659710cd  curl-8.7.1.tar.xz
++sha256  0f58bb95fc330c8a46eeb3df5701b0d90c9d9bfcc42bd1cd08791d12551d4400  curl-8.8.0.tar.xz
+ sha256  adb1fc06547fd136244179809f7b7c2d2ae6c4534f160aa513af9b6a12866a32  COPYING
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index 99320c1315..172dd22071 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- OPEN_ISCSI_CONF_OPTS = -Ddbroot=/var/lib/iscsi
- 
-+ifeq ($(BR2_PACKAGE_OPEN_ISNS),y)
-+OPEN_ISCSI_DEPENDENCIES += open-isns
-+OPEN_ISCSI_CONF_OPTS += -Disns=enabled
-+else
-+OPEN_ISCSI_CONF_OPTS += -Disns=disabled
-+endif
-+
- ifeq ($(BR2_PACKAGE_SYSTEMD),y)
- OPEN_ISCSI_DEPENDENCIES += systemd
- OPEN_ISCSI_CONF_OPTS += -Dno_systemd=false
+-LIBCURL_VERSION = 8.7.1
++LIBCURL_VERSION = 8.8.0
+ LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
+ LIBCURL_SITE = https://curl.se/download
+ LIBCURL_DEPENDENCIES = host-pkgconf \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
