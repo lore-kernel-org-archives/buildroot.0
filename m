@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5388CCA101E
-	for <buildroot@archiver.kernel.org>; Sun,  1 Sep 2024 14:57:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E4D8DCA101E
+	for <buildroot@archiver.kernel.org>; Sun,  1 Sep 2024 14:57:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 12D294052D;
-	Sun,  1 Sep 2024 14:57:06 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B2E3540556;
+	Sun,  1 Sep 2024 14:57:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TYAgcYmXUyiE; Sun,  1 Sep 2024 14:57:05 +0000 (UTC)
+ id HGYL1_8AK5PT; Sun,  1 Sep 2024 14:57:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8F52F40433
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2D31A40592
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8F52F40433;
-	Sun,  1 Sep 2024 14:57:04 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2D31A40592;
+	Sun,  1 Sep 2024 14:57:08 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2821D1BF2B6
- for <buildroot@lists.busybox.net>; Sun,  1 Sep 2024 14:56:47 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5B17E1BF2B6
+ for <buildroot@lists.busybox.net>; Sun,  1 Sep 2024 14:56:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7D2AF4021C
+ by smtp2.osuosl.org (Postfix) with ESMTP id B2BFF404C2
  for <buildroot@lists.busybox.net>; Sun,  1 Sep 2024 14:56:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 35BuE5Q3XS8u for <buildroot@lists.busybox.net>;
+ id FIE0y3gS3cMA for <buildroot@lists.busybox.net>;
  Sun,  1 Sep 2024 14:56:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DE41A40151
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 75F0140449
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id DE41A40151
+ by smtp2.osuosl.org (Postfix) with ESMTP id 75F0140449
  for <buildroot@buildroot.org>; Sun,  1 Sep 2024 14:56:44 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CA52E868FA; Sun,  1 Sep 2024 14:56:44 +0000 (UTC)
+ id D4E9F868CE; Sun,  1 Sep 2024 14:56:44 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 1 Sep 2024 16:49:35 +0200
+Date: Sun, 1 Sep 2024 16:52:42 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: d46b2f5feaf3926a47b664188668a812b6662003
-X-Git-Newrev: b13a25259f192ad62b47cf133f61e6f880f1dd9a
+X-Git-Oldrev: b13a25259f192ad62b47cf133f61e6f880f1dd9a
+X-Git-Newrev: 793946286cf8593e6a7e64ac60bf2ca930acf675
 X-Patchwork-Hint: ignore
-Message-Id: <20240901145644.CA52E868FA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] DEVELOPERS: remove Bernd
- Kuhls from libks
+Message-Id: <20240901145644.D4E9F868CE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/open-iscsi:
+ open-isns is optional, not mandatory
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,31 +65,57 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b13a25259f192ad62b47cf133f61e6f880f1dd9a
+commit: https://git.buildroot.net/buildroot/commit/?id=793946286cf8593e6a7e64ac60bf2ca930acf675
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-I am not using this package anymore.
+open-isns is optional, not mandatory, since bump to version 2.1.9 in
+commit 2314928cf828ff02939b9c0041964c3ee2dd907d and
+https://github.com/open-iscsi/open-iscsi/commit/713524df809396e11f42d7691bd8ead2ffc1ca6b
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit c79ec67bc8763f8d630f51ffbcaf0bb6bfb71236)
+(cherry picked from commit 948b1830423421e087f6aa4923a37ce077ed5904)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- DEVELOPERS | 1 -
- 1 file changed, 1 deletion(-)
+ package/open-iscsi/Config.in     | 1 -
+ package/open-iscsi/open-iscsi.mk | 9 ++++++++-
+ 2 files changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 5f570de8ae..d1c4c6ece0 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -411,7 +411,6 @@ F:	package/libglu/
- F:	package/libhdhomerun/
- F:	package/libheif/
- F:	package/libilbc/
--F:	package/libks/
- F:	package/libldns/
- F:	package/libmicrohttpd/
- F:	package/libminiupnpc/
+diff --git a/package/open-iscsi/Config.in b/package/open-iscsi/Config.in
+index e55bbfd867..01d83615c9 100644
+--- a/package/open-iscsi/Config.in
++++ b/package/open-iscsi/Config.in
+@@ -5,7 +5,6 @@ config BR2_PACKAGE_OPEN_ISCSI
+ 	depends on !BR2_STATIC_LIBS # kmod
+ 	select BR2_PACKAGE_KMOD
+ 	select BR2_PACKAGE_OPENSSL
+-	select BR2_PACKAGE_OPEN_ISNS
+ 	select BR2_PACKAGE_UTIL_LINUX
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBMOUNT
+ 	help
+diff --git a/package/open-iscsi/open-iscsi.mk b/package/open-iscsi/open-iscsi.mk
+index d1f40d3e20..1266db3d3f 100644
+--- a/package/open-iscsi/open-iscsi.mk
++++ b/package/open-iscsi/open-iscsi.mk
+@@ -9,10 +9,17 @@ OPEN_ISCSI_SITE = $(call github,open-iscsi,open-iscsi,$(OPEN_ISCSI_VERSION))
+ OPEN_ISCSI_LICENSE = GPL-2.0+, GPL-3.0+, LGPL-3.0+
+ OPEN_ISCSI_LICENSE_FILES = COPYING README libopeniscsiusr/COPYING
+ OPEN_ISCSI_CPE_ID_VALID = YES
+-OPEN_ISCSI_DEPENDENCIES = kmod open-isns openssl util-linux
++OPEN_ISCSI_DEPENDENCIES = kmod openssl util-linux
+ 
+ OPEN_ISCSI_CONF_OPTS = -Ddbroot=/var/lib/iscsi
+ 
++ifeq ($(BR2_PACKAGE_OPEN_ISNS),y)
++OPEN_ISCSI_DEPENDENCIES += open-isns
++OPEN_ISCSI_CONF_OPTS += -Disns=enabled
++else
++OPEN_ISCSI_CONF_OPTS += -Disns=disabled
++endif
++
+ ifeq ($(BR2_PACKAGE_SYSTEMD),y)
+ OPEN_ISCSI_DEPENDENCIES += systemd
+ OPEN_ISCSI_CONF_OPTS += -Dno_systemd=false
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
