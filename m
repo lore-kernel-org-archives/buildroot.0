@@ -4,91 +4,94 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A81FBCA101E
-	for <buildroot@archiver.kernel.org>; Sun,  1 Sep 2024 06:36:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1607CA101E
+	for <buildroot@archiver.kernel.org>; Sun,  1 Sep 2024 06:36:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2EBC88137A;
-	Sun,  1 Sep 2024 06:36:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6EDED819FC;
+	Sun,  1 Sep 2024 06:36:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ulOq9xyGH7a5; Sun,  1 Sep 2024 06:36:43 +0000 (UTC)
+ id NP8EaSH3POjp; Sun,  1 Sep 2024 06:36:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 37EF6819B4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 311EF81A47
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 37EF6819B4;
-	Sun,  1 Sep 2024 06:36:43 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id BB20A1BF5A9
- for <buildroot@lists.busybox.net>; Sun,  1 Sep 2024 06:36:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 311EF81A47;
+	Sun,  1 Sep 2024 06:36:46 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 912601BF5A9
+ for <buildroot@lists.busybox.net>; Sun,  1 Sep 2024 06:36:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A813240169
- for <buildroot@lists.busybox.net>; Sun,  1 Sep 2024 06:36:41 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7E1064022E
+ for <buildroot@lists.busybox.net>; Sun,  1 Sep 2024 06:36:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oL3eU1SAJ-ri for <buildroot@lists.busybox.net>;
- Sun,  1 Sep 2024 06:36:40 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ipC1bKQCXsON for <buildroot@lists.busybox.net>;
+ Sun,  1 Sep 2024 06:36:41 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::62c; helo=mail-ej1-x62c.google.com;
+ client-ip=2a00:1450:4864:20::134; helo=mail-lf1-x134.google.com;
  envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 33E4740117
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 33E4740117
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com
- [IPv6:2a00:1450:4864:20::62c])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 33E4740117
- for <buildroot@buildroot.org>; Sun,  1 Sep 2024 06:36:40 +0000 (UTC)
-Received: by mail-ej1-x62c.google.com with SMTP id
- a640c23a62f3a-a86a37208b2so361250566b.0
- for <buildroot@buildroot.org>; Sat, 31 Aug 2024 23:36:39 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 63448400AC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 63448400AC
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com
+ [IPv6:2a00:1450:4864:20::134])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 63448400AC
+ for <buildroot@buildroot.org>; Sun,  1 Sep 2024 06:36:41 +0000 (UTC)
+Received: by mail-lf1-x134.google.com with SMTP id
+ 2adb3069b0e04-5334c4d6829so4023016e87.2
+ for <buildroot@buildroot.org>; Sat, 31 Aug 2024 23:36:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1725172598; x=1725777398;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=bQX4WQZ6ZoKSvZIa2YYRQZFyyerWqxovZ05eWvbOmnA=;
- b=L1T/t6Zpd70SbK2t2sZJ6rJ6Zlahz/J7GTtVHVM9vaI7CXrY4w+svIPXLAAByBbJzV
- dPXvNUI+L46Q6WQkyKJPGGtIAP3CGMYOi7EbSLXxGw/KnD5UOk2xoyq+QSKfUlAL9R4Q
- //9+ERAxNjTsqorWJwMc9529KWZXp5Ud0xWWqwJFw6xu6CS+yEisvL0Sppbl0sTsNc9X
- 3V0zaxOqoCXBxtP63UG//iuNSiU2efMJlglwN5lNvzErRvZn1+4waxkAL/q3SL35EWkL
- Et7lMuLy5hz7ES8UQ//5Z7GD5e0McRoLZ9Se9EFMOfPtCSqq2aqrQ9DES96eUmkjLz6r
- /yFg==
-X-Gm-Message-State: AOJu0YzPhr2rPqz5Qe4moTDzv/i3Wtl3xbHyXBJ+95C9+KeGPDLaMQnE
- of2MaZEcwSF+TMKIuWndQBAV1cku5w+goj1af2NdgyYE7wJVxYZNjp6v1Yc6w8TQBXZh4nhtvFX
- BYzE=
-X-Google-Smtp-Source: AGHT+IGkG0dqyOqShifUeGFszJ4/Gu0mg4P0avuAwcDF4I7P3yrIgu4RiGTvcFJb5Y7AVCeKFXbV2w==
-X-Received: by 2002:a17:907:3208:b0:a87:31c:c6c4 with SMTP id
- a640c23a62f3a-a897f83623fmr828541566b.24.1725172597735; 
- Sat, 31 Aug 2024 23:36:37 -0700 (PDT)
+ d=1e100.net; s=20230601; t=1725172599; x=1725777399;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=+JR8kumruQYcM7mOy9qIuMUgfRi8SatHn5MXEL61Ruc=;
+ b=OjEZtP6oX9g4M1bE+9SARMzL/AqM10zOJSLJH4B/L/D0yEr1kScrh6HgS7CmQoSjhP
+ ATJoa74/u8lgFZzM1O/FnIFBf6l/zi0W9kHlZYRS02XS4XxOWLLk9j0yn77Dj2nt5ROd
+ YLNgOk8EpAKYny4UmCMfOHMnl8/GE7xGXjbX1wCCb3GPdXN8vBItGl7IEhJ55R6Y89hr
+ x+TzIobs9aqSvxkajcRKG5xlzGAz8KkzE2DM/+enN92+yVvkQ8f+9USGs64umymL8bkp
+ uyZDGcl2c5QRzv8qLgeJXXkSGlkucv/wLIpXhe7f7Qrv8S0eAKK8X/Ds5vBtz7L+8gWC
+ 4FbQ==
+X-Gm-Message-State: AOJu0Yw/6kN3yzYtOp+YnWLSIx4iZ56XRmWGvwhtm9275GVzU1ROsCbj
+ 62II356CzRGEhcodIMxq1ziQMSoOd6b9QmyWuufNh8EKV1r+AgzYVI5cORQrpjTrIn0oZts8HL0
+ RLgQ=
+X-Google-Smtp-Source: AGHT+IGTR4boBd3FtyLLgFP8euk3ik97caMnzAFqJJAGiOlP5gzfT9Sjcu8ScS5NB8FjBQL6g7q5Dw==
+X-Received: by 2002:a05:6512:318d:b0:533:4652:9848 with SMTP id
+ 2adb3069b0e04-53546b4b20emr4231491e87.32.1725172598520; 
+ Sat, 31 Aug 2024 23:36:38 -0700 (PDT)
 Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it
  (host-82-48-52-249.retail.telecomitalia.it. [82.48.52.249])
  by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-a898900f055sm401702466b.67.2024.08.31.23.36.36
+ a640c23a62f3a-a898900f055sm401702466b.67.2024.08.31.23.36.37
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 31 Aug 2024 23:36:37 -0700 (PDT)
+ Sat, 31 Aug 2024 23:36:38 -0700 (PDT)
 From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Sun,  1 Sep 2024 08:36:33 +0200
-Message-ID: <20240901063634.3504315-1-dario.binacchi@amarulasolutions.com>
+Date: Sun,  1 Sep 2024 08:36:34 +0200
+Message-ID: <20240901063634.3504315-2-dario.binacchi@amarulasolutions.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240901063634.3504315-1-dario.binacchi@amarulasolutions.com>
+References: <20240901063634.3504315-1-dario.binacchi@amarulasolutions.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1725172598; x=1725777398;
+ d=amarulasolutions.com; s=google; t=1725172599; x=1725777399;
  darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=bQX4WQZ6ZoKSvZIa2YYRQZFyyerWqxovZ05eWvbOmnA=;
- b=dZUHAUDOuU9u9pxzQDYVRSPLLCniO5etFPHyjA8caGmACFdnpRbhOs2YOVvKgvtF9Q
- Fufg19Lh7om7LKQPg931ipJxJpHKUUF5ZZO5NrTJ6UhfjVixeJgqLzoS2y7ipN5cC9B8
- a8Qxa77RYPtQY8in43YCEAaIxxKxuSa2rENfc=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=+JR8kumruQYcM7mOy9qIuMUgfRi8SatHn5MXEL61Ruc=;
+ b=CWgKIlOGGJ58d7cZjBinddI7utKDAgWfuL8Nk1m5KMkG+8ucseX+7RL9HQizTwDsL9
+ uOzEKRZpJe7HSIUrK2R0ES5IZk2W8KJqRqwZVXaKj5pDpKSsbWx0YEfxUwktblizYVv9
+ 1xGYjkRwFSuIHx1c9h6uKJxdXqPBJQWh01btI=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (1024-bit key,
  unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=dZUHAUDO
-Subject: [Buildroot] [PATCH v3 1/2] package/babeld: update URL site
+ header.a=rsa-sha256 header.s=google header.b=CWgKIlOG
+Subject: [Buildroot] [PATCH v3 2/2] DEVELOPERS: add Dario Binacchi for babeld
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -107,49 +110,26 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-As reported in [1], version 1.9.2 has been moved to another archive, and
-it is recommended to use https://github.com/jech/babeld as the official
-repository.
-
-It was also necessary to change the sha of the downloaded tar.gz.
-
-Fixes:
-- http://autobuild.buildroot.org/results/2447060c86acf1bd8d6ee0bcf8f9b6adcdfc50c9
-
-[1] https://alioth-lists.debian.net/pipermail/babel-users/2024-August/004187.html
 Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 ---
-Changes v2 -> v3:
-  - Fix the way the github macro is called.
+no changes since v2
 
-Changes v1 -> v2:
-  - Don't bump to 1.10.0 but update the URL site.
+Added in v2
 
- package/babeld/babeld.hash | 2 +-
- package/babeld/babeld.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ DEVELOPERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/babeld/babeld.hash b/package/babeld/babeld.hash
-index 2e0513efa010..e725b1fe310c 100644
---- a/package/babeld/babeld.hash
-+++ b/package/babeld/babeld.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  154f00e0a8bf35d6ea9028886c3dc5c3c342dd1a367df55ef29a547b75867f07  babeld-1.9.2.tar.gz
-+sha256  c8c8c3698afb00caa5a5c9bbbb0a22b56d79ad3f9775382915ba979ac88c4e8f  babeld-1.9.2.tar.gz
- sha256  b415c41292cedef6c97b243609e50552887c29343566c639f23282d31efd2afd  LICENCE
-diff --git a/package/babeld/babeld.mk b/package/babeld/babeld.mk
-index 785fa2bce9f1..3f9a944ed063 100644
---- a/package/babeld/babeld.mk
-+++ b/package/babeld/babeld.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- BABELD_VERSION = 1.9.2
--BABELD_SITE = http://www.pps.univ-paris-diderot.fr/~jch/software/files
-+BABELD_SITE = $(call github,jech,babeld,babeld-$(BABELD_VERSION))
- BABELD_LICENSE = MIT
- BABELD_LICENSE_FILES = LICENCE
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 0b590f0ec20c..33d4c119531f 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -790,6 +790,7 @@ F:	configs/imx6ulz_bsh_smm_m2_defconfig
+ F:	configs/imx8mn_bsh_smm_s2_defconfig
+ F:	configs/imx8mn_bsh_smm_s2_pro_defconfig
+ F:	configs/stm32f769_disco_sd_defconfig
++F:	package/babeld/
+ F:	package/sscep/
+ F:	package/uuu/
  
 -- 
 2.43.0
