@@ -4,50 +4,79 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0B8FCA0ED3
-	for <buildroot@archiver.kernel.org>; Mon,  2 Sep 2024 10:31:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A9852CD13CF
+	for <buildroot@archiver.kernel.org>; Mon,  2 Sep 2024 10:44:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5294A60801;
-	Mon,  2 Sep 2024 10:31:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6E608606F6;
+	Mon,  2 Sep 2024 10:44:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 64K0UW9fujAJ; Mon,  2 Sep 2024 10:31:07 +0000 (UTC)
+ id YUbbo4ORlKAV; Mon,  2 Sep 2024 10:44:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1C160607FD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8C9A06074E
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1C160607FD;
-	Mon,  2 Sep 2024 10:31:07 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3BB1E1BF279
- for <buildroot@lists.busybox.net>; Mon,  2 Sep 2024 10:31:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8C9A06074E;
+	Mon,  2 Sep 2024 10:44:50 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id A42E01BF279
+ for <buildroot@lists.busybox.net>; Mon,  2 Sep 2024 10:44:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 192A480F97
- for <buildroot@lists.busybox.net>; Mon,  2 Sep 2024 10:31:01 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9E9D06074E
+ for <buildroot@lists.busybox.net>; Mon,  2 Sep 2024 10:44:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AnOl5IQPNHjo for <buildroot@lists.busybox.net>;
- Mon,  2 Sep 2024 10:30:59 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id RwPYiQqNeloy for <buildroot@lists.busybox.net>;
+ Mon,  2 Sep 2024 10:44:48 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=68.232.143.124;
+ helo=esa2.hgst.iphmx.com; envelope-from=prvs=968e9b7b9=niklas.cassel@wdc.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6E4FD80F92
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6E4FD80F92
- for <buildroot@buildroot.org>; Mon,  2 Sep 2024 10:30:59 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6755986975; Mon,  2 Sep 2024 10:30:59 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org C30296061B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C30296061B
+Received: from esa2.hgst.iphmx.com (esa2.hgst.iphmx.com [68.232.143.124])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C30296061B
+ for <buildroot@buildroot.org>; Mon,  2 Sep 2024 10:44:47 +0000 (UTC)
+X-CSE-ConnectionGUID: zmNix6AKQgefJf/jFEdkZQ==
+X-CSE-MsgGUID: ljzSS1k5T2esh/ap53Or1w==
+X-IronPort-AV: E=Sophos;i="6.10,195,1719849600"; d="scan'208";a="26096224"
+Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com)
+ ([199.255.45.15])
+ by ob1.hgst.iphmx.com with ESMTP; 02 Sep 2024 18:44:46 +0800
+IronPort-SDR: 66d58904_CCNddowuTPgnBk86nTjlQL3W0O1ny+LeUuN1q2eK6qZVkw4
+ 9yx5o0Q6dxvQxpH/0zMs1jQqdRW8MC3BkA8NWdg==
+Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
+ by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256;
+ 02 Sep 2024 02:44:37 -0700
+WDCIronportException: Internal
+Received: from unknown (HELO ryzen.wdc.com) ([10.224.3.224])
+ by uls-op-cesaip01.wdc.com with ESMTP; 02 Sep 2024 03:44:45 -0700
 To: buildroot@buildroot.org
-Date: Mon, 2 Sep 2024 12:17:04 +0200
-X-Git-Refname: refs/heads/2024.05.x
-X-Git-Oldrev: 36617cbcfe4b693333052fe0d0c123f5cb949102
-X-Git-Newrev: 330edde813f963d596724b47ace37acce9140b36
-X-Patchwork-Hint: ignore
-Message-Id: <20240902103059.6755986975@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.05.x] package/pkg-kconfig:
- cleanup savedefconfig MAKE
+Date: Mon,  2 Sep 2024 12:44:28 +0200
+Message-ID: <20240902104433.2561797-1-niklas.cassel@wdc.com>
+X-Mailer: git-send-email 2.46.0
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+ d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+ t=1725273887; x=1756809887;
+ h=from:to:cc:subject:date:message-id:mime-version:
+ content-transfer-encoding;
+ bh=oOpVVj+PASvAthefqeP9wQMjVhuNknzATqyQB0ADXo8=;
+ b=BW2kuKOK49oCgrbDpGXhOJ5xUsuMjHymqULyNURshiIuq+Jay5VeKvhi
+ BKY/GH9mBR2Ty/VWDtcIbPE0S5zrnsZxnPbpC7q0PevYDiiuXMWsc9oZC
+ 4UsyOSDAUFcLi+HxB+Fpi0DAaDMEeXTaM+ava59qgQijwPPj8YyHs0EVw
+ jM8ddmKTjYIrO37hJ78CgQqF0kXRsQiaYlmTi7mPI2xsaAruqbslb/3hQ
+ ud2MUA/gpYSUPDZwNLCzW8y8wnusn1hXTM3AAt3VCCEAaWEvQMYjY+ee3
+ +HLDeUfOYm+1NM+urNUtn/daqsugG48jHW8/gxucT72EGrImFtzm5OctZ
+ A==;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=wdc.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=wdc.com header.i=@wdc.com header.a=rsa-sha256
+ header.s=dkim.wdc.com header.b=BW2kuKOK
+Subject: [Buildroot] [PATCH 0/5] rock5b additional improvements
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,41 +88,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+From: Niklas Cassel via buildroot <buildroot@buildroot.org>
+Reply-To: Niklas Cassel <niklas.cassel@wdc.com>
+Cc: Niklas Cassel <cassel@kernel.org>, Damien Le Moal <dlemoal@kernel.org>,
+ Kilian Zinnecker <kilian.zinnecker@mail.de>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=330edde813f963d596724b47ace37acce9140b36
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.05.x
+From: Niklas Cassel <cassel@kernel.org>
 
-The kconfig infra defines a 'PKG_KCONFIG_MAKE' var that wraps all the
-standard kconfig options. Switch to this so we aren't duplicating the
-logic.
+Hello all,
 
-Signed-off-by: Brandon Maier <brandon.maier@collins.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 009d31b438b2c402fa959a9041f5cc9b050a1f8f)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/pkg-kconfig.mk | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+Here are some additional improvements for the rock5b board that:
+-Migrates to GPT partition table instead of hybrid (MBR+GPT).
+-Uses more robust rootfs definition on the kernel command line.
+-Enables udev such that modules are loaded automatically, which
+ also allows us to drop the linux.fragment which forced some
+ drivers to be built as built-in.
+-Disables udev predictable NIC names such the NIC is still called eth0.
+-Enables DHCP for eth0.
 
-diff --git a/package/pkg-kconfig.mk b/package/pkg-kconfig.mk
-index 684342bcef..8000de16c4 100644
---- a/package/pkg-kconfig.mk
-+++ b/package/pkg-kconfig.mk
-@@ -33,8 +33,7 @@ PKG_KCONFIG_COMMON_OPTS = \
- # Macro to save the defconfig file
- # $(1): the name of the package in upper-case letters
- define kconfig-package-savedefconfig
--	$($(1)_MAKE_ENV) $($(1)_MAKE) -C $($(1)_DIR) \
--		$(PKG_KCONFIG_COMMON_OPTS) $($(1)_KCONFIG_OPTS) savedefconfig
-+	$($(1)_KCONFIG_MAKE) savedefconfig
- endef
- 
- # The correct way to regenerate a .config file is to use 'make olddefconfig'.
+Kind regards,
+Niklas
+
+Niklas Cassel (5):
+  board/radxa/rock5b: use gpt partition table instead of hybrid
+  board/radxa/rock5b: use PARTLABEL to specify rootfs
+  configs/rock5b: enable eudev to enable automatic module loading
+  board/radxa/rock5b: do not use udev predictable NIC names
+  configs/rock5b: enable DHCP for eth0
+
+ board/radxa/rock5b/extlinux.conf  | 2 +-
+ board/radxa/rock5b/genimage.cfg   | 4 ++--
+ board/radxa/rock5b/linux.fragment | 2 --
+ configs/rock5b_defconfig          | 3 ++-
+ 4 files changed, 5 insertions(+), 6 deletions(-)
+ delete mode 100644 board/radxa/rock5b/linux.fragment
+
+-- 
+2.46.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
