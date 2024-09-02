@@ -4,136 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5E1B4CD13CF
-	for <buildroot@archiver.kernel.org>; Mon,  2 Sep 2024 15:33:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50234CD13CF
+	for <buildroot@archiver.kernel.org>; Mon,  2 Sep 2024 15:38:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 206C84000B;
-	Mon,  2 Sep 2024 15:33:36 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 200674067B;
+	Mon,  2 Sep 2024 15:38:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RT2Nrl7qxQQf; Mon,  2 Sep 2024 15:33:35 +0000 (UTC)
+ id KDzQ75rGgS29; Mon,  2 Sep 2024 15:38:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CFB49405A9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4C983408D4
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CFB49405A9;
-	Mon,  2 Sep 2024 15:33:34 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 6CA291BF292
- for <buildroot@lists.busybox.net>; Mon,  2 Sep 2024 15:33:33 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4C983408D4;
+	Mon,  2 Sep 2024 15:38:09 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B39441BF292
+ for <buildroot@lists.busybox.net>; Mon,  2 Sep 2024 15:38:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6774C80F50
- for <buildroot@lists.busybox.net>; Mon,  2 Sep 2024 15:33:33 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9B71340906
+ for <buildroot@lists.busybox.net>; Mon,  2 Sep 2024 15:38:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WpAWQGyRA4DZ for <buildroot@lists.busybox.net>;
- Mon,  2 Sep 2024 15:33:32 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.22;
- helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org F171E80F49
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F171E80F49
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
- by smtp1.osuosl.org (Postfix) with ESMTPS id F171E80F49
- for <buildroot@buildroot.org>; Mon,  2 Sep 2024 15:33:31 +0000 (UTC)
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.7.2] ([85.22.115.191]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1N2Dx8-1s4cRE2dxO-010v3t; Mon, 02
- Sep 2024 17:33:18 +0200
-Message-ID: <f752a51d-2a74-4c84-9935-ee1dfc301e50@gmx.de>
-Date: Mon, 2 Sep 2024 17:33:17 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Michael Walle <michael@walle.cc>
-References: <20240902112735.728574-1-michael@walle.cc>
- <a9865fde-0c09-42dd-8cd2-d174412dce28@gmx.de>
- <9640293d17286595101e07a82a66d44f@walle.cc>
-Content-Language: en-US, de-DE-1901, de-DE
-Autocrypt: addr=fiona.klute@gmx.de; keydata=
- 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
-In-Reply-To: <9640293d17286595101e07a82a66d44f@walle.cc>
-X-Provags-ID: V03:K1:Qev9JW+cbvtDdntboiVdPCJb/Q9pY5nnnvT1pithtIsZcAbaPcE
- m7R8UCpWWZmHmOMNXKXzho/0kSl/HkVo4/wnFIg3y2iacDsNe2i76x/zuqTClpA7JJzPrtv
- GJ9eArsc9VZh/THor9OXlqzWHKeRLwAh3weB1n5B/ao6voJXU6ir1FVO/LGZ3ZZ+Gm+LV4t
- 2QhBPJ+AeOHpxuU3041Qw==
-UI-OutboundReport: notjunk:1;M01:P0:SzLisYyOVLk=;m8cuPWIxUcD5BST0xeGWlrY7czn
- 4GiFpTfOQr/TWHdXzdWsZ55LM7Ayl0Ji5QXconPwFUaWHmj/U6hwALsN0R9hozJkuRMTc7Wl4
- Ibxd7wmdeugjkj+VkNM8Xyxp56A4kyJra0aydPqjU1YnlZ/5RodZ6LMEwlksgHv4otHivONxY
- BnyrdbbuGKeNfu4zgCYOmdDyrkCF5NSYYNe1HDjhkXg6Hsvf5JkmPdCa5n9qjq0xv8bHMfwHW
- J0huJk4WjLK5bnEoJzI9LX1PPwnoF7kARpcKYMIatW4WoxI2Tx2uQp1C54R18H68OjjGQQbrp
- cj8wzgitg06/iR5wwEx4kaUHB9I/3XBNfkP2toTqst9LufNV9hxpDGfIF6y+7g+tJOlvau6tk
- ueQsVfd3hFCHj/rsE9UXiFWxGqwvqFn2j0FGO1YCfFl87E5E8TpII/+nvFOHsT4jza2h0BGGJ
- 91u4oSh4aLS5M8z9FKQTRKd2T1Um5P2c1sRyeznoDKgpLmb+auvLBJoEJcDjXUbBqAj5SvejT
- 3y60SozlEPQMwb/uJN318+K15jFb5sNdaRBwrBGs2ZegXxvZ28xQ+AMW/HWZwJD2oppo7WXTK
- qny4BscG8VUzkLAESODh2O5nu6R4VUFlk5d19T1yYTZCS9w7Y/sTb/W0djqnqz2pAYkkstGj2
- Pqt3H2PKAarfHhAHApJ+dUBpaaZPqy04paV7m+VMcxkqMdaQMJq90FtX0JF13heRHjMgrtkGC
- a80EvwphZLLi4A7pC4iDf98TebqBYXkWbhff8qV6lPG0wM7Vb9m4Y9PU+vuLkxPB6olXq/nVc
- U4ZiYG/8BSaI2zEpjAxFn/SA==
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmx.de; 
- s=s31663417; t=1725291198; x=1725895998; i=fiona.klute@gmx.de;
- bh=IYuBhJQ9wIi/yQ2Z54982Md9kthe58vkessYiYKzWWY=;
- h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
- References:From:In-Reply-To:Content-Type:
- Content-Transfer-Encoding:cc:content-transfer-encoding:
- content-type:date:from:message-id:mime-version:reply-to:subject:
- to;
- b=nWBWLXUqJ8G1x3Bb38jtYvp/QxtN+yiwZK+BDof8seLduZ5PRI2+00lolg+dHLlp
- kHmCa+KD3rbKV4Afll+NdUSW67DSJDAeYk+JkhJhhy6wcLJt03xYKyhXE5O6IxZqA
- 6QysbQIXibfLgMoi0Xi/DCmbwTCeyAdvQ5Q4NBbzhAh3+514Z3QTgz4r2Tc6QuYKb
- gnmdUa082hMsrJ7Y1+tJ+fu00WCUA/K7/toFw7pfDkpkoCwrUepP/hrY0rvHrccKx
- 3ICtKXQUA+wE9/CiJMSPyE9rrRxn1pJwWkhrCGAPCzUMtN8Y8NYBQQBe4Bv4wL3r9
- Zem9gBG+OQw0/7IQVQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=gmx.de
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmx.de header.i=fiona.klute@gmx.de header.a=rsa-sha256
- header.s=s31663417 header.b=nWBWLXUq
-Subject: Re: [Buildroot] [PATCH v2] linux: add support for device tree
- overlays
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id rgOWzaN5MgBb for <buildroot@lists.busybox.net>;
+ Mon,  2 Sep 2024 15:38:07 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4DCDC408EC
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4DCDC408EC
+ for <buildroot@buildroot.org>; Mon,  2 Sep 2024 15:38:07 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 369FA869DC; Mon,  2 Sep 2024 15:38:07 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Mon, 2 Sep 2024 17:36:45 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 1bab2c9374775e57746a89b10534ddc2fe86d605
+X-Git-Newrev: 88f120d031456fd439bca2ac8a96f9b7477b35cc
+X-Patchwork-Hint: ignore
+Message-Id: <20240902153807.369FA869DC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/midori: drop package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -145,58 +58,268 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Fiona Klute via buildroot <buildroot@buildroot.org>
-Reply-To: Fiona Klute <fiona.klute@gmx.de>
-Cc: Niklas Cassel <Niklas.Cassel@wdc.com>,
- =?UTF-8?Q?Ga=C3=ABl_PORTAY?= <gael.portay@rtone.fr>,
- Julien Grossholtz <julien.grossholtz@openest.io>,
- Damien Le Moal <dlemoal@kernel.org>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org,
- Martin Bark <martin@barkynet.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Am 02.09.24 um 17:02 schrieb Michael Walle:
-> Hi,
->
->> This looks like the DTBOs will be installed to $BINARIES_DIR along with
->> the DTBs. At least on RPi platforms it'd be preferable to be able to put
->> them in an overlays/ directory, to make it easier to create the
->> structure expected by the firmware in a genimage config without
->> templating. I don't know how common this is across other platforms that
->> use DT overlays.
->>
->> Would it be practical to add an option to install DTBOs in a
->> (configurable) subdirectory?
->
-> Isn't that what is the BR2_ROOTFS_*_SCRIPT are for? I.e. to customize
-> the final image to your/the board likings?
-It's definitely possible, the configurable install dir would just make
-the post image script that builds a disk image from the rootfs and files
-in $BINARIES_DIR simpler:
+commit: https://git.buildroot.net/buildroot/commit/?id=88f120d031456fd439bca2ac8a96f9b7477b35cc
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-With all DTBOs installed into $BINARIES_DIR/overlays I only need to list
-that directory in the genimage config to be included in the boot
-partition (in the "files" list).
+The original WebKitGTK-based Midori is no longer maintained and doesn't build
+since WebKitGTK moved to libsoup3 as of commit 38a098df133aaa2ebf09742054b02db5a44f58e5.
 
-Without a custom install dir I need to either move the files around in
-$BINARIES_DIR, or generate a relatively complex genimage config with a
-"file" entry for each DTBO to map it to the right path. The former is
-pretty simple, but might break anything that expects the DTBOs in the
-original location. There probably isn't anything that does for now
-because there have been no DTBOs installed by the kernel previously, but
-I can't know how future proof that'll be.
+Last WebKitGTK based release: https://github.com/midori-browser/core/tree/v9.0.
+New browser, based on Gecko/Firefox: https://github.com/goastian/midori-desktop.
 
-That's why I wrote the option would make it *easier* to create the
-structure required by RPi firmware, it's not a necessity. If you choose
-not to add it I'll probably choose the "move files around in post image
-script" option and fix it if it breaks. :-)
+The intention is also to start migrating WebKitGTK to GTK4, as this is now the default
+version. See: https://webkitgtk.org/2024/03/27/webkigit-2.44.html.
 
-Best regards,
-Fiona
+Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ .checkpackageignore                                |  2 -
+ Config.in.legacy                                   |  8 ++++
+ package/Config.in                                  |  1 -
+ .../midori/0001-disable-vala-fatal-warnings.patch  | 30 -------------
+ ...d-option-to-specify-path-to-g-ir-compiler.patch | 37 ---------------
+ package/midori/Config.in                           | 52 ----------------------
+ package/midori/midori.hash                         |  3 --
+ package/midori/midori.mk                           | 35 ---------------
+ 8 files changed, 8 insertions(+), 160 deletions(-)
 
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 96358d0d6c..a824a50c49 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -892,8 +892,6 @@ package/metacity/0001-add-libm-reference.patch lib_patch.Upstream
+ package/metacity/0002-gconf.patch lib_patch.Upstream
+ package/metacity/0003-mag-add-libm-reference.patch lib_patch.Upstream
+ package/mfgtools/0001-lnx_def.h-fix-conflicting-declaration-of-__time64_t.patch lib_patch.Upstream
+-package/midori/0001-disable-vala-fatal-warnings.patch lib_patch.Upstream
+-package/midori/0002-add-option-to-specify-path-to-g-ir-compiler.patch lib_patch.Upstream
+ package/mii-diag/0001-strchr.patch lib_patch.Sob lib_patch.Upstream
+ package/mimic/0001-Fix-linking-on-gcc-10.2.0-or-newer.patch lib_patch.Upstream
+ package/mini-snmpd/0001-linux.c-fix-musl-build.patch lib_patch.Upstream
+diff --git a/Config.in.legacy b/Config.in.legacy
+index d8480106ba..d1f892dded 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,14 @@ endif
+ 
+ comment "Legacy options removed in 2024.08"
+ 
++config BR2_PACKAGE_MIDORI
++	bool "midori has been removed"
++	select BR2_LEGACY
++	help
++	  The original WebKitGTK-based Midori is no longer maintained
++	  and doesn't build since WebKitGTK moved to libsoup3 as of
++	  commit 38a098df133aaa2ebf09742054b02db5a44f58e5.
++
+ config BR2_PACKAGE_FROTZ
+ 	bool "frotz has been removed"
+ 	select BR2_LEGACY
+diff --git a/package/Config.in b/package/Config.in
+index 211080345a..f33c4780f8 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -331,7 +331,6 @@ comment "Graphic applications"
+ 	source "package/kmscube/Config.in"
+ 	source "package/libva-utils/Config.in"
+ 	source "package/mesa3d-demos/Config.in"
+-	source "package/midori/Config.in"
+ 	source "package/netsurf/Config.in"
+ 	source "package/pngquant/Config.in"
+ 	source "package/qt5cinex/Config.in"
+diff --git a/package/midori/0001-disable-vala-fatal-warnings.patch b/package/midori/0001-disable-vala-fatal-warnings.patch
+deleted file mode 100644
+index c3f245f141..0000000000
+--- a/package/midori/0001-disable-vala-fatal-warnings.patch
++++ /dev/null
+@@ -1,30 +0,0 @@
+-From be91b1260d3215119e4ab5b19012ab80d6ff788d Mon Sep 17 00:00:00 2001
+-From: Adam Duskett <aduskett@gmail.com>
+-Date: Mon, 11 Oct 2021 16:58:34 -0700
+-Subject: [PATCH] disable vala fatal warnings
+-
+-When building midori in a buildroot directory cloned from git, the git
+-descript --tags command return tags from buildroot, which in turn sets
+-the --fatal-warnings flag. Disable --fatal-warnings unconditionally.
+-
+-Signed-off-by: Adam Duskett <aduskett@gmail.com>
+----
+- CMakeLists.txt | 2 +-
+- 1 file changed, 1 insertion(+), 1 deletion(-)
+-
+-diff --git a/CMakeLists.txt b/CMakeLists.txt
+-index 8e72f08..39941e2 100644
+---- a/CMakeLists.txt
+-+++ b/CMakeLists.txt
+-@@ -18,7 +18,7 @@ execute_process(COMMAND "git" "describe" "--tags"
+- if (REVISION)
+-     set(CORE_VERSION "${REVISION}")
+-     # All warnings are errors in development builds
+--    set(VALAFLAGS ${VALAFLAGS} --fatal-warnings)
+-+    set(VALAFLAGS ${VALAFLAGS} --disable-assert)
+- else ()
+-     # No runtime type checks
+-     set(VALAFLAGS ${VALAFLAGS} --disable-assert)
+--- 
+-2.30.2
+-
+diff --git a/package/midori/0002-add-option-to-specify-path-to-g-ir-compiler.patch b/package/midori/0002-add-option-to-specify-path-to-g-ir-compiler.patch
+deleted file mode 100644
+index 4bbcbaaf12..0000000000
+--- a/package/midori/0002-add-option-to-specify-path-to-g-ir-compiler.patch
++++ /dev/null
+@@ -1,37 +0,0 @@
+-From 118ac24b2c488f490ee8814336291a58eae45395 Mon Sep 17 00:00:00 2001
+-From: Adam Duskett <aduskett@gmail.com>
+-Date: Tue, 12 Oct 2021 13:21:19 -0700
+-Subject: [PATCH] add option to specify path to g-ir-compiler
+-
+-By default, find_program (GIR_COMPILER_BIN g-ir-compiler) returns the host path
+-to g-ir-compiler, which is undesirable in a cross-compile environment.
+-
+-Add an option to manually specify a path to the g-ir-compiler.
+-
+-Signed-off-by: Adam Duskett <aduskett@gmail.com>
+----
+- core/CMakeLists.txt | 8 +++++++-
+- 1 file changed, 7 insertions(+), 1 deletion(-)
+-
+-diff --git a/core/CMakeLists.txt b/core/CMakeLists.txt
+-index c4982de..6584229 100644
+---- a/core/CMakeLists.txt
+-+++ b/core/CMakeLists.txt
+-@@ -66,7 +66,13 @@ set_target_properties("${LIBCORE}" PROPERTIES
+-                       VERSION ${LIBCORE_VERSION}
+-                       )
+- 
+--find_program (GIR_COMPILER_BIN g-ir-compiler)
+-+option(GIR_COMPILER_PATH "Specify a path to g-ir-compiler" OFF)
+-+if(GIR_COMPILER_PATH)
+-+  set(GIR_COMPILER_BIN "${GIR_COMPILER_PATH}")
+-+else()
+-+  find_program (GIR_COMPILER_BIN g-ir-compiler)
+-+endif(GIR_COMPILER_PATH)
+-+
+- add_custom_target(${LIBCORE_GIR}.typelib ALL
+-                   COMMAND ${GIR_COMPILER_BIN} ${CMAKE_CURRENT_BINARY_DIR}/${LIBCORE_GIR}.gir
+-                   --output ${CMAKE_CURRENT_BINARY_DIR}/${LIBCORE_GIR}.typelib
+--- 
+-2.30.2
+-
+diff --git a/package/midori/Config.in b/package/midori/Config.in
+deleted file mode 100644
+index 6029c0a9df..0000000000
+--- a/package/midori/Config.in
++++ /dev/null
+@@ -1,52 +0,0 @@
+-config BR2_PACKAGE_MIDORI_ARCH_SUPPORTS
+-	bool
+-	default y
+-	depends on BR2_USE_MMU
+-	depends on BR2_PACKAGE_HOST_RUSTC_ARCH_SUPPORTS
+-	depends on BR2_PACKAGE_GOBJECT_INTROSPECTION_ARCH_SUPPORTS
+-	depends on BR2_PACKAGE_LIBGPG_ERROR_ARCH_SUPPORTS # gcr -> libgcrypt -> libgpg-error
+-	depends on BR2_PACKAGE_WEBKITGTK_ARCH_SUPPORTS
+-	depends on !BR2_BINFMT_FLAT # webkitgtk -> icu
+-
+-comment "midori needs a glibc toolchain w/ C++, wchar, threads, dynamic library, gcc >= 7, host gcc >= 8"
+-	depends on BR2_PACKAGE_MIDORI_ARCH_SUPPORTS
+-	depends on !BR2_INSTALL_LIBSTDCPP || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_7 || \
+-		!BR2_HOST_GCC_AT_LEAST_8 || \
+-		!BR2_TOOLCHAIN_USES_GLIBC || !BR2_TOOLCHAIN_HAS_THREADS || \
+-		BR2_STATIC_LIBS || !BR2_USE_WCHAR
+-
+-comment "midori needs libgtk3 w/ X11 or wayland backend"
+-	depends on BR2_PACKAGE_MIDORI_ARCH_SUPPORTS
+-	depends on !BR2_PACKAGE_LIBGTK3_X11 && \
+-		!BR2_PACKAGE_LIBGTK3_WAYLAND
+-
+-config BR2_PACKAGE_MIDORI
+-	bool "midori"
+-	depends on BR2_PACKAGE_MIDORI_ARCH_SUPPORTS
+-	depends on !BR2_STATIC_LIBS # webkitgtk
+-	depends on BR2_INSTALL_LIBSTDCPP # webkitgtk
+-	depends on BR2_HOST_GCC_AT_LEAST_8 # gobject-introspection
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_7 # webkitgtk
+-	depends on BR2_TOOLCHAIN_USES_GLIBC # webkitgtk
+-	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2
+-	depends on BR2_TOOLCHAIN_HAS_SYNC_4 # libgtk3
+-	depends on BR2_USE_WCHAR # granite, gcr, libsoup, libpeas, gobject-introspection
+-	depends on BR2_PACKAGE_LIBGTK3
+-	depends on BR2_PACKAGE_LIBGTK3_X11 || BR2_PACKAGE_LIBGTK3_WAYLAND
+-	select BR2_PACKAGE_GCR
+-	select BR2_PACKAGE_GRANITE
+-	select BR2_PACKAGE_JSON_GLIB
+-	select BR2_PACKAGE_LIBARCHIVE
+-	select BR2_PACKAGE_LIBPEAS
+-	select BR2_PACKAGE_LIBPEAS_WIDGETS
+-	select BR2_PACKAGE_LIBSOUP
+-	select BR2_PACKAGE_LIBXML2
+-	select BR2_PACKAGE_PYTHON3 # gobject-introspection
+-	select BR2_PACKAGE_SQLITE
+-	select BR2_PACKAGE_WEBKITGTK
+-	select BR2_PACKAGE_LIBICONV if !BR2_ENABLE_LOCALE
+-	help
+-	  Midori is a lightweight web browser based on WebKit
+-
+-	  https://github.com/midori-browser/core
+diff --git a/package/midori/midori.hash b/package/midori/midori.hash
+deleted file mode 100644
+index f14ec6d929..0000000000
+--- a/package/midori/midori.hash
++++ /dev/null
+@@ -1,3 +0,0 @@
+-# Locally computed
+-sha256  5e0a531455c47b0ff7589940aa2b0d9c16f59c99ba933e5fcdcab68114262016  midori-v9.0.tar.gz
+-sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING
+diff --git a/package/midori/midori.mk b/package/midori/midori.mk
+deleted file mode 100644
+index aeafa9bfdc..0000000000
+--- a/package/midori/midori.mk
++++ /dev/null
+@@ -1,35 +0,0 @@
+-################################################################################
+-#
+-# midori
+-#
+-################################################################################
+-
+-MIDORI_VERSION = 9.0
+-MIDORI_SOURCE = midori-v$(MIDORI_VERSION).tar.gz
+-MIDORI_SITE = https://github.com/midori-browser/core/releases/download/v$(MIDORI_VERSION)
+-MIDORI_LICENSE = LGPL-2.1+
+-MIDORI_LICENSE_FILES = COPYING
+-MIDORI_CPE_ID_VENDOR = midori-browser
+-MIDORI_DEPENDENCIES = \
+-	host-intltool \
+-	host-librsvg \
+-	host-pkgconf \
+-	host-vala \
+-	host-python3 \
+-	gcr \
+-	gobject-introspection \
+-	granite \
+-	json-glib \
+-	libarchive \
+-	libgtk3 \
+-	libpeas \
+-	libsoup \
+-	libxml2 \
+-	sqlite \
+-	webkitgtk \
+-	$(TARGET_NLS_DEPENDENCIES) \
+-	$(if $(BR2_PACKAGE_LIBICONV),libiconv)
+-
+-MIDORI_CONF_OPTS += -DGIR_COMPILER_PATH=$(STAGING_DIR)/usr/bin/g-ir-compiler
+-
+-$(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
