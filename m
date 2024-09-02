@@ -4,93 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9E133CD13CF
-	for <buildroot@archiver.kernel.org>; Mon,  2 Sep 2024 20:57:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF78FCA0ED3
+	for <buildroot@archiver.kernel.org>; Mon,  2 Sep 2024 21:01:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DE38040259;
-	Mon,  2 Sep 2024 20:57:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 57E054031E;
+	Mon,  2 Sep 2024 21:01:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CXc-UpoGGnxx; Mon,  2 Sep 2024 20:57:25 +0000 (UTC)
+ id QbeMShccYLsZ; Mon,  2 Sep 2024 21:01:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E14DF40322
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BE2194025A
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E14DF40322;
-	Mon,  2 Sep 2024 20:57:24 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 185F61BF8B4
- for <buildroot@lists.busybox.net>; Mon,  2 Sep 2024 20:57:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BE2194025A;
+	Mon,  2 Sep 2024 21:01:06 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id BAF3B1BF426
+ for <buildroot@lists.busybox.net>; Mon,  2 Sep 2024 21:01:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 062A0606E2
- for <buildroot@lists.busybox.net>; Mon,  2 Sep 2024 20:57:20 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id A66DA80E60
+ for <buildroot@lists.busybox.net>; Mon,  2 Sep 2024 21:01:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7eICRykP5t9c for <buildroot@lists.busybox.net>;
- Mon,  2 Sep 2024 20:57:19 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id g9354K1tSfGz for <buildroot@lists.busybox.net>;
+ Mon,  2 Sep 2024 21:01:03 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::334; helo=mail-wm1-x334.google.com;
+ client-ip=2a00:1450:4864:20::332; helo=mail-wm1-x332.google.com;
  envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 3103760622
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3103760622
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
- [IPv6:2a00:1450:4864:20::334])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 3103760622
- for <buildroot@buildroot.org>; Mon,  2 Sep 2024 20:57:19 +0000 (UTC)
-Received: by mail-wm1-x334.google.com with SMTP id
- 5b1f17b1804b1-42bbdf7f860so29579805e9.3
- for <buildroot@buildroot.org>; Mon, 02 Sep 2024 13:57:19 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org ADC1780E56
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org ADC1780E56
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
+ [IPv6:2a00:1450:4864:20::332])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id ADC1780E56
+ for <buildroot@buildroot.org>; Mon,  2 Sep 2024 21:01:02 +0000 (UTC)
+Received: by mail-wm1-x332.google.com with SMTP id
+ 5b1f17b1804b1-428e0d184b4so38572855e9.2
+ for <buildroot@buildroot.org>; Mon, 02 Sep 2024 14:01:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1725310637; x=1725915437;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=O/jewXA46NT379vX/04F2vKWuXZrs/sWhgv5fUKIfGU=;
- b=GBIUR21o3X0b0xA6lf+YTFlewgSVdpaT8Lej0Lv7a0KiTL5G2ud6Y/GPA+68/EzB5V
- E54ZLGuORVQdut69tGYbVPKvn67n6x1Sze0h8uWKg/7f8GD39fJ3o9PBn92VCUpnapPF
- Ur70TN0xsqXVQ6ztNDitRK9KwaNWlM8/9ayunfBWV/TlaDoAWCZbj99+DtKee2UjOFFX
- 735qqNFty8BHtdm4nhxrLwFg1gv3DIZrN9dU12zb/JKsJtbGks59bv0g9Q9dNkD8ss0h
- ObtBTVDGN5VT5l4wmw43+hfJAG95X/Uh503itkcN8JRhEX3T2U6JI/KFeuHPrvRn00t1
- bSHg==
-X-Gm-Message-State: AOJu0YzAHFLbqn9M7rUSW0lSPXN2U/ob5UDvPTSyRH3HALgCXrGxmSP9
- dlKsGe5d0kL1VA6RKnuaeQZl3jMdkeXj0pMBt5e90IbBoVYxsr5Wd20MxWO0d/cuENF3RJVHKWE
- uH9E=
-X-Google-Smtp-Source: AGHT+IHpIPYqB7qJBima3praqf2iIWqQt0w8JVk6ZMNKH+ZOCBwzrCHKXyZN9pTe3vShM/elQXTB5w==
-X-Received: by 2002:a05:600c:1d8f:b0:426:6158:962d with SMTP id
- 5b1f17b1804b1-42bb01e6e03mr108641775e9.23.1725310637042; 
- Mon, 02 Sep 2024 13:57:17 -0700 (PDT)
+ d=1e100.net; s=20230601; t=1725310860; x=1725915660;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=ThWht5zYD4n4PqkTIkHqQfXj5TzyBO6zFtxdnmTzdbE=;
+ b=oGP/41akuu09rwokB+odlzvpUMb1r74AUZ6izbrV+r9xjXJOUxqJFjg7XzNR+I0Cq7
+ FLI0KUoCBn39aBxXoW8lVcSCXE1SaAzXAZHeSRE+IPlpJ2uRZpeAh5UlfC7UPokVq9ZR
+ NpNBzttiFPJRgIj+pHEdb+wtRSZgqBrMKIt0at+IePblif6pLGw1SInadI/qs7wJ7RBl
+ YoqInIy4E+O/dcifib+eDMpOm0EZ9sIX+QpPDR+oqtJ65hdCwJbEBvTW1PIb3CVTu0sX
+ kD6doU22W/5UicEKM+7+kD9fBymjwe0LWFBVSfC+1WTUKACT0NQgLv0gfGCgrxHjatD6
+ HMEg==
+X-Gm-Message-State: AOJu0YxqMtrvVgd6ZKgixeM64a1OkysZNF6lcA9ApcTGTYP/GbFkjPU7
+ d91TmE59gE+TT16E3cYUNWQqve3AxoRvnuxXg4q8GO3nBoJSNfQ6Q/r3UBBmmyniszHgR5/3+lG
+ xtfY=
+X-Google-Smtp-Source: AGHT+IFC231mJAEE3TA74DzsQPj/IgNS8KZJGr45VMsYKxhXibsAY8GNl9DOPxHIybqRVN2q6lW5XQ==
+X-Received: by 2002:adf:b350:0:b0:368:3751:de3 with SMTP id
+ ffacd0b85a97d-374bf16c0d7mr4918710f8f.31.1725310860187; 
+ Mon, 02 Sep 2024 14:01:00 -0700 (PDT)
 Received: from dario-ThinkPad-T14s-Gen-2i.amarulasolutions.com ([2.196.42.28])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-42bb6deb43esm149733725e9.7.2024.09.02.13.57.16
+ ffacd0b85a97d-3749ee4c83fsm12426246f8f.22.2024.09.02.14.00.59
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 02 Sep 2024 13:57:16 -0700 (PDT)
+ Mon, 02 Sep 2024 14:00:59 -0700 (PDT)
 From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Mon,  2 Sep 2024 22:57:07 +0200
-Message-ID: <20240902205707.239163-2-dario.binacchi@amarulasolutions.com>
+Date: Mon,  2 Sep 2024 23:00:55 +0200
+Message-ID: <20240902210055.239859-1-dario.binacchi@amarulasolutions.com>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240902205707.239163-1-dario.binacchi@amarulasolutions.com>
-References: <20240902205707.239163-1-dario.binacchi@amarulasolutions.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1725310637; x=1725915437;
+ d=amarulasolutions.com; s=google; t=1725310860; x=1725915660;
  darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=O/jewXA46NT379vX/04F2vKWuXZrs/sWhgv5fUKIfGU=;
- b=JDnMISNNoTk9KBXtVgSMmYLq61Q4wh11E+fVLi2oo6AWNP46bZT+7mhozH6P9aHYHX
- vY5xkkt7p7Cz07W7wA3+YQoYZu1ASxGJt0x0lCX8X91jWJxVBfDmdwOsi+7CiJwnFCMB
- bQrXwz+lmBIADdewDcsdSn/syIqNjvpdefjy0=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=ThWht5zYD4n4PqkTIkHqQfXj5TzyBO6zFtxdnmTzdbE=;
+ b=BOJKvhXKzUdzO3TTu3xjQFFvRa5Ht4VIPVcYQds9WZ0i9sw0nPnreLFziOdJh/BOm5
+ G1slgC3RWoMET26bR4XNEHkToK9YLJvJMz4dQafs5TckX3xW8Kl2jzHFGgcKtjaIQ2at
+ uSHXpwYeBco8xUuGJvCVPqmcRvlfGg5Wi0y0g=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=JDnMISNN
-Subject: [Buildroot] [PATCH v4 2/2] DEVELOPERS: add Dario Binacchi for babeld
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (1024-bit key) header.d=amarulasolutions.com
+ header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
+ header.b=BOJKvhXK
+Subject: [Buildroot] [PATCH 1/1] package/ipmitool: only accept local PEN
+ registry
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,30 +100,89 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+Cc: Floris Bos <bos@je-eigen-domein.nl>, Heiko Thiery <heiko.thiery@gmail.com>,
+ Dario Binacchi <dario.binacchi@amarulasolutions.com>,
  linux-amarula@amarulasolutions.com, "Yann E . MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+The https://www.iana.org/assignments/enterprise-numbers.txt is not a
+versioned URL, and that file is regularly updated, so it is not
+acceptable to change its hash each time.
+
+Following Yann's suggestions [1], only local files are now accepted,
+removing the need to download the PEN registry and consequently verify
+the hash's correctness.
+
+Fixes:
+- http://autobuild.buildroot.org/results/5ae5ee948d99679cd50d1115a7d46f4368347b4f
+
+[1]: https://patchwork.ozlabs.org/project/buildroot/patch/20240824103634.1955431-1-dario.binacchi@amarulasolutions.com/
+Co-Developed-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 ---
- DEVELOPERS | 1 +
- 1 file changed, 1 insertion(+)
+ package/ipmitool/Config.in   | 12 ++++++------
+ package/ipmitool/ipmitool.mk | 13 +++++--------
+ 2 files changed, 11 insertions(+), 14 deletions(-)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 59f3b0320244..919a91dd2591 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -790,6 +790,7 @@ F:	configs/imx6ulz_bsh_smm_m2_defconfig
- F:	configs/imx8mn_bsh_smm_s2_defconfig
- F:	configs/imx8mn_bsh_smm_s2_pro_defconfig
- F:	configs/stm32f769_disco_sd_defconfig
-+F:	package/babeld/
- F:	package/sscep/
- F:	package/uuu/
+diff --git a/package/ipmitool/Config.in b/package/ipmitool/Config.in
+index 9516ff8596d3..fefa8c34fd7f 100644
+--- a/package/ipmitool/Config.in
++++ b/package/ipmitool/Config.in
+@@ -9,14 +9,14 @@ config BR2_PACKAGE_IPMITOOL
  
+ if BR2_PACKAGE_IPMITOOL
+ 
+-config BR2_PACKAGE_IPMITOOL_PEN_REG_URI
+-	string "IANA PEN registry URL or path"
+-	default "https://www.iana.org/assignments/enterprise-numbers.txt"
++config BR2_PACKAGE_IPMITOOL_PEN_REG_PATH
++	string "PEN registry path"
++	default ""
+ 	help
+-	  Enter an URL or a file path to the PEN registry to use.
++	  Enter file path to the PEN registry to use.
+ 
+-	  Note that the official registry is 4MiB+ and may change any
+-	  time and is thus not guaranteed to be reproducible.
++	  The official registry (4MiB+) can be downloaded from:
++	  https://www.iana.org/assignments/enterprise-numbers.txt
+ 
+ 	  Leave empty to not use a registry; vendor IDs will be
+ 	  displayed instead of the corresponding names.
+diff --git a/package/ipmitool/ipmitool.mk b/package/ipmitool/ipmitool.mk
+index 4f2151904d43..40bc8bb9dd13 100644
+--- a/package/ipmitool/ipmitool.mk
++++ b/package/ipmitool/ipmitool.mk
+@@ -49,20 +49,17 @@ endef
+ IPMITOOL_POST_INSTALL_TARGET_HOOKS += IPMITOOL_REMOVE_IPMIEVD
+ endif
+ 
+-IPMITOOL_PEN_REG_URI = $(call qstrip,$(BR2_PACKAGE_IPMITOOL_PEN_REG_URI))
+-ifneq ($(IPMITOOL_PEN_REG_URI),)
+-ifneq ($(findstring ://,$(IPMITOOL_PEN_REG_URI)),)
+-IPMITOOL_EXTRA_DOWNLOADS += $(IPMITOOL_PEN_REG_URI)
+-BR_NO_CHECK_HASH_FOR += $(notdir $(IPMITOOL_PEN_REG_URI))
+-IPMITOOL_PEN_REG = $(IPMITOOL_DL_DIR)/$(notdir $(IPMITOOL_PEN_REG_URI))
++IPMITOOL_PEN_REG = $(call qstrip,$(BR2_PACKAGE_IPMITOOL_PEN_REG_PATH))
++ifneq ($(IPMITOOL_PEN_REG),)
++ifneq ($(findstring ://,$(IPMITOOL_PEN_REG)),)
++$(error "URL paths are no supported")
+ else
+-IPMITOOL_PEN_REG = $(IPMITOOL_PEN_REG_URI)
+ endif #findstring
+ define IPMITOOL_INSTALL_PEN_REG
+ 	$(INSTALL) -D -m 0644 $(IPMITOOL_PEN_REG) \
+ 		$(TARGET_DIR)/usr/share/misc/enterprise-numbers
+ endef
+ IPMITOOL_POST_INSTALL_TARGET_HOOKS += IPMITOOL_INSTALL_PEN_REG
+-endif # IPMITOOL_PEN_REG_URI !empty
++endif # IPMITOOL_PEN_REG !empty
+ 
+ $(eval $(autotools-package))
 -- 
 2.43.0
 
