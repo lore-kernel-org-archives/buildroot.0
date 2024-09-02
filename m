@@ -4,72 +4,136 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9556ECA0ED3
-	for <buildroot@archiver.kernel.org>; Mon,  2 Sep 2024 15:32:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5E1B4CD13CF
+	for <buildroot@archiver.kernel.org>; Mon,  2 Sep 2024 15:33:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3E0B3408C5;
-	Mon,  2 Sep 2024 15:32:52 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 206C84000B;
+	Mon,  2 Sep 2024 15:33:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rMaIKeTXI8Cv; Mon,  2 Sep 2024 15:32:50 +0000 (UTC)
+ id RT2Nrl7qxQQf; Mon,  2 Sep 2024 15:33:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A2FFA405A9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CFB49405A9
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A2FFA405A9;
-	Mon,  2 Sep 2024 15:32:50 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D03111BF292
- for <buildroot@lists.busybox.net>; Mon,  2 Sep 2024 15:32:48 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id CFB49405A9;
+	Mon,  2 Sep 2024 15:33:34 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 6CA291BF292
+ for <buildroot@lists.busybox.net>; Mon,  2 Sep 2024 15:33:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BBDA3405A9
- for <buildroot@lists.busybox.net>; Mon,  2 Sep 2024 15:32:48 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6774C80F50
+ for <buildroot@lists.busybox.net>; Mon,  2 Sep 2024 15:33:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id U5otRvLJ38rk for <buildroot@lists.busybox.net>;
- Mon,  2 Sep 2024 15:32:47 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
- helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org EAC434000B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EAC434000B
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp2.osuosl.org (Postfix) with ESMTPS id EAC434000B
- for <buildroot@buildroot.org>; Mon,  2 Sep 2024 15:32:46 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 920CD13FA34;
- Mon,  2 Sep 2024 17:32:41 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Mon, 02 Sep 2024 17:32:41 +0200
-Date: Mon, 2 Sep 2024 17:32:41 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Peter Korsgaard <peter@korsgaard.com>
-Message-ID: <ZtXambp2sr75g3Zl@landeda>
-References: <20240902094405.506338-1-peter@korsgaard.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WpAWQGyRA4DZ for <buildroot@lists.busybox.net>;
+ Mon,  2 Sep 2024 15:33:32 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.22;
+ helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org F171E80F49
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F171E80F49
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id F171E80F49
+ for <buildroot@buildroot.org>; Mon,  2 Sep 2024 15:33:31 +0000 (UTC)
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.7.2] ([85.22.115.191]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1N2Dx8-1s4cRE2dxO-010v3t; Mon, 02
+ Sep 2024 17:33:18 +0200
+Message-ID: <f752a51d-2a74-4c84-9935-ee1dfc301e50@gmx.de>
+Date: Mon, 2 Sep 2024 17:33:17 +0200
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20240902094405.506338-1-peter@korsgaard.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1725291163;
- bh=S01W17qOcNNElWOqUJ/WIKyR69Eea2o2JnPOcSZGL9M=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=onExmtWYRDR1ksIBYJO8cC/H9cdl9r79lonIhYmlOLKXuVJpLPLMwz3GsM2Ihjjgx
- DcALSzUvfeghClwgxLAyGMPL/ples+hZFmjolBnl272Ln42wUDAPwQDkvwKLueh8u7
- 05tY94m6IM2VPNzTOP6iYCBNWUR0A7AmrDD83dpMwpB9p1pr5RfeTqZ3TRs+OI8Uq8
- sVEWVnTI3+wX+wUCewqxlSHTpqX3Np1DJudMS6yMyl+aaooOdW7E2JUIoZbBg6Bj7f
- zZtkYs36dVrySzAUqZcLyoaZqUsP6499MUNbh5E+sS0YYQc8jOtrgxMhCrsOgifblk
- OEvRWbKUvUfrw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+User-Agent: Mozilla Thunderbird
+To: Michael Walle <michael@walle.cc>
+References: <20240902112735.728574-1-michael@walle.cc>
+ <a9865fde-0c09-42dd-8cd2-d174412dce28@gmx.de>
+ <9640293d17286595101e07a82a66d44f@walle.cc>
+Content-Language: en-US, de-DE-1901, de-DE
+Autocrypt: addr=fiona.klute@gmx.de; keydata=
+ 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
+In-Reply-To: <9640293d17286595101e07a82a66d44f@walle.cc>
+X-Provags-ID: V03:K1:Qev9JW+cbvtDdntboiVdPCJb/Q9pY5nnnvT1pithtIsZcAbaPcE
+ m7R8UCpWWZmHmOMNXKXzho/0kSl/HkVo4/wnFIg3y2iacDsNe2i76x/zuqTClpA7JJzPrtv
+ GJ9eArsc9VZh/THor9OXlqzWHKeRLwAh3weB1n5B/ao6voJXU6ir1FVO/LGZ3ZZ+Gm+LV4t
+ 2QhBPJ+AeOHpxuU3041Qw==
+UI-OutboundReport: notjunk:1;M01:P0:SzLisYyOVLk=;m8cuPWIxUcD5BST0xeGWlrY7czn
+ 4GiFpTfOQr/TWHdXzdWsZ55LM7Ayl0Ji5QXconPwFUaWHmj/U6hwALsN0R9hozJkuRMTc7Wl4
+ Ibxd7wmdeugjkj+VkNM8Xyxp56A4kyJra0aydPqjU1YnlZ/5RodZ6LMEwlksgHv4otHivONxY
+ BnyrdbbuGKeNfu4zgCYOmdDyrkCF5NSYYNe1HDjhkXg6Hsvf5JkmPdCa5n9qjq0xv8bHMfwHW
+ J0huJk4WjLK5bnEoJzI9LX1PPwnoF7kARpcKYMIatW4WoxI2Tx2uQp1C54R18H68OjjGQQbrp
+ cj8wzgitg06/iR5wwEx4kaUHB9I/3XBNfkP2toTqst9LufNV9hxpDGfIF6y+7g+tJOlvau6tk
+ ueQsVfd3hFCHj/rsE9UXiFWxGqwvqFn2j0FGO1YCfFl87E5E8TpII/+nvFOHsT4jza2h0BGGJ
+ 91u4oSh4aLS5M8z9FKQTRKd2T1Um5P2c1sRyeznoDKgpLmb+auvLBJoEJcDjXUbBqAj5SvejT
+ 3y60SozlEPQMwb/uJN318+K15jFb5sNdaRBwrBGs2ZegXxvZ28xQ+AMW/HWZwJD2oppo7WXTK
+ qny4BscG8VUzkLAESODh2O5nu6R4VUFlk5d19T1yYTZCS9w7Y/sTb/W0djqnqz2pAYkkstGj2
+ Pqt3H2PKAarfHhAHApJ+dUBpaaZPqy04paV7m+VMcxkqMdaQMJq90FtX0JF13heRHjMgrtkGC
+ a80EvwphZLLi4A7pC4iDf98TebqBYXkWbhff8qV6lPG0wM7Vb9m4Y9PU+vuLkxPB6olXq/nVc
+ U4ZiYG/8BSaI2zEpjAxFn/SA==
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmx.de; 
+ s=s31663417; t=1725291198; x=1725895998; i=fiona.klute@gmx.de;
+ bh=IYuBhJQ9wIi/yQ2Z54982Md9kthe58vkessYiYKzWWY=;
+ h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
+ References:From:In-Reply-To:Content-Type:
+ Content-Transfer-Encoding:cc:content-transfer-encoding:
+ content-type:date:from:message-id:mime-version:reply-to:subject:
+ to;
+ b=nWBWLXUqJ8G1x3Bb38jtYvp/QxtN+yiwZK+BDof8seLduZ5PRI2+00lolg+dHLlp
+ kHmCa+KD3rbKV4Afll+NdUSW67DSJDAeYk+JkhJhhy6wcLJt03xYKyhXE5O6IxZqA
+ 6QysbQIXibfLgMoi0Xi/DCmbwTCeyAdvQ5Q4NBbzhAh3+514Z3QTgz4r2Tc6QuYKb
+ gnmdUa082hMsrJ7Y1+tJ+fu00WCUA/K7/toFw7pfDkpkoCwrUepP/hrY0rvHrccKx
+ 3ICtKXQUA+wE9/CiJMSPyE9rrRxn1pJwWkhrCGAPCzUMtN8Y8NYBQQBe4Bv4wL3r9
+ Zem9gBG+OQw0/7IQVQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=gmx.de
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=onExmtWY
-Subject: Re: [Buildroot] [PATCH] configs/pandaboard_defconfig: drop defconfig
+ unprotected) header.d=gmx.de header.i=fiona.klute@gmx.de header.a=rsa-sha256
+ header.s=s31663417 header.b=nWBWLXUq
+Subject: Re: [Buildroot] [PATCH v2] linux: add support for device tree
+ overlays
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,233 +145,58 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
+From: Fiona Klute via buildroot <buildroot@buildroot.org>
+Reply-To: Fiona Klute <fiona.klute@gmx.de>
+Cc: Niklas Cassel <Niklas.Cassel@wdc.com>,
+ =?UTF-8?Q?Ga=C3=ABl_PORTAY?= <gael.portay@rtone.fr>,
+ Julien Grossholtz <julien.grossholtz@openest.io>,
+ Damien Le Moal <dlemoal@kernel.org>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org,
+ Martin Bark <martin@barkynet.com>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Peter, All,
+Am 02.09.24 um 17:02 schrieb Michael Walle:
+> Hi,
+>
+>> This looks like the DTBOs will be installed to $BINARIES_DIR along with
+>> the DTBs. At least on RPi platforms it'd be preferable to be able to put
+>> them in an overlays/ directory, to make it easier to create the
+>> structure expected by the firmware in a genimage config without
+>> templating. I don't know how common this is across other platforms that
+>> use DT overlays.
+>>
+>> Would it be practical to add an option to install DTBOs in a
+>> (configurable) subdirectory?
+>
+> Isn't that what is the BR2_ROOTFS_*_SCRIPT are for? I.e. to customize
+> the final image to your/the board likings?
+It's definitely possible, the configurable install dir would just make
+the post image script that builds a disk image from the rootfs and files
+in $BINARIES_DIR simpler:
 
-On 2024-09-02 11:44 +0200, Peter Korsgaard spake thusly:
-> The defconfig has failed to build since May with the change to GCC 13.x,
-> E.G.:
-> 
-> https://gitlab.com/buildroot.org/buildroot/-/jobs/6865597768
-> 
-> I no longer have access to a pandaboard.  Pandaboard/omap4 support has
-> recently been dropped from u-boot:
-> https://lists.denx.de/pipermail/u-boot/2024-July/558846.html
-> 
-> And (part of) the kernel support is also getting removed:
-> https://patchwork.kernel.org/project/linux-media/patch/815a789d-85a5-44a1-8b9c-429ac0101e3f@xs4all.nl/
-> 
-> So drop the defconfig here as well.
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+With all DTBOs installed into $BINARIES_DIR/overlays I only need to list
+that directory in the genimage config to be included in the boot
+partition (in the "files" list).
 
-Applied to master, thanks.
+Without a custom install dir I need to either move the files around in
+$BINARIES_DIR, or generate a relatively complex genimage config with a
+"file" entry for each DTBO to map it to the right path. The former is
+pretty simple, but might break anything that expects the DTBOs in the
+original location. There probably isn't anything that does for now
+because there have been no DTBOs installed by the kernel previously, but
+I can't know how future proof that'll be.
 
-Regards,
-Yann E. MORIN.
+That's why I wrote the option would make it *easier* to create the
+structure required by RPi firmware, it's not a necessity. If you choose
+not to add it I'll probably choose the "move files around in post image
+script" option and fix it if it breaks. :-)
 
-> ---
->  .checkpackageignore           |  1 -
->  DEVELOPERS                    |  2 --
->  board/pandaboard/genimage.cfg | 27 --------------------
->  board/pandaboard/readme.txt   | 46 ---------------------------------
->  configs/pandaboard_defconfig  | 48 -----------------------------------
->  5 files changed, 124 deletions(-)
->  delete mode 100644 board/pandaboard/genimage.cfg
->  delete mode 100644 board/pandaboard/readme.txt
->  delete mode 100644 configs/pandaboard_defconfig
-> 
-> diff --git a/.checkpackageignore b/.checkpackageignore
-> index 4cfc202153..96358d0d6c 100644
-> --- a/.checkpackageignore
-> +++ b/.checkpackageignore
-> @@ -221,7 +221,6 @@ configs/orangepi_zero3_defconfig lib_defconfig.ForceCheckHash
->  configs/orangepi_zero_defconfig lib_defconfig.ForceCheckHash
->  configs/orangepi_zero_plus2_defconfig lib_defconfig.ForceCheckHash
->  configs/orangepi_zero_plus_defconfig lib_defconfig.ForceCheckHash
-> -configs/pandaboard_defconfig lib_defconfig.ForceCheckHash
->  configs/pc_x86_64_bios_defconfig lib_defconfig.ForceCheckHash
->  configs/pc_x86_64_efi_defconfig lib_defconfig.ForceCheckHash
->  configs/pcengines_apu2_defconfig lib_defconfig.ForceCheckHash
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 0b590f0ec2..59f3b03202 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -2553,7 +2553,6 @@ F:	board/librecomputer/lafrite/
->  F:	board/nexbox/a95x/
->  F:	board/openblocks/a6/
->  F:	board/orangepi/
-> -F:	board/pandaboard/
->  F:	board/roseapplepi/
->  F:	board/visionfive/
->  F:	boot/shim/
-> @@ -2566,7 +2565,6 @@ F:	configs/nezha_defconfig
->  F:	configs/openblocks_a6_defconfig
->  F:	configs/orangepi_pc_defconfig
->  F:	configs/orangepi_r1_defconfig
-> -F:	configs/pandaboard_defconfig
->  F:	configs/roseapplepi_defconfig
->  F:	configs/sheevaplug_defconfig
->  F:	configs/visionfive_defconfig
-> diff --git a/board/pandaboard/genimage.cfg b/board/pandaboard/genimage.cfg
-> deleted file mode 100644
-> index dfe388227e..0000000000
-> --- a/board/pandaboard/genimage.cfg
-> +++ /dev/null
-> @@ -1,27 +0,0 @@
-> -image boot.vfat {
-> -	vfat {
-> -		files = {
-> -			"MLO",
-> -			"u-boot.img"
-> -		}
-> -	}
-> -
-> -	size = 8M
-> -}
-> -
-> -image sdcard.img {
-> -	hdimage {
-> -	}
-> -
-> -	partition boot {
-> -		partition-type = 0xC
-> -		bootable = "true"
-> -		image = "boot.vfat"
-> -	}
-> -
-> -	partition rootfs {
-> -		partition-type = 0x83
-> -		image = "rootfs.ext4"
-> -		size = 512M
-> -	}
-> -}
-> diff --git a/board/pandaboard/readme.txt b/board/pandaboard/readme.txt
-> deleted file mode 100644
-> index 80a20c2743..0000000000
-> --- a/board/pandaboard/readme.txt
-> +++ /dev/null
-> @@ -1,46 +0,0 @@
-> -Pandaboard
-> -==========
-> -
-> -This file documents the Buildroot support for the Pandaboard, a
-> -low-power, low-cost single-board computer development platform based
-> -on the Texas Instruments OMAP4 system on a chip (SoC).
-> -
-> -Configuring and building Buildroot
-> -----------------------------------
-> -
-> -Start from the defconfig:
-> -
-> -  $ make pandaboard_defconfig
-> -
-> -You can edit build options the usual way:
-> -
-> -  $ make menuconfig
-> -
-> -When you are happy with the setup, run:
-> -
-> -  $ make
-> -
-> -The result of the build with the default settings should be these files:
-> -
-> -  output/images
-> -  +-- MLO
-> -  +-- omap4-panda-a4.dtb
-> -  +-- omap4-panda.dtb
-> -  +-- omap4-panda-es.dtb
-> -  +-- rootfs.ext4
-> -  +-- sdcard.img
-> -  +-- u-boot.img
-> -  +-- zImage
-> -
-> -How to write the SD card
-> -------------------------
-> -
-> -Once the build process is finished you will have an image called "sdcard.img"
-> -in the output/images/ directory.
-> -
-> -Copy the bootable "sdcard.img" onto an SD card with "dd":
-> -
-> -  $ sudo dd if=output/images/sdcard.img of=/dev/sdX
-> -
-> -Where /dev/sdX is the device node of your SD card (may be /dev/mmcblkX
-> -instead depending on setup).
-> diff --git a/configs/pandaboard_defconfig b/configs/pandaboard_defconfig
-> deleted file mode 100644
-> index 376ecfe504..0000000000
-> --- a/configs/pandaboard_defconfig
-> +++ /dev/null
-> @@ -1,48 +0,0 @@
-> -# Architecture
-> -BR2_arm=y
-> -BR2_cortex_a9=y
-> -BR2_ARM_ENABLE_NEON=y
-> -BR2_ARM_ENABLE_VFP=y
-> -BR2_ARM_FPU_VFPV3=y
-> -
-> -# Linux headers same as kernel, a 5.12 series
-> -BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_12=y
-> -
-> -# System
-> -BR2_ROOTFS_DEVICE_CREATION_DYNAMIC_MDEV=y
-> -BR2_TARGET_GENERIC_GETTY_PORT="ttyS2"
-> -BR2_SYSTEM_DHCP="eth0"
-> -
-> -# Image
-> -BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
-> -BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/pandaboard/genimage.cfg"
-> -
-> -# Kernel
-> -BR2_LINUX_KERNEL=y
-> -BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-> -BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.12.2"
-> -BR2_LINUX_KERNEL_DEFCONFIG="omap2plus"
-> -BR2_LINUX_KERNEL_DTS_SUPPORT=y
-> -BR2_LINUX_KERNEL_INTREE_DTS_NAME="omap4-panda-es omap4-panda omap4-panda-a4"
-> -BR2_LINUX_KERNEL_INSTALL_TARGET=y
-> -BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-> -
-> -# Filesystem
-> -BR2_TARGET_ROOTFS_EXT2=y
-> -BR2_TARGET_ROOTFS_EXT2_4=y
-> -# BR2_TARGET_ROOTFS_TAR is not set
-> -
-> -# Bootloader
-> -BR2_TARGET_UBOOT=y
-> -BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
-> -BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-> -BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.04"
-> -BR2_TARGET_UBOOT_BOARD_DEFCONFIG="omap4_panda"
-> -BR2_TARGET_UBOOT_FORMAT_IMG=y
-> -BR2_TARGET_UBOOT_SPL=y
-> -BR2_TARGET_UBOOT_SPL_NAME="MLO"
-> -
-> -# Required tools to create the SD card image
-> -BR2_PACKAGE_HOST_DOSFSTOOLS=y
-> -BR2_PACKAGE_HOST_GENIMAGE=y
-> -BR2_PACKAGE_HOST_MTOOLS=y
-> -- 
-> 2.39.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+Best regards,
+Fiona
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
