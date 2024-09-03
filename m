@@ -4,49 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60E13CD37B1
-	for <buildroot@archiver.kernel.org>; Tue,  3 Sep 2024 21:01:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9216ACD343F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Sep 2024 21:02:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 25FCF4015A;
-	Tue,  3 Sep 2024 21:01:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 55974401B1;
+	Tue,  3 Sep 2024 21:02:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id E9kzKhAo51_1; Tue,  3 Sep 2024 21:01:14 +0000 (UTC)
+ id yYTdvfOO_Y8S; Tue,  3 Sep 2024 21:02:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BA79140223
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 303A6401E4
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BA79140223;
-	Tue,  3 Sep 2024 21:01:14 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 839311BF57B
- for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 21:01:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 303A6401E4;
+	Tue,  3 Sep 2024 21:02:28 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 744E61BF57B
+ for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 21:02:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 71EB980F27
- for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 21:01:13 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 61633606E3
+ for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 21:02:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0xG9dqqYXSxK for <buildroot@lists.busybox.net>;
- Tue,  3 Sep 2024 21:01:12 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id SASjRbpccIYO for <buildroot@lists.busybox.net>;
+ Tue,  3 Sep 2024 21:02:26 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::229;
+ helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9B06580DA1
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9B06580DA1
- for <buildroot@buildroot.org>; Tue,  3 Sep 2024 21:01:12 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8668786CE2; Tue,  3 Sep 2024 21:01:12 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 3 Sep 2024 23:00:36 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 684843620a92b0dc811676cb5d94302c9dab47ac
-X-Git-Newrev: 88c7ef62df7bf266fcd070e2b24c9dea0db1e5e7
-X-Patchwork-Hint: ignore
-Message-Id: <20240903210112.8668786CE2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/ima-evm-utils: bump
- version to 1.6.2
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org CB3456058D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CB3456058D
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id CB3456058D
+ for <buildroot@buildroot.org>; Tue,  3 Sep 2024 21:02:25 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 03BDDFF804;
+ Tue,  3 Sep 2024 21:02:22 +0000 (UTC)
+Date: Tue, 3 Sep 2024 23:02:22 +0200
+To: Petr Vorel <petr.vorel@gmail.com>
+Message-ID: <20240903230222.0019371b@windsurf>
+In-Reply-To: <20240902181743.528003-1-petr.vorel@gmail.com>
+References: <20240902181743.528003-1-petr.vorel@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1725397343;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=/Q4w3A4AiZhMKlZ2k4oVoQTn9P/ecqr+xkSZVLczIzY=;
+ b=hKCr4KlWxF/sboOV0uByQY9+JH9nQvZW4cLUsMP4/CoryJzd34eUvpQVu0q6dRV2dHmOhn
+ RyZK88ut7aFQPKLBJuDMnQWwSoShXpkwdcOqSLU1MbuM1MgMJc2a/U4GgnsdkRyE5TehI6
+ 5PzhTCpiipYF8RaXBcmrVCYbU2kEk4wzTUZJl+PQ0ctaCSn9v6SHsWDP/qjSKoFbkYYLYH
+ cmQpa1ujv3ajftfkfdKyAQ5IOKmnBxZOTTMPihFUpQ+l5/rI9ev5FTd+ZRsTMFp0CCj441
+ 9/SU82WbN2rPxTVF3CiYSbLEXQsRvfikJNongbCJlPlA8q+As55xLY1guy/A9Q==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=hKCr4KlW
+Subject: Re: [Buildroot] [PATCH 1/1] package/ima-evm-utils: bump version to
+ 1.6.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,59 +83,29 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=88c7ef62df7bf266fcd070e2b24c9dea0db1e5e7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On Mon,  2 Sep 2024 20:17:42 +0200
+Petr Vorel <petr.vorel@gmail.com> wrote:
 
-This version also reintroduced COPYING COPYING.LGPL, therefore add
-them to IMA_EVM_UTILS_LICENSE_FILES.
+> This version also reintroduced COPYING COPYING.LGPL, therefore add them
+> to IMA_EVM_UTILS_LICENSE_FILES.
 
-The hash change in LICENSES.txt is just due to the addition of the
-reference to the re-introduced COPYING and COPYING.LGPL files.
+It would have been good to explain here why the LICENSES.txt file gets
+changed (since you change its hash).
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/ima-evm-utils/ima-evm-utils.hash | 9 ++++++---
- package/ima-evm-utils/ima-evm-utils.mk   | 4 ++--
- 2 files changed, 8 insertions(+), 5 deletions(-)
+I fixed that up with an explanation (after diffing the file
+before/after), and applied to next. Thanks a lot!
 
-diff --git a/package/ima-evm-utils/ima-evm-utils.hash b/package/ima-evm-utils/ima-evm-utils.hash
-index 844ba0d4fe..72e8c89242 100644
---- a/package/ima-evm-utils/ima-evm-utils.hash
-+++ b/package/ima-evm-utils/ima-evm-utils.hash
-@@ -1,3 +1,6 @@
--# https://github.com/linux-integrity/ima-evm-utils/releases/download/v1.6/ima-evm-utils-1.6.tar.gz.sha256
--sha256  3d09e77a09e985b285891f13d458653f44913879147679dce30bdbf00380d40e  ima-evm-utils-1.6.tar.gz
--sha256  d037fb0b5fdb4d1e09e246a56bdb8049fc6d9b1f9270c0ec2ae4bc8f9285165b  LICENSES.txt
-+# https://github.com/linux-integrity/ima-evm-utils/releases/download/v1.6.2/ima-evm-utils-1.6.2.tar.gz.sha256
-+sha256  9346a5ccd5ca77caf6a9d2ac0d83873c04d0372414a632126df4e7a88bedff4a  ima-evm-utils-1.6.2.tar.gz
-+# locally computed
-+sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-+sha256  681e386e44a19d7d0674b4320272c90e66b6610b741e7e6305f8219c42e85366  COPYING.LGPL
-+sha256  9d2cf91f1292121f94b412abfdea1dd2d83984704f594b0a14de88d7b1cfb42c  LICENSES.txt
-diff --git a/package/ima-evm-utils/ima-evm-utils.mk b/package/ima-evm-utils/ima-evm-utils.mk
-index 858efee8da..b7eb8ff530 100644
---- a/package/ima-evm-utils/ima-evm-utils.mk
-+++ b/package/ima-evm-utils/ima-evm-utils.mk
-@@ -4,10 +4,10 @@
- #
- ################################################################################
- 
--IMA_EVM_UTILS_VERSION = 1.6
-+IMA_EVM_UTILS_VERSION = 1.6.2
- IMA_EVM_UTILS_SITE = https://github.com/linux-integrity/ima-evm-utils/releases/download/v$(IMA_EVM_UTILS_VERSION)
- IMA_EVM_UTILS_LICENSE = LGPL-2.0+ (libimaevm), GPL-2.0+ (evmctl)
--IMA_EVM_UTILS_LICENSE_FILES = LICENSES.txt
-+IMA_EVM_UTILS_LICENSE_FILES = LICENSES.txt COPYING COPYING.LGPL
- IMA_EVM_UTILS_INSTALL_STAGING = YES
- IMA_EVM_UTILS_DEPENDENCIES = host-pkgconf keyutils openssl tpm2-tss
- 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
