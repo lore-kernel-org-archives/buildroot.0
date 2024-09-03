@@ -4,73 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 26E92CD37AE
-	for <buildroot@archiver.kernel.org>; Tue,  3 Sep 2024 20:41:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F3108CD37AE
+	for <buildroot@archiver.kernel.org>; Tue,  3 Sep 2024 20:41:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E4819402A2;
-	Tue,  3 Sep 2024 20:41:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B057040167;
+	Tue,  3 Sep 2024 20:41:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kRmPr7swny8U; Tue,  3 Sep 2024 20:41:30 +0000 (UTC)
+ id AKqBv5_U1gvI; Tue,  3 Sep 2024 20:41:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 83FE8402EE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6F8C04024A
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 83FE8402EE;
-	Tue,  3 Sep 2024 20:41:29 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 9F5D71BF57B
- for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 20:41:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6F8C04024A;
+	Tue,  3 Sep 2024 20:41:48 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 655601BF57B
+ for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 20:41:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8C756402F6
- for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 20:41:26 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 51D4480ED5
+ for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 20:41:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9vkp-4rjiwKf for <buildroot@lists.busybox.net>;
- Tue,  3 Sep 2024 20:41:25 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
- helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ikhKgpk0R41G for <buildroot@lists.busybox.net>;
+ Tue,  3 Sep 2024 20:41:46 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 4EF0540198
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4EF0540198
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 4EF0540198
- for <buildroot@buildroot.org>; Tue,  3 Sep 2024 20:41:24 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 9E34313F8B5;
- Tue,  3 Sep 2024 22:41:19 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Tue, 03 Sep 2024 22:41:19 +0200
-Date: Tue, 3 Sep 2024 22:41:19 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Message-ID: <Ztd0b2Vu3Pq66n8Y@landeda>
-References: <20240818214305.1051667-1-thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20240818214305.1051667-1-thomas.petazzoni@bootlin.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1725396081;
- bh=bMgwCUahaGxaWrvLiYkdbLxvUKkFzIpARyidQTtj4nA=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=SC8BrhDQHBZl7CDl8iCIErtCSsTqoCW9MJlWlCsy4+7xrDlMMU/tEELVvFa8Usn61
- a4B4tKidcRxtoknq27vhf7RA4l9lyhFIJ7Z0kHUBq2xKcNsgglYcN1fHFnXwF0Udic
- bfdBalQzM/yn3E6G+1JQylj/yXsbrX6gbQhXu/liR2anlkkDxjI+Zp0jQNu+IMFQ1x
- 8IdQ/0tD3Aq3BAaZw9obGt89UVvRWSx9N7gWuIooNVgLGWoCeGXWpqibmsicXM2fTP
- SG5xAnIl/F8LYsDaqbsyJxna3WBsCUrKnkJ+w/p9lE7T3pIa7o5lVvC2N2eM7dmZ5C
- SFiVShfZklEYg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=SC8BrhDQ
-Subject: Re: [Buildroot] [PATCH next 0/2] Update to Bootlin toolchains
- 2024.05
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9134D80EB9
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9134D80EB9
+ for <buildroot@buildroot.org>; Tue,  3 Sep 2024 20:41:46 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 7EF7186CAE; Tue,  3 Sep 2024 20:41:46 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
+To: buildroot@buildroot.org
+Date: Tue, 3 Sep 2024 22:30:46 +0200
+X-Git-Refname: refs/heads/2024.02.x
+X-Git-Oldrev: 90cd6b3574b9425b0534e11a199331a0950b8856
+X-Git-Newrev: 1c5b296c5e3197aa5a7200616887e6a0c5fabab9
+X-Patchwork-Hint: ignore
+Message-Id: <20240903204146.7EF7186CAE@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/cryptsetup: bump
+ version to 2.7.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,59 +59,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Buildroot List <buildroot@buildroot.org>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Thomas, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=1c5b296c5e3197aa5a7200616887e6a0c5fabab9
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-On 2024-08-18 23:43 +0200, Thomas Petazzoni via buildroot spake thusly:
-> This short series updates toolchain-external-bootlin to the 2024.05
-> toolchains.
-> 
-> NOTE: this series depends on
-> https://patchwork.ozlabs.org/project/buildroot/patch/20240810215624.482529-2-thomas.petazzoni@bootlin.com/,
-> which introduces the BR2_ARCH_NEEDS_GCC_AT_LEAST_15 symbol also used
-> in this series.
-> 
-> Thanks,
-> 
-> Thomas
-> 
-> Thomas Petazzoni (2):
->   support/scripts/gen-bootlin-toolchains: tarballs are now xz-compressed
->   toolchain/toolchain-external/toolchain-external-bootlin: bump to
->     2024.05
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 7c56e71b46007bc1d70e9c13267109abe4776f49)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/cryptsetup/cryptsetup.hash | 2 +-
+ package/cryptsetup/cryptsetup.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to next, thanks.
-
-Regards,
-Yann E. MORIN.
-
->  support/scripts/gen-bootlin-toolchains        |    4 +-
->  .../tests/toolchain/test_external_bootlin.py  |   81 +
->  .../Config.in.options                         | 1519 +++++++++--------
->  .../toolchain-external-bootlin.hash           |  870 +++++-----
->  .../toolchain-external-bootlin.mk             |  890 +++++-----
->  5 files changed, 1758 insertions(+), 1606 deletions(-)
-> 
-> -- 
-> 2.46.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/cryptsetup/cryptsetup.hash b/package/cryptsetup/cryptsetup.hash
+index 531432aaaf..dfee537a4a 100644
+--- a/package/cryptsetup/cryptsetup.hash
++++ b/package/cryptsetup/cryptsetup.hash
+@@ -1,4 +1,4 @@
+ # From https://www.kernel.org/pub/linux/utils/cryptsetup/v2.7/sha256sums.asc
+-sha256  da5d1419e2a86e01aa32fd79582cd54d208857cb541bca2fd426a5ff1aaabbc3  cryptsetup-2.7.1.tar.xz
++sha256  b772ae4f6df0cee7200b28cea960e4daaff2a203d2fd502beab3c1317b07a456  cryptsetup-2.7.3.tar.xz
+ sha256  45670cce8b6a0ddd66c8016cd8ccef6cd71f35717cbacc7f1e895b3855207b33  COPYING
+ sha256  8c33cc37871654ec7ed87e6fbb896c8cf33ef5ef05b1611a5aed857596ffafa5  COPYING.LGPL
+diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
+index b15f458576..d5046d9943 100644
+--- a/package/cryptsetup/cryptsetup.mk
++++ b/package/cryptsetup/cryptsetup.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ CRYPTSETUP_VERSION_MAJOR = 2.7
+-CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).1
++CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).3
+ CRYPTSETUP_SOURCE = cryptsetup-$(CRYPTSETUP_VERSION).tar.xz
+ CRYPTSETUP_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/cryptsetup/v$(CRYPTSETUP_VERSION_MAJOR)
+ CRYPTSETUP_DEPENDENCIES = \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
