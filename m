@@ -4,60 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 486FFCD37AB
-	for <buildroot@archiver.kernel.org>; Tue,  3 Sep 2024 19:06:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E69E7CD37AB
+	for <buildroot@archiver.kernel.org>; Tue,  3 Sep 2024 19:09:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 07F7840A1A;
-	Tue,  3 Sep 2024 19:06:34 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8781440A21;
+	Tue,  3 Sep 2024 19:09:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 18n2B1uH8ziA; Tue,  3 Sep 2024 19:06:33 +0000 (UTC)
+ id 5bOEuv05Ao4Q; Tue,  3 Sep 2024 19:09:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ECBA140A1D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4637F40A20
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id ECBA140A1D;
-	Tue,  3 Sep 2024 19:06:32 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4637F40A20;
+	Tue,  3 Sep 2024 19:09:22 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id CAA521BF267
- for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 19:06:31 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 7E9601BF267
+ for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 19:09:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C5AA9606F7
- for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 19:06:31 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6C852606F7
+ for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 19:09:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KJV_FCV5QbD7 for <buildroot@lists.busybox.net>;
- Tue,  3 Sep 2024 19:06:31 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.200;
- helo=relay7-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+ id HoWhHxrDhfwS for <buildroot@lists.busybox.net>;
+ Tue,  3 Sep 2024 19:09:19 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org F194A60681
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F194A60681
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp3.osuosl.org (Postfix) with ESMTPS id F194A60681
- for <buildroot@buildroot.org>; Tue,  3 Sep 2024 19:06:30 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id EA35120007;
- Tue,  3 Sep 2024 19:06:28 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1slYrE-005B8d-15;
- Tue, 03 Sep 2024 21:06:28 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
-To: Adrian Perez de Castro <aperez@igalia.com>
-References: <20240805223946.116873-1-aperez@igalia.com>
-Date: Tue, 03 Sep 2024 21:06:28 +0200
-In-Reply-To: <20240805223946.116873-1-aperez@igalia.com> (Adrian Perez de
- Castro's message of "Tue, 6 Aug 2024 01:39:44 +0300")
-Message-ID: <87plpklfpn.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] DEVELOPERS: assign Adrian Perez for
- sysprof
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AB88960681
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id AB88960681
+ for <buildroot@buildroot.org>; Tue,  3 Sep 2024 19:09:19 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id A110B86B2B; Tue,  3 Sep 2024 19:09:19 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 3 Sep 2024 20:57:25 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: e40c6f2156cd59082fd02c37b24c3a2750eee809
+X-Git-Newrev: 8194a727a211bb944d78eb0b82ab952fb8083a5a
+X-Patchwork-Hint: ignore
+Message-Id: <20240903190919.A110B86B2B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/tllist: update download URL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,20 +57,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Adrian" == Adrian Perez de Castro <aperez@igalia.com> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=8194a727a211bb944d78eb0b82ab952fb8083a5a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
+Fix download URL. Tarball is renamed, too.
 
-Committed to 2024.02.x and 2024.05.x, thanks.
+Fixes:
 
--- 
-Bye, Peter Korsgaard
+ http://autobuild.buildroot.org/results/950/950688493021c12c4dea98ac4b220355d917ff69
+
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/tllist/tllist.hash | 2 +-
+ package/tllist/tllist.mk   | 3 +--
+ 2 files changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/package/tllist/tllist.hash b/package/tllist/tllist.hash
+index 2806d62355..73d382767a 100644
+--- a/package/tllist/tllist.hash
++++ b/package/tllist/tllist.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  3f3fe2f7433719cec816c63937a7aa36e566bd317763ef46d11562073ab6361d  1.1.0.tar.gz
++sha256  a1f0ce0dc4fcb4ce59c37202a1d914c853a8bd2d7c5d57d623b15a8dd9778767  tllist-1.1.0.tar.gz
+ sha256  d534a23a31500a0ac958d9634b84f532bd73ff1aca1bb8f7debbcbebc16ff39a  LICENSE
+diff --git a/package/tllist/tllist.mk b/package/tllist/tllist.mk
+index 69a34a65ab..26e21ccbe1 100644
+--- a/package/tllist/tllist.mk
++++ b/package/tllist/tllist.mk
+@@ -5,8 +5,7 @@
+ ################################################################################
+ 
+ TLLIST_VERSION = 1.1.0
+-TLLIST_SOURCE = $(TLLIST_VERSION).tar.gz
+-TLLIST_SITE = https://codeberg.org/dnkl/tllist/archive
++TLLIST_SITE = https://codeberg.org/dnkl/tllist/releases/download/$(TLLIST_VERSION)
+ TLLIST_LICENSE = MIT
+ TLLIST_LICENSE_FILES = LICENSE
+ # header only
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
