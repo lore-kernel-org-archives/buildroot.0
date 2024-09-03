@@ -4,48 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A1EEAE6FE46
-	for <buildroot@archiver.kernel.org>; Fri,  6 Sep 2024 20:11:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66222CE7B11
+	for <buildroot@archiver.kernel.org>; Fri,  6 Sep 2024 20:11:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6873981EA1;
-	Fri,  6 Sep 2024 20:11:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C360081F19;
+	Fri,  6 Sep 2024 20:11:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id djjpno5i0fDJ; Fri,  6 Sep 2024 20:11:35 +0000 (UTC)
+ id jrmxUW_jsB2g; Fri,  6 Sep 2024 20:11:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2B56581E9D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8807881EC2
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2B56581E9D;
-	Fri,  6 Sep 2024 20:11:34 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 263681BF37F
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8807881EC2;
+	Fri,  6 Sep 2024 20:11:37 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 6D71A1BF37F
  for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 20:00:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id EFA4A408D6
- for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 19:59:03 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0B2C960E16
+ for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 19:59:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iblrKymdWjLE for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id DpLBnPsOu6Kq for <buildroot@lists.busybox.net>;
  Fri,  6 Sep 2024 19:59:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4D55140B40
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B317860765
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4D55140B40
- for <buildroot@buildroot.org>; Fri,  6 Sep 2024 19:59:01 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B317860765
+ for <buildroot@buildroot.org>; Fri,  6 Sep 2024 19:58:58 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 468B685FEB; Fri,  6 Sep 2024 19:59:01 +0000 (UTC)
+ id B036E86B7A; Fri,  6 Sep 2024 19:58:58 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Thu, 5 Sep 2024 21:48:59 +0200
+Date: Tue, 3 Sep 2024 22:23:55 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c4a0df9ad2d1ec0a27bdfcf3cdb3e093ba5b7b70
-X-Git-Newrev: ca4559c69b063a4b1beaed6d2f9cdd8074e2b26b
+X-Git-Oldrev: ad99ad8e8a284c635a87452de573a8700025ec9f
+X-Git-Newrev: 1ed8573cddf8183fc3c9e8c03ce9ee26c5e5d0e3
 X-Patchwork-Hint: ignore
-Message-Id: <20240906195901.468B685FEB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/zfs: bump version to 2.2.6
+Message-Id: <20240906195858.B036E86B7A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/imx6sx-sdb: bump U-Boot and kernel
+ versions
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,57 +61,56 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============5508546573987215435=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============5508546573987215435==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=ca4559c69b063a4b1beaed6d2f9cdd8074e2b26b
+commit: https://git.buildroot.net/buildroot/commit/?id=1ed8573cddf8183fc3c9e8c03ce9ee26c5e5d0e3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: José Luis Salvador Rufo <salvador.joseluis@gmail.com>
+Bump U-Boot to version 2024.07 and kernel to 6.6.46.
+
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/zfs/zfs.hash | 2 +-
- package/zfs/zfs.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ configs/imx6sx-sdb_defconfig | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/zfs/zfs.hash b/package/zfs/zfs.hash
-index 9598aed992..50e53910fa 100644
---- a/package/zfs/zfs.hash
-+++ b/package/zfs/zfs.hash
-@@ -1,5 +1,5 @@
- # From https://github.com/openzfs/zfs/releases/download/zfs-2.2.4/zfs-2.2.4.sha256.asc
--sha256  2388cf6f29cd75e87d6d05e4858a09d419c4f883a658d51ef57796121cd08897  zfs-2.2.5.tar.gz
-+sha256  c92e02103ac5dd77bf01d7209eabdca55c7b3356aa747bb2357ec4222652a2a7  zfs-2.2.6.tar.gz
- 
- # Hash for license files:
- sha256  1ffb70c33c4f79f04e947facc5c7851f289609256aacb47fc115f700427d9520  LICENSE
-diff --git a/package/zfs/zfs.mk b/package/zfs/zfs.mk
-index 549f8641b9..9cecd499ed 100644
---- a/package/zfs/zfs.mk
-+++ b/package/zfs/zfs.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ZFS_VERSION = 2.2.5
-+ZFS_VERSION = 2.2.6
- ZFS_SITE = https://github.com/openzfs/zfs/releases/download/zfs-$(ZFS_VERSION)
- ZFS_SELINUX_MODULES = zfs
- ZFS_LICENSE = CDDL
-
---===============5508546573987215435==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+diff --git a/configs/imx6sx-sdb_defconfig b/configs/imx6sx-sdb_defconfig
+index c36520a165..14a5c5f271 100644
+--- a/configs/imx6sx-sdb_defconfig
++++ b/configs/imx6sx-sdb_defconfig
+@@ -3,23 +3,23 @@ BR2_cortex_a9=y
+ BR2_ARM_ENABLE_NEON=y
+ BR2_ARM_ENABLE_VFP=y
+ BR2_ARM_FPU_VFPV3=y
+-# Linux headers same as kernel, a 5.15 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
++# Linux headers same as kernel, a 6.6 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+ BR2_TARGET_ROOTFS_EXT2=y
+ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BOARDNAME="mx6sxsabresd"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.10"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.07"
+ BR2_TARGET_UBOOT_FORMAT_IMX=y
+ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.11"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.46"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6sx-sdb imx6sx-sdb-reva"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="nxp/imx/imx6sx-sdb nxp/imx/imx6sx-sdb-reva"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/post-image.sh"
+ # required tools to create the SD card image
+ BR2_PACKAGE_HOST_DOSFSTOOLS=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============5508546573987215435==--
