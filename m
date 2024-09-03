@@ -4,72 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AE880CD37AE
-	for <buildroot@archiver.kernel.org>; Tue,  3 Sep 2024 20:42:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 07907CD37AE
+	for <buildroot@archiver.kernel.org>; Tue,  3 Sep 2024 20:43:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 73F64405A1;
-	Tue,  3 Sep 2024 20:42:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BC08E40105;
+	Tue,  3 Sep 2024 20:43:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jc25KS-sNAlg; Tue,  3 Sep 2024 20:42:05 +0000 (UTC)
+ id MJlh85-m_Y9a; Tue,  3 Sep 2024 20:43:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7BE4540577
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3906B4024A
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7BE4540577;
-	Tue,  3 Sep 2024 20:42:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3906B4024A;
+	Tue,  3 Sep 2024 20:43:15 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 160011BF57B
- for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 20:41:57 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2BF1C1BF57B
+ for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 20:43:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 10F9C40198
- for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 20:41:57 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 18FC640382
+ for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 20:43:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id apceU_Exc5Hi for <buildroot@lists.busybox.net>;
- Tue,  3 Sep 2024 20:41:56 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.200;
- helo=relay7-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id 59RNJ-xq7QX8 for <buildroot@lists.busybox.net>;
+ Tue,  3 Sep 2024 20:43:13 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org CE6B2402F6
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CE6B2402F6
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp2.osuosl.org (Postfix) with ESMTPS id CE6B2402F6
- for <buildroot@buildroot.org>; Tue,  3 Sep 2024 20:41:55 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 2690D20003;
- Tue,  3 Sep 2024 20:41:53 +0000 (UTC)
-Date: Tue, 3 Sep 2024 22:41:52 +0200
-To: Michel Alex <Alex.Michel@wiedemann-group.com>
-Message-ID: <20240903224152.5cf6b343@windsurf>
-In-Reply-To: <AS1P250MB0608E95391462F88D8DC7F02A9932@AS1P250MB0608.EURP250.PROD.OUTLOOK.COM>
-References: <AS1P250MB0608E95391462F88D8DC7F02A9932@AS1P250MB0608.EURP250.PROD.OUTLOOK.COM>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1725396113;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=bEXqUJliX+rjKQFL8HK0FlKLqH7Dn6S7YfvUCPNg3kU=;
- b=OXTbdRjaFR5Tt21Sl31tQODeZ4eiWr7ISob9YbvwU/vagUdWTW7EvWFeXVqjDlUcIefyBL
- /uBYBPNWIr16P3TVecqZq1Tg3h+C8XbE4qrWHlVcDyQEvs1rksRjaNcHCHohcuvxBf/22h
- zfbTSQGP7Y7sEHJWpxtOZxcKulcMOkDeW5N/+UR0Rj2Y7DhRMnCkbHCqs0OE3a4VqHNAqI
- y0shYgZJNPYs5lubJciXSmvV152tmygmSAYVTi01DDNbnM4tWgtVD4c/Ny2nTCHQjS+wN7
- UOsMM1QvTgoKIa6mbPy60yrmAP+VPnwhEjrvEqIIf5B8mrsbsgPVZdnFEDOD9g==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=OXTbdRja
-Subject: Re: [Buildroot] [PATCH 1/1] package/network-manager-openvpn: bump
- to version 1.12.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0BDD2402F6
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0BDD2402F6
+ for <buildroot@buildroot.org>; Tue,  3 Sep 2024 20:43:13 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id ECD8786CD1; Tue,  3 Sep 2024 20:43:12 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 3 Sep 2024 22:41:57 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: d3ad58dce9cafccb22d782e56677e060d5eb5a52
+X-Git-Newrev: 4605a794ddbd7d3dbd2073f9767b85341878ec15
+X-Patchwork-Hint: ignore
+Message-Id: <20240903204312.ECD8786CD1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libksba: bump to
+ version 1.6.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,30 +60,48 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: "buildroot@buildroot.org" <buildroot@buildroot.org>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Tue, 3 Sep 2024 05:30:01 +0000
-Michel Alex <Alex.Michel@wiedemann-group.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=4605a794ddbd7d3dbd2073f9767b85341878ec15
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> https://download.gnome.org/sources/NetworkManager-openvpn/1.12/NetworkManager-openvpn-1.12.0.news
-> 
-> Signed-off-by: Alex Michel <alex.michel@wiedemann-group.com>
-> ---
->  package/network-manager-openvpn/network-manager-openvpn.hash | 2 +-
->  package/network-manager-openvpn/network-manager-openvpn.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libksba/libksba.hash | 4 ++--
+ package/libksba/libksba.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Applied to next, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libksba/libksba.hash b/package/libksba/libksba.hash
+index e74cde2cc0..aca159d972 100644
+--- a/package/libksba/libksba.hash
++++ b/package/libksba/libksba.hash
+@@ -1,6 +1,6 @@
+ # From https://www.gnupg.org/download/integrity_check.html
+-sha1  1db4222e052656700021a30d517f5aa2f882da4a  libksba-1.6.6.tar.bz2
+-sha256  5dec033d211559338838c0c4957c73dfdc3ee86f73977d6279640c9cd08ce6a4  libksba-1.6.6.tar.bz2
++sha1  781acfb012cbb5328f41efcf82f723524e8d0128  libksba-1.6.7.tar.bz2
++sha256  cf72510b8ebb4eb6693eef765749d83677a03c79291a311040a5bfd79baab763  libksba-1.6.7.tar.bz2
+ 
+ # Hash for license files:
+ sha256  f9c59ea5a5e1dfdeebcd134e6a594c21eb088cc95f6653ee99ff2e187c105380  AUTHORS
+diff --git a/package/libksba/libksba.mk b/package/libksba/libksba.mk
+index 03e455145a..dc22d60113 100644
+--- a/package/libksba/libksba.mk
++++ b/package/libksba/libksba.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBKSBA_VERSION = 1.6.6
++LIBKSBA_VERSION = 1.6.7
+ LIBKSBA_SOURCE = libksba-$(LIBKSBA_VERSION).tar.bz2
+ LIBKSBA_SITE = https://gnupg.org/ftp/gcrypt/libksba
+ LIBKSBA_LICENSE = LGPL-3.0+ or GPL-2.0+ (library, headers), GPL-3.0+ (manual, tests, build system)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
