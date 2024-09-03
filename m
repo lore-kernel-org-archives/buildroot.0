@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43E04E6FE46
-	for <buildroot@archiver.kernel.org>; Fri,  6 Sep 2024 20:08:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4909ACE7B11
+	for <buildroot@archiver.kernel.org>; Fri,  6 Sep 2024 20:08:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 75E5484C3F;
-	Fri,  6 Sep 2024 20:08:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 41D398456A;
+	Fri,  6 Sep 2024 20:08:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3Ig24Yfr4KAC; Fri,  6 Sep 2024 20:08:10 +0000 (UTC)
+ id 1OEW1t_EQ77q; Fri,  6 Sep 2024 20:08:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EC6A784C39
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1358384C64
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EC6A784C39;
-	Fri,  6 Sep 2024 20:08:09 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4061A1BF37F
- for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 20:00:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1358384C64;
+	Fri,  6 Sep 2024 20:08:13 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 97B0C1BF37F
+ for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 20:00:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D2E1340BAB
- for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 19:59:03 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 395EC60765
+ for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 19:59:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VqdERCpdbbDr for <buildroot@lists.busybox.net>;
- Fri,  6 Sep 2024 19:59:03 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id p7Aw7i3xkRXf for <buildroot@lists.busybox.net>;
+ Fri,  6 Sep 2024 19:59:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 33306409FB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8BCFF61140
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 33306409FB
- for <buildroot@buildroot.org>; Fri,  6 Sep 2024 19:59:01 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8BCFF61140
+ for <buildroot@buildroot.org>; Fri,  6 Sep 2024 19:59:00 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 30DB7828EF; Fri,  6 Sep 2024 19:59:01 +0000 (UTC)
+ id 88BA386587; Fri,  6 Sep 2024 19:59:00 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Thu, 5 Sep 2024 21:44:12 +0200
+Date: Wed, 4 Sep 2024 00:29:11 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f35edfe7f1aa6f2a235ba597f37c5138b7fd65b4
-X-Git-Newrev: c5f342af1e0e9fbad71a7a45cc17dfcdbc6eb16b
+X-Git-Oldrev: 9eb0fad1487f5e5ca8c2501d79f21b46f2d54c46
+X-Git-Newrev: dfc11b0d84e17120e8ab50ba79c26a202df9870e
 X-Patchwork-Hint: ignore
-Message-Id: <20240906195901.30DB7828EF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-django: security bump to
- 5.1.1
+Message-Id: <20240906195900.88BA386587@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/erlang-eimp: bump version to 1.0.23
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,59 +58,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c5f342af1e0e9fbad71a7a45cc17dfcdbc6eb16b
+commit: https://git.buildroot.net/buildroot/commit/?id=dfc11b0d84e17120e8ab50ba79c26a202df9870e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Fixes:
-* CVE-2024-45230
-* CVE-2024-45231
-
-Further changes: https://docs.djangoproject.com/en/5.1/releases/5.1.1/
-
-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-django/python-django.hash | 4 ++--
- package/python-django/python-django.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/erlang-eimp/erlang-eimp.hash | 2 +-
+ package/erlang-eimp/erlang-eimp.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-django/python-django.hash b/package/python-django/python-django.hash
-index 8ddc221973..d39bf4d081 100644
---- a/package/python-django/python-django.hash
-+++ b/package/python-django/python-django.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/django/json
--md5  77f44885427c09458e1abd0b48e09517  Django-5.1.tar.gz
--sha256  848a5980e8efb76eea70872fb0e4bc5e371619c70fffbe48e3e1b50b2c09455d  Django-5.1.tar.gz
-+md5  8024c23d7efe9e7acb04496ae22739c7  Django-5.1.1.tar.gz
-+sha256  021ffb7fdab3d2d388bc8c7c2434eb9c1f6f4d09e6119010bbb1694dda286bc2  Django-5.1.1.tar.gz
- # Locally computed sha256 checksums
- sha256  b846415d1b514e9c1dff14a22deb906d794bc546ca6129f950a18cd091e2a669  LICENSE
-diff --git a/package/python-django/python-django.mk b/package/python-django/python-django.mk
-index de5d2a9d06..cfe23ab16b 100644
---- a/package/python-django/python-django.mk
-+++ b/package/python-django/python-django.mk
-@@ -4,10 +4,10 @@
+diff --git a/package/erlang-eimp/erlang-eimp.hash b/package/erlang-eimp/erlang-eimp.hash
+index 26e8addd2d..e9ef9c693e 100644
+--- a/package/erlang-eimp/erlang-eimp.hash
++++ b/package/erlang-eimp/erlang-eimp.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  7023b86bc7cf3551fd876a1361ceb2443bdf1c1be9f98a4d9a9a90eda3353b51  erlang-eimp-1.0.22.tar.gz
++sha256  923d9fb5abd7fca36188441e6871e2d2da2f8fc95ed42d78406eb431df587b28  erlang-eimp-1.0.23.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.txt
+diff --git a/package/erlang-eimp/erlang-eimp.mk b/package/erlang-eimp/erlang-eimp.mk
+index 68d0d9e9ed..1e1a5ece43 100644
+--- a/package/erlang-eimp/erlang-eimp.mk
++++ b/package/erlang-eimp/erlang-eimp.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_DJANGO_VERSION = 5.1
-+PYTHON_DJANGO_VERSION = 5.1.1
- PYTHON_DJANGO_SOURCE = Django-$(PYTHON_DJANGO_VERSION).tar.gz
- # The official Django site has an unpractical URL
--PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/1e/0c/d854d25bb74a8a3b41e642bbd27fe6af12fadd0edfd07d487809cf0ef719
-+PYTHON_DJANGO_SITE = https://files.pythonhosted.org/packages/88/6f/8f57ed6dc88656edd4fcb35c50dd963f3cd79303bd711fb0160fc7fd6ab7
- PYTHON_DJANGO_LICENSE = BSD-3-Clause
- PYTHON_DJANGO_LICENSE_FILES = LICENSE
- PYTHON_DJANGO_CPE_ID_VENDOR = djangoproject
+-ERLANG_EIMP_VERSION = 1.0.22
++ERLANG_EIMP_VERSION = 1.0.23
+ ERLANG_EIMP_SITE = $(call github,processone,eimp,$(ERLANG_EIMP_VERSION))
+ ERLANG_EIMP_LICENSE = Apache-2.0
+ ERLANG_EIMP_LICENSE_FILES = LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
