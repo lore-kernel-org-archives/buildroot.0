@@ -4,49 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CD424CD343F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Sep 2024 21:15:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10552CD3440
+	for <buildroot@archiver.kernel.org>; Tue,  3 Sep 2024 21:15:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A0FDE402EA;
-	Tue,  3 Sep 2024 21:14:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B2835402ED;
+	Tue,  3 Sep 2024 21:15:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4jIOhc-HlEdT; Tue,  3 Sep 2024 21:14:58 +0000 (UTC)
+ id rRWyAbyeDlnI; Tue,  3 Sep 2024 21:15:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A807340327
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ED6594039F
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A807340327;
-	Tue,  3 Sep 2024 21:14:57 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 75CF71BF95C
+	by smtp4.osuosl.org (Postfix) with ESMTP id ED6594039F;
+	Tue,  3 Sep 2024 21:15:00 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 83D841BF48B
  for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 21:14:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 63FBF606F7
+ by smtp4.osuosl.org (Postfix) with ESMTP id 708BD402CD
  for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 21:14:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TXi4G300rfz2 for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id rCPzE-kp6RZC for <buildroot@lists.busybox.net>;
  Tue,  3 Sep 2024 21:14:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8C26060674
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7738F402B5
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8C26060674
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7738F402B5
  for <buildroot@buildroot.org>; Tue,  3 Sep 2024 21:14:49 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3E04686D32; Tue,  3 Sep 2024 21:14:49 +0000 (UTC)
+ id 630D286D34; Tue,  3 Sep 2024 21:14:49 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 3 Sep 2024 23:14:08 +0200
+Date: Tue, 3 Sep 2024 23:14:13 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 4e9ef05b2ef85ab746a982c3663b80b2c94b5b53
-X-Git-Newrev: 1a7980f0250f5857c8bf0cd6fc85a276372e1206
+X-Git-Oldrev: 410995b7120b42790934ad35cf7656ade30d8539
+X-Git-Newrev: 41132c0541b0d69e88f9f720cac166e304d7b64d
 X-Patchwork-Hint: ignore
-Message-Id: <20240903211449.3E04686D32@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/moby-buildkit: needs
- CGO linking for host
+Message-Id: <20240903211449.630D286D34@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/skopeo: bump version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,33 +65,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1a7980f0250f5857c8bf0cd6fc85a276372e1206
+commit: https://git.buildroot.net/buildroot/commit/?id=41132c0541b0d69e88f9f720cac166e304d7b64d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-The target variant depends on CGO linking, so propagate it to the host
-variant as well.
-
-Fixes: http://autobuild.buildroot.org/results/d6d/d6d6747541b7de8b04598c4c9181693e015ccf44/
-
 Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
-Cc: Christian Stewart <christian@aperture.us>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/moby-buildkit/Config.in.host | 1 +
- 1 file changed, 1 insertion(+)
+ package/skopeo/skopeo.hash | 2 +-
+ package/skopeo/skopeo.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/moby-buildkit/Config.in.host b/package/moby-buildkit/Config.in.host
-index d4eb0d74c3..f0d36f37a1 100644
---- a/package/moby-buildkit/Config.in.host
-+++ b/package/moby-buildkit/Config.in.host
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_HOST_MOBY_BUILDKIT
- 	bool "host moby-buildkit"
- 	depends on BR2_PACKAGE_HOST_GO_HOST_ARCH_SUPPORTS
-+	depends on BR2_PACKAGE_HOST_GO_HOST_CGO_LINKING_SUPPORTS
- 	select BR2_PACKAGE_HOST_GO
- 	help
- 	  BuildKit is a toolkit for converting source code to build
+diff --git a/package/skopeo/skopeo.hash b/package/skopeo/skopeo.hash
+index d40585d52f..ee42f18b80 100644
+--- a/package/skopeo/skopeo.hash
++++ b/package/skopeo/skopeo.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  0b788fc5725ac79327f7c29797821a2bafc1c3c87bbfcb2998c2a1be949e314d  skopeo-1.13.3-go2.tar.gz
++sha256  fed91fd067605460ef33431163227471b1e85c8768203fc393345d6ffd645448  skopeo-1.16.0-go2.tar.gz
+ sha256  716a8b80635c394681e652823e1e42e411ad2d254e1f202403422d74f4b0b106  LICENSE
+diff --git a/package/skopeo/skopeo.mk b/package/skopeo/skopeo.mk
+index 58631629b3..f09009d88c 100644
+--- a/package/skopeo/skopeo.mk
++++ b/package/skopeo/skopeo.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-SKOPEO_VERSION = 1.13.3
++SKOPEO_VERSION = 1.16.0
+ SKOPEO_SITE = $(call github,containers,skopeo,v$(SKOPEO_VERSION))
+ 
+ SKOPEO_LICENSE = Apache-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
