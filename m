@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B4DCCD37B6
-	for <buildroot@archiver.kernel.org>; Tue,  3 Sep 2024 22:43:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EE384CD37B5
+	for <buildroot@archiver.kernel.org>; Tue,  3 Sep 2024 22:43:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 03D9580F53;
-	Tue,  3 Sep 2024 22:43:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 448A781028;
+	Tue,  3 Sep 2024 22:43:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Wsr5hFk-E2WE; Tue,  3 Sep 2024 22:43:44 +0000 (UTC)
+ id rPSYPN_gj3G0; Tue,  3 Sep 2024 22:43:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 24B7F80F5C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3F4CE80F75
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 24B7F80F5C;
-	Tue,  3 Sep 2024 22:43:44 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 12D3F1BF576
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3F4CE80F75;
+	Tue,  3 Sep 2024 22:43:49 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 2505B1BF95C
  for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 22:43:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0A57280F65
+ by smtp2.osuosl.org (Postfix) with ESMTP id 080C140A82
  for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 22:43:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9tDfSKsvEIIc for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id BxRWP8ejcyz5 for <buildroot@lists.busybox.net>;
  Tue,  3 Sep 2024 22:43:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 38F6280F53
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EC7094010F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 38F6280F53
- for <buildroot@buildroot.org>; Tue,  3 Sep 2024 22:43:41 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id EC7094010F
+ for <buildroot@buildroot.org>; Tue,  3 Sep 2024 22:43:40 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2576586D81; Tue,  3 Sep 2024 22:43:41 +0000 (UTC)
+ id D87B08669F; Tue,  3 Sep 2024 22:43:40 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 4 Sep 2024 00:28:29 +0200
+Date: Wed, 4 Sep 2024 00:26:43 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: e1e95a78ae171c15ebaf76056cc8ce3708c610e8
-X-Git-Newrev: ef28b4b039da7305ee269efe7625b7ea1031355a
+X-Git-Oldrev: 7251f07b4581bd6b8cdd62e6341bf02936292516
+X-Git-Newrev: 3d6ca60f8de9fe6fbfd412194534e312c97adce1
 X-Patchwork-Hint: ignore
-Message-Id: <20240903224341.2576586D81@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/erlang-xmpp: bump
- version to 1.8.3
+Message-Id: <20240903224340.D87B08669F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/erlang-stun: bump
+ version to 1.2.14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,38 +65,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ef28b4b039da7305ee269efe7625b7ea1031355a
+commit: https://git.buildroot.net/buildroot/commit/?id=3d6ca60f8de9fe6fbfd412194534e312c97adce1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/erlang-xmpp/erlang-xmpp.hash | 2 +-
- package/erlang-xmpp/erlang-xmpp.mk   | 2 +-
+ package/erlang-stun/erlang-stun.hash | 2 +-
+ package/erlang-stun/erlang-stun.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/erlang-xmpp/erlang-xmpp.hash b/package/erlang-xmpp/erlang-xmpp.hash
-index 703b610800..df509886f8 100644
---- a/package/erlang-xmpp/erlang-xmpp.hash
-+++ b/package/erlang-xmpp/erlang-xmpp.hash
+diff --git a/package/erlang-stun/erlang-stun.hash b/package/erlang-stun/erlang-stun.hash
+index 85dc6a42fa..c248e89ea8 100644
+--- a/package/erlang-stun/erlang-stun.hash
++++ b/package/erlang-stun/erlang-stun.hash
 @@ -1,3 +1,3 @@
  # Locally calculated
--sha256  c227e3a32af4973308120aa726b945c2d3ab7187d47343fe65eb30e95bade0b0  erlang-xmpp-1.6.2.tar.gz
-+sha256  2a099bdfb129c416fae6f7e713d94ad39153cf2e7bf6b277a970136190a28ff2  erlang-xmpp-1.8.3.tar.gz
+-sha256  d7e9d3d591a88a91abf053c068f7152495e37d17f4c9ac58992c544d6f8f5e86  erlang-stun-1.2.7.tar.gz
++sha256  110b06572c6208fdeaa60c32cd549e6798f0a719d51bef97608c2aaa61151c11  erlang-stun-1.2.14.tar.gz
  sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.txt
-diff --git a/package/erlang-xmpp/erlang-xmpp.mk b/package/erlang-xmpp/erlang-xmpp.mk
-index 76f3d31b64..66d7223346 100644
---- a/package/erlang-xmpp/erlang-xmpp.mk
-+++ b/package/erlang-xmpp/erlang-xmpp.mk
+diff --git a/package/erlang-stun/erlang-stun.mk b/package/erlang-stun/erlang-stun.mk
+index 9def30a857..abfb1c3853 100644
+--- a/package/erlang-stun/erlang-stun.mk
++++ b/package/erlang-stun/erlang-stun.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ERLANG_XMPP_VERSION = 1.6.2
-+ERLANG_XMPP_VERSION = 1.8.3
- ERLANG_XMPP_SITE = $(call github,processone,xmpp,$(ERLANG_XMPP_VERSION))
- ERLANG_XMPP_LICENSE = Apache-2.0
- ERLANG_XMPP_LICENSE_FILES = LICENSE.txt
+-ERLANG_STUN_VERSION = 1.2.7
++ERLANG_STUN_VERSION = 1.2.14
+ ERLANG_STUN_SITE = $(call github,processone,stun,$(ERLANG_STUN_VERSION))
+ ERLANG_STUN_LICENSE = Apache-2.0
+ ERLANG_STUN_LICENSE_FILES = LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
