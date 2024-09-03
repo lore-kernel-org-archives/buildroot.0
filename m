@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43485E6FE46
-	for <buildroot@archiver.kernel.org>; Fri,  6 Sep 2024 20:00:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3E0AAE6FE47
+	for <buildroot@archiver.kernel.org>; Fri,  6 Sep 2024 20:00:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0E714841D0;
-	Fri,  6 Sep 2024 20:00:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0748E84487;
+	Fri,  6 Sep 2024 20:00:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HJ--cPy4g0kE; Fri,  6 Sep 2024 20:00:13 +0000 (UTC)
+ id Nl5TCKJ1MI4x; Fri,  6 Sep 2024 20:00:16 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B88848447B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F19508448E
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B88848447B;
-	Fri,  6 Sep 2024 20:00:12 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1F4D71BF980
+	by smtp1.osuosl.org (Postfix) with ESMTP id F19508448E;
+	Fri,  6 Sep 2024 20:00:15 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 4B4941BF37F
  for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 19:59:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7B1A760E13
- for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 19:58:55 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 327288415A
+ for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 19:59:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XmgYHfeSiwmK for <buildroot@lists.busybox.net>;
- Fri,  6 Sep 2024 19:58:54 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 04Yd9JMr_yPw for <buildroot@lists.busybox.net>;
+ Fri,  6 Sep 2024 19:58:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 90F8C6076B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 37F4E84159
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 90F8C6076B
- for <buildroot@buildroot.org>; Fri,  6 Sep 2024 19:58:53 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 37F4E84159
+ for <buildroot@buildroot.org>; Fri,  6 Sep 2024 19:58:59 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8E0A086EE3; Fri,  6 Sep 2024 19:58:53 +0000 (UTC)
+ id 1508A86C5A; Fri,  6 Sep 2024 19:58:59 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 14 Aug 2024 23:17:03 +0200
+Date: Tue, 3 Sep 2024 22:41:59 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 439ddbc5bbd56ab15d4edc0573092af3a724d7fb
-X-Git-Newrev: 5f76c30024dab07cad46f952c74e171733a32730
+X-Git-Oldrev: 5bdc92ceb4661c90a8e8706cce6519c5f9177318
+X-Git-Newrev: 684843620a92b0dc811676cb5d94302c9dab47ac
 X-Patchwork-Hint: ignore
-Message-Id: <20240906195853.8E0A086EE3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/eudev: support configuration via
- /etc/default/udevd
+Message-Id: <20240906195859.1508A86C5A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/network-manager-openvpn: bump to
+ version 1.12.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,50 +66,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5f76c30024dab07cad46f952c74e171733a32730
+commit: https://git.buildroot.net/buildroot/commit/?id=684843620a92b0dc811676cb5d94302c9dab47ac
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Take the arguments for the daemon and the "udevadm settle" command
-from variables and support defining them in /etc/default/udevd.
+https://download.gnome.org/sources/NetworkManager-openvpn/1.12/NetworkManager-openvpn-1.12.0.news
 
-Signed-off-by: Simon Rowe <simon.rowe@nutanix.com>
+Signed-off-by: Alex Michel <alex.michel@wiedemann-group.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/eudev/S10udev | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
+ package/network-manager-openvpn/network-manager-openvpn.hash | 2 +-
+ package/network-manager-openvpn/network-manager-openvpn.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/eudev/S10udev b/package/eudev/S10udev
-index 4e799d6507..6f20fc51f5 100644
---- a/package/eudev/S10udev
-+++ b/package/eudev/S10udev
-@@ -16,6 +16,14 @@
- #	/dev/zero, /dev/null -- that's needed to boot and run this script.
+diff --git a/package/network-manager-openvpn/network-manager-openvpn.hash b/package/network-manager-openvpn/network-manager-openvpn.hash
+index 59d03fae2a..902dc599b9 100644
+--- a/package/network-manager-openvpn/network-manager-openvpn.hash
++++ b/package/network-manager-openvpn/network-manager-openvpn.hash
+@@ -1,4 +1,4 @@
+ # From https://download.gnome.org/sources/NetworkManager-openvpn/1.11/NetworkManager-openvpn-1.11.0.sha256sum
+-sha256  2128de06f91b33c13d63cdaa6e178bc1ca57fc770cde3bc7c24891f4d9824501  NetworkManager-openvpn-1.11.0.tar.xz
++sha256  903fd4c0aebd2aa7ac70c9d8c2bed8df922655d22d764514403566ae89b7e886  NetworkManager-openvpn-1.12.0.tar.xz
+ # Locally computed
+ sha256  c39e345d992dfba62db265f8c6d6ff1d90c61d92876635ae05adbfa2f45fff46  COPYING
+diff --git a/package/network-manager-openvpn/network-manager-openvpn.mk b/package/network-manager-openvpn/network-manager-openvpn.mk
+index f39edf3209..b8a4325493 100644
+--- a/package/network-manager-openvpn/network-manager-openvpn.mk
++++ b/package/network-manager-openvpn/network-manager-openvpn.mk
+@@ -4,7 +4,7 @@
  #
+ ################################################################################
  
-+DAEMON="udevd"
-+
-+SETTLE_TIMEOUT=30
-+UDEVD_ARGS="-d"
-+
-+# shellcheck source=/dev/null
-+[ -r "/etc/default/$DAEMON" ] && . "/etc/default/$DAEMON"
-+
- # Check for config file and read it
- UDEV_CONFIG=/etc/udev/udev.conf
- test -r $UDEV_CONFIG || exit 6
-@@ -25,10 +33,10 @@ case "$1" in
-     start)
-         printf "Populating %s using udev: " "${udev_root:-/dev}"
-         [ -e /proc/sys/kernel/hotplug ] && printf '\000\000\000\000' > /proc/sys/kernel/hotplug
--        /sbin/udevd -d || { echo "FAIL"; exit 1; }
-+        /sbin/udevd $UDEVD_ARGS || { echo "FAIL"; exit 1; }
-         udevadm trigger --type=subsystems --action=add
-         udevadm trigger --type=devices --action=add
--        udevadm settle --timeout=30 || echo "udevadm settle failed"
-+        udevadm settle --timeout=$SETTLE_TIMEOUT || echo "udevadm settle failed"
-         echo "done"
-         ;;
-     stop)
+-NETWORK_MANAGER_OPENVPN_VERSION_MAJOR = 1.11
++NETWORK_MANAGER_OPENVPN_VERSION_MAJOR = 1.12
+ NETWORK_MANAGER_OPENVPN_VERSION = $(NETWORK_MANAGER_OPENVPN_VERSION_MAJOR).0
+ NETWORK_MANAGER_OPENVPN_SOURCE = NetworkManager-openvpn-$(NETWORK_MANAGER_OPENVPN_VERSION).tar.xz
+ NETWORK_MANAGER_OPENVPN_SITE = https://download.gnome.org/sources/NetworkManager-openvpn/$(NETWORK_MANAGER_OPENVPN_VERSION_MAJOR)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
