@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D849BCD37AA
-	for <buildroot@archiver.kernel.org>; Tue,  3 Sep 2024 18:38:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 858FECD37AC
+	for <buildroot@archiver.kernel.org>; Tue,  3 Sep 2024 18:38:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9086F40AF9;
-	Tue,  3 Sep 2024 18:38:44 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3FF5E40B07;
+	Tue,  3 Sep 2024 18:38:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6bWKdu64pjwQ; Tue,  3 Sep 2024 18:38:42 +0000 (UTC)
+ id LfaQ013aeqdP; Tue,  3 Sep 2024 18:38:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4497540AC4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B61A140AC4
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4497540AC4;
-	Tue,  3 Sep 2024 18:38:40 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B61A140AC4;
+	Tue,  3 Sep 2024 18:38:44 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 051611BF59C
- for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 18:38:15 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 132E51BF59C
+ for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 18:38:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1819940A1A
+ by smtp2.osuosl.org (Postfix) with ESMTP id D0AB140A22
  for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 18:38:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yBTgQSbZ4P84 for <buildroot@lists.busybox.net>;
- Tue,  3 Sep 2024 18:38:11 +0000 (UTC)
+ id HliBm7xb_QHB for <buildroot@lists.busybox.net>;
+ Tue,  3 Sep 2024 18:38:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6C14C40A25
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4A24840A1F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6C14C40A25
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4A24840A1F
  for <buildroot@buildroot.org>; Tue,  3 Sep 2024 18:38:10 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6647986ABC; Tue,  3 Sep 2024 18:38:10 +0000 (UTC)
+ id 4667680068; Tue,  3 Sep 2024 18:38:10 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 3 Sep 2024 20:34:59 +0200
+Date: Tue, 3 Sep 2024 20:25:07 +0200
 X-Git-Refname: refs/heads/2024.05.x
-X-Git-Oldrev: 935111fd263119d65771a0b8f0a16d372d0b6462
-X-Git-Newrev: 64cfac7087e38fffbf5a009e7c392cd80a1be753
+X-Git-Oldrev: e0fcc10522e9629260e6d58008170ca432b16396
+X-Git-Newrev: dc53c20200d5825df8fee19a6574af49fc2a1a90
 X-Patchwork-Hint: ignore
-Message-Id: <20240903183810.6647986ABC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.05.x] package/swaybg: bump to
- version 1.2.1
+Message-Id: <20240903183810.4667680068@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.05.x] package/libxml2: security
+ bump version to 2.12.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,44 +65,49 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=64cfac7087e38fffbf5a009e7c392cd80a1be753
+commit: https://git.buildroot.net/buildroot/commit/?id=dc53c20200d5825df8fee19a6574af49fc2a1a90
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.05.x
 
-See also: https://github.com/swaywm/swaybg/releases/tag/v1.2.1
+Fixes CVE-2024-34459 (2.12.7) & CVE-2024-40896.
 
-Signed-off-by: James Knight <james.d.knight@live.com>
+Release notes:
+https://download.gnome.org/sources/libxml2/2.12/libxml2-2.12.7.news
+https://download.gnome.org/sources/libxml2/2.12/libxml2-2.12.8.news
+https://download.gnome.org/sources/libxml2/2.12/libxml2-2.12.9.news
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 2143e8f8351c177d7fce87ccacba042afea94f93)
+(cherry picked from commit 45651cdb851bcd5af06bb94d824b078b03d4f187)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/swaybg/swaybg.hash | 5 +++--
- package/swaybg/swaybg.mk   | 2 +-
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ package/libxml2/libxml2.hash | 4 ++--
+ package/libxml2/libxml2.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/swaybg/swaybg.hash b/package/swaybg/swaybg.hash
-index 62bf048d61..e528349db9 100644
---- a/package/swaybg/swaybg.hash
-+++ b/package/swaybg/swaybg.hash
-@@ -1,3 +1,4 @@
--# Locally computed, tarball verified with GPG signature
--sha256  c0205b34f1fad94553b6cb2c2b983cc33186018026058cad0b841a00bc3087e3  swaybg-1.2.0.tar.gz
-+# Locally calculated after checking pgp signature:
-+# https://github.com/swaywm/swaybg/releases/download/v1.2.1/swaybg-1.2.1.tar.gz.sig
-+sha256  6af1fdf0e57b1cc5345febed786b761fea0e170943a82639f94cfaed7df84f8f  swaybg-1.2.1.tar.gz
- sha256  95224d118a325daf31828afcca98cd958d53f0a7cdd856b50b1be8ac44832faf  LICENSE
-diff --git a/package/swaybg/swaybg.mk b/package/swaybg/swaybg.mk
-index 90a8cb5d80..87374e035e 100644
---- a/package/swaybg/swaybg.mk
-+++ b/package/swaybg/swaybg.mk
-@@ -4,7 +4,7 @@
- #
+diff --git a/package/libxml2/libxml2.hash b/package/libxml2/libxml2.hash
+index 086bb41098..73fd0ecedf 100644
+--- a/package/libxml2/libxml2.hash
++++ b/package/libxml2/libxml2.hash
+@@ -1,4 +1,4 @@
+-# From https://download.gnome.org/sources/libxml2/2.12/libxml2-2.12.6.sha256sum
+-sha256  889c593a881a3db5fdd96cc9318c87df34eb648edfc458272ad46fd607353fbb  libxml2-2.12.6.tar.xz
++# From https://download.gnome.org/sources/libxml2/2.12/libxml2-2.12.9.sha256sum
++sha256  59912db536ab56a3996489ea0299768c7bcffe57169f0235e7f962a91f483590  libxml2-2.12.9.tar.xz
+ # License files, locally calculated
+ sha256  7fb0a66f3989f9bd5c7e5438a3de02cd4a7a47dde0aea2f7ea2ba2ff454ee6a4  Copyright
+diff --git a/package/libxml2/libxml2.mk b/package/libxml2/libxml2.mk
+index e7ed6fb752..b69722b21d 100644
+--- a/package/libxml2/libxml2.mk
++++ b/package/libxml2/libxml2.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--SWAYBG_VERSION = 1.2.0
-+SWAYBG_VERSION = 1.2.1
- SWAYBG_SITE = https://github.com/swaywm/swaybg/releases/download/v$(SWAYBG_VERSION)
- SWAYBG_LICENSE = MIT
- SWAYBG_LICENSE_FILES = LICENSE
+ LIBXML2_VERSION_MAJOR = 2.12
+-LIBXML2_VERSION = $(LIBXML2_VERSION_MAJOR).6
++LIBXML2_VERSION = $(LIBXML2_VERSION_MAJOR).9
+ LIBXML2_SOURCE = libxml2-$(LIBXML2_VERSION).tar.xz
+ LIBXML2_SITE = \
+ 	https://download.gnome.org/sources/libxml2/$(LIBXML2_VERSION_MAJOR)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
