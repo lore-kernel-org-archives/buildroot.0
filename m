@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F3108CD37AE
-	for <buildroot@archiver.kernel.org>; Tue,  3 Sep 2024 20:41:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04076CD37AE
+	for <buildroot@archiver.kernel.org>; Tue,  3 Sep 2024 20:41:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B057040167;
-	Tue,  3 Sep 2024 20:41:49 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A62FC4024A;
+	Tue,  3 Sep 2024 20:41:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AKqBv5_U1gvI; Tue,  3 Sep 2024 20:41:48 +0000 (UTC)
+ id 32vvJJgueuQO; Tue,  3 Sep 2024 20:41:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6F8C04024A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6A14B4028F
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6F8C04024A;
-	Tue,  3 Sep 2024 20:41:48 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 655601BF57B
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6A14B4028F;
+	Tue,  3 Sep 2024 20:41:51 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 974C61BF57B
  for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 20:41:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 51D4480ED5
+ by smtp3.osuosl.org (Postfix) with ESMTP id 855B5606E3
  for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 20:41:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ikhKgpk0R41G for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id m92xQ1R5C0Gb for <buildroot@lists.busybox.net>;
  Tue,  3 Sep 2024 20:41:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9134D80EB9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C054E60687
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9134D80EB9
+ by smtp3.osuosl.org (Postfix) with ESMTP id C054E60687
  for <buildroot@buildroot.org>; Tue,  3 Sep 2024 20:41:46 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7EF7186CAE; Tue,  3 Sep 2024 20:41:46 +0000 (UTC)
+ id BA37686CAF; Tue,  3 Sep 2024 20:41:46 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 3 Sep 2024 22:30:46 +0200
+Date: Tue, 3 Sep 2024 22:38:48 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 90cd6b3574b9425b0534e11a199331a0950b8856
-X-Git-Newrev: 1c5b296c5e3197aa5a7200616887e6a0c5fabab9
+X-Git-Oldrev: 726588f81cb3a8687b3b350e5aae006fde90fa59
+X-Git-Newrev: 2266def7d0079d827c72f75eb9683a76b262c43a
 X-Patchwork-Hint: ignore
-Message-Id: <20240903204146.7EF7186CAE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/cryptsetup: bump
- version to 2.7.3
+Message-Id: <20240903204146.BA37686CAF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/mjpg-streamer:
+ fix undefined symbol error
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,41 +65,63 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1c5b296c5e3197aa5a7200616887e6a0c5fabab9
+commit: https://git.buildroot.net/buildroot/commit/?id=2266def7d0079d827c72f75eb9683a76b262c43a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Fixes runtime error:
+
+    dlopen: /usr/lib/mjpg-streamer/input_uvc.so: undefined symbol: resolutions_help
+
+Patch was suggested by Thomas:
+http://lists.busybox.net/pipermail/buildroot/2024-August/759732.html
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 7c56e71b46007bc1d70e9c13267109abe4776f49)
+(cherry picked from commit fdbc8d97cb166ce721df96acda6d291f6f2c4aa9)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/cryptsetup/cryptsetup.hash | 2 +-
- package/cryptsetup/cryptsetup.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...xport-all-symbols-of-mjpg_streamer-binary.patch | 33 ++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
 
-diff --git a/package/cryptsetup/cryptsetup.hash b/package/cryptsetup/cryptsetup.hash
-index 531432aaaf..dfee537a4a 100644
---- a/package/cryptsetup/cryptsetup.hash
-+++ b/package/cryptsetup/cryptsetup.hash
-@@ -1,4 +1,4 @@
- # From https://www.kernel.org/pub/linux/utils/cryptsetup/v2.7/sha256sums.asc
--sha256  da5d1419e2a86e01aa32fd79582cd54d208857cb541bca2fd426a5ff1aaabbc3  cryptsetup-2.7.1.tar.xz
-+sha256  b772ae4f6df0cee7200b28cea960e4daaff2a203d2fd502beab3c1317b07a456  cryptsetup-2.7.3.tar.xz
- sha256  45670cce8b6a0ddd66c8016cd8ccef6cd71f35717cbacc7f1e895b3855207b33  COPYING
- sha256  8c33cc37871654ec7ed87e6fbb896c8cf33ef5ef05b1611a5aed857596ffafa5  COPYING.LGPL
-diff --git a/package/cryptsetup/cryptsetup.mk b/package/cryptsetup/cryptsetup.mk
-index b15f458576..d5046d9943 100644
---- a/package/cryptsetup/cryptsetup.mk
-+++ b/package/cryptsetup/cryptsetup.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- CRYPTSETUP_VERSION_MAJOR = 2.7
--CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).1
-+CRYPTSETUP_VERSION = $(CRYPTSETUP_VERSION_MAJOR).3
- CRYPTSETUP_SOURCE = cryptsetup-$(CRYPTSETUP_VERSION).tar.xz
- CRYPTSETUP_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/cryptsetup/v$(CRYPTSETUP_VERSION_MAJOR)
- CRYPTSETUP_DEPENDENCIES = \
+diff --git a/package/mjpg-streamer/0001-Export-all-symbols-of-mjpg_streamer-binary.patch b/package/mjpg-streamer/0001-Export-all-symbols-of-mjpg_streamer-binary.patch
+new file mode 100644
+index 0000000000..771ee83832
+--- /dev/null
++++ b/package/mjpg-streamer/0001-Export-all-symbols-of-mjpg_streamer-binary.patch
+@@ -0,0 +1,33 @@
++From fbde1593948ae95f287b2167d0bec5b27948cc01 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Date: Tue, 6 Aug 2024 17:04:55 +0200
++Subject: [PATCH] Export all symbols of mjpg_streamer binary
++
++Fixes runtime error with stripped binary
++
++    dlopen: /usr/lib/mjpg-streamer/input_uvc.so: undefined symbol: resolutions_help
++
++Source: http://lists.busybox.net/pipermail/buildroot/2024-August/759732.html
++
++Upstream: https://github.com/jacksonliam/mjpg-streamer/pull/401
++
++Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
++---
++ mjpg-streamer-experimental/CMakeLists.txt | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/mjpg-streamer-experimental/CMakeLists.txt b/mjpg-streamer-experimental/CMakeLists.txt
++index cf26620..3ff12cd 100644
++--- a/mjpg-streamer-experimental/CMakeLists.txt
+++++ b/mjpg-streamer-experimental/CMakeLists.txt
++@@ -92,6 +92,7 @@ set (CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
++ add_executable(mjpg_streamer mjpg_streamer.c
++                              utils.c)
++ 
+++set_property(TARGET mjpg_streamer PROPERTY ENABLE_EXPORTS ON)
++ target_link_libraries(mjpg_streamer pthread dl)
++ install(TARGETS mjpg_streamer DESTINATION bin)
++ 
++-- 
++2.39.2
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
