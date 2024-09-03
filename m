@@ -4,62 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BDCCCCD37AA
-	for <buildroot@archiver.kernel.org>; Tue,  3 Sep 2024 20:38:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C74FCD37AC
+	for <buildroot@archiver.kernel.org>; Tue,  3 Sep 2024 20:38:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 72D244024A;
-	Tue,  3 Sep 2024 20:38:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 237CF402A7;
+	Tue,  3 Sep 2024 20:38:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MomTEdDIncru; Tue,  3 Sep 2024 20:38:28 +0000 (UTC)
+ id MZJH7fkf8S3M; Tue,  3 Sep 2024 20:38:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 305644026A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 05C29402C5
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 305644026A;
-	Tue,  3 Sep 2024 20:38:28 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 13B7B1BF57B
- for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 20:38:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 05C29402C5;
+	Tue,  3 Sep 2024 20:38:37 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 29ACE1BF57B
+ for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 20:38:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 00D074026A
- for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 20:38:27 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1788760680
+ for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 20:38:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sAt_NoDiritg for <buildroot@lists.busybox.net>;
- Tue,  3 Sep 2024 20:38:26 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.197;
- helo=relay5-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5-r3wZVHen8P for <buildroot@lists.busybox.net>;
+ Tue,  3 Sep 2024 20:38:34 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 0690F4024A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0690F4024A
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0690F4024A
- for <buildroot@buildroot.org>; Tue,  3 Sep 2024 20:38:25 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 07A441C0002;
- Tue,  3 Sep 2024 20:38:23 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1slaIB-00634w-1F;
- Tue, 03 Sep 2024 22:38:23 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
-To: =?utf-8?Q?Jos=C3=A9?= Luis Salvador Rufo <salvador.joseluis@gmail.com>
-References: <20240807120619.66304f2e@windsurf>
- <20240808160606.60188-3-salvador.joseluis@gmail.com>
-Date: Tue, 03 Sep 2024 22:38:23 +0200
-In-Reply-To: <20240808160606.60188-3-salvador.joseluis@gmail.com>
- (=?utf-8?Q?=22Jos=C3=A9?= Luis
- Salvador Rufo"'s message of "Thu, 8 Aug 2024 18:06:07 +0200")
-Message-ID: <87plpkjww0.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH v3 1/2] package/zfs: replace wip patch by
- upstream patch
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 483F560679
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 483F560679
+ for <buildroot@buildroot.org>; Tue,  3 Sep 2024 20:38:34 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 337FF86C68; Tue,  3 Sep 2024 20:38:34 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 3 Sep 2024 22:38:09 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: 1b753a3c14df48f0bb36d4d9e45d98b8f94e82df
+X-Git-Newrev: a1a638f14cb3d61867e8ba7536361fc47df5289a
+X-Patchwork-Hint: ignore
+Message-Id: <20240903203834.337FF86C68@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] arch/Config.in.m68k: Add an
+ option for 68030
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,28 +58,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Alexander Mukhin <alexander.i.mukhin@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Pj4+Pj4gIkpvc8OpIiA9PSBKb3PDqSBMdWlzIFNhbHZhZG9yIFJ1Zm8gPHNhbHZhZG9yLmpvc2Vs
-dWlzQGdtYWlsLmNvbT4gd3JpdGVzOgoKID4gU2lnbmVkLW9mZi1ieTogSm9zw6kgTHVpcyBTYWx2
-YWRvciBSdWZvIDxzYWx2YWRvci5qb3NlbHVpc0BnbWFpbC5jb20+CiA+IC0tLQogPiBDaGFuZ2Vz
-IHYyIC0+IHYzOgogPiAgICAgLSBBZGRlZCBTaWduZWQtb2ZmLWJ5IChzdWdnZXN0ZWQgYnkgVGhv
-bWFzIFBldGF6em9uaSkKID4gQ2hhbmdlcyB2MSAtPiB2MjoKID4gICAgIC0gUmVtb3ZlZCBaRlNf
-QVVUT1JFQ09ORiAoc3VnZ2VzdGVkIGJ5IEJhcnVjaCBTaWFjaCkKCiA+IC4uLmxsLWZpeC1mb3It
-U0VFS19EQVRBLVNFRUtfSE9MRS10ZXN0cy5wYXRjaCB8ICA3MCArKysrKysrKwogPiAgLi4ucy1p
-Z25vcmUtaWYtU0VFS19EQVRBLWlzLW5vdC1kZWZpbmVkLnBhdGNoIHwgMTYyIC0tLS0tLS0tLS0t
-LS0tLS0tLQogPiAgcGFja2FnZS96ZnMvemZzLm1rICAgICAgICAgICAgICAgICAgICAgICAgICAg
-IHwgICAzIC0KID4gIDMgZmlsZXMgY2hhbmdlZCwgNzAgaW5zZXJ0aW9ucygrKSwgMTY1IGRlbGV0
-aW9ucygtKQogPiAgY3JlYXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvemZzLzAwMDEtWlRTLXNtYWxs
-LWZpeC1mb3ItU0VFS19EQVRBLVNFRUtfSE9MRS10ZXN0cy5wYXRjaAogPiAgZGVsZXRlIG1vZGUg
-MTAwNjQ0IHBhY2thZ2UvemZzLzAwMDEtdGVzdHMtY3BfZmlsZXMtaWdub3JlLWlmLVNFRUtfREFU
-QS1pcy1ub3QtZGVmaW5lZC5wYXRjaAoKQ29tbWl0dGVkIHRvIDIwMjQuMDIueCBhbmQgMjAyNC4w
-NS54LCB0aGFua3MuCgotLSAKQnllLCBQZXRlciBLb3JzZ2FhcmQKX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWls
-ZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9s
-aXN0aW5mby9idWlsZHJvb3QK
+commit: https://git.buildroot.net/buildroot/commit/?id=a1a638f14cb3d61867e8ba7536361fc47df5289a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
+Buildroot is probably the only thing lightweight enough to run on
+68030 machines in the current day.
+
+Add a CPU option for the 68030.
+
+Tested on a Motorola MVME147.
+
+Signed-off-by: Daniel Palmer <daniel@0x0f.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ arch/Config.in.m68k | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/arch/Config.in.m68k b/arch/Config.in.m68k
+index 9fd22aaf1e..235cafacf5 100644
+--- a/arch/Config.in.m68k
++++ b/arch/Config.in.m68k
+@@ -23,6 +23,11 @@ choice
+ 	help
+ 	  Specific CPU variant to use
+ 
++config BR2_m68k_68030
++	bool "68030"
++	select BR2_m68k_m68k
++	select BR2_USE_MMU
++
+ config BR2_m68k_68040
+ 	bool "68040"
+ 	select BR2_m68k_m68k
+@@ -36,6 +41,7 @@ config BR2_m68k_cf5208
+ endchoice
+ 
+ config BR2_GCC_TARGET_CPU
++	default "68030"		if BR2_m68k_68030
+ 	default "68040"		if BR2_m68k_68040
+ 	default "5208"		if BR2_m68k_cf5208
+ 
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
