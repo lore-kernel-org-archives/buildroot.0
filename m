@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 920A0E6FE46
-	for <buildroot@archiver.kernel.org>; Fri,  6 Sep 2024 20:03:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA986CE7B11
+	for <buildroot@archiver.kernel.org>; Fri,  6 Sep 2024 20:03:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 61E5B8481C;
-	Fri,  6 Sep 2024 20:03:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9634584821;
+	Fri,  6 Sep 2024 20:03:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 66tvOVS_pvul; Fri,  6 Sep 2024 20:03:08 +0000 (UTC)
+ id RVAR2KZejFbM; Fri,  6 Sep 2024 20:03:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C923B84807
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 44E6D84823
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C923B84807;
-	Fri,  6 Sep 2024 20:03:07 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E27BF1BF20B
- for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 19:59:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 44E6D84823;
+	Fri,  6 Sep 2024 20:03:11 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 1FFFB1BF20B
+ for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 19:59:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 187016077B
+ by smtp4.osuosl.org (Postfix) with ESMTP id BE17240B9F
  for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 19:58:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5CttxiBvq5mP for <buildroot@lists.busybox.net>;
- Fri,  6 Sep 2024 19:58:53 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4aIu-_kzukwF for <buildroot@lists.busybox.net>;
+ Fri,  6 Sep 2024 19:58:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 11BC1606EB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1C44C409E3
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 11BC1606EB
- for <buildroot@buildroot.org>; Fri,  6 Sep 2024 19:58:53 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1C44C409E3
+ for <buildroot@buildroot.org>; Fri,  6 Sep 2024 19:58:58 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0D52686EE3; Fri,  6 Sep 2024 19:58:53 +0000 (UTC)
+ id 199C9869F2; Fri,  6 Sep 2024 19:58:58 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 12 Aug 2024 22:52:31 +0200
+Date: Tue, 3 Sep 2024 21:20:57 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 800a033f7818a7799d4997aba28b9f8f5999871b
-X-Git-Newrev: 5219cd2a4da5576928f643f6c546db06cefcc40a
+X-Git-Oldrev: e0ed05cc007eed630dd44b7f129903a76fab6981
+X-Git-Newrev: 2245396b20db0c658323e16886a65ba2215dc9a7
 X-Patchwork-Hint: ignore
-Message-Id: <20240906195853.0D52686EE3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/binutils: make 2.42 the default
- version
+Message-Id: <20240906195858.199C9869F2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] board/radxa/rock5b: use gpt partition
+ table instead of hybrid
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,45 +66,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5219cd2a4da5576928f643f6c546db06cefcc40a
+commit: https://git.buildroot.net/buildroot/commit/?id=2245396b20db0c658323e16886a65ba2215dc9a7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Now that 2.43 has been introduced, let's make 2.42 the latest version,
-following the traditional Buildroot policy.
+Partition table hybrid means GPT + MBR.
+There is no need to keep the MBR when using GPT, so migrate to GPT only.
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+This change also requires us to migrate from partition-type to
+partition-type-uuid, otherwise genimage won't generate an image.
+
+Note that GPT itself always writes a "protective MBR" at LBA 0.
+
+Signed-off-by: Niklas Cassel <cassel@kernel.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/binutils/Config.in.host | 2 +-
- package/binutils/binutils.mk    | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ board/radxa/rock5b/genimage.cfg | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/binutils/Config.in.host b/package/binutils/Config.in.host
-index 9e1ed6353f..007728321c 100644
---- a/package/binutils/Config.in.host
-+++ b/package/binutils/Config.in.host
-@@ -7,7 +7,7 @@ config BR2_PACKAGE_HOST_BINUTILS_SUPPORTS_CFI
+diff --git a/board/radxa/rock5b/genimage.cfg b/board/radxa/rock5b/genimage.cfg
+index 138ec26e3a..43bb65bdd9 100644
+--- a/board/radxa/rock5b/genimage.cfg
++++ b/board/radxa/rock5b/genimage.cfg
+@@ -2,7 +2,7 @@
  
- choice
- 	prompt "Binutils Version"
--	default BR2_BINUTILS_VERSION_2_41_X if !BR2_arc
-+	default BR2_BINUTILS_VERSION_2_42_X if !BR2_arc
- 	default BR2_BINUTILS_VERSION_ARC if BR2_arc
- 	help
- 	  Select the version of binutils you wish to use.
-diff --git a/package/binutils/binutils.mk b/package/binutils/binutils.mk
-index d98dd7b830..3d1f77c8c4 100644
---- a/package/binutils/binutils.mk
-+++ b/package/binutils/binutils.mk
-@@ -11,7 +11,7 @@ ifeq ($(BINUTILS_VERSION),)
- ifeq ($(BR2_arc),y)
- BINUTILS_VERSION = arc-2023.09-release
- else
--BINUTILS_VERSION = 2.41
-+BINUTILS_VERSION = 2.42
- endif
- endif # BINUTILS_VERSION
+ image sdcard.img {
+ 	hdimage {
+-		partition-table-type = "hybrid"
++		partition-table-type = "gpt"
+ 	}
  
+ 	partition uboot {
+@@ -12,7 +12,7 @@ image sdcard.img {
+ 	}
+ 
+ 	partition rootfs {
+-		partition-type = 0x83
++		partition-type-uuid = L
+ 		image = "rootfs.ext2"
+ 	}
+ }
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
