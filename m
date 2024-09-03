@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8F61CCD3440
-	for <buildroot@archiver.kernel.org>; Tue,  3 Sep 2024 21:15:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 45A1DCD3440
+	for <buildroot@archiver.kernel.org>; Tue,  3 Sep 2024 21:15:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5A78A403DB;
-	Tue,  3 Sep 2024 21:15:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0C27D404D6;
+	Tue,  3 Sep 2024 21:15:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id P79HtROR2_It; Tue,  3 Sep 2024 21:15:09 +0000 (UTC)
+ id REKgMYx6qCjF; Tue,  3 Sep 2024 21:15:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C9A3F4042E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 75105404A3
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C9A3F4042E;
-	Tue,  3 Sep 2024 21:15:08 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 75105404A3;
+	Tue,  3 Sep 2024 21:15:11 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6F6FF1BF95C
- for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 21:14:51 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 9470D1BF48B
+ for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 21:14:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6611D40182
- for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 21:14:50 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7EED640182
+ for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 21:14:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rFdRKE2Yc_YS for <buildroot@lists.busybox.net>;
+ id 6W385tdLck1O for <buildroot@lists.busybox.net>;
  Tue,  3 Sep 2024 21:14:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6A9D3402F6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 46B0940198
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6A9D3402F6
+ by smtp2.osuosl.org (Postfix) with ESMTP id 46B0940198
  for <buildroot@buildroot.org>; Tue,  3 Sep 2024 21:14:49 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 56E6180E4F; Tue,  3 Sep 2024 21:14:49 +0000 (UTC)
+ id 3228A86D34; Tue,  3 Sep 2024 21:14:49 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 3 Sep 2024 23:14:11 +0200
+Date: Tue, 3 Sep 2024 23:14:07 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: fe2b0ad4595db98babd0f513b6dfa7a879bbe684
-X-Git-Newrev: 410995b7120b42790934ad35cf7656ade30d8539
+X-Git-Oldrev: 6016dad5cfbaa93d4acbf4edcc709d81bb6e5148
+X-Git-Newrev: 4e9ef05b2ef85ab746a982c3663b80b2c94b5b53
 X-Patchwork-Hint: ignore
-Message-Id: <20240903211449.56E6180E4F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/skopeo: needs CGO
+Message-Id: <20240903211449.3228A86D34@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/delve: needs CGO
  linking for host
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -66,29 +66,33 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=410995b7120b42790934ad35cf7656ade30d8539
+commit: https://git.buildroot.net/buildroot/commit/?id=4e9ef05b2ef85ab746a982c3663b80b2c94b5b53
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-Fixes: http://autobuild.buildroot.org/results/35e/35ec43c0970f001e422d0b2ca6f8319deea2cde4/
+The target variant depends on CGO linking, so propagate it to the host
+variant as well.
+
+Fixes: http://autobuild.buildroot.org/results/530/530e95c3b1f8dd0494075735a401be89e0cb9938/
 
 Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
+Cc: Christian Stewart <christian@aperture.us>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/skopeo/Config.in.host | 1 +
+ package/delve/Config.in.host | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/package/skopeo/Config.in.host b/package/skopeo/Config.in.host
-index b3a1c155f7..334a12b6fc 100644
---- a/package/skopeo/Config.in.host
-+++ b/package/skopeo/Config.in.host
+diff --git a/package/delve/Config.in.host b/package/delve/Config.in.host
+index 0938ab0659..305198f1ab 100644
+--- a/package/delve/Config.in.host
++++ b/package/delve/Config.in.host
 @@ -1,6 +1,7 @@
- config BR2_PACKAGE_HOST_SKOPEO
- 	bool "host skopeo"
+ config BR2_PACKAGE_HOST_DELVE
+ 	bool "host delve"
  	depends on BR2_PACKAGE_HOST_GO_HOST_ARCH_SUPPORTS
 +	depends on BR2_PACKAGE_HOST_GO_HOST_CGO_LINKING_SUPPORTS
+ 	select BR2_PACKAGE_HOST_GO
  	help
- 	  skopeo is a command line utility that performs various
- 	  operations on container images and image repositories.
+ 	  Delve is a debugger for the Go programming language.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
