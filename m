@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 824D3CD37AA
-	for <buildroot@archiver.kernel.org>; Tue,  3 Sep 2024 19:51:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4CF80CD37AA
+	for <buildroot@archiver.kernel.org>; Tue,  3 Sep 2024 19:52:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 51EE1607C1;
-	Tue,  3 Sep 2024 19:51:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0060160833;
+	Tue,  3 Sep 2024 19:52:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PZdHROMfc69S; Tue,  3 Sep 2024 19:51:57 +0000 (UTC)
+ id FaNlZg9PwRB1; Tue,  3 Sep 2024 19:51:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 65BB8607C3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6EB6D607FC
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 65BB8607C3;
-	Tue,  3 Sep 2024 19:51:57 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 6EDD51BF344
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6EB6D607FC;
+	Tue,  3 Sep 2024 19:51:59 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id A89781BF344
  for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 19:51:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5C97B607C3
+ by smtp2.osuosl.org (Postfix) with ESMTP id 95B6A40198
  for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 19:51:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nRpXtk3NcTyr for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zSgf6ZBE3R5e for <buildroot@lists.busybox.net>;
  Tue,  3 Sep 2024 19:51:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9B438607C1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7769440109
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9B438607C1
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7769440109
  for <buildroot@buildroot.org>; Tue,  3 Sep 2024 19:51:55 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 85A1686BE1; Tue,  3 Sep 2024 19:51:55 +0000 (UTC)
+ id 6CAD486BE0; Tue,  3 Sep 2024 19:51:55 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 3 Sep 2024 21:51:28 +0200
+Date: Tue, 3 Sep 2024 21:51:18 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: f0d9f976e5a9bce04d737f981c902615eb2083d3
-X-Git-Newrev: c7c2aa477fe9b70bfa9ddcd52c0d27a96b7fdec6
+X-Git-Oldrev: 9ed8b8769534761b04445718acd3d3ec36c1bfdf
+X-Git-Newrev: f0d9f976e5a9bce04d737f981c902615eb2083d3
 X-Patchwork-Hint: ignore
-Message-Id: <20240903195155.85A1686BE1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] configs/pine64: bump TF-A
- version to 2.10.5
+Message-Id: <20240903195155.6CAD486BE0@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] configs/pine64: bump U-Boot
+ version to 2024.07
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,30 +66,83 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c7c2aa477fe9b70bfa9ddcd52c0d27a96b7fdec6
+commit: https://git.buildroot.net/buildroot/commit/?id=f0d9f976e5a9bce04d737f981c902615eb2083d3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+
+Update U-Boot to fix the following error when building with
+python-setuptools >= 69, that is, since 6b62384e3d
+("package/python-setuptools: bump to version 69.0.3"):
+
+  packaging.version.InvalidVersion: Invalid version: 'u-boot-2019.01'
+  make[5]: *** [scripts/dtc/pylibfdt/Makefile:27: scripts/dtc/pylibfdt/_libfdt.so] Error 1
+  make[4]: *** [scripts/Makefile.build:434: scripts/dtc/pylibfdt] Error 2
+  make[4]: *** Waiting for unfinished jobs....
+  make[3]: *** [scripts/Makefile.build:434: scripts/dtc] Error 2
+  make[2]: *** [Makefile:508: scripts] Error 2
+  make[1]: *** [package/pkg-generic.mk:289: output/build/uboot-2019.01/.stamp_built] Error 2
+  make: *** [Makefile:83: _all] Error 2
+
+Use SPL and U-Boot FIT image combined into u-boot-sunxi-with-spl.bin.
+
+Do not use the optional System Control Processor (SCP) firmware pointing
+the SCP env variable to /dev/null.
 
 Signed-off-by: Mattia Narducci <mattianarducci1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- configs/pine64_defconfig | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ board/pine64/pine64/genimage.cfg | 12 +++---------
+ configs/pine64_defconfig         |  8 ++++----
+ 2 files changed, 7 insertions(+), 13 deletions(-)
 
+diff --git a/board/pine64/pine64/genimage.cfg b/board/pine64/pine64/genimage.cfg
+index 06b4ed1056..3555869036 100644
+--- a/board/pine64/pine64/genimage.cfg
++++ b/board/pine64/pine64/genimage.cfg
+@@ -14,17 +14,11 @@ image sdcard.img {
+ 	hdimage {
+ 	}
+ 
+-	partition spl {
+-		in-partition-table = "no"
+-		image = "sunxi-spl.bin"
+-		offset = 8K
+-	}
+-
+ 	partition u-boot {
+ 		in-partition-table = "no"
+-		image = "u-boot.itb"
+-		offset = 40K
+-		size = 1M # 1MB - 40KB
++		image = "u-boot-sunxi-with-spl.bin"
++		offset = 8K
++		size = 1016K # 1MB - 8KB
+ 	}
+ 
+ 	partition boot {
 diff --git a/configs/pine64_defconfig b/configs/pine64_defconfig
-index a6ddf6e57b..fb3a468f2d 100644
+index c454114d2a..a6ddf6e57b 100644
 --- a/configs/pine64_defconfig
 +++ b/configs/pine64_defconfig
-@@ -8,9 +8,8 @@ BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_0=y
- # Firmware
- BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="v2.7"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="lts-v2.10.5"
- BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="sun50i_a64"
--BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
- 
- # Bootloader
+@@ -16,15 +16,15 @@ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
  BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2019.01"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.07"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="pine64_plus"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
+ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
++BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+ BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
+-BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+-BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot.itb"
+ BR2_TARGET_UBOOT_SPL=y
+-BR2_TARGET_UBOOT_SPL_NAME="spl/sunxi-spl.bin"
++BR2_TARGET_UBOOT_SPL_NAME="u-boot-sunxi-with-spl.bin"
++BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS="SCP=/dev/null"
+ BR2_PACKAGE_HOST_UBOOT_TOOLS=y
+ BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT=y
+ BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE="board/pine64/pine64/boot.cmd"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
