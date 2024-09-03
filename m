@@ -4,72 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9216ACD343F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Sep 2024 21:02:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8E68CD3440
+	for <buildroot@archiver.kernel.org>; Tue,  3 Sep 2024 21:04:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 55974401B1;
-	Tue,  3 Sep 2024 21:02:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8A840401E4;
+	Tue,  3 Sep 2024 21:04:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yYTdvfOO_Y8S; Tue,  3 Sep 2024 21:02:28 +0000 (UTC)
+ id 7veK7Ds9Wr8A; Tue,  3 Sep 2024 21:04:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 303A6401E4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 58053401E7
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 303A6401E4;
-	Tue,  3 Sep 2024 21:02:28 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 744E61BF57B
- for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 21:02:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 58053401E7;
+	Tue,  3 Sep 2024 21:04:34 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 5F33D1BF48B
+ for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 21:04:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 61633606E3
- for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 21:02:27 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 220EA8002A
+ for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 21:04:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SASjRbpccIYO for <buildroot@lists.busybox.net>;
- Tue,  3 Sep 2024 21:02:26 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::229;
- helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pXY5z9u2FZ8M for <buildroot@lists.busybox.net>;
+ Tue,  3 Sep 2024 21:04:31 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org CB3456058D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CB3456058D
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp3.osuosl.org (Postfix) with ESMTPS id CB3456058D
- for <buildroot@buildroot.org>; Tue,  3 Sep 2024 21:02:25 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 03BDDFF804;
- Tue,  3 Sep 2024 21:02:22 +0000 (UTC)
-Date: Tue, 3 Sep 2024 23:02:22 +0200
-To: Petr Vorel <petr.vorel@gmail.com>
-Message-ID: <20240903230222.0019371b@windsurf>
-In-Reply-To: <20240902181743.528003-1-petr.vorel@gmail.com>
-References: <20240902181743.528003-1-petr.vorel@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1725397343;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=/Q4w3A4AiZhMKlZ2k4oVoQTn9P/ecqr+xkSZVLczIzY=;
- b=hKCr4KlWxF/sboOV0uByQY9+JH9nQvZW4cLUsMP4/CoryJzd34eUvpQVu0q6dRV2dHmOhn
- RyZK88ut7aFQPKLBJuDMnQWwSoShXpkwdcOqSLU1MbuM1MgMJc2a/U4GgnsdkRyE5TehI6
- 5PzhTCpiipYF8RaXBcmrVCYbU2kEk4wzTUZJl+PQ0ctaCSn9v6SHsWDP/qjSKoFbkYYLYH
- cmQpa1ujv3ajftfkfdKyAQ5IOKmnBxZOTTMPihFUpQ+l5/rI9ev5FTd+ZRsTMFp0CCj441
- 9/SU82WbN2rPxTVF3CiYSbLEXQsRvfikJNongbCJlPlA8q+As55xLY1guy/A9Q==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=hKCr4KlW
-Subject: Re: [Buildroot] [PATCH 1/1] package/ima-evm-utils: bump version to
- 1.6.2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 679F780DA1
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 679F780DA1
+ for <buildroot@buildroot.org>; Tue,  3 Sep 2024 21:04:31 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 527DC86CE9; Tue,  3 Sep 2024 21:04:31 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 3 Sep 2024 23:03:44 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: 88c7ef62df7bf266fcd070e2b24c9dea0db1e5e7
+X-Git-Newrev: 3c811d67042006b6afb16b2c9229dec1ebf19793
+X-Patchwork-Hint: ignore
+Message-Id: <20240903210431.527DC86CE9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/libgpiod: bump to
+ version 1.6.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,29 +60,45 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon,  2 Sep 2024 20:17:42 +0200
-Petr Vorel <petr.vorel@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=3c811d67042006b6afb16b2c9229dec1ebf19793
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> This version also reintroduced COPYING COPYING.LGPL, therefore add them
-> to IMA_EVM_UTILS_LICENSE_FILES.
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libgpiod/libgpiod.hash | 2 +-
+ package/libgpiod/libgpiod.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-It would have been good to explain here why the LICENSES.txt file gets
-changed (since you change its hash).
-
-I fixed that up with an explanation (after diffing the file
-before/after), and applied to next. Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libgpiod/libgpiod.hash b/package/libgpiod/libgpiod.hash
+index 6647b77c5a..969ff4b8fa 100644
+--- a/package/libgpiod/libgpiod.hash
++++ b/package/libgpiod/libgpiod.hash
+@@ -1,4 +1,4 @@
+ # From https://www.kernel.org/pub/software/libs/libgpiod/sha256sums.asc
+-sha256  7b146e12f28fbca3df7557f176eb778c5ccf952ca464698dba8a61b2e1e3f9b5  libgpiod-1.6.4.tar.xz
++sha256  ae280f697bf035a1fb780c9972e5c81d0d2712b7ab6124fb3fba24619daa72bc  libgpiod-1.6.5.tar.xz
+ # Hash for license file
+ sha256  ce64d5f7b49ea6d80fdb6d4cdee6839d1a94274f7493dc797c3b55b65ec8e9ed  COPYING
+diff --git a/package/libgpiod/libgpiod.mk b/package/libgpiod/libgpiod.mk
+index e7ff155618..f669643b39 100644
+--- a/package/libgpiod/libgpiod.mk
++++ b/package/libgpiod/libgpiod.mk
+@@ -6,7 +6,7 @@
+ 
+ # Be careful when bumping versions.
+ # Dependency on kernel header versions may change.
+-LIBGPIOD_VERSION = 1.6.4
++LIBGPIOD_VERSION = 1.6.5
+ LIBGPIOD_SOURCE = libgpiod-$(LIBGPIOD_VERSION).tar.xz
+ LIBGPIOD_SITE = https://www.kernel.org/pub/software/libs/libgpiod
+ LIBGPIOD_LICENSE = LGPL-2.1+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
