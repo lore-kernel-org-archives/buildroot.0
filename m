@@ -4,75 +4,95 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7690ACD37AC
-	for <buildroot@archiver.kernel.org>; Tue,  3 Sep 2024 20:19:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A53E1CD37AA
+	for <buildroot@archiver.kernel.org>; Tue,  3 Sep 2024 20:22:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CF7D560683;
-	Tue,  3 Sep 2024 20:19:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2EFBB60680;
+	Tue,  3 Sep 2024 20:22:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mtBB2ShbGakR; Tue,  3 Sep 2024 20:19:44 +0000 (UTC)
+ id ZO2UGkZvzwC0; Tue,  3 Sep 2024 20:22:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8C6F7606E3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 26E196072A
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8C6F7606E3;
-	Tue,  3 Sep 2024 20:19:44 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0EC131BF57B
- for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 20:19:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 26E196072A;
+	Tue,  3 Sep 2024 20:22:04 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 5FFB11BF57B
+ for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 20:22:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id F05698086A
- for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 20:19:42 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 549366072A
+ for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 20:22:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UnYrLiCxM_oA for <buildroot@lists.busybox.net>;
- Tue,  3 Sep 2024 20:19:41 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
- helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org AEB0F8056A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AEB0F8056A
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
- by smtp1.osuosl.org (Postfix) with ESMTPS id AEB0F8056A
- for <buildroot@buildroot.org>; Tue,  3 Sep 2024 20:19:41 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 88A8C13F86A;
- Tue,  3 Sep 2024 22:19:35 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Tue, 03 Sep 2024 22:19:35 +0200
-Date: Tue, 3 Sep 2024 22:19:35 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Message-ID: <ZtdvV89dTxIaB7aE@landeda>
-References: <20240810215624.482529-1-thomas.petazzoni@bootlin.com>
- <20240810215624.482529-6-thomas.petazzoni@bootlin.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3mEyFii71f_9 for <buildroot@lists.busybox.net>;
+ Tue,  3 Sep 2024 20:22:01 +0000 (UTC)
+Received-SPF: None (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::42d; helo=mail-pf1-x42d.google.com;
+ envelope-from=flavio.tapajos@newtesc.com.br; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org B106760680
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B106760680
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com
+ [IPv6:2607:f8b0:4864:20::42d])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id B106760680
+ for <buildroot@buildroot.org>; Tue,  3 Sep 2024 20:22:00 +0000 (UTC)
+Received: by mail-pf1-x42d.google.com with SMTP id
+ d2e1a72fcca58-714302e7285so5224441b3a.2
+ for <buildroot@buildroot.org>; Tue, 03 Sep 2024 13:22:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1725394919; x=1725999719;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=ejNMc9V8Jw830V2gt4RS7UwfdaMh2D+6MhwqURPvhvU=;
+ b=Dki5jogQVXmQVVE/0XecC6aagbvMnaKV23HWqigApchBTcWUV8oqNjy0rF32qR5G9Q
+ tEbmekdCKAwliDojK2H7LMJM0927KYS1xgarxTZpm2unDKHyNmZlDkyI9LMN5EKPwFEg
+ 3Ly+ri4RVu8IwvNn+qUOHG+RU6RdCGTBnilQdvhvsMejOv+uaFogr/qTKOJKc4UDbwmI
+ I15yrki+iaNiGmdFn4xPZiS6cpE7WpjagbEDyCwcLbk3eoTnBgybMGPYwEF6aV6CB9mL
+ 11snaALk9YzVCCiQ+sQUUAj/6LSNeNgpQsnV//Qic9itHsOCLjPfBKBweMbkJ2kVRXWZ
+ Rz6w==
+X-Gm-Message-State: AOJu0YxaV3VVw77tWw0CdCO9NFxs/okfNcFy6VrOj8gzl8e5r2yB24k/
+ oPAk6/zzSHoGWNflCBjp74vcazLbgxDFnTMHPvA4x+w+6fhc5lclJB9WBU1ajNZM/gfgIkAoSFv
+ odfo=
+X-Google-Smtp-Source: AGHT+IELbjLArTdyxsOQnv0b3WFlIVtsee6WxCQxGijUz927ZqTHdddiH00S8NE9eJkZ/1YOltu8eQ==
+X-Received: by 2002:a05:6a20:9f95:b0:1cc:e6b6:802 with SMTP id
+ adf61e73a8af0-1cce6b60e30mr20817927637.35.1725394919305; 
+ Tue, 03 Sep 2024 13:21:59 -0700 (PDT)
+Received: from niltesque.newtesc.com.br ([189.113.44.122])
+ by smtp.gmail.com with ESMTPSA id
+ d2e1a72fcca58-71778521040sm290380b3a.11.2024.09.03.13.21.57
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 03 Sep 2024 13:21:58 -0700 (PDT)
+From: =?UTF-8?q?Fl=C3=A1vio=20Tapaj=C3=B3s?= <flavio.tapajos@newtesc.com.br>
+To: buildroot@buildroot.org
+Date: Tue,  3 Sep 2024 17:21:53 -0300
+Message-ID: <20240903202153.346589-1-flavio.tapajos@newtesc.com.br>
+X-Mailer: git-send-email 2.46.0
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20240810215624.482529-6-thomas.petazzoni@bootlin.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1725394779;
- bh=peL23VQC09mnT3yXUuMHbTeFnqpftb6ss1Kk6zO+bok=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=d4N8pkAcslJCFd7LeyM74UHyvvqOQ5Zkd2pQrH3LwqwbOZ0pJgCOIxAEvAdmW0aoq
- tmXc8gFi7ArseNojazMB5k9mPafjYLbmgUnZmlmlAdo0BFDQLqLGmmOG79S14eYvq7
- OtkHXmL5T1cGTA8HpbXrAkXBKm7UiSDKDHSQPakC9c7KqvzFz7RHDWp33rusaVlQ5w
- cLso2x9uvfU9BJNOtXETCxmZkNaRYi3yxRGNsH9emevtJWhmkLGoPbkroOkKlAVr3r
- 06zM3bPl9soevqBqX+cg5RYq+Tj6cjUc+3pnROj8V2MzDG4btNDgvg6S/sDGd5nULF
- wuyRhNGA1SxuA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=newtesc-com-br.20230601.gappssmtp.com; s=20230601; t=1725394919; x=1725999719;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=ejNMc9V8Jw830V2gt4RS7UwfdaMh2D+6MhwqURPvhvU=;
+ b=cJDc2F/wf06wQ8KL1RxtIxhxPb3sxJTQV/nZsLs9p2+/loNVSKLNQrjFwoTbRUPms9
+ w7ec4B5AI/3Z0uQxs59PPyo9wWceOnEZrFP8jVD20UbsellS/kFiPd8mM7fCyNxU5gWr
+ 6Be2csAr7Zh7t9Dm4rwHoP58n2lNv/1QK1hlD/4CPfMvkUNQ4D6Mno61WQK0FTkmXnNO
+ oRw9wOkcBZS2NXX91GbJ2elLEusJEaBDp7wlKNsfYDyMFYGwqklcw1qAQzDiouoDuwNn
+ i3Plq6QVUHlYpbzxXQrsEk5+3lHRdgj2oYd+LhRLqbdHAD+AB0QNe71fyqKnvhrlIYjE
+ bOXQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=newtesc.com.br
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=d4N8pkAc
-Subject: Re: [Buildroot] [PATCH next 5/7]
- toolchain/toolchain-external/toolchain-external-synopsys-arc: bump to
- 2024.06
+ unprotected) header.d=newtesc-com-br.20230601.gappssmtp.com
+ header.i=@newtesc-com-br.20230601.gappssmtp.com header.a=rsa-sha256
+ header.s=20230601 header.b=cJDc2F/w
+Subject: [Buildroot] [PATCH 1/1] package/python-sqlalchemy: bump version to
+ 2.0.33
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,150 +104,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: =?UTF-8?q?Fl=C3=A1vio=20Tapaj=C3=B3s?= <flavio.tapajos@newtesc.com.br>,
+ James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Thomas, All,
-
-On 2024-08-10 23:56 +0200, Thomas Petazzoni via buildroot spake thusly:
-> Until now only one option was shown, and we were automatically
-> selecting the ARC700/ARChs and LE/BE toolchains based on the
-> architecture selection. However now, Synopsys offers glibc/uClibc
-> toolchains, and we can't decide that automatically, so let's add an
-> explicit choice for the user to chose between the different variants
-> of Synopsys toolchains available.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> ---
-[--SNIP--]
-> diff --git a/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in.options b/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in.options
-> index ceb7dd0081..faedaf2ffb 100644
-> --- a/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in.options
-> +++ b/toolchain/toolchain-external/toolchain-external-synopsys-arc/Config.in.options
-> @@ -1,5 +1,37 @@
->  if BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC
->  
-> +choice
-> +	prompt "Synopsys toolchain variant"
-> +
-> +config BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC700
-> +	bool "Linux/uClibc ARC 700"
-
-As discussed on IRC, this is the ARC 700 familly, so I kept it rather
-tha change to 7x0 (or 7xx) as we discussed. If that's wrong ARC experts
-can send a patch to fix the prompt.
-
-> +	depends on BR2_arc750d || BR2_arc770d
-> +	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
-> +	select BR2_USE_WCHAR
-> +	select BR2_TOOLCHAIN_HAS_THREADS
-> +	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
-> +	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
-> +
-> +config BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARCHS_UCLIBC
-> +	bool "Linux/uClibc ARC HS"
-> +	depends on BR2_archs38_64mpy || BR2_archs38_full || \
-> +		BR2_archs4x_rel31 || BR2_archs4x
-> +	select BR2_TOOLCHAIN_EXTERNAL_UCLIBC
-> +	select BR2_USE_WCHAR
-> +	select BR2_TOOLCHAIN_HAS_THREADS
-> +	select BR2_TOOLCHAIN_HAS_THREADS_NPTL
-> +	select BR2_TOOLCHAIN_HAS_THREADS_DEBUG
-> +	select BR2_TOOLCHAIN_HAS_FORTRAN
-> +
-> +config BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARCHS_GLIBC
-> +	bool "Linux/glibc ARC 700"
-
-As discussed on IRC, that prompt was actualyl incorrect, as it really is
-for ARC HS, so I fixed that when applying.
-
-Applied to next, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> +	depends on BR2_archs38_64mpy || BR2_archs38_full || \
-> +		BR2_archs4x_rel31 || BR2_archs4x
-> +	select BR2_TOOLCHAIN_EXTERNAL_GLIBC
-> +	select BR2_TOOLCHAIN_HAS_FORTRAN
-> +
-> +endchoice
-> +
->  config BR2_TOOLCHAIN_EXTERNAL_PREFIX
->  	default "arc-linux"		 if BR2_arcle
->  	default "arceb-linux"		 if BR2_arceb
-> diff --git a/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.hash b/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.hash
-> index 3c22723833..52273871ab 100644
-> --- a/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.hash
-> +++ b/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.hash
-> @@ -1,5 +1,7 @@
-> -# From https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/releases/tag/arc-2019.09-release
-> -sha256  f7cbf68ef251943db7baf63535e0ec98dafbdf5d925017b4e1d4fc64d9b38a26  arc_gnu_2019.09_prebuilt_uclibc_le_arc700_linux_install.tar.gz
-> -sha256  ac09f0a21f9d50146a5e542f4a6abc93e5a1dcb0a1372cb5c3ba86bbefaaec7d  arc_gnu_2019.09_prebuilt_uclibc_be_arc700_linux_install.tar.gz
-> -sha256  245ca49fe8ea2456617541b18bb96e52e6c0dc619f00e293fcaad519fc436c35  arc_gnu_2019.09_prebuilt_uclibc_le_archs_linux_install.tar.gz
-> -sha256  6f039a0158c03af398ada31fae96009e47f0d7b7f7d52e12eb419492fc3f27e7  arc_gnu_2019.09_prebuilt_uclibc_be_archs_linux_install.tar.gz
-> +# From https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/releases/tag/arc-2024.06-release
-> +sha256  080bbf8c0747d221314d04b0fcef89f91dc82710afa1aa66a88f04c93719663a  arc_gnu_2024.06_prebuilt_uclibc_le_arc700_linux_install.tar.bz2
-> +sha256  37ad59b2624608cd126fab3a83a188edc18ad9e2bba8bbb778d46cdd49ad2ffe  arc_gnu_2024.06_prebuilt_glibc_le_archs_linux_install.tar.bz2
-> +sha256  6867bc6f895c29b053020423923ead2054b8474816f1d067f2726b13e8ee16c0  arc_gnu_2024.06_prebuilt_uclibc_le_archs_linux_install.tar.bz2
-> +sha256  6efd9025e4b226bf1b4a4d448670e00f928e61e0051a0b209b7adaa327945a32  arc_gnu_2024.06_prebuilt_uclibc_be_arc700_linux_install.tar.bz2
-> +sha256  ae2ffb5fbe8d6002341dd87d005400010e85dfc1df1e8db070a19ab7300d738f  arc_gnu_2024.06_prebuilt_glibc_be_archs_linux_install.tar.bz2
-> +sha256  892a576acdf962afafde345d2c830317cb14ff8ef95da7cadc79177c226db269  arc_gnu_2024.06_prebuilt_uclibc_be_archs_linux_install.tar.bz2
-> diff --git a/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.mk b/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.mk
-> index c8f141e45d..c88ca35c43 100644
-> --- a/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.mk
-> +++ b/toolchain/toolchain-external/toolchain-external-synopsys-arc/toolchain-external-synopsys-arc.mk
-> @@ -4,13 +4,18 @@
->  #
->  ################################################################################
->  
-> -TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_VERSION = 2019.09
-> +TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_VERSION = 2024.06
->  TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_SITE = https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/releases/download/arc-$(TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_VERSION)-release
->  
-> -ifeq ($(BR2_arc750d)$(BR2_arc770d),y)
-> +ifeq ($(BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC700),y)
->  TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_CORE = arc700
-> -else
-> +TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_LIBC = uclibc
-> +else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARCHS_UCLIBC),y)
-> +TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_CORE = archs
-> +TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_LIBC = uclibc
-> +else ifeq ($(BR2_TOOLCHAIN_EXTERNAL_SYNOPSYS_ARCHS_GLIBC),y)
->  TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_CORE = archs
-> +TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_LIBC = glibc
->  endif
->  
->  ifeq ($(BR2_arcle),y)
-> @@ -19,6 +24,6 @@ else
->  TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_ENDIANESS = be
->  endif
->  
-> -TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_SOURCE = arc_gnu_$(TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_VERSION)_prebuilt_uclibc_$(TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_ENDIANESS)_$(TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_CORE)_linux_install.tar.gz
-> +TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_SOURCE = arc_gnu_$(TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_VERSION)_prebuilt_$(TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_LIBC)_$(TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_ENDIANESS)_$(TOOLCHAIN_EXTERNAL_SYNOPSYS_ARC_CORE)_linux_install.tar.bz2
->  
->  $(eval $(toolchain-external-package))
-> -- 
-> 2.45.2
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+U2lnbmVkLW9mZi1ieTogRmzDoXZpbyBUYXBhasOzcyA8ZmxhdmlvLnRhcGFqb3NAbmV3dGVzYy5j
+b20uYnI+Ci0tLQogcGFja2FnZS9weXRob24tc3FsYWxjaGVteS9weXRob24tc3FsYWxjaGVteS5o
+YXNoIHwgNCArKy0tCiBwYWNrYWdlL3B5dGhvbi1zcWxhbGNoZW15L3B5dGhvbi1zcWxhbGNoZW15
+Lm1rICAgfCA2ICsrKy0tLQogMiBmaWxlcyBjaGFuZ2VkLCA1IGluc2VydGlvbnMoKyksIDUgZGVs
+ZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEvcGFja2FnZS9weXRob24tc3FsYWxjaGVteS9weXRob24t
+c3FsYWxjaGVteS5oYXNoIGIvcGFja2FnZS9weXRob24tc3FsYWxjaGVteS9weXRob24tc3FsYWxj
+aGVteS5oYXNoCmluZGV4IGQ5MjI3ZjA1MjguLjdmZmRmYWYxYjUgMTAwNjQ0Ci0tLSBhL3BhY2th
+Z2UvcHl0aG9uLXNxbGFsY2hlbXkvcHl0aG9uLXNxbGFsY2hlbXkuaGFzaAorKysgYi9wYWNrYWdl
+L3B5dGhvbi1zcWxhbGNoZW15L3B5dGhvbi1zcWxhbGNoZW15Lmhhc2gKQEAgLTEsNSArMSw1IEBA
+CiAjIG1kNSwgc2hhMjU2IGZyb20gaHR0cHM6Ly9weXBpLm9yZy9weXBpL3NxbGFsY2hlbXkvanNv
+bgotbWQ1ICBmZDllZDM4MTQ0ZmNlNDc5ZWE5NmI2NjFlMDQ4YTAyZiAgU1FMQWxjaGVteS0yLjAu
+MzIudGFyLmd6Ci1zaGEyNTYgIGMxYjg4Y2M4YjAyYjZhNWYwZWZiMDM0NWEwMzY3MmQ0Yzg5N2Rj
+N2Q5MjU4NTE3NmY4OGM2NzM0NmY1NjVlYTggIFNRTEFsY2hlbXktMi4wLjMyLnRhci5negorbWQ1
+ICAyZDdjMGRiYjRiMjFhMWNiMDU0NmQ1MjBlNzc5NTAyMiAgc3FsYWxjaGVteS0yLjAuMzMudGFy
+Lmd6CitzaGEyNTYgIDkxYzkzMzMzYzJiMzdmZjcyMWRjODNiMzdlMjhjMjlkZTRjNTAyYjU2MTJm
+MmQwOTM0NjgwMzdiODZhYTJiZTAgIHNxbGFsY2hlbXktMi4wLjMzLnRhci5negogIyBMb2NhbGx5
+IGNvbXB1dGVkIHNoYTI1NiBjaGVja3N1bXMKIHNoYTI1NiAgM2MwZjU5YWI4ODdkMDQxZGU2YTRl
+NTJmZmUzZTllZGI1ZDk1MjJkZTkwOWZhZTlhNmNkN2FkYjZlN2JlMzI5MyAgTElDRU5TRQpkaWZm
+IC0tZ2l0IGEvcGFja2FnZS9weXRob24tc3FsYWxjaGVteS9weXRob24tc3FsYWxjaGVteS5tayBi
+L3BhY2thZ2UvcHl0aG9uLXNxbGFsY2hlbXkvcHl0aG9uLXNxbGFsY2hlbXkubWsKaW5kZXggM2Y0
+ZTIwZTY2OS4uODQyMDFjZjgzMyAxMDA2NDQKLS0tIGEvcGFja2FnZS9weXRob24tc3FsYWxjaGVt
+eS9weXRob24tc3FsYWxjaGVteS5taworKysgYi9wYWNrYWdlL3B5dGhvbi1zcWxhbGNoZW15L3B5
+dGhvbi1zcWxhbGNoZW15Lm1rCkBAIC00LDkgKzQsOSBAQAogIwogIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
+IyMjIyMKIAotUFlUSE9OX1NRTEFMQ0hFTVlfVkVSU0lPTiA9IDIuMC4zMgotUFlUSE9OX1NRTEFM
+Q0hFTVlfU09VUkNFID0gU1FMQWxjaGVteS0kKFBZVEhPTl9TUUxBTENIRU1ZX1ZFUlNJT04pLnRh
+ci5negotUFlUSE9OX1NRTEFMQ0hFTVlfU0lURSA9IGh0dHBzOi8vZmlsZXMucHl0aG9uaG9zdGVk
+Lm9yZy9wYWNrYWdlcy9hZi82Zi85NjdlOTg3NjgzOTA4YWY4MTZhYTMwNzJjMWE2OTk3YWM5OTMz
+Y2YzOGQ2NmIwNDc0ZmIwM2YyNTMzMjMKK1BZVEhPTl9TUUxBTENIRU1ZX1ZFUlNJT04gPSAyLjAu
+MzMKK1BZVEhPTl9TUUxBTENIRU1ZX1NPVVJDRSA9IHNxbGFsY2hlbXktJChQWVRIT05fU1FMQUxD
+SEVNWV9WRVJTSU9OKS50YXIuZ3oKK1BZVEhPTl9TUUxBTENIRU1ZX1NJVEUgPSBodHRwczovL2Zp
+bGVzLnB5dGhvbmhvc3RlZC5vcmcvcGFja2FnZXMvZDUvNzAvNmRjNDM3YWZmMjBlNDU0ZThhYzM1
+Y2RjYzc0NjIwZmFkNTU5ODViNWVhMjgzMGZhMmQ3M2IwMmQ1ODA1CiBQWVRIT05fU1FMQUxDSEVN
+WV9TRVRVUF9UWVBFID0gc2V0dXB0b29scwogUFlUSE9OX1NRTEFMQ0hFTVlfTElDRU5TRSA9IE1J
+VAogUFlUSE9OX1NRTEFMQ0hFTVlfTElDRU5TRV9GSUxFUyA9IExJQ0VOU0UKLS0gCjIuNDYuMAoK
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290
+IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxk
+cm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
