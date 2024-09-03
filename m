@@ -4,48 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10552CD3440
-	for <buildroot@archiver.kernel.org>; Tue,  3 Sep 2024 21:15:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92EE2CD3440
+	for <buildroot@archiver.kernel.org>; Tue,  3 Sep 2024 21:15:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B2835402ED;
-	Tue,  3 Sep 2024 21:15:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 61CA1402EE;
+	Tue,  3 Sep 2024 21:15:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rRWyAbyeDlnI; Tue,  3 Sep 2024 21:15:01 +0000 (UTC)
+ id mXVOl1nCpxsw; Tue,  3 Sep 2024 21:15:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ED6594039F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 74C80403D6
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id ED6594039F;
-	Tue,  3 Sep 2024 21:15:00 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 83D841BF48B
- for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 21:14:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 74C80403D6;
+	Tue,  3 Sep 2024 21:15:04 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 6C2F31BF48B
+ for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 21:14:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 708BD402CD
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5814A80967
  for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 21:14:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rCPzE-kp6RZC for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id YItNBDpdj2J9 for <buildroot@lists.busybox.net>;
  Tue,  3 Sep 2024 21:14:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7738F402B5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 39C39808A9
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7738F402B5
+ by smtp1.osuosl.org (Postfix) with ESMTP id 39C39808A9
  for <buildroot@buildroot.org>; Tue,  3 Sep 2024 21:14:49 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 630D286D34; Tue,  3 Sep 2024 21:14:49 +0000 (UTC)
+ id 25BA986D05; Tue,  3 Sep 2024 21:14:49 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 3 Sep 2024 23:14:13 +0200
+Date: Tue, 3 Sep 2024 23:14:06 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 410995b7120b42790934ad35cf7656ade30d8539
-X-Git-Newrev: 41132c0541b0d69e88f9f720cac166e304d7b64d
+X-Git-Oldrev: 2c222c29689d3abaee00c1a0a4faefb0306a4c61
+X-Git-Newrev: 6016dad5cfbaa93d4acbf4edcc709d81bb6e5148
 X-Patchwork-Hint: ignore
-Message-Id: <20240903211449.630D286D34@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/skopeo: bump version
+Message-Id: <20240903211449.25BA986D05@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/go: expose host CGO
+ linking support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,38 +66,102 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=41132c0541b0d69e88f9f720cac166e304d7b64d
+commit: https://git.buildroot.net/buildroot/commit/?id=6016dad5cfbaa93d4acbf4edcc709d81bb6e5148
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
+Even when configured for cross-compilation, the go compiler is always
+able to build natively as well, and this is was we use in Buildroot to
+build host go packages. This implies that when the target has
+limitations, those limitations thus also apply to the host builds.
+
+This means that, when there is no CGO linking support for the target,
+the compiler is built without CGO linking support, and thus CGO linking
+is also not available for the host builds.
+
+Of course, when there is no go support for the target, the CGO linking
+support only depends on the host architecture.
+
+Add a new Kconfig symbol that repesent whether CGO linking is available
+for the host; host packages can then depend on that symbol, like the
+target variants do on the corresponding target symbol.
+
+The dependencies of this symbol are a bit complicated. Fortunately,
+because it is a blind symbol, we can write it with a combination of
+"default y" and "depends on" statements. As mentioned, CGO for the host
+is available if CGO is available for the target, but also if Go is not
+available for the target at all. In addition, Go must of course be
+available for the host. There are also the toolchain constraints of CGO.
+We exclude MIPS64 explicitly based on BR2_HOSTARCH. For the host, we
+always assume that dynamic library and threads are available so we don't
+have conditions for that.
+
 Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
+Cc: Thomas Perale <thomas.perale@mind.be>
+Cc: Christian Stewart <christian@aperture.us>
+Cc: Anisse Astier <anisse@astier.eu>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/skopeo/skopeo.hash | 2 +-
- package/skopeo/skopeo.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ docs/manual/adding-packages-golang.adoc |  3 ++-
+ package/go/Config.in.host               | 12 ++++++++++++
+ package/go/go.mk                        |  7 ++++---
+ 3 files changed, 18 insertions(+), 4 deletions(-)
 
-diff --git a/package/skopeo/skopeo.hash b/package/skopeo/skopeo.hash
-index d40585d52f..ee42f18b80 100644
---- a/package/skopeo/skopeo.hash
-+++ b/package/skopeo/skopeo.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  0b788fc5725ac79327f7c29797821a2bafc1c3c87bbfcb2998c2a1be949e314d  skopeo-1.13.3-go2.tar.gz
-+sha256  fed91fd067605460ef33431163227471b1e85c8768203fc393345d6ffd645448  skopeo-1.16.0-go2.tar.gz
- sha256  716a8b80635c394681e652823e1e42e411ad2d254e1f202403422d74f4b0b106  LICENSE
-diff --git a/package/skopeo/skopeo.mk b/package/skopeo/skopeo.mk
-index 58631629b3..f09009d88c 100644
---- a/package/skopeo/skopeo.mk
-+++ b/package/skopeo/skopeo.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/docs/manual/adding-packages-golang.adoc b/docs/manual/adding-packages-golang.adoc
+index 3ddbe57afe..aa25426591 100644
+--- a/docs/manual/adding-packages-golang.adoc
++++ b/docs/manual/adding-packages-golang.adoc
+@@ -49,7 +49,8 @@ infrastructure should depend on +BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS+
+ because Buildroot will automatically add a dependency on +host-go+
+ to such packages.
+ If you need CGO support in your package, you must add a dependency on
+-+BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS+.
+++BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS+; for host packages,
++add a dependency on +BR2_PACKAGE_HOST_GO_HOST_CGO_LINKING_SUPPORTS+.
  
--SKOPEO_VERSION = 1.13.3
-+SKOPEO_VERSION = 1.16.0
- SKOPEO_SITE = $(call github,containers,skopeo,v$(SKOPEO_VERSION))
+ The main macro of the Go package infrastructure is
+ +golang-package+. It is similar to the +generic-package+ macro. The
+diff --git a/package/go/Config.in.host b/package/go/Config.in.host
+index 11ce6df369..eefca03b02 100644
+--- a/package/go/Config.in.host
++++ b/package/go/Config.in.host
+@@ -36,6 +36,18 @@ config BR2_PACKAGE_HOST_GO_HOST_ARCH_SUPPORTS
+ 	default y
+ 	depends on BR2_PACKAGE_HOST_GO_BOOTSTRAP_STAGE3_ARCH_SUPPORTS
  
- SKOPEO_LICENSE = Apache-2.0
++# CGO linking for the host. Since we use the same compiler for target
++# and host, if the target can't do CGO linking, then the host can't.
++# But if the target is not supported by Go, then the host can do CGO
++# linking (except when it itself does not support CGO linking).
++config BR2_PACKAGE_HOST_GO_HOST_CGO_LINKING_SUPPORTS
++	bool
++	default y if BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
++	default y if !BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_HOST_GO_HOST_ARCH_SUPPORTS
++	depends on BR2_HOSTARCH != "mips64"
++	depends on BR2_HOSTARCH != "mips64el"
++
+ # Go packages should select BR2_PACKAGE_HOST_GO
+ config BR2_PACKAGE_HOST_GO
+ 	bool
+diff --git a/package/go/go.mk b/package/go/go.mk
+index 660c7a9bad..7e0dfc5880 100644
+--- a/package/go/go.mk
++++ b/package/go/go.mk
+@@ -91,10 +91,11 @@ else
+ HOST_GO_CGO_ENABLED = 0
+ endif
+ else # !BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
+-# If the target arch does not support go, host-go can still be used to build
+-# packages for the host, and enable cgo. No need to set all the arch stuff
+-#since we will not be cross-compiling.
++ifeq ($(BR2_PACKAGE_HOST_GO_HOST_CGO_LINKING_SUPPORTS),y)
+ HOST_GO_CGO_ENABLED = 1
++else # !BR2_PACKAGE_HOST_GO_HOST_CGO_LINKING_SUPPORTS
++HOST_GO_CGO_ENABLED = 0
++endif # BR2_PACKAGE_HOST_GO_HOST_CGO_LINKING_SUPPORTS
+ endif # BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
+ # Ensure the toolchain is available, whatever the provider
+ HOST_GO_DEPENDENCIES += $(HOST_GO_DEPENDENCIES_CGO)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
