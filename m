@@ -4,100 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50686CD37AC
-	for <buildroot@archiver.kernel.org>; Tue,  3 Sep 2024 20:44:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BFAF9CD37AE
+	for <buildroot@archiver.kernel.org>; Tue,  3 Sep 2024 20:45:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E5FAE40105;
-	Tue,  3 Sep 2024 20:44:52 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8AE2240105;
+	Tue,  3 Sep 2024 20:45:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tMh4UAuLLRfJ; Tue,  3 Sep 2024 20:44:51 +0000 (UTC)
+ id NSCW2YljbiFY; Tue,  3 Sep 2024 20:45:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 922C14024A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4480A4026A
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 922C14024A;
-	Tue,  3 Sep 2024 20:44:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4480A4026A;
+	Tue,  3 Sep 2024 20:45:48 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id AA3D81BF57B
- for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 20:44:49 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D2ADF1BF57B
+ for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 20:45:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 957A060687
- for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 20:44:49 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C0E8760687
+ for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 20:45:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id w-N8kBqMyeyP for <buildroot@lists.busybox.net>;
- Tue,  3 Sep 2024 20:44:48 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42f; helo=mail-wr1-x42f.google.com;
- envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 4BAE160683
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4BAE160683
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com
- [IPv6:2a00:1450:4864:20::42f])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 4BAE160683
- for <buildroot@buildroot.org>; Tue,  3 Sep 2024 20:44:48 +0000 (UTC)
-Received: by mail-wr1-x42f.google.com with SMTP id
- ffacd0b85a97d-374c1963cb6so2029826f8f.3
- for <buildroot@buildroot.org>; Tue, 03 Sep 2024 13:44:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1725396286; x=1726001086;
- h=content-transfer-encoding:in-reply-to:content-language:from
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=KGvaUck2pmLHBqp/GoFyYfAwwRQ76nPfO+zCqRcsAk4=;
- b=VGRT/nBwpm20ZGM3d72LNJMzk9iYq7rcRtrBMKFmLPtNp40gYix2Xxx0GrQd5vd5z7
- 7IZw0ONikHY0L03EqmwCf4ZnDec/NXUTku+ti5ljtcpU7sPAVomizCWfH5+Pr2Rd/ECH
- zKLqZnnsSIEwKDlGqcgh9WrVdUkhRcEXtvXwdHfyvvGPYi6l4J5beEBoj9kr7UEY1WO9
- kX9P4ww18EY7jg75OxhyF0912yxZoFaqfBpf2OIX7GmeCtiq9cB/MSalELiKQ5spjQAL
- SdTPiWqX413vJEdx0hcvZi+hZMQFB1oOhBkNIGb/KNLHedg0T/tlGOj+7gE48qlE8559
- 2wuw==
-X-Forwarded-Encrypted: i=1;
- AJvYcCXdfOZ9swBg2m48Wde7U/7mvo6RDCmJPGTC1/F5ba6kbfI7CKPVmZN0vvp53nSZyMFrfx4XWKw/YyQ=@buildroot.org
-X-Gm-Message-State: AOJu0YwRNJqkCEaBi7ilnRVETYjaxcDfKaMMhPUdgXBlf6QftwcMf+fg
- PWbZNVCuKO805JaFymUdQNdYmJl/dq2L+XwDoRhzHsGMrbw9iI0cDi6pYpGF3as=
-X-Google-Smtp-Source: AGHT+IEbfuxMpCz1j7Jr40T4gxK8hTyL+Ud3IjP4s1+4xfunD3WCUkxrFS6q9/mB5SYF4qMRCP9jLg==
-X-Received: by 2002:a05:6000:2188:b0:374:bde1:6dbc with SMTP id
- ffacd0b85a97d-374bde16f16mr9913087f8f.4.1725396285997; 
- Tue, 03 Sep 2024 13:44:45 -0700 (PDT)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
- (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-42bb6df9705sm181241765e9.27.2024.09.03.13.44.45
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Tue, 03 Sep 2024 13:44:45 -0700 (PDT)
-Message-ID: <094e4098-48aa-42fd-a8eb-a9f31b9b8db6@mind.be>
-Date: Tue, 3 Sep 2024 22:44:43 +0200
+ id Ki3JYrBkUNaz for <buildroot@lists.busybox.net>;
+ Tue,  3 Sep 2024 20:45:46 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.200;
+ helo=relay7-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 7386C60683
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7386C60683
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [217.70.183.200])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7386C60683
+ for <buildroot@buildroot.org>; Tue,  3 Sep 2024 20:45:45 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id A35A620005;
+ Tue,  3 Sep 2024 20:45:43 +0000 (UTC)
+Date: Tue, 3 Sep 2024 22:45:42 +0200
+To: Maxim Kochetkov via buildroot <buildroot@buildroot.org>
+Message-ID: <20240903224542.0ecdef27@windsurf>
+In-Reply-To: <20240903054622.14033-1-fido_max@inbox.ru>
+References: <20240903054622.14033-1-fido_max@inbox.ru>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: yann.morin@orange.com, buildroot@buildroot.org
-References: <cover.1722501946.git.yann.morin@orange.com>
- <36b2737b4867a81a9119c86f9a4fe8135171d920.1722501946.git.yann.morin@orange.com>
-Content-Language: en-GB
-In-Reply-To: <36b2737b4867a81a9119c86f9a4fe8135171d920.1722501946.git.yann.morin@orange.com>
+X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1725396286; x=1726001086; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:content-language:from
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=KGvaUck2pmLHBqp/GoFyYfAwwRQ76nPfO+zCqRcsAk4=;
- b=E/z1roFcTpUyrCQWFPdIS3PC0x/nWGzU2w9io6cXfxVNnpglEviphVumXYgSQwCeVe
- kFeSDeAPhD0eJMzsaVQzuLHcU7iAUH+AH/KZp7RknhEDS483KBW6bcsWnwLgj2yXeJJV
- Y0vPSBCVEfTjW83KwRj443VysDIjnhGw6WTaitU0HQLX8i8OLd8zv0e+MQtaPSVkqhO/
- Wz6N9DpY+e+w4yqQ+EuA0wdLHfiOcz1qEh9ndWjZLVJ7D1TYpeJDvLw3o+vBr2VqGP2e
- 4KOHNquPoa6LJENqijdveU4tiTilt5j2j+pt568vf9JifwCty/2N/kD0QdBuuJiCNcd+
- LHDg==
+ d=bootlin.com; s=gm1; t=1725396343;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=vBqSP9U3J9raucudnK8PBUFZc0qWSfUZJ0/fD0sqPbo=;
+ b=T8yzkxH3PIQBXAk6uBgOj6TLp4Zj2o34vaajzTENqN4h1oVwIhk8kwv3b/GKoDUera24ko
+ k6qcaC37r4qoBhILeffPFpYZCiJL/znSsMz8HwlXNPGHkg3211YQ6bNlZXKZFAdPgFW7in
+ d5tWKpmFa9mIbFMHdMnkxVMqoqFDeimklVkkHd1M85hOB+AzIyhxwSeA3tTqvy5DDFc6pC
+ lwp1gIfOTK3qsaGHAvvBcpRRw33FoL3knxBnzsx7LGs4kYe0FyzWyAOvBGmcnEVdwLdWkU
+ 3BmcuFcIYO3Rakl1w0bUjSQhxy+pe+CjOxx9bSSncn8agUWoY13nniG3dFb0yg==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=E/z1roFc
-Subject: Re: [Buildroot] [PATCH 2/7] package/go: expose host CGO linking
- support
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=T8yzkxH3
+Subject: Re: [Buildroot] [PATCH 1/1] package/postgresql: needs threads
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -109,122 +80,81 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
-Cc: Thomas Perale <thomas.perale@mind.be>,
- Christian Stewart <christian@aperture.us>, Anisse Astier <anisse@astier.eu>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Maxim Kochetkov <fido_max@inbox.ru>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Hello Maxim,
 
+On Tue,  3 Sep 2024 08:46:22 +0300
+Maxim Kochetkov via buildroot <buildroot@buildroot.org> wrote:
 
-On 01/08/2024 10:45, yann.morin@orange.com wrote:
-> From: "Yann E. MORIN" <yann.morin@orange.com>
-> 
-> Even when configured for cross-compilation, the go compiler is always
-> able to build natively as well, and this is was we use in Buildroot to
-> build host go packages. This implies that when the target has
-> limitations, those limitations thus also apply to the host builds.
-> 
-> This means that, when there is no CGO linking support for the target,
-> the compiler is built without CGO linking support, and thus CGO linking
-> is also not available for the host builds.
-> 
-> Of course, when there is no go support for the target, the CGO linking
-> support only depends on the host architecture.
-> 
-> Add a new Kconfig symbol that repesent whether CGO linking is available
-> for the host; host packages can then depend on that symbol, like the
-> target variants do on the corresponding target symbol.
-> 
-> Signed-off-by: Yann E. MORIN <yann.morin@orange.com>
-> Cc: Thomas Perale <thomas.perale@mind.be>
-> Cc: Christian Stewart <christian@aperture.us>
-> Cc: Anisse Astier <anisse@astier.eu>
-> ---
->   docs/manual/adding-packages-golang.adoc |  3 ++-
->   package/go/Config.in.host               | 12 ++++++++++++
->   package/go/go.mk                        |  7 ++++---
->   3 files changed, 18 insertions(+), 4 deletions(-)
-> 
-> diff --git a/docs/manual/adding-packages-golang.adoc b/docs/manual/adding-packages-golang.adoc
-> index 3ddbe57afe..aa25426591 100644
-> --- a/docs/manual/adding-packages-golang.adoc
-> +++ b/docs/manual/adding-packages-golang.adoc
-> @@ -49,7 +49,8 @@ infrastructure should depend on +BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS+
->   because Buildroot will automatically add a dependency on +host-go+
->   to such packages.
->   If you need CGO support in your package, you must add a dependency on
-> -+BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS+.
-> ++BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS+; for host packages,
-> +add a dependency on +BR2_PACKAGE_HOST_GO_HOST_CGO_LINKING_SUPPORTS+.
->   
->   The main macro of the Go package infrastructure is
->   +golang-package+. It is similar to the +generic-package+ macro. The
-> diff --git a/package/go/Config.in.host b/package/go/Config.in.host
-> index 11ce6df369..eefca03b02 100644
-> --- a/package/go/Config.in.host
-> +++ b/package/go/Config.in.host
-> @@ -36,6 +36,18 @@ config BR2_PACKAGE_HOST_GO_HOST_ARCH_SUPPORTS
->   	default y
->   	depends on BR2_PACKAGE_HOST_GO_BOOTSTRAP_STAGE3_ARCH_SUPPORTS
->   
-> +# CGO linking for the host. Since we use the same compiler for target
-> +# and host, if the target can't do CGO linking, then the host can't.
-> +# But if the target is not supported by Go, then the host can do CGO
-> +# linking (except when it itself does not support CGO linking).
-> +config BR2_PACKAGE_HOST_GO_HOST_CGO_LINKING_SUPPORTS
-> +	bool
-> +	default y if BR2_PACKAGE_HOST_GO_TARGET_CGO_LINKING_SUPPORTS
-> +	default y if !BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
-> +	depends on BR2_PACKAGE_HOST_GO_HOST_ARCH_SUPPORTS
-> +	depends on BR2_HOSTARCH != "mips64"
-> +	depends on BR2_HOSTARCH != "mips64el"
-> +
->   # Go packages should select BR2_PACKAGE_HOST_GO
->   config BR2_PACKAGE_HOST_GO
->   	bool
-> diff --git a/package/go/go.mk b/package/go/go.mk
-> index 660c7a9bad..7e0dfc5880 100644
-> --- a/package/go/go.mk
-> +++ b/package/go/go.mk
-> @@ -91,10 +91,11 @@ else
->   HOST_GO_CGO_ENABLED = 0
->   endif
->   else # !BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
-> -# If the target arch does not support go, host-go can still be used to build
-> -# packages for the host, and enable cgo. No need to set all the arch stuff
-> -#since we will not be cross-compiling.
-> +ifeq ($(BR2_PACKAGE_HOST_GO_HOST_CGO_LINKING_SUPPORTS),y)
->   HOST_GO_CGO_ENABLED = 1
-> +else # !BR2_PACKAGE_HOST_GO_HOST_CGO_LINKING_SUPPORTS
-> +HOST_GO_CGO_ENABLED = 0
+> Threads are mandantory since bump to version 16.3 in commit
+> https://github.com/postgres/postgres/commit/52afe563206e753f4c45c014fee2459ad0855826
 
-  There is still a weird situation here: if the host is mips64, then it's 
-possible that the host builds do _not_ support CGO, but target builds don't - 
-and we still pass CGO_ENABLED=1 for host builds. Of course, host packages that 
-rely on CGO should be excluded already in Config.in.host, but what if CGO is 
-optional?
+to which Buildroot was updated in commit
+73dd1d6b96665574607c8b05189426ad3eb05a6f.
 
-  My first intuition was that we should have a separate HOST_GO_HOST_CGO_ENABLED 
-for host builds, but the problem still exists for the go-src package itself, 
-since it has host and target in a single build. In fact, what will happen when 
-you build that package on a mips64 for a target that does support CGO?
+> diff --git a/package/postgresql/Config.in b/package/postgresql/Config.in
+> index 899907d6a5..9faed419bc 100644
+> --- a/package/postgresql/Config.in
+> +++ b/package/postgresql/Config.in
+> @@ -32,9 +32,9 @@ config BR2_PACKAGE_POSTGRESQL_FULL
+>  
+>  endif
+>  
+> -comment "postgresql needs a toolchain w/ dynamic library, wchar"
+> +comment "postgresql needs a toolchain w/ dynamic library, wchar, threads"
+>  	depends on BR2_USE_MMU
+> -	depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR
+> +	depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
+>  
+>  comment "postgresql can't be built with Optimize for fast"
+>  	depends on BR2_OPTIMIZE_FAST
 
+Unfortunately, this is not sufficient to add a dependency, you also
+need "depends on BR2_TOOLCHAIN_HAS_THREADS" in BR2_PACKAGE_POSTGRESQL.
 
-  Anyway, I think this patch is still progress, but a bit risky to still apply 
-to master just befor the release. So I applied to next instead.
+Then, you need to go through all the reverse dependencies of postgresql:
 
-  Regards,
-  Arnout
+package/bandwidthd/Config.in:   select BR2_PACKAGE_POSTGRESQL
+package/collectd/Config.in:     select BR2_PACKAGE_POSTGRESQL
+package/lighttpd/Config.in:     select BR2_PACKAGE_POSTGRESQL
+package/php/Config.ext: select BR2_PACKAGE_POSTGRESQL
+package/php/Config.ext: select BR2_PACKAGE_POSTGRESQL
+package/poco/Config.in: select BR2_PACKAGE_POSTGRESQL
+package/python-psycopg2/Config.in:      select BR2_PACKAGE_POSTGRESQL
+package/qt5/qt5base/Config.in:  select BR2_PACKAGE_POSTGRESQL
+package/qt6/qt6base/Config.in:  select BR2_PACKAGE_POSTGRESQL
+package/zabbix/Config.in:       select BR2_PACKAGE_POSTGRESQL
 
+and check that they all have a BR2_TOOLCHAIN_HAS_THREADS dependency,
+and if not, add it. And then look at their reverse dependencies.
 
-> +endif # BR2_PACKAGE_HOST_GO_HOST_CGO_LINKING_SUPPORTS
->   endif # BR2_PACKAGE_HOST_GO_TARGET_ARCH_SUPPORTS
->   # Ensure the toolchain is available, whatever the provider
->   HOST_GO_DEPENDENCIES += $(HOST_GO_DEPENDENCIES_CGO)
+Also, another thing is that postgresql.mk has:
+
+ifneq ($(BR2_TOOLCHAIN_HAS_THREADS_NPTL),y)
+POSTGRESQL_CONF_OPTS += --disable-thread-safety
+endif
+
+so does it mean that this option is no longer supported? No longer
+exists?
+
+Also, does it now need thread support, or NPTL thread support
+specifically? (You can figure out by building with a Buildroot
+configuration that has BR2_PTHREADS instead of BR2_PTHREADS_NATIVE).
+
+Thanks!
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
