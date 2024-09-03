@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E8871CD37AA
-	for <buildroot@archiver.kernel.org>; Tue,  3 Sep 2024 18:38:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 41109CD37AB
+	for <buildroot@archiver.kernel.org>; Tue,  3 Sep 2024 18:38:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B171940AD5;
-	Tue,  3 Sep 2024 18:38:35 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0C0D040AC1;
+	Tue,  3 Sep 2024 18:38:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cMX1ESBIHVnm; Tue,  3 Sep 2024 18:38:34 +0000 (UTC)
+ id v7WRpcjkgf4c; Tue,  3 Sep 2024 18:38:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3D08040A48
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7646140AD9
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3D08040A48;
-	Tue,  3 Sep 2024 18:38:34 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E50A61BF59C
- for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 18:38:13 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7646140AD9;
+	Tue,  3 Sep 2024 18:38:37 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 2507F1BF59C
+ for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 18:38:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id CEDBE80ABE
+ by smtp2.osuosl.org (Postfix) with ESMTP id AF54740A1D
  for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 18:38:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XOP8wyHhVNUP for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id AEeaCEqasyGq for <buildroot@lists.busybox.net>;
  Tue,  3 Sep 2024 18:38:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 07EFB80E62
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 30CC640A1A
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 07EFB80E62
+ by smtp2.osuosl.org (Postfix) with ESMTP id 30CC640A1A
  for <buildroot@buildroot.org>; Tue,  3 Sep 2024 18:38:10 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0158D86ABE; Tue,  3 Sep 2024 18:38:10 +0000 (UTC)
+ id 2B9F380068; Tue,  3 Sep 2024 18:38:10 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 3 Sep 2024 20:03:45 +0200
+Date: Tue, 3 Sep 2024 20:21:59 +0200
 X-Git-Refname: refs/heads/2024.05.x
-X-Git-Oldrev: 83112fb33fcc88062962d58ab85ec5d7bc8eca82
-X-Git-Newrev: 7389a013007d421c56934e8f8908d1cbbc94a630
+X-Git-Oldrev: eb39c88509efeb2f6f1fb0228ef53fed423c9ae1
+X-Git-Newrev: 11dda46ff2b76a1d9e2737dc598a2c74e328f7e8
 X-Patchwork-Hint: ignore
-Message-Id: <20240903183810.0158D86ABE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.05.x] package/mokutil: force
- libopenssl
+Message-Id: <20240903183810.2B9F380068@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.05.x] support/testing: add
+ mariadb runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,40 +65,231 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7389a013007d421c56934e8f8908d1cbbc94a630
+commit: https://git.buildroot.net/buildroot/commit/?id=11dda46ff2b76a1d9e2737dc598a2c74e328f7e8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.05.x
 
-mokutil unconditionally uses X509_get0_subject_key_id resulting in the
-following build failure with libressl since its addition in commit
-2e6e121496bfcbe09c018558be13733077b6df9b:
-
-/home/autobuild/autobuild/instance-18/output-1/host/lib/gcc/i686-buildroot-linux-uclibc/13.3.0/../../../../i686-buildroot-linux-uclibc/bin/ld: mokutil-efi_x509.o: in function `get_cert_skid':
-efi_x509.c:(.text+0x4e6): undefined reference to `X509_get0_subject_key_id'
-
-Fixes: 2e6e121496bfcbe09c018558be13733077b6df9b
- - http://autobuild.buildroot.org/results/88b549734eae4b25de1b8e1c4f04bace0a7e7418
- - http://autobuild.buildroot.org/results/05ac319bfb2a252f3dcdc5d04761f276afb53b6f
-
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 1941fe3d82236f4b4e92eedf6e7f7a34db70016e)
+(cherry picked from commit 5356754d1e11174274553f2f7329edd7e8c7fd68)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mokutil/Config.in | 1 +
- 1 file changed, 1 insertion(+)
+ DEVELOPERS                                    |   1 +
+ support/testing/tests/package/test_mariadb.py | 195 ++++++++++++++++++++++++++
+ 2 files changed, 196 insertions(+)
 
-diff --git a/package/mokutil/Config.in b/package/mokutil/Config.in
-index dd02078b4e..8895b66d20 100644
---- a/package/mokutil/Config.in
-+++ b/package/mokutil/Config.in
-@@ -14,6 +14,7 @@ config BR2_PACKAGE_MOKUTIL
- 	select BR2_PACKAGE_KEYUTILS
- 	select BR2_PACKAGE_LIBXCRYPT if BR2_TOOLCHAIN_USES_GLIBC
- 	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_OPENSSL_FORCE_LIBOPENSSL
- 	help
- 	  mokutil is a tool to import or delete the machines owner
- 	  keys (MOK) stored in the database of shim.
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 1ee1e0f627..3fc57b5ecc 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1871,6 +1871,7 @@ F:	support/testing/tests/package/test_lz4.py
+ F:	support/testing/tests/package/test_lzop.py
+ F:	support/testing/tests/package/test_make.py
+ F:	support/testing/tests/package/test_make/
++F:	support/testing/tests/package/test_mariadb.py
+ F:	support/testing/tests/package/test_mawk.py
+ F:	support/testing/tests/package/test_mdadm.py
+ F:	support/testing/tests/package/test_mdadm/
+diff --git a/support/testing/tests/package/test_mariadb.py b/support/testing/tests/package/test_mariadb.py
+new file mode 100644
+index 0000000000..523f075db1
+--- /dev/null
++++ b/support/testing/tests/package/test_mariadb.py
+@@ -0,0 +1,195 @@
++import os
++
++import infra.basetest
++
++
++class TestMariaDB(infra.basetest.BRTest):
++    # We use a specific configuration for:
++    # - using Aarch64, to have more than 256MB memory,
++    # - to have an ext4 rootfs image exposed as a virtio storage
++    #   (rather than cpio initrd). This will save some memory, as the
++    #   rootfs image is big.
++    config = \
++        """
++        BR2_aarch64=y
++        BR2_TOOLCHAIN_EXTERNAL=y
++        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
++        BR2_LINUX_KERNEL=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
++        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.78"
++        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
++        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
++        BR2_PACKAGE_MYSQL=y
++        BR2_PACKAGE_MARIADB=y
++        BR2_PACKAGE_MARIADB_SERVER=y
++        BR2_TARGET_ROOTFS_EXT2=y
++        BR2_TARGET_ROOTFS_EXT2_4=y
++        BR2_TARGET_ROOTFS_EXT2_SIZE="512M"
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
++
++    # Configuration for the test
++    db_adminuser = "root"
++    db_admin = "mysql"
++    db_user = "br_user"
++    db_name = "br_database"
++    backup_file = "dump.sql"
++
++    def run_user_db_query(self, user, database, query, opts=None):
++        cmd = f"mariadb --user={user} --database={database}"
++        cmd += f' --execute="{query}"'
++        if opts is not None:
++            cmd += " " + opts
++        self.assertRunOk(cmd)
++
++    def run_admin_sql_query(self, query, opts=None):
++        self.run_user_db_query(self.db_adminuser, self.db_admin, query, opts)
++
++    def run_sql_query(self, query, opts=None):
++        self.run_user_db_query(self.db_user, self.db_name, query, opts)
++
++    def cleanup_database(self):
++        # This cleanup is useful when run-test -k is used. It makes
++        # this test idempotent. Since the drive storage is preserved
++        # between reboots, this cleanup will prevent errors during the
++        # user/db creation.
++
++        # Drop the test database, if it exists.
++        sql_query = f"DROP USER IF EXISTS {self.db_user}@localhost;"
++        self.run_admin_sql_query(sql_query)
++
++        # Drop the test user, if it exists.
++        sql_query = f"DROP DATABASE IF EXISTS {self.db_name};"
++        self.run_admin_sql_query(sql_query)
++
++    def create_tables(self):
++        sql_query = "CREATE TABLE fruits ("
++        sql_query += "id integer PRIMARY KEY, name varchar(16) NOT NULL);"
++        self.run_sql_query(sql_query)
++
++        sql_query = "CREATE TABLE colors ("
++        sql_query += "id integer PRIMARY KEY, name varchar(16) NOT NULL);"
++        self.run_sql_query(sql_query)
++
++        sql_query = "CREATE TABLE fruit_colors ("
++        sql_query += "fruit_id integer REFERENCES fruits(id), "
++        sql_query += "color_id integer REFERENCES colors(id), "
++        sql_query += "UNIQUE (fruit_id, color_id));"
++        self.run_sql_query(sql_query)
++
++    def insert_data(self):
++        fruits = ["Banana", "Blueberry", "Orange", "Raspberry"]
++        fruit_id = 1
++        for fruit in fruits:
++            sql_query = "INSERT INTO fruits (id, name) "
++            sql_query += f"VALUES ({fruit_id}, '{fruit}');"
++            self.run_sql_query(sql_query)
++            fruit_id += 1
++
++        colors = ["Blue", "Orange", "Red", "Yellow"]
++        color_id = 1
++        for color in colors:
++            sql_query = "INSERT INTO colors (id, name) "
++            sql_query += f"VALUES ({color_id}, '{color}');"
++            self.run_sql_query(sql_query)
++            color_id += 1
++
++        fruit_colors = [(1, 4), (2, 1), (3, 2), (4, 3)]
++        for fruit_color in fruit_colors:
++            fruit_id, color_id = fruit_color
++            sql_query = "INSERT INTO fruit_colors (fruit_id, color_id) "
++            sql_query += f"VALUES ({fruit_id}, {color_id});"
++            self.run_sql_query(sql_query)
++
++    def query_database(self):
++        sql_query = "SELECT "
++        sql_query += "fruits.name AS fruit, colors.name AS color "
++        sql_query += "FROM fruits, colors, fruit_colors "
++        sql_query += "WHERE fruits.id = fruit_colors.fruit_id "
++        sql_query += "AND colors.id = fruit_colors.color_id "
++        sql_query += "ORDER BY fruit;"
++        self.run_sql_query(sql_query)
++
++    def test_run(self):
++        drive = os.path.join(self.builddir, "images", "rootfs.ext4")
++        kern = os.path.join(self.builddir, "images", "Image")
++        self.emulator.boot(arch="aarch64",
++                           kernel=kern,
++                           kernel_cmdline=["root=/dev/vda console=ttyAMA0"],
++                           options=["-M", "virt",
++                                    "-cpu", "cortex-a57",
++                                    "-m", "2G",
++                                    "-smp", "2",
++                                    "-drive", f"file={drive},if=virtio,format=raw"])
++        self.emulator.login()
++
++        # Check the server binary can execute.
++        self.assertRunOk("mariadbd --version")
++
++        # Check the client binary can execute.
++        self.assertRunOk("mariadb --version")
++
++        # Check the server is ready.
++        self.assertRunOk("mariadb-admin ping")
++
++        # Query the server version from the client.
++        sql_query = "SELECT version();"
++        self.run_admin_sql_query(sql_query, opts="-N -s")
++
++        self.cleanup_database()
++
++        # Create a new user.
++        sql_query = f"CREATE USER {self.db_user}@localhost;"
++        self.run_admin_sql_query(sql_query)
++
++        # Create a new database.
++        sql_query = f"CREATE DATABASE {self.db_name}"
++        sql_query += " COMMENT = 'Test Database for Buildroot Test';"
++        self.run_admin_sql_query(sql_query)
++
++        # Grant all permission on this new database to our test user.
++        sql_query = "GRANT ALL PRIVILEGES"
++        sql_query += f" ON {self.db_name}.*"
++        sql_query += f" TO {self.db_user}@localhost;"
++        self.run_admin_sql_query(sql_query)
++
++        self.create_tables()
++
++        self.insert_data()
++
++        self.query_database()
++
++        # Update a table.
++        sql_query = "UPDATE fruits SET name = 'Lemon' WHERE id = 1;"
++        self.run_sql_query(sql_query)
++
++        # Backup the test database.
++        cmd = f"mariadb-dump --user={self.db_user}"
++        cmd += f" {self.db_name} > {self.backup_file}"
++        self.assertRunOk(cmd)
++
++        # Drop all the tables.
++        sql_query = "DROP TABLE fruit_colors, fruits, colors;"
++        self.run_sql_query(sql_query)
++
++        # Query the server status.
++        self.assertRunOk("mariadb-admin status")
++
++        # Stop the server.
++        self.assertRunOk("/etc/init.d/S97mysqld stop")
++
++        # Check the server is stopped.
++        _, exit_code = self.emulator.run("mariadb-admin ping")
++        self.assertNotEqual(exit_code, 0)
++
++        # Restart the server.
++        self.assertRunOk("/etc/init.d/S97mysqld start")
++
++        # Restore the backup.
++        cmd = f"mariadb --user={self.db_user} --database={self.db_name}"
++        cmd += f" < {self.backup_file}"
++        self.assertRunOk(cmd)
++
++        # Query one last time our data, to check the backup
++        # restoration succeeded.
++        self.query_database()
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
