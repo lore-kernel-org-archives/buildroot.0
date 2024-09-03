@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94526CD37AA
-	for <buildroot@archiver.kernel.org>; Tue,  3 Sep 2024 19:35:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B6D09CD37AC
+	for <buildroot@archiver.kernel.org>; Tue,  3 Sep 2024 19:35:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5F984607EA;
-	Tue,  3 Sep 2024 19:35:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 77EEB6087A;
+	Tue,  3 Sep 2024 19:35:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8205b6SZVZp4; Tue,  3 Sep 2024 19:35:28 +0000 (UTC)
+ id BWofIFOzi_46; Tue,  3 Sep 2024 19:35:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 60B3860893
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C1639608AB
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 60B3860893;
-	Tue,  3 Sep 2024 19:35:27 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1A7FF1BF95C
+	by smtp3.osuosl.org (Postfix) with ESMTP id C1639608AB;
+	Tue,  3 Sep 2024 19:35:30 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 4027C1BF344
  for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 19:35:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CBB7F60817
+ by smtp1.osuosl.org (Postfix) with ESMTP id 86D3480B69
  for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 19:35:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tv-YRbmncdo7 for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wA0ctkGUNdKS for <buildroot@lists.busybox.net>;
  Tue,  3 Sep 2024 19:35:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A98C7607FB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AD61B80B70
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id A98C7607FB
+ by smtp1.osuosl.org (Postfix) with ESMTP id AD61B80B70
  for <buildroot@buildroot.org>; Tue,  3 Sep 2024 19:35:19 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A681186BB4; Tue,  3 Sep 2024 19:35:19 +0000 (UTC)
+ id 9B10686BB3; Tue,  3 Sep 2024 19:35:19 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 3 Sep 2024 21:14:30 +0200
+Date: Tue, 3 Sep 2024 21:13:05 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: a5482a73006e18b014469a0cbcba581f8abfff27
-X-Git-Newrev: 3ff877be290823fbbaf302c1ac57627c9f03e599
+X-Git-Oldrev: 3952b976a3a84c0ceb34d4fefbc7e7b62f7c3f7d
+X-Git-Newrev: a5482a73006e18b014469a0cbcba581f8abfff27
 X-Patchwork-Hint: ignore
-Message-Id: <20240903193519.A681186BB4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/htop: fix
- BR2_SHARED_STATIC_LIBS build
+Message-Id: <20240903193519.9B10686BB3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] Revert
+ "docs/website/support.html: document irc channel permission changes"
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,58 +65,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3ff877be290823fbbaf302c1ac57627c9f03e599
+commit: https://git.buildroot.net/buildroot/commit/?id=a5482a73006e18b014469a0cbcba581f8abfff27
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-With BR2_SHARED_STATIC_LIBS=y, the generic infrastructure adds a
---enable-static flags causing htop to be built as a static binary.
-Adding a --disable-static reverts this. This will fix the following
-build failure with hwloc raised since bump to version 3.3.0 in commit
-09243186df3168022f0b23b8a9677c6313033769 and
-https://github.com/htop-dev/htop/commit/c8a61850dd31ab64eb8ad83929ce86d2adbeb96c:
+This didn't work out as planned, neither the restriction of muting
+unregistered users, nor the exception for matrix users worked as planned.
 
-/home/autobuild/autobuild/instance-3/output-1/host/bin/mipsel-buildroot-linux-gnu-gcc -std=c99 -pedantic -D_DEFAULT_SOURCE -D_XOPEN_SOURCE=600 -I/home/autobuild/autobuild/instance-3/output-1/host/mipsel-buildroot-linux-gnu/sysroot/usr/bin/../../usr/include -I/home/autobuild/autobuild/instance-3/output-1/host/bin/../mipsel-buildroot-linux-gnu/sysroot/usr/include/libxml2  -Wall -Wcast-align -Wcast-qual -Wextra -Wfloat-equal -Wformat=2 -Winit-self -Wmissing-format-attribute -Wmissing-noreturn -Wmissing-prototypes -Wpointer-arith -Wshadow -Wstrict-prototypes -Wundef -Wunused -Wwrite-strings -Wnull-dereference -D_XOPEN_SOURCE_EXTENDED -DSYSCONFDIR="\"/etc\"" -I"./linux" -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64  -Os -g0 -D_FORTIFY_SOURCE=2 -static -rdynamic  -static -o htop htop.o   Action.o Affinity.o AffinityPanel.o AvailableColumnsPanel.o AvailableMetersPanel.o BatteryMeter.o CategoriesPanel.o ClockMeter.o ColorsPanel.o ColumnsPanel.o CommandLine.o CommandScreen.
- o Compat.o CPUMeter.o CRT.o DateMeter.o DateTimeMeter.o DiskIOMeter.o DisplayOptionsPanel.o DynamicColumn.o DynamicMeter.o DynamicScreen.o EnvScreen.o FileDescriptorMeter.o FunctionBar.o Hashtable.o Header.o HeaderOptionsPanel.o HostnameMeter.o IncSet.o InfoScreen.o ListItem.o LoadAverageMeter.o Machine.o MainPanel.o MemoryMeter.o MemorySwapMeter.o Meter.o MetersPanel.o NetworkIOMeter.o Object.o OpenFilesScreen.o OptionItem.o Panel.o Process.o ProcessLocksScreen.o ProcessTable.o Row.o RichString.o Scheduling.o ScreenManager.o ScreensPanel.o ScreenTabsPanel.o Settings.o SignalsPanel.o SwapMeter.o SysArchMeter.o Table.o TasksMeter.o TraceScreen.o UptimeMeter.o UsersTable.o Vector.o XUtils.o generic/gettime.o generic/hostname.o generic/uname.o linux/CGroupUtils.o linux/HugePageMeter.o linux/IOPriorityPanel.o linux/LibSensors.o linux/LinuxMachine.o linux/LinuxProcess.o linux/LinuxProcessTable.o linux/Platform.o linux/PressureStallMeter.o linux/SELinuxMeter.o linux/SystemdMeter.o linux/Z
- ramMeter.o zfs/ZfsArcMeter.o zfs/ZfsCompressedArcMeter.o   -lcap -llzma -L/home/autobuild/autobuild/instance-3/output-1/host/mipsel-buildroot-linux-gnu/sysroot/usr/bin/../../usr/lib -lncurses -lm   -L/home/autobuild/autobuild/instance-3/output-1/host/bin/../mipsel-buildroot-linux-gnu/sysroot/usr/lib -lhwloc
-/home/autobuild/autobuild/instance-3/output-1/host/lib/gcc/mipsel-buildroot-linux-gnu/12.3.0/../../../../mipsel-buildroot-linux-gnu/bin/ld: Action.o: in function `Action_setUserOnly':
-Action.c:(.text+0x2490): warning: Using 'getpwnam' in statically linked applications requires at runtime the shared libraries from the glibc version used for linking
-/home/autobuild/autobuild/instance-3/output-1/host/lib/gcc/mipsel-buildroot-linux-gnu/12.3.0/../../../../mipsel-buildroot-linux-gnu/bin/ld: Settings.o: in function `Settings_new':
-Settings.c:(.text+0x2dd0): warning: Using 'getpwuid' in statically linked applications requires at runtime the shared libraries from the glibc version used for linking
-/home/autobuild/autobuild/instance-3/output-1/host/lib/gcc/mipsel-buildroot-linux-gnu/12.3.0/../../../../mipsel-buildroot-linux-gnu/bin/ld: /home/autobuild/autobuild/instance-3/output-1/host/mipsel-buildroot-linux-gnu/sysroot/usr/bin/../../usr/lib/libhwloc.a(topology-xml-libxml.o): in function `hwloc_libxml_free_buffer':
-topology-xml-libxml.c:(.text+0x2c): undefined reference to `xmlFree'
+The channel mode has been reverted to +R (meaning only registered users
+are allowed to join) and an exception for *that* has been introduced for
+matrix users via +e. The channel modes are documented in [1].
 
-Fixes:
- - http://autobuild.buildroot.org/results/04bd5633750ff5cef048ea78c9de043d3ffcfa32
+[1] https://www.oftc.net/ChannelModes/
 
-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+This reverts commit d1e6d7845b0f3b450709b84a6e4fc4527f12b196.
+
+Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 21f312a53e49a3338db870df778665e42cf72dbf)
+(cherry picked from commit bede54c774ef59640cc1b4d9fd1dabfc69e4ecdb)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/htop/htop.mk | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ docs/website/support.html | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/htop/htop.mk b/package/htop/htop.mk
-index 6dbaae3796..4fa8e4fb5f 100644
---- a/package/htop/htop.mk
-+++ b/package/htop/htop.mk
-@@ -17,6 +17,16 @@ HTOP_LICENSE_FILES = COPYING
- # provided by autoconf relies on wchar_t.
- HTOP_CONF_ENV += ac_cv_prog_cc_c99=-std=gnu99
+diff --git a/docs/website/support.html b/docs/website/support.html
+index 28873c6d76..13d63b13a9 100644
+--- a/docs/website/support.html
++++ b/docs/website/support.html
+@@ -27,8 +27,8 @@
+ 		    When asking for help on IRC, share relevant logs or pieces of code using a code
+ 		    sharing website.</p>
  
-+# --enable-static has a non-standard semantic in htop, and causes the
-+# main binary to be linked statically, not just the production of
-+# static libraries. This causes issues with BR2_SHARED_STATIC_LIBS as
-+# htop is linked statically, but pkg-config returns results relevant
-+# for a shared library build. Since htop is only building an
-+# application, let's disable this bogus behavior.
-+ifeq ($(BR2_SHARED_STATIC_LIBS),y)
-+HTOP_CONF_OPTS += --disable-static
-+endif
-+
- ifeq ($(BR2_PACKAGE_HWLOC),y)
- HTOP_CONF_OPTS += --enable-hwloc
- HTOP_DEPENDENCIES += hwloc
+-		  <p>Note that due to excessive spamming on IRC, you can only talk in the
+-		    channel if you are a registered user with
++		  <p>Note that due to excessive spamming on IRC, the channel can only be
++		    joined if you are a registered user with
+ 		    <a href="https://www.oftc.net/Services/">OFTC NickServ</a>
+ 		    service. Follow the instructions to register as a user with a password,
+ 		    and then join the <code>#buildroot</code> channel.</p>
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
