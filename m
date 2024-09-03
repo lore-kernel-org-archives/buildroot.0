@@ -4,72 +4,102 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6DAF9CD37AA
-	for <buildroot@archiver.kernel.org>; Tue,  3 Sep 2024 19:48:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 87C89CD37AC
+	for <buildroot@archiver.kernel.org>; Tue,  3 Sep 2024 19:51:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3D6156058D;
-	Tue,  3 Sep 2024 19:48:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3E022607B2;
+	Tue,  3 Sep 2024 19:51:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id u-vqsRwxcQHY; Tue,  3 Sep 2024 19:48:58 +0000 (UTC)
+ id pJPYinIlQUWT; Tue,  3 Sep 2024 19:51:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6031060631
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 20BD560683
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6031060631;
-	Tue,  3 Sep 2024 19:48:58 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 17E181BF344
- for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 19:48:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 20BD560683;
+	Tue,  3 Sep 2024 19:51:03 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 3BFB11BF344
+ for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 19:51:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 054E160645
- for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 19:48:57 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 288A64024D
+ for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 19:51:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id stw4hzOJV8lo for <buildroot@lists.busybox.net>;
- Tue,  3 Sep 2024 19:48:56 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
- helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E0CAD6058D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E0CAD6058D
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [217.70.183.199])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E0CAD6058D
- for <buildroot@buildroot.org>; Tue,  3 Sep 2024 19:48:55 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 4F098FF802;
- Tue,  3 Sep 2024 19:48:54 +0000 (UTC)
-Date: Tue, 3 Sep 2024 21:48:53 +0200
-To: Sergey Matyukevich <geomatsi@gmail.com>
-Message-ID: <20240903214853.1704c313@windsurf>
-In-Reply-To: <20240902180029.2651596-1-geomatsi@gmail.com>
-References: <20240902180029.2651596-1-geomatsi@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xfcooRwizdMK for <buildroot@lists.busybox.net>;
+ Tue,  3 Sep 2024 19:51:00 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::336; helo=mail-wm1-x336.google.com;
+ envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 7532C40230
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7532C40230
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com
+ [IPv6:2a00:1450:4864:20::336])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7532C40230
+ for <buildroot@buildroot.org>; Tue,  3 Sep 2024 19:50:59 +0000 (UTC)
+Received: by mail-wm1-x336.google.com with SMTP id
+ 5b1f17b1804b1-428e0d184b4so47736365e9.2
+ for <buildroot@buildroot.org>; Tue, 03 Sep 2024 12:50:58 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1725393057; x=1725997857;
+ h=content-transfer-encoding:in-reply-to:content-language:from
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=CzL+Bv0fpsSGmyZOJTeRYTg7tbf4chWSbr5mFWjKU5E=;
+ b=RPIIc+4JlxQ0s5/BSBKmoE5iMGJ4Ar6Qdt1iCLwQoN6L4e/MNPTrSqbrUkvF9SVlVZ
+ tqbxJZ92DQyI1BWZzhqGfcTUUl2o1+eE0+vGVEvX1vTxHL2kI8VGVAJ2McTBfufzvM7R
+ Bj4eweKqQOXKFHzl4G94Kbu6N78yd/sIOitIwVvSkV3CIVCVo22szBIOYgaHXeZGn/rS
+ VJFpZLb5nGUpLHRvnvwhVMK1bt1qzYmER+HkDW2I6J3yMQ+j/GunuFF9DD/CQp3aUIIe
+ rsZG3iv02fEPSdxYZnBrg2zfzymScD+QkszTsvxZcVvf1706pbmbHGs78t3AyqT4dWJh
+ m/9Q==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCXibxnyxTTB3HQRAHqy298yIPiEMh4sVCNCJ7AnpciybB8IPheLuwqVEVHKctCZs+PSIW6bqksMWUM=@buildroot.org
+X-Gm-Message-State: AOJu0YzsqwaP218XWu6/DjfafcTvLfpoVFv9VmQth3Gd0W6luPD05/+Y
+ wJWYDDSJUpPMEeKB6gGuf54s11MZhrPEClnXC6CYXPgX/2+0LjnsMgSxiOZX560=
+X-Google-Smtp-Source: AGHT+IESv6G2If0zw3xqmaMFDisf/dDkDgVW079IxrX5onzM+CbRqkC+i8m5NYBHavcjvVLESQ5LpQ==
+X-Received: by 2002:adf:cd0c:0:b0:374:ba3f:d00c with SMTP id
+ ffacd0b85a97d-374bf1e4d69mr8147981f8f.59.1725393056891; 
+ Tue, 03 Sep 2024 12:50:56 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
+ (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
+ by smtp.gmail.com with ESMTPSA id
+ ffacd0b85a97d-374c610d437sm8106038f8f.97.2024.09.03.12.50.55
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Tue, 03 Sep 2024 12:50:56 -0700 (PDT)
+Message-ID: <a31976ae-fdf5-4a62-aece-52fb70775b39@mind.be>
+Date: Tue, 3 Sep 2024 21:50:53 +0200
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
+User-Agent: Mozilla Thunderbird
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Niklas Cassel via buildroot <buildroot@buildroot.org>
+References: <20240902104433.2561797-1-niklas.cassel@wdc.com>
+ <20240902104433.2561797-4-niklas.cassel@wdc.com>
+ <20240903212611.613c6d42@windsurf>
+Content-Language: en-GB
+In-Reply-To: <20240903212611.613c6d42@windsurf>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1725392934;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=1yBayz/8WaTphMOUczGRaINDesMqN/lTo4C62O3UnAQ=;
- b=E9pLzB7H2yfAJDOqkGHKEItk2ls82ggxM6hLno9FP+/hRx6rPPl8QFmsBqbkZwkcOvNRnA
- rEBpUnhbiOpB0O3yQ1ghDFf7oLNKz+kQ7Vab9S6Wc4IFbi7HlxbKkB8ng8pTeWH4WncE7Q
- IE2khs4alQRLfcvw41+djjz003CtF1od2PauyHbJZQ/voS3nuAHm7eRV8IQm1myeDRQOmD
- hEQX0Xv4HgsA+L2X4nyZnmJwoGt1FdSJxkTlKnnFacXVqchRK55sxdwFV5B92AByT1opRm
- Y9bv10/B8zHo1bF/41Docri4C8eNchc9UezTcDbVztzMZHDYiKgb9Fhc+gXjbw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=mind.be; s=google; t=1725393057; x=1725997857; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:content-language:from
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=CzL+Bv0fpsSGmyZOJTeRYTg7tbf4chWSbr5mFWjKU5E=;
+ b=XuCV0hkEPffo14YvOYZ5prwwYnyOlcFEznyLGCtyDpNwv13vHbDo42NRW+J9LrV5LQ
+ lmSWRYjzQy+8Yri9FNQ3zaRn18OkJEYdwUEpA0mIx+mKWmzG0YWX/V0VvCy+Ja9JrbLG
+ SIqZXKzkMurxpoSZDXPWUtJ19RCPgEUP9rj7Z2GIVMaDAcdSRfgw5NtZ45o1wzPdcjit
+ EA59iFUVByVr9jVtoZW+U3sVZTSS8ZP0MlQt9s+9sgmFnU0tpwuiQOsNxqUZHhDWGwTT
+ 5Szqyp5ECANfybwaDh6CNqCXe8ELUF8weQfh+Q6c0iWHRaf4zxKUzWo3LUhhl9iLV1yS
+ qxow==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=E9pLzB7H
-Subject: Re: [Buildroot] [PATCH v2] package/wpa_supplicant: macsec offload
- needs headers >= v5.7
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=XuCV0hkE
+Subject: Re: [Buildroot] [PATCH 3/5] configs/rock5b: enable eudev to enable
+ automatic module loading
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,40 +111,64 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@mind.be>
+Cc: Niklas Cassel <niklas.cassel@wdc.com>, Damien Le Moal <dlemoal@kernel.org>,
+ Kilian Zinnecker <kilian.zinnecker@mail.de>, Niklas Cassel <cassel@kernel.org>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon,  2 Sep 2024 21:00:20 +0300
-Sergey Matyukevich <geomatsi@gmail.com> wrote:
 
-> Hardware offload in Linux macsec driver is enabled in compile time if
-> libnl version is >= v3.6. However this is not enough for successful
-> build since enum 'macsec_offload' has been added to Linux headers only
-> since Linux >= v5.7.
-> 
-> Add upstream commit that extends compile time condition for the
-> enablement of the macsec hardware offload adding Linux headers version
-> check.
-> 
-> Fixes:
-> - http://autobuild.buildroot.net/results/b59d5bc5bd17683a3a1e3577c40c802e81911f84/
-> 
-> Signed-off-by: Sergey Matyukevich <geomatsi@gmail.com>
-> ---
 
-Applied to master, thanks a lot for having worked on this improved
-solution!
+On 03/09/2024 21:26, Thomas Petazzoni via buildroot wrote:
+> On Mon,  2 Sep 2024 12:44:31 +0200
+> Niklas Cassel via buildroot <buildroot@buildroot.org> wrote:
+> 
+>> From: Niklas Cassel <cassel@kernel.org>
+>>
+>> The arm64 defconfig enables both the R8169 Ethernet driver and the
+>> PHY_ROCKCHIP_NANENG_COMBO_PHY PHY driver as modules.
+>>
+>> Enable udev so that these modules will get automatically loaded by udev
+>> after the rootfs is mounted from the SD card.
+>>
+>> This way, we do not need to build these modules as built-in, and we also
+>> get the benefit that any device plugged in to the PCIe slot will get
+>> automatically loaded.
+>>
+>> Signed-off-by: Niklas Cassel <cassel@kernel.org>
+> 
+> I'm not sure what we want to do here, especially when this ends up
+> needing net.ifnames=0 that you add in PATCH 4/5.
+> 
+> We do have already a small number of defconfigs that enable eudev. So
+> far we only use net.ifnames=0 in 4 configurations.
+> 
+> Basically, I'm trying to make sure we remain consistent and have a
+> policy that applies to all defconfigs rather than ad-hoc solutions that
+> are different for each and every defconfig. That's why I'm a bit
+> reluctant with applying your patches as-is because they only solve the
+> specific case of this defconfig, in a specific way, without creating a
+> clear rule that all defconfigs meeting a specific situation should
+> follow.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+  We don't really have a policy or rules at the moment. I've added this to the 
+topics of the Buildroot Developer meeting in Vienna.
+
+  For the time being, I think we generally prefer to have a kernel config that 
+is as much as possible custom for the target board. Thus, we also generally 
+prefer to not require loading modules. Certainly for ethernet - having ethernet 
+as a module makes nfsroot impossible.
+
+  So I've marked patches 3/5 and 4/5 as Rejected.
+
+  Feel free to give arguments why we should prefer these drivers as module though!
+
+  Regards,
+  Arnout
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
