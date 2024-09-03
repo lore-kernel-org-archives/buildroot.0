@@ -1,97 +1,139 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D60C4CD13CF
-	for <buildroot@archiver.kernel.org>; Tue,  3 Sep 2024 09:03:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F15B0CD13CF
+	for <buildroot@archiver.kernel.org>; Tue,  3 Sep 2024 09:49:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6847580E75;
-	Tue,  3 Sep 2024 09:03:41 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EmJ8cSG5sUoP; Tue,  3 Sep 2024 09:03:40 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2221380E84
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2221380E84;
-	Tue,  3 Sep 2024 09:03:40 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1F5371BF34B
- for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 09:03:38 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0C8BD40025
- for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 09:03:38 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5F21540966;
+	Tue,  3 Sep 2024 09:49:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id U0fcjCcR7wuR for <buildroot@lists.busybox.net>;
- Tue,  3 Sep 2024 09:03:36 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::a32; helo=mail-vk1-xa32.google.com;
- envelope-from=lars@underjord.io; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 1049040226
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1049040226
-Received: from mail-vk1-xa32.google.com (mail-vk1-xa32.google.com
- [IPv6:2607:f8b0:4864:20::a32])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 1049040226
- for <buildroot@buildroot.org>; Tue,  3 Sep 2024 09:03:35 +0000 (UTC)
-Received: by mail-vk1-xa32.google.com with SMTP id
- 71dfb90a1353d-4fd142a798eso1420240e0c.3
- for <buildroot@buildroot.org>; Tue, 03 Sep 2024 02:03:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1725354214; x=1725959014;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=J+gy2HtnBlnaFqI97wO+DzT2+cAfDRv3z2gDl6uj/cg=;
- b=c8ciJ1f5YIYURklcWwNO1hosTzurK6x3ZnTM5zlEO1vLvKv66qVPUExYKEQb2izHUe
- ZS+NsN4mkiDahTkXkJ+RcksB5nhDY1qPw5kW3pDbxDk2BWqnVpoenQIUVh6ZouUZ5OJs
- lZDQDsfChCJxS0G2B2IUAPW5w/4JjD5z2EPau6KgPkgSBrd0VLNMUUP/UiWUnRPiu+EV
- NadbNgcf3Qiqq4coijJoANTJZ3OMhASJ6rwkvmbuOo7wF06YbkV40oxYbVkMaAKMJUg3
- 3WH8RR/sX1mYqXHfiU0EJSxPNbQsajBdQvmb0CwEyYGTGs35RQeoM7KiPE/MBHyT7YYx
- Xn6w==
-X-Gm-Message-State: AOJu0Yz3Q6fqxx9g+JwljapTCVqoVVeyg9dlfOXwi03T37DWaDcSrAWH
- B44ErVaG0xjV0jUs5U/xOFT0yImnl0V8s6n+jcqJEvoN3v5KE64QuLctJbSrmoIpEScVSC3zUWA
- 4mxLThs85gMO1eQSymgrpiKsphKkvhPSw4dICaw==
-X-Google-Smtp-Source: AGHT+IHm7/1JXfwy1H0Xn9W7D8qdI7Nz5Cqm96MXVqcP8UjKXinzrFGl+voyycndrJ8efndD0qoOgSSqFfTLMzM0Jac=
-X-Received: by 2002:a05:6122:1da8:b0:4ec:f8f0:7175 with SMTP id
- 71dfb90a1353d-500de23ed80mr1393406e0c.11.1725354213858; Tue, 03 Sep 2024
- 02:03:33 -0700 (PDT)
+ id qqsFDTzN1h78; Tue,  3 Sep 2024 09:49:52 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 497A44043F
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 497A44043F;
+	Tue,  3 Sep 2024 09:49:52 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id CEB541BF38E
+ for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 09:49:50 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id BC5ED80896
+ for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 09:49:50 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id eh5CPfyzo_UG for <buildroot@lists.busybox.net>;
+ Tue,  3 Sep 2024 09:49:49 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.18;
+ helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 2F3448083F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2F3448083F
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2F3448083F
+ for <buildroot@buildroot.org>; Tue,  3 Sep 2024 09:49:48 +0000 (UTC)
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.7.2] ([85.22.113.24]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MEm2D-1srkcD048x-00540O; Tue, 03
+ Sep 2024 11:49:30 +0200
+Message-ID: <7dcfa2ab-5cf3-472f-a163-83d0ca65620f@gmx.de>
+Date: Tue, 3 Sep 2024 11:49:28 +0200
 MIME-Version: 1.0
-References: <20240903073929.3717568-1-lars@underjord.io>
- <871q21i38z.fsf@tarshish>
- <CADqW+qn3TnF3LyUaYs3jfMSDT3wMC57q+r3gV0+UoOsxSVKYOA@mail.gmail.com>
- <87wmjtgnny.fsf@tarshish>
- <CADqW+qm-jkPWT29uFgMqEpur4Y5WpJZhrGUzjL5s==Nu6sySEw@mail.gmail.com>
- <87seuhgm7t.fsf@tarshish>
-In-Reply-To: <87seuhgm7t.fsf@tarshish>
-From: Lars Wikman <lars@underjord.io>
-Date: Tue, 3 Sep 2024 11:03:23 +0200
-Message-ID: <CADqW+qkb0PFTM482nwZrsrtVA_oDXTs3KzkprVxZ1zO0xqfCuQ@mail.gmail.com>
-To: Baruch Siach <baruch@tkos.co.il>
+User-Agent: Mozilla Thunderbird
+To: =?UTF-8?Q?Ga=C3=ABl_PORTAY?= <gael.portay@gmail.com>,
+ Michael Walle <michael@walle.cc>, buildroot@buildroot.org
+References: <20240902112735.728574-1-michael@walle.cc>
+ <a9865fde-0c09-42dd-8cd2-d174412dce28@gmx.de>
+ <D3W3GXLAY046.CI48SHS5EP44@gmail.com>
+Content-Language: en-US, de-DE-1901, de-DE
+Autocrypt: addr=fiona.klute@gmx.de; keydata=
+ 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
+In-Reply-To: <D3W3GXLAY046.CI48SHS5EP44@gmail.com>
+X-Provags-ID: V03:K1:i+cK4LG41xgNpZxZGX5CDQzsI+4CyUIpYotVh/KtG7NlJOvMu4q
+ y2WTgEWfVZtqjHQxgLRH1KOVioJKMimCQXG5Xv4Tlh8ghMF0lu6h7krxKUwBQKolsctbQDR
+ o1EJtAVHQHTBfcR6XX0pklkfcoSXlTYdpVsM04+589CQRi1hw/k0TXjZYtaB71y15wonueN
+ CK9n0eERmkMKl0pL8n+BA==
+UI-OutboundReport: notjunk:1;M01:P0:eEgthXET+as=;0eilBclu+JvjEHiTTioESl399q6
+ OHIlXO3iDode4nJcL4ywM/+QiZ3HFGcrW8o1D3SuMnLI2lYnDxHzTj8uuN8fjkYDxNb21UIWk
+ idSDkI3HjcsWeRDtmQThrAAVEuM3utKEPLGUwBCQBwGlUJEN7tRyb/Q49yuFGy51y42d5tw5s
+ kWd7iopkICqYo5O8gj2zR+/9h6UYPMNkGk4SToAmo84e685Jasoq38vja8iABrM0GyxCXKQZO
+ NVIUayoZE1OjK++7zJfcjOK7+gChApseTly8n8slow17KmWKlL5MgsQVc35Xr7ADUVmUOacXS
+ kkaD1cgtwrbPEvAwJe0C+MUzx/5ntfThBjUMhnhtoK+Ehjt+E7ifcggwCgy0AnpyLnObNFlfp
+ mtbVO8KblKfhMfKqXCOxvfT4H5iQaQk5gB7bMhZjO9aCWque6N4rqQMLIWwsLu3qVXu0sH9tu
+ cUziSczYUeObQlOjEMEI0rehgs/SzdPM9t0SyN3pRvEvyHhHbBdNjs51qyHJiCx27s4HFG2m0
+ /D4jQXQJsP9sHzr+OC6whba1/AYfmVHHjsIF36LVSRYe/55qguQoorncxhSS0ZK8RNBI8KVup
+ MORfJQaMIwufAhqv5BWCBXEuheNbFDgfqKZ1TCTmzFDjXcKH43D03rDJZbJ/Ln8y/vB5gPw3W
+ uZkhzji74z3h4tYBD/djtL3hT2eCvn9mFxUSl5W9LZH2feLxidQBL2PDP+w7CxdZCcdLu4LgY
+ HnY9tBks+A2Ug4Q7qUj3xsx8HLKTahK5AbYmJw9y1t66tJ4gZFu4Uk3lRs4zcd9tr4wzadHDw
+ mi++CKeFcllOr8gG47FU84fA==
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=underjord.io; s=google; t=1725354214; x=1725959014; darn=buildroot.org;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=J+gy2HtnBlnaFqI97wO+DzT2+cAfDRv3z2gDl6uj/cg=;
- b=DxcVdzGt/X78/WW77yM+wEFLbXyKyAtXflPoKDxzU7DTm2jg0NMrdq9tk96xE4Vvaj
- 4NtfNw5rignlg7gtsoB7uyuExt2yeQiNs4bjNdjTxPPcfswVbqB+9SGa+Cz8ndWwlRuF
- MCLSUcZ1Uyehdjhepwr4UPMjSGSiIMa70M4/Dvm0djOAszgRBag5Ar8NfaFxi+nyYYhM
- 4e7R+RxlgNfHIGW3O2NJ7ki3rzm0U/nGEUP7agpaHwMqxkXKMoogDGjqaaWtO7/MwuZY
- 2iAT6cd8lvuerI0tZQYUoGDZqv4EHZMeENDO0KQG8eGPto3q8rzmwWRrecoYQnntoXCS
- 94xg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=underjord.io
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=underjord.io header.i=@underjord.io header.a=rsa-sha256
- header.s=google header.b=DxcVdzGt
-Subject: Re: [Buildroot] [PATCH v2] package/wpa_supplicant: add Smart card
- option
+ d=gmx.de; 
+ s=s31663417; t=1725356970; x=1725961770; i=fiona.klute@gmx.de;
+ bh=I3l3F40awIdD8eh5tQESJVZPlc66+Thcr4lhvXQqRoI=;
+ h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
+ References:From:In-Reply-To:Content-Type:
+ Content-Transfer-Encoding:cc:content-transfer-encoding:
+ content-type:date:from:message-id:mime-version:reply-to:subject:
+ to;
+ b=g9VNdH8we7vkSNBzF14nX3jQknPJTu1nNQc9tgCQKBwytssFSANq6zFZXp1qC1gq
+ UjSV5LI97x9V6v4PP1O9wMkgyPA8NAJqKOVKgQ5298zYuUaySr92Y7HciieKlnI6B
+ mcUte5iVUMAmGhBu8tW/0ulqr1TOYTQAOYXg++8DJLajR/xblZpJegEnNHRKFJCnY
+ +duPL2LB5wGCQX+lRjkV8fWTc44/FVqe4P+B48YhQEtYVpAP+pdilYfEShGpSh/qW
+ tIg7UrzH2oTXezatpQhbHSJi/3/aYJwk8Efmf6df1I8o/mf0fonlnavWXlA4kZ2tQ
+ wKTXjcMBS8TSdlDEbA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=gmx.de
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmx.de header.i=fiona.klute@gmx.de
+ header.a=rsa-sha256 header.s=s31663417 header.b=g9VNdH8w
+Subject: Re: [Buildroot] [PATCH v2] linux: add support for device tree
+ overlays
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,234 +145,69 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Sergey Matyukevich <geomatsi@gmail.com>, buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============8080609658379979164=="
+From: Fiona Klute via buildroot <buildroot@buildroot.org>
+Reply-To: Fiona Klute <fiona.klute@gmx.de>
+Cc: Niklas Cassel <Niklas.Cassel@wdc.com>,
+ =?UTF-8?Q?Ga=C3=ABl_PORTAY?= <gael.portay@rtone.fr>,
+ Julien Grossholtz <julien.grossholtz@openest.io>,
+ Damien Le Moal <dlemoal@kernel.org>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Martin Bark <martin@barkynet.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8080609658379979164==
-Content-Type: multipart/alternative; boundary="0000000000000779120621335540"
-
---0000000000000779120621335540
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-Hi
-
-Great. Appreciate the clarification :)
-
--L
-
-On Tue, Sep 3, 2024 at 10:44=E2=80=AFAM Baruch Siach <baruch@tkos.co.il> wr=
-ote:
-
-> Hi Lars,
->
-> On Tue, Sep 03 2024, Lars Wikman wrote:
-> > This was the only initial assignment for DISABLE being made. And now
-> > it is conditional on the new option. What would be the preferred way
-> > to do it?
-> >
-> > Can DISABLE be left blank? Or left out until it is conditionally set?
-> >
-> > Happy to do it either way, it was not obvious to me how it should be
-> > handled so I did this.
->
-> Just remove the initial assignment as you did. No need to initialize to
-> blank. This is the common convention in Buildroot.
->
-> Thanks,
-> baruch
->
-> > On Tue, 3 Sep 2024 at 10:13, Baruch Siach <baruch@tkos.co.il> wrote:
-> >  On Tue, Sep 03 2024, Lars Wikman wrote:
-> >  > The existing line was =3D as it was the first reference to
-> WPA_SUPPLICANT_CONFIG_DISABLE.
-> >  > So I kept it that way.
-> >
-> >  The existing line is first assignment that initializes
-> >  WPA_SUPPLICANT_CONFIG_DISABLE. All initial assignments use =3D in this
-> >  file and others.
-> >
-> >  Following conditional assignments should only add to existing value, n=
-ot
-> >  overwrite it.
-> >
-> >  baruch
-> >
-> >  > Happy to change it if I should still. I'm not particularly used to
-> >  > these files or conventions.
-> >  >
-> >  > - Lars
-> >  >
-> >  > On Tue, Sep 3, 2024 at 9:51=E2=80=AFAM Baruch Siach <baruch@tkos.co.=
-il>
-> wrote:
-> >  >  On Tue, Sep 03 2024, Lars Wikman wrote:
-> >  >  > diff --git a/package/wpa_supplicant/wpa_supplicant.mk=E2=9A=A0=EF=
-=B8=8F=E2=9A=A0=EF=B8=8F
-> b/package/wpa_supplicant/wpa_supplicant.mk=E2=9A=A0=EF=B8=8F=E2=9A=A0=EF=
-=B8=8F
-> >  >  > index 984959f679..a7b7800c99 100644
-> >  >  > --- a/package/wpa_supplicant/wpa_supplicant.mk=E2=9A=A0=EF=B8=8F=
-=E2=9A=A0=EF=B8=8F
-> >  >  > +++ b/package/wpa_supplicant/wpa_supplicant.mk=E2=9A=A0=EF=B8=8F=
-=E2=9A=A0=EF=B8=8F
-> >  >  > @@ -24,8 +24,11 @@ WPA_SUPPLICANT_CONFIG_ENABLE =3D \
-> >  >  >       CONFIG_INTERNAL_LIBTOMMATH \
-> >  >  >       CONFIG_MATCH_IFACE
-> >  >  >
-> >  >  > -WPA_SUPPLICANT_CONFIG_DISABLE =3D \
-> >  >  > -     CONFIG_SMARTCARD
-> >  >  > +ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_SMARTCARD),y)
-> >  >  > +WPA_SUPPLICANT_CONFIG_ENABLE +=3D CONFIG_SMARTCARD
-> >  >  > +else
-> >  >  > +WPA_SUPPLICANT_CONFIG_DISABLE =3D CONFIG_SMARTCARD
-> >  >
-> >  >  Should be +=3D here. Otherwise WPA_SUPPLICANT_CONFIG_DISABLE is
-> >  >  overwritten.
-> >  >
-> >  >  baruch
-> >  >
-> >  >  > +endif
-> >  >  >
-> >  >  >  # libnl-3 needs -lm (for rint) and -lpthread if linking statical=
-ly
-> >  >  >  # And library order matters hence stick -lnl-3 first since it's
-> appended
->
-> --
->                                                      ~. .~   Tk Open
-> Systems
-> =3D}------------------------------------------------ooO--U--Ooo----------=
---{=3D
->    - baruch@tkos.co.il - tel: +972.52.368.4656, http://www.tkos.co.il -
->
-
---0000000000000779120621335540
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr">Hi<div><br></div><div>Great. Appreciate the clarification =
-:)</div><div><br></div><div>-L</div></div><br><div class=3D"gmail_quote"><d=
-iv dir=3D"ltr" class=3D"gmail_attr">On Tue, Sep 3, 2024 at 10:44=E2=80=AFAM=
- Baruch Siach &lt;<a href=3D"mailto:baruch@tkos.co.il">baruch@tkos.co.il</a=
->&gt; wrote:<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0px=
- 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">Hi =
-Lars,<br>
-<br>
-On Tue, Sep 03 2024, Lars Wikman wrote:<br>
-&gt; This was the only initial assignment for DISABLE being made. And now<b=
-r>
-&gt; it is conditional on the new option. What would be the preferred way<b=
-r>
-&gt; to do it?<br>
-&gt;<br>
-&gt; Can DISABLE be left blank? Or left out until it is conditionally set?<=
-br>
-&gt;<br>
-&gt; Happy to do it either way, it was not obvious to me how it should be<b=
-r>
-&gt; handled so I did this.<br>
-<br>
-Just remove the initial assignment as you did. No need to initialize to<br>
-blank. This is the common convention in Buildroot.<br>
-<br>
-Thanks,<br>
-baruch<br>
-<br>
-&gt; On Tue, 3 Sep 2024 at 10:13, Baruch Siach &lt;<a href=3D"mailto:baruch=
-@tkos.co.il" target=3D"_blank">baruch@tkos.co.il</a>&gt; wrote:<br>
-&gt;=C2=A0 On Tue, Sep 03 2024, Lars Wikman wrote:<br>
-&gt;=C2=A0 &gt; The existing line was =3D as it was the first reference to =
-WPA_SUPPLICANT_CONFIG_DISABLE.<br>
-&gt;=C2=A0 &gt; So I kept it that way.<br>
-&gt;<br>
-&gt;=C2=A0 The existing line is first assignment that initializes<br>
-&gt;=C2=A0 WPA_SUPPLICANT_CONFIG_DISABLE. All initial assignments use =3D i=
-n this<br>
-&gt;=C2=A0 file and others.<br>
-&gt;<br>
-&gt;=C2=A0 Following conditional assignments should only add to existing va=
-lue, not<br>
-&gt;=C2=A0 overwrite it.<br>
-&gt;<br>
-&gt;=C2=A0 baruch<br>
-&gt;<br>
-&gt;=C2=A0 &gt; Happy to change it if I should still. I&#39;m not particula=
-rly used to<br>
-&gt;=C2=A0 &gt; these files or conventions.<br>
-&gt;=C2=A0 &gt;<br>
-&gt;=C2=A0 &gt; - Lars<br>
-&gt;=C2=A0 &gt;<br>
-&gt;=C2=A0 &gt; On Tue, Sep 3, 2024 at 9:51=E2=80=AFAM Baruch Siach &lt;<a =
-href=3D"mailto:baruch@tkos.co.il" target=3D"_blank">baruch@tkos.co.il</a>&g=
-t; wrote:<br>
-&gt;=C2=A0 &gt;=C2=A0 On Tue, Sep 03 2024, Lars Wikman wrote:<br>
-&gt;=C2=A0 &gt;=C2=A0 &gt; diff --git a/package/wpa_supplicant/<a href=3D"h=
-ttp://wpa_supplicant.mk" rel=3D"noreferrer" target=3D"_blank">wpa_supplican=
-t.mk</a>=E2=9A=A0=EF=B8=8F=E2=9A=A0=EF=B8=8F b/package/wpa_supplicant/<a hr=
-ef=3D"http://wpa_supplicant.mk" rel=3D"noreferrer" target=3D"_blank">wpa_su=
-pplicant.mk</a>=E2=9A=A0=EF=B8=8F=E2=9A=A0=EF=B8=8F<br>
-&gt;=C2=A0 &gt;=C2=A0 &gt; index 984959f679..a7b7800c99 100644<br>
-&gt;=C2=A0 &gt;=C2=A0 &gt; --- a/package/wpa_supplicant/<a href=3D"http://w=
-pa_supplicant.mk" rel=3D"noreferrer" target=3D"_blank">wpa_supplicant.mk</a=
->=E2=9A=A0=EF=B8=8F=E2=9A=A0=EF=B8=8F<br>
-&gt;=C2=A0 &gt;=C2=A0 &gt; +++ b/package/wpa_supplicant/<a href=3D"http://w=
-pa_supplicant.mk" rel=3D"noreferrer" target=3D"_blank">wpa_supplicant.mk</a=
->=E2=9A=A0=EF=B8=8F=E2=9A=A0=EF=B8=8F<br>
-&gt;=C2=A0 &gt;=C2=A0 &gt; @@ -24,8 +24,11 @@ WPA_SUPPLICANT_CONFIG_ENABLE =
-=3D \<br>
-&gt;=C2=A0 &gt;=C2=A0 &gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0CONFIG_INTERNAL_LIBTOM=
-MATH \<br>
-&gt;=C2=A0 &gt;=C2=A0 &gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0CONFIG_MATCH_IFACE<br>
-&gt;=C2=A0 &gt;=C2=A0 &gt;=C2=A0 <br>
-&gt;=C2=A0 &gt;=C2=A0 &gt; -WPA_SUPPLICANT_CONFIG_DISABLE =3D \<br>
-&gt;=C2=A0 &gt;=C2=A0 &gt; -=C2=A0 =C2=A0 =C2=A0CONFIG_SMARTCARD<br>
-&gt;=C2=A0 &gt;=C2=A0 &gt; +ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_SMARTCARD),y=
-)<br>
-&gt;=C2=A0 &gt;=C2=A0 &gt; +WPA_SUPPLICANT_CONFIG_ENABLE +=3D CONFIG_SMARTC=
-ARD<br>
-&gt;=C2=A0 &gt;=C2=A0 &gt; +else<br>
-&gt;=C2=A0 &gt;=C2=A0 &gt; +WPA_SUPPLICANT_CONFIG_DISABLE =3D CONFIG_SMARTC=
-ARD<br>
-&gt;=C2=A0 &gt;<br>
-&gt;=C2=A0 &gt;=C2=A0 Should be +=3D here. Otherwise WPA_SUPPLICANT_CONFIG_=
-DISABLE is<br>
-&gt;=C2=A0 &gt;=C2=A0 overwritten.<br>
-&gt;=C2=A0 &gt;<br>
-&gt;=C2=A0 &gt;=C2=A0 baruch<br>
-&gt;=C2=A0 &gt;<br>
-&gt;=C2=A0 &gt;=C2=A0 &gt; +endif<br>
-&gt;=C2=A0 &gt;=C2=A0 &gt;=C2=A0 <br>
-&gt;=C2=A0 &gt;=C2=A0 &gt;=C2=A0 # libnl-3 needs -lm (for rint) and -lpthre=
-ad if linking statically<br>
-&gt;=C2=A0 &gt;=C2=A0 &gt;=C2=A0 # And library order matters hence stick -l=
-nl-3 first since it&#39;s appended<br>
-<br>
--- <br>
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
-=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =
-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0~. .~=C2=A0 =C2=A0Tk Open Systems<=
-br>
-=3D}------------------------------------------------ooO--U--Ooo------------=
-{=3D<br>
-=C2=A0 =C2=A0- <a href=3D"mailto:baruch@tkos.co.il" target=3D"_blank">baruc=
-h@tkos.co.il</a> - tel: +972.52.368.4656, <a href=3D"http://www.tkos.co.il"=
- rel=3D"noreferrer" target=3D"_blank">http://www.tkos.co.il</a> -<br>
-</blockquote></div>
-
---0000000000000779120621335540--
-
---===============8080609658379979164==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============8080609658379979164==--
+QW0gMDIuMDkuMjQgdW0gMjI6NTIgc2NocmllYiBHYcOrbCBQT1JUQVk6Cj4gQWxsLCB0aGFuayB5
+b3UgZm9yIHlvdXIgaW50ZXJlc3QgaW4gYnJpbmdpbmcgdGhlIHN1cHBvcnQgZm9yIGR0Ym8hCj4K
+PiBPbiBNb24gU2VwIDIsIDIwMjQgYXQgNDozMiBQTSBDRVNULCBGaW9uYSBLbHV0ZSB2aWEgYnVp
+bGRyb290IHdyb3RlOgo+Pj4gLUxJTlVYX0RUU19OQU1FICs9ICQoYmFzZW5hbWUgJChmaWx0ZXIg
+JS5kdHMsJChub3RkaXIgJChjYWxsIHFzdHJpcCwkKEJSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX0RU
+U19QQVRIKSkpKSkKPj4+ICtMSU5VWF9DVVNUT01fRFRTX1BBVEggPSAkKGNhbGwgcXN0cmlwLCQo
+QlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fRFRTX1BBVEgpKQo+Pj4gK0xJTlVYX0RUU19OQU1FICs9
+ICQoYmFzZW5hbWUgJChmaWx0ZXIgJS5kdHMsJChub3RkaXIgJChMSU5VWF9DVVNUT01fRFRTX1BB
+VEgpKSkpCj4+PiArTElOVVhfRFRTT19OQU1FUyArPSAkKGJhc2VuYW1lICQoZmlsdGVyICUuZHRz
+bywkKG5vdGRpciAkKExJTlVYX0NVU1RPTV9EVFNfUEFUSCkpKSkKPj4+Cj4+PiAtTElOVVhfRFRC
+UyA9ICQoYWRkc3VmZml4IC5kdGIsJChMSU5VWF9EVFNfTkFNRSkpCj4+PiArTElOVVhfRFRCUyA9
+ICQoYWRkc3VmZml4IC5kdGIsJChMSU5VWF9EVFNfTkFNRSkpICQoYWRkc3VmZml4IC5kdGJvLCQo
+TElOVVhfRFRTT19OQU1FUykpCj4+Cj4+IFRoaXMgbG9va3MgbGlrZSB0aGUgRFRCT3Mgd2lsbCBi
+ZSBpbnN0YWxsZWQgdG8gJEJJTkFSSUVTX0RJUiBhbG9uZyB3aXRoCj4+IHRoZSBEVEJzLiBBdCBs
+ZWFzdCBvbiBSUGkgcGxhdGZvcm1zIGl0J2QgYmUgcHJlZmVyYWJsZSB0byBiZSBhYmxlIHRvIHB1
+dAo+PiB0aGVtIGluIGFuIG92ZXJsYXlzLyBkaXJlY3RvcnksIHRvIG1ha2UgaXQgZWFzaWVyIHRv
+IGNyZWF0ZSB0aGUKPj4gc3RydWN0dXJlIGV4cGVjdGVkIGJ5IHRoZSBmaXJtd2FyZSBpbiBhIGdl
+bmltYWdlIGNvbmZpZyB3aXRob3V0Cj4+IHRlbXBsYXRpbmcuIEkgZG9uJ3Qga25vdyBob3cgY29t
+bW9uIHRoaXMgaXMgYWNyb3NzIG90aGVyIHBsYXRmb3JtcyB0aGF0Cj4+IHVzZSBEVCBvdmVybGF5
+cy4KPj4KPgo+IElJUkMsIEkgaGF2ZSBzZWVuIHBsYXRmb3JtcyB0aGF0IHB1dCB0aGUgZHRiIGFu
+ZCBkdGJvIGF0IHRoZSBzYW1lIHBsYWNlLgo+Cj4gSSBzdHJvbmdseSB0aGluayB0aGUgUGkgaXMg
+dGhlIG9uZSB0aGF0IHB1dCB0aGUgZHRibyBpbiB0aGUgc3ViZGlyZWN0b3J5Cj4gb3ZlcmxheXMv
+Lgo+Cj4+IFdvdWxkIGl0IGJlIHByYWN0aWNhbCB0byBhZGQgYW4gb3B0aW9uIHRvIGluc3RhbGwg
+RFRCT3MgaW4gYQo+PiAoY29uZmlndXJhYmxlKSBzdWJkaXJlY3Rvcnk/Cj4+Cj4KPiBXZWxsLCBJ
+IGRvIG5vdCByZWFsbHkgbGlrZSBhZGRpbmcgYW4gb3B0aW9uIHRvIHNldCB0aGUgdGFyZ2V0IGRp
+cmVjdG9yeS4KPgo+IEluIG15IHBhdGNoIHNlcmllIEkgaGF2ZSBjb21wbGV0bHkgc3BsaXQgdGhl
+IGR0Ym8gZnJvbSB0aGUgZHRiOyBzbyB5b3UKPiBjYW4ga2VlcCBvciBub3QgdGhlICJ0b3AiIGRp
+cmVjdG9yeSBmb3IgZHRiIChicm9hZGNvbSkgYW5kIGZvciBkdGJvCj4gKG92ZXJsYXlzKS4KPgo+
+IEkgZG8gbm90IHRoaW5rIGl0IHdvcnRoIGl0LCBidXQgaXQgaGVscHMgZm9yIHRoZSBQaS4KPgo+
+IEluIHRoZSBjYXNlIG9mIHRoZSBQaSwgeW91IHNldDoKPgo+IAkjIEJSMl9MSU5VWF9LRVJORUxf
+RFRCX0tFRVBfRElSTkFNRSBpcyBub3Qgc2V0Cj4gCUJSMl9MSU5VWF9LRVJORUxfRFRCT19LRUVQ
+X0RJUk5BTUU9eQo+Cj4gVG8gaW5zdGFsbCBkdGJvcyB0byAkQklOQVJJRVNfRElSL292ZXJsYXlz
+IGFuZCBkdGIgdG8gJEJJTkFSSUVTX0RJUi4KClRoaXMgaXMgZm9yIGluLXRyZWUgRFRCT3MgKHdo
+aWNoIGlzIGRlZmluaXRlbHkgYSBnb29kIHRoaW5nIHRvCnN1cHBvcnQhKSwgbXkgcXVlc3Rpb24g
+d2FzIGFib3V0IG91dC1vZi10cmVlIG9uZXMuIFRvIGV4cGxhaW4gbXkKcGVyc3BlY3RpdmU6IEkg
+Y3VycmVudGx5IGhhdmUgYSBwYWNrYWdlIGluIGFuIGV4dGVybmFsIHRyZWUgdGhhdCB1c2VzCmhv
+c3QtZHRjIHRvIGNvbXBpbGUgY3VzdG9tIERUU09zIGFuZCBpbnN0YWxsIHRoZW0gdG8KJEJJTkFS
+SUVTX0RJUi9vdmVybGF5cywgYW5kIGl0J2QgYmUgbmljZSB0byByZXBsYWNlIHRoYXQgd2l0aCBn
+ZW5lcmljCmluZnJhc3RydWN0dXJlIGZvciBvdmVybGF5cy4KCldpdGggTWljaGFlbCdzIHBhdGNo
+IHRoYXQgc2hvdWxkIG1vc3RseSBiZSBwb3NzaWJsZSBhbHJlYWR5LCBJJ2QganVzdApoYXZlIHRv
+IHNodWZmbGUgdGhlIERUQk9zIGFyb3VuZCBpbiBhIHBvc3QtYnVpbGQvcG9zdC1pbWFnZSBzY3Jp
+cHQgdG8KcHV0IHRoZW0gd2hlcmUgdGhlIGZpcm13YXJlIG5lZWRzIHRoZW0sIGhlbmNlIG15IHF1
+ZXN0aW9uIGFib3V0IGEKY29uZmlndXJhYmxlIHRhcmdldCBkaXIuIElmIHRoYXQncyBjb25zaWRl
+cmVkIHRvbyBuaWNoZSBmb3IgZ2VuZXJpYwppbmZyYXN0cnVjdHVyZSwgZmFpciBlbm91Z2guIDot
+KQoKQmVzdCByZWdhcmRzLApGaW9uYQoKPiAJaHR0cHM6Ly9wYXRjaHdvcmsub3psYWJzLm9yZy9w
+cm9qZWN0L2J1aWxkcm9vdC9wYXRjaC8yMDI0MDkwMjIwMzUzMy4zOTYxMTA4LTItZ2FlbC5wb3J0
+YXlAcnRvbmUuZnIvCj4KPiBJIGhhdmUgbm8gc3Ryb25nIG9waW5pb24gYWJvdXQgeW91ciB3b3Jr
+IChtb3JlIHNpbXBsZSkgYW5kIG1pbmUgKG1vcmUKPiBkdXBsaWNhdGlvbikuCj4KPj4gRWl0aGVy
+IHdheSB0aGFuayB5b3UgZm9yIHdvcmtpbmcgb24gdGhpcyEKPj4KPgo+IFllcyB0aGFuayB5b3Ug
+KGFnYWluKS4KPgo+PiBCZXN0IHJlZ2FyZHMsCj4+IEZpb25hCj4+Cj4KPiBLaW5kIFJlZ2FyZHMs
+Cj4gR2HDq2wKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+CmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9s
+aXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
