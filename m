@@ -1,95 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EA15DCD13CF
-	for <buildroot@archiver.kernel.org>; Tue,  3 Sep 2024 10:10:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4E6FCD3420
+	for <buildroot@archiver.kernel.org>; Tue,  3 Sep 2024 10:51:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6C1944099B;
-	Tue,  3 Sep 2024 10:10:03 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 490574025F;
+	Tue,  3 Sep 2024 10:51:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HFlRKdv8QeRH; Tue,  3 Sep 2024 10:10:02 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id mIZOIPEuTPbk; Tue,  3 Sep 2024 10:51:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EB32C4096F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E1466402A6
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EB32C4096F;
-	Tue,  3 Sep 2024 10:10:01 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 84B5C1BF263
- for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 10:09:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E1466402A6;
+	Tue,  3 Sep 2024 10:51:14 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id A49461BF263
+ for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 10:51:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 729BC80ABC
- for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 10:09:59 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9212260658
+ for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 10:51:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Tl4KFcl-8omc for <buildroot@lists.busybox.net>;
- Tue,  3 Sep 2024 10:09:58 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::134; helo=mail-lf1-x134.google.com;
- envelope-from=lars@underjord.io; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 0502080AA9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0502080AA9
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com
- [IPv6:2a00:1450:4864:20::134])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0502080AA9
- for <buildroot@buildroot.org>; Tue,  3 Sep 2024 10:09:57 +0000 (UTC)
-Received: by mail-lf1-x134.google.com with SMTP id
- 2adb3069b0e04-53351642021so5522444e87.3
- for <buildroot@buildroot.org>; Tue, 03 Sep 2024 03:09:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1725358195; x=1725962995;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=3kGzmb/9wlF2CppmPSO6jH0ZZmD9rv9rlyCcbEMQkBs=;
- b=h+RAiEHKR5oL7oy22r20Ql0CqFNtLkHxjE4+x7a1GKj6BWkOTICpsX+CRQ2NwkHLHC
- pBbt395pV6MGHHWfeFlK+cmc2D0w1/jkjYr5tFou4nDfcKJ1hjVKwpGEIemx+asEXHHM
- mcEEtpxxw5gEDfJosZCAAxTwabGSAs5wEtJPI9TojUnz/CzSSZ7afhwwg+6C36PrGqAn
- F8fzl5l52yhixuNCYOVWiBGV46RybRc0nwNQ3PYQrktNVLHxF3ijUHt/Gq8vze1+wL9R
- x2eFfCsAO1FImkMTuL1iohuKHPxqtzj7pkpNWQvflXEZ+aI0GCN+qpBCeM3FU7Ivf5Ns
- tPvw==
-X-Gm-Message-State: AOJu0YzfzfNBWWFq3e+3ZjyqJjqVopZpvVj1bY3/cZp1V4dB1l0FhDq5
- wBGBnfUj5AbfaqOPAxQv8AvJTmM/E2lJ+9wOTtpgMqDMOXfgInTpHaZZCFj0EnXAF910iLRs9Fp
- 0
-X-Google-Smtp-Source: AGHT+IEY9RWYlnzW+riDUFOw+wPqapBpXMY3LE0YPl8RrRkCSveRpR840c3/zR1OBv/JeTOwzv6jFw==
-X-Received: by 2002:a05:6512:1390:b0:52f:cc06:c483 with SMTP id
- 2adb3069b0e04-53546b26a80mr9015681e87.24.1725358194476; 
- Tue, 03 Sep 2024 03:09:54 -0700 (PDT)
-Received: from monolith.tailb203e.ts.net (h-98-128-166-168.NA.cust.bahnhof.se.
- [98.128.166.168]) by smtp.gmail.com with ESMTPSA id
- 2adb3069b0e04-535407ac512sm1929210e87.79.2024.09.03.03.09.53
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 03 Sep 2024 03:09:54 -0700 (PDT)
-From: Lars Wikman <lars@underjord.io>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WoeQhSelOo9D for <buildroot@lists.busybox.net>;
+ Tue,  3 Sep 2024 10:51:13 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=178.60.130.6;
+ helo=fanzine2.igalia.com; envelope-from=aperez@igalia.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 6A4056063D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6A4056063D
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6A4056063D
+ for <buildroot@buildroot.org>; Tue,  3 Sep 2024 10:51:10 +0000 (UTC)
+Received: from 91-153-34-210.elisa-laajakaista.fi ([91.153.34.210] helo=kodama)
+ by fanzine2.igalia.com with esmtpsa 
+ (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+ id 1slR7r-008vzw-V7; Tue, 03 Sep 2024 12:51:07 +0200
+Received: from localhost (kodama [local])
+ by kodama (OpenSMTPD) with ESMTPA id 015a38c7;
+ Tue, 3 Sep 2024 10:51:06 +0000 (UTC)
+From: Adrian Perez de Castro <aperez@igalia.com>
 To: buildroot@buildroot.org
-Date: Tue,  3 Sep 2024 12:09:52 +0200
-Message-Id: <20240903100952.3789698-1-lars@underjord.io>
-X-Mailer: git-send-email 2.34.1
+Date: Tue,  3 Sep 2024 13:51:04 +0300
+Message-ID: <20240903105105.3285178-1-aperez@igalia.com>
+X-Mailer: git-send-email 2.46.0
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=underjord.io; s=google; t=1725358195; x=1725962995; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=3kGzmb/9wlF2CppmPSO6jH0ZZmD9rv9rlyCcbEMQkBs=;
- b=E3KJJhg5/SaikfQe3uldnjLf8JOhfvSNgqNiFFBD6k+N8DusnbVuJ+PVBaEHAp1uuW
- 6c8Ece8NdjD4v3V9YbCWrQ6uQ9hlRAlTrYAj/9YMu9MRCzMCYH+bWH9+k/32XlPVR2Sh
- 0h47g5xhaosEEjn4F/5kqXFFa2kvL32IAAr2bJF5TC3f86R01AskwNhEH6kvyE9cd7de
- NUzG848Ecxalbdvs0xoVYWu1Nt+rebRIzWW1HoOarZzer31Yw+hhWjCSsrLkYd7d99j3
- E30Oa1ZdkG0DuVPGjipfPiSiM/C/SyIw7sYJlGztEN9Klloa2f7etUJCnlZNCj9QaMj0
- 4m3w==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
+ c=relaxed/relaxed; d=igalia.com; 
+ s=20170329; h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:
+ Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
+ Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+ In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+ List-Post:List-Owner:List-Archive;
+ bh=z9l4Z2xZu16kzj4O5geL/J/+0XGrnJguLZ0cWIlob00=; b=jZ328q88d1RRQEZgOfPYn8KJs2
+ wdnqJ+Qx8yXbLIdIMhbUbj6IT8LUflvDzhV2aldvlzFt5s3dKFAtclViVyJScHMefytdezSKTlzHb
+ zRxgS8Hg7aHyRMB0jTh/rTRWgk0zs3WP9gEo7SyVdlp4nVKNUsguxG+cYt+5x2pRbVPlcmFNGVj8b
+ X2dFSCq9VMERAtRhIYLKaDL/M+513tgdZYXiv/x4TE2H7VPsG6Qk5TQTrJjBFrpLmrhGsboWt/kMh
+ o3pBTHHUB3EFutNFWAfWQKgveXEffKBr2M0DdsM9vEhqG8TvUQ7LD8uEnpLWfE8kzy3UA0TIZknjJ
+ AhVLKiFQ==;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=underjord.io
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ header.from=igalia.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=underjord.io header.i=@underjord.io header.a=rsa-sha256
- header.s=google header.b=E3KJJhg5
-Subject: [Buildroot] [PATCH v3] package/wpa_supplicant: add Smart card option
+ unprotected) header.d=igalia.com header.i=@igalia.com header.a=rsa-sha256
+ header.s=20170329 header.b=jZ328q88
+Subject: [Buildroot] [PATCH] package/webkitgtk: add option to enable
+ MiniBrowser
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,85 +82,60 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Lars Wikman <lars@underjord.io>, Sergey Matyukevich <geomatsi@gmail.com>
+Cc: Adrian Perez de Castro <aperez@igalia.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-CONFIG_SMARTCARD was unconditionally disabled which has meant that
-even if OpenSSL is compiled with engine support and the supplicant
-is configured to use an engine it would warn that it was compiled
-without engine support.
+Add an option to enable building and installing the MiniBrowser program
+included in the WebKitGTK source tree. This may be handy now that Midori
+will no longer be packaged in Builroot. A post-install hook installs a
+symbolic link to it into /usr/bin for convenience.
 
-This mechanism is used to enable the more secure forms of 802.1x
-networking authentication such as EAP-TLS with hardware-delegated
-cryptography and private keys protected in hardware.
-
-It is still disabled by default in case there was an original reason.
-
-Enabling the option will allow delegating private key access to TPM2,
-ARM TrustZone and other specialized secure hardware for establishing
-a network connection.
-
-Signed-off-by: Lars Wikman <lars@underjord.io>
-
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 ---
-Changes v1 -> v2:
-  - Change option name to focus on smartcard  (suggested by Sergey)
-Changes v2 -> v3:
-  - Change setting disabled to match convention (suggested by Baruch)
+ package/webkitgtk/Config.in    |  5 +++++
+ package/webkitgtk/webkitgtk.mk | 10 ++++++++++
+ 2 files changed, 15 insertions(+)
 
-Signed-off-by: Lars Wikman <lars@underjord.io>
----
- package/wpa_supplicant/Config.in         | 6 ++++++
- package/wpa_supplicant/wpa_supplicant.mk | 9 ++++++---
- 2 files changed, 12 insertions(+), 3 deletions(-)
-
-diff --git a/package/wpa_supplicant/Config.in b/package/wpa_supplicant/Config.in
-index 92953f69f0..2aee108fc1 100644
---- a/package/wpa_supplicant/Config.in
-+++ b/package/wpa_supplicant/Config.in
-@@ -175,4 +175,10 @@ config BR2_PACKAGE_WPA_SUPPLICANT_DBUS_INTROSPECTION
- 	help
- 	  Add introspection support for the DBus control interface.
+diff --git a/package/webkitgtk/Config.in b/package/webkitgtk/Config.in
+index 8ee90dda1c..e6ab405cd5 100644
+--- a/package/webkitgtk/Config.in
++++ b/package/webkitgtk/Config.in
+@@ -139,4 +139,9 @@ config BR2_PACKAGE_WEBKITGTK_WEBDRIVER
+ 	  Enable support for WebDriver. This will build and install the
+ 	  WebKitWebDriver program in the target.
  
-+config BR2_PACKAGE_WPA_SUPPLICANT_SMARTCARD
-+	bool "Smartcard support"
++config BR2_PACKAGE_WEBKITGTK_MINIBROWSER
++	bool "MiniBrowser"
 +	help
-+	  Enable the smart card support. Required for OpenSSL engines
-+	  to work using PKCS11 and 802.1x
++	  Example browser application included with WebKitGTK.
 +
  endif
-diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
-index 984959f679..6199e584d0 100644
---- a/package/wpa_supplicant/wpa_supplicant.mk
-+++ b/package/wpa_supplicant/wpa_supplicant.mk
-@@ -24,9 +24,6 @@ WPA_SUPPLICANT_CONFIG_ENABLE = \
- 	CONFIG_INTERNAL_LIBTOMMATH \
- 	CONFIG_MATCH_IFACE
- 
--WPA_SUPPLICANT_CONFIG_DISABLE = \
--	CONFIG_SMARTCARD
--
- # libnl-3 needs -lm (for rint) and -lpthread if linking statically
- # And library order matters hence stick -lnl-3 first since it's appended
- # in the wpa_supplicant Makefiles as in LIBS+=-lnl-3 ... thus failing
-@@ -180,6 +177,12 @@ WPA_SUPPLICANT_DEPENDENCIES += readline
- WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_READLINE
+diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
+index 9aaff5da8f..d29c533e1a 100644
+--- a/package/webkitgtk/webkitgtk.mk
++++ b/package/webkitgtk/webkitgtk.mk
+@@ -61,6 +61,16 @@ else
+ WEBKITGTK_CONF_OPTS += -DENABLE_WEBDRIVER=OFF
  endif
  
-+ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_SMARTCARD),y)
-+WPA_SUPPLICANT_CONFIG_ENABLE += CONFIG_SMARTCARD
++ifeq ($(BR2_PACKAGE_WEBKITGTK_MINIBROWSER),y)
++define WEBKITGTK_INSTALL_MINIBROWSER_SYMLINK
++	ln -sf ../libexec/webkit2gtk-4.1/MiniBrowser $(TARGET_DIR)/usr/bin/MiniBrowser
++endef
++WEBKITGTK_POST_INSTALL_TARGET_HOOKS += WEBKITGTK_INSTALL_MINIBROWSER_SYMLINK
++WEBKITGTK_CONF_OPTS += -DENABLE_MINIBROWSER=ON
 +else
-+WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_SMARTCARD
++WEBKITGTK_CONF_OPTS += -DENABLE_MINIBROWSER=OFF
 +endif
 +
- ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_CTRL_IFACE),y)
- define WPA_SUPPLICANT_ENABLE_CTRL_IFACE
- 	sed -i '/ctrl_interface/s/^#//g' $(TARGET_DIR)/etc/wpa_supplicant.conf
+ ifeq ($(BR2_PACKAGE_LCMS2),y)
+ WEBKITGTK_CONF_OPTS += -DUSE_LCMS=ON
+ WEBKITGTK_DEPENDENCIES += lcms2
 -- 
-2.34.1
+2.46.0
 
 _______________________________________________
 buildroot mailing list
