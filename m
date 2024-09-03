@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 927DFCD37B5
-	for <buildroot@archiver.kernel.org>; Tue,  3 Sep 2024 22:44:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 883C9CD37B5
+	for <buildroot@archiver.kernel.org>; Tue,  3 Sep 2024 22:44:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5776F81066;
-	Tue,  3 Sep 2024 22:44:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 16BBA81028;
+	Tue,  3 Sep 2024 22:44:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BpidXYEJY5bc; Tue,  3 Sep 2024 22:44:05 +0000 (UTC)
+ id XRIQi-TZlZXy; Tue,  3 Sep 2024 22:44:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 44C5A8112C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 864618113C
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 44C5A8112C;
-	Tue,  3 Sep 2024 22:44:04 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5392D1BF95C
- for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 22:43:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 864618113C;
+	Tue,  3 Sep 2024 22:44:08 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 4DE281BF576
+ for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 22:43:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4D4CB80F53
+ by smtp2.osuosl.org (Postfix) with ESMTP id 52EFF4010F
  for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 22:43:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wUVVUTpl1QH9 for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id apwP5l4cdXLu for <buildroot@lists.busybox.net>;
  Tue,  3 Sep 2024 22:43:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8DDFE80F5C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 41B1440A64
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8DDFE80F5C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 41B1440A64
  for <buildroot@buildroot.org>; Tue,  3 Sep 2024 22:43:41 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8AE7986D05; Tue,  3 Sep 2024 22:43:41 +0000 (UTC)
+ id 3E5AC86D80; Tue,  3 Sep 2024 22:43:41 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 4 Sep 2024 00:29:03 +0200
+Date: Wed, 4 Sep 2024 00:28:37 +0200
 X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 91327d8c7272f0fb881c67b8bf416446ac3dbf3e
-X-Git-Newrev: a466bef94cd140a9998ed08779b6f2cb52a54b27
+X-Git-Oldrev: 549c60565112d35e6500ed4f38e921649ce7baef
+X-Git-Newrev: 78d8a52cfdd296b51f21a0f4b91eb4cfc4a1c9f8
 X-Patchwork-Hint: ignore
-Message-Id: <20240903224341.8AE7986D05@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/erlang-p1-oauth2: bump
- version to 0.6.14
+Message-Id: <20240903224341.3E5AC86D80@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/erlang-p1-cache-tab:
+ bump version to 1.0.31
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,38 +65,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a466bef94cd140a9998ed08779b6f2cb52a54b27
+commit: https://git.buildroot.net/buildroot/commit/?id=78d8a52cfdd296b51f21a0f4b91eb4cfc4a1c9f8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
 Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/erlang-p1-oauth2/erlang-p1-oauth2.hash | 2 +-
- package/erlang-p1-oauth2/erlang-p1-oauth2.mk   | 2 +-
+ package/erlang-p1-cache-tab/erlang-p1-cache-tab.hash | 2 +-
+ package/erlang-p1-cache-tab/erlang-p1-cache-tab.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/erlang-p1-oauth2/erlang-p1-oauth2.hash b/package/erlang-p1-oauth2/erlang-p1-oauth2.hash
-index ac87485d5b..dd2f8782b7 100644
---- a/package/erlang-p1-oauth2/erlang-p1-oauth2.hash
-+++ b/package/erlang-p1-oauth2/erlang-p1-oauth2.hash
+diff --git a/package/erlang-p1-cache-tab/erlang-p1-cache-tab.hash b/package/erlang-p1-cache-tab/erlang-p1-cache-tab.hash
+index 83c40f37d7..9662c39aca 100644
+--- a/package/erlang-p1-cache-tab/erlang-p1-cache-tab.hash
++++ b/package/erlang-p1-cache-tab/erlang-p1-cache-tab.hash
 @@ -1,3 +1,3 @@
  # Locally calculated
--sha256  2a33d96ab007b77759f48613a65794351569e7d2d800700b71e50448eed0e3b8  erlang-p1-oauth2-0.6.11.tar.gz
-+sha256  6437184239ea3053584834771776062c4e055e897dc6ca94dd8f960f393d891c  erlang-p1-oauth2-0.6.14.tar.gz
- sha256  0ecddd0a5e35b7fcdab451f54c5bb688fac8365cdf6b0da0ac64b7895a0770f3  LICENSE
-diff --git a/package/erlang-p1-oauth2/erlang-p1-oauth2.mk b/package/erlang-p1-oauth2/erlang-p1-oauth2.mk
-index b01a391963..09bb0e6752 100644
---- a/package/erlang-p1-oauth2/erlang-p1-oauth2.mk
-+++ b/package/erlang-p1-oauth2/erlang-p1-oauth2.mk
+-sha256  c506d2aa2e59f1e0086ce32234618189d557a767312179cc1c8df19754131ca2  erlang-p1-cache-tab-1.0.30.tar.gz
++sha256  7d30cacd91b4a691e1e4bb458df895fd71803853a624bd0afaba0db4dbfc3f15  erlang-p1-cache-tab-1.0.31.tar.gz
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.txt
+diff --git a/package/erlang-p1-cache-tab/erlang-p1-cache-tab.mk b/package/erlang-p1-cache-tab/erlang-p1-cache-tab.mk
+index e2479b8214..07d28fd2d4 100644
+--- a/package/erlang-p1-cache-tab/erlang-p1-cache-tab.mk
++++ b/package/erlang-p1-cache-tab/erlang-p1-cache-tab.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ERLANG_P1_OAUTH2_VERSION = 0.6.11
-+ERLANG_P1_OAUTH2_VERSION = 0.6.14
- ERLANG_P1_OAUTH2_SITE = $(call github,processone,p1_oauth2,$(ERLANG_P1_OAUTH2_VERSION))
- ERLANG_P1_OAUTH2_LICENSE = MIT
- ERLANG_P1_OAUTH2_LICENSE_FILES = LICENSE
+-ERLANG_P1_CACHE_TAB_VERSION = 1.0.30
++ERLANG_P1_CACHE_TAB_VERSION = 1.0.31
+ ERLANG_P1_CACHE_TAB_SITE = $(call github,processone,cache_tab,$(ERLANG_P1_CACHE_TAB_VERSION))
+ ERLANG_P1_CACHE_TAB_LICENSE = Apache-2.0
+ ERLANG_P1_CACHE_TAB_LICENSE_FILES = LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
