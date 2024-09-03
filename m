@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5B8D9E6FE46
-	for <buildroot@archiver.kernel.org>; Fri,  6 Sep 2024 20:11:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7957ACE7B11
+	for <buildroot@archiver.kernel.org>; Fri,  6 Sep 2024 20:11:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 01DAC81450;
-	Fri,  6 Sep 2024 20:11:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9082181846;
+	Fri,  6 Sep 2024 20:11:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IwesrAVSD74g; Fri,  6 Sep 2024 20:11:26 +0000 (UTC)
+ id AagKjydHS8Va; Fri,  6 Sep 2024 20:11:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A21D880E60
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 044078149E
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A21D880E60;
-	Fri,  6 Sep 2024 20:11:26 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 0A3131BF37F
+	by smtp1.osuosl.org (Postfix) with ESMTP id 044078149E;
+	Fri,  6 Sep 2024 20:11:29 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 1638D1BF980
  for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 20:00:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id EE93360E05
- for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 19:59:05 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id F2DA6409FB
+ for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 19:59:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id azgjS_HxNmJH for <buildroot@lists.busybox.net>;
- Fri,  6 Sep 2024 19:59:03 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id e0Q72gR8Os6k for <buildroot@lists.busybox.net>;
+ Fri,  6 Sep 2024 19:59:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D21DC60E16
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 47BF5409EE
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id D21DC60E16
- for <buildroot@buildroot.org>; Fri,  6 Sep 2024 19:58:58 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 47BF5409EE
+ for <buildroot@buildroot.org>; Fri,  6 Sep 2024 19:59:00 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CDC9086C5A; Fri,  6 Sep 2024 19:58:58 +0000 (UTC)
+ id 439EC86587; Fri,  6 Sep 2024 19:59:00 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 3 Sep 2024 22:40:19 +0200
+Date: Wed, 4 Sep 2024 00:28:46 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a1a638f14cb3d61867e8ba7536361fc47df5289a
-X-Git-Newrev: fdd9b3e24b910bdc5fb37daa01c9b0e0f3c5b54d
+X-Git-Oldrev: 6ac2798e15927dca26c7edb42b3ca7c12bb92abf
+X-Git-Newrev: 8e85104d37622fe04b35c890d455804e6b90bee5
 X-Patchwork-Hint: ignore
-Message-Id: <20240906195858.CDC9086C5A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support/scripts/gen-bootlin-toolchains:
- tarballs are now xz-compressed
+Message-Id: <20240906195900.439EC86587@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/erlang-p1-stringprep: bump version
+ to 1.0.30
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,43 +65,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fdd9b3e24b910bdc5fb37daa01c9b0e0f3c5b54d
+commit: https://git.buildroot.net/buildroot/commit/?id=8e85104d37622fe04b35c890d455804e6b90bee5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-As of the 2024.05 toolchain release, the toolchain tarballs are now
-xz-compressed instead of bz2-compressed. Since this script is only
-meant to update to the latest toolchains, we don't really bother
-supporting the older toolchains that are bz2-compressed, and we simply
-assume the tarballs are xz-compressed.
-
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- support/scripts/gen-bootlin-toolchains | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/erlang-p1-stringprep/erlang-p1-stringprep.hash | 2 +-
+ package/erlang-p1-stringprep/erlang-p1-stringprep.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/support/scripts/gen-bootlin-toolchains b/support/scripts/gen-bootlin-toolchains
-index 4344221213..ef034058e1 100755
---- a/support/scripts/gen-bootlin-toolchains
-+++ b/support/scripts/gen-bootlin-toolchains
-@@ -293,7 +293,7 @@ class Toolchain:
-     @property
-     def tarball_url(self):
-         return os.path.join(BASE_URL, self.arch, "tarballs",
--                            self.fname_prefix + ".tar.bz2")
-+                            self.fname_prefix + ".tar.xz")
+diff --git a/package/erlang-p1-stringprep/erlang-p1-stringprep.hash b/package/erlang-p1-stringprep/erlang-p1-stringprep.hash
+index 50a48af0a4..6df5048dce 100644
+--- a/package/erlang-p1-stringprep/erlang-p1-stringprep.hash
++++ b/package/erlang-p1-stringprep/erlang-p1-stringprep.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated
+-sha256  b07daf2148829d513caf2931d463550e70252a78ef99696dcf444d61d93bf940  erlang-p1-stringprep-1.0.29.tar.gz
++sha256  8fc39340e73b0f77c2c77ebb486c5c2309ea3ec46afa16cc03db35d200e3a5f5  erlang-p1-stringprep-1.0.30.tar.gz
+ sha256  f44415631770cb818de6d92f3961fdfe6e407a5154f84b87cc06ac27323e919c  LICENSE.ALL
+ sha256  42aef2a1337ef1f45ae2832aa5aa268c79b2560fb1f3ebab519629372cb24ffe  LICENSE.TCL
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.txt
+diff --git a/package/erlang-p1-stringprep/erlang-p1-stringprep.mk b/package/erlang-p1-stringprep/erlang-p1-stringprep.mk
+index 09e339f57a..4f925c0682 100644
+--- a/package/erlang-p1-stringprep/erlang-p1-stringprep.mk
++++ b/package/erlang-p1-stringprep/erlang-p1-stringprep.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
-     @property
-     def hash_url(self):
-@@ -416,7 +416,7 @@ class Toolchain:
-     def gen_mk(self, f):
-         f.write("ifeq ($(%s),y)\n" % self.option_name)
-         f.write("TOOLCHAIN_EXTERNAL_BOOTLIN_VERSION = %s\n" % self.version)
--        f.write("TOOLCHAIN_EXTERNAL_BOOTLIN_SOURCE = %s--%s--%s-$(TOOLCHAIN_EXTERNAL_BOOTLIN_VERSION).tar.bz2\n" %
-+        f.write("TOOLCHAIN_EXTERNAL_BOOTLIN_SOURCE = %s--%s--%s-$(TOOLCHAIN_EXTERNAL_BOOTLIN_VERSION).tar.xz\n" %
-                 (self.arch, self.libc, self.variant))
-         f.write("TOOLCHAIN_EXTERNAL_BOOTLIN_SITE = %s\n" %
-                 os.path.join(BASE_URL, self.arch, "tarballs"))
+-ERLANG_P1_STRINGPREP_VERSION = 1.0.29
++ERLANG_P1_STRINGPREP_VERSION = 1.0.30
+ ERLANG_P1_STRINGPREP_SITE = $(call github,processone,stringprep,$(ERLANG_P1_STRINGPREP_VERSION))
+ ERLANG_P1_STRINGPREP_LICENSE = TCL (tools/*.tcl), Apache-2.0 (rest)
+ ERLANG_P1_STRINGPREP_LICENSE_FILES = LICENSE.ALL LICENSE.TCL LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
