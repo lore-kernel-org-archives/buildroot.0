@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3E06ACD3448
-	for <buildroot@archiver.kernel.org>; Tue,  3 Sep 2024 16:28:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B7FA5CD379F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Sep 2024 16:28:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 068A46077F;
-	Tue,  3 Sep 2024 16:28:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5F32A607B2;
+	Tue,  3 Sep 2024 16:28:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hCG81--xE0Qf; Tue,  3 Sep 2024 16:28:16 +0000 (UTC)
+ id Yj-CyI-jvH06; Tue,  3 Sep 2024 16:28:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BC74B607EE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 75555607FA
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BC74B607EE;
-	Tue,  3 Sep 2024 16:28:15 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 15D4B1BF373
+	by smtp3.osuosl.org (Postfix) with ESMTP id 75555607FA;
+	Tue,  3 Sep 2024 16:28:18 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 4F3641BF83E
  for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 16:28:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F15D66071D
- for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 16:28:08 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3C6EA40453
+ for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 16:28:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8ZyW_-1KqVKd for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QzHr2g9ChPKQ for <buildroot@lists.busybox.net>;
  Tue,  3 Sep 2024 16:28:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 218426073C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1A1B640442
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 218426073C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1A1B640442
  for <buildroot@buildroot.org>; Tue,  3 Sep 2024 16:28:08 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 10A7E86A1F; Tue,  3 Sep 2024 16:28:08 +0000 (UTC)
+ id 0412686A1E; Tue,  3 Sep 2024 16:28:08 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 3 Sep 2024 18:22:31 +0200
+Date: Tue, 3 Sep 2024 18:18:34 +0200
 X-Git-Refname: refs/heads/2024.05.x
-X-Git-Oldrev: 83c7e07828e8fc9d932b46fe65dbb0cf8c0dd6d9
-X-Git-Newrev: 75b881e95cc1372038f54fcf920ff251cf72d1f7
+X-Git-Oldrev: 1baed8fbd3db296f5db66da6c8a3b60ca699baa2
+X-Git-Newrev: 83c7e07828e8fc9d932b46fe65dbb0cf8c0dd6d9
 X-Patchwork-Hint: ignore
-Message-Id: <20240903162808.10A7E86A1F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.05.x] package/bcusdk: fixup
- upstream tag in patch 0001
+Message-Id: <20240903162808.0412686A1E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.05.x] package/cwiid: fix build
+ with gcc >= 14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,46 +65,70 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=75b881e95cc1372038f54fcf920ff251cf72d1f7
+commit: https://git.buildroot.net/buildroot/commit/?id=83c7e07828e8fc9d932b46fe65dbb0cf8c0dd6d9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.05.x
 
-The patch 0001 has been submitted upstream, but the formatting of the
-tag was not correct, let's fix this.
+Fix the following build failure with gcc >= 14:
 
+led.c: In function 'wmplugin_exec':
+led.c:86:42: error: assignment to 'struct cwiid_btn_message *' from incompatible pointer type 'struct cwiid_btn_mesg *' [-Wincompatible-pointer-types]
+   86 |                                 btn_mesg = &mesg[i].btn_mesg;
+      |                                          ^
+
+Fixes:
+ - http://autobuild.buildroot.org/results/a3bde74ff2137d088f4261e62930859bfe460cb9
+
+Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 668867bfed9a4decd7fd74d87d742368030b9399)
+(cherry picked from commit f0877f5f9db6d14e39bd9c82ad13937906a2ab62)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .checkpackageignore                                                 | 1 -
- package/bcusdk/0001-fd_set-requires-inclusion-of-sys-select.h.patch | 3 +--
- 2 files changed, 1 insertion(+), 3 deletions(-)
+ ...t-plugins-led-led.c-fix-build-with-gcc-14.patch | 37 ++++++++++++++++++++++
+ 1 file changed, 37 insertions(+)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 640da2eb28..bc52d45933 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -411,7 +411,6 @@ package/bc/0003-dc-fix-exit-code-of-q-command.patch lib_patch.Upstream
- package/bc/0004-no-gen-libmath.patch lib_patch.Upstream
- package/bcache-tools/0001-Don-t-inline-crc64-for-gcc-5-compatability.patch lib_patch.Upstream
- package/bctoolbox/0001-Fix-Libs.private-flags-for-mbedtls.patch lib_patch.Upstream
--package/bcusdk/0001-fd_set-requires-inclusion-of-sys-select.h.patch lib_patch.Upstream
- package/bcusdk/0002-eibd-fix-endless-recursion-when-using-USB-backends.patch lib_patch.Upstream
- package/bearssl/0001-Fix-missing-objdir-dependency.patch lib_patch.Upstream
- package/beecrypt/0001-cppglue.cxx-cplusplus-only.patch lib_patch.Upstream
-diff --git a/package/bcusdk/0001-fd_set-requires-inclusion-of-sys-select.h.patch b/package/bcusdk/0001-fd_set-requires-inclusion-of-sys-select.h.patch
-index 723de5c1a2..f89658836f 100644
---- a/package/bcusdk/0001-fd_set-requires-inclusion-of-sys-select.h.patch
-+++ b/package/bcusdk/0001-fd_set-requires-inclusion-of-sys-select.h.patch
-@@ -7,8 +7,7 @@ According to POSIX.1-2001, the definition fd_set and related macros is
- in <sys/select.h>, so it should be included in files using fd_set to
- make the code compatible with all standard C libraries.
- 
--Submitted upstream: https://sourceforge.net/p/bcusdk/patches/3/
--
-+Upstream: https://sourceforge.net/p/bcusdk/patches/3/
- Signed-off-by: Thomas Petazzoni <thomas.petazzoni@free-electrons.com>
- ---
-  eibd/examples/common.h | 1 +
+diff --git a/package/cwiid/0003-wminput-plugins-led-led.c-fix-build-with-gcc-14.patch b/package/cwiid/0003-wminput-plugins-led-led.c-fix-build-with-gcc-14.patch
+new file mode 100644
+index 0000000000..ba8121802b
+--- /dev/null
++++ b/package/cwiid/0003-wminput-plugins-led-led.c-fix-build-with-gcc-14.patch
+@@ -0,0 +1,37 @@
++From 10106fdb4cc833faa3c2fcb980d0a4eb121fe19d Mon Sep 17 00:00:00 2001
++From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Date: Tue, 23 Jul 2024 10:31:32 +0200
++Subject: [PATCH] wminput/plugins/led/led.c: fix build with gcc >= 14
++
++Fix the following build failure with gcc >= 14:
++
++led.c: In function 'wmplugin_exec':
++led.c:86:42: error: assignment to 'struct cwiid_btn_message *' from incompatible pointer type 'struct cwiid_btn_mesg *' [-Wincompatible-pointer-types]
++   86 |                                 btn_mesg = &mesg[i].btn_mesg;
++      |                                          ^
++
++Fixes:
++ - http://autobuild.buildroot.org/results/a3bde74ff2137d088f4261e62930859bfe460cb9
++
++Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
++Upstream: https://github.com/abstrakraft/cwiid/pull/47
++---
++ wminput/plugins/led/led.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/wminput/plugins/led/led.c b/wminput/plugins/led/led.c
++index 93b96d9..591f365 100644
++--- a/wminput/plugins/led/led.c
+++++ b/wminput/plugins/led/led.c
++@@ -72,7 +72,7 @@ struct wmplugin_data *wmplugin_exec(int mesg_count, union cwiid_mesg mesg[])
++ {
++ 	int i;
++ 	uint8_t button;
++-	struct cwiid_btn_message *btn_mesg;
+++	struct cwiid_btn_mesg *btn_mesg;
++ 
++ 	uint8_t led_state = (Led1 ? CWIID_LED1_ON : 0)
++ 	                  | (Led2 ? CWIID_LED2_ON : 0)
++-- 
++2.43.0
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
