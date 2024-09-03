@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B6091CD37AB
-	for <buildroot@archiver.kernel.org>; Tue,  3 Sep 2024 18:44:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8E9FFCD37AA
+	for <buildroot@archiver.kernel.org>; Tue,  3 Sep 2024 18:44:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C853A40A64;
-	Tue,  3 Sep 2024 18:44:35 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C8D9B40A1F;
+	Tue,  3 Sep 2024 18:44:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yZqYfspbcK-J; Tue,  3 Sep 2024 18:44:33 +0000 (UTC)
+ id wOaoAgldHdB3; Tue,  3 Sep 2024 18:44:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8B33040A21
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C2E9440A63
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8B33040A21;
-	Tue,  3 Sep 2024 18:44:32 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id F214A1BF59C
+	by smtp2.osuosl.org (Postfix) with ESMTP id C2E9440A63;
+	Tue,  3 Sep 2024 18:44:35 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id F30641BF95D
  for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 18:44:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DCE5880F83
+ by smtp2.osuosl.org (Postfix) with ESMTP id EC5F840A1F
  for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 18:44:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id G-z8DdSYpEbz for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id h_uHPAksYIH6 for <buildroot@lists.busybox.net>;
  Tue,  3 Sep 2024 18:44:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 152AD80E83
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E68BD40A02
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 152AD80E83
- for <buildroot@buildroot.org>; Tue,  3 Sep 2024 18:44:28 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id E68BD40A02
+ for <buildroot@buildroot.org>; Tue,  3 Sep 2024 18:44:27 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1007D86B0B; Tue,  3 Sep 2024 18:44:28 +0000 (UTC)
+ id DE12686B0C; Tue,  3 Sep 2024 18:44:27 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 3 Sep 2024 20:21:51 +0200
+Date: Tue, 3 Sep 2024 20:07:15 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 7254104a3d55bd88f8062712e9d1fe4059d5d62e
-X-Git-Newrev: 78a29492f5a2d344164f2619fe295041d5b153d5
+X-Git-Oldrev: 85f498fa8e40ad400e5df785826009ffcdc2922a
+X-Git-Newrev: 92453b8029288859d8012e000933ba2ddc6a61db
 X-Patchwork-Hint: ignore
-Message-Id: <20240903184428.1007D86B0B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] support/testing: package:
- mariadb: fix test configuration
+Message-Id: <20240903184427.DE12686B0C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] DEVELOPERS: remove Maeva
+ Manuel
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,45 +65,37 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=78a29492f5a2d344164f2619fe295041d5b153d5
+commit: https://git.buildroot.net/buildroot/commit/?id=92453b8029288859d8012e000933ba2ddc6a61db
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-The mysql virtual package was removed in commit 8708f3a23a
-"package/mysql: drop virtual package".
-
-The mariadb runtime test was authored before this mysql virtual
-package removal, but was merged after it, in commit 5356754d1e
-"support/testing: add mariadb runtime test". Due to this, this test
-always failed with the error:
-
-    Makefile.legacy:9: *** "You have legacy configuration in your .config! Please check your configuration.".  Stop.
-
-This commit fixes the issue by removing the legacy
-BR2_PACKAGE_MYSQL=y configuration directive.
-
-Fixes:
-https://gitlab.com/buildroot.org/buildroot/-/jobs/7540345406
+Maeva told me personally she will no longer contribute to Buildroot
+for the time being. This commit removes all the associated DEVELOPERS
+entries.
 
 Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 3da3361a1b9cafb274dac776693720fe20f6681b)
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 92d652df4869d073e383d9d44b5c43e338d83c29)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- support/testing/tests/package/test_mariadb.py | 1 -
- 1 file changed, 1 deletion(-)
+ DEVELOPERS | 5 -----
+ 1 file changed, 5 deletions(-)
 
-diff --git a/support/testing/tests/package/test_mariadb.py b/support/testing/tests/package/test_mariadb.py
-index 523f075db1..d40ffdba96 100644
---- a/support/testing/tests/package/test_mariadb.py
-+++ b/support/testing/tests/package/test_mariadb.py
-@@ -19,7 +19,6 @@ class TestMariaDB(infra.basetest.BRTest):
-         BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.78"
-         BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-         BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
--        BR2_PACKAGE_MYSQL=y
-         BR2_PACKAGE_MARIADB=y
-         BR2_PACKAGE_MARIADB_SERVER=y
-         BR2_TARGET_ROOTFS_EXT2=y
+diff --git a/DEVELOPERS b/DEVELOPERS
+index d1c4c6ece0..2582f1415b 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2054,11 +2054,6 @@ N:	Ludwig Kormann <ludwig.kormann@ict42.de>
+ F:	board/in-circuit/
+ F:	configs/icnova*
+ 
+-N:	Maeva Manuel <maeva.manuel@oss.nxp.com>
+-F:	board/freescale/imx8qmmek/
+-F:	configs/freescale_imx8qmmek_defconfig
+-F:	package/freescale-imx/imx-seco/
+-
+ N:	Mahyar Koshkouei <mahyar.koshkouei@gmail.com>
+ F:	package/ffmpeg/
+ F:	package/mpv/
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
