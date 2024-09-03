@@ -4,49 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 94D05CD3440
-	for <buildroot@archiver.kernel.org>; Tue,  3 Sep 2024 21:08:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0D38CD3440
+	for <buildroot@archiver.kernel.org>; Tue,  3 Sep 2024 21:08:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 451CC401E4;
-	Tue,  3 Sep 2024 21:08:18 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8F359401E4;
+	Tue,  3 Sep 2024 21:08:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6iyBpXbeR3bf; Tue,  3 Sep 2024 21:08:17 +0000 (UTC)
+ id gTwNf_bfgKa2; Tue,  3 Sep 2024 21:08:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D429A40201
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0A24B4028C
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D429A40201;
-	Tue,  3 Sep 2024 21:08:16 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2ABC91BF48B
- for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 21:08:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0A24B4028C;
+	Tue,  3 Sep 2024 21:08:23 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 0397F1BF48B
+ for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 21:08:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 17F9140198
- for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 21:08:15 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id E413D80E60
+ for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 21:08:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tse5uZQfqYCi for <buildroot@lists.busybox.net>;
- Tue,  3 Sep 2024 21:08:13 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WefZ6BxwB_Jc for <buildroot@lists.busybox.net>;
+ Tue,  3 Sep 2024 21:08:19 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::227;
+ helo=relay7-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D6E0040182
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id D6E0040182
- for <buildroot@buildroot.org>; Tue,  3 Sep 2024 21:08:13 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CBE2D86D00; Tue,  3 Sep 2024 21:08:13 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Tue, 3 Sep 2024 23:05:29 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: f014a44646a1fea37449e3c97073816400e74f04
-X-Git-Newrev: 2297dfc0e79d15770c4ee232002d09193fe8a7cd
-X-Patchwork-Hint: ignore
-Message-Id: <20240903210813.CBE2D86D00@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/dbus-broker: bump to
- version 36
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org AE56580E5E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AE56580E5E
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::227])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id AE56580E5E
+ for <buildroot@busybox.net>; Tue,  3 Sep 2024 21:08:18 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 1E6FF20002;
+ Tue,  3 Sep 2024 21:08:17 +0000 (UTC)
+Date: Tue, 3 Sep 2024 23:08:16 +0200
+To: Francois Perrad <francois.perrad@gadz.org>
+Message-ID: <20240903230816.36912f3d@windsurf>
+In-Reply-To: <20240902203454.2649413-1-francois.perrad@gadz.org>
+References: <20240902203454.2649413-1-francois.perrad@gadz.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1725397697;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=2eXJ3y3HEfoOB4OKLd7furMWF6ROdBD9dOGKgBahLxM=;
+ b=mVxwkuYIk75e6x1nhhTMJPwGrGRaXO/sSf/ztMDm1N7dsMmVgkdA0Qj37hKEnHE6Oua1wn
+ TM2PQyPavPPEKu+k32AnX5Zf8VlzLYtu2I/AYTYpZAPjlNFB5PVzfAV4mTIFnufHoazgca
+ J/eIEEESHewxIdjS1a9Q6QN0WNd7+K2ZGa92dcYlE5fJAvZd59c6weaFztNWFaDDklz6q4
+ OWl+E9aCaTDrBkJnBpwnxzxm3mEBTRgH/0LXuCfpIBCXTWYjpSY3yr8RvuCa+9r72/zCHQ
+ neUVvS7vFYT7Zv8w4FxtcTl6QJhE/uTJIYiAXfyxPhrrg6W/ZZ7s6ZoUsR0Ulg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=mVxwkuYI
+Subject: Re: [Buildroot] [PATCH] package/dbus-broker: bump to version 36
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,84 +82,49 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@busybox.net
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2297dfc0e79d15770c4ee232002d09193fe8a7cd
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On Mon,  2 Sep 2024 22:34:54 +0200
+Francois Perrad <francois.perrad@gadz.org> wrote:
 
-diff subprojects/libcdvar-1/AUTHORS
-    +        Kostadin Shishmanov <kocelfc@tutanota.com>
+> diff subprojects/libcdvar-1/AUTHORS
+>     +        Kostadin Shishmanov <kocelfc@tutanota.com>
+> 
+> diff subprojects/libcrbtree-3/README.md
+>     + * **Documentation**: <https://c-rbtree.readthedocs.io>
+> 
+> diff subprojects/libcstdaux-1/AUTHORS
+>     +        Copyright (C) 2022-2023 David Rheinsberg
+>     -        David Rheinsberg <david.rheinsberg@gmail.com>
+>     +        Adrian Vovk <adrianvovk@gmail.com>
+>     +        David Rheinsberg <david@readahead.eu>
+>     +        Nikita Popov <npopov@redhat.com>
+> 
+> diff subprojects/libcutf8-1/AUTHORS
+>     +        Copyright (C) 2022-2023 David Rheinsberg
+>     -        David Rheinsberg <david.rheinsberg@gmail.com>
+>     +        David Rheinsberg <david@readahead.eu>
+>     +        Jan Engelhardt <jengelh@inai.de>
+> 
+> diff subprojects/libcutf8-1/README.md: minor wordings
+> 
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>  package/dbus-broker/dbus-broker.hash | 12 ++++++------
+>  package/dbus-broker/dbus-broker.mk   |  2 +-
+>  2 files changed, 7 insertions(+), 7 deletions(-)
 
-diff subprojects/libcrbtree-3/README.md
-    + * **Documentation**: <https://c-rbtree.readthedocs.io>
+Applied to next, thanks.
 
-diff subprojects/libcstdaux-1/AUTHORS
-    +        Copyright (C) 2022-2023 David Rheinsberg
-    -        David Rheinsberg <david.rheinsberg@gmail.com>
-    +        Adrian Vovk <adrianvovk@gmail.com>
-    +        David Rheinsberg <david@readahead.eu>
-    +        Nikita Popov <npopov@redhat.com>
-
-diff subprojects/libcutf8-1/AUTHORS
-    +        Copyright (C) 2022-2023 David Rheinsberg
-    -        David Rheinsberg <david.rheinsberg@gmail.com>
-    +        David Rheinsberg <david@readahead.eu>
-    +        Jan Engelhardt <jengelh@inai.de>
-
-diff subprojects/libcutf8-1/README.md: minor wordings
-
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/dbus-broker/dbus-broker.hash | 12 ++++++------
- package/dbus-broker/dbus-broker.mk   |  2 +-
- 2 files changed, 7 insertions(+), 7 deletions(-)
-
-diff --git a/package/dbus-broker/dbus-broker.hash b/package/dbus-broker/dbus-broker.hash
-index 06c8f229b7..fd4f43d16e 100644
---- a/package/dbus-broker/dbus-broker.hash
-+++ b/package/dbus-broker/dbus-broker.hash
-@@ -1,17 +1,17 @@
- # Locally calculated
--sha256  23713f25624749fdb274907e429080fa2d8f4dbe76acd87bb6d21a3c818c7841  dbus-broker-33.tar.xz
-+sha256  d333d99bd2688135b6d6961e7ad1360099d186078781c87102230910ea4e162b  dbus-broker-36.tar.xz
- sha256  3cda3630283eda0eab825abe5ac84d191248c6b3fe1c232a118124959b96c6a4  LICENSE
--sha256  20ea1f96abc15553695c6725bb3dcabff4b43b85b7ca7d675a2b8860e3b01f87  subprojects/libcdvar-1/AUTHORS
-+sha256  ce7b8b8fb05126e556b3f9ed97fe21aa654e4ff411c00a9fd219ecbaae26abe0  subprojects/libcdvar-1/AUTHORS
- sha256  8153c478102dc209b30dd4627cf5bb3596263f99692bf3eec174b1e17bbf8a3b  subprojects/libcdvar-1/README.md
- sha256  6d63b1fb794d4c02622595ad30357c90398aa883864e5a275479139c8f03208f  subprojects/libcini-1/AUTHORS
- sha256  fc92d49d69aa9aa91919bac79242abee3eda27a567b4573ed3690b5cef0cf2fd  subprojects/libcini-1/README.md
- sha256  a30deb6dde90366bfaf054bc689a209b974f80c1cceac950c4378c14abaa243a  subprojects/libclist-3/AUTHORS
- sha256  75f4c76441ac69ba9474bb7ad0958389ca0f1f2fc90c5f7b033be3461652f5a6  subprojects/libclist-3/README.md
- sha256  23f24eeaaded5fedd6e7840b6f7b73838f9a4e2112ad6a12fe1ef958f73d0214  subprojects/libcrbtree-3/AUTHORS
--sha256  05113a24aca4c537819dd0d91b95b13edb85bea4b6a77a6d9269becb397ed374  subprojects/libcrbtree-3/README.md
-+sha256  a2ab28f3a7b4b29c0a361c96e220555904bfd713c78134e66b7551774749b453  subprojects/libcrbtree-3/README.md
- sha256  6d63b1fb794d4c02622595ad30357c90398aa883864e5a275479139c8f03208f  subprojects/libcshquote-1/AUTHORS
- sha256  cad109dd33062518a437ebee145ba863fe0e047d4e3db9c28b0bf3c6148f10c2  subprojects/libcshquote-1/README.md
--sha256  e796182869fe0892347d069f3f423774124987d6c45d016854fc51530633c177  subprojects/libcstdaux-1/AUTHORS
-+sha256  ec71c7ba4dfd282c434a00bde0c17bc347685be9d3df38d3a0df03adceb9d996  subprojects/libcstdaux-1/AUTHORS
- sha256  92006886d7f28894fef08bf97e35ef52147067bd3c4d4d6381da7c59f9901dae  subprojects/libcstdaux-1/README.md
--sha256  7e660796fea0400a1a9a539226c345b3c656a745a334e323e33258de7864e985  subprojects/libcutf8-1/AUTHORS
--sha256  106099cc1c488cbf8911f56da7977a955f6b27a7bb5b815985e59d9fae0e6fe7  subprojects/libcutf8-1/README.md
-+sha256  0dcfdbd0298538023ac93ed6be1f5dfd2fa973615b07e3b85d8b1c89970db423  subprojects/libcutf8-1/AUTHORS
-+sha256  a8d41713b802ad31c6c69bdcf475aa73f7be942986064e662039351ebb266d13  subprojects/libcutf8-1/README.md
-diff --git a/package/dbus-broker/dbus-broker.mk b/package/dbus-broker/dbus-broker.mk
-index 4266441ac9..0bbdd304af 100644
---- a/package/dbus-broker/dbus-broker.mk
-+++ b/package/dbus-broker/dbus-broker.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--DBUS_BROKER_VERSION = 33
-+DBUS_BROKER_VERSION = 36
- DBUS_BROKER_SOURCE = dbus-broker-$(DBUS_BROKER_VERSION).tar.xz
- DBUS_BROKER_SITE = https://github.com/bus1/dbus-broker/releases/download/v$(DBUS_BROKER_VERSION)
- 
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
