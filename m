@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7537DCD379F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Sep 2024 16:28:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6B496CD3448
+	for <buildroot@archiver.kernel.org>; Tue,  3 Sep 2024 16:28:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E197560773;
-	Tue,  3 Sep 2024 16:28:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 37E9E60741;
+	Tue,  3 Sep 2024 16:28:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KtdZNOudDrp9; Tue,  3 Sep 2024 16:28:29 +0000 (UTC)
+ id xVBjrxngfk6i; Tue,  3 Sep 2024 16:28:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0EBF960848
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3F17E60842
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0EBF960848;
-	Tue,  3 Sep 2024 16:28:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3F17E60842;
+	Tue,  3 Sep 2024 16:28:33 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 05E021BF373
- for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 16:28:12 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 164421BF373
+ for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 16:28:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C2F614016D
- for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 16:28:09 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8BD944022A
+ for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 16:28:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Q7f2S-rH9f5x for <buildroot@lists.busybox.net>;
- Tue,  3 Sep 2024 16:28:08 +0000 (UTC)
+ id F87HrdiMVnb5 for <buildroot@lists.busybox.net>;
+ Tue,  3 Sep 2024 16:28:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E812E4022A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D9D1540210
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id E812E4022A
+ by smtp2.osuosl.org (Postfix) with ESMTP id D9D1540210
  for <buildroot@buildroot.org>; Tue,  3 Sep 2024 16:28:07 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D2B5E86A1F; Tue,  3 Sep 2024 16:28:07 +0000 (UTC)
+ id C3CD486A1E; Tue,  3 Sep 2024 16:28:07 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 3 Sep 2024 18:10:55 +0200
+Date: Tue, 3 Sep 2024 18:06:43 +0200
 X-Git-Refname: refs/heads/2024.05.x
-X-Git-Oldrev: 9194f49cf4f8e07df9ddc48f0c5b4a13df855805
-X-Git-Newrev: 611adf8283db28f2dfb572161b1b760314ca9730
+X-Git-Oldrev: f10881b5b08784c4b31f1f2a49af99173e5b6a00
+X-Git-Newrev: 9194f49cf4f8e07df9ddc48f0c5b4a13df855805
 X-Patchwork-Hint: ignore
-Message-Id: <20240903162807.D2B5E86A1F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.05.x] package/odb: properly
- format Upstream: tags in patches
+Message-Id: <20240903162807.C3CD486A1E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.05.x] package/gcc: update to
+ 14.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,227 +65,73 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=611adf8283db28f2dfb572161b1b760314ca9730
+commit: https://git.buildroot.net/buildroot/commit/?id=9194f49cf4f8e07df9ddc48f0c5b4a13df855805
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.05.x
 
-All patches of the odb package already contained relevant Upstream
-information, just not formatted according to how we expect it. Let's
-fix that, and drop the .checkpackageignore entries that are no longer
-needed.
+List of bugs which were resolved in 14.2.0:
+https://gcc.gnu.org/bugzilla/buglist.cgi?bug_status=RESOLVED&resolution=FIXED&target_milestone=14.2
 
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 84ae3b04fe6cd70a4abccc5d9e19218583410c16)
+(cherry picked from commit f3148385f89bf052a420933c05dcd4e40f114c77)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .checkpackageignore                                         | 13 -------------
- ....h-include-in-gcc.hxx-appears-to-be-no-longer-nece.patch |  2 +-
- package/odb/0002-Remove-gratuitous-classes.patch            |  2 +-
- ...003-Initial-work-to-make-ODB-compatible-with-GCC-6.patch |  2 +-
- .../odb/0004-Make-compilable-with-GCC-6-in-C-14-mode.patch  |  2 +-
- .../0005-Fix-bug-in-GCC-6-input_location-translation.patch  |  2 +-
- package/odb/0006-Adapt-to-changes-in-GCC-8.patch            |  2 +-
- .../odb/0007-Switch-to-C-11-get-rid-of-auto_ptr-use.patch   |  2 +-
- ...x-GCC-8-adaptation-to-be-compatible-with-previous-.patch |  2 +-
- ...009-Handle-namespace-aliases-when-parsing-GCC-tree.patch |  2 +-
- package/odb/0010-Add-initial-support-for-GCC-9.patch        |  2 +-
- package/odb/0011-Adjust-to-changes-in-GCC-10.patch          |  2 +-
- package/odb/0012-Adjust-to-changes-in-GCC-11.patch          |  2 +-
- ...solve-name-lookup-ambiguity-causing-error-with-GCC.patch |  2 +-
- 14 files changed, 13 insertions(+), 26 deletions(-)
+ .checkpackageignore                                                   | 2 +-
+ .../0001-disable-split-stack-for-non-thread-builds.patch              | 0
+ .../0002-libsanitizer-also-undef-_TIME_BITS-in-sanitizer_proc.patch   | 0
+ package/gcc/Config.in.host                                            | 2 +-
+ package/gcc/gcc.hash                                                  | 4 ++--
+ 5 files changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/.checkpackageignore b/.checkpackageignore
-index 05e97ebccc..640da2eb28 100644
+index 47da52c4eb..05e97ebccc 100644
 --- a/.checkpackageignore
 +++ b/.checkpackageignore
-@@ -1102,19 +1102,6 @@ package/numactl/0001-link-with-latomic-if-needed-again.patch lib_patch.Upstream
- package/nuttcp/0001-susv3-legacy.patch lib_patch.Upstream
- package/nvidia-driver/0001-use-LDFLAGS.patch lib_patch.Upstream
- package/octave/0001-Fix-BLAS-library-integer-size-detection.patch lib_patch.Upstream
--package/odb/0001-tm.h-include-in-gcc.hxx-appears-to-be-no-longer-nece.patch lib_patch.Upstream
--package/odb/0002-Remove-gratuitous-classes.patch lib_patch.Upstream
--package/odb/0003-Initial-work-to-make-ODB-compatible-with-GCC-6.patch lib_patch.Upstream
--package/odb/0004-Make-compilable-with-GCC-6-in-C-14-mode.patch lib_patch.Upstream
--package/odb/0005-Fix-bug-in-GCC-6-input_location-translation.patch lib_patch.Upstream
--package/odb/0006-Adapt-to-changes-in-GCC-8.patch lib_patch.Upstream
--package/odb/0007-Switch-to-C-11-get-rid-of-auto_ptr-use.patch lib_patch.Upstream
--package/odb/0008-Fix-GCC-8-adaptation-to-be-compatible-with-previous-.patch lib_patch.Upstream
--package/odb/0009-Handle-namespace-aliases-when-parsing-GCC-tree.patch lib_patch.Upstream
--package/odb/0010-Add-initial-support-for-GCC-9.patch lib_patch.Upstream
--package/odb/0011-Adjust-to-changes-in-GCC-10.patch lib_patch.Upstream
--package/odb/0012-Adjust-to-changes-in-GCC-11.patch lib_patch.Upstream
--package/odb/0013-Resolve-name-lookup-ambiguity-causing-error-with-GCC.patch lib_patch.Upstream
- package/ofono/0001-uclibc-backtrace.patch lib_patch.Upstream
- package/ofono/S46ofono lib_sysv.Variables
- package/ola/0001-ola-fix-compilation-with-musl-1-2-3.patch lib_patch.Upstream
-diff --git a/package/odb/0001-tm.h-include-in-gcc.hxx-appears-to-be-no-longer-nece.patch b/package/odb/0001-tm.h-include-in-gcc.hxx-appears-to-be-no-longer-nece.patch
-index 0216038f2c..a9366d6fb8 100644
---- a/package/odb/0001-tm.h-include-in-gcc.hxx-appears-to-be-no-longer-nece.patch
-+++ b/package/odb/0001-tm.h-include-in-gcc.hxx-appears-to-be-no-longer-nece.patch
-@@ -6,7 +6,7 @@ Subject: [PATCH] <tm.h> include in gcc.hxx appears to be no longer necessary
- On MIPS this file pulls in enum processor which conflicts with
- our class processor.
+@@ -638,7 +638,7 @@ package/gamin/0002-no-const-return.patch lib_patch.Sob lib_patch.Upstream
+ package/gamin/0003-fix-missing-PTHREAD_MUTEX_RECURSIVE_NP.patch lib_patch.Upstream
+ package/gcc/12.4.0/0001-disable-split-stack-for-non-thread-builds.patch lib_patch.Upstream
+ package/gcc/13.3.0/0001-disable-split-stack-for-non-thread-builds.patch lib_patch.Upstream
+-package/gcc/14.1.0/0001-disable-split-stack-for-non-thread-builds.patch lib_patch.Upstream
++package/gcc/14.2.0/0001-disable-split-stack-for-non-thread-builds.patch lib_patch.Upstream
+ package/gcc/8.4.0/0001-xtensa-fix-PR-target-91880.patch lib_patch.Upstream
+ package/gcc/8.4.0/0002-Revert-re-PR-target-92095-internal-error-with-O1-mcp.patch lib_patch.Upstream
+ package/gcc/8.4.0/0003-libsanitizer-Remove-cyclades-from-libsanitizer.patch lib_patch.Upstream
+diff --git a/package/gcc/14.1.0/0001-disable-split-stack-for-non-thread-builds.patch b/package/gcc/14.2.0/0001-disable-split-stack-for-non-thread-builds.patch
+similarity index 100%
+rename from package/gcc/14.1.0/0001-disable-split-stack-for-non-thread-builds.patch
+rename to package/gcc/14.2.0/0001-disable-split-stack-for-non-thread-builds.patch
+diff --git a/package/gcc/14.1.0/0002-libsanitizer-also-undef-_TIME_BITS-in-sanitizer_proc.patch b/package/gcc/14.2.0/0002-libsanitizer-also-undef-_TIME_BITS-in-sanitizer_proc.patch
+similarity index 100%
+rename from package/gcc/14.1.0/0002-libsanitizer-also-undef-_TIME_BITS-in-sanitizer_proc.patch
+rename to package/gcc/14.2.0/0002-libsanitizer-also-undef-_TIME_BITS-in-sanitizer_proc.patch
+diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
+index 5d3b803c78..911bc2f4de 100644
+--- a/package/gcc/Config.in.host
++++ b/package/gcc/Config.in.host
+@@ -75,7 +75,7 @@ config BR2_GCC_VERSION
+ 	default "8.4.0"     if BR2_GCC_VERSION_POWERPC_SPE
+ 	default "12.4.0"    if BR2_GCC_VERSION_12_X
+ 	default "13.3.0"    if BR2_GCC_VERSION_13_X
+-	default "14.1.0"    if BR2_GCC_VERSION_14_X
++	default "14.2.0"    if BR2_GCC_VERSION_14_X
+ 	default "arc-2023.09-release" if BR2_GCC_VERSION_ARC
  
--[Upstream: f0bbc17aeed1b636782a4b92e8191d90f310d0a2]
-+Upstream: https://git.codesynthesis.com/cgit/odb/odb/commit/?id=f0bbc17aeed1b636782a4b92e8191d90f310d0a2
- Signed-off-by: Kamel Bouhara <kamel.bouhara@bootlin.com>
- ---
-  odb/gcc.hxx | 2 --
-diff --git a/package/odb/0002-Remove-gratuitous-classes.patch b/package/odb/0002-Remove-gratuitous-classes.patch
-index f2d9303e09..7fd70e8a21 100644
---- a/package/odb/0002-Remove-gratuitous-classes.patch
-+++ b/package/odb/0002-Remove-gratuitous-classes.patch
-@@ -6,7 +6,7 @@ Subject: [PATCH] Remove gratuitous classes
- In the process also get rid of global class processor which conflicts
- with enum processor on MIPS.
+ config BR2_EXTRA_GCC_CONFIG_OPTIONS
+diff --git a/package/gcc/gcc.hash b/package/gcc/gcc.hash
+index 4534655790..b7c53f8fbe 100644
+--- a/package/gcc/gcc.hash
++++ b/package/gcc/gcc.hash
+@@ -6,8 +6,8 @@ sha512  440c08ca746da450d9a1b35e8fd2305cb27e7e6987cd9d0f7d375f3b1fc9e4b0bd7acb3c
+ sha512  5bd29402cad2deb5d9388d0236c7146414d77e5b8d5f1c6c941c7a1f47691c3389f08656d5f6e8e2d6717bf2c81f018d326f632fb468f42925b40bd217fc4853  gcc-12.4.0.tar.xz
+ # From https://gcc.gnu.org/pub/gcc/releases/gcc-13.3.0/sha512.sum
+ sha512  ed5f2f4c6ed2c796fcf2c93707159e9dbd3ddb1ba063d549804dd68cdabbb6d550985ae1c8465ae9a336cfe29274a6eb0f42e21924360574ebd8e5d5c7c9a801  gcc-13.3.0.tar.xz
+-# From https://gcc.gnu.org/pub/gcc/releases/gcc-14.1.0/sha512.sum
+-sha512  e9e224f2b26646fcf038d28dfa08b94c623bc57941f99894a321d01c600f7c68aff6b8837fd25e73e540de1f8de5606e98694a62cdcdfb525ce768b3ef6879ea  gcc-14.1.0.tar.xz
++# From https://gcc.gnu.org/pub/gcc/releases/gcc-14.2.0/sha512.sum
++sha512  932bdef0cda94bacedf452ab17f103c0cb511ff2cec55e9112fc0328cbf1d803b42595728ea7b200e0a057c03e85626f937012e49a7515bc5dd256b2bf4bc396  gcc-14.2.0.tar.xz
  
--[Upstream: bbc39ffe31c67506b4c03fc56fa3adcb925b6325]
-+Upstream: https://git.codesynthesis.com/cgit/odb/odb/commit/?id=bbc39ffe31c67506b4c03fc56fa3adcb925b6325
- Signed-off-by: Kamel Bouhara <kamel.bouhara@bootlin.com>
- ---
-  odb/context.hxx              |  3 ++-
-diff --git a/package/odb/0003-Initial-work-to-make-ODB-compatible-with-GCC-6.patch b/package/odb/0003-Initial-work-to-make-ODB-compatible-with-GCC-6.patch
-index e2b97cca6c..4c936f4453 100644
---- a/package/odb/0003-Initial-work-to-make-ODB-compatible-with-GCC-6.patch
-+++ b/package/odb/0003-Initial-work-to-make-ODB-compatible-with-GCC-6.patch
-@@ -3,7 +3,7 @@ From: Boris Kolpackov <boris@codesynthesis.com>
- Date: Fri, 5 Feb 2016 16:01:42 +0200
- Subject: [PATCH] Initial work to make ODB compatible with GCC 6
- 
--[Upstream: 511dcf67322ad87fb32f97d1cf7725c129e83898]
-+Upstream: https://git.codesynthesis.com/cgit/odb/odb/commit/?id=511dcf67322ad87fb32f97d1cf7725c129e83898
- Signed-off-by: Kamel Bouhara <kamel.bouhara@bootlin.com>
- ---
-  odb/cxx-lexer.cxx          |  4 ++++
-diff --git a/package/odb/0004-Make-compilable-with-GCC-6-in-C-14-mode.patch b/package/odb/0004-Make-compilable-with-GCC-6-in-C-14-mode.patch
-index 57288af044..8911590ec1 100644
---- a/package/odb/0004-Make-compilable-with-GCC-6-in-C-14-mode.patch
-+++ b/package/odb/0004-Make-compilable-with-GCC-6-in-C-14-mode.patch
-@@ -3,7 +3,7 @@ From: Boris Kolpackov <boris@codesynthesis.com>
- Date: Mon, 8 Feb 2016 18:39:21 +0200
- Subject: [PATCH] Make compilable with GCC 6 in C++14 mode
- 
--[Upstream: 61d13eb53ade9f30a64892a901401bda5e42c335]
-+Upstream: https://git.codesynthesis.com/cgit/odb/odb/commit/?id=61d13eb53ade9f30a64892a901401bda5e42c335
- Signed-off-by: Kamel Bouhara <kamel.bouhara@bootlin.com>
- ---
-  odb/gcc.hxx    | 9 ++++++---
-diff --git a/package/odb/0005-Fix-bug-in-GCC-6-input_location-translation.patch b/package/odb/0005-Fix-bug-in-GCC-6-input_location-translation.patch
-index 4e8c8f4fc3..af682502c9 100644
---- a/package/odb/0005-Fix-bug-in-GCC-6-input_location-translation.patch
-+++ b/package/odb/0005-Fix-bug-in-GCC-6-input_location-translation.patch
-@@ -3,7 +3,7 @@ From: Boris Kolpackov <boris@codesynthesis.com>
- Date: Fri, 23 Dec 2016 10:18:01 +0200
- Subject: [PATCH] Fix bug in GCC 6 input_location translation
- 
--[Upstream: ec777147024fde72e4411cc6b1e1e49f4a1d1804]
-+Upstream: https://git.codesynthesis.com/cgit/odb/odb/commit/?id=ec777147024fde72e4411cc6b1e1e49f4a1d1804
- Signed-off-by: Kamel Bouhara <kamel.bouhara@bootlin.com>
- ---
-  odb/cxx-lexer.cxx | 8 ++++++++
-diff --git a/package/odb/0006-Adapt-to-changes-in-GCC-8.patch b/package/odb/0006-Adapt-to-changes-in-GCC-8.patch
-index c0ef4e8bfa..2f907de663 100644
---- a/package/odb/0006-Adapt-to-changes-in-GCC-8.patch
-+++ b/package/odb/0006-Adapt-to-changes-in-GCC-8.patch
-@@ -3,7 +3,7 @@ From: Boris Kolpackov <boris@codesynthesis.com>
- Date: Tue, 7 Nov 2017 14:58:43 +0200
- Subject: [PATCH] Adapt to changes in GCC 8
- 
--[Upstream: 356630ced28f3101e8e2d88e3c52f8d3008515c7]
-+Upstream: https://git.codesynthesis.com/cgit/odb/odb/commit/?id=356630ced28f3101e8e2d88e3c52f8d3008515c7
- Signed-off-by: Kamel Bouhara <kamel.bouhara@bootlin.com>
- ---
-  odb/cxx-lexer.cxx          | 16 ++++++++++++++--
-diff --git a/package/odb/0007-Switch-to-C-11-get-rid-of-auto_ptr-use.patch b/package/odb/0007-Switch-to-C-11-get-rid-of-auto_ptr-use.patch
-index bf856eb487..e3fbc21ae6 100644
---- a/package/odb/0007-Switch-to-C-11-get-rid-of-auto_ptr-use.patch
-+++ b/package/odb/0007-Switch-to-C-11-get-rid-of-auto_ptr-use.patch
-@@ -3,7 +3,7 @@ From: Boris Kolpackov <boris@codesynthesis.com>
- Date: Tue, 7 Nov 2017 10:37:53 +0200
- Subject: [PATCH] Switch to C++11, get rid of auto_ptr use
- 
--[Upstream: 6e374de9ae2f2978f2fca3390aba4ea3f72bfade]
-+Upstream: https://git.codesynthesis.com/cgit/odb/odb/commit/?id=6e374de9ae2f2978f2fca3390aba4ea3f72bfade
- Signed-off-by: Kamel Bouhara <kamel.bouhara@bootlin.com>
- ---
-  odb/Makefile.am   |  5 +++++
-diff --git a/package/odb/0008-Fix-GCC-8-adaptation-to-be-compatible-with-previous-.patch b/package/odb/0008-Fix-GCC-8-adaptation-to-be-compatible-with-previous-.patch
-index b89c35fb8f..818a95db73 100644
---- a/package/odb/0008-Fix-GCC-8-adaptation-to-be-compatible-with-previous-.patch
-+++ b/package/odb/0008-Fix-GCC-8-adaptation-to-be-compatible-with-previous-.patch
-@@ -4,7 +4,7 @@ Date: Tue, 7 Nov 2017 16:57:35 +0200
- Subject: [PATCH] Fix GCC 8 adaptation to be compatible with previous
-  versions
- 
--[Upstream: 006bbc5748a8197d7874550cc9186545f1c55ad8]
-+Upstream: https://git.codesynthesis.com/cgit/odb/odb/commit/?id=006bbc5748a8197d7874550cc9186545f1c55ad8
- Signed-off-by: Kamel Bouhara <kamel.bouhara@bootlin.com>
- ---
-  odb/validator.cxx | 6 ++++++
-diff --git a/package/odb/0009-Handle-namespace-aliases-when-parsing-GCC-tree.patch b/package/odb/0009-Handle-namespace-aliases-when-parsing-GCC-tree.patch
-index bac7abea1f..dbe2d533bd 100644
---- a/package/odb/0009-Handle-namespace-aliases-when-parsing-GCC-tree.patch
-+++ b/package/odb/0009-Handle-namespace-aliases-when-parsing-GCC-tree.patch
-@@ -3,7 +3,7 @@ From: Boris Kolpackov <boris@codesynthesis.com>
- Date: Fri, 5 Oct 2018 07:20:18 +0200
- Subject: [PATCH] Handle namespace aliases when parsing GCC tree
- 
--[Upstream: 3a1788234bfaa96ee093b68e9ba02cf7d5bdffe6]
-+Upstream: https://git.codesynthesis.com/cgit/odb/odb/commit/?id=3a1788234bfaa96ee093b68e9ba02cf7d5bdffe6
- Signed-off-by: Kamel Bouhara <kamel.bouhara@bootlin.com>
- ---
-  odb/parser.cxx | 5 +++++
-diff --git a/package/odb/0010-Add-initial-support-for-GCC-9.patch b/package/odb/0010-Add-initial-support-for-GCC-9.patch
-index dd36882bc5..c6c4c0a52d 100644
---- a/package/odb/0010-Add-initial-support-for-GCC-9.patch
-+++ b/package/odb/0010-Add-initial-support-for-GCC-9.patch
-@@ -3,7 +3,7 @@ From: Boris Kolpackov <boris@codesynthesis.com>
- Date: Fri, 15 Mar 2019 17:37:28 +0200
- Subject: [PATCH] Add initial support for GCC 9
- 
--[Upstream: 841140bbf13ae2bfaa5978a181718cda0a8edae7]
-+Upstream: https://git.codesynthesis.com/cgit/odb/odb/commit/?id=841140bbf13ae2bfaa5978a181718cda0a8edae7
- Signed-off-by: Kamel Bouhara <kamel.bouhara@bootlin.com>
- ---
-  odb/cxx-lexer.cxx | 33 +++++++++++++++++++++++++++------
-diff --git a/package/odb/0011-Adjust-to-changes-in-GCC-10.patch b/package/odb/0011-Adjust-to-changes-in-GCC-10.patch
-index 33d46d792e..0da8b09bf1 100644
---- a/package/odb/0011-Adjust-to-changes-in-GCC-10.patch
-+++ b/package/odb/0011-Adjust-to-changes-in-GCC-10.patch
-@@ -3,7 +3,7 @@ From: Boris Kolpackov <boris@codesynthesis.com>
- Date: Wed, 17 Jun 2020 11:22:11 +0200
- Subject: [PATCH] Adjust to changes in GCC 10
- 
--[Upstream: 060bb7eb4d008fbd4a9fa8ef7c5e33c9e483eb52]
-+Upstream: https://git.codesynthesis.com/cgit/odb/odb/commit/?id=060bb7eb4d008fbd4a9fa8ef7c5e33c9e483eb52
- Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- ---
-  odb/gcc.hxx                | 7 +++++--
-diff --git a/package/odb/0012-Adjust-to-changes-in-GCC-11.patch b/package/odb/0012-Adjust-to-changes-in-GCC-11.patch
-index 2959a71dea..e5601b048e 100644
---- a/package/odb/0012-Adjust-to-changes-in-GCC-11.patch
-+++ b/package/odb/0012-Adjust-to-changes-in-GCC-11.patch
-@@ -3,7 +3,7 @@ From: Boris Kolpackov <boris@codesynthesis.com>
- Date: Wed, 31 Mar 2021 10:45:21 +0200
- Subject: [PATCH] Adjust to changes in GCC 11
- 
--[Upstream: 61d80f051293a7449a09081f60f48b8377bfbbad]
-+Upstream: https://git.codesynthesis.com/cgit/odb/odb/commit/?id=61d80f051293a7449a09081f60f48b8377bfbbad
- Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- ---
-  odb/gcc.hxx | 20 ++++++++++++++++++++
-diff --git a/package/odb/0013-Resolve-name-lookup-ambiguity-causing-error-with-GCC.patch b/package/odb/0013-Resolve-name-lookup-ambiguity-causing-error-with-GCC.patch
-index 79c3d982fa..fed8b6319b 100644
---- a/package/odb/0013-Resolve-name-lookup-ambiguity-causing-error-with-GCC.patch
-+++ b/package/odb/0013-Resolve-name-lookup-ambiguity-causing-error-with-GCC.patch
-@@ -3,7 +3,7 @@ From: Boris Kolpackov <boris@codesynthesis.com>
- Date: Wed, 7 Jul 2021 09:26:57 +0200
- Subject: [PATCH] Resolve name lookup ambiguity causing error with GCC 11
- 
--[Upstream: 47035c0f72efd99a2210cd45db6e42423fb74533]
-+Upstream: https://git.codesynthesis.com/cgit/odb/odb/commit/?id=47035c0f72efd99a2210cd45db6e42423fb74533
- Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- ---
-  odb/relational/header.hxx | 2 ++
+ # Locally calculated (fetched from Github)
+ sha512  4dca20f517a42bb027fec605965b09fb917a535eebf3fe3e811d93476b02b1962df5ad4665f117bd44c2ec8e8015d51a44c00591761fe5f259c201ac5c7d920f  gcc-arc-2023.09-release.tar.gz
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
