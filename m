@@ -4,48 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1B95E6FE48
-	for <buildroot@archiver.kernel.org>; Fri,  6 Sep 2024 20:05:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E520FE6FE46
+	for <buildroot@archiver.kernel.org>; Fri,  6 Sep 2024 20:05:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7CFE184A04;
-	Fri,  6 Sep 2024 20:05:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B29D884A0B;
+	Fri,  6 Sep 2024 20:05:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Mqkr10keLK3t; Fri,  6 Sep 2024 20:05:46 +0000 (UTC)
+ id FI7NbEJogZV8; Fri,  6 Sep 2024 20:05:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5734E84A0B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8F8F584A13
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5734E84A0B;
-	Fri,  6 Sep 2024 20:05:46 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1FF5D1BF20B
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8F8F584A13;
+	Fri,  6 Sep 2024 20:05:49 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id D2B181BF20B
  for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 19:59:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1618460770
- for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 19:59:02 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id EAFC440C97
+ for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 19:59:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xBug_Ad-X04z for <buildroot@lists.busybox.net>;
- Fri,  6 Sep 2024 19:58:58 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JzMO2R9rf6GO for <buildroot@lists.busybox.net>;
+ Fri,  6 Sep 2024 19:58:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0A456610C1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8D3F54086C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0A456610C1
- for <buildroot@buildroot.org>; Fri,  6 Sep 2024 19:58:56 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8D3F54086C
+ for <buildroot@buildroot.org>; Fri,  6 Sep 2024 19:58:58 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 06E4B828CC; Fri,  6 Sep 2024 19:58:56 +0000 (UTC)
+ id 867CE869F2; Fri,  6 Sep 2024 19:58:58 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Fri, 23 Aug 2024 18:39:43 +0200
+Date: Tue, 3 Sep 2024 22:02:00 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 91f3ffd847c95aff43886140854f52f9ef122171
-X-Git-Newrev: b5fe7088e842aaaed1730f2d50d60e514e052105
+X-Git-Oldrev: 6fbb04b36654b6d09172404984bda274a0f4591b
+X-Git-Newrev: e1c316bc4018816a5a118d21f98bc3380a52f382
 X-Patchwork-Hint: ignore
-Message-Id: <20240906195856.06E4B828CC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/samba4: bump version to 4.20.4
+Message-Id: <20240906195858.867CE869F2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit]
+ toolchain/toolchain-external/toolchain-external-arm-aarch64-be: bump to
+ 13.3.rel1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,52 +60,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b5fe7088e842aaaed1730f2d50d60e514e052105
+commit: https://git.buildroot.net/buildroot/commit/?id=e1c316bc4018816a5a118d21f98bc3380a52f382
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes:
-https://www.samba.org/samba/history/samba-4.20.4.html
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/samba4/samba4.hash | 4 ++--
- package/samba4/samba4.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ .../toolchain-external/toolchain-external-arm-aarch64-be/Config.in    | 2 +-
+ .../toolchain-external-arm-aarch64-be.hash                            | 4 ++--
+ .../toolchain-external-arm-aarch64-be.mk                              | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index d2512f2e0a..71fe862901 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://download.samba.org/pub/samba/stable/samba-4.20.3.tar.asc
--sha256  afd5a9bb03e5c921c4c1d4e4b4fa6ea16cf798d94e5e5bffb9fd61716641cf30  samba-4.20.3.tar.gz
-+# https://download.samba.org/pub/samba/stable/samba-4.20.4.tar.asc
-+sha256  3a92e97eaeb345b6b32232f503e14d34f03a7aa64c451fe8c258a11bbda908e5  samba-4.20.4.tar.gz
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index d48a02140f..f08303a346 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
+diff --git a/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/Config.in b/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/Config.in
+index 1cee601a89..d3c095b2b6 100644
+--- a/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/Config.in
++++ b/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/Config.in
+@@ -1,5 +1,5 @@
+ config BR2_TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE
+-	bool "Arm AArch64 BE 13.2.rel1"
++	bool "Arm AArch64 BE 13.3.rel1"
+ 	depends on BR2_aarch64_be
+ 	depends on BR2_HOSTARCH = "x86_64"
+ 	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_13
+diff --git a/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/toolchain-external-arm-aarch64-be.hash b/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/toolchain-external-arm-aarch64-be.hash
+index a9830c43c3..f876465543 100644
+--- a/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/toolchain-external-arm-aarch64-be.hash
++++ b/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/toolchain-external-arm-aarch64-be.hash
+@@ -1,2 +1,2 @@
+-# From https://developer.arm.com/-/media/Files/downloads/gnu/13.2.rel1/binrel/arm-gnu-toolchain-13.2.rel1-x86_64-aarch64_be-none-linux-gnu.tar.xz.sha256asc
+-sha256  fe864b2b15127f58867a171cfcd639318609e734fbc8b78bb40258312a21a097  arm-gnu-toolchain-13.2.rel1-x86_64-aarch64_be-none-linux-gnu.tar.xz
++# From https://developer.arm.com/-/media/Files/downloads/gnu/13.3.rel1/binrel/arm-gnu-toolchain-13.3.rel1-x86_64-aarch64_be-none-linux-gnu.tar.xz.sha256asc
++sha256  55a2f073708c938ffe1d302859e5c3d6195b8bca3affa3d3aa6b2aafd79bf487  arm-gnu-toolchain-13.3.rel1-x86_64-aarch64_be-none-linux-gnu.tar.xz
+diff --git a/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/toolchain-external-arm-aarch64-be.mk b/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/toolchain-external-arm-aarch64-be.mk
+index 7771269b0d..dd03635e71 100644
+--- a/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/toolchain-external-arm-aarch64-be.mk
++++ b/toolchain/toolchain-external/toolchain-external-arm-aarch64-be/toolchain-external-arm-aarch64-be.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SAMBA4_VERSION = 4.20.3
-+SAMBA4_VERSION = 4.20.4
- SAMBA4_SITE = https://download.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
+-TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE_VERSION = 13.2.rel1
++TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE_VERSION = 13.3.rel1
+ TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE_SITE = https://developer.arm.com/-/media/Files/downloads/gnu/$(TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE_VERSION)/binrel
+ 
+ TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE_SOURCE = arm-gnu-toolchain-$(TOOLCHAIN_EXTERNAL_ARM_AARCH64_BE_VERSION)-x86_64-aarch64_be-none-linux-gnu.tar.xz
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
