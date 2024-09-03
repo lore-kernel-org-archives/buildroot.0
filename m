@@ -4,73 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8B2C2CD37B1
-	for <buildroot@archiver.kernel.org>; Tue,  3 Sep 2024 20:52:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 60E13CD37B1
+	for <buildroot@archiver.kernel.org>; Tue,  3 Sep 2024 21:01:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5526740145;
-	Tue,  3 Sep 2024 20:52:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 25FCF4015A;
+	Tue,  3 Sep 2024 21:01:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AHBmF-qyjUiU; Tue,  3 Sep 2024 20:52:00 +0000 (UTC)
+ id E9kzKhAo51_1; Tue,  3 Sep 2024 21:01:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1DD0440184
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BA79140223
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1DD0440184;
-	Tue,  3 Sep 2024 20:52:00 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4F4281BF57B
- for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 20:51:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BA79140223;
+	Tue,  3 Sep 2024 21:01:14 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 839311BF57B
+ for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 21:01:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 48C9240184
- for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 20:51:59 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 71EB980F27
+ for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 21:01:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BRCRdoid5X-o for <buildroot@lists.busybox.net>;
- Tue,  3 Sep 2024 20:51:58 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
- helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 0xG9dqqYXSxK for <buildroot@lists.busybox.net>;
+ Tue,  3 Sep 2024 21:01:12 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org EF87440145
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EF87440145
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp4.osuosl.org (Postfix) with ESMTPS id EF87440145
- for <buildroot@buildroot.org>; Tue,  3 Sep 2024 20:51:57 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 443B213F89C;
- Tue,  3 Sep 2024 22:51:53 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Tue, 03 Sep 2024 22:51:53 +0200
-Date: Tue, 3 Sep 2024 22:51:53 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Message-ID: <Ztd26aIl5GWiW1Vo@landeda>
-References: <20240903155622.922284-1-dario.binacchi@amarulasolutions.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20240903155622.922284-1-dario.binacchi@amarulasolutions.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1725396716;
- bh=5bk8k2H4i1nlXsxJW81hzJUwj9Kx5PYMrAqPb/S6rOQ=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=UYoIkcPext1C1BdRGdogrLZ53RIhVwexfEArdBmG4U3GVjKC+l1dX229uWDprzIeo
- pKRE8IQKR9Lvib7GvPy9vskBHWBmT2Ge80/ro8ImoFyidsMPaijbZxYlcDUy/Bu/M5
- M3+T+YomdlhOH8gxfe/xZDENeOaQqPE62CzdGg2rUjSlIiFTUd2ViZ1gpcpYCFzBM7
- SWOakzaI4TyS/niAq1e+B24iFG/jS5VZ2XWI+BMMxr/79X/gSgQPlDfJ/cq1Cp9s+d
- xAvho3xcnzReI8G34gt1Rj8v5Xrj0XDSn/W0DjvlBvaXsKYXtlq2+LbsFn0u0JjwzK
- JBuYqsZPbU3zQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=UYoIkcPe
-Subject: Re: [Buildroot] [PATCH 1/1] package/cache-calibrator: fix build
- failure for implicit declaration
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9B06580DA1
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 9B06580DA1
+ for <buildroot@buildroot.org>; Tue,  3 Sep 2024 21:01:12 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 8668786CE2; Tue,  3 Sep 2024 21:01:12 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 3 Sep 2024 23:00:36 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: 684843620a92b0dc811676cb5d94302c9dab47ac
+X-Git-Newrev: 88c7ef62df7bf266fcd070e2b24c9dea0db1e5e7
+X-Patchwork-Hint: ignore
+Message-Id: <20240903210112.8668786CE2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/ima-evm-utils: bump
+ version to 1.6.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,84 +58,61 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Stephan Hoffmann <sho@relinux.de>, buildroot@buildroot.org
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Dario, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=88c7ef62df7bf266fcd070e2b24c9dea0db1e5e7
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-On 2024-09-03 17:56 +0200, Dario Binacchi spake thusly:
-> Fixes:
->  - http://autobuild.buildroot.org/results/db996c894c810ff5c7f4263975d1def0edef6d55
-> 
-> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+This version also reintroduced COPYING COPYING.LGPL, therefore add
+them to IMA_EVM_UTILS_LICENSE_FILES.
 
-Applied to master, thanks.
+The hash change in LICENSES.txt is just due to the addition of the
+reference to the re-introduced COPYING and COPYING.LGPL files.
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/ima-evm-utils/ima-evm-utils.hash | 9 ++++++---
+ package/ima-evm-utils/ima-evm-utils.mk   | 4 ++--
+ 2 files changed, 8 insertions(+), 5 deletions(-)
 
-> ---
->  ...e-due-to-getpagesize-implicit-declar.patch | 33 +++++++++++++++++++
->  1 file changed, 33 insertions(+)
->  create mode 100644 package/cache-calibrator/0002-Fix-build-failure-due-to-getpagesize-implicit-declar.patch
-> 
-> diff --git a/package/cache-calibrator/0002-Fix-build-failure-due-to-getpagesize-implicit-declar.patch b/package/cache-calibrator/0002-Fix-build-failure-due-to-getpagesize-implicit-declar.patch
-> new file mode 100644
-> index 000000000000..fcad6694816e
-> --- /dev/null
-> +++ b/package/cache-calibrator/0002-Fix-build-failure-due-to-getpagesize-implicit-declar.patch
-> @@ -0,0 +1,33 @@
-> +From 29c4e0038b212e953cc59ac8b31d4541db758a3d Mon Sep 17 00:00:00 2001
-> +From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-> +Date: Tue, 3 Sep 2024 17:43:44 +0200
-> +Subject: [PATCH] Fix build failure due to getpagesize implicit declaration
-> +
-> +The patch fixes the following build error:
-> +
-> +calibrator.c: In function 'runCache':
-> +calibrator.c:267:24: error: implicit declaration of function 'getpagesize' [-Wimplicit-function-declaration]
-> +
-> +Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-> +Upstream: sent to Stefan Manegold Stefan.Manegold@cwi.nl
-> +---
-> + calibrator.c | 2 --
-> + 1 file changed, 2 deletions(-)
-> +
-> +diff --git a/calibrator.c b/calibrator.c
-> +index e045dfdcb96b..fd2fadb26020 100644
-> +--- a/calibrator.c
-> ++++ b/calibrator.c
-> +@@ -37,9 +37,7 @@
-> +  * THE POSSIBILITY OF SUCH DAMAGE.
-> +  */
-> + 
-> +-/*
-> + #include        <unistd.h>
-> +-*/
-> + #include        <stdlib.h>
-> + #include	<stdio.h>
-> + #include	<math.h>
-> +-- 
-> +2.43.0
-> +
-> -- 
-> 2.43.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/ima-evm-utils/ima-evm-utils.hash b/package/ima-evm-utils/ima-evm-utils.hash
+index 844ba0d4fe..72e8c89242 100644
+--- a/package/ima-evm-utils/ima-evm-utils.hash
++++ b/package/ima-evm-utils/ima-evm-utils.hash
+@@ -1,3 +1,6 @@
+-# https://github.com/linux-integrity/ima-evm-utils/releases/download/v1.6/ima-evm-utils-1.6.tar.gz.sha256
+-sha256  3d09e77a09e985b285891f13d458653f44913879147679dce30bdbf00380d40e  ima-evm-utils-1.6.tar.gz
+-sha256  d037fb0b5fdb4d1e09e246a56bdb8049fc6d9b1f9270c0ec2ae4bc8f9285165b  LICENSES.txt
++# https://github.com/linux-integrity/ima-evm-utils/releases/download/v1.6.2/ima-evm-utils-1.6.2.tar.gz.sha256
++sha256  9346a5ccd5ca77caf6a9d2ac0d83873c04d0372414a632126df4e7a88bedff4a  ima-evm-utils-1.6.2.tar.gz
++# locally computed
++sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
++sha256  681e386e44a19d7d0674b4320272c90e66b6610b741e7e6305f8219c42e85366  COPYING.LGPL
++sha256  9d2cf91f1292121f94b412abfdea1dd2d83984704f594b0a14de88d7b1cfb42c  LICENSES.txt
+diff --git a/package/ima-evm-utils/ima-evm-utils.mk b/package/ima-evm-utils/ima-evm-utils.mk
+index 858efee8da..b7eb8ff530 100644
+--- a/package/ima-evm-utils/ima-evm-utils.mk
++++ b/package/ima-evm-utils/ima-evm-utils.mk
+@@ -4,10 +4,10 @@
+ #
+ ################################################################################
+ 
+-IMA_EVM_UTILS_VERSION = 1.6
++IMA_EVM_UTILS_VERSION = 1.6.2
+ IMA_EVM_UTILS_SITE = https://github.com/linux-integrity/ima-evm-utils/releases/download/v$(IMA_EVM_UTILS_VERSION)
+ IMA_EVM_UTILS_LICENSE = LGPL-2.0+ (libimaevm), GPL-2.0+ (evmctl)
+-IMA_EVM_UTILS_LICENSE_FILES = LICENSES.txt
++IMA_EVM_UTILS_LICENSE_FILES = LICENSES.txt COPYING COPYING.LGPL
+ IMA_EVM_UTILS_INSTALL_STAGING = YES
+ IMA_EVM_UTILS_DEPENDENCIES = host-pkgconf keyutils openssl tpm2-tss
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
