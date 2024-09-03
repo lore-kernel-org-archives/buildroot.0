@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 572C8CD37AC
-	for <buildroot@archiver.kernel.org>; Tue,  3 Sep 2024 19:35:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6484BCD37AC
+	for <buildroot@archiver.kernel.org>; Tue,  3 Sep 2024 19:35:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 14A5E60893;
-	Tue,  3 Sep 2024 19:35:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2DFC760848;
+	Tue,  3 Sep 2024 19:35:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id j0TIhXeeXNDk; Tue,  3 Sep 2024 19:35:47 +0000 (UTC)
+ id xSKSC_esySln; Tue,  3 Sep 2024 19:35:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8638F608C3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3A5F5608C3
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8638F608C3;
-	Tue,  3 Sep 2024 19:35:47 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 16F311BF344
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3A5F5608C3;
+	Tue,  3 Sep 2024 19:35:50 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 55D861BF344
  for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 19:35:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 43B1E607E9
+ by smtp1.osuosl.org (Postfix) with ESMTP id 38C6D80BB9
  for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 19:35:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WTZ7IE6Zxe1t for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Qv90cI59j2Ba for <buildroot@lists.busybox.net>;
  Tue,  3 Sep 2024 19:35:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8A7BC607F8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A37B980B6A
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 8A7BC607F8
+ by smtp1.osuosl.org (Postfix) with ESMTP id A37B980B6A
  for <buildroot@buildroot.org>; Tue,  3 Sep 2024 19:35:19 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 85D0E86BB5; Tue,  3 Sep 2024 19:35:19 +0000 (UTC)
+ id 9158B86BB2; Tue,  3 Sep 2024 19:35:19 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 3 Sep 2024 21:04:06 +0200
+Date: Tue, 3 Sep 2024 21:06:15 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 76dda5f00af8d65ec6f4e1ae5d9896bf78bd36ac
-X-Git-Newrev: 9586e77dc80bcb6bae4b4805a87f727e12d12738
+X-Git-Oldrev: 9586e77dc80bcb6bae4b4805a87f727e12d12738
+X-Git-Newrev: 3952b976a3a84c0ceb34d4fefbc7e7b62f7c3f7d
 X-Patchwork-Hint: ignore
-Message-Id: <20240903193519.85D0E86BB5@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/fluidsynth: bump
- to version 2.3.6
+Message-Id: <20240903193519.9158B86BB2@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] DEVELOPERS: assign Adrian
+ Perez for sysprof
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,43 +65,37 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9586e77dc80bcb6bae4b4805a87f727e12d12738
+commit: https://git.buildroot.net/buildroot/commit/?id=3952b976a3a84c0ceb34d4fefbc7e7b62f7c3f7d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-For change log since v2.3.5, see:
-- https://github.com/FluidSynth/fluidsynth/releases/tag/v2.3.6
-
-Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Adrian Perez de Castro <aperez@igalia.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit f9f2ade9bb207d2481b12a325bba7cee5a3e9cbf)
+(cherry picked from commit 03505e34570d65ead565e13b0998b05a12ab95ac)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/fluidsynth/fluidsynth.hash | 2 +-
- package/fluidsynth/fluidsynth.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ DEVELOPERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/fluidsynth/fluidsynth.hash b/package/fluidsynth/fluidsynth.hash
-index 91d8778cbf..0f54ad254e 100644
---- a/package/fluidsynth/fluidsynth.hash
-+++ b/package/fluidsynth/fluidsynth.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  f89e8e983ecfb4a5b4f5d8c2b9157ed18d15ed2e36246fa782f18abaea550e0d  fluidsynth-2.3.5.tar.gz
-+sha256  3340d73286b28fe6e5150fbe12648d4640e86c64c228878b572773bd08cac531  fluidsynth-2.3.6.tar.gz
- sha256  9b872a8a070b8ad329c4bd380fb1bf0000f564c75023ec8e1e6803f15364b9e9  LICENSE
-diff --git a/package/fluidsynth/fluidsynth.mk b/package/fluidsynth/fluidsynth.mk
-index ef05b6a569..3105162bda 100644
---- a/package/fluidsynth/fluidsynth.mk
-+++ b/package/fluidsynth/fluidsynth.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 1945e1fb37..edd3c75cca 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -52,6 +52,7 @@ F:	package/libepoxy/
+ F:	package/libmanette/
+ F:	package/libpsl/
+ F:	package/libwpe/
++F:	package/sysprof/
+ F:	package/webkitgtk/
+ F:	package/wlroots/
+ F:	package/woff2/
+@@ -3172,7 +3173,6 @@ N:	Will Newton <will.newton@gmail.com>
+ F:	package/enchant/
+ F:	package/erlang/
+ F:	package/libmicrohttpd/
+-F:	package/sysprof/
+ F:	package/time/
  
--FLUIDSYNTH_VERSION = 2.3.5
-+FLUIDSYNTH_VERSION = 2.3.6
- FLUIDSYNTH_SITE = $(call github,FluidSynth,fluidsynth,v$(FLUIDSYNTH_VERSION))
- FLUIDSYNTH_LICENSE = LGPL-2.1+
- FLUIDSYNTH_LICENSE_FILES = LICENSE
+ N:	Will Wagner <will_wagner@carallon.com>
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
