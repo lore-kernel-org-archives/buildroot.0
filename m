@@ -4,133 +4,190 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 66363CD342E
-	for <buildroot@archiver.kernel.org>; Tue,  3 Sep 2024 13:10:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BAFC9CD342E
+	for <buildroot@archiver.kernel.org>; Tue,  3 Sep 2024 13:29:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B55BE4042E;
-	Tue,  3 Sep 2024 13:10:32 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4DC2B40340;
+	Tue,  3 Sep 2024 13:29:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vC8nzffJ7ypB; Tue,  3 Sep 2024 13:10:31 +0000 (UTC)
+ id V_HA-ch56dok; Tue,  3 Sep 2024 13:29:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1F14F403EC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D41B7402ED
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1F14F403EC;
-	Tue,  3 Sep 2024 13:10:31 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 559121BF4E4
- for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 13:10:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D41B7402ED;
+	Tue,  3 Sep 2024 13:29:07 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 14CED1BF4E4
+ for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 13:29:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 50213405A9
- for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 13:10:29 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 01C42402ED
+ for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 13:29:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id x6Bx-q1KdAYk for <buildroot@lists.busybox.net>;
- Tue,  3 Sep 2024 13:10:27 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.18;
- helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0E54F40399
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0E54F40399
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0E54F40399
- for <buildroot@buildroot.org>; Tue,  3 Sep 2024 13:10:26 +0000 (UTC)
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.7.2] ([85.22.113.24]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MIMbO-1sopKq27PQ-002KSp; Tue, 03
- Sep 2024 15:10:20 +0200
-Message-ID: <98537c50-9e0c-4bee-97af-4e4815c310e4@gmx.de>
-Date: Tue, 3 Sep 2024 15:10:19 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Niklas Cassel <Niklas.Cassel@wdc.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jXyxkCGznJSW for <buildroot@lists.busybox.net>;
+ Tue,  3 Sep 2024 13:29:05 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=216.71.154.42;
+ helo=esa4.hgst.iphmx.com; envelope-from=prvs=969f4f420=niklas.cassel@wdc.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 7B935402EC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7B935402EC
+Received: from esa4.hgst.iphmx.com (esa4.hgst.iphmx.com [216.71.154.42])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 7B935402EC
+ for <buildroot@buildroot.org>; Tue,  3 Sep 2024 13:29:05 +0000 (UTC)
+X-CSE-ConnectionGUID: WaQHHzOES2WDsrqtt3lcjQ==
+X-CSE-MsgGUID: glvZUz6YRdidP1WZ+bvM8Q==
+X-IronPort-AV: E=Sophos;i="6.10,198,1719849600"; d="scan'208";a="25192336"
+Received: from mail-dm6nam11lp2176.outbound.protection.outlook.com (HELO
+ NAM11-DM6-obe.outbound.protection.outlook.com) ([104.47.57.176])
+ by ob1.hgst.iphmx.com with ESMTP; 03 Sep 2024 21:29:03 +0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=X7Lg/V3Jm1ZnhHRKdai6aIDrkmoL1wNeLsezmERiubRSvWz7HlSs1KCTwW4Zakdp+21T9D6r3Jas34rGFd/gQ5qbNSzf60wiwAP14MOplJFQzgNPtEhUv+B4oB5oWgIJrGtwgHQo2X9kwb64v/y9A2wvHzLn/JPp3SqiMBqE0OLvuFssxRBlDefgHdgaX+Rp7oZzeSDOnHpX6MHoOE/d1qEnUOXP7gfLL+OQ1d6lxIOIgoPUabFnMvh04YjGkuQfggw4qz/Yd6F95gWLbUIv0nZRd6xzxEKCgiLx9WxGAoAhe8RiiURq0HXdXr+ertaXI4+PCEm1Kasnb/+onfAZnA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=MQw7MyLySuvpdwq0E85ZbJmYoXEmapJvDybTBPjeeVA=;
+ b=AA5Jb/hQG9Tma//EznzDBnURe4BncPJjuu2V0COZnUjyRChaOfMBiUgyx7jUq8tjC/Qa1B4F/hzEgbcV3C6KinkNmg4i7mlyhCaVXV4n7Q0DYzRRWZETYEegl69cjLrG32RgglPQpKX9OTkKK1R9piaa86FsklBBpmb0iA6UZsFYSa541r3L3Y68jhBo64wrDSRmlThyolOfyI7ZtucpUmsEHGlNcR1bulKA7jQpVUCas5Iru7at7S1hAOEk1vnS6PqSoYiRH7NJQokW0XbiJwmNotfKr87wx13MbvRpksr7Y/bP1SPUvy8B/8qYxry+4gJIXRFv7i+IJdguAMoP/g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
+ header.d=wdc.com; arc=none
+Received: from SJ0PR04MB8326.namprd04.prod.outlook.com (2603:10b6:a03:3db::16)
+ by PH0PR04MB7590.namprd04.prod.outlook.com (2603:10b6:510:52::23)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7918.26; Tue, 3 Sep
+ 2024 13:29:01 +0000
+Received: from SJ0PR04MB8326.namprd04.prod.outlook.com
+ ([fe80::5088:5f08:45a0:9a8]) by SJ0PR04MB8326.namprd04.prod.outlook.com
+ ([fe80::5088:5f08:45a0:9a8%5]) with mapi id 15.20.7918.024; Tue, 3 Sep 2024
+ 13:29:01 +0000
+To: Fiona Klute <fiona.klute@gmx.de>
+Thread-Topic: [Buildroot] [PATCH next v2 3/3]
+ configs/raspberrypicm4io_64_uboot_defconfig: new defconfig
+Thread-Index: AQHa+9hWBI88W/7iHkCDRf4EFYXEy7JF65qAgAAh9YCAAAU2AA==
+Date: Tue, 3 Sep 2024 13:29:01 +0000
+Message-ID: <ZtcPGjS9gktPuNNK@ryzen.lan>
 References: <20240831190126.366600-1-fiona.klute@gmx.de>
  <20240831190126.366600-4-fiona.klute@gmx.de> <ZtbuP9we0h8B9YE0@ryzen.lan>
-Content-Language: en-US, de-DE-1901, de-DE
-Autocrypt: addr=fiona.klute@gmx.de; keydata=
- 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
-In-Reply-To: <ZtbuP9we0h8B9YE0@ryzen.lan>
-X-Provags-ID: V03:K1:6VZftK46eolg6Pzfqv+moDJx5jLxYvey/qsp8BdC5IgZEqR9/WQ
- lMyvh3TnqabWV+d3YP5TiwVy11JxO5jKPNksQvaKc8elncXRQ6BZ1N8Dm9KsHwTzT5xafhY
- lZgn/YIY0zzTFiVGG67ctWoBawqWO0vHIwqwS1NS4NamPmcujlYLPhGfLQgc3rY7JO/7TyC
- VlP1VtYta9u3HCiaHf6mg==
-UI-OutboundReport: notjunk:1;M01:P0:n0n+jUs3P1c=;OjXlC8dsTFQIVlU82J5o2zQlPa2
- x69c/f/SPETmLnxdb0n+cP4CVnQReEdmE7H5aBGnGYbcq2V1temPjnn8IzDvvYFNFN4qurgyj
- 7VoOOkUDyrrpugzId3CVlAWyP6kgoguda9Zbkwpo0R4WDVNi11qfBkE1T/kxAufUq+kO7bX/4
- oagkC9Et33uU1OELHfaSzxNpq6p4RUCq29a24BjmKg+/x/WX2nE6TKYAhblaX9n06JmXi27Nc
- rMya6rmLrETkJKiiVLq+klQip8ANKgSyAxUXPLszMklERDK7506cazCqRRmzn/KyDs+4l9gLp
- 4Ng/kbw0TGrDLIbL2zlcsoMtWjHI00y+NAx31r64icR0FpwwP3KRW4Q+h3zs4xWsFUhYOAB29
- j+vL3DITSQU7Scg8s66jM8MX9Ghcj75Xf1u3/cuPYD4U65hzGYPe2iFyvHV3cne9hTScjgaFL
- BDDmJhCcEYkTbKqKCNQMOPhEahnR/8m83+rUkBTbiHj1YGw/tzIVy9vcAuwOeD0A9yUQU9pv3
- jdmEFc64r/sjysMFx2a2RjYAjK64OpFfC7rw01vBT3P2A8Fic5IRCIyee8Urtv2zuDA/wH7fZ
- PZXR71HNPTaoPjNXKDONkgz1ePVU5/A2fCheOktJ9modGn2Z5CS/sLXkGGugnOK2AdskMgi6g
- aS/LX8Zrq+WQciHG7ASJknBtQ2E3Bo4iRNonPxOsydBuyXI2TKMIEFo+R4fjgfbaHSgeq2IoH
- jheEIHe+bH8IkLy/96eTIRwA4VUCW4IMRR12ubTLXGhGaAeuw1KKbf6I50C6x2J9i2bPCi6+n
- efbA+giybTdpcCb/Xw5TGAPQ==
+ <98537c50-9e0c-4bee-97af-4e4815c310e4@gmx.de>
+In-Reply-To: <98537c50-9e0c-4bee-97af-4e4815c310e4@gmx.de>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SJ0PR04MB8326:EE_|PH0PR04MB7590:EE_
+x-ms-office365-filtering-correlation-id: dff3c7b2-89c2-475f-92c1-08dccc1c5f68
+wdcipoutbound: EOP-TRUE
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+ ARA:13230040|366016|1800799024|376014|38070700018|41080700001; 
+x-microsoft-antispam-message-info: =?iso-8859-1?Q?G7JvQB7MtxiuqufAe+LmFUgVzCQLDarj1Jc5o6BTljecZHAyXByuB7nPt1?=
+ =?iso-8859-1?Q?74znieB5Ee8wttkSh5xam2lSjLrPsJ4udcbtSalBoUVMAQg3Z89X0ajVwS?=
+ =?iso-8859-1?Q?Tara9avaKfnGHPVMdnGM8TN3Kol6TgzMJn0p5WA3mJwsKlVVgkiww+EMNz?=
+ =?iso-8859-1?Q?n3hJXlfjA/pFs4bBnfoMutqMH2e0/7k+GPQPUXzpPgmA2OwV97m0mGrZLd?=
+ =?iso-8859-1?Q?G6C67TY70V3LEDJtJHbVJguPxvJrtEzjP60EWXOW/QNTwZtz/WEYqViSpt?=
+ =?iso-8859-1?Q?OUYvCHlOPgLVA/GFBolZzV/RauzaIDB1zEjHSW3IgDF35JtptHxEnlJk7h?=
+ =?iso-8859-1?Q?Ng2d6rKihaWV8NpwfQFWqFPqDj5PHbEoR2GQidTZSms+2Dsz+N3YPnNMic?=
+ =?iso-8859-1?Q?6nxppAXF/Z5tVN+H1FJO1k1+NkeUsD6OTntBD/ynZkbi1TMK6lzS5hEm7E?=
+ =?iso-8859-1?Q?3CKfdy5lLoKr0WiWNFy3xqQArQYBQfcPOIg33IHd5v6kR+fOBaKYfiYd7u?=
+ =?iso-8859-1?Q?ZTkKlLKwFcx3Dg5fQtIqoRoTe/cJQSdrG4Xtupmb7z4DF2kHGxqgM6mvMI?=
+ =?iso-8859-1?Q?RHmVH1WpukUtIUkjmdct+d9S1zklsQZ3VP1AG3OG9Ue+YF2q5xEpGYyW5Y?=
+ =?iso-8859-1?Q?42tEAkJ8k/gu0WIrVYoCJChuXiQYyrnLdBnE/W6bzFTI0O13JFAar4S192?=
+ =?iso-8859-1?Q?l7inO48aRzs8U5rqvDmLIHirKD05zy4bBkvJnjkKfbj6+A4k6n236IP8Dw?=
+ =?iso-8859-1?Q?FsBcW5tuqMv7JhBNg5tOvSbpR+5aK8LZXdB1UMNNfmruIYwi2WkkAqbazW?=
+ =?iso-8859-1?Q?CKZx6RMvzbu/+9rBVRpWdLEKPAhEisxZHW6pQScriKKhtDYPHH0Oq88Kiv?=
+ =?iso-8859-1?Q?8RAYp2fdEZvBY7oeDmMwwE9KfyiU7fm8c52VsZDP16+iMZYooYpjYctQ9t?=
+ =?iso-8859-1?Q?AU5EyHj7vUkqZRJy/XJCGgHlVyCHwC++BaVuU0vHzUfsBEG09vJAQlYE1d?=
+ =?iso-8859-1?Q?Cae+rPn2lbvxRoLH40FPL0Hq32s8nA3trAP0xEuT3k5/ZERCvDKcVKlHPO?=
+ =?iso-8859-1?Q?59oSrI7Gm3HZROQcICLY4+kZpbfVDyR2toQEiXQFx16f0tWQV9dBmu7F6k?=
+ =?iso-8859-1?Q?N82BiYUchRFmWFtbiNCfceU4LHfZy/N4eF+Z4AVHtSaHuGXJh5hc/IafjV?=
+ =?iso-8859-1?Q?mrrmPwBY9onTPvq4xoAfHV1gnXNGqwD64fB3jJ9HRe0bUbTg91KHoj88dS?=
+ =?iso-8859-1?Q?lrcJn0qSrp8g8lm/XC2xY1/aBA65OfKK9Zoa7QgYztjcDvQb25gpI302YG?=
+ =?iso-8859-1?Q?hW8fWd96Y68rYmmSw+Lmx2A8e43o+AuQt5LY/cA4JWm2LJYAeQxW+whtxG?=
+ =?iso-8859-1?Q?X/0xjCNMqnfm/ZtaQYqc77FBNCoheRH2FHBzEj0nyXFklwzCTdzkCC84cV?=
+ =?iso-8859-1?Q?vq8k71us1MFGNVUKuYPu0XOQEEGKiC70G/6/bQ=3D=3D?=
+x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
+ IPV:NLI; SFV:NSPM; H:SJ0PR04MB8326.namprd04.prod.outlook.com; PTR:; CAT:NONE;
+ SFS:(13230040)(366016)(1800799024)(376014)(38070700018)(41080700001); DIR:OUT;
+ SFP:1101; 
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?sS+zsryV2p9ZLE4zpoV9wXCWs7kSs+4ypUkJ0aFjmjU/Z0rPUw6thnahBN?=
+ =?iso-8859-1?Q?FYvsGZHvUK0N8U22r6jJslcW3ToRPtj/BiMBQV9xa6qyEvENmVuCsDTyVR?=
+ =?iso-8859-1?Q?c4kejkuu1hFlkDqvSZ+WNrg2vYzUoTV6Wyx6JKv/K2mKXCpsaFFzQ+uOvz?=
+ =?iso-8859-1?Q?yMOPTzjAqR39MTc0gyCtCwrU+ENPq0Lx7L3x+Qw0GAE5JEIltTQICDNg0Y?=
+ =?iso-8859-1?Q?8FHcZtzTFpg8ZOpbtl5oc+IG/X4lOX4JaUaDZpQTvZ5pLig6MPlpYUhNxG?=
+ =?iso-8859-1?Q?s3hJxuEzutQl8F6W/QDo6d7eqz7h9VGdgO91CHLFFVcs1ViMVm+2FOgt+Y?=
+ =?iso-8859-1?Q?oZ4sipzIVSiWQ9eJtOlSuoT+9PHDq9rRmC1J0lcbBruPHQEE+lBQPT6JWY?=
+ =?iso-8859-1?Q?XGoHcsuyAs0QiKnCe3FmKo6wdxdJHtjOm3qIjkEZJmJTDr75D68LVb9xjs?=
+ =?iso-8859-1?Q?43MVe78FqIpCLGnTVcHqidfQzXhxrRPeqDnM8HJA49Inq/VpgkQeQv/CoV?=
+ =?iso-8859-1?Q?f8CVRqkVXRvcdnAiH050YBPc3dbrx3YG3C8aK1pNtbBBa73+Au3rqhcy1H?=
+ =?iso-8859-1?Q?bgyANv6Lf0CWlH18wGoXd2da7GFCgoSzCI1zOmluML+osDprXbbOiwHb29?=
+ =?iso-8859-1?Q?3yknxjbf6Qy4xyddPO8b4d4U/ZKhy5W9kaCxuaqvDi4+dE/chclYWBJb9T?=
+ =?iso-8859-1?Q?S7XZPBMeQ/jFEksZg/c/kWB3pmMMw0qEUaeM4NMarXQCV1ScS12pkBtf2J?=
+ =?iso-8859-1?Q?WOY3nosE8+4aQBG1irs/IPI24ypVKabmnz0aswi5z2oFeSTUpkudgIBKED?=
+ =?iso-8859-1?Q?3Tm0K4lijCKuRzig06K5YQHpav45/SaGYiTEYYVBRxqdgyPS87NF/GhVuZ?=
+ =?iso-8859-1?Q?xeNuAs00hEl0tfQdyLJs1Dg7d0mQLByGgZQMqRgLFrUdGeZCv47OA3RMjb?=
+ =?iso-8859-1?Q?sCMZwCiTGxpjUbLOuuU2IxuTMpg9dXsnHegmtVEZWQZhdd97LApdFFNAOG?=
+ =?iso-8859-1?Q?74gVegDjWEG7MCCdwRx2lxsi1vZhsPv0XNlMU7N4p/iN9bh8rhhx4DSgRI?=
+ =?iso-8859-1?Q?A80oork/53k1CH1pFbQpaddguI+nsMGxwn4NuwFmb9/ueuNextAnq2mF0/?=
+ =?iso-8859-1?Q?dWN17eUdzO/n1TXmWCNQUjXdHMRw7KemsxTLPrJl9P+jaZE4jfX7ONsln4?=
+ =?iso-8859-1?Q?p8CGa3Xt2Jwxn5o0Vc7c2NQ2XSjLVc4Gffn94/rXTovsYVs6kCFEhC3ycx?=
+ =?iso-8859-1?Q?DsZAbj+z6Otk+EekWv4h22S/CV2DcQAYCLJMZ7YMaYwqFfe0rT452nNAtu?=
+ =?iso-8859-1?Q?decvF7VnEspw78cvMZKVlAAH78R1a1mThRZiqf7hsaWz/Vm6fHT/RZDgro?=
+ =?iso-8859-1?Q?urMPBtO87S6zBYEf+2TjLwYvCLQzyXC1plBjdykR++HBu+mzbycqJTDsg+?=
+ =?iso-8859-1?Q?MOihqQ0NPBE0WsdmmZgyasoX92xaPB1kUiH1lPLlRrK+qxi6Zo631403+C?=
+ =?iso-8859-1?Q?pB9oMqQ+gVSjQe9zyWvJ3xZ9wwP8NmVGUotYGKjDwcD1hPOrsLQ3E0ongq?=
+ =?iso-8859-1?Q?bNDYymcEgCvedWNbAiq8eXin6uSKI2PKmdW4Jat4MwA67paUgUUxsPUIz3?=
+ =?iso-8859-1?Q?zaQTFrJ/2qWpthBTovWqaCdSnJrq6WRfuU1LhFW8T0dc/QgrdC8dPJxA?=
+ =?iso-8859-1?Q?=3D=3D?=
+Content-ID: <1CF8B0521E249A47850BCE0323C0DE5A@namprd04.prod.outlook.com>
+MIME-Version: 1.0
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: +D7qGgMzgKEKLoIl3aDztSZwfyDck+DLTOigyWtvQ9k7YKE4vIxgWCNONZr3QDw7Le5AsDf9KE8+btZT1LylMbOx/z/gVg7e5FvM4wY32tXVv3zARIb0FUPq40o96PHEiUP+rdKFLa3jiY2XRTFj+ZMct0/LgbzVatNv50StTTGKguUuOE9NmmtU01nfQ3QRjR1YdUNRYPYeVM63vjlTX42eH0Fy9kLm8QRfdNF3SwFFfkQLlbTfSmkli2bTFBzPaIIhL4KBqhte9zEI1DOUi5Nhl/2WPrcQIio6gjSaRpS3q+Mft6d7oAJagxF5cbJwPlUPkM0SdlgTlZjwqta07wL0YX2Ajn37eF6j8y3vW92vSQjNCVZXSFimcYkw2fDmMbfst4+LBIy3sq1XYraSY7dqtMRMm99t2AZK4grtpOvDTne7VVaLfqx/bQgh8lICSu2JCPBNA3fXxI97JXMwsdQ7U40+KVRGhc06NMTIzA5NAfWDGBEzaXMMUHHkldhz8MvxdKk7IhXijleC5pOJSOke7JvOi+4SJWzwHaAKlKR1/w/fdtyBZBcsqSdhUqxf3QMS34aS5oVxRb51mA0v/4eNM6xqp4MA+OluI5gehVfyP2S6cfQKPOBTNf1KGZJd
+X-OriginatorOrg: wdc.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SJ0PR04MB8326.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: dff3c7b2-89c2-475f-92c1-08dccc1c5f68
+X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Sep 2024 13:29:01.1326 (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: ccjm2z6bfLmhAVjlK6ygg7UPDUQ3Uj8W+Qcw7/U9RoOlWkIJ/ss18B7fe+p+os2atKLvhNdJD0uIxN6cU+m+UQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR04MB7590
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+ d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+ t=1725370145; x=1756906145;
+ h=from:to:cc:subject:date:message-id:references:
+ in-reply-to:content-id:content-transfer-encoding:
+ mime-version;
+ bh=Se1RXBHQNzi905CqLZwXdO7raJdgd3thmcY31z1NuaU=;
+ b=TWoOA+wU69HMvv79SYqntfEwibIq2fqsIGWS/T0gbXTV4hf1U2rG2uh4
+ LU9aijLeNSu25ZTklyN/6HYuJBPP+oMoPSiBJVfPYXQWhuWqvwxBCUuei
+ zuPNbMGZU9UYVKWowrgwqKXlzvwlYfn0DDd3iSRHWHg8jul5kZQFWBGDO
+ yZteTuSnQ3nVxpouqDOcT5aORgfP4A8mjgfkHsyOEL/RgmM4K+xMAJEfu
+ 4SMhloRo30mDAJJiwu0VrQAdJS3zxpKr+XKdcGrpV8yPJVr8rlhSsJH+W
+ on+PIBk0lmfNij33tcNubNC4zLh7F96KkBFzFRnsICKcaPDTdg6UsvSz/
+ Q==;
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmx.de; 
- s=s31663417; t=1725369020; x=1725973820; i=fiona.klute@gmx.de;
- bh=Pozaaq2P6H+BA1ezj7jon7p2WfqDsVAtW8kMDZYDBqg=;
- h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
- References:From:In-Reply-To:Content-Type:
- Content-Transfer-Encoding:cc:content-transfer-encoding:
- content-type:date:from:message-id:mime-version:reply-to:subject:
- to;
- b=eS8Ng8ufmLNsvCYroQJEd8C4IQKHk+ql3L6LlsuQ7QnRZdDst+x0V9BBjCchUHgq
- dWBieXu1Gmc+t3ieovgRU2MHkJD/m7OnOmFv/O1Gkx6g7c8jKW3h4xqg6FbmIQ4mD
- /sLYZvmK8K0JqltkOYxt8V6IHnfD1gDnyro0U3PstupuXfVGFJS+9nu4aTLCXSrnS
- 8xqgzPphTmmkegMoRkCifMistVgTL1LpgkyeZ8M5sAhvWYxpStPhj40Lwychw1+my
- 9WLfSwYXm0Tu7V+wdgjwpjLAa6VcE74S6yhj7qpQp9DoGDeZrCl/9oWjS0Vl2h+DY
- mwLtGulHEkAC9VA54w==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=MQw7MyLySuvpdwq0E85ZbJmYoXEmapJvDybTBPjeeVA=;
+ b=CnIVvVUcg/7ezO/rzLqnBZUu/BqkSapZAgvo8qHlwr7WA7DgqoJYxfBkASoTMr9ZTOdYlKZvgboLku9I8KfcXDcOpQjEN4eRL0+AjBQhKZhabpZq3a+uUj1Om0UO4rh0kpLYw2FMTUYJnvJ24O+mIniEYujvvzlb0frIfdrl4p0=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
- header.from=gmx.de
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmx.de header.i=fiona.klute@gmx.de header.a=rsa-sha256
- header.s=s31663417 header.b=eS8Ng8uf
+ header.from=wdc.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key, unprotected) header.d=wdc.com header.i=@wdc.com
+ header.a=rsa-sha256 header.s=dkim.wdc.com header.b=TWoOA+wU; 
+ dkim=pass (1024-bit key,
+ unprotected) header.d=sharedspace.onmicrosoft.com
+ header.i=@sharedspace.onmicrosoft.com header.a=rsa-sha256
+ header.s=selector2-sharedspace-onmicrosoft-com header.b=CnIVvVUc
+X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=wdc.com;
 Subject: Re: [Buildroot] [PATCH next v2 3/3]
  configs/raspberrypicm4io_64_uboot_defconfig: new defconfig
 X-BeenThere: buildroot@buildroot.org
@@ -144,160 +201,109 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Fiona Klute via buildroot <buildroot@buildroot.org>
-Reply-To: Fiona Klute <fiona.klute@gmx.de>
+From: Niklas Cassel via buildroot <buildroot@buildroot.org>
+Reply-To: Niklas Cassel <Niklas.Cassel@wdc.com>
 Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
- =?UTF-8?Q?Jos=C3=A9_Mendes?= <jp.baltazar.mendes@gmail.com>,
+ =?iso-8859-1?Q?Jos=E9_Mendes?= <jp.baltazar.mendes@gmail.com>,
  Martin Bark <martin@barkynet.com>,
  Julien Grossholtz <julien.grossholtz@openest.io>,
  "buildroot@buildroot.org" <buildroot@buildroot.org>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Am 03.09.24 um 13:08 schrieb Niklas Cassel:
-> On Sat, Aug 31, 2024 at 09:01:26PM +0200, Fiona Klute via buildroot wrote:
->> From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
->>
->> The new config deviates from the existing
->> configs/raspberrypicm4io_64_defconfig only as far as necessary to
->> demonstrate booting through U-Boot instead of having the firmware load
->> the kernel directly. The sample boot script loads the kernel from the
->> rootfs and uses the device tree provided by the firmware.
->>
->> Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
->> ---
->> The config I'm usually using is a bit different, including using a
->> mainline kernel (which seems strongly preferable to me), but for
->> defconfig maintenance staying close to the other RPi defconfigs is
->> probably easiest.
->>
->>   board/raspberrypi/boot.scr.in                 |  9 +++
->>   .../raspberrypi/config_cm4io_64bit_uboot.txt  | 23 +++++++
->>   board/raspberrypi/readme.txt                  |  4 ++
->>   configs/raspberrypicm4io_64_uboot_defconfig   | 60 +++++++++++++++++++
->>   4 files changed, 96 insertions(+)
->>   create mode 100644 board/raspberrypi/boot.scr.in
->>   create mode 100644 board/raspberrypi/config_cm4io_64bit_uboot.txt
->>   create mode 100644 configs/raspberrypicm4io_64_uboot_defconfig
->>
->> diff --git a/board/raspberrypi/boot.scr.in b/board/raspberrypi/boot.scr.in
->> new file mode 100644
->> index 0000000000..a5c986ef99
->> --- /dev/null
->> +++ b/board/raspberrypi/boot.scr.in
->> @@ -0,0 +1,9 @@
->> +# Please note that this is only a sample, we recommend you to change
->> +# it to fit your needs. You should override this file using
->> +# BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE.
->> +
->> +# load kernel from the root partition
->> +load mmc 0:2 ${kernel_addr_r} boot/Image
->> +env set bootargs "root=/dev/mmcblk0p2 rootwait console=tty1 console=ttyAMA0,115200"
->> +# boot using the FDT provided by firmware
->> +booti ${kernel_addr_r} - ${fdt_addr}
->
-> Hello Fiona,
->
-> While I'm not a u-boot expert, I am slightly surprised to see a new
-> buildroot defconfig use boot.scr instead of extlinux.conf.
->
-> extlinux.conf is the default configuration format in u-boot:
-> https://github.com/u-boot/u-boot/blob/v2024.10-rc4/doc/develop/distro.rst?plain=1#L69-L71
->
-> Even though boot.scr still seems to be supported for backwards-compatibility:
-> https://github.com/u-boot/u-boot/blob/v2024.10-rc4/doc/develop/distro.rst?plain=1#L367-L368
->
-> See e.g. this buildroot commit that converted rock5b from boot.scr to
-> extlinux.conf:
-> https://github.com/buildroot/buildroot/commit/b7dbdd3d775b8e94664c6f37b11afc8a6a352e35
->
-> I don't see anthing exotic in your boot.scr that wouldn't work with
-> extlinux.conf.
+On Tue, Sep 03, 2024 at 03:10:19PM +0200, Fiona Klute wrote:
+> Am 03.09.24 um 13:08 schrieb Niklas Cassel:
+> > On Sat, Aug 31, 2024 at 09:01:26PM +0200, Fiona Klute via buildroot wrote:
+> > > From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
+> > > 
+> > > The new config deviates from the existing
+> > > configs/raspberrypicm4io_64_defconfig only as far as necessary to
+> > > demonstrate booting through U-Boot instead of having the firmware load
+> > > the kernel directly. The sample boot script loads the kernel from the
+> > > rootfs and uses the device tree provided by the firmware.
+> > > 
+> > > Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
+> > > ---
+> > > The config I'm usually using is a bit different, including using a
+> > > mainline kernel (which seems strongly preferable to me), but for
+> > > defconfig maintenance staying close to the other RPi defconfigs is
+> > > probably easiest.
+> > > 
+> > >   board/raspberrypi/boot.scr.in                 |  9 +++
+> > >   .../raspberrypi/config_cm4io_64bit_uboot.txt  | 23 +++++++
+> > >   board/raspberrypi/readme.txt                  |  4 ++
+> > >   configs/raspberrypicm4io_64_uboot_defconfig   | 60 +++++++++++++++++++
+> > >   4 files changed, 96 insertions(+)
+> > >   create mode 100644 board/raspberrypi/boot.scr.in
+> > >   create mode 100644 board/raspberrypi/config_cm4io_64bit_uboot.txt
+> > >   create mode 100644 configs/raspberrypicm4io_64_uboot_defconfig
+> > > 
+> > > diff --git a/board/raspberrypi/boot.scr.in b/board/raspberrypi/boot.scr.in
+> > > new file mode 100644
+> > > index 0000000000..a5c986ef99
+> > > --- /dev/null
+> > > +++ b/board/raspberrypi/boot.scr.in
+> > > @@ -0,0 +1,9 @@
+> > > +# Please note that this is only a sample, we recommend you to change
+> > > +# it to fit your needs. You should override this file using
+> > > +# BR2_PACKAGE_HOST_UBOOT_TOOLS_BOOT_SCRIPT_SOURCE.
+> > > +
+> > > +# load kernel from the root partition
+> > > +load mmc 0:2 ${kernel_addr_r} boot/Image
+> > > +env set bootargs "root=/dev/mmcblk0p2 rootwait console=tty1 console=ttyAMA0,115200"
+> > > +# boot using the FDT provided by firmware
+> > > +booti ${kernel_addr_r} - ${fdt_addr}
+> > 
+> > Hello Fiona,
+> > 
+> > While I'm not a u-boot expert, I am slightly surprised to see a new
+> > buildroot defconfig use boot.scr instead of extlinux.conf.
+> > 
+> > extlinux.conf is the default configuration format in u-boot:
+> > https://github.com/u-boot/u-boot/blob/v2024.10-rc4/doc/develop/distro.rst?plain=1#L69-L71
+> > 
+> > Even though boot.scr still seems to be supported for backwards-compatibility:
+> > https://github.com/u-boot/u-boot/blob/v2024.10-rc4/doc/develop/distro.rst?plain=1#L367-L368
+> > 
+> > See e.g. this buildroot commit that converted rock5b from boot.scr to
+> > extlinux.conf:
+> > https://github.com/buildroot/buildroot/commit/b7dbdd3d775b8e94664c6f37b11afc8a6a352e35
+> > 
+> > I don't see anthing exotic in your boot.scr that wouldn't work with
+> > extlinux.conf.
+> 
+> AFAIK things like configuring watchdogs and handling A/B boot slot
+> selection (with RAUC integration) aren't possible with extlinux.conf,
+> and a menu isn't going to be much help in a headless system. If there is
+> a better way than boot.scr to handle those I'd very much like to read
+> about it.
 
-Hi Niklas!
+My point was just that the boot.scr.in that you have above could easily be
+replaced by a extlinux.conf instead.
 
-Someone who just wants to load a certain kernel will probably stick with
-the non-U-Boot variant (raspberrypicm4io_64_defconfig) anyway. ;-) The
-point of this defconfig is to be a minimal example that shows the moving
-parts for booting an RPi aarch64 device with U-Boot (including a boot
-script), so someone who needs the additional flexibility can use it as a
-starting point to implement whatever it is they need.
+I hear your argument that certain features (like watchdog an A/B boot slot)
+is not possible with extlinux.conf.
 
-AFAIK things like configuring watchdogs and handling A/B boot slot
-selection (with RAUC integration) aren't possible with extlinux.conf,
-and a menu isn't going to be much help in a headless system. If there is
-a better way than boot.scr to handle those I'd very much like to read
-about it.
+But if you want your example to be minimal... isn't extlinux.conf enough/
+exactly what you want? (extlinux.conf is definitely simpler for a beginner
+to understand, compared to a boot.scr or a .its file.)
 
-If there is a way to combine a boot script with extlinux.conf (e.g. set
-up a watchdog in the script and set the kernel in extlinux.conf) that
-might be interesting and a good addition to this defconfig, too, but I
-haven't looked into whether that's possible, and if yes, how.
+Your comment in boot.scr.in itself says that if you want something more fancy,
+you should provide your own config.
 
-> Although I am I but confused why you set:
-> BR2_LINUX_KERNEL_INTREE_DTS_NAME="broadcom/bcm2711-rpi-cm4"
-> but then you do not use this device tree, but rather some
-> device tree provided by firmware.
->
-> What is the point of setting BR2_LINUX_KERNEL_INTREE_DTS_NAME if you
-> are not using this device tree?
->
-> I would strongly suggest to use the device tree that comes with the
-> kernel version that you are using, as the changes to the device tree
-> (to enable support for additional hardware in an existing SoC) might
-> often look different once upstreamed (compared to the downstream device
-> tree).
+Anyway, I'm just providing a suggestion. Feel free to ignore :)
 
-That's an oddity of the RPi boot process: The firmware bootloader
-expects to find a DTB in the boot partition. By default it'll try
-certain names based on the device type, though you can override it in
-config.txt. That's why the DTB needs to be built and installed to the
-boot partition, but doesn't show up in the U-Boot config.
+Another suggestion is for your new defconfig to use the upstream kernel
+instead of the downstream kernel. A person running u-boot has already taken
+the step to use the "upstream" way of booting. It is far more likely that
+such a person also wants to use the upstream kernel (rather than the
+downstream kernel).
 
-So what happens with the DT on boot with this defconfig:
 
-1. Firmware loads bcm2711-rpi-cm4.dtb and sets per-device values (e.g.
-serial number)
-2. Firmware adds overlays if configured to do so (in config.txt)
-3. Firmware starts U-Boot, and provides it with the prepared FDT
-(flattened device tree)
-4. U-Boot uses the FDT for its own setup, this makes it possible to have
-a U-Boot build that works on all aarch64 RPi devices, including those
-which don't have a dedicated defconfig (like CM4) [1]
-5. U-Boot runs the boot script, which tells it to load and boot the
-kernel, and provide it with the same FDT U-Boot uses
-
-So the kernel actually gets the DT that was built with it (possibly with
-overlays added), just via the firmware. :-)
-
-Sure, you might want to be able to update the DT used for U-Boot
-separately from that for the kernel, or separately for different kernel
-versions. U-Boot will fill in the per-device values from the FDT
-provided by the firmware if you have it load a different DTB.
-
-There's an RPi-specific catch though: The RPi bootloader supports
-overlay *parameters*, U-Boot and Linux [2] do not, and overlays with
-parameters (like most of those provided by rpi-firmware) will fail to
-load. If you need overlays with parameters, you have to load the DT via
-the firmware. Or you can rewrite them with the parameter values folded
-in, and add them to your build (I've actually done that).
-
-I think that's a bit beyond a simple example, though. If the maintainers
-disagree I could add another snippet from my setup to create a FIT image
-that includes a DTB to be used by the kernel. Or maybe a comment/readme
-section that points out the options a bit more explicitly than just "we
-recommend you to change it to fit your needs".
-
-Best regards,
-Fiona
-
-[1] https://docs.u-boot.org/en/latest/board/broadcom/raspberrypi.html
-[2] I haven't checked if that may be patched in RPi kernels, I mostly
-work with mainline, I just use an RPi kernel here to stay close to the
-existing RPi defconfigs.
-
+Kind regards,
+Niklas
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
