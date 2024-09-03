@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 86D8ECD3448
-	for <buildroot@archiver.kernel.org>; Tue,  3 Sep 2024 16:11:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C990BCD379F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Sep 2024 16:13:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 444EF606C7;
-	Tue,  3 Sep 2024 16:11:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 90FEC600BB;
+	Tue,  3 Sep 2024 16:13:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id T4CDqkNtOFUb; Tue,  3 Sep 2024 16:11:48 +0000 (UTC)
+ id Z073gm9tiKQh; Tue,  3 Sep 2024 16:13:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 583B5606CC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8936E606E8
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 583B5606CC;
-	Tue,  3 Sep 2024 16:11:48 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 7253D1BF373
- for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 16:11:46 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8936E606E8;
+	Tue,  3 Sep 2024 16:13:05 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id D480B1BF373
+ for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 16:13:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id F0FB9606BE
- for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 16:11:44 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id C13E3401CE
+ for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 16:13:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id efSchSTQRBni for <buildroot@lists.busybox.net>;
- Tue,  3 Sep 2024 16:11:44 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.201;
- helo=relay8-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id OfH_7-z_xiyD for <buildroot@lists.busybox.net>;
+ Tue,  3 Sep 2024 16:13:02 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::223;
+ helo=relay3-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org BD5C0606C7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BD5C0606C7
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp3.osuosl.org (Postfix) with ESMTPS id BD5C0606C7
- for <buildroot@buildroot.org>; Tue,  3 Sep 2024 16:11:43 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 070221BF203;
- Tue,  3 Sep 2024 16:11:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 884C74016D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 884C74016D
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 884C74016D
+ for <buildroot@buildroot.org>; Tue,  3 Sep 2024 16:13:02 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 73C7E60008;
+ Tue,  3 Sep 2024 16:12:59 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1slW85-004epB-1N;
- Tue, 03 Sep 2024 18:11:41 +0200
+ (envelope-from <peter@korsgaard.com>) id 1slW9K-004ewY-2j;
+ Tue, 03 Sep 2024 18:12:58 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-References: <20240802063627.61C2A83B0C@busybox.osuosl.org>
-Date: Tue, 03 Sep 2024 18:11:36 +0200
-In-Reply-To: <20240802063627.61C2A83B0C@busybox.osuosl.org> (Thomas Petazzoni
- via buildroot's message of "Fri, 2 Aug 2024 08:35:41 +0200")
-Message-ID: <87plpkpvif.fsf@dell.be.48ers.dk>
+References: <20240802063627.5502E83B0B@busybox.osuosl.org>
+Date: Tue, 03 Sep 2024 18:12:58 +0200
+In-Reply-To: <20240802063627.5502E83B0B@busybox.osuosl.org> (Thomas Petazzoni
+ via buildroot's message of "Fri, 2 Aug 2024 08:33:55 +0200")
+Message-ID: <87le08pvg5.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: Re: [Buildroot] [git commit] package/odb: backport upstream patch
- to fix GCC 14.x build issue
+Subject: Re: [Buildroot] [git commit] package/odb: properly format Upstream:
+ tags in patches
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,12 +77,13 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 >>>>> "Thomas" == Thomas Petazzoni via buildroot <buildroot@buildroot.org> writes:
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=905b9c8868fc4b021d7d7e0bce331f17d5e20d71
+ > commit: https://git.buildroot.net/buildroot/commit/?id=84ae3b04fe6cd70a4abccc5d9e19218583410c16
  > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
- > Fixes:
-
- >   http://autobuild.buildroot.net/results/f1b802e65273ae348569f37feb7e4bd2a04bb46e/
+ > All patches of the odb package already contained relevant Upstream
+ > information, just not formatted according to how we expect it. Let's
+ > fix that, and drop the .checkpackageignore entries that are no longer
+ > needed.
 
  > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 
