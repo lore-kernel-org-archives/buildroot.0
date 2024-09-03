@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6B496CD3448
-	for <buildroot@archiver.kernel.org>; Tue,  3 Sep 2024 16:28:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8A020CD379F
+	for <buildroot@archiver.kernel.org>; Tue,  3 Sep 2024 16:28:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 37E9E60741;
-	Tue,  3 Sep 2024 16:28:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 21F006086D;
+	Tue,  3 Sep 2024 16:28:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xVBjrxngfk6i; Tue,  3 Sep 2024 16:28:33 +0000 (UTC)
+ id U2mfpq-wH9_G; Tue,  3 Sep 2024 16:28:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3F17E60842
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EF95C60851
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3F17E60842;
-	Tue,  3 Sep 2024 16:28:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EF95C60851;
+	Tue,  3 Sep 2024 16:28:36 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 164421BF373
- for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 16:28:13 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1AF5E1BF373
+ for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 16:28:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8BD944022A
+ by smtp2.osuosl.org (Postfix) with ESMTP id E33F940210
  for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 16:28:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id F87HrdiMVnb5 for <buildroot@lists.busybox.net>;
- Tue,  3 Sep 2024 16:28:07 +0000 (UTC)
+ id lUZSA5X8cMCV for <buildroot@lists.busybox.net>;
+ Tue,  3 Sep 2024 16:28:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D9D1540210
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2170740431
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id D9D1540210
- for <buildroot@buildroot.org>; Tue,  3 Sep 2024 16:28:07 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2170740431
+ for <buildroot@buildroot.org>; Tue,  3 Sep 2024 16:28:08 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C3CD486A1E; Tue,  3 Sep 2024 16:28:07 +0000 (UTC)
+ id 1C00E86A20; Tue,  3 Sep 2024 16:28:08 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 3 Sep 2024 18:06:43 +0200
+Date: Tue, 3 Sep 2024 18:22:38 +0200
 X-Git-Refname: refs/heads/2024.05.x
-X-Git-Oldrev: f10881b5b08784c4b31f1f2a49af99173e5b6a00
-X-Git-Newrev: 9194f49cf4f8e07df9ddc48f0c5b4a13df855805
+X-Git-Oldrev: 75b881e95cc1372038f54fcf920ff251cf72d1f7
+X-Git-Newrev: a0d1df2ac511404241f6f74d00bcde4b8fdeba8b
 X-Patchwork-Hint: ignore
-Message-Id: <20240903162807.C3CD486A1E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.05.x] package/gcc: update to
- 14.2.0
+Message-Id: <20240903162808.1C00E86A20@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.05.x] package/bcusdk: fix build
+ with host GCC 14.x
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,73 +65,164 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9194f49cf4f8e07df9ddc48f0c5b4a13df855805
+commit: https://git.buildroot.net/buildroot/commit/?id=a0d1df2ac511404241f6f74d00bcde4b8fdeba8b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.05.x
 
-List of bugs which were resolved in 14.2.0:
-https://gcc.gnu.org/bugzilla/buglist.cgi?bug_status=RESOLVED&resolution=FIXED&target_milestone=14.2
+With GCC 14.x as the host compiler, bcusdk fails to build as follows:
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+configure: error: Specified CC_FOR_BUILD doesn't seem to work
+
+This is due to missing includes in the test programs used in the
+configure script to check the host compiler. We fix this with patch
+0003.
+
+However, this patch requires to autoreconf the package, and autoreconf
+would need the definition of AM_PATH_XML2, which would require libxml2
+even though we don't have libxml2 as a dependency of this package (we
+don't enable the features that requires libxml2). As it turns out that
+the AM_PATH_XML2 macro is in fact deprecated, we replaced it by its
+equivalent using PKG_CHECK_MODULES(), which is in fact exactly how
+AM_PATH_XML2 is implemented in upstream libxml2.
+
+Fixes:
+
+  http://autobuild.buildroot.net/results/458880bd6c207e5bb7afce1a1186f204c30c0941/
+
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit f3148385f89bf052a420933c05dcd4e40f114c77)
+(cherry picked from commit e4109c1d2d28f737409dce2e346661cbf20084c6)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- .checkpackageignore                                                   | 2 +-
- .../0001-disable-split-stack-for-non-thread-builds.patch              | 0
- .../0002-libsanitizer-also-undef-_TIME_BITS-in-sanitizer_proc.patch   | 0
- package/gcc/Config.in.host                                            | 2 +-
- package/gcc/gcc.hash                                                  | 4 ++--
- 5 files changed, 4 insertions(+), 4 deletions(-)
+ ...build.m4-include-stdlib.h-in-test-program.patch | 50 ++++++++++++++++++++++
+ ...n-replace-obsolete-AM_PATH_XML2-by-PKG_CH.patch | 40 +++++++++++++++++
+ package/bcusdk/bcusdk.mk                           |  6 ++-
+ 3 files changed, 95 insertions(+), 1 deletion(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 47da52c4eb..05e97ebccc 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -638,7 +638,7 @@ package/gamin/0002-no-const-return.patch lib_patch.Sob lib_patch.Upstream
- package/gamin/0003-fix-missing-PTHREAD_MUTEX_RECURSIVE_NP.patch lib_patch.Upstream
- package/gcc/12.4.0/0001-disable-split-stack-for-non-thread-builds.patch lib_patch.Upstream
- package/gcc/13.3.0/0001-disable-split-stack-for-non-thread-builds.patch lib_patch.Upstream
--package/gcc/14.1.0/0001-disable-split-stack-for-non-thread-builds.patch lib_patch.Upstream
-+package/gcc/14.2.0/0001-disable-split-stack-for-non-thread-builds.patch lib_patch.Upstream
- package/gcc/8.4.0/0001-xtensa-fix-PR-target-91880.patch lib_patch.Upstream
- package/gcc/8.4.0/0002-Revert-re-PR-target-92095-internal-error-with-O1-mcp.patch lib_patch.Upstream
- package/gcc/8.4.0/0003-libsanitizer-Remove-cyclades-from-libsanitizer.patch lib_patch.Upstream
-diff --git a/package/gcc/14.1.0/0001-disable-split-stack-for-non-thread-builds.patch b/package/gcc/14.2.0/0001-disable-split-stack-for-non-thread-builds.patch
-similarity index 100%
-rename from package/gcc/14.1.0/0001-disable-split-stack-for-non-thread-builds.patch
-rename to package/gcc/14.2.0/0001-disable-split-stack-for-non-thread-builds.patch
-diff --git a/package/gcc/14.1.0/0002-libsanitizer-also-undef-_TIME_BITS-in-sanitizer_proc.patch b/package/gcc/14.2.0/0002-libsanitizer-also-undef-_TIME_BITS-in-sanitizer_proc.patch
-similarity index 100%
-rename from package/gcc/14.1.0/0002-libsanitizer-also-undef-_TIME_BITS-in-sanitizer_proc.patch
-rename to package/gcc/14.2.0/0002-libsanitizer-also-undef-_TIME_BITS-in-sanitizer_proc.patch
-diff --git a/package/gcc/Config.in.host b/package/gcc/Config.in.host
-index 5d3b803c78..911bc2f4de 100644
---- a/package/gcc/Config.in.host
-+++ b/package/gcc/Config.in.host
-@@ -75,7 +75,7 @@ config BR2_GCC_VERSION
- 	default "8.4.0"     if BR2_GCC_VERSION_POWERPC_SPE
- 	default "12.4.0"    if BR2_GCC_VERSION_12_X
- 	default "13.3.0"    if BR2_GCC_VERSION_13_X
--	default "14.1.0"    if BR2_GCC_VERSION_14_X
-+	default "14.2.0"    if BR2_GCC_VERSION_14_X
- 	default "arc-2023.09-release" if BR2_GCC_VERSION_ARC
+diff --git a/package/bcusdk/0003-m4-ccforbuild.m4-include-stdlib.h-in-test-program.patch b/package/bcusdk/0003-m4-ccforbuild.m4-include-stdlib.h-in-test-program.patch
+new file mode 100644
+index 0000000000..36b8f3d744
+--- /dev/null
++++ b/package/bcusdk/0003-m4-ccforbuild.m4-include-stdlib.h-in-test-program.patch
+@@ -0,0 +1,50 @@
++From 1c78aa3541f730e9624504168fb0e1f413e5cbb8 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Date: Fri, 2 Aug 2024 19:28:36 +0200
++Subject: [PATCH] m4/ccforbuild.m4: include <stdlib.h> in test program
++
++The GMP_PROG_CC_FOR_BUILD_WORKS and GMP_PROG_EXEEXT_FOR_BUILD macros
++do various checks to verify if the host compiler works, but their test
++programs lack the inclusion of <stdlib.h>, needed for exit(). This
++causes a build failure with gcc 14.x:
++
++conftest.c: In function 'main':
++conftest.c:4:3: error: implicit declaration of function 'exit' [-Wimplicit-function-declaration]
++    4 |   exit(0);
++
++which then causes the configure script to think that the host compiler
++does not work:
++
++configure: error: Specified CC_FOR_BUILD doesn't seem to work
++
++so let's include <stdlib.h> to fix this issue.
++
++Upstream: https://sourceforge.net/p/bcusdk/patches/4/
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ m4/ccforbuild.m4 | 2 ++
++ 1 file changed, 2 insertions(+)
++
++diff --git a/m4/ccforbuild.m4 b/m4/ccforbuild.m4
++index a466cab..389deaa 100644
++--- a/m4/ccforbuild.m4
+++++ b/m4/ccforbuild.m4
++@@ -66,6 +66,7 @@ AC_DEFUN([GMP_PROG_CC_FOR_BUILD_WORKS],
++ # remove anything that might look like compiler output to our "||" expression
++ rm -f conftest* a.out b.out a.exe a_out.exe
++ cat >conftest.c <<EOF
+++#include <stdlib.h>
++ int
++ main ()
++ {
++@@ -140,6 +141,7 @@ AC_DEFUN([GMP_PROG_EXEEXT_FOR_BUILD],
++ AC_CACHE_CHECK([for build system executable suffix],
++                gmp_cv_prog_exeext_for_build,
++ [cat >conftest.c <<EOF
+++#include <stdlib.h>
++ int
++ main ()
++ {
++-- 
++2.45.2
++
+diff --git a/package/bcusdk/0004-configure.in-replace-obsolete-AM_PATH_XML2-by-PKG_CH.patch b/package/bcusdk/0004-configure.in-replace-obsolete-AM_PATH_XML2-by-PKG_CH.patch
+new file mode 100644
+index 0000000000..899f8c0f3b
+--- /dev/null
++++ b/package/bcusdk/0004-configure.in-replace-obsolete-AM_PATH_XML2-by-PKG_CH.patch
+@@ -0,0 +1,40 @@
++From 8402c1ffccb2eeb47581d2d80b81e94433cdacb7 Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Date: Fri, 2 Aug 2024 19:35:02 +0200
++Subject: [PATCH] configure.in: replace obsolete AM_PATH_XML2 by
++ PKG_CHECK_MODULES
++
++According to the libxml2 code:
++
++  AM_PATH_XML2 is deprecated, use PKG_CHECK_MODULES instead
++
++See:
++
++  https://gitlab.gnome.org/GNOME/libxml2/-/blob/master/libxml.m4
++
++Upstream: https://sourceforge.net/p/bcusdk/patches/5/
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ configure.in | 6 +++++-
++ 1 file changed, 5 insertions(+), 1 deletion(-)
++
++diff --git a/configure.in b/configure.in
++index 7f3a8bd..82176d9 100644
++--- a/configure.in
+++++ b/configure.in
++@@ -81,7 +81,11 @@ AM_CONDITIONAL(HAVE_ONLYEIBD, test x$onlyeibd = xtrue)
++ 
++ if test x$onlyeibd = xfalse ; then
++ 
++-AM_PATH_XML2(2.6.16,,[AC_MSG_ERROR([limxml2 not found])])
+++PKG_CHECK_MODULES(XML, [libxml-2.0 >= 2.6.16], [], [AC_MSG_ERROR([limxml2 not found])])
+++XML_CPPFLAGS=$XML_CFLAGS
+++AC_SUBST(XML_CPPFLAGS)
+++AC_SUBST(XML_LIBS)
+++
++ AC_PATH_PROG(TAS,[m68hc05-as],,[$PATH:$bindir:$prefix/bin])
++ AC_PATH_PROG(TLD,[m68hc05-ld],,[$PATH:$bindir:$prefix/bin])
++ AC_PATH_PROG(TAR,[m68hc05-ar],,[$PATH:$bindir:$prefix/bin])
++-- 
++2.45.2
++
+diff --git a/package/bcusdk/bcusdk.mk b/package/bcusdk/bcusdk.mk
+index f14b23c7cc..4defd29ba1 100644
+--- a/package/bcusdk/bcusdk.mk
++++ b/package/bcusdk/bcusdk.mk
+@@ -10,6 +10,9 @@ BCUSDK_SITE = http://www.auto.tuwien.ac.at/~mkoegler/eib
+ BCUSDK_LICENSE = GPL-2.0+
+ BCUSDK_LICENSE_FILES = COPYING
+ BCUSDK_INSTALL_STAGING = YES
++# 0003-m4-ccforbuild.m4-include-stdlib.h-in-test-program.patch
++# 0004-configure.in-replace-obsolete-AM_PATH_XML2-by-PKG_CH.patch
++BCUSDK_AUTORECONF = YES
+ BCUSDK_CONF_OPTS = \
+ 	--enable-onlyeibd \
+ 	--enable-ft12 \
+@@ -21,7 +24,8 @@ BCUSDK_CONF_OPTS = \
+ 	--without-pth-test \
+ 	--with-pth=$(STAGING_DIR)/usr
  
- config BR2_EXTRA_GCC_CONFIG_OPTIONS
-diff --git a/package/gcc/gcc.hash b/package/gcc/gcc.hash
-index 4534655790..b7c53f8fbe 100644
---- a/package/gcc/gcc.hash
-+++ b/package/gcc/gcc.hash
-@@ -6,8 +6,8 @@ sha512  440c08ca746da450d9a1b35e8fd2305cb27e7e6987cd9d0f7d375f3b1fc9e4b0bd7acb3c
- sha512  5bd29402cad2deb5d9388d0236c7146414d77e5b8d5f1c6c941c7a1f47691c3389f08656d5f6e8e2d6717bf2c81f018d326f632fb468f42925b40bd217fc4853  gcc-12.4.0.tar.xz
- # From https://gcc.gnu.org/pub/gcc/releases/gcc-13.3.0/sha512.sum
- sha512  ed5f2f4c6ed2c796fcf2c93707159e9dbd3ddb1ba063d549804dd68cdabbb6d550985ae1c8465ae9a336cfe29274a6eb0f42e21924360574ebd8e5d5c7c9a801  gcc-13.3.0.tar.xz
--# From https://gcc.gnu.org/pub/gcc/releases/gcc-14.1.0/sha512.sum
--sha512  e9e224f2b26646fcf038d28dfa08b94c623bc57941f99894a321d01c600f7c68aff6b8837fd25e73e540de1f8de5606e98694a62cdcdfb525ce768b3ef6879ea  gcc-14.1.0.tar.xz
-+# From https://gcc.gnu.org/pub/gcc/releases/gcc-14.2.0/sha512.sum
-+sha512  932bdef0cda94bacedf452ab17f103c0cb511ff2cec55e9112fc0328cbf1d803b42595728ea7b200e0a057c03e85626f937012e49a7515bc5dd256b2bf4bc396  gcc-14.2.0.tar.xz
+-BCUSDK_DEPENDENCIES = libpthsem
++# host-pkgconf is only needed because of autoreconf
++BCUSDK_DEPENDENCIES = libpthsem host-pkgconf
  
- # Locally calculated (fetched from Github)
- sha512  4dca20f517a42bb027fec605965b09fb917a535eebf3fe3e811d93476b02b1962df5ad4665f117bd44c2ec8e8015d51a44c00591761fe5f259c201ac5c7d920f  gcc-arc-2023.09-release.tar.gz
+ ifeq ($(BR2_PACKAGE_ARGP_STANDALONE),y)
+ BCUSDK_DEPENDENCIES += argp-standalone $(TARGET_NLS_DEPENDENCIES)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
