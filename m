@@ -4,50 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F2718CD37AE
-	for <buildroot@archiver.kernel.org>; Tue,  3 Sep 2024 20:41:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1740BCD37AE
+	for <buildroot@archiver.kernel.org>; Tue,  3 Sep 2024 20:41:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C0E7B40327;
-	Tue,  3 Sep 2024 20:41:01 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D8489402D5;
+	Tue,  3 Sep 2024 20:41:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xBRyBbX3Vm7N; Tue,  3 Sep 2024 20:41:01 +0000 (UTC)
+ id r2pQK1v16_jI; Tue,  3 Sep 2024 20:41:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A65764042E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 221A8404CB
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A65764042E;
-	Tue,  3 Sep 2024 20:41:00 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id D15231BF57B
- for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 20:40:50 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 221A8404CB;
+	Tue,  3 Sep 2024 20:41:03 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 256EE1BF57B
+ for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 20:40:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BF56B60687
- for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 20:40:50 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 123C780EB9
+ for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 20:40:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EYlKB9l297m5 for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Oe_tU-cl6wTG for <buildroot@lists.busybox.net>;
  Tue,  3 Sep 2024 20:40:50 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::228;
+ helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F285560679
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id F285560679
- for <buildroot@buildroot.org>; Tue,  3 Sep 2024 20:40:49 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id ED0117F8B4; Tue,  3 Sep 2024 20:40:49 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Tue, 3 Sep 2024 22:40:19 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: a1a638f14cb3d61867e8ba7536361fc47df5289a
-X-Git-Newrev: fdd9b3e24b910bdc5fb37daa01c9b0e0f3c5b54d
-X-Patchwork-Hint: ignore
-Message-Id: <20240903204049.ED0117F8B4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next]
- support/scripts/gen-bootlin-toolchains: tarballs are now xz-compressed
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E68DE80EAD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E68DE80EAD
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id E68DE80EAD
+ for <buildroot@busybox.net>; Tue,  3 Sep 2024 20:40:49 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id D41471BF205;
+ Tue,  3 Sep 2024 20:40:46 +0000 (UTC)
+Date: Tue, 3 Sep 2024 22:40:45 +0200
+To: Francois Perrad <francois.perrad@gadz.org>
+Message-ID: <20240903224045.0af9882e@windsurf>
+In-Reply-To: <20240902203714.2650246-1-francois.perrad@gadz.org>
+References: <20240902203714.2650246-1-francois.perrad@gadz.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1725396047;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=4K5sTeq5Nux1LnlFs/WpnJV3luCNscdTpj2s3yy37EE=;
+ b=kneT7Uict5IItuiNJqCV9xWF3UXD+rVUET66y11utTCY2UyyJeFkPEFnHDbrzY1IYgkESO
+ NgWgVz13ip8FeI/tRJJZ3r6aNMmupLKUvC0td5R3cjKuZ77K1HOXMgzY7NejFkwTZEXSGI
+ pwJ5ZrjAO8qn8mBDGeXppoKOUcsejHGhznsnraZNE091TmQO6UrGoL+t0OwPxUdFulTiS9
+ lZBovul/zbjhY7/qnivyO196p6ZXvGRXouO686/oU4o3IuF9mKLyD01raHwj2zlw7DWpbU
+ EW2Jy2gd2PQRpYlRa5oJ7eRc1gYmW9dCZVxkvvfo5zrfZ94e1CKuroQt7NbrYg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=kneT7Uic
+Subject: Re: [Buildroot] [PATCH] package/lz4: bump to version 1.10.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,49 +80,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@busybox.net
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fdd9b3e24b910bdc5fb37daa01c9b0e0f3c5b54d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On Mon,  2 Sep 2024 22:37:13 +0200
+Francois Perrad <francois.perrad@gadz.org> wrote:
 
-As of the 2024.05 toolchain release, the toolchain tarballs are now
-xz-compressed instead of bz2-compressed. Since this script is only
-meant to update to the latest toolchains, we don't really bother
-supporting the older toolchains that are bz2-compressed, and we simply
-assume the tarballs are xz-compressed.
+> remove merged patch
+> 
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+> ---
+>  .../0001-build-Support-BUILD_SHARED-no.patch  | 42 -------------------
+>  package/lz4/lz4.hash                          |  4 +-
+>  package/lz4/lz4.mk                            |  2 +-
+>  3 files changed, 3 insertions(+), 45 deletions(-)
+>  delete mode 100644 package/lz4/0001-build-Support-BUILD_SHARED-no.patch
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- support/scripts/gen-bootlin-toolchains | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Thanks a lot for the patch, but you have forgotten to update
+.checkpackageignore, and more importantly, you have not explained the
+change of the license file hash in the commit message? Could you have a
+look at those small things, and send a v2?
 
-diff --git a/support/scripts/gen-bootlin-toolchains b/support/scripts/gen-bootlin-toolchains
-index 4344221213..ef034058e1 100755
---- a/support/scripts/gen-bootlin-toolchains
-+++ b/support/scripts/gen-bootlin-toolchains
-@@ -293,7 +293,7 @@ class Toolchain:
-     @property
-     def tarball_url(self):
-         return os.path.join(BASE_URL, self.arch, "tarballs",
--                            self.fname_prefix + ".tar.bz2")
-+                            self.fname_prefix + ".tar.xz")
- 
-     @property
-     def hash_url(self):
-@@ -416,7 +416,7 @@ class Toolchain:
-     def gen_mk(self, f):
-         f.write("ifeq ($(%s),y)\n" % self.option_name)
-         f.write("TOOLCHAIN_EXTERNAL_BOOTLIN_VERSION = %s\n" % self.version)
--        f.write("TOOLCHAIN_EXTERNAL_BOOTLIN_SOURCE = %s--%s--%s-$(TOOLCHAIN_EXTERNAL_BOOTLIN_VERSION).tar.bz2\n" %
-+        f.write("TOOLCHAIN_EXTERNAL_BOOTLIN_SOURCE = %s--%s--%s-$(TOOLCHAIN_EXTERNAL_BOOTLIN_VERSION).tar.xz\n" %
-                 (self.arch, self.libc, self.variant))
-         f.write("TOOLCHAIN_EXTERNAL_BOOTLIN_SITE = %s\n" %
-                 os.path.join(BASE_URL, self.arch, "tarballs"))
+Thanks a lot!
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
