@@ -4,48 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C9945E6FE46
-	for <buildroot@archiver.kernel.org>; Fri,  6 Sep 2024 20:06:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D57BCE7B11
+	for <buildroot@archiver.kernel.org>; Fri,  6 Sep 2024 20:06:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6E5D584A58;
-	Fri,  6 Sep 2024 20:06:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 63D3E84A48;
+	Fri,  6 Sep 2024 20:06:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CWp7TlH6vM3F; Fri,  6 Sep 2024 20:06:03 +0000 (UTC)
+ id x60Gjq0T4XoC; Fri,  6 Sep 2024 20:06:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9313384A3E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3FF4C84A5B
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9313384A3E;
-	Fri,  6 Sep 2024 20:06:02 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id CE62C1BF20B
- for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 19:59:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3FF4C84A5B;
+	Fri,  6 Sep 2024 20:06:06 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 531AE1BF20B
+ for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 19:59:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5D45E60736
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3B2AA4086C
  for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 19:59:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lm63cI0PKkeD for <buildroot@lists.busybox.net>;
- Fri,  6 Sep 2024 19:59:01 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6DQrGe4wZy7f for <buildroot@lists.busybox.net>;
+ Fri,  6 Sep 2024 19:58:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9A0A461119
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 58A3E409EA
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9A0A461119
- for <buildroot@buildroot.org>; Fri,  6 Sep 2024 19:58:57 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 58A3E409EA
+ for <buildroot@buildroot.org>; Fri,  6 Sep 2024 19:58:58 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9085586C5A; Fri,  6 Sep 2024 19:58:57 +0000 (UTC)
+ id 537D686587; Fri,  6 Sep 2024 19:58:58 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 27 Aug 2024 18:40:05 +0200
+Date: Tue, 3 Sep 2024 21:53:39 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 89c04d7e12ce21d9ba77906ee1790687e5d034e4
-X-Git-Newrev: fa4ea2f723e27a0897a067428ad156161cad08b7
+X-Git-Oldrev: 5e94707ca925accebdd1a7fc8fb4b023e2e8edec
+X-Git-Newrev: a584f8355569daa8f5794c70fa6e5eadbbe5a537
 X-Patchwork-Hint: ignore
-Message-Id: <20240906195857.9085586C5A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-fastapi: bump to 0.112.2
+Message-Id: <20240906195858.537D686587@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/imx8mqevk: bump TF-A,
+ U-Boot and Linux Kernel version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,46 +66,77 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fa4ea2f723e27a0897a067428ad156161cad08b7
+commit: https://git.buildroot.net/buildroot/commit/?id=a584f8355569daa8f5794c70fa6e5eadbbe5a537
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog: https://fastapi.tiangolo.com/release-notes/#01122
+The imx8mqevk_defconfig is failing to build the arm-trusted-firmware
+package, with the error message:
 
-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
+    plat/imx/imx8m/hab.c: In function 'imx_hab_handler':
+    plat/imx/imx8m/hab.c:65:57: error: array subscript 0 is outside array bounds of 'uint32_t[0]' {aka 'unsigned int[]'} [-Werror=array-bounds=]
+       65 | #define HAB_RVT_CHECK_TARGET_ARM64      ((unsigned long)*(uint32_t *)(HAB_RVT_BASE + 0x18))
+          |                                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This is happening since commit dc0f721 "package/gcc: switch to 13.x
+as default".
+
+This commit fixes this build failure by updating the TF-A, U-Boot and
+Linux Kernel. Note: this imx8mqevk_defconfig uses the upstream Kernel
+(in contrast of the freescale_imx8mqevk_defconfig which is using the NXP
+BSP Kernel version).
+
+Also, this new uboot version needs gnutls and openssl, so the
+corresponding options are added to the defconfig.
+
+Fixes:
+https://gitlab.com/buildroot.org/buildroot/-/jobs/7691701411
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+Reviewed-by: Fabio Estevam <festevam@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-fastapi/python-fastapi.hash | 4 ++--
- package/python-fastapi/python-fastapi.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ configs/imx8mqevk_defconfig | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-fastapi/python-fastapi.hash b/package/python-fastapi/python-fastapi.hash
-index 203af3e915..810f31023c 100644
---- a/package/python-fastapi/python-fastapi.hash
-+++ b/package/python-fastapi/python-fastapi.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/fastapi/json
--md5  f42ce6731bca9412b36b0537672cf568  fastapi-0.112.1.tar.gz
--sha256  b2537146f8c23389a7faa8b03d0bd38d4986e6983874557d95eed2acc46448ef  fastapi-0.112.1.tar.gz
-+md5  c9d319aa5b12df82e51b77573e419e01  fastapi-0.112.2.tar.gz
-+sha256  3d4729c038414d5193840706907a41839d839523da6ed0c2811f1168cac1798c  fastapi-0.112.2.tar.gz
- # Locally computed sha256 checksums
- sha256  4ec89ffc81485b97fec584b2d4a961032eeffe834453894fd9c1274906cc744e  LICENSE
-diff --git a/package/python-fastapi/python-fastapi.mk b/package/python-fastapi/python-fastapi.mk
-index 5fd91c691b..210abcfa3d 100644
---- a/package/python-fastapi/python-fastapi.mk
-+++ b/package/python-fastapi/python-fastapi.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_FASTAPI_VERSION = 0.112.1
-+PYTHON_FASTAPI_VERSION = 0.112.2
- PYTHON_FASTAPI_SOURCE = fastapi-$(PYTHON_FASTAPI_VERSION).tar.gz
--PYTHON_FASTAPI_SITE = https://files.pythonhosted.org/packages/2c/09/71a961740a1121d7cc90c99036cc3fbb507bf0c69860d08d4388f842196b
-+PYTHON_FASTAPI_SITE = https://files.pythonhosted.org/packages/9c/11/4874d165e7ef97aa803a567a4be8f9c8b0bd7cced6d536d44033ef7d4bfa
- PYTHON_FASTAPI_SETUP_TYPE = pep517
- PYTHON_FASTAPI_LICENSE = MIT
- PYTHON_FASTAPI_LICENSE_FILES = LICENSE
+diff --git a/configs/imx8mqevk_defconfig b/configs/imx8mqevk_defconfig
+index 943a479932..350b863ec9 100644
+--- a/configs/imx8mqevk_defconfig
++++ b/configs/imx8mqevk_defconfig
+@@ -1,12 +1,12 @@
+ BR2_aarch64=y
+ BR2_ARM_FPU_VFPV3=y
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_8=y
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/freescale/common/imx/imx8-bootloader-prepare.sh board/freescale/common/imx/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="${UBOOT_DIR}/arch/arm/dts/imx8mq-evk.dtb"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.8.7"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.48"
+ BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/imx8mq-evk"
+@@ -19,15 +19,17 @@ BR2_TARGET_ROOTFS_EXT2_4=y
+ BR2_TARGET_ROOTFS_EXT2_SIZE="120M"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL=y
+-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,imx-atf,rel_imx_5.4.24_2.1.0)/imx-atf-rel_imx_5.4.24_2.1.0.tar.gz"
++BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,imx-atf,lf-6.6.23-2.0.0)/imx-atf-lf-6.6.23-2.0.0.tar.gz"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mq"
+ BR2_TARGET_ARM_TRUSTED_FIRMWARE_BL31=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_TARBALL=y
+-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,uboot-imx,rel_imx_5.4.24_2.1.0)/uboot-imx-rel_imx_5.4.24_2.1.0.tar.gz"
++BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call github,nxp-imx,uboot-imx,lf-6.6.23-2.0.0)/uboot-imx-lf-6.6.23-2.0.0.tar.gz"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx8mq_evk"
+ BR2_TARGET_UBOOT_NEEDS_DTC=y
++BR2_TARGET_UBOOT_NEEDS_GNUTLS=y
++BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM=y
+ BR2_TARGET_UBOOT_FORMAT_CUSTOM_NAME="u-boot-nodtb.bin"
+ BR2_TARGET_UBOOT_SPL=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
