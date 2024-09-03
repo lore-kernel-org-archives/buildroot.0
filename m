@@ -4,48 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59B5FCE7B11
-	for <buildroot@archiver.kernel.org>; Fri,  6 Sep 2024 20:07:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35282E6FE46
+	for <buildroot@archiver.kernel.org>; Fri,  6 Sep 2024 20:07:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 27E1B84B8A;
-	Fri,  6 Sep 2024 20:07:23 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0C17784B83;
+	Fri,  6 Sep 2024 20:07:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kGZlcTZCMz7t; Fri,  6 Sep 2024 20:07:22 +0000 (UTC)
+ id I3o4kFUiqb3l; Fri,  6 Sep 2024 20:07:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0F61484729
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B2CD684B97
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0F61484729;
-	Fri,  6 Sep 2024 20:07:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B2CD684B97;
+	Fri,  6 Sep 2024 20:07:24 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1E0FF1BF980
- for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 20:00:03 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2E0D11BF983
+ for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 20:00:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 172CF608B4
+ by smtp3.osuosl.org (Postfix) with ESMTP id 382A1606EB
  for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 19:59:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZFMDISarwWbX for <buildroot@lists.busybox.net>;
- Fri,  6 Sep 2024 19:59:03 +0000 (UTC)
+ id ITl1peyZprlU for <buildroot@lists.busybox.net>;
+ Fri,  6 Sep 2024 19:59:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1D1D2606EB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6A16E61121
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1D1D2606EB
- for <buildroot@buildroot.org>; Fri,  6 Sep 2024 19:58:59 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6A16E61121
+ for <buildroot@buildroot.org>; Fri,  6 Sep 2024 19:58:58 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0AA0E86B7A; Fri,  6 Sep 2024 19:58:59 +0000 (UTC)
+ id 6719486B7A; Fri,  6 Sep 2024 19:58:58 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 3 Sep 2024 22:41:58 +0200
+Date: Tue, 3 Sep 2024 22:01:48 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4605a794ddbd7d3dbd2073f9767b85341878ec15
-X-Git-Newrev: 5bdc92ceb4661c90a8e8706cce6519c5f9177318
+X-Git-Oldrev: 848d2614bf46999358b941c261d5c429e6471820
+X-Git-Newrev: f577d8218f3f18016aa084255e337a7f589eeed1
 X-Patchwork-Hint: ignore
-Message-Id: <20240906195859.0AA0E86B7A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/slirp: bump to version 4.8.0
+Message-Id: <20240906195858.6719486B7A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] arch/Config.in: introduce
+ BR2_ARCH_NEEDS_GCC_AT_LEAST_15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,46 +59,41 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5bdc92ceb4661c90a8e8706cce6519c5f9177318
+commit: https://git.buildroot.net/buildroot/commit/?id=f577d8218f3f18016aa084255e337a7f589eeed1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/slirp/slirp.hash | 2 +-
- package/slirp/slirp.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Since we're going to introduce external toolchains that are based on
+GCC 14.x, we will need them to "depends on
+!BR2_ARCH_NEEDS_GCC_AT_LEAST_15", so let's introduce this symbol
+first.
 
-diff --git a/package/slirp/slirp.hash b/package/slirp/slirp.hash
-index 3f7abdee5a..930e6aca58 100644
---- a/package/slirp/slirp.hash
-+++ b/package/slirp/slirp.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  358ce8b6ea59ec9deac937cc754f0115b992839e7b0cddf30ffb8f77dc21da82  libslirp-v4.7.0.tar.bz2
-+sha256  1c2e3d30e41a055ed41f9d0b3234d0d143bc28f5ad84bb101413f830844df757  libslirp-v4.8.0.tar.bz2
- sha256  b28aecf4796a6a22054167f0a976de13d9db335669d37afd2dc7ea4c335e1e13  COPYRIGHT
-diff --git a/package/slirp/slirp.mk b/package/slirp/slirp.mk
-index 2ad71f13d9..6d44df8d7e 100644
---- a/package/slirp/slirp.mk
-+++ b/package/slirp/slirp.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ arch/Config.in | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/arch/Config.in b/arch/Config.in
+index f39c33ef7f..2e7ac080ef 100644
+--- a/arch/Config.in
++++ b/arch/Config.in
+@@ -312,6 +312,10 @@ config BR2_ARCH_NEEDS_GCC_AT_LEAST_14
+ 	bool
+ 	select BR2_ARCH_NEEDS_GCC_AT_LEAST_13
  
--SLIRP_VERSION = 4.7.0
-+SLIRP_VERSION = 4.8.0
- SLIRP_SOURCE = libslirp-v$(SLIRP_VERSION).tar.bz2
- SLIRP_SITE = https://gitlab.freedesktop.org/slirp/libslirp/-/archive/v$(SLIRP_VERSION)
- SLIRP_LICENSE = BSD-3-Clause
++config BR2_ARCH_NEEDS_GCC_AT_LEAST_15
++	bool
++	select BR2_ARCH_NEEDS_GCC_AT_LEAST_14
++
+ # The following string values are defined by the individual
+ # Config.in.$ARCH files
+ config BR2_ARCH
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
