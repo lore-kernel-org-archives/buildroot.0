@@ -4,71 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 77598CD343F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Sep 2024 21:31:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C39EDCD3440
+	for <buildroot@archiver.kernel.org>; Tue,  3 Sep 2024 21:32:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 421DE60674;
-	Tue,  3 Sep 2024 21:31:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8DE5C60674;
+	Tue,  3 Sep 2024 21:32:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TyrOBWhnjp3O; Tue,  3 Sep 2024 21:31:38 +0000 (UTC)
+ id Y2zY6178IZXM; Tue,  3 Sep 2024 21:32:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5BB9560773
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9AC7A607A7
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5BB9560773;
-	Tue,  3 Sep 2024 21:31:38 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 713D11BF421
- for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 21:31:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9AC7A607A7;
+	Tue,  3 Sep 2024 21:32:31 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 8993D1BF421
+ for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 21:32:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5F23B60773
- for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 21:31:36 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 74F9E40182
+ for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 21:32:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JOHb3C9XjvE4 for <buildroot@lists.busybox.net>;
- Tue,  3 Sep 2024 21:31:35 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.200;
- helo=relay7-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id H6VXLyhGqJeQ for <buildroot@lists.busybox.net>;
+ Tue,  3 Sep 2024 21:32:29 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 144C160674
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 144C160674
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [217.70.183.200])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 144C160674
- for <buildroot@buildroot.org>; Tue,  3 Sep 2024 21:31:34 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 2CB7E20005;
- Tue,  3 Sep 2024 21:31:33 +0000 (UTC)
-Date: Tue, 3 Sep 2024 23:31:32 +0200
-To: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
-Message-ID: <20240903233132.51e57497@windsurf>
-In-Reply-To: <20240828110215.147869-1-roykollensvendsen@gmail.com>
-References: <20240828110215.147869-1-roykollensvendsen@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1725399093;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=gtsiWcphPbNquqvxA72+PnlmKiJmdwXt+BAVCNuTNwo=;
- b=UVtJ2pd3rSPAT4nwwT7+qx6Vs8rVrbgehXwHJ91/p8aPMG6iVY6/9Y9Ggznm78yDV7dc6U
- iZqfWoaQaet+4sPftqT8id2sK9R93JFLSokm/6L+P/3lcw6AhK83iOhF2OQlfJnRzdFIuc
- HTpUa1g+RCzRairLWPj5rEg/AwfigyDy5KcX4uTP0wDsytauVOOFP5Fo+V2kx4P0xBqnFx
- DAZy6h/5SwCRqcqXAh/Oq6Ge6Yn6U12qOSrou9EZ8QD2Zh7dRYQIphbXlr3uKU2hdffjuX
- a5Q7MfKU2C2Ugus3IttNFnFQaL1FnuaGzaS0PTXz4rkUkePdCCQGrD3fy7wAQg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=UVtJ2pd3
-Subject: Re: [Buildroot] [PATCH 1/1] package/qt6/qt6declarative: fix typo
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 619E44010C
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 619E44010C
+ for <buildroot@buildroot.org>; Tue,  3 Sep 2024 21:32:29 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 4E6F386D47; Tue,  3 Sep 2024 21:32:29 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 3 Sep 2024 23:31:39 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 3cf1a6f80d3bb6a97b22111534dfeaa129b73d21
+X-Git-Newrev: ac51d214659139ad8260b21b1e94cb631994fc62
+X-Patchwork-Hint: ignore
+Message-Id: <20240903213229.4E6F386D47@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/p910nd: update download URL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,27 +59,56 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Jesse Van Gavere <jesseevg@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, 28 Aug 2024 13:02:13 +0200
-Roy Kollen Svendsen <roykollensvendsen@gmail.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=ac51d214659139ad8260b21b1e94cb631994fc62
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
-> ---
->  package/qt6/qt6declarative/qt6declarative.mk | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Project moved to Github. Update download URL and hash.
+License file got renamed, but it is still GPLv2.
 
-Applied to master, thanks.
+Fixes:
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+ http://autobuild.buildroot.org/results/6e0/6e0e34c342fe712d5314de80488a2d034a2f5983/
+
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/p910nd/p910nd.hash | 4 ++--
+ package/p910nd/p910nd.mk   | 5 ++---
+ 2 files changed, 4 insertions(+), 5 deletions(-)
+
+diff --git a/package/p910nd/p910nd.hash b/package/p910nd/p910nd.hash
+index 93b1389909..0f69e402d5 100644
+--- a/package/p910nd/p910nd.hash
++++ b/package/p910nd/p910nd.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  4ac980a3ae24babae6f70f0a692625ece03a4a92c357fbb10d2e368386c3c26f  p910nd-0.97.tar.bz2
+-sha256  91df39d1816bfb17a4dda2d3d2c83b1f6f2d38d53e53e41e8f97ad5ac46a0cad  COPYING
++sha256  a1bcc2dd75bad4e00a9de5098dbd970e8380f978fc09292bcfa15852af6a6964  p910nd-0.97.tar.gz
++sha256  62f171d4d8b6726df61f18a6bbc0a70f79c4bc2134d837d35c81fc6289a2d84d  LICENSE.md
+diff --git a/package/p910nd/p910nd.mk b/package/p910nd/p910nd.mk
+index 163ab1bcf2..fea8aafd50 100644
+--- a/package/p910nd/p910nd.mk
++++ b/package/p910nd/p910nd.mk
+@@ -5,10 +5,9 @@
+ ################################################################################
+ 
+ P910ND_VERSION = 0.97
+-P910ND_SITE = http://downloads.sourceforge.net/project/p910nd/p910nd/$(P910ND_VERSION)
+-P910ND_SOURCE = p910nd-$(P910ND_VERSION).tar.bz2
++P910ND_SITE = $(call github,kenyapcomau,p910nd,$(P910ND_VERSION))
+ P910ND_LICENSE = GPL-2.0
+-P910ND_LICENSE_FILES = COPYING
++P910ND_LICENSE_FILES = LICENSE.md
+ 
+ define P910ND_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
