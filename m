@@ -1,76 +1,63 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38C97CD37AA
-	for <buildroot@archiver.kernel.org>; Tue,  3 Sep 2024 19:26:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5B499CD37AB
+	for <buildroot@archiver.kernel.org>; Tue,  3 Sep 2024 19:30:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 028C640A22;
-	Tue,  3 Sep 2024 19:26:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1B1386059D;
+	Tue,  3 Sep 2024 19:30:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XshJv45gSVn3; Tue,  3 Sep 2024 19:26:18 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id t1AZCeimElKA; Tue,  3 Sep 2024 19:30:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BA3A640A1D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3E5E060687
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BA3A640A1D;
-	Tue,  3 Sep 2024 19:26:17 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3E5E060687;
+	Tue,  3 Sep 2024 19:30:58 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D79CB1BF344
- for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 19:26:15 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D06151BF344
+ for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 19:30:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C21C9402FB
- for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 19:26:15 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id BD4AF402F0
+ for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 19:30:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PTVLisnW0SSo for <buildroot@lists.busybox.net>;
- Tue,  3 Sep 2024 19:26:14 +0000 (UTC)
+ id ITXK5lzwB68F for <buildroot@lists.busybox.net>;
+ Tue,  3 Sep 2024 19:30:56 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.197;
- helo=relay5-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ helo=relay5-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 5E44B402EE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5E44B402EE
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org A43B0402EE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A43B0402EE
 Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
  [217.70.183.197])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5E44B402EE
- for <buildroot@buildroot.org>; Tue,  3 Sep 2024 19:26:14 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 8275F1C0005;
- Tue,  3 Sep 2024 19:26:12 +0000 (UTC)
-Date: Tue, 3 Sep 2024 21:26:11 +0200
-To: Niklas Cassel via buildroot <buildroot@buildroot.org>
-Message-ID: <20240903212611.613c6d42@windsurf>
-In-Reply-To: <20240902104433.2561797-4-niklas.cassel@wdc.com>
-References: <20240902104433.2561797-1-niklas.cassel@wdc.com>
- <20240902104433.2561797-4-niklas.cassel@wdc.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A43B0402EE
+ for <buildroot@buildroot.org>; Tue,  3 Sep 2024 19:30:55 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id E96901C0002;
+ Tue,  3 Sep 2024 19:30:53 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1slZEr-005vTI-1E;
+ Tue, 03 Sep 2024 21:30:53 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Julien Olivain <ju.o@free.fr>
+References: <20240806212850.467698-1-ju.o@free.fr>
+Date: Tue, 03 Sep 2024 21:30:53 +0200
+In-Reply-To: <20240806212850.467698-1-ju.o@free.fr> (Julien Olivain's message
+ of "Tue, 6 Aug 2024 23:28:50 +0200")
+Message-ID: <878qw8leky.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1725391572;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=wNL+Q88u0Ofj0U0q7OR/vS4Qa9RJEcNuZoWrl6Mb6xw=;
- b=jRT+tN/UtGM5qoU1G79zJzoLAVAIl/u8Hc+eAAXHa6/QnxA1S+MOVCFiLXp0ZFYcDJ37q+
- dgZTXxYQ6U89Viw7X30E8TDAt+F/WYHApNNkXjpoXFlKC3BOhm+Opc7HfD38NBhnKi9iHY
- 0YI4cr5OUvlpfLB8jq31DfoLCbY4IJIU6H0S2ZHv0Am8lWQQuUekuS2XFJ+CnEVqUk7c1F
- B9qelksPlLwjzQOWpTOp6I/3lDy7HSapKh1op4foBNu8aOOSylv0/aIhmIfO0WZ+pSCjfH
- mSGv+t9p8BUuvFpGV60WNIs1/JGZavHsv+JYVB8lA/PuxoPYFUDjcQPhH1/4+A==
+X-GND-Sasl: peter@korsgaard.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=jRT+tN/U
-Subject: Re: [Buildroot] [PATCH 3/5] configs/rock5b: enable eudev to enable
- automatic module loading
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: Re: [Buildroot] [PATCH 1/1] support/testing: package: gpsd: fix
+ test by enabling python support
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,51 +69,31 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Niklas Cassel <niklas.cassel@wdc.com>, Damien Le Moal <dlemoal@kernel.org>,
- Kilian Zinnecker <kilian.zinnecker@mail.de>, Niklas Cassel <cassel@kernel.org>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon,  2 Sep 2024 12:44:31 +0200
-Niklas Cassel via buildroot <buildroot@buildroot.org> wrote:
+>>>>> "Julien" == Julien Olivain <ju.o@free.fr> writes:
 
-> From: Niklas Cassel <cassel@kernel.org>
-> 
-> The arm64 defconfig enables both the R8169 Ethernet driver and the
-> PHY_ROCKCHIP_NANENG_COMBO_PHY PHY driver as modules.
-> 
-> Enable udev so that these modules will get automatically loaded by udev
-> after the rootfs is mounted from the SD card.
-> 
-> This way, we do not need to build these modules as built-in, and we also
-> get the benefit that any device plugged in to the PCIe slot will get
-> automatically loaded.
-> 
-> Signed-off-by: Niklas Cassel <cassel@kernel.org>
+ > Commit 9696d27756 "package/gpsd: condition python stuff to the proper
+ > kconfig option" changed the condition in which the gpsd python scripts
+ > are installed. After that change, the "gpsfake" command (which is a
+ > python script) is no longer found and the runtime test is failing.
 
-I'm not sure what we want to do here, especially when this ends up
-needing net.ifnames=0 that you add in PATCH 4/5.
+ > This commit fixes the issue by reflecting the change in the runtime
+ > test Buildroot configuration.
 
-We do have already a small number of defconfigs that enable eudev. So
-far we only use net.ifnames=0 in 4 configurations.
+ > Signed-off-by: Julien Olivain <ju.o@free.fr>
+ > ---
+ > Patch testing in:
+ > https://gitlab.com/jolivain/buildroot/-/jobs/7520716177
 
-Basically, I'm trying to make sure we remain consistent and have a
-policy that applies to all defconfigs rather than ad-hoc solutions that
-are different for each and every defconfig. That's why I'm a bit
-reluctant with applying your patches as-is because they only solve the
-specific case of this defconfig, in a specific way, without creating a
-clear rule that all defconfigs meeting a specific situation should
-follow.
+Committed to 2024.02.x and 2024.05.x, thanks.
 
-Thomas
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
