@@ -4,60 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C990BCD379F
-	for <buildroot@archiver.kernel.org>; Tue,  3 Sep 2024 16:13:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CD836CD3448
+	for <buildroot@archiver.kernel.org>; Tue,  3 Sep 2024 16:18:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 90FEC600BB;
-	Tue,  3 Sep 2024 16:13:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 99AF9606E8;
+	Tue,  3 Sep 2024 16:18:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Z073gm9tiKQh; Tue,  3 Sep 2024 16:13:05 +0000 (UTC)
+ id yS9XPMvTU1VN; Tue,  3 Sep 2024 16:18:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8936E606E8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D710260592
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8936E606E8;
-	Tue,  3 Sep 2024 16:13:05 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D480B1BF373
- for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 16:13:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D710260592;
+	Tue,  3 Sep 2024 16:18:22 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D23DF1BF373
+ for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 16:18:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C13E3401CE
- for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 16:13:03 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id CD81660592
+ for <buildroot@lists.busybox.net>; Tue,  3 Sep 2024 16:18:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OfH_7-z_xiyD for <buildroot@lists.busybox.net>;
- Tue,  3 Sep 2024 16:13:02 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::223;
- helo=relay3-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Bw1MDaynoLvt for <buildroot@lists.busybox.net>;
+ Tue,  3 Sep 2024 16:18:20 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::226;
+ helo=relay6-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 884C74016D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 884C74016D
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::223])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 884C74016D
- for <buildroot@buildroot.org>; Tue,  3 Sep 2024 16:13:02 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 73C7E60008;
- Tue,  3 Sep 2024 16:12:59 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 77ECC6058D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 77ECC6058D
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::226])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 77ECC6058D
+ for <buildroot@buildroot.org>; Tue,  3 Sep 2024 16:18:19 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id A05C5C0002;
+ Tue,  3 Sep 2024 16:18:16 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1slW9K-004ewY-2j;
- Tue, 03 Sep 2024 18:12:58 +0200
+ (envelope-from <peter@korsgaard.com>) id 1slWES-004fXz-0E;
+ Tue, 03 Sep 2024 18:18:16 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-References: <20240802063627.5502E83B0B@busybox.osuosl.org>
-Date: Tue, 03 Sep 2024 18:12:58 +0200
-In-Reply-To: <20240802063627.5502E83B0B@busybox.osuosl.org> (Thomas Petazzoni
- via buildroot's message of "Fri, 2 Aug 2024 08:33:55 +0200")
-Message-ID: <87le08pvg5.fsf@dell.be.48ers.dk>
+To: Robert Marko <robimarko@gmail.com>
+References: <20240802104437.488091-1-robimarko@gmail.com>
+Date: Tue, 03 Sep 2024 18:18:15 +0200
+In-Reply-To: <20240802104437.488091-1-robimarko@gmail.com> (Robert Marko's
+ message of "Fri, 2 Aug 2024 12:44:37 +0200")
+Message-ID: <87h6awpv7c.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: Re: [Buildroot] [git commit] package/odb: properly format Upstream:
- tags in patches
+Subject: Re: [Buildroot] [PATCH 1/1] package/mdio-tools: enable
+ CONFIG_NETDEVICES
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,25 +69,32 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Thomas" == Thomas Petazzoni via buildroot <buildroot@buildroot.org> writes:
+>>>>> "Robert" == Robert Marko <robimarko@gmail.com> writes:
 
- > commit: https://git.buildroot.net/buildroot/commit/?id=84ae3b04fe6cd70a4abccc5d9e19218583410c16
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+ > mdio-tools depends on CONFIG_MDIO_DEVICE in order for mdiobus driver to
+ > be built, but CONFIG_MDIO_DEVICE depends on CONFIG_NETDEVICES which we
+ > are not enabling so on platforms without it enabled in kernel config
+ > building mdio-tools will fail with:
 
- > All patches of the odb package already contained relevant Upstream
- > information, just not formatted according to how we expect it. Let's
- > fix that, and drop the .checkpackageignore entries that are no longer
- > needed.
+ > ERROR: modpost: "mdio_find_bus" [output-1/build/mdio-tools-1.3.1/kernel/mdio-netlink.ko] undefined!
+ > ERROR: modpost: "__mdiobus_c45_read" [output-1/build/mdio-tools-1.3.1/kernel/mdio-netlink.ko] undefined!
+ > ERROR: modpost: "__mdiobus_read" [output-1/build/mdio-tools-1.3.1/kernel/mdio-netlink.ko] undefined!
+ > ERROR: modpost: "__mdiobus_c45_write" [output-1/build/mdio-tools-1.3.1/kernel/mdio-netlink.ko] undefined!
+ > ERROR: modpost: "__mdiobus_write" [output-1/build/mdio-tools-1.3.1/kernel/mdio-netlink.ko] undefined!
 
- > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ > So enable CONFIG_NETDEVICES as well to make sure CONFIG_MDIO_DEVICE can be enabled.
 
-Committed to 2024.05.x, thanks.
+ > Fixes: http://autobuild.buildroot.net/results/edf47df96cde6094c890c0b74034cced90335a39/
+
+ > Signed-off-by: Robert Marko <robimarko@gmail.com>
+
+Committed to 2024.02.x and 2024.05.x, thanks.
 
 -- 
 Bye, Peter Korsgaard
