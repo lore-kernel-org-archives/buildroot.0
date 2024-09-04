@@ -4,94 +4,94 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25603CD37B4
-	for <buildroot@archiver.kernel.org>; Wed,  4 Sep 2024 14:20:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A96C0CD484A
+	for <buildroot@archiver.kernel.org>; Wed,  4 Sep 2024 14:20:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DFCB780D80;
-	Wed,  4 Sep 2024 14:20:51 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5D553811D9;
+	Wed,  4 Sep 2024 14:20:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id O3QZdhJiE3ED; Wed,  4 Sep 2024 14:20:51 +0000 (UTC)
+ id 8kh_CIfs6P_A; Wed,  4 Sep 2024 14:20:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D751E811C2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AC340811D8
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D751E811C2;
-	Wed,  4 Sep 2024 14:20:50 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id AC340811D8;
+	Wed,  4 Sep 2024 14:20:53 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 63A231BF267
- for <buildroot@lists.busybox.net>; Wed,  4 Sep 2024 14:20:46 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B7E061BF267
+ for <buildroot@lists.busybox.net>; Wed,  4 Sep 2024 14:20:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4F13860896
+ by smtp3.osuosl.org (Postfix) with ESMTP id A2DEB6059D
  for <buildroot@lists.busybox.net>; Wed,  4 Sep 2024 14:20:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tAG4tPJMlFZK for <buildroot@lists.busybox.net>;
- Wed,  4 Sep 2024 14:20:45 +0000 (UTC)
+ id gcq-65ezKG6M for <buildroot@lists.busybox.net>;
+ Wed,  4 Sep 2024 14:20:46 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::242; helo=mail-lj1-x242.google.com;
+ client-ip=2a00:1450:4864:20::544; helo=mail-ed1-x544.google.com;
  envelope-from=adam.duskett@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 3B5A76059D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3B5A76059D
-Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com
- [IPv6:2a00:1450:4864:20::242])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 3B5A76059D
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 93B82605EE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 93B82605EE
+Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com
+ [IPv6:2a00:1450:4864:20::544])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 93B82605EE
  for <buildroot@buildroot.org>; Wed,  4 Sep 2024 14:20:45 +0000 (UTC)
-Received: by mail-lj1-x242.google.com with SMTP id
- 38308e7fff4ca-2f3f922ad1eso5401011fa.3
- for <buildroot@buildroot.org>; Wed, 04 Sep 2024 07:20:44 -0700 (PDT)
+Received: by mail-ed1-x544.google.com with SMTP id
+ 4fb4d7f45d1cf-5c24b1ed83eso609499a12.2
+ for <buildroot@buildroot.org>; Wed, 04 Sep 2024 07:20:45 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1725459642; x=1726064442;
+ d=1e100.net; s=20230601; t=1725459643; x=1726064443;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=p+/iwBYpcDWv456LkFaK9aDPUjCjo5AFNf4+BdZrhwQ=;
- b=pxqKd2In3OZtK83TVo46NzVxFcHAr3r4u07DPG4evdQ6tDRTV5KP5hemrM7/MtfWDe
- IimYr8A24dzX9CaytmOUy28zssqJrkg0OenjvfBlRcYpQT/8EyihH7cCLYduz1RikYbt
- wVobLh3pyTvitr6A7ecJT3Dy8vTFh1RLOHTJFtow+7e4C9nc9uBTNuEMr62k+/ynIwpa
- X5/HTgTHdjwdqzflIv8itVV2TPUi3zblb4c7TlO10PuzdiQCq+wulI5ZmyKh7NK9aLb4
- dI2IDAPDCtLwubbjWkX3Z/9OnJMzn2ZgETc8AjMSGD4D4rxLojCettZrzbAkZWH6CAB9
- M1jQ==
-X-Gm-Message-State: AOJu0YzZZEUyW3fc56J+u9VXxZYhaq0p7FvdkZdMOT4oKWLx4Is9Wfaz
- i+BT3XQqll+G+qqw8UiXV4aQkRfHflgq/nPbTdGofkWmd/03uL15/ec1u5gbOidpi6XfBpbbt6i
- Ax9qhO2G2
-X-Google-Smtp-Source: AGHT+IHkiqpQupIFCC401ye/XZlKRXnLaH4QkTeK2bkyRTHnq6Jhas/hpdB+oce2Or33sWULrH6MFg==
-X-Received: by 2002:a05:651c:210c:b0:2f3:d032:44a9 with SMTP id
- 38308e7fff4ca-2f61df97cdfmr65820671fa.0.1725459641832; 
- Wed, 04 Sep 2024 07:20:41 -0700 (PDT)
+ bh=R+HGCOuKdig/Tl2BpFPS4G02esg7Y5pwDOapL7WJKCs=;
+ b=EwQ//r2wv8bGrxH+XObBN2uHzJXD5dBhZfAQonB8ZFWnVzltyHwELkpFeA+G0E+lyB
+ vJIbxImsufLL2FCRtEhgKOq1FflzvKMAIcwzU8NJz7DtvGX1jZJYeNSEs10wToAbIU6l
+ SKAEixNU4+pb7BWmQX34rTyvO7EhJZzSNx3eNp+IvPuxbEGk5apuhwUufD/22PHUmMiv
+ YR2wxRdUTNxR4g7Z+ENxpwx9xyHSf+boQRTqfjEEDndgpgmkK5quS6RAaLY0apkWF2de
+ 2H+3IJM/czENQC3SCcevN9S+8uBA6fBE6RqCxTfWydi0icq9o9Y7iEFLyZ2bLftWjAnz
+ SoNg==
+X-Gm-Message-State: AOJu0YwFx9rsJXTBryzSdyv+1hdv/rW5j2SdUSLMgA6XBWE4QzQlOFuI
+ ZoQyH/M3f7oSyQoGlZHRzbyvvuFsMztOhKfD66GES84xAWke5Y4gLE/aFjrfKfLBoZflqxBh/9c
+ VMbgd/+NP
+X-Google-Smtp-Source: AGHT+IFNbZiil+gfEzik9X8r50ZgbvC6r+ck/QGwk8R9FD5SAWCoiT5aspFo/PIcduEBYQxZ8DTxww==
+X-Received: by 2002:a05:6402:34c3:b0:5c2:4dcc:b913 with SMTP id
+ 4fb4d7f45d1cf-5c24dccbcb3mr5396810a12.3.1725459642454; 
+ Wed, 04 Sep 2024 07:20:42 -0700 (PDT)
 Received: from adam-laptop.ipgroup.local (212-57-59-66.xdsl.deanconnect.nl.
  [212.57.59.66]) by smtp.gmail.com with ESMTPSA id
- 4fb4d7f45d1cf-5c2502f86ebsm4680230a12.77.2024.09.04.07.20.41
+ 4fb4d7f45d1cf-5c2502f86ebsm4680230a12.77.2024.09.04.07.20.42
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 04 Sep 2024 07:20:41 -0700 (PDT)
+ Wed, 04 Sep 2024 07:20:42 -0700 (PDT)
 From: Adam Duskett <adam.duskett@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Wed,  4 Sep 2024 16:20:35 +0200
-Message-ID: <20240904142038.3294224-2-adam.duskett@amarulasolutions.com>
+Date: Wed,  4 Sep 2024 16:20:36 +0200
+Message-ID: <20240904142038.3294224-3-adam.duskett@amarulasolutions.com>
 X-Mailer: git-send-email 2.46.0
 In-Reply-To: <20240904142038.3294224-1-adam.duskett@amarulasolutions.com>
 References: <20240904142038.3294224-1-adam.duskett@amarulasolutions.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1725459642; x=1726064442;
+ d=amarulasolutions.com; s=google; t=1725459643; x=1726064443;
  darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=p+/iwBYpcDWv456LkFaK9aDPUjCjo5AFNf4+BdZrhwQ=;
- b=ZnYp2cgW/WpcH8IelrXbN2Dow2h+jM9JWn2tkg1DP3wc5m2jTzlnd2mXow0k64bclc
- qhO0I9h8Ho4Tq+1O+tD6fSOke7Ugjn7SiXdVkUdjieJM1bPTOLv/3LqqSIyiS+jww2x4
- koazHr5Clb9N3vL9uUg++YjjdjCx4E+pOJlng=
+ bh=R+HGCOuKdig/Tl2BpFPS4G02esg7Y5pwDOapL7WJKCs=;
+ b=KhNr1B3xmRhVUd1hUQL7dg3kZZHITlYpe5ZcV/nm1Vj2n/swL7lkdrRBph+3p4vhv3
+ WOCecJwPM4qjG1G27iz1ssIuJyFdo7Y3qTo6z4Ro5eGWvqhKg9Uo4Xi+A3HkOePixAIL
+ 3ZiWcvoTteq5c6sTJbgAJxym73ylEVxY/CC1o=
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=amarulasolutions.com
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=ZnYp2cgW
-Subject: [Buildroot] [PATCH 2/5] package/mender-grubenv: Fix per-package
- building
+ dkim=pass (1024-bit key) header.d=amarulasolutions.com
+ header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
+ header.b=KhNr1B3x
+Subject: [Buildroot] [PATCH 3/5] package/mender-grubenv: bump version to
+ 38e5043a215f696d126a2d707c9db9aeb93cfb2d
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -110,79 +110,84 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Normally, two packages should never touch the same file. However, the
-mender-grubenv package is a special case, as its sole purpose is to overwrite
-the grub.cfg file.
+Commit 174bf40fb520893a5ef69ef02c22aa232b56bd67 introduced the usage of
+`flock -w` to prevent errors during concurrent access of the environment
+(IE: When a process is editing an env and another is trying to restore it.)
 
-As per-package directory building has no guarantee that the grub package is
-rsynced to the target directory before the mender-grubenv package, this leads
-to the possiblity that mender-grubenvs grub.conf file is overwritten with the
-stock grub2 packages grub.conf file.
+As such, mender-grubenv now requires util-linux and the basic binaries
+set, as the busybox flock does not provide the -w argument.
 
-Instead of a MENDER_GRUBENV_INSTALL_I386_CFG and MENDER_GRUBENV_INSTALL_EFI_CFG
-being part if MENDER_GRUBENV_INSTALL_IMAGES_CMDS, move them to
-TARGET_FINALIZE_HOOKS. This guarantees that the grub.cfg provided by the
-mender-grubenv package is installed after grub.conf provided by the grub2
-package.
+Other changes:
+  - The boot directory is now expected to be /boot instead of /boot/grub
+  - License hash changed for 2023 -> 2024 year date (see commit f54ecfb)
 
 Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 ---
- package/mender-grubenv/mender-grubenv.mk | 12 ++++--------
- 1 file changed, 4 insertions(+), 8 deletions(-)
+ package/mender-grubenv/Config.in           | 2 ++
+ package/mender-grubenv/mender-grubenv.hash | 4 ++--
+ package/mender-grubenv/mender-grubenv.mk   | 8 ++++----
+ 3 files changed, 8 insertions(+), 6 deletions(-)
 
+diff --git a/package/mender-grubenv/Config.in b/package/mender-grubenv/Config.in
+index f27eb09e34..8505458793 100644
+--- a/package/mender-grubenv/Config.in
++++ b/package/mender-grubenv/Config.in
+@@ -4,6 +4,8 @@ config BR2_PACKAGE_MENDER_GRUBENV
+ 	depends on BR2_PACKAGE_MENDER # runtime
+ 	depends on BR2_TARGET_GRUB2
+ 	depends on !(BR2_TARGET_GRUB2_HAS_LEGACY_BOOT && BR2_TARGET_GRUB2_HAS_EFI_BOOT)
++	select BR2_PACKAGE_UTIL_LINUX
++	select BR2_PACKAGE_UTIL_LINUX_BINARIES # flock -w
+ 	help
+ 	  Contains the boot scripts and tools used by Mender to
+ 	  integrate with the GRUB bootloader.
+diff --git a/package/mender-grubenv/mender-grubenv.hash b/package/mender-grubenv/mender-grubenv.hash
+index 193bff073b..d7f784493c 100644
+--- a/package/mender-grubenv/mender-grubenv.hash
++++ b/package/mender-grubenv/mender-grubenv.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  b7a08eb3d996afb38c1a4f7c51b7eb44aec6197ff713ce75e4f39d5b448cfc82  mender-grubenv-2ac898f5924d5870f8394ad8ecd3ef1ab1422e3b.tar.gz
+-sha256  1033348db7606a7e61b6484f293847cf8d7a35766efebb97e304d4bd5d7f3f6b  LICENSE
++sha256  0bac59698165a8dafdd282610246addd7bebf41612efa88c77b779f8ffb5ed9d  mender-grubenv-38e5043a215f696d126a2d707c9db9aeb93cfb2d.tar.gz
++sha256  d0f406b04e7901e6b4076bdf5fd20f9d7f04fc41681069fd8954413ac6295688  LICENSE
 diff --git a/package/mender-grubenv/mender-grubenv.mk b/package/mender-grubenv/mender-grubenv.mk
-index 8679ad9236..a6d8d48d43 100644
+index a6d8d48d43..a47531fe58 100644
 --- a/package/mender-grubenv/mender-grubenv.mk
 +++ b/package/mender-grubenv/mender-grubenv.mk
-@@ -11,7 +11,6 @@ MENDER_GRUBENV_LICENSE_FILES = LICENSE
+@@ -4,13 +4,13 @@
+ #
+ ################################################################################
+ 
+-MENDER_GRUBENV_VERSION = 2ac898f5924d5870f8394ad8ecd3ef1ab1422e3b
++MENDER_GRUBENV_VERSION = 38e5043a215f696d126a2d707c9db9aeb93cfb2d
+ MENDER_GRUBENV_SITE = $(call github,mendersoftware,grub-mender-grubenv,$(MENDER_GRUBENV_VERSION))
+ MENDER_GRUBENV_LICENSE = Apache-2.0
+ MENDER_GRUBENV_LICENSE_FILES = LICENSE
  # Grub2 must be built first so this package can overwrite the config files
  # provided by grub.
- MENDER_GRUBENV_DEPENDENCIES = grub2
--MENDER_GRUBENV_INSTALL_IMAGES = YES
+-MENDER_GRUBENV_DEPENDENCIES = grub2
++MENDER_GRUBENV_DEPENDENCIES = grub2 util-linux
  
  MENDER_GRUBENV_MAKE_ENV = \
  	$(TARGET_CONFIGURE_OPTS) \
-@@ -34,12 +33,13 @@ MENDER_GRUBENV_MAKE_ENV += BOOT_DIR=/boot/grub
+@@ -29,14 +29,14 @@ MENDER_GRUBENV_MODULES_MISSING_PC = \
+ 	$(filter-out $(call qstrip,$(BR2_TARGET_GRUB2_BUILTIN_MODULES_PC)),\
+ 		$(MENDER_GRUBENV_MANDATORY_MODULES))
+ 
+-MENDER_GRUBENV_MAKE_ENV += BOOT_DIR=/boot/grub
++MENDER_GRUBENV_MAKE_ENV += BOOT_DIR=/boot
  
  define MENDER_GRUBENV_INSTALL_I386_CFG
  	mkdir -p $(BINARIES_DIR)/boot-part/grub
--	cp -dpfr $(@D)/mender_grub.cfg \
-+	cp -dpfr $(MENDER_GRUBENV_BUILDDIR)/mender_grub.cfg \
+ 	cp -dpfr $(MENDER_GRUBENV_BUILDDIR)/mender_grub.cfg \
  		$(TARGET_DIR)/boot/grub/grub.cfg
  	cp -dpfr $(TARGET_DIR)/boot/grub/grub.cfg \
- 		$(TARGET_DIR)/boot/grub/grub-mender-grubenv \
+-		$(TARGET_DIR)/boot/grub/grub-mender-grubenv \
++		$(TARGET_DIR)/boot/grub-mender-grubenv \
  		$(BINARIES_DIR)/boot-part/
  endef
-+MENDER_GRUBENV_TARGET_FINALIZE_HOOKS += MENDER_GRUBENV_INSTALL_I386_CFG
- endif # BR2_TARGET_GRUB2_HAS_LEGACY_BOOT
- 
- ifeq ($(BR2_TARGET_GRUB2_HAS_EFI_BOOT),y)
-@@ -51,13 +51,14 @@ MENDER_GRUBENV_MAKE_ENV += BOOT_DIR=/boot/EFI/BOOT
- 
- define MENDER_GRUBENV_INSTALL_EFI_CFG
- 	mkdir -p $(BINARIES_DIR)/efi-part/EFI/BOOT
--	cp -dpfr $(@D)/mender_grub.cfg \
-+	cp -dpfr $(MENDER_GRUBENV_BUILDDIR)/mender_grub.cfg \
- 		$(TARGET_DIR)/boot/EFI/BOOT/grub.cfg
- 	cp -dpfr $(TARGET_DIR)/boot/EFI/BOOT/grub.cfg \
- 		$(BINARIES_DIR)/efi-part/EFI/BOOT
- 	cp -dpfr $(TARGET_DIR)/boot/EFI/BOOT/grub-mender-grubenv \
- 		$(BINARIES_DIR)/efi-part/
- endef
-+MENDER_GRUBENV_TARGET_FINALIZE_HOOKS += MENDER_GRUBENV_INSTALL_EFI_CFG
- endif # BR2_TARGET_GRUB2_HAS_EFI_BOOT
- 
- ifeq ($(BR2_PACKAGE_MENDER_GRUBENV)$(BR_BUILDING),yy)
-@@ -86,9 +87,4 @@ define MENDER_GRUBENV_INSTALL_TARGET_CMDS
- 	echo 'ENV_DIR=/boot/grub-mender-grubenv' > $(TARGET_DIR)/etc/mender_grubenv.config
- endef
- 
--define MENDER_GRUBENV_INSTALL_IMAGES_CMDS
--	$(MENDER_GRUBENV_INSTALL_I386_CFG)
--	$(MENDER_GRUBENV_INSTALL_EFI_CFG)
--endef
--
- $(eval $(generic-package))
+ MENDER_GRUBENV_TARGET_FINALIZE_HOOKS += MENDER_GRUBENV_INSTALL_I386_CFG
 -- 
 2.46.0
 
