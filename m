@@ -4,90 +4,89 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4F40CD4F32
-	for <buildroot@archiver.kernel.org>; Wed,  4 Sep 2024 21:24:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E2479CD4F32
+	for <buildroot@archiver.kernel.org>; Wed,  4 Sep 2024 21:27:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 581D4812EF;
-	Wed,  4 Sep 2024 21:24:14 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A43BA8131A;
+	Wed,  4 Sep 2024 21:27:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WPMhL_P6EybE; Wed,  4 Sep 2024 21:24:13 +0000 (UTC)
+ id GimmgucKfcRJ; Wed,  4 Sep 2024 21:27:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2907C812F1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8B6CA8131B
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2907C812F1;
-	Wed,  4 Sep 2024 21:24:13 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 0E6F11BF97A
- for <buildroot@lists.busybox.net>; Wed,  4 Sep 2024 21:24:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8B6CA8131B;
+	Wed,  4 Sep 2024 21:27:38 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 3F6011BF423
+ for <buildroot@lists.busybox.net>; Wed,  4 Sep 2024 21:27:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 098B5608B2
- for <buildroot@lists.busybox.net>; Wed,  4 Sep 2024 21:24:11 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2B4C58131A
+ for <buildroot@lists.busybox.net>; Wed,  4 Sep 2024 21:27:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MGI4ggxe-xw6 for <buildroot@lists.busybox.net>;
- Wed,  4 Sep 2024 21:24:10 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id nnWDL1_nBHSr for <buildroot@lists.busybox.net>;
+ Wed,  4 Sep 2024 21:27:36 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::112d; helo=mail-yw1-x112d.google.com;
+ client-ip=2607:f8b0:4864:20::b32; helo=mail-yb1-xb32.google.com;
  envelope-from=roykollensvendsen@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org DC0F4608AD
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DC0F4608AD
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com
- [IPv6:2607:f8b0:4864:20::112d])
- by smtp3.osuosl.org (Postfix) with ESMTPS id DC0F4608AD
- for <buildroot@buildroot.org>; Wed,  4 Sep 2024 21:24:09 +0000 (UTC)
-Received: by mail-yw1-x112d.google.com with SMTP id
- 00721157ae682-6daf46ee332so73807b3.0
- for <buildroot@buildroot.org>; Wed, 04 Sep 2024 14:24:09 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 008E681319
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 008E681319
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com
+ [IPv6:2607:f8b0:4864:20::b32])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 008E681319
+ for <buildroot@buildroot.org>; Wed,  4 Sep 2024 21:27:35 +0000 (UTC)
+Received: by mail-yb1-xb32.google.com with SMTP id
+ 3f1490d57ef6-e1651f48c31so158901276.0
+ for <buildroot@buildroot.org>; Wed, 04 Sep 2024 14:27:35 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1725485048; x=1726089848;
+ d=1e100.net; s=20230601; t=1725485255; x=1726090055;
  h=cc:to:subject:message-id:date:from:in-reply-to:references
  :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=iBqfreAweirWDRNrobyVcPmItTsiQfLh081DG86PYeA=;
- b=J4UuFA9DDV/qLtSNUQfW4ywygx4RKpMm9njJUtCuGphdIldU/mN6VTtVTWJaHYsQxj
- +kG7tUbn/nWbtbo4qQRQVVgsQLmkR0GaSLmH1iTGZPe+zUndA5C5kdFWhBjqPvy1Runa
- 6PvPUBH50Bo48kWgi1UcLA/lQQhkfN/0FKVUp3h8pAOV/nPkt6yXJJ9akFnnOzrlb/PI
- O9wAeJlGopXeAw7bhWD2Zg8jbleJLrHHLm3D2cZRb4lxNp89y1E09bWlXJBBGy2SE+2I
- CB1lA2JqkmzNen1GOapd+nYTpWa5fBmudX1KinVhNyBbMcnBivlQZpjqvBUQ468MUDsp
- QAwg==
-X-Gm-Message-State: AOJu0Yyr8uJfALjpKQje635gSKPQl40akxrYqW7hmmRt56zbjNEPNsO9
- kvZQJpiOQD2Acu3l7/aghhq5/xyHSsiFc2IWQzmmyOzX3sM4v5+eMXeUrzF8pl3Phi+K0VAOB2q
- gIPEBqHVzmpXAksZXyaTqqr/lYmw=
-X-Google-Smtp-Source: AGHT+IEByfDpUiXyMkENq/07mbkCjkP39PZi7aXfx5ZKIY/S/R+HI6df1vFCKKqE6h6/lS8v1dB8/t9lowYP//ijq+U=
-X-Received: by 2002:a05:690c:398:b0:6b1:8d2:8819 with SMTP id
- 00721157ae682-6d40f43953bmr200639687b3.15.1725485048266; Wed, 04 Sep 2024
- 14:24:08 -0700 (PDT)
+ bh=A1NBCN1XZYVrZ6ATtLcnftVLEM3e1rCI6O7Q2uXzBIs=;
+ b=ardeFDabgXqKmcC8ZrhhyRIg17A9QrfhhRGHJuKHd95HuRnC4pryzt/mB1ie2UaFnv
+ 5RMlV1RsO07sNb31RPT5KP1pE6m4ZULBmwEBESzxZdi5VEvgmt1dSfd/pFuLDzSw9z9O
+ JcUpiMHuEr9GfaCeXn5YN3ZkcLHAs0t9CDfNU3w5ARFabefu6FTEFInlNhUfQTNTDp0b
+ Epe2pdQ1NxZbmUUPIhpPCfDQplKN/mLyjz+ruTQkW9jD2eSkA54UyVT1b3rN12jvpl3F
+ Nv0d9E/cLbyL1iH/pM4nUxdfknXByvDekUaUKFYjDV+O3nMFSTYBe7uHTcwshShNF81u
+ 1Qhg==
+X-Gm-Message-State: AOJu0Yw5ps77VrfuZmRxYzKxcERmmbvPF61n6e6IdO9arJmNbm+jcrbT
+ LAhtPrktoeYA0EgaXawNoiCKi+vM7epHbS3krsuoz6Y5D5FZfc2DU0W7W5C4WTEVNrGlzNgE1I8
+ pkq/+lHSAN5A8yMzp2wDfLPexJm+HOAFm
+X-Google-Smtp-Source: AGHT+IGZWlDDTQgEAgROO0O32SC56WC+9Ff5xacEdhGvuk8qij66hRR/x1EAGbV4Ht9es6257+DKLMjKY8ZGA68NPsg=
+X-Received: by 2002:a05:690c:6788:b0:6d4:e841:20b7 with SMTP id
+ 00721157ae682-6d4e8412806mr199083567b3.17.1725485254565; Wed, 04 Sep 2024
+ 14:27:34 -0700 (PDT)
 MIME-Version: 1.0
 References: <20240904122040.738362-1-roykollensvendsen@gmail.com>
- <20240904122040.738362-2-roykollensvendsen@gmail.com>
- <20240904143345.42fb7e47@windsurf>
-In-Reply-To: <20240904143345.42fb7e47@windsurf>
+ <20240904143016.14accde3@windsurf>
+In-Reply-To: <20240904143016.14accde3@windsurf>
 From: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
-Date: Wed, 4 Sep 2024 23:23:56 +0200
-Message-ID: <CA+R_derkVf0VVgs8ySaeOxx8PgEVZ6QzV62NjtLUcRDcDB-qfQ@mail.gmail.com>
+Date: Wed, 4 Sep 2024 23:27:23 +0200
+Message-ID: <CA+R_der6G24qK3xgcOoF9vp_-3Oecx3v2U3F7gujNBUA4Q73FQ@mail.gmail.com>
 To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1725485048; x=1726089848; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1725485255; x=1726090055; darn=buildroot.org;
  h=cc:to:subject:message-id:date:from:in-reply-to:references
  :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=iBqfreAweirWDRNrobyVcPmItTsiQfLh081DG86PYeA=;
- b=K03374piUH4T2WRqYPmF/fuAJFZiCWgpGYqDKSXykbUIFWek77/fqJmuzENTUWsCCm
- 7BnFGoU7d4Qqhy4rb58960H015MVnzWN7aFobJ/pUY0/xg9aZsgwSWMMlOMN98pG4jAS
- gCDeOM8BXXYn1dkuNs9NlgNPEHmg/7SZ1JaqtY19I92514axGmNhVjefTQqjwxRnXRKK
- Tex5HdTei/1tzhBO5ZotaRnSGi0o0liLDi9OBGKKGjW/G43DR7K4RAH0hRYogAPREcJf
- BB16fDEr9E07U+41oLxXXZtD17BAMEF98Ebvgd0IulMGUGR/8dtfkisR8XOR8paC1f6H
- UOng==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=A1NBCN1XZYVrZ6ATtLcnftVLEM3e1rCI6O7Q2uXzBIs=;
+ b=cn8HebhOdjkFhK2FFO/cDeLi3k6DurVpK6Zc3TUucD0GUJQ+wegsUInz8R+HEqRJ2H
+ B3yupwzbf5U3KVyPSx29znd1cM7PwqfcsIE3Yn2hQnnZFfG0GkrYR7SurBJLxVjSSSAY
+ m7OOiP40dQTPrgkQKNMhwGeqycwmpcMHQ7uapHh829f6G4dgJPAFMRVEvSxShMj9luzD
+ akJ018Kgq9bi41r65n8PSmkr4DOJg7zZKvqlCekXgdK8YAqYEd3OvOpk/qF6uFMy4vBW
+ 5xo8GSZQAoa/e0hoj6javgH1hqUaSVgtZBP7MN1X8Mns9rIM5dYQNs50sbDi1M7z2ygF
+ mixQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=K03374pi
-Subject: Re: [Buildroot] [PATCH 2/2] package/qt6/qt6base: allow selecting
- the host Qt Print Support module
+ header.a=rsa-sha256 header.s=20230601 header.b=cn8HebhO
+Subject: Re: [Buildroot] [PATCH 1/2] package/qt6/qt6tools: allow building
+ host Qt Linguist Tools
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -107,127 +106,114 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Hi Thomas,
 
-Here is v2 of the patchset:
+Here is v2:
 
-https://patchwork.ozlabs.org/project/buildroot/patch/20240904211049.866640-1-roykollensvendsen@gmail.com/
+PATCH 2/3:
+https://patchwork.ozlabs.org/project/buildroot/patch/20240904211049.866640-2-roykollensvendsen@gmail.com/
+
+PATCH 3/3:
+https://patchwork.ozlabs.org/project/buildroot/patch/20240904211049.866640-3-roykollensvendsen@gmail.com/
+
+
 
 Roy
 
-ons. 4. sep. 2024 kl. 14:33 skrev Thomas Petazzoni
+
+
+ons. 4. sep. 2024 kl. 14:30 skrev Thomas Petazzoni
 <thomas.petazzoni@bootlin.com>:
 >
 > Hello,
 >
-> On Wed,  4 Sep 2024 14:20:38 +0200
+> On Wed,  4 Sep 2024 14:20:37 +0200
 > Roy Kollen Svendsen <roykollensvendsen@gmail.com> wrote:
 >
-> > According to configure.cmake printsupport requires widgets:
+> > According to src/linguist/CMakeLists.txt we need to enable the
+> > linguist feature:
 > >
-> > qt_feature("printsupport" PRIVATE
-> >     LABEL "Qt PrintSupport"
-> >     CONDITION QT_FEATURE_widgets
-> >     SECTION "Module"
-> >     PURPOSE "Provides the Qt PrintSupport module."
+> > ...
+> > if(NOT QT_FEATURE_linguist)
+> >     return()
+> > endif()
+> > add_subdirectory(lconvert)
+> > add_subdirectory(lprodump)
+> > add_subdirectory(lrelease)
+> > add_subdirectory(lrelease-pro)
+> > add_subdirectory(lupdate)
+> > add_subdirectory(lupdate-pro)
+> > if(QT_FEATURE_process AND QT_FEATURE_pushbutton AND QT_FEATURE_toolbutton AND TARGET Qt::Widgets AND NOT no-png)
+> >     add_subdirectory(linguist)
+> > endif()
+> > ...
+> >
+> > And according to configure.cmake we need to select print support:
+> > ...
+> > qt_feature("linguist" PRIVATE
+> >     LABEL "Qt Linguist"
+> >     PURPOSE "Qt Linguist can be used by translator to translate text in Qt applications."
+> >     CONDITION TARGET Qt::PrintSupport
 > > )
-> >
-> > So we let print support automatically select widgets support.
+> > ...
 > >
 > > Signed-off-by: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
->
-> This should be PATCH 1/2 in the series, because your patch adding
-> BR2_PACKAGE_HOST_QT6TOOLS_LINGUIST_TOOLS uses this new
-> BR2_PACKAGE_HOST_QT6BASE_PRINTSUPPORT option.
->
 > > ---
-> >  package/qt6/qt6base/Config.in.host | 11 +++++++++++
-> >  package/qt6/qt6base/qt6base.mk     | 16 ++++++++++++++--
-> >  2 files changed, 25 insertions(+), 2 deletions(-)
+> >  package/qt6/qt6tools/Config.in   | 11 +++++++++++
+> >  package/qt6/qt6tools/qt6tools.mk | 10 ++++++++--
+> >  2 files changed, 19 insertions(+), 2 deletions(-)
 > >
-> > diff --git a/package/qt6/qt6base/Config.in.host b/package/qt6/qt6base/Config.in.host
-> > index 46fb668817..8f0bc1f070 100644
-> > --- a/package/qt6/qt6base/Config.in.host
-> > +++ b/package/qt6/qt6base/Config.in.host
-> > @@ -8,6 +8,13 @@ config BR2_PACKAGE_HOST_QT6BASE_GUI
-> >  config BR2_PACKAGE_HOST_QT6BASE_NETWORK
-> >       bool
+> > diff --git a/package/qt6/qt6tools/Config.in b/package/qt6/qt6tools/Config.in
+> > index 5f52c5644f..eea461a2a9 100644
+> > --- a/package/qt6/qt6tools/Config.in
+> > +++ b/package/qt6/qt6tools/Config.in
+> > @@ -15,3 +15,14 @@ config BR2_PACKAGE_QT6TOOLS
+> >         and design of applications.
 > >
-> > +# Select this if you need host qt6 tools that require the Qt Print Support
-> > +# module
-> > +# (e.g. Qt Tools Linguist Tools).
->
-> I don't think that this really makes sense. We don't really care about
-> how is using this (in the future, it may be other things). We care
-> about what the option does... but what it does is actually pretty
-> obvious from the option name. I think the only comment is to clarify
-> that yes, widget support is needed for the print support, which isn't
-> really obvious.
->
-> > +config BR2_PACKAGE_HOST_QT6BASE_PRINTSUPPORT
-> > +     bool
-> > +     select BR2_PACKAGE_HOST_QT6BASE_WIDGETS
+> >         https://github.com/qt/qttools
 > > +
-> >  # Select this if you need host qt6 tools that require the Qt::Test module
-> >  # (e.g. qmltestrunner).
-> >  config BR2_PACKAGE_HOST_QT6BASE_TEST
-> > @@ -17,3 +24,7 @@ config BR2_PACKAGE_HOST_QT6BASE_TEST
-> >  # (e.g. qhelpgenerator).
-> >  config BR2_PACKAGE_HOST_QT6BASE_SQL
-> >       bool
+> > +if BR2_PACKAGE_QT6TOOLS
 > > +
-> > +# The Qt Widgets module is required by the Qt Print Support module
+> > +config BR2_PACKAGE_HOST_QT6TOOLS_LINGUIST_TOOLS
+> > +     bool "linguist tools (host)"
+> > +     select BR2_PACKAGE_HOST_QT6BASE_PRINTSUPPORT
+> > +     help
+> > +       Translate Qt C++ and Qt Quick applications into local
+> > +       languages.
 >
-> And this comment would become useless.
+> This should go in a package/qt6/qt6tools/Config.in.host, not in
+> Config.in as Config.in is for options that affect the target build.
+
+
+
 >
-> > +config BR2_PACKAGE_HOST_QT6BASE_WIDGETS
-> > +     bool
+> > +
+> > +endif
+> > diff --git a/package/qt6/qt6tools/qt6tools.mk b/package/qt6/qt6tools/qt6tools.mk
+> > index 09c986cfc6..897cf43054 100644
+> > --- a/package/qt6/qt6tools/qt6tools.mk
+> > +++ b/package/qt6/qt6tools/qt6tools.mk
+> > @@ -37,11 +37,17 @@ QT6TOOLS_DEPENDENCIES = \
+> >       qt6base \
+> >       host-qt6tools
+> >
+> > +HOST_QT6TOOLS_DEPENDENCIES = host-qt6base
+> > +
+> > +ifeq ($(BR2_PACKAGE_HOST_QT6TOOLS_LINGUIST_TOOLS),y)
+> > +HOST_QT6TOOLS_CONF_OPTS += -DFEATURE_linguist=ON
+> > +else
+> > +HOST_QT6TOOLS_CONF_OPTS += -DFEATURE_linguist=OFF
+> > +endif
 >
-> Isn't widget support dependent on GUI support?
+> Please group these host package things...
 >
-> > diff --git a/package/qt6/qt6base/qt6base.mk b/package/qt6/qt6base/qt6base.mk
-> > index 4c0392f92d..271f464115 100644
-> > --- a/package/qt6/qt6base/qt6base.mk
-> > +++ b/package/qt6/qt6base/qt6base.mk
-> > @@ -113,10 +113,8 @@ HOST_QT6BASE_CONF_OPTS += \
-> >       -DFEATURE_png=OFF \
-> >       -DFEATURE_gif=OFF \
-> >       -DFEATURE_jpeg=OFF \
-> > -     -DFEATURE_printsupport=OFF \
-> >       -DFEATURE_kms=OFF \
-> >       -DFEATURE_fontconfig=OFF \
-> > -     -DFEATURE_widgets=OFF \
-> >       -DFEATURE_libinput=OFF \
-> >       -DFEATURE_tslib=OFF \
-> >       -DFEATURE_eglfs=OFF
-> > @@ -131,6 +129,13 @@ else
-> >  HOST_QT6BASE_CONF_OPTS += -DFEATURE_network=OFF
+> > +
+> >  ifeq ($(BR2_PACKAGE_QT6DECLARATIVE),y)
+> >  QT6TOOLS_DEPENDENCIES += qt6declarative
 > >  endif
 > >
-> > +# The Qt Print Support module is required for building Qt Tools Linguist Tools
+> > -HOST_QT6TOOLS_DEPENDENCIES = host-qt6base
 >
-> Not needed, it could be other things.
->
-> > +ifeq ($(BR2_PACKAGE_HOST_QT6BASE_PRINTSUPPORT),y)
-> > +HOST_QT6BASE_CONF_OPTS += -DFEATURE_printsupport=ON
-> > +else
-> > +HOST_QT6BASE_CONF_OPTS += -DFEATURE_printsupport=OFF
-> > +endif
-> > +
-> >  # We need host qt6base with Sql support for host-qt6tools to generate the
-> >  # qhelpgenerator host tool. qt6tools will fail to build if qhelpgenerator is not
-> >  # available.
-> > @@ -150,6 +155,13 @@ else
-> >  HOST_QT6BASE_CONF_OPTS += -DFEATURE_testlib=OFF
-> >  endif
-> >
-> > +# The Qt Widgets module is required by the Qt Print Support module
->
-> Also not very relevant comment IMO.
->
-> > +ifeq ($(BR2_PACKAGE_HOST_QT6BASE_WIDGETS),y)
-> > +HOST_QT6BASE_CONF_OPTS += -DFEATURE_widgets=ON
-> > +else
-> > +HOST_QT6BASE_CONF_OPTS += -DFEATURE_widgets=OFF
-> > +endif
+> ... here. Rather than inter-twining target package and host package
+> details.
 >
 > Thanks!
 >
