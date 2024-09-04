@@ -4,90 +4,69 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5BD52CD3431
-	for <buildroot@archiver.kernel.org>; Wed,  4 Sep 2024 12:04:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50780CD3431
+	for <buildroot@archiver.kernel.org>; Wed,  4 Sep 2024 12:04:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0782A400FF;
-	Wed,  4 Sep 2024 12:04:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 04E09400FC;
+	Wed,  4 Sep 2024 12:04:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lbTSb1Btr88Y; Wed,  4 Sep 2024 12:04:29 +0000 (UTC)
+ id HFZZkHpt3YSd; Wed,  4 Sep 2024 12:04:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DD7564010F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A72D9400FF
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DD7564010F;
-	Wed,  4 Sep 2024 12:04:28 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1F15F1BF47A
- for <buildroot@lists.busybox.net>; Wed,  4 Sep 2024 12:04:28 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A72D9400FF;
+	Wed,  4 Sep 2024 12:04:47 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 46C721BF47A
+ for <buildroot@lists.busybox.net>; Wed,  4 Sep 2024 12:04:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 0BB184025E
- for <buildroot@lists.busybox.net>; Wed,  4 Sep 2024 12:04:28 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3331D400FF
+ for <buildroot@lists.busybox.net>; Wed,  4 Sep 2024 12:04:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BpJQA7UAiWE0 for <buildroot@lists.busybox.net>;
- Wed,  4 Sep 2024 12:04:27 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.17.21;
- helo=mout.gmx.net; envelope-from=j.neuschaefer@gmx.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 7D28940129
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7D28940129
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 7D28940129
- for <buildroot@buildroot.org>; Wed,  4 Sep 2024 12:04:26 +0000 (UTC)
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from probook ([176.5.9.176]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MOA3F-1sNpq10NnV-00OUVO; Wed, 04
- Sep 2024 14:04:04 +0200
-Date: Wed, 4 Sep 2024 14:04:02 +0200
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-Message-ID: <ZthMslmRa2q2EA5R@probook>
-References: <20240901-rgbmatrix-v2-0-3a10c3c367e4@gmx.net>
- <20240901-rgbmatrix-v2-2-3a10c3c367e4@gmx.net>
- <ZteDUZoQYrmvwS8A@landeda>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id kj9AvR4CBngh for <buildroot@lists.busybox.net>;
+ Wed,  4 Sep 2024 12:04:45 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=220.197.31.4;
+ helo=m16.mail.163.com; envelope-from=tianyuanhao3@163.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 2FD12400FC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2FD12400FC
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.4])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2FD12400FC
+ for <buildroot@buildroot.org>; Wed,  4 Sep 2024 12:04:43 +0000 (UTC)
+Received: from ubuntu.localdomain (unknown [223.102.86.110])
+ by gzga-smtp-mta-g3-3 (Coremail) with SMTP id _____wDn74hJSdhmXhFPBw--.4952S2; 
+ Wed, 04 Sep 2024 19:49:29 +0800 (CST)
+From: TIAN Yuanhao <tianyuanhao3@163.com>
+To: buildroot@buildroot.org
+Date: Wed,  4 Sep 2024 04:49:03 -0700
+Message-ID: <20240904114903.4020-1-tianyuanhao3@163.com>
+X-Mailer: git-send-email 2.44.1
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <ZteDUZoQYrmvwS8A@landeda>
-X-Provags-ID: V03:K1:QqHXP3on6p4rdHJusCHANZIzhuqkioM4jga5JWco3fBmaxD9Yy7
- HtL6CmvVPi1isgCBF9gfzSWAuyGNccyRiBdz3gebiWtAJvKDsIujRxd0WCbqXKH/YIqUB0X
- BtlS/NUpPXgKJGkJPJ++zYk0OTmQvnTsfscP9tcI3JTQS0lbACU0lPmBRXrT26tLbvLZNhN
- 2oR+BYGfYR4Ozl3SLZl1A==
-UI-OutboundReport: notjunk:1;M01:P0:FXEDwCU1sYQ=;gp/1ciJpdjpO1dr2RkRcsszpBXc
- NpIVrcu0PFFJ2AOXsxMzn4bPG4hDFsgzTKCDqoIx8QfBuz9pa7XrNw9eRChfpLviBrO7XvX4d
- Q0MVUt6EYrmvzvXSFFYopWW1bHhGLXybWY2FD/jIboze2klhBtGC6V57NtNagpe+1GcgJMP9+
- V42d0Ne1yOIGhy5L7W79WhToBn2YGR8sOUKr6IFePDwFDHVcVIi6MPhAMcJzVdYHcymxY9B9d
- UIt2XbNI/4B+5rYs3tIhjOxSFJvhAQfM/CAcwk/0jh/wPAPuLBw/Z+VAsHT5a/aoEBub1tZXv
- w0g3ZqLviUq4GIjkZuoze2y2Y+UTt6Em1KVtxoJNiYVQPhxZRnpSABKI36EpkZuT23AGOYZ3e
- RGwBwJCBOnO8j6ND9sYGUo+LO5oMGknPvcAo+TWlb8dLWCFqfKMyCdaDbHY59A42OF3+bzakY
- RNho3KH1rVBFmx1SfJlKao80Yqd/NoRt21i/cUAeEiR2/b3pwgaN/l0c7BJIa5Z6DN8B8+DNW
- Dn8NPFJV9Frdtf9rZzMveY5c06LABHnPlouM8VJO1lOSWBRljVDm5k0lrIcynTH7GYABS+gyz
- xwnrSUqMM0PQcLIVY5xFxpa7TbV682CQ6BMjbQpx/IjjH6XaZRp7JyLRKjIrT7A9tLm+XzfB1
- aHNXcIC39FKpk1t8sIsxEACaV/MWpy/mEaPBTTkrQuNr4dkHPTsKTkSBKHi99rgBMto2w/iWq
- pebSRdQvTM7kNSlEtOOobsFecDzXx9mntiP7Rd0PRFkduFqTTdKsYJIZwYn8Jo2m/+P6aq17m
- 2Cv93dYpxglFT1x8Q+P+9Vlw==
+X-CM-TRANSID: _____wDn74hJSdhmXhFPBw--.4952S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxCry5CF4fZr18GFyUWw17Jrb_yoW5Xry7pF
+ WkCrWfGw48trySkFsrJayxXry5WrWkJF1UAw4xJa1vya4DtFyFvr1Ikrn5AFy7CrZ3Cw1U
+ Xr15AF4Uu3yUJ3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+ 9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pR_HUhUUUUU=
+X-Originating-IP: [223.102.86.110]
+X-CM-SenderInfo: xwld05xxdqxtjrt6il2tof0z/xtbBhBJQjWV4IOXqTgAAs3
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmx.net; 
- s=s31663417; t=1725451444; x=1726056244; i=j.neuschaefer@gmx.net;
- bh=UynXRegCXFOlPt4PTkqNPFL1SI2Jr73HQCnHTDkq1wY=;
- h=X-UI-Sender-Class:Date:From:To:Cc:Subject:Message-ID:References:
- MIME-Version:Content-Type:Content-Transfer-Encoding:In-Reply-To:
- cc:content-transfer-encoding:content-type:date:from:message-id:
- mime-version:reply-to:subject:to;
- b=RZMY+T/PMOhqodTS/R40Bm8IOK1qpWihYQ+5SatYIY4+Ho0bf2O+v8a9qtzajMys
- mz4s2+g1sZ8JJG28vUhXOt39RGQMRGyPhJ8/KcVLPWiHKNsHdkTKrX7EO7CCXKj4P
- 8UIHUBF051f/tZRpFC3dByND11wL0IlynzcoehOy/OhcpsJ9p2ojF4L9OcaTEMcE4
- pm7n+CxADvwKjR388AVO4EF4kGHeZQQ93dxBMslEGTHTef+h+nRkFDPz2Ha4xeDEr
- k7tG8AF78GKHOMOO1kww/PaYJurShs2cUB4jl8QMJ0BAOtbNtUbL05QOdxQYdJUeB
- /KEyi8DSH2lvPb6R4Q==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=gmx.net
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmx.net header.i=j.neuschaefer@gmx.net
- header.a=rsa-sha256 header.s=s31663417 header.b=RZMY+T/P
-Subject: Re: [Buildroot] [PATCH v2 2/3] package/python-rgbmatrix: new package
+ d=163.com; 
+ s=s110527; h=From:Subject:Date:Message-ID:MIME-Version; bh=S546H
+ v6BBrMJeIM6fm3MUsKMZn4QEmV4Yyo6LFo7Jrk=; b=Su0dyO+B155x50Ja+idMI
+ 1KS+T3CRt2Om5EQxFWY0lEeD90ND3bH2Pl5Ho+yne/DG2h6hRUGJu8wlHB6XZZ2B
+ nuZX0hggXNa3je6f3Y5+Kj9V7HN9eyj1yU33MRLSzQbn04QPfSc49MjNrYjlH2tw
+ LryuhXIATm+NqCRbi9lfso=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=163.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=163.com header.i=@163.com header.a=rsa-sha256
+ header.s=s110527 header.b=Su0dyO+B
+Subject: [Buildroot] [PATCH 1/1] package/ntp: add a patch to fix crashes
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,27 +78,84 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: =?utf-8?q?J=2E_Neusch=C3=A4fer_via_buildroot?= <buildroot@buildroot.org>
-Reply-To: =?utf-8?Q?J=2E_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-Cc: Grzegorz Blach <grzegorz@blach.pl>,
- =?utf-8?Q?J=2E_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
- Asaf Kahlon <asafka7@gmail.com>, James Hilliard <james.hilliard1@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>, TIAN Yuanhao <tianyuanhao3@163.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gVHVlLCBTZXAgMDMsIDIwMjQgYXQgMTE6NDQ6NDlQTSArMDIwMCwgWWFubiBFLiBNT1JJTiB3
-cm90ZToKPiBKLiwgQWxsLAo+Cj4gT24gMjAyNC0wOS0wMSAxNjoyOSArMDIwMCwgSi4gTmV1c2No
-w6RmZXIgdmlhIGJ1aWxkcm9vdCBzcGFrZSB0aHVzbHk6Cj4gPiBUaGUgInJnYm1hdHJpeCIgcHl0
-aG9uIG1vZHVsZSBpcyB0aGUgUHl0aG9uIGJpbmRpbmcgZm9yCj4gPiBycGktcmdiLWxlZC1tYXRy
-aXgsIGJ1aWx0IGZyb20gdGhlIHNhbWUgc291cmNlIHJlcG9zaXRvcnkuCj4gPgo+ID4gU2lnbmVk
-LW9mZi1ieTogSi4gTmV1c2Now6RmZXIgPGoubmV1c2NoYWVmZXJAZ214Lm5ldD4KPgo+IEkgZGlk
-IGEgZmV3IGNoYW5nZXM6Cj4KPiAgIC0gYWRkIGNvbW1lbnQgZm9yIHByb3BhZ2F0ZWQgZGVwZW5k
-ZW5jaWVzCj4gICAtIGFkZCBjb21tZW50IG9uIG1pc3NpbmcgZGVwZW5kZW5jaWVzCj4gICAtIGRy
-b3AgY29tbWVudCBhdCBlbmQgb2YgX1ZFUlNJT04gbGluZQo+Cj4gQXBwbGllZCB0byBuZXh0LCB0
-aGFua3MuCgpUaGFua3MgZm9yIHRha2luZyBjYXJlIG9mIHRoZXNlIHRoaW5ncyEKCi0tIGpuCl9f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBt
-YWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJv
-b3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+This patch fixes a regression [1] introduced in ntpd 4.2.8p18 [2].
+
+  ntpd[200]: Listen normally on 3 lo [::1]:123
+  ntpd[200]: bind(20) AF_INET6 [fe80::bf3d:254d:dee0:d345%3]:123 flags 0x811 failed: Cannot assign requested address
+  ntpd[200]: unable to create socket on enp0s3 (4) for [fe80::bf3d:254d:dee0:d345%3]:123
+  ntpd[192]: daemon control: got EOF
+  ntpd[192]: daemon child died with signal 11
+  systemd[1]: ntpd.service: Control process exited, code=exited, status=70/SOFTWARE
+  systemd[1]: ntpd.service: Failed with result 'exit-code'.
+  systemd[1]: Failed to start Network Time Service.
+
+If the IPv6 link-local interface was not ready for binding on the first
+attempt, ntpd would segfault in update_interfaces(). The segfault would
+only occur when ntpd was started as part of the boot sequence. Most
+- but not all - boots were affected. Evidently it could happen that the
+timing of ntpd's start up was delayed enough that the IPv6 link-local
+interface was ready for the bind() call when it was first issued by
+open_socket() via create_interface().
+
+[1]: https://bugs.ntp.org/show_bug.cgi?id=3928
+[2]: https://bugs.ntp.org/show_bug.cgi?id=3913
+
+Signed-off-by: TIAN Yuanhao <tianyuanhao3@163.com>
+Cc: Bernd Kuhls <bernd.kuhls@t-online.de>
+---
+ ...-Fix-crash-when-binding-IPv6-address.patch | 33 +++++++++++++++++++
+ 1 file changed, 33 insertions(+)
+ create mode 100644 package/ntp/0003-Fix-crash-when-binding-IPv6-address.patch
+
+diff --git a/package/ntp/0003-Fix-crash-when-binding-IPv6-address.patch b/package/ntp/0003-Fix-crash-when-binding-IPv6-address.patch
+new file mode 100644
+index 0000000000..0219132891
+--- /dev/null
++++ b/package/ntp/0003-Fix-crash-when-binding-IPv6-address.patch
+@@ -0,0 +1,33 @@
++Fix crash when binding IPv6 address
++
++Reference:
++  https://bugs.ntp.org/show_bug.cgi?id=3928
++
++Signed-off-by: TIAN Yuanhao <tianyuanhao3@163.com>
++---
++ ntpd/ntp_io.c |    6 +++---
++ 1 file changed, 3 insertions(+), 3 deletions(-)
++
++Index: ntp-4.2.8p18/ntpd/ntp_io.c
++===================================================================
++--- ntp-4.2.8p18.orig/ntpd/ntp_io.c
+++++ ntp-4.2.8p18/ntpd/ntp_io.c
++@@ -1917,15 +1917,15 @@ update_interfaces(
++ 			}
++ 			new_interface_found = TRUE;
++ 			DPRINT_INTERFACE(3,
++-				(ep, "updating ", " new - created\n"));
+++				(ep2, "updating ", " new - created\n"));
++ 		}
++ 		else {
++ 			DPRINT_INTERFACE(3,
++-				(ep, "updating ", " new - FAILED"));
+++				(ep2, "updating ", " new - FAILED"));
++ 
++ 			msyslog(LOG_ERR,
++ 				"cannot bind address %s",
++-				stoa(&ep->sin));
+++				stoa(&ep2->sin));
++ 		}
++ 		free(ep2);
++ 	}
+-- 
+2.45.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
