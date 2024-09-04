@@ -1,75 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5C033CD3431
-	for <buildroot@archiver.kernel.org>; Wed,  4 Sep 2024 12:30:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97449CD3431
+	for <buildroot@archiver.kernel.org>; Wed,  4 Sep 2024 12:33:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 01BEA40340;
-	Wed,  4 Sep 2024 12:30:24 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yw0-hnHpi3DG; Wed,  4 Sep 2024 12:30:22 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9FFE0403C4
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9FFE0403C4;
-	Wed,  4 Sep 2024 12:30:22 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 9EA371BF373
- for <buildroot@lists.busybox.net>; Wed,  4 Sep 2024 12:30:21 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 995EC6087A
- for <buildroot@lists.busybox.net>; Wed,  4 Sep 2024 12:30:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5D192605AA;
+	Wed,  4 Sep 2024 12:33:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id x0_k-8vxJzO1 for <buildroot@lists.busybox.net>;
- Wed,  4 Sep 2024 12:30:20 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.196;
- helo=relay4-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id ehFBj3ZGd28b; Wed,  4 Sep 2024 12:33:52 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4201560877
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4201560877;
+	Wed,  4 Sep 2024 12:33:52 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 5D6141BF267
+ for <buildroot@lists.busybox.net>; Wed,  4 Sep 2024 12:33:50 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5828C60877
+ for <buildroot@lists.busybox.net>; Wed,  4 Sep 2024 12:33:50 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6M49LzIy9NoX for <buildroot@lists.busybox.net>;
+ Wed,  4 Sep 2024 12:33:49 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::226;
+ helo=relay6-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 375EA60877
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 375EA60877
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 375EA60877
- for <buildroot@buildroot.org>; Wed,  4 Sep 2024 12:30:19 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 34ED4E000B;
- Wed,  4 Sep 2024 12:30:17 +0000 (UTC)
-Date: Wed, 4 Sep 2024 14:30:16 +0200
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org C9D94605AA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C9D94605AA
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::226])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C9D94605AA
+ for <buildroot@buildroot.org>; Wed,  4 Sep 2024 12:33:48 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 158A5C0009;
+ Wed,  4 Sep 2024 12:33:46 +0000 (UTC)
+Date: Wed, 4 Sep 2024 14:33:45 +0200
 To: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
-Message-ID: <20240904143016.14accde3@windsurf>
-In-Reply-To: <20240904122040.738362-1-roykollensvendsen@gmail.com>
+Message-ID: <20240904143345.42fb7e47@windsurf>
+In-Reply-To: <20240904122040.738362-2-roykollensvendsen@gmail.com>
 References: <20240904122040.738362-1-roykollensvendsen@gmail.com>
+ <20240904122040.738362-2-roykollensvendsen@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1725453017;
+ d=bootlin.com; s=gm1; t=1725453226;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=YYrnfZI9JbeBVzoYChoeRGCyP2IhdvDm++h0+8dDeso=;
- b=b50P+dfJZB/m/t1cjMB2b1dmtNaQ8J0H7HW902ETj2j5yRa/dIjLy2m3WAsCvMl0se0/Td
- yYlE/CbksS6GDHBKlHxIDsn+g40XuCjPaKaCBk29W8NvpSOs8JICM+m9q6yw4kvmaLJ2o4
- ZR81vdx5xCcrIxZDY64DqLqDqn/6nVdXOL6h59ztuR4Two9f17PawQhtYdT0kWyyl87Sn/
- gPX6JNXqtRk9TWaCARFCgwZ+cO3q4tTuOI1kn8skgunJdPL9Jb9onyh0Dx5lsl4Jkw6wS3
- pmLtV0nwohdLhJwd8F5+0SFjW9NsX4A+BT1ukpBZWiUj2A495vQAd8BnJjJ86Q==
+ bh=VhGLqixb0oPy6MSmS8xSFmp8lGZsJMFnRVOmjQda0GU=;
+ b=kI97xjjM7TQjkBmInljq4oEBkhNnFn95qJhnIuymHd1MRj50LEgz3YW4j84Uxo3p3LQQzZ
+ xUhGURi8wEKxqSDDFBuP1rT4aYqB+ca/qzymTLO79p84lrP6PP5YgCVll+Kw+VyUp0J9aj
+ 0YtAmjA5mKBNMaxSK3GoElbHgjF688B07IRkbjvcHRgXYErPKjYQ9rc5QxVnM6HD/QEcqI
+ 3rPaTwMsb30vkCopqctyLU1TpNM0lDdAuZPri+ewiOVfC/HOsVXdJ7gdcw2vdNUYAv3lvN
+ IirFTnpCUzkW9pptFXkq6JNuRR2q+LTWFLkp9YFYUzJ4jeSbv1+16NcHcWNEWw==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=b50P+dfJ
-Subject: Re: [Buildroot] [PATCH 1/2] package/qt6/qt6tools: allow building
- host Qt Linguist Tools
+ header.s=gm1 header.b=kI97xjjM
+Subject: Re: [Buildroot] [PATCH 2/2] package/qt6/qt6base: allow selecting
+ the host Qt Print Support module
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,92 +92,116 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Hello,
 
-On Wed,  4 Sep 2024 14:20:37 +0200
+On Wed,  4 Sep 2024 14:20:38 +0200
 Roy Kollen Svendsen <roykollensvendsen@gmail.com> wrote:
 
-> According to src/linguist/CMakeLists.txt we need to enable the
-> linguist feature:
+> According to configure.cmake printsupport requires widgets:
 > 
-> ...
-> if(NOT QT_FEATURE_linguist)
->     return()
-> endif()
-> add_subdirectory(lconvert)
-> add_subdirectory(lprodump)
-> add_subdirectory(lrelease)
-> add_subdirectory(lrelease-pro)
-> add_subdirectory(lupdate)
-> add_subdirectory(lupdate-pro)
-> if(QT_FEATURE_process AND QT_FEATURE_pushbutton AND QT_FEATURE_toolbutton AND TARGET Qt::Widgets AND NOT no-png)
->     add_subdirectory(linguist)
-> endif()
-> ...
-> 
-> And according to configure.cmake we need to select print support:
-> ...
-> qt_feature("linguist" PRIVATE
->     LABEL "Qt Linguist"
->     PURPOSE "Qt Linguist can be used by translator to translate text in Qt applications."
->     CONDITION TARGET Qt::PrintSupport
+> qt_feature("printsupport" PRIVATE
+>     LABEL "Qt PrintSupport"
+>     CONDITION QT_FEATURE_widgets
+>     SECTION "Module"
+>     PURPOSE "Provides the Qt PrintSupport module."
 > )
-> ...
+> 
+> So we let print support automatically select widgets support.
 > 
 > Signed-off-by: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
+
+This should be PATCH 1/2 in the series, because your patch adding
+BR2_PACKAGE_HOST_QT6TOOLS_LINGUIST_TOOLS uses this new
+BR2_PACKAGE_HOST_QT6BASE_PRINTSUPPORT option.
+
 > ---
->  package/qt6/qt6tools/Config.in   | 11 +++++++++++
->  package/qt6/qt6tools/qt6tools.mk | 10 ++++++++--
->  2 files changed, 19 insertions(+), 2 deletions(-)
+>  package/qt6/qt6base/Config.in.host | 11 +++++++++++
+>  package/qt6/qt6base/qt6base.mk     | 16 ++++++++++++++--
+>  2 files changed, 25 insertions(+), 2 deletions(-)
 > 
-> diff --git a/package/qt6/qt6tools/Config.in b/package/qt6/qt6tools/Config.in
-> index 5f52c5644f..eea461a2a9 100644
-> --- a/package/qt6/qt6tools/Config.in
-> +++ b/package/qt6/qt6tools/Config.in
-> @@ -15,3 +15,14 @@ config BR2_PACKAGE_QT6TOOLS
->  	  and design of applications.
+> diff --git a/package/qt6/qt6base/Config.in.host b/package/qt6/qt6base/Config.in.host
+> index 46fb668817..8f0bc1f070 100644
+> --- a/package/qt6/qt6base/Config.in.host
+> +++ b/package/qt6/qt6base/Config.in.host
+> @@ -8,6 +8,13 @@ config BR2_PACKAGE_HOST_QT6BASE_GUI
+>  config BR2_PACKAGE_HOST_QT6BASE_NETWORK
+>  	bool
 >  
->  	  https://github.com/qt/qttools
-> +
-> +if BR2_PACKAGE_QT6TOOLS
-> +
-> +config BR2_PACKAGE_HOST_QT6TOOLS_LINGUIST_TOOLS
-> +	bool "linguist tools (host)"
-> +	select BR2_PACKAGE_HOST_QT6BASE_PRINTSUPPORT
-> +	help
-> +	  Translate Qt C++ and Qt Quick applications into local
-> +	  languages.
+> +# Select this if you need host qt6 tools that require the Qt Print Support
+> +# module
+> +# (e.g. Qt Tools Linguist Tools).
 
-This should go in a package/qt6/qt6tools/Config.in.host, not in
-Config.in as Config.in is for options that affect the target build.
+I don't think that this really makes sense. We don't really care about
+how is using this (in the future, it may be other things). We care
+about what the option does... but what it does is actually pretty
+obvious from the option name. I think the only comment is to clarify
+that yes, widget support is needed for the print support, which isn't
+really obvious.
 
+> +config BR2_PACKAGE_HOST_QT6BASE_PRINTSUPPORT
+> +	bool
+> +	select BR2_PACKAGE_HOST_QT6BASE_WIDGETS
 > +
-> +endif
-> diff --git a/package/qt6/qt6tools/qt6tools.mk b/package/qt6/qt6tools/qt6tools.mk
-> index 09c986cfc6..897cf43054 100644
-> --- a/package/qt6/qt6tools/qt6tools.mk
-> +++ b/package/qt6/qt6tools/qt6tools.mk
-> @@ -37,11 +37,17 @@ QT6TOOLS_DEPENDENCIES = \
->  	qt6base \
->  	host-qt6tools
->  
-> +HOST_QT6TOOLS_DEPENDENCIES = host-qt6base
+>  # Select this if you need host qt6 tools that require the Qt::Test module
+>  # (e.g. qmltestrunner).
+>  config BR2_PACKAGE_HOST_QT6BASE_TEST
+> @@ -17,3 +24,7 @@ config BR2_PACKAGE_HOST_QT6BASE_TEST
+>  # (e.g. qhelpgenerator).
+>  config BR2_PACKAGE_HOST_QT6BASE_SQL
+>  	bool
 > +
-> +ifeq ($(BR2_PACKAGE_HOST_QT6TOOLS_LINGUIST_TOOLS),y)
-> +HOST_QT6TOOLS_CONF_OPTS += -DFEATURE_linguist=ON
-> +else
-> +HOST_QT6TOOLS_CONF_OPTS += -DFEATURE_linguist=OFF
-> +endif
+> +# The Qt Widgets module is required by the Qt Print Support module
 
-Please group these host package things...
+And this comment would become useless.
 
-> +
->  ifeq ($(BR2_PACKAGE_QT6DECLARATIVE),y)
->  QT6TOOLS_DEPENDENCIES += qt6declarative
+> +config BR2_PACKAGE_HOST_QT6BASE_WIDGETS
+> +	bool
+
+Isn't widget support dependent on GUI support?
+
+> diff --git a/package/qt6/qt6base/qt6base.mk b/package/qt6/qt6base/qt6base.mk
+> index 4c0392f92d..271f464115 100644
+> --- a/package/qt6/qt6base/qt6base.mk
+> +++ b/package/qt6/qt6base/qt6base.mk
+> @@ -113,10 +113,8 @@ HOST_QT6BASE_CONF_OPTS += \
+>  	-DFEATURE_png=OFF \
+>  	-DFEATURE_gif=OFF \
+>  	-DFEATURE_jpeg=OFF \
+> -	-DFEATURE_printsupport=OFF \
+>  	-DFEATURE_kms=OFF \
+>  	-DFEATURE_fontconfig=OFF \
+> -	-DFEATURE_widgets=OFF \
+>  	-DFEATURE_libinput=OFF \
+>  	-DFEATURE_tslib=OFF \
+>  	-DFEATURE_eglfs=OFF
+> @@ -131,6 +129,13 @@ else
+>  HOST_QT6BASE_CONF_OPTS += -DFEATURE_network=OFF
 >  endif
 >  
-> -HOST_QT6TOOLS_DEPENDENCIES = host-qt6base
+> +# The Qt Print Support module is required for building Qt Tools Linguist Tools
 
-... here. Rather than inter-twining target package and host package
-details.
+Not needed, it could be other things.
+
+> +ifeq ($(BR2_PACKAGE_HOST_QT6BASE_PRINTSUPPORT),y)
+> +HOST_QT6BASE_CONF_OPTS += -DFEATURE_printsupport=ON
+> +else
+> +HOST_QT6BASE_CONF_OPTS += -DFEATURE_printsupport=OFF
+> +endif
+> +
+>  # We need host qt6base with Sql support for host-qt6tools to generate the
+>  # qhelpgenerator host tool. qt6tools will fail to build if qhelpgenerator is not
+>  # available.
+> @@ -150,6 +155,13 @@ else
+>  HOST_QT6BASE_CONF_OPTS += -DFEATURE_testlib=OFF
+>  endif
+>  
+> +# The Qt Widgets module is required by the Qt Print Support module
+
+Also not very relevant comment IMO.
+
+> +ifeq ($(BR2_PACKAGE_HOST_QT6BASE_WIDGETS),y)
+> +HOST_QT6BASE_CONF_OPTS += -DFEATURE_widgets=ON
+> +else
+> +HOST_QT6BASE_CONF_OPTS += -DFEATURE_widgets=OFF
+> +endif
 
 Thanks!
 
