@@ -4,49 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 07419CE7A89
-	for <buildroot@archiver.kernel.org>; Thu,  5 Sep 2024 19:37:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 960C7CD5BB8
+	for <buildroot@archiver.kernel.org>; Thu,  5 Sep 2024 19:37:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A733540361;
-	Thu,  5 Sep 2024 19:37:27 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5CC3840114;
+	Thu,  5 Sep 2024 19:37:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KmHqRsBOjX7J; Thu,  5 Sep 2024 19:37:26 +0000 (UTC)
+ id ZRtbCVConXpc; Thu,  5 Sep 2024 19:37:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8D55040114
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2F24740175
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8D55040114;
-	Thu,  5 Sep 2024 19:37:26 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C24A51BF423
- for <buildroot@lists.busybox.net>; Thu,  5 Sep 2024 19:37:25 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2F24740175;
+	Thu,  5 Sep 2024 19:37:46 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 347F61BF423
+ for <buildroot@lists.busybox.net>; Thu,  5 Sep 2024 19:37:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id AFDA281E0A
- for <buildroot@lists.busybox.net>; Thu,  5 Sep 2024 19:37:25 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 21B42406F7
+ for <buildroot@lists.busybox.net>; Thu,  5 Sep 2024 19:37:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ke9jJ9rlX0wy for <buildroot@lists.busybox.net>;
- Thu,  5 Sep 2024 19:37:25 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id El7mdDbQocHY for <buildroot@lists.busybox.net>;
+ Thu,  5 Sep 2024 19:37:43 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::225;
+ helo=relay5-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EC3A581C0A
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id EC3A581C0A
- for <buildroot@buildroot.org>; Thu,  5 Sep 2024 19:37:24 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E40DE86DDD; Thu,  5 Sep 2024 19:37:24 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 5 Sep 2024 21:37:02 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 7534115416388525dc6a35f2b54232abd8aa0fd3
-X-Git-Newrev: 8cf677f42864b6862be34645a7e4863c3112f6ab
-X-Patchwork-Hint: ignore
-Message-Id: <20240905193724.E40DE86DDD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] configs/imx7dpico: update
- U-Boot and kernel
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org BE4A040248
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BE4A040248
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id BE4A040248
+ for <buildroot@buildroot.org>; Thu,  5 Sep 2024 19:37:42 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id B77671C0002;
+ Thu,  5 Sep 2024 19:37:40 +0000 (UTC)
+Date: Thu, 5 Sep 2024 21:37:39 +0200
+To: Fabio Estevam <festevam@gmail.com>
+Message-ID: <20240905213739.502a70bc@windsurf>
+In-Reply-To: <20240904182619.3013605-1-festevam@gmail.com>
+References: <20240904182619.3013605-1-festevam@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1725565060;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=uYaiSKC2SlnkJD9fEA86R7sIQ2IclmsCN9HBuiEt8HA=;
+ b=KOHB80Ij7z4p/9vFNmQ90HrMxxvHhAmHj5cXb6Meiww24Gw/v296VDdZaXt0xc6d5YJq69
+ FexyHIrlgxwQcujtzTe5zWKf2LS3ZHLZzKn9+80qMnJVKS8OXAKQ0j90r4K3sWYGV9juAt
+ NmZRp6TLdcZD/rEZGDZTtMIwSpXqTvKv/eNdmhrHkesL1ovioS/dzTCV35Lu67Tsm3akh8
+ 6wtdeYdnGulkHQ7Jt/XswRJq22d9UEbArYmfbxLw4Z4wfwdcXWtCI/HUTIeYm+dHvvSc9N
+ VsaTij6HADN5GiXITWTX+ZINFx+LPgEdtYvnTRLGQs+TtSAHNuL+CakMgFnlgw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=KOHB80Ij
+Subject: Re: [Buildroot] [PATCH] configs/imx7dpico: update U-Boot and kernel
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,60 +82,30 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8cf677f42864b6862be34645a7e4863c3112f6ab
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On Wed,  4 Sep 2024 15:26:19 -0300
+Fabio Estevam <festevam@gmail.com> wrote:
 
-Update to U-Boot 2024.07 and kernel 6.6.48 versions.
+> Update to U-Boot 2024.07 and kernel 6.6.48 versions.
+> 
+> Signed-off-by: Fabio Estevam <festevam@gmail.com>
+> ---
+>  configs/imx7dpico_defconfig | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- configs/imx7dpico_defconfig | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+Applied to next, thanks. However, it would be nice if you could enable
+BR2_DOWNLOAD_FORCE_CHECK_HASHES=y when bumping defconfigs. Thanks a lot!
 
-diff --git a/configs/imx7dpico_defconfig b/configs/imx7dpico_defconfig
-index c6ea04b683..b0a4b3dd12 100644
---- a/configs/imx7dpico_defconfig
-+++ b/configs/imx7dpico_defconfig
-@@ -3,8 +3,8 @@ BR2_arm=y
- BR2_cortex_a7=y
- BR2_ARM_FPU_NEON_VFPV4=y
- 
--# Linux headers same as kernel, a 5.13 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_13=y
-+# Linux headers same as kernel, a 6.6 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
- 
- # system
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc4"
-@@ -12,10 +12,10 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc4"
- # kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.13"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.48"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx7d-pico-pi"
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="nxp/imx/imx7d-pico-pi"
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
- BR2_LINUX_KERNEL_INSTALL_TARGET=y
- 
-@@ -25,7 +25,7 @@ BR2_TARGET_UBOOT_SPL=y
- BR2_TARGET_UBOOT_SPL_NAME="SPL"
- BR2_TARGET_UBOOT_BOARDNAME="pico-pi-imx7d"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.07"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.07"
- BR2_TARGET_UBOOT_FORMAT_DTB_IMG=y
- 
- # wifi firmware for brcm43439
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
