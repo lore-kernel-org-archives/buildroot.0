@@ -4,50 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 75C83E6FE46
-	for <buildroot@archiver.kernel.org>; Fri,  6 Sep 2024 20:11:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 37609E6FE46
+	for <buildroot@archiver.kernel.org>; Fri,  6 Sep 2024 20:11:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 26DB58483C;
-	Fri,  6 Sep 2024 20:11:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9379C84A4F;
+	Fri,  6 Sep 2024 20:11:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dKRdhr6obmBl; Fri,  6 Sep 2024 20:11:44 +0000 (UTC)
+ id FbXWiwGIh1By; Fri,  6 Sep 2024 20:11:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E65FA847E6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1045184879
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E65FA847E6;
-	Fri,  6 Sep 2024 20:11:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1045184879;
+	Fri,  6 Sep 2024 20:11:46 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3DBB21BF37F
- for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 20:00:34 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 20E4E1BF37F
+ for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 20:00:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1902E6074D
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3DA126110C
  for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 19:59:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3e9rdfPIpnqt for <buildroot@lists.busybox.net>;
- Fri,  6 Sep 2024 19:59:04 +0000 (UTC)
+ id 6vZVinbHh6Y0 for <buildroot@lists.busybox.net>;
+ Fri,  6 Sep 2024 19:59:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AFD176076C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F18B060639
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id AFD176076C
- for <buildroot@buildroot.org>; Fri,  6 Sep 2024 19:58:59 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id F18B060639
+ for <buildroot@buildroot.org>; Fri,  6 Sep 2024 19:59:00 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A121186C5A; Fri,  6 Sep 2024 19:58:59 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id EEAD6828EF; Fri,  6 Sep 2024 19:59:00 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 3 Sep 2024 23:38:28 +0200
+Date: Thu, 5 Sep 2024 21:02:39 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 41132c0541b0d69e88f9f720cac166e304d7b64d
-X-Git-Newrev: 9ce0861a58582fa1dfbc31277d163e023028e8d9
+X-Git-Oldrev: 713d63b613c67974c6b14a84bab77ea570893aa2
+X-Git-Newrev: c9a184cf316cfdebe61ca2deacd0e4a0835a081a
 X-Patchwork-Hint: ignore
-Message-Id: <20240906195859.A121186C5A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/rpi-rgb-led-matrix: update to
- latest commit
+Message-Id: <20240906195900.EEAD6828EF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/pkg-cargo: don't install crates
+ tracking
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,52 +58,94 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============6950165449049191441=="
+Content-Type: multipart/mixed; boundary="===============5969845365062678720=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============6950165449049191441==
+--===============5969845365062678720==
 Content-Type: text/plain
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9ce0861a58582fa1dfbc31277d163e023028e8d9
+commit: https://git.buildroot.net/buildroot/commit/?id=c9a184cf316cfdebe61ca2deacd0e4a0835a081a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-The rpi-rgb-led-matrix project doesn't have tagged releases, so this
-patch updates the package to the latest commit on the master branch.
+By default, 'cargo install' also installs a kind of "registry" in
+/usr/.crates2.json and /usr/.crates.toml [0]:
+    To track information of installed executables, some extra files,
+    such as .crates.toml and .crates2.json, are also created under this
+    root.
 
-Signed-off-by: J. Neuschäfer <j.neuschaefer@gmx.net>
-[yann.morin.1998@free.fr: drop comment at end of _VERSION line]
+Presumably, this would be used by "cargo uninstall" to properly cleanup
+the package [1]:
+    By default all binaries are removed for a crate [...].
+
+However, in the context of Buildroot, this is useless, as we do not
+uninstall packages, and thus those files are superfluous.
+
+Tell cargo to not create that tracking information, by using --no-track
+to "cargo install".
+
+Note that this would cause cargo to fail to install a file that already
+exists [2], like would be the case when running foo-reinstall for example:
+    --no-track
+    By default, Cargo keeps track of the installed packages with a
+    metadata file stored in the installation root directory. This flag
+    tells Cargo not to use or create that file. With this flag, Cargo
+    will refuse to overwrite any existing files unless the --force flag
+    is used. This also disables Cargo’s ability to protect against
+    multiple concurrent invocations of Cargo installing at the same
+    time.
+
+However, we do already use --force which allows cargo to overwrite
+existing files without any further ado, so in our case, --no-track will
+only disable the tracking information.
+
+Also, in Buildroot, we do not have concurrent installation _to the same
+location_: either PPD is disabled, in which case only one package will
+be installed to the common target/ at a time, or we're using PPD, so
+each package will get installed into its own target/. Thus, --no-track
+has no adverse side effect for us.
+
+Fixes:
+
+  https://gitlab.com/buildroot.org/buildroot/-/issues/17
+
+[0] https://doc.rust-lang.org/cargo/reference/config.html#installroot
+[1] https://doc.rust-lang.org/cargo/commands/cargo-uninstall.html
+[2] https://doc.rust-lang.org/cargo/commands/cargo-install.html
+
+Reported-by: Thomas Kindler @thomask77
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Tested-by: Thomas Kindler @thomask77
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/rpi-rgb-led-matrix/rpi-rgb-led-matrix.hash | 2 +-
- package/rpi-rgb-led-matrix/rpi-rgb-led-matrix.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/pkg-cargo.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/package/rpi-rgb-led-matrix/rpi-rgb-led-matrix.hash b/package/rpi-rgb-led-matrix/rpi-rgb-led-matrix.hash
-index 265e4c4249..ee6c50dee0 100644
---- a/package/rpi-rgb-led-matrix/rpi-rgb-led-matrix.hash
-+++ b/package/rpi-rgb-led-matrix/rpi-rgb-led-matrix.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  490ca6fa0c81451f2472b4aa85796a876790f2e212bf0882e3bb7caf5c47e2c3  rpi-rgb-led-matrix-a56338db0f003d5236f2ce98c73a591d64a70852.tar.gz
-+sha256  9a6da5b0ad730883a5fa18afc59b1297b4b05eb581c2c14ae50a3583296a4bed  rpi-rgb-led-matrix-f55736f7595bc028451658996eedea9742688bbc.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/rpi-rgb-led-matrix/rpi-rgb-led-matrix.mk b/package/rpi-rgb-led-matrix/rpi-rgb-led-matrix.mk
-index 499fb408c2..c0b2e61c79 100644
---- a/package/rpi-rgb-led-matrix/rpi-rgb-led-matrix.mk
-+++ b/package/rpi-rgb-led-matrix/rpi-rgb-led-matrix.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RPI_RGB_LED_MATRIX_VERSION = a56338db0f003d5236f2ce98c73a591d64a70852
-+RPI_RGB_LED_MATRIX_VERSION = f55736f7595bc028451658996eedea9742688bbc
- RPI_RGB_LED_MATRIX_SITE = $(call github,hzeller,rpi-rgb-led-matrix,$(RPI_RGB_LED_MATRIX_VERSION))
- RPI_RGB_LED_MATRIX_LICENSE = GPL-2.0
- RPI_RGB_LED_MATRIX_LICENSE_FILES = COPYING
+diff --git a/package/pkg-cargo.mk b/package/pkg-cargo.mk
+index 41dfcbd096..d94a19024e 100644
+--- a/package/pkg-cargo.mk
++++ b/package/pkg-cargo.mk
+@@ -279,6 +279,7 @@ define $(2)_INSTALL_TARGET_CMDS
+ 			--root $$(TARGET_DIR)/usr/ \
+ 			--bins \
+ 			--path ./ \
++			--no-track \
+ 			--force \
+ 			--locked \
+ 			-Z target-applies-to-host \
+@@ -298,6 +299,7 @@ define $(2)_INSTALL_CMDS
+ 			--root $$(HOST_DIR) \
+ 			--bins \
+ 			--path ./ \
++			--no-track \
+ 			--force \
+ 			--locked \
+ 			$$($(2)_CARGO_INSTALL_OPTS)
 
---===============6950165449049191441==
+--===============5969845365062678720==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -115,4 +156,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============6950165449049191441==--
+--===============5969845365062678720==--
