@@ -4,59 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90E19CD4F4D
-	for <buildroot@archiver.kernel.org>; Thu,  5 Sep 2024 06:18:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95AA7CD4F54
+	for <buildroot@archiver.kernel.org>; Thu,  5 Sep 2024 06:19:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3DD7F40296;
-	Thu,  5 Sep 2024 06:18:15 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3752B405E1;
+	Thu,  5 Sep 2024 06:19:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fdr41_KwoKzd; Thu,  5 Sep 2024 06:18:14 +0000 (UTC)
+ id hry6PKXKPsJR; Thu,  5 Sep 2024 06:19:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CE34740298
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C5EE4403E2
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CE34740298;
-	Thu,  5 Sep 2024 06:18:13 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E1E901BF2B9
- for <buildroot@lists.busybox.net>; Thu,  5 Sep 2024 06:18:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C5EE4403E2;
+	Thu,  5 Sep 2024 06:19:55 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id CA6831BF2B9
+ for <buildroot@lists.busybox.net>; Thu,  5 Sep 2024 06:19:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id CD5D7813F2
- for <buildroot@lists.busybox.net>; Thu,  5 Sep 2024 06:18:11 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id BE33460631
+ for <buildroot@lists.busybox.net>; Thu,  5 Sep 2024 06:19:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id czn9W1x9SBzx for <buildroot@lists.busybox.net>;
- Thu,  5 Sep 2024 06:18:11 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.178.240;
- helo=mslow1.mail.gandi.net; envelope-from=peko@korsgaard.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pDV7yknFKhCM for <buildroot@lists.busybox.net>;
+ Thu,  5 Sep 2024 06:19:53 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org AAC8D813F4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AAC8D813F4
-Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
- by smtp1.osuosl.org (Postfix) with ESMTPS id AAC8D813F4
- for <buildroot@buildroot.org>; Thu,  5 Sep 2024 06:18:10 +0000 (UTC)
-Received: from relay9-d.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::229])
- by mslow1.mail.gandi.net (Postfix) with ESMTP id C2122C2162
- for <buildroot@buildroot.org>; Thu,  5 Sep 2024 06:18:07 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id DE644FF805;
- Thu,  5 Sep 2024 06:18:01 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peko@dell.be.48ers.dk>) id 1slb9W-006MO4-31;
- Tue, 03 Sep 2024 23:33:30 +0200
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CFB7A605BA
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id CFB7A605BA
+ for <buildroot@buildroot.org>; Thu,  5 Sep 2024 06:19:53 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id C679586DB6; Thu,  5 Sep 2024 06:19:53 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue,  3 Sep 2024 23:33:29 +0200
-Message-Id: <20240903213330.1516007-1-peter@korsgaard.com>
-X-Mailer: git-send-email 2.39.2
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: [Buildroot] [PATCH] package/libopenssl: security bump to version
- 3.3.2
+Date: Thu, 5 Sep 2024 08:04:28 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: efd5f1aae45e841bf1a40c977253f1cb5e229396
+X-Git-Newrev: 8de200895c9ee06d6d8e20fb5809a143dcead6a5
+X-Patchwork-Hint: ignore
+Message-Id: <20240905061953.C679586DB6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libopenssl: security bump version
+ to 3.3.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,10 +59,14 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
+
+commit: https://git.buildroot.net/buildroot/commit/?id=8de200895c9ee06d6d8e20fb5809a143dcead6a5
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Fixes the following security issues:
 
@@ -82,22 +77,26 @@ Fixes the following security issues:
 - CVE-2024-5535: SSL_select_next_proto buffer overread [Low severity]
   https://openssl-library.org/news/secadv/20240528.txt
 
-Downloads now moved to github, so adjust _SITE to match.
+Updated _SITE and project URL according to
+https://openssl-library.org/post/2024-04-30-releases-distribution-changes/
 
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+[Peter: add CVE details]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
  package/libopenssl/libopenssl.hash | 4 ++--
  package/libopenssl/libopenssl.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/openssl/Config.in          | 2 +-
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
 diff --git a/package/libopenssl/libopenssl.hash b/package/libopenssl/libopenssl.hash
-index dd1c99f7a7..797a9efe5e 100644
+index dd1c99f7a7..52fce1eb3a 100644
 --- a/package/libopenssl/libopenssl.hash
 +++ b/package/libopenssl/libopenssl.hash
 @@ -1,5 +1,5 @@
 -# From https://www.openssl.org/source/openssl-3.3.1.tar.gz.sha256
 -sha256  777cd596284c883375a2a7a11bf5d2786fc5413255efab20c50d6ffe6d020b7e  openssl-3.3.1.tar.gz
-+# From https://www.mail-archive.com/openssl-announce@openssl.org/msg00463.html
++# From https://github.com/openssl/openssl/releases/download/openssl-3.3.2/openssl-3.3.2.tar.gz.sha256
 +sha256  2e8a40b01979afe8be0bbfb3de5dc1c6709fedb46d6c89c10da114ab5fc3d281  openssl-3.3.2.tar.gz
  
  # License files
@@ -117,9 +116,19 @@ index 89a9189bb8..82b924c557 100644
  LIBOPENSSL_SOURCE = openssl-$(LIBOPENSSL_VERSION).tar.gz
  LIBOPENSSL_LICENSE = Apache-2.0
  LIBOPENSSL_LICENSE_FILES = LICENSE.txt
--- 
-2.39.2
-
+diff --git a/package/openssl/Config.in b/package/openssl/Config.in
+index 30db152fad..d255a05596 100644
+--- a/package/openssl/Config.in
++++ b/package/openssl/Config.in
+@@ -35,7 +35,7 @@ config BR2_PACKAGE_LIBOPENSSL
+ 	  (TLS v1) as well as a full-strength general-purpose
+ 	  cryptography library.
+ 
+-	  http://www.openssl.org/
++	  https://openssl-library.org/
+ 
+ 	  Note: Some helper scripts need perl.
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
