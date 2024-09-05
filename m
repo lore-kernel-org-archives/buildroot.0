@@ -1,74 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4E953CD5BC9
-	for <buildroot@archiver.kernel.org>; Thu,  5 Sep 2024 15:22:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8FC4ACD5BCB
+	for <buildroot@archiver.kernel.org>; Thu,  5 Sep 2024 15:45:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E58AE81826;
-	Thu,  5 Sep 2024 15:22:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 45F1F60A67;
+	Thu,  5 Sep 2024 15:45:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id D561TdDYCAKw; Thu,  5 Sep 2024 15:22:11 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Bg3L78B65--5; Thu,  5 Sep 2024 15:45:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0B3D981831
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 50D2660A71
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0B3D981831;
-	Thu,  5 Sep 2024 15:22:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 50D2660A71;
+	Thu,  5 Sep 2024 15:45:39 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 216A11BF3D4
- for <buildroot@lists.busybox.net>; Thu,  5 Sep 2024 15:22:09 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id B42611BF3D4
+ for <buildroot@lists.busybox.net>; Thu,  5 Sep 2024 15:45:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0E649404F8
- for <buildroot@lists.busybox.net>; Thu,  5 Sep 2024 15:22:09 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id AE1534067D
+ for <buildroot@lists.busybox.net>; Thu,  5 Sep 2024 15:45:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3TOZoAjjTaNf for <buildroot@lists.busybox.net>;
- Thu,  5 Sep 2024 15:22:08 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=188.165.44.123;
- helo=mail1.insia.net; envelope-from=guillaume.chaye@zeetim.com;
+ id dP7-ILET8Zwx for <buildroot@lists.busybox.net>;
+ Thu,  5 Sep 2024 15:45:38 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=163.172.193.142;
+ helo=mail0.insia.net; envelope-from=guillaume.chaye@zeetim.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 02943401CF
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 02943401CF
-Received: from mail1.insia.net (mail1.insia.net [188.165.44.123])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 02943401CF
- for <buildroot@buildroot.org>; Thu,  5 Sep 2024 15:22:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 882A040679
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 882A040679
+Received: from mail0.insia.net (mail0.insia.net [163.172.193.142])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 882A040679
+ for <buildroot@buildroot.org>; Thu,  5 Sep 2024 15:45:37 +0000 (UTC)
 Received: from smtp.insia.net (unknown [192.168.1.24])
- by mail1.insia.net (Postfix) with ESMTP id 155DE3F82C;
- Thu,  5 Sep 2024 17:22:00 +0200 (CEST)
+ by mail0.insia.net (Postfix) with ESMTP id 9E6DA1FBA8;
+ Thu,  5 Sep 2024 17:45:31 +0200 (CEST)
 Received: from sb-dev-build.insia.net. (gw-servers.insia.net [192.168.1.1])
- by smtp.insia.net (Postfix) with ESMTP id BE5145F497;
- Thu,  5 Sep 2024 17:18:28 +0200 (CEST)
+ by smtp.insia.net (Postfix) with ESMTP id 354055F497;
+ Thu,  5 Sep 2024 17:42:00 +0200 (CEST)
 From: "Guillaume GC. Chaye" <guillaume.chaye@zeetim.com>
 To: buildroot@buildroot.org
-Date: Thu,  5 Sep 2024 17:21:10 +0200
-Message-Id: <20240905152110.1317154-1-guillaume.chaye@zeetim.com>
+Date: Thu,  5 Sep 2024 17:45:11 +0200
+Message-Id: <20240905154511.1319010-1-guillaume.chaye@zeetim.com>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=zeetim.com; s=mail1; t=1725549720;
+ d=zeetim.com; s=mail0; t=1725551131;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:
  content-transfer-encoding:content-transfer-encoding;
- bh=eGoh4OWniabCC5uOng70RqXsiylDEf5bqUHH7aZHJ1s=;
- b=JjyTkRhn1lTaKhlo+pPmyhwa1lDJIyprYamdOv/G6NiYCZDBEzJUfPbpr9Ipq5gDzi6JT+
- BO7z2EakxtXT7DnVEX8o5b2W6t4Lh2p2UgcAm6AVM0zAF44bTQD5vVUv2mGOkNATjfHMQM
- 8fQrD0EqOlvKehsBxT0YFHW25lN9JwjI8OMk4enYGPUAgUEuOOCDVTgdRMiLeXijU3ARyd
- FEs2bYtcMHhXb2z5136wNyi14NzuN/noyBJBFc1PbDsFTLPTrQFwXCiCVLSMWXEvmaNwvW
- 8OuqGXetVDZQJZDkRGQKs5nx+pmNbtXNGKfGGbR7fur864utH5TsplAi1d9eGQ==
+ bh=D7rt25BnKZgQlwUFix2RrIw/B3N+XapOwfOITuiT8Nw=;
+ b=pjzKTop28mf+HJctZp4iMqfzUE1MKjL+fzlNb8BaVUIXkfRj+mPRopi/pQ2b8pu7FKeNaW
+ 6gM1qhulOaqX4KMJQAzFZLqdpscWFWLz24dWWOLB9JGdlXbM4XyKa2v4ImyZgRVb+NcgK/
+ wCFRo7/Y6b9j8L1x6qHY9556kal3VKkmoYBO4lFsyuGDlASP/XqQIxmjrpteT/4TRkHL9K
+ UJBn1KR5qYJvtJPJdQQHVVQULWFN04/QBAodWhnXudliPYdHtJiGz3S7KkT0KWogaj+w4l
+ DSDLvI0zrBESuIVLRGUJf5esSjBYAySZAqpEFvOPywnMRx+QvjdJENZOpbJeKA==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=zeetim.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=zeetim.com header.i=@zeetim.com header.a=rsa-sha256
- header.s=mail1 header.b=JjyTkRhn
-Subject: [Buildroot] [PATCH 3/3] package/wpa_supplicant: add missing config
- for WPA3 entreprise
+ header.s=mail0 header.b=pjzKTop2
+Subject: [Buildroot] [PATCH 4/4] package/alsa-plugins: add support for
+ pulseaudio
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,42 +80,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Guillaume GC. Chaye" <guillaume.chaye@zeetim.com>,
- Sergey Matyukevich <geomatsi@gmail.com>
+Cc: Charles Hardin <ckhardin@gmail.com>,
+ "Guillaume GC. Chaye" <guillaume.chaye@zeetim.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+build package with pulseaudio support only if package is selected in menuconfig
+
 Signed-off-by: Guillaume GC. Chaye <guillaume.chaye@zeetim.com>
 ---
- package/wpa_supplicant/wpa_supplicant.mk | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ package/alsa-plugins/alsa-plugins.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
-index 984959f679..f37a7db821 100644
---- a/package/wpa_supplicant/wpa_supplicant.mk
-+++ b/package/wpa_supplicant/wpa_supplicant.mk
-@@ -131,13 +131,17 @@ WPA_SUPPLICANT_CONFIG_ENABLE += \
- 	CONFIG_DPP \
- 	CONFIG_SAE \
- 	CONFIG_SAE_PK \
--	CONFIG_OWE
-+	CONFIG_OWE \
-+	CONFIG_SUITEB \
-+	CONFIG_SUITEB192
- else
- WPA_SUPPLICANT_CONFIG_DISABLE += \
- 	CONFIG_DPP \
- 	CONFIG_SAE \
- 	CONFIG_SAE_PK \
--	CONFIG_OWE
-+	CONFIG_OWE \
-+	CONFIG_SUITEB \
-+	CONFIG_SUITEB192
- endif
+diff --git a/package/alsa-plugins/alsa-plugins.mk b/package/alsa-plugins/alsa-plugins.mk
+index 25ecc589fc..deeca838b1 100644
+--- a/package/alsa-plugins/alsa-plugins.mk
++++ b/package/alsa-plugins/alsa-plugins.mk
+@@ -14,12 +14,18 @@ ALSA_PLUGINS_DEPENDENCIES = host-pkgconf alsa-lib
+ ALSA_PLUGINS_CONF_OPTS = \
+ 	--disable-jack \
+ 	--disable-usbstream \
+-	--disable-pulseaudio \
+ 	--disable-libav \
+ 	--disable-maemo-plugin \
+ 	--disable-maemo-resource-manager \
+ 	--with-speex=no
  
- # Try to use openssl if it's already available
++ifeq ($(BR2_PACKAGE_PULSEAUDIO),y)
++ALSA_PLUGINS_DEPENDENCIES += pulseaudio
++ALSA_PLUGINS_CONF_OPTS += --enable-pulseaudio
++else
++ALSA_PLUGINS_CONF_OPTS += --disable-pulseaudio
++endif
++
+ ifeq ($(BR2_PACKAGE_ALSA_UTILS),y)
+ ALSA_PLUGINS_DEPENDENCIES += alsa-utils
+ endif
 -- 
 2.39.2
 
