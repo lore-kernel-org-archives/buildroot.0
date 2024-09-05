@@ -4,49 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55517CE7A9A
-	for <buildroot@archiver.kernel.org>; Thu,  5 Sep 2024 20:36:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 23523CE7A9C
+	for <buildroot@archiver.kernel.org>; Thu,  5 Sep 2024 20:41:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1F14240DF9;
-	Thu,  5 Sep 2024 20:36:01 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B21654028F;
+	Thu,  5 Sep 2024 20:41:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id twRhuBhPJV1G; Thu,  5 Sep 2024 20:36:00 +0000 (UTC)
+ id UAK7NeuXJmex; Thu,  5 Sep 2024 20:41:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C49B640F80
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3986F40A27
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C49B640F80;
-	Thu,  5 Sep 2024 20:35:59 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2E9231BF861
- for <buildroot@lists.busybox.net>; Thu,  5 Sep 2024 20:35:58 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3986F40A27;
+	Thu,  5 Sep 2024 20:41:52 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 18E761BF41B
+ for <buildroot@lists.busybox.net>; Thu,  5 Sep 2024 20:41:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1C521400AE
- for <buildroot@lists.busybox.net>; Thu,  5 Sep 2024 20:35:58 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 05B2740113
+ for <buildroot@lists.busybox.net>; Thu,  5 Sep 2024 20:41:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tyIlUD4vuURr for <buildroot@lists.busybox.net>;
- Thu,  5 Sep 2024 20:35:57 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id m-03uu34Ep_F for <buildroot@lists.busybox.net>;
+ Thu,  5 Sep 2024 20:41:48 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::229;
+ helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 534B340E94
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 534B340E94
- for <buildroot@buildroot.org>; Thu,  5 Sep 2024 20:35:57 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3E55186E4A; Thu,  5 Sep 2024 20:35:57 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 5 Sep 2024 22:34:32 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: 93dd24358e37828237b7d31695ab93412a47d507
-X-Git-Newrev: e3a88abeb72b3a4d1137fb1ad5dc6e4ddae119e9
-X-Patchwork-Hint: ignore
-Message-Id: <20240905203557.3E55186E4A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] configs/imx6ulevk: update
- U-Boot and kernel
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 52602400EE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 52602400EE
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 52602400EE
+ for <buildroot@buildroot.org>; Thu,  5 Sep 2024 20:41:48 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id EE043FF803;
+ Thu,  5 Sep 2024 20:41:45 +0000 (UTC)
+Date: Thu, 5 Sep 2024 22:41:45 +0200
+To: Yu Chien Peter Lin via buildroot <buildroot@buildroot.org>
+Message-ID: <20240905224145.562521e1@windsurf>
+In-Reply-To: <20240904051609.2871616-2-peterlin@andestech.com>
+References: <20240904051609.2871616-1-peterlin@andestech.com>
+ <20240904051609.2871616-2-peterlin@andestech.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1725568906;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=zeLK4U6Xmv+qDbH+GERndDSSsdaaw9hcrn5GHlBOXu4=;
+ b=ZZhdUx7E8Lc7wE+oQTgdvdiyNP8zSzTvRDGRuJB/kwPTHqJ/8Kguqbwqp/Ln3Rlw+ZAq3r
+ P/84Fu3eDO8/UJVSFbCMVpIk85Ru+XTlQY/+hktt3Au0zm6zhkj7Lq2FT5ZzzT2jyaI/3S
+ XvJ+E3Bg59IC7VVKAcyYow39HktwZWzFj6aadtzrAdo+Je2UFhIRvDC1Ht4yR6Y+1qFrF6
+ APH7fzYHxoDGICYKha8V+6oeqBp2+F3JOrqyj8VRPJqJLyEPuOj5Y+P5ADJf3qeQxHQ9as
+ rSF6wqIABZdzVChNDISaeNXofKRfmLdqn//id9RnJ8I8rE1Lba/YsT2aAZmudA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=ZZhdUx7E
+Subject: Re: [Buildroot] [PATCH v2 1/4] package: andes-spi-burn: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,59 +83,112 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: tim609@andestech.com, Yu Chien Peter Lin <peterlin@andestech.com>,
+ ycliang@andestech.com
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e3a88abeb72b3a4d1137fb1ad5dc6e4ddae119e9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+Hello Peter,
 
-Update to U-Boot 2024.07 and kernel 6.6.48 versions.
+Thanks for this patch! See some comments below.
 
-Signed-off-by: Fabio Estevam <festevam@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- configs/imx6ulevk_defconfig | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+The commit title should be:
 
-diff --git a/configs/imx6ulevk_defconfig b/configs/imx6ulevk_defconfig
-index 22b5a45480..271b62be81 100644
---- a/configs/imx6ulevk_defconfig
-+++ b/configs/imx6ulevk_defconfig
-@@ -3,8 +3,8 @@ BR2_arm=y
- BR2_cortex_a7=y
- BR2_ARM_FPU_NEON_VFPV4=y
- 
--# Linux headers same as kernel, a 5.15 series
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
-+# Linux headers same as kernel, a 6.6 series
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
- 
- # system
- BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
-@@ -12,17 +12,17 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc0"
- # kernel
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.11"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.48"
- BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
--BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6ul-14x14-evk"
-+BR2_LINUX_KERNEL_INTREE_DTS_NAME="nxp/imx/imx6ul-14x14-evk"
- BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
- 
- # bootloader
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BOARDNAME="mx6ul_14x14_evk"
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.10"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.07"
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
- BR2_TARGET_UBOOT_FORMAT_IMG=y
- BR2_TARGET_UBOOT_SPL=y
+	package/andes-spi-burn: new package
+
+On Wed, 4 Sep 2024 13:16:06 +0800
+Yu Chien Peter Lin via buildroot <buildroot@buildroot.org> wrote:
+
+
+> diff --git a/package/andes-spi-burn/Config.in.host b/package/andes-spi-burn/Config.in.host
+> new file mode 100644
+> index 0000000000..fed4f49f5d
+> --- /dev/null
+> +++ b/package/andes-spi-burn/Config.in.host
+> @@ -0,0 +1,8 @@
+> +config BR2_PACKAGE_HOST_ANDES_SPI_BURN
+> +	bool "host andes-spi-burn"
+> +	depends on BR2_riscv
+> +	help
+> +		Andes Technology SPI_burn tool to program bootloader and
+> +		device-tree blob onto flash memory of AE350 platform.
+> +
+> +		https://github.com/andestech/Andes-Development-Kit
+
+Indentation of the help text is one tab + 2 spaces. You can run "make
+check-package" to get some coding style check.
+
+> diff --git a/package/andes-spi-burn/andes-spi-burn.hash b/package/andes-spi-burn/andes-spi-burn.hash
+> new file mode 100644
+> index 0000000000..170f362646
+> --- /dev/null
+> +++ b/package/andes-spi-burn/andes-spi-burn.hash
+> @@ -0,0 +1,2 @@
+> +# Locally computed
+> +sha256  6632bc0ddd0b6d07bd328758cd9132f48429d144079eb8011af60d95b0bdfd6b  flash.zip
+
+No license file?
+
+> diff --git a/package/andes-spi-burn/andes-spi-burn.mk b/package/andes-spi-burn/andes-spi-burn.mk
+> new file mode 100644
+> index 0000000000..2f7387ca2f
+> --- /dev/null
+> +++ b/package/andes-spi-burn/andes-spi-burn.mk
+> @@ -0,0 +1,25 @@
+> +################################################################################
+> +#
+> +# andes-spi-burn
+> +#
+> +################################################################################
+> +
+> +ANDES_SPI_BURN_VERSION = 5.3.0
+> +ANDES_SPI_BURN_SOURCE = flash.zip
+
+This will unfortunately not work, as the file name doesn't include a
+version. So when you will update the package, there will already be a
+flash.zip in $DL_DIR/andes-spi-burn/ and the new one will not be
+re-downloaded. Therefore, you need to find a way to make sure that the
+filename contains the version.
+
+Alternatively, perhaps you could simply use a git clone instead, with
+ANDES_SPI_BURN_SITE_METHOD = git.
+
+Except I see your Git repo doesn't actually contain anything... This is
+really not great.
+
+> +ANDES_SPI_BURN_SITE = https://github.com/andestech/Andes-Development-Kit/releases/download/ast-v5_3_0-release-windows
+> +ANDES_SPI_BURN_LICENSE = Apache-2.0
+
+No license file?
+
+> +
+> +define HOST_ANDES_SPI_BURN_EXTRACT_CMDS
+> +	$(UNZIP) -q $(HOST_ANDES_SPI_BURN_DL_DIR)/$(ANDES_SPI_BURN_SOURCE) -d $(@D)
+> +endef
+> +
+> +define HOST_ANDES_SPI_BURN_BUILD_CMDS
+> +	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)/flash/src-SPI_burn clean
+
+No need to do the "clean" first. We never do it in Buildroot packages.
+
+> +	$(HOST_MAKE_ENV) $(MAKE) -C $(@D)/flash/src-SPI_burn --makefile=Makefile_SPIburn_linux
+> +endef
+> +
+> +define HOST_ANDES_SPI_BURN_INSTALL_CMDS
+> +	$(INSTALL) -D -m 0755 $(@D)/flash/src-SPI_burn/SPI_burn $(HOST_DIR)/bin/SPI_burn
+> +endef
+> +
+> +$(eval $(host-generic-package))
+
+The rest seems OK to me!
+
+Thomas
+-- 
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
