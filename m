@@ -4,72 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A18B5CD5BAE
-	for <buildroot@archiver.kernel.org>; Thu,  5 Sep 2024 12:05:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84B9FCD5BB7
+	for <buildroot@archiver.kernel.org>; Thu,  5 Sep 2024 12:18:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5300880C3E;
-	Thu,  5 Sep 2024 12:05:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2BBFB8133A;
+	Thu,  5 Sep 2024 12:18:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0f2oEV-Zvi-x; Thu,  5 Sep 2024 12:05:11 +0000 (UTC)
+ id x4CRk25L3dpY; Thu,  5 Sep 2024 12:18:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4E91C80BA6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3A6558133B
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4E91C80BA6;
-	Thu,  5 Sep 2024 12:05:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3A6558133B;
+	Thu,  5 Sep 2024 12:18:26 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 0F35B1BF403
- for <buildroot@lists.busybox.net>; Thu,  5 Sep 2024 12:05:10 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 779C51BF403
+ for <buildroot@lists.busybox.net>; Thu,  5 Sep 2024 12:18:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id EF3A180BA6
- for <buildroot@lists.busybox.net>; Thu,  5 Sep 2024 12:05:09 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 63A2F8133B
+ for <buildroot@lists.busybox.net>; Thu,  5 Sep 2024 12:18:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DkIJJNzEdeiy for <buildroot@lists.busybox.net>;
- Thu,  5 Sep 2024 12:05:09 +0000 (UTC)
+ id b2CMwUxWshR2 for <buildroot@lists.busybox.net>;
+ Thu,  5 Sep 2024 12:18:23 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
  helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org AE7AF80B9F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AE7AF80B9F
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 688798133A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 688798133A
 Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp1.osuosl.org (Postfix) with ESMTPS id AE7AF80B9F
- for <buildroot@buildroot.org>; Thu,  5 Sep 2024 12:05:08 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 688798133A
+ for <buildroot@buildroot.org>; Thu,  5 Sep 2024 12:18:23 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id 1CD4D13F89C;
- Thu,  5 Sep 2024 14:04:59 +0200 (CEST)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 55E4113F88E;
+ Thu,  5 Sep 2024 14:18:14 +0200 (CEST)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Thu, 05 Sep 2024 14:04:58 +0200
-Date: Thu, 5 Sep 2024 14:04:58 +0200
+ Thu, 05 Sep 2024 14:18:14 +0200
+Date: Thu, 5 Sep 2024 14:18:14 +0200
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: "Guillaume GC. Chaye" <guillaume.chaye@zeetim.com>
-Message-ID: <ZtmeaiPGkdpfNW1T@landeda>
+Message-ID: <Ztmhhq922XUxjUP9@landeda>
 References: <20240905094828.1313494-1-guillaume.chaye@zeetim.com>
- <20240905094828.1313494-2-guillaume.chaye@zeetim.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20240905094828.1313494-2-guillaume.chaye@zeetim.com>
+In-Reply-To: <20240905094828.1313494-1-guillaume.chaye@zeetim.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1725537905;
- bh=tcBJb1YouX77eHw1HLE3YrdX3lti2JfB7ymfbvkJLI4=;
+ d=free.fr; s=smtp-20201208; t=1725538700;
+ bh=vLmzXw9LTfH33xg1wjnRRMMIm3y+PXIvB6m5o+RSQhw=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=IZkLcqEyAsFvzsrd+7WK+0cpxYz9kegf+Hs11PfeUE3Y5jtUXb1Kg6Nm6okxV0+Dz
- RoliXGoDP4Z7BEI0K3k02jAJDIxuSjwqvy9HRM/APvK+dyr5DzYGQQrbFO+2NePU0v
- Ocm0h5KTQxbQk1JQOKga/PDAMmg5lTi7d7e9bfQHWNhuPnodyh4XRNAfe0TEE7gREE
- cUUe4rJHELXBpH3cusGdt2CSx7eb9DNY/RoAmOXXuJOPLnoVRx42oUYa++C61VGo3I
- C1lLIf8zb6Uz7EKDQPQjSCG61t/KOuv/y3rUc4UosQlJUYwiQwlpqhm1AxJlIvKXnB
- Zbv1JYYJIgdeQ==
+ b=EnLfyPFKD7h/VLDIbPKGVbwnlcWQNkDUCzukq0qitO3gvUuw+1lET1BTR78OW486Q
+ mpIdDqf49L7qsU/tjuS9l06o5y2+28qiOV2har5sIxp2eqQbyklNQ/oSJ3eNOptPl6
+ rilommIBjsIxkoowaFZew6rOPnvFPRftarme0xVGZq6RFDCnoUAW1kwujsWw4t5tsj
+ mH0uUbidLE1C8zjWqJCTtCIZa0GFvI6+Wvt+KqB21Gqcr7gKBNmOCgi8B3qZKsV9vK
+ TUYD9mEy7OtulA4Oo8m/Lyq9kojbuYXKaYC+nDsl1CtMyYxd3prWlClw6EbNssNCA4
+ vb40VPTqztdFQ==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=free.fr
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=IZkLcqEy
-Subject: Re: [Buildroot] [PATCH 2/2] package/systemd: add efi support option
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=EnLfyPFK
+Subject: Re: [Buildroot] [PATCH 1/2] package/perl-file-slurp: add host
+ package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -89,65 +89,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Guillsume, All,
+Guillaume, All,
 
 On 2024-09-05 11:48 +0200, Guillaume GC. Chaye spake thusly:
-> We need to compile systemd with -Defi=true flag to mount automatically efivarfs in /sys/firmware/efi/efivars
+> Some project like efitools requires host version of this package to build properly.
 
-Please, wrap your commitlogs to 72 char-wide lines.
+Please wrap your commit logs t o72-char wide lines.
 
-> Signed-off-by: Guillaume GC. Chaye <guillaume.chaye@zeetim.com>
-> ---
->  package/systemd/Config.in  | 3 +++
->  package/systemd/systemd.mk | 7 ++++++-
->  2 files changed, 9 insertions(+), 1 deletion(-)
-> 
-> diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-> index 345f08590e..d1ca6e7f85 100644
-> --- a/package/systemd/Config.in
-> +++ b/package/systemd/Config.in
-> @@ -161,6 +161,9 @@ config BR2_PACKAGE_SYSTEMD_BOOT_EFI_ARCH
->  	default "x64"   if BR2_x86_64
->  	depends on BR2_PACKAGE_SYSTEMD_BOOT
->  
-> +config BR2_PACKAGE_SYSTEMD_EFI
-> +	bool "enable EFI support"
+As is, this change will never be tested, because we have nothing in the
+Buildroot tree that depends on host-perl-file-slurp. 
 
-With this, when the user enables BR2_PACKAGE_SYSTEMD_BOOT but does not
-enable BR2_PACKAGE_SYSTEMD_EFI, then -Defi=true is still passed, and
-systemd still has EFI support. This is misleading, because the user sees
-"enale EFI support" disabled.
+We ciurrently do not have efitools packaged in Buildroot. Are you
+planning to do so? If so, then please include this change into a series
+that adds efitools.
 
-But see below..
-
->  config BR2_PACKAGE_SYSTEMD_JOURNAL_REMOTE
->  	bool "enable journal remote tools"
->  	select BR2_PACKAGE_LIBCURL
-> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
-> index 5dca8681bc..7b3eabbd0d 100644
-> --- a/package/systemd/systemd.mk
-> +++ b/package/systemd/systemd.mk
-> @@ -660,7 +660,12 @@ define SYSTEMD_INSTALL_BOOT_FILES
->  endef
->  
->  else
-> -SYSTEMD_CONF_OPTS += -Defi=false -Dbootloader=disabled
-> +SYSTEMD_CONF_OPTS += -Dbootloader=disabled
-> +ifeq ($(BR2_PACKAGE_SYSTEMD_EFI),y)
-> +SYSTEMD_CONF_OPTS += -Defi=true
-> +else
-> +SYSTEMD_CONF_OPTS += -Defi=false
-> +endif
->  endif # BR2_PACKAGE_SYSTEMD_BOOT == y
-
-The -Defi option should be moved outside the bootloader conditional
-block altogether, and BR2_PACKAGE_SYSTEMD_BOOT should select
-BR2_PACKAGE_SYSTEMD_EFI.
+Also, I don't think there is a relation between this patch, and the
+folowing one about systemd, so don't send tem as a series.
 
 Regards,
 Yann E. MORIN.
 
->  SYSTEMD_FALLBACK_HOSTNAME = $(call qstrip,$(BR2_TARGET_GENERIC_HOSTNAME))
+> Signed-off-by: Guillaume GC. Chaye <guillaume.chaye@zeetim.com>
+> ---
+>  package/perl-file-slurp/perl-file-slurp.mk | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/perl-file-slurp/perl-file-slurp.mk b/package/perl-file-slurp/perl-file-slurp.mk
+> index 0d4ab94034..7cada58070 100644
+> --- a/package/perl-file-slurp/perl-file-slurp.mk
+> +++ b/package/perl-file-slurp/perl-file-slurp.mk
+> @@ -12,3 +12,4 @@ PERL_FILE_SLURP_LICENSE_FILES = README.md
+>  PERL_FILE_SLURP_DISTNAME = File-Slurp
+>  
+>  $(eval $(perl-package))
+> +$(eval $(host-perl-package))
 > -- 
 > 2.39.2
 > 
