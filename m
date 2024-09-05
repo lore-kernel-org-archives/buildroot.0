@@ -4,50 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D25ECE7B11
-	for <buildroot@archiver.kernel.org>; Fri,  6 Sep 2024 20:08:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BF74CE6FE46
+	for <buildroot@archiver.kernel.org>; Fri,  6 Sep 2024 20:08:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A368084C77;
-	Fri,  6 Sep 2024 20:08:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 154A984C82;
+	Fri,  6 Sep 2024 20:08:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YzIChu5qBOgG; Fri,  6 Sep 2024 20:08:16 +0000 (UTC)
+ id P60BNLkXN4vM; Fri,  6 Sep 2024 20:08:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 733AE84C74
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CF62784C84
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 733AE84C74;
-	Fri,  6 Sep 2024 20:08:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CF62784C84;
+	Fri,  6 Sep 2024 20:08:19 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E46731BF37F
- for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 20:00:15 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2906B1BF980
+ for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 20:00:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 16AB2408C5
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2C179409EE
  for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 19:59:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uxB27mlZPR1U for <buildroot@lists.busybox.net>;
- Fri,  6 Sep 2024 19:59:02 +0000 (UTC)
+ id FpiVf3Jm7Eaq for <buildroot@lists.busybox.net>;
+ Fri,  6 Sep 2024 19:59:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 60CD640BC3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7712D40C5B
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 60CD640BC3
- for <buildroot@buildroot.org>; Fri,  6 Sep 2024 19:59:00 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7712D40C5B
+ for <buildroot@buildroot.org>; Fri,  6 Sep 2024 19:59:01 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5D02883F98; Fri,  6 Sep 2024 19:59:00 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id 74D78828EF; Fri,  6 Sep 2024 19:59:01 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 4 Sep 2024 00:28:54 +0200
+Date: Thu, 5 Sep 2024 22:18:01 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2b560082ba31d67ca1b0e463ec9918c3c4392ba9
-X-Git-Newrev: 31bcb608f520cdf0e940c10f71de4353f3a54acb
+X-Git-Oldrev: d6559e0f58b9962a82df0db009a622ffc4b8db1c
+X-Git-Newrev: 5bd8ab48c12b583cb35c323955a41c567d5449eb
 X-Patchwork-Hint: ignore
-Message-Id: <20240906195900.5D02883F98@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/erlang-fast-yaml: bump version to
- 1.0.37
+Message-Id: <20240906195901.74D78828EF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/flutter-packages: bump version to
+ 71e827e7df6833e6942873361f189adcb041d7f1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,44 +58,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=31bcb608f520cdf0e940c10f71de4353f3a54acb
+commit: https://git.buildroot.net/buildroot/commit/?id=5bd8ab48c12b583cb35c323955a41c567d5449eb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Johan Oudinet <johan.oudinet@gmail.com>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/erlang-fast-yaml/erlang-fast-yaml.hash | 2 +-
- package/erlang-fast-yaml/erlang-fast-yaml.mk   | 2 +-
+ package/flutter-packages/flutter-packages.hash | 2 +-
+ package/flutter-packages/flutter-packages.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/erlang-fast-yaml/erlang-fast-yaml.hash b/package/erlang-fast-yaml/erlang-fast-yaml.hash
-index da2ccf13c9..863781725d 100644
---- a/package/erlang-fast-yaml/erlang-fast-yaml.hash
-+++ b/package/erlang-fast-yaml/erlang-fast-yaml.hash
+diff --git a/package/flutter-packages/flutter-packages.hash b/package/flutter-packages/flutter-packages.hash
+index 1fbe601396..b51eefbe80 100644
+--- a/package/flutter-packages/flutter-packages.hash
++++ b/package/flutter-packages/flutter-packages.hash
 @@ -1,3 +1,3 @@
  # Locally calculated
--sha256  6794470ef35fb3985c4e9aa0ed8d3a0b44e7a5c7bf4c5a1efbeca42060db6806  erlang-fast-yaml-1.0.36.tar.gz
-+sha256  a8d632d97282cfdf54a0172df59d8641f37de690dd886d0b2e4ef0d4ff876077  erlang-fast-yaml-1.0.37.tar.gz
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.txt
-diff --git a/package/erlang-fast-yaml/erlang-fast-yaml.mk b/package/erlang-fast-yaml/erlang-fast-yaml.mk
-index 861706b547..675dba0839 100644
---- a/package/erlang-fast-yaml/erlang-fast-yaml.mk
-+++ b/package/erlang-fast-yaml/erlang-fast-yaml.mk
+-sha256  388ec45142ddfab711aa82958c82657b8c2238deb6c131cec94a5a993ba4c760  flutter-packages-8af79fbca12699248e96b50b4705da74396cd6a3.tar.gz
++sha256  9de635d61d9efc0fd42762c1814086ead28ea6a372a6f8a99ee97060a3323fb3  flutter-packages-71e827e7df6833e6942873361f189adcb041d7f1.tar.gz
+ sha256  89519eca6f7b9529b35bdddd623a58c3af06a88c458dbd6531ddb4675acf75a9  LICENSE
+diff --git a/package/flutter-packages/flutter-packages.mk b/package/flutter-packages/flutter-packages.mk
+index 1a1913043b..407dd31a0f 100644
+--- a/package/flutter-packages/flutter-packages.mk
++++ b/package/flutter-packages/flutter-packages.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ERLANG_FAST_YAML_VERSION = 1.0.36
-+ERLANG_FAST_YAML_VERSION = 1.0.37
- ERLANG_FAST_YAML_SITE = $(call github,processone,fast_yaml,$(ERLANG_FAST_YAML_VERSION))
- ERLANG_FAST_YAML_LICENSE = Apache-2.0
- ERLANG_FAST_YAML_LICENSE_FILES = LICENSE.txt
+-FLUTTER_PACKAGES_VERSION = 8af79fbca12699248e96b50b4705da74396cd6a3
++FLUTTER_PACKAGES_VERSION = 71e827e7df6833e6942873361f189adcb041d7f1
+ FLUTTER_PACKAGES_SITE = $(call github,flutter,packages,$(FLUTTER_PACKAGES_VERSION))
+ FLUTTER_PACKAGES_LICENSE = BSD-3-Clause
+ FLUTTER_PACKAGES_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
