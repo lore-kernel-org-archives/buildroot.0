@@ -4,49 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D9E3CD5BB8
-	for <buildroot@archiver.kernel.org>; Thu,  5 Sep 2024 19:46:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0B395CE7A8E
+	for <buildroot@archiver.kernel.org>; Thu,  5 Sep 2024 19:46:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 377B140361;
-	Thu,  5 Sep 2024 19:46:39 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A091540361;
+	Thu,  5 Sep 2024 19:46:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4O8qyRIy7s3S; Thu,  5 Sep 2024 19:46:38 +0000 (UTC)
+ id Nl_Cjyruvlk0; Thu,  5 Sep 2024 19:46:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F37AF40391
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B78D040EA3
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id F37AF40391;
-	Thu,  5 Sep 2024 19:46:37 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 2B0F31BF423
- for <buildroot@lists.busybox.net>; Thu,  5 Sep 2024 19:46:36 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B78D040EA3;
+	Thu,  5 Sep 2024 19:46:43 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 77D941BF423
+ for <buildroot@lists.busybox.net>; Thu,  5 Sep 2024 19:46:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 18D34406F7
- for <buildroot@lists.busybox.net>; Thu,  5 Sep 2024 19:46:36 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 43C7E81467
+ for <buildroot@lists.busybox.net>; Thu,  5 Sep 2024 19:46:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HA7MwamLRBew for <buildroot@lists.busybox.net>;
- Thu,  5 Sep 2024 19:46:35 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9pt-WlYfDebG for <buildroot@lists.busybox.net>;
+ Thu,  5 Sep 2024 19:46:41 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.196;
+ helo=relay4-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 05BA1406E4
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 05BA1406E4
- for <buildroot@buildroot.org>; Thu,  5 Sep 2024 19:46:35 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E308086E0E; Thu,  5 Sep 2024 19:46:34 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 5 Sep 2024 21:46:03 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: c5f342af1e0e9fbad71a7a45cc17dfcdbc6eb16b
-X-Git-Newrev: c4a0df9ad2d1ec0a27bdfcf3cdb3e093ba5b7b70
-X-Patchwork-Hint: ignore
-Message-Id: <20240905194634.E308086E0E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/python-sentry-sdk:
- bump to version 2.13.0
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 48EDA8129D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 48EDA8129D
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 48EDA8129D
+ for <buildroot@buildroot.org>; Thu,  5 Sep 2024 19:46:39 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 2F9B7E0003;
+ Thu,  5 Sep 2024 19:46:37 +0000 (UTC)
+Date: Thu, 5 Sep 2024 21:46:36 +0200
+To: James Hilliard <james.hilliard1@gmail.com>
+Message-ID: <20240905214636.06d7b10a@windsurf>
+In-Reply-To: <20240905051925.3337643-1-james.hilliard1@gmail.com>
+References: <20240905051925.3337643-1-james.hilliard1@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1725565597;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=bZ3Ys88D9oxdyBa40aU620FGV/lp8L40UA735V3X7QY=;
+ b=KBmqpwmpCuxZcBoDXWPXbmKDEcMUZunPDhCwzzMqEtOTeh9wc3EValjjPYbZMqN6qcQABm
+ CBQ7IlZ4+HrynM9xssi48QV3C9YKCZVGHC2MLuFSj8HbhksKijqGyaBevtYtEqdijhDi9B
+ 1oSRgyUc7Yy2iQh2RMDmuSEXuRF26fQSfFf6fH+RUJYd6uzOFjAfRPf5valkW44c77aGpU
+ jqY+a4lI358vPqf+sJOXv2FkE+G8C2hdpKRG+9rRSgu3m11DSHdBfREWnnVB8H61qsvP+V
+ GvJ5Ah0WBGxIPYKSPT96xvXWm34IFNJkNodebTqlIiNv5Z/SxuX4qEZzk+J0Uw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=KBmqpwmp
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-sentry-sdk: bump to
+ version 2.13.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,50 +83,29 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Joseph Kogut <joseph.kogut@gmail.com>, Asaf Kahlon <asafka7@gmail.com>,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c4a0df9ad2d1ec0a27bdfcf3cdb3e093ba5b7b70
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On Wed,  4 Sep 2024 23:19:25 -0600
+James Hilliard <james.hilliard1@gmail.com> wrote:
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/python-sentry-sdk/python-sentry-sdk.hash | 4 ++--
- package/python-sentry-sdk/python-sentry-sdk.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>  package/python-sentry-sdk/python-sentry-sdk.hash | 4 ++--
+>  package/python-sentry-sdk/python-sentry-sdk.mk   | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-sentry-sdk/python-sentry-sdk.hash b/package/python-sentry-sdk/python-sentry-sdk.hash
-index 6060b6cab7..2c1bb6c698 100644
---- a/package/python-sentry-sdk/python-sentry-sdk.hash
-+++ b/package/python-sentry-sdk/python-sentry-sdk.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/sentry-sdk/json
--md5  98621433d1f8565f1f00576d47be30ce  sentry_sdk-2.7.1.tar.gz
--sha256  25006c7e68b75aaa5e6b9c6a420ece22e8d7daec4b7a906ffd3a8607b67c037b  sentry_sdk-2.7.1.tar.gz
-+md5  d56d6bf0acd0bd0663b420199c9afc29  sentry_sdk-2.13.0.tar.gz
-+sha256  8d4a576f7a98eb2fdb40e13106e41f330e5c79d72a68be1316e7852cf4995260  sentry_sdk-2.13.0.tar.gz
- # Locally computed sha256 checksums
- sha256  6d7ec62dc20e8b92cb88b89fb3b55ee8576505f3e1afa57952548f6eea5d008e  LICENSE
-diff --git a/package/python-sentry-sdk/python-sentry-sdk.mk b/package/python-sentry-sdk/python-sentry-sdk.mk
-index 50ca854330..dcf2b2c420 100644
---- a/package/python-sentry-sdk/python-sentry-sdk.mk
-+++ b/package/python-sentry-sdk/python-sentry-sdk.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_SENTRY_SDK_VERSION = 2.7.1
-+PYTHON_SENTRY_SDK_VERSION = 2.13.0
- PYTHON_SENTRY_SDK_SOURCE = sentry_sdk-$(PYTHON_SENTRY_SDK_VERSION).tar.gz
--PYTHON_SENTRY_SDK_SITE = https://files.pythonhosted.org/packages/b8/63/310d89868a0dab17f6d7c1f35eba9c304dd06c2a17d0d26905738763b614
-+PYTHON_SENTRY_SDK_SITE = https://files.pythonhosted.org/packages/bb/41/97f673384dae5ed81cc2a568cc5c28e76deee85f8ba50def862e86150a5a
- PYTHON_SENTRY_SDK_SETUP_TYPE = setuptools
- PYTHON_SENTRY_SDK_LICENSE = MIT
- PYTHON_SENTRY_SDK_LICENSE_FILES = LICENSE
+Applied to next, thanks.
+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
