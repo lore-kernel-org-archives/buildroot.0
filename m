@@ -4,72 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08E14CE7A8C
-	for <buildroot@archiver.kernel.org>; Thu,  5 Sep 2024 19:40:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CE23ACD5BB8
+	for <buildroot@archiver.kernel.org>; Thu,  5 Sep 2024 19:42:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BE65140EB0;
-	Thu,  5 Sep 2024 19:40:45 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9630E40175;
+	Thu,  5 Sep 2024 19:42:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WdNWIWq8YT2K; Thu,  5 Sep 2024 19:40:44 +0000 (UTC)
+ id vO10frHAszGj; Thu,  5 Sep 2024 19:42:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0230C40E7F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5CD9440361
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0230C40E7F;
-	Thu,  5 Sep 2024 19:40:44 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5CD9440361;
+	Thu,  5 Sep 2024 19:42:23 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id BCD531BF423
- for <buildroot@lists.busybox.net>; Thu,  5 Sep 2024 19:40:38 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A49841BF423
+ for <buildroot@lists.busybox.net>; Thu,  5 Sep 2024 19:42:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id AA8B660AD2
- for <buildroot@lists.busybox.net>; Thu,  5 Sep 2024 19:40:38 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 924BC60AD5
+ for <buildroot@lists.busybox.net>; Thu,  5 Sep 2024 19:42:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zAth2llzisAU for <buildroot@lists.busybox.net>;
- Thu,  5 Sep 2024 19:40:38 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.194;
- helo=relay2-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id U6hZO0xPodZA for <buildroot@lists.busybox.net>;
+ Thu,  5 Sep 2024 19:42:20 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 8DF0560AAE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8DF0560AAE
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8DF0560AAE
- for <buildroot@buildroot.org>; Thu,  5 Sep 2024 19:40:37 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id F2A0940004;
- Thu,  5 Sep 2024 19:40:35 +0000 (UTC)
-Date: Thu, 5 Sep 2024 21:40:35 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Message-ID: <20240905214035.0fe7cc26@windsurf>
-In-Reply-To: <20240904203801.2825242-1-bernd@kuhls.net>
-References: <20240904203801.2825242-1-bernd@kuhls.net>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1725565236;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=v3bcKJIeYLfz02Y352Eosfpy4C+5a0CjnGjFQf33WYI=;
- b=Il/UOxuAJ4KO4pE9a6hYXldAq0OHaDghKLMLQl8MvA+WGQSSj8+mJO3qaxfKArWJwb+ntO
- sSogg0wq2x7jmRXm8IlXx6OuKBfPIoqHaZeGq5r3xRPj9hhXtoL7zoYX4+MxPdDb5a0JTq
- HgWk1dhnf4NmXSL5GiYQH98+mmmFAC1RG1iDQaw+U1fwH/U35g1MDTxsHZQrRYsxcH3bK5
- R8b8W5Zp05KpIhPCKEvaCLSZhe2zw1AU9x0dafKK/dCmQWlvNqKmyE1+fI9AfZPWPNgRq/
- gmw2RHuKfBjoAaN98c1tvQszfvUYT8poWSXqg8dYza/uuhRQzQLt2dGn01+wAA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Il/UOxuA
-Subject: Re: [Buildroot] [PATCH 1/1] {linux,
- linux-headers}: bump 4.19.x / 5.{4, 10, 15}.x / 6.{1, 6, 10}.x series
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C6DDF60AAE
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id C6DDF60AAE
+ for <buildroot@buildroot.org>; Thu,  5 Sep 2024 19:42:20 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id B24C98694B; Thu,  5 Sep 2024 19:42:20 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Thu, 5 Sep 2024 21:41:57 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: 8cf677f42864b6862be34645a7e4863c3112f6ab
+X-Git-Newrev: 97d2040a30616cd34835bdcf85a1ee8b73574e48
+X-Patchwork-Hint: ignore
+Message-Id: <20240905194220.B24C98694B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] configs/imx6ulpico: update
+ U-Boot and kernel
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,29 +60,68 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed,  4 Sep 2024 22:38:01 +0200
-Bernd Kuhls <bernd@kuhls.net> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=97d2040a30616cd34835bdcf85a1ee8b73574e48
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-> ---
->  linux/Config.in                      |  2 +-
->  linux/linux.hash                     | 14 +++++++-------
->  package/linux-headers/Config.in.host | 14 +++++++-------
->  3 files changed, 15 insertions(+), 15 deletions(-)
+Update to U-Boot 2024.07 and kernel 6.6.48 versions.
 
-Applied to master, thanks.
+The default U-Boot pico-imx6ul_defconfig causes the board to hang in SPL.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Fix it by chaging it to the more specific U-Boot
+pico-pi-imx6ul_defconfig.
+
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ configs/imx6ulpico_defconfig | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/configs/imx6ulpico_defconfig b/configs/imx6ulpico_defconfig
+index e406d9938b..a77eac5c58 100644
+--- a/configs/imx6ulpico_defconfig
++++ b/configs/imx6ulpico_defconfig
+@@ -3,8 +3,8 @@ BR2_arm=y
+ BR2_cortex_a7=y
+ BR2_ARM_FPU_NEON_VFPV4=y
+ 
+-# Linux headers same as kernel, a 5.15 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_15=y
++# Linux headers same as kernel, a 6.6 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
+ 
+ # system
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc5"
+@@ -15,10 +15,10 @@ BR2_ROOTFS_OVERLAY="board/technexion/imx6ulpico/rootfs_overlay"
+ # kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.15.11"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.48"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx6ul-pico-pi imx6ul-pico-hobbit imx6ul-pico-dwarf"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="nxp/imx/imx6ul-pico-pi nxp/imx/imx6ul-pico-hobbit nxp/imx/imx6ul-pico-dwarf"
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+ 
+@@ -38,9 +38,9 @@ BR2_PACKAGE_WPA_SUPPLICANT_PASSPHRASE=y
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="SPL"
+-BR2_TARGET_UBOOT_BOARDNAME="pico-imx6ul"
++BR2_TARGET_UBOOT_BOARDNAME="pico-pi-imx6ul"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.10"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.07"
+ BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+ BR2_TARGET_UBOOT_FORMAT_DTB_IMG=y
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
