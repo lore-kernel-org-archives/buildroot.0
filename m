@@ -4,71 +4,70 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8FC4ACD5BCB
-	for <buildroot@archiver.kernel.org>; Thu,  5 Sep 2024 15:45:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E61A6CD5BD4
+	for <buildroot@archiver.kernel.org>; Thu,  5 Sep 2024 16:24:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 45F1F60A67;
-	Thu,  5 Sep 2024 15:45:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 67A1760A82;
+	Thu,  5 Sep 2024 16:24:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Bg3L78B65--5; Thu,  5 Sep 2024 15:45:39 +0000 (UTC)
+ id 2Dr-LKoRAscW; Thu,  5 Sep 2024 16:24:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 50D2660A71
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6010260A87
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 50D2660A71;
-	Thu,  5 Sep 2024 15:45:39 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B42611BF3D4
- for <buildroot@lists.busybox.net>; Thu,  5 Sep 2024 15:45:38 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6010260A87;
+	Thu,  5 Sep 2024 16:24:37 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 416A71BF39D
+ for <buildroot@lists.busybox.net>; Thu,  5 Sep 2024 16:24:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id AE1534067D
- for <buildroot@lists.busybox.net>; Thu,  5 Sep 2024 15:45:38 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5471E801CC
+ for <buildroot@lists.busybox.net>; Thu,  5 Sep 2024 16:24:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dP7-ILET8Zwx for <buildroot@lists.busybox.net>;
- Thu,  5 Sep 2024 15:45:38 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=163.172.193.142;
- helo=mail0.insia.net; envelope-from=guillaume.chaye@zeetim.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7mOYY99RlDKN for <buildroot@lists.busybox.net>;
+ Thu,  5 Sep 2024 16:24:33 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=188.165.44.123;
+ helo=mail1.insia.net; envelope-from=guillaume.chaye@zeetim.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 882A040679
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 882A040679
-Received: from mail0.insia.net (mail0.insia.net [163.172.193.142])
- by smtp4.osuosl.org (Postfix) with ESMTP id 882A040679
- for <buildroot@buildroot.org>; Thu,  5 Sep 2024 15:45:37 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 84CD380426
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 84CD380426
+Received: from mail1.insia.net (mail1.insia.net [188.165.44.123])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 84CD380426
+ for <buildroot@buildroot.org>; Thu,  5 Sep 2024 16:24:33 +0000 (UTC)
 Received: from smtp.insia.net (unknown [192.168.1.24])
- by mail0.insia.net (Postfix) with ESMTP id 9E6DA1FBA8;
- Thu,  5 Sep 2024 17:45:31 +0200 (CEST)
+ by mail1.insia.net (Postfix) with ESMTP id 0FC5A3F9C3;
+ Thu,  5 Sep 2024 18:24:26 +0200 (CEST)
 Received: from sb-dev-build.insia.net. (gw-servers.insia.net [192.168.1.1])
- by smtp.insia.net (Postfix) with ESMTP id 354055F497;
- Thu,  5 Sep 2024 17:42:00 +0200 (CEST)
+ by smtp.insia.net (Postfix) with ESMTP id 8C1345F497;
+ Thu,  5 Sep 2024 18:20:54 +0200 (CEST)
 From: "Guillaume GC. Chaye" <guillaume.chaye@zeetim.com>
 To: buildroot@buildroot.org
-Date: Thu,  5 Sep 2024 17:45:11 +0200
-Message-Id: <20240905154511.1319010-1-guillaume.chaye@zeetim.com>
+Date: Thu,  5 Sep 2024 18:24:02 +0200
+Message-Id: <20240905162402.1320569-1-guillaume.chaye@zeetim.com>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=zeetim.com; s=mail0; t=1725551131;
+ d=zeetim.com; s=mail1; t=1725553466;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:
  content-transfer-encoding:content-transfer-encoding;
- bh=D7rt25BnKZgQlwUFix2RrIw/B3N+XapOwfOITuiT8Nw=;
- b=pjzKTop28mf+HJctZp4iMqfzUE1MKjL+fzlNb8BaVUIXkfRj+mPRopi/pQ2b8pu7FKeNaW
- 6gM1qhulOaqX4KMJQAzFZLqdpscWFWLz24dWWOLB9JGdlXbM4XyKa2v4ImyZgRVb+NcgK/
- wCFRo7/Y6b9j8L1x6qHY9556kal3VKkmoYBO4lFsyuGDlASP/XqQIxmjrpteT/4TRkHL9K
- UJBn1KR5qYJvtJPJdQQHVVQULWFN04/QBAodWhnXudliPYdHtJiGz3S7KkT0KWogaj+w4l
- DSDLvI0zrBESuIVLRGUJf5esSjBYAySZAqpEFvOPywnMRx+QvjdJENZOpbJeKA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=PVMxD48fAaGagnyLIEXwXi6xoNBnHCVgm4rYBGDWyAU=;
+ b=dkc5rQwoQ/KauwZu0T6I6/58NdbTzHyFyyUxJSTThp6xJ0NP8YFXf6r4Fjq6J7P0UlkG0t
+ /ZRAiacHV4ii7t/zyLbb9BAhlpUlW3aiH5PPSwOmbSxeDa2X3Zv8V2ibtdv7BZHCojk9GT
+ x6wTtnKDhhFHOuo1MpNM4QBmHwVtW5tLiuQTmLCyo+z6STa9tZNZXIzG1hmLES3NOwOixM
+ y1SuGi49Sooj4/Bn6VSVeboF7HAf1hmxcWAgo5bv4Hc4AzmvcakVjQNEbQwpFUbQIN7yog
+ 5ZcKd1gYYvLPiqCH1wsKZ2eL/p9nemELmuv1mI7t6ta0h1EhcH9EJ2x8uTiijQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=zeetim.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=zeetim.com header.i=@zeetim.com header.a=rsa-sha256
- header.s=mail0 header.b=pjzKTop2
-Subject: [Buildroot] [PATCH 4/4] package/alsa-plugins: add support for
- pulseaudio
+ header.s=mail1 header.b=dkc5rQwo
+Subject: [Buildroot] [PATCH 5/5] package/librsvg: fix svg with gdk-pixbuf
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,44 +79,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Charles Hardin <ckhardin@gmail.com>,
- "Guillaume GC. Chaye" <guillaume.chaye@zeetim.com>
+Cc: "Guillaume GC. Chaye" <guillaume.chaye@zeetim.com>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-build package with pulseaudio support only if package is selected in menuconfig
-
 Signed-off-by: Guillaume GC. Chaye <guillaume.chaye@zeetim.com>
 ---
- package/alsa-plugins/alsa-plugins.mk | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ package/librsvg/librsvg.mk | 19 ++++++++++++++++++-
+ 1 file changed, 18 insertions(+), 1 deletion(-)
 
-diff --git a/package/alsa-plugins/alsa-plugins.mk b/package/alsa-plugins/alsa-plugins.mk
-index 25ecc589fc..deeca838b1 100644
---- a/package/alsa-plugins/alsa-plugins.mk
-+++ b/package/alsa-plugins/alsa-plugins.mk
-@@ -14,12 +14,18 @@ ALSA_PLUGINS_DEPENDENCIES = host-pkgconf alsa-lib
- ALSA_PLUGINS_CONF_OPTS = \
- 	--disable-jack \
- 	--disable-usbstream \
--	--disable-pulseaudio \
- 	--disable-libav \
- 	--disable-maemo-plugin \
- 	--disable-maemo-resource-manager \
- 	--with-speex=no
+diff --git a/package/librsvg/librsvg.mk b/package/librsvg/librsvg.mk
+index 81a6667817..0187218a98 100644
+--- a/package/librsvg/librsvg.mk
++++ b/package/librsvg/librsvg.mk
+@@ -12,7 +12,7 @@ LIBRSVG_INSTALL_STAGING = YES
+ LIBRSVG_CONF_ENV = \
+ 	LIBS=$(TARGET_NLS_LIBS) \
+ 	RUST_TARGET=$(RUSTC_TARGET_NAME)
+-LIBRSVG_CONF_OPTS = --disable-pixbuf-loader --disable-tools
++LIBRSVG_CONF_OPTS = --disable-tools
+ HOST_LIBRSVG_CONF_OPTS = --enable-introspection=no
+ LIBRSVG_DEPENDENCIES = cairo host-gdk-pixbuf gdk-pixbuf host-rustc libglib2 libxml2 pango \
+ 	$(TARGET_NLS_DEPENDENCIES)
+@@ -30,5 +30,22 @@ else
+ LIBRSVG_CONF_OPTS += --disable-introspection
+ endif
  
-+ifeq ($(BR2_PACKAGE_PULSEAUDIO),y)
-+ALSA_PLUGINS_DEPENDENCIES += pulseaudio
-+ALSA_PLUGINS_CONF_OPTS += --enable-pulseaudio
-+else
-+ALSA_PLUGINS_CONF_OPTS += --disable-pulseaudio
++# gdk-pixbuf requires the loaders.cache file populated to work properly
++# Rather than doing so at runtime, since the fs can be read-only, do so
++# here after building and installing to target.
++# And since the cache file will contain relative host directory names we
++# need to prepend them with /usr/.
++ifeq ($(BR2_STATIC_LIBS),)
++define LIBRSVG_PIXBUF_UPDATE_CACHE
++	GDK_PIXBUF_MODULEDIR=$(HOST_DIR)/lib/gdk-pixbuf-2.0/2.10.0/loaders \
++		$(HOST_DIR)/bin/gdk-pixbuf-query-loaders \
++		> $(TARGET_DIR)/usr/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache
++	$(SED) 's,^"lib,"/usr/lib,g' \
++		$(TARGET_DIR)/usr/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache
++endef
++LIBRSVG_POST_INSTALL_TARGET_HOOKS += LIBRSVG_PIXBUF_UPDATE_CACHE
 +endif
 +
- ifeq ($(BR2_PACKAGE_ALSA_UTILS),y)
- ALSA_PLUGINS_DEPENDENCIES += alsa-utils
- endif
++
+ $(eval $(autotools-package))
+ $(eval $(host-autotools-package))
 -- 
 2.39.2
 
