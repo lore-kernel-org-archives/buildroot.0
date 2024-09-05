@@ -4,48 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C817ECE7A9C
-	for <buildroot@archiver.kernel.org>; Thu,  5 Sep 2024 20:55:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4AA4BCE7A9C
+	for <buildroot@archiver.kernel.org>; Thu,  5 Sep 2024 20:56:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6E2D8400AE;
-	Thu,  5 Sep 2024 20:55:42 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0BD9E400AE;
+	Thu,  5 Sep 2024 20:56:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PnSCkEDsrFlH; Thu,  5 Sep 2024 20:55:41 +0000 (UTC)
+ id itaitTqd0d0D; Thu,  5 Sep 2024 20:56:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 24B5F40391
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BCE8040391
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 24B5F40391;
-	Thu,  5 Sep 2024 20:55:41 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0B1681BF41B
- for <buildroot@lists.busybox.net>; Thu,  5 Sep 2024 20:55:40 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id BCE8040391;
+	Thu,  5 Sep 2024 20:56:19 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 778CC1BF41B
+ for <buildroot@lists.busybox.net>; Thu,  5 Sep 2024 20:56:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E85E940391
- for <buildroot@lists.busybox.net>; Thu,  5 Sep 2024 20:55:39 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 71485406DD
+ for <buildroot@lists.busybox.net>; Thu,  5 Sep 2024 20:56:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id F9pKKG0oNaPn for <buildroot@lists.busybox.net>;
- Thu,  5 Sep 2024 20:55:38 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id CScYIhzJgCUs for <buildroot@lists.busybox.net>;
+ Thu,  5 Sep 2024 20:56:17 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.196;
+ helo=relay4-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CE636400AE
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id CE636400AE
- for <buildroot@buildroot.org>; Thu,  5 Sep 2024 20:55:38 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C5F6E86E58; Thu,  5 Sep 2024 20:55:38 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 5 Sep 2024 22:49:53 +0200
-X-Git-Refname: refs/heads/next
-X-Git-Oldrev: e3a88abeb72b3a4d1137fb1ad5dc6e4ddae119e9
-X-Git-Newrev: e3f464778945d3e7ed31c50d07de02fb2cd85464
-X-Patchwork-Hint: ignore
-Message-Id: <20240905205538.C5F6E86E58@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/next] package/libsoup3: bump to 3.6.0
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 1AA004060B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1AA004060B
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1AA004060B
+ for <buildroot@buildroot.org>; Thu,  5 Sep 2024 20:56:16 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 67491E0002;
+ Thu,  5 Sep 2024 20:56:12 +0000 (UTC)
+Date: Thu, 5 Sep 2024 22:56:11 +0200
+To: Thomas Devoogdt <thomas@devoogdt.com>
+Message-ID: <20240905225611.2c8f0855@windsurf>
+In-Reply-To: <20240829131232.2132854-1-thomas@devoogdt.com>
+References: <20240829131232.2132854-1-thomas@devoogdt.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1725569774;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=3Yk/w/GEhhq8wD+CV/9Vyi6JT82Q8rYWVeBmC/y+Z7E=;
+ b=gpi0W3TIM6/cawk0yJzDiuoHG5kpmSYEWFnuYi7p5HrCuevNtocZSTyQAjahHRZoEjMIaD
+ 93b765NjQIjPAEbUYy3E/Hulse8OBGU4+CFJ091nv8Vrja2Hbx6jF3dBys+5H6gq1iql+F
+ cpzNZbyO0wFSkZDUnSqVecqOoVyz1s7pYWHkTaelweLiG+u6gi2xkzMqFzbmE2ZWI4C9Lf
+ 24mb/UfddXPKdqxQzMz8cJOpyxakw9VQFiLLdaClNdSsz71aRKNQOep2RDNmisQgO0H34t
+ OfwNnkSDcxdCiO+voO0Zfm6DXUxwY4eAbT2DX9HmoQBw9vw8Jvm3fUkUvOA+ww==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=gpi0W3TI
+Subject: Re: [Buildroot] [PATCH v1] package/libsoup3: bump to 3.6.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,53 +82,35 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Adrian Perez de Castro <aperez@igalia.com>,
+ Thomas Devoogdt <thomas.devoogdt@barco.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e3f464778945d3e7ed31c50d07de02fb2cd85464
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
+On Thu, 29 Aug 2024 15:12:28 +0200
+Thomas Devoogdt <thomas@devoogdt.com> wrote:
 
-News:
- - https://download.gnome.org/sources/libsoup/3.5/libsoup-3.5.2.news
- - https://download.gnome.org/sources/libsoup/3.6/libsoup-3.6.0.news
+> From: Thomas Devoogdt <thomas.devoogdt@barco.com>
+> 
+> News:
+>  - https://download.gnome.org/sources/libsoup/3.5/libsoup-3.5.2.news
+>  - https://download.gnome.org/sources/libsoup/3.6/libsoup-3.6.0.news
+> 
+> Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
+> ---
+>  package/libsoup3/libsoup3.hash | 4 ++--
+>  package/libsoup3/libsoup3.mk   | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
-Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
-Acked-by: Adrian Perez de Castro <aperez@igalia.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/libsoup3/libsoup3.hash | 4 ++--
- package/libsoup3/libsoup3.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Applied to next, thanks.
 
-diff --git a/package/libsoup3/libsoup3.hash b/package/libsoup3/libsoup3.hash
-index 139771a11e..37ecd2db84 100644
---- a/package/libsoup3/libsoup3.hash
-+++ b/package/libsoup3/libsoup3.hash
-@@ -1,4 +1,4 @@
--# From https://download.gnome.org/sources/libsoup/3.5/libsoup-3.5.1.sha256sum
--sha256  c1d7cfb89832d35c271f37d544f2cfe21fa60ae9faad4a7ac58996ae4031f7ba  libsoup-3.5.1.tar.xz
-+# From https://download.gnome.org/sources/libsoup/3.6/libsoup-3.6.0.sha256sum
-+sha256  62959f791e8e8442f8c13cedac8c4919d78f9120d5bb5301be67a5e53318b4a3  libsoup-3.6.0.tar.xz
- # Locally calculated
- sha256  b7993225104d90ddd8024fd838faf300bea5e83d91203eab98e29512acebd69c  COPYING
-diff --git a/package/libsoup3/libsoup3.mk b/package/libsoup3/libsoup3.mk
-index bc3ae4d0cb..f8a7e26159 100644
---- a/package/libsoup3/libsoup3.mk
-+++ b/package/libsoup3/libsoup3.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--LIBSOUP3_VERSION_MAJOR = 3.5
--LIBSOUP3_VERSION = $(LIBSOUP3_VERSION_MAJOR).1
-+LIBSOUP3_VERSION_MAJOR = 3.6
-+LIBSOUP3_VERSION = $(LIBSOUP3_VERSION_MAJOR).0
- LIBSOUP3_SOURCE = libsoup-$(LIBSOUP3_VERSION).tar.xz
- LIBSOUP3_SITE = https://download.gnome.org/sources/libsoup/$(LIBSOUP3_VERSION_MAJOR)
- LIBSOUP3_LICENSE = LGPL-2.0+
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
