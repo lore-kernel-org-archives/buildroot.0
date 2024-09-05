@@ -4,71 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C4BE2CE7A89
-	for <buildroot@archiver.kernel.org>; Thu,  5 Sep 2024 19:32:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 027B8CE7A89
+	for <buildroot@archiver.kernel.org>; Thu,  5 Sep 2024 19:35:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 76A3F40114;
-	Thu,  5 Sep 2024 19:32:17 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A955640114;
+	Thu,  5 Sep 2024 19:35:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qF93eMyNbApp; Thu,  5 Sep 2024 19:32:16 +0000 (UTC)
+ id eZZzJpo6Vv6m; Thu,  5 Sep 2024 19:35:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2228E40175
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 53F9640391
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2228E40175;
-	Thu,  5 Sep 2024 19:32:16 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 566B31BF423
- for <buildroot@lists.busybox.net>; Thu,  5 Sep 2024 19:32:14 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 53F9640391;
+	Thu,  5 Sep 2024 19:35:30 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 8AF1F1BF423
+ for <buildroot@lists.busybox.net>; Thu,  5 Sep 2024 19:35:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4394981AF3
- for <buildroot@lists.busybox.net>; Thu,  5 Sep 2024 19:32:14 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 78AD160AD2
+ for <buildroot@lists.busybox.net>; Thu,  5 Sep 2024 19:35:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iFck2FnZm9nf for <buildroot@lists.busybox.net>;
- Thu,  5 Sep 2024 19:32:13 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.195;
- helo=relay3-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xz4o35uJMAlC for <buildroot@lists.busybox.net>;
+ Thu,  5 Sep 2024 19:35:27 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.193;
+ helo=relay1-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 2009C814B3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2009C814B3
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2009C814B3
- for <buildroot@buildroot.org>; Thu,  5 Sep 2024 19:32:12 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id EC29160003;
- Thu,  5 Sep 2024 19:32:09 +0000 (UTC)
-Date: Thu, 5 Sep 2024 21:32:08 +0200
-To: "Guillaume GC. Chaye" <guillaume.chaye@zeetim.com>
-Message-ID: <20240905213208.390416dc@windsurf>
-In-Reply-To: <20240905162402.1320569-1-guillaume.chaye@zeetim.com>
-References: <20240905162402.1320569-1-guillaume.chaye@zeetim.com>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org AE87B60AAE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AE87B60AAE
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id AE87B60AAE
+ for <buildroot@buildroot.org>; Thu,  5 Sep 2024 19:35:26 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id B1714240004;
+ Thu,  5 Sep 2024 19:35:23 +0000 (UTC)
+Date: Thu, 5 Sep 2024 21:35:22 +0200
+To: "Yann E. MORIN" <yann.morin.1998@free.fr>
+Message-ID: <20240905213522.2a476624@windsurf>
+In-Reply-To: <20240904205354.504964-1-yann.morin.1998@free.fr>
+References: <20240904205354.504964-1-yann.morin.1998@free.fr>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1725564730;
+ d=bootlin.com; s=gm1; t=1725564924;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=KUE6sTofGPycKYv4Z2nUD/3kH9e+dJf6YDkpIFbE4TE=;
- b=nnpuG3z6qAZ46DUF9zNIiaPjWw3rWIal23kIaWa5EcWKIAVZqlnhW2srYKZ43yMVMDCw0u
- YAlZDKYlErStMDVN6CBy58/4PRulu65WtC7ysSDOMgX6xENxogC8iNG+6uAGJpPFIaWBVs
- wpa+3UrntX5zprtNMT7LyF7FEyEaOZCSES3tK3Xm85KrtF19LGdDubOSxxC41SIuO8hFum
- G/po+bSG8/RosiVqPzBCWA9RUPz3dbZgqSCF2C5Q1+B0BZaEGncYz4VxtpLTFGrr/8E2cq
- 5PVC807xsRQyIsTvhA3JUq4gHmNqT+9gMXgjQKzcHQabog7HbeVZQGjEfjvayg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=nT+N4dv2InbVggM9FWaWXkkCCJr95HyNYmPnFcjQdfs=;
+ b=LV56+MxTwSE6xxSTT6I/lbYcdhaknWBOAfULV8n+Nwco6V9QWq8Jvm+LhYphhEdI6mdrTQ
+ RlTGgVDy0z41kRAqQQV+KYakLxBDK4MzQsM9121ftZ5k0JZn6fsuGaPbgAsBnBJ1WFgxPN
+ yIXsZ7IMmB5Eu3l8GMI9fGJU/M++aOnTcz8jA4AdRjghPq66n6xRNMDAo1q69BRHHZQyBo
+ BG9yow8onGgVurPZ3Gn9seHffvbwUMMb0fUMGK7c1kSBOVnBz2MeZFv+3UYVM7Ki1WDy8S
+ kq/9e/AZfMc8G+ICFHv+lNy0bnlaKQxEzluaZSL7lH7b60vCBg/jXeOQkcdz0g==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=nnpuG3z6
-Subject: Re: [Buildroot] [PATCH 5/5] package/librsvg: fix svg with gdk-pixbuf
+ header.s=gm1 header.b=LV56+MxT
+Subject: Re: [Buildroot] [PATCH v3] docs/manual: use space-separated list
+ for BR2_EXTERNAL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,70 +83,54 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+Cc: "Fiona Klute \(WIWA\)" <fiona.klute@gmx.de>,
+ Brandon Maier <Brandon.Maier@collins.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+On Wed,  4 Sep 2024 22:53:54 +0200
+"Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
 
-On Thu,  5 Sep 2024 18:24:02 +0200
-"Guillaume GC. Chaye" <guillaume.chaye@zeetim.com> wrote:
+> Specifying a list of br2-external trees is poorly documented, and the
+> only example uses a colon to separate the br2-external paths.
+> 
+> Adding the support for colon-separated list is the biggest mistake that
+> was made when introducing support for multiple br2-external [0]. Indeed,
+> both space and colon can be used to separate entries in the list, and it
+> is also possible to mix the two. However, internally, the list is stored
+> as a space-separated list, and all the code will split on spaces.
+> 
+> So, using colons is odd.
+> 
+> Change the documentation to only mention using a space-separated list.
+> 
+> Of course, for backward compatibility, we keep the code as-is to accept
+> a colon-separated list, but we just do not advertise it.
+> 
+> [0] in 20cd49738781 core: add support for multiple br2-external trees
+> 
+> Reported-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
+> Reported-by: Brandon Maier <Brandon.Maier@collins.com>
+> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+> Cc: Arnout Vandecappelle (Essensium/Mind) <arnout@mind.be>
+> 
+> ---
+> Note: support/scripts/br2-external has shellcheck issues; this commit
+> does not try to address those on purpose, as it only adds a comment.
 
-> Signed-off-by: Guillaume GC. Chaye <guillaume.chaye@zeetim.com>
-
-Thanks for the patch. However, it really, really needs a non-empty
-commit log with some explanation.
-
-> diff --git a/package/librsvg/librsvg.mk b/package/librsvg/librsvg.mk
-> index 81a6667817..0187218a98 100644
-> --- a/package/librsvg/librsvg.mk
-> +++ b/package/librsvg/librsvg.mk
-> @@ -12,7 +12,7 @@ LIBRSVG_INSTALL_STAGING = YES
->  LIBRSVG_CONF_ENV = \
->  	LIBS=$(TARGET_NLS_LIBS) \
->  	RUST_TARGET=$(RUSTC_TARGET_NAME)
-> -LIBRSVG_CONF_OPTS = --disable-pixbuf-loader --disable-tools
-> +LIBRSVG_CONF_OPTS = --disable-tools
-
-You're removing --disable-pixbuf-loader, so probably it means that
-pixbuf-loader support is important... so we probably need
---enable-pixbuf-loader, no?
-
->  HOST_LIBRSVG_CONF_OPTS = --enable-introspection=no
->  LIBRSVG_DEPENDENCIES = cairo host-gdk-pixbuf gdk-pixbuf host-rustc libglib2 libxml2 pango \
->  	$(TARGET_NLS_DEPENDENCIES)
-> @@ -30,5 +30,22 @@ else
->  LIBRSVG_CONF_OPTS += --disable-introspection
->  endif
->  
-> +# gdk-pixbuf requires the loaders.cache file populated to work properly
-
-gdk-pixbuf? I guess this is due to a copy/paste.
-
-> +# Rather than doing so at runtime, since the fs can be read-only, do so
-> +# here after building and installing to target.
-> +# And since the cache file will contain relative host directory names we
-> +# need to prepend them with /usr/.
-> +ifeq ($(BR2_STATIC_LIBS),)
-> +define LIBRSVG_PIXBUF_UPDATE_CACHE
-> +	GDK_PIXBUF_MODULEDIR=$(HOST_DIR)/lib/gdk-pixbuf-2.0/2.10.0/loaders \
-> +		$(HOST_DIR)/bin/gdk-pixbuf-query-loaders \
-> +		> $(TARGET_DIR)/usr/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache
-> +	$(SED) 's,^"lib,"/usr/lib,g' \
-> +		$(TARGET_DIR)/usr/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache
-> +endef
-> +LIBRSVG_POST_INSTALL_TARGET_HOOKS += LIBRSVG_PIXBUF_UPDATE_CACHE
-
-Why do we need this a second time, when it's already done in
-package/gdk-pixbuf/gdk-pixbuf.mk ? Also the 2.10.0 hardcoded here is
-probably wrong? Maybe it's already wrong in gdk-pixbuf.mk?
+I'm afraid I'm personally finding that this not going in the right
+direction. I didn't follow the discussions on v1 and v2, but on my
+side, I would very, very, very much prefer to use colon as a separator
+in the BR2_EXTERNAL variable. The PATH variable is like this, it works
+well, and I believe the principle of least surprise should encourage us
+to follow that and use colon as a separator.
 
 Thomas
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
 https://bootlin.com
 _______________________________________________
 buildroot mailing list
