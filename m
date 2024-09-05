@@ -4,50 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79193E6FE46
-	for <buildroot@archiver.kernel.org>; Fri,  6 Sep 2024 20:08:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B36BCE7B11
+	for <buildroot@archiver.kernel.org>; Fri,  6 Sep 2024 20:08:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 837C984C04;
-	Fri,  6 Sep 2024 20:07:58 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id E057784C25;
+	Fri,  6 Sep 2024 20:08:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id e9fJitaHggq5; Fri,  6 Sep 2024 20:07:57 +0000 (UTC)
+ id SNXqmIUM41Im; Fri,  6 Sep 2024 20:08:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EBDF484784
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CB4B481A50
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EBDF484784;
-	Fri,  6 Sep 2024 20:07:56 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1ADF41BF990
- for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 20:00:09 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id CB4B481A50;
+	Fri,  6 Sep 2024 20:08:00 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 1F7361BF980
+ for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 20:00:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id EBD4E6111E
- for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 19:59:04 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id A11B640731
+ for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 19:59:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SSK7TDzgMlEK for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id AWCtGECgnvPU for <buildroot@lists.busybox.net>;
  Fri,  6 Sep 2024 19:59:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 089EB6078B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 119F340C3F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 089EB6078B
- for <buildroot@buildroot.org>; Fri,  6 Sep 2024 19:58:58 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 119F340C3F
+ for <buildroot@buildroot.org>; Fri,  6 Sep 2024 19:59:01 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 05ADC86B7A; Fri,  6 Sep 2024 19:58:58 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id 0E4AA83F98; Fri,  6 Sep 2024 19:59:01 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 31 Aug 2024 00:21:53 +0200
+Date: Thu, 5 Sep 2024 21:37:02 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b6d023bdc2bb8585e779c3a1a7fac75b93bc7d41
-X-Git-Newrev: 37801767f68c05500f1d4495b5baac0e7340f7a9
+X-Git-Oldrev: 7534115416388525dc6a35f2b54232abd8aa0fd3
+X-Git-Newrev: 8cf677f42864b6862be34645a7e4863c3112f6ab
 X-Patchwork-Hint: ignore
-Message-Id: <20240906195858.05ADC86B7A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/gobject-introspection: use objdump
- instead of prelink-cross
+Message-Id: <20240906195901.0E4AA83F98@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] configs/imx7dpico: update U-Boot and kernel
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,127 +57,62 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=37801767f68c05500f1d4495b5baac0e7340f7a9
+commit: https://git.buildroot.net/buildroot/commit/?id=8cf677f42864b6862be34645a7e4863c3112f6ab
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-This commit switches the gobject-introspection package from using
-prelink-cross to simply using "objdump -p". This basically implements
-the same change as was done in OpenEmbedded commit:
+Update to U-Boot 2024.07 and kernel 6.6.48 versions.
 
-  https://git.openembedded.org/openembedded-core/commit/?id=767e0880d4d729e659e859dd99c1cdb084b8ba51
-
-In particular, this allows to get rid of the architecture dependency
-of prelink-cross, which wasn't currently encoded, but that was
-actually causing failures such as:
-
-/home/autobuild/autobuild/instance-17/output-1/host/sbin/prelink-rtld: error while loading shared libraries: /lib/libc.so.6: cannot handle TLS data
-
-It also paves the way for removing host-prelink-cross entirely, as the
-only remaining user of it now is dracut.
-
-The test tests.package.test_python_gobject.TestPythonPy3Gobject (which
-uses gobject-introspection) has been tested to run fine after this
-commit.
-
-Fixes:
-
-  http://autobuild.buildroot.net/results/7efa6a18f543752dfe33577f74c20bda3f8b1e65/
-
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Tested-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- .checkpackageignore                                |  1 -
- ...gnore-error-return-codes-from-ldd-wrapper.patch | 31 ----------------------
- .../g-ir-scanner-lddwrapper.in                     |  3 +--
- .../gobject-introspection/gobject-introspection.mk |  3 ++-
- 4 files changed, 3 insertions(+), 35 deletions(-)
+ configs/imx7dpico_defconfig | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 4017438f5e..e86fd390e9 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -576,7 +576,6 @@ package/go/go-src/0001-build.go-explicit-option-for-crosscompilation.patch lib_p
- package/gob2/0001-dont-include-from-prefix.patch lib_patch.Upstream
- package/gobject-introspection/0001-disable-tests.patch lib_patch.Upstream
- package/gobject-introspection/0002-Add-rpath-links-to-ccompiler.patch lib_patch.Upstream
--package/gobject-introspection/0003-giscanner-ignore-error-return-codes-from-ldd-wrapper.patch lib_patch.Upstream
- package/gpsd/S50gpsd Shellcheck lib_sysv.Indent lib_sysv.Variables
- package/gptfdisk/0001-gptcurses-partially-revert-Tweaks-for-building-on-th.patch lib_patch.Upstream
- package/graphite2/0001-don-t-install-a-libtool-file-with-static-library.patch lib_patch.Upstream
-diff --git a/package/gobject-introspection/0003-giscanner-ignore-error-return-codes-from-ldd-wrapper.patch b/package/gobject-introspection/0003-giscanner-ignore-error-return-codes-from-ldd-wrapper.patch
-deleted file mode 100644
-index f1ea518954..0000000000
---- a/package/gobject-introspection/0003-giscanner-ignore-error-return-codes-from-ldd-wrapper.patch
-+++ /dev/null
-@@ -1,31 +0,0 @@
--From e0fc4a2a5161a36483ddc518be9bb14390f11b19 Mon Sep 17 00:00:00 2001
--From: Alexander Kanavin <alex.kanavin@gmail.com>
--Date: Wed, 5 Sep 2018 16:46:52 +0200
--Subject: [PATCH] giscanner: ignore error return codes from ldd-wrapper
--
--prelink-rtld, which we use instead of ldd returns 127 when it can't find a library.
--It is not an error per se, but it breaks subprocess.check_output().
--
--Upstream-Status: Inappropriate [oe-core specific]
--Signed-off-by: Alexander Kanavin <alex.kanavin@gmail.com>
--Signed-off-by: Adam Duskett <aduskett@gmail.com>
-----
-- giscanner/shlibs.py | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/giscanner/shlibs.py b/giscanner/shlibs.py
--index 9f8ab5df..7a1a72fe 100644
----- a/giscanner/shlibs.py
--+++ b/giscanner/shlibs.py
--@@ -103,7 +103,7 @@ def _resolve_non_libtool(options, binary, libraries):
--             args.extend(['otool', '-L', binary.args[0]])
--         else:
--             args.extend(['ldd', binary.args[0]])
---        output = subprocess.check_output(args)
--+        output = subprocess.run(args, check=False, stdout=subprocess.PIPE).stdout
--         if isinstance(output, bytes):
--             output = output.decode("utf-8", "replace")
-- 
---- 
--2.25.1
--
-diff --git a/package/gobject-introspection/g-ir-scanner-lddwrapper.in b/package/gobject-introspection/g-ir-scanner-lddwrapper.in
-index 2f09bca77a..7f3db67da4 100644
---- a/package/gobject-introspection/g-ir-scanner-lddwrapper.in
-+++ b/package/gobject-introspection/g-ir-scanner-lddwrapper.in
-@@ -1,3 +1,2 @@
- #!/usr/bin/env sh
--
--"${HOST_DIR}"/sbin/prelink-rtld --root="$(dirname "$0")/../../" "$@"
-+@TARGET_OBJDUMP@ -p "$@"
-diff --git a/package/gobject-introspection/gobject-introspection.mk b/package/gobject-introspection/gobject-introspection.mk
-index f0c7fcd2ca..ad72af22a2 100644
---- a/package/gobject-introspection/gobject-introspection.mk
-+++ b/package/gobject-introspection/gobject-introspection.mk
-@@ -15,7 +15,6 @@ GOBJECT_INTROSPECTION_LICENSE_FILES = COPYING.LGPL COPYING.GPL giscanner/scanner
- GOBJECT_INTROSPECTION_DEPENDENCIES = \
- 	host-autoconf-archive \
- 	host-gobject-introspection \
--	host-prelink-cross \
- 	host-qemu \
- 	libffi \
- 	libglib2 \
-@@ -78,6 +77,8 @@ define GOBJECT_INTROSPECTION_INSTALL_PRE_WRAPPERS
+diff --git a/configs/imx7dpico_defconfig b/configs/imx7dpico_defconfig
+index c6ea04b683..b0a4b3dd12 100644
+--- a/configs/imx7dpico_defconfig
++++ b/configs/imx7dpico_defconfig
+@@ -3,8 +3,8 @@ BR2_arm=y
+ BR2_cortex_a7=y
+ BR2_ARM_FPU_NEON_VFPV4=y
  
- 	$(INSTALL) -D -m 755 $(GOBJECT_INTROSPECTION_PKGDIR)/g-ir-scanner-lddwrapper.in \
- 		$(STAGING_DIR)/usr/bin/g-ir-scanner-lddwrapper
-+	$(SED) "s%@TARGET_OBJDUMP@%$(TARGET_OBJDUMP)%" \
-+		$(STAGING_DIR)/usr/bin/g-ir-scanner-lddwrapper
+-# Linux headers same as kernel, a 5.13 series
+-BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_5_13=y
++# Linux headers same as kernel, a 6.6 series
++BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_6=y
  
- 	$(INSTALL) -D -m 755 $(GOBJECT_INTROSPECTION_PKGDIR)/g-ir-scanner-qemuwrapper.in \
- 		$(STAGING_DIR)/usr/bin/g-ir-scanner-qemuwrapper
+ # system
+ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc4"
+@@ -12,10 +12,10 @@ BR2_TARGET_GENERIC_GETTY_PORT="ttymxc4"
+ # kernel
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="5.13"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.48"
+ BR2_LINUX_KERNEL_DEFCONFIG="imx_v6_v7"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+-BR2_LINUX_KERNEL_INTREE_DTS_NAME="imx7d-pico-pi"
++BR2_LINUX_KERNEL_INTREE_DTS_NAME="nxp/imx/imx7d-pico-pi"
+ BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
+ BR2_LINUX_KERNEL_INSTALL_TARGET=y
+ 
+@@ -25,7 +25,7 @@ BR2_TARGET_UBOOT_SPL=y
+ BR2_TARGET_UBOOT_SPL_NAME="SPL"
+ BR2_TARGET_UBOOT_BOARDNAME="pico-pi-imx7d"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2021.07"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.07"
+ BR2_TARGET_UBOOT_FORMAT_DTB_IMG=y
+ 
+ # wifi firmware for brcm43439
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
