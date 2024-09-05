@@ -4,72 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0B395CE7A8E
-	for <buildroot@archiver.kernel.org>; Thu,  5 Sep 2024 19:46:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E68C6CE7A91
+	for <buildroot@archiver.kernel.org>; Thu,  5 Sep 2024 19:56:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A091540361;
-	Thu,  5 Sep 2024 19:46:46 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B33A4400E4;
+	Thu,  5 Sep 2024 19:56:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Nl_Cjyruvlk0; Thu,  5 Sep 2024 19:46:45 +0000 (UTC)
+ id 0H6YAWT9JnRF; Thu,  5 Sep 2024 19:56:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B78D040EA3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6EA33400FC
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B78D040EA3;
-	Thu,  5 Sep 2024 19:46:43 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 77D941BF423
- for <buildroot@lists.busybox.net>; Thu,  5 Sep 2024 19:46:42 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6EA33400FC;
+	Thu,  5 Sep 2024 19:56:38 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1D97F1BF423
+ for <buildroot@lists.busybox.net>; Thu,  5 Sep 2024 19:56:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 43C7E81467
- for <buildroot@lists.busybox.net>; Thu,  5 Sep 2024 19:46:42 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 18013400FC
+ for <buildroot@lists.busybox.net>; Thu,  5 Sep 2024 19:56:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9pt-WlYfDebG for <buildroot@lists.busybox.net>;
- Thu,  5 Sep 2024 19:46:41 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.196;
- helo=relay4-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id dr64lZcj4auX for <buildroot@lists.busybox.net>;
+ Thu,  5 Sep 2024 19:56:36 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
+ helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 48EDA8129D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 48EDA8129D
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [217.70.183.196])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 48EDA8129D
- for <buildroot@buildroot.org>; Thu,  5 Sep 2024 19:46:39 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 2F9B7E0003;
- Thu,  5 Sep 2024 19:46:37 +0000 (UTC)
-Date: Thu, 5 Sep 2024 21:46:36 +0200
-To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <20240905214636.06d7b10a@windsurf>
-In-Reply-To: <20240905051925.3337643-1-james.hilliard1@gmail.com>
-References: <20240905051925.3337643-1-james.hilliard1@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org B33DC400E4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B33DC400E4
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B33DC400E4
+ for <buildroot@buildroot.org>; Thu,  5 Sep 2024 19:56:35 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 0016D13F8A9;
+ Thu,  5 Sep 2024 21:56:26 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Thu, 05 Sep 2024 21:56:26 +0200
+Date: Thu, 5 Sep 2024 21:56:26 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Message-ID: <ZtoM6k0EaDsZa4mV@landeda>
+References: <20240904205354.504964-1-yann.morin.1998@free.fr>
+ <20240905213522.2a476624@windsurf>
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1725565597;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=bZ3Ys88D9oxdyBa40aU620FGV/lp8L40UA735V3X7QY=;
- b=KBmqpwmpCuxZcBoDXWPXbmKDEcMUZunPDhCwzzMqEtOTeh9wc3EValjjPYbZMqN6qcQABm
- CBQ7IlZ4+HrynM9xssi48QV3C9YKCZVGHC2MLuFSj8HbhksKijqGyaBevtYtEqdijhDi9B
- 1oSRgyUc7Yy2iQh2RMDmuSEXuRF26fQSfFf6fH+RUJYd6uzOFjAfRPf5valkW44c77aGpU
- jqY+a4lI358vPqf+sJOXv2FkE+G8C2hdpKRG+9rRSgu3m11DSHdBfREWnnVB8H61qsvP+V
- GvJ5Ah0WBGxIPYKSPT96xvXWm34IFNJkNodebTqlIiNv5Z/SxuX4qEZzk+J0Uw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+Content-Disposition: inline
+In-Reply-To: <20240905213522.2a476624@windsurf>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1725566192;
+ bh=tcGqM92uw/rLi01E6Te95+sarHr+txVgfJqSGq2HtHg=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=EEmqNIbB4G83WUQO7mFqaGrv+xJGj8cP5Ldn+0lcKeWI697PGAPqDHLcay0/4L62r
+ dyFfnRcvjsUAnAjMttknX6mGBB088UP3sP0WtNhyOQrv1km15hnxB2qe93+2aYFUrR
+ Iv9y0IsEDcgCiT74QnzdaWMvU37BVoVPshyNX8qqDXCCB4Cek51r7ofyduap55QVJP
+ avjx9sY+ZOagA0DhjoP6vhRc+Gaf/ZirxjjSKSHcIAeLG+8CUDVgsMAtczVOQqTx1h
+ ymun0l6cxCHedVGyXnKs+OW2eoXZ8DgP1cvP+L3euds/9x4poCk7/CqmorOt2sW54g
+ JGq1jUf2opMSQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=KBmqpwmp
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-sentry-sdk: bump to
- version 2.13.0
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=EEmqNIbB
+Subject: Re: [Buildroot] [PATCH v3] docs/manual: use space-separated list
+ for BR2_EXTERNAL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,31 +83,62 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Joseph Kogut <joseph.kogut@gmail.com>, Asaf Kahlon <asafka7@gmail.com>,
- buildroot@buildroot.org
+Cc: "Fiona Klute \(WIWA\)" <fiona.klute@gmx.de>,
+ Brandon Maier <Brandon.Maier@collins.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed,  4 Sep 2024 23:19:25 -0600
-James Hilliard <james.hilliard1@gmail.com> wrote:
+Thomas, All,
 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
->  package/python-sentry-sdk/python-sentry-sdk.hash | 4 ++--
->  package/python-sentry-sdk/python-sentry-sdk.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
++Arnout whom I forgot to Cc in my patch.
 
-Applied to next, thanks.
+On 2024-09-05 21:35 +0200, Thomas Petazzoni spake thusly:
+> On Wed,  4 Sep 2024 22:53:54 +0200
+> "Yann E. MORIN" <yann.morin.1998@free.fr> wrote:
+> > Change the documentation to only mention using a space-separated list.
+[--SNIP--]
+> I'm afraid I'm personally finding that this not going in the right
+> direction. I didn't follow the discussions on v1 and v2, but on my
+> side, I would very, very, very much prefer to use colon as a separator
+> in the BR2_EXTERNAL variable. The PATH variable is like this, it works
+> well, and I believe the principle of least surprise should encourage us
+> to follow that and use colon as a separator.
 
-Thomas
+The thing is that all the other lists are space-separated:
+    BR2_ROOTFS_DEVICE_TABLE
+    BR2_ROOTFS_STATIC_DEVICE_TABLE
+    BR2_TARGET_TZ_ZONELIST
+    BR2_ROOTFS_USERS_TABLES
+    BR2_ROOTFS_OVERLAY
+    BR2_ROOTFS_PRE_BUILD_SCRIPT
+    BR2_ROOTFS_POST_BUILD_SCRIPT
+    BR2_ROOTFS_POST_FAKEROOT_SCRIPT
+    BR2_ROOTFS_POST_IMAGE_SCRIPT
+
+The list goes on and on, notably the options to specify the lists of
+.config fragments for the kernel, uclibc, uboot etc...
+
+In fact, BR2_EXTERNAL is the odd one; it's the only one were we expect
+a colon-separated list. Also, lists in Makefile are necessarily space-
+separated, we can't handle paths with spaces in them anyway. I think we
+should just accept that space is the splitting character for lists.
+
+(v1 had too many typoes that I was ashamed enough to quickly respin v2,
+which added the comment in the script, as explained in the post-commit
+changelogs ;-) )
+
+Regards,
+Yann E. MORIN.
+
 -- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
