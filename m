@@ -4,72 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AA500CE7A8E
-	for <buildroot@archiver.kernel.org>; Thu,  5 Sep 2024 19:45:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D9E3CD5BB8
+	for <buildroot@archiver.kernel.org>; Thu,  5 Sep 2024 19:46:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7180640361;
-	Thu,  5 Sep 2024 19:45:58 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 377B140361;
+	Thu,  5 Sep 2024 19:46:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EOgLKSodCpOf; Thu,  5 Sep 2024 19:45:57 +0000 (UTC)
+ id 4O8qyRIy7s3S; Thu,  5 Sep 2024 19:46:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3A2A840391
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F37AF40391
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3A2A840391;
-	Thu,  5 Sep 2024 19:45:57 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B51761BF423
- for <buildroot@lists.busybox.net>; Thu,  5 Sep 2024 19:45:54 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id F37AF40391;
+	Thu,  5 Sep 2024 19:46:37 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 2B0F31BF423
+ for <buildroot@lists.busybox.net>; Thu,  5 Sep 2024 19:46:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B008B60AAE
- for <buildroot@lists.busybox.net>; Thu,  5 Sep 2024 19:45:54 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 18D34406F7
+ for <buildroot@lists.busybox.net>; Thu,  5 Sep 2024 19:46:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ro8XXvyVH7e7 for <buildroot@lists.busybox.net>;
- Thu,  5 Sep 2024 19:45:54 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.193;
- helo=relay1-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id HA7MwamLRBew for <buildroot@lists.busybox.net>;
+ Thu,  5 Sep 2024 19:46:35 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A8CFC6062D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A8CFC6062D
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [217.70.183.193])
- by smtp3.osuosl.org (Postfix) with ESMTPS id A8CFC6062D
- for <buildroot@buildroot.org>; Thu,  5 Sep 2024 19:45:53 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id E9517240005;
- Thu,  5 Sep 2024 19:45:51 +0000 (UTC)
-Date: Thu, 5 Sep 2024 21:45:51 +0200
-To: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
-Message-ID: <20240905214551.06532f87@windsurf>
-In-Reply-To: <20240904154417.168646-1-buildroot@bubu1.eu>
-References: <20240904154417.168646-1-buildroot@bubu1.eu>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1725565552;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=VUtqv8iCkqTgqhUOFmKbJUgGSP/K4RxNwknQ+TqzVCw=;
- b=Ah65aS2Lm+pIKO35jVCMsqVyGaoTG9Ci/lUNIJEwwbSycFzIGcbCeHRpiJHf5nn7JIsdt4
- 8RI9Alm85d34iz6ux5+rma8+iL7R+hJnZkDVBJ03LaOMGoNSx5A5HrO5+xBotNJfe1vp/N
- dcCchfu2uaqZRD4fTuzbFnHXtgz3Ef6+mDLUpByuEpbR8+JcZuNB/f2H5DX8f8OWLjF5YL
- WiuDvm4LMsP+IhwseOEY0WY91CcRRChT9ZWQJqPkjUpoJpBOb1U5ZW0RdwDjRPRI4SRsUe
- vDMgPaspnkpR86CpomEmldFEBVCgjSfSYuL2K4g9Fl33Ngu8I2xM1U20dfkEOg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Ah65aS2L
-Subject: Re: [Buildroot] [PATCH] package/python-django: security bump to
- 5.1.1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 05BA1406E4
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 05BA1406E4
+ for <buildroot@buildroot.org>; Thu,  5 Sep 2024 19:46:35 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id E308086E0E; Thu,  5 Sep 2024 19:46:34 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Thu, 5 Sep 2024 21:46:03 +0200
+X-Git-Refname: refs/heads/next
+X-Git-Oldrev: c5f342af1e0e9fbad71a7a45cc17dfcdbc6eb16b
+X-Git-Newrev: c4a0df9ad2d1ec0a27bdfcf3cdb3e093ba5b7b70
+X-Patchwork-Hint: ignore
+Message-Id: <20240905194634.E308086E0E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/next] package/python-sentry-sdk:
+ bump to version 2.13.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,42 +60,50 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Marcus Hoffmann <buildroot@bubu1.eu>, Asaf Kahlon <asafka7@gmail.com>,
- Oli Vogt <oli.vogt.pub01@gmail.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed,  4 Sep 2024 17:44:16 +0200
-Marcus Hoffmann via buildroot <buildroot@buildroot.org> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=c4a0df9ad2d1ec0a27bdfcf3cdb3e093ba5b7b70
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/next
 
-> Fixes:
-> * CVE-2024-45230
-> * CVE-2024-45231
-> 
-> Further changes: https://docs.djangoproject.com/en/5.1/releases/5.1.1/
-> 
-> Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
-> ---
->  package/python-django/python-django.hash | 4 ++--
->  package/python-django/python-django.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python-sentry-sdk/python-sentry-sdk.hash | 4 ++--
+ package/python-sentry-sdk/python-sentry-sdk.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-I've applied to next, because next had 5.1.0.
-
-For master, which has 5.0.8, we need a bump to 5.0.9, which fixes those
-security issues I believe (and 2024.02.x should also upgrade to 5.0.9).
-Could you send a patch against master bumping to 5.0.9 ?
-
-Thanks a lot!
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/python-sentry-sdk/python-sentry-sdk.hash b/package/python-sentry-sdk/python-sentry-sdk.hash
+index 6060b6cab7..2c1bb6c698 100644
+--- a/package/python-sentry-sdk/python-sentry-sdk.hash
++++ b/package/python-sentry-sdk/python-sentry-sdk.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/sentry-sdk/json
+-md5  98621433d1f8565f1f00576d47be30ce  sentry_sdk-2.7.1.tar.gz
+-sha256  25006c7e68b75aaa5e6b9c6a420ece22e8d7daec4b7a906ffd3a8607b67c037b  sentry_sdk-2.7.1.tar.gz
++md5  d56d6bf0acd0bd0663b420199c9afc29  sentry_sdk-2.13.0.tar.gz
++sha256  8d4a576f7a98eb2fdb40e13106e41f330e5c79d72a68be1316e7852cf4995260  sentry_sdk-2.13.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  6d7ec62dc20e8b92cb88b89fb3b55ee8576505f3e1afa57952548f6eea5d008e  LICENSE
+diff --git a/package/python-sentry-sdk/python-sentry-sdk.mk b/package/python-sentry-sdk/python-sentry-sdk.mk
+index 50ca854330..dcf2b2c420 100644
+--- a/package/python-sentry-sdk/python-sentry-sdk.mk
++++ b/package/python-sentry-sdk/python-sentry-sdk.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_SENTRY_SDK_VERSION = 2.7.1
++PYTHON_SENTRY_SDK_VERSION = 2.13.0
+ PYTHON_SENTRY_SDK_SOURCE = sentry_sdk-$(PYTHON_SENTRY_SDK_VERSION).tar.gz
+-PYTHON_SENTRY_SDK_SITE = https://files.pythonhosted.org/packages/b8/63/310d89868a0dab17f6d7c1f35eba9c304dd06c2a17d0d26905738763b614
++PYTHON_SENTRY_SDK_SITE = https://files.pythonhosted.org/packages/bb/41/97f673384dae5ed81cc2a568cc5c28e76deee85f8ba50def862e86150a5a
+ PYTHON_SENTRY_SDK_SETUP_TYPE = setuptools
+ PYTHON_SENTRY_SDK_LICENSE = MIT
+ PYTHON_SENTRY_SDK_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
