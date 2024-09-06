@@ -4,91 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E728E6FE33
-	for <buildroot@archiver.kernel.org>; Fri,  6 Sep 2024 17:12:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6EBF4E6FE34
+	for <buildroot@archiver.kernel.org>; Fri,  6 Sep 2024 17:15:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 460E881233;
-	Fri,  6 Sep 2024 17:12:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2AB0B818A2;
+	Fri,  6 Sep 2024 17:15:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sy29iZQ82zpD; Fri,  6 Sep 2024 17:11:59 +0000 (UTC)
+ id Q5q0pSkjUmR2; Fri,  6 Sep 2024 17:15:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4E973813A6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1430F818DC
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4E973813A6;
-	Fri,  6 Sep 2024 17:11:59 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 4A4B41BF38A
- for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 17:11:57 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1430F818DC;
+	Fri,  6 Sep 2024 17:15:22 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 3E7B01BF38A
+ for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 17:15:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3818B813A6
- for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 17:11:57 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2AB8E408DD
+ for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 17:15:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ksZIewdrImuQ for <buildroot@lists.busybox.net>;
- Fri,  6 Sep 2024 17:11:56 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4lK1kl366IIQ for <buildroot@lists.busybox.net>;
+ Fri,  6 Sep 2024 17:15:18 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::d35; helo=mail-io1-xd35.google.com;
- envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 32B3981233
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 32B3981233
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com
- [IPv6:2607:f8b0:4864:20::d35])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 32B3981233
- for <buildroot@buildroot.org>; Fri,  6 Sep 2024 17:11:55 +0000 (UTC)
-Received: by mail-io1-xd35.google.com with SMTP id
- ca18e2360f4ac-82a24deca03so90479439f.0
- for <buildroot@buildroot.org>; Fri, 06 Sep 2024 10:11:55 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::329; helo=mail-wm1-x329.google.com;
+ envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 8A9A2408D9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8A9A2408D9
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
+ [IPv6:2a00:1450:4864:20::329])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 8A9A2408D9
+ for <buildroot@buildroot.org>; Fri,  6 Sep 2024 17:15:18 +0000 (UTC)
+Received: by mail-wm1-x329.google.com with SMTP id
+ 5b1f17b1804b1-42ca6ba750eso3915365e9.0
+ for <buildroot@buildroot.org>; Fri, 06 Sep 2024 10:15:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1725642714; x=1726247514;
+ d=1e100.net; s=20230601; t=1725642916; x=1726247716;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=aKwJqBDm8NqYhYIxhkDUolt5eDseScqSe9TtwPsSsdU=;
- b=khC91rGp0kR9Y8aX60Zei3BAqkCzu5Dyyf37+t38s193IMzPpK9AHG9QG4+TBHoInh
- OPbLSOvquF7j8WqNNCAdg1Pgv6Ahw5PDIriaiMf2kkTNeKf6mVOuBO0FNUExeUEifKLx
- 753bj3WCOTuokPUGTTAVFD9OQnL61eU6QJAvVWUSfs27WwJ71qhoD031TbS4B8IdbVEl
- r9kiIIfL0scXAvgFWyqNcFKtIIkfUbMnM9V6Oui/q+8PIaNlyIlrimElOXCzRhYwiTsF
- fEfoQfLYsWtShAT8xkZZhoTkW2Ao+47nFYgBmvP5Ye3HtmCLtoryZqTHdwkLJ5M9uSMd
- jgOA==
-X-Gm-Message-State: AOJu0YzuV9BBCWug3Kz1iv5dYHMJsnfAba8GkGHW59Sg/C48mXX6gmGB
- DfmIS+MK4cXVCAZeIGFd8EZGooofhCXEu0Tr3Ty8cJbAbHFO6/kffQBgjg==
-X-Google-Smtp-Source: AGHT+IHRC6Hx6owGHxv0sU1ZYhCGThXk9qPtjz502EdYzbkeozQmNMPoutXXYX4LuOpx9PRFb29xAw==
-X-Received: by 2002:a05:6602:6218:b0:82a:242d:e0c7 with SMTP id
- ca18e2360f4ac-82a961b8c5bmr388922039f.9.1725642714352; 
- Fri, 06 Sep 2024 10:11:54 -0700 (PDT)
-Received: from james-x399.localdomain (97-118-128-240.hlrn.qwest.net.
- [97.118.128.240]) by smtp.gmail.com with ESMTPSA id
- ca18e2360f4ac-82a1a2f0759sm477636639f.2.2024.09.06.10.11.53
+ bh=krC2znMnnN1smE5XhZ+TJvG9KjlJdjFEKTwK/kQvX3c=;
+ b=cSUoiSjBViOVV5MunC9FlGOAFlQc/YT7BBLBfeCJcpvnCMzPKCKajA3Miz+Wl0HV7K
+ yhtfR34Y0Ff8/OcxCuGco5cBwFQqt0uVoXDnag669yygQn4UcFwqvrM7l573g81OiWlV
+ YWNXSKuWL45Kb4lJpE6npjRUsaMwa0bOtoSJOQiT+aiVSdRag/oXvqdxN0h2kjKy19+E
+ h6gMOCUwzupuWm1HLg4W1dsBfeJ/ISNU7VPjeejWy10cnD5wnVnSlQeqgUhPaxMdYrEJ
+ /9jKS0Luc+cgG+dcXW4IAIlUJ9Lif+azWeXJgkSnMrDupAHmDddMbdhuN+7nW/3bzMwD
+ XfSA==
+X-Gm-Message-State: AOJu0YwIQImjTXoGwXAiD8cdamyqqgBooGIzgnCdm9TUX0OxHfMiaap6
+ 8jwrsfUEU0ToviLgV+VmSnB5FGz7l2fwiAd3cUcRUVP0txSWBnQ/nUzUT6P3lCnvOEbM5pqSVaz
+ 2Ll4=
+X-Google-Smtp-Source: AGHT+IHkpiAEqdQlCP67PBdWOl5HUKOG/N0PmHulr1gucgXBCDhDMQ3l3Fod2HPnIRiWWy+DmTHamw==
+X-Received: by 2002:a05:600c:1c26:b0:424:8be4:f2c with SMTP id
+ 5b1f17b1804b1-42c9f498cf8mr22422895e9.2.1725642916174; 
+ Fri, 06 Sep 2024 10:15:16 -0700 (PDT)
+Received: from dario-ThinkPad-T14s-Gen-2i.. ([2.196.43.8])
+ by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-42ca05c6fb9sm26193875e9.7.2024.09.06.10.15.15
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 06 Sep 2024 10:11:54 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
+ Fri, 06 Sep 2024 10:15:15 -0700 (PDT)
+From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Fri,  6 Sep 2024 11:11:52 -0600
-Message-Id: <20240906171152.1922026-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Date: Fri,  6 Sep 2024 19:15:02 +0200
+Message-ID: <20240906171503.3495498-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1725642714; x=1726247514; darn=buildroot.org;
+ d=amarulasolutions.com; s=google; t=1725642916; x=1726247716;
+ darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=aKwJqBDm8NqYhYIxhkDUolt5eDseScqSe9TtwPsSsdU=;
- b=Dn/NSA7nEDzJ6x+haXglMEib7x9eOhyWY5fnnaNw5UKxbl6wNjKE8LFCasENoyR/te
- T+Bc3FoFa43hTxymp7vKcaYM1Sqq5IIfwu3q0VpokrL1iB3DuCp1QJC9XwePj4BuElU0
- tG46pbbHatVQQNtGdO6p5G17vJSeKuAp8CXFbqyjwaocZtCvQpaISu5UfReVCCZsCbwg
- gvrkYRSueJixx0oaFAusBDlx0djTJRCMaf4JpGGaJgorgkNKvLJt9zBz26B5Ohi4qrV5
- afnf5YGi/Se797LaEMte9hr2yjGWvh24qU65t6de1uBYkyV6xpvrNG1iUkd+taD/XIpX
- wRew==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=krC2znMnnN1smE5XhZ+TJvG9KjlJdjFEKTwK/kQvX3c=;
+ b=ktkmIddsib632eNCLLVXbg+kqJjiqsAE3E0XDmYyCBmcIdHZFj6cCumvhh86DZiyI+
+ Y9V+kAcwbl/DTAnptDup++PHTGRYGQPaSudldr5eS4HX99JoTBakksGJx14wzxqvfzQr
+ oAvVmBdO8PdiftYjxQS9XVP2S5Rk4v56ZDHGs=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=Dn/NSA7n
-Subject: [Buildroot] [PATCH 1/1] package/python-cryptography: bump to
- version 43.0.1
+ header.from=amarulasolutions.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
+ header.a=rsa-sha256 header.s=google header.b=ktkmIdds
+Subject: [Buildroot] [PATCH v3 1/2] package/iana-assignments: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,73 +99,121 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Cc: Floris Bos <bos@je-eigen-domein.nl>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Heiko Thiery <heiko.thiery@gmail.com>,
+ Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+ linux-amarula@amarulasolutions.com, "Yann E . MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Migrate from setuptools-rust to maturin pep517 backend.
+The fixing of [1] and related code reviews [2] and [3] highlighted the
+need for a package providing a versioned PEN (Enterprise Numbers)
+registry file from IANA (Internet Assigned Numbers Authority).
+The GitHub repository from which this package originates is a mirror of
+the IANA registries periodically updated from https://www.iana.org/protocols.
 
-License hash changed due to dropping PSF license:
-https://github.com/pyca/cryptography/commit/5e6476a4c6e094926a983dcf5cbe9488c30aeb53
-
-We now need to enable chacha support when building with libopenssl.
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+[1] http://autobuild.buildroot.org/results/5ae5ee948d99679cd50d1115a7d46f4368347b4f
+[2] https://patchwork.ozlabs.org/project/buildroot/patch/20240902210055.239859-1-dario.binacchi@amarulasolutions.com
+[3] https://patchwork.ozlabs.org/project/buildroot/patch/20240904174021.2670289-1-dario.binacchi@amarulasolutions.com/
+Co-Developed-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Co-Developed-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 ---
- package/python-cryptography/Config.in                | 1 +
- package/python-cryptography/python-cryptography.hash | 4 ++--
- package/python-cryptography/python-cryptography.mk   | 9 ++++-----
- 3 files changed, 7 insertions(+), 7 deletions(-)
+  Added in v3
 
-diff --git a/package/python-cryptography/Config.in b/package/python-cryptography/Config.in
-index 213aa24fa8..d12f040656 100644
---- a/package/python-cryptography/Config.in
-+++ b/package/python-cryptography/Config.in
-@@ -2,6 +2,7 @@ config BR2_PACKAGE_PYTHON_CRYPTOGRAPHY
- 	bool "python-cryptography"
- 	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
- 	select BR2_PACKAGE_OPENSSL
-+	select BR2_PACKAGE_LIBOPENSSL_ENABLE_CHACHA if BR2_PACKAGE_LIBOPENSSL
- 	select BR2_PACKAGE_PYTHON_CFFI # runtime
- 	help
- 	  cryptography is a package designed to expose cryptographic
-diff --git a/package/python-cryptography/python-cryptography.hash b/package/python-cryptography/python-cryptography.hash
-index 5fbf69a208..5336f23257 100644
---- a/package/python-cryptography/python-cryptography.hash
-+++ b/package/python-cryptography/python-cryptography.hash
-@@ -1,6 +1,6 @@
- # Locally calculated after vendoring
--sha256  b55c6c011ba4bb803de0b557f40f1765bab9f63240e93516daaf75c3c68e6618  python-cryptography-39.0.2-cargo2.tar.gz
-+sha256  c57ae743b2adfb29a3fc005b6f39bf1378e20d10529a859b6e2e425845bff8f3  cryptography-43.0.1.tar.gz
- # Locally computed sha256 checksums
--sha256  43dad2cc752ab721cd9a9f36ece70fb53ab7713551f2d3d8694d8e8c5a06d6e2  LICENSE
-+sha256  3e0c7c091a948b82533ba98fd7cbb40432d6f1a9acbf85f5922d2f99a93ae6bb  LICENSE
- sha256  aac73b3148f6d1d7111dbca32099f68d26c644c6813ae1e4f05f6579aa2663fe  LICENSE.APACHE
- sha256  602c4c7482de6479dd2e9793cda275e5e63d773dacd1eca689232ab7008fb4fb  LICENSE.BSD
-diff --git a/package/python-cryptography/python-cryptography.mk b/package/python-cryptography/python-cryptography.mk
-index 1cbccd0d5c..2602289149 100644
---- a/package/python-cryptography/python-cryptography.mk
-+++ b/package/python-cryptography/python-cryptography.mk
-@@ -4,11 +4,10 @@
- #
- ################################################################################
+ DEVELOPERS                                     |  1 +
+ package/Config.in                              |  1 +
+ package/iana-assignments/Config.in             | 14 ++++++++++++++
+ package/iana-assignments/iana-assignments.hash |  2 ++
+ package/iana-assignments/iana-assignments.mk   | 18 ++++++++++++++++++
+ 5 files changed, 36 insertions(+)
+ create mode 100644 package/iana-assignments/Config.in
+ create mode 100644 package/iana-assignments/iana-assignments.hash
+ create mode 100644 package/iana-assignments/iana-assignments.mk
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 069965680b2b..10c8b802a9c2 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -792,6 +792,7 @@ F:	configs/imx8mn_bsh_smm_s2_pro_defconfig
+ F:	configs/stm32f769_disco_sd_defconfig
+ F:	package/armadillo/
+ F:	package/babeld/
++F:	package/iana-assignments/
+ F:	package/sscep/
+ F:	package/uuu/
  
--PYTHON_CRYPTOGRAPHY_VERSION = 39.0.2
--PYTHON_CRYPTOGRAPHY_SOURCE_PYPI = cryptography-$(PYTHON_CRYPTOGRAPHY_VERSION).tar.gz
--PYTHON_CRYPTOGRAPHY_SITE_PYPI = https://files.pythonhosted.org/packages/fa/f3/f4b8c175ea9a1de650b0085858059050b7953a93d66c97ed89b93b232996
--PYTHON_CRYPTOGRAPHY_SITE = $(PYTHON_CRYPTOGRAPHY_SITE_PYPI)/$(PYTHON_CRYPTOGRAPHY_SOURCE_PYPI)?buildroot-path=filename
--PYTHON_CRYPTOGRAPHY_SETUP_TYPE = setuptools-rust
-+PYTHON_CRYPTOGRAPHY_VERSION = 43.0.1
-+PYTHON_CRYPTOGRAPHY_SOURCE = cryptography-$(PYTHON_CRYPTOGRAPHY_VERSION).tar.gz
-+PYTHON_CRYPTOGRAPHY_SITE = https://files.pythonhosted.org/packages/de/ba/0664727028b37e249e73879348cc46d45c5c1a2a2e81e8166462953c5755
-+PYTHON_CRYPTOGRAPHY_SETUP_TYPE = maturin
- PYTHON_CRYPTOGRAPHY_LICENSE = Apache-2.0 or BSD-3-Clause
- PYTHON_CRYPTOGRAPHY_LICENSE_FILES = LICENSE LICENSE.APACHE LICENSE.BSD
- PYTHON_CRYPTOGRAPHY_CPE_ID_VENDOR = cryptography_project
+diff --git a/package/Config.in b/package/Config.in
+index f33c4780f8ef..c2f63dd9c695 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2463,6 +2463,7 @@ endif
+ 	source "package/htpdate/Config.in"
+ 	source "package/httping/Config.in"
+ 	source "package/i2pd/Config.in"
++	source "package/iana-assignments/Config.in"
+ 	source "package/ibrdtn-tools/Config.in"
+ 	source "package/ibrdtnd/Config.in"
+ 	source "package/ifenslave/Config.in"
+diff --git a/package/iana-assignments/Config.in b/package/iana-assignments/Config.in
+new file mode 100644
+index 000000000000..b7bd52abd2d1
+--- /dev/null
++++ b/package/iana-assignments/Config.in
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_IANA_ASSIGNMENTS
++	bool "IANA assignments"
++	help
++	  Mirror of the IANA registries periodically updated
++	  from https://www.iana.org/protocols.
++
++	  https://github.com/larseggert/iana-assignments
++
++if BR2_PACKAGE_IANA_ASSIGNMENTS
++
++config BR2_PACKAGE_IANA_ASSIGNMENTS_PEN_REG
++	bool "PEN (Enterprise Numbers) registry"
++
++endif
+diff --git a/package/iana-assignments/iana-assignments.hash b/package/iana-assignments/iana-assignments.hash
+new file mode 100644
+index 000000000000..c58fb61df292
+--- /dev/null
++++ b/package/iana-assignments/iana-assignments.hash
+@@ -0,0 +1,2 @@
++# Locally computed
++sha256  e7a1f8153715fa9e0f4c5d102f9271bce425a468f58a445e7c5ecdf7105fd460  iana-assignments-bf358dc8d89b7939557220b8055699b42a4133e9.tar.gz
+diff --git a/package/iana-assignments/iana-assignments.mk b/package/iana-assignments/iana-assignments.mk
+new file mode 100644
+index 000000000000..824b26d4ecf6
+--- /dev/null
++++ b/package/iana-assignments/iana-assignments.mk
+@@ -0,0 +1,18 @@
++################################################################################
++#
++# iana-assignments
++#
++################################################################################
++
++IANA_ASSIGNMENTS_VERSION = bf358dc8d89b7939557220b8055699b42a4133e9
++IANA_ASSIGNMENTS_SITE = $(call github,larseggert,iana-assignments,$(IANA_ASSIGNMENTS_VERSION))
++
++ifeq ($(BR2_PACKAGE_IANA_ASSIGNMENTS_PEN_REG),y)
++define IANA_ASSIGNMENTS_INSTALL_PEN_REG
++	$(INSTALL) -D -m 0644 $(@D)/enterprise-numbers/enterprise-numbers \
++		$(TARGET_DIR)/usr/share/misc/iana/enterprise-numbers
++endef
++IANA_ASSIGNMENTS_POST_INSTALL_TARGET_HOOKS += IANA_ASSIGNMENTS_INSTALL_PEN_REG
++endif
++
++$(eval $(generic-package))
 -- 
-2.34.1
+2.43.0
 
 _______________________________________________
 buildroot mailing list
