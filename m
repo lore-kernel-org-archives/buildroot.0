@@ -4,91 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 70156CE7B10
-	for <buildroot@archiver.kernel.org>; Fri,  6 Sep 2024 13:39:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50D74CE7B14
+	for <buildroot@archiver.kernel.org>; Fri,  6 Sep 2024 13:45:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id EC56180C9B;
-	Fri,  6 Sep 2024 13:39:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A30CD81282;
+	Fri,  6 Sep 2024 13:45:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mP29t9OPXEmW; Fri,  6 Sep 2024 13:39:41 +0000 (UTC)
+ id LJOMYXFQ0to0; Fri,  6 Sep 2024 13:45:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C2DAB80D58
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7884E812EC
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C2DAB80D58;
-	Fri,  6 Sep 2024 13:39:40 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 44D321BF341
- for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 13:39:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7884E812EC;
+	Fri,  6 Sep 2024 13:45:57 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 79DEC1BF341
+ for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 13:45:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 3EAEE40C13
- for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 13:39:39 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 654A44018D
+ for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 13:45:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YOEhbeNYUVAY for <buildroot@lists.busybox.net>;
- Fri,  6 Sep 2024 13:39:38 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4GLaOTp2RuJz for <buildroot@lists.busybox.net>;
+ Fri,  6 Sep 2024 13:45:55 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::130; helo=mail-lf1-x130.google.com;
+ client-ip=2a00:1450:4864:20::12c; helo=mail-lf1-x12c.google.com;
  envelope-from=roykollensvendsen@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org B0B5C40C0F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B0B5C40C0F
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com
- [IPv6:2a00:1450:4864:20::130])
- by smtp4.osuosl.org (Postfix) with ESMTPS id B0B5C40C0F
- for <buildroot@buildroot.org>; Fri,  6 Sep 2024 13:39:37 +0000 (UTC)
-Received: by mail-lf1-x130.google.com with SMTP id
- 2adb3069b0e04-53567b4c3f4so1969851e87.2
- for <buildroot@buildroot.org>; Fri, 06 Sep 2024 06:39:37 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org B5B584012F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B5B584012F
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com
+ [IPv6:2a00:1450:4864:20::12c])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B5B584012F
+ for <buildroot@buildroot.org>; Fri,  6 Sep 2024 13:45:54 +0000 (UTC)
+Received: by mail-lf1-x12c.google.com with SMTP id
+ 2adb3069b0e04-53654e2ed93so2170833e87.0
+ for <buildroot@buildroot.org>; Fri, 06 Sep 2024 06:45:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1725629975; x=1726234775;
+ d=1e100.net; s=20230601; t=1725630352; x=1726235152;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=3IhwyGNCCAt5+pK2VorG59gbcINYmqfTLHD4AvBRntI=;
- b=hshovfQEhjc9mYDB/lUXEt6+/axDobNLp8JlSRwgfV1FsH41eL35r9Za2drYFP3Jph
- huUmonEACgW4nVgLH5XLucVWLKiy0CuDzvjrEY1gVv8pL3IVlO1hskez9miktWMlJnVk
- CBKQHobImK7rbIqXJqDssnJzZD9nYB1WG7X5d/8xGXYn/zGbLnEl3CEWUE0voxhApkkb
- 4TJBAuljefsVaZg0Wr9CFf6xcIrwr8m4RtYWUxSVgWUAGUtLmHUe5mOZAkdgtTX8RqX0
- m8ptd3tpaUvnikqMM+wkY2DFZDeoOIRO12ch0CgNQLTnMxMnBveuqXqDlFyCuNXmx5EB
- OHBg==
-X-Gm-Message-State: AOJu0Yw6n+4YP/cm/r8qaOX2srrnk0r1RX5XRVJtEjgx+5hTJ9QCSyZF
- +UnmNFsA58MLlXDEUANEVtB5fLOHcEZ+EWdv3jrjFLUvkJh9tBGTUKVvPw==
-X-Google-Smtp-Source: AGHT+IEUTDt0tdlEFIU3f+8KIZQbH8LFCfYgF4H44IXJCho3/4rRjAJXYHeTkhfy3MR3/AkCvhzIKA==
-X-Received: by 2002:a05:6512:3d1b:b0:52e:999b:7c01 with SMTP id
- 2adb3069b0e04-536587fcf4dmr1823166e87.48.1725629974408; 
- Fri, 06 Sep 2024 06:39:34 -0700 (PDT)
+ bh=qCT8gerrOFE84H6aFvkadXh2JzpbYQW6Gor9V+UOcHo=;
+ b=asWqVy/u5FeWb+e93waaQ7oGrN1zjL/sqmhNXQuTAnw3Ett7yejEecpWDRNjhvV9Kq
+ 1AjNkgzP3YTdUYOi2uIC1XrSzTLI83hIehRVoHfqKxH0s+hnZa8dv6LTz3zsiQJYJewO
+ ir0pCUZ36AU8dcl/NsBGUgmUBpCK7JsugUqpRhNf2IhftUMrO8Zv8casS40xwDql65iV
+ iACLleKccEDkFlj6kT+94vD3Wcc0syxyFOzlrl+ZkK0y9fuUNcnzfu7Czcjs+20odgWs
+ WFPSLzn1uY1Szxct0GPsXAukodeW3AKuEZksyOlG7pIz7IEoKj9U591kWQ9xzA+skfRr
+ zFCg==
+X-Gm-Message-State: AOJu0YzLAlqUwKi5fKsobUVx01jqJTO8l/w6N5IPG4pUMnVa2kHiG/dv
+ ik1cGfinNNLBIOYh3WAir0YhSWOkOtcQuDSXABeBNnnXT1u90sitxRWdEA==
+X-Google-Smtp-Source: AGHT+IHxgYsqwusOMwoQtSbvoQP9zVQ0OCxVTLUfg0ZUAeosLyCXR331yQUgc6di8bUyS3wZEaJ+6g==
+X-Received: by 2002:a05:6512:39ce:b0:530:abec:9a23 with SMTP id
+ 2adb3069b0e04-536587b3f52mr1900101e87.17.1725630351404; 
+ Fri, 06 Sep 2024 06:45:51 -0700 (PDT)
 Received: from precision7530-arch-roy.lan
  ([2a01:799:1a22:4401:9825:b52b:4cba:665e])
  by smtp.gmail.com with ESMTPSA id
- 2adb3069b0e04-535407ac33esm2943266e87.102.2024.09.06.06.39.33
+ 2adb3069b0e04-53652bd3dcesm441061e87.10.2024.09.06.06.45.50
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 06 Sep 2024 06:39:33 -0700 (PDT)
+ Fri, 06 Sep 2024 06:45:50 -0700 (PDT)
 From: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri,  6 Sep 2024 15:39:29 +0200
-Message-ID: <20240906133931.2095292-1-roykollensvendsen@gmail.com>
+Date: Fri,  6 Sep 2024 15:45:45 +0200
+Message-ID: <20240906134546.2097938-1-roykollensvendsen@gmail.com>
 X-Mailer: git-send-email 2.46.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1725629975; x=1726234775; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1725630352; x=1726235152; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=3IhwyGNCCAt5+pK2VorG59gbcINYmqfTLHD4AvBRntI=;
- b=TI+Y6lMI4RLrYLeiZpQXyPGuEPLaER4tMorpAJv9BwuNEg0Uaz/wykfd68biKdnG0j
- K946W50bqRueYirkm4h3fh1YnxYTx67UKNJMjsPkFz1spOEawtgEVyE/O+kQq1Gb34gg
- MaAFg3uAb5bXNo709arwuUzqwGsFSctgqSvsZ1WJtyxZRCvKyY3vNR1pOBHA6UmKbhpD
- otxpzeFaaqvjFfFg3RcGH7rXKGylzfjOPhvzdaTzMgM1xfIzKVOrs4kncUL8HlH/5ZXm
- FYjDr/PCxg+093NYpzLdK+Xu84J61LKZTZF/lSymp5IrB9+vmwATJjk0kef4kD4kiI9t
- sQjA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=qCT8gerrOFE84H6aFvkadXh2JzpbYQW6Gor9V+UOcHo=;
+ b=dhfkJK7u9MG4QO6pQBumTnu/2W/e+hc6UWNaVNLROsvvp3BbCGm66yFOvZUTElDw+q
+ OUt/itiw1vFQRzzRZYm1aWyUXshgb9TAbeq4hIKvyH/PRX/5idWLhmtydTGxQo3wHcjj
+ S3qmhIZ4JJJkI23KoremNm9U88tT+9TfWbeT0yXTn9pJcTNogJa4p7dRgrKoi0Rdlus/
+ E9V7PYA4lVWytQl3MCN2WAgbUTjKSTVcjH3JORrt5e3Pt8zJ7vEE+XLKlMT04GQ5yy7I
+ NpLJnunON2qh3aK8Yj4n9rID7tN+wKiGMc/Wc0J75peHwN1lc2HSMD06m5fzhb2qXdpQ
+ Q9WA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=TI+Y6lMI
-Subject: [Buildroot] [PATCH 1/1] package/dlib: new package
+ header.a=rsa-sha256 header.s=20230601 header.b=dhfkJK7u
+Subject: [Buildroot] [PATCH v2] package/dlib: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -109,27 +109,30 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
 ---
+Changes v1 -> v2:
+  - forgot to commit some changes 'make check-package' complained about
+
  package/Config.in      |  1 +
  package/dlib/Config.in | 13 +++++++
  package/dlib/dlib.hash | 12 ++++++
- package/dlib/dlib.mk   | 88 ++++++++++++++++++++++++++++++++++++++++++
- 4 files changed, 114 insertions(+)
+ package/dlib/dlib.mk   | 87 ++++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 113 insertions(+)
  create mode 100644 package/dlib/Config.in
  create mode 100644 package/dlib/dlib.hash
  create mode 100644 package/dlib/dlib.mk
 
 diff --git a/package/Config.in b/package/Config.in
-index f33c4780f8..2893849961 100644
+index f33c4780f8..ef87605b42 100644
 --- a/package/Config.in
 +++ b/package/Config.in
-@@ -2150,6 +2150,7 @@ menu "Other"
+@@ -2148,6 +2148,7 @@ menu "Other"
+ 	source "package/cracklib/Config.in"
+ 	source "package/dawgdic/Config.in"
  	source "package/ding-libs/Config.in"
++	source "package/dlib/Config.in"
  	source "package/dotconf/Config.in"
  	source "package/double-conversion/Config.in"
-+	source "package/dlib/Config.in"
  	source "package/eigen/Config.in"
- 	source "package/elfutils/Config.in"
- 	source "package/ell/Config.in"
 diff --git a/package/dlib/Config.in b/package/dlib/Config.in
 new file mode 100644
 index 0000000000..3d43bdb41b
@@ -169,10 +172,10 @@ index 0000000000..3bb5a540d0
 +sha256  8acb12b218fdb5e071f25eda9ac990d04888388b65095867d9007c278a9f993b  python_examples/LICENSE_FOR_EXAMPLE_PROGRAMS.txt
 diff --git a/package/dlib/dlib.mk b/package/dlib/dlib.mk
 new file mode 100644
-index 0000000000..cc21bdae1c
+index 0000000000..22fe957594
 --- /dev/null
 +++ b/package/dlib/dlib.mk
-@@ -0,0 +1,88 @@
+@@ -0,0 +1,87 @@
 +################################################################################
 +#
 +# dlib
@@ -181,7 +184,6 @@ index 0000000000..cc21bdae1c
 +
 +DLIB_VERSION = 19.24.6
 +DLIB_SITE = $(call github,davisking,dlib,v$(DLIB_VERSION))
-+DLIB_INSTALL_STAGING = NO
 +DLIB_CMAKE_BACKEND = ninja
 +DLIB_SUPPORTS_IN_SOURCE_BUILD = NO
 +
