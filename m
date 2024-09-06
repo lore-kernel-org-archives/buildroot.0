@@ -4,91 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 59F01E6FE41
-	for <buildroot@archiver.kernel.org>; Fri,  6 Sep 2024 18:33:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 699B1E6FE41
+	for <buildroot@archiver.kernel.org>; Fri,  6 Sep 2024 18:34:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1944840151;
-	Fri,  6 Sep 2024 18:33:27 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 11CEB40151;
+	Fri,  6 Sep 2024 18:34:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id z-CNp5HqgAC8; Fri,  6 Sep 2024 18:33:26 +0000 (UTC)
+ id q0vszww5x45D; Fri,  6 Sep 2024 18:34:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DAA7F401D5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AE920401D5
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DAA7F401D5;
-	Fri,  6 Sep 2024 18:33:25 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id AB6771BF309
- for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 18:33:24 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id AE920401D5;
+	Fri,  6 Sep 2024 18:34:08 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B9C851BF309
+ for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 18:34:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 98C446058B
- for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 18:33:24 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id A768E8411D
+ for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 18:34:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CnIFs3qaBeR1 for <buildroot@lists.busybox.net>;
- Fri,  6 Sep 2024 18:33:23 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42c; helo=mail-wr1-x42c.google.com;
- envelope-from=petr.vorel@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 6EC61600B8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6EC61600B8
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com
- [IPv6:2a00:1450:4864:20::42c])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6EC61600B8
- for <buildroot@buildroot.org>; Fri,  6 Sep 2024 18:33:23 +0000 (UTC)
-Received: by mail-wr1-x42c.google.com with SMTP id
- ffacd0b85a97d-3787e067230so1447759f8f.1
- for <buildroot@buildroot.org>; Fri, 06 Sep 2024 11:33:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1725647601; x=1726252401;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=ht9iu6/48TnPWAOOBhIvucy0TKQEVHVoi8ZQfSXJT6E=;
- b=ajqE5OMvhIiFpIbl95xWao14apuQTrD2tZaKGvTC7LcvFXnCbRx4UIE5zHtxc6joPS
- KGIaqJp9nyD2DnpaQGgB/gGGtD9es6vQ/T/9sDAyjs3H1NJfPOtc2txmQ5O81+Pqj41f
- 6JhCF3J4YHffYTa+yW8fwWO1OGFFlQK1+rFFl2C8iekmLXb9oIHLXeJoxuw4KO8LXHoP
- Q6kD91PTHtombxM1oi0+xVNLPcJWvSz8gJXMtlIjE1y5PuTP9mnzLARvWf4ZhBcoD9JA
- QddKESfIonGw3vJzrdseFKAIOGj/8v1MKueVXPmU3aNxZjUMi6HPUeZwMNUdqbIc/AjF
- WiMg==
-X-Gm-Message-State: AOJu0YwOJr23FPKr908UpFROdMLw+4wJdlaqbYdWYd/Awul1zm0hBIHr
- EWpCpTE0rWbns3s/b/+I9DHdwLUIjf7oVV9vvzeNxFQXL+sRH81UBiP1XQ==
-X-Google-Smtp-Source: AGHT+IHWbZMtPGAmCsTGqkr7uMp6aHfLcvdl9OePHcfOO2oPui2c7lZqgA2P7yLBZXwhnV4RYbunxg==
-X-Received: by 2002:a05:6000:a8e:b0:371:8dcc:7f9f with SMTP id
- ffacd0b85a97d-378895c5343mr2595754f8f.5.1725647600656; 
- Fri, 06 Sep 2024 11:33:20 -0700 (PDT)
-Received: from x230.home (109-81-80-201.rct.o2.cz. [109.81.80.201])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-42ca05ccf8dsm27568585e9.19.2024.09.06.11.33.19
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 06 Sep 2024 11:33:20 -0700 (PDT)
-From: Petr Vorel <petr.vorel@gmail.com>
-To: buildroot@buildroot.org
-Date: Fri,  6 Sep 2024 20:33:13 +0200
-Message-ID: <20240906183313.1612683-1-petr.vorel@gmail.com>
-X-Mailer: git-send-email 2.45.2
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Rktdcq72BY8G for <buildroot@lists.busybox.net>;
+ Fri,  6 Sep 2024 18:34:07 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
+ helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 96D3E8411F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 96D3E8411F
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 96D3E8411F
+ for <buildroot@buildroot.org>; Fri,  6 Sep 2024 18:34:06 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id B2CD313F88F;
+ Fri,  6 Sep 2024 20:33:56 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Fri, 06 Sep 2024 20:33:56 +0200
+Date: Fri, 6 Sep 2024 20:33:56 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Message-ID: <ZttLFI21Y94ar9HY@landeda>
+References: <20240906171503.3495498-1-dario.binacchi@amarulasolutions.com>
+ <20240906171503.3495498-2-dario.binacchi@amarulasolutions.com>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1725647601; x=1726252401; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=ht9iu6/48TnPWAOOBhIvucy0TKQEVHVoi8ZQfSXJT6E=;
- b=cCTElz/O00qtDvR7oei0IH23h+ssFnNKNQm79XDlDep/kc4QuNSRb47K+oqay2vC2n
- IFWt5/8dkogvbNts16T+dHXm3049E8QN1B8kSMjK1JvrRuNqfVkCBB4UTJ7RJsTK7Kdm
- IHdhT1EHqgeYTQ45MfYXilo2ol/2pjXNiH+PbDgE/V8c5tRQ7nkO0FBA9pp3cFPXYWEo
- 6lOE7xGTgLsi6+pkugRo9dLCxf3fj98TOCIAz4pMF/86y2RjiPVIo/k+1mxRYdGvPHFS
- 2BkcwVc3R0qowCRxIFi1q/q5YNPqhq5Sada73EZH3AoBjBL7KLyVjlw2qPlszUWe3fTr
- SitA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+Content-Disposition: inline
+In-Reply-To: <20240906171503.3495498-2-dario.binacchi@amarulasolutions.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1725647643;
+ bh=VifqS4TMShIpr5IC5O+Dei1f2RMM7045nupksgyULXE=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=DrFHKNHObHdvJ2VpyYrGLbeQdZXw7EwzcQf/BRjSr8I8c8JSU+lT1z1XJBeqThwE+
+ Cx1dGGUq9Q2OgmSxlDtqtZTnWs7v58880COkQyCWsxIZA+vqyG8RNiCY1HYQWL8oKt
+ gNvk+XeRNtxn9BrFuCh2CkI+iKGuRPQAANWnF5vIOJMqxUMQ1pFtHdKUHwQtYXF8Ll
+ jlUfpna3oTZ1SFvjPyGC0WwSPZOnRqSWYFJVOsZxQ6wYLyrVPAkcEhQJ/OxqOGfZZ/
+ B6ZHp/oUl5MxxqlVJmCLNJfaI911rIr1czOFbIzl5J4cTeYNNNzy2TxLw5teyK2+HC
+ P5fR7MrLtwQdA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=cCTElz/O
-Subject: [Buildroot] [PATCH 1/1] package/iputils: bump version to 20240905
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=DrFHKNHO
+Subject: Re: [Buildroot] [PATCH v3 2/2] package/ipmitool: use versioned or
+ local PEN registry
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,52 +82,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Petr Vorel <petr.vorel@gmail.com>
+Cc: Floris Bos <bos@je-eigen-domein.nl>, Heiko Thiery <heiko.thiery@gmail.com>,
+ linux-amarula@amarulasolutions.com,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Update comment. This release includes pre-generated man pages & HTML
-docs in dist tarballs [1], but we don't install them anyway (Buildroot
-does not ship package docs).
+Dario, All,
 
-[1] https://github.com/iputils/iputils/commit/535f6de25909a63ea35750c8a37408e49c0d235c
+On 2024-09-06 19:15 +0200, Dario Binacchi spake thusly:
+[--SNIP--]
+> diff --git a/package/ipmitool/Config.in b/package/ipmitool/Config.in
+> index 9516ff8596d3..c4b3ee734d44 100644
+> --- a/package/ipmitool/Config.in
+> +++ b/package/ipmitool/Config.in
+> @@ -9,14 +9,34 @@ config BR2_PACKAGE_IPMITOOL
+>  
+>  if BR2_PACKAGE_IPMITOOL
+>  
+> -config BR2_PACKAGE_IPMITOOL_PEN_REG_URI
+> -	string "IANA PEN registry URL or path"
+> -	default "https://www.iana.org/assignments/enterprise-numbers.txt"
 
-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
----
- package/iputils/iputils.hash | 4 ++--
- package/iputils/iputils.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+You forgot to add legacy handling for this variable:
 
-diff --git a/package/iputils/iputils.hash b/package/iputils/iputils.hash
-index a3e48d60a9..6baf433dcb 100644
---- a/package/iputils/iputils.hash
-+++ b/package/iputils/iputils.hash
-@@ -1,5 +1,5 @@
--# https://github.com/iputils/iputils/releases/download/20240117/sha256sums.asc
--sha256  7ed46e876e4157e1d20c40ec945e1ce0f3af3b10b5f6373e423135c6f22cd116  iputils-20240117.tar.gz
-+# https://github.com/iputils/iputils/releases/download/20240905/sha256sums.asc
-+sha256  599cda8e3f5f7ce4c612456ab1101369da8f79aa0f83c8e877290a1c7bb56010  iputils-20240905.tar.gz
- # Locally computed
- sha256  2c9f29d982c48665c30b3adaf400c048988fd256eb91c691e351eb3b6a8b2036  LICENSE
- sha256  9acc4bc871a4742550158e3696dcb381953172ef808d04ca248184f9f6322712  Documentation/LICENSE.BSD3
-diff --git a/package/iputils/iputils.mk b/package/iputils/iputils.mk
-index 08d849e69d..ec8c24e4e0 100644
---- a/package/iputils/iputils.mk
-+++ b/package/iputils/iputils.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--IPUTILS_VERSION = 20240117
-+IPUTILS_VERSION = 20240905
- IPUTILS_SITE = https://github.com/iputils/iputils/releases/download/$(IPUTILS_VERSION)
- IPUTILS_LICENSE = GPL-2.0+, BSD-3-Clause
- IPUTILS_LICENSE_FILES = LICENSE Documentation/LICENSE.BSD3 Documentation/LICENSE.GPL2
+    config BR2_PACKAGE_IPMITOOL_PEN_REG_URI
+        string "IANA PEN registry move to iana-assignment package"
+        help
+          Installation of the IANA PEN is now handled by the
+          iana-assignment package; to install a custom PEN,
+          use a rootfs-overlay for example.
+
+
+    config BR2_PACKAGE_IPMITOOL_PEN_REG_URI_WRAP
+        bool
+        default y if BR2_PACKAGE_IPMITOOL_PEN_REG_URI != ""
+        select BR2_LEGACY
+
+Regards,
+Yann E. MORIN.
+
 -- 
-2.45.2
-
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
