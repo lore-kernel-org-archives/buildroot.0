@@ -4,91 +4,92 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0A749E6FE41
-	for <buildroot@archiver.kernel.org>; Fri,  6 Sep 2024 19:15:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 396E7E6FE46
+	for <buildroot@archiver.kernel.org>; Fri,  6 Sep 2024 19:19:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8B360402EA;
-	Fri,  6 Sep 2024 19:15:15 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id BEDED4018B;
+	Fri,  6 Sep 2024 19:19:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bDYMDDSXTauD; Fri,  6 Sep 2024 19:15:13 +0000 (UTC)
+ id ZyXdFQAxzNlf; Fri,  6 Sep 2024 19:19:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E8360401D5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 83711401D5
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E8360401D5;
-	Fri,  6 Sep 2024 19:15:12 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D0B7B1BF46A
- for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 19:15:10 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 83711401D5;
+	Fri,  6 Sep 2024 19:19:49 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 0A1C21BF46A
+ for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 19:19:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 922948412C
- for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 19:15:09 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 04826401D5
+ for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 19:19:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FI0Mh1F9t1Qj for <buildroot@lists.busybox.net>;
- Fri,  6 Sep 2024 19:15:08 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ZBoQNwRHY9bG for <buildroot@lists.busybox.net>;
+ Fri,  6 Sep 2024 19:19:46 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::d29; helo=mail-io1-xd29.google.com;
+ client-ip=2607:f8b0:4864:20::129; helo=mail-il1-x129.google.com;
  envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9FEF384135
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9FEF384135
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com
- [IPv6:2607:f8b0:4864:20::d29])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9FEF384135
- for <buildroot@buildroot.org>; Fri,  6 Sep 2024 19:15:08 +0000 (UTC)
-Received: by mail-io1-xd29.google.com with SMTP id
- ca18e2360f4ac-82a22127e97so109834439f.0
- for <buildroot@buildroot.org>; Fri, 06 Sep 2024 12:15:08 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 9D8BF4018B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9D8BF4018B
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com
+ [IPv6:2607:f8b0:4864:20::129])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 9D8BF4018B
+ for <buildroot@buildroot.org>; Fri,  6 Sep 2024 19:19:46 +0000 (UTC)
+Received: by mail-il1-x129.google.com with SMTP id
+ e9e14a558f8ab-39f51934f61so9207905ab.2
+ for <buildroot@buildroot.org>; Fri, 06 Sep 2024 12:19:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1725650107; x=1726254907;
+ d=1e100.net; s=20230601; t=1725650385; x=1726255185;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=OPWWMtmHnsitmz4XQujVfY+GmDy/L+Abuw2vrS/uEYM=;
- b=KlQU5af5sCqU+wagn233N7LsOBSpW1OQSIE3DM3tF3Zt5MOYr1pBlQkLm85d/pNBRF
- hyMDTIxb+SgA/NYoQ3XkqUk1BeBwyO6Mn+8TFJ7p6Ww/uo/6DqmKZ3Xq/xbafMSr9pHL
- ag6cZ9IRbKoHOzevk37HoPQSiIknwMwXNfBW4CmuunUuXv4ArBq1xN7oJHYjA1W/fMcj
- khWqlCTG8J/uguhcdpDuTt/uS8G2SgZvmNH9+tAtfpQ96no3D7NSnKIRlGK7Fz1+mzBI
- ebexdzxEsKYiILgm/SDiYD4RxK8CRXGotETAPwLCxwvgOYHwtB2YGId2ZVGOMkK9N/ir
- NocA==
-X-Gm-Message-State: AOJu0YxwoXmafv8rssngTL1UFPGpqzzXcN8FyTCDD5TcBCPqNpUn4R2l
- hxIbq7FwL/9AlwRiXR/YBE1WkUChoyu2onAJ15ln4wUKa0MDL3h0vY5exw==
-X-Google-Smtp-Source: AGHT+IEkPZ1nW65Lv2XzmCdedTB0pzMLO/7MIaleiwbMOXcW7cf74WtosKM9YNfVltI71oFZ9Z8eJg==
-X-Received: by 2002:a05:6602:14cd:b0:82a:3d74:6c4c with SMTP id
- ca18e2360f4ac-82a9622bd41mr370245639f.15.1725650107042; 
- Fri, 06 Sep 2024 12:15:07 -0700 (PDT)
+ bh=K7+/fKE/ukRQnoxO05TezlEDwkpGTC7e3l7WBOGtI0k=;
+ b=wPdMsUaEjf4iObRikGMW9Kb4nPg8HOscNOC3nBW+z9nwqe1PvV00cKZ+QOEKCK/wUU
+ Y1F8NtVg/U2BAzx9GDCSzrfaKn2rdxBEmPHU6vxZ7QF8JZzw7kIODVTw+qlbIdUm9Q2M
+ oR92CcoD6HqVEdGky9pAvruIperspjBPumKABs6zCxaGJUQBuMXjZ8gFDxSNa1f9b/j2
+ lRKmrYNoulTPeC8AuG0uLVHSJ9kqXZzFhGRZYfPej40jO4GmQfqqDfPhdTX55mCD2yEG
+ AGt4IEYlPJ3UHpQcl83+xSibh9VizopBv5lsexDVXcKmPv0iY5MJ3WxJTHybhhwpuH0k
+ prnQ==
+X-Gm-Message-State: AOJu0YwD/efmnMxqmYGDYhFi/IVLJvbKVsmy7QmOGlhgHgNVykNmyBfz
+ z59ImQ0EH3+YZ1kUCA6EnbZdMcXjvuAAWs6Nd3A1E7jSyzd4R5G2YmdfOg==
+X-Google-Smtp-Source: AGHT+IFvqVVJaRmnfIsOyoF93tz3JqabATZqW60z6Zx4IyR0E3Y055m97GxqSJsLm0LbETDCT/G/yQ==
+X-Received: by 2002:a05:6e02:154d:b0:376:4049:69e5 with SMTP id
+ e9e14a558f8ab-3a04f0e19ecmr46701325ab.23.1725650385268; 
+ Fri, 06 Sep 2024 12:19:45 -0700 (PDT)
 Received: from james-x399.localdomain (97-118-128-240.hlrn.qwest.net.
  [97.118.128.240]) by smtp.gmail.com with ESMTPSA id
- ca18e2360f4ac-82a1a412f07sm478560139f.15.2024.09.06.12.15.06
+ e9e14a558f8ab-39f3afc65b2sm48812475ab.47.2024.09.06.12.19.44
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 06 Sep 2024 12:15:06 -0700 (PDT)
+ Fri, 06 Sep 2024 12:19:45 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri,  6 Sep 2024 13:14:57 -0600
-Message-Id: <20240906191457.1761911-1-james.hilliard1@gmail.com>
+Date: Fri,  6 Sep 2024 13:19:39 -0600
+Message-Id: <20240906191939.1857705-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1725650107; x=1726254907; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1725650385; x=1726255185; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=OPWWMtmHnsitmz4XQujVfY+GmDy/L+Abuw2vrS/uEYM=;
- b=JfNK7cf5JFq9e/pBUEwqnWktbj7elOQv487Cy+lYFRlPTFwqCgtuYsCtFsoTxoCJNp
- SqaIVanwaLnEm1bPvGnnFzWMC8mu5nAiJXVUAVjggN/ejQpIPLjqkT3zJ3qZJCm1HqlM
- DqtOb62pNz4uINv0F8G3vjUdORfNM7qOR84RdDzmthQzr6TeM6Sg2KfgJT8yIPi8vH6m
- Kq/oTlLK40A2fM2EbDSO3X6Ja/PPcBe/h1uuxPid62NvQ9iCq1L8Adxh5DIdDSuNyJXX
- xHaTOcvFGm4J9VUwXM9MRICv1JaXgl4bJ5Ppg3joqYnYR4uWJwPnuLNElycMKjxuNGPd
- 9ZYg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=K7+/fKE/ukRQnoxO05TezlEDwkpGTC7e3l7WBOGtI0k=;
+ b=IMDcTVXwIx9cUYXfR0JwtXhSU8Ou82tMuWFZLSFPipdoGUDG7+wSRddeCBUqvBcngk
+ 3dySE+a/tHGMQ97AX+u/IGPQ9Snd6dq8QYhYpdzCM1rHFjdxH9UG9wQGJidg8N8IaJMn
+ 3tFUrA4+zB+jthTNHEHgES0dx2I7iGApqf2UFCga+YmyJw7JR4U04hTSGSrElhhVcIlK
+ gl7DYr7j5U8WT3OfGjlKO8xB0kd2pxn/2BSKnNQIiVU+FtRXZjKRMggZnPqkPnWiXYId
+ fxpzIRPBA2OszQ0CwgfieK/BN9sEBmjBQ20VOHXmKwSDu7sr61np27x7Xfo0zEwES4++
+ i7+A==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=JfNK7cf5
-Subject: [Buildroot] [PATCH 1/1] package/python-uvicorn: bump to version
- 0.30.6
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=IMDcTVXw
+Subject: [Buildroot] [PATCH 1/1] package/python-websockets: bump to version
+ 13.0.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,7 +101,8 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Cc: Joseph Kogut <joseph.kogut@gmail.com>,
+ James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -108,38 +110,38 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-uvicorn/python-uvicorn.hash | 4 ++--
- package/python-uvicorn/python-uvicorn.mk   | 4 ++--
+ package/python-websockets/python-websockets.hash | 4 ++--
+ package/python-websockets/python-websockets.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-uvicorn/python-uvicorn.hash b/package/python-uvicorn/python-uvicorn.hash
-index e662adda1e..57839debd2 100644
---- a/package/python-uvicorn/python-uvicorn.hash
-+++ b/package/python-uvicorn/python-uvicorn.hash
+diff --git a/package/python-websockets/python-websockets.hash b/package/python-websockets/python-websockets.hash
+index 8d0bda501c..33d28745b0 100644
+--- a/package/python-websockets/python-websockets.hash
++++ b/package/python-websockets/python-websockets.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/uvicorn/json
--md5  c43ec29f83c3706b99c48a7eeb0208ac  uvicorn-0.30.5.tar.gz
--sha256  ac6fdbd4425c5fd17a9fe39daf4d4d075da6fdc80f653e5894cdc2fd98752bee  uvicorn-0.30.5.tar.gz
-+md5  d75153180f8c19a1bf8299818d3acdb2  uvicorn-0.30.6.tar.gz
-+sha256  4b15decdda1e72be08209e860a1e10e92439ad5b97cf44cc945fcbee66fc5788  uvicorn-0.30.6.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/websockets/json
+-md5  49d033c8236aa56ba2524f65570a27c5  websockets-12.0.tar.gz
+-sha256  81df9cbcbb6c260de1e007e58c011bfebe2dafc8435107b0537f393dd38c8b1b  websockets-12.0.tar.gz
++md5  b3d1cc7a447c4f91b0c6f24beaf312cc  websockets-13.0.1.tar.gz
++sha256  4d6ece65099411cfd9a48d13701d7438d9c34f479046b34c50ff60bb8834e43e  websockets-13.0.1.tar.gz
  # Locally computed sha256 checksums
- sha256  efe1acf3e62fb99c288b0ec73e5a773b7268ef4320fe757ea994214e4b63c371  LICENSE.md
-diff --git a/package/python-uvicorn/python-uvicorn.mk b/package/python-uvicorn/python-uvicorn.mk
-index 276aa89804..e9676d3765 100644
---- a/package/python-uvicorn/python-uvicorn.mk
-+++ b/package/python-uvicorn/python-uvicorn.mk
+ sha256  3d6a0c050d8bec52fabad502e45fb25bd02bcadbd70dea34d447b6a0ff4e6da8  LICENSE
+diff --git a/package/python-websockets/python-websockets.mk b/package/python-websockets/python-websockets.mk
+index 2b8761c029..00d69f9ddd 100644
+--- a/package/python-websockets/python-websockets.mk
++++ b/package/python-websockets/python-websockets.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_UVICORN_VERSION = 0.30.5
-+PYTHON_UVICORN_VERSION = 0.30.6
- PYTHON_UVICORN_SOURCE = uvicorn-$(PYTHON_UVICORN_VERSION).tar.gz
--PYTHON_UVICORN_SITE = https://files.pythonhosted.org/packages/c3/ad/02b1b412e43605aa6aac8d0392c383ff3f6ae8267b7864e48e3b5f3f601e
-+PYTHON_UVICORN_SITE = https://files.pythonhosted.org/packages/5a/01/5e637e7aa9dd031be5376b9fb749ec20b86f5a5b6a49b87fabd374d5fa9f
- PYTHON_UVICORN_SETUP_TYPE = pep517
- PYTHON_UVICORN_LICENSE = BSD-3-Clause
- PYTHON_UVICORN_LICENSE_FILES = LICENSE.md
+-PYTHON_WEBSOCKETS_VERSION = 12.0
++PYTHON_WEBSOCKETS_VERSION = 13.0.1
+ PYTHON_WEBSOCKETS_SOURCE = websockets-$(PYTHON_WEBSOCKETS_VERSION).tar.gz
+-PYTHON_WEBSOCKETS_SITE = https://files.pythonhosted.org/packages/2e/62/7a7874b7285413c954a4cca3c11fd851f11b2fe5b4ae2d9bee4f6d9bdb10
++PYTHON_WEBSOCKETS_SITE = https://files.pythonhosted.org/packages/8f/1c/78687e0267b09412409ac134f10fd14d14ac6475da892a8b09a02d0f6ae2
+ PYTHON_WEBSOCKETS_SETUP_TYPE = setuptools
+ PYTHON_WEBSOCKETS_LICENSE = BSD-3-Clause
+ PYTHON_WEBSOCKETS_LICENSE_FILES = LICENSE
 -- 
 2.34.1
 
