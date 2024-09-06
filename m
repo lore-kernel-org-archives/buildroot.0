@@ -4,90 +4,94 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 351F0E6FE46
-	for <buildroot@archiver.kernel.org>; Fri,  6 Sep 2024 18:48:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 08051E6FE41
+	for <buildroot@archiver.kernel.org>; Fri,  6 Sep 2024 18:48:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D63BA40229;
-	Fri,  6 Sep 2024 18:48:05 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 153C340515;
+	Fri,  6 Sep 2024 18:48:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BBD8W07gWoQ6; Fri,  6 Sep 2024 18:48:04 +0000 (UTC)
+ id mXv1yXPq2wWv; Fri,  6 Sep 2024 18:48:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5A8AE40249
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F314F404F5
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5A8AE40249;
-	Fri,  6 Sep 2024 18:48:04 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id F314F404F5;
+	Fri,  6 Sep 2024 18:48:08 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 930BB1BF980
- for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 18:48:03 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0C0041BF309
+ for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 18:48:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7E9AA40229
- for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 18:48:03 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2868E40151
+ for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 18:48:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id DCQ7bzrybMpQ for <buildroot@lists.busybox.net>;
- Fri,  6 Sep 2024 18:48:02 +0000 (UTC)
+ id Jr7yfR0ubMgV for <buildroot@lists.busybox.net>;
+ Fri,  6 Sep 2024 18:48:04 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::d34; helo=mail-io1-xd34.google.com;
+ client-ip=2607:f8b0:4864:20::d35; helo=mail-io1-xd35.google.com;
  envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 2AE6E40151
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2AE6E40151
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com
- [IPv6:2607:f8b0:4864:20::d34])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 2AE6E40151
- for <buildroot@buildroot.org>; Fri,  6 Sep 2024 18:48:02 +0000 (UTC)
-Received: by mail-io1-xd34.google.com with SMTP id
- ca18e2360f4ac-82a2a035b59so117446439f.0
- for <buildroot@buildroot.org>; Fri, 06 Sep 2024 11:48:02 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 06A77401D5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 06A77401D5
+Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com
+ [IPv6:2607:f8b0:4864:20::d35])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 06A77401D5
+ for <buildroot@buildroot.org>; Fri,  6 Sep 2024 18:48:03 +0000 (UTC)
+Received: by mail-io1-xd35.google.com with SMTP id
+ ca18e2360f4ac-829f7911eecso102407539f.1
+ for <buildroot@buildroot.org>; Fri, 06 Sep 2024 11:48:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1725648481; x=1726253281;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=7yDsiwySLIl3PaWTFSQrGN5+5knmxbG/0i94BxP4ul4=;
- b=ZykllZ9avFXuaOTbSXA6Q+2NtMiJpacoTvqct7XV0/butk/UFJKms+HV2tPuWpRFJQ
- 5vg0DsrYNbgtg3GfsWrX38EnRg6c5wg4H+YP2iWEFarvmyS6X5nTH2702PCrUguiVfB/
- nPsEUgzsdFT051hgq6Of+ezG9Rc5bikfG3BoPBa9docT0FlAiNzFalzxyOlajmi/n/hE
- Fb1+G1x7uY/UFw5g1GwK33KtA9fVoZbjg1d3a8TbUX6v8GqxrNsrfEb+CmLZRt8bcFzQ
- LRTfuONY6L3rgOYP30ZiQwZhGG2wpyS1dGbuMWZD7vFsOMHk6DiAIGtFfyXpD/qlMJTx
- diPg==
-X-Gm-Message-State: AOJu0YwlLch8zhr1+yt63AH4azknwr7PjnWgU1q3MZ8iB5gv7gn2a45h
- bwb65N+v980MGvmDWrOm5Pd9eiDexlikb/jQH4CkG9FBCsQ2jM2JlRBI/Q==
-X-Google-Smtp-Source: AGHT+IH6EAZnrd/8sFNIHK8fn+8wnqkQXurIZS8eqI4oVdRxKAP91Yae6EkLC5h4aGWgRbV2bnfdfQ==
-X-Received: by 2002:a05:6602:341b:b0:825:1f11:5996 with SMTP id
- ca18e2360f4ac-82a9622213dmr417440939f.13.1725648480855; 
- Fri, 06 Sep 2024 11:48:00 -0700 (PDT)
+ d=1e100.net; s=20230601; t=1725648482; x=1726253282;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=+HPab5V8zJxyjnMzJ1vFuokX3ThiDSjFD9P/bl2PxgU=;
+ b=Imzkp9Q8W5921IDhuAla3LbYqW+aclFyv6+CauB48yv+NlnJYHfKMzOU0IfYLiZOWo
+ V1WVUA6f9VuLx57bnAMvT1a8DWHPsbFZ6Y1CgDd30bdxYvpuNcZ/ZFFXR73VSywtXjw0
+ 1pOULRNUwE9sfTE3GAreRZioYV8Yy5YBAV2UIUOLOM/knFTzr/JSpf56pW33wbYwVjox
+ TdXfTMhU/AoV+Rh3o+4MFMGK5Y0jpbLBcfbPu2qSKsw21Q0W99dXfi5x2GqidYyN8UA1
+ te8Z/S8XhQDrRyRPlYENCAyK9QPIgAWqLZPMAy9yJk1Bo57DA3Q0NqkoXroyubf3Vvsg
+ V3Fw==
+X-Gm-Message-State: AOJu0YydzcEcbXdZHbSUHmwtvUy5OH4nzz0E2JJfsUgv7Vkh/5ik+KZi
+ dwyBezOg0yYbuCIe7Z3IFERyonv1ao6N5hpnizD85hiw+xaI/aaeAZlK0w==
+X-Google-Smtp-Source: AGHT+IGyrE3L9yA37IDH193MyLFRvIdUK4rD7g0uIbfVS1Ql69e7eWybWkDG9unRzo2Fk10fA6/D6A==
+X-Received: by 2002:a05:6e02:1a45:b0:39d:2507:6abd with SMTP id
+ e9e14a558f8ab-3a052254035mr29999225ab.13.1725648482063; 
+ Fri, 06 Sep 2024 11:48:02 -0700 (PDT)
 Received: from james-x399.localdomain (97-118-128-240.hlrn.qwest.net.
  [97.118.128.240]) by smtp.gmail.com with ESMTPSA id
  8926c6da1cb9f-4ced2dcdf66sm4176539173.33.2024.09.06.11.48.00
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 06 Sep 2024 11:48:00 -0700 (PDT)
+ Fri, 06 Sep 2024 11:48:01 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Fri,  6 Sep 2024 12:47:55 -0600
-Message-Id: <20240906184756.1166732-1-james.hilliard1@gmail.com>
+Date: Fri,  6 Sep 2024 12:47:56 -0600
+Message-Id: <20240906184756.1166732-2-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20240906184756.1166732-1-james.hilliard1@gmail.com>
+References: <20240906184756.1166732-1-james.hilliard1@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1725648481; x=1726253281; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=7yDsiwySLIl3PaWTFSQrGN5+5knmxbG/0i94BxP4ul4=;
- b=X61rQkjnGzHyiS938oesQTfppzFXmcLCRtAw8Q8EKIJwPrw2XrTiFtTwss+Fe9kcgS
- 8+zFflkIhLB+HRNgiRPSt+l6otmXy+QreeLkbh0TfQieRQGo3EC+O/riDbeMEk7uVf20
- nPnibU/qux+MKstGTHf0gRTjrbdoAr0l/xuipWcz1rEH8yau/isk0AdCHBqQ+jngEVjl
- LYL4R6jF+kjzNEI8CRsd9+7X8UXMPgMKbx1R/5KV/G0Haffur+CM15eENd0mD0FSz5i0
- vZvEmrD728CxyOmMERyPvOflC1J9gdRbe+LtrXESrqoqloKar1eNsZeE1MfxW3zZEV+H
- bAlQ==
+ d=gmail.com; s=20230601; t=1725648482; x=1726253282; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=+HPab5V8zJxyjnMzJ1vFuokX3ThiDSjFD9P/bl2PxgU=;
+ b=a5fh9iHJtePMYyWsexqvSkeXmaHQGujfi8S7Xq9UN/kLVunJZj1/GHitvRcQCDkhwe
+ YZgELZ5pDFaYchPKCjjPHtLjaop6aeuwi2/rNUc76g3NhgAd1kPwCmIrNxqjn/70+0eo
+ BBfX6p3MUMIwuRti2e56sdI2jGRljfAlk8pUNn9s1EiW4HXeTW5aQwNGFjVKW3b5RPfI
+ nIF+msPbWRxJPFKSacS5Gy8HTg0XZnYETnRAbSdd9vGxy2RZ5GbvNEXiZ2wXXC/x2ksK
+ e5L/+v8GAsJhJGLf5EjE6HUxzPJMUCtTUZBuwY9TIs6H2Rtg8L+VPzLYK32t0sI9o+sq
+ Kn1A==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=X61rQkjn
-Subject: [Buildroot] [PATCH 1/2] package/python-tzdata: new package
+ header.a=rsa-sha256 header.s=20230601 header.b=a5fh9iHJ
+Subject: [Buildroot] [PATCH 2/2] package/python-pydantic: bump to version
+ 2.9.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -106,72 +110,55 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Add new python-tzdata runtime dependency.
+
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/Config.in                        |  1 +
- package/python-tzdata/Config.in          |  6 ++++++
- package/python-tzdata/python-tzdata.hash |  5 +++++
- package/python-tzdata/python-tzdata.mk   | 14 ++++++++++++++
- 4 files changed, 26 insertions(+)
- create mode 100644 package/python-tzdata/Config.in
- create mode 100644 package/python-tzdata/python-tzdata.hash
- create mode 100644 package/python-tzdata/python-tzdata.mk
+ package/python-pydantic/Config.in            | 1 +
+ package/python-pydantic/python-pydantic.hash | 4 ++--
+ package/python-pydantic/python-pydantic.mk   | 4 ++--
+ 3 files changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index f33c4780f8..4109a23871 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1425,6 +1425,7 @@ menu "External python modules"
- 	source "package/python-types-python-dateutil/Config.in"
- 	source "package/python-typing-extensions/Config.in"
- 	source "package/python-typing-inspect/Config.in"
-+	source "package/python-tzdata/Config.in"
- 	source "package/python-u-msgpack/Config.in"
- 	source "package/python-ubjson/Config.in"
- 	source "package/python-uhid/Config.in"
-diff --git a/package/python-tzdata/Config.in b/package/python-tzdata/Config.in
-new file mode 100644
-index 0000000000..fc06da356b
---- /dev/null
-+++ b/package/python-tzdata/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PYTHON_TZDATA
-+	bool "python-tzdata"
-+	help
-+	  Provider of IANA time zone data.
-+
-+	  https://github.com/python/tzdata
-diff --git a/package/python-tzdata/python-tzdata.hash b/package/python-tzdata/python-tzdata.hash
-new file mode 100644
-index 0000000000..e82aed0e78
---- /dev/null
-+++ b/package/python-tzdata/python-tzdata.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/tzdata/json
-+md5  6ffd87c74f67524f8e58ae32868c1a95  tzdata-2024.1.tar.gz
-+sha256  2674120f8d891909751c38abcdfd386ac0a5a1127954fbc332af6b5ceae07efd  tzdata-2024.1.tar.gz
-+# Locally computed sha256 checksums
-+sha256  33e8e5002d3512d3fcc2282b995e6bad9d334781b9c5ac31843f404900e1f3b4  LICENSE
-diff --git a/package/python-tzdata/python-tzdata.mk b/package/python-tzdata/python-tzdata.mk
-new file mode 100644
-index 0000000000..d8f2088d8a
---- /dev/null
-+++ b/package/python-tzdata/python-tzdata.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-tzdata
-+#
-+################################################################################
-+
-+PYTHON_TZDATA_VERSION = 2024.1
-+PYTHON_TZDATA_SOURCE = tzdata-$(PYTHON_TZDATA_VERSION).tar.gz
-+PYTHON_TZDATA_SITE = https://files.pythonhosted.org/packages/74/5b/e025d02cb3b66b7b76093404392d4b44343c69101cc85f4d180dd5784717
-+PYTHON_TZDATA_SETUP_TYPE = setuptools
-+PYTHON_TZDATA_LICENSE = Apache-2.0
-+PYTHON_TZDATA_LICENSE_FILES = LICENSE
-+
-+$(eval $(python-package))
+diff --git a/package/python-pydantic/Config.in b/package/python-pydantic/Config.in
+index e9cd2e6780..029f86450e 100644
+--- a/package/python-pydantic/Config.in
++++ b/package/python-pydantic/Config.in
+@@ -4,6 +4,7 @@ config BR2_PACKAGE_PYTHON_PYDANTIC
+ 	select BR2_PACKAGE_PYTHON_ANNOTATED_TYPES # runtime
+ 	select BR2_PACKAGE_PYTHON_PYDANTIC_CORE # runtime
+ 	select BR2_PACKAGE_PYTHON_TYPING_EXTENSIONS # runtime
++	select BR2_PACKAGE_PYTHON_TZDATA # runtime
+ 	help
+ 	  Data validation and settings management using python 3.6
+ 	  type hinting.
+diff --git a/package/python-pydantic/python-pydantic.hash b/package/python-pydantic/python-pydantic.hash
+index 6127dcaf37..fd8d16dbb1 100644
+--- a/package/python-pydantic/python-pydantic.hash
++++ b/package/python-pydantic/python-pydantic.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/pydantic/json
+-md5  940d760de174d3567d4f5be28fd215f5  pydantic-2.8.2.tar.gz
+-sha256  6f62c13d067b0755ad1c21a34bdd06c0c12625a22b0fc09c6b149816604f7c2a  pydantic-2.8.2.tar.gz
++md5  f328e2d6c3d511a81e358aac6a8636b6  pydantic-2.9.0.tar.gz
++sha256  c7a8a9fdf7d100afa49647eae340e2d23efa382466a8d177efcd1381e9be5598  pydantic-2.9.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  a9e186f3ca16b5eef84318e7a701721351a00cb7b8ae3a4394b67b49e3529ef3  LICENSE
+diff --git a/package/python-pydantic/python-pydantic.mk b/package/python-pydantic/python-pydantic.mk
+index c549970db9..828658af19 100644
+--- a/package/python-pydantic/python-pydantic.mk
++++ b/package/python-pydantic/python-pydantic.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_PYDANTIC_VERSION = 2.8.2
++PYTHON_PYDANTIC_VERSION = 2.9.0
+ PYTHON_PYDANTIC_SOURCE = pydantic-$(PYTHON_PYDANTIC_VERSION).tar.gz
+-PYTHON_PYDANTIC_SITE = https://files.pythonhosted.org/packages/8c/99/d0a5dca411e0a017762258013ba9905cd6e7baa9a3fd1fe8b6529472902e
++PYTHON_PYDANTIC_SITE = https://files.pythonhosted.org/packages/f6/8f/3b9f7a38caa3fa0bcb3cea7ee9958e89a9a6efc0e6f51fd6096f24cac140
+ PYTHON_PYDANTIC_SETUP_TYPE = pep517
+ PYTHON_PYDANTIC_LICENSE = MIT
+ PYTHON_PYDANTIC_LICENSE_FILES = LICENSE
 -- 
 2.34.1
 
