@@ -4,72 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22C8AE6FE41
-	for <buildroot@archiver.kernel.org>; Fri,  6 Sep 2024 18:10:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 32F34E6FE41
+	for <buildroot@archiver.kernel.org>; Fri,  6 Sep 2024 18:15:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CBBB060657;
-	Fri,  6 Sep 2024 18:10:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E1B61605E8;
+	Fri,  6 Sep 2024 18:15:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7NJF0-XnDGFB; Fri,  6 Sep 2024 18:10:29 +0000 (UTC)
+ id sUt3ue-nxX6m; Fri,  6 Sep 2024 18:15:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AE64B6065D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B622760657
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AE64B6065D;
-	Fri,  6 Sep 2024 18:10:29 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 48F571BF309
- for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 18:10:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B622760657;
+	Fri,  6 Sep 2024 18:15:30 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id C82C91BF309
+ for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 18:15:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 422DE409EA
- for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 18:10:28 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B52FC4018A
+ for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 18:15:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cNwxBJEHzYOv for <buildroot@lists.busybox.net>;
- Fri,  6 Sep 2024 18:10:26 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.3;
- helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6364A409AE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6364A409AE
-Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [212.27.42.3])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6364A409AE
- for <buildroot@buildroot.org>; Fri,  6 Sep 2024 18:10:25 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp3-g21.free.fr (Postfix) with ESMTPSA id EA95913F86E;
- Fri,  6 Sep 2024 20:10:16 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Fri, 06 Sep 2024 20:10:16 +0200
-Date: Fri, 6 Sep 2024 20:10:16 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Message-ID: <ZttFiFByaiEckB1X@landeda>
-References: <20240906171503.3495498-1-dario.binacchi@amarulasolutions.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id myUIM1xDaYWa for <buildroot@lists.busybox.net>;
+ Fri,  6 Sep 2024 18:15:27 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::d30; helo=mail-io1-xd30.google.com;
+ envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 8C0EF40151
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8C0EF40151
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com
+ [IPv6:2607:f8b0:4864:20::d30])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 8C0EF40151
+ for <buildroot@buildroot.org>; Fri,  6 Sep 2024 18:15:26 +0000 (UTC)
+Received: by mail-io1-xd30.google.com with SMTP id
+ ca18e2360f4ac-82a3022be9eso98035939f.3
+ for <buildroot@buildroot.org>; Fri, 06 Sep 2024 11:15:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1725646525; x=1726251325;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=YoP6MkcS6k5zldtn3BPLLmHi4qRHiFnDNGnaG9oQ68w=;
+ b=UPXlsCibetgdTlwJdsUz5155w5lTuj8gdfTx7sKTsRFRyAamK8B53WeeJcBTGPQ6Dz
+ CGgpE6z/i7S3x4z31mstc3RLclzOjFY+qzSaJLiYUe58x1zHik9F1LUHxYbgkB4Hj9nX
+ 7SHCoWVVf/fhzLU7LYswuk7zEtiGGIcqLT5VQ9DLCrt5YWbQhl5xNZVz5K4IpE+rC1V1
+ 2ACXHltdmJshT8Z6As2gzHl+Q+kyE8v4uNa39n0zi1v5obWHCgpX0D9e7IIwNDYWaly6
+ XcOYMNlU43cW02xL5HoQL0OML41TZlay938X+LJAZCj9z8EIpq16avorXn1WcEM+oETQ
+ MnSg==
+X-Gm-Message-State: AOJu0Yx/y4zjOIItiOde44t8xLmB0Q5TH0E8FM5SxFywf5l1PuYkt7TV
+ XdhpxUkrr4pPkKBa0Esuq056H5ZXmjSoZbxPwiTWjTDposEamTncmEDzdg==
+X-Google-Smtp-Source: AGHT+IEOhOmwqEZLLCn9K4tHBK276g+VWBNVdonvcMYF5a0ta2phjTxC4RJ9oKk4zRWVEg7NFsxPSg==
+X-Received: by 2002:a05:6602:2c8b:b0:81f:cad4:c6e7 with SMTP id
+ ca18e2360f4ac-82a96247f31mr375148739f.15.1725646525541; 
+ Fri, 06 Sep 2024 11:15:25 -0700 (PDT)
+Received: from james-x399.localdomain (97-118-128-240.hlrn.qwest.net.
+ [97.118.128.240]) by smtp.gmail.com with ESMTPSA id
+ 8926c6da1cb9f-4d07ad4d64bsm736307173.54.2024.09.06.11.15.25
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 06 Sep 2024 11:15:25 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
+To: buildroot@buildroot.org
+Date: Fri,  6 Sep 2024 12:15:17 -0600
+Message-Id: <20240906181517.4105353-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20240906171503.3495498-1-dario.binacchi@amarulasolutions.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1725646223;
- bh=rdhOl1WmI7ows9XsAYIumS7d4TUcQM8XijVnYxYaTvc=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=pMn7UIHD65wR6S91qQbO3puNHICrM+o45m/1258Pn8J7yfdnle2cwWNbMV268qy0A
- rm48Y3/9OeWYeflRLS/vCZlfxCljE67kS41ga29oBhSimVw8cReQXthkkD4RV4/JMB
- Rpg3lo3cy8Gwf5ujXD+CWHU6Jhrd6LF3mMf0YUpVDH3NRoJP9M9mQMNpEOvbBmtvJC
- eKb+IqzHvYn8arL1BQ+E9hvdDnbVf/YQ9R8KiBMGLXvkZYCw6MhmesIpAeTD8uQCEr
- D0UiD5IK4NC6ECETge72a89pgwRT7chjc8XGC8WNJggg2SCFMGueHIpYsApYJhvRbo
- MZcFmgnoDSzHg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1725646525; x=1726251325; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=YoP6MkcS6k5zldtn3BPLLmHi4qRHiFnDNGnaG9oQ68w=;
+ b=UUNtzHkEFMmMnebK5XAqOZARYJ6HXVlonTjKeRb+bddkbER9nv5XEznmE026t3L4+J
+ QCLrAv7daQ1pTgYSSldpPlfj775FNBiY/qL9vAUmNocALagQrlPkBmDviOHU1nRLbgQu
+ oZY+VGxTIJnd2oBl8i1aPAyHUANq2hTnokljtCtANssnrQQ8dTQKQtWx568UZy/VoULB
+ TPP6dulQ03GlU3sZyxzEvPl6WVekJ/tDjsYuWOAoPf1FkGaFTiF8ATfXWxNywDXHUZYg
+ pOFfcbU8ZCCkpvEZcLcUg/L/XwFkuJLt0oJdlLIrm0udTDJQYSs0SGga0Ev3mdA1nX0C
+ ng8A==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=pMn7UIHD
-Subject: Re: [Buildroot] [PATCH v3 1/2] package/iana-assignments: new package
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=UUNtzHkE
+Subject: [Buildroot] [PATCH 1/1] package/python-httpx: bump to version 0.27.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,114 +99,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Floris Bos <bos@je-eigen-domein.nl>, Heiko Thiery <heiko.thiery@gmail.com>,
- linux-amarula@amarulasolutions.com,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Dario, All,
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/python-httpx/python-httpx.hash | 4 ++--
+ package/python-httpx/python-httpx.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-On 2024-09-06 19:15 +0200, Dario Binacchi spake thusly:
-> The fixing of [1] and related code reviews [2] and [3] highlighted the
-> need for a package providing a versioned PEN (Enterprise Numbers)
-> registry file from IANA (Internet Assigned Numbers Authority).
-> The GitHub repository from which this package originates is a mirror of
-> the IANA registries periodically updated from https://www.iana.org/protocols.
-> 
-> [1] http://autobuild.buildroot.org/results/5ae5ee948d99679cd50d1115a7d46f4368347b4f
-> [2] https://patchwork.ozlabs.org/project/buildroot/patch/20240902210055.239859-1-dario.binacchi@amarulasolutions.com
-> [3] https://patchwork.ozlabs.org/project/buildroot/patch/20240904174021.2670289-1-dario.binacchi@amarulasolutions.com/
-> Co-Developed-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-> Co-Developed-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-> ---
-[--SNIP--]
-> diff --git a/package/iana-assignments/Config.in b/package/iana-assignments/Config.in
-> new file mode 100644
-> index 000000000000..b7bd52abd2d1
-> --- /dev/null
-> +++ b/package/iana-assignments/Config.in
-> @@ -0,0 +1,14 @@
-> +config BR2_PACKAGE_IANA_ASSIGNMENTS
-> +	bool "IANA assignments"
-
-As I suggested, we should 'select PEN' here, otherwise, when the user
-enables the iana-assignements package alone, nothing will be done; it
-does not make much sense.
-
-Agreed, one may argue that having a single option that is always
-selected does not make much sense either. However, in that case, a
-dependent package (like ipmitool) can appropriately depend on the PEN
-option, and be future-proof in case iana-assignments installs something
-else in the future.
-
-Regards,
-Yann E. MORIN.
-
-> +	help
-> +	  Mirror of the IANA registries periodically updated
-> +	  from https://www.iana.org/protocols.
-> +
-> +	  https://github.com/larseggert/iana-assignments
-> +
-> +if BR2_PACKAGE_IANA_ASSIGNMENTS
-> +
-> +config BR2_PACKAGE_IANA_ASSIGNMENTS_PEN_REG
-> +	bool "PEN (Enterprise Numbers) registry"
-> +
-> +endif
-> diff --git a/package/iana-assignments/iana-assignments.hash b/package/iana-assignments/iana-assignments.hash
-> new file mode 100644
-> index 000000000000..c58fb61df292
-> --- /dev/null
-> +++ b/package/iana-assignments/iana-assignments.hash
-> @@ -0,0 +1,2 @@
-> +# Locally computed
-> +sha256  e7a1f8153715fa9e0f4c5d102f9271bce425a468f58a445e7c5ecdf7105fd460  iana-assignments-bf358dc8d89b7939557220b8055699b42a4133e9.tar.gz
-> diff --git a/package/iana-assignments/iana-assignments.mk b/package/iana-assignments/iana-assignments.mk
-> new file mode 100644
-> index 000000000000..824b26d4ecf6
-> --- /dev/null
-> +++ b/package/iana-assignments/iana-assignments.mk
-> @@ -0,0 +1,18 @@
-> +################################################################################
-> +#
-> +# iana-assignments
-> +#
-> +################################################################################
-> +
-> +IANA_ASSIGNMENTS_VERSION = bf358dc8d89b7939557220b8055699b42a4133e9
-> +IANA_ASSIGNMENTS_SITE = $(call github,larseggert,iana-assignments,$(IANA_ASSIGNMENTS_VERSION))
-> +
-> +ifeq ($(BR2_PACKAGE_IANA_ASSIGNMENTS_PEN_REG),y)
-> +define IANA_ASSIGNMENTS_INSTALL_PEN_REG
-> +	$(INSTALL) -D -m 0644 $(@D)/enterprise-numbers/enterprise-numbers \
-> +		$(TARGET_DIR)/usr/share/misc/iana/enterprise-numbers
-> +endef
-> +IANA_ASSIGNMENTS_POST_INSTALL_TARGET_HOOKS += IANA_ASSIGNMENTS_INSTALL_PEN_REG
-> +endif
-> +
-> +$(eval $(generic-package))
-> -- 
-> 2.43.0
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
+diff --git a/package/python-httpx/python-httpx.hash b/package/python-httpx/python-httpx.hash
+index 381439f464..3ffd491c9e 100644
+--- a/package/python-httpx/python-httpx.hash
++++ b/package/python-httpx/python-httpx.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/httpx/json
+-md5  d6035d561136590900678ec6c78698cb  httpx-0.27.0.tar.gz
+-sha256  a0cb88a46f32dc874e04ee956e4c2764aba2aa228f650b06788ba6bda2962ab5  httpx-0.27.0.tar.gz
++md5  f29763f29da610b185d2ca33937c572f  httpx-0.27.2.tar.gz
++sha256  f7c2be1d2f3c3c3160d441802406b206c2b76f5947b11115e6df10c6c65e66c2  httpx-0.27.2.tar.gz
+ # Locally computed sha256 checksums
+ sha256  4ec59d544f12b5f539a3a716fd321ac58ccd8030b465221f2c880200cdf28d8d  LICENSE.md
+diff --git a/package/python-httpx/python-httpx.mk b/package/python-httpx/python-httpx.mk
+index edba2dbb04..c6a298f192 100644
+--- a/package/python-httpx/python-httpx.mk
++++ b/package/python-httpx/python-httpx.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_HTTPX_VERSION = 0.27.0
++PYTHON_HTTPX_VERSION = 0.27.2
+ PYTHON_HTTPX_SOURCE = httpx-$(PYTHON_HTTPX_VERSION).tar.gz
+-PYTHON_HTTPX_SITE = https://files.pythonhosted.org/packages/5c/2d/3da5bdf4408b8b2800061c339f240c1802f2e82d55e50bd39c5a881f47f0
++PYTHON_HTTPX_SITE = https://files.pythonhosted.org/packages/78/82/08f8c936781f67d9e6b9eeb8a0c8b4e406136ea4c3d1f89a5db71d42e0e6
+ PYTHON_HTTPX_SETUP_TYPE = pep517
+ PYTHON_HTTPX_LICENSE = BSD-3-Clause
+ PYTHON_HTTPX_LICENSE_FILES = LICENSE.md
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
