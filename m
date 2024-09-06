@@ -4,49 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10C16CE7B19
-	for <buildroot@archiver.kernel.org>; Fri,  6 Sep 2024 13:58:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1ED63CE7B19
+	for <buildroot@archiver.kernel.org>; Fri,  6 Sep 2024 13:58:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id CB8DE804C3;
-	Fri,  6 Sep 2024 13:58:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 42CAC841A8;
+	Fri,  6 Sep 2024 13:58:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Se0eK-LkO2NG; Fri,  6 Sep 2024 13:58:16 +0000 (UTC)
+ id YnXgNIwY8n1K; Fri,  6 Sep 2024 13:58:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6CD8780477
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 258F484167
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6CD8780477;
-	Fri,  6 Sep 2024 13:58:16 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 6CF5D1BF341
+	by smtp1.osuosl.org (Postfix) with ESMTP id 258F484167;
+	Fri,  6 Sep 2024 13:58:18 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 9794E1BF341
  for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 13:58:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 678CF606A3
+ by smtp4.osuosl.org (Postfix) with ESMTP id 84503401F4
  for <buildroot@lists.busybox.net>; Fri,  6 Sep 2024 13:58:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CjY68lxVH65z for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id bMPo2Zncwfth for <buildroot@lists.busybox.net>;
  Fri,  6 Sep 2024 13:58:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AA4A860670
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 697A7401A0
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id AA4A860670
+ by smtp4.osuosl.org (Postfix) with ESMTP id 697A7401A0
  for <buildroot@buildroot.org>; Fri,  6 Sep 2024 13:58:14 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5C39786EB0; Fri,  6 Sep 2024 13:58:14 +0000 (UTC)
+ id 5044786EC1; Fri,  6 Sep 2024 13:58:14 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 6 Sep 2024 15:57:55 +0200
+Date: Fri, 6 Sep 2024 15:57:12 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d25c0b21d81b2dd8470c76ee4c0e3267d3de90f1
-X-Git-Newrev: 2ed96c42634c235b0c2e2ad8bb124d7591250416
+X-Git-Oldrev: 769d71ae84c7a3d43ee92a1d126b2937713cc811
+X-Git-Newrev: d25c0b21d81b2dd8470c76ee4c0e3267d3de90f1
 X-Patchwork-Hint: ignore
-Message-Id: <20240906135814.5C39786EB0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] Kickoff 2024.11 cycle
+Message-Id: <20240906135814.5044786EC1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] docs/website/news.html: add 2024.08
+ announcement link
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,27 +65,28 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2ed96c42634c235b0c2e2ad8bb124d7591250416
+commit: https://git.buildroot.net/buildroot/commit/?id=d25c0b21d81b2dd8470c76ee4c0e3267d3de90f1
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ docs/website/news.html | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/Makefile b/Makefile
-index 43730c02b2..b134311cfa 100644
---- a/Makefile
-+++ b/Makefile
-@@ -92,7 +92,7 @@ all:
- .PHONY: all
- 
- # Set and export the version string
--export BR2_VERSION := 2024.08
-+export BR2_VERSION := 2024.11-git
- # Actual time the release is cut (for reproducible builds)
- BR2_VERSION_EPOCH = 1725627000
- 
+diff --git a/docs/website/news.html b/docs/website/news.html
+index c09db758a6..636209a15f 100644
+--- a/docs/website/news.html
++++ b/docs/website/news.html
+@@ -20,7 +20,8 @@
+ 	<p>The stable 2024.08 release is out - Thanks to everyone
+ 	  contributing and testing the release candidates. See the
+ 	  <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2024.08">CHANGES</a>
+-	  file for more details
++	  file for more details, read the
++	  <a href="https://lore.kernel.org/buildroot/87frqcj3nw.fsf@dell.be.48ers.dk/T/#u">announcement</a>
+ 	  and go to the <a href="/downloads/">downloads page</a> to pick up the
+ 	  <a href="/downloads/buildroot-2024.08.tar.xz">2024.08 release</a>.</p>
+       </div>
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
