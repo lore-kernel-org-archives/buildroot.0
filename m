@@ -4,91 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B0502EB64CA
-	for <buildroot@archiver.kernel.org>; Sat,  7 Sep 2024 19:05:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD5E1EB64CF
+	for <buildroot@archiver.kernel.org>; Sat,  7 Sep 2024 19:32:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2EE8440469;
-	Sat,  7 Sep 2024 19:05:56 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 77D37400D2;
+	Sat,  7 Sep 2024 19:32:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 85cLrwHUN15N; Sat,  7 Sep 2024 19:05:55 +0000 (UTC)
+ id myHZcMZvQkxn; Sat,  7 Sep 2024 19:32:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3048740363
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0A4794023F
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3048740363;
-	Sat,  7 Sep 2024 19:05:55 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 239E31BF3EC
- for <buildroot@lists.busybox.net>; Sat,  7 Sep 2024 19:05:53 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0A4794023F;
+	Sat,  7 Sep 2024 19:32:12 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 1F43A1BF3EC
+ for <buildroot@lists.busybox.net>; Sat,  7 Sep 2024 19:32:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id AD426818DC
- for <buildroot@lists.busybox.net>; Sat,  7 Sep 2024 19:05:49 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0BB0740256
+ for <buildroot@lists.busybox.net>; Sat,  7 Sep 2024 19:32:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id P3ZBWKzrKCWP for <buildroot@lists.busybox.net>;
- Sat,  7 Sep 2024 19:05:49 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::d2e; helo=mail-io1-xd2e.google.com;
- envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org BEBDA81919
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BEBDA81919
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com
- [IPv6:2607:f8b0:4864:20::d2e])
- by smtp1.osuosl.org (Postfix) with ESMTPS id BEBDA81919
- for <buildroot@buildroot.org>; Sat,  7 Sep 2024 19:05:48 +0000 (UTC)
-Received: by mail-io1-xd2e.google.com with SMTP id
- ca18e2360f4ac-81f9339e534so131072639f.3
- for <buildroot@buildroot.org>; Sat, 07 Sep 2024 12:05:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1725735947; x=1726340747;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=t0qupq+DPzxFhAF21IvuIN84VAHni2GCVOGaihWlpaY=;
- b=VOMQGymuh+NvOlkuMyxLQxNFuImYkGCVc3RagGek5vv0mdCTShURSafr43tBRRXBE2
- 5ZsgsWkxrunjnz6/fiFnPYqOurBivW3rpijt1pT2sPLyej69ZPpV/Rpx0CjYVq8GK1OA
- aR4LCvl+SzDVLRUvuhdgKfLVQ42tkKgjlbZZBEZ9c5+tG0D+KhBJYS9I1A9yWoVz1MO5
- kuBc65i9dcTAdyuTJWTqJQuQhK2LoyC2Piz9b8Xi7M4kLGv9v/6NzfRdyPlz45KNon/k
- Z7entqDrzgkl9TxTw5D2K/Cd9GEEzYdgerdijy1DrEMCQC/BqFGr//fMgcBtBX1s8xEj
- BPmg==
-X-Gm-Message-State: AOJu0Yzu/1vc+9B+Z9ihy/VzUCR3cr3l8TXwrF2spYg3giH14+kBTtFM
- s3ILtRWX5F5wDthXk4Ij7aTcmhKAmjMGISA+5CSvflqP8odx60yz1HsQdg==
-X-Google-Smtp-Source: AGHT+IESwy0/JaXn/QPyKIILpdCHQtM7EwIhc10Uwg1pyA/GywnWalfZh/+lquG39hVlwlANQshaYw==
-X-Received: by 2002:a05:6e02:18c8:b0:3a0:4e27:e704 with SMTP id
- e9e14a558f8ab-3a056868d5bmr23630375ab.10.1725735947154; 
- Sat, 07 Sep 2024 12:05:47 -0700 (PDT)
-Received: from james-x399.localdomain (97-118-128-240.hlrn.qwest.net.
- [97.118.128.240]) by smtp.gmail.com with ESMTPSA id
- e9e14a558f8ab-3a058fe5598sm4534475ab.38.2024.09.07.12.05.46
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 07 Sep 2024 12:05:46 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
-To: buildroot@buildroot.org
-Date: Sat,  7 Sep 2024 13:05:41 -0600
-Message-Id: <20240907190542.879982-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ziRep4yUmQX0 for <buildroot@lists.busybox.net>;
+ Sat,  7 Sep 2024 19:32:09 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::12;
+ helo=smtp3-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 567994022A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 567994022A
+Received: from smtp3-g21.free.fr (smtp3-g21.free.fr [IPv6:2a01:e0c:1:1599::12])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 567994022A
+ for <buildroot@buildroot.org>; Sat,  7 Sep 2024 19:32:08 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8290:3800:e05a:3b8d:ff83:9629])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp3-g21.free.fr (Postfix) with ESMTPSA id 8562A13F879;
+ Sat,  7 Sep 2024 21:32:00 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sat, 07 Sep 2024 21:32:00 +0200
+Date: Sat, 7 Sep 2024 21:32:00 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: TIAN Yuanhao <tianyuanhao3@163.com>
+Message-ID: <ZtyqMEeVKgFMJwIw@landeda>
+References: <20240828124440.3882-1-tianyuanhao3@163.com>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1725735947; x=1726340747; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=t0qupq+DPzxFhAF21IvuIN84VAHni2GCVOGaihWlpaY=;
- b=nsMvrs51rejWz73jurRgEfyVafe/0S1AJ8ECLlIkyBMNEpQP4wXTJwWSsSqwjqW74m
- UtjhnfX5Sb33CfG4jJhgi/se+1OxZAQ6hoyp4R2MhFashMpnmmXYnxoaNcGj0KpE+scY
- mRnt4d5Tgjfyir6b56whz7DlW6gZDcYtaggFSdPSEMJ9XPgTTwB0rKvPdvIq4Iprzw2n
- 4IACEa0nlOFhTmQJ8CLjfalYHXr/UmjdOvvd+xWt493G9H0yNV3OFvE2rCeqBcSMkDwX
- PmBn/baUqYubDN/Y51MGj63g63TxdzPDWygFksJt+YucTW/YwI6Ht62e0GWVbBbTOZml
- c0nA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+Content-Disposition: inline
+In-Reply-To: <20240828124440.3882-1-tianyuanhao3@163.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1725737525;
+ bh=anyMx5PBwErxY9dlQFrk3+DhP6THKC6LSXUObEPW8HM=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=gEo7sQojgg7cfldyjM+SFmMilTeaZJJnmqiWn7MWdhlXWSRmLsa5AC48SP6DlytEU
+ +iNDZsEHeczzUCNl0dqveTLKyQbrUIhY3Q+G/GI0Rjp+xDgy6wHWus8nt6L7N+2pjX
+ I9Bi4BZmvVfziDdnHHlPbdNDeEOJC+GWGvvMKsqEPC/g8NW+G2KqzJKH6I+ndIokxx
+ PHC4BIz0Gl9MFumJqC9DL78gHQIGpH7rynEd07zbojK7xfwEqR+9VOzEubWbJ2dNtO
+ AyPUEYPY6p/ZK/cfcKx6ksLIL5W4T75z0jgwmQrPs0baFjQdz6Al/oG1g0Io0bPecq
+ BXWjuD6M13J0A==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=nsMvrs51
-Subject: [Buildroot] [PATCH 1/2] package/ell: bump to version 0.68
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=gEo7sQoj
+Subject: Re: [Buildroot] [PATCH 1/1] Makefile: move 'ppd-fixup-paths' to
+ 'host-finalize'
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,45 +82,90 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ Brandon Maier <Brandon.Maier@collins.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/ell/ell.hash | 2 +-
- package/ell/ell.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Yuanhao, All,
 
-diff --git a/package/ell/ell.hash b/package/ell/ell.hash
-index 3adca75140..1bf764b621 100644
---- a/package/ell/ell.hash
-+++ b/package/ell/ell.hash
-@@ -1,5 +1,5 @@
- # From https://mirrors.edge.kernel.org/pub/linux/libs/ell/sha256sums.asc
--sha256  9ee7ac57b188d391cead705d3596a6d3240341786475149db297782a52269aa5  ell-0.65.tar.xz
-+sha256  ddcbf381d758f61a02954bf5d2907c8900462abb7b2dcf45589874978bc10125  ell-0.68.tar.xz
- 
- # License files
- sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING
-diff --git a/package/ell/ell.mk b/package/ell/ell.mk
-index a682635539..4fe5fa7c56 100644
---- a/package/ell/ell.mk
-+++ b/package/ell/ell.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--ELL_VERSION = 0.65
-+ELL_VERSION = 0.68
- ELL_SOURCE = ell-$(ELL_VERSION).tar.xz
- ELL_SITE = $(BR2_KERNEL_MIRROR)/linux/libs/ell
- ELL_LICENSE = LGPL-2.1+
+On 2024-08-28 05:44 -0700, TIAN Yuanhao spake thusly:
+> When using 'per-package', some python shebang in the host directory
+> will point to the per-package directory. However, the python modules
+> that are runtime dependencies will not be rsynced to the corresponding
+> per-package directory, which may cause the python script to fail to
+> find the python module.
+> 
+> For example, when enabling BR2_PER_PACKAGE_DIRECTORIES and
+> BR2_PACKAGE_HOST_BMAP_TOOLS, the following error will occur:
+> 
+>   ModuleNotFoundError: No module named 'six'
+> 
+> output/host/bin/bmaptool detects the presence of host-python-six in
+> output/per-package/host-bmap-tools/host. However, host-python-six is
+> not a required compile-time dependency for host-bmap-tools. Therefore,
+> it will not be rsynced to output/per-package/host-bmap-tools/host, but
+> only to output/host. This is the reason for the error.
+> 
+> Move the 'ppd-fixup-paths' to 'host-finalize' to allow the host python
+> script to search for python modules in output/host.
+
+Thankyou for this patch.
+
+As you already noticed [1], there was a more generic patch pending [1],
+so I've marked yours as "Not applicable" in patchwork.
+
+Thank you for th effedback on my previous patch! :-)
+
+Regards,
+Yann E. MORIN.
+
+> Signed-off-by: TIAN Yuanhao <tianyuanhao3@163.com>
+> Cc: Brandon Maier <Brandon.Maier@collins.com>
+> Cc: James Hilliard <james.hilliard1@gmail.com>
+> Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> ---
+>  Makefile | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/Makefile b/Makefile
+> index 55aeafde23..f1fc3a4a52 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -604,7 +604,6 @@ prepare-sdk: world
+>  	PARALLEL_JOBS=$(PARALLEL_JOBS) \
+>  		PER_PACKAGE_DIR=$(PER_PACKAGE_DIR) \
+>  		$(TOPDIR)/support/scripts/fix-rpath staging
+> -	$(call ppd-fixup-paths,$(BASE_DIR))
+>  	$(INSTALL) -m 755 $(TOPDIR)/support/misc/relocate-sdk.sh $(HOST_DIR)/relocate-sdk.sh
+>  	mkdir -p $(HOST_DIR)/share/buildroot
+>  	echo $(HOST_DIR) > $(HOST_DIR)/share/buildroot/sdk-location
+> @@ -722,6 +721,7 @@ STAGING_DIR_FILES_LISTS = $(sort $(wildcard $(BUILD_DIR)/*/.files-list-staging.t
+>  host-finalize: $(PACKAGES) $(HOST_DIR) $(HOST_DIR_SYMLINK)
+>  	@$(call MESSAGE,"Finalizing host directory")
+>  	$(call per-package-rsync,$(sort $(PACKAGES)),host,$(HOST_DIR),copy)
+> +	$(call ppd-fixup-paths,$(BASE_DIR))
+>  
+>  .PHONY: staging-finalize
+>  staging-finalize: $(STAGING_DIR_SYMLINK)
+> -- 
+> 2.45.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
 -- 
-2.34.1
-
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
