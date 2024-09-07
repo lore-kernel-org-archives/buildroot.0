@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33D56ECE567
-	for <buildroot@archiver.kernel.org>; Sat,  7 Sep 2024 20:04:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B466FECE567
+	for <buildroot@archiver.kernel.org>; Sat,  7 Sep 2024 20:04:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E8C0D404C2;
-	Sat,  7 Sep 2024 20:04:27 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 814B0405AA;
+	Sat,  7 Sep 2024 20:04:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3Xp6qWAeoFnW; Sat,  7 Sep 2024 20:04:26 +0000 (UTC)
+ id V24MZWF20EHx; Sat,  7 Sep 2024 20:04:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6B98F4059B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 22F4D405A3
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6B98F4059B;
-	Sat,  7 Sep 2024 20:04:26 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 22F4D405A3;
+	Sat,  7 Sep 2024 20:04:30 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1E72F1BF3EC
- for <buildroot@lists.busybox.net>; Sat,  7 Sep 2024 20:04:04 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 08A0A1BF863
+ for <buildroot@lists.busybox.net>; Sat,  7 Sep 2024 20:04:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6399D4044E
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7B59D4023F
  for <buildroot@lists.busybox.net>; Sat,  7 Sep 2024 20:03:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 61LfdPQ7jKx3 for <buildroot@lists.busybox.net>;
+ id QwnOQKQFmOEc for <buildroot@lists.busybox.net>;
  Sat,  7 Sep 2024 20:03:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 39DB64023F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7B2A54047C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 39DB64023F
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7B2A54047C
  for <buildroot@buildroot.org>; Sat,  7 Sep 2024 20:03:57 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 33AD186F3D; Sat,  7 Sep 2024 20:03:57 +0000 (UTC)
+ id 784FB86F3D; Sat,  7 Sep 2024 20:03:57 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 7 Sep 2024 21:58:20 +0200
+Date: Sat, 7 Sep 2024 21:58:29 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8ba362bf9493583889e355817e2edc8e915154a8
-X-Git-Newrev: 69167af68962b77697d23fcb64cf4b2d0c2edd43
+X-Git-Oldrev: f3a0da611bff2c18d6b10fc140c8686107d1daf1
+X-Git-Newrev: be5a0ce9bc52eb43d0c597097b6716809ed0098d
 X-Patchwork-Hint: ignore
-Message-Id: <20240907200357.33AD186F3D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pyyaml: bump to version
- 6.0.2
+Message-Id: <20240907200357.784FB86F3D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-starlette: bump to version
+ 0.38.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,45 +65,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=69167af68962b77697d23fcb64cf4b2d0c2edd43
+commit: https://git.buildroot.net/buildroot/commit/?id=be5a0ce9bc52eb43d0c597097b6716809ed0098d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-pyyaml/python-pyyaml.hash | 4 ++--
- package/python-pyyaml/python-pyyaml.mk   | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-starlette/python-starlette.hash | 4 ++--
+ package/python-starlette/python-starlette.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pyyaml/python-pyyaml.hash b/package/python-pyyaml/python-pyyaml.hash
-index e1f9412c30..47bd6d1ef9 100644
---- a/package/python-pyyaml/python-pyyaml.hash
-+++ b/package/python-pyyaml/python-pyyaml.hash
+diff --git a/package/python-starlette/python-starlette.hash b/package/python-starlette/python-starlette.hash
+index eca8cb8fd1..b5ba43c061 100644
+--- a/package/python-starlette/python-starlette.hash
++++ b/package/python-starlette/python-starlette.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/PyYAML/json
--md5  c9246277af2d9a13b7018af267a0831a  PyYAML-6.0.1.tar.gz
--sha256  bfdf460b1736c775f2ba9f6a92bca30bc2095067b8a9d77876d1fad6cc3b4a43  PyYAML-6.0.1.tar.gz
-+md5  9600ee49b2b4e1a0237cf4173b6dc594  pyyaml-6.0.2.tar.gz
-+sha256  d584d9ec91ad65861cc08d42e834324ef890a082e591037abe114850ff7bbc3e  pyyaml-6.0.2.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/starlette/json
+-md5  c56bd58a7ed1320677cff4b1055dff18  starlette-0.38.2.tar.gz
+-sha256  c7c0441065252160993a1a37cf2a73bb64d271b17303e0b0c1eb7191cfb12d75  starlette-0.38.2.tar.gz
++md5  7861ee7609e649508792a4ece854406b  starlette-0.38.4.tar.gz
++sha256  53a7439060304a208fea17ed407e998f46da5e5d9b1addfea3040094512a6379  starlette-0.38.4.tar.gz
  # Locally computed sha256 checksums
- sha256  8d3928f9dc4490fd635707cb88eb26bd764102a7282954307d3e5167a577e8a4  LICENSE
-diff --git a/package/python-pyyaml/python-pyyaml.mk b/package/python-pyyaml/python-pyyaml.mk
-index 40a1c25758..1101b59276 100644
---- a/package/python-pyyaml/python-pyyaml.mk
-+++ b/package/python-pyyaml/python-pyyaml.mk
+ sha256  dcb95677a02240243187e964f941847d19b17821cf99e5afae684fab328c19bf  LICENSE.md
+diff --git a/package/python-starlette/python-starlette.mk b/package/python-starlette/python-starlette.mk
+index bf38b1375b..1a2b7532f7 100644
+--- a/package/python-starlette/python-starlette.mk
++++ b/package/python-starlette/python-starlette.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYYAML_VERSION = 6.0.1
--PYTHON_PYYAML_SOURCE = PyYAML-$(PYTHON_PYYAML_VERSION).tar.gz
--PYTHON_PYYAML_SITE = https://files.pythonhosted.org/packages/cd/e5/af35f7ea75cf72f2cd079c95ee16797de7cd71f29ea7c68ae5ce7be1eda0
-+PYTHON_PYYAML_VERSION = 6.0.2
-+PYTHON_PYYAML_SOURCE = pyyaml-$(PYTHON_PYYAML_VERSION).tar.gz
-+PYTHON_PYYAML_SITE = https://files.pythonhosted.org/packages/54/ed/79a089b6be93607fa5cdaedf301d7dfb23af5f25c398d5ead2525b063e17
- PYTHON_PYYAML_SETUP_TYPE = setuptools
- PYTHON_PYYAML_LICENSE = MIT
- PYTHON_PYYAML_LICENSE_FILES = LICENSE
+-PYTHON_STARLETTE_VERSION = 0.38.2
++PYTHON_STARLETTE_VERSION = 0.38.4
+ PYTHON_STARLETTE_SOURCE = starlette-$(PYTHON_STARLETTE_VERSION).tar.gz
+-PYTHON_STARLETTE_SITE = https://files.pythonhosted.org/packages/43/e2/d49a94ecb665b3a1c34b40c78165a737abc384fcabc843ccb14a3bd3dc37
++PYTHON_STARLETTE_SITE = https://files.pythonhosted.org/packages/b4/9c/d85721508122ae927aa7064e10a3f47f8dabcd4fd162222afcecd0d8d7b7
+ PYTHON_STARLETTE_SETUP_TYPE = pep517
+ PYTHON_STARLETTE_LICENSE = BSD-3-Clause
+ PYTHON_STARLETTE_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
