@@ -4,54 +4,54 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 74FC8CD4F4C
-	for <buildroot@archiver.kernel.org>; Sun,  8 Sep 2024 21:38:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D843BECE577
+	for <buildroot@archiver.kernel.org>; Sun,  8 Sep 2024 21:45:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2F05240128;
-	Sun,  8 Sep 2024 21:38:14 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6C8EF40128;
+	Sun,  8 Sep 2024 21:45:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2AToa1P2BH_o; Sun,  8 Sep 2024 21:38:13 +0000 (UTC)
+ id k6P1U7YDtUKZ; Sun,  8 Sep 2024 21:45:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 142674016D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 338294016D
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 142674016D;
-	Sun,  8 Sep 2024 21:38:13 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5CE3E1BF35C
- for <buildroot@lists.busybox.net>; Sun,  8 Sep 2024 21:38:12 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 338294016D;
+	Sun,  8 Sep 2024 21:45:07 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 724C41BF35C
+ for <buildroot@lists.busybox.net>; Sun,  8 Sep 2024 21:45:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 57F1480DE5
- for <buildroot@lists.busybox.net>; Sun,  8 Sep 2024 21:38:12 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6C429402B1
+ for <buildroot@lists.busybox.net>; Sun,  8 Sep 2024 21:45:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5a_2vC_RROeN for <buildroot@lists.busybox.net>;
- Sun,  8 Sep 2024 21:38:11 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id T6LjU70yPBg4 for <buildroot@lists.busybox.net>;
+ Sun,  8 Sep 2024 21:45:05 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=116.202.254.214;
  helo=ciao.gmane.io; envelope-from=gclub-buildroot@m.gmane-mx.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 6AB6680DAA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6AB6680DAA
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 382C740290
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 382C740290
 Received: from ciao.gmane.io (ciao.gmane.io [116.202.254.214])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6AB6680DAA
- for <buildroot@uclibc.org>; Sun,  8 Sep 2024 21:38:11 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 382C740290
+ for <buildroot@uclibc.org>; Sun,  8 Sep 2024 21:45:05 +0000 (UTC)
 Received: from list by ciao.gmane.io with local (Exim 4.92)
- (envelope-from <gclub-buildroot@m.gmane-mx.org>) id 1snPbk-00053S-Gv
- for buildroot@uclibc.org; Sun, 08 Sep 2024 23:38:08 +0200
+ (envelope-from <gclub-buildroot@m.gmane-mx.org>) id 1snPiQ-0000Tx-5p
+ for buildroot@uclibc.org; Sun, 08 Sep 2024 23:45:02 +0200
 X-Injected-Via-Gmane: http://gmane.org/
 To: buildroot@uclibc.org
 From: Bernd Kuhls <bernd@kuhls.net>
-Date: Sun, 08 Sep 2024 23:37:44 +0200
-Message-ID: <pan$81c84$42e12b22$72776d1a$160b1265@ID-313208.user.individual.net>
-References: <20240908181505.403963-1-dario.binacchi__17014.6963371494$1725819338$gmane$org@amarulasolutions.com>
+Date: Sun, 08 Sep 2024 23:39:05 +0200
+Message-ID: <pan$dcd79$3d067ab6$ab561398$22d7fa7f@ID-313208.user.individual.net>
+References: <20240822103854.2114748-1-thomas.petazzoni__44393.730528985$1724323164$gmane$org@bootlin.com>
 Mime-Version: 1.0
 User-Agent: Pan/0.154 (Izium; 517acf4)
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=fail (p=none dis=none)
  header.from=kuhls.net
-Subject: Re: [Buildroot] [PATCH 1/1] package/rp-pppoe: fixup download URL
+Subject: Re: [Buildroot] [PATCH next] package/cmake: bump to 3.30.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,21 +68,15 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Am Sun,  8 Sep 2024 20:15:05 +0200 schrieb Dario Binacchi:
+Am Thu, 22 Aug 2024 12:38:53 +0200 schrieb Thomas Petazzoni via buildroot:
 
-> The idea is to later submit a patch to bump the version to 4.0 using the
-> official repository, which is https://salsa.debian.org/dskoll/rp-pppoe.
+> This is minor release. According to
+> https://cmake.org/cmake/help/latest/release/3.30.html#updates:
+> 
+> 3.30.1, 3.30.2
 
-Hi,
-
-sent a patch[1] sitting in my queue for several months, run-time tested. 
-Back then I chose to use the github repo for no obvious reason but I can 
-change it to debian.org if requested.
-
-Regards, Bernd
-
-[1] https://patchwork.ozlabs.org/project/buildroot/patch/
-20240908213452.1634373-1-bernd@kuhls.net/
+Tested-by: Bernd Kuhls <bernd@kuhls.net>
+[built my usual setup without problems, btw: 3.30.3 is out ;))
 
 _______________________________________________
 buildroot mailing list
