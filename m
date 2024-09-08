@@ -4,91 +4,95 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4201ACD4F4C
-	for <buildroot@archiver.kernel.org>; Sun,  8 Sep 2024 14:48:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8FCB4E6FE49
+	for <buildroot@archiver.kernel.org>; Sun,  8 Sep 2024 14:48:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7650B4035A;
-	Sun,  8 Sep 2024 14:48:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id AE3DA4035C;
+	Sun,  8 Sep 2024 14:48:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PhSWqKF9vNqV; Sun,  8 Sep 2024 14:48:25 +0000 (UTC)
+ id rjmkIIvfhdVI; Sun,  8 Sep 2024 14:48:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EB66640353
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 092D4403C2
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EB66640353;
-	Sun,  8 Sep 2024 14:48:24 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 774EE1BF2B9
+	by smtp4.osuosl.org (Postfix) with ESMTP id 092D4403C2;
+	Sun,  8 Sep 2024 14:48:28 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id DB5FB1BF2B9
  for <buildroot@lists.busybox.net>; Sun,  8 Sep 2024 14:48:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6483D605E1
+ by smtp1.osuosl.org (Postfix) with ESMTP id D60EB80F9E
  for <buildroot@lists.busybox.net>; Sun,  8 Sep 2024 14:48:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OCxY__BqzeF8 for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id cN2gbj3lPosm for <buildroot@lists.busybox.net>;
  Sun,  8 Sep 2024 14:48:22 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::22c; helo=mail-lj1-x22c.google.com;
+ client-ip=2a00:1450:4864:20::531; helo=mail-ed1-x531.google.com;
  envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 0434E605AE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0434E605AE
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com
- [IPv6:2a00:1450:4864:20::22c])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 0434E605AE
- for <buildroot@buildroot.org>; Sun,  8 Sep 2024 14:48:21 +0000 (UTC)
-Received: by mail-lj1-x22c.google.com with SMTP id
- 38308e7fff4ca-2f75de9a503so11430501fa.0
- for <buildroot@buildroot.org>; Sun, 08 Sep 2024 07:48:21 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 68A4580F94
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 68A4580F94
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com
+ [IPv6:2a00:1450:4864:20::531])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 68A4580F94
+ for <buildroot@buildroot.org>; Sun,  8 Sep 2024 14:48:22 +0000 (UTC)
+Received: by mail-ed1-x531.google.com with SMTP id
+ 4fb4d7f45d1cf-5c3c30e663fso4048341a12.1
+ for <buildroot@buildroot.org>; Sun, 08 Sep 2024 07:48:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1725806899; x=1726411699;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=VUMdG/r+kvqO/a60leXFJ3pwXBvBdCUO2dJo0QvKYL0=;
- b=wgQnesfnYbbNBHCi4YNQx0dLRh6Dwq+M7Mv0sgTtRlhxHUS6r4CglFOQrNnlugWaYn
- BqOSfe/Gy+MUxZ0Da0bjbrS1v9wVJvdL6gghdzx23Nj6OjrPl/uUoyerFcgHHoijc6Or
- YEblM9aIxRtYfE120Xlf0mCF1ZSkDjxtf0T5LaIndl6B82D7GsYgmixFx6IcgI1vEvFr
- irzC/j31x4rpgf5tzs/0FCgHjrBuQ3y4S+Nw1Wnx1U9VJyNCcRxj2z/6yas7yCpLr0aM
- qr0MiD+a3evGBv5kF4ZcgIN6y5rvzggeTNlC/jx6MsGoUC4inZDGYWQSVMNSET0VX8V/
- U/dg==
-X-Gm-Message-State: AOJu0Yws8Kg6QwAi98K2vUvAxy4BY34xOEYV2dty220lDa57hf/nHN43
- 79ux3D1NiZ3RbDgXsTE5YNrJyOldhJNoqwkQrZ5A4bDY13n/NovArvu+2N2INaf2duop7I2vP6Q
- +fr0=
-X-Google-Smtp-Source: AGHT+IF8wcVQ+OlY97ltsgHl00s7o2o0LjJL7iXP3c7WnRNq4gsJ+wIkBELeA/5X+w+Ckf6PVuY6nw==
-X-Received: by 2002:a2e:be91:0:b0:2f7:4e9b:93e1 with SMTP id
- 38308e7fff4ca-2f751f69e28mr61916801fa.36.1725806898981; 
- Sun, 08 Sep 2024 07:48:18 -0700 (PDT)
+ d=1e100.net; s=20230601; t=1725806900; x=1726411700;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=cUbbb1kXWjjwyYgJbT9QmmJzLRqPEvZMt2LGUusZfNw=;
+ b=EFODovIMQ7XssCquphthiD2N3Veb+HqjhqSjKM080e2SXTaRWL45RFyrHwFvm3Ss80
+ wLpYIndr2h/65I2VgrQnP/bLVzBj0nkFluAU/sUBSLn1+aPQ/75W5Hf+oMR0FXu2L8LQ
+ 4oMk8Ob8Gu+smKr/jjE1tK/nSwUKv2T+GK/L25JJpp9F6pK7ry40XLVBRvtteMPHYFcC
+ Xd18L++ewdH4KKJOub3ytWh5PRqdz44Gzn2vIMsfnSv0PJbBMvB+HFfSOWbdq/AfQ/wO
+ a+JAX+1rOn/YrrJGez44//+FjdulPxRbinMeoIGo4lWzc4EK5apK9N6n7/pdqmcTbm1z
+ f7LA==
+X-Gm-Message-State: AOJu0Ywl74QDEy2ELDJbwHBzpPQLDTAiI1X6q1A9YIF3RPqz6k3flocM
+ ujwH/RMNd8O1QORkqS6F3LOjWn6KZgosds83HZhODi82n3QU6S6VJ5+tOEbccm8Ut8gf7pHxkcG
+ Tqck=
+X-Google-Smtp-Source: AGHT+IG+hqd319M3cEQQ0a/XAzr9ufnID/cnWIhx8Z+UY2W8g9fhxAOZcUAd6Je4iEIrIZfsE4sb4A==
+X-Received: by 2002:a05:6402:3604:b0:5bf:c8:78a with SMTP id
+ 4fb4d7f45d1cf-5c3dc795ce9mr5329399a12.17.1725806899863; 
+ Sun, 08 Sep 2024 07:48:19 -0700 (PDT)
 Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it
  (host-87-4-102-18.retail.telecomitalia.it. [87.4.102.18])
  by smtp.gmail.com with ESMTPSA id
- 4fb4d7f45d1cf-5c3ebd4693fsm1926602a12.37.2024.09.08.07.48.17
+ 4fb4d7f45d1cf-5c3ebd4693fsm1926602a12.37.2024.09.08.07.48.19
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 08 Sep 2024 07:48:18 -0700 (PDT)
+ Sun, 08 Sep 2024 07:48:19 -0700 (PDT)
 From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Sun,  8 Sep 2024 16:48:14 +0200
-Message-ID: <20240908144815.3822467-1-dario.binacchi@amarulasolutions.com>
+Date: Sun,  8 Sep 2024 16:48:15 +0200
+Message-ID: <20240908144815.3822467-2-dario.binacchi@amarulasolutions.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240908144815.3822467-1-dario.binacchi@amarulasolutions.com>
+References: <20240908144815.3822467-1-dario.binacchi@amarulasolutions.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1725806899; x=1726411699;
+ d=amarulasolutions.com; s=google; t=1725806900; x=1726411700;
  darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=VUMdG/r+kvqO/a60leXFJ3pwXBvBdCUO2dJo0QvKYL0=;
- b=Dem7L8+wwafIPYUTcAqtS7+JQb5WcdsRWnZOL3DNI4VLDVblZ8KUnx2/Q4LUcpKOE4
- lucNQuO2JWukmpiQ4TT+qnfPfShb7xLo1UodEjGrUq/YK7unOD3ysowOuqw5CrDQLsPg
- TMVPs1bbm3aHIFd/mQlw5LqyZlujj/0btQ1j0=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=cUbbb1kXWjjwyYgJbT9QmmJzLRqPEvZMt2LGUusZfNw=;
+ b=YMt4JaRfIQKsI1Pwh/H7yRNp9VbPrdcYetc9+e/z68oZoVUPxuZzu4P8oFE4xL2bbV
+ iCPTH0a974qskF0020PD7+mxLf5Je1mPKEj2XLDoMtvgYrCzriqmbg8Ic3XraS/k1jZm
+ JksIkARbP/oeEMValL1kz2Gq2/nBLSLPpVpIU=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (1024-bit key,
  unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=Dem7L8+w
-Subject: [Buildroot] [PATCH v4 1/2] package/iana-assignments: new package
+ header.a=rsa-sha256 header.s=google header.b=YMt4JaRf
+Subject: [Buildroot] [PATCH v4 2/2] package/ipmitool: use versioned or
+ custom PEN registry
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -110,15 +114,20 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The fixing of [1] and related code reviews [2] and [3] highlighted the
-need for a package providing a versioned PEN (Enterprise Numbers)
-registry file from IANA (Internet Assigned Numbers Authority).
-The GitHub repository from which this package originates is a mirror of
-the IANA registries periodically updated from https://www.iana.org/protocols.
+The previous default URL used for the PEN registry was not stable and
+could change at any time, making it unacceptable to have to update its
+hash every time.
 
-[1] http://autobuild.buildroot.org/results/5ae5ee948d99679cd50d1115a7d46f4368347b4f
-[2] https://patchwork.ozlabs.org/project/buildroot/patch/20240902210055.239859-1-dario.binacchi@amarulasolutions.com
-[3] https://patchwork.ozlabs.org/project/buildroot/patch/20240904174021.2670289-1-dario.binacchi@amarulasolutions.com/
+With this patch, if the PEN (Enterprise numbers) registry is installed
+by the iana-assignments package, ipmitool will use it. Otherwise, the
+user can provide a custom file named enterprise-numbers to be placed
+under /usr/share/misc/ of the overlay rootfs.
+
+Downloading such a file is no longer supported.
+
+Fixes:
+- http://autobuild.buildroot.org/results/5ae5ee948d99679cd50d1115a7d46f4368347b4f
+
 Co-Developed-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Co-Developed-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
@@ -126,97 +135,114 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 ---
 Changes v3 -> v4:
-  - select BR2_PACKAGE_IANA_ASSIGNMENTS_PEN_REG when the package is enabled
+  - Drop BR2_PACKAGE_IPMITOOL_PEN_REG_URI and mark as a legacy option.
+  - Drop IPMITOOL_DEPENDENCIES += iana-assignments.
+  - Add IPMITOOL_CONF_ENV += IANADIR=/usr/share/misc in case of
+    custom PEN.
+  - Use IANA PEN registry in case BR2_PACKAGE_IANA_ASSIGNMENTS_PEN_REG
+    is enabled.
+  - Update the commit message.
 
-Added in v3
+Changes v2 -> v3:
+  - Use by default enterprise-numbers from iana-assignments package.
+  - Alternatively allows to use a local PEN registry file.
+  - Don't support URL path for PEN registry.
 
- DEVELOPERS                                     |  1 +
- package/Config.in                              |  1 +
- package/iana-assignments/Config.in             | 15 +++++++++++++++
- package/iana-assignments/iana-assignments.hash |  2 ++
- package/iana-assignments/iana-assignments.mk   | 18 ++++++++++++++++++
- 5 files changed, 37 insertions(+)
- create mode 100644 package/iana-assignments/Config.in
- create mode 100644 package/iana-assignments/iana-assignments.hash
- create mode 100644 package/iana-assignments/iana-assignments.mk
+Changes v1 -> v2:
+  - use an enterprise-numbers file versioned
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index b0efabfd5d35..40e46741612b 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -792,6 +792,7 @@ F:	configs/imx8mn_bsh_smm_s2_pro_defconfig
- F:	configs/stm32f769_disco_sd_defconfig
- F:	package/armadillo/
- F:	package/babeld/
-+F:	package/iana-assignments/
- F:	package/sscep/
- F:	package/uuu/
+ Config.in.legacy             | 12 ++++++++++++
+ package/ipmitool/Config.in   | 18 ++++++------------
+ package/ipmitool/ipmitool.mk | 20 ++++++--------------
+ 3 files changed, 24 insertions(+), 26 deletions(-)
+
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 7513aa7efd66..ece342bb12d9 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -189,6 +189,18 @@ config BR2_BINUTILS_VERSION_2_40_X
  
-diff --git a/package/Config.in b/package/Config.in
-index 17855fed3058..729e05be675d 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2465,6 +2465,7 @@ endif
- 	source "package/htpdate/Config.in"
- 	source "package/httping/Config.in"
- 	source "package/i2pd/Config.in"
-+	source "package/iana-assignments/Config.in"
- 	source "package/ibrdtn-tools/Config.in"
- 	source "package/ibrdtnd/Config.in"
- 	source "package/ifenslave/Config.in"
-diff --git a/package/iana-assignments/Config.in b/package/iana-assignments/Config.in
-new file mode 100644
-index 000000000000..f1b803cfec1a
---- /dev/null
-+++ b/package/iana-assignments/Config.in
-@@ -0,0 +1,15 @@
-+config BR2_PACKAGE_IANA_ASSIGNMENTS
-+	bool "IANA assignments"
-+	select BR2_PACKAGE_IANA_ASSIGNMENTS_PEN_REG
+ comment "Legacy options removed in 2024.08"
+ 
++config BR2_PACKAGE_IPMITOOL_PEN_REG_URI
++	string "IANA PEN registry move to iana-assignment package"
 +	help
-+	  Mirror of the IANA registries periodically updated
-+	  from https://www.iana.org/protocols.
++	  Installation of the IANA PEN is now handled by the
++	  iana-assignment package; to install a custom PEN,
++	  use a rootfs-overlay for example.
 +
-+	  https://github.com/larseggert/iana-assignments
++config BR2_PACKAGE_IPMITOOL_PEN_REG_URI_WRAP
++	bool
++	default y if BR2_PACKAGE_IPMITOOL_PEN_REG_URI != ""
++	select BR2_LEGACY
 +
-+if BR2_PACKAGE_IANA_ASSIGNMENTS
+ config BR2_PACKAGE_MIDORI
+ 	bool "midori has been removed"
+ 	select BR2_LEGACY
+diff --git a/package/ipmitool/Config.in b/package/ipmitool/Config.in
+index 9516ff8596d3..5cbcf8e535d4 100644
+--- a/package/ipmitool/Config.in
++++ b/package/ipmitool/Config.in
+@@ -5,22 +5,16 @@ config BR2_PACKAGE_IPMITOOL
+ 	  IPMItool provides a simple command-line interface to
+ 	  IPMI-enabled devices.
+ 
++	  Note: If the PEN (Enterprise Numbers) registry is installed
++	  by the "iana-assignments" package, ipmitool will use it.
++	  Otherwise, the user can provide a custom file named
++	  enterprise-numbers to be placed in the usr/share/misc/
++	  directory of the overlay rootfs.
 +
-+config BR2_PACKAGE_IANA_ASSIGNMENTS_PEN_REG
-+	bool "PEN (Enterprise Numbers) registry"
-+
-+endif
-diff --git a/package/iana-assignments/iana-assignments.hash b/package/iana-assignments/iana-assignments.hash
-new file mode 100644
-index 000000000000..c58fb61df292
---- /dev/null
-+++ b/package/iana-assignments/iana-assignments.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256  e7a1f8153715fa9e0f4c5d102f9271bce425a468f58a445e7c5ecdf7105fd460  iana-assignments-bf358dc8d89b7939557220b8055699b42a4133e9.tar.gz
-diff --git a/package/iana-assignments/iana-assignments.mk b/package/iana-assignments/iana-assignments.mk
-new file mode 100644
-index 000000000000..824b26d4ecf6
---- /dev/null
-+++ b/package/iana-assignments/iana-assignments.mk
-@@ -0,0 +1,18 @@
-+################################################################################
-+#
-+# iana-assignments
-+#
-+################################################################################
-+
-+IANA_ASSIGNMENTS_VERSION = bf358dc8d89b7939557220b8055699b42a4133e9
-+IANA_ASSIGNMENTS_SITE = $(call github,larseggert,iana-assignments,$(IANA_ASSIGNMENTS_VERSION))
-+
+ 	  https://github.com/ipmitool/ipmitool/
+ 
+ if BR2_PACKAGE_IPMITOOL
+ 
+-config BR2_PACKAGE_IPMITOOL_PEN_REG_URI
+-	string "IANA PEN registry URL or path"
+-	default "https://www.iana.org/assignments/enterprise-numbers.txt"
+-	help
+-	  Enter an URL or a file path to the PEN registry to use.
+-
+-	  Note that the official registry is 4MiB+ and may change any
+-	  time and is thus not guaranteed to be reproducible.
+-
+-	  Leave empty to not use a registry; vendor IDs will be
+-	  displayed instead of the corresponding names.
+-
+ config BR2_PACKAGE_IPMITOOL_LANPLUS
+ 	bool "enable lanplus interface"
+ 	select BR2_PACKAGE_OPENSSL
+diff --git a/package/ipmitool/ipmitool.mk b/package/ipmitool/ipmitool.mk
+index 4f2151904d43..f2ae72bab841 100644
+--- a/package/ipmitool/ipmitool.mk
++++ b/package/ipmitool/ipmitool.mk
+@@ -49,20 +49,12 @@ endef
+ IPMITOOL_POST_INSTALL_TARGET_HOOKS += IPMITOOL_REMOVE_IPMIEVD
+ endif
+ 
+-IPMITOOL_PEN_REG_URI = $(call qstrip,$(BR2_PACKAGE_IPMITOOL_PEN_REG_URI))
+-ifneq ($(IPMITOOL_PEN_REG_URI),)
+-ifneq ($(findstring ://,$(IPMITOOL_PEN_REG_URI)),)
+-IPMITOOL_EXTRA_DOWNLOADS += $(IPMITOOL_PEN_REG_URI)
+-BR_NO_CHECK_HASH_FOR += $(notdir $(IPMITOOL_PEN_REG_URI))
+-IPMITOOL_PEN_REG = $(IPMITOOL_DL_DIR)/$(notdir $(IPMITOOL_PEN_REG_URI))
 +ifeq ($(BR2_PACKAGE_IANA_ASSIGNMENTS_PEN_REG),y)
-+define IANA_ASSIGNMENTS_INSTALL_PEN_REG
-+	$(INSTALL) -D -m 0644 $(@D)/enterprise-numbers/enterprise-numbers \
-+		$(TARGET_DIR)/usr/share/misc/iana/enterprise-numbers
-+endef
-+IANA_ASSIGNMENTS_POST_INSTALL_TARGET_HOOKS += IANA_ASSIGNMENTS_INSTALL_PEN_REG
++IPMITOOL_CONF_ENV += IANADIR=/usr/share/misc/iana
+ else
+-IPMITOOL_PEN_REG = $(IPMITOOL_PEN_REG_URI)
+-endif #findstring
+-define IPMITOOL_INSTALL_PEN_REG
+-	$(INSTALL) -D -m 0644 $(IPMITOOL_PEN_REG) \
+-		$(TARGET_DIR)/usr/share/misc/enterprise-numbers
+-endef
+-IPMITOOL_POST_INSTALL_TARGET_HOOKS += IPMITOOL_INSTALL_PEN_REG
+-endif # IPMITOOL_PEN_REG_URI !empty
++# Directory where ipmitool will search a custom PEN
++# registry provided by the user in the rootfs overlay.
++IPMITOOL_CONF_ENV += IANADIR=/usr/share/misc
 +endif
-+
-+$(eval $(generic-package))
+ 
+ $(eval $(autotools-package))
 -- 
 2.43.0
 
