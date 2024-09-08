@@ -1,98 +1,94 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8FCB4E6FE49
-	for <buildroot@archiver.kernel.org>; Sun,  8 Sep 2024 14:48:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 465C1CD4F4C
+	for <buildroot@archiver.kernel.org>; Sun,  8 Sep 2024 18:15:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AE3DA4035C;
-	Sun,  8 Sep 2024 14:48:29 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rjmkIIvfhdVI; Sun,  8 Sep 2024 14:48:28 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 092D4403C2
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 092D4403C2;
-	Sun,  8 Sep 2024 14:48:28 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id DB5FB1BF2B9
- for <buildroot@lists.busybox.net>; Sun,  8 Sep 2024 14:48:23 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D60EB80F9E
- for <buildroot@lists.busybox.net>; Sun,  8 Sep 2024 14:48:23 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D441F8109C;
+	Sun,  8 Sep 2024 18:15:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cN2gbj3lPosm for <buildroot@lists.busybox.net>;
- Sun,  8 Sep 2024 14:48:22 +0000 (UTC)
+ id ZKClReaQkIyS; Sun,  8 Sep 2024 18:15:18 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 21E3380E66
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 21E3380E66;
+	Sun,  8 Sep 2024 18:15:18 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id E8EE41BF3D7
+ for <buildroot@lists.busybox.net>; Sun,  8 Sep 2024 18:15:16 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id D2318605DC
+ for <buildroot@lists.busybox.net>; Sun,  8 Sep 2024 18:15:14 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id B6x6yoJ0aq9Y for <buildroot@lists.busybox.net>;
+ Sun,  8 Sep 2024 18:15:14 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::531; helo=mail-ed1-x531.google.com;
+ client-ip=2a00:1450:4864:20::629; helo=mail-ej1-x629.google.com;
  envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 68A4580F94
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 68A4580F94
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com
- [IPv6:2a00:1450:4864:20::531])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 68A4580F94
- for <buildroot@buildroot.org>; Sun,  8 Sep 2024 14:48:22 +0000 (UTC)
-Received: by mail-ed1-x531.google.com with SMTP id
- 4fb4d7f45d1cf-5c3c30e663fso4048341a12.1
- for <buildroot@buildroot.org>; Sun, 08 Sep 2024 07:48:22 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A3D95605E6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A3D95605E6
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com
+ [IPv6:2a00:1450:4864:20::629])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A3D95605E6
+ for <buildroot@buildroot.org>; Sun,  8 Sep 2024 18:15:13 +0000 (UTC)
+Received: by mail-ej1-x629.google.com with SMTP id
+ a640c23a62f3a-a8d0d0aea3cso242453066b.3
+ for <buildroot@buildroot.org>; Sun, 08 Sep 2024 11:15:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1725806900; x=1726411700;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=cUbbb1kXWjjwyYgJbT9QmmJzLRqPEvZMt2LGUusZfNw=;
- b=EFODovIMQ7XssCquphthiD2N3Veb+HqjhqSjKM080e2SXTaRWL45RFyrHwFvm3Ss80
- wLpYIndr2h/65I2VgrQnP/bLVzBj0nkFluAU/sUBSLn1+aPQ/75W5Hf+oMR0FXu2L8LQ
- 4oMk8Ob8Gu+smKr/jjE1tK/nSwUKv2T+GK/L25JJpp9F6pK7ry40XLVBRvtteMPHYFcC
- Xd18L++ewdH4KKJOub3ytWh5PRqdz44Gzn2vIMsfnSv0PJbBMvB+HFfSOWbdq/AfQ/wO
- a+JAX+1rOn/YrrJGez44//+FjdulPxRbinMeoIGo4lWzc4EK5apK9N6n7/pdqmcTbm1z
- f7LA==
-X-Gm-Message-State: AOJu0Ywl74QDEy2ELDJbwHBzpPQLDTAiI1X6q1A9YIF3RPqz6k3flocM
- ujwH/RMNd8O1QORkqS6F3LOjWn6KZgosds83HZhODi82n3QU6S6VJ5+tOEbccm8Ut8gf7pHxkcG
- Tqck=
-X-Google-Smtp-Source: AGHT+IG+hqd319M3cEQQ0a/XAzr9ufnID/cnWIhx8Z+UY2W8g9fhxAOZcUAd6Je4iEIrIZfsE4sb4A==
-X-Received: by 2002:a05:6402:3604:b0:5bf:c8:78a with SMTP id
- 4fb4d7f45d1cf-5c3dc795ce9mr5329399a12.17.1725806899863; 
- Sun, 08 Sep 2024 07:48:19 -0700 (PDT)
+ d=1e100.net; s=20230601; t=1725819311; x=1726424111;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=swQ8T/57ZqwaFWwGV6mf0Jc6dm65gbS/fASo1yOudrw=;
+ b=s8bH/tmy0ussX9uhh+l4dnAdB6FmNRd6iWCMnnU6DlfQQgqzRpLt5euIWnAwFiIvKG
+ jwtHK/6nVfuNmjUZcjGdctBwHh/Sq5EuxC9sgNJFsVnPIJleGM80/Zw+EjEOzuVnp2qU
+ hR0eO1a4SWWFQKO4gvFsqYPaeo60QKI+IbwrdWhoV4EzxeuzJ3fJo0r0ZfMRfLtkI5Tl
+ pjOUDWK3BiE+LP5OLLvR0N1IXbaoq6VQ2bXPjpymEfgQdvTJBAvl/ehXuhVxTcQ5A7Zo
+ Osj/4HVnQYA5VKLqAGVoNsh4eNP1tXRYktkGkTihcADVgmySrkq5Yt+HxXEE4Od/H4F5
+ ZWJw==
+X-Gm-Message-State: AOJu0YxQJAON8DW/6Ors9nI4hI3x+ROefs8K9w7kgnKP52pK+WpjeeVw
+ MaxZhfXkaUerYGomDflO88IFNDnX23JlcYWim6Qu54gpUBY/6Sd0t0d0ejH/e+oo4xqWV/B8WPb
+ 0zWU=
+X-Google-Smtp-Source: AGHT+IEyxOxPQBecqQMz5DgFQX7gmatmmTxwSQjGFq4t7neT+WpAQJLitdx2N9UPDfJTuUm6TY4MNA==
+X-Received: by 2002:a17:907:801:b0:a86:9c41:cfc1 with SMTP id
+ a640c23a62f3a-a8a885c47bemr640612666b.8.1725819311111; 
+ Sun, 08 Sep 2024 11:15:11 -0700 (PDT)
 Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it
  (host-87-4-102-18.retail.telecomitalia.it. [87.4.102.18])
  by smtp.gmail.com with ESMTPSA id
- 4fb4d7f45d1cf-5c3ebd4693fsm1926602a12.37.2024.09.08.07.48.19
+ a640c23a62f3a-a8d2593dbb7sm234484866b.56.2024.09.08.11.15.10
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 08 Sep 2024 07:48:19 -0700 (PDT)
+ Sun, 08 Sep 2024 11:15:10 -0700 (PDT)
 From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Sun,  8 Sep 2024 16:48:15 +0200
-Message-ID: <20240908144815.3822467-2-dario.binacchi@amarulasolutions.com>
+Date: Sun,  8 Sep 2024 20:15:05 +0200
+Message-ID: <20240908181505.403963-1-dario.binacchi@amarulasolutions.com>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240908144815.3822467-1-dario.binacchi@amarulasolutions.com>
-References: <20240908144815.3822467-1-dario.binacchi@amarulasolutions.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1725806900; x=1726411700;
+ d=amarulasolutions.com; s=google; t=1725819311; x=1726424111;
  darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=cUbbb1kXWjjwyYgJbT9QmmJzLRqPEvZMt2LGUusZfNw=;
- b=YMt4JaRfIQKsI1Pwh/H7yRNp9VbPrdcYetc9+e/z68oZoVUPxuZzu4P8oFE4xL2bbV
- iCPTH0a974qskF0020PD7+mxLf5Je1mPKEj2XLDoMtvgYrCzriqmbg8Ic3XraS/k1jZm
- JksIkARbP/oeEMValL1kz2Gq2/nBLSLPpVpIU=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=swQ8T/57ZqwaFWwGV6mf0Jc6dm65gbS/fASo1yOudrw=;
+ b=BJIPZuAncMT2CnLNZeBkuI8B1tpH3qcf2LQ/8oanoU571dqZSeg7mGRd7GlpZT7F6m
+ /KeDbYuqwIRZ8vpctEG7gQtjrlhjNBX0LhcJylO++i4Agz5kuYuJbljBDnR53DcfDW/p
+ 7aaOCdOTBAwsymA5AjyF/kho6p4tbEVuO4e5c=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (1024-bit key,
  unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=YMt4JaRf
-Subject: [Buildroot] [PATCH v4 2/2] package/ipmitool: use versioned or
- custom PEN registry
+ header.a=rsa-sha256 header.s=google header.b=BJIPZuAn
+Subject: [Buildroot] [PATCH 1/1] package/rp-pppoe: fixup download URL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -104,145 +100,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Floris Bos <bos@je-eigen-domein.nl>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Heiko Thiery <heiko.thiery@gmail.com>,
- Dario Binacchi <dario.binacchi@amarulasolutions.com>,
- linux-amarula@amarulasolutions.com, "Yann E . MORIN" <yann.morin.1998@free.fr>
+Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+ linux-amarula@amarulasolutions.com
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The previous default URL used for the PEN registry was not stable and
-could change at any time, making it unacceptable to have to update its
-hash every time.
+As reported in [1], the download of rp-pppoe-3.15.tar.gz is no longer
+guaranteed from the download section of the project.
+As suggested by Dianne, the maintainer, for now we "can grab the tarball
+from archive.org and then figure out a way to make it available to
+buildroot users".
 
-With this patch, if the PEN (Enterprise numbers) registry is installed
-by the iana-assignments package, ipmitool will use it. Otherwise, the
-user can provide a custom file named enterprise-numbers to be placed
-under /usr/share/misc/ of the overlay rootfs.
-
-Downloading such a file is no longer supported.
+The idea is to later submit a patch to bump the version to 4.0 using the
+official repository, which is https://salsa.debian.org/dskoll/rp-pppoe.
 
 Fixes:
-- http://autobuild.buildroot.org/results/5ae5ee948d99679cd50d1115a7d46f4368347b4f
+- http://autobuild.buildroot.org/results/8676456feec9dd401152887101ad1a9ce96cb769
 
-Co-Developed-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Co-Developed-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+[1] https://dianne.skoll.ca/pipermail/rp-pppoe/2024q3/000652.html
+
 Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 ---
-Changes v3 -> v4:
-  - Drop BR2_PACKAGE_IPMITOOL_PEN_REG_URI and mark as a legacy option.
-  - Drop IPMITOOL_DEPENDENCIES += iana-assignments.
-  - Add IPMITOOL_CONF_ENV += IANADIR=/usr/share/misc in case of
-    custom PEN.
-  - Use IANA PEN registry in case BR2_PACKAGE_IANA_ASSIGNMENTS_PEN_REG
-    is enabled.
-  - Update the commit message.
+ package/rp-pppoe/rp-pppoe.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Changes v2 -> v3:
-  - Use by default enterprise-numbers from iana-assignments package.
-  - Alternatively allows to use a local PEN registry file.
-  - Don't support URL path for PEN registry.
-
-Changes v1 -> v2:
-  - use an enterprise-numbers file versioned
-
- Config.in.legacy             | 12 ++++++++++++
- package/ipmitool/Config.in   | 18 ++++++------------
- package/ipmitool/ipmitool.mk | 20 ++++++--------------
- 3 files changed, 24 insertions(+), 26 deletions(-)
-
-diff --git a/Config.in.legacy b/Config.in.legacy
-index 7513aa7efd66..ece342bb12d9 100644
---- a/Config.in.legacy
-+++ b/Config.in.legacy
-@@ -189,6 +189,18 @@ config BR2_BINUTILS_VERSION_2_40_X
+diff --git a/package/rp-pppoe/rp-pppoe.mk b/package/rp-pppoe/rp-pppoe.mk
+index f50f1e5a1fd1..fae66894c103 100644
+--- a/package/rp-pppoe/rp-pppoe.mk
++++ b/package/rp-pppoe/rp-pppoe.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
  
- comment "Legacy options removed in 2024.08"
- 
-+config BR2_PACKAGE_IPMITOOL_PEN_REG_URI
-+	string "IANA PEN registry move to iana-assignment package"
-+	help
-+	  Installation of the IANA PEN is now handled by the
-+	  iana-assignment package; to install a custom PEN,
-+	  use a rootfs-overlay for example.
-+
-+config BR2_PACKAGE_IPMITOOL_PEN_REG_URI_WRAP
-+	bool
-+	default y if BR2_PACKAGE_IPMITOOL_PEN_REG_URI != ""
-+	select BR2_LEGACY
-+
- config BR2_PACKAGE_MIDORI
- 	bool "midori has been removed"
- 	select BR2_LEGACY
-diff --git a/package/ipmitool/Config.in b/package/ipmitool/Config.in
-index 9516ff8596d3..5cbcf8e535d4 100644
---- a/package/ipmitool/Config.in
-+++ b/package/ipmitool/Config.in
-@@ -5,22 +5,16 @@ config BR2_PACKAGE_IPMITOOL
- 	  IPMItool provides a simple command-line interface to
- 	  IPMI-enabled devices.
- 
-+	  Note: If the PEN (Enterprise Numbers) registry is installed
-+	  by the "iana-assignments" package, ipmitool will use it.
-+	  Otherwise, the user can provide a custom file named
-+	  enterprise-numbers to be placed in the usr/share/misc/
-+	  directory of the overlay rootfs.
-+
- 	  https://github.com/ipmitool/ipmitool/
- 
- if BR2_PACKAGE_IPMITOOL
- 
--config BR2_PACKAGE_IPMITOOL_PEN_REG_URI
--	string "IANA PEN registry URL or path"
--	default "https://www.iana.org/assignments/enterprise-numbers.txt"
--	help
--	  Enter an URL or a file path to the PEN registry to use.
--
--	  Note that the official registry is 4MiB+ and may change any
--	  time and is thus not guaranteed to be reproducible.
--
--	  Leave empty to not use a registry; vendor IDs will be
--	  displayed instead of the corresponding names.
--
- config BR2_PACKAGE_IPMITOOL_LANPLUS
- 	bool "enable lanplus interface"
- 	select BR2_PACKAGE_OPENSSL
-diff --git a/package/ipmitool/ipmitool.mk b/package/ipmitool/ipmitool.mk
-index 4f2151904d43..f2ae72bab841 100644
---- a/package/ipmitool/ipmitool.mk
-+++ b/package/ipmitool/ipmitool.mk
-@@ -49,20 +49,12 @@ endef
- IPMITOOL_POST_INSTALL_TARGET_HOOKS += IPMITOOL_REMOVE_IPMIEVD
- endif
- 
--IPMITOOL_PEN_REG_URI = $(call qstrip,$(BR2_PACKAGE_IPMITOOL_PEN_REG_URI))
--ifneq ($(IPMITOOL_PEN_REG_URI),)
--ifneq ($(findstring ://,$(IPMITOOL_PEN_REG_URI)),)
--IPMITOOL_EXTRA_DOWNLOADS += $(IPMITOOL_PEN_REG_URI)
--BR_NO_CHECK_HASH_FOR += $(notdir $(IPMITOOL_PEN_REG_URI))
--IPMITOOL_PEN_REG = $(IPMITOOL_DL_DIR)/$(notdir $(IPMITOOL_PEN_REG_URI))
-+ifeq ($(BR2_PACKAGE_IANA_ASSIGNMENTS_PEN_REG),y)
-+IPMITOOL_CONF_ENV += IANADIR=/usr/share/misc/iana
- else
--IPMITOOL_PEN_REG = $(IPMITOOL_PEN_REG_URI)
--endif #findstring
--define IPMITOOL_INSTALL_PEN_REG
--	$(INSTALL) -D -m 0644 $(IPMITOOL_PEN_REG) \
--		$(TARGET_DIR)/usr/share/misc/enterprise-numbers
--endef
--IPMITOOL_POST_INSTALL_TARGET_HOOKS += IPMITOOL_INSTALL_PEN_REG
--endif # IPMITOOL_PEN_REG_URI !empty
-+# Directory where ipmitool will search a custom PEN
-+# registry provided by the user in the rootfs overlay.
-+IPMITOOL_CONF_ENV += IANADIR=/usr/share/misc
-+endif
- 
- $(eval $(autotools-package))
+ RP_PPPOE_VERSION = 3.15
+-RP_PPPOE_SITE = https://dianne.skoll.ca/projects/rp-pppoe/download
++RP_PPPOE_SITE = http://web.archive.org/web/20220523050110/https://dianne.skoll.ca/projects/rp-pppoe/download
+ RP_PPPOE_LICENSE = GPL-2.0
+ RP_PPPOE_LICENSE_FILES = doc/LICENSE
+ RP_PPPOE_CPE_ID_VALID = YES
 -- 
 2.43.0
 
