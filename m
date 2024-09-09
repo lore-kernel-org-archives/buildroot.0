@@ -4,95 +4,95 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B50F2ECE577
-	for <buildroot@archiver.kernel.org>; Mon,  9 Sep 2024 16:28:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10730ECE577
+	for <buildroot@archiver.kernel.org>; Mon,  9 Sep 2024 16:28:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2741280C96;
-	Mon,  9 Sep 2024 16:28:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A493F80C7D;
+	Mon,  9 Sep 2024 16:28:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vpPnQZVQf0nm; Mon,  9 Sep 2024 16:28:06 +0000 (UTC)
+ id pocaaeV3WXhU; Mon,  9 Sep 2024 16:28:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4B62280EC8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 49E4780EA4
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4B62280EC8;
-	Mon,  9 Sep 2024 16:28:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 49E4780EA4;
+	Mon,  9 Sep 2024 16:28:09 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 26BFB1BF345
- for <buildroot@lists.busybox.net>; Mon,  9 Sep 2024 16:27:57 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 332231BF345
+ for <buildroot@lists.busybox.net>; Mon,  9 Sep 2024 16:27:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2049580C9C
- for <buildroot@lists.busybox.net>; Mon,  9 Sep 2024 16:27:56 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 526F880D8D
+ for <buildroot@lists.busybox.net>; Mon,  9 Sep 2024 16:27:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PNiCiIMmH0FJ for <buildroot@lists.busybox.net>;
- Mon,  9 Sep 2024 16:27:55 +0000 (UTC)
+ id vdBUVyaL5CRf for <buildroot@lists.busybox.net>;
+ Mon,  9 Sep 2024 16:27:56 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::331; helo=mail-wm1-x331.google.com;
+ client-ip=2a00:1450:4864:20::32a; helo=mail-wm1-x32a.google.com;
  envelope-from=francois.perrad@gadz.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org EFDEF80CA8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EFDEF80CA8
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
- [IPv6:2a00:1450:4864:20::331])
- by smtp1.osuosl.org (Postfix) with ESMTPS id EFDEF80CA8
- for <buildroot@busybox.net>; Mon,  9 Sep 2024 16:27:54 +0000 (UTC)
-Received: by mail-wm1-x331.google.com with SMTP id
- 5b1f17b1804b1-42cba0dc922so6799135e9.3
- for <buildroot@busybox.net>; Mon, 09 Sep 2024 09:27:54 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 3DACB80CA8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3DACB80CA8
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
+ [IPv6:2a00:1450:4864:20::32a])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3DACB80CA8
+ for <buildroot@busybox.net>; Mon,  9 Sep 2024 16:27:55 +0000 (UTC)
+Received: by mail-wm1-x32a.google.com with SMTP id
+ 5b1f17b1804b1-42ca4e0299eso22540925e9.2
+ for <buildroot@busybox.net>; Mon, 09 Sep 2024 09:27:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1725899273; x=1726504073;
+ d=1e100.net; s=20230601; t=1725899274; x=1726504074;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=uUF1uREid+whfw1VCithXvbIWARFiKmgyI6EoJvMUSg=;
- b=sW6Jeq3AyPaIAS/paf/mMrD3XQAR/cyTPyVVNh4CkFWH6QfpnwyrdO3VoNRgUWALyD
- CE3r2UpajkWZzuC3ptr+W/xYzFU4VW6MmEEiMYpfYbi6x0X5OdEKxvihcZ+ooIRhE2vQ
- 7nffa3p6LYTSOfQ8FPKm0n0lesFSacN3HEh5hsIgvonIulENm6B+OGhJACWPBHtKMjqN
- Z9My4gUaYl/2QJnKbwMfcfatWiaGA3WHSq1IsZaPkhcxw/FZyEKtYtHc2J9p4M+VwMxB
- CinDsmHCWAKzB0FMGtHl7XIV46jD3aQepNcZvreeb0DLNsOCfqLfnWyaIDzLSWsqV8iL
- UbZA==
-X-Gm-Message-State: AOJu0YxisyVlnp96C8D7sJ6S1bB5qTwmE6MvTI8YWWKBG7u09z+8g2Qj
- TTrjSnJvmEXYgMpZb0+dg1RbDck/vhW7autk0rHDAfPeRWE/Iryl6/plBvz3uT64an/av+AQWVH
- MSw==
-X-Google-Smtp-Source: AGHT+IGQfzEN8T3KeFmypVrk0890mkz5yA6ZK6gEeba4YR5Auo9glX/gTZ7og7olc91GI/hr0ouENg==
-X-Received: by 2002:a05:600c:5104:b0:426:66e9:b844 with SMTP id
- 5b1f17b1804b1-42cad746459mr57414375e9.8.1725899272495; 
- Mon, 09 Sep 2024 09:27:52 -0700 (PDT)
+ bh=LiQh7qU78CO5LYhW5s5j1J7I051BJOPeSWo3A/yPCIU=;
+ b=AdUICvyFxmK3z9lakuqW5Iuyfn0aCjlnKLbHrCaV4chTwxFbniyBb6HOrzB87LOcsw
+ JtstDLx7YjoXp+LDlLZWwEWYALpRi/qwBeLa958ZP3nQaRdAAROdWBT5R8456pF5vbyr
+ aFDzns5dIRTiSgRK6faWMKmdvnD06CjAzOLp38MSaaFY7d5ZTSX/cd9Le4GdrcOVOhOK
+ ibD3tLyE4Ygguy01jmlxOGTv0EcpPjm6Q4CZpw5rABLkmJUr+ZZrVFC0UkbmJeRirkve
+ qy8p9Q8L2Pw3ho5ipisNAquNrtCjVrLDZzS67PBKUBEn0RH5FtUa7mGtvwWL/PAWU6Gb
+ 6qvA==
+X-Gm-Message-State: AOJu0YyFGqKjXpJFOraGxaqhh/2WrHWfqL7/NMFABQGemTdiuEmuYmy8
+ x4qInNtdSMxRzE+yybkslBqJHsGSrMvmJW39+dQeSb639elwwFzaue0VQPhyHGtdhGXMDqR+uW8
+ 3KQ==
+X-Google-Smtp-Source: AGHT+IGvUvgViUX2da95SBp24l+J3K3cSlbowalXkJxbQh4GgjjAmdpg8qaczEN4s32juylEw2RdXQ==
+X-Received: by 2002:a5d:6892:0:b0:374:c79b:ca5f with SMTP id
+ ffacd0b85a97d-37892703f43mr4952007f8f.46.1725899273778; 
+ Mon, 09 Sep 2024 09:27:53 -0700 (PDT)
 Received: from vm-2404.. (255.7.65.37.rev.sfr.net. [37.65.7.255])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-42ca0600651sm114500595e9.32.2024.09.09.09.27.52
+ 5b1f17b1804b1-42ca0600651sm114500595e9.32.2024.09.09.09.27.53
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 09 Sep 2024 09:27:52 -0700 (PDT)
+ Mon, 09 Sep 2024 09:27:53 -0700 (PDT)
 From: Francois Perrad <francois.perrad@gadz.org>
 To: buildroot@busybox.net
-Date: Mon,  9 Sep 2024 18:26:45 +0200
-Message-ID: <20240909162703.3439481-3-francois.perrad@gadz.org>
+Date: Mon,  9 Sep 2024 18:26:47 +0200
+Message-ID: <20240909162703.3439481-5-francois.perrad@gadz.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240909162703.3439481-1-francois.perrad@gadz.org>
 References: <20240909162703.3439481-1-francois.perrad@gadz.org>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gadz.org; s=google; t=1725899273; x=1726504073; darn=busybox.net;
+ d=gadz.org; s=google; t=1725899274; x=1726504074; darn=busybox.net;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=uUF1uREid+whfw1VCithXvbIWARFiKmgyI6EoJvMUSg=;
- b=px8CEEGcx9SkDGT7Nn3DfYqeZGcpmWvJj2c9Q3uIo5qvhvGh7yFNQz7Nzyk/6/ygCm
- Yhw/ITOOXfRsoafw266UrMOFZeJn58rT1gF6j6XEuRBpypEju55eA4AjxKExbkqtExlV
- lSXumY+1hr92cC8gzmGq82GdUeaabi9Pna6XcjHv3ZrqowR4DBTURwYeeX0TyggV4Y5R
- jOC3UT5vc4pynhHRjETV5bzgrwJ3M5KTmNzs5h/4MCpSRvElYSbcxZLcfr6ga+GHJNcQ
- w9tU5gYxnPeI7o5H8lNK8HfuunqogICrQp1NgEh04JHxxi3Pvi8XYhh9W5eOLFSiCK1h
- v8Gg==
+ bh=LiQh7qU78CO5LYhW5s5j1J7I051BJOPeSWo3A/yPCIU=;
+ b=m5te/3gtBjNuH28IQgYKUdaxY3SCuwH8LjXxrQsZvrIYln3m56U2BWTEuGdr1EMAwH
+ U1e1+uLjKdUWvQaBBqx3QMJodygNQxXIJDfcVnvNSgCjHT15ssPmRd9U8qHxSVarlA5h
+ hVTcfHu1OoAbJZfbSESJ+joV7N7upVomDyUszf3oX1ipJDCJsYD6x+lROUXvyLE0Cjcb
+ Nzevr473QeVlUbZAPhiSRmUummKHxPLa44P5OFDMA4pe/67LDPJ6sPvXIc4sSJI4o5SL
+ 4erRKszkt5m96kIXw8IBnmxx3JICGiKLADdEy4pHFxdYduwFwXAgKBuRP62mFMPWS6dV
+ vtrQ==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gadz.org
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gadz.org header.i=@gadz.org
- header.a=rsa-sha256 header.s=google header.b=px8CEEGc
-Subject: [Buildroot] [PATCH 03/20] package/perl-date-manip: bump to version
- 6.95
+ header.a=rsa-sha256 header.s=google header.b=m5te/3gt
+Subject: [Buildroot] [PATCH 05/20] package/perl-http-message: bump to
+ version 6.46
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -111,36 +111,36 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 ---
- package/perl-date-manip/perl-date-manip.hash | 4 ++--
- package/perl-date-manip/perl-date-manip.mk   | 2 +-
+ package/perl-http-message/perl-http-message.hash | 4 ++--
+ package/perl-http-message/perl-http-message.mk   | 2 +-
  2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/perl-date-manip/perl-date-manip.hash b/package/perl-date-manip/perl-date-manip.hash
-index d055cb33c..53f7f6191 100644
---- a/package/perl-date-manip/perl-date-manip.hash
-+++ b/package/perl-date-manip/perl-date-manip.hash
+diff --git a/package/perl-http-message/perl-http-message.hash b/package/perl-http-message/perl-http-message.hash
+index b33e00e33..f42d1432a 100644
+--- a/package/perl-http-message/perl-http-message.hash
++++ b/package/perl-http-message/perl-http-message.hash
 @@ -1,6 +1,6 @@
  # retrieved by scancpan from https://cpan.metacpan.org/
--md5  74f127ff4c71fa1aff54dc55818b0c2e  Date-Manip-6.94.tar.gz
--sha256  0278eb62113618c8977d3d537433d85340c487cbdfd95dd3452e4d7217f48848  Date-Manip-6.94.tar.gz
-+md5  1dc65dbb042ecab09149a22fbbe9abb4  Date-Manip-6.95.tar.gz
-+sha256  92383832311f22083f55d03c8dae8f4bcc387cd902624e5ef9ac680f144cbd4c  Date-Manip-6.95.tar.gz
+-md5  86c386bcc85a63c8908e6ae9967b34ee  HTTP-Message-6.45.tar.gz
+-sha256  01cb8406612a3f738842d1e97313ae4d874870d1b8d6d66331f16000943d4cbe  HTTP-Message-6.45.tar.gz
++md5  12a4bf7d993ba7b231df9a24f8bf3ec5  HTTP-Message-6.46.tar.gz
++sha256  e27443434150d2d1259bb1e5c964429f61559b0ae34b5713090481994936e2a5  HTTP-Message-6.46.tar.gz
  
  # computed by scancpan
- sha256  8ba2a138654f8b59b7e1e3ad0d4c81918b9148ff95078b172ccbb45fa241431d  LICENSE
-diff --git a/package/perl-date-manip/perl-date-manip.mk b/package/perl-date-manip/perl-date-manip.mk
-index 55d9cff6e..dc55bcff2 100644
---- a/package/perl-date-manip/perl-date-manip.mk
-+++ b/package/perl-date-manip/perl-date-manip.mk
+ sha256  553ecefc0ed6d4152809da8516960b9a12352c1c0d7d289ac4ab06d0bd0e67bb  LICENSE
+diff --git a/package/perl-http-message/perl-http-message.mk b/package/perl-http-message/perl-http-message.mk
+index 7fdba0b29..2870c0c71 100644
+--- a/package/perl-http-message/perl-http-message.mk
++++ b/package/perl-http-message/perl-http-message.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_DATE_MANIP_VERSION = 6.94
-+PERL_DATE_MANIP_VERSION = 6.95
- PERL_DATE_MANIP_SOURCE = Date-Manip-$(PERL_DATE_MANIP_VERSION).tar.gz
- PERL_DATE_MANIP_SITE = $(BR2_CPAN_MIRROR)/authors/id/S/SB/SBECK
- PERL_DATE_MANIP_LICENSE = Artistic or GPL-1.0+
+-PERL_HTTP_MESSAGE_VERSION = 6.45
++PERL_HTTP_MESSAGE_VERSION = 6.46
+ PERL_HTTP_MESSAGE_SOURCE = HTTP-Message-$(PERL_HTTP_MESSAGE_VERSION).tar.gz
+ PERL_HTTP_MESSAGE_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
+ PERL_HTTP_MESSAGE_LICENSE = Artistic-1.0-Perl or GPL-1.0+
 -- 
 2.43.0
 
