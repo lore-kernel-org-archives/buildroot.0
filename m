@@ -1,74 +1,94 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9CFD1CD4F4C
-	for <buildroot@archiver.kernel.org>; Sun,  8 Sep 2024 21:35:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AD37CCE7AB0
+	for <buildroot@archiver.kernel.org>; Mon,  9 Sep 2024 06:33:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 33D2D40329;
-	Sun,  8 Sep 2024 21:35:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 32A0D80C7F;
+	Mon,  9 Sep 2024 06:33:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lGQmEZVQRNNl; Sun,  8 Sep 2024 21:35:00 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 0GBPLlonrgfg; Mon,  9 Sep 2024 06:33:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 931694016D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4015F80CB2
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 931694016D;
-	Sun,  8 Sep 2024 21:35:00 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4015F80CB2;
+	Mon,  9 Sep 2024 06:33:49 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id DC20A1BF35C
- for <buildroot@lists.busybox.net>; Sun,  8 Sep 2024 21:34:59 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 4C7CC1BF335
+ for <buildroot@lists.busybox.net>; Mon,  9 Sep 2024 06:33:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id C95A14016D
- for <buildroot@lists.busybox.net>; Sun,  8 Sep 2024 21:34:59 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 39432400F6
+ for <buildroot@lists.busybox.net>; Mon,  9 Sep 2024 06:33:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZrJA4AOJvxav for <buildroot@lists.busybox.net>;
- Sun,  8 Sep 2024 21:34:58 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
- helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org A70EA40128
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A70EA40128
-Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp2.osuosl.org (Postfix) with ESMTPS id A70EA40128
- for <buildroot@buildroot.org>; Sun,  8 Sep 2024 21:34:56 +0000 (UTC)
-Received: from fli4l.lan.fli4l (p5b3a0d4f.dip0.t-ipconnect.de [91.58.13.79])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 90092A4C0A3E
- for <buildroot@buildroot.org>; Sun,  8 Sep 2024 23:34:53 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:55624)
- by fli4l.lan.fli4l with esmtp (Exim 4.98)
- (envelope-from <bernd@kuhls.net>) id 1snPYa-000000005UT-1S9g
- for buildroot@buildroot.org; Sun, 08 Sep 2024 21:34:52 +0000
-From: Bernd Kuhls <bernd@kuhls.net>
+ id BdNpWIGgzkU7 for <buildroot@lists.busybox.net>;
+ Mon,  9 Sep 2024 06:33:47 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::22d; helo=mail-lj1-x22d.google.com;
+ envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org A3A8C400F3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A3A8C400F3
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com
+ [IPv6:2a00:1450:4864:20::22d])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id A3A8C400F3
+ for <buildroot@buildroot.org>; Mon,  9 Sep 2024 06:33:46 +0000 (UTC)
+Received: by mail-lj1-x22d.google.com with SMTP id
+ 38308e7fff4ca-2f74e468baeso45853881fa.2
+ for <buildroot@buildroot.org>; Sun, 08 Sep 2024 23:33:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1725863624; x=1726468424;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=16tbjg0klZkURB8dQhYMyeJ9JNFoxXCMohgUjlV2bAY=;
+ b=MbEdT1tqSmdxOMtXs+kZ0AamabMxdav/PqTow/1qrvOUaW2Pde1m0/zE9l2t/Jgu7C
+ LU0hKeD2yAGBOTIjecn8QII9TaZ1WCbIwED9fyA+6NCmcYSPALUzU8I7F8dtHgf6IomR
+ OIG/7GibMaADCj7r9n0is5J1+mEeYKw+0mAcQn+kxq3EbfGspYqksRLg1jemRS5a8fZN
+ G0clNxNGlTZwZfXyml5Uw0ZYtxTH+6SAnRAwoeKUhiQvjBr9iM7cpWQ0XYnPivX3x8t+
+ oabA4Ek7SRCq7nRzk3R37JalQOzdxa3oT9rUP7UgtsGuEch8oDBCMJ4IRJBzI4iY/MKn
+ tFpw==
+X-Gm-Message-State: AOJu0Yxazv0HrqOUHmKFqgs2o1nDwG5o03VLcGk4cBYf05lqp27l1iVj
+ 0tg2h6S5qzHOag8DrjgkaouDwHlZYVKjKa1j67nvLfbg/jYSfObuOUj559+IKCuKDxYG9U+iyiu
+ XnQk=
+X-Google-Smtp-Source: AGHT+IFXuAxKKTcr36goelJVqz2MEcXUZeAHWuydLAZsRZOn4+0+awP0mAPFwSXjlAG5UpWoq1MxRQ==
+X-Received: by 2002:a05:6512:2313:b0:52e:9cc7:4461 with SMTP id
+ 2adb3069b0e04-536587a67c1mr6841790e87.5.1725863623903; 
+ Sun, 08 Sep 2024 23:33:43 -0700 (PDT)
+Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it
+ (host-87-4-102-18.retail.telecomitalia.it. [87.4.102.18])
+ by smtp.gmail.com with ESMTPSA id
+ a640c23a62f3a-a8d25ce974dsm296269566b.147.2024.09.08.23.33.42
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 08 Sep 2024 23:33:43 -0700 (PDT)
+From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Sun,  8 Sep 2024 23:34:52 +0200
-Message-Id: <20240908213452.1634373-1-bernd@kuhls.net>
-X-Mailer: git-send-email 2.39.2
+Date: Mon,  9 Sep 2024 08:33:39 +0200
+Message-ID: <20240909063340.533620-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-Spamd-Bar: +
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=kuhls.net; 
- s=kas202406071026; t=1725831293;
- bh=jMxGZ5aI2HcNKbehry11nqKm9holRN+V2H9nJ4mePII=;
- h=From:To:Subject:Date:From;
- b=brb2QlhLa+ectFetmKjODTPIPP6JyztHMG3SH8B/NCICM1xaN1r3LS+hkQr+dQBcK
- byYxyPCNKgPOKqJCSfZ6UXD9KxM4sXidUx41lJCX8BQzCCicMot6FQYK+iPL7GvoB1
- 7akBiT6+bxeXcn/Ph2x/pGcK5VCibDCImnyZx3z/n2KxGBcZkKM50LsDF1ddAZBYsV
- Aqt55ywRs9F80pSWTkUgbRsUxNHIJNocUVGv4uPsZxre6K+dicYUb3xc+J5va7jIzw
- XR+/7ooThDUGxWxDYrkpfk3ALStM+5E5PXB+gtKG0nXWHhAV2W1UWpIyNfHFrIIf38
- iIpEb1R0hHRDg==
+ d=amarulasolutions.com; s=google; t=1725863624; x=1726468424;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=16tbjg0klZkURB8dQhYMyeJ9JNFoxXCMohgUjlV2bAY=;
+ b=Ri2LQgy38i3i7CNxmqLBON3CGUkvw2Ky/88/AbTQkayJBSPpjnrrUPTgXFbla4v9fv
+ xUhhMFQOi+kNI9IES6rYvywPxgYgwNAJUMcXkdMoSafeWq3sIrIzzwtrJkqtmCmj2IKm
+ 2ziWGdIgUgpcuTIXKbO94Lca4A5tBHPRNkH1c=
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=kuhls.net
+ header.from=amarulasolutions.com
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
- header.s=kas202406071026 header.b=brb2QlhL
-Subject: [Buildroot] [PATCH 1/1] package/rp-pppoe: bump version to 4.0
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
+ header.a=rsa-sha256 header.s=google header.b=Ri2LQgy3
+Subject: [Buildroot] [PATCH 1/1] package/xenomai: fix build with gcc 11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,161 +100,71 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Romain Naour <romain.naour@gmail.com>,
+ Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+ linux-amarula@amarulasolutions.com
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release notes:
-https://dianne.skoll.ca/pipermail/rp-pppoe/2023q2/000640.html
+The commit adds an upstream patch to fix the following build failure:
 
-Updated license hash due to SPDX-License-Identifier addition:
-https://github.com/dfskoll/rp-pppoe/commit/e51f1cea3bb40b1a79b7256ef0ea81c318e97edb
+latency.c: In function 'dump_histo_gnuplot':
+latency.c:415:9: error: 'fclose' called on pointer returned from a mismatched allocation function [-Werror=mismatched-dealloc]
+  415 |         fclose(ifp);
+      |         ^~~~~~~~~~~
+latency.c:404:15: note: returned from 'popen'
+  404 |         ifp = popen(xconf, "r");
+      |               ^~~~~~~~~~~~~~~~~
 
-Removed non-existing files from RP_PPPOE_INSTALL_TARGET_CMDS.
+Fixes:
+- http://autobuild.buildroot.org/results/e15ccef2f2bd58482204b5061f77e76a8a540ebd
 
-Removed patch which was applied upstream:
-https://github.com/dfskoll/rp-pppoe/commit/bbf5b2759cff0c65b47fd6dbe5fe7341f205ad03
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 ---
- .checkpackageignore                           |  1 -
- ...src-pppoe.h-fix-build-with-musl-libc.patch | 60 -------------------
- package/rp-pppoe/rp-pppoe.hash                |  5 +-
- package/rp-pppoe/rp-pppoe.mk                  | 11 +---
- 4 files changed, 4 insertions(+), 73 deletions(-)
- delete mode 100644 package/rp-pppoe/0001-src-pppoe.h-fix-build-with-musl-libc.patch
+ ...y-Use-corresponding-pclose-for-popen.patch | 30 +++++++++++++++++++
+ 1 file changed, 30 insertions(+)
+ create mode 100644 package/xenomai/3.0.10/0005-testsuite-latency-Use-corresponding-pclose-for-popen.patch
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 9a7cf07c7a..5c34e9e228 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -1139,7 +1139,6 @@ package/ripgrep/0001-puts-jemalloc-allocator-behind-a-cargo-feature-flag.patch l
- package/riscv-isa-sim/0001-riscv-disable-precompiled-headers.patch lib_patch.Upstream
- package/rng-tools/S21rngd Shellcheck lib_sysv.Variables
- package/rocksdb/0001-build_tools-build_detect_platform-fix-C-tests.patch lib_patch.Upstream
--package/rp-pppoe/0001-src-pppoe.h-fix-build-with-musl-libc.patch lib_patch.Upstream
- package/rpcbind/0001-Remove-yellow-pages-support.patch lib_patch.Upstream
- package/rpcbind/S30rpcbind lib_sysv.EmptyLastLine lib_sysv.Indent lib_sysv.Variables
- package/rpi-userland/0001-Add-.pc-files-for-the-OpenGLESv2-EGL-and-bcm_host-li.patch lib_patch.Upstream
-diff --git a/package/rp-pppoe/0001-src-pppoe.h-fix-build-with-musl-libc.patch b/package/rp-pppoe/0001-src-pppoe.h-fix-build-with-musl-libc.patch
-deleted file mode 100644
-index 29ba72be4f..0000000000
---- a/package/rp-pppoe/0001-src-pppoe.h-fix-build-with-musl-libc.patch
-+++ /dev/null
-@@ -1,60 +0,0 @@
--From bbf5b2759cff0c65b47fd6dbe5fe7341f205ad03 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sat, 11 Dec 2021 22:03:16 +0100
--Subject: [PATCH] src/pppoe.h: fix build with musl libc
--
--musl libc defines its own struct ethhdr that conflicts with the kernel
--define one. The kernel headers provide a way to suppress its struct
--ethhdr. For that to work the libc headers must precede the kernel. Move
--the kernel linux/if_ether.h include below libc netinet/if_ether.h. That
--fixes the following build failure:
--
--In file included from pppoe.h:133,
--                 from debug.c:19:
--/home/giuliobenetti/autobuild/run/instance-0/output-1/host/riscv64-buildroot-linux-musl/sysroot/usr/include/netinet/if_ether.h:116:8: error: redefinition of 'struct ethhdr'
--  116 | struct ethhdr {
--      |        ^~~~~~
--In file included from pppoe.h:121,
--                 from debug.c:19:
--/home/giuliobenetti/autobuild/run/instance-0/output-1/host/riscv64-buildroot-linux-musl/sysroot/usr/include/linux/if_ether.h:163:8: note: originally defined here
--  163 | struct ethhdr {
--      |        ^~~~~~
--
--Fixes:
-- - http://autobuild.buildroot.org/results/ccca18fcbcde65cb6784f5559eac68ca17ab14a3
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/dfskoll/rp-pppoe/pull/4]
-----
-- src/pppoe.h | 8 ++++----
-- 1 file changed, 4 insertions(+), 4 deletions(-)
--
--diff --git a/src/pppoe.h b/src/pppoe.h
--index 4780092..2b08111 100644
----- a/src/pppoe.h
--+++ b/src/pppoe.h
--@@ -117,10 +117,6 @@ typedef unsigned long UINT32_t;
-- #error Could not find a 32-bit integer type
-- #endif
-- 
---#ifdef HAVE_LINUX_IF_ETHER_H
---#include <linux/if_ether.h>
---#endif
---
-- #include <netinet/in.h>
-- 
-- #ifdef HAVE_NETINET_IF_ETHER_H
--@@ -134,6 +130,10 @@ typedef unsigned long UINT32_t;
-- #endif
-- #endif
-- 
--+#ifdef HAVE_LINUX_IF_ETHER_H
--+#include <linux/if_ether.h>
--+#endif
--+
-- 
-- 
-- /* Ethernet frame types according to RFC 2516 */
---- 
--2.33.0
--
-diff --git a/package/rp-pppoe/rp-pppoe.hash b/package/rp-pppoe/rp-pppoe.hash
-index c883322d70..97bb61eaf8 100644
---- a/package/rp-pppoe/rp-pppoe.hash
-+++ b/package/rp-pppoe/rp-pppoe.hash
-@@ -1,4 +1,3 @@
--# Locally calculated after checking pgp signature
--sha256  b1f318bc7e4e5b0fd8a8e23e8803f5e6e43165245a5a10a7162a92a6cf17829a  rp-pppoe-3.15.tar.gz
- # Locally computed
--sha256  464006ba771074f4022db14f58a29a0b447b6fdde9529cf0331be396b6279162  doc/LICENSE
-+sha256  17d45712778f2bf6b0859ff610a3dacd24bc4462e9f53bb1466d47af391701d3  rp-pppoe-4.0.tar.gz
-+sha256  d2767e7ffc6dc9477812f6238551fe4b29a889df6f23c3922e7b9cec92bc278d  doc/LICENSE
-diff --git a/package/rp-pppoe/rp-pppoe.mk b/package/rp-pppoe/rp-pppoe.mk
-index f50f1e5a1f..98325e7d49 100644
---- a/package/rp-pppoe/rp-pppoe.mk
-+++ b/package/rp-pppoe/rp-pppoe.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
- 
--RP_PPPOE_VERSION = 3.15
--RP_PPPOE_SITE = https://dianne.skoll.ca/projects/rp-pppoe/download
-+RP_PPPOE_VERSION = 4.0
-+RP_PPPOE_SITE = $(call github,dfskoll,rp-pppoe,$(RP_PPPOE_VERSION))
- RP_PPPOE_LICENSE = GPL-2.0
- RP_PPPOE_LICENSE_FILES = doc/LICENSE
- RP_PPPOE_CPE_ID_VALID = YES
-@@ -13,8 +13,6 @@ RP_PPPOE_CPE_ID_VALID = YES
- RP_PPPOE_DEPENDENCIES = pppd
- RP_PPPOE_SUBDIR = src
- RP_PPPOE_TARGET_FILES = pppoe pppoe-server pppoe-relay pppoe-sniff
--RP_PPPOE_TARGET_SCRIPTS = pppoe-connect pppoe-init pppoe-setup pppoe-start \
--	pppoe-status pppoe-stop
- RP_PPPOE_MAKE_OPTS = PLUGIN_DIR=/usr/lib/pppd/$(PPPD_VERSION)
- RP_PPPOE_CONF_OPTS = --disable-debugging
- 
-@@ -30,14 +28,9 @@ RP_PPPOE_CONF_ENV = \
- 	PPPD_H=$(PPPD_DIR)/pppd/pppd.h
- 
- define RP_PPPOE_INSTALL_TARGET_CMDS
--	$(INSTALL) -D -m 0644 $(@D)/configs/pppoe.conf \
--		$(TARGET_DIR)/etc/ppp/pppoe.conf
- 	for ff in $(RP_PPPOE_TARGET_FILES); do \
- 		$(INSTALL) -m 0755 $(@D)/src/$$ff $(TARGET_DIR)/usr/sbin/$$ff || exit 1; \
- 	done
--	for ff in $(RP_PPPOE_TARGET_SCRIPTS); do \
--		$(INSTALL) -m 0755 $(@D)/scripts/$$ff $(TARGET_DIR)/usr/sbin/$$ff || exit 1; \
--	done
- endef
- 
- $(eval $(autotools-package))
+diff --git a/package/xenomai/3.0.10/0005-testsuite-latency-Use-corresponding-pclose-for-popen.patch b/package/xenomai/3.0.10/0005-testsuite-latency-Use-corresponding-pclose-for-popen.patch
+new file mode 100644
+index 000000000000..a144c4ece35b
+--- /dev/null
++++ b/package/xenomai/3.0.10/0005-testsuite-latency-Use-corresponding-pclose-for-popen.patch
+@@ -0,0 +1,30 @@
++From 6fe6b75bef4b4bb9723b12f0e9ebfd9877e00a44 Mon Sep 17 00:00:00 2001
++From: Jan Kiszka <jan.kiszka@siemens.com>
++Date: Sat, 16 Oct 2021 19:52:28 +0200
++Subject: [PATCH] testsuite/latency: Use corresponding pclose for popen
++
++Was found by latest gcc-11 and -Werror=mismatched-dealloc.
++
++Signed-off-by: Jan Kiszka <jan.kiszka@siemens.com>
++Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
++Upstream: https://source.denx.de/Xenomai/xenomai/-/commit/6fe6b75bef4b4bb9723b12f0e9ebfd9877e00a44
++---
++ testsuite/latency/latency.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/testsuite/latency/latency.c b/testsuite/latency/latency.c
++index a0e6f4826084..6cd3a28b44f6 100644
++--- a/testsuite/latency/latency.c
+++++ b/testsuite/latency/latency.c
++@@ -412,7 +412,7 @@ static void dump_histo_gnuplot(int32_t *histogram, time_t duration)
++ 		fputs(buf, ofp);
++ 	}
++ 
++-	fclose(ifp);
+++	pclose(ifp);
++ 
++ dump_data:
++ 	for (n = 0; n < histogram_size && histogram[n] == 0; n++)
++-- 
++2.43.0
++
 -- 
-2.39.2
+2.43.0
 
 _______________________________________________
 buildroot mailing list
