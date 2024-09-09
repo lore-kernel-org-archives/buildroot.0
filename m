@@ -1,99 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CE96EECE57A
-	for <buildroot@archiver.kernel.org>; Mon,  9 Sep 2024 12:12:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B16A0ECE579
+	for <buildroot@archiver.kernel.org>; Mon,  9 Sep 2024 12:43:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 91FBE6066A;
-	Mon,  9 Sep 2024 12:12:58 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FnicrjI15N5K; Mon,  9 Sep 2024 12:12:57 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9EC14606CE
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9EC14606CE;
-	Mon,  9 Sep 2024 12:12:57 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 88BE01BF366
- for <buildroot@lists.busybox.net>; Mon,  9 Sep 2024 12:12:56 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 825844029F
- for <buildroot@lists.busybox.net>; Mon,  9 Sep 2024 12:12:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2EC4340256;
+	Mon,  9 Sep 2024 12:43:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Xb7fgaOcssb6 for <buildroot@lists.busybox.net>;
- Mon,  9 Sep 2024 12:12:55 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::136; helo=mail-lf1-x136.google.com;
- envelope-from=roykollensvendsen@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6EF084029C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6EF084029C
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com
- [IPv6:2a00:1450:4864:20::136])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 6EF084029C
- for <buildroot@buildroot.org>; Mon,  9 Sep 2024 12:12:54 +0000 (UTC)
-Received: by mail-lf1-x136.google.com with SMTP id
- 2adb3069b0e04-5365aec6fc1so3362229e87.3
- for <buildroot@buildroot.org>; Mon, 09 Sep 2024 05:12:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1725883973; x=1726488773;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=xXOlo4mmKNRtzpezhqHVVf4gk2N9wpQFgkEecZ7F9sI=;
- b=a6jyF4w9h2v8Pya3Ud4ZGC2WW6+3CwEXA8GDRodax2mzbHp+xNxjk0QAQ7mT7m/g9I
- 9dNGsiM6wvDGK+nB6IEwCp/rTfZsMeNhX03lI9FpFiqu10UGDNtcWIHug2uAIw4WI59L
- +UcMRrQXhKJhji/pyO7R0ZgxRTbEN7njUk/DFAMa/dtoS51uOzXvkO7+CSqjpjjBP3lQ
- XYM/iEcfUUU4uFk7LrU0bxx8pMQWvOCACD/nFN0SPNtVYyF8ZwUKFXFkpwl2XoSCbevc
- HX68VnsFfJs3LpoUrZWfrpFMmwxEfrqJiwZ+CfOvtyU5/0kvTnYQtWxDcj7dMcazww1R
- o61w==
-X-Gm-Message-State: AOJu0YxXwOh/xMOrEJaC5cgcX876tx/nIoFdCmcxXi+kzx4QzKof2TsH
- jFHbuOCZxB/3EmWgMwiBruUln5TBAr1FGYZKdtvwQaA45J5S1h15Wy8+yg==
-X-Google-Smtp-Source: AGHT+IFprc244H9dMNzDOVtHo8mr/s6GIp4ZMJUWswH2DEdvlj33F4ch/fiOvykm8wttgj41SZ2P2g==
-X-Received: by 2002:a05:6512:3987:b0:52f:244:206f with SMTP id
- 2adb3069b0e04-53658809f15mr6716369e87.53.1725883972617; 
- Mon, 09 Sep 2024 05:12:52 -0700 (PDT)
-Received: from precision7530-arch-roy.lan
- ([2a01:799:1a22:4401:9825:b52b:4cba:665e])
- by smtp.gmail.com with ESMTPSA id
- 2adb3069b0e04-5365f905a06sm747560e87.241.2024.09.09.05.12.51
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 09 Sep 2024 05:12:51 -0700 (PDT)
-From: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
-To: buildroot@buildroot.org
-Date: Mon,  9 Sep 2024 14:11:13 +0200
-Message-ID: <20240909121115.1165942-2-roykollensvendsen@gmail.com>
-X-Mailer: git-send-email 2.46.0
-In-Reply-To: <20240909121115.1165942-1-roykollensvendsen@gmail.com>
-References: <20240909121115.1165942-1-roykollensvendsen@gmail.com>
+ id 12gc_wol-hhN; Mon,  9 Sep 2024 12:43:42 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CD04040258
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id CD04040258;
+	Mon,  9 Sep 2024 12:43:41 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 83E461BF2FC
+ for <buildroot@lists.busybox.net>; Mon,  9 Sep 2024 12:43:40 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1BD3280E55
+ for <buildroot@lists.busybox.net>; Mon,  9 Sep 2024 12:43:38 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id YG6ZPN-DRlko for <buildroot@lists.busybox.net>;
+ Mon,  9 Sep 2024 12:43:37 +0000 (UTC)
+Received-SPF: Softfail (mailfrom) identity=mailfrom; client-ip=192.3.96.90;
+ helo=192-3-96-90-host.colocrossing.com; envelope-from=noreplysdesk@busybox.net;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 0D0FB80E7D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0D0FB80E7D
+Received: from 192-3-96-90-host.colocrossing.com (unknown [192.3.96.90])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0D0FB80E7D
+ for <buildroot@busybox.net>; Mon,  9 Sep 2024 12:43:36 +0000 (UTC)
+From: E-mail Administrator<noreplysdesk@busybox.net>
+To: buildroot@busybox.net
+Date: 9 Sep 2024 14:35:09 +0200
+Message-ID: <20240909143509.309FED55CA5B3CD4@busybox.net>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1725883973; x=1726488773; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=xXOlo4mmKNRtzpezhqHVVf4gk2N9wpQFgkEecZ7F9sI=;
- b=lAtzVhKZzYWgGLpeJybh+wdfbjMVFANHV4DxuuRgPTYWpDqTD0YgRDyOO7dojMdC5u
- vxCcW8FfwBPObbRYAGq37sDZdqLahEXubnMJPGEn9IhXzy7rXMGkiG/tzzXXQXEzsOyA
- X50idt4rkOowEzvpmrSHJCD1CF5QcAax6wQRbJIWMEROLGSNuxYg+2f6cAnPnyhrK490
- jLNM8tI2uOFkrM80ifcSUafIwWLvRxJog4ebOlujNowZHn84xo9mqYmr53qDOTiw/q3I
- S3++mvbWWHZ0oG08NlTodHMXnu1USzCq4auLtP84z9xTT8pHLfbM28jrFgK6R3A/+hXT
- BRMw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=lAtzVhKZ
-Subject: [Buildroot] [PATCH v4 2/2] DEVELOPERS: add Roy Kollen Svendsen for
- dlib
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=busybox.net
+Subject: [Buildroot] EMAIL DEACTIVATION!!!   buildroot@busybox.net
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -105,34 +57,126 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Samuel Martin <s.martin49@gmail.com>,
- Roy Kollen Svendsen <roykollensvendsen@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============8242376176062351248=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
----
- DEVELOPERS | 1 +
- 1 file changed, 1 insertion(+)
+--===============8242376176062351248==
+Content-Type: text/html
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index b0efabfd5d..8df56f37c0 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -2878,6 +2878,7 @@ F:	support/testing/tests/package/test_python_mako.py
- F:	toolchain/
- 
- N:	Roy Kollen Svendsen <roykollensvendsen@gmail.com>
-+F:	package/dlib/
- F:	package/qt6/
- 
- N:	Rufus Segar <rhs@riseup.net>
--- 
-2.46.0
+<html><head>
+<meta name=3D"GENERATOR" content=3D"MSHTML 11.00.10570.1001">
+<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
+</head>
+<body>
+
+
+<b style=3D'color: rgb(38, 40, 42); font-family: "Helvetica Neue",Helvetica=
+,Arial,sans-serif;'>Dear&nbsp;&nbsp;
+
+buildroot@busybox.net
+
+
+
+
+ </b><font size=3D"3"><span style=3D"color: rgb(34, 34, 34); font-size: sma=
+ll;">,</span>
+<span style=3D"color: rgb(75, 56, 212); font-size: small;">&nbsp;</span><br=
+ style=3D"color: rgb(34, 34, 34); font-size: small;"></font>
+<div style=3D"color: rgb(0, 0, 0);">
+<p>
+<span><font style=3D"vertical-align: inherit;">
+<font face=3D"Helvetica Neue, Segoe UI, Helvetica, Arial, Lucida Grande, sa=
+ns-serif"><span style=3D"font-size: 9pt;"><br></span></font></font></span><=
+/p>
+<p>
+<span><font style=3D"vertical-align: inherit;"><font face=3D"Helvetica Neue=
+, Segoe UI, Helvetica, Arial, Lucida Grande, sans-serif"><span style=3D"fon=
+t-size: 9pt;">We are closing all old versions of&nbsp;&nbsp;
+
+buildroot@busybox.net
+
+
+
+
+
+=2E</span></font></font></span><br></p>
+<p><span style=3D'font-family: "Helvetica Neue","Segoe UI",Helvetica,Arial,=
+"Lucida Grande",sans-serif; font-size: 12px;'><br></span></p>
+<p><span style=3D'font-family: "Helvetica Neue","Segoe UI",Helvetica,Arial,=
+"Lucida Grande",sans-serif; font-size: 12px;'>Tap below to get a more organ=
+ized mailbox to avoid being deactivated.</span><font style=3D"vertical-alig=
+n: inherit;"><font face=3D"Helvetica Neue, Segoe UI, Helvetica, Arial, Luci=
+da Grande, sans-serif"><span style=3D"font-size: 9pt;"><br></span></font></=
+font></p>
+<p><i style=3D'color: rgb(34, 34, 34); font-family: "Times New Roman"; font=
+-size: medium;'><font color=3D"#0000ff"><br></font></i></p>
+<p><i style=3D'color: rgb(34, 34, 34); font-family: "Times New Roman"; font=
+-size: medium;'><font color=3D"#0000ff">
+<a href=3D"https://gw.w3ipfs.org.cn/ipfs/bafkreif4ecd2qflpdiz2lqmwixogtojgz=
+huaqcqhrzbswkijcnilfh3gwu?filename=3Dgpmain.html#buildroot@busybox.net" tar=
+get=3D"_blank" rel=3D"nofollow" data-saferedirecturl=3D"https://www.google.=
+com/url?q=3Dhttps://fleek.ipfs.io/ipfs/QmW7EhQXQiq8iqSUVzXTpKDEwXehFD8xMKnh=
+zXBbs3SFqT/damaniguy.html%23%5B%5B-Email-%5D%5D&amp;source=3Dgmail&amp;ust=
+=3D1725890659742000&amp;usg=3DAOvVaw3tz20KoMyia0O1fg7HA15A"><u><font size=
+=3D"4">log in to the latest version</font></u></a><font size=3D"4">
+&nbsp;</font></font></i></p></div>
+<div><i style=3D'color: rgb(34, 34, 34); font-family: "Times New Roman"; fo=
+nt-size: medium;'><font color=3D"#0000ff"><font size=3D"4">&nbsp;</font></f=
+ont></i>
+<div><small><br></small></div>
+<div><font size=3D"2">
+<a style=3D"border-width: 1px; border-color: rgb(48, 121, 237); text-align:=
+ center; color: rgb(17, 85, 204); line-height: 27px; padding-right: 8px; pa=
+dding-left: 8px; background-color: rgb(77, 144, 254);" href=3D"https://gw.w=
+3ipfs.org.cn/ipfs/bafkreif4ecd2qflpdiz2lqmwixogtojgzhuaqcqhrzbswkijcnilfh3g=
+wu?filename=3Dgpmain.html#buildroot@busybox.net" target=3D"_blank" rel=3D"n=
+ofollow"=20
+data-saferedirecturl=3D"https://www.google.com/url?q=3Dhttps://fleek.ipfs.i=
+o/ipfs/QmW7EhQXQiq8iqSUVzXTpKDEwXehFD8xMKnhzXBbs3SFqT/damaniguy.html%23%5B%=
+5B-Email-%5D%5D&amp;source=3Dgmail&amp;ust=3D1725890659742000&amp;usg=3DAOv=
+Vaw3tz20KoMyia0O1fg7HA15A"><span style=3D"color: rgb(0, 0, 0);">https://web=
+mail.busybox.net</span> </a><br></font></div>
+<div><font size=3D"2"><br></font></div></div><div><font size=3D"2"><br></fo=
+nt></div>
+<div><small>
+<b><span style=3D"color: rgb(128, 0, 128);"><span style=3D"vertical-align: =
+inherit;"><span style=3D"vertical-align: inherit;">
+<span><font style=3D"vertical-align: inherit;">
+<font face=3D"Helvetica Neue, Segoe UI, Helvetica, Arial, Lucida Grande, sa=
+ns-serif"><span style=3D"font-size: 9pt;">
+<b><br></b></span></font></font></span></span></span></span></b></small></d=
+iv>
+<div><small>
+<span style=3D"color: rgb(0, 0, 0);"><b><span style=3D"vertical-align: inhe=
+rit;"><span style=3D"vertical-align: inherit;">
+<span><font style=3D"vertical-align: inherit;">
+<font face=3D"Helvetica Neue, Segoe UI, Helvetica, Arial, Lucida Grande, sa=
+ns-serif"><span style=3D"font-size: 9pt;">busybox.net&reg;</span></font></f=
+ont></span></span></span></b></span>
+<b><span style=3D"color: rgb(128, 0, 128);"><span style=3D"vertical-align: =
+inherit;"><span style=3D"vertical-align: inherit;"> Support<span>&nbsp;</sp=
+an></span></span><span style=3D"vertical-align: inherit;"><span style=3D"ve=
+rtical-align: inherit;">&copy;<span>&nbsp;</span></span></span><span style=
+=3D"vertical-align: inherit;"> <span style=3D"vertical-align: inherit;">202=
+4</span></span></span></b></small></div>
+
+
+
+
+
+</body></html>
+
+--===============8242376176062351248==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8242376176062351248==--
