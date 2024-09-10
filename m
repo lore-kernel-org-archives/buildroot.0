@@ -4,49 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ED88DEE01E8
-	for <buildroot@archiver.kernel.org>; Tue, 10 Sep 2024 20:52:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53386EE01E8
+	for <buildroot@archiver.kernel.org>; Tue, 10 Sep 2024 20:52:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BD72060A6E;
-	Tue, 10 Sep 2024 20:52:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 13D2B60B4F;
+	Tue, 10 Sep 2024 20:52:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VFJYKoEt0lKi; Tue, 10 Sep 2024 20:52:35 +0000 (UTC)
+ id 8QRPuqxPzLQo; Tue, 10 Sep 2024 20:52:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E6B0560B09
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 413E760B54
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E6B0560B09;
-	Tue, 10 Sep 2024 20:52:34 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 93B371BF4D8
- for <buildroot@lists.busybox.net>; Tue, 10 Sep 2024 20:51:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 413E760B54;
+	Tue, 10 Sep 2024 20:52:38 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 5AB0C1BF4D8
+ for <buildroot@lists.busybox.net>; Tue, 10 Sep 2024 20:51:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 03F97404F6
- for <buildroot@lists.busybox.net>; Tue, 10 Sep 2024 20:51:33 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7D39540926
+ for <buildroot@lists.busybox.net>; Tue, 10 Sep 2024 20:51:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 07fbZ-F-JUkE for <buildroot@lists.busybox.net>;
- Tue, 10 Sep 2024 20:51:32 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1ypE5F8LYnF6 for <buildroot@lists.busybox.net>;
+ Tue, 10 Sep 2024 20:51:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 221E740A60
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 29A8F40947
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 221E740A60
+ by smtp4.osuosl.org (Postfix) with ESMTP id 29A8F40947
  for <buildroot@buildroot.org>; Tue, 10 Sep 2024 20:51:31 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1BF5386F5D; Tue, 10 Sep 2024 20:51:31 +0000 (UTC)
+ id 2609286F5F; Tue, 10 Sep 2024 20:51:31 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 10 Sep 2024 22:49:33 +0200
+Date: Tue, 10 Sep 2024 22:49:34 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e277ef8affc38ecae5b70943d13fb3a8b78def4a
-X-Git-Newrev: 8e6d5e49fe49192777f90116fbc8d0a125165eaa
+X-Git-Oldrev: 8e6d5e49fe49192777f90116fbc8d0a125165eaa
+X-Git-Newrev: 9a11cb9bdd92da964ce1d5141c21558e6df02808
 X-Patchwork-Hint: ignore
-Message-Id: <20240910205131.1BF5386F5D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/chocolate-doom: fix multiple typo
+Message-Id: <20240910205131.2609286F5F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/collectd: fix typos in help text /
+ comment
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,28 +65,60 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8e6d5e49fe49192777f90116fbc8d0a125165eaa
+commit: https://git.buildroot.net/buildroot/commit/?id=9a11cb9bdd92da964ce1d5141c21558e6df02808
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- .../chocolate-doom/0001-Remove-redundant-demoextend-definition.patch    | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/collectd/Config.in   | 6 +++---
+ package/collectd/collectd.mk | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/chocolate-doom/0001-Remove-redundant-demoextend-definition.patch b/package/chocolate-doom/0001-Remove-redundant-demoextend-definition.patch
-index bbfbdbb2d6..06bf54c583 100644
---- a/package/chocolate-doom/0001-Remove-redundant-demoextend-definition.patch
-+++ b/package/chocolate-doom/0001-Remove-redundant-demoextend-definition.patch
-@@ -4,7 +4,7 @@ Date: Sun, 15 Mar 2020 16:55:33 -0500
- Subject: [PATCH] Remove redundant demoextend definition
+diff --git a/package/collectd/Config.in b/package/collectd/Config.in
+index 5f39507cff..39c0d352e5 100644
+--- a/package/collectd/Config.in
++++ b/package/collectd/Config.in
+@@ -288,7 +288,7 @@ config BR2_PACKAGE_COLLECTD_GPS
+ 	bool "gps"
+ 	select BR2_PACKAGE_GPSD
+ 	help
+-	  Reports the number of sattelites seen by and precision
++	  Reports the number of satellites seen by and precision
+ 	  of a GPS receiver.
  
- GCC 10 enables -fno-common by default, which causes the linker to fail when
--there are multple definitions of a global variable.
-+there are multiple definitions of a global variable.
+ config BR2_PACKAGE_COLLECTD_HUGEPAGES
+@@ -471,7 +471,7 @@ config BR2_PACKAGE_COLLECTD_PING
+ 	bool "ping"
+ 	select BR2_PACKAGE_LIBOPING
+ 	help
+-	  Mesures network latency using ICMP "echo requests".
++	  Measures network latency using ICMP "echo requests".
  
- See https://gcc.gnu.org/gcc-10/porting_to.html
+ config BR2_PACKAGE_COLLECTD_POSTGRESQL
+ 	bool "postgresql"
+@@ -493,7 +493,7 @@ comment "postgresql support can't be built with Optimize for fast"
+ config BR2_PACKAGE_COLLECTD_PROCESSES
+ 	bool "processes"
+ 	help
+-	  Collects the number of processes gruped by state.
++	  Collects the number of processes grouped by state.
  
+ config BR2_PACKAGE_COLLECTD_PROTOCOLS
+ 	bool "protocols"
+diff --git a/package/collectd/collectd.mk b/package/collectd/collectd.mk
+index b47b2efaba..7bfe556e90 100644
+--- a/package/collectd/collectd.mk
++++ b/package/collectd/collectd.mk
+@@ -38,7 +38,7 @@ endif
+ COLLECTD_CONF_ENV += CFLAGS="$(COLLECTD_CFLAGS)"
+ 
+ #
+-# NOTE: There's also a third availible setting "intswap", which might
++# NOTE: There's also a third available setting "intswap", which might
+ # be needed on some old ARM hardware (see [2]), but is not being
+ # accounted for as per discussion [1]
+ #
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
