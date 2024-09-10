@@ -4,58 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0AFD9ECE564
-	for <buildroot@archiver.kernel.org>; Tue, 10 Sep 2024 07:09:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9BA4ECE582
+	for <buildroot@archiver.kernel.org>; Tue, 10 Sep 2024 07:09:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CD67440650;
-	Tue, 10 Sep 2024 07:09:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A72C040233;
+	Tue, 10 Sep 2024 07:09:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gLT3qHNYGFVY; Tue, 10 Sep 2024 07:09:01 +0000 (UTC)
+ id WrmL8aeJ1922; Tue, 10 Sep 2024 07:09:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7992E40634
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6DFED40661
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7992E40634;
-	Tue, 10 Sep 2024 07:09:01 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 283501BF2C1
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6DFED40661;
+	Tue, 10 Sep 2024 07:09:04 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id E5A0F1BF2C1
  for <buildroot@lists.busybox.net>; Tue, 10 Sep 2024 07:08:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id B2EF84052D
+ by smtp3.osuosl.org (Postfix) with ESMTP id F0B7A60809
  for <buildroot@lists.busybox.net>; Tue, 10 Sep 2024 07:08:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id s8m2_vE3K5IB for <buildroot@lists.busybox.net>;
- Tue, 10 Sep 2024 07:08:43 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.195;
- helo=relay3-d.mail.gandi.net; envelope-from=peko@korsgaard.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id k158kE22GIpk for <buildroot@lists.busybox.net>;
+ Tue, 10 Sep 2024 07:08:42 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.199;
+ helo=relay9-d.mail.gandi.net; envelope-from=peko@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 4812B40233
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4812B40233
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
- [217.70.183.195])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 4812B40233
- for <buildroot@buildroot.org>; Tue, 10 Sep 2024 07:08:41 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 764E960005;
- Tue, 10 Sep 2024 07:08:39 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 7F63B6080F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7F63B6080F
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [217.70.183.199])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7F63B6080F
+ for <buildroot@buildroot.org>; Tue, 10 Sep 2024 07:08:42 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id F06BBFF802;
+ Tue, 10 Sep 2024 07:08:38 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peko@dell.be.48ers.dk>) id 1snuzP-00HRyQ-0F;
- Tue, 10 Sep 2024 09:08:39 +0200
+ (envelope-from <peko@dell.be.48ers.dk>) id 1snuzO-00HRyJ-1f;
+ Tue, 10 Sep 2024 09:08:38 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 10 Sep 2024 09:07:52 +0200
-Message-Id: <20240910070823.4158894-13-peter@korsgaard.com>
+Date: Tue, 10 Sep 2024 09:07:51 +0200
+Message-Id: <20240910070823.4158894-12-peter@korsgaard.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240910070823.4158894-1-peter@korsgaard.com>
 References: <20240910070823.4158894-1-peter@korsgaard.com>
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: [Buildroot] [PATCH 12/42] package/avahi: fix appropriate typo
+Subject: [Buildroot] [PATCH 11/42] package/audit: fix deactivate typo
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,26 +74,22 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/avahi/0002-remove-imp-from-py-compile.patch | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/audit/audit.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/avahi/0002-remove-imp-from-py-compile.patch b/package/avahi/0002-remove-imp-from-py-compile.patch
-index 37534a3f7a..ba92275206 100644
---- a/package/avahi/0002-remove-imp-from-py-compile.patch
-+++ b/package/avahi/0002-remove-imp-from-py-compile.patch
-@@ -1,10 +1,10 @@
- Remove optional imp python module dependency.
+diff --git a/package/audit/audit.mk b/package/audit/audit.mk
+index 76828571ca..c703acc559 100644
+--- a/package/audit/audit.mk
++++ b/package/audit/audit.mk
+@@ -17,7 +17,7 @@ AUDIT_CONF_OPTS = --without-python --without-python3 --disable-zos-remote
  
- Upstream already removed py-compile entirely in their git repository,
--so the patch is not appropiate for upstream.
-+so the patch is not appropriate for upstream.
- 
- Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
--Upstream: not appropiate
-+Upstream: not appropriate
- 
- diff -Nur avahi-0.8.orig/py-compile avahi-0.8/py-compile
- --- avahi-0.8.orig/py-compile	2020-02-18 07:58:21.192417644 +0100
+ # src/libev has some assembly function that is not present in Thumb mode:
+ # Error: selected processor does not support `mcr p15,0,r3,c7,c10,5' in Thumb mode
+-# so, we desactivate Thumb mode
++# so, we deactivate Thumb mode
+ ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
+ AUDIT_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -marm"
+ endif
 -- 
 2.39.2
 
