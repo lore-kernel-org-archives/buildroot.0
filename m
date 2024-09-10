@@ -1,69 +1,61 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8F8FECE564
-	for <buildroot@archiver.kernel.org>; Tue, 10 Sep 2024 06:27:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8CD3FECE564
+	for <buildroot@archiver.kernel.org>; Tue, 10 Sep 2024 07:08:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7B1E7409EC;
-	Tue, 10 Sep 2024 06:27:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 96E034026F;
+	Tue, 10 Sep 2024 07:08:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6PWYnSs-l2-s; Tue, 10 Sep 2024 06:27:07 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id o5CYzwJtiRa0; Tue, 10 Sep 2024 07:08:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D1E63409F6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D8C0940214
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D1E63409F6;
-	Tue, 10 Sep 2024 06:27:05 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id D8C0940214;
+	Tue, 10 Sep 2024 07:08:39 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A2FD61BF303
- for <buildroot@lists.busybox.net>; Tue, 10 Sep 2024 06:27:03 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1D9441BF2C1
+ for <buildroot@lists.busybox.net>; Tue, 10 Sep 2024 07:08:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9142E409E5
- for <buildroot@lists.busybox.net>; Tue, 10 Sep 2024 06:27:03 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0ABD3405C6
+ for <buildroot@lists.busybox.net>; Tue, 10 Sep 2024 07:08:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ypetHwqdWCnJ for <buildroot@lists.busybox.net>;
- Tue, 10 Sep 2024 06:27:02 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=60.248.80.70;
- helo=atcsqr.andestech.com; envelope-from=peterlin@andestech.com;
+ id BzwTnLFEKafx for <buildroot@lists.busybox.net>;
+ Tue, 10 Sep 2024 07:08:37 +0000 (UTC)
+X-Greylist: delayed 56440 seconds by postgrey-1.37 at util1.osuosl.org;
+ Tue, 10 Sep 2024 07:08:36 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org B7D1A40399
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B7D1A40399
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.194;
+ helo=relay2-d.mail.gandi.net; envelope-from=peko@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0082E409C1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0082E409C1
-Received: from Atcsqr.andestech.com (60-248-80-70.hinet-ip.hinet.net
- [60.248.80.70])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0082E409C1
- for <buildroot@buildroot.org>; Tue, 10 Sep 2024 06:27:01 +0000 (UTC)
-Received: from mail.andestech.com (ATCPCS34.andestech.com [10.0.1.134])
- by Atcsqr.andestech.com with ESMTPS id 48A6Qdsb086357
- (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
- Tue, 10 Sep 2024 14:26:39 +0800 (+08)
- (envelope-from peterlin@andestech.com)
-Received: from swlinux02.andestech.com (10.0.15.183) by ATCPCS34.andestech.com
- (10.0.1.134) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Tue, 10 Sep
- 2024 14:26:39 +0800
-To: <buildroot@buildroot.org>
-Date: Tue, 10 Sep 2024 14:26:35 +0800
-Message-ID: <20240910062635.4193650-5-peterlin@andestech.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240910062635.4193650-1-peterlin@andestech.com>
-References: <20240910062635.4193650-1-peterlin@andestech.com>
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [217.70.183.194])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B7D1A40399
+ for <buildroot@buildroot.org>; Tue, 10 Sep 2024 07:08:36 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id D28FE40008;
+ Tue, 10 Sep 2024 07:08:32 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peko@dell.be.48ers.dk>) id 1snuzI-00HRwt-10;
+ Tue, 10 Sep 2024 09:08:32 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: buildroot@buildroot.org
+Date: Tue, 10 Sep 2024 09:07:40 +0200
+Message-Id: <20240910070823.4158894-1-peter@korsgaard.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-Originating-IP: [10.0.15.183]
-X-ClientProxiedBy: ATCPCS33.andestech.com (10.0.1.100) To
- ATCPCS34.andestech.com (10.0.1.134)
-X-DNSRBL: 
-X-MAIL: Atcsqr.andestech.com 48A6Qdsb086357
+X-GND-Sasl: peter@korsgaard.com
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=andestech.com
-Subject: [Buildroot] [PATCH v3 4/4] board/andes/ae350: readme.txt: Add
- SPI_burn tool instructions
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: [Buildroot] [PATCH 00/42] codespell spelling fixes A-H
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -75,79 +67,116 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Yu Chien Peter Lin via buildroot <buildroot@buildroot.org>
-Reply-To: Yu Chien Peter Lin <peterlin@andestech.com>
-Cc: tim609@andestech.com, Yu Chien Peter Lin <peterlin@andestech.com>,
- ycliang@andestech.com, Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add a section to document how to update bootloader on AE350
-platforms with SPI_burn tool.
+A collection of small typo fixes found by codespell
+(https://github.com/codespell-project/codespell/).
 
-Signed-off-by: Yu Chien Peter Lin <peterlin@andestech.com>
----
- board/andes/ae350/readme.txt | 43 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 43 insertions(+)
+I have skipped typo fixes for patches that are direct backports from
+upstream.  Patches for the remaining packages will follow later, as the
+series is already very long.
 
-diff --git a/board/andes/ae350/readme.txt b/board/andes/ae350/readme.txt
-index 4de4cb3894..36561fc777 100644
---- a/board/andes/ae350/readme.txt
-+++ b/board/andes/ae350/readme.txt
-@@ -41,6 +41,49 @@ After building, you should obtain the following files:
-   |-- u-boot-spl.bin
-   `-- u-boot.itb
- 
-+How to update the bootloader and device-tree
-+============================================
-+
-+To update the bootloader and device tree, make sure you have
-+an ICEman (Andes OpenOCD [1]) and AICE [2] connection set up
-+as below:
-+
-+  Local Host                 Local/Remote Host
-+ .-----------------.          .--------------.
-+ | buildroot images|          |              |
-+ |                 |         ICEman host <IP:PORT>
-+ | .----------.    |          |  .--------.  |
-+ | | SPI_burn |<---+--socket--+->| ICEman |  |
-+ | '----------'    |          |  '--.-----'  |
-+ '-----------------'          '-----|--------'
-+                                    |
-+                                    USB
-+   .--------------.                 |
-+   | target       |           .-----v-----.
-+   | board        <----JTAG---| AICE      |
-+   |              |           '-----------'
-+   '--------------'
-+
-+[1] https://github.com/andestech/ICEman
-+[2] https://www.andestech.com/en/products-solutions/andeshape-platforms/aice-micro/
-+
-+The Andes SPI_burn tool will be located in output/host/bin. Use
-+the following commands to update the bootloader and device tree:
-+
-+  $ SPI_burn --host $ICE_IP --port $ICE_BURNER_PORT --addr 0x0     -i u-boot-spl.bin
-+  $ SPI_burn --host $ICE_IP --port $ICE_BURNER_PORT --addr 0x10000 -i u-boot.itb
-+  $ SPI_burn --host $ICE_IP --port $ICE_BURNER_PORT --addr 0xf0000 -i ae350_ax45mp.dtb
-+
-+Note that the --addr option specifies the offset starting from
-+the flash base address 0x80000000 and set by U-Boot configurations.
-+e.g.
-+u-boot-spl.bin  : CONFIG_SPL_TEXT_BASE=0x80000000
-+u-boot.itb      : CONFIG_SPL_LOAD_FIT_ADDRESS=0x80010000
-+ae350_ax45mp.dtb: CONFIG_SYS_FDT_BASE=0x800f0000
-+
-+How to write the SD card
-+========================
-+
- Copy the sdcard.img to a SD card with "dd":
- 
-   $ sudo dd if=sdcard.img of=/dev/sdX bs=4096
+Peter Korsgaard (42):
+  docs/manual/adding-packages-asciidoc.adoc: fix resources typo in
+    example
+  docs/manual/adding-packages-linux-kernel-spec-infra.adoc: fix
+    information typo
+  docs/manual/adding-packages-meson.adoc: fix occurrences typo
+  docs/manual/customize-outside-br.adoc: fix 'or' typo
+  docs/manual/migrating.adoc: fix occurrence typo
+  docs/manual/migrating.adoc: fix accommodate typo
+  docs/manual/using-buildroot-toolchain.adoc: fix overridden typo
+  docs/website/copyright.txt: fix oboard typo
+  docs/website/news.html: fix information typo
+  package/alure: fix dependencies typo in comment
+  package/audit: fix deactivate typo
+  package/avahi: fix appropriate typo
+  package/bc: fix typos in patch descriptions
+  package/bcache-tools: fix compatibility typo
+  package/bcusdk: fix definition typo
+  package/boost: fix typos in help text
+  package/c-icap-modules: fix Additional typo
+  package/chocolate-doom: fix multiple typo
+  package/collectd: fix typos in help text / comment
+  package/dcron: fix opening typo
+  package/dmalloc: fix deactivate typo
+  package/dvblast: fix which typo
+  package/elftosb: fix typos in patch descriptions
+  package/erlang: fix inadvertently typo
+  package/exiv2: fix 'information see' typo
+  package/falcosecurity-libs: fix which typo
+  package/fbgrab: fix framebuffer typo in help text
+  package/fcgiwrap: fix explicitly typo
+  package/flex: fix typo in patch description
+  package/flutter-engine: fix typos in comments
+  package/flutter-pi: fix Raspberry typo
+  package/gcc: fix explicitly typo
+  package/gdb: fix program typo
+  package/genpart: fix typos in patch description
+  package/gerbera: fix guaranteed typo
+  package/go-src: fix variable typo in patch description
+  package/go: fix convenience typo
+  package/gobject-introspection: fix altogether typo in patch
+    description
+  package/gtest: fix explanation typo
+  package/hddtemp: fix information typo in help text
+  package/heirloom-mailx: fix attachments typo in help text
+  package/hostapd: fix proprietary typo in help text
+
+ docs/manual/adding-packages-asciidoc.adoc                   | 2 +-
+ docs/manual/adding-packages-linux-kernel-spec-infra.adoc    | 2 +-
+ docs/manual/adding-packages-meson.adoc                      | 2 +-
+ docs/manual/customize-outside-br.adoc                       | 2 +-
+ docs/manual/migrating.adoc                                  | 4 ++--
+ docs/manual/using-buildroot-toolchain.adoc                  | 2 +-
+ docs/website/copyright.txt                                  | 2 +-
+ docs/website/news.html                                      | 4 ++--
+ package/alure/alure.mk                                      | 2 +-
+ package/audit/audit.mk                                      | 2 +-
+ package/avahi/0002-remove-imp-from-py-compile.patch         | 4 ++--
+ package/bc/0001-bc-use-MAKEINFO-variable-for-docs.patch     | 2 +-
+ ...2-notice-read-and-write-errors-on-input-and-output.patch | 2 +-
+ package/bc/0004-no-gen-libmath.patch                        | 2 +-
+ .../0001-Don-t-inline-crc64-for-gcc-5-compatability.patch   | 4 ++--
+ ...eibd-fix-endless-recursion-when-using-USB-backends.patch | 2 +-
+ package/boost/Config.in                                     | 4 ++--
+ package/c-icap-modules/Config.in                            | 2 +-
+ .../0001-Remove-redundant-demoextend-definition.patch       | 2 +-
+ package/collectd/Config.in                                  | 6 +++---
+ package/collectd/collectd.mk                                | 2 +-
+ ...in.c-add-newline-to-logfile-openning-error-message.patch | 2 +-
+ package/dmalloc/dmalloc.mk                                  | 2 +-
+ package/dvblast/0001-missing-lm.patch                       | 2 +-
+ package/elftosb/0001-fixes-includes.patch                   | 2 +-
+ package/elftosb/0002-force-cxx-compiler.patch               | 2 +-
+ package/erlang/erlang.mk                                    | 2 +-
+ package/exiv2/Config.in                                     | 2 +-
+ package/falcosecurity-libs/falcosecurity-libs.mk            | 2 +-
+ package/fbgrab/Config.in                                    | 2 +-
+ package/fcgiwrap/0001-use-LIBS-from-configure.patch         | 2 +-
+ package/fcgiwrap/fcgiwrap.mk                                | 2 +-
+ ...ild-make-it-possible-to-disable-the-build-of-the-d.patch | 2 +-
+ package/flutter-engine/Config.in                            | 2 +-
+ package/flutter-engine/gen-tarball                          | 4 ++--
+ package/flutter-pi/Config.in                                | 2 +-
+ package/gcc/gcc.mk                                          | 2 +-
+ package/gdb/Config.in                                       | 2 +-
+ package/genpart/0001-fix-return-code.patch                  | 4 ++--
+ package/gerbera/gerbera.mk                                  | 2 +-
+ ...0001-build.go-explicit-option-for-crosscompilation.patch | 2 +-
+ package/go/go.mk                                            | 2 +-
+ package/gobject-introspection/0001-disable-tests.patch      | 2 +-
+ package/gtest/gtest.mk                                      | 2 +-
+ package/hddtemp/Config.in                                   | 2 +-
+ package/heirloom-mailx/Config.in                            | 2 +-
+ package/hostapd/Config.in                                   | 2 +-
+ 47 files changed, 56 insertions(+), 56 deletions(-)
+
 -- 
-2.34.1
+2.39.2
 
 _______________________________________________
 buildroot mailing list
