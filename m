@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C11E4EE01E8
-	for <buildroot@archiver.kernel.org>; Tue, 10 Sep 2024 20:52:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96D2BEDE9BF
+	for <buildroot@archiver.kernel.org>; Tue, 10 Sep 2024 20:52:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 69A5C60A57;
-	Tue, 10 Sep 2024 20:52:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 64396608E2;
+	Tue, 10 Sep 2024 20:52:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cACHC_285EHf; Tue, 10 Sep 2024 20:52:11 +0000 (UTC)
+ id kKU2kWEIiB2n; Tue, 10 Sep 2024 20:52:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7F36860A8B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4621760A99
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7F36860A8B;
-	Tue, 10 Sep 2024 20:52:10 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1F4721BF4D8
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4621760A99;
+	Tue, 10 Sep 2024 20:52:14 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id EABBE1BF4D8
  for <buildroot@lists.busybox.net>; Tue, 10 Sep 2024 20:51:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5FC704024D
- for <buildroot@lists.busybox.net>; Tue, 10 Sep 2024 20:51:32 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id C6BB380B1E
+ for <buildroot@lists.busybox.net>; Tue, 10 Sep 2024 20:51:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0UmQxSvL-yml for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id apCQAGtzXbyb for <buildroot@lists.busybox.net>;
  Tue, 10 Sep 2024 20:51:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B262C40247
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8B3F780B4D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id B262C40247
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8B3F780B4D
  for <buildroot@buildroot.org>; Tue, 10 Sep 2024 20:51:30 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9E8EF86F54; Tue, 10 Sep 2024 20:51:30 +0000 (UTC)
+ id 7551186F5F; Tue, 10 Sep 2024 20:51:30 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 10 Sep 2024 22:49:18 +0200
+Date: Tue, 10 Sep 2024 22:49:12 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: eba958eb5dcb5065e932fb8740299390ba3bff28
-X-Git-Newrev: d729696451c899b8db149f9f6346db3f1b678ad5
+X-Git-Oldrev: c88a61759981562a85cb6a45b9db945ef6ccfa1e
+X-Git-Newrev: 6762761957f956b91ca3956370548e5a29e9bd42
 X-Patchwork-Hint: ignore
-Message-Id: <20240910205130.9E8EF86F54@busybox.osuosl.org>
-Subject: [Buildroot] [git commit]
- docs/manual/using-buildroot-toolchain.adoc: fix overridden typo
+Message-Id: <20240910205130.7551186F5F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] docs/manual/adding-packages-meson.adoc:
+ fix occurrences typo
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,30 +65,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d729696451c899b8db149f9f6346db3f1b678ad5
+commit: https://git.buildroot.net/buildroot/commit/?id=6762761957f956b91ca3956370548e5a29e9bd42
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Overridden is with double-r-double-d.
+Occurrences is with double-c-double-r.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- docs/manual/using-buildroot-toolchain.adoc | 2 +-
+ docs/manual/adding-packages-meson.adoc | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/docs/manual/using-buildroot-toolchain.adoc b/docs/manual/using-buildroot-toolchain.adoc
-index 09408ef05a..fd9dda753b 100644
---- a/docs/manual/using-buildroot-toolchain.adoc
-+++ b/docs/manual/using-buildroot-toolchain.adoc
-@@ -16,7 +16,7 @@ Alternatively, Buildroot can also export the toolchain and the development
- files of all selected packages, as an SDK, by running the command
- +make sdk+. This generates a tarball of the content of the host directory
- +output/host/+, named +<TARGET-TUPLE>_sdk-buildroot.tar.gz+ (which can be
--overriden by setting the environment variable +BR2_SDK_PREFIX+) and
-+overridden by setting the environment variable +BR2_SDK_PREFIX+) and
- located in the output directory +output/images/+.
+diff --git a/docs/manual/adding-packages-meson.adoc b/docs/manual/adding-packages-meson.adoc
+index 16135b1297..01891e03cc 100644
+--- a/docs/manual/adding-packages-meson.adoc
++++ b/docs/manual/adding-packages-meson.adoc
+@@ -61,7 +61,7 @@ added to +FOO_DEPENDENCIES+. Note that the support for +baz+ is explicitly
+ disabled at line 20, if the package is not selected.
  
- This tarball can then be distributed to application developers, when
+ To sum it up, to add a new meson-based package, the Makefile example can be
+-copied verbatim then edited to replace all occurences of +FOO+ with the
++copied verbatim then edited to replace all occurrences of +FOO+ with the
+ uppercase name of the new package and update the values of the standard
+ variables.
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
