@@ -4,72 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 027FDEDE9BF
-	for <buildroot@archiver.kernel.org>; Tue, 10 Sep 2024 20:45:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8E96BEDE9BF
+	for <buildroot@archiver.kernel.org>; Tue, 10 Sep 2024 20:51:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C1A23608BE;
-	Tue, 10 Sep 2024 20:45:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 50FBE608BB;
+	Tue, 10 Sep 2024 20:51:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0Dab0WOe3pe8; Tue, 10 Sep 2024 20:45:06 +0000 (UTC)
+ id M3HeA-KlkSb0; Tue, 10 Sep 2024 20:51:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C2ABC608BA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 14A8B608BF
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C2ABC608BA;
-	Tue, 10 Sep 2024 20:45:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 14A8B608BF;
+	Tue, 10 Sep 2024 20:51:32 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 93CD11BF4D8
- for <buildroot@lists.busybox.net>; Tue, 10 Sep 2024 20:45:04 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6D6821BF95A
+ for <buildroot@lists.busybox.net>; Tue, 10 Sep 2024 20:46:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 15B76406C1
- for <buildroot@lists.busybox.net>; Tue, 10 Sep 2024 20:45:03 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5A43840211
+ for <buildroot@lists.busybox.net>; Tue, 10 Sep 2024 20:46:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FYiOpKgNIRLa for <buildroot@lists.busybox.net>;
- Tue, 10 Sep 2024 20:45:02 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::228;
- helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id FMtmeV5zXv5E for <buildroot@lists.busybox.net>;
+ Tue, 10 Sep 2024 20:46:57 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org A3CF0406DC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A3CF0406DC
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::228])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A3CF0406DC
- for <buildroot@buildroot.org>; Tue, 10 Sep 2024 20:45:01 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id CC69F1BF203;
- Tue, 10 Sep 2024 20:44:57 +0000 (UTC)
-Date: Tue, 10 Sep 2024 22:44:56 +0200
-To: Peter Korsgaard <peter@korsgaard.com>
-Message-ID: <20240910224456.52a90479@windsurf>
-In-Reply-To: <20240909152748.3876779-1-peter@korsgaard.com>
-References: <20240909152748.3876779-1-peter@korsgaard.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1726001098;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=cSMylG0v5vDf2GAPjo5xn3uwzcKNyCps5oQfP/8XME0=;
- b=g38dznbPXmHntt/s0wPZGUrd2YCjauNKDGBcnEC0YLb5k0y0kN3CwtbHHlKYxinX28DGAo
- u5k8dzYvSeDoQylNsDAMNFBR5GlSEBzcZcJ7So2g77yyul5HuwsZND2sEPCtuzUjIxN2Yf
- IZNxnI0St2bPvMDmQpVDFF/v5gPJgo8TpgRsSIl2FhNXvkme3Ttxyg5gxaPOa5DRTdw7ll
- 6hwxIXpKZucM9JVXNfZ48PSo/04K8AS7TGpB7CdWa+t8IkR06mmA4alCF+m5Ex8kkGTNIb
- cp55Llxsd8k+NNh+OkCnFe7dYx9IdAnR/wv6LLPiAU2Qqf0yB6KL9LPfMROxiA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=g38dznbP
-Subject: Re: [Buildroot] [PATCH 1/2] support/misc/Vagrantfile: move to
- Debian bullseyes (12)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1E1CF40210
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1E1CF40210
+ for <buildroot@buildroot.org>; Tue, 10 Sep 2024 20:46:57 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 14DAD86F5A; Tue, 10 Sep 2024 20:46:57 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Tue, 10 Sep 2024 22:44:40 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 75b543880ceaeb8ff039b0cf3a2ba3e1d38aba37
+X-Git-Newrev: 817b22f114ab3543d69341efa7c6da5008ec419b
+X-Patchwork-Hint: ignore
+Message-Id: <20240910204657.14DAD86F5A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/network-manager: bump version to
+ 1.48.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,42 +60,146 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Mon,  9 Sep 2024 17:27:46 +0200
-Peter Korsgaard <peter@korsgaard.com> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=817b22f114ab3543d69341efa7c6da5008ec419b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Ubuntu Bionic (18.04) was EOL'ed in June 2023:
-> 
-> https://ubuntu.com//blog/18-04-end-of-standard-support
-> 
-> And the VM image is only available in virtualbox format:
-> 
-> https://app.vagrantup.com/ubuntu/boxes/bionic64
-> 
-> So move to Debian bullseye (12), matching what we do for the docker image.
-> This is available in virtualbox and libvirt (qemu) format:
-> 
-> https://app.vagrantup.com/debian/boxes/bullseye64
-> 
-> Bullseye does not come with rsync out of the box, so install it.
-> 
-> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-> ---
->  support/misc/Vagrantfile | 8 +++-----
->  1 file changed, 3 insertions(+), 5 deletions(-)
+Upstream changelog:
+https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/blob/1.48.10/NEWS?ref_type=tags
 
-Both applied to master, thanks!
+Packaging changes:
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+NM removed UPower suspend/resume support because it has been removed
+from UPower, the new fallback is consolekit.
+https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/commit/05ef682bb5bf16a4de2cef4ed9eba4f9473ff19d
+
+Add patch required to build with musl due to changes in imported
+libsystemd code (merged upstream in 1.49.x dev branch):
+https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/commit/118e3117fe48f18cb2175b3cbc95a6ea3ced28b2
+
+Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ ...ore-disable-sd_dhcp6_client_set_duid_uuid.patch | 68 ++++++++++++++++++++++
+ package/network-manager/network-manager.hash       |  4 +-
+ package/network-manager/network-manager.mk         |  6 +-
+ 3 files changed, 73 insertions(+), 5 deletions(-)
+
+diff --git a/package/network-manager/0001-libnm-systemd-core-disable-sd_dhcp6_client_set_duid_uuid.patch b/package/network-manager/0001-libnm-systemd-core-disable-sd_dhcp6_client_set_duid_uuid.patch
+new file mode 100644
+index 0000000000..7c5d4bde78
+--- /dev/null
++++ b/package/network-manager/0001-libnm-systemd-core-disable-sd_dhcp6_client_set_duid_uuid.patch
+@@ -0,0 +1,68 @@
++From 118e3117fe48f18cb2175b3cbc95a6ea3ced28b2 Mon Sep 17 00:00:00 2001
++From: Khem Raj <raj.khem@gmail.com>
++Date: Fri, 7 Jun 2024 14:03:15 -0700
++Subject: [PATCH] libnm-systemd-core: Disable sd_dhcp6_client_set_duid_uuid
++ function
++
++When building on musl systems ( with out systemd ), and using LLD linker
++from LLVM project we fail to link with undefined symbols.
++
++This symbol is in sd_id128.c but its disabled, so let disable the functions
++which need this function.
++
++| x86_64-yoe-linux-musl-ld.lld: error: undefined symbol: sd_id128_get_machine_app_specific
++| >>> referenced by sd-dhcp-duid.c:202 (/usr/src/debug/networkmanager/1.48.0/../NetworkManager-1.48.0/src/libnm-systemd-core/src/libsystemd-network/sd-dhcp-duid.c:202)
++| >>>               libnm-systemd-core.a.p/src_libsystemd-network_sd-dhcp-duid.c.o:(sd_dhcp_duid_set_uuid) in archive src/libnm-systemd-core/libnm-systemd-core.a
++| x86_64-yoe-linux-musl-clang: error: linker command failed with exit code 1 (use -v to see invocation)
++
++Signed-off-by: Khem Raj <raj.khem@gmail.com>
++Upstream: https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/commit/118e3117fe48f18cb2175b3cbc95a6ea3ced28b2
++Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
++---
++ src/libnm-systemd-core/src/libsystemd-network/sd-dhcp-duid.c    | 2 ++
++ src/libnm-systemd-core/src/libsystemd-network/sd-dhcp6-client.c | 2 ++
++ 2 files changed, 4 insertions(+)
++
++diff --git a/src/libnm-systemd-core/src/libsystemd-network/sd-dhcp-duid.c b/src/libnm-systemd-core/src/libsystemd-network/sd-dhcp-duid.c
++index e664a4a7207..28abddfbc5e 100644
++--- a/src/libnm-systemd-core/src/libsystemd-network/sd-dhcp-duid.c
+++++ b/src/libnm-systemd-core/src/libsystemd-network/sd-dhcp-duid.c
++@@ -193,6 +193,7 @@ int sd_dhcp_duid_set_en(sd_dhcp_duid *duid) {
++         return 0;
++ }
++
+++#if 0  /* NM_IGNORED */
++ int sd_dhcp_duid_set_uuid(sd_dhcp_duid *duid) {
++         sd_id128_t machine_id;
++         int r;
++@@ -209,6 +210,7 @@ int sd_dhcp_duid_set_uuid(sd_dhcp_duid *duid) {
++         duid->size = offsetof(struct duid, uuid.uuid) + sizeof(machine_id);
++         return 0;
++ }
+++#endif /* NM_IGNORED */
++
++ int dhcp_duid_to_string_internal(uint16_t type, const void *data, size_t data_size, char **ret) {
++         _cleanup_free_ char *p = NULL, *x = NULL;
++diff --git a/src/libnm-systemd-core/src/libsystemd-network/sd-dhcp6-client.c b/src/libnm-systemd-core/src/libsystemd-network/sd-dhcp6-client.c
++index 7c20116409e..a6b55d07e0b 100644
++--- a/src/libnm-systemd-core/src/libsystemd-network/sd-dhcp6-client.c
+++++ b/src/libnm-systemd-core/src/libsystemd-network/sd-dhcp6-client.c
++@@ -244,6 +244,7 @@ int sd_dhcp6_client_set_duid_en(sd_dhcp6_client *client) {
++         return 0;
++ }
++
+++#if 0  /* NM_IGNORED */
++ int sd_dhcp6_client_set_duid_uuid(sd_dhcp6_client *client) {
++         int r;
++
++@@ -256,6 +257,7 @@ int sd_dhcp6_client_set_duid_uuid(sd_dhcp6_client *client) {
++
++         return 0;
++ }
+++#endif /* NM_IGNORED */
++
++ int sd_dhcp6_client_set_duid_raw(sd_dhcp6_client *client, uint16_t duid_type, const uint8_t *duid, size_t duid_len) {
++         int r;
++--
++GitLab
++
+diff --git a/package/network-manager/network-manager.hash b/package/network-manager/network-manager.hash
+index 952b0cea93..9fe9ce4e8b 100644
+--- a/package/network-manager/network-manager.hash
++++ b/package/network-manager/network-manager.hash
+@@ -1,5 +1,5 @@
+-# From https://download.gnome.org/sources/NetworkManager/1.46/NetworkManager-1.46.0.sha256sum
+-sha256  722649e25362693b334371473802a729b0ec9ee283375096905f868808e74068  NetworkManager-1.46.0.tar.xz
++# From https://download.gnome.org/sources/NetworkManager/1.48/NetworkManager-1.48.8.sha256sum
++sha256  5dc188fdffcf2d23c89d34b1e6319a6b20203e12eaec24b30037b7ea8ac8c613  NetworkManager-1.48.10.tar.xz
+ # Locally computed
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LGPL
+diff --git a/package/network-manager/network-manager.mk b/package/network-manager/network-manager.mk
+index 3937982c5f..8349b6c79b 100644
+--- a/package/network-manager/network-manager.mk
++++ b/package/network-manager/network-manager.mk
+@@ -4,8 +4,8 @@
+ #
+ ################################################################################
+ 
+-NETWORK_MANAGER_VERSION_MAJOR = 1.46
+-NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).0
++NETWORK_MANAGER_VERSION_MAJOR = 1.48
++NETWORK_MANAGER_VERSION = $(NETWORK_MANAGER_VERSION_MAJOR).10
+ NETWORK_MANAGER_SOURCE = NetworkManager-$(NETWORK_MANAGER_VERSION).tar.xz
+ NETWORK_MANAGER_SITE = https://download.gnome.org/sources/NetworkManager/$(NETWORK_MANAGER_VERSION_MAJOR)
+ NETWORK_MANAGER_INSTALL_STAGING = YES
+@@ -144,7 +144,7 @@ NETWORK_MANAGER_CONF_OPTS += \
+ 	-Dsystemd_journal=false \
+ 	-Dconfig_logging_backend_default=syslog \
+ 	-Dsession_tracking=no \
+-	-Dsuspend_resume=upower \
++	-Dsuspend_resume=consolekit \
+ 	-Dsystemdsystemunitdir=no
+ endif
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
