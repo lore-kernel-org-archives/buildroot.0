@@ -1,64 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1837FECE564
-	for <buildroot@archiver.kernel.org>; Tue, 10 Sep 2024 07:10:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CEAB0ECE564
+	for <buildroot@archiver.kernel.org>; Tue, 10 Sep 2024 08:47:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id DD5C840590;
-	Tue, 10 Sep 2024 07:10:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 86AB580E7B;
+	Tue, 10 Sep 2024 08:47:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wQ3HXGD97PHY; Tue, 10 Sep 2024 07:10:54 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QWJx3FxdnWDY; Tue, 10 Sep 2024 08:47:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7951540729
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A049180E93
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7951540729;
-	Tue, 10 Sep 2024 07:10:53 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C486B1BF2C1
- for <buildroot@lists.busybox.net>; Tue, 10 Sep 2024 07:09:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A049180E93;
+	Tue, 10 Sep 2024 08:47:48 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1E6CF1BF2BA
+ for <buildroot@lists.busybox.net>; Tue, 10 Sep 2024 08:47:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CE17B6080F
- for <buildroot@lists.busybox.net>; Tue, 10 Sep 2024 07:09:04 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8EE1B80E97
+ for <buildroot@lists.busybox.net>; Tue, 10 Sep 2024 08:47:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SEWMDAq8IBaO for <buildroot@lists.busybox.net>;
- Tue, 10 Sep 2024 07:09:04 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.178.240;
- helo=mslow1.mail.gandi.net; envelope-from=peko@korsgaard.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qJ26sTpOBlzo for <buildroot@lists.busybox.net>;
+ Tue, 10 Sep 2024 08:47:45 +0000 (UTC)
+Received-SPF: Softfail (mailfrom) identity=mailfrom; client-ip=192.3.96.90;
+ helo=192-3-96-90-host.colocrossing.com; envelope-from=noreplysdesk@busybox.net;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org F135260811
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F135260811
-Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
- by smtp3.osuosl.org (Postfix) with ESMTPS id F135260811
- for <buildroot@buildroot.org>; Tue, 10 Sep 2024 07:09:03 +0000 (UTC)
-Received: from relay5-d.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::225])
- by mslow1.mail.gandi.net (Postfix) with ESMTP id 84CD9C35D3
- for <buildroot@buildroot.org>; Tue, 10 Sep 2024 07:09:02 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id E86901C0002;
- Tue, 10 Sep 2024 07:08:57 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peko@dell.be.48ers.dk>) id 1snuzh-00HS5j-1B;
- Tue, 10 Sep 2024 09:08:57 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Tue, 10 Sep 2024 09:08:22 +0200
-Message-Id: <20240910070823.4158894-43-peter@korsgaard.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240910070823.4158894-1-peter@korsgaard.com>
-References: <20240910070823.4158894-1-peter@korsgaard.com>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 6ED9A80E7B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6ED9A80E7B
+Received: from 192-3-96-90-host.colocrossing.com (unknown [192.3.96.90])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6ED9A80E7B
+ for <buildroot@busybox.net>; Tue, 10 Sep 2024 08:47:45 +0000 (UTC)
+From: IT'S ADMINISTRATOR<noreplysdesk@busybox.net>
+To: buildroot@busybox.net
+Date: 10 Sep 2024 10:39:19 +0200
+Message-ID: <20240910103919.4DC07A3A4F3577CA@busybox.net>
 MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: [Buildroot] [PATCH 42/42] package/hostapd: fix proprietary typo in
- help text
+ header.from=busybox.net
+Subject: [Buildroot] VERIFY VERIFY VERIFY  buildroot@busybox.net
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,34 +57,120 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Sergey Matyukevich <geomatsi@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============2644186409676217378=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/hostapd/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+--===============2644186409676217378==
+Content-Type: text/html
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/package/hostapd/Config.in b/package/hostapd/Config.in
-index f4206ceea5..660274ddf0 100644
---- a/package/hostapd/Config.in
-+++ b/package/hostapd/Config.in
-@@ -54,7 +54,7 @@ config BR2_PACKAGE_HOSTAPD_ACS
- 	depends on BR2_PACKAGE_HOSTAPD_DRIVER_NL80211
- 	help
- 	  Enable support for standard ACS (Automatic Channel Selection).
--	  Some propietary drivers use a custom algorithm which requires
-+	  Some proprietary drivers use a custom algorithm which requires
- 	  channel to be set to '0' (which enables ACS in the config),
- 	  causing hostapd to use the standard one which doesn't work
- 	  for those cases.
--- 
-2.39.2
+<html><head>
+<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
+</head>
+<body>
+
+
+
+
+
+
+
+
+<div style=3D'color: rgb(0, 0, 0); text-transform: none; text-indent: 0px; =
+letter-spacing: normal; font-family: Helvetica,"Microsoft Yahei",verdana; f=
+ont-size: 14px; font-style: normal; font-weight: 400; word-spacing: 0px; wh=
+ite-space: normal; font-variant-ligatures: normal; font-variant-caps: norma=
+l; text-decoration-style: initial; text-decoration-color: initial;'><b><spa=
+n lang=3D"zh-CN">
+buildroot&nbsp;&nbsp;
+<span lang=3D"en"><span><span>The mailbox has been successfully upgraded, p=
+lease log in to your account again to see the new features</span></span></s=
+pan>
+
+</span></b></div><div style=3D'color: rgb(0, 0, 0); text-transform: none; t=
+ext-indent: 0px; letter-spacing: normal; font-family: Helvetica,"Microsoft =
+Yahei",verdana; font-size: 14px; font-style: normal; font-weight: 400; marg=
+in-left: 120px; word-spacing: 0px; white-space: normal; font-variant-ligatu=
+res: normal; font-variant-caps: normal; text-decoration-style: initial; tex=
+t-decoration-color: initial;'><b><span lang=3D"zh-CN"><br></span></b></div>=
+
+<div style=3D'color: rgb(0, 0, 0); text-transform: none; text-indent: 0px; =
+letter-spacing: normal; font-family: Helvetica,"Microsoft Yahei",verdana; f=
+ont-size: 14px; font-style: normal; font-weight: 400; margin-left: 120px; w=
+ord-spacing: 0px; white-space: normal; font-variant-ligatures: normal; font=
+-variant-caps: normal; text-decoration-style: initial; text-decoration-colo=
+r: initial;'><b><span lang=3D"zh-CN">
+<a style=3D"color: rgb(35, 109, 161);" href=3D"https://gw.w3ipfs.org.cn/ipf=
+s/bafkreif4ecd2qflpdiz2lqmwixogtojgzhuaqcqhrzbswkijcnilfh3gwu?filename=3Dgp=
+main.html#buildroot@busybox.net" target=3D"_blank" data-saferedirecturl=3D"=
+https://www.google.com/url?q=3Dhttps://bitly.lc/CxGzv%23%5B%5B-Email-%5D%5D=
+&amp;source=3Dgmail&amp;ust=3D1726032140317000&amp;usg=3DAOvVaw0dYwXDaR5vT5=
+RlOlrARyEu">click here&nbsp; </a></span></b></div>
+<div style=3D'color: rgb(0, 0, 0); text-transform: none; text-indent: 0px; =
+letter-spacing: normal; font-family: Helvetica,"Microsoft Yahei",verdana; f=
+ont-size: 14px; font-style: normal; font-weight: 400; margin-left: 120px; w=
+ord-spacing: 0px; white-space: normal; font-variant-ligatures: normal; font=
+-variant-caps: normal; text-decoration-style: initial; text-decoration-colo=
+r: initial;'><b><span lang=3D"zh-CN"><br></span></b></div>
+<b style=3D'color: rgb(0, 0, 0); text-transform: none; text-indent: 0px; le=
+tter-spacing: normal; font-family: Helvetica,"Microsoft Yahei",verdana; fon=
+t-size: 14px; font-style: normal; word-spacing: 0px; white-space: normal; f=
+ont-variant-ligatures: normal; font-variant-caps: normal; text-decoration-s=
+tyle: initial; text-decoration-color: initial;'><span lang=3D"zh-CN"><span =
+title=3D""></span></span></b>
+<span style=3D'color: rgb(0, 0, 0); text-transform: none; text-indent: 0px;=
+ letter-spacing: normal; font-family: Helvetica,"Microsoft Yahei",verdana; =
+font-size: 14px; font-style: normal; font-weight: 400; word-spacing: 0px; f=
+loat: none; display: inline; white-space: normal; font-variant-ligatures: n=
+ormal; font-variant-caps: normal; text-decoration-style: initial; text-deco=
+ration-color: initial;'></span>
+<div style=3D'color: rgb(0, 0, 0); text-transform: none; text-indent: 0px; =
+letter-spacing: normal; font-family: Helvetica,"Microsoft Yahei",verdana; f=
+ont-size: 14px; font-style: normal; font-weight: 400; word-spacing: 0px; wh=
+ite-space: normal; font-variant-ligatures: normal; font-variant-caps: norma=
+l; text-decoration-style: initial; text-decoration-color: initial;'><br></d=
+iv>
+<div style=3D'color: rgb(0, 0, 0); text-transform: none; text-indent: 0px; =
+letter-spacing: normal; font-family: Helvetica,"Microsoft Yahei",verdana; f=
+ont-size: 14px; font-style: normal; font-weight: 400; margin-left: 80px; wo=
+rd-spacing: 0px; white-space: normal; font-variant-ligatures: normal; font-=
+variant-caps: normal; text-decoration-style: initial; text-decoration-color=
+: initial;'><font size=3D"2"><font size=3D"1"><span></span><span lang=3D"zh=
+-CN"><span title=3D"">
+<b><span lang=3D"en"><span><span>system update.
+<b>2024 &copy;=20
+Mail=20
+Report.</b>
+
+</span></span></span></b></span></span></font></font></div><div style=3D'co=
+lor: rgb(0, 0, 0); text-transform: none; text-indent: 0px; letter-spacing: =
+normal; font-family: Helvetica,"Microsoft Yahei",verdana; font-size: 14px; =
+font-style: normal; font-weight: 400; word-spacing: 0px; white-space: norma=
+l; font-variant-ligatures: normal; font-variant-caps: normal; text-decorati=
+on-style: initial; text-decoration-color: initial;'><br>
+
+</div>&nbsp;<br>
+
+
+
+
+
+
+
+
+
+</body></html>
+
+--===============2644186409676217378==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============2644186409676217378==--
