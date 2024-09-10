@@ -4,50 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5514AEE01E8
-	for <buildroot@archiver.kernel.org>; Tue, 10 Sep 2024 20:52:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 698F5EE01E9
+	for <buildroot@archiver.kernel.org>; Tue, 10 Sep 2024 20:52:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 211FF608D7;
-	Tue, 10 Sep 2024 20:52:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 32C9060E03;
+	Tue, 10 Sep 2024 20:52:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ehO5CLWWQswY; Tue, 10 Sep 2024 20:52:42 +0000 (UTC)
+ id CvGdZyOMZOW0; Tue, 10 Sep 2024 20:52:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ED00260D6B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7BF0160D7B
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ED00260D6B;
-	Tue, 10 Sep 2024 20:52:41 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 96DDC1BF4D8
- for <buildroot@lists.busybox.net>; Tue, 10 Sep 2024 20:51:37 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7BF0160D7B;
+	Tue, 10 Sep 2024 20:52:44 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 1DD0A1BF4D8
+ for <buildroot@lists.busybox.net>; Tue, 10 Sep 2024 20:51:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1337440A60
- for <buildroot@lists.busybox.net>; Tue, 10 Sep 2024 20:51:33 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8AF3F40B9F
+ for <buildroot@lists.busybox.net>; Tue, 10 Sep 2024 20:51:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YP7JAo8fhrd6 for <buildroot@lists.busybox.net>;
- Tue, 10 Sep 2024 20:51:32 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id DSpbwij6_IxU for <buildroot@lists.busybox.net>;
+ Tue, 10 Sep 2024 20:51:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 52CBD40B7F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 482834097D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 52CBD40B7F
+ by smtp4.osuosl.org (Postfix) with ESMTP id 482834097D
  for <buildroot@buildroot.org>; Tue, 10 Sep 2024 20:51:31 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4F75E86F54; Tue, 10 Sep 2024 20:51:31 +0000 (UTC)
+ id 43B8486F5F; Tue, 10 Sep 2024 20:51:31 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 10 Sep 2024 22:49:40 +0200
+Date: Tue, 10 Sep 2024 22:49:39 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1a05d2f16ffe77d0572674d74cd13419c7cc69cd
-X-Git-Newrev: a4c81a7a07a5fae6ab99188aee8539a8b9a5a0e3
+X-Git-Oldrev: 1fe75a9a621730dbd13036b18d553ae90da61191
+X-Git-Newrev: 1a05d2f16ffe77d0572674d74cd13419c7cc69cd
 X-Patchwork-Hint: ignore
-Message-Id: <20240910205131.4F75E86F54@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/elftosb: fix typos in patch
- descriptions
+Message-Id: <20240910205131.43B8486F5F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/dvblast: fix which typo
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,39 +64,27 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a4c81a7a07a5fae6ab99188aee8539a8b9a5a0e3
+commit: https://git.buildroot.net/buildroot/commit/?id=1a05d2f16ffe77d0572674d74cd13419c7cc69cd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/elftosb/0001-fixes-includes.patch     | 2 +-
- package/elftosb/0002-force-cxx-compiler.patch | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/dvblast/0001-missing-lm.patch | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/elftosb/0001-fixes-includes.patch b/package/elftosb/0001-fixes-includes.patch
-index eaf8ebad98..ba84d126bc 100644
---- a/package/elftosb/0001-fixes-includes.patch
-+++ b/package/elftosb/0001-fixes-includes.patch
-@@ -1,4 +1,4 @@
--This patch uses system include files instead of a hard coded system path to fixe
-+This patch uses system include files instead of a hard coded system path to fix
- potential compilation failure on systems that do not populate system header
- files in /usr/include/..
+diff --git a/package/dvblast/0001-missing-lm.patch b/package/dvblast/0001-missing-lm.patch
+index 2efbec4648..f287db5819 100644
+--- a/package/dvblast/0001-missing-lm.patch
++++ b/package/dvblast/0001-missing-lm.patch
+@@ -1,6 +1,6 @@
+ dvblast: fix static linking
  
-diff --git a/package/elftosb/0002-force-cxx-compiler.patch b/package/elftosb/0002-force-cxx-compiler.patch
-index efa92d1171..2dc0394f86 100644
---- a/package/elftosb/0002-force-cxx-compiler.patch
-+++ b/package/elftosb/0002-force-cxx-compiler.patch
-@@ -19,7 +19,7 @@ Thus, elftosb should either:
- - use gcc and link against libc and libm;
- - or use g++ and link against libstdc++.
+-dvblast links to -lev, wihch uses functions from the maths library,
++dvblast links to -lev, which uses functions from the maths library,
+ like floor().
  
--Because elftosb is written in C++, this patch implement the sencond option, using
-+Because elftosb is written in C++, this patch implement the second option, using
- g++ and linking against libstdc++.
- 
- Signed-off-by: Samuel Martin <s.martin49@gmail.com>
+ When linking to a shared libev.so, that dependency is automatically
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
