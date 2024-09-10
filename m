@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34D95EE01E8
-	for <buildroot@archiver.kernel.org>; Tue, 10 Sep 2024 20:52:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C11E4EE01E8
+	for <buildroot@archiver.kernel.org>; Tue, 10 Sep 2024 20:52:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id F208B60902;
-	Tue, 10 Sep 2024 20:52:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 69A5C60A57;
+	Tue, 10 Sep 2024 20:52:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xIbwQxp9Av0l; Tue, 10 Sep 2024 20:52:08 +0000 (UTC)
+ id cACHC_285EHf; Tue, 10 Sep 2024 20:52:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6EF5060A7E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7F36860A8B
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6EF5060A7E;
-	Tue, 10 Sep 2024 20:52:07 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 359C91BF4D8
- for <buildroot@lists.busybox.net>; Tue, 10 Sep 2024 20:51:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7F36860A8B;
+	Tue, 10 Sep 2024 20:52:10 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1F4721BF4D8
+ for <buildroot@lists.busybox.net>; Tue, 10 Sep 2024 20:51:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8DCC140B35
- for <buildroot@lists.busybox.net>; Tue, 10 Sep 2024 20:51:31 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5FC704024D
+ for <buildroot@lists.busybox.net>; Tue, 10 Sep 2024 20:51:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Hn51hIdQtW1S for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 0UmQxSvL-yml for <buildroot@lists.busybox.net>;
  Tue, 10 Sep 2024 20:51:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9D76F408D8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B262C40247
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9D76F408D8
+ by smtp2.osuosl.org (Postfix) with ESMTP id B262C40247
  for <buildroot@buildroot.org>; Tue, 10 Sep 2024 20:51:30 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8A63386F61; Tue, 10 Sep 2024 20:51:30 +0000 (UTC)
+ id 9E8EF86F54; Tue, 10 Sep 2024 20:51:30 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Tue, 10 Sep 2024 22:49:15 +0200
+Date: Tue, 10 Sep 2024 22:49:18 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 777c081abef77511da585c53b9de4e44b913af46
-X-Git-Newrev: 6ee748089347966eea5aced1e42fc25d9cbfc2aa
+X-Git-Oldrev: eba958eb5dcb5065e932fb8740299390ba3bff28
+X-Git-Newrev: d729696451c899b8db149f9f6346db3f1b678ad5
 X-Patchwork-Hint: ignore
-Message-Id: <20240910205130.8A63386F61@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] docs/manual/migrating.adoc: fix occurrence
- typo
+Message-Id: <20240910205130.9E8EF86F54@busybox.osuosl.org>
+Subject: [Buildroot] [git commit]
+ docs/manual/using-buildroot-toolchain.adoc: fix overridden typo
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,30 +65,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6ee748089347966eea5aced1e42fc25d9cbfc2aa
+commit: https://git.buildroot.net/buildroot/commit/?id=d729696451c899b8db149f9f6346db3f1b678ad5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Occurrence is with double-c-double-r.
+Overridden is with double-r-double-d.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- docs/manual/migrating.adoc | 2 +-
+ docs/manual/using-buildroot-toolchain.adoc | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/docs/manual/migrating.adoc b/docs/manual/migrating.adoc
-index ed2be1c6c9..d99c779799 100644
---- a/docs/manual/migrating.adoc
-+++ b/docs/manual/migrating.adoc
-@@ -62,7 +62,7 @@ $ echo 'name: NAME_OF_YOUR_TREE' >external.desc
- Be careful when choosing a name: It has to be unique and be made
- with only ASCII characters from the set +[A-Za-z0-9_]+.
+diff --git a/docs/manual/using-buildroot-toolchain.adoc b/docs/manual/using-buildroot-toolchain.adoc
+index 09408ef05a..fd9dda753b 100644
+--- a/docs/manual/using-buildroot-toolchain.adoc
++++ b/docs/manual/using-buildroot-toolchain.adoc
+@@ -16,7 +16,7 @@ Alternatively, Buildroot can also export the toolchain and the development
+ files of all selected packages, as an SDK, by running the command
+ +make sdk+. This generates a tarball of the content of the host directory
+ +output/host/+, named +<TARGET-TUPLE>_sdk-buildroot.tar.gz+ (which can be
+-overriden by setting the environment variable +BR2_SDK_PREFIX+) and
++overridden by setting the environment variable +BR2_SDK_PREFIX+) and
+ located in the output directory +output/images/+.
  
-- * Then, change every occurence of +BR2_EXTERNAL+ in your br2-external
-+ * Then, change every occurrence of +BR2_EXTERNAL+ in your br2-external
-    tree with the new variable:
- +
- ----
+ This tarball can then be distributed to application developers, when
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
