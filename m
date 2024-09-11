@@ -4,48 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 81B6DEE49B0
-	for <buildroot@archiver.kernel.org>; Wed, 11 Sep 2024 14:00:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62E92EE49B0
+	for <buildroot@archiver.kernel.org>; Wed, 11 Sep 2024 14:00:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4CFCD4104C;
-	Wed, 11 Sep 2024 14:00:22 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1CCE540E13;
+	Wed, 11 Sep 2024 14:00:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id m1my_c4bmLje; Wed, 11 Sep 2024 14:00:21 +0000 (UTC)
+ id RE6BrbZNA2em; Wed, 11 Sep 2024 14:00:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D037141057
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D5D8F40FC0
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D037141057;
-	Wed, 11 Sep 2024 14:00:20 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D5D8F40FC0;
+	Wed, 11 Sep 2024 14:00:23 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E819C1BF20B
- for <buildroot@lists.busybox.net>; Wed, 11 Sep 2024 13:59:31 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 053031BF20B
+ for <buildroot@lists.busybox.net>; Wed, 11 Sep 2024 13:59:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E4A6A60B36
- for <buildroot@lists.busybox.net>; Wed, 11 Sep 2024 13:59:22 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3EA8B60B2C
+ for <buildroot@lists.busybox.net>; Wed, 11 Sep 2024 13:59:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id feldCn8CfNA1 for <buildroot@lists.busybox.net>;
- Wed, 11 Sep 2024 13:59:20 +0000 (UTC)
+ id icNZ3AnZLsPQ for <buildroot@lists.busybox.net>;
+ Wed, 11 Sep 2024 13:59:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4981660B2C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9407360B46
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4981660B2C
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9407360B46
  for <buildroot@buildroot.org>; Wed, 11 Sep 2024 13:59:20 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3F15886F45; Wed, 11 Sep 2024 13:59:20 +0000 (UTC)
+ id 91CBD86E9D; Wed, 11 Sep 2024 13:59:20 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 11 Sep 2024 15:26:19 +0200
+Date: Wed, 11 Sep 2024 15:26:26 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 8cda08f821685fe9819b527036a60842025d81e6
-X-Git-Newrev: ee13dd14be8ce54d6b0d14b4eac5180a74e2a549
+X-Git-Oldrev: b3dc4b00b12cd6963d1b43bef7eb55fad3f63404
+X-Git-Newrev: 89370de5e09c0111d38c5e34322c5bad4327d8af
 X-Patchwork-Hint: ignore
-Message-Id: <20240911135920.3F15886F45@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/perl-try-tiny: bump to version 0.32
+Message-Id: <20240911135920.91CBD86E9D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/perl-crypt-openssl-random: bump to
+ version 0.17
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,43 +66,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ee13dd14be8ce54d6b0d14b4eac5180a74e2a549
+commit: https://git.buildroot.net/buildroot/commit/?id=89370de5e09c0111d38c5e34322c5bad4327d8af
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+diff LICENSE: minor cleanup
+    see https://metacpan.org/release/RURBAN/Crypt-OpenSSL-Random-0.17/diff/RURBAN/Crypt-OpenSSL-Random-0.15#LICENSE
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/perl-try-tiny/perl-try-tiny.hash | 6 +++---
- package/perl-try-tiny/perl-try-tiny.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/perl-crypt-openssl-random/perl-crypt-openssl-random.hash | 8 ++++----
+ package/perl-crypt-openssl-random/perl-crypt-openssl-random.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/perl-try-tiny/perl-try-tiny.hash b/package/perl-try-tiny/perl-try-tiny.hash
-index 7aa88724f0..fb1acc21fe 100644
---- a/package/perl-try-tiny/perl-try-tiny.hash
-+++ b/package/perl-try-tiny/perl-try-tiny.hash
+diff --git a/package/perl-crypt-openssl-random/perl-crypt-openssl-random.hash b/package/perl-crypt-openssl-random/perl-crypt-openssl-random.hash
+index 6c1344fb2a..f8ab405ca0 100644
+--- a/package/perl-crypt-openssl-random/perl-crypt-openssl-random.hash
++++ b/package/perl-crypt-openssl-random/perl-crypt-openssl-random.hash
 @@ -1,6 +1,6 @@
 -# retrieved by scancpan from http://cpan.metacpan.org/
--md5  993a29ee8a03c9bd9c2f7c53d1082a03  Try-Tiny-0.31.tar.gz
--sha256  3300d31d8a4075b26d8f46ce864a1d913e0e8467ceeba6655d5d2b2e206c11be  Try-Tiny-0.31.tar.gz
+-md5  bcde8d5a822c91376deda3c4f0c75fbe  Crypt-OpenSSL-Random-0.15.tar.gz
+-sha256  f0876faa1ba3111e39b86aa730c603211eff2905e460c72a57b61e8cf475cef4  Crypt-OpenSSL-Random-0.15.tar.gz
 +# retrieved by scancpan from https://cpan.metacpan.org/
-+md5  964424fcada4654bede745a7a2fb870b  Try-Tiny-0.32.tar.gz
-+sha256  ef2d6cab0bad18e3ab1c4e6125cc5f695c7e459899f512451c8fa3ef83fa7fc0  Try-Tiny-0.32.tar.gz
++md5  294f545c54a5a4855cb00c5648eb5c2b  Crypt-OpenSSL-Random-0.17.tar.gz
++sha256  a571b24181baaa76c96704e92acffc6934ff593e380dade274db4e43c140ad51  Crypt-OpenSSL-Random-0.17.tar.gz
  
  # computed by scancpan
- sha256  f1864ede834871a1207fcd19838b6bd5e1ff0a8704f5cc523fc397126041ed0b  LICENCE
-diff --git a/package/perl-try-tiny/perl-try-tiny.mk b/package/perl-try-tiny/perl-try-tiny.mk
-index cd2421a3cb..466955ffff 100644
---- a/package/perl-try-tiny/perl-try-tiny.mk
-+++ b/package/perl-try-tiny/perl-try-tiny.mk
+-sha256  fdaba2134145d3e252c5930180b2bcb13b5367ad5a8713d6868f014cd25c496f  LICENSE
++sha256  076d44a82dfa5a992169d47bc5e2d44ff113a3a84bd9963a6b51c953f8d05099  LICENSE
+diff --git a/package/perl-crypt-openssl-random/perl-crypt-openssl-random.mk b/package/perl-crypt-openssl-random/perl-crypt-openssl-random.mk
+index e70eb7e927..b52e836981 100644
+--- a/package/perl-crypt-openssl-random/perl-crypt-openssl-random.mk
++++ b/package/perl-crypt-openssl-random/perl-crypt-openssl-random.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_TRY_TINY_VERSION = 0.31
-+PERL_TRY_TINY_VERSION = 0.32
- PERL_TRY_TINY_SOURCE = Try-Tiny-$(PERL_TRY_TINY_VERSION).tar.gz
- PERL_TRY_TINY_SITE = $(BR2_CPAN_MIRROR)/authors/id/E/ET/ETHER
- PERL_TRY_TINY_LICENSE = MIT
+-PERL_CRYPT_OPENSSL_RANDOM_VERSION = 0.15
++PERL_CRYPT_OPENSSL_RANDOM_VERSION = 0.17
+ PERL_CRYPT_OPENSSL_RANDOM_SOURCE = Crypt-OpenSSL-Random-$(PERL_CRYPT_OPENSSL_RANDOM_VERSION).tar.gz
+ PERL_CRYPT_OPENSSL_RANDOM_SITE = $(BR2_CPAN_MIRROR)/authors/id/R/RU/RURBAN
+ PERL_CRYPT_OPENSSL_RANDOM_DEPENDENCIES = \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
