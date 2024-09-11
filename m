@@ -4,90 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 934ADEE0213
-	for <buildroot@archiver.kernel.org>; Wed, 11 Sep 2024 15:50:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84A8DEE57C6
+	for <buildroot@archiver.kernel.org>; Wed, 11 Sep 2024 16:45:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 56AFE80D5D;
-	Wed, 11 Sep 2024 15:50:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8012A812B7;
+	Wed, 11 Sep 2024 16:45:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vs4m4qxetPFV; Wed, 11 Sep 2024 15:50:38 +0000 (UTC)
+ id sFP5ir3YuzAB; Wed, 11 Sep 2024 16:45:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 65F4F80D64
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4622A81277
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 65F4F80D64;
-	Wed, 11 Sep 2024 15:50:38 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 00C1B1BF33C
- for <buildroot@lists.busybox.net>; Wed, 11 Sep 2024 15:50:37 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4622A81277;
+	Wed, 11 Sep 2024 16:45:04 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 797F01BF228
+ for <buildroot@lists.busybox.net>; Wed, 11 Sep 2024 16:45:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E453780D88
- for <buildroot@lists.busybox.net>; Wed, 11 Sep 2024 15:50:36 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 68DB2606D3
+ for <buildroot@lists.busybox.net>; Wed, 11 Sep 2024 16:45:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qoO2FWqpf3hs for <buildroot@lists.busybox.net>;
- Wed, 11 Sep 2024 15:50:35 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32b; helo=mail-wm1-x32b.google.com;
- envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org A0DF980D5D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A0DF980D5D
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
- [IPv6:2a00:1450:4864:20::32b])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A0DF980D5D
- for <buildroot@buildroot.org>; Wed, 11 Sep 2024 15:50:35 +0000 (UTC)
-Received: by mail-wm1-x32b.google.com with SMTP id
- 5b1f17b1804b1-42cae102702so42887215e9.0
- for <buildroot@buildroot.org>; Wed, 11 Sep 2024 08:50:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1726069833; x=1726674633;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=buT4a7Xf5HihzFuMgAeMdkytGgzHrA0n++KV+wSr9RM=;
- b=rPAyS/0SyhPImv9PHf21KYN5iBMTFjX6CsKIBjy/JlF5noVAoepRH+Hu1hTtOs9KdA
- Rc/X/RZTHajesQn9JAeBkGG4utRMibdXKxu42QvtWseSZOSdt1907imAyy5BYIcw1d6t
- ofF7rZPsmQRBNf/2lk3x/b0DUhz3kFYFur6yWeWYMBSVR8cZ2+vc/Nva/YO6POCM9Gt8
- qlfh4Dko//nfZm4HKCqkSRjNMdiSeWqvuFAeGJRMQh4/T3rb6hqPX/CdulkqFh7GWZ1e
- pDCWxYPGKjX6HGKGKIEkc3EzXBrj6Ru/4igOGAL/K0KtpgDwyYSZFnkEP4bAJqc5hxBv
- aLLw==
-X-Gm-Message-State: AOJu0Yxpsz+8T/9AbCEK/WAKltfVT2ptyrYQHrY4KRg1EN+6KdbjuIl4
- 0hwleGMfNRcs7A2FlNjsWkUdTvPOUrQ5671ibE3DxDGL+N73vy7kfnaRmwOVnGyWCW0sAQLRE7K
- BVdM=
-X-Google-Smtp-Source: AGHT+IEhNNxw7gyO4PYo+jn76AwSCPwVJiDx0aemwlICQSmg3vJFpFqp4/Dblp8E9pxCln6fJoz6LA==
-X-Received: by 2002:a05:600c:1c85:b0:429:a05:32fb with SMTP id
- 5b1f17b1804b1-42cdb5318femr336975e9.10.1726069833013; 
- Wed, 11 Sep 2024 08:50:33 -0700 (PDT)
-Received: from dario-ThinkPad-T14s-Gen-2i.amarulasolutions.com ([2.196.41.3])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-42caeb8ada3sm143712915e9.43.2024.09.11.08.50.32
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 11 Sep 2024 08:50:32 -0700 (PDT)
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-To: buildroot@buildroot.org
-Date: Wed, 11 Sep 2024 17:50:23 +0200
-Message-ID: <20240911155023.2921034-1-dario.binacchi@amarulasolutions.com>
-X-Mailer: git-send-email 2.43.0
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id v8Fli-mJJeUZ for <buildroot@lists.busybox.net>;
+ Wed, 11 Sep 2024 16:45:02 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
+ helo=smtp5-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org F036760596
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F036760596
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id F036760596
+ for <buildroot@buildroot.org>; Wed, 11 Sep 2024 16:45:01 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown
+ [IPv6:2a01:cb19:8290:3800:5d8d:eab4:d280:c2c4])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id 8F6356013A;
+ Wed, 11 Sep 2024 18:44:54 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Wed, 11 Sep 2024 18:44:54 +0200
+Date: Wed, 11 Sep 2024 18:44:54 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: James Hilliard <james.hilliard1@gmail.com>
+Message-ID: <ZuHJBtCNOIRW68wi@landeda>
+References: <20240910193641.1711056-1-james.hilliard1@gmail.com>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1726069833; x=1726674633;
- darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=buT4a7Xf5HihzFuMgAeMdkytGgzHrA0n++KV+wSr9RM=;
- b=eiBddIB7ocnzzAtzWcNeU66HAfAKkpjm4OLotuTrhStp1mh+MqyMxPHfm2yEoGUK5X
- gD3qEQa9xCkdxFhq75DFirRoXWuG6gdPIlsEkc2nf7Bu0yUNMvmc4FIlDgpvJiFy9ZG8
- VA7rDuZEEioZju4B0g7EgbIoWC7a7Azxol4FA=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+Content-Disposition: inline
+In-Reply-To: <20240910193641.1711056-1-james.hilliard1@gmail.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1726073098;
+ bh=mblvWxuGF+7Gtic4cGKhZOXclLwX3TA0krWwTDPsuRc=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=XkhNhphmkQecw2nnHT9Sxin4rW36UGdmLIt6q7kl2q3Tjcd/hOfEy63lPv8BbQpup
+ O4x6IxBoXZ5hN8HX0C5MAyWuAW5Mm9OTF9S85su8koogoRy3gzlUhHT+62fRNlndgb
+ bVXnfQazXpQ2WB1tJ8Vhus2mbvNugXzGVA4NPHNrlRFav23ygPCgTDR3AwSGOEyYqF
+ BEXeI7MsU9Wi+p0pIhruRM7h+u3PcZrrlwGLe4mj/CNSCZ4A56Gk5fHYS+uuCoCWd4
+ jl51jisCWuWb3V3nU1uFnDml021qQHZH1F/iva9VOG+ciJulKLcWobLqURZeGIdjoG
+ yt7Pmrx57YScg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=eiBddIB7
-Subject: [Buildroot] [PATCH v2 1/1] package/rp-pppoe: fixup download URL
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=XkhNhphm
+Subject: Re: [Buildroot] [PATCH 1/1] package/systemd: link host systemd
+ utilities statically
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,50 +81,138 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Jaco Kroon <jaco@uls.co.za>, Dianne Skoll <dianne@skoll.ca>,
- Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Cc: Norbert Lange <nolange79@gmail.com>, Sen Hastings <sen@hastings.org>,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-As reported in [1], the download of rp-pppoe-3.15.tar.gz is no longer
-guaranteed from the download section of the project.
+James, All,
 
-Fortunately, Jacon Kroon is hosting the RP-PPPoE source code for versions
-3.15 and 4.0 in a location that permits automated downloads.
+On 2024-09-10 13:36 -0600, James Hilliard spake thusly:
+> This makes it less likely that we will run into missing library
+> errors when running host systemd utilities
 
-Fixes:
-- http://autobuild.buildroot.org/results/8676456feec9dd401152887101ad1a9ce96cb769
+What error exactly are you trying to fix here?
+Why does it happen only now?
 
-[1] https://dianne.skoll.ca/pipermail/rp-pppoe/2024q3/000652.html
+Stating "less likekely" implies that it is not systematic, so there are
+conditions that trigger it. What conditions would tht be, so we can try
+and reproduce the issue?
 
-Cc: Jaco Kroon <jaco@uls.co.za>
-Cc: Dianne Skoll <dianne@skoll.ca>
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
----
-Changes v1 -> v2:
-  - Change download URL.
+While "missing libraries" is atually an issue, what library are missing?
+Why are they missing?
 
- package/rp-pppoe/rp-pppoe.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+These are critical information that must be present in the commit log.
 
-diff --git a/package/rp-pppoe/rp-pppoe.mk b/package/rp-pppoe/rp-pppoe.mk
-index f50f1e5a1fd1..75f2290442bc 100644
---- a/package/rp-pppoe/rp-pppoe.mk
-+++ b/package/rp-pppoe/rp-pppoe.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- RP_PPPOE_VERSION = 3.15
--RP_PPPOE_SITE = https://dianne.skoll.ca/projects/rp-pppoe/download
-+RP_PPPOE_SITE = https://downloads.uls.co.za/rp-pppoe
- RP_PPPOE_LICENSE = GPL-2.0
- RP_PPPOE_LICENSE_FILES = doc/LICENSE
- RP_PPPOE_CPE_ID_VALID = YES
+Let me guess. You are hitting the same issue as reported there:
+    https://gitlab.com/buildroot.org/buildroot/-/issues/39
+
+If so, then I think your patch is just hidding the dust under the rug.
+
+Indeed, it is possible that other packages suffer from the same issue,
+and we certainly do not want to build all such packages statically.
+
+Instead, we want to fix the rpath fixups (he! fix the fixups!).
+
+Regards,
+Yann E. MORIN.
+
+> and lets us remove the
+> HOST_SYSTEMD_FIX_RPATH hack.
+
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>  .../fakeroot_tmpfiles.sh                      |  2 +-
+>  .../skeleton-init-systemd.mk                  |  2 +-
+>  package/systemd/systemd.mk                    | 30 +++++++------------
+>  3 files changed, 13 insertions(+), 21 deletions(-)
+> 
+> diff --git a/package/skeleton-init-systemd/fakeroot_tmpfiles.sh b/package/skeleton-init-systemd/fakeroot_tmpfiles.sh
+> index 9498638f0b..5381750500 100755
+> --- a/package/skeleton-init-systemd/fakeroot_tmpfiles.sh
+> +++ b/package/skeleton-init-systemd/fakeroot_tmpfiles.sh
+> @@ -25,7 +25,7 @@
+>  # [1] - https://github.com/systemd/systemd/pull/16187
+>  
+>  [ -n "${HOST_SYSTEMD_TMPFILES-}" ] ||
+> -    HOST_SYSTEMD_TMPFILES=systemd-tmpfiles
+> +    HOST_SYSTEMD_TMPFILES=systemd-tmpfiles.standalone
+>  
+>  [ -n "${1-}" -a -d "${1-}"/usr/lib/tmpfiles.d ] ||
+>      { echo 1>&2 "$0: need ROOTFS argument"; exit 1; }
+> diff --git a/package/skeleton-init-systemd/skeleton-init-systemd.mk b/package/skeleton-init-systemd/skeleton-init-systemd.mk
+> index b312fe33e4..cd51ce209a 100644
+> --- a/package/skeleton-init-systemd/skeleton-init-systemd.mk
+> +++ b/package/skeleton-init-systemd/skeleton-init-systemd.mk
+> @@ -80,7 +80,7 @@ endif  # BR2_TARGET_GENERIC_REMOUNT_ROOTFS_RW
+>  
+>  ifeq ($(BR2_INIT_SYSTEMD_POPULATE_TMPFILES),y)
+>  define SKELETON_INIT_SYSTEMD_CREATE_TMPFILES_HOOK
+> -	HOST_SYSTEMD_TMPFILES=$(HOST_DIR)/bin/systemd-tmpfiles \
+> +	HOST_SYSTEMD_TMPFILES=$(HOST_DIR)/bin/systemd-tmpfiles.standalone \
+>  		$(SKELETON_INIT_SYSTEMD_PKGDIR)/fakeroot_tmpfiles.sh $(TARGET_DIR)
+>  endef
+>  SKELETON_INIT_SYSTEMD_ROOTFS_PRE_CMD_HOOKS += SKELETON_INIT_SYSTEMD_CREATE_TMPFILES_HOOK
+> diff --git a/package/systemd/systemd.mk b/package/systemd/systemd.mk
+> index 5dca8681bc..9a18d91533 100644
+> --- a/package/systemd/systemd.mk
+> +++ b/package/systemd/systemd.mk
+> @@ -899,6 +899,17 @@ endef
+>  # We need a very minimal host variant, so we disable as much as possible.
+>  HOST_SYSTEMD_CONF_OPTS = \
+>  	-Dsplit-bin=true \
+> +	-Dlink-udev-shared=false \
+> +	-Dlink-executor-shared=false \
+> +	-Dlink-systemctl-shared=false \
+> +	-Dlink-networkd-shared=false \
+> +	-Dlink-timesyncd-shared=false \
+> +	-Dlink-journalctl-shared=false \
+> +	-Dlink-boot-shared=false \
+> +	-Dlink-portabled-shared=false \
+> +	-Dstatic-libsystemd=true \
+> +	-Dstatic-libudev=true \
+> +	-Dstandalone-binaries=true \
+>  	--prefix=/usr \
+>  	--libdir=lib \
+>  	--sysconfdir=/etc \
+> @@ -1022,24 +1033,5 @@ HOST_SYSTEMD_DEPENDENCIES = \
+>  
+>  HOST_SYSTEMD_NINJA_ENV = DESTDIR=$(HOST_DIR)
+>  
+> -# Fix RPATH After installation
+> -# * systemd provides a install_rpath instruction to meson because the binaries
+> -#   need to link with libsystemd which is not in a standard path
+> -# * meson can only replace the RPATH, not append to it
+> -# * the original rpath is thus lost.
+> -# * the original path had been tweaked by buildroot via LDFLAGS to add
+> -#   $(HOST_DIR)/lib
+> -# * thus re-tweak rpath after the installation for all binaries that need it
+> -HOST_SYSTEMD_HOST_TOOLS = busctl journalctl systemctl systemd-* udevadm
+> -
+> -define HOST_SYSTEMD_FIX_RPATH
+> -	for f in $(addprefix $(HOST_DIR)/bin/,$(HOST_SYSTEMD_HOST_TOOLS)); do \
+> -		[ -e $$f ] || continue; \
+> -		$(HOST_DIR)/bin/patchelf --set-rpath $(HOST_DIR)/lib:$(HOST_DIR)/lib/systemd $${f} \
+> -		|| exit 1; \
+> -	done
+> -endef
+> -HOST_SYSTEMD_POST_INSTALL_HOOKS += HOST_SYSTEMD_FIX_RPATH
+> -
+>  $(eval $(meson-package))
+>  $(eval $(host-meson-package))
+> -- 
+> 2.34.1
+> 
+
 -- 
-2.43.0
-
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
