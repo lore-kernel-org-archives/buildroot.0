@@ -4,101 +4,98 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AF3D4EE57CF
-	for <buildroot@archiver.kernel.org>; Wed, 11 Sep 2024 19:37:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A530EE57CF
+	for <buildroot@archiver.kernel.org>; Wed, 11 Sep 2024 19:39:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1DF184014E;
-	Wed, 11 Sep 2024 19:37:57 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A4FA54014E;
+	Wed, 11 Sep 2024 19:39:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JFS17k-rUGJS; Wed, 11 Sep 2024 19:37:55 +0000 (UTC)
+ id jUDvn-qM0WJU; Wed, 11 Sep 2024 19:39:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 497054018A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E4BB44018A
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 497054018A;
-	Wed, 11 Sep 2024 19:37:55 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id CC0001BF369
- for <buildroot@lists.busybox.net>; Wed, 11 Sep 2024 19:37:53 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E4BB44018A;
+	Wed, 11 Sep 2024 19:39:02 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 4692B1BF369
+ for <buildroot@lists.busybox.net>; Wed, 11 Sep 2024 19:39:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C815A403B2
- for <buildroot@lists.busybox.net>; Wed, 11 Sep 2024 19:37:53 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 35A5B81415
+ for <buildroot@lists.busybox.net>; Wed, 11 Sep 2024 19:39:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kZZ-6ZSbddRY for <buildroot@lists.busybox.net>;
- Wed, 11 Sep 2024 19:37:52 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ugWgJ5cuGxjd for <buildroot@lists.busybox.net>;
+ Wed, 11 Sep 2024 19:38:59 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::331; helo=mail-wm1-x331.google.com;
+ client-ip=2a00:1450:4864:20::32f; helo=mail-wm1-x32f.google.com;
  envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E354940667
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E354940667
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
- [IPv6:2a00:1450:4864:20::331])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E354940667
- for <buildroot@buildroot.org>; Wed, 11 Sep 2024 19:37:51 +0000 (UTC)
-Received: by mail-wm1-x331.google.com with SMTP id
- 5b1f17b1804b1-42cb2191107so971425e9.1
- for <buildroot@buildroot.org>; Wed, 11 Sep 2024 12:37:51 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8F26981407
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8F26981407
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
+ [IPv6:2a00:1450:4864:20::32f])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8F26981407
+ for <buildroot@buildroot.org>; Wed, 11 Sep 2024 19:38:58 +0000 (UTC)
+Received: by mail-wm1-x32f.google.com with SMTP id
+ 5b1f17b1804b1-42cb1758e41so1067185e9.1
+ for <buildroot@buildroot.org>; Wed, 11 Sep 2024 12:38:58 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1726083470; x=1726688270;
+ d=1e100.net; s=20230601; t=1726083536; x=1726688336;
  h=content-transfer-encoding:in-reply-to:content-language:from
  :references:cc:to:subject:user-agent:mime-version:date:message-id
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=qPdv6iTRIqcg/f+jXXEPZNWf5wWT/EuTT6mp1pm0rSw=;
- b=GqPhtfRSLU2rxpZrFy4Uh6Qm0JE+deBNMP0HD7fayAt9hUgPqQuZ5sU+A+YgvAit9W
- 2L43xbqgJLHHAsJoBT2OdaKGjjUoFDTdZVrhNX92ij6nhXav8RlhkUgzJwZ+Yq6CLFPs
- pb7WBWOn42PZwySwLwSK2vRklLWEv71mdR4dg3hQ5If6pZhSUh3+d9cDjEbMXP5nCtGR
- L1Lu3oHdeqU2+D50awHVp0T41IrNMZfXsdd+ObFytnYXGUvu2yqHBYkwxBPP4r+G2KfC
- AfrwwcdpkHDvYxJOXhfQ3bHCM4Ahe6vzuZyTLdhc+rCFEgtz4Tf5EUYHH8/tDq/KutTG
- jrYg==
+ bh=bgtJDDB2LAZ1nENHOX/1s3hNXwafNpGEajg1CVFJYPU=;
+ b=nfLgL4albyZDgXvLGyeE+ciJxZlMwQ3H8x5gaOH4dsHkME+EsZgRE4qXQHlmRpvNga
+ AoBD/L5il4lpfm3zsazHhBdrYHGKoskWD1otSeW93J5dNyX14VAl+P3QLU8Ggmycat1a
+ IxbAwOV7Yc7W44Bvb8S2rwX/KxP0Z2B1KCwZHwwK5G4q/IGfsw2OmoodYOLOFGGA51CC
+ iDqlzJwUTuOINPayrECqYk5kYu5VEgIxDIuvVaSDqGy0PDf0XOIYBtGnupfo3yyu+svl
+ G6svUXqsCpHzFIaVTg3zBel87tzhCwQJvvEQsRV2wWZhtw6qo+rcSy+1lj+1zsZAp9gn
+ wREg==
 X-Forwarded-Encrypted: i=1;
- AJvYcCWsbRqcLJKDKoCSgR8SMS2J1zdAU9VRlbpWQRZFojK5GR2b4ufT8xHdmHAQyYlp6JmC4TxGEuqZoO8=@buildroot.org
-X-Gm-Message-State: AOJu0YyKftEItt9651ADy2G0X2jdtl3M9L8kzMoiXYH/jc4SRkx3FJ24
- NRzojV+T/EilpqNWKbcsKrUaJRTNMiA85IlmUA6eV7V1dtWsTgtRX0oR78wFoD9zxIVe53H5Gfp
- T
-X-Google-Smtp-Source: AGHT+IEVzIBmgrOCXCjXi8OeE0W57OOGxKct0A0OCOFURh05O45Vty7wf1W7IyJmQprx0bsm6kdlYw==
-X-Received: by 2002:a05:600c:1c27:b0:428:150e:4f13 with SMTP id
- 5b1f17b1804b1-42cdb572754mr4093945e9.33.1726083469596; 
- Wed, 11 Sep 2024 12:37:49 -0700 (PDT)
+ AJvYcCVji1DilV9lW5YoEgRXB64QUtZRWV5nnvYTyg+ICuM+RV/Sl+Cb3PK+yldYtPFkvqFCNrGK2xe0SS0=@buildroot.org
+X-Gm-Message-State: AOJu0YyhiK5EmFseb0diWH7TEUEw4/2FNGCPolD1LQ/jlEyJewTC/5W/
+ n+PQe0slokNzjYXbOMDe+j+LfPzb6sYbQENwgFaijA+pkPMjk1NuzbljOkl8SPQ=
+X-Google-Smtp-Source: AGHT+IGK/MOC9hleNfzXe8g0GgsNbD9pMta7TUwv9eVXJivplO6h8Z8FxQkQr1D+onpLNmZt+PdoVQ==
+X-Received: by 2002:a5d:4841:0:b0:374:bd48:fae9 with SMTP id
+ ffacd0b85a97d-378c2cf401bmr154055f8f.20.1726083536213; 
+ Wed, 11 Sep 2024 12:38:56 -0700 (PDT)
 Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
  (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
  [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
  by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-42cb6db7ddbsm115172595e9.34.2024.09.11.12.37.48
+ ffacd0b85a97d-378956654e8sm12338327f8f.41.2024.09.11.12.38.55
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 11 Sep 2024 12:37:49 -0700 (PDT)
-Message-ID: <29417ab9-c6fe-41bf-a7e8-b8fb9b67fc1c@mind.be>
-Date: Wed, 11 Sep 2024 21:37:46 +0200
+ Wed, 11 Sep 2024 12:38:55 -0700 (PDT)
+Message-ID: <18c2657a-a061-4337-8a8f-fb79efa46237@mind.be>
+Date: Wed, 11 Sep 2024 21:38:53 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: George Kiagiadakis <george.kiagiadakis@collabora.com>,
- buildroot@buildroot.org
-References: <20240816091119.38036-1-george.kiagiadakis@collabora.com>
- <20240816091119.38036-2-george.kiagiadakis@collabora.com>
+To: Waldemar Brodkorb <wbx@openadk.org>, buildroot@buildroot.org
+References: <Zr8PNUDzJOp3zuii@waldemar-brodkorb.de>
 Content-Language: en-GB
-In-Reply-To: <20240816091119.38036-2-george.kiagiadakis@collabora.com>
+In-Reply-To: <Zr8PNUDzJOp3zuii@waldemar-brodkorb.de>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1726083470; x=1726688270; darn=buildroot.org;
+ d=mind.be; s=google; t=1726083536; x=1726688336; darn=buildroot.org;
  h=content-transfer-encoding:in-reply-to:content-language:from
  :references:cc:to:subject:user-agent:mime-version:date:message-id
  :from:to:cc:subject:date:message-id:reply-to;
- bh=qPdv6iTRIqcg/f+jXXEPZNWf5wWT/EuTT6mp1pm0rSw=;
- b=YgUMGL9v/OEC6N/USHan0Yw+0ywEesnGftQH0r3lE0mxv97oHuH2UJBPHnT1d83ijz
- 8gvmdg9vwTNI3gbuGJH/OlpetHN/nmw5bNXidvJRfPkRxrZyclUIQgTGKEfMHfCzGObP
- fneW9f3KWSB2PZO2z97ynlhI6afwzcayRPgQe4mfDS3UuH2VhIpZ+gSjAY0XbzPD63/Y
- TUXOPFx5LYnM8jgKRmi02TS+2O/ziC6/5rKg6a7z4Sf5MtpiNma/a+T5I/V3ORywXCOk
- mK9Cj/Sxouiseu1EeWyQilBka43ncS88/a0uodc8e0jhRVgUH4x5C0VKLdVqrci//w3C
- CWAA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=bgtJDDB2LAZ1nENHOX/1s3hNXwafNpGEajg1CVFJYPU=;
+ b=W+F0jYteUyvKstFV5LtIJn0+NEaum/0HHW3INd2ZlI3v4hOb/TqXxzzK3vm6mwrVtE
+ NGrqSqRrGxTYAjpH7v9Z7B72Tqao6uwIZ+VgXmeq6Bkp2JqnRSFtDgTHWLjWlmihfyxc
+ oXqZpMx7s6YrXgRWHGdP4O4ns/LpAOXTdKrpBFfYwnaCiwptH9iQrIcwis8tIrMbzCLY
+ lE3vD7YtUbg1ZW/NUy2Vy35MMD9jJUhTidhsWNcTysh5itSzHc6lgMBXhIoEmobqZMib
+ GxjzAgFooyZQmN1ImGvjtRidqGiOReCME2Y0KGYrQ2SQ2eitZAHsT0gabraG/N4VBDbC
+ xjXg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=YgUMGL9v
-Subject: Re: [Buildroot] [PATCH v2 2/4] package/wireplumber: bump version to
- 0.5.5
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=W+F0jYte
+Subject: Re: [Buildroot] [PATCH next] package/gerbera: update to 2.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -112,237 +109,235 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@mind.be>
-Cc: James Hilliard <james.hilliard1@gmail.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-CgpPbiAxNi8wOC8yMDI0IDExOjA2LCBHZW9yZ2UgS2lhZ2lhZGFraXMgd3JvdGU6Cj4gRHJvcCBw
-YXRjaCB0aGF0IHdhcyBiYWNrcG9ydGVkIGZyb20gdXBzdHJlYW0uCj4gRXhwbGljaXRseSBkaXNh
-YmxlIGVsb2dpbmQsIHdoaWNoIGRvZXNuJ3QgZXhpc3QgaW4gYnVpbGRyb290Lgo+IEFsc28gZGlz
-YWJsZSBidWlsZGluZyB0ZXN0cy4KCiAgV2UgbGlrZSB0byBleHBsaWNpdGx5IG1lbnRpb24gaGVy
-ZSB0aGF0IHBhdGNoIDAwMDEgaXMgdXBzdHJlYW0uIEFwcGxpZWQgdG8gCm1hc3RlciB3aXRoIHRo
-YXQgZml4ZWQsIHRoYW5rcy4KCiAgVGhlIHJlc3Qgb2YgdGhlIHNlcmllcyBpcyBhbHNvIGFwcGxp
-ZWQgdG8gbWFzdGVyLgoKICBSZWdhcmRzLAogIEFybm91dAoKPiAKPiBTaWduZWQtb2ZmLWJ5OiBH
-ZW9yZ2UgS2lhZ2lhZGFraXMgPGdlb3JnZS5raWFnaWFkYWtpc0Bjb2xsYWJvcmEuY29tPgo+IC0t
-LQo+IENoYW5nZXMgc2luY2UgdjE6Cj4gICAgLSBOb25lCj4gCj4gICAuLi4vMDAwMS1maXgtbm9u
-LXg4Nl82NC1hcmNoaXRlY3R1cmVzLnBhdGNoICAgfCAyMTUgLS0tLS0tLS0tLS0tLS0tLS0tCj4g
-ICBwYWNrYWdlL3dpcmVwbHVtYmVyL3dpcmVwbHVtYmVyLmhhc2ggICAgICAgICAgfCAgIDIgKy0K
-PiAgIHBhY2thZ2Uvd2lyZXBsdW1iZXIvd2lyZXBsdW1iZXIubWsgICAgICAgICAgICB8ICAgNCAr
-LQo+ICAgMyBmaWxlcyBjaGFuZ2VkLCA0IGluc2VydGlvbnMoKyksIDIxNyBkZWxldGlvbnMoLSkK
-PiAgIGRlbGV0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL3dpcmVwbHVtYmVyLzAwMDEtZml4LW5vbi14
-ODZfNjQtYXJjaGl0ZWN0dXJlcy5wYXRjaAo+IAo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL3dpcmVw
-bHVtYmVyLzAwMDEtZml4LW5vbi14ODZfNjQtYXJjaGl0ZWN0dXJlcy5wYXRjaCBiL3BhY2thZ2Uv
-d2lyZXBsdW1iZXIvMDAwMS1maXgtbm9uLXg4Nl82NC1hcmNoaXRlY3R1cmVzLnBhdGNoCj4gZGVs
-ZXRlZCBmaWxlIG1vZGUgMTAwNjQ0Cj4gaW5kZXggMTljMzRlNGUxYS4uMDAwMDAwMDAwMAo+IC0t
-LSBhL3BhY2thZ2Uvd2lyZXBsdW1iZXIvMDAwMS1maXgtbm9uLXg4Nl82NC1hcmNoaXRlY3R1cmVz
-LnBhdGNoCj4gKysrIC9kZXYvbnVsbAo+IEBAIC0xLDIxNSArMCwwIEBACj4gLUZyb20gZTQyOWRi
-N2U4YzI2NjA0NWFlZTI1ZTE1M2ZiMjMwOGJkNjFmZTIzMyBNb24gU2VwIDE3IDAwOjAwOjAwIDIw
-MDEKPiAtRnJvbTogSnVsaWFuIEJvdXphcyA8anVsaWFuLmJvdXphc0Bjb2xsYWJvcmEuY29tPgo+
-IC1EYXRlOiBXZWQsIDkgRmViIDIwMjIgMDc6NTk6NTkgLTA1MDAKPiAtU3ViamVjdDogW1BBVENI
-XSBzcGEtanNvbjogZml4IHZhX2xpc3QgQVBJcyBmb3IgZGlmZmVyZW50IGFyY2hpdGVjdHVyZXMK
-PiAtCj4gLVRoZSB2YV9saXN0IHR5cGUgbWlnaHQgbm90IGFsd2F5cyBiZSBhIHBvaW50ZXIgaW4g
-c29tZSBhcmNoaXRlY3R1cmVzLCBzbyB3ZQo+IC1jYW5ub3QgZ3VhcmFudGVlIGl0IHdpbGwgYmUg
-bW9kaWZpZWQgYWZ0ZXIgdXNpbmcgaXQgZm9yIGEgc2Vjb25kIHRpbWUgaW4gYW5vdGhlcgo+IC1m
-dW5jdGlvbi4gVGhpcyBmaXhlcyB0aGUgaXNzdWUgYnkgdXNpbmcgbWFjcm9zIHNvIGFyZ3MgZG9l
-cyBub3QgZ2V0IGNvcGllZCwgYW5kCj4gLWFsd2F5cyBnZXRzIG1vZGlmaWVkIHdoZW4gdXNpbmcg
-aXQgbW9yZSB0aGFuIG9uY2UuCj4gLQo+IC1TaWduZWQtb2ZmLWJ5OiBUaMOpbyBMZWJydW4gPHRo
-ZW8ubGVicnVuQGJvb3RsaW4uY29tPgo+IC1VcHN0cmVhbTogaHR0cHM6Ly9naXRsYWIuZnJlZWRl
-c2t0b3Aub3JnL3BpcGV3aXJlL3dpcmVwbHVtYmVyLy0vY29tbWl0L2U0MjlkYjdlOGMyNjYwNDVh
-ZWUyNWUxNTNmYjIzMDhiZDYxZmUyMzMKPiAtLS0tCj4gLSBsaWIvd3Avc3BhLWpzb24uYyB8IDE1
-NiArKysrKysrKysrKysrKysrKysrKysrKystLS0tLS0tLS0tLS0tLS0tLS0tLS0tCj4gLSAxIGZp
-bGUgY2hhbmdlZCwgODAgaW5zZXJ0aW9ucygrKSwgNzYgZGVsZXRpb25zKC0pCj4gLQo+IC1kaWZm
-IC0tZ2l0IGEvbGliL3dwL3NwYS1qc29uLmMgYi9saWIvd3Avc3BhLWpzb24uYwo+IC1pbmRleCBm
-MTRmMzk1ZC4uYzVlNTlhM2UgMTAwNjQ0Cj4gLS0tLSBhL2xpYi93cC9zcGEtanNvbi5jCj4gLSsr
-KyBiL2xpYi93cC9zcGEtanNvbi5jCj4gLUBAIC0zNjMsMzMgKzM2MywzMyBAQCB3cF9zcGFfanNv
-bl9uZXdfc3RyaW5nIChjb25zdCBnY2hhciAqdmFsdWUpCj4gLSAgICAgICB3cF9zcGFfanNvbl9i
-dWlsZGVyX25ld19mb3JtYXR0ZWQgKCJcIiVzXCIiLCB2YWx1ZSkpOwo+IC0gfQo+IC0KPiAtLXN0
-YXRpYyB2b2lkCj4gLS13cF9zcGFfanNvbl9idWlsZGVyX2FkZF92YWx1ZSAoV3BTcGFKc29uQnVp
-bGRlciAqc2VsZiwgY29uc3QgZ2NoYXIgKmZtdCwKPiAtLSAgICB2YV9saXN0IGFyZ3MpCj4gLS17
-Cj4gLS0gIHN3aXRjaCAoKmZtdCkgewo+IC0tICAgIGNhc2UgJ24nOgo+IC0tICAgICAgd3Bfc3Bh
-X2pzb25fYnVpbGRlcl9hZGRfbnVsbCAoc2VsZik7Cj4gLS0gICAgICBicmVhazsKPiAtLSAgICBj
-YXNlICdiJzoKPiAtLSAgICAgIHdwX3NwYV9qc29uX2J1aWxkZXJfYWRkX2Jvb2xlYW4gKHNlbGYs
-IHZhX2FyZyhhcmdzLCBnYm9vbGVhbikpOwo+IC0tICAgICAgYnJlYWs7Cj4gLS0gICAgY2FzZSAn
-aSc6Cj4gLS0gICAgICB3cF9zcGFfanNvbl9idWlsZGVyX2FkZF9pbnQgKHNlbGYsIHZhX2FyZyhh
-cmdzLCBnaW50KSk7Cj4gLS0gICAgICBicmVhazsKPiAtLSAgICBjYXNlICdmJzoKPiAtLSAgICAg
-IHdwX3NwYV9qc29uX2J1aWxkZXJfYWRkX2Zsb2F0IChzZWxmLCAoZmxvYXQpdmFfYXJnKGFyZ3Ms
-IGRvdWJsZSkpOwo+IC0tICAgICAgYnJlYWs7Cj4gLS0gICAgY2FzZSAncyc6Cj4gLS0gICAgICB3
-cF9zcGFfanNvbl9idWlsZGVyX2FkZF9zdHJpbmcgKHNlbGYsIHZhX2FyZyhhcmdzLCBjb25zdCBn
-Y2hhciAqKSk7Cj4gLS0gICAgICBicmVhazsKPiAtLSAgICBjYXNlICdKJzoKPiAtLSAgICAgIHdw
-X3NwYV9qc29uX2J1aWxkZXJfYWRkX2pzb24gKHNlbGYsIHZhX2FyZyhhcmdzLCBXcFNwYUpzb24g
-KikpOwo+IC0tICAgICAgYnJlYWs7Cj4gLS0gICAgZGVmYXVsdDoKPiAtLSAgICAgIHJldHVybjsK
-PiAtLSAgfQo+IC0tfQo+IC0rLyogQXJncyBpcyBub3QgYSBwb2ludGVyIGluIHNvbWUgYXJjaGl0
-ZWN0dXJlcywgc28gdGhpcyBuZWVkcyB0byBiZSBhIG1hY3JvIHRvCj4gLSsgKiBhdm9pZCBhcmdz
-IGJlaW5nIGNvcGllZCAqLwo+IC0rI2RlZmluZSB3cF9zcGFfanNvbl9idWlsZGVyX2FkZF92YWx1
-ZShzZWxmLGZtdCxhcmdzKSAgICAgICAgICAgICAgICAgICAgICAgICAgIFwKPiAtK2RvIHsgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICBcCj4gLSsgIHN3aXRjaCAoKmZtdCkgeyAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXAo+IC0rICAgIGNhc2Ug
-J24nOiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgIFwKPiAtKyAgICAgIHdwX3NwYV9qc29uX2J1aWxkZXJfYWRkX251bGwgKHNl
-bGYpOyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcCj4gLSsgICAgICBicmVh
-azsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgXAo+IC0rICAgIGNhc2UgJ2InOiAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFwKPiAtKyAgICAgIHdwX3Nw
-YV9qc29uX2J1aWxkZXJfYWRkX2Jvb2xlYW4gKHNlbGYsIHZhX2FyZyhhcmdzLCBnYm9vbGVhbikp
-OyAgICAgICAgICBcCj4gLSsgICAgICBicmVhazsgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXAo+IC0rICAgIGNhc2UgJ2kn
-OiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgIFwKPiAtKyAgICAgIHdwX3NwYV9qc29uX2J1aWxkZXJfYWRkX2ludCAoc2VsZiwg
-dmFfYXJnKGFyZ3MsIGdpbnQpKTsgICAgICAgICAgICAgICAgICBcCj4gLSsgICAgICBicmVhazsg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgXAo+IC0rICAgIGNhc2UgJ2YnOiAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFwKPiAtKyAgICAgIHdwX3NwYV9q
-c29uX2J1aWxkZXJfYWRkX2Zsb2F0IChzZWxmLCAoZmxvYXQpdmFfYXJnKGFyZ3MsIGRvdWJsZSkp
-OyAgICAgICBcCj4gLSsgICAgICBicmVhazsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXAo+IC0rICAgIGNhc2UgJ3MnOiAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgIFwKPiAtKyAgICAgIHdwX3NwYV9qc29uX2J1aWxkZXJfYWRkX3N0cmluZyAoc2VsZiwg
-dmFfYXJnKGFyZ3MsIGNvbnN0IGdjaGFyICopKTsgICAgICBcCj4gLSsgICAgICBicmVhazsgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgXAo+IC0rICAgIGNhc2UgJ0onOiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFwKPiAtKyAgICAgIHdwX3NwYV9qc29u
-X2J1aWxkZXJfYWRkX2pzb24gKHNlbGYsIHZhX2FyZyhhcmdzLCBXcFNwYUpzb24gKikpOyAgICAg
-ICAgICBcCj4gLSsgICAgICBicmVhazsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXAo+IC0rICAgIGRlZmF1bHQ6ICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgIFwKPiAtKyAgICAgIGJyZWFrOyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcCj4gLSsgIH0JCQkJCQkJCSAgICAgICAg
-ICAgICAgIFwKPiAtK30gd2hpbGUoZmFsc2UpCj4gLQo+IC0gLyohCj4gLSAgKiBcYnJpZWYgQ3Jl
-YXRlcyBhIHNwYSBqc29uIG9mIHR5cGUgYXJyYXkKPiAtQEAgLTcyNCw0OCArNzI0LDQ2IEBAIHdw
-X3NwYV9qc29uX3BhcnNlX29iamVjdF92YWxpc3QgKFdwU3BhSnNvbiAqc2VsZiwgdmFfbGlzdCBh
-cmdzKQo+IC0gICByZXR1cm4gcmVzOwo+IC0gfQo+IC0KPiAtLXN0YXRpYyBnYm9vbGVhbgo+IC0t
-d3Bfc3BhX2pzb25fcGFyc2VfdmFsdWUgKGNvbnN0IGdjaGFyICpkYXRhLCBpbnQgbGVuLCBjb25z
-dCBnY2hhciAqZm10LAo+IC0tICAgIHZhX2xpc3QgYXJncykKPiAtLXsKPiAtLSAgc3dpdGNoICgq
-Zm10KSB7Cj4gLS0gICAgY2FzZSAnbic6Cj4gLS0gICAgICBpZiAoIXNwYV9qc29uX2lzX251bGwg
-KGRhdGEsIGxlbikpCj4gLS0gICAgICAgIHJldHVybiBGQUxTRTsKPiAtLSAgICAgIGJyZWFrOwo+
-IC0tICAgIGNhc2UgJ2InOgo+IC0tICAgICAgaWYgKCF3cF9zcGFfanNvbl9wYXJzZV9ib29sZWFu
-X2ludGVybmFsIChkYXRhLCBsZW4sCj4gLS0gICAgICAgICAgdmFfYXJnKGFyZ3MsIGdib29sZWFu
-ICopKSkKPiAtLSAgICAgICAgcmV0dXJuIEZBTFNFOwo+IC0tICAgICAgYnJlYWs7Cj4gLS0gICAg
-Y2FzZSAnaSc6Cj4gLS0gICAgICBpZiAoc3BhX2pzb25fcGFyc2VfaW50IChkYXRhLCBsZW4sIHZh
-X2FyZyhhcmdzLCBnaW50ICopKSA8IDApCj4gLS0gICAgICAgIHJldHVybiBGQUxTRTsKPiAtLSAg
-ICAgIGJyZWFrOwo+IC0tICAgIGNhc2UgJ2YnOgo+IC0tICAgICAgaWYgKHNwYV9qc29uX3BhcnNl
-X2Zsb2F0IChkYXRhLCBsZW4sCj4gLS0gICAgICAgICAgKGZsb2F0ICopdmFfYXJnKGFyZ3MsIGRv
-dWJsZSAqKSkgPCAwKQo+IC0tICAgICAgICByZXR1cm4gRkFMU0U7Cj4gLS0gICAgICBicmVhazsK
-PiAtLSAgICBjYXNlICdzJzogewo+IC0tICAgICAgZ2NoYXIgKnN0ciA9IHdwX3NwYV9qc29uX3Bh
-cnNlX3N0cmluZ19pbnRlcm5hbCAoZGF0YSwgbGVuKTsKPiAtLSAgICAgIGlmICghc3RyKQo+IC0t
-ICAgICAgICByZXR1cm4gRkFMU0U7Cj4gLS0gICAgICAqdmFfYXJnKGFyZ3MsIGdjaGFyICoqKSA9
-IHN0cjsKPiAtLSAgICAgIGJyZWFrOwo+IC0tICAgIH0KPiAtLSAgICBjYXNlICdKJzogewo+IC0t
-ICAgICAgV3BTcGFKc29uICpqID0gd3Bfc3BhX2pzb25fbmV3IChkYXRhLCBsZW4pOwo+IC0tICAg
-ICAgaWYgKCFqKQo+IC0tICAgICAgICByZXR1cm4gRkFMU0U7Cj4gLS0gICAgICAqdmFfYXJnKGFy
-Z3MsIFdwU3BhSnNvbiAqKikgPSBqOwo+IC0tICAgICAgYnJlYWs7Cj4gLS0gICAgfQo+IC0tICAg
-IGRlZmF1bHQ6Cj4gLS0gICAgICByZXR1cm4gRkFMU0U7Cj4gLS0gIH0KPiAtLSAgcmV0dXJuIFRS
-VUU7Cj4gLS19Cj4gLSsvKiBBcmdzIGlzIG5vdCBhIHBvaW50ZXIgaW4gc29tZSBhcmNoaXRlY3R1
-cmVzLCBzbyB0aGlzIG5lZWRzIHRvIGJlIGEgbWFjcm8gdG8KPiAtKyAqIGF2b2lkIGFyZ3MgYmVp
-bmcgY29waWVkICovCj4gLSsjZGVmaW5lIHdwX3NwYV9qc29uX3BhcnNlX3ZhbHVlKGRhdGEsbGVu
-LGZtdCxhcmdzKSAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXAo+IC0rZG8geyAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgIFwKPiAtKyAgc3dpdGNoICgqZm10KSB7ICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcCj4gLSsgICAgY2FzZSAnbic6
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgXAo+IC0rICAgICAgaWYgKCFzcGFfanNvbl9pc19udWxsIChkYXRhLCBsZW4pKSAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFwKPiAtKyAgICAgICAgcmV0dXJu
-IEZBTFNFOyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICBcCj4gLSsgICAgICBicmVhazsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXAo+IC0rICAgIGNhc2UgJ2InOiAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgIFwKPiAtKyAgICAgIGlmICghd3Bfc3BhX2pzb25fcGFyc2VfYm9vbGVhbl9pbnRlcm5h
-bCAoZGF0YSwgbGVuLCAgICAgICAgICAgICAgICAgICAgICBcCj4gLSsgICAgICAgICAgdmFfYXJn
-KGFyZ3MsIGdib29sZWFuICopKSkgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgXAo+IC0rICAgICAgICByZXR1cm4gRkFMU0U7ICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFwKPiAtKyAgICAgIGJyZWFrOyAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICBcCj4gLSsgICAgY2FzZSAnaSc6ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXAo+IC0rICAgICAgaWYgKHNwYV9qc29u
-X3BhcnNlX2ludCAoZGF0YSwgbGVuLCB2YV9hcmcoYXJncywgZ2ludCAqKSkgPCAwKSAgICAgICAg
-ICAgIFwKPiAtKyAgICAgICAgcmV0dXJuIEZBTFNFOyAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcCj4gLSsgICAgICBicmVhazsgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgXAo+IC0rICAgIGNhc2UgJ2YnOiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFwKPiAtKyAgICAgIGlmIChzcGFfanNvbl9w
-YXJzZV9mbG9hdCAoZGF0YSwgbGVuLCB2YV9hcmcoYXJncywgZmxvYXQgKikpIDwgMCkgICAgICAg
-ICBcCj4gLSsgICAgICAgIHJldHVybiBGQUxTRTsgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXAo+IC0rICAgICAgYnJlYWs7ICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-IFwKPiAtKyAgICBjYXNlICdzJzogeyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcCj4gLSsgICAgICBnY2hhciAqc3RyID0gd3Bf
-c3BhX2pzb25fcGFyc2Vfc3RyaW5nX2ludGVybmFsIChkYXRhLCBsZW4pOyAgICAgICAgICAgICAg
-XAo+IC0rICAgICAgaWYgKCFzdHIpICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgIFwKPiAtKyAgICAgICAgcmV0dXJuIEZBTFNFOyAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBc
-Cj4gLSsgICAgICAqdmFfYXJnKGFyZ3MsIGdjaGFyICoqKSA9IHN0cjsgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgXAo+IC0rICAgICAgYnJlYWs7ICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFwK
-PiAtKyAgICB9ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICBcCj4gLSsgICAgY2FzZSAnSic6IHsgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXAo+
-IC0rICAgICAgV3BTcGFKc29uICpqID0gd3Bfc3BhX2pzb25fbmV3IChkYXRhLCBsZW4pOyAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgIFwKPiAtKyAgICAgIGlmICghaikgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcCj4g
-LSsgICAgICAgIHJldHVybiBGQUxTRTsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgXAo+IC0rICAgICAgKnZhX2FyZyhhcmdzLCBXcFNwYUpz
-b24gKiopID0gajsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFwKPiAt
-KyAgICAgIGJyZWFrOyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICBcCj4gLSsgICAgfSAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXAo+IC0r
-ICAgIGRlZmF1bHQ6ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgIFwKPiAtKyAgICAgIHJldHVybiBGQUxTRTsgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcCj4gLSsg
-IH0gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgXAo+IC0rfSB3aGlsZShmYWxzZSkKPiAtCj4gLSAvKiEKPiAt
-ICAqIFxicmllZiBQYXJzZXMgdGhlIG9iamVjdCBwcm9wZXJ0eSB2YWx1ZXMgb2YgYSBzcGEganNv
-biBvYmplY3QKPiAtQEAgLTgyNyw4ICs4MjUsNyBAQCB3cF9zcGFfanNvbl9vYmplY3RfZ2V0X3Zh
-bGlzdCAoV3BTcGFKc29uICpzZWxmLCB2YV9saXN0IGFyZ3MpCj4gLSAgICAgdmFsdWUgPSBnX3Zh
-bHVlX2dldF9ib3hlZCAoJml0ZW0pOwo+IC0KPiAtICAgICBpZiAoZ19zdHJjbXAwIChrZXlfc3Ry
-LCBsb29rdXBfa2V5KSA9PSAwKSB7Cj4gLS0gICAgICBpZiAoIXdwX3NwYV9qc29uX3BhcnNlX3Zh
-bHVlICh2YWx1ZS0+ZGF0YSwgdmFsdWUtPnNpemUsIGxvb2t1cF9mbXQsIGFyZ3MpKQo+IC0tICAg
-ICAgICByZXR1cm4gRkFMU0U7Cj4gLSsgICAgICB3cF9zcGFfanNvbl9wYXJzZV92YWx1ZSAodmFs
-dWUtPmRhdGEsIHZhbHVlLT5zaXplLCBsb29rdXBfZm10LCBhcmdzKTsKPiAtICAgICAgIGxvb2t1
-cF9rZXkgPSB2YV9hcmcoYXJncywgY29uc3QgZ2NoYXIgKik7Cj4gLSAgICAgICBpZiAoIWxvb2t1
-cF9rZXkpCj4gLSAgICAgICAgIHJldHVybiBUUlVFOwo+IC1AQCAtMTM2Niw5ICsxMzYzLDEyIEBA
-IGdib29sZWFuCj4gLSB3cF9zcGFfanNvbl9wYXJzZXJfZ2V0X3ZhbHVlIChXcFNwYUpzb25QYXJz
-ZXIgKnNlbGYsIGNvbnN0IGdjaGFyICpmbXQsCj4gLSAgICAgdmFfbGlzdCBhcmdzKQo+IC0gewo+
-IC0tICByZXR1cm4gd3Bfc3BhX2pzb25fcGFyc2VyX2FkdmFuY2UgKHNlbGYpICYmCj4gLS0gICAg
-ICB3cF9zcGFfanNvbl9wYXJzZV92YWx1ZSAoc2VsZi0+Y3Vyci5jdXIsCj4gLS0gICAgICAgICAg
-c2VsZi0+Y3Vyci5lbmQgLSBzZWxmLT5jdXJyLmN1ciwgZm10LCBhcmdzKTsKPiAtKyAgaWYgKHdw
-X3NwYV9qc29uX3BhcnNlcl9hZHZhbmNlIChzZWxmKSkgewo+IC0rICAgIHdwX3NwYV9qc29uX3Bh
-cnNlX3ZhbHVlIChzZWxmLT5jdXJyLmN1ciwgc2VsZi0+Y3Vyci5lbmQgLSBzZWxmLT5jdXJyLmN1
-ciwKPiAtKyAgICAgICAgZm10LCBhcmdzKTsKPiAtKyAgICByZXR1cm4gVFJVRTsKPiAtKyAgfQo+
-IC0rICByZXR1cm4gRkFMU0U7Cj4gLSB9Cj4gLQo+IC0gLyohCj4gLUBAIC0xNDE5LDkgKzE0MTks
-MTMgQEAgd3Bfc3BhX2pzb25fcGFyc2VyX2dldF92YWxpc3QgKFdwU3BhSnNvblBhcnNlciAqc2Vs
-ZiwgdmFfbGlzdCBhcmdzKQo+IC0gICAgIGlmICghZm9ybWF0KQo+IC0gICAgICAgcmV0dXJuIFRS
-VUU7Cj4gLQo+IC0tICAgIC8qIHBhcnNlIHZhbHVlICovCj4gLS0gICAgaWYgKCF3cF9zcGFfanNv
-bl9wYXJzZXJfZ2V0X3ZhbHVlIChzZWxmLCBmb3JtYXQsIGFyZ3MpKQo+IC0rICAgIC8qIGFkdmFu
-Y2UgKi8KPiAtKyAgICBpZiAoIXdwX3NwYV9qc29uX3BhcnNlcl9hZHZhbmNlIChzZWxmKSkKPiAt
-ICAgICAgIHJldHVybiBGQUxTRTsKPiAtKwo+IC0rICAgIC8qIHBhcnNlIHZhbHVlICovCj4gLSsg
-ICAgd3Bfc3BhX2pzb25fcGFyc2VfdmFsdWUgKHNlbGYtPmN1cnIuY3VyLCBzZWxmLT5jdXJyLmVu
-ZCAtIHNlbGYtPmN1cnIuY3VyLAo+IC0rICAgICAgICBmb3JtYXQsIGFyZ3MpOwo+IC0gICB9IHdo
-aWxlIChUUlVFKTsKPiAtCj4gLSAgIHJldHVybiBGQUxTRTsKPiAtLS0KPiAtR2l0TGFiCj4gLQo+
-IGRpZmYgLS1naXQgYS9wYWNrYWdlL3dpcmVwbHVtYmVyL3dpcmVwbHVtYmVyLmhhc2ggYi9wYWNr
-YWdlL3dpcmVwbHVtYmVyL3dpcmVwbHVtYmVyLmhhc2gKPiBpbmRleCAyMDZkN2QxNWFmLi43ZmZm
-MzRhN2E3IDEwMDY0NAo+IC0tLSBhL3BhY2thZ2Uvd2lyZXBsdW1iZXIvd2lyZXBsdW1iZXIuaGFz
-aAo+ICsrKyBiL3BhY2thZ2Uvd2lyZXBsdW1iZXIvd2lyZXBsdW1iZXIuaGFzaAo+IEBAIC0xLDMg
-KzEsMyBAQAo+ICAgIyBMb2NhbGx5IGNhbGN1bGF0ZWQKPiAtc2hhMjU2ICA2NDI5ZThhOTVlMzU1
-Y2UyMWI0YzRmMWE1ZWJjNzY5ZjAzN2U4ZGJlZWM1MTkwNWFkOTA5Y2U2MDlhMzhkMGNlICB3aXJl
-cGx1bWJlci0wLjQuOC50YXIuYnoyCj4gK3NoYTI1NiAgNDkyNjM5OWNmZmUzZGExMmYxMzM4ZTFm
-ZWVjNTNlZjk0NGU4NmFlN2M3MTkzODRiZmY4NzQ5MGQ3ZTNlZGJjNyAgd2lyZXBsdW1iZXItMC41
-LjUudGFyLmJ6Mgo+ICAgc2hhMjU2ICBmZjJlYjlhZjViMDVkOTJhYzNhMzhjZmZjYWQyNzU4MmVm
-NTU1YTMxZmYxNzgxZTFjMWQ0ZTA4N2Y3N2M5YzgxICBMSUNFTlNFCj4gZGlmZiAtLWdpdCBhL3Bh
-Y2thZ2Uvd2lyZXBsdW1iZXIvd2lyZXBsdW1iZXIubWsgYi9wYWNrYWdlL3dpcmVwbHVtYmVyL3dp
-cmVwbHVtYmVyLm1rCj4gaW5kZXggNzYzZTNkNzYzOS4uYzhjYzFhZDEwNiAxMDA2NDQKPiAtLS0g
-YS9wYWNrYWdlL3dpcmVwbHVtYmVyL3dpcmVwbHVtYmVyLm1rCj4gKysrIGIvcGFja2FnZS93aXJl
-cGx1bWJlci93aXJlcGx1bWJlci5tawo+IEBAIC00LDcgKzQsNyBAQAo+ICAgIwo+ICAgIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMKPiAgIAo+IC1XSVJFUExVTUJFUl9WRVJTSU9OID0gMC40LjgKPiAr
-V0lSRVBMVU1CRVJfVkVSU0lPTiA9IDAuNS41Cj4gICBXSVJFUExVTUJFUl9TT1VSQ0UgPSB3aXJl
-cGx1bWJlci0kKFdJUkVQTFVNQkVSX1ZFUlNJT04pLnRhci5iejIKPiAgIFdJUkVQTFVNQkVSX1NJ
-VEUgPSBodHRwczovL2dpdGxhYi5mcmVlZGVza3RvcC5vcmcvcGlwZXdpcmUvd2lyZXBsdW1iZXIv
-LS9hcmNoaXZlLyQoV0lSRVBMVU1CRVJfVkVSU0lPTikKPiAgIFdJUkVQTFVNQkVSX0xJQ0VOU0Ug
-PSBNSVQKPiBAQCAtMTMsNiArMTMsOCBAQCBXSVJFUExVTUJFUl9ERVBFTkRFTkNJRVMgPSBob3N0
-LXBrZ2NvbmYgcGlwZXdpcmUgbGliZ2xpYjIgbHVhCj4gICAKPiAgIFdJUkVQTFVNQkVSX0NPTkZf
-T1BUUyA9IFwKPiAgIAktRGRvYz1kaXNhYmxlZCBcCj4gKwktRHRlc3RzPWZhbHNlIFwKPiArCS1E
-ZWxvZ2luZD1kaXNhYmxlZCBcCj4gICAJLURzeXN0ZW0tbHVhPXRydWUgXAo+ICAgCS1Ec3lzdGVt
-LWx1YS12ZXJzaW9uPQo+ICAgCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcK
-aHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+
+
+On 16/08/2024 10:35, Waldemar Brodkorb wrote:
+> See here for changelogs:
+> https://github.com/gerbera/gerbera/releases/tag/v2.2.0
+> https://github.com/gerbera/gerbera/releases/tag/v2.1.0
+> https://github.com/gerbera/gerbera/releases/tag/v2.0.0
+> 
+> Patch 0001 is no longer required.
+
+  This should have been "Patch 0001 is upstream".
+
+  There was another upstream patch applied as well, so it had to be removed as well.
+
+  Applied to master with those two fixed, thanks.
+
+  Regards,
+  Arnout
+
+> 
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+> ---
+>   .../0001-buildfix-support-fmtlib-10.patch     | 166 ------------------
+>   package/gerbera/gerbera.hash                  |   2 +-
+>   package/gerbera/gerbera.mk                    |   2 +-
+>   3 files changed, 2 insertions(+), 168 deletions(-)
+>   delete mode 100644 package/gerbera/0001-buildfix-support-fmtlib-10.patch
+> 
+> diff --git a/package/gerbera/0001-buildfix-support-fmtlib-10.patch b/package/gerbera/0001-buildfix-support-fmtlib-10.patch
+> deleted file mode 100644
+> index b274aab75b..0000000000
+> --- a/package/gerbera/0001-buildfix-support-fmtlib-10.patch
+> +++ /dev/null
+> @@ -1,166 +0,0 @@
+> -From 37957aac0aea776e6f843af2358916f81056a405 Mon Sep 17 00:00:00 2001
+> -From: Mamoru TASAKA <mtasaka@fedoraproject.org>
+> -Date: Thu, 29 Jun 2023 22:09:15 +0900
+> -Subject: [PATCH] buildfix: support fmtlib 10
+> -
+> -With fmtlib10, fmt::format does not accept pugi::xml_node as it is.
+> -Use name() member function, as this usage appear on other places of
+> -gerbera source code.
+> -
+> -Closes #2839 .
+> -
+> -Upstream: https://github.com/gerbera/gerbera/commit/37957aac0aea776e6f843af2358916f81056a405
+> -
+> -Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> ----
+> - src/config/setup/config_setup_array.cc       | 6 +++---
+> - src/config/setup/config_setup_autoscan.cc    | 2 +-
+> - src/config/setup/config_setup_client.cc      | 2 +-
+> - src/config/setup/config_setup_dictionary.cc  | 6 +++---
+> - src/config/setup/config_setup_dynamic.cc     | 2 +-
+> - src/config/setup/config_setup_transcoding.cc | 2 +-
+> - src/config/setup/config_setup_tweak.cc       | 2 +-
+> - src/config/setup/config_setup_vector.cc      | 4 ++--
+> - 8 files changed, 13 insertions(+), 13 deletions(-)
+> -
+> -diff --git a/src/config/setup/config_setup_array.cc b/src/config/setup/config_setup_array.cc
+> -index 62dd5c9a7..a5f8958ce 100644
+> ---- a/src/config/setup/config_setup_array.cc
+> -+++ b/src/config/setup/config_setup_array.cc
+> -@@ -137,11 +137,11 @@ std::vector<std::string> ConfigArraySetup::getXmlContent(const pugi::xml_node& o
+> -     std::vector<std::string> result;
+> -     if (initArray) {
+> -         if (!initArray(optValue, result, ConfigDefinition::mapConfigOption(nodeOption))) {
+> --            throw_std_runtime_error("Invalid {} array value '{}'", xpath, optValue);
+> -+            throw_std_runtime_error("Invalid {} array value '{}'", xpath, optValue.name());
+> -         }
+> -     } else {
+> -         if (!createOptionFromNode(optValue, result)) {
+> --            throw_std_runtime_error("Invalid {} array value '{}'", xpath, optValue);
+> -+            throw_std_runtime_error("Invalid {} array value '{}'", xpath, optValue.name());
+> -         }
+> -     }
+> -     if (result.empty()) {
+> -@@ -150,7 +150,7 @@ std::vector<std::string> ConfigArraySetup::getXmlContent(const pugi::xml_node& o
+> -         result = defaultEntries;
+> -     }
+> -     if (notEmpty && result.empty()) {
+> --        throw_std_runtime_error("Invalid array {} empty '{}'", xpath, optValue);
+> -+        throw_std_runtime_error("Invalid array {} empty '{}'", xpath, optValue.name());
+> -     }
+> -     return result;
+> - }
+> -diff --git a/src/config/setup/config_setup_autoscan.cc b/src/config/setup/config_setup_autoscan.cc
+> -index 9ae4e61f8..5e1394585 100644
+> ---- a/src/config/setup/config_setup_autoscan.cc
+> -+++ b/src/config/setup/config_setup_autoscan.cc
+> -@@ -245,7 +245,7 @@ std::shared_ptr<ConfigOption> ConfigAutoscanSetup::newOption(const pugi::xml_nod
+> - {
+> -     auto result = std::vector<AutoscanDirectory>();
+> -     if (!createOptionFromNode(optValue, result)) {
+> --        throw_std_runtime_error("Init {} autoscan failed '{}'", xpath, optValue);
+> -+        throw_std_runtime_error("Init {} autoscan failed '{}'", xpath, optValue.name());
+> -     }
+> -     optionValue = std::make_shared<AutoscanListOption>(result);
+> -     return optionValue;
+> -diff --git a/src/config/setup/config_setup_client.cc b/src/config/setup/config_setup_client.cc
+> -index ffd12fc01..857db3c3e 100644
+> ---- a/src/config/setup/config_setup_client.cc
+> -+++ b/src/config/setup/config_setup_client.cc
+> -@@ -183,7 +183,7 @@ std::shared_ptr<ConfigOption> ConfigClientSetup::newOption(const pugi::xml_node&
+> -     auto result = std::make_shared<ClientConfigList>();
+> -
+> -     if (!createOptionFromNode(isEnabled ? optValue : pugi::xml_node(nullptr), result)) {
+> --        throw_std_runtime_error("Init {} client config failed '{}'", xpath, optValue);
+> -+        throw_std_runtime_error("Init {} client config failed '{}'", xpath, optValue.name());
+> -     }
+> -     optionValue = std::make_shared<ClientConfigListOption>(result);
+> -     return optionValue;
+> -diff --git a/src/config/setup/config_setup_dictionary.cc b/src/config/setup/config_setup_dictionary.cc
+> -index 003b4cc59..69d1a7255 100644
+> ---- a/src/config/setup/config_setup_dictionary.cc
+> -+++ b/src/config/setup/config_setup_dictionary.cc
+> -@@ -163,11 +163,11 @@ std::map<std::string, std::string> ConfigDictionarySetup::getXmlContent(const pu
+> -     std::map<std::string, std::string> result;
+> -     if (initDict) {
+> -         if (!initDict(optValue, result)) {
+> --            throw_std_runtime_error("Init {} dictionary failed '{}'", xpath, optValue);
+> -+            throw_std_runtime_error("Init {} dictionary failed '{}'", xpath, optValue.name());
+> -         }
+> -     } else {
+> -         if (!createOptionFromNode(optValue, result) && required) {
+> --            throw_std_runtime_error("Init {} dictionary failed '{}'", xpath, optValue);
+> -+            throw_std_runtime_error("Init {} dictionary failed '{}'", xpath, optValue.name());
+> -         }
+> -     }
+> -     if (result.empty()) {
+> -@@ -176,7 +176,7 @@ std::map<std::string, std::string> ConfigDictionarySetup::getXmlContent(const pu
+> -         result = defaultEntries;
+> -     }
+> -     if (notEmpty && result.empty()) {
+> --        throw_std_runtime_error("Invalid dictionary {} empty '{}'", xpath, optValue);
+> -+        throw_std_runtime_error("Invalid dictionary {} empty '{}'", xpath, optValue.name());
+> -     }
+> -     return result;
+> - }
+> -diff --git a/src/config/setup/config_setup_dynamic.cc b/src/config/setup/config_setup_dynamic.cc
+> -index 0074cb6d3..d6962afe6 100644
+> ---- a/src/config/setup/config_setup_dynamic.cc
+> -+++ b/src/config/setup/config_setup_dynamic.cc
+> -@@ -192,7 +192,7 @@ std::shared_ptr<ConfigOption> ConfigDynamicContentSetup::newOption(const pugi::x
+> -     auto result = std::make_shared<DynamicContentList>();
+> -
+> -     if (!createOptionFromNode(optValue, result)) {
+> --        throw_std_runtime_error("Init {} DynamicContentList failed '{}'", xpath, optValue);
+> -+        throw_std_runtime_error("Init {} DynamicContentList failed '{}'", xpath, optValue.name());
+> -     }
+> -     optionValue = std::make_shared<DynamicContentListOption>(result);
+> -     return optionValue;
+> -diff --git a/src/config/setup/config_setup_transcoding.cc b/src/config/setup/config_setup_transcoding.cc
+> -index 17d1780dc..1f6fb0604 100644
+> ---- a/src/config/setup/config_setup_transcoding.cc
+> -+++ b/src/config/setup/config_setup_transcoding.cc
+> -@@ -501,7 +501,7 @@ std::shared_ptr<ConfigOption> ConfigTranscodingSetup::newOption(const pugi::xml_
+> -     auto result = std::make_shared<TranscodingProfileList>();
+> -
+> -     if (!createOptionFromNode(isEnabled ? optValue : pugi::xml_node(nullptr), result)) {
+> --        throw_std_runtime_error("Init {} transcoding failed '{}'", xpath, optValue);
+> -+        throw_std_runtime_error("Init {} transcoding failed '{}'", xpath, optValue.name());
+> -     }
+> -     optionValue = std::make_shared<TranscodingProfileListOption>(result);
+> -     return optionValue;
+> -diff --git a/src/config/setup/config_setup_tweak.cc b/src/config/setup/config_setup_tweak.cc
+> -index 65dae2759..4da9fca1b 100644
+> ---- a/src/config/setup/config_setup_tweak.cc
+> -+++ b/src/config/setup/config_setup_tweak.cc
+> -@@ -257,7 +257,7 @@ std::shared_ptr<ConfigOption> ConfigDirectorySetup::newOption(const pugi::xml_no
+> -     auto result = std::make_shared<DirectoryConfigList>();
+> -
+> -     if (!createOptionFromNode(optValue, result)) {
+> --        throw_std_runtime_error("Init {} DirectoryConfigList failed '{}'", xpath, optValue);
+> -+        throw_std_runtime_error("Init {} DirectoryConfigList failed '{}'", xpath, optValue.name());
+> -     }
+> -     optionValue = std::make_shared<DirectoryTweakOption>(result);
+> -     return optionValue;
+> -diff --git a/src/config/setup/config_setup_vector.cc b/src/config/setup/config_setup_vector.cc
+> -index e5efe2767..9a9670569 100644
+> ---- a/src/config/setup/config_setup_vector.cc
+> -+++ b/src/config/setup/config_setup_vector.cc
+> -@@ -181,7 +181,7 @@ std::vector<std::vector<std::pair<std::string, std::string>>> ConfigVectorSetup:
+> - {
+> -     std::vector<std::vector<std::pair<std::string, std::string>>> result;
+> -     if (!createOptionFromNode(optValue, result) && required) {
+> --        throw_std_runtime_error("Init {} vector failed '{}'", xpath, optValue);
+> -+        throw_std_runtime_error("Init {} vector failed '{}'", xpath, optValue.name());
+> -     }
+> -     if (result.empty()) {
+> -         log_debug("{} assigning {} default values", xpath, defaultEntries.size());
+> -@@ -189,7 +189,7 @@ std::vector<std::vector<std::pair<std::string, std::string>>> ConfigVectorSetup:
+> -         result = defaultEntries;
+> -     }
+> -     if (notEmpty && result.empty()) {
+> --        throw_std_runtime_error("Invalid vector {} empty '{}'", xpath, optValue);
+> -+        throw_std_runtime_error("Invalid vector {} empty '{}'", xpath, optValue.name());
+> -     }
+> -     return result;
+> - }
+> diff --git a/package/gerbera/gerbera.hash b/package/gerbera/gerbera.hash
+> index ee6e3d9b3a..8a0f052e9e 100644
+> --- a/package/gerbera/gerbera.hash
+> +++ b/package/gerbera/gerbera.hash
+> @@ -1,3 +1,3 @@
+>   # Locally computed:
+> -sha256  2144a7c4a13e8b43aa0c911fbeae65f05e2c42254ddd03be5c41f5fcf103a93c  gerbera-1.12.1.tar.gz
+> +sha256  c77f4a8ccbed5e18499c0854803fec65ae2f26af633818b52584651fbd3eec13  gerbera-2.2.0.tar.gz
+>   sha256  cae4138373be41fd2be75faf41ce7efbcf49fb17d0e05ad1c51cc01ac335b9b6  LICENSE.md
+> diff --git a/package/gerbera/gerbera.mk b/package/gerbera/gerbera.mk
+> index 6616a83e74..b6122610df 100644
+> --- a/package/gerbera/gerbera.mk
+> +++ b/package/gerbera/gerbera.mk
+> @@ -4,7 +4,7 @@
+>   #
+>   ################################################################################
+>   
+> -GERBERA_VERSION = 1.12.1
+> +GERBERA_VERSION = 2.2.0
+>   GERBERA_SITE = $(call github,gerbera,gerbera,v$(GERBERA_VERSION))
+>   GERBERA_LICENSE = GPL-2.0
+>   GERBERA_LICENSE_FILES = LICENSE.md
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
