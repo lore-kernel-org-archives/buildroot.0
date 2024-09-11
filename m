@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8C3A2EE57CF
-	for <buildroot@archiver.kernel.org>; Wed, 11 Sep 2024 19:42:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 16588EE57D0
+	for <buildroot@archiver.kernel.org>; Wed, 11 Sep 2024 19:42:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 57AA240FDD;
-	Wed, 11 Sep 2024 19:42:08 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D2E8E40FDB;
+	Wed, 11 Sep 2024 19:42:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eoYVbgbPKsKZ; Wed, 11 Sep 2024 19:42:07 +0000 (UTC)
+ id TBcGJLyATZui; Wed, 11 Sep 2024 19:42:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 22D8340FDE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7F67B40FC1
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 22D8340FDE;
-	Wed, 11 Sep 2024 19:42:07 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id D6AAF1BF369
- for <buildroot@lists.busybox.net>; Wed, 11 Sep 2024 19:41:54 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7F67B40FC1;
+	Wed, 11 Sep 2024 19:42:10 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 44F931BF369
+ for <buildroot@lists.busybox.net>; Wed, 11 Sep 2024 19:41:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C430380CBA
- for <buildroot@lists.busybox.net>; Wed, 11 Sep 2024 19:41:53 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7E86D40197
+ for <buildroot@lists.busybox.net>; Wed, 11 Sep 2024 19:41:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id itrpRaIth7jP for <buildroot@lists.busybox.net>;
- Wed, 11 Sep 2024 19:41:52 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hDCQQDkWSBBB for <buildroot@lists.busybox.net>;
+ Wed, 11 Sep 2024 19:41:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CF7F180CCE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1ED1440449
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id CF7F180CCE
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1ED1440449
  for <buildroot@buildroot.org>; Wed, 11 Sep 2024 19:41:52 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8BB0E86FB7; Wed, 11 Sep 2024 19:41:52 +0000 (UTC)
+ id 7FB6F86FB6; Wed, 11 Sep 2024 19:41:52 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 11 Sep 2024 21:41:17 +0200
+Date: Wed, 11 Sep 2024 21:41:15 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c9515c8b63bc9bc84b52b731c2c72031acd240d2
-X-Git-Newrev: 6cda3504086e4c4b6acd24212e4d568684442243
+X-Git-Oldrev: 839ee1b1280aabf717acc247371070e803fcea99
+X-Git-Newrev: c9515c8b63bc9bc84b52b731c2c72031acd240d2
 X-Patchwork-Hint: ignore
-Message-Id: <20240911194152.8BB0E86FB7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/nginx: fix static build error
+Message-Id: <20240911194152.7FB6F86FB6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/bind: update to 9.18.28
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,65 +65,134 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6cda3504086e4c4b6acd24212e4d568684442243
+commit: https://git.buildroot.net/buildroot/commit/?id=c9515c8b63bc9bc84b52b731c2c72031acd240d2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-In commit 761259c93400bc806611a242c7dc3df7ff67c231 the SSL patch was
-removed, without testing any static compilation.
-Reintroduce a small version of the original patch.
+Bind 9.16.x is EOL since April 2024.
+See here for what version should be used in production:
+https://kb.isc.org/docs/aa-01540
 
-Upstream does not use pkg-config, so the patch is Buildroot specific and
-not suitable for upstreaming.
+Remove patch 0001 as CC_FOR_BUILD is used in upstream code
+to compile host utility gen.
 
-Fixes:
- - http://autobuild.buildroot.net/results/a85/a85b00dfe9b55607390ebacc0e4e55c7cfbace3a
+Use BIND_AUTORECONF = YES to avoid a Debian 12 libtool bug.
+Otherwise rndc linking fails. See here for a bug report to
+bind9 project:
+https://gitlab.isc.org/isc-projects/bind9/-/issues/4840
+
+See here for a changelog:
+https://downloads.isc.org/isc/bind9/9.18.28/doc/arm/html/notes.html
+
+COPYRIGHT file has been updated, following Copyright holders were
+added:
+Copyright Joyent, Inc. and other Node contributors. All rights reserved.
 
 Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- ...0009-auto-lib-openssl-conf-use-pkg-config.patch | 34 ++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
+ .checkpackageignore           |  1 -
+ package/bind/0001-cross.patch | 34 ----------------------------------
+ package/bind/bind.hash        |  8 ++++----
+ package/bind/bind.mk          |  9 +++++----
+ 4 files changed, 9 insertions(+), 43 deletions(-)
 
-diff --git a/package/nginx/0009-auto-lib-openssl-conf-use-pkg-config.patch b/package/nginx/0009-auto-lib-openssl-conf-use-pkg-config.patch
-new file mode 100644
-index 0000000000..05fb48b76e
---- /dev/null
-+++ b/package/nginx/0009-auto-lib-openssl-conf-use-pkg-config.patch
-@@ -0,0 +1,34 @@
-+From 232ac61984720401b0c3854da1644ec20ed218e0 Mon Sep 17 00:00:00 2001
-+From: Martin Bark <martin@barkynet.com>
-+Date: Thu, 15 Aug 2024 19:47:23 +0200
-+Subject: [PATCH] auto/lib/openssl/conf: use pkg-config
-+
-+Change to using pkg-config to find the path to openssl and its
-+dependencies.
-+
-+Signed-off-by: Martin Bark <martin@barkynet.com>
-+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-+Upstream: not suitable
-+---
-+ auto/lib/openssl/conf | 5 +++--
-+ 1 file changed, 3 insertions(+), 2 deletions(-)
-+
-+diff --git a/auto/lib/openssl/conf b/auto/lib/openssl/conf
-+index fdf430dff..c9fe4c8bf 100644
-+--- a/auto/lib/openssl/conf
-++++ b/auto/lib/openssl/conf
-+@@ -63,8 +63,9 @@ else
-+         ngx_feature_name="NGX_OPENSSL"
-+         ngx_feature_run=no
-+         ngx_feature_incs="#include <openssl/ssl.h>"
-+-        ngx_feature_path=
-+-        ngx_feature_libs="-lssl -lcrypto $NGX_LIBDL $NGX_LIBPTHREAD"
-++        ngx_feature_path="$(${PKG_CONFIG:=pkg-config} --cflags-only-I openssl|
-++			    sed -re 's/(^|\s)-I\s*(\S+)/\1\2/g')"
-++        ngx_feature_libs="$(${PKG_CONFIG:=pkg-config} --libs openssl)"
-+         ngx_feature_test="SSL_CTX_set_options(NULL, 0)"
-+         . auto/feature
-+ 
-+-- 
-+2.39.2
-+
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 9a7cf07c7a..17b0dcd4d5 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -334,7 +334,6 @@ package/benejson/0001-c-std.patch lib_patch.Upstream
+ package/benejson/0002-Use-print-as-a-function-for-Py3-compatibility.patch lib_patch.Upstream
+ package/berkeleydb/0001-cwd-db_config.patch lib_patch.Upstream
+ package/berkeleydb/0002-atomic_compare_exchange.patch lib_patch.Upstream
+-package/bind/0001-cross.patch lib_patch.Upstream
+ package/bind/S81named Shellcheck lib_sysv.Indent lib_sysv.Variables
+ package/bird/0001-configure.ac-fix-build-with-autoconf-2.70.patch lib_patch.Upstream
+ package/bmx7/0001-Fix-schedule.c-378-36-error-SIOCGSTAMP-undeclared.patch lib_patch.Upstream
+diff --git a/package/bind/0001-cross.patch b/package/bind/0001-cross.patch
+deleted file mode 100644
+index f39be2f837..0000000000
+--- a/package/bind/0001-cross.patch
++++ /dev/null
+@@ -1,34 +0,0 @@
+-From 505cc9fcadda5607dc4c5bacb03928c0b35162a8 Mon Sep 17 00:00:00 2001
+-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-Date: Wed, 4 Nov 2020 17:51:38 +0100
+-Subject: [PATCH] Use host compiler to build 'gen' since it's run when
+- building.
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-[Fabrice: updated for 9.11.10]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+----
+- lib/dns/Makefile.in | 6 ++----
+- 1 file changed, 2 insertions(+), 4 deletions(-)
+-
+-diff --git a/lib/dns/Makefile.in b/lib/dns/Makefile.in
+-index 8fc4e94f26..4ac92857e0 100644
+---- a/lib/dns/Makefile.in
+-+++ b/lib/dns/Makefile.in
+-@@ -184,10 +184,8 @@ code.h:	gen
+- 	./gen -s ${srcdir} > code.h || { rm -f $@ ; exit 1; }
+- 
+- gen: gen.c
+--	${BUILD_CC} ${BUILD_CFLAGS} -I${top_srcdir}/lib/isc/include \
+--	${LFS_CFLAGS} ${LFS_LDFLAGS} \
+--	${BUILD_CPPFLAGS} ${BUILD_LDFLAGS} -o $@ ${srcdir}/gen.c \
+--	${BUILD_LIBS} ${LFS_LIBS}
+-+	${HOSTCC} ${HOST_CFLAGS} -I${top_srcdir}/lib/isc/include \
+-+	${HOST_LDFLAGS} -o $@ ${srcdir}/gen.c
+- 
+- timestamp: include libdns.@A@
+- 	touch timestamp
+--- 
+-2.29.1
+-
+diff --git a/package/bind/bind.hash b/package/bind/bind.hash
+index 482b046c8d..feb3430a73 100644
+--- a/package/bind/bind.hash
++++ b/package/bind/bind.hash
+@@ -1,4 +1,4 @@
+-# Verified from https://ftp.isc.org/isc/bind9/9.16.48/bind-9.16.48.tar.xz.asc
+-# with key AADBBA5074F1402F7B69D56BC5B4EE931A9F9DFD
+-sha256  8d3814582348f90dead1ad410b1019094cd399d3d83930abebb2b3b1eb0b2bbb  bind-9.16.48.tar.xz
+-sha256  13491a682dc0f5ee2273cebd3949e2be62f9470fe659419a03a308d4f444773b  COPYRIGHT
++# Verified from https://ftp.isc.org/isc/bind9/9.18.28/bind-9.18.28.tar.xz.asc
++# with key 706B6C28620E76F91D11F7DF510A642A06C52CEC
++sha256  e7cce9a165f7b619eefc4832f0a8dc16b005d29e3890aed6008c506ea286a5e7  bind-9.18.28.tar.xz
++sha256  9734825d67a3ac967b2c2f7c9a83c9e5db1c2474dbe9599157c3a4188749ebd4  COPYRIGHT
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index 0d81ffabd6..217c9916fd 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-BIND_VERSION = 9.16.48
++BIND_VERSION = 9.18.28
+ BIND_SOURCE= bind-$(BIND_VERSION).tar.xz
+ BIND_SITE = https://ftp.isc.org/isc/bind9/$(BIND_VERSION)
+ # bind does not support parallel builds.
+@@ -24,13 +24,14 @@ BIND_TARGET_SERVER_SBIN += lwresd named named-checkconf named-checkzone
+ BIND_TARGET_SERVER_SBIN += named-compilezone rndc rndc-confgen dnssec-dsfromkey
+ BIND_TARGET_SERVER_SBIN += dnssec-keyfromlabel dnssec-signzone tsig-keygen
+ BIND_TARGET_TOOLS_BIN = dig host nslookup nsupdate
+-BIND_CONF_ENV = \
+-	BUILD_CC="$(TARGET_CC)" \
+-	LIBS=`$(PKG_CONFIG_HOST_BINARY) --libs openssl`
++# avoid potential Debian 12 libtool 2.4.7 bug
++# https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=929396
++BIND_AUTORECONF = YES
+ BIND_CONF_OPTS = \
+ 	--without-cmocka \
+ 	--without-lmdb \
+ 	--enable-epoll \
++	--disable-doh \
+ 	--disable-backtrace \
+ 	--with-openssl=$(STAGING_DIR)/usr
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
