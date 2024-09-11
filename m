@@ -4,70 +4,76 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BBD4FEE499D
-	for <buildroot@archiver.kernel.org>; Wed, 11 Sep 2024 13:05:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 016DEEE49A5
+	for <buildroot@archiver.kernel.org>; Wed, 11 Sep 2024 13:18:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 787D9812F1;
-	Wed, 11 Sep 2024 13:05:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id A29798116B;
+	Wed, 11 Sep 2024 13:18:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UfCLNW4THuPG; Wed, 11 Sep 2024 13:05:46 +0000 (UTC)
+ id ZH-wWAhgk2fZ; Wed, 11 Sep 2024 13:18:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7F981812F3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C6AF981300
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7F981812F3;
-	Wed, 11 Sep 2024 13:05:46 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 659461BF342
- for <buildroot@lists.busybox.net>; Wed, 11 Sep 2024 13:05:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C6AF981300;
+	Wed, 11 Sep 2024 13:18:46 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 7AEC91BF342
+ for <buildroot@lists.busybox.net>; Wed, 11 Sep 2024 13:18:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5D70640CCF
- for <buildroot@lists.busybox.net>; Wed, 11 Sep 2024 13:05:44 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 69DA160A61
+ for <buildroot@lists.busybox.net>; Wed, 11 Sep 2024 13:18:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tR3pQQ-KBrb2 for <buildroot@lists.busybox.net>;
- Wed, 11 Sep 2024 13:05:43 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=163.172.193.142;
- helo=mail0.insia.net; envelope-from=guillaume.chaye@zeetim.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id BbkvXMtuxYpX for <buildroot@lists.busybox.net>;
+ Wed, 11 Sep 2024 13:18:43 +0000 (UTC)
+X-Greylist: delayed 351 seconds by postgrey-1.37 at util1.osuosl.org;
+ Wed, 11 Sep 2024 13:18:42 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 22992608D7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 22992608D7
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.243.197.30;
+ helo=mail.hostpark.net; envelope-from=christian@klarinett.li;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 5D4AE40480
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5D4AE40480
-Received: from mail0.insia.net (mail0.insia.net [163.172.193.142])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5D4AE40480
- for <buildroot@buildroot.org>; Wed, 11 Sep 2024 13:05:43 +0000 (UTC)
-Received: from smtp.insia.net (unknown [192.168.1.24])
- by mail0.insia.net (Postfix) with ESMTP id E096B1FFB0;
- Wed, 11 Sep 2024 15:04:36 +0200 (CEST)
-Received: from sb-dev-build.insia.net. (gw-servers.insia.net [192.168.1.1])
- by smtp.insia.net (Postfix) with ESMTP id 492BB5F497;
- Wed, 11 Sep 2024 15:00:33 +0200 (CEST)
-From: "Guillaume GC. Chaye" <guillaume.chaye@zeetim.com>
+Received: from mail.hostpark.net (mail.hostpark.net [212.243.197.30])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 22992608D7
+ for <buildroot@buildroot.org>; Wed, 11 Sep 2024 13:18:42 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by mail.hostpark.net (Postfix) with ESMTP id 8B91F164E2;
+ Wed, 11 Sep 2024 15:18:40 +0200 (CEST)
+X-Virus-Scanned: by Hostpark/NetZone Mailprotection at hostpark.net
+Received: from mail.hostpark.net ([127.0.0.1])
+ by localhost (mail0.hostpark.net [127.0.0.1]) (amavisd-new, port 10224)
+ with ESMTP id TlvOaWq2_QFF; Wed, 11 Sep 2024 15:18:40 +0200 (CEST)
+Received: from customer (localhost [127.0.0.1])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+ (No client certificate requested)
+ by mail.hostpark.net (Postfix) with ESMTPSA id 8E88E164DB;
+ Wed, 11 Sep 2024 15:18:36 +0200 (CEST)
 To: buildroot@buildroot.org
-Date: Wed, 11 Sep 2024 15:04:06 +0200
-Message-Id: <20240911130407.2925548-1-guillaume.chaye@zeetim.com>
-X-Mailer: git-send-email 2.39.2
+Date: Wed, 11 Sep 2024 15:18:29 +0200
+Message-ID: <20240911131830.2313769-1-christian@klarinett.li>
+X-Mailer: git-send-email 2.46.0
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=zeetim.com; s=mail0; t=1726059876;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding;
- bh=n9VBBjAg9QxjzArpuQw3tJdpjOkH3TBcukUeJ0SGSok=;
- b=Jvg3l3mHmiF9arU+MDbN1zmTtSoSozQbvibcnn9E61YPjwrn9LLbVXQGEOEtju+O6bzgDf
- GwqAW0hbor98ARDz7UtaU8aYM193iN36vUQGUhWb//4qlyUC6B5QTM2c0HGCn41CyayPqm
- N11WlJRmSXUd0qFTVY/pv0EmzRLsG0UPPXZCTM3VelGkUdYRIaAIe7iLb6vMT8y+SA2EuA
- E8opD1G3pszkZOh+kPHEnhPHKHCiGRFi+gLV7Jox2My2Ky8+hk09r+VecL7lEgJEVvdbSf
- 3vsNVzz4axXm3ap8sJjx3zl0ZUEvqUILyBpp3iMPFPEEX3cYHzAYGK3wGWcQRw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=zeetim.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=zeetim.com header.i=@zeetim.com header.a=rsa-sha256
- header.s=mail0 header.b=Jvg3l3mH
-Subject: [Buildroot] [PATCHv2 1/2] package/gdk-pixbuf: fix update cache hook
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=klarinett.li; h=
+ content-transfer-encoding:mime-version:x-mailer:message-id:date
+ :date:subject:subject:from:from; s=sel2011a; t=1726060720; bh=jA
+ 3fJp5TUs2++Fk6xoh6mAZTAZkdgmVzAL0ZZoIL1dM=; b=laZX10F3Vc8UM35BgX
+ d8kTfuQsL10IASRh8xDKX/jIu5tJY39k4jAAg8nSaxsGRzQ2HnpEOUhzBkB63VEE
+ G0g3D3T3SVnOiHcXrHTNFOWIuD0kzab9ojMRWBjqmDYTWSDtvNeari5tyOU1PEVd
+ 6lVPRWQcxxFzj0xAolUrmBgYA=
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=klarinett.li
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=klarinett.li header.i=@klarinett.li header.a=rsa-sha256
+ header.s=sel2011a header.b=laZX10F3
+Subject: [Buildroot] [PATCH] package/qt6/qt6svg: host variant depends on
+ host-qt6base
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,36 +85,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Guillaume GC. Chaye" <guillaume.chaye@zeetim.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
+From: Christian Hitz via buildroot <buildroot@buildroot.org>
+Reply-To: Christian Hitz <christian@klarinett.li>
+Cc: Christian Hitz <christian.hitz@bbv.ch>,
+ Jesse Van Gavere <jesseevg@gmail.com>,
+ Roy Kollen Svendsen <roykollensvendsen@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Move hook at the rootfs generation so all dependencies are
-correctly added in loaders.cache.
+From: Christian Hitz <christian.hitz@bbv.ch>
 
-Signed-off-by: Guillaume GC. Chaye <guillaume.chaye@zeetim.com>
+Signed-off-by: Christian Hitz <christian.hitz@bbv.ch>
 ---
- package/gdk-pixbuf/gdk-pixbuf.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/qt6/qt6svg/qt6svg.mk | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/package/gdk-pixbuf/gdk-pixbuf.mk b/package/gdk-pixbuf/gdk-pixbuf.mk
-index e041d2cbde..a8a21f0532 100644
---- a/package/gdk-pixbuf/gdk-pixbuf.mk
-+++ b/package/gdk-pixbuf/gdk-pixbuf.mk
-@@ -82,7 +82,7 @@ define GDK_PIXBUF_UPDATE_CACHE
- 	$(SED) 's,^"lib,"/usr/lib,g' \
- 		$(TARGET_DIR)/usr/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache
- endef
--GDK_PIXBUF_POST_INSTALL_TARGET_HOOKS += GDK_PIXBUF_UPDATE_CACHE
-+GDK_PIXBUF_ROOTFS_PRE_CMD_HOOKS += GDK_PIXBUF_UPDATE_CACHE
- endif
+diff --git a/package/qt6/qt6svg/qt6svg.mk b/package/qt6/qt6svg/qt6svg.mk
+index a9d7eaef51..08570c7f9c 100644
+--- a/package/qt6/qt6svg/qt6svg.mk
++++ b/package/qt6/qt6svg/qt6svg.mk
+@@ -36,5 +36,8 @@ QT6SVG_DEPENDENCIES = \
+ 	host-pkgconf \
+ 	qt6base
  
- # Target gdk-pixbuf needs loaders.cache populated to build for the
++HOST_QT6SVG_DEPENDENCIES = \
++	host-qt6base
++
+ $(eval $(cmake-package))
+ $(eval $(host-cmake-package))
 -- 
-2.39.2
+2.46.0
 
 _______________________________________________
 buildroot mailing list
