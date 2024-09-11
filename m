@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 741EDEE49AB
-	for <buildroot@archiver.kernel.org>; Wed, 11 Sep 2024 13:59:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1B0E4EE49B2
+	for <buildroot@archiver.kernel.org>; Wed, 11 Sep 2024 13:59:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2619840E16;
-	Wed, 11 Sep 2024 13:59:33 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D357F40F8D;
+	Wed, 11 Sep 2024 13:59:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AC_g9Ic57u3W; Wed, 11 Sep 2024 13:59:32 +0000 (UTC)
+ id w_O9vs9yKFri; Wed, 11 Sep 2024 13:59:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D122240DF8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 75A7C40F84
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D122240DF8;
-	Wed, 11 Sep 2024 13:59:31 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id DEA291BF342
- for <buildroot@lists.busybox.net>; Wed, 11 Sep 2024 13:59:20 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 75A7C40F84;
+	Wed, 11 Sep 2024 13:59:34 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 123CD1BF20B
+ for <buildroot@lists.busybox.net>; Wed, 11 Sep 2024 13:59:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id CD9B9811F5
- for <buildroot@lists.busybox.net>; Wed, 11 Sep 2024 13:59:20 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 016B0400FC
+ for <buildroot@lists.busybox.net>; Wed, 11 Sep 2024 13:59:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BaZoEjAXBeZ5 for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id maHvXJirP78D for <buildroot@lists.busybox.net>;
  Wed, 11 Sep 2024 13:59:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E3BD7811E8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EBBA240162
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id E3BD7811E8
+ by smtp2.osuosl.org (Postfix) with ESMTP id EBBA240162
  for <buildroot@buildroot.org>; Wed, 11 Sep 2024 13:59:19 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C5B7586F45; Wed, 11 Sep 2024 13:59:19 +0000 (UTC)
+ id E10A386F6A; Wed, 11 Sep 2024 13:59:19 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 11 Sep 2024 15:26:11 +0200
+Date: Wed, 11 Sep 2024 15:26:13 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3134f865e9e501d5466225c193c3e1145639e04e
-X-Git-Newrev: 0a88dd665d3f5949e9864441df0c5054df5c5454
+X-Git-Oldrev: ef07108bb840d9b51a3cd174aae605b914b7ab67
+X-Git-Newrev: 82f5b98f9ca774338aed20849964212a06a2afae
 X-Patchwork-Hint: ignore
-Message-Id: <20240911135919.C5B7586F45@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/perl-http-message: bump to version
- 6.46
+Message-Id: <20240911135919.E10A386F6A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/perl-mime-tools: bump to version
+ 5.515
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,42 +66,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0a88dd665d3f5949e9864441df0c5054df5c5454
+commit: https://git.buildroot.net/buildroot/commit/?id=82f5b98f9ca774338aed20849964212a06a2afae
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/perl-http-message/perl-http-message.hash | 4 ++--
- package/perl-http-message/perl-http-message.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/perl-mime-tools/perl-mime-tools.hash | 6 +++---
+ package/perl-mime-tools/perl-mime-tools.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/perl-http-message/perl-http-message.hash b/package/perl-http-message/perl-http-message.hash
-index b33e00e33e..f42d1432ad 100644
---- a/package/perl-http-message/perl-http-message.hash
-+++ b/package/perl-http-message/perl-http-message.hash
+diff --git a/package/perl-mime-tools/perl-mime-tools.hash b/package/perl-mime-tools/perl-mime-tools.hash
+index f67fe61549..0b3ce379f4 100644
+--- a/package/perl-mime-tools/perl-mime-tools.hash
++++ b/package/perl-mime-tools/perl-mime-tools.hash
 @@ -1,6 +1,6 @@
- # retrieved by scancpan from https://cpan.metacpan.org/
--md5  86c386bcc85a63c8908e6ae9967b34ee  HTTP-Message-6.45.tar.gz
--sha256  01cb8406612a3f738842d1e97313ae4d874870d1b8d6d66331f16000943d4cbe  HTTP-Message-6.45.tar.gz
-+md5  12a4bf7d993ba7b231df9a24f8bf3ec5  HTTP-Message-6.46.tar.gz
-+sha256  e27443434150d2d1259bb1e5c964429f61559b0ae34b5713090481994936e2a5  HTTP-Message-6.46.tar.gz
+-# retrieved by scancpan from http://cpan.metacpan.org/
+-md5  a2f0e07da2ff4b0478908544cc4b40fa  MIME-tools-5.509.tar.gz
+-sha256  64579f0c923d81d9a2194586e47c3475519e2646e4b5c102a8920759facf6973  MIME-tools-5.509.tar.gz
++# retrieved by scancpan from https://cpan.metacpan.org/
++md5  dbc3c9f982498c35d8a103af17c5b5c9  MIME-tools-5.515.tar.gz
++sha256  c1ba1dd9f0b2cd82a0e75caedec51e48233f9f01dc29a0971bdff1cb53be9013  MIME-tools-5.515.tar.gz
  
  # computed by scancpan
- sha256  553ecefc0ed6d4152809da8516960b9a12352c1c0d7d289ac4ab06d0bd0e67bb  LICENSE
-diff --git a/package/perl-http-message/perl-http-message.mk b/package/perl-http-message/perl-http-message.mk
-index 7fdba0b29e..2870c0c71d 100644
---- a/package/perl-http-message/perl-http-message.mk
-+++ b/package/perl-http-message/perl-http-message.mk
+ sha256  151cd94e37eb05239c5a678c7d1c4d9d5241a7c9c138760b85152bc1947e2b93  COPYING
+diff --git a/package/perl-mime-tools/perl-mime-tools.mk b/package/perl-mime-tools/perl-mime-tools.mk
+index 10279d7308..1b526be91d 100644
+--- a/package/perl-mime-tools/perl-mime-tools.mk
++++ b/package/perl-mime-tools/perl-mime-tools.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PERL_HTTP_MESSAGE_VERSION = 6.45
-+PERL_HTTP_MESSAGE_VERSION = 6.46
- PERL_HTTP_MESSAGE_SOURCE = HTTP-Message-$(PERL_HTTP_MESSAGE_VERSION).tar.gz
- PERL_HTTP_MESSAGE_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
- PERL_HTTP_MESSAGE_LICENSE = Artistic-1.0-Perl or GPL-1.0+
+-PERL_MIME_TOOLS_VERSION = 5.509
++PERL_MIME_TOOLS_VERSION = 5.515
+ PERL_MIME_TOOLS_SOURCE = MIME-tools-$(PERL_MIME_TOOLS_VERSION).tar.gz
+ PERL_MIME_TOOLS_SITE = $(BR2_CPAN_MIRROR)/authors/id/D/DS/DSKOLL
+ PERL_MIME_TOOLS_LICENSE = Artistic or GPL-1.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
