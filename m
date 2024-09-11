@@ -4,74 +4,94 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DC32DEE4982
-	for <buildroot@archiver.kernel.org>; Wed, 11 Sep 2024 09:38:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8F304EE4987
+	for <buildroot@archiver.kernel.org>; Wed, 11 Sep 2024 09:44:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 58C13412F5;
-	Wed, 11 Sep 2024 09:38:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 36E1440D87;
+	Wed, 11 Sep 2024 09:44:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2x9wmBX5pW9s; Wed, 11 Sep 2024 09:38:43 +0000 (UTC)
+ id OjCUZTH9_3IA; Wed, 11 Sep 2024 09:44:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EC299412F0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E8D9941260
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EC299412F0;
-	Wed, 11 Sep 2024 09:38:42 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E4E551BF3E5
- for <buildroot@lists.busybox.net>; Wed, 11 Sep 2024 09:38:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E8D9941260;
+	Wed, 11 Sep 2024 09:44:19 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 346BB1BF3E5
+ for <buildroot@lists.busybox.net>; Wed, 11 Sep 2024 09:44:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D00B5412CC
- for <buildroot@lists.busybox.net>; Wed, 11 Sep 2024 09:38:41 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 22AED4038B
+ for <buildroot@lists.busybox.net>; Wed, 11 Sep 2024 09:44:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GPFadsqezBRY for <buildroot@lists.busybox.net>;
- Wed, 11 Sep 2024 09:38:40 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=163.172.193.142;
- helo=mail0.insia.net; envelope-from=guillaume.chaye@zeetim.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 010FB412BC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 010FB412BC
-Received: from mail0.insia.net (mail0.insia.net [163.172.193.142])
- by smtp4.osuosl.org (Postfix) with ESMTP id 010FB412BC
- for <buildroot@buildroot.org>; Wed, 11 Sep 2024 09:38:39 +0000 (UTC)
-Received: from smtp.insia.net (unknown [192.168.1.24])
- by mail0.insia.net (Postfix) with ESMTP id DA3131FD20;
- Wed, 11 Sep 2024 11:38:33 +0200 (CEST)
-Received: from sb-dev-build.insia.net. (gw-servers.insia.net [192.168.1.1])
- by smtp.insia.net (Postfix) with ESMTP id 15EBF5F497;
- Wed, 11 Sep 2024 11:34:31 +0200 (CEST)
-From: "Guillaume GC. Chaye" <guillaume.chaye@zeetim.com>
-To: buildroot@buildroot.org
-Date: Wed, 11 Sep 2024 11:38:15 +0200
-Message-Id: <20240911093815.2915609-2-guillaume.chaye@zeetim.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240911093815.2915609-1-guillaume.chaye@zeetim.com>
-References: <20240911093815.2915609-1-guillaume.chaye@zeetim.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Mg3nesQ0cm6a for <buildroot@lists.busybox.net>;
+ Wed, 11 Sep 2024 09:44:16 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::12d; helo=mail-lf1-x12d.google.com;
+ envelope-from=romain.naour@smile.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 274C7400F6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 274C7400F6
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com
+ [IPv6:2a00:1450:4864:20::12d])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 274C7400F6
+ for <buildroot@buildroot.org>; Wed, 11 Sep 2024 09:44:15 +0000 (UTC)
+Received: by mail-lf1-x12d.google.com with SMTP id
+ 2adb3069b0e04-535dc4ec181so6260252e87.3
+ for <buildroot@buildroot.org>; Wed, 11 Sep 2024 02:44:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1726047853; x=1726652653;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=YTwNsHc4ooh2vIJUUMOeXnUBbcefVyvK+brQsdWKT58=;
+ b=xCYnuGeKuLVmLZrNyHw1sAu/cuQQwpoEZgGUxCJjXlBQ6tEBkZDESYR1Iyv/YGTsNl
+ 0+0C1dmayrgan4Oinr7GXDHsAHKEe+tzfOGcS3cXFfZJL2yeRd7LcEUBEVy56g88Emf7
+ RIBEYi+spBsGNJQ+4r8YaPh8HLqb9iXDGZQmKtxg60SyoQDogSy5zIpoxnhNoMv/2HA7
+ ClHUG2wXZfTpsmph3Std7wLYdwC79n27r36Hg1yLXY+wIRFCTbRFveNwN/gU1htU9yRK
+ K+hQukDWvDV6cMzzWCGtLQzU8iuTtZnPZXNvOnZpihpKkFn0d4WzcCWRdls7DPrXeyvv
+ V2Rw==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCWGtTA7TMwMo3a2LXi7bNU6WC+v72UkF7WBoBbOTZz1Wm+AYh/lMk3VKkqZDpIiMeoyKR9we1RnBfc=@buildroot.org
+X-Gm-Message-State: AOJu0Yz8FoT1007yY5tjZMAzzNmZ3/jlXbWDNfaI/cv1mFdB/FL+Qg1H
+ mww9+n5xlKSD/8TlKtQ4Py1/Gcqpa31ThxICDVJPo7WoeUd2lCruxpSE2WaWCIc=
+X-Google-Smtp-Source: AGHT+IFPXDBjTSyDqO9Z5144gIOW9xwMI0Cp56F6k/shwTEEDDncpJbojnsfUuzVJfWAi3NSjemntw==
+X-Received: by 2002:a05:6512:b25:b0:52f:159:2dc5 with SMTP id
+ 2adb3069b0e04-536587fc053mr8228891e87.42.1726047853086; 
+ Wed, 11 Sep 2024 02:44:13 -0700 (PDT)
+Received: from [10.5.90.17]
+ (static-css-ccs-204145.business.bouyguestelecom.com. [176.157.204.145])
+ by smtp.gmail.com with ESMTPSA id
+ 2adb3069b0e04-5365f914008sm1520675e87.304.2024.09.11.02.44.12
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Wed, 11 Sep 2024 02:44:12 -0700 (PDT)
+Message-ID: <93c0a59a-f9b7-4dfb-92cc-d381f6aae6e5@smile.fr>
+Date: Wed, 11 Sep 2024 11:44:11 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Waldemar Brodkorb <wbx@openadk.org>, buildroot@buildroot.org
+References: <ZuFeS3LE0/MttrzN@waldemar-brodkorb.de>
+Content-Language: fr
+In-Reply-To: <ZuFeS3LE0/MttrzN@waldemar-brodkorb.de>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=zeetim.com; s=mail0; t=1726047513;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=fgJOj4jH9widYs4FUan40LY0dTmApVKh8Ynz3XQX7Zg=;
- b=rT9yWvermWyyNRkaVTvVXyxoLPFkmvZiD2YBzlhpsOJNpPztvFviIwyIKEtJ2vN71tQuQA
- 6GjsBGm36Ff8ty3mrahIdC8abTLBoavctt/uUOo98LhTcG+IW5EY6OHDbK6GBloTeO/hmw
- OsF8b129ben1wAlmZkyU8vMSocL+czJFxDDHUK5R9iSjCWGRNW6XMTjGKBGde1y0DXz5z5
- FgdvUuiI+vAQI+GBDQ9+UeNc3l7dayisPJVxNHQNEjKlRjc3KqC+eghLXKKj0+3vt3/sG5
- GPY07rU0jQ+umGE1VaunZB9Eip8yd/FesnE14qeCpI5/HhuKEeGnVbKL3asciQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=zeetim.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=zeetim.com header.i=@zeetim.com header.a=rsa-sha256
- header.s=mail0 header.b=rT9yWver
-Subject: [Buildroot] [PATCHv3 2/2] package/efitools: efitools is a set of
- utilities to manipulate efi variables
+ d=smile.fr; s=google; t=1726047853; x=1726652653; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:to:subject:user-agent:mime-version:date:message-id:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=YTwNsHc4ooh2vIJUUMOeXnUBbcefVyvK+brQsdWKT58=;
+ b=W1CpGbzZJGXORqk03hjWSQez91vtGuJwUmJgRCcfU4PDdD+oaNa7D9NxRonzxNT5q3
+ BJKbdjyoAJblCKDf+j4k0DyYDx4XElme/TaF98Dn0gQczMK2Ab8PurkOHunrgks0uzrK
+ tUt4cygiB/1il8sPmrZSpQtqrofNsKhdreRdc=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=smile.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
+ header.s=google header.b=W1CpGbzZ
+Subject: Re: [Buildroot] [PATCH] package/qemu: update to 9.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,282 +103,66 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Guillaume GC. Chaye" <guillaume.chaye@zeetim.com>,
- Christopher McCrory <chrismcc@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: Romain Naour via buildroot <buildroot@buildroot.org>
+Reply-To: Romain Naour <romain.naour@smile.fr>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Guillaume GC. Chaye <guillaume.chaye@zeetim.com>
----
- package/Config.in                             |  1 +
- ...ve-EFISIGNED-variable-from-makefiles.patch | 58 +++++++++++++++
- ...d-SYSROOT_DIR-variable-to-Make.rules.patch | 43 +++++++++++
- ...-to-efi-updatevar-to-read-from-stdin.patch | 73 +++++++++++++++++++
- package/efitools/Config.in                    | 14 ++++
- package/efitools/efitools.mk                  | 20 +++++
- 6 files changed, 209 insertions(+)
- create mode 100644 package/efitools/0001-Remove-EFISIGNED-variable-from-makefiles.patch
- create mode 100644 package/efitools/0002-Add-SYSROOT_DIR-variable-to-Make.rules.patch
- create mode 100644 package/efitools/0003-Add-option-to-efi-updatevar-to-read-from-stdin.patch
- create mode 100644 package/efitools/Config.in
- create mode 100644 package/efitools/efitools.mk
-
-diff --git a/package/Config.in b/package/Config.in
-index f33c4780f8..a6e56a6d74 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -505,6 +505,7 @@ endmenu
- 	source "package/edid-decode/Config.in"
- 	source "package/edk2-non-osi/Config.in"
- 	source "package/edk2-platforms/Config.in"
-+	source "package/efitools/Config.in"
- 	source "package/esp-hosted/Config.in"
- 	source "package/espflash/Config.in"
- 	source "package/eudev/Config.in"
-diff --git a/package/efitools/0001-Remove-EFISIGNED-variable-from-makefiles.patch b/package/efitools/0001-Remove-EFISIGNED-variable-from-makefiles.patch
-new file mode 100644
-index 0000000000..b2ba1ed2e4
---- /dev/null
-+++ b/package/efitools/0001-Remove-EFISIGNED-variable-from-makefiles.patch
-@@ -0,0 +1,58 @@
-+From ec1b602d119f17ebb62d0d841eec1d93313f54aa Mon Sep 17 00:00:00 2001
-+From: "Guillaume GC. Chaye" <guillaume.chaye@zeetim.com>
-+Date: Wed, 11 Sep 2024 10:32:07 +0200
-+Subject: [PATCH 1/3] efitools: remove EFISIGNED variable from makefiles
-+
-+Efitools sign efi files with a key generated during build.
-+We disable it to remove a build dependencie to sbsigntools.
-+These signed files were not actually installed to the target.
-+
-+Signed-off-by: Guillaume GC. Chaye <guillaume.chaye@zeetim.com>
-+---
-+ Make.rules | 10 ----------
-+ Makefile   |  4 +---
-+ 2 files changed, 1 insertion(+), 13 deletions(-)
-+
-+diff --git a/Make.rules b/Make.rules
-+index 903a5a4..8c06be8 100644
-+--- a/Make.rules
-++++ b/Make.rules
-+@@ -1,4 +1,3 @@
-+-EFISIGNED = $(patsubst %.efi,%-signed.efi,$(EFIFILES))
-+ MANPAGES = $(patsubst doc/%.1.in,doc/%.1,$(wildcard doc/*.1.in))
-+ HELP2MAN = help2man
-+ ARCH	 = $(shell uname -m | sed 's/i.86/ia32/;s/arm.*/arm/')
-+@@ -119,15 +118,6 @@ getvar = $(shell if [ "$(1)" = "PK" -o "$(1)" = "KEK" ]; then echo $(1); else ec
-+ %-subkey.crt: %-subkey.csr KEK.crt
-+ 	openssl x509 -req -in $< -CA DB.crt -CAkey DB.key -set_serial 1 -out $@ -days 365
-+ 
-+-%-signed.efi: %.efi DB.crt
-+-	sbsign --key DB.key --cert DB.crt --output $@ $<
-+-
-+-##
-+-# No need for KEK signing
-+-##
-+-#%-kek-signed.efi: %.efi KEK.crt
-+-#	sbsign --key KEK.key --cert KEK.crt --output $@ $<
-+-
-+ %.a:
-+ 	ar rcv $@ $^
-+ 
-+diff --git a/Makefile b/Makefile
-+index 7d471da..79dc603 100644
-+--- a/Makefile
-++++ b/Makefile
-+@@ -25,9 +25,7 @@ export TOPDIR	:= $(shell pwd)/
-+ 
-+ include Make.rules
-+ 
-+-EFISIGNED = $(patsubst %.efi,%-signed.efi,$(EFIFILES))
-+-
-+-all: $(EFISIGNED) $(BINARIES) $(MANPAGES) noPK.auth $(KEYAUTH) \
-++all: $(EFIFILES) $(BINARIES) $(MANPAGES) noPK.auth $(KEYAUTH) \
-+ 	$(KEYUPDATEAUTH) $(KEYBLACKLISTAUTH) $(KEYHASHBLACKLISTAUTH)
-+ 
-+ 
-+-- 
-+2.39.2
-+
-diff --git a/package/efitools/0002-Add-SYSROOT_DIR-variable-to-Make.rules.patch b/package/efitools/0002-Add-SYSROOT_DIR-variable-to-Make.rules.patch
-new file mode 100644
-index 0000000000..699ed1bc08
---- /dev/null
-+++ b/package/efitools/0002-Add-SYSROOT_DIR-variable-to-Make.rules.patch
-@@ -0,0 +1,43 @@
-+From aed26937117cf569a1274fb818c1f1846dab0e05 Mon Sep 17 00:00:00 2001
-+From: "Guillaume GC. Chaye" <guillaume.chaye@zeetim.com>
-+Date: Wed, 11 Sep 2024 10:41:45 +0200
-+Subject: [PATCH 2/3] efitools: Add SYSROOT_DIR variable to Make.rules
-+
-+We need to be able to change the root directory of include paths and library
-+paths in order to cross compile efitools
-+
-+Signed-off-by: Guillaume GC. Chaye <guillaume.chaye@zeetim.com>
-+---
-+ Make.rules | 7 ++++---
-+ 1 file changed, 4 insertions(+), 3 deletions(-)
-+
-+diff --git a/Make.rules b/Make.rules
-+index 8c06be8..d7cd20b 100644
-+--- a/Make.rules
-++++ b/Make.rules
-+@@ -12,18 +12,19 @@ ARCH3264 =
-+ else
-+ $(error unknown architecture $(ARCH))
-+ endif
-+-INCDIR	   = -I$(TOPDIR)include/ -I/usr/include/efi -I/usr/include/efi/$(ARCH) -I/usr/include/efi/protocol
-++SYSROOT_DIR=
-++INCDIR	   = -I$(TOPDIR)include/ -I$(SYSROOT_DIR)/usr/include -I$(SYSROOT_DIR)/usr/include/efi -I$(SYSROOT_DIR)/usr/include/efi/$(ARCH) -I$(SYSROOT_DIR)/usr/include/efi/protocol
-+ CPPFLAGS   = -DCONFIG_$(ARCH)
-+ CFLAGS	   = -O2 -g $(ARCH3264) -fpic -Wall -fshort-wchar -fno-strict-aliasing -fno-merge-constants -fno-stack-protector -ffreestanding -fno-stack-check
-+ LDFLAGS	   = -nostdlib
-+ CRTOBJ		= crt0-efi-$(ARCH).o
-+-CRTPATHS	= /lib /lib64 /lib/efi /lib64/efi /usr/lib /usr/lib64 /usr/lib/efi /usr/lib64/efi /usr/lib/gnuefi /usr/lib64/gnuefi
-++CRTPATHS	= $(SYSROOT_DIR)/lib $(SYSROOT_DIR)/lib64 $(SYSROOT_DIR)/lib/efi $(SYSROOT_DIR)/lib64/efi $(SYSROOT_DIR)/usr/lib $(SYSROOT_DIR)/usr/lib64 $(SYSROOT_DIR)/usr/lib/efi $(SYSROOT_DIR)/usr/lib64/efi $(SYSROOT_DIR)/usr/lib/gnuefi $(SYSROOT_DIR)/usr/lib64/gnuefi
-+ CRTPATH		= $(shell for f in $(CRTPATHS); do if [ -e $$f/$(CRTOBJ) ]; then echo $$f; break; fi; done)
-+ CRTOBJS		= $(CRTPATH)/$(CRTOBJ)
-+ # there's a bug in the gnu tools ... the .reloc section has to be
-+ # aligned otherwise the file alignment gets screwed up
-+ LDSCRIPT	= elf_$(ARCH)_efi.lds
-+-LDFLAGS		+= -shared -Bsymbolic $(CRTOBJS) -L $(CRTPATH) -L /usr/lib -L /usr/lib64 -T $(LDSCRIPT)
-++LDFLAGS		+= -shared -Bsymbolic $(CRTOBJS) -L $(CRTPATH) -L $(SYSROOT_DIR)/usr/lib -L $(SYSROOT_DIR)/usr/lib64 -T $(LDSCRIPT)
-+ LOADLIBES	= -lefi -lgnuefi $(shell $(CC) $(ARCH3264) -print-libgcc-file-name)
-+ FORMAT		= --target=efi-app-$(ARCH)
-+ OBJCOPY		= objcopy
-+-- 
-+2.39.2
-+
-diff --git a/package/efitools/0003-Add-option-to-efi-updatevar-to-read-from-stdin.patch b/package/efitools/0003-Add-option-to-efi-updatevar-to-read-from-stdin.patch
-new file mode 100644
-index 0000000000..d486eb4a88
---- /dev/null
-+++ b/package/efitools/0003-Add-option-to-efi-updatevar-to-read-from-stdin.patch
-@@ -0,0 +1,73 @@
-+From 3c7fbc5e24634e229ea785e106382cef4c8eec5c Mon Sep 17 00:00:00 2001
-+From: "Guillaume GC. Chaye" <guillaume.chaye@zeetim.com>
-+Date: Wed, 11 Sep 2024 10:52:19 +0200
-+Subject: [PATCH 3/3] efitools: add option to efi-updatevar to read from stdin
-+ using -f- option
-+
-+The option "-f /dev/stdin" is actually not working.
-+This patch allow to pipe keys in your script without having errors.
-+
-+Signed-off-by: Guillaume GC. Chaye <guillaume.chaye@zeetim.com>
-+---
-+ efi-updatevar.c | 17 +++++++++++++++--
-+ 1 file changed, 15 insertions(+), 2 deletions(-)
-+
-+diff --git a/efi-updatevar.c b/efi-updatevar.c
-+index 4247105..89d7c92 100644
-+--- a/efi-updatevar.c
-++++ b/efi-updatevar.c
-+@@ -14,6 +14,7 @@
-+ #include <sys/stat.h>
-+ #include <fcntl.h>
-+ #include <unistd.h>
-++#include <stdbool.h>
-+ 
-+ #include <openssl/x509.h>
-+ #include <openssl/bio.h>
-+@@ -72,6 +73,7 @@ main(int argc, char *argv[])
-+ 		| EFI_VARIABLE_TIME_BASED_AUTHENTICATED_WRITE_ACCESS;
-+ 	char *hash_mode = NULL, *file = NULL, *var, *progname = argv[0], *buf,
-+ 		*name, *crt_file = NULL, *key_file = NULL;
-++	bool read_stdin=false;
-+ 	
-+ 
-+ 	while (argc > 1 && argv[1][0] == '-') {
-+@@ -97,6 +99,10 @@ main(int argc, char *argv[])
-+ 			file = argv[2];
-+ 			argv += 2;
-+ 			argc -= 2;
-++		} else if (strcmp(argv[1], "-f-") == 0) {
-++			read_stdin=true;
-++			argv += 1;
-++			argc -= 1;
-+ 		} else if (strcmp(argv[1], "-g") == 0) {
-+ 			if (str_to_guid(argv[2], &guid)) {
-+ 				fprintf(stderr, "Invalid GUID %s\n", argv[2]);
-+@@ -147,7 +153,7 @@ main(int argc, char *argv[])
-+ 		exit(1);
-+ 	}
-+ 
-+-	if (delsig == -1 && (!!file + !!hash_mode + !!crt_file != 1)) {
-++	if (delsig == -1 && !read_stdin && (!!file + !!hash_mode + !!crt_file != 1)) {
-+ 		fprintf(stderr, "must specify exactly one of -f, -b or -c\n");
-+ 		exit(1);
-+ 	}
-+@@ -219,7 +225,14 @@ main(int argc, char *argv[])
-+ 		buf = malloc(st.st_size);
-+ 		read(fd, buf, st.st_size);
-+ 		close(fd);
-+-	} else {
-++	}else if (read_stdin){
-++		buf=malloc(0x400);
-++		st.st_size=0;
-++		while (read(STDIN_FILENO,buf+st.st_size,1)){
-++			st.st_size++;
-++			if (!(st.st_size&0x3FF)) buf=realloc(buf,st.st_size+0x400);
-++		}
-++	}else {
-+ 		X509 *X = NULL;
-+ 		BIO *bio;
-+ 		char *crt_file_ext = &crt_file[strlen(crt_file) - 4];
-+-- 
-+2.39.2
-+
-diff --git a/package/efitools/Config.in b/package/efitools/Config.in
-new file mode 100644
-index 0000000000..5b8fdc9145
---- /dev/null
-+++ b/package/efitools/Config.in
-@@ -0,0 +1,14 @@
-+config BR2_PACKAGE_EFITOOLS
-+    bool "efitools"
-+    depends on BR2_PACKAGE_GNU_EFI_ARCH_SUPPORTS
-+    select BR2_PACKAGE_GNU_EFI
-+    select BR2_PACKAGE_OPENSSL
-+    select BR2_PACKAGE_LIBOPENSSL
-+    select BR2_PACKAGE_LIBOPENSSL_ENGINES
-+    help
-+        A variety of tools for manipulating keys and binary signatures
-+        on UEFI secure boot platforms. The tools provide access to the 
-+        keys and certificates stored in the secure variables of the 
-+        UEFI firmware, usually in the NVRAM area.
-+
-+        https://git.kernel.org/pub/scm/linux/kernel/git/jejb/efitools.git
-diff --git a/package/efitools/efitools.mk b/package/efitools/efitools.mk
-new file mode 100644
-index 0000000000..0f90de16a0
---- /dev/null
-+++ b/package/efitools/efitools.mk
-@@ -0,0 +1,20 @@
-+################################################################################
-+#
-+# efitools
-+#
-+################################################################################
-+
-+EFITOOLS_VERSION = 1.9.2
-+EFITOOLS_SITE = https://git.kernel.org/pub/scm/linux/kernel/git/jejb/efitools.git/snapshot
-+EFITOOLS_LICENSE = GPL-2.0
-+EFITOOLS_DEPENDENCIES = gnu-efi openssl host-perl-file-slurp
-+
-+define EFITOOLS_BUILD_CMDS
-+	cd $(@D); $(TARGET_CONFIGURE_OPTS) $(MAKE) SYSROOT_DIR=$(STAGING_DIR)
-+endef
-+
-+define EFITOOLS_INSTALL_TARGET_CMDS
-+	cd $(@D); $(TARGET_MAKE_ENV) $(MAKE) install DESTDIR=$(TARGET_DIR)
-+endef
-+
-+$(eval $(generic-package))
--- 
-2.39.2
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGVsbG8gV2FsZGVtYXIsCgpMZSAxMS8wOS8yMDI0IMOgIDExOjA5LCBXYWxkZW1hciBCcm9ka29y
+YiBhIMOpY3JpdMKgOgo+IFNlZSBoZXJlIGZvciBjaGFuZ2VzOgo+IGh0dHBzOi8vd2lraS5xZW11
+Lm9yZy9DaGFuZ2VMb2cvOS4xCj4gCj4gVGhlIHN1cHBvcnQgZm9yIHRoZSBuaW9zMiBhcmNoaXRl
+Y3R1cmUgZ290IHJlbW92ZWQuCgpXZSBuZWVkIHRvIHJlbW92ZSBob3N0LXFlbXUgZnJvbSB0aGUg
+cWVtdV9uaW9zMl8xMG01MF9kZWZjb25maWcgb3Igc2ltcGx5IHJlbW92ZQp0aGlzIGRlZmNvbmZp
+ZyBzaW5jZSB0aGUgcWVtdSBzdXBwb3J0IGlzIGdvbmUuCgpBYm91dCBxZW11IHBhY2thZ2UsIGl0
+IHNlZW1zIHRoYXQgdGhlIHFlbXVfYWFyY2g2NF9zYnNhX2RlZmNvbmZpZyBkb2Vzbid0IGJvb3QK
+YW55bW9yZSBbMV0gc2luY2UgdGhlIHFlbXUgdmVyc2lvbiBidW1wIDkuMCBbMl0uCgpbMV0KaHR0
+cHM6Ly9naXRsYWIuY29tL2J1aWxkcm9vdC5vcmcvYnVpbGRyb290Ly0vam9icz9uYW1lPXFlbXVf
+YWFyY2g2NF9zYnNhX2RlZmNvbmZpZysKClsyXQpodHRwczovL2dpdGxhYi5jb20vYnVpbGRyb290
+Lm9yZy9idWlsZHJvb3QvLS9jb21taXQvMTAzYTU1MDI4Yzc1ZGFjZTMxMjQ3MGJhMDVhMTk3ODg2
+YzZiNjEwMAoKSXQgc2VlbXMgdGhpcyBkZWZjb25maWcgbmVlZHMgYW4gQVRGL0VESzIgdXBkYXRl
+IHRvIGJvb3Qgd2l0aCBxZW11ID49IDkuMC4KCkNhbiB5b3UgaGF2ZSBhIGxvb2s/CgpCZXN0IHJl
+Z2FyZHMsClJvbWFpbgoKCj4gCj4gU2lnbmVkLW9mZi1ieTogV2FsZGVtYXIgQnJvZGtvcmIgPHdi
+eEBvcGVuYWRrLm9yZz4KPiAtLS0KPiAgcGFja2FnZS9xZW11L0NvbmZpZy5pbiAgICAgIHwgNSAt
+LS0tLQo+ICBwYWNrYWdlL3FlbXUvQ29uZmlnLmluLmhvc3QgfCAxIC0KPiAgcGFja2FnZS9xZW11
+L3FlbXUuaGFzaCAgICAgIHwgMiArLQo+ICBwYWNrYWdlL3FlbXUvcWVtdS5tayAgICAgICAgfCAy
+ICstCj4gIDQgZmlsZXMgY2hhbmdlZCwgMiBpbnNlcnRpb25zKCspLCA4IGRlbGV0aW9ucygtKQo+
+IAo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL3FlbXUvQ29uZmlnLmluIGIvcGFja2FnZS9xZW11L0Nv
+bmZpZy5pbgo+IGluZGV4IDYwOGU0ZDQyOWQuLjJkMTVhYjFlYTkgMTAwNjQ0Cj4gLS0tIGEvcGFj
+a2FnZS9xZW11L0NvbmZpZy5pbgo+ICsrKyBiL3BhY2thZ2UvcWVtdS9Db25maWcuaW4KPiBAQCAt
+MjUyLDExICsyNTIsNiBAQCBjb25maWcgQlIyX1BBQ0tBR0VfUUVNVV9UQVJHRVRfTUlQU04zMkVM
+Cj4gIAloZWxwCj4gIAkgIE1JUFMgTjMyIGFyY2hpdGVjdHVyZSwgbGl0dGxlLWVuZGlhbi4KPiAg
+Cj4gLWNvbmZpZyBCUjJfUEFDS0FHRV9RRU1VX1RBUkdFVF9OSU9TMgo+IC0JYm9vbCAibmlvczIi
+Cj4gLQloZWxwCj4gLQkgIE5pb3MgSUkgYXJjaGl0ZWN0dXJlLgo+IC0KPiAgY29uZmlnIEJSMl9Q
+QUNLQUdFX1FFTVVfVEFSR0VUX09SMUsKPiAgCWJvb2wgIm9yMWsiCj4gIAlzZWxlY3QgQlIyX1BB
+Q0tBR0VfUUVNVV9GRFQgaWYgQlIyX1BBQ0tBR0VfUUVNVV9TWVNURU0KPiBkaWZmIC0tZ2l0IGEv
+cGFja2FnZS9xZW11L0NvbmZpZy5pbi5ob3N0IGIvcGFja2FnZS9xZW11L0NvbmZpZy5pbi5ob3N0
+Cj4gaW5kZXggOGRkMGM3ZDExYi4uNGRiMTE0NDkwYSAxMDA2NDQKPiAtLS0gYS9wYWNrYWdlL3Fl
+bXUvQ29uZmlnLmluLmhvc3QKPiArKysgYi9wYWNrYWdlL3FlbXUvQ29uZmlnLmluLmhvc3QKPiBA
+QCAtOSw3ICs5LDYgQEAgY29uZmlnIEJSMl9QQUNLQUdFX0hPU1RfUUVNVV9BUkNIX1NVUFBPUlRT
+Cj4gIAlkZWZhdWx0IHkgaWYgQlIyX21pY3JvYmxhemViZQo+ICAJZGVmYXVsdCB5IGlmIEJSMl9t
+aXBzCj4gIAlkZWZhdWx0IHkgaWYgQlIyX21pcHNlbAo+IC0JZGVmYXVsdCB5IGlmIEJSMl9uaW9z
+Mgo+ICAJZGVmYXVsdCB5IGlmIEJSMl9vcjFrCj4gIAlkZWZhdWx0IHkgaWYgQlIyX3Bvd2VycGMK
+PiAgCWRlZmF1bHQgeSBpZiBCUjJfcG93ZXJwYzY0Cj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvcWVt
+dS9xZW11Lmhhc2ggYi9wYWNrYWdlL3FlbXUvcWVtdS5oYXNoCj4gaW5kZXggNDE5ZGQwZDFiMy4u
+MTY5ZmUwNTA2OCAxMDA2NDQKPiAtLS0gYS9wYWNrYWdlL3FlbXUvcWVtdS5oYXNoCj4gKysrIGIv
+cGFja2FnZS9xZW11L3FlbXUuaGFzaAo+IEBAIC0xLDQgKzEsNCBAQAo+ICAjIExvY2FsbHkgY29t
+cHV0ZWQsIHRhcmJhbGwgdmVyaWZpZWQgd2l0aCBHUEcgc2lnbmF0dXJlCj4gLXNoYTI1NiAgYThj
+M2Y1OTZhZWNlOTZkYTNiMDBjYWZiNzRiYWFmYTBkMTQ1MTVlYWZiOGVkMWVlM2Y3ZjVjMmQwZWJm
+MDJiNiAgcWVtdS05LjAuMi50YXIueHoKPiArc2hhMjU2ICA4MTZiNzAyMmE4YmE3YzJhYzMwZTJl
+MGNmOTczZTgyNmY2YmNjODUwNTMzOTYwMzIxMmM1ZWRlOGU5NGQ3ODM0ICBxZW11LTkuMS4wLnRh
+ci54ego+ICBzaGEyNTYgIDZmMDRhZTgzNjRkMDA3OWExOTJiMTQ2MzVmNGIxZGEyOTRjZTE4NzI0
+YzAzNGMzOWE2YTQxZDFiMDlkZjYxMDAgIENPUFlJTkcKPiAgc2hhMjU2ICBkYzYyNjUyMGRjZDUz
+YTIyZjcyN2FmM2VlNDJjNzcwZTU2Yzk3YTY0ZmUzYWRiMDYzNzk5ZDhhYjAzMmZlNTUxICBDT1BZ
+SU5HLkxJQgo+IGRpZmYgLS1naXQgYS9wYWNrYWdlL3FlbXUvcWVtdS5tayBiL3BhY2thZ2UvcWVt
+dS9xZW11Lm1rCj4gaW5kZXggMTZjZmYxM2QxOC4uZTlmNjUyMGQ4OSAxMDA2NDQKPiAtLS0gYS9w
+YWNrYWdlL3FlbXUvcWVtdS5tawo+ICsrKyBiL3BhY2thZ2UvcWVtdS9xZW11Lm1rCj4gQEAgLTYs
+NyArNiw3IEBACj4gIAo+ICAjIFdoZW4gdXBkYXRpbmcgdGhlIHZlcnNpb24sIGNoZWNrIHdoZXRo
+ZXIgdGhlIGxpc3Qgb2Ygc3VwcG9ydGVkIHRhcmdldHMKPiAgIyBuZWVkcyB0byBiZSB1cGRhdGVk
+Lgo+IC1RRU1VX1ZFUlNJT04gPSA5LjAuMgo+ICtRRU1VX1ZFUlNJT04gPSA5LjEuMAo+ICBRRU1V
+X1NPVVJDRSA9IHFlbXUtJChRRU1VX1ZFUlNJT04pLnRhci54ego+ICBRRU1VX1NJVEUgPSBodHRw
+czovL2Rvd25sb2FkLnFlbXUub3JnCj4gIFFFTVVfU0VMSU5VWF9NT0RVTEVTID0gcWVtdSB2aXJ0
+CgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJv
+b3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVp
+bGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
