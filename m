@@ -4,71 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2D9EEE49A9
-	for <buildroot@archiver.kernel.org>; Wed, 11 Sep 2024 13:52:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10C8CEE49AB
+	for <buildroot@archiver.kernel.org>; Wed, 11 Sep 2024 13:59:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7145840162;
-	Wed, 11 Sep 2024 13:52:51 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B0192400FC;
+	Wed, 11 Sep 2024 13:59:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4VpVRIhsrBEl; Wed, 11 Sep 2024 13:52:50 +0000 (UTC)
+ id SBLxXtGeui36; Wed, 11 Sep 2024 13:59:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5026F40DF5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 63F9940162
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5026F40DF5;
-	Wed, 11 Sep 2024 13:52:50 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 543371BF342
- for <buildroot@lists.busybox.net>; Wed, 11 Sep 2024 13:52:49 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 63F9940162;
+	Wed, 11 Sep 2024 13:59:21 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 8DDCE1BF20B
+ for <buildroot@lists.busybox.net>; Wed, 11 Sep 2024 13:59:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4F9974022B
- for <buildroot@lists.busybox.net>; Wed, 11 Sep 2024 13:52:49 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7C5CA60B46
+ for <buildroot@lists.busybox.net>; Wed, 11 Sep 2024 13:59:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eYAN562tz2RX for <buildroot@lists.busybox.net>;
- Wed, 11 Sep 2024 13:52:48 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=188.165.44.123;
- helo=mail1.insia.net; envelope-from=guillaume.chaye@zeetim.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id e3E9b8i6az5A for <buildroot@lists.busybox.net>;
+ Wed, 11 Sep 2024 13:59:19 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 3F631401B0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3F631401B0
-Received: from mail1.insia.net (mail1.insia.net [188.165.44.123])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 3F631401B0
- for <buildroot@buildroot.org>; Wed, 11 Sep 2024 13:52:48 +0000 (UTC)
-Received: from smtp.insia.net (unknown [192.168.1.24])
- by mail1.insia.net (Postfix) with ESMTP id 7E2DF3FB23;
- Wed, 11 Sep 2024 15:52:41 +0200 (CEST)
-Received: from sb-dev-build.insia.net. (gw-servers.insia.net [192.168.1.1])
- by smtp.insia.net (Postfix) with ESMTP id B5DC55F497;
- Wed, 11 Sep 2024 15:48:37 +0200 (CEST)
-From: "Guillaume GC. Chaye" <guillaume.chaye@zeetim.com>
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A9045605EB
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id A9045605EB
+ for <buildroot@buildroot.org>; Wed, 11 Sep 2024 13:59:19 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 934BA86F45; Wed, 11 Sep 2024 13:59:19 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 11 Sep 2024 15:52:34 +0200
-Message-Id: <20240911135234.2928130-1-guillaume.chaye@zeetim.com>
-X-Mailer: git-send-email 2.39.2
-MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=zeetim.com; s=mail1; t=1726062761;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding;
- bh=OUCCVE67dLmfVmuSF0E6v3PvLgtU78SudE7nfDmbV2I=;
- b=VrWrfGdyUHeK64HqV211NVZ+prNX5gt8L6r21G5Z/CVEP4ge4XfPcVcHpor9OssLUPQHNE
- Qs+pAZm5qpb+MkZJ68jO4AkeCxEfR9ecWAgDDBUzAObLK0apNIf+V9lSqSt/SrPYBwgWtC
- 5+ad9ZeqMlgYZAVMmk3L84ykAcTexbIgh/qNkQE2rxOby3NK2YMjb5zhIZny//jWx1Qyr3
- S9HQ9vMCQxualNXaWS/YcmEGLj9h90VqUv639AC7KqKIYaoHiIf8cfLQBi9xnqVnTndC6m
- NgazYMpTDEcgbCUj8Z4HzzW0eye3jvFgU4uxs7a5DUIsLj4h/9era2EVOJOJJw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=zeetim.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=zeetim.com header.i=@zeetim.com header.a=rsa-sha256
- header.s=mail1 header.b=VrWrfGdy
-Subject: [Buildroot] [PATCHv2 1/1] package/wpa_supplicant: add configuration
- for WPA3-Entreprise
+Date: Wed, 11 Sep 2024 15:26:07 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: ffc872d5f87a565a766ac21cd9d4b2a54c9b4f48
+X-Git-Newrev: 82678ddb2acf5f149d1456011343ad73787db8de
+X-Patchwork-Hint: ignore
+Message-Id: <20240911135919.934BA86F45@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/perl-clone: bump to version 0.47
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,56 +57,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Guillaume GC. Chaye" <guillaume.chaye@zeetim.com>,
- Sergey Matyukevich <geomatsi@gmail.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Guillaume GC. Chaye <guillaume.chaye@zeetim.com>
+commit: https://git.buildroot.net/buildroot/commit/?id=82678ddb2acf5f149d1456011343ad73787db8de
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/wpa_supplicant/wpa_supplicant.mk | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
+ package/perl-clone/perl-clone.hash | 4 ++--
+ package/perl-clone/perl-clone.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
-index 984959f679..dbd8eea690 100644
---- a/package/wpa_supplicant/wpa_supplicant.mk
-+++ b/package/wpa_supplicant/wpa_supplicant.mk
-@@ -126,18 +126,28 @@ ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_WPS),)
- WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_WPS
- endif
+diff --git a/package/perl-clone/perl-clone.hash b/package/perl-clone/perl-clone.hash
+index 7b69b97d06..2cd62648a8 100644
+--- a/package/perl-clone/perl-clone.hash
++++ b/package/perl-clone/perl-clone.hash
+@@ -1,6 +1,6 @@
+ # retrieved by scancpan from https://cpan.metacpan.org/
+-md5  cafa8984a2c2e005e54b27dd1e3f0afe  Clone-0.46.tar.gz
+-sha256  aadeed5e4c8bd6bbdf68c0dd0066cb513e16ab9e5b4382dc4a0aafd55890697b  Clone-0.46.tar.gz
++md5  62ff032a4df0c4abb74f76adf519361e  Clone-0.47.tar.gz
++sha256  4c2c0cb9a483efbf970cb1a75b2ca75b0e18cb84bcb5c09624f86e26b09c211d  Clone-0.47.tar.gz
  
-+# WPA3 configurations:
-+# - CONFIG_OWE: Opportunistic Wireless Encryption (OWE)
-+# - CONFIG_DPP,CONFIG_DPP2: Easy Connect (Device Provisioning Protocol - DPP R1 & R2)
-+# - CONFIG_SAE: WPA3-Personal (SAE)
-+# - CONFIG_PASN: PASN
-+# - CONFIG_SUITEB, CONFIG_SUITEB192: WPA3-Enterprise (SuiteB-192)
- ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_WPA3),y)
- WPA_SUPPLICANT_CONFIG_ENABLE += \
- 	CONFIG_DPP \
- 	CONFIG_SAE \
- 	CONFIG_SAE_PK \
--	CONFIG_OWE
-+	CONFIG_OWE \
-+	CONFIG_SUITEB \
-+	CONFIG_SUITEB192
- else
- WPA_SUPPLICANT_CONFIG_DISABLE += \
- 	CONFIG_DPP \
- 	CONFIG_SAE \
- 	CONFIG_SAE_PK \
--	CONFIG_OWE
-+	CONFIG_OWE \
-+	CONFIG_SUITEB \
-+	CONFIG_SUITEB192
- endif
+ # computed by scancpan
+ sha256  40aa7eb133e97b075024380640528760a54aefc344781741ed02539a375db5ac  README.md
+diff --git a/package/perl-clone/perl-clone.mk b/package/perl-clone/perl-clone.mk
+index 9e04329eab..a5d18558bc 100644
+--- a/package/perl-clone/perl-clone.mk
++++ b/package/perl-clone/perl-clone.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
  
- # Try to use openssl if it's already available
--- 
-2.39.2
-
+-PERL_CLONE_VERSION = 0.46
++PERL_CLONE_VERSION = 0.47
+ PERL_CLONE_SOURCE = Clone-$(PERL_CLONE_VERSION).tar.gz
+-PERL_CLONE_SITE = $(BR2_CPAN_MIRROR)/authors/id/G/GA/GARU
++PERL_CLONE_SITE = $(BR2_CPAN_MIRROR)/authors/id/A/AT/ATOOMIC
+ PERL_CLONE_LICENSE = Artistic or GPL-1.0+
+ PERL_CLONE_LICENSE_FILES = README.md
+ PERL_CLONE_DISTNAME = Clone
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
