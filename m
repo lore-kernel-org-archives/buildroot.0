@@ -4,49 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 962E6EE57CF
-	for <buildroot@archiver.kernel.org>; Wed, 11 Sep 2024 19:42:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8C3A2EE57CF
+	for <buildroot@archiver.kernel.org>; Wed, 11 Sep 2024 19:42:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5575740FD5;
-	Wed, 11 Sep 2024 19:42:05 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 57AA240FDD;
+	Wed, 11 Sep 2024 19:42:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FVw02W2lc_H5; Wed, 11 Sep 2024 19:42:04 +0000 (UTC)
+ id eoYVbgbPKsKZ; Wed, 11 Sep 2024 19:42:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E1C0D40FC2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 22D8340FDE
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E1C0D40FC2;
-	Wed, 11 Sep 2024 19:42:03 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A4BDA1BF369
+	by smtp2.osuosl.org (Postfix) with ESMTP id 22D8340FDE;
+	Wed, 11 Sep 2024 19:42:07 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id D6AAF1BF369
  for <buildroot@lists.busybox.net>; Wed, 11 Sep 2024 19:41:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A0EB04197F
- for <buildroot@lists.busybox.net>; Wed, 11 Sep 2024 19:41:54 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id C430380CBA
+ for <buildroot@lists.busybox.net>; Wed, 11 Sep 2024 19:41:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EnFO_cxZjkyk for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id itrpRaIth7jP for <buildroot@lists.busybox.net>;
  Wed, 11 Sep 2024 19:41:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C69CA41980
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CF7F180CCE
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id C69CA41980
+ by smtp1.osuosl.org (Postfix) with ESMTP id CF7F180CCE
  for <buildroot@buildroot.org>; Wed, 11 Sep 2024 19:41:52 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B030386FB9; Wed, 11 Sep 2024 19:41:52 +0000 (UTC)
+ id 8BB0E86FB7; Wed, 11 Sep 2024 19:41:52 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 11 Sep 2024 21:41:21 +0200
+Date: Wed, 11 Sep 2024 21:41:17 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1ae3c6f2ad5fb8bbc46ebe3b7a4bc0d3194d25f2
-X-Git-Newrev: 14b1b8ca8dc92851aa7400af432874621cfdb776
+X-Git-Oldrev: c9515c8b63bc9bc84b52b731c2c72031acd240d2
+X-Git-Newrev: 6cda3504086e4c4b6acd24212e4d568684442243
 X-Patchwork-Hint: ignore
-Message-Id: <20240911194152.B030386FB9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package: move wireplumber from Graphics to
- Audio/Video
+Message-Id: <20240911194152.8BB0E86FB7@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/nginx: fix static build error
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,40 +65,65 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=14b1b8ca8dc92851aa7400af432874621cfdb776
+commit: https://git.buildroot.net/buildroot/commit/?id=6cda3504086e4c4b6acd24212e4d568684442243
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-WirePlumber is a PipeWire session manager, essential to the operation
-of PipeWire in most use cases. It is not a graphical application,
-nor does it support graphics in any way. It is only there to support
-PipeWire and it should be kept together with PipeWire in the menus.
+In commit 761259c93400bc806611a242c7dc3df7ff67c231 the SSL patch was
+removed, without testing any static compilation.
+Reintroduce a small version of the original patch.
 
-Signed-off-by: George Kiagiadakis <george.kiagiadakis@collabora.com>
+Upstream does not use pkg-config, so the patch is Buildroot specific and
+not suitable for upstreaming.
+
+Fixes:
+ - http://autobuild.buildroot.net/results/a85/a85b00dfe9b55607390ebacc0e4e55c7cfbace3a
+
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ ...0009-auto-lib-openssl-conf-use-pkg-config.patch | 34 ++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
 
-diff --git a/package/Config.in b/package/Config.in
-index 17855fed30..8f8f1ff8ee 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -61,6 +61,7 @@ menu "Audio and video applications"
- 	source "package/vlc/Config.in"
- 	source "package/vorbis-tools/Config.in"
- 	source "package/wavpack/Config.in"
-+	source "package/wireplumber/Config.in"
- 	source "package/yavta/Config.in"
- 	source "package/ympd/Config.in"
- 	source "package/zynaddsubfx/Config.in"
-@@ -1762,7 +1763,6 @@ menu "Graphics"
- 	source "package/waylandpp/Config.in"
- 	source "package/webkitgtk/Config.in"
- 	source "package/webp/Config.in"
--	source "package/wireplumber/Config.in"
- 	source "package/wlroots/Config.in"
- 	source "package/woff2/Config.in"
- 	source "package/wpebackend-fdo/Config.in"
+diff --git a/package/nginx/0009-auto-lib-openssl-conf-use-pkg-config.patch b/package/nginx/0009-auto-lib-openssl-conf-use-pkg-config.patch
+new file mode 100644
+index 0000000000..05fb48b76e
+--- /dev/null
++++ b/package/nginx/0009-auto-lib-openssl-conf-use-pkg-config.patch
+@@ -0,0 +1,34 @@
++From 232ac61984720401b0c3854da1644ec20ed218e0 Mon Sep 17 00:00:00 2001
++From: Martin Bark <martin@barkynet.com>
++Date: Thu, 15 Aug 2024 19:47:23 +0200
++Subject: [PATCH] auto/lib/openssl/conf: use pkg-config
++
++Change to using pkg-config to find the path to openssl and its
++dependencies.
++
++Signed-off-by: Martin Bark <martin@barkynet.com>
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++Upstream: not suitable
++---
++ auto/lib/openssl/conf | 5 +++--
++ 1 file changed, 3 insertions(+), 2 deletions(-)
++
++diff --git a/auto/lib/openssl/conf b/auto/lib/openssl/conf
++index fdf430dff..c9fe4c8bf 100644
++--- a/auto/lib/openssl/conf
+++++ b/auto/lib/openssl/conf
++@@ -63,8 +63,9 @@ else
++         ngx_feature_name="NGX_OPENSSL"
++         ngx_feature_run=no
++         ngx_feature_incs="#include <openssl/ssl.h>"
++-        ngx_feature_path=
++-        ngx_feature_libs="-lssl -lcrypto $NGX_LIBDL $NGX_LIBPTHREAD"
+++        ngx_feature_path="$(${PKG_CONFIG:=pkg-config} --cflags-only-I openssl|
+++			    sed -re 's/(^|\s)-I\s*(\S+)/\1\2/g')"
+++        ngx_feature_libs="$(${PKG_CONFIG:=pkg-config} --libs openssl)"
++         ngx_feature_test="SSL_CTX_set_options(NULL, 0)"
++         . auto/feature
++ 
++-- 
++2.39.2
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
