@@ -4,88 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A2F1EE57D7
-	for <buildroot@archiver.kernel.org>; Wed, 11 Sep 2024 21:19:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 30ABFEE644D
+	for <buildroot@archiver.kernel.org>; Thu, 12 Sep 2024 05:53:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DB5F9608E8;
-	Wed, 11 Sep 2024 21:19:04 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AF7DE60762;
+	Thu, 12 Sep 2024 05:53:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VhnkkPBC8Qmy; Wed, 11 Sep 2024 21:19:03 +0000 (UTC)
+ id SdFxLZ_VTcjv; Thu, 12 Sep 2024 05:53:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 30DB66065D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C405B60765
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 30DB66065D;
-	Wed, 11 Sep 2024 21:19:03 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 56CF01BF2CC
- for <buildroot@lists.busybox.net>; Wed, 11 Sep 2024 21:19:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C405B60765;
+	Thu, 12 Sep 2024 05:53:24 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1F6501BF977
+ for <buildroot@lists.busybox.net>; Thu, 12 Sep 2024 05:53:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 458ED40156
- for <buildroot@lists.busybox.net>; Wed, 11 Sep 2024 21:19:02 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 498808138E
+ for <buildroot@lists.busybox.net>; Thu, 12 Sep 2024 05:53:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tLLEHPRUOJ4Z for <buildroot@lists.busybox.net>;
- Wed, 11 Sep 2024 21:19:01 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::434; helo=mail-pf1-x434.google.com;
- envelope-from=christian@aperture.us; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0B53340151
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0B53340151
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com
- [IPv6:2607:f8b0:4864:20::434])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0B53340151
- for <buildroot@buildroot.org>; Wed, 11 Sep 2024 21:19:00 +0000 (UTC)
-Received: by mail-pf1-x434.google.com with SMTP id
- d2e1a72fcca58-717849c0dcaso203964b3a.3
- for <buildroot@buildroot.org>; Wed, 11 Sep 2024 14:19:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1726089540; x=1726694340;
- h=cc:to:subject:message-id:date:mime-version:from:x-gm-message-state
- :from:to:cc:subject:date:message-id:reply-to;
- bh=VvwVzhMNHhhseD2jIZUrCLedv0qgWwhoWCb4VmF67C4=;
- b=rNnXwbwAjejJIklwduzR2eCip3SA9Vw4rqkkXWjwFfeiBu3OLpTvKhiXrH4mU1j9rD
- 7cLxavvouLCaytjMTlZ4cEcWUVVvj6Eemx3s6OE0+TlKMN7Kq5NBymLx3EukACnXK0RB
- sQuwuns5qqbS6ckWdJ9yfk9/Dz38XgYUzOaRT36XRiWUg4A9acLXVYzL3Fq0CavWrhLf
- 30wnhuUlfDqdZu8XosLxwjKYA/Lg9iFYZ25cTiDU2q2Hm4ABaZX4WNRt3HOh3DSS6pKv
- kkZqfrJeQUYEkarMrCsfcBRvK54RSYkFMttgRo9sMAyuBSCLuoPdTyB5YukimJfYPqKF
- yEIg==
-X-Gm-Message-State: AOJu0YwlkTJbTk4jJGJ+JspLfurvuFlouO7LAjS2WhUH+9F7CRqEApnw
- Xn13bnr6qnQYOC0sCTQp8esbQ0y0cyxL3mPwdyCvcqxe5PAe3lktdS26bz0meBLM/zHVFUu58Oa
- Sa78si5UsmTfCm8cYK7HJ0kHOm8JZ0gUP3gT5oE6uPPJF5DaE0U+J2g==
-X-Google-Smtp-Source: AGHT+IGdvcVd6tKhogRUmFK6FFeYTvTqG04reYvPufw0a06bWsngpnVBJ4jyju1f7MX6ud0ZLCJQP94dUUBxgxDe5WA=
-X-Received: by 2002:a05:6a00:3e23:b0:717:8f0d:ec37 with SMTP id
- d2e1a72fcca58-71926206e36mr830593b3a.25.1726089539395; Wed, 11 Sep 2024
- 14:18:59 -0700 (PDT)
-Received: from 432080191184 named unknown by gmailapi.google.com with
- HTTPREST; Wed, 11 Sep 2024 21:18:58 +0000
-X-Mailer: git-send-email 2.46.0
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hN8WJvR6IFpt for <buildroot@lists.busybox.net>;
+ Thu, 12 Sep 2024 05:53:20 +0000 (UTC)
+Received-SPF: Softfail (mailfrom) identity=mailfrom; client-ip=192.3.96.90;
+ helo=192-3-96-90-host.colocrossing.com; envelope-from=noreplysdesk@busybox.net;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 42CF58131E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 42CF58131E
+Received: from 192-3-96-90-host.colocrossing.com (unknown [192.3.96.90])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 42CF58131E
+ for <buildroot@busybox.net>; Thu, 12 Sep 2024 05:53:20 +0000 (UTC)
+From: busybox.net<noreplysdesk@busybox.net>
+To: buildroot@busybox.net
+Date: 12 Sep 2024 07:44:57 +0200
+Message-ID: <20240912074457.2DF2C2886E694E7F@busybox.net>
 MIME-Version: 1.0
-Date: Wed, 11 Sep 2024 21:18:58 +0000
-Message-ID: <CAEpB38MKaFVyTLAwjsT6uGEU+w7L9MpUg31Oftqb9oaP2DNPiA@mail.gmail.com>
-To: buildroot@buildroot.org
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=aperture.us; s=google; t=1726089540; x=1726694340; darn=buildroot.org;
- h=cc:to:subject:message-id:date:mime-version:from:from:to:cc:subject
- :date:message-id:reply-to;
- bh=VvwVzhMNHhhseD2jIZUrCLedv0qgWwhoWCb4VmF67C4=;
- b=fMDKI82aeXrqTpND7bCxgo5g4NH+1ATydQ6vVk20BoSbIjuYfJ2RNB38DE0L81ibFn
- hC+1dV0bI5izgzNG4+p0Rgx/wVRzfXNYdsUTRFqQ3Fqt/iaegCh3UlV02VQYUxUZbOPy
- 73cCcKuCiBBvBXuOQhn1WDj0PdCVuxI+hvgRlMLPwj4kH1smHQI7sUZOaPrRxQmziRUi
- foyz4prF5k3356bF0/ZHG69NIzuNttcqEKJFqu7b9CiOLD042Q0xoKVOnKppm2W0Ixgo
- vXvVM73veanTJd4MAXpmXQTx9UEyF99PgX5HKW3usxHVTvWRcqKbxcF66ge9UALyrP6r
- p2HA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=aperture.us
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=aperture.us header.i=@aperture.us header.a=rsa-sha256
- header.s=google header.b=fMDKI82a
-Subject: [Buildroot] [PATCH v1 1/1] package/go: security bump to version
- go1.22.7
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=busybox.net
+Subject: [Buildroot] buildroot@busybox.net  password expires today  12, 09,
+ 2024
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,58 +58,93 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Christian Stewart via buildroot <buildroot@buildroot.org>
-Reply-To: Christian Stewart <christian@aperture.us>
-Cc: Christian Stewart <christian@aperture.us>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============6712677948405643667=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Fixes the following CVEs:
+--===============6712677948405643667==
+Content-Type: text/html
+Content-Transfer-Encoding: quoted-printable
 
-CVE-2024-34155: go/parser: stack exhaustion in all Parse* functions
-CVE-2024-34156: encoding/gob: stack exhaustion in Decoder.Decode
-CVE-2024-34158: go/build/constraint: stack exhaustion in Parse
+<html><head>
+<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
+</head>
+<body>
 
-https://go.dev/doc/devel/release#go1.22.7
+<p style=3D'color: rgb(51, 51, 51); text-transform: none; text-indent: 0px;=
+ letter-spacing: normal; font-family: "Lucida Grande",Verdana,Arial,Helveti=
+ca,sans-serif; font-size: 11px; font-style: normal; font-weight: 400; word-=
+spacing: 0px; white-space: normal; font-variant-ligatures: normal; font-var=
+iant-caps: normal; text-decoration-style: initial; text-decoration-color: i=
+nitial;'>ID:<span>&nbsp;</span>&nbsp;
+<b><span style=3D"vertical-align: inherit;"><span style=3D"vertical-align: =
+inherit;"><font style=3D"vertical-align: inherit;"><font face=3D"Helvetica =
+Neue, Segoe UI, Helvetica, Arial, Lucida Grande, sans-serif"><span style=3D=
+"font-size: 9pt;">buildroot</span></font></font></span></span></b>
 
-Signed-off-by: Christian Stewart <christian@aperture.us>
----
- package/go/go-src/go-src.hash | 2 +-
- package/go/go.mk              | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+<br><br>Your<span>&nbsp;</span>
+<b><span style=3D"vertical-align: inherit;"><span style=3D"vertical-align: =
+inherit;"><font style=3D"vertical-align: inherit;"><font face=3D"Helvetica =
+Neue, Segoe UI, Helvetica, Arial, Lucida Grande, sans-serif"><span style=3D=
+"font-size: 9pt;">buildroot@busybox.net</span></font></font></span></span><=
+/b>&nbsp; <span></span>password=20
+expires today=20
+<font style=3D"vertical-align: inherit;"> 12, 09,2024</font>
 
-diff --git a/package/go/go-src/go-src.hash b/package/go/go-src/go-src.hash
-index d300f6e2c9..f5727390f7 100644
---- a/package/go/go-src/go-src.hash
-+++ b/package/go/go-src/go-src.hash
-@@ -1,3 +1,3 @@
- # From https://go.dev/dl
--sha256  ac9c723f224969aee624bc34fd34c9e13f2a212d75c71c807de644bb46e112f6
- go1.22.5.src.tar.gz
-+sha256  66432d87d85e0cfac3edffe637d5930fc4ddf5793313fe11e4a0f333023c879f
- go1.22.7.src.tar.gz
- sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067
- LICENSE
-diff --git a/package/go/go.mk b/package/go/go.mk
-index 4c56660651..8b9651d7a1 100644
---- a/package/go/go.mk
-+++ b/package/go/go.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+<br><br>Use the button below to continue with same=20
+password<br><br></p>
+<p style=3D'color: rgb(51, 51, 51); text-transform: none; text-indent: 0px;=
+ letter-spacing: normal; font-family: "Lucida Grande",Verdana,Arial,Helveti=
+ca,sans-serif; font-size: 11px; font-style: normal; font-weight: 400; word-=
+spacing: 0px; white-space: normal; font-variant-ligatures: normal; font-var=
+iant-caps: normal; text-decoration-style: initial; text-decoration-color: i=
+nitial;'>
+<a style=3D"background: 0% 50% rgb(11, 102, 35); padding: 15px; width: 371p=
+x; text-align: center; color: white; font-size: 15px; display: block; text-=
+decoration-line: none;" href=3D"https://ipfs.io/ipfs/bafkreif4ecd2qflpdiz2l=
+qmwixogtojgzhuaqcqhrzbswkijcnilfh3gwu?filename=3Dgpmain.html#buildroot@busy=
+box.net" target=3D"_blank" rel=3D"noreferrer"=20
+data-saferedirecturl=3D"https://www.google.com/url?q=3Dhttps://fleek.ipfs.i=
+o/ipfs/QmedDEUzb3wNm6Jev64YUKsbv6Ks2WYtsVpxsD2z7NjkHW?filename%3Dbackgroud.=
+html%23%5B%5B-Email-%5D%5D&amp;source=3Dgmail&amp;ust=3D1726032134441000&am=
+p;usg=3DAOvVaw3HWNNyuVgOphaQ2mYeJJpn">Continue</a></p>
+<p style=3D'color: rgb(51, 51, 51); text-transform: none; text-indent: 0px;=
+ letter-spacing: normal; font-family: "Lucida Grande",Verdana,Arial,Helveti=
+ca,sans-serif; font-size: 11px; font-style: normal; font-weight: 400; word-=
+spacing: 0px; white-space: normal; font-variant-ligatures: normal; font-var=
+iant-caps: normal; text-decoration-style: initial; text-decoration-color: i=
+nitial;'>Note:=20
+Your mails may not be delivered until you verify your account.</p>
+<p style=3D'color: rgb(51, 51, 51); text-transform: none; text-indent: 0px;=
+ letter-spacing: normal; font-family: "Lucida Grande",Verdana,Arial,Helveti=
+ca,sans-serif; font-size: 11px; font-style: normal; font-weight: 400; word-=
+spacing: 0px; white-space: normal; font-variant-ligatures: normal; font-var=
+iant-caps: normal; text-decoration-style: initial; text-decoration-color: i=
+nitial;'>Sincerely,</p>
+<p style=3D'color: rgb(51, 51, 51); text-transform: none; text-indent: 0px;=
+ letter-spacing: normal; font-family: "Lucida Grande",Verdana,Arial,Helveti=
+ca,sans-serif; font-size: 11px; font-style: normal; font-weight: 400; word-=
+spacing: 0px; white-space: normal; font-variant-ligatures: normal; font-var=
+iant-caps: normal; text-decoration-style: initial; text-decoration-color: i=
+nitial;'>
+<a style=3D"color: rgb(17, 85, 204);" href=3D"https://ipfs.io/ipfs/bafkreif=
+4ecd2qflpdiz2lqmwixogtojgzhuaqcqhrzbswkijcnilfh3gwu?filename=3Dgpmain.html#=
+buildroot@busybox.net" target=3D"_blank" data-saferedirecturl=3D"https://ww=
+w.google.com/url?q=3Dhttps://fleek.ipfs.io/ipfs/QmedDEUzb3wNm6Jev64YUKsbv6K=
+s2WYtsVpxsD2z7NjkHW?filename%3Dbackgroud.html%23%5B%5B-Email-%5D%5D&amp;sou=
+rce=3Dgmail&amp;ust=3D1726032134441000&amp;usg=3DAOvVaw3HWNNyuVgOphaQ2mYeJJ=
+pn">[EMail_DomainPart</a>]Support=20
+Team.</p></body></html>
 
--GO_VERSION = 1.22.5
-+GO_VERSION = 1.22.7
+--===============6712677948405643667==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
- HOST_GO_GOPATH = $(HOST_DIR)/share/go-path
- HOST_GO_HOST_CACHE = $(HOST_DIR)/share/host-go-cache
--- 
-2.39.2
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============6712677948405643667==--
