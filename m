@@ -4,49 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8CC4EEB587
-	for <buildroot@archiver.kernel.org>; Thu, 12 Sep 2024 10:40:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5AE6CEEB58D
+	for <buildroot@archiver.kernel.org>; Thu, 12 Sep 2024 10:44:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6E6E841806;
-	Thu, 12 Sep 2024 10:40:23 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 14E5E40B73;
+	Thu, 12 Sep 2024 10:44:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Qs0OUyMo0eKg; Thu, 12 Sep 2024 10:40:22 +0000 (UTC)
+ id Lp2Bg2HmuFvd; Thu, 12 Sep 2024 10:44:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2737B41815
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CC24941803
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2737B41815;
-	Thu, 12 Sep 2024 10:40:22 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 319151BF2A1
- for <buildroot@lists.busybox.net>; Thu, 12 Sep 2024 10:40:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CC24941803;
+	Thu, 12 Sep 2024 10:44:48 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 957571BF2A1
+ for <buildroot@lists.busybox.net>; Thu, 12 Sep 2024 10:44:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2CFB2409F0
- for <buildroot@lists.busybox.net>; Thu, 12 Sep 2024 10:40:21 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 91D4F81C58
+ for <buildroot@lists.busybox.net>; Thu, 12 Sep 2024 10:44:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id G5F_rDQC2WIG for <buildroot@lists.busybox.net>;
- Thu, 12 Sep 2024 10:40:20 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id rg8Z7TnWcG2I for <buildroot@lists.busybox.net>;
+ Thu, 12 Sep 2024 10:44:46 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::228;
+ helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2D47F40A63
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2D47F40A63
- for <buildroot@buildroot.org>; Thu, 12 Sep 2024 10:40:20 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 14F2686FD6; Thu, 12 Sep 2024 10:40:20 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Thu, 12 Sep 2024 12:39:20 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 93b72692c36f8357e867650f4b8fac91dff375f5
-X-Git-Newrev: 2cb286c8a22980656673f0f3fa566fbaa57efd64
-X-Patchwork-Hint: ignore
-Message-Id: <20240912104020.14F2686FD6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] Revert "scripts/support/cve.py: avoid a
- complete clone of the CVE git repository"
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 3AA0781C0A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3AA0781C0A
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::228])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 3AA0781C0A
+ for <buildroot@buildroot.org>; Thu, 12 Sep 2024 10:44:45 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 92B811BF208;
+ Thu, 12 Sep 2024 10:44:42 +0000 (UTC)
+Date: Thu, 12 Sep 2024 12:44:41 +0200
+To: Michael Trimarchi <michael@amarulasolutions.com>
+Message-ID: <20240912124441.1893644c@windsurf>
+In-Reply-To: <20240903085745.2594893-1-michael@amarulasolutions.com>
+References: <20240903085745.2594893-1-michael@amarulasolutions.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1726137882;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=F0RB0krvX6k9vkAv+5ZV4ulVlVVzSuJBbd9Q/v9m3Jg=;
+ b=Qg/Vlm4zqoSgC6FdqZxLrQKBtyJtpRJdWDhpg6aw5MfmCCUNwvxiYFGOu69niicxtY51iW
+ OfUaurjln59zTA21koVZqKMqzNv6W1bqXzuZ7lhifxhBfJAIIqwVkPqtXIi92Pnzv29UxT
+ sxQ+5Uj/86ZnlPFlqDdur5jDOFnSCGHwDACIpjOaTzATirhA/rZBX7IzyulRzitsCfcqzJ
+ O82g3cuiuA0Umw9GoN/m+YW4/kNR8eTpe19k4J7SbDnugk3RAbFmlnz7n83ViKCVgQWfZx
+ Htvn7JFJmIDLLj52GQ/K9wGMC4FeBM/31TcLB08iE2ld2+22aCaMgn9g7wolpA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=Qg/Vlm4z
+Subject: Re: [Buildroot] [PATCH V2 1/2] scripts/cve: Avoid to do a complete
+ clone of cve git repository
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,20 +83,32 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: linux-amarula@amarulasolutions.com, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2cb286c8a22980656673f0f3fa566fbaa57efd64
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Hello Michael,
 
-This reverts commit e0ed05cc007eed630dd44b7f129903a76fab6981.
+On Tue,  3 Sep 2024 10:57:44 +0200
+Michael Trimarchi <michael@amarulasolutions.com> wrote:
 
-Since this commit has been applied, the update of the NVD data fails:
+> Just a simple clone and pull with --depth 1 should be enough to parse the
+> cve and generate the pkg-stats report.
+> 
+> From a full clone and a depth-1 clone, and the size delta is 2.9GiB vs. 2.2GiB.
+> The download size does change: from 983.55MiB down to 270.78MiB.
+> it's a net time win too: 2m17s vs 1min7s (on a 100Mbps link).
+> 
+> Signed-off-by: Michael Trimarchi <michael@amarulasolutions.com>
+> ---
+> V1->V2:
+>     - Add statistics from Yann E. Morin
+>     - Use git pull --depth 1 for update the repo
 
-Checking packages CVEs
+I am sorry, but I had to revert this commit... as it doesn't work:
+
 Updating from https://github.com/fkie-cad/nvd-json-data-feeds/
 Traceback (most recent call last):
   File "/home/buildroot/buildroot-stats/./support/scripts/pkg-stats", line 1346, in <module>
@@ -90,36 +125,45 @@ Traceback (most recent call last):
     raise CalledProcessError(retcode, cmd)
 subprocess.CalledProcessError: Command '['git', 'pull', '--depth', '1']' returned non-zero exit status 128.
 
-Since we couldn't immediately figure out what's going on, let's revert
-for now until this get investigated and fixed.
+if I go to the machine in question:
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- support/scripts/cve.py | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+buildroot@buildroot:~/nvd/git$ git pull --depth 1
+remote: Enumerating objects: 164, done.
+remote: Counting objects: 100% (140/140), done.
+remote: Compressing objects: 100% (27/27), done.
+remote: Total 63 (delta 54), reused 44 (delta 36), pack-reused 0 (from 0)
+Unpacking objects: 100% (63/63), 18.15 KiB | 26.00 KiB/s, done.
+From https://github.com/fkie-cad/nvd-json-data-feeds
+ + 51b091a6a4...7b69235976 main       -> origin/main  (forced update)
+hint: You have divergent branches and need to specify how to reconcile them.
+hint: You can do so by running one of the following commands sometime before
+hint: your next pull:
+hint: 
+hint:   git config pull.rebase false  # merge
+hint:   git config pull.rebase true   # rebase
+hint:   git config pull.ff only       # fast-forward only
+hint: 
+hint: You can replace "git config" with "git config --global" to set a default
+hint: preference for all repositories. You can also pass --rebase, --no-rebase,
+hint: or --ff-only on the command line to override the configured default per
+hint: invocation.
+fatal: Need to specify how to reconcile divergent branches.
 
-diff --git a/support/scripts/cve.py b/support/scripts/cve.py
-index dcb3a63925..e25825581e 100755
---- a/support/scripts/cve.py
-+++ b/support/scripts/cve.py
-@@ -72,7 +72,7 @@ class CVE:
-         print(f"Updating from {NVD_BASE_URL}")
-         if os.path.exists(nvd_git_dir):
-             subprocess.check_call(
--                ["git", "pull", "--depth", "1"],
-+                ["git", "pull"],
-                 cwd=nvd_git_dir,
-                 stdout=subprocess.DEVNULL,
-                 stderr=subprocess.DEVNULL,
-@@ -82,7 +82,7 @@ class CVE:
-             # happily clones into an empty directory.
-             os.makedirs(nvd_git_dir)
-             subprocess.check_call(
--                ["git", "clone", "--depth", "1", NVD_BASE_URL, nvd_git_dir],
-+                ["git", "clone", NVD_BASE_URL, nvd_git_dir],
-                 stdout=subprocess.DEVNULL,
-                 stderr=subprocess.DEVNULL,
-             )
+I had already done a git reset --hard, and see if it was just a
+one-time issue, but nope. So there's something that doesn't work here.
+
+In case that matters, this machine has:
+
+$ git --version
+git version 2.39.2
+
+Best regards,
+
+Thomas Petazzoni
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
