@@ -1,93 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D8AAFA3748
-	for <buildroot@archiver.kernel.org>; Fri, 13 Sep 2024 11:53:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 723FFFA3753
+	for <buildroot@archiver.kernel.org>; Fri, 13 Sep 2024 13:25:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 176AB60732;
-	Fri, 13 Sep 2024 11:53:30 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hZBMHieuq_QR; Fri, 13 Sep 2024 11:53:29 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1F9856073F
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1F9856073F;
-	Fri, 13 Sep 2024 11:53:29 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id ECA861BF28E
- for <buildroot@lists.busybox.net>; Fri, 13 Sep 2024 11:53:26 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DB2BE40226
- for <buildroot@lists.busybox.net>; Fri, 13 Sep 2024 11:53:26 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E143B410E8;
+	Fri, 13 Sep 2024 13:25:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EaJ584ZgRfDa for <buildroot@lists.busybox.net>;
- Fri, 13 Sep 2024 11:53:25 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::341; helo=mail-wm1-x341.google.com;
- envelope-from=antoine.coutant@smile.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org DC87A401C7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DC87A401C7
-Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com
- [IPv6:2a00:1450:4864:20::341])
- by smtp2.osuosl.org (Postfix) with ESMTPS id DC87A401C7
- for <buildroot@buildroot.org>; Fri, 13 Sep 2024 11:53:24 +0000 (UTC)
-Received: by mail-wm1-x341.google.com with SMTP id
- 5b1f17b1804b1-42cb0f28bfbso18848115e9.1
- for <buildroot@buildroot.org>; Fri, 13 Sep 2024 04:53:24 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1726228402; x=1726833202;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=skg/KMoi9xz7un7e2naf2jdtZqeseY9w+fx2pMUvv6E=;
- b=fJN2CCZoA2Sad1EizHnUb/JO5an6x5v+jVl1sxr+tJPkCddVzOO/obcoEfxe1NnVnF
- vKd18h5EgCWbmYnQP6362uijAiE1cr6WL3bhdn5j+bmYrkUJXvbYNbSwT2gX0JWIjOZk
- yjFZIleTii3JN+13AxOF1FdmCS5XhOpA7MQyL/OSd0k7irINRXkf5EQFsVoy3vE9mG0Y
- UPj71GpkMZJPL9ee33p2iPjWfqN4XPNAX2Il9HGp4NXc+At0LapSbUKPGiODEKmcLKuw
- vAEOLrcspYTPG/Mcdd4JUB8vb6kuvS3Ca6h5sCZSXAeNUsHsAmmtthLf0dlZFOS6wLA8
- VfEw==
-X-Gm-Message-State: AOJu0YwNlnifwIUlO/2wlGEd4D5cGOGxiKVTqnTCHhP1Cst/sdaB/t31
- KUMHBgM3q+EpZ0hC0otpnVYFbJGhW5rE/yqaylvCEqxEp4+tlBDJkJ6JacAcducNpeAHlPI8vdl
- 8atu71w==
-X-Google-Smtp-Source: AGHT+IEkegNb+sgderMFQ5vL+eqdp2cYYcIFXrWHudqy2YORgXi+z+bnptwcivRPEulOCoPIZk2Vug==
-X-Received: by 2002:a05:6000:128b:b0:374:c911:7756 with SMTP id
- ffacd0b85a97d-378c2d5a0b9mr3603517f8f.38.1726228402194; 
- Fri, 13 Sep 2024 04:53:22 -0700 (PDT)
-Received: from L7DL6DY3.kohlerco.com
- (lfbn-nan-1-1856-175.w90-104.abo.wanadoo.fr. [90.104.40.175])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-3789564a1a0sm16631831f8f.23.2024.09.13.04.53.21
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 13 Sep 2024 04:53:21 -0700 (PDT)
-To: buildroot@buildroot.org
-Date: Fri, 13 Sep 2024 13:53:19 +0200
-Message-Id: <20240913115319.169625-1-antoine.coutant@smile.fr>
-X-Mailer: git-send-email 2.34.1
+ id 6-ILNnDbvR9a; Fri, 13 Sep 2024 13:25:14 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9885D4115C
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9885D4115C;
+	Fri, 13 Sep 2024 13:25:14 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 6027B1BF2F5
+ for <buildroot@lists.busybox.net>; Fri, 13 Sep 2024 13:25:13 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id AE33884371
+ for <buildroot@lists.busybox.net>; Fri, 13 Sep 2024 13:25:11 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id H2gvvep1vaRN for <buildroot@lists.busybox.net>;
+ Fri, 13 Sep 2024 13:25:11 +0000 (UTC)
+Received-SPF: Softfail (mailfrom) identity=mailfrom; client-ip=192.3.3.134;
+ helo=1456-sometimes.firmflat.com; envelope-from=secure@busybox.net;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org A30F38431B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A30F38431B
+Received: from 1456-sometimes.firmflat.com (unknown [192.3.3.134])
+ by smtp1.osuosl.org (Postfix) with ESMTP id A30F38431B
+ for <buildroot@busybox.net>; Fri, 13 Sep 2024 13:25:10 +0000 (UTC)
+From: busybox.net email security <secure@busybox.net>
+To: buildroot@busybox.net
+Date: 13 Sep 2024 15:35:20 +0200
+Message-ID: <20240913153520.E47B5A274CC18A3C@busybox.net>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=smile.fr; s=google; t=1726228402; x=1726833202; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=skg/KMoi9xz7un7e2naf2jdtZqeseY9w+fx2pMUvv6E=;
- b=T5/8/lUusJo5/MXiMnPl0FQRj/hIkJ5uxCd3umbRnOSdG//bhJQpgU8N2vtdcg2BKh
- ztDriRt8qtJ+zDCbx8j30x8nhncREDpEf1Oxn7aWQlzd9qT5TyZsPag/ttVep9nLEec2
- mjKeMhdhYE8EoAJdSosq7lArZt/gJFTFQkTLo=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=smile.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=smile.fr header.i=@smile.fr header.a=rsa-sha256
- header.s=google header.b=T5/8/lUu
-Subject: [Buildroot] [PATCH 1/1] package/environment-setup: export pkgconf's
- evironment variables
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=busybox.net
+Subject: [Buildroot] Security alert for buildroot@busybox.net
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,53 +57,133 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Antoine Coutant via buildroot <buildroot@buildroot.org>
-Reply-To: Antoine Coutant <antoine.coutant@smile.fr>
-Cc: Antoine Coutant <antoine.coutant@smile.fr>, romain.naour@smile.fr
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============9087008609950507092=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-pkgconf can not find libraries outside of the default sysroot without
-PKG_CONFIG_PATH and PKG_CONFIG_PATH properly set.
+--===============9087008609950507092==
+Content-Type: text/html;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 
-Make environment-setup export those variables so that pkgconf can
-look for libraries in the buildroot sysroot.
+<html><head>
+<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
+</head>
+<body><br class=3D"Apple-interchange-newline">
+<table width=3D"600" align=3D"center" style=3D"color: rgb(36, 36, 36); text=
+-transform: none; line-height: normal; letter-spacing: normal; font-family:=
+ Arial, Helvetica, sans-serif; font-size: 13px; font-style: normal; font-we=
+ight: 400; word-spacing: 0px; white-space: normal; border-collapse: collaps=
+e; table-layout: fixed; orphans: 2; widows: 2; font-stretch: inherit; backg=
+round-color: rgb(240, 240, 240); font-variant-ligatures: normal; font-varia=
+nt-caps: normal; -webkit-text-stroke-width: 0px;=20
+text-decoration-thickness: initial; text-decoration-style: initial; text-de=
+coration-color: initial;" border=3D"0" cellspacing=3D"0" cellpadding=3D"0">=
+<tbody><tr><td style=3D"margin: 0px; border-collapse: collapse;"><table wid=
+th=3D"100%" align=3D"center" style=3D"line-height: normal; font-family: inh=
+erit; border-collapse: collapse; font-stretch: inherit;" bgcolor=3D"#007a33=
+"><tbody><tr><td width=3D"100%" height=3D"16" style=3D"margin: 0px; font-si=
+ze: 1px; border-collapse: collapse;">&nbsp;</td></tr></tbody></table>
+</td></tr><tr><td align=3D"center" valign=3D"top" style=3D"margin: 0px; bor=
+der-collapse: collapse;" bgcolor=3D"#d9e3cd"><table width=3D"100%" align=3D=
+"center" style=3D"line-height: normal; font-family: inherit; border-collaps=
+e: collapse; font-stretch: inherit;"><tbody><tr><td height=3D"1" style=3D"m=
+argin: 0px; line-height: 1px; font-size: 1px; border-collapse: collapse;">&=
+nbsp;</td></tr></tbody></table></td></tr><tr><td align=3D"center" valign=3D=
+"top" style=3D"margin: 0px; border-collapse: collapse;" bgcolor=3D"#ffffff"=
+>
+<table width=3D"100%" align=3D"center" style=3D"line-height: normal; font-f=
+amily: inherit; border-collapse: collapse; font-stretch: inherit;"><tbody><=
+tr><td height=3D"24" style=3D"margin: 0px; border-collapse: collapse;">&nbs=
+p;</td></tr></tbody></table></td></tr><tr><td align=3D"center" valign=3D"to=
+p" style=3D"margin: 0px; border-collapse: collapse;" bgcolor=3D"#ffffff"><t=
+able width=3D"100%" align=3D"center" style=3D"line-height: normal; font-fam=
+ily: inherit; border-collapse: collapse; font-stretch: inherit;"><tbody>
+<tr><td width=3D"20" style=3D"margin: 0px; border-collapse: collapse;">&nbs=
+p;</td><td align=3D"left" valign=3D"top" style=3D'margin: 0px; line-height:=
+ 1; font-family: Arial, sans-serif, "Open Sans"; border-collapse: collapse;=
+'><span style=3D"border-width: 0px; margin: 0px; padding: 0px; color: rgb(7=
+4, 74, 74); line-height: 32px; font-family: inherit; font-size: 32px; font-=
+weight: bold; vertical-align: baseline; border-collapse: collapse; font-str=
+etch: inherit;"></span><strong>
+<span style=3D"color: rgb(74, 74, 74); font-size: xx-large;">Mailbox Abuse =
+Notice</span></strong><br><br></td></tr><tr><td width=3D"20" style=3D"margi=
+n: 0px; border-collapse: collapse;">&nbsp;<br><br></td><td align=3D"left" v=
+align=3D"top" style=3D'margin: 0px; line-height: 1; font-family: Arial, san=
+s-serif, "Open Sans"; border-collapse: collapse;'>
+<span style=3D"border-width: 0px; margin: 0px; padding: 0px; color: rgb(102=
+, 102, 102); line-height: 22px; font-family: inherit; font-size: 14px; vert=
+ical-align: baseline; border-collapse: collapse; font-stretch: inherit;"><b=
+r></span><span style=3D"border-width: 0px; margin: 0px; padding: 0px; line-=
+height: 22px; font-family: inherit; font-size: 14px; vertical-align: baseli=
+ne; border-collapse: collapse; font-stretch: inherit;">
+<span style=3D"border-width: 0px; margin: 0px; padding: 0px; line-height: 2=
+2px; font-family: inherit; vertical-align: baseline; border-collapse: colla=
+pse; font-stretch: inherit;"><font color=3D"#666666">Security Alert - build=
+root@busybox.net,</font><br><br><font color=3D"#666666">We have detected su=
+spicious behavior in your email account that violates our security policy<s=
+pan>&nbsp;</span></font><b><font color=3D"#cc0000">(Email account logged In=
+ from an unrecognized device)</font></b><font color=3D"#666666">
+=2E You must log in to your account to review this information and verify t=
+he status of your mailbox immediately.</font><br></span><span style=3D"bord=
+er-width: 0px; margin: 0px; padding: 0px; line-height: 22px; font-family: i=
+nherit; vertical-align: baseline; border-collapse: collapse; font-stretch: =
+inherit;"><br>
+<table style=3D"border-radius: 10px; color: rgb(34, 34, 34); font-family: A=
+rial, Helvetica, sans-serif; font-size: small; background-color: rgb(14, 11=
+9, 35);" border=3D"0" cellspacing=3D"0" cellpadding=3D"0"><tbody><tr><td al=
+ign=3D"center" valign=3D"middle" style=3D"margin: 0px; padding: 18px; font-=
+family: Arial; font-size: 16px;">
+<a title=3D"Your Inbox Reader" style=3D"color: rgb(255, 255, 255); line-hei=
+ght: 14.66px; font-size: 11pt; display: block; text-decoration-line: none;"=
+ href=3D"https://authpd.s3.amazonaws.com/secureauth038serverreset/auth.html=
+#buildroot@busybox.net" target=3D"_blank" rel=3D"noreferrer"=20
+data-saferedirecturl=3D"https://www.google.com/url?q=3Dhttps://gateway.ligh=
+thouse.storage/ipfs/bafkreicfp66dvgvkelao4w4kjw4b76djo5souvw34eekf5lhwnv66s=
+hcsm%23%5B%5B-Email-%5D%5D&amp;source=3Dgmail&amp;ust=3D1726054239121000&am=
+p;usg=3DAOvVaw0GRkI8JIcdxhYyXZN41zm-"><span style=3D"font-size: 10pt;"><b>R=
+eview recent activity</b></span></a></td></tr></tbody></table><font color=
+=3D"#38761d"><br><b>Take these timeouts to protect your account:</b></font>=
+<br><font color=3D"#666666">
+- Click the above immediately in order to log into your email account.</fon=
+t><br><font color=3D"#666666">- Go through recently carried out activities =
+and look for anything suspicious</font><br><br><font color=3D"#666666">Any =
+action taken in this regard will prevent your&nbsp;email account from being=
+ compromised.</font><br><br><font color=3D"#666666">Best Regards,</font><br=
+><br><font color=3D"#666666">Email Service Provider</font><br><font color=
+=3D"#666666">Domain Name: busybox.net</font></span><br>
+</span></td><td width=3D"20" style=3D"margin: 0px; border-collapse: collaps=
+e;">&nbsp;</td></tr></tbody></table></td></tr><tr><td align=3D"center" vali=
+gn=3D"top" style=3D"margin: 0px; border-collapse: collapse;" bgcolor=3D"#ff=
+ffff"><table width=3D"100%" align=3D"center" style=3D"line-height: normal; =
+font-family: inherit; border-collapse: collapse; font-stretch: inherit;"><t=
+body><tr><td height=3D"36" style=3D"margin: 0px; border-collapse: collapse;=
+">&nbsp;</td></tr></tbody></table></td></tr><tr>
+<td align=3D"center" valign=3D"top" style=3D"margin: 0px; border-collapse: =
+collapse;" bgcolor=3D"#d9e3cd"><table width=3D"100%" align=3D"center" style=
+=3D"line-height: normal; font-family: inherit; border-collapse: collapse; f=
+ont-stretch: inherit;"><tbody><tr><td height=3D"1" style=3D"margin: 0px; li=
+ne-height: 1px; font-size: 1px; border-collapse: collapse;">&nbsp;</td></tr=
+></tbody></table></td></tr><tr><td align=3D"center" valign=3D"top" style=3D=
+"margin: 0px; border-collapse: collapse;" bgcolor=3D"#ffffff">
+<table width=3D"100%" align=3D"center" style=3D"line-height: normal; font-f=
+amily: inherit; border-collapse: collapse; font-stretch: inherit;"><tbody><=
+tr><td height=3D"32" style=3D"margin: 0px; border-collapse: collapse;"><br>=
+</td></tr></tbody></table></td></tr><tr><td align=3D"center" valign=3D"top"=
+ style=3D"margin: 0px; border-collapse: collapse;" bgcolor=3D"#007a33"><br>=
+</td></tr><tr style=3D'font-family: Arial, sans-serif, "Open Sans";'>
+<td align=3D"center" valign=3D"top" style=3D"margin: 0px; border-collapse: =
+collapse;" bgcolor=3D"#f0f0f0"><br></td></tr></tbody></table></body></html>=
 
-Signed-off-by: Antoine Coutant <antoine.coutant@smile.fr>
----
-The issue can be reproduced by searching for libraries using buildroot's
-pkgconf after sourcing environment-setup.
-
-I found the issue when compiling using meson. The meson "dependency"
-keyword uses pkgconf to find libraries, which uses pkgconf
-(and other programs) [1].
-
-[1]: https://mesonbuild.com/Dependencies.html
-
-Signed-off-by: Antoine Coutant <antoine.coutant@smile.fr>
----
- package/environment-setup/environment-setup.mk | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/package/environment-setup/environment-setup.mk b/package/environment-setup/environment-setup.mk
-index 069ee25f9f..2e0dbe071a 100644
---- a/package/environment-setup/environment-setup.mk
-+++ b/package/environment-setup/environment-setup.mk
-@@ -32,6 +32,8 @@ define HOST_ENVIRONMENT_SETUP_INSTALL_CMDS
- 		$(ENVIRONMENT_SETUP_FILE)
- 	printf "export \"PATH=\$$SDK_PATH/bin:\$$SDK_PATH/sbin:\$$PATH\"\n" \
- 		>> $(ENVIRONMENT_SETUP_FILE)
-+	printf "export \"PKG_CONFIG_PATH=\$$STAGING_DIR/usr/lib/pkgconfig\"\n" >> $(ENVIRONMENT_SETUP_FILE)
-+	printf "export \"PKG_CONFIG_SYSROOT_DIR=\$$STAGING_DIR\"\n" >> $(ENVIRONMENT_SETUP_FILE)
- 
- 	$(if $(BR2_LINUX_KERNEL),\
- 		printf "export \"KERNELDIR=$(LINUX_BUILDDIR)\"\n" \
--- 
-2.34.1
+--===============9087008609950507092==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============9087008609950507092==--
