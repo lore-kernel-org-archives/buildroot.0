@@ -4,52 +4,52 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 87719EDE9AB
-	for <buildroot@archiver.kernel.org>; Tue, 10 Sep 2024 19:01:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B3CBFA3755
+	for <buildroot@archiver.kernel.org>; Fri, 13 Sep 2024 14:06:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2F95840659;
-	Tue, 10 Sep 2024 19:01:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DD6CC406F8;
+	Fri, 13 Sep 2024 14:06:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0pMXkOq5w7Ii; Tue, 10 Sep 2024 19:01:21 +0000 (UTC)
+ id sW4DnoioBm7v; Fri, 13 Sep 2024 14:06:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0D92B4067C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A5EC64072B
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0D92B4067C;
-	Tue, 10 Sep 2024 19:01:21 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 4B53B1BF228
- for <buildroot@lists.busybox.net>; Tue, 10 Sep 2024 19:01:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A5EC64072B;
+	Fri, 13 Sep 2024 14:06:43 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1128F1BF315
+ for <buildroot@lists.busybox.net>; Fri, 13 Sep 2024 14:06:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D9D6280B30
- for <buildroot@lists.busybox.net>; Tue, 10 Sep 2024 19:01:18 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id F0B83410A1
+ for <buildroot@lists.busybox.net>; Fri, 13 Sep 2024 14:06:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zz6rQ1Fb6qHK for <buildroot@lists.busybox.net>;
- Tue, 10 Sep 2024 19:01:18 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7Rt6Nkkg9LGF for <buildroot@lists.busybox.net>;
+ Fri, 13 Sep 2024 14:06:41 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=116.202.254.214;
  helo=ciao.gmane.io; envelope-from=gclub-buildroot@m.gmane-mx.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 393FB80AFB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 393FB80AFB
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org ED6D34059D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ED6D34059D
 Received: from ciao.gmane.io (ciao.gmane.io [116.202.254.214])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 393FB80AFB
- for <buildroot@uclibc.org>; Tue, 10 Sep 2024 19:01:18 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id ED6D34059D
+ for <buildroot@uclibc.org>; Fri, 13 Sep 2024 14:06:40 +0000 (UTC)
 Received: from list by ciao.gmane.io with local (Exim 4.92)
- (envelope-from <gclub-buildroot@m.gmane-mx.org>) id 1so671-0003VG-6D
- for buildroot@uclibc.org; Tue, 10 Sep 2024 21:01:15 +0200
+ (envelope-from <gclub-buildroot@m.gmane-mx.org>) id 1sp6wX-0002V3-HG
+ for buildroot@uclibc.org; Fri, 13 Sep 2024 16:06:37 +0200
 X-Injected-Via-Gmane: http://gmane.org/
 To: buildroot@uclibc.org
 From: Grant Edwards <grant.b.edwards@gmail.com>
-Date: Tue, 10 Sep 2024 19:01:10 -0000 (UTC)
-Message-ID: <vbq51m$cnj$1@ciao.gmane.io>
+Date: Fri, 13 Sep 2024 14:06:32 -0000 (UTC)
+Message-ID: <vc1gt7$8pe$1@ciao.gmane.io>
 User-Agent: slrn/1.0.3 (Linux)
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=fail (p=none dis=none)
  header.from=gmail.com
-Subject: [Buildroot] How to control host gcc version?
+Subject: [Buildroot] BR2_DEFCONFIG not being saved by "make savedefconfig"
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -67,22 +67,26 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-I'm trying to build a root filesystem using a vendor-supplied copy of
-buildroot 2020.02.07.
+NB: I'm currently using 2020.02.7 as provided by a silicon
+    vendor. Once I get that all set up and working as desired, I do
+    plan on upgrading.
 
-Unfortunately, some of the packages that buildroot wants to build for
-the host (e.g. m4) are so old they won't compile with my host's
-version of gcc (13.3).  [I've got m4 installed on the host, but
-buildroot still wants to build its own.]
+In my external default config file, I have BR2_DEFCONFIG set to point
+to the location in my external buildroot tree where the default
+configuration file is located. When I do "make savedefconfig", the
+current working configuration is saved to that location has expected.
 
-I can install older versions of gcc, but I can't figure out how to
-tell buildroot what host toolchain to use. There must be an option for
-that, but I've been searching through the manual and haven't found it.
+However, the BR2_DEFCONFIG setting has vanished from that saved
+configuration.
 
-How do I tell buildroot what host gcc to use (e.g. 'gcc-11' instead of
-'gcc')?
+Is that expected behavior?
 
---
+According to the manual "make savedefconfig" is only supposed to
+remove config options that are at their default values.  BR2_DEFCONFIG
+is non-default, yet it is not being saved.  What am I doing wrong?
+
+Thanks,
+
 Grant
 
 _______________________________________________
