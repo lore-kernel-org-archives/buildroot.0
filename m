@@ -4,72 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4ACB0FC6172
-	for <buildroot@archiver.kernel.org>; Fri, 13 Sep 2024 22:18:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36923FC6182
+	for <buildroot@archiver.kernel.org>; Fri, 13 Sep 2024 22:18:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1BBE840356;
-	Fri, 13 Sep 2024 22:18:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F17AC40551;
+	Fri, 13 Sep 2024 22:18:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id p1_5fkqsXpre; Fri, 13 Sep 2024 22:18:36 +0000 (UTC)
+ id Uf2NsvZwJEdI; Fri, 13 Sep 2024 22:18:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E4240404CA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CFB944246F
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E4240404CA;
-	Fri, 13 Sep 2024 22:18:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CFB944246F;
+	Fri, 13 Sep 2024 22:18:41 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 125A51BF2BE
- for <buildroot@lists.busybox.net>; Fri, 13 Sep 2024 22:18:34 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 05E791BF2BE
+ for <buildroot@lists.busybox.net>; Fri, 13 Sep 2024 22:18:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0156B60D70
- for <buildroot@lists.busybox.net>; Fri, 13 Sep 2024 22:18:34 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 01F9260742
+ for <buildroot@lists.busybox.net>; Fri, 13 Sep 2024 22:18:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7XkSnRrXt-pZ for <buildroot@lists.busybox.net>;
- Fri, 13 Sep 2024 22:18:33 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.201;
- helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id r4itgl3SNQZS for <buildroot@lists.busybox.net>;
+ Fri, 13 Sep 2024 22:18:35 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.197;
+ helo=relay5-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org CD1F260742
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CD1F260742
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [217.70.183.201])
- by smtp3.osuosl.org (Postfix) with ESMTPS id CD1F260742
- for <buildroot@buildroot.org>; Fri, 13 Sep 2024 22:18:32 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id A98521BF203;
- Fri, 13 Sep 2024 22:18:28 +0000 (UTC)
-Date: Sat, 14 Sep 2024 00:18:27 +0200
-To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <20240914001827.01a1165d@windsurf>
-In-Reply-To: <20240911203331.906197-1-james.hilliard1@gmail.com>
-References: <20240911203331.906197-1-james.hilliard1@gmail.com>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org F15D760D70
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F15D760D70
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [217.70.183.197])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id F15D760D70
+ for <buildroot@buildroot.org>; Fri, 13 Sep 2024 22:18:34 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 678991C0003;
+ Fri, 13 Sep 2024 22:18:32 +0000 (UTC)
+Date: Sat, 14 Sep 2024 00:18:31 +0200
+To: Bernd Kuhls <bernd@kuhls.net>
+Message-ID: <20240914001831.54c8b028@windsurf>
+In-Reply-To: <20240911204719.47461-1-bernd@kuhls.net>
+References: <20240911204719.47461-1-bernd@kuhls.net>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1726265909;
+ d=bootlin.com; s=gm1; t=1726265912;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=uOhpBwJDMLsO1Jc0zDsIOKybyMOewHiEhWEPSrtoS3w=;
- b=IzGXC1glcybmfiQFDvrs2wQQSwxU56dNFSlUZG5IcpYxlH97IgM2fImceJznnsTMZNDD4l
- rPVx3TzIkm9o2c2kq3aLf9zsALCUDpQct6nkRCa84uDv/QZf2s6ez+kYsaS9BUuq2iqD5Z
- a57U60B4sPc5sdfgDMrEI3dIHqVDPE2KOP3ldU0HauVfGzd6Lseayl56rkU0dsvMFdmr2T
- CGO7JB7ogIfXH25umq3ThMY2GR5IKSPo/UlNvHZ6E7BDRxQIHZ0RjsuiU2qVdY6nL0YRth
- Waz/fjSgBgWye2U/fGZ7cpRxSaNkBulEzvo5TXN0ocUKzB8TzbP0g42rG60fKw==
+ bh=UTR4hy1lehgHctltiO37s5icpRLUfWpZ/WjSZbIsMcQ=;
+ b=IL6+QhtJwgOkGtwkDhljbABbGO6puhNs9GuhH/4rkfJe0n/5i3XbMYZK0QzlVeRBukMxdD
+ timqE0xULtBYfMJWUFHVsd4K03oiqlvMBsZdxU+lewrGsTcnjtm0nPZqCw2CL5m1zIx/hB
+ 7Gjt33nIssGrJBVNf2E7eF8hWmngL+Uj3z+OoCEnZCtyYHwFMeV6ORNm4Z1sdTx+/ULWO7
+ ThPCU1il/MMWFzhRiHqjSFmIpxE1zIy2AHWLCJjZ4WLMSzS/fmpGwedhN9usB5R0FQ3xfJ
+ ke0Ahea9QL9wX8/smFEUCdL27qE5RajejfKDfsOolrrxc8HlB4w4L6AImCmkQg==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=IzGXC1gl
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-aiohttp-sse: bump to
- version 2.2.0
+ header.s=gm1 header.b=IL6+QhtJ
+Subject: Re: [Buildroot] [PATCH 1/1] {linux, linux-headers}: bump 6.{1, 6,
+ 10}.x series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,20 +83,21 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, 11 Sep 2024 14:33:31 -0600
-James Hilliard <james.hilliard1@gmail.com> wrote:
+On Wed, 11 Sep 2024 22:47:19 +0200
+Bernd Kuhls <bernd@kuhls.net> wrote:
 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 > ---
->  package/python-aiohttp-sse/python-aiohttp-sse.hash | 4 ++--
->  package/python-aiohttp-sse/python-aiohttp-sse.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
+>  linux/Config.in                      | 2 +-
+>  linux/linux.hash                     | 6 +++---
+>  package/linux-headers/Config.in.host | 6 +++---
+>  3 files changed, 7 insertions(+), 7 deletions(-)
 
 Applied to master, thanks.
 
