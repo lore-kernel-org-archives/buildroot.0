@@ -4,72 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36923FC6182
-	for <buildroot@archiver.kernel.org>; Fri, 13 Sep 2024 22:18:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CB942FC6172
+	for <buildroot@archiver.kernel.org>; Fri, 13 Sep 2024 22:18:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F17AC40551;
-	Fri, 13 Sep 2024 22:18:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 94287406F8;
+	Fri, 13 Sep 2024 22:18:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Uf2NsvZwJEdI; Fri, 13 Sep 2024 22:18:42 +0000 (UTC)
+ id r3uPf90mgBfs; Fri, 13 Sep 2024 22:18:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CFB944246F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 61E4D424D2
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CFB944246F;
-	Fri, 13 Sep 2024 22:18:41 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 05E791BF2BE
- for <buildroot@lists.busybox.net>; Fri, 13 Sep 2024 22:18:36 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 61E4D424D2;
+	Fri, 13 Sep 2024 22:18:45 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 428F31BF2BE
+ for <buildroot@lists.busybox.net>; Fri, 13 Sep 2024 22:18:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 01F9260742
- for <buildroot@lists.busybox.net>; Fri, 13 Sep 2024 22:18:36 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 31BAA4024D
+ for <buildroot@lists.busybox.net>; Fri, 13 Sep 2024 22:18:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id r4itgl3SNQZS for <buildroot@lists.busybox.net>;
- Fri, 13 Sep 2024 22:18:35 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.197;
- helo=relay5-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hYLFcI4am79C for <buildroot@lists.busybox.net>;
+ Fri, 13 Sep 2024 22:18:43 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org F15D760D70
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F15D760D70
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp3.osuosl.org (Postfix) with ESMTPS id F15D760D70
- for <buildroot@buildroot.org>; Fri, 13 Sep 2024 22:18:34 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 678991C0003;
- Fri, 13 Sep 2024 22:18:32 +0000 (UTC)
-Date: Sat, 14 Sep 2024 00:18:31 +0200
-To: Bernd Kuhls <bernd@kuhls.net>
-Message-ID: <20240914001831.54c8b028@windsurf>
-In-Reply-To: <20240911204719.47461-1-bernd@kuhls.net>
-References: <20240911204719.47461-1-bernd@kuhls.net>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1726265912;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=UTR4hy1lehgHctltiO37s5icpRLUfWpZ/WjSZbIsMcQ=;
- b=IL6+QhtJwgOkGtwkDhljbABbGO6puhNs9GuhH/4rkfJe0n/5i3XbMYZK0QzlVeRBukMxdD
- timqE0xULtBYfMJWUFHVsd4K03oiqlvMBsZdxU+lewrGsTcnjtm0nPZqCw2CL5m1zIx/hB
- 7Gjt33nIssGrJBVNf2E7eF8hWmngL+Uj3z+OoCEnZCtyYHwFMeV6ORNm4Z1sdTx+/ULWO7
- ThPCU1il/MMWFzhRiHqjSFmIpxE1zIy2AHWLCJjZ4WLMSzS/fmpGwedhN9usB5R0FQ3xfJ
- ke0Ahea9QL9wX8/smFEUCdL27qE5RajejfKDfsOolrrxc8HlB4w4L6AImCmkQg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=IL6+QhtJ
-Subject: Re: [Buildroot] [PATCH 1/1] {linux, linux-headers}: bump 6.{1, 6,
- 10}.x series
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1576D402DC
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1576D402DC
+ for <buildroot@buildroot.org>; Fri, 13 Sep 2024 22:18:43 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 031AE86FFC; Fri, 13 Sep 2024 22:18:43 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 14 Sep 2024 00:18:03 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: d30841bb82e076e64067af9ef3cc3ab58ced8558
+X-Git-Newrev: 30e39b33e9b6a2680357ad5d5120ac6d70ecbf7b
+X-Patchwork-Hint: ignore
+Message-Id: <20240913221843.031AE86FFC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-aiohttp-sse: bump to
+ version 2.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,29 +60,50 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, 11 Sep 2024 22:47:19 +0200
-Bernd Kuhls <bernd@kuhls.net> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=30e39b33e9b6a2680357ad5d5120ac6d70ecbf7b
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-> ---
->  linux/Config.in                      | 2 +-
->  linux/linux.hash                     | 6 +++---
->  package/linux-headers/Config.in.host | 6 +++---
->  3 files changed, 7 insertions(+), 7 deletions(-)
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/python-aiohttp-sse/python-aiohttp-sse.hash | 4 ++--
+ package/python-aiohttp-sse/python-aiohttp-sse.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/python-aiohttp-sse/python-aiohttp-sse.hash b/package/python-aiohttp-sse/python-aiohttp-sse.hash
+index 224601450c..e8382e7f8e 100644
+--- a/package/python-aiohttp-sse/python-aiohttp-sse.hash
++++ b/package/python-aiohttp-sse/python-aiohttp-sse.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/aiohttp-sse/json
+-md5  822cd0c30325e8a711101c1a1ede4058  aiohttp-sse-2.1.0.tar.gz
+-sha256  dfe8f7271ab4470891fa1bfa1913d6889b3d19015dd3d3a4cab949e66971bbca  aiohttp-sse-2.1.0.tar.gz
++md5  8c86e737a2f3642941c1d383f42ce6ae  aiohttp-sse-2.2.0.tar.gz
++sha256  a48dd5774031d3f41a29e159ebdbb93e89c8f37c1e9e83e196296be51885a5c2  aiohttp-sse-2.2.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  5585eb91ec607b4fdbe97d44a61146a9cc27bb703336628bc3c6a1eaffe60307  LICENSE
+diff --git a/package/python-aiohttp-sse/python-aiohttp-sse.mk b/package/python-aiohttp-sse/python-aiohttp-sse.mk
+index 2aef1579f5..bf46c98528 100644
+--- a/package/python-aiohttp-sse/python-aiohttp-sse.mk
++++ b/package/python-aiohttp-sse/python-aiohttp-sse.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_AIOHTTP_SSE_VERSION = 2.1.0
++PYTHON_AIOHTTP_SSE_VERSION = 2.2.0
+ PYTHON_AIOHTTP_SSE_SOURCE = aiohttp-sse-$(PYTHON_AIOHTTP_SSE_VERSION).tar.gz
+-PYTHON_AIOHTTP_SSE_SITE = https://files.pythonhosted.org/packages/2f/3f/cc4f5a3fe6cb50ad5b9d26bb7738c5da1f61645b517d4230df2fc32d89f0
++PYTHON_AIOHTTP_SSE_SITE = https://files.pythonhosted.org/packages/80/df/4ddb30e689695fd91cf41c072e154061120ed166e8baf6c9a0020f27dffc
+ PYTHON_AIOHTTP_SSE_SETUP_TYPE = setuptools
+ PYTHON_AIOHTTP_SSE_LICENSE = Apache-2.0
+ PYTHON_AIOHTTP_SSE_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
