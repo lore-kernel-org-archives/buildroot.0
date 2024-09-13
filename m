@@ -4,89 +4,87 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EFD4EFC6169
-	for <buildroot@archiver.kernel.org>; Fri, 13 Sep 2024 17:06:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B835DFC6172
+	for <buildroot@archiver.kernel.org>; Fri, 13 Sep 2024 21:08:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8E6B061245;
-	Fri, 13 Sep 2024 17:06:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 59F9C60585;
+	Fri, 13 Sep 2024 21:08:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id B3VJWuo27oPz; Fri, 13 Sep 2024 17:06:58 +0000 (UTC)
+ id TlOB2xgmX6ue; Fri, 13 Sep 2024 21:08:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 88DE261246
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6644A60614
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 88DE261246;
-	Fri, 13 Sep 2024 17:06:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6644A60614;
+	Fri, 13 Sep 2024 21:08:42 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 9AB441BF28A
- for <buildroot@lists.busybox.net>; Fri, 13 Sep 2024 17:06:57 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id DA13B1BF852
+ for <buildroot@lists.busybox.net>; Fri, 13 Sep 2024 21:08:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 89AB280F3B
- for <buildroot@lists.busybox.net>; Fri, 13 Sep 2024 17:06:57 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id C96EE846AF
+ for <buildroot@lists.busybox.net>; Fri, 13 Sep 2024 21:08:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8DqJ9TaafVob for <buildroot@lists.busybox.net>;
- Fri, 13 Sep 2024 17:06:57 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::632; helo=mail-pl1-x632.google.com;
- envelope-from=markus.mayer@broadcom.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org BD43480E5C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BD43480E5C
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com
- [IPv6:2607:f8b0:4864:20::632])
- by smtp1.osuosl.org (Postfix) with ESMTPS id BD43480E5C
- for <buildroot@buildroot.org>; Fri, 13 Sep 2024 17:06:56 +0000 (UTC)
-Received: by mail-pl1-x632.google.com with SMTP id
- d9443c01a7336-2053a0bd0a6so24907155ad.3
- for <buildroot@buildroot.org>; Fri, 13 Sep 2024 10:06:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1726247216; x=1726852016;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=mJ/pSNUQ7C0RH5m1QK60DhDNrn4agaOI0fIMwRbaZGA=;
- b=DirOq9seDG+uAG123ZttsaCJbEqU8jEa8HaIYxwbNa9dCebZ5YkQQ1XFLrEJGCgSSy
- EQiEtL4PoTj5LP7nP7djZJ8c5eVGY94XUjQrmacFZkv3orghyrVx3v2sfQRzrf7El59B
- lzNBTcUpUncuq71NI7JhBtvoyvZ2iizSi+k78tDoY4BuBb78yu2e+IsPllq866OIWvqi
- 53BLmVef6tI2Lums/+BG1Y1t7/Bbj/CSw9vdIO2eAxBK16euvSXLadOp/iMnkCXX2DID
- sPIZn9vdFuhXUfZ9RGeIl2kKerJl4ymncDCGVsRXJoM7iPrWVCq94CbvYkVu7AQ8LxNG
- WwJg==
-X-Forwarded-Encrypted: i=1;
- AJvYcCWSFRCLSC3Xs2VHgaoq2YvKLXaiHZdadR1vIQbNpfWC64FApt36g4E2U5yASEI9Q5tDIDIQ/f1sDO8=@buildroot.org
-X-Gm-Message-State: AOJu0Yxdvx8kFaCZ4m9569VK5mGZVMVIc8gbQWGGUCJdsu2Ath/K+TSo
- ePsfTZf/SeT7NXeeOnQY1AkZI4YeiTCcxNAMEfCNHlJfMOZWhSetY7/sJV8oYcLd04OrOeDrnCB
- w95MHi4sdIAWe1U0UwYT5t30NUFNKBxHykZWuhAlPHKiIoAH2b5Bo
-X-Google-Smtp-Source: AGHT+IG9HWom2UQYn5VxD6G2eNm1BqhTdYm6NGcVC4oQQMpAwhDZAgxpTxaVZrR7hWexbCNqKTZq8I0mrNPvqJumur0=
-X-Received: by 2002:a17:90a:7407:b0:2d8:8252:f675 with SMTP id
- 98e67ed59e1d1-2dba007f0a6mr7746929a91.39.1726247215583; Fri, 13 Sep 2024
- 10:06:55 -0700 (PDT)
+ id nFOR-K452tzD for <buildroot@lists.busybox.net>;
+ Fri, 13 Sep 2024 21:08:39 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.126.134;
+ helo=mout.kundenserver.de; envelope-from=paguilar@paguilar.org;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 1D1508455C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1D1508455C
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1D1508455C
+ for <buildroot@buildroot.org>; Fri, 13 Sep 2024 21:08:38 +0000 (UTC)
+X-UI-Sender-Class: 55c96926-9e95-11ee-ae09-1f7a4046a0f6
+Received: from uxmal.fritz.box ([151.51.184.1]) by mrelayeu.kundenserver.de
+ (mreue011 [212.227.17.189]) with ESMTPSA (Nemesis) id
+ 1N5mWp-1rwx8Z1b1n-01495o; Fri, 13 Sep 2024 23:03:32 +0200
+From: Pedro Aguilar <paguilar@paguilar.org>
+To: buildroot@buildroot.org
+Date: Fri, 13 Sep 2024 23:03:01 +0200
+Message-Id: <20240913210301.6681-1-paguilar@paguilar.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <cover.1723543467.git.yann.morin@orange.com>
- <ZshsYmf4qZcXkEZX@probook>
-In-Reply-To: <ZshsYmf4qZcXkEZX@probook>
-Date: Fri, 13 Sep 2024 10:06:44 -0700
-Message-ID: <CAGt4E5uswBziir9OtGYEeoxotmJwz8fHeQSr7_xsadk_hkxniw@mail.gmail.com>
-To: yann.morin@orange.com
+X-Provags-ID: V03:K1:BRQOXLoPkVDEW8GnAxxEVb3pPwIpVc40NOlwa5MZzdMMBuzB6QG
+ I+C5WML588ykFHWeVa3RK1n58Pocc8Pxgh1Wl/ArhikGYqv8K9VAGLVqqK/OPmYMI5Fi8hq
+ TGglKN73cgsNfgOcU4FGXKlmXKjNkV8j62zBchtm3L5UTtvBNSHZRA+iSQkL93lQ2XrFD/V
+ HQvrmjr6xdJlh3oDx6Csw==
+UI-OutboundReport: notjunk:1;M01:P0:eduEKPdq/cg=;eWcA2SazbzLq5PMTHA1DH+ccXXw
+ yqfervpaHqHOu0qgG2D/a88+FauHebI/sKxfqGviivr89A6nluU09nKyVlgv1e3fLHTwvRqOH
+ TRPy6E3AXCUttnySYuQLAdwOZZUysoqYzSY6EIaw/dUoDDb8w5g9X+a3VDg5N0OiDzDVZtvvd
+ eK5Q/k+/IBUFMg4qiUkboc5ClLvKp8du8sBvhJNBgKamRnSl3OFsE1oXgOIDxtj4RYDklqoZP
+ LJJJ00jGew3NZHY0+VSXnCM6C3ZnaTuGRzhAZySsAaWyeEoAhBdu8pMep3NLmQbZI9Sg0JxNX
+ kud3AenZwcaTLTuCuYmb4v8tSfkj/c2xR6X/hzdpFH5NRyqqT87B/g3gBsiety/LuI0xuJylW
+ kJ9HAW8NQHnYnpGGdqcLvqJVWtqjWrJxG07DEZswEbzS5B9Jx1DO8T0QYwZTC7uM3v7Lsceso
+ FpLpjt3ZRPo1dw0gIKV4qdRRv57TFEEHeajxX8yU9tJvNttlfvOmFqmnEdSkMhf4d4OUoPKX2
+ RABx5hwwiNW7YxzSnukVjT+fzOuNHo25YCnAsOO/Ryy/PgbmmADEYDUDCPiNLgtboDWot44nS
+ EQNA0ten0Ht7wWcM9IrTaOx+CJKb3vFY+d7JhPD4cUnoS/Gv7z9ryMIziqVXL5O/ZVldx1B5U
+ pcm7tyQCbaNHYeJwPQx2ZIU47tf5gm18mIh5R8z5lLerc6uJZHlDc7Qf20B7sr2+78s6TNvev
+ JbD1XEc/jbrK12pEGVHk6Tx2VDrVkF7HA==
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=broadcom.com; s=google; t=1726247216; x=1726852016; darn=buildroot.org;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=mJ/pSNUQ7C0RH5m1QK60DhDNrn4agaOI0fIMwRbaZGA=;
- b=WDGwspiyZEFRwi+GoP+HPKtOeYH1uA8lAmXvIkUbTDa8vZmQ+2ORCrd/3JbFft1jKu
- i1KPV3r03eMv/M51QZOIG7OEi4vRroj/b/S+aFitWcQNevgFk45z6DmtIivWV30hf4ZU
- B5JIGwVRBOeyjtP7NrrDMuP4e6rIoQf9CdbWQ=
+ d=paguilar.org; 
+ s=s1-ionos; t=1726261717; x=1726866517; i=paguilar@paguilar.org;
+ bh=mYdHs9OrouKOoSdVT6MhRbQSscfKgzJ3qDd2R8sZRBk=;
+ h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-Id:
+ MIME-Version:Content-Transfer-Encoding:cc:
+ content-transfer-encoding:content-type:date:from:message-id:
+ mime-version:reply-to:subject:to;
+ b=fgIAtMVZGkhrxIbJTtzzQ7b3BsqVNXFKwDU7f0proJuiTmDu3iTfap5l7UdPUoG2
+ mVJ3sKs5fSOPYw41OqAJ/13DPq0tdleeMRyQOXER0tk++cSZHD25Ei64QDh0RnrM3
+ PT+DUhaQYoP7r2Lo3xKrEJ6KFeJuh45ccQwCqLpyhsXq+CbSkNnoPCnRRmkCXr11I
+ WGeqB9Lz+/zQevD7OlcaF6gW84oGV7DSywFFjbvpUrfLsdq7DXhPhclpZCOVYK7ny
+ zJ98lhFHa32aW9bkrcWHYokxQUrbrWv5AtovdLPW9ab3Idoo/H9eUbwR/dnDH3mE9
+ 4hfHBmuwxytz3iRAFw==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=broadcom.com
+ dmarc=none (p=none dis=none)
+ header.from=paguilar.org
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=broadcom.com header.i=@broadcom.com header.a=rsa-sha256
- header.s=google header.b=WDGwspiy
-Subject: Re: [Buildroot] [PATCH 0/3] toolchain/wrapper: move -ztext to the
- toolchain wrapper
+ dkim=pass (2048-bit key,
+ unprotected) header.d=paguilar.org header.i=paguilar@paguilar.org
+ header.a=rsa-sha256 header.s=s1-ionos header.b=fgIAtMVZ
+Subject: [Buildroot] [PATCH 1/1] package/bdwgc: bump to version 8.2.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,30 +96,50 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Markus Mayer via buildroot <buildroot@buildroot.org>
-Reply-To: Markus Mayer <mmayer@broadcom.com>
-Cc: Romain Naour <romain.naour@gmail.com>, buildroot@buildroot.org,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- =?UTF-8?B?SiAuIE5ldXNjaMOkZmVy?= <j.neuschaefer@gmx.net>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: paguilar@paguilar.org
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgYWxsLAoKT24gRnJpLCAyMyBBdWcgMjAyNCBhdCAwNDowMywgSi4gTmV1c2Now6RmZXIgdmlh
-IGJ1aWxkcm9vdAo8YnVpbGRyb290QGJ1aWxkcm9vdC5vcmc+IHdyb3RlOgo+Cj4gT24gVHVlLCBB
-dWcgMTMsIDIwMjQgYXQgMTI6MDQ6MjhQTSArMDIwMCwgeWFubi5tb3JpbkBvcmFuZ2UuY29tIHdy
-b3RlOgo+ID4gRnJvbTogIllhbm4gRS4gTU9SSU4iIDx5YW5uLm1vcmluQG9yYW5nZS5jb20+Cj4g
-Pgo+ID4gSGVsbG8gQWxsIQo+ID4KPiA+IEZvbGxvd2luZyBhIGRpc2N1c3Npb24gd2l0aCBUaG9t
-YXMgLCB3ZSB3ZXJlIGJvdGggbGVmdCB3b25kZXJpbmcgd2h5Cj4gPiAtenRleHQgd2FzIG5vdCBo
-YW5kbGVkIGluIHRoZSB0b29sY2hhaW4gd3JhcHBlciwgbGlrZSB0aGUgb3RoZXIgc2ltaWxhcgo+
-ID4gZmxhZ3MgYXJlLgoKSSBhbSBjdXJpb3VzIHdoYXQgdGhlIHBsYW4gaXMgd2l0aCB0aGlzIHNl
-cmllcy4gT24gdGhlIG9uZSBoYW5kIGl0IGlzCmxvb2tpbmcgbGlrZSB0aGlzIG5ldyBhcHByb2Fj
-aCBpcyB0aGUgYXBwcm9hY2ggdGhhdCBzaG91bGQgaGF2ZSBiZWVuCnRha2VuIGFsbCBhbG9uZyAo
-aGFuZGxlICItenRleHQiIGluIHRoZSB3cmFwcGVyKS4gT24gdGhlIG90aGVyIGhhbmQsCml0IGRv
-ZXNuJ3Qgc2VlbSB0byBoYXZlIGJlZW4gYXBwbGllZCBhbnl3aGVyZSB0aGF0IEkgY2FuIGZpbmQu
-CgpXaWxsIGl0IGJlIGJyb3VnaHQgaW4gYXQgc29tZSBwb2ludD8KClRoYW5rcywKLU1hcmt1cwpf
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3Qg
-bWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRy
-b290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+Signed-off-by: Pedro Aguilar <paguilar@paguilar.org>
+---
+ package/bdwgc/bdwgc.hash | 4 ++++
+ package/bdwgc/bdwgc.mk   | 4 ++++
+ 2 files changed, 8 insertions(+)
+
+diff --git a/package/bdwgc/bdwgc.hash b/package/bdwgc/bdwgc.hash
+index 917089da08..1e8cc6df98 100644
+--- a/package/bdwgc/bdwgc.hash
++++ b/package/bdwgc/bdwgc.hash
+@@ -1,3 +1,7 @@
+ # Locally computed
++<<<<<<< Updated upstream
+ sha256  f30107bcb062e0920a790ffffa56d9512348546859364c23a14be264b38836a0  gc-8.2.2.tar.gz
++=======
++sha256  b9183fe49d4c44c7327992f626f8eaa1d8b14de140f243edb1c9dcff7719a7fc  gc-8.2.6.tar.gz
++>>>>>>> Stashed changes
+ sha256  a9b077aeb4e9e1aaf9742119d8023ef26f52f445cdc3f60d390bf59e1647f54a  README.QUICK
+diff --git a/package/bdwgc/bdwgc.mk b/package/bdwgc/bdwgc.mk
+index e776fb7458..e1cdbce62c 100644
+--- a/package/bdwgc/bdwgc.mk
++++ b/package/bdwgc/bdwgc.mk
+@@ -4,7 +4,11 @@
+ #
+ ################################################################################
+
++<<<<<<< Updated upstream
+ BDWGC_VERSION = 8.2.2
++=======
++BDWGC_VERSION = 8.2.6
++>>>>>>> Stashed changes
+ BDWGC_SOURCE = gc-$(BDWGC_VERSION).tar.gz
+ BDWGC_SITE = https://github.com/ivmai/bdwgc/releases/download/v$(BDWGC_VERSION)
+ BDWGC_INSTALL_STAGING = YES
+--
+2.34.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
