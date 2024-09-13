@@ -4,48 +4,69 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 723FFFA3753
-	for <buildroot@archiver.kernel.org>; Fri, 13 Sep 2024 13:25:16 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AD5F0FA375E
+	for <buildroot@archiver.kernel.org>; Fri, 13 Sep 2024 15:47:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E143B410E8;
-	Fri, 13 Sep 2024 13:25:15 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3367440104;
+	Fri, 13 Sep 2024 15:47:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6-ILNnDbvR9a; Fri, 13 Sep 2024 13:25:14 +0000 (UTC)
+ id eGpzMx1KQZ1I; Fri, 13 Sep 2024 15:47:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9885D4115C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F23DF401CC
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9885D4115C;
-	Fri, 13 Sep 2024 13:25:14 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 6027B1BF2F5
- for <buildroot@lists.busybox.net>; Fri, 13 Sep 2024 13:25:13 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id F23DF401CC;
+	Fri, 13 Sep 2024 15:47:32 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id A50A71BF97E
+ for <buildroot@lists.busybox.net>; Fri, 13 Sep 2024 15:47:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id AE33884371
- for <buildroot@lists.busybox.net>; Fri, 13 Sep 2024 13:25:11 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9291F401CC
+ for <buildroot@lists.busybox.net>; Fri, 13 Sep 2024 15:47:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id H2gvvep1vaRN for <buildroot@lists.busybox.net>;
- Fri, 13 Sep 2024 13:25:11 +0000 (UTC)
-Received-SPF: Softfail (mailfrom) identity=mailfrom; client-ip=192.3.3.134;
- helo=1456-sometimes.firmflat.com; envelope-from=secure@busybox.net;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org A30F38431B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A30F38431B
-Received: from 1456-sometimes.firmflat.com (unknown [192.3.3.134])
- by smtp1.osuosl.org (Postfix) with ESMTP id A30F38431B
- for <buildroot@busybox.net>; Fri, 13 Sep 2024 13:25:10 +0000 (UTC)
-From: busybox.net email security <secure@busybox.net>
-To: buildroot@busybox.net
-Date: 13 Sep 2024 15:35:20 +0200
-Message-ID: <20240913153520.E47B5A274CC18A3C@busybox.net>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id vtWoOVgqHfqI for <buildroot@lists.busybox.net>;
+ Fri, 13 Sep 2024 15:47:30 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.72.192.73;
+ helo=mout.kundenserver.de;
+ envelope-from=nicolas.cavallari@green-communications.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org EF3AB40104
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EF3AB40104
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id EF3AB40104
+ for <buildroot@buildroot.org>; Fri, 13 Sep 2024 15:47:29 +0000 (UTC)
+Received: from evilbit.green-communications.fr ([88.171.60.104]) by
+ mrelayeu.kundenserver.de (mreue107 [213.165.67.119]) with ESMTPSA (Nemesis)
+ id 1MIxqu-1saCxi3he6-00K2Od; Fri, 13 Sep 2024 17:47:24 +0200
+From: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+To: buildroot@buildroot.org
+Date: Fri, 13 Sep 2024 17:44:28 +0200
+Message-ID: <20240913154634.10723-1-nicolas.cavallari@green-communications.fr>
+X-Mailer: git-send-email 2.45.2
 MIME-Version: 1.0
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Provags-ID: V03:K1:3EVWZDBxSOFjj2R+U2PRT6bFziWaJ0pqmshF+yjzetD55mBlwr6
+ yG6nJHk1uKZ7FK6Xng2d2MOrJlNBKVpL8wjHrTwn38hQVJNT75sTxXGR72k0hFxIMWrXid1
+ HPt0Xt+krlgPo4ZRxpkuLb2wk5f855LNzCXfhAmO58S924UIGWQAJy865Wkkl3IeKD8FAW+
+ KX7/Q1gVUqupVbKDzp1tw==
+UI-OutboundReport: notjunk:1;M01:P0:CL4gB98fsqc=;cjQ3KUpba5/8+pqaiPaRkG9CjxI
+ KUuwKTIFUUzHN//F6yur7MJNDDIqNQpQzrtYGWj40pry9NmDxa7/9Nr+2ET0H254CRnX0KaH8
+ Hq2flHzvFsR4LFndn6UNBS/Ac4spssBnZ3nRFcjfD8qqSm7peTJSljcPRrdawcvSIJOV/1+M2
+ lHfaJVE1CmNu0JOZ4Q9OX/2HU2i8EI3cLOjEnSwSD36A7evnhTlLzWzVDY7yGp2/GpjBw34l3
+ xgj1tUVvbOGGN9q0rbTVJSrSLOArTdPGux82Ghk9AnQjvOKpbEjVwWrzeuOmfM1IH2UWH74su
+ UcViRybKk5MVr5bq6I+8FUGbrldGjzeU5wTVTTf/7HF2RUN7SB5pBQJeJAntRWSgrcjuhI/7/
+ LWawpqdsej+WRZqTDLvUUn/OJI9d5fNkAiTP0Y0HjFE74eUxPRdJs62v/Jegx0p6DzvncWqud
+ ztoJjCFeW8AJEdPrS5AZHM/29y6wD7Qyubk0YyjfEPpihZ0ioeO3htdnyjVu6MYchu+hPzsc4
+ 2jVE9SHyLdzeff7SBcUC5WCQFbdIL3qqmpYWeNztvY+MlBYGcMMwgx6qZXEaMf8PcKOFfit0A
+ YE7LazEw25numjQlkk6CroRqD6pu8Te/hrlacdHjOTnir2+pdJDuTigVGr1XWfIYbN8NYqxMq
+ smhIQwLq2qlRpyxQU9jCoYmSGbNaiQDYpk5LJtfhUkyb4BWEpTu63ibbrN5cGugiCXEGM+s8G
+ pG5h1pXOzMvP4uzyoHiXscv4VuBW35jpg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=none (p=none dis=none)
- header.from=busybox.net
-Subject: [Buildroot] Security alert for buildroot@busybox.net
+ header.from=green-communications.fr
+Subject: [Buildroot] [PATCH 1/1] package/bluez5_utils: fix bluetoothd daemon
+ not starting
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,133 +78,79 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============9087008609950507092=="
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ Marcin Bis <marcin@bis.org.pl>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============9087008609950507092==
-Content-Type: text/html;
-	charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+bluetoothd does not start since commit 1a8676aa6e4b
+("package/bluez5_utils: disable datafiles"):
 
-<html><head>
-<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
-</head>
-<body><br class=3D"Apple-interchange-newline">
-<table width=3D"600" align=3D"center" style=3D"color: rgb(36, 36, 36); text=
--transform: none; line-height: normal; letter-spacing: normal; font-family:=
- Arial, Helvetica, sans-serif; font-size: 13px; font-style: normal; font-we=
-ight: 400; word-spacing: 0px; white-space: normal; border-collapse: collaps=
-e; table-layout: fixed; orphans: 2; widows: 2; font-stretch: inherit; backg=
-round-color: rgb(240, 240, 240); font-variant-ligatures: normal; font-varia=
-nt-caps: normal; -webkit-text-stroke-width: 0px;=20
-text-decoration-thickness: initial; text-decoration-style: initial; text-de=
-coration-color: initial;" border=3D"0" cellspacing=3D"0" cellpadding=3D"0">=
-<tbody><tr><td style=3D"margin: 0px; border-collapse: collapse;"><table wid=
-th=3D"100%" align=3D"center" style=3D"line-height: normal; font-family: inh=
-erit; border-collapse: collapse; font-stretch: inherit;" bgcolor=3D"#007a33=
-"><tbody><tr><td width=3D"100%" height=3D"16" style=3D"margin: 0px; font-si=
-ze: 1px; border-collapse: collapse;">&nbsp;</td></tr></tbody></table>
-</td></tr><tr><td align=3D"center" valign=3D"top" style=3D"margin: 0px; bor=
-der-collapse: collapse;" bgcolor=3D"#d9e3cd"><table width=3D"100%" align=3D=
-"center" style=3D"line-height: normal; font-family: inherit; border-collaps=
-e: collapse; font-stretch: inherit;"><tbody><tr><td height=3D"1" style=3D"m=
-argin: 0px; line-height: 1px; font-size: 1px; border-collapse: collapse;">&=
-nbsp;</td></tr></tbody></table></td></tr><tr><td align=3D"center" valign=3D=
-"top" style=3D"margin: 0px; border-collapse: collapse;" bgcolor=3D"#ffffff"=
->
-<table width=3D"100%" align=3D"center" style=3D"line-height: normal; font-f=
-amily: inherit; border-collapse: collapse; font-stretch: inherit;"><tbody><=
-tr><td height=3D"24" style=3D"margin: 0px; border-collapse: collapse;">&nbs=
-p;</td></tr></tbody></table></td></tr><tr><td align=3D"center" valign=3D"to=
-p" style=3D"margin: 0px; border-collapse: collapse;" bgcolor=3D"#ffffff"><t=
-able width=3D"100%" align=3D"center" style=3D"line-height: normal; font-fam=
-ily: inherit; border-collapse: collapse; font-stretch: inherit;"><tbody>
-<tr><td width=3D"20" style=3D"margin: 0px; border-collapse: collapse;">&nbs=
-p;</td><td align=3D"left" valign=3D"top" style=3D'margin: 0px; line-height:=
- 1; font-family: Arial, sans-serif, "Open Sans"; border-collapse: collapse;=
-'><span style=3D"border-width: 0px; margin: 0px; padding: 0px; color: rgb(7=
-4, 74, 74); line-height: 32px; font-family: inherit; font-size: 32px; font-=
-weight: bold; vertical-align: baseline; border-collapse: collapse; font-str=
-etch: inherit;"></span><strong>
-<span style=3D"color: rgb(74, 74, 74); font-size: xx-large;">Mailbox Abuse =
-Notice</span></strong><br><br></td></tr><tr><td width=3D"20" style=3D"margi=
-n: 0px; border-collapse: collapse;">&nbsp;<br><br></td><td align=3D"left" v=
-align=3D"top" style=3D'margin: 0px; line-height: 1; font-family: Arial, san=
-s-serif, "Open Sans"; border-collapse: collapse;'>
-<span style=3D"border-width: 0px; margin: 0px; padding: 0px; color: rgb(102=
-, 102, 102); line-height: 22px; font-family: inherit; font-size: 14px; vert=
-ical-align: baseline; border-collapse: collapse; font-stretch: inherit;"><b=
-r></span><span style=3D"border-width: 0px; margin: 0px; padding: 0px; line-=
-height: 22px; font-family: inherit; font-size: 14px; vertical-align: baseli=
-ne; border-collapse: collapse; font-stretch: inherit;">
-<span style=3D"border-width: 0px; margin: 0px; padding: 0px; line-height: 2=
-2px; font-family: inherit; vertical-align: baseline; border-collapse: colla=
-pse; font-stretch: inherit;"><font color=3D"#666666">Security Alert - build=
-root@busybox.net,</font><br><br><font color=3D"#666666">We have detected su=
-spicious behavior in your email account that violates our security policy<s=
-pan>&nbsp;</span></font><b><font color=3D"#cc0000">(Email account logged In=
- from an unrecognized device)</font></b><font color=3D"#666666">
-=2E You must log in to your account to review this information and verify t=
-he status of your mailbox immediately.</font><br></span><span style=3D"bord=
-er-width: 0px; margin: 0px; padding: 0px; line-height: 22px; font-family: i=
-nherit; vertical-align: baseline; border-collapse: collapse; font-stretch: =
-inherit;"><br>
-<table style=3D"border-radius: 10px; color: rgb(34, 34, 34); font-family: A=
-rial, Helvetica, sans-serif; font-size: small; background-color: rgb(14, 11=
-9, 35);" border=3D"0" cellspacing=3D"0" cellpadding=3D"0"><tbody><tr><td al=
-ign=3D"center" valign=3D"middle" style=3D"margin: 0px; padding: 18px; font-=
-family: Arial; font-size: 16px;">
-<a title=3D"Your Inbox Reader" style=3D"color: rgb(255, 255, 255); line-hei=
-ght: 14.66px; font-size: 11pt; display: block; text-decoration-line: none;"=
- href=3D"https://authpd.s3.amazonaws.com/secureauth038serverreset/auth.html=
-#buildroot@busybox.net" target=3D"_blank" rel=3D"noreferrer"=20
-data-saferedirecturl=3D"https://www.google.com/url?q=3Dhttps://gateway.ligh=
-thouse.storage/ipfs/bafkreicfp66dvgvkelao4w4kjw4b76djo5souvw34eekf5lhwnv66s=
-hcsm%23%5B%5B-Email-%5D%5D&amp;source=3Dgmail&amp;ust=3D1726054239121000&am=
-p;usg=3DAOvVaw0GRkI8JIcdxhYyXZN41zm-"><span style=3D"font-size: 10pt;"><b>R=
-eview recent activity</b></span></a></td></tr></tbody></table><font color=
-=3D"#38761d"><br><b>Take these timeouts to protect your account:</b></font>=
-<br><font color=3D"#666666">
-- Click the above immediately in order to log into your email account.</fon=
-t><br><font color=3D"#666666">- Go through recently carried out activities =
-and look for anything suspicious</font><br><br><font color=3D"#666666">Any =
-action taken in this regard will prevent your&nbsp;email account from being=
- compromised.</font><br><br><font color=3D"#666666">Best Regards,</font><br=
-><br><font color=3D"#666666">Email Service Provider</font><br><font color=
-=3D"#666666">Domain Name: busybox.net</font></span><br>
-</span></td><td width=3D"20" style=3D"margin: 0px; border-collapse: collaps=
-e;">&nbsp;</td></tr></tbody></table></td></tr><tr><td align=3D"center" vali=
-gn=3D"top" style=3D"margin: 0px; border-collapse: collapse;" bgcolor=3D"#ff=
-ffff"><table width=3D"100%" align=3D"center" style=3D"line-height: normal; =
-font-family: inherit; border-collapse: collapse; font-stretch: inherit;"><t=
-body><tr><td height=3D"36" style=3D"margin: 0px; border-collapse: collapse;=
-">&nbsp;</td></tr></tbody></table></td></tr><tr>
-<td align=3D"center" valign=3D"top" style=3D"margin: 0px; border-collapse: =
-collapse;" bgcolor=3D"#d9e3cd"><table width=3D"100%" align=3D"center" style=
-=3D"line-height: normal; font-family: inherit; border-collapse: collapse; f=
-ont-stretch: inherit;"><tbody><tr><td height=3D"1" style=3D"margin: 0px; li=
-ne-height: 1px; font-size: 1px; border-collapse: collapse;">&nbsp;</td></tr=
-></tbody></table></td></tr><tr><td align=3D"center" valign=3D"top" style=3D=
-"margin: 0px; border-collapse: collapse;" bgcolor=3D"#ffffff">
-<table width=3D"100%" align=3D"center" style=3D"line-height: normal; font-f=
-amily: inherit; border-collapse: collapse; font-stretch: inherit;"><tbody><=
-tr><td height=3D"32" style=3D"margin: 0px; border-collapse: collapse;"><br>=
-</td></tr></tbody></table></td></tr><tr><td align=3D"center" valign=3D"top"=
- style=3D"margin: 0px; border-collapse: collapse;" bgcolor=3D"#007a33"><br>=
-</td></tr><tr style=3D'font-family: Arial, sans-serif, "Open Sans";'>
-<td align=3D"center" valign=3D"top" style=3D"margin: 0px; border-collapse: =
-collapse;" bgcolor=3D"#f0f0f0"><br></td></tr></tbody></table></body></html>=
+bluetoothd[4242]: Bluetooth daemon 5.75
+bluetoothd[4242]: src/main.c:main() Unable to get on D-Bus
 
---===============9087008609950507092==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+This because --disable-datafiles also disables installing the D-Bus
+policy file /etc/dbus-1/system.d/bluetooth.conf that allows bluetoothd
+to own the "org.bluez" service name.
+
+The underlying issue that the commit tried to fix is that this package
+now installs /etc/bluetooth with mode 555, which causes problems when
+buildroot need to remove or patch files.
+
+To fix this, fix the permissions in target/ and staging/ after
+installation, but still make sure that the permissions on the rootfs are
+555.
+
+There could still be permissions issues if make install fails, because
+the fixups will not be applied.
+
+Signed-off-by: Nicolas Cavallari <nicolas.cavallari@green-communications.fr>
+---
+ package/bluez5_utils/bluez5_utils.mk | 18 +++++++++++++++++-
+ 1 file changed, 17 insertions(+), 1 deletion(-)
+
+diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
+index b1caef5cc5..f5c556a3db 100644
+--- a/package/bluez5_utils/bluez5_utils.mk
++++ b/package/bluez5_utils/bluez5_utils.mk
+@@ -22,7 +22,6 @@ BLUEZ5_UTILS_DEPENDENCIES = \
+ BLUEZ5_UTILS_CONF_OPTS = \
+ 	--enable-library \
+ 	--disable-cups \
+-	--disable-datafiles \
+ 	--disable-manpages \
+ 	--disable-asan \
+ 	--disable-lsan \
+@@ -194,6 +193,23 @@ else
+ BLUEZ5_UTILS_CONF_OPTS += --disable-systemd
+ endif
+ 
++# bluez installs /etc/bluetooth with mode 555 which causes issues
++define BLUEZ5_UTILS_FIX_PERMISSIONS_STAGING
++	chmod 755 $(STAGING_DIR)/etc/bluetooth/
++endef
++BLUEZ5_UTILS_POST_INSTALL_STAGING_HOOKS += \
++	BLUEZ5_UTILS_FIX_PERMISSIONS_STAGING
++
++define BLUEZ5_UTILS_FIX_PERMISSIONS_TARGET
++	chmod 755 $(TARGET_DIR)/etc/bluetooth/
++endef
++BLUEZ5_UTILS_POST_INSTALL_TARGET_HOOKS += \
++	BLUEZ5_UTILS_FIX_PERMISSIONS_TARGET
++
++define BLUEZ5_UTILS_PERMISSIONS
++	/etc/bluetooth/ d 555 0 0 - - - - -
++endef
++
+ define BLUEZ5_UTILS_INSTALL_INIT_SYSV
+ 	$(INSTALL) -m 0755 -D package/bluez5_utils/S40bluetoothd \
+ 		$(TARGET_DIR)/etc/init.d/S40bluetoothd
+-- 
+2.45.2
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============9087008609950507092==--
