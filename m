@@ -4,72 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3D83C02190
-	for <buildroot@archiver.kernel.org>; Sat, 14 Sep 2024 11:27:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 78000C02191
+	for <buildroot@archiver.kernel.org>; Sat, 14 Sep 2024 11:32:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 92826606AE;
-	Sat, 14 Sep 2024 11:27:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 400A2606FF;
+	Sat, 14 Sep 2024 11:32:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZFq_EKsbiPlK; Sat, 14 Sep 2024 11:27:13 +0000 (UTC)
+ id bySk2GwPXbEZ; Sat, 14 Sep 2024 11:31:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BC979613AB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2E48660718
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BC979613AB;
-	Sat, 14 Sep 2024 11:27:12 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 6FBF41BF2C8
- for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 11:26:57 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2E48660718;
+	Sat, 14 Sep 2024 11:31:59 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id C32471BF2C8
+ for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 11:31:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 618C6607B1
- for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 11:26:57 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B0A10407AA
+ for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 11:31:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JHwzG40lQWFz for <buildroot@lists.busybox.net>;
- Sat, 14 Sep 2024 11:26:55 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.194;
- helo=relay2-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id T_fEG40xCHdc for <buildroot@lists.busybox.net>;
+ Sat, 14 Sep 2024 11:31:56 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org EBE3E600B9
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EBE3E600B9
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [217.70.183.194])
- by smtp3.osuosl.org (Postfix) with ESMTPS id EBE3E600B9
- for <buildroot@buildroot.org>; Sat, 14 Sep 2024 11:26:54 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 5D31B40002;
- Sat, 14 Sep 2024 11:26:51 +0000 (UTC)
-Date: Sat, 14 Sep 2024 13:26:50 +0200
-To: Christian Hitz via buildroot <buildroot@buildroot.org>
-Message-ID: <20240914132650.3eb4a7b4@windsurf>
-In-Reply-To: <20240911131830.2313769-1-christian@klarinett.li>
-References: <20240911131830.2313769-1-christian@klarinett.li>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1726313212;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=Xr9dAyRHPi+/GBm0U+tIZ1tVOU3k1/s8b379iNIgPts=;
- b=nzkP7lXWIwK5+zQU5D8+QOv7PSPp2mXGdbQMJ9AQVYiXFSB4Nqcbj54aQWtGFHMhlu1aIM
- nkiBWOSxSuXCTFNj5e9diV0dgOjScXD1LFiCTRtDeDX766psY3fEwisYYd2cvWV1NBri0O
- ZpDP+sX0FSHtAD3C/AmFqSvpoGtXHqAhWbcUvRbAQkrBZQGxkLsKe/EdLgaFM2X0EXXJMT
- ZBwGAShzQovP5ms61UtzdppyIaBJP2g3dqn08jK7bRCUPv/bEEOe0QuWc5hyi07D67x5QQ
- inVnesfsnKAN1292EopenlpwKZkzaEkP9QK0L5GgRYmyMYveC6BoT8U8u21o9w==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=nzkP7lXW
-Subject: Re: [Buildroot] [PATCH] package/qt6/qt6svg: host variant depends on
- host-qt6base
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 674E040520
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 674E040520
+ for <buildroot@buildroot.org>; Sat, 14 Sep 2024 11:31:56 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 53DE082897; Sat, 14 Sep 2024 11:31:56 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sat, 14 Sep 2024 13:31:36 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: e5459a3f6a9a83f2cbf8d2e9a2a32a8d27e99c90
+X-Git-Newrev: 2a9d61fec10a1386da9769668ae64d98c08add88
+X-Patchwork-Hint: ignore
+Message-Id: <20240914113156.53DE082897@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/ipmitool: use versioned or custom
+ PEN registry
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,33 +59,128 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Christian Hitz <christian@klarinett.li>,
- Christian Hitz <christian.hitz@bbv.ch>, Jesse Van Gavere <jesseevg@gmail.com>,
- Roy Kollen Svendsen <roykollensvendsen@gmail.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, 11 Sep 2024 15:18:29 +0200
-Christian Hitz via buildroot <buildroot@buildroot.org> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=2a9d61fec10a1386da9769668ae64d98c08add88
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> From: Christian Hitz <christian.hitz@bbv.ch>
-> 
-> Signed-off-by: Christian Hitz <christian.hitz@bbv.ch>
-> ---
->  package/qt6/qt6svg/qt6svg.mk | 3 +++
->  1 file changed, 3 insertions(+)
+The previous default URL used for the PEN registry was not stable and
+could change at any time, making it unacceptable to have to update its
+hash every time.
 
-Applied to master, thanks.
+With this patch, if the PEN (Enterprise numbers) registry is installed
+by the iana-assignments package, ipmitool will use it. Otherwise, the
+user can provide a custom file in a rootfs overlay.
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Downloading such a file is no longer supported.
+
+Fixes:
+- http://autobuild.buildroot.org/results/5ae5ee948d99679cd50d1115a7d46f4368347b4f
+
+Co-Developed-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Co-Developed-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+[yann.morin.1998@free.fr: always look in /usr/share/misc/iana/]
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+---
+ Config.in.legacy             | 12 ++++++++++++
+ package/ipmitool/Config.in   | 17 +++++------------
+ package/ipmitool/ipmitool.mk | 17 +----------------
+ 3 files changed, 18 insertions(+), 28 deletions(-)
+
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 7513aa7efd..6a1518f439 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,18 @@ endif
+ 
+ comment "Legacy options removed in 2024.11"
+ 
++config BR2_PACKAGE_IPMITOOL_PEN_REG_URI
++	string "IANA PEN registry moved to iana-assignment package"
++	help
++	  Installation of the IANA PEN is now handled by the
++	  iana-assignment package; to install a custom PEN,
++	  use a rootfs-overlay for example.
++
++config BR2_PACKAGE_IPMITOOL_PEN_REG_URI_WRAP
++	bool
++	default y if BR2_PACKAGE_IPMITOOL_PEN_REG_URI != ""
++	select BR2_LEGACY
++
+ config BR2_PACKAGE_ERLANG_P1_YAML
+ 	bool "erlang-p1-yaml has been renamed"
+ 	select BR2_LEGACY
+diff --git a/package/ipmitool/Config.in b/package/ipmitool/Config.in
+index 9516ff8596..dd2b0e6b6d 100644
+--- a/package/ipmitool/Config.in
++++ b/package/ipmitool/Config.in
+@@ -5,22 +5,15 @@ config BR2_PACKAGE_IPMITOOL
+ 	  IPMItool provides a simple command-line interface to
+ 	  IPMI-enabled devices.
+ 
++	  ipmitool will look up the IANA PEN (Enterprise Numbers)
++	  registry in /usr/share/misc/iana/. The IANA PEN is optional,
++	  it can be provided by the iana-assignment package or by a
++	  rootfs overlay.
++
+ 	  https://github.com/ipmitool/ipmitool/
+ 
+ if BR2_PACKAGE_IPMITOOL
+ 
+-config BR2_PACKAGE_IPMITOOL_PEN_REG_URI
+-	string "IANA PEN registry URL or path"
+-	default "https://www.iana.org/assignments/enterprise-numbers.txt"
+-	help
+-	  Enter an URL or a file path to the PEN registry to use.
+-
+-	  Note that the official registry is 4MiB+ and may change any
+-	  time and is thus not guaranteed to be reproducible.
+-
+-	  Leave empty to not use a registry; vendor IDs will be
+-	  displayed instead of the corresponding names.
+-
+ config BR2_PACKAGE_IPMITOOL_LANPLUS
+ 	bool "enable lanplus interface"
+ 	select BR2_PACKAGE_OPENSSL
+diff --git a/package/ipmitool/ipmitool.mk b/package/ipmitool/ipmitool.mk
+index 4f2151904d..159bb7c8b6 100644
+--- a/package/ipmitool/ipmitool.mk
++++ b/package/ipmitool/ipmitool.mk
+@@ -14,6 +14,7 @@ IPMITOOL_AUTORECONF = YES
+ IPMITOOL_DEPENDENCIES = host-pkgconf
+ 
+ IPMITOOL_CONF_OPTS = --disable-registry-download
++IPMITOOL_CONF_ENV = IANADIR=/usr/share/misc/iana
+ 
+ ifeq ($(BR2_PACKAGE_FREEIPMI),y)
+ IPMITOOL_DEPENDENCIES += freeipmi
+@@ -49,20 +50,4 @@ endef
+ IPMITOOL_POST_INSTALL_TARGET_HOOKS += IPMITOOL_REMOVE_IPMIEVD
+ endif
+ 
+-IPMITOOL_PEN_REG_URI = $(call qstrip,$(BR2_PACKAGE_IPMITOOL_PEN_REG_URI))
+-ifneq ($(IPMITOOL_PEN_REG_URI),)
+-ifneq ($(findstring ://,$(IPMITOOL_PEN_REG_URI)),)
+-IPMITOOL_EXTRA_DOWNLOADS += $(IPMITOOL_PEN_REG_URI)
+-BR_NO_CHECK_HASH_FOR += $(notdir $(IPMITOOL_PEN_REG_URI))
+-IPMITOOL_PEN_REG = $(IPMITOOL_DL_DIR)/$(notdir $(IPMITOOL_PEN_REG_URI))
+-else
+-IPMITOOL_PEN_REG = $(IPMITOOL_PEN_REG_URI)
+-endif #findstring
+-define IPMITOOL_INSTALL_PEN_REG
+-	$(INSTALL) -D -m 0644 $(IPMITOOL_PEN_REG) \
+-		$(TARGET_DIR)/usr/share/misc/enterprise-numbers
+-endef
+-IPMITOOL_POST_INSTALL_TARGET_HOOKS += IPMITOOL_INSTALL_PEN_REG
+-endif # IPMITOOL_PEN_REG_URI !empty
+-
+ $(eval $(autotools-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
