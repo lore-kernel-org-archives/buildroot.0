@@ -4,72 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D5D23C021BE
-	for <buildroot@archiver.kernel.org>; Sat, 14 Sep 2024 21:54:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 75A71C0219E
+	for <buildroot@archiver.kernel.org>; Sat, 14 Sep 2024 21:55:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 994D8406CC;
-	Sat, 14 Sep 2024 21:54:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 383A6406C1;
+	Sat, 14 Sep 2024 21:55:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id b37DpwdvuYrI; Sat, 14 Sep 2024 21:54:20 +0000 (UTC)
+ id qGpgEUBE4zgY; Sat, 14 Sep 2024 21:55:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 52BFD4070A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 170F9406CA
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 52BFD4070A;
-	Sat, 14 Sep 2024 21:54:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 170F9406CA;
+	Sat, 14 Sep 2024 21:55:25 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 16ADB1BF86D
- for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 21:54:19 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 0DD981BF470
+ for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 21:55:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 15EC4406CC
- for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 21:54:12 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id EFE1F406CA
+ for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 21:55:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id r0HNo9k9Q-50 for <buildroot@lists.busybox.net>;
- Sat, 14 Sep 2024 21:54:10 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::229;
- helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id MiXIexKWbIJ1 for <buildroot@lists.busybox.net>;
+ Sat, 14 Sep 2024 21:55:23 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.195;
+ helo=relay3-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 74DBA40795
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 74DBA40795
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 74DBA40795
- for <buildroot@buildroot.org>; Sat, 14 Sep 2024 21:54:10 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 932E6FF802;
- Sat, 14 Sep 2024 21:54:07 +0000 (UTC)
-Date: Sat, 14 Sep 2024 23:54:06 +0200
-To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <20240914235406.3767a0b7@windsurf>
-In-Reply-To: <20240914215154.1325864-1-james.hilliard1@gmail.com>
-References: <20240914215154.1325864-1-james.hilliard1@gmail.com>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org BC88C406C1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BC88C406C1
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [217.70.183.195])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id BC88C406C1
+ for <buildroot@buildroot.org>; Sat, 14 Sep 2024 21:55:22 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 0899660002;
+ Sat, 14 Sep 2024 21:55:20 +0000 (UTC)
+Date: Sat, 14 Sep 2024 23:55:19 +0200
+To: Bernd Kuhls <bernd@kuhls.net>
+Message-ID: <20240914235519.73ee43cd@windsurf>
+In-Reply-To: <20240906215631.1737953-1-bernd@kuhls.net>
+References: <20240906215631.1737953-1-bernd@kuhls.net>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1726350847;
+ d=bootlin.com; s=gm1; t=1726350921;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=KBOVpxgCBmJcw2uO/TECRA3c9yIiKQ7Jhtdi57wgRd4=;
- b=mF4uILOjbjWiqjGzdA+h+DXWD/O+wK/OM6la7Q9DGTJkbtlSG4Dwg5J9eWXvvPEPe1Z6Of
- KGa9/k2otGLFKKupDdN67/DzN90k86DJZ6ngf4pMJLriJ9mBGSPZu73BY7FbuoyX3SiTcP
- dwd1E1ENBxkTe7Kbf789yG11N8RdA4EOTfhHbV2vpPWaPwtWNes121uXCp4dlpa3FXzB6A
- d8WI+oLpKJyd93wSFSChj5akdEenHIGbJ1SUziHIXdgYGHxm7zxbjAQJw6L1YUks7iK4WK
- NikxIKC2Ea0RidZhtrPJsllVk2N2BNMB39mdrARKCEU0SPnKYNWJwNqffKQtQw==
+ bh=31qdivIQ/PNzhRSgI3j6NHlU4h1LB4yATrkXPOqD4V8=;
+ b=JstmCG6/kovCxfKUqcb11y6gnxmdqYLUm2j/ZGjlBOUXWkOzhCxCrqyHGSxszEvqVmjAyY
+ 2i61QxLfHgh+YSdx88aSJCD8a39sZhp/8r36YNuOokSVpJemZvyW8ThiV8zOhHwp7ouMVi
+ K+Qs9oi5EQKTvQanReR8rxWt3xrJ38IORwQHBkkXFe7GQ34S3w7dKArxbcR7xWoR6kEbId
+ 4zNcboFHsfRg7VbW/idrgSr3DddxzNWjgX+DnU/fR9Ap/ndsIRamA/QpkQntcAGzLQIr7m
+ 6vxpDMBXrIJiGuXzSGZ4B8xXIP1VLqt43mEsRS+mOrK7kIgHY1ixJAh2tftKmQ==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=mF4uILOj
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-automat: bump to version
- 24.8.1
+ header.s=gm1 header.b=JstmCG6/
+Subject: Re: [Buildroot] [PATCH 1/3] package/kodi-peripheral-xarcade: bump
+ version to 21.0.1-Omega
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,30 +83,22 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sat, 14 Sep 2024 15:51:54 -0600
-James Hilliard <james.hilliard1@gmail.com> wrote:
+On Fri,  6 Sep 2024 23:56:29 +0200
+Bernd Kuhls <bernd@kuhls.net> wrote:
 
-> Drop no longer required patch.
-> 
-> Drop no longer required python-six and python-attrs runtime
-> dependencies.
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 > ---
->  ...1-Remove-uneeded-dependency-to-wheel.patch | 28 -------------------
->  package/python-automat/Config.in              |  2 --
->  package/python-automat/python-automat.hash    |  4 +--
->  package/python-automat/python-automat.mk      |  6 ++--
->  4 files changed, 5 insertions(+), 35 deletions(-)
->  delete mode 100644 package/python-automat/0001-Remove-uneeded-dependency-to-wheel.patch
+>  package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.hash | 2 +-
+>  package/kodi-peripheral-xarcade/kodi-peripheral-xarcade.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to master, thanks.
+Series applied to master, thanks!
 
 Thomas
 -- 
