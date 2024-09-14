@@ -4,91 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2F197FC6176
-	for <buildroot@archiver.kernel.org>; Sat, 14 Sep 2024 22:28:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3BEE9C021BE
+	for <buildroot@archiver.kernel.org>; Sat, 14 Sep 2024 22:35:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D6D644060B;
-	Sat, 14 Sep 2024 22:28:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 061A2405E9;
+	Sat, 14 Sep 2024 22:35:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SEPhnHGKemQK; Sat, 14 Sep 2024 22:28:25 +0000 (UTC)
+ id 27CxFQzzZCAF; Sat, 14 Sep 2024 22:35:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 74C0540624
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C341840619
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 74C0540624;
-	Sat, 14 Sep 2024 22:28:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C341840619;
+	Sat, 14 Sep 2024 22:35:08 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 66DFD1BF3DB
- for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 22:28:24 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id E58CC1BF3DB
+ for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 22:35:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 55F154018E
- for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 22:28:24 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id E0B794018E
+ for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 22:35:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id T9ibxVkJsUFu for <buildroot@lists.busybox.net>;
- Sat, 14 Sep 2024 22:28:23 +0000 (UTC)
+ id 9CRSjfduaWt7 for <buildroot@lists.busybox.net>;
+ Sat, 14 Sep 2024 22:35:05 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::d2b; helo=mail-io1-xd2b.google.com;
+ client-ip=2607:f8b0:4864:20::d2e; helo=mail-io1-xd2e.google.com;
  envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 2402140130
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2402140130
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com
- [IPv6:2607:f8b0:4864:20::d2b])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 2402140130
- for <buildroot@buildroot.org>; Sat, 14 Sep 2024 22:28:23 +0000 (UTC)
-Received: by mail-io1-xd2b.google.com with SMTP id
- ca18e2360f4ac-82ceab75c27so128660139f.1
- for <buildroot@buildroot.org>; Sat, 14 Sep 2024 15:28:23 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 9DA9040130
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9DA9040130
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com
+ [IPv6:2607:f8b0:4864:20::d2e])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 9DA9040130
+ for <buildroot@buildroot.org>; Sat, 14 Sep 2024 22:35:05 +0000 (UTC)
+Received: by mail-io1-xd2e.google.com with SMTP id
+ ca18e2360f4ac-82ce603d8b5so137651439f.0
+ for <buildroot@buildroot.org>; Sat, 14 Sep 2024 15:35:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1726352902; x=1726957702;
+ d=1e100.net; s=20230601; t=1726353304; x=1726958104;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=pvipqfDS5ETUtz+0BvcS7FW7eecSsbCK91XoRMUs7fY=;
- b=KZRTIRcNWaPQa5lF87OGPIRXBatvl78u4K88iudnJQ1ktJ30QU0dlpGESI3XHe/3zj
- jx8eNIBUiP8d4RrD+AeYVAa+fDsgsLTToHsT8BswqI9iMtAd143Epk3qPUUS4eR1L6MP
- SQTAorW+4KyV7hb16zmtmmmGKWbWhG3wfekduLbl91F4rCX+1HUFxLojhe6G8L+aQQVY
- zWo+2twBzjB4LX3FGv4zsgSXW/UaPnoumjD/Hg43DAkpOa9Bskz+hg2IW8RMo1uSjE9e
- 3yTkao69P7L/LYLeQHcfkgmCegP25Q8uUfeWsCe20aRitcJo6c0o04o8LC486TR/FcUk
- TBvw==
-X-Gm-Message-State: AOJu0YxvQSY2nhHdPR+Az5Jvh7s9cofQcyRZ3W4V7OhJDwNb3I7Hzost
- xA33gzw8OUHrLrdqj3oONDjHSHMMaSnfUBF8WvrM4+DkopPf0BYH+9nQVQ==
-X-Google-Smtp-Source: AGHT+IGz67/nrRRSEq+nRe1aemLp3XoI2Idc1tO22/qJVVDRv9V+5aiggzaKt8SNIjPxkSIy+aWKdQ==
-X-Received: by 2002:a05:6e02:4b2:b0:3a0:8e39:bcb1 with SMTP id
- e9e14a558f8ab-3a08e39bde0mr52243005ab.1.1726352901988; 
- Sat, 14 Sep 2024 15:28:21 -0700 (PDT)
+ bh=rG6jYP7kpkep9Ol8M5AQlTqgzc4yosXkIxcJVLZpWYo=;
+ b=rw5tYWnKmW2UIHocX6MiEwFWxWX07c6RGz/lzkXxU7NWqwp9EfHpANchxO5EqTOyQR
+ 7WsIb33JUaySghnbTZYX1WDIeuLUjgXumMcSg5YieyXiHLsEKEsyA8IiaKUfg7akxoAI
+ rFsbHSXMh4FG2tU4EwjfgHU4jmAM0p/OoXYzA1JAQAHYNoQEOpDU5qD4/7wl7W03ZgvK
+ KEIbghAnBiZiWeHOwMCQe2JNIn7oIunYGzs7m041RTvrmWMnKWMdQ9gZgC7CN4TqDx8r
+ kDMySLC9k0ehROWvuUQBJBeR0T+5zzLEZeOH5VSHK6WK4So2cbPF2sLZQxLSKqJGskbM
+ Zn6g==
+X-Gm-Message-State: AOJu0Yy07ezFETSJ3zPz6XIagoI422xZhdos4bNJe1UdhzHsP9iNcgzM
+ eHCL6J6kbq4mRWXO9nY0ooMVTzduL2tH61129L5HC5uwSm+dRcvGFe6PyQ==
+X-Google-Smtp-Source: AGHT+IHGBTb39vtgmXG+xN6B4MS3dpE43El34nc4KbTGWsupIkv6GGcEXN+UwBy6/vq9NSOCf8xg7g==
+X-Received: by 2002:a05:6602:6207:b0:82a:2143:8 with SMTP id
+ ca18e2360f4ac-82d1f93f807mr1340573739f.10.1726353304200; 
+ Sat, 14 Sep 2024 15:35:04 -0700 (PDT)
 Received: from james-x399.localdomain (71-218-252-223.hlrn.qwest.net.
  [71.218.252.223]) by smtp.gmail.com with ESMTPSA id
- e9e14a558f8ab-3a092e10661sm6701805ab.25.2024.09.14.15.28.21
+ ca18e2360f4ac-82d492694a5sm60876339f.11.2024.09.14.15.35.03
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 14 Sep 2024 15:28:21 -0700 (PDT)
+ Sat, 14 Sep 2024 15:35:03 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 14 Sep 2024 16:28:20 -0600
-Message-Id: <20240914222820.1351112-1-james.hilliard1@gmail.com>
+Date: Sat, 14 Sep 2024 16:35:02 -0600
+Message-Id: <20240914223502.1352651-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1726352902; x=1726957702; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1726353304; x=1726958104; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=pvipqfDS5ETUtz+0BvcS7FW7eecSsbCK91XoRMUs7fY=;
- b=fgEupDNwUPpZP4rsovyZoKi9wX0ndmnRaL7pdAEnsy5orUJZovovQMNba/ljmeR4K0
- hkj4Xh5FA2hZG9JVoCMRe7YoauSwx/3RWoGO1wlTgCWbk2x7t+R9x5WLz6xHLrNgpuAd
- 49yaqk3msrzn8sYQNchu7qckMflFFVxAXk3aAtNX/5gMtS4D4TYD0QiT50H5prVVlX6Q
- Wm9lHZgh3o50G6DvsQrkSpjhraqNG3ep+LArfQRtjweWoMiwRv+y97agjmVgyCiTCjdT
- NdEg3Li4912uwGH0SQxKQMiTk6jzz2PDEFjv9RKXev5dvJBSim41Y5fR2OxlN63FRPCH
- YyuA==
+ bh=rG6jYP7kpkep9Ol8M5AQlTqgzc4yosXkIxcJVLZpWYo=;
+ b=F9zegRzPa8Xggq4kz/6W+mVPi9GptYdbFdMy0N8YzxLVcF7ILjzqSU96tefI4FywY9
+ 6zcShGElItX4lIvEJhr8KZDR2q6xDXISjZW84byr1CSZaqwgO3j5KLmATcXdEKl3NCfF
+ 6gGq+4wPoMjLHwGms6A6YFpV9Cj0642BLGc3fnnZ8+WP/0VcxDBv6UHGJV6u0DUz6dCR
+ SfL9TpXSmPfkZoJmCimR6F2iFT1PUELZIuOxhLjoTJRfdpPNzQVq5fc2pYBk4/ANCt/v
+ B0/6seeXKaslFrrKYaKmuxHQQj6n9Gz6iJT1T01U3W5CoAupKicVCaGBN9ebIgeSPuXN
+ v6HA==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=fgEupDNw
-Subject: [Buildroot] [PATCH 1/1] package/python-blinker: bump to version
- 1.8.2
+ header.a=rsa-sha256 header.s=20230601 header.b=F9zegRzP
+Subject: [Buildroot] [PATCH 1/1] package/python-bluezero: bump to version
+ 0.9.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,53 +101,46 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: James Hilliard <james.hilliard1@gmail.com>,
- Peter Seiderer <ps.report@gmx.net>, Asaf Kahlon <asafka7@gmail.com>
+ Grzegorz Blach <grzegorz@blach.pl>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Migrate build backend from setuptools to flit.
-
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-blinker/python-blinker.hash | 6 +++---
- package/python-blinker/python-blinker.mk   | 8 ++++----
- 2 files changed, 7 insertions(+), 7 deletions(-)
+ package/python-bluezero/python-bluezero.hash | 4 ++--
+ package/python-bluezero/python-bluezero.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-blinker/python-blinker.hash b/package/python-blinker/python-blinker.hash
-index e0c1d600eb..d9f1052254 100644
---- a/package/python-blinker/python-blinker.hash
-+++ b/package/python-blinker/python-blinker.hash
+diff --git a/package/python-bluezero/python-bluezero.hash b/package/python-bluezero/python-bluezero.hash
+index e9ccb9133e..150a384223 100644
+--- a/package/python-bluezero/python-bluezero.hash
++++ b/package/python-bluezero/python-bluezero.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/blinker/json
--md5  0306b831281e9918ffb0ac6e3e18b47f  blinker-1.7.0.tar.gz
--sha256  e6820ff6fa4e4d1d8e2747c2283749c3f547e4fee112b98555cdcdae32996182  blinker-1.7.0.tar.gz
-+md5  ce2f9fb3bc0c0000db11f012f5f5afda  blinker-1.8.2.tar.gz
-+sha256  8f77b09d3bf7c795e969e9486f39c2c5e9c39d4ee07424be2bc594ece9642d83  blinker-1.8.2.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/bluezero/json
+-md5  5c256c89c3973cfd20f340f095525af2  bluezero-0.8.0.tar.gz
+-sha256  9bd6706ff6b941c3bedd5b64e0447051120ae8eeac458fb65f56cc6730e1e598  bluezero-0.8.0.tar.gz
++md5  8bace06486618fceca632aedc2733027  bluezero-0.9.0.tar.gz
++sha256  2512935e094e3afd21ca9d4cb1b9aaa88a524e9538ae81305b2086f09f0eee17  bluezero-0.9.0.tar.gz
  # Locally computed sha256 checksums
--sha256  9eb73a1f38597a4aa17025d2ae1be3839624c795e985d4f0e9769ce29faca467  LICENSE.rst
-+sha256  9eb73a1f38597a4aa17025d2ae1be3839624c795e985d4f0e9769ce29faca467  LICENSE.txt
-diff --git a/package/python-blinker/python-blinker.mk b/package/python-blinker/python-blinker.mk
-index 234126a500..7ce06c2177 100644
---- a/package/python-blinker/python-blinker.mk
-+++ b/package/python-blinker/python-blinker.mk
-@@ -4,11 +4,11 @@
+ sha256  59319e80b4caa94ace4817c9f84aa16abc9d4d2b5f7866251b5fda92e87ccdef  LICENSE
+diff --git a/package/python-bluezero/python-bluezero.mk b/package/python-bluezero/python-bluezero.mk
+index 8e078f1073..81e7363fc7 100644
+--- a/package/python-bluezero/python-bluezero.mk
++++ b/package/python-bluezero/python-bluezero.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_BLINKER_VERSION = 1.7.0
-+PYTHON_BLINKER_VERSION = 1.8.2
- PYTHON_BLINKER_SOURCE = blinker-$(PYTHON_BLINKER_VERSION).tar.gz
--PYTHON_BLINKER_SITE = https://files.pythonhosted.org/packages/a1/13/6df5fc090ff4e5d246baf1f45fe9e5623aa8565757dfa5bd243f6a545f9e
--PYTHON_BLINKER_SETUP_TYPE = setuptools
-+PYTHON_BLINKER_SITE = https://files.pythonhosted.org/packages/1e/57/a6a1721eff09598fb01f3c7cda070c1b6a0f12d63c83236edf79a440abcc
-+PYTHON_BLINKER_SETUP_TYPE = flit
- PYTHON_BLINKER_LICENSE = MIT
--PYTHON_BLINKER_LICENSE_FILES = LICENSE.rst
-+PYTHON_BLINKER_LICENSE_FILES = LICENSE.txt
- 
- $(eval $(python-package))
+-PYTHON_BLUEZERO_VERSION = 0.8.0
++PYTHON_BLUEZERO_VERSION = 0.9.0
+ PYTHON_BLUEZERO_SOURCE = bluezero-$(PYTHON_BLUEZERO_VERSION).tar.gz
+-PYTHON_BLUEZERO_SITE = https://files.pythonhosted.org/packages/67/e1/15fc417b9828d38aa8e09ba06df61d6889740fe45867510a781df9a8ba35
++PYTHON_BLUEZERO_SITE = https://files.pythonhosted.org/packages/7b/9c/bfb3e1f92dd39bf3de8fc483a102bfae763fbf156177b77ed96b8a38bbb1
+ PYTHON_BLUEZERO_SETUP_TYPE = setuptools
+ PYTHON_BLUEZERO_LICENSE = MIT
+ PYTHON_BLUEZERO_LICENSE_FILES = LICENSE
 -- 
 2.34.1
 
