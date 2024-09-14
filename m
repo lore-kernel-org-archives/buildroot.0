@@ -4,72 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 88A69C0218F
-	for <buildroot@archiver.kernel.org>; Sat, 14 Sep 2024 10:43:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id BAC0FC0218F
+	for <buildroot@archiver.kernel.org>; Sat, 14 Sep 2024 10:45:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 381956063C;
-	Sat, 14 Sep 2024 10:43:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7BDC66063C;
+	Sat, 14 Sep 2024 10:45:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7EPemxbnWnem; Sat, 14 Sep 2024 10:43:54 +0000 (UTC)
+ id CrnQc0D3OzsH; Sat, 14 Sep 2024 10:45:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 384056069C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 92EE26069C
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 384056069C;
-	Sat, 14 Sep 2024 10:43:54 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8AED01BF846
- for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 10:43:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 92EE26069C;
+	Sat, 14 Sep 2024 10:45:17 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id EE00D1BF846
+ for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 10:44:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 86CA08454E
- for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 10:43:53 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id DC6494066F
+ for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 10:44:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id aIFsm-Yfa2J4 for <buildroot@lists.busybox.net>;
- Sat, 14 Sep 2024 10:43:52 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::228;
- helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id mdbKFXgQemBT for <buildroot@lists.busybox.net>;
+ Sat, 14 Sep 2024 10:44:38 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::225;
+ helo=relay5-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 633178454D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 633178454D
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::228])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 633178454D
- for <buildroot@buildroot.org>; Sat, 14 Sep 2024 10:43:51 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 3DEF41BF204;
- Sat, 14 Sep 2024 10:43:49 +0000 (UTC)
-Date: Sat, 14 Sep 2024 12:43:47 +0200
-To: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
-Message-ID: <20240914124347.752578ac@windsurf>
-In-Reply-To: <20240904211049.866640-1-roykollensvendsen@gmail.com>
-References: <20240904211049.866640-1-roykollensvendsen@gmail.com>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9994840679
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9994840679
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9994840679
+ for <buildroot@buildroot.org>; Sat, 14 Sep 2024 10:44:37 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id C664E1C0003;
+ Sat, 14 Sep 2024 10:44:33 +0000 (UTC)
+Date: Sat, 14 Sep 2024 12:44:32 +0200
+To: Christian Hitz via buildroot <buildroot@buildroot.org>
+Message-ID: <20240914124432.669c5785@windsurf>
+In-Reply-To: <20240911132021.2318073-1-christian@klarinett.li>
+References: <20240911132021.2318073-1-christian@klarinett.li>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1726310629;
+ d=bootlin.com; s=gm1; t=1726310674;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=n884E4YMa6uj1egocP7kBVsgZA89mNFCMWkgVTK/SF4=;
- b=CSjMNq6q49spNRxbi8/ZXCoXh3lOdV9IcV3qy3AMM4vvJRbNzZVxPuEr/ebZhVFMZamVg0
- 8k/VoYEaVxqKb/KKBWpnI7J8uWeZICj+YAtxOEpSAUxTZXM0+2E65ktvZKA4ZBPDevyt21
- 9OsO9OBnWrcghkdqyGbbSF+tZcRMT5PZNXrT1Kuidl959fLKPP01v53xR1XjqrkHfafX7e
- 6xBdRFzNWDV4o1ZvXfiOhuKyX5/swVCI7ptrO9jzezZkkw9LmVfiTmOgXacC3iUi2kfpmj
- 8sNQmsk3r/ihThsHOtfiNv1sw4UH+/3qKvuf/vXmiCP/NUZ8I00bNxxeF1n1bg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=M3TK20h/hNQYPJrydDEfadRe2qMkzO0T+wjoJNEGqzg=;
+ b=TIpOLRf9oPF3bRA9yYLgywC3HrHnuSkJ2rzcEytmRNKdulfbXtcPCcdkYy+fqk2hJskxL7
+ JpZbhvaniA6IvoguIkcK6sISYVjeCxyKUXG/hSAEInIWct1CB7PFVGGppUFmxWF/KFYPjB
+ f9M/D+GcIY37CzjjnYjbUB+KaQ1WsAgcnBnfEL0ttytuIScti7vzfwKyo//zKsUpqtweNo
+ I4+grVaCplx5OJwga9dNIWvgjWk12VqzS3zbC7lEMsRXQ4U3t5d5JjefFutZQIWX40vzEC
+ SJWN2DirxGeqp+GvgQvbUepTfo/b45UowUrkyduTo48ilQIUNQPjufENJAs45w==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=CSjMNq6q
-Subject: Re: [Buildroot] [PATCH v2 1/3] package/qt6/qt6base: allow selecting
- the host print support module
+ header.s=gm1 header.b=TIpOLRf9
+Subject: Re: [Buildroot] [PATCH 1/2] package/qt6/qt6tools: build linuguist
+ tools without printsupport
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,48 +83,43 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Jesse Van Gavere <jesseevg@gmail.com>, buildroot@buildroot.org
+Cc: Christian Hitz <christian@klarinett.li>,
+ Christian Hitz <christian.hitz@bbv.ch>, Jesse Van Gavere <jesseevg@gmail.com>,
+ Roy Kollen Svendsen <roykollensvendsen@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed,  4 Sep 2024 23:10:44 +0200
-Roy Kollen Svendsen <roykollensvendsen@gmail.com> wrote:
+On Wed, 11 Sep 2024 15:20:19 +0200
+Christian Hitz via buildroot <buildroot@buildroot.org> wrote:
 
-> According to configure.cmake print support requires us to select the
-> widgets feature:
+> From: Christian Hitz <christian.hitz@bbv.ch>
 > 
-> ...
-> qt_feature("printsupport" PRIVATE
->     LABEL "Qt PrintSupport"
->     CONDITION QT_FEATURE_widgets
->     SECTION "Module"
->     PURPOSE "Provides the Qt PrintSupport module."
-> )
-> ...
+> This fixes a regression in qttools that would not build the qt linuguist
+> tools (lupdate, lrelease, etc.) when CUPS is not available.
 > 
-> And further, according to configure.cmake, widgets requires us to select
-> the gui feature:
-> 
-> ...
-> qt_feature("widgets" PRIVATE
->     LABEL "Qt Widgets"
->     AUTODETECT NOT TVOS AND NOT WATCHOS
->     CONDITION QT_FEATURE_gui
-> )
-> ...
-> 
-> Signed-off-by: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
+> Signed-off-by: Christian Hitz <christian.hitz@bbv.ch>
 > ---
-> In response to:
-> https://patchwork.ozlabs.org/project/buildroot/patch/20240904122040.738362-2-roykollensvendsen@gmail.com/
+>  ...e-lconvert-lrelease-in-no-gui-builds.patch | 56 +++++++++++++++++++
+>  package/qt6/qt6tools/qt6tools.mk              |  5 ++
+>  2 files changed, 61 insertions(+)
+>  create mode 100644 package/qt6/qt6tools/0001-CMake-Re-enable-lupdate-lconvert-lrelease-in-no-gui-builds.patch
 
-And in fact I have reverted this one, because I applied
-https://patchwork.ozlabs.org/project/buildroot/patch/20240911132021.2318073-1-christian@klarinett.li/,
-which makes this patch unnecessary.
+Applied to master after splitting out into a separate commit the
+following:
 
-Best regards,
++HOST_QT6TOOLS_CONF_OPTS = \
++	-DQT_BUILD_EXAMPLES=OFF \
++	-DQT_BUILD_TESTS=OFF \
+
+which wasn't related, and adjusting:
+
++	-DFEATURE_linguist=ON
+
+to use the newly introduced option instead.
+
+Thanks!
 
 Thomas
 -- 
