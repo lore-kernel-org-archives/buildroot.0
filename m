@@ -4,94 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4AA90C02191
-	for <buildroot@archiver.kernel.org>; Sat, 14 Sep 2024 09:55:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D7DF6C0218F
+	for <buildroot@archiver.kernel.org>; Sat, 14 Sep 2024 10:08:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B450040481;
-	Sat, 14 Sep 2024 09:55:27 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 75E74403FF;
+	Sat, 14 Sep 2024 10:08:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id W4Y9p5siFV0m; Sat, 14 Sep 2024 09:55:26 +0000 (UTC)
+ id GhLAn2eoMCBY; Sat, 14 Sep 2024 10:08:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F291E40590
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 56E4640179
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id F291E40590;
-	Sat, 14 Sep 2024 09:55:25 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1FDEF1BF280
- for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 09:55:18 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 56E4640179;
+	Sat, 14 Sep 2024 10:08:18 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id D7A1C1BF846
+ for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 10:08:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0E3EE407AA
- for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 09:55:18 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C66C160683
+ for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 10:08:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id R0ZcwOXXRuSV for <buildroot@lists.busybox.net>;
- Sat, 14 Sep 2024 09:55:17 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32f; helo=mail-wm1-x32f.google.com;
- envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 11EEB40789
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 11EEB40789
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com
- [IPv6:2a00:1450:4864:20::32f])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 11EEB40789
- for <buildroot@buildroot.org>; Sat, 14 Sep 2024 09:55:16 +0000 (UTC)
-Received: by mail-wm1-x32f.google.com with SMTP id
- 5b1f17b1804b1-42cb1758e41so14650815e9.1
- for <buildroot@buildroot.org>; Sat, 14 Sep 2024 02:55:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1726307715; x=1726912515;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=kUT26IeVJHycT8Eg+pTeJcmTqsyMxpym0F+OIrueNmY=;
- b=vU3MKuEfe6KUGuv8o5QUyQ3AT6iNwrnW6qVK95TtX6OGkV0h26XzA9V44RLiulyOWo
- bHWOsszuR48b+U+JzljjuSoPI18XOoRsVel9wuzUbG53wVrdTYP6utiuI3t3nuJO5+eb
- lkI7/YswpdMly4q3B3ur/17ZYeo3bSz6vwB5p1f3bIGyPlH+Q0sR1TLqlh5bLDEfruPh
- hrOB7M+BS3eXoKLKuTEKVcPPUFa8pHd92u6PU8ZDxTbdvdHY//8X7Vo0XoDOm1nQ4gTR
- 55heds09j1OrnyoxfHME7xtz9ZUVTty5l9cRBdxwNGA0q4BJGAmWxbTRI2XVuGrPdBAn
- QjGQ==
-X-Gm-Message-State: AOJu0YyBVQ/sX1xydLf0DzbQsMYoIkqACWurzO4gBogHtcxrFngSCHaI
- mlbXCkYZoTMr+NaKpUnUxCLD6Y1/EzP5Xi5QOYtPPrXbpzAlIH2WahoXIhz7rotgLPNl6JY+xX1
- kVpdFQQ==
-X-Google-Smtp-Source: AGHT+IGn1eA2VaIRaVyvVtfsQrq+pZtWpEjpX3oeY1QMmQOkkJqBNvxcZWOt5+KeH/9dkO04jYczJQ==
-X-Received: by 2002:a05:600c:c12:b0:42c:a7cc:cb6d with SMTP id
- 5b1f17b1804b1-42d9070d97amr40155255e9.1.1726307714820; 
- Sat, 14 Sep 2024 02:55:14 -0700 (PDT)
-Received: from localhost.localdomain ([2a02:61:a2::9b5])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-42da22b87a9sm14457395e9.6.2024.09.14.02.55.13
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 14 Sep 2024 02:55:14 -0700 (PDT)
-To: buildroot@buildroot.org
-Date: Sat, 14 Sep 2024 11:55:01 +0200
-Message-ID: <20240914095501.194725-4-arnout@mind.be>
-X-Mailer: git-send-email 2.46.0
-In-Reply-To: <20240914095501.194725-1-arnout@mind.be>
-References: <20240914095501.194725-1-arnout@mind.be>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id uCtyBsaae9I4 for <buildroot@lists.busybox.net>;
+ Sat, 14 Sep 2024 10:08:16 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::221;
+ helo=relay1-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 86A5F60655
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 86A5F60655
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 86A5F60655
+ for <buildroot@buildroot.org>; Sat, 14 Sep 2024 10:08:15 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 6FF37240003;
+ Sat, 14 Sep 2024 10:08:12 +0000 (UTC)
+Date: Sat, 14 Sep 2024 12:08:11 +0200
+To: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
+Message-ID: <20240914120811.04cde88c@windsurf>
+In-Reply-To: <20240904211049.866640-1-roykollensvendsen@gmail.com>
+References: <20240904211049.866640-1-roykollensvendsen@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1726307715; x=1726912515; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=kUT26IeVJHycT8Eg+pTeJcmTqsyMxpym0F+OIrueNmY=;
- b=hhbBFaVpyurM8isZxGPwHI/Sz2Fos81eb9OpkcPaLSu34/lLLXPFhSUQ1gEECDVmlp
- o6Ry6foV3CMnkQ9eLPEjSOR6WSVK9ir8hh4KGJTPffpbDe6hoZu1ZaNYAesiMMd/1fIX
- 4cB8clO4QpV635T89pQVfZxgdEgCAaYF6zCASWsBL05+Qu5L9nV7NysGMAxU2W9LnZYF
- N/Sj5fD4ycbz5gy1wZhvlisBOsRa/YdkZOJ9zuNUkb4JFlliNm8FKHuQGhNoHropGzSu
- d5NcrC3ZFLy8k/ScfZuEZklaMh219pog8200JcBtsk8q2G1ETspge8CZSRKTDK8WtiFo
- mLeA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=hhbBFaVp
-Subject: [Buildroot] [PATCH 4/4] package/pkg-generic.mk: remove set -x in
- mk_tar_gz call
+ d=bootlin.com; s=gm1; t=1726308492;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=m/2qJndaxMyTxBQjVbovrqZICkFAzKpT+UIuE8LFsRY=;
+ b=XeA35UgZGCSysV8EKIqnsbFgGncMfPBGo7XI9tiBKZZYjUBu4wuiFNSV0Yrsn3C/4ApTTr
+ 0nfPz1lKFNL/KT8MgRDY4117f1x4PHr79xLLBO9w3uTRpDnTRuQ+r54yrB+64UJLOcP+XW
+ 45HeDDgilFavnHfLj/8aNAQM+90pejUKtK6/ZP4beUwtHYYsXDe3meCIFQMlihqCL96KRz
+ hquun/CvnZpyLQ/4VM7oNh53+TnJtTAtqHBje2ujevtGZRZUJ5hWFfaAl/sxNYPT3te1yv
+ R/AG6zQjcpuV+q7rmPAGPQILVkXfgkgwLOCbducmlqKJbaM5kadJNnZ08cYiTQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=XeA35UgZ
+Subject: Re: [Buildroot] [PATCH v2 1/3] package/qt6/qt6base: allow selecting
+ the host print support module
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,37 +81,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Jesse Van Gavere <jesseevg@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The set -x was added for debugging, and forgotten to be removed
-afterwards. Remove it now.
+On Wed,  4 Sep 2024 23:10:44 +0200
+Roy Kollen Svendsen <roykollensvendsen@gmail.com> wrote:
 
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
----
- package/pkg-generic.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> According to configure.cmake print support requires us to select the
+> widgets feature:
+> 
+> ...
+> qt_feature("printsupport" PRIVATE
+>     LABEL "Qt PrintSupport"
+>     CONDITION QT_FEATURE_widgets
+>     SECTION "Module"
+>     PURPOSE "Provides the Qt PrintSupport module."
+> )
+> ...
+> 
+> And further, according to configure.cmake, widgets requires us to select
+> the gui feature:
+> 
+> ...
+> qt_feature("widgets" PRIVATE
+>     LABEL "Qt Widgets"
+>     AUTODETECT NOT TVOS AND NOT WATCHOS
+>     CONDITION QT_FEATURE_gui
+> )
+> ...
+> 
+> Signed-off-by: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
+> ---
+> In response to:
+> https://patchwork.ozlabs.org/project/buildroot/patch/20240904122040.738362-2-roykollensvendsen@gmail.com/
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index e67f141604..9ec84d0f45 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -1168,7 +1168,7 @@ ifneq ($$($(2)_OVERRIDE_SRCDIR),)
- 		 $$($(2)_BUILDDIR)/.legal-info-rsync/
- 	$$(call prepare-per-package-directory,$$(BR2_GZIP_HOST_DEPENDENCY) $$(BR2_TAR_HOST_DEPENDENCY))
- 	$$(Q)mkdir -p $$($(2)_REDIST_SOURCES_DIR)
--	$$(Q). support/download/helpers; set -x; cd $$($(2)_BUILDDIR); TAR=$$(TAR) mk_tar_gz \
-+	$$(Q). support/download/helpers; cd $$($(2)_BUILDDIR); TAR=$$(TAR) mk_tar_gz \
- 		$$($(2)_BUILDDIR)/.legal-info-rsync/ \
- 		$$($(2)_BASENAME_RAW) \
- 		@0 \
+Thanks a lot, series applied!
+
+Thomas
 -- 
-2.46.0
-
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
