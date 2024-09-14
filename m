@@ -4,71 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B997FC021A5
-	for <buildroot@archiver.kernel.org>; Sat, 14 Sep 2024 16:23:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7D2E7C021A5
+	for <buildroot@archiver.kernel.org>; Sat, 14 Sep 2024 16:25:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 852688199D;
-	Sat, 14 Sep 2024 16:23:31 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 47F1581334;
+	Sat, 14 Sep 2024 16:25:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bPuzQ32VaJaE; Sat, 14 Sep 2024 16:23:30 +0000 (UTC)
+ id 6OcNw8GwGSPx; Sat, 14 Sep 2024 16:25:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 806BA81B04
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 47858813EE
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 806BA81B04;
-	Sat, 14 Sep 2024 16:23:30 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 508601BF83A
- for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 16:23:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 47858813EE;
+	Sat, 14 Sep 2024 16:25:01 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 244761BF83A
+ for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 16:25:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3F869607BD
- for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 16:23:29 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1285840120
+ for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 16:25:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id grMwI_xyF8CF for <buildroot@lists.busybox.net>;
- Sat, 14 Sep 2024 16:23:28 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::222;
- helo=relay2-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id w53cb_dtectF for <buildroot@lists.busybox.net>;
+ Sat, 14 Sep 2024 16:24:58 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
+ helo=smtp6-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 1F187607B2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1F187607B2
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::222])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 1F187607B2
- for <buildroot@buildroot.org>; Sat, 14 Sep 2024 16:23:27 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id E878640002;
- Sat, 14 Sep 2024 16:23:24 +0000 (UTC)
-Date: Sat, 14 Sep 2024 18:23:22 +0200
-To: Thomas Perale <thomas.perale@essensium.com>
-Message-ID: <20240914182322.181c10d5@windsurf>
-In-Reply-To: <20240914153651.2633469-1-thomas.perale@mind.be>
-References: <20240914153651.2633469-1-thomas.perale@mind.be>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 87A814010C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 87A814010C
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 87A814010C
+ for <buildroot@buildroot.org>; Sat, 14 Sep 2024 16:24:58 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown [IPv6:2a02:61:a2::3f4])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPSA id 1FB17780383;
+ Sat, 14 Sep 2024 18:24:48 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sat, 14 Sep 2024 18:24:48 +0200
+Date: Sat, 14 Sep 2024 18:24:48 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Athaariq Ardhiansyah <foss@athaariq.my.id>
+Message-ID: <ZuW40MpG-bqwnf43@landeda>
+References: <20240610154028.792440-1-foss@athaariq.my.id>
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1726331005;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=m30XgZOIBEWEKOvLlUWXDLChSg0Z7PRnmgQkQF3mRpQ=;
- b=XUciC3PRcweX2MaMUnAU/B15AXbcECU2iN2lLavLEVr403HBj3gr8MfE58L21nGFbeNi9Q
- 7WldBF9w5pm56iLJ2DQvy+Uj0A4pS1iBA+qOWhrGsPMd/NzYZxuRXlqCA0ARnjQlll4OLC
- bAPK9dK5gypU5DISpBaPdAR7ZjzcmX+rs+Yxyri9uJGTaaU13EEEHDjd9E8ECBE7RhvUNY
- wm57YFaaNCAXS3tSjdr8YECumEh1AqMmu/VgEv2us18pqfbFM6WlFD4HMo9vlPKH7HMP75
- oV/ioxVE2MKlSVfyhstXXmf0855Fibcl85X2ZNNCW+/xEADO9eU81HCK7E1Z9w==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=XUciC3PR
-Subject: Re: [Buildroot] [PATCH 1/1] package/ffmpeg: fix build error
+Content-Disposition: inline
+In-Reply-To: <20240610154028.792440-1-foss@athaariq.my.id>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1726331095;
+ bh=OI+VL6C5nRyd4pCpNt4B+9jTPNjRk6+mlar4YlODIXE=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=d05crAXljK34LfiviAZcP7yRU5rpLbsiwuWQGMGqJKWo9DoTXGxtGFelIkY9oUj7T
+ IbYh4I19wUsGUYmcYDWeR9U4AcHRjyGX0LbiRHD5QF6OuKMhdHs3/h8rETO8mpJsHP
+ UlbDRHA08buabc2btrxevmEXBBmovKQzu+uDo21HWDBiBbpKZUtUY+VQi3auX43zUF
+ Y8gsX+Tthy2MdW1BlEN7nq2pPAHdWPn/duvHYZr+yrV4NnTNfg4Bd412waAfgPUxTx
+ lrqfqvz6XFS/DxaKsxE8+3jqfrpAvO4Q2EQKe9rXjQL8QRUZmvMe/wq2Sv2ZU45n/5
+ HuZaXK1bCrszQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=d05crAXl
+Subject: Re: [Buildroot] [PATCH 1/3] package/go: expose option to enable via
+ configurator
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,65 +80,66 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Anisse Astier <anisse@astier.eu>, Thomas Perale <thomas.perale@mind.be>,
+Cc: Thomas Perale <thomas.perale@mind.be>, Anisse Astier <anisse@astier.eu>,
  Christian Stewart <christian@aperture.us>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Thomas,
+Athaariq, All,
 
-On Sat, 14 Sep 2024 17:36:51 +0200
-Thomas Perale <thomas.perale@essensium.com> wrote:
+On 2024-06-10 22:40 +0700, Athaariq Ardhiansyah spake thusly:
+> Just in case you forgot it, I re-exposed the configuration option for
+> enabling host-go virtual package before I'm adding host-go-bin
+> subpackage.
 
-> ffmpeg builds with `--enable-vaapi` opt made GCC v14 and 32 bit target
-> will throw an 'Wincompatible-pointer-types' error.
+Thank you for your patch.
+
+I reworded the entire commit log when aplying: we want the commit log to
+be in a neutral tense (no "I'), and explain why the patch is needed on
+tehcnical grounds. You can check what I wrote:
+
+    https://gitlab.com/buildroot.org/buildroot/-/commit/7cac7bc3c98c5008b646d2f33b386a45c0271a34
+
+Thank you!
+
+Regards,
+Yann E. MORIN.
+
+> Signed-off-by: Athaariq Ardhiansyah <foss@athaariq.my.id>
+> ---
+>  package/go/Config.in.host | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> This is a downport of an upstreamed commit but not yet present in any
-> ffmpeg version that fix the pointer type.
+> diff --git a/package/go/Config.in.host b/package/go/Config.in.host
+> index 483393f8e4..32483871e7 100644
+> --- a/package/go/Config.in.host
+> +++ b/package/go/Config.in.host
+> @@ -34,7 +34,7 @@ config BR2_PACKAGE_HOST_GO_HOST_ARCH_SUPPORTS
+>  
+>  # Go packages should select BR2_PACKAGE_HOST_GO
+>  config BR2_PACKAGE_HOST_GO
+> -	bool
+> +	bool "host go"
+>  	depends on BR2_PACKAGE_HOST_GO_HOST_ARCH_SUPPORTS
+>  
+>  if BR2_PACKAGE_HOST_GO
+> -- 
+> 2.45.2
 > 
-> Fixes:
->  - http://autobuild.buildroot.org/results/f5f/f5f2d16226ad9500ecf046779d5282ee071a54d3/
-> 
-> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 
-Thanks for your patch!
-
-> diff --git a/package/ffmpeg/0007-avutil-hwcontext-vaapi-use-the-correct-type.patch b/package/ffmpeg/0007-avutil-hwcontext-vaapi-use-the-correct-type.patch
-> new file mode 100644
-> index 0000000000..e455654b2e
-> --- /dev/null
-> +++ b/package/ffmpeg/0007-avutil-hwcontext-vaapi-use-the-correct-type.patch
-> @@ -0,0 +1,26 @@
-> +From 6f8e365a2af2b6b21701d41eed3b2e3f8a436eeb Mon Sep 17 00:00:00 2001
-> +From: James Almer <jamrial@gmail.com>
-> +Date: Wed, 31 Jul 2024 10:00:54 -0300
-> +Subject: [PATCH] avutil/hwcontext_vaapi: use the correct type for
-> + VASurfaceAttribExternalBuffers.buffers
-> +
-> +Should fix ticket #11115.
-> +
-> +Signed-off-by: James Almer <jamrial@gmail.com>
-
-We need you to add your Signed-off-by line below the one of the
-original author, and we need an Upstream: tag pointing to the upstream
-commit (or pull request or mailing list submission if the fix isn't
-applied upstream yet).
-
-Note that those issues are reported by "make check-package". I suggest
-that you add https://paste.ack.tf/faa8ee as your .git/hooks/post-commit
-so that it automatically runs check-package on the changes you make.
-
-Thanks a lot!
-
-Thomas
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
