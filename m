@@ -4,72 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ADCA2C0219B
-	for <buildroot@archiver.kernel.org>; Sat, 14 Sep 2024 14:36:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5273AC02182
+	for <buildroot@archiver.kernel.org>; Sat, 14 Sep 2024 14:37:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 244F5406EC;
-	Sat, 14 Sep 2024 14:36:11 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1C183406EC;
+	Sat, 14 Sep 2024 14:37:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7ZamSrEjF-zP; Sat, 14 Sep 2024 14:36:10 +0000 (UTC)
+ id mb6ITsTO-L14; Sat, 14 Sep 2024 14:37:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D43634196F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BAEE64196F
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D43634196F;
-	Sat, 14 Sep 2024 14:36:09 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 44BFF1BF28C
- for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 14:36:09 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BAEE64196F;
+	Sat, 14 Sep 2024 14:37:03 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 5E6D31BF28C
+ for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 14:37:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3443684373
- for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 14:36:09 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 59FEB40516
+ for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 14:37:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6WkmQZl6F_dh for <buildroot@lists.busybox.net>;
- Sat, 14 Sep 2024 14:36:08 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::224;
- helo=relay4-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pj-0vsM4XFex for <buildroot@lists.busybox.net>;
+ Sat, 14 Sep 2024 14:37:01 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 17E8C8436E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 17E8C8436E
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::224])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 17E8C8436E
- for <buildroot@buildroot.org>; Sat, 14 Sep 2024 14:36:07 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 0AE6AE0005;
- Sat, 14 Sep 2024 14:36:03 +0000 (UTC)
-Date: Sat, 14 Sep 2024 16:36:02 +0200
-To: "Guillaume GC. Chaye" <guillaume.chaye@zeetim.com>
-Message-ID: <20240914163602.7c27c66d@windsurf>
-In-Reply-To: <20240911135234.2928130-1-guillaume.chaye@zeetim.com>
-References: <20240911135234.2928130-1-guillaume.chaye@zeetim.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1726324564;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=QuGnyqAndEr+JFW7eZlD3hZpiWvun9bFMQ1nEASTYsM=;
- b=d9pN1OZPVx9k+qH8zuSeMbDv+dmMofFYlCvIlSVSsPRpSBJRSCGgm85haxd3XEKjc5UDpv
- BYF7bly5PVn+qJJmlS2kDynr2lcD0IWorl89wOBD/qNvLIRLIv1cDHjIuBWpZt5Ro+Z3V3
- Kf4MEfU9OcIdqw5xVvGlE+b9+ZitIdqO+fX9g2khLldYrPuTg3DHz8coG/3wdppHkESUQC
- IsBZvgQKQrzYBnNz6kVdtAQaXBrBemuRgnT6dxPd5oLZf8GWDG08UbjrYhh2KdcRVU0yN7
- RtYcRp0zf60308JNOhCKJjQRCkOBG3ibQBKEQU/DYTNGf4RhE2H8nUVjNIqy8A==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=d9pN1OZP
-Subject: Re: [Buildroot] [PATCHv2 1/1] package/wpa_supplicant: add
- configuration for WPA3-Entreprise
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2835C40130
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2835C40130
+ for <buildroot@buildroot.org>; Sat, 14 Sep 2024 14:37:01 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 12DD182D96; Sat, 14 Sep 2024 14:37:01 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sat, 14 Sep 2024 16:36:03 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 0cc9fcfd0299f28413786bbdbac1ec9af459d724
+X-Git-Newrev: 86bb1b2360bdaed069cd087541f4edad1d5ce925
+X-Patchwork-Hint: ignore
+Message-Id: <20240914143701.12DD182D96@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] boot/grub2: needs host-python3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,66 +58,83 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Sergey Matyukevich <geomatsi@gmail.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============5810781750748372569=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+--===============5810781750748372569==
+Content-Type: text/plain
 
-Thanks for the new patch. Question/comment below.
+commit: https://git.buildroot.net/buildroot/commit/?id=86bb1b2360bdaed069cd087541f4edad1d5ce925
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Wed, 11 Sep 2024 15:52:34 +0200
-"Guillaume GC. Chaye" <guillaume.chaye@zeetim.com> wrote:
+When the build host does not have a Python interpreter installed,
+host-grub2 is failing to configure due to this missing interpreter.
+Note that host-grub2 is the first package to fail because it is a
+dependency of grub2. The grub2 target package has the same dependency
+requirement.
 
-> Signed-off-by: Guillaume GC. Chaye <guillaume.chaye@zeetim.com>
-> ---
->  package/wpa_supplicant/wpa_supplicant.mk | 14 ++++++++++++--
->  1 file changed, 12 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/wpa_supplicant/wpa_supplicant.mk b/package/wpa_supplicant/wpa_supplicant.mk
-> index 984959f679..dbd8eea690 100644
-> --- a/package/wpa_supplicant/wpa_supplicant.mk
-> +++ b/package/wpa_supplicant/wpa_supplicant.mk
-> @@ -126,18 +126,28 @@ ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_WPS),)
->  WPA_SUPPLICANT_CONFIG_DISABLE += CONFIG_WPS
->  endif
->  
-> +# WPA3 configurations:
-> +# - CONFIG_OWE: Opportunistic Wireless Encryption (OWE)
-> +# - CONFIG_DPP,CONFIG_DPP2: Easy Connect (Device Provisioning Protocol - DPP R1 & R2)
-> +# - CONFIG_SAE: WPA3-Personal (SAE)
-> +# - CONFIG_PASN: PASN
+The issue can be quickly reproduced on a host without Python with the
+commands:
 
-You're mentioning CONFIG_PASN here.
+    cat <<EOF >.config
+    BR2_aarch64=y
+    BR2_TARGET_GRUB2=y
+    BR2_TOOLCHAIN_EXTERNAL=y
+    EOF
+    make olddefconfig
+    make grub2
 
-> +# - CONFIG_SUITEB, CONFIG_SUITEB192: WPA3-Enterprise (SuiteB-192)
->  ifeq ($(BR2_PACKAGE_WPA_SUPPLICANT_WPA3),y)
->  WPA_SUPPLICANT_CONFIG_ENABLE += \
->  	CONFIG_DPP \
->  	CONFIG_SAE \
->  	CONFIG_SAE_PK \
-> -	CONFIG_OWE
-> +	CONFIG_OWE \
-> +	CONFIG_SUITEB \
-> +	CONFIG_SUITEB192
+grub2 autotools configure.ac search for a Python interpreter since
+upstream commit [1] 8b467844e "python: Use AM_PATH_PYTHON to determine
+interpreter for gentpl.py", first included in grub v2.04 released
+on 2019-07-04. For reference, grub2 has been updated to that version
+in commit [2] ea7ec41c "boot/grub2: bump to verson 2.04".
 
-... but it isn't anywhere here.
+This commit fixes the issue by adding the host-python3 dependency to
+host-grub2 and grub2.
 
-And symmetrically, CONFIG_SAE_PK is in the list, but not in your
-comment.
+Fixes:
 
-Best regards,
+    checking for a Python interpreter with version >= 2.6... none
+    configure: error: no suitable Python interpreter found
 
-Thomas
--- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+[1] https://git.savannah.gnu.org/gitweb/?p=grub.git;a=commitdiff;h=8b467844e11170077c8ca727c39d2bd36eeb5f08
+[2] https://gitlab.com/buildroot.org/buildroot/-/commit/ea7ec41cf64e86a692ac45e0d012c6e8199ef110
+
+Reported-by: Vincent Stehlé <vincent.stehle@arm.com>
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ boot/grub2/grub2.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/boot/grub2/grub2.mk b/boot/grub2/grub2.mk
+index 1263c63cfd..7c95adc739 100644
+--- a/boot/grub2/grub2.mk
++++ b/boot/grub2/grub2.mk
+@@ -9,8 +9,8 @@ GRUB2_SITE = http://ftp.gnu.org/gnu/grub
+ GRUB2_SOURCE = grub-$(GRUB2_VERSION).tar.xz
+ GRUB2_LICENSE = GPL-3.0+
+ GRUB2_LICENSE_FILES = COPYING
+-GRUB2_DEPENDENCIES = host-bison host-flex host-gawk host-grub2
+-HOST_GRUB2_DEPENDENCIES = host-bison host-flex host-gawk
++GRUB2_DEPENDENCIES = host-bison host-flex host-gawk host-grub2 host-python3
++HOST_GRUB2_DEPENDENCIES = host-bison host-flex host-gawk host-python3
+ GRUB2_INSTALL_IMAGES = YES
+ 
+ # CVE-2019-14865 is about a flaw in the grub2-set-bootflag tool, which
+
+--===============5810781750748372569==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============5810781750748372569==--
