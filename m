@@ -4,53 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EFB69C02187
-	for <buildroot@archiver.kernel.org>; Sat, 14 Sep 2024 22:02:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 212BFC02187
+	for <buildroot@archiver.kernel.org>; Sat, 14 Sep 2024 22:06:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 94990402A2;
-	Sat, 14 Sep 2024 22:02:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id DA4424072B;
+	Sat, 14 Sep 2024 22:06:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lwYGens0aM4P; Sat, 14 Sep 2024 22:02:50 +0000 (UTC)
+ id jeKZCb9ayBdn; Sat, 14 Sep 2024 22:06:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 05551402B0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A0E2D4073D
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 05551402B0;
-	Sat, 14 Sep 2024 22:02:50 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8C22B1BF470
- for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 22:02:48 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A0E2D4073D;
+	Sat, 14 Sep 2024 22:06:09 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 0381A1BF86D
+ for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 22:06:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7B6E281B71
- for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 22:02:48 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id D47B64018E
+ for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 22:06:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oTjUHyV10DJd for <buildroot@lists.busybox.net>;
- Sat, 14 Sep 2024 22:02:47 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=116.202.254.214;
- helo=ciao.gmane.io; envelope-from=glbb-buildroot@m.gmane-mx.org;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 55F2981B35
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 55F2981B35
-Received: from ciao.gmane.io (ciao.gmane.io [116.202.254.214])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 55F2981B35
- for <buildroot@busybox.net>; Sat, 14 Sep 2024 22:02:47 +0000 (UTC)
-Received: from list by ciao.gmane.io with local (Exim 4.92)
- (envelope-from <glbb-buildroot@m.gmane-mx.org>) id 1spaqp-0008il-Vw
- for buildroot@busybox.net; Sun, 15 Sep 2024 00:02:43 +0200
-X-Injected-Via-Gmane: http://gmane.org/
-To: buildroot@busybox.net
-From: Grant Edwards <grant.b.edwards@gmail.com>
-Date: Sat, 14 Sep 2024 22:02:37 -0000 (UTC)
-Message-ID: <vc515t$108g$1@ciao.gmane.io>
-References: <vc23rg$llm$1@ciao.gmane.io> <20240914094334.1228db8e@windsurf>
-User-Agent: slrn/1.0.3 (Linux)
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=fail (p=none dis=none)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id r-cU0utCaC9z for <buildroot@lists.busybox.net>;
+ Sat, 14 Sep 2024 22:06:05 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::12d; helo=mail-il1-x12d.google.com;
+ envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 927D140130
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 927D140130
+Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com
+ [IPv6:2607:f8b0:4864:20::12d])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 927D140130
+ for <buildroot@buildroot.org>; Sat, 14 Sep 2024 22:06:05 +0000 (UTC)
+Received: by mail-il1-x12d.google.com with SMTP id
+ e9e14a558f8ab-3a043496fdeso11133095ab.3
+ for <buildroot@buildroot.org>; Sat, 14 Sep 2024 15:06:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1726351564; x=1726956364;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=0uXhvVj/H6Mgh7kcWO2MZBnaG2CUi8PzYxp89OwnyhI=;
+ b=ghVxhWaCDZ24MDuxce3qukpFNYnew+s3C4Ri7uzPFCfSis9rj26BprMGQ2EgkeaIi/
+ zHAP8dD3AM6LnbFzURVZ6g79wiJ9Bx4FCqhikZsxuMQGzIyjjVcauEqP2h8zXTFY249H
+ U5pREP81AO0znhMr81uKFTLPZx5pq4fMEu+apKBVsh+PhqSZxEvFytWkXgEk/HW3C1R3
+ OfhBqsBIsA+E91Lx8Jj6WPoglMoeIzlCL9Jie8aYhtmJcw8+HhjcNLANIyI/E+tuyXLq
+ 0MxCm4+JHBZITNuPVM8O7p8xhUTlrbEgds+36XcsHx41dzWEj6DC6LUdFUfQ+5byUCsx
+ 6hng==
+X-Gm-Message-State: AOJu0YwRy/IS+1+1uvttUWq9Psl0jA/GWDXvEE40YSUD+U+qASfBdapS
+ vN99TK4NrSK0/iKJo0+z24vv5ZZel36tr8LZfk6wZH0YqCZCsHduKLxsPw==
+X-Google-Smtp-Source: AGHT+IGJWU6HSZHfO/IqQQEgYGHHVopKGpGnQiAbSDVuftVNK4W6aPV5pEUdVYTOebXCU86MC1LTvQ==
+X-Received: by 2002:a05:6e02:1c0d:b0:39f:60d7:8146 with SMTP id
+ e9e14a558f8ab-3a0847d8ecamr102191745ab.0.1726351563825; 
+ Sat, 14 Sep 2024 15:06:03 -0700 (PDT)
+Received: from james-x399.localdomain (71-218-252-223.hlrn.qwest.net.
+ [71.218.252.223]) by smtp.gmail.com with ESMTPSA id
+ 8926c6da1cb9f-4d37ed34b36sm596552173.124.2024.09.14.15.06.02
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 14 Sep 2024 15:06:03 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
+To: buildroot@buildroot.org
+Date: Sat, 14 Sep 2024 16:06:01 -0600
+Message-Id: <20240914220601.1341809-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1726351564; x=1726956364; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=0uXhvVj/H6Mgh7kcWO2MZBnaG2CUi8PzYxp89OwnyhI=;
+ b=fP+74g6cys6YGi7ENSoA/3Fc1UZ2jT2wmUnPWo4DDFxOF0YauTXsFBBqpGjtipSOOh
+ L9vQwOIbZQRIur2WWtQ2oNdLj0x0wNPSGlRsGaLR7/8LkESzGPXs0OVldxoOrfK0QmKR
+ NoaJo2O0aGGWjueOEFMK62MZ2VFRhLexZ0dgKo9cgyq4UM9T+rK8B6xcM+E4ObyD3Qs7
+ /lxh0pDlqxatk/j0ppFpUslKbuPEzdJvr0j90t6NpUmgoIUSj2RxzPmO8gUYIeFDGs1A
+ P8hwkYPv8x4+hGNgKnQpzXD8TFVf3xGn4bZwrkRW4DpAca8UHJ4HXuKeHz3Z5Mn81Iho
+ OQhw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
  header.from=gmail.com
-Subject: Re: [Buildroot] Upgrading buildroot and rootfs/kernel compatibility
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=fP+74g6c
+Subject: [Buildroot] [PATCH 1/1] package/python-bcrypt: bump to version 4.2.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -62,136 +100,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@uclibc.org
-MIME-Version: 1.0
+Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 2024-09-14, Thomas Petazzoni via buildroot <buildroot@buildroot.org> wrote:
-> Grant Edwards <grant.b.edwards@gmail.com> wrote:
->
->> I started with a buildroot 2020.02.7 configuration provided by a
->> silicon vendor that used a linaro-6.3.1-2017.02 toolchain.  That
->> worked OK after I manually upgraded a couple packages that were too
->> old to build using my host system's gcc 13.3.
->> 
->> Now I'm trying to upgrade buildroot to 2024.02.6.  First I tried
->> using the same toolchain as above.  That failed. AFAICT, it was
->> because Fortran support was enabled in the toolchain, and BR 2024
->> can't tolerate that unless Fortran support is also enabled
->> somewhere else (it wasn't clear where).
->
-> Do you have more details on what happened? [,,,]
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/python-bcrypt/python-bcrypt.hash | 2 +-
+ package/python-bcrypt/python-bcrypt.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Building 2020.02.7 with linaro-6.3.1-2017.02 seems to work fine (after
-upgrading m4 and fakeroot to be compatible with host's modern
-glibc). Building 2024.02.6 with same toolchain fails. The same
-defconfig file is used it both cases.
-
-Here's the tail of the "make" output in the failure case:
-
-    >>> skeleton  Extracting
-    >>> skeleton  Patching
-    >>> skeleton  Configuring
-    >>> skeleton  Building
-    >>> skeleton  Installing to target
-    WARNING: no hash file for gcc-linaro-6.3.1-2017.02-x86_64_arm-linux-gnueabihf.tar.xz
-    >>> toolchain-external-custom  Extracting
-    xzcat /home/rzn1/buildroot/downloads/toolchain-external-custom/gcc-linaro-6.3.1-2017.02-x86_64_arm-linux-gnueabihf.tar.xz | /home/rzn1/buildroot/output/host/bin/tar --strip-components=1 -C /home/rzn1/buildroot/output/build/toolchain-external-custom --exclude='usr/lib/locale/*'   -xf -
-    rm -rf /home/rzn1/buildroot/output/host/opt/ext-toolchain
-    mkdir -p /home/rzn1/buildroot/output/host/opt/ext-toolchain
-    mv /home/rzn1/buildroot/output/build/toolchain-external-custom/* /home/rzn1/buildroot/output/host/opt/ext-toolchain/
-    >>> toolchain-external-custom  Patching
-    >>> toolchain-external-custom  Configuring
-    Fortran support is not selected but is available in external toolchain
-    make[2]: *** [package/pkg-generic.mk:273: /home/rzn1/buildroot/output/build/toolchain-external-custom/.stamp_configured] Error 1
-    make[1]: *** [Makefile:23: _all] Error 2
-
-Buildroot 2020 only gets upset if you've told it that the toolchain
-has Fortran support but it actually doesn't:
-
-buildroot-2020.02.7/toolchain/helpers.mk
-
-   369  # Check that the external toolchain supports Fortran
-   370  #
-   371  # $1: cross-gfortran path
-   372  #
-   373  check_fortran = \
-   374          __CROSS_FC=$(strip $1) ; \
-   375          __o=$(BUILD_DIR)/.br-toolchain-test-fortran.tmp ; \
-   376          printf 'program hello\n\tprint *, "Hello Fortran!\\n"\nend program hello\n' | \
-   377          $${__CROSS_FC} -x f95 -o $${__o} - ; \
-   378          if test $$? -ne 0 ; then \
-   379                  rm -f $${__o}* ; \
-   380                  echo "Fortran support is selected but is not available in external toolchain" ; \
-   381                  exit 1 ; \
-   382          fi ; \
-   383          rm -f $${__o}* \
-   384  
-
-In buildroot-2024, you're not allowed to have Fortan support in your
-toolchain unless you've told BR 2024 about it:
-
-buildroot-2024.02.6/toolchain/helpers.mk
-
-   376  #
-   377  # Check that the external toolchain supports Fortran
-   378  #
-   379  # $1: cross-gfortran path
-   380  #
-   381  check_fortran = \
-   382          __CROSS_FC=$(strip $1) ; \
-   383          __o=$(BUILD_DIR)/.br-toolchain-test-fortran.tmp ; \
-   384          __HAS_FORTRAN=`printf 'program hello\n\tprint *, "Hello Fortran!\\\n"\nend program hello\n' | \
-   385                  $${__CROSS_FC} -x f95 -ffree-form -o $${__o} - 2>/dev/null && echo y`; \
-   386          rm -f $${__o}* ; \
-   387          if [ "$${__HAS_FORTRAN}" != "y" -a "$(BR2_TOOLCHAIN_HAS_FORTRAN)" = y ] ; then \
-   388                  echo "Fortran support is selected but is not available in external toolchain" ; \
-   389                  exit 1 ; \
-** 390          elif [ "$${__HAS_FORTRAN}" = "y" -a "$(BR2_TOOLCHAIN_HAS_FORTRAN)" != y ] ; then \
-** 391                  echo "Fortran support is not selected but is available in external toolchain" ; \
-** 392                  exit 1 ; \
-   393          fi \
-
-I don't really understand the reasoning behind that.  Why would the
-unannounced presence of Fortran support in the toolchain be a problem
-that should cause the build to fail?
-
-FWIW, my defconfig file contents are below
-
-BR2_arm=y
-BR2_cortex_a7=y
-BR2_DL_DIR="$(TOPDIR)/../downloads"
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM=y
-BR2_TOOLCHAIN_EXTERNAL_DOWNLOAD=y
-BR2_TOOLCHAIN_EXTERNAL_URL="https://releases.linaro.org/components/toolchain/binaries/6.3-2017.02/arm-linux-gnueabihf/gcc-linaro-6.3.1-2017.02-x86_64_arm-linux-gnueabihf.tar.xz"
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM_PREFIX="$(ARCH)-linux-gnueabihf"
-BR2_TOOLCHAIN_EXTERNAL_GCC_6=y
-BR2_TOOLCHAIN_EXTERNAL_HEADERS_4_6=y
-BR2_TOOLCHAIN_EXTERNAL_CUSTOM_GLIBC=y
-BR2_TOOLCHAIN_EXTERNAL_CXX=y
-BR2_TARGET_GENERIC_GETTY_PORT="ttyS0"
-BR2_PACKAGE_BUSYBOX_CONFIG="$(BR2_EXTERNAL_RZN1_PATH)/board/rzn1/busybox.config"
-BR2_ROOTFS_OVERLAY="$(BR2_EXTERNAL_RZN1_PATH)/board/rzn1/rootfs_overlay"
-BR2_ROOTFS_POST_BUILD_SCRIPT="$(BR2_EXTERNAL_RZN1_PATH)/board/rzn1/postbuild.sh"
-BR2_PACKAGE_MTD=y
-BR2_PACKAGE_MBEDTLS=y
-BR2_PACKAGE_JSON_C=y
-BR2_PACKAGE_LRZSZ=y
-BR2_PACKAGE_OPENSSH=y
-BR2_PACKAGE_OPKG=y
-BR2_PACKAGE_NANO=y
-BR2_TARGET_ROOTFS_JFFS2=y
-BR2_TARGET_ROOTFS_JFFS2_NANDFLASH_128K=y
-BR2_TARGET_ROOTFS_SQUASHFS=y
-BR2_TARGET_ROOTFS_UBI=y
-BR2_TARGET_ROOTFS_UBI_SUBSIZE=0
-BR2_TARGET_ROOTFS_UBIFS_LEBSIZE=0x1f000
-BR2_TARGET_ROOTFS_UBIFS_MAXLEBCNT=198
-BR2_TARGET_ROOTFS_UBIFS_OPTS="-F"
+diff --git a/package/python-bcrypt/python-bcrypt.hash b/package/python-bcrypt/python-bcrypt.hash
+index f3e0517429..6855047de6 100644
+--- a/package/python-bcrypt/python-bcrypt.hash
++++ b/package/python-bcrypt/python-bcrypt.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after vendoring
+-sha256  630f29d9eccca3aea0521eaeff7e4aab43611f1bbf4f8afcdf590aeee9fc8187  python-bcrypt-4.1.3-cargo2.tar.gz
++sha256  2385fd07301cf6d01befc1245d9310a97790492be76e388dd7c0d8de0409806f  python-bcrypt-4.2.0-cargo2.tar.gz
+ # Locally computed sha256 checksums
+ sha256  8173d5c29b4f956d532781d2b86e4e30f83e6b7878dce18c919451d6ba707c90  LICENSE
+diff --git a/package/python-bcrypt/python-bcrypt.mk b/package/python-bcrypt/python-bcrypt.mk
+index 3d1aeab288..0654ea4730 100644
+--- a/package/python-bcrypt/python-bcrypt.mk
++++ b/package/python-bcrypt/python-bcrypt.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_BCRYPT_VERSION = 4.1.3
++PYTHON_BCRYPT_VERSION = 4.2.0
+ PYTHON_BCRYPT_SOURCE_PYPI = bcrypt-$(PYTHON_BCRYPT_VERSION).tar.gz
+-PYTHON_BCRYPT_SITE_PYPI = https://files.pythonhosted.org/packages/ca/e9/0b36987abbcd8c9210c7b86673d88ff0a481b4610630710fb80ba5661356
++PYTHON_BCRYPT_SITE_PYPI = https://files.pythonhosted.org/packages/e4/7e/d95e7d96d4828e965891af92e43b52a4cd3395dc1c1ef4ee62748d0471d0
+ PYTHON_BCRYPT_SITE = $(PYTHON_BCRYPT_SITE_PYPI)/$(PYTHON_BCRYPT_SOURCE_PYPI)?buildroot-path=filename
+ PYTHON_BCRYPT_SETUP_TYPE = setuptools-rust
+ PYTHON_BCRYPT_LICENSE = Apache-2.0
+-- 
+2.34.1
 
 _______________________________________________
 buildroot mailing list
