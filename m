@@ -4,91 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3BEE9C021BE
-	for <buildroot@archiver.kernel.org>; Sat, 14 Sep 2024 22:35:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 42136FC6176
+	for <buildroot@archiver.kernel.org>; Sat, 14 Sep 2024 22:36:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 061A2405E9;
-	Sat, 14 Sep 2024 22:35:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 06A884063C;
+	Sat, 14 Sep 2024 22:36:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 27CxFQzzZCAF; Sat, 14 Sep 2024 22:35:09 +0000 (UTC)
+ id g0uJn2BXx5Kd; Sat, 14 Sep 2024 22:36:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C341840619
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ADE5A40652
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C341840619;
-	Sat, 14 Sep 2024 22:35:08 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E58CC1BF3DB
- for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 22:35:06 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id ADE5A40652;
+	Sat, 14 Sep 2024 22:36:34 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id DC35F1BF3DB
+ for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 22:36:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id E0B794018E
- for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 22:35:06 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id D84AC607D5
+ for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 22:36:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9CRSjfduaWt7 for <buildroot@lists.busybox.net>;
- Sat, 14 Sep 2024 22:35:05 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5Uth2Xa5R005 for <buildroot@lists.busybox.net>;
+ Sat, 14 Sep 2024 22:36:33 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::d2e; helo=mail-io1-xd2e.google.com;
+ client-ip=2607:f8b0:4864:20::d2a; helo=mail-io1-xd2a.google.com;
  envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 9DA9040130
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9DA9040130
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com
- [IPv6:2607:f8b0:4864:20::d2e])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 9DA9040130
- for <buildroot@buildroot.org>; Sat, 14 Sep 2024 22:35:05 +0000 (UTC)
-Received: by mail-io1-xd2e.google.com with SMTP id
- ca18e2360f4ac-82ce603d8b5so137651439f.0
- for <buildroot@buildroot.org>; Sat, 14 Sep 2024 15:35:05 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org EA3F1607D4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EA3F1607D4
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com
+ [IPv6:2607:f8b0:4864:20::d2a])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id EA3F1607D4
+ for <buildroot@buildroot.org>; Sat, 14 Sep 2024 22:36:32 +0000 (UTC)
+Received: by mail-io1-xd2a.google.com with SMTP id
+ ca18e2360f4ac-82cdadeeb2eso112527639f.2
+ for <buildroot@buildroot.org>; Sat, 14 Sep 2024 15:36:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1726353304; x=1726958104;
+ d=1e100.net; s=20230601; t=1726353392; x=1726958192;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=rG6jYP7kpkep9Ol8M5AQlTqgzc4yosXkIxcJVLZpWYo=;
- b=rw5tYWnKmW2UIHocX6MiEwFWxWX07c6RGz/lzkXxU7NWqwp9EfHpANchxO5EqTOyQR
- 7WsIb33JUaySghnbTZYX1WDIeuLUjgXumMcSg5YieyXiHLsEKEsyA8IiaKUfg7akxoAI
- rFsbHSXMh4FG2tU4EwjfgHU4jmAM0p/OoXYzA1JAQAHYNoQEOpDU5qD4/7wl7W03ZgvK
- KEIbghAnBiZiWeHOwMCQe2JNIn7oIunYGzs7m041RTvrmWMnKWMdQ9gZgC7CN4TqDx8r
- kDMySLC9k0ehROWvuUQBJBeR0T+5zzLEZeOH5VSHK6WK4So2cbPF2sLZQxLSKqJGskbM
- Zn6g==
-X-Gm-Message-State: AOJu0Yy07ezFETSJ3zPz6XIagoI422xZhdos4bNJe1UdhzHsP9iNcgzM
- eHCL6J6kbq4mRWXO9nY0ooMVTzduL2tH61129L5HC5uwSm+dRcvGFe6PyQ==
-X-Google-Smtp-Source: AGHT+IHGBTb39vtgmXG+xN6B4MS3dpE43El34nc4KbTGWsupIkv6GGcEXN+UwBy6/vq9NSOCf8xg7g==
-X-Received: by 2002:a05:6602:6207:b0:82a:2143:8 with SMTP id
- ca18e2360f4ac-82d1f93f807mr1340573739f.10.1726353304200; 
- Sat, 14 Sep 2024 15:35:04 -0700 (PDT)
+ bh=Mhi7gJ584VNQW3vU7N3hJEo1oXtAeWLruFcYXvxNTO0=;
+ b=ZowvaJyCkjt5w5rTv83IJ71VwJhyqVnE5TBUB1ZRAXD2dRG+tjwwpteRBtz9yoYyuj
+ yVVwaLPz1jEYZJ5WFHyxsUehAWDrTteA9Dc6UtizXYCiFHpACpy+7IyqCDzlYrnyNutu
+ mgB2qxnqsNjBsC9Txes4Z1M1nHzPzmhF6JEEb+SFtJ2rWwfeHC/qfaAbFMa2xRpfZGrj
+ FBXSKwx7ekw78VXUr8Aw+JKA3a2sA17sxf4a/J40biikztJxuwZVAvw3zREIF77ZurA6
+ Ww85xp3Bu4+pYagy3HNilI0RjUyn893hPTp1r59SUTSD+xH2+yBxGaFjd5deZrIcvprI
+ weAw==
+X-Gm-Message-State: AOJu0YyAWH2rfZAIom4IbREiTXRhags7iAPvRm7V0hN9ocJ1Zh47WByB
+ /0y/GHpiJaMnClGOqHe6vYGcRyZC3pPBHRwoVFClEI6uiA4yXzd8CS+L5Q==
+X-Google-Smtp-Source: AGHT+IHcAu/Cn2fhOqtR71Tp65q0SFH40RjI0nn7ZQcZbf1bzvvTX2vBLp0HErxa6KHZ5W/knSHHCw==
+X-Received: by 2002:a05:6e02:1c0d:b0:39f:60d7:8146 with SMTP id
+ e9e14a558f8ab-3a0847d8ecamr102474945ab.0.1726353391728; 
+ Sat, 14 Sep 2024 15:36:31 -0700 (PDT)
 Received: from james-x399.localdomain (71-218-252-223.hlrn.qwest.net.
  [71.218.252.223]) by smtp.gmail.com with ESMTPSA id
- ca18e2360f4ac-82d492694a5sm60876339f.11.2024.09.14.15.35.03
+ 8926c6da1cb9f-4d37ed13d4asm592859173.90.2024.09.14.15.36.30
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 14 Sep 2024 15:35:03 -0700 (PDT)
+ Sat, 14 Sep 2024 15:36:31 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 14 Sep 2024 16:35:02 -0600
-Message-Id: <20240914223502.1352651-1-james.hilliard1@gmail.com>
+Date: Sat, 14 Sep 2024 16:36:29 -0600
+Message-Id: <20240914223629.1352911-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1726353304; x=1726958104; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1726353392; x=1726958192; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=rG6jYP7kpkep9Ol8M5AQlTqgzc4yosXkIxcJVLZpWYo=;
- b=F9zegRzPa8Xggq4kz/6W+mVPi9GptYdbFdMy0N8YzxLVcF7ILjzqSU96tefI4FywY9
- 6zcShGElItX4lIvEJhr8KZDR2q6xDXISjZW84byr1CSZaqwgO3j5KLmATcXdEKl3NCfF
- 6gGq+4wPoMjLHwGms6A6YFpV9Cj0642BLGc3fnnZ8+WP/0VcxDBv6UHGJV6u0DUz6dCR
- SfL9TpXSmPfkZoJmCimR6F2iFT1PUELZIuOxhLjoTJRfdpPNzQVq5fc2pYBk4/ANCt/v
- B0/6seeXKaslFrrKYaKmuxHQQj6n9Gz6iJT1T01U3W5CoAupKicVCaGBN9ebIgeSPuXN
- v6HA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=Mhi7gJ584VNQW3vU7N3hJEo1oXtAeWLruFcYXvxNTO0=;
+ b=DInDILXvtxJynVRFNIMgTfVZh0JQZ085Unvi90SuLpDivRz8l1/RBFBrEIBcyAAjfn
+ R1l2OCa6Aayyu0FIWwgPh3B4PbxiQwpTW1aggp94njY5Oe+B82TXBNV2f6gUuIaBayyr
+ tLsxE+7P02ddEHLylf0X1ryDHOz95xu6qX7kzWylJEj2HhVhtLcAl0l/wOZ7W+wzZmDB
+ YjLVywvCCZKVzS/7+HNFchB30yPjHzuCWzS0nyNggRsbSW0pKdMT2iuBrMtRb+pcXWJX
+ 0i7ZH1E1b+U1SreghiXVPfh2EOSWfDH6cjTc/cwOAxk6CaAio800IHLIMS02IpDQRBql
+ h9UQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=F9zegRzP
-Subject: [Buildroot] [PATCH 1/1] package/python-bluezero: bump to version
- 0.9.0
+ header.a=rsa-sha256 header.s=20230601 header.b=DInDILXv
+Subject: [Buildroot] [PATCH 1/1] package/python-boto3: bump to version
+ 1.35.19
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,7 +101,8 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: James Hilliard <james.hilliard1@gmail.com>,
- Grzegorz Blach <grzegorz@blach.pl>, Asaf Kahlon <asafka7@gmail.com>
+ =?UTF-8?q?Rapha=C3=ABl=20M=C3=A9lotte?= <raphael.melotte@mind.be>,
+ Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -109,38 +110,38 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-bluezero/python-bluezero.hash | 4 ++--
- package/python-bluezero/python-bluezero.mk   | 4 ++--
+ package/python-boto3/python-boto3.hash | 4 ++--
+ package/python-boto3/python-boto3.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-bluezero/python-bluezero.hash b/package/python-bluezero/python-bluezero.hash
-index e9ccb9133e..150a384223 100644
---- a/package/python-bluezero/python-bluezero.hash
-+++ b/package/python-bluezero/python-bluezero.hash
+diff --git a/package/python-boto3/python-boto3.hash b/package/python-boto3/python-boto3.hash
+index 02440a2960..5b7c1cdba3 100644
+--- a/package/python-boto3/python-boto3.hash
++++ b/package/python-boto3/python-boto3.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/bluezero/json
--md5  5c256c89c3973cfd20f340f095525af2  bluezero-0.8.0.tar.gz
--sha256  9bd6706ff6b941c3bedd5b64e0447051120ae8eeac458fb65f56cc6730e1e598  bluezero-0.8.0.tar.gz
-+md5  8bace06486618fceca632aedc2733027  bluezero-0.9.0.tar.gz
-+sha256  2512935e094e3afd21ca9d4cb1b9aaa88a524e9538ae81305b2086f09f0eee17  bluezero-0.9.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/boto3/json
+-md5  7cc00aa828c5d3a5c09e3af284e6d23e  boto3-1.34.14.tar.gz
+-sha256  5c1bb487c68120aae236354d81b8a1a55d0aa3395d30748a01825ef90891921e  boto3-1.34.14.tar.gz
++md5  b344337be1e7925cbc32940567432e5c  boto3-1.35.19.tar.gz
++sha256  9979fe674780a0b7100eae9156d74ee374cd1638a9f61c77277e3ce712f3e496  boto3-1.35.19.tar.gz
  # Locally computed sha256 checksums
- sha256  59319e80b4caa94ace4817c9f84aa16abc9d4d2b5f7866251b5fda92e87ccdef  LICENSE
-diff --git a/package/python-bluezero/python-bluezero.mk b/package/python-bluezero/python-bluezero.mk
-index 8e078f1073..81e7363fc7 100644
---- a/package/python-bluezero/python-bluezero.mk
-+++ b/package/python-bluezero/python-bluezero.mk
+ sha256  0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  LICENSE
+diff --git a/package/python-boto3/python-boto3.mk b/package/python-boto3/python-boto3.mk
+index 52bb5bc3b1..1584c81971 100644
+--- a/package/python-boto3/python-boto3.mk
++++ b/package/python-boto3/python-boto3.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_BLUEZERO_VERSION = 0.8.0
-+PYTHON_BLUEZERO_VERSION = 0.9.0
- PYTHON_BLUEZERO_SOURCE = bluezero-$(PYTHON_BLUEZERO_VERSION).tar.gz
--PYTHON_BLUEZERO_SITE = https://files.pythonhosted.org/packages/67/e1/15fc417b9828d38aa8e09ba06df61d6889740fe45867510a781df9a8ba35
-+PYTHON_BLUEZERO_SITE = https://files.pythonhosted.org/packages/7b/9c/bfb3e1f92dd39bf3de8fc483a102bfae763fbf156177b77ed96b8a38bbb1
- PYTHON_BLUEZERO_SETUP_TYPE = setuptools
- PYTHON_BLUEZERO_LICENSE = MIT
- PYTHON_BLUEZERO_LICENSE_FILES = LICENSE
+-PYTHON_BOTO3_VERSION = 1.34.14
++PYTHON_BOTO3_VERSION = 1.35.19
+ PYTHON_BOTO3_SOURCE = boto3-$(PYTHON_BOTO3_VERSION).tar.gz
+-PYTHON_BOTO3_SITE = https://files.pythonhosted.org/packages/5f/b6/1e45c3a145304c3feaf48959c6a46efe9a256eec4d417a445b0d9827d20c
++PYTHON_BOTO3_SITE = https://files.pythonhosted.org/packages/80/85/d4119201c65b56a2bcc8dc328db98cd1c769a2376aea1613a6f5e8f2a88b
+ PYTHON_BOTO3_SETUP_TYPE = setuptools
+ PYTHON_BOTO3_LICENSE = Apache-2.0
+ PYTHON_BOTO3_LICENSE_FILES = LICENSE
 -- 
 2.34.1
 
