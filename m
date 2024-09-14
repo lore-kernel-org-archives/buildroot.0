@@ -4,49 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B5BD9C02197
-	for <buildroot@archiver.kernel.org>; Sat, 14 Sep 2024 14:01:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1D0FC02197
+	for <buildroot@archiver.kernel.org>; Sat, 14 Sep 2024 14:01:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7CA8D424C3;
-	Sat, 14 Sep 2024 14:01:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 754ED41988;
+	Sat, 14 Sep 2024 14:01:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Dq8J9j7Xv-TS; Sat, 14 Sep 2024 14:01:19 +0000 (UTC)
+ id t9BrnSC3A4Z4; Sat, 14 Sep 2024 14:01:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7A75142570
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3F27542645
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7A75142570;
-	Sat, 14 Sep 2024 14:01:18 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id CA2FA1BF86C
- for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 14:00:25 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3F27542645;
+	Sat, 14 Sep 2024 14:01:22 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id BC0C51BF3F9
+ for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 14:00:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 69158606C0
- for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 14:00:16 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id AB91884531
+ for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 14:00:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pic-oxpHcBMW for <buildroot@lists.busybox.net>;
- Sat, 14 Sep 2024 14:00:14 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PDD1vGD4Bo72 for <buildroot@lists.busybox.net>;
+ Sat, 14 Sep 2024 14:00:31 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
+ helo=smtp6-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 154E06076D
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 154E06076D
- for <buildroot@buildroot.org>; Sat, 14 Sep 2024 14:00:14 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0D2E182B65; Sat, 14 Sep 2024 14:00:14 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
-To: buildroot@buildroot.org
-Date: Sat, 14 Sep 2024 15:54:45 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 21697b50db70cc4c0bba287eee8a99a8a1b640b9
-X-Git-Newrev: 271ea8be96abf1b30b999075500aaf91f992c25c
-X-Patchwork-Hint: ignore
-Message-Id: <20240914140014.0D2E182B65@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/mrouted: fix typos and grammar
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8454E844ED
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8454E844ED
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8454E844ED
+ for <buildroot@buildroot.org>; Sat, 14 Sep 2024 14:00:31 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown [IPv6:2a02:61:a2::3f4])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPSA id 4C933780372;
+ Sat, 14 Sep 2024 16:00:25 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sat, 14 Sep 2024 16:00:24 +0200
+Date: Sat, 14 Sep 2024 16:00:24 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Peter Korsgaard <peter@korsgaard.com>
+Message-ID: <ZuWW-JNZCG7oPTmm@landeda>
+References: <20240914124337.1200461-1-peter@korsgaard.com>
+MIME-Version: 1.0
+Content-Disposition: inline
+In-Reply-To: <20240914124337.1200461-1-peter@korsgaard.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1726322428;
+ bh=wW2qefeQawQgfJY7S6Z5ThLTlu8Y7iOfLTCdAt1NX/k=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=dt+5ktTZnJ57AYwIM2ERNUNXFLbZMBipfsPVv9htgGm9Nwouqm17WZIu7ID1GRvg2
+ DEloAQW7X9tnCPtP2aN3qi+vfI7dSCOUcEZzx8PsrVGd4xmw9pRurr5HUhlDI3Wq60
+ ofT6D6v3QB680CUFhIbFdDRtR5Z2h7L9Ke2udvRQM06anJldbHdscrcUTv6RmyhdWM
+ nmLgOY13iAFTv20D89FC04PA3ZCFDdUsvqXo3OhZNk0gf41Nxc9XGvp0/R0Om6v40f
+ mzq4ROtfMEHqgTMQROhEXEFXY+fRJcLeTK1449TjnI3QCL1RLeVmymJcZCeBqS45QY
+ iPhxnLcUSsqlQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=dt+5ktTZ
+Subject: Re: [Buildroot] [PATCH 01/20] package/linux-firmware: fix typo in
+ Config.in prompt
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,50 +81,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Bernd Kuhls <bernd@kuhls.net>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=271ea8be96abf1b30b999075500aaf91f992c25c
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Peter, All,
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Cc: Federico Pellegrin <fede@evolware.org>
-[yann.morin.1998@free.fr: s/is/are/ (noticed by Federico)]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
----
- package/mrouted/Config.in  | 3 ++-
- package/mrouted/mrouted.mk | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+Whole series sapplied to master, thanks.
 
-diff --git a/package/mrouted/Config.in b/package/mrouted/Config.in
-index 95b4fb3825..de99303bfa 100644
---- a/package/mrouted/Config.in
-+++ b/package/mrouted/Config.in
-@@ -8,6 +8,7 @@ config BR2_PACKAGE_MROUTED
- 	  source. This package comes with mrouted and mroutectl.  Where
- 	  the latter is used to query status and control operation.
- 
--	  Note: at least two interfaces with MULTICAST flag is requried.
-+	  Note: at least two interfaces with MULTICAST flag are
-+	  required.
- 
- 	  http://github.com/troglobit/mrouted
-diff --git a/package/mrouted/mrouted.mk b/package/mrouted/mrouted.mk
-index 0d2071c4f0..7b5f5039f6 100644
---- a/package/mrouted/mrouted.mk
-+++ b/package/mrouted/mrouted.mk
-@@ -23,7 +23,7 @@ define MROUTED_INSTALL_INIT_SYSTEMD
- 		$(TARGET_DIR)/usr/lib/systemd/system/mrouted.service
- endef
- 
--# We will asume that CONFIG_NET and CONFIG_INET are already
-+# We will assume that CONFIG_NET and CONFIG_INET are already
- # set in the kernel configuration provided by the user.
- define MROUTED_LINUX_CONFIG_FIXUPS
- 	$(call KCONFIG_ENABLE_OPT,CONFIG_IP_MULTICAST)
+I modified patch 13 with feedback from Federico.
+
+Regards,
+Yann E. MORIN.
+
+On 2024-09-14 14:43 +0200, Peter Korsgaard spake thusly:
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+> ---
+>  package/linux-firmware/Config.in | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
+> index 4a17ceaf0b..abec943c36 100644
+> --- a/package/linux-firmware/Config.in
+> +++ b/package/linux-firmware/Config.in
+> @@ -596,7 +596,7 @@ config BR2_PACKAGE_LINUX_FIRMWARE_QLOGIC_4X
+>  	  (qede)
+>  
+>  config BR2_PACKAGE_LINUX_FIRMWARE_RTL_815X
+> -	bool "Realtek 8152/8153/8156 USB Ethernet Adapaters"
+> +	bool "Realtek 8152/8153/8156 USB Ethernet Adapters"
+>  	help
+>  	  Firmware files for Realtek 8152/8153/8156 based USB Ethernet
+>  	  adapters.
+> -- 
+> 2.39.2
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
+-- 
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
