@@ -4,48 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10563C021A8
-	for <buildroot@archiver.kernel.org>; Sat, 14 Sep 2024 17:19:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1B2F1C021A7
+	for <buildroot@archiver.kernel.org>; Sat, 14 Sep 2024 17:25:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C3B7541988;
-	Sat, 14 Sep 2024 17:19:27 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C9F14405E3;
+	Sat, 14 Sep 2024 17:25:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id s6f8R9phTw52; Sat, 14 Sep 2024 17:19:27 +0000 (UTC)
+ id sLWeI-uxWZm2; Sat, 14 Sep 2024 17:25:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 20EA7419B6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A4F324072E
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 20EA7419B6;
-	Sat, 14 Sep 2024 17:19:26 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 683E41BF86D
- for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 17:19:22 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A4F324072E;
+	Sat, 14 Sep 2024 17:25:17 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id B3EFF1BF86C
+ for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 17:25:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 63E2240120
- for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 17:19:22 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id A23E14072E
+ for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 17:25:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QnPiACe0Npzk for <buildroot@lists.busybox.net>;
- Sat, 14 Sep 2024 17:19:21 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qzELG2DQKJbC for <buildroot@lists.busybox.net>;
+ Sat, 14 Sep 2024 17:25:15 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::222;
+ helo=relay2-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 693F8400EA
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 693F8400EA
- for <buildroot@buildroot.org>; Sat, 14 Sep 2024 17:19:21 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5DDC283566; Sat, 14 Sep 2024 17:19:21 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Sat, 14 Sep 2024 19:15:31 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9114da45e612e9c02622c7fc9bf26694e9758556
-X-Git-Newrev: 52414d25f5b003774a3247f5da7036cd7ab538c5
-X-Patchwork-Hint: ignore
-Message-Id: <20240914171921.5DDC283566@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/bdwgc: bump to version 8.2.8
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 3AEDF405E3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3AEDF405E3
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 3AEDF405E3
+ for <buildroot@buildroot.org>; Sat, 14 Sep 2024 17:25:14 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 011EC40002;
+ Sat, 14 Sep 2024 17:25:11 +0000 (UTC)
+Date: Sat, 14 Sep 2024 19:25:10 +0200
+To: Yuriy Kolerov via buildroot <buildroot@buildroot.org>
+Message-ID: <20240914192510.13464c03@windsurf>
+In-Reply-To: <20240823152547.1023215-1-ykolerov@synopsys.com>
+References: <20240823152547.1023215-1-ykolerov@synopsys.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1726334712;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=Hnx/A/cNIoAfdHMubvB37unUbX1nmNsvzIqeKZ2GlAs=;
+ b=RmiaeJ/KUmZSWEdCH9+IR+HSjz3dqy+DvotNSapVA/qDr7JkXpfu1TiMUHzNPPj20oNaMt
+ cnYmfkV/4TKZR6mYBUPzVCllsPUp8hJJajWQttTJA8D8ooqPtkoZoz/7cxQWt26hF4aT/k
+ 4o64lrEJO4KgB8L4HdB4puRPR+HCoSmJCp3LYbsr6NY7IkC9uZCRP9vsf+xLgpJ86VX89T
+ v4eR0P27YYbvK1AHylIhztkfHCIstY81pLsFcNmY6DwlY0ZQZCcupaVrwAbdjlbHsRVixm
+ 9F7zFdU0XkNT3DMtSYIHZLZJbd3BgNdghyt2hhYpTuGTNJz59NJ3xiFtbmvxtw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=RmiaeJ/K
+Subject: Re: [Buildroot] [PATCH 1/1] package/glibc: drop support of ARC 700
+ targets
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,46 +83,33 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: Romain Naour <romain.naour@gmail.com>,
+ Alexey Brodkin <Alexey.Brodkin@synopsys.com>,
+ Yuriy Kolerov <Yuriy.Kolerov@synopsys.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=52414d25f5b003774a3247f5da7036cd7ab538c5
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Fri, 23 Aug 2024 18:25:47 +0300
+Yuriy Kolerov via buildroot <buildroot@buildroot.org> wrote:
 
-Release notes: https://github.com/ivmai/bdwgc/releases/tag/v8.2.8
+> Synopsys ARC 700 family is not supported by glibc. Thus, it is
+> necessary to prevent selecting glibc while configuring for
+> that processors family.
+> 
+> Signed-off-by: Yuriy Kolerov <ykolerov@synopsys.com>
+> ---
+>  package/glibc/Config.in | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Signed-off-by: Pedro Aguilar <paguilar@paguilar.org>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/bdwgc/bdwgc.hash | 2 +-
- package/bdwgc/bdwgc.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Applied to master with added autobuilder references. Thanks!
 
-diff --git a/package/bdwgc/bdwgc.hash b/package/bdwgc/bdwgc.hash
-index 8fa49b4585..8705c0f87b 100644
---- a/package/bdwgc/bdwgc.hash
-+++ b/package/bdwgc/bdwgc.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  3d0d3cdbe077403d3106bb40f0cbb563413d6efdbb2a7e1cd6886595dec48fc2  gc-8.2.4.tar.gz
-+sha256  7649020621cb26325e1fb5c8742590d92fb48ce5c259b502faf7d9fb5dabb160  gc-8.2.8.tar.gz
- sha256  a9b077aeb4e9e1aaf9742119d8023ef26f52f445cdc3f60d390bf59e1647f54a  README.QUICK
-diff --git a/package/bdwgc/bdwgc.mk b/package/bdwgc/bdwgc.mk
-index 0e9c9d849c..ca2fbdb1d4 100644
---- a/package/bdwgc/bdwgc.mk
-+++ b/package/bdwgc/bdwgc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--BDWGC_VERSION = 8.2.4
-+BDWGC_VERSION = 8.2.8
- BDWGC_SOURCE = gc-$(BDWGC_VERSION).tar.gz
- BDWGC_SITE = https://github.com/ivmai/bdwgc/releases/download/v$(BDWGC_VERSION)
- BDWGC_INSTALL_STAGING = YES
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
