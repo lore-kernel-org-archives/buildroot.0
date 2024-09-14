@@ -4,70 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D1B20C02195
-	for <buildroot@archiver.kernel.org>; Sat, 14 Sep 2024 12:46:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6ACB9C02197
+	for <buildroot@archiver.kernel.org>; Sat, 14 Sep 2024 12:57:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A262D40523;
-	Sat, 14 Sep 2024 12:46:55 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 072B140284;
+	Sat, 14 Sep 2024 12:57:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MaTLVm4993-s; Sat, 14 Sep 2024 12:46:54 +0000 (UTC)
+ id VFUq_5eRXear; Sat, 14 Sep 2024 12:57:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7A7D74059B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7C3114020B
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7A7D74059B;
-	Sat, 14 Sep 2024 12:46:54 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C8BC31BF232
- for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 12:46:52 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7C3114020B;
+	Sat, 14 Sep 2024 12:57:53 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 1B7B31BF232
+ for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 12:57:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id C422360769
- for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 12:46:52 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0A76A81EB0
+ for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 12:57:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2jezSCaKn2w8 for <buildroot@lists.busybox.net>;
- Sat, 14 Sep 2024 12:46:52 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
- helo=smtp6-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id IY854nf85Oyb for <buildroot@lists.busybox.net>;
+ Sat, 14 Sep 2024 12:57:51 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=209.85.218.51;
+ helo=mail-ej1-f51.google.com; envelope-from=fede.evol@gmail.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E0284606E7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E0284606E7
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E0284606E7
- for <buildroot@buildroot.org>; Sat, 14 Sep 2024 12:46:51 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown [IPv6:2a02:61:a2::3f4])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPSA id D5C9478050F;
- Sat, 14 Sep 2024 14:46:47 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 14 Sep 2024 14:46:47 +0200
-Date: Sat, 14 Sep 2024 14:46:47 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Message-ID: <ZuWFt3u8_zI3beOt@landeda>
-References: <20240914101527.31256-1-thomas.petazzoni@bootlin.com>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 88B6C81E9F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 88B6C81E9F
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com
+ [209.85.218.51])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 88B6C81E9F
+ for <buildroot@buildroot.org>; Sat, 14 Sep 2024 12:57:50 +0000 (UTC)
+Received: by mail-ej1-f51.google.com with SMTP id
+ a640c23a62f3a-a8a789c4fc5so660893666b.0
+ for <buildroot@buildroot.org>; Sat, 14 Sep 2024 05:57:50 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1726318668; x=1726923468;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=vwvUIqWRFE+2N/PUvtlLqsYZl3iaJAWS4+bOCZW7SWQ=;
+ b=xNEPP0Es+87F1cGVkXI4o1chU7QDF3h9HHauVm4h4M+aEIHURNp2wGwvif5Ruyk4cq
+ jMj9PJPp5rx57mFbxfvUHCk1XcZga7G1gWNDhSB88Qeo9/lW+5Mtsrkf6qmsFPIZJhG/
+ 9oQ05HFAmo8+EQQs0dmIRAuPqvOuFej9jUgdcOuCkxAUDvZq9ftk7wKAJ0cP1NK50RNo
+ JpjLu589EoL1jvjE7Ek67wqv5wrbss+N7F5P11sSsdw0IKv0DRsoQ5D3SqbUq3Z4bAK5
+ tlotY78KvPkxD2jccZ5nIXb0vJ9xFm3QTXliTP2l0iumbIjzpTe/IBPKHoWcXQ5idZEI
+ VOEg==
+X-Gm-Message-State: AOJu0Yx+deyq9Nj2Iq2JIKvIDVVq3DHOMkxwPWycKywlwpufaXyCpsSz
+ kom6R/mh1NbpOv0/o71QUb7Kekqy35Uw+551n0lFZ0CU8LrjCit18++UKrnXUGzPEIS5wfnwVx3
+ KhF7qb1R+TdGdHTlPS/Bu0E1s3draqQ==
+X-Google-Smtp-Source: AGHT+IHO3r5qysods91J88CjVKELl+pqg91d0Wjo8qAZZobg+HcY5P8Ss25PeXuyW+YsA4io3M9NqOpHRM1czn/3wOk=
+X-Received: by 2002:a17:907:6ea0:b0:a8d:4cec:fcec with SMTP id
+ a640c23a62f3a-a8ffae0016cmr1710919266b.26.1726318667514; Sat, 14 Sep 2024
+ 05:57:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20240914101527.31256-1-thomas.petazzoni@bootlin.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1726318010;
- bh=CJSbJjakn2pOT5zVT97yvp8OS8t1OKQYaejOpmgWdB8=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=KnfWfHNgOmhbL/m9xrn2EI13qyqqXg7M2wTw4kLGqEwkrawZtVr/WBDLtCrTi6Tym
- n1sDPxrVHoPgUY9j6eKreKT/pQEpIWZI/UIE8d96HWP3UAYf4aOt0fqacZpuT6GDj/
- mw9+/RKKyQI8Ve/DXdgN8o1LqZH12oisDVl0hBSDoOoAhfN1yI+njq3ba6EC0gtX5V
- AeZXGL6/GHBYPPFZKzJLSvTvezE6U0E0ZH+DfXayPKUFPa9n6MeJRFlIZ0ZAWv7tYc
- FQbiUS0eD9NULwPxPMz+Qp8Em5+rFlTAOuEkF8MC4CPrw0Y17TSwT52Hbiiv1TZZaW
- Yh0o4E+FxQKtw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=KnfWfHNg
-Subject: Re: [Buildroot] [PATCH] DEVELOPERS: drop Samuel Martin
+References: <20240914124337.1200461-1-peter@korsgaard.com>
+ <20240914124337.1200461-13-peter@korsgaard.com>
+In-Reply-To: <20240914124337.1200461-13-peter@korsgaard.com>
+From: Federico Pellegrin <fede@evolware.org>
+Date: Sat, 14 Sep 2024 14:57:36 +0200
+Message-ID: <CAM6O0ZhnJrAYQSLSXWZsMBxc8hY8bRqwbUOuWvkR+PuKKrzPRA@mail.gmail.com>
+To: Peter Korsgaard <peter@korsgaard.com>
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=fail (p=none dis=none)
+ header.from=evolware.org
+Subject: Re: [Buildroot] [PATCH 13/20] package/mrouted: fix typos
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,72 +83,158 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Joachim Wiberg <troglobit@gmail.com>, buildroot@buildroot.org
+Content-Type: multipart/mixed; boundary="===============4625228379304661278=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Thomas, All,
+--===============4625228379304661278==
+Content-Type: multipart/alternative; boundary="000000000000f249b5062213e274"
 
-On 2024-09-14 12:15 +0200, Thomas Petazzoni via buildroot spake thusly:
-> Samuel Martin has not been around in the Buildroot community for many,
-> many years. His last posting on the mailing list was on July 2018. So
-> let's not pretend those packages are actually maintained, and let's
-> stop spamming Samuel with lots of patches and autobuilder failures.
-> 
-> Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+--000000000000f249b5062213e274
+Content-Type: text/plain; charset="UTF-8"
 
-Applied to master, thanks.
+Hi,
 
-Regards,
-Yann E. MORIN.
+Il giorno sab 14 set 2024 alle ore 14:44 Peter Korsgaard <
+peter@korsgaard.com> ha scritto:
 
+> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 > ---
->  DEVELOPERS | 14 --------------
->  1 file changed, 14 deletions(-)
-> 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index 479ebeed37..c9f805a82c 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -2898,20 +2898,6 @@ F:	package/zoxide/
->  N:	Sam Lancia <sam@gpsm.co.uk>
->  F:	package/lrzip/
->  
-> -N:	Samuel Martin <s.martin49@gmail.com>
-> -F:	package/armadillo/
-> -F:	package/cwiid/
-> -F:	package/flite/
-> -F:	package/nginx/
-> -F:	package/opencv3/
-> -F:	package/openobex/
-> -F:	package/pkg-cmake.mk
-> -F:	package/python-numpy/
-> -F:	package/scrub/
-> -F:	package/urg/
-> -F:	package/ussp-push/
-> -F:	support/misc/toolchainfile.cmake.in
-> -
->  N:	Sam Voss <sam.voss@gmail.com>
->  F:	package/ripgrep/
->  
-> -- 
-> 2.46.0
-> 
+>  package/mrouted/Config.in  | 2 +-
+>  package/mrouted/mrouted.mk | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/package/mrouted/Config.in b/package/mrouted/Config.in
+> index 95b4fb3825..9a29985763 100644
+> --- a/package/mrouted/Config.in
+> +++ b/package/mrouted/Config.in
+> @@ -8,6 +8,6 @@ config BR2_PACKAGE_MROUTED
+>           source. This package comes with mrouted and mroutectl.  Where
+>           the latter is used to query status and control operation.
+>
+> -         Note: at least two interfaces with MULTICAST flag is requried.
+> +         Note: at least two interfaces with MULTICAST flag is required.
+>
+
+Should that say instead:
+
+Note: at least two interfaces with MULTICAST flag are required.
+
+? (so is -> are)
+
+Cheers,
+Federico
+
+
+
+>
+>           http://github.com/troglobit/mrouted
+> diff --git a/package/mrouted/mrouted.mk b/package/mrouted/mrouted.mk
+> index 0d2071c4f0..7b5f5039f6 100644
+> --- a/package/mrouted/mrouted.mk
+> +++ b/package/mrouted/mrouted.mk
+> @@ -23,7 +23,7 @@ define MROUTED_INSTALL_INIT_SYSTEMD
+>                 $(TARGET_DIR)/usr/lib/systemd/system/mrouted.service
+>  endef
+>
+> -# We will asume that CONFIG_NET and CONFIG_INET are already
+> +# We will assume that CONFIG_NET and CONFIG_INET are already
+>  # set in the kernel configuration provided by the user.
+>  define MROUTED_LINUX_CONFIG_FIXUPS
+>         $(call KCONFIG_ENABLE_OPT,CONFIG_IP_MULTICAST)
+> --
+> 2.39.2
+>
 > _______________________________________________
 > buildroot mailing list
 > buildroot@buildroot.org
 > https://lists.buildroot.org/mailman/listinfo/buildroot
+>
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+--000000000000f249b5062213e274
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div dir=3D"ltr"><div><br></div><div>Hi,<br></div></div><b=
+r><div class=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_attr">Il giorn=
+o sab 14 set 2024 alle ore 14:44 Peter Korsgaard &lt;<a href=3D"mailto:pete=
+r@korsgaard.com">peter@korsgaard.com</a>&gt; ha scritto:<br></div><blockquo=
+te class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px =
+solid rgb(204,204,204);padding-left:1ex">Signed-off-by: Peter Korsgaard &lt=
+;<a href=3D"mailto:peter@korsgaard.com" target=3D"_blank">peter@korsgaard.c=
+om</a>&gt;<br>
+---<br>
+=C2=A0package/mrouted/Config.in=C2=A0 | 2 +-<br>
+=C2=A0package/mrouted/<a href=3D"http://mrouted.mk" rel=3D"noreferrer" targ=
+et=3D"_blank">mrouted.mk</a> | 2 +-<br>
+=C2=A02 files changed, 2 insertions(+), 2 deletions(-)<br>
+<br>
+diff --git a/package/mrouted/Config.in b/package/mrouted/Config.in<br>
+index 95b4fb3825..9a29985763 100644<br>
+--- a/package/mrouted/Config.in<br>
++++ b/package/mrouted/Config.in<br>
+@@ -8,6 +8,6 @@ config BR2_PACKAGE_MROUTED<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 source. This package comes with mrouted =
+and mroutectl.=C2=A0 Where<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 the latter is used to query status and c=
+ontrol operation.<br>
+<br>
+-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0Note: at least two interfaces with MULTI=
+CAST flag is requried.<br>
++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0Note: at least two interfaces with MULTI=
+CAST flag is required.<br></blockquote><div><br></div><div>Should that say =
+instead:</div><div><br></div><div>Note: at least two interfaces with MULTIC=
+AST flag are required.</div><div><br></div><div>? (so is -&gt; are)</div><d=
+iv><br></div><div>Cheers,</div><div>Federico</div><div><br></div><div>=C2=
+=A0</div><blockquote class=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8e=
+x;border-left:1px solid rgb(204,204,204);padding-left:1ex">
+<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 <a href=3D"http://github.com/troglobit/m=
+routed" rel=3D"noreferrer" target=3D"_blank">http://github.com/troglobit/mr=
+outed</a><br>
+diff --git a/package/mrouted/<a href=3D"http://mrouted.mk" rel=3D"noreferre=
+r" target=3D"_blank">mrouted.mk</a> b/package/mrouted/<a href=3D"http://mro=
+uted.mk" rel=3D"noreferrer" target=3D"_blank">mrouted.mk</a><br>
+index 0d2071c4f0..7b5f5039f6 100644<br>
+--- a/package/mrouted/<a href=3D"http://mrouted.mk" rel=3D"noreferrer" targ=
+et=3D"_blank">mrouted.mk</a><br>
++++ b/package/mrouted/<a href=3D"http://mrouted.mk" rel=3D"noreferrer" targ=
+et=3D"_blank">mrouted.mk</a><br>
+@@ -23,7 +23,7 @@ define MROUTED_INSTALL_INIT_SYSTEMD<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 $(TARGET_DIR)/usr/l=
+ib/systemd/system/mrouted.service<br>
+=C2=A0endef<br>
+<br>
+-# We will asume that CONFIG_NET and CONFIG_INET are already<br>
++# We will assume that CONFIG_NET and CONFIG_INET are already<br>
+=C2=A0# set in the kernel configuration provided by the user.<br>
+=C2=A0define MROUTED_LINUX_CONFIG_FIXUPS<br>
+=C2=A0 =C2=A0 =C2=A0 =C2=A0 $(call KCONFIG_ENABLE_OPT,CONFIG_IP_MULTICAST)<=
+br>
+-- <br>
+2.39.2<br>
+<br>
+_______________________________________________<br>
+buildroot mailing list<br>
+<a href=3D"mailto:buildroot@buildroot.org" target=3D"_blank">buildroot@buil=
+droot.org</a><br>
+<a href=3D"https://lists.buildroot.org/mailman/listinfo/buildroot" rel=3D"n=
+oreferrer" target=3D"_blank">https://lists.buildroot.org/mailman/listinfo/b=
+uildroot</a><br>
+</blockquote></div></div>
+
+--000000000000f249b5062213e274--
+
+--===============4625228379304661278==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============4625228379304661278==--
