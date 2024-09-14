@@ -4,48 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 257BAC02189
-	for <buildroot@archiver.kernel.org>; Sat, 14 Sep 2024 09:29:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 37249C0218C
+	for <buildroot@archiver.kernel.org>; Sat, 14 Sep 2024 09:29:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E058A840AA;
-	Sat, 14 Sep 2024 09:29:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DF3C184723;
+	Sat, 14 Sep 2024 09:29:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ia1MjiRoJlXZ; Sat, 14 Sep 2024 09:29:16 +0000 (UTC)
+ id JBI9CVzYo2bQ; Sat, 14 Sep 2024 09:29:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D0553846D4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3CC71846FF
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id D0553846D4;
-	Sat, 14 Sep 2024 09:29:15 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 756661BF280
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3CC71846FF;
+	Sat, 14 Sep 2024 09:29:18 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id BC7461BF280
  for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 09:29:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 63E06846D4
+ by smtp2.osuosl.org (Postfix) with ESMTP id B85B34034B
  for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 09:29:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wdRseTclaiso for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id SFZ_bjdlbseK for <buildroot@lists.busybox.net>;
  Sat, 14 Sep 2024 09:29:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 82F1B846B0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 99C7D40179
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 82F1B846B0
+ by smtp2.osuosl.org (Postfix) with ESMTP id 99C7D40179
  for <buildroot@buildroot.org>; Sat, 14 Sep 2024 09:29:13 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 79CF78118C; Sat, 14 Sep 2024 09:29:13 +0000 (UTC)
+ id 85E2981191; Sat, 14 Sep 2024 09:29:13 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 14 Sep 2024 11:28:11 +0200
+Date: Sat, 14 Sep 2024 11:28:16 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 17642f50323041e4f9fa0cb1d6f703e646ee4548
-X-Git-Newrev: d90c669777ebe48eb9ea180e962a8adffc031f91
+X-Git-Oldrev: d90c669777ebe48eb9ea180e962a8adffc031f91
+X-Git-Newrev: 8bb08e7f43a76cce0e9e69f353cc1b77c3b6f6e5
 X-Patchwork-Hint: ignore
-Message-Id: <20240914092913.79CF78118C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/perl-mime-base32: new package
+Message-Id: <20240914092913.85E2981191@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/perl-uri: bump to version 5.29
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,76 +65,54 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d90c669777ebe48eb9ea180e962a8adffc031f91
+commit: https://git.buildroot.net/buildroot/commit/?id=8bb08e7f43a76cce0e9e69f353cc1b77c3b6f6e5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/Config.in                              |  1 +
- package/perl-mime-base32/Config.in             |  6 ++++++
- package/perl-mime-base32/perl-mime-base32.hash |  8 ++++++++
- package/perl-mime-base32/perl-mime-base32.mk   | 14 ++++++++++++++
- 4 files changed, 29 insertions(+)
+ package/perl-uri/Config.in     | 1 +
+ package/perl-uri/perl-uri.hash | 4 ++--
+ package/perl-uri/perl-uri.mk   | 2 +-
+ 3 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 40b20201a0..599e3e9c3f 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -888,6 +888,7 @@ menu "Perl libraries/modules"
- 	source "package/perl-mailtools/Config.in"
- 	source "package/perl-math-int64/Config.in"
- 	source "package/perl-math-prime-util/Config.in"
-+	source "package/perl-mime-base32/Config.in"
- 	source "package/perl-mime-base64-urlsafe/Config.in"
- 	source "package/perl-mime-tools/Config.in"
- 	source "package/perl-module-implementation/Config.in"
-diff --git a/package/perl-mime-base32/Config.in b/package/perl-mime-base32/Config.in
-new file mode 100644
-index 0000000000..e05b96557a
---- /dev/null
-+++ b/package/perl-mime-base32/Config.in
-@@ -0,0 +1,6 @@
-+config BR2_PACKAGE_PERL_MIME_BASE32
-+	bool "perl-mime-base32"
-+	help
-+	  Base32 encoder and decoder.
-+
-+	  https://metacpan.org/release/MIME-Base32
-diff --git a/package/perl-mime-base32/perl-mime-base32.hash b/package/perl-mime-base32/perl-mime-base32.hash
-new file mode 100644
-index 0000000000..a01e405bef
---- /dev/null
-+++ b/package/perl-mime-base32/perl-mime-base32.hash
-@@ -0,0 +1,8 @@
-+# retrieved by scancpan from https://cpan.metacpan.org/
-+md5  0c7735fa09e74c7f2ec93d1890b8c6c0  MIME-Base32-1.303.tar.gz
-+sha256  ab21fa99130e33a0aff6cdb596f647e5e565d207d634ba2ef06bdbef50424e99  MIME-Base32-1.303.tar.gz
-+
-+# computed by scancpan
-+sha256  08c2ed7589aff3b2076b48b792078d3479c2295559ee7bc4615e93abe0473939  ARTISTIC-1.0
-+sha256  3d2fb9b42d1134f39c2e990d66b5e9b77005663fe956db526cc380eb3d9a77d8  GPL-1
-+sha256  834c4ebff45be11f35f059b077fdd747dee4b8a747b95049d849fef1c0ccdc62  LICENSE
-diff --git a/package/perl-mime-base32/perl-mime-base32.mk b/package/perl-mime-base32/perl-mime-base32.mk
-new file mode 100644
-index 0000000000..5c5272fe1b
---- /dev/null
-+++ b/package/perl-mime-base32/perl-mime-base32.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# perl-mime-base32
-+#
-+################################################################################
-+
-+PERL_MIME_BASE32_VERSION = 1.303
-+PERL_MIME_BASE32_SOURCE = MIME-Base32-$(PERL_MIME_BASE32_VERSION).tar.gz
-+PERL_MIME_BASE32_SITE = $(BR2_CPAN_MIRROR)/authors/id/R/RE/REHSACK
-+PERL_MIME_BASE32_LICENSE = Artistic or GPL-1.0+
-+PERL_MIME_BASE32_LICENSE_FILES = ARTISTIC-1.0 GPL-1 LICENSE
-+PERL_MIME_BASE32_DISTNAME = MIME-Base32
-+
-+$(eval $(perl-package))
+diff --git a/package/perl-uri/Config.in b/package/perl-uri/Config.in
+index 3f51c517f3..a09f30178d 100644
+--- a/package/perl-uri/Config.in
++++ b/package/perl-uri/Config.in
+@@ -1,5 +1,6 @@
+ config BR2_PACKAGE_PERL_URI
+ 	bool "perl-uri"
++	select BR2_PACKAGE_PERL_MIME_BASE32 # runtime
+ 	help
+ 	  Uniform Resource Identifiers (absolute and relative).
+ 
+diff --git a/package/perl-uri/perl-uri.hash b/package/perl-uri/perl-uri.hash
+index c10a829e98..fb70f0c266 100644
+--- a/package/perl-uri/perl-uri.hash
++++ b/package/perl-uri/perl-uri.hash
+@@ -1,6 +1,6 @@
+ # retrieved by scancpan from https://cpan.metacpan.org/
+-md5  9b45e7635f0968deabe377fc4c99a8b5  URI-5.21.tar.gz
+-sha256  96265860cd61bde16e8415dcfbf108056de162caa0ac37f81eb695c9d2e0ab77  URI-5.21.tar.gz
++md5  34cf48b69c4fbcc40cfebac94af39424  URI-5.29.tar.gz
++sha256  a34b9f626c3ff1e20c0d4a23ec5c8b7ae1de1fb674ecefed7e46791388137372  URI-5.29.tar.gz
+ 
+ # computed by scancpan
+ sha256  a1730c55839ce3c9182c92e3387ba8f683ad6ab8b4a3257553a20c4db194c2cf  LICENSE
+diff --git a/package/perl-uri/perl-uri.mk b/package/perl-uri/perl-uri.mk
+index aa0c1ed8b5..d02a729dc2 100644
+--- a/package/perl-uri/perl-uri.mk
++++ b/package/perl-uri/perl-uri.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PERL_URI_VERSION = 5.21
++PERL_URI_VERSION = 5.29
+ PERL_URI_SOURCE = URI-$(PERL_URI_VERSION).tar.gz
+ PERL_URI_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
+ PERL_URI_LICENSE = Artistic-1.0-Perl or GPL-1.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
