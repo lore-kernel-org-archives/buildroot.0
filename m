@@ -4,73 +4,89 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 77D59C021A6
-	for <buildroot@archiver.kernel.org>; Sat, 14 Sep 2024 16:44:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7885DC021A8
+	for <buildroot@archiver.kernel.org>; Sat, 14 Sep 2024 17:04:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 11BD7412FB;
-	Sat, 14 Sep 2024 16:44:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 248EE40748;
+	Sat, 14 Sep 2024 17:04:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qZq2yX2OxuKy; Sat, 14 Sep 2024 16:44:40 +0000 (UTC)
+ id XBtmkb2VpelS; Sat, 14 Sep 2024 17:04:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C832D412FF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E0E7E40789
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C832D412FF;
-	Sat, 14 Sep 2024 16:44:39 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 400381BF83A
- for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 16:44:38 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id E0E7E40789;
+	Sat, 14 Sep 2024 17:04:12 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 8F5A81BF83A
+ for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 17:04:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2F2E8840C3
- for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 16:44:38 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8A31640789
+ for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 17:04:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id c1aSPTzkPu6A for <buildroot@lists.busybox.net>;
- Sat, 14 Sep 2024 16:44:37 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.198;
- helo=relay6-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id UcsxZtogz8sn for <buildroot@lists.busybox.net>;
+ Sat, 14 Sep 2024 17:04:09 +0000 (UTC)
+X-Greylist: delayed 456 seconds by postgrey-1.37 at util1.osuosl.org;
+ Sat, 14 Sep 2024 17:04:08 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9BAAC40748
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9BAAC40748
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.72.192.74;
+ helo=mout.kundenserver.de; envelope-from=paguilar@paguilar.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org CFDB4840C2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CFDB4840C2
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [217.70.183.198])
- by smtp1.osuosl.org (Postfix) with ESMTPS id CFDB4840C2
- for <buildroot@buildroot.org>; Sat, 14 Sep 2024 16:44:36 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 098C9C0003;
- Sat, 14 Sep 2024 16:44:34 +0000 (UTC)
-Date: Sat, 14 Sep 2024 18:44:33 +0200
-To: Ben Hutchings via buildroot <buildroot@buildroot.org>
-Message-ID: <20240914184433.061122ac@windsurf>
-In-Reply-To: <20240411145559.1183064-2-ben.hutchings@mind.be>
-References: <20240411145559.1183064-1-ben.hutchings@mind.be>
- <20240411145559.1183064-2-ben.hutchings@mind.be>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.74])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9BAAC40748
+ for <buildroot@buildroot.org>; Sat, 14 Sep 2024 17:04:08 +0000 (UTC)
+X-UI-Sender-Class: 55c96926-9e95-11ee-ae09-1f7a4046a0f6
+Received: from uxmal.fritz.box ([151.51.184.1]) by mrelayeu.kundenserver.de
+ (mreue109 [212.227.17.173]) with ESMTPSA (Nemesis) id
+ 1M42fG-1spVzZ1RJ2-000MME; Sat, 14 Sep 2024 18:51:25 +0200
+From: Pedro Aguilar <paguilar@paguilar.org>
+To: buildroot@buildroot.org
+Date: Sat, 14 Sep 2024 18:51:01 +0200
+Message-Id: <20240914165101.258406-1-paguilar@paguilar.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Provags-ID: V03:K1:lYYVPuP3UpeNIb+h/dEq6Yhv4jQ0amKzs8YOso90XIORqvYBAIf
+ QOq+cSM69AdQ6bwJhWvSguB69F++Gxy0TmYNqtaVaKqjc3aTLGTu9QR0lzq7d7cO4jU5sVJ
+ TgH0Ekd1dRifFCATFAmbBQPVoHhFC3Qoy5rOpZK3K87iayl8PZuKAr1gJnfrHFaNvHq2iFA
+ AyE72B5BZr/u5Gyr1k/CA==
+UI-OutboundReport: notjunk:1;M01:P0:RSClpjJyqHc=;p70ashhqodSQTXlPFd+HVjVXJfF
+ sIyYcU0Jf/3PFq9/mlplsKKjgeWQW2DG7Vj78jwq2EsZo3/E+Km41n+uOPIv67H+flGRpYsEp
+ pLqmZBdQPfaXGSdGmydKab/7Qcu289Y56P9vGpnhNxB+IaBmSKmU8lT2iTYSrTyxvJoQyIH6s
+ ROgCyPMkqPVPBTqF7yui8u5s1q5njTdRrm1h9ylCZIO3ZcRvopkYXlyntk1M29vMb3v1Nxtc4
+ tkROpwRh/c8MbSbRIM1P3IR3i/Cv6kBpO8JlkI1MhCgHOFY02yLFwt1AqyuaXHB60gC+NFTal
+ 0ZJjZRr+sdIpI0bfKAgyl+3aagQPMm1TA7qsLDVFmkzZ2GXDwc4fT5GPDecFwlFOZlnpVPKSx
+ swLvv4wZtisrVfxyyPHPMGT+G3L+XHN/T24dBKHZmwZzIorFFzUx9Vdc8cjeuVe0b4Bdee7U2
+ uKSUd4qeVa5sZhv4i02DHB7bDh2AgHRSAh2yVr/EtpMdbbGa+bo1b26QJqZnXPuU5eq7sSrUc
+ Kf2jxO1m43LG/n3sOEx6yZdztsPV20XTVsVB8ar4wLdxRxBuPR9RJgB08LyrqkWpVDfWMkVQb
+ xPwTKqzosaSKU5y+tF3dV67frt+YJZ9nQmEOBc40RdwsyhJAP0+lU0oqfBNtvwSi6qPt4sfzh
+ 2vj4PkBKVegJUPCCAdcboeYttfErLhZj0aFH1C7+XWVWqujGizam22/L3XW9HNnKSa6+LJXvD
+ tzuOGF52vv0yPGnFLsISLex13hn7oy9tg==
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1726332275;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=DL1q6BXiUuiKhyElTdTTCamcmEdgcrfGiUitx/b8Dhg=;
- b=grgjZxZPC79vOUm3cOLFjb+RMvQIB+cW2B5gJTHMXl3+Jsm5aPn8U6hFp8Hx//cfYk+tXr
- clprwebtETBb89+zKDYvPnv1CK6SUhOKHPKw8u7onN/glH6xmKy/Ka7w+A6b3vh988hB+Y
- aLYWvwx0VNk5oc5R0clJeW3Dc5IyKiDu2iCYEVan5oxtqMzVOote7pm9wOqrlKUI+Fw+hW
- hLbpbKJD8SxcWRqoJKlqm2cRE5Z4omHcKMKZviN9XHE6NHBDI27q2I3eCCM0/DkHXsYf7Z
- cK5aKBwis+vNvfRbTWBN/7lk+sHtEPtFucf91ifKt+t8RLk7Azr2yzMLtuP9Qg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=paguilar.org; 
+ s=s1-ionos; t=1726333446; x=1726938246; i=paguilar@paguilar.org;
+ bh=j+AW3BC/BOX+UkTs/qaa32tG76HD9gTayxHRpZpMY6g=;
+ h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-Id:
+ MIME-Version:Content-Transfer-Encoding:cc:
+ content-transfer-encoding:content-type:date:from:message-id:
+ mime-version:reply-to:subject:to;
+ b=pEFLXRboj73oumHA12K4IYb2EwWaT86ZJkca4AIIXScxelkgCrZiDISi9m1zlI6i
+ RcstBSIbqYUqcnRkG+6KzR59C6IL824dVij4k0nUi7cX9O9A0yFVb7QUSP6TDpHW9
+ YhBtrPo986UNlFUH08M95duDCVHTyMpc+SQ2wY5MqMw3xPDXtYcgjtuEbLWmPjvmn
+ N8OhL7rFC+3rqM4fK5x2p9Y9Lv0y6ZDUEoeDttC2pT3We+5QPKDdjN7kTzIxVztk9
+ 08DMiIZGw95sRMnV1vtXiqPIFq6HHrDdPICfAL+WCHQ0COFPBzgIQinHG6KfHjL03
+ j26XSCRkihR8jqt4Vw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=paguilar.org
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=grgjZxZP
-Subject: Re: [Buildroot] [PATCH] package/qt6/qt6base: Restore DirectFB
- support
+ unprotected) header.d=paguilar.org header.i=paguilar@paguilar.org
+ header.a=rsa-sha256 header.s=s1-ionos header.b=pEFLXRbo
+Subject: [Buildroot] [PATCH 1/1] package/bdwgc: bump to version 8.2.8
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,77 +98,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Ben Hutchings <ben.hutchings@mind.be>
+Cc: Pedro Aguilar <paguilar@paguilar.org>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Ben,
+Release notes: https://github.com/ivmai/bdwgc/releases/tag/v8.2.8
 
-On Thu, 11 Apr 2024 16:55:59 +0200
-Ben Hutchings via buildroot <buildroot@buildroot.org> wrote:
+Signed-off-by: Pedro Aguilar <paguilar@paguilar.org>
+---
+ package/bdwgc/bdwgc.hash | 2 +-
+ package/bdwgc/bdwgc.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> Apply a patch from upstream to make Qt 6 support DirectFB again.
-> 
-> Implement a config option for this, similar to what we do for Qt 5.
-> 
-> Signed-off-by: Ben Hutchings <ben.hutchings@mind.be>
-> ---
->  package/qt6/qt6base/Config.in                 |   8 +
->  .../qt6base-directfb-Fix-compilation.patch    | 288 ++++++++++++++++++
->  package/qt6/qt6base/qt6base.mk                |   7 +
->  3 files changed, 303 insertions(+)
->  create mode 100644 package/qt6/qt6base/qt6base-directfb-Fix-compilation.patch
+diff --git a/package/bdwgc/bdwgc.hash b/package/bdwgc/bdwgc.hash
+index 8fa49b4585..8705c0f87b 100644
+--- a/package/bdwgc/bdwgc.hash
++++ b/package/bdwgc/bdwgc.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  3d0d3cdbe077403d3106bb40f0cbb563413d6efdbb2a7e1cd6886595dec48fc2  gc-8.2.4.tar.gz
++sha256  7649020621cb26325e1fb5c8742590d92fb48ce5c259b502faf7d9fb5dabb160  gc-8.2.8.tar.gz
+ sha256  a9b077aeb4e9e1aaf9742119d8023ef26f52f445cdc3f60d390bf59e1647f54a  README.QUICK
+diff --git a/package/bdwgc/bdwgc.mk b/package/bdwgc/bdwgc.mk
+index 0e9c9d849c..ca2fbdb1d4 100644
+--- a/package/bdwgc/bdwgc.mk
++++ b/package/bdwgc/bdwgc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
 
-I applied this, dropped the qt6base-directfb-Fix-compilation.patch
-patch as we have a newer version of Qt6 that includes this fix, and
-tried a build, but it fails with:
+-BDWGC_VERSION = 8.2.4
++BDWGC_VERSION = 8.2.8
+ BDWGC_SOURCE = gc-$(BDWGC_VERSION).tar.gz
+ BDWGC_SITE = https://github.com/ivmai/bdwgc/releases/download/v$(BDWGC_VERSION)
+ BDWGC_INSTALL_STAGING = YES
+--
+2.34.1
 
-CMake Error at cmake/QtTargetHelpers.cmake:171 (target_link_libraries):
-  Target "QDirectFbIntegrationPlugin" links to:
-
-    EGL::EGL
-
-  but the target was not found.  Possible reasons include:
-
-    * There is a typo in the target name.
-    * A find_package call is missing for an IMPORTED target.
-    * An ALIAS target is missing.
-
-Call Stack (most recent call first):
-  cmake/QtPluginHelpers.cmake:348 (qt_internal_extend_target)
-  src/plugins/platforms/directfb/CMakeLists.txt:11 (qt_internal_add_plugin)
-
-so it looks like Qt6 expects EGL when the DirectFB backend is enabled?
-Not sure it makes sense.
-
-This defconfig fails to build:
-
-BR2_arm=y
-BR2_cortex_a9=y
-BR2_ARM_ENABLE_VFP=y
-BR2_TOOLCHAIN_EXTERNAL=y
-BR2_TOOLCHAIN_EXTERNAL_BOOTLIN=y
-BR2_INIT_NONE=y
-BR2_SYSTEM_BIN_SH_NONE=y
-# BR2_PACKAGE_BUSYBOX is not set
-BR2_PACKAGE_DIRECTFB=y
-BR2_PACKAGE_QT6=y
-BR2_PACKAGE_QT6BASE_GUI=y
-BR2_PACKAGE_QT6BASE_DIRECTFB=y
-BR2_PACKAGE_QT6BASE_WIDGETS=y
-# BR2_TARGET_ROOTFS_TAR is not set
-
-Best regards,
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
