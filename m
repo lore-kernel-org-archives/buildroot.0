@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15BC8C0219B
-	for <buildroot@archiver.kernel.org>; Sat, 14 Sep 2024 14:11:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97D54C0219B
+	for <buildroot@archiver.kernel.org>; Sat, 14 Sep 2024 14:33:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BA1DC40B3E;
-	Sat, 14 Sep 2024 14:11:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5520A40688;
+	Sat, 14 Sep 2024 14:33:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 78Ogy0Z7KK16; Sat, 14 Sep 2024 14:11:56 +0000 (UTC)
+ id gLPUt3QSFozW; Sat, 14 Sep 2024 14:32:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7B90440CAB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2FCA2406E9
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 7B90440CAB;
-	Sat, 14 Sep 2024 14:11:56 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id BDD351BF3FC
- for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 14:11:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 2FCA2406E9;
+	Sat, 14 Sep 2024 14:32:59 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id B9A551BF28C
+ for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 14:32:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id CEEF981B8A
- for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 14:11:53 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id A8AB260771
+ for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 14:32:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xyu2s703YRS6 for <buildroot@lists.busybox.net>;
- Sat, 14 Sep 2024 14:11:52 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hUPBhEoO2w5i for <buildroot@lists.busybox.net>;
+ Sat, 14 Sep 2024 14:32:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CF1ED8120A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EBE42606E7
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id CF1ED8120A
- for <buildroot@buildroot.org>; Sat, 14 Sep 2024 14:11:52 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id EBE42606E7
+ for <buildroot@buildroot.org>; Sat, 14 Sep 2024 14:32:56 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C59F382B89; Sat, 14 Sep 2024 14:11:52 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id E35E682D13; Sat, 14 Sep 2024 14:32:56 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sat, 14 Sep 2024 16:10:33 +0200
+Date: Sat, 14 Sep 2024 16:32:41 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 812bb30412cb87f3c05048b6a1030af0e4aab40b
-X-Git-Newrev: ce4e5fd129b557ac0411d0a0704be43717310d6d
+X-Git-Oldrev: ce4e5fd129b557ac0411d0a0704be43717310d6d
+X-Git-Newrev: 8d5468491806dee13f3cf51cccedd11c21081c38
 X-Patchwork-Hint: ignore
-Message-Id: <20240914141152.C59F382B89@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] bluez5_utils: disable asha profile
+Message-Id: <20240914143256.E35E682D13@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/qt6/qt6core5compat: enable QML
+ compat modules
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,43 +58,41 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ce4e5fd129b557ac0411d0a0704be43717310d6d
+commit: https://git.buildroot.net/buildroot/commit/?id=8d5468491806dee13f3cf51cccedd11c21081c38
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-asha profile as it depends on audio profile which isn't selected
-by default (BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_AUDIO), results in
-below linking failure.
+When BR2_PACKAGE_QT6DECLARATIVE_QUICK is enabled the QML compatibility
+modules should be built and installed.
 
-ld: profiles/audio/bluetoothd-asha.o: in function `get_transport':
-asha.c:(.text.get_transport+0x2c): undefined reference to `media_transport_get_path'
-
-Fixes: http://autobuild.buildroot.org/results/317bf4ad2593b1d1a8aec82cc0b3265285f00b7b/
-
-Signed-off-by: Parthiban Nallathambi <parthiban@linumiz.com>
-[yann.morin.1998@free.fr: add autobuild reference]
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Christian Hitz <christian.hitz@bbv.ch>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/bluez5_utils/bluez5_utils.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/qt6/qt6core5compat/qt6core5compat.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
-index b1caef5cc5..59eb68de61 100644
---- a/package/bluez5_utils/bluez5_utils.mk
-+++ b/package/bluez5_utils/bluez5_utils.mk
-@@ -28,6 +28,7 @@ BLUEZ5_UTILS_CONF_OPTS = \
- 	--disable-lsan \
- 	--disable-ubsan \
- 	--disable-pie \
-+	--disable-asha \
- 	--with-dbusconfdir=/etc
+diff --git a/package/qt6/qt6core5compat/qt6core5compat.mk b/package/qt6/qt6core5compat/qt6core5compat.mk
+index 0b6d9369cb..aeb5ddd931 100644
+--- a/package/qt6/qt6core5compat/qt6core5compat.mk
++++ b/package/qt6/qt6core5compat/qt6core5compat.mk
+@@ -36,4 +36,10 @@ QT6CORE5COMPAT_DEPENDENCIES = \
+ 	host-pkgconf \
+ 	qt6base
  
- ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS_OBEX),y)
++# When Qt::Quick is available, qt6core5compat will build additional
++# QML compatibility modules
++ifeq ($(BR2_PACKAGE_QT6DECLARATIVE_QUICK),y)
++QT6CORE5COMPAT_DEPENDENCIES += qt6declarative
++endif
++
+ $(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
