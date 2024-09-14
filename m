@@ -4,92 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1EA90C021BE
-	for <buildroot@archiver.kernel.org>; Sat, 14 Sep 2024 22:46:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A29C3C021BE
+	for <buildroot@archiver.kernel.org>; Sat, 14 Sep 2024 22:50:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B3D1C60600;
-	Sat, 14 Sep 2024 22:46:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6C2B360071;
+	Sat, 14 Sep 2024 22:50:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Qegx9alrAMTR; Sat, 14 Sep 2024 22:46:33 +0000 (UTC)
+ id oNaT8-Qtt4Ur; Sat, 14 Sep 2024 22:50:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C0DA7607DD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 65FD6607B4
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C0DA7607DD;
-	Sat, 14 Sep 2024 22:46:32 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 79BBD1BF3DB
- for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 22:46:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 65FD6607B4;
+	Sat, 14 Sep 2024 22:50:07 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 3372E1BF3DB
+ for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 22:50:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6954080965
- for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 22:46:31 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1FF3E607B4
+ for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 22:50:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kQA14hFbca90 for <buildroot@lists.busybox.net>;
- Sat, 14 Sep 2024 22:46:30 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5Zx1EqMPSTgL for <buildroot@lists.busybox.net>;
+ Sat, 14 Sep 2024 22:50:05 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::12d; helo=mail-il1-x12d.google.com;
+ client-ip=2607:f8b0:4864:20::131; helo=mail-il1-x131.google.com;
  envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 72D20808A3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 72D20808A3
-Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com
- [IPv6:2607:f8b0:4864:20::12d])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 72D20808A3
- for <buildroot@buildroot.org>; Sat, 14 Sep 2024 22:46:30 +0000 (UTC)
-Received: by mail-il1-x12d.google.com with SMTP id
- e9e14a558f8ab-3a08ca8d45aso11084545ab.0
- for <buildroot@buildroot.org>; Sat, 14 Sep 2024 15:46:30 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 3507660071
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3507660071
+Received: from mail-il1-x131.google.com (mail-il1-x131.google.com
+ [IPv6:2607:f8b0:4864:20::131])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3507660071
+ for <buildroot@buildroot.org>; Sat, 14 Sep 2024 22:50:05 +0000 (UTC)
+Received: by mail-il1-x131.google.com with SMTP id
+ e9e14a558f8ab-39f56df0ddbso13206305ab.3
+ for <buildroot@buildroot.org>; Sat, 14 Sep 2024 15:50:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1726353989; x=1726958789;
+ d=1e100.net; s=20230601; t=1726354204; x=1726959004;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=Js/dZrGuGAhOCUAmyvWjKSuwcQqhyITgi1EuPAd1rSg=;
- b=JcPpranbrBUV3ZM7U1XssdHuGAUgdzF1OCDDjC3zTRLTRw+x1m026mMpgpMkfsvU9k
- qIU1EoL1lkCl6j/MooDjU4WVugdTuWDCoJJu3hmB/p0+3f3kIbdoEYdVDq7nV26hHpuS
- lqXPZKR2szt76OT8NCteq1dKQAL1a1CFJVaB+2iTtsihQ07KBatnsd7s2SpyPcj6Tjp+
- AhS1bexpiCoW9/+wjJxUPsaRHPM2OnZ3Hr6b+CheKBr5HC8DHeJ3UFi83EbsN6hc1PvT
- b4w16zMOMi+vxvPyWCxxSJAM/vyJ5RPbpt1ViRkwVDLMbgwUPrmD6B4wg2tbvSBb5Df7
- 5xHw==
-X-Gm-Message-State: AOJu0Yw80S4mo1UoWLfiAKaW9zGq34OSWK0UdPTVD7nv672tBtx6XxGA
- Tp2bVvSHSQLKZgBZS3W4K8NxKLHKpeW4FKs/pIlLwXac+mN8ZWTsAHMl0Q==
-X-Google-Smtp-Source: AGHT+IGRJTybcra+0TES6+3hGZUVQY0XizVASoxGjoRrrYUEygP9PQeDUF6BtT49N+D6ulwUxDtguQ==
-X-Received: by 2002:a05:6e02:1caf:b0:3a0:933d:d307 with SMTP id
- e9e14a558f8ab-3a0933dd365mr40494075ab.8.1726353989141; 
- Sat, 14 Sep 2024 15:46:29 -0700 (PDT)
+ bh=qOaueGWb6meWHA6t2UNV3oPDbZ1lCAmxQnmD32CX9w4=;
+ b=prYUES2+/c7BxMLOnnO9t4ACtPKxj07//+ZhpfjRZ5wct49CmDn4/DxkKdOd1PZMYw
+ 9KbRcTjE7vWChOa8tjXuRIoLgyWUchxsHbS6amlgczK0g/SK+ZfsN2zHgRwOWCsNjSMB
+ dwYe89FcslZmKPShq4I75iL//pmKIwNUs7UvmFqdw2ontUJhojFmYAmIiqCeOEjDiZMi
+ F0dcN8rVFQRJqP6Bm02XIf2YaiupTWlRgOHU2P+2dlA9KlR5wIE8gULTYOFE6yg167uF
+ tuwM9xJnuq7sH96/QNytCTolrie+uZbLuKubZiw8LwE+79pdHTUO3HqI9UmwjaQnDMLK
+ GZ9A==
+X-Gm-Message-State: AOJu0YzRPCcNiBUrV+wQiikEfXMq+H1Bbh1SBpu4dVOb+mvdOYq3XqRL
+ 7w6TIlrpk7morH2PqcMAzmX/2Vidm4q7Iht0KphcfbJZybOjs3RhF6pSNw==
+X-Google-Smtp-Source: AGHT+IERd12708+TUKVcQrCJOMfO6y8vCYrOx1ixVyBvXq1Ji6VK72WWNHf3c8NdGBpiQLSCnQ5E9Q==
+X-Received: by 2002:a92:c56a:0:b0:3a0:8d8a:47c with SMTP id
+ e9e14a558f8ab-3a08d8a07e8mr55880505ab.14.1726354203900; 
+ Sat, 14 Sep 2024 15:50:03 -0700 (PDT)
 Received: from james-x399.localdomain (71-218-252-223.hlrn.qwest.net.
  [71.218.252.223]) by smtp.gmail.com with ESMTPSA id
- 8926c6da1cb9f-4d37ed56fafsm609359173.156.2024.09.14.15.46.28
+ e9e14a558f8ab-3a092dfe271sm6777615ab.6.2024.09.14.15.50.03
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 14 Sep 2024 15:46:28 -0700 (PDT)
+ Sat, 14 Sep 2024 15:50:03 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 14 Sep 2024 16:46:26 -0600
-Message-Id: <20240914224626.1365661-1-james.hilliard1@gmail.com>
+Date: Sat, 14 Sep 2024 16:50:01 -0600
+Message-Id: <20240914225001.1368174-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1726353989; x=1726958789; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1726354204; x=1726959004; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=Js/dZrGuGAhOCUAmyvWjKSuwcQqhyITgi1EuPAd1rSg=;
- b=UfYjKc8SnpkUa9brdc2Xw0g5nAlrFyaKlrMaJfpLr4wS1bk5V3scykoTFjqKCyhVQ6
- uHuUB4BYtYs6RarE5ga1PrsT8h5bYKV2zrO1g3Z2ZazWB54cAfpA7RSdjM5aKWeeJcmf
- gxeYN1AhV7wqjKKjgkcbb8Mko+dVryaZDmAUsr+DOthqXBdwmJjm4E/SgoSCw8sHDOFa
- AZxoE4uLidP8KhaZg8X28qnTL+a99vNA1dTtQ10/RpYUNu8zdHPmHdtLODO6Py0/4yVs
- n09fm5elrylyzjAc0KotR0im8m8bNb9+Mq9bn+0tzXVm77VbRqwHR0UpWMNzxXEtBYJx
- Gj0Q==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=qOaueGWb6meWHA6t2UNV3oPDbZ1lCAmxQnmD32CX9w4=;
+ b=H9HdVGOPFOBHAqDNhDDSTR/vxAiIPQi937RzF07uRh/QZu9Ny4KgxFs2MNgD3KyR57
+ db1rAw1LAAtpe/cUA+zJDT9o2ApDR5lScdHuUDCSjBUWyebwC7y4K1LwUIoRz165hNVf
+ 6pBEOxH5f+DtezPHwUj4rMvXovpxtgoz6J0YvUec1uz+7GwAy2+4eJBwkRzyRF3Xb/2i
+ 9WWzL7kSs9tKsgXizZ3vCulq5F/zmCs6Bz1kNduj6GF4ixORnTxcG7UeqHWm2XxnXSwm
+ zaHgmFYBMHiVi5tmY+qLBmDgB/CcuaybYJzAf2ojIP2KYpEPrP40TmFJgLVzTuaeySul
+ 5JjA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=UfYjKc8S
-Subject: [Buildroot] [PATCH 1/1] package/python-cachetools: bump to version
- 5.5.0
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=H9HdVGOP
+Subject: [Buildroot] [PATCH 1/1] package/python-canopen: bump to version
+ 2.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,50 +100,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Cc: Attila Wagner <attila.wagner@onyxinsight.com>,
+ James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-License hash changed due to year update:
-https://github.com/tkem/cachetools/commit/d56683461f42d72a53d52e7dd3bee11b5fbb2b52
-
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-cachetools/python-cachetools.hash | 6 +++---
- package/python-cachetools/python-cachetools.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-canopen/python-canopen.hash | 4 ++--
+ package/python-canopen/python-canopen.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-cachetools/python-cachetools.hash b/package/python-cachetools/python-cachetools.hash
-index 7b6b939191..fb16cb492b 100644
---- a/package/python-cachetools/python-cachetools.hash
-+++ b/package/python-cachetools/python-cachetools.hash
+diff --git a/package/python-canopen/python-canopen.hash b/package/python-canopen/python-canopen.hash
+index fc3668bc6c..8a38dc16a3 100644
+--- a/package/python-canopen/python-canopen.hash
++++ b/package/python-canopen/python-canopen.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/cachetools/json
--md5  5317c13b69c4021e925a2fbbc199bcc9  cachetools-5.3.2.tar.gz
--sha256  086ee420196f7b2ab9ca2db2520aca326318b68fe5ba8bc4d49cca91add450f2  cachetools-5.3.2.tar.gz
-+md5  d589387a314eed031e97348a73b8cf91  cachetools-5.5.0.tar.gz
-+sha256  2cc24fb4cbe39633fb7badd9db9ca6295d766d9c2995f245725a46715d050f2a  cachetools-5.5.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/canopen/json
+-md5  2a757a6996f896d2e6afbf2bcf598df2  canopen-2.2.0.tar.gz
+-sha256  5f18651b9df6e4769b9882e969f934ae773ef24a45aabc3334b586982048d08c  canopen-2.2.0.tar.gz
++md5  808c04aa0394210be9eeb46fb6e3bf96  canopen-2.3.0.tar.gz
++sha256  792084a93c138d5b2a406ddd2d4eb5ce208f03bd8fda60f81ad2bb8d56c6b827  canopen-2.3.0.tar.gz
  # Locally computed sha256 checksums
--sha256  76260c1370a7d41d5fac71a27d781f3add5d7249adfbbfa930846d2d9e47dbd5  LICENSE
-+sha256  2f4d2ff05f05c5da3879f40292b7600332d775dc7ed320d43dd42f3cd7d92c9b  LICENSE
-diff --git a/package/python-cachetools/python-cachetools.mk b/package/python-cachetools/python-cachetools.mk
-index c841e0761f..38a2313d59 100644
---- a/package/python-cachetools/python-cachetools.mk
-+++ b/package/python-cachetools/python-cachetools.mk
+ sha256  0740d30978affcd91c0fc817b7cf942a332381bf0380fe17e60c6a0b377c6e0d  LICENSE.txt
+diff --git a/package/python-canopen/python-canopen.mk b/package/python-canopen/python-canopen.mk
+index 09ec595ec6..e9747dcdf2 100644
+--- a/package/python-canopen/python-canopen.mk
++++ b/package/python-canopen/python-canopen.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_CACHETOOLS_VERSION = 5.3.2
-+PYTHON_CACHETOOLS_VERSION = 5.5.0
- PYTHON_CACHETOOLS_SOURCE = cachetools-$(PYTHON_CACHETOOLS_VERSION).tar.gz
--PYTHON_CACHETOOLS_SITE = https://files.pythonhosted.org/packages/10/21/1b6880557742c49d5b0c4dcf0cf544b441509246cdd71182e0847ac859d5
-+PYTHON_CACHETOOLS_SITE = https://files.pythonhosted.org/packages/c3/38/a0f315319737ecf45b4319a8cd1f3a908e29d9277b46942263292115eee7
- PYTHON_CACHETOOLS_SETUP_TYPE = setuptools
- PYTHON_CACHETOOLS_LICENSE = MIT
- PYTHON_CACHETOOLS_LICENSE_FILES = LICENSE
+-PYTHON_CANOPEN_VERSION = 2.2.0
++PYTHON_CANOPEN_VERSION = 2.3.0
+ PYTHON_CANOPEN_SOURCE = canopen-$(PYTHON_CANOPEN_VERSION).tar.gz
+-PYTHON_CANOPEN_SITE = https://files.pythonhosted.org/packages/49/55/67e555f6f4ea51d6d966e998a77881c1bd726c6e8cc602fd04852772ce87
++PYTHON_CANOPEN_SITE = https://files.pythonhosted.org/packages/1a/b3/733e5f98c995d7f3e82853bc5ee2f0677df6203d51d8a4387af188322523
+ PYTHON_CANOPEN_SETUP_TYPE = setuptools
+ PYTHON_CANOPEN_LICENSE = MIT
+ PYTHON_CANOPEN_LICENSE_FILES = LICENSE.txt
 -- 
 2.34.1
 
