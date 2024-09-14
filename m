@@ -4,68 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 06CD1C021A8
-	for <buildroot@archiver.kernel.org>; Sat, 14 Sep 2024 18:51:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CE677C021AA
+	for <buildroot@archiver.kernel.org>; Sat, 14 Sep 2024 19:00:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C7741605FE;
-	Sat, 14 Sep 2024 18:51:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 952976058C;
+	Sat, 14 Sep 2024 19:00:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NFEmEz1aW_0I; Sat, 14 Sep 2024 18:51:16 +0000 (UTC)
+ id 2bFaYoxIday2; Sat, 14 Sep 2024 19:00:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DF6136076D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9B0DC6062C
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DF6136076D;
-	Sat, 14 Sep 2024 18:51:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9B0DC6062C;
+	Sat, 14 Sep 2024 19:00:38 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1E87D1BF31D
- for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 18:51:15 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D046D1BF31D
+ for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 19:00:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0C45E40600
- for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 18:51:15 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B995F406E4
+ for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 19:00:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KKMci6VOV-g2 for <buildroot@lists.busybox.net>;
- Sat, 14 Sep 2024 18:51:14 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.156.101;
- helo=smtpcmd10101.aruba.it;
- envelope-from=giulio.benetti@benettiengineering.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org D5D39405FD
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D5D39405FD
-Received: from smtpcmd10101.aruba.it (smtpcmd10101.aruba.it [62.149.156.101])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D5D39405FD
- for <buildroot@buildroot.org>; Sat, 14 Sep 2024 18:51:13 +0000 (UTC)
-Received: from localhost.localdomain ([84.33.84.190])
- by Aruba Outgoing Smtp  with ESMTPSA
- id pXrSs8Aox0w3UpXrTsCgL9; Sat, 14 Sep 2024 20:51:11 +0200
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
-To: buildroot@buildroot.org
-Date: Sat, 14 Sep 2024 20:51:10 +0200
-Message-Id: <20240914185110.2757653-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.34.1
+ id qczJUiuR1GtT for <buildroot@lists.busybox.net>;
+ Sat, 14 Sep 2024 19:00:35 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::222;
+ helo=relay2-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 5D9CC406CF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5D9CC406CF
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 5D9CC406CF
+ for <buildroot@buildroot.org>; Sat, 14 Sep 2024 19:00:35 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 2B44340003;
+ Sat, 14 Sep 2024 19:00:32 +0000 (UTC)
+Date: Sat, 14 Sep 2024 21:00:30 +0200
+To: Yu Chien Peter Lin via buildroot <buildroot@buildroot.org>
+Message-ID: <20240914210030.20a1d5fe@windsurf>
+In-Reply-To: <20240910062635.4193650-2-peterlin@andestech.com>
+References: <20240910062635.4193650-1-peterlin@andestech.com>
+ <20240910062635.4193650-2-peterlin@andestech.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfLduks0nx2TvAMoQqQvaTN0sHDRTHd0f7Q9vSyBDUjRKAN3f4L+TAex33m+ud75pPd0lELb+6sL+Vto1prixDoYKcxxmZ08RMCezfLMJfzQSVlo9b4NY
- fr66xlyZj2wUmglBlGSvSQE5WHYhLoSI0IwbvH88wegYwtGUnjstQpul72DDm26NC1zQe5yxbpFeT2mIPIx8O9W2/Idt3B9MzRIB4a2Y3GeMTQ/rqedfaMBJ
- Fw7NeV01cIBEIdr2+fbdgM53Mlx3+B2VK59agtJjO35i32EmT00OwXxFVjULXwxzDEVfdz03KO1/6zPtywQ8WA==
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1726339871; bh=7hjEkuBWWM8lw8yhLU7VUGHYTQME+rcOqpotS1cpPPA=;
- h=From:To:Subject:Date:MIME-Version;
- b=cV6HldHafvPFxwgICspbqg0dDjzctMvJQ8OKqPkQreuuE515fUm6GHBbsiUdUm01c
- ImM3FtPVcER1vXbVedtSzrrlTOZQtr6iH62egPI6+w+GjKrgSmIpOiIMAUvD7xQ0ea
- j3zsxSLXrA690r/F1gbRfBdgYx5Ahx1opEwPwThL1b3Cx4SgD1TRgtOE6hnMuzhgdS
- HtvrRR3zPvZtvQjVCtHlak1xAAYMiqeRKHCLWWqOVJqPqy8QL1V5WwuYTJLXS0Fmgr
- hXiByuH3RxzXUq+V5+gNd92d+kAjc2vSNiYgDAlXH7jDSma9pmUdch3eEGGl+Dgl16
- qnaQNjHhgdEhQ==
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1726340432;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=P6F4OwBdTGqRXX6pmZl+eYhaAuphRUMLW1+gKgH6pCk=;
+ b=csWrBjV3XjRbqVm2M6zUrmeTuIlYCb54Rc0bQWQKMXbn4pHn2OJOv0vAcui9O/7Z2sLlBM
+ koRWy6j8zjLKJ80ES7e5WiVM4ufJKPxJMeKiyowA4p5Ib1BrAM2+EAsJ6v8Uh79OnYErxx
+ 8pOrZ9zbZRTnPvVbHdAsib1mrs50vR0dJigJVhFEqaSthEEoEQb8UapGE1ya3KFrND13D5
+ IASMYJyp+bi8aTy+UU6fOO+5LqSaepmqEPShW6JXfz5eJE3udQZ8NT9pBWIBF0svkkdRLw
+ UaOc9m3pATuiNF1GTWSYpKxiRTfMsKs0bViTZSfRAcaUTbldAKKkSaTemmqjfg==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=benettiengineering.com
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=aruba.it header.i=@aruba.it
- header.a=rsa-sha256 header.s=a1 header.b=cV6HldHa
-Subject: [Buildroot] [PATCH] package/rtl8821cu: bump to version 2024-08-21
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=csWrBjV3
+Subject: Re: [Buildroot] [PATCH v3 1/4] package/andes-spi-burn: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,46 +81,65 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Christian Stewart <christian@aperture.us>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: tim609@andestech.com, Yu Chien Peter Lin <peterlin@andestech.com>,
+ ycliang@andestech.com
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-With this version we can build with Linux 6.11.
+Hello,
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
- package/rtl8821cu/rtl8821cu.hash | 2 +-
- package/rtl8821cu/rtl8821cu.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+On Tue, 10 Sep 2024 14:26:32 +0800
+Yu Chien Peter Lin via buildroot <buildroot@buildroot.org> wrote:
 
-diff --git a/package/rtl8821cu/rtl8821cu.hash b/package/rtl8821cu/rtl8821cu.hash
-index fba2f7a109..41c39f5cff 100644
---- a/package/rtl8821cu/rtl8821cu.hash
-+++ b/package/rtl8821cu/rtl8821cu.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  c04741129e815c30c51e509012d1a21e4f6d568c211921e6bc46e1adc3d4d4e1  rtl8821cu-0b505f382ea67bd8bdc9288ba5dbe7f4c9de33c0.tar.gz
-+sha256  9ccac108553e0ddc35e030539e23c2151fc038f21c12a241b4df13e0c171ba5f  rtl8821cu-1597dfeda6cefd2e603fc7020ceca226d05fb108.tar.gz
- sha256  22cdb0a9cf492dbf05c5b27381a5c0e73ae0d4622427b522b0ba92b7495e5fb0  LICENSE
-diff --git a/package/rtl8821cu/rtl8821cu.mk b/package/rtl8821cu/rtl8821cu.mk
-index 39aea1d7a4..faad054b3b 100644
---- a/package/rtl8821cu/rtl8821cu.mk
-+++ b/package/rtl8821cu/rtl8821cu.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--RTL8821CU_VERSION = 0b505f382ea67bd8bdc9288ba5dbe7f4c9de33c0
-+RTL8821CU_VERSION = 1597dfeda6cefd2e603fc7020ceca226d05fb108
- RTL8821CU_SITE = $(call github,morrownr,8821cu-20210916,$(RTL8821CU_VERSION))
- RTL8821CU_LICENSE = GPL-2.0
- RTL8821CU_LICENSE_FILES = LICENSE
+> Add a new package for Andes AE350 SPI_burn tool to program
+> flash memory.
+> 
+> Signed-off-by: Yu Chien Peter Lin <peterlin@andestech.com>
+
+Thanks for this new iteration. Unfortunately, there's still something
+that doesn't work. It fails to build for me with:
+
+/usr/bin/ld: cannot find -lm: No such file or directory
+/usr/bin/ld: cannot find -lc: No such file or directory
+collect2: error: ld returned 1 exit status
+make[1]: *** [Makefile_SPIburn_linux:25: SPI_burn] Error 1
+
+that's because you link with -static, and I don't have the static
+version of libc/libm installed on my machine.
+
+So I wanted to patch that out, but the code is not even in the Github
+repo at https://github.com/andestech/meta-andes/, so I can't create
+a pull request. All you have published is a ZIP file with the source
+code, buried deep inside the meta-andes Yocto layer repository. This
+really isn't nice, and prevents people (like me) from actually
+contributing fixes (like removing this bogus -static flag).
+
+Could you instead create a proper Github repository for this project,
+so that people can submit fixes, so that you can do tags, releases, etc.
+
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 069965680b..aab5a6c05f 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -2487,6 +2487,7 @@ N:	Yu Chien Peter Lin <peterlin@andestech.com>
+>  F:	board/andes
+>  F:	configs/andes_ae350_45_defconfig
+>  F:	package/kmon/
+> +F:	package/andes-spi-burn/
+
+Alphabetic ordering is not correct here.
+
+Best regards,
+
+Thomas
 -- 
-2.34.1
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
