@@ -4,82 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7CC8CC02197
-	for <buildroot@archiver.kernel.org>; Sat, 14 Sep 2024 13:03:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79384C02194
+	for <buildroot@archiver.kernel.org>; Sat, 14 Sep 2024 13:12:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 41DDD401C2;
-	Sat, 14 Sep 2024 13:03:35 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2A598401C2;
+	Sat, 14 Sep 2024 13:12:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zm2MQPI0Q25O; Sat, 14 Sep 2024 13:03:34 +0000 (UTC)
+ id HQ0kieUkridT; Sat, 14 Sep 2024 13:12:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EA42B4020B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DE9624020B
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EA42B4020B;
-	Sat, 14 Sep 2024 13:03:33 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 075AC1BF232
- for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 13:03:32 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DE9624020B;
+	Sat, 14 Sep 2024 13:12:40 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 45DAC1BF3F9
+ for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 13:12:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0387F8417F
- for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 13:03:32 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 409FD4020B
+ for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 13:12:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1T9vtrK3cuW1 for <buildroot@lists.busybox.net>;
- Sat, 14 Sep 2024 13:03:31 +0000 (UTC)
-X-Greylist: delayed 3135 seconds by postgrey-1.37 at util1.osuosl.org;
- Sat, 14 Sep 2024 13:03:30 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 0B80E84175
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0B80E84175
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=198.47.23.249;
- helo=lelv0142.ext.ti.com; envelope-from=sabeeh-khan@ti.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id F9c1cxtGdg4q for <buildroot@lists.busybox.net>;
+ Sat, 14 Sep 2024 13:12:38 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
+ helo=smtp6-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
  receiver=<UNKNOWN> 
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 0B80E84175
- for <buildroot@buildroot.org>; Sat, 14 Sep 2024 13:03:30 +0000 (UTC)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
- by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 48ECBEWx075897;
- Sat, 14 Sep 2024 07:11:14 -0500
-Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
- by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 48ECBEa6005202
- (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
- Sat, 14 Sep 2024 07:11:14 -0500
-Received: from DFLE100.ent.ti.com (10.64.6.21) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Sat, 14
- Sep 2024 07:11:14 -0500
-Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Sat, 14 Sep 2024 07:11:14 -0500
-Received: from thinkstationp3.dhcp.ti.com (thinkstationp3.dhcp.ti.com
- [128.247.83.36])
- by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 48ECBEXV105005;
- Sat, 14 Sep 2024 07:11:14 -0500
-To: <buildroot@buildroot.org>
-Date: Sat, 14 Sep 2024 07:10:15 -0500
-Message-ID: <20240914121016.3530250-1-sabeeh-khan@ti.com>
-X-Mailer: git-send-email 2.34.1
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org B6341401C2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B6341401C2
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id B6341401C2
+ for <buildroot@buildroot.org>; Sat, 14 Sep 2024 13:12:37 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown [IPv6:2a02:61:a2::3f4])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPSA id C46A7780518;
+ Sat, 14 Sep 2024 15:12:31 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sat, 14 Sep 2024 15:12:31 +0200
+Date: Sat, 14 Sep 2024 15:12:31 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Arnout Vandecappelle <arnout@mind.be>
+Message-ID: <ZuWLv2Xe1qn8G0sO@landeda>
+References: <20240914095501.194725-1-arnout@mind.be>
 MIME-Version: 1.0
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=ti.com; s=ti-com-17Q1; t=1726315874;
- bh=LPvmrULGvhN+p8DZcIDIN8bpu/DiWw4krqcUDpFUWrE=;
- h=From:To:CC:Subject:Date;
- b=Cds/7xg0xpBHmcMrzxzfIEyYOCeGqbdrusj06JYmHJoLFsiFCDKEbo6opae8MBhcD
- F34ObD71rNduxVXpoUd2ZGYf2xTHEoM11bUOzDw2m/Ko+7cO0pCV3TIAD+3iXEBzEY
- 7F67Ajm2+axNhTrvdey8NASmvvLqAp3poaqw8Gaw=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=ti.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=ti.com header.i=@ti.com header.a=rsa-sha256
- header.s=ti-com-17Q1 header.b=Cds/7xg0
-Subject: [Buildroot] [PATCH 1/1] package/linux-firmware: add WLAN and BLE
- chip TI cc33xx firmware option
+Content-Disposition: inline
+In-Reply-To: <20240914095501.194725-1-arnout@mind.be>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1726319555;
+ bh=dMIRMTEDQpGTi/VLtLfXhVMMhDkmnf9k/jmfJYpBgWY=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=saTN018VW4g1zZK/3wwtfebNl5lZTUDkEoOJJxcrCwXZPs6r+Y4Z1vbI8GqQSg4P2
+ +i9iX/cuFVWLR9j1B6vBT5fUJFu7MRj8VJJO2PlfYJP+GT5/QdnXSb45PhXmjGr0Zg
+ mwN6SyUISw0r4DBp0/EPJZWPo7CIpmxd7N/xHlk8Wa3JXZuPFpoXHPiV68GQH/pbyZ
+ NGImb1JXuI/1/0VoE2sFvORax35b06xYYNPovhoPMaR+y93738YBEYj/c+gBH4Ig9M
+ tQehPYM89fOLXwH0cY3WnzL1R1brf+dP9BKfdh6pcvpvKRLdvTezKStETOyvr81P3F
+ X7NCJUBHtznPw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=saTN018V
+Subject: Re: [Buildroot] [PATCH 1/4] package/pkg-generic.mk: legal-info:
+ create redist directory for override
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -91,63 +80,71 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Sabeeh Khan via buildroot <buildroot@buildroot.org>
-Reply-To: Sabeeh Khan <sabeeh-khan@ti.com>
-Cc: Bernd Kuhls <bernd@kuhls.net>, Sabeeh Khan <sabeeh-khan@ti.com>,
- "Yann E. MORIN" <yann.morin.1998@free.fr>
+Cc: Nicolas Carrier <carrier.nicolas0@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add an option to install the cc33xx firmware files.
-The TI cc33xx family of devices support WiFi 6 and BLE 5.4.
+Arnout, All,
 
-Signed-off-by: Sabeeh Khan <sabeeh-khan@ti.com>
----
- package/linux-firmware/Config.in         | 5 +++++
- package/linux-firmware/linux-firmware.mk | 9 +++++++++
- 2 files changed, 14 insertions(+)
+On 2024-09-14 11:54 +0200, Arnout Vandecappelle via buildroot spake thusly:
+> Commit aacca7f0639bac6bb3fb262d0b1738c4387edeb0 introduced the
+> possibility to also create tarballs for packages that are local or
+> overridden (i.e., with a custom version). However, it forgot to create
+> the directory in which that tarball is stored. The original patch did,
+> but it was reworked by Arnout to use mk_tar_gz instead of tar directly,
+> and the mkdir was dropped there.
+> 
+> This failure was silent because the mk_tar_gz function doesn't exit on
+> error. The following error was printed but ignored:
+> 
+>     support/download/helpers: line 68: .../legal-info/sources/busybox-custom/busybox-custom.tar.gz: No such file or directory
+> 
+> Create the directory before calling mk_tar_gz.
+> 
+> Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+> Cc: Nicolas Carrier <carrier.nicolas0@gmail.com>
+> Reported-by: Yann E. MORIN <yann.morin.1998@free.fr>
 
-diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
-index 4a17ceaf0b..f0d5fefc2e 100644
---- a/package/linux-firmware/Config.in
-+++ b/package/linux-firmware/Config.in
-@@ -527,6 +527,11 @@ config BR2_PACKAGE_LINUX_FIRMWARE_TI_WL18XX
- 	help
- 	  Firmware files for WLAN and Bluetooth modules wl18xx
- 
-+config BR2_PACKAGE_LINUX_FIRMWARE_TI_CC33XX
-+	bool "TI cc33xx"
-+	help
-+	  Firmware files for cc33xx WLAN and BLE family of chips
-+
- config BR2_PACKAGE_LINUX_FIRMWARE_QUALCOMM_WIL6210
- 	bool "Qualcomm Atheros wil6210"
- 	help
-diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
-index ae10e160b9..80a6f38a85 100644
---- a/package/linux-firmware/linux-firmware.mk
-+++ b/package/linux-firmware/linux-firmware.mk
-@@ -486,6 +486,15 @@ LINUX_FIRMWARE_FILES += \
- LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.ti-connectivity
- endif
- 
-+# cc33xx
-+ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_TI_CC33XX),y)
-+LINUX_FIRMWARE_FILES += \
-+	ti-connectivity/cc33xx_2nd_loader.bin \
-+	ti-connectivity/cc33xx_fw.bin \
-+	ti-connectivity/cc33xx-conf.bin
-+LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.ti-connectivity
-+endif
-+
- ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_QUALCOMM_WIL6210),y)
- LINUX_FIRMWARE_FILES += wil6210.*
- LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENSE.QualcommAtheros_ath10k
+You confused me with the other me. ;-)
+
+Applied to master with the proper reported-by assignment, thanks.
+
+Regards,
+Yann E. MORIN.
+
+> ---
+>  package/pkg-generic.mk | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+> index 171163dcb4..69352b3730 100644
+> --- a/package/pkg-generic.mk
+> +++ b/package/pkg-generic.mk
+> @@ -1163,6 +1163,7 @@ ifneq ($$($(2)_OVERRIDE_SRCDIR),)
+>  	$$(Q)rsync -au --chmod=u=rwX,go=rX $$(RSYNC_VCS_EXCLUSIONS) \
+>  		$(call qstrip,$$($(2)_OVERRIDE_SRCDIR))/ \
+>  		 $$($(2)_BUILDDIR)/.legal-info-rsync/
+> +	$$(Q)mkdir -p $$($(2)_REDIST_SOURCES_DIR)
+>  	$$(Q). support/download/helpers; set -x; cd $$($(2)_BUILDDIR); TAR=$$(TAR) mk_tar_gz \
+>  		$$($(2)_BUILDDIR)/.legal-info-rsync/ \
+>  		$$($(2)_BASENAME_RAW) \
+> -- 
+> 2.46.0
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
+
 -- 
-2.34.1
-
+.-----------------.--------------------.------------------.--------------------.
+|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
+| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
+| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
+| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
+'------------------------------^-------^------------------^--------------------'
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
