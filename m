@@ -1,52 +1,95 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 89FBCC02192
-	for <buildroot@archiver.kernel.org>; Sat, 14 Sep 2024 11:32:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C3B3BC02194
+	for <buildroot@archiver.kernel.org>; Sat, 14 Sep 2024 11:43:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A0E1C60796;
-	Sat, 14 Sep 2024 11:32:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 827508456A;
+	Sat, 14 Sep 2024 11:43:29 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QRp_rcDxHKZM; Sat, 14 Sep 2024 11:43:28 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8DDFF8453E
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8DDFF8453E;
+	Sat, 14 Sep 2024 11:43:28 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id F02F81BF2C8
+ for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 11:43:26 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id EB8086072E
+ for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 11:43:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ok5MaNvafGyP; Sat, 14 Sep 2024 11:32:02 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AF3066075B
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id AF3066075B;
-	Sat, 14 Sep 2024 11:32:01 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id CB17B1BF86C
- for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 11:31:57 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B96564034B
- for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 11:31:57 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sLKkyYZoiKGt for <buildroot@lists.busybox.net>;
- Sat, 14 Sep 2024 11:31:56 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4E5AB40130
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4E5AB40130
- for <buildroot@buildroot.org>; Sat, 14 Sep 2024 11:31:56 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4581A82895; Sat, 14 Sep 2024 11:31:56 +0000 (UTC)
-From: Yann E. MORIN <yann.morin.1998@free.fr>
+ id 6O8vkL4oltlQ for <buildroot@lists.busybox.net>;
+ Sat, 14 Sep 2024 11:43:26 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::62b; helo=mail-pl1-x62b.google.com;
+ envelope-from=festevam@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 1B6866060C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1B6866060C
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com
+ [IPv6:2607:f8b0:4864:20::62b])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 1B6866060C
+ for <buildroot@buildroot.org>; Sat, 14 Sep 2024 11:43:25 +0000 (UTC)
+Received: by mail-pl1-x62b.google.com with SMTP id
+ d9443c01a7336-2054e22ce3fso32347455ad.2
+ for <buildroot@buildroot.org>; Sat, 14 Sep 2024 04:43:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1726314204; x=1726919004;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=hQYOomzhMnPVLYpcIBlV/vFkfQHIGaV67pOnDFUaqLo=;
+ b=JMDo3Q7nXPlI2b0ej1mrFBofKVDJ+1CQcmGk5EZdjat9rKL62k/C9w0qkimDgy+hXm
+ BAAdozxOqXCe1vl09kSinXPnZ5ISv8gBhFm5e7buV2MVxAhDqIoAVTHkxTMEoeVc/8P3
+ FGFCom+Y6qv+xxyqigItfL4YBUuR91i81FNZ4hayq9X7oeM6GdubX6ljSFnAZVckHnFu
+ YSCZOQjTyv/YmhzxUGaE2LSj0h+AmLW/ntCwajfXuasM/4x1eJ5+TTgT+JAxs3V3D2K8
+ uti+3JgAwzUgb6nHl9LxG4EIU0SOvmmynF3mVaS2YWTBlSwENkqlkJ3ynfRIDLMUaG9b
+ OyaA==
+X-Gm-Message-State: AOJu0Yy/6f4i6sIzFcrGMJdYMqfBLgBxf1ev2eRuGXV94a2w41Rxslkl
+ tIBOIqakfxyidEqSKTnPgqsXRtQ7DDWoiVYGixz4Ik+QK4z2p4rnZwCTzg==
+X-Google-Smtp-Source: AGHT+IEuS+Mn8fIfSMbqbhf3BON89jqFqUSR8wS1c702JP05RzVJI92YSOxPC2jrwUgUxSiVkFHM9Q==
+X-Received: by 2002:a17:902:e5c8:b0:1fc:2e38:d3de with SMTP id
+ d9443c01a7336-2076e315577mr151707285ad.7.1726314204349; 
+ Sat, 14 Sep 2024 04:43:24 -0700 (PDT)
+Received: from fabio-Precision-3551.. ([2804:14c:485:4b61:f375:804a:5c89:62a])
+ by smtp.gmail.com with ESMTPSA id
+ d9443c01a7336-2079471af10sm8446185ad.239.2024.09.14.04.43.22
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 14 Sep 2024 04:43:23 -0700 (PDT)
+From: Fabio Estevam <festevam@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 14 Sep 2024 13:31:35 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 480d667a1907f84630bf061537c14fdb73a33eda
-X-Git-Newrev: e5459a3f6a9a83f2cbf8d2e9a2a32a8d27e99c90
-X-Patchwork-Hint: ignore
-Message-Id: <20240914113156.4581A82895@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/iana-assignments: new package
+Date: Sat, 14 Sep 2024 08:43:17 -0300
+Message-Id: <20240914114318.1912121-1-festevam@gmail.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1726314204; x=1726919004; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=hQYOomzhMnPVLYpcIBlV/vFkfQHIGaV67pOnDFUaqLo=;
+ b=Sbd/azFXgiGVjO3DsQUUhD0MXifseCZpQko5Thpt/YVn9qmFHhhNainHYykR/8reTh
+ 0UafYPKShgoKuP2VOobcYo4BaXdpTkUMRzT8306Wk+/BmCWYKdMdLebw8jL1lw3LaWBN
+ NP0HoJzzcnzkcyx2Q9jo9BO3j2CWue5HV18K3SRC2qv4gxZ1iHrQygdGfFTbTixMMvma
+ iJ2Yfx97IQ73RLDAkjNxV5LCs+vBNH4hn3kXNtKGdGX3XnMKnIVsgfH9yfrghxeJYUDL
+ LmKL5YLUGIZN54n+FkPQQQh1NukSWmC+eXAMBWX6T0TILQLtd/GRAvJkKYG6DWgugkyS
+ tzvA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=Sbd/azFX
+Subject: [Buildroot] [PATCH 1/2] configs/imx7dpico: Select
+ BR2_TARGET_UBOOT_NEEDS_OPENSSL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,119 +101,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Fabio Estevam <festevam@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e5459a3f6a9a83f2cbf8d2e9a2a32a8d27e99c90
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+Select BR2_TARGET_UBOOT_NEEDS_OPENSSL to fix the following
+build warning:
 
-The fixing of [1] and related code reviews [2] and [3] highlighted the
-need for a package providing a versioned PEN (Enterprise Numbers)
-registry file from IANA (Internet Assigned Numbers Authority).
-The GitHub repository from which this package originates is a mirror of
-the IANA registries periodically updated from https://www.iana.org/protocols.
+include/image.h:1471:12: fatal error: openssl/evp.h: No such file or directory
+ 1471 | #  include <openssl/evp.h>
 
-[1] http://autobuild.buildroot.org/results/5ae5ee948d99679cd50d1115a7d46f4368347b4f
-[2] https://patchwork.ozlabs.org/project/buildroot/patch/20240902210055.239859-1-dario.binacchi@amarulasolutions.com
-[3] https://patchwork.ozlabs.org/project/buildroot/patch/20240904174021.2670289-1-dario.binacchi@amarulasolutions.com/
-Co-Developed-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Co-Developed-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-[yann.morin.1998@free.fr: add licensing info]
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Fixes: https://gitlab.com/buildroot.org/buildroot/-/jobs/7803199869
+
+Signed-off-by: Fabio Estevam <festevam@gmail.com>
 ---
- DEVELOPERS                                     |  1 +
- package/Config.in                              |  1 +
- package/iana-assignments/Config.in             | 15 +++++++++++++++
- package/iana-assignments/iana-assignments.hash |  2 ++
- package/iana-assignments/iana-assignments.mk   | 22 ++++++++++++++++++++++
- 5 files changed, 41 insertions(+)
+ configs/imx7dpico_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 479ebeed37..cbc2040165 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -792,6 +792,7 @@ F:	configs/imx8mn_bsh_smm_s2_pro_defconfig
- F:	configs/stm32f769_disco_sd_defconfig
- F:	package/armadillo/
- F:	package/babeld/
-+F:	package/iana-assignments/
- F:	package/sscep/
- F:	package/tinyinit/
- F:	package/uuu/
-diff --git a/package/Config.in b/package/Config.in
-index 599e3e9c3f..187ba3a154 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -2467,6 +2467,7 @@ endif
- 	source "package/htpdate/Config.in"
- 	source "package/httping/Config.in"
- 	source "package/i2pd/Config.in"
-+	source "package/iana-assignments/Config.in"
- 	source "package/ibrdtn-tools/Config.in"
- 	source "package/ibrdtnd/Config.in"
- 	source "package/ifenslave/Config.in"
-diff --git a/package/iana-assignments/Config.in b/package/iana-assignments/Config.in
-new file mode 100644
-index 0000000000..f1b803cfec
---- /dev/null
-+++ b/package/iana-assignments/Config.in
-@@ -0,0 +1,15 @@
-+config BR2_PACKAGE_IANA_ASSIGNMENTS
-+	bool "IANA assignments"
-+	select BR2_PACKAGE_IANA_ASSIGNMENTS_PEN_REG
-+	help
-+	  Mirror of the IANA registries periodically updated
-+	  from https://www.iana.org/protocols.
-+
-+	  https://github.com/larseggert/iana-assignments
-+
-+if BR2_PACKAGE_IANA_ASSIGNMENTS
-+
-+config BR2_PACKAGE_IANA_ASSIGNMENTS_PEN_REG
-+	bool "PEN (Enterprise Numbers) registry"
-+
-+endif
-diff --git a/package/iana-assignments/iana-assignments.hash b/package/iana-assignments/iana-assignments.hash
-new file mode 100644
-index 0000000000..c58fb61df2
---- /dev/null
-+++ b/package/iana-assignments/iana-assignments.hash
-@@ -0,0 +1,2 @@
-+# Locally computed
-+sha256  e7a1f8153715fa9e0f4c5d102f9271bce425a468f58a445e7c5ecdf7105fd460  iana-assignments-bf358dc8d89b7939557220b8055699b42a4133e9.tar.gz
-diff --git a/package/iana-assignments/iana-assignments.mk b/package/iana-assignments/iana-assignments.mk
-new file mode 100644
-index 0000000000..df069b94f1
---- /dev/null
-+++ b/package/iana-assignments/iana-assignments.mk
-@@ -0,0 +1,22 @@
-+################################################################################
-+#
-+# iana-assignments
-+#
-+################################################################################
-+
-+IANA_ASSIGNMENTS_VERSION = bf358dc8d89b7939557220b8055699b42a4133e9
-+IANA_ASSIGNMENTS_SITE = $(call github,larseggert,iana-assignments,$(IANA_ASSIGNMENTS_VERSION))
-+
-+# The licensing is defined by IANA: https://www.iana.org/help/licensing-terms
-+# The repository we use is not a real upstream, and contains no license file.
-+IANA_ASSIGNMENTS_LICENSE = CC0-1.0
-+
-+ifeq ($(BR2_PACKAGE_IANA_ASSIGNMENTS_PEN_REG),y)
-+define IANA_ASSIGNMENTS_INSTALL_PEN_REG
-+	$(INSTALL) -D -m 0644 $(@D)/enterprise-numbers/enterprise-numbers \
-+		$(TARGET_DIR)/usr/share/misc/iana/enterprise-numbers
-+endef
-+IANA_ASSIGNMENTS_POST_INSTALL_TARGET_HOOKS += IANA_ASSIGNMENTS_INSTALL_PEN_REG
-+endif
-+
-+$(eval $(generic-package))
+diff --git a/configs/imx7dpico_defconfig b/configs/imx7dpico_defconfig
+index b0a4b3dd12d1..eaaa0202bb16 100644
+--- a/configs/imx7dpico_defconfig
++++ b/configs/imx7dpico_defconfig
+@@ -26,6 +26,7 @@ BR2_TARGET_UBOOT_SPL_NAME="SPL"
+ BR2_TARGET_UBOOT_BOARDNAME="pico-pi-imx7d"
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.07"
++BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
+ BR2_TARGET_UBOOT_FORMAT_DTB_IMG=y
+ 
+ # wifi firmware for brcm43439
+-- 
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
