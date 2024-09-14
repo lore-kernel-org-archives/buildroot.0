@@ -4,49 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4D5D1C3ABAE
-	for <buildroot@archiver.kernel.org>; Sun, 15 Sep 2024 21:38:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0B9DCC3ABAD
+	for <buildroot@archiver.kernel.org>; Sun, 15 Sep 2024 21:38:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1664081461;
-	Sun, 15 Sep 2024 21:38:28 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C8E5B81EEA;
+	Sun, 15 Sep 2024 21:38:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LZaTjgy8Z8jL; Sun, 15 Sep 2024 21:38:27 +0000 (UTC)
+ id 4boscoBdk_am; Sun, 15 Sep 2024 21:38:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 27E7181EEE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 731F881F19
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 27E7181EEE;
-	Sun, 15 Sep 2024 21:38:26 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 18B231BF95A
+	by smtp1.osuosl.org (Postfix) with ESMTP id 731F881F19;
+	Sun, 15 Sep 2024 21:38:30 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 1844E1BF954
  for <buildroot@lists.busybox.net>; Sun, 15 Sep 2024 21:36:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 45C7F80A50
+ by smtp3.osuosl.org (Postfix) with ESMTP id 985EB608A1
  for <buildroot@lists.busybox.net>; Sun, 15 Sep 2024 21:36:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8EDmgG6iApAQ for <buildroot@lists.busybox.net>;
- Sun, 15 Sep 2024 21:36:38 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 865ELhsL_MVl for <buildroot@lists.busybox.net>;
+ Sun, 15 Sep 2024 21:36:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 61F5280AE2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CAC2660880
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 61F5280AE2
- for <buildroot@buildroot.org>; Sun, 15 Sep 2024 21:36:38 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id CAC2660880
+ for <buildroot@buildroot.org>; Sun, 15 Sep 2024 21:36:36 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5E78F83687; Sun, 15 Sep 2024 21:36:38 +0000 (UTC)
+ id C7D6A835CD; Sun, 15 Sep 2024 21:36:36 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 15 Sep 2024 10:02:16 +0200
+Date: Sat, 14 Sep 2024 20:37:17 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: c5c887bdb916fe30c2fe48770e476a0963cbc0c9
-X-Git-Newrev: 4afa0d048b2d4339d53edbe1bf54a0ec66910a93
+X-Git-Oldrev: 7b888e08a2e253e15f6e9c668419b006a2f40e11
+X-Git-Newrev: 3b870057c646a6b7abc822d3ce2ea0f41683420b
 X-Patchwork-Hint: ignore
-Message-Id: <20240915213638.5E78F83687@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-blinker: bump to version
- 1.8.2
+Message-Id: <20240915213636.C7D6A835CD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/procps-ng: link the w command with
+ systemd or elogin libs.
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,61 +59,101 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4afa0d048b2d4339d53edbe1bf54a0ec66910a93
+commit: https://git.buildroot.net/buildroot/commit/?id=3b870057c646a6b7abc822d3ce2ea0f41683420b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Migrate build backend from setuptools to flit.
+The build of procps-ng was broken when systemd was enabled.  Applying
+commit ca004d46 of procps-ng upstream to explictly link the 'w'
+command to libsystemd or elogind even though libproc2 is linked to it.
 
-The license file got renamed, but the contents did not change.
+This was (likely) broken since the upgrade to procps-ng v4.0.4 with
+commit d79f40dbbe98983bc657d4c82d46b38b8283351b.
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Fixes: https://gitlab.com/buildroot.org/buildroot/-/issues/28
+Fixes: http://autobuild.buildroot.org/results/e8b/e8bae7bfd7d6a7987f3afa199d8d944429144817/build-end.log
+
+Signed-off-by: Hugo Cornelis <hugo.cornelis@essensium.com>
+[yann.morin.1998@free.fr: don't number patch 1/1; add fixes tag]
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-blinker/python-blinker.hash | 6 +++---
- package/python-blinker/python-blinker.mk   | 8 ++++----
- 2 files changed, 7 insertions(+), 7 deletions(-)
+ .../0001-build-sys-Add-systemd-elogind-to-w.patch  | 48 ++++++++++++++++++++++
+ package/procps-ng/procps-ng.mk                     |  3 ++
+ 2 files changed, 51 insertions(+)
 
-diff --git a/package/python-blinker/python-blinker.hash b/package/python-blinker/python-blinker.hash
-index e0c1d600eb..d9f1052254 100644
---- a/package/python-blinker/python-blinker.hash
-+++ b/package/python-blinker/python-blinker.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/blinker/json
--md5  0306b831281e9918ffb0ac6e3e18b47f  blinker-1.7.0.tar.gz
--sha256  e6820ff6fa4e4d1d8e2747c2283749c3f547e4fee112b98555cdcdae32996182  blinker-1.7.0.tar.gz
-+md5  ce2f9fb3bc0c0000db11f012f5f5afda  blinker-1.8.2.tar.gz
-+sha256  8f77b09d3bf7c795e969e9486f39c2c5e9c39d4ee07424be2bc594ece9642d83  blinker-1.8.2.tar.gz
- # Locally computed sha256 checksums
--sha256  9eb73a1f38597a4aa17025d2ae1be3839624c795e985d4f0e9769ce29faca467  LICENSE.rst
-+sha256  9eb73a1f38597a4aa17025d2ae1be3839624c795e985d4f0e9769ce29faca467  LICENSE.txt
-diff --git a/package/python-blinker/python-blinker.mk b/package/python-blinker/python-blinker.mk
-index 234126a500..7ce06c2177 100644
---- a/package/python-blinker/python-blinker.mk
-+++ b/package/python-blinker/python-blinker.mk
-@@ -4,11 +4,11 @@
- #
- ################################################################################
+diff --git a/package/procps-ng/0001-build-sys-Add-systemd-elogind-to-w.patch b/package/procps-ng/0001-build-sys-Add-systemd-elogind-to-w.patch
+new file mode 100644
+index 0000000000..4a8b2a6a8b
+--- /dev/null
++++ b/package/procps-ng/0001-build-sys-Add-systemd-elogind-to-w.patch
+@@ -0,0 +1,48 @@
++From 788248ee631b3b5f82073c36320fc3f4a3c8f9ba Mon Sep 17 00:00:00 2001
++From: Craig Small <csmall@dropbear.xyz>
++Date: Thu, 31 Aug 2023 22:24:23 +1000
++Subject: [PATCH] build-sys: Add systemd/elogind to w
++
++Depending on the compiler flags, w needs to be explictly linked
++to libsystemd or elogind even though libproc2 is linked to it.
++
++Signed-off-by: Craig Small <csmall@dropbear.xyz>
++Upstream: https://gitlab.com/procps-ng/procps/-/commit/ca004d4657d5e8b468a4552ede429be53193a3a9
++Signed-off-by: Hugo Cornelis <hugo.cornelis@essensium.com>
++---
++ Makefile.am | 7 +++++++
++ NEWS        | 3 +++
++ 2 files changed, 10 insertions(+)
++
++diff --git a/Makefile.am b/Makefile.am
++index f70c8fb1..ddfc0141 100644
++--- a/Makefile.am
+++++ b/Makefile.am
++@@ -149,6 +149,13 @@ endif
++ 
++ dist_man_MANS += man/w.1
++ src_w_SOURCES = src/w.c local/fileutils.c
+++src_w_LDADD = $(LDADD)
+++if WITH_SYSTEMD
+++src_w_LDADD += @SYSTEMD_LIBS@
+++endif
+++if WITH_ELOGIND
+++src_w_LDADD += @ELOGIND_LIBS@
+++endif
++ else
++   EXTRA_DIST += man/w.1
++ endif
++diff --git a/NEWS b/NEWS
++index 3f2158d4..4ad9f74e 100644
++--- a/NEWS
+++++ b/NEWS
++@@ -1,3 +1,6 @@
+++procps-ng-NEXT
+++---------------
+++
++ procps-ng-4.0.4
++ ---------------
++   * library (API & ABI unchanged)
++-- 
++2.34.1
++
+diff --git a/package/procps-ng/procps-ng.mk b/package/procps-ng/procps-ng.mk
+index 2f28e3571e..1002d6340f 100644
+--- a/package/procps-ng/procps-ng.mk
++++ b/package/procps-ng/procps-ng.mk
+@@ -14,6 +14,9 @@ PROCPS_NG_INSTALL_STAGING = YES
+ PROCPS_NG_DEPENDENCIES = ncurses host-pkgconf $(TARGET_NLS_DEPENDENCIES)
+ PROCPS_NG_CONF_OPTS = LIBS=$(TARGET_NLS_LIBS)
  
--PYTHON_BLINKER_VERSION = 1.7.0
-+PYTHON_BLINKER_VERSION = 1.8.2
- PYTHON_BLINKER_SOURCE = blinker-$(PYTHON_BLINKER_VERSION).tar.gz
--PYTHON_BLINKER_SITE = https://files.pythonhosted.org/packages/a1/13/6df5fc090ff4e5d246baf1f45fe9e5623aa8565757dfa5bd243f6a545f9e
--PYTHON_BLINKER_SETUP_TYPE = setuptools
-+PYTHON_BLINKER_SITE = https://files.pythonhosted.org/packages/1e/57/a6a1721eff09598fb01f3c7cda070c1b6a0f12d63c83236edf79a440abcc
-+PYTHON_BLINKER_SETUP_TYPE = flit
- PYTHON_BLINKER_LICENSE = MIT
--PYTHON_BLINKER_LICENSE_FILES = LICENSE.rst
-+PYTHON_BLINKER_LICENSE_FILES = LICENSE.txt
- 
- $(eval $(python-package))
++# Applying 0001-build-sys-Add-systemd-elogind-to-w.patch touches Makefile.am
++PROCPS_NG_AUTORECONF = YES
++
+ ifeq ($(BR2_PACKAGE_SYSTEMD),y)
+ PROCPS_NG_DEPENDENCIES += systemd
+ PROCPS_NG_CONF_OPTS += --with-systemd
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
