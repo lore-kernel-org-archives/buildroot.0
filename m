@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 89F2CC02194
-	for <buildroot@archiver.kernel.org>; Sat, 14 Sep 2024 14:00:37 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A057BC02194
+	for <buildroot@archiver.kernel.org>; Sat, 14 Sep 2024 14:00:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 56DB441264;
-	Sat, 14 Sep 2024 14:00:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 69C05412E8;
+	Sat, 14 Sep 2024 14:00:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LoVFRvUL1Mxt; Sat, 14 Sep 2024 14:00:36 +0000 (UTC)
+ id 61NcG2JQeXqZ; Sat, 14 Sep 2024 14:00:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 001CB41A5B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 004DC42453
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 001CB41A5B;
-	Sat, 14 Sep 2024 14:00:35 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2F6711BF86C
+	by smtp4.osuosl.org (Postfix) with ESMTP id 004DC42453;
+	Sat, 14 Sep 2024 14:00:38 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 6B1851BF86D
  for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 14:00:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 97299606C0
- for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 14:00:14 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 599A540130
+ for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 14:00:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CQEjkr-FCpNM for <buildroot@lists.busybox.net>;
- Sat, 14 Sep 2024 14:00:13 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id RAZRTFSAN0AC for <buildroot@lists.busybox.net>;
+ Sat, 14 Sep 2024 14:00:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C9FD46073B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2766040558
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id C9FD46073B
- for <buildroot@buildroot.org>; Sat, 14 Sep 2024 14:00:13 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 2766040558
+ for <buildroot@buildroot.org>; Sat, 14 Sep 2024 14:00:14 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B54D082B75; Sat, 14 Sep 2024 14:00:13 +0000 (UTC)
+ id 219ED82B75; Sat, 14 Sep 2024 14:00:14 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 14 Sep 2024 15:54:28 +0200
+Date: Sat, 14 Sep 2024 15:54:48 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 39b784bd5772fa14294b5da750143e5532dd68f3
-X-Git-Newrev: edb2d45e058c58acdd2db135c056c5c253041b03
+X-Git-Oldrev: 66dbf094d3a8613fc594c9d6ae1be7c0d19757ce
+X-Git-Newrev: 0353d684828acfac36321c3f84c27b61c5ec61f7
 X-Patchwork-Hint: ignore
-Message-Id: <20240914140013.B54D082B75@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/lua-augeaus: fix assignment typo
+Message-Id: <20240914140014.219ED82B75@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/net-tools: fix appropriate typo
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,29 +64,28 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=edb2d45e058c58acdd2db135c056c5c253041b03
+commit: https://git.buildroot.net/buildroot/commit/?id=0353d684828acfac36321c3f84c27b61c5ec61f7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-Acked-by: Herve Codina <herve.codina@bootlin.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/lua-augeas/lua-augeas.mk | 2 +-
+ package/net-tools/net-tools.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/lua-augeas/lua-augeas.mk b/package/lua-augeas/lua-augeas.mk
-index 930cf49b86..8a7f2b5f7b 100644
---- a/package/lua-augeas/lua-augeas.mk
-+++ b/package/lua-augeas/lua-augeas.mk
-@@ -11,7 +11,7 @@ LUA_AUGEAS_LICENSE_FILES = COPYRIGHT
- LUA_AUGEAS_DEPENDENCIES = luainterpreter augeas host-pkgconf
+diff --git a/package/net-tools/net-tools.mk b/package/net-tools/net-tools.mk
+index 0744bf18cb..03e1c73406 100644
+--- a/package/net-tools/net-tools.mk
++++ b/package/net-tools/net-tools.mk
+@@ -16,7 +16,7 @@ define NET_TOOLS_CONFIGURE_CMDS
+ 	(cd $(@D); yes "" | ./configure.sh config.in )
+ endef
  
- # LDFLAGS=$(LDFLAGS) is present to pass LDFLAGS from environment to the command
--# line. With LDFLAGS set in the command line, related ordinary asignment present
-+# line. With LDFLAGS set in the command line, related ordinary assignment present
- # in the makefile are ignored and so lua-augeas makefile cannot not add '-L/lib'
- # to this value.
- LUA_AUGEAS_CONF_OPTS= \
+-# Enable I18N when appropiate
++# Enable I18N when appropriate
+ ifeq ($(BR2_SYSTEM_ENABLE_NLS),y)
+ define NET_TOOLS_ENABLE_I18N
+ 	$(SED) 's:I18N 0:I18N 1:' $(@D)/config.h
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
