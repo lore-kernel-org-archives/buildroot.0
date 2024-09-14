@@ -4,71 +4,69 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B6D7BC021AA
-	for <buildroot@archiver.kernel.org>; Sat, 14 Sep 2024 18:45:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04793C021AA
+	for <buildroot@archiver.kernel.org>; Sat, 14 Sep 2024 18:50:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3D8F7605A1;
-	Sat, 14 Sep 2024 18:45:14 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B0AA3605FE;
+	Sat, 14 Sep 2024 18:50:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id l3QGWZh4MD68; Sat, 14 Sep 2024 18:45:12 +0000 (UTC)
+ id ULfZhOrGsA88; Sat, 14 Sep 2024 18:50:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B35706076D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BB6D56076D
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B35706076D;
-	Sat, 14 Sep 2024 18:45:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id BB6D56076D;
+	Sat, 14 Sep 2024 18:50:48 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B6C271BF31D
- for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 18:45:10 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 837791BF31D
+ for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 18:50:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id AFFAF4060B
- for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 18:45:10 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 7208B40600
+ for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 18:50:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id h4UTvZf5xxsY for <buildroot@lists.busybox.net>;
- Sat, 14 Sep 2024 18:45:09 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
- helo=smtp6-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E37F8405FD
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E37F8405FD
-Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
- by smtp4.osuosl.org (Postfix) with ESMTPS id E37F8405FD
- for <buildroot@buildroot.org>; Sat, 14 Sep 2024 18:45:08 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown [IPv6:2a02:61:a2::3f4])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp6-g21.free.fr (Postfix) with ESMTPSA id B63447804FD;
- Sat, 14 Sep 2024 20:45:03 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 14 Sep 2024 20:45:03 +0200
-Date: Sat, 14 Sep 2024 20:45:03 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Hugo Cornelis <hugo.cornelis@essensium.com>
-Message-ID: <ZuXZr1Wjgi6AvDpq@landeda>
-References: <20240914172710.2917184-1-hugo.cornelis@essensium.com>
+ id oebd4XRu-oZY for <buildroot@lists.busybox.net>;
+ Sat, 14 Sep 2024 18:50:46 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.156.176;
+ helo=smtpcmd15176.aruba.it;
+ envelope-from=giulio.benetti@benettiengineering.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9B454405FD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9B454405FD
+Received: from smtpcmd15176.aruba.it (smtpcmd15176.aruba.it [62.149.156.176])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9B454405FD
+ for <buildroot@buildroot.org>; Sat, 14 Sep 2024 18:50:43 +0000 (UTC)
+Received: from localhost.localdomain ([84.33.84.190])
+ by Aruba Outgoing Smtp  with ESMTPSA
+ id pXqysjJrrqJRSpXqzsiMQ8; Sat, 14 Sep 2024 20:50:41 +0200
+From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+To: buildroot@buildroot.org
+Date: Sat, 14 Sep 2024 20:50:39 +0200
+Message-Id: <20240914185039.2757610-1-giulio.benetti@benettiengineering.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20240914172710.2917184-1-hugo.cornelis@essensium.com>
+X-CMAE-Envelope: MS4xfD9N6Wc5nYjFGhT+YhhEim64g+aOr8TIIxCXbMJ7OFq8UAnEHGI+aTvryXU5kUsiVhvzl0/tNqOrAVgIvhyQoF09DS+6Yl+zT5Z3z/MfRSey2CXBLCnw
+ ha/OFywI/9t0uYeTH5pw6EFL7PISjP2dXc+rrhjdpm5KBmB9ggl//0pg0XNS7OihZ9U0ltJ9Cwx7Y6M3euzlC5/Cz2XwOarbfLPLWGf435NEwiBFEAqUykoq
+ x+gUWE/DSZ7y55LUDFjTHfXkE3zFdCzdzixowu90Y/rsXHclsKMXKHKKc6glvqKsh/ArfndZz/SxyqJjhv7UZg==
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1726339505;
- bh=GD8UDpP1EWRd91jJAWQG0Pcwzj2XFVJ7GOdRny/1MVw=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=r3LL633H7NGPLZJTWoIfgFiyzfgOT50WGPHqG8aAVQiwRIKwKcdO9ZoDsmje0OCRv
- 1Z0JSezPqcbNH4CxXAruLYBxuaOKQGtSnwsX9S8kMb8rjiqKJDviwj59Otq9YYr0JH
- KFXdfD2+0shRzYT3i09SxWhhIIvfyH/5k+19MhFwCN5os6lQAW7QZ1yeCNDKxuBppz
- Qi938Nc211THrWwuTNrAfMBJUj78LjMpB+BnK1y43NAJR58+XHbn01+iqbLxUKsdU5
- Cc/BDSgUSOU3UHaLAVHQggwbDu9tP6R/I5l8tHrrsZGr/82CSBPS42SJTCqXb0Elon
- ILv/gHm8NnuVA==
+ d=aruba.it; s=a1; 
+ t=1726339841; bh=nYpBEDvBv8CvYfI+Xkd2zh2MyrcQsnelkyN6zcTdlEI=;
+ h=From:To:Subject:Date:MIME-Version;
+ b=mWXgp1QGVLiAA4HMSJbQVD93BpT6v3jhqe+Bts9vkzofUg9VV685KcUxAfCJzVfEL
+ S8SzKMM5xkwLodZClJzPchHy8jzFpfWUL5QlPaO3YLCsZL0OKbf7No3X6bNNVZHx85
+ kidso/r87jUsCgsxaoeSnT1Ydeixi6WEnovWrbVgcu2ci5KSTbNJgf6Dg47Pci0Zpb
+ Z4JvRX+/V5ofmDMgaZL+iGYzfsARgluPQxA6PksGYnS6Eo8GqSfrvTEFqx4e2FBSGf
+ 5OX9By+XxakkMGRtgYrn9rsEb2ZOQQ5wTYD+/OJRAWVlkFfl9sTF7KW3qAJhaxp6lx
+ qPlCfx/IjFPsA==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=free.fr
+ header.from=benettiengineering.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=r3LL633H
-Subject: Re: [Buildroot] [PATCH 1/1] package/procps-ng: link the w command
- with systemd or elogin libs.
+ dkim=pass (2048-bit key,
+ unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
+ header.s=a1 header.b=mWXgp1QG
+Subject: [Buildroot] [PATCH] package/libnss: bump version to 3.104
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,126 +78,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+Cc: Joseph Kogut <joseph.kogut@gmail.com>,
+ Giulio Benetti <giulio.benetti@benettiengineering.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On 2024-09-14 19:27 +0200, Hugo Cornelis via buildroot spake thusly:
-> The build of procps-ng was broken when systemd was enabled.  Applying
-> commit ca004d46 of procps-ng upstream to explictly link the 'w'
-> command to libsystemd or elogind even though libproc2 is linked to it.
-> 
-> This was (likely) broken since the upgrade to procps-ng v4.0.4 with
-> commit d79f40dbbe98983bc657d4c82d46b38b8283351b.
-> 
-> Fixes: http://autobuild.buildroot.org/results/e8b/e8bae7bfd7d6a7987f3afa199d8d944429144817/build-end.log
+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+---
+ package/libnss/libnss.hash | 4 ++--
+ package/libnss/libnss.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-I've also added Fixes: tag for the issue in gitlab:
-    https://gitlab.com/buildroot.org/buildroot/-/issues/28
-
-(But that did not actually auto-closed the issue, unfortunately, but
-obviously that's not on you.)
-
-> Signed-off-by: Hugo Cornelis <hugo.cornelis@essensium.com>
-> ---
->  ...1-build-sys-Add-systemd-elogind-to-w.patch | 48 +++++++++++++++++++
->  package/procps-ng/procps-ng.mk                |  3 ++
->  2 files changed, 51 insertions(+)
->  create mode 100644 package/procps-ng/0001-build-sys-Add-systemd-elogind-to-w.patch
-> 
-> diff --git a/package/procps-ng/0001-build-sys-Add-systemd-elogind-to-w.patch b/package/procps-ng/0001-build-sys-Add-systemd-elogind-to-w.patch
-> new file mode 100644
-> index 0000000000..3fecb4746d
-> --- /dev/null
-> +++ b/package/procps-ng/0001-build-sys-Add-systemd-elogind-to-w.patch
-> @@ -0,0 +1,48 @@
-> +From 788248ee631b3b5f82073c36320fc3f4a3c8f9ba Mon Sep 17 00:00:00 2001
-> +From: Craig Small <csmall@dropbear.xyz>
-> +Date: Thu, 31 Aug 2023 22:24:23 +1000
-> +Subject: [PATCH 1/1] build-sys: Add systemd/elogind to w
-
-    $ ./utils/docker-run make check-package
-    package/procps-ng/0001-build-sys-Add-systemd-elogind-to-w.patch:4: generate your patches with 'git format-patch -N'
-
-I've fixed that when applying to master, thanks!
-
-Regards,
-Yann E. MORIN.
-
-> +Depending on the compiler flags, w needs to be explictly linked
-> +to libsystemd or elogind even though libproc2 is linked to it.
-> +
-> +Signed-off-by: Craig Small <csmall@dropbear.xyz>
-> +Upstream: https://gitlab.com/procps-ng/procps/-/commit/ca004d4657d5e8b468a4552ede429be53193a3a9
-> +Signed-off-by: Hugo Cornelis <hugo.cornelis@essensium.com>
-> +---
-> + Makefile.am | 7 +++++++
-> + NEWS        | 3 +++
-> + 2 files changed, 10 insertions(+)
-> +
-> +diff --git a/Makefile.am b/Makefile.am
-> +index f70c8fb1..ddfc0141 100644
-> +--- a/Makefile.am
-> ++++ b/Makefile.am
-> +@@ -149,6 +149,13 @@ endif
-> + 
-> + dist_man_MANS += man/w.1
-> + src_w_SOURCES = src/w.c local/fileutils.c
-> ++src_w_LDADD = $(LDADD)
-> ++if WITH_SYSTEMD
-> ++src_w_LDADD += @SYSTEMD_LIBS@
-> ++endif
-> ++if WITH_ELOGIND
-> ++src_w_LDADD += @ELOGIND_LIBS@
-> ++endif
-> + else
-> +   EXTRA_DIST += man/w.1
-> + endif
-> +diff --git a/NEWS b/NEWS
-> +index 3f2158d4..4ad9f74e 100644
-> +--- a/NEWS
-> ++++ b/NEWS
-> +@@ -1,3 +1,6 @@
-> ++procps-ng-NEXT
-> ++---------------
-> ++
-> + procps-ng-4.0.4
-> + ---------------
-> +   * library (API & ABI unchanged)
-> +-- 
-> +2.34.1
-> +
-> diff --git a/package/procps-ng/procps-ng.mk b/package/procps-ng/procps-ng.mk
-> index 2f28e3571e..1002d6340f 100644
-> --- a/package/procps-ng/procps-ng.mk
-> +++ b/package/procps-ng/procps-ng.mk
-> @@ -14,6 +14,9 @@ PROCPS_NG_INSTALL_STAGING = YES
->  PROCPS_NG_DEPENDENCIES = ncurses host-pkgconf $(TARGET_NLS_DEPENDENCIES)
->  PROCPS_NG_CONF_OPTS = LIBS=$(TARGET_NLS_LIBS)
->  
-> +# Applying 0001-build-sys-Add-systemd-elogind-to-w.patch touches Makefile.am
-> +PROCPS_NG_AUTORECONF = YES
-> +
->  ifeq ($(BR2_PACKAGE_SYSTEMD),y)
->  PROCPS_NG_DEPENDENCIES += systemd
->  PROCPS_NG_CONF_OPTS += --with-systemd
-> -- 
-> 2.34.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
+diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
+index 1370b6ad0d..e92a6fee25 100644
+--- a/package/libnss/libnss.hash
++++ b/package/libnss/libnss.hash
+@@ -1,4 +1,4 @@
+-# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_103_RTM/src/SHA256SUMS
+-sha256  7b4ab657f772dc7520c46e8d481940b292dcfc6a4c90150a7c26672384cee962  nss-3.103.tar.gz
++# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_104_RTM/src/SHA256SUMS
++sha256  e2763223622d1e76b98a43030873856f248af0a41b03b2fa2ca06a91bc50ac8e  nss-3.104.tar.gz
+ # Locally calculated
+ sha256  a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
+diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
+index 06038c2e55..0fd9858647 100644
+--- a/package/libnss/libnss.mk
++++ b/package/libnss/libnss.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBNSS_VERSION = 3.103
++LIBNSS_VERSION = 3.104
+ LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
+ LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
+ LIBNSS_DISTDIR = dist
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
