@@ -4,59 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92627C02197
-	for <buildroot@archiver.kernel.org>; Sat, 14 Sep 2024 13:22:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 85252C02194
+	for <buildroot@archiver.kernel.org>; Sat, 14 Sep 2024 13:22:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 52AEC40130;
-	Sat, 14 Sep 2024 13:22:48 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 411A540580;
+	Sat, 14 Sep 2024 13:22:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id liX3z5gJcK9o; Sat, 14 Sep 2024 13:22:47 +0000 (UTC)
+ id dm3Li2gyGj9M; Sat, 14 Sep 2024 13:22:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2E9DB401C2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 02F7140568
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2E9DB401C2;
-	Sat, 14 Sep 2024 13:22:47 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 02F7140568;
+	Sat, 14 Sep 2024 13:22:50 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 824C11BF3F9
- for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 13:22:45 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 08B761BF3F9
+ for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 13:22:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7CD554031F
- for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 13:22:45 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id EA98340340
+ for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 13:22:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qd0d0-bqBTQO for <buildroot@lists.busybox.net>;
- Sat, 14 Sep 2024 13:22:44 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::225;
- helo=relay5-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+ id 3dfrD8bvF5aG for <buildroot@lists.busybox.net>;
+ Sat, 14 Sep 2024 13:22:46 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.6;
+ helo=smtp6-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 68E4140305
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 68E4140305
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::225])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 68E4140305
- for <buildroot@buildroot.org>; Sat, 14 Sep 2024 13:22:44 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id AB97D1C0003;
- Sat, 14 Sep 2024 13:22:42 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1spSjZ-0054IE-2d;
- Sat, 14 Sep 2024 15:22:41 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20240822102040.2083799-1-thomas.petazzoni@bootlin.com>
-Date: Sat, 14 Sep 2024 15:22:41 +0200
-In-Reply-To: <20240822102040.2083799-1-thomas.petazzoni@bootlin.com> (Thomas
- Petazzoni's message of "Thu, 22 Aug 2024 12:20:25 +0200")
-Message-ID: <871q1mxtcu.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E95EF40305
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E95EF40305
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [212.27.42.6])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E95EF40305
+ for <buildroot@buildroot.org>; Sat, 14 Sep 2024 13:22:45 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown [IPv6:2a02:61:a2::3f4])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPSA id 28A3178050F;
+ Sat, 14 Sep 2024 15:22:40 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sat, 14 Sep 2024 15:22:39 +0200
+Date: Sat, 14 Sep 2024 15:22:39 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Federico Pellegrin <fede@evolware.org>
+Message-ID: <ZuWOH8KW_dPAwK71@landeda>
+References: <20240914124337.1200461-1-peter@korsgaard.com>
+ <20240914124337.1200461-13-peter@korsgaard.com>
+ <CAM6O0ZhnJrAYQSLSXWZsMBxc8hY8bRqwbUOuWvkR+PuKKrzPRA@mail.gmail.com>
 MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
+Content-Disposition: inline
+In-Reply-To: <CAM6O0ZhnJrAYQSLSXWZsMBxc8hY8bRqwbUOuWvkR+PuKKrzPRA@mail.gmail.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1726320164;
+ bh=J9qDxrr129vzJ1t3dHU0xJhe3v/4kEWbDCKVE9BBkdw=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=Q778p2MrzEVX1BdlqTyCIGWuZiZVl3IEVpAB5ObMW5cn+qQcVtOFcAQ/2uSWfLR52
+ LynjsgcAMQfhi7Lk9ixsQWYNI4jVYtFTpmGj8wTpkeREHDI3SVj+vDFttG2xXkW0fo
+ lXg2ikOvtQW2cYMuYpyIEGXM4Z/xs5QNL0KYSn1yYWcuwANwhO05JNgi2Pq+0sVJCs
+ Jw6MsPNI3RRixB7nfHTmgLdFqHZ8NgabaOl8NBZxNgb9zb1xTClhE0M5IoKCOqyxYW
+ gMKN9PShdsCK8ivEUGddSsgyTWW5QcxAehRvyCL7A58/dAVdefZBSRNtTsrvjiXZbT
+ /mAO7OASNAkjw==
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 2024.02.x 0/9] Fix Qt6 CVEs in 2024.02.x
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=Q778p2Mr
+Subject: Re: [Buildroot] [PATCH 13/20] package/mrouted: fix typos
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,49 +81,30 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Roy Kollen Svendsen <roykollensvendsen@gmail.com>,
- Buildroot List <buildroot@buildroot.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Joachim Wiberg <troglobit@gmail.com>, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Thomas" == Thomas Petazzoni <thomas.petazzoni@bootlin.com> writes:
-
- > Hello,
- > The Qt6 version currently packaged in Buildroot 2024.02.x is affected
- > by a number of CVEs. This series of patches fixes all reported CVEs
- > affecting Qt6, by backporting the relevant patches from upstream.
-
- > Some of the fixes do require bringing along some related changes, as
- > they would not otherwise apply without significant rework.
-
- > All of the CVEs expect CVE-2024-39936 only affect 2024.02.x, as
- > Buildroot 2024.05 has a newer Qt6 version that isn't affected by those
- > CVEs. CVE-2024-39936 is already fixed in master (commit
- > b866afa68405564497dd60c1f8f33cdf71d22728), but this patch series
- > provides a fix that applies cleanly on the the Qt6 version packaged in
- > 2024.02.x, so it should be considered as a replacement for backporting
- > b866afa68405564497dd60c1f8f33cdf71d22728 to 2024.02.x.
-
- > Thomas
-
- > Thomas Petazzoni (9):
- >   package/qt6/qt6svg: backport fix for CVE-2023-32573
- >   package/qt6/qt6base: backport fix for CVE-2023-33285
- >   package/qt6/qt6base: backport fix for CVE-2023-32762
- >   package/qt6/qt6base: backport fix for CVE-2023-32763
- >   package/qt6/qt6base: backport fix for CVE-2023-38197
- >   package/qt6/qt6base: backport fix for CVE-2023-51714
- >   package/qt6/qt6base: backport fix for CVE-2023-37369
- >   package/qt6/qt6base: backport fix for CVE-2023-34410
- >   package/qt6/qt6base: backport fix for CVE-2024-39936
-
-Committed series to 2024.02.x, thanks.
-
--- 
-Bye, Peter Korsgaard
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+RmVkZXJpY28sIEFsbCwKCk9uIDIwMjQtMDktMTQgMTQ6NTcgKzAyMDAsIEZlZGVyaWNvIFBlbGxl
+Z3JpbiBzcGFrZSB0aHVzbHk6Cj4gSWwgZ2lvcm5vIHNhYiAxNCBzZXQgMjAyNCBhbGxlIG9yZSAx
+NDo0NCBQZXRlciBLb3JzZ2FhcmQgPFsxXQo+IHBldGVyQGtvcnNnYWFyZC5jb20+IGhhIHNjcml0
+dG86Cj4gICAgIC3CoCDCoCDCoCDCoCDCoE5vdGU6IGF0IGxlYXN0IHR3byBpbnRlcmZhY2VzIHdp
+dGggTVVMVElDQVNUIGZsYWcgaXMgcmVxdXJpZWQuCj4gICAgICvCoCDCoCDCoCDCoCDCoE5vdGU6
+IGF0IGxlYXN0IHR3byBpbnRlcmZhY2VzIHdpdGggTVVMVElDQVNUIGZsYWcgaXMgcmVxdWlyZWQu
+Cj4gU2hvdWxkIHRoYXQgc2F5IGluc3RlYWQ6Cj4gTm90ZTogYXQgbGVhc3QgdHdvIGludGVyZmFj
+ZXMgd2l0aCBNVUxUSUNBU1QgZmxhZyBhcmUgcmVxdWlyZWQuCj4gPyAoc28gaXMgLT4gYXJlKQoK
+R29vZCBjYXRjaCEgSSBmaXhlZCBpdCB3aGVuIGFwcGx5aW5nLCB0aGFua3MhIPCfkY0KClJlZ2Fy
+ZHMsCllhbm4gRS4gTU9SSU4uCgotLSAKLi0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0t
+LS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS4tLS0tLS0tLS0tLS0tLS0tLS0tLS4KfCAgWWFubiBF
+LiBNT1JJTiAgfCBSZWFsLVRpbWUgRW1iZWRkZWQgfCAvIlwgQVNDSUkgUklCQk9OIHwgRXJpY3Mn
+IGNvbnNwaXJhY3k6IHwKfCArMzMgNjYyIDM3NiAwNTYgfCBTb2Z0d2FyZSAgRGVzaWduZXIgfCBc
+IC8gQ0FNUEFJR04gICAgIHwgIF9fXyAgICAgICAgICAgICAgIHwKfCArMzMgNTYxIDA5OSA0Mjcg
+YC0tLS0tLS0tLS0tLS4tLS0tLS0tOiAgWCAgQUdBSU5TVCAgICAgIHwgIFxlLyAgVGhlcmUgaXMg
+bm8gIHwKfCBodHRwOi8veW1vcmluLmlzLWEtZ2Vlay5vcmcvIHwgXy8qXF8gfCAvIFwgSFRNTCBN
+QUlMICAgIHwgICB2ICAgY29uc3BpcmFjeS4gIHwKJy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLV4tLS0tLS0tXi0tLS0tLS0tLS0tLS0tLS0tLV4tLS0tLS0tLS0tLS0tLS0tLS0tLScKX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1h
+aWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9v
+dC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
