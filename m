@@ -4,72 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8D6FDC0218B
-	for <buildroot@archiver.kernel.org>; Sat, 14 Sep 2024 09:20:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F1B19C02189
+	for <buildroot@archiver.kernel.org>; Sat, 14 Sep 2024 09:22:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 543D98115F;
-	Sat, 14 Sep 2024 09:20:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B9D2A84095;
+	Sat, 14 Sep 2024 09:22:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id i4O-Gs5o0VBf; Sat, 14 Sep 2024 09:20:37 +0000 (UTC)
+ id 0HsvyrvXyd6w; Sat, 14 Sep 2024 09:22:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 56D12846E9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BC3FB8409B
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 56D12846E9;
-	Sat, 14 Sep 2024 09:20:37 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 5A7AD1BF280
- for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 09:20:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BC3FB8409B;
+	Sat, 14 Sep 2024 09:22:55 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 5A5201BF280
+ for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 09:22:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 486D7846EB
- for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 09:20:35 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4932460605
+ for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 09:22:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cboaoiUSW-aN for <buildroot@lists.busybox.net>;
- Sat, 14 Sep 2024 09:20:34 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.197;
- helo=relay5-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id iWPsaCMpxWJB for <buildroot@lists.busybox.net>;
+ Sat, 14 Sep 2024 09:22:53 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 7518D81463
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7518D81463
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7518D81463
- for <buildroot@buildroot.org>; Sat, 14 Sep 2024 09:20:33 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 838D31C0004;
- Sat, 14 Sep 2024 09:20:31 +0000 (UTC)
-Date: Sat, 14 Sep 2024 11:20:30 +0200
-To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <20240914112030.7369d08b@windsurf>
-In-Reply-To: <20240907211638.945542-1-james.hilliard1@gmail.com>
-References: <20240907211638.945542-1-james.hilliard1@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1726305631;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=dxsIoZR7Knxv7hM5tz1vG3vTSS1HfCg2wjNde79N4nc=;
- b=RIJ/g/fnpJRNieQzzTrcj0F+N5j7lNBU2w6SUo04KRSaDeoH6nkEW4q81Qxa3NZhW674gl
- xZ9XuL4jLArqXjqb3vRDBVRhQk8Ukt8ubuadQ0Tt2f35VKjfUgyjZ3CvXWwE0niuzXDgRZ
- +nk5FbUdsALEdfa3YIQPe8WXHBKtpzjisQIftSZ8i6FPq5pqZB5/0ZMsO00+mY4wsJUw2v
- PrRS3Kh50jnwCaPALN7MQgrRTXXd+18Khj9/SOnpsEm7qLXNDUFFeE+vy1mPMQUspoyJ3c
- 0i8R9rJJcl5Uunebnnh4KedUr/kr2rTInaQ0nsnRX6/z6VblzKwP0dNN3wBF8g==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=RIJ/g/fn
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-maturin: bump to version
- 1.7.1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8642D605DC
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8642D605DC
+ for <buildroot@buildroot.org>; Sat, 14 Sep 2024 09:22:53 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 7FDAD8706E; Sat, 14 Sep 2024 09:22:53 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 14 Sep 2024 11:22:37 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 581031089f01c25beda6a8abb0cc51a64505f960
+X-Git-Newrev: 8331fb05925b33fbff1b08367470652e31996b39
+X-Patchwork-Hint: ignore
+Message-Id: <20240914092253.7FDAD8706E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/php: bump version to 8.3.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,40 +59,49 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello James,
+commit: https://git.buildroot.net/buildroot/commit/?id=8331fb05925b33fbff1b08367470652e31996b39
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On Sat,  7 Sep 2024 15:16:38 -0600
-James Hilliard <james.hilliard1@gmail.com> wrote:
+Changelog: https://www.php.net/ChangeLog-8.php#PHP_8_3
+Release notes: https://news-web.php.net/php.announce/437
 
-> Restore cargo2 archive suffix format as well.
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
->  package/python-maturin/python-maturin.hash | 2 +-
->  package/python-maturin/python-maturin.mk   | 7 ++++---
->  2 files changed, 5 insertions(+), 4 deletions(-)
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/php/php.hash | 2 +-
+ package/php/php.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thanks, but it doesn't work for me:
-
-ERROR: while checking hashes from package/python-maturin/python-maturin.hash
-ERROR: python-maturin-1.7.1-cargo2.tar.gz has wrong sha256 hash:
-ERROR: expected: 92c5fc2a24f32623a6994334b523a587dca63ebb5b46ae14a255a2ebc25fd3f7
-ERROR: got     : 9b25e8232b67e7ad8652adfe95e890868f56adfb65a93ad4c2a2cb6a7236a94f
-ERROR: Incomplete download, or man-in-the-middle (MITM) attack
-
-Could you have a look?
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/php/php.hash b/package/php/php.hash
+index 3a6f60680b..7df051df4e 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,5 +1,5 @@
+ # From https://www.php.net/downloads.php
+-sha256  a0f2179d00931fe7631a12cbc3428f898ca3d99fe564260c115af381d2a1978d  php-8.3.10.tar.xz
++sha256  b862b098a08ab9bf4b36ed12c7d0d9f65353656b36fb0e3c5344093aceb35802  php-8.3.11.tar.xz
+ 
+ # License file
+ sha256  b42e4df5e50e6ecda1047d503d6d91d71032d09ed1027ba1ef29eed26f890c5a  LICENSE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index 0487c03b61..d7788107c1 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PHP_VERSION = 8.3.10
++PHP_VERSION = 8.3.11
+ PHP_SITE = https://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
