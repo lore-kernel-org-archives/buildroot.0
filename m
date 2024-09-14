@@ -4,72 +4,69 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BAC81C021A9
-	for <buildroot@archiver.kernel.org>; Sat, 14 Sep 2024 18:16:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8DBD7C021A9
+	for <buildroot@archiver.kernel.org>; Sat, 14 Sep 2024 18:19:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 86B2080A78;
-	Sat, 14 Sep 2024 18:16:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3B20081E81;
+	Sat, 14 Sep 2024 18:19:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id v_XEQD3kRZyy; Sat, 14 Sep 2024 18:16:28 +0000 (UTC)
+ id 55pp-Sj4dBqr; Sat, 14 Sep 2024 18:19:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9F0C680899
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2751484147
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9F0C680899;
-	Sat, 14 Sep 2024 18:16:28 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 4955A1BF283
- for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 18:16:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2751484147;
+	Sat, 14 Sep 2024 18:19:43 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 24E811BF283
+ for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 18:19:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3834D606CE
- for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 18:16:27 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1414184147
+ for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 18:19:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ah8qRx7nwwxc for <buildroot@lists.busybox.net>;
- Sat, 14 Sep 2024 18:16:26 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::227;
- helo=relay7-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id BqAN_D1IF73L for <buildroot@lists.busybox.net>;
+ Sat, 14 Sep 2024 18:19:41 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.150.162;
+ helo=dd33218.kasserver.com; envelope-from=brpi@duering-andreas.de;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 878A4606BA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 878A4606BA
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 878A4606BA
- for <buildroot@buildroot.org>; Sat, 14 Sep 2024 18:16:25 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 96DA820002;
- Sat, 14 Sep 2024 18:16:23 +0000 (UTC)
-Date: Sat, 14 Sep 2024 20:16:22 +0200
-To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <20240914201622.56e7318e@windsurf>
-In-Reply-To: <20240906185059.1263571-1-james.hilliard1@gmail.com>
-References: <20240906185059.1263571-1-james.hilliard1@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 2397381E81
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2397381E81
+Received: from dd33218.kasserver.com (dd33218.kasserver.com [85.13.150.162])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2397381E81
+ for <buildroot@buildroot.org>; Sat, 14 Sep 2024 18:19:41 +0000 (UTC)
+Received: from devuanPc.fritz.box (muedsl-82-207-203-099.citykom.de
+ [82.207.203.99])
+ by dd33218.kasserver.com (Postfix) with ESMTPSA id E427F200098B
+ for <buildroot@buildroot.org>; Sat, 14 Sep 2024 20:19:38 +0200 (CEST)
+Date: Sat, 14 Sep 2024 20:19:37 +0200
+To: buildroot@buildroot.org
+Message-ID: <20240914201937.567067fd@devuanPc.fritz.box>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Spamd-Bar: /
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1726337784;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=9URoQ2NQPbuvk+Kmr+wJ93ae2EbCifIr+E5FspBhaeA=;
- b=V51VJoX2wxZHqKvUEFe6ShD1eTgUc1vq1K5BhqlCa5BLyyWyyGGOjInIdkf4I3qeRX8w/W
- bPV2SOXab/3NjnqN3BXu/foy+WS6Fxw9LlivD+oPrWhZKj3AB+jAjI5Lw+fA350OlphqJ9
- aXBGEw+h3Er4F/qaVxjLjJJvinB98He1ZOh0PMYN6rry+53hE6j8b+hCK/fCaCS04md239
- 2VqD0Ie5PjlC7uYAaCRLa5reCHAPBfCztjBvTDHbdgdc11Wsc7MSwA+xKRO6/412PhSW+1
- dnFEvl8bG4hJ1dBJKjHSaXvhHNx+xPOY5Qx18UBaEr7HBEhAieUV9CH7K1GmMg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=duering-andreas.de; 
+ s=kas201911161523; t=1726337978;
+ bh=o3zhPd3HLkwRtSv/0wLv4i9Btm3SsO07OtShFC9W20g=;
+ h=Date:From:To:Subject:From;
+ b=fbGJHzLed8kJhrtQlPLHCjQj67UoR0omLOffoWl2EKqUKQ68ipf1srOFAAEEwbNl+
+ yrXhzm6GLnJuEeOa4JyWu0rBjep9ii7fvdSERGK8HHFcDSfexgHkEnFkPxW0ZDUhvX
+ djkK9aBgCh4HrAON5dDPibqMEwDy6rj7LvW55DLJSkJfjpmbF3SZINivxwNoYFD1uD
+ 6YKsLAZN1ZWvafh8Khc770corgenSjVvQIhe8EIL2YyC9emO8opLvb7RbXBtWSEfBm
+ LZWlMgGzRDY+5tXEvIy5kB8L/C8j1OL+Ea0CjogVWKn5/f/owi64OU5/OEc7VxLbvN
+ 4ZlxSaIUrlKQw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=duering-andreas.de
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=V51VJoX2
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-pymodbus: bump to
- version 3.7.2
+ unprotected) header.d=duering-andreas.de header.i=@duering-andreas.de
+ header.a=rsa-sha256 header.s=kas201911161523 header.b=fbGJHzLe
+Subject: [Buildroot] Buildroot does not use ccache for compiling Linux
+ kernel?
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,31 +78,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Falco Hyfing <hyfinglists@gmail.com>, Asaf Kahlon <asafka7@gmail.com>,
- buildroot@buildroot.org
+From: =?utf-8?q?Andreas_D=C3=BCring_via_buildroot?= <buildroot@buildroot.org>
+Reply-To: Andreas =?UTF-8?B?RMO8cmluZw==?= <brpi@duering-andreas.de>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Fri,  6 Sep 2024 12:50:59 -0600
-James Hilliard <james.hilliard1@gmail.com> wrote:
+Hello,
 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
->  package/python-pymodbus/python-pymodbus.hash | 4 ++--
->  package/python-pymodbus/python-pymodbus.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
+I am currently experimenting with building a minimal image for my
+Raspberry Pi.
 
-Applied to master, thanks.
+During this process, I realized that ccache, although enabled, is not
+used for compiling the Linux kernel. I think this is because of the
+recipe in linux/linux.mk:
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+LINUX_MAKE_FLAGS = \
+        HOSTCC="$(HOSTCC) $(subst -I/,-isystem /,$(subst -I /,-isystem /,$(HOST_CFLAGS))) $(HOST_LDFLAGS)" \
+        ARCH=$(KERNEL_ARCH) \
+        INSTALL_MOD_PATH=$(TARGET_DIR) \
+        CROSS_COMPILE="$(TARGET_CROSS)" \
+        WERROR=0 \
+        REGENERATE_PARSERS=1 \
+        DEPMOD=$(HOST_DIR)/sbin/depmod
+
+
+The linux kernel seems to assemble the compiler using TARGET_CROSS,
+e.g.
+CC = $(TARGET_CROSS)gcc
+
+As a very crude solution, I changed the corresponding line to
+        CROSS_COMPILE="ccache $(TARGET_CROSS)"
+but this is probably not the optimal solution. (I didn't carefully
+check where else CROSS_COMPILE is used).
+
+If this is a known limitation? Should this be added to the
+documentation?
+https://buildroot.org/downloads/manual/manual.html#ccache
+("This will automatically build ccache and use it for every host and
+target compilation.")
+
+With best regards,
+Andreas
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
