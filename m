@@ -4,71 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 41F96C02189
-	for <buildroot@archiver.kernel.org>; Sat, 14 Sep 2024 09:31:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 654DEC0218C
+	for <buildroot@archiver.kernel.org>; Sat, 14 Sep 2024 09:31:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0889280CCC;
-	Sat, 14 Sep 2024 09:31:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3869B80DC5;
+	Sat, 14 Sep 2024 09:31:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Sr083VsY7_Yc; Sat, 14 Sep 2024 09:31:39 +0000 (UTC)
+ id bLE7yNyJGQ1M; Sat, 14 Sep 2024 09:31:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2415280D3B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4771681076
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2415280D3B;
-	Sat, 14 Sep 2024 09:31:39 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 31D681BF280
- for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 09:31:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4771681076;
+	Sat, 14 Sep 2024 09:31:47 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id CCC0E1BF280
+ for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 09:31:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2D7C680C98
- for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 09:31:38 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id C81C840568
+ for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 09:31:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gi30jr2j_SGp for <buildroot@lists.busybox.net>;
- Sat, 14 Sep 2024 09:31:37 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::228;
- helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Be4bZPDW_BnQ for <buildroot@lists.busybox.net>;
+ Sat, 14 Sep 2024 09:31:44 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 185FC80C25
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 185FC80C25
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::228])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 185FC80C25
- for <buildroot@busybox.net>; Sat, 14 Sep 2024 09:31:36 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 9FA951BF203;
- Sat, 14 Sep 2024 09:31:33 +0000 (UTC)
-Date: Sat, 14 Sep 2024 11:31:32 +0200
-To: Francois Perrad <francois.perrad@gadz.org>
-Message-ID: <20240914113132.39e9a014@windsurf>
-In-Reply-To: <20240911075552.3455745-1-francois.perrad@gadz.org>
-References: <20240911075552.3455745-1-francois.perrad@gadz.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1726306294;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=fexzRskf/hVHdMr2cUiQgtyNbYlP7MJltyZ5C/HtfQ8=;
- b=d+yUm8NqliF68FxhEzzINComz2qqDetYH0dmo/G5cqSlZu3R8kvhPc9QxF0+HKQvp9lXR/
- Ma+kiYq12TR0zA+Lr4Dr3p2s0xpDCE3G+HI59uEDVbSEHZdbx78ZegQst9oyt98rz7JCgP
- 4na9Jm/4zBKpj9VaxeS+jjDNAfMyNWG6kocwsASb2p9tywO+1tmqeIgKysTEICOarQmqbZ
- cyatYbWYaaQgQtGOch1BDnkkzYZjAcj3NYHyRZragiJrXarzx8NVYyIgeLbompC/6Q5+xZ
- WJEKUk7m4PZYkJoeJYKbQUtXLq9sFpOMpWmd43jBbMBXZBDgzsodyA/+OyeHYQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=d+yUm8Nq
-Subject: Re: [Buildroot] [PATCH] package/perl-libwww-perl: bump to version
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B462A4061D
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id B462A4061D
+ for <buildroot@buildroot.org>; Sat, 14 Sep 2024 09:31:44 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id A0348814B9; Sat, 14 Sep 2024 09:31:44 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Sat, 14 Sep 2024 11:29:57 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 8bb08e7f43a76cce0e9e69f353cc1b77c3b6f6e5
+X-Git-Newrev: d724d4a02a8c3f4b61ae110847419c6997d8909c
+X-Patchwork-Hint: ignore
+Message-Id: <20240914093144.A0348814B9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/perl-libwww-perl: bump to version
  6.77
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -83,31 +60,53 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@busybox.net
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, 11 Sep 2024 09:55:52 +0200
-Francois Perrad <francois.perrad@gadz.org> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=d724d4a02a8c3f4b61ae110847419c6997d8909c
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> diff LICENSE: use "The Perl Artistic License 1.0"
->     see https://metacpan.org/release/OALDERS/libwww-perl-6.77/diff/OALDERS/libwww-perl-6.67#LICENSE
-> 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  package/perl-libwww-perl/perl-libwww-perl.hash | 8 ++++----
->  package/perl-libwww-perl/perl-libwww-perl.mk   | 2 +-
->  2 files changed, 5 insertions(+), 5 deletions(-)
+diff LICENSE: use "The Perl Artistic License 1.0"
+    see https://metacpan.org/release/OALDERS/libwww-perl-6.77/diff/OALDERS/libwww-perl-6.67#LICENSE
 
-Applied to master, thanks.
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/perl-libwww-perl/perl-libwww-perl.hash | 8 ++++----
+ package/perl-libwww-perl/perl-libwww-perl.mk   | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/perl-libwww-perl/perl-libwww-perl.hash b/package/perl-libwww-perl/perl-libwww-perl.hash
+index 8b4b229b50..5951c34a58 100644
+--- a/package/perl-libwww-perl/perl-libwww-perl.hash
++++ b/package/perl-libwww-perl/perl-libwww-perl.hash
+@@ -1,6 +1,6 @@
+-# retrieved by scancpan from http://cpan.metacpan.org/
+-md5  ff7621d0350da3052f24db9a74692672  libwww-perl-6.67.tar.gz
+-sha256  96eec40a3fd0aa1bd834117be5eb21c438f73094d861a1a7e5774f0b1226b723  libwww-perl-6.67.tar.gz
++# retrieved by scancpan from https://cpan.metacpan.org/
++md5  e70e2f41a97b8d97608569d10b75b931  libwww-perl-6.77.tar.gz
++sha256  94a907d6b3ea8d966ef43deffd4fa31f5500142b4c00489bfd403860a5f060e4  libwww-perl-6.77.tar.gz
+ 
+ # computed by scancpan
+-sha256  311f168ba9a7819ffab4fea19858f9e880737baf6d112929d11530205035a4cc  LICENSE
++sha256  6186a79a305a0e62c5087f9737b4f66fa5793fa1b396da0126e3c8722c460245  LICENSE
+diff --git a/package/perl-libwww-perl/perl-libwww-perl.mk b/package/perl-libwww-perl/perl-libwww-perl.mk
+index 6c4bd29805..38f68385aa 100644
+--- a/package/perl-libwww-perl/perl-libwww-perl.mk
++++ b/package/perl-libwww-perl/perl-libwww-perl.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PERL_LIBWWW_PERL_VERSION = 6.67
++PERL_LIBWWW_PERL_VERSION = 6.77
+ PERL_LIBWWW_PERL_SOURCE = libwww-perl-$(PERL_LIBWWW_PERL_VERSION).tar.gz
+ PERL_LIBWWW_PERL_SITE = $(BR2_CPAN_MIRROR)/authors/id/O/OA/OALDERS
+ PERL_LIBWWW_PERL_LICENSE = Artistic or GPL-1.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
