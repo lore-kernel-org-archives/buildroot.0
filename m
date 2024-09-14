@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4BA65C3ABAD
-	for <buildroot@archiver.kernel.org>; Sun, 15 Sep 2024 21:39:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA5A9C3ABAD
+	for <buildroot@archiver.kernel.org>; Sun, 15 Sep 2024 21:39:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 1CD7181E65;
-	Sun, 15 Sep 2024 21:39:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 560018475E;
+	Sun, 15 Sep 2024 21:39:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id g_4BqwhTT7wx; Sun, 15 Sep 2024 21:39:36 +0000 (UTC)
+ id LB9ObvcKGgeQ; Sun, 15 Sep 2024 21:39:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 11E0884728
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6F2448474C
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 11E0884728;
-	Sun, 15 Sep 2024 21:39:36 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 77B4A1BF94D
- for <buildroot@lists.busybox.net>; Sun, 15 Sep 2024 21:36:51 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6F2448474C;
+	Sun, 15 Sep 2024 21:39:39 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 171421BF28B
+ for <buildroot@lists.busybox.net>; Sun, 15 Sep 2024 21:36:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B0F1240A22
+ by smtp1.osuosl.org (Postfix) with ESMTP id D55EC805A2
  for <buildroot@lists.busybox.net>; Sun, 15 Sep 2024 21:36:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oBrZkBiW76kl for <buildroot@lists.busybox.net>;
- Sun, 15 Sep 2024 21:36:39 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Kr-R9QSgscZN for <buildroot@lists.busybox.net>;
+ Sun, 15 Sep 2024 21:36:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9111F40A20
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B257580ADE
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9111F40A20
- for <buildroot@buildroot.org>; Sun, 15 Sep 2024 21:36:39 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B257580ADE
+ for <buildroot@buildroot.org>; Sun, 15 Sep 2024 21:36:37 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8CCD583683; Sun, 15 Sep 2024 21:36:39 +0000 (UTC)
+ id A0CFE83687; Sun, 15 Sep 2024 21:36:37 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 15 Sep 2024 10:02:43 +0200
+Date: Sat, 14 Sep 2024 23:54:29 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 993afb736c84a2c0057352cb7c4bdfa13571205f
-X-Git-Newrev: 8114723b4320b7bc66705edf72187f6838ff09c7
+X-Git-Oldrev: 555fe215d98aebad4e44559f1bde931049c175f5
+X-Git-Newrev: 458f8779e9245cd1b411cfff52a1105af6095fc5
 X-Patchwork-Hint: ignore
-Message-Id: <20240915213639.8CCD583683@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-fastui: bump to version
- 0.7.0
+Message-Id: <20240915213637.A0CFE83687@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/kodi-pvr-iptvsimple: bump version
+ to 21.8.6-Omega
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,44 +66,38 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8114723b4320b7bc66705edf72187f6838ff09c7
+commit: https://git.buildroot.net/buildroot/commit/?id=458f8779e9245cd1b411cfff52a1105af6095fc5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-fastui/python-fastui.hash | 4 ++--
- package/python-fastui/python-fastui.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash | 2 +-
+ package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-fastui/python-fastui.hash b/package/python-fastui/python-fastui.hash
-index 50f49824e0..37e7f0216b 100644
---- a/package/python-fastui/python-fastui.hash
-+++ b/package/python-fastui/python-fastui.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/fastui/json
--md5  c8e7d060c0ad3a7ad1237dac3555b83e  fastui-0.5.2.tar.gz
--sha256  854a7a7fce4c08efd9caff1a331d222007b3708b133d996528e3f40996c96091  fastui-0.5.2.tar.gz
-+md5  bfc873f6ec7ab9cd406822793168ee7e  fastui-0.7.0.tar.gz
-+sha256  08ec1b8437653fc37caaf3dae46566a43dbda3f190c62c43f8f3d063261dd1e8  fastui-0.7.0.tar.gz
- # Locally computed sha256 checksums
- sha256  1c39900853b2c98a5c98e1acc10e54ef06ba2693cdf85e8b28e3ede658888d79  LICENSE
-diff --git a/package/python-fastui/python-fastui.mk b/package/python-fastui/python-fastui.mk
-index e143c9978c..7ed2eb39a9 100644
---- a/package/python-fastui/python-fastui.mk
-+++ b/package/python-fastui/python-fastui.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
+index 560eea27e6..14fad490b9 100644
+--- a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
++++ b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  aa463ad43e0dda1aaf10f5fca562823d91762671ad5b5077f5dbaeb7dc425fa7  kodi-pvr-iptvsimple-21.8.5-Omega.tar.gz
++sha256  191a56c10fc3639a6d3d5dffeaac38425c70b5196afa23b623cb205d5c3be4a6  kodi-pvr-iptvsimple-21.8.6-Omega.tar.gz
+ sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
+diff --git a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
+index 04b8327344..50a221857d 100644
+--- a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
++++ b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_FASTUI_VERSION = 0.5.2
-+PYTHON_FASTUI_VERSION = 0.7.0
- PYTHON_FASTUI_SOURCE = fastui-$(PYTHON_FASTUI_VERSION).tar.gz
--PYTHON_FASTUI_SITE = https://files.pythonhosted.org/packages/64/11/515c9b5cb6e885f4ba8c325f75b95a754d99b8296bdc9f134dc90a79019f
-+PYTHON_FASTUI_SITE = https://files.pythonhosted.org/packages/87/97/3f001410200256026ff98a4588ec8cb4f3b48bc74a28325e32bfb3b08ffd
- PYTHON_FASTUI_SETUP_TYPE = pep517
- PYTHON_FASTUI_LICENSE = MIT
- PYTHON_FASTUI_LICENSE_FILES = LICENSE
+-KODI_PVR_IPTVSIMPLE_VERSION = 21.8.5-Omega
++KODI_PVR_IPTVSIMPLE_VERSION = 21.8.6-Omega
+ KODI_PVR_IPTVSIMPLE_SITE = $(call github,kodi-pvr,pvr.iptvsimple,$(KODI_PVR_IPTVSIMPLE_VERSION))
+ KODI_PVR_IPTVSIMPLE_LICENSE = GPL-2.0+
+ KODI_PVR_IPTVSIMPLE_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
