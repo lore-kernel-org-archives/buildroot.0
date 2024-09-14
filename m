@@ -4,104 +4,82 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 644CAC02194
-	for <buildroot@archiver.kernel.org>; Sat, 14 Sep 2024 13:01:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7CC8CC02197
+	for <buildroot@archiver.kernel.org>; Sat, 14 Sep 2024 13:03:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2A9A040568;
-	Sat, 14 Sep 2024 13:01:49 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 41DDD401C2;
+	Sat, 14 Sep 2024 13:03:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WdwUFu3_rrg8; Sat, 14 Sep 2024 13:01:47 +0000 (UTC)
+ id zm2MQPI0Q25O; Sat, 14 Sep 2024 13:03:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 03F1D40278
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EA42B4020B
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 03F1D40278;
-	Sat, 14 Sep 2024 13:01:47 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 760AC1BF232
- for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 13:01:45 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id EA42B4020B;
+	Sat, 14 Sep 2024 13:03:33 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 075AC1BF232
+ for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 13:03:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 61E8140278
- for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 13:01:45 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0387F8417F
+ for <buildroot@lists.busybox.net>; Sat, 14 Sep 2024 13:03:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ly1yUBuVhXJ7 for <buildroot@lists.busybox.net>;
- Sat, 14 Sep 2024 13:01:44 +0000 (UTC)
-X-Greylist: delayed 428 seconds by postgrey-1.37 at util1.osuosl.org;
- Sat, 14 Sep 2024 13:01:43 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 7A0684020B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7A0684020B
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=35.89.44.39;
- helo=omta40.uswest2.a.cloudfilter.net; envelope-from=parthiban@linumiz.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1T9vtrK3cuW1 for <buildroot@lists.busybox.net>;
+ Sat, 14 Sep 2024 13:03:31 +0000 (UTC)
+X-Greylist: delayed 3135 seconds by postgrey-1.37 at util1.osuosl.org;
+ Sat, 14 Sep 2024 13:03:30 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 0B80E84175
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0B80E84175
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=198.47.23.249;
+ helo=lelv0142.ext.ti.com; envelope-from=sabeeh-khan@ti.com;
  receiver=<UNKNOWN> 
-Received: from omta40.uswest2.a.cloudfilter.net
- (omta40.uswest2.a.cloudfilter.net [35.89.44.39])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 7A0684020B
- for <buildroot@buildroot.org>; Sat, 14 Sep 2024 13:01:43 +0000 (UTC)
-Received: from eig-obgw-5001a.ext.cloudfilter.net ([10.0.29.139])
- by cmsmtp with ESMTPS
- id pCSasK001vH7lpSIMs32ZF; Sat, 14 Sep 2024 12:54:34 +0000
-Received: from md-in-79.webhostbox.net ([43.225.55.182]) by cmsmtp with ESMTPS
- id pSIIs34H2mqhipSIKsG3QA; Sat, 14 Sep 2024 12:54:33 +0000
-X-Authority-Analysis: v=2.4 cv=NdEt1HD4 c=1 sm=1 tr=0 ts=66e58789
- a=LfuyaZh/8e9VOkaVZk0aRw==:117 a=kofhyyBXuK/oEhdxNjf66Q==:17
- a=EaEq8P2WXUwA:10 a=-pn6D5nKLtMA:10 a=vU9dKmh3AAAA:8 a=ys7s_uIHIrOwV0Zdl-MA:9
- a=rsP06fVo5MYu2ilr0aT5:22 a=ZCPYImcxYIQFgLOT52_G:22
-Received: from [122.165.245.213] (port=40424 helo=localhost.localdomain)
- by md-in-79.webhostbox.net with esmtpsa (TLS1.2) tls
- TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 (Exim 4.96.2)
- (envelope-from <parthiban@linumiz.com>) id 1spSII-001nZs-0V;
- Sat, 14 Sep 2024 18:24:30 +0530
-From: Parthiban Nallathambi <parthiban@linumiz.com>
-To: buildroot@buildroot.org
-Date: Sat, 14 Sep 2024 18:24:05 +0530
-Message-Id: <20240914125406.3026002-1-parthiban@linumiz.com>
-X-Mailer: git-send-email 2.39.2
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 0B80E84175
+ for <buildroot@buildroot.org>; Sat, 14 Sep 2024 13:03:30 +0000 (UTC)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+ by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 48ECBEWx075897;
+ Sat, 14 Sep 2024 07:11:14 -0500
+Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
+ by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 48ECBEa6005202
+ (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+ Sat, 14 Sep 2024 07:11:14 -0500
+Received: from DFLE100.ent.ti.com (10.64.6.21) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Sat, 14
+ Sep 2024 07:11:14 -0500
+Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Sat, 14 Sep 2024 07:11:14 -0500
+Received: from thinkstationp3.dhcp.ti.com (thinkstationp3.dhcp.ti.com
+ [128.247.83.36])
+ by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 48ECBEXV105005;
+ Sat, 14 Sep 2024 07:11:14 -0500
+To: <buildroot@buildroot.org>
+Date: Sat, 14 Sep 2024 07:10:15 -0500
+Message-ID: <20240914121016.3530250-1-sabeeh-khan@ti.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-AntiAbuse: This header was added to track abuse,
- please include it with any abuse report
-X-AntiAbuse: Primary Hostname - md-in-79.webhostbox.net
-X-AntiAbuse: Original Domain - buildroot.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - linumiz.com
-X-BWhitelist: no
-X-Source-IP: 122.165.245.213
-X-Source-L: No
-X-Exim-ID: 1spSII-001nZs-0V
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: (localhost.localdomain) [122.165.245.213]:40424
-X-Source-Auth: parthiban@linumiz.com
-X-Email-Count: 2
-X-Org: HG=dishared_whb_net_legacy;ORG=directi;
-X-Source-Cap: bGludW1jbWM7aG9zdGdhdG9yO21kLWluLTc5LndlYmhvc3Rib3gubmV0
-X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfAUzol+ldibwxeNL9vhIIYqwPtC1OweLOy/gDe64ZpbxyPIw+86TEwBPhGMRrBShLuLW21oE2CO164BgPnysZHN8jk48cwzG1oUWx8gBgA83fs98Ixcb
- m5kXKhq8zLvez03N40Edv/LDdVfALI4R1TDYUAoMPr7yx8r17+RbnGzTRTvXiYKIU1uWlTUCFa6sF84eIbzDfyHOYVk8IVo+oAs=
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
- c=relaxed/relaxed; d=linumiz.com
- ; s=default; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject
- :Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
- Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
- In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
- List-Post:List-Owner:List-Archive;
- bh=3UDqdxU+v7wPA/KYwf0f+IZqfabWQ+fCabFMypCl21c=; b=V2oDyq5IgGui3qdQlPvhk/eh7C
- 3t4whiPwsWrobiAGs/M69jROWN9ReWhC9igI+2rzC2DnTorbAlIoK2uUHiv9GoO1xwA4M3D2ysBFD
- eM2siBRlqCjUarT/0x3B59UiTqi6quOwfuijGfy2WneYAo70fNKXZ0c3y6JR0PZz8cnsBlauIVuKk
- 3wYO8WP/FBgAs/nMVbWy0/I8ORHLicTzqKRSsz4zK8r7wiaNKhugEvXt1dXqxQL4BScTATMbuchZ1
- bATaAALZ1XEYPx9CjuBZXV4mOTeJeNYk4msG7gz33tBaza9FHjJxNrx9QnN40b5lcJsqRf02kLuLd
- ClPkFoSA==;
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=linumiz.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=linumiz.com header.i=@linumiz.com header.a=rsa-sha256
- header.s=default header.b=V2oDyq5I
-Subject: [Buildroot] [PATCH] bluez5_utils: disable asha profile
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=ti.com; s=ti-com-17Q1; t=1726315874;
+ bh=LPvmrULGvhN+p8DZcIDIN8bpu/DiWw4krqcUDpFUWrE=;
+ h=From:To:CC:Subject:Date;
+ b=Cds/7xg0xpBHmcMrzxzfIEyYOCeGqbdrusj06JYmHJoLFsiFCDKEbo6opae8MBhcD
+ F34ObD71rNduxVXpoUd2ZGYf2xTHEoM11bUOzDw2m/Ko+7cO0pCV3TIAD+3iXEBzEY
+ 7F67Ajm2+axNhTrvdey8NASmvvLqAp3poaqw8Gaw=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=ti.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=ti.com header.i=@ti.com header.a=rsa-sha256
+ header.s=ti-com-17Q1 header.b=Cds/7xg0
+Subject: [Buildroot] [PATCH 1/1] package/linux-firmware: add WLAN and BLE
+ chip TI cc33xx firmware option
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -113,38 +91,62 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Parthiban Nallathambi <parthiban@linumiz.com>, marcin@bis.org.pl
+From: Sabeeh Khan via buildroot <buildroot@buildroot.org>
+Reply-To: Sabeeh Khan <sabeeh-khan@ti.com>
+Cc: Bernd Kuhls <bernd@kuhls.net>, Sabeeh Khan <sabeeh-khan@ti.com>,
+ "Yann E. MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-asha profile as it depends on audio profile which isn't selected
-by default (BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_AUDIO), results in
-below linking failure.
+Add an option to install the cc33xx firmware files.
+The TI cc33xx family of devices support WiFi 6 and BLE 5.4.
 
-ld: profiles/audio/bluetoothd-asha.o: in function `get_transport':
-asha.c:(.text.get_transport+0x2c): undefined reference to `media_transport_get_path'
-
-Signed-off-by: Parthiban Nallathambi <parthiban@linumiz.com>
+Signed-off-by: Sabeeh Khan <sabeeh-khan@ti.com>
 ---
- package/bluez5_utils/bluez5_utils.mk | 1 +
- 1 file changed, 1 insertion(+)
+ package/linux-firmware/Config.in         | 5 +++++
+ package/linux-firmware/linux-firmware.mk | 9 +++++++++
+ 2 files changed, 14 insertions(+)
 
-diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
-index b1caef5cc5..59eb68de61 100644
---- a/package/bluez5_utils/bluez5_utils.mk
-+++ b/package/bluez5_utils/bluez5_utils.mk
-@@ -28,6 +28,7 @@ BLUEZ5_UTILS_CONF_OPTS = \
- 	--disable-lsan \
- 	--disable-ubsan \
- 	--disable-pie \
-+	--disable-asha \
- 	--with-dbusconfdir=/etc
+diff --git a/package/linux-firmware/Config.in b/package/linux-firmware/Config.in
+index 4a17ceaf0b..f0d5fefc2e 100644
+--- a/package/linux-firmware/Config.in
++++ b/package/linux-firmware/Config.in
+@@ -527,6 +527,11 @@ config BR2_PACKAGE_LINUX_FIRMWARE_TI_WL18XX
+ 	help
+ 	  Firmware files for WLAN and Bluetooth modules wl18xx
  
- ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS_OBEX),y)
++config BR2_PACKAGE_LINUX_FIRMWARE_TI_CC33XX
++	bool "TI cc33xx"
++	help
++	  Firmware files for cc33xx WLAN and BLE family of chips
++
+ config BR2_PACKAGE_LINUX_FIRMWARE_QUALCOMM_WIL6210
+ 	bool "Qualcomm Atheros wil6210"
+ 	help
+diff --git a/package/linux-firmware/linux-firmware.mk b/package/linux-firmware/linux-firmware.mk
+index ae10e160b9..80a6f38a85 100644
+--- a/package/linux-firmware/linux-firmware.mk
++++ b/package/linux-firmware/linux-firmware.mk
+@@ -486,6 +486,15 @@ LINUX_FIRMWARE_FILES += \
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.ti-connectivity
+ endif
+ 
++# cc33xx
++ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_TI_CC33XX),y)
++LINUX_FIRMWARE_FILES += \
++	ti-connectivity/cc33xx_2nd_loader.bin \
++	ti-connectivity/cc33xx_fw.bin \
++	ti-connectivity/cc33xx-conf.bin
++LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENCE.ti-connectivity
++endif
++
+ ifeq ($(BR2_PACKAGE_LINUX_FIRMWARE_QUALCOMM_WIL6210),y)
+ LINUX_FIRMWARE_FILES += wil6210.*
+ LINUX_FIRMWARE_ALL_LICENSE_FILES += LICENSE.QualcommAtheros_ath10k
 -- 
-2.39.2
+2.34.1
 
 _______________________________________________
 buildroot mailing list
