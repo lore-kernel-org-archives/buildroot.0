@@ -4,72 +4,78 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B62F0C35FE4
-	for <buildroot@archiver.kernel.org>; Sun, 15 Sep 2024 10:02:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90B27C35FE7
+	for <buildroot@archiver.kernel.org>; Sun, 15 Sep 2024 10:03:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5D004400C7;
-	Sun, 15 Sep 2024 10:02:23 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0125F404E0;
+	Sun, 15 Sep 2024 10:03:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id txfwagrozNnP; Sun, 15 Sep 2024 10:02:22 +0000 (UTC)
+ id Zo972anTUEns; Sun, 15 Sep 2024 10:03:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 35275400EF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 08C15401A4
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 35275400EF;
-	Sun, 15 Sep 2024 10:02:22 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A32101BF947
- for <buildroot@lists.busybox.net>; Sun, 15 Sep 2024 10:02:20 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 08C15401A4;
+	Sun, 15 Sep 2024 10:03:52 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 263C51BF947
+ for <buildroot@lists.busybox.net>; Sun, 15 Sep 2024 10:03:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5403E400C1
- for <buildroot@lists.busybox.net>; Sun, 15 Sep 2024 10:02:20 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 2271A60663
+ for <buildroot@lists.busybox.net>; Sun, 15 Sep 2024 10:03:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KzEaDAUPLTXP for <buildroot@lists.busybox.net>;
- Sun, 15 Sep 2024 10:02:19 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::229;
- helo=relay9-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id qSh0IebsIp37 for <buildroot@lists.busybox.net>;
+ Sun, 15 Sep 2024 10:03:48 +0000 (UTC)
+X-Greylist: delayed 467 seconds by postgrey-1.37 at util1.osuosl.org;
+ Sun, 15 Sep 2024 10:03:47 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 6AD27605F1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6AD27605F1
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=147.173.1.68;
+ helo=mailgw-out1.grenoble.cnrs.fr; envelope-from=bonet@grenoble.cnrs.fr;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 0C95240504
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0C95240504
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0C95240504
- for <buildroot@buildroot.org>; Sun, 15 Sep 2024 10:02:18 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id A086FFF803;
- Sun, 15 Sep 2024 10:02:15 +0000 (UTC)
-Date: Sun, 15 Sep 2024 12:02:13 +0200
-To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <20240915120213.408e53bc@windsurf>
-In-Reply-To: <20240915083852.1578142-1-james.hilliard1@gmail.com>
-References: <20240915083852.1578142-1-james.hilliard1@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+Received: from mailgw-out1.grenoble.cnrs.fr (mailgw-out1.grenoble.cnrs.fr
+ [147.173.1.68])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6AD27605F1
+ for <buildroot@buildroot.org>; Sun, 15 Sep 2024 10:03:47 +0000 (UTC)
+Received: from [IPV6:2a01:e0a:12:eba0:3224:1719:af5c:c1e8] (unknown
+ [IPv6:2a01:e0a:12:eba0:3224:1719:af5c:c1e8])
+ (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+ key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+ (No client certificate requested)
+ by mailgw-out1.grenoble.cnrs.fr (Postfix) with ESMTPSA id 246A8BFF7F;
+ Sun, 15 Sep 2024 11:55:57 +0200 (CEST)
+Message-ID: <bdf93e5f-47ab-4359-b544-807eb639fc15@grenoble.cnrs.fr>
+Date: Sun, 15 Sep 2024 11:55:56 +0200
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
+User-Agent: Mozilla Thunderbird
+To: Grant Edwards <grant.b.edwards@gmail.com>
+References: <vc23rg$llm$1@ciao.gmane.io> <20240914094334.1228db8e@windsurf>
+ <vc515t$108g$1@ciao.gmane.io>
+Content-Language: en-US
+From: Edgar Bonet <bonet@grenoble.cnrs.fr>
+In-Reply-To: <vc515t$108g$1@ciao.gmane.io>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1726394536;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=D4PLN/zLJMNjea6CRphbsdIyS8bOPlUNkG//3S2yOj4=;
- b=TzqHYBcTN0LCWp+iN3+EXdGCyCGzgS9oDHKhMd/qGTQECfiu5IRJqXndLsfcp8KFdnoQqR
- 84LhWqyRBuL9QHRafVZTITVVXd3n17VRvY+HcDW1k2xmKbWdC/R//lFVywheeOyZFxrm8Y
- xUI1Hv5mCIzoPJKkKY8vDsFLGYQwZhr/F+BPUdsDWq1fk5j2t1IZ/xGE775lTMjtxTGSwq
- TpXQ7pZCmhcPL6uMr4Y95wS0Aew93Tl/N+DgwTVgyd+wQUO7eTCwBfJgGVifyUoa4IaFTZ
- torBWG587hPYopm+WMV3I1lhLIjxsX/NBAE23BNBhnLVY9KAUi+b1mh5kbEgbQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=grenoble.cnrs.fr; 
+ s=202106-grenoble.cnrs.fr; t=1726394157;
+ bh=ikL7Q7V5Gg7VJYpR+IiUqzaqWssXqI99j1sOvrUwjD4=;
+ h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+ b=pqXJFLInNNi6ZAsBtYg+CUyia6l2fTZRgTqs205+7Q2Oae9yVx1VObvTh7x99spyY
+ 13CwiGliWsyj36zNkKhiAOqYyTrqRHyCtKKqlCrw5JcHsoog31DdJMsvZ5L0JtgMpW
+ WJlP2eRPDt620ElVbl1NDdvEv29/DK7fGfNVYkS0m6C/klCroxKJO8cepyKyNW1CCV
+ w0SVXLM/oti6U6q6hFFX7PpGWyE7B3n6u+BiLAd1I2Nh6HXjWI4ms0g/WLUXuPadwi
+ 4mPYPkK/4Wv/8R6edlafcR4YBYY0yrLerha4c2N5GQEJNNQd2sCcIN+bRbtc5cT846
+ +wgJKXwrq7k2g==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=grenoble.cnrs.fr
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=TzqHYBcT
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-influxdb: bump to
- version 5.3.2
+ unprotected) header.d=grenoble.cnrs.fr header.i=@grenoble.cnrs.fr
+ header.a=rsa-sha256 header.s=202106-grenoble.cnrs.fr header.b=pqXJFLIn
+Subject: Re: [Buildroot] Upgrading buildroot and rootfs/kernel compatibility
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,31 +87,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, 15 Sep 2024 02:38:52 -0600
-James Hilliard <james.hilliard1@gmail.com> wrote:
+Hello!
 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
->  package/python-influxdb/python-influxdb.hash | 4 ++--
->  package/python-influxdb/python-influxdb.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
+Grant Edwards wrote:
+> In buildroot-2024, you're not allowed to have Fortan support in your
+> toolchain unless you've told BR 2024 about it:
+>
+> [excerpt from toolchain/helpers.mk showing the test]
+>
+> I don't really understand the reasoning behind that.  Why would the
+> unannounced presence of Fortran support in the toolchain be a problem
+> that should cause the build to fail?
 
-All patches from this one to package/python-jaraco-text applied to
-master. Thanks!
+This is the kind of question `git blame` is made for. Blaming that test
+gets you this commit[1], which explains the rationale:
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+commit bdccc57816a6ba043945096202ff676faed929d9
+Author: Vincent Fazio <vfazio@gmail.com>
+Date:   Thu Jul 6 12:18:33 2023 -0500
+
+    toolchain/helpers.mk: perform reverse support checks
+
+    Previously, it was possible for external toolchains to be used that had
+    support for languages or libraries that Buildroot was not aware of.
+
+    If Buildroot is not made aware of this support, it will not know to copy
+    the requisite libraries into the filesystem.
+
+    This is problematic as packages may perform their own checks [0] to find
+    out what the toolchain supports and builds will link against libraries
+    from the toolchain but will be missing dependencies in the filesystem.
+
+    Now, the support helpers alert the user when a toolchain supports a
+    language or library that has not been set in the Buildroot configuration.
+
+    Also, while we're here, add `-ffree-form` to the Fortran check to
+    suppress a meaningless warning.
+
+    [0]: https://bugs.busybox.net/show_bug.cgi?id=15634
+
+    Signed-off-by: Vincent Fazio <vfazio@gmail.com>
+    Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+
+Regards,
+
+Edgar Bonet.
+
+[1] https://gitlab.com/buildroot.org/buildroot/-/commit/bdccc57816a6ba043945096202ff676faed929d9
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
