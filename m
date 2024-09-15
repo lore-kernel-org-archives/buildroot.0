@@ -4,97 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 17F81C35FE7
-	for <buildroot@archiver.kernel.org>; Sun, 15 Sep 2024 09:21:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D11D9C35FE7
+	for <buildroot@archiver.kernel.org>; Sun, 15 Sep 2024 09:23:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A56604021D;
-	Sun, 15 Sep 2024 09:21:33 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 89D7E404DB;
+	Sun, 15 Sep 2024 09:23:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3eo1-6nXN--h; Sun, 15 Sep 2024 09:21:32 +0000 (UTC)
+ id JR9lpDaDHEXp; Sun, 15 Sep 2024 09:23:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4EA4640222
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 30449404E3
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4EA4640222;
-	Sun, 15 Sep 2024 09:21:32 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id DC8E21BF357
- for <buildroot@lists.busybox.net>; Sun, 15 Sep 2024 09:21:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 30449404E3;
+	Sun, 15 Sep 2024 09:23:32 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 6812F1BF357
+ for <buildroot@lists.busybox.net>; Sun, 15 Sep 2024 09:23:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D944680898
- for <buildroot@lists.busybox.net>; Sun, 15 Sep 2024 09:21:30 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 63F6B400EF
+ for <buildroot@lists.busybox.net>; Sun, 15 Sep 2024 09:23:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id V0hjaE7XQMC4 for <buildroot@lists.busybox.net>;
- Sun, 15 Sep 2024 09:21:30 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ETfWVjzm-I73 for <buildroot@lists.busybox.net>;
+ Sun, 15 Sep 2024 09:23:29 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::429; helo=mail-wr1-x429.google.com;
- envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org AF44B80594
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AF44B80594
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com
- [IPv6:2a00:1450:4864:20::429])
- by smtp1.osuosl.org (Postfix) with ESMTPS id AF44B80594
- for <buildroot@buildroot.org>; Sun, 15 Sep 2024 09:21:29 +0000 (UTC)
-Received: by mail-wr1-x429.google.com with SMTP id
- ffacd0b85a97d-3787e067230so2475486f8f.1
- for <buildroot@buildroot.org>; Sun, 15 Sep 2024 02:21:29 -0700 (PDT)
+ client-ip=2607:f8b0:4864:20::d36; helo=mail-io1-xd36.google.com;
+ envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 4B46B401A4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4B46B401A4
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com
+ [IPv6:2607:f8b0:4864:20::d36])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 4B46B401A4
+ for <buildroot@buildroot.org>; Sun, 15 Sep 2024 09:23:29 +0000 (UTC)
+Received: by mail-io1-xd36.google.com with SMTP id
+ ca18e2360f4ac-82cd869453eso70859239f.0
+ for <buildroot@buildroot.org>; Sun, 15 Sep 2024 02:23:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1726392087; x=1726996887;
- h=content-transfer-encoding:in-reply-to:content-language:from
- :references:to:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=SNNAkUpHz5cZJkFDjhu/m4SSvz1OnFt0sadttiipFIM=;
- b=aXbO/hEokK3vkYVhr1bplGCa5CEUa26QiRlUYIGadgA9V9DoJWHXx2/1EKKIWLJ65t
- innYCuXKqmMqxDKuftZ1+Goa0ghv4ly7kYWwUxQVRQCLSUW04QqcqEooF2XnqZLi7Z7+
- YDRtlYDN0tayZB8QN08CLHlFK3WHLA+t96xGDOtIhHTJ1QnBXxYGt10yDzYNrMT1TKFi
- np/4l00teEo05R+tAsPvYf2NOBsPD8wYgdSSkNTUMzx83Qp+M5vtlM0Rzgn6ZILVqFWA
- mzEDRiDBuL1yvGsRu2n9z/Carqx049R//aKnKbhx6sUQ2+Dz7bPN2pIO73hs4FImaCLt
- 8d6Q==
-X-Forwarded-Encrypted: i=1;
- AJvYcCVcopBMCvOMC22Gup6CguIV4lt+UQhPu1fGTbZnSMqVbSILxYK/oBhvsrkD1vCUcfV053ORF1ECuVs=@buildroot.org
-X-Gm-Message-State: AOJu0YwtqJFdtDKCYB7vOtH8t/+XfuTaYl8W4v2SAL3t+qnMUVJXIm56
- +305I5hKNbNfM1GIgZDwmClZmswugUizOFov5VFL53NJM6QeSQGAehtu0dCDLd+l/RwsDykDAb9
- nm+W0sg==
-X-Google-Smtp-Source: AGHT+IGnxiu30HyY8GiosI1HduuoYrfDAtdWzos9iI0DuNmR+dcf9Vvhia70gX6QDokdc3od6OHvGg==
-X-Received: by 2002:a5d:61c2:0:b0:374:c4e2:ee00 with SMTP id
- ffacd0b85a97d-378c2d727cdmr6758843f8f.53.1726392087226; 
- Sun, 15 Sep 2024 02:21:27 -0700 (PDT)
-Received: from [192.168.197.114] (92-184-117-99.mobile.fr.orangecustomers.net.
- [92.184.117.99]) by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-378e780016asm4240603f8f.85.2024.09.15.02.21.25
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 15 Sep 2024 02:21:26 -0700 (PDT)
-Message-ID: <9dfcc77c-ec81-4a9d-9823-014dd98028bd@mind.be>
-Date: Sun, 15 Sep 2024 11:21:18 +0200
+ d=1e100.net; s=20230601; t=1726392208; x=1726997008;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=895KAtc3DT4FcsbDJ6pHvYtcRsFOYpgh/5hVmCUG03k=;
+ b=HNL1dopgOsRXuwZPSBf7cMWaZ6engntt2KL6pf4jWswmFbEewuiDve5kAhpUGiaKft
+ tXojQCnrcvjeBmHTBoURcOSVe1vrN9iJjZSrVHUKSxmV7B0P0F6TorhNJv0AipoHvekV
+ dkc5LXZV/osSuAhVRe46ri6Cne2psiCG4VwjEJE4EUN7wrSUUXhCVPyDC3tfywYhqg1R
+ /ysGT7jlYEK0oBTWxXHYi4lSfe5LUidEUs3mNUcnD+riyBxUfs54K1asvfvwjRbIfMjL
+ BeqRrnkAVwfm8SIRu7g2i8fuHu2VZ943w83lHP0LtQLV/02+uHH8orjCF+oOk72KN086
+ AvGg==
+X-Gm-Message-State: AOJu0YyuvFSpm2vSE9Y/qUuMCv6TohkSKoFsOglBk4ADoZq42gNR7bXc
+ IhhBhpLME6pmAjwU+vfTIig066XpGG+oEMByQxqGJouiphjUwwJcXDw4eQ==
+X-Google-Smtp-Source: AGHT+IFZSW2oo7flxQOTtJvis3ojTcFxgFc3hbNrCCPDEpzf69nQoGu5lHGrOvFhJE/Y5fMzxQZn3w==
+X-Received: by 2002:a05:6e02:1cad:b0:3a0:9fc6:5437 with SMTP id
+ e9e14a558f8ab-3a09fc656cfmr6918695ab.18.1726392207945; 
+ Sun, 15 Sep 2024 02:23:27 -0700 (PDT)
+Received: from james-x399.localdomain (71-218-252-223.hlrn.qwest.net.
+ [71.218.252.223]) by smtp.gmail.com with ESMTPSA id
+ 8926c6da1cb9f-4d37ed1abd0sm848719173.104.2024.09.15.02.23.27
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 15 Sep 2024 02:23:27 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
+To: buildroot@buildroot.org
+Date: Sun, 15 Sep 2024 03:23:26 -0600
+Message-Id: <20240915092326.1591374-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Julien Olivain <ju.o@free.fr>, buildroot@buildroot.org
-References: <20240818112652.1232927-1-ju.o@free.fr>
-Content-Language: en-GB
-In-Reply-To: <20240818112652.1232927-1-ju.o@free.fr>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1726392087; x=1726996887; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:content-language:from
- :references:to:subject:user-agent:mime-version:date:message-id:from
- :to:cc:subject:date:message-id:reply-to;
- bh=SNNAkUpHz5cZJkFDjhu/m4SSvz1OnFt0sadttiipFIM=;
- b=dR8EnEQaQiTrPv1MxEgbDimS0gwsxD3eqHau06xvsPk3+RvJ8boItHWfwHCh+ejb2c
- eKhJeNW0cC6y+KBxKP+gmT04Rsi014rtVGGUBy4TRQhMOMYkjcYNQh+6wNd3UkVihkpM
- ArN8SbjRVxzG+GOyNmuBNuQpu3c+3LQZrGnG80tWe+VtjORkiUOIKRtWEcXj58ROyxke
- bK6BAY+fLCgLL3I7Nbtr580xKKBHfniKiFeRO2w2Qu/MRmk0ddkT3FY7EW2RAdLIqTXW
- FQ3nU8oy6kYwKK6GxMmN42Ch1q/jy0vsZllDgNdxfqT5kB3bdGDTc2vAtVYO9t+XnocV
- 942Q==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=dR8EnEQa
-Subject: Re: [Buildroot] [PATCH 1/1] support/testing: fs: new erofs runtime
- test
+ d=gmail.com; s=20230601; t=1726392208; x=1726997008; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=895KAtc3DT4FcsbDJ6pHvYtcRsFOYpgh/5hVmCUG03k=;
+ b=bMw8ACXQCW1roryQX1WnG3wqaUKlsiKJGvM3QIoQGqK1FqPP1weVOobFGkA12V/gpc
+ OTmjJlXPLRai2IRmLOnX1B/jeID0wFL1ncY0iglAbKezpgB/X2r0055ugVyYemnIrT+9
+ +25a+v9Xi7+BwaaLu+bmDLp/dZXY43Wb6UsLFUOk+tBVK34x27ZBAZzPpeCE4no7DjRf
+ GYtLuwMDIDUsGqy5EZIPt7+vQSNehIWxWscgqqE/lRcIOn0bfyj4HyJnT+APWdjrlzIX
+ E5lmblqRdzZQJ3Ljp55jxkQhKMs5tjk6FeuONGd2iQUhsTGxlMqsFTIMmwv2M1eqnkRh
+ LxVQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=bMw8ACXQ
+Subject: [Buildroot] [PATCH 1/1] package/python-jaraco-text: bump to version
+ 4.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -106,111 +100,65 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
+Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Drop no longer required python-inflect runtime dependency.
 
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/python-jaraco-text/Config.in               | 1 -
+ package/python-jaraco-text/python-jaraco-text.hash | 4 ++--
+ package/python-jaraco-text/python-jaraco-text.mk   | 6 +++---
+ 3 files changed, 5 insertions(+), 6 deletions(-)
 
-On 18/08/2024 13:26, Julien Olivain wrote:
-> Signed-off-by: Julien Olivain <ju.o@free.fr>
+diff --git a/package/python-jaraco-text/Config.in b/package/python-jaraco-text/Config.in
+index 9ce179b056..44000ccb18 100644
+--- a/package/python-jaraco-text/Config.in
++++ b/package/python-jaraco-text/Config.in
+@@ -1,7 +1,6 @@
+ config BR2_PACKAGE_PYTHON_JARACO_TEXT
+ 	bool "python-jaraco-text"
+ 	select BR2_PACKAGE_PYTHON_AUTOCOMMAND # runtime
+-	select BR2_PACKAGE_PYTHON_INFLECT # runtime
+ 	select BR2_PACKAGE_PYTHON_JARACO_CONTEXT # runtime
+ 	select BR2_PACKAGE_PYTHON_JARACO_FUNCTOOLS # runtime
+ 	select BR2_PACKAGE_PYTHON_MORE_ITERTOOLS # runtime
+diff --git a/package/python-jaraco-text/python-jaraco-text.hash b/package/python-jaraco-text/python-jaraco-text.hash
+index 704e75d6be..1e79bf746a 100644
+--- a/package/python-jaraco-text/python-jaraco-text.hash
++++ b/package/python-jaraco-text/python-jaraco-text.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/jaraco.text/json
+-md5  9f63a5cdd56061ebd84d8175d1df3b70  jaraco.text-3.12.0.tar.gz
+-sha256  389e25c8d4b32e9715bf530596fab0f5cd3aa47296e43969392e18a541af592c  jaraco.text-3.12.0.tar.gz
++md5  3c519c7a49d6448e6dc2073d466afd39  jaraco_text-4.0.0.tar.gz
++sha256  5b71fecea69ab6f939d4c906c04fee1eda76500d1641117df6ec45b865f10db0  jaraco_text-4.0.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  86da0f01aeae46348a3c3d465195dc1ceccde79f79e87769a64b8da04b2a4741  LICENSE
+diff --git a/package/python-jaraco-text/python-jaraco-text.mk b/package/python-jaraco-text/python-jaraco-text.mk
+index 06b028d65f..2d612196a6 100644
+--- a/package/python-jaraco-text/python-jaraco-text.mk
++++ b/package/python-jaraco-text/python-jaraco-text.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_JARACO_TEXT_VERSION = 3.12.0
+-PYTHON_JARACO_TEXT_SOURCE = jaraco.text-$(PYTHON_JARACO_TEXT_VERSION).tar.gz
+-PYTHON_JARACO_TEXT_SITE = https://files.pythonhosted.org/packages/53/30/52edc6c9997d48b0d9fbedb6a29edab2b397968f637b76aae299a9128c34
++PYTHON_JARACO_TEXT_VERSION = 4.0.0
++PYTHON_JARACO_TEXT_SOURCE = jaraco_text-$(PYTHON_JARACO_TEXT_VERSION).tar.gz
++PYTHON_JARACO_TEXT_SITE = https://files.pythonhosted.org/packages/4f/00/1b4dbbc5c6dcb87a4278cc229b2b560484bf231bba7922686c5139e5f934
+ PYTHON_JARACO_TEXT_SETUP_TYPE = setuptools
+ PYTHON_JARACO_TEXT_LICENSE = MIT
+ PYTHON_JARACO_TEXT_LICENSE_FILES = LICENSE
+-- 
+2.34.1
 
-  Applied to master, thanks.
-
-  Regards,
-  Arnout
-
-> ---
-> Patch tested in:
-> https://gitlab.com/jolivain/buildroot/-/jobs/7606961571
-> ---
->   DEVELOPERS                                    |  2 +
->   support/testing/tests/fs/test_erofs.py        | 51 +++++++++++++++++++
->   .../tests/fs/test_erofs/linux-erofs.fragment  |  1 +
->   3 files changed, 54 insertions(+)
->   create mode 100644 support/testing/tests/fs/test_erofs.py
->   create mode 100644 support/testing/tests/fs/test_erofs/linux-erofs.fragment
-> 
-> diff --git a/DEVELOPERS b/DEVELOPERS
-> index d7d0af3543..5113b5e60d 100644
-> --- a/DEVELOPERS
-> +++ b/DEVELOPERS
-> @@ -1820,6 +1820,8 @@ F:	support/testing/tests/boot/test_optee_os.py
->   F:	support/testing/tests/boot/test_optee_os/
->   F:	support/testing/tests/fs/test_btrfs.py
->   F:	support/testing/tests/fs/test_btrfs/
-> +F:	support/testing/tests/fs/test_erofs.py
-> +F:	support/testing/tests/fs/test_erofs/
->   F:	support/testing/tests/package/sample_python_distro.py
->   F:	support/testing/tests/package/sample_python_gnupg.py
->   F:	support/testing/tests/package/sample_python_hwdata.py
-> diff --git a/support/testing/tests/fs/test_erofs.py b/support/testing/tests/fs/test_erofs.py
-> new file mode 100644
-> index 0000000000..47c75262e0
-> --- /dev/null
-> +++ b/support/testing/tests/fs/test_erofs.py
-> @@ -0,0 +1,51 @@
-> +import os
-> +
-> +import infra.basetest
-> +
-> +
-> +class TestErofs(infra.basetest.BRTest):
-> +    kern_frag = \
-> +        infra.filepath("tests/fs/test_erofs/linux-erofs.fragment")
-> +    config = \
-> +        f"""
-> +        BR2_aarch64=y
-> +        BR2_TOOLCHAIN_EXTERNAL=y
-> +        BR2_TARGET_GENERIC_GETTY_PORT="ttyAMA0"
-> +        BR2_LINUX_KERNEL=y
-> +        BR2_LINUX_KERNEL_CUSTOM_VERSION=y
-> +        BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.6.46"
-> +        BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
-> +        BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/qemu/aarch64-virt/linux.config"
-> +        BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="{kern_frag}"
-> +        BR2_LINUX_KERNEL_NEEDS_HOST_OPENSSL=y
-> +        BR2_PACKAGE_EROFS_UTILS=y
-> +        BR2_TARGET_ROOTFS_EROFS=y
-> +        # BR2_TARGET_ROOTFS_TAR is not set
-> +        """
-> +
-> +    def test_run(self):
-> +        root_dev = "/dev/vda"
-> +        disk = os.path.join(self.builddir, "images", "rootfs.erofs")
-> +        kern = os.path.join(self.builddir, "images", "Image")
-> +        bootargs = [f"root={root_dev}", "console=ttyAMA0"]
-> +        qemu_opts = ["-M", "virt", "-cpu", "cortex-a57", "-m", "256M",
-> +                     "-drive", f"file={disk},if=virtio,format=raw"]
-> +        self.emulator.boot(arch="aarch64",
-> +                           kernel=kern,
-> +                           kernel_cmdline=bootargs,
-> +                           options=qemu_opts)
-> +        self.emulator.login()
-> +
-> +        # We check our root filesystem is in erofs format.
-> +        cmd = "mount | grep '/dev/root on / type erofs'"
-> +        self.assertRunOk(cmd)
-> +
-> +        # Since we are on a read-only mounted filesystem, we can run a
-> +        # check...
-> +        self.assertRunOk(f"fsck.erofs {root_dev}")
-> +
-> +        # We check we can dump the superblock.
-> +        self.assertRunOk(f"dump.erofs -s {root_dev}")
-> +
-> +        # We check we can dump statistics on the image.
-> +        self.assertRunOk(f"dump.erofs -S {root_dev}")
-> diff --git a/support/testing/tests/fs/test_erofs/linux-erofs.fragment b/support/testing/tests/fs/test_erofs/linux-erofs.fragment
-> new file mode 100644
-> index 0000000000..e14017aae4
-> --- /dev/null
-> +++ b/support/testing/tests/fs/test_erofs/linux-erofs.fragment
-> @@ -0,0 +1 @@
-> +CONFIG_EROFS_FS=y
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
