@@ -1,94 +1,77 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7EA7C3ABA1
-	for <buildroot@archiver.kernel.org>; Sun, 15 Sep 2024 17:05:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F2E94C3ABA0
+	for <buildroot@archiver.kernel.org>; Sun, 15 Sep 2024 17:51:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 371248143F;
-	Sun, 15 Sep 2024 17:05:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 26E5C405DD;
+	Sun, 15 Sep 2024 17:51:30 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id isrh7goy2EFn; Sun, 15 Sep 2024 17:51:28 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 118F8405C9
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 118F8405C9;
+	Sun, 15 Sep 2024 17:51:28 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id C3E4E1BF5E9
+ for <buildroot@lists.busybox.net>; Sun, 15 Sep 2024 17:51:26 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id B2A5D80AE1
+ for <buildroot@lists.busybox.net>; Sun, 15 Sep 2024 17:51:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xq2OhyB0mEfH; Sun, 15 Sep 2024 17:05:18 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C698781402
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C698781402;
-	Sun, 15 Sep 2024 17:05:17 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 23FD21BF5E9
- for <buildroot@lists.busybox.net>; Sun, 15 Sep 2024 17:05:17 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1286D606ED
- for <buildroot@lists.busybox.net>; Sun, 15 Sep 2024 17:05:17 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id O8-rQyUxdyhO for <buildroot@lists.busybox.net>;
- Sun, 15 Sep 2024 17:05:15 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::b32; helo=mail-yb1-xb32.google.com;
- envelope-from=baxiche@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 7DB5E606E0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7DB5E606E0
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com
- [IPv6:2607:f8b0:4864:20::b32])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 7DB5E606E0
- for <buildroot@buildroot.org>; Sun, 15 Sep 2024 17:05:15 +0000 (UTC)
-Received: by mail-yb1-xb32.google.com with SMTP id
- 3f1490d57ef6-e1d06c728b8so3207706276.0
- for <buildroot@buildroot.org>; Sun, 15 Sep 2024 10:05:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1726419914; x=1727024714;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=fszR2Et872RrISHJB+z4fmhqLZJJZsOMzYMzyJshpls=;
- b=m3v3TSZkhGsyOQVKmQxkgeYcGYtXmjTryEyPmBujLbstwAM9frlrkfTHpLfM3NAtoH
- C41Zl9m68RNbqy849IRheLt/1wYqBrGPkY1Y3n7GkkR8dqVqiRr1QZC2j3B9VN0iCubO
- XMLTSxgN+SqCVQFUPBp9fk5aKyzLu+WZkZI7GGb52TgPQbznDChxc0dP7SH1/M+6uFf2
- u4feDAhUExO3k4/EAVuznYcgBpBJ3tDGclSuFQ5jtiaSmGzjzxgqJ+RSB6TsCxhgllGk
- Xg3xh6aDKInFKPNSeEHNrerK5C02iJ66bfRhlVVyy4il2ChtCDUhEhVXrx0aQ61CnAEK
- aLcg==
-X-Forwarded-Encrypted: i=1;
- AJvYcCUMKcG9L1ciL7R/JmYatkxsgYSmX9eDuh0IZ2iimuY6tqnGwED8Y7nRt2BVvLbDAb8VM4zYSJzcBqY=@buildroot.org
-X-Gm-Message-State: AOJu0YyQrBA+65s9/7C7kaRrCmmsfFyRQXwrWbG/Nib5TJrtPCrU2PDM
- F2HxBb67+g5OrxoBpnw+Rlj6fi+PhRxyVuCnD4bdldQ3MNs29E0MIIsMiudLe8MKgNDBgqknm9/
- Z190u3o4g3AzGBcNdXq+7Xfs0dk8=
-X-Google-Smtp-Source: AGHT+IHS3rxzMsFoMcMZHwczPIs4Ye6Ckgzg26p0xIy8m1LOFsbJTqoG7Cm1140Fxetot6SfAkwE6mV2VHNWxOnEfgg=
-X-Received: by 2002:a25:9c44:0:b0:e1d:a827:2a46 with SMTP id
- 3f1490d57ef6-e1da8273182mr6473440276.36.1726419914064; Sun, 15 Sep 2024
- 10:05:14 -0700 (PDT)
+ id Uae4uSpCcKYW for <buildroot@lists.busybox.net>;
+ Sun, 15 Sep 2024 17:51:25 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::15;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org AA54F80ABB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AA54F80ABB
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id AA54F80ABB
+ for <buildroot@buildroot.org>; Sun, 15 Sep 2024 17:51:24 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.3])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id EE51C780371;
+ Sun, 15 Sep 2024 19:51:18 +0200 (CEST)
+Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:38760])
+ via 82-64-214-120.subs.proxad.net ([82.64.214.120])
+ by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Sun, 15 Sep 2024 19:51:18 +0200
 MIME-Version: 1.0
-References: <20240810171335.19227-1-baxiche@gmail.com>
- <CA+R_dep6gZd6Kv6SuDPE-+RCfjbNArRd9U+yvnYiZ=YX5R9H7Q@mail.gmail.com>
- <20240914121320.4672b1ca@windsurf>
-In-Reply-To: <20240914121320.4672b1ca@windsurf>
-From: baxiche su <baxiche@gmail.com>
-Date: Mon, 16 Sep 2024 01:05:03 +0800
-Message-ID: <CAE3sgKinBiJn9SdBHhC7NgeZ9edpfs-yMigBNYzqA5ndrAv3KA@mail.gmail.com>
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1726419914; x=1727024714; darn=buildroot.org;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=fszR2Et872RrISHJB+z4fmhqLZJJZsOMzYMzyJshpls=;
- b=C+uw+xKvTpMJoRMRALzIdG/5CHBb6V6ipAPyEUSCe2A6GdRBFpXWl5IlQKfofoUTld
- XYQd6eNr2/5lzzKPpb4AJyMfsOYBCypXYYR7oqdpIAeKSqECJ5SrRrKcezqlGVqQeBxB
- nT3mpGcsQS+rG88TvZZGZ07dNp7grM66ZtAB0eHebiVRFVTqZmdbSZR87yqAkuBree1X
- X8g5XVyrrKrL/Fzp5wcCSKxTnvCpxau48Ye+lAXIXL6d9ANRnqp/g+FRVp98QWevINkq
- ugZqcD+3eFm44GheT4UcisRGae0Inp/5/c3wLLpRfDNt8E7JBPvIkUPvyvrQUTbjpvJu
- blDA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+Date: Sun, 15 Sep 2024 19:51:18 +0200
+From: Julien Olivain <ju.o@free.fr>
+To: Vincent Jardin <vjardin@free.fr>
+In-Reply-To: <20240915143004.24060-2-vjardin@free.fr>
+References: <33f4749e4084bc4015a6c35d5edec68c@free.fr>
+ <20240915143004.24060-1-vjardin@free.fr>
+ <20240915143004.24060-2-vjardin@free.fr>
+User-Agent: Webmail Free/1.6.9
+Message-ID: <488754bcb3f7b741b18d04eae8dc4d5f@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1726422681;
+ bh=+SQgLFbVp2ROOHli0Qlvv7cKcCPQ40i1njzRWx/alc8=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=U5y2HVFhb/JLFkpVCwwJnA9pRrau3STx2bPHPyb/aErbt5Yr/6362/aw04POafT/K
+ 9SOgMBdfefs9r1Y2vgmovUrNEqgu3apdaWbY62e0Dz8yKfd3lQ8+wPckVpBcd+Hxga
+ 0yOlWoUB5XgnOhbSVRq0TFRanYStEaas+vqi8P8HxvdwrBgOIrMaSf7K+s21U1XtM9
+ GT5NI7shjmeYOEbAUicg9/J/ucgAP4QB/Gp2Qd1osLJv+5oP0h6O0+kbC4lepM/LkS
+ frVRJ6iHy5H/gA5ePbVgL4jSFamSxRc9bEXlFXkxEmmE/+rjNhiYR72qiLpjL6Kt6P
+ 8PN8FkUlwp/zg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=C+uw+xKv
-Subject: Re: [Buildroot] [PATCH 1/1] package/qt6: add qt6 multimedia
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=U5y2HVFh
+Subject: Re: [Buildroot] [PATCH v6 1/1] package/dpdk: add 24.07
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,326 +83,478 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Jesse Van Gavere <jesseevg@gmail.com>, Samuel Martin <s.martin49@gmail.com>,
- Roy Kollen Svendsen <roykollensvendsen@gmail.com>, buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============8134877848783154507=="
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8134877848783154507==
-Content-Type: multipart/alternative; boundary="000000000000b60c7106222b758c"
+Hi Vincent,
 
---000000000000b60c7106222b758c
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Thanks for the update!
 
-Hi Thomas,
+With this v6, I'm able to run few dpdk tests in Qemu on x86_64
+and Aarch64.
 
-I have a few questions regarding your comments:
+In this current state, I would be OK to merge this patch as is.
+Other improvements can be managed in later patches.
 
-1. Should I push a new patch after discussing the patch details with you
-via email,
-    or should I push a new patch each time we have a discussion?
+I'll propose new runtime tests later, once this patch will be merged.
 
-2. Regarding FFmpeg integration in Qt6 Multimedia compilation:
-    When building Qt6 Multimedia from source, it requires specifying the
-FFmpeg directory
-    containing the include, lib, and bin subdirectories. Are there
-alternative methods
-    to achieve this integration without directly modifying the FFmpeg
-source code?
-
-3. Regarding PulseAudio in Qt6 Multimedia:
-    Qt6 Multimedia can be built without PulseAudio. The configuration
-process automatically detects
-    the PulseAudio library if present. Therefore, there is no need to
-specify an alternative option in the absence of PulseAudio.
-
-For more information on Qt6 Multimedia, please see the following resources:
-https://doc.qt.io/qt-6/qtmultimedia-building-from-source.html
-
-That's my question about your comment.
-
-By the way, this is my first patch in the open-source community, your
-feedback means a lot to me.
-
-Thank you for taking the time to review my work.
-
-Baxiche
-
-Thomas Petazzoni <thomas.petazzoni@bootlin.com> =E6=96=BC 2024=E5=B9=B49=E6=
-=9C=8814=E6=97=A5 =E9=80=B1=E5=85=AD =E4=B8=8B=E5=8D=886:13=E5=AF=AB=E9=81=
-=93=EF=BC=9A
-
-> Hello Baxiche, Hello Roy,
->
-> First of all, thanks Roy for the review, much appreciated! See my
-> comments below.
->
-> On Wed, 14 Aug 2024 13:59:04 +0200
-> Roy Kollen Svendsen <roykollensvendsen@gmail.com> wrote:
->
->
-> > > +QT6MULTIMEDIA_LICENSE =3D \
-> > > +       LGPL-3.0 or GPL-2.0 or GPL-3.0, \
-> > > +       LGPL-2.1+, \
-> > > +       BSD-3-Clause (docs), \
-> > > +       GFDL-1.3 no invariants (docs), \
-> > > +       BSD-3-Clause (examples), \
-> > > +       BSL-1.0, \
-> > > +       MPL-2.0 \
-> > > +       MIT
-> >
-> > Thomas, should we order these licenses alpabetically, and avoid
-> > duplicating the lines?:
-> >
-> > To avoid duplicating lines I would do:
-> >
-> > QT6MULTIMEDIA_LICENSE =3D \
-> >       LGPL-3.0 or GPL-2.0 or GPL-3.0, \
-> >       LGPL-2.1+, \
-> >       BSD-3-Clause (docs, examples), \
-> >       GFDL-1.3 no invariants (docs), \
-> >       BSL-1.0, \
-> >       MPL-2.0 \
-> >       MIT
-> >
-> > And order alphabetically:
-> >       BSD-3-Clause (docs, examples), \
-> >       BSL-1.0, \
-> >       GFDL-1.3 no invariants (docs), \
-> >       LGPL-2.1+, \
-> >       LGPL-3.0 or GPL-2.0 or GPL-3.0, \
-> >       MIT \
-> >       MPL-2.0
->
-> Yes, I agree this looks nicer. We don't enforce alphabetic ordering for
-> the licenses currently, but here it definitely makes sense to do so.
->
->
-> > > +ifeq ($(BR2_PACKAGE_QT6DECLARATIVE),y)
-> > > +QT6MULTIMEDIA_DEPENDENCIES +=3D qt6declarative
-> > > +endif
-> >
-> > I think it is custom to order these ifeq-statements alphabetically?
->
-> Yes, it's good to do so.
->
-> > > +ifeq ($(BR2_PACKAGE_PULSEAUDIO),y)
-> > > +QT6MULTIMEDIA_DEPENDENCIES +=3D pulseaudio
-> > > +endif
-> > > +
-> > > +ifeq ($(BR2_PACKAGE_FFMPEG)$(BR2_PACKAGE_PULSEAUDIO),yy)
-> >
-> > It may be better to avoid doing the BR2_PACKAGE_PULSEAUDIO=3D=3Dy twice=
-,
-> > by moving the BR2_PACKAGE_FFMPEG=3D=3Dy inside ifeq
-> > ($(BR2_PACKAGE_PULSEAUDIO),y)-block above.
-> >
-> > > +QT6MULTIMEDIA_CONF_OPTS +=3D
-> -DFFMPEG_DIR=3D$(BUILD_DIR)/ffmpeg-$(FFMPEG_VERSION) -DQT_DEPLOY_FFMPEG=
-=3DON
-> >
-> > What about splitting the long line to increase readability?:
-> >
-> > QT6MULTIMEDIA_CONF_OPTS +=3D \
-> >       -DFFMPEG_DIR=3D$(BUILD_DIR)/ffmpeg-$(FFMPEG_VERSION) \
->
-> I don't really like this. Why is this needed? Why does qt6multimedia
-> need to poke directly into the ffmpeg source code?
->
-> If this hadn't been present, I would have applied the patch with the
-> fixes proposed by Roy, but I'm not a big fan of this ffmpeg thing.
->
-> Also, are there some options to explicitly disable things?
->
-> I.e, instead of:
->
-> +ifeq ($(BR2_PACKAGE_PULSEAUDIO),y)
-> +QT6MULTIMEDIA_DEPENDENCIES +=3D pulseaudio
+On 15/09/2024 16:30, Vincent Jardin wrote:
+> This commit adds the integration of the Data Plane Development Kit 
+> (DPDK),
+> a suite of libraries and drivers designed for high-performance packet
+> processing from the user space. DPDK enables direct packet steering 
+> from
+> some network interfaces to the userland, bypassing the Linux kernel
+> network stack. This is achieved through userland PCI drivers or by
+> leveraging some userland memory mappings of the network devices.
+> 
+> Originally inspired by RDMA (Remote Direct Memory Access) concepts, 
+> DPDK
+> has been adapted to work with PCI devices that do not inherently 
+> support
+> RDMA. This adaptation allows for low-latency, high-throughput data
+> processing by minimizing the overhead typically associated with
+> kernel-space network drivers.
+> 
+> Importantly, this commit does not enforce the use of UIO or VFIO
+> kernel frameworks, as DPDK's architecture supports userland memory
+> mappings that do not require these technologies. By maintaining this
+> flexibility, DPDK can operate with a broader range of hardware and
+> software configurations, making it suitable for diverse Buildroot's
+> deployment scenarios.
+> 
+> Yocto patch imported from:
+>   
+> https://git.yoctoproject.org/meta-dpdk/plain/recipes-extended/dpdk/dpdk/0001-config-meson-get-cpu_instruction_set-from-meson-opti.patch
+> 
+> The patch that fixes DPDK's meson for building properly for aarch64 was
+> suggested by Julien. It clearly points that DPDK's meson shall need a
+> proper set of fixes in order to properly cross-compile for aarch64,
+> riscv64 or ppc64. So for the time being, only the x86_64 and aarch64
+> targets are enabled. Other targets will be enabled later once DPDK
+> upstream will be properly fixed.
+> 
+> Only the little endian targets are properly supported by DPDK. Big 
+> endian
+> was supported, mostly on Power8, but it has not been used for a while 
+> and
+> IBM is not strongly pushing any tests. Should big endian be supported
+> again, DPDK community will be welcoming any  contributions.
+> 
+> Some nice to have for the Kernel, but not mandatory:
+> - CONFIG_VFIO_IOMMU_TYPE1=y
+> - CONFIG_VFIO_VIRQFD=y
+> - CONFIG_VFIO=y
+> - CONFIG_VFIO_NOIOMMU=y
+> - CONFIG_VFIO_PCI=y
+> - CONFIG_VFIO_PCI_MMAP=y
+> - CONFIG_HUGETLBFS=y
+> - CONFIG_HUGETLB_PAGE=y
+> - CONFIG_PROC_PAGE_MONITOR=y
+> 
+> For x86 only, HPET and HPET_MMAP can be some nice to have too.
+> 
+> Since they are some nice to have, but not mandatory ones, the following
+> Kernel config fixups are not used:
+> define DPDK_LINUX_CONFIG_FIXUPS
+> 	$(call KCONFIG_ENABLE_OPT, CONFIG_HUGETLBFS)
+> 	...
+> endef
+> 
+> Notes about license:
+> 
+> DPDK was released with the BSD-3-Clause license.
+> 
+> One network driver, the Google Virtual Ethernet (GVE) include files
+> under the MIT license. See [2] and [3].
+> 
+> DPDK had been including a Kernel Netdevice Interface (KNI) and an 
+> IGB_UIO
+> kernel module under the GPL-2.0 license. Those modules were moved into 
+> a
+> different repository [K]. Then, for instance, the KNI module was 
+> removed
+> by [KNI]. This commit was first included in version v23.11. The IGB_UIO 
+> kernel
+> module was removed by [UIO] since VFIO became capable of supporting all
+> the required usecases for the DPDK. The main remaining issues had been
+> the support of memory mapping within a VM or without the use of nested
+> virtualization but those were fixed by the latest VFIO's kernel 
+> support.
+> We can notice that the PMD drivers that are using the ibverbs (RDMA) 
+> APIs
+> are not sharing this need of UIO/VFIO.
+> 
+> There are also 2 files in "lib/eal/windows" under other licenses
+> (namely BSD-2-Clause, ISC and MIT) but they are parts of the 
+> Environment
+> Abstraction Library (EAL) for Microsoft Windows OS, it means they are
+> not used when compiling for the Linux targets of Buildroot.
+> 
+> The list of DPDK license exceptions is maintained at [3].
+> 
+> Add configuration options to enable DPDK examples and tests.
+> 
+> [1] https://www.dpdk.org/
+> [2] https://git.dpdk.org/dpdk/tree/doc/guides/nics/gve.rst?h=v24.07
+> [3] https://git.dpdk.org/dpdk/tree/license/exceptions.txt?h=v24.07
+> [KNI] 
+> https://git.dpdk.org/dpdk/commit/?id=f78c100bc87119c6a94130a6689d773afdaa9d98
+> [UIO] 
+> https://git.dpdk.org/dpdk/commit/?id=56bb5841fd0608989101d933f091852a3126b4fe
+> [K] 
+> https://git.dpdk.org/dpdk-kmods/commit/?id=d16f3b44987be181b6effee139558a084eaf9f8c
+> 
+> Signed-off-by: Vincent Jardin <vjardin@free.fr>
+> Suggested-by: Julien Olivain <ju.o@free.fr>
+> Reviewed-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+> Reviewed-by: Julien Olivain <ju.o@free.fr>
+> ---
+>  DEVELOPERS                                    |  3 +
+>  package/Config.in                             |  1 +
+>  ...-cpu_instruction_set-from-meson-opti.patch | 33 +++++++
+>  package/dpdk/0010-Fix-aarch64-build.patch     | 42 ++++++++
+>  package/dpdk/Config.in                        | 45 +++++++++
+>  package/dpdk/dpdk.hash                        | 10 ++
+>  package/dpdk/dpdk.mk                          | 99 +++++++++++++++++++
+>  7 files changed, 233 insertions(+)
+>  create mode 100644 
+> package/dpdk/0001-config-meson-get-cpu_instruction_set-from-meson-opti.patch
+>  create mode 100644 package/dpdk/0010-Fix-aarch64-build.patch
+>  create mode 100644 package/dpdk/Config.in
+>  create mode 100644 package/dpdk/dpdk.hash
+>  create mode 100644 package/dpdk/dpdk.mk
+> 
+> diff --git a/DEVELOPERS b/DEVELOPERS
+> index 426590d5c5..7c3d858e40 100644
+> --- a/DEVELOPERS
+> +++ b/DEVELOPERS
+> @@ -3238,6 +3238,9 @@ F:	package/rtl8822cs/
+>  N:	Victor Huesca <victor.huesca@bootlin.com>
+>  F:	support/testing/tests/core/test_root_password.py
+> 
+> +N:	Vincent Jardin <vjardin@free.fr>
+> +F:	package/dpdk/
+> +
+>  N:	Vincent Prince <vincent.prince.fr@gmail.com>
+>  F:	package/nss-myhostname/
+>  F:	package/utp_com/
+> diff --git a/package/Config.in b/package/Config.in
+> index 211080345a..90e521330b 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1988,6 +1988,7 @@ menu "Networking"
+>  	source "package/daq3/Config.in"
+>  	source "package/davici/Config.in"
+>  	source "package/dht/Config.in"
+> +	source "package/dpdk/Config.in"
+>  	source "package/enet/Config.in"
+>  	source "package/filemq/Config.in"
+>  	source "package/fmlib/Config.in"
+> diff --git 
+> a/package/dpdk/0001-config-meson-get-cpu_instruction_set-from-meson-opti.patch 
+> b/package/dpdk/0001-config-meson-get-cpu_instruction_set-from-meson-opti.patch
+> new file mode 100644
+> index 0000000000..8e99379fb6
+> --- /dev/null
+> +++ 
+> b/package/dpdk/0001-config-meson-get-cpu_instruction_set-from-meson-opti.patch
+> @@ -0,0 +1,33 @@
+> +From 121e5d019f0bb6dec0ace2b361611edd10fc8ff8 Mon Sep 17 00:00:00 2001
+> +From: Lee Chee Yang <chee.yang.lee@intel.com>
+> +Date: Wed, 6 Dec 2023 16:58:10 +0800
+> +Subject: [PATCH] config/meson: get cpu_instruction_set from meson 
+> option
+> +
+> +Workaround error:
+> +| ../git/config/meson.build:178:8: ERROR: Problem encountered: 
+> Compiler
+> +does not support "x86_64" arch flag.
+> +
+> +Upstream-Status: Inappropriate [ yocto specific to set 
+> cpu_instruction_set ]
+> +
+> +Signed-off-by: Lee Chee Yang <chee.yang.lee@intel.com>
+> +Upstream: 
+> https://git.yoctoproject.org/meta-dpdk/plain/recipes-extended/dpdk/dpdk/0001-config-meson-get-cpu_instruction_set-from-meson-opti.patch
+> +---
+> + config/meson.build | 2 +-
+> + 1 file changed, 1 insertion(+), 1 deletion(-)
+> +
+> +diff --git a/config/meson.build b/config/meson.build
+> +index a9ccd56deb..f310c7adf6 100644
+> +--- a/config/meson.build
+> ++++ b/config/meson.build
+> +@@ -105,7 +105,7 @@ platform = get_option('platform')
+> +
+> + # set the cpu_instruction_set and cflags for it
+> + if meson.is_cross_build()
+> +-    cpu_instruction_set = host_machine.cpu()
+> ++    cpu_instruction_set = get_option('cpu_instruction_set')
+> + else
+> +     cpu_instruction_set = get_option('cpu_instruction_set')
+> +     machine = get_option('machine')
+> +--
+> +2.37.3
+> +
+> diff --git a/package/dpdk/0010-Fix-aarch64-build.patch 
+> b/package/dpdk/0010-Fix-aarch64-build.patch
+> new file mode 100644
+> index 0000000000..845ec9235b
+> --- /dev/null
+> +++ b/package/dpdk/0010-Fix-aarch64-build.patch
+> @@ -0,0 +1,42 @@
+> +From c5ea091a74bbfa5fb095d2c6fe15be3a7b15cacb Mon Sep 17 00:00:00 2001
+> +From: Julien Olivain <ju.o@free.fr>
+> +Date: Sun, 8 Sep 2024 13:20:14 +0200
+> +Subject: [PATCH] Fix aarch64 build
+> +
+> +The condition on which DPDK meson skip the -march detection for 
+> Aarch64
+> +seems incorrect or incomplete. This patch changes the condition in 
+> order
+> +to better match the comment (that the options are decided in
+> +config/arm/meson.build). It actually test for the architecture name.
+> +
+> +While this patch might need some discussion with DPDK maintainers to
+> +cover all situations, it can still be useful here in Buildroot, as it
+> +fixes the Aarch64 cross compilation.
+> +
+> +Signed-off-by: Julien Olivain <ju.o@free.fr>
+> +Upstream: to be proposed https://patches.dpdk.org/project/dpdk/list/
+> +Links: cherry-picked from 
+> https://github.com/jolivain/dpdk/commit/c5ea091a74bbfa5fb095d2c6fe15be3a7b15cacb
+> +---
+> + config/meson.build | 6 +++---
+> + 1 file changed, 3 insertions(+), 3 deletions(-)
+> +
+> +diff --git a/config/meson.build b/config/meson.build
+> +index 8c8b019c25..ea48e55ce3 100644
+> +--- a/config/meson.build
+> ++++ b/config/meson.build
+> +@@ -176,10 +176,10 @@ if not is_ms_compiler
+> +     else
+> +         machine_args += '-march=' + cpu_instruction_set
+> +         # arm manages generic/auto config in config/arm/meson.build
+> +-        if cpu_instruction_set != 'generic' and cpu_instruction_set 
+> != 'auto'
+> +-            compiler_arch_support = cc.has_argument('-march=' + 
+> cpu_instruction_set)
+> +-        else
+> ++        if host_machine.cpu_family().startswith('aarch')
+> +             compiler_arch_support = true
+> ++        else
+> ++            compiler_arch_support = cc.has_argument('-march=' + 
+> cpu_instruction_set)
+> +         endif
+> +     endif
+> +     if not compiler_arch_support
+> +--
+> +2.46.0
+> +
+> diff --git a/package/dpdk/Config.in b/package/dpdk/Config.in
+> new file mode 100644
+> index 0000000000..2fe129c47f
+> --- /dev/null
+> +++ b/package/dpdk/Config.in
+> @@ -0,0 +1,45 @@
+> +config BR2_PACKAGE_DPDK_ARCH_SUPPORTS
+> +	bool
+> +	# DPDK can be used for the following little endian architecture
+> +	default y if BR2_aarch64
+> +	# DPDK requires SSE4.2 for x86_64 since v17.08
+> +	default y if BR2_x86_64 && BR2_X86_CPU_HAS_SSE42
+> +
+> +config BR2_PACKAGE_DPDK
+> +	bool "dpdk"
+> +	depends on BR2_PACKAGE_DPDK_ARCH_SUPPORTS
+> +	depends on BR2_TOOLCHAIN_HAS_THREADS # DPDK design
+> +	depends on BR2_USE_MMU # pthread() memory mappings
+> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C11/stdatomic.h
+> +	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_19
+> +	depends on BR2_TOOLCHAIN_USES_GLIBC
+> +	select BR2_PACKAGE_LIBEXECINFO if !BR2_TOOLCHAIN_USES_GLIBC
+> +	help
+> +	  DPDK (Data Plane Development Kit) is a set of libraries
+> +	  and drivers for fast packet processing.
+> +
+> +	  http://dpdk.org/
+> +
+> +if BR2_PACKAGE_DPDK
+> +
+> +config BR2_PACKAGE_DPDK_EXAMPLES
+> +	bool "Install examples"
+> +	help
+> +	  Install all DPDK examples.
+> +
+> +config BR2_PACKAGE_DPDK_TESTS
+> +	bool "Install tests"
+> +	help
+> +	  Install all DPDK tests.
+> +
 > +endif
->
-> have something to explicitly enable pulseaudio support in
-> qt6multimedia, and in an "else" clause, something to explicitly disable
-> pulseaudio support?
->
-> Roy: as Baxiche didn't come back with a new iteration, I'm not sure
-> they will ever come back with a new version. I'm going to mark this
-> patch as Changes Requested, but if Baxiche doesn't come back with a new
-> version and no-one else picks it up, it means it will be forgotten.
->
-> Best regards,
->
-> Thomas
+> +
+> +comment "DPDK needs a toolchain w/ dynamic library, threads, wchar, 
+> kernel headers >= 4.19"
+> +	depends on BR2_USE_MMU # pthread() memory mappings
+> +	depends on BR2_PACKAGE_DPDK_ARCH_SUPPORTS
+> +	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C11/stdatomic.h
+> +	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_19
+> +	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
+> +		!BR2_TOOLCHAIN_USES_GLIBC || \
+> +		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
+> +		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_19
+> diff --git a/package/dpdk/dpdk.hash b/package/dpdk/dpdk.hash
+> new file mode 100644
+> index 0000000000..4e98d9dc25
+> --- /dev/null
+> +++ b/package/dpdk/dpdk.hash
+> @@ -0,0 +1,10 @@
+> +# Locally computed
+> +sha256  
+> 9944f7e5f268e7ac9b4193e2cd54ef6d98f6e1d7dddc967c77ae4f6616d6fbbd  
+> dpdk-24.07.tar.xz
+> +sha256  
+> 1531b66affc3bae796d755e12850795e56e25ccedd685bf7d2644d8ddfadbad8  
+> license/bsd-2-clause.txt
+> +sha256  
+> 9acc4bc871a4742550158e3696dcb381953172ef808d04ca248184f9f6322712  
+> license/bsd-3-clause.txt
+> +sha256  
+> e19808bccd90c238fac06da2fc3683e094c64f7ba647e9d86f03a98cf5f2ce05  
+> license/exceptions.txt
+> +sha256  
+> 8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  
+> license/gpl-2.0.txt
+> +sha256  
+> be8f198f2e1c9b30226e293255bbe6933ee6607a580ee5874185aa023bcc3c39  
+> license/isc.txt
+> +sha256  
+> 592987e8510228d546540b84a22444bde98e48d03078d3b2eefcd889bec5ce8c  
+> license/lgpl-2.1.txt
+> +sha256  
+> 6c54c4d44faf3cba829b3d0c21c6955953e758767018fd7244f809b01d4f4845  
+> license/mit.txt
+> +sha256  
+> cae178052c96959741acb7f00634a09a8294e6cafb5ad53e158d63e3510875ab  
+> license/README
+> diff --git a/package/dpdk/dpdk.mk b/package/dpdk/dpdk.mk
+> new file mode 100644
+> index 0000000000..0c6be05e6e
+> --- /dev/null
+> +++ b/package/dpdk/dpdk.mk
+> @@ -0,0 +1,99 @@
+> +################################################################################
+> +#
+> +# dpdk
+> +#
+> +################################################################################
+> +
+> +DPDK_VERSION = 24.07
+> +DPDK_SOURCE = dpdk-$(DPDK_VERSION).tar.xz
+> +DPDK_SITE = https://fast.dpdk.org/rel
+> +DPDK_LICENSE = \
+> +	BSD-3-Clause (legacy), \
+> +	BSD-2-Clause, \
+> +	GPL-2.0, \
+> +	ISC, \
+> +	LGPL-2.1, \
+> +	MIT (drivers/net/gve/base)
+> +
+> +# Only the Windows target has the 2 following licenses:
+> +# - license/bsd-2-clause.txt
+> +# - license/isc.txt
+> +# which is related to a Windows getopt.[ch] compatibility layer.
+> +# Since Buildroot is not used for Windows target, it is not listed
+> +# here.
+> +#
+> +# All the userland files of DPDK have dual licences BSD or GPL/LGPL
+> +# Since the Linux kernel modules had been removed from the DPDK, there
+> +# is no GPL only code into the DPDK anymore.
+> +# The usage of DPDK with Buildroot is for userland only, it means
+> +# that for the dual licenced files, BSD clause is used but not the
+> +# following ones:
+> +# - license/gpl-2.0.txt
+> +# - license/lgpl-2.1.txt
+> +# See the DPDK's license/README for more details.
+> +#
+> +# The legacy and historical license of the DPDK is BSD-3-clause.
+> +DPDK_LICENSE_FILES = \
+> +	license/README \
+> +	license/bsd-3-clause.txt \
+> +	license/exceptions.txt \
+> +	license/mit.txt
+> +
+> +DPDK_DEPENDENCIES = \
+> +	host-pkgconf \
+> +	host-python-pyelftools
+> +
+> +ifeq ($(BR2_PACKAGE_DPDK_EXAMPLES),y)
+> +DPDK_CONF_OPTS += -Dexamples=all
+> +else
+> +DPDK_CONF_OPTS += -Dexamples=
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_DPDK_TESTS),y)
+> +DPDK_CONF_OPTS += -Dtests=true
+> +else
+> +DPDK_CONF_OPTS += -Dtests=false
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_LIBBSD),y)
+> +DPDK_DEPENDENCIES += libbsd
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_JANSSON),y)
+> +DPDK_DEPENDENCIES += jansson
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_LIBPCAP),y)
+> +DPDK_DEPENDENCIES += libpcap
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_ZLIB),y)
+> +DPDK_DEPENDENCIES += zlib
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_LIBEXECINFO),y)
+> +DPDK_DEPENDENCIES += libexecinfo
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_NUMACTL),y)
+> +DPDK_DEPENDENCIES += numactl
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_LIBARCHIVE),y)
+> +DPDK_DEPENDENCIES += libarchive
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_LIBBPF),y)
+> +DPDK_DEPENDENCIES += libbpf
+> +endif
+> +
+> +ifeq ($(BR2_PACKAGE_RDMA_CORE),y)
+> +DPDK_DEPENDENCIES += rdma-core
+> +endif
+> +
+> +# DPDK's meson shall need to be clean'd, hack here along the enclosed 
+> patch
+> +DPDK_CONF_OPTS += -Dcpu_instruction_set=$(BR2_GCC_TARGET_ARCH)
+> +# Keep the following, even if not mandatory, until the removal of the 
+> patch
+> +DPDK_MESON_EXTRA_PROPERTIES += platform='generic'
+> +
+> +$(eval $(meson-package))
 > --
-> Thomas Petazzoni, co-owner and CEO, Bootlin
-> Embedded Linux and Kernel engineering and training
-> https://bootlin.com
->
+> 2.46.0
 
---000000000000b60c7106222b758c
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Best regards,
 
-<div dir=3D"ltr"><h3 class=3D"gmail-iw gmail-gFxsud" style=3D"overflow:hidd=
-en;margin:inherit;text-overflow:ellipsis;font-family:&quot;Google Sans&quot=
-;,Roboto,RobotoDraft,Helvetica,Arial,sans-serif;line-height:20px"><font col=
-or=3D"#1f1f1f"><span style=3D"font-size:14px;font-weight:normal">Hi Thomas,=
-=C2=A0</span></font></h3><div><font color=3D"#1f1f1f"><span style=3D"font-s=
-ize:14px;font-weight:normal"><br></span></font></div><div>I have a few ques=
-tions regarding your comments:<font color=3D"#1f1f1f"><span style=3D"font-s=
-ize:14px;font-weight:normal"><br></span></font></div><div><br></div><div>1.=
- Should I push a new patch after discussing the patch details with you via =
-email,=C2=A0</div><div>=C2=A0 =C2=A0 or should I push a new patch each time=
- we have a discussion?<br><br>2. Regarding FFmpeg integration in Qt6 Multim=
-edia compilation:<br>=C2=A0 =C2=A0 When building Qt6 Multimedia from source=
-, it requires specifying the FFmpeg directory <br>=C2=A0 =C2=A0 containing =
-the include, lib, and bin subdirectories. Are there alternative methods <br=
->=C2=A0 =C2=A0 to achieve this integration without directly modifying the F=
-Fmpeg source code?<br><br>3. Regarding PulseAudio in Qt6 Multimedia:<br>=C2=
-=A0 =C2=A0 Qt6 Multimedia can be built without PulseAudio. The configuratio=
-n process automatically detects <br>=C2=A0 =C2=A0 the PulseAudio library if=
- present. Therefore, there is no need to specify an alternative option in t=
-he absence of PulseAudio.<br><br>For more information on Qt6 Multimedia,=C2=
-=A0please see the following resources:<br><a href=3D"https://doc.qt.io/qt-6=
-/qtmultimedia-building-from-source.html">https://doc.qt.io/qt-6/qtmultimedi=
-a-building-from-source.html</a><br><br>That&#39;s my question about your co=
-mment.<br><br><div dir=3D"auto">By the way, this is my first patch in the o=
-pen-source community, your feedback means a lot to me.=C2=A0</div><div dir=
-=3D"auto"><br></div><div dir=3D"auto">Thank you for taking the time to revi=
-ew my work.=C2=A0<br><br>Baxiche<br></div></div></div><br><div class=3D"gma=
-il_quote"><div dir=3D"ltr" class=3D"gmail_attr">Thomas Petazzoni &lt;<a hre=
-f=3D"mailto:thomas.petazzoni@bootlin.com">thomas.petazzoni@bootlin.com</a>&=
-gt; =E6=96=BC 2024=E5=B9=B49=E6=9C=8814=E6=97=A5 =E9=80=B1=E5=85=AD =E4=B8=
-=8B=E5=8D=886:13=E5=AF=AB=E9=81=93=EF=BC=9A<br></div><blockquote class=3D"g=
-mail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204=
-,204,204);padding-left:1ex">Hello Baxiche, Hello Roy,<br>
-<br>
-First of all, thanks Roy for the review, much appreciated! See my<br>
-comments below.<br>
-<br>
-On Wed, 14 Aug 2024 13:59:04 +0200<br>
-Roy Kollen Svendsen &lt;<a href=3D"mailto:roykollensvendsen@gmail.com" targ=
-et=3D"_blank">roykollensvendsen@gmail.com</a>&gt; wrote:<br>
-<br>
-<br>
-&gt; &gt; +QT6MULTIMEDIA_LICENSE =3D \<br>
-&gt; &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0LGPL-3.0 or GPL-2.0 or GPL-3.0, \<br>
-&gt; &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0LGPL-2.1+, \<br>
-&gt; &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0BSD-3-Clause (docs), \<br>
-&gt; &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0GFDL-1.3 no invariants (docs), \<br>
-&gt; &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0BSD-3-Clause (examples), \<br>
-&gt; &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0BSL-1.0, \<br>
-&gt; &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0MPL-2.0 \<br>
-&gt; &gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0MIT=C2=A0 <br>
-&gt; <br>
-&gt; Thomas, should we order these licenses alpabetically, and avoid<br>
-&gt; duplicating the lines?:<br>
-&gt; <br>
-&gt; To avoid duplicating lines I would do:<br>
-&gt; <br>
-&gt; QT6MULTIMEDIA_LICENSE =3D \<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0LGPL-3.0 or GPL-2.0 or GPL-3.0, \<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0LGPL-2.1+, \<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0BSD-3-Clause (docs, examples), \<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0GFDL-1.3 no invariants (docs), \<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0BSL-1.0, \<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0MPL-2.0 \<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0MIT<br>
-&gt; <br>
-&gt; And order alphabetically:<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0BSD-3-Clause (docs, examples), \<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0BSL-1.0, \<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0GFDL-1.3 no invariants (docs), \<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0LGPL-2.1+, \<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0LGPL-3.0 or GPL-2.0 or GPL-3.0, \<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0MIT \<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0MPL-2.0<br>
-<br>
-Yes, I agree this looks nicer. We don&#39;t enforce alphabetic ordering for=
-<br>
-the licenses currently, but here it definitely makes sense to do so.<br>
-<br>
-<br>
-&gt; &gt; +ifeq ($(BR2_PACKAGE_QT6DECLARATIVE),y)<br>
-&gt; &gt; +QT6MULTIMEDIA_DEPENDENCIES +=3D qt6declarative<br>
-&gt; &gt; +endif=C2=A0 <br>
-&gt; <br>
-&gt; I think it is custom to order these ifeq-statements alphabetically?<br=
->
-<br>
-Yes, it&#39;s good to do so.<br>
-<br>
-&gt; &gt; +ifeq ($(BR2_PACKAGE_PULSEAUDIO),y)<br>
-&gt; &gt; +QT6MULTIMEDIA_DEPENDENCIES +=3D pulseaudio<br>
-&gt; &gt; +endif<br>
-&gt; &gt; +<br>
-&gt; &gt; +ifeq ($(BR2_PACKAGE_FFMPEG)$(BR2_PACKAGE_PULSEAUDIO),yy)=C2=A0 <=
-br>
-&gt; <br>
-&gt; It may be better to avoid doing the BR2_PACKAGE_PULSEAUDIO=3D=3Dy twic=
-e,<br>
-&gt; by moving the BR2_PACKAGE_FFMPEG=3D=3Dy inside ifeq<br>
-&gt; ($(BR2_PACKAGE_PULSEAUDIO),y)-block above.<br>
-&gt; <br>
-&gt; &gt; +QT6MULTIMEDIA_CONF_OPTS +=3D -DFFMPEG_DIR=3D$(BUILD_DIR)/ffmpeg-=
-$(FFMPEG_VERSION) -DQT_DEPLOY_FFMPEG=3DON=C2=A0 <br>
-&gt; <br>
-&gt; What about splitting the long line to increase readability?:<br>
-&gt; <br>
-&gt; QT6MULTIMEDIA_CONF_OPTS +=3D \<br>
-&gt;=C2=A0 =C2=A0 =C2=A0 =C2=A0-DFFMPEG_DIR=3D$(BUILD_DIR)/ffmpeg-$(FFMPEG_=
-VERSION) \<br>
-<br>
-I don&#39;t really like this. Why is this needed? Why does qt6multimedia<br=
->
-need to poke directly into the ffmpeg source code?<br>
-<br>
-If this hadn&#39;t been present, I would have applied the patch with the<br=
->
-fixes proposed by Roy, but I&#39;m not a big fan of this ffmpeg thing.<br>
-<br>
-Also, are there some options to explicitly disable things?<br>
-<br>
-I.e, instead of:<br>
-<br>
-+ifeq ($(BR2_PACKAGE_PULSEAUDIO),y)<br>
-+QT6MULTIMEDIA_DEPENDENCIES +=3D pulseaudio<br>
-+endif<br>
-<br>
-have something to explicitly enable pulseaudio support in<br>
-qt6multimedia, and in an &quot;else&quot; clause, something to explicitly d=
-isable<br>
-pulseaudio support?<br>
-<br>
-Roy: as Baxiche didn&#39;t come back with a new iteration, I&#39;m not sure=
-<br>
-they will ever come back with a new version. I&#39;m going to mark this<br>
-patch as Changes Requested, but if Baxiche doesn&#39;t come back with a new=
-<br>
-version and no-one else picks it up, it means it will be forgotten.<br>
-<br>
-Best regards,<br>
-<br>
-Thomas<br>
--- <br>
-Thomas Petazzoni, co-owner and CEO, Bootlin<br>
-Embedded Linux and Kernel engineering and training<br>
-<a href=3D"https://bootlin.com" rel=3D"noreferrer" target=3D"_blank">https:=
-//bootlin.com</a><br>
-</blockquote></div>
-
---000000000000b60c7106222b758c--
-
---===============8134877848783154507==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+Julien.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============8134877848783154507==--
