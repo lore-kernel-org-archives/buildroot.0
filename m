@@ -4,49 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C77AAC3ABAE
-	for <buildroot@archiver.kernel.org>; Sun, 15 Sep 2024 21:40:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3137DC3ABAD
+	for <buildroot@archiver.kernel.org>; Sun, 15 Sep 2024 21:40:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 932EB844C9;
-	Sun, 15 Sep 2024 21:40:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EF57581EA4;
+	Sun, 15 Sep 2024 21:40:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id my_xgVwFC_fr; Sun, 15 Sep 2024 21:40:10 +0000 (UTC)
+ id 2V2mWQtJ6M3W; Sun, 15 Sep 2024 21:40:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 12C74847C6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 94BB7847D2
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 12C74847C6;
-	Sun, 15 Sep 2024 21:40:10 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2CB221BF28B
+	by smtp1.osuosl.org (Postfix) with ESMTP id 94BB7847D2;
+	Sun, 15 Sep 2024 21:40:13 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 306BF1BF94D
  for <buildroot@lists.busybox.net>; Sun, 15 Sep 2024 21:36:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 526B080B3C
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5F56440A0D
  for <buildroot@lists.busybox.net>; Sun, 15 Sep 2024 21:36:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zrN0UaCvFkTP for <buildroot@lists.busybox.net>;
- Sun, 15 Sep 2024 21:36:40 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id njaD-ZaXDMtq for <buildroot@lists.busybox.net>;
+ Sun, 15 Sep 2024 21:36:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2A47A80837
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0D65D4042C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2A47A80837
- for <buildroot@buildroot.org>; Sun, 15 Sep 2024 21:36:40 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0D65D4042C
+ for <buildroot@buildroot.org>; Sun, 15 Sep 2024 21:36:38 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 24F1A83685; Sun, 15 Sep 2024 21:36:40 +0000 (UTC)
+ id 0A61B835CD; Sun, 15 Sep 2024 21:36:38 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 15 Sep 2024 10:02:56 +0200
+Date: Sun, 15 Sep 2024 09:38:01 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 39fb1550716e00b49fde99bef7e11c63b44063c3
-X-Git-Newrev: 6b34faee342870f54f1ab30de48297047b5f771c
+X-Git-Oldrev: 96f10934763edd7ca781de44c6a7cc9e915e4cff
+X-Git-Newrev: 33a7a17cc1bb7034296cf431d61d8825527b2db9
 X-Patchwork-Hint: ignore
-Message-Id: <20240915213640.24F1A83685@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-google-api-core: bump to
- version 2.19.2
+Message-Id: <20240915213638.0A61B835CD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/strongswan: update to 5.9.14
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,92 +57,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@mind.be>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6b34faee342870f54f1ab30de48297047b5f771c
+commit: https://git.buildroot.net/buildroot/commit/?id=33a7a17cc1bb7034296cf431d61d8825527b2db9
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Add new python-proto-plus runtime dependency, which requires adding
-BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS and propagate to reverse
-dependencies.
+For a changelog see here:
+https://github.com/strongswan/strongswan/releases/tag/5.9.14
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
- package/python-google-api-core/Config.in                   | 2 ++
- package/python-google-api-core/python-google-api-core.hash | 4 ++--
- package/python-google-api-core/python-google-api-core.mk   | 6 +++---
- package/python-grpc-requests/Config.in                     | 2 ++
- 4 files changed, 9 insertions(+), 5 deletions(-)
+ package/strongswan/strongswan.hash | 6 +++---
+ package/strongswan/strongswan.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-google-api-core/Config.in b/package/python-google-api-core/Config.in
-index 689923a2f4..5ddc8b3b22 100644
---- a/package/python-google-api-core/Config.in
-+++ b/package/python-google-api-core/Config.in
-@@ -1,7 +1,9 @@
- config BR2_PACKAGE_PYTHON_GOOGLE_API_CORE
- 	bool "python-google-api-core"
-+	depends on BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS # python-proto-plus
- 	select BR2_PACKAGE_PYTHON_GOOGLE_AUTH # runtime
- 	select BR2_PACKAGE_PYTHON_GOOGLEAPIS_COMMON_PROTOS # runtime
-+	select BR2_PACKAGE_PYTHON_PROTO_PLUS # runtime
- 	select BR2_PACKAGE_PYTHON_PROTOBUF # runtime
- 	select BR2_PACKAGE_PYTHON_REQUESTS # runtime
- 	help
-diff --git a/package/python-google-api-core/python-google-api-core.hash b/package/python-google-api-core/python-google-api-core.hash
-index 5a1cd7f1cb..7a52c94417 100644
---- a/package/python-google-api-core/python-google-api-core.hash
-+++ b/package/python-google-api-core/python-google-api-core.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/google-api-core/json
--md5  58a4ce34a405e514cdb5295c80834cfd  google-api-core-2.15.0.tar.gz
--sha256  abc978a72658f14a2df1e5e12532effe40f94f868f6e23d95133bd6abcca35ca  google-api-core-2.15.0.tar.gz
-+md5  39052bc872e39093248cc1841b0037ca  google_api_core-2.19.2.tar.gz
-+sha256  ca07de7e8aa1c98a8bfca9321890ad2340ef7f2eb136e558cee68f24b94b0a8f  google_api_core-2.19.2.tar.gz
- # Locally computed sha256 checksums
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/python-google-api-core/python-google-api-core.mk b/package/python-google-api-core/python-google-api-core.mk
-index 84042d8d7a..b2bf049624 100644
---- a/package/python-google-api-core/python-google-api-core.mk
-+++ b/package/python-google-api-core/python-google-api-core.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/strongswan/strongswan.hash b/package/strongswan/strongswan.hash
+index ed8cf0ae31..f6b16fc8a2 100644
+--- a/package/strongswan/strongswan.hash
++++ b/package/strongswan/strongswan.hash
+@@ -1,7 +1,7 @@
+-# From http://download.strongswan.org/strongswan-5.9.13.tar.bz2.md5
+-md5  9ada6be0c89846fb7ded1787a17cfbb2  strongswan-5.9.13.tar.bz2
++# From http://download.strongswan.org/strongswan-5.9.14.tar.bz2.md5
++md5  21ca3fc7c18456405d03b77266ba630a  strongswan-5.9.14.tar.bz2
+ # Calculated based on the hash above
+-sha256  56e30effb578fd9426d8457e3b76c8c3728cd8a5589594b55649b2719308ba55  strongswan-5.9.13.tar.bz2
++sha256  728027ddda4cb34c67c4cec97d3ddb8c274edfbabdaeecf7e74693b54fc33678  strongswan-5.9.14.tar.bz2
+ # Locally calculated
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  2292e21797754548dccdef9eef6aee7584e552fbd890fa914e1de8d3577d23f0  LICENSE
+diff --git a/package/strongswan/strongswan.mk b/package/strongswan/strongswan.mk
+index 57cadd3a0c..823b58555d 100644
+--- a/package/strongswan/strongswan.mk
++++ b/package/strongswan/strongswan.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_GOOGLE_API_CORE_VERSION = 2.15.0
--PYTHON_GOOGLE_API_CORE_SOURCE = google-api-core-$(PYTHON_GOOGLE_API_CORE_VERSION).tar.gz
--PYTHON_GOOGLE_API_CORE_SITE = https://files.pythonhosted.org/packages/2c/e4/56b14d35057a23cab9067dd8fb841407d05d32b5d6c7a3c66c1360e8a7c0
-+PYTHON_GOOGLE_API_CORE_VERSION = 2.19.2
-+PYTHON_GOOGLE_API_CORE_SOURCE = google_api_core-$(PYTHON_GOOGLE_API_CORE_VERSION).tar.gz
-+PYTHON_GOOGLE_API_CORE_SITE = https://files.pythonhosted.org/packages/78/14/99c2514b3ccc5aad1e0776f0ae8295c9f7153aead4f41d07dd126cecdc14
- PYTHON_GOOGLE_API_CORE_SETUP_TYPE = setuptools
- PYTHON_GOOGLE_API_CORE_LICENSE = Apache-2.0
- PYTHON_GOOGLE_API_CORE_LICENSE_FILES = LICENSE
-diff --git a/package/python-grpc-requests/Config.in b/package/python-grpc-requests/Config.in
-index 1cdd0d3f67..a4bb238089 100644
---- a/package/python-grpc-requests/Config.in
-+++ b/package/python-grpc-requests/Config.in
-@@ -1,5 +1,6 @@
- config BR2_PACKAGE_PYTHON_GRPC_REQUESTS
- 	bool "python-grpc-requests"
-+	depends on BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS # python-google-api-core
- 	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS # python-cryptography
- 	depends on BR2_PACKAGE_PYTHON_GRPCIO_ARCH_SUPPORTS # python-grpcio
- 	depends on BR2_INSTALL_LIBSTDCPP # python-grpcio
-@@ -13,6 +14,7 @@ config BR2_PACKAGE_PYTHON_GRPC_REQUESTS
- 	  https://github.com/wesky93/grpc_requests
- 
- comment "python-grpcio-requests needs a toolchain w/ C++"
-+	depends on BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS
- 	depends on BR2_PACKAGE_PYTHON_GRPCIO_ARCH_SUPPORTS
- 	depends on !BR2_INSTALL_LIBSTDCPP
+-STRONGSWAN_VERSION = 5.9.13
++STRONGSWAN_VERSION = 5.9.14
+ STRONGSWAN_SOURCE = strongswan-$(STRONGSWAN_VERSION).tar.bz2
+ STRONGSWAN_SITE = http://download.strongswan.org
+ STRONGSWAN_LICENSE = GPL-2.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
