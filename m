@@ -4,91 +4,92 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22DF6C35FE7
-	for <buildroot@archiver.kernel.org>; Sun, 15 Sep 2024 04:46:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF16BC35FE5
+	for <buildroot@archiver.kernel.org>; Sun, 15 Sep 2024 04:55:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B1809400EF;
-	Sun, 15 Sep 2024 04:46:30 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 71D1E400EF;
+	Sun, 15 Sep 2024 04:55:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id l7Sg8NYrjdwQ; Sun, 15 Sep 2024 04:46:29 +0000 (UTC)
+ id 4e5mtbalqOpm; Sun, 15 Sep 2024 04:55:07 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 713EE40169
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F1D7F401A1
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 713EE40169;
-	Sun, 15 Sep 2024 04:46:29 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 149A61BF383
- for <buildroot@lists.busybox.net>; Sun, 15 Sep 2024 04:46:28 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id F1D7F401A1;
+	Sun, 15 Sep 2024 04:55:06 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 5E9F91BF383
+ for <buildroot@lists.busybox.net>; Sun, 15 Sep 2024 04:55:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 109B0607E4
- for <buildroot@lists.busybox.net>; Sun, 15 Sep 2024 04:46:28 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4BAEC40169
+ for <buildroot@lists.busybox.net>; Sun, 15 Sep 2024 04:55:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hPvGLtTkVUoh for <buildroot@lists.busybox.net>;
- Sun, 15 Sep 2024 04:46:27 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Kt9rKFlmz96f for <buildroot@lists.busybox.net>;
+ Sun, 15 Sep 2024 04:55:04 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::d2f; helo=mail-io1-xd2f.google.com;
- envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 006A460776
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 006A460776
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com
- [IPv6:2607:f8b0:4864:20::d2f])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 006A460776
- for <buildroot@buildroot.org>; Sun, 15 Sep 2024 04:46:26 +0000 (UTC)
-Received: by mail-io1-xd2f.google.com with SMTP id
- ca18e2360f4ac-82ce1cd202cso190484939f.0
- for <buildroot@buildroot.org>; Sat, 14 Sep 2024 21:46:26 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::22f; helo=mail-lj1-x22f.google.com;
+ envelope-from=roykollensvendsen@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 7F574400EF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7F574400EF
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com
+ [IPv6:2a00:1450:4864:20::22f])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 7F574400EF
+ for <buildroot@buildroot.org>; Sun, 15 Sep 2024 04:55:03 +0000 (UTC)
+Received: by mail-lj1-x22f.google.com with SMTP id
+ 38308e7fff4ca-2f759688444so29275491fa.1
+ for <buildroot@buildroot.org>; Sat, 14 Sep 2024 21:55:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1726375585; x=1726980385;
+ d=1e100.net; s=20230601; t=1726376101; x=1726980901;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=vEWD5+YTMSxU50PbemehbqK1mcg6WTlhYx72giYHxEY=;
- b=kFO1OWlKFWMQtkUJcU5lmx+FYffXolUFArcayWq32pIOOaejyTKdlWhrOQhQslNg+L
- 7FJkGaCiSlYP1jQxGjrq328+oY4ykcFBq+GRzHRU3XKwHJvz1FHPrY32xOaZkxrQAzN6
- oeFR61KaarjDEyyOHpU+fq1XJldiAeQkE4JA8/11QpqO9PJI2TTR6Oz9vQ6URGqswxRA
- 7yO6CMRqgZqYgt4+WXI4vHCngKJPWNneDuvv76XY3FmkZYqUa6VzQ7Sj+qpyKyPBX6Wz
- u8/ry+d6/uVrCnc9Wo3rk1ICMWxFA48QnyUjmdWWEc4ls0ZN0yxYCeHTjx5p/B9HtQTq
- sDKg==
-X-Gm-Message-State: AOJu0YxD6Buo5YKjQZs+rWH1m5y5dlQbDE8V6t4Y8osR6TUKnB0S6fsV
- ++0pXcCA3GH9RcWyngfSAv36VeYAdwsvwEg6rM7RfJ5JwAu4ThcIpES4fQ==
-X-Google-Smtp-Source: AGHT+IHAJNgrZTMOi8g27cengeS6JSAmwQurtQFBZO4HMcinLjs9Otb0iUgQbJJSjq9eAxzRTJsnZQ==
-X-Received: by 2002:a05:6602:6013:b0:82a:4e38:b47c with SMTP id
- ca18e2360f4ac-82d1f8b4d50mr273163739f.1.1726375585186; 
- Sat, 14 Sep 2024 21:46:25 -0700 (PDT)
-Received: from james-x399.localdomain (71-218-252-223.hlrn.qwest.net.
- [71.218.252.223]) by smtp.gmail.com with ESMTPSA id
- ca18e2360f4ac-82d4928d5dasm74843739f.14.2024.09.14.21.46.24
+ bh=AulXpjNeZmTlsnaSoB/H5xKJI81vUJ8u+xwPswvjEkk=;
+ b=FRVP3rF54GP7FmciQLwe4fpwzi+ioGKzEgN+iuC06pmYh5hIpqAkItFZOppa8qMLMt
+ xWPaoF+k26dDT9Sp3n9E7qGfX6WIr6CnxtGuACN51jrG/kr8/fy1LrDQ5G0k0Oftf4ie
+ aOUj1z/kc1MIei2BUaywQ/L+2uc/4jLKYHs0p2zNBJRNUu20a0CDHPazyyJ0yNz9IiVB
+ y1xSR1dIPSuebH/rDtYp4y1eT3YyLT7twzj07QTTPq2+TeVYM+fTzjowVm7wZgtEysEK
+ OonZ4jkzDxiRqKlwydqYZP1aEsX9OHi8CKKLzK4wbcCXOk9nSG39RhlXIE3DmiC0db3V
+ +PEQ==
+X-Gm-Message-State: AOJu0YyGab1Yati49cBIyxPrKh6YLR+JjQIAHgr4/00oGMIPlmZqkGFS
+ +IsIYVjvLwZNBW+GKCFgqW60x2j1KfmnMHbSz62DQQ466c0SfaEboVMSVg==
+X-Google-Smtp-Source: AGHT+IGuFTVVQ4AIFjpv5yLgGC2b0SwM/NXo+8XvyCEoWOlrjzP892sZsc76njAalvDeO0ak96SlTg==
+X-Received: by 2002:a2e:f0a:0:b0:2f6:6576:ae6e with SMTP id
+ 38308e7fff4ca-2f787ed9065mr49302531fa.21.1726376100144; 
+ Sat, 14 Sep 2024 21:55:00 -0700 (PDT)
+Received: from precision7530-arch-roy.lan
+ ([2a01:799:1a22:4401:9825:b52b:4cba:665e])
+ by smtp.gmail.com with ESMTPSA id
+ 38308e7fff4ca-2f79d30130esm4250851fa.38.2024.09.14.21.54.58
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 14 Sep 2024 21:46:24 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
+ Sat, 14 Sep 2024 21:54:59 -0700 (PDT)
+From: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 14 Sep 2024 22:46:23 -0600
-Message-Id: <20240915044623.1401733-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Date: Sun, 15 Sep 2024 06:54:53 +0200
+Message-ID: <20240915045455.1567220-1-roykollensvendsen@gmail.com>
+X-Mailer: git-send-email 2.46.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1726375585; x=1726980385; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1726376101; x=1726980901; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=vEWD5+YTMSxU50PbemehbqK1mcg6WTlhYx72giYHxEY=;
- b=QVv/Xj4fNNv+8EZHzMeYN0G3XRbCVVssVhyNECVwCT0Ubs/VDpSdfUqAs8otud/2gJ
- sm9rruWKRPuKkk6xLqpaQAES+5jWHy7P+OCFF/jkH47OYZ1SnJ1bhlPt7FGABiledT3k
- ZMRMXbrBvhTJnNfOaMkhwE83wbbVmyAxDagZxQ6d7FILwRVLrP6ged4uN7U0H9VHPWPV
- mykNw1Ikj07I4jIk84ean7lDxogeWcU6ISOK32JKy+rLvDKdxYHg+UrH6uPRiqLD3/6u
- RS/AXP0XobwXM0WMhEcWACIhJYIc4kw5pi27refJVZ4cYdO03+ZEOSSOj+x7DjRC3rQW
- Xebw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=AulXpjNeZmTlsnaSoB/H5xKJI81vUJ8u+xwPswvjEkk=;
+ b=cpDhBn9RztUYllY1ie1SpwakIMsaJsZpGQZwzgMD9AV0NPDTWt04yezLLfs9qC3NdP
+ U+ihfrwGMUd+9xBckAEKACA9r0kM1aX8mRuN23G/7r+3wSExtyEEO2CEZ8uExF76kJTm
+ MIiMHMlCJvbftBtngOmIUI94p1nytE/BkV9uJ33qbTXlcQgbxz+/NO4rSwx6v0uAUS3D
+ +QGj3+On6JwUHB6ZdGYNaP+PTAYsLHzWwQc7DL8fnNG+wWs97IQOD35CoeabWTtHNcqT
+ uUuSymTiyw+qi5GOBnrT9bTM7rUVP6vSFgVO8TtkAVm6m7vSbrr+ssyCcYUUd1ups7YV
+ wBXQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=QVv/Xj4f
-Subject: [Buildroot] [PATCH 1/1] package/python-dnspython: bump to versin
- 2.6.1
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=cpDhBn9R
+Subject: [Buildroot] [PATCH v5] package/dlib: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,58 +101,202 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Louis Aussedat <aussedat.louis@gmail.com>,
- James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Cc: Roy Kollen Svendsen <roykollensvendsen@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Replace poetry-core build backend with hatchling.
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
 ---
- package/python-dnspython/python-dnspython.hash | 4 ++--
- package/python-dnspython/python-dnspython.mk   | 8 ++++----
- 2 files changed, 6 insertions(+), 6 deletions(-)
+Changes v4 -> v5:
+  - drop all sub-options, and instead rely on automatic dependencies  (suggested by Thomas)
+  - sort the ifeq's
+  - add entry in the DEVELOPERS file as part of the patch adding the package  (suggested by Thomas)
+  - convert 'OR' to lowercase in DLIB_LICENSES
+  - use the most common patterns for comments in hash-files
 
-diff --git a/package/python-dnspython/python-dnspython.hash b/package/python-dnspython/python-dnspython.hash
-index 77ffb5dedc..acab710d5a 100644
---- a/package/python-dnspython/python-dnspython.hash
-+++ b/package/python-dnspython/python-dnspython.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/dnspython/json
--md5  fac4e1580e5e9dfee722cb97bc073722  dnspython-2.4.2.tar.gz
--sha256  8dcfae8c7460a2f84b4072e26f1c9f4101ca20c071649cb7c34e8b6a93d58984  dnspython-2.4.2.tar.gz
-+md5  ad29d0392621fb107e0eac4beed79ce5  dnspython-2.6.1.tar.gz
-+sha256  e8f0f9c23a7b7cb99ded64e6c3a6f3e701d78f50c55e002b839dea7225cff7cc  dnspython-2.6.1.tar.gz
- # Locally computed sha256 checksums
- sha256  c3ea3ff5654b329c19d3bc5f7481af623c3dded4a6145585499f843ad3d741cd  LICENSE
-diff --git a/package/python-dnspython/python-dnspython.mk b/package/python-dnspython/python-dnspython.mk
-index f0df733143..01fad58c1d 100644
---- a/package/python-dnspython/python-dnspython.mk
-+++ b/package/python-dnspython/python-dnspython.mk
-@@ -4,14 +4,14 @@
- #
- ################################################################################
+ DEVELOPERS             |  1 +
+ package/Config.in      |  1 +
+ package/dlib/Config.in | 14 ++++++
+ package/dlib/dlib.hash | 13 ++++++
+ package/dlib/dlib.mk   | 99 ++++++++++++++++++++++++++++++++++++++++++
+ 5 files changed, 128 insertions(+)
+ create mode 100644 package/dlib/Config.in
+ create mode 100644 package/dlib/dlib.hash
+ create mode 100644 package/dlib/dlib.mk
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 1f887e161c..6e5f47466e 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2886,6 +2886,7 @@ F:	support/testing/tests/package/test_python_mako.py
+ F:	toolchain/
  
--PYTHON_DNSPYTHON_VERSION = 2.4.2
-+PYTHON_DNSPYTHON_VERSION = 2.6.1
- PYTHON_DNSPYTHON_SOURCE = dnspython-$(PYTHON_DNSPYTHON_VERSION).tar.gz
--PYTHON_DNSPYTHON_SITE = https://files.pythonhosted.org/packages/65/2d/372a20e52a87b2ba0160997575809806111a72e18aa92738daccceb8d2b9
-+PYTHON_DNSPYTHON_SITE = https://files.pythonhosted.org/packages/37/7d/c871f55054e403fdfd6b8f65fd6d1c4e147ed100d3e9f9ba1fe695403939
- PYTHON_DNSPYTHON_LICENSE = ISC
- PYTHON_DNSPYTHON_LICENSE_FILES = LICENSE
- PYTHON_DNSPYTHON_SETUP_TYPE = pep517
--PYTHON_DNSPYTHON_DEPENDENCIES = host-python-poetry-core
--HOST_PYTHON_DNSPYTHON_DEPENDENCIES = host-python-poetry-core
-+PYTHON_DNSPYTHON_DEPENDENCIES = host-python-hatchling
-+HOST_PYTHON_DNSPYTHON_DEPENDENCIES = host-python-hatchling
+ N:	Roy Kollen Svendsen <roykollensvendsen@gmail.com>
++F:	package/dlib/
+ F:	package/qt6/
  
- $(eval $(python-package))
- $(eval $(host-python-package))
+ N:	Rufus Segar <rhs@riseup.net>
+diff --git a/package/Config.in b/package/Config.in
+index 269a8cae6f..04dfca4289 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2153,6 +2153,7 @@ menu "Other"
+ 	source "package/cracklib/Config.in"
+ 	source "package/dawgdic/Config.in"
+ 	source "package/ding-libs/Config.in"
++	source "package/dlib/Config.in"
+ 	source "package/dotconf/Config.in"
+ 	source "package/double-conversion/Config.in"
+ 	source "package/eigen/Config.in"
+diff --git a/package/dlib/Config.in b/package/dlib/Config.in
+new file mode 100644
+index 0000000000..2419af967b
+--- /dev/null
++++ b/package/dlib/Config.in
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_DLIB
++	bool "dlib"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	help
++	  Dlib is a modern C++ toolkit containing machine learning
++	  algorithms and tools for creating complex software in C++ to
++	  solve real world problems.
++
++	  http://dlib.net
++
++comment "dlib needs a toolchain w/ C++, threads"
++	depends on !BR2_INSTALL_LIBSTDCPP || \
++		!BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/dlib/dlib.hash b/package/dlib/dlib.hash
+new file mode 100644
+index 0000000000..af206386b8
+--- /dev/null
++++ b/package/dlib/dlib.hash
+@@ -0,0 +1,13 @@
++# Locally computed
++sha256  22513c353ec9c153300c394050c96ca9d088e02966ac0f639e989e50318c82d6  dlib-19.24.6.tar.gz
++
++# Hashes for license files
++sha256  50c1c5978d490c7f13062d91c4b89affc83774f87bc4568a714f748b62a5b216  dlib/external/libjpeg/README
++sha256  debfae299fa4118b0a586af4cf7ac8d38aae81ac4e9995c935862aaee6eb0362  dlib/external/libpng/LICENSE
++sha256  83965b843b98f670d3a85bd041ed4b372c8ec50d7b4a5995a83ac697ba675dcb  dlib/external/pybind11/LICENSE
++sha256  8d8291caf1cee26d23acf3eb67c9f9a2d58f1c681b16a4fbe8cbfb9e3c0b5a9b  dlib/LICENSE.txt
++sha256  908b0b565ae9bf61b7b41447cb0b83564f320375723bcc884ec30e5537a0d5dc  dlib/test/ffmpeg_data/LICENSE.TXT
++sha256  78515536a4b0d896745b6483fccc561987e8e2f2d014dc81d7c2e97c497a0a69  examples/LICENSE_FOR_EXAMPLE_PROGRAMS.txt
++sha256  a0e7b40719ba74630debe9fae1cb847ee436215451123254a690171d09fb036e  examples/video_frames/license.txt
++sha256  8d8291caf1cee26d23acf3eb67c9f9a2d58f1c681b16a4fbe8cbfb9e3c0b5a9b  LICENSE.txt
++sha256  8acb12b218fdb5e071f25eda9ac990d04888388b65095867d9007c278a9f993b  python_examples/LICENSE_FOR_EXAMPLE_PROGRAMS.txt
+diff --git a/package/dlib/dlib.mk b/package/dlib/dlib.mk
+new file mode 100644
+index 0000000000..4eb0002775
+--- /dev/null
++++ b/package/dlib/dlib.mk
+@@ -0,0 +1,99 @@
++################################################################################
++#
++# dlib
++#
++################################################################################
++
++DLIB_VERSION = 19.24.6
++DLIB_SITE = $(call github,davisking,dlib,v$(DLIB_VERSION))
++DLIB_CMAKE_BACKEND = ninja
++DLIB_INSTALL_STAGING = YES
++DLIB_SUPPORTS_IN_SOURCE_BUILD = NO
++
++DLIB_LICENSE = \
++	BSD-3-Clause (kissfft, pybind11) \
++	BSL-1.0 (dlib, tools) \
++	CC0-1.0 (examples) \
++	libpng-2.0 (libpng) \
++	MIT or CC0-1.0 (JoinPaths.cmake)
++
++DLIB_LICENSE_FILES = \
++	dlib/external/libjpeg/README \
++	dlib/external/libpng/LICENSE \
++	dlib/external/pybind11/LICENSE \
++	dlib/LICENSE.txt \
++	dlib/test/ffmpeg_data/LICENSE.TXT \
++	examples/LICENSE_FOR_EXAMPLE_PROGRAMS.txt \
++	examples/video_frames/license.txt \
++	LICENSE.txt \
++	python_examples/LICENSE_FOR_EXAMPLE_PROGRAMS.txt
++
++DLIB_CONF_OPTS = \
++	-DDLIB_LINK_WITH_SQLITE3=OFF \
++	-DDLIB_USE_CUDA=OFF \
++	-DDLIB_USE_MKL_FFT=OFF
++
++ifeq ($(BR2_PACKAGE_FFMPEG)$(BR2_PACKAGE_FFMPEG_SWSCALE),yy)
++DLIB_CONF_OPTS += -DDLIB_USE_FFMPEG=ON
++DLIB_DEPENDENCIES += ffmpeg
++else
++DLIB_CONF_OPTS += -DDLIB_USE_FFMPEG=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_GIFLIB),y)
++DLIB_CONF_OPTS += -DDLIB_GIF_SUPPORT=ON
++DLIB_DEPENDENCIES += giflib
++else
++DLIB_CONF_OPTS += -DDLIB_GIF_SUPPORT=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_JPEG),y)
++DLIB_CONF_OPTS += -DDLIB_JPEG_SUPPORT=ON
++DLIB_DEPENDENCIES += jpeg
++else
++DLIB_CONF_OPTS += -DDLIB_JPEG_SUPPORT=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_LAPACK),y)
++DLIB_CONF_OPTS += -DDLIB_USE_LAPACK=ON
++DLIB_DEPENDENCIES += lapack
++else
++DLIB_CONF_OPTS += -DDLIB_USE_LAPACK=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_LIBJXL),y)
++DLIB_CONF_OPTS += -DDLIB_JXL_SUPPORT=ON
++DLIB_DEPENDENCIES += libjxl
++else
++DLIB_CONF_OPTS += -DDLIB_JXL_SUPPORT=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_LIBPNG),y)
++DLIB_CONF_OPTS += -DDLIB_PNG_SUPPORT=ON
++DLIB_DEPENDENCIES += libpng
++else
++DLIB_CONF_OPTS += -DDLIB_PNG_SUPPORT=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_OPENBLAS),y)
++DLIB_CONF_OPTS += -DDLIB_USE_BLAS=ON
++DLIB_DEPENDENCIES += openblas
++else
++DLIB_CONF_OPTS += -DDLIB_USE_BLAS=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_WEBP),y)
++DLIB_CONF_OPTS += -DDLIB_WEBP_SUPPORT=ON
++DLIB_DEPENDENCIES += webp
++else
++DLIB_CONF_OPTS += -DDLIB_WEBP_SUPPORT=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_XLIB_LIBX11),y)
++DLIB_CONF_OPTS += -DDLIB_NO_GUI_SUPPORT=OFF
++DLIB_DEPENDENCIES += xlib_libX11
++else
++DLIB_CONF_OPTS += -DDLIB_NO_GUI_SUPPORT=ON
++endif
++
++$(eval $(cmake-package))
 -- 
-2.34.1
+2.46.0
 
 _______________________________________________
 buildroot mailing list
