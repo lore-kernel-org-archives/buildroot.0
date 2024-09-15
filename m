@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EDD7DC3ABAE
-	for <buildroot@archiver.kernel.org>; Sun, 15 Sep 2024 21:42:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79BD4C3ABAE
+	for <buildroot@archiver.kernel.org>; Sun, 15 Sep 2024 21:42:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A2B5A84915;
-	Sun, 15 Sep 2024 21:42:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 04CC784936;
+	Sun, 15 Sep 2024 21:42:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5pVAL57NnG-O; Sun, 15 Sep 2024 21:42:10 +0000 (UTC)
+ id xyi8uCR6upxM; Sun, 15 Sep 2024 21:42:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 74F9F8491F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C8D7884924
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 74F9F8491F;
-	Sun, 15 Sep 2024 21:42:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C8D7884924;
+	Sun, 15 Sep 2024 21:42:12 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 6D1221BF94D
- for <buildroot@lists.busybox.net>; Sun, 15 Sep 2024 21:37:16 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1884B1BF28B
+ for <buildroot@lists.busybox.net>; Sun, 15 Sep 2024 21:37:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id CD4D460887
+ by smtp3.osuosl.org (Postfix) with ESMTP id EAEE56088B
  for <buildroot@lists.busybox.net>; Sun, 15 Sep 2024 21:36:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rEDa5pu4vRBC for <buildroot@lists.busybox.net>;
- Sun, 15 Sep 2024 21:36:38 +0000 (UTC)
+ id iwLLgo1k0-Bm for <buildroot@lists.busybox.net>;
+ Sun, 15 Sep 2024 21:36:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4B1726088B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 52DB8608AB
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4B1726088B
- for <buildroot@buildroot.org>; Sun, 15 Sep 2024 21:36:38 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 52DB8608AB
+ for <buildroot@buildroot.org>; Sun, 15 Sep 2024 21:36:40 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 41E3483685; Sun, 15 Sep 2024 21:36:38 +0000 (UTC)
+ id 4F915835CD; Sun, 15 Sep 2024 21:36:40 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 15 Sep 2024 10:02:14 +0200
+Date: Sun, 15 Sep 2024 10:12:46 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 68905539caa1a6f199f419f9fd33d822ffd8f3b8
-X-Git-Newrev: 9a385fd12fc0b44d4cc391fcc75ead3d772d84dd
+X-Git-Oldrev: 35c578f25609c6c7afbbb01265b6678afa225a70
+X-Git-Newrev: 17bdb450da0d085889fc45b51ff06fd909e41f68
 X-Patchwork-Hint: ignore
-Message-Id: <20240915213638.41E3483685@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-bitstring: bump to version
- 4.2.3
+Message-Id: <20240915213640.4F915835CD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-greenlet: bump to version
+ 3.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,44 +66,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=9a385fd12fc0b44d4cc391fcc75ead3d772d84dd
+commit: https://git.buildroot.net/buildroot/commit/?id=17bdb450da0d085889fc45b51ff06fd909e41f68
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-bitstring/python-bitstring.hash | 4 ++--
- package/python-bitstring/python-bitstring.mk   | 4 ++--
+ package/python-greenlet/python-greenlet.hash | 4 ++--
+ package/python-greenlet/python-greenlet.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-bitstring/python-bitstring.hash b/package/python-bitstring/python-bitstring.hash
-index 1889983f47..e1b66c76b0 100644
---- a/package/python-bitstring/python-bitstring.hash
-+++ b/package/python-bitstring/python-bitstring.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/bitstring/json
--md5  3909415d89586edabd577b62b0d0c1be  bitstring-4.1.4.tar.gz
--sha256  94f3f1c45383ebe8fd4a359424ffeb75c2f290760ae8fcac421b44f89ac85213  bitstring-4.1.4.tar.gz
-+md5  5edecacd8fa0356601f7035977d0749e  bitstring-4.2.3.tar.gz
-+sha256  e0c447af3fda0d114f77b88c2d199f02f97ee7e957e6d719f40f41cf15fbb897  bitstring-4.2.3.tar.gz
+diff --git a/package/python-greenlet/python-greenlet.hash b/package/python-greenlet/python-greenlet.hash
+index 61e7f05346..59be4fbff9 100644
+--- a/package/python-greenlet/python-greenlet.hash
++++ b/package/python-greenlet/python-greenlet.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/greenlet/json
+-md5  170495b0af3b63ca40ca637dd6e5c6ef  greenlet-3.0.3.tar.gz
+-sha256  43374442353259554ce33599da8b692d5aa96f8976d567d4badf263371fbe491  greenlet-3.0.3.tar.gz
++md5  9ff064be5bce917f9a60b609ca65f54b  greenlet-3.1.0.tar.gz
++sha256  b395121e9bbe8d02a750886f108d540abe66075e61e22f7353d9acb0b81be0f0  greenlet-3.1.0.tar.gz
  # Locally computed sha256 checksums
- sha256  3705eed5a923f35d9bfaca1f10e9136cc84d6e576570aec661bda69991f129ea  LICENSE
-diff --git a/package/python-bitstring/python-bitstring.mk b/package/python-bitstring/python-bitstring.mk
-index 983491303d..fcb40365d4 100644
---- a/package/python-bitstring/python-bitstring.mk
-+++ b/package/python-bitstring/python-bitstring.mk
+ sha256  769831d6e5dfaf2c20802faccff1fafb4c2025dd8f6253dfa47fcad59d4d0979  LICENSE
+ sha256  e5ff3c23c110e494cd7d736c10fd96d462457bafeca310840db6527298c7d46b  LICENSE.PSF
+diff --git a/package/python-greenlet/python-greenlet.mk b/package/python-greenlet/python-greenlet.mk
+index 1af104519b..6e041d5ffe 100644
+--- a/package/python-greenlet/python-greenlet.mk
++++ b/package/python-greenlet/python-greenlet.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_BITSTRING_VERSION = 4.1.4
-+PYTHON_BITSTRING_VERSION = 4.2.3
- PYTHON_BITSTRING_SOURCE = bitstring-$(PYTHON_BITSTRING_VERSION).tar.gz
--PYTHON_BITSTRING_SITE = https://files.pythonhosted.org/packages/7f/07/0fd502a29127b968bada3d1824a8af997546d2b9ff73f00e800b3d9888cb
-+PYTHON_BITSTRING_SITE = https://files.pythonhosted.org/packages/d8/d0/d6f57409bb50f54fe2894ec5a50b5c04cb41aa814c3bdb8a7eeb4a0f7697
- PYTHON_BITSTRING_SETUP_TYPE = setuptools
- PYTHON_BITSTRING_LICENSE = MIT
- PYTHON_BITSTRING_LICENSE_FILES = LICENSE
+-PYTHON_GREENLET_VERSION = 3.0.3
++PYTHON_GREENLET_VERSION = 3.1.0
+ PYTHON_GREENLET_SOURCE = greenlet-$(PYTHON_GREENLET_VERSION).tar.gz
+-PYTHON_GREENLET_SITE = https://files.pythonhosted.org/packages/17/14/3bddb1298b9a6786539ac609ba4b7c9c0842e12aa73aaa4d8d73ec8f8185
++PYTHON_GREENLET_SITE = https://files.pythonhosted.org/packages/65/1b/3d91623c3eff61c11799e7f3d6c01f6bfa9bd2d1f0181116fd0b9b108a40
+ PYTHON_GREENLET_SETUP_TYPE = setuptools
+ PYTHON_GREENLET_LICENSE = MIT, PSF-2.0
+ PYTHON_GREENLET_LICENSE_FILES = LICENSE LICENSE.PSF
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
