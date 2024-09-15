@@ -4,91 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3CE90C35FE5
-	for <buildroot@archiver.kernel.org>; Sun, 15 Sep 2024 05:08:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3ADFC35FE7
+	for <buildroot@archiver.kernel.org>; Sun, 15 Sep 2024 05:33:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EE289400EF;
-	Sun, 15 Sep 2024 05:08:17 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 69A3A401AD;
+	Sun, 15 Sep 2024 05:33:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Y4DtMyqZ2nV5; Sun, 15 Sep 2024 05:08:16 +0000 (UTC)
+ id JNSZPk5bxmFD; Sun, 15 Sep 2024 05:33:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 99956401A1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 09F6B40225
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 99956401A1;
-	Sun, 15 Sep 2024 05:08:16 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 09F6B40225;
+	Sun, 15 Sep 2024 05:33:28 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 4E8E01BF293
- for <buildroot@lists.busybox.net>; Sun, 15 Sep 2024 05:08:15 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 982C41BF293
+ for <buildroot@lists.busybox.net>; Sun, 15 Sep 2024 05:33:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 3D5F440359
- for <buildroot@lists.busybox.net>; Sun, 15 Sep 2024 05:08:15 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8621940359
+ for <buildroot@lists.busybox.net>; Sun, 15 Sep 2024 05:33:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uzzOxMLVHi_a for <buildroot@lists.busybox.net>;
- Sun, 15 Sep 2024 05:08:14 +0000 (UTC)
+ id 9L_JafP3NJqL for <buildroot@lists.busybox.net>;
+ Sun, 15 Sep 2024 05:33:26 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::12e; helo=mail-il1-x12e.google.com;
+ client-ip=2607:f8b0:4864:20::d2f; helo=mail-io1-xd2f.google.com;
  envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 158F8400EF
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 158F8400EF
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com
- [IPv6:2607:f8b0:4864:20::12e])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 158F8400EF
- for <buildroot@buildroot.org>; Sun, 15 Sep 2024 05:08:13 +0000 (UTC)
-Received: by mail-il1-x12e.google.com with SMTP id
- e9e14a558f8ab-3a08ca8d3fdso6612415ab.0
- for <buildroot@buildroot.org>; Sat, 14 Sep 2024 22:08:13 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 395DF401AD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 395DF401AD
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com
+ [IPv6:2607:f8b0:4864:20::d2f])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 395DF401AD
+ for <buildroot@buildroot.org>; Sun, 15 Sep 2024 05:33:26 +0000 (UTC)
+Received: by mail-io1-xd2f.google.com with SMTP id
+ ca18e2360f4ac-82aa93774ceso197747639f.0
+ for <buildroot@buildroot.org>; Sat, 14 Sep 2024 22:33:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1726376892; x=1726981692;
+ d=1e100.net; s=20230601; t=1726378405; x=1726983205;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=tkH1HtDhih1kR6paQylJDb9Fm4pQz9R91NRtcgldVLE=;
- b=R87DAxXBVUCwa6gPMTeTGhA8RSVt/VB/tFBKhNl12XQZ/VhPj24Wk46R5LUKcoKZT1
- F2jrkZCZQWBu1RIv7tWsUW5I7SnqhtPanJLqekJG7O+iv5WWeUDfYYQyte0fW7RSWAR7
- f3QS8nSnLwZoQ0V6NuFQiXAl3nNNYWCKd1b8sMPI3UXIyZ5+DzSDlS3AJSAt4fCMJfHJ
- RoVbTKBhuFBba6yTL5XM8OAOTZuhRc0PomeEZq5+DzWQ7mKjpbce0bWmoMaiy90jXdbo
- ejUfTAsdsfRpp5paagpveuDqQoDqa6KKP+B86RJ/EDuSrXfk3XEIc5/lowLFCKMXWoat
- Bm8w==
-X-Gm-Message-State: AOJu0Yy2QjQFBYFK35Rml2pDbbeImvDGO3muK3p4XLPdXyuExTyvytVr
- pt8alFVJix5dp/cfVURRR+suBAQBUZ2i7wbqYf57pSYVAwyGVGmaaGOdEA==
-X-Google-Smtp-Source: AGHT+IF48IQ3T7tkhozmwhiubaK3rXjZPMQ+B6m/ef4tKjcB39iemxsX2aIGGheOcUDOngAT5dgGxQ==
-X-Received: by 2002:a05:6e02:1e0c:b0:3a0:9043:59b8 with SMTP id
- e9e14a558f8ab-3a09043628emr62647665ab.12.1726376892492; 
- Sat, 14 Sep 2024 22:08:12 -0700 (PDT)
+ bh=f3t53VACfGwVQ+7CF+URjpN3/2Lu1tHX87FVGXEaUgk=;
+ b=BqxSrzb4FxMi+L5WsBVT5+Of1z9i63C1M53qPKKU7AdO236w8xvrkZKab43IQgVnpC
+ iJkXARhFe58JieZCBI7US2beZbGFTfNUd0n7PLMg3ohv7r6xJ75jToOrH1JvwHuZ12ZY
+ xx2t0DxVVnB8ALkLUTMNWNz02qHxFPt8xNY/KzJgF8I8IArXaFxjrWheK3kJWuRJ/Ach
+ +YrJgBD8wumURyyxswAqgdjb+0m6xlZi2T2+wCo6y7odUCYqpL4Q9amz6E7T+oG8+avL
+ SWGshBzwOHsg6DYr0cvOyMwMbqhJ6xaTX1z4fhBAZ+gZHEx3Ms4XXdfzqOI0SxbN99AF
+ GPBg==
+X-Gm-Message-State: AOJu0Yy61mFQOJ1tk5N4A5h/jewOOpieCuH42FUUXSMrYUEtvO29nU3v
+ kSkSYE6buFtz/NKQMStN9YwFiT9w+QqugV7teA6Nb+2742sf0SIt35AYgw==
+X-Google-Smtp-Source: AGHT+IF+kDIyGqlpsgbCFeY3YVAiEUd+VQsTPcUYVq+dwIrGVFXCbUCyitvdG4hCYC/IOwSn/65SwA==
+X-Received: by 2002:a05:6602:3420:b0:82c:f30d:fc9b with SMTP id
+ ca18e2360f4ac-82d1f982f5dmr1044119339f.13.1726378404875; 
+ Sat, 14 Sep 2024 22:33:24 -0700 (PDT)
 Received: from james-x399.localdomain (71-218-252-223.hlrn.qwest.net.
  [71.218.252.223]) by smtp.gmail.com with ESMTPSA id
- e9e14a558f8ab-3a092e7208bsm8308525ab.58.2024.09.14.22.08.11
+ ca18e2360f4ac-82d49269955sm79396039f.8.2024.09.14.22.33.23
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 14 Sep 2024 22:08:12 -0700 (PDT)
+ Sat, 14 Sep 2024 22:33:23 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 14 Sep 2024 23:08:10 -0600
-Message-Id: <20240915050810.1411887-1-james.hilliard1@gmail.com>
+Date: Sat, 14 Sep 2024 23:33:19 -0600
+Message-Id: <20240915053320.1418783-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1726376892; x=1726981692; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1726378405; x=1726983205; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=tkH1HtDhih1kR6paQylJDb9Fm4pQz9R91NRtcgldVLE=;
- b=ZNuUkXowQgCE6SDYOTn//dIkOS0A9PTBvT8bq72uKPYif5ksZp+chanVP9dn521eOP
- md8Ztufs4Maa+I9sAiIQ6V2GBscNI6Al96pOhuPaP71d9Oo3peYoMSjcGoVSRZR9Anmz
- TRpUHt1oXrFpcpspsDtaYXZf3ioDnDKxcxrIeuGt1u+VLGqTP1O/X/YvqdPTacL/gU1k
- R32hVkVRNEkE4jZ5Bw7orZch6XA8I8R0mzPqyH/T8n9rvQHiqrf4B/BNP/TzzoOEROiu
- gHJJ2zYblnZpFF08a30+DBoDwvJJzfRQfuJLWERnd92PGQCPe80Ak84RranfGFBu/Nc0
- bn1w==
+ bh=f3t53VACfGwVQ+7CF+URjpN3/2Lu1tHX87FVGXEaUgk=;
+ b=Q+p0XxCRby+lN0VouG1gynaNEh7D3FsGtCpGo95Tar4Fo50nk2Xh3VQNahqCFCcYfM
+ DXutAWU3c1M6GuE/VSQiAbhkyfYmVDTtF4JJwMlbtdhdbrl53OFhgz1aMrMtwhfZaW11
+ wXPum9QTb7VEMNsd6wHfkZDzcNOAquPT7MnbiRnFiIicNnJe9ah3lLdylU1I7Ye7wZ2o
+ bLeVEzUZasbl4isl0KlK4RwbI+2xwRB/8BLB38H6K9CCkuC+Uuvjb66WEDh02dCPVB2E
+ lPbzbzOVI7UIaAnqt2BdTNg8MK/l43Ofhx1GzMH1x+SGQ3oy8SuTwkd9g2FeHISdKkiN
+ zuWw==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=ZNuUkXow
-Subject: [Buildroot] [PATCH 1/1] package/python-email-validator: bump to
- version 2.2.0
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=Q+p0XxCR
+Subject: [Buildroot] [PATCH 1/2] package/python-simple-websocket: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,7 +100,8 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -108,38 +109,71 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-email-validator/python-email-validator.hash | 4 ++--
- package/python-email-validator/python-email-validator.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/Config.in                                  |  1 +
+ package/python-simple-websocket/Config.in          |  7 +++++++
+ .../python-simple-websocket.hash                   |  5 +++++
+ .../python-simple-websocket.mk                     | 14 ++++++++++++++
+ 4 files changed, 27 insertions(+)
+ create mode 100644 package/python-simple-websocket/Config.in
+ create mode 100644 package/python-simple-websocket/python-simple-websocket.hash
+ create mode 100644 package/python-simple-websocket/python-simple-websocket.mk
 
-diff --git a/package/python-email-validator/python-email-validator.hash b/package/python-email-validator/python-email-validator.hash
-index 4342f8d91b..f7a7ed8a33 100644
---- a/package/python-email-validator/python-email-validator.hash
-+++ b/package/python-email-validator/python-email-validator.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/email-validator/json
--md5  a836759afeb7efdc5d493fbdf8a1bae6  email_validator-2.1.1.tar.gz
--sha256  200a70680ba08904be6d1eef729205cc0d687634399a5924d842533efb824b84  email_validator-2.1.1.tar.gz
-+md5  593073eca56ac1e947d47b9b314f2f11  email_validator-2.2.0.tar.gz
-+sha256  cb690f344c617a714f22e66ae771445a1ceb46821152df8e165c5f9a364582b7  email_validator-2.2.0.tar.gz
- # Locally computed sha256 checksums
- sha256  672179752e109134a3fb2bdd0780b29fdb7a03974f0f586a13aead5129562d4c  LICENSE
-diff --git a/package/python-email-validator/python-email-validator.mk b/package/python-email-validator/python-email-validator.mk
-index 8d82eb092f..35881c13a3 100644
---- a/package/python-email-validator/python-email-validator.mk
-+++ b/package/python-email-validator/python-email-validator.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_EMAIL_VALIDATOR_VERSION = 2.1.1
-+PYTHON_EMAIL_VALIDATOR_VERSION = 2.2.0
- PYTHON_EMAIL_VALIDATOR_SOURCE = email_validator-$(PYTHON_EMAIL_VALIDATOR_VERSION).tar.gz
--PYTHON_EMAIL_VALIDATOR_SITE = https://files.pythonhosted.org/packages/63/82/2914bff80ebee8c027802a664ad4b4caad502cd594e358f76aff395b5e56
-+PYTHON_EMAIL_VALIDATOR_SITE = https://files.pythonhosted.org/packages/48/ce/13508a1ec3f8bb981ae4ca79ea40384becc868bfae97fd1c942bb3a001b1
- PYTHON_EMAIL_VALIDATOR_SETUP_TYPE = setuptools
- PYTHON_EMAIL_VALIDATOR_LICENSE = Unlicense
- PYTHON_EMAIL_VALIDATOR_LICENSE_FILES = LICENSE
+diff --git a/package/Config.in b/package/Config.in
+index 269a8cae6f..38944bdd4f 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1372,6 +1372,7 @@ menu "External python modules"
+ 	source "package/python-setuptools/Config.in"
+ 	source "package/python-sh/Config.in"
+ 	source "package/python-shutilwhich/Config.in"
++	source "package/python-simple-websocket/Config.in"
+ 	source "package/python-simpleaudio/Config.in"
+ 	source "package/python-simplegeneric/Config.in"
+ 	source "package/python-simplejson/Config.in"
+diff --git a/package/python-simple-websocket/Config.in b/package/python-simple-websocket/Config.in
+new file mode 100644
+index 0000000000..187d20a3a3
+--- /dev/null
++++ b/package/python-simple-websocket/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_PYTHON_SIMPLE_WEBSOCKET
++	bool "python-simple-websocket"
++	select BR2_PACKAGE_PYTHON_WSPROTO # runtime
++	help
++	  Simple WebSocket server and client for Python.
++
++	  https://github.com/miguelgrinberg/simple-websocket
+diff --git a/package/python-simple-websocket/python-simple-websocket.hash b/package/python-simple-websocket/python-simple-websocket.hash
+new file mode 100644
+index 0000000000..f6cf8457dc
+--- /dev/null
++++ b/package/python-simple-websocket/python-simple-websocket.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/simple-websocket/json
++md5  e1dd8c3da6994555289611586c326dfe  simple-websocket-1.0.0.tar.gz
++sha256  17d2c72f4a2bd85174a97e3e4c88b01c40c3f81b7b648b0cc3ce1305968928c8  simple-websocket-1.0.0.tar.gz
++# Locally computed sha256 checksums
++sha256  4b8abadcc5e3dd29c71905b84952945699f0a7ba41e6af99eaba46faabe95bb7  LICENSE
+diff --git a/package/python-simple-websocket/python-simple-websocket.mk b/package/python-simple-websocket/python-simple-websocket.mk
+new file mode 100644
+index 0000000000..1fdf7f8763
+--- /dev/null
++++ b/package/python-simple-websocket/python-simple-websocket.mk
+@@ -0,0 +1,14 @@
++################################################################################
++#
++# python-simple-websocket
++#
++################################################################################
++
++PYTHON_SIMPLE_WEBSOCKET_VERSION = 1.0.0
++PYTHON_SIMPLE_WEBSOCKET_SOURCE = simple-websocket-$(PYTHON_SIMPLE_WEBSOCKET_VERSION).tar.gz
++PYTHON_SIMPLE_WEBSOCKET_SITE = https://files.pythonhosted.org/packages/d3/82/3cf87d317911864a2f2a8daf1779fc7f82d5d55e6a8aaa0315f8209047a7
++PYTHON_SIMPLE_WEBSOCKET_SETUP_TYPE = setuptools
++PYTHON_SIMPLE_WEBSOCKET_LICENSE = MIT
++PYTHON_SIMPLE_WEBSOCKET_LICENSE_FILES = LICENSE
++
++$(eval $(python-package))
 -- 
 2.34.1
 
