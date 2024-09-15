@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31193C3ABAE
-	for <buildroot@archiver.kernel.org>; Sun, 15 Sep 2024 21:40:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6DF4FC3ABAE
+	for <buildroot@archiver.kernel.org>; Sun, 15 Sep 2024 21:40:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F2DC181E5F;
-	Sun, 15 Sep 2024 21:40:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3E9458480F;
+	Sun, 15 Sep 2024 21:40:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id N6AFNWDh7w5R; Sun, 15 Sep 2024 21:40:27 +0000 (UTC)
+ id ULtfzb-UB-p9; Sun, 15 Sep 2024 21:40:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C427484806
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 94FCC81E79
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C427484806;
-	Sun, 15 Sep 2024 21:40:26 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B53071BF28B
- for <buildroot@lists.busybox.net>; Sun, 15 Sep 2024 21:36:56 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 94FCC81E79;
+	Sun, 15 Sep 2024 21:40:29 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 478881BF94D
+ for <buildroot@lists.busybox.net>; Sun, 15 Sep 2024 21:36:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6225260A61
+ by smtp2.osuosl.org (Postfix) with ESMTP id B23B040A12
  for <buildroot@lists.busybox.net>; Sun, 15 Sep 2024 21:36:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Zdq9yWG_9Znw for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id YE-FSftzhlBg for <buildroot@lists.busybox.net>;
  Sun, 15 Sep 2024 21:36:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5FDE360878
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B996A40A35
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5FDE360878
- for <buildroot@buildroot.org>; Sun, 15 Sep 2024 21:36:39 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id B996A40A35
+ for <buildroot@buildroot.org>; Sun, 15 Sep 2024 21:36:40 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5AC44835CD; Sun, 15 Sep 2024 21:36:39 +0000 (UTC)
+ id B57DD83683; Sun, 15 Sep 2024 21:36:40 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 15 Sep 2024 10:02:38 +0200
+Date: Sun, 15 Sep 2024 10:35:46 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 0b779eb980c5bc47e725ccfd404b43ffd59d9e7a
-X-Git-Newrev: e15ee604ca308068eca4c9541e8fbfea528f0db4
+X-Git-Oldrev: 069add3bcc5c6be3a88981852a2f13b9a012fdaf
+X-Git-Newrev: fd35be957e813d478325500cd0033b6912e77c44
 X-Patchwork-Hint: ignore
-Message-Id: <20240915213639.5AC44835CD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-simple-websocket: new
- package
+Message-Id: <20240915213640.B57DD83683@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-inflect: bump to version
+ 7.4.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,74 +66,105 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e15ee604ca308068eca4c9541e8fbfea528f0db4
+commit: https://git.buildroot.net/buildroot/commit/?id=fd35be957e813d478325500cd0033b6912e77c44
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+Drop no longer required python-pydantic runtime dependency and
+propagate reverse dependency removal.
+
+Drop no longer required python-typing-extensions runtime dependency.
+
+Add new python-more-itertools runtime dependency.
+
+Add new python-typeguard runtime dependency.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/Config.in                                          |  1 +
- package/python-simple-websocket/Config.in                  |  7 +++++++
- .../python-simple-websocket/python-simple-websocket.hash   |  5 +++++
- package/python-simple-websocket/python-simple-websocket.mk | 14 ++++++++++++++
- 4 files changed, 27 insertions(+)
+ package/python-cherrypy/Config.in           | 1 -
+ package/python-inflect/Config.in            | 5 ++---
+ package/python-inflect/python-inflect.hash  | 4 ++--
+ package/python-inflect/python-inflect.mk    | 4 ++--
+ package/python-jaraco-collections/Config.in | 1 -
+ package/python-jaraco-text/Config.in        | 1 -
+ 6 files changed, 6 insertions(+), 10 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index 269a8cae6f..38944bdd4f 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1372,6 +1372,7 @@ menu "External python modules"
- 	source "package/python-setuptools/Config.in"
- 	source "package/python-sh/Config.in"
- 	source "package/python-shutilwhich/Config.in"
-+	source "package/python-simple-websocket/Config.in"
- 	source "package/python-simpleaudio/Config.in"
- 	source "package/python-simplegeneric/Config.in"
- 	source "package/python-simplejson/Config.in"
-diff --git a/package/python-simple-websocket/Config.in b/package/python-simple-websocket/Config.in
-new file mode 100644
-index 0000000000..187d20a3a3
---- /dev/null
-+++ b/package/python-simple-websocket/Config.in
-@@ -0,0 +1,7 @@
-+config BR2_PACKAGE_PYTHON_SIMPLE_WEBSOCKET
-+	bool "python-simple-websocket"
-+	select BR2_PACKAGE_PYTHON_WSPROTO # runtime
-+	help
-+	  Simple WebSocket server and client for Python.
-+
-+	  https://github.com/miguelgrinberg/simple-websocket
-diff --git a/package/python-simple-websocket/python-simple-websocket.hash b/package/python-simple-websocket/python-simple-websocket.hash
-new file mode 100644
-index 0000000000..f6cf8457dc
---- /dev/null
-+++ b/package/python-simple-websocket/python-simple-websocket.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/simple-websocket/json
-+md5  e1dd8c3da6994555289611586c326dfe  simple-websocket-1.0.0.tar.gz
-+sha256  17d2c72f4a2bd85174a97e3e4c88b01c40c3f81b7b648b0cc3ce1305968928c8  simple-websocket-1.0.0.tar.gz
-+# Locally computed sha256 checksums
-+sha256  4b8abadcc5e3dd29c71905b84952945699f0a7ba41e6af99eaba46faabe95bb7  LICENSE
-diff --git a/package/python-simple-websocket/python-simple-websocket.mk b/package/python-simple-websocket/python-simple-websocket.mk
-new file mode 100644
-index 0000000000..1fdf7f8763
---- /dev/null
-+++ b/package/python-simple-websocket/python-simple-websocket.mk
-@@ -0,0 +1,14 @@
-+################################################################################
-+#
-+# python-simple-websocket
-+#
-+################################################################################
-+
-+PYTHON_SIMPLE_WEBSOCKET_VERSION = 1.0.0
-+PYTHON_SIMPLE_WEBSOCKET_SOURCE = simple-websocket-$(PYTHON_SIMPLE_WEBSOCKET_VERSION).tar.gz
-+PYTHON_SIMPLE_WEBSOCKET_SITE = https://files.pythonhosted.org/packages/d3/82/3cf87d317911864a2f2a8daf1779fc7f82d5d55e6a8aaa0315f8209047a7
-+PYTHON_SIMPLE_WEBSOCKET_SETUP_TYPE = setuptools
-+PYTHON_SIMPLE_WEBSOCKET_LICENSE = MIT
-+PYTHON_SIMPLE_WEBSOCKET_LICENSE_FILES = LICENSE
-+
-+$(eval $(python-package))
+diff --git a/package/python-cherrypy/Config.in b/package/python-cherrypy/Config.in
+index fd67872873..24e244f3b3 100644
+--- a/package/python-cherrypy/Config.in
++++ b/package/python-cherrypy/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_PYTHON_CHERRYPY
+ 	bool "python-cherrypy"
+-	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS # python-jaraco-collections -> python-jaraco-text -> python-inflect -> python-pydantic -> python-pydantic-core
+ 	select BR2_PACKAGE_PYTHON_CHEROOT # runtime
+ 	select BR2_PACKAGE_PYTHON_JARACO_COLLECTIONS # runtime
+ 	select BR2_PACKAGE_PYTHON_MORE_ITERTOOLS # runtime
+diff --git a/package/python-inflect/Config.in b/package/python-inflect/Config.in
+index daf6bd4a32..c2773aae45 100644
+--- a/package/python-inflect/Config.in
++++ b/package/python-inflect/Config.in
+@@ -1,8 +1,7 @@
+ config BR2_PACKAGE_PYTHON_INFLECT
+ 	bool "python-inflect"
+-	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS # python-pydantic -> python-pydantic-core
+-	select BR2_PACKAGE_PYTHON_PYDANTIC # runtime
+-	select BR2_PACKAGE_PYTHON_TYPING_EXTENSIONS # runtime
++	select BR2_PACKAGE_PYTHON_MORE_ITERTOOLS # runtime
++	select BR2_PACKAGE_PYTHON_TYPEGUARD # runtime
+ 	help
+ 	  Correctly generate plurals, singular nouns, ordinals,
+ 	  indefinite articles; convert numbers to words.
+diff --git a/package/python-inflect/python-inflect.hash b/package/python-inflect/python-inflect.hash
+index 3faa4cc5a5..8b373b8a7e 100644
+--- a/package/python-inflect/python-inflect.hash
++++ b/package/python-inflect/python-inflect.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/inflect/json
+-md5  61c670cf5c4d09314f6a4d3b99d3b98d  inflect-7.0.0.tar.gz
+-sha256  63da9325ad29da81ec23e055b41225795ab793b4ecb483be5dc1fa363fd4717e  inflect-7.0.0.tar.gz
++md5  7201084aafe65ed5925a8f055f9281a7  inflect-7.4.0.tar.gz
++sha256  904baa17cc2cb74827a6c27b95692e95670dadc72b208b3e8c1c05aeed47026b  inflect-7.4.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  86da0f01aeae46348a3c3d465195dc1ceccde79f79e87769a64b8da04b2a4741  LICENSE
+diff --git a/package/python-inflect/python-inflect.mk b/package/python-inflect/python-inflect.mk
+index cef4c06627..926f2c43ef 100644
+--- a/package/python-inflect/python-inflect.mk
++++ b/package/python-inflect/python-inflect.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_INFLECT_VERSION = 7.0.0
++PYTHON_INFLECT_VERSION = 7.4.0
+ PYTHON_INFLECT_SOURCE = inflect-$(PYTHON_INFLECT_VERSION).tar.gz
+-PYTHON_INFLECT_SITE = https://files.pythonhosted.org/packages/9f/90/1d0a889847fdce963ebe9684de24a749e4fad627bf595e9f0d32730f85a8
++PYTHON_INFLECT_SITE = https://files.pythonhosted.org/packages/e1/dc/02614acece4d578e709c606594c989cfd9f15cf6401444e5603e60df9b26
+ PYTHON_INFLECT_SETUP_TYPE = setuptools
+ PYTHON_INFLECT_LICENSE = MIT
+ PYTHON_INFLECT_LICENSE_FILES = LICENSE
+diff --git a/package/python-jaraco-collections/Config.in b/package/python-jaraco-collections/Config.in
+index a6fa721d4d..6cb1024b88 100644
+--- a/package/python-jaraco-collections/Config.in
++++ b/package/python-jaraco-collections/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_PYTHON_JARACO_COLLECTIONS
+ 	bool "python-jaraco-collections"
+-	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS # python-jaraco-text -> python-inflect -> python-pydantic -> python-pydantic-core
+ 	select BR2_PACKAGE_PYTHON_JARACO_TEXT # runtime
+ 	help
+ 	  Collection objects similar to those in stdlib by jaraco.
+diff --git a/package/python-jaraco-text/Config.in b/package/python-jaraco-text/Config.in
+index 5044ea3233..9ce179b056 100644
+--- a/package/python-jaraco-text/Config.in
++++ b/package/python-jaraco-text/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_PYTHON_JARACO_TEXT
+ 	bool "python-jaraco-text"
+-	depends on BR2_PACKAGE_HOST_RUSTC_TARGET_ARCH_SUPPORTS # python-inflect -> python-pydantic -> python-pydantic-core
+ 	select BR2_PACKAGE_PYTHON_AUTOCOMMAND # runtime
+ 	select BR2_PACKAGE_PYTHON_INFLECT # runtime
+ 	select BR2_PACKAGE_PYTHON_JARACO_CONTEXT # runtime
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
