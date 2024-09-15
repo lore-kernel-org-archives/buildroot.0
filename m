@@ -4,102 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36EF8C35FE7
-	for <buildroot@archiver.kernel.org>; Sun, 15 Sep 2024 14:18:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 22DB1C35FE4
+	for <buildroot@archiver.kernel.org>; Sun, 15 Sep 2024 14:18:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DF1ED40012;
-	Sun, 15 Sep 2024 14:18:04 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E1DF940012;
+	Sun, 15 Sep 2024 14:18:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1C2GquJoXbre; Sun, 15 Sep 2024 14:18:03 +0000 (UTC)
+ id Ks3u4aWzCcFS; Sun, 15 Sep 2024 14:18:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 87BD24063E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BC26B402BC
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 87BD24063E;
-	Sun, 15 Sep 2024 14:18:03 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id EB2061BF365
- for <buildroot@lists.busybox.net>; Sun, 15 Sep 2024 14:18:01 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id BC26B402BC;
+	Sun, 15 Sep 2024 14:18:38 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id AA96E1BF365
+ for <buildroot@lists.busybox.net>; Sun, 15 Sep 2024 14:18:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E375C60707
- for <buildroot@lists.busybox.net>; Sun, 15 Sep 2024 14:18:01 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id A65744059A
+ for <buildroot@lists.busybox.net>; Sun, 15 Sep 2024 14:18:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id b8bUJZQ2-SgI for <buildroot@lists.busybox.net>;
- Sun, 15 Sep 2024 14:18:01 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::329; helo=mail-ot1-x329.google.com;
- envelope-from=christian@aperture.us; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org EE9C7606BD
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EE9C7606BD
-Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com
- [IPv6:2607:f8b0:4864:20::329])
- by smtp3.osuosl.org (Postfix) with ESMTPS id EE9C7606BD
- for <buildroot@buildroot.org>; Sun, 15 Sep 2024 14:18:00 +0000 (UTC)
-Received: by mail-ot1-x329.google.com with SMTP id
- 46e09a7af769-710d861eb56so1606536a34.2
- for <buildroot@buildroot.org>; Sun, 15 Sep 2024 07:18:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1726409880; x=1727014680;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=TikDOAVu5A8nLGATWAGvWGZ3FT+BhWPFnuea3WweGa8=;
- b=pVdkPEDdghYmL4Vvc0CKgnfHI5aFLwlJNQmYKhoeUr4lW1IiiVOUGosKqXRrr4LgJh
- CYFhv6biez9q7Cn9mzPYn9NrNgXZhozp7rKNENw4SJHGtE8JP1nyD0varm0H4CLDrKBx
- 4uWL2TY1X3wPqxA9NgaRyaIYwfsSBT45HDEULB1QCsmG7HIh5oBUix8XS3eucSBVZE/a
- 0pQcEKQHIW4RLAzdKX2ebCFZxXrA54vjmFENBnTrRkHdvyHvufLevRKVQlqI196Lk6DX
- /0LDmSmEHq/McsMr0xSTAfzK6bh7/QjuuvuxknmNRMNRl6SnnfiCoMQieMbCpPyLaDIH
- n3EQ==
-X-Gm-Message-State: AOJu0YxVaWoH0XWkmMlXtHuPlsiRLv0PnihZshF0ORNKBK6bHe3X39Lj
- ov8HOutrYMABBlSugqs7Jp9hx9pqbQ/XLBu8QRbzLWDydHyB+gz00gIvET4Ho2H9syaf1iMrRwK
- 9xK0=
-X-Google-Smtp-Source: AGHT+IHMxY9361wQri87fo5MGG1bSJZGL0KjXBvTeGiPSy+3M8uR9QXDxJYi24AfXnKGZvJVigGHCA==
-X-Received: by 2002:a05:6830:2692:b0:709:3daf:39a1 with SMTP id
- 46e09a7af769-711094c03cemr7857292a34.27.1726409879483; 
- Sun, 15 Sep 2024 07:17:59 -0700 (PDT)
-Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com.
- [209.85.167.174]) by smtp.gmail.com with ESMTPSA id
- 46e09a7af769-71239e7fa31sm691753a34.5.2024.09.15.07.17.58
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 15 Sep 2024 07:17:58 -0700 (PDT)
-Received: by mail-oi1-f174.google.com with SMTP id
- 5614622812f47-3e037b80140so1504529b6e.3
- for <buildroot@buildroot.org>; Sun, 15 Sep 2024 07:17:58 -0700 (PDT)
-X-Received: by 2002:a05:6871:790:b0:270:74f2:8e97 with SMTP id
- 586e51a60fabf-27c3f26d34emr6463891fac.15.1726409877789; Sun, 15 Sep 2024
- 07:17:57 -0700 (PDT)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id gCRERJsO1NSA for <buildroot@lists.busybox.net>;
+ Sun, 15 Sep 2024 14:18:36 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.2;
+ helo=smtp2-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 842FE40352
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 842FE40352
+Received: from smtp2-g21.free.fr (smtp2-g21.free.fr [212.27.42.2])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 842FE40352
+ for <buildroot@buildroot.org>; Sun, 15 Sep 2024 14:18:36 +0000 (UTC)
+Received: from ymorin.is-a-geek.org (unknown [92.184.112.92])
+ (Authenticated sender: yann.morin.1998@free.fr)
+ by smtp2-g21.free.fr (Postfix) with ESMTPSA id 7C55C2003F7;
+ Sun, 15 Sep 2024 16:18:27 +0200 (CEST)
+Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
+ Sun, 15 Sep 2024 16:18:26 +0200
+Date: Sun, 15 Sep 2024 16:18:26 +0200
+From: "Yann E. MORIN" <yann.morin.1998@free.fr>
+To: Thomas Perale <thomas.perale@essensium.com>
+Message-ID: <ZubssqRnLr2bP9nd@landeda>
+References: <20240914152323.2630539-1-thomas.perale@mind.be>
 MIME-Version: 1.0
-References: <CAEpB38NWKuFapnjbEofugLm-csmkwq1dUbvh0jRbcPRVO5K19Q@mail.gmail.com>
- <302021cc-1bc6-4ac1-b1e1-be63902f2a9a@mind.be>
-In-Reply-To: <302021cc-1bc6-4ac1-b1e1-be63902f2a9a@mind.be>
-Date: Sun, 15 Sep 2024 07:17:48 -0700
-X-Gmail-Original-Message-ID: <CA+h8R2qdFf+KrW6GT1J1ApPvVGoc56ZDAUOrJA_wpsm58k0G4A@mail.gmail.com>
-Message-ID: <CA+h8R2qdFf+KrW6GT1J1ApPvVGoc56ZDAUOrJA_wpsm58k0G4A@mail.gmail.com>
-To: Arnout Vandecappelle <arnout@mind.be>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=aperture.us; s=google; t=1726409880; x=1727014680; darn=buildroot.org;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=TikDOAVu5A8nLGATWAGvWGZ3FT+BhWPFnuea3WweGa8=;
- b=l8qE6lmAAiBosqt6BRJzoFYGNOCamwWfkbc9Brdtr+NqSyPYyjv4yRo6BB6sDjP3wZ
- v/E4RQdA+/UNh7c7QicxAqXu2q0kH+wZdxTbmzUc2okzGClrMT3cvXGG7m5O0EQdEsbv
- YQkyJi6eG/ehDzV2wZ7r7PTXgHAeAW2JSlv39hgSuLy55E+aIUpQOdnB0cgikboU//pw
- JTlfmnRoOItv4yuKIkqrYAVIg/inBp8Bvy+gzBF55YGPBID5j5HkcM1mwN1iq/pwT0zJ
- XphRGCM+09C/jBqK1AcTNQ48+zWtbgA54c6vHpPR3Cu2SU9KQifRGIwjhbeUFHwXeA+f
- xQ6Q==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=aperture.us
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+Content-Disposition: inline
+In-Reply-To: <20240914152323.2630539-1-thomas.perale@mind.be>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1726409914;
+ bh=YmBKtqQRehcDv9YpoH+20++2M2Im0sONG5nB0yuMRkY=;
+ h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+ b=D26tuygzkIn7KVx6QoTzg33ug+8HsZwG+SydB3TTj16+mRlAI2YEWIILTzrTDwJn3
+ sM0hQGm2ymBxhzJ8WhQTESyMJRrrxPTbw4MxBokdeIR9H92J3UjyO9Tjy7pjCA5ibI
+ dudWhJarueV8yNhDCk90nIIAVTUAAreAVF07hqtvfouwEMk04UtbyyJPsCaUmBJqhe
+ 8mWsBT3h8AQY/HDLh0VwN4t9J9Qxdodj/CMqrRxgSXVU9Y3GSZnc5CnGbMhB6QIbwD
+ 8X2dzTyFDFtqdC3Wa0J1qgMoBundkCdc+a1MtrHvEL2y/Mg/P8jMUxwfkpi4Zz4uT3
+ W6YlFNtgwZIzw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=aperture.us header.i=@aperture.us header.a=rsa-sha256
- header.s=google header.b=l8qE6lmA
-Subject: Re: [Buildroot] [PATCH v8 1/1] package/go: use host compiler when
- go-bootstrap unsupported
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=D26tuygz
+Subject: Re: [Buildroot] [PATCH 0/2] Add go-bin virtual package to go
+ providers
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -111,139 +81,52 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Christian Stewart via buildroot <buildroot@buildroot.org>
-Reply-To: Christian Stewart <christian@aperture.us>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Anisse Astier <anisse@astier.eu>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Buildroot Mailing List <buildroot@buildroot.org>
-Content-Type: multipart/mixed; boundary="===============4029752115050021741=="
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Thomas Perale <thomas.perale@mind.be>, Anisse Astier <anisse@astier.eu>,
+ Christian Stewart <christian@aperture.us>, buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============4029752115050021741==
-Content-Type: multipart/alternative; boundary="00000000000080b4300622291fa8"
-
---00000000000080b4300622291fa8
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-Hi Arnout,
-
-On Sun, Sep 15, 2024, 2:15=E2=80=AFAM Arnout Vandecappelle <arnout@mind.be>=
- wrote:
-
->   Hi Christian,
->
->
->   The solution is quite simple: make this approach an option, rather than
-> automatically selecting depending on if go-bootstrap-stage1 is supported
-> or not.
-> Something like: when you select go-src, a new choice pops up to choose
-> between
-> full bootstrap or bootstrap from a downloaded binary.
->
-
-I agree this is a good option and the new host-go-bin option accomplished
-this.
-
-But what if we want to bootstrap from source, not download and trust a pre
-built binary?
-
-> This patch adds a fallback to require a host Go compiler to build
-> host-go-src
-> > when BR2_PACKAGE_HOST_GO_BOOTSTRAP_STAGE3_ARCH_SUPPORTS is not set.
->
->   We also discussed this one. Relying on the host Go compiler is tricky
-> because
-> then you also have to check its version (which this patch doesn't do
-> AFAICS).
-> And it's always tricky to rely on host tools when it comes to
-> reproducibility.
->
-
-You do not need to check that version. The go compiler bootstrap script
-does these checks and also builds the compiler with itself multiple times
-to eliminate any variance from the bootstrap toolchain.
-
-  So we think it's better to instead download the Go compiler. In terms of
-> build
-> time, it shouldn't make much of a difference whether it's downloaded or
-> the host
-> Go is used. And with the download it always works (at least on supported
-> platforms), even if there is no Go installed on the host.
->
-
-See above for my reasoning on why, but I digress.
-
-Best regards,
-Christian Stewart
-
---00000000000080b4300622291fa8
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"auto"><div>Hi=C2=A0Arnout,<br><br><div class=3D"gmail_quote"><d=
-iv dir=3D"ltr" class=3D"gmail_attr">On Sun, Sep 15, 2024, 2:15=E2=80=AFAM A=
-rnout Vandecappelle &lt;<a href=3D"mailto:arnout@mind.be">arnout@mind.be</a=
->&gt; wrote:<br></div><blockquote class=3D"gmail_quote" style=3D"margin:0 0=
- 0 .8ex;border-left:1px #ccc solid;padding-left:1ex">=C2=A0 Hi Christian,<b=
-r><br>
-<br>
-=C2=A0 The solution is quite simple: make this approach an option, rather t=
-han <br>
-automatically selecting depending on if go-bootstrap-stage1 is supported or=
- not. <br>
-Something like: when you select go-src, a new choice pops up to choose betw=
-een <br>
-full bootstrap or bootstrap from a downloaded binary.<br></blockquote></div=
-></div><div dir=3D"auto"><br></div><div dir=3D"auto">I agree this is a good=
- option and the new host-go-bin option accomplished this.</div><div dir=3D"=
-auto"><br></div><div dir=3D"auto">But what if we want to bootstrap from sou=
-rce, not download and trust a pre built binary?</div><div dir=3D"auto"><br>=
-</div><div dir=3D"auto"><div class=3D"gmail_quote"><blockquote class=3D"gma=
-il_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;padding-lef=
-t:1ex">
-&gt; This patch adds a fallback to require a host Go compiler to build host=
--go-src<br>
-&gt; when BR2_PACKAGE_HOST_GO_BOOTSTRAP_STAGE3_ARCH_SUPPORTS is not set.<br=
->
-<br>
-=C2=A0 We also discussed this one. Relying on the host Go compiler is trick=
-y because <br>
-then you also have to check its version (which this patch doesn&#39;t do AF=
-AICS). <br>
-And it&#39;s always tricky to rely on host tools when it comes to reproduci=
-bility.<br></blockquote></div></div><div dir=3D"auto"><br></div><div dir=3D=
-"auto">You do not need to check that version. The go compiler bootstrap scr=
-ipt does these checks and also builds the compiler with itself multiple tim=
-es to eliminate any variance from the bootstrap toolchain.</div><div dir=3D=
-"auto"><br></div><div dir=3D"auto"><div class=3D"gmail_quote"><blockquote c=
-lass=3D"gmail_quote" style=3D"margin:0 0 0 .8ex;border-left:1px #ccc solid;=
-padding-left:1ex">
-=C2=A0 So we think it&#39;s better to instead download the Go compiler. In =
-terms of build <br>
-time, it shouldn&#39;t make much of a difference whether it&#39;s downloade=
-d or the host <br>
-Go is used. And with the download it always works (at least on supported <b=
-r>
-platforms), even if there is no Go installed on the host.<br></blockquote><=
-/div></div><div dir=3D"auto"><br></div><div dir=3D"auto">See above for my r=
-easoning on why, but I digress.</div><div dir=3D"auto"><br></div><div dir=
-=3D"auto">Best regards,</div><div dir=3D"auto">Christian Stewart</div></div=
->
-
---00000000000080b4300622291fa8--
-
---===============4029752115050021741==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============4029752115050021741==--
+VGhvbWFzLCBBbGwsCgpPbiAyMDI0LTA5LTE0IDE3OjIzICswMjAwLCBUaG9tYXMgUGVyYWxlIHZp
+YSBidWlsZHJvb3Qgc3Bha2UgdGh1c2x5Ogo+IFByZXZpb3VzIHBhdGNoIHNldCBhZGRpbmcgJ2dv
+LWJpbicgZmFpbGVkIHRoZSB0ZXN0cyBpbiBuZXdlciBnbyB2ZXJzaW9uCj4gYmVjYXVzZSBvZiBp
+bGxlZ2FsIGluc3RydWN0aW9ucy4KPiAKPiBUaGlzIHBhdGNoIHNldCBmaXggdGhlIGNyb3NzLWNv
+bXBpbGF0aW9uIGlzc3VlIGNvbWluZyBmcm9tIHRoZSAnZ28tYmluJwo+IHRoaXMgd2FzIHNvbHZl
+ZCBieSBzcGVjaWZpY2FsbHkgbWVudGlvbm5pbmcgdGhlIEdPQVJNIHZlcnNpb24gaW4KPiBlbnZp
+cm9ubWVudCB2YXJpYWJsZSB3aGVuIGJ1aWxkaW5nIGEgZ28gcGFja2FnZSBmb3IgdGhlIHRhcmdl
+dAo+IChgSE9TVF9HT19UQVJHRVRfRU5WYCkuCgpJIGFwcGxpZWQgdGhlIHNlcmllcyB3aXRoIGEg
+ZmV3IGNoYW5nZXMsIHNlZSB0aGUgY29tbWl0cy4KCkkgYWxzbyBhZGRlZCB0aHJlZSBwcmVwYXJh
+dG9yeSBjb21taXRzOwogICAgNTU5YmIzM2FlNyBzdXBwb3J0L3Rlc3Rpbmc6IGRvIG5vdCB1c2Ug
+cy5iLm8KICAgIGU5YjA4OTNhOGUgcGFja2FnZS9nby9nby1zcmM6IHNoYXJlIGRvd25sb2FkIGRp
+cmVjdG9yeSB3aXRoIGdvCiAgICA4OTMxZTlmNTM0IHN1cHBvcnQvdGVzdGluZzogc3dpdGNoIGdv
+LXNyYyB0byB1c2UgZmxhbm5lbAoKVGhhbmtzIGEgbG90IGZvciB0aGlzIHdvcmshIPCfkY0KClJl
+Z2FyZHMsCllhbm4gRS4gTU9SSU4uCgo+IFRob21hcyBQZXJhbGUgKDIpOgo+ICAgcGFja2FnZS9n
+by9nby1iaW46IG5ldyBob3N0LWdvIHByb3ZpZGVyCj4gICBzdXBwb3J0L3Rlc3Rpbmc6IGFkZCB0
+ZXN0cyBmb3IgR28gcHJvdmlkZXJzCj4gCj4gIHBhY2thZ2UvZ28vQ29uZmlnLmluLmhvc3QgICAg
+ICAgICAgICAgICAgfCAyMiArKysrKysrKysrKysrKysrLS0tLS0tCj4gIHBhY2thZ2UvZ28vZ28t
+YmluL0NvbmZpZy5pbi5ob3N0ICAgICAgICAgfCAxMyArKysrKysrKysrKysrCj4gIHBhY2thZ2Uv
+Z28vZ28tYmluL2dvLWJpbi5oYXNoICAgICAgICAgICAgfCAgOCArKysrKysrKwo+ICBwYWNrYWdl
+L2dvL2dvLWJpbi9nby1iaW4ubWsgICAgICAgICAgICAgIHwgMjAgKysrKysrKysrKysrKysrKysr
+KysKPiAgcGFja2FnZS9nby9nby5tayAgICAgICAgICAgICAgICAgICAgICAgICB8ICAyICsrCj4g
+IHN1cHBvcnQvdGVzdGluZy90ZXN0cy9wYWNrYWdlL3Rlc3RfZ28ucHkgfCAxNCArKysrKysrKysr
+KysrKwo+ICA2IGZpbGVzIGNoYW5nZWQsIDczIGluc2VydGlvbnMoKyksIDYgZGVsZXRpb25zKC0p
+Cj4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL2dvL2dvLWJpbi9Db25maWcuaW4uaG9zdAo+
+ICBjcmVhdGUgbW9kZSAxMDA2NDQgcGFja2FnZS9nby9nby1iaW4vZ28tYmluLmhhc2gKPiAgY3Jl
+YXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2UvZ28vZ28tYmluL2dvLWJpbi5tawo+IAo+IC0tIAo+IDIu
+NDYuMAo+IAo+IF9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+Cj4gYnVpbGRyb290IG1haWxpbmcgbGlzdAo+IGJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCj4gaHR0
+cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290CgotLSAK
+Li0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0tLS0tLi0tLS0tLS0tLS0tLS0tLS0t
+LS4tLS0tLS0tLS0tLS0tLS0tLS0tLS4KfCAgWWFubiBFLiBNT1JJTiAgfCBSZWFsLVRpbWUgRW1i
+ZWRkZWQgfCAvIlwgQVNDSUkgUklCQk9OIHwgRXJpY3MnIGNvbnNwaXJhY3k6IHwKfCArMzMgNjYy
+IDM3NiAwNTYgfCBTb2Z0d2FyZSAgRGVzaWduZXIgfCBcIC8gQ0FNUEFJR04gICAgIHwgIF9fXyAg
+ICAgICAgICAgICAgIHwKfCArMzMgNTYxIDA5OSA0MjcgYC0tLS0tLS0tLS0tLS4tLS0tLS0tOiAg
+WCAgQUdBSU5TVCAgICAgIHwgIFxlLyAgVGhlcmUgaXMgbm8gIHwKfCBodHRwOi8veW1vcmluLmlz
+LWEtZ2Vlay5vcmcvIHwgXy8qXF8gfCAvIFwgSFRNTCBNQUlMICAgIHwgICB2ICAgY29uc3BpcmFj
+eS4gIHwKJy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLV4tLS0tLS0tXi0tLS0tLS0tLS0t
+LS0tLS0tLV4tLS0tLS0tLS0tLS0tLS0tLS0tLScKX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVp
+bGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9i
+dWlsZHJvb3QK
