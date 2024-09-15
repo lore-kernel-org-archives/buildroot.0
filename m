@@ -4,48 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A2D81C3ABAE
-	for <buildroot@archiver.kernel.org>; Sun, 15 Sep 2024 21:40:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B4F20C3ABAE
+	for <buildroot@archiver.kernel.org>; Sun, 15 Sep 2024 21:40:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 70F2084859;
-	Sun, 15 Sep 2024 21:40:51 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7CA4181F14;
+	Sun, 15 Sep 2024 21:40:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gH_vJdxlyKx1; Sun, 15 Sep 2024 21:40:50 +0000 (UTC)
+ id MBse5CAP-jPX; Sun, 15 Sep 2024 21:40:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 30F9884856
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B216A84853
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 30F9884856;
-	Sun, 15 Sep 2024 21:40:50 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 614591BF28B
+	by smtp1.osuosl.org (Postfix) with ESMTP id B216A84853;
+	Sun, 15 Sep 2024 21:40:52 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 7348F1BF94D
  for <buildroot@lists.busybox.net>; Sun, 15 Sep 2024 21:37:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 60F8440A0C
- for <buildroot@lists.busybox.net>; Sun, 15 Sep 2024 21:36:42 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id C257D60D93
+ for <buildroot@lists.busybox.net>; Sun, 15 Sep 2024 21:36:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3XWt0Ua86hM9 for <buildroot@lists.busybox.net>;
- Sun, 15 Sep 2024 21:36:41 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id OnqgC93AUPfI for <buildroot@lists.busybox.net>;
+ Sun, 15 Sep 2024 21:36:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8FAAB40A20
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A2D1160880
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8FAAB40A20
- for <buildroot@buildroot.org>; Sun, 15 Sep 2024 21:36:41 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id A2D1160880
+ for <buildroot@buildroot.org>; Sun, 15 Sep 2024 21:36:39 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8CBF483682; Sun, 15 Sep 2024 21:36:41 +0000 (UTC)
+ id 9852083682; Sun, 15 Sep 2024 21:36:39 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 15 Sep 2024 14:50:13 +0200
+Date: Sun, 15 Sep 2024 10:02:44 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: dd5fcb24b1fb577add8284b9176229102f40eb61
-X-Git-Newrev: 6ba1e1170cbaeb681e6fbbd5c73df94a17bbf236
+X-Git-Oldrev: 8114723b4320b7bc66705edf72187f6838ff09c7
+X-Git-Newrev: 8f5d46c21297864ffab51bf781812631032fef7c
 X-Patchwork-Hint: ignore
-Message-Id: <20240915213641.8CBF483682@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/shapelib: bump to 1.6.1
+Message-Id: <20240915213639.9852083682@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-filelock: bump to version
+ 3.16.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,43 +66,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6ba1e1170cbaeb681e6fbbd5c73df94a17bbf236
+commit: https://git.buildroot.net/buildroot/commit/?id=8f5d46c21297864ffab51bf781812631032fef7c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Also updating hash of the LICENSE-MIT file (only copyright year changed)
-
-Signed-off-by: Zoltan Gyarmati <zgyarmati@zgyarmati.de>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/shapelib/shapelib.hash | 4 ++--
- package/shapelib/shapelib.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/python-filelock/python-filelock.hash | 4 ++--
+ package/python-filelock/python-filelock.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/shapelib/shapelib.hash b/package/shapelib/shapelib.hash
-index f542ee79ac..dfa7ef3a34 100644
---- a/package/shapelib/shapelib.hash
-+++ b/package/shapelib/shapelib.hash
+diff --git a/package/python-filelock/python-filelock.hash b/package/python-filelock/python-filelock.hash
+index 3013cb6789..d4f2bdc6e3 100644
+--- a/package/python-filelock/python-filelock.hash
++++ b/package/python-filelock/python-filelock.hash
 @@ -1,5 +1,5 @@
- # Locally computed
--sha256  19528b24377241705637320c367943031ad5088665d1fb0e1eaa52a71264a6c4  shapelib-1.6.0.tar.gz
-+sha256  5da90a60e25440f108f4e8e95732bfa83ede13c8e0c2bcf80ae41006cc8ebc20  shapelib-1.6.1.tar.gz
- sha256  681e386e44a19d7d0674b4320272c90e66b6610b741e7e6305f8219c42e85366  LICENSE-LGPL
--sha256  67f1348ec73ef6343f0dbb3fa0612c321da4073e1ee68ffc99fcd3f2d2a65813  LICENSE-MIT
-+sha256  3f46082162242563bf4f43b091871cb19064bc5a398c6d2b024f6b64c6710516  LICENSE-MIT
- sha256  15e1205bb007d4d7821f7b1cc461ba8d051647e86dbc9baf1bb6f68b10588eeb  web/license.html
-diff --git a/package/shapelib/shapelib.mk b/package/shapelib/shapelib.mk
-index a36a65f80e..f7c3056844 100644
---- a/package/shapelib/shapelib.mk
-+++ b/package/shapelib/shapelib.mk
-@@ -4,7 +4,7 @@
+ # md5, sha256 from https://pypi.org/pypi/filelock/json
+-md5  368d00d1946b89c910d4bf1da68b5a66  filelock-3.13.1.tar.gz
+-sha256  521f5f56c50f8426f5e03ad3b281b490a87ef15bc6c526f168290f0c7148d44e  filelock-3.13.1.tar.gz
++md5  b630d3af1f7347fde354f82e0f190411  filelock-3.16.0.tar.gz
++sha256  81de9eb8453c769b63369f87f11131a7ab04e367f8d97ad39dc230daa07e3bec  filelock-3.16.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  88d9b4eb60579c191ec391ca04c16130572d7eedc4a86daa58bf28c6e14c9bcd  LICENSE
+diff --git a/package/python-filelock/python-filelock.mk b/package/python-filelock/python-filelock.mk
+index a32517b1ad..1f0f601d6f 100644
+--- a/package/python-filelock/python-filelock.mk
++++ b/package/python-filelock/python-filelock.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--SHAPELIB_VERSION = 1.6.0
-+SHAPELIB_VERSION = 1.6.1
- SHAPELIB_SITE = http://download.osgeo.org/shapelib
- SHAPELIB_LICENSE = MIT or LGPL-2.0
- SHAPELIB_LICENSE_FILES = LICENSE-LGPL LICENSE-MIT web/license.html
+-PYTHON_FILELOCK_VERSION = 3.13.1
++PYTHON_FILELOCK_VERSION = 3.16.0
+ PYTHON_FILELOCK_SOURCE = filelock-$(PYTHON_FILELOCK_VERSION).tar.gz
+-PYTHON_FILELOCK_SITE = https://files.pythonhosted.org/packages/70/70/41905c80dcfe71b22fb06827b8eae65781783d4a14194bce79d16a013263
++PYTHON_FILELOCK_SITE = https://files.pythonhosted.org/packages/e6/76/3981447fd369539aba35797db99a8e2ff7ed01d9aa63e9344a31658b8d81
+ PYTHON_FILELOCK_SETUP_TYPE = pep517
+ PYTHON_FILELOCK_LICENSE = Public Domain
+ PYTHON_FILELOCK_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
