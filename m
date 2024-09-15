@@ -4,65 +4,69 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 45631C35FE7
-	for <buildroot@archiver.kernel.org>; Sun, 15 Sep 2024 14:25:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 62BBFC35FE4
+	for <buildroot@archiver.kernel.org>; Sun, 15 Sep 2024 14:30:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0662B40012;
-	Sun, 15 Sep 2024 14:25:03 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E479840428;
+	Sun, 15 Sep 2024 14:30:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hM6VIrejn_Tg; Sun, 15 Sep 2024 14:25:01 +0000 (UTC)
+ id jh5z7yrnws4w; Sun, 15 Sep 2024 14:30:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A94C2402BC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A79E3402BC
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A94C2402BC;
-	Sun, 15 Sep 2024 14:25:01 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A79E3402BC;
+	Sun, 15 Sep 2024 14:30:14 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C25FC1BF365
- for <buildroot@lists.busybox.net>; Sun, 15 Sep 2024 14:24:59 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1644A1BF365
+ for <buildroot@lists.busybox.net>; Sun, 15 Sep 2024 14:30:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B0CC4402BC
- for <buildroot@lists.busybox.net>; Sun, 15 Sep 2024 14:24:59 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 04EA3402BC
+ for <buildroot@lists.busybox.net>; Sun, 15 Sep 2024 14:30:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id J5gPISMxSuqZ for <buildroot@lists.busybox.net>;
- Sun, 15 Sep 2024 14:24:58 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=89.238.66.15;
- helo=helium.openadk.org; envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 33B3340012
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 33B3340012
-Received: from helium.openadk.org (helium.openadk.org [89.238.66.15])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 33B3340012
- for <buildroot@buildroot.org>; Sun, 15 Sep 2024 14:24:58 +0000 (UTC)
-Received: by helium.openadk.org (Postfix, from userid 1000)
- id 0C37335282AA; Sun, 15 Sep 2024 16:24:50 +0200 (CEST)
-Date: Sun, 15 Sep 2024 16:24:50 +0200
-From: Waldemar Brodkorb <wbx@openadk.org>
+ id Hb-och98J9AP for <buildroot@lists.busybox.net>;
+ Sun, 15 Sep 2024 14:30:11 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
+ helo=smtp1-g21.free.fr; envelope-from=vjardin@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 5035C40012
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5035C40012
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 5035C40012
+ for <buildroot@buildroot.org>; Sun, 15 Sep 2024 14:30:11 +0000 (UTC)
+Received: from localhost.localdomain (unknown
+ [IPv6:2a01:e0a:2af:22b0:29b6:dcc2:71d9:ec47])
+ (Authenticated sender: vjardin@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 13F92B00535;
+ Sun, 15 Sep 2024 16:30:06 +0200 (CEST)
+From: Vincent Jardin <vjardin@free.fr>
 To: buildroot@buildroot.org
-Message-ID: <ZubuMtvyrh/8Nj/W@waldemar-brodkorb.de>
+Date: Sun, 15 Sep 2024 16:30:03 +0200
+Message-ID: <20240915143004.24060-1-vjardin@free.fr>
+X-Mailer: git-send-email 2.46.0
+In-Reply-To: <33f4749e4084bc4015a6c35d5edec68c@free.fr>
+References: <33f4749e4084bc4015a6c35d5edec68c@free.fr>
 MIME-Version: 1.0
-Content-Disposition: inline
-X-Operating-System: Linux 5.10.0-32-amd64 x86_64
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=openadk.org; s=2022; 
- t=1726410291; bh=PmsxXiH+FzjmFW+DMO52/hRatN3Ee0eqmMfwYZI5x2g=;
- h=Date:From:To:Subject:From;
- b=akA0cw99YbTh9BkinTE3rqL643K0DAFfzL6HtuAXqlFyUK/6s4tA0P3YRGiMl/6zE
- Q3KeAm3a2DkRfVtfmSF6Fv8YqqOtpgsP1ysxwzAAgDdvThkHK2fIO4cAVAcj3NkRqB
- JIzXvzNIwb5kKZ0TleQVv2QDwSE6xsjO2rKIrkzp1FMR1JfrULXN9II5SkzuJ31J6k
- ncA+SKYR/Y1Adq7uccJWuflk76ew7Ui/U0ktgQcmr5fK8OyzUGQaZtkmNfoHjykeZH
- 2GoZ+uy2nRPniVN0B6G3WWnRLUbtACJslYDvnlDjpmllmiwdE1BLipERFpwR0+sZ6c
- AuStWQ/dvdmug==
+ d=free.fr; s=smtp-20201208; t=1726410609;
+ bh=JQKGxSQPzmNPEG8RC3hIHZ5Iz4nwJoyNyPCRg6R9DqU=;
+ h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+ b=mIqecjrQaRHb7QLPBVJu6ql/suUopFObBb+4PH+gQIskMBiLlBIG12srLFsjY8JdJ
+ 0lBI+NzKiZUTD6Fp0Jsf+M4FSt2qaBwKEflxyDSywD6rWJo+is0FYarc8uRmvbrKe6
+ pZguK4b/a4VgGZdhr7V+II7yff/48sPqGO5YRjXTJer2PJ6b4nw12kCDWArp/gSWcL
+ sp0ixpowUJRUmJINunxhOLNxDCuN/xZSuWNoE3zfYB4xzt4uV9RimPHsbA3OrXETtC
+ uGbK74MK+gA+QP2gIHy4Hbl/+tEtK6fJLdDgwJc1Q0t1ohmDBAPPeKfhO2V2kS95TX
+ 3wRMPvxU/2P9w==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=openadk.org
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=openadk.org header.i=@openadk.org header.a=rsa-sha256
- header.s=2022 header.b=akA0cw99
-Subject: [Buildroot] [PATCH 2/2] package/qemu: update to 9.1.0
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=mIqecjrQ
+Subject: [Buildroot] [PATCH v6 0/1] add DPDK libraries
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,77 +78,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Vincent Jardin <vjardin@free.fr>, Julien Olivain <ju.o@free.fr>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-See here for changes:
-https://wiki.qemu.org/ChangeLog/9.1
+v5 -> v6 changes:
+  - update comments on DPDK patch to compile aarch64 with Buildroot
 
-The support for the nios2 architecture got removed.
+v4 -> v5 changes:
+  - fix test-pkg dpdk
+  - fix make legal-info
+  - add builds for DPDK tests and examples
+  - support only aarch64/ARM64 and x86_64
+  - notes: logs of checks at https://github.com/vjardin/br_dpdk/actions/runs/10767364662/job/29854551507
+  - thans to Julien Olivain for many reviews and contributions
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
----
- package/qemu/Config.in      | 5 -----
- package/qemu/Config.in.host | 1 -
- package/qemu/qemu.hash      | 2 +-
- package/qemu/qemu.mk        | 2 +-
- 4 files changed, 2 insertions(+), 8 deletions(-)
+v3 -> v4 changes:
+  - proof readings (dpdk/DPDK, git.dpdk.org instead of github)
+  - gcc 4.9 needed
 
-diff --git a/package/qemu/Config.in b/package/qemu/Config.in
-index 608e4d429d..2d15ab1ea9 100644
---- a/package/qemu/Config.in
-+++ b/package/qemu/Config.in
-@@ -252,11 +252,6 @@ config BR2_PACKAGE_QEMU_TARGET_MIPSN32EL
- 	help
- 	  MIPS N32 architecture, little-endian.
- 
--config BR2_PACKAGE_QEMU_TARGET_NIOS2
--	bool "nios2"
--	help
--	  Nios II architecture.
--
- config BR2_PACKAGE_QEMU_TARGET_OR1K
- 	bool "or1k"
- 	select BR2_PACKAGE_QEMU_FDT if BR2_PACKAGE_QEMU_SYSTEM
-diff --git a/package/qemu/Config.in.host b/package/qemu/Config.in.host
-index 8dd0c7d11b..4db114490a 100644
---- a/package/qemu/Config.in.host
-+++ b/package/qemu/Config.in.host
-@@ -9,7 +9,6 @@ config BR2_PACKAGE_HOST_QEMU_ARCH_SUPPORTS
- 	default y if BR2_microblazebe
- 	default y if BR2_mips
- 	default y if BR2_mipsel
--	default y if BR2_nios2
- 	default y if BR2_or1k
- 	default y if BR2_powerpc
- 	default y if BR2_powerpc64
-diff --git a/package/qemu/qemu.hash b/package/qemu/qemu.hash
-index 419dd0d1b3..169fe05068 100644
---- a/package/qemu/qemu.hash
-+++ b/package/qemu/qemu.hash
-@@ -1,4 +1,4 @@
- # Locally computed, tarball verified with GPG signature
--sha256  a8c3f596aece96da3b00cafb74baafa0d14515eafb8ed1ee3f7f5c2d0ebf02b6  qemu-9.0.2.tar.xz
-+sha256  816b7022a8ba7c2ac30e2e0cf973e826f6bcc8505339603212c5ede8e94d7834  qemu-9.1.0.tar.xz
- sha256  6f04ae8364d0079a192b14635f4b1da294ce18724c034c39a6a41d1b09df6100  COPYING
- sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  COPYING.LIB
-diff --git a/package/qemu/qemu.mk b/package/qemu/qemu.mk
-index 16cff13d18..e9f6520d89 100644
---- a/package/qemu/qemu.mk
-+++ b/package/qemu/qemu.mk
-@@ -6,7 +6,7 @@
- 
- # When updating the version, check whether the list of supported targets
- # needs to be updated.
--QEMU_VERSION = 9.0.2
-+QEMU_VERSION = 9.1.0
- QEMU_SOURCE = qemu-$(QEMU_VERSION).tar.xz
- QEMU_SITE = https://download.qemu.org
- QEMU_SELINUX_MODULES = qemu virt
+v2 -> v3 changes:
+  - include the comments from Julien Olivain
+  - refine the licenses
+  - support little endian targets only
+  - many build dependencies if the packages are selected
+
+v1 -> v2 changes:
+  - include the comments from Thomas
+  - add a meson patch for the DPDK that I forgot to include
+    This patch has been aligned with Yocto so we can share the same
+    feedbacks. I'll upstream it on DPDK too.
+
+Vincent Jardin (1):
+  package/dpdk: add 24.07
+
+ DEVELOPERS                                    |  3 +
+ package/Config.in                             |  1 +
+ ...-cpu_instruction_set-from-meson-opti.patch | 33 +++++++
+ package/dpdk/0010-Fix-aarch64-build.patch     | 42 ++++++++
+ package/dpdk/Config.in                        | 45 +++++++++
+ package/dpdk/dpdk.hash                        | 10 ++
+ package/dpdk/dpdk.mk                          | 99 +++++++++++++++++++
+ 7 files changed, 233 insertions(+)
+ create mode 100644 package/dpdk/0001-config-meson-get-cpu_instruction_set-from-meson-opti.patch
+ create mode 100644 package/dpdk/0010-Fix-aarch64-build.patch
+ create mode 100644 package/dpdk/Config.in
+ create mode 100644 package/dpdk/dpdk.hash
+ create mode 100644 package/dpdk/dpdk.mk
+
 -- 
-2.30.2
+2.46.0
 
 _______________________________________________
 buildroot mailing list
