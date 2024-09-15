@@ -4,92 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1566DC35FE8
-	for <buildroot@archiver.kernel.org>; Sun, 15 Sep 2024 09:02:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 110D6C35FE8
+	for <buildroot@archiver.kernel.org>; Sun, 15 Sep 2024 09:06:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A88B140110;
-	Sun, 15 Sep 2024 09:02:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A57A34065A;
+	Sun, 15 Sep 2024 09:05:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZB8DxPc5LEyX; Sun, 15 Sep 2024 09:02:41 +0000 (UTC)
+ id rZIznv9FzXn2; Sun, 15 Sep 2024 09:05:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3094740128
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 33F1C4065C
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3094740128;
-	Sun, 15 Sep 2024 09:02:41 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id BC0BC1BF47D
- for <buildroot@lists.busybox.net>; Sun, 15 Sep 2024 09:02:39 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 33F1C4065C;
+	Sun, 15 Sep 2024 09:05:58 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 7A71E1BF357
+ for <buildroot@lists.busybox.net>; Sun, 15 Sep 2024 09:05:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B85A281E21
- for <buildroot@lists.busybox.net>; Sun, 15 Sep 2024 09:02:39 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 651CA4065C
+ for <buildroot@lists.busybox.net>; Sun, 15 Sep 2024 09:05:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LQKcLcnPOI1r for <buildroot@lists.busybox.net>;
- Sun, 15 Sep 2024 09:02:39 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id d4YRlLqrt1XP for <buildroot@lists.busybox.net>;
+ Sun, 15 Sep 2024 09:05:55 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::d30; helo=mail-io1-xd30.google.com;
- envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org A3A3B81E06
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A3A3B81E06
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com
- [IPv6:2607:f8b0:4864:20::d30])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A3A3B81E06
- for <buildroot@buildroot.org>; Sun, 15 Sep 2024 09:02:38 +0000 (UTC)
-Received: by mail-io1-xd30.google.com with SMTP id
- ca18e2360f4ac-82ce603d8daso116442939f.0
- for <buildroot@buildroot.org>; Sun, 15 Sep 2024 02:02:38 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::533; helo=mail-ed1-x533.google.com;
+ envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org E03694065A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E03694065A
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com
+ [IPv6:2a00:1450:4864:20::533])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id E03694065A
+ for <buildroot@buildroot.org>; Sun, 15 Sep 2024 09:05:54 +0000 (UTC)
+Received: by mail-ed1-x533.google.com with SMTP id
+ 4fb4d7f45d1cf-5c40942358eso1947062a12.1
+ for <buildroot@buildroot.org>; Sun, 15 Sep 2024 02:05:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1726390957; x=1726995757;
+ d=1e100.net; s=20230601; t=1726391153; x=1726995953;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=q12AgzcYnp94H2p2r7PvFHKhULt6DzhtxpfbPhj5mgw=;
- b=cx9R9aI1IOFyxLOtIl8uv+oaESiSimsIKkICjYjjMpxhXb3QvkBHF4R33HS1yzvZg8
- 5IISt1xm3VO9n28PqoY3Iqykj8dBy6skGPlfIN6hpcrVIb/ZdiQ6loin+uHW20d346AI
- hJ9nP6Z6byPiCc6rix49X2aouF++AcWOHywe5Jnv6R55fj0zfz9/uUnzmUqezbjW88Q/
- nLSId1YQmiBZN2EYtLt0DfGH13wWYWJrrYnPhABNIrFk0WB/XC4zPZGglmyithHi6KgT
- YMR4XFBRJs60SvHswAmgAVVVpFNuc2b6DKPIug/N+MGnS1YdJTUFETS17abcNMReUcm5
- Fneg==
-X-Gm-Message-State: AOJu0YylLb6SBUKTwOe8tGoQtezd/4GKpSI+NiHGbp0joRX33Fr67L7X
- 5csVCUkwvby8xXBOh80T7jIh1FpAtnk2Y+6J6hlW2qW/FKfmf0wnCtt9gw==
-X-Google-Smtp-Source: AGHT+IHBza06yuwpbIkQAVVcsFcAgTI7YUc2qblveCzAOjF0pieJSEDmPtjRwoY9pjRL+fXQzQTxvQ==
-X-Received: by 2002:a05:6e02:16cb:b0:3a0:451b:ade3 with SMTP id
- e9e14a558f8ab-3a0848c9f4dmr113582235ab.10.1726390957188; 
- Sun, 15 Sep 2024 02:02:37 -0700 (PDT)
-Received: from james-x399.localdomain (71-218-252-223.hlrn.qwest.net.
- [71.218.252.223]) by smtp.gmail.com with ESMTPSA id
- e9e14a558f8ab-3a092e71ccasm9250635ab.69.2024.09.15.02.02.36
+ bh=L+y0l4WpizQA0AZoPJp6GhwgGfqY0qLIOd332k3BqO8=;
+ b=wgoTFKse5EoFO+ZpmPY+sKvuUFFAywI47v6CzHXScm4jxg50ZeupATPUwcbxc+dt5D
+ DRu5rBChIsuOq3v7kgmuCSLX9p5bDEXvqF6ag+FrHNb7r0fG/qjXhCdLfqGjHFdnPBaa
+ F6xUdMYct4+FPE2BVna7Mqm/DH3LIpuhL/Hhuke779EQ/WHXwT6eSBjR9N4VZntedfCj
+ nBRWz5zlDghA4vK+y/+E+sUyPlRhbVZBCX4klAMxy4j0UaFYr5lN09UL1Ykz8H11lw3/
+ 1Ry0dMdloEz0ApUK9c4yygyVoE9foHIJwyEGD5Z9EV1aOHxf45O7XJZqty72qQRuc7Y7
+ z8iA==
+X-Gm-Message-State: AOJu0YwGdyTLmPNmQ37f7Eoxpj+6dTkcm1ccKVOdh69T/ujYBs3b0ACB
+ ryjeSYgeb9mTxa1INHiDQJCAKe1Sw/D82FukNM8VkB6K/YGp01k+T04N37OX0laSV6t0IlE3e35
+ 58IHdcw==
+X-Google-Smtp-Source: AGHT+IFQsCmELdldLKHMBdQv7vqO85Zy2YhVQl+9YDmDIj5aRb/V5tMfeGAtM2c79FNvfiC4E0t7ug==
+X-Received: by 2002:a05:6402:5004:b0:5c4:156:7edd with SMTP id
+ 4fb4d7f45d1cf-5c401602770mr20266865a12.14.1726391152009; 
+ Sun, 15 Sep 2024 02:05:52 -0700 (PDT)
+Received: from dario-ThinkPad-T14s-Gen-2i.. ([62.18.213.32])
+ by smtp.gmail.com with ESMTPSA id
+ 4fb4d7f45d1cf-5c42bb53122sm1486514a12.32.2024.09.15.02.05.50
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 15 Sep 2024 02:02:36 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
+ Sun, 15 Sep 2024 02:05:51 -0700 (PDT)
+From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Sun, 15 Sep 2024 03:02:30 -0600
-Message-Id: <20240915090230.1584379-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Date: Sun, 15 Sep 2024 11:05:37 +0200
+Message-ID: <20240915090537.12330-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1726390957; x=1726995757; darn=buildroot.org;
+ d=amarulasolutions.com; s=google; t=1726391153; x=1726995953;
+ darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=q12AgzcYnp94H2p2r7PvFHKhULt6DzhtxpfbPhj5mgw=;
- b=dB910oocLx25d6DD96Y6J5qk+qewFZUsQWqYxjLevz/XVzP4oP3bzOyTfAx8oE30bg
- U7UiKAOH1W8ky51qk3gVZmpda6tRKgOk9xBvmMTsFx5mg8VRu0i7k40yFDsAU1lwGFux
- UsjrIL7R93JXi8SnZy9Z44xfV627uw2Iu90H9TsJsgvZ3iSX/WhemyF2bROfxdVv24ma
- wmSuq/Ss1SiQ+3IFztKRquY5PjbH9mEiuyrTFd9FN/u+9bgcVdZtiSP+W88kFA2/72kg
- mE2w8avUMXzHcdYvZVETh/AD7rYPyaq4fpkahiI/PRdTLLG9ScKCxXQqrnw2JIZLVE/7
- 6jUA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=L+y0l4WpizQA0AZoPJp6GhwgGfqY0qLIOd332k3BqO8=;
+ b=CqzJyb3S9M29FqkJ626uYKIMei2In0daif1NFIWgAC2RudIFjKbkhsiocpXAGwB4Xp
+ 81qCF8xEoA8GvrgMWW4GFMNN33s2LKl9qMbiU6AShqbGQes5kW5v6WGCRDwUvL7jdSBG
+ +5xd17MxHX2RiAOU9Ufr/mmniN1s2kYFu/hn4=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=dB910ooc
-Subject: [Buildroot] [PATCH 1/1] package/python-jaraco-classes: bump to
- version 3.4.0
+ header.from=amarulasolutions.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
+ header.a=rsa-sha256 header.s=google header.b=CqzJyb3S
+Subject: [Buildroot] [PATCH 1/1] package/armadillo: bump to version 14.0.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,48 +99,102 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+ linux-amarula@amarulasolutions.com
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/python-jaraco-classes/python-jaraco-classes.hash | 4 ++--
- package/python-jaraco-classes/python-jaraco-classes.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+The commit f69fe48404eda ("package/armadillo: temporarily update the
+site URL") changed the download URL only to continue to build the
+9.900.2 version. This is an outdated and no longer supported version
+and as suggested by Conrad Sand, the project maintainer, it is
+recommended upgrading to the latest version, which is currently 14.0.2,
+and it's downloadable from the URL containing the most recent versions.
 
-diff --git a/package/python-jaraco-classes/python-jaraco-classes.hash b/package/python-jaraco-classes/python-jaraco-classes.hash
-index 701aa07b83..370ec5e2f6 100644
---- a/package/python-jaraco-classes/python-jaraco-classes.hash
-+++ b/package/python-jaraco-classes/python-jaraco-classes.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/jaraco.classes/json
--md5  26ae65ab8cda78455ddab0b05fe0a553  jaraco.classes-3.3.0.tar.gz
--sha256  c063dd08e89217cee02c8d5e5ec560f2c8ce6cdc2fcdc2e68f7b2e5547ed3621  jaraco.classes-3.3.0.tar.gz
-+md5  994fb3f2ce9bb538ca6e8abf6ebbdf9c  jaraco.classes-3.4.0.tar.gz
-+sha256  47a024b51d0239c0dd8c8540c6c7f484be3b8fcf0b2d85c13825780d3b3f3acd  jaraco.classes-3.4.0.tar.gz
- # Locally computed sha256 checksums
- sha256  86da0f01aeae46348a3c3d465195dc1ceccde79f79e87769a64b8da04b2a4741  LICENSE
-diff --git a/package/python-jaraco-classes/python-jaraco-classes.mk b/package/python-jaraco-classes/python-jaraco-classes.mk
-index 45950556b0..0ba39721bb 100644
---- a/package/python-jaraco-classes/python-jaraco-classes.mk
-+++ b/package/python-jaraco-classes/python-jaraco-classes.mk
-@@ -4,9 +4,9 @@
+- Drop ARMADILLO_EXTRACT_CMDS added to fix an issue only related to
+  the previous version building.
+- C++14 is now mandatory.
+
+Release notes:
+https://arma.sourceforge.net/docs.html#changelog
+
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+---
+ package/armadillo/Config.in      |  4 +++-
+ package/armadillo/armadillo.hash |  2 +-
+ package/armadillo/armadillo.mk   | 12 ++++--------
+ 3 files changed, 8 insertions(+), 10 deletions(-)
+
+diff --git a/package/armadillo/Config.in b/package/armadillo/Config.in
+index 7aed4fd02fe9..7a93343d41f8 100644
+--- a/package/armadillo/Config.in
++++ b/package/armadillo/Config.in
+@@ -2,16 +2,18 @@ comment "armadillo needs a toolchain w/ C++"
+ 	depends on BR2_PACKAGE_OPENBLAS_ARCH_SUPPORTS
+ 	depends on !BR2_INSTALL_LIBSTDCPP
+ 
+-comment "armadillo needs a toolchain w/ fortran, C++"
++comment "armadillo needs a toolchain w/ fortran, C++, gcc >= 4.9"
+ 	depends on !BR2_PACKAGE_OPENBLAS_ARCH_SUPPORTS # otherwise, see comment above
+ 	depends on BR2_PACKAGE_LAPACK_ARCH_SUPPORTS
+ 	depends on !BR2_TOOLCHAIN_HAS_FORTRAN || !BR2_INSTALL_LIBSTDCPP
++	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_9
+ 
+ config BR2_PACKAGE_ARMADILLO
+ 	bool "armadillo"
+ 	depends on BR2_PACKAGE_OPENBLAS_ARCH_SUPPORTS || \
+ 		(BR2_PACKAGE_LAPACK_ARCH_SUPPORTS && BR2_TOOLCHAIN_HAS_FORTRAN)
+ 	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C++14
+ 	help
+ 	  Armadillo: An Open Source C++ Linear Algebra Library for
+ 	  Fast Prototyping and Computationally Intensive Experiments.
+diff --git a/package/armadillo/armadillo.hash b/package/armadillo/armadillo.hash
+index 9b19b8c8c4a2..4e8652192303 100644
+--- a/package/armadillo/armadillo.hash
++++ b/package/armadillo/armadillo.hash
+@@ -1,4 +1,4 @@
+ # Locally computed:
+-sha256  d78658c9442addf7f718eb05881150ee3ec25604d06dd3af4942422b3ce26d05  armadillo-9.900.2.tar.xz.RETIRED
++sha256  248e2535fc092add6cb7dea94fc86ae1c463bda39e46fd82d2a7165c1c197dff  armadillo-14.0.2.tar.xz
+ # License files, locally calculated
+ sha256  3ddf9be5c28fe27dad143a5dc76eea25222ad1dd68934a047064e56ed2fa40c5  LICENSE.txt
+diff --git a/package/armadillo/armadillo.mk b/package/armadillo/armadillo.mk
+index 81684a44f72f..608f8fb229f2 100644
+--- a/package/armadillo/armadillo.mk
++++ b/package/armadillo/armadillo.mk
+@@ -4,14 +4,14 @@
  #
  ################################################################################
  
--PYTHON_JARACO_CLASSES_VERSION = 3.3.0
-+PYTHON_JARACO_CLASSES_VERSION = 3.4.0
- PYTHON_JARACO_CLASSES_SOURCE = jaraco.classes-$(PYTHON_JARACO_CLASSES_VERSION).tar.gz
--PYTHON_JARACO_CLASSES_SITE = https://files.pythonhosted.org/packages/8b/de/d0a466824ce8b53c474bb29344e6d6113023eb2c3793d1c58c0908588bfa
-+PYTHON_JARACO_CLASSES_SITE = https://files.pythonhosted.org/packages/06/c0/ed4a27bc5571b99e3cff68f8a9fa5b56ff7df1c2251cc715a652ddd26402
- PYTHON_JARACO_CLASSES_LICENSE = MIT
- PYTHON_JARACO_CLASSES_LICENSE_FILES = LICENSE
- PYTHON_JARACO_CLASSES_SETUP_TYPE = setuptools
+-ARMADILLO_VERSION = 9.900.2
+-ARMADILLO_SOURCE = armadillo-$(ARMADILLO_VERSION).tar.xz.RETIRED
+-ARMADILLO_SITE = https://sourceforge.net/projects/arma/files/retired
++ARMADILLO_VERSION = 14.0.2
++ARMADILLO_SOURCE = armadillo-$(ARMADILLO_VERSION).tar.xz
++ARMADILLO_SITE = https://downloads.sourceforge.net/project/arma
+ ARMADILLO_INSTALL_STAGING = YES
+ ARMADILLO_LICENSE = Apache-2.0
+ ARMADILLO_LICENSE_FILES = LICENSE.txt
+ 
+-ARMADILLO_CONF_OPTS = -DDETECT_HDF5=false
++ARMADILLO_CONF_OPTS = -DDETECT_HDF5=false -DBUILD_SMOKE_TEST=false
+ 
+ # blas support may be provided by lapack (libblas.a) or openblas (libopenblas.a)
+ ARMADILLO_CONF_OPTS += -DBLAS_FOUND=ON
+@@ -30,8 +30,4 @@ ARMADILLO_CONF_OPTS += -DLAPACK_FOUND=ON
+ ARMADILLO_DEPENDENCIES += lapack
+ endif
+ 
+-define ARMADILLO_EXTRACT_CMDS
+-	$(TAR) --strip-components=1 -C $(@D) $(TAR_OPTIONS) $($(PKG)_DL_DIR)/$(ARMADILLO_SOURCE)
+-endef
+-
+ $(eval $(cmake-package))
 -- 
-2.34.1
+2.43.0
 
 _______________________________________________
 buildroot mailing list
