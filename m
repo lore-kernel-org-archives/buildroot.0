@@ -4,96 +4,92 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EE043C35FE8
-	for <buildroot@archiver.kernel.org>; Sun, 15 Sep 2024 07:52:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5EC55C35FE8
+	for <buildroot@archiver.kernel.org>; Sun, 15 Sep 2024 07:55:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B616F80F11;
-	Sun, 15 Sep 2024 07:52:21 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 189B580F63;
+	Sun, 15 Sep 2024 07:55:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fNShNVthAk_E; Sun, 15 Sep 2024 07:52:20 +0000 (UTC)
+ id zjri1YE4fDBk; Sun, 15 Sep 2024 07:55:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B649F80F1F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1B1B780FEF
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B649F80F1F;
-	Sun, 15 Sep 2024 07:52:20 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 111631BF282
- for <buildroot@lists.busybox.net>; Sun, 15 Sep 2024 07:52:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1B1B780FEF;
+	Sun, 15 Sep 2024 07:55:23 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 3E2191BF282
+ for <buildroot@lists.busybox.net>; Sun, 15 Sep 2024 07:55:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0072980F1F
- for <buildroot@lists.busybox.net>; Sun, 15 Sep 2024 07:52:19 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2C5DC405BE
+ for <buildroot@lists.busybox.net>; Sun, 15 Sep 2024 07:55:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NJAXGG_0bwhb for <buildroot@lists.busybox.net>;
- Sun, 15 Sep 2024 07:52:18 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7UjiztFNu35s for <buildroot@lists.busybox.net>;
+ Sun, 15 Sep 2024 07:55:20 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::329; helo=mail-wm1-x329.google.com;
- envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9BAFD80F11
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9BAFD80F11
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
- [IPv6:2a00:1450:4864:20::329])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 9BAFD80F11
- for <buildroot@buildroot.org>; Sun, 15 Sep 2024 07:52:17 +0000 (UTC)
-Received: by mail-wm1-x329.google.com with SMTP id
- 5b1f17b1804b1-42cc43454d5so18318905e9.3
- for <buildroot@buildroot.org>; Sun, 15 Sep 2024 00:52:17 -0700 (PDT)
+ client-ip=2607:f8b0:4864:20::d31; helo=mail-io1-xd31.google.com;
+ envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org EFC31405A1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EFC31405A1
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com
+ [IPv6:2607:f8b0:4864:20::d31])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id EFC31405A1
+ for <buildroot@buildroot.org>; Sun, 15 Sep 2024 07:55:19 +0000 (UTC)
+Received: by mail-io1-xd31.google.com with SMTP id
+ ca18e2360f4ac-82ade877fbeso144615239f.0
+ for <buildroot@buildroot.org>; Sun, 15 Sep 2024 00:55:19 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1726386735; x=1726991535;
- h=content-transfer-encoding:in-reply-to:content-language:from
- :references:to:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=XElDIm78KyxlCczibm6z3V3H3dv+X9ellPdAgR/pz/0=;
- b=vSklGvyszSKHu/L5kqnhpYvQn1qIOxs35uw3j/z7e/MK5td4+xvIoS4LboepIJsWuR
- ef/oAdVeQ+Tpubw03j3v+sYITKhoMwL4TF0MqoDUBBPQSoLgSjQ8IWH7PJ0krl+zblZf
- YAyH1PyLL8VWs7f9DXRQ1HB9LjNvCfwKHxTWjbiFe45TQ8Zlc1od11KVASjiVao5MRoO
- DyOb6YqpBfPxnoPIYzBn4u89JRyjJ58kgoN/dV74YMWzt+ROJtnIVd/45ETlWZ6CfFWt
- fZJtoTCdZ4xP7a/C6UPw+0UGL1D960YSbHEOJbpho31Q4Kkr5qHc6PfTztBdTNa8FjHj
- sXag==
-X-Forwarded-Encrypted: i=1;
- AJvYcCU6CDLJojW34XGvQ0eG3gzs1TT3yRK82xw2V8nxcSqSTNFxzHOMCqtlURqdWcADUnvQPUGE6m6+JZE=@buildroot.org
-X-Gm-Message-State: AOJu0Yxv/hAD41OpQRwTa8w5fCmPWRkm6vvVEhb+J60kae+aDHBoXxPk
- oOK1p98+A0Ig8Upy5YNqDyrD0164CoL6Z5EOadSGoXET4dLciuQaLiWKGJO8vFqk8LGHkgspeXW
- /4os++g==
-X-Google-Smtp-Source: AGHT+IG84waDKclIZjNDEScz2p+wra+0UM5EOz0XzkxGYkiaeP4dgyPPh0GmnmISrvSXTH9QhdE87Q==
-X-Received: by 2002:a05:600c:4892:b0:42d:a024:d6bb with SMTP id
- 5b1f17b1804b1-42da024d788mr28187565e9.20.1726386734859; 
- Sun, 15 Sep 2024 00:52:14 -0700 (PDT)
-Received: from [192.168.197.114] (92-184-117-99.mobile.fr.orangecustomers.net.
- [92.184.117.99]) by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-42da22e6540sm42498545e9.21.2024.09.15.00.52.13
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Sun, 15 Sep 2024 00:52:14 -0700 (PDT)
-Message-ID: <2d94fd06-278c-434c-8eff-267c79573d7d@mind.be>
-Date: Sun, 15 Sep 2024 09:52:11 +0200
+ d=1e100.net; s=20230601; t=1726386918; x=1726991718;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=xCApRFgAMQz0lVSR7ESrpuQKX6mdFEWM5jY9P4SYiZg=;
+ b=avwcGnyyymYanBAVeA+dbm/7jb2w+NDSl4/L946png6kwSV41H6Z1ju5Ge7VGvQv3E
+ vZTkkh3uP/xStkLd/sTqCt0vYN4UcJKCyF7Js4a+q/7GXrf7T7bM5e2qDpAti8LOMeHQ
+ GLuQIn3OLkWLefcKtOBbCyCQXe6W5k1+wkeiK5GWe5QNAarFAH0upcUwA5ZQAm0zUK4x
+ VWKYtzdIz39pvlhnVc8mOnAn+LJANZLaRCHN/qRBAiohCgp2o5B+tVOIAFcH73y/f8wx
+ h3iEMhBSHUq6V3YGKdi1Svo3wjfgLqJkFQycVFXqAOBBYAZ0QXH5trmzGN/Vks37HknA
+ /1zA==
+X-Gm-Message-State: AOJu0YyTbVjtF0PL62mmeX16WxoWsZBXBk2x0KV9E9r7fVV4EMbuLkvv
+ zP+JoDwBmzYjMbxc8hSBFRV1Zg2uJCWybmO0QGphPkhlU1HfuKFlZgdZSQ==
+X-Google-Smtp-Source: AGHT+IEPUmR+6k2y+bRCh/kGJ/THabNwkhlH94Q04FGotA/JldZBOPV2WAwiLZUPfRhmkf1wTtcxbA==
+X-Received: by 2002:a05:6e02:2197:b0:39d:1dda:fe9 with SMTP id
+ e9e14a558f8ab-3a08b6eaeecmr88376405ab.5.1726386918124; 
+ Sun, 15 Sep 2024 00:55:18 -0700 (PDT)
+Received: from james-x399.localdomain (71-218-252-223.hlrn.qwest.net.
+ [71.218.252.223]) by smtp.gmail.com with ESMTPSA id
+ 8926c6da1cb9f-4d37ed1af3esm800652173.88.2024.09.15.00.55.17
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 15 Sep 2024 00:55:17 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
+To: buildroot@buildroot.org
+Date: Sun, 15 Sep 2024 01:55:09 -0600
+Message-Id: <20240915075509.1563070-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Waldemar Brodkorb <wbx@openadk.org>, buildroot@buildroot.org
-References: <ZsC4BZadtEq7CZQw@waldemar-brodkorb.de>
-Content-Language: en-GB
-In-Reply-To: <ZsC4BZadtEq7CZQw@waldemar-brodkorb.de>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1726386735; x=1726991535; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:content-language:from
- :references:to:subject:user-agent:mime-version:date:message-id:from
- :to:cc:subject:date:message-id:reply-to;
- bh=XElDIm78KyxlCczibm6z3V3H3dv+X9ellPdAgR/pz/0=;
- b=GbfztnvsJa7OOZEXuHPlDYkiWMfWBE6Q4DYid5IILWdhldm1SyZYftfI3qgSdCOHd0
- 9CUf03f1BJC1xgSFFVdA06yWz4doXADW/rfYyXPajPswFXTYvDTaXhPY2T+Sr6pFHegX
- ftPjKPMK78znGe2+GKMze5+9NwnX3cZF5Klg81JZPI9O0hF32vzBG6t9xOIKIJVQ6a4i
- z6pO/WpAJYSmOOtRMxkLLyuhFBpBhA62xUcz+/FiyQgKk3+EfUUgRfqr70khqCkCgC3c
- 50FuNhAl0DA/2yHGEYWWG5jvZPVgQP4SbiA7r4ZWXvPM/cNvWoeJlpv70xL/nuMOV5ns
- mVwQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=mind.be header.i=@mind.be
- header.a=rsa-sha256 header.s=google header.b=Gbfztnvs
-Subject: Re: [Buildroot] [PATCH next] package/strongswan: update to 5.9.14
+ d=gmail.com; s=20230601; t=1726386918; x=1726991718; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=xCApRFgAMQz0lVSR7ESrpuQKX6mdFEWM5jY9P4SYiZg=;
+ b=TCMVRfCCVzFiWck1JldJXdZZ0qmmwrVNuw33IYbEVt6rUXm9ceN2bMGRFoBkpfufxv
+ d6EThq4XJwj9kIqS5WTkBDHwAhzaBB/MbcrayiQU78CX1V1ydEisXDfn7QrNwh9xh+kR
+ DCGqwzHjlX/X2jpcdbDtgwWqHW91NTsI0PRxq/C1ptllEDsxtBsh6/fDEHdpPHEP9W5Y
+ a9W7Eg4R3m6D61E7qBUTX+GS82wuFCTPuWlChhq7JKF5cEGnxoB+wFZIu4Fmzr5ZcFqK
+ wWv6KGS6XUy2JWiQp8K8tKjIC9MTecdZuDNUcgVsXoGNCkAkCF6/1edmfurrnp7AskHj
+ t2og==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=TCMVRfCC
+Subject: [Buildroot] [PATCH 1/1] package/python-gunicorn: bump to version
+ 23.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -105,59 +101,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
+Cc: Lionel Flandrin <lionel@svkt.org>,
+ James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+License hash changed due to year update:
+https://github.com/benoitc/gunicorn/commit/5b68c17b170c7b021a7a982a06c08e3898a5a640
 
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/python-gunicorn/python-gunicorn.hash | 6 +++---
+ package/python-gunicorn/python-gunicorn.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-On 17/08/2024 16:47, Waldemar Brodkorb wrote:
-> For a changelog see here:
-> https://github.com/strongswan/strongswan/releases/tag/5.9.14
-> 
-> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+diff --git a/package/python-gunicorn/python-gunicorn.hash b/package/python-gunicorn/python-gunicorn.hash
+index bd4dc1b3ca..5639697c51 100644
+--- a/package/python-gunicorn/python-gunicorn.hash
++++ b/package/python-gunicorn/python-gunicorn.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/gunicorn/json
+-md5  cb41319d6929842c5af7003d48c513a2  gunicorn-21.2.0.tar.gz
+-sha256  88ec8bff1d634f98e61b9f65bc4bf3cd918a90806c6f5c48bc5603849ec81033  gunicorn-21.2.0.tar.gz
++md5  18b666db62a890579170639961c5b064  gunicorn-23.0.0.tar.gz
++sha256  f014447a0101dc57e294f6c18ca6b40227a4c90e9bdb586042628030cba004ec  gunicorn-23.0.0.tar.gz
+ # Locally computed sha256 checksums
+-sha256  fc71b8f2ce774a47090c106ac5d1145359f5c0e25a0d9ab42acacd230f596936  LICENSE
++sha256  6646cdbba2e99e3421dd18c22173579a1fde347e831dae6adee80eefe331e951  LICENSE
+diff --git a/package/python-gunicorn/python-gunicorn.mk b/package/python-gunicorn/python-gunicorn.mk
+index effa93e5ef..8e3b87fd51 100644
+--- a/package/python-gunicorn/python-gunicorn.mk
++++ b/package/python-gunicorn/python-gunicorn.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_GUNICORN_VERSION = 21.2.0
++PYTHON_GUNICORN_VERSION = 23.0.0
+ PYTHON_GUNICORN_SOURCE = gunicorn-$(PYTHON_GUNICORN_VERSION).tar.gz
+-PYTHON_GUNICORN_SITE = https://files.pythonhosted.org/packages/06/89/acd9879fa6a5309b4bf16a5a8855f1e58f26d38e0c18ede9b3a70996b021
++PYTHON_GUNICORN_SITE = https://files.pythonhosted.org/packages/34/72/9614c465dc206155d93eff0ca20d42e1e35afc533971379482de953521a4
+ PYTHON_GUNICORN_SETUP_TYPE = setuptools
+ PYTHON_GUNICORN_LICENSE = MIT
+ PYTHON_GUNICORN_LICENSE_FILES = LICENSE
+-- 
+2.34.1
 
-  Applied to master, thanks.
-
-  Regards,
-  Arnout
-
-> ---
->   package/strongswan/strongswan.hash | 6 +++---
->   package/strongswan/strongswan.mk   | 2 +-
->   2 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/strongswan/strongswan.hash b/package/strongswan/strongswan.hash
-> index ed8cf0ae31..f6b16fc8a2 100644
-> --- a/package/strongswan/strongswan.hash
-> +++ b/package/strongswan/strongswan.hash
-> @@ -1,7 +1,7 @@
-> -# From http://download.strongswan.org/strongswan-5.9.13.tar.bz2.md5
-> -md5  9ada6be0c89846fb7ded1787a17cfbb2  strongswan-5.9.13.tar.bz2
-> +# From http://download.strongswan.org/strongswan-5.9.14.tar.bz2.md5
-> +md5  21ca3fc7c18456405d03b77266ba630a  strongswan-5.9.14.tar.bz2
->   # Calculated based on the hash above
-> -sha256  56e30effb578fd9426d8457e3b76c8c3728cd8a5589594b55649b2719308ba55  strongswan-5.9.13.tar.bz2
-> +sha256  728027ddda4cb34c67c4cec97d3ddb8c274edfbabdaeecf7e74693b54fc33678  strongswan-5.9.14.tar.bz2
->   # Locally calculated
->   sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
->   sha256  2292e21797754548dccdef9eef6aee7584e552fbd890fa914e1de8d3577d23f0  LICENSE
-> diff --git a/package/strongswan/strongswan.mk b/package/strongswan/strongswan.mk
-> index 41959793a3..a3fd9fe449 100644
-> --- a/package/strongswan/strongswan.mk
-> +++ b/package/strongswan/strongswan.mk
-> @@ -4,7 +4,7 @@
->   #
->   ################################################################################
->   
-> -STRONGSWAN_VERSION = 5.9.13
-> +STRONGSWAN_VERSION = 5.9.14
->   STRONGSWAN_SOURCE = strongswan-$(STRONGSWAN_VERSION).tar.bz2
->   STRONGSWAN_SITE = http://download.strongswan.org
->   STRONGSWAN_LICENSE = GPL-2.0+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
