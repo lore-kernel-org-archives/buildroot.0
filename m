@@ -4,78 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90B27C35FE7
-	for <buildroot@archiver.kernel.org>; Sun, 15 Sep 2024 10:03:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18BAFC35FE4
+	for <buildroot@archiver.kernel.org>; Sun, 15 Sep 2024 10:04:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0125F404E0;
-	Sun, 15 Sep 2024 10:03:53 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D1DFF400EF;
+	Sun, 15 Sep 2024 10:04:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Zo972anTUEns; Sun, 15 Sep 2024 10:03:52 +0000 (UTC)
+ id c3t1oYHAX_wr; Sun, 15 Sep 2024 10:04:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 08C15401A4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7E612401A4
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 08C15401A4;
-	Sun, 15 Sep 2024 10:03:52 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 263C51BF947
- for <buildroot@lists.busybox.net>; Sun, 15 Sep 2024 10:03:50 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7E612401A4;
+	Sun, 15 Sep 2024 10:04:54 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 899CF1BF681
+ for <buildroot@lists.busybox.net>; Sun, 15 Sep 2024 10:04:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2271A60663
- for <buildroot@lists.busybox.net>; Sun, 15 Sep 2024 10:03:50 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 772B74057B
+ for <buildroot@lists.busybox.net>; Sun, 15 Sep 2024 10:04:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qSh0IebsIp37 for <buildroot@lists.busybox.net>;
- Sun, 15 Sep 2024 10:03:48 +0000 (UTC)
-X-Greylist: delayed 467 seconds by postgrey-1.37 at util1.osuosl.org;
- Sun, 15 Sep 2024 10:03:47 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 6AD27605F1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6AD27605F1
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=147.173.1.68;
- helo=mailgw-out1.grenoble.cnrs.fr; envelope-from=bonet@grenoble.cnrs.fr;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ThxBWJk-_Atr for <buildroot@lists.busybox.net>;
+ Sun, 15 Sep 2024 10:04:51 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::226;
+ helo=relay6-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-Received: from mailgw-out1.grenoble.cnrs.fr (mailgw-out1.grenoble.cnrs.fr
- [147.173.1.68])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 6AD27605F1
- for <buildroot@buildroot.org>; Sun, 15 Sep 2024 10:03:47 +0000 (UTC)
-Received: from [IPV6:2a01:e0a:12:eba0:3224:1719:af5c:c1e8] (unknown
- [IPv6:2a01:e0a:12:eba0:3224:1719:af5c:c1e8])
- (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
- key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
- (No client certificate requested)
- by mailgw-out1.grenoble.cnrs.fr (Postfix) with ESMTPSA id 246A8BFF7F;
- Sun, 15 Sep 2024 11:55:57 +0200 (CEST)
-Message-ID: <bdf93e5f-47ab-4359-b544-807eb639fc15@grenoble.cnrs.fr>
-Date: Sun, 15 Sep 2024 11:55:56 +0200
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org EB95340574
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EB95340574
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::226])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id EB95340574
+ for <buildroot@buildroot.org>; Sun, 15 Sep 2024 10:04:50 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id A5D91C0003;
+ Sun, 15 Sep 2024 10:04:47 +0000 (UTC)
+Date: Sun, 15 Sep 2024 12:04:45 +0200
+To: Thomas Perale via buildroot <buildroot@buildroot.org>
+Message-ID: <20240915120445.0d5154d0@windsurf>
+In-Reply-To: <20240915093048.810466-1-thomas.perale@mind.be>
+References: <20240915093048.810466-1-thomas.perale@mind.be>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Grant Edwards <grant.b.edwards@gmail.com>
-References: <vc23rg$llm$1@ciao.gmane.io> <20240914094334.1228db8e@windsurf>
- <vc515t$108g$1@ciao.gmane.io>
-Content-Language: en-US
-From: Edgar Bonet <bonet@grenoble.cnrs.fr>
-In-Reply-To: <vc515t$108g$1@ciao.gmane.io>
+X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=grenoble.cnrs.fr; 
- s=202106-grenoble.cnrs.fr; t=1726394157;
- bh=ikL7Q7V5Gg7VJYpR+IiUqzaqWssXqI99j1sOvrUwjD4=;
- h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
- b=pqXJFLInNNi6ZAsBtYg+CUyia6l2fTZRgTqs205+7Q2Oae9yVx1VObvTh7x99spyY
- 13CwiGliWsyj36zNkKhiAOqYyTrqRHyCtKKqlCrw5JcHsoog31DdJMsvZ5L0JtgMpW
- WJlP2eRPDt620ElVbl1NDdvEv29/DK7fGfNVYkS0m6C/klCroxKJO8cepyKyNW1CCV
- w0SVXLM/oti6U6q6hFFX7PpGWyE7B3n6u+BiLAd1I2Nh6HXjWI4ms0g/WLUXuPadwi
- 4mPYPkK/4Wv/8R6edlafcR4YBYY0yrLerha4c2N5GQEJNNQd2sCcIN+bRbtc5cT846
- +wgJKXwrq7k2g==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=grenoble.cnrs.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=bootlin.com; s=gm1; t=1726394688;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=sbHRTz9UnOkmHM3SUV8ve04mIHjH5Nm76uyobyRMECE=;
+ b=GEQuiqg5KlzJatZvlrasbKAq0Jhx+pExu7UC4ii/hWD1mwQQsSRtN3/ehhRscZaBh8wg/U
+ S2ZxOEj7Cg4w+8xHiTcpBFIYSifSTP7MF9Sew77dUN7nm/zrIOd7TuidMkU4fm0CA+TGE7
+ uqSTClOfgMa8eeI0K28hCga+Ox02q9eRy/sM7dCKqaLZGWBRv7ZV0LhNddKNFVxTMf3z4n
+ vErqaCgbS4dAFLRJdvkPaKvNngKKNfryzh449JyRVt6GKtrirGm7LJM3kW6RuXrWi44FGB
+ hGTN49wA+Z8Tv+IQFbr/WfVLQNIBYD5VIi7ylh/z3GZo3cRZMK3vz3dnwdiO6Q==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=grenoble.cnrs.fr header.i=@grenoble.cnrs.fr
- header.a=rsa-sha256 header.s=202106-grenoble.cnrs.fr header.b=pqXJFLIn
-Subject: Re: [Buildroot] Upgrading buildroot and rootfs/kernel compatibility
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=GEQuiqg5
+Subject: Re: [Buildroot] [PATCH 1/1] package/libssh: fix build failure
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,59 +80,56 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Thomas Perale <thomas.perale@mind.be>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello!
+On Sun, 15 Sep 2024 11:30:48 +0200
+Thomas Perale via buildroot <buildroot@buildroot.org> wrote:
 
-Grant Edwards wrote:
-> In buildroot-2024, you're not allowed to have Fortan support in your
-> toolchain unless you've told BR 2024 about it:
->
-> [excerpt from toolchain/helpers.mk showing the test]
->
-> I don't really understand the reasoning behind that.  Why would the
-> unannounced presence of Fortran support in the toolchain be a problem
-> that should cause the build to fail?
+> When compiling libssh without a C++ cross-compiler the build will fail.
+> 
+> This patch remove the CMake C++ dependency to build libssh. That dependency
+> is only used for the code coverage tool and is not required to build the
+> library.
+> 
+> Fixes:
+>   - http://autobuild.buildroot.org/results/927/92794da6346b856ad74f14f87cc51415871cb5d2/
+>   - http://autobuild.buildroot.org/results/89d/89dcd4982e4061732de635f9e7669db1f257330c/
+>   - http://autobuild.buildroot.org/results/b3f/b3feff5c21defb53c65a3d5d06b13230cfed3317/
+>   - http://autobuild.buildroot.org/results/bc8/bc8338d2c61eaa7c98c99140de5c491b7528c4f3/
+>   - ...
+> 
+> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+> ---
+>  ...enable-CXX-when-running-the-coverage.patch | 57 +++++++++++++++++++
+>  1 file changed, 57 insertions(+)
+>  create mode 100644 package/libssh/0001-cmake-Only-enable-CXX-when-running-the-coverage.patch
 
-This is the kind of question `git blame` is made for. Blaming that test
-gets you this commit[1], which explains the rationale:
+Thanks a lot, but once applied your patch doesn't apply to the libssh
+code base:
 
-commit bdccc57816a6ba043945096202ff676faed929d9
-Author: Vincent Fazio <vfazio@gmail.com>
-Date:   Thu Jul 6 12:18:33 2023 -0500
+>>> libssh 0.11.1 Patching
 
-    toolchain/helpers.mk: perform reverse support checks
+Applying 0001-cmake-Only-enable-CXX-when-running-the-coverage.patch using patch: 
+patching file CMakeLists.txt
+Hunk #1 FAILED at 9.
+1 out of 2 hunks FAILED -- saving rejects to file CMakeLists.txt.rej
+patching file cmake/Modules/AddCMockaTest.cmake
+make: *** [package/pkg-generic.mk:247: /home/thomas/projets/buildroot/output/build/libssh-0.11.1/.stamp_patched] Error 1
 
-    Previously, it was possible for external toolchains to be used that had
-    support for languages or libraries that Buildroot was not aware of.
+Maybe you did your patch against libssh master, and forgot to rebase it
+on top of 0.11.1 before adding it in Buildroot?
 
-    If Buildroot is not made aware of this support, it will not know to copy
-    the requisite libraries into the filesystem.
-
-    This is problematic as packages may perform their own checks [0] to find
-    out what the toolchain supports and builds will link against libraries
-    from the toolchain but will be missing dependencies in the filesystem.
-
-    Now, the support helpers alert the user when a toolchain supports a
-    language or library that has not been set in the Buildroot configuration.
-
-    Also, while we're here, add `-ffree-form` to the Fortran check to
-    suppress a meaningless warning.
-
-    [0]: https://bugs.busybox.net/show_bug.cgi?id=15634
-
-    Signed-off-by: Vincent Fazio <vfazio@gmail.com>
-    Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-
-Regards,
-
-Edgar Bonet.
-
-[1] https://gitlab.com/buildroot.org/buildroot/-/commit/bdccc57816a6ba043945096202ff676faed929d9
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
