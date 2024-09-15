@@ -4,91 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7AA2C35FE7
-	for <buildroot@archiver.kernel.org>; Sun, 15 Sep 2024 08:03:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A6CBBC35FE8
+	for <buildroot@archiver.kernel.org>; Sun, 15 Sep 2024 08:07:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6483F81B72;
-	Sun, 15 Sep 2024 08:03:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6358081B72;
+	Sun, 15 Sep 2024 08:07:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ifIDgogaBFLE; Sun, 15 Sep 2024 08:03:54 +0000 (UTC)
+ id NnpnnjAJOyPp; Sun, 15 Sep 2024 08:07:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5F8A081B7B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6DD0781B7B
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5F8A081B7B;
-	Sun, 15 Sep 2024 08:03:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6DD0781B7B;
+	Sun, 15 Sep 2024 08:07:43 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id C7BEA1BF47D
- for <buildroot@lists.busybox.net>; Sun, 15 Sep 2024 08:03:52 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 91EF91BF47D
+ for <buildroot@lists.busybox.net>; Sun, 15 Sep 2024 08:07:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B61594028E
- for <buildroot@lists.busybox.net>; Sun, 15 Sep 2024 08:03:52 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8E6CC4028E
+ for <buildroot@lists.busybox.net>; Sun, 15 Sep 2024 08:07:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id h9CRkPAGM-Xa for <buildroot@lists.busybox.net>;
- Sun, 15 Sep 2024 08:03:51 +0000 (UTC)
+ id ImyVtytwYuBu for <buildroot@lists.busybox.net>;
+ Sun, 15 Sep 2024 08:07:41 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::130; helo=mail-il1-x130.google.com;
+ client-ip=2607:f8b0:4864:20::d32; helo=mail-io1-xd32.google.com;
  envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 8ABF240136
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8ABF240136
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com
- [IPv6:2607:f8b0:4864:20::130])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 8ABF240136
- for <buildroot@buildroot.org>; Sun, 15 Sep 2024 08:03:51 +0000 (UTC)
-Received: by mail-il1-x130.google.com with SMTP id
- e9e14a558f8ab-3a08ca8d45aso12860955ab.0
- for <buildroot@buildroot.org>; Sun, 15 Sep 2024 01:03:51 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 4B23F40136
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4B23F40136
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com
+ [IPv6:2607:f8b0:4864:20::d32])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 4B23F40136
+ for <buildroot@buildroot.org>; Sun, 15 Sep 2024 08:07:41 +0000 (UTC)
+Received: by mail-io1-xd32.google.com with SMTP id
+ ca18e2360f4ac-82521c46feaso161902639f.2
+ for <buildroot@buildroot.org>; Sun, 15 Sep 2024 01:07:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1726387430; x=1726992230;
+ d=1e100.net; s=20230601; t=1726387660; x=1726992460;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=pyokk1lgTQzF97cgrD0vX9Lu14VKYNsVlrfnisnyyO4=;
- b=NvdzeJ2E0CYSjCMiqk1OSafSTqLbVevKveoL2YTUzVc7lACecDzX+twSXJYKyiw1vM
- garWeJDfDO1Sj6BG7PzWErp+4d825oQgQFsBEUz4r7Uy8b3CxGaGbm4sQZRXGsfQw1+t
- Z/B277cq7yvV0PP0Pm1Jz94ikOB3wC3zK1BSD9czkEBWmT3ypCkm4mn0L4WjSk9swYLB
- ng2KzNHucXjIECietuIoZcP5Jen22wxDwWShBTuU7ePdlAGDhAe5Uk7NbNLjuLzfZxaO
- nIvTw0L4n14sz1/TU7kI5EN831mjizX2eQG/JzwlPhindSjy++vfxmfJqniH3rWWGVxZ
- m3Aw==
-X-Gm-Message-State: AOJu0YzyDemM6KCTAVYxZkR0xjI+TwEWURzMtRRM8He4KA5N692MWl9Z
- pL3TbOHFu/oLRDxw+8QCIWiyTwPPfzTKiKUZN49S0fzJOZB8Aal+9KTVOg==
-X-Google-Smtp-Source: AGHT+IGV/4kspnMrDGFmGNDHloQL6tRyOq6kzMUfr8rHsedFpObMdR3k651aQ7xN/UIHFHoCGmMyNQ==
-X-Received: by 2002:a05:6e02:1e06:b0:39f:5d96:1fde with SMTP id
- e9e14a558f8ab-3a0848ac92emr117845235ab.3.1726387430281; 
- Sun, 15 Sep 2024 01:03:50 -0700 (PDT)
+ bh=2y1HysBS+RBM8dtgp0Ozw/Dw59m75plIcL8+Rpo7WOg=;
+ b=pZOnDGurOTLlTM6e3oHFe+u9LJ7N6575qvo1fsjqAxP84eFJWt3HbVZjB6r9cPLfSa
+ fbsZhZ9sKXM9LMZ+dGFd4fA1mWkWaaNRD+ipJJrSu7DDWdLd1iYoQ7x00DgPkEJY5sci
+ PFjY7Q2P8y7T9GDhfByF+qhOpHFH+6Fog6yNedplY/d4XX6V6+L2DFfJbB9TDhum/T6T
+ OxzIBD88wgsw9q+t24g3aTtE2UdXxqlxkHWEstKN7lEmvqYPZ0AuRYxx+lcJmw/MQvcO
+ xdl2rMeJiWPG0NnY1pxxHXVMQqViq8/FuyZaCfqFgZsPIZSykMSO36I0S+202LaqnpXK
+ g6JA==
+X-Gm-Message-State: AOJu0YzzW6PPyhI+zNURHQ3N+MO6+mH503QzNFxukjRaaBjFhAGIZx+3
+ 9SixS+4DU0USR9Zff3TSmxdC5nQ5u9ig71NdpPNIjZcmPtGHcEjswBoT+w==
+X-Google-Smtp-Source: AGHT+IG+baZCymNC5NW3tvgpQxewdbsSjc2H0e5IAava78d4XWu/q3R6STn7+e6HeZMOmmzqUpjBfg==
+X-Received: by 2002:a05:6e02:1c4a:b0:377:14a7:fc99 with SMTP id
+ e9e14a558f8ab-3a08b79b5cdmr90200735ab.24.1726387660059; 
+ Sun, 15 Sep 2024 01:07:40 -0700 (PDT)
 Received: from james-x399.localdomain (71-218-252-223.hlrn.qwest.net.
  [71.218.252.223]) by smtp.gmail.com with ESMTPSA id
- 8926c6da1cb9f-4d37ec2b88dsm826169173.71.2024.09.15.01.03.49
+ e9e14a558f8ab-3a092dfdba4sm9073685ab.8.2024.09.15.01.07.39
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 15 Sep 2024 01:03:49 -0700 (PDT)
+ Sun, 15 Sep 2024 01:07:39 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 15 Sep 2024 02:03:48 -0600
-Message-Id: <20240915080348.1569609-1-james.hilliard1@gmail.com>
+Date: Sun, 15 Sep 2024 02:07:37 -0600
+Message-Id: <20240915080738.1571637-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1726387430; x=1726992230; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1726387660; x=1726992460; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=pyokk1lgTQzF97cgrD0vX9Lu14VKYNsVlrfnisnyyO4=;
- b=WVTaVOUgVoOaOBJ+qcH+sQucEcWPcCz0FZRfBhM/RP8QedkXoH4hvyAYtT157wAkZA
- cI9ezHgWKFD0WxhoZdAhbUltSswC5OLrPYgFQihJPXr6bjDArRFFln6GjzGUlCcPywuG
- dD1HSSsRv9njJODBiTqOoUtUBH/wT/tH6XtoBduS+t7VoNBF1bk/xh+Bk5ap9nZVZXqR
- /JwPFQN1q0mXds3D1lhMVpcVUGwSydG/pjznkOdN1w3EsqFpPzxHaZ5Maty6NJmojMC6
- ErMRzvxljYXUAD478Cibg0h/Uxo41L24zkIEAH5fFMDmDBBKq27le8tJjQfqqG0RaFXu
- 8YHw==
+ bh=2y1HysBS+RBM8dtgp0Ozw/Dw59m75plIcL8+Rpo7WOg=;
+ b=UYX66N4Ir6iPCvIeILrcVE7A69lzpA1aGRvHLyJ0MKf+nbRrpwumprYcEbGBGy8x3+
+ OvRybs64xtlaGnqvqGuFBftegxJvWIJk5OLQYZ35vxhB6uKuWIlgdruYUiYRgABw1PPE
+ bhsJxIoTCE8ytSq8kRH5kw3zx8UMEM4fGWE1CnGHi2wamu9t2HjQq8zc2WPO43KGE78C
+ 9QTWm5/o46x4ImGcwDclOtManvNFf1vW7PW+SxEizJUepsZ3c23WbCh0fq4WOhyh4Sby
+ K1r+AnzpAHRlrrJGNDDVhZJduJSam+iz3TAwTadAxJT0JJtqtg/ZWptosrIPqKgBYIhB
+ wiGw==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=WVTaVOUg
-Subject: [Buildroot] [PATCH 1/1] package/python-humanize: bump to verison
- 4.10.0
+ header.a=rsa-sha256 header.s=20230601 header.b=UYX66N4I
+Subject: [Buildroot] [PATCH 1/1] package/python-idna: bump to version 3.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -106,47 +105,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Migrate from setuptools to hatchling build backend.
-
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-humanize/python-humanize.hash | 4 ++--
- package/python-humanize/python-humanize.mk   | 8 ++++----
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/python-idna/python-idna.hash | 4 ++--
+ package/python-idna/python-idna.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-humanize/python-humanize.hash b/package/python-humanize/python-humanize.hash
-index 871bb9bfa5..98ea691e0e 100644
---- a/package/python-humanize/python-humanize.hash
-+++ b/package/python-humanize/python-humanize.hash
+diff --git a/package/python-idna/python-idna.hash b/package/python-idna/python-idna.hash
+index 88459b38df..bf6a65a097 100644
+--- a/package/python-idna/python-idna.hash
++++ b/package/python-idna/python-idna.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/humanize/json
--md5  5e90552713107f756788ecdd8fbe341d  humanize-4.4.0.tar.gz
--sha256  efb2584565cc86b7ea87a977a15066de34cdedaf341b11c851cfcfd2b964779c  humanize-4.4.0.tar.gz
-+md5  1c0f59ba335b32c06e121e5577ed1548  humanize-4.10.0.tar.gz
-+sha256  06b6eb0293e4b85e8d385397c5868926820db32b9b654b932f57fa41c23c9978  humanize-4.10.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/idna/json
+-md5  4490e5070a3dcbf1a6cd178cb523cdfb  idna-3.8.tar.gz
+-sha256  d838c2c0ed6fced7693d5e8ab8e734d5f8fda53a039c0164afb0b82e771e3603  idna-3.8.tar.gz
++md5  3310aa9831d5ee7a33f3cf4bba993558  idna-3.9.tar.gz
++sha256  e5c5dafde284f26e9e0f28f6ea2d6400abd5ca099864a67f576f3981c6476124  idna-3.9.tar.gz
  # Locally computed sha256 checksums
- sha256  8ba6c18112a431400ad3c743f70670079b302545d98884fc2f28a91c383a0380  LICENCE
-diff --git a/package/python-humanize/python-humanize.mk b/package/python-humanize/python-humanize.mk
-index 6155954b82..ff87f6a18d 100644
---- a/package/python-humanize/python-humanize.mk
-+++ b/package/python-humanize/python-humanize.mk
-@@ -4,12 +4,12 @@
+ sha256  a59f0b0ef3635874109a4461ca44ff7a70d50696e814767bfaf721d4c9b0db0f  LICENSE.md
+diff --git a/package/python-idna/python-idna.mk b/package/python-idna/python-idna.mk
+index c9b83a5bff..a89427e42d 100644
+--- a/package/python-idna/python-idna.mk
++++ b/package/python-idna/python-idna.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_HUMANIZE_VERSION = 4.4.0
-+PYTHON_HUMANIZE_VERSION = 4.10.0
- PYTHON_HUMANIZE_SOURCE = humanize-$(PYTHON_HUMANIZE_VERSION).tar.gz
--PYTHON_HUMANIZE_SITE = https://files.pythonhosted.org/packages/51/19/3e1adf0e7a8c8361496b085edcab2ddcd85410735a2b6fdd044247fc5b75
--PYTHON_HUMANIZE_SETUP_TYPE = setuptools
-+PYTHON_HUMANIZE_SITE = https://files.pythonhosted.org/packages/5d/b1/c8f05d5dc8f64030d8cc71e91307c1daadf6ec0d70bcd6eabdfd9b6f153f
-+PYTHON_HUMANIZE_SETUP_TYPE = pep517
- PYTHON_HUMANIZE_LICENSE = MIT
- PYTHON_HUMANIZE_LICENSE_FILES = LICENCE
--PYTHON_HUMANIZE_DEPENDENCIES = host-python-setuptools-scm
-+PYTHON_HUMANIZE_DEPENDENCIES = host-python-hatchling host-python-hatch-vcs
- 
- $(eval $(python-package))
+-PYTHON_IDNA_VERSION = 3.8
++PYTHON_IDNA_VERSION = 3.9
+ PYTHON_IDNA_SOURCE = idna-$(PYTHON_IDNA_VERSION).tar.gz
+-PYTHON_IDNA_SITE = https://files.pythonhosted.org/packages/e8/ac/e349c5e6d4543326c6883ee9491e3921e0d07b55fdf3cce184b40d63e72a
++PYTHON_IDNA_SITE = https://files.pythonhosted.org/packages/00/6f/93e724eafe34e860d15d37a4f72a1511dd37c43a76a8671b22a15029d545
+ PYTHON_IDNA_LICENSE = BSD-3-Clause
+ PYTHON_IDNA_LICENSE_FILES = LICENSE.md
+ PYTHON_IDNA_SETUP_TYPE = flit
 -- 
 2.34.1
 
