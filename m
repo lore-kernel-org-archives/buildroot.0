@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7008BC3ABAD
-	for <buildroot@archiver.kernel.org>; Sun, 15 Sep 2024 21:38:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7E906C3ABAE
+	for <buildroot@archiver.kernel.org>; Sun, 15 Sep 2024 21:38:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 3F572815AB;
-	Sun, 15 Sep 2024 21:38:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 36A1D841A0;
+	Sun, 15 Sep 2024 21:38:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gVAFDlWgKaUd; Sun, 15 Sep 2024 21:38:54 +0000 (UTC)
+ id 4PhlJ8Ihfl4U; Sun, 15 Sep 2024 21:38:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 29BE981393
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6D9CF84122
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 29BE981393;
-	Sun, 15 Sep 2024 21:38:54 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1C6891BF28B
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6D9CF84122;
+	Sun, 15 Sep 2024 21:38:56 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 42D991BF28B
  for <buildroot@lists.busybox.net>; Sun, 15 Sep 2024 21:36:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1E07980C66
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1FDA6608AA
  for <buildroot@lists.busybox.net>; Sun, 15 Sep 2024 21:36:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OcdRqc9_DUjC for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id v6inweKy-WCA for <buildroot@lists.busybox.net>;
  Sun, 15 Sep 2024 21:36:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 349C680837
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9A58260890
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 349C680837
- for <buildroot@buildroot.org>; Sun, 15 Sep 2024 21:36:39 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9A58260890
+ for <buildroot@buildroot.org>; Sun, 15 Sep 2024 21:36:38 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 31EDE83685; Sun, 15 Sep 2024 21:36:39 +0000 (UTC)
+ id 90A54835CD; Sun, 15 Sep 2024 21:36:38 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 15 Sep 2024 10:02:34 +0200
+Date: Sun, 15 Sep 2024 10:02:21 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 2b83df84600a68f18fe5540a3b8a4b2641a4395f
-X-Git-Newrev: c9fd1ca67629a5076403765547993bd21a8b06c3
+X-Git-Oldrev: e5ca1f1672d2143be74fe9107d3bcb018fb48b64
+X-Git-Newrev: c4c7d5a80011820a7562bfcace6c4f05798fd86f
 X-Patchwork-Hint: ignore
-Message-Id: <20240915213639.31EDE83685@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-docutils: bump to version
- 0.21.2
+Message-Id: <20240915213638.90A54835CD@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-cachetools: bump to version
+ 5.5.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,53 +66,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c9fd1ca67629a5076403765547993bd21a8b06c3
+commit: https://git.buildroot.net/buildroot/commit/?id=c4c7d5a80011820a7562bfcace6c4f05798fd86f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Python-2.0 license replaced with ZPL-2.1 license:
-https://sourceforge.net/p/docutils/code/9398/
+License hash changed due to year update:
+https://github.com/tkem/cachetools/commit/d56683461f42d72a53d52e7dd3bee11b5fbb2b52
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-docutils/python-docutils.hash | 6 +++---
- package/python-docutils/python-docutils.mk   | 8 ++++----
- 2 files changed, 7 insertions(+), 7 deletions(-)
+ package/python-cachetools/python-cachetools.hash | 6 +++---
+ package/python-cachetools/python-cachetools.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-docutils/python-docutils.hash b/package/python-docutils/python-docutils.hash
-index 2386cc2891..f79d418efa 100644
---- a/package/python-docutils/python-docutils.hash
-+++ b/package/python-docutils/python-docutils.hash
+diff --git a/package/python-cachetools/python-cachetools.hash b/package/python-cachetools/python-cachetools.hash
+index 7b6b939191..fb16cb492b 100644
+--- a/package/python-cachetools/python-cachetools.hash
++++ b/package/python-cachetools/python-cachetools.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/docutils/json
--md5  93bcfe0065cf1d0b6a0bcabeca7a2335  docutils-0.20.1.tar.gz
--sha256  f08a4e276c3a1583a86dce3e34aba3fe04d02bba2dd51ed16106244e8a923e3b  docutils-0.20.1.tar.gz
-+md5  c4064e1e0e3cd142951fd2b95b830874  docutils-0.21.2.tar.gz
-+sha256  3a6b18732edf182daa3cd12775bbb338cf5691468f91eeeb109deff6ebfa986f  docutils-0.21.2.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/cachetools/json
+-md5  5317c13b69c4021e925a2fbbc199bcc9  cachetools-5.3.2.tar.gz
+-sha256  086ee420196f7b2ab9ca2db2520aca326318b68fe5ba8bc4d49cca91add450f2  cachetools-5.3.2.tar.gz
++md5  d589387a314eed031e97348a73b8cf91  cachetools-5.5.0.tar.gz
++sha256  2cc24fb4cbe39633fb7badd9db9ca6295d766d9c2995f245725a46715d050f2a  cachetools-5.5.0.tar.gz
  # Locally computed sha256 checksums
--sha256  a0d7ee761e8d757c0b904518514f98233fd94f2398da3703130d15142ca47a77  COPYING.txt
-+sha256  534edf7641abde69fc500f228c09751812c0589815eef0c082bc6ba317d646ac  COPYING.txt
-diff --git a/package/python-docutils/python-docutils.mk b/package/python-docutils/python-docutils.mk
-index 2b496f0d46..1f1e043c15 100644
---- a/package/python-docutils/python-docutils.mk
-+++ b/package/python-docutils/python-docutils.mk
-@@ -4,12 +4,12 @@
+-sha256  76260c1370a7d41d5fac71a27d781f3add5d7249adfbbfa930846d2d9e47dbd5  LICENSE
++sha256  2f4d2ff05f05c5da3879f40292b7600332d775dc7ed320d43dd42f3cd7d92c9b  LICENSE
+diff --git a/package/python-cachetools/python-cachetools.mk b/package/python-cachetools/python-cachetools.mk
+index c841e0761f..38a2313d59 100644
+--- a/package/python-cachetools/python-cachetools.mk
++++ b/package/python-cachetools/python-cachetools.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_DOCUTILS_VERSION = 0.20.1
-+PYTHON_DOCUTILS_VERSION = 0.21.2
- PYTHON_DOCUTILS_SOURCE = docutils-$(PYTHON_DOCUTILS_VERSION).tar.gz
--PYTHON_DOCUTILS_SITE = https://files.pythonhosted.org/packages/1f/53/a5da4f2c5739cf66290fac1431ee52aff6851c7c8ffd8264f13affd7bcdd
--PYTHON_DOCUTILS_LICENSE = Public Domain, BSD-2-Clause, BSD-3-Clause, Python-2.0, GPL-3.0+ (emacs mode)
-+PYTHON_DOCUTILS_SITE = https://files.pythonhosted.org/packages/ae/ed/aefcc8cd0ba62a0560c3c18c33925362d46c6075480bfa4df87b28e169a9
-+PYTHON_DOCUTILS_LICENSE = Public Domain, BSD-2-Clause, BSD-3-Clause, ZPL-2.1, GPL-3.0+ (emacs mode)
- PYTHON_DOCUTILS_LICENSE_FILES = COPYING.txt
--PYTHON_DOCUTILS_SETUP_TYPE = setuptools
-+PYTHON_DOCUTILS_SETUP_TYPE = flit
- 
- $(eval $(python-package))
- $(eval $(host-python-package))
+-PYTHON_CACHETOOLS_VERSION = 5.3.2
++PYTHON_CACHETOOLS_VERSION = 5.5.0
+ PYTHON_CACHETOOLS_SOURCE = cachetools-$(PYTHON_CACHETOOLS_VERSION).tar.gz
+-PYTHON_CACHETOOLS_SITE = https://files.pythonhosted.org/packages/10/21/1b6880557742c49d5b0c4dcf0cf544b441509246cdd71182e0847ac859d5
++PYTHON_CACHETOOLS_SITE = https://files.pythonhosted.org/packages/c3/38/a0f315319737ecf45b4319a8cd1f3a908e29d9277b46942263292115eee7
+ PYTHON_CACHETOOLS_SETUP_TYPE = setuptools
+ PYTHON_CACHETOOLS_LICENSE = MIT
+ PYTHON_CACHETOOLS_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
