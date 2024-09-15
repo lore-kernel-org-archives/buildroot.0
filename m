@@ -4,71 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 18BAFC35FE4
-	for <buildroot@archiver.kernel.org>; Sun, 15 Sep 2024 10:04:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3C140C35FE4
+	for <buildroot@archiver.kernel.org>; Sun, 15 Sep 2024 10:05:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D1DFF400EF;
-	Sun, 15 Sep 2024 10:04:55 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 02E01401A4;
+	Sun, 15 Sep 2024 10:05:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id c3t1oYHAX_wr; Sun, 15 Sep 2024 10:04:54 +0000 (UTC)
+ id R-6XgHaj8O-x; Sun, 15 Sep 2024 10:05:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7E612401A4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C6F6740528
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7E612401A4;
-	Sun, 15 Sep 2024 10:04:54 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 899CF1BF681
- for <buildroot@lists.busybox.net>; Sun, 15 Sep 2024 10:04:52 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C6F6740528;
+	Sun, 15 Sep 2024 10:05:41 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B35041BF681
+ for <buildroot@lists.busybox.net>; Sun, 15 Sep 2024 10:05:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 772B74057B
- for <buildroot@lists.busybox.net>; Sun, 15 Sep 2024 10:04:52 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id AFC0881C56
+ for <buildroot@lists.busybox.net>; Sun, 15 Sep 2024 10:05:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ThxBWJk-_Atr for <buildroot@lists.busybox.net>;
- Sun, 15 Sep 2024 10:04:51 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::226;
- helo=relay6-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4g7TXcSOePWm for <buildroot@lists.busybox.net>;
+ Sun, 15 Sep 2024 10:05:40 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::222;
+ helo=relay2-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org EB95340574
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EB95340574
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::226])
- by smtp4.osuosl.org (Postfix) with ESMTPS id EB95340574
- for <buildroot@buildroot.org>; Sun, 15 Sep 2024 10:04:50 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id A5D91C0003;
- Sun, 15 Sep 2024 10:04:47 +0000 (UTC)
-Date: Sun, 15 Sep 2024 12:04:45 +0200
-To: Thomas Perale via buildroot <buildroot@buildroot.org>
-Message-ID: <20240915120445.0d5154d0@windsurf>
-In-Reply-To: <20240915093048.810466-1-thomas.perale@mind.be>
-References: <20240915093048.810466-1-thomas.perale@mind.be>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org A482C81C38
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A482C81C38
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::222])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A482C81C38
+ for <buildroot@buildroot.org>; Sun, 15 Sep 2024 10:05:39 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 9103240003;
+ Sun, 15 Sep 2024 10:05:36 +0000 (UTC)
+Date: Sun, 15 Sep 2024 12:05:35 +0200
+To: Waldemar Brodkorb <wbx@openadk.org>
+Message-ID: <20240915120535.4a11701c@windsurf>
+In-Reply-To: <ZuEdJENuvG2TQCFg@waldemar-brodkorb.de>
+References: <ZuEdJENuvG2TQCFg@waldemar-brodkorb.de>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1726394688;
+ d=bootlin.com; s=gm1; t=1726394736;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=sbHRTz9UnOkmHM3SUV8ve04mIHjH5Nm76uyobyRMECE=;
- b=GEQuiqg5KlzJatZvlrasbKAq0Jhx+pExu7UC4ii/hWD1mwQQsSRtN3/ehhRscZaBh8wg/U
- S2ZxOEj7Cg4w+8xHiTcpBFIYSifSTP7MF9Sew77dUN7nm/zrIOd7TuidMkU4fm0CA+TGE7
- uqSTClOfgMa8eeI0K28hCga+Ox02q9eRy/sM7dCKqaLZGWBRv7ZV0LhNddKNFVxTMf3z4n
- vErqaCgbS4dAFLRJdvkPaKvNngKKNfryzh449JyRVt6GKtrirGm7LJM3kW6RuXrWi44FGB
- hGTN49wA+Z8Tv+IQFbr/WfVLQNIBYD5VIi7ylh/z3GZo3cRZMK3vz3dnwdiO6Q==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=/ex1YpmCoOj6FHXUIHdqnVGlHeGfUAtRefto5wtFPyo=;
+ b=KRLCLh2vKg0rHbCNg4iqPLL7BLCdq/XT2gDbgzy5pNWrCtog2UO2ACfDbh0GJcEtlq0QFT
+ WLp/v/yK8sOWRwM922Xj11LzF5PkY2c2SZ0JuXP3XPLY/41E8ZDdlXdVXWAk07PoLJ6ZFm
+ vFHhL7+aP27a/ueJjMnACJg1YB8g+zAHVTD1CjfVHJDGsA0EaO/oh8gWjUGlarvkS7NMa0
+ /Jo+m77zb+1utGedH2lzBDwlb7nnKTY2FarNBIzITSswinTaAHMFF3lrO2wbCiFQossj26
+ kdawwFCMDqQDY3+sVmJ1I/HTNTJhFOmetZN6jHX6108qVfJpj+v5A2sl3eKiUg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=GEQuiqg5
-Subject: Re: [Buildroot] [PATCH 1/1] package/libssh: fix build failure
+ header.s=gm1 header.b=KRLCLh2v
+Subject: Re: [Buildroot] [PATCH] package/uclibc: fix mips64 n32 big endian
+ issue
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,48 +83,27 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Thomas Perale <thomas.perale@mind.be>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, 15 Sep 2024 11:30:48 +0200
-Thomas Perale via buildroot <buildroot@buildroot.org> wrote:
+On Wed, 11 Sep 2024 06:31:32 +0200
+Waldemar Brodkorb <wbx@openadk.org> wrote:
 
-> When compiling libssh without a C++ cross-compiler the build will fail.
+> Add a real fix for the time64 issue instead of disabling
+> time64 for mips64 n32 big endian.
 > 
-> This patch remove the CMake C++ dependency to build libssh. That dependency
-> is only used for the code coverage tool and is not required to build the
-> library.
-> 
-> Fixes:
->   - http://autobuild.buildroot.org/results/927/92794da6346b856ad74f14f87cc51415871cb5d2/
->   - http://autobuild.buildroot.org/results/89d/89dcd4982e4061732de635f9e7669db1f257330c/
->   - http://autobuild.buildroot.org/results/b3f/b3feff5c21defb53c65a3d5d06b13230cfed3317/
->   - http://autobuild.buildroot.org/results/bc8/bc8338d2c61eaa7c98c99140de5c491b7528c4f3/
->   - ...
-> 
-> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 > ---
->  ...enable-CXX-when-running-the-coverage.patch | 57 +++++++++++++++++++
->  1 file changed, 57 insertions(+)
->  create mode 100644 package/libssh/0001-cmake-Only-enable-CXX-when-running-the-coverage.patch
+>  ...r-n32-ABI-breaks-a-lot-of-tests-disa.patch | 28 ---------------
+>  ...time64-Select-correct-_dl_fstat-impl.patch | 34 +++++++++++++++++++
+>  2 files changed, 34 insertions(+), 28 deletions(-)
+>  delete mode 100644 package/uclibc/0001-mips64-time64-for-n32-ABI-breaks-a-lot-of-tests-disa.patch
+>  create mode 100644 package/uclibc/0001-mips64n32-time64-Select-correct-_dl_fstat-impl.patch
 
-Thanks a lot, but once applied your patch doesn't apply to the libssh
-code base:
-
->>> libssh 0.11.1 Patching
-
-Applying 0001-cmake-Only-enable-CXX-when-running-the-coverage.patch using patch: 
-patching file CMakeLists.txt
-Hunk #1 FAILED at 9.
-1 out of 2 hunks FAILED -- saving rejects to file CMakeLists.txt.rej
-patching file cmake/Modules/AddCMockaTest.cmake
-make: *** [package/pkg-generic.mk:247: /home/thomas/projets/buildroot/output/build/libssh-0.11.1/.stamp_patched] Error 1
-
-Maybe you did your patch against libssh master, and forgot to rebase it
-on top of 0.11.1 before adding it in Buildroot?
+Applied to master, thanks.
 
 Thomas
 -- 
