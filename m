@@ -1,94 +1,74 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A118FC35FE4
-	for <buildroot@archiver.kernel.org>; Sun, 15 Sep 2024 10:36:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8E9AC35FE4
+	for <buildroot@archiver.kernel.org>; Sun, 15 Sep 2024 10:51:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3478B404E0;
-	Sun, 15 Sep 2024 10:36:54 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 447F280B7F;
+	Sun, 15 Sep 2024 10:51:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id pUJ9O3YC_X2M; Sun, 15 Sep 2024 10:36:53 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id eiZKLxoyoYNp; Sun, 15 Sep 2024 10:51:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D3EE0401D2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 38C8780B86
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id D3EE0401D2;
-	Sun, 15 Sep 2024 10:36:52 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 712431BF29D
- for <buildroot@lists.busybox.net>; Sun, 15 Sep 2024 10:36:51 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 38C8780B86;
+	Sun, 15 Sep 2024 10:51:41 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 241311BF29D
+ for <buildroot@lists.busybox.net>; Sun, 15 Sep 2024 10:51:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5F65A401D2
- for <buildroot@lists.busybox.net>; Sun, 15 Sep 2024 10:36:51 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1314F80B7F
+ for <buildroot@lists.busybox.net>; Sun, 15 Sep 2024 10:51:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kow2mk3--AiF for <buildroot@lists.busybox.net>;
- Sun, 15 Sep 2024 10:36:50 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::632; helo=mail-ej1-x632.google.com;
- envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 9A1D9400EF
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9A1D9400EF
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com
- [IPv6:2a00:1450:4864:20::632])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 9A1D9400EF
- for <buildroot@buildroot.org>; Sun, 15 Sep 2024 10:36:48 +0000 (UTC)
-Received: by mail-ej1-x632.google.com with SMTP id
- a640c23a62f3a-a8d2daa2262so290167066b.1
- for <buildroot@buildroot.org>; Sun, 15 Sep 2024 03:36:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1726396607; x=1727001407;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=Sd1A8S/ID6yw/8mvVXuULtEbtsqJ7rn4XTxfXhwt7b0=;
- b=Y4gD/W0Es6EZRqaz7Fr0D18E07rC0liQBSyVWwMpQANkTXyXiXVmkWyCcVyRUNhkzw
- /bIDQ4lTUs3IHlvZinNI4/nnbw6BF3Jw01O/90Fra4NwuuEUeoBCS5xsjpmEt2B/XYbe
- Z9jWAhsj7w5kM9uswZEKD+iLqHTlIxGbOnMPcRsIJTFyPk4KOLPWPdXtIqdTMnMfFeU2
- LTUG7tdMWiFLPoKUB9M7duQ9ekMqZ2IwPfedMyBI8Ug04R6XU+bScSwuIWibYgD4x8wQ
- 69+ZbJtPBVlEPEGoIHkkVxWh/oxALqwzp0rDzMn5h/wGsajCbAZ98b3/uIP80Aj24rSK
- xY7w==
-X-Gm-Message-State: AOJu0Ywh4XTACzDRNzrhxFxnVx83azR0eWWkYzD2mi/ngyGams+neiXT
- Gt1mRWR428b9fqT1WHMw9f8FJCu74EqkdoPkJQugqKefSfLOR+1A8NCzumX5zRD3+9q3qFn7o+v
- gcQ09Pg==
-X-Google-Smtp-Source: AGHT+IFx7U6ZQfp9LAiGWgYB7tWlT7wdFQleoR4uNGMHQNxyboXtxjxDLZ1A0d1aa29weGHxNyFROQ==
-X-Received: by 2002:a17:907:72d3:b0:a86:92a5:247a with SMTP id
- a640c23a62f3a-a9047ca0756mr845525866b.17.1726396606704; 
- Sun, 15 Sep 2024 03:36:46 -0700 (PDT)
-Received: from localhost.localdomain (roof.metalab.wien.funkfeuer.at.
- [78.41.112.119]) by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-a90610966ccsm181787066b.45.2024.09.15.03.36.45
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 15 Sep 2024 03:36:46 -0700 (PDT)
-To: buildroot@buildroot.org
-Date: Sun, 15 Sep 2024 12:36:29 +0200
-Message-ID: <20240915103629.884407-1-thomas.perale@mind.be>
-X-Mailer: git-send-email 2.46.0
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 6ysDiaew_TWj for <buildroot@lists.busybox.net>;
+ Sun, 15 Sep 2024 10:51:39 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::223;
+ helo=relay3-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8597580B78
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8597580B78
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::223])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 8597580B78
+ for <buildroot@buildroot.org>; Sun, 15 Sep 2024 10:51:38 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id A8DE760002;
+ Sun, 15 Sep 2024 10:51:35 +0000 (UTC)
+Date: Sun, 15 Sep 2024 12:51:34 +0200
+To: Waldemar Brodkorb <wbx@openadk.org>
+Message-ID: <20240915125134.2d6a9f55@windsurf>
+In-Reply-To: <Zsa6HF+NBfLtnThO@waldemar-brodkorb.de>
+References: <Zsa6HF+NBfLtnThO@waldemar-brodkorb.de>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1726396607; x=1727001407; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=Sd1A8S/ID6yw/8mvVXuULtEbtsqJ7rn4XTxfXhwt7b0=;
- b=EVdu1VAvTAX0uL6egJ9l/aRILaoQ153vt2X2LnojSM4mSmOVaWABQqMCdC/p1OcEXu
- ZOORkzku9hMZ20QbUJPDj7zJDzCph1o0W2uXVFUcVQ9QmybbI0M3eoPSKSDXRZZ3hEpo
- sn8S7OhOXf0tf+qJScer/eX7O97yXdY4spuNEWw335Iez1ahb4px9OztBubhtc7p7Uk7
- Jg9n4Taorwz3TFJAkunUwuPTl2u8TfeEmOynYqoMpcA9iG5nx+N03Sr8ztz5fnPYR4EZ
- FamsLZvbUo6pHzSjgspuCBBsoK8rd4TeHl5+T5X0If0oIHfRXiJGugLusB1pqd+G3p/h
- 4wPA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=bootlin.com; s=gm1; t=1726397495;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=Uk8Kc3YWkRmLaG5MYTqlRmoyxDOlSZjBz+Nf0NDiuQE=;
+ b=axt+XyX6YLUqfDjR+mRqj4K1mxqkOxpcK/KDg8bK4gqpvm6SfiwsEA0qgbMTALrkmNcktx
+ vFpCBqEWXCr+HxDQbFSADyfLiDffHpWVmSW7trzCSyJQeiVBeHXIgm4BnPdCEsf1NfeMWr
+ MYbt3fSJyz7nC/k9gXGQ+od8TgmU/qP3uxW1ZQ7t9JME7bRY+dncncTldx/s7dkQnDxqA/
+ 6e1G1MZsWkaSXE0POCegvDqnEDKnSv33NaD/3TIme5mkthELLLERq0IQn9iknVOY4sZqri
+ ITHwwn5tEzCdBwINS7pHFwFp9CzFZOPV2MreKpro7PwyGfP4IozpVR+Werhy3w==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=EVdu1VAv
-Subject: [Buildroot] [PATCH 1/1 v2] package/libssh: fix build failure
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=axt+XyX6
+Subject: Re: [Buildroot] [PATCH next] package/httping: update to 4.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,98 +80,132 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Perale via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Perale <thomas.perale@mind.be>
-Cc: Thomas Perale <thomas.perale@mind.be>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-When compiling libssh without a C++ cross-compiler the build will fail.
+Hello,
 
-This patch remove the CMake C++ dependency to build libssh. That dependency
-is only used for the code coverage tool and is not required to build the
-library.
+On Thu, 22 Aug 2024 06:10:04 +0200
+Waldemar Brodkorb <wbx@openadk.org> wrote:
 
-Fixes:
-  - http://autobuild.buildroot.org/results/927/92794da6346b856ad74f14f87cc51415871cb5d2/
-  - http://autobuild.buildroot.org/results/89d/89dcd4982e4061732de635f9e7669db1f257330c/
-  - http://autobuild.buildroot.org/results/b3f/b3feff5c21defb53c65a3d5d06b13230cfed3317/
-  - http://autobuild.buildroot.org/results/bc8/bc8338d2c61eaa7c98c99140de5c491b7528c4f3/
-  - ...
+> Changes made to the Buildroot package:
+>  - use github url for download
+>  - switch to cmake infrastructure
+>  - add new option for TUI support
+>  - add new option for SSL support
+>  - TFO is always enabled now
 
-Signed-off-by: Thomas Perale <thomas.perale@mind.be>
----
- ...enable-CXX-when-running-the-coverage.patch | 56 +++++++++++++++++++
- 1 file changed, 56 insertions(+)
- create mode 100644 package/libssh/0001-cmake-Only-enable-CXX-when-running-the-coverage.patch
+Specify: "and therefore we don't need to add Config.in.legacy handling
+for this option".
 
-diff --git a/package/libssh/0001-cmake-Only-enable-CXX-when-running-the-coverage.patch b/package/libssh/0001-cmake-Only-enable-CXX-when-running-the-coverage.patch
-new file mode 100644
-index 0000000000..e70c0fa44e
---- /dev/null
-+++ b/package/libssh/0001-cmake-Only-enable-CXX-when-running-the-coverage.patch
-@@ -0,0 +1,56 @@
-+From 328ae3d2306c9f65b5e85a2be98a368c07287a05 Mon Sep 17 00:00:00 2001
-+From: Thomas Perale <thomas.perale@mind.be>
-+Date: Sat, 14 Sep 2024 21:07:30 +0200
-+Subject: [PATCH] cmake: Only enable CXX when running the coverage
-+
-+Commit 25a678190c42b24076fdd805a8d7a722a8a9c798 introduced code coverage
-+collection. That also introduced a dependency to CXX language.
-+
-+When cross-compiling libssh in an environment that doesn't have a C++ compiler
-+the following error is raised: "No CMAKE_CXX_COMPILER could be found.".
-+
-+Since the C++ part is only needed for the coverage part, this commit only enable
-+that language dependency when actually needing it.
-+
-+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-+---
-+ CMakeLists.txt                    | 3 ++-
-+ cmake/Modules/AddCMockaTest.cmake | 1 +
-+ 2 files changed, 3 insertions(+), 1 deletion(-)
-+
-+diff --git a/CMakeLists.txt b/CMakeLists.txt
-+index 13330ea3..5595a47a 100644
-+--- a/CMakeLists.txt
-++++ b/CMakeLists.txt
-+@@ -9,7 +9,7 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules")
-+ include(DefineCMakeDefaults)
-+ include(DefineCompilerFlags)
-+ 
-+-project(libssh VERSION 0.11.1 LANGUAGES C CXX)
-++project(libssh VERSION 0.11.1 LANGUAGES C)
-+ 
-+ # global needed variable
-+ set(APPLICATION_NAME ${PROJECT_NAME})
-+@@ -190,6 +190,7 @@ endif (WITH_SYMBOL_VERSIONING AND ABIMAP_FOUND)
-+ 
-+ # Coverage
-+ if (WITH_COVERAGE)
-++    ENABLE_LANGUAGE(CXX)
-+     include(CodeCoverage)
-+     setup_target_for_coverage_lcov(
-+         NAME "coverage"
-+diff --git a/cmake/Modules/AddCMockaTest.cmake b/cmake/Modules/AddCMockaTest.cmake
-+index 79178183..f49961ba 100644
-+--- a/cmake/Modules/AddCMockaTest.cmake
-++++ b/cmake/Modules/AddCMockaTest.cmake
-+@@ -117,6 +117,7 @@ function(ADD_CMOCKA_TEST _TARGET_NAME)
-+         ${TARGET_SYSTEM_EMULATOR} ${_TARGET_NAME}
-+     )
-+     if (WITH_COVERAGE)
-++        ENABLE_LANGUAGE(CXX)
-+         include(CodeCoverage)
-+         append_coverage_compiler_flags_to_target(${_TARGET_NAME})
-+     endif (WITH_COVERAGE)
-+-- 
-+2.46.0
-+
+>  - remove no longer required patches 0001/0002
+>  - update license file to LICENSE
+>  - update license to GPLv3
+>  - always build without gettext support
+> 
+> Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+
+I was about to apply, but there's a major licensing issue: they have
+the GPLv3 license text, but all source files contain this:
+
+/* Released under AGPL v3 with exception for the OpenSSL library. See license.txt */
+
+license.txt doesn't exist, and AGPL v3 is obviously not GPL v3.
+
+So could you check this with upstream, and ask them to fix those
+inconsistencies?
+
+Also, I have comments below (which I had fixed locally... but need to
+drop because of this license issue).
+
+
+> diff --git a/package/httping/Config.in b/package/httping/Config.in
+> index c0e5071ce8..f5057e05d0 100644
+> --- a/package/httping/Config.in
+> +++ b/package/httping/Config.in
+> @@ -16,7 +16,16 @@ config BR2_PACKAGE_HTTPING
+>  
+>  if BR2_PACKAGE_HTTPING
+>  
+> -config BR2_PACKAGE_HTTPING_TFO
+> -	bool "TCP Fast Open (TFO) support"
+> +config BR2_PACKAGE_HTTPING_SSL
+> +	bool "enable SSL support"
+> +	select BR2_PACKAGE_LIBOPENSSL
+
+Since it builds fine with libressl, this should be:
+
+	select BR2_PACKAGE_OPENSSL
+
+> +	select BR2_PACKAGE_LIBOPENSSL_ENGINES
+
+And so this should be:
+
+	select BR2_PACKAGE_LIBOPENSSL_ENGINES if BR2_PACKAGE_LIBOPENSSL
+
+> +	select BR2_PACKAGE_CA_CERTIFICATES # runtime
+> +
+> +config BR2_PACKAGE_HTTPING_TUI
+> +	bool "enable TUI support"
+> +	select BR2_PACKAGE_NCURSES
+> +	select BR2_PACKAGE_NCURSES_WCHAR
+> +	select BR2_PACKAGE_FFTW_DOUBLE
+
+This causes a menuconfig warning because BR2_PACKAGE_FFTW_DOUBLE
+doesn't exist if you don't select BR2_PACKAGE_FFTW. So please add a
+"select BR2_PACKAGE_FFTW".
+
+> diff --git a/package/httping/httping.mk b/package/httping/httping.mk
+> index b3a625a8e1..cf1189eeb6 100644
+> --- a/package/httping/httping.mk
+> +++ b/package/httping/httping.mk
+> @@ -4,34 +4,19 @@
+>  #
+>  ################################################################################
+>  
+> -HTTPING_VERSION = 2.5
+> -HTTPING_SOURCE = httping-$(HTTPING_VERSION).tgz
+> -HTTPING_SITE = http://www.vanheusden.com/httping
+> -HTTPING_LICENSE = GPL-2.0
+> -HTTPING_LICENSE_FILES = license.txt
+> -HTTPING_LDFLAGS = $(TARGET_LDFLAGS) \
+> -	$(TARGET_NLS_LIBS) \
+> -	$(if $(BR2_PACKAGE_LIBICONV),-liconv)
+> -HTTPING_DEPENDENCIES = \
+> -	$(TARGET_NLS_DEPENDENCIES) \
+> -	$(if $(BR2_PACKAGE_LIBICONV),libiconv) \
+> -	$(if $(BR2_PACKAGE_NCURSES_WCHAR),ncurses) \
+> -	$(if $(BR2_PACKAGE_OPENSSL),openssl) \
+> -	$(if $(BR2_PACKAGE_FFTW_DOUBLE),fftw-double)
+> -HTTPING_MAKE_OPTS = $(TARGET_CONFIGURE_OPTS) \
+> -	FW=$(if $(BR2_PACKAGE_FFTW_DOUBLE),yes,no) \
+> -	NC=$(if $(BR2_PACKAGE_NCURSES_WCHAR),yes,no) \
+> -	SSL=$(if $(BR2_PACKAGE_OPENSSL),yes,no) \
+> -	TFO=$(if $(BR2_PACKAGE_HTTPING_TFO),yes,no) \
+> -	NO_GETTEXT=$(if $(BR2_SYSTEM_ENABLE_NLS),no,yes)
+> +HTTPING_VERSION = 4.1.0
+> +HTTPING_SOURCE = v$(HTTPING_VERSION).tar.gz
+
+Please drop this HTTPING_SOURCE so that the default gets used.
+
+> +HTTPING_SITE = $(call github,folkertvanheusden,HTTPing,v$(HTTPING_VERSION))
+> +HTTPING_LICENSE = GPL-3.0
+
+Of course, this might need to be adjusted once upstream clarifies their
+licensing intention.
+
+Thanks!
+
+Thomas
 -- 
-2.46.0
-
+Thomas Petazzoni, co-owner and CEO, Bootlin
+Embedded Linux and Kernel engineering and training
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
