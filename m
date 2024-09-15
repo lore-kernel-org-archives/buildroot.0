@@ -4,49 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8876C3ABAE
-	for <buildroot@archiver.kernel.org>; Sun, 15 Sep 2024 21:42:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1375C3ABAD
+	for <buildroot@archiver.kernel.org>; Sun, 15 Sep 2024 21:42:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A6656849D0;
-	Sun, 15 Sep 2024 21:42:53 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B05C1849E8;
+	Sun, 15 Sep 2024 21:42:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ddhz3I0aOD67; Sun, 15 Sep 2024 21:42:52 +0000 (UTC)
+ id T_Zsy0qsaSbw; Sun, 15 Sep 2024 21:42:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 03F32849D4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B6BE9849D4
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 03F32849D4;
-	Sun, 15 Sep 2024 21:42:51 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B6BE9849D4;
+	Sun, 15 Sep 2024 21:42:54 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 811681BF28B
- for <buildroot@lists.busybox.net>; Sun, 15 Sep 2024 21:37:29 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 77B9E1BF28B
+ for <buildroot@lists.busybox.net>; Sun, 15 Sep 2024 21:37:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7E0D660880
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8BEB960886
  for <buildroot@lists.busybox.net>; Sun, 15 Sep 2024 21:36:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AXutRyrNZvuJ for <buildroot@lists.busybox.net>;
+ id p4lMd7JJ1bys for <buildroot@lists.busybox.net>;
  Sun, 15 Sep 2024 21:36:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ED51C60886
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D83E86089A
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id ED51C60886
+ by smtp3.osuosl.org (Postfix) with ESMTP id D83E86089A
  for <buildroot@buildroot.org>; Sun, 15 Sep 2024 21:36:40 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E53C17FB7E; Sun, 15 Sep 2024 21:36:40 +0000 (UTC)
+ id D5A3A82261; Sun, 15 Sep 2024 21:36:40 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 15 Sep 2024 11:29:35 +0200
+Date: Sun, 15 Sep 2024 11:27:24 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 3cb185d3df237341382b03c8e6f6c5358063c721
-X-Git-Newrev: 475c79d1c437f0e693af65f4dc26ed064c043de1
+X-Git-Oldrev: 21e9bb0967a6534e73138a8e645a5c80fc442b0d
+X-Git-Newrev: 3cb185d3df237341382b03c8e6f6c5358063c721
 X-Patchwork-Hint: ignore
-Message-Id: <20240915213640.E53C17FB7E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/openjdk{-bin}: bump versions to
- 17.0.12+7 and 21.0.4+7
+Message-Id: <20240915213640.D5A3A82261@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/dlib: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,107 +57,195 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=475c79d1c437f0e693af65f4dc26ed064c043de1
+commit: https://git.buildroot.net/buildroot/commit/?id=3cb185d3df237341382b03c8e6f6c5358063c721
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-./support/testing/run-tests tests.package.test_openjdk.TestOpenJdk.test_run
-passed without issue.
-
-Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/openjdk-bin/{17.0.9_9 => 17.0.12_7}/openjdk-bin.hash | 4 ++--
- package/openjdk-bin/{21.0.1_12 => 21.0.4_7}/openjdk-bin.hash | 4 ++--
- package/openjdk-bin/openjdk-bin.mk                           | 4 ++--
- package/openjdk/openjdk.hash                                 | 4 ++--
- package/openjdk/openjdk.mk                                   | 4 ++--
- 5 files changed, 10 insertions(+), 10 deletions(-)
+ DEVELOPERS             |  1 +
+ package/Config.in      |  1 +
+ package/dlib/Config.in | 14 +++++++
+ package/dlib/dlib.hash | 13 +++++++
+ package/dlib/dlib.mk   | 99 ++++++++++++++++++++++++++++++++++++++++++++++++++
+ 5 files changed, 128 insertions(+)
 
-diff --git a/package/openjdk-bin/17.0.9_9/openjdk-bin.hash b/package/openjdk-bin/17.0.12_7/openjdk-bin.hash
-similarity index 53%
-rename from package/openjdk-bin/17.0.9_9/openjdk-bin.hash
-rename to package/openjdk-bin/17.0.12_7/openjdk-bin.hash
-index 29f39c5d36..4a7c84eb87 100644
---- a/package/openjdk-bin/17.0.9_9/openjdk-bin.hash
-+++ b/package/openjdk-bin/17.0.12_7/openjdk-bin.hash
-@@ -1,6 +1,6 @@
- # https://github.com/adoptium/temurin17-binaries/releases
--sha256  7b175dbe0d6e3c9c23b6ed96449b018308d8fc94a5ecd9c0df8b8bc376c3c18a  OpenJDK17U-jdk_x64_linux_hotspot_17.0.9_9.tar.gz
--sha256  e2c5e26f8572544b201bc22a9b28f2b1a3147ab69be111cea07c7f52af252e75  OpenJDK17U-jdk_aarch64_linux_hotspot_17.0.9_9.tar.gz
-+sha256  9d4dd339bf7e6a9dcba8347661603b74c61ab2a5083ae67bf76da6285da8a778  OpenJDK17U-jdk_x64_linux_hotspot_17.0.12_7.tar.gz
-+sha256  8257de06bf37f0c8f19f8d542e2ab5a4e17db3ca5f29d041bd0b02ab265db021  OpenJDK17U-jdk_aarch64_linux_hotspot_17.0.12_7.tar.gz
+diff --git a/DEVELOPERS b/DEVELOPERS
+index f291ba8e7c..929e9f895f 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -2888,6 +2888,7 @@ F:	support/testing/tests/package/test_python_mako.py
+ F:	toolchain/
  
- # Locally calculated
- sha256  4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  legal/java.prefs/LICENSE
-diff --git a/package/openjdk-bin/21.0.1_12/openjdk-bin.hash b/package/openjdk-bin/21.0.4_7/openjdk-bin.hash
-similarity index 53%
-rename from package/openjdk-bin/21.0.1_12/openjdk-bin.hash
-rename to package/openjdk-bin/21.0.4_7/openjdk-bin.hash
-index 35be28bb4f..a73bea1a77 100644
---- a/package/openjdk-bin/21.0.1_12/openjdk-bin.hash
-+++ b/package/openjdk-bin/21.0.4_7/openjdk-bin.hash
-@@ -1,6 +1,6 @@
- # From https://github.com/adoptium/temurin21-binaries/releases
--sha256  1a6fa8abda4c5caed915cfbeeb176e7fbd12eb6b222f26e290ee45808b529aa1  OpenJDK21U-jdk_x64_linux_hotspot_21.0.1_12.tar.gz
--sha256  e184dc29a6712c1f78754ab36fb48866583665fa345324f1a79e569c064f95e9  OpenJDK21U-jdk_aarch64_linux_hotspot_21.0.1_12.tar.gz
-+sha256  51fb4d03a4429c39d397d3a03a779077159317616550e4e71624c9843083e7b9  OpenJDK21U-jdk_x64_linux_hotspot_21.0.4_7.tar.gz
-+sha256  d768eecddd7a515711659e02caef8516b7b7177fa34880a56398fd9822593a79  OpenJDK21U-jdk_aarch64_linux_hotspot_21.0.4_7.tar.gz
+ N:	Roy Kollen Svendsen <roykollensvendsen@gmail.com>
++F:	package/dlib/
+ F:	package/qt6/
  
- # Locally calculated
- sha256  4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  legal/java.prefs/LICENSE
-diff --git a/package/openjdk-bin/openjdk-bin.mk b/package/openjdk-bin/openjdk-bin.mk
-index 0280151fba..17056e80b7 100644
---- a/package/openjdk-bin/openjdk-bin.mk
-+++ b/package/openjdk-bin/openjdk-bin.mk
-@@ -6,10 +6,10 @@
- 
- ifeq ($(BR2_PACKAGE_OPENJDK_VERSION_21),y)
- HOST_OPENJDK_BIN_VERSION_MAJOR = 21
--HOST_OPENJDK_BIN_VERSION_MINOR = 0.1_12
-+HOST_OPENJDK_BIN_VERSION_MINOR = 0.4_7
- else
- HOST_OPENJDK_BIN_VERSION_MAJOR = 17
--HOST_OPENJDK_BIN_VERSION_MINOR = 0.9_9
-+HOST_OPENJDK_BIN_VERSION_MINOR = 0.12_7
- endif
- 
- ifeq ($(HOSTARCH),x86_64)
-diff --git a/package/openjdk/openjdk.hash b/package/openjdk/openjdk.hash
-index 949a62e527..209004a292 100644
---- a/package/openjdk/openjdk.hash
-+++ b/package/openjdk/openjdk.hash
-@@ -1,4 +1,4 @@
- # Locally computed
--sha256  9943e3814d3c1a31f1449f09a8b67df54841944f855a1d372be892c5e6b19217  openjdk-21.0.1+12.tar.gz
--sha256  836adb5fec5a58ce2f49a0faeaf9e69a3cb89865f4d855c6098f0264843672ad  openjdk-17.0.9+9.tar.gz
-+sha256  b8b37fa6fcc284d91e7458c703ca4c893a1dd5a6e0f6b9e198e7d13cd8efd24d  openjdk-21.0.4+7.tar.gz
-+sha256  ccb7d37c24f9f5808f9d25419d93680570dc600f292e68944032338cb4b2c51e  openjdk-17.0.12+7.tar.gz
- sha256  4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726  LICENSE
-diff --git a/package/openjdk/openjdk.mk b/package/openjdk/openjdk.mk
-index f4e1920e6c..446e4aa3c2 100644
---- a/package/openjdk/openjdk.mk
-+++ b/package/openjdk/openjdk.mk
-@@ -6,10 +6,10 @@
- 
- ifeq ($(BR2_PACKAGE_OPENJDK_VERSION_21),y)
- OPENJDK_VERSION_MAJOR = 21
--OPENJDK_VERSION_MINOR = 0.1+12
-+OPENJDK_VERSION_MINOR = 0.4+7
- else
- OPENJDK_VERSION_MAJOR = 17
--OPENJDK_VERSION_MINOR = 0.9+9
-+OPENJDK_VERSION_MINOR = 0.12+7
- endif
- OPENJDK_VERSION = $(OPENJDK_VERSION_MAJOR).$(OPENJDK_VERSION_MINOR)
- OPENJDK_SITE = $(call github,openjdk,jdk$(OPENJDK_VERSION_MAJOR)u,jdk-$(OPENJDK_VERSION))
+ N:	Rufus Segar <rhs@riseup.net>
+diff --git a/package/Config.in b/package/Config.in
+index a1d53edf5b..c0f4d9ece5 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2155,6 +2155,7 @@ menu "Other"
+ 	source "package/cracklib/Config.in"
+ 	source "package/dawgdic/Config.in"
+ 	source "package/ding-libs/Config.in"
++	source "package/dlib/Config.in"
+ 	source "package/dotconf/Config.in"
+ 	source "package/double-conversion/Config.in"
+ 	source "package/eigen/Config.in"
+diff --git a/package/dlib/Config.in b/package/dlib/Config.in
+new file mode 100644
+index 0000000000..2419af967b
+--- /dev/null
++++ b/package/dlib/Config.in
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_DLIB
++	bool "dlib"
++	depends on BR2_INSTALL_LIBSTDCPP
++	depends on BR2_TOOLCHAIN_HAS_THREADS
++	help
++	  Dlib is a modern C++ toolkit containing machine learning
++	  algorithms and tools for creating complex software in C++ to
++	  solve real world problems.
++
++	  http://dlib.net
++
++comment "dlib needs a toolchain w/ C++, threads"
++	depends on !BR2_INSTALL_LIBSTDCPP || \
++		!BR2_TOOLCHAIN_HAS_THREADS
+diff --git a/package/dlib/dlib.hash b/package/dlib/dlib.hash
+new file mode 100644
+index 0000000000..af206386b8
+--- /dev/null
++++ b/package/dlib/dlib.hash
+@@ -0,0 +1,13 @@
++# Locally computed
++sha256  22513c353ec9c153300c394050c96ca9d088e02966ac0f639e989e50318c82d6  dlib-19.24.6.tar.gz
++
++# Hashes for license files
++sha256  50c1c5978d490c7f13062d91c4b89affc83774f87bc4568a714f748b62a5b216  dlib/external/libjpeg/README
++sha256  debfae299fa4118b0a586af4cf7ac8d38aae81ac4e9995c935862aaee6eb0362  dlib/external/libpng/LICENSE
++sha256  83965b843b98f670d3a85bd041ed4b372c8ec50d7b4a5995a83ac697ba675dcb  dlib/external/pybind11/LICENSE
++sha256  8d8291caf1cee26d23acf3eb67c9f9a2d58f1c681b16a4fbe8cbfb9e3c0b5a9b  dlib/LICENSE.txt
++sha256  908b0b565ae9bf61b7b41447cb0b83564f320375723bcc884ec30e5537a0d5dc  dlib/test/ffmpeg_data/LICENSE.TXT
++sha256  78515536a4b0d896745b6483fccc561987e8e2f2d014dc81d7c2e97c497a0a69  examples/LICENSE_FOR_EXAMPLE_PROGRAMS.txt
++sha256  a0e7b40719ba74630debe9fae1cb847ee436215451123254a690171d09fb036e  examples/video_frames/license.txt
++sha256  8d8291caf1cee26d23acf3eb67c9f9a2d58f1c681b16a4fbe8cbfb9e3c0b5a9b  LICENSE.txt
++sha256  8acb12b218fdb5e071f25eda9ac990d04888388b65095867d9007c278a9f993b  python_examples/LICENSE_FOR_EXAMPLE_PROGRAMS.txt
+diff --git a/package/dlib/dlib.mk b/package/dlib/dlib.mk
+new file mode 100644
+index 0000000000..4eb0002775
+--- /dev/null
++++ b/package/dlib/dlib.mk
+@@ -0,0 +1,99 @@
++################################################################################
++#
++# dlib
++#
++################################################################################
++
++DLIB_VERSION = 19.24.6
++DLIB_SITE = $(call github,davisking,dlib,v$(DLIB_VERSION))
++DLIB_CMAKE_BACKEND = ninja
++DLIB_INSTALL_STAGING = YES
++DLIB_SUPPORTS_IN_SOURCE_BUILD = NO
++
++DLIB_LICENSE = \
++	BSD-3-Clause (kissfft, pybind11) \
++	BSL-1.0 (dlib, tools) \
++	CC0-1.0 (examples) \
++	libpng-2.0 (libpng) \
++	MIT or CC0-1.0 (JoinPaths.cmake)
++
++DLIB_LICENSE_FILES = \
++	dlib/external/libjpeg/README \
++	dlib/external/libpng/LICENSE \
++	dlib/external/pybind11/LICENSE \
++	dlib/LICENSE.txt \
++	dlib/test/ffmpeg_data/LICENSE.TXT \
++	examples/LICENSE_FOR_EXAMPLE_PROGRAMS.txt \
++	examples/video_frames/license.txt \
++	LICENSE.txt \
++	python_examples/LICENSE_FOR_EXAMPLE_PROGRAMS.txt
++
++DLIB_CONF_OPTS = \
++	-DDLIB_LINK_WITH_SQLITE3=OFF \
++	-DDLIB_USE_CUDA=OFF \
++	-DDLIB_USE_MKL_FFT=OFF
++
++ifeq ($(BR2_PACKAGE_FFMPEG)$(BR2_PACKAGE_FFMPEG_SWSCALE),yy)
++DLIB_CONF_OPTS += -DDLIB_USE_FFMPEG=ON
++DLIB_DEPENDENCIES += ffmpeg
++else
++DLIB_CONF_OPTS += -DDLIB_USE_FFMPEG=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_GIFLIB),y)
++DLIB_CONF_OPTS += -DDLIB_GIF_SUPPORT=ON
++DLIB_DEPENDENCIES += giflib
++else
++DLIB_CONF_OPTS += -DDLIB_GIF_SUPPORT=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_JPEG),y)
++DLIB_CONF_OPTS += -DDLIB_JPEG_SUPPORT=ON
++DLIB_DEPENDENCIES += jpeg
++else
++DLIB_CONF_OPTS += -DDLIB_JPEG_SUPPORT=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_LAPACK),y)
++DLIB_CONF_OPTS += -DDLIB_USE_LAPACK=ON
++DLIB_DEPENDENCIES += lapack
++else
++DLIB_CONF_OPTS += -DDLIB_USE_LAPACK=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_LIBJXL),y)
++DLIB_CONF_OPTS += -DDLIB_JXL_SUPPORT=ON
++DLIB_DEPENDENCIES += libjxl
++else
++DLIB_CONF_OPTS += -DDLIB_JXL_SUPPORT=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_LIBPNG),y)
++DLIB_CONF_OPTS += -DDLIB_PNG_SUPPORT=ON
++DLIB_DEPENDENCIES += libpng
++else
++DLIB_CONF_OPTS += -DDLIB_PNG_SUPPORT=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_OPENBLAS),y)
++DLIB_CONF_OPTS += -DDLIB_USE_BLAS=ON
++DLIB_DEPENDENCIES += openblas
++else
++DLIB_CONF_OPTS += -DDLIB_USE_BLAS=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_WEBP),y)
++DLIB_CONF_OPTS += -DDLIB_WEBP_SUPPORT=ON
++DLIB_DEPENDENCIES += webp
++else
++DLIB_CONF_OPTS += -DDLIB_WEBP_SUPPORT=OFF
++endif
++
++ifeq ($(BR2_PACKAGE_XLIB_LIBX11),y)
++DLIB_CONF_OPTS += -DDLIB_NO_GUI_SUPPORT=OFF
++DLIB_DEPENDENCIES += xlib_libX11
++else
++DLIB_CONF_OPTS += -DDLIB_NO_GUI_SUPPORT=ON
++endif
++
++$(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
