@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 51CE9C3ABAD
-	for <buildroot@archiver.kernel.org>; Sun, 15 Sep 2024 21:39:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7C00C3ABAE
+	for <buildroot@archiver.kernel.org>; Sun, 15 Sep 2024 21:39:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 212598146E;
-	Sun, 15 Sep 2024 21:39:01 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B0E52840F8;
+	Sun, 15 Sep 2024 21:39:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OQODGDI7Mvn8; Sun, 15 Sep 2024 21:39:00 +0000 (UTC)
+ id j5MUBHoeBWbJ; Sun, 15 Sep 2024 21:39:03 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C436B81D0B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 79CB684446
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C436B81D0B;
-	Sun, 15 Sep 2024 21:38:59 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 47C311BF94D
- for <buildroot@lists.busybox.net>; Sun, 15 Sep 2024 21:36:48 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 79CB684446;
+	Sun, 15 Sep 2024 21:39:03 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 0B55B1BF28B
+ for <buildroot@lists.busybox.net>; Sun, 15 Sep 2024 21:36:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8113840A2F
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4CA6380AC1
  for <buildroot@lists.busybox.net>; Sun, 15 Sep 2024 21:36:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RdIyvtUzzVmk for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QuDKEcJO2G4B for <buildroot@lists.busybox.net>;
  Sun, 15 Sep 2024 21:36:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2ACE140A11
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7B41080A47
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2ACE140A11
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7B41080A47
  for <buildroot@buildroot.org>; Sun, 15 Sep 2024 21:36:39 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2800683683; Sun, 15 Sep 2024 21:36:39 +0000 (UTC)
+ id 7856E83685; Sun, 15 Sep 2024 21:36:39 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Sun, 15 Sep 2024 10:02:33 +0200
+Date: Sun, 15 Sep 2024 10:02:41 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: b93a35dcef85e8e3d0e3471862e3f32903da6db0
-X-Git-Newrev: 2b83df84600a68f18fe5540a3b8a4b2641a4395f
+X-Git-Oldrev: 8e0e78d4cb723ed222c3be2ea69262655a7d7f61
+X-Git-Newrev: ea087cd1be22864554e928007f38b73c2d48ec7b
 X-Patchwork-Hint: ignore
-Message-Id: <20240915213639.2800683683@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-dnspython: bump to versin
- 2.6.1
+Message-Id: <20240915213639.7856E83685@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-executing: bump to version
+ 2.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,53 +66,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2b83df84600a68f18fe5540a3b8a4b2641a4395f
+commit: https://git.buildroot.net/buildroot/commit/?id=ea087cd1be22864554e928007f38b73c2d48ec7b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-Replace poetry-core build backend with hatchling.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/python-dnspython/python-dnspython.hash | 4 ++--
- package/python-dnspython/python-dnspython.mk   | 8 ++++----
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/python-executing/python-executing.hash | 4 ++--
+ package/python-executing/python-executing.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-dnspython/python-dnspython.hash b/package/python-dnspython/python-dnspython.hash
-index 77ffb5dedc..acab710d5a 100644
---- a/package/python-dnspython/python-dnspython.hash
-+++ b/package/python-dnspython/python-dnspython.hash
+diff --git a/package/python-executing/python-executing.hash b/package/python-executing/python-executing.hash
+index e21418aae9..8f02628485 100644
+--- a/package/python-executing/python-executing.hash
++++ b/package/python-executing/python-executing.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/dnspython/json
--md5  fac4e1580e5e9dfee722cb97bc073722  dnspython-2.4.2.tar.gz
--sha256  8dcfae8c7460a2f84b4072e26f1c9f4101ca20c071649cb7c34e8b6a93d58984  dnspython-2.4.2.tar.gz
-+md5  ad29d0392621fb107e0eac4beed79ce5  dnspython-2.6.1.tar.gz
-+sha256  e8f0f9c23a7b7cb99ded64e6c3a6f3e701d78f50c55e002b839dea7225cff7cc  dnspython-2.6.1.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/executing/json
+-md5  91da12f933267a5fe085033db2a3b84d  executing-2.0.1.tar.gz
+-sha256  35afe2ce3affba8ee97f2d69927fa823b08b472b7b994e36a52a964b93d16147  executing-2.0.1.tar.gz
++md5  e64dd9916bb0a6c89f88295f4867c1b6  executing-2.1.0.tar.gz
++sha256  8ea27ddd260da8150fa5a708269c4a10e76161e2496ec3e587da9e3c0fe4b9ab  executing-2.1.0.tar.gz
  # Locally computed sha256 checksums
- sha256  c3ea3ff5654b329c19d3bc5f7481af623c3dded4a6145585499f843ad3d741cd  LICENSE
-diff --git a/package/python-dnspython/python-dnspython.mk b/package/python-dnspython/python-dnspython.mk
-index f0df733143..01fad58c1d 100644
---- a/package/python-dnspython/python-dnspython.mk
-+++ b/package/python-dnspython/python-dnspython.mk
-@@ -4,14 +4,14 @@
+ sha256  a476a2cb0ef4c41450340a577a28b91ac4c7f669136b2ee148047fabd5fc4181  LICENSE.txt
+diff --git a/package/python-executing/python-executing.mk b/package/python-executing/python-executing.mk
+index 071e867941..d13da22be3 100644
+--- a/package/python-executing/python-executing.mk
++++ b/package/python-executing/python-executing.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_DNSPYTHON_VERSION = 2.4.2
-+PYTHON_DNSPYTHON_VERSION = 2.6.1
- PYTHON_DNSPYTHON_SOURCE = dnspython-$(PYTHON_DNSPYTHON_VERSION).tar.gz
--PYTHON_DNSPYTHON_SITE = https://files.pythonhosted.org/packages/65/2d/372a20e52a87b2ba0160997575809806111a72e18aa92738daccceb8d2b9
-+PYTHON_DNSPYTHON_SITE = https://files.pythonhosted.org/packages/37/7d/c871f55054e403fdfd6b8f65fd6d1c4e147ed100d3e9f9ba1fe695403939
- PYTHON_DNSPYTHON_LICENSE = ISC
- PYTHON_DNSPYTHON_LICENSE_FILES = LICENSE
- PYTHON_DNSPYTHON_SETUP_TYPE = pep517
--PYTHON_DNSPYTHON_DEPENDENCIES = host-python-poetry-core
--HOST_PYTHON_DNSPYTHON_DEPENDENCIES = host-python-poetry-core
-+PYTHON_DNSPYTHON_DEPENDENCIES = host-python-hatchling
-+HOST_PYTHON_DNSPYTHON_DEPENDENCIES = host-python-hatchling
- 
- $(eval $(python-package))
- $(eval $(host-python-package))
+-PYTHON_EXECUTING_VERSION = 2.0.1
++PYTHON_EXECUTING_VERSION = 2.1.0
+ PYTHON_EXECUTING_SOURCE = executing-$(PYTHON_EXECUTING_VERSION).tar.gz
+-PYTHON_EXECUTING_SITE = https://files.pythonhosted.org/packages/08/41/85d2d28466fca93737592b7f3cc456d1cfd6bcd401beceeba17e8e792b50
++PYTHON_EXECUTING_SITE = https://files.pythonhosted.org/packages/8c/e3/7d45f492c2c4a0e8e0fad57d081a7c8a0286cdd86372b070cca1ec0caa1e
+ PYTHON_EXECUTING_SETUP_TYPE = setuptools
+ PYTHON_EXECUTING_LICENSE = MIT
+ PYTHON_EXECUTING_LICENSE_FILES = LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
