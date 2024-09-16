@@ -4,49 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36C90C3ABA2
-	for <buildroot@archiver.kernel.org>; Mon, 16 Sep 2024 10:01:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8A30C3ABB2
+	for <buildroot@archiver.kernel.org>; Mon, 16 Sep 2024 10:01:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E9A44606EA;
-	Mon, 16 Sep 2024 10:01:52 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 74DCB60A9A;
+	Mon, 16 Sep 2024 10:01:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BciL_MQOFLVE; Mon, 16 Sep 2024 10:01:52 +0000 (UTC)
+ id XZR8Qj54nM9r; Mon, 16 Sep 2024 10:01:55 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BCDD560A88
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B7DFA60A92
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BCDD560A88;
-	Mon, 16 Sep 2024 10:01:51 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id ECFB41BF397
- for <buildroot@lists.busybox.net>; Mon, 16 Sep 2024 10:01:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B7DFA60A92;
+	Mon, 16 Sep 2024 10:01:54 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 15B581BF95A
+ for <buildroot@lists.busybox.net>; Mon, 16 Sep 2024 10:01:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DC22380BBD
- for <buildroot@lists.busybox.net>; Mon, 16 Sep 2024 10:01:47 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 0CBED403E6
+ for <buildroot@lists.busybox.net>; Mon, 16 Sep 2024 10:01:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EpYZzafg6pU8 for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id IZl9VSYa2hDh for <buildroot@lists.busybox.net>;
  Mon, 16 Sep 2024 10:01:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 02BE280B8C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 07FA2403DC
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 02BE280B8C
- for <buildroot@buildroot.org>; Mon, 16 Sep 2024 10:01:46 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 07FA2403DC
+ for <buildroot@buildroot.org>; Mon, 16 Sep 2024 10:01:47 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B2B2B8266F; Mon, 16 Sep 2024 10:01:46 +0000 (UTC)
+ id F3C778377F; Mon, 16 Sep 2024 10:01:46 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 16 Sep 2024 11:47:01 +0200
+Date: Mon, 16 Sep 2024 11:54:39 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 7649293490874df3bca71fe0c855b049f363552b
-X-Git-Newrev: 032b33d4fa33e03d752835a9d04532306b3710f0
+X-Git-Oldrev: ee974c03f0e5d770136a1870b0e5b6956f328b83
+X-Git-Newrev: 73c654ed4b52864c57a364037484b375b03eac2d
 X-Patchwork-Hint: ignore
-Message-Id: <20240916100146.B2B2B8266F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-lmdb: bump to version 1.5.1
+Message-Id: <20240916100146.F3C778377F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-marshmallow: bump to
+ version 3.22.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,63 +65,56 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=032b33d4fa33e03d752835a9d04532306b3710f0
+commit: https://git.buildroot.net/buildroot/commit/?id=73c654ed4b52864c57a364037484b375b03eac2d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Drop no longer required python-cffi dependency.
+Migrate from setuptools to flit build backend.
+
+License has changed due to year removal:
+https://github.com/marshmallow-code/marshmallow/commit/033277809382a496d7004b1e944423fd86fb65f9
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-lmdb/Config.in        | 1 -
- package/python-lmdb/python-lmdb.hash | 4 ++--
- package/python-lmdb/python-lmdb.mk   | 5 ++---
- 3 files changed, 4 insertions(+), 6 deletions(-)
+ package/python-marshmallow/python-marshmallow.hash | 6 +++---
+ package/python-marshmallow/python-marshmallow.mk   | 8 ++++----
+ 2 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/package/python-lmdb/Config.in b/package/python-lmdb/Config.in
-index baf9bce5ac..b63af96ec4 100644
---- a/package/python-lmdb/Config.in
-+++ b/package/python-lmdb/Config.in
-@@ -1,6 +1,5 @@
- config BR2_PACKAGE_PYTHON_LMDB
- 	bool "python-lmdb"
--	select BR2_PACKAGE_PYTHON_CFFI # runtime
- 	help
- 	  Universal Python binding for the LMDB 'Lightning' Database.
- 
-diff --git a/package/python-lmdb/python-lmdb.hash b/package/python-lmdb/python-lmdb.hash
-index ad176d5d21..064c76fb58 100644
---- a/package/python-lmdb/python-lmdb.hash
-+++ b/package/python-lmdb/python-lmdb.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/lmdb/json
--md5  d216e0220c625aa72de2acc158e81a0e  lmdb-1.4.1.tar.gz
--sha256  1f4c76af24e907593487c904ef5eba1993beb38ed385af82adb25a858f2d658d  lmdb-1.4.1.tar.gz
-+md5  bdd78148e8374cb0001af06cc64bfefb  lmdb-1.5.1.tar.gz
-+sha256  717c255827d331e02f7242b44051aa06466c90f6d732ecb07b31edfb1e06c67a  lmdb-1.5.1.tar.gz
+diff --git a/package/python-marshmallow/python-marshmallow.hash b/package/python-marshmallow/python-marshmallow.hash
+index cb60216a26..e71425d958 100644
+--- a/package/python-marshmallow/python-marshmallow.hash
++++ b/package/python-marshmallow/python-marshmallow.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/marshmallow/json
+-md5  c6093f980a650b1088bbc5610055a05c  marshmallow-3.20.1.tar.gz
+-sha256  5d2371bbe42000f2b3fb5eaa065224df7d8f8597bc19a1bbfa5bfe7fba8da889  marshmallow-3.20.1.tar.gz
++md5  55bc9b09b8557d53541521b723232133  marshmallow-3.22.0.tar.gz
++sha256  4972f529104a220bb8637d595aa4c9762afbe7f7a77d82dc58c1615d70c5823e  marshmallow-3.22.0.tar.gz
  # Locally computed sha256 checksums
- sha256  310fe25c858a9515fc8c8d7d1f24a67c9496f84a91e0a0e41ea9975b1371e569  LICENSE
-diff --git a/package/python-lmdb/python-lmdb.mk b/package/python-lmdb/python-lmdb.mk
-index 7906d388ae..7105fd1464 100644
---- a/package/python-lmdb/python-lmdb.mk
-+++ b/package/python-lmdb/python-lmdb.mk
-@@ -4,14 +4,13 @@
+-sha256  759dc79c383ad79340c6e41f712e80407fe0d2cb3cbaad1ed98aa9c3e28a602c  LICENSE
++sha256  906b5d9051e426144cb173ad911667b8ebd05a9c584c2c26c135b32a3ed12001  LICENSE
+ sha256  f982e6fd97ba00973e94605b972ff04894b22c4fa937b868828b32ae8f0a7c2e  docs/license.rst
+diff --git a/package/python-marshmallow/python-marshmallow.mk b/package/python-marshmallow/python-marshmallow.mk
+index afd4068f44..811e532155 100644
+--- a/package/python-marshmallow/python-marshmallow.mk
++++ b/package/python-marshmallow/python-marshmallow.mk
+@@ -4,12 +4,12 @@
  #
  ################################################################################
  
--PYTHON_LMDB_VERSION = 1.4.1
-+PYTHON_LMDB_VERSION = 1.5.1
- PYTHON_LMDB_SOURCE = lmdb-$(PYTHON_LMDB_VERSION).tar.gz
--PYTHON_LMDB_SITE = https://files.pythonhosted.org/packages/de/13/dd9b0c1924f0becc93e0bacd123a4e7a347966e3e74753ace3b1e85acc39
-+PYTHON_LMDB_SITE = https://files.pythonhosted.org/packages/67/2c/0cc9375341121ca1f4b31a2137f955dc24550e095d733c9b42ea94113ba1
- PYTHON_LMDB_LICENSE = OLDAP-2.8
- PYTHON_LMDB_LICENSE_FILES = LICENSE
- PYTHON_LMDB_CPE_ID_VENDOR = py-lmdb_project
- PYTHON_LMDB_CPE_ID_PRODUCT = py-lmdb
- PYTHON_LMDB_SETUP_TYPE = setuptools
--PYTHON_LMDB_DEPENDENCIES = host-python-cffi
+-PYTHON_MARSHMALLOW_VERSION = 3.20.1
++PYTHON_MARSHMALLOW_VERSION = 3.22.0
+ PYTHON_MARSHMALLOW_SOURCE = marshmallow-$(PYTHON_MARSHMALLOW_VERSION).tar.gz
+-PYTHON_MARSHMALLOW_SITE = https://files.pythonhosted.org/packages/e4/e0/3e49c0f91f3e8954806c1076f4eae2c95a9d3ed2546f267c683b877d327b
+-PYTHON_MARSHMALLOW_SETUP_TYPE = setuptools
++PYTHON_MARSHMALLOW_SITE = https://files.pythonhosted.org/packages/70/40/faa10dc4500bca85f41ca9d8cefab282dd23d0fcc7a9b5fab40691e72e76
++PYTHON_MARSHMALLOW_SETUP_TYPE = flit
+ PYTHON_MARSHMALLOW_LICENSE = MIT
+-PYTHON_MARSHMALLOW_LICENSE_FILES = LICENSE
++PYTHON_MARSHMALLOW_LICENSE_FILES = LICENSE docs/license.rst
+ PYTHON_MARSHMALLOW_CPE_ID_VENDOR = marshmallow_project
+ PYTHON_MARSHMALLOW_CPE_ID_PRODUCT = marshmallow
  
- $(eval $(python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
