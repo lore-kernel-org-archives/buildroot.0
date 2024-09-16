@@ -4,94 +4,94 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B10E9C3ABB2
-	for <buildroot@archiver.kernel.org>; Mon, 16 Sep 2024 15:13:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B95E8C3ABA2
+	for <buildroot@archiver.kernel.org>; Mon, 16 Sep 2024 15:13:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5AAF94102C;
-	Mon, 16 Sep 2024 15:13:01 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 894B5410C3;
+	Mon, 16 Sep 2024 15:13:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id awxRBToZN8AY; Mon, 16 Sep 2024 15:13:00 +0000 (UTC)
+ id rUGOx6heB2Mz; Mon, 16 Sep 2024 15:13:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 654FE4101C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7B14041090
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 654FE4101C;
-	Mon, 16 Sep 2024 15:12:59 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7B14041090;
+	Mon, 16 Sep 2024 15:13:02 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id F2BDA1BF41D
- for <buildroot@lists.busybox.net>; Mon, 16 Sep 2024 15:12:24 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 357AF1BF41D
+ for <buildroot@lists.busybox.net>; Mon, 16 Sep 2024 15:12:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D6F6340CA5
- for <buildroot@lists.busybox.net>; Mon, 16 Sep 2024 15:12:24 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 13CE440C28
+ for <buildroot@lists.busybox.net>; Mon, 16 Sep 2024 15:12:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LBywICQUI2Ok for <buildroot@lists.busybox.net>;
- Mon, 16 Sep 2024 15:12:22 +0000 (UTC)
+ id Pl2CoDGhHOkp for <buildroot@lists.busybox.net>;
+ Mon, 16 Sep 2024 15:12:24 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::641; helo=mail-ej1-x641.google.com;
+ client-ip=2a00:1450:4864:20::530; helo=mail-ed1-x530.google.com;
  envelope-from=adam.duskett@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 76CF340C21
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 76CF340C21
-Received: from mail-ej1-x641.google.com (mail-ej1-x641.google.com
- [IPv6:2a00:1450:4864:20::641])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 76CF340C21
- for <buildroot@buildroot.org>; Mon, 16 Sep 2024 15:12:22 +0000 (UTC)
-Received: by mail-ej1-x641.google.com with SMTP id
- a640c23a62f3a-a8d302b6b30so74309966b.0
- for <buildroot@buildroot.org>; Mon, 16 Sep 2024 08:12:22 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 89F1140C2A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 89F1140C2A
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com
+ [IPv6:2a00:1450:4864:20::530])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 89F1140C2A
+ for <buildroot@buildroot.org>; Mon, 16 Sep 2024 15:12:23 +0000 (UTC)
+Received: by mail-ed1-x530.google.com with SMTP id
+ 4fb4d7f45d1cf-5c254a544bfso654673a12.1
+ for <buildroot@buildroot.org>; Mon, 16 Sep 2024 08:12:23 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1726499540; x=1727104340;
+ d=1e100.net; s=20230601; t=1726499541; x=1727104341;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=z9mPY3RBDCrX4uM0os8lI6TXaWp9ME5v1CpqPHaQMm8=;
- b=ddHNIbXllCb7CKpVwzTuWtyDwdCPE/3PiuhUxgGWWHOkQwbzqNdKY9vYt7QdFfXSpe
- a9+iKNXyfzy8KTcQdcRRPyOX02iEn4rBB4dMV54k9yFb2qB8jZZX4GWRE49JKey64321
- jp6AQoJxW8+nYgvgQb/SkxJOvs/WPjJeoQq6wjJjh65iph/KJ2dfRTici0Y500aCfe2T
- gTp77CeZrrpC1zlkBgDR7MM2uPti1NZuBXgVuoIGSHlx+S7pjT//FyN4d5Tma8+7ES9C
- 5WQX7lVS5qxvn/ZBi5/Bbzze5JvjlWFXiw6ozXGE7WZ30EM2xQeQTsC8bcmyk7+5cjB3
- 5qPQ==
-X-Gm-Message-State: AOJu0YxlvMCjN2t7sN8zkuIj/WOctUidNC5OOzNpMHi2H/zfrXPOTzhz
- Y3xcPH+QPEkghcZkbokbcqZHv7S8oiLiF3PwF1p6/pbpYk/RFuU/PAi04sM4s6yYkqm8mhHXNuI
- RDXB6WJvX
-X-Google-Smtp-Source: AGHT+IEDOE0eVfuzu5kgrVj+v3sNxCYm7xiWqnDd79Tz18WkHeNqxlmnUjAMYL1j9Vlv+uYFD1Xkzg==
-X-Received: by 2002:a17:907:9724:b0:a7a:b895:6571 with SMTP id
- a640c23a62f3a-a9029612b9dmr677708166b.9.1726499539407; 
- Mon, 16 Sep 2024 08:12:19 -0700 (PDT)
+ bh=8ApxJXtCqY9AeiHRMpy313H1fQCVk43HcZISd5dEiCI=;
+ b=VGTb5Pp8AHhbqYL7fxAYzSXYqVTcILIAJjlpWQQle8Ca/ePN9OCTrtkyGLBNZKMCmX
+ x/qLbDKNP7KaaLngISb0D5tt1SxoGybzdeSzrnf5C4X8PHZUnClfUvPYFu8vUN4Y8uMt
+ hUKvsSx4BhxWwlWvuP40jErkIQ8QgOJmjlGfGzLD/fh/oN8RSKE0MRoCJTFTEK4lT6LO
+ L35Pwu6p0/g9K5SsejxDrTgh5PmPsosE5+ubwd4DO2wuAUThakEebba7COMjIXp+rd6J
+ hsUu1RZlyexOV1zjFwi30CWFJRM2Zy3otAJliroBFLao7azba9/q0iKZdxZJGKwzBk2k
+ JxeQ==
+X-Gm-Message-State: AOJu0YwoYpyyhV7Y7N59v9OE6hxIcdXGXYW3Gb+AoCOuCbsKFxY+JheI
+ JUfB0ueCKtDyekUrHb1LCjoK73+X+HdEe8QHe9N3r7r5XJd0HomSg8CuDElwR3cSdopvCdICnpI
+ p6Lf+AA==
+X-Google-Smtp-Source: AGHT+IHYXfov1SjHEZ0j8B/7ZREsXou5z+tvA+6jHtkShq1XPMHM4kSLWwXIPxOn1XX1oQjZk61MGA==
+X-Received: by 2002:a17:907:6ea5:b0:a80:f54c:ad68 with SMTP id
+ a640c23a62f3a-a90293fbce6mr760029266b.2.1726499541025; 
+ Mon, 16 Sep 2024 08:12:21 -0700 (PDT)
 Received: from adam-laptop.ipgroup.local (212-57-59-66.xdsl.deanconnect.nl.
  [212.57.59.66]) by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-a90610f440bsm330460166b.86.2024.09.16.08.12.18
+ a640c23a62f3a-a90610f440bsm330460166b.86.2024.09.16.08.12.20
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 16 Sep 2024 08:12:18 -0700 (PDT)
+ Mon, 16 Sep 2024 08:12:20 -0700 (PDT)
 From: Adam Duskett <adam.duskett@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Mon, 16 Sep 2024 17:12:03 +0200
-Message-ID: <20240916151206.947484-11-adam.duskett@amarulasolutions.com>
+Date: Mon, 16 Sep 2024 17:12:05 +0200
+Message-ID: <20240916151206.947484-13-adam.duskett@amarulasolutions.com>
 X-Mailer: git-send-email 2.46.0
 In-Reply-To: <20240916151206.947484-1-adam.duskett@amarulasolutions.com>
 References: <20240916151206.947484-1-adam.duskett@amarulasolutions.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1726499540; x=1727104340;
+ d=amarulasolutions.com; s=google; t=1726499541; x=1727104341;
  darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=z9mPY3RBDCrX4uM0os8lI6TXaWp9ME5v1CpqPHaQMm8=;
- b=OfwNp4N9SCIVBBkspeJk1hfsPxpQJ4WFtr5HEbkZcuHNf0QQhO8D7RpkJyAMOfXwnu
- NtapHDURewpKMNSifTAUTpsiBG+noUaO5ZRNp/Oh+Y03qglIOBZs4Srv8/1JP4jfrrDK
- xPAlHyxSA8ywNEJsYdxoO4WNgLPyZubwFJlv4=
+ bh=8ApxJXtCqY9AeiHRMpy313H1fQCVk43HcZISd5dEiCI=;
+ b=dE1YuH8ywPgwL3bPLJwW2Wzywsrq1c46IQEAP/fIQdJPJ2nH/2Anysh4Ww5evh2k/b
+ g8kUN5JJASwKdQ6fKvUWMLCHNKcS1abhVHPVrCU4dGyQNsIrs4k/k52gkKt9NrIasgnX
+ 34vbuXLAorOOSR2cUmJqZPLCKh3d5kSlT9xfU=
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=amarulasolutions.com
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (1024-bit key) header.d=amarulasolutions.com
  header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=OfwNp4N9
-Subject: [Buildroot] [PATCH 10/13] package/refpolicy: bump version to
- 2.20240226
+ header.b=dE1YuH8y
+Subject: [Buildroot] [PATCH 12/13] package/audit/S02auditd: fix shellcheck
+ and check-package warnings
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -112,36 +112,93 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Tested with qemu_x86_64_defconfig. start, stop, restart, reload, and rotate
+all work with busybox ash shell.
+
 Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 ---
- package/refpolicy/refpolicy.hash | 2 +-
- package/refpolicy/refpolicy.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/audit/S02auditd | 44 ++++++++++++++++++++++-------------------
+ 1 file changed, 24 insertions(+), 20 deletions(-)
 
-diff --git a/package/refpolicy/refpolicy.hash b/package/refpolicy/refpolicy.hash
-index 70d1acc9af..5e876d4a43 100644
---- a/package/refpolicy/refpolicy.hash
-+++ b/package/refpolicy/refpolicy.hash
-@@ -1,5 +1,5 @@
- # From https://github.com/SELinuxProject/refpolicy/releases
--sha256  c89cd3b2e5d99765cc24536fd8e76de83951ad23e05472350328b5a4f8bee410  refpolicy-2.20231002.tar.bz2
-+sha256  7ed41f4f45189b9ee9706da8ac357eccc103651b56daabaddb54c436e8117cf9  refpolicy-2.20240226.tar.bz2
+diff --git a/package/audit/S02auditd b/package/audit/S02auditd
+index dd3dc22d6d..b23c49a125 100644
+--- a/package/audit/S02auditd
++++ b/package/audit/S02auditd
+@@ -8,27 +8,22 @@
+ #              will be sent to syslog.
+ #
  
- # Locally computed
- sha256  204d8eff92f95aac4df6c8122bc1505f468f3a901e5a4cc08940e0ede1938994  COPYING
-diff --git a/package/refpolicy/refpolicy.mk b/package/refpolicy/refpolicy.mk
-index fb1c213b84..74ccb79624 100644
---- a/package/refpolicy/refpolicy.mk
-+++ b/package/refpolicy/refpolicy.mk
-@@ -23,7 +23,7 @@ REFPOLICY_SITE = $(call qstrip,$(BR2_PACKAGE_REFPOLICY_CUSTOM_REPO_URL))
- REFPOLICY_SITE_METHOD = git
- BR_NO_CHECK_HASH_FOR += $(REFPOLICY_SOURCE)
- else
--REFPOLICY_VERSION = 2.20231002
-+REFPOLICY_VERSION = 2.20240226
- REFPOLICY_SOURCE = refpolicy-$(REFPOLICY_VERSION).tar.bz2
- REFPOLICY_SITE = https://github.com/SELinuxProject/refpolicy/releases/download/RELEASE_$(subst .,_,$(REFPOLICY_VERSION))
- endif
+-NAME=auditd
+-DAEMON=/usr/sbin/${NAME}
+-CONFIG=/etc/audit/auditd.conf
+-PIDFILE=/var/run/${NAME}.pid
++DAEMON="auditd"
++PIDFILE="/var/run/${DAEMON}.pid"
+ 
+ start(){
+-	printf "Starting ${NAME}: "
++	printf "Starting %s: " "${DAEMON}"
+ 
+ 	# Create dir to store log files in if one doesn't exist. Create
+ 	# the directory with SELinux permissions if possible
+-	command -v selabel_lookup >/dev/null 2>&1
+-	if [ $? = 0 ]; then
+-		mkdir -p /var/log/audit -Z `selabel_lookup -b file -k /var/log/audit | cut -d ' ' -f 3`
++	if command -v selabel_lookup >/dev/null 2>&1; then
++		mkdir -p /var/log/audit -Z "$(selabel_lookup -b file -k /var/log/audit | cut -d ' ' -f 3)"
+ 	else
+ 		mkdir -p /var/log/audit
+ 	fi
+ 
+ 	# Run audit daemon executable
+-	start-stop-daemon -S -q -p ${PIDFILE} --exec ${DAEMON}
+-
+-	if [ $? = 0 ]; then
++	if start-stop-daemon -S -q -p "${PIDFILE}" --exec /usr/sbin/"${DAEMON}"; then
+ 		# Load the default rules
+ 		test -f /etc/audit/rules.d/audit.rules && /usr/sbin/auditctl -R /etc/audit/rules.d/audit.rules >/dev/null
+ 		echo "OK"
+@@ -38,22 +33,31 @@ start(){
+ }
+ 
+ stop(){
+-	printf "Stopping ${NAME}: "
++	printf "Stopping %s: " "${DAEMON}"
+ 
+-	start-stop-daemon -K -q -p ${PIDFILE}
+-	[ $? = 0 ] && echo "OK" || echo "FAIL"
++	if start-stop-daemon -K -q -p "${PIDFILE}"; then
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
+ }
+ 
+ reload(){
+-	printf "Reloading ${NAME} configuration: "
+-	start-stop-daemon --stop -s 1 -p ${PIDFILE} 1>/dev/null
+-	[ $? = 0 ] && echo "OK" || echo "FAIL"
++	printf "Reloading %s configuration: " "${DAEMON}"
++	if start-stop-daemon --stop -s 1 -p "${PIDFILE}" 1>/dev/nulll; then
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
+ }
+ 
+ rotate(){
+-	printf "Rotating ${NAME} logs: "
+-	start-stop-daemon --stop -s 10 -p ${PIDFILE} 1>/dev/null
+-	[ $? = 0 ] && echo "OK" || echo "FAIL"
++	printf "Rotating %s logs: " "${DAEMON}"
++	if start-stop-daemon --stop -s 10 -p "${PIDFILE}" 1>/dev/null; then
++		echo "OK"
++	else
++		echo "FAIL"
++	fi
+ }
+ 
+ case "$1" in
 -- 
 2.46.0
 
