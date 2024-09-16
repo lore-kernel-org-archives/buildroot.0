@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9AEF3C3ABA2
-	for <buildroot@archiver.kernel.org>; Mon, 16 Sep 2024 10:02:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1AAD2C3ABB2
+	for <buildroot@archiver.kernel.org>; Mon, 16 Sep 2024 10:02:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 67FF260A9C;
-	Mon, 16 Sep 2024 10:02:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D31E160AD1;
+	Mon, 16 Sep 2024 10:02:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XzgLruxRPSHl; Mon, 16 Sep 2024 10:01:59 +0000 (UTC)
+ id EVtn-pn4GyWb; Mon, 16 Sep 2024 10:02:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 71D3F60A9F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5409C60AAF
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 71D3F60A9F;
-	Mon, 16 Sep 2024 10:01:58 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 201E51BF397
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5409C60AAF;
+	Mon, 16 Sep 2024 10:02:02 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 605B11BF397
  for <buildroot@lists.busybox.net>; Mon, 16 Sep 2024 10:01:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id EF9D180B8C
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8AB0F60594
  for <buildroot@lists.busybox.net>; Mon, 16 Sep 2024 10:01:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eL1jgA1fqBFO for <buildroot@lists.busybox.net>;
- Mon, 16 Sep 2024 10:01:47 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TGQ_VYKEkrIZ for <buildroot@lists.busybox.net>;
+ Mon, 16 Sep 2024 10:01:46 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2317880B97
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B6F70605AE
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2317880B97
- for <buildroot@buildroot.org>; Mon, 16 Sep 2024 10:01:47 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B6F70605AE
+ for <buildroot@buildroot.org>; Mon, 16 Sep 2024 10:01:46 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0F64383778; Mon, 16 Sep 2024 10:01:47 +0000 (UTC)
+ id A1DD98377B; Mon, 16 Sep 2024 10:01:46 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Mon, 16 Sep 2024 11:54:41 +0200
+Date: Mon, 16 Sep 2024 11:42:48 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 73c654ed4b52864c57a364037484b375b03eac2d
-X-Git-Newrev: 20828475d1985367787f3c1d7326af89e1751b93
+X-Git-Oldrev: fe7f48fe4994fcfb756921c13676c052a8eeb455
+X-Git-Newrev: 7649293490874df3bca71fe0c855b049f363552b
 X-Patchwork-Hint: ignore
-Message-Id: <20240916100147.0F64383778@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-matplotlib-inline: bump to
- version 0.1.7
+Message-Id: <20240916100146.A1DD98377B@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-kiwisolver: bump to version
+ 1.4.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,45 +65,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=20828475d1985367787f3c1d7326af89e1751b93
+commit: https://git.buildroot.net/buildroot/commit/?id=7649293490874df3bca71fe0c855b049f363552b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+License hash changed due to date update:
+https://github.com/nucleic/kiwi/commit/e8702fc0dee8233418891c7927b33b2663d6baef
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-matplotlib-inline/python-matplotlib-inline.hash | 4 ++--
- package/python-matplotlib-inline/python-matplotlib-inline.mk   | 6 +++---
+ package/python-kiwisolver/python-kiwisolver.hash | 6 +++---
+ package/python-kiwisolver/python-kiwisolver.mk   | 4 ++--
  2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-matplotlib-inline/python-matplotlib-inline.hash b/package/python-matplotlib-inline/python-matplotlib-inline.hash
-index 7382fc3406..1925a09808 100644
---- a/package/python-matplotlib-inline/python-matplotlib-inline.hash
-+++ b/package/python-matplotlib-inline/python-matplotlib-inline.hash
+diff --git a/package/python-kiwisolver/python-kiwisolver.hash b/package/python-kiwisolver/python-kiwisolver.hash
+index 900027a88b..c4ae255377 100644
+--- a/package/python-kiwisolver/python-kiwisolver.hash
++++ b/package/python-kiwisolver/python-kiwisolver.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/matplotlib-inline/json
--md5  aded9a57e2f526f76b3a4851d5528d4f  matplotlib-inline-0.1.6.tar.gz
--sha256  f887e5f10ba98e8d2b150ddcf4702c1e5f8b3a20005eb0f74bfdbd360ee6f304  matplotlib-inline-0.1.6.tar.gz
-+md5  96fe871bf30dc414e6724423c1e2ebb1  matplotlib_inline-0.1.7.tar.gz
-+sha256  8423b23ec666be3d16e16b60bdd8ac4e86e840ebd1dd11a30b9f117f2fa0ab90  matplotlib_inline-0.1.7.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/kiwisolver/json
+-md5  20dea6992699d6be8a563995d7fe0309  kiwisolver-1.4.5.tar.gz
+-sha256  e57e563a57fb22a142da34f38acc2fc1a5c864bc29ca1517a88abc963e60d6ec  kiwisolver-1.4.5.tar.gz
++md5  3e1406c57a4fdce3804096f57a9b4855  kiwisolver-1.4.7.tar.gz
++sha256  9893ff81bd7107f7b685d3017cc6583daadb4fc26e4a888350df530e41980a60  kiwisolver-1.4.7.tar.gz
  # Locally computed sha256 checksums
- sha256  8521b036c6448e0e0aa7213d4713b6fdee0f4c64c9f320450f77346bf5c0e8e4  LICENSE
-diff --git a/package/python-matplotlib-inline/python-matplotlib-inline.mk b/package/python-matplotlib-inline/python-matplotlib-inline.mk
-index c9c22605ca..961b50120a 100644
---- a/package/python-matplotlib-inline/python-matplotlib-inline.mk
-+++ b/package/python-matplotlib-inline/python-matplotlib-inline.mk
+-sha256  26da8d49744796f2601fb5fe9e5d8b9e8102064ca60a8dc1825b6177cb05450c  LICENSE
++sha256  238e69906d7e507a94832b9831131862c4176d58c002b388e2e99db5d83677d2  LICENSE
+diff --git a/package/python-kiwisolver/python-kiwisolver.mk b/package/python-kiwisolver/python-kiwisolver.mk
+index 04a0779b37..4220e1c890 100644
+--- a/package/python-kiwisolver/python-kiwisolver.mk
++++ b/package/python-kiwisolver/python-kiwisolver.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_MATPLOTLIB_INLINE_VERSION = 0.1.6
--PYTHON_MATPLOTLIB_INLINE_SOURCE = matplotlib-inline-$(PYTHON_MATPLOTLIB_INLINE_VERSION).tar.gz
--PYTHON_MATPLOTLIB_INLINE_SITE = https://files.pythonhosted.org/packages/d9/50/3af8c0362f26108e54d58c7f38784a3bdae6b9a450bab48ee8482d737f44
-+PYTHON_MATPLOTLIB_INLINE_VERSION = 0.1.7
-+PYTHON_MATPLOTLIB_INLINE_SOURCE = matplotlib_inline-$(PYTHON_MATPLOTLIB_INLINE_VERSION).tar.gz
-+PYTHON_MATPLOTLIB_INLINE_SITE = https://files.pythonhosted.org/packages/99/5b/a36a337438a14116b16480db471ad061c36c3694df7c2084a0da7ba538b7
- PYTHON_MATPLOTLIB_INLINE_SETUP_TYPE = setuptools
- PYTHON_MATPLOTLIB_INLINE_LICENSE = BSD-3-Clause
- PYTHON_MATPLOTLIB_INLINE_LICENSE_FILES = LICENSE
+-PYTHON_KIWISOLVER_VERSION = 1.4.5
++PYTHON_KIWISOLVER_VERSION = 1.4.7
+ PYTHON_KIWISOLVER_SOURCE = kiwisolver-$(PYTHON_KIWISOLVER_VERSION).tar.gz
+-PYTHON_KIWISOLVER_SITE = https://files.pythonhosted.org/packages/b9/2d/226779e405724344fc678fcc025b812587617ea1a48b9442628b688e85ea
++PYTHON_KIWISOLVER_SITE = https://files.pythonhosted.org/packages/85/4d/2255e1c76304cbd60b48cee302b66d1dde4468dc5b1160e4b7cb43778f2a
+ PYTHON_KIWISOLVER_LICENSE = BSD-3-Clause
+ PYTHON_KIWISOLVER_LICENSE_FILES = LICENSE
+ PYTHON_KIWISOLVER_SETUP_TYPE = setuptools
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
