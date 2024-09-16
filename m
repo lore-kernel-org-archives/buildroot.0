@@ -4,70 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 861BEC3ABB2
-	for <buildroot@archiver.kernel.org>; Mon, 16 Sep 2024 10:12:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D40FCC3ABA2
+	for <buildroot@archiver.kernel.org>; Mon, 16 Sep 2024 10:24:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1762D60A88;
-	Mon, 16 Sep 2024 10:12:02 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A292B6086C;
+	Mon, 16 Sep 2024 10:24:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hjeoKcLvqtF7; Mon, 16 Sep 2024 10:12:01 +0000 (UTC)
+ id 7uL9_4sYvbpo; Mon, 16 Sep 2024 10:24:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E1A4C60A99
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B14FA608A6
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E1A4C60A99;
-	Mon, 16 Sep 2024 10:12:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B14FA608A6;
+	Mon, 16 Sep 2024 10:24:08 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 680941BF5A4
- for <buildroot@lists.busybox.net>; Mon, 16 Sep 2024 10:11:59 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id BE0221BF966
+ for <buildroot@lists.busybox.net>; Mon, 16 Sep 2024 10:24:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 574B780B6F
- for <buildroot@lists.busybox.net>; Mon, 16 Sep 2024 10:11:59 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id AB07D811CD
+ for <buildroot@lists.busybox.net>; Mon, 16 Sep 2024 10:24:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ybMxVuk2xBNh for <buildroot@lists.busybox.net>;
- Mon, 16 Sep 2024 10:11:58 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
- helo=smtp1-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
+ id vAJtWqR6A7V1 for <buildroot@lists.busybox.net>;
+ Mon, 16 Sep 2024 10:24:05 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 47D3080B6C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 47D3080B6C
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 47D3080B6C
- for <buildroot@buildroot.org>; Mon, 16 Sep 2024 10:11:58 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown [92.184.117.145])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 2C241B00535;
- Mon, 16 Sep 2024 12:11:49 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Mon, 16 Sep 2024 12:11:48 +0200
-Date: Mon, 16 Sep 2024 12:11:48 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <ZugEZGPkWpJC5kUJ@landeda>
-References: <20240915221018.1655380-1-james.hilliard1@gmail.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20240915221018.1655380-1-james.hilliard1@gmail.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1726481515;
- bh=NY3zmyyrtWtRn8F/+rhoPndAZiRMwuvrpnWxJD5xuVo=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=ATYlIXI42BmTU0nl8FbmeY9QJjYMUa48TlR8/1EexzhYo/VojRrhj3iODvNohsBCF
- 8wUXdTQ1sGnDQsg4DIqRJNRWXOGY4cfVS7Y2g7PbSk/SP43UUdKe5eo3OWCpTUoxau
- C0yPW5QQ2kbL2K+9xzi3HeTNh+jum142y3StFwJ9VJYZZOe+tjbsFdixUki5yfFpz4
- TrBBu37Vn+/siA6lkAcwvd+Iz2wx06QekkE3KnAju1qEWUiXRFHAAHqm5iMtMufYEy
- q4eRsoDpjvH7E2YwI8HK9qO4cWmV5loxyrPokCpT7YXxa5uh3DZgeG4XY1GRgHvkh7
- n6RaZG9c/A5dQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=ATYlIXI4
-Subject: Re: [Buildroot] [PATCH 1/3] package/python-iterable-io: new package
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BAE3B811C2
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id BAE3B811C2
+ for <buildroot@buildroot.org>; Mon, 16 Sep 2024 10:24:05 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id A7ECA8019E; Mon, 16 Sep 2024 10:24:05 +0000 (UTC)
+From: Peter Korsgaard <peter@korsgaard.com>
+To: buildroot@buildroot.org
+Date: Mon, 16 Sep 2024 12:23:12 +0200
+X-Git-Refname: refs/heads/2024.02.x
+X-Git-Oldrev: 3eb2c46bc4d943d4f3e118e405ed0d6999836f9b
+X-Git-Newrev: 6a0257e9497fe82718babde3b0e3df89c27676f3
+X-Patchwork-Hint: ignore
+Message-Id: <20240916102405.A7ECA8019E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x]
+ package/python-unittest-xml-reporting: add patch to fix LICENSE file
+ installation
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -79,105 +60,87 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-James, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=6a0257e9497fe82718babde3b0e3df89c27676f3
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-On 2024-09-15 16:10 -0600, James Hilliard spake thusly:
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+The LICENSE file gets installed directly to the root of $(TARGET_DIR),
+which clashes with other packages:
 
-Series of 3 patches applied to master, thanks.
+FileExistsError: File already exists: /home/autobuild/autobuild/instance-3/output-1/target/LICENSE
 
-Regards,
-Yann E. MORIN.
+This commit fixes this issue for the python-unittest-xml-reporting
+package. Other fixes will be needed for the other patches.
 
-> ---
->  package/Config.in                                  |  1 +
->  package/python-iterable-io/Config.in               |  7 +++++++
->  package/python-iterable-io/python-iterable-io.hash |  5 +++++
->  package/python-iterable-io/python-iterable-io.mk   | 14 ++++++++++++++
->  4 files changed, 27 insertions(+)
->  create mode 100644 package/python-iterable-io/Config.in
->  create mode 100644 package/python-iterable-io/python-iterable-io.hash
->  create mode 100644 package/python-iterable-io/python-iterable-io.mk
-> 
-> diff --git a/package/Config.in b/package/Config.in
-> index c0f4d9ece5..a0d2f329b7 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1167,6 +1167,7 @@ menu "External python modules"
->  	source "package/python-ipython/Config.in"
->  	source "package/python-ipython-genutils/Config.in"
->  	source "package/python-iso8601/Config.in"
-> +	source "package/python-iterable-io/Config.in"
->  	source "package/python-itsdangerous/Config.in"
->  	source "package/python-iwlib/Config.in"
->  	source "package/python-janus/Config.in"
-> diff --git a/package/python-iterable-io/Config.in b/package/python-iterable-io/Config.in
-> new file mode 100644
-> index 0000000000..e85159eb2f
-> --- /dev/null
-> +++ b/package/python-iterable-io/Config.in
-> @@ -0,0 +1,7 @@
-> +config BR2_PACKAGE_PYTHON_ITERABLE_IO
-> +	bool "python-iterable-io"
-> +	help
-> +	  Adapt generators and other iterables to a file-like
-> +	  interface.
-> +
-> +	  https://github.com/pR0Ps/iterable-io
-> diff --git a/package/python-iterable-io/python-iterable-io.hash b/package/python-iterable-io/python-iterable-io.hash
-> new file mode 100644
-> index 0000000000..aae6ad547e
-> --- /dev/null
-> +++ b/package/python-iterable-io/python-iterable-io.hash
-> @@ -0,0 +1,5 @@
-> +# md5, sha256 from https://pypi.org/pypi/iterable-io/json
-> +md5  d6027af37f8e15edd346bdff6d5c5e3c  iterable-io-1.0.0.tar.gz
-> +sha256  fb9e1b739587a9ba0d5c60a3e1eb71246761583bc9f18b3c35bb112b44b18c3c  iterable-io-1.0.0.tar.gz
-> +# Locally computed sha256 checksums
-> +sha256  5de72116ec3738168bbaea5bd3405d161246ac542456470dc074f23d336252c0  README.md
-> diff --git a/package/python-iterable-io/python-iterable-io.mk b/package/python-iterable-io/python-iterable-io.mk
-> new file mode 100644
-> index 0000000000..e59c7d6455
-> --- /dev/null
-> +++ b/package/python-iterable-io/python-iterable-io.mk
-> @@ -0,0 +1,14 @@
-> +################################################################################
-> +#
-> +# python-iterable-io
-> +#
-> +################################################################################
-> +
-> +PYTHON_ITERABLE_IO_VERSION = 1.0.0
-> +PYTHON_ITERABLE_IO_SOURCE = iterable-io-$(PYTHON_ITERABLE_IO_VERSION).tar.gz
-> +PYTHON_ITERABLE_IO_SITE = https://files.pythonhosted.org/packages/40/be/27d59b5c1d74ecbd26c1142f84b61d6cb04f0d0337697149645f34406b2d
-> +PYTHON_ITERABLE_IO_SETUP_TYPE = setuptools
-> +PYTHON_ITERABLE_IO_LICENSE = LGPL-3.0
-> +PYTHON_ITERABLE_IO_LICENSE_FILES = README.md
-> +
-> +$(eval $(python-package))
-> -- 
-> 2.34.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
+The issue in python-unittest-xml-reporting was introduced in upstream
+commit c43427611390fba83ca13fbb5311bd8fece5048f, which first appeared
+in v3.1.0. We switched from a pre-3.1.0 version to 3.2.0 in Buildroot
+in commit 69ba1562d5bef8d58b430fd7d67d0f3e77acfefc, which was merged
+in 2023.02.
 
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+Fixes:
+
+  http://autobuild.buildroot.net/results/2c91243b440087bbc7d051d65f553f59d05dd207/
+
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 182d3556a6838c01b0d1f4e6a36da84260605298)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...op-data_files-installs-LICENSE-to-incorre.patch | 40 ++++++++++++++++++++++
+ 1 file changed, 40 insertions(+)
+
+diff --git a/package/python-unittest-xml-reporting/0001-setup.py-drop-data_files-installs-LICENSE-to-incorre.patch b/package/python-unittest-xml-reporting/0001-setup.py-drop-data_files-installs-LICENSE-to-incorre.patch
+new file mode 100644
+index 0000000000..4bc005f448
+--- /dev/null
++++ b/package/python-unittest-xml-reporting/0001-setup.py-drop-data_files-installs-LICENSE-to-incorre.patch
+@@ -0,0 +1,40 @@
++From 662cd67695c31126d72035a818b0f5f1da5a31ca Mon Sep 17 00:00:00 2001
++From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++Date: Sat, 17 Aug 2024 12:24:28 +0200
++Subject: [PATCH] setup.py: drop data_files, installs LICENSE to incorrect
++ place
++
++As reported in issue
++https://github.com/xmlrunner/unittest-xml-reporting/issues/284, the
++data_files statement in the setup() calls installs the LICENSE file in
++the wrong place: in /usr/LICENSE, or even /LICENSE depending on the
++configuration.
++
++So let's drop this, and let setuptools install the LICENSE file
++automatically: since setuptools v56, the license_files attribute is
++automatically assigned to a default value, which includes "LICENSE",
++so there is in fact nothing to do to the get the LICENSE file
++installed at the correct location. See
++https://setuptools.pypa.io/en/latest/history.html#v56-0-0.
++
++Upstream: https://github.com/xmlrunner/unittest-xml-reporting/pull/287
++Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
++---
++ setup.py | 1 -
++ 1 file changed, 1 deletion(-)
++
++diff --git a/setup.py b/setup.py
++index c524ed4..afa5925 100755
++--- a/setup.py
+++++ b/setup.py
++@@ -27,7 +27,6 @@ setup(
++     description = 'unittest-based test runner with Ant/JUnit like XML reporting.',
++     long_description = long_description,
++     long_description_content_type = 'text/markdown',
++-    data_files = [('', ['LICENSE'])],
++     install_requires = ['lxml'],
++     license = 'BSD',
++     platforms = ['Any'],
++-- 
++2.46.0
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
