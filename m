@@ -4,93 +4,93 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D2763C3ABCE
-	for <buildroot@archiver.kernel.org>; Mon, 16 Sep 2024 15:12:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93121C3ABCE
+	for <buildroot@archiver.kernel.org>; Mon, 16 Sep 2024 15:12:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CC06240C08;
-	Mon, 16 Sep 2024 15:12:19 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C912E40BDD;
+	Mon, 16 Sep 2024 15:12:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Y8C9cVBNj5-j; Mon, 16 Sep 2024 15:12:18 +0000 (UTC)
+ id Y6nV4lx2-6uD; Mon, 16 Sep 2024 15:12:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 34EA640BDE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7C28140C21
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 34EA640BDE;
-	Mon, 16 Sep 2024 15:12:17 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B47C71BF41D
- for <buildroot@lists.busybox.net>; Mon, 16 Sep 2024 15:12:13 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7C28140C21;
+	Mon, 16 Sep 2024 15:12:20 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id E558D1BF41D
+ for <buildroot@lists.busybox.net>; Mon, 16 Sep 2024 15:12:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B0AF360AB4
- for <buildroot@lists.busybox.net>; Mon, 16 Sep 2024 15:12:13 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id D04ED406EB
+ for <buildroot@lists.busybox.net>; Mon, 16 Sep 2024 15:12:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bbWL2JJUKr5r for <buildroot@lists.busybox.net>;
- Mon, 16 Sep 2024 15:12:12 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id AGK_HViaLRN8 for <buildroot@lists.busybox.net>;
+ Mon, 16 Sep 2024 15:12:13 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::544; helo=mail-ed1-x544.google.com;
+ client-ip=2a00:1450:4864:20::441; helo=mail-wr1-x441.google.com;
  envelope-from=adam.duskett@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 7655060AB2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7655060AB2
-Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com
- [IPv6:2a00:1450:4864:20::544])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 7655060AB2
- for <buildroot@buildroot.org>; Mon, 16 Sep 2024 15:12:12 +0000 (UTC)
-Received: by mail-ed1-x544.google.com with SMTP id
- 4fb4d7f45d1cf-5c26fd60b7bso324929a12.1
- for <buildroot@buildroot.org>; Mon, 16 Sep 2024 08:12:12 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 9974A40315
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9974A40315
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com
+ [IPv6:2a00:1450:4864:20::441])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 9974A40315
+ for <buildroot@buildroot.org>; Mon, 16 Sep 2024 15:12:13 +0000 (UTC)
+Received: by mail-wr1-x441.google.com with SMTP id
+ ffacd0b85a97d-374b3632ef0so334596f8f.2
+ for <buildroot@buildroot.org>; Mon, 16 Sep 2024 08:12:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1726499530; x=1727104330;
+ d=1e100.net; s=20230601; t=1726499531; x=1727104331;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=eQwVHfG62ZGb8WriUBcUaQUFH+SZabDSVdYhppA3WzU=;
- b=qeWYefSbdzZAg2+VFHKjkhlusxoB9PhfpEJMkJSqRySv+P+YFPV7Tl+Gp240S8TUzM
- fQ+K4sfLf9aNxM/t1C48fFx/7TW5KbwkvKnNrsO9awh6HrEqw0ndo7h34jO8DcgetfAF
- VcUjbqgpQpK9kzWGYfBInlC5/QLXVGYecJk/l2pwHbce44LTc4I/cPBNpRj4lUj1LxsJ
- WwiT3lUCE+Ii5axRQH9DNzyf1QUDRHC1CaPQ+ijv8FxHFf7P2Ai0XvMLWBSPGE2oQvVG
- IX5hJ29EoTqHq/ss4kU+dZAjh9fFrNB0tAJDgMMUSWHXD0ZjwAQ53zl+3FCMcd92tFhr
- Jg1A==
-X-Gm-Message-State: AOJu0Yw767bMENFdTct/drgUVJL7Ey9tlO8nJXJ7B57WHOLbljsudV9D
- y83vMDmh8+EmAClXgvgzdFOcJLkYuxaNMqhbnoB0SsVJ3iDntf0VkUGqukuFFuf+mFTOfPIx8+T
- 9jBvhKwYD
-X-Google-Smtp-Source: AGHT+IG7z+JcF05p154VKaETYR0sWM23ChtPN8UgJWK7h/ywgQs02UxweMmsMwg+YM+okSwlDbqe5w==
-X-Received: by 2002:a17:907:7d87:b0:a8a:93ce:d252 with SMTP id
- a640c23a62f3a-a9029453485mr657448466b.6.1726499529469; 
- Mon, 16 Sep 2024 08:12:09 -0700 (PDT)
+ bh=6iSn2jwCoUgCYumfoPzFPOyyFBudK/wdjWNn32x+aIA=;
+ b=Gdkhd9nkn3oqjdPq5DzsnOmSeWM2nP/wYyFdp9ojl4Oni10DK24IRpZQCDjmkW4RJ5
+ rsE0Ocpy4tOUilInvAlK4PVPk98ZVSSECHvRMmZ+dERSks7sWkJvRt4YEY9PvNedExw8
+ HGK82jggiEsXTEvZFVA0SR4fYpdxVkClpeSuGBKWpjbnuIDnJ8cL33ICZNIHH35YNCd/
+ yELhNX71vHRiS2Xaca1k45KbK9MHHj1i+j/Nj0so/ERi7vYQmeWTqBR+ZvU9UUTFRmOs
+ 3RjGheZF5IsB3OCxuP6j3iYRX5jxhcrn4areYSfcC/T3Od9OATc5SKwfK13pL114N0Q+
+ T5Bw==
+X-Gm-Message-State: AOJu0YxFBDONC0ZvZIqSwJDj7djzhnBKqB4IMhA+P8TKJBydegkgpnOa
+ OV3GsbJqpLQEhcaAf6UYZCn4gQadW/9eEuoNpd+GXpMrYINN0qzmh8FFqLf+2C8TQ+TB8ZReerb
+ ZDNYrRtWX
+X-Google-Smtp-Source: AGHT+IFPFYCJ6lNGiR7lksB6c36lHgUAjP7xqzw8pOemlMWkSmwcGheX+10Mt1LXzkJNChlKXGM19g==
+X-Received: by 2002:a05:6000:184a:b0:374:c8d9:9094 with SMTP id
+ ffacd0b85a97d-378c2cfee8bmr5477191f8f.5.1726499531255; 
+ Mon, 16 Sep 2024 08:12:11 -0700 (PDT)
 Received: from adam-laptop.ipgroup.local (212-57-59-66.xdsl.deanconnect.nl.
  [212.57.59.66]) by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-a90610f440bsm330460166b.86.2024.09.16.08.12.09
+ a640c23a62f3a-a90610f440bsm330460166b.86.2024.09.16.08.12.10
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 16 Sep 2024 08:12:09 -0700 (PDT)
+ Mon, 16 Sep 2024 08:12:10 -0700 (PDT)
 From: Adam Duskett <adam.duskett@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Mon, 16 Sep 2024 17:11:54 +0200
-Message-ID: <20240916151206.947484-2-adam.duskett@amarulasolutions.com>
+Date: Mon, 16 Sep 2024 17:11:56 +0200
+Message-ID: <20240916151206.947484-4-adam.duskett@amarulasolutions.com>
 X-Mailer: git-send-email 2.46.0
 In-Reply-To: <20240916151206.947484-1-adam.duskett@amarulasolutions.com>
 References: <20240916151206.947484-1-adam.duskett@amarulasolutions.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1726499530; x=1727104330;
+ d=amarulasolutions.com; s=google; t=1726499531; x=1727104331;
  darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=eQwVHfG62ZGb8WriUBcUaQUFH+SZabDSVdYhppA3WzU=;
- b=ZCJ9ON7teBMc9rxcJAlICmTuALVWD0PSnQ9f1S+7I03IPUEB9bHwgc4PeLEzZbb1cL
- lXh6oorNsHj75Xq6xeVdchD5xMOiKmCXpapPMou0D8HOlYuy23ueohpu6x1Jd4joq/J4
- qMoojYB88GLq1qhWsB67TMJ8KDpB/0dB3F1Xs=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=6iSn2jwCoUgCYumfoPzFPOyyFBudK/wdjWNn32x+aIA=;
+ b=mDZaO8Z3pWfAw32qmvHVvsPK7s8GcXJoA99bHg8U1bWdSkuyIgCKp20JCQxIz1ZGSE
+ PE0dwwY0eSEPXt92Vzzt2IolH1uT1e8Vl0ZXLoXesLV336Tk0JP/e5nXiKbY7yJVkJ3x
+ EfrH950f+Xm4dGaWEhYm8jOX05s/P+rpU+nFw=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (1024-bit key,
  unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=ZCJ9ON7t
-Subject: [Buildroot] [PATCH 01/13] package/libsepol: bump version to 3.7
+ header.a=rsa-sha256 header.s=google header.b=mDZaO8Z3
+Subject: [Buildroot] [PATCH 03/13] package/libselinux: bump version to 3.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -113,34 +113,34 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
 ---
- package/libsepol/libsepol.hash | 2 +-
- package/libsepol/libsepol.mk   | 2 +-
+ package/libselinux/libselinux.hash | 2 +-
+ package/libselinux/libselinux.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libsepol/libsepol.hash b/package/libsepol/libsepol.hash
-index 1369d820e1..dcc67ac638 100644
---- a/package/libsepol/libsepol.hash
-+++ b/package/libsepol/libsepol.hash
+diff --git a/package/libselinux/libselinux.hash b/package/libselinux/libselinux.hash
+index 4e0a2ca317..fac9d3cef2 100644
+--- a/package/libselinux/libselinux.hash
++++ b/package/libselinux/libselinux.hash
 @@ -1,5 +1,5 @@
  # From: https://github.com/SELinuxProject/selinux/wiki/Releases
--sha256  c9dc585ea94903d784d597c861cd5dce6459168f95e22b31a0eab1cdd800975a  libsepol-3.6.tar.gz
-+sha256  cd741e25244e7ef6cd934d633614131a266c3eaeab33d8bfa45e8a93b45cc901  libsepol-3.7.tar.gz
+-sha256  ba4e0ef34b270e7672a5e5f1b523fe2beab3a40bb33d9389f4ad3a8728f21b52  libselinux-3.6.tar.gz
++sha256  ea03f42d13a4f95757997dba8cf0b26321fac5d2f164418b4cc856a92d2b17bd  libselinux-3.7.tar.gz
  
  # Hash for license file
- sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  LICENSE
-diff --git a/package/libsepol/libsepol.mk b/package/libsepol/libsepol.mk
-index 6361cc66bc..af14778ead 100644
---- a/package/libsepol/libsepol.mk
-+++ b/package/libsepol/libsepol.mk
+ sha256  86657b4c0fe868d7cbd977cb04c63b6c667e08fa51595a7bc846ad4bed8fc364  LICENSE
+diff --git a/package/libselinux/libselinux.mk b/package/libselinux/libselinux.mk
+index f07498d739..360ab063ca 100644
+--- a/package/libselinux/libselinux.mk
++++ b/package/libselinux/libselinux.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBSEPOL_VERSION = 3.6
-+LIBSEPOL_VERSION = 3.7
- LIBSEPOL_SITE = https://github.com/SELinuxProject/selinux/releases/download/$(LIBSEPOL_VERSION)
- LIBSEPOL_LICENSE = LGPL-2.1+
- LIBSEPOL_LICENSE_FILES = LICENSE
+-LIBSELINUX_VERSION = 3.6
++LIBSELINUX_VERSION = 3.7
+ LIBSELINUX_SITE = https://github.com/SELinuxProject/selinux/releases/download/$(LIBSELINUX_VERSION)
+ LIBSELINUX_LICENSE = Public Domain
+ LIBSELINUX_LICENSE_FILES = LICENSE
 -- 
 2.46.0
 
