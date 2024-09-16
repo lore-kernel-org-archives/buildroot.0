@@ -4,91 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BC2CAC3ABB2
-	for <buildroot@archiver.kernel.org>; Mon, 16 Sep 2024 14:57:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 83594C3ABB2
+	for <buildroot@archiver.kernel.org>; Mon, 16 Sep 2024 15:12:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 66D3740462;
-	Mon, 16 Sep 2024 14:57:49 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0431C40BC4;
+	Mon, 16 Sep 2024 15:12:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1DUFWgJkMuI4; Mon, 16 Sep 2024 14:57:48 +0000 (UTC)
+ id XcvrSf6LmXbT; Mon, 16 Sep 2024 15:12:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E900340B37
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9F1B540BD3
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E900340B37;
-	Mon, 16 Sep 2024 14:57:47 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id AE3541BF3B0
- for <buildroot@lists.busybox.net>; Mon, 16 Sep 2024 14:57:46 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9F1B540BD3;
+	Mon, 16 Sep 2024 15:12:14 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 81F8F1BF41D
+ for <buildroot@lists.busybox.net>; Mon, 16 Sep 2024 15:12:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A9F4D60AA0
- for <buildroot@lists.busybox.net>; Mon, 16 Sep 2024 14:57:46 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7119D8100D
+ for <buildroot@lists.busybox.net>; Mon, 16 Sep 2024 15:12:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id T8PMZTjpTFUz for <buildroot@lists.busybox.net>;
- Mon, 16 Sep 2024 14:57:45 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zRwKCw6QLIEb for <buildroot@lists.busybox.net>;
+ Mon, 16 Sep 2024 15:12:12 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::92c; helo=mail-ua1-x92c.google.com;
- envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 5FB3960708
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5FB3960708
-Received: from mail-ua1-x92c.google.com (mail-ua1-x92c.google.com
- [IPv6:2607:f8b0:4864:20::92c])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5FB3960708
- for <buildroot@buildroot.org>; Mon, 16 Sep 2024 14:57:45 +0000 (UTC)
-Received: by mail-ua1-x92c.google.com with SMTP id
- a1e0cc1a2514c-846b934981aso604628241.3
- for <buildroot@buildroot.org>; Mon, 16 Sep 2024 07:57:44 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::642; helo=mail-ej1-x642.google.com;
+ envelope-from=adam.duskett@amarulasolutions.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 5D07A80F89
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5D07A80F89
+Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com
+ [IPv6:2a00:1450:4864:20::642])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 5D07A80F89
+ for <buildroot@buildroot.org>; Mon, 16 Sep 2024 15:12:12 +0000 (UTC)
+Received: by mail-ej1-x642.google.com with SMTP id
+ a640c23a62f3a-a866902708fso89529766b.2
+ for <buildroot@buildroot.org>; Mon, 16 Sep 2024 08:12:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1726498664; x=1727103464;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=ORzeNIHgt+AKDMJcN7Zb0HvzxCsl0KpPGwvqwfotpYk=;
- b=DqTWTeRavq82Ce9kxRpEHcnAm3FzJuBUK9Cfi5t8Kl6fcg+C2MmeHwwLFNb9fUFNx8
- Cr3nkPm/7BBRDb4mPdLsJF8w90wzRaF8fhkhqIFMUtR1aItP8almWrc9QWtm4+HdCjei
- 01wlALeZddcD/uTZUYc+u1p2zp7hJXixdwrHQtlnQUpuwPZdLMuD1xfMgIjL76Mm1ri8
- iEio6U0Wj3hVj+vOEKRsY7cOTlXkPnsy+MjTP3yFEBpkDKn/fZqyHvOwCkAkuBNVPrpg
- kJ5DWb3yVQdkC+W0fvpB5kt0H3JIVGi9V6fjwXXaYNPOwJaDT84/SfhrfqPHJ5f9+PvM
- /lDA==
-X-Gm-Message-State: AOJu0YygG/72ohhSuL2Lz2fLr4GQCrDpjDh0fILTQvini7iExxG3qilv
- iWslsnTAMcn3aoubaOJCktwsZ03gFyyKMuHsc8gCE/gmMGEqJP0xBRQNZlIYA/dcbqXACWrazqo
- mbtVuWgaYdWXT/MFleVFNXHNJxF2pRw==
-X-Google-Smtp-Source: AGHT+IG/H3tYeAP4IIxl98EDttJiXoclMihY1sdMzDgBjiHqWoZUS0ceAre4hgy4qrk+wY0ZeGSwaPYFE4NY1u8fGhY=
-X-Received: by 2002:a05:6102:1611:b0:497:70dc:c with SMTP id
- ada2fe7eead31-49d4f6b0302mr7195637137.19.1726498663805; Mon, 16 Sep 2024
- 07:57:43 -0700 (PDT)
+ d=1e100.net; s=20230601; t=1726499530; x=1727104330;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=C69cBcOCOMOxlYSR58i+5h3G27SNKrgJomGCQ4v055A=;
+ b=bzzlYRcJNYEIWAqEJnNeUsgD1fVnBP264UdF4155jwefyh85Aowe4R1kvK6Cux2Ks0
+ U71vJlC/MYgRAbQff7gjJVAXK2JAeMtP8dJ57gbW9nOXhq+cpdVIQrpJXxSGOYmVCn41
+ dqQ1u3hRrKOYM3VKFfji09i2Qgato/2+tFT6ke+Qxg7Y+eNjY5QKT6T1GKnY/tdxHFcN
+ qZOlslYtpv7i+xQWyvFo7yHTKCfHvUFrkL6Ou6QGXWGwGwsh20faz1BfpTYmquGzR79R
+ n+i+OzW6wcWurIvADZ/LFds3pRheHeO79dF7XSX2f3duWHsf6r6Z2WgoPv8ClhZvKCO7
+ X0qg==
+X-Gm-Message-State: AOJu0Yy8cqUbztshXDWC+Ea6I5JHAVhaY4X8ZdNiVPA5wKqzZJnTWpg4
+ jzBCrtLQBFu9WBEjDhH+TB0cgJ2bpTAIF6kuyHQs1lTeD9rXQJSZAsy44OnACwSsSyZWeiEmPFG
+ hNRgs5kLX
+X-Google-Smtp-Source: AGHT+IE9iS0YVT4DqUJBS5gnB+NHhmxqQZzHvBH1BAOkmuSiaQ6fdKwF2xot0r567ayhj04ENGm3qA==
+X-Received: by 2002:a17:907:7d87:b0:a8a:93ce:d252 with SMTP id
+ a640c23a62f3a-a9029453485mr657447466b.6.1726499528990; 
+ Mon, 16 Sep 2024 08:12:08 -0700 (PDT)
+Received: from adam-laptop.ipgroup.local (212-57-59-66.xdsl.deanconnect.nl.
+ [212.57.59.66]) by smtp.gmail.com with ESMTPSA id
+ a640c23a62f3a-a90610f440bsm330460166b.86.2024.09.16.08.12.08
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 16 Sep 2024 08:12:08 -0700 (PDT)
+From: Adam Duskett <adam.duskett@amarulasolutions.com>
+To: buildroot@buildroot.org
+Date: Mon, 16 Sep 2024 17:11:53 +0200
+Message-ID: <20240916151206.947484-1-adam.duskett@amarulasolutions.com>
+X-Mailer: git-send-email 2.46.0
 MIME-Version: 1.0
-References: <20240915212816.1645997-1-james.hilliard1@gmail.com>
- <Zuf_n3SFObkfWBOL@landeda>
-In-Reply-To: <Zuf_n3SFObkfWBOL@landeda>
-From: James Hilliard <james.hilliard1@gmail.com>
-Date: Mon, 16 Sep 2024 08:57:32 -0600
-Message-ID: <CADvTj4pXw1xsnT8YF9-hL=XJW1YQpKtcMG5QBtLJJo7QibrxtA@mail.gmail.com>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1726498664; x=1727103464; darn=buildroot.org;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=ORzeNIHgt+AKDMJcN7Zb0HvzxCsl0KpPGwvqwfotpYk=;
- b=VXzoUoV0r9993RMXvVIDF7LQVBe2b4VtHrmS79UZsw72kB3+3u6rAW5XIf80IWODWd
- RZ/0qfiiyx3b7NADqo6dsEPRsPytvARhTMQaz8HikvCMkBqnyWpBiewzm38kcog6WhLh
- vfbpkeTn9E+uaGw/PKoCc/2SlttrDLKp4LEM6BK4adAEBMXNwfL2cR9pK315eLLuraMD
- TOkjLqYPbKuLeqXeV6zYOvkE9qxE/B6teCTJwvtiTj8XXmA7q/s4NY8Dlz0ayxRttT8Y
- on/TjQ/RMLbWVTojSLIuidaX5T9NzrcGbRoNI7EaMyBeNjLMIi55uV5tHQ3pEbBAA/4v
- fLlw==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=amarulasolutions.com; s=google; t=1726499530; x=1727104330;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=C69cBcOCOMOxlYSR58i+5h3G27SNKrgJomGCQ4v055A=;
+ b=IfKb/PZrlXgzuRhdreeAfIYv51FTCjI05pwtYwfRTQahguGc9yesuCsuQbvzRJ5VPd
+ lybKoz1KQz9gB376yA25FqO3NvQNvA3UDp5h7Spf1ECrKBUnSN4wqspdyJ5YIaa1kd26
+ GI/QH5tuEKH5raH5hy43wF1byIZpIRBY7aCfg=
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=VXzoUoV0
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-m2crypto: bump to
- version 0.42.0
+ header.from=amarulasolutions.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
+ header.a=rsa-sha256 header.s=google header.b=IfKb/PZr
+Subject: [Buildroot] [PATCH 00/13] selinux-packages: bump to 3.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,82 +99,78 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Gustavo Heinz <gustavo@gsthnz.com>, Asaf Kahlon <asafka7@gmail.com>,
- buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Marcus Folkesson <marcus.folkesson@gmail.com>,
+ Adam Duskett <adam.duskett@amarulasolutions.com>,
+ Antoine Tenart <atenart@kernel.org>,
+ Marek Belisko <marek.belisko@open-nandra.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gTW9uLCBTZXAgMTYsIDIwMjQgYXQgMzo1MeKAr0FNIFlhbm4gRS4gTU9SSU4gPHlhbm4ubW9y
-aW4uMTk5OEBmcmVlLmZyPiB3cm90ZToKPgo+IEphbWVzLCBBbGwsCj4KPiBPbiAyMDI0LTA5LTE1
-IDE1OjI4IC0wNjAwLCBKYW1lcyBIaWxsaWFyZCBzcGFrZSB0aHVzbHk6Cj4gPiBTZXQgb3BlbnNz
-bCBwYXRoIHZpYSBlbnYgaW5zdGVhZCBvZiBidWlsZCBvcHRpb25zLgo+Cj4gWW91IGFyZSBfZGVz
-Y3JpYmluZ18gdGhlIGNoYW5nZSwgeW91IGFyZSBub3QgX2V4cGxhaW5pbmdfIGl0LiBJdCBpcwo+
-IHByZXR0eSBlYXN5IHRvIHNwb3QgdGhhdCB0aGUgb3B0aW9ucyBhcmUgZHJvcHBlZCBhbmQgdGhh
-dCB0aGUgcGF0aAo+IGlzIG5vdyBwYXNzZWQgaW4gYW4gZW52aXJvbm1lbnQgdmFyaWFibGUuCj4K
-PiBCdXQgd2h5IGlzIHRoYXQgbmVlZGVkPyBXaGF0J3MgdGhlIHJhdGlvbmFsZSBmb3IgZG9pbmcg
-aXQ/IElzIGl0Cj4gcmVxdWlyZWQgYnkgdGhlIGJ1bXAsIG9yIGlzIGl0IHNvbWV0aGluZyB0aGF0
-IGNhbiBiZSBkb25lIGJlZm9yZSBvcgo+IGFmdGVyPyBFeHBsYWluaW5nIHRoaXMgbWF5IHJpbmcg
-YSBiZWxsIHRoYXQgbWF5YmUgdGhlIGNoYW5nZSBzaG91bGQgKG9yCj4gc2hvdWxkIG5vdCkgYmUg
-YmFja3BvcnRlZC4KCkl0IGlzIHJlcXVpcmVkIGFzIHRoZSBidWlsZCBvcHRpb24gd2FzIHJlbW92
-ZWQuIFByZXN1bWFibHkgZG9lc24ndApuZWVkIHRvIGJlIGJhY2twb3J0ZWQgdG8gdmVyc2lvbnMg
-d2l0aCB0aGUgYnVpbGQgb3B0aW9uLgoKPgo+IFJlZ2FyZHMsCj4gWWFubiBFLiBNT1JJTi4KPgo+
-ID4gU2lnbmVkLW9mZi1ieTogSmFtZXMgSGlsbGlhcmQgPGphbWVzLmhpbGxpYXJkMUBnbWFpbC5j
-b20+Cj4gPiAtLS0KPiA+ICBwYWNrYWdlL3B5dGhvbi1tMmNyeXB0by9weXRob24tbTJjcnlwdG8u
-aGFzaCB8ICA0ICsrLS0KPiA+ICBwYWNrYWdlL3B5dGhvbi1tMmNyeXB0by9weXRob24tbTJjcnlw
-dG8ubWsgICB8IDEwICsrKystLS0tLS0KPiA+ICAyIGZpbGVzIGNoYW5nZWQsIDYgaW5zZXJ0aW9u
-cygrKSwgOCBkZWxldGlvbnMoLSkKPiA+Cj4gPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9weXRob24t
-bTJjcnlwdG8vcHl0aG9uLW0yY3J5cHRvLmhhc2ggYi9wYWNrYWdlL3B5dGhvbi1tMmNyeXB0by9w
-eXRob24tbTJjcnlwdG8uaGFzaAo+ID4gaW5kZXggNzgyODM3MDgxZS4uYWE4ZmUwOWMxNCAxMDA2
-NDQKPiA+IC0tLSBhL3BhY2thZ2UvcHl0aG9uLW0yY3J5cHRvL3B5dGhvbi1tMmNyeXB0by5oYXNo
-Cj4gPiArKysgYi9wYWNrYWdlL3B5dGhvbi1tMmNyeXB0by9weXRob24tbTJjcnlwdG8uaGFzaAo+
-ID4gQEAgLTEsNSArMSw1IEBACj4gPiAgIyBtZDUsIHNoYTI1NiBmcm9tIGh0dHBzOi8vcHlwaS5v
-cmcvcHlwaS9tMmNyeXB0by9qc29uCj4gPiAtbWQ1ICAyODBjMjAwNzJhZmJlNzAxMGNmOWU5NjIw
-ZWEyNWM3YiAgTTJDcnlwdG8tMC40MC4xLnRhci5nego+ID4gLXNoYTI1NiAgYmJmZDExM2VjNTU3
-MDhjMDU4MTYyNTJhNGYwOWU0MjM3ZGY0ZjNiYmZjODE3MWNiYmMzMzA1N2QyNTdiYmIzMCAgTTJD
-cnlwdG8tMC40MC4xLnRhci5nego+ID4gK21kNSAgYjg4YmNiMWQ0YWViODE3ZjkxZWI2MjdkMDhi
-NjczYTIgIG0yY3J5cHRvLTAuNDIuMC50YXIuZ3oKPiA+ICtzaGEyNTYgIDQyYjYyZGYyY2FmNjIz
-MTYxYjFkNjQzYTcyMzU0NjRjMmZlMmEzMTA1MDQ5ZWJjNDk4YTZkNDdkYzA4ZjY0YjQgIG0yY3J5
-cHRvLTAuNDIuMC50YXIuZ3oKPiA+ICAjIExvY2FsbHkgY29tcHV0ZWQgc2hhMjU2IGNoZWNrc3Vt
-cwo+ID4gIHNoYTI1NiAgNGVjYTQ3ODM5NmY0YjJiMDIwNzI5YTExMWZjZTNmMDk2NDU2ZDc0NTAw
-YmZkOGYyYjAzODhjM2M2OWY5OTdjMCAgTElDRU5DRQo+ID4gZGlmZiAtLWdpdCBhL3BhY2thZ2Uv
-cHl0aG9uLW0yY3J5cHRvL3B5dGhvbi1tMmNyeXB0by5tayBiL3BhY2thZ2UvcHl0aG9uLW0yY3J5
-cHRvL3B5dGhvbi1tMmNyeXB0by5tawo+ID4gaW5kZXggNmMwN2Y0MmQwNi4uNzlkZmMxYmViMiAx
-MDA2NDQKPiA+IC0tLSBhL3BhY2thZ2UvcHl0aG9uLW0yY3J5cHRvL3B5dGhvbi1tMmNyeXB0by5t
-awo+ID4gKysrIGIvcGFja2FnZS9weXRob24tbTJjcnlwdG8vcHl0aG9uLW0yY3J5cHRvLm1rCj4g
-PiBAQCAtNCwxNyArNCwxNSBAQAo+ID4gICMKPiA+ICAjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIwo+
-ID4KPiA+IC1QWVRIT05fTTJDUllQVE9fVkVSU0lPTiA9IDAuNDAuMQo+ID4gLVBZVEhPTl9NMkNS
-WVBUT19TT1VSQ0UgPSBNMkNyeXB0by0kKFBZVEhPTl9NMkNSWVBUT19WRVJTSU9OKS50YXIuZ3oK
-PiA+IC1QWVRIT05fTTJDUllQVE9fU0lURSA9IGh0dHBzOi8vZmlsZXMucHl0aG9uaG9zdGVkLm9y
-Zy9wYWNrYWdlcy85ZS9hMy85NDMzODE3NDkzZWEyNTBkYjY3YTA1ZGUzMzYxY2IwYTFkNTg1MzE4
-NDdkNTA0MDZmMmYyODQ1NWU2OGMKPiA+ICtQWVRIT05fTTJDUllQVE9fVkVSU0lPTiA9IDAuNDIu
-MAo+ID4gK1BZVEhPTl9NMkNSWVBUT19TT1VSQ0UgPSBtMmNyeXB0by0kKFBZVEhPTl9NMkNSWVBU
-T19WRVJTSU9OKS50YXIuZ3oKPiA+ICtQWVRIT05fTTJDUllQVE9fU0lURSA9IGh0dHBzOi8vZmls
-ZXMucHl0aG9uaG9zdGVkLm9yZy9wYWNrYWdlcy84NS85Zi9iODk3N2NlMjk3MWNmNWY4MjNkYjNm
-ZGIzMWU3ZTA2MWI5NjYyZGEzMThhMTdiNmJmMGM2NTNmODRhZWUKPiA+ICBQWVRIT05fTTJDUllQ
-VE9fU0VUVVBfVFlQRSA9IHNldHVwdG9vbHMKPiA+ICBQWVRIT05fTTJDUllQVE9fTElDRU5TRSA9
-IE1JVAo+ID4gIFBZVEhPTl9NMkNSWVBUT19MSUNFTlNFX0ZJTEVTID0gTElDRU5DRQo+ID4gIFBZ
-VEhPTl9NMkNSWVBUT19DUEVfSURfVkVORE9SID0gbTJjcnlwdG9fcHJvamVjdAo+ID4gIFBZVEhP
-Tl9NMkNSWVBUT19DUEVfSURfUFJPRFVDVCA9IG0yY3J5cHRvCj4gPiAgUFlUSE9OX00yQ1JZUFRP
-X0RFUEVOREVOQ0lFUyA9IG9wZW5zc2wgaG9zdC1zd2lnCj4gPiAtUFlUSE9OX00yQ1JZUFRPX0JV
-SUxEX09QVFMgPSBcCj4gPiAtICAgICAtQy0tYnVpbGQtb3B0aW9uPWJ1aWxkX2V4dCBcCj4gPiAt
-ICAgICAtQy0tYnVpbGQtb3B0aW9uPS0tb3BlbnNzbD0kKFNUQUdJTkdfRElSKS91c3IKPiA+ICtQ
-WVRIT05fTTJDUllQVE9fRU5WID0gT1BFTlNTTF9QQVRIPSIkKFNUQUdJTkdfRElSKS91c3IiCj4g
-Pgo+ID4gICQoZXZhbCAkKHB5dGhvbi1wYWNrYWdlKSkKPiA+IC0tCj4gPiAyLjM0LjEKPiA+Cj4g
-PiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwo+ID4gYnVp
-bGRyb290IG1haWxpbmcgbGlzdAo+ID4gYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKPiA+IGh0dHBz
-Oi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo+Cj4gLS0K
-PiAuLS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0tLS0tLS0t
-LS0tLi0tLS0tLS0tLS0tLS0tLS0tLS0tLgo+IHwgIFlhbm4gRS4gTU9SSU4gIHwgUmVhbC1UaW1l
-IEVtYmVkZGVkIHwgLyJcIEFTQ0lJIFJJQkJPTiB8IEVyaWNzJyBjb25zcGlyYWN5OiB8Cj4gfCAr
-MzMgNjYyIDM3NiAwNTYgfCBTb2Z0d2FyZSAgRGVzaWduZXIgfCBcIC8gQ0FNUEFJR04gICAgIHwg
-IF9fXyAgICAgICAgICAgICAgIHwKPiB8ICszMyA1NjEgMDk5IDQyNyBgLS0tLS0tLS0tLS0tLi0t
-LS0tLS06ICBYICBBR0FJTlNUICAgICAgfCAgXGUvICBUaGVyZSBpcyBubyAgfAo+IHwgaHR0cDov
-L3ltb3Jpbi5pcy1hLWdlZWsub3JnLyB8IF8vKlxfIHwgLyBcIEhUTUwgTUFJTCAgICB8ICAgdiAg
-IGNvbnNwaXJhY3kuICB8Cj4gJy0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLV4tLS0tLS0t
-Xi0tLS0tLS0tLS0tLS0tLS0tLV4tLS0tLS0tLS0tLS0tLS0tLS0tLScKX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApi
-dWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1h
-bi9saXN0aW5mby9idWlsZHJvb3QK
+No large changes other than the following:
+  - setools 0001-Do-not-export-use-setools.InfoFlowAnalysis-and-setoo.patch
+    needed to be refactored to work with 4.5.1
+
+  - The audit package needed to be cleaned up and a new init.d service file
+    added.
+
+Other than those two things, it's a very straight-forward patch series.
+
+All SELinux unit tests pass.
+
+Adam Duskett (13):
+  package/libsepol: bump version to 3.7
+  package/libsemanage: bump version to 3.7
+  package/libselinux: bump version to 3.7
+  package/policycoreutils: bump version to 3.7
+  package/checkpolicy: bump version to 3.7
+  package/restorecond: bump version to 3.7
+  package/semodule-utils: bump to version 3.7
+  package/selinux-python: bump to version 3.7
+  package/setools: bump version to 4.5.1
+  package/refpolicy: bump version to 2.20240226
+  package/polkit: bump version to 125
+  package/audit/S02auditd: fix shellcheck and check-package warnings
+  package/audit: bump version to 4.0.2
+
+ package/audit/S02auditd                       | 80 ---------------
+ package/audit/S02augenrules                   | 31 ++++++
+ package/audit/S03auditd                       | 82 ++++++++++++++++
+ package/audit/audit.hash                      |  2 +-
+ package/audit/audit.mk                        | 20 ++--
+ package/checkpolicy/checkpolicy.hash          |  2 +-
+ package/checkpolicy/checkpolicy.mk            |  2 +-
+ package/libselinux/libselinux.hash            |  2 +-
+ package/libselinux/libselinux.mk              |  2 +-
+ package/libsemanage/libsemanage.hash          |  2 +-
+ package/libsemanage/libsemanage.mk            |  2 +-
+ package/libsepol/libsepol.hash                |  2 +-
+ package/libsepol/libsepol.mk                  |  2 +-
+ package/policycoreutils/policycoreutils.hash  |  2 +-
+ package/policycoreutils/policycoreutils.mk    |  2 +-
+ package/polkit/polkit.hash                    |  2 +-
+ package/polkit/polkit.mk                      |  4 +-
+ package/refpolicy/refpolicy.hash              |  2 +-
+ package/refpolicy/refpolicy.mk                |  2 +-
+ package/restorecond/restorecond.hash          |  2 +-
+ package/restorecond/restorecond.mk            |  2 +-
+ package/selinux-python/selinux-python.hash    |  2 +-
+ package/selinux-python/selinux-python.mk      |  2 +-
+ package/semodule-utils/semodule-utils.hash    |  2 +-
+ package/semodule-utils/semodule-utils.mk      |  2 +-
+ ...e-setools.InfoFlowAnalysis-and-setoo.patch | 98 +++++++------------
+ package/setools/setools.hash                  |  2 +-
+ package/setools/setools.mk                    |  2 +-
+ 28 files changed, 181 insertions(+), 178 deletions(-)
+ delete mode 100644 package/audit/S02auditd
+ create mode 100644 package/audit/S02augenrules
+ create mode 100644 package/audit/S03auditd
+
+-- 
+2.46.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
