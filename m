@@ -4,91 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10582C3ABB9
-	for <buildroot@archiver.kernel.org>; Mon, 16 Sep 2024 00:19:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D7D6EC3ABB9
+	for <buildroot@archiver.kernel.org>; Mon, 16 Sep 2024 00:22:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A488640653;
-	Mon, 16 Sep 2024 00:19:45 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8BCB0403A7;
+	Mon, 16 Sep 2024 00:22:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id w0E7SP1IoOBw; Mon, 16 Sep 2024 00:19:44 +0000 (UTC)
+ id LKvXuyBxMJ4q; Mon, 16 Sep 2024 00:22:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6BD0F4067C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 52B21403AF
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6BD0F4067C;
-	Mon, 16 Sep 2024 00:19:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 52B21403AF;
+	Mon, 16 Sep 2024 00:22:38 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id CF4231BF94D
- for <buildroot@lists.busybox.net>; Mon, 16 Sep 2024 00:19:43 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A993F1BF94D
+ for <buildroot@lists.busybox.net>; Mon, 16 Sep 2024 00:22:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BD94F400A4
- for <buildroot@lists.busybox.net>; Mon, 16 Sep 2024 00:19:43 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 988FD400A4
+ for <buildroot@lists.busybox.net>; Mon, 16 Sep 2024 00:22:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MsEv64y_WjLn for <buildroot@lists.busybox.net>;
- Mon, 16 Sep 2024 00:19:42 +0000 (UTC)
+ id jZ3ekDw-LiKP for <buildroot@lists.busybox.net>;
+ Mon, 16 Sep 2024 00:22:34 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::12d; helo=mail-il1-x12d.google.com;
+ client-ip=2607:f8b0:4864:20::d32; helo=mail-io1-xd32.google.com;
  envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org D859D40004
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D859D40004
-Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com
- [IPv6:2607:f8b0:4864:20::12d])
- by smtp2.osuosl.org (Postfix) with ESMTPS id D859D40004
- for <buildroot@buildroot.org>; Mon, 16 Sep 2024 00:19:41 +0000 (UTC)
-Received: by mail-il1-x12d.google.com with SMTP id
- e9e14a558f8ab-37636c3872bso9115165ab.3
- for <buildroot@buildroot.org>; Sun, 15 Sep 2024 17:19:41 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 6430040004
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6430040004
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com
+ [IPv6:2607:f8b0:4864:20::d32])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6430040004
+ for <buildroot@buildroot.org>; Mon, 16 Sep 2024 00:22:34 +0000 (UTC)
+Received: by mail-io1-xd32.google.com with SMTP id
+ ca18e2360f4ac-82a151a65b8so233148639f.2
+ for <buildroot@buildroot.org>; Sun, 15 Sep 2024 17:22:34 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1726445980; x=1727050780;
+ d=1e100.net; s=20230601; t=1726446153; x=1727050953;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=8JKH2UkrxvsmxPMpV5EBC/P/kVzc0dbH4+Ifk0JCBSc=;
- b=cRTKeBCrD3es0QVKZLc7nFyiLQzL6fujz86WJR6spIdci+1smXQdqUwfyjkPnM/JW1
- WPdDaxVcwuHGgMUv+hpWMltkLOAbgZ+3rIrLH45W8WHlNlVYLQGstsUygXvJIsf1XfWC
- 7JYVtA2VDM1GI7MEWgcs9hahwdScnJOBnHx81neVWnr7dVHEHoFeWdcfGnqZI+REY0Kh
- HkAIJEYg4tM3HrX5IijM3P0+RwkLOjngOMSy2dXbrpyZ6idNVnGAAxF46MT0vG9k2d00
- aGAOciklSKfVrLCsEPLIGk4fhL7h9sYXbdy9+7DjVA9kKzG4OGa1UmbKan8QsdX98uF3
- jsPw==
-X-Gm-Message-State: AOJu0YxDx9nKCvrKzee1QDhT6TuX5U2yq6jQLm4AC+rkJq05PKXdu6Rb
- 9xaDdiZzOa/9zPpoRMp71M0jB17MRZydEDJn9mxlBC/XeDtdkhWFGB7/vA==
-X-Google-Smtp-Source: AGHT+IHSyUZnP+u8iHlH8sPZ/3jTf7/TZt3aZd4CPp/EQyH+1Yvz+Gz7WrukGz1IIHe33KmxWCmuEA==
-X-Received: by 2002:a05:6e02:1543:b0:3a0:4a91:224f with SMTP id
- e9e14a558f8ab-3a08b6f87edmr91098575ab.1.1726445980127; 
- Sun, 15 Sep 2024 17:19:40 -0700 (PDT)
+ bh=6mTyQ7kAtIqHyMjsIdiGLNHH14B4wYVWD432Lh/+1/g=;
+ b=LoB+7V8ymqQtOn4Cipr93REnjqX5MTE1Hg/bLtgbhpQMeouVd4STFeZsHtaw6bEebm
+ 2Pw4f/Yzq8a2zNUS1vIurGx4qnN+He5+hbtweLy51zwXSNwjNmQ2Xpsjk8YHpNyXZg1n
+ +LcCSjq1sLBemcDOpdshB3YFHN/ToPwp4O+qglU5tk+aCqtvRibd3iYP0MA6zTFNkCvg
+ XeJcxGIgeUnIt40B9vRFzLMyjOwqVdtA3fyUKsKmAso8b7+UeSASffmOEOtknJ6SuWTp
+ qNeg/TR4hokt5/StgNb3HC+8tWJG6vJR1JyR3akVwKs3nHx6OpaXUlxBkKtx5sgoWbKw
+ nDPA==
+X-Gm-Message-State: AOJu0YzjTH1Myydpk9Eaa3JYoRCy6vqTpOex6tQ3zJ2hsivwkMr+qtgE
+ RBjls6jeuFUjbp4PRFfgYYgtFC/yWZEzxbNQMozkrJ3JFcNvTX5n6PsbRg==
+X-Google-Smtp-Source: AGHT+IGNNe42NNW6hwjEsdpodOJTkJRpszFDzb1FHo+YjqZDWt4hyCH2sJbr1FsNaTOfOUu41HkaxA==
+X-Received: by 2002:a05:6602:15d2:b0:82d:1ba1:da5b with SMTP id
+ ca18e2360f4ac-82d1f971466mr1019985739f.13.1726446153022; 
+ Sun, 15 Sep 2024 17:22:33 -0700 (PDT)
 Received: from james-x399.localdomain (71-218-252-223.hlrn.qwest.net.
  [71.218.252.223]) by smtp.gmail.com with ESMTPSA id
- 8926c6da1cb9f-4d37ebf42casm1189973173.17.2024.09.15.17.19.39
+ ca18e2360f4ac-82d492694fdsm125123439f.6.2024.09.15.17.22.32
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 15 Sep 2024 17:19:39 -0700 (PDT)
+ Sun, 15 Sep 2024 17:22:32 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 15 Sep 2024 18:19:38 -0600
-Message-Id: <20240916001938.2145540-1-james.hilliard1@gmail.com>
+Date: Sun, 15 Sep 2024 18:22:31 -0600
+Message-Id: <20240916002231.2147897-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1726445980; x=1727050780; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1726446153; x=1727050953; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=8JKH2UkrxvsmxPMpV5EBC/P/kVzc0dbH4+Ifk0JCBSc=;
- b=nJeyhUKCtB0VrAdhn57LgWyQeVWfy22qYwO7FEmgejWfOAs9vgCixNppXL8x6tjZGA
- C0iqswlLqxc50DKYu3qQnOseb2of0lr0O7qGh4a7RweNZHaOZfwAWgO0ovueGblmPLZO
- yYSOMhvxEuTGqcUk9kT40ZIsHxaznB0t7UGU2q20ovhMSz4ubuD36VjkJpq5qfPCF9Ar
- FqGippuebvYthDSZm6SNMlrs6a7VwNNN63hOAiNRxX51tdjkCtLoiRRaQyLEzjROeQji
- nN80p56D+hePVkUVBuejqAtW3cstfleg+9zV/s7biorXE7f8e2uy5TDtVhlK8/HIpNh8
- Q3qw==
+ bh=6mTyQ7kAtIqHyMjsIdiGLNHH14B4wYVWD432Lh/+1/g=;
+ b=NruA2TiN+XAt2SMqWPTYEuxAkogJtDi9OvCkzoIyfyDR590pM+9bvpmfPB7Wryohtu
+ 7LTnbmDPjTUlChUUe3QoXcH4PFVeDT4xdqmdA+qjL7hHFsK95zQbKF/s7taYYpHruyYE
+ O71zmDSNejZJztHkqMbLctsSd6XQ27/06uPvuH4zqGTDS/mRAsBJ5QPqcLj0fqfiiYD9
+ qn8qUmvH3ZNF+oYTNCCqN4/RBcx2LLRstjYtZgdonOZwA/cg+ilq/Uq3Pg5p7PBNWFOZ
+ A6zTVKej+h1YakpJtDziglcDTa61Ggj5b4NBMBGYWhqnELalE2DbHwHcPt9vxBJ34TQU
+ qFaw==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=nJeyhUKC
-Subject: [Buildroot] [PATCH 1/1] package/python-msgpack: bump to version
- 1.1.0
+ header.a=rsa-sha256 header.s=20230601 header.b=NruA2TiN
+Subject: [Buildroot] [PATCH 1/1] package/python-multidict: bump to version
+ 6.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,60 +100,46 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Wojciech M . Zabolotny" <wzab01@gmail.com>,
- James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Drop workaround when a c++ compiler is not available as msgpack
-now uses only pure c extensions.
-
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-msgpack/python-msgpack.hash |  4 ++--
- package/python-msgpack/python-msgpack.mk   | 12 ++----------
- 2 files changed, 4 insertions(+), 12 deletions(-)
+ package/python-multidict/python-multidict.hash | 4 ++--
+ package/python-multidict/python-multidict.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-msgpack/python-msgpack.hash b/package/python-msgpack/python-msgpack.hash
-index 26599f2972..acacd6c664 100644
---- a/package/python-msgpack/python-msgpack.hash
-+++ b/package/python-msgpack/python-msgpack.hash
+diff --git a/package/python-multidict/python-multidict.hash b/package/python-multidict/python-multidict.hash
+index d23a3de3eb..3230ac9b56 100644
+--- a/package/python-multidict/python-multidict.hash
++++ b/package/python-multidict/python-multidict.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/msgpack/json
--md5  6f4d91b00537fd5069dc6bfc52ae5652  msgpack-1.0.8.tar.gz
--sha256  95c02b0e27e706e48d0e5426d1710ca78e0f0628d6e89d5b5a5b91a5f12274f3  msgpack-1.0.8.tar.gz
-+md5  e5769d4ab610491ac561c84fde4cf4a7  msgpack-1.1.0.tar.gz
-+sha256  dd432ccc2c72b914e4cb77afce64aab761c1137cc698be3984eee260bcb2896e  msgpack-1.1.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/multidict/json
+-md5  abcf9bf19365d06aa784de07da02115d  multidict-6.0.5.tar.gz
+-sha256  f7e301075edaf50500f0b341543c41194d8df3ae5caf4702f2095f3ca73dd8da  multidict-6.0.5.tar.gz
++md5  2c8cf03b6e92e1b9c335de56b606c2fc  multidict-6.1.0.tar.gz
++sha256  22ae2ebf9b0c69d206c003e2f6a914ea33f0a932d4aa16f236afc049d9958f4a  multidict-6.1.0.tar.gz
  # Locally computed sha256 checksums
- sha256  492dedba85da5872f78e6091bcd1fea474d660d35acb4dee964b8aab3f007427  COPYING
-diff --git a/package/python-msgpack/python-msgpack.mk b/package/python-msgpack/python-msgpack.mk
-index 4e686a19a6..92d3516186 100644
---- a/package/python-msgpack/python-msgpack.mk
-+++ b/package/python-msgpack/python-msgpack.mk
-@@ -4,19 +4,11 @@
+ sha256  93d11a968e2f0f36373c40811ff6d20e173f58c3cab5884cd6617bbfd795492a  LICENSE
+diff --git a/package/python-multidict/python-multidict.mk b/package/python-multidict/python-multidict.mk
+index 3c9a21f1dc..6b952244bc 100644
+--- a/package/python-multidict/python-multidict.mk
++++ b/package/python-multidict/python-multidict.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_MSGPACK_VERSION = 1.0.8
-+PYTHON_MSGPACK_VERSION = 1.1.0
- PYTHON_MSGPACK_SOURCE = msgpack-$(PYTHON_MSGPACK_VERSION).tar.gz
--PYTHON_MSGPACK_SITE = https://files.pythonhosted.org/packages/08/4c/17adf86a8fbb02c144c7569dc4919483c01a2ac270307e2d59e1ce394087
-+PYTHON_MSGPACK_SITE = https://files.pythonhosted.org/packages/cb/d0/7555686ae7ff5731205df1012ede15dd9d927f6227ea151e901c7406af4f
- PYTHON_MSGPACK_LICENSE = Apache-2.0
- PYTHON_MSGPACK_LICENSE_FILES = COPYING
- PYTHON_MSGPACK_SETUP_TYPE = setuptools
--PYTHON_MSGPACK_BUILD_OPTS = --skip-dependency-check
--
--# When set in the environment, whatever the value, MSGPACK_PUREPYTHON drives
--# using the pure python implementation rather than rely on the C++ native code.
--# So we can't force it to use C++; we can only force it to use pure python.
--ifeq ($(BR2_INSTALL_LIBSTDCPP),)
--PYTHON_MSGPACK_ENV = MSGPACK_PUREPYTHON=1
--endif
- 
- $(eval $(python-package))
+-PYTHON_MULTIDICT_VERSION = 6.0.5
++PYTHON_MULTIDICT_VERSION = 6.1.0
+ PYTHON_MULTIDICT_SOURCE = multidict-$(PYTHON_MULTIDICT_VERSION).tar.gz
+-PYTHON_MULTIDICT_SITE = https://files.pythonhosted.org/packages/f9/79/722ca999a3a09a63b35aac12ec27dfa8e5bb3a38b0f857f7a1a209a88836
++PYTHON_MULTIDICT_SITE = https://files.pythonhosted.org/packages/d6/be/504b89a5e9ca731cd47487e91c469064f8ae5af93b7259758dcfc2b9c848
+ PYTHON_MULTIDICT_SETUP_TYPE = setuptools
+ PYTHON_MULTIDICT_LICENSE = Apache-2.0
+ PYTHON_MULTIDICT_LICENSE_FILES = LICENSE
 -- 
 2.34.1
 
