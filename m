@@ -1,94 +1,95 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D7D6EC3ABB9
-	for <buildroot@archiver.kernel.org>; Mon, 16 Sep 2024 00:22:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3C953C3ABB2
+	for <buildroot@archiver.kernel.org>; Mon, 16 Sep 2024 05:02:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8BCB0403A7;
-	Mon, 16 Sep 2024 00:22:39 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B0DD060617;
+	Mon, 16 Sep 2024 05:02:43 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fMrJaLe5_YkE; Mon, 16 Sep 2024 05:02:42 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B3CB8608AC
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id B3CB8608AC;
+	Mon, 16 Sep 2024 05:02:42 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 135D91BF59A
+ for <buildroot@lists.busybox.net>; Mon, 16 Sep 2024 05:02:41 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 01A24403E5
+ for <buildroot@lists.busybox.net>; Mon, 16 Sep 2024 05:02:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LKvXuyBxMJ4q; Mon, 16 Sep 2024 00:22:38 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 52B21403AF
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 52B21403AF;
-	Mon, 16 Sep 2024 00:22:38 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A993F1BF94D
- for <buildroot@lists.busybox.net>; Mon, 16 Sep 2024 00:22:35 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 988FD400A4
- for <buildroot@lists.busybox.net>; Mon, 16 Sep 2024 00:22:35 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jZ3ekDw-LiKP for <buildroot@lists.busybox.net>;
- Mon, 16 Sep 2024 00:22:34 +0000 (UTC)
+ id wTs_PCGJPCbE for <buildroot@lists.busybox.net>;
+ Mon, 16 Sep 2024 05:02:40 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::d32; helo=mail-io1-xd32.google.com;
- envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 6430040004
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6430040004
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com
- [IPv6:2607:f8b0:4864:20::d32])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 6430040004
- for <buildroot@buildroot.org>; Mon, 16 Sep 2024 00:22:34 +0000 (UTC)
-Received: by mail-io1-xd32.google.com with SMTP id
- ca18e2360f4ac-82a151a65b8so233148639f.2
- for <buildroot@buildroot.org>; Sun, 15 Sep 2024 17:22:34 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::22e; helo=mail-lj1-x22e.google.com;
+ envelope-from=troglobit@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org A3BE7403AF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A3BE7403AF
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com
+ [IPv6:2a00:1450:4864:20::22e])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A3BE7403AF
+ for <buildroot@buildroot.org>; Mon, 16 Sep 2024 05:02:39 +0000 (UTC)
+Received: by mail-lj1-x22e.google.com with SMTP id
+ 38308e7fff4ca-2f75de9a503so41213301fa.0
+ for <buildroot@buildroot.org>; Sun, 15 Sep 2024 22:02:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1726446153; x=1727050953;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=6mTyQ7kAtIqHyMjsIdiGLNHH14B4wYVWD432Lh/+1/g=;
- b=LoB+7V8ymqQtOn4Cipr93REnjqX5MTE1Hg/bLtgbhpQMeouVd4STFeZsHtaw6bEebm
- 2Pw4f/Yzq8a2zNUS1vIurGx4qnN+He5+hbtweLy51zwXSNwjNmQ2Xpsjk8YHpNyXZg1n
- +LcCSjq1sLBemcDOpdshB3YFHN/ToPwp4O+qglU5tk+aCqtvRibd3iYP0MA6zTFNkCvg
- XeJcxGIgeUnIt40B9vRFzLMyjOwqVdtA3fyUKsKmAso8b7+UeSASffmOEOtknJ6SuWTp
- qNeg/TR4hokt5/StgNb3HC+8tWJG6vJR1JyR3akVwKs3nHx6OpaXUlxBkKtx5sgoWbKw
- nDPA==
-X-Gm-Message-State: AOJu0YzjTH1Myydpk9Eaa3JYoRCy6vqTpOex6tQ3zJ2hsivwkMr+qtgE
- RBjls6jeuFUjbp4PRFfgYYgtFC/yWZEzxbNQMozkrJ3JFcNvTX5n6PsbRg==
-X-Google-Smtp-Source: AGHT+IGNNe42NNW6hwjEsdpodOJTkJRpszFDzb1FHo+YjqZDWt4hyCH2sJbr1FsNaTOfOUu41HkaxA==
-X-Received: by 2002:a05:6602:15d2:b0:82d:1ba1:da5b with SMTP id
- ca18e2360f4ac-82d1f971466mr1019985739f.13.1726446153022; 
- Sun, 15 Sep 2024 17:22:33 -0700 (PDT)
-Received: from james-x399.localdomain (71-218-252-223.hlrn.qwest.net.
- [71.218.252.223]) by smtp.gmail.com with ESMTPSA id
- ca18e2360f4ac-82d492694fdsm125123439f.6.2024.09.15.17.22.32
+ d=1e100.net; s=20230601; t=1726462957; x=1727067757;
+ h=content-transfer-encoding:organization:mime-version:message-id:date
+ :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=S70GnA4nk/RD6WHSS665ruDyTr7t9YRlIq0bJlEcZss=;
+ b=jKl6P7ud0PhfXctRu/YxD8Jk4x/i3KmGtL5BVWKTVEfS+jYjznXrybaH8nkTiKSzWc
+ WCczQ5VR3SEKFmmxT2u83Gbn2MhW3V30rAE2uODrztlvIX/770LzjYXox7k1uqMoDNzp
+ aFRjSA7SKijNV3CvbCuukY0v8fgx3J6vxssZhTZzZe8CaifBegW6cuJQ/5bpU8xnPVAO
+ 5GImOadkscnbWDhjqFVY1dhPvOW1F0/MYPkJD3B5ovCJWUXV4A70xIaByh2cPaUc8mOZ
+ pPJ+cb1y/7p+g4EECyK+X4SrqIfZW7CdhrKcYppmwOn56Ye8cogkQN7uS2Bh/IuXMECp
+ kaHQ==
+X-Gm-Message-State: AOJu0Yw8Rkh03pQYxX65N6cG8hGkbUeEdFDV/akn98arfaC4aM03OhDt
+ GYCkWNaEs+gt+AzfI7+qBEGDIiEri9k0nbiF4o+J6N/jiTX+WQb6jASlzQ==
+X-Google-Smtp-Source: AGHT+IEE9CXvYNmyv/T34N/Gf7BrVS4FicMflOrTk0fWgRyJfswI95rB3MySaCH8SlRfSM85+n84FA==
+X-Received: by 2002:a05:6512:230a:b0:530:e1f1:8dc9 with SMTP id
+ 2adb3069b0e04-53678fed1b2mr5939053e87.46.1726462956136; 
+ Sun, 15 Sep 2024 22:02:36 -0700 (PDT)
+Received: from gimli.lan ([2001:9b0:214:3500::522])
+ by smtp.gmail.com with ESMTPSA id
+ 2adb3069b0e04-536870b8ccbsm762996e87.279.2024.09.15.22.02.33
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 15 Sep 2024 17:22:32 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
+ Sun, 15 Sep 2024 22:02:34 -0700 (PDT)
+From: Joachim Wiberg <troglobit@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 15 Sep 2024 18:22:31 -0600
-Message-Id: <20240916002231.2147897-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Date: Mon, 16 Sep 2024 07:02:31 +0200
+Message-ID: <20240916050231.85966-1-troglobit@gmail.com>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
+Organization: Addiva Elektronik
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1726446153; x=1727050953; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=6mTyQ7kAtIqHyMjsIdiGLNHH14B4wYVWD432Lh/+1/g=;
- b=NruA2TiN+XAt2SMqWPTYEuxAkogJtDi9OvCkzoIyfyDR590pM+9bvpmfPB7Wryohtu
- 7LTnbmDPjTUlChUUe3QoXcH4PFVeDT4xdqmdA+qjL7hHFsK95zQbKF/s7taYYpHruyYE
- O71zmDSNejZJztHkqMbLctsSd6XQ27/06uPvuH4zqGTDS/mRAsBJ5QPqcLj0fqfiiYD9
- qn8qUmvH3ZNF+oYTNCCqN4/RBcx2LLRstjYtZgdonOZwA/cg+ilq/Uq3Pg5p7PBNWFOZ
- A6zTVKej+h1YakpJtDziglcDTa61Ggj5b4NBMBGYWhqnELalE2DbHwHcPt9vxBJ34TQU
- qFaw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=gmail.com; s=20230601; t=1726462957; x=1727067757; darn=buildroot.org;
+ h=content-transfer-encoding:organization:mime-version:message-id:date
+ :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=S70GnA4nk/RD6WHSS665ruDyTr7t9YRlIq0bJlEcZss=;
+ b=QW7sBpYZtVB/D+bVUCI1q8O5Ibuka8ez/wVDKFwRmBqClBMth7mlW8BQbgU6+0UH40
+ OwgajTptzaR5f49bqg6tZWwoFedwp92RtExRyNgqcxg/9KZPfK/1AHnpPnNnUscqrcu5
+ OkUThUdnxid0IPECKxxi66mPcAQcAG68bKkeHDMr4sW3eUM7OoWBSqJvVS9tWdTw/IM2
+ 29sulOYhc8LDdw0O0fgmR7gkZjrC04mXeEOmq/osHo6MCz2AMMqJgj56zMLFF9s2nW7l
+ beZI7XwntMVj1LiGuTV1ljFh3xwR6V3j9xdCoQHySHxGdRVndDMHvMqFVlYvuuIlL2fX
+ V8ew==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=NruA2TiN
-Subject: [Buildroot] [PATCH 1/1] package/python-multidict: bump to version
- 6.1.0
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=QW7sBpYZ
+Subject: [Buildroot] [PATCH 1/1] package/sysklogd: bump to v2.6.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,48 +101,58 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Cc: Joachim Wiberg <troglobit@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/python-multidict/python-multidict.hash | 4 ++--
- package/python-multidict/python-multidict.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+From https://github.com/troglobit/sysklogd/releases/tag/v2.6.2:
 
-diff --git a/package/python-multidict/python-multidict.hash b/package/python-multidict/python-multidict.hash
-index d23a3de3eb..3230ac9b56 100644
---- a/package/python-multidict/python-multidict.hash
-+++ b/package/python-multidict/python-multidict.hash
+ - syslog.conf: misplaced continuation character in example
+ - Add facility aliases for RFC5424 compliance: LOG_CRON2 and LOG_AUDIT,
+   including facilitynames[] = cron2, audit.  Used by the native logger
+   tool (and any clients linking to libsyslog)
+ - Fix data corruption using the listen directive, introduced in 2.6.0
+ - Fix IPv6 addresses in listen directive, introduced in 2.6.0
+ - Fix logging to remote IPv6 address, add support for parsing
+   [fdd5::6979:c0ff:ee87:8f92]:123 style addresses
+ - Fix initial delay for unresolvable remote target.  When a DNS name
+   cannot be resolved, e.g., critically at boot, syslogd blocked with
+   default resolver timeout (5 * 2 sec)
+
+Signed-off-by: Joachim Wiberg <troglobit@gmail.com>
+---
+ package/sysklogd/sysklogd.hash | 2 +-
+ package/sysklogd/sysklogd.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/sysklogd/sysklogd.hash b/package/sysklogd/sysklogd.hash
+index 0a5790a1a5..8b1cd63a73 100644
+--- a/package/sysklogd/sysklogd.hash
++++ b/package/sysklogd/sysklogd.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/multidict/json
--md5  abcf9bf19365d06aa784de07da02115d  multidict-6.0.5.tar.gz
--sha256  f7e301075edaf50500f0b341543c41194d8df3ae5caf4702f2095f3ca73dd8da  multidict-6.0.5.tar.gz
-+md5  2c8cf03b6e92e1b9c335de56b606c2fc  multidict-6.1.0.tar.gz
-+sha256  22ae2ebf9b0c69d206c003e2f6a914ea33f0a932d4aa16f236afc049d9958f4a  multidict-6.1.0.tar.gz
- # Locally computed sha256 checksums
- sha256  93d11a968e2f0f36373c40811ff6d20e173f58c3cab5884cd6617bbfd795492a  LICENSE
-diff --git a/package/python-multidict/python-multidict.mk b/package/python-multidict/python-multidict.mk
-index 3c9a21f1dc..6b952244bc 100644
---- a/package/python-multidict/python-multidict.mk
-+++ b/package/python-multidict/python-multidict.mk
-@@ -4,9 +4,9 @@
+ # Upstream .sha256 from GitHub
+-sha256  e35d5c5f55019976302ac9818890bd6b6858db257506f0e9afaa718a8dee9cc3  sysklogd-2.6.1.tar.gz
++sha256  40a3bb593d7507e49a4379f48ae8a9bc4b68dcc583efcdbf3b9056128442c92a  sysklogd-2.6.2.tar.gz
+ 
+ # Locally calculated
+ sha256  7a71d7603a7c4456df441463e54da35acf151c1be0879246de63544f1f34f477  LICENSE
+diff --git a/package/sysklogd/sysklogd.mk b/package/sysklogd/sysklogd.mk
+index 86bd4ef168..eeb3a3748d 100644
+--- a/package/sysklogd/sysklogd.mk
++++ b/package/sysklogd/sysklogd.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_MULTIDICT_VERSION = 6.0.5
-+PYTHON_MULTIDICT_VERSION = 6.1.0
- PYTHON_MULTIDICT_SOURCE = multidict-$(PYTHON_MULTIDICT_VERSION).tar.gz
--PYTHON_MULTIDICT_SITE = https://files.pythonhosted.org/packages/f9/79/722ca999a3a09a63b35aac12ec27dfa8e5bb3a38b0f857f7a1a209a88836
-+PYTHON_MULTIDICT_SITE = https://files.pythonhosted.org/packages/d6/be/504b89a5e9ca731cd47487e91c469064f8ae5af93b7259758dcfc2b9c848
- PYTHON_MULTIDICT_SETUP_TYPE = setuptools
- PYTHON_MULTIDICT_LICENSE = Apache-2.0
- PYTHON_MULTIDICT_LICENSE_FILES = LICENSE
+-SYSKLOGD_VERSION = 2.6.1
++SYSKLOGD_VERSION = 2.6.2
+ SYSKLOGD_SITE = https://github.com/troglobit/sysklogd/releases/download/v$(SYSKLOGD_VERSION)
+ SYSKLOGD_LICENSE = BSD-3-Clause
+ SYSKLOGD_LICENSE_FILES = LICENSE
 -- 
-2.34.1
+2.43.0
 
 _______________________________________________
 buildroot mailing list
