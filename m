@@ -1,96 +1,71 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 05A32C3ABB2
-	for <buildroot@archiver.kernel.org>; Mon, 16 Sep 2024 15:13:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8E34C3ABA2
+	for <buildroot@archiver.kernel.org>; Mon, 16 Sep 2024 17:04:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C9F24410F6;
-	Mon, 16 Sep 2024 15:13:07 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6551C403B0;
+	Mon, 16 Sep 2024 17:04:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id N9ib0PpZ35an; Mon, 16 Sep 2024 15:13:06 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id EXasnRwTnMKm; Mon, 16 Sep 2024 17:04:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6923740C6F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 00BB94061C
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6923740C6F;
-	Mon, 16 Sep 2024 15:13:05 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 218BB1BF41D
- for <buildroot@lists.busybox.net>; Mon, 16 Sep 2024 15:12:26 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 00BB94061C;
+	Mon, 16 Sep 2024 17:04:16 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 3EF521BF34E
+ for <buildroot@lists.busybox.net>; Mon, 16 Sep 2024 17:04:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DDDB740C2A
- for <buildroot@lists.busybox.net>; Mon, 16 Sep 2024 15:12:25 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3B1E260ADC
+ for <buildroot@lists.busybox.net>; Mon, 16 Sep 2024 17:04:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RueNDuaKMCBc for <buildroot@lists.busybox.net>;
- Mon, 16 Sep 2024 15:12:24 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::644; helo=mail-ej1-x644.google.com;
- envelope-from=adam.duskett@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0F49C40C6F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0F49C40C6F
-Received: from mail-ej1-x644.google.com (mail-ej1-x644.google.com
- [IPv6:2a00:1450:4864:20::644])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0F49C40C6F
- for <buildroot@buildroot.org>; Mon, 16 Sep 2024 15:12:23 +0000 (UTC)
-Received: by mail-ej1-x644.google.com with SMTP id
- a640c23a62f3a-a8a765f980dso86480866b.1
- for <buildroot@buildroot.org>; Mon, 16 Sep 2024 08:12:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1726499542; x=1727104342;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=VWMAkbEFHNfGhLPk2talQ4v13JTmY9zsXtAUeFdsZ6U=;
- b=IiFtfCEMPiB1MiqOVWr3bvSZDuKmu7oXuqcVjlm5RIGS3IiJ4b7s1salM812uH6r61
- eznBqIqpF5gIOPaRODCXBeIYmHYfGtH3OW8GPuR+AaYbYbSWSGjXPQI0rJUUrymZae9q
- kXe5hH8y6A0CEuuxunKWyRrk4BMyon+qzMhw+MJMhpUkqseOkpH4hVWCWzJpr+vly03X
- Xq+oClvvOBtTApSPUQjCVrBL6qcoLY4oj3RTlWOtfjpPKvT7KOkzttdjuDI2eGTJwF62
- PnRdoetyU3K0u2TY5/Nb7rwptU1oVSFxWdzIRzjMmjULncaxGHqp7eGC8JewIYKcUQcp
- 9Vtg==
-X-Gm-Message-State: AOJu0YyhsFn0UFglp1xqkB8Y3pVHqNiA121j+cx8PYHEtWJRymXRrFMy
- KrOMYv4g8LiyGqIov+2Lwz4q0NM6lMR63IZR8Wm3GDTbz/7i0cH1toJPNV0mjQ1dNeAJh00j0gF
- SGZQ3Muj6
-X-Google-Smtp-Source: AGHT+IGf/viag/hQ2afZgDJGKI4X1i0vxIqtafLUK3kvsRHoTk0Vn0aOZm8TFBOeJMXnKOGVaSDxTg==
-X-Received: by 2002:a17:907:6e8e:b0:a8d:2624:1a85 with SMTP id
- a640c23a62f3a-a9029641b35mr654104566b.12.1726499541469; 
- Mon, 16 Sep 2024 08:12:21 -0700 (PDT)
-Received: from adam-laptop.ipgroup.local (212-57-59-66.xdsl.deanconnect.nl.
- [212.57.59.66]) by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-a90610f440bsm330460166b.86.2024.09.16.08.12.21
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 16 Sep 2024 08:12:21 -0700 (PDT)
-From: Adam Duskett <adam.duskett@amarulasolutions.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WRcuiIiQz3iU for <buildroot@lists.busybox.net>;
+ Mon, 16 Sep 2024 17:04:14 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.150.162;
+ helo=dd33218.kasserver.com; envelope-from=brpi@duering-andreas.de;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 3CF0860ACD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3CF0860ACD
+Received: from dd33218.kasserver.com (dd33218.kasserver.com [85.13.150.162])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 3CF0860ACD
+ for <buildroot@buildroot.org>; Mon, 16 Sep 2024 17:04:14 +0000 (UTC)
+Received: from localhost.localdomain (i6DFA2813.versanet.de [109.250.40.19])
+ by dd33218.kasserver.com (Postfix) with ESMTPSA id EA821200122C;
+ Mon, 16 Sep 2024 19:04:10 +0200 (CEST)
 To: buildroot@buildroot.org
-Date: Mon, 16 Sep 2024 17:12:06 +0200
-Message-ID: <20240916151206.947484-14-adam.duskett@amarulasolutions.com>
-X-Mailer: git-send-email 2.46.0
-In-Reply-To: <20240916151206.947484-1-adam.duskett@amarulasolutions.com>
-References: <20240916151206.947484-1-adam.duskett@amarulasolutions.com>
+Date: Mon, 16 Sep 2024 19:03:40 +0200
+Message-Id: <20240916170340.13019-1-brpi@duering-andreas.de>
+X-Mailer: git-send-email 2.39.5
 MIME-Version: 1.0
+X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1726499542; x=1727104342;
- darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=VWMAkbEFHNfGhLPk2talQ4v13JTmY9zsXtAUeFdsZ6U=;
- b=MM02e6F+TIDEsF+baDN978VzEZGqq3J8McJxfCGqTyOZexHl9/PoGK8UBe7G78XKS+
- EKnpna2xRtUsTcGShLXQvOQDqTCPN9vKLa/eCA77+lW7YMZxngzd9rIrPxZFKSg9kFUT
- L2VFyZICqjtFhWIfJwAOoNeeVL83PChI+Jnww=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key) header.d=amarulasolutions.com
- header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=MM02e6F+
-Subject: [Buildroot] [PATCH 13/13] package/audit: bump version to 4.0.2
+ d=duering-andreas.de; 
+ s=kas201911161523; t=1726506251;
+ bh=mQDeJTBzirFhIb9lS0i2D5wgcXB/k6vMRM3ujWRI1eU=;
+ h=From:To:Cc:Subject:Date:From;
+ b=mDrbhGs2jO/lYNkSY+t3584uDHUpzibsZYGlEU3FADL63zq4+0Ol8o+qDQTWSwe2Z
+ xV48ldKw3+gYisBFamB45LXMbvAXYKVUSLUIkUC5h8epmDU2xo+btilHEsdxCO22RS
+ zjTEa3pc31NabvmAARU4xyFP8n8YCVwYUQL7hegB60bnWeZIpDSBR7fIvv3IVuhHdx
+ rwYEyw4GQjPC+jEUboIDtQJY3HmPy0Wfh94eId3Um8ADNB3ePQx64/YOuH/lMuPdMj
+ kZMuR10KNb8NeX+PRxcfuSCb7TtXj/jNnJMg0z0PXBk2iwHrDuXFLEtdBE6+akn1ZU
+ mA10NrVQRCzfQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=duering-andreas.de
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=duering-andreas.de header.i=@duering-andreas.de
+ header.a=rsa-sha256 header.s=kas201911161523 header.b=mDrbhGs2
+Subject: [Buildroot] [PATCH v1 1/1] package/mbedtls: Move test binaries to
+ subdirectory
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,169 +77,113 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Marcus Folkesson <marcus.folkesson@gmail.com>,
- Adam Duskett <adam.duskett@amarulasolutions.com>,
- Antoine Tenart <atenart@kernel.org>,
- Marek Belisko <marek.belisko@open-nandra.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+From: =?utf-8?q?Andreas_D=C3=BCring_via_buildroot?= <buildroot@buildroot.org>
+Reply-To: =?UTF-8?q?Andreas=20D=C3=BCring?= <brpi@duering-andreas.de>
+Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
+ =?UTF-8?q?Andreas=20D=C3=BCring?= <brpi@duering-andreas.de>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-In addition, audit 4.x now provides two service files:
- - audit-rules.service
- - auditd.service, which depends on audit-rules.service
-
-audit-rules.service is a one-shot service that runs augenrules --load.
-To keep audit compatible with sysvinit-based systems, create a new file,
-S02augenrules, and move S02auditd to S03auditd. This change keeps the basic
-format of the systemd provided service files for ease of maintance.
-
-Other changes:
- - The --without-python option is no longer present.
- - There is no longer a --enable/--disable-systemd option.
- - audit.rules are no longer autogenerated on startup. As such, the RedHat
-   rpm .spec logic is copied, and $(@D)/rules/10-base-config.rules is copied
-   to $(TARGET_DIR)/etc/audit/rules.d/audit.rules as part of the
-   POST_INSTALL_TARGET_HOOKS. If /etc/audit/rules.d/audit.rules does not exit
-   on the target, auditd fails to run. This change is also a bonus for
-   read-only systems and the audit.rules file is guaranteed to be on the system.
-
-Tested with qemu_x86_64_defconfig and running checking if audit is running
-properly.
-
-Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
----
- package/audit/S02augenrules            | 31 ++++++++++++++++++++++++++
- package/audit/{S02auditd => S03auditd} |  4 +---
- package/audit/audit.hash               |  2 +-
- package/audit/audit.mk                 | 20 +++++++++--------
- 4 files changed, 44 insertions(+), 13 deletions(-)
- create mode 100644 package/audit/S02augenrules
- rename package/audit/{S02auditd => S03auditd} (87%)
-
-diff --git a/package/audit/S02augenrules b/package/audit/S02augenrules
-new file mode 100644
-index 0000000000..70342a231c
---- /dev/null
-+++ b/package/audit/S02augenrules
-@@ -0,0 +1,31 @@
-+#!/bin/sh
-+#
-+# audi       This starts and stops auditd
-+#
-+# description: This starts the Linux Auditing System Daemon,
-+#              which collects security related events in a dedicated
-+#              audit log. If this daemon is turned off, audit events
-+#              will be sent to syslog.
-+#
-+
-+DAEMON="augenrules"
-+
-+start(){
-+	printf "Starting %s: " "${DAEMON}"
-+	# Run audit daemon executable
-+	if /usr/sbin/"${DAEMON}" --load > /dev/null 2>&1; then
-+		echo "OK"
-+	else
-+		echo "FAIL"
-+	fi
-+}
-+
-+case "$1" in
-+	start)
-+		start
-+		;;
-+	*)
-+		echo "Usage: $0 {start}"
-+		exit 1
-+		;;
-+esac
-diff --git a/package/audit/S02auditd b/package/audit/S03auditd
-similarity index 87%
-rename from package/audit/S02auditd
-rename to package/audit/S03auditd
-index b23c49a125..9b3f633812 100644
---- a/package/audit/S02auditd
-+++ b/package/audit/S03auditd
-@@ -23,9 +23,7 @@ start(){
- 	fi
- 
- 	# Run audit daemon executable
--	if start-stop-daemon -S -q -p "${PIDFILE}" --exec /usr/sbin/"${DAEMON}"; then
--		# Load the default rules
--		test -f /etc/audit/rules.d/audit.rules && /usr/sbin/auditctl -R /etc/audit/rules.d/audit.rules >/dev/null
-+	if start-stop-daemon -S -p "${PIDFILE}" --exec /usr/sbin/"${DAEMON}"; then
- 		echo "OK"
- 	else
- 		echo "FAIL"
-diff --git a/package/audit/audit.hash b/package/audit/audit.hash
-index 5743b3a13a..6db85f1b33 100644
---- a/package/audit/audit.hash
-+++ b/package/audit/audit.hash
-@@ -1,4 +1,4 @@
- #Locally computed
--sha256  c0b1792d1f0a88c6f1828710509cbb987059fc68712c97669ca90eae103d287d  audit-3.1.2.tar.gz
-+sha256  d5d1b5d50ee4a2d0d17875bc6ae6bd6a7d5b34d9557ea847a39faec531faaa0a  audit-4.0.2.tar.gz
- sha256  32b1062f7da84967e7019d01ab805935caa7ab7321a7ced0e30ebe75e5df1670  COPYING
- sha256  f18a0811fa0e220ccbc42f661545e77f0388631e209585ed582a1c693029c6aa  COPYING.LIB
-diff --git a/package/audit/audit.mk b/package/audit/audit.mk
-index c703acc559..161c15e70f 100644
---- a/package/audit/audit.mk
-+++ b/package/audit/audit.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--AUDIT_VERSION = 3.1.2
-+AUDIT_VERSION = 4.0.2
- AUDIT_SITE = http://people.redhat.com/sgrubb/audit
- AUDIT_LICENSE = GPL-2.0+ (programs), LGPL-2.1+ (libraries)
- AUDIT_LICENSE_FILES = COPYING COPYING.LIB
-@@ -13,7 +13,7 @@ AUDIT_CPE_ID_PRODUCT = linux_audit
- 
- AUDIT_INSTALL_STAGING = YES
- 
--AUDIT_CONF_OPTS = --without-python --without-python3 --disable-zos-remote
-+AUDIT_CONF_OPTS = --without-python3 --disable-zos-remote
- 
- # src/libev has some assembly function that is not present in Thumb mode:
- # Error: selected processor does not support `mcr p15,0,r3,c7,c10,5' in Thumb mode
-@@ -40,14 +40,9 @@ ifeq ($(BR2_aarch64),y)
- AUDIT_CONF_OPTS += --with-aarch64
- endif
- 
--ifeq ($(BR2_INIT_SYSTEMD),y)
--AUDIT_CONF_OPTS += --enable-systemd
--else
--AUDIT_CONF_OPTS += --disable-systemd
--endif
--
- define AUDIT_INSTALL_INIT_SYSV
--	$(INSTALL) -D -m 755 package/audit/S02auditd $(TARGET_DIR)/etc/init.d/S02auditd
-+	$(INSTALL) -D -m 755 package/audit/S02augenrules $(TARGET_DIR)/etc/init.d/S02augenrules
-+	$(INSTALL) -D -m 755 package/audit/S03auditd $(TARGET_DIR)/etc/init.d/S03auditd
- endef
- 
- define AUDIT_INSTALL_INIT_SYSTEMD
-@@ -55,6 +50,13 @@ define AUDIT_INSTALL_INIT_SYSTEMD
- 		$(TARGET_DIR)/usr/lib/tmpfiles.d/audit.conf
- endef
- 
-+define AUDIT_INSTALL_RULES
-+	mkdir -p $(TARGET_DIR)/etc/audit/rules.d
-+	$(INSTALL) -m 0640 $(@D)/rules/10-base-config.rules \
-+		$(TARGET_DIR)/etc/audit/rules.d/audit.rules
-+endef
-+AUDIT_POST_INSTALL_TARGET_HOOKS += AUDIT_INSTALL_RULES
-+
- define AUDIT_INSTALL_CLEANUP
- 	$(RM) $(TARGET_DIR)/etc/rc.d/init.d/auditd
- 	$(RM) $(TARGET_DIR)/etc/sysconfig/auditd
--- 
-2.46.0
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+VGhlIG1iZWR0bHMgcGFja2FnZSBoYXMgYSBjb25maWcgb3B0aW9uIEJSMl9QQUNLQUdFX01CRURU
+TFNfUFJPR1JBTVMsCndoaWNoIGVuYWJsZXMgc29tZSB0ZXN0IHByb2dyYW1zIHRvIGJlIGJ1aWx0
+IGFuZCBpbnN0YWxsZWQuCkhvd2V2ZXIsIHNvbWUgb2YgdGhlIHRlc3QgcHJvZ3JhbXMgaGF2ZSB1
+bmZvcnR1bmF0ZSBuYW1lcywKZS5nLiAiaGVsbG8iIGFuZCAic3RyZXJyb3IiLCB3aGljaCBtYXkg
+bGVhZCB0byBuYW1lIGNvbGxpc2lvbnMgKD8pCmFuZCBhbHNvIG90aGVyd2lzZSAicG9sbHV0ZSIg
+L3Vzci9iaW4vLgoKQWRkIGEgcGF0Y2ggdG8gdGhlIENNYWtlTGlzdHMudHh0IGZpbGVzLCBzbyB0
+aGF0IHRoZSBiaW5hcmllcyBnbwp0byAvdXNyL2Jpbi9tYmVkdGxzLgoKU2lnbmVkLW9mZi1ieTog
+QW5kcmVhcyBEw7xyaW5nIDxicnBpQGR1ZXJpbmctYW5kcmVhcy5kZT4KLS0tCiAuLi4wMDEtaW5z
+dGFsbC1wcm9ncmFtcy10by1zdWJkaXJlY3RvcnkucGF0Y2ggfCAxMDMgKysrKysrKysrKysrKysr
+KysrCiAxIGZpbGUgY2hhbmdlZCwgMTAzIGluc2VydGlvbnMoKykKIGNyZWF0ZSBtb2RlIDEwMDY0
+NCBwYWNrYWdlL21iZWR0bHMvMDAwMS1pbnN0YWxsLXByb2dyYW1zLXRvLXN1YmRpcmVjdG9yeS5w
+YXRjaAoKZGlmZiAtLWdpdCBhL3BhY2thZ2UvbWJlZHRscy8wMDAxLWluc3RhbGwtcHJvZ3JhbXMt
+dG8tc3ViZGlyZWN0b3J5LnBhdGNoIGIvcGFja2FnZS9tYmVkdGxzLzAwMDEtaW5zdGFsbC1wcm9n
+cmFtcy10by1zdWJkaXJlY3RvcnkucGF0Y2gKbmV3IGZpbGUgbW9kZSAxMDA2NDQKaW5kZXggMDAw
+MDAwMDAwMC4uNWEyOGRjZmMzMQotLS0gL2Rldi9udWxsCisrKyBiL3BhY2thZ2UvbWJlZHRscy8w
+MDAxLWluc3RhbGwtcHJvZ3JhbXMtdG8tc3ViZGlyZWN0b3J5LnBhdGNoCkBAIC0wLDAgKzEsMTAz
+IEBACitJbnN0YWxsIG1iZWR0bHMgdGVzdCBwcm9ncmFtcyB0byBhIHN1YmRpcmVjdG9yeQorCitU
+aGlzIGlzIHRvIGF2b2lkIGNvbGxpc2lvbnMgKGUuZy4gImhlbGxvIikuCisKK1NpZ25lZC1vZmYt
+Ynk6IEFuZHJlYXMgRMO8cmluZyA8YnJwaUBkdWVyaW5nLWFuZHJlYXMuZGU+CitJbmRleDogbWJl
+ZHRscy0yLjI4LjgvcHJvZ3JhbXMvYWVzL0NNYWtlTGlzdHMudHh0Cis9PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09CistLS0g
+bWJlZHRscy0yLjI4Ljgub3JpZy9wcm9ncmFtcy9hZXMvQ01ha2VMaXN0cy50eHQKKysrKyBtYmVk
+dGxzLTIuMjguOC9wcm9ncmFtcy9hZXMvQ01ha2VMaXN0cy50eHQKK0BAIC04LDUgKzgsNSBAQCBm
+b3JlYWNoKGV4ZSBJTiBMSVNUUyBleGVjdXRhYmxlcykKKyBlbmRmb3JlYWNoKCkKKyAKKyBpbnN0
+YWxsKFRBUkdFVFMgJHtleGVjdXRhYmxlc30KKy0gICAgICAgIERFU1RJTkFUSU9OICJiaW4iCisr
+ICAgICAgICBERVNUSU5BVElPTiAiYmluL21iZWR0bHMiCisgICAgICAgICBQRVJNSVNTSU9OUyBP
+V05FUl9SRUFEIE9XTkVSX1dSSVRFIE9XTkVSX0VYRUNVVEUgR1JPVVBfUkVBRCBHUk9VUF9FWEVD
+VVRFIFdPUkxEX1JFQUQgV09STERfRVhFQ1VURSkKK0luZGV4OiBtYmVkdGxzLTIuMjguOC9wcm9n
+cmFtcy9oYXNoL0NNYWtlTGlzdHMudHh0Cis9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09CistLS0gbWJlZHRscy0yLjI4Ljgu
+b3JpZy9wcm9ncmFtcy9oYXNoL0NNYWtlTGlzdHMudHh0CisrKysgbWJlZHRscy0yLjI4LjgvcHJv
+Z3JhbXMvaGFzaC9DTWFrZUxpc3RzLnR4dAorQEAgLTksNSArOSw1IEBAIGZvcmVhY2goZXhlIElO
+IExJU1RTIGV4ZWN1dGFibGVzKQorIGVuZGZvcmVhY2goKQorIAorIGluc3RhbGwoVEFSR0VUUyAk
+e2V4ZWN1dGFibGVzfQorLSAgICAgICAgREVTVElOQVRJT04gImJpbiIKKysgICAgICAgIERFU1RJ
+TkFUSU9OICJiaW4vbWJlZHRscyIKKyAgICAgICAgIFBFUk1JU1NJT05TIE9XTkVSX1JFQUQgT1dO
+RVJfV1JJVEUgT1dORVJfRVhFQ1VURSBHUk9VUF9SRUFEIEdST1VQX0VYRUNVVEUgV09STERfUkVB
+RCBXT1JMRF9FWEVDVVRFKQorSW5kZXg6IG1iZWR0bHMtMi4yOC44L3Byb2dyYW1zL3BrZXkvQ01h
+a2VMaXN0cy50eHQKKz09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT0KKy0tLSBtYmVkdGxzLTIuMjguOC5vcmlnL3Byb2dyYW1z
+L3BrZXkvQ01ha2VMaXN0cy50eHQKKysrKyBtYmVkdGxzLTIuMjguOC9wcm9ncmFtcy9wa2V5L0NN
+YWtlTGlzdHMudHh0CitAQCAtMzUsNSArMzUsNSBAQCBmb3JlYWNoKGV4ZSBJTiBMSVNUUyBleGVj
+dXRhYmxlc19tYmVkY3J5CisgZW5kZm9yZWFjaCgpCisgCisgaW5zdGFsbChUQVJHRVRTICR7ZXhl
+Y3V0YWJsZXNfbWJlZHRsc30gJHtleGVjdXRhYmxlc19tYmVkY3J5cHRvfQorLSAgICAgICAgREVT
+VElOQVRJT04gImJpbiIKKysgICAgICAgIERFU1RJTkFUSU9OICJiaW4vbWJlZHRscyIKKyAgICAg
+ICAgIFBFUk1JU1NJT05TIE9XTkVSX1JFQUQgT1dORVJfV1JJVEUgT1dORVJfRVhFQ1VURSBHUk9V
+UF9SRUFEIEdST1VQX0VYRUNVVEUgV09STERfUkVBRCBXT1JMRF9FWEVDVVRFKQorSW5kZXg6IG1i
+ZWR0bHMtMi4yOC44L3Byb2dyYW1zL3BzYS9DTWFrZUxpc3RzLnR4dAorPT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQorLS0t
+IG1iZWR0bHMtMi4yOC44Lm9yaWcvcHJvZ3JhbXMvcHNhL0NNYWtlTGlzdHMudHh0CisrKysgbWJl
+ZHRscy0yLjI4LjgvcHJvZ3JhbXMvcHNhL0NNYWtlTGlzdHMudHh0CitAQCAtMTgsNCArMTgsNCBA
+QCBpbnN0YWxsKFRBUkdFVFMgJHtleGVjdXRhYmxlc30KKyAKKyBpbnN0YWxsKFBST0dSQU1TCisg
+ICAgICAgICAgICAga2V5X2xhZGRlcl9kZW1vLnNoCistICAgICAgICBERVNUSU5BVElPTiAiYmlu
+IikKKysgICAgICAgIERFU1RJTkFUSU9OICJiaW4vbWJlZHRscyIpCitJbmRleDogbWJlZHRscy0y
+LjI4LjgvcHJvZ3JhbXMvcmFuZG9tL0NNYWtlTGlzdHMudHh0Cis9PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09CistLS0gbWJl
+ZHRscy0yLjI4Ljgub3JpZy9wcm9ncmFtcy9yYW5kb20vQ01ha2VMaXN0cy50eHQKKysrKyBtYmVk
+dGxzLTIuMjguOC9wcm9ncmFtcy9yYW5kb20vQ01ha2VMaXN0cy50eHQKK0BAIC0xMCw1ICsxMCw1
+IEBAIGZvcmVhY2goZXhlIElOIExJU1RTIGV4ZWN1dGFibGVzKQorIGVuZGZvcmVhY2goKQorIAor
+IGluc3RhbGwoVEFSR0VUUyAke2V4ZWN1dGFibGVzfQorLSAgICAgICAgREVTVElOQVRJT04gImJp
+biIKKysgICAgICAgIERFU1RJTkFUSU9OICJiaW4vbWJlZHRscyIKKyAgICAgICAgIFBFUk1JU1NJ
+T05TIE9XTkVSX1JFQUQgT1dORVJfV1JJVEUgT1dORVJfRVhFQ1VURSBHUk9VUF9SRUFEIEdST1VQ
+X0VYRUNVVEUgV09STERfUkVBRCBXT1JMRF9FWEVDVVRFKQorSW5kZXg6IG1iZWR0bHMtMi4yOC44
+L3Byb2dyYW1zL3NzbC9DTWFrZUxpc3RzLnR4dAorPT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQorLS0tIG1iZWR0bHMtMi4y
+OC44Lm9yaWcvcHJvZ3JhbXMvc3NsL0NNYWtlTGlzdHMudHh0CisrKysgbWJlZHRscy0yLjI4Ljgv
+cHJvZ3JhbXMvc3NsL0NNYWtlTGlzdHMudHh0CitAQCAtNTAsNSArNTAsNSBAQCBpZihUSFJFQURT
+X0ZPVU5EKQorIGVuZGlmKFRIUkVBRFNfRk9VTkQpCisgCisgaW5zdGFsbChUQVJHRVRTICR7ZXhl
+Y3V0YWJsZXN9CistICAgICAgICBERVNUSU5BVElPTiAiYmluIgorKyAgICAgICAgREVTVElOQVRJ
+T04gImJpbi9tYmVkdGxzIgorICAgICAgICAgUEVSTUlTU0lPTlMgT1dORVJfUkVBRCBPV05FUl9X
+UklURSBPV05FUl9FWEVDVVRFIEdST1VQX1JFQUQgR1JPVVBfRVhFQ1VURSBXT1JMRF9SRUFEIFdP
+UkxEX0VYRUNVVEUpCitJbmRleDogbWJlZHRscy0yLjI4LjgvcHJvZ3JhbXMvdGVzdC9DTWFrZUxp
+c3RzLnR4dAorPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PQorLS0tIG1iZWR0bHMtMi4yOC44Lm9yaWcvcHJvZ3JhbXMvdGVz
+dC9DTWFrZUxpc3RzLnR4dAorKysrIG1iZWR0bHMtMi4yOC44L3Byb2dyYW1zL3Rlc3QvQ01ha2VM
+aXN0cy50eHQKK0BAIC02NCw1ICs2NCw1IEBAIGZvcmVhY2goZXhlIElOIExJU1RTIGV4ZWN1dGFi
+bGVzX2xpYnMgZXgKKyBlbmRmb3JlYWNoKCkKKyAKKyBpbnN0YWxsKFRBUkdFVFMgJHtleGVjdXRh
+Ymxlc19saWJzfSAke2V4ZWN1dGFibGVzX21iZWRjcnlwdG99CistICAgICAgICBERVNUSU5BVElP
+TiAiYmluIgorKyAgICAgICAgREVTVElOQVRJT04gImJpbi9tYmVkdGxzIgorICAgICAgICAgUEVS
+TUlTU0lPTlMgT1dORVJfUkVBRCBPV05FUl9XUklURSBPV05FUl9FWEVDVVRFIEdST1VQX1JFQUQg
+R1JPVVBfRVhFQ1VURSBXT1JMRF9SRUFEIFdPUkxEX0VYRUNVVEUpCitJbmRleDogbWJlZHRscy0y
+LjI4LjgvcHJvZ3JhbXMvdXRpbC9DTWFrZUxpc3RzLnR4dAorPT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQorLS0tIG1iZWR0
+bHMtMi4yOC44Lm9yaWcvcHJvZ3JhbXMvdXRpbC9DTWFrZUxpc3RzLnR4dAorKysrIG1iZWR0bHMt
+Mi4yOC44L3Byb2dyYW1zL3V0aWwvQ01ha2VMaXN0cy50eHQKK0BAIC0xMyw1ICsxMyw1IEBAIGZv
+cmVhY2goZXhlIElOIExJU1RTIGV4ZWN1dGFibGVzKQorIGVuZGZvcmVhY2goKQorIAorIGluc3Rh
+bGwoVEFSR0VUUyAke2V4ZWN1dGFibGVzfQorLSAgICAgICAgREVTVElOQVRJT04gImJpbiIKKysg
+ICAgICAgIERFU1RJTkFUSU9OICJiaW4vbWJlZHRscyIKKyAgICAgICAgIFBFUk1JU1NJT05TIE9X
+TkVSX1JFQUQgT1dORVJfV1JJVEUgT1dORVJfRVhFQ1VURSBHUk9VUF9SRUFEIEdST1VQX0VYRUNV
+VEUgV09STERfUkVBRCBXT1JMRF9FWEVDVVRFKQorSW5kZXg6IG1iZWR0bHMtMi4yOC44L3Byb2dy
+YW1zL3g1MDkvQ01ha2VMaXN0cy50eHQKKz09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KKy0tLSBtYmVkdGxzLTIuMjguOC5v
+cmlnL3Byb2dyYW1zL3g1MDkvQ01ha2VMaXN0cy50eHQKKysrKyBtYmVkdGxzLTIuMjguOC9wcm9n
+cmFtcy94NTA5L0NNYWtlTGlzdHMudHh0CitAQCAtMjcsNSArMjcsNSBAQCBlbmRmb3JlYWNoKCkK
+KyB0YXJnZXRfbGlua19saWJyYXJpZXMoY2VydF9hcHAgJHttYmVkdGxzX3RhcmdldH0pCisgCisg
+aW5zdGFsbChUQVJHRVRTICR7ZXhlY3V0YWJsZXN9CistICAgICAgICBERVNUSU5BVElPTiAiYmlu
+IgorKyAgICAgICAgREVTVElOQVRJT04gImJpbi9tYmVkdGxzIgorICAgICAgICAgUEVSTUlTU0lP
+TlMgT1dORVJfUkVBRCBPV05FUl9XUklURSBPV05FUl9FWEVDVVRFIEdST1VQX1JFQUQgR1JPVVBf
+RVhFQ1VURSBXT1JMRF9SRUFEIFdPUkxEX0VYRUNVVEUpCi0tIAoyLjM5LjUKCl9fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxp
+c3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21h
+aWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
