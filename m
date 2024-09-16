@@ -1,71 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8E34C3ABA2
-	for <buildroot@archiver.kernel.org>; Mon, 16 Sep 2024 17:04:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 471DBC3ABA2
+	for <buildroot@archiver.kernel.org>; Mon, 16 Sep 2024 18:04:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 6551C403B0;
-	Mon, 16 Sep 2024 17:04:18 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9543E402E1;
+	Mon, 16 Sep 2024 18:04:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EXasnRwTnMKm; Mon, 16 Sep 2024 17:04:17 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JhNniG0g5Zo1; Mon, 16 Sep 2024 18:04:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 00BB94061C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org DA46040163
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 00BB94061C;
-	Mon, 16 Sep 2024 17:04:16 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3EF521BF34E
- for <buildroot@lists.busybox.net>; Mon, 16 Sep 2024 17:04:15 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id DA46040163;
+	Mon, 16 Sep 2024 18:04:52 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id E5E931BF370
+ for <buildroot@lists.busybox.net>; Mon, 16 Sep 2024 18:04:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3B1E260ADC
- for <buildroot@lists.busybox.net>; Mon, 16 Sep 2024 17:04:15 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id E221381190
+ for <buildroot@lists.busybox.net>; Mon, 16 Sep 2024 18:04:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WRcuiIiQz3iU for <buildroot@lists.busybox.net>;
- Mon, 16 Sep 2024 17:04:14 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.150.162;
- helo=dd33218.kasserver.com; envelope-from=brpi@duering-andreas.de;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id am_FNFXZUecH for <buildroot@lists.busybox.net>;
+ Mon, 16 Sep 2024 18:04:49 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 3CF0860ACD
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3CF0860ACD
-Received: from dd33218.kasserver.com (dd33218.kasserver.com [85.13.150.162])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 3CF0860ACD
- for <buildroot@buildroot.org>; Mon, 16 Sep 2024 17:04:14 +0000 (UTC)
-Received: from localhost.localdomain (i6DFA2813.versanet.de [109.250.40.19])
- by dd33218.kasserver.com (Postfix) with ESMTPSA id EA821200122C;
- Mon, 16 Sep 2024 19:04:10 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 67BD981182
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 67BD981182
+ for <buildroot@buildroot.org>; Mon, 16 Sep 2024 18:04:49 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 5222183954; Mon, 16 Sep 2024 18:04:49 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Mon, 16 Sep 2024 19:03:40 +0200
-Message-Id: <20240916170340.13019-1-brpi@duering-andreas.de>
-X-Mailer: git-send-email 2.39.5
-MIME-Version: 1.0
-X-Spamd-Bar: ++
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=duering-andreas.de; 
- s=kas201911161523; t=1726506251;
- bh=mQDeJTBzirFhIb9lS0i2D5wgcXB/k6vMRM3ujWRI1eU=;
- h=From:To:Cc:Subject:Date:From;
- b=mDrbhGs2jO/lYNkSY+t3584uDHUpzibsZYGlEU3FADL63zq4+0Ol8o+qDQTWSwe2Z
- xV48ldKw3+gYisBFamB45LXMbvAXYKVUSLUIkUC5h8epmDU2xo+btilHEsdxCO22RS
- zjTEa3pc31NabvmAARU4xyFP8n8YCVwYUQL7hegB60bnWeZIpDSBR7fIvv3IVuhHdx
- rwYEyw4GQjPC+jEUboIDtQJY3HmPy0Wfh94eId3Um8ADNB3ePQx64/YOuH/lMuPdMj
- kZMuR10KNb8NeX+PRxcfuSCb7TtXj/jNnJMg0z0PXBk2iwHrDuXFLEtdBE6+akn1ZU
- mA10NrVQRCzfQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=duering-andreas.de
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=duering-andreas.de header.i=@duering-andreas.de
- header.a=rsa-sha256 header.s=kas201911161523 header.b=mDrbhGs2
-Subject: [Buildroot] [PATCH v1 1/1] package/mbedtls: Move test binaries to
- subdirectory
+Date: Mon, 16 Sep 2024 20:04:29 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 91afa8c8ccdfa668b59e00dc566585c6b450dc87
+X-Git-Newrev: 8e783314d7299c0d1627f0aa650506133ed9cb4a
+X-Patchwork-Hint: ignore
+Message-Id: <20240916180449.5222183954@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] board/xilinx: bump to linux 6.6.40
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,113 +57,219 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: =?utf-8?q?Andreas_D=C3=BCring_via_buildroot?= <buildroot@buildroot.org>
-Reply-To: =?UTF-8?q?Andreas=20D=C3=BCring?= <brpi@duering-andreas.de>
-Cc: Fabrice Fontaine <fontaine.fabrice@gmail.com>,
- =?UTF-8?q?Andreas=20D=C3=BCring?= <brpi@duering-andreas.de>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@mind.be>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-VGhlIG1iZWR0bHMgcGFja2FnZSBoYXMgYSBjb25maWcgb3B0aW9uIEJSMl9QQUNLQUdFX01CRURU
-TFNfUFJPR1JBTVMsCndoaWNoIGVuYWJsZXMgc29tZSB0ZXN0IHByb2dyYW1zIHRvIGJlIGJ1aWx0
-IGFuZCBpbnN0YWxsZWQuCkhvd2V2ZXIsIHNvbWUgb2YgdGhlIHRlc3QgcHJvZ3JhbXMgaGF2ZSB1
-bmZvcnR1bmF0ZSBuYW1lcywKZS5nLiAiaGVsbG8iIGFuZCAic3RyZXJyb3IiLCB3aGljaCBtYXkg
-bGVhZCB0byBuYW1lIGNvbGxpc2lvbnMgKD8pCmFuZCBhbHNvIG90aGVyd2lzZSAicG9sbHV0ZSIg
-L3Vzci9iaW4vLgoKQWRkIGEgcGF0Y2ggdG8gdGhlIENNYWtlTGlzdHMudHh0IGZpbGVzLCBzbyB0
-aGF0IHRoZSBiaW5hcmllcyBnbwp0byAvdXNyL2Jpbi9tYmVkdGxzLgoKU2lnbmVkLW9mZi1ieTog
-QW5kcmVhcyBEw7xyaW5nIDxicnBpQGR1ZXJpbmctYW5kcmVhcy5kZT4KLS0tCiAuLi4wMDEtaW5z
-dGFsbC1wcm9ncmFtcy10by1zdWJkaXJlY3RvcnkucGF0Y2ggfCAxMDMgKysrKysrKysrKysrKysr
-KysrCiAxIGZpbGUgY2hhbmdlZCwgMTAzIGluc2VydGlvbnMoKykKIGNyZWF0ZSBtb2RlIDEwMDY0
-NCBwYWNrYWdlL21iZWR0bHMvMDAwMS1pbnN0YWxsLXByb2dyYW1zLXRvLXN1YmRpcmVjdG9yeS5w
-YXRjaAoKZGlmZiAtLWdpdCBhL3BhY2thZ2UvbWJlZHRscy8wMDAxLWluc3RhbGwtcHJvZ3JhbXMt
-dG8tc3ViZGlyZWN0b3J5LnBhdGNoIGIvcGFja2FnZS9tYmVkdGxzLzAwMDEtaW5zdGFsbC1wcm9n
-cmFtcy10by1zdWJkaXJlY3RvcnkucGF0Y2gKbmV3IGZpbGUgbW9kZSAxMDA2NDQKaW5kZXggMDAw
-MDAwMDAwMC4uNWEyOGRjZmMzMQotLS0gL2Rldi9udWxsCisrKyBiL3BhY2thZ2UvbWJlZHRscy8w
-MDAxLWluc3RhbGwtcHJvZ3JhbXMtdG8tc3ViZGlyZWN0b3J5LnBhdGNoCkBAIC0wLDAgKzEsMTAz
-IEBACitJbnN0YWxsIG1iZWR0bHMgdGVzdCBwcm9ncmFtcyB0byBhIHN1YmRpcmVjdG9yeQorCitU
-aGlzIGlzIHRvIGF2b2lkIGNvbGxpc2lvbnMgKGUuZy4gImhlbGxvIikuCisKK1NpZ25lZC1vZmYt
-Ynk6IEFuZHJlYXMgRMO8cmluZyA8YnJwaUBkdWVyaW5nLWFuZHJlYXMuZGU+CitJbmRleDogbWJl
-ZHRscy0yLjI4LjgvcHJvZ3JhbXMvYWVzL0NNYWtlTGlzdHMudHh0Cis9PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09CistLS0g
-bWJlZHRscy0yLjI4Ljgub3JpZy9wcm9ncmFtcy9hZXMvQ01ha2VMaXN0cy50eHQKKysrKyBtYmVk
-dGxzLTIuMjguOC9wcm9ncmFtcy9hZXMvQ01ha2VMaXN0cy50eHQKK0BAIC04LDUgKzgsNSBAQCBm
-b3JlYWNoKGV4ZSBJTiBMSVNUUyBleGVjdXRhYmxlcykKKyBlbmRmb3JlYWNoKCkKKyAKKyBpbnN0
-YWxsKFRBUkdFVFMgJHtleGVjdXRhYmxlc30KKy0gICAgICAgIERFU1RJTkFUSU9OICJiaW4iCisr
-ICAgICAgICBERVNUSU5BVElPTiAiYmluL21iZWR0bHMiCisgICAgICAgICBQRVJNSVNTSU9OUyBP
-V05FUl9SRUFEIE9XTkVSX1dSSVRFIE9XTkVSX0VYRUNVVEUgR1JPVVBfUkVBRCBHUk9VUF9FWEVD
-VVRFIFdPUkxEX1JFQUQgV09STERfRVhFQ1VURSkKK0luZGV4OiBtYmVkdGxzLTIuMjguOC9wcm9n
-cmFtcy9oYXNoL0NNYWtlTGlzdHMudHh0Cis9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09CistLS0gbWJlZHRscy0yLjI4Ljgu
-b3JpZy9wcm9ncmFtcy9oYXNoL0NNYWtlTGlzdHMudHh0CisrKysgbWJlZHRscy0yLjI4LjgvcHJv
-Z3JhbXMvaGFzaC9DTWFrZUxpc3RzLnR4dAorQEAgLTksNSArOSw1IEBAIGZvcmVhY2goZXhlIElO
-IExJU1RTIGV4ZWN1dGFibGVzKQorIGVuZGZvcmVhY2goKQorIAorIGluc3RhbGwoVEFSR0VUUyAk
-e2V4ZWN1dGFibGVzfQorLSAgICAgICAgREVTVElOQVRJT04gImJpbiIKKysgICAgICAgIERFU1RJ
-TkFUSU9OICJiaW4vbWJlZHRscyIKKyAgICAgICAgIFBFUk1JU1NJT05TIE9XTkVSX1JFQUQgT1dO
-RVJfV1JJVEUgT1dORVJfRVhFQ1VURSBHUk9VUF9SRUFEIEdST1VQX0VYRUNVVEUgV09STERfUkVB
-RCBXT1JMRF9FWEVDVVRFKQorSW5kZXg6IG1iZWR0bHMtMi4yOC44L3Byb2dyYW1zL3BrZXkvQ01h
-a2VMaXN0cy50eHQKKz09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT0KKy0tLSBtYmVkdGxzLTIuMjguOC5vcmlnL3Byb2dyYW1z
-L3BrZXkvQ01ha2VMaXN0cy50eHQKKysrKyBtYmVkdGxzLTIuMjguOC9wcm9ncmFtcy9wa2V5L0NN
-YWtlTGlzdHMudHh0CitAQCAtMzUsNSArMzUsNSBAQCBmb3JlYWNoKGV4ZSBJTiBMSVNUUyBleGVj
-dXRhYmxlc19tYmVkY3J5CisgZW5kZm9yZWFjaCgpCisgCisgaW5zdGFsbChUQVJHRVRTICR7ZXhl
-Y3V0YWJsZXNfbWJlZHRsc30gJHtleGVjdXRhYmxlc19tYmVkY3J5cHRvfQorLSAgICAgICAgREVT
-VElOQVRJT04gImJpbiIKKysgICAgICAgIERFU1RJTkFUSU9OICJiaW4vbWJlZHRscyIKKyAgICAg
-ICAgIFBFUk1JU1NJT05TIE9XTkVSX1JFQUQgT1dORVJfV1JJVEUgT1dORVJfRVhFQ1VURSBHUk9V
-UF9SRUFEIEdST1VQX0VYRUNVVEUgV09STERfUkVBRCBXT1JMRF9FWEVDVVRFKQorSW5kZXg6IG1i
-ZWR0bHMtMi4yOC44L3Byb2dyYW1zL3BzYS9DTWFrZUxpc3RzLnR4dAorPT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQorLS0t
-IG1iZWR0bHMtMi4yOC44Lm9yaWcvcHJvZ3JhbXMvcHNhL0NNYWtlTGlzdHMudHh0CisrKysgbWJl
-ZHRscy0yLjI4LjgvcHJvZ3JhbXMvcHNhL0NNYWtlTGlzdHMudHh0CitAQCAtMTgsNCArMTgsNCBA
-QCBpbnN0YWxsKFRBUkdFVFMgJHtleGVjdXRhYmxlc30KKyAKKyBpbnN0YWxsKFBST0dSQU1TCisg
-ICAgICAgICAgICAga2V5X2xhZGRlcl9kZW1vLnNoCistICAgICAgICBERVNUSU5BVElPTiAiYmlu
-IikKKysgICAgICAgIERFU1RJTkFUSU9OICJiaW4vbWJlZHRscyIpCitJbmRleDogbWJlZHRscy0y
-LjI4LjgvcHJvZ3JhbXMvcmFuZG9tL0NNYWtlTGlzdHMudHh0Cis9PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09CistLS0gbWJl
-ZHRscy0yLjI4Ljgub3JpZy9wcm9ncmFtcy9yYW5kb20vQ01ha2VMaXN0cy50eHQKKysrKyBtYmVk
-dGxzLTIuMjguOC9wcm9ncmFtcy9yYW5kb20vQ01ha2VMaXN0cy50eHQKK0BAIC0xMCw1ICsxMCw1
-IEBAIGZvcmVhY2goZXhlIElOIExJU1RTIGV4ZWN1dGFibGVzKQorIGVuZGZvcmVhY2goKQorIAor
-IGluc3RhbGwoVEFSR0VUUyAke2V4ZWN1dGFibGVzfQorLSAgICAgICAgREVTVElOQVRJT04gImJp
-biIKKysgICAgICAgIERFU1RJTkFUSU9OICJiaW4vbWJlZHRscyIKKyAgICAgICAgIFBFUk1JU1NJ
-T05TIE9XTkVSX1JFQUQgT1dORVJfV1JJVEUgT1dORVJfRVhFQ1VURSBHUk9VUF9SRUFEIEdST1VQ
-X0VYRUNVVEUgV09STERfUkVBRCBXT1JMRF9FWEVDVVRFKQorSW5kZXg6IG1iZWR0bHMtMi4yOC44
-L3Byb2dyYW1zL3NzbC9DTWFrZUxpc3RzLnR4dAorPT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQorLS0tIG1iZWR0bHMtMi4y
-OC44Lm9yaWcvcHJvZ3JhbXMvc3NsL0NNYWtlTGlzdHMudHh0CisrKysgbWJlZHRscy0yLjI4Ljgv
-cHJvZ3JhbXMvc3NsL0NNYWtlTGlzdHMudHh0CitAQCAtNTAsNSArNTAsNSBAQCBpZihUSFJFQURT
-X0ZPVU5EKQorIGVuZGlmKFRIUkVBRFNfRk9VTkQpCisgCisgaW5zdGFsbChUQVJHRVRTICR7ZXhl
-Y3V0YWJsZXN9CistICAgICAgICBERVNUSU5BVElPTiAiYmluIgorKyAgICAgICAgREVTVElOQVRJ
-T04gImJpbi9tYmVkdGxzIgorICAgICAgICAgUEVSTUlTU0lPTlMgT1dORVJfUkVBRCBPV05FUl9X
-UklURSBPV05FUl9FWEVDVVRFIEdST1VQX1JFQUQgR1JPVVBfRVhFQ1VURSBXT1JMRF9SRUFEIFdP
-UkxEX0VYRUNVVEUpCitJbmRleDogbWJlZHRscy0yLjI4LjgvcHJvZ3JhbXMvdGVzdC9DTWFrZUxp
-c3RzLnR4dAorPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PQorLS0tIG1iZWR0bHMtMi4yOC44Lm9yaWcvcHJvZ3JhbXMvdGVz
-dC9DTWFrZUxpc3RzLnR4dAorKysrIG1iZWR0bHMtMi4yOC44L3Byb2dyYW1zL3Rlc3QvQ01ha2VM
-aXN0cy50eHQKK0BAIC02NCw1ICs2NCw1IEBAIGZvcmVhY2goZXhlIElOIExJU1RTIGV4ZWN1dGFi
-bGVzX2xpYnMgZXgKKyBlbmRmb3JlYWNoKCkKKyAKKyBpbnN0YWxsKFRBUkdFVFMgJHtleGVjdXRh
-Ymxlc19saWJzfSAke2V4ZWN1dGFibGVzX21iZWRjcnlwdG99CistICAgICAgICBERVNUSU5BVElP
-TiAiYmluIgorKyAgICAgICAgREVTVElOQVRJT04gImJpbi9tYmVkdGxzIgorICAgICAgICAgUEVS
-TUlTU0lPTlMgT1dORVJfUkVBRCBPV05FUl9XUklURSBPV05FUl9FWEVDVVRFIEdST1VQX1JFQUQg
-R1JPVVBfRVhFQ1VURSBXT1JMRF9SRUFEIFdPUkxEX0VYRUNVVEUpCitJbmRleDogbWJlZHRscy0y
-LjI4LjgvcHJvZ3JhbXMvdXRpbC9DTWFrZUxpc3RzLnR4dAorPT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQorLS0tIG1iZWR0
-bHMtMi4yOC44Lm9yaWcvcHJvZ3JhbXMvdXRpbC9DTWFrZUxpc3RzLnR4dAorKysrIG1iZWR0bHMt
-Mi4yOC44L3Byb2dyYW1zL3V0aWwvQ01ha2VMaXN0cy50eHQKK0BAIC0xMyw1ICsxMyw1IEBAIGZv
-cmVhY2goZXhlIElOIExJU1RTIGV4ZWN1dGFibGVzKQorIGVuZGZvcmVhY2goKQorIAorIGluc3Rh
-bGwoVEFSR0VUUyAke2V4ZWN1dGFibGVzfQorLSAgICAgICAgREVTVElOQVRJT04gImJpbiIKKysg
-ICAgICAgIERFU1RJTkFUSU9OICJiaW4vbWJlZHRscyIKKyAgICAgICAgIFBFUk1JU1NJT05TIE9X
-TkVSX1JFQUQgT1dORVJfV1JJVEUgT1dORVJfRVhFQ1VURSBHUk9VUF9SRUFEIEdST1VQX0VYRUNV
-VEUgV09STERfUkVBRCBXT1JMRF9FWEVDVVRFKQorSW5kZXg6IG1iZWR0bHMtMi4yOC44L3Byb2dy
-YW1zL3g1MDkvQ01ha2VMaXN0cy50eHQKKz09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0KKy0tLSBtYmVkdGxzLTIuMjguOC5v
-cmlnL3Byb2dyYW1zL3g1MDkvQ01ha2VMaXN0cy50eHQKKysrKyBtYmVkdGxzLTIuMjguOC9wcm9n
-cmFtcy94NTA5L0NNYWtlTGlzdHMudHh0CitAQCAtMjcsNSArMjcsNSBAQCBlbmRmb3JlYWNoKCkK
-KyB0YXJnZXRfbGlua19saWJyYXJpZXMoY2VydF9hcHAgJHttYmVkdGxzX3RhcmdldH0pCisgCisg
-aW5zdGFsbChUQVJHRVRTICR7ZXhlY3V0YWJsZXN9CistICAgICAgICBERVNUSU5BVElPTiAiYmlu
-IgorKyAgICAgICAgREVTVElOQVRJT04gImJpbi9tYmVkdGxzIgorICAgICAgICAgUEVSTUlTU0lP
-TlMgT1dORVJfUkVBRCBPV05FUl9XUklURSBPV05FUl9FWEVDVVRFIEdST1VQX1JFQUQgR1JPVVBf
-RVhFQ1VURSBXT1JMRF9SRUFEIFdPUkxEX0VYRUNVVEUpCi0tIAoyLjM5LjUKCl9fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxp
-c3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21h
-aWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+commit: https://git.buildroot.net/buildroot/commit/?id=8e783314d7299c0d1627f0aa650506133ed9cb4a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+This patch bumps all Xilinx board defconfigs to Linux 6.6.40.
+
+Xilinx Evaluation Boards:
+configs/versal_vck190_defconfig
+configs/versal_vpk180_defconfig
+configs/zynq_microzed_defconfig
+configs/zynq_zc702_defconfig
+configs/zynq_zc706_defconfig
+configs/zynq_zed_defconfig
+configs/zynqmp_kria_kd240_defconfig
+configs/zynqmp_kria_kr260_defconfig
+configs/zynqmp_kria_kv260_defconfig
+configs/zynqmp_zcu102_defconfig
+configs/zynqmp_zcu104_defconfig
+configs/zynqmp_zcu106_defconfig
+
+Signed-off-by: Neal Frager <neal.frager@amd.com>
+Tested-by: Brandon Maier <brandon.maier@collins.com>
+Reviewed-by: Brandon Maier <brandon.maier@collins.com>
+Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+---
+ board/xilinx/patches/linux/linux.hash | 2 +-
+ configs/versal_vck190_defconfig       | 2 +-
+ configs/versal_vpk180_defconfig       | 2 +-
+ configs/zynq_microzed_defconfig       | 2 +-
+ configs/zynq_zc702_defconfig          | 2 +-
+ configs/zynq_zc706_defconfig          | 2 +-
+ configs/zynq_zed_defconfig            | 2 +-
+ configs/zynqmp_kria_kd240_defconfig   | 2 +-
+ configs/zynqmp_kria_kr260_defconfig   | 2 +-
+ configs/zynqmp_kria_kv260_defconfig   | 2 +-
+ configs/zynqmp_zcu102_defconfig       | 2 +-
+ configs/zynqmp_zcu104_defconfig       | 2 +-
+ configs/zynqmp_zcu106_defconfig       | 2 +-
+ 13 files changed, 13 insertions(+), 13 deletions(-)
+
+diff --git a/board/xilinx/patches/linux/linux.hash b/board/xilinx/patches/linux/linux.hash
+index d85f773478..b007db4303 100644
+--- a/board/xilinx/patches/linux/linux.hash
++++ b/board/xilinx/patches/linux/linux.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  ea85988e66b9a2e19ccd76d0f5f5e657988a873fed292160917712f45605a805  xlnx_rebase_v6.6_LTS_2024.1.tar.gz
++sha256  6415cfcfd74e943d6ae44f6c1edcae09bf6cd89410b03c4290bf1464a8368f84  xlnx_rebase_v6.6_LTS_merge_6.6.40.tar.gz
+diff --git a/configs/versal_vck190_defconfig b/configs/versal_vck190_defconfig
+index 21dfe2577a..58479c9f2d 100644
+--- a/configs/versal_vck190_defconfig
++++ b/configs/versal_vck190_defconfig
+@@ -6,7 +6,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/versal/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="ttyAMA0,115200 mmcblk0p2"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.6_LTS_2024.1)/xlnx_rebase_v6.6_LTS_2024.1.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.6_LTS_merge_6.6.40)/xlnx_rebase_v6.6_LTS_merge_6.6.40.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="xilinx"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/versal-vck190-rev1.1"
+diff --git a/configs/versal_vpk180_defconfig b/configs/versal_vpk180_defconfig
+index 253a6d2cff..4d3afc0e98 100644
+--- a/configs/versal_vpk180_defconfig
++++ b/configs/versal_vpk180_defconfig
+@@ -6,7 +6,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/versal/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="ttyAMA0,115200 mmcblk0p2"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.6_LTS_2024.1)/xlnx_rebase_v6.6_LTS_2024.1.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.6_LTS_merge_6.6.40)/xlnx_rebase_v6.6_LTS_merge_6.6.40.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="xilinx"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/versal-vpk180-revA"
+diff --git a/configs/zynq_microzed_defconfig b/configs/zynq_microzed_defconfig
+index f955a0c4ad..71a5d880b3 100644
+--- a/configs/zynq_microzed_defconfig
++++ b/configs/zynq_microzed_defconfig
+@@ -9,7 +9,7 @@ BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynq/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynq/post-image.sh"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.6_LTS_2024.1)/xlnx_rebase_v6.6_LTS_2024.1.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.6_LTS_merge_6.6.40)/xlnx_rebase_v6.6_LTS_merge_6.6.40.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynq"
+ BR2_LINUX_KERNEL_UIMAGE=y
+ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
+diff --git a/configs/zynq_zc702_defconfig b/configs/zynq_zc702_defconfig
+index 75ebc2a3ba..f3fc32145b 100644
+--- a/configs/zynq_zc702_defconfig
++++ b/configs/zynq_zc702_defconfig
+@@ -9,7 +9,7 @@ BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynq/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynq/post-image.sh"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.6_LTS_2024.1)/xlnx_rebase_v6.6_LTS_2024.1.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.6_LTS_merge_6.6.40)/xlnx_rebase_v6.6_LTS_merge_6.6.40.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynq"
+ BR2_LINUX_KERNEL_UIMAGE=y
+ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
+diff --git a/configs/zynq_zc706_defconfig b/configs/zynq_zc706_defconfig
+index ce539eefaf..f1c9bd6622 100644
+--- a/configs/zynq_zc706_defconfig
++++ b/configs/zynq_zc706_defconfig
+@@ -9,7 +9,7 @@ BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynq/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynq/post-image.sh"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.6_LTS_2024.1)/xlnx_rebase_v6.6_LTS_2024.1.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.6_LTS_merge_6.6.40)/xlnx_rebase_v6.6_LTS_merge_6.6.40.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynq"
+ BR2_LINUX_KERNEL_UIMAGE=y
+ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
+diff --git a/configs/zynq_zed_defconfig b/configs/zynq_zed_defconfig
+index 925faeac8e..cada3bbd47 100644
+--- a/configs/zynq_zed_defconfig
++++ b/configs/zynq_zed_defconfig
+@@ -9,7 +9,7 @@ BR2_ROOTFS_POST_BUILD_SCRIPT="board/zynq/post-build.sh"
+ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynq/post-image.sh"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.6_LTS_2024.1)/xlnx_rebase_v6.6_LTS_2024.1.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.6_LTS_merge_6.6.40)/xlnx_rebase_v6.6_LTS_merge_6.6.40.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="xilinx_zynq"
+ BR2_LINUX_KERNEL_UIMAGE=y
+ BR2_LINUX_KERNEL_UIMAGE_LOADADDR="0x8000"
+diff --git a/configs/zynqmp_kria_kd240_defconfig b/configs/zynqmp_kria_kd240_defconfig
+index ce76805638..83a674f24b 100644
+--- a/configs/zynqmp_kria_kd240_defconfig
++++ b/configs/zynqmp_kria_kd240_defconfig
+@@ -5,7 +5,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynqmp/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="ttyPS1,115200 sda2 ${UBOOT_DIR}"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.6_LTS_2024.1)/xlnx_rebase_v6.6_LTS_2024.1.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.6_LTS_merge_6.6.40)/xlnx_rebase_v6.6_LTS_merge_6.6.40.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="xilinx"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynqmp-smk-k24-revA-sck-kd-g-revA"
+diff --git a/configs/zynqmp_kria_kr260_defconfig b/configs/zynqmp_kria_kr260_defconfig
+index 21d01e5f2a..5303a63147 100644
+--- a/configs/zynqmp_kria_kr260_defconfig
++++ b/configs/zynqmp_kria_kr260_defconfig
+@@ -5,7 +5,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynqmp/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="ttyPS1,115200 sda2 ${UBOOT_DIR}"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.6_LTS_2024.1)/xlnx_rebase_v6.6_LTS_2024.1.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.6_LTS_merge_6.6.40)/xlnx_rebase_v6.6_LTS_merge_6.6.40.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="xilinx"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynqmp-smk-k26-revA-sck-kr-g-revB"
+diff --git a/configs/zynqmp_kria_kv260_defconfig b/configs/zynqmp_kria_kv260_defconfig
+index f83ef35be3..00541fa277 100644
+--- a/configs/zynqmp_kria_kv260_defconfig
++++ b/configs/zynqmp_kria_kv260_defconfig
+@@ -5,7 +5,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynqmp/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="ttyPS1,115200 mmcblk1p2 ${UBOOT_DIR}"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.6_LTS_2024.1)/xlnx_rebase_v6.6_LTS_2024.1.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.6_LTS_merge_6.6.40)/xlnx_rebase_v6.6_LTS_merge_6.6.40.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="xilinx"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynqmp-smk-k26-revA-sck-kv-g-revB"
+diff --git a/configs/zynqmp_zcu102_defconfig b/configs/zynqmp_zcu102_defconfig
+index df5eba7ca0..d51a19b4d3 100644
+--- a/configs/zynqmp_zcu102_defconfig
++++ b/configs/zynqmp_zcu102_defconfig
+@@ -5,7 +5,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynqmp/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="ttyPS0,115200 mmcblk0p2"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.6_LTS_2024.1)/xlnx_rebase_v6.6_LTS_2024.1.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.6_LTS_merge_6.6.40)/xlnx_rebase_v6.6_LTS_merge_6.6.40.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="xilinx"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynqmp-zcu102-rev1.0"
+diff --git a/configs/zynqmp_zcu104_defconfig b/configs/zynqmp_zcu104_defconfig
+index 793a677ab2..55db24c54b 100644
+--- a/configs/zynqmp_zcu104_defconfig
++++ b/configs/zynqmp_zcu104_defconfig
+@@ -5,7 +5,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynqmp/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="ttyPS0,115200 mmcblk0p2"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.6_LTS_2024.1)/xlnx_rebase_v6.6_LTS_2024.1.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.6_LTS_merge_6.6.40)/xlnx_rebase_v6.6_LTS_merge_6.6.40.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="xilinx"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynqmp-zcu104-revC"
+diff --git a/configs/zynqmp_zcu106_defconfig b/configs/zynqmp_zcu106_defconfig
+index fdf5e80795..b09a3bdd3d 100644
+--- a/configs/zynqmp_zcu106_defconfig
++++ b/configs/zynqmp_zcu106_defconfig
+@@ -5,7 +5,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="board/zynqmp/post-image.sh"
+ BR2_ROOTFS_POST_SCRIPT_ARGS="ttyPS0,115200 mmcblk0p2"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_TARBALL=y
+-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.6_LTS_2024.1)/xlnx_rebase_v6.6_LTS_2024.1.tar.gz"
++BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call github,Xilinx,linux-xlnx,xlnx_rebase_v6.6_LTS_merge_6.6.40)/xlnx_rebase_v6.6_LTS_merge_6.6.40.tar.gz"
+ BR2_LINUX_KERNEL_DEFCONFIG="xilinx"
+ BR2_LINUX_KERNEL_DTS_SUPPORT=y
+ BR2_LINUX_KERNEL_INTREE_DTS_NAME="xilinx/zynqmp-zcu106-revA"
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
