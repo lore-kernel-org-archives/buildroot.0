@@ -4,91 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 46559CAC593
-	for <buildroot@archiver.kernel.org>; Tue, 17 Sep 2024 18:24:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E8A1FCAC595
+	for <buildroot@archiver.kernel.org>; Tue, 17 Sep 2024 18:27:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 15AB660770;
-	Tue, 17 Sep 2024 18:24:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B9943608C4;
+	Tue, 17 Sep 2024 18:27:36 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2ojyBy0AGWtj; Tue, 17 Sep 2024 18:24:58 +0000 (UTC)
+ id pXrZApb7_jLY; Tue, 17 Sep 2024 18:27:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 20DBE60D79
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C3676608E6
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 20DBE60D79;
-	Tue, 17 Sep 2024 18:24:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C3676608E6;
+	Tue, 17 Sep 2024 18:27:35 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 223391BF310
- for <buildroot@lists.busybox.net>; Tue, 17 Sep 2024 18:24:57 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id ECA911BF310
+ for <buildroot@lists.busybox.net>; Tue, 17 Sep 2024 18:27:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 110A9401ED
- for <buildroot@lists.busybox.net>; Tue, 17 Sep 2024 18:24:57 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id E8FBC401ED
+ for <buildroot@lists.busybox.net>; Tue, 17 Sep 2024 18:27:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TXgMiLMmFsOG for <buildroot@lists.busybox.net>;
- Tue, 17 Sep 2024 18:24:56 +0000 (UTC)
+ id c8CG59kXH5Cw for <buildroot@lists.busybox.net>;
+ Tue, 17 Sep 2024 18:27:34 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::12e; helo=mail-il1-x12e.google.com;
+ client-ip=2607:f8b0:4864:20::d30; helo=mail-io1-xd30.google.com;
  envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org CA54440139
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CA54440139
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com
- [IPv6:2607:f8b0:4864:20::12e])
- by smtp2.osuosl.org (Postfix) with ESMTPS id CA54440139
- for <buildroot@buildroot.org>; Tue, 17 Sep 2024 18:24:55 +0000 (UTC)
-Received: by mail-il1-x12e.google.com with SMTP id
- e9e14a558f8ab-3a07bd770e2so32444675ab.0
- for <buildroot@buildroot.org>; Tue, 17 Sep 2024 11:24:55 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org C7E1840139
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C7E1840139
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com
+ [IPv6:2607:f8b0:4864:20::d30])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C7E1840139
+ for <buildroot@buildroot.org>; Tue, 17 Sep 2024 18:27:33 +0000 (UTC)
+Received: by mail-io1-xd30.google.com with SMTP id
+ ca18e2360f4ac-82aa8c36eefso277063539f.3
+ for <buildroot@buildroot.org>; Tue, 17 Sep 2024 11:27:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1726597494; x=1727202294;
+ d=1e100.net; s=20230601; t=1726597652; x=1727202452;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=LIXWQ8UKdyCeH4y/UAmZnqas05FfOzSOVdpQEPAI7+w=;
- b=IzquEbliylMUBkVQSrDsnxtdmk40Z7JwoHQwMUiiTMGDaQirxzv9e6f2jA6WwMI9Q5
- rXpR8Ix0GLTJtrQSJ6ZMnwcHWh2U1a1ZOTASSmId4Izk047qsDGe8CDCIcV/l7Cb3FNi
- qqcvKDPMTt2EWyedFS+vudZ6ZmxmWpJSqAaPbaC5TxYeZaj3tib5NEkSiP9eDAKs3sQJ
- yPMcg/WEELg9prHcP81OwIfnTeApp5mBL4A8M7j7Sb5q51BikrGlUcUHYmXmZreWH9Yd
- K2EUb4aDUDBEqiumhIFVIg5jn05iufBj+z76o5+Fv1awemo6CtWshqSU+fmsd0YCKEQ5
- rrPQ==
-X-Gm-Message-State: AOJu0Yw6XlvFIjuXQ1R+/czndpyo1kmpespRMqokLdd0ZfocxlLC4sZJ
- t/HC1JuFSMqQnDSZB66IJjpq/0vmzp+9wGYiUxH89A5JwDzgRmIegU2Y9w==
-X-Google-Smtp-Source: AGHT+IG9Fs4oAGF7Dr3JK5NCbbchPggrWsmMebHvQfaQL6GsISlqojsU99QNrx/SnjHaBLmBwXHRoA==
-X-Received: by 2002:a05:6e02:218d:b0:3a0:98f7:101d with SMTP id
- e9e14a558f8ab-3a098f711d0mr98618295ab.21.1726597494008; 
- Tue, 17 Sep 2024 11:24:54 -0700 (PDT)
+ bh=JSSS4JcZXsseD5dHSwdpiBfP9w/Wu69DNw9E/WM5dfA=;
+ b=cJj3cUKGdUFmwz5rFudVsdwayM8Iijm98i+FJMCClEXIa0u8GlSfjik7zlYS6vhGOr
+ gd4Z0jhNxy2zZTfo+rXRuxeFkl5if1B0ciuU+LYSl61dYcCBDt7fzLMR/C5CY0qTH659
+ IEwOUJaOSPxClT9bDtDiTXTm1VK4RRnRANMVhkFpwc79IqNwh35VgPKz7Iyu5hP02yNX
+ WMVVtsqhoJnPg3VvjcSsRyb6wK822nfvQwkl7U/KlaPrmTGoG1raiT4bB6D1Eptl/wZB
+ ijd9NEXL0AyrqEA/GHKZw3EMY/Mmmo7aR29cX0i7gwO/xTChwf0TV+KOMfJJPgv0F2rv
+ S+Xg==
+X-Gm-Message-State: AOJu0Yz4OBf/B3P6mKhbkfz4O4VhaDS6Hq30stB2PwtTnk+M+pB9l2aL
+ ADZkDBcijazppIJRSJtLDwMlY8JLLORwhQ2fgA1Uh8I811eoQzOxjuCnnQ==
+X-Google-Smtp-Source: AGHT+IFJwKnRqrtIejYJq1iNGa1+uxvAfuBcydorFhclIIFVc4ZJjeRu4VXwUorXbCJm6JIGJX9BEQ==
+X-Received: by 2002:a05:6602:6d03:b0:7f6:8303:ba80 with SMTP id
+ ca18e2360f4ac-82d3780c296mr1322104539f.11.1726597652616; 
+ Tue, 17 Sep 2024 11:27:32 -0700 (PDT)
 Received: from james-x399.localdomain (71-218-252-223.hlrn.qwest.net.
  [71.218.252.223]) by smtp.gmail.com with ESMTPSA id
- e9e14a558f8ab-3a092e10b83sm23428825ab.31.2024.09.17.11.24.53
+ 8926c6da1cb9f-4d37ec3d032sm2080887173.79.2024.09.17.11.27.31
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 17 Sep 2024 11:24:53 -0700 (PDT)
+ Tue, 17 Sep 2024 11:27:32 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 17 Sep 2024 12:24:52 -0600
-Message-Id: <20240917182452.3872754-1-james.hilliard1@gmail.com>
+Date: Tue, 17 Sep 2024 12:27:30 -0600
+Message-Id: <20240917182730.3874226-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1726597494; x=1727202294; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1726597652; x=1727202452; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=LIXWQ8UKdyCeH4y/UAmZnqas05FfOzSOVdpQEPAI7+w=;
- b=OgQZjT1kmBeSsCUXiDH3NJMB3ye1tTtHl1rnRGGwsW2sRj98fP5DQspDm8oaPvKFvE
- +VQevtMfMFKsnJdKX0bN1VEyt6akomqYqLs20h/qRVGxCXfs7vbAFu/NWutGjdJ+snnR
- 1vgYVRbiFvxb0MKDDIzyi5DU6rA+nIW7SLsOxorffhxPrJdO1kNdOhOaTaRPCc5HFwuS
- 7SjGUBx8RwMMQDsSlGCrUTvy6b7zRBMTrJrzDWl8s2eeOJLxKYg/96Y7M+WG2amVu/kp
- RM9oDhV0PDupuZXMQOhZWxx0KC8VUTwAyhuwloj3FGqCtCbW19ssJAGzIEUKAvoa1oWR
- 5Omg==
+ bh=JSSS4JcZXsseD5dHSwdpiBfP9w/Wu69DNw9E/WM5dfA=;
+ b=h2B7sEbtx8q+kiKnjNr5ThhpACr6EUyy6LeVQlQWa7U/lY7iOgOSHQwaHcxqpW4PuU
+ 32VsJuVRrTIlS/QQBu9siF4yRTHOk8UcUP1scP1yHqL7tBrquRY2PxE4nCqQFAt4Jlcq
+ DOr7WjVeUTHXfboP74lryHnOx4JkCpuaZO0bhGuMuZLE0vMgXdXlgOzyn84pU09a2eh5
+ q5kvSsw/l1f9pdZ59zn/6/kmt9iZbUP33QWfwiaLY9fQaWCRlziaINGcpKNtHPvr2Tr/
+ yauEQcIT37e4SRtH1J3rugKMaUlWMohnOl0mnOaIdLUcHV/sM7seQ9wXlSXqtnv66RDO
+ VHHw==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=OgQZjT1k
-Subject: [Buildroot] [PATCH 1/1] package/python-pathvalidate: bump to
- version 3.2.1
+ header.a=rsa-sha256 header.s=20230601 header.b=h2B7sEbt
+Subject: [Buildroot] [PATCH 1/1] package/python-pbr: bump to version 6.1.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -106,49 +105,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-License hash changed due to year update:
-https://github.com/thombashi/pathvalidate/commit/72a9bb14d828708e8df883852e9ebb29a329a7c6
-
-Add new host-python-setuptools-scm build dependency.
-
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-pathvalidate/python-pathvalidate.hash | 6 +++---
- package/python-pathvalidate/python-pathvalidate.mk   | 5 +++--
- 2 files changed, 6 insertions(+), 5 deletions(-)
+ package/python-pbr/python-pbr.hash | 4 ++--
+ package/python-pbr/python-pbr.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pathvalidate/python-pathvalidate.hash b/package/python-pathvalidate/python-pathvalidate.hash
-index 4442d82ac1..dc6a1999e0 100644
---- a/package/python-pathvalidate/python-pathvalidate.hash
-+++ b/package/python-pathvalidate/python-pathvalidate.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pathvalidate/json
--md5  2a76cbe4e08f58087f418d150a1461b5  pathvalidate-3.2.0.tar.gz
--sha256  5e8378cf6712bff67fbe7a8307d99fa8c1a0cb28aa477056f8fc374f0dff24ad  pathvalidate-3.2.0.tar.gz
-+md5  cc99f63c6f835eae4fe8643c79b8ca68  pathvalidate-3.2.1.tar.gz
-+sha256  f5d07b1e2374187040612a1fcd2bcb2919f8db180df254c9581bb90bf903377d  pathvalidate-3.2.1.tar.gz
+diff --git a/package/python-pbr/python-pbr.hash b/package/python-pbr/python-pbr.hash
+index cfeef9419d..02db9aca02 100644
+--- a/package/python-pbr/python-pbr.hash
++++ b/package/python-pbr/python-pbr.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/pbr/json
+-md5  e01bcc0e9154d513ecad3e766f9582d7  pbr-6.0.0.tar.gz
+-sha256  d1377122a5a00e2f940ee482999518efe16d745d423a670c27773dfbc3c9a7d9  pbr-6.0.0.tar.gz
++md5  06361b83d178fb62dcd1b4ba9a9b418c  pbr-6.1.0.tar.gz
++sha256  788183e382e3d1d7707db08978239965e8b9e4e5ed42669bf4758186734d5f24  pbr-6.1.0.tar.gz
  # Locally computed sha256 checksums
--sha256  a93d75bcb0774e2990106380cadad6dcb2de193c55d435ffc56ba345a08b1dc2  LICENSE
-+sha256  36289157e371aaae5b5d3ba4be87359ed07548cdc7a9f19ff61dc67cfc536a9c  LICENSE
-diff --git a/package/python-pathvalidate/python-pathvalidate.mk b/package/python-pathvalidate/python-pathvalidate.mk
-index 243f541892..f5eb257cc1 100644
---- a/package/python-pathvalidate/python-pathvalidate.mk
-+++ b/package/python-pathvalidate/python-pathvalidate.mk
-@@ -4,11 +4,12 @@
+ sha256  5df2a0d87d6c562f0ea11c688ac52532aa28d744cabc7994ff0537f64b3b3320  LICENSE
+ sha256  eb4a8c8791f6caab1cf36df26db2b6f4e2ddda52657b060ff7f02abc63910aef  pbr/tests/testpackage/LICENSE.txt
+diff --git a/package/python-pbr/python-pbr.mk b/package/python-pbr/python-pbr.mk
+index aaea80d389..993e748a2b 100644
+--- a/package/python-pbr/python-pbr.mk
++++ b/package/python-pbr/python-pbr.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PATHVALIDATE_VERSION = 3.2.0
-+PYTHON_PATHVALIDATE_VERSION = 3.2.1
- PYTHON_PATHVALIDATE_SOURCE = pathvalidate-$(PYTHON_PATHVALIDATE_VERSION).tar.gz
--PYTHON_PATHVALIDATE_SITE = https://files.pythonhosted.org/packages/27/93/e2b086c7aba96c70b5e7ef48251702fb95027638fb5a3e787d2efd65783e
-+PYTHON_PATHVALIDATE_SITE = https://files.pythonhosted.org/packages/b4/8c/8713d8dcd8e357b9358695b441ee974580a8addfaea4f01437df07577052
- PYTHON_PATHVALIDATE_SETUP_TYPE = setuptools
- PYTHON_PATHVALIDATE_LICENSE = MIT
- PYTHON_PATHVALIDATE_LICENSE_FILES = LICENSE
-+PYTHON_PATHVALIDATE_DEPENDENCIES = host-python-setuptools-scm
- 
- $(eval $(python-package))
+-PYTHON_PBR_VERSION = 6.0.0
++PYTHON_PBR_VERSION = 6.1.0
+ PYTHON_PBR_SOURCE = pbr-$(PYTHON_PBR_VERSION).tar.gz
+-PYTHON_PBR_SITE = https://files.pythonhosted.org/packages/8d/c2/ee43b3b11bf2b40e56536183fc9f22afbb04e882720332b6276ee2454c24
++PYTHON_PBR_SITE = https://files.pythonhosted.org/packages/b2/35/80cf8f6a4f34017a7fe28242dc45161a1baa55c41563c354d8147e8358b2
+ PYTHON_PBR_SETUP_TYPE = setuptools
+ PYTHON_PBR_LICENSE = Apache-2.0 (module), BSD-3-Clause (test package)
+ PYTHON_PBR_LICENSE_FILES = LICENSE pbr/tests/testpackage/LICENSE.txt
 -- 
 2.34.1
 
