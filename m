@@ -4,95 +4,95 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D19ADC3ABCB
-	for <buildroot@archiver.kernel.org>; Tue, 17 Sep 2024 02:13:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 686CAC3ABB2
+	for <buildroot@archiver.kernel.org>; Tue, 17 Sep 2024 02:13:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7101640E97;
-	Tue, 17 Sep 2024 02:13:49 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2A4D940FBF;
+	Tue, 17 Sep 2024 02:13:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EOR-iyEmSiwD; Tue, 17 Sep 2024 02:13:48 +0000 (UTC)
+ id qFr_n3N26qZ9; Tue, 17 Sep 2024 02:13:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 58D1D40F90
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 98BDC40FA9
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 58D1D40F90;
-	Tue, 17 Sep 2024 02:13:48 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C22EE1BF3D2
- for <buildroot@lists.busybox.net>; Tue, 17 Sep 2024 02:13:46 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 98BDC40FA9;
+	Tue, 17 Sep 2024 02:13:51 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 7A2CD1BF3D2
+ for <buildroot@lists.busybox.net>; Tue, 17 Sep 2024 02:13:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B1A9A8176C
- for <buildroot@lists.busybox.net>; Tue, 17 Sep 2024 02:13:46 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 686FB419A5
+ for <buildroot@lists.busybox.net>; Tue, 17 Sep 2024 02:13:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id T4uWwyK6RJLh for <buildroot@lists.busybox.net>;
- Tue, 17 Sep 2024 02:13:45 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id j1NWmFZtPhGX for <buildroot@lists.busybox.net>;
+ Tue, 17 Sep 2024 02:13:46 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::d31; helo=mail-io1-xd31.google.com;
+ client-ip=2607:f8b0:4864:20::d36; helo=mail-io1-xd36.google.com;
  envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 7668E8176B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7668E8176B
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com
- [IPv6:2607:f8b0:4864:20::d31])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7668E8176B
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 1770B40C77
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1770B40C77
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com
+ [IPv6:2607:f8b0:4864:20::d36])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1770B40C77
  for <buildroot@buildroot.org>; Tue, 17 Sep 2024 02:13:45 +0000 (UTC)
-Received: by mail-io1-xd31.google.com with SMTP id
- ca18e2360f4ac-82aa7c3b3dbso220582139f.2
+Received: by mail-io1-xd36.google.com with SMTP id
+ ca18e2360f4ac-824ee14f7bfso178991639f.1
  for <buildroot@buildroot.org>; Mon, 16 Sep 2024 19:13:45 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1726539224; x=1727144024;
+ d=1e100.net; s=20230601; t=1726539225; x=1727144025;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=fsQ2O4ZupyNUVnYbgsBaOZ8N6/5TAx6BiorbeeroqbM=;
- b=ieIJhA2ndxQeFYnmZ7cLOXEmt29T/oD923HhzI7iy/5p2aXlJCpToiGmwx3PVNFMwX
- cTX4n2gM42guu5AE7gZY79YGpBYeMsdzZHIuqyengPjt9BUCN8gtTPPSwp3xGaGhejWE
- I8PgOkIIAL4MUL7t4WXLY320AfxcuqoPTdRtsdqnkuW2xKR+Ygz0n2ZHSQNxAnvQyET8
- jLosOOpPeI1uPQk0tu/kWGyJslgN5Q8bmvIjBMtHNsSQFs1MCgyZEr0EbeiVR933nea0
- CZk7+rML4NgHH8T7xqH6cosS+KTLhtk5PQaTSybpVDyAIVzPsNsPXUa/WTsCE+NWmHgz
- 5zGA==
-X-Gm-Message-State: AOJu0Yw9tioTzOYPmuotKcH2p0N9kxD6OZsyvBn7vws0om1WevacpIav
- FEcpz9oWPwyPvZ46R5ZmhEec7mtOTQRBc+drZo3SFwjRPiAjrN/0PxqXzQ==
-X-Google-Smtp-Source: AGHT+IEWV2sennrfi3F5nJGniWtJvKpj8C9zcV2YNHvgK8LZtlXFseKMbtfh3iYrV3B37w91mbXQTg==
-X-Received: by 2002:a05:6602:134d:b0:82a:3588:994b with SMTP id
- ca18e2360f4ac-82d1fa8d687mr1555147639f.15.1726539223880; 
- Mon, 16 Sep 2024 19:13:43 -0700 (PDT)
+ bh=wkn5ygI1Ov5zFYzQqOfK7FkWyBZXEAwi6MngbW53bQA=;
+ b=XUqGaTHxquFhBYG9aikEvcOXbhXBLqqNW9YpxuDTCx821QyC10/GjZmH9U1KsI2X3c
+ ZZZ6dtX4NTcPh/1zAnoneULwIhCE8pMnGxE/PquXaY1WrdbImnU2nfC8qPc2EZHNRqQF
+ tOHoJUUCO3v51LYbbCmkTeN3zmhkqiSAegHueA/t0HF9cDsa4Op7amcFP1zd0IujY+pr
+ r8PeG88rQEQQMyHG9J6ZM0gYgBrfrlDSbxugpHb9TaplCOfGT9k7SIw4G4NmxmxCupeg
+ VXEatid1YJCPlc6GnVHeLN1K75EAvZqYwSub33dDHBbvAemDjmScE6H0alZvSJBlCWdo
+ HscA==
+X-Gm-Message-State: AOJu0YxWjtQE+Ke0oFN0eZqe57Mz0yh8vDfC3LbMbSSZZlPBkNAIxp0z
+ bTcIxYQ6s2C9m47NRo+BFnMVo9qmcj/FUyBy+HwrVKAPSJNerVuVyZeF5A==
+X-Google-Smtp-Source: AGHT+IFVOOmixovl1125IwOZGN4LDy/2+wWO439ikXIXShrz/TltJ1NvQ5wIp5iZISG00pWlLvtCZQ==
+X-Received: by 2002:a92:c56e:0:b0:3a0:92e5:af68 with SMTP id
+ e9e14a558f8ab-3a092e5b19emr78017785ab.15.1726539224751; 
+ Mon, 16 Sep 2024 19:13:44 -0700 (PDT)
 Received: from james-x399.localdomain (71-218-252-223.hlrn.qwest.net.
  [71.218.252.223]) by smtp.gmail.com with ESMTPSA id
- 8926c6da1cb9f-4d37ed34fb4sm1811265173.149.2024.09.16.19.13.42
+ 8926c6da1cb9f-4d37ed34fb4sm1811265173.149.2024.09.16.19.13.43
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 16 Sep 2024 19:13:43 -0700 (PDT)
+ Mon, 16 Sep 2024 19:13:44 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Mon, 16 Sep 2024 20:13:31 -0600
-Message-Id: <20240917021332.3838579-2-james.hilliard1@gmail.com>
+Date: Mon, 16 Sep 2024 20:13:32 -0600
+Message-Id: <20240917021332.3838579-3-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240917021332.3838579-1-james.hilliard1@gmail.com>
 References: <20240917021332.3838579-1-james.hilliard1@gmail.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1726539224; x=1727144024; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1726539225; x=1727144025; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=fsQ2O4ZupyNUVnYbgsBaOZ8N6/5TAx6BiorbeeroqbM=;
- b=D6ntCcbB+GNvUwMvpnu3OKWa9XpGYeHKZ7/JgMGA6ySYc9uYdtKEO6tDYADbViy8WN
- Od5VF6OoVvXeFiKjD9zOu1HCpmfgm63tye2axxxiqhWH9XuaF//X89GAij4hCelXQKEK
- QgSVF1NkvSjjuyvUyFtRj5n5X6jt8P5kDy2D3AM0QMSO38jhytimzJYrYvn3z3VuOIDN
- kGS9/R44vutahs840QSls56NXIhhM/1UIEhv70m3AfFCjxbKEM23rPoGR83xHLnYt8bC
- VJtyziVmxke228hDEdVszdSP9ZZGn6ecSHNa8isaLLd6ri+TGT7erq0JZMHHaPqA/izz
- NPqQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=wkn5ygI1Ov5zFYzQqOfK7FkWyBZXEAwi6MngbW53bQA=;
+ b=gJK27pQMem8bD+rs/6M7Aq8YBMR2aBsWttUogdNjeJWmZXIqxDHii+nyHMqlZMFLhI
+ T8yhyO+EngQZsDWZSNxgrhI97DDcaFamwXANZqHCYEJs5tiCvzvIy3kP6iOWx7nKTM1g
+ 5Hqhp4midqCrTFLwco6ppydK3duETfi9kxaqB2uVtpoK75GJxmDApxklQ8pJeaJR1p61
+ veoLfT3XR84f9cfUHkGreGNeptCiyFg0qjqLQoHfB4wUqzIgQv5TEFqIyDwSRAeedd6u
+ GBYqSsfWpeyYdvIrla5N1FQWsgYaC7D2a9Mxj8/X22LCvJdK5I6bNajcg2usSytbDI1/
+ NJLw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=D6ntCcbB
-Subject: [Buildroot] [PATCH v5 2/3] package/python-scipy: bump to version
- 1.12.0
+ header.s=20230601 header.b=gJK27pQM
+Subject: [Buildroot] [PATCH v5 3/3] package/python-cython: bump to version
+ 3.0.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -113,47 +113,58 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-License hash changed due to date update:
-https://github.com/scipy/scipy/commit/0ace7295322148d74932bee32b0647e29c38fc8a
+Tested by ensuring all packages with a host-python-cython dependency
+build succesfully.
+
+Note that due to namespace conflicts supporting both cython 0.29 and
+cython 3.0 variants at the same time would be difficult as both can
+not be installed at the same time.
+
+License hash changed due to changing links from http to https:
+https://github.com/cython/cython/commit/331d9d824ee5f0c539310332215ebd6ed3257325
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-scipy/python-scipy.hash | 6 +++---
- package/python-scipy/python-scipy.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+Changes v3 -> v4:
+  - update to 3.0.11
+Changes v2 -> v3:
+  - add more details to commit message
+---
+ package/python-cython/python-cython.hash | 6 +++---
+ package/python-cython/python-cython.mk   | 6 +++---
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/python-scipy/python-scipy.hash b/package/python-scipy/python-scipy.hash
-index bee5d698a0..5b8cac8055 100644
---- a/package/python-scipy/python-scipy.hash
-+++ b/package/python-scipy/python-scipy.hash
-@@ -1,8 +1,8 @@
- # md5, sha256 from https://pypi.org/pypi/scipy/json
--md5  0e8eea0f7c4fe7d8102366230c96d66d  scipy-1.11.4.tar.gz
--sha256  90a2b78e7f5733b9de748f589f09225013685f9b218275257f8a8168ededaeaa  scipy-1.11.4.tar.gz
-+md5  22683fcf9a411f0a5254b7509bea0a6b  scipy-1.12.0.tar.gz
-+sha256  4bf5abab8a36d20193c698b0f1fc282c1d083c94723902c447e5d2f1780936a3  scipy-1.12.0.tar.gz
+diff --git a/package/python-cython/python-cython.hash b/package/python-cython/python-cython.hash
+index 42c063014e..cd320eaa2a 100644
+--- a/package/python-cython/python-cython.hash
++++ b/package/python-cython/python-cython.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/cython/json
+-md5  d9a1e8416f2278857a189347858ed9d0  Cython-0.29.37.tar.gz
+-sha256  f813d4a6dd94adee5d4ff266191d1d95bf6d4164a4facc535422c021b2504cfb  Cython-0.29.37.tar.gz
++md5  388b85b7c23f501320d19d991b169f5d  cython-3.0.11.tar.gz
++sha256  7146dd2af8682b4ca61331851e6aebce9fe5158e75300343f80c07ca80b1faff  cython-3.0.11.tar.gz
  # Locally computed sha256 checksums
--sha256  5517022426a56179540ee6eace15fd723ef8fdb83b2900fed2152dd2e2f972a2  LICENSE.txt
-+sha256  c29fb8e5936f33237a8b15256b4c6e93037f05bbf58c3d7b5755aede4c200173  LICENSE.txt
- sha256  606209a000716c5f66e33e180ce08434b96ed17db4975ab9723c6b5fbcc89609  scipy/ndimage/LICENSE.txt
- sha256  3df9207af2fdb861af0ae3b22026f163b9bcfab4e525dc4943afe2ffa3f77624  scipy/optimize/tnc/LICENSE
- sha256  f0cedf52503b2d42b83411a0a16e6fefac346dfad8fddc66f50050150123470c  scipy/sparse/linalg/_dsolve/SuperLU/License.txt
-diff --git a/package/python-scipy/python-scipy.mk b/package/python-scipy/python-scipy.mk
-index 6626826e33..9110a5b847 100644
---- a/package/python-scipy/python-scipy.mk
-+++ b/package/python-scipy/python-scipy.mk
+-sha256  a6cba85bc92e0cff7a450b1d873c0eaa2e9fc96bf472df0247a26bec77bf3ff9  LICENSE.txt
++sha256  9568a2b155e66ac3e0ba1fd80b52b827b9460e6cf6f233125e7cbca8e206ddc3  LICENSE.txt
+ sha256  e1eb1c49a8508e8173dac30157e4a6439a44ad8846194746c424fbc3fc2b95d7  COPYING.txt
+diff --git a/package/python-cython/python-cython.mk b/package/python-cython/python-cython.mk
+index 024c8c1e50..51086bedab 100644
+--- a/package/python-cython/python-cython.mk
++++ b/package/python-cython/python-cython.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_SCIPY_VERSION = 1.11.4
-+PYTHON_SCIPY_VERSION = 1.12.0
- PYTHON_SCIPY_SOURCE = scipy-$(PYTHON_SCIPY_VERSION).tar.gz
--PYTHON_SCIPY_SITE = https://files.pythonhosted.org/packages/6e/1f/91144ba78dccea567a6466262922786ffc97be1e9b06ed9574ef0edc11e1
-+PYTHON_SCIPY_SITE = https://files.pythonhosted.org/packages/30/85/cdbf2c3c460fe5aae812917866392068a88d02f07de0fe31ce738734c477
- PYTHON_SCIPY_LICENSE = \
- 	BSD-3-Clause, \
- 	BSD-2-Clause, \
+-PYTHON_CYTHON_VERSION = 0.29.37
+-PYTHON_CYTHON_SOURCE = Cython-$(PYTHON_CYTHON_VERSION).tar.gz
+-PYTHON_CYTHON_SITE = https://files.pythonhosted.org/packages/2a/97/8cc3fe7c6de4796921236a64d00ca8a95565772e57f0d3caae68d880b592
++PYTHON_CYTHON_VERSION = 3.0.11
++PYTHON_CYTHON_SOURCE = cython-$(PYTHON_CYTHON_VERSION).tar.gz
++PYTHON_CYTHON_SITE = https://files.pythonhosted.org/packages/84/4d/b720d6000f4ca77f030bd70f12550820f0766b568e43f11af7f7ad9061aa
+ PYTHON_CYTHON_SETUP_TYPE = setuptools
+ PYTHON_CYTHON_LICENSE = Apache-2.0
+ PYTHON_CYTHON_LICENSE_FILES = COPYING.txt LICENSE.txt
 -- 
 2.34.1
 
