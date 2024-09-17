@@ -4,71 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D0D8DCAC595
-	for <buildroot@archiver.kernel.org>; Tue, 17 Sep 2024 18:22:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AABC0CAC593
+	for <buildroot@archiver.kernel.org>; Tue, 17 Sep 2024 18:22:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 970BF614B1;
-	Tue, 17 Sep 2024 18:22:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6F55B606D3;
+	Tue, 17 Sep 2024 18:22:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iFwNHyLZ1H4g; Tue, 17 Sep 2024 18:22:11 +0000 (UTC)
+ id n7Tu2uFd92jw; Tue, 17 Sep 2024 18:22:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CE92260E3C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6E49160E3C
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id CE92260E3C;
-	Tue, 17 Sep 2024 18:22:09 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 68D0A1BF310
- for <buildroot@lists.busybox.net>; Tue, 17 Sep 2024 18:22:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6E49160E3C;
+	Tue, 17 Sep 2024 18:22:34 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 7901B1BF310
+ for <buildroot@lists.busybox.net>; Tue, 17 Sep 2024 18:22:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 558A180D88
- for <buildroot@lists.busybox.net>; Tue, 17 Sep 2024 18:22:08 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 66BA0401C9
+ for <buildroot@lists.busybox.net>; Tue, 17 Sep 2024 18:22:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id C2HmmqTUPPf8 for <buildroot@lists.busybox.net>;
- Tue, 17 Sep 2024 18:22:07 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QWh8NIe2_cTV for <buildroot@lists.busybox.net>;
+ Tue, 17 Sep 2024 18:22:32 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4512B80C84
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4512B80C84
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 18D79401B4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 18D79401B4
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 4512B80C84
- for <buildroot@buildroot.org>; Tue, 17 Sep 2024 18:22:07 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 18D79401B4
+ for <buildroot@buildroot.org>; Tue, 17 Sep 2024 18:22:31 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a0e02.dip0.t-ipconnect.de [91.58.14.2])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 9E875A4C1FCF;
- Tue, 17 Sep 2024 20:21:53 +0200 (CEST)
-Received: from bruckner.lan.fli4l ([192.168.1.1]:52062)
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id DFF98A4C13FE;
+ Tue, 17 Sep 2024 20:22:29 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:54236)
  by fli4l.lan.fli4l with esmtp (Exim 4.98)
- (envelope-from <bernd@kuhls.net>) id 1sqcpl-000000000nL-2vu1;
- Tue, 17 Sep 2024 18:21:53 +0000
+ (envelope-from <bernd@kuhls.net>) id 1sqcqM-000000000sz-0GHl;
+ Tue, 17 Sep 2024 18:22:29 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Tue, 17 Sep 2024 20:21:52 +0200
-Message-Id: <20240917182153.3009755-1-bernd@kuhls.net>
+Date: Tue, 17 Sep 2024 20:22:27 +0200
+Message-Id: <20240917182229.3009790-1-bernd@kuhls.net>
 X-Mailer: git-send-email 2.39.5
 MIME-Version: 1.0
 X-Spamd-Bar: ++++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
- s=kas202406071026; t=1726597313;
- bh=KOsepbAkEFA+uCWi+YRZDYQ6KkJs1n/dfIhnC6Uin4w=;
+ s=kas202406071026; t=1726597349;
+ bh=bx6vgPfD3O1muXlnQoHm/7qN4F+jOcSAKpGlOCYCRcM=;
  h=From:To:Cc:Subject:Date:From;
- b=bsPYgjJC+Wm19pn5NJHHMwHK1S6CsV/VpvugTuDeF0/2Am+Ln88vn6yEQsNcq9xAj
- E9u38hlXJ/LOhU6XuQNF5zD+/iL12mXWOSvPB0tuBYY/O56f6KbIzOUVQCT2wzUoYR
- z345fL09meEgPlo+gLcsMCZSMco0YRUC/Q2It/FsKbK7fI2y8ZTK+n4JQ5EfmA1p+V
- xuWlnHknAOl0dghUn5DjoQCLiCxQUy3mWjuUjckkGXjVpe75avRFzNIM/6yT04Yoab
- 3FV/oxNgT5XZRSWYQS5I8vuF3dJU5o86qQugIwvv+BLOOIR+FB0ZlDWb9QgElNgk6c
- k/T+D1BRkbeSA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=dbHV76RAPJkhfAGqQOBAo5cI945sqRrIieqBupskZWdF0yCNrCyMj4D6SHLPbk/oT
+ TB2xCNxb2JTfvoEe+WessVwF0VeariG/BSWhRXHuZ0yQRdTS0QgfyGpCPaq71nJa7G
+ hTgS9mHW5fUHYajvWMU6ZgYS/avv2FAgoghoqNiy/w3kUeTHq7a6aXu/CxjGKHPHZE
+ Ar6jvtsPB2y8fwunznVxzoMSR1v+Z3x8emBMp1hEHOj+Fnn5WzsrqwCl38zRxtRmKs
+ oKN/kjiZE9iQll5vSsmymOW3HWxRBYirklH5a9Xvk/qXk4uWmO9koVeEz71ZIffupB
+ xDcEn2J0wIuMg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202406071026 header.b=bsPYgjJC
-Subject: [Buildroot] [PATCH 1/2] package/expat: security bump version to
- 2.6.3
+ header.a=rsa-sha256 header.s=kas202406071026 header.b=dbHV76RA
+Subject: [Buildroot] [PATCH 1/3] {linux, linux-headers}: bump 4.19.x / 5.{4,
+ 10, 15}.x / 6.{1, 6, 10}.x series
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,67 +80,84 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- James Hilliard <james.hilliard1@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>,
+ Romain Naour <romain.naour@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Changelog:
-https://github.com/libexpat/libexpat/blob/R_2_6_3/expat/Changes
-
-Fixes CVE-2024-45490, CVE-2024-45491 & CVE-2024-45492.
-
-Follow upstream switch of project repository to github:
-https://sourceforge.net/p/expat/news/2022/01/project-moved-to-github/
-
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/expat/Config.in  | 2 +-
- package/expat/expat.hash | 6 +-----
- package/expat/expat.mk   | 4 ++--
- 3 files changed, 4 insertions(+), 8 deletions(-)
+ linux/Config.in                      |  2 +-
+ linux/linux.hash                     | 14 +++++++-------
+ package/linux-headers/Config.in.host | 14 +++++++-------
+ 3 files changed, 15 insertions(+), 15 deletions(-)
 
-diff --git a/package/expat/Config.in b/package/expat/Config.in
-index 758fb7d516..c227912b03 100644
---- a/package/expat/Config.in
-+++ b/package/expat/Config.in
-@@ -3,4 +3,4 @@ config BR2_PACKAGE_EXPAT
- 	help
- 	  The Expat XML Parser.
+diff --git a/linux/Config.in b/linux/Config.in
+index b4e88214d6..e8c0722de0 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -134,7 +134,7 @@ config BR2_LINUX_KERNEL_CUSTOM_REPO_GIT_SUBMODULES
  
--	  http://expat.sourceforge.net
-+	  https://libexpat.github.io/
-diff --git a/package/expat/expat.hash b/package/expat/expat.hash
-index 63890b54df..e40b250ba0 100644
---- a/package/expat/expat.hash
-+++ b/package/expat/expat.hash
-@@ -1,7 +1,3 @@
--# From https://sourceforge.net/projects/expat/files/expat/2.6.2/
--md5  0cb75c8feb842c0794ba89666b762a2d  expat-2.6.1.tar.xz
--sha1  d9e5f953dcacda3c9e69b4886382c3d8847b81bd  expat-2.6.1.tar.xz
--
- # Locally calculated
--sha256  ee14b4c5d8908b1bec37ad937607eab183d4d9806a08adee472c3c3121d27364  expat-2.6.2.tar.xz
-+sha256  274db254a6979bde5aad404763a704956940e465843f2a9bd9ed7af22e2c0efc  expat-2.6.3.tar.xz
- sha256  122f2c27000472a201d337b9b31f7eb2b52d091b02857061a8880371612d9534  COPYING
-diff --git a/package/expat/expat.mk b/package/expat/expat.mk
-index c6b7fc8b44..f5c6175f28 100644
---- a/package/expat/expat.mk
-+++ b/package/expat/expat.mk
-@@ -4,8 +4,8 @@
- #
- ################################################################################
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+-	default "6.10.9" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "6.10.10" if BR2_LINUX_KERNEL_LATEST_VERSION
+ 	default "5.10.162-cip24" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "5.10.162-cip24-rt10" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+diff --git a/linux/linux.hash b/linux/linux.hash
+index 5c745f7c7c..8f369e5f36 100644
+--- a/linux/linux.hash
++++ b/linux/linux.hash
+@@ -1,13 +1,13 @@
+ # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
+-sha256  a4489b70e0a7c2dc8f501b9cd7fc76989be2febb5519e163ecf816064f2f6858  linux-6.10.9.tar.xz
+-sha256  c065e36daf28210060c91a37ef3e92ac5814784e634577e04e406297ead2e86e  linux-6.6.50.tar.xz
+-sha256  732ff40ac63642c5ddbb7d65c24c90ed08b95af0e8c92df4739e9703eec01ac1  linux-6.1.109.tar.xz
++sha256  e687e735b5eb9efb6d67b42433c93fc9118106a995514f062652873b5e809bcd  linux-6.10.10.tar.xz
++sha256  1c0c9a14650879c4913efdbac428ba31a540c3d987155ddf34d33e11eca008b3  linux-6.6.51.tar.xz
++sha256  9ebe34b4742f8c9104678f32a6bc20e91299ebac2ae607ff2ed137d928df8f6a  linux-6.1.110.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
+-sha256  e56caae259b85b7685ee589075d58bb7b227024497a60fa27a7b43e0b48839cf  linux-5.15.166.tar.xz
+-sha256  85d7bf3a807538b9032e3f798ab978da9b77352bcb526534038c351a4f39e01c  linux-5.10.225.tar.xz
+-sha256  250c6a3199b42a1cb1427c9bbeacf5d90fb91bcf9f227195f484a1c877e1f797  linux-5.4.283.tar.xz
++sha256  b1751f18ece3df08d502dd87a9ab1a317dc0f9486355bf8ee62ba6af0b35da30  linux-5.15.167.tar.xz
++sha256  f6a19a64785965b9fcac0bcb6fd2412b45ca449495bb03592d46f9a50be51ca6  linux-5.10.226.tar.xz
++sha256  77221ab9aebeac746915c755ec3b7d320f85cd219c63d9c501820fbca1e3b32b  linux-5.4.284.tar.xz
+ # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
+-sha256  f13aa1465a2578a910f64b65d743d167466edfb1e0671bc70fa2328cb66b06d9  linux-4.19.321.tar.xz
++sha256  4e27cdf999359876a0ff489bff6ece7ba5798ff37c2289db0c9e9422a9014162  linux-4.19.322.tar.xz
+ # Locally computed
+ sha256  fb0edc3c18e47d2b6974cb0880a0afb5c3fa08f50ee87dfdf24349405ea5f8ae  linux-cip-5.10.162-cip24.tar.gz
+ sha256  b5539243f187e3d478d76d44ae13aab83952c94b885ad889df6fa9997e16a441  linux-cip-5.10.162-cip24-rt10.tar.gz
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 003c2f6a66..067c3b96aa 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -423,13 +423,13 @@ endchoice
  
--EXPAT_VERSION = 2.6.2
--EXPAT_SITE = http://downloads.sourceforge.net/project/expat/expat/$(EXPAT_VERSION)
-+EXPAT_VERSION = 2.6.3
-+EXPAT_SITE = https://github.com/libexpat/libexpat/releases/download/R_$(subst .,_,$(EXPAT_VERSION))
- EXPAT_SOURCE = expat-$(EXPAT_VERSION).tar.xz
- EXPAT_INSTALL_STAGING = YES
- EXPAT_LICENSE = MIT
+ config BR2_DEFAULT_KERNEL_HEADERS
+ 	string
+-	default "4.19.321"	if BR2_KERNEL_HEADERS_4_19
+-	default "5.4.283"	if BR2_KERNEL_HEADERS_5_4
+-	default "5.10.225"	if BR2_KERNEL_HEADERS_5_10
+-	default "5.15.166"	if BR2_KERNEL_HEADERS_5_15
+-	default "6.1.109"	if BR2_KERNEL_HEADERS_6_1
+-	default "6.6.50"	if BR2_KERNEL_HEADERS_6_6
+-	default "6.10.9"	if BR2_KERNEL_HEADERS_6_10
++	default "4.19.322"	if BR2_KERNEL_HEADERS_4_19
++	default "5.4.284"	if BR2_KERNEL_HEADERS_5_4
++	default "5.10.226"	if BR2_KERNEL_HEADERS_5_10
++	default "5.15.167"	if BR2_KERNEL_HEADERS_5_15
++	default "6.1.110"	if BR2_KERNEL_HEADERS_6_1
++	default "6.6.51"	if BR2_KERNEL_HEADERS_6_6
++	default "6.10.10"	if BR2_KERNEL_HEADERS_6_10
+ 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
+ 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
+ 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
 -- 
 2.39.5
 
