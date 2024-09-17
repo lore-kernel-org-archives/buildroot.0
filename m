@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7FA43CAC5A3
-	for <buildroot@archiver.kernel.org>; Tue, 17 Sep 2024 21:09:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 379C2CAC5A3
+	for <buildroot@archiver.kernel.org>; Tue, 17 Sep 2024 21:10:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 461E9614AB;
-	Tue, 17 Sep 2024 21:09:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0D9E361519;
+	Tue, 17 Sep 2024 21:10:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id e_5kRZ8zdUhS; Tue, 17 Sep 2024 21:09:55 +0000 (UTC)
+ id n4sY01lKBBiZ; Tue, 17 Sep 2024 21:09:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8C28A61529
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9D3E86153E
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 8C28A61529;
-	Tue, 17 Sep 2024 21:09:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9D3E86153E;
+	Tue, 17 Sep 2024 21:09:58 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 02D161BF5E6
- for <buildroot@lists.busybox.net>; Tue, 17 Sep 2024 21:09:15 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 1E3991BF5E6
+ for <buildroot@lists.busybox.net>; Tue, 17 Sep 2024 21:09:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D4A4A614AE
- for <buildroot@lists.busybox.net>; Tue, 17 Sep 2024 21:09:10 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0C094614B0
+ for <buildroot@lists.busybox.net>; Tue, 17 Sep 2024 21:09:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id rrHWRihx27cR for <buildroot@lists.busybox.net>;
- Tue, 17 Sep 2024 21:09:08 +0000 (UTC)
+ id J304tbKjd8q4 for <buildroot@lists.busybox.net>;
+ Tue, 17 Sep 2024 21:09:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 81AA1610DC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D73056115A
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 81AA1610DC
+ by smtp3.osuosl.org (Postfix) with ESMTP id D73056115A
  for <buildroot@buildroot.org>; Tue, 17 Sep 2024 21:09:08 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7CE0683A80; Tue, 17 Sep 2024 21:09:08 +0000 (UTC)
+ id D3D4E82138; Tue, 17 Sep 2024 21:09:08 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 17 Sep 2024 23:04:52 +0200
+Date: Tue, 17 Sep 2024 23:06:58 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: c68ffcb55e8ff219bead37b21e81cd35cd87da58
-X-Git-Newrev: a404097dd007d01d22098dd13a7bf5025cffd9cb
+X-Git-Oldrev: b4b98ee9eedaae3b2b52791590f9a6f7716fbd7a
+X-Git-Newrev: 763d5beb5d71bc6e08ba0f414f4caaec038319a2
 X-Patchwork-Hint: ignore
-Message-Id: <20240917210908.7CE0683A80@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/asterisk: bump to
- 20.7.0
+Message-Id: <20240917210908.D3D4E82138@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/asterisk:
+ security update to 20.9.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,99 +65,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a404097dd007d01d22098dd13a7bf5025cffd9cb
+commit: https://git.buildroot.net/buildroot/commit/?id=763d5beb5d71bc6e08ba0f414f4caaec038319a2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-See here for changes:
-https://downloads.asterisk.org/pub/telephony/asterisk/ChangeLog-20-current.md
+See here for a changelog:
+https://downloads.asterisk.org/pub/telephony/asterisk/releases/ChangeLog-20.9.2.md
 
-There is still an open issue reported upstream:
-https://github.com/asterisk/asterisk/issues/671
-
-But it seems it is not reproducible by the asterisk developers, so
-update the package so others can make use of it.
-
-Use the external pjsip package, instead of the bundled one.
+And here for the security advisory:
+https://github.com/asterisk/asterisk/security/advisories/GHSA-c4cg-9275-6w44
 
 Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-(cherry picked from commit 0e6d4d2171ce70d3aa6693f860a36ff08fc4d2b3)
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 6877647e8aff18a697d49015dd6273a9886db17e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/asterisk/Config.in     |  2 ++
- package/asterisk/asterisk.hash |  2 +-
- package/asterisk/asterisk.mk   | 11 +++++++----
- 3 files changed, 10 insertions(+), 5 deletions(-)
+ package/asterisk/asterisk.hash | 2 +-
+ package/asterisk/asterisk.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/asterisk/Config.in b/package/asterisk/Config.in
-index c52456f8fc..ba5a574042 100644
---- a/package/asterisk/Config.in
-+++ b/package/asterisk/Config.in
-@@ -10,6 +10,8 @@ config BR2_PACKAGE_ASTERISK
- 	select BR2_PACKAGE_LIBCURL
- 	select BR2_PACKAGE_LIBEDIT
- 	select BR2_PACKAGE_LIBILBC
-+	select BR2_PACKAGE_LIBJWT
-+	select BR2_PACKAGE_LIBPJSIP
- 	select BR2_PACKAGE_LIBXML2
- 	select BR2_PACKAGE_SQLITE
- 	select BR2_PACKAGE_UTIL_LINUX
 diff --git a/package/asterisk/asterisk.hash b/package/asterisk/asterisk.hash
-index 246f4219aa..8cb5468249 100644
+index ee21d88d98..9889a18c9d 100644
 --- a/package/asterisk/asterisk.hash
 +++ b/package/asterisk/asterisk.hash
 @@ -1,5 +1,5 @@
  # Locally computed
--sha256  9def260ac8745a5eac7aceabe1c22f84a283b7812f0eccd760f87ce9eb991d22  asterisk-20.5.2.tar.gz
-+sha256  62adff44f5bc415627e16957e6bd528e1782a892e116ff261c46f96ca87c342b  asterisk-20.7.0.tar.gz
+-sha256  c928c715dc5ff783ea6cf62cca3eebdc1dc9c5d40ce9b37b0213c0eac7f4090f  asterisk-20.9.1.tar.gz
++sha256  6bc4d982a238397bf6b3bfa523f63a75a2d9b19edd6f33f79264f2385d05bc42  asterisk-20.9.2.tar.gz
  
  # sha1 from: http://downloads.asterisk.org/pub/telephony/sounds/releases
  # sha256 locally computed
 diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
-index d1f3ea82d3..33d2e78bcf 100644
+index a254e462d6..08fe0d5ede 100644
 --- a/package/asterisk/asterisk.mk
 +++ b/package/asterisk/asterisk.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ASTERISK_VERSION = 20.5.2
-+ASTERISK_VERSION = 20.7.0
+-ASTERISK_VERSION = 20.9.1
++ASTERISK_VERSION = 20.9.2
  # Use the github mirror: it's an official mirror maintained by Digium, and
  # provides tarballs, which the main Asterisk git tree (behind Gerrit) does not.
  ASTERISK_SITE = $(call github,asterisk,asterisk,$(ASTERISK_VERSION))
-@@ -27,7 +27,7 @@ ASTERISK_SELINUX_MODULES = asterisk
- 
- # For patches 0002 and 0003
- ASTERISK_AUTORECONF = YES
--ASTERISK_AUTORECONF_OPTS = -Iautoconf -Ithird-party -Ithird-party/pjproject -Ithird-party/jansson
-+ASTERISK_AUTORECONF_OPTS = -Iautoconf -Ithird-party -Ithird-party/pjproject -Ithird-party/jansson -Ithird-party/libjwt
- 
- ASTERISK_DEPENDENCIES = \
- 	host-asterisk \
-@@ -35,6 +35,8 @@ ASTERISK_DEPENDENCIES = \
- 	jansson \
- 	libcurl \
- 	libedit \
-+	libjwt \
-+	libpjsip \
- 	libxml2 \
- 	sqlite \
- 	util-linux
-@@ -89,10 +91,11 @@ ASTERISK_CONF_OPTS = \
- 	--with-jansson \
- 	--with-libcurl \
- 	--with-ilbc \
-+	--with-libjwt="$(STAGING_DIR)/usr" \
- 	--with-libxml2 \
- 	--with-libedit="$(STAGING_DIR)/usr" \
--	--with-pjproject \
--	--with-pjproject-bundled \
-+	--without-pjproject-bundled \
-+	--with-pjproject="$(STAGING_DIR)/usr" \
- 	--with-sqlite3="$(STAGING_DIR)/usr" \
- 	--with-sounds-cache=$(ASTERISK_DL_DIR)
- 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
