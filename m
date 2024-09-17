@@ -4,91 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E6675CAC59E
-	for <buildroot@archiver.kernel.org>; Tue, 17 Sep 2024 20:10:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E3BFCCAC59E
+	for <buildroot@archiver.kernel.org>; Tue, 17 Sep 2024 20:28:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 898FD81DFE;
-	Tue, 17 Sep 2024 20:10:40 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0036081E2D;
+	Tue, 17 Sep 2024 20:28:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NJQMb1szfsG6; Tue, 17 Sep 2024 20:10:39 +0000 (UTC)
+ id Ojhrp7cl7kAi; Tue, 17 Sep 2024 20:28:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 77C5181E26
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6F14E81E33
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 77C5181E26;
-	Tue, 17 Sep 2024 20:10:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6F14E81E33;
+	Tue, 17 Sep 2024 20:28:42 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 8E42D1BF2C3
- for <buildroot@lists.busybox.net>; Tue, 17 Sep 2024 20:10:37 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id EDE441BF2C3
+ for <buildroot@lists.busybox.net>; Tue, 17 Sep 2024 20:28:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7CF9681882
- for <buildroot@lists.busybox.net>; Tue, 17 Sep 2024 20:10:37 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id DD5B481E33
+ for <buildroot@lists.busybox.net>; Tue, 17 Sep 2024 20:28:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KhgiwEacDyid for <buildroot@lists.busybox.net>;
- Tue, 17 Sep 2024 20:10:36 +0000 (UTC)
+ id gfTtMUH0LJes for <buildroot@lists.busybox.net>;
+ Tue, 17 Sep 2024 20:28:39 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::331; helo=mail-wm1-x331.google.com;
- envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 1F9AF81E24
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1F9AF81E24
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com
- [IPv6:2a00:1450:4864:20::331])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1F9AF81E24
- for <buildroot@buildroot.org>; Tue, 17 Sep 2024 20:10:35 +0000 (UTC)
-Received: by mail-wm1-x331.google.com with SMTP id
- 5b1f17b1804b1-42cba6cdf32so50487185e9.1
- for <buildroot@buildroot.org>; Tue, 17 Sep 2024 13:10:35 -0700 (PDT)
+ client-ip=2607:f8b0:4864:20::130; helo=mail-il1-x130.google.com;
+ envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4C66F81E2D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4C66F81E2D
+Received: from mail-il1-x130.google.com (mail-il1-x130.google.com
+ [IPv6:2607:f8b0:4864:20::130])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4C66F81E2D
+ for <buildroot@buildroot.org>; Tue, 17 Sep 2024 20:28:39 +0000 (UTC)
+Received: by mail-il1-x130.google.com with SMTP id
+ e9e14a558f8ab-3a09cdeab8eso10324975ab.0
+ for <buildroot@buildroot.org>; Tue, 17 Sep 2024 13:28:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1726603834; x=1727208634;
+ d=1e100.net; s=20230601; t=1726604918; x=1727209718;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=z983jp2uNse0jXL+x6p5bpQH3GBHNZNb6IDLNY3EtNU=;
- b=l9vBiq2jt+13828uL9pIxactRx+4HZcW19rmpdws2LV0tdAIR5EMpiG3IJAYr4ky1h
- 904u7kyte4Co9Ei4kxPtHyKgOw2RdJjT9hjSTHKPKOzsWaUFF3fGLtdP6StH8ACBrRFD
- 9L8V2vSVNhUHDXHEr4O7TZnmpvSiQPLIpo5bEeXLv3kKPwhwzAIF0WoCoY9ch+NUlxWq
- /0/Ccd50kYItJ/bXr+8vO9i/jxIdBabAzFD+X5jVOUz9z8c4K6EI//nPnZI/61yODLzH
- xFRz1J77n5AoKoC/4sWoplkTmlRj48lGphtpoXqcenzd3d4eX8hMQ6/hhqKNMjUh6Bd/
- GcjA==
-X-Gm-Message-State: AOJu0Yyot2NcmG72PQyKnbwDlaj3cgmw/jQYqY++qgCwL/uUTyrEL211
- CQQIsn3wVrZ2g1YQkJmFBAMsM3On5Nke46rWFoCx3Pl7LJssN6+7fh1yp4t/9FUk+uItiXu3CvF
- d4jonGg==
-X-Google-Smtp-Source: AGHT+IEao3fPu/+eDfufHkiX42FzogPD+z/d59KUcr9sH/+spoxoM2nU2IgMqESg02uH9/p7gUT6aQ==
-X-Received: by 2002:a05:600c:6c8d:b0:42c:b7e2:3bc3 with SMTP id
- 5b1f17b1804b1-42cdb54d638mr134218505e9.19.1726603833800; 
- Tue, 17 Sep 2024 13:10:33 -0700 (PDT)
-Received: from dario-ThinkPad-T14s-Gen-2i..
- (91.141.77.19.wireless.dyn.drei.com. [91.141.77.19])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-42d9b15d4f7sm146459205e9.27.2024.09.17.13.10.33
+ bh=1kpDMIYx9WDfV79uXSPx2C0HT2LL/cgyOOXCVgJBMxc=;
+ b=nHMLBTWtevbo0GNGIr1c2YKBIXRoUpgU86r92kFf/PN2gNWQti5fQR5QNEB/IT6qto
+ 8wXeiaWfU4gPz2dToh9jp66NbLmEDQVcujXWJfUwwPESpi/DotpCL90Nz4u366Tx6z/t
+ aMW5VF+IxMWM8/FQYNH0CGoDGDSVEUqhoTcx1OvONl5/MZCZGCTw/WaP1CvkZGp3SGxK
+ 4pqdK27zHgnmNbO2xAyvdJ9GE0i2r+R1FrIgur8x6DMxA1SJHswnHUySnMZtPP47mAFv
+ ncUsdzbiCvbViNLlnvFPaY7D/yn8pVF/zc6KDhvzTXaCYTEk5/gps79CFkxfgwr8dh88
+ pAxg==
+X-Gm-Message-State: AOJu0YzUZ7LA+U3d7l8xObLXlBeYj5GyaZ+DsqIQZvzhxu/d0H2Ol7Q8
+ uag9eGQUml9UkRxVLKQcI0nOCI1sQduU8QTI+rfGeJPfAVHKD5nRHnU0tc2V
+X-Google-Smtp-Source: AGHT+IGfjhdTlX0SYNu0HLSC2sawbZsFUgdqhmFac2pY6SM4hB/wwj6R55Msx25IWuAkmcwgo0m+AQ==
+X-Received: by 2002:a05:6e02:1809:b0:3a0:43b1:4c32 with SMTP id
+ e9e14a558f8ab-3a08b7aaa3emr146444555ab.25.1726604917761; 
+ Tue, 17 Sep 2024 13:28:37 -0700 (PDT)
+Received: from james-x399.localdomain (71-218-252-223.hlrn.qwest.net.
+ [71.218.252.223]) by smtp.gmail.com with ESMTPSA id
+ e9e14a558f8ab-3a0b637e81bsm2519255ab.9.2024.09.17.13.28.36
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 17 Sep 2024 13:10:33 -0700 (PDT)
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+ Tue, 17 Sep 2024 13:28:37 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 17 Sep 2024 22:10:30 +0200
-Message-ID: <20240917201030.11583-1-dario.binacchi@amarulasolutions.com>
-X-Mailer: git-send-email 2.43.0
+Date: Tue, 17 Sep 2024 14:28:34 -0600
+Message-Id: <20240917202834.4017981-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1726603834; x=1727208634;
- darn=buildroot.org; 
+ d=gmail.com; s=20230601; t=1726604918; x=1727209718; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=z983jp2uNse0jXL+x6p5bpQH3GBHNZNb6IDLNY3EtNU=;
- b=LcODjxU82PdYsqf5c9IXvSl1TDfzolSuP521PcUI922fitDL7fX9dEmlSp6eiZkNMb
- 8v0Mx4h167LBZLI22wXUJ9Ls3Kqr5/j0K4rhVR6AY4613MpZ+IYS7YljObJXjSsRaAl3
- d/E/jTanWk89W+iVZA38a1JrYknozjNFUS4Uo=
+ bh=1kpDMIYx9WDfV79uXSPx2C0HT2LL/cgyOOXCVgJBMxc=;
+ b=kVhC3tif5Cy7s5vajK2yVnKo0QJIUwCvkmvcExAKogLr5PlhWYleLOnntc2X8j8DNo
+ s/du4YMOaysKjidXFJL2NEZFEgfOFy4b0UJhbLYdzmol5RPHx6T8Bmgt195/WBvXaJ2C
+ W23UfTlmvq3MmzO0TKrIUR0Ne0kyexeImbnkmmYVCDWzWKJUAj67FvRS4/PTwkXq9AfT
+ hmeNVyeYcf6skV2hPnWpSLdN8OdXkRIMErxDd4x2qo7/K9AQnucaqff/+tf8J17G/i/4
+ bh5iedeKpSrnPMDM+8EYSdvz3DAFivLN3HF/mI3Vu14j8Z5SxWFue/xf1BKPTy9/fvpS
+ pubg==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=amarulasolutions.com
+ header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=LcODjxU8
-Subject: [Buildroot] [PATCH 1/1] package/babeld: bump to version 1.13.1
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=kVhC3tif
+Subject: [Buildroot] [PATCH 1/1] package/{python-}protobuf: bump to version
+ 28.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,63 +100,404 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
- linux-amarula@amarulasolutions.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Marcus Folkesson <marcus.folkesson@gmail.com>,
+ Kamel Bouhara <kamel.bouhara@gmail.com>,
+ Marcin Niestroj <m.niestroj@grinn-global.com>, Julien Olivain <ju.o@free.fr>,
+ Asaf Kahlon <asafka7@gmail.com>, James Hilliard <james.hilliard1@gmail.com>,
+ Woodrow Douglass <wdouglass@carnegierobotics.com>,
+ Christian Stewart <christian@aperture.us>,
+ Fabrice Fontaine <fontaine.fabrice@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-LSBJbXBsZW1lbnRlZCB0aGUgcGVyLWludGVyZmFjZSBvcHRpb24gInByb2JlLW10dSIsIHdoaWNo
-IGF1dG9tYXRpY2FsbHkKICBkaXNjYXJkcyBsaW5rcyB3aXRoIGEgbWlzLWNvbmZpZ3VyZWQgTVRV
-LiAgVGhhbmtzIHRvIERhbmllbCBHcsO2YmVyLgotIEZpeGVkIGEgdHlwbyBpbiB0aGUgaGFuZGlu
-ZyBvZiB0aGUgb3B0aW9uICJ2NHZpYXY2Ii4KClJlbGVhc2Ugbm90ZXM6Cmh0dHBzOi8vZ2l0aHVi
-LmNvbS9qZWNoL2JhYmVsZC9ibG9iL21hc3Rlci9DSEFOR0VTCgpTaWduZWQtb2ZmLWJ5OiBEYXJp
-byBCaW5hY2NoaSA8ZGFyaW8uYmluYWNjaGlAYW1hcnVsYXNvbHV0aW9ucy5jb20+Ci0tLQogLi4u
-LzAwMDEtRml4LWNvbXBpbGF0aW9uLWVycm9yLW9uLWxpbnV4LnBhdGNoIHwgMzYgKysrKysrKysr
-KysrKysrKysrKwogcGFja2FnZS9iYWJlbGQvYmFiZWxkLmhhc2ggICAgICAgICAgICAgICAgICAg
-IHwgIDIgKy0KIHBhY2thZ2UvYmFiZWxkL2JhYmVsZC5tayAgICAgICAgICAgICAgICAgICAgICB8
-ICAyICstCiAzIGZpbGVzIGNoYW5nZWQsIDM4IGluc2VydGlvbnMoKyksIDIgZGVsZXRpb25zKC0p
-CiBjcmVhdGUgbW9kZSAxMDA2NDQgcGFja2FnZS9iYWJlbGQvMDAwMS1GaXgtY29tcGlsYXRpb24t
-ZXJyb3Itb24tbGludXgucGF0Y2gKCmRpZmYgLS1naXQgYS9wYWNrYWdlL2JhYmVsZC8wMDAxLUZp
-eC1jb21waWxhdGlvbi1lcnJvci1vbi1saW51eC5wYXRjaCBiL3BhY2thZ2UvYmFiZWxkLzAwMDEt
-Rml4LWNvbXBpbGF0aW9uLWVycm9yLW9uLWxpbnV4LnBhdGNoCm5ldyBmaWxlIG1vZGUgMTAwNjQ0
-CmluZGV4IDAwMDAwMDAwMDAwMC4uNDFmZjgzNGVjZjEyCi0tLSAvZGV2L251bGwKKysrIGIvcGFj
-a2FnZS9iYWJlbGQvMDAwMS1GaXgtY29tcGlsYXRpb24tZXJyb3Itb24tbGludXgucGF0Y2gKQEAg
-LTAsMCArMSwzNiBAQAorRnJvbSBhN2Y4MDczNDlkY2MzMjk3NDczZDhkZGMwMzEyMDZiMjkxMmY3
-MzAxIE1vbiBTZXAgMTcgMDA6MDA6MDAgMjAwMQorRnJvbTogRGFyaW8gQmluYWNjaGkgPGRhcmlv
-LmJpbmFjY2hpQGFtYXJ1bGFzb2x1dGlvbnMuY29tPgorRGF0ZTogVHVlLCAxNyBTZXAgMjAyNCAy
-MTo0ODowMSArMDIwMAorU3ViamVjdDogW1BBVENIXSBGaXggY29tcGlsYXRpb24gZXJyb3Igb24g
-bGludXgKKworVGhpcyBwYXRjaCBmaXhlcyB0aGUgZm9sbG93aW5nIGNvbXBpbGF0aW9uIGVycm9y
-IHJhaXNlZCBieSB0aGUgYnVtcCB0bwordmVyc2lvbiAxLjEzLjEgaW4gQnVpbGRyb290OgorCitu
-ZXQuYzogSW4gZnVuY3Rpb24gJ2JhYmVsX3NlbmQnOgorbmV0LmM6MTk5OjI3OiBlcnJvcjogJ0lQ
-VjZfRE9OVEZSQUcnIHVuZGVjbGFyZWQgKGZpcnN0IHVzZSBpbiB0aGlzIGZ1bmN0aW9uKQorICAx
-OTkgfCAgICAgICAgIGNtc2ctPmNtc2dfdHlwZSA9IElQVjZfRE9OVEZSQUc7OworCitTaWduZWQt
-b2ZmLWJ5OiBEYXJpbyBCaW5hY2NoaSA8ZGFyaW8uYmluYWNjaGlAYW1hcnVsYXNvbHV0aW9ucy5j
-b20+CitVcHN0cmVhbTogaHR0cHM6Ly9naXRodWIuY29tL2plY2gvYmFiZWxkL3B1bGwvMTIxCist
-LS0KKyBuZXQuYyB8IDQgKysrKworIDEgZmlsZSBjaGFuZ2VkLCA0IGluc2VydGlvbnMoKykKKwor
-ZGlmZiAtLWdpdCBhL25ldC5jIGIvbmV0LmMKK2luZGV4IDdhN2I1Nzg0NGU2Yy4uODIyMTEyMjk5
-ZmQ4IDEwMDY0NAorLS0tIGEvbmV0LmMKKysrKyBiL25ldC5jCitAQCAtMzcsNiArMzcsMTAgQEAg
-VEhFIFNPRlRXQVJFLgorICNpbmNsdWRlIDxhcnBhL2luZXQuaD4KKyAjaW5jbHVkZSA8ZXJybm8u
-aD4KKyAKKysjaWYgZGVmaW5lZChfX2xpbnV4KQorKyNpbmNsdWRlIDxsaW51eC9pbjYuaD4KKysj
-ZW5kaWYKKysKKyAjaW5jbHVkZSAiYmFiZWxkLmgiCisgI2luY2x1ZGUgInV0aWwuaCIKKyAjaW5j
-bHVkZSAibmV0LmgiCistLSAKKzIuNDMuMAorCmRpZmYgLS1naXQgYS9wYWNrYWdlL2JhYmVsZC9i
-YWJlbGQuaGFzaCBiL3BhY2thZ2UvYmFiZWxkL2JhYmVsZC5oYXNoCmluZGV4IDNlYjVkMjIwODE1
-My4uYWIyZmZjNmVmODExIDEwMDY0NAotLS0gYS9wYWNrYWdlL2JhYmVsZC9iYWJlbGQuaGFzaAor
-KysgYi9wYWNrYWdlL2JhYmVsZC9iYWJlbGQuaGFzaApAQCAtMSwzICsxLDMgQEAKICMgTG9jYWxs
-eSBjb21wdXRlZAotc2hhMjU2ICBkMDg1Y2NjY2ZiMDZhMTFkN2ZhNWI1NGM1MWQ5YzQxMGY1ZjNi
-MGE5Mzg5ZjU4NDk1MTMzNmZmMTc4ZjI5M2I4ICBiYWJlbGQtMS4xMy50YXIuZ3oKK3NoYTI1NiAg
-MTVmMjRkMjZkYTBjY2ZjMDczYWJjZGVmMDMwOWYyODFlNDY4NGYyYWE3MTEyNmY4MjY1NzJjNGM4
-NDVlOGRkOSAgYmFiZWxkLTEuMTMuMS50YXIuZ3oKIHNoYTI1NiAgYjQxNWM0MTI5MmNlZGVmNmM5
-N2IyNDM2MDllNTA1NTI4ODdjMjkzNDM1NjZjNjM5ZjIzMjgyZDMxZWZkMmFmZCAgTElDRU5DRQpk
-aWZmIC0tZ2l0IGEvcGFja2FnZS9iYWJlbGQvYmFiZWxkLm1rIGIvcGFja2FnZS9iYWJlbGQvYmFi
-ZWxkLm1rCmluZGV4IDY3ZmY1NTNiOGJlZC4uZTlkMjAxMTFmOTNkIDEwMDY0NAotLS0gYS9wYWNr
-YWdlL2JhYmVsZC9iYWJlbGQubWsKKysrIGIvcGFja2FnZS9iYWJlbGQvYmFiZWxkLm1rCkBAIC00
-LDcgKzQsNyBAQAogIwogIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMKIAotQkFCRUxEX1ZFUlNJT04g
-PSAxLjEzCitCQUJFTERfVkVSU0lPTiA9IDEuMTMuMQogQkFCRUxEX1NJVEUgPSBodHRwczovL3d3
-dy5pcmlmLmZyL35qY2gvc29mdHdhcmUvZmlsZXMKIEJBQkVMRF9MSUNFTlNFID0gTUlUCiBCQUJF
-TERfTElDRU5TRV9GSUxFUyA9IExJQ0VOQ0UKLS0gCjIuNDMuMAoKX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWls
-ZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9s
-aXN0aW5mby9idWlsZHJvb3QK
+Migrate protobuf build from autotools to cmake.
+
+Migrate protobuf-python to use pypi sources which are now required
+for setup.py builds:
+https://github.com/protocolbuffers/protobuf/tree/v28.1/python#building-from-setuppy
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/criu/Config.in                       |  2 +-
+ package/kismet/Config.in                     | 12 +++--
+ package/mosh/Config.in                       |  6 +--
+ package/netdata/Config.in                    |  6 +--
+ package/ola/Config.in                        |  5 ++-
+ package/opencv3/Config.in                    |  6 +--
+ package/opencv4/Config.in                    |  9 +++-
+ package/protobuf/Config.in                   |  8 ++--
+ package/protobuf/protobuf.hash               |  2 +-
+ package/protobuf/protobuf.mk                 | 46 ++++++++++++++------
+ package/python-protobuf/python-protobuf.hash |  6 ++-
+ package/python-protobuf/python-protobuf.mk   |  5 +--
+ package/usbguard/Config.in                   |  2 +-
+ 13 files changed, 74 insertions(+), 41 deletions(-)
+
+diff --git a/package/criu/Config.in b/package/criu/Config.in
+index 30b131cd30..90bb18d355 100644
+--- a/package/criu/Config.in
++++ b/package/criu/Config.in
+@@ -19,7 +19,7 @@ config BR2_PACKAGE_CRIU
+ 	bool "criu"
+ 	depends on BR2_PACKAGE_CRIU_ARCH_SUPPORTS
+ 	depends on BR2_HOST_GCC_AT_LEAST_7 # protobuf-c
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # -march=armv7-a+fp
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # -march=armv7-a+fp, protobuf
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_18 # rseq.h
+ 	depends on !BR2_TOOLCHAIN_USES_UCLIBC # no aio.h
+ 	depends on !BR2_STATIC_LIBS # protobuf, libbsd
+diff --git a/package/kismet/Config.in b/package/kismet/Config.in
+index 2e1e0cfbd0..e2a2385f38 100644
+--- a/package/kismet/Config.in
++++ b/package/kismet/Config.in
+@@ -35,6 +35,7 @@ config BR2_PACKAGE_KISMET_PYTHON_TOOLS
+ 	bool "Install python tools"
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # protobuf
+ 	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS # python-numpy
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # protobuf
+ 	depends on BR2_PACKAGE_PYTHON3
+ 	depends on !BR2_STATIC_LIBS # protobuf
+ 	depends on BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL # python-numpy
+@@ -52,26 +53,29 @@ comment "python tools needs python3"
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
+ 
+-comment "python tools needs a glibc or musl toolchain w/ dynamic library"
++comment "python tools needs a glibc or musl toolchain w/ dynamic library, gcc >= 8"
+ 	depends on BR2_STATIC_LIBS
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+ 	depends on BR2_PACKAGE_PYTHON_NUMPY_ARCH_SUPPORTS
+-	depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL)
++	depends on !(BR2_TOOLCHAIN_USES_GLIBC || BR2_TOOLCHAIN_USES_MUSL) || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_8
+ 
+ config BR2_PACKAGE_KISMET_SERVER
+ 	bool "Install server"
+ 	default y
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # protobuf
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # protobuf
+ 	depends on !BR2_STATIC_LIBS # dlfcn.h
+ 	depends on BR2_USE_WCHAR
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # std::future
+ 	select BR2_PACKAGE_OPENSSL
+ 	select BR2_PACKAGE_PROTOBUF
+ 
+-comment "server needs a toolchain w/ dynamic library, wchar"
++comment "server needs a toolchain w/ dynamic library, wchar, gcc >= 8"
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+-	depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR
++	depends on BR2_STATIC_LIBS || !BR2_USE_WCHAR || \
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_8
+ 
+ comment "server needs a toolchain not affected by GCC bug 64735"
+ 	depends on BR2_TOOLCHAIN_HAS_GCC_BUG_64735
+diff --git a/package/mosh/Config.in b/package/mosh/Config.in
+index 5b90358cac..7ca5259ecb 100644
+--- a/package/mosh/Config.in
++++ b/package/mosh/Config.in
+@@ -1,7 +1,7 @@
+-comment "mosh needs a toolchain w/ C++, threads, dynamic library, wchar, gcc >= 4.8"
++comment "mosh needs a toolchain w/ C++, threads, dynamic library, wchar, gcc >= 8"
+ 	depends on !BR2_TOOLCHAIN_HAS_THREADS || !BR2_INSTALL_LIBSTDCPP \
+ 		|| BR2_STATIC_LIBS || !BR2_USE_WCHAR \
+-		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_8
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+ 
+ config BR2_PACKAGE_MOSH
+@@ -9,7 +9,7 @@ config BR2_PACKAGE_MOSH
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+ 	depends on BR2_INSTALL_LIBSTDCPP # protobuf
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # protobuf
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # protobuf
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # protobuf
+ 	depends on !BR2_STATIC_LIBS # protobuf
+ 	depends on BR2_USE_WCHAR
+ 	select BR2_PACKAGE_PROTOBUF
+diff --git a/package/netdata/Config.in b/package/netdata/Config.in
+index d17b5e89aa..3603eb071c 100644
+--- a/package/netdata/Config.in
++++ b/package/netdata/Config.in
+@@ -23,15 +23,15 @@ config BR2_PACKAGE_NETDATA_PROMETHEUS
+ 	bool "prometheus remote write backend"
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+ 	depends on BR2_INSTALL_LIBSTDCPP # protobuf, snappy
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # protobuf
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # protobuf
+ 	select BR2_PACKAGE_PROTOBUF
+ 	select BR2_PACKAGE_SNAPPY
+ 	help
+ 	  Enable prometheus remote write backend
+ 
+-comment "prometheus remote write backend needs a toolchain w/ C++, gcc >= 4.8"
++comment "prometheus remote write backend needs a toolchain w/ C++, gcc >= 8"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || \
+-		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++		!BR2_TOOLCHAIN_GCC_AT_LEAST_8
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+ 
+ endif
+diff --git a/package/ola/Config.in b/package/ola/Config.in
+index dd0be6f35e..1766f5bd76 100644
+--- a/package/ola/Config.in
++++ b/package/ola/Config.in
+@@ -1,7 +1,7 @@
+ comment "ola needs a toolchain w/ C++, threads, dynamic library, gcc >= 4.8"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
+ 		|| BR2_STATIC_LIBS \
+-		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++		|| !BR2_TOOLCHAIN_GCC_AT_LEAST_8
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+ 
+ menuconfig BR2_PACKAGE_OLA
+@@ -10,7 +10,7 @@ menuconfig BR2_PACKAGE_OLA
+ 	depends on !BR2_STATIC_LIBS # protobuf
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # protobuf
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # protobuf
+ 	select BR2_PACKAGE_PROTOBUF
+ 	select BR2_PACKAGE_UTIL_LINUX
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBUUID
+@@ -35,6 +35,7 @@ config BR2_PACKAGE_OLA_WEB
+ config BR2_PACKAGE_OLA_PYTHON_BINDINGS
+ 	bool "python bindings"
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # protobuf
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # protobuf
+ 	depends on BR2_PACKAGE_PYTHON3
+ 	select BR2_PACKAGE_PYTHON_PROTOBUF
+ 	help
+diff --git a/package/opencv3/Config.in b/package/opencv3/Config.in
+index 2ce548f095..a672497108 100644
+--- a/package/opencv3/Config.in
++++ b/package/opencv3/Config.in
+@@ -290,14 +290,14 @@ config BR2_PACKAGE_OPENCV3_WITH_PNG
+ config BR2_PACKAGE_OPENCV3_WITH_PROTOBUF
+ 	bool "protobuf support"
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # protobuf
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # protobuf
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # protobuf
+ 	select BR2_PACKAGE_PROTOBUF
+ 	help
+ 	  Use shared protobuf from the target system.
+ 
+-comment "protobuf support needs a toolchain w/ gcc >= 4.8"
++comment "protobuf support needs a toolchain w/ gcc >= 8"
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+-	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++	depends on !BR2_TOOLCHAIN_GCC_AT_LEAST_8
+ 
+ config BR2_PACKAGE_OPENCV3_WITH_TIFF
+ 	bool "tiff support"
+diff --git a/package/opencv4/Config.in b/package/opencv4/Config.in
+index f6976d8fb5..f71ceba2c5 100644
+--- a/package/opencv4/Config.in
++++ b/package/opencv4/Config.in
+@@ -35,14 +35,16 @@ config BR2_PACKAGE_OPENCV4_LIB_DNN
+ 	# dnn needs fenv.h which is not provided by uclibc
+ 	depends on !BR2_TOOLCHAIN_USES_UCLIBC
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8
+ 	select BR2_PACKAGE_OPENCV4_WITH_PROTOBUF
+ 	help
+ 	  Include opencv_dnn (Deep Neural Networks) module into the
+ 	  OpenCV build.
+ 
+-comment "dnn needs a glibc or musl toolchain"
++comment "dnn needs a glibc or musl toolchain, gcc >= 8"
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+-	depends on BR2_TOOLCHAIN_USES_UCLIBC
++	depends on BR2_TOOLCHAIN_USES_UCLIBC || \
++		!BR2_HOST_GCC_AT_LEAST_8
+ 
+ config BR2_PACKAGE_OPENCV4_LIB_FEATURES2D
+ 	bool "features2d"
+@@ -155,6 +157,7 @@ config BR2_PACKAGE_OPENCV4_LIB_OBJDETECT
+ 	bool "objdetect"
+ 	depends on !BR2_TOOLCHAIN_USES_UCLIBC # dnn support
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # dnn support
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # dnn support
+ 	# opencv_core dependency is already enabled
+ 	select BR2_PACKAGE_OPENCV4_LIB_CALIB3D
+ 	select BR2_PACKAGE_OPENCV4_LIB_DNN
+@@ -204,6 +207,7 @@ config BR2_PACKAGE_OPENCV4_LIB_SHAPE
+ config BR2_PACKAGE_OPENCV4_LIB_STITCHING
+ 	bool "stitching"
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # objdetect
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # objdetect
+ 	depends on !BR2_TOOLCHAIN_USES_UCLIBC # objdetect
+ 	select BR2_PACKAGE_OPENCV4_LIB_CALIB3D
+ 	select BR2_PACKAGE_OPENCV4_LIB_FEATURES2D
+@@ -333,6 +337,7 @@ config BR2_PACKAGE_OPENCV4_WITH_PNG
+ config BR2_PACKAGE_OPENCV4_WITH_PROTOBUF
+ 	bool "protobuf support"
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # protobuf
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # protobuf
+ 	select BR2_PACKAGE_PROTOBUF
+ 	help
+ 	  Use shared protobuf from the target system.
+diff --git a/package/protobuf/Config.in b/package/protobuf/Config.in
+index 47e987fa2b..633201b38c 100644
+--- a/package/protobuf/Config.in
++++ b/package/protobuf/Config.in
+@@ -37,6 +37,7 @@ config BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+ 	default y if BR2_sparc64
+ 	default y if BR2_TOOLCHAIN_HAS_ATOMIC
+ 	depends on BR2_PACKAGE_HOST_PROTOBUF_ARCH_SUPPORTS
++	depends on BR2_PACKAGE_LIBABSEIL_CPP_ARCH_SUPPORTS
+ 	depends on BR2_USE_MMU # fork()
+ 
+ config BR2_PACKAGE_PROTOBUF
+@@ -44,8 +45,9 @@ config BR2_PACKAGE_PROTOBUF
+ 	depends on BR2_INSTALL_LIBSTDCPP
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_8 # C++11
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # libabseil-cpp
+ 	depends on !BR2_STATIC_LIBS
++	select BR2_PACKAGE_LIBABSEIL_CPP
+ 	help
+ 	  Protocol buffers are Google's language-neutral,
+ 	  platform-neutral, extensible mechanism for serializing
+@@ -53,7 +55,7 @@ config BR2_PACKAGE_PROTOBUF
+ 
+ 	  https://developers.google.com/protocol-buffers
+ 
+-comment "protobuf needs a toolchain w/ C++, threads, dynamic library, gcc >= 4.8"
++comment "protobuf needs a toolchain w/ C++, threads, dynamic library, gcc >= 8"
+ 	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_TOOLCHAIN_HAS_THREADS \
+-		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_4_8
++		|| BR2_STATIC_LIBS || !BR2_TOOLCHAIN_GCC_AT_LEAST_8
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS
+diff --git a/package/protobuf/protobuf.hash b/package/protobuf/protobuf.hash
+index b092c9303f..06f4924394 100644
+--- a/package/protobuf/protobuf.hash
++++ b/package/protobuf/protobuf.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+ sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
+-sha256  4eab9b524aa5913c6fffb20b2a8abf5ef7f95a80bc0701f3a6dbb4c607f73460  protobuf-cpp-3.21.12.tar.gz
++sha256  3b8bf6e96499a744bd014c60b58f797715a758093abf859f1d902194b8e1f8c9  protobuf-28.1.tar.gz
+diff --git a/package/protobuf/protobuf.mk b/package/protobuf/protobuf.mk
+index 8cd4e99e06..6c9017b316 100644
+--- a/package/protobuf/protobuf.mk
++++ b/package/protobuf/protobuf.mk
+@@ -7,16 +7,40 @@
+ # When bumping this package, make sure to also verify if the
+ # python-protobuf package still works and to update its hash,
+ # as they share the same version/site variables.
+-PROTOBUF_VERSION = 21.12
+-PROTOBUF_SOURCE = protobuf-cpp-3.$(PROTOBUF_VERSION).tar.gz
++PROTOBUF_VERSION = 28.1
+ PROTOBUF_SITE = https://github.com/protocolbuffers/protobuf/releases/download/v$(PROTOBUF_VERSION)
+ PROTOBUF_LICENSE = BSD-3-Clause
+ PROTOBUF_LICENSE_FILES = LICENSE
+ PROTOBUF_CPE_ID_VENDOR = google
+ 
+ # N.B. Need to use host protoc during cross compilation.
+-PROTOBUF_DEPENDENCIES = host-protobuf
+-PROTOBUF_CONF_OPTS = --with-protoc=$(HOST_DIR)/bin/protoc
++PROTOBUF_DEPENDENCIES = host-protobuf libabseil-cpp
++PROTOBUF_CONF_OPTS = \
++	-Dprotobuf_ABSL_PROVIDER=package \
++	-Dprotobuf_ALLOW_CCACHE=ON \
++	-Dprotobuf_BUILD_CONFORMANCE=OFF \
++	-Dprotobuf_BUILD_LIBPROTOC=OFF \
++	-Dprotobuf_BUILD_LIBUPB=ON \
++	-Dprotobuf_BUILD_PROTOBUF_BINARIES=ON \
++	-Dprotobuf_BUILD_PROTOC_BINARIES=OFF \
++	-Dprotobuf_BUILD_TESTS=OFF \
++	-Dprotobuf_DISABLE_RTTI=OFF \
++	-Dprotobuf_INSTALL=ON \
++	-DWITH_PROTOC=$(HOST_DIR)/bin/protoc
++
++HOST_PROTOBUF_DEPENDENCIES = host-libabseil-cpp
++HOST_PROTOBUF_CONF_OPTS = \
++	-Dprotobuf_ABSL_PROVIDER=package \
++	-Dprotobuf_ALLOW_CCACHE=ON \
++	-Dprotobuf_BUILD_CONFORMANCE=OFF \
++	-Dprotobuf_BUILD_LIBPROTOC=ON \
++	-Dprotobuf_BUILD_LIBUPB=OFF \
++	-Dprotobuf_BUILD_PROTOBUF_BINARIES=ON \
++	-Dprotobuf_BUILD_PROTOC_BINARIES=ON \
++	-Dprotobuf_BUILD_TESTS=OFF \
++	-Dprotobuf_DISABLE_RTTI=OFF \
++	-Dprotobuf_INSTALL=ON \
++	-Dprotobuf_WITH_ZLIB=OFF
+ 
+ PROTOBUF_CXXFLAGS = $(TARGET_CXXFLAGS)
+ 
+@@ -38,14 +62,10 @@ PROTOBUF_INSTALL_STAGING = YES
+ 
+ ifeq ($(BR2_PACKAGE_ZLIB),y)
+ PROTOBUF_DEPENDENCIES += zlib
++PROTOBUF_CONF_OPTS += -Dprotobuf_WITH_ZLIB=ON
++else
++PROTOBUF_CONF_OPTS += -Dprotobuf_WITH_ZLIB=OFF
+ endif
+ 
+-define PROTOBUF_REMOVE_UNNECESSARY_TARGET_FILES
+-	rm -rf $(TARGET_DIR)/usr/bin/protoc
+-	rm -rf $(TARGET_DIR)/usr/lib/libprotoc.so*
+-endef
+-
+-PROTOBUF_POST_INSTALL_TARGET_HOOKS += PROTOBUF_REMOVE_UNNECESSARY_TARGET_FILES
+-
+-$(eval $(autotools-package))
+-$(eval $(host-autotools-package))
++$(eval $(cmake-package))
++$(eval $(host-cmake-package))
+diff --git a/package/python-protobuf/python-protobuf.hash b/package/python-protobuf/python-protobuf.hash
+index e7af678b97..8ce6039449 100644
+--- a/package/python-protobuf/python-protobuf.hash
++++ b/package/python-protobuf/python-protobuf.hash
+@@ -1,3 +1,5 @@
+-# Locally calculated
+-sha256  e2b976e67d6fcf7078f799143a73f2a4d9cf3126ca68a1a6f1bda30fe5f3585c  protobuf-python-4.21.12.tar.gz
++# md5, sha256 from https://pypi.org/pypi/protobuf/json
++md5  44b076f3564d3561067bcc2c455e008a  protobuf-5.28.1.tar.gz
++sha256  42597e938f83bb7f3e4b35f03aa45208d49ae8d5bcb4bc10b9fc825e0ab5e423  protobuf-5.28.1.tar.gz
++# Locally computed sha256 checksums
+ sha256  6e5e117324afd944dcf67f36cf329843bc1a92229a8cd9bb573d7a83130fea7d  LICENSE
+diff --git a/package/python-protobuf/python-protobuf.mk b/package/python-protobuf/python-protobuf.mk
+index df90254670..02bf2a1d70 100644
+--- a/package/python-protobuf/python-protobuf.mk
++++ b/package/python-protobuf/python-protobuf.mk
+@@ -5,12 +5,11 @@
+ ################################################################################
+ 
+ PYTHON_PROTOBUF_VERSION = $(PROTOBUF_VERSION)
+-PYTHON_PROTOBUF_SOURCE = protobuf-python-4.$(PYTHON_PROTOBUF_VERSION).tar.gz
+-PYTHON_PROTOBUF_SITE = $(PROTOBUF_SITE)
++PYTHON_PROTOBUF_SOURCE = protobuf-5.$(PYTHON_PROTOBUF_VERSION).tar.gz
++PYTHON_PROTOBUF_SITE = https://files.pythonhosted.org/packages/3c/0b/7a997c8939f698d72bdea14d57116e43d3051fffb3b2964c30938c4a08e6
+ PYTHON_PROTOBUF_LICENSE = BSD-3-Clause
+ PYTHON_PROTOBUF_LICENSE_FILES = LICENSE
+ PYTHON_PROTOBUF_DEPENDENCIES = host-protobuf
+ PYTHON_PROTOBUF_SETUP_TYPE = setuptools
+-PYTHON_PROTOBUF_SUBDIR = python
+ 
+ $(eval $(python-package))
+diff --git a/package/usbguard/Config.in b/package/usbguard/Config.in
+index f207fa6826..254209ff64 100644
+--- a/package/usbguard/Config.in
++++ b/package/usbguard/Config.in
+@@ -3,7 +3,7 @@ config BR2_PACKAGE_USBGUARD
+ 	depends on BR2_PACKAGE_PROTOBUF_ARCH_SUPPORTS # protobuf
+ 	depends on BR2_INSTALL_LIBSTDCPP # protobuf
+ 	depends on BR2_TOOLCHAIN_HAS_THREADS # libqb, protobuf
+-	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # C++17 filesystem
++	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8 # protobuf, C++17 filesystem
+ 	depends on !BR2_STATIC_LIBS # libqb, protobuf
+ 	depends on !BR2_TOOLCHAIN_HAS_GCC_BUG_64735 # std::future
+ 	select BR2_PACKAGE_PROTOBUF
+-- 
+2.34.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
