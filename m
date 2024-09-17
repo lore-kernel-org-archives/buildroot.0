@@ -4,71 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7AB5DCAC593
-	for <buildroot@archiver.kernel.org>; Tue, 17 Sep 2024 18:23:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8779FCAC595
+	for <buildroot@archiver.kernel.org>; Tue, 17 Sep 2024 18:23:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4A34B61130;
-	Tue, 17 Sep 2024 18:23:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 53D1D610C5;
+	Tue, 17 Sep 2024 18:23:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id b_URcVH5P3DM; Tue, 17 Sep 2024 18:23:12 +0000 (UTC)
+ id YGK65bvodpD3; Tue, 17 Sep 2024 18:23:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 44EFF610E4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7541761130
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 44EFF610E4;
-	Tue, 17 Sep 2024 18:23:12 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2E6581BF310
- for <buildroot@lists.busybox.net>; Tue, 17 Sep 2024 18:23:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7541761130;
+	Tue, 17 Sep 2024 18:23:24 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id B21FC1BF310
+ for <buildroot@lists.busybox.net>; Tue, 17 Sep 2024 18:23:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2DA1061129
- for <buildroot@lists.busybox.net>; Tue, 17 Sep 2024 18:23:09 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9FF2B412C4
+ for <buildroot@lists.busybox.net>; Tue, 17 Sep 2024 18:23:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CSL1Jq6G8YkG for <buildroot@lists.busybox.net>;
- Tue, 17 Sep 2024 18:23:08 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id nHlf2SEOhsPJ for <buildroot@lists.busybox.net>;
+ Tue, 17 Sep 2024 18:23:21 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
  helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 7996E60770
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7996E60770
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 758DF412B4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 758DF412B4
 Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 7996E60770
- for <buildroot@buildroot.org>; Tue, 17 Sep 2024 18:23:08 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 758DF412B4
+ for <buildroot@buildroot.org>; Tue, 17 Sep 2024 18:23:21 +0000 (UTC)
 Received: from fli4l.lan.fli4l (p5b3a0e02.dip0.t-ipconnect.de [91.58.14.2])
- by dd20012.kasserver.com (Postfix) with ESMTPSA id 745EBA4C13FE
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id 7B385A4C1FCF
  for <buildroot@buildroot.org>; Tue, 17 Sep 2024 20:22:56 +0200 (CEST)
 Received: from bruckner.lan.fli4l ([192.168.1.1]:39060)
  by fli4l.lan.fli4l with esmtp (Exim 4.98)
- (envelope-from <bernd@kuhls.net>) id 1sqcqm-000000000wy-2f2Q
+ (envelope-from <bernd@kuhls.net>) id 1sqcqm-000000000wy-2ucu
  for buildroot@buildroot.org; Tue, 17 Sep 2024 18:22:56 +0000
 From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Tue, 17 Sep 2024 20:22:55 +0200
-Message-Id: <20240917182256.3009821-1-bernd@kuhls.net>
+Date: Tue, 17 Sep 2024 20:22:56 +0200
+Message-Id: <20240917182256.3009821-2-bernd@kuhls.net>
 X-Mailer: git-send-email 2.39.5
+In-Reply-To: <20240917182256.3009821-1-bernd@kuhls.net>
+References: <20240917182256.3009821-1-bernd@kuhls.net>
 MIME-Version: 1.0
-X-Spamd-Bar: +
+X-Spamd-Bar: ++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=kuhls.net; 
  s=kas202406071026; t=1726597376;
- bh=gKhqxWL5gnKNu9IpVsuVLlZ2AfhvANfu/K/oDUG2Dns=;
- h=From:To:Subject:Date:From;
- b=YQmIC2RGWgy2+qyN5aShy/fUFuZX/2w0nFMS+O+NhZ4kM5uEPeYckYpM2NoeOo8u0
- 7sgh3rxZf1+p1LUO37S3J+3Z2t1JmZTFWn4b14fUGlcDPWwOOd6D/m6CbEvEFRoxu8
- Of16XausQvI/TXeKbk8HhizzJ7q/rhKeJofoI+bUcD2xhNoNpGuhNNmZpJ54HJaojD
- qtOJn5nieF44KTAOG/9YXoUT8NxUMymy2o5+KxC7GCGBHjoinTEBMsexv71wakpe40
- G1VLR1h6XRQ04i5YjlS22aSq3gIeDVjL5DzIRJ8Er2oFtL8gnFfqkONCXYVF/1bToN
- vTmUV/83N9xmg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=5qWsP6xALlZvBcZUCKbCu7dTNl9/3rD6DO/vbRWZmJI=;
+ h=From:To:Subject:Date:In-Reply-To:References:From;
+ b=IJu75WvYZf5U/OGQUhQYXqi7oTFtYIfpzfNdWn56YRsLCfiFW3ezhexN8Oi/5mp0U
+ LlA9b9JUJ3ZK7lEYMFAb4Uv+FZOrQRfEcfeZNmosp2r/5P4pPwKb27Z+GRKGS1jHF6
+ 4eCVk3pN9H/i5/faKdMZ0gQdzd65PTtglqwHxZPNB7D6/08e9MXhHJ1E+7IpIrdCar
+ 3uhBF3Be04fuMKbcBoBE0faFZK2ruveutumCj5bmQdExO6dhqUhive3uTTvjXJkFip
+ W2J8Scd4Mr/cKCwwEBCcG+/HfeDMDjznOunN6TEGuLdDt1Vr+2oINk+VkoNqdzsaSt
+ ykomecpnyDhig==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=kuhls.net
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=kuhls.net header.i=@kuhls.net
- header.a=rsa-sha256 header.s=kas202406071026 header.b=YQmIC2RG
-Subject: [Buildroot] [PATCH 1/2] package/kodi-pvr-iptvsimple: bump version
- to 21.8.7-Omega
+ header.a=rsa-sha256 header.s=kas202406071026 header.b=IJu75WvY
+Subject: [Buildroot] [PATCH 2/2] package/kodi-skin-confluence: bump version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,32 +88,32 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash | 2 +-
- package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk   | 2 +-
+ package/kodi-skin-confluence/kodi-skin-confluence.hash | 2 +-
+ package/kodi-skin-confluence/kodi-skin-confluence.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
-index 14fad490b9..c9509abc75 100644
---- a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
-+++ b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.hash
+diff --git a/package/kodi-skin-confluence/kodi-skin-confluence.hash b/package/kodi-skin-confluence/kodi-skin-confluence.hash
+index 487aa7e5f1..560b38ea2c 100644
+--- a/package/kodi-skin-confluence/kodi-skin-confluence.hash
++++ b/package/kodi-skin-confluence/kodi-skin-confluence.hash
 @@ -1,3 +1,3 @@
  # Locally computed
--sha256  191a56c10fc3639a6d3d5dffeaac38425c70b5196afa23b623cb205d5c3be4a6  kodi-pvr-iptvsimple-21.8.6-Omega.tar.gz
-+sha256  fb526d408b5a707c169399aa41e6a111045c4c78d28b4971f4e51ccf02930b4a  kodi-pvr-iptvsimple-21.8.7-Omega.tar.gz
- sha256  310782e1abd43c4de6217c513e328bddf999d39302d67c6e05b10a59959827af  LICENSE.md
-diff --git a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
-index 50a221857d..31175a978f 100644
---- a/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
-+++ b/package/kodi-pvr-iptvsimple/kodi-pvr-iptvsimple.mk
+-sha256  816010973378faf7ad45e8b7fb97e190500fd5f8a6adaaea032f8c877424113c  kodi-skin-confluence-ae94e6e92c1c67861701e6e8a70f9ccc4dca9f13.tar.gz
++sha256  0f1459727e50bbcefae7330de21a29debb4fde1da83f5a0f28d68ccf3d14a94e  kodi-skin-confluence-1128703261f3fae5f26b0ea5e052897e3d7a663b.tar.gz
+ sha256  89931c1fb1f3716694175763cf3221cfcd63d6935031cf6b4512d17ffe5d9860  LICENSE.txt
+diff --git a/package/kodi-skin-confluence/kodi-skin-confluence.mk b/package/kodi-skin-confluence/kodi-skin-confluence.mk
+index 59e5f10875..1344c8156d 100644
+--- a/package/kodi-skin-confluence/kodi-skin-confluence.mk
++++ b/package/kodi-skin-confluence/kodi-skin-confluence.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--KODI_PVR_IPTVSIMPLE_VERSION = 21.8.6-Omega
-+KODI_PVR_IPTVSIMPLE_VERSION = 21.8.7-Omega
- KODI_PVR_IPTVSIMPLE_SITE = $(call github,kodi-pvr,pvr.iptvsimple,$(KODI_PVR_IPTVSIMPLE_VERSION))
- KODI_PVR_IPTVSIMPLE_LICENSE = GPL-2.0+
- KODI_PVR_IPTVSIMPLE_LICENSE_FILES = LICENSE.md
+-KODI_SKIN_CONFLUENCE_VERSION = ae94e6e92c1c67861701e6e8a70f9ccc4dca9f13
++KODI_SKIN_CONFLUENCE_VERSION = 1128703261f3fae5f26b0ea5e052897e3d7a663b
+ KODI_SKIN_CONFLUENCE_SITE = $(call github,xbmc,skin.confluence,$(KODI_SKIN_CONFLUENCE_VERSION))
+ KODI_SKIN_CONFLUENCE_LICENSE = GPL-2.0
+ KODI_SKIN_CONFLUENCE_LICENSE_FILES = LICENSE.txt
 -- 
 2.39.5
 
