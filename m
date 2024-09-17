@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1AAE0CAC5A2
-	for <buildroot@archiver.kernel.org>; Tue, 17 Sep 2024 21:09:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8CC75CAC5A3
+	for <buildroot@archiver.kernel.org>; Tue, 17 Sep 2024 21:09:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DB379614E3;
-	Tue, 17 Sep 2024 21:09:35 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5D889610DC;
+	Tue, 17 Sep 2024 21:09:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id e9VwNfRnaR2B; Tue, 17 Sep 2024 21:09:34 +0000 (UTC)
+ id Eawn4Kp8G7w3; Tue, 17 Sep 2024 21:09:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6D315614F6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8E70E614F6
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6D315614F6;
-	Tue, 17 Sep 2024 21:09:34 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 175D31BF5E6
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8E70E614F6;
+	Tue, 17 Sep 2024 21:09:37 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 1EF681BF969
  for <buildroot@lists.busybox.net>; Tue, 17 Sep 2024 21:09:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id F22E44018F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 4D834610C5
  for <buildroot@lists.busybox.net>; Tue, 17 Sep 2024 21:09:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wOBQnDuvWC9w for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id cAZeRBgXgTwS for <buildroot@lists.busybox.net>;
  Tue, 17 Sep 2024 21:09:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A0B044026F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 57E5460782
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id A0B044026F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 57E5460782
  for <buildroot@buildroot.org>; Tue, 17 Sep 2024 21:09:08 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 10C50838FA; Tue, 17 Sep 2024 21:09:08 +0000 (UTC)
+ id 41AA283A80; Tue, 17 Sep 2024 21:09:08 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 17 Sep 2024 15:16:20 +0200
+Date: Tue, 17 Sep 2024 15:19:25 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 439eaa9d106090426f2043ba980d7b007539ab35
-X-Git-Newrev: d22b11c0935f42fcb4aea305f4f817f102e50be9
+X-Git-Oldrev: ef3f407a82c835e8e73997d89bff3520e6d15197
+X-Git-Newrev: 82346f7c8ed987239e95e3778b87463709c0557c
 X-Patchwork-Hint: ignore
-Message-Id: <20240917210908.10C50838FA@busybox.osuosl.org>
+Message-Id: <20240917210908.41AA283A80@busybox.osuosl.org>
 Subject: [Buildroot] [git commit branch/2024.02.x] utils/genrandconfig:
- remove support for toolchain CSV
+ improve logging
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,178 +65,96 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d22b11c0935f42fcb4aea305f4f817f102e50be9
+commit: https://git.buildroot.net/buildroot/commit/?id=82346f7c8ed987239e95e3778b87463709c0557c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-Now that the support for generating a fully random configuration has
-been well-tested, the whole mechanism based on a toolchain CSV isn't
-really useful anymore, so let's drop it to simplify the logic.
+Right now, genrandconfig just spits out the random messages from the
+different make invocations, which isn't terribly useful. Instead,
+let's redirect the output of make invocations to oblivion, and add
+some more high level logging.
 
-Note that the autobuilder code still uses --{,no-}toolchains-csv, so we
-can't remove those or the autobuilders would fail. Once all supported
-branches no longer use those argumetns, we can drop them from the
-autobuilder code, then ask people to update their runners, and we will
-finally be able to drop those arguments. Eventually.
+As part of this logging, we're interested to see how many iterations
+were needed to find a valid configuration, so changed the loop logic
+to count from 0 to 100 instead of from 100 to 0 so that we can easily
+show the iteration number.
 
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-[yann.morin.1998@free.fr: keep --{,no-}toolchains-csv and explain why]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 2f260084d5771728f3340ff6a86a23391133a635)
+(cherry picked from commit ce3dedc26b9080399c44d86e14aa1704f7bf563a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- utils/genrandconfig | 101 +++-------------------------------------------------
- 1 file changed, 4 insertions(+), 97 deletions(-)
+ utils/genrandconfig | 28 +++++++++++++++++++++-------
+ 1 file changed, 21 insertions(+), 7 deletions(-)
 
 diff --git a/utils/genrandconfig b/utils/genrandconfig
-index e660496fe5..6745507f7f 100755
+index 6ebb720ef7..06c26b0512 100755
 --- a/utils/genrandconfig
 +++ b/utils/genrandconfig
-@@ -20,7 +20,6 @@
- 
- from binascii import hexlify
- import asyncio
--import csv
- import os
- from random import randint
- import sys
-@@ -100,73 +99,6 @@ class SystemInfo:
-         return not missing_requirements
- 
- 
--def get_toolchain_configs(toolchains_csv, buildrootdir):
--    """Fetch and return the possible toolchain configurations
--
--    This function returns an array of toolchain configurations. Each
--    toolchain configuration is itself an array of lines of the defconfig.
--    """
--
--    with open(toolchains_csv) as r:
--        # filter empty lines and comments
--        lines = [t for t in r.readlines() if len(t.strip()) > 0 and t[0] != '#']
--        toolchains = lines
--    configs = []
--
--    (_, _, _, _, hostarch) = os.uname()
--    # ~2015 distros report x86 when on a 32bit install
--    if hostarch == 'i686' or hostarch == 'i386' or hostarch == 'x86':
--        hostarch = 'x86'
--
--    for row in csv.reader(toolchains):
--        config = {}
--        configfile = row[0]
--        config_hostarch = row[1]
--        keep = False
--
--        # Keep all toolchain configs that work regardless of the host
--        # architecture
--        if config_hostarch == "any":
--            keep = True
--
--        # Keep all toolchain configs that can work on the current host
--        # architecture
--        if hostarch == config_hostarch:
--            keep = True
--
--        # Assume that x86 32 bits toolchains work on x86_64 build
--        # machines
--        if hostarch == 'x86_64' and config_hostarch == "x86":
--            keep = True
--
--        if not keep:
--            continue
--
--        if not os.path.isabs(configfile):
--            configfile = os.path.join(buildrootdir, configfile)
--
--        with open(configfile) as r:
--            config = r.readlines()
--        configs.append(config)
--    return configs
--
--
--async def is_toolchain_usable(configfile, config):
--    """Check if the toolchain is actually usable."""
--
--    with open(configfile) as configf:
--        configlines = configf.readlines()
--
--    # Check that the toolchain configuration is still present
--    for toolchainline in config:
--        if toolchainline not in configlines:
--            print("WARN: toolchain can't be used", file=sys.stderr)
--            print("      Missing: %s" % toolchainline.strip(), file=sys.stderr)
--            return False
--
--    return True
--
--
- async def fixup_config(sysinfo, configfile):
-     """Finalize the configuration and reject any problematic combinations
- 
-@@ -574,24 +506,11 @@ async def fixup_config(sysinfo, configfile):
- 
- async def gen_config(args):
-     """Generate a new random configuration
--
--    This function generates the configuration, by choosing a random
--    toolchain configuration and then generating a random selection of
--    packages.
-     """
- 
-     sysinfo = SystemInfo()
- 
--    if args.toolchains_csv:
--        # Select a random toolchain configuration
--        configs = get_toolchain_configs(args.toolchains_csv, args.buildrootdir)
--
--        i = randint(0, len(configs) - 1)
--        toolchainconfig = configs[i]
--    else:
--        toolchainconfig = []
--
--    configlines = list(toolchainconfig)
-+    configlines = list()
- 
-     # Combine with the minimal configuration
-     minimalconfigfile = os.path.join(args.buildrootdir,
-@@ -650,9 +569,6 @@ async def gen_config(args):
-     if ret:
-         return ret
- 
--    if not await is_toolchain_usable(configfile, toolchainconfig):
--        return 2
--
-     # Now, generate the random selection of packages, and fixup
+@@ -524,23 +524,27 @@ async def gen_config(args):
      # things if needed.
      # Safe-guard, in case we can not quickly come to a valid
-@@ -668,7 +584,7 @@ async def gen_config(args):
+     # configuration: allow at most 100 (arbitrary) iterations.
+-    bounded_loop = 100
++    loop = 0
+     while True:
+-        if bounded_loop == 0:
++        if loop == 100:
+             print("ERROR: cannot generate random configuration after 100 iterations",
+                   file=sys.stderr)
+             return 1
+-        bounded_loop -= 1
++        print("Generating configuration, loop %d" % loop)
++        loop += 1
+         proc = await asyncio.create_subprocess_exec(
              "make", "O=%s" % args.outputdir, "-C", args.buildrootdir,
              "KCONFIG_SEED=0x%s" % hexlify(os.urandom(4)).decode("ascii").upper(),
              "KCONFIG_PROBABILITY=%d" % randint(1, 20),
--            "randpackageconfig" if args.toolchains_csv else "randconfig")
-+            "randconfig")
+-            "randconfig")
++            "randconfig",
++            stdout=asyncio.subprocess.DEVNULL,
++            stderr=asyncio.subprocess.DEVNULL)
          ret = await proc.wait()
          if ret:
              return ret
-@@ -702,17 +618,8 @@ if __name__ == '__main__':
-     parser.add_argument("--buildrootdir", "-b",
-                         help="Buildroot directory (relative to current directory)",
-                         type=str, default='.')
--
--    toolchains_csv = parser.add_mutually_exclusive_group(required=False)
--    toolchains_csv.add_argument("--toolchains-csv",
--                                dest="toolchains_csv",
--                                help="Path of the toolchain configuration file",
--                                type=str)
--    toolchains_csv.add_argument("--no-toolchains-csv",
--                                dest="toolchains_csv",
--                                help="Generate random toolchain configuration",
--                                action='store_false')
--    parser.set_defaults(toolchains_csv="support/config-fragments/autobuild/toolchain-configs.csv")
-+    parser.add_argument("--toolchains-csv", help="Legacy, unused", type=str)
-+    parser.add_argument("--no-toolchains-csv", help="Legacy, unused")
  
-     args = parser.parse_args()
+         if await fixup_config(sysinfo, configfile):
++            print("  configuration valid")
+             break
+ 
+     configlines = list()
+@@ -563,20 +567,30 @@ async def gen_config(args):
+     with open(configfile, "a") as configf:
+         configf.writelines(configlines)
+ 
++    print("  olddefconfig")
+     proc = await asyncio.create_subprocess_exec(
+-        "make", "O=%s" % args.outputdir, "-C", args.buildrootdir, "olddefconfig")
++        "make", "O=%s" % args.outputdir, "-C", args.buildrootdir, "olddefconfig",
++        stdout=asyncio.subprocess.DEVNULL,
++        stderr=asyncio.subprocess.DEVNULL)
+     ret = await proc.wait()
+     if ret:
+         return ret
+ 
++    print("  savedefconfig")
+     proc = await asyncio.create_subprocess_exec(
+-        "make", "O=%s" % args.outputdir, "-C", args.buildrootdir, "savedefconfig")
++        "make", "O=%s" % args.outputdir, "-C", args.buildrootdir, "savedefconfig",
++        stdout=asyncio.subprocess.DEVNULL,
++        stderr=asyncio.subprocess.DEVNULL)
++
+     ret = await proc.wait()
+     if ret:
+         return ret
+ 
++    print("  dependencies")
+     proc = await asyncio.create_subprocess_exec(
+-        "make", "O=%s" % args.outputdir, "-C", args.buildrootdir, "dependencies")
++        "make", "O=%s" % args.outputdir, "-C", args.buildrootdir, "dependencies",
++        stdout=asyncio.subprocess.DEVNULL,
++        stderr=asyncio.subprocess.DEVNULL)
+     return await proc.wait()
+ 
  
 _______________________________________________
 buildroot mailing list
