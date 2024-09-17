@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F7C9CAC5A3
-	for <buildroot@archiver.kernel.org>; Tue, 17 Sep 2024 21:09:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9D9B3CAC5A3
+	for <buildroot@archiver.kernel.org>; Tue, 17 Sep 2024 21:09:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 19FFA614E8;
-	Tue, 17 Sep 2024 21:09:29 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 665916070F;
+	Tue, 17 Sep 2024 21:09:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bQGuozGTfU6E; Tue, 17 Sep 2024 21:09:27 +0000 (UTC)
+ id psoN6PXWJ9kT; Tue, 17 Sep 2024 21:09:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D986F614BA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 18989614F0
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D986F614BA;
-	Tue, 17 Sep 2024 21:09:26 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1696C1BF969
+	by smtp3.osuosl.org (Postfix) with ESMTP id 18989614F0;
+	Tue, 17 Sep 2024 21:09:31 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id AE5FD1BF5E6
  for <buildroot@lists.busybox.net>; Tue, 17 Sep 2024 21:09:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 36A8A60616
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6130F81E19
  for <buildroot@lists.busybox.net>; Tue, 17 Sep 2024 21:09:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HCBfUbkQpPdo for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id G1_QyczdgRiZ for <buildroot@lists.busybox.net>;
  Tue, 17 Sep 2024 21:09:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 698B2610C5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8D43781E1B
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 698B2610C5
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8D43781E1B
  for <buildroot@buildroot.org>; Tue, 17 Sep 2024 21:09:08 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5556980584; Tue, 17 Sep 2024 21:09:08 +0000 (UTC)
+ id 89DE681DB5; Tue, 17 Sep 2024 21:09:08 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 17 Sep 2024 15:20:56 +0200
+Date: Tue, 17 Sep 2024 23:05:08 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 82346f7c8ed987239e95e3778b87463709c0557c
-X-Git-Newrev: 3dd70ef15bba55e65398a28ef72e8154a79b7d99
+X-Git-Oldrev: a404097dd007d01d22098dd13a7bf5025cffd9cb
+X-Git-Newrev: 93ff1abc9ac423eb71840b6c5b4dc68a56d283bf
 X-Patchwork-Hint: ignore
-Message-Id: <20240917210908.5556980584@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] utils/genrandconfig: fix
- fallout of dropping toolchain CSV
+Message-Id: <20240917210908.89DE681DB5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/asterisk: fix
+ compile issue
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,41 +65,47 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3dd70ef15bba55e65398a28ef72e8154a79b7d99
+commit: https://git.buildroot.net/buildroot/commit/?id=93ff1abc9ac423eb71840b6c5b4dc68a56d283bf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-Commit 2f260084d577 (utils/genrandconfig: remove support for toolchain
-CSV) kept the --no-toolchains-csv option, but in the rework forgot to
-keep it as a bool, while argparse default is to expect a string.
+Fix a compile issue when libyuv and libjpeg is enabled.
+Detection of following function fails:
+checking for pjsip_dlg_create_uas_and_inc_lock in -lpjsip... no
 
-Rather than re-introduce the action="store_true" which implies the
-argument is a bool, explicit make it a bool.
+In config.log you see that libjpeg is missing.
 
-Fixes: 2f260084d5771728f3340ff6a86a23391133a635
+Fixes:
+ http://autobuild.buildroot.net/results/7bed9fc68fc9331ad12942c3eab9742ee8a7a4c4
 
-Reported-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 4dbb87bb6676b82f34981f6adedccfa03a9667cd)
+(cherry picked from commit 07b7d8708d0c8302ad5407acf81df974050f0f5c)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- utils/genrandconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/asterisk/asterisk.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/utils/genrandconfig b/utils/genrandconfig
-index 06c26b0512..d13c7befc4 100755
---- a/utils/genrandconfig
-+++ b/utils/genrandconfig
-@@ -604,7 +604,7 @@ if __name__ == '__main__':
-                         help="Buildroot directory (relative to current directory)",
-                         type=str, default='.')
-     parser.add_argument("--toolchains-csv", help="Legacy, unused", type=str)
--    parser.add_argument("--no-toolchains-csv", help="Legacy, unused")
-+    parser.add_argument("--no-toolchains-csv", help="Legacy, unused", type=bool)
+diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
+index 33d2e78bcf..c37aa5ec9d 100644
+--- a/package/asterisk/asterisk.mk
++++ b/package/asterisk/asterisk.mk
+@@ -113,9 +113,15 @@ ASTERISK_CONF_ENV = \
  
-     args = parser.parse_args()
+ # Uses __atomic_fetch_add_4
+ ifeq ($(BR2_TOOLCHAIN_HAS_LIBATOMIC),y)
+-ASTERISK_CONF_ENV += LIBS="-latomic"
++ASTERISK_LIBS += -latomic
+ endif
  
++ifeq ($(BR2_PACKAGE_LIBYUV)$(BR2_PACKAGE_JPEG),yy)
++ASTERISK_LIBS += -ljpeg
++endif
++
++ASTERISK_CONF_ENV += LIBS="$(ASTERISK_LIBS)"
++
+ ifeq ($(BR2_TOOLCHAIN_USES_GLIBC),y)
+ ASTERISK_CONF_OPTS += --with-execinfo
+ else
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
