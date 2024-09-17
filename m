@@ -4,91 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6EADECAC590
-	for <buildroot@archiver.kernel.org>; Tue, 17 Sep 2024 23:49:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 87042CAC590
+	for <buildroot@archiver.kernel.org>; Tue, 17 Sep 2024 23:58:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2025C60618;
-	Tue, 17 Sep 2024 23:49:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3245060781;
+	Tue, 17 Sep 2024 23:58:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id guRpVXtqh3QV; Tue, 17 Sep 2024 23:49:12 +0000 (UTC)
+ id 4XAcqhfYr3CA; Tue, 17 Sep 2024 23:58:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 141096115E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2353660782
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 141096115E;
-	Tue, 17 Sep 2024 23:49:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2353660782;
+	Tue, 17 Sep 2024 23:58:47 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 3FE611BF2FF
- for <buildroot@lists.busybox.net>; Tue, 17 Sep 2024 23:49:10 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2639C1BF842
+ for <buildroot@lists.busybox.net>; Tue, 17 Sep 2024 23:58:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2E4EF4041C
- for <buildroot@lists.busybox.net>; Tue, 17 Sep 2024 23:49:10 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 139114041C
+ for <buildroot@lists.busybox.net>; Tue, 17 Sep 2024 23:58:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 90RibYSDYbwo for <buildroot@lists.busybox.net>;
- Tue, 17 Sep 2024 23:49:09 +0000 (UTC)
+ id siJj3qujCcJH for <buildroot@lists.busybox.net>;
+ Tue, 17 Sep 2024 23:58:44 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::d32; helo=mail-io1-xd32.google.com;
+ client-ip=2607:f8b0:4864:20::136; helo=mail-il1-x136.google.com;
  envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org ED9CA41057
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ED9CA41057
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com
- [IPv6:2607:f8b0:4864:20::d32])
- by smtp2.osuosl.org (Postfix) with ESMTPS id ED9CA41057
- for <buildroot@buildroot.org>; Tue, 17 Sep 2024 23:49:08 +0000 (UTC)
-Received: by mail-io1-xd32.google.com with SMTP id
- ca18e2360f4ac-829f7911eecso351068839f.1
- for <buildroot@buildroot.org>; Tue, 17 Sep 2024 16:49:08 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org CC5E74013B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CC5E74013B
+Received: from mail-il1-x136.google.com (mail-il1-x136.google.com
+ [IPv6:2607:f8b0:4864:20::136])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id CC5E74013B
+ for <buildroot@buildroot.org>; Tue, 17 Sep 2024 23:58:43 +0000 (UTC)
+Received: by mail-il1-x136.google.com with SMTP id
+ e9e14a558f8ab-3a07bd770e2so33688375ab.0
+ for <buildroot@buildroot.org>; Tue, 17 Sep 2024 16:58:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1726616947; x=1727221747;
+ d=1e100.net; s=20230601; t=1726617522; x=1727222322;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=MAO9rAZfRwUqZLWZmCWB7K+KKzTRGn8tYJjn8PwXUfs=;
- b=jzLakbi+Q8ljiL4XZqSjsPzPe46ncHotSAO6Lnk0812mm0kQeynnDA5xvMGYHEEIg6
- 5w/jmV0FhHkN3jBUxvhJh+I94QbUC1+x6ODOCBzlS0C1X+nnOsf3sR5Uyp2lHG8U223d
- A9WT3QjXSiAkP2BBFxmCyyWv2+UJB3lknK3/MbSM4P0KHKkwS+Sbkg0XRo9exT+MwJYn
- TjgogGhTkARu6aOAY/urtxJi2zB1LP6BeAfoSOn7h5/2UQN5vESvvNEygUpDuUr6jHbf
- GOdi7tKgi0xnl5B4WPegeFehPqtZ2HXyMtwGxxeDJVUEb7kprv0Subd/5x/08c8lU+BN
- Wvmg==
-X-Gm-Message-State: AOJu0YzJ5sRI6ywDZxq2nTllmA62tBmrU5ZIWXqpbas5yNhpdaJHmpvH
- ooi+KDBGEn1HtsU0v46D7Md1tKlKrnXm0BmiQ+EDfERjvdvtKMG2fegDBOHR
-X-Google-Smtp-Source: AGHT+IHzrKoFchAinvkU0KTYOjfucwnlioWJ1CG349lTW2j6j2/WUB6degTWWX3kf/x8rzIc4BuqXQ==
-X-Received: by 2002:a05:6602:3420:b0:82c:f30d:fc9b with SMTP id
- ca18e2360f4ac-82d1f982f5dmr1641064239f.13.1726616946994; 
- Tue, 17 Sep 2024 16:49:06 -0700 (PDT)
+ bh=wq1ddqowYO40/TLHfXTlIK0+GRNZcRPVJGnTeNC2zaA=;
+ b=iDJ0y8l/GXJSVSKJmhES+SYL4MHH2E0OkYbEqYihlo+882jSZTj2jvtKF5ZwX283WW
+ 5k3YRCe3PUQpYXKHM7aTdosWeNuTDhlCk7gaqYcQVt+gVkhnUcujHjUmyziPArZ+/SvC
+ nDcXeSeLYS5hJsIpffzOuSUp4GPTnWBi8Y+pNgsZb8joaDwAZ5RM7VF2ik1UerrgVAef
+ RuJpzpPi9+3cZLVocqXHwEYCRoKdZVcs7Ti08PYTnpF1GIRU781zKm2sNE1Q1lJixg0s
+ FZDihCBZMJ3tEzMx97A7kaLZIKLXNTv7u5fkASVfw1i9rrig1h1lGhL0nbu0Qhhu+DOd
+ 5U8g==
+X-Gm-Message-State: AOJu0Yx2Er4aIEoIEkHVlolPanYzfRxUfUtJx+wh7OF8WrPr4m/SD1Sf
+ i4KlXJJwNcoKjcef0WWaiBcNIAUcDRN3loFsLt0dQFAXw2RgtKzB6ocfUzsg
+X-Google-Smtp-Source: AGHT+IGASn491IoMbB9w8oNnSvN5oht672T44NumwQ9s6atdQc5uD/y0lGuK6xOKW0EIaAKjbLGa9w==
+X-Received: by 2002:a05:6e02:1d16:b0:3a0:9b56:a69 with SMTP id
+ e9e14a558f8ab-3a09b560c2cmr107443865ab.7.1726617522069; 
+ Tue, 17 Sep 2024 16:58:42 -0700 (PDT)
 Received: from james-x399.localdomain (71-218-252-223.hlrn.qwest.net.
  [71.218.252.223]) by smtp.gmail.com with ESMTPSA id
- ca18e2360f4ac-82d49354ad4sm229772139f.53.2024.09.17.16.49.06
+ 8926c6da1cb9f-4d37ed33fd1sm2216748173.122.2024.09.17.16.58.41
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 17 Sep 2024 16:49:06 -0700 (PDT)
+ Tue, 17 Sep 2024 16:58:41 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 17 Sep 2024 17:49:05 -0600
-Message-Id: <20240917234905.407631-1-james.hilliard1@gmail.com>
+Date: Tue, 17 Sep 2024 17:58:40 -0600
+Message-Id: <20240917235840.410166-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1726616947; x=1727221747; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1726617522; x=1727222322; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=MAO9rAZfRwUqZLWZmCWB7K+KKzTRGn8tYJjn8PwXUfs=;
- b=j6bsYMcjkTJWfuFJgIIow/RdFRU9maFd2oT2EvNHicOGoamE2jOKB6iM2esmQj0drO
- UmjkRcPDYmHnjYUi6pYxrkLno/+BXeGqGb4/rP5CRQ5BiYcZt6mLQkJ++PmYItxsez64
- NzfT7e/05OCRThTkvzZCJNKshs9CQsSJqfU9O96YZkFfOKbbbvOD0x7BpHbb0SrPOhF9
- 6OEh25nP8DnbLKEiJyvpsi1xLQcc8N1keMSrobRearxm+DLVBKPQMo2AqHjkzMtwZGiJ
- nVanvkahY3mUuRyjZxyS8njZdhaDMDfLsq5XXxqlUGYPLjd4adet+0V996txh2qS3otz
- GkRA==
+ bh=wq1ddqowYO40/TLHfXTlIK0+GRNZcRPVJGnTeNC2zaA=;
+ b=XfbC+gwpuVXIxSiYAM0UY2uJ9WXq2ASRsqOR5wjmZ4+bUKRTIrOscUS8eFLcELKqst
+ YYoxR95sSz52Rz9IjhOZbOdH/uuwtTqQy73Y8AFr6Xt5BrBgY1GplGY1pyOPTdJqjhLQ
+ ELnabn9D9vdxOyUWWSGhdTf+nrOiAr5CM1JonP2FIBAQh8SlmAKMBPYm3si9+bmD26n3
+ HmASa0nzOOSkXsnyDnWmfg6THB4fHERS7co4nJqlLCaXRFoeHjbYkN+W6IinwPJt+IDI
+ oPizAqrXPfgn6VL29FwYAfvELXXAiSlONO7MzmzskWrwHqReAb/5cS1PqG8pynmH84Im
+ PNOw==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=j6bsYMcj
-Subject: [Buildroot] [PATCH 1/1] package/python-pyroute2: bump to version
- 0.7.12
+ header.a=rsa-sha256 header.s=20230601 header.b=XfbC+gwp
+Subject: [Buildroot] [PATCH 1/1] package/python-pysmi: bump to version 1.5.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -106,43 +105,66 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Add new python-jinja2 and python-requests runtime dependencies.
+
+Migrate from setuptools to poetry build backend.
+
+License hash changed due to formatting changes:
+https://github.com/lextudio/pysmi/commit/8341b2e13421739cb3f284c1bf725ab56f7af15a
+
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-pyroute2/python-pyroute2.hash | 6 +++---
- package/python-pyroute2/python-pyroute2.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-pysmi/Config.in         | 2 ++
+ package/python-pysmi/python-pysmi.hash | 6 +++---
+ package/python-pysmi/python-pysmi.mk   | 7 ++++---
+ 3 files changed, 9 insertions(+), 6 deletions(-)
 
-diff --git a/package/python-pyroute2/python-pyroute2.hash b/package/python-pyroute2/python-pyroute2.hash
-index 87693d028b..e346ca4f66 100644
---- a/package/python-pyroute2/python-pyroute2.hash
-+++ b/package/python-pyroute2/python-pyroute2.hash
-@@ -1,7 +1,7 @@
- # md5, sha256 from https://pypi.org/pypi/pyroute2/json
--md5  0566531c56ec453cc9ca0aff2c3f2f31  pyroute2-0.7.10.tar.gz
--sha256  cc2f90aad1517cb0b301041f678cc8d3c3427c26e53f15c78c93c67928d89a02  pyroute2-0.7.10.tar.gz
--# Locally computed sha256
-+md5  04e3b1a6550840c2eaa75da16b83f62b  pyroute2-0.7.12.tar.gz
-+sha256  54d226fc3ff2732f49bac9b26853c50c9d05be05a4d9daf09c7cf6d77301eff3  pyroute2-0.7.12.tar.gz
-+# Locally computed sha256 checksums
- sha256  4739b32a2478e9c204bf010bad5d565d188e59ff905e3c8f71fe3398098b7093  LICENSE.Apache-2.0
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  LICENSE.GPL-2.0-or-later
- sha256  cbd229e4525bd162dd51f53b2e972d0383f0d0bd5277a10387a57ab9bff97c9f  README.license.rst
-diff --git a/package/python-pyroute2/python-pyroute2.mk b/package/python-pyroute2/python-pyroute2.mk
-index 023b8e7c44..a4029c7321 100644
---- a/package/python-pyroute2/python-pyroute2.mk
-+++ b/package/python-pyroute2/python-pyroute2.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/python-pysmi/Config.in b/package/python-pysmi/Config.in
+index 2e4453d886..d30e24afd1 100644
+--- a/package/python-pysmi/Config.in
++++ b/package/python-pysmi/Config.in
+@@ -1,6 +1,8 @@
+ config BR2_PACKAGE_PYTHON_PYSMI
+ 	bool "python-pysmi"
++	select BR2_PACKAGE_PYTHON_JINJA2 # runtime
+ 	select BR2_PACKAGE_PYTHON_PLY # runtime
++	select BR2_PACKAGE_PYTHON_REQUESTS # runtime
+ 	help
+ 	  SNMP SMI/MIB Parser.
+ 
+diff --git a/package/python-pysmi/python-pysmi.hash b/package/python-pysmi/python-pysmi.hash
+index bb13f0ef00..729b980032 100644
+--- a/package/python-pysmi/python-pysmi.hash
++++ b/package/python-pysmi/python-pysmi.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/pysmi/json
+-md5  10a9dd140ad512eed9f37344df83ce9d  pysmi-0.3.4.tar.gz
+-sha256  bd15a15020aee8376cab5be264c26330824a8b8164ed0195bd402dd59e4e8f7c  pysmi-0.3.4.tar.gz
++md5  f99b37bb4a31a9cfaedc8b7f269ad7b8  pysmi-1.5.0.tar.gz
++sha256  e42bcd3961de71d58186f7a7fa6adac133701ae74cd19e6376289d89593b0af2  pysmi-1.5.0.tar.gz
+ # Locally computed sha256 checksums
+-sha256  c43704eafcfa2bc33e56168f2b498c3c34a1d7865855626a52b5af411fc5837f  LICENSE.rst
++sha256  46aa9a218d0f066d2565b826b08872227480e93f561eadf4d994213b08882b8a  LICENSE.rst
+diff --git a/package/python-pysmi/python-pysmi.mk b/package/python-pysmi/python-pysmi.mk
+index 2aee27b186..f747864def 100644
+--- a/package/python-pysmi/python-pysmi.mk
++++ b/package/python-pysmi/python-pysmi.mk
+@@ -4,11 +4,12 @@
  #
  ################################################################################
  
--PYTHON_PYROUTE2_VERSION = 0.7.10
-+PYTHON_PYROUTE2_VERSION = 0.7.12
- PYTHON_PYROUTE2_SOURCE = pyroute2-$(PYTHON_PYROUTE2_VERSION).tar.gz
--PYTHON_PYROUTE2_SITE = https://files.pythonhosted.org/packages/18/44/930e15e4fd5d0c7c54dfd303f644a057d88f411a97581d6edc5cb9e16f9e
-+PYTHON_PYROUTE2_SITE = https://files.pythonhosted.org/packages/39/16/323b947c34530436658331e2cf393b72ebcbd923a75154a7efb28feefd5d
- PYTHON_PYROUTE2_LICENSE = Apache-2.0 or GPL-2.0+
- PYTHON_PYROUTE2_LICENSE_FILES = LICENSE.Apache-2.0 LICENSE.GPL-2.0-or-later README.license.rst
- PYTHON_PYROUTE2_SETUP_TYPE = setuptools
+-PYTHON_PYSMI_VERSION = 0.3.4
++PYTHON_PYSMI_VERSION = 1.5.0
+ PYTHON_PYSMI_SOURCE = pysmi-$(PYTHON_PYSMI_VERSION).tar.gz
+-PYTHON_PYSMI_SITE = https://files.pythonhosted.org/packages/52/42/ddaeb06ff551672b17b77f81bc2e26b7c6060b28fe1552226edc6476ce37
+-PYTHON_PYSMI_SETUP_TYPE = setuptools
++PYTHON_PYSMI_SITE = https://files.pythonhosted.org/packages/59/d9/136ca19b66a917377a3b40f390f525eeeb21122dba7562a726bfb2d3629e
++PYTHON_PYSMI_SETUP_TYPE = pep517
+ PYTHON_PYSMI_LICENSE = BSD-2-Clause
+ PYTHON_PYSMI_LICENSE_FILES = LICENSE.rst
++PYTHON_PYSMI_DEPENDENCIES = host-python-poetry-core
+ 
+ $(eval $(python-package))
 -- 
 2.34.1
 
