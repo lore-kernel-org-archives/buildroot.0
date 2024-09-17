@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 379C2CAC5A3
-	for <buildroot@archiver.kernel.org>; Tue, 17 Sep 2024 21:10:00 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 858C2CAC5A3
+	for <buildroot@archiver.kernel.org>; Tue, 17 Sep 2024 21:10:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 0D9E361519;
-	Tue, 17 Sep 2024 21:10:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 526DE61520;
+	Tue, 17 Sep 2024 21:10:03 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id n4sY01lKBBiZ; Tue, 17 Sep 2024 21:09:59 +0000 (UTC)
+ id 2CtWxLyhrF0B; Tue, 17 Sep 2024 21:10:02 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9D3E86153E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CC80A61543
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9D3E86153E;
-	Tue, 17 Sep 2024 21:09:58 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CC80A61543;
+	Tue, 17 Sep 2024 21:10:01 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1E3991BF5E6
- for <buildroot@lists.busybox.net>; Tue, 17 Sep 2024 21:09:17 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 02F941BF5E6
+ for <buildroot@lists.busybox.net>; Tue, 17 Sep 2024 21:09:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0C094614B0
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1756C6115A
  for <buildroot@lists.busybox.net>; Tue, 17 Sep 2024 21:09:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id J304tbKjd8q4 for <buildroot@lists.busybox.net>;
+ id A7qudlTJ4zHT for <buildroot@lists.busybox.net>;
  Tue, 17 Sep 2024 21:09:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D73056115A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E236F614AB
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id D73056115A
+ by smtp3.osuosl.org (Postfix) with ESMTP id E236F614AB
  for <buildroot@buildroot.org>; Tue, 17 Sep 2024 21:09:08 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D3D4E82138; Tue, 17 Sep 2024 21:09:08 +0000 (UTC)
+ id DF63782572; Tue, 17 Sep 2024 21:09:08 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 17 Sep 2024 23:06:58 +0200
+Date: Tue, 17 Sep 2024 23:07:53 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: b4b98ee9eedaae3b2b52791590f9a6f7716fbd7a
-X-Git-Newrev: 763d5beb5d71bc6e08ba0f414f4caaec038319a2
+X-Git-Oldrev: 763d5beb5d71bc6e08ba0f414f4caaec038319a2
+X-Git-Newrev: 5c10eb289234e771030995daf7d69d112c2412f2
 X-Patchwork-Hint: ignore
-Message-Id: <20240917210908.D3D4E82138@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/asterisk:
- security update to 20.9.2
+Message-Id: <20240917210908.DF63782572@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/botan: security
+ update to 3.5.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,48 +65,54 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=763d5beb5d71bc6e08ba0f414f4caaec038319a2
+commit: https://git.buildroot.net/buildroot/commit/?id=5c10eb289234e771030995daf7d69d112c2412f2
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-See here for a changelog:
-https://downloads.asterisk.org/pub/telephony/asterisk/releases/ChangeLog-20.9.2.md
+See here for complete changelogs:
+https://botan.randombit.net/news.html#version-3-5-0-2024-07-08
+https://botan.randombit.net/news.html#version-3-4-0-2024-04-08
 
-And here for the security advisory:
-https://github.com/asterisk/asterisk/security/advisories/GHSA-c4cg-9275-6w44
+CVE-2024-34702: Fix a DoS caused by excessive name constraints. (GH
+
+CVE-2024-39312: Fix a name constraint processing error, where if
+permitted and excluded rules both applied to a certificate, only the
+permitted rules would be checked.
+
+The License hash changed because the year was updated from 2023 to 2024.
 
 Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 6877647e8aff18a697d49015dd6273a9886db17e)
+(cherry picked from commit 3ba9ac62052c99d7557adf2bbad1bab0c5577a81)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/asterisk/asterisk.hash | 2 +-
- package/asterisk/asterisk.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/botan/botan.hash | 4 ++--
+ package/botan/botan.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/asterisk/asterisk.hash b/package/asterisk/asterisk.hash
-index ee21d88d98..9889a18c9d 100644
---- a/package/asterisk/asterisk.hash
-+++ b/package/asterisk/asterisk.hash
-@@ -1,5 +1,5 @@
+diff --git a/package/botan/botan.hash b/package/botan/botan.hash
+index 37e00ea9cc..d948271900 100644
+--- a/package/botan/botan.hash
++++ b/package/botan/botan.hash
+@@ -1,4 +1,4 @@
+ # From https://botan.randombit.net/releases/sha256sums.txt
+-sha256  368f11f426f1205aedb9e9e32368a16535dc11bd60351066e6f6664ec36b85b9  Botan-3.3.0.tar.xz
++sha256  67e8dae1ca2468d90de4e601c87d5f31ff492b38e8ab8bcbd02ddf7104ed8a9f  Botan-3.5.0.tar.xz
  # Locally computed
--sha256  c928c715dc5ff783ea6cf62cca3eebdc1dc9c5d40ce9b37b0213c0eac7f4090f  asterisk-20.9.1.tar.gz
-+sha256  6bc4d982a238397bf6b3bfa523f63a75a2d9b19edd6f33f79264f2385d05bc42  asterisk-20.9.2.tar.gz
- 
- # sha1 from: http://downloads.asterisk.org/pub/telephony/sounds/releases
- # sha256 locally computed
-diff --git a/package/asterisk/asterisk.mk b/package/asterisk/asterisk.mk
-index a254e462d6..08fe0d5ede 100644
---- a/package/asterisk/asterisk.mk
-+++ b/package/asterisk/asterisk.mk
+-sha256  1833cde7c7cc03296b1ef2ddc178b1cd7fd1c476840f32cf6aedb09ab0bc9004  license.txt
++sha256  db9168bdccaaea26557094436652577cc9bf43164e8be078d88aef1342fe4fb6  license.txt
+diff --git a/package/botan/botan.mk b/package/botan/botan.mk
+index e0bd258f57..561e7bf702 100644
+--- a/package/botan/botan.mk
++++ b/package/botan/botan.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ASTERISK_VERSION = 20.9.1
-+ASTERISK_VERSION = 20.9.2
- # Use the github mirror: it's an official mirror maintained by Digium, and
- # provides tarballs, which the main Asterisk git tree (behind Gerrit) does not.
- ASTERISK_SITE = $(call github,asterisk,asterisk,$(ASTERISK_VERSION))
+-BOTAN_VERSION = 3.3.0
++BOTAN_VERSION = 3.5.0
+ BOTAN_SOURCE = Botan-$(BOTAN_VERSION).tar.xz
+ BOTAN_SITE = http://botan.randombit.net/releases
+ BOTAN_LICENSE = BSD-2-Clause
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
