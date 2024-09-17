@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C410CCAC5A4
-	for <buildroot@archiver.kernel.org>; Tue, 17 Sep 2024 21:09:25 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F7C9CAC5A3
+	for <buildroot@archiver.kernel.org>; Tue, 17 Sep 2024 21:09:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 94D30614B5;
-	Tue, 17 Sep 2024 21:09:25 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 19FFA614E8;
+	Tue, 17 Sep 2024 21:09:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZhZECdu_WdC5; Tue, 17 Sep 2024 21:09:24 +0000 (UTC)
+ id bQGuozGTfU6E; Tue, 17 Sep 2024 21:09:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3B1B6614DA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D986F614BA
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3B1B6614DA;
-	Tue, 17 Sep 2024 21:09:24 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 04CA61BF5E6
+	by smtp3.osuosl.org (Postfix) with ESMTP id D986F614BA;
+	Tue, 17 Sep 2024 21:09:26 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 1696C1BF969
  for <buildroot@lists.busybox.net>; Tue, 17 Sep 2024 21:09:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id CEAC440118
+ by smtp3.osuosl.org (Postfix) with ESMTP id 36A8A60616
  for <buildroot@lists.busybox.net>; Tue, 17 Sep 2024 21:09:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Tohczw7ViEIN for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id HCBfUbkQpPdo for <buildroot@lists.busybox.net>;
  Tue, 17 Sep 2024 21:09:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 905424018F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 698B2610C5
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 905424018F
+ by smtp3.osuosl.org (Postfix) with ESMTP id 698B2610C5
  for <buildroot@buildroot.org>; Tue, 17 Sep 2024 21:09:08 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F269483A5F; Tue, 17 Sep 2024 21:09:07 +0000 (UTC)
+ id 5556980584; Tue, 17 Sep 2024 21:09:08 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 17 Sep 2024 15:13:02 +0200
+Date: Tue, 17 Sep 2024 15:20:56 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 6a0257e9497fe82718babde3b0e3df89c27676f3
-X-Git-Newrev: 439eaa9d106090426f2043ba980d7b007539ab35
+X-Git-Oldrev: 82346f7c8ed987239e95e3778b87463709c0557c
+X-Git-Newrev: 3dd70ef15bba55e65398a28ef72e8154a79b7d99
 X-Patchwork-Hint: ignore
-Message-Id: <20240917210907.F269483A5F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] utils/genrandconfig:
- remove fixups related to untested CT-NG toolchains
+Message-Id: <20240917210908.5556980584@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] utils/genrandconfig: fix
+ fallout of dropping toolchain CSV
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,122 +65,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=439eaa9d106090426f2043ba980d7b007539ab35
+commit: https://git.buildroot.net/buildroot/commit/?id=3dd70ef15bba55e65398a28ef72e8154a79b7d99
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-We have accumulated a whole bunch of very old fixups to avoid issues
-with super old CT-NG toolchains, which we are not testing anymore, so
-remove those fixups.
+Commit 2f260084d577 (utils/genrandconfig: remove support for toolchain
+CSV) kept the --no-toolchains-csv option, but in the rework forgot to
+keep it as a bool, while argparse default is to expect a string.
 
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Rather than re-introduce the action="store_true" which implies the
+argument is a bool, explicit make it a bool.
+
+Fixes: 2f260084d5771728f3340ff6a86a23391133a635
+
+Reported-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 9e3388256811c943d8312db289959b74cae9536e)
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 4dbb87bb6676b82f34981f6adedccfa03a9667cd)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- utils/genrandconfig | 81 -----------------------------------------------------
- 1 file changed, 81 deletions(-)
+ utils/genrandconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/utils/genrandconfig b/utils/genrandconfig
-index 63943eafe9..e660496fe5 100755
+index 06c26b0512..d13c7befc4 100755
 --- a/utils/genrandconfig
 +++ b/utils/genrandconfig
-@@ -181,43 +181,8 @@ async def fixup_config(sysinfo, configfile):
+@@ -604,7 +604,7 @@ if __name__ == '__main__':
+                         help="Buildroot directory (relative to current directory)",
+                         type=str, default='.')
+     parser.add_argument("--toolchains-csv", help="Legacy, unused", type=str)
+-    parser.add_argument("--no-toolchains-csv", help="Legacy, unused")
++    parser.add_argument("--no-toolchains-csv", help="Legacy, unused", type=bool)
  
-     ROOTFS_SIZE = '5G'
+     args = parser.parse_args()
  
--    BR2_TOOLCHAIN_EXTERNAL_URL = 'BR2_TOOLCHAIN_EXTERNAL_URL="http://autobuild.buildroot.org/toolchains/tarballs/'
--
-     if "BR2_NEEDS_HOST_JAVA=y\n" in configlines and not await sysinfo.has("java"):
-         return False
--    # The ctng toolchain is affected by PR58854
--    if 'BR2_PACKAGE_LTTNG_TOOLS=y\n' in configlines and \
--       BR2_TOOLCHAIN_EXTERNAL_URL + 'armv5-ctng-linux-gnueabi.tar.xz"\n' in configlines:
--        return False
--    # The ctng toolchain tigger an assembler error with guile package when compiled with -Os (same issue as for CS ARM 2014.05-29)
--    if 'BR2_PACKAGE_GUILE=y\n' in configlines and \
--       'BR2_OPTIMIZE_S=y\n' in configlines and \
--       BR2_TOOLCHAIN_EXTERNAL_URL + 'armv5-ctng-linux-gnueabi.tar.xz"\n' in configlines:
--        return False
--    # The ctng toolchain is affected by PR58854
--    if 'BR2_PACKAGE_LTTNG_TOOLS=y\n' in configlines and \
--       BR2_TOOLCHAIN_EXTERNAL_URL + 'armv6-ctng-linux-uclibcgnueabi.tar.xz"\n' in configlines:
--        return False
--    # The ctng toolchain is affected by PR58854
--    if 'BR2_PACKAGE_LTTNG_TOOLS=y\n' in configlines and \
--       BR2_TOOLCHAIN_EXTERNAL_URL + 'armv7-ctng-linux-gnueabihf.tar.xz"\n' in configlines:
--        return False
--    # The ctng toolchain is affected by PR60155
--    if 'BR2_PACKAGE_SDL=y\n' in configlines and \
--       BR2_TOOLCHAIN_EXTERNAL_URL + 'powerpc-ctng-linux-uclibc.tar.xz"\n' in configlines:
--        return False
--    # The ctng toolchain is affected by PR60155
--    if 'BR2_PACKAGE_LIBMPEG2=y\n' in configlines and \
--       BR2_TOOLCHAIN_EXTERNAL_URL + 'powerpc-ctng-linux-uclibc.tar.xz"\n' in configlines:
--        return False
--    # This MIPS toolchain uses eglibc-2.18 which lacks SYS_getdents64
--    if 'BR2_PACKAGE_STRONGSWAN=y\n' in configlines and \
--       BR2_TOOLCHAIN_EXTERNAL_URL + 'mips64el-ctng_n64-linux-gnu.tar.xz"\n' in configlines:
--        return False
--    # This MIPS toolchain uses eglibc-2.18 which lacks SYS_getdents64
--    if 'BR2_PACKAGE_PYTHON3=y\n' in configlines and \
--       BR2_TOOLCHAIN_EXTERNAL_URL + 'mips64el-ctng_n64-linux-gnu.tar.xz"\n' in configlines:
--        return False
-     # libffi not available on ARMv7-M, but propagating libffi arch
-     # dependencies in Buildroot is really too much work, so we handle
-     # this here.
-@@ -232,52 +197,6 @@ async def fixup_config(sysinfo, configfile):
-     if 'BR2_PACKAGE_SUNXI_BOARDS=y\n' in configlines:
-         configlines.remove('BR2_PACKAGE_SUNXI_BOARDS_FEX_FILE=""\n')
-         configlines.append('BR2_PACKAGE_SUNXI_BOARDS_FEX_FILE="a10/hackberry.fex"\n')
--    # This MIPS uClibc toolchain fails to build the gdb package
--    if 'BR2_PACKAGE_GDB=y\n' in configlines and \
--       BR2_TOOLCHAIN_EXTERNAL_URL + 'mipsel-ctng-linux-uclibc.tar.xz"\n' in configlines:
--        return False
--    # This MIPS uClibc toolchain fails to build the rt-tests package
--    if 'BR2_PACKAGE_RT_TESTS=y\n' in configlines and \
--       BR2_TOOLCHAIN_EXTERNAL_URL + 'mipsel-ctng-linux-uclibc.tar.xz"\n' in configlines:
--        return False
--    # This MIPS uClibc toolchain fails to build the civetweb package
--    if 'BR2_PACKAGE_CIVETWEB=y\n' in configlines and \
--       BR2_TOOLCHAIN_EXTERNAL_URL + 'mipsel-ctng-linux-uclibc.tar.xz"\n' in configlines:
--        return False
--    # This MIPS ctng toolchain fails to build the python3 package
--    if 'BR2_PACKAGE_PYTHON3=y\n' in configlines and \
--       BR2_TOOLCHAIN_EXTERNAL_URL + 'mips64el-ctng_n64-linux-gnu.tar.xz"\n' in configlines:
--        return False
--    # This MIPS uClibc toolchain fails to build the strace package
--    if 'BR2_PACKAGE_STRACE=y\n' in configlines and \
--       BR2_TOOLCHAIN_EXTERNAL_URL + 'mipsel-ctng-linux-uclibc.tar.xz"\n' in configlines:
--        return False
--    # This MIPS uClibc toolchain fails to build the cdrkit package
--    if 'BR2_PACKAGE_CDRKIT=y\n' in configlines and \
--       'BR2_STATIC_LIBS=y\n' in configlines and \
--       BR2_TOOLCHAIN_EXTERNAL_URL + 'mipsel-ctng-linux-uclibc.tar.xz"\n' in configlines:
--        return False
--    # uClibc vfork static linking issue
--    if 'BR2_PACKAGE_ALSA_LIB=y\n' in configlines and \
--       'BR2_STATIC_LIBS=y\n' in configlines and \
--       BR2_TOOLCHAIN_EXTERNAL_URL + 'i486-ctng-linux-uclibc.tar.xz"\n' in configlines:
--        return False
--    # This MIPS uClibc toolchain fails to build the weston package
--    if 'BR2_PACKAGE_WESTON=y\n' in configlines and \
--       BR2_TOOLCHAIN_EXTERNAL_URL + 'mipsel-ctng-linux-uclibc.tar.xz"\n' in configlines:
--        return False
--    # The cs nios2 2017.02 toolchain is affected by binutils PR19405
--    if 'BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII=y\n' in configlines and \
--       'BR2_PACKAGE_BOOST=y\n' in configlines:
--        return False
--    # The cs nios2 2017.02 toolchain is affected by binutils PR19405
--    if 'BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII=y\n' in configlines and \
--       'BR2_PACKAGE_QT5BASE_GUI=y\n' in configlines:
--        return False
--    # The cs nios2 2017.02 toolchain is affected by binutils PR19405
--    if 'BR2_TOOLCHAIN_EXTERNAL_CODESOURCERY_NIOSII=y\n' in configlines and \
--       'BR2_PACKAGE_FLANN=y\n' in configlines:
--        return False
-     # No C library for internal toolchain
-     if 'BR2_TOOLCHAIN_BUILDROOT_NONE=y\n' in configlines:
-         return False
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
