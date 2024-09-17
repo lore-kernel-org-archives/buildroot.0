@@ -1,95 +1,94 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E2E91CAC5AB
-	for <buildroot@archiver.kernel.org>; Tue, 17 Sep 2024 22:30:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 479E3CAC5AC
+	for <buildroot@archiver.kernel.org>; Tue, 17 Sep 2024 23:22:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9BAE781DEA;
-	Tue, 17 Sep 2024 22:30:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B3F9D60778;
+	Tue, 17 Sep 2024 23:22:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id e-6WrnTyc7Zm; Tue, 17 Sep 2024 22:30:14 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wpGz_IGOusDD; Tue, 17 Sep 2024 23:22:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A1E1681E07
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A6BB46115E
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A1E1681E07;
-	Tue, 17 Sep 2024 22:30:14 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 8755B1BF316
- for <buildroot@lists.busybox.net>; Tue, 17 Sep 2024 22:30:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A6BB46115E;
+	Tue, 17 Sep 2024 23:22:32 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id C37691BF2FF
+ for <buildroot@lists.busybox.net>; Tue, 17 Sep 2024 23:22:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 7543841A6C
- for <buildroot@lists.busybox.net>; Tue, 17 Sep 2024 22:30:13 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9DD8460778
+ for <buildroot@lists.busybox.net>; Tue, 17 Sep 2024 23:22:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tczJ83jMaAm3 for <buildroot@lists.busybox.net>;
- Tue, 17 Sep 2024 22:30:12 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ju6S9QqmaEes for <buildroot@lists.busybox.net>;
+ Tue, 17 Sep 2024 23:22:27 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::131; helo=mail-il1-x131.google.com;
+ client-ip=2607:f8b0:4864:20::d2b; helo=mail-io1-xd2b.google.com;
  envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 29E5341A00
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 29E5341A00
-Received: from mail-il1-x131.google.com (mail-il1-x131.google.com
- [IPv6:2607:f8b0:4864:20::131])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 29E5341A00
- for <buildroot@buildroot.org>; Tue, 17 Sep 2024 22:30:11 +0000 (UTC)
-Received: by mail-il1-x131.google.com with SMTP id
- e9e14a558f8ab-39f51934f61so15829645ab.2
- for <buildroot@buildroot.org>; Tue, 17 Sep 2024 15:30:11 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 9D81E61165
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9D81E61165
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com
+ [IPv6:2607:f8b0:4864:20::d2b])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 9D81E61165
+ for <buildroot@buildroot.org>; Tue, 17 Sep 2024 23:22:27 +0000 (UTC)
+Received: by mail-io1-xd2b.google.com with SMTP id
+ ca18e2360f4ac-82a151a65b8so336854339f.2
+ for <buildroot@buildroot.org>; Tue, 17 Sep 2024 16:22:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1726612211; x=1727217011;
+ d=1e100.net; s=20230601; t=1726615346; x=1727220146;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=qej499ORCGX2Z7CBRgpW986HifSSW0JM6jUyNXGiHJQ=;
- b=kvnisTuoeXXMFJAEDW0H7EHXt2fQOXAQty+Tt6bjiA35st543HcydjjaiIUrsg6q4Q
- jHjLOiDzyoBiszMl69na3S4HQJ2XaqGsEaNDrt6rUGPtvkFFMEdcifPhT+m4MS1BcyHC
- 6cnq/jcPYKPh+FyMv775pirA3zLUJXNhxKrbFHGzjfFlNKmku7ZmcIIC1bkaJRJBah42
- HhD6ttZOfsrdVvALM/DVBmiCuy4BuDmHmCt220cxK5sqAz7RzjV6zBd53GKW4NXv3jpL
- MiWHAH/r49SwGUFTNgIW6WE1oauQLsf2inJkln48w78/NIQ63RpyoSwENW0H4cLoXmVH
- hKjg==
-X-Gm-Message-State: AOJu0Yx/E89YIzvY8lXulIpKjn0ZY1KbL6wiEH7VlJnR+CwhILlxV+w+
- l6kXSgECP6edDGEaX5Mijb16eql5fGUtvIomLAI6j+dbellV2iUwdSZVSexo
-X-Google-Smtp-Source: AGHT+IHE1MqgSa5QtR4fPGMdcqQaIPduUx0x9POVfSF6E+DsWTD5yQ+J6stsk9E7hRystyr1N8DACw==
-X-Received: by 2002:a05:6e02:1d8e:b0:3a0:9b27:7d52 with SMTP id
- e9e14a558f8ab-3a09b277eb6mr93816085ab.20.1726612210901; 
- Tue, 17 Sep 2024 15:30:10 -0700 (PDT)
+ bh=NjVHpXshOV+LdqWD4IKoJVjeD4Q5a5DRg2hR7QPdk6o=;
+ b=cfeVn9tT5o/mgW4SIdtO5dCNjpWuedwQ/U4SjHf8/GUmqwFLWmufEzT0Xsdn+0WIct
+ Q1c4L8NvIj47MnizgDygZ4a4k94ucY548KiOHnI4v3DSr+Ulgr/+mBTs9xGk3B3csQoM
+ E2tK/S8r/mXAi20KJyttcMiRoYjL+nSFVApUYupLHxOKwOMisA5k0be6G3NeCx2w5lZf
+ tMtc8xczN9HuSrWnixM6KF2x4eojsgcQA6QQV7S57VyqG5Y8tEjpjAo70j2FfT+txHZl
+ bmJipl5w1nFqlQvBrU1PI3/EgSc0tv7NKaHmvk1BM+j1PH3GElFVn8Obx8zmeIKbz+x8
+ kpsw==
+X-Gm-Message-State: AOJu0YwTAmNA4DsXFPlthCUxaV037k3Z1MWb3a1RJqG9QEGEPtc9J4Eb
+ yw1V9YEduUsV0wsI3K0mCDNV2XSNOsmVnfD5i08RATh7VRRlk6velhaQn7u6
+X-Google-Smtp-Source: AGHT+IELtr2K7Wr57NMVui3AI8PSszZXP5Ak8JWtZIjR8T1f9Taq4iLtTcOEucfNdMTSHYmchX7BMA==
+X-Received: by 2002:a05:6602:1542:b0:82c:db6a:366 with SMTP id
+ ca18e2360f4ac-82d1f8132d9mr2147817039f.0.1726615346168; 
+ Tue, 17 Sep 2024 16:22:26 -0700 (PDT)
 Received: from james-x399.localdomain (71-218-252-223.hlrn.qwest.net.
  [71.218.252.223]) by smtp.gmail.com with ESMTPSA id
- 8926c6da1cb9f-4d37ed34febsm2199133173.134.2024.09.17.15.30.10
+ ca18e2360f4ac-82d493389c8sm227972139f.44.2024.09.17.16.22.24
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 17 Sep 2024 15:30:10 -0700 (PDT)
+ Tue, 17 Sep 2024 16:22:25 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 17 Sep 2024 16:30:09 -0600
-Message-Id: <20240917223009.124484-1-james.hilliard1@gmail.com>
+Date: Tue, 17 Sep 2024 17:22:23 -0600
+Message-Id: <20240917232223.394548-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1726612211; x=1727217011; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1726615346; x=1727220146; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=qej499ORCGX2Z7CBRgpW986HifSSW0JM6jUyNXGiHJQ=;
- b=Uddihd2JutrMHw8AOSAFaowNdqnGq2K/k3Z+7YCw2CuBmVGvRX1j4xo2RGuPNrcBQN
- yIrt77lQWDHdta5LL+t7OBJ5Tk7Cisa3eZ1flVbRrQjWnkPR+MNoCvIlU+OMmrgBJG/R
- DH9m6aqPAaDYKdbtgGtFemPyEtPBG1VMDl1uPxcjo2elvbGbhE2RIoQbPCA09lkmgpsm
- YBng1pAaKPgziXdvfFC1hWPVPeS0k1avonyf93sB4KUkQ7tnQ6MS2h0stiTtDyBUiAXv
- HeMQXhKbFXmn7uR06EWdFj0xAR1H0Z9dh5zmCXFG8eLUYbLaU3Xnc4IBIaBO92BxlTzb
- pVlA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=NjVHpXshOV+LdqWD4IKoJVjeD4Q5a5DRg2hR7QPdk6o=;
+ b=dLn/9B9boVBsusA01ElAie5ZlZBaTrefChXsxSOKPsNcbR5T0eGsHjBosw6zy0HrNo
+ SdkG2sMtYiMlXBpQvlpbV1WB3JxkJidjShbUNglWavJ3ySxzHdy/qoUkvKHmoha75GBM
+ AUbRtP2lMycM+m+t91tNlBx/OQeea73PlCMCITDBsswzqka0eiWRv4x42q2vfgWcyT9f
+ UlDsyl+9juAVz4PNWmU1bOYXeFyFEwjGUR7ioRCpyhWq8TG9+GuDn4CHgui2BZqmEPXs
+ KhQoYCkLXCfRqwW3BLyN2Y2Ba5wIL9ofArvDdtt3PDM0a+475xR9tQhk4g4A9F2nunZa
+ wm0g==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=Uddihd2J
-Subject: [Buildroot] [PATCH 1/1] package/python-pylibftdi: bump to version
- 0.22.0
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=dLn/9B9b
+Subject: [Buildroot] [PATCH 1/1] package/python-pymysql: bump to version
+ 1.1.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,8 +101,7 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 Cc: James Hilliard <james.hilliard1@gmail.com>,
- Christian Kellermann <christian.kellermann@solectrix.de>,
- Asaf Kahlon <asafka7@gmail.com>
+ Steve Calfee <stevecalfee@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -111,38 +109,39 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-pylibftdi/python-pylibftdi.hash | 4 ++--
- package/python-pylibftdi/python-pylibftdi.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-pymysql/python-pymysql.hash | 4 ++--
+ package/python-pymysql/python-pymysql.mk   | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-pylibftdi/python-pylibftdi.hash b/package/python-pylibftdi/python-pylibftdi.hash
-index 5d8a19647f..00cee048f4 100644
---- a/package/python-pylibftdi/python-pylibftdi.hash
-+++ b/package/python-pylibftdi/python-pylibftdi.hash
+diff --git a/package/python-pymysql/python-pymysql.hash b/package/python-pymysql/python-pymysql.hash
+index 641d5dba97..d697dfae88 100644
+--- a/package/python-pymysql/python-pymysql.hash
++++ b/package/python-pymysql/python-pymysql.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pylibftdi/json
--md5  75b63f325b760cc6342b7d35fbb84fde  pylibftdi-0.21.0.tar.gz
--sha256  eb7e2f5052852547f4c6c46022a1665f9d7453439639171eade56fdc80a58832  pylibftdi-0.21.0.tar.gz
-+md5  a1d3039e8e09b3fb73cb03f1d6f3119b  pylibftdi-0.22.0.tar.gz
-+sha256  85a6aab438f765342843aa2d59bb28fbb0d30847a621fb9800985185990f01af  pylibftdi-0.22.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/pymysql/json
+-md5  81d559c87414017075de030d8ce93257  PyMySQL-1.1.0.tar.gz
+-sha256  4f13a7df8bf36a51e81dd9f3605fede45a4878fe02f9236349fd82a3f0612f96  PyMySQL-1.1.0.tar.gz
++md5  66e1b2c679250e0ae9ae037444de950a  pymysql-1.1.1.tar.gz
++sha256  e127611aaf2b417403c60bf4dc570124aeb4a57f5f37b8e95ae399a42f904cd0  pymysql-1.1.1.tar.gz
  # Locally computed sha256 checksums
- sha256  b8a7b113cfaa2c01d0701183de16ba653465692b1e29e0229244eee42fb3a9a8  LICENSE.txt
-diff --git a/package/python-pylibftdi/python-pylibftdi.mk b/package/python-pylibftdi/python-pylibftdi.mk
-index 7607c90d4a..b4a9d82ef8 100644
---- a/package/python-pylibftdi/python-pylibftdi.mk
-+++ b/package/python-pylibftdi/python-pylibftdi.mk
+ sha256  314120dc65f0800f738a4b31400c76ee14decd1fbe77ce9c3540a421b86ea7b6  LICENSE
+diff --git a/package/python-pymysql/python-pymysql.mk b/package/python-pymysql/python-pymysql.mk
+index c600fe515c..742fb4f6f1 100644
+--- a/package/python-pymysql/python-pymysql.mk
++++ b/package/python-pymysql/python-pymysql.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYLIBFTDI_VERSION = 0.21.0
-+PYTHON_PYLIBFTDI_VERSION = 0.22.0
- PYTHON_PYLIBFTDI_SOURCE = pylibftdi-$(PYTHON_PYLIBFTDI_VERSION).tar.gz
--PYTHON_PYLIBFTDI_SITE = https://files.pythonhosted.org/packages/d2/ce/ff3e83f3a14eb5b7950ff3657f07cdc3033dd0ded5c8ed093db515e1de33
-+PYTHON_PYLIBFTDI_SITE = https://files.pythonhosted.org/packages/74/b3/a3c333a250143d204a0bb60de7c1e5f841543231f04c71ff4fa65e5b90c2
- PYTHON_PYLIBFTDI_LICENSE = MIT
- PYTHON_PYLIBFTDI_LICENSE_FILES = LICENSE.txt
- PYTHON_PYLIBFTDI_SETUP_TYPE = pep517
+-PYTHON_PYMYSQL_VERSION = 1.1.0
+-PYTHON_PYMYSQL_SOURCE = PyMySQL-$(PYTHON_PYMYSQL_VERSION).tar.gz
+-PYTHON_PYMYSQL_SITE = https://files.pythonhosted.org/packages/41/9d/ee68dee1c8821c839bb31e6e5f40e61035a5278f7c1307dde758f0c90452
++PYTHON_PYMYSQL_VERSION = 1.1.1
++PYTHON_PYMYSQL_SOURCE = pymysql-$(PYTHON_PYMYSQL_VERSION).tar.gz
++PYTHON_PYMYSQL_SITE = https://files.pythonhosted.org/packages/b3/8f/ce59b5e5ed4ce8512f879ff1fa5ab699d211ae2495f1adaa5fbba2a1eada
+ PYTHON_PYMYSQL_LICENSE = MIT
+ PYTHON_PYMYSQL_LICENSE_FILES = LICENSE
+ PYTHON_PYMYSQL_SETUP_TYPE = setuptools
 -- 
 2.34.1
 
