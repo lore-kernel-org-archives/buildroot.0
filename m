@@ -4,78 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 85775CAC59E
-	for <buildroot@archiver.kernel.org>; Tue, 17 Sep 2024 20:33:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 63318CAC59E
+	for <buildroot@archiver.kernel.org>; Tue, 17 Sep 2024 20:34:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0FC4381E52;
-	Tue, 17 Sep 2024 20:33:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 30281817AD;
+	Tue, 17 Sep 2024 20:34:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SYHAPheA6-kD; Tue, 17 Sep 2024 20:33:19 +0000 (UTC)
+ id WPIQ_o4jjfiH; Tue, 17 Sep 2024 20:34:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8427B81E3D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2EDCB81836
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8427B81E3D;
-	Tue, 17 Sep 2024 20:33:19 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 88C6C1BF2C3
- for <buildroot@lists.busybox.net>; Tue, 17 Sep 2024 20:33:18 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2EDCB81836;
+	Tue, 17 Sep 2024 20:34:10 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 835831BF2C3
+ for <buildroot@lists.busybox.net>; Tue, 17 Sep 2024 20:34:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 857178195D
- for <buildroot@lists.busybox.net>; Tue, 17 Sep 2024 20:33:18 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7FCB760E18
+ for <buildroot@lists.busybox.net>; Tue, 17 Sep 2024 20:34:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jsIgOFmah8gu for <buildroot@lists.busybox.net>;
- Tue, 17 Sep 2024 20:33:17 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=209.85.128.41;
- helo=mail-wm1-f41.google.com; envelope-from=thomas.devoogdt@gmail.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 5C2D1817AD
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5C2D1817AD
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com
- [209.85.128.41])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 5C2D1817AD
- for <buildroot@buildroot.org>; Tue, 17 Sep 2024 20:33:17 +0000 (UTC)
-Received: by mail-wm1-f41.google.com with SMTP id
- 5b1f17b1804b1-42cb0f28bfbso52356725e9.1
- for <buildroot@buildroot.org>; Tue, 17 Sep 2024 13:33:17 -0700 (PDT)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xBP0u6FbBl4i for <buildroot@lists.busybox.net>;
+ Tue, 17 Sep 2024 20:34:07 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::12e; helo=mail-il1-x12e.google.com;
+ envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 83606607A5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 83606607A5
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com
+ [IPv6:2607:f8b0:4864:20::12e])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 83606607A5
+ for <buildroot@buildroot.org>; Tue, 17 Sep 2024 20:34:07 +0000 (UTC)
+Received: by mail-il1-x12e.google.com with SMTP id
+ e9e14a558f8ab-3a056727fdfso18944305ab.3
+ for <buildroot@buildroot.org>; Tue, 17 Sep 2024 13:34:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1726605194; x=1727209994;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=aE4Xz36EF4LvS4/IP25xGLEwtEyxTGeivaAZRuXch3o=;
- b=oeZiysRh8NRS1j0T0vDio/sKSM/n7UFtcYOJ6ebb89JmgdjZ4HgCDnm98MHpUh4jKT
- Qk2w1oVIW5SgusIHFWVMgBLCCG95dwuVTBQ+XohXw7xLI3upC2ov5sMk3PhAlQWMujJ5
- 61Zh9JhcPBmUagJcyB+se/+PTvLeYn0Ui+4hC8vsMWCRdiG7Ce/NaLFsI6DVCw1BGrop
- 65i+WJAqbUxqEq1iH2o2DZhe1sowVjneL/L1UTZ1od9DxzKpGRRgV1/pezYHRGqekoCJ
- eF9vE8V7970FDu4F2Ub4HmQmK1/dyMzzI9gVWTG39PtmENHIbE+dFIet7iz6M+VK0I9p
- E94A==
-X-Gm-Message-State: AOJu0YyFB6bpI79441qmZFbo6A5qcIinAWmPR8bEaQWEaZJmtoyoJI46
- 8669np1ufJt5vj+yZaFdagAcnwbnQerT0h/12SH9BePYFiGVpEZjhq1buIK1
-X-Google-Smtp-Source: AGHT+IHyua7FfQH9yr/n1uk/tyjrkXFZ8tBFEErbYJNVSGF0TtYjFMZaay3lAWUeZrdHu5aIZ5OYsA==
-X-Received: by 2002:a5d:6b51:0:b0:374:c2b0:6fee with SMTP id
- ffacd0b85a97d-378c2d61ff5mr10572576f8f.59.1726605194081; 
- Tue, 17 Sep 2024 13:33:14 -0700 (PDT)
-Received: from localhost.localdomain ([2a02:a03f:eb68:2f00:2841:ccc:4e90:c28])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-378e7800237sm10490141f8f.83.2024.09.17.13.33.13
+ d=1e100.net; s=20230601; t=1726605246; x=1727210046;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=tzn844gx7/gOz0THZ7o8vU7HvQWD17ky2nF3nzIkCHE=;
+ b=AoJ0r4yNKa2+/dD07qUP2K2PjtrMFd+cgSnheNmyqVM+vgwJkNyipZ6URgkx9OI+7X
+ lbz1OygsG+rYP9iV0fguZIYNlUHMdlc3zZofYO/QB3nfoBvR/P3JINzgzwpGFqDM4ObP
+ ofczpyaSuUuSIFfUWwmcV1rYL7OEyWQkXEM3cvZLYD2q6seiwOk3wFIJd8bJshU2lF1b
+ H7bd+idMd/VebVDYYtqf7QKM0loT+X+LC3fUqihKoItd8icbuSoERfZUacMrKKRlXiBl
+ pbjm6wqkV4aiY89T5m2ZPT2Tvc/XWEhJRhuOwhpn64KsXg6VCTRI/TKmVeUF5+4uWbVT
+ KmGA==
+X-Gm-Message-State: AOJu0YyVarBqX47RXKV4xACcuQO38aAztvcUwdUufscOKuqKmEnbL6P2
+ u4Q4+rje7RhyOGFm0INdVojW5TQJUZji68W5t0En6LFCVPOKlsjKSfudRw==
+X-Google-Smtp-Source: AGHT+IFCRvWEafjpIEWPOodgy+H4Ir4CoIoWeoM7ST45yOVQGges6z2IBswsKmP2DBn6C0YxzJw9rQ==
+X-Received: by 2002:a05:6e02:1649:b0:3a0:a0bd:f92b with SMTP id
+ e9e14a558f8ab-3a0a0bdfbe5mr67422805ab.10.1726605246272; 
+ Tue, 17 Sep 2024 13:34:06 -0700 (PDT)
+Received: from james-x399.localdomain (71-218-252-223.hlrn.qwest.net.
+ [71.218.252.223]) by smtp.gmail.com with ESMTPSA id
+ e9e14a558f8ab-3a092e8fdb2sm23665825ab.78.2024.09.17.13.34.05
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 17 Sep 2024 13:33:13 -0700 (PDT)
-From: Thomas Devoogdt <thomas@devoogdt.com>
+ Tue, 17 Sep 2024 13:34:05 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Tue, 17 Sep 2024 22:33:11 +0200
-Message-ID: <20240917203311.1241557-1-thomas@devoogdt.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240831120707.471306-1-thomas@devoogdt.com>
-References: <20240831120707.471306-1-thomas@devoogdt.com>
+Date: Tue, 17 Sep 2024 14:34:04 -0600
+Message-Id: <20240917203404.4020567-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=devoogdt.com
-Subject: [Buildroot] [PATCH v2] package/webkitgtk: bump to 2.44.4
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1726605246; x=1727210046; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=tzn844gx7/gOz0THZ7o8vU7HvQWD17ky2nF3nzIkCHE=;
+ b=doAxJVgVg31nxxTALaXtNNF0vxql3bMn6uIlwAZS81eSPhN0gTB91VcKfQZ2xTsOsT
+ m/y1PgACCIxg6TieYGRqQO0VGg+ZXvaCQy0oE4VHwT7I/B6E0I3Ss3Zw8UpDf4TsfapE
+ UQTIrT2R/J6BGvnpuEsJJJfIJC5w+rchfVxInzQDt9GIgEqDenwKffG/7WYOlXNYpM8L
+ oPnxoWYLIqjVisqE/q1zChGA9eIOlTs9gC9buZL56FfGhKWM6KY9V2pBmQFRamTSruOK
+ A/dlIeLAPb2ZdkjhSI0Z50NkmG1LBVjYu/3O5P1hQ7niHwq1iG19x5l3z9II+xH9bmI+
+ RSYw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=doAxJVgV
+Subject: [Buildroot] [PATCH 1/1] package/python-psutil: bump to version 6.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -87,63 +100,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Adrian Perez de Castro <aperez@igalia.com>,
- Thomas Devoogdt <thomas@devoogdt.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Bugfix release with many security fixes, including (but not limited to)
-patches for CVE-2024-40776, CVE-2024-40779, CVE-2024-40780, CVE-2024-40782,
-CVE-2024-40789, and CVE-2024-4558.
-
-Release notes:
-
-  https://webkitgtk.org/2024/08/13/webkitgtk2.44.3-released.html
-  https://www.webkitgtk.org/release/webkitgtk-2.44.4.html
-
-Accompanying security advisory:
-
-  https://webkitgtk.org/security/WSA-2024-0004.html
-
-Signed-off-by: Thomas Devoogdt <thomas@devoogdt.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
-v2: bump to 2.44.4 iso 2.44.3
----
- package/webkitgtk/webkitgtk.hash | 6 +++---
- package/webkitgtk/webkitgtk.mk   | 2 +-
+ package/python-psutil/python-psutil.hash | 4 ++--
+ package/python-psutil/python-psutil.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/webkitgtk/webkitgtk.hash b/package/webkitgtk/webkitgtk.hash
-index 7da0e97e5d..49f758d6a8 100644
---- a/package/webkitgtk/webkitgtk.hash
-+++ b/package/webkitgtk/webkitgtk.hash
-@@ -1,6 +1,6 @@
--# From https://www.webkitgtk.org/releases/webkitgtk-2.44.2.tar.xz.sums
--sha1  e62b2c545011a2f180a914529a68950c4d34a2ee  webkitgtk-2.44.2.tar.xz
--sha256  523f42c8ff24832add17631f6eaafe8f9303afe316ef1a7e1844b952a7f7521b  webkitgtk-2.44.2.tar.xz
-+# From https://www.webkitgtk.org/releases/webkitgtk-2.44.4.tar.xz.sums
-+sha1  3699ff9c9b84e755a0736e72dfd6e5a13151f7d6  webkitgtk-2.44.4.tar.xz
-+sha256  2ce4ec1b78413035037aba8326b31ed72696626b7bea7bace5e46ac0d8cbe796  webkitgtk-2.44.4.tar.xz
- 
- # Hashes for license files:
- sha256  0b5d3a7cc325942567373b0ecd757d07c132e0ebd7c97bfc63f7e1a76094edb4  Source/WebCore/LICENSE-APPLE
-diff --git a/package/webkitgtk/webkitgtk.mk b/package/webkitgtk/webkitgtk.mk
-index 5ecc1d1d09..a5bb81c3fa 100644
---- a/package/webkitgtk/webkitgtk.mk
-+++ b/package/webkitgtk/webkitgtk.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-psutil/python-psutil.hash b/package/python-psutil/python-psutil.hash
+index c5f4f39fe0..f85a293557 100644
+--- a/package/python-psutil/python-psutil.hash
++++ b/package/python-psutil/python-psutil.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/psutil/json
+-md5  afcc40a779f84f6d909570a8934cebc3  psutil-5.9.7.tar.gz
+-sha256  3f02134e82cfb5d089fddf20bb2e03fd5cd52395321d1c8458a9e58500ff417c  psutil-5.9.7.tar.gz
++md5  5874bd773d2fe7da3c0817424f383033  psutil-6.0.0.tar.gz
++sha256  8faae4f310b6d969fa26ca0545338b21f73c6b15db7c4a8d934a5482faa818f2  psutil-6.0.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  b89c063b3786e28e0c0a38f1931db61fed35e69dd2a2966fbecffee0f46c8d10  LICENSE
+diff --git a/package/python-psutil/python-psutil.mk b/package/python-psutil/python-psutil.mk
+index e83193f20f..b6dee0ce7f 100644
+--- a/package/python-psutil/python-psutil.mk
++++ b/package/python-psutil/python-psutil.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--WEBKITGTK_VERSION = 2.44.2
-+WEBKITGTK_VERSION = 2.44.4
- WEBKITGTK_SITE = https://www.webkitgtk.org/releases
- WEBKITGTK_SOURCE = webkitgtk-$(WEBKITGTK_VERSION).tar.xz
- WEBKITGTK_INSTALL_STAGING = YES
+-PYTHON_PSUTIL_VERSION = 5.9.7
++PYTHON_PSUTIL_VERSION = 6.0.0
+ PYTHON_PSUTIL_SOURCE = psutil-$(PYTHON_PSUTIL_VERSION).tar.gz
+-PYTHON_PSUTIL_SITE = https://files.pythonhosted.org/packages/a0/d0/c9ae661a302931735237791f04cb7086ac244377f78692ba3b3eae3a9619
++PYTHON_PSUTIL_SITE = https://files.pythonhosted.org/packages/18/c7/8c6872f7372eb6a6b2e4708b88419fb46b857f7a2e1892966b851cc79fc9
+ PYTHON_PSUTIL_SETUP_TYPE = setuptools
+ PYTHON_PSUTIL_LICENSE = BSD-3-Clause
+ PYTHON_PSUTIL_LICENSE_FILES = LICENSE
 -- 
-2.43.0
+2.34.1
 
 _______________________________________________
 buildroot mailing list
