@@ -4,90 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 93BA5CAC595
-	for <buildroot@archiver.kernel.org>; Tue, 17 Sep 2024 18:21:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1A48CAC593
+	for <buildroot@archiver.kernel.org>; Tue, 17 Sep 2024 18:21:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4D82B61130;
-	Tue, 17 Sep 2024 18:21:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7D14760E06;
+	Tue, 17 Sep 2024 18:21:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cU8Wl-7emUmZ; Tue, 17 Sep 2024 18:21:02 +0000 (UTC)
+ id jM5i0gNZTfTQ; Tue, 17 Sep 2024 18:21:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3A9C460B5A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 87E9060E3C
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3A9C460B5A;
-	Tue, 17 Sep 2024 18:21:02 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 980E71BF310
- for <buildroot@lists.busybox.net>; Tue, 17 Sep 2024 18:21:00 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 87E9060E3C;
+	Tue, 17 Sep 2024 18:21:24 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 965EE1BF310
+ for <buildroot@lists.busybox.net>; Tue, 17 Sep 2024 18:21:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8665440139
- for <buildroot@lists.busybox.net>; Tue, 17 Sep 2024 18:21:00 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8403941981
+ for <buildroot@lists.busybox.net>; Tue, 17 Sep 2024 18:21:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id niBHEnkEpD8t for <buildroot@lists.busybox.net>;
- Tue, 17 Sep 2024 18:20:59 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::d2f; helo=mail-io1-xd2f.google.com;
- envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 46C2F4033A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 46C2F4033A
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com
- [IPv6:2607:f8b0:4864:20::d2f])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 46C2F4033A
- for <buildroot@buildroot.org>; Tue, 17 Sep 2024 18:20:59 +0000 (UTC)
-Received: by mail-io1-xd2f.google.com with SMTP id
- ca18e2360f4ac-82d24e18dfcso233556239f.3
- for <buildroot@buildroot.org>; Tue, 17 Sep 2024 11:20:59 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1726597258; x=1727202058;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=FQh+G//3sDJ+a3DA+p9J/9HPzsUFe2Fhh6H493taF1M=;
- b=jOT0vP8sGMP/paSa5oVT0SZORsWZFReskte9BVuPOSc8a3ZFCny4rAVEhmXmefSps0
- JwKzUcX/PSV1GJsc3FhCSyNQFcbdNzqHaQiscrKH3RUA4rHi8TLQdYuBiEFzR1vnZgQi
- sddQsMnr1+CuMLU32aW+SpFFcyrfA0JThsZC84PGrOV5lJqy8cIlEWHttWzCbV2gxa/B
- MrsebTtsXhqzfVvcTuK8ePTpsIRjgT9+09y2RwMrUk4dk8qtEFETDbNP7F5zL3M3zBfT
- BYkkkaAXLRSowQP34wpCi1lh8Tkc8t3L4VhwWSo4cbCo/4N/eAaeeNwOusm6fbaF3dxz
- 1MxA==
-X-Gm-Message-State: AOJu0Yy/gMZMTg2E3LBF6qLBF5tsWakObYW5QnQoBRRBoUGHeiRVNVTD
- 9bYkDNdwpCHyxYVkpZlsCii5Nk4aFt8vOQAJA591rZDoouLN9T9BMGuKUQ==
-X-Google-Smtp-Source: AGHT+IGgaK9qN8M4xpIw28VmASb36bxIKUsE+eQUupUtuxxvHIUEgX58ffPoyFPht1eIY0UtWHz7cg==
-X-Received: by 2002:a05:6602:13c7:b0:82c:d67d:aa91 with SMTP id
- ca18e2360f4ac-82d1f8a7fa9mr2243835339f.1.1726597258034; 
- Tue, 17 Sep 2024 11:20:58 -0700 (PDT)
-Received: from james-x399.localdomain (71-218-252-223.hlrn.qwest.net.
- [71.218.252.223]) by smtp.gmail.com with ESMTPSA id
- 8926c6da1cb9f-4d37ed4b52bsm2100141173.154.2024.09.17.11.20.57
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 17 Sep 2024 11:20:57 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jll_UjvCqjyG for <buildroot@lists.busybox.net>;
+ Tue, 17 Sep 2024 18:21:21 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 461044197F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 461044197F
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 461044197F
+ for <buildroot@buildroot.org>; Tue, 17 Sep 2024 18:21:21 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p5b3a0e02.dip0.t-ipconnect.de [91.58.14.2])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id DBFC3A4C1FCF;
+ Tue, 17 Sep 2024 20:21:18 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:52542)
+ by fli4l.lan.fli4l with esmtp (Exim 4.98)
+ (envelope-from <bernd@kuhls.net>) id 1sqcpD-000000000i6-0CUR;
+ Tue, 17 Sep 2024 18:21:18 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Tue, 17 Sep 2024 12:20:56 -0600
-Message-Id: <20240917182056.3870161-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Date: Tue, 17 Sep 2024 20:21:18 +0200
+Message-Id: <20240917182118.3009727-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.39.5
 MIME-Version: 1.0
+X-Spamd-Bar: ++++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1726597258; x=1727202058; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=FQh+G//3sDJ+a3DA+p9J/9HPzsUFe2Fhh6H493taF1M=;
- b=Hy5CZTWx8djOByVxbiwCKh0jWsnuzPf4ivFBhaw0RJhUv/zMrBMMob3uaWIuMYVKY9
- xo65Zb4zgSt/xvVw8NHYvmhExDecMz6Ne3nxUfHiFJ0SIoUIVgHpSbtNfNbLgs848Rg9
- KzOOFGCI42I8OU0rBrhcdoB6VRkhbBcZLneaGlq1Dh3u/ghb60c4MAV5jkIvIbufvINr
- IN9BHwB7hOx4Ng9+DIy1LFrDxAYJYSd2cQWcq77DTeosZFfNXD/TLS401WEdSLoJZ1QX
- sz/wzMa9CxBxSva98pjgQC6Srxt/BH3jPrq//XdVOxKNj/hlGiqMnd1loqSLJW2Ftnb+
- tNiQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=kuhls.net; 
+ s=kas202406071026; t=1726597278;
+ bh=zJ7Njmhn4krbpZ5H2Dk+Vh33aRG15p2bQkDZlKRapu8=;
+ h=From:To:Cc:Subject:Date:From;
+ b=CbFcTdxZixKFEhygIgra6XGRxi2BVg+IY0nNLYwsvQBWo/gihA0iI6Zlev8KC/83c
+ EW/vYJd98nAXFyO/G7tAaCDGP3/GdQRVbF2B6veV6/tf1TDd3qka7nISiqdiQMVCqQ
+ 5LYZBkBOrDi3bxmuf7LD+rZLuZstZlmAZv9u9o+ssl5Xohnt9XR+479yZEhTqc8crj
+ wHGX6blq09GXsMPnv/3X4AmOxsJBelRxWRS8WcrSyHf0JdhErcXRvmg31rJ785px5M
+ +PqTD38a4a3RhtvO7y/NGEdTZx76f+UjgqIdzB9nbTz4KWGvYJ0wRu+YuYbh7r8rdg
+ InamOLZcKFmBQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=Hy5CZTWx
-Subject: [Buildroot] [PATCH 1/1] package/python-parso: bump to version 0.8.4
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202406071026 header.b=CbFcTdxZ
+Subject: [Buildroot] [PATCH 1/1] package/libcurl: security bump version to
+ 8.10.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,50 +81,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- package/python-parso/python-parso.hash | 4 ++--
- package/python-parso/python-parso.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Changelog: https://curl.se/changes.html#8_10_0
 
-diff --git a/package/python-parso/python-parso.hash b/package/python-parso/python-parso.hash
-index 67e77a162e..83224a28bf 100644
---- a/package/python-parso/python-parso.hash
-+++ b/package/python-parso/python-parso.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/parso/json
--md5  7ee251113f31f8d851c4a5d9e98977cb  parso-0.8.3.tar.gz
--sha256  8c07be290bb59f03588915921e29e8a50002acaf2cdc5fa0e0114f91709fafa0  parso-0.8.3.tar.gz
-+md5  f83b2e4164f6589ccae39b16c30ed5de  parso-0.8.4.tar.gz
-+sha256  eb3a7b58240fb99099a345571deecc0f9540ea5f4dd2fe14c2a99d6b281ab92d  parso-0.8.4.tar.gz
- # Locally computed sha256 checksums
- sha256  fa67973073753d17624caf8684d5ee816d70c89d912c5bca7ca0f08e7b150edb  LICENSE.txt
- sha256  9c1e620a5cf8e74fe81c1fd4c55e9cc0b189fc04e677cfc7ef915de746c3f59e  docs/_themes/flask/LICENSE
-diff --git a/package/python-parso/python-parso.mk b/package/python-parso/python-parso.mk
-index ce1d3401ff..65d10ebfc0 100644
---- a/package/python-parso/python-parso.mk
-+++ b/package/python-parso/python-parso.mk
-@@ -4,9 +4,9 @@
+Fixes CVE-2024-8096.
+
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+---
+ package/libcurl/libcurl.hash | 4 ++--
+ package/libcurl/libcurl.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
+index 1d01935501..d0feafde1e 100644
+--- a/package/libcurl/libcurl.hash
++++ b/package/libcurl/libcurl.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking pgp signature
+-# https://curl.se/download/curl-8.9.1.tar.xz.asc
++# https://curl.se/download/curl-8.10.0.tar.xz.asc
+ # signed with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
+-sha256  f292f6cc051d5bbabf725ef85d432dfeacc8711dd717ea97612ae590643801e5  curl-8.9.1.tar.xz
++sha256  e6b142f0e85e954759d37e26a3627e2278137595be80e3a860c4353e4335e5a0  curl-8.10.0.tar.xz
+ sha256  adb1fc06547fd136244179809f7b7c2d2ae6c4534f160aa513af9b6a12866a32  COPYING
+diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+index 3661cbf5bd..681799c6ac 100644
+--- a/package/libcurl/libcurl.mk
++++ b/package/libcurl/libcurl.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_PARSO_VERSION = 0.8.3
-+PYTHON_PARSO_VERSION = 0.8.4
- PYTHON_PARSO_SOURCE = parso-$(PYTHON_PARSO_VERSION).tar.gz
--PYTHON_PARSO_SITE = https://files.pythonhosted.org/packages/a2/0e/41f0cca4b85a6ea74d66d2226a7cda8e41206a624f5b330b958ef48e2e52
-+PYTHON_PARSO_SITE = https://files.pythonhosted.org/packages/66/94/68e2e17afaa9169cf6412ab0f28623903be73d1b32e208d9e8e541bb086d
- PYTHON_PARSO_SETUP_TYPE = setuptools
- PYTHON_PARSO_LICENSE = MIT, Python-2.0, BSD-3-Clause (flask theme)
- PYTHON_PARSO_LICENSE_FILES = LICENSE.txt docs/_themes/flask/LICENSE test/normalizer_issue_files/LICENSE
+-LIBCURL_VERSION = 8.9.1
++LIBCURL_VERSION = 8.10.0
+ LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
+ LIBCURL_SITE = https://curl.se/download
+ LIBCURL_DEPENDENCIES = host-pkgconf \
 -- 
-2.34.1
+2.39.5
 
 _______________________________________________
 buildroot mailing list
