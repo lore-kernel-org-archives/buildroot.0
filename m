@@ -4,92 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4AFC3CDD55C
-	for <buildroot@archiver.kernel.org>; Wed, 18 Sep 2024 20:38:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E7F76CDD55C
+	for <buildroot@archiver.kernel.org>; Wed, 18 Sep 2024 20:42:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0D79040096;
-	Wed, 18 Sep 2024 20:38:29 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id AC072400F5;
+	Wed, 18 Sep 2024 20:42:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lkVNr94XMadH; Wed, 18 Sep 2024 20:38:28 +0000 (UTC)
+ id hNt4hQsfMghe; Wed, 18 Sep 2024 20:42:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B7F92401F6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6AA5B40364
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B7F92401F6;
-	Wed, 18 Sep 2024 20:38:27 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6C7FF1BF30C
- for <buildroot@lists.busybox.net>; Wed, 18 Sep 2024 20:38:26 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6AA5B40364;
+	Wed, 18 Sep 2024 20:42:45 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 9BC4F1BF30C
+ for <buildroot@lists.busybox.net>; Wed, 18 Sep 2024 20:42:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5A7B44279D
- for <buildroot@lists.busybox.net>; Wed, 18 Sep 2024 20:38:26 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6790A40364
+ for <buildroot@lists.busybox.net>; Wed, 18 Sep 2024 20:42:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3C6aCRxfm6kN for <buildroot@lists.busybox.net>;
- Wed, 18 Sep 2024 20:38:25 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wnmxz44U1agT for <buildroot@lists.busybox.net>;
+ Wed, 18 Sep 2024 20:42:42 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::130; helo=mail-il1-x130.google.com;
+ client-ip=2607:f8b0:4864:20::d2d; helo=mail-io1-xd2d.google.com;
  envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 0CB8E42791
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0CB8E42791
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com
- [IPv6:2607:f8b0:4864:20::130])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 0CB8E42791
- for <buildroot@buildroot.org>; Wed, 18 Sep 2024 20:38:24 +0000 (UTC)
-Received: by mail-il1-x130.google.com with SMTP id
- e9e14a558f8ab-3a09cdeab8eso505485ab.0
- for <buildroot@buildroot.org>; Wed, 18 Sep 2024 13:38:24 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 28643400F5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 28643400F5
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com
+ [IPv6:2607:f8b0:4864:20::d2d])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 28643400F5
+ for <buildroot@buildroot.org>; Wed, 18 Sep 2024 20:42:41 +0000 (UTC)
+Received: by mail-io1-xd2d.google.com with SMTP id
+ ca18e2360f4ac-829f7911eecso8522439f.1
+ for <buildroot@buildroot.org>; Wed, 18 Sep 2024 13:42:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1726691903; x=1727296703;
+ d=1e100.net; s=20230601; t=1726692161; x=1727296961;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=W+dYu9U0HeXC7cyuQBYi6GjZDtIebcwU/FbmFteL+40=;
- b=VSp0t42uJFix6+3pcAH/hAGDBbhoS7eYHrXwyeW9qpXjlV5+kFeTus/Tw+gnhR5zfc
- IKl4g8i/U6zCj/acspP9lAfeOOy8YaKOya0rYwk6IzvYgbRNo/wZZeB27bVpXum22T0D
- PkncW2tL1JhJ4/ZjNF9oZ8tp0675AlUPTe7m08Gb7hOCt7GvB07maS574GTXbm4pFRB5
- 0g6Ojo8KE15lUs6XuOcQKHumPB1U8a+GTrdlsze95fKfhKm7JIKgPqH/KRDMzslGd1DD
- hdRR3AK6T1jSXmYVlhg5RTZfoT13ZPzrxF7m0e3Ix42NQ8Sy+4H+LIW0uurY1J4uof8p
- 4M1w==
-X-Gm-Message-State: AOJu0YwhfZezXxJgEXm+xKhseDoK4V/Oh278Ca/b/d2H5TmIlqPNfQOJ
- paPD1wAb25meUtcrgEzUOBeTIBTrhRK3bT0iBxWaWUxL5aFqmo9H3Dv2YKYP
-X-Google-Smtp-Source: AGHT+IFquiKWp+30FHtJz//9cPxjc7cw0ztYvo92qf0BiTE4evWeEIkxDobs2XIXYXDRMn0pAaYi9Q==
-X-Received: by 2002:a05:6e02:1b0d:b0:3a0:4db0:ddbf with SMTP id
- e9e14a558f8ab-3a08b711bf1mr209642035ab.8.1726691903422; 
- Wed, 18 Sep 2024 13:38:23 -0700 (PDT)
+ bh=pmiJbu69ghuBelT/rVfwyD4piOGCmpP0hw+q3FoW78k=;
+ b=KZ32tNlwnlLfsZpTVOgT3QPHoxclAH67WMh+1OBHW3kp/NgBEh5nRMSz/llQyP0Ud8
+ Bh66Gj83U2OjJVCDTVlxAAzXonCw2uFWHE1IyDx6TDqgbs0qQqP4nYdWvAQmOBYc0mK+
+ 5BSOQ7mnOm8fi4naUsY6ytHW1pAPwLpIKirPtYb2nWDjLjFTXaLSw0DF2RpPPTUGmlRG
+ opedKBuDXxtLMrLrSuGKriueoOPiDliXCQFSuiOVfyAMIVLVHb08yZZ29QNUqKea7nsk
+ 7CGx/DHgoIK5+uW9R6pj5JyGMbRezNo6AhRN0Wve5aEPyv5bnt09MdXoNh3QJVpZ0Ags
+ wswQ==
+X-Gm-Message-State: AOJu0Ywdpt19Dndx47HQM8BWj2gF+EV2QHKPBx6P6FJ0Y9J8JoO/Jhmx
+ 3wL2ZBYK1Dku1OL0IZrnVAND1JYQ0QthCIEcQ67/IbAb0HrKRcWnXPiIYOG/
+X-Google-Smtp-Source: AGHT+IGa7gR0THY99b3TA1gxz7A0FKPhguHpMlTURAnW+k5oMEH8VjK+V8bx3JDxRti6B1nZZYvllg==
+X-Received: by 2002:a05:6602:3f82:b0:82c:5c76:bd48 with SMTP id
+ ca18e2360f4ac-82d1f996cafmr2456353539f.16.1726692160655; 
+ Wed, 18 Sep 2024 13:42:40 -0700 (PDT)
 Received: from james-x399.localdomain (71-218-252-223.hlrn.qwest.net.
  [71.218.252.223]) by smtp.gmail.com with ESMTPSA id
- 8926c6da1cb9f-4d37ec206c2sm2703974173.63.2024.09.18.13.38.22
+ ca18e2360f4ac-831e9697887sm86429439f.1.2024.09.18.13.42.39
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 18 Sep 2024 13:38:22 -0700 (PDT)
+ Wed, 18 Sep 2024 13:42:40 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed, 18 Sep 2024 14:38:21 -0600
-Message-Id: <20240918203821.428603-1-james.hilliard1@gmail.com>
+Date: Wed, 18 Sep 2024 14:42:38 -0600
+Message-Id: <20240918204238.430403-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1726691903; x=1727296703; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1726692161; x=1727296961; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=W+dYu9U0HeXC7cyuQBYi6GjZDtIebcwU/FbmFteL+40=;
- b=OF6zr6rAdEqBjv2IU2nuVYHXJrYmW8XJeCpC58z+qy/1L2dcsha62UecznzwjvXtcx
- 7P2SyT0ntHMS41NmAmRTfhYc8hLo8gUL++NrJLfAAnAWQwctMZUkGr1BW8eDzVJJrCs+
- Xxyy+i5qt7MLZcUS1LNKfBjqONxStZ0gxqiNUcwXfSj0d3cQXYezf67ZK7H9m/45ywrP
- mw4w5O5E3ehSMfjVxn/z0eAQq/eI/peDkCeZg7m4D+uMstp/1Vuhz2OnD3KSzsX6JKMz
- pMOvwF5C2aCWnIVwojf0HcWtqhza30eWsgjnOUv/HRTw6glISN3PA+2x0eyQoTvg4+cR
- fDDQ==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=pmiJbu69ghuBelT/rVfwyD4piOGCmpP0hw+q3FoW78k=;
+ b=G5e/R3sVIRalhieenI+acDUBIJJ/4cWnykOpCfQCbJyysCW7RgkZK90yf4kGPmGq0K
+ nph0Oy4Cf3J7NYkTiUU1TDw3WNoFFdXviDXSWNRi0QRkthrJUi4Wp07iSdWxpTQh4LPW
+ PK8S2FqIjhf1AF2nH6GpjzXWiyRmmyt4dia5u9DnsNmP090Pq+ouM2As4ai3p3rTmf6p
+ lm+bbHx7xLK4fjogT7HkRHBM725I7tEkCu4piual6QFvV8tWRLjTYqnoXcna8Nx23KOT
+ MJrIpBWXz8KPl9vb5Pjwqx4ULSdrgyfkigzQ3/o9BUbyb3/e1F6RjWGdE81LStQ3YV9w
+ I+HQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=OF6zr6rA
-Subject: [Buildroot] [PATCH 1/1] package/python-pytest-asyncio: bump to
- version 0.24.0
+ header.s=20230601 header.b=G5e/R3sV
+Subject: [Buildroot] [PATCH 1/1] package/python-pytest: bump to version 8.3.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -110,39 +109,38 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-pytest-asyncio/python-pytest-asyncio.hash | 4 ++--
- package/python-pytest-asyncio/python-pytest-asyncio.mk   | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-pytest/python-pytest.hash | 4 ++--
+ package/python-pytest/python-pytest.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pytest-asyncio/python-pytest-asyncio.hash b/package/python-pytest-asyncio/python-pytest-asyncio.hash
-index 53bf62340c..a88d1c5841 100644
---- a/package/python-pytest-asyncio/python-pytest-asyncio.hash
-+++ b/package/python-pytest-asyncio/python-pytest-asyncio.hash
+diff --git a/package/python-pytest/python-pytest.hash b/package/python-pytest/python-pytest.hash
+index 1d5a874238..15ac04a6ea 100644
+--- a/package/python-pytest/python-pytest.hash
++++ b/package/python-pytest/python-pytest.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pytest-asyncio/json
--md5  e419d6fbc626b366814b7b698fa79236  pytest-asyncio-0.23.6.tar.gz
--sha256  ffe523a89c1c222598c76856e76852b787504ddb72dd5d9b6617ffa8aa2cde5f  pytest-asyncio-0.23.6.tar.gz
-+md5  510ca6136236bba0f0581aa46060ae03  pytest_asyncio-0.24.0.tar.gz
-+sha256  d081d828e576d85f875399194281e92bf8a68d60d72d1a2faf2feddb6c46b276  pytest_asyncio-0.24.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/pytest/json
+-md5  6a85eccffeb0fa15c104f408d82ce7fa  pytest-8.1.1.tar.gz
+-sha256  ac978141a75948948817d360297b7aae0fcb9d6ff6bc9ec6d514b85d5a65c044  pytest-8.1.1.tar.gz
++md5  71466867181a5a7aefdb298b7146bcad  pytest-8.3.3.tar.gz
++sha256  70b98107bd648308a7952b06e6ca9a50bc660be218d53c257cc1fc94fda10181  pytest-8.3.3.tar.gz
  # Locally computed sha256 checksums
- sha256  a8ad31b1c3f40dca5a84119351b8fa8ddc868edd77fad8a8ebf6d8f2d16fa4ae  LICENSE
-diff --git a/package/python-pytest-asyncio/python-pytest-asyncio.mk b/package/python-pytest-asyncio/python-pytest-asyncio.mk
-index 88f93d83e0..ae0934e00f 100644
---- a/package/python-pytest-asyncio/python-pytest-asyncio.mk
-+++ b/package/python-pytest-asyncio/python-pytest-asyncio.mk
+ sha256  ca836a5f9ecca3b2f350230faa20a48fb8b145653b5568d784862df864706b9b  LICENSE
+diff --git a/package/python-pytest/python-pytest.mk b/package/python-pytest/python-pytest.mk
+index 90dc91b654..256b6954f0 100644
+--- a/package/python-pytest/python-pytest.mk
++++ b/package/python-pytest/python-pytest.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYTEST_ASYNCIO_VERSION = 0.23.6
--PYTHON_PYTEST_ASYNCIO_SOURCE = pytest-asyncio-$(PYTHON_PYTEST_ASYNCIO_VERSION).tar.gz
--PYTHON_PYTEST_ASYNCIO_SITE = https://files.pythonhosted.org/packages/cd/ef/80107b9e939875ad613c705d99d91e4510dcf5fed29613ac9aecbcba0a8d
-+PYTHON_PYTEST_ASYNCIO_VERSION = 0.24.0
-+PYTHON_PYTEST_ASYNCIO_SOURCE = pytest_asyncio-$(PYTHON_PYTEST_ASYNCIO_VERSION).tar.gz
-+PYTHON_PYTEST_ASYNCIO_SITE = https://files.pythonhosted.org/packages/52/6d/c6cf50ce320cf8611df7a1254d86233b3df7cc07f9b5f5cbcb82e08aa534
- PYTHON_PYTEST_ASYNCIO_SETUP_TYPE = setuptools
- PYTHON_PYTEST_ASYNCIO_LICENSE = Apache-2.0
- PYTHON_PYTEST_ASYNCIO_LICENSE_FILES = LICENSE
+-PYTHON_PYTEST_VERSION = 8.1.1
++PYTHON_PYTEST_VERSION = 8.3.3
+ PYTHON_PYTEST_SOURCE = pytest-$(PYTHON_PYTEST_VERSION).tar.gz
+-PYTHON_PYTEST_SITE = https://files.pythonhosted.org/packages/30/b7/7d44bbc04c531dcc753056920e0988032e5871ac674b5a84cb979de6e7af
++PYTHON_PYTEST_SITE = https://files.pythonhosted.org/packages/8b/6c/62bbd536103af674e227c41a8f3dcd022d591f6eed5facb5a0f31ee33bbc
+ PYTHON_PYTEST_SETUP_TYPE = setuptools
+ PYTHON_PYTEST_LICENSE = MIT
+ PYTHON_PYTEST_LICENSE_FILES = LICENSE
 -- 
 2.34.1
 
