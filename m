@@ -4,59 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B21ECDD54D
-	for <buildroot@archiver.kernel.org>; Wed, 18 Sep 2024 17:09:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3E007CDD54D
+	for <buildroot@archiver.kernel.org>; Wed, 18 Sep 2024 17:09:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 42A3D40096;
-	Wed, 18 Sep 2024 17:09:17 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 08436411BC;
+	Wed, 18 Sep 2024 17:09:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RWyD5wuTcdFR; Wed, 18 Sep 2024 17:09:16 +0000 (UTC)
+ id TIKCZZu8gWfl; Wed, 18 Sep 2024 17:09:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 229F74117F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E2839411AC
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 229F74117F;
-	Wed, 18 Sep 2024 17:09:16 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A0EED1BF5A7
- for <buildroot@lists.busybox.net>; Wed, 18 Sep 2024 17:09:14 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E2839411AC;
+	Wed, 18 Sep 2024 17:09:49 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 441691BF5A7
+ for <buildroot@lists.busybox.net>; Wed, 18 Sep 2024 17:09:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 9022D846EC
- for <buildroot@lists.busybox.net>; Wed, 18 Sep 2024 17:09:14 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3CB51608E9
+ for <buildroot@lists.busybox.net>; Wed, 18 Sep 2024 17:09:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id i3zrt3UCn3ZP for <buildroot@lists.busybox.net>;
- Wed, 18 Sep 2024 17:09:13 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::227;
- helo=relay7-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Gkih3GOG46Tr for <buildroot@lists.busybox.net>;
+ Wed, 18 Sep 2024 17:09:47 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 8477C846E1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8477C846E1
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::227])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 8477C846E1
- for <buildroot@buildroot.org>; Wed, 18 Sep 2024 17:09:13 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id B106120005;
- Wed, 18 Sep 2024 17:09:10 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1sqyAv-00DFRj-2o;
- Wed, 18 Sep 2024 19:09:09 +0200
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5F3B8606F8
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 5F3B8606F8
+ for <buildroot@buildroot.org>; Wed, 18 Sep 2024 17:09:47 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 5393783B77; Wed, 18 Sep 2024 17:09:47 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Waldemar Brodkorb <wbx@openadk.org>
-References: <Zsxt7Db6yjMX8x1x@waldemar-brodkorb.de>
-Date: Wed, 18 Sep 2024 19:09:09 +0200
-In-Reply-To: <Zsxt7Db6yjMX8x1x@waldemar-brodkorb.de> (Waldemar Brodkorb's
- message of "Mon, 26 Aug 2024 13:58:36 +0200")
-Message-ID: <87a5g4q47e.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH] package/fbset: update download URL
+To: buildroot@buildroot.org
+Date: Wed, 18 Sep 2024 19:04:12 +0200
+X-Git-Refname: refs/heads/2024.02.x
+X-Git-Oldrev: 090dea2faa1d04a14e399b03e0038f45f9699eef
+X-Git-Newrev: 68e71cde3069d0875e8bf30ebed509b157044de2
+X-Patchwork-Hint: ignore
+Message-Id: <20240918170947.5393783B77@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/x264: disable
+ assembly code on x86 + musl + PIC/PIE
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,24 +59,64 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============5234803098999141309=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Waldemar" == Waldemar Brodkorb <wbx@openadk.org> writes:
+--===============5234803098999141309==
+Content-Type: text/plain
 
- > Fixes:
- >  http://autobuild.buildroot.org/results/13e/13e28650fc58fc62c801a664d79616c6dd39a8ac
+commit: https://git.buildroot.net/buildroot/commit/?id=68e71cde3069d0875e8bf30ebed509b157044de2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
- > Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+The x264 package uses large amounts of non-PIC assembly code
+(e.g. common/x86/dct-a.asm), which results in textrels, which aren't
+supported by musl-libc's dynamic linker.
 
-Committed to 2024.02.x, thanks.
+Disable x264's assembly code when compiling for x86 with PIC/PIE and
+musl-libc to avoid this particular incompatibility.
 
--- 
-Bye, Peter Korsgaard
+Reported-by: Yann Morin <yann.morin@orange.com>
+Fixes: https://lore.kernel.org/buildroot/ZrsirnrvgsEIpAJI@tl-lnx-nyma7486-2/
+Signed-off-by: J. Neuschäfer <j.neuschaefer@gmx.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 0196ec4198771e5fe83d6df02c7cd3b13c0ce05f)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/x264/x264.mk | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/package/x264/x264.mk b/package/x264/x264.mk
+index 97caf19466..e96d993017 100644
+--- a/package/x264/x264.mk
++++ b/package/x264/x264.mk
+@@ -14,9 +14,15 @@ X264_INSTALL_STAGING = YES
+ X264_CONF_OPTS = --disable-avs --disable-lavf --disable-swscale
+ 
+ ifeq ($(BR2_i386)$(BR2_x86_64),y)
++ifeq ($(BR2_TOOLCHAIN_USES_MUSL)$(BR2_PIC_PIE),yy)
++# libx264 uses large amounts of non-pic assembly code, resulting in text
++# section relocations, which are not supported on musl-libc's ld.so.
++X264_CONF_OPTS += --disable-asm
++else
+ # nasm needed for assembly files
+ X264_DEPENDENCIES += host-nasm
+ X264_CONF_ENV += AS="$(HOST_DIR)/bin/nasm"
++endif
+ else ifeq ($(BR2_ARM_CPU_ARMV7A)$(BR2_aarch64),y)
+ # We need to pass gcc as AS, because the ARM assembly files have to be
+ # preprocessed
+
+--===============5234803098999141309==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============5234803098999141309==--
