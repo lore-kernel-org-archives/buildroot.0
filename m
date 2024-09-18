@@ -4,60 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D6D4CDD543
-	for <buildroot@archiver.kernel.org>; Wed, 18 Sep 2024 16:49:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 063A4CDD548
+	for <buildroot@archiver.kernel.org>; Wed, 18 Sep 2024 16:50:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DE3CD401EB;
-	Wed, 18 Sep 2024 16:49:09 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9C2D040096;
+	Wed, 18 Sep 2024 16:50:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4lZXRk-Fhw1E; Wed, 18 Sep 2024 16:49:09 +0000 (UTC)
+ id DtdBDUjw1Ob2; Wed, 18 Sep 2024 16:50:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C56E240FD9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5411F401EB
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C56E240FD9;
-	Wed, 18 Sep 2024 16:49:08 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 59B3E1BF2C9
- for <buildroot@lists.busybox.net>; Wed, 18 Sep 2024 16:49:07 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5411F401EB;
+	Wed, 18 Sep 2024 16:50:45 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 0C5D71BF2C9
+ for <buildroot@lists.busybox.net>; Wed, 18 Sep 2024 16:50:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 462F94115C
- for <buildroot@lists.busybox.net>; Wed, 18 Sep 2024 16:49:07 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id EF29F606A3
+ for <buildroot@lists.busybox.net>; Wed, 18 Sep 2024 16:50:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7s-uGbXX-7au for <buildroot@lists.busybox.net>;
- Wed, 18 Sep 2024 16:49:05 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::226;
- helo=relay6-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id nn8QIAZHVrKm for <buildroot@lists.busybox.net>;
+ Wed, 18 Sep 2024 16:50:43 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 034454026C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 034454026C
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::226])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 034454026C
- for <buildroot@buildroot.org>; Wed, 18 Sep 2024 16:49:04 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id D423AC0003;
- Wed, 18 Sep 2024 16:49:02 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1sqxrS-00DEDn-1L;
- Wed, 18 Sep 2024 18:49:02 +0200
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3635C60634
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 3635C60634
+ for <buildroot@buildroot.org>; Wed, 18 Sep 2024 16:50:42 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id E569B83B50; Wed, 18 Sep 2024 16:50:42 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Bernd Kuhls <bernd@kuhls.net>
-References: <20240825081205.562228-1-bernd@kuhls.net>
-Date: Wed, 18 Sep 2024 18:49:02 +0200
-In-Reply-To: <20240825081205.562228-1-bernd@kuhls.net> (Bernd Kuhls's message
- of "Sun, 25 Aug 2024 10:12:05 +0200")
-Message-ID: <871q1grjpd.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/sofia-sip: fix static build
- with openssl >= 3.2.0
+To: buildroot@buildroot.org
+Date: Wed, 18 Sep 2024 18:42:09 +0200
+X-Git-Refname: refs/heads/2024.02.x
+X-Git-Oldrev: 36328f64d90a81329c68deb5ba90c515e811855c
+X-Git-Newrev: 0717afbd5ffdb5eda106bb1561d39071b994ee80
+X-Patchwork-Hint: ignore
+Message-Id: <20240918165042.E569B83B50@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/libglob: update
+ download URL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,25 +59,40 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Gregory Dymarek <gregd72002@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>, buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Bernd" == Bernd Kuhls <bernd@kuhls.net> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=0717afbd5ffdb5eda106bb1561d39071b994ee80
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
- > Fixes:
- > http://autobuild.buildroot.org/results/de08bd5c68f5fcdaa5c0374a4f5051c4751ebb88/
- > and many others.
+Fixes:
 
- > Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+ http://autobuild.buildroot.org/results/92c/92c697697c07f63f0e03ceb655b5d558e85c392e
 
-Committed to 2024.02.x, thanks.
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit b331217a50e975e89e28741a05d1f7b60c62496a)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/libglob/libglob.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/libglob/libglob.mk b/package/libglob/libglob.mk
+index 90356b3973..52da399658 100644
+--- a/package/libglob/libglob.mk
++++ b/package/libglob/libglob.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ LIBGLOB_VERSION = 1.0
+-LIBGLOB_SITE = $(call github,voidlinux,libglob,$(LIBGLOB_VERSION))
++LIBGLOB_SITE = $(call github,void-linux,libglob,$(LIBGLOB_VERSION))
+ LIBGLOB_LICENSE = BSD-3-Clause
+ LIBGLOB_LICENSE_FILES = LICENSE
+ LIBGLOB_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
