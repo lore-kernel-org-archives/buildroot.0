@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BF3CACDD555
-	for <buildroot@archiver.kernel.org>; Wed, 18 Sep 2024 20:36:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 964CDCDD553
+	for <buildroot@archiver.kernel.org>; Wed, 18 Sep 2024 20:36:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 887094128B;
-	Wed, 18 Sep 2024 20:36:28 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3D73F41263;
+	Wed, 18 Sep 2024 20:36:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gM2XUrcICW9F; Wed, 18 Sep 2024 20:36:27 +0000 (UTC)
+ id mjGD-MICfwpP; Wed, 18 Sep 2024 20:36:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4FA4D4129E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C3A0F4129E
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4FA4D4129E;
-	Wed, 18 Sep 2024 20:36:27 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C3A0F4129E;
+	Wed, 18 Sep 2024 20:36:29 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 082E61BF30C
- for <buildroot@lists.busybox.net>; Wed, 18 Sep 2024 20:35:04 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 113E01BF30C
+ for <buildroot@lists.busybox.net>; Wed, 18 Sep 2024 20:35:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 07EBC4125F
+ by smtp2.osuosl.org (Postfix) with ESMTP id B5E5541263
  for <buildroot@lists.busybox.net>; Wed, 18 Sep 2024 20:35:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4Hn9WtxQvJFV for <buildroot@lists.busybox.net>;
- Wed, 18 Sep 2024 20:34:59 +0000 (UTC)
+ id BR3gNOCFhqzZ for <buildroot@lists.busybox.net>;
+ Wed, 18 Sep 2024 20:34:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 900F040364
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 42B9541195
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 900F040364
+ by smtp2.osuosl.org (Postfix) with ESMTP id 42B9541195
  for <buildroot@buildroot.org>; Wed, 18 Sep 2024 20:34:58 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 868C682128; Wed, 18 Sep 2024 20:34:58 +0000 (UTC)
+ id 3EBD582128; Wed, 18 Sep 2024 20:34:58 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 18 Sep 2024 22:31:34 +0200
+Date: Wed, 18 Sep 2024 22:23:11 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: e497d9fdc3cc4fc4971dcb0a5c55756ac248befb
-X-Git-Newrev: 7f0d3201b81fc9f7bb809e6388f430adc6c1488a
+X-Git-Oldrev: 19c22c36d9cfcacefae142fb1d5235973814d926
+X-Git-Newrev: 328a3b815d5ac64fa1be997a535175cdd3f7fc05
 X-Patchwork-Hint: ignore
-Message-Id: <20240918203458.868C682128@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/p910nd: update
- download URL
+Message-Id: <20240918203458.3EBD582128@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/babeld: update
+ URL site
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,52 +65,72 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7f0d3201b81fc9f7bb809e6388f430adc6c1488a
+commit: https://git.buildroot.net/buildroot/commit/?id=328a3b815d5ac64fa1be997a535175cdd3f7fc05
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-Project moved to Github. Update download URL and hash.
-License file got renamed, but it is still GPLv2.
+As reported in [1], version 1.9.2 has been moved to another archive, and
+it is recommended to use https://github.com/jech/babeld as the official
+repository.
+
+The use of the github macro:
+
+$(call github,jech,babeld,babeld-$(BABELD_VERSION))
+
+would have downloaded a file with the same name (e.g. babeld-1.9.2.tar.gz)
+but with a different hash from the one downloaded from the previous URL,
+creating unacceptable backward compatibility issues.
+Therefore, it was decided to download the package via the git method. In
+this way, the downloaded file is babeld-babeld-1.9.2-br1.tar.gz, thus
+with a different name, to which its SHA can be associated without side
+effects, except for breaking the release monitoring process.
+Unfortunately, for now, we will have to live with this limitation.
+
+Particularly interesting are the explanations provided by Yann E. Morin,
+which you can find in [2], that guided the creation of this patch.
 
 Fixes:
+- http://autobuild.buildroot.org/results/2447060c86acf1bd8d6ee0bcf8f9b6adcdfc50c9
 
- http://autobuild.buildroot.org/results/6e0/6e0e34c342fe712d5314de80488a2d034a2f5983/
+[1] https://alioth-lists.debian.net/pipermail/babel-users/2024-August/004187.html
+[2] https://patchwork.ozlabs.org/project/buildroot/patch/20240901063634.3504315-1-dario.binacchi@amarulasolutions.com/
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Co-Developed-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit ac51d214659139ad8260b21b1e94cb631994fc62)
+(cherry picked from commit 9172ffc3b425e2520827d0592b1fffef59b906c5)
+[Peter: adjust filename and hash for 2024.02.x]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/p910nd/p910nd.hash | 4 ++--
- package/p910nd/p910nd.mk   | 5 ++---
- 2 files changed, 4 insertions(+), 5 deletions(-)
+ package/babeld/babeld.hash | 2 +-
+ package/babeld/babeld.mk   | 5 +++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/package/p910nd/p910nd.hash b/package/p910nd/p910nd.hash
-index 93b1389909..0f69e402d5 100644
---- a/package/p910nd/p910nd.hash
-+++ b/package/p910nd/p910nd.hash
+diff --git a/package/babeld/babeld.hash b/package/babeld/babeld.hash
+index 2e0513efa0..5c33bc5ccf 100644
+--- a/package/babeld/babeld.hash
++++ b/package/babeld/babeld.hash
 @@ -1,3 +1,3 @@
- # Locally computed:
--sha256  4ac980a3ae24babae6f70f0a692625ece03a4a92c357fbb10d2e368386c3c26f  p910nd-0.97.tar.bz2
--sha256  91df39d1816bfb17a4dda2d3d2c83b1f6f2d38d53e53e41e8f97ad5ac46a0cad  COPYING
-+sha256  a1bcc2dd75bad4e00a9de5098dbd970e8380f978fc09292bcfa15852af6a6964  p910nd-0.97.tar.gz
-+sha256  62f171d4d8b6726df61f18a6bbc0a70f79c4bc2134d837d35c81fc6289a2d84d  LICENSE.md
-diff --git a/package/p910nd/p910nd.mk b/package/p910nd/p910nd.mk
-index 163ab1bcf2..fea8aafd50 100644
---- a/package/p910nd/p910nd.mk
-+++ b/package/p910nd/p910nd.mk
-@@ -5,10 +5,9 @@
+ # Locally computed
+-sha256  154f00e0a8bf35d6ea9028886c3dc5c3c342dd1a367df55ef29a547b75867f07  babeld-1.9.2.tar.gz
++sha256  41a99b340b568a12ba58486cf07a63ab01b8dbbc8da1c4e833c30dc251340aaa  babeld-babeld-1.9.2-br1.tar.gz
+ sha256  b415c41292cedef6c97b243609e50552887c29343566c639f23282d31efd2afd  LICENCE
+diff --git a/package/babeld/babeld.mk b/package/babeld/babeld.mk
+index 785fa2bce9..ac32e798c8 100644
+--- a/package/babeld/babeld.mk
++++ b/package/babeld/babeld.mk
+@@ -4,8 +4,9 @@
+ #
  ################################################################################
  
- P910ND_VERSION = 0.97
--P910ND_SITE = http://downloads.sourceforge.net/project/p910nd/p910nd/$(P910ND_VERSION)
--P910ND_SOURCE = p910nd-$(P910ND_VERSION).tar.bz2
-+P910ND_SITE = $(call github,kenyapcomau,p910nd,$(P910ND_VERSION))
- P910ND_LICENSE = GPL-2.0
--P910ND_LICENSE_FILES = COPYING
-+P910ND_LICENSE_FILES = LICENSE.md
+-BABELD_VERSION = 1.9.2
+-BABELD_SITE = http://www.pps.univ-paris-diderot.fr/~jch/software/files
++BABELD_VERSION = babeld-1.9.2
++BABELD_SITE = https://github.com/jech/babeld
++BABELD_SITE_METHOD = git
+ BABELD_LICENSE = MIT
+ BABELD_LICENSE_FILES = LICENCE
  
- define P910ND_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) $(MAKE) $(TARGET_CONFIGURE_OPTS) -C $(@D)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
