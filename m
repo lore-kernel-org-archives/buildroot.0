@@ -4,90 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A039CDD55C
-	for <buildroot@archiver.kernel.org>; Wed, 18 Sep 2024 20:51:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B49A1CDD55C
+	for <buildroot@archiver.kernel.org>; Wed, 18 Sep 2024 20:55:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D420E6123D;
-	Wed, 18 Sep 2024 20:51:12 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6DD886123D;
+	Wed, 18 Sep 2024 20:55:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id x8bzAXm930Gm; Wed, 18 Sep 2024 20:51:12 +0000 (UTC)
+ id mHqfzIrKdCAh; Wed, 18 Sep 2024 20:55:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D99D861248
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7DF7F61248
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D99D861248;
-	Wed, 18 Sep 2024 20:51:11 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 61B571BF30C
- for <buildroot@lists.busybox.net>; Wed, 18 Sep 2024 20:51:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7DF7F61248;
+	Wed, 18 Sep 2024 20:55:37 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 3CB791BF30C
+ for <buildroot@lists.busybox.net>; Wed, 18 Sep 2024 20:55:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5D9A361248
- for <buildroot@lists.busybox.net>; Wed, 18 Sep 2024 20:51:10 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 37EE4427A7
+ for <buildroot@lists.busybox.net>; Wed, 18 Sep 2024 20:55:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dXqkX4wy3gSm for <buildroot@lists.busybox.net>;
- Wed, 18 Sep 2024 20:51:09 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id iEnmQ4T8TCnF for <buildroot@lists.busybox.net>;
+ Wed, 18 Sep 2024 20:55:34 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::32a; helo=mail-ot1-x32a.google.com;
+ client-ip=2607:f8b0:4864:20::135; helo=mail-il1-x135.google.com;
  envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 7A2DF6123D
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7A2DF6123D
-Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com
- [IPv6:2607:f8b0:4864:20::32a])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 7A2DF6123D
- for <buildroot@buildroot.org>; Wed, 18 Sep 2024 20:51:09 +0000 (UTC)
-Received: by mail-ot1-x32a.google.com with SMTP id
- 46e09a7af769-70930972e19so55584a34.3
- for <buildroot@buildroot.org>; Wed, 18 Sep 2024 13:51:09 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 1B0E742789
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1B0E742789
+Received: from mail-il1-x135.google.com (mail-il1-x135.google.com
+ [IPv6:2607:f8b0:4864:20::135])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 1B0E742789
+ for <buildroot@buildroot.org>; Wed, 18 Sep 2024 20:55:33 +0000 (UTC)
+Received: by mail-il1-x135.google.com with SMTP id
+ e9e14a558f8ab-3a046d4c465so481585ab.3
+ for <buildroot@buildroot.org>; Wed, 18 Sep 2024 13:55:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1726692668; x=1727297468;
+ d=1e100.net; s=20230601; t=1726692933; x=1727297733;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=TB6R+TwXUgXqvEMDZIidCNq72Gh0BEJRnsvHYWloG0I=;
- b=PXv1qeEYTeVL57z73t3kSAm2zV/SX8+/Lf08A3T3Ecwx03spvlOfyE5T6FuFoCO9DJ
- lM6h6Hg3RTFMiZ+gbS+l1AeZhvV2tmpYDZNV4cwg1oaqPAbFWz/fqYBsHwS2d/t5B/Hq
- SJILps1wQriWpHvUL6RoCjBNKALpabyvQ5VCFmvS6fhxC0Uh/S8kWWFMdQheG2u3kj/T
- 57l415aeGZMMwAWYTd+rAD3QWJWuUHADB5qFFsznGDjNzKPAS89w9qRZ2Cq11kEVXMu5
- 03lAMVYp+5cYa6XFyk+bWPyGSRpB9E8CIEdJhjAaCDOzSFjmlZi5CanCktoyujgU9mJX
- XUFA==
-X-Gm-Message-State: AOJu0YzbKws8b871SZWv4HdKpL/C1nVFHVttVohwbbSzm8AvJdFg6FK0
- Cni+gyAi8Wck8LXEQW2CkDV5/IK0fXwKdaxyHkLrc4+dLTiumM9PCs2XGB3A
-X-Google-Smtp-Source: AGHT+IHkRqj/9HyAkELeboM87OHTTKUEIGUjXI2XYdp+wNx5sWk3AEVpKOd6Hx+bAK4IbSCpI+peqg==
-X-Received: by 2002:a05:6830:65c6:b0:710:eb9a:f8d1 with SMTP id
- 46e09a7af769-71109486190mr22332870a34.17.1726692668157; 
- Wed, 18 Sep 2024 13:51:08 -0700 (PDT)
+ bh=81D/lQFOZtx2zpDCXKzIQjmVZIcq2vXEY51V0zmW64A=;
+ b=S2fcJA9n1AbgzJpepJHuDBIxUym2FVxNAP530N7Ot7ZnmZsvWcdqmwjIFyl+d2Dox2
+ hBWLZ09KNkJrA4cmEiwvzahuRyXnT8nQP1DT9BF8hI59sgUaQJ7sFmyUsS9vRR2VQtlC
+ uX1cS3edOgVDFjX7A5gihs+mHjuVHpFPoXcXjzKQ2PXNu7ccv0kVkL8YbFg2dLd2nkYP
+ OZTGJmBqJ6+ltzuViWrRrIXHOKDpmrO1rIwuctWccDGjNzPyWRR8YDL4gVly+KT9qaa3
+ hviE1ExaPltOhnMeR6CBi91/DCz03bAfaYhcF4PvXLyJp5H6W9kQn+QVQ3zqsEeuEYqm
+ zI/Q==
+X-Gm-Message-State: AOJu0YxwNWqST2ZbRqEeHLfSAtFAyw7qnR+a7mXf2mTaEkpouUEfwWdf
+ LuCOXZ9NceJPwBzl72pPnTGitqRdThayyvsZt38D3fLdNnch8YPG09rZBcTP
+X-Google-Smtp-Source: AGHT+IFn4ZqPDV+BGkyEWq6BKoDuWId0g3dC+0nJrRsw+u6G4XDzMhBK1fKQK6GVz3/d3Qwt20Mu4g==
+X-Received: by 2002:a05:6e02:218c:b0:3a0:9050:702a with SMTP id
+ e9e14a558f8ab-3a090507262mr158136135ab.17.1726692932632; 
+ Wed, 18 Sep 2024 13:55:32 -0700 (PDT)
 Received: from james-x399.localdomain (71-218-252-223.hlrn.qwest.net.
  [71.218.252.223]) by smtp.gmail.com with ESMTPSA id
- 8926c6da1cb9f-4d37ec1f268sm2601264173.70.2024.09.18.13.51.07
+ e9e14a558f8ab-3a092e8d803sm30038205ab.76.2024.09.18.13.55.31
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 18 Sep 2024 13:51:07 -0700 (PDT)
+ Wed, 18 Sep 2024 13:55:32 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed, 18 Sep 2024 14:51:06 -0600
-Message-Id: <20240918205106.440642-1-james.hilliard1@gmail.com>
+Date: Wed, 18 Sep 2024 14:55:30 -0600
+Message-Id: <20240918205530.443111-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1726692668; x=1727297468; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1726692933; x=1727297733; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=TB6R+TwXUgXqvEMDZIidCNq72Gh0BEJRnsvHYWloG0I=;
- b=X2vRhSVJuUl7KGTI4Ku6vlG1HyxTBvWxuwTUKb+qk9760Sl4s60pm+DoQ6BE+ZavL1
- TlxsD+Z77yd+08trOIyXgP+S05emq52waH9L4xhI66XG/US1+Xsp24OggMmKTdJ2m3os
- EJLQHZFCAN4SoANh5pZxz6XfG22QBwK3EANQcW9iunD4fWfpD7wpM2gv28vIKNWz/aT1
- uBaBLsfdEEiIDPwFUzahTVGtW8jHu35O8QzOzhUnAggIlxnsKeshCoquJ4O94a2cHSew
- n23hZnBQUoj01HlM0jmpImf+v9Q6aPVxPJOLQdoRAOAPi7MIk2TIyn1QjXBKDLfQobzh
- NpDg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=81D/lQFOZtx2zpDCXKzIQjmVZIcq2vXEY51V0zmW64A=;
+ b=kyuXVthqqA3GefkwiztbVCqNcsREBOeWUjnRvD1DuitIsT514WAVkPG74vL15uZVA4
+ LnvvVISoxJzuLmVB1k+YPneShzLVhFsXpGznhp5P8hZvACzswDLn7RrLaLJuZEI1hcxL
+ 6vkfsuwVMKwPmmLBP8IyOz663fjcmUH3jssJYL8Axmdlih65N2232r0LZOOgpNQeJUC3
+ o7oLIoSgeVtOO7X20Bae6/f25h8T2IJBYvJCpI9zd97syOQdCS/g/awbjOqHMIMRyTUx
+ jgCEOCMeNKDSmre0pv9xk72DnqgkOLBMFEe8Iywexb92auNwq8pQbYS2NRxTGt3qG6a3
+ mdOg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=X2vRhSVJ
-Subject: [Buildroot] [PATCH 1/1] package/python-pytz: bump to version 2024.2
+ header.a=rsa-sha256 header.s=20230601 header.b=kyuXVthq
+Subject: [Buildroot] [PATCH 1/1] package/python-pyudev: bump to version
+ 0.24.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -107,38 +108,38 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-pytz/python-pytz.hash | 4 ++--
- package/python-pytz/python-pytz.mk   | 4 ++--
+ package/python-pyudev/python-pyudev.hash | 4 ++--
+ package/python-pyudev/python-pyudev.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pytz/python-pytz.hash b/package/python-pytz/python-pytz.hash
-index a8bfe67817..ca64cb7d79 100644
---- a/package/python-pytz/python-pytz.hash
-+++ b/package/python-pytz/python-pytz.hash
+diff --git a/package/python-pyudev/python-pyudev.hash b/package/python-pyudev/python-pyudev.hash
+index 72eb323e1f..e9596b7b43 100644
+--- a/package/python-pyudev/python-pyudev.hash
++++ b/package/python-pyudev/python-pyudev.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pytz/json
--md5  b26bb090d1fe96064019bf7068eeb801  pytz-2024.1.tar.gz
--sha256  2a29735ea9c18baf14b448846bde5a48030ed267578472d8955cd0e7443a9812  pytz-2024.1.tar.gz
-+md5  efcb554763a36b3e18acee074f44d1a5  pytz-2024.2.tar.gz
-+sha256  2aa355083c50a0f93fa581709deac0c9ad65cca8a9e9beac660adcbd493c798a  pytz-2024.2.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/pyudev/json
+-md5  fecaabe9eaa890d2173c7b49ab63a412  pyudev-0.24.1.tar.gz
+-sha256  75e54d37218f5ac45b0da1f0fd9cc5e526a3cac3ef1cfad410cf7ab338b01471  pyudev-0.24.1.tar.gz
++md5  07bbe9111308d2509645705b8321c416  pyudev-0.24.3.tar.gz
++sha256  2e945427a21674893bb97632401db62139d91cea1ee96137cc7b07ad22198fc7  pyudev-0.24.3.tar.gz
  # Locally computed sha256 checksums
- sha256  be8b1a37ebe26c592a90f6c0eb33103a7f383ce2f4d7498c0af9a526990a07b8  LICENSE.txt
-diff --git a/package/python-pytz/python-pytz.mk b/package/python-pytz/python-pytz.mk
-index 300e26befe..1d37d09ab1 100644
---- a/package/python-pytz/python-pytz.mk
-+++ b/package/python-pytz/python-pytz.mk
+ sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  COPYING
+diff --git a/package/python-pyudev/python-pyudev.mk b/package/python-pyudev/python-pyudev.mk
+index 53d60572a8..fa11ce5040 100644
+--- a/package/python-pyudev/python-pyudev.mk
++++ b/package/python-pyudev/python-pyudev.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYTZ_VERSION = 2024.1
-+PYTHON_PYTZ_VERSION = 2024.2
- PYTHON_PYTZ_SOURCE = pytz-$(PYTHON_PYTZ_VERSION).tar.gz
--PYTHON_PYTZ_SITE = https://files.pythonhosted.org/packages/90/26/9f1f00a5d021fff16dee3de13d43e5e978f3d58928e129c3a62cf7eb9738
-+PYTHON_PYTZ_SITE = https://files.pythonhosted.org/packages/3a/31/3c70bf7603cc2dca0f19bdc53b4537a797747a58875b552c8c413d963a3f
- PYTHON_PYTZ_SETUP_TYPE = setuptools
- PYTHON_PYTZ_LICENSE = MIT
- PYTHON_PYTZ_LICENSE_FILES = LICENSE.txt
+-PYTHON_PYUDEV_VERSION = 0.24.1
++PYTHON_PYUDEV_VERSION = 0.24.3
+ PYTHON_PYUDEV_SOURCE = pyudev-$(PYTHON_PYUDEV_VERSION).tar.gz
+-PYTHON_PYUDEV_SITE = https://files.pythonhosted.org/packages/20/b6/16961ac3575575260c72928f17df9c99c2a696871e486965ec6e2fa2aff4
++PYTHON_PYUDEV_SITE = https://files.pythonhosted.org/packages/c4/5c/6cc034da13830e3da123ccf9a30910bc868fa16670362f004e4b788d0df1
+ PYTHON_PYUDEV_LICENSE = LGPL-2.1+
+ PYTHON_PYUDEV_LICENSE_FILES = COPYING
+ PYTHON_PYUDEV_SETUP_TYPE = setuptools
 -- 
 2.34.1
 
