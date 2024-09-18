@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 46F17CDD54E
-	for <buildroot@archiver.kernel.org>; Wed, 18 Sep 2024 17:10:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 65A71CDD54E
+	for <buildroot@archiver.kernel.org>; Wed, 18 Sep 2024 17:10:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 13CC3411BC;
-	Wed, 18 Sep 2024 17:10:01 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 21A7741229;
+	Wed, 18 Sep 2024 17:10:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LgGng0Dcvgxe; Wed, 18 Sep 2024 17:09:59 +0000 (UTC)
+ id Wk3cDvlKLeqC; Wed, 18 Sep 2024 17:10:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9490941209
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C7A3541220
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9490941209;
-	Wed, 18 Sep 2024 17:09:59 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C7A3541220;
+	Wed, 18 Sep 2024 17:10:02 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 244B31BF5A7
- for <buildroot@lists.busybox.net>; Wed, 18 Sep 2024 17:09:49 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id BF4DA1BF5A7
+ for <buildroot@lists.busybox.net>; Wed, 18 Sep 2024 17:09:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6B333606F8
+ by smtp3.osuosl.org (Postfix) with ESMTP id BCB1760732
  for <buildroot@lists.busybox.net>; Wed, 18 Sep 2024 17:09:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QghxQoLCBF0L for <buildroot@lists.busybox.net>;
- Wed, 18 Sep 2024 17:09:47 +0000 (UTC)
+ id mQE4B3POgvR4 for <buildroot@lists.busybox.net>;
+ Wed, 18 Sep 2024 17:09:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 86CF860732
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DED3E608C1
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 86CF860732
+ by smtp3.osuosl.org (Postfix) with ESMTP id DED3E608C1
  for <buildroot@buildroot.org>; Wed, 18 Sep 2024 17:09:47 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 703C983B7C; Wed, 18 Sep 2024 17:09:47 +0000 (UTC)
+ id 8B35F83B7E; Wed, 18 Sep 2024 17:09:47 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Wed, 18 Sep 2024 19:06:46 +0200
+Date: Wed, 18 Sep 2024 19:08:08 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: e612ba63c5538de28dcaf53d04596818bcfc9217
-X-Git-Newrev: 94b7bb247cea41a4249c254fbfe29cef08108831
+X-Git-Oldrev: 6eea6b524dc84907d5ea31495109110949987c34
+X-Git-Newrev: 1f6026dfa057c11bd46986a3def966e842373e7e
 X-Patchwork-Hint: ignore
-Message-Id: <20240918170947.703C983B7C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/postgresql:
- security bump version to 16.4
+Message-Id: <20240918170947.8B35F83B7E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/proftpd: fix
+ group name preventing server from starting
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,49 +65,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=94b7bb247cea41a4249c254fbfe29cef08108831
+commit: https://git.buildroot.net/buildroot/commit/?id=1f6026dfa057c11bd46986a3def966e842373e7e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-Release notes:
- - https://www.postgresql.org/docs/release/16.4/
- - https://www.postgresql.org/about/news/postgresql-164-158-1413-1316-1220-and-17-beta-3-released-2910/
+Replace the group name 'nogroup' with 'nobody' in the default ProFTPD
+configuration file. This fixes the following error when starting the
+server:
 
-Fixes CVE-2024-7348:
- - https://www.postgresql.org/support/security/CVE-2024-7348/
+  proftpd[110]: fatal: Group: Unknown group 'nogroup' on line 30 of '/etc/proftpd.conf'
 
-Signed-off-by: Scott Fan <fancp2007@gmail.com>
+Fixes: 0d887cc2b4 ("system: replace nogroup with nobody")
+Signed-off-by: Mattia Narducci <mattianarducci1@gmail.com>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit 10088427cf3b714db85a1d10e6a023c2639bd790)
+(cherry picked from commit 2383768cdf03ad78a89a0b4355c4e1a576c2d219)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/postgresql/postgresql.hash | 4 ++--
- package/postgresql/postgresql.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/proftpd/proftpd.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/postgresql/postgresql.hash b/package/postgresql/postgresql.hash
-index d917a03ebb..1d9a9081b7 100644
---- a/package/postgresql/postgresql.hash
-+++ b/package/postgresql/postgresql.hash
-@@ -1,4 +1,4 @@
--# From https://ftp.postgresql.org/pub/source/v16.2/postgresql-16.3.tar.bz2.sha256
--sha256  331963d5d3dc4caf4216a049fa40b66d6bcb8c730615859411b9518764e60585  postgresql-16.3.tar.bz2
-+# From https://ftp.postgresql.org/pub/source/v16.4/postgresql-16.4.tar.bz2.sha256
-+sha256  971766d645aa73e93b9ef4e3be44201b4f45b5477095b049125403f9f3386d6f  postgresql-16.4.tar.bz2
- # License file, Locally calculated
- sha256  9bf20ee493926a7e17a74bc7f05089fbc014269667b1540bc35a6b194a40c9de  COPYRIGHT
-diff --git a/package/postgresql/postgresql.mk b/package/postgresql/postgresql.mk
-index 0a1d98079a..4021a54300 100644
---- a/package/postgresql/postgresql.mk
-+++ b/package/postgresql/postgresql.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--POSTGRESQL_VERSION = 16.3
-+POSTGRESQL_VERSION = 16.4
- POSTGRESQL_SOURCE = postgresql-$(POSTGRESQL_VERSION).tar.bz2
- POSTGRESQL_SITE = https://ftp.postgresql.org/pub/source/v$(POSTGRESQL_VERSION)
- POSTGRESQL_LICENSE = PostgreSQL
+diff --git a/package/proftpd/proftpd.mk b/package/proftpd/proftpd.mk
+index 445ece779d..0ae7afcdf8 100644
+--- a/package/proftpd/proftpd.mk
++++ b/package/proftpd/proftpd.mk
+@@ -126,6 +126,7 @@ endif
+ define PROFTPD_INSTALL_TARGET_CMDS
+ 	$(INSTALL) -D -m 0755 $(@D)/proftpd $(TARGET_DIR)/usr/sbin/proftpd
+ 	$(INSTALL) -m 0644 -D $(@D)/sample-configurations/basic.conf $(TARGET_DIR)/etc/proftpd.conf
++	$(SED) 's/^\(Group\s\+\)nogroup/\1nobody/' $(TARGET_DIR)/etc/proftpd.conf
+ 	$(PROFTPD_INSTALL_FTPQUOTA)
+ 	$(PROFTPD_INSTALL_FTPASSWD)
+ endef
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
