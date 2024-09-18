@@ -4,50 +4,92 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 964CDCDD553
-	for <buildroot@archiver.kernel.org>; Wed, 18 Sep 2024 20:36:32 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4AFC3CDD55C
+	for <buildroot@archiver.kernel.org>; Wed, 18 Sep 2024 20:38:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3D73F41263;
-	Wed, 18 Sep 2024 20:36:32 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0D79040096;
+	Wed, 18 Sep 2024 20:38:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mjGD-MICfwpP; Wed, 18 Sep 2024 20:36:30 +0000 (UTC)
+ id lkVNr94XMadH; Wed, 18 Sep 2024 20:38:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C3A0F4129E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B7F92401F6
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C3A0F4129E;
-	Wed, 18 Sep 2024 20:36:29 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 113E01BF30C
- for <buildroot@lists.busybox.net>; Wed, 18 Sep 2024 20:35:05 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B7F92401F6;
+	Wed, 18 Sep 2024 20:38:27 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 6C7FF1BF30C
+ for <buildroot@lists.busybox.net>; Wed, 18 Sep 2024 20:38:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id B5E5541263
- for <buildroot@lists.busybox.net>; Wed, 18 Sep 2024 20:35:00 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5A7B44279D
+ for <buildroot@lists.busybox.net>; Wed, 18 Sep 2024 20:38:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BR3gNOCFhqzZ for <buildroot@lists.busybox.net>;
- Wed, 18 Sep 2024 20:34:58 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 42B9541195
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 42B9541195
- for <buildroot@buildroot.org>; Wed, 18 Sep 2024 20:34:58 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3EBD582128; Wed, 18 Sep 2024 20:34:58 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3C6aCRxfm6kN for <buildroot@lists.busybox.net>;
+ Wed, 18 Sep 2024 20:38:25 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::130; helo=mail-il1-x130.google.com;
+ envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 0CB8E42791
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0CB8E42791
+Received: from mail-il1-x130.google.com (mail-il1-x130.google.com
+ [IPv6:2607:f8b0:4864:20::130])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 0CB8E42791
+ for <buildroot@buildroot.org>; Wed, 18 Sep 2024 20:38:24 +0000 (UTC)
+Received: by mail-il1-x130.google.com with SMTP id
+ e9e14a558f8ab-3a09cdeab8eso505485ab.0
+ for <buildroot@buildroot.org>; Wed, 18 Sep 2024 13:38:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1726691903; x=1727296703;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=W+dYu9U0HeXC7cyuQBYi6GjZDtIebcwU/FbmFteL+40=;
+ b=VSp0t42uJFix6+3pcAH/hAGDBbhoS7eYHrXwyeW9qpXjlV5+kFeTus/Tw+gnhR5zfc
+ IKl4g8i/U6zCj/acspP9lAfeOOy8YaKOya0rYwk6IzvYgbRNo/wZZeB27bVpXum22T0D
+ PkncW2tL1JhJ4/ZjNF9oZ8tp0675AlUPTe7m08Gb7hOCt7GvB07maS574GTXbm4pFRB5
+ 0g6Ojo8KE15lUs6XuOcQKHumPB1U8a+GTrdlsze95fKfhKm7JIKgPqH/KRDMzslGd1DD
+ hdRR3AK6T1jSXmYVlhg5RTZfoT13ZPzrxF7m0e3Ix42NQ8Sy+4H+LIW0uurY1J4uof8p
+ 4M1w==
+X-Gm-Message-State: AOJu0YwhfZezXxJgEXm+xKhseDoK4V/Oh278Ca/b/d2H5TmIlqPNfQOJ
+ paPD1wAb25meUtcrgEzUOBeTIBTrhRK3bT0iBxWaWUxL5aFqmo9H3Dv2YKYP
+X-Google-Smtp-Source: AGHT+IFquiKWp+30FHtJz//9cPxjc7cw0ztYvo92qf0BiTE4evWeEIkxDobs2XIXYXDRMn0pAaYi9Q==
+X-Received: by 2002:a05:6e02:1b0d:b0:3a0:4db0:ddbf with SMTP id
+ e9e14a558f8ab-3a08b711bf1mr209642035ab.8.1726691903422; 
+ Wed, 18 Sep 2024 13:38:23 -0700 (PDT)
+Received: from james-x399.localdomain (71-218-252-223.hlrn.qwest.net.
+ [71.218.252.223]) by smtp.gmail.com with ESMTPSA id
+ 8926c6da1cb9f-4d37ec206c2sm2703974173.63.2024.09.18.13.38.22
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 18 Sep 2024 13:38:22 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed, 18 Sep 2024 22:23:11 +0200
-X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 19c22c36d9cfcacefae142fb1d5235973814d926
-X-Git-Newrev: 328a3b815d5ac64fa1be997a535175cdd3f7fc05
-X-Patchwork-Hint: ignore
-Message-Id: <20240918203458.3EBD582128@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/babeld: update
- URL site
+Date: Wed, 18 Sep 2024 14:38:21 -0600
+Message-Id: <20240918203821.428603-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1726691903; x=1727296703; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=W+dYu9U0HeXC7cyuQBYi6GjZDtIebcwU/FbmFteL+40=;
+ b=OF6zr6rAdEqBjv2IU2nuVYHXJrYmW8XJeCpC58z+qy/1L2dcsha62UecznzwjvXtcx
+ 7P2SyT0ntHMS41NmAmRTfhYc8hLo8gUL++NrJLfAAnAWQwctMZUkGr1BW8eDzVJJrCs+
+ Xxyy+i5qt7MLZcUS1LNKfBjqONxStZ0gxqiNUcwXfSj0d3cQXYezf67ZK7H9m/45ywrP
+ mw4w5O5E3ehSMfjVxn/z0eAQq/eI/peDkCeZg7m4D+uMstp/1Vuhz2OnD3KSzsX6JKMz
+ pMOvwF5C2aCWnIVwojf0HcWtqhza30eWsgjnOUv/HRTw6glISN3PA+2x0eyQoTvg4+cR
+ fDDQ==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=OF6zr6rA
+Subject: [Buildroot] [PATCH 1/1] package/python-pytest-asyncio: bump to
+ version 0.24.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,78 +101,51 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ Marcin Niestroj <m.niestroj@grinn-global.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=328a3b815d5ac64fa1be997a535175cdd3f7fc05
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
-
-As reported in [1], version 1.9.2 has been moved to another archive, and
-it is recommended to use https://github.com/jech/babeld as the official
-repository.
-
-The use of the github macro:
-
-$(call github,jech,babeld,babeld-$(BABELD_VERSION))
-
-would have downloaded a file with the same name (e.g. babeld-1.9.2.tar.gz)
-but with a different hash from the one downloaded from the previous URL,
-creating unacceptable backward compatibility issues.
-Therefore, it was decided to download the package via the git method. In
-this way, the downloaded file is babeld-babeld-1.9.2-br1.tar.gz, thus
-with a different name, to which its SHA can be associated without side
-effects, except for breaking the release monitoring process.
-Unfortunately, for now, we will have to live with this limitation.
-
-Particularly interesting are the explanations provided by Yann E. Morin,
-which you can find in [2], that guided the creation of this patch.
-
-Fixes:
-- http://autobuild.buildroot.org/results/2447060c86acf1bd8d6ee0bcf8f9b6adcdfc50c9
-
-[1] https://alioth-lists.debian.net/pipermail/babel-users/2024-August/004187.html
-[2] https://patchwork.ozlabs.org/project/buildroot/patch/20240901063634.3504315-1-dario.binacchi@amarulasolutions.com/
-
-Co-Developed-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 9172ffc3b425e2520827d0592b1fffef59b906c5)
-[Peter: adjust filename and hash for 2024.02.x]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/babeld/babeld.hash | 2 +-
- package/babeld/babeld.mk   | 5 +++--
- 2 files changed, 4 insertions(+), 3 deletions(-)
+ package/python-pytest-asyncio/python-pytest-asyncio.hash | 4 ++--
+ package/python-pytest-asyncio/python-pytest-asyncio.mk   | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/babeld/babeld.hash b/package/babeld/babeld.hash
-index 2e0513efa0..5c33bc5ccf 100644
---- a/package/babeld/babeld.hash
-+++ b/package/babeld/babeld.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  154f00e0a8bf35d6ea9028886c3dc5c3c342dd1a367df55ef29a547b75867f07  babeld-1.9.2.tar.gz
-+sha256  41a99b340b568a12ba58486cf07a63ab01b8dbbc8da1c4e833c30dc251340aaa  babeld-babeld-1.9.2-br1.tar.gz
- sha256  b415c41292cedef6c97b243609e50552887c29343566c639f23282d31efd2afd  LICENCE
-diff --git a/package/babeld/babeld.mk b/package/babeld/babeld.mk
-index 785fa2bce9..ac32e798c8 100644
---- a/package/babeld/babeld.mk
-+++ b/package/babeld/babeld.mk
-@@ -4,8 +4,9 @@
+diff --git a/package/python-pytest-asyncio/python-pytest-asyncio.hash b/package/python-pytest-asyncio/python-pytest-asyncio.hash
+index 53bf62340c..a88d1c5841 100644
+--- a/package/python-pytest-asyncio/python-pytest-asyncio.hash
++++ b/package/python-pytest-asyncio/python-pytest-asyncio.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/pytest-asyncio/json
+-md5  e419d6fbc626b366814b7b698fa79236  pytest-asyncio-0.23.6.tar.gz
+-sha256  ffe523a89c1c222598c76856e76852b787504ddb72dd5d9b6617ffa8aa2cde5f  pytest-asyncio-0.23.6.tar.gz
++md5  510ca6136236bba0f0581aa46060ae03  pytest_asyncio-0.24.0.tar.gz
++sha256  d081d828e576d85f875399194281e92bf8a68d60d72d1a2faf2feddb6c46b276  pytest_asyncio-0.24.0.tar.gz
+ # Locally computed sha256 checksums
+ sha256  a8ad31b1c3f40dca5a84119351b8fa8ddc868edd77fad8a8ebf6d8f2d16fa4ae  LICENSE
+diff --git a/package/python-pytest-asyncio/python-pytest-asyncio.mk b/package/python-pytest-asyncio/python-pytest-asyncio.mk
+index 88f93d83e0..ae0934e00f 100644
+--- a/package/python-pytest-asyncio/python-pytest-asyncio.mk
++++ b/package/python-pytest-asyncio/python-pytest-asyncio.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--BABELD_VERSION = 1.9.2
--BABELD_SITE = http://www.pps.univ-paris-diderot.fr/~jch/software/files
-+BABELD_VERSION = babeld-1.9.2
-+BABELD_SITE = https://github.com/jech/babeld
-+BABELD_SITE_METHOD = git
- BABELD_LICENSE = MIT
- BABELD_LICENSE_FILES = LICENCE
- 
+-PYTHON_PYTEST_ASYNCIO_VERSION = 0.23.6
+-PYTHON_PYTEST_ASYNCIO_SOURCE = pytest-asyncio-$(PYTHON_PYTEST_ASYNCIO_VERSION).tar.gz
+-PYTHON_PYTEST_ASYNCIO_SITE = https://files.pythonhosted.org/packages/cd/ef/80107b9e939875ad613c705d99d91e4510dcf5fed29613ac9aecbcba0a8d
++PYTHON_PYTEST_ASYNCIO_VERSION = 0.24.0
++PYTHON_PYTEST_ASYNCIO_SOURCE = pytest_asyncio-$(PYTHON_PYTEST_ASYNCIO_VERSION).tar.gz
++PYTHON_PYTEST_ASYNCIO_SITE = https://files.pythonhosted.org/packages/52/6d/c6cf50ce320cf8611df7a1254d86233b3df7cc07f9b5f5cbcb82e08aa534
+ PYTHON_PYTEST_ASYNCIO_SETUP_TYPE = setuptools
+ PYTHON_PYTEST_ASYNCIO_LICENSE = Apache-2.0
+ PYTHON_PYTEST_ASYNCIO_LICENSE_FILES = LICENSE
+-- 
+2.34.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
