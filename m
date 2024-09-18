@@ -4,50 +4,61 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0EACFCDD54D
-	for <buildroot@archiver.kernel.org>; Wed, 18 Sep 2024 17:10:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 88B2BCDD54D
+	for <buildroot@archiver.kernel.org>; Wed, 18 Sep 2024 17:50:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CD69641220;
-	Wed, 18 Sep 2024 17:10:07 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2608240096;
+	Wed, 18 Sep 2024 17:50:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2EIMdW5z3U0q; Wed, 18 Sep 2024 17:10:07 +0000 (UTC)
+ id BQrEMzCPLn9s; Wed, 18 Sep 2024 17:50:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9057641231
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EE471411B3
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9057641231;
-	Wed, 18 Sep 2024 17:10:06 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id C24D11BF5A7
- for <buildroot@lists.busybox.net>; Wed, 18 Sep 2024 17:09:51 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id EE471411B3;
+	Wed, 18 Sep 2024 17:50:31 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 884D01BF5A7
+ for <buildroot@lists.busybox.net>; Wed, 18 Sep 2024 17:50:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id AD097606A2
- for <buildroot@lists.busybox.net>; Wed, 18 Sep 2024 17:09:49 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 84FD0847D1
+ for <buildroot@lists.busybox.net>; Wed, 18 Sep 2024 17:50:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4N4xGUIpg6tq for <buildroot@lists.busybox.net>;
- Wed, 18 Sep 2024 17:09:48 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id kvSnVluNNEv1 for <buildroot@lists.busybox.net>;
+ Wed, 18 Sep 2024 17:50:29 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::225;
+ helo=relay5-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DDB96607AA
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id DDB96607AA
- for <buildroot@buildroot.org>; Wed, 18 Sep 2024 17:09:47 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 61CFD83B4B; Wed, 18 Sep 2024 17:09:47 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 4AD888447A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4AD888447A
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::225])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 4AD888447A
+ for <buildroot@buildroot.org>; Wed, 18 Sep 2024 17:50:28 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 1AA861C0003;
+ Wed, 18 Sep 2024 17:50:25 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1sqyor-00DJIC-1f;
+ Wed, 18 Sep 2024 19:50:25 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Wed, 18 Sep 2024 19:05:47 +0200
-X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 68e71cde3069d0875e8bf30ebed509b157044de2
-X-Git-Newrev: e612ba63c5538de28dcaf53d04596818bcfc9217
-X-Patchwork-Hint: ignore
-Message-Id: <20240918170947.61CFD83B4B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x]
- package/xserver_xorg-server: security update to 21.1.13
+To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+References: <20240824190720.2370919-1-thomas.petazzoni@bootlin.com>
+Date: Wed, 18 Sep 2024 19:50:25 +0200
+In-Reply-To: <20240824190720.2370919-1-thomas.petazzoni@bootlin.com> (Thomas
+ Petazzoni via buildroot's message of "Sat, 24 Aug 2024 21:07:19
+ +0200")
+Message-ID: <871q1gq2am.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: Re: [Buildroot] [PATCH] package/libuecc: switch to a functional
+ Github repo
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,61 +70,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Alexander Dahl <post@lespocky.de>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=e612ba63c5538de28dcaf53d04596818bcfc9217
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
+>>>>> "Thomas" == Thomas Petazzoni via buildroot <buildroot@buildroot.org> writes:
 
-Fixes the following security issues:
+ > The https://projects.universe-factory.net/attachments/download/85 URL
+ > no longer works, so let's switch to what appears to be the official
+ > Github repo:
 
-- CVE-2024-31080: Heap buffer overread/data leakage in ProcXIGetSelectedEvents
-- CVE-2024-31081: Heap buffer overread/data leakage in ProcXIPassiveGrabDevice
-- CVE-2024-31082: Heap buffer overread/data leakage in ProcAppleDRICreatePixmap
-- CVE-2024-31083: User-after-free in ProcRenderAddGlyphs
+ >   https://github.com/neocturne/libuecc
 
-For more details, see thee security page of Xorg:
-https://www.x.org/wiki/Development/Security/
+ > The v7 in this Github is 100% identical to the v7 that was available
+ > from https://projects.universe-factory.net/attachments/download/85.
 
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
-[Peter: add actual list of CVEs]
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-(cherry picked from commit e33db30aab02188c8b3aae6451d26288d06d7a15)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/x11r7/xserver_xorg-server/xserver_xorg-server.hash | 6 +++---
- package/x11r7/xserver_xorg-server/xserver_xorg-server.mk   | 2 +-
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ > Also at
+ > https://metadata.ftp-master.debian.org/changelogs//main/libu/libuecc/libuecc_7-5_copyright
+ > Debian lists https://github.com/NeoRaider/libuecc as the source, and
+ > this URL redirects to https://github.com/neocturne/libuecc.
 
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-index be636936e2..3520de242f 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.hash
-@@ -1,5 +1,5 @@
--# From https://lists.x.org/archives/xorg-announce/2024-January/003442.html
--sha256  1aa0ee1adad0b2db7f291f3823a4ab240c7f4aea710e89f5ef4aa232b6833403  xorg-server-21.1.11.tar.gz
--sha512  e41bf71955691e66084a67fc20643632087f0326d5eddc31e6edd118d05005b8ab536738c181f4c352f331ec8fc8f23ae1b45f237592fa5d7eddbffe43638b08  xorg-server-21.1.11.tar.gz
-+# From https://lists.x.org/archives/xorg-announce/2024-April/003504.html
-+sha256  2864b6a5359ab41c5a6132c69b5d0c9af6eb85ad26d433edb012c914029de752  xorg-server-21.1.13.tar.gz
-+sha512  9bf5617d577dd3526a9578daedc1f2e3527da6913841f8fc78a2bda311ebf1560e84e31942cb8133a2a2ac99487c13b9153db6fb2d00859fc24d053f6b91fe34  xorg-server-21.1.13.tar.gz
- # Locally calculated
- sha256  4cc0447a22635c7b2f1a93fec4aa94f1970fadeb72a063de006b51cf4963a06f  COPYING
-diff --git a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-index 1d0807ffec..05ba938c30 100644
---- a/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-+++ b/package/x11r7/xserver_xorg-server/xserver_xorg-server.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--XSERVER_XORG_SERVER_VERSION = 21.1.11
-+XSERVER_XORG_SERVER_VERSION = 21.1.13
- XSERVER_XORG_SERVER_SOURCE = xorg-server-$(XSERVER_XORG_SERVER_VERSION).tar.gz
- XSERVER_XORG_SERVER_SITE = https://xorg.freedesktop.org/archive/individual/xserver
- XSERVER_XORG_SERVER_LICENSE = MIT
+ > Thanks to the original tarball being a .tar.xz, and our Github macro
+ > generating a .tar.gz, the filename is different, and therefore the
+ > different hash will not be an issue.
+
+ > Fixes:
+
+ >   http://autobuild.buildroot.org/results/c4c24bd06bc7889c46d78e14d5bef528340d4463/
+
+ > Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+
+Committed to 2024.02.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
