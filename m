@@ -1,92 +1,94 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 43226CCD1A0
-	for <buildroot@archiver.kernel.org>; Wed, 18 Sep 2024 13:48:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 82E67C3ABDB
+	for <buildroot@archiver.kernel.org>; Wed, 18 Sep 2024 15:11:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9EA2042650;
-	Wed, 18 Sep 2024 13:48:34 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C94B6405D8;
+	Wed, 18 Sep 2024 15:11:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qN-9CHbl5NEx; Wed, 18 Sep 2024 13:48:33 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id a2gRxmfgLZMO; Wed, 18 Sep 2024 15:11:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 55A8742699
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5B8F240644
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 55A8742699;
-	Wed, 18 Sep 2024 13:48:33 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B73951BF4E2
- for <buildroot@lists.busybox.net>; Wed, 18 Sep 2024 13:48:31 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5B8F240644;
+	Wed, 18 Sep 2024 15:11:42 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 8BF241BF5A5
+ for <buildroot@lists.busybox.net>; Wed, 18 Sep 2024 15:11:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A6A42847CD
- for <buildroot@lists.busybox.net>; Wed, 18 Sep 2024 13:48:31 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 878AA60A3D
+ for <buildroot@lists.busybox.net>; Wed, 18 Sep 2024 15:11:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mkfqvSBdFh3q for <buildroot@lists.busybox.net>;
- Wed, 18 Sep 2024 13:48:31 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.12.126.239;
- helo=smtp-out.orange.com; envelope-from=yann.morin@orange.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 853E5847CC
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 853E5847CC
-Received: from smtp-out.orange.com (smtp-out.orange.com [80.12.126.239])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 853E5847CC
- for <buildroot@buildroot.org>; Wed, 18 Sep 2024 13:48:29 +0000 (UTC)
-Received: from unknown (HELO opfedv3rlp0f.nor.fr.ftgroup) ([x.x.x.x]) by
- smtp-out.orange.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
- 18 Sep 2024 15:48:27 +0200
-Received: from unknown (HELO OPE16NORMBX305.corporate.adroot.infra.ftgroup)
- ([x.x.x.x]) by opfedv3rlp0f.nor.fr.ftgroup with
- ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 18 Sep 2024 15:48:27 +0200
-Received: from yd-6wlzhs3 [x.x.x.x] by
- OPE16NORMBX305.corporate.adroot.infra.ftgroup
- [x.x.x.x] with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39;
- Wed, 18 Sep 2024 15:48:25 +0200
-Received: by yd-6wlzhs3 (sSMTP sendmail emulation);
- Wed, 18 Sep 2024 15:48:25 +0200
-From: yann.morin@orange.com
-X-IronPort-AV: E=Sophos;i="6.10,238,1719871200"; d="scan'208";a="199533203"
-Date: Wed, 18 Sep 2024 15:48:25 +0200
-To: TIAN Yuanhao <tianyuanhao3@163.com>
-Message-ID: <ZuraKWUWIIGrV+i6@yd-6wlzhs3>
-References: <cover.1725049576.git.yann.morin.1998@free.fr>
- <23841300f5a85914d9c0fc19b24df485ba861efa.1725049576.git.yann.morin.1998@free.fr>
- <CABGWkvq=ca3xYu6+_91-8KtoQqCBOBGexBbJe8wDZGMR3YQUcA@mail.gmail.com>
- <ac95b02.879a.19204270bbd.Coremail.tianyuanhao3@163.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 4nLSd5cE0hVC for <buildroot@lists.busybox.net>;
+ Wed, 18 Sep 2024 15:11:39 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::630; helo=mail-ej1-x630.google.com;
+ envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 7B445608D9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7B445608D9
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com
+ [IPv6:2a00:1450:4864:20::630])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 7B445608D9
+ for <buildroot@buildroot.org>; Wed, 18 Sep 2024 15:11:37 +0000 (UTC)
+Received: by mail-ej1-x630.google.com with SMTP id
+ a640c23a62f3a-a7a81bd549eso836631266b.3
+ for <buildroot@buildroot.org>; Wed, 18 Sep 2024 08:11:37 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1726672296; x=1727277096;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=PvWNQP5ej6haslVnKo7tgnQ66g/xziSzAIJeorr8B0Q=;
+ b=wptNPaonVCKIF3OctERNwoF/8ERvGdLJth5GkoUIIBI7mGbxSnzmywTeEKgTCnXubj
+ NWWXpO0NWmYKhO7ezV3aiPiBSXhLSiYJ6cfXlOSFSF5quJ6G7Uh4KbGXahDSHFaQWFkX
+ jm7a6WZGv8gd/wMefbl3JLS4vxAIXq4ksahy+Sr6YRSy8330upBIhDty7l/WN5X8VqkP
+ FBDLcVz8pKuTWx3D8XuY9Vq46JlaLXi6s5PM0410yPgOLCMDR8yiQrqOia6Qcjw+kIwb
+ JevUSI08YZc9LKW8ylb09+er3eG7jU2D5gtgDCqmCBMNJD/gl814SskClUfhL80UbYir
+ dEuw==
+X-Gm-Message-State: AOJu0YzTdNgIzB0qinNZgqDFGoTXDWsWGah+my6RlhBn8pts147Oqein
+ QEJvZLAvRRJ6ajtM96bsiDQpsx+G903hBb5k4POHBd7VhmF8AduyKm1yTmX7Kh5Dgm1ekNFSMrv
+ 4S5Q=
+X-Google-Smtp-Source: AGHT+IFH1nsY4ewJ2KvMA/vZlM/6MsZ8Emj4mzl6kS86nSzkeiT4z0bGc4tS+nCtOFYlVLAEHlJy4g==
+X-Received: by 2002:a17:906:f5a9:b0:a8c:d6a3:d049 with SMTP id
+ a640c23a62f3a-a90294fea6cmr2382157866b.19.1726672295653; 
+ Wed, 18 Sep 2024 08:11:35 -0700 (PDT)
+Received: from localhost.localdomain ([193.32.29.227])
+ by smtp.gmail.com with ESMTPSA id
+ a640c23a62f3a-a906109674bsm603589966b.9.2024.09.18.08.11.34
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 18 Sep 2024 08:11:35 -0700 (PDT)
+To: buildroot@buildroot.org
+Date: Wed, 18 Sep 2024 17:10:43 +0200
+Message-ID: <20240918151043.907458-1-thomas.perale@mind.be>
+X-Mailer: git-send-email 2.46.0
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <ac95b02.879a.19204270bbd.Coremail.tianyuanhao3@163.com>
-X-Originating-IP: [10.115.27.53]
-X-ClientProxiedBy: OPE16NORMBX301.corporate.adroot.infra.ftgroup
- (10.115.26.10) To OPE16NORMBX305.corporate.adroot.infra.ftgroup
- (10.115.27.10)
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=orange.com; i=@orange.com; q=dns/txt; s=orange002;
- t=1726667310; x=1758203310;
- h=date:to:cc:subject:message-id:references:mime-version:
- in-reply-to:content-transfer-encoding:from;
- bh=UYQ/rKyeefnWcBS7PEuVJ617ofAF0+LWXJ6UWKvgmdU=;
- b=oexH8Xck4t+CHULCTUq5i9trS1D0u8HHw183k2KmCr7AWUlq1Qmz30S6
- 0ILk6Q0ns6EEHAovCWo/PKlF7EIWHCwsbCVqv1o1UC/mKpOsrXHH79LoZ
- XOsa7xgO7HMMDBx29xysZiST76elyJ4KeK09iJgtj+v1prcOJRLNIMb2t
- fWtQPn4J+KpGncUGbDXcZVj2UR7rbU8sEUqwL/oyX8LE+K0rF7+nZXD/4
- iIxjeNvCATxyikQgNnZfpxhcviXkJ0nkhzIDZCeYlIaSiQsncruqTCulX
- Axt0Zj4QTGU0g1Wo4XlsEOQ4ptIwGmxRKGuvwZNltuiQFWFeTxzYkGNhA
- Q==;
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=orange.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=mind.be; s=google; t=1726672296; x=1727277096; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=PvWNQP5ej6haslVnKo7tgnQ66g/xziSzAIJeorr8B0Q=;
+ b=P+0pqDW+Fj6V8gw2bGFRWLUjQKibVRqJ15h0C2tfB3eOng00fkGOGfy0duRJBT+AbA
+ OamvlqUTezRSK9udWvWfQIljbgBXOazO9vd668IDSaUrghCttq7JilI1IdZDRaIY8t8p
+ su8UyZmWVpQwthWOORM9+zVsn+M3lQPPA+zpFXjVtyanuVVm2bOnQgzHbVeFuMLAcN8K
+ xqN6Xq7IeNsHZXhBj0lG1bp/tLfA8nfJpwIMBI23pS8W4gVcWW4JX2fhN+1nn/0Lndr9
+ uCvLNuCJZB3ZaI25eplhRJnwn6txQe+gzOaC2yHIW0wiJ//hQJtQxn75WXpRzYfHF5yN
+ S4OA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=orange.com header.i=@orange.com header.a=rsa-sha256
- header.s=orange002 header.b=oexH8Xck
-Subject: Re: [Buildroot] [PATCH 3/3] system: add tini as init system
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=P+0pqDW+
+Subject: [Buildroot] [PATCH 1/1] package/popperjs: remove PopperJS package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -98,65 +100,119 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Dario Binacchi <dario.binacchi@amarulasolutions.com>,
- "Yann E. MORIN" <yann.morin.1998@free.fr>,
- Christian Stewart <christian@aperture.us>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Thomas Perale via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Perale <thomas.perale@mind.be>
+Cc: Thomas Perale <thomas.perale@mind.be>,
+ Joeri Barbarien <joeri.barbarien@nokia.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-VElBTiBZdWFuaGFvLCBBbGwsCgpPbiAyMDI0LTA5LTE4IDE2OjAyICswODAwLCBUSUFOIFl1YW5o
-YW8gc3Bha2UgdGh1c2x5Ogo+IEF0IDIwMjQtMDktMTQgMTc6MDQ6MjYsICJEYXJpbyBCaW5hY2No
-aSIgPGRhcmlvLmJpbmFjY2hpQGFtYXJ1bGFzb2x1dGlvbnMuY29tPiB3cm90ZToKPiA+T24gRnJp
-LCBBdWcgMzAsIDIwMjQgYXQgMTA6MjbigK9QTSBZYW5uIEUuIE1PUklOIDx5YW5uLm1vcmluLjE5
-OThAZnJlZS5mcj4gd3JvdGU6Cj4gPj4gVGluaSBpcyBhIHNwZWNpYWwtcHVycG9zZSBpbml0IHN5
-c3RlbSwgYWltZWQgYXQgY29udGFpbmVycy4KPiA+PiBBZGQgaXQgdG8gdGhlIGNob2ljZSBvZiBp
-bml0IHN5c3RlbXMuClstLVNOSVAtLV0KPiBJIHRoaW5rIHRoaXMgaXMgY29tcGxldGVseSAqKndy
-b25nKiouCj4gUGVvcGxlIHVzdWFsbHkgZG8gbm90IHB1dCBkb2NrZXItaW5pdCAoc3VjaCBhcyB0
-aW5pL2NhdGF0b25pdCkgaW4KPiBjb250YWluZXIgaW1hZ2VzLCBidXQgaW4gdGhlIGhvc3Qgc3lz
-dGVtLCBhbmQgdXNlIGl0IGJ5Cj4gYGRvY2tlciBydW4gLS1pbml0YC4KClRoZSBjb250YWluZXIg
-d29ybGQgZG9lcyBub3QgcmV2b2x2ZSBvbmx5IGFyb3VuZCBkb2NrZXI7IHRoZXJlIGFyZSBvdGhl
-cgpzb2x1dGlvbnMuCgpXZSBkbyBoYXZlIGEgc2l0dWF0aW9uIHdoZXJlIHRoZSBjb250YWluZXIg
-cnVudGltZSB3aWxsIGV4cGVjdCB1cyB0bwphY3R1YWxseSBwcm92aWRlIG91ciBvd24gUElELTEg
-dGhhdCBpcyBhIHByb3BlciByZWFwZXIuIEluIHRoYXQKc2l0dWF0aW9uLCB3ZSBkbyBuZWVkIHRv
-IGhhdmUgdGluaSBpbiB0aGUgY29udGFpbmVyIGFuZCBydW5uaW5nIGFzIHRoZQplbnRyeXBvaW50
-LgoKTm90ZSB0aGF0IHRpbmkgYWxzbyB3b3JrcyBpZiBpdCBpcyBub3QgUElELTE7IGluIHRoYXQg
-Y2FzZSwgaXQgdXNlcyB0aGUKc3VicmVhcGVyIGZlYXR1cmUgKHNpbmNlIGtlcm5lbCAzLjQsIGFn
-ZXMgYWdvIG5vdyEpLgoKWW91IG1lbnRpb24gY2F0YXRvbml0LiBJIHdhcyBub3QgYXdhcmUgYWJv
-dXQgaXQsIGFuZCBuZWl0aGVyIHRoYXQgaXQKd2FzIHBhY2thZ2VkIGluIEJ1aWxkcm9vdCwgYnV0
-IHRoZW4gaXQgbWlnaHQgbWFrZSBzZW5zZSB0byBhbHNvIGFkZAp0aGF0IHRvIHRoZSBsaXN0LCBu
-b3cuCgpJZiBvbmUgc3RpbGwgd2FudHMgdG8gZGVsZWdhdGUgdGhlIFBJRC0xIHJlYXBlciB0byBh
-IGRvY2tlci1wcm92aWRlZAp0aW5pIChvciBhbHRlcm5hdGl2ZSksIHRoZW4gaXQgaXMgc3RpbGwg
-cG9zc2libGUgdG8gc2VsZWN0IHRoZSAiQ3VzdG9tCihub25lKSIgZW50cnkgaW4gdGhlIGNob2lj
-ZS4KClJlZ2FyZHMsCllhbm4gRS4gTU9SSU4uCgotLSAKICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgIF9fX19fX19fX19fXwouLS0tLS0tLS0tLS0tLS0tLS0uLS0tLS0tLS0t
-LS0tLS0tLS0tLS06ICAgICAgIF8gICAgOi0tLS0tLS0tLS0tLS0tLS0tLS4KfCAgWWFubiBFLiBN
-T1JJTiAgfCBSZWFsLVRpbWUgRW1iZWRkZWQgfCAgICBfXy8gKSAgIHwgLyJcIEFTQ0lJIFJJQkJP
-TiB8CnwgICAgICAgICAgICAgICAgIHwgU29mdHdhcmUgIERlc2lnbmVyIHwgIF8vIC0gLycgICB8
-IFwgLyBDQU1QQUlHTiAgICAgfAp8ICszMyA2MzguNDExLjI0NSAnLS0tLS0tLS0tLS0tLS0tLS0t
-LS06IChfICAgIGAtLSwgfCAgWCAgQUdBSU5TVCAgICAgIHwKfCB5YW5uLm1vcmluIChhdCkgb3Jh
-bmdlLmNvbSAgICAgICAgICAgfF89IiAgICAsLS0nIHwgLyBcIEhUTUwgTUFJTCAgICB8CictLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLTpfX19fX18vX19fX186LS0tLS0tLS0t
-LS0tLS0tLS0tJwoKX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fDQpDZSBtZXNzYWdlIGV0IHNlcyBwaWVjZXMgam9pbnRlcyBwZXV2ZW50IGNvbnRlbmly
-IGRlcyBpbmZvcm1hdGlvbnMgY29uZmlkZW50aWVsbGVzIG91IHByaXZpbGVnaWVlcyBldCBuZSBk
-b2l2ZW50IGRvbmMNCnBhcyBldHJlIGRpZmZ1c2VzLCBleHBsb2l0ZXMgb3UgY29waWVzIHNhbnMg
-YXV0b3Jpc2F0aW9uLiBTaSB2b3VzIGF2ZXogcmVjdSBjZSBtZXNzYWdlIHBhciBlcnJldXIsIHZl
-dWlsbGV6IGxlIHNpZ25hbGVyDQphIGwnZXhwZWRpdGV1ciBldCBsZSBkZXRydWlyZSBhaW5zaSBx
-dWUgbGVzIHBpZWNlcyBqb2ludGVzLiBMZXMgbWVzc2FnZXMgZWxlY3Ryb25pcXVlcyBldGFudCBz
-dXNjZXB0aWJsZXMgZCdhbHRlcmF0aW9uLA0KT3JhbmdlIGRlY2xpbmUgdG91dGUgcmVzcG9uc2Fi
-aWxpdGUgc2kgY2UgbWVzc2FnZSBhIGV0ZSBhbHRlcmUsIGRlZm9ybWUgb3UgZmFsc2lmaWUuIE1l
-cmNpLg0KDQpUaGlzIG1lc3NhZ2UgYW5kIGl0cyBhdHRhY2htZW50cyBtYXkgY29udGFpbiBjb25m
-aWRlbnRpYWwgb3IgcHJpdmlsZWdlZCBpbmZvcm1hdGlvbiB0aGF0IG1heSBiZSBwcm90ZWN0ZWQg
-YnkgbGF3Ow0KdGhleSBzaG91bGQgbm90IGJlIGRpc3RyaWJ1dGVkLCB1c2VkIG9yIGNvcGllZCB3
-aXRob3V0IGF1dGhvcmlzYXRpb24uDQpJZiB5b3UgaGF2ZSByZWNlaXZlZCB0aGlzIGVtYWlsIGlu
-IGVycm9yLCBwbGVhc2Ugbm90aWZ5IHRoZSBzZW5kZXIgYW5kIGRlbGV0ZSB0aGlzIG1lc3NhZ2Ug
-YW5kIGl0cyBhdHRhY2htZW50cy4NCkFzIGVtYWlscyBtYXkgYmUgYWx0ZXJlZCwgT3JhbmdlIGlz
-IG5vdCBsaWFibGUgZm9yIG1lc3NhZ2VzIHRoYXQgaGF2ZSBiZWVuIG1vZGlmaWVkLCBjaGFuZ2Vk
-IG9yIGZhbHNpZmllZC4NClRoYW5rIHlvdS4KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRy
-b290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWls
-ZHJvb3QK
+PopperJS project is now called floating-ui and is hosted on
+https://github.com/floating-ui/floating-ui this caused legacy
+source code archives to be repackaged with difference directory
+name which broke the sha256 hash and made the autobuild fail.
+
+Given the package has never been bumped since its introduction the
+support for that package should probably be dropped.
+
+Fixes:
+  - https://autobuild.buildroot.org/results/ab6/ab62afa6252ad986a900fbfc8b805038edc5d1d6/
+  - https://autobuild.buildroot.org/results/d1a/d1a5b56b987aa178b2ca3fa0855a5bd3da896bcb/
+  - https://autobuild.buildroot.org/results/962/9629da94be61a906fd113e77f0120cade521a715/
+  - ...
+
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+---
+ Config.in.legacy               |  5 +++++
+ package/Config.in              |  1 -
+ package/popperjs/Config.in     |  6 ------
+ package/popperjs/popperjs.hash |  3 ---
+ package/popperjs/popperjs.mk   | 19 -------------------
+ 5 files changed, 5 insertions(+), 29 deletions(-)
+ delete mode 100644 package/popperjs/Config.in
+ delete mode 100644 package/popperjs/popperjs.hash
+ delete mode 100644 package/popperjs/popperjs.mk
+
+diff --git a/Config.in.legacy b/Config.in.legacy
+index 6a1518f439..50d2776113 100644
+--- a/Config.in.legacy
++++ b/Config.in.legacy
+@@ -146,6 +146,11 @@ endif
+ 
+ comment "Legacy options removed in 2024.11"
+ 
++config BR2_PACKAGE_POPPERJS
++	string "PopperJS has been removed"
++	help
++	  The project has been renamed to floating-ui.
++
+ config BR2_PACKAGE_IPMITOOL_PEN_REG_URI
+ 	string "IANA PEN registry moved to iana-assignment package"
+ 	help
+diff --git a/package/Config.in b/package/Config.in
+index 2200f16520..f3fe27a6bf 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1881,7 +1881,6 @@ endif
+ 	source "package/json-javascript/Config.in"
+ 	source "package/jszip/Config.in"
+ 	source "package/openlayers/Config.in"
+-	source "package/popperjs/Config.in"
+ 	source "package/vis-network/Config.in"
+ 	source "package/vuejs/Config.in"
+ if BR2_PACKAGE_VUEJS
+diff --git a/package/popperjs/Config.in b/package/popperjs/Config.in
+deleted file mode 100644
+index eae963100e..0000000000
+--- a/package/popperjs/Config.in
++++ /dev/null
+@@ -1,6 +0,0 @@
+-config BR2_PACKAGE_POPPERJS
+-	bool "popperjs"
+-	help
+-	  Popper.js, a JavaScript Tooltip & Popover Positioning Engine.
+-
+-	  https://popper.js.org
+diff --git a/package/popperjs/popperjs.hash b/package/popperjs/popperjs.hash
+deleted file mode 100644
+index a2388f5b7a..0000000000
+--- a/package/popperjs/popperjs.hash
++++ /dev/null
+@@ -1,3 +0,0 @@
+-# Locally computed:
+-sha256  83eecef51d10826faca2cd5cabb344e0bef6d4127d7e728db9e4d8308b7b15d1  popperjs-1.16.0.tar.gz
+-sha256  2961310ed05cd9373a08b8191c071425a7fede0ca5d807ca38fa5f5f61c5b834  LICENSE.md
+diff --git a/package/popperjs/popperjs.mk b/package/popperjs/popperjs.mk
+deleted file mode 100644
+index c5df302eb2..0000000000
+--- a/package/popperjs/popperjs.mk
++++ /dev/null
+@@ -1,19 +0,0 @@
+-################################################################################
+-#
+-# popperjs
+-#
+-################################################################################
+-
+-POPPERJS_VERSION = 1.16.0
+-POPPERJS_SITE = $(call github,popperjs,popper-core,v$(POPPERJS_VERSION))
+-POPPERJS_LICENSE = MIT
+-POPPERJS_LICENSE_FILES = LICENSE.md
+-
+-define POPPERJS_INSTALL_TARGET_CMDS
+-	$(INSTALL) -m 0644 -D $(@D)/dist/umd/popper.min.js \
+-		$(TARGET_DIR)/var/www/popperjs/js/popper.min.js
+-	$(INSTALL) -m 0644 -D $(@D)/dist/umd/popper-utils.min.js \
+-		$(TARGET_DIR)/var/www/popperjs/js/popper-utils.min.js
+-endef
+-
+-$(eval $(generic-package))
+-- 
+2.46.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
