@@ -4,59 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A618ACE8D61
-	for <buildroot@archiver.kernel.org>; Thu, 19 Sep 2024 09:12:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D5171CE8D61
+	for <buildroot@archiver.kernel.org>; Thu, 19 Sep 2024 09:14:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5EF734056D;
-	Thu, 19 Sep 2024 09:12:57 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8A32A4056D;
+	Thu, 19 Sep 2024 09:14:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VYYuPzDg3SH5; Thu, 19 Sep 2024 09:12:56 +0000 (UTC)
+ id f7ial9JsMsCg; Thu, 19 Sep 2024 09:14:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3633C40598
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 658CB40598
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3633C40598;
-	Thu, 19 Sep 2024 09:12:56 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 2F9831BF3F4
- for <buildroot@lists.busybox.net>; Thu, 19 Sep 2024 09:12:55 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 658CB40598;
+	Thu, 19 Sep 2024 09:14:53 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 66A2D1BF4DA
+ for <buildroot@lists.busybox.net>; Thu, 19 Sep 2024 09:14:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 1E8F361236
- for <buildroot@lists.busybox.net>; Thu, 19 Sep 2024 09:12:55 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5512E8477E
+ for <buildroot@lists.busybox.net>; Thu, 19 Sep 2024 09:14:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id s0_AoeN_4Oqh for <buildroot@lists.busybox.net>;
- Thu, 19 Sep 2024 09:12:54 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::222;
- helo=relay2-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WbUcN7VdjMHI for <buildroot@lists.busybox.net>;
+ Thu, 19 Sep 2024 09:14:51 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 8FFFA61228
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8FFFA61228
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::222])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 8FFFA61228
- for <buildroot@buildroot.org>; Thu, 19 Sep 2024 09:12:53 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id BD76340005;
- Thu, 19 Sep 2024 09:12:50 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1srDDW-00EAFo-0K;
- Thu, 19 Sep 2024 11:12:50 +0200
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8324484185
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8324484185
+ for <buildroot@buildroot.org>; Thu, 19 Sep 2024 09:14:51 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 6FEE183C67; Thu, 19 Sep 2024 09:14:51 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Yann E. MORIN <yann.morin.1998@free.fr>
-References: <20240911192455.66E0886F84@busybox.osuosl.org>
-Date: Thu, 19 Sep 2024 11:12:50 +0200
-In-Reply-To: <20240911192455.66E0886F84@busybox.osuosl.org> (Yann E. MORIN's
- message of "Wed, 11 Sep 2024 21:24:40 +0200")
-Message-ID: <87cyl0knvx.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [git commit] gitlab: fix issue template
+To: buildroot@buildroot.org
+Date: Thu, 19 Sep 2024 11:03:05 +0200
+X-Git-Refname: refs/heads/2024.08.x
+X-Git-Oldrev: 30f9e284d98df4c923b6f52a0564aabeae867833
+X-Git-Newrev: 4124af66264ec5057ec359851c711bc69aa7469a
+X-Patchwork-Hint: ignore
+Message-Id: <20240919091451.6FEE183C67@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.08.x]
+ docs/manual/adding-packages-asciidoc.adoc: fix resources typo in example
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -68,29 +59,38 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=4124af66264ec5057ec359851c711bc69aa7469a
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.08.x
 
- > commit:
- > https://git.buildroot.net/buildroot/commit/?id=6a1e297a31ed3257876fcba5064dbce36b1e670c
- > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+As FOO_RESOURCES hints, the correct spelling is resources so use that.
 
- > The two lines with the Buildroot version and the system os-release
- > details are rendered on a single line, "because Markdown".
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 5fca562ee88b07472cdb68e166ebc7f576d1c6f1)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ docs/manual/adding-packages-asciidoc.adoc | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- > Make that a two-item list, to be sure they are on properly rendered.
-
- > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-
-Committed to 2024.02.x and 2024.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/docs/manual/adding-packages-asciidoc.adoc b/docs/manual/adding-packages-asciidoc.adoc
+index d68978b1cb..c34b9ffc2a 100644
+--- a/docs/manual/adding-packages-asciidoc.adoc
++++ b/docs/manual/adding-packages-asciidoc.adoc
+@@ -112,7 +112,7 @@ Here is a complete example that uses all variables and all hooks:
+ 05: ################################################################################
+ 06:
+ 07: FOO_SOURCES = $(sort $(wildcard $(FOO_DOCDIR)/*))
+-08: FOO_RESOURCES = $(sort $(wildcard $(FOO_DOCDIR)/ressources))
++08: FOO_RESOURCES = $(sort $(wildcard $(FOO_DOCDIR)/resources))
+ 09:
+ 10: FOO_TOC_DEPTH = 2
+ 11: FOO_TOC_DEPTH_HTML = 1
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
