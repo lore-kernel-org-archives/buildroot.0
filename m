@@ -1,71 +1,62 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90842CE8D46
-	for <buildroot@archiver.kernel.org>; Thu, 19 Sep 2024 04:00:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97437CE8D58
+	for <buildroot@archiver.kernel.org>; Thu, 19 Sep 2024 07:11:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5ACFD849DA;
-	Thu, 19 Sep 2024 04:00:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D8EBA6069F;
+	Thu, 19 Sep 2024 07:11:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id H_AeXzPN1th1; Thu, 19 Sep 2024 04:00:20 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id KI3P6KugfinB; Thu, 19 Sep 2024 07:11:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 06153849F5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 000E5608CD
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 06153849F5;
-	Thu, 19 Sep 2024 04:00:20 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 90E961BF215
- for <buildroot@lists.busybox.net>; Thu, 19 Sep 2024 03:59:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 000E5608CD;
+	Thu, 19 Sep 2024 07:11:44 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1FDF51BF4D5
+ for <buildroot@lists.busybox.net>; Thu, 19 Sep 2024 07:11:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 699BD4278E
- for <buildroot@lists.busybox.net>; Thu, 19 Sep 2024 03:59:53 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0DFF240332
+ for <buildroot@lists.busybox.net>; Thu, 19 Sep 2024 07:11:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id co56kv5bozaw for <buildroot@lists.busybox.net>;
- Thu, 19 Sep 2024 03:59:52 +0000 (UTC)
-Received-SPF: None (mailfrom) identity=mailfrom;
- client-ip=2a00:1828:2000:679::23; helo=helium.openadk.org;
- envelope-from=wbx@helium.openadk.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 5C79D42727
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 5C79D42727
-Received: from helium.openadk.org (helium.openadk.org
- [IPv6:2a00:1828:2000:679::23])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 5C79D42727
- for <buildroot@buildroot.org>; Thu, 19 Sep 2024 03:59:51 +0000 (UTC)
-Received: by helium.openadk.org (Postfix, from userid 1000)
- id 874B9353500C; Thu, 19 Sep 2024 05:53:36 +0200 (CEST)
-From: Waldemar Brodkorb <wbx@openadk.org>
-To: buildroot@buildroot.org
-Date: Thu, 19 Sep 2024 05:53:00 +0200
-Message-Id: <20240919035308.2622723-2-wbx@openadk.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20240919035308.2622723-1-wbx@openadk.org>
-References: <20240919035308.2622723-1-wbx@openadk.org>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 5I1PZGR57XhN for <buildroot@lists.busybox.net>;
+ Thu, 19 Sep 2024 07:11:43 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.198;
+ helo=relay6-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 5A22D4027D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5A22D4027D
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
+ [217.70.183.198])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 5A22D4027D
+ for <buildroot@buildroot.org>; Thu, 19 Sep 2024 07:11:41 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 5481EC0006;
+ Thu, 19 Sep 2024 07:11:39 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1srBKE-00E84l-1W;
+ Thu, 19 Sep 2024 09:11:38 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Yann E. MORIN <yann.morin.1998@free.fr>
+References: <20240907171954.CAB3C86DE6@busybox.osuosl.org>
+Date: Thu, 19 Sep 2024 09:11:38 +0200
+In-Reply-To: <20240907171954.CAB3C86DE6@busybox.osuosl.org> (Yann E. MORIN's
+ message of "Sat, 7 Sep 2024 19:18:33 +0200")
+Message-ID: <87zfo4kthx.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=openadk.org; s=2022; 
- t=1726718016; bh=Jotw4kQTFTgtF5vwRaEarzZ2zO4dl9zcMLqdJkfjcEU=;
- h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=IC9w2L7xf4PrpdOyjpAEqdvGarwGZkEuA9bTxb32E+TA5n6HmXNkG1HYPjGHi3430
- l9HDCxZIQBMvbPXx0DRuuZGvmWZGJRzutAMjhJ9t3F4Er3Ts5uy0F3jr/s2X77pwCH
- WfBB5fwc8v6umlrNEgKxN0qx2raCNzPG7dGg/6p+J3ZDuwTavBkeuhddLXMTvSBeFq
- ewBkXhSzFsbaX3mniUghUfuYCqQWwD5mWBkSKjY+bO6DR1d9Tww6nvek+HtWlu1WXR
- 1gT4jLCdx5qslRgdpyONWuPKIUNX8aCWokxYlT8XazzbppExk8QrLIpFIxIRXWfjHU
- P6SWsrGpz4Sdg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=none (p=none dis=none)
- header.from=openadk.org
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=openadk.org header.i=@openadk.org
- header.a=rsa-sha256 header.s=2022 header.b=IC9w2L7x
-Subject: [Buildroot] [PATCH 1/9] Revert: "arch: drop now useless support for
- FDPIC"
+ header.from=korsgaard.com
+Subject: Re: [Buildroot] [git commit] arch/Config.in.arc: fix indentation
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,85 +68,23 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Ben Wolsieffer <Ben.Wolsieffer@hefring.com>
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Ben Wolsieffer <ben.wolsieffer@hefring.com>
+>>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
 
-This reverts commit 58dcd28dfbed481becb822b009583a63efbc6ffa.
+ > commit: https://git.buildroot.net/buildroot/commit/?id=2ba879cc38733f5160b0729bac1b9e2f001f35e1
+ > branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-ARM supports FDPIC, so this code is needed once again.
+ > Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 
-Signed-off-by: Ben Wolsieffer <Ben.Wolsieffer@hefring.com>
-Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
----
- arch/Config.in           | 14 ++++++++++++++
- package/uclibc/uclibc.mk |  7 +++++++
- 2 files changed, 21 insertions(+)
+Committed to 2024.02.x and 2024.08.x, thanks.
 
-diff --git a/arch/Config.in b/arch/Config.in
-index 2e7ac080ef..bd5f9ce470 100644
---- a/arch/Config.in
-+++ b/arch/Config.in
-@@ -12,6 +12,9 @@ config BR2_SOFT_FLOAT
- config BR2_USE_MMU
- 	bool
- 
-+config BR2_ARCH_HAS_FDPIC_SUPPORT
-+	bool
-+
- choice
- 	prompt "Target Architecture"
- 	default BR2_i386
-@@ -430,6 +433,7 @@ endif
- choice
- 	prompt "Target Binary Format"
- 	default BR2_BINFMT_ELF if BR2_USE_MMU
-+	default BR2_BINFMT_FDPIC if BR2_ARCH_HAS_FDPIC_SUPPORT
- 	default BR2_BINFMT_FLAT
- 
- config BR2_BINFMT_ELF
-@@ -441,6 +445,16 @@ config BR2_BINFMT_ELF
- 	  and executables used across different architectures and
- 	  operating systems.
- 
-+config BR2_BINFMT_FDPIC
-+	bool "FDPIC"
-+	depends on BR2_ARCH_HAS_FDPIC_SUPPORT
-+	select BR2_BINFMT_SUPPORTS_SHARED
-+	help
-+	  ELF FDPIC binaries are based on ELF, but allow the individual
-+	  load segments of a binary to be located in memory
-+	  independently of each other. This makes this format ideal for
-+	  use in environments where no MMU is available.
-+
- config BR2_BINFMT_FLAT
- 	bool "FLAT"
- 	depends on !BR2_USE_MMU
-diff --git a/package/uclibc/uclibc.mk b/package/uclibc/uclibc.mk
-index de834bac4f..600d72ce7b 100644
---- a/package/uclibc/uclibc.mk
-+++ b/package/uclibc/uclibc.mk
-@@ -57,6 +57,13 @@ UCLIBC_LOCALES = \
- endif
- 
- # noMMU binary formats
-+ifeq ($(BR2_BINFMT_FDPIC),y)
-+define UCLIBC_BINFMT_CONFIG
-+	$(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_FLAT,$(@D)/.config)
-+	$(call KCONFIG_DISABLE_OPT,UCLIBC_FORMAT_FLAT_SEP_DATA,$(@D)/.config)
-+	$(call KCONFIG_ENABLE_OPT,UCLIBC_FORMAT_FDPIC_ELF,$(@D)/.config)
-+endef
-+endif
- ifeq ($(BR2_BINFMT_FLAT),y)
- define UCLIBC_BINFMT_CONFIG
- 	$(call KCONFIG_ENABLE_OPT,UCLIBC_FORMAT_FLAT)
 -- 
-2.30.2
-
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
