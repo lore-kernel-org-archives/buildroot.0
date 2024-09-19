@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF5B0CE8D7A
-	for <buildroot@archiver.kernel.org>; Thu, 19 Sep 2024 11:29:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9BB0CE8D7A
+	for <buildroot@archiver.kernel.org>; Thu, 19 Sep 2024 11:29:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9D68F4011A;
-	Thu, 19 Sep 2024 11:29:35 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 85927412CC;
+	Thu, 19 Sep 2024 11:29:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fYf7U0YJVq2U; Thu, 19 Sep 2024 11:29:34 +0000 (UTC)
+ id hdp5_Wkd7jrJ; Thu, 19 Sep 2024 11:29:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C1DA4404CF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 32CFE412C0
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C1DA4404CF;
-	Thu, 19 Sep 2024 11:29:33 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B94731BF33B
+	by smtp2.osuosl.org (Postfix) with ESMTP id 32CFE412C0;
+	Thu, 19 Sep 2024 11:29:37 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id F08BD1BF33B
  for <buildroot@lists.busybox.net>; Thu, 19 Sep 2024 11:29:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id A30034280D
+ by smtp1.osuosl.org (Postfix) with ESMTP id DE68281425
  for <buildroot@lists.busybox.net>; Thu, 19 Sep 2024 11:29:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HI2nVDFeFZ0H for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id lGdCBvcSh8h0 for <buildroot@lists.busybox.net>;
  Thu, 19 Sep 2024 11:29:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CC81042809
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A5F9B81431
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id CC81042809
+ by smtp1.osuosl.org (Postfix) with ESMTP id A5F9B81431
  for <buildroot@buildroot.org>; Thu, 19 Sep 2024 11:29:22 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B97EC83CC3; Thu, 19 Sep 2024 11:29:22 +0000 (UTC)
+ id 93C0C83CC1; Thu, 19 Sep 2024 11:29:22 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 19 Sep 2024 13:27:08 +0200
+Date: Thu, 19 Sep 2024 13:17:16 +0200
 X-Git-Refname: refs/heads/2024.08.x
-X-Git-Oldrev: 43d9a911b2dc6a01e86fe74c426cec097f9cf5da
-X-Git-Newrev: b0a601d8c601b6ba67f8da725fc29ba3ab16f71f
+X-Git-Oldrev: 328bd0be09b4c71e2650b85b3a075e9c5a4e7546
+X-Git-Newrev: c04b02323c7274f78f77c2665618793c2c3eb98d
 X-Patchwork-Hint: ignore
-Message-Id: <20240919112922.B97EC83CC3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.08.x] package/rp-pppoe: fixup
- download URL
+Message-Id: <20240919112922.93C0C83CC1@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.08.x] package/nginx: fix static
+ build error
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,43 +65,67 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b0a601d8c601b6ba67f8da725fc29ba3ab16f71f
+commit: https://git.buildroot.net/buildroot/commit/?id=c04b02323c7274f78f77c2665618793c2c3eb98d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.08.x
 
-As reported in [1], the download of rp-pppoe-3.15.tar.gz is no longer
-guaranteed from the download section of the project.
+In commit 761259c93400bc806611a242c7dc3df7ff67c231 the SSL patch was
+removed, without testing any static compilation.
+Reintroduce a small version of the original patch.
 
-Fortunately, Jacon Kroon is hosting the RP-PPPoE source code for versions
-3.15 and 4.0 in a location that permits automated downloads.
+Upstream does not use pkg-config, so the patch is Buildroot specific and
+not suitable for upstreaming.
 
 Fixes:
-- http://autobuild.buildroot.org/results/8676456feec9dd401152887101ad1a9ce96cb769
+ - http://autobuild.buildroot.net/results/a85/a85b00dfe9b55607390ebacc0e4e55c7cfbace3a
 
-[1] https://dianne.skoll.ca/pipermail/rp-pppoe/2024q3/000652.html
-
-Cc: Jaco Kroon <jaco@uls.co.za>
-Cc: Dianne Skoll <dianne@skoll.ca>
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit de42743f1b7f05517fc4f8eba73ddaee2e4c9ae8)
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+(cherry picked from commit 6cda3504086e4c4b6acd24212e4d568684442243)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/rp-pppoe/rp-pppoe.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ ...0009-auto-lib-openssl-conf-use-pkg-config.patch | 34 ++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
 
-diff --git a/package/rp-pppoe/rp-pppoe.mk b/package/rp-pppoe/rp-pppoe.mk
-index f50f1e5a1f..75f2290442 100644
---- a/package/rp-pppoe/rp-pppoe.mk
-+++ b/package/rp-pppoe/rp-pppoe.mk
-@@ -5,7 +5,7 @@
- ################################################################################
- 
- RP_PPPOE_VERSION = 3.15
--RP_PPPOE_SITE = https://dianne.skoll.ca/projects/rp-pppoe/download
-+RP_PPPOE_SITE = https://downloads.uls.co.za/rp-pppoe
- RP_PPPOE_LICENSE = GPL-2.0
- RP_PPPOE_LICENSE_FILES = doc/LICENSE
- RP_PPPOE_CPE_ID_VALID = YES
+diff --git a/package/nginx/0009-auto-lib-openssl-conf-use-pkg-config.patch b/package/nginx/0009-auto-lib-openssl-conf-use-pkg-config.patch
+new file mode 100644
+index 0000000000..05fb48b76e
+--- /dev/null
++++ b/package/nginx/0009-auto-lib-openssl-conf-use-pkg-config.patch
+@@ -0,0 +1,34 @@
++From 232ac61984720401b0c3854da1644ec20ed218e0 Mon Sep 17 00:00:00 2001
++From: Martin Bark <martin@barkynet.com>
++Date: Thu, 15 Aug 2024 19:47:23 +0200
++Subject: [PATCH] auto/lib/openssl/conf: use pkg-config
++
++Change to using pkg-config to find the path to openssl and its
++dependencies.
++
++Signed-off-by: Martin Bark <martin@barkynet.com>
++Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
++Upstream: not suitable
++---
++ auto/lib/openssl/conf | 5 +++--
++ 1 file changed, 3 insertions(+), 2 deletions(-)
++
++diff --git a/auto/lib/openssl/conf b/auto/lib/openssl/conf
++index fdf430dff..c9fe4c8bf 100644
++--- a/auto/lib/openssl/conf
+++++ b/auto/lib/openssl/conf
++@@ -63,8 +63,9 @@ else
++         ngx_feature_name="NGX_OPENSSL"
++         ngx_feature_run=no
++         ngx_feature_incs="#include <openssl/ssl.h>"
++-        ngx_feature_path=
++-        ngx_feature_libs="-lssl -lcrypto $NGX_LIBDL $NGX_LIBPTHREAD"
+++        ngx_feature_path="$(${PKG_CONFIG:=pkg-config} --cflags-only-I openssl|
+++			    sed -re 's/(^|\s)-I\s*(\S+)/\1\2/g')"
+++        ngx_feature_libs="$(${PKG_CONFIG:=pkg-config} --libs openssl)"
++         ngx_feature_test="SSL_CTX_set_options(NULL, 0)"
++         . auto/feature
++ 
++-- 
++2.39.2
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
