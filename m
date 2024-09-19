@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7FF73CF3962
-	for <buildroot@archiver.kernel.org>; Thu, 19 Sep 2024 20:00:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1AAB0CF3963
+	for <buildroot@archiver.kernel.org>; Thu, 19 Sep 2024 20:00:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3E62040E0C;
-	Thu, 19 Sep 2024 20:00:29 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 782974328A;
+	Thu, 19 Sep 2024 20:00:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QW9ntVfNu9Jw; Thu, 19 Sep 2024 20:00:28 +0000 (UTC)
+ id rzDe52hlDQ5a; Thu, 19 Sep 2024 20:00:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E602843251
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0ECC643251
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E602843251;
-	Thu, 19 Sep 2024 20:00:27 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id C08A21BF215
- for <buildroot@lists.busybox.net>; Thu, 19 Sep 2024 19:59:50 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0ECC643251;
+	Thu, 19 Sep 2024 20:00:31 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1D7611BF215
+ for <buildroot@lists.busybox.net>; Thu, 19 Sep 2024 19:59:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id AAE7C84BF8
- for <buildroot@lists.busybox.net>; Thu, 19 Sep 2024 19:59:49 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 36D764186E
+ for <buildroot@lists.busybox.net>; Thu, 19 Sep 2024 19:59:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id zENUPT5X_pdk for <buildroot@lists.busybox.net>;
- Thu, 19 Sep 2024 19:59:48 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id MhEg5trhpb6c for <buildroot@lists.busybox.net>;
+ Thu, 19 Sep 2024 19:59:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D30E484BF9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3E3654187F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id D30E484BF9
- for <buildroot@buildroot.org>; Thu, 19 Sep 2024 19:59:48 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3E3654187F
+ for <buildroot@buildroot.org>; Thu, 19 Sep 2024 19:59:49 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CF09283D8C; Thu, 19 Sep 2024 19:59:48 +0000 (UTC)
+ id 3697B83D8C; Thu, 19 Sep 2024 19:59:49 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 19 Sep 2024 13:55:51 +0200
+Date: Thu, 19 Sep 2024 13:55:57 +0200
 X-Git-Refname: refs/heads/2024.08.x
-X-Git-Oldrev: b903a3b3933a2e32ffabef844a410cc74edeb760
-X-Git-Newrev: df61e43aab3693144bd74a02b4b05593d14be675
+X-Git-Oldrev: 2d17c16ff7154524d2ee004fd3c3e6f8a2401e58
+X-Git-Newrev: 94b0b7d79c20e74aa78a56311ed7f5109f8d0c1b
 X-Patchwork-Hint: ignore
-Message-Id: <20240919195948.CF09283D8C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.08.x] package/irda-utils: fix
- typos in patch descriptions
+Message-Id: <20240919195949.3697B83D8C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.08.x] package/libee: fix typo
+ in help text
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,44 +65,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=df61e43aab3693144bd74a02b4b05593d14be675
+commit: https://git.buildroot.net/buildroot/commit/?id=94b0b7d79c20e74aa78a56311ed7f5109f8d0c1b
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.08.x
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 1961a86751cc550dd54e0c68b3bd131fad3168d4)
+(cherry picked from commit 686caaa5d47b2553b4a99109aa171a996cebf79b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/irda-utils/0001-daemon.patch | 2 +-
- package/irda-utils/0002-nommu.patch  | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/libee/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/irda-utils/0001-daemon.patch b/package/irda-utils/0001-daemon.patch
-index f6034a75b4..9f01de20ae 100644
---- a/package/irda-utils/0001-daemon.patch
-+++ b/package/irda-utils/0001-daemon.patch
-@@ -2,7 +2,7 @@ written by Mike Frysinger
+diff --git a/package/libee/Config.in b/package/libee/Config.in
+index 9a3411ef29..f7dd821bc0 100644
+--- a/package/libee/Config.in
++++ b/package/libee/Config.in
+@@ -13,7 +13,7 @@ config BR2_PACKAGE_LIBEE
+ 	  convenient API layer above the CEE standard. However, CEE
+ 	  is not finished. At the time of this writing, CEE is under
+ 	  heavy development and even some of its core data structures
+-	  (like the data dictionary and taxonmy) have not been fully
++	  (like the data dictionary and taxonomy) have not been fully
+ 	  specified.
  
- https://sourceforge.net/tracker/?func=detail&aid=3132053&group_id=5616&atid=305616
- 
--Rather than using the fork function (which doesnt work on nommu
-+Rather than using the fork function (which doesn't work on nommu
- systems), simply use the daemon() function instead (which does
- work). this should work the same before and after for all systems.
- 
-diff --git a/package/irda-utils/0002-nommu.patch b/package/irda-utils/0002-nommu.patch
-index bc76bd3957..13c5ad2a7c 100644
---- a/package/irda-utils/0002-nommu.patch
-+++ b/package/irda-utils/0002-nommu.patch
-@@ -3,7 +3,7 @@ written by Mike Frysinger
- https://sourceforge.net/tracker/?func=detail&aid=3132056&group_id=5616&atid=305616
- 
- nommu systems cannot fork() as the hardware cannot support
--it. irattach uses it as a minor optimization, but it isnt
-+it. irattach uses it as a minor optimization, but it isn't
- necessary for correct functioning of the utility. so add a
- NO_FORK define so we nommu peeps can do CFLAGS="... -DNO_FORK=1
- ..." and use it in our embedded systems.
+ 	  http://www.libee.org
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
