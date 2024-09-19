@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DCC38CE8D61
-	for <buildroot@archiver.kernel.org>; Thu, 19 Sep 2024 09:15:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B1B3CE8D5F
+	for <buildroot@archiver.kernel.org>; Thu, 19 Sep 2024 09:15:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A84C7410F9;
-	Thu, 19 Sep 2024 09:15:42 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 107FB412A2;
+	Thu, 19 Sep 2024 09:15:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KboOCacpscoL; Thu, 19 Sep 2024 09:15:41 +0000 (UTC)
+ id r-iV4UeCp8jD; Thu, 19 Sep 2024 09:15:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 45F8A41451
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AD13141471
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 45F8A41451;
-	Thu, 19 Sep 2024 09:15:41 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E4ABB1BF4DA
+	by smtp2.osuosl.org (Postfix) with ESMTP id AD13141471;
+	Thu, 19 Sep 2024 09:15:44 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id E93FB1BF97E
  for <buildroot@lists.busybox.net>; Thu, 19 Sep 2024 09:14:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id F3384427FD
+ by smtp1.osuosl.org (Postfix) with ESMTP id 5BF7F84987
  for <buildroot@lists.busybox.net>; Thu, 19 Sep 2024 09:14:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id yj8ndhL2e4zq for <buildroot@lists.busybox.net>;
- Thu, 19 Sep 2024 09:14:53 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Vwo2a3KLXteu for <buildroot@lists.busybox.net>;
+ Thu, 19 Sep 2024 09:14:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org EE7D642800
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0F26384709
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id EE7D642800
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0F26384709
  for <buildroot@buildroot.org>; Thu, 19 Sep 2024 09:14:52 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id EAEA583C67; Thu, 19 Sep 2024 09:14:52 +0000 (UTC)
+ id 0A5817FF33; Thu, 19 Sep 2024 09:14:52 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 19 Sep 2024 11:03:29 +0200
+Date: Thu, 19 Sep 2024 11:03:14 +0200
 X-Git-Refname: refs/heads/2024.08.x
-X-Git-Oldrev: 17076edc906efe2554f31f14d90dcb5717b3ce5a
-X-Git-Newrev: c299d465b8d3de1b4e3765815ac3931b8a59c117
+X-Git-Oldrev: 04d64ab6d563a30cee48318c4a070f6aaab5f72c
+X-Git-Newrev: 0d56cfabf462b7d90a8aa15549d9e196da3741b5
 X-Patchwork-Hint: ignore
-Message-Id: <20240919091452.EAEA583C67@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.08.x] package/flutter-engine:
- fix typos in comments
+Message-Id: <20240919091452.0A5817FF33@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.08.x] package/avahi: fix
+ appropriate typo
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,45 +65,34 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c299d465b8d3de1b4e3765815ac3931b8a59c117
+commit: https://git.buildroot.net/buildroot/commit/?id=0d56cfabf462b7d90a8aa15549d9e196da3741b5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.08.x
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit cccd164fd63010ac01c8c797203362f0c3bfa7ac)
+(cherry picked from commit fcb823ffdcfc3d89503f859a1042a56ad5d47f46)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/flutter-engine/Config.in   | 2 +-
- package/flutter-engine/gen-tarball | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/avahi/0002-remove-imp-from-py-compile.patch | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/flutter-engine/Config.in b/package/flutter-engine/Config.in
-index 00bcd05cd4..610c26d933 100644
---- a/package/flutter-engine/Config.in
-+++ b/package/flutter-engine/Config.in
-@@ -1,4 +1,4 @@
--# Flutter includes a vender copy of clang which is mandatory to use for
-+# Flutter includes a vendor copy of clang which is mandatory to use for
- # compiling. These are the supported architectures.
- config BR2_PACKAGE_FLUTTER_ENGINE_ARCH_SUPPORTS
- 	bool
-diff --git a/package/flutter-engine/gen-tarball b/package/flutter-engine/gen-tarball
-index 23b121d1f9..5bfb8f60e8 100755
---- a/package/flutter-engine/gen-tarball
-+++ b/package/flutter-engine/gen-tarball
-@@ -66,10 +66,10 @@ gen_tarball() {
-     # There are two issues with the flutter-engine buildsystem:
-     # - it expects empty directories created by gclient.py to be present; that
-     #   means we can't use the mk_tar_gz helper method from support/download/helpers,
--    #   becasue it does not include emnpty directories;
-+    #   because it does not include empty directories;
-     # - it insists on having a full git repositoy, with .git et al., which means
-     #   we can't generate a reproducible archive anyway.
--    # So we jsut create a plain tarball.
-+    # So we just create a plain tarball.
-     ${TAR} -C "${SCRATCH_DIR}"/src -czf "${TARBALL_NAME}" .
-     mv "${TARBALL_NAME}" "${TARBALL_DL_PATH}"
- }
+diff --git a/package/avahi/0002-remove-imp-from-py-compile.patch b/package/avahi/0002-remove-imp-from-py-compile.patch
+index 37534a3f7a..ba92275206 100644
+--- a/package/avahi/0002-remove-imp-from-py-compile.patch
++++ b/package/avahi/0002-remove-imp-from-py-compile.patch
+@@ -1,10 +1,10 @@
+ Remove optional imp python module dependency.
+ 
+ Upstream already removed py-compile entirely in their git repository,
+-so the patch is not appropiate for upstream.
++so the patch is not appropriate for upstream.
+ 
+ Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+-Upstream: not appropiate
++Upstream: not appropriate
+ 
+ diff -Nur avahi-0.8.orig/py-compile avahi-0.8/py-compile
+ --- avahi-0.8.orig/py-compile	2020-02-18 07:58:21.192417644 +0100
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
