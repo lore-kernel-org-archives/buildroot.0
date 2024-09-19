@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 392D1CF3962
-	for <buildroot@archiver.kernel.org>; Thu, 19 Sep 2024 20:00:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AF73ACF3962
+	for <buildroot@archiver.kernel.org>; Thu, 19 Sep 2024 20:00:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 06E59432AF;
-	Thu, 19 Sep 2024 20:00:43 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 701D1432BC;
+	Thu, 19 Sep 2024 20:00:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0aEFh2-S4Yap; Thu, 19 Sep 2024 20:00:42 +0000 (UTC)
+ id UqlfpxhmOaKT; Thu, 19 Sep 2024 20:00:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8B387432A2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2CDEE432B7
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8B387432A2;
-	Thu, 19 Sep 2024 20:00:41 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 0899F1BF215
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2CDEE432B7;
+	Thu, 19 Sep 2024 20:00:45 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 1E82B1BF292
  for <buildroot@lists.busybox.net>; Thu, 19 Sep 2024 19:59:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7DFC6416BB
- for <buildroot@lists.busybox.net>; Thu, 19 Sep 2024 19:59:50 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id DC2B96F4F3
+ for <buildroot@lists.busybox.net>; Thu, 19 Sep 2024 19:59:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 63But-u-m-MU for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id PXdqaYjsD4u4 for <buildroot@lists.busybox.net>;
  Thu, 19 Sep 2024 19:59:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9895F41811
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 04B0E6F4A8
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9895F41811
+ by smtp3.osuosl.org (Postfix) with ESMTP id 04B0E6F4A8
  for <buildroot@buildroot.org>; Thu, 19 Sep 2024 19:59:49 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 92EDF828A6; Thu, 19 Sep 2024 19:59:49 +0000 (UTC)
+ id F364E83D8C; Thu, 19 Sep 2024 19:59:48 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 19 Sep 2024 13:56:02 +0200
+Date: Thu, 19 Sep 2024 13:55:54 +0200
 X-Git-Refname: refs/heads/2024.08.x
-X-Git-Oldrev: 40161617be2ad3457434a52f3059b81c1891da07
-X-Git-Newrev: 16598bdf5ea9e87f4ad8146c603d109e48403c36
+X-Git-Oldrev: 7a597b92f129759d6d76bc6636197dd87e52214b
+X-Git-Newrev: 5ce885b30b80b1d532f3f9a0b69e792a295b43cd
 X-Patchwork-Hint: ignore
-Message-Id: <20240919195949.92EDF828A6@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.08.x] package/libmad: fix
- deactivate typo
+Message-Id: <20240919195948.F364E83D8C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.08.x] package/kexec-lite: fix
+ utility typo in help text
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,30 +65,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=16598bdf5ea9e87f4ad8146c603d109e48403c36
+commit: https://git.buildroot.net/buildroot/commit/?id=5ce885b30b80b1d532f3f9a0b69e792a295b43cd
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.08.x
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 01cc093a980fae3a2f9a632b4a91e5b766e0ec82)
+(cherry picked from commit 98e1dae3a39c622d755ada474c693e33109a47d5)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libmad/libmad.mk | 2 +-
+ package/kexec-lite/Config.in | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libmad/libmad.mk b/package/libmad/libmad.mk
-index 9f3396b1a4..db04d22e92 100644
---- a/package/libmad/libmad.mk
-+++ b/package/libmad/libmad.mk
-@@ -33,7 +33,7 @@ LIBMAD_AUTORECONF = YES
+diff --git a/package/kexec-lite/Config.in b/package/kexec-lite/Config.in
+index 89184b0b7c..71bd619ae4 100644
+--- a/package/kexec-lite/Config.in
++++ b/package/kexec-lite/Config.in
+@@ -13,7 +13,7 @@ config BR2_PACKAGE_KEXEC_LITE
+ 	select BR2_PACKAGE_DTC
+ 	select BR2_PACKAGE_DTC_PROGRAMS
+ 	help
+-	  Kexec is a user space utiltity for loading another kernel
++	  Kexec is a user space utility for loading another kernel
+ 	  and asking the currently running kernel to do something with
+ 	  it.
  
- # libmad has some assembly function that is not present in Thumb mode:
- # Error: selected processor does not support `smull r6,r7,r3,r1' in Thumb mode
--# so, we desactivate Thumb mode
-+# so, we deactivate Thumb mode
- ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
- LIBMAD_CONF_ENV += CFLAGS="$(TARGET_CFLAGS) -marm"
- endif
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
