@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 51BD8CE8D61
-	for <buildroot@archiver.kernel.org>; Thu, 19 Sep 2024 09:15:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 409E2CE8D61
+	for <buildroot@archiver.kernel.org>; Thu, 19 Sep 2024 09:15:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 114AC41342;
-	Thu, 19 Sep 2024 09:15:52 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0A5784148E;
+	Thu, 19 Sep 2024 09:15:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 0VSRRRhzpcmE; Thu, 19 Sep 2024 09:15:51 +0000 (UTC)
+ id xFyrw7qztPZP; Thu, 19 Sep 2024 09:15:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 254A24148E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 99DB54149C
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 254A24148E;
-	Thu, 19 Sep 2024 09:15:50 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 99DB54149C;
+	Thu, 19 Sep 2024 09:15:53 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 86C761BF97E
- for <buildroot@lists.busybox.net>; Thu, 19 Sep 2024 09:14:59 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2874E1BF4DA
+ for <buildroot@lists.busybox.net>; Thu, 19 Sep 2024 09:15:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6268484975
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8B82D8499F
  for <buildroot@lists.busybox.net>; Thu, 19 Sep 2024 09:14:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hLaVD-6V7ReZ for <buildroot@lists.busybox.net>;
+ id cu8E3u43JzDJ for <buildroot@lists.busybox.net>;
  Thu, 19 Sep 2024 09:14:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1AF4E84715
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4DC81848EF
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1AF4E84715
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4DC81848EF
  for <buildroot@buildroot.org>; Thu, 19 Sep 2024 09:14:52 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 181B683C4D; Thu, 19 Sep 2024 09:14:52 +0000 (UTC)
+ id 4B31583C39; Thu, 19 Sep 2024 09:14:52 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 19 Sep 2024 11:03:15 +0200
+Date: Thu, 19 Sep 2024 11:03:19 +0200
 X-Git-Refname: refs/heads/2024.08.x
-X-Git-Oldrev: 0d56cfabf462b7d90a8aa15549d9e196da3741b5
-X-Git-Newrev: 923a6df874afd1dca8c9b3a26132fa568350f017
+X-Git-Oldrev: fc1b43b2e69ba92e58b13ed66fdba5d9f668b144
+X-Git-Newrev: c35946ccada2f20b78525a24d18b510d9a0c6bd7
 X-Patchwork-Hint: ignore
-Message-Id: <20240919091452.181B683C4D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.08.x] package/bc: fix typos in
- patch descriptions
+Message-Id: <20240919091452.4B31583C39@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.08.x] package/c-icap-modules:
+ fix Additional typo
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,58 +65,29 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=923a6df874afd1dca8c9b3a26132fa568350f017
+commit: https://git.buildroot.net/buildroot/commit/?id=c35946ccada2f20b78525a24d18b510d9a0c6bd7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.08.x
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit e2a0ab180c13ecb41b1c1aea65c9ca69fbe8bc90)
+(cherry picked from commit e277ef8affc38ecae5b70943d13fb3a8b78def4a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/bc/0001-bc-use-MAKEINFO-variable-for-docs.patch                | 2 +-
- package/bc/0002-notice-read-and-write-errors-on-input-and-output.patch | 2 +-
- package/bc/0004-no-gen-libmath.patch                                   | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ package/c-icap-modules/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/bc/0001-bc-use-MAKEINFO-variable-for-docs.patch b/package/bc/0001-bc-use-MAKEINFO-variable-for-docs.patch
-index 03d15f5524..5ff6125f67 100644
---- a/package/bc/0001-bc-use-MAKEINFO-variable-for-docs.patch
-+++ b/package/bc/0001-bc-use-MAKEINFO-variable-for-docs.patch
-@@ -3,7 +3,7 @@ From: Matt Weber <matthew.weber@rockwellcollins.com>
- Date: Fri, 13 Sep 2019 13:45:02 -0500
- Subject: [PATCH] bc: use MAKEINFO variable for docs
+diff --git a/package/c-icap-modules/Config.in b/package/c-icap-modules/Config.in
+index 616456b4dc..7114131f04 100644
+--- a/package/c-icap-modules/Config.in
++++ b/package/c-icap-modules/Config.in
+@@ -2,6 +2,6 @@ config BR2_PACKAGE_C_ICAP_MODULES
+ 	bool "c-icap-modules"
+ 	depends on BR2_PACKAGE_C_ICAP
+ 	help
+-	  Additionals modules for c-icap server.
++	  Additional modules for c-icap server.
  
--Use the appropiate MAKEINFO variable rather than the hardcoded makeinfo
-+Use the appropriate MAKEINFO variable rather than the hardcoded makeinfo
- command directly, otherwise missing logic never works.
- 
- Fixes:
-diff --git a/package/bc/0002-notice-read-and-write-errors-on-input-and-output.patch b/package/bc/0002-notice-read-and-write-errors-on-input-and-output.patch
-index 87654e3c14..7649ae8c4f 100644
---- a/package/bc/0002-notice-read-and-write-errors-on-input-and-output.patch
-+++ b/package/bc/0002-notice-read-and-write-errors-on-input-and-output.patch
-@@ -16,7 +16,7 @@ Quoting from the bug report:
-      were correct.  I _think_ I got them all.  -iwj.
-      -- Ian Jackson <iwj@ubuntu.com>  Tue,  4 Apr 2006 17:21:02 +0100
- 
--Upsteam:
-+Upstream:
- https://sources.debian.org/patches/bc/1.07.1-2/05_notice_read_write_errors.diff/
- 
- [Reformatted to GIT for 1.0.7.1 by Matt W]
-diff --git a/package/bc/0004-no-gen-libmath.patch b/package/bc/0004-no-gen-libmath.patch
-index 7cd506be2c..15b7b9e5a8 100644
---- a/package/bc/0004-no-gen-libmath.patch
-+++ b/package/bc/0004-no-gen-libmath.patch
-@@ -5,7 +5,7 @@ Subject: [PATCH] no gen libmath
- 
- These rules are not cross-friendly so delete them.  libmath has been
- generated offline and included as part of this patch as the fbc tool
--used to generate that header is assuming the cross archtecture and
-+used to generate that header is assuming the cross architecture and
- can't execute.
- 
- Upstream:
+ 	  http://c-icap.sourceforge.net/
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
