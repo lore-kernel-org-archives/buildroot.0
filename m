@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D0AC9CF3965
-	for <buildroot@archiver.kernel.org>; Thu, 19 Sep 2024 19:58:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0AEE3CF3963
+	for <buildroot@archiver.kernel.org>; Thu, 19 Sep 2024 19:59:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A00D4416A4;
-	Thu, 19 Sep 2024 19:58:59 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id BA3BA416B0;
+	Thu, 19 Sep 2024 19:59:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ABV8HaOezJOB; Thu, 19 Sep 2024 19:58:58 +0000 (UTC)
+ id fDjsu3ZinNFL; Thu, 19 Sep 2024 19:59:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9BA8F415FF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2CDC7414EE
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9BA8F415FF;
-	Thu, 19 Sep 2024 19:58:58 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id CEE431BF292
- for <buildroot@lists.busybox.net>; Thu, 19 Sep 2024 19:58:39 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2CDC7414EE;
+	Thu, 19 Sep 2024 19:59:01 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 11F411BF292
+ for <buildroot@lists.busybox.net>; Thu, 19 Sep 2024 19:58:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id C75E742B15
+ by smtp3.osuosl.org (Postfix) with ESMTP id EADC96F4AD
  for <buildroot@lists.busybox.net>; Thu, 19 Sep 2024 19:58:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9SlyJNkpxJAc for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id fRh83il945Y1 for <buildroot@lists.busybox.net>;
  Thu, 19 Sep 2024 19:58:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0C3B042B1A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1D1076F49B
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0C3B042B1A
- for <buildroot@buildroot.org>; Thu, 19 Sep 2024 19:58:37 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1D1076F49B
+ for <buildroot@buildroot.org>; Thu, 19 Sep 2024 19:58:38 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7505083CF7; Thu, 19 Sep 2024 19:58:37 +0000 (UTC)
+ id 199DC83CF4; Thu, 19 Sep 2024 19:58:38 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 19 Sep 2024 13:56:15 +0200
+Date: Thu, 19 Sep 2024 13:56:34 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: bc473b79910504e79695c0a4e2eb0d8846e4d633
-X-Git-Newrev: 81c5d9e6bad4ea074283f91d13dfae87bd2d8e59
+X-Git-Oldrev: 03a4c696cf9d9606cd223ff92caf44b22e55e3ba
+X-Git-Newrev: cbec8ef6cd82b381ca709df977a42c898a3a8ed8
 X-Patchwork-Hint: ignore
-Message-Id: <20240919195837.7505083CF7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/keepalived: fix
- summarize typo in help text
+Message-Id: <20240919195838.199DC83CF4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/libnetconf2: fix
+ library typo
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,30 +65,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=81c5d9e6bad4ea074283f91d13dfae87bd2d8e59
+commit: https://git.buildroot.net/buildroot/commit/?id=cbec8ef6cd82b381ca709df977a42c898a3a8ed8
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit c21f235838f66a08f927570d398012297ffe251d)
+(cherry picked from commit c805d1e7c7a7de0b88157e08860fb3bc3ae3b50d)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/keepalived/Config.in | 2 +-
+ package/libnetconf2/Config.in | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/keepalived/Config.in b/package/keepalived/Config.in
-index 2a0663fed0..98512912fd 100644
---- a/package/keepalived/Config.in
-+++ b/package/keepalived/Config.in
-@@ -10,7 +10,7 @@ config BR2_PACKAGE_KEEPALIVED
- 	  checks. Keepalived implements a framework based on three
- 	  family checks: Layer3, Layer4 & Layer5. This framework gives
- 	  the daemon the ability of checking a LVS server pool
--	  states. Keepalived can be sumarize as a LVS driving daemon.
-+	  states. Keepalived can be summarized as a LVS driving daemon.
+diff --git a/package/libnetconf2/Config.in b/package/libnetconf2/Config.in
+index 7865f9e487..a01d2d7f9c 100644
+--- a/package/libnetconf2/Config.in
++++ b/package/libnetconf2/Config.in
+@@ -11,7 +11,7 @@ config BR2_PACKAGE_LIBNETCONF2
  
- 	  http://www.keepalived.org/
+ 	  https://github.com/CESNET/libnetconf2
  
+-comment "libnetconf2 needs a toolchain w/ threads, dynamic libraray"
++comment "libnetconf2 needs a toolchain w/ threads, dynamic library"
+ 	depends on BR2_USE_MMU
+ 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
+ 	depends on BR2_STATIC_LIBS || !BR2_TOOLCHAIN_HAS_THREADS
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
