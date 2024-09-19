@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6E2CFCF3963
-	for <buildroot@archiver.kernel.org>; Thu, 19 Sep 2024 19:59:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3A8BCF3962
+	for <buildroot@archiver.kernel.org>; Thu, 19 Sep 2024 19:59:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0AA7D41810;
-	Thu, 19 Sep 2024 19:59:29 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 752FA417F8;
+	Thu, 19 Sep 2024 19:59:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8c2JhbmbZlET; Thu, 19 Sep 2024 19:59:26 +0000 (UTC)
+ id WXyCVe6v_s35; Thu, 19 Sep 2024 19:59:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 27E644178A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 51F124178A
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 27E644178A;
-	Thu, 19 Sep 2024 19:59:26 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E39E71BF292
- for <buildroot@lists.busybox.net>; Thu, 19 Sep 2024 19:58:44 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 51F124178A;
+	Thu, 19 Sep 2024 19:59:29 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 75D881BF292
+ for <buildroot@lists.busybox.net>; Thu, 19 Sep 2024 19:58:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6A7BA84BFF
+ by smtp3.osuosl.org (Postfix) with ESMTP id D408D6F4A3
  for <buildroot@lists.busybox.net>; Thu, 19 Sep 2024 19:58:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TozDQxRajG7p for <buildroot@lists.busybox.net>;
- Thu, 19 Sep 2024 19:58:38 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id TefkSbNSsP1k for <buildroot@lists.busybox.net>;
+ Thu, 19 Sep 2024 19:58:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 32BEB84C00
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B6A2061B3C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 32BEB84C00
- for <buildroot@buildroot.org>; Thu, 19 Sep 2024 19:58:38 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B6A2061B3C
+ for <buildroot@buildroot.org>; Thu, 19 Sep 2024 19:58:37 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2FD2B83CEE; Thu, 19 Sep 2024 19:58:38 +0000 (UTC)
+ id A589B83CF5; Thu, 19 Sep 2024 19:58:37 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 19 Sep 2024 13:56:35 +0200
+Date: Thu, 19 Sep 2024 13:56:18 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 2c740ee04671e060419fac595addd4aa3c6eafe4
-X-Git-Newrev: 2847fbdcceb6f77d79b95e05915f877c1bb7bce9
+X-Git-Oldrev: 3f13fa8ef92d98fbe370a03e422a8921d765c98a
+X-Git-Newrev: ce07704976b3453ce1a8fd9b48a7aac5f2755d52
 X-Patchwork-Hint: ignore
-Message-Id: <20240919195838.2FD2B83CEE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/libpam-nfc: fix
- typo in help text
+Message-Id: <20240919195837.A589B83CF5@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/libcoap: fix typo
+ in help text
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,29 +65,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=2847fbdcceb6f77d79b95e05915f877c1bb7bce9
+commit: https://git.buildroot.net/buildroot/commit/?id=ce07704976b3453ce1a8fd9b48a7aac5f2755d52
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
+
+Rewrap the whole help text as with the typo fix the line is a bit
+longer and no longer fits within the limits defined by our
+check-package coding style checking.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 415542a23536e9a1db7ae7daf13c068352af4a2a)
+(cherry picked from commit 08926081d879f03477e3d5f4a326e01be07c0d60)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libpam-nfc/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/libcoap/Config.in | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/libpam-nfc/Config.in b/package/libpam-nfc/Config.in
-index ce3a3eeb19..3dce8d8e4a 100644
---- a/package/libpam-nfc/Config.in
-+++ b/package/libpam-nfc/Config.in
-@@ -2,6 +2,6 @@ config BR2_PACKAGE_LIBPAM_NFC
- 	bool "libpam-nfc"
- 	select BR2_PACKAGE_LIBNFC
+diff --git a/package/libcoap/Config.in b/package/libcoap/Config.in
+index 950aee5279..2bd6b742e9 100644
+--- a/package/libcoap/Config.in
++++ b/package/libcoap/Config.in
+@@ -5,9 +5,9 @@ config BR2_PACKAGE_LIBCOAP
  	help
--	  NFC-based PAM authentification module.
-+	  NFC-based PAM authentication module.
+ 	  libcoap is a C implementation of a lightweight
+ 	  application-protocol for devices that are constrained their
+-	  resources such as computing power, RF range, memory, bandwith,
+-	  or network packet sizes. This protocol, CoAP, is standardized
+-	  by the IETF as RFC 7252. For further information related to
+-	  CoAP, see <http://coap.technology>.
++	  resources such as computing power, RF range, memory,
++	  bandwidth, or network packet sizes. This protocol, CoAP, is
++	  standardized by the IETF as RFC 7252. For further
++	  information related to CoAP, see <http://coap.technology>.
  
- 	  https://github.com/nfc-tools/pam_nfc
+ 	  https://github.com/obgm/libcoap
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
