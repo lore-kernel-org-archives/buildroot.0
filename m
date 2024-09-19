@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12CF7CE8D5F
-	for <buildroot@archiver.kernel.org>; Thu, 19 Sep 2024 09:16:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35B52CE8D62
+	for <buildroot@archiver.kernel.org>; Thu, 19 Sep 2024 09:16:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B79F54132E;
-	Thu, 19 Sep 2024 09:16:51 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id EF6E641819;
+	Thu, 19 Sep 2024 09:16:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dsovIVVu4OYe; Thu, 19 Sep 2024 09:16:50 +0000 (UTC)
+ id f18liSugXo2l; Thu, 19 Sep 2024 09:16:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6C06441819
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BDF934182A
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6C06441819;
-	Thu, 19 Sep 2024 09:16:49 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id BDF934182A;
+	Thu, 19 Sep 2024 09:16:52 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 7DA8A1BF4DA
- for <buildroot@lists.busybox.net>; Thu, 19 Sep 2024 09:15:16 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 818071BF97E
+ for <buildroot@lists.busybox.net>; Thu, 19 Sep 2024 09:15:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7F64284949
+ by smtp1.osuosl.org (Postfix) with ESMTP id 90B0784775
  for <buildroot@lists.busybox.net>; Thu, 19 Sep 2024 09:14:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id h3obWIumDFDi for <buildroot@lists.busybox.net>;
- Thu, 19 Sep 2024 09:14:52 +0000 (UTC)
+ id iuc74VG1zngq for <buildroot@lists.busybox.net>;
+ Thu, 19 Sep 2024 09:14:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3FF8184775
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1C12E846F3
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 3FF8184775
- for <buildroot@buildroot.org>; Thu, 19 Sep 2024 09:14:52 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1C12E846F3
+ for <buildroot@buildroot.org>; Thu, 19 Sep 2024 09:14:53 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3D66283C4D; Thu, 19 Sep 2024 09:14:52 +0000 (UTC)
+ id 18C1F83C66; Thu, 19 Sep 2024 09:14:53 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 19 Sep 2024 11:03:18 +0200
+Date: Thu, 19 Sep 2024 11:03:32 +0200
 X-Git-Refname: refs/heads/2024.08.x
-X-Git-Oldrev: 8d5f51706da7218888df80c67b210d37432f563c
-X-Git-Newrev: fc1b43b2e69ba92e58b13ed66fdba5d9f668b144
+X-Git-Oldrev: ff0edf24509c67937672f4e69894271b96ab08ef
+X-Git-Newrev: fee0865740a1a7a9cd943f3695f9f3c7e0d7ff83
 X-Patchwork-Hint: ignore
-Message-Id: <20240919091452.3D66283C4D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.08.x] package/boost: fix typos
- in help text
+Message-Id: <20240919091453.18C1F83C66@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.08.x] package/gdb: fix program
+ typo
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,39 +65,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=fc1b43b2e69ba92e58b13ed66fdba5d9f668b144
+commit: https://git.buildroot.net/buildroot/commit/?id=fee0865740a1a7a9cd943f3695f9f3c7e0d7ff83
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.08.x
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit add472910818f7c77fc54f13a5a44ffc9c90228a)
+(cherry picked from commit 27277a2bc90326f9bfda3aacc2ef494bf207a8ec)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/boost/Config.in | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/gdb/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/boost/Config.in b/package/boost/Config.in
-index 908a53fea0..c7c90aa9ab 100644
---- a/package/boost/Config.in
-+++ b/package/boost/Config.in
-@@ -4,7 +4,7 @@ comment "boost needs a toolchain w/ C++, threads, wchar"
- config BR2_PACKAGE_BOOST
- 	bool "boost"
- 	depends on BR2_INSTALL_LIBSTDCPP
--	# Boost could theorically be built with threading=single, but
-+	# Boost could theoretically be built with threading=single, but
- 	# that unfortunately doesn't work. Until someone fixes that,
- 	# let's depend on threads.
- 	depends on BR2_TOOLCHAIN_HAS_THREADS
-@@ -241,7 +241,7 @@ config BR2_PACKAGE_BOOST_MATH
- 	  C++ standard.
+diff --git a/package/gdb/Config.in b/package/gdb/Config.in
+index 49ee4b3728..8cbd52cff5 100644
+--- a/package/gdb/Config.in
++++ b/package/gdb/Config.in
+@@ -52,7 +52,7 @@ config BR2_PACKAGE_GDB_SERVER
+ 	depends on !BR2_TOOLCHAIN_EXTERNAL_GDB_SERVER_COPY
+ 	help
+ 	  Build the gdbserver stub to run on the target.
+-	  A full gdb is needed to debug the progam.
++	  A full gdb is needed to debug the program.
  
- 	  Quaternions are a relative of complex numbers often used to
--	  parameterise rotations in three dimentional space.
-+	  parameterise rotations in three dimensional space.
- 
- 	  Octonions, like quaternions, are a relative of complex
- 	  numbers.
+ config BR2_PACKAGE_GDB_DEBUGGER
+ 	bool "full debugger"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
