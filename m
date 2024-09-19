@@ -4,50 +4,51 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF17CCE8D61
-	for <buildroot@archiver.kernel.org>; Thu, 19 Sep 2024 09:15:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E5A16CE8D5F
+	for <buildroot@archiver.kernel.org>; Thu, 19 Sep 2024 09:15:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9957A41278;
-	Thu, 19 Sep 2024 09:15:10 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B0E78412A0;
+	Thu, 19 Sep 2024 09:15:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id aFqCYtaW35V4; Thu, 19 Sep 2024 09:15:09 +0000 (UTC)
+ id P45sC1ooxZcF; Thu, 19 Sep 2024 09:15:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 529E0412B4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4A4EA412C2
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 529E0412B4;
-	Thu, 19 Sep 2024 09:15:09 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 238FD1BF4DA
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4A4EA412C2;
+	Thu, 19 Sep 2024 09:15:12 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 35FC61BF980
  for <buildroot@lists.busybox.net>; Thu, 19 Sep 2024 09:14:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6DAD184916
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9AED960614
  for <buildroot@lists.busybox.net>; Thu, 19 Sep 2024 09:14:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7_t8gztUtNK7 for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Nu4eUvTTtfNr for <buildroot@lists.busybox.net>;
  Thu, 19 Sep 2024 09:14:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 991CB841D5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D5EEF61228
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 991CB841D5
+ by smtp3.osuosl.org (Postfix) with ESMTP id D5EEF61228
  for <buildroot@buildroot.org>; Thu, 19 Sep 2024 09:14:51 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 936B483C66; Thu, 19 Sep 2024 09:14:51 +0000 (UTC)
+ id 7BACC83C6A; Thu, 19 Sep 2024 09:14:51 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 19 Sep 2024 11:03:08 +0200
+Date: Thu, 19 Sep 2024 11:03:06 +0200
 X-Git-Refname: refs/heads/2024.08.x
-X-Git-Oldrev: 889abedd5b995264f8bac43bb19b4566468557e7
-X-Git-Newrev: 0f20caa178251015022741cb3b161b33856a9248
+X-Git-Oldrev: 4124af66264ec5057ec359851c711bc69aa7469a
+X-Git-Newrev: 8d22410d933a03bf071e96604cce4cdc0bec05f7
 X-Patchwork-Hint: ignore
-Message-Id: <20240919091451.936B483C66@busybox.osuosl.org>
+Message-Id: <20240919091451.7BACC83C6A@busybox.osuosl.org>
 Subject: [Buildroot] [git commit branch/2024.08.x]
- docs/manual/customize-outside-br.adoc: fix 'or' typo
+ docs/manual/adding-packages-linux-kernel-spec-infra.adoc: fix information
+ typo
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,32 +66,32 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0f20caa178251015022741cb3b161b33856a9248
+commit: https://git.buildroot.net/buildroot/commit/?id=8d22410d933a03bf071e96604cce4cdc0bec05f7
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.08.x
 
-It is OR, not OT.
+Plural of information is also information.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 777c081abef77511da585c53b9de4e44b913af46)
+(cherry picked from commit c88a61759981562a85cb6a45b9db945ef6ccfa1e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/manual/customize-outside-br.adoc | 2 +-
+ docs/manual/adding-packages-linux-kernel-spec-infra.adoc | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/docs/manual/customize-outside-br.adoc b/docs/manual/customize-outside-br.adoc
-index 5e653f1603..78065489d4 100644
---- a/docs/manual/customize-outside-br.adoc
-+++ b/docs/manual/customize-outside-br.adoc
-@@ -191,7 +191,7 @@ tree.
+diff --git a/docs/manual/adding-packages-linux-kernel-spec-infra.adoc b/docs/manual/adding-packages-linux-kernel-spec-infra.adoc
+index 3b3daebf55..9fd3b566a5 100644
+--- a/docs/manual/adding-packages-linux-kernel-spec-infra.adoc
++++ b/docs/manual/adding-packages-linux-kernel-spec-infra.adoc
+@@ -107,7 +107,7 @@ Let's look at an example on how to add a new Linux extension +foo+.
+ First, create the package +foo+ that provides the extension: this
+ package is a standard package; see the previous chapters on how to
+ create such a package. This package is in charge of downloading the
+-sources archive, checking the hash, defining the licence informations
++sources archive, checking the hash, defining the licence information
+ and building user space tools if any.
  
- For some packages, Buildroot provides a choice between two (or more)
- implementations of API-compatible such packages. For example, there is
--a choice to choose either libjpeg ot jpeg-turbo; there is one between
-+a choice to choose either libjpeg or jpeg-turbo; there is one between
- openssl or libressl; there is one to select one of the known,
- pre-configured toolchains...
- 
+ Then create the 'Linux extension' proper: create a new menu entry in
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
