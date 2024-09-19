@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B9BB0CE8D7A
-	for <buildroot@archiver.kernel.org>; Thu, 19 Sep 2024 11:29:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 55B3CCE8D7A
+	for <buildroot@archiver.kernel.org>; Thu, 19 Sep 2024 11:30:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 85927412CC;
-	Thu, 19 Sep 2024 11:29:38 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 286F4412A4;
+	Thu, 19 Sep 2024 11:30:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hdp5_Wkd7jrJ; Thu, 19 Sep 2024 11:29:37 +0000 (UTC)
+ id knPXjm5Lja5P; Thu, 19 Sep 2024 11:30:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 32CFE412C0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 071C54129C
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 32CFE412C0;
-	Thu, 19 Sep 2024 11:29:37 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id F08BD1BF33B
- for <buildroot@lists.busybox.net>; Thu, 19 Sep 2024 11:29:25 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 071C54129C;
+	Thu, 19 Sep 2024 11:30:34 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 1720D1BF33B
+ for <buildroot@lists.busybox.net>; Thu, 19 Sep 2024 11:30:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id DE68281425
- for <buildroot@lists.busybox.net>; Thu, 19 Sep 2024 11:29:24 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 05BB7615D1
+ for <buildroot@lists.busybox.net>; Thu, 19 Sep 2024 11:30:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lGdCBvcSh8h0 for <buildroot@lists.busybox.net>;
- Thu, 19 Sep 2024 11:29:22 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Xag1J38TIx5H for <buildroot@lists.busybox.net>;
+ Thu, 19 Sep 2024 11:30:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A5F9B81431
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 35139615D2
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id A5F9B81431
- for <buildroot@buildroot.org>; Thu, 19 Sep 2024 11:29:22 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 35139615D2
+ for <buildroot@buildroot.org>; Thu, 19 Sep 2024 11:30:31 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 93C0C83CC1; Thu, 19 Sep 2024 11:29:22 +0000 (UTC)
+ id 30D3883CEB; Thu, 19 Sep 2024 11:30:31 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 19 Sep 2024 13:17:16 +0200
-X-Git-Refname: refs/heads/2024.08.x
-X-Git-Oldrev: 328bd0be09b4c71e2650b85b3a075e9c5a4e7546
-X-Git-Newrev: c04b02323c7274f78f77c2665618793c2c3eb98d
+Date: Thu, 19 Sep 2024 13:17:30 +0200
+X-Git-Refname: refs/heads/2024.02.x
+X-Git-Oldrev: b020b54fa68c23defd62058d17a0a516b29e6c57
+X-Git-Newrev: f7aa9aa70832ec51b0a4fc7e80de2b4d1d4e9240
 X-Patchwork-Hint: ignore
-Message-Id: <20240919112922.93C0C83CC1@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.08.x] package/nginx: fix static
+Message-Id: <20240919113031.30D3883CEB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/nginx: fix static
  build error
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -65,8 +65,8 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c04b02323c7274f78f77c2665618793c2c3eb98d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.08.x
+commit: https://git.buildroot.net/buildroot/commit/?id=f7aa9aa70832ec51b0a4fc7e80de2b4d1d4e9240
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
 In commit 761259c93400bc806611a242c7dc3df7ff67c231 the SSL patch was
 removed, without testing any static compilation.
