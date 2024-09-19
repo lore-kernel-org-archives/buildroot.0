@@ -1,98 +1,94 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 71531CF3959
-	for <buildroot@archiver.kernel.org>; Thu, 19 Sep 2024 15:00:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C8F14CF395D
+	for <buildroot@archiver.kernel.org>; Thu, 19 Sep 2024 16:20:40 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 08D444284D;
-	Thu, 19 Sep 2024 15:00:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6F8BD607A7;
+	Thu, 19 Sep 2024 16:20:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PUJKktEX4QZv; Thu, 19 Sep 2024 15:00:52 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id BTHrRMWa7ili; Thu, 19 Sep 2024 16:20:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AF9B842892
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6DAD5615D5
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AF9B842892;
-	Thu, 19 Sep 2024 15:00:52 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B4B2B1BF279
- for <buildroot@lists.busybox.net>; Thu, 19 Sep 2024 15:00:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6DAD5615D5;
+	Thu, 19 Sep 2024 16:20:39 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 62C941BF40F
+ for <buildroot@lists.busybox.net>; Thu, 19 Sep 2024 16:20:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A375184A0B
- for <buildroot@lists.busybox.net>; Thu, 19 Sep 2024 15:00:50 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 51B76615D5
+ for <buildroot@lists.busybox.net>; Thu, 19 Sep 2024 16:20:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 1OJioakW_H8D for <buildroot@lists.busybox.net>;
- Thu, 19 Sep 2024 15:00:49 +0000 (UTC)
-Received-SPF: None (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::534; helo=mail-pg1-x534.google.com;
- envelope-from=flavio.tapajos@newtesc.com.br; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 1D78384A08
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1D78384A08
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com
- [IPv6:2607:f8b0:4864:20::534])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 1D78384A08
- for <buildroot@buildroot.org>; Thu, 19 Sep 2024 15:00:48 +0000 (UTC)
-Received: by mail-pg1-x534.google.com with SMTP id
- 41be03b00d2f7-7ae3d7222d4so778229a12.3
- for <buildroot@buildroot.org>; Thu, 19 Sep 2024 08:00:48 -0700 (PDT)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 0V5a7LYe0_eJ for <buildroot@lists.busybox.net>;
+ Thu, 19 Sep 2024 16:20:36 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::329; helo=mail-wm1-x329.google.com;
+ envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 02EF7607A7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 02EF7607A7
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com
+ [IPv6:2a00:1450:4864:20::329])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 02EF7607A7
+ for <buildroot@buildroot.org>; Thu, 19 Sep 2024 16:20:35 +0000 (UTC)
+Received: by mail-wm1-x329.google.com with SMTP id
+ 5b1f17b1804b1-42cba6cdf32so8913075e9.1
+ for <buildroot@buildroot.org>; Thu, 19 Sep 2024 09:20:35 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1726758047; x=1727362847;
+ d=1e100.net; s=20230601; t=1726762833; x=1727367633;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=beJXW9xX7t10PysrXvCsBwY5DxKELfljufx3UtiZt0U=;
- b=tWDk9ueBfNSJ3YXuozzklk1BcDl8H8ivx3hGdC5JCD+9LVWPPacee/YbKL/elaah4v
- POtKa5rnsRRnouI9SThSSFj6bDKvjL5BWCbOJa2LugBOrQrvKjcIu4eiE7OZ3UpmQ7uu
- ZfrIFMjIcYgKwiPMT84ODXCMJTlaMktWDQoufBmQqGGtejvq1RnlW/89iudKFqu3gL7O
- ziJ9thKY4AgQHqnsQz3aBS3X+Vyked4QTGfoCxCj+zKSp8cATUJ6W+YuYRCI4KzcpwMy
- jacrOx+FbxXJ3XxmXAjt9SkhYWarb4BuO66TXQdRxWX5ZGn0bwDRAaBNy0/70EB7HHHT
- bpcA==
-X-Gm-Message-State: AOJu0YzicP90AE51jTH7xdgNLkRYNZfYyb8GE4+vLt1k2gdl9xIPggHf
- xdCbMGWa4i01gEzL8ti10JNo403sUbV0ndQPyzRP9RyfT7TxNHUkbHXYepgpNF9zgaee36hRXpZ
- /Wv7eNA==
-X-Google-Smtp-Source: AGHT+IE1imF8XJmLTXW45C5O7ZqWb2ZiOMbmpVRpcQfrcUuOk2QzdfwDci1VGepQMbSYNpnk6XE7Tg==
-X-Received: by 2002:a05:6a20:e18a:b0:1d2:e78a:cab with SMTP id
- adf61e73a8af0-1d2e78a12b1mr14035751637.35.1726758047412; 
- Thu, 19 Sep 2024 08:00:47 -0700 (PDT)
-Received: from niltesque.newtesc.com.br ([189.113.44.122])
+ bh=BKofBkKau0p1AL/bxckHL+eAmOvzO0xrSufkLlH7Vjo=;
+ b=vzGmch2K6tbJuuN50Tuf4eTfzsel1sCQFFVKQlPd0xmBkYBcZvN/ZQhzXXXUjYMElg
+ l+/XcSzleKXW2BUuqznxXX7GgTDt580msnzlEHqyIhosabEfRwMYrP/ADcb1mKrS66eV
+ Vhmg1DvMoAmVXj0Gu5j2nSBJhNUu6iDtxb9ac0JJ36MOsGEciMW5EiWzVx4FA+4GgSb9
+ qGZZln3kHTqLNithloTSHnuLHWKpPpbgb1qLVqVDIy5xBNpuPAaDO4hYenwrei6FwjFv
+ sKGRJ/jmRnw/ykG3fEAFlBz4Sz/dE07CCaJerEFBscIeaNrnOqme9XwziHtuFvBQFSwd
+ AdlA==
+X-Gm-Message-State: AOJu0YzM2e772JD2t4iLfXn97fv1nC6zBVrFZAwJVxmMSPAQfJQgMs5Q
+ DUPUIhO/EOA6XOL9lRQ+x7Z4Fmne+8yMUJ5nxJx+Ril7eqjGtcBrdnR6zth+73adI0QWHn5fq8r
+ pG4o=
+X-Google-Smtp-Source: AGHT+IH4KZeQncZjuVPttn2EV8+4EEHKDHIT4zM3Ppus5nUahhm7PolfDxXEwNu2yjlg4RZlQeFLLw==
+X-Received: by 2002:a05:600c:3514:b0:42c:bae0:f059 with SMTP id
+ 5b1f17b1804b1-42cdb531943mr199023605e9.5.1726762833349; 
+ Thu, 19 Sep 2024 09:20:33 -0700 (PDT)
+Received: from localhost.localdomain ([79.132.233.68])
  by smtp.gmail.com with ESMTPSA id
- d2e1a72fcca58-71944ac99fesm8354043b3a.86.2024.09.19.08.00.44
+ 5b1f17b1804b1-42e7545598csm26115045e9.31.2024.09.19.09.20.32
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 19 Sep 2024 08:00:46 -0700 (PDT)
-From: =?UTF-8?q?Fl=C3=A1vio=20Tapaj=C3=B3s?= <flavio.tapajos@newtesc.com.br>
+ Thu, 19 Sep 2024 09:20:32 -0700 (PDT)
 To: buildroot@buildroot.org
-Date: Thu, 19 Sep 2024 12:00:41 -0300
-Message-ID: <20240919150041.49152-1-flavio.tapajos@newtesc.com.br>
-X-Mailer: git-send-email 2.46.1
+Date: Thu, 19 Sep 2024 18:19:08 +0200
+Message-ID: <20240919161908.125007-1-thomas.perale@mind.be>
+X-Mailer: git-send-email 2.46.0
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=newtesc-com-br.20230601.gappssmtp.com; s=20230601; t=1726758047; x=1727362847;
- darn=buildroot.org; 
+ d=mind.be; s=google; t=1726762833; x=1727367633; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=beJXW9xX7t10PysrXvCsBwY5DxKELfljufx3UtiZt0U=;
- b=X/I1/+eIP0UK2cqk/frR/pN/cHIpSNfN4q+QVbsXDDyGye8ga6i/yxPIxacWSvVWiZ
- tTYnDbiuf62BOKQz9qtZkyhMP1UnwulWQIPq4BtXJsK2ANLF9lxtHKz8cXjLUDewNWP+
- NMoWm2/VMzfGcnO/rNxInbD2xPUZfQI9lv5PiSBo1VGykUxB7SSLmQCYRroIVLKe90YL
- uXpVHCCcWAFGfcxLtuk/3Ta2SrE+OPAl82nmmaGlQsooGTWQg0M6mDG6REOvSS1VA/RT
- JxIw904QTwylt+UYI530VNFr6E7t7nS1hHFlGkRG0mR5MTtIKJHU28kZ11TmSZFwVxqo
- z8Gw==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=newtesc.com.br
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=BKofBkKau0p1AL/bxckHL+eAmOvzO0xrSufkLlH7Vjo=;
+ b=Tx8JOoqA7DcoF+dLp9nE0M1zJKweP5NZsnsaH/+yZSV3TN6mXhEXLYnIB/KA58YdmQ
+ 0WBpDZB60GKFn5cYKo8/wxFC7q0i2vKmG4++Y6oXA9B7V8Bc257QzftuBKbx7EXpLRBO
+ KfaZfDX54jr38+5BKe3jVsNnLLc9Q1KRlgkmKKY8Bv9YLwD7SccyEoBhE61k3Ea6lQuo
+ sZBrq00MA1lr2DnLvNpI3jJIYk+0Hx5xac+sSiBJugk4GDqABy6cAdd/sODVUZ3ybClB
+ jzGaCNQHOAFwg90RjZvnZwAOT1J0KOQiV+FDO5Sh6b+TfjHqEh4Tj0OntTr4C0429JZW
+ ua0g==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=newtesc-com-br.20230601.gappssmtp.com
- header.i=@newtesc-com-br.20230601.gappssmtp.com header.a=rsa-sha256
- header.s=20230601 header.b=X/I1/+eI
-Subject: [Buildroot] [PATCH 1/1] package/python-sqlalchemy: bump version to
- 2.0.35
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=Tx8JOoqA
+Subject: [Buildroot] [PATCH 1/1] package/espflash: bump v3.1.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -104,47 +100,59 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: =?UTF-8?q?Fl=C3=A1vio=20Tapaj=C3=B3s?= <flavio.tapajos@newtesc.com.br>,
- James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+From: Thomas Perale via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Perale <thomas.perale@mind.be>
+Cc: Torben Voltmer <mail@t-voltmer.net>, Thomas Perale <thomas.perale@mind.be>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-U2lnbmVkLW9mZi1ieTogRmzDoXZpbyBUYXBhasOzcyA8ZmxhdmlvLnRhcGFqb3NAbmV3dGVzYy5j
-b20uYnI+Ci0tLQogcGFja2FnZS9weXRob24tc3FsYWxjaGVteS9weXRob24tc3FsYWxjaGVteS5o
-YXNoIHwgNCArKy0tCiBwYWNrYWdlL3B5dGhvbi1zcWxhbGNoZW15L3B5dGhvbi1zcWxhbGNoZW15
-Lm1rICAgfCA0ICsrLS0KIDIgZmlsZXMgY2hhbmdlZCwgNCBpbnNlcnRpb25zKCspLCA0IGRlbGV0
-aW9ucygtKQoKZGlmZiAtLWdpdCBhL3BhY2thZ2UvcHl0aG9uLXNxbGFsY2hlbXkvcHl0aG9uLXNx
-bGFsY2hlbXkuaGFzaCBiL3BhY2thZ2UvcHl0aG9uLXNxbGFsY2hlbXkvcHl0aG9uLXNxbGFsY2hl
-bXkuaGFzaAppbmRleCA3ZmZkZmFmMWI1Li5lOWFiYTM4NGNjIDEwMDY0NAotLS0gYS9wYWNrYWdl
-L3B5dGhvbi1zcWxhbGNoZW15L3B5dGhvbi1zcWxhbGNoZW15Lmhhc2gKKysrIGIvcGFja2FnZS9w
-eXRob24tc3FsYWxjaGVteS9weXRob24tc3FsYWxjaGVteS5oYXNoCkBAIC0xLDUgKzEsNSBAQAog
-IyBtZDUsIHNoYTI1NiBmcm9tIGh0dHBzOi8vcHlwaS5vcmcvcHlwaS9zcWxhbGNoZW15L2pzb24K
-LW1kNSAgMmQ3YzBkYmI0YjIxYTFjYjA1NDZkNTIwZTc3OTUwMjIgIHNxbGFsY2hlbXktMi4wLjMz
-LnRhci5negotc2hhMjU2ICA5MWM5MzMzM2MyYjM3ZmY3MjFkYzgzYjM3ZTI4YzI5ZGU0YzUwMmI1
-NjEyZjJkMDkzNDY4MDM3Yjg2YWEyYmUwICBzcWxhbGNoZW15LTIuMC4zMy50YXIuZ3oKK21kNSAg
-OWNkYmI3Nzc0NmU3ZDExM2I5ZDJjMmFmMWJlNjcwMGQgIHNxbGFsY2hlbXktMi4wLjM1LnRhci5n
-egorc2hhMjU2ICBlMTFkN2VhNGQyNGYwYTI2MmJjY2Y5YTdjZDYyODRjOTc2YzUzNjlkYWMyMWRi
-MjM3Y2ZmNTk1ODYwNDVhYjlmICBzcWxhbGNoZW15LTIuMC4zNS50YXIuZ3oKICMgTG9jYWxseSBj
-b21wdXRlZCBzaGEyNTYgY2hlY2tzdW1zCiBzaGEyNTYgIDNjMGY1OWFiODg3ZDA0MWRlNmE0ZTUy
-ZmZlM2U5ZWRiNWQ5NTIyZGU5MDlmYWU5YTZjZDdhZGI2ZTdiZTMyOTMgIExJQ0VOU0UKZGlmZiAt
-LWdpdCBhL3BhY2thZ2UvcHl0aG9uLXNxbGFsY2hlbXkvcHl0aG9uLXNxbGFsY2hlbXkubWsgYi9w
-YWNrYWdlL3B5dGhvbi1zcWxhbGNoZW15L3B5dGhvbi1zcWxhbGNoZW15Lm1rCmluZGV4IDg0MjAx
-Y2Y4MzMuLjc4ZDdmNWU1NTMgMTAwNjQ0Ci0tLSBhL3BhY2thZ2UvcHl0aG9uLXNxbGFsY2hlbXkv
-cHl0aG9uLXNxbGFsY2hlbXkubWsKKysrIGIvcGFja2FnZS9weXRob24tc3FsYWxjaGVteS9weXRo
-b24tc3FsYWxjaGVteS5tawpAQCAtNCw5ICs0LDkgQEAKICMKICMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjCiAKLVBZVEhPTl9TUUxBTENIRU1ZX1ZFUlNJT04gPSAyLjAuMzMKK1BZVEhPTl9TUUxBTENI
-RU1ZX1ZFUlNJT04gPSAyLjAuMzUKIFBZVEhPTl9TUUxBTENIRU1ZX1NPVVJDRSA9IHNxbGFsY2hl
-bXktJChQWVRIT05fU1FMQUxDSEVNWV9WRVJTSU9OKS50YXIuZ3oKLVBZVEhPTl9TUUxBTENIRU1Z
-X1NJVEUgPSBodHRwczovL2ZpbGVzLnB5dGhvbmhvc3RlZC5vcmcvcGFja2FnZXMvZDUvNzAvNmRj
-NDM3YWZmMjBlNDU0ZThhYzM1Y2RjYzc0NjIwZmFkNTU5ODViNWVhMjgzMGZhMmQ3M2IwMmQ1ODA1
-CitQWVRIT05fU1FMQUxDSEVNWV9TSVRFID0gaHR0cHM6Ly9maWxlcy5weXRob25ob3N0ZWQub3Jn
-L3BhY2thZ2VzLzM2LzQ4LzRmMTkwYTgzNTI1ZjVjZWZlZmE0NGY2YWRjOWU2Mzg2YzRkZTUyMThk
-Njg2YzI3ZWRhOTJlYjFmNTQyNAogUFlUSE9OX1NRTEFMQ0hFTVlfU0VUVVBfVFlQRSA9IHNldHVw
-dG9vbHMKIFBZVEhPTl9TUUxBTENIRU1ZX0xJQ0VOU0UgPSBNSVQKIFBZVEhPTl9TUUxBTENIRU1Z
-X0xJQ0VOU0VfRklMRVMgPSBMSUNFTlNFCi0tIAoyLjQ2LjEKCl9fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRy
-b290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlz
-dGluZm8vYnVpbGRyb290Cg==
+Fix the following error:
+
+error[E0282]: type annotations needed for `Box<_>`
+
+The issue came from the `time` library depedency of espflash
+(see https://github.com/time-rs/time/issues/693).
+The `time` library has been bumped in the following commit
+https://github.com/esp-rs/espflash/commit/233490736646ca7bc29463a98df98d7ccf53439d
+
+Fixes:
+  - https://autobuild.buildroot.org/results/321/321598baef543b84ce82c09a88e51ad745a15dfd/
+
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+---
+ package/espflash/espflash.hash | 2 +-
+ package/espflash/espflash.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/espflash/espflash.hash b/package/espflash/espflash.hash
+index ebe24ef51f..0b1e160a47 100644
+--- a/package/espflash/espflash.hash
++++ b/package/espflash/espflash.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  8e5da5e90d03135a1b2af6c0b551e4f2504ad64e659b0e88e8a4ecd98cc6a6b6  espflash-3.1.0-cargo2.tar.gz
++sha256  f91a3e33e874bac0d7687d87c3cd692a54325c0dceaf35c983bd3d94519dee25  espflash-3.1.1-cargo2.tar.gz
+ sha256  0886cf791a43c02d71c105b4835b53293704ec407a72f84a87f73e20cb2d3251  LICENSE-APACHE
+ sha256  a75018ab59a13738ed2024a0090ae8f91b7693ae84568aa0e52c3dff99e6748d  LICENSE-MIT
+diff --git a/package/espflash/espflash.mk b/package/espflash/espflash.mk
+index ad2294e1bf..bcb343fc58 100644
+--- a/package/espflash/espflash.mk
++++ b/package/espflash/espflash.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-ESPFLASH_VERSION = 3.1.0
++ESPFLASH_VERSION = 3.1.1
+ ESPFLASH_SITE = $(call github,esp-rs,espflash,v$(ESPFLASH_VERSION))
+ ESPFLASH_SUBDIR = espflash
+ ESPFLASH_LICENSE = Apache-2.0 or MIT
+-- 
+2.46.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
