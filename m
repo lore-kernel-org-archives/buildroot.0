@@ -4,98 +4,100 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E2713CE8D78
-	for <buildroot@archiver.kernel.org>; Thu, 19 Sep 2024 11:53:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 537E4CE8D7A
+	for <buildroot@archiver.kernel.org>; Thu, 19 Sep 2024 11:56:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8C47684701;
-	Thu, 19 Sep 2024 11:53:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 19DE884733;
+	Thu, 19 Sep 2024 11:56:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lMD4NlZ4n0e8; Thu, 19 Sep 2024 11:53:44 +0000 (UTC)
+ id f4KhVo3hy7eH; Thu, 19 Sep 2024 11:56:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7784884716
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2D55184740
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7784884716;
-	Thu, 19 Sep 2024 11:53:44 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B62CE1BF33B
- for <buildroot@lists.busybox.net>; Thu, 19 Sep 2024 11:53:42 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2D55184740;
+	Thu, 19 Sep 2024 11:56:01 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id CD30B1BF33B
+ for <buildroot@lists.busybox.net>; Thu, 19 Sep 2024 11:55:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id B15E784716
- for <buildroot@lists.busybox.net>; Thu, 19 Sep 2024 11:53:42 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id BB65F424BE
+ for <buildroot@lists.busybox.net>; Thu, 19 Sep 2024 11:55:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bJR6cctHkvOK for <buildroot@lists.busybox.net>;
- Thu, 19 Sep 2024 11:53:41 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id VdZNz1Vr6vVb for <buildroot@lists.busybox.net>;
+ Thu, 19 Sep 2024 11:55:58 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::129; helo=mail-lf1-x129.google.com;
+ client-ip=2a00:1450:4864:20::636; helo=mail-ej1-x636.google.com;
  envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 6B35F84701
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6B35F84701
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com
- [IPv6:2a00:1450:4864:20::129])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6B35F84701
- for <buildroot@buildroot.org>; Thu, 19 Sep 2024 11:53:40 +0000 (UTC)
-Received: by mail-lf1-x129.google.com with SMTP id
- 2adb3069b0e04-5356aa9a0afso1226074e87.2
- for <buildroot@buildroot.org>; Thu, 19 Sep 2024 04:53:40 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 2F6A7424B6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2F6A7424B6
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com
+ [IPv6:2a00:1450:4864:20::636])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 2F6A7424B6
+ for <buildroot@buildroot.org>; Thu, 19 Sep 2024 11:55:58 +0000 (UTC)
+Received: by mail-ej1-x636.google.com with SMTP id
+ a640c23a62f3a-a8a6d1766a7so104391066b.3
+ for <buildroot@buildroot.org>; Thu, 19 Sep 2024 04:55:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1726746819; x=1727351619;
+ d=1e100.net; s=20230601; t=1726746956; x=1727351756;
  h=content-transfer-encoding:in-reply-to:content-language:from
- :references:to:subject:user-agent:mime-version:date:message-id
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
  :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=Nqx8hbNzNyaSiCoiaLdEvUcEgVd8R6lLIdS+GJq+nP8=;
- b=Mh184K4whxI9i5emZdUYQiZ/cItEw5a8ylISI7AJmnIsJ/BL+QvrSO9neRlfaxrJfI
- YENAPgdHzS2mZVvik+efkeL67lt7+COUAz2Y72FISKv1rnfXz6BHmpc6QkpwkZk6fWOo
- 8y44LMz/AO08oEpnTicUmUbjWjOjWGHCL76G5BUjgYqsQ/X9+nx+UOdP6R6fUE5F79fl
- wC+Mg4YHttNWbYmQu0U9VtX+2QHVLnsOHhnhAWPDsf4wlKhvDsFZmFKNP5p73iRTWOQo
- AkYDDDPmZtdjV9q5DggETD//ZqU0SyI7hS/vX5u7q2rYIgsjhjeX+6Uli1qJqBeL5PlW
- SOuA==
+ bh=2x0nZArp6wATB9dLutuo9gdCa9IanrPTW6CEOfblhO4=;
+ b=gRJ1WjBFCLD/vyE3ZkUqYdro2MIembu+dXpgk/KiA06uHjRrgoOcPvQmboqnKJLZdS
+ ALEc5L83nFTwdTuPi/KrFmfLa/Z4e8VAQOnQYY9A8kf6Kljr7mzlZm+4qiYHNjjszYtv
+ sjwNzC+eXsWsZM4bTqgI0jZ0LNQphdXaxpSQ6RatLEmJWBgvzZrScqwpxuHtHLYu6OS8
+ ZrHhALNGqaRCcJvpHvqM4spInAwCGJC8KfFWtx0E+jKFibyJtoajOKAE7stZKCVhwWvp
+ q8YiJUFDh6A5yW6Aajiio6LIn02HQq9XZUqmTSMXCI2whWQrdQucWHSC+CRKvd0YAHDt
+ iH4g==
 X-Forwarded-Encrypted: i=1;
- AJvYcCX/Il1gWayNO0ujbCufbSL+EUKV1sB5ddR+LADgBX1AeOYXeTu9ZE+CUsQHl4dYjsgCM9mAaAYOQGc=@buildroot.org
-X-Gm-Message-State: AOJu0YyNglxN/RvGF+jrlpACQtq5d2GgmJkVUvoHr4ROBOOtpF22+i/Q
- P15p17+6oFH1KiipSeBqmKx0N12T7baf3wapkoKl9h5DrKH8o09kVZKVu5hA5xnKq+8gIlVJl3U
- Kdlg=
-X-Google-Smtp-Source: AGHT+IHzkT3fa/+zO1lfREECw5ApMzshfyGc+TWsDBE23ffs6k2Xzt1oTGwbLXrM5z8BsAlpJkgnjQ==
-X-Received: by 2002:a05:6512:a90:b0:52c:9877:71b7 with SMTP id
- 2adb3069b0e04-5367ff398c4mr16448626e87.59.1726746818539; 
- Thu, 19 Sep 2024 04:53:38 -0700 (PDT)
+ AJvYcCUrcNA92s1wZJuz/3TNSiubqsew2koFDIGnyQ9gbcYEi3nNbwO9FxcljHIRQs/jgXQSlwnLZONDVkg=@buildroot.org
+X-Gm-Message-State: AOJu0YziNKS+gVnjzh+JXKSp+Z47Kn2wvb3E2AVsdQIuacFaZZhyI17K
+ HPmVaIFZWvUmVhDAf1r178B0BSNfLm/NBHpLRRP5xU9D/CZNHzikl+EawhN/VcIhS0S/XCYTDaz
+ FUMI=
+X-Google-Smtp-Source: AGHT+IH2JNFKswMdtljC7llCWYKX0D/OxSp86hqrlIcqPImOU3R2jElMY8D6ZPo11ygQzEsF4Qe12A==
+X-Received: by 2002:a17:907:e686:b0:a8d:75ab:17ca with SMTP id
+ a640c23a62f3a-a902949a224mr2407548366b.31.1726746956093; 
+ Thu, 19 Sep 2024 04:55:56 -0700 (PDT)
 Received: from [10.130.6.116] ([83.68.141.146])
  by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-a9061096a1esm720258366b.14.2024.09.19.04.53.37
+ a640c23a62f3a-a90613316c2sm707476966b.211.2024.09.19.04.55.54
  (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Thu, 19 Sep 2024 04:53:37 -0700 (PDT)
-Message-ID: <216539b9-4730-4adc-b400-655d287a082a@mind.be>
-Date: Thu, 19 Sep 2024 13:53:35 +0200
+ Thu, 19 Sep 2024 04:55:55 -0700 (PDT)
+Message-ID: <18b7c354-da3a-47fd-a424-d0391eea9fac@mind.be>
+Date: Thu, 19 Sep 2024 13:55:53 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Neil Webster <neilw@tungstencollaborative.com>,
- "buildroot@buildroot.org" <buildroot@buildroot.org>
-References: <bf3a752a-6954-44dc-b805-c7850be85539@tungstencollaborative.com>
+To: Fabio Estevam <festevam@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <CAOMZO5D3LL=gCQt-k5e3350tQ+XULrzhV233q1GZbGFDD5f3Cg@mail.gmail.com>
+ <20240724221001.7ec77c1b@windsurf>
+ <CAOMZO5DbYXhKjwpyoLUFhV97_VZ076ExChBWmAzU8Z5FN-M6kQ@mail.gmail.com>
 Content-Language: en-GB
-In-Reply-To: <bf3a752a-6954-44dc-b805-c7850be85539@tungstencollaborative.com>
+In-Reply-To: <CAOMZO5DbYXhKjwpyoLUFhV97_VZ076ExChBWmAzU8Z5FN-M6kQ@mail.gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1726746819; x=1727351619; darn=buildroot.org;
+ d=mind.be; s=google; t=1726746956; x=1727351756; darn=buildroot.org;
  h=content-transfer-encoding:in-reply-to:content-language:from
- :references:to:subject:user-agent:mime-version:date:message-id:from
- :to:cc:subject:date:message-id:reply-to;
- bh=Nqx8hbNzNyaSiCoiaLdEvUcEgVd8R6lLIdS+GJq+nP8=;
- b=SlNRn+nWDNve06rHSVYbuaM+1EpHu/0rVIJB5iBZxV4Ts9wNGiskn23Tc+QExC9gty
- 2q9HqN9v4v8p8C97b94AjPYAy6c6XN7l7JYrI3PA+fFOungvGZrAi7dJ83BvNxZBKmdS
- 8/mIEaygmsUuum+rFnJ9ik7IAh5iUEva94DaX09BwC7ZUUuEvPrUTZx3ljozfLypevjX
- m3H4Up3fTCdcCa/sLNxXPljXA/odx0AcomhGj2EpSAuAIVKmNp/W+3ZNqycUd4/C8bhD
- Pkw1mCFggFZwO0rETgM68LZYB6f8GAHVQuNqFx3HcUUj3gd19p8tjf71v3avtCjElMYj
- TCMA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=2x0nZArp6wATB9dLutuo9gdCa9IanrPTW6CEOfblhO4=;
+ b=HrgWaudsVVjDbClDi+HOrc2N3yJb1fiAaX62s1bTXmDwISICisiqVdlkpGHkVTZXSq
+ OnEcV8bH57ERZ8SZ07pKm6KsYpp4Sf/oDdg3nhF/LytRzfXoM/UQovrQibjNqzMDFqAc
+ 8aKtIi/yDE96z2PRSLN9wqari6oBKBNO+6e/4pq+moZmWe6Fx72ZfCxmUq2E3psHXkgQ
+ c/oGmxboyDeX42Z7pYyQ1jPeTP0NmIAjbyDgYqJ71MII6zBy6YYXKM68HixHkMeVvJJ3
+ NGwgjRq22im2jP9B5L8cE+1VE1zkx/G7NInQ6Qt+9w7FAiS1prLgswOf6Gojl4zPfq/A
+ 6JEg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=SlNRn+nW
-Subject: Re: [Buildroot] Variscite Dart
+ header.s=google header.b=HrgWauds
+Subject: Re: [Buildroot] crucible: Build failure on riscv64/mips64el
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -109,130 +111,48 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@mind.be>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Cc: Christian Stewart <christian@aperture.us>,
+ buildroot <buildroot@buildroot.org>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-  Hi Neil,
-
-On 19/09/2024 00:19, Neil Webster wrote:
-> Hello,
-> 
-> I am new to Buildroot and have been struggling for a couple of days with
-> something and wondering if I could get some pointers. Please let me know
-> if this is not the appropriate place to post such questions.
-> 
-> I want to get an embedded Linux image running on a Variscite Dart Mini
-> (link below)
-> 
-> https://www.variscite.com/product/system-on-module-som/cortex-a53-krait/dart-mx8m-mini-nxp-i-mx8m-mini/
-> 
-> I have the SOM connected to a dev kit referenced in the same link above.
-> 
-> I wanted to use the opportunity to get familiar with Buildroot but sadly
-> Variscite do not support Buildroot and instead they steered me towards
-> Yocto.
-
-  :sad-face:
-
-
-> I have been able to get an image running with Yocto following their
-> recipes but I found the whole process to be obscure and opaque and I am
-> therefore back to my original objective of using Buildroot.
-
-  Please make sure to give this feedback to Variscite!
-
-
-> 
-> I have been able to follow the tutorials and get a build working on a
-> Raspberry Pi.
-> 
-> However, as mentioned above there is no support available from Variscite
-> and there is no specific defconfig for my hardware, so I tried to start
-> with freescale_imx8mmevk_defconfig as this seems to be close with what
-> appear to be correct settings under the "target options" menu.
-
-  Yes, that's an excellent start!
-
-  ... but not enough to get a working board...
-
-
-> However I am not getting anything at the console.
-> 
-> I noticed that the freescale_imx8mmevk_defconfig sets the getty TTY port
-> to ttymxc1, so I tried changing this to ttymxc0 as that is the port
-> mapped to the debug interface on the development board. Still nothing at
-> the console.
-
-  That is one of the things you need to change indeed. However, things already 
-went wrong way before that, because you should have gotten U-Boot and kernel 
-debug output on the console.
-
-  There are a number of things you have to change in a defconfig when you switch 
-to a different (but similar) board. I'm going to list them below with the symbol 
-names, not how they appear in the menu. You can always search for those symbols 
-in `make menuconfig` by typing /
-
-BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_TARBALL_LOCATION="$(call 
-github,nxp-imx,imx-atf,lf-6.6.23-2.0.0)/imx-atf-lf-6.6.23-2.0.0.tar.gz"
-
-You should check Variscite's yocto layer to see if they use the NXP TF-A or if 
-they fork it even more. They may also use a different version.
-
-
-BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="imx8mm"
-
-I expect that this will be OK for the Variscite board as well, but it is 
-possible that they have defined their own platform.
-
-
-
-BR2_TARGET_UBOOT_CUSTOM_TARBALL_LOCATION="$(call 
-github,nxp-imx,uboot-imx,lf-6.6.23-2.0.0)/uboot-imx-lf-6.6.23-2.0.0.tar.gz"
-
-You should check Variscite's yocto layer to see if they use the NXP U-Boot or if 
-they fork it even more. They may also use a different version.
-
-
-BR2_TARGET_UBOOT_BOARD_DEFCONFIG="imx8mm_evk"
-
-This needs to change to the U-Boot defconfig. That defconfig could be in NXP's 
-U-Boot fork already, or it could be in Variscite's fork, or Variscite may supply 
-it in their u-boot yocto recipe.
-
-
-BR2_LINUX_KERNEL_CUSTOM_TARBALL_LOCATION="$(call 
-github,nxp-imx,linux-imx,lf-6.6.23-2.0.0)/linux-imx-lf-6.6.23-2.0.0.tar.gz"
-BR2_LINUX_KERNEL_DEFCONFIG="imx_v8"
-BR2_LINUX_KERNEL_INTREE_DTS_NAME="freescale/imx8mm-evk 
-freescale/imx8mm-evk-revb-qca-wifi"
-
-You probably start to know the drill, right? The defconfig is probably OK, 
-although it's possible that Variscite appends a fragment to it in their 
-bbappend. The DTS name is most definitely not OK, but it might come from 
-Variscite's metalayer instead of NXP's kernel. The kernel is unlikely to be 
-forked by Variscite so that one is probably OK, but it may be a different version.
-
-
-> I tried changing the init system from busybox to systemd. Still nothing.
-
-  No, busybox init should work fine.
-
-
-> I feel like I am poking around in the dark. Any thoughts on what I
-> should try next?
-
-  If you do manage to advance with this, there are two contributions you could make:
-- You can add a defconfig for the Variscite board.
-- You could update the documentation with a "how to add support for a new board" 
-section that explains what I wrote above in a better (more generic) way.
-
-
-  Regards,
-  Arnout
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+CgpPbiAxOS8wOS8yMDI0IDA1OjIxLCBGYWJpbyBFc3RldmFtIHdyb3RlOgo+IEhpLAo+IAo+IE9u
+IFdlZCwgSnVsIDI0LCAyMDI0IGF0IDU6MTDigK9QTSBUaG9tYXMgUGV0YXp6b25pCj4gPHRob21h
+cy5wZXRhenpvbmlAYm9vdGxpbi5jb20+IHdyb3RlOgo+IAo+PiBJIGFncmVlIHRoYXQgd2UgZG9u
+J3QgcmVhbGx5IGNhcmUgYWJvdXQgY3J1Y2libGUgb24gUklTQy1WIDY0LWJpdCBhbmQKPj4gbWlw
+czY0ZWwuIEhvd2V2ZXIsIHRoZSBidWlsZCBmYWlsdXJlcyB5b3UncmUgcG9pbnRpbmcgdG8gZG9u
+J3Qgc2VlbSB0bwo+PiBiZSBjYXVzZWQgYnkgYW55dGhpbmcgQVJNLXNwZWNpZmljIGluIHRoZSBj
+cnVjaWJsZSBjb2RlIGJhc2UuIEluc3RlYWQKPj4gdGhleSBsb29rIGxpa2UgcmVsYXRpdmVseSBn
+ZW5lcmljIGlzc3VlcyB3aXRoIG91ciBHbyBpbnRlZ3JhdGlvbi4KPj4KPj4gQ2hyaXN0aWFuLCBk
+byB5b3UgdGhpbmsgeW91IGNvdWxkIGhhdmUgYSBsb29rIGF0IHRoZSBhYm92ZSB0d28KPj4gZmFp
+bHVyZXMsIHdoaWNoIHJlYWxseSBkb24ndCBzZWVtIHRvIGJlIHJlbGF0ZWQgdG8gdGhlIGNydWNp
+YmxlIGNvZGUsCj4+IGJ1dCBtb3JlIGdlbmVyYWwgR28gaXNzdWVzLgo+Pgo+PiBUaGUgZmlyc3Qg
+b25lOgo+Pgo+PiAkV09SSy9iMDcxL19wa2dfLmEoX3gwMDEubyk6IHVua25vd24gcmVsb2NhdGlv
+biB0eXBlIDE3OyBjb21waWxlZCB3aXRob3V0IC1mcGljPwo+PiAkV09SSy9iMDc4L19wa2dfLmEo
+X3gwMDUubyk6IHVua25vd24gcmVsb2NhdGlvbiB0eXBlIDE3OyBjb21waWxlZCB3aXRob3V0IC1m
+cGljPwo+Pgo+PiBpcyByZWFsbHkgbXlzdGVyaW91cyB0byBtZS4KPj4KPj4gVGhlIHNlY29uZCBv
+bmU6Cj4+Cj4+IC9ob21lL2F1dG9idWlsZC9hdXRvYnVpbGQvaW5zdGFuY2UtOS9vdXRwdXQtMS9o
+b3N0L2xpYi9nY2MvbWlwczY0ZWwtYnVpbGRyb290LWxpbnV4LWdudS8xMy4zLjAvLi4vLi4vLi4v
+Li4vbWlwczY0ZWwtYnVpbGRyb290LWxpbnV4LWdudS9iaW4vbGQ6IC90bXAvZ28tbGluay0yMDQ0
+MjQ4ODAzL2dvLm86IGxpbmtpbmcgLW1uYW49bGVnYWN5IG1vZHVsZSB3aXRoIHByZXZpb3VzIC1t
+bmFuPTIwMDggbW9kdWxlcwo+Pgo+PiBpcyByZWxhdGVkIHRvIHRoZSBmYWN0IHRoYXQgZGlmZmVy
+ZW50IG9iamVjdCBmaWxlcy9saWJyYXJpZXMgaGF2ZSBiZWVuCj4+IGJ1aWx0IHdpdGggZGlmZmVu
+dCAtbW5hbiBhcmd1bWVudHMsIGFuZCB3ZSB0cnkgdG8gbGluayB0aGVtIHRvZ2V0aGVyLAo+PiB3
+aGljaCBpc24ndCBjb3JyZWN0LiBUaGUgY29uZmlndXJhdGlvbiBoYXMgQlIyX01JUFNfTkFOXzIw
+MDg9eSwgc28KPj4gd2UncmUgc3VwcG9zZWQgdG8gYmUgYnVpbGRpbmcgZXZlcnl0aGluZyB3aXRo
+IC1tbmFuPTIwMDgsIGJ1dCBpdCBzZWVtcwo+PiBsaWtlIHNvbWUgR28gc3R1ZmYgdHJpZXMgdG8g
+dXNlIC1tbmFuPWxlZ2FjeSBpbnN0ZWFkLgo+Pgo+PiBJZiB5b3UgY291bGQgaGVscCB3aXRoIHRo
+b3NlIHdlaXJkIEdvIGlzc3VlcywgaXQgd291bGQgYmUgbXVjaCwgbXVjaAo+PiBhcHByZWNpYXRl
+ZC4KPiAKPiBDYW4gYW55b25lIHBsZWFzZSBoZWxwIHdpdGggdGhlc2UgR28gaXNzdWVzPwo+IAo+
+IEkga2VlcCBnZXR0aW5nIGJ1aWxkIGZhaWx1cmUgcmVwb3J0cyBmb3IgdGhlIGNydWNpYmxlIHBh
+Y2thZ2UuCj4gCj4gSGVyZSBpcyBhbm90aGVyIG9uZToKPiBodHRwczovL2F1dG9idWlsZC5idWls
+ZHJvb3Qub3JnL3Jlc3VsdHMvYjU2ZDkzNzZiZDc1ODA4MWUyN2JjMzQ5YzE5Mjc4M2VjZTIyYTRm
+Yi9idWlsZC1lbmQubG9nCgogIElmIHdlIGRvbid0IGZpbmQgYSBzb2x1dGlvbiBJIHRoaW5rIHdl
+IHNob3VsZCBkaXNhYmxlIEdvIGVudGlyZWx5IGZvciB0aGVzZSAKYXJjaGl0ZWN0dXJlcy4gVW50
+aWwgc29tZW9uZSBzaG93cyB1cCB3aG8gaXMgd2lsbGluZyB0byBwdXQgaW4gdGhlIGVmZm9ydCB0
+byAKbWFrZSBpdCB3b3JrLgoKICBSZWdhcmRzLAogIEFybm91dAoKX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWls
+ZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9s
+aXN0aW5mby9idWlsZHJvb3QK
