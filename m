@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CE9FACF396A
-	for <buildroot@archiver.kernel.org>; Thu, 19 Sep 2024 20:30:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D69BACF396A
+	for <buildroot@archiver.kernel.org>; Thu, 19 Sep 2024 20:30:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8BE45414CA;
-	Thu, 19 Sep 2024 20:30:01 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A3D5F416A1;
+	Thu, 19 Sep 2024 20:30:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id N4eXfV-z8-wx; Thu, 19 Sep 2024 20:30:00 +0000 (UTC)
+ id 8S-vJUFLvI2Y; Thu, 19 Sep 2024 20:30:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 41900414D8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E2B1C416A9
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 41900414D8;
-	Thu, 19 Sep 2024 20:30:00 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 28F5D1BF343
+	by smtp2.osuosl.org (Postfix) with ESMTP id E2B1C416A9;
+	Thu, 19 Sep 2024 20:30:03 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id E572A1BF343
  for <buildroot@lists.busybox.net>; Thu, 19 Sep 2024 20:29:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1823D84C40
+ by smtp4.osuosl.org (Postfix) with ESMTP id E09FD42B49
  for <buildroot@lists.busybox.net>; Thu, 19 Sep 2024 20:29:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VC3m9aQKPqBs for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jvU9BpohRn4l for <buildroot@lists.busybox.net>;
  Thu, 19 Sep 2024 20:29:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4A5C184C3E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A6A644281E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4A5C184C3E
+ by smtp4.osuosl.org (Postfix) with ESMTP id A6A644281E
  for <buildroot@buildroot.org>; Thu, 19 Sep 2024 20:29:58 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 330D083D9B; Thu, 19 Sep 2024 20:29:58 +0000 (UTC)
+ id 2152683D9A; Thu, 19 Sep 2024 20:29:58 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 19 Sep 2024 22:24:40 +0200
+Date: Thu, 19 Sep 2024 22:21:49 +0200
 X-Git-Refname: refs/heads/2024.08.x
-X-Git-Oldrev: a14661a72d61d803e1b2e315e0ba154506b8ea41
-X-Git-Newrev: cc70cadb3224686779b50cbd2480a77e38d5a9e4
+X-Git-Oldrev: 66425c8e1485b83551bb0d8704a01521ed5309e9
+X-Git-Newrev: a14661a72d61d803e1b2e315e0ba154506b8ea41
 X-Patchwork-Hint: ignore
-Message-Id: <20240919202958.330D083D9B@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.08.x] package/xenomai: fix
- build with gcc 11
+Message-Id: <20240919202958.2152683D9A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.08.x] package/php: bump version
+ to 8.3.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,66 +65,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cc70cadb3224686779b50cbd2480a77e38d5a9e4
+commit: https://git.buildroot.net/buildroot/commit/?id=a14661a72d61d803e1b2e315e0ba154506b8ea41
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.08.x
 
-The commit adds an upstream patch to fix the following build failure:
+Changelog: https://www.php.net/ChangeLog-8.php#PHP_8_3
+Release notes: https://news-web.php.net/php.announce/437
 
-latency.c: In function 'dump_histo_gnuplot':
-latency.c:415:9: error: 'fclose' called on pointer returned from a mismatched allocation function [-Werror=mismatched-dealloc]
-  415 |         fclose(ifp);
-      |         ^~~~~~~~~~~
-latency.c:404:15: note: returned from 'popen'
-  404 |         ifp = popen(xconf, "r");
-      |               ^~~~~~~~~~~~~~~~~
-
-Fixes:
-- http://autobuild.buildroot.org/results/e15ccef2f2bd58482204b5061f77e76a8a540ebd
-
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 17642f50323041e4f9fa0cb1d6f703e646ee4548)
+(cherry picked from commit 8331fb05925b33fbff1b08367470652e31996b39)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- ...atency-Use-corresponding-pclose-for-popen.patch | 30 ++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
+ package/php/php.hash | 2 +-
+ package/php/php.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/xenomai/3.0.10/0005-testsuite-latency-Use-corresponding-pclose-for-popen.patch b/package/xenomai/3.0.10/0005-testsuite-latency-Use-corresponding-pclose-for-popen.patch
-new file mode 100644
-index 0000000000..a144c4ece3
---- /dev/null
-+++ b/package/xenomai/3.0.10/0005-testsuite-latency-Use-corresponding-pclose-for-popen.patch
-@@ -0,0 +1,30 @@
-+From 6fe6b75bef4b4bb9723b12f0e9ebfd9877e00a44 Mon Sep 17 00:00:00 2001
-+From: Jan Kiszka <jan.kiszka@siemens.com>
-+Date: Sat, 16 Oct 2021 19:52:28 +0200
-+Subject: [PATCH] testsuite/latency: Use corresponding pclose for popen
-+
-+Was found by latest gcc-11 and -Werror=mismatched-dealloc.
-+
-+Signed-off-by: Jan Kiszka <jan.kiszka@siemens.com>
-+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-+Upstream: https://source.denx.de/Xenomai/xenomai/-/commit/6fe6b75bef4b4bb9723b12f0e9ebfd9877e00a44
-+---
-+ testsuite/latency/latency.c | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/testsuite/latency/latency.c b/testsuite/latency/latency.c
-+index a0e6f4826084..6cd3a28b44f6 100644
-+--- a/testsuite/latency/latency.c
-++++ b/testsuite/latency/latency.c
-+@@ -412,7 +412,7 @@ static void dump_histo_gnuplot(int32_t *histogram, time_t duration)
-+ 		fputs(buf, ofp);
-+ 	}
-+ 
-+-	fclose(ifp);
-++	pclose(ifp);
-+ 
-+ dump_data:
-+ 	for (n = 0; n < histogram_size && histogram[n] == 0; n++)
-+-- 
-+2.43.0
-+
+diff --git a/package/php/php.hash b/package/php/php.hash
+index 3a6f60680b..7df051df4e 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,5 +1,5 @@
+ # From https://www.php.net/downloads.php
+-sha256  a0f2179d00931fe7631a12cbc3428f898ca3d99fe564260c115af381d2a1978d  php-8.3.10.tar.xz
++sha256  b862b098a08ab9bf4b36ed12c7d0d9f65353656b36fb0e3c5344093aceb35802  php-8.3.11.tar.xz
+ 
+ # License file
+ sha256  b42e4df5e50e6ecda1047d503d6d91d71032d09ed1027ba1ef29eed26f890c5a  LICENSE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index 0487c03b61..d7788107c1 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-PHP_VERSION = 8.3.10
++PHP_VERSION = 8.3.11
+ PHP_SITE = https://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
