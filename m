@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 64BA2CE8D7A
-	for <buildroot@archiver.kernel.org>; Thu, 19 Sep 2024 11:30:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A6394CE8D7A
+	for <buildroot@archiver.kernel.org>; Thu, 19 Sep 2024 11:30:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2EC8F412BE;
-	Thu, 19 Sep 2024 11:30:46 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7502741331;
+	Thu, 19 Sep 2024 11:30:49 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8ehgLaTtWiYB; Thu, 19 Sep 2024 11:30:44 +0000 (UTC)
+ id ncaclpl_VAv8; Thu, 19 Sep 2024 11:30:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4433641331
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A403741339
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4433641331;
-	Thu, 19 Sep 2024 11:30:44 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 84F5B1BF97E
- for <buildroot@lists.busybox.net>; Thu, 19 Sep 2024 11:30:32 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A403741339;
+	Thu, 19 Sep 2024 11:30:47 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 1316D1BF33B
+ for <buildroot@lists.busybox.net>; Thu, 19 Sep 2024 11:30:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 7372B4129C
+ by smtp3.osuosl.org (Postfix) with ESMTP id 41B07615D4
  for <buildroot@lists.busybox.net>; Thu, 19 Sep 2024 11:30:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GvqyYgJcmXoE for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JwSPworbL9aV for <buildroot@lists.busybox.net>;
  Thu, 19 Sep 2024 11:30:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5B12D41273
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 37C96615D3
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 5B12D41273
+ by smtp3.osuosl.org (Postfix) with ESMTP id 37C96615D3
  for <buildroot@buildroot.org>; Thu, 19 Sep 2024 11:30:31 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 483C383CEE; Thu, 19 Sep 2024 11:30:31 +0000 (UTC)
+ id 264FD83CEA; Thu, 19 Sep 2024 11:30:31 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 19 Sep 2024 13:24:55 +0200
+Date: Thu, 19 Sep 2024 13:13:11 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 79b102c0f1614e7490b7bbdf52acef72417e7a4c
-X-Git-Newrev: 681c821e81a8dec16cf04f935eb152973b116688
+X-Git-Oldrev: 5fb4d48713022f1c18363963fe23acceba1abf9e
+X-Git-Newrev: b020b54fa68c23defd62058d17a0a516b29e6c57
 X-Patchwork-Hint: ignore
-Message-Id: <20240919113031.483C383CEE@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] {linux,
- linux-headers}: bump 6.{1, 6, 10}.x series
+Message-Id: <20240919113031.264FD83CEA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/bind: security
+ bump to 9.18.28
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,61 +65,151 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=681c821e81a8dec16cf04f935eb152973b116688
+commit: https://git.buildroot.net/buildroot/commit/?id=b020b54fa68c23defd62058d17a0a516b29e6c57
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit ee67e4baffc8bb0577a265ad4ffe814acfad5397)
-[Peter: drop 6.10.x bump]
+Fixes the following security issues:
+
+- CVE-2024-0760: A flood of DNS messages over TCP may make the server
+  unstable https://kb.isc.org/docs/cve-2024-0760
+
+- CVE-2024-1737: BIND's database will be slow if a very large number of RRs
+  exist at the same name https://kb.isc.org/docs/cve-2024-1737
+
+- CVE-2024-1975: SIG(0) can be used to exhaust CPU resources
+  https://kb.isc.org/docs/cve-2024-1975
+
+- CVE-2024-4076: Assertion failure when serving both stale cache data and
+  authoritative zone content https://kb.isc.org/docs/cve-2024-4076
+
+Bind 9.16.x is EOL since April 2024.
+See here for what version should be used in production:
+https://kb.isc.org/docs/aa-01540
+
+Remove patch 0001 as CC_FOR_BUILD is used in upstream code
+to compile host utility gen.
+
+Use BIND_AUTORECONF = YES to avoid a Debian 12 libtool bug.
+Otherwise rndc linking fails. See here for a bug report to
+bind9 project:
+https://gitlab.isc.org/isc-projects/bind9/-/issues/4840
+
+See here for a changelog:
+https://downloads.isc.org/isc/bind9/9.18.28/doc/arm/html/notes.html
+
+COPYRIGHT file has been updated, following Copyright holders were
+added:
+Copyright Joyent, Inc. and other Node contributors. All rights reserved.
+
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Reviewed-by: Petr Vorel <petr.vorel@gmail.com>
+Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+(cherry picked from commit c9515c8b63bc9bc84b52b731c2c72031acd240d2)
+[Peter: mark as security bump]
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/Config.in                      | 2 +-
- linux/linux.hash                     | 4 ++--
- package/linux-headers/Config.in.host | 4 ++--
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ .checkpackageignore           |  1 -
+ package/bind/0001-cross.patch | 34 ----------------------------------
+ package/bind/bind.hash        |  8 ++++----
+ package/bind/bind.mk          |  9 +++++----
+ 4 files changed, 9 insertions(+), 43 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index 340bf5c590..c520cccfda 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -128,7 +128,7 @@ endif
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 0fd82e1eb4..62ba818026 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -190,7 +190,6 @@ package/benejson/0001-c-std.patch Upstream
+ package/benejson/0002-Use-print-as-a-function-for-Py3-compatibility.patch Upstream
+ package/berkeleydb/0001-cwd-db_config.patch Upstream
+ package/berkeleydb/0002-atomic_compare_exchange.patch Upstream
+-package/bind/0001-cross.patch Upstream
+ package/bind/S81named Indent Shellcheck Variables
+ package/binutils/2.39/0001-sh-conf.patch Upstream
+ package/binutils/2.39/0002-poison-system-directories.patch Upstream
+diff --git a/package/bind/0001-cross.patch b/package/bind/0001-cross.patch
+deleted file mode 100644
+index f39be2f837..0000000000
+--- a/package/bind/0001-cross.patch
++++ /dev/null
+@@ -1,34 +0,0 @@
+-From 505cc9fcadda5607dc4c5bacb03928c0b35162a8 Mon Sep 17 00:00:00 2001
+-From: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-Date: Wed, 4 Nov 2020 17:51:38 +0100
+-Subject: [PATCH] Use host compiler to build 'gen' since it's run when
+- building.
+-
+-Signed-off-by: Gustavo Zacarias <gustavo@zacarias.com.ar>
+-[Fabrice: updated for 9.11.10]
+-Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
+-Signed-off-by: Petr Vorel <petr.vorel@gmail.com>
+----
+- lib/dns/Makefile.in | 6 ++----
+- 1 file changed, 2 insertions(+), 4 deletions(-)
+-
+-diff --git a/lib/dns/Makefile.in b/lib/dns/Makefile.in
+-index 8fc4e94f26..4ac92857e0 100644
+---- a/lib/dns/Makefile.in
+-+++ b/lib/dns/Makefile.in
+-@@ -184,10 +184,8 @@ code.h:	gen
+- 	./gen -s ${srcdir} > code.h || { rm -f $@ ; exit 1; }
+- 
+- gen: gen.c
+--	${BUILD_CC} ${BUILD_CFLAGS} -I${top_srcdir}/lib/isc/include \
+--	${LFS_CFLAGS} ${LFS_LDFLAGS} \
+--	${BUILD_CPPFLAGS} ${BUILD_LDFLAGS} -o $@ ${srcdir}/gen.c \
+--	${BUILD_LIBS} ${LFS_LIBS}
+-+	${HOSTCC} ${HOST_CFLAGS} -I${top_srcdir}/lib/isc/include \
+-+	${HOST_LDFLAGS} -o $@ ${srcdir}/gen.c
+- 
+- timestamp: include libdns.@A@
+- 	touch timestamp
+--- 
+-2.29.1
+-
+diff --git a/package/bind/bind.hash b/package/bind/bind.hash
+index 482b046c8d..feb3430a73 100644
+--- a/package/bind/bind.hash
++++ b/package/bind/bind.hash
+@@ -1,4 +1,4 @@
+-# Verified from https://ftp.isc.org/isc/bind9/9.16.48/bind-9.16.48.tar.xz.asc
+-# with key AADBBA5074F1402F7B69D56BC5B4EE931A9F9DFD
+-sha256  8d3814582348f90dead1ad410b1019094cd399d3d83930abebb2b3b1eb0b2bbb  bind-9.16.48.tar.xz
+-sha256  13491a682dc0f5ee2273cebd3949e2be62f9470fe659419a03a308d4f444773b  COPYRIGHT
++# Verified from https://ftp.isc.org/isc/bind9/9.18.28/bind-9.18.28.tar.xz.asc
++# with key 706B6C28620E76F91D11F7DF510A642A06C52CEC
++sha256  e7cce9a165f7b619eefc4832f0a8dc16b005d29e3890aed6008c506ea286a5e7  bind-9.18.28.tar.xz
++sha256  9734825d67a3ac967b2c2f7c9a83c9e5db1c2474dbe9599157c3a4188749ebd4  COPYRIGHT
+diff --git a/package/bind/bind.mk b/package/bind/bind.mk
+index 0d81ffabd6..217c9916fd 100644
+--- a/package/bind/bind.mk
++++ b/package/bind/bind.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "6.6.49" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "6.6.50" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "5.10.162-cip24" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "5.10.162-cip24-rt10" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-diff --git a/linux/linux.hash b/linux/linux.hash
-index b65249c7bb..4bebf4cc50 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,6 +1,6 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
--sha256  2c56dac2b70859c16b4ef651befb0d28c227498bd3eee08e8a45a357f22dd3b7  linux-6.6.49.tar.xz
--sha256  3f4e4e89a00e221a6dd1174779e0028794f44f4624ad6a31c79f3b7796688ca2  linux-6.1.108.tar.xz
-+sha256  c065e36daf28210060c91a37ef3e92ac5814784e634577e04e406297ead2e86e  linux-6.6.50.tar.xz
-+sha256  732ff40ac63642c5ddbb7d65c24c90ed08b95af0e8c92df4739e9703eec01ac1  linux-6.1.109.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
- sha256  e56caae259b85b7685ee589075d58bb7b227024497a60fa27a7b43e0b48839cf  linux-5.15.166.tar.xz
- sha256  85d7bf3a807538b9032e3f798ab978da9b77352bcb526534038c351a4f39e01c  linux-5.10.225.tar.xz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 6d7f77a88e..7bb49eb43d 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -407,8 +407,8 @@ config BR2_DEFAULT_KERNEL_HEADERS
- 	default "5.4.283"	if BR2_KERNEL_HEADERS_5_4
- 	default "5.10.225"	if BR2_KERNEL_HEADERS_5_10
- 	default "5.15.166"	if BR2_KERNEL_HEADERS_5_15
--	default "6.1.108"	if BR2_KERNEL_HEADERS_6_1
--	default "6.6.49"	if BR2_KERNEL_HEADERS_6_6
-+	default "6.1.109"	if BR2_KERNEL_HEADERS_6_1
-+	default "6.6.50"	if BR2_KERNEL_HEADERS_6_6
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+-BIND_VERSION = 9.16.48
++BIND_VERSION = 9.18.28
+ BIND_SOURCE= bind-$(BIND_VERSION).tar.xz
+ BIND_SITE = https://ftp.isc.org/isc/bind9/$(BIND_VERSION)
+ # bind does not support parallel builds.
+@@ -24,13 +24,14 @@ BIND_TARGET_SERVER_SBIN += lwresd named named-checkconf named-checkzone
+ BIND_TARGET_SERVER_SBIN += named-compilezone rndc rndc-confgen dnssec-dsfromkey
+ BIND_TARGET_SERVER_SBIN += dnssec-keyfromlabel dnssec-signzone tsig-keygen
+ BIND_TARGET_TOOLS_BIN = dig host nslookup nsupdate
+-BIND_CONF_ENV = \
+-	BUILD_CC="$(TARGET_CC)" \
+-	LIBS=`$(PKG_CONFIG_HOST_BINARY) --libs openssl`
++# avoid potential Debian 12 libtool 2.4.7 bug
++# https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=929396
++BIND_AUTORECONF = YES
+ BIND_CONF_OPTS = \
+ 	--without-cmocka \
+ 	--without-lmdb \
+ 	--enable-epoll \
++	--disable-doh \
+ 	--disable-backtrace \
+ 	--with-openssl=$(STAGING_DIR)/usr
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
