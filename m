@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D9AE8CE8D61
-	for <buildroot@archiver.kernel.org>; Thu, 19 Sep 2024 09:15:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CF17CCE8D61
+	for <buildroot@archiver.kernel.org>; Thu, 19 Sep 2024 09:15:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A5B5B412AF;
-	Thu, 19 Sep 2024 09:15:07 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 9957A41278;
+	Thu, 19 Sep 2024 09:15:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TJNnoUaWJKca; Thu, 19 Sep 2024 09:15:06 +0000 (UTC)
+ id aFqCYtaW35V4; Thu, 19 Sep 2024 09:15:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9D572412A7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 529E0412B4
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9D572412A7;
-	Thu, 19 Sep 2024 09:15:06 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 242871BF97E
+	by smtp2.osuosl.org (Postfix) with ESMTP id 529E0412B4;
+	Thu, 19 Sep 2024 09:15:09 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 238FD1BF4DA
  for <buildroot@lists.busybox.net>; Thu, 19 Sep 2024 09:14:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9E40E427F4
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6DAD184916
  for <buildroot@lists.busybox.net>; Thu, 19 Sep 2024 09:14:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dsx2d00GUx92 for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 7_t8gztUtNK7 for <buildroot@lists.busybox.net>;
  Thu, 19 Sep 2024 09:14:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B12CC427F9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 991CB841D5
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id B12CC427F9
+ by smtp1.osuosl.org (Postfix) with ESMTP id 991CB841D5
  for <buildroot@buildroot.org>; Thu, 19 Sep 2024 09:14:51 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9E04583C67; Thu, 19 Sep 2024 09:14:51 +0000 (UTC)
+ id 936B483C66; Thu, 19 Sep 2024 09:14:51 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 19 Sep 2024 11:03:09 +0200
+Date: Thu, 19 Sep 2024 11:03:08 +0200
 X-Git-Refname: refs/heads/2024.08.x
-X-Git-Oldrev: 0f20caa178251015022741cb3b161b33856a9248
-X-Git-Newrev: 7fab58374d0349769d01ab174bf00e01cf11115d
+X-Git-Oldrev: 889abedd5b995264f8bac43bb19b4566468557e7
+X-Git-Newrev: 0f20caa178251015022741cb3b161b33856a9248
 X-Patchwork-Hint: ignore
-Message-Id: <20240919091451.9E04583C67@busybox.osuosl.org>
+Message-Id: <20240919091451.936B483C66@busybox.osuosl.org>
 Subject: [Buildroot] [git commit branch/2024.08.x]
- docs/manual/migrating.adoc: fix occurrence typo
+ docs/manual/customize-outside-br.adoc: fix 'or' typo
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,32 +65,32 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7fab58374d0349769d01ab174bf00e01cf11115d
+commit: https://git.buildroot.net/buildroot/commit/?id=0f20caa178251015022741cb3b161b33856a9248
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.08.x
 
-Occurrence is with double-c-double-r.
+It is OR, not OT.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 6ee748089347966eea5aced1e42fc25d9cbfc2aa)
+(cherry picked from commit 777c081abef77511da585c53b9de4e44b913af46)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/manual/migrating.adoc | 2 +-
+ docs/manual/customize-outside-br.adoc | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/docs/manual/migrating.adoc b/docs/manual/migrating.adoc
-index ed2be1c6c9..d99c779799 100644
---- a/docs/manual/migrating.adoc
-+++ b/docs/manual/migrating.adoc
-@@ -62,7 +62,7 @@ $ echo 'name: NAME_OF_YOUR_TREE' >external.desc
- Be careful when choosing a name: It has to be unique and be made
- with only ASCII characters from the set +[A-Za-z0-9_]+.
+diff --git a/docs/manual/customize-outside-br.adoc b/docs/manual/customize-outside-br.adoc
+index 5e653f1603..78065489d4 100644
+--- a/docs/manual/customize-outside-br.adoc
++++ b/docs/manual/customize-outside-br.adoc
+@@ -191,7 +191,7 @@ tree.
  
-- * Then, change every occurence of +BR2_EXTERNAL+ in your br2-external
-+ * Then, change every occurrence of +BR2_EXTERNAL+ in your br2-external
-    tree with the new variable:
- +
- ----
+ For some packages, Buildroot provides a choice between two (or more)
+ implementations of API-compatible such packages. For example, there is
+-a choice to choose either libjpeg ot jpeg-turbo; there is one between
++a choice to choose either libjpeg or jpeg-turbo; there is one between
+ openssl or libressl; there is one to select one of the known,
+ pre-configured toolchains...
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
