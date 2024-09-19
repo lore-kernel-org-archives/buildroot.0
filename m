@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10779CE8D5F
-	for <buildroot@archiver.kernel.org>; Thu, 19 Sep 2024 09:15:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 51BD8CE8D61
+	for <buildroot@archiver.kernel.org>; Thu, 19 Sep 2024 09:15:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CD3D54148A;
-	Thu, 19 Sep 2024 09:15:48 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 114AC41342;
+	Thu, 19 Sep 2024 09:15:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HshlDleS0y5N; Thu, 19 Sep 2024 09:15:47 +0000 (UTC)
+ id 0VSRRRhzpcmE; Thu, 19 Sep 2024 09:15:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5154141483
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 254A24148E
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5154141483;
-	Thu, 19 Sep 2024 09:15:47 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 8398E1BF4DA
+	by smtp2.osuosl.org (Postfix) with ESMTP id 254A24148E;
+	Thu, 19 Sep 2024 09:15:50 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 86C761BF97E
  for <buildroot@lists.busybox.net>; Thu, 19 Sep 2024 09:14:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 17DC0427FF
- for <buildroot@lists.busybox.net>; Thu, 19 Sep 2024 09:14:54 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6268484975
+ for <buildroot@lists.busybox.net>; Thu, 19 Sep 2024 09:14:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id h9bJOAFfv1ir for <buildroot@lists.busybox.net>;
- Thu, 19 Sep 2024 09:14:53 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id hLaVD-6V7ReZ for <buildroot@lists.busybox.net>;
+ Thu, 19 Sep 2024 09:14:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2C9A3427F4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1AF4E84715
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2C9A3427F4
- for <buildroot@buildroot.org>; Thu, 19 Sep 2024 09:14:53 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1AF4E84715
+ for <buildroot@buildroot.org>; Thu, 19 Sep 2024 09:14:52 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 235E083C39; Thu, 19 Sep 2024 09:14:53 +0000 (UTC)
+ id 181B683C4D; Thu, 19 Sep 2024 09:14:52 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 19 Sep 2024 11:03:33 +0200
+Date: Thu, 19 Sep 2024 11:03:15 +0200
 X-Git-Refname: refs/heads/2024.08.x
-X-Git-Oldrev: fee0865740a1a7a9cd943f3695f9f3c7e0d7ff83
-X-Git-Newrev: 1395e6cedcc1263077eeb8501d0348c3e915090a
+X-Git-Oldrev: 0d56cfabf462b7d90a8aa15549d9e196da3741b5
+X-Git-Newrev: 923a6df874afd1dca8c9b3a26132fa568350f017
 X-Patchwork-Hint: ignore
-Message-Id: <20240919091453.235E083C39@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.08.x] package/genpart: fix
- typos and grammar in patch description
+Message-Id: <20240919091452.181B683C4D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.08.x] package/bc: fix typos in
+ patch descriptions
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,33 +65,58 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1395e6cedcc1263077eeb8501d0348c3e915090a
+commit: https://git.buildroot.net/buildroot/commit/?id=923a6df874afd1dca8c9b3a26132fa568350f017
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.08.x
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
-[yann.morin.1998@free.fr: also fix grammar]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit e009783505e80e80a49f57a0abd9aa2b417063bb)
+(cherry picked from commit e2a0ab180c13ecb41b1c1aea65c9ca69fbe8bc90)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/genpart/0001-fix-return-code.patch | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ package/bc/0001-bc-use-MAKEINFO-variable-for-docs.patch                | 2 +-
+ package/bc/0002-notice-read-and-write-errors-on-input-and-output.patch | 2 +-
+ package/bc/0004-no-gen-libmath.patch                                   | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/genpart/0001-fix-return-code.patch b/package/genpart/0001-fix-return-code.patch
-index ec18c82f8c..6ecf0d9bc2 100644
---- a/package/genpart/0001-fix-return-code.patch
-+++ b/package/genpart/0001-fix-return-code.patch
-@@ -1,7 +1,7 @@
--genpart: return 0 if partition writen OK, with no do_magic
-+genpart: return 0 if partition written OK, with no do_magic
+diff --git a/package/bc/0001-bc-use-MAKEINFO-variable-for-docs.patch b/package/bc/0001-bc-use-MAKEINFO-variable-for-docs.patch
+index 03d15f5524..5ff6125f67 100644
+--- a/package/bc/0001-bc-use-MAKEINFO-variable-for-docs.patch
++++ b/package/bc/0001-bc-use-MAKEINFO-variable-for-docs.patch
+@@ -3,7 +3,7 @@ From: Matt Weber <matthew.weber@rockwellcollins.com>
+ Date: Fri, 13 Sep 2019 13:45:02 -0500
+ Subject: [PATCH] bc: use MAKEINFO variable for docs
  
--If do_magic is false, we don't won't write the 0xaa55 magic.
--However, if we succesfully wrote the partition entry, we still
-+If do_magic is false, we won't write the 0xaa55 magic.
-+However, if we successfully wrote the partition entry, we still
- want to return 0 to indicate success.
+-Use the appropiate MAKEINFO variable rather than the hardcoded makeinfo
++Use the appropriate MAKEINFO variable rather than the hardcoded makeinfo
+ command directly, otherwise missing logic never works.
  
- Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+ Fixes:
+diff --git a/package/bc/0002-notice-read-and-write-errors-on-input-and-output.patch b/package/bc/0002-notice-read-and-write-errors-on-input-and-output.patch
+index 87654e3c14..7649ae8c4f 100644
+--- a/package/bc/0002-notice-read-and-write-errors-on-input-and-output.patch
++++ b/package/bc/0002-notice-read-and-write-errors-on-input-and-output.patch
+@@ -16,7 +16,7 @@ Quoting from the bug report:
+      were correct.  I _think_ I got them all.  -iwj.
+      -- Ian Jackson <iwj@ubuntu.com>  Tue,  4 Apr 2006 17:21:02 +0100
+ 
+-Upsteam:
++Upstream:
+ https://sources.debian.org/patches/bc/1.07.1-2/05_notice_read_write_errors.diff/
+ 
+ [Reformatted to GIT for 1.0.7.1 by Matt W]
+diff --git a/package/bc/0004-no-gen-libmath.patch b/package/bc/0004-no-gen-libmath.patch
+index 7cd506be2c..15b7b9e5a8 100644
+--- a/package/bc/0004-no-gen-libmath.patch
++++ b/package/bc/0004-no-gen-libmath.patch
+@@ -5,7 +5,7 @@ Subject: [PATCH] no gen libmath
+ 
+ These rules are not cross-friendly so delete them.  libmath has been
+ generated offline and included as part of this patch as the fbc tool
+-used to generate that header is assuming the cross archtecture and
++used to generate that header is assuming the cross architecture and
+ can't execute.
+ 
+ Upstream:
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
