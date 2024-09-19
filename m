@@ -4,60 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D05DCF3967
-	for <buildroot@archiver.kernel.org>; Thu, 19 Sep 2024 20:28:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DD670CF396A
+	for <buildroot@archiver.kernel.org>; Thu, 19 Sep 2024 20:28:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0A84641498;
-	Thu, 19 Sep 2024 20:28:10 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A7E13414DA;
+	Thu, 19 Sep 2024 20:28:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XwAqh9El2zVx; Thu, 19 Sep 2024 20:28:09 +0000 (UTC)
+ id XyOeRnE8se5Q; Thu, 19 Sep 2024 20:28:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CDCA6414BB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 69232414E2
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CDCA6414BB;
-	Thu, 19 Sep 2024 20:28:08 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1603E1BF343
- for <buildroot@lists.busybox.net>; Thu, 19 Sep 2024 20:28:07 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 69232414E2;
+	Thu, 19 Sep 2024 20:28:37 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 0C6D51BF343
+ for <buildroot@lists.busybox.net>; Thu, 19 Sep 2024 20:28:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id F0DDD84C42
- for <buildroot@lists.busybox.net>; Thu, 19 Sep 2024 20:28:03 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id EE70A414E2
+ for <buildroot@lists.busybox.net>; Thu, 19 Sep 2024 20:28:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8vL9-FNdBmD8 for <buildroot@lists.busybox.net>;
- Thu, 19 Sep 2024 20:28:03 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::221;
- helo=relay1-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id FWnq1DUMdymb for <buildroot@lists.busybox.net>;
+ Thu, 19 Sep 2024 20:28:34 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org EA1A184C3E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EA1A184C3E
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp1.osuosl.org (Postfix) with ESMTPS id EA1A184C3E
- for <buildroot@buildroot.org>; Thu, 19 Sep 2024 20:28:02 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 42FE5240003;
- Thu, 19 Sep 2024 20:27:59 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1srNks-00GepL-1Z;
- Thu, 19 Sep 2024 22:27:58 +0200
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C9A68414D8
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp2.osuosl.org (Postfix) with ESMTP id C9A68414D8
+ for <buildroot@buildroot.org>; Thu, 19 Sep 2024 20:28:34 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id A8A4083D8E; Thu, 19 Sep 2024 20:28:34 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-References: <20240909063340.533620-1-dario.binacchi@amarulasolutions.com>
- <20240914112624.52462119@windsurf>
-Date: Thu, 19 Sep 2024 22:27:58 +0200
-In-Reply-To: <20240914112624.52462119@windsurf> (Thomas Petazzoni via
- buildroot's message of "Sat, 14 Sep 2024 11:26:24 +0200")
-Message-ID: <87a5g3jsmp.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/xenomai: fix build with gcc 11
+To: buildroot@buildroot.org
+Date: Thu, 19 Sep 2024 22:27:33 +0200
+X-Git-Refname: refs/heads/2024.02.x
+X-Git-Oldrev: e5b4c7980debefa30af64a1438aecdfa304525bf
+X-Git-Newrev: 82fbd44f3f908423dfc2dd767bd60f4bd7e0d2cf
+X-Patchwork-Hint: ignore
+Message-Id: <20240919202834.A8A4083D8E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/xenomai: fix
+ build with gcc 11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,47 +59,72 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Romain Naour <romain.naour@gmail.com>,
- Dario Binacchi <dario.binacchi@amarulasolutions.com>,
- linux-amarula@amarulasolutions.com,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Thomas" == Thomas Petazzoni via buildroot <buildroot@buildroot.org> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=82fbd44f3f908423dfc2dd767bd60f4bd7e0d2cf
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
- > On Mon,  9 Sep 2024 08:33:39 +0200
- > Dario Binacchi <dario.binacchi@amarulasolutions.com> wrote:
+The commit adds an upstream patch to fix the following build failure:
 
- >> The commit adds an upstream patch to fix the following build failure:
- >> 
- >> latency.c: In function 'dump_histo_gnuplot':
- >> latency.c:415:9: error: 'fclose' called on pointer returned from a
- >> mismatched allocation function [-Werror=mismatched-dealloc]
- >> 415 |         fclose(ifp);
- >> |         ^~~~~~~~~~~
- >> latency.c:404:15: note: returned from 'popen'
- >> 404 |         ifp = popen(xconf, "r");
- >> |               ^~~~~~~~~~~~~~~~~
- >> 
- >> Fixes:
- >> - http://autobuild.buildroot.org/results/e15ccef2f2bd58482204b5061f77e76a8a540ebd
- >> 
- >> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
- >> ---
- >> ...y-Use-corresponding-pclose-for-popen.patch | 30 +++++++++++++++++++
- >> 1 file changed, 30 insertions(+)
- >> create mode 100644
- >> package/xenomai/3.0.10/0005-testsuite-latency-Use-corresponding-pclose-for-popen.patch
+latency.c: In function 'dump_histo_gnuplot':
+latency.c:415:9: error: 'fclose' called on pointer returned from a mismatched allocation function [-Werror=mismatched-dealloc]
+  415 |         fclose(ifp);
+      |         ^~~~~~~~~~~
+latency.c:404:15: note: returned from 'popen'
+  404 |         ifp = popen(xconf, "r");
+      |               ^~~~~~~~~~~~~~~~~
 
- > Applied to master, thanks.
+Fixes:
+- http://autobuild.buildroot.org/results/e15ccef2f2bd58482204b5061f77e76a8a540ebd
 
-Committed to 2024.02.x and 2024.08.x, thanks.
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+(cherry picked from commit 17642f50323041e4f9fa0cb1d6f703e646ee4548)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ ...atency-Use-corresponding-pclose-for-popen.patch | 30 ++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
--- 
-Bye, Peter Korsgaard
+diff --git a/package/xenomai/3.0.10/0005-testsuite-latency-Use-corresponding-pclose-for-popen.patch b/package/xenomai/3.0.10/0005-testsuite-latency-Use-corresponding-pclose-for-popen.patch
+new file mode 100644
+index 0000000000..a144c4ece3
+--- /dev/null
++++ b/package/xenomai/3.0.10/0005-testsuite-latency-Use-corresponding-pclose-for-popen.patch
+@@ -0,0 +1,30 @@
++From 6fe6b75bef4b4bb9723b12f0e9ebfd9877e00a44 Mon Sep 17 00:00:00 2001
++From: Jan Kiszka <jan.kiszka@siemens.com>
++Date: Sat, 16 Oct 2021 19:52:28 +0200
++Subject: [PATCH] testsuite/latency: Use corresponding pclose for popen
++
++Was found by latest gcc-11 and -Werror=mismatched-dealloc.
++
++Signed-off-by: Jan Kiszka <jan.kiszka@siemens.com>
++Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
++Upstream: https://source.denx.de/Xenomai/xenomai/-/commit/6fe6b75bef4b4bb9723b12f0e9ebfd9877e00a44
++---
++ testsuite/latency/latency.c | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/testsuite/latency/latency.c b/testsuite/latency/latency.c
++index a0e6f4826084..6cd3a28b44f6 100644
++--- a/testsuite/latency/latency.c
+++++ b/testsuite/latency/latency.c
++@@ -412,7 +412,7 @@ static void dump_histo_gnuplot(int32_t *histogram, time_t duration)
++ 		fputs(buf, ofp);
++ 	}
++ 
++-	fclose(ifp);
+++	pclose(ifp);
++ 
++ dump_data:
++ 	for (n = 0; n < histogram_size && histogram[n] == 0; n++)
++-- 
++2.43.0
++
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
