@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B1B3CE8D5F
-	for <buildroot@archiver.kernel.org>; Thu, 19 Sep 2024 09:15:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10779CE8D5F
+	for <buildroot@archiver.kernel.org>; Thu, 19 Sep 2024 09:15:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 107FB412A2;
-	Thu, 19 Sep 2024 09:15:46 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id CD3D54148A;
+	Thu, 19 Sep 2024 09:15:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id r-iV4UeCp8jD; Thu, 19 Sep 2024 09:15:45 +0000 (UTC)
+ id HshlDleS0y5N; Thu, 19 Sep 2024 09:15:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AD13141471
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5154141483
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id AD13141471;
-	Thu, 19 Sep 2024 09:15:44 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id E93FB1BF97E
- for <buildroot@lists.busybox.net>; Thu, 19 Sep 2024 09:14:58 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5154141483;
+	Thu, 19 Sep 2024 09:15:47 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 8398E1BF4DA
+ for <buildroot@lists.busybox.net>; Thu, 19 Sep 2024 09:14:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5BF7F84987
- for <buildroot@lists.busybox.net>; Thu, 19 Sep 2024 09:14:53 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 17DC0427FF
+ for <buildroot@lists.busybox.net>; Thu, 19 Sep 2024 09:14:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Vwo2a3KLXteu for <buildroot@lists.busybox.net>;
- Thu, 19 Sep 2024 09:14:52 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id h9bJOAFfv1ir for <buildroot@lists.busybox.net>;
+ Thu, 19 Sep 2024 09:14:53 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0F26384709
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2C9A3427F4
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 0F26384709
- for <buildroot@buildroot.org>; Thu, 19 Sep 2024 09:14:52 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2C9A3427F4
+ for <buildroot@buildroot.org>; Thu, 19 Sep 2024 09:14:53 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 0A5817FF33; Thu, 19 Sep 2024 09:14:52 +0000 (UTC)
+ id 235E083C39; Thu, 19 Sep 2024 09:14:53 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 19 Sep 2024 11:03:14 +0200
+Date: Thu, 19 Sep 2024 11:03:33 +0200
 X-Git-Refname: refs/heads/2024.08.x
-X-Git-Oldrev: 04d64ab6d563a30cee48318c4a070f6aaab5f72c
-X-Git-Newrev: 0d56cfabf462b7d90a8aa15549d9e196da3741b5
+X-Git-Oldrev: fee0865740a1a7a9cd943f3695f9f3c7e0d7ff83
+X-Git-Newrev: 1395e6cedcc1263077eeb8501d0348c3e915090a
 X-Patchwork-Hint: ignore
-Message-Id: <20240919091452.0A5817FF33@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.08.x] package/avahi: fix
- appropriate typo
+Message-Id: <20240919091453.235E083C39@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.08.x] package/genpart: fix
+ typos and grammar in patch description
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,34 +65,33 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0d56cfabf462b7d90a8aa15549d9e196da3741b5
+commit: https://git.buildroot.net/buildroot/commit/?id=1395e6cedcc1263077eeb8501d0348c3e915090a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.08.x
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+[yann.morin.1998@free.fr: also fix grammar]
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit fcb823ffdcfc3d89503f859a1042a56ad5d47f46)
+(cherry picked from commit e009783505e80e80a49f57a0abd9aa2b417063bb)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/avahi/0002-remove-imp-from-py-compile.patch | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ package/genpart/0001-fix-return-code.patch | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/avahi/0002-remove-imp-from-py-compile.patch b/package/avahi/0002-remove-imp-from-py-compile.patch
-index 37534a3f7a..ba92275206 100644
---- a/package/avahi/0002-remove-imp-from-py-compile.patch
-+++ b/package/avahi/0002-remove-imp-from-py-compile.patch
-@@ -1,10 +1,10 @@
- Remove optional imp python module dependency.
+diff --git a/package/genpart/0001-fix-return-code.patch b/package/genpart/0001-fix-return-code.patch
+index ec18c82f8c..6ecf0d9bc2 100644
+--- a/package/genpart/0001-fix-return-code.patch
++++ b/package/genpart/0001-fix-return-code.patch
+@@ -1,7 +1,7 @@
+-genpart: return 0 if partition writen OK, with no do_magic
++genpart: return 0 if partition written OK, with no do_magic
  
- Upstream already removed py-compile entirely in their git repository,
--so the patch is not appropiate for upstream.
-+so the patch is not appropriate for upstream.
+-If do_magic is false, we don't won't write the 0xaa55 magic.
+-However, if we succesfully wrote the partition entry, we still
++If do_magic is false, we won't write the 0xaa55 magic.
++However, if we successfully wrote the partition entry, we still
+ want to return 0 to indicate success.
  
- Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
--Upstream: not appropiate
-+Upstream: not appropriate
- 
- diff -Nur avahi-0.8.orig/py-compile avahi-0.8/py-compile
- --- avahi-0.8.orig/py-compile	2020-02-18 07:58:21.192417644 +0100
+ Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
