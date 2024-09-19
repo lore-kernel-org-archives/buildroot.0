@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7CC3CE8D61
-	for <buildroot@archiver.kernel.org>; Thu, 19 Sep 2024 09:17:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A7F29CE8D5F
+	for <buildroot@archiver.kernel.org>; Thu, 19 Sep 2024 09:17:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 96E1A43236;
-	Thu, 19 Sep 2024 09:17:42 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7773942F80;
+	Thu, 19 Sep 2024 09:17:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mXfcNS1T9lvb; Thu, 19 Sep 2024 09:17:41 +0000 (UTC)
+ id txtvVReMRGL9; Thu, 19 Sep 2024 09:17:44 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B4B7742F80
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4EF0C43251
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B4B7742F80;
-	Thu, 19 Sep 2024 09:17:40 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 14BCE1BF4DA
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4EF0C43251;
+	Thu, 19 Sep 2024 09:17:44 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 158981BF97E
  for <buildroot@lists.busybox.net>; Thu, 19 Sep 2024 09:16:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 824E384996
- for <buildroot@lists.busybox.net>; Thu, 19 Sep 2024 09:16:12 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id EB1F8615D8
+ for <buildroot@lists.busybox.net>; Thu, 19 Sep 2024 09:16:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5fboiHxTXciH for <buildroot@lists.busybox.net>;
- Thu, 19 Sep 2024 09:16:10 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2RCcXnO4nRn0 for <buildroot@lists.busybox.net>;
+ Thu, 19 Sep 2024 09:16:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 68AD0849BF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DEF9A615E1
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 68AD0849BF
+ by smtp3.osuosl.org (Postfix) with ESMTP id DEF9A615E1
  for <buildroot@buildroot.org>; Thu, 19 Sep 2024 09:16:06 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 57C2F83C5E; Thu, 19 Sep 2024 09:16:06 +0000 (UTC)
+ id DC87583C6C; Thu, 19 Sep 2024 09:16:06 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 19 Sep 2024 11:04:06 +0200
+Date: Thu, 19 Sep 2024 11:04:43 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 3be671e6ed794f12b31d7535c15f8c76518a86c6
-X-Git-Newrev: 32e493c90cc80dca5c4e3a2bb777eff4eaf16b58
+X-Git-Oldrev: 29a1e2663584aebfb683a9117ffa617187779304
+X-Git-Newrev: 588c331e423e7206d54abdd0efbcdeca87386736
 X-Patchwork-Hint: ignore
-Message-Id: <20240919091606.57C2F83C5E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x]
- docs/manual/adding-packages-meson.adoc: fix occurrences typo
+Message-Id: <20240919091606.DC87583C6C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/c-icap-modules:
+ fix Additional typo
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,32 +65,29 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=32e493c90cc80dca5c4e3a2bb777eff4eaf16b58
+commit: https://git.buildroot.net/buildroot/commit/?id=588c331e423e7206d54abdd0efbcdeca87386736
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
-
-Occurrences is with double-c-double-r.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 6762761957f956b91ca3956370548e5a29e9bd42)
+(cherry picked from commit e277ef8affc38ecae5b70943d13fb3a8b78def4a)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/manual/adding-packages-meson.adoc | 2 +-
+ package/c-icap-modules/Config.in | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/docs/manual/adding-packages-meson.adoc b/docs/manual/adding-packages-meson.adoc
-index 16135b1297..01891e03cc 100644
---- a/docs/manual/adding-packages-meson.adoc
-+++ b/docs/manual/adding-packages-meson.adoc
-@@ -61,7 +61,7 @@ added to +FOO_DEPENDENCIES+. Note that the support for +baz+ is explicitly
- disabled at line 20, if the package is not selected.
+diff --git a/package/c-icap-modules/Config.in b/package/c-icap-modules/Config.in
+index 616456b4dc..7114131f04 100644
+--- a/package/c-icap-modules/Config.in
++++ b/package/c-icap-modules/Config.in
+@@ -2,6 +2,6 @@ config BR2_PACKAGE_C_ICAP_MODULES
+ 	bool "c-icap-modules"
+ 	depends on BR2_PACKAGE_C_ICAP
+ 	help
+-	  Additionals modules for c-icap server.
++	  Additional modules for c-icap server.
  
- To sum it up, to add a new meson-based package, the Makefile example can be
--copied verbatim then edited to replace all occurences of +FOO+ with the
-+copied verbatim then edited to replace all occurrences of +FOO+ with the
- uppercase name of the new package and update the values of the standard
- variables.
- 
+ 	  http://c-icap.sourceforge.net/
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
