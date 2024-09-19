@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 90EAACF3965
-	for <buildroot@archiver.kernel.org>; Thu, 19 Sep 2024 20:01:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F2C17CF3963
+	for <buildroot@archiver.kernel.org>; Thu, 19 Sep 2024 20:01:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3F52F43317;
-	Thu, 19 Sep 2024 20:01:15 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C0BDB43321;
+	Thu, 19 Sep 2024 20:01:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sWU07I3XnxJ5; Thu, 19 Sep 2024 20:01:14 +0000 (UTC)
+ id QTxAc7vecHPg; Thu, 19 Sep 2024 20:01:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5C30C4330D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C95894331D
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 5C30C4330D;
-	Thu, 19 Sep 2024 20:01:13 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C95894331D;
+	Thu, 19 Sep 2024 20:01:16 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 8A21D1BF215
- for <buildroot@lists.busybox.net>; Thu, 19 Sep 2024 19:59:55 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 63FCF1BF215
+ for <buildroot@lists.busybox.net>; Thu, 19 Sep 2024 19:59:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id AF00542B27
+ by smtp4.osuosl.org (Postfix) with ESMTP id E7BF742B28
  for <buildroot@lists.busybox.net>; Thu, 19 Sep 2024 19:59:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TkSTlOSLVVxH for <buildroot@lists.busybox.net>;
- Thu, 19 Sep 2024 19:59:49 +0000 (UTC)
+ id rIP2yV9ehPS4 for <buildroot@lists.busybox.net>;
+ Thu, 19 Sep 2024 19:59:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A3CBD42B28
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E7CB642B2C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id A3CBD42B28
+ by smtp4.osuosl.org (Postfix) with ESMTP id E7CB642B2C
  for <buildroot@buildroot.org>; Thu, 19 Sep 2024 19:59:49 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 9DF9C821B9; Thu, 19 Sep 2024 19:59:49 +0000 (UTC)
+ id E4272821B9; Thu, 19 Sep 2024 19:59:49 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 19 Sep 2024 13:56:03 +0200
+Date: Thu, 19 Sep 2024 13:56:07 +0200
 X-Git-Refname: refs/heads/2024.08.x
-X-Git-Oldrev: 16598bdf5ea9e87f4ad8146c603d109e48403c36
-X-Git-Newrev: 83d384ac0f4907c7c6cc8100a47553a918ce88bb
+X-Git-Oldrev: 6485c37fa39865c28b09ce451f0d72a53f304ddb
+X-Git-Newrev: 1b6e22b6a4d47a67762e6c57260fd6a9d4b8fbfb
 X-Patchwork-Hint: ignore
-Message-Id: <20240919195949.9DF9C821B9@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.08.x] package/libmodsecurity:
- fix locally typo
+Message-Id: <20240919195949.E4272821B9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.08.x] package/libxcrypt: fix
+ insecure typo
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,28 +65,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=83d384ac0f4907c7c6cc8100a47553a918ce88bb
+commit: https://git.buildroot.net/buildroot/commit/?id=1b6e22b6a4d47a67762e6c57260fd6a9d4b8fbfb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.08.x
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit f6e32b6910fdcd1c41bbcc5fe4357d6488175006)
+(cherry picked from commit 893602e69d1cd728a24c2cad6b877cb0c3da51cd)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/libmodsecurity/libmodsecurity.hash | 2 +-
+ package/libxcrypt/libxcrypt.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/libmodsecurity/libmodsecurity.hash b/package/libmodsecurity/libmodsecurity.hash
-index 2221a8a37d..dbe43d18e7 100644
---- a/package/libmodsecurity/libmodsecurity.hash
-+++ b/package/libmodsecurity/libmodsecurity.hash
-@@ -1,5 +1,5 @@
- # From https://github.com/owasp-modsecurity/ModSecurity/releases/download/v3.0.12/modsecurity-v3.0.12.tar.gz.sha256
- sha256  a36118401641feef376bb469bf468abf94b7948844976a188a6fccb53390b11f  modsecurity-v3.0.12.tar.gz
+diff --git a/package/libxcrypt/libxcrypt.mk b/package/libxcrypt/libxcrypt.mk
+index d39186eecb..60901988ac 100644
+--- a/package/libxcrypt/libxcrypt.mk
++++ b/package/libxcrypt/libxcrypt.mk
+@@ -15,7 +15,7 @@ LIBXCRYPT_INSTALL_STAGING = YES
+ LIBXCRYPT_CONF_OPTS = --disable-werror
+ HOST_LIBXCRYPT_CONF_OPTS = --disable-werror
  
--# Localy calculated
-+# Locally calculated
- sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
+-# Disable obsolete and unsecure API
++# Disable obsolete and insecure API
+ LIBXCRYPT_CONF_OPTS += --disable-obsolete_api
+ HOST_LIBXCRYPT_CONF_OPTS += --disable-obsolete_api
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
