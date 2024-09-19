@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D3C68CE8D5F
-	for <buildroot@archiver.kernel.org>; Thu, 19 Sep 2024 09:17:39 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C7CC3CE8D61
+	for <buildroot@archiver.kernel.org>; Thu, 19 Sep 2024 09:17:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A598141358;
-	Thu, 19 Sep 2024 09:17:39 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 96E1A43236;
+	Thu, 19 Sep 2024 09:17:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SbJiAcKxztij; Thu, 19 Sep 2024 09:17:38 +0000 (UTC)
+ id mXfcNS1T9lvb; Thu, 19 Sep 2024 09:17:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 077A241C19
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B4B7742F80
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 077A241C19;
-	Thu, 19 Sep 2024 09:17:38 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B4B7742F80;
+	Thu, 19 Sep 2024 09:17:40 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1C5641BF97E
- for <buildroot@lists.busybox.net>; Thu, 19 Sep 2024 09:16:14 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 14BCE1BF4DA
+ for <buildroot@lists.busybox.net>; Thu, 19 Sep 2024 09:16:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 539A684396
+ by smtp1.osuosl.org (Postfix) with ESMTP id 824E384996
  for <buildroot@lists.busybox.net>; Thu, 19 Sep 2024 09:16:12 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IX2PZvxCLdCT for <buildroot@lists.busybox.net>;
- Thu, 19 Sep 2024 09:16:11 +0000 (UTC)
+ id 5fboiHxTXciH for <buildroot@lists.busybox.net>;
+ Thu, 19 Sep 2024 09:16:10 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8D585849C8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 68AD0849BF
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8D585849C8
+ by smtp1.osuosl.org (Postfix) with ESMTP id 68AD0849BF
  for <buildroot@buildroot.org>; Thu, 19 Sep 2024 09:16:06 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 8ADFB83C75; Thu, 19 Sep 2024 09:16:06 +0000 (UTC)
+ id 57C2F83C5E; Thu, 19 Sep 2024 09:16:06 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 19 Sep 2024 11:04:25 +0200
+Date: Thu, 19 Sep 2024 11:04:06 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 405d6898686362ecf8e7e927ad2e8abbfeb4adeb
-X-Git-Newrev: 3afbac1c861c3a9999a0455f9779bff1c55ee626
+X-Git-Oldrev: 3be671e6ed794f12b31d7535c15f8c76518a86c6
+X-Git-Newrev: 32e493c90cc80dca5c4e3a2bb777eff4eaf16b58
 X-Patchwork-Hint: ignore
-Message-Id: <20240919091606.8ADFB83C75@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] docs/website/news.html:
- fix information typo
+Message-Id: <20240919091606.57C2F83C5E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x]
+ docs/manual/adding-packages-meson.adoc: fix occurrences typo
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,40 +65,31 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=3afbac1c861c3a9999a0455f9779bff1c55ee626
+commit: https://git.buildroot.net/buildroot/commit/?id=32e493c90cc80dca5c4e3a2bb777eff4eaf16b58
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
-Plural of information is also information.
+Occurrences is with double-c-double-r.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit cd6584715ea4cec33d587ccb965fc599081c6233)
+(cherry picked from commit 6762761957f956b91ca3956370548e5a29e9bd42)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- docs/website/news.html | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ docs/manual/adding-packages-meson.adoc | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/docs/website/news.html b/docs/website/news.html
-index a51da7f4bb..3aae495011 100644
---- a/docs/website/news.html
-+++ b/docs/website/news.html
-@@ -7011,7 +7011,7 @@
-       </div>
-       <div class="timeline-body">
- 	<p>We have a new release candidate! Various fixes, and
--	  addition of licensing informations on many
-+	  addition of licensing information on many
- 	  packages. See <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2012.08_rc3">CHANGES</a>
- 	  file for details</p>
+diff --git a/docs/manual/adding-packages-meson.adoc b/docs/manual/adding-packages-meson.adoc
+index 16135b1297..01891e03cc 100644
+--- a/docs/manual/adding-packages-meson.adoc
++++ b/docs/manual/adding-packages-meson.adoc
+@@ -61,7 +61,7 @@ added to +FOO_DEPENDENCIES+. Note that the support for +baz+ is explicitly
+ disabled at line 20, if the package is not selected.
  
-@@ -7033,7 +7033,7 @@
-       </div>
-       <div class="timeline-body">
- 	<p>We have a new release candidate! Various fixes, and addition
--	  of licensing informations on many
-+	  of licensing information on many
- 	  packages. See <a href="http://git.buildroot.net/buildroot/plain/CHANGES?id=2012.08_rc2">CHANGES</a>
- 	  file for details</p>
+ To sum it up, to add a new meson-based package, the Makefile example can be
+-copied verbatim then edited to replace all occurences of +FOO+ with the
++copied verbatim then edited to replace all occurrences of +FOO+ with the
+ uppercase name of the new package and update the values of the standard
+ variables.
  
 _______________________________________________
 buildroot mailing list
