@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97A56CE8D58
-	for <buildroot@archiver.kernel.org>; Thu, 19 Sep 2024 07:17:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D0959CE8D58
+	for <buildroot@archiver.kernel.org>; Thu, 19 Sep 2024 07:18:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 55EA460730;
-	Thu, 19 Sep 2024 07:17:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 685E06120C;
+	Thu, 19 Sep 2024 07:17:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xAuVwvr30BgG; Thu, 19 Sep 2024 07:17:54 +0000 (UTC)
+ id Kh8a6ry9OjQ8; Thu, 19 Sep 2024 07:17:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 58F2C60742
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A12BA61228
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 58F2C60742;
-	Thu, 19 Sep 2024 07:17:54 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3B8031BF4D5
+	by smtp3.osuosl.org (Postfix) with ESMTP id A12BA61228;
+	Thu, 19 Sep 2024 07:17:56 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 517691BF97E
  for <buildroot@lists.busybox.net>; Thu, 19 Sep 2024 07:17:53 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3718F60742
+ by smtp1.osuosl.org (Postfix) with ESMTP id 41640840C0
  for <buildroot@lists.busybox.net>; Thu, 19 Sep 2024 07:17:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LwczhC5XSRWd for <buildroot@lists.busybox.net>;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 0szXLUQMB8vD for <buildroot@lists.busybox.net>;
  Thu, 19 Sep 2024 07:17:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 74084606A7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7850381F1F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 74084606A7
+ by smtp1.osuosl.org (Postfix) with ESMTP id 7850381F1F
  for <buildroot@buildroot.org>; Thu, 19 Sep 2024 07:17:52 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 6D61883C3D; Thu, 19 Sep 2024 07:17:52 +0000 (UTC)
+ id 6214B83C3A; Thu, 19 Sep 2024 07:17:52 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 19 Sep 2024 09:11:13 +0200
+Date: Thu, 19 Sep 2024 09:11:03 +0200
 X-Git-Refname: refs/heads/2024.08.x
-X-Git-Oldrev: f066ea7f9c5539e326c1072d15745915fa9b71f6
-X-Git-Newrev: a0890d709b56871c1d939ab696468bfe043ba381
+X-Git-Oldrev: 5c6e7340adff349f2c67b3de486ae328ca4b68a0
+X-Git-Newrev: f066ea7f9c5539e326c1072d15745915fa9b71f6
 X-Patchwork-Hint: ignore
-Message-Id: <20240919071752.6D61883C3D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.08.x] package: fix a few
- Config.in indentation
+Message-Id: <20240919071752.6214B83C3A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.08.x] arch/Config.in.arc: fix
+ indentation
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,61 +65,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a0890d709b56871c1d939ab696468bfe043ba381
+commit: https://git.buildroot.net/buildroot/commit/?id=f066ea7f9c5539e326c1072d15745915fa9b71f6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.08.x
 
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit a7552293bb01e6189d3bad14bbf071431510a1ad)
+(cherry picked from commit 2ba879cc38733f5160b0729bac1b9e2f001f35e1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/kodi/Config.in      | 2 +-
- package/mmc-utils/Config.in | 6 +++---
- package/rauc/Config.in      | 2 +-
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ arch/Config.in.arc | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/kodi/Config.in b/package/kodi/Config.in
-index 25c5758b85..1977263db8 100644
---- a/package/kodi/Config.in
-+++ b/package/kodi/Config.in
-@@ -143,7 +143,7 @@ config BR2_PACKAGE_KODI_BLUEZ
- 	select BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_AUDIO
- 	select BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_HID
+diff --git a/arch/Config.in.arc b/arch/Config.in.arc
+index 388d3496bc..f367c49131 100644
+--- a/arch/Config.in.arc
++++ b/arch/Config.in.arc
+@@ -3,7 +3,7 @@ choice
+ 	default BR2_arc770d
+ 	depends on BR2_arc
  	help
--	    Enable bluetooth support
-+	  Enable bluetooth support
+-	    Specific CPU to use
++	  Specific CPU to use
  
- comment "bluetooth support needs a toolchain w/ headers >= 3.18"
- 	depends on BR2_TOOLCHAIN_HAS_SYNC_4
-diff --git a/package/mmc-utils/Config.in b/package/mmc-utils/Config.in
-index d938b5dea3..3275ba0d44 100644
---- a/package/mmc-utils/Config.in
-+++ b/package/mmc-utils/Config.in
-@@ -11,9 +11,9 @@ if BR2_PACKAGE_MMC_UTILS
- config BR2_PACKAGE_MMC_UTILS_ENABLE_DANGEROUS_COMMANDS
- 	bool "Enable dangerous commands"
+ config BR2_arc750d
+ 	bool "ARC 750D"
+@@ -40,12 +40,12 @@ config BR2_archs38_full
+ config BR2_archs4x_rel31
+ 	bool "ARC HS48 rel 31"
  	help
--	   Enable support for dangerous commands in mmc-utils. mmc-utils
--	   considers turning on permanent write protection on a device a
--	   "dangerous command" and doesn't offer it by default.
-+	  Enable support for dangerous commands in mmc-utils. mmc-utils
-+	  considers turning on permanent write protection on a device a
-+	  "dangerous command" and doesn't offer it by default.
+-	   Build for HS48 release 3.1
++	  Build for HS48 release 3.1
  
- endif
- 
-diff --git a/package/rauc/Config.in b/package/rauc/Config.in
-index 01a321e3dd..af0b99c36b 100644
---- a/package/rauc/Config.in
-+++ b/package/rauc/Config.in
-@@ -33,7 +33,7 @@ config BR2_PACKAGE_RAUC_GPT
- 	select BR2_PACKAGE_UTIL_LINUX_LIBS
- 	select BR2_PACKAGE_UTIL_LINUX_LIBFDISK
+ config BR2_archs4x
+ 	bool "ARC HS48"
  	help
--	    This option enables support for GPT partition tables.
-+	  This option enables support for GPT partition tables.
+-	   Latest release of HS48 processor
++	  Latest release of HS48 processor
+ 	   - Dual and Quad multiply and MAC operations
+ 	   - Double-precision FPU
  
- config BR2_PACKAGE_RAUC_NETWORK
- 	bool "network support"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
