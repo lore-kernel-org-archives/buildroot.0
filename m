@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5336BC78820
-	for <buildroot@archiver.kernel.org>; Fri, 20 Sep 2024 10:36:57 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3EA9DC78820
+	for <buildroot@archiver.kernel.org>; Fri, 20 Sep 2024 10:37:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 1E48742D5F;
-	Fri, 20 Sep 2024 10:36:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0E8CF42C19;
+	Fri, 20 Sep 2024 10:37:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5Mkotp0Q-BaC; Fri, 20 Sep 2024 10:36:56 +0000 (UTC)
+ id mlmSV12ZIV3z; Fri, 20 Sep 2024 10:36:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C262C42D6F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0436542C6B
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C262C42D6F;
-	Fri, 20 Sep 2024 10:36:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0436542C6B;
+	Fri, 20 Sep 2024 10:36:59 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 4C8E81BF599
- for <buildroot@lists.busybox.net>; Fri, 20 Sep 2024 10:36:13 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 412771BF599
+ for <buildroot@lists.busybox.net>; Fri, 20 Sep 2024 10:36:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id C0B1E84C91
+ by smtp1.osuosl.org (Postfix) with ESMTP id C890F84C41
  for <buildroot@lists.busybox.net>; Fri, 20 Sep 2024 10:36:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6D53xJe_jqyY for <buildroot@lists.busybox.net>;
- Fri, 20 Sep 2024 10:36:06 +0000 (UTC)
+ id Z7FmR0-GSFbc for <buildroot@lists.busybox.net>;
+ Fri, 20 Sep 2024 10:36:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C802384C41
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4CAB884C95
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id C802384C41
- for <buildroot@buildroot.org>; Fri, 20 Sep 2024 10:36:06 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4CAB884C95
+ for <buildroot@buildroot.org>; Fri, 20 Sep 2024 10:36:07 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C4C9084117; Fri, 20 Sep 2024 10:36:06 +0000 (UTC)
+ id 4942982DEB; Fri, 20 Sep 2024 10:36:07 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 20 Sep 2024 12:33:40 +0200
+Date: Fri, 20 Sep 2024 12:33:47 +0200
 X-Git-Refname: refs/heads/2024.08.x
-X-Git-Oldrev: ba222b59766de993c4329de82ac4414e5bd32b8b
-X-Git-Newrev: 511b426a75496820665a345cefa5fea700cd8b58
+X-Git-Oldrev: bd4c654b78a51f7c32d765e7329cc653affa4067
+X-Git-Newrev: e7ae0ea2d0aa9fd8de3a83a7fbef7dfed260a590
 X-Patchwork-Hint: ignore
-Message-Id: <20240920103606.C4C9084117@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.08.x]
- package/makedevs/makedevs.c: fix typos
+Message-Id: <20240920103607.4942982DEB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.08.x] package/nodejs-src: fix
+ convenient typo in patch description
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,46 +65,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=511b426a75496820665a345cefa5fea700cd8b58
+commit: https://git.buildroot.net/buildroot/commit/?id=e7ae0ea2d0aa9fd8de3a83a7fbef7dfed260a590
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.08.x
-
-And replace Couldn't with 'Could not' for clarity.
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 79d062ab99fef3d7bb5982ac99d9cfcbe6d0cd83)
+(cherry picked from commit 28a53f8f55019f67a6f840cb4cfb1eb14028f8d1)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/makedevs/makedevs.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ .../0004-lib-internal-modules-cjs-loader.js-adjust-default-pa.patch     | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/makedevs/makedevs.c b/package/makedevs/makedevs.c
-index a5c9c7d64d..be76155ab6 100644
---- a/package/makedevs/makedevs.c
-+++ b/package/makedevs/makedevs.c
-@@ -165,7 +165,7 @@ int bb_make_directory (char *path, long mode, int flags)
- 			}
- 			/* Since the directory exists, don't attempt to change
- 			 * permissions if it was the full target.  Note that
--			 * this is not an error conditon. */
-+			 * this is not an error condition. */
- 			if (!c) {
- 				umask(mask);
- 				return 0;
-@@ -480,11 +480,11 @@ int main(int argc, char **argv)
- 	}
+diff --git a/package/nodejs/nodejs-src/0004-lib-internal-modules-cjs-loader.js-adjust-default-pa.patch b/package/nodejs/nodejs-src/0004-lib-internal-modules-cjs-loader.js-adjust-default-pa.patch
+index 25c26b43bd..ffb8e67a64 100644
+--- a/package/nodejs/nodejs-src/0004-lib-internal-modules-cjs-loader.js-adjust-default-pa.patch
++++ b/package/nodejs/nodejs-src/0004-lib-internal-modules-cjs-loader.js-adjust-default-pa.patch
+@@ -6,7 +6,7 @@ Subject: [PATCH] lib/internal/modules/cjs/loader.js: adjust default path to
  
- 	if (optind >= argc || (rootdir=argv[optind])==NULL) {
--		bb_error_msg_and_die("root directory not speficied");
-+		bb_error_msg_and_die("root directory not specified");
- 	}
+ NPM installs modules in /usr/lib/node_modules/, but by default NodeJS
+ searches for them only in /usr/lib/node/. We could also set the
+-NODE_PATH environment variable, but it is more convienient to have
++NODE_PATH environment variable, but it is more convenient to have
+ NodeJS configured by default to find modules where they are installed.
  
- 	if (chdir(rootdir) != 0) {
--		bb_perror_msg_and_die("Couldnt chdir to %s", rootdir);
-+		bb_perror_msg_and_die("Could not chdir to %s", rootdir);
- 	}
- 
- 	umask(0);
+ This issue is discussed at
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
