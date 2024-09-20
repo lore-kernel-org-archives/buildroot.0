@@ -4,74 +4,92 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8378CF58E7
-	for <buildroot@archiver.kernel.org>; Fri, 20 Sep 2024 08:01:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2130ECF58E5
+	for <buildroot@archiver.kernel.org>; Fri, 20 Sep 2024 08:30:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id F2DF84143F;
-	Fri, 20 Sep 2024 08:01:19 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A9329400F1;
+	Fri, 20 Sep 2024 08:30:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cT9S8gxS51DS; Fri, 20 Sep 2024 08:01:18 +0000 (UTC)
+ id 7St_ByZNtclI; Fri, 20 Sep 2024 08:30:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 84DC8412A8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 749CA402C6
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 84DC8412A8;
-	Fri, 20 Sep 2024 08:01:18 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 3BBB61BF82C
- for <buildroot@lists.busybox.net>; Fri, 20 Sep 2024 08:01:17 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 749CA402C6;
+	Fri, 20 Sep 2024 08:30:47 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 5B0CF1BF39E
+ for <buildroot@lists.busybox.net>; Fri, 20 Sep 2024 08:30:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 2B6BD84C23
- for <buildroot@lists.busybox.net>; Fri, 20 Sep 2024 08:01:17 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 56247402C6
+ for <buildroot@lists.busybox.net>; Fri, 20 Sep 2024 08:30:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qawv1NyHO9fd for <buildroot@lists.busybox.net>;
- Fri, 20 Sep 2024 08:01:16 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id HCbTG1oLMxLa for <buildroot@lists.busybox.net>;
+ Fri, 20 Sep 2024 08:30:45 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2001:660:530d:201::44; helo=mailgw-out1.grenoble.cnrs.fr;
- envelope-from=bonet@grenoble.cnrs.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org A997584C1E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A997584C1E
-Received: from mailgw-out1.grenoble.cnrs.fr (mailgw-out1.grenoble.cnrs.fr
- [IPv6:2001:660:530d:201::44])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A997584C1E
- for <buildroot@buildroot.org>; Fri, 20 Sep 2024 08:01:14 +0000 (UTC)
-Received: from [147.173.65.159] (unknown [147.173.65.159])
- (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
- key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
- (No client certificate requested)
- by mailgw-out1.grenoble.cnrs.fr (Postfix) with ESMTPSA id 5D8E5C1B4D
- for <buildroot@buildroot.org>; Fri, 20 Sep 2024 10:01:11 +0200 (CEST)
-Message-ID: <e35baa79-3f30-4a85-b811-d3d662e6f96a@grenoble.cnrs.fr>
-Date: Fri, 20 Sep 2024 10:01:10 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
+ client-ip=2607:f8b0:4864:20::631; helo=mail-pl1-x631.google.com;
+ envelope-from=hehaorui1999@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 39716400F1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 39716400F1
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com
+ [IPv6:2607:f8b0:4864:20::631])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 39716400F1
+ for <buildroot@buildroot.org>; Fri, 20 Sep 2024 08:30:45 +0000 (UTC)
+Received: by mail-pl1-x631.google.com with SMTP id
+ d9443c01a7336-206bd1c6ccdso18240555ad.3
+ for <buildroot@buildroot.org>; Fri, 20 Sep 2024 01:30:45 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1726821043; x=1727425843;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=VYAjOoiULzSPcSKkEMV4aIIaimWVQVCVueOTQb+l9sE=;
+ b=BbuP3jhkPS4QLTpsBDk1MWpS7FEEQ2U8qFSugNMl+FWDJo2e3+jg4af18efD4f+WmY
+ HVYdIu7hghHfRECUaoQ2b3ejWuVm5AoqAPXxfKKJZTrsYDahwnNfDAmmZ7iWM6AiMjXn
+ qgUbJa+HYRnOybbcSLOhDidjOXQa/pAzstKZu6Wj7QqZqSy7fKmO5isIW0b/EBb7GMfa
+ p/rGjvXNQywuTYkXpSzfPpnd20Bv2hmzvrm4gVUkGQXrXYGD1SLz2zMHQYzVnmIlPQtW
+ 5TrYVlImp2dV0gGDj2KDWwHCZb9DHOlRQd151Q1eI8p5uurDr9CamMXdos1QfGLhA53m
+ P3BQ==
+X-Gm-Message-State: AOJu0Yyd1IkAC5gX5dcZFrNLMeFOwN8GlQC+oamAXhiI48m7LFZkF/1v
+ L2W8IGvZPU8IedWQMAa/01aNbkz76goH9eHPP+NZURYUnlSuKv09U/2f3W05kRA=
+X-Google-Smtp-Source: AGHT+IFanGpxUdeIeMPLw96XG3cnCKG8bJfbJmCYAIAPYWfmV0GB4ODpfhSARZa+hMRAMEZ955LCvw==
+X-Received: by 2002:a17:903:2c8:b0:207:625:cf04 with SMTP id
+ d9443c01a7336-208d8565119mr34054715ad.52.1726821043339; 
+ Fri, 20 Sep 2024 01:30:43 -0700 (PDT)
+Received: from localhost.localdomain ([2001:da8:c800:d70a:0:740:2:113])
+ by smtp.gmail.com with ESMTPSA id
+ d9443c01a7336-207945db10csm90817545ad.53.2024.09.20.01.30.41
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Fri, 20 Sep 2024 01:30:42 -0700 (PDT)
+From: "HE,HAORUI" <hehaorui1999@gmail.com>
 To: buildroot@buildroot.org
-References: <20240919202026.723863-1-yann.morin.1998@free.fr>
-Content-Language: en-US
-From: Edgar Bonet <bonet@grenoble.cnrs.fr>
-In-Reply-To: <20240919202026.723863-1-yann.morin.1998@free.fr>
+Date: Fri, 20 Sep 2024 16:30:37 +0800
+Message-ID: <20240920083037.958289-1-hehaorui1999@gmail.com>
+X-Mailer: git-send-email 2.46.1
+MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=grenoble.cnrs.fr; 
- s=202106-grenoble.cnrs.fr; t=1726819271;
- bh=3nrIIOehsqa9MrKS4vpOTzcZVnK+gSCK/YZjRwJoAHY=;
- h=Date:Subject:To:References:From:In-Reply-To:From;
- b=herR+LbML3dfYW4M6g/JxOsmUQa2SnXQoR4ptKHV35Un+9eD26yLbOtlW7BX0xhYX
- +QyGCVjfFZiAlIQHHRnmsAJ9Lk2hDBHhOfReuUrAUbrYR1nzmJbv+ugDHUw4GMMd4F
- Yw///WEWOlmFRqS6LEy+iPCvv0pBe08m2qSmaw65ajZkYeqVxuWKx8saqsvsYNzfqZ
- nWCZoU9E9mHUWIdcNnqr1L08bVHFDac3D/L6YJvUhmCk7PmHEUFqrOTjTklqzLSInE
- BdFBEP5hpBA/brPD8B7U5BXrlpkhHkFDrLSSN0639XESLYqcmODtY3xw/u0RnrsYs8
- OteTnOxsZs2IA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=grenoble.cnrs.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=gmail.com; s=20230601; t=1726821043; x=1727425843; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=VYAjOoiULzSPcSKkEMV4aIIaimWVQVCVueOTQb+l9sE=;
+ b=Xo+l/l7ujagl4FnFyU8xHuyXqp+lCqm9yHp2qFYiehRnCQ1Bi2MccYETEeJsPRjzkW
+ EN/3U+Juhh8y6bALmFcZrq9V6gC6aT4K164w5C09drN2Iyu42EHqqWspulheNSD8uLSM
+ IRujZXjn2eDZwHqXtoPT67oYivJXT61TcKhBAKnGa59Qp65SXF5rEt5SVp2OpQh4q+h5
+ 6i6J6tSX+isgU6HgJWOoxSKUMOI4pzlGEf6Nr4IaPFoMes7BvzX0D+NDozilb4fEUyOf
+ qr/m0/g+UHnQ2smjmWagASoUSVyTBcki4bMb0pg1YRNUOAt86iTihSMPcZaxE8qO84xQ
+ amdA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=grenoble.cnrs.fr header.i=@grenoble.cnrs.fr
- header.a=rsa-sha256 header.s=202106-grenoble.cnrs.fr header.b=herR+LbM
-Subject: Re: [Buildroot] [PATCH] configs: regenerate all defconfigs
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=Xo+l/l7u
+Subject: [Buildroot] [PATCH] package/openjdk: fix typo in help text of
+ openjdk zero
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,44 +101,34 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: "HE, HAORUI" <hehaorui1999@gmail.com>,
+ Tudor Holton <buildroot@tudorholton.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Buildroot people!
+Signed-off-by: HE,HAORUI <hehaorui1999@gmail.com>
+---
+ package/openjdk/Config.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Yesterday, Yann E. MORIN wrote:
-> This is a mechanical change, achieved by running:
->     $ for cfg in configs/*_defconfig; do
->         (make "${cfg##*/}" && make savedefconfig) || break
->       done
+diff --git a/package/openjdk/Config.in b/package/openjdk/Config.in
+index 25d6960ecf..78775370ca 100644
+--- a/package/openjdk/Config.in
++++ b/package/openjdk/Config.in
+@@ -148,7 +148,7 @@ config BR2_PACKAGE_OPENJDK_JVM_VARIANT_ZERO
+ 	select BR2_PACKAGE_LIBFFI
+ 	help
+ 	  A non-assembler variant with wide arch support, however
+-	  performance is less then client/server.
++	  performance is less than client/server.
+ 
+ 	  http://openjdk.java.net/projects/zero
+ 
+-- 
+2.46.1
 
-The problem with using `make savedefconfig` for this is that, if we are
-using the latest supported kernel headers (currently 6.10), the line
-
-    BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_10=y
-
-gets removed from the defconfig. This is an issue because, whenever
-Buildroot adds support for headers 6.11, the defconfig will
-automatically default to those. In fact,
-docs/manual/adding-board-support.adoc explicitly asks contributors to:
-
-    set the custom kernel headers series to match your kernel version
-    (+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_*+).
-
-In this patch, the issue affects six defconfigs, namely:
-
-    beagleplay_defconfig
-    imx8mn_bsh_smm_s2_defconfig
-    imx8mn_bsh_smm_s2_pro_defconfig
-    mx6udoo_defconfig
-    ti_am62x_sk_defconfig
-    ti_am64x_sk_defconfig
-
-Regards,
-
-Edgar.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
