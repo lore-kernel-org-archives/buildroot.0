@@ -4,61 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D901CCF3968
-	for <buildroot@archiver.kernel.org>; Fri, 20 Sep 2024 10:32:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95A5BCF58EA
+	for <buildroot@archiver.kernel.org>; Fri, 20 Sep 2024 10:34:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A0C1A42B82;
-	Fri, 20 Sep 2024 10:32:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 594A4402AD;
+	Fri, 20 Sep 2024 10:34:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id x46pOk1BERzM; Fri, 20 Sep 2024 10:32:52 +0000 (UTC)
+ id ne2c8YLJ5CDA; Fri, 20 Sep 2024 10:34:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 052A442B8C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 29CBA403C2
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 052A442B8C;
-	Fri, 20 Sep 2024 10:32:51 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 894C11BF599
- for <buildroot@lists.busybox.net>; Fri, 20 Sep 2024 10:32:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 29CBA403C2;
+	Fri, 20 Sep 2024 10:34:54 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id B2E621BF599
+ for <buildroot@lists.busybox.net>; Fri, 20 Sep 2024 10:34:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 78E236077B
- for <buildroot@lists.busybox.net>; Fri, 20 Sep 2024 10:32:42 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9DECE40403
+ for <buildroot@lists.busybox.net>; Fri, 20 Sep 2024 10:34:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NKnJbOfTNMyo for <buildroot@lists.busybox.net>;
- Fri, 20 Sep 2024 10:32:41 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::221;
- helo=relay1-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id vBkY5NmSa4fq for <buildroot@lists.busybox.net>;
+ Fri, 20 Sep 2024 10:34:51 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 5AA1E60772
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5AA1E60772
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 5AA1E60772
- for <buildroot@buildroot.org>; Fri, 20 Sep 2024 10:32:40 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 68956240008;
- Fri, 20 Sep 2024 10:32:39 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1srawI-00H38g-1I;
- Fri, 20 Sep 2024 12:32:38 +0200
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org ABD42402AD
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id ABD42402AD
+ for <buildroot@buildroot.org>; Fri, 20 Sep 2024 10:34:51 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 957FA83DFA; Fri, 20 Sep 2024 10:34:51 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-References: <20240914095501.194725-1-arnout@mind.be>
- <20240914095501.194725-4-arnout@mind.be>
-Date: Fri, 20 Sep 2024 12:32:38 +0200
-In-Reply-To: <20240914095501.194725-4-arnout@mind.be> (Arnout Vandecappelle
- via buildroot's message of "Sat, 14 Sep 2024 11:55:01 +0200")
-Message-ID: <877cb6ipix.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
-MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 4/4] package/pkg-generic.mk: remove set -x
- in mk_tar_gz call
+To: buildroot@buildroot.org
+Date: Fri, 20 Sep 2024 12:33:56 +0200
+X-Git-Refname: refs/heads/2024.02.x
+X-Git-Oldrev: 6733f2954cf3594b91821265f816e0ac692a3a54
+X-Git-Newrev: 278be2f2a81ffecd44480e12e816190bcf05eec2
+X-Patchwork-Hint: ignore
+Message-Id: <20240920103451.957FA83DFA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/linux-fusion: fix
+ version typo in patch description
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -70,22 +59,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Arnout" == Arnout Vandecappelle via buildroot <buildroot@buildroot.org> writes:
+commit: https://git.buildroot.net/buildroot/commit/?id=278be2f2a81ffecd44480e12e816190bcf05eec2
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
- > The set -x was added for debugging, and forgotten to be removed
- > afterwards. Remove it now.
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+(cherry picked from commit 42385486e72f845948512669c1a416c1c361dc8b)
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+---
+ package/linux-fusion/0001-fix-for-linux-4-and-above.patch | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- > Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-
-Committed to 2024.08.x, thanks.
-
--- 
-Bye, Peter Korsgaard
+diff --git a/package/linux-fusion/0001-fix-for-linux-4-and-above.patch b/package/linux-fusion/0001-fix-for-linux-4-and-above.patch
+index 689d9bf107..bc9e936510 100644
+--- a/package/linux-fusion/0001-fix-for-linux-4-and-above.patch
++++ b/package/linux-fusion/0001-fix-for-linux-4-and-above.patch
+@@ -1,6 +1,6 @@
+ Fix build for linux >= 4.x
+ 
+-Instead of relying on testing for '3' as the linux kernel major verison,
++Instead of relying on testing for '3' as the linux kernel major version,
+ check that it is 2.x to include the proper Makefile, otherwise forcibly
+ include the .26 Makefile, that is good for 3.x and 4.x too.
+ 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
