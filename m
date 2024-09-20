@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0EF4CCF3968
-	for <buildroot@archiver.kernel.org>; Fri, 20 Sep 2024 10:35:01 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C13A3CF58EA
+	for <buildroot@archiver.kernel.org>; Fri, 20 Sep 2024 10:35:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 5911C4040B;
-	Fri, 20 Sep 2024 10:34:59 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F26D642B75;
+	Fri, 20 Sep 2024 10:35:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Hl4FLMco4IXL; Fri, 20 Sep 2024 10:34:57 +0000 (UTC)
+ id tDmJD9l3WFTd; Fri, 20 Sep 2024 10:35:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AB16A405B5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org AF30542B84
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AB16A405B5;
-	Fri, 20 Sep 2024 10:34:56 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B665C1BF982
+	by smtp4.osuosl.org (Postfix) with ESMTP id AF30542B84;
+	Fri, 20 Sep 2024 10:34:59 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id BD5241BF983
  for <buildroot@lists.busybox.net>; Fri, 20 Sep 2024 10:34:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A5C6684C42
+ by smtp2.osuosl.org (Postfix) with ESMTP id B7F9740C08
  for <buildroot@lists.busybox.net>; Fri, 20 Sep 2024 10:34:52 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lEfB_cShHENT for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id L1TRQYIh7ZpN for <buildroot@lists.busybox.net>;
  Fri, 20 Sep 2024 10:34:51 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BA37E84BF7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org BA0584015F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id BA37E84BF7
+ by smtp2.osuosl.org (Postfix) with ESMTP id BA0584015F
  for <buildroot@buildroot.org>; Fri, 20 Sep 2024 10:34:51 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A53437FF41; Fri, 20 Sep 2024 10:34:51 +0000 (UTC)
+ id B257782386; Fri, 20 Sep 2024 10:34:51 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 20 Sep 2024 12:33:57 +0200
+Date: Fri, 20 Sep 2024 12:33:58 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 278be2f2a81ffecd44480e12e816190bcf05eec2
-X-Git-Newrev: f86b0d6d2a976d4242b928e969558f0b6c0fafbc
+X-Git-Oldrev: f86b0d6d2a976d4242b928e969558f0b6c0fafbc
+X-Git-Newrev: a37afd5c2e3cf1a1211d307a68e97f72ac006b1e
 X-Patchwork-Hint: ignore
-Message-Id: <20240920103451.A53437FF41@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/linux-zigbee: fix
- these typo in patch description
+Message-Id: <20240920103451.B257782386@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/lldpd: fix typo
+ in help text
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,30 +65,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f86b0d6d2a976d4242b928e969558f0b6c0fafbc
+commit: https://git.buildroot.net/buildroot/commit/?id=a37afd5c2e3cf1a1211d307a68e97f72ac006b1e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 1789b5feb66f909486cba40a9f0be44d9706b3d0)
+(cherry picked from commit 28cdb718eae4a91e4c42ab4202d789dc9d20a25e)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/linux-zigbee/0001-test-serial-Remove-test-serial.patch | 2 +-
+ package/lldpd/Config.in | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/linux-zigbee/0001-test-serial-Remove-test-serial.patch b/package/linux-zigbee/0001-test-serial-Remove-test-serial.patch
-index 8cd9d754c0..95e52b3c95 100644
---- a/package/linux-zigbee/0001-test-serial-Remove-test-serial.patch
-+++ b/package/linux-zigbee/0001-test-serial-Remove-test-serial.patch
-@@ -5,7 +5,7 @@ Subject: [PATCH] test-serial: Remove test-serial
+diff --git a/package/lldpd/Config.in b/package/lldpd/Config.in
+index 3e0446986f..04dd6040b6 100644
+--- a/package/lldpd/Config.in
++++ b/package/lldpd/Config.in
+@@ -4,7 +4,7 @@ config BR2_PACKAGE_LLDPD
+ 	select BR2_PACKAGE_LIBEVENT
+ 	help
+ 	  lldpd is a 802.1ab implementation (LLDP) to help you locate
+-	  neighbors of all your equipments.
++	  neighbors of all your equipment.
  
- This folders only contains python tests scripts which would force us to
- enable a dependency to host-python which seems kind of silly since
--theses are only tests scripts.
-+these are only tests scripts.
- 
- Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
- ---
+ 	  LLDP allows you to know exactly on which port is a server
+ 	  (and reciprocally).
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
