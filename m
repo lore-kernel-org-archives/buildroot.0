@@ -4,50 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A3444CF58E4
-	for <buildroot@archiver.kernel.org>; Fri, 20 Sep 2024 07:53:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A8378CF58E7
+	for <buildroot@archiver.kernel.org>; Fri, 20 Sep 2024 08:01:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 50D43414DB;
-	Fri, 20 Sep 2024 07:53:43 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id F2DF84143F;
+	Fri, 20 Sep 2024 08:01:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9LcTCJZ_60Gi; Fri, 20 Sep 2024 07:53:42 +0000 (UTC)
+ id cT9S8gxS51DS; Fri, 20 Sep 2024 08:01:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 927A741352
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 84DC8412A8
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 927A741352;
-	Fri, 20 Sep 2024 07:53:41 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 84DC8412A8;
+	Fri, 20 Sep 2024 08:01:18 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id DFA091BF82C
- for <buildroot@lists.busybox.net>; Fri, 20 Sep 2024 07:53:33 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3BBB61BF82C
+ for <buildroot@lists.busybox.net>; Fri, 20 Sep 2024 08:01:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id BC59084BDC
- for <buildroot@lists.busybox.net>; Fri, 20 Sep 2024 07:53:31 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2B6BD84C23
+ for <buildroot@lists.busybox.net>; Fri, 20 Sep 2024 08:01:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mjfY4ppFOiZ5 for <buildroot@lists.busybox.net>;
- Fri, 20 Sep 2024 07:53:30 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5385884BD8
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5385884BD8
- for <buildroot@buildroot.org>; Fri, 20 Sep 2024 07:53:30 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 41A2883E6F; Fri, 20 Sep 2024 07:53:30 +0000 (UTC)
-From: Peter Korsgaard <peter@korsgaard.com>
+ id qawv1NyHO9fd for <buildroot@lists.busybox.net>;
+ Fri, 20 Sep 2024 08:01:16 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2001:660:530d:201::44; helo=mailgw-out1.grenoble.cnrs.fr;
+ envelope-from=bonet@grenoble.cnrs.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org A997584C1E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A997584C1E
+Received: from mailgw-out1.grenoble.cnrs.fr (mailgw-out1.grenoble.cnrs.fr
+ [IPv6:2001:660:530d:201::44])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A997584C1E
+ for <buildroot@buildroot.org>; Fri, 20 Sep 2024 08:01:14 +0000 (UTC)
+Received: from [147.173.65.159] (unknown [147.173.65.159])
+ (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+ key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+ (No client certificate requested)
+ by mailgw-out1.grenoble.cnrs.fr (Postfix) with ESMTPSA id 5D8E5C1B4D
+ for <buildroot@buildroot.org>; Fri, 20 Sep 2024 10:01:11 +0200 (CEST)
+Message-ID: <e35baa79-3f30-4a85-b811-d3d662e6f96a@grenoble.cnrs.fr>
+Date: Fri, 20 Sep 2024 10:01:10 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
 To: buildroot@buildroot.org
-Date: Fri, 20 Sep 2024 09:35:45 +0200
-X-Git-Refname: refs/heads/2024.08.x
-X-Git-Oldrev: 0b0c59a4d015affee54a6af4efb4ea0894e08a12
-X-Git-Newrev: 4a161d729bae688fd577e7754815b6e1ccf82f9d
-X-Patchwork-Hint: ignore
-Message-Id: <20240920075330.41A2883E6F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.08.x] package/genpart: change
- homepage and download location
+References: <20240919202026.723863-1-yann.morin.1998@free.fr>
+Content-Language: en-US
+From: Edgar Bonet <bonet@grenoble.cnrs.fr>
+In-Reply-To: <20240919202026.723863-1-yann.morin.1998@free.fr>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=grenoble.cnrs.fr; 
+ s=202106-grenoble.cnrs.fr; t=1726819271;
+ bh=3nrIIOehsqa9MrKS4vpOTzcZVnK+gSCK/YZjRwJoAHY=;
+ h=Date:Subject:To:References:From:In-Reply-To:From;
+ b=herR+LbML3dfYW4M6g/JxOsmUQa2SnXQoR4ptKHV35Un+9eD26yLbOtlW7BX0xhYX
+ +QyGCVjfFZiAlIQHHRnmsAJ9Lk2hDBHhOfReuUrAUbrYR1nzmJbv+ugDHUw4GMMd4F
+ Yw///WEWOlmFRqS6LEy+iPCvv0pBe08m2qSmaw65ajZkYeqVxuWKx8saqsvsYNzfqZ
+ nWCZoU9E9mHUWIdcNnqr1L08bVHFDac3D/L6YJvUhmCk7PmHEUFqrOTjTklqzLSInE
+ BdFBEP5hpBA/brPD8B7U5BXrlpkhHkFDrLSSN0639XESLYqcmODtY3xw/u0RnrsYs8
+ OteTnOxsZs2IA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=grenoble.cnrs.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=grenoble.cnrs.fr header.i=@grenoble.cnrs.fr
+ header.a=rsa-sha256 header.s=202106-grenoble.cnrs.fr header.b=herR+LbM
+Subject: Re: [Buildroot] [PATCH] configs: regenerate all defconfigs
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,61 +83,44 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4a161d729bae688fd577e7754815b6e1ccf82f9d
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.08.x
+Hello Buildroot people!
 
-The old homepage is no more, and the download location has changed.
-Update both to the new download location.
+Yesterday, Yann E. MORIN wrote:
+> This is a mechanical change, achieved by running:
+>     $ for cfg in configs/*_defconfig; do
+>         (make "${cfg##*/}" && make savedefconfig) || break
+>       done
 
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 629c6254ce158f3a15f11149a65066473c17fbd9)
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/genpart/Config.in      | 2 +-
- package/genpart/Config.in.host | 2 +-
- package/genpart/genpart.mk     | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+The problem with using `make savedefconfig` for this is that, if we are
+using the latest supported kernel headers (currently 6.10), the line
 
-diff --git a/package/genpart/Config.in b/package/genpart/Config.in
-index 64288452ea..b8b8c16f66 100644
---- a/package/genpart/Config.in
-+++ b/package/genpart/Config.in
-@@ -5,4 +5,4 @@ config BR2_PACKAGE_GENPART
- 	  line arguments and dump it to stdout. No CHS magic is done,
- 	  only lba entries are filled out.
- 
--	  http://www.pengutronix.de/software/genpart/index_en.html
-+	  https://public.pengutronix.de/software/genpart
-diff --git a/package/genpart/Config.in.host b/package/genpart/Config.in.host
-index d8b9eb61b0..f821bc9e8b 100644
---- a/package/genpart/Config.in.host
-+++ b/package/genpart/Config.in.host
-@@ -5,4 +5,4 @@ config BR2_PACKAGE_HOST_GENPART
- 	  line arguments and dump it to stdout. No CHS magic is done,
- 	  only lba entries are filled out.
- 
--	  http://www.pengutronix.de/software/genpart/index_en.html
-+	  https://public.pengutronix.de/software/genpart
-diff --git a/package/genpart/genpart.mk b/package/genpart/genpart.mk
-index 2aa2c710c0..b48a0ac358 100644
---- a/package/genpart/genpart.mk
-+++ b/package/genpart/genpart.mk
-@@ -6,7 +6,7 @@
- 
- GENPART_VERSION = 1.0.2
- GENPART_SOURCE = genpart-$(GENPART_VERSION).tar.bz2
--GENPART_SITE = http://www.pengutronix.de/software/genpart/download
-+GENPART_SITE = https://public.pengutronix.de/software/genpart
- # genpart has no license embedded in its source release.
- # However, their project page mentions:
- #   > This community portal offers an overview about our own OSS
+    BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_10=y
+
+gets removed from the defconfig. This is an issue because, whenever
+Buildroot adds support for headers 6.11, the defconfig will
+automatically default to those. In fact,
+docs/manual/adding-board-support.adoc explicitly asks contributors to:
+
+    set the custom kernel headers series to match your kernel version
+    (+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_*+).
+
+In this patch, the issue affects six defconfigs, namely:
+
+    beagleplay_defconfig
+    imx8mn_bsh_smm_s2_defconfig
+    imx8mn_bsh_smm_s2_pro_defconfig
+    mx6udoo_defconfig
+    ti_am62x_sk_defconfig
+    ti_am64x_sk_defconfig
+
+Regards,
+
+Edgar.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
