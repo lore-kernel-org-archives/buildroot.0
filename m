@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 75B61C78821
-	for <buildroot@archiver.kernel.org>; Fri, 20 Sep 2024 10:35:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 896CAC78821
+	for <buildroot@archiver.kernel.org>; Fri, 20 Sep 2024 10:36:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 38B5E42C39;
-	Fri, 20 Sep 2024 10:35:51 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4BD23402AD;
+	Fri, 20 Sep 2024 10:36:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lvzEaf62Sg9y; Fri, 20 Sep 2024 10:35:50 +0000 (UTC)
+ id PkGSzS9d4c4S; Fri, 20 Sep 2024 10:36:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0555242CBC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 0A0A642BBE
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 0555242CBC;
-	Fri, 20 Sep 2024 10:35:49 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 228231BF599
- for <buildroot@lists.busybox.net>; Fri, 20 Sep 2024 10:35:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 0A0A642BBE;
+	Fri, 20 Sep 2024 10:36:09 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 2F10B1BF982
+ for <buildroot@lists.busybox.net>; Fri, 20 Sep 2024 10:36:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D8EA284BF7
- for <buildroot@lists.busybox.net>; Fri, 20 Sep 2024 10:34:55 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 27EF942C3D
+ for <buildroot@lists.busybox.net>; Fri, 20 Sep 2024 10:36:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id dVROMXItvqAj for <buildroot@lists.busybox.net>;
- Fri, 20 Sep 2024 10:34:52 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id siUyFVnYFDIw for <buildroot@lists.busybox.net>;
+ Fri, 20 Sep 2024 10:36:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E223B84BFA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3044E42B84
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id E223B84BFA
- for <buildroot@buildroot.org>; Fri, 20 Sep 2024 10:34:51 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 3044E42B84
+ for <buildroot@buildroot.org>; Fri, 20 Sep 2024 10:36:06 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DD41F83DFA; Fri, 20 Sep 2024 10:34:51 +0000 (UTC)
+ id 2B34384117; Fri, 20 Sep 2024 10:36:06 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 20 Sep 2024 12:34:00 +0200
-X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: b3651bcde1a9972cc36c6eb22e79ba2fdc50104d
-X-Git-Newrev: 1237764fadb10a74726d6a12bc67a98ea3447ac9
+Date: Fri, 20 Sep 2024 12:29:33 +0200
+X-Git-Refname: refs/heads/2024.08.x
+X-Git-Oldrev: 5db78454b230652164db6e2a5eef91f65f891b5e
+X-Git-Newrev: f70be8d584004524bda546735ac14f3fbc30cbf1
 X-Patchwork-Hint: ignore
-Message-Id: <20240920103451.DD41F83DFA@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/luabitop: fix
- typo in hash comment
+Message-Id: <20240920103606.2B34384117@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.08.x] package/pkg-generic.mk:
+ legal-info: create redist directory for override
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,27 +65,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1237764fadb10a74726d6a12bc67a98ea3447ac9
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=f70be8d584004524bda546735ac14f3fbc30cbf1
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.08.x
 
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+Commit aacca7f0639bac6bb3fb262d0b1738c4387edeb0 introduced the
+possibility to also create tarballs for packages that are local or
+overridden (i.e., with a custom version). However, it forgot to create
+the directory in which that tarball is stored. The original patch did,
+but it was reworked by Arnout to use mk_tar_gz instead of tar directly,
+and the mkdir was dropped there.
+
+This failure was silent because the mk_tar_gz function doesn't exit on
+error. The following error was printed but ignored:
+
+    support/download/helpers: line 68: .../legal-info/sources/busybox-custom/busybox-custom.tar.gz: No such file or directory
+
+Create the directory before calling mk_tar_gz.
+
+Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+Cc: Nicolas Carrier <carrier.nicolas0@gmail.com>
+Reported-by: Yann E. MORIN <yann.morin@orange.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit f5ad59e948c5be1800bbfbaca7f4d83124221e2a)
+(cherry picked from commit d1945f143d4c8cfc541c17ec6ce03c45e2a09155)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/luabitop/luabitop.hash | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/pkg-generic.mk | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/package/luabitop/luabitop.hash b/package/luabitop/luabitop.hash
-index 02757a6b08..cfbf2b6516 100644
---- a/package/luabitop/luabitop.hash
-+++ b/package/luabitop/luabitop.hash
-@@ -1,4 +1,4 @@
- # computed by luarocks/buildroot
- sha256  fc7a8065a57462ee13bed7f95b0ab13f94ecd1bf846108c61ccf2c75548af26e  luabitop-1.0.2-1.src.rock
--# Locally calcuated
-+# Locally calculated
- sha256  25e331120d0c2f95fa2ac6e439ca920f0a4362c366a4c7382d843113743a3ba5  LuaBitOp-1.0.2/README
+diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
+index 171163dcb4..69352b3730 100644
+--- a/package/pkg-generic.mk
++++ b/package/pkg-generic.mk
+@@ -1163,6 +1163,7 @@ ifneq ($$($(2)_OVERRIDE_SRCDIR),)
+ 	$$(Q)rsync -au --chmod=u=rwX,go=rX $$(RSYNC_VCS_EXCLUSIONS) \
+ 		$(call qstrip,$$($(2)_OVERRIDE_SRCDIR))/ \
+ 		 $$($(2)_BUILDDIR)/.legal-info-rsync/
++	$$(Q)mkdir -p $$($(2)_REDIST_SOURCES_DIR)
+ 	$$(Q). support/download/helpers; set -x; cd $$($(2)_BUILDDIR); TAR=$$(TAR) mk_tar_gz \
+ 		$$($(2)_BUILDDIR)/.legal-info-rsync/ \
+ 		$$($(2)_BASENAME_RAW) \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
