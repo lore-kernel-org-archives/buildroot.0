@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 416CEC78820
-	for <buildroot@archiver.kernel.org>; Fri, 20 Sep 2024 10:36:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 15556C78821
+	for <buildroot@archiver.kernel.org>; Fri, 20 Sep 2024 10:36:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 01E9B42C4A;
-	Fri, 20 Sep 2024 10:36:17 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9B3B142C2F;
+	Fri, 20 Sep 2024 10:36:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 886f-gQWqsBL; Fri, 20 Sep 2024 10:36:15 +0000 (UTC)
+ id xfB5x6FKYrRl; Fri, 20 Sep 2024 10:36:19 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 85D8C42CD1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1B5C142CE4
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 85D8C42CD1;
-	Fri, 20 Sep 2024 10:36:15 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 218061BF599
+	by smtp4.osuosl.org (Postfix) with ESMTP id 1B5C142CE4;
+	Fri, 20 Sep 2024 10:36:19 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 290E01BF983
  for <buildroot@lists.busybox.net>; Fri, 20 Sep 2024 10:36:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 417E142B84
+ by smtp3.osuosl.org (Postfix) with ESMTP id 336FA61630
  for <buildroot@lists.busybox.net>; Fri, 20 Sep 2024 10:36:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VF8tRo6iKiIt for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id OHkSPhhUa2Ma for <buildroot@lists.busybox.net>;
  Fri, 20 Sep 2024 10:36:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4A98442B90
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8562661631
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4A98442B90
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8562661631
  for <buildroot@buildroot.org>; Fri, 20 Sep 2024 10:36:06 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 38DCF8411D; Fri, 20 Sep 2024 10:36:06 +0000 (UTC)
+ id 734438411D; Fri, 20 Sep 2024 10:36:06 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 20 Sep 2024 12:31:29 +0200
+Date: Fri, 20 Sep 2024 12:33:35 +0200
 X-Git-Refname: refs/heads/2024.08.x
-X-Git-Oldrev: f70be8d584004524bda546735ac14f3fbc30cbf1
-X-Git-Newrev: edde5c1a44b995036c1173ad2040f1a8be8d323a
+X-Git-Oldrev: 027850d2e5702f3c9d6da6862c4aed25856b62d0
+X-Git-Newrev: 3c34715aa9d82f36c271fb9dd70234cdee879814
 X-Patchwork-Hint: ignore
-Message-Id: <20240920103606.38DCF8411D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.08.x] package/pkg-generic.mk:
- legal-info: make sure host-tar is available
+Message-Id: <20240920103606.734438411D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.08.x] package/linux-zigbee: fix
+ these typo in patch description
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,64 +65,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=edde5c1a44b995036c1173ad2040f1a8be8d323a
+commit: https://git.buildroot.net/buildroot/commit/?id=3c34715aa9d82f36c271fb9dd70234cdee879814
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.08.x
 
-Commit aacca7f0639bac6bb3fb262d0b1738c4387edeb0 introduced the
-possibility to also create tarballs for packages that are local or
-overridden (i.e., with a custom version). However, it doesn't work
-correctly for PPD, because the PPD-host-tar and gzip are not available.
-
-This failure was silent because the mk_tar_gz function doesn't exit on
-error. The following error was printed but ignored:
-
-    support/download/helpers: line 62: .../per-package/busybox/host/bin/tar: No such file or directory
-
-Call prepare-per-package-directory before calling mk_tar_gz which uses
-it. Note that we use only tar and gzip here, not all of
-DOWNLOAD_DEPENDENCIES, because tar and gzip are the only ones we really
-use.
-
-Also add this dependency to the legal-info target. We use an order-only
-dependency even though that makes not difference for a phony target, but
-this makes it similar to how it's done for the stamp targets. Note also
-that this dependency is redundant, because there is already a dependency
-on the foo-rsync target which does depend on DOWNLOAD_DEPENDENCIES. We
-still add the dependency explicitly in case things change with the
-foo-rsync target in the future.
-
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
-Cc: Nicolas Carrier <carrier.nicolas0@gmail.com>
-Reported-by: Yann E. MORIN <yann.morin@orange.com>
+Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit f4681fc417a057f46f00ac95474251944843a050)
+(cherry picked from commit 1789b5feb66f909486cba40a9f0be44d9706b3d0)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/pkg-generic.mk | 4 ++++
- 1 file changed, 4 insertions(+)
+ package/linux-zigbee/0001-test-serial-Remove-test-serial.patch | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/pkg-generic.mk b/package/pkg-generic.mk
-index 69352b3730..48cc8ec800 100644
---- a/package/pkg-generic.mk
-+++ b/package/pkg-generic.mk
-@@ -1008,6 +1008,9 @@ $(1)-rsync:		$$($(2)_TARGET_RSYNC)
+diff --git a/package/linux-zigbee/0001-test-serial-Remove-test-serial.patch b/package/linux-zigbee/0001-test-serial-Remove-test-serial.patch
+index 8cd9d754c0..95e52b3c95 100644
+--- a/package/linux-zigbee/0001-test-serial-Remove-test-serial.patch
++++ b/package/linux-zigbee/0001-test-serial-Remove-test-serial.patch
+@@ -5,7 +5,7 @@ Subject: [PATCH] test-serial: Remove test-serial
  
- $(1)-source:
- $(1)-legal-source:
-+# For override, legal-info uses host-tar and host-gzip
-+$(1)-legal-info: | $(BR2_GZIP_HOST_DEPENDENCY) $(BR2_TAR_HOST_DEPENDENCY)
-+
+ This folders only contains python tests scripts which would force us to
+ enable a dependency to host-python which seems kind of silly since
+-theses are only tests scripts.
++these are only tests scripts.
  
- $(1)-external-deps:
- 	@echo "file://$$($(2)_OVERRIDE_SRCDIR)"
-@@ -1163,6 +1166,7 @@ ifneq ($$($(2)_OVERRIDE_SRCDIR),)
- 	$$(Q)rsync -au --chmod=u=rwX,go=rX $$(RSYNC_VCS_EXCLUSIONS) \
- 		$(call qstrip,$$($(2)_OVERRIDE_SRCDIR))/ \
- 		 $$($(2)_BUILDDIR)/.legal-info-rsync/
-+	$$(call prepare-per-package-directory,$$(BR2_GZIP_HOST_DEPENDENCY) $$(BR2_TAR_HOST_DEPENDENCY))
- 	$$(Q)mkdir -p $$($(2)_REDIST_SOURCES_DIR)
- 	$$(Q). support/download/helpers; set -x; cd $$($(2)_BUILDDIR); TAR=$$(TAR) mk_tar_gz \
- 		$$($(2)_BUILDDIR)/.legal-info-rsync/ \
+ Signed-off-by: Maxime Hadjinlian <maxime.hadjinlian@gmail.com>
+ ---
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
