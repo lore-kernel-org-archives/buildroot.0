@@ -4,58 +4,58 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BB821CF9C69
-	for <buildroot@archiver.kernel.org>; Fri, 20 Sep 2024 21:29:12 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8DD7BCF9C68
+	for <buildroot@archiver.kernel.org>; Fri, 20 Sep 2024 21:29:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8807B40354;
-	Fri, 20 Sep 2024 21:29:12 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 613A0409F1;
+	Fri, 20 Sep 2024 21:29:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZTxSTVQ-qsMU; Fri, 20 Sep 2024 21:29:11 +0000 (UTC)
+ id TIch5iSqdi7a; Fri, 20 Sep 2024 21:29:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 77F4B41728
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2A930416C0
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 77F4B41728;
-	Fri, 20 Sep 2024 21:29:10 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E11E71BF5A6
- for <buildroot@lists.busybox.net>; Fri, 20 Sep 2024 21:28:57 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 2A930416C0;
+	Fri, 20 Sep 2024 21:29:14 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 769131BF5A6
+ for <buildroot@lists.busybox.net>; Fri, 20 Sep 2024 21:28:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D06FB6061E
- for <buildroot@lists.busybox.net>; Fri, 20 Sep 2024 21:28:57 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5F41E40567
+ for <buildroot@lists.busybox.net>; Fri, 20 Sep 2024 21:28:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JgzE8kTHlAAd for <buildroot@lists.busybox.net>;
- Fri, 20 Sep 2024 21:28:57 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.197;
- helo=relay5-d.mail.gandi.net; envelope-from=peko@korsgaard.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zVL4VcuJVhOu for <buildroot@lists.busybox.net>;
+ Fri, 20 Sep 2024 21:28:58 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.193;
+ helo=relay1-d.mail.gandi.net; envelope-from=peko@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org EACA2605AF
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EACA2605AF
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net
- [217.70.183.197])
- by smtp3.osuosl.org (Postfix) with ESMTPS id EACA2605AF
- for <buildroot@buildroot.org>; Fri, 20 Sep 2024 21:28:56 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 0091B1C0004;
- Fri, 20 Sep 2024 21:28:54 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 5542640253
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5542640253
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [217.70.183.193])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 5542640253
+ for <buildroot@buildroot.org>; Fri, 20 Sep 2024 21:28:57 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 961AA240002;
+ Fri, 20 Sep 2024 21:28:55 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peko@dell.be.48ers.dk>) id 1srlBN-00HCQM-0x;
- Fri, 20 Sep 2024 23:28:53 +0200
+ (envelope-from <peko@dell.be.48ers.dk>) id 1srlBO-00HCQk-0c;
+ Fri, 20 Sep 2024 23:28:54 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 20 Sep 2024 23:28:46 +0200
-Message-Id: <20240920212848.4099245-7-peter@korsgaard.com>
+Date: Fri, 20 Sep 2024 23:28:47 +0200
+Message-Id: <20240920212848.4099245-8-peter@korsgaard.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240920212848.4099245-1-peter@korsgaard.com>
 References: <20240920212848.4099245-1-peter@korsgaard.com>
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: [Buildroot] [PATCH 7/8] boot/shim/shim.mk: fix 'deactivate' typo
+Subject: [Buildroot] [PATCH 8/8] boot/uboot: fix typos
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -74,21 +74,35 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- boot/shim/shim.mk | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ boot/uboot/Config.in | 2 +-
+ boot/uboot/uboot.mk  | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/boot/shim/shim.mk b/boot/shim/shim.mk
-index ae57677320..f5b3d1cee6 100644
---- a/boot/shim/shim.mk
-+++ b/boot/shim/shim.mk
-@@ -22,7 +22,7 @@ SHIM_MAKE_OPTS = \
+diff --git a/boot/uboot/Config.in b/boot/uboot/Config.in
+index c4d052595c..dd80693614 100644
+--- a/boot/uboot/Config.in
++++ b/boot/uboot/Config.in
+@@ -150,7 +150,7 @@ config BR2_TARGET_UBOOT_DEFAULT_ENV_FILE
+ 	  Text file containing the variables to be used as the default
+ 	  environment in U-Boot.
  
- # shim has some assembly function that is not present in Thumb mode:
- # Error: selected processor does not support `mrc p15,0,r2,c9,c13,0' in Thumb mode
--# so, we desactivate Thumb mode
-+# so, we deactivate Thumb mode
- ifeq ($(BR2_ARM_INSTRUCTIONS_THUMB),y)
- SHIM_CFLAGS += -marm
+-	  If empty, let U-Boot generate the default enviromnent from the
++	  If empty, let U-Boot generate the default environment from the
+ 	  source code and other U-Boot configuration values, which is
+ 	  the default behaviour.
+ 
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index 2c04abc896..ab534a8b3a 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -54,7 +54,7 @@ endif
+ 
+ ifeq ($(BR2_TARGET_UBOOT_FORMAT_ELF),y)
+ UBOOT_BINS += u-boot
+-# To make elf usable for debuging on ARC use special target
++# To make elf usable for debugging on ARC use special target
+ ifeq ($(BR2_arc),y)
+ UBOOT_MAKE_TARGET += mdbtrick
  endif
 -- 
 2.39.2
