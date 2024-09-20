@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 63E30C78820
-	for <buildroot@archiver.kernel.org>; Fri, 20 Sep 2024 10:35:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 10163C78821
+	for <buildroot@archiver.kernel.org>; Fri, 20 Sep 2024 10:35:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 2CEDA42C0A;
-	Fri, 20 Sep 2024 10:35:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id C2CF042C5C;
+	Fri, 20 Sep 2024 10:35:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MbNSUL5kXqnL; Fri, 20 Sep 2024 10:35:29 +0000 (UTC)
+ id w2k5sjr_imHx; Fri, 20 Sep 2024 10:35:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E23D142C43
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CFFCA42C5E
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E23D142C43;
-	Fri, 20 Sep 2024 10:35:28 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id DD2711BF599
- for <buildroot@lists.busybox.net>; Fri, 20 Sep 2024 10:34:56 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id CFFCA42C5E;
+	Fri, 20 Sep 2024 10:35:31 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 66EE51BF599
+ for <buildroot@lists.busybox.net>; Fri, 20 Sep 2024 10:34:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5919084C23
- for <buildroot@lists.busybox.net>; Fri, 20 Sep 2024 10:34:53 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8539A40173
+ for <buildroot@lists.busybox.net>; Fri, 20 Sep 2024 10:34:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id en81XdvbCmzs for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wkti2xA9uWNt for <buildroot@lists.busybox.net>;
  Fri, 20 Sep 2024 10:34:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 60BFB84C37
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7EE5D4052F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 60BFB84C37
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7EE5D4052F
  for <buildroot@buildroot.org>; Fri, 20 Sep 2024 10:34:52 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5D7F682386; Fri, 20 Sep 2024 10:34:52 +0000 (UTC)
+ id 79374803B6; Fri, 20 Sep 2024 10:34:52 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 20 Sep 2024 12:34:06 +0200
+Date: Fri, 20 Sep 2024 12:34:07 +0200
 X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: c62ae9151ada7b235ce6e3e987e3af677916ba84
-X-Git-Newrev: cc3cdca938032cafcb183911aaf428362f9ad8c2
+X-Git-Oldrev: 9cd45deedebea15818f7b3b7b43fd3c8e37fdb67
+X-Git-Newrev: 5067cd99cc13a5b582092b148ab0bbbdcc625a85
 X-Patchwork-Hint: ignore
-Message-Id: <20240920103452.5D7F682386@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/net-tools: fix
- appropriate typo
+Message-Id: <20240920103452.79374803B6@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.02.x] package/nginx: fix
+ symmetric typo
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,30 +65,30 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=cc3cdca938032cafcb183911aaf428362f9ad8c2
+commit: https://git.buildroot.net/buildroot/commit/?id=5067cd99cc13a5b582092b148ab0bbbdcc625a85
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
-(cherry picked from commit 0353d684828acfac36321c3f84c27b61c5ec61f7)
+(cherry picked from commit acbff448619596895267e972ebc2bdad2b0fb12b)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/net-tools/net-tools.mk | 2 +-
+ package/nginx/nginx.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/package/net-tools/net-tools.mk b/package/net-tools/net-tools.mk
-index 0744bf18cb..03e1c73406 100644
---- a/package/net-tools/net-tools.mk
-+++ b/package/net-tools/net-tools.mk
-@@ -16,7 +16,7 @@ define NET_TOOLS_CONFIGURE_CMDS
- 	(cd $(@D); yes "" | ./configure.sh config.in )
- endef
+diff --git a/package/nginx/nginx.mk b/package/nginx/nginx.mk
+index d3b042c59b..7a5455def7 100644
+--- a/package/nginx/nginx.mk
++++ b/package/nginx/nginx.mk
+@@ -93,7 +93,7 @@ endif
+ # - pcre-jit          (want to rebuild pcre)
  
--# Enable I18N when appropiate
-+# Enable I18N when appropriate
- ifeq ($(BR2_SYSTEM_ENABLE_NLS),y)
- define NET_TOOLS_ENABLE_I18N
- 	$(SED) 's:I18N 0:I18N 1:' $(@D)/config.h
+ # Notes:
+-# * Feature/module option are *not* symetric.
++# * Feature/module option are *not* symmetric.
+ #   If a feature is on by default, only its --without-xxx option exists;
+ #   if a feature is off by default, only its --with-xxx option exists.
+ # * The configure script fails if unknown options are passed on the command
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
