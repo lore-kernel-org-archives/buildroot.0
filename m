@@ -4,68 +4,60 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ECB21CF3974
-	for <buildroot@archiver.kernel.org>; Fri, 20 Sep 2024 10:17:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B68F3CF58EA
+	for <buildroot@archiver.kernel.org>; Fri, 20 Sep 2024 10:32:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 708A540015;
-	Fri, 20 Sep 2024 10:17:21 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 60E2140190;
+	Fri, 20 Sep 2024 10:32:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Wm5TFAmx_qZQ; Fri, 20 Sep 2024 10:17:20 +0000 (UTC)
+ id iVO04sNrxOYk; Fri, 20 Sep 2024 10:32:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3018F40059
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 3B619401B3
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3018F40059;
-	Fri, 20 Sep 2024 10:17:20 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 3B619401B3;
+	Fri, 20 Sep 2024 10:32:29 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id EDF3D1BF599
- for <buildroot@lists.busybox.net>; Fri, 20 Sep 2024 10:17:17 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 76BAB1BF599
+ for <buildroot@lists.busybox.net>; Fri, 20 Sep 2024 10:32:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DC08742AC5
- for <buildroot@lists.busybox.net>; Fri, 20 Sep 2024 10:17:17 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 65025401B3
+ for <buildroot@lists.busybox.net>; Fri, 20 Sep 2024 10:32:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id y09iVcB9GsAP for <buildroot@lists.busybox.net>;
- Fri, 20 Sep 2024 10:17:16 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=60.248.80.70;
- helo=atcsqr.andestech.com; envelope-from=peterlin@andestech.com;
+ id ivaiNEWzhzCF for <buildroot@lists.busybox.net>;
+ Fri, 20 Sep 2024 10:32:26 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::221;
+ helo=relay1-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 43E3142AB5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 43E3142AB5
-Received: from Atcsqr.andestech.com (60-248-80-70.hinet-ip.hinet.net
- [60.248.80.70])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 43E3142AB5
- for <buildroot@buildroot.org>; Fri, 20 Sep 2024 10:17:14 +0000 (UTC)
-Received: from mail.andestech.com (ATCPCS34.andestech.com [10.0.1.134])
- by Atcsqr.andestech.com with ESMTPS id 48KAH0L0070241
- (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
- Fri, 20 Sep 2024 18:17:00 +0800 (+08)
- (envelope-from peterlin@andestech.com)
-Received: from APC323 (10.0.12.98) by ATCPCS34.andestech.com (10.0.1.134) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Fri, 20 Sep
- 2024 18:17:01 +0800
-Date: Fri, 20 Sep 2024 18:16:10 +0800
-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Message-ID: <Zu1LajtUwyZi8WdK@APC323>
-References: <20240910062635.4193650-1-peterlin@andestech.com>
- <20240910062635.4193650-2-peterlin@andestech.com>
- <20240914210030.20a1d5fe@windsurf>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org D68E840190
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D68E840190
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id D68E840190
+ for <buildroot@buildroot.org>; Fri, 20 Sep 2024 10:32:25 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 0D961240008;
+ Fri, 20 Sep 2024 10:32:21 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1sraw1-00H38I-0S;
+ Fri, 20 Sep 2024 12:32:21 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+References: <20240914095501.194725-1-arnout@mind.be>
+Date: Fri, 20 Sep 2024 12:32:21 +0200
+In-Reply-To: <20240914095501.194725-1-arnout@mind.be> (Arnout Vandecappelle
+ via buildroot's message of "Sat, 14 Sep 2024 11:54:58 +0200")
+Message-ID: <87jzf6ipje.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20240914210030.20a1d5fe@windsurf>
-User-Agent: Mutt/2.2.13 (00d56288) (2024-03-09)
-X-Originating-IP: [10.0.12.98]
-X-ClientProxiedBy: ATCPCS33.andestech.com (10.0.1.100) To
- ATCPCS34.andestech.com (10.0.1.134)
-X-DNSRBL: 
-X-MAIL: Atcsqr.andestech.com 48KAH0L0070241
+X-GND-Sasl: peter@korsgaard.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=andestech.com
-Subject: Re: [Buildroot] [PATCH v3 1/4] package/andes-spi-burn: new package
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: Re: [Buildroot] [PATCH 1/4] package/pkg-generic.mk: legal-info:
+ create redist directory for override
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,79 +69,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Yu-Chien Peter Lin via buildroot <buildroot@buildroot.org>
-Reply-To: Yu-Chien Peter Lin <peterlin@andestech.com>
-Cc: tim609@andestech.com, ycliang@andestech.com,
- Yu Chien Peter Lin via buildroot <buildroot@buildroot.org>
+Cc: Nicolas Carrier <carrier.nicolas0@gmail.com>,
+ "Yann E. MORIN" <yann.morin.1998@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Thomas,
+>>>>> "Arnout" == Arnout Vandecappelle via buildroot <buildroot@buildroot.org> writes:
 
-On Sat, Sep 14, 2024 at 09:00:30PM +0200, Thomas Petazzoni wrote:
-> [EXTERNAL MAIL]
-> 
-> Hello,
-> 
-> On Tue, 10 Sep 2024 14:26:32 +0800
-> Yu Chien Peter Lin via buildroot <buildroot@buildroot.org> wrote:
-> 
-> > Add a new package for Andes AE350 SPI_burn tool to program
-> > flash memory.
-> >
-> > Signed-off-by: Yu Chien Peter Lin <peterlin@andestech.com>
-> 
-> Thanks for this new iteration. Unfortunately, there's still something
-> that doesn't work. It fails to build for me with:
-> 
-> /usr/bin/ld: cannot find -lm: No such file or directory
-> /usr/bin/ld: cannot find -lc: No such file or directory
-> collect2: error: ld returned 1 exit status
-> make[1]: *** [Makefile_SPIburn_linux:25: SPI_burn] Error 1
-> 
-> that's because you link with -static, and I don't have the static
-> version of libc/libm installed on my machine.
-> 
-> So I wanted to patch that out, but the code is not even in the Github
-> repo at https://github.com/andestech/meta-andes/, so I can't create
-> a pull request. All you have published is a ZIP file with the source
-> code, buried deep inside the meta-andes Yocto layer repository. This
-> really isn't nice, and prevents people (like me) from actually
-> contributing fixes (like removing this bogus -static flag).
-> 
-> Could you instead create a proper Github repository for this project,
-> so that people can submit fixes, so that you can do tags, releases, etc.
+ > Commit aacca7f0639bac6bb3fb262d0b1738c4387edeb0 introduced the
+ > possibility to also create tarballs for packages that are local or
+ > overridden (i.e., with a custom version). However, it forgot to create
+ > the directory in which that tarball is stored. The original patch did,
+ > but it was reworked by Arnout to use mk_tar_gz instead of tar directly,
+ > and the mkdir was dropped there.
 
-Thank you for the review. I am in the process of creating a
-dedicated GitHub repository for SPI_burn and will send PATCHv4
-once the logistical issues are resolved.
+ > This failure was silent because the mk_tar_gz function doesn't exit on
+ > error. The following error was printed but ignored:
 
-> > diff --git a/DEVELOPERS b/DEVELOPERS
-> > index 069965680b..aab5a6c05f 100644
-> > --- a/DEVELOPERS
-> > +++ b/DEVELOPERS
-> > @@ -2487,6 +2487,7 @@ N:      Yu Chien Peter Lin <peterlin@andestech.com>
-> >  F:   board/andes
-> >  F:   configs/andes_ae350_45_defconfig
-> >  F:   package/kmon/
-> > +F:   package/andes-spi-burn/
-> 
-> Alphabetic ordering is not correct here.
+ >     support/download/helpers: line 68: .../legal-info/sources/busybox-custom/busybox-custom.tar.gz: No such file or directory
 
-Will fix, thanks.
+ > Create the directory before calling mk_tar_gz.
 
-Best regards,
-Peter Lin
+ > Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+ > Cc: Nicolas Carrier <carrier.nicolas0@gmail.com>
+ > Reported-by: Yann E. MORIN <yann.morin.1998@free.fr>
 
-> Best regards,
-> 
-> Thomas
-> --
-> Thomas Petazzoni, co-owner and CEO, Bootlin
-> Embedded Linux and Kernel engineering and training
-> https://bootlin.com
+Committed to 2024.08.x, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
