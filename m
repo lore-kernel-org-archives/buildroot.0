@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5D38FCF58E5
-	for <buildroot@archiver.kernel.org>; Fri, 20 Sep 2024 07:52:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E6D6DCF58E4
+	for <buildroot@archiver.kernel.org>; Fri, 20 Sep 2024 07:53:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A0F464010F;
-	Fri, 20 Sep 2024 07:52:23 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id AEBAE405BA;
+	Fri, 20 Sep 2024 07:53:33 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id lNWeuVmAXgG3; Fri, 20 Sep 2024 07:52:22 +0000 (UTC)
+ id 9ptVEK47WFe8; Fri, 20 Sep 2024 07:53:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 93D2640620
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 978DF405C5
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 93D2640620;
-	Fri, 20 Sep 2024 07:52:21 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 978DF405C5;
+	Fri, 20 Sep 2024 07:53:32 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 91DFF1BF982
- for <buildroot@lists.busybox.net>; Fri, 20 Sep 2024 07:52:17 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3BFF81BF82C
+ for <buildroot@lists.busybox.net>; Fri, 20 Sep 2024 07:53:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8157984BD3
- for <buildroot@lists.busybox.net>; Fri, 20 Sep 2024 07:52:17 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2B8C884C0A
+ for <buildroot@lists.busybox.net>; Fri, 20 Sep 2024 07:53:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id aDZEZHwmaL2H for <buildroot@lists.busybox.net>;
- Fri, 20 Sep 2024 07:52:16 +0000 (UTC)
+ id 5srUs7lEhsHB for <buildroot@lists.busybox.net>;
+ Fri, 20 Sep 2024 07:53:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 75A7C84BCD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6162284BDA
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 75A7C84BCD
- for <buildroot@buildroot.org>; Fri, 20 Sep 2024 07:52:16 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6162284BDA
+ for <buildroot@buildroot.org>; Fri, 20 Sep 2024 07:53:30 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5EA5883DFD; Fri, 20 Sep 2024 07:52:16 +0000 (UTC)
+ id 5013783E70; Fri, 20 Sep 2024 07:53:30 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Fri, 20 Sep 2024 09:36:04 +0200
-X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: 82fbd44f3f908423dfc2dd767bd60f4bd7e0d2cf
-X-Git-Newrev: 6d9ecca957d23d3b408a65cd1e31147f8a5a7bf7
+Date: Fri, 20 Sep 2024 09:38:43 +0200
+X-Git-Refname: refs/heads/2024.08.x
+X-Git-Oldrev: 4a161d729bae688fd577e7754815b6e1ccf82f9d
+X-Git-Newrev: 090890c5f7ff1cf970995ba6be50ccc1f0fad67f
 X-Patchwork-Hint: ignore
-Message-Id: <20240920075216.5EA5883DFD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] package/genpart: change
- homepage and download location
+Message-Id: <20240920075330.5013783E70@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.08.x] package/qt6/qt6tools:
+ don't build examples and tests in host variant
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,55 +65,31 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6d9ecca957d23d3b408a65cd1e31147f8a5a7bf7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=090890c5f7ff1cf970995ba6be50ccc1f0fad67f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.08.x
 
-The old homepage is no more, and the download location has changed.
-Update both to the new download location.
-
-Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-(cherry picked from commit 629c6254ce158f3a15f11149a65066473c17fbd9)
+(cherry picked from commit 138d83721b101e621fc6143ebb94954ac833a9e4)
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/genpart/Config.in      | 2 +-
- package/genpart/Config.in.host | 2 +-
- package/genpart/genpart.mk     | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+ package/qt6/qt6tools/qt6tools.mk | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/package/genpart/Config.in b/package/genpart/Config.in
-index 64288452ea..b8b8c16f66 100644
---- a/package/genpart/Config.in
-+++ b/package/genpart/Config.in
-@@ -5,4 +5,4 @@ config BR2_PACKAGE_GENPART
- 	  line arguments and dump it to stdout. No CHS magic is done,
- 	  only lba entries are filled out.
+diff --git a/package/qt6/qt6tools/qt6tools.mk b/package/qt6/qt6tools/qt6tools.mk
+index 09c986cfc6..12b6667bae 100644
+--- a/package/qt6/qt6tools/qt6tools.mk
++++ b/package/qt6/qt6tools/qt6tools.mk
+@@ -41,6 +41,10 @@ ifeq ($(BR2_PACKAGE_QT6DECLARATIVE),y)
+ QT6TOOLS_DEPENDENCIES += qt6declarative
+ endif
  
--	  http://www.pengutronix.de/software/genpart/index_en.html
-+	  https://public.pengutronix.de/software/genpart
-diff --git a/package/genpart/Config.in.host b/package/genpart/Config.in.host
-index d8b9eb61b0..f821bc9e8b 100644
---- a/package/genpart/Config.in.host
-+++ b/package/genpart/Config.in.host
-@@ -5,4 +5,4 @@ config BR2_PACKAGE_HOST_GENPART
- 	  line arguments and dump it to stdout. No CHS magic is done,
- 	  only lba entries are filled out.
++HOST_QT6TOOLS_CONF_OPTS = \
++	-DQT_BUILD_EXAMPLES=OFF \
++	-DQT_BUILD_TESTS=OFF
++
+ HOST_QT6TOOLS_DEPENDENCIES = host-qt6base
  
--	  http://www.pengutronix.de/software/genpart/index_en.html
-+	  https://public.pengutronix.de/software/genpart
-diff --git a/package/genpart/genpart.mk b/package/genpart/genpart.mk
-index 2aa2c710c0..b48a0ac358 100644
---- a/package/genpart/genpart.mk
-+++ b/package/genpart/genpart.mk
-@@ -6,7 +6,7 @@
- 
- GENPART_VERSION = 1.0.2
- GENPART_SOURCE = genpart-$(GENPART_VERSION).tar.bz2
--GENPART_SITE = http://www.pengutronix.de/software/genpart/download
-+GENPART_SITE = https://public.pengutronix.de/software/genpart
- # genpart has no license embedded in its source release.
- # However, their project page mentions:
- #   > This community portal offers an overview about our own OSS
+ $(eval $(cmake-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
