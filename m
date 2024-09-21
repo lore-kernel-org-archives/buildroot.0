@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 745CECF9C64
-	for <buildroot@archiver.kernel.org>; Sat, 21 Sep 2024 21:11:24 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6A119CF9C5B
+	for <buildroot@archiver.kernel.org>; Sat, 21 Sep 2024 21:11:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 3B052608B1;
-	Sat, 21 Sep 2024 21:11:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2E34360ABF;
+	Sat, 21 Sep 2024 21:11:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YyZGoW1j4LKJ; Sat, 21 Sep 2024 21:11:22 +0000 (UTC)
+ id Nmx3SMIAYuin; Sat, 21 Sep 2024 21:11:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4A06F6F6FF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C195E608FC
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4A06F6F6FF;
-	Sat, 21 Sep 2024 21:11:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C195E608FC;
+	Sat, 21 Sep 2024 21:11:25 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 206831BF473
- for <buildroot@lists.busybox.net>; Sat, 21 Sep 2024 21:08:18 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 122FC1BF86D
+ for <buildroot@lists.busybox.net>; Sat, 21 Sep 2024 21:08:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 924D7606F0
+ by smtp3.osuosl.org (Postfix) with ESMTP id F1B6B60841
  for <buildroot@lists.busybox.net>; Sat, 21 Sep 2024 21:07:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id jpVcDMVyqmWV for <buildroot@lists.busybox.net>;
- Sat, 21 Sep 2024 21:07:46 +0000 (UTC)
+ id uW_evjjT1bb4 for <buildroot@lists.busybox.net>;
+ Sat, 21 Sep 2024 21:07:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B0846607E8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9B28C607E5
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id B0846607E8
+ by smtp3.osuosl.org (Postfix) with ESMTP id 9B28C607E5
  for <buildroot@buildroot.org>; Sat, 21 Sep 2024 21:07:43 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id AD0E18119A; Sat, 21 Sep 2024 21:07:43 +0000 (UTC)
+ id 965D484150; Sat, 21 Sep 2024 21:07:43 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 21 Sep 2024 22:53:49 +0200
+Date: Sat, 21 Sep 2024 22:53:46 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 54dadeedc5d498065ef0170921463b11aed058d1
-X-Git-Newrev: a17849708413e771430ffcd2ecfadb9b838d3db4
+X-Git-Oldrev: 0adfafd9f73d75b6375f27853a5164b014d91f44
+X-Git-Newrev: 39f1751f6f63f846b006f223bd8c8d2de5b14804
 X-Patchwork-Hint: ignore
-Message-Id: <20240921210743.AD0E18119A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-ruamel-yaml: bump to
- version 0.18.6
+Message-Id: <20240921210743.965D484150@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-requests-oauthlib: bump to
+ version 2.0.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,48 +65,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a17849708413e771430ffcd2ecfadb9b838d3db4
+commit: https://git.buildroot.net/buildroot/commit/?id=39f1751f6f63f846b006f223bd8c8d2de5b14804
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-License hash changed due to date update:
-https://sourceforge.net/p/ruamel-yaml/code/ci/6f41eb6001661917fceb0e88ed0693ae1a7c50f4/
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-ruamel-yaml/python-ruamel-yaml.hash | 6 +++---
- package/python-ruamel-yaml/python-ruamel-yaml.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-requests-oauthlib/python-requests-oauthlib.hash | 4 ++--
+ package/python-requests-oauthlib/python-requests-oauthlib.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-ruamel-yaml/python-ruamel-yaml.hash b/package/python-ruamel-yaml/python-ruamel-yaml.hash
-index 02845d112b..94a0d43544 100644
---- a/package/python-ruamel-yaml/python-ruamel-yaml.hash
-+++ b/package/python-ruamel-yaml/python-ruamel-yaml.hash
+diff --git a/package/python-requests-oauthlib/python-requests-oauthlib.hash b/package/python-requests-oauthlib/python-requests-oauthlib.hash
+index 08c19ab1f6..5d37e09f76 100644
+--- a/package/python-requests-oauthlib/python-requests-oauthlib.hash
++++ b/package/python-requests-oauthlib/python-requests-oauthlib.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/ruamel.yaml/json
--md5  24fac3544a3c7bd7eeaf6e4f704a056e  ruamel.yaml-0.18.5.tar.gz
--sha256  61917e3a35a569c1133a8f772e1226961bf5a1198bea7e23f06a0841dea1ab0e  ruamel.yaml-0.18.5.tar.gz
-+md5  964a8e48646e26533d8e5f03cff99dde  ruamel.yaml-0.18.6.tar.gz
-+sha256  8b27e6a217e786c6fbe5634d8f3f11bc63e0f80f6a5890f28863d9c45aac311b  ruamel.yaml-0.18.6.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/requests-oauthlib/json
+-md5  c4f3b4ecdb72a56a13675e5a3302852a  requests-oauthlib-1.3.1.tar.gz
+-sha256  75beac4a47881eeb94d5ea5d6ad31ef88856affe2332b9aafb52c6452ccf0d7a  requests-oauthlib-1.3.1.tar.gz
++md5  713dc7856f9ff625d75335c10d332a1b  requests-oauthlib-2.0.0.tar.gz
++sha256  b3dffaebd884d8cd778494369603a9e7b58d29111bf6b41bdc2dcd87203af4e9  requests-oauthlib-2.0.0.tar.gz
  # Locally computed sha256 checksums
--sha256  ba45629abb7022949148ce65de4a59e7ee164d30c94450389a6afdd3ebe4e9e0  LICENSE
-+sha256  e84ff196f03668af751abae0c4cbd9169aa365121f50c30bb9a329666ab6260a  LICENSE
-diff --git a/package/python-ruamel-yaml/python-ruamel-yaml.mk b/package/python-ruamel-yaml/python-ruamel-yaml.mk
-index bbdac591ca..83a4aa12e8 100644
---- a/package/python-ruamel-yaml/python-ruamel-yaml.mk
-+++ b/package/python-ruamel-yaml/python-ruamel-yaml.mk
+ sha256  ae01846afad8a8291fe6a08966f3015af9a8ff675d84b981f9793c122f7876e8  LICENSE
+diff --git a/package/python-requests-oauthlib/python-requests-oauthlib.mk b/package/python-requests-oauthlib/python-requests-oauthlib.mk
+index cdd334fb9a..823b8140fb 100644
+--- a/package/python-requests-oauthlib/python-requests-oauthlib.mk
++++ b/package/python-requests-oauthlib/python-requests-oauthlib.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_RUAMEL_YAML_VERSION = 0.18.5
-+PYTHON_RUAMEL_YAML_VERSION = 0.18.6
- PYTHON_RUAMEL_YAML_SOURCE = ruamel.yaml-$(PYTHON_RUAMEL_YAML_VERSION).tar.gz
--PYTHON_RUAMEL_YAML_SITE = https://files.pythonhosted.org/packages/82/43/fa976e03a4a9ae406904489119cd7dd4509752ca692b2e0a19491ca1782c
-+PYTHON_RUAMEL_YAML_SITE = https://files.pythonhosted.org/packages/29/81/4dfc17eb6ebb1aac314a3eb863c1325b907863a1b8b1382cdffcb6ac0ed9
- PYTHON_RUAMEL_YAML_SETUP_TYPE = setuptools
- PYTHON_RUAMEL_YAML_LICENSE = MIT
- PYTHON_RUAMEL_YAML_LICENSE_FILES = LICENSE
+-PYTHON_REQUESTS_OAUTHLIB_VERSION = 1.3.1
++PYTHON_REQUESTS_OAUTHLIB_VERSION = 2.0.0
+ PYTHON_REQUESTS_OAUTHLIB_SOURCE = requests-oauthlib-$(PYTHON_REQUESTS_OAUTHLIB_VERSION).tar.gz
+-PYTHON_REQUESTS_OAUTHLIB_SITE = https://files.pythonhosted.org/packages/95/52/531ef197b426646f26b53815a7d2a67cb7a331ef098bb276db26a68ac49f
++PYTHON_REQUESTS_OAUTHLIB_SITE = https://files.pythonhosted.org/packages/42/f2/05f29bc3913aea15eb670be136045bf5c5bbf4b99ecb839da9b422bb2c85
+ PYTHON_REQUESTS_OAUTHLIB_SETUP_TYPE = setuptools
+ PYTHON_REQUESTS_OAUTHLIB_LICENSE = ISC
+ PYTHON_REQUESTS_OAUTHLIB_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
