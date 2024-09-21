@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 21CD1CF9C5B
-	for <buildroot@archiver.kernel.org>; Sat, 21 Sep 2024 21:08:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 36DC8CF9C64
+	for <buildroot@archiver.kernel.org>; Sat, 21 Sep 2024 21:08:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E5A116083F;
-	Sat, 21 Sep 2024 21:08:32 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id F17F660606;
+	Sat, 21 Sep 2024 21:08:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FzTVrZS0jc5J; Sat, 21 Sep 2024 21:08:31 +0000 (UTC)
+ id bvttbZTaNsty; Sat, 21 Sep 2024 21:08:35 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 51413608B4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A812B608C5
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 51413608B4;
-	Sat, 21 Sep 2024 21:08:31 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 13C7B1BF473
+	by smtp3.osuosl.org (Postfix) with ESMTP id A812B608C5;
+	Sat, 21 Sep 2024 21:08:34 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 8BBA41BF473
  for <buildroot@lists.busybox.net>; Sat, 21 Sep 2024 21:07:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 4EDF2607B2
+ by smtp4.osuosl.org (Postfix) with ESMTP id 803B5403FE
  for <buildroot@lists.busybox.net>; Sat, 21 Sep 2024 21:07:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id v0kMZP4CtmnK for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id v-AlPpTgAgLp for <buildroot@lists.busybox.net>;
  Sat, 21 Sep 2024 21:07:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F245760682
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2E0B140402
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id F245760682
- for <buildroot@buildroot.org>; Sat, 21 Sep 2024 21:07:41 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2E0B140402
+ for <buildroot@buildroot.org>; Sat, 21 Sep 2024 21:07:42 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id ED8718415D; Sat, 21 Sep 2024 21:07:41 +0000 (UTC)
+ id 2A9BA84174; Sat, 21 Sep 2024 21:07:42 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 21 Sep 2024 22:52:51 +0200
+Date: Sat, 21 Sep 2024 22:52:57 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9abb92cd3f56335d1293e135140566639dd33182
-X-Git-Newrev: eab6e2399c47e44ae421bba60c6cdd60d0462805
+X-Git-Oldrev: f3d2f650404e355fc7a9f2afbac555e142be4235
+X-Git-Newrev: 0cf37ab3f955e61b6156dd0b6f201b62b55782b4
 X-Patchwork-Hint: ignore
-Message-Id: <20240921210741.ED8718415D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-psutil: bump to version
- 6.0.0
+Message-Id: <20240921210742.2A9BA84174@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-pybind: bump to version
+ 2.13.6
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,44 +65,39 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=eab6e2399c47e44ae421bba60c6cdd60d0462805
+commit: https://git.buildroot.net/buildroot/commit/?id=0cf37ab3f955e61b6156dd0b6f201b62b55782b4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-psutil/python-psutil.hash | 4 ++--
- package/python-psutil/python-psutil.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-pybind/python-pybind.hash | 2 +-
+ package/python-pybind/python-pybind.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/python-psutil/python-psutil.hash b/package/python-psutil/python-psutil.hash
-index c5f4f39fe0..f85a293557 100644
---- a/package/python-psutil/python-psutil.hash
-+++ b/package/python-psutil/python-psutil.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/psutil/json
--md5  afcc40a779f84f6d909570a8934cebc3  psutil-5.9.7.tar.gz
--sha256  3f02134e82cfb5d089fddf20bb2e03fd5cd52395321d1c8458a9e58500ff417c  psutil-5.9.7.tar.gz
-+md5  5874bd773d2fe7da3c0817424f383033  psutil-6.0.0.tar.gz
-+sha256  8faae4f310b6d969fa26ca0545338b21f73c6b15db7c4a8d934a5482faa818f2  psutil-6.0.0.tar.gz
- # Locally computed sha256 checksums
- sha256  b89c063b3786e28e0c0a38f1931db61fed35e69dd2a2966fbecffee0f46c8d10  LICENSE
-diff --git a/package/python-psutil/python-psutil.mk b/package/python-psutil/python-psutil.mk
-index e83193f20f..b6dee0ce7f 100644
---- a/package/python-psutil/python-psutil.mk
-+++ b/package/python-psutil/python-psutil.mk
-@@ -4,9 +4,9 @@
+diff --git a/package/python-pybind/python-pybind.hash b/package/python-pybind/python-pybind.hash
+index c831007d4d..a046181a9b 100644
+--- a/package/python-pybind/python-pybind.hash
++++ b/package/python-pybind/python-pybind.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated
+-sha256  51631e88960a8856f9c497027f55c9f2f9115cafb08c0005439838a05ba17bfc  python-pybind-2.13.1.tar.gz
++sha256  e08cb87f4773da97fa7b5f035de8763abc656d87d5773e62f6da0587d1f0ec20  python-pybind-2.13.6.tar.gz
+ # License files, locally calculated
+ sha256  83965b843b98f670d3a85bd041ed4b372c8ec50d7b4a5995a83ac697ba675dcb  LICENSE
+diff --git a/package/python-pybind/python-pybind.mk b/package/python-pybind/python-pybind.mk
+index a1cc02ee04..8d815ac38f 100644
+--- a/package/python-pybind/python-pybind.mk
++++ b/package/python-pybind/python-pybind.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--PYTHON_PSUTIL_VERSION = 5.9.7
-+PYTHON_PSUTIL_VERSION = 6.0.0
- PYTHON_PSUTIL_SOURCE = psutil-$(PYTHON_PSUTIL_VERSION).tar.gz
--PYTHON_PSUTIL_SITE = https://files.pythonhosted.org/packages/a0/d0/c9ae661a302931735237791f04cb7086ac244377f78692ba3b3eae3a9619
-+PYTHON_PSUTIL_SITE = https://files.pythonhosted.org/packages/18/c7/8c6872f7372eb6a6b2e4708b88419fb46b857f7a2e1892966b851cc79fc9
- PYTHON_PSUTIL_SETUP_TYPE = setuptools
- PYTHON_PSUTIL_LICENSE = BSD-3-Clause
- PYTHON_PSUTIL_LICENSE_FILES = LICENSE
+-PYTHON_PYBIND_VERSION = 2.13.1
++PYTHON_PYBIND_VERSION = 2.13.6
+ PYTHON_PYBIND_SITE = $(call github,pybind,pybind11,v$(PYTHON_PYBIND_VERSION))
+ PYTHON_PYBIND_LICENSE = BSD-3-Clause
+ PYTHON_PYBIND_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
