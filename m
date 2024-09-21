@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E664DCF9C5B
-	for <buildroot@archiver.kernel.org>; Sat, 21 Sep 2024 21:11:07 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9AF4BCF9C5B
+	for <buildroot@archiver.kernel.org>; Sat, 21 Sep 2024 21:11:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B47A760842;
-	Sat, 21 Sep 2024 21:11:07 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 60FAD60DF0;
+	Sat, 21 Sep 2024 21:11:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wpOXb9jnSb3y; Sat, 21 Sep 2024 21:11:06 +0000 (UTC)
+ id M-3CMurO_6E7; Sat, 21 Sep 2024 21:11:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ABB996F64E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3265C608FB
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id ABB996F64E;
-	Sat, 21 Sep 2024 21:11:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3265C608FB;
+	Sat, 21 Sep 2024 21:11:12 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1696C1BF473
- for <buildroot@lists.busybox.net>; Sat, 21 Sep 2024 21:08:14 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 127DC1BF473
+ for <buildroot@lists.busybox.net>; Sat, 21 Sep 2024 21:08:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 56EF5607C3
+ by smtp3.osuosl.org (Postfix) with ESMTP id 919CC60802
  for <buildroot@lists.busybox.net>; Sat, 21 Sep 2024 21:07:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id j9wx5HtvFNZl for <buildroot@lists.busybox.net>;
+ id ismIwRjLuwR7 for <buildroot@lists.busybox.net>;
  Sat, 21 Sep 2024 21:07:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C5129607EE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C5E03607F7
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id C5129607EE
+ by smtp3.osuosl.org (Postfix) with ESMTP id C5E03607F7
  for <buildroot@buildroot.org>; Sat, 21 Sep 2024 21:07:43 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id B63E2813F7; Sat, 21 Sep 2024 21:07:43 +0000 (UTC)
+ id C061282200; Sat, 21 Sep 2024 21:07:43 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 21 Sep 2024 22:53:50 +0200
+Date: Sat, 21 Sep 2024 22:53:52 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a17849708413e771430ffcd2ecfadb9b838d3db4
-X-Git-Newrev: fe8ff668627b2f96fdf00d97a932fb7699e68a31
+X-Git-Oldrev: fe8ff668627b2f96fdf00d97a932fb7699e68a31
+X-Git-Newrev: 904cbaafce9fe93c82e691ad9401f7d3b08d0100
 X-Patchwork-Hint: ignore
-Message-Id: <20240921210743.B63E2813F7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-s3transfer: bump to version
- 0.10.2
+Message-Id: <20240921210743.C061282200@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-schedule: bump to version
+ 1.2.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -60,62 +60,50 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============8790726129943178023=="
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8790726129943178023==
-Content-Type: text/plain
-
-commit: https://git.buildroot.net/buildroot/commit/?id=fe8ff668627b2f96fdf00d97a932fb7699e68a31
+commit: https://git.buildroot.net/buildroot/commit/?id=904cbaafce9fe93c82e691ad9401f7d3b08d0100
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Acked-by: Raphaël Mélotte <raphael.melotte@mind.be>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-s3transfer/python-s3transfer.hash | 4 ++--
- package/python-s3transfer/python-s3transfer.mk   | 4 ++--
+ package/python-schedule/python-schedule.hash | 4 ++--
+ package/python-schedule/python-schedule.mk   | 4 ++--
  2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-s3transfer/python-s3transfer.hash b/package/python-s3transfer/python-s3transfer.hash
-index 48be6b3a8b..c8b8f65d0c 100644
---- a/package/python-s3transfer/python-s3transfer.hash
-+++ b/package/python-s3transfer/python-s3transfer.hash
+diff --git a/package/python-schedule/python-schedule.hash b/package/python-schedule/python-schedule.hash
+index 59c84c2002..abbf07ffb9 100644
+--- a/package/python-schedule/python-schedule.hash
++++ b/package/python-schedule/python-schedule.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/s3transfer/json
--md5  ba84e7c06bc1dcd3151c3d2132621cfc  s3transfer-0.10.0.tar.gz
--sha256  d0c8bbf672d5eebbe4e57945e23b972d963f07d82f661cabf678a5c88831595b  s3transfer-0.10.0.tar.gz
-+md5  891737ce35aeb23b02a47a72c7f9b639  s3transfer-0.10.2.tar.gz
-+sha256  0711534e9356d3cc692fdde846b4a1e4b0cb6519971860796e6bc4c7aea00ef6  s3transfer-0.10.2.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/schedule/json
+-md5  ecb436a797e1a149bac4643330b268ca  schedule-1.2.1.tar.gz
+-sha256  843bc0538b99c93f02b8b50e3e39886c06f2d003b24f48e1aa4cadfa3f341279  schedule-1.2.1.tar.gz
++md5  e9a2733aad7fb33107444a53f8b87d48  schedule-1.2.2.tar.gz
++sha256  15fe9c75fe5fd9b9627f3f19cc0ef1420508f9f9a46f45cd0769ef75ede5f0b7  schedule-1.2.2.tar.gz
  # Locally computed sha256 checksums
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.txt
-diff --git a/package/python-s3transfer/python-s3transfer.mk b/package/python-s3transfer/python-s3transfer.mk
-index 6fae824862..1851bb8426 100644
---- a/package/python-s3transfer/python-s3transfer.mk
-+++ b/package/python-s3transfer/python-s3transfer.mk
+ sha256  30a8352c318ce1b645acde0299697342d4380ed2637d7ca18a8ad25661e3b41b  LICENSE.txt
+diff --git a/package/python-schedule/python-schedule.mk b/package/python-schedule/python-schedule.mk
+index 11be2e49d4..f78b2dcb11 100644
+--- a/package/python-schedule/python-schedule.mk
++++ b/package/python-schedule/python-schedule.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_S3TRANSFER_VERSION = 0.10.0
-+PYTHON_S3TRANSFER_VERSION = 0.10.2
- PYTHON_S3TRANSFER_SOURCE = s3transfer-$(PYTHON_S3TRANSFER_VERSION).tar.gz
--PYTHON_S3TRANSFER_SITE = https://files.pythonhosted.org/packages/a0/b5/4c570b08cb85fdcc65037b5229e00412583bb38d974efecb7ec3495f40ba
-+PYTHON_S3TRANSFER_SITE = https://files.pythonhosted.org/packages/cb/67/94c6730ee4c34505b14d94040e2f31edf144c230b6b49e971b4f25ff8fab
- PYTHON_S3TRANSFER_SETUP_TYPE = setuptools
- PYTHON_S3TRANSFER_LICENSE = Apache-2.0
- PYTHON_S3TRANSFER_LICENSE_FILES = LICENSE.txt
-
---===============8790726129943178023==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
+-PYTHON_SCHEDULE_VERSION = 1.2.1
++PYTHON_SCHEDULE_VERSION = 1.2.2
+ PYTHON_SCHEDULE_SOURCE = schedule-$(PYTHON_SCHEDULE_VERSION).tar.gz
+-PYTHON_SCHEDULE_SITE = https://files.pythonhosted.org/packages/29/22/9dd374cbf76a42ece1f1f41cc8f4957f0ad512577372527cd3dd52758241
++PYTHON_SCHEDULE_SITE = https://files.pythonhosted.org/packages/0c/91/b525790063015759f34447d4cf9d2ccb52cdee0f1dd6ff8764e863bcb74c
+ PYTHON_SCHEDULE_SETUP_TYPE = setuptools
+ PYTHON_SCHEDULE_LICENSE = MIT
+ PYTHON_SCHEDULE_LICENSE_FILES = LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============8790726129943178023==--
