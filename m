@@ -4,50 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 89954CF9C5B
-	for <buildroot@archiver.kernel.org>; Sat, 21 Sep 2024 18:49:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 13CE9CF9C5B
+	for <buildroot@archiver.kernel.org>; Sat, 21 Sep 2024 18:49:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 51AA540956;
-	Sat, 21 Sep 2024 18:49:02 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A70C54074B;
+	Sat, 21 Sep 2024 18:49:05 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XUyIsXfYwWHx; Sat, 21 Sep 2024 18:49:01 +0000 (UTC)
+ id 1xL8A8Wzj6tP; Sat, 21 Sep 2024 18:49:04 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D9ED740C0B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D559240D0B
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D9ED740C0B;
-	Sat, 21 Sep 2024 18:49:00 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id AF3821BF59E
+	by smtp4.osuosl.org (Postfix) with ESMTP id D559240D0B;
+	Sat, 21 Sep 2024 18:49:03 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B4D751BF869
  for <buildroot@lists.busybox.net>; Sat, 21 Sep 2024 18:48:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 2487B606CA
- for <buildroot@lists.busybox.net>; Sat, 21 Sep 2024 18:48:16 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6AB12400E4
+ for <buildroot@lists.busybox.net>; Sat, 21 Sep 2024 18:48:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id R0Ps49RmpC4B for <buildroot@lists.busybox.net>;
- Sat, 21 Sep 2024 18:48:15 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id KZ_qqCdGoc1r for <buildroot@lists.busybox.net>;
+ Sat, 21 Sep 2024 18:48:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AA551606E0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 645DA40163
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id AA551606E0
- for <buildroot@buildroot.org>; Sat, 21 Sep 2024 18:48:12 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 645DA40163
+ for <buildroot@buildroot.org>; Sat, 21 Sep 2024 18:48:13 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id A773483D99; Sat, 21 Sep 2024 18:48:12 +0000 (UTC)
+ id 4E19C8141F; Sat, 21 Sep 2024 18:48:13 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 21 Sep 2024 20:39:27 +0200
+Date: Sat, 21 Sep 2024 20:39:42 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 670f6a4bf5a457eaa95340a68a976fb94b89306f
-X-Git-Newrev: c62de54852239da4e74fc1a3d23e60cdfd296751
+X-Git-Oldrev: 2e3c0ab1b7bbe8bb5a5abb493fc81e166593ac8f
+X-Git-Newrev: 9e3fdb87f0e2a03e32c3a91875434f7b722a17d4
 X-Patchwork-Hint: ignore
-Message-Id: <20240921184812.A773483D99@busybox.osuosl.org>
-Subject: [Buildroot] [git commit]
- support/testing/tests/package/test_bash.py: fix 'running' typo
+Message-Id: <20240921184813.4E19C8141F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] boot/barebox/barebox.mk: fix 'allows' typo
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,28 +64,28 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=c62de54852239da4e74fc1a3d23e60cdfd296751
+commit: https://git.buildroot.net/buildroot/commit/?id=9e3fdb87f0e2a03e32c3a91875434f7b722a17d4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- support/testing/tests/package/test_bash.py | 2 +-
+ boot/barebox/barebox.mk | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/support/testing/tests/package/test_bash.py b/support/testing/tests/package/test_bash.py
-index f0ee8cadc1..7ec6e85ef9 100644
---- a/support/testing/tests/package/test_bash.py
-+++ b/support/testing/tests/package/test_bash.py
-@@ -28,7 +28,7 @@ class TestBash(infra.basetest.BRTest):
-         self.assertEqual(out[0], "", "Already running bash instead of busybox' sh")
- 
-         self.assertRunOk("bash -il")
--        # Twist! The above command is still runing, it's just that
-+        # Twist! The above command is still running, it's just that
-         # bash did display the prompt we expect. Check we are indeed
-         # actually bash
-         out, _ = self.emulator.run('echo "${BASH}"')
+diff --git a/boot/barebox/barebox.mk b/boot/barebox/barebox.mk
+index fe366989b9..929ed48ada 100644
+--- a/boot/barebox/barebox.mk
++++ b/boot/barebox/barebox.mk
+@@ -26,7 +26,7 @@ else ifeq ($$(BR2_TARGET_BAREBOX_CUSTOM_GIT),y)
+ $(1)_SITE = $$(call qstrip,$$(BR2_TARGET_BAREBOX_CUSTOM_GIT_REPO_URL))
+ $(1)_SITE_METHOD = git
+ # Override the default value of _SOURCE to 'barebox-*' so that it is not
+-# downloaded a second time for barebox-aux; also alows avoiding the hash
++# downloaded a second time for barebox-aux; also allows avoiding the hash
+ # check:
+ $(1)_SOURCE = barebox-$$($(1)_VERSION)$$(BR_FMT_VERSION_git).tar.gz
+ else
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
