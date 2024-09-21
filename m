@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01936CF9C5B
-	for <buildroot@archiver.kernel.org>; Sat, 21 Sep 2024 18:48:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99494CF9C5B
+	for <buildroot@archiver.kernel.org>; Sat, 21 Sep 2024 18:48:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id BA577408FE;
-	Sat, 21 Sep 2024 18:48:31 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5C6E84097E;
+	Sat, 21 Sep 2024 18:48:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SCYcf3yrlDQO; Sat, 21 Sep 2024 18:48:31 +0000 (UTC)
+ id BLjI4FyK_SQQ; Sat, 21 Sep 2024 18:48:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B3AD540905
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 074854094F
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B3AD540905;
-	Sat, 21 Sep 2024 18:48:30 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 074854094F;
+	Sat, 21 Sep 2024 18:48:33 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id B042E1BF59E
- for <buildroot@lists.busybox.net>; Sat, 21 Sep 2024 18:48:14 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 109E81BF59E
+ for <buildroot@lists.busybox.net>; Sat, 21 Sep 2024 18:48:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 56E724074B
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6359940663
  for <buildroot@lists.busybox.net>; Sat, 21 Sep 2024 18:48:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ru80VNl8q5_L for <buildroot@lists.busybox.net>;
+ id ZupzJTJe8J5K for <buildroot@lists.busybox.net>;
  Sat, 21 Sep 2024 18:48:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2174540663
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 597E440667
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2174540663
+ by smtp4.osuosl.org (Postfix) with ESMTP id 597E440667
  for <buildroot@buildroot.org>; Sat, 21 Sep 2024 18:48:13 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 077EC83D91; Sat, 21 Sep 2024 18:48:13 +0000 (UTC)
+ id 4220283D9C; Sat, 21 Sep 2024 18:48:13 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 21 Sep 2024 20:39:32 +0200
+Date: Sat, 21 Sep 2024 20:39:40 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 28c56bc26f2c8b4cbeb8124178b349b1bf5b6f57
-X-Git-Newrev: 98f7a32d05ba509461cc58103c359d3b67f00ef5
+X-Git-Oldrev: 9c604ef86f32ccb71e050cd92b2ab72659f9474c
+X-Git-Newrev: 2e3c0ab1b7bbe8bb5a5abb493fc81e166593ac8f
 X-Patchwork-Hint: ignore
-Message-Id: <20240921184813.077EC83D91@busybox.osuosl.org>
-Subject: [Buildroot] [git commit]
- support/testing/tests/package/test_ddrescue.py: fix 'normally' typo
+Message-Id: <20240921184813.4220283D9C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] boot/arm-trusted-firmware/Config.in: fix
+ 'platform' typo
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,28 +65,28 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=98f7a32d05ba509461cc58103c359d3b67f00ef5
+commit: https://git.buildroot.net/buildroot/commit/?id=2e3c0ab1b7bbe8bb5a5abb493fc81e166593ac8f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- support/testing/tests/package/test_ddrescue.py | 2 +-
+ boot/arm-trusted-firmware/Config.in | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/support/testing/tests/package/test_ddrescue.py b/support/testing/tests/package/test_ddrescue.py
-index 2206971421..989abc8f01 100644
---- a/support/testing/tests/package/test_ddrescue.py
-+++ b/support/testing/tests/package/test_ddrescue.py
-@@ -76,7 +76,7 @@ class TestDdrescue(infra.basetest.BRTest):
-         # Where a normal 'dd' fails, 'ddrescue' is expected to succeed
-         self.assertRunOk(f"ddrescue {dm_dev} {ddrescue_img}")
+diff --git a/boot/arm-trusted-firmware/Config.in b/boot/arm-trusted-firmware/Config.in
+index 02a6db795a..5ba4e08370 100644
+--- a/boot/arm-trusted-firmware/Config.in
++++ b/boot/arm-trusted-firmware/Config.in
+@@ -77,7 +77,7 @@ endif
+ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM
+ 	string "ATF platform"
+ 	help
+-	  Target plaform to build for.
++	  Target platform to build for.
  
--        # ddrescue does not normaly write any output data when there
-+        # ddrescue does not normally write any output data when there
-         # is I/O error on the input. The intent is to preserve any
-         # data that could have been read in a previous pass. There is
-         # one exception, when the output is a non-existing regular
+ config BR2_TARGET_ARM_TRUSTED_FIRMWARE_TARGET_BOARD
+ 	string "ATF target board"
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
