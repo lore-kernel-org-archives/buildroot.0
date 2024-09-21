@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7233ACF9C5B
-	for <buildroot@archiver.kernel.org>; Sat, 21 Sep 2024 18:48:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E108FCF9C5B
+	for <buildroot@archiver.kernel.org>; Sat, 21 Sep 2024 18:48:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 3C1A1409F5;
-	Sat, 21 Sep 2024 18:48:46 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id B4DD24065E;
+	Sat, 21 Sep 2024 18:48:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sAfpqrUVWnAE; Sat, 21 Sep 2024 18:48:45 +0000 (UTC)
+ id xDcPVWVepYQa; Sat, 21 Sep 2024 18:48:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B2C1F40B3B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D808840B7F
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id B2C1F40B3B;
-	Sat, 21 Sep 2024 18:48:44 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 352DD1BF59E
+	by smtp4.osuosl.org (Postfix) with ESMTP id D808840B7F;
+	Sat, 21 Sep 2024 18:48:47 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 505341BF869
  for <buildroot@lists.busybox.net>; Sat, 21 Sep 2024 18:48:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7BF6E6065A
- for <buildroot@lists.busybox.net>; Sat, 21 Sep 2024 18:48:15 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4035D81A3B
+ for <buildroot@lists.busybox.net>; Sat, 21 Sep 2024 18:48:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id j0NzPPIUsE9G for <buildroot@lists.busybox.net>;
- Sat, 21 Sep 2024 18:48:12 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 852iX20atenv for <buildroot@lists.busybox.net>;
+ Sat, 21 Sep 2024 18:48:14 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3B95660675
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1F24481A0D
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3B95660675
- for <buildroot@buildroot.org>; Sat, 21 Sep 2024 18:48:12 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1F24481A0D
+ for <buildroot@buildroot.org>; Sat, 21 Sep 2024 18:48:13 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 3890A83D9A; Sat, 21 Sep 2024 18:48:12 +0000 (UTC)
+ id 1A92683D9A; Sat, 21 Sep 2024 18:48:13 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 21 Sep 2024 20:39:14 +0200
+Date: Sat, 21 Sep 2024 20:39:34 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ea4179f3ae4b37b4e2deb84ef474ac693ab8c4d4
-X-Git-Newrev: ca4eca4bfa7e1b2603de7834433eb29e86ed1e01
+X-Git-Oldrev: 1772ad2f5f34e28bf845c45ce355e888cdea9f63
+X-Git-Newrev: 4a8aafecf026a099e4b55d10a38b9dfd9b576e60
 X-Patchwork-Hint: ignore
-Message-Id: <20240921184812.3890A83D9A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support/dependencies/dependencies.sh: fix
- 'mimic' typo
+Message-Id: <20240921184813.1A92683D9A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit]
+ support/testing/tests/package/test_micropython.py: fix 'returned' typo
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,28 +65,28 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=ca4eca4bfa7e1b2603de7834433eb29e86ed1e01
+commit: https://git.buildroot.net/buildroot/commit/?id=4a8aafecf026a099e4b55d10a38b9dfd9b576e60
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- support/dependencies/dependencies.sh | 2 +-
+ support/testing/tests/package/test_micropython.py | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/support/dependencies/dependencies.sh b/support/dependencies/dependencies.sh
-index 6d5fc36037..fb0defd0c9 100755
---- a/support/dependencies/dependencies.sh
-+++ b/support/dependencies/dependencies.sh
-@@ -143,7 +143,7 @@ fi
+diff --git a/support/testing/tests/package/test_micropython.py b/support/testing/tests/package/test_micropython.py
+index 371deb2978..cc0e5854c8 100644
+--- a/support/testing/tests/package/test_micropython.py
++++ b/support/testing/tests/package/test_micropython.py
+@@ -16,7 +16,7 @@ class TestMicroPython(infra.basetest.BRTest):
+     def run_upy_code(self, python_code, opts=""):
+         cmd = f'micropython {opts} -c "{python_code}"'
+         output, ret = self.emulator.run(cmd)
+-        self.assertEqual(ret, 0, f"could not run '{cmd}', returnd {ret}: '{output}'")
++        self.assertEqual(ret, 0, f"could not run '{cmd}', returned {ret}: '{output}'")
+         return output
  
- # Check bash
- # We only check bash is available, setting SHELL appropriately is done
--# in the top-level Makefile, and we mimick the same sequence here
-+# in the top-level Makefile, and we mimic the same sequence here
- if   [ -n "${BASH}" ]; then :
- elif [ -x /bin/bash ]; then :
- elif [ -z "$( sh -c 'echo $BASH' )" ]; then
+     def test_run(self):
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
