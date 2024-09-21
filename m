@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 801EFCF9C64
-	for <buildroot@archiver.kernel.org>; Sat, 21 Sep 2024 18:48:29 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 01936CF9C5B
+	for <buildroot@archiver.kernel.org>; Sat, 21 Sep 2024 18:48:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4EF7F40757;
-	Sat, 21 Sep 2024 18:48:29 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id BA577408FE;
+	Sat, 21 Sep 2024 18:48:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9yIaQxmfQQWc; Sat, 21 Sep 2024 18:48:28 +0000 (UTC)
+ id SCYcf3yrlDQO; Sat, 21 Sep 2024 18:48:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 205CD408E7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B3AD540905
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 205CD408E7;
-	Sat, 21 Sep 2024 18:48:28 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 3B6F21BF59E
+	by smtp4.osuosl.org (Postfix) with ESMTP id B3AD540905;
+	Sat, 21 Sep 2024 18:48:30 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id B042E1BF59E
  for <buildroot@lists.busybox.net>; Sat, 21 Sep 2024 18:48:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 31E96400E4
- for <buildroot@lists.busybox.net>; Sat, 21 Sep 2024 18:48:13 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 56E724074B
+ for <buildroot@lists.busybox.net>; Sat, 21 Sep 2024 18:48:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mHVZYN8PZFoB for <buildroot@lists.busybox.net>;
- Sat, 21 Sep 2024 18:48:12 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Ru80VNl8q5_L for <buildroot@lists.busybox.net>;
+ Sat, 21 Sep 2024 18:48:13 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 310BF40289
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2174540663
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 310BF40289
- for <buildroot@buildroot.org>; Sat, 21 Sep 2024 18:48:12 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2174540663
+ for <buildroot@buildroot.org>; Sat, 21 Sep 2024 18:48:13 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 1E20183D99; Sat, 21 Sep 2024 18:48:12 +0000 (UTC)
+ id 077EC83D91; Sat, 21 Sep 2024 18:48:13 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 21 Sep 2024 20:39:12 +0200
+Date: Sat, 21 Sep 2024 20:39:32 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f1ceb3687f16634ee0f41de278d875280f96bdc0
-X-Git-Newrev: edd87c76521a3eb2984c5475b4014d922aae0e2b
+X-Git-Oldrev: 28c56bc26f2c8b4cbeb8124178b349b1bf5b6f57
+X-Git-Newrev: 98f7a32d05ba509461cc58103c359d3b67f00ef5
 X-Patchwork-Hint: ignore
-Message-Id: <20240921184812.1E20183D99@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] toolchain/helpers.mk: fix 'unsupported'
- typo
+Message-Id: <20240921184813.077EC83D91@busybox.osuosl.org>
+Subject: [Buildroot] [git commit]
+ support/testing/tests/package/test_ddrescue.py: fix 'normally' typo
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,28 +65,28 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=edd87c76521a3eb2984c5475b4014d922aae0e2b
+commit: https://git.buildroot.net/buildroot/commit/?id=98f7a32d05ba509461cc58103c359d3b67f00ef5
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- toolchain/helpers.mk | 2 +-
+ support/testing/tests/package/test_ddrescue.py | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/toolchain/helpers.mk b/toolchain/helpers.mk
-index 839ee278d0..f3fdaaec07 100644
---- a/toolchain/helpers.mk
-+++ b/toolchain/helpers.mk
-@@ -324,7 +324,7 @@ check_arm_abi = \
- 	__CROSS_CC=$(strip $1) ; \
- 	EXT_TOOLCHAIN_TARGET=`LANG=C $${__CROSS_CC} -v 2>&1 | grep ^Target | cut -f2 -d ' '` ; \
- 	if ! echo $${EXT_TOOLCHAIN_TARGET} | grep -qE 'eabi(hf)?$$' ; then \
--		echo "External toolchain uses the unsuported OABI" ; \
-+		echo "External toolchain uses the unsupported OABI" ; \
- 		exit 1 ; \
- 	fi ; \
- 	if ! echo 'int main(void) {}' | $${__CROSS_CC} -x c -o $(BUILD_DIR)/.br-toolchain-test.tmp - ; then \
+diff --git a/support/testing/tests/package/test_ddrescue.py b/support/testing/tests/package/test_ddrescue.py
+index 2206971421..989abc8f01 100644
+--- a/support/testing/tests/package/test_ddrescue.py
++++ b/support/testing/tests/package/test_ddrescue.py
+@@ -76,7 +76,7 @@ class TestDdrescue(infra.basetest.BRTest):
+         # Where a normal 'dd' fails, 'ddrescue' is expected to succeed
+         self.assertRunOk(f"ddrescue {dm_dev} {ddrescue_img}")
+ 
+-        # ddrescue does not normaly write any output data when there
++        # ddrescue does not normally write any output data when there
+         # is I/O error on the input. The intent is to preserve any
+         # data that could have been read in a previous pass. There is
+         # one exception, when the output is a non-existing regular
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
