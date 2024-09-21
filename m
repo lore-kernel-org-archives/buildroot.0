@@ -4,49 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 584B4CF9C64
-	for <buildroot@archiver.kernel.org>; Sat, 21 Sep 2024 21:07:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 04808CF9C64
+	for <buildroot@archiver.kernel.org>; Sat, 21 Sep 2024 21:07:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 71C9D6070D;
-	Sat, 21 Sep 2024 21:07:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 206B460716;
+	Sat, 21 Sep 2024 21:07:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tiPvfuKHihdw; Sat, 21 Sep 2024 21:07:48 +0000 (UTC)
+ id eamGqJGI2J3d; Sat, 21 Sep 2024 21:07:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 51DAF6070E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7AF9960850
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 51DAF6070E;
-	Sat, 21 Sep 2024 21:07:47 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 7751C1BF869
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7AF9960850;
+	Sat, 21 Sep 2024 21:07:51 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B11AA1BF473
  for <buildroot@lists.busybox.net>; Sat, 21 Sep 2024 21:07:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 65B5260716
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9FB7A4022F
  for <buildroot@lists.busybox.net>; Sat, 21 Sep 2024 21:07:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 8gcKX-u_be10 for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id gmY8w7hKQTMH for <buildroot@lists.busybox.net>;
  Sat, 21 Sep 2024 21:07:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 987EF60606
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 715D8400DD
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 987EF60606
+ by smtp2.osuosl.org (Postfix) with ESMTP id 715D8400DD
  for <buildroot@buildroot.org>; Sat, 21 Sep 2024 21:07:41 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 91C9784171; Sat, 21 Sep 2024 21:07:41 +0000 (UTC)
+ id 5D4E284171; Sat, 21 Sep 2024 21:07:41 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 21 Sep 2024 22:52:39 +0200
+Date: Sat, 21 Sep 2024 22:52:32 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: dc43b4e5ee588f0e241754e6b519027ba11cdc84
-X-Git-Newrev: 62edcddf92ff894ae9c127860e9079a09991e5ed
+X-Git-Oldrev: 11559c71b3da6f2eebda6e56e4c92d98c6764861
+X-Git-Newrev: 3bff4c7a999b8c42a0e7bb9d34c169283f53963a
 X-Patchwork-Hint: ignore
-Message-Id: <20240921210741.91C9784171@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-parso: bump to version 0.8.4
+Message-Id: <20240921210741.5D4E284171@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-networkx: bump to version
+ 3.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,45 +65,48 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=62edcddf92ff894ae9c127860e9079a09991e5ed
+commit: https://git.buildroot.net/buildroot/commit/?id=3bff4c7a999b8c42a0e7bb9d34c169283f53963a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+
+License hash changed due to year update:
+https://github.com/networkx/networkx/commit/7fc4fa51875d9e326416f998c51f208442d55dad
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-parso/python-parso.hash | 4 ++--
- package/python-parso/python-parso.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-networkx/python-networkx.hash | 6 +++---
+ package/python-networkx/python-networkx.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-parso/python-parso.hash b/package/python-parso/python-parso.hash
-index 67e77a162e..83224a28bf 100644
---- a/package/python-parso/python-parso.hash
-+++ b/package/python-parso/python-parso.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/parso/json
--md5  7ee251113f31f8d851c4a5d9e98977cb  parso-0.8.3.tar.gz
--sha256  8c07be290bb59f03588915921e29e8a50002acaf2cdc5fa0e0114f91709fafa0  parso-0.8.3.tar.gz
-+md5  f83b2e4164f6589ccae39b16c30ed5de  parso-0.8.4.tar.gz
-+sha256  eb3a7b58240fb99099a345571deecc0f9540ea5f4dd2fe14c2a99d6b281ab92d  parso-0.8.4.tar.gz
+diff --git a/package/python-networkx/python-networkx.hash b/package/python-networkx/python-networkx.hash
+index b9fe50fd9c..3b6f4c6fba 100644
+--- a/package/python-networkx/python-networkx.hash
++++ b/package/python-networkx/python-networkx.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/networkx/json
+-md5  e81583dcb3d929b60660721912f3faed  networkx-3.2.1.tar.gz
+-sha256  9f1bb5cf3409bf324e0a722c20bdb4c20ee39bf1c30ce8ae499c8502b0b5e0c6  networkx-3.2.1.tar.gz
++md5  c307f8c790cf3f18954ae7458b16c843  networkx-3.3.tar.gz
++sha256  0c127d8b2f4865f59ae9cb8aafcd60b5c70f3241ebd66f7defad7c4ab90126c9  networkx-3.3.tar.gz
  # Locally computed sha256 checksums
- sha256  fa67973073753d17624caf8684d5ee816d70c89d912c5bca7ca0f08e7b150edb  LICENSE.txt
- sha256  9c1e620a5cf8e74fe81c1fd4c55e9cc0b189fc04e677cfc7ef915de746c3f59e  docs/_themes/flask/LICENSE
-diff --git a/package/python-parso/python-parso.mk b/package/python-parso/python-parso.mk
-index ce1d3401ff..65d10ebfc0 100644
---- a/package/python-parso/python-parso.mk
-+++ b/package/python-parso/python-parso.mk
+-sha256  50b5a27cb43f7a20cede7aa7b9ab2033552e0412c9a1fde51d38885c1417e95f  LICENSE.txt
++sha256  5b433b90f755eb9bbd06feff1d1a4f5f232c5208a185694199e45fa95d762792  LICENSE.txt
+diff --git a/package/python-networkx/python-networkx.mk b/package/python-networkx/python-networkx.mk
+index e463dca40a..ef51003047 100644
+--- a/package/python-networkx/python-networkx.mk
++++ b/package/python-networkx/python-networkx.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PARSO_VERSION = 0.8.3
-+PYTHON_PARSO_VERSION = 0.8.4
- PYTHON_PARSO_SOURCE = parso-$(PYTHON_PARSO_VERSION).tar.gz
--PYTHON_PARSO_SITE = https://files.pythonhosted.org/packages/a2/0e/41f0cca4b85a6ea74d66d2226a7cda8e41206a624f5b330b958ef48e2e52
-+PYTHON_PARSO_SITE = https://files.pythonhosted.org/packages/66/94/68e2e17afaa9169cf6412ab0f28623903be73d1b32e208d9e8e541bb086d
- PYTHON_PARSO_SETUP_TYPE = setuptools
- PYTHON_PARSO_LICENSE = MIT, Python-2.0, BSD-3-Clause (flask theme)
- PYTHON_PARSO_LICENSE_FILES = LICENSE.txt docs/_themes/flask/LICENSE test/normalizer_issue_files/LICENSE
+-PYTHON_NETWORKX_VERSION = 3.2.1
++PYTHON_NETWORKX_VERSION = 3.3
+ PYTHON_NETWORKX_SOURCE = networkx-$(PYTHON_NETWORKX_VERSION).tar.gz
+-PYTHON_NETWORKX_SITE = https://files.pythonhosted.org/packages/c4/80/a84676339aaae2f1cfdf9f418701dd634aef9cc76f708ef55c36ff39c3ca
++PYTHON_NETWORKX_SITE = https://files.pythonhosted.org/packages/04/e6/b164f94c869d6b2c605b5128b7b0cfe912795a87fc90e78533920001f3ec
+ PYTHON_NETWORKX_LICENSE = BSD-3-Clause
+ PYTHON_NETWORKX_LICENSE_FILES = LICENSE.txt
+ PYTHON_NETWORKX_CPE_ID_VENDOR = python
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
