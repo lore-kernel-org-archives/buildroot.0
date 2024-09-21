@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9A102CF9C64
-	for <buildroot@archiver.kernel.org>; Sat, 21 Sep 2024 21:10:59 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 23A71CF9C5B
+	for <buildroot@archiver.kernel.org>; Sat, 21 Sep 2024 21:11:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 63EE76F5FA;
-	Sat, 21 Sep 2024 21:10:59 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id E19A26F66A;
+	Sat, 21 Sep 2024 21:11:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id eBGAKiFzBSvx; Sat, 21 Sep 2024 21:10:57 +0000 (UTC)
+ id waITCrDJSVjp; Sat, 21 Sep 2024 21:11:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B82526F5E2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A9F036F64A
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B82526F5E2;
-	Sat, 21 Sep 2024 21:10:56 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A9F036F64A;
+	Sat, 21 Sep 2024 21:10:59 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 28BAB1BF869
- for <buildroot@lists.busybox.net>; Sat, 21 Sep 2024 21:08:11 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 16F451BF473
+ for <buildroot@lists.busybox.net>; Sat, 21 Sep 2024 21:08:12 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id BC24B60782
+ by smtp3.osuosl.org (Postfix) with ESMTP id E2ECC607C0
  for <buildroot@lists.busybox.net>; Sat, 21 Sep 2024 21:07:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MdPlxQS69zHe for <buildroot@lists.busybox.net>;
- Sat, 21 Sep 2024 21:07:45 +0000 (UTC)
+ id zqAdU1Pd_EtT for <buildroot@lists.busybox.net>;
+ Sat, 21 Sep 2024 21:07:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6EEFB607C0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6918A60720
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6EEFB607C0
- for <buildroot@buildroot.org>; Sat, 21 Sep 2024 21:07:43 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6918A60720
+ for <buildroot@buildroot.org>; Sat, 21 Sep 2024 21:07:42 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 66BE884150; Sat, 21 Sep 2024 21:07:43 +0000 (UTC)
+ id 6649F84150; Sat, 21 Sep 2024 21:07:42 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 21 Sep 2024 22:53:39 +0200
+Date: Sat, 21 Sep 2024 22:53:06 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ac2f881b625d6ce7bd17957e3e84ebec4cba2eb2
-X-Git-Newrev: 1d90acd1e61003779e90d8bd5ea0aedb85e026ee
+X-Git-Oldrev: d9be0ed46dd7e9b2f0e10e53dc0a8389c93057e5
+X-Git-Newrev: c14b56a3548346f1b9c933a2709f029039c9483d
 X-Patchwork-Hint: ignore
-Message-Id: <20240921210743.66BE884150@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pyudev: bump to version
- 0.24.3
+Message-Id: <20240921210742.6649F84150@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-pydantic-core: bump to
+ version 2.23.4
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,44 +65,42 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=1d90acd1e61003779e90d8bd5ea0aedb85e026ee
+commit: https://git.buildroot.net/buildroot/commit/?id=c14b56a3548346f1b9c933a2709f029039c9483d
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-pyudev/python-pyudev.hash | 4 ++--
- package/python-pyudev/python-pyudev.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-pydantic-core/python-pydantic-core.hash | 2 +-
+ package/python-pydantic-core/python-pydantic-core.mk   | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/python-pyudev/python-pyudev.hash b/package/python-pyudev/python-pyudev.hash
-index 72eb323e1f..e9596b7b43 100644
---- a/package/python-pyudev/python-pyudev.hash
-+++ b/package/python-pyudev/python-pyudev.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pyudev/json
--md5  fecaabe9eaa890d2173c7b49ab63a412  pyudev-0.24.1.tar.gz
--sha256  75e54d37218f5ac45b0da1f0fd9cc5e526a3cac3ef1cfad410cf7ab338b01471  pyudev-0.24.1.tar.gz
-+md5  07bbe9111308d2509645705b8321c416  pyudev-0.24.3.tar.gz
-+sha256  2e945427a21674893bb97632401db62139d91cea1ee96137cc7b07ad22198fc7  pyudev-0.24.3.tar.gz
+diff --git a/package/python-pydantic-core/python-pydantic-core.hash b/package/python-pydantic-core/python-pydantic-core.hash
+index 39f64e760f..7c59716a58 100644
+--- a/package/python-pydantic-core/python-pydantic-core.hash
++++ b/package/python-pydantic-core/python-pydantic-core.hash
+@@ -1,4 +1,4 @@
+ # Locally calculated after vendoring
+-sha256  4d2ad4888a80e06641bfe6a950fa2390ac59a6b0cf0f4e03574122b4b5bcc6a4  python-pydantic-core-2.23.2-cargo2.tar.gz
++sha256  eff354ef5fcf428103276a2c2825962411327811866ff52eb0c2df703858ba33  python-pydantic-core-2.23.4-cargo2.tar.gz
  # Locally computed sha256 checksums
- sha256  6095e9ffa777dd22839f7801aa845b31c9ed07f3d6bf8a26dc5d2dec8ccc0ef3  COPYING
-diff --git a/package/python-pyudev/python-pyudev.mk b/package/python-pyudev/python-pyudev.mk
-index 53d60572a8..fa11ce5040 100644
---- a/package/python-pyudev/python-pyudev.mk
-+++ b/package/python-pyudev/python-pyudev.mk
+ sha256  2afdd30d54b4d62b6f488a6bcc1546e84ec5061f13f4209c03d012348783795a  LICENSE
+diff --git a/package/python-pydantic-core/python-pydantic-core.mk b/package/python-pydantic-core/python-pydantic-core.mk
+index aad7988fff..d1f3ab4655 100644
+--- a/package/python-pydantic-core/python-pydantic-core.mk
++++ b/package/python-pydantic-core/python-pydantic-core.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYUDEV_VERSION = 0.24.1
-+PYTHON_PYUDEV_VERSION = 0.24.3
- PYTHON_PYUDEV_SOURCE = pyudev-$(PYTHON_PYUDEV_VERSION).tar.gz
--PYTHON_PYUDEV_SITE = https://files.pythonhosted.org/packages/20/b6/16961ac3575575260c72928f17df9c99c2a696871e486965ec6e2fa2aff4
-+PYTHON_PYUDEV_SITE = https://files.pythonhosted.org/packages/c4/5c/6cc034da13830e3da123ccf9a30910bc868fa16670362f004e4b788d0df1
- PYTHON_PYUDEV_LICENSE = LGPL-2.1+
- PYTHON_PYUDEV_LICENSE_FILES = COPYING
- PYTHON_PYUDEV_SETUP_TYPE = setuptools
+-PYTHON_PYDANTIC_CORE_VERSION = 2.23.2
++PYTHON_PYDANTIC_CORE_VERSION = 2.23.4
+ PYTHON_PYDANTIC_CORE_SOURCE_PYPI = pydantic_core-$(PYTHON_PYDANTIC_CORE_VERSION).tar.gz
+-PYTHON_PYDANTIC_CORE_SITE_PYPI = https://files.pythonhosted.org/packages/5f/03/54e4961dfaed4804fea0ad73e94d337f4ef88a635e73990d6e150b469594
++PYTHON_PYDANTIC_CORE_SITE_PYPI = https://files.pythonhosted.org/packages/e2/aa/6b6a9b9f8537b872f552ddd46dd3da230367754b6f707b8e1e963f515ea3
+ PYTHON_PYDANTIC_CORE_SITE = $(PYTHON_PYDANTIC_CORE_SITE_PYPI)/$(PYTHON_PYDANTIC_CORE_SOURCE_PYPI)?buildroot-path=filename
+ PYTHON_PYDANTIC_CORE_SETUP_TYPE = maturin
+ PYTHON_PYDANTIC_CORE_LICENSE = MIT
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
