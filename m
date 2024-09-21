@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03D92CF9C64
-	for <buildroot@archiver.kernel.org>; Sat, 21 Sep 2024 21:11:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2B578CF9C64
+	for <buildroot@archiver.kernel.org>; Sat, 21 Sep 2024 21:11:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C7D3360AA1;
-	Sat, 21 Sep 2024 21:11:16 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DF0AE6F6F7;
+	Sat, 21 Sep 2024 21:11:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CjUT142A6oBo; Sat, 21 Sep 2024 21:11:15 +0000 (UTC)
+ id ifwiVQxvtsVT; Sat, 21 Sep 2024 21:11:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 724D36F6B5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2996760AA7
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 724D36F6B5;
-	Sat, 21 Sep 2024 21:11:15 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 2996760AA7;
+	Sat, 21 Sep 2024 21:11:18 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1101A1BF869
- for <buildroot@lists.busybox.net>; Sat, 21 Sep 2024 21:08:16 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 10B621BF869
+ for <buildroot@lists.busybox.net>; Sat, 21 Sep 2024 21:08:17 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DE50160832
- for <buildroot@lists.busybox.net>; Sat, 21 Sep 2024 21:07:47 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7B1066077B
+ for <buildroot@lists.busybox.net>; Sat, 21 Sep 2024 21:07:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Psgxnm_FrOgP for <buildroot@lists.busybox.net>;
- Sat, 21 Sep 2024 21:07:44 +0000 (UTC)
+ id zaV92m1VIRsf for <buildroot@lists.busybox.net>;
+ Sat, 21 Sep 2024 21:07:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ECEC56077B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 92C26606F0
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id ECEC56077B
- for <buildroot@buildroot.org>; Sat, 21 Sep 2024 21:07:42 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 92C26606F0
+ for <buildroot@buildroot.org>; Sat, 21 Sep 2024 21:07:43 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DFC048119A; Sat, 21 Sep 2024 21:07:42 +0000 (UTC)
+ id 8D41D835FF; Sat, 21 Sep 2024 21:07:43 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 21 Sep 2024 22:53:22 +0200
+Date: Sat, 21 Sep 2024 22:53:45 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 4a380858da0b727ac4d1ba65196096de9d45b109
-X-Git-Newrev: 7275aa0796481e57a9d9bdbc62f3c5c873c30a06
+X-Git-Oldrev: aa4f1a63c32b5309a4884d722b931fd535ce7069
+X-Git-Newrev: 0adfafd9f73d75b6375f27853a5164b014d91f44
 X-Patchwork-Hint: ignore
-Message-Id: <20240921210742.DFC048119A@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pyopenssl: bump to version
- 24.2.1
+Message-Id: <20240921210743.8D41D835FF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-regex: bump to version
+ 2024.9.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,45 +65,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7275aa0796481e57a9d9bdbc62f3c5c873c30a06
+commit: https://git.buildroot.net/buildroot/commit/?id=0adfafd9f73d75b6375f27853a5164b014d91f44
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-pyopenssl/python-pyopenssl.hash | 4 ++--
- package/python-pyopenssl/python-pyopenssl.mk   | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-regex/python-regex.hash | 4 ++--
+ package/python-regex/python-regex.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pyopenssl/python-pyopenssl.hash b/package/python-pyopenssl/python-pyopenssl.hash
-index fb5f75db96..6c968eff16 100644
---- a/package/python-pyopenssl/python-pyopenssl.hash
-+++ b/package/python-pyopenssl/python-pyopenssl.hash
+diff --git a/package/python-regex/python-regex.hash b/package/python-regex/python-regex.hash
+index 7454db99bb..054e5937e9 100644
+--- a/package/python-regex/python-regex.hash
++++ b/package/python-regex/python-regex.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pyopenssl/json
--md5  4c4f6f9e1c731b8ee7adcd9fbeccec62  pyOpenSSL-23.3.0.tar.gz
--sha256  6b2cba5cc46e822750ec3e5a81ee12819850b11303630d575e98108a079c2b12  pyOpenSSL-23.3.0.tar.gz
-+md5  4e41c41b8a14ac141dde132c348aaf5d  pyopenssl-24.2.1.tar.gz
-+sha256  4247f0dbe3748d560dcbb2ff3ea01af0f9a1a001ef5f7c4c647956ed8cbf0e95  pyopenssl-24.2.1.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/regex/json
+-md5  3f97f0aef9bf334fe50ae5980b183e68  regex-2023.12.25.tar.gz
+-sha256  29171aa128da69afdf4bde412d5bedc335f2ca8fcfe4489038577d05f16181e5  regex-2023.12.25.tar.gz
++md5  a544771359e2c977578297506de829eb  regex-2024.9.11.tar.gz
++sha256  6c188c307e8433bcb63dc1915022deb553b4203a70722fc542c363bf120a01fd  regex-2024.9.11.tar.gz
  # Locally computed sha256 checksums
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
-diff --git a/package/python-pyopenssl/python-pyopenssl.mk b/package/python-pyopenssl/python-pyopenssl.mk
-index 9865f2bb00..077322131f 100644
---- a/package/python-pyopenssl/python-pyopenssl.mk
-+++ b/package/python-pyopenssl/python-pyopenssl.mk
+ sha256  bff55ef4cdcc8c14ce259f8e8ab60e264418440d6335f4dc138273fbd506144d  LICENSE.txt
+diff --git a/package/python-regex/python-regex.mk b/package/python-regex/python-regex.mk
+index 6b1938bc0c..fab4cf8365 100644
+--- a/package/python-regex/python-regex.mk
++++ b/package/python-regex/python-regex.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYOPENSSL_VERSION = 23.3.0
--PYTHON_PYOPENSSL_SOURCE = pyOpenSSL-$(PYTHON_PYOPENSSL_VERSION).tar.gz
--PYTHON_PYOPENSSL_SITE = https://files.pythonhosted.org/packages/bf/a0/e667c3c43b65a188cc3041fa00c50655315b93be45182b2c94d185a2610e
-+PYTHON_PYOPENSSL_VERSION = 24.2.1
-+PYTHON_PYOPENSSL_SOURCE = pyopenssl-$(PYTHON_PYOPENSSL_VERSION).tar.gz
-+PYTHON_PYOPENSSL_SITE = https://files.pythonhosted.org/packages/5d/70/ff56a63248562e77c0c8ee4aefc3224258f1856977e0c1472672b62dadb8
- PYTHON_PYOPENSSL_LICENSE = Apache-2.0
- PYTHON_PYOPENSSL_LICENSE_FILES = LICENSE
- PYTHON_PYOPENSSL_CPE_ID_VENDOR = pyopenssl
+-PYTHON_REGEX_VERSION = 2023.12.25
++PYTHON_REGEX_VERSION = 2024.9.11
+ PYTHON_REGEX_SOURCE = regex-$(PYTHON_REGEX_VERSION).tar.gz
+-PYTHON_REGEX_SITE = https://files.pythonhosted.org/packages/b5/39/31626e7e75b187fae7f121af3c538a991e725c744ac893cc2cfd70ce2853
++PYTHON_REGEX_SITE = https://files.pythonhosted.org/packages/f9/38/148df33b4dbca3bd069b963acab5e0fa1a9dbd6820f8c322d0dd6faeff96
+ PYTHON_REGEX_SETUP_TYPE = setuptools
+ PYTHON_REGEX_LICENSE = Apache-2.0
+ PYTHON_REGEX_LICENSE_FILES = LICENSE.txt
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
