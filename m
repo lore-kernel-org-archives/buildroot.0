@@ -4,50 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 25F40CF9C64
-	for <buildroot@archiver.kernel.org>; Sat, 21 Sep 2024 21:09:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DF7D4CF9C5B
+	for <buildroot@archiver.kernel.org>; Sat, 21 Sep 2024 21:09:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E55626084F;
-	Sat, 21 Sep 2024 21:09:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AD2D860AED;
+	Sat, 21 Sep 2024 21:09:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id D8MyKQpmMAl3; Sat, 21 Sep 2024 21:09:21 +0000 (UTC)
+ id jc0Rzkbya4Ss; Sat, 21 Sep 2024 21:09:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 03F1A608A1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 04FBF60876
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 03F1A608A1;
-	Sat, 21 Sep 2024 21:09:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 04FBF60876;
+	Sat, 21 Sep 2024 21:09:24 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 0E6281BF473
- for <buildroot@lists.busybox.net>; Sat, 21 Sep 2024 21:07:54 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 13A7E1BF473
+ for <buildroot@lists.busybox.net>; Sat, 21 Sep 2024 21:07:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9359F60643
+ by smtp3.osuosl.org (Postfix) with ESMTP id CB62760809
  for <buildroot@lists.busybox.net>; Sat, 21 Sep 2024 21:07:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EEk55eGV66uG for <buildroot@lists.busybox.net>;
+ id MTohRWury_IJ for <buildroot@lists.busybox.net>;
  Sat, 21 Sep 2024 21:07:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 53FEB6070D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BE60260752
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 53FEB6070D
+ by smtp3.osuosl.org (Postfix) with ESMTP id BE60260752
  for <buildroot@buildroot.org>; Sat, 21 Sep 2024 21:07:42 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5124D84174; Sat, 21 Sep 2024 21:07:42 +0000 (UTC)
+ id B2F838119A; Sat, 21 Sep 2024 21:07:42 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 21 Sep 2024 22:53:03 +0200
+Date: Sat, 21 Sep 2024 22:53:16 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 81ca1488648059e73fc1572f799a2b654eaf1392
-X-Git-Newrev: d1aaab41ce30896f60e7e02df604bbbd3284af83
+X-Git-Oldrev: 2065027130f8df7e26d5ace75a30a5bf462e1837
+X-Git-Newrev: 805b820a5ab4a78ee3b18f11e15d506a49274c4f
 X-Patchwork-Hint: ignore
-Message-Id: <20240921210742.5124D84174@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pycups: bump to version
- 2.0.4
+Message-Id: <20240921210742.B2F838119A@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-pyjwt: bump to version 2.9.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,44 +64,45 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d1aaab41ce30896f60e7e02df604bbbd3284af83
+commit: https://git.buildroot.net/buildroot/commit/?id=805b820a5ab4a78ee3b18f11e15d506a49274c4f
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-pycups/python-pycups.hash | 4 ++--
- package/python-pycups/python-pycups.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-pyjwt/python-pyjwt.hash | 4 ++--
+ package/python-pyjwt/python-pyjwt.mk   | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-pycups/python-pycups.hash b/package/python-pycups/python-pycups.hash
-index d1498b61cf..d6b7963cfc 100644
---- a/package/python-pycups/python-pycups.hash
-+++ b/package/python-pycups/python-pycups.hash
+diff --git a/package/python-pyjwt/python-pyjwt.hash b/package/python-pyjwt/python-pyjwt.hash
+index 06b91bc14a..a6c8d90853 100644
+--- a/package/python-pyjwt/python-pyjwt.hash
++++ b/package/python-pyjwt/python-pyjwt.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/pycups/json
--md5  41eef188b86d01ccfdbaaa05cf0f6ca4  pycups-2.0.1.tar.gz
--sha256  57434ce5f62548eb12949ca8217f066f4eeb21a5d6ab8b13471dce350e380c90  pycups-2.0.1.tar.gz
-+md5  a4e9bcdc2012fcff660e0806416a1fb3  pycups-2.0.4.tar.gz
-+sha256  843e385c1dbf694996ca84ef02a7f30c28376035588f5fbeacd6bae005cf7c8d  pycups-2.0.4.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/PyJWT/json
+-md5  a683445793adb7fcf39ad3e55c5c347c  PyJWT-2.8.0.tar.gz
+-sha256  57e28d156e3d5c10088e0c68abb90bfac3df82b40a71bd0daa20c65ccd5c23de  PyJWT-2.8.0.tar.gz
++md5  88c9dbeb3e6302c7db813195e202420a  pyjwt-2.9.0.tar.gz
++sha256  7e1e5b56cc735432a7369cbfa0efe50fa113ebecdc04ae6922deba8b84582d0c  pyjwt-2.9.0.tar.gz
  # Locally computed sha256 checksums
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/python-pycups/python-pycups.mk b/package/python-pycups/python-pycups.mk
-index bf61400afe..60f4b483f7 100644
---- a/package/python-pycups/python-pycups.mk
-+++ b/package/python-pycups/python-pycups.mk
+ sha256  797a7a20231d4c433e9f1911db1731d06b5828b98f499819a034f7c0f56f5ce5  LICENSE
+diff --git a/package/python-pyjwt/python-pyjwt.mk b/package/python-pyjwt/python-pyjwt.mk
+index d4cf226941..084d4ac802 100644
+--- a/package/python-pyjwt/python-pyjwt.mk
++++ b/package/python-pyjwt/python-pyjwt.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PYCUPS_VERSION = 2.0.1
-+PYTHON_PYCUPS_VERSION = 2.0.4
- PYTHON_PYCUPS_SOURCE = pycups-$(PYTHON_PYCUPS_VERSION).tar.gz
--PYTHON_PYCUPS_SITE = https://files.pythonhosted.org/packages/0c/bb/82546806a86dc16f5eeb76f62ffdc42cce3d43aacd4e25a8b5300eec0263
-+PYTHON_PYCUPS_SITE = https://files.pythonhosted.org/packages/96/c4/b077f0422cd031e4f3a47c75ce0bcf77f2f2e5bf3648f6945a4d09fd44a5
- PYTHON_PYCUPS_SETUP_TYPE = setuptools
- PYTHON_PYCUPS_LICENSE = GPL-2.0+
- PYTHON_PYCUPS_LICENSE_FILES = COPYING
+-PYTHON_PYJWT_VERSION = 2.8.0
+-PYTHON_PYJWT_SOURCE = PyJWT-$(PYTHON_PYJWT_VERSION).tar.gz
+-PYTHON_PYJWT_SITE = https://files.pythonhosted.org/packages/30/72/8259b2bccfe4673330cea843ab23f86858a419d8f1493f66d413a76c7e3b
++PYTHON_PYJWT_VERSION = 2.9.0
++PYTHON_PYJWT_SOURCE = pyjwt-$(PYTHON_PYJWT_VERSION).tar.gz
++PYTHON_PYJWT_SITE = https://files.pythonhosted.org/packages/fb/68/ce067f09fca4abeca8771fe667d89cc347d1e99da3e093112ac329c6020e
+ PYTHON_PYJWT_SETUP_TYPE = setuptools
+ PYTHON_PYJWT_LICENSE = MIT
+ PYTHON_PYJWT_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
