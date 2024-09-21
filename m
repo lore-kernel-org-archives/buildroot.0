@@ -1,74 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 86AC7CF9C64
-	for <buildroot@archiver.kernel.org>; Sat, 21 Sep 2024 20:18:54 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 35AF4CF9C5B
+	for <buildroot@archiver.kernel.org>; Sat, 21 Sep 2024 20:53:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4DCE740015;
-	Sat, 21 Sep 2024 20:18:54 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DD9BA605C2;
+	Sat, 21 Sep 2024 20:53:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ms-tjgjhDPyI; Sat, 21 Sep 2024 20:18:53 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id QPGChcwt893c; Sat, 21 Sep 2024 20:53:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0A59C400DD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C9EC560643
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0A59C400DD;
-	Sat, 21 Sep 2024 20:18:53 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 51E501BF48B
- for <buildroot@lists.busybox.net>; Sat, 21 Sep 2024 20:18:43 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id C9EC560643;
+	Sat, 21 Sep 2024 20:53:39 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 5F9BA1BF48B
+ for <buildroot@lists.busybox.net>; Sat, 21 Sep 2024 20:53:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 4DB1340716
- for <buildroot@lists.busybox.net>; Sat, 21 Sep 2024 20:18:43 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 4F361813FA
+ for <buildroot@lists.busybox.net>; Sat, 21 Sep 2024 20:53:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZB7hrQMGgzJx for <buildroot@lists.busybox.net>;
- Sat, 21 Sep 2024 20:18:42 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::14;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XnAXZuEslDlg for <buildroot@lists.busybox.net>;
+ Sat, 21 Sep 2024 20:53:37 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
  helo=smtp5-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org DC905406FD
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DC905406FD
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp4.osuosl.org (Postfix) with ESMTPS id DC905406FD
- for <buildroot@buildroot.org>; Sat, 21 Sep 2024 20:18:41 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 36EB5813F9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 36EB5813F9
+Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 36EB5813F9
+ for <buildroot@buildroot.org>; Sat, 21 Sep 2024 20:53:37 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8290:3800:5d8d:eab4:d280:c2c4])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id 0D4FD60129;
- Sat, 21 Sep 2024 22:18:37 +0200 (CEST)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id BE0515FF3F;
+ Sat, 21 Sep 2024 22:53:29 +0200 (CEST)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sat, 21 Sep 2024 22:18:36 +0200
-Date: Sat, 21 Sep 2024 22:18:36 +0200
+ Sat, 21 Sep 2024 22:53:29 +0200
+Date: Sat, 21 Sep 2024 22:53:29 +0200
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <Zu8qHAeo6BrMKbkx@landeda>
-References: <20240906181820.15261-1-james.hilliard1@gmail.com>
+Message-ID: <Zu8yScN-8KJTH-Kf@landeda>
+References: <20240917174651.3846612-1-james.hilliard1@gmail.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20240906181820.15261-1-james.hilliard1@gmail.com>
+In-Reply-To: <20240917174651.3846612-1-james.hilliard1@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1726949920;
- bh=37NfVyiQkup9ZqV+SpTOTaApZagee+9vcQRjGuvIWZw=;
+ d=free.fr; s=smtp-20201208; t=1726952014;
+ bh=l77X0HHhZLExtcVvTvVgPxgWTj7mQYH42WOioZKiDF4=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=aZzBrFcN//w92EeYSyolx1qiCxDLibrLD+1WuFVmeVmvlOemG0cztN2FUAUc0pHhM
- QJ3Ii1EkQAgQ708ySsjRnv0GqWbo0eYwF38mDLtZfQWgJYQpnI9N7ywskzRdGWIlg9
- jYRZXLrlLCK9jEEow2/rZsTjFBjlKYv3uEjTIWHxto5GJ5BsGj1ktzuSu4NXucMSEk
- gGFvhtjOZXvSiuCCzGywdvRfs5adDJkVDEGe4loOah/XuA59zcNl72nC0hPz4ycswn
- reo0KhFEvmRsqfjdL6Yyjzes653k65ZjklcdZe/v/5SMB6Y/fNet+PMfMvDHOTy0D4
- c7/mbFprqy5dA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=pGquB45VyikzoH1Vp9AbLnnKgy3IxiqNVeNCT/UdcVGZGRgZt/lLTIK5r7h1ci1Ik
+ HKMMNksUrWpo2WkYfJrLRlb4ODtRU5E0rXemgbUe9qW4r4tsOjsrRKlFcwh4cwIVId
+ OvRSn7ll8XeWuqU/XmANZKzvpzhh0cGy47n8LsXEK1I0cO0bsOORyqHvhI+7tcQ8u0
+ Qq6YZXwN2ruEN9lmtMsoBxJfPkkarLLFE94YK0X/11Nd+HMl7Pz/PxQiCP+DFZ4Bhb
+ 9lw2VpOkRunN9Vhj99f4BH3Btx0nKWJsCQdH5WjdsdKwvQGnz0kCbfJPWhMefBLqDx
+ rusD85sqaBvUw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=aZzBrFcN
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-idna: bump to version 3.8
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=pGquB45V
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-netaddr: bump to version
+ 1.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,55 +81,61 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
+Cc: Mauro Condarelli <mc5686@mclink.it>, Asaf Kahlon <asafka7@gmail.com>,
+ buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-James, all,
+James, All,
 
-On 2024-09-06 12:18 -0600, James Hilliard spake thusly:
+On 2024-09-17 11:46 -0600, James Hilliard spake thusly:
 > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> ---
+>  package/python-netaddr/python-netaddr.hash | 6 +++---
+>  package/python-netaddr/python-netaddr.mk   | 6 +++---
+>  2 files changed, 6 insertions(+), 6 deletions(-)
+> 
+> diff --git a/package/python-netaddr/python-netaddr.hash b/package/python-netaddr/python-netaddr.hash
+> index f969aeecfc..1ad35966bb 100644
+> --- a/package/python-netaddr/python-netaddr.hash
+> +++ b/package/python-netaddr/python-netaddr.hash
+> @@ -1,5 +1,5 @@
+>  # md5, sha256 from https://pypi.org/pypi/netaddr/json
+> -md5  c0d7b080da18c851ea436389813d7652  netaddr-0.10.1.tar.gz
+> -sha256  f4da4222ca8c3f43c8e18a8263e5426c750a3a837fdfeccf74c68d0408eaa3bf  netaddr-0.10.1.tar.gz
+> +md5  b0307617f8f3aa73bbcfadac52d91df7  netaddr-1.3.0.tar.gz
+> +sha256  5c3c3d9895b551b763779ba7db7a03487dc1f8e3b385af819af341ae9ef6e48a  netaddr-1.3.0.tar.gz
+>  # Locally computed sha256 checksums
+> -sha256  0e53de62547787462f41eefb5cee31a14f7ea767ba0362c6f9304f1742486d47  LICENSE
+> +sha256  36dcdc429f76107d1697396ca0d8c43b343808c98beacb3405f472a76b65bffa  LICENSE.rst
 
-Applied to master, thanks. As well as a few other such bumps...
+The license filename chanmged, but the content also changed. What is the
+difference?
 
 Regards,
 Yann E. MORIN.
 
-> ---
->  package/python-idna/python-idna.hash | 4 ++--
->  package/python-idna/python-idna.mk   | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/python-idna/python-idna.hash b/package/python-idna/python-idna.hash
-> index 7b22841d88..88459b38df 100644
-> --- a/package/python-idna/python-idna.hash
-> +++ b/package/python-idna/python-idna.hash
-> @@ -1,5 +1,5 @@
->  # md5, sha256 from https://pypi.org/pypi/idna/json
-> -md5  31cc572cb7a6519159c927c998c64c79  idna-3.7.tar.gz
-> -sha256  028ff3aadf0609c1fd278d8ea3089299412a7a8b9bd005dd08b9f8285bcb5cfc  idna-3.7.tar.gz
-> +md5  4490e5070a3dcbf1a6cd178cb523cdfb  idna-3.8.tar.gz
-> +sha256  d838c2c0ed6fced7693d5e8ab8e734d5f8fda53a039c0164afb0b82e771e3603  idna-3.8.tar.gz
->  # Locally computed sha256 checksums
->  sha256  a59f0b0ef3635874109a4461ca44ff7a70d50696e814767bfaf721d4c9b0db0f  LICENSE.md
-> diff --git a/package/python-idna/python-idna.mk b/package/python-idna/python-idna.mk
-> index b3c012ed0d..c9b83a5bff 100644
-> --- a/package/python-idna/python-idna.mk
-> +++ b/package/python-idna/python-idna.mk
-> @@ -4,9 +4,9 @@
+> diff --git a/package/python-netaddr/python-netaddr.mk b/package/python-netaddr/python-netaddr.mk
+> index 79e55a739f..7c26b16bb4 100644
+> --- a/package/python-netaddr/python-netaddr.mk
+> +++ b/package/python-netaddr/python-netaddr.mk
+> @@ -4,11 +4,11 @@
 >  #
 >  ################################################################################
 >  
-> -PYTHON_IDNA_VERSION = 3.7
-> +PYTHON_IDNA_VERSION = 3.8
->  PYTHON_IDNA_SOURCE = idna-$(PYTHON_IDNA_VERSION).tar.gz
-> -PYTHON_IDNA_SITE = https://files.pythonhosted.org/packages/21/ed/f86a79a07470cb07819390452f178b3bef1d375f2ec021ecfc709fc7cf07
-> +PYTHON_IDNA_SITE = https://files.pythonhosted.org/packages/e8/ac/e349c5e6d4543326c6883ee9491e3921e0d07b55fdf3cce184b40d63e72a
->  PYTHON_IDNA_LICENSE = BSD-3-Clause
->  PYTHON_IDNA_LICENSE_FILES = LICENSE.md
->  PYTHON_IDNA_SETUP_TYPE = flit
+> -PYTHON_NETADDR_VERSION = 0.10.1
+> +PYTHON_NETADDR_VERSION = 1.3.0
+>  PYTHON_NETADDR_SOURCE = netaddr-$(PYTHON_NETADDR_VERSION).tar.gz
+> -PYTHON_NETADDR_SITE = https://files.pythonhosted.org/packages/af/96/f4878091248450bbdebfbd01bf1d95821bd47eb38e756815a0431baa6b07
+> +PYTHON_NETADDR_SITE = https://files.pythonhosted.org/packages/54/90/188b2a69654f27b221fba92fda7217778208532c962509e959a9cee5229d
+>  PYTHON_NETADDR_LICENSE = BSD-3-Clause
+> -PYTHON_NETADDR_LICENSE_FILES = LICENSE
+> +PYTHON_NETADDR_LICENSE_FILES = LICENSE.rst
+>  PYTHON_NETADDR_SETUP_TYPE = setuptools
+>  
+>  $(eval $(python-package))
 > -- 
 > 2.34.1
 > 
