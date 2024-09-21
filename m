@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1A32FCF9C64
-	for <buildroot@archiver.kernel.org>; Sat, 21 Sep 2024 21:09:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 369F3CF9C64
+	for <buildroot@archiver.kernel.org>; Sat, 21 Sep 2024 21:09:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id DA83A60841;
-	Sat, 21 Sep 2024 21:09:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id ECB2660908;
+	Sat, 21 Sep 2024 21:09:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vUmNQO3JI722; Sat, 21 Sep 2024 21:09:03 +0000 (UTC)
+ id mdRlWSdpqBe1; Sat, 21 Sep 2024 21:09:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 64E3860A78
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8F5CE60A6A
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 64E3860A78;
-	Sat, 21 Sep 2024 21:09:02 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 047D01BF473
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8F5CE60A6A;
+	Sat, 21 Sep 2024 21:09:05 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 134271BF869
  for <buildroot@lists.busybox.net>; Sat, 21 Sep 2024 21:07:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 3AF4860761
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1E983403C8
  for <buildroot@lists.busybox.net>; Sat, 21 Sep 2024 21:07:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kAjWb0w1YPsa for <buildroot@lists.busybox.net>;
- Sat, 21 Sep 2024 21:07:41 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id a3Au6vY-NnHY for <buildroot@lists.busybox.net>;
+ Sat, 21 Sep 2024 21:07:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D794E6066C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4C08B404D7
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id D794E6066C
- for <buildroot@buildroot.org>; Sat, 21 Sep 2024 21:07:41 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 4C08B404D7
+ for <buildroot@buildroot.org>; Sat, 21 Sep 2024 21:07:43 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id C415E8417C; Sat, 21 Sep 2024 21:07:41 +0000 (UTC)
+ id 486F88417C; Sat, 21 Sep 2024 21:07:43 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sat, 21 Sep 2024 22:52:46 +0200
+Date: Sat, 21 Sep 2024 22:53:35 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 687fb917378bfb1102107114d24809f84253a337
-X-Git-Newrev: bb8843f5604542945322845843c8228eafb12871
+X-Git-Oldrev: 312be2346957101fd1a4fea32fc415da505cbce0
+X-Git-Newrev: 38999488d422b84b5ba084bbb73dd84c4dacc78c
 X-Patchwork-Hint: ignore
-Message-Id: <20240921210741.C415E8417C@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-pillow: bump to version
- 10.4.0
+Message-Id: <20240921210743.486F88417C@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-pytest: bump to version
+ 8.3.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,45 +65,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bb8843f5604542945322845843c8228eafb12871
+commit: https://git.buildroot.net/buildroot/commit/?id=38999488d422b84b5ba084bbb73dd84c4dacc78c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-pillow/python-pillow.hash | 7 +++----
- package/python-pillow/python-pillow.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 6 deletions(-)
+ package/python-pytest/python-pytest.hash | 4 ++--
+ package/python-pytest/python-pytest.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-pillow/python-pillow.hash b/package/python-pillow/python-pillow.hash
-index 352536a035..91626319b2 100644
---- a/package/python-pillow/python-pillow.hash
-+++ b/package/python-pillow/python-pillow.hash
-@@ -1,6 +1,5 @@
--# md5, sha256 https://pypi.org/project/pillow/10.3.0/#copy-hash-modal-125abe0d-59be-40cd-89a3-3e2f78136be0
--md5  6c21a12849ae42f93881f614d8f6f651  pillow-10.3.0.tar.gz
--sha256  9d2455fbf44c914840c793e89aa82d0e1763a14253a000743719ae5946814b2d  pillow-10.3.0.tar.gz
--
-+# md5, sha256 from https://pypi.org/pypi/pillow/json
-+md5  869758b3c5f5d8c15ffda4c8011b78d6  pillow-10.4.0.tar.gz
-+sha256  166c1cd4d24309b30d61f79f4a9114b7b2313d7450912277855ff5dfd7cd4a06  pillow-10.4.0.tar.gz
+diff --git a/package/python-pytest/python-pytest.hash b/package/python-pytest/python-pytest.hash
+index 1d5a874238..15ac04a6ea 100644
+--- a/package/python-pytest/python-pytest.hash
++++ b/package/python-pytest/python-pytest.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/pytest/json
+-md5  6a85eccffeb0fa15c104f408d82ce7fa  pytest-8.1.1.tar.gz
+-sha256  ac978141a75948948817d360297b7aae0fcb9d6ff6bc9ec6d514b85d5a65c044  pytest-8.1.1.tar.gz
++md5  71466867181a5a7aefdb298b7146bcad  pytest-8.3.3.tar.gz
++sha256  70b98107bd648308a7952b06e6ca9a50bc660be218d53c257cc1fc94fda10181  pytest-8.3.3.tar.gz
  # Locally computed sha256 checksums
- sha256  cf234c27a3f275f5a050f4df3946f8855704226fe4e7ca8b33928cbcecbced37  LICENSE
-diff --git a/package/python-pillow/python-pillow.mk b/package/python-pillow/python-pillow.mk
-index 38214376ce..62e87951c9 100644
---- a/package/python-pillow/python-pillow.mk
-+++ b/package/python-pillow/python-pillow.mk
-@@ -4,8 +4,8 @@
+ sha256  ca836a5f9ecca3b2f350230faa20a48fb8b145653b5568d784862df864706b9b  LICENSE
+diff --git a/package/python-pytest/python-pytest.mk b/package/python-pytest/python-pytest.mk
+index 90dc91b654..256b6954f0 100644
+--- a/package/python-pytest/python-pytest.mk
++++ b/package/python-pytest/python-pytest.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_PILLOW_VERSION = 10.3.0
--PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/ef/43/c50c17c5f7d438e836c169e343695534c38c77f60e7c90389bd77981bc21
-+PYTHON_PILLOW_VERSION = 10.4.0
-+PYTHON_PILLOW_SITE = https://files.pythonhosted.org/packages/cd/74/ad3d526f3bf7b6d3f408b73fde271ec69dfac8b81341a318ce825f2b3812
- PYTHON_PILLOW_SOURCE = pillow-$(PYTHON_PILLOW_VERSION).tar.gz
- PYTHON_PILLOW_LICENSE = HPND
- PYTHON_PILLOW_LICENSE_FILES = LICENSE
+-PYTHON_PYTEST_VERSION = 8.1.1
++PYTHON_PYTEST_VERSION = 8.3.3
+ PYTHON_PYTEST_SOURCE = pytest-$(PYTHON_PYTEST_VERSION).tar.gz
+-PYTHON_PYTEST_SITE = https://files.pythonhosted.org/packages/30/b7/7d44bbc04c531dcc753056920e0988032e5871ac674b5a84cb979de6e7af
++PYTHON_PYTEST_SITE = https://files.pythonhosted.org/packages/8b/6c/62bbd536103af674e227c41a8f3dcd022d591f6eed5facb5a0f31ee33bbc
+ PYTHON_PYTEST_SETUP_TYPE = setuptools
+ PYTHON_PYTEST_LICENSE = MIT
+ PYTHON_PYTEST_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
