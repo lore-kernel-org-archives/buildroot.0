@@ -1,97 +1,93 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0370FCF9C69
-	for <buildroot@archiver.kernel.org>; Sun, 22 Sep 2024 18:18:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id AD0FFCF9C64
+	for <buildroot@archiver.kernel.org>; Sun, 22 Sep 2024 18:43:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id BBA1840247;
-	Sun, 22 Sep 2024 18:18:51 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 47C436061D;
+	Sun, 22 Sep 2024 18:43:34 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id v-NVlfTOEIIB; Sun, 22 Sep 2024 18:43:33 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 36E196061F
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 36E196061F;
+	Sun, 22 Sep 2024 18:43:33 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id A69B91BF3E1
+ for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 18:43:31 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9566F40251
+ for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 18:43:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id LnjhlDjnP4jt; Sun, 22 Sep 2024 18:18:50 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 760A7403A2
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 760A7403A2;
-	Sun, 22 Sep 2024 18:18:50 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A31201BF3E1
- for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 18:18:46 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 92A0F811AD
- for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 18:18:46 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id USEj_ivr5RTj for <buildroot@lists.busybox.net>;
- Sun, 22 Sep 2024 18:18:45 +0000 (UTC)
+ id XG_rHlVrtfrT for <buildroot@lists.busybox.net>;
+ Sun, 22 Sep 2024 18:43:30 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::636; helo=mail-ej1-x636.google.com;
- envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 2B517811AF
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2B517811AF
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com
- [IPv6:2a00:1450:4864:20::636])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 2B517811AF
- for <buildroot@buildroot.org>; Sun, 22 Sep 2024 18:18:45 +0000 (UTC)
-Received: by mail-ej1-x636.google.com with SMTP id
- a640c23a62f3a-a8a789c4fc5so783764566b.0
- for <buildroot@buildroot.org>; Sun, 22 Sep 2024 11:18:44 -0700 (PDT)
+ client-ip=2607:f8b0:4864:20::633; helo=mail-pl1-x633.google.com;
+ envelope-from=nemaakhilesh@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 5FA2C400F8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5FA2C400F8
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com
+ [IPv6:2607:f8b0:4864:20::633])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 5FA2C400F8
+ for <buildroot@buildroot.org>; Sun, 22 Sep 2024 18:43:30 +0000 (UTC)
+Received: by mail-pl1-x633.google.com with SMTP id
+ d9443c01a7336-2068acc8a4fso32978005ad.1
+ for <buildroot@buildroot.org>; Sun, 22 Sep 2024 11:43:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1727029123; x=1727633923;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=YkW9YTAjgxGhm9kaSVFMmDdvs/iVT/bOpOv00PNc7js=;
- b=Qmfsm4YUNXqTZEowa8p43q7V6GS/l4RTG3dT5RTnzozwOMm+Lu5Ame5Nv2hSg46MTL
- urqyZHIpTvCvBiHqu8Xvs9jDdPU9cYzhzcz+n6qguXpYTGeJuCRacWDkSgPAg2HJly6u
- FFvnjIqWfuGaxek0PZN2js37SCukwhioGME1kbQLk3ClkCfLOy+Imw46GO9zC8pV64lc
- 0sucES6G5C2JXuvSr/LJmpwJYR8Di7bzx2TP+g/TDrZYr63DivGJvT45oO9uBKe6XjBc
- nsfznw0dTt5TRJxmoEuM9qUkXuflZI+5j5697L/BxAXDuJTzCxVEC+fvPe/Fu57tefb4
- cEVA==
-X-Gm-Message-State: AOJu0Yy33VvUQpn33bqpMqarWVCt2Y2RAGMbioWaLEqCZ4UY22Vqtebf
- DHKp3xUsaI5m6jhbaNqSE6IGCaZf2AM/T4QuiCGbkvLiW0jn0G74BblsznStdGA3OPoVD2UStMB
- HK3g=
-X-Google-Smtp-Source: AGHT+IH4cFA+rOZDsY+OiafdtPoyck2eYRJNx/CEbf/Oqnwp5Shj0DGPAvAFvc+vQ2yOTOdHdJ2CPw==
-X-Received: by 2002:a17:906:7951:b0:a7a:acae:340b with SMTP id
- a640c23a62f3a-a90d364468bmr896974066b.31.1727029122774; 
- Sun, 22 Sep 2024 11:18:42 -0700 (PDT)
-Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it
- (host-79-20-102-52.retail.telecomitalia.it. [79.20.102.52])
+ d=1e100.net; s=20230601; t=1727030609; x=1727635409;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=FUcJFtcKmrI8LZyGEauuSitBKmi9/G8k7PxeHlnBviI=;
+ b=p0m9+e1R1pXqBxFiPhXosL/fzsJkWQ1eXJxFSHYA+3HjyCYwMHUXPfs5gHElKL1CiI
+ OEg/Ivyr5NNv4oN2x65iZNqjjKrjO8ox687SJbTJbftbsbjhGcCxUYcR8H5o1FUqKEyb
+ obJT4xwKCKejtHMxXqK0emYQC6tAIZUMEDsSwauk0tUd0QhhZHfLxnAb/88Xc+2rkPyf
+ n/uzTutMj4GVoVBu+YhRLmNI+1UO4+c9oCYQMoD+DqlImW57zOfOkchlUPGn2KH/ocdT
+ B7INfietxYY3lh0eXFEuipp5DM1tJBzAZLFmXP7CNN0r8+RsaR+xdq7u6P/VUaPq7/lB
+ EdGA==
+X-Gm-Message-State: AOJu0YxsE+TJkyTIE6Ym3Hx9tLarfRZ29SdZO2FYvp+e0Dy/dpu+kCOu
+ KxvOcxNBOMN3jRhmVG33wS9S7FZyPSQnhRcms5KbOQjKHhf0H9hPJfHf4zX0u6A=
+X-Google-Smtp-Source: AGHT+IErcz1TLmA3NwIq5OdgPfZVoabD/bcARfYRtp1XuRGq1DCDM6F3497RQMW41VpacKHdBqyGNw==
+X-Received: by 2002:a17:902:c404:b0:205:6566:cb07 with SMTP id
+ d9443c01a7336-208d83861d1mr145890235ad.17.1727030609207; 
+ Sun, 22 Sep 2024 11:43:29 -0700 (PDT)
+Received: from localhost.localdomain ([2600:8802:2a05:9000:ad2f:66c:ef69:238f])
  by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-a90610f3883sm1111852766b.50.2024.09.22.11.18.42
+ d9443c01a7336-207945dc6d8sm121835545ad.29.2024.09.22.11.43.28
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 22 Sep 2024 11:18:42 -0700 (PDT)
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+ Sun, 22 Sep 2024 11:43:28 -0700 (PDT)
+From: Akhilesh Nema <nemaakhilesh@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 22 Sep 2024 20:18:31 +0200
-Message-ID: <20240922181831.2901344-2-dario.binacchi@amarulasolutions.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240922181831.2901344-1-dario.binacchi@amarulasolutions.com>
-References: <20240922181831.2901344-1-dario.binacchi@amarulasolutions.com>
+Date: Sun, 22 Sep 2024 11:43:24 -0700
+Message-Id: <20240922184324.3469302-1-nemaakhilesh@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1727029123; x=1727633923;
- darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=YkW9YTAjgxGhm9kaSVFMmDdvs/iVT/bOpOv00PNc7js=;
- b=Jcge6tK+WN/Odx0WHhHMzwr2Dv80ktER3qDNzNbpdMIYleKbmDKYkcSr+yvi2gQmkM
- zMdxNob2k/sW584raBSqbUedsEsoT6h5sHmz+i61bnCUkay7BEhUcxboIOgjETDQItlW
- 4GRwOQQ1tMIjH0bkEAAGtAdjv+sN6QwL0oViM=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=gmail.com; s=20230601; t=1727030609; x=1727635409; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=FUcJFtcKmrI8LZyGEauuSitBKmi9/G8k7PxeHlnBviI=;
+ b=H4aaNGnP7VBkMrNT3g9QlIFXQAdT1gzRgRe10ny7GMrQb87Ii1kN55fS9T3axRjh9i
+ 6TtCEMNaGhUDpMon3ycHERp40AVVpqdZrbqZUSgblNgelVTYOvlL4t9X4zbZ4QB134pZ
+ V0Y83sNEyBUpDtEW88z8OC//enSXRY/0lZrdv0Wov8vFsCV+IW/rdFiOdGZsTDqk6uyS
+ zQ1IDQprjOnZVtmWcWc36bOyOh9oD/2seSp+QcsnzC0aqr+K8bPSHXvbJSwiYc1orslT
+ iQ6jxlYKnxk9XjnwdQUsebIhVp9ZSFX1UCtTNfZ4ROut/o9z7M7c2qOH7GYGcEl+a6m3
+ l+dg==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key) header.d=amarulasolutions.com
- header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=Jcge6tK+
-Subject: [Buildroot] [PATCH v2 2/2] package/iproute2: bump to version 6.11.0
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=H4aaNGnP
+Subject: [Buildroot] [PATCH 1/1] package/strace: bump version to 6.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,208 +99,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Petr Vorel <petr.vorel@gmail.com>,
- Dario Binacchi <dario.binacchi@amarulasolutions.com>,
- linux-amarula@amarulasolutions.com
+Cc: Akhilesh Nema <nemaakhilesh@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The building test using musl as the C library for the cross-compilation
-toolchain raised errors that required the application of two additional
-patches. Furthermore, it was necessary, by properly setting CFLAGS, to
-instruct iproute2 not to define structures already provided by musl to
-avoid redefinition errors (i. e. in6_addr and sockaddr_in6).
+Changelog - https://github.com/strace/strace/releases/tag/v6.11
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
 ---
-Added in v2
+ package/strace/strace.hash | 4 ++--
+ package/strace/strace.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
- ...04-bridge-mst-fix-a-musl-build-issue.patch | 73 +++++++++++++++++++
- ...e-mst-fix-a-further-musl-build-issue.patch | 56 ++++++++++++++
- package/iproute2/iproute2.hash                |  2 +-
- package/iproute2/iproute2.mk                  |  6 +-
- 4 files changed, 135 insertions(+), 2 deletions(-)
- create mode 100644 package/iproute2/0004-bridge-mst-fix-a-musl-build-issue.patch
- create mode 100644 package/iproute2/0005-bridge-mst-fix-a-further-musl-build-issue.patch
-
-diff --git a/package/iproute2/0004-bridge-mst-fix-a-musl-build-issue.patch b/package/iproute2/0004-bridge-mst-fix-a-musl-build-issue.patch
-new file mode 100644
-index 000000000000..9dddfb6e7f26
---- /dev/null
-+++ b/package/iproute2/0004-bridge-mst-fix-a-musl-build-issue.patch
-@@ -0,0 +1,73 @@
-+From 0359ee6dc57ee8aa21a3f0f7404422c0f9372d3a Mon Sep 17 00:00:00 2001
-+From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-+Date: Sun, 22 Sep 2024 14:00:42 +0200
-+Subject: [PATCH] bridge: mst: fix a musl build issue
-+
-+This patch fixes a compilation error raised by the bump to version 6.11.0
-+in Buildroot using musl as the C library for the cross-compilation
-+toolchain.
-+
-+After setting the CFLGAS
-+
-+ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
-+IPROUTE2_CFLAGS += -D__UAPI_DEF_IN6_ADDR=0 -D__UAPI_DEF_SOCKADDR_IN6=0 \
-+			-D__UAPI_DEF_IPV6_MREQ=0
-+endif
-+
-+to fix the following errors:
-+
-+In file included from ../../../host/mips64-buildroot-linux-musl/sysroot/usr/include/arpa/inet.h:9,
-+                 from ../include/libnetlink.h:14,
-+                 from mst.c:10:
-+../../../host/mips64-buildroot-linux-musl/sysroot/usr/include/netinet/in.h:23:8: error: redefinition of 'struct in6_addr'
-+   23 | struct in6_addr {
-+      |        ^~~~~~~~
-+In file included from ../include/uapi/linux/if_bridge.h:19,
-+                 from mst.c:7:
-+../include/uapi/linux/in6.h:33:8: note: originally defined here
-+   33 | struct in6_addr {
-+      |        ^~~~~~~~
-+../../../host/mips64-buildroot-linux-musl/sysroot/usr/include/netinet/in.h:34:8: error: redefinition of 'struct sockaddr_in6'
-+   34 | struct sockaddr_in6 {
-+      |        ^~~~~~~~~~~~
-+../include/uapi/linux/in6.h:50:8: note: originally defined here
-+   50 | struct sockaddr_in6 {
-+      |        ^~~~~~~~~~~~
-+../../../host/mips64-buildroot-linux-musl/sysroot/usr/include/netinet/in.h:42:8: error: redefinition of 'struct ipv6_mreq'
-+   42 | struct ipv6_mreq {
-+      |        ^~~~~~~~~
-+../include/uapi/linux/in6.h:60:8: note: originally defined here
-+   60 | struct ipv6_mreq {
-+
-+I got this further errors
-+
-+../include/uapi/linux/in6.h:72:25: error: field 'flr_dst' has incomplete type
-+   72 |         struct in6_addr flr_dst;
-+      |                         ^~~~~~~
-+../include/uapi/linux/if_bridge.h:711:41: error: field 'ip6' has incomplete type
-+  711 |                         struct in6_addr ip6;
-+      |                                         ^~~
-+
-+fixed by including the netinet/in.h header.
-+
-+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-+Upstream: https://patchwork.kernel.org/project/netdevbpf/patch/20240922145011.2104040-1-dario.binacchi@amarulasolutions.com/
-+---
-+ bridge/mst.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/bridge/mst.c b/bridge/mst.c
-+index 873ca5369fd6..c8f7e6606c3c 100644
-+--- a/bridge/mst.c
-++++ b/bridge/mst.c
-+@@ -4,6 +4,7 @@
-+  */
-+ 
-+ #include <stdio.h>
-++#include <netinet/in.h>
-+ #include <linux/if_bridge.h>
-+ #include <net/if.h>
-+ 
-+-- 
-+2.43.0
-+
-diff --git a/package/iproute2/0005-bridge-mst-fix-a-further-musl-build-issue.patch b/package/iproute2/0005-bridge-mst-fix-a-further-musl-build-issue.patch
-new file mode 100644
-index 000000000000..f4e7c317bf9c
---- /dev/null
-+++ b/package/iproute2/0005-bridge-mst-fix-a-further-musl-build-issue.patch
-@@ -0,0 +1,56 @@
-+From 62c4dfff5ff596984ece7960fba49b05d69f37a7 Mon Sep 17 00:00:00 2001
-+From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-+Date: Sun, 22 Sep 2024 14:11:18 +0200
-+Subject: [PATCH] bridge: mst: fix a further musl build issue
-+
-+This patch fixes the following build errors:
-+
-+In file included from mst.c:11:
-+../include/json_print.h:80:30: warning: 'struct timeval' declared inside parameter list will not be visible outside of this definition or declaration
-+   80 | _PRINT_FUNC(tv, const struct timeval *)
-+      |                              ^~~~~~~
-+../include/json_print.h:50:37: note: in definition of macro '_PRINT_FUNC'
-+   50 |                                     type value);                        \
-+      |                                     ^~~~
-+../include/json_print.h:80:30: warning: 'struct timeval' declared inside parameter list will not be visible outside of this definition or declaration
-+   80 | _PRINT_FUNC(tv, const struct timeval *)
-+      |                              ^~~~~~~
-+../include/json_print.h:55:45: note: in definition of macro '_PRINT_FUNC'
-+   55 |                                             type value)                 \
-+      |                                             ^~~~
-+../include/json_print.h: In function 'print_tv':
-+../include/json_print.h:58:48: error: passing argument 5 of 'print_color_tv' from incompatible pointer type [-Wincompatible-pointer-types]
-+   58 |                                                value);                  \
-+      |                                                ^~~~~
-+      |                                                |
-+      |                                                const struct timeval *
-+../include/json_print.h:80:1: note: in expansion of macro '_PRINT_FUNC'
-+   80 | _PRINT_FUNC(tv, const struct timeval *)
-+      | ^~~~~~~~~~~
-+../include/json_print.h:50:42: note: expected 'const struct timeval *' but argument is of type 'const struct timeval *'
-+   50 |                                     type value);                        \
-+      |                                          ^
-+../include/json_print.h:80:1: note: in expansion of macro '_PRINT_FUNC'
-+   80 | _PRINT_FUNC(tv, const struct timeval *)
-+
-+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-+Upstream: https://patchwork.kernel.org/project/netdevbpf/patch/20240922145011.2104040-2-dario.binacchi@amarulasolutions.com/
-+---
-+ bridge/mst.c | 1 +
-+ 1 file changed, 1 insertion(+)
-+
-+diff --git a/bridge/mst.c b/bridge/mst.c
-+index c8f7e6606c3c..fccb7fd68140 100644
-+--- a/bridge/mst.c
-++++ b/bridge/mst.c
-+@@ -4,6 +4,7 @@
-+  */
-+ 
-+ #include <stdio.h>
-++#include <sys/time.h>
-+ #include <netinet/in.h>
-+ #include <linux/if_bridge.h>
-+ #include <net/if.h>
-+-- 
-+2.43.0
-+
-diff --git a/package/iproute2/iproute2.hash b/package/iproute2/iproute2.hash
-index 0760183b9e66..028a32439644 100644
---- a/package/iproute2/iproute2.hash
-+++ b/package/iproute2/iproute2.hash
-@@ -1,3 +1,3 @@
- # From https://kernel.org/pub/linux/utils/net/iproute2/sha256sums.asc
--sha256  91a62f82737b44905a00fa803369c447d549e914e9a2a4018fdd75b1d54e8dce  iproute2-6.10.0.tar.xz
-+sha256  1f795398a04aeaacd06a8f6ace2cfd913c33fa5953ca99daae83bb5c534611c3  iproute2-6.11.0.tar.xz
- sha256  e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4  COPYING
-diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
-index 08b890b33117..ae95de045b02 100644
---- a/package/iproute2/iproute2.mk
-+++ b/package/iproute2/iproute2.mk
+diff --git a/package/strace/strace.hash b/package/strace/strace.hash
+index dcaf1ad5d4..e167f9d20a 100644
+--- a/package/strace/strace.hash
++++ b/package/strace/strace.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking signature with RSA key 0xA8041FA839E16E36
+-# https://strace.io/files/6.10/strace-6.10.tar.xz.asc
+-sha256  765ec71aa1de2fe37363c1e40c7b7669fc1d40c44bb5d38ba8e8cd82c4edcf07  strace-6.10.tar.xz
++# https://strace.io/files/6.11/strace-6.11.tar.xz.asc
++sha256  83262583a3529f02c3501aa8b8ac772b4cbc03dc934e98bab6e4883626e283a5  strace-6.11.tar.xz
+ sha256  1988d0e1aa101d68855e8c4f940aacf2531051b82f6b608eb026c5fad1f33df1  COPYING
+ sha256  7c379436436a562834aa7d2f5dcae1f80a25230fa74201046ca1fba4367d39aa  LGPL-2.1-or-later
+diff --git a/package/strace/strace.mk b/package/strace/strace.mk
+index 34a154357f..367a44da6e 100644
+--- a/package/strace/strace.mk
++++ b/package/strace/strace.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--IPROUTE2_VERSION = 6.10.0
-+IPROUTE2_VERSION = 6.11.0
- IPROUTE2_SOURCE = iproute2-$(IPROUTE2_VERSION).tar.xz
- IPROUTE2_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/net/iproute2
- IPROUTE2_DEPENDENCIES = host-bison host-flex host-pkgconf \
-@@ -53,6 +53,10 @@ endef
- 
- # workaround for static_assert on uclibc-ng < 1.0.42
- IPROUTE2_CFLAGS = $(TARGET_CFLAGS) -Dstatic_assert=_Static_assert
-+ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
-+IPROUTE2_CFLAGS += -D__UAPI_DEF_IN6_ADDR=0 -D__UAPI_DEF_SOCKADDR_IN6=0 \
-+			-D__UAPI_DEF_IPV6_MREQ=0
-+endif
- 
- define IPROUTE2_BUILD_CMDS
- 	$(TARGET_MAKE_ENV) LDFLAGS="$(TARGET_LDFLAGS)" \
+-STRACE_VERSION = 6.10
++STRACE_VERSION = 6.11
+ STRACE_SOURCE = strace-$(STRACE_VERSION).tar.xz
+ STRACE_SITE = https://github.com/strace/strace/releases/download/v$(STRACE_VERSION)
+ STRACE_LICENSE = LGPL-2.1+
 -- 
-2.43.0
+2.25.1
 
 _______________________________________________
 buildroot mailing list
