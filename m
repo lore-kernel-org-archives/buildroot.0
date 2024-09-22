@@ -4,49 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B5B6CF9C6C
-	for <buildroot@archiver.kernel.org>; Sun, 22 Sep 2024 10:36:19 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 03328CF9C6C
+	for <buildroot@archiver.kernel.org>; Sun, 22 Sep 2024 10:36:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6AF0481BB2;
-	Sun, 22 Sep 2024 10:36:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C263581C58;
+	Sun, 22 Sep 2024 10:36:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7GyGugIFD6L7; Sun, 22 Sep 2024 10:36:18 +0000 (UTC)
+ id g3xAyIdxKfLP; Sun, 22 Sep 2024 10:36:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A17C381E21
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 61F2781E55
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A17C381E21;
-	Sun, 22 Sep 2024 10:36:17 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 405D61BF47A
- for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 10:34:49 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 61F2781E55;
+	Sun, 22 Sep 2024 10:36:21 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 269161BF47A
+ for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 10:34:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D12CD40653
- for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 10:34:42 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0EDDC404C7
+ for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 10:34:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id N1725XwrdQuL for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2tyzVrj-73bS for <buildroot@lists.busybox.net>;
  Sun, 22 Sep 2024 10:34:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8270E40639
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 11ABB400AC
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8270E40639
- for <buildroot@buildroot.org>; Sun, 22 Sep 2024 10:34:41 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 11ABB400AC
+ for <buildroot@buildroot.org>; Sun, 22 Sep 2024 10:34:42 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7D5D481EE7; Sun, 22 Sep 2024 10:34:41 +0000 (UTC)
+ id 0EC56811F3; Sun, 22 Sep 2024 10:34:42 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 22 Sep 2024 12:30:32 +0200
+Date: Sun, 22 Sep 2024 12:30:48 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d16bb45b68feb06ee72492e67b46b56fee1d693a
-X-Git-Newrev: 6a2d4750fdb8bc2384713ce4c5c3fbc69e1abbad
+X-Git-Oldrev: f8abb592997c30b77307dcd2fd50aaf11ad3fb01
+X-Git-Newrev: d55a14085a3120fd668bce6450e6235554ecedf3
 X-Patchwork-Hint: ignore
-Message-Id: <20240922103441.7D5D481EE7@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-trio: bump to version 0.26.2
+Message-Id: <20240922103442.0EC56811F3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-urwid: bump to version
+ 2.6.15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,59 +65,61 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=6a2d4750fdb8bc2384713ce4c5c3fbc69e1abbad
+commit: https://git.buildroot.net/buildroot/commit/?id=d55a14085a3120fd668bce6450e6235554ecedf3
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Drop no longer required python-async-generator runtime dependency.
+Add new python-typing-extensions runtime dependency.
+
+Add new python-wcwidth runtime dependency.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-trio/Config.in        | 1 -
- package/python-trio/python-trio.hash | 4 ++--
- package/python-trio/python-trio.mk   | 4 ++--
- 3 files changed, 4 insertions(+), 5 deletions(-)
+ package/python-urwid/Config.in         | 2 ++
+ package/python-urwid/python-urwid.hash | 4 ++--
+ package/python-urwid/python-urwid.mk   | 4 ++--
+ 3 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-trio/Config.in b/package/python-trio/Config.in
-index 0aa53c90ca..02931aadb5 100644
---- a/package/python-trio/Config.in
-+++ b/package/python-trio/Config.in
-@@ -1,6 +1,5 @@
- config BR2_PACKAGE_PYTHON_TRIO
- 	bool "python-trio"
--	select BR2_PACKAGE_PYTHON_ASYNC_GENERATOR # runtime
- 	select BR2_PACKAGE_PYTHON_ATTRS # runtime
- 	select BR2_PACKAGE_PYTHON_IDNA # runtime
- 	select BR2_PACKAGE_PYTHON_OUTCOME # runtime
-diff --git a/package/python-trio/python-trio.hash b/package/python-trio/python-trio.hash
-index 487194662e..2ef1851f25 100644
---- a/package/python-trio/python-trio.hash
-+++ b/package/python-trio/python-trio.hash
-@@ -1,6 +1,6 @@
- # md5, sha256 from https://pypi.org/pypi/trio/json
--md5  f7dbfa6a8722065f09da188641d8ed93  trio-0.22.0.tar.gz
--sha256  ce68f1c5400a47b137c5a4de72c7c901bd4e7a24fbdebfe9b41de8c6c04eaacf  trio-0.22.0.tar.gz
-+md5  8f9ed35c130e802b7561edd7f32fc305  trio-0.26.2.tar.gz
-+sha256  0346c3852c15e5c7d40ea15972c4805689ef2cb8b5206f794c9c19450119f3a4  trio-0.26.2.tar.gz
+diff --git a/package/python-urwid/Config.in b/package/python-urwid/Config.in
+index f584a9258d..573d71f1c9 100644
+--- a/package/python-urwid/Config.in
++++ b/package/python-urwid/Config.in
+@@ -1,5 +1,7 @@
+ config BR2_PACKAGE_PYTHON_URWID
+ 	bool "python-urwid"
++	select BR2_PACKAGE_PYTHON_TYPING_EXTENSIONS # runtime
++	select BR2_PACKAGE_PYTHON_WCWIDTH # runtime
+ 	help
+ 	  Urwid is a console user interface library for Python
+ 
+diff --git a/package/python-urwid/python-urwid.hash b/package/python-urwid/python-urwid.hash
+index aad6f6f672..4804555b22 100644
+--- a/package/python-urwid/python-urwid.hash
++++ b/package/python-urwid/python-urwid.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/urwid/json
+-md5  324cf0f877a5bc7b7d2de7d7f36b13ee  urwid-2.6.10.tar.gz
+-sha256  ae33355c414c13214e541d3634f3c8a0bfb373914e62ffbcf2fa863527706321  urwid-2.6.10.tar.gz
++md5  73e4171e00a673afbc1eb32eaf7d31e0  urwid-2.6.15.tar.gz
++sha256  9ecc57330d88c8d9663ffd7092a681674c03ff794b6330ccfef479af7aa9671b  urwid-2.6.15.tar.gz
  # Locally computed sha256 checksums
- sha256  418d025e1284311f2690263e6efa6bf51585e5741818ece63e5862487e505bb9  LICENSE
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE.APACHE2
-diff --git a/package/python-trio/python-trio.mk b/package/python-trio/python-trio.mk
-index 80da203c15..58c28bb757 100644
---- a/package/python-trio/python-trio.mk
-+++ b/package/python-trio/python-trio.mk
+ sha256  36b6d3fa47916943fd5fec313c584784946047ec1337a78b440e5992cb595f89  COPYING
+diff --git a/package/python-urwid/python-urwid.mk b/package/python-urwid/python-urwid.mk
+index d7943a8b5c..66b067a20c 100644
+--- a/package/python-urwid/python-urwid.mk
++++ b/package/python-urwid/python-urwid.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_TRIO_VERSION = 0.22.0
-+PYTHON_TRIO_VERSION = 0.26.2
- PYTHON_TRIO_SOURCE = trio-$(PYTHON_TRIO_VERSION).tar.gz
--PYTHON_TRIO_SITE = https://files.pythonhosted.org/packages/0b/b8/1b81d2149c3e2c25900d40b8e6c8d3ca502a3cc844b90c962b0854aaf3f3
-+PYTHON_TRIO_SITE = https://files.pythonhosted.org/packages/9a/03/ab0e9509be0c6465e2773768ec25ee0cb8053c0b91471ab3854bbf2294b2
- PYTHON_TRIO_SETUP_TYPE = setuptools
- PYTHON_TRIO_LICENSE = Apache-2.0 or MIT
- PYTHON_TRIO_LICENSE_FILES = LICENSE LICENSE.APACHE2 LICENSE.MIT
+-PYTHON_URWID_VERSION = 2.6.10
++PYTHON_URWID_VERSION = 2.6.15
+ PYTHON_URWID_SOURCE = urwid-$(PYTHON_URWID_VERSION).tar.gz
+-PYTHON_URWID_SITE = https://files.pythonhosted.org/packages/8e/74/8c2082f2b07a72ff5d2438447c13a70f0cbede73584e0a262c166a30785c
++PYTHON_URWID_SITE = https://files.pythonhosted.org/packages/85/b7/516b0bbb7dd9fc313c6443b35d86b6f91b3baa83d2c4016e4d8e0df5a5e3
+ PYTHON_URWID_LICENSE = LGPL-2.1+
+ PYTHON_URWID_LICENSE_FILES = COPYING
+ PYTHON_URWID_SETUP_TYPE = setuptools
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
