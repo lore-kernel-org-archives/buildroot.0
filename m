@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id F1975CF9C64
-	for <buildroot@archiver.kernel.org>; Sun, 22 Sep 2024 10:36:08 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2E2A9CF9C6C
+	for <buildroot@archiver.kernel.org>; Sun, 22 Sep 2024 10:36:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8DC0B81761;
-	Sun, 22 Sep 2024 10:36:08 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 8149E81CA5;
+	Sun, 22 Sep 2024 10:36:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qOAh5egWalgb; Sun, 22 Sep 2024 10:36:05 +0000 (UTC)
+ id 4TncrKef4Izh; Sun, 22 Sep 2024 10:36:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 84DFB81D72
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 093FF81D46
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 84DFB81D72;
-	Sun, 22 Sep 2024 10:36:04 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 6E5851BF47A
- for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 10:34:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 093FF81D46;
+	Sun, 22 Sep 2024 10:36:08 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 302D21BF47A
+ for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 10:34:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 490876061F
- for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 10:34:43 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 9BA7140650
+ for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 10:34:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id atiLkGhkpe0I for <buildroot@lists.busybox.net>;
- Sun, 22 Sep 2024 10:34:42 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jJNUICDeIK9L for <buildroot@lists.busybox.net>;
+ Sun, 22 Sep 2024 10:34:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5CB196062D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BDAFD40631
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5CB196062D
- for <buildroot@buildroot.org>; Sun, 22 Sep 2024 10:34:42 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id BDAFD40631
+ for <buildroot@buildroot.org>; Sun, 22 Sep 2024 10:34:40 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 59C8981446; Sun, 22 Sep 2024 10:34:42 +0000 (UTC)
+ id B39A383760; Sun, 22 Sep 2024 10:34:40 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 22 Sep 2024 12:30:56 +0200
+Date: Sun, 22 Sep 2024 11:37:46 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: ea2bcc942ec1e1b705127ac15b886441d23c1b48
-X-Git-Newrev: 4b638f2791902639d9b8d1c79e1b6aea97263aa3
+X-Git-Oldrev: 57ee6b143e8d1b4ccda272e3b41260c58ad1fc67
+X-Git-Newrev: e3ee69d37d95e5e4d8ee4d0a93741d14fa2dc4ae
 X-Patchwork-Hint: ignore
-Message-Id: <20240922103442.59C8981446@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-websocket-client: bump to
- version 1.8.0
+Message-Id: <20240922103440.B39A383760@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-starlette: bump to version
+ 0.38.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,49 +65,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4b638f2791902639d9b8d1c79e1b6aea97263aa3
+commit: https://git.buildroot.net/buildroot/commit/?id=e3ee69d37d95e5e4d8ee4d0a93741d14fa2dc4ae
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-License hash changed due to year update:
-https://github.com/websocket-client/websocket-client/commit/02457749c4a995af86aed6930e5d26eadcce6b6d
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-websocket-client/python-websocket-client.hash | 6 +++---
- package/python-websocket-client/python-websocket-client.mk   | 6 +++---
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ package/python-starlette/python-starlette.hash | 4 ++--
+ package/python-starlette/python-starlette.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-websocket-client/python-websocket-client.hash b/package/python-websocket-client/python-websocket-client.hash
-index 5da778027b..373906c3dc 100644
---- a/package/python-websocket-client/python-websocket-client.hash
-+++ b/package/python-websocket-client/python-websocket-client.hash
+diff --git a/package/python-starlette/python-starlette.hash b/package/python-starlette/python-starlette.hash
+index b5ba43c061..ea5cb4799e 100644
+--- a/package/python-starlette/python-starlette.hash
++++ b/package/python-starlette/python-starlette.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/websocket-client/json
--md5  26d1d8db59c9417570d8ec73ace1687b  websocket-client-1.4.2.tar.gz
--sha256  d6e8f90ca8e2dd4e8027c4561adeb9456b54044312dba655e7cae652ceb9ae59  websocket-client-1.4.2.tar.gz
-+md5  9cffbda9eefb0a17e9c4cda3b7884493  websocket_client-1.8.0.tar.gz
-+sha256  3239df9f44da632f96012472805d40a23281a991027ce11d2f45a6f24ac4c3da  websocket_client-1.8.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/starlette/json
+-md5  7861ee7609e649508792a4ece854406b  starlette-0.38.4.tar.gz
+-sha256  53a7439060304a208fea17ed407e998f46da5e5d9b1addfea3040094512a6379  starlette-0.38.4.tar.gz
++md5  e2e61f4def1d357e73795c646bda57e8  starlette-0.38.5.tar.gz
++sha256  04a92830a9b6eb1442c766199d62260c3d4dc9c4f9188360626b1e0273cb7077  starlette-0.38.5.tar.gz
  # Locally computed sha256 checksums
--sha256  638eb70dcc4af2e6d8388de0636ced399f7c24716e11b8573a6b06f879e80691  LICENSE
-+sha256  453e6a69427ed9ff92a03ef2d7b21ef1db41fdf56d62307a49ba85059f7a0c62  LICENSE
-diff --git a/package/python-websocket-client/python-websocket-client.mk b/package/python-websocket-client/python-websocket-client.mk
-index 79cde7e590..ce582e89b7 100644
---- a/package/python-websocket-client/python-websocket-client.mk
-+++ b/package/python-websocket-client/python-websocket-client.mk
+ sha256  dcb95677a02240243187e964f941847d19b17821cf99e5afae684fab328c19bf  LICENSE.md
+diff --git a/package/python-starlette/python-starlette.mk b/package/python-starlette/python-starlette.mk
+index 1a2b7532f7..bce75a1957 100644
+--- a/package/python-starlette/python-starlette.mk
++++ b/package/python-starlette/python-starlette.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_WEBSOCKET_CLIENT_VERSION = 1.4.2
--PYTHON_WEBSOCKET_CLIENT_SOURCE = websocket-client-$(PYTHON_WEBSOCKET_CLIENT_VERSION).tar.gz
--PYTHON_WEBSOCKET_CLIENT_SITE = https://files.pythonhosted.org/packages/75/af/1d13b93e7a21aca7f8ab8645fcfcfad21fc39716dc9dce5dc2a97f73ff78
-+PYTHON_WEBSOCKET_CLIENT_VERSION = 1.8.0
-+PYTHON_WEBSOCKET_CLIENT_SOURCE = websocket_client-$(PYTHON_WEBSOCKET_CLIENT_VERSION).tar.gz
-+PYTHON_WEBSOCKET_CLIENT_SITE = https://files.pythonhosted.org/packages/e6/30/fba0d96b4b5fbf5948ed3f4681f7da2f9f64512e1d303f94b4cc174c24a5
- PYTHON_WEBSOCKET_CLIENT_SETUP_TYPE = setuptools
- PYTHON_WEBSOCKET_CLIENT_LICENSE = Apache-2.0
- PYTHON_WEBSOCKET_CLIENT_LICENSE_FILES = LICENSE
+-PYTHON_STARLETTE_VERSION = 0.38.4
++PYTHON_STARLETTE_VERSION = 0.38.5
+ PYTHON_STARLETTE_SOURCE = starlette-$(PYTHON_STARLETTE_VERSION).tar.gz
+-PYTHON_STARLETTE_SITE = https://files.pythonhosted.org/packages/b4/9c/d85721508122ae927aa7064e10a3f47f8dabcd4fd162222afcecd0d8d7b7
++PYTHON_STARLETTE_SITE = https://files.pythonhosted.org/packages/13/aa/57975da16ca0c368bbb5687daa6ad79561c2328a44667a1d6802e94df3e5
+ PYTHON_STARLETTE_SETUP_TYPE = pep517
+ PYTHON_STARLETTE_LICENSE = BSD-3-Clause
+ PYTHON_STARLETTE_LICENSE_FILES = LICENSE.md
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
