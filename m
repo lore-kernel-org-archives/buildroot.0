@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A39A0CF9C64
-	for <buildroot@archiver.kernel.org>; Sun, 22 Sep 2024 10:35:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EE979CF9C6C
+	for <buildroot@archiver.kernel.org>; Sun, 22 Sep 2024 10:35:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7734A816E3;
-	Sun, 22 Sep 2024 10:35:52 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id BC7FC8183D;
+	Sun, 22 Sep 2024 10:35:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id gXk9jiooPP9C; Sun, 22 Sep 2024 10:35:51 +0000 (UTC)
+ id 0bcnRpokX4vt; Sun, 22 Sep 2024 10:35:54 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2B65B81A5F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 3D15B81A5F
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2B65B81A5F;
-	Sun, 22 Sep 2024 10:35:51 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 1B43B1BF870
+	by smtp1.osuosl.org (Postfix) with ESMTP id 3D15B81A5F;
+	Sun, 22 Sep 2024 10:35:54 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id CF7861BF47A
  for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 10:34:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id A16E740339
- for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 10:34:42 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 05FC3606F0
+ for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 10:34:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hy30li82QR1t for <buildroot@lists.busybox.net>;
- Sun, 22 Sep 2024 10:34:41 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2acUfnDOss0e for <buildroot@lists.busybox.net>;
+ Sun, 22 Sep 2024 10:34:42 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9D2D440190
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1D116606D5
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9D2D440190
- for <buildroot@buildroot.org>; Sun, 22 Sep 2024 10:34:41 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 1D116606D5
+ for <buildroot@buildroot.org>; Sun, 22 Sep 2024 10:34:42 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 927E980FD8; Sun, 22 Sep 2024 10:34:41 +0000 (UTC)
+ id 186DD8230F; Sun, 22 Sep 2024 10:34:42 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 22 Sep 2024 12:30:35 +0200
+Date: Sun, 22 Sep 2024 12:30:49 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d6118f9567364fd5e822daf6d10839e81d196ec5
-X-Git-Newrev: 5f7099609ad5f5875597890cdb0d11b560981f60
+X-Git-Oldrev: d55a14085a3120fd668bce6450e6235554ecedf3
+X-Git-Newrev: 432cb5cd0ea64e499b253e1ccba6d93f167a5e0a
 X-Patchwork-Hint: ignore
-Message-Id: <20240922103441.927E980FD8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-twisted: bump to version
- 24.7.0
+Message-Id: <20240922103442.186DD8230F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-validators: bump to version
+ 0.34.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,87 +65,52 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5f7099609ad5f5875597890cdb0d11b560981f60
+commit: https://git.buildroot.net/buildroot/commit/?id=432cb5cd0ea64e499b253e1ccba6d93f167a5e0a
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Drop no longer required python-pyhamcrest runtime dependency.
-
-Drop no longer required python-pyasn1 runtime dependency.
-
-Migrate from setuptools to hatchling build backend.
-
 License hash changed due to year update:
-https://github.com/twisted/twisted/commit/4ed1a5b8ad9aaa1e3c5adb13076a2d79ec4279f1
+https://github.com/python-validators/validators/commit/1f5f499a3e1f1fdf1aff0a507c49f8a0e24bf816
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-twisted/Config.in           |  2 --
- package/python-twisted/python-twisted.hash |  8 ++++----
- package/python-twisted/python-twisted.mk   | 13 ++++++++-----
- 3 files changed, 12 insertions(+), 11 deletions(-)
+ package/python-validators/python-validators.hash | 6 +++---
+ package/python-validators/python-validators.mk   | 6 +++---
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/package/python-twisted/Config.in b/package/python-twisted/Config.in
-index 1f3baf57e2..84786689b7 100644
---- a/package/python-twisted/Config.in
-+++ b/package/python-twisted/Config.in
-@@ -5,7 +5,6 @@ config BR2_PACKAGE_PYTHON_TWISTED
- 	select BR2_PACKAGE_PYTHON_AUTOMAT # runtime
- 	select BR2_PACKAGE_PYTHON_CONSTANTLY # runtime
- 	select BR2_PACKAGE_PYTHON_HYPERLINK # runtime
--	select BR2_PACKAGE_PYTHON_PYHAMCREST # runtime
- 	select BR2_PACKAGE_PYTHON_ZOPE_INTERFACE # runtime
- 	select BR2_PACKAGE_PYTHON_TYPING_EXTENSIONS # runtime
- 	help
-@@ -35,7 +34,6 @@ config BR2_PACKAGE_PYTHON_TWISTED_CONCH
- 	select BR2_PACKAGE_PYTHON_APPDIRS # runtime
- 	select BR2_PACKAGE_PYTHON_BCRYPT # runtime
- 	select BR2_PACKAGE_PYTHON_CRYPTOGRAPHY # runtime
--	select BR2_PACKAGE_PYTHON_PYASN1 # runtime
- 
- config BR2_PACKAGE_PYTHON_TWISTED_SERIAL
- 	bool "Serial support"
-diff --git a/package/python-twisted/python-twisted.hash b/package/python-twisted/python-twisted.hash
-index 36612ff5e7..a414058ca7 100644
---- a/package/python-twisted/python-twisted.hash
-+++ b/package/python-twisted/python-twisted.hash
+diff --git a/package/python-validators/python-validators.hash b/package/python-validators/python-validators.hash
+index 3682850cb3..e60f540f7d 100644
+--- a/package/python-validators/python-validators.hash
++++ b/package/python-validators/python-validators.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/twisted/json
--md5  c9a5dad0813512fabd9de502738c0bf8  Twisted-22.10.0.tar.gz
--sha256  32acbd40a94f5f46e7b42c109bfae2b302250945561783a8b7a059048f2d4d31  Twisted-22.10.0.tar.gz
--# Locally computed sha256
--sha256  686f6426a775450eb3afd00bc3a5c2621f305ddb9c8478ee9bf28a368ef2dece  LICENSE
-+md5  f89c2542ea9cb39c5343472fdefb4a22  twisted-24.7.0.tar.gz
-+sha256  5a60147f044187a127ec7da96d170d49bcce50c6fd36f594e60f4587eff4d394  twisted-24.7.0.tar.gz
-+# Locally computed sha256 checksums
-+sha256  78d059391dddba18a695c1998ac9dde68160a1df1635f34adcfb3ecba4564802  LICENSE
-diff --git a/package/python-twisted/python-twisted.mk b/package/python-twisted/python-twisted.mk
-index 398baed2a8..71d1b32df2 100644
---- a/package/python-twisted/python-twisted.mk
-+++ b/package/python-twisted/python-twisted.mk
-@@ -4,14 +4,17 @@
+ # md5, sha256 from https://pypi.org/pypi/validators/json
+-md5  e7b36d935ebafe149629146cbfe5b0c8  validators-0.22.0.tar.gz
+-sha256  77b2689b172eeeb600d9605ab86194641670cdb73b60afd577142a9397873370  validators-0.22.0.tar.gz
++md5  8cae932ff53da1607ed2ca354a93ba54  validators-0.34.0.tar.gz
++sha256  647fe407b45af9a74d245b943b18e6a816acf4926974278f6dd617778e1e781f  validators-0.34.0.tar.gz
+ # Locally computed sha256 checksums
+-sha256  7c1bdc4712afecb46d402ec79da0ea2877811711e76dbaf1e425ee0b0e331b1f  LICENSE
++sha256  9d10adf59f4505a733162ff7de6887645dcef1fb495b8070d8b207da0f6b3a16  LICENSE.txt
+diff --git a/package/python-validators/python-validators.mk b/package/python-validators/python-validators.mk
+index 09ccbe6ab7..7db6d98546 100644
+--- a/package/python-validators/python-validators.mk
++++ b/package/python-validators/python-validators.mk
+@@ -4,12 +4,12 @@
  #
  ################################################################################
  
--PYTHON_TWISTED_VERSION = 22.10.0
--PYTHON_TWISTED_SOURCE = Twisted-$(PYTHON_TWISTED_VERSION).tar.gz
--PYTHON_TWISTED_SITE = https://files.pythonhosted.org/packages/b2/ce/cbb56597127b1d51905b0cddcc3f314cc769769efc5e9a8a67f4617f7bca
--PYTHON_TWISTED_SETUP_TYPE = setuptools
-+PYTHON_TWISTED_VERSION = 24.7.0
-+PYTHON_TWISTED_SOURCE = twisted-$(PYTHON_TWISTED_VERSION).tar.gz
-+PYTHON_TWISTED_SITE = https://files.pythonhosted.org/packages/8b/bf/f30eb89bcd14a21a36b4cd3d96658432d4c590af3c24bbe08ea77fa7bbbb
-+PYTHON_TWISTED_SETUP_TYPE = pep517
- PYTHON_TWISTED_LICENSE = MIT
- PYTHON_TWISTED_LICENSE_FILES = LICENSE
- PYTHON_TWISTED_CPE_ID_VENDOR = twistedmatrix
- PYTHON_TWISTED_CPE_ID_PRODUCT = twisted
--PYTHON_TWISTED_DEPENDENCIES = python-incremental host-python-incremental
-+PYTHON_TWISTED_DEPENDENCIES = \
-+	host-python-hatchling \
-+	host-python-hatch-fancy-pypi-readme \
-+	host-python-incremental
+-PYTHON_VALIDATORS_VERSION = 0.22.0
++PYTHON_VALIDATORS_VERSION = 0.34.0
+ PYTHON_VALIDATORS_SOURCE = validators-$(PYTHON_VALIDATORS_VERSION).tar.gz
+-PYTHON_VALIDATORS_SITE = https://files.pythonhosted.org/packages/9b/21/40a249498eee5a244a017582c06c0af01851179e2617928063a3d628bc8f
++PYTHON_VALIDATORS_SITE = https://files.pythonhosted.org/packages/64/07/91582d69320f6f6daaf2d8072608a4ad8884683d4840e7e4f3a9dbdcc639
+ PYTHON_VALIDATORS_SETUP_TYPE = setuptools
+ PYTHON_VALIDATORS_LICENSE = MIT
+-PYTHON_VALIDATORS_LICENSE_FILES = LICENSE
++PYTHON_VALIDATORS_LICENSE_FILES = LICENSE.txt
+ PYTHON_VALIDATORS_CPE_ID_VENDOR = validators_project
+ PYTHON_VALIDATORS_CPE_ID_PRODUCT = validators
  
- $(eval $(python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
