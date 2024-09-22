@@ -4,91 +4,92 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58A2FCF9C5B
-	for <buildroot@archiver.kernel.org>; Sun, 22 Sep 2024 03:01:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 81937CF9C5B
+	for <buildroot@archiver.kernel.org>; Sun, 22 Sep 2024 03:06:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E9BCF40124;
-	Sun, 22 Sep 2024 03:01:25 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 09EE140124;
+	Sun, 22 Sep 2024 03:06:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id X9p5etk3Znpp; Sun, 22 Sep 2024 03:01:24 +0000 (UTC)
+ id JZIXqRsJKAYF; Sun, 22 Sep 2024 03:06:39 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8054D4036A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B3C184036A
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 8054D4036A;
-	Sun, 22 Sep 2024 03:01:24 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 2EC9E1BF573
- for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 03:01:23 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B3C184036A;
+	Sun, 22 Sep 2024 03:06:39 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id B350C1BF299
+ for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 03:06:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 131B580B28
- for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 03:01:23 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id A213860643
+ for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 03:06:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id N2ull6py4j8i for <buildroot@lists.busybox.net>;
- Sun, 22 Sep 2024 03:01:22 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id bFCFoylUB-Xs for <buildroot@lists.busybox.net>;
+ Sun, 22 Sep 2024 03:06:36 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::12d; helo=mail-il1-x12d.google.com;
+ client-ip=2607:f8b0:4864:20::12a; helo=mail-il1-x12a.google.com;
  envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org F173F8133E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F173F8133E
-Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com
- [IPv6:2607:f8b0:4864:20::12d])
- by smtp1.osuosl.org (Postfix) with ESMTPS id F173F8133E
- for <buildroot@buildroot.org>; Sun, 22 Sep 2024 03:01:21 +0000 (UTC)
-Received: by mail-il1-x12d.google.com with SMTP id
- e9e14a558f8ab-3a0cce338fcso5467275ab.0
- for <buildroot@buildroot.org>; Sat, 21 Sep 2024 20:01:21 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A397A6062C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A397A6062C
+Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com
+ [IPv6:2607:f8b0:4864:20::12a])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A397A6062C
+ for <buildroot@buildroot.org>; Sun, 22 Sep 2024 03:06:36 +0000 (UTC)
+Received: by mail-il1-x12a.google.com with SMTP id
+ e9e14a558f8ab-3a08489f757so14994035ab.0
+ for <buildroot@buildroot.org>; Sat, 21 Sep 2024 20:06:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1726974080; x=1727578880;
+ d=1e100.net; s=20230601; t=1726974395; x=1727579195;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=Nv0HhiNLE4y7/ZzHchOdHBCvH45AZqWjZA2esmdUAJg=;
- b=lRJc3AJotgJfKjzsk7xRE5RW0gjAFboHMUSQw7ri6dGWJWM26HMVJ95AuhECAlF0QL
- 2/ki38p1u3iU0Ob8suTqO3jUWvNSQOOAy64GCpOEmjlxKwRSDxX1VwEb2qT++7hLc5sq
- 3r7dzP/ocrn+E6JEukMr+R3u4reFcedU9tn5w1g8FPB3GghsH0TZ7comPGK8N6Kyovla
- yNRhMe9Y4daSmN7kqfQ+v7AxheCyVKUeSr/rbpjMrQ6GVcJ9bjq7Jyliozf7jMCUURLC
- e4G3Pu5mNXsUivnbq51EczgwRpe6HGVf46RBC74HvyWAk3j+pnLjGyLHjxpo793ZLOsI
- 6vvQ==
-X-Gm-Message-State: AOJu0Yz4xhBNORoGyXhg/HtBDMcv3BFhRD2ec5pBuOpxYddkbX6C+HdF
- C/WD9PaM1WffR+r39BN8HzbBLq0febJR0E4La9xc+8ue+pQ45rJy7e9ibA==
-X-Google-Smtp-Source: AGHT+IF0a6FWFrO8qQFGMG44q+q5sL6scRD+v8HwHNdhVA3GZzfjKzIy4mnWpDQVywQ+4HpHoz8hpg==
-X-Received: by 2002:a05:6e02:1a2d:b0:3a0:9c99:32d6 with SMTP id
- e9e14a558f8ab-3a0c8d2e4femr51538685ab.24.1726974080464; 
- Sat, 21 Sep 2024 20:01:20 -0700 (PDT)
+ bh=iTEOK8eXQSomFLU4AaXrBfW5n2w2Dlgt1U86MzV6IBo=;
+ b=j2x29BzSC96ykDCGV42DMG8h8Np27C7fKOIeJtUsc6Uj6LiOL3g5GVGRoot5hsIpSo
+ 0xcpiI7WX5tHA4BrFGt6vPYym70EpnZ3XxVKfjNX00UoyMjSHUfoUZjRwN+/k0i+azTq
+ LjH4PJMjBr7qQ0eXZpdiCKv81/qwJ/C/iulpB/SgtfkaVLgWEJJDusNEduWmwLh19LfF
+ YR6SR01ihZrO0c8kO4Hq73smJk1nMlRe42g+oHizqivLeTJxhwHzaOYEA7FCmGWBawwB
+ ysuXQs+bVg7rnA0pSwbgdjBLAL4mFgMBEYYI/X808hLhZ2jdFcq2TaW92sT7WPlu5BNP
+ mykg==
+X-Gm-Message-State: AOJu0YyUy/zSwVWWFtqhHxGcyZklaU7q5beSrvH1D+Up18lUIeXYB5xv
+ pxLUgne4lMLMH0WpbHrIXU27tN0DzVXSUdZoWvS6eEAm76im0zKPyqsv3A==
+X-Google-Smtp-Source: AGHT+IHm5edn9euFqazLG2DCfY7eT7GzzDrzikPD6bpSMr9iXl7EXJYq7YKE1hod6Ogubpd9muc0ZA==
+X-Received: by 2002:a05:6e02:1d87:b0:3a1:95d9:6f36 with SMTP id
+ e9e14a558f8ab-3a195d9710amr13009075ab.13.1726974395294; 
+ Sat, 21 Sep 2024 20:06:35 -0700 (PDT)
 Received: from james-x399.localdomain (97-118-132-252.hlrn.qwest.net.
  [97.118.132.252]) by smtp.gmail.com with ESMTPSA id
- e9e14a558f8ab-3a092e10b6dsm51227395ab.27.2024.09.21.20.01.19
+ 8926c6da1cb9f-4d37ed1add8sm4331824173.119.2024.09.21.20.06.34
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 21 Sep 2024 20:01:19 -0700 (PDT)
+ Sat, 21 Sep 2024 20:06:35 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 21 Sep 2024 21:01:18 -0600
-Message-Id: <20240922030118.750872-1-james.hilliard1@gmail.com>
+Date: Sat, 21 Sep 2024 21:06:33 -0600
+Message-Id: <20240922030633.752714-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1726974080; x=1727578880; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1726974395; x=1727579195; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=Nv0HhiNLE4y7/ZzHchOdHBCvH45AZqWjZA2esmdUAJg=;
- b=NQjpMmnpj4SKyTqDLi1aAQoO7QqpDQK18RXG5wRhZQnAOAqNzTIbGo2gcU9bb27h/b
- /oSUk1Op0C4c6IpYFgG/ZUpqZVHMfks9FxXl3v9vqDBxjQ8SVmMKi2k6J/4jTTPMWBNQ
- 6O8Orf67eJGLpCLuiAKyHNIOq8yTXHOCFrZXKEXPqS646LI4Cpdj9qe3pBp/MOtW8taS
- YFWQp4XRaeKwjd3YzvqLzNJCL/xxtOIoZ1HROdqR+WNJB9d6O9eEZ8mFmFCaR64ONryp
- xe4t7n4j4w/LSl2DdPw2YwASBZUnvfzKnXKtSGq/0SSdFUa0hDCHj6q2Cx+wKZdqu0qS
- flxQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=iTEOK8eXQSomFLU4AaXrBfW5n2w2Dlgt1U86MzV6IBo=;
+ b=eZxdAc9RCXNSdJxQHq2tglHgvm6V9MtZ18NszQhXXPV2vXUry4XL834F2KQg18uP4n
+ l8X06qpC9jx83y3514+KfTT0s0oBolSeIWFrkHi4294gWkqYgXjUYqAaFQdotqHtIezE
+ 1SbGs/s+hkupUgzsAazjJ/AxRR+Ls3MdY4jb9iBH4gaALQEqV15Ola1Oe/NU8TcKYhp/
+ Zy/JMScOFtJzQzZe2GMZhQAlvK5LAM8Ne7tOPPzArW16UMf5LXfhbbTOi9oQ+wyQi5+s
+ 7WIeGtUOkZevFroHR4BqVbwBcSh71uMYlDfRVKu9DOz3xsYIIK0l7jPv6n65VlFPLRf+
+ i8Gg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=NQjpMmnp
-Subject: [Buildroot] [PATCH 1/1] package/python-soupsieve: bump to version
- 2.6
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=eZxdAc9R
+Subject: [Buildroot] [PATCH 1/1] package/python-starlette: bump to version
+ 0.38.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -106,44 +107,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-License hash changed due to year update:
-https://github.com/facelessuser/soupsieve/commit/c811bdff9f5c6d1c54888d5af5c257709e957c6e
-
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-soupsieve/python-soupsieve.hash | 6 +++---
- package/python-soupsieve/python-soupsieve.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-starlette/python-starlette.hash | 4 ++--
+ package/python-starlette/python-starlette.mk   | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/python-soupsieve/python-soupsieve.hash b/package/python-soupsieve/python-soupsieve.hash
-index 278c7d1b0c..d220c8c772 100644
---- a/package/python-soupsieve/python-soupsieve.hash
-+++ b/package/python-soupsieve/python-soupsieve.hash
+diff --git a/package/python-starlette/python-starlette.hash b/package/python-starlette/python-starlette.hash
+index b5ba43c061..ea5cb4799e 100644
+--- a/package/python-starlette/python-starlette.hash
++++ b/package/python-starlette/python-starlette.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/soupsieve/json
--md5  88ae72bd970b425692235d17224204e6  soupsieve-2.5.tar.gz
--sha256  5663d5a7b3bfaeee0bc4372e7fc48f9cff4940b3eec54a6451cc5299f1097690  soupsieve-2.5.tar.gz
-+md5  19126989f90d775ebe752b7fcacf1fc5  soupsieve-2.6.tar.gz
-+sha256  e2e68417777af359ec65daac1057404a3c8a5455bb8abc36f1a9866ab1a51abb  soupsieve-2.6.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/starlette/json
+-md5  7861ee7609e649508792a4ece854406b  starlette-0.38.4.tar.gz
+-sha256  53a7439060304a208fea17ed407e998f46da5e5d9b1addfea3040094512a6379  starlette-0.38.4.tar.gz
++md5  e2e61f4def1d357e73795c646bda57e8  starlette-0.38.5.tar.gz
++sha256  04a92830a9b6eb1442c766199d62260c3d4dc9c4f9188360626b1e0273cb7077  starlette-0.38.5.tar.gz
  # Locally computed sha256 checksums
--sha256  ceb7b9053b88addffa3102a457302bd840d123925ee9ed9c2ac90cf6548b33bf  LICENSE.md
-+sha256  7e1f14c81e9939ef23b472176cda08410cc238752d180abaa0151d8a1c48f594  LICENSE.md
-diff --git a/package/python-soupsieve/python-soupsieve.mk b/package/python-soupsieve/python-soupsieve.mk
-index 581df7e787..9546a6b8c4 100644
---- a/package/python-soupsieve/python-soupsieve.mk
-+++ b/package/python-soupsieve/python-soupsieve.mk
+ sha256  dcb95677a02240243187e964f941847d19b17821cf99e5afae684fab328c19bf  LICENSE.md
+diff --git a/package/python-starlette/python-starlette.mk b/package/python-starlette/python-starlette.mk
+index 1a2b7532f7..bce75a1957 100644
+--- a/package/python-starlette/python-starlette.mk
++++ b/package/python-starlette/python-starlette.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_SOUPSIEVE_VERSION = 2.5
-+PYTHON_SOUPSIEVE_VERSION = 2.6
- PYTHON_SOUPSIEVE_SOURCE = soupsieve-$(PYTHON_SOUPSIEVE_VERSION).tar.gz
--PYTHON_SOUPSIEVE_SITE = https://files.pythonhosted.org/packages/ce/21/952a240de1c196c7e3fbcd4e559681f0419b1280c617db21157a0390717b
-+PYTHON_SOUPSIEVE_SITE = https://files.pythonhosted.org/packages/d7/ce/fbaeed4f9fb8b2daa961f90591662df6a86c1abf25c548329a86920aedfb
- PYTHON_SOUPSIEVE_SETUP_TYPE = pep517
- PYTHON_SOUPSIEVE_LICENSE = MIT
- PYTHON_SOUPSIEVE_LICENSE_FILES = LICENSE.md
+-PYTHON_STARLETTE_VERSION = 0.38.4
++PYTHON_STARLETTE_VERSION = 0.38.5
+ PYTHON_STARLETTE_SOURCE = starlette-$(PYTHON_STARLETTE_VERSION).tar.gz
+-PYTHON_STARLETTE_SITE = https://files.pythonhosted.org/packages/b4/9c/d85721508122ae927aa7064e10a3f47f8dabcd4fd162222afcecd0d8d7b7
++PYTHON_STARLETTE_SITE = https://files.pythonhosted.org/packages/13/aa/57975da16ca0c368bbb5687daa6ad79561c2328a44667a1d6802e94df3e5
+ PYTHON_STARLETTE_SETUP_TYPE = pep517
+ PYTHON_STARLETTE_LICENSE = BSD-3-Clause
+ PYTHON_STARLETTE_LICENSE_FILES = LICENSE.md
 -- 
 2.34.1
 
