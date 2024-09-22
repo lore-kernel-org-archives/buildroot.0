@@ -4,91 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C5A4CF9C68
-	for <buildroot@archiver.kernel.org>; Sun, 22 Sep 2024 08:30:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1B749CF9C68
+	for <buildroot@archiver.kernel.org>; Sun, 22 Sep 2024 08:35:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D8DA86061F;
-	Sun, 22 Sep 2024 08:30:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A727960656;
+	Sun, 22 Sep 2024 08:35:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7UN7cTjuDIey; Sun, 22 Sep 2024 08:30:34 +0000 (UTC)
+ id fMKbqeK-KjBh; Sun, 22 Sep 2024 08:35:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EFECE60643
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B24616065A
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EFECE60643;
-	Sun, 22 Sep 2024 08:30:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B24616065A;
+	Sun, 22 Sep 2024 08:35:22 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 29A991BF870
- for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 08:30:32 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 176C91BF57C
+ for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 08:35:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 261AA60643
- for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 08:30:32 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 0672660656
+ for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 08:35:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 81-2LL_1W2zn for <buildroot@lists.busybox.net>;
- Sun, 22 Sep 2024 08:30:31 +0000 (UTC)
+ id wquD0teGoYRJ for <buildroot@lists.busybox.net>;
+ Sun, 22 Sep 2024 08:35:21 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::12e; helo=mail-il1-x12e.google.com;
- envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 2118A6061F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2118A6061F
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com
- [IPv6:2607:f8b0:4864:20::12e])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2118A6061F
- for <buildroot@buildroot.org>; Sun, 22 Sep 2024 08:30:30 +0000 (UTC)
-Received: by mail-il1-x12e.google.com with SMTP id
- e9e14a558f8ab-39f54ab8e69so14791375ab.1
- for <buildroot@buildroot.org>; Sun, 22 Sep 2024 01:30:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1726993830; x=1727598630;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=tKggX0JmRfl0y/MrM56C25AopS1eZWWy8sNdPGRALBM=;
- b=TzX1CCeV+GrG9XkHTy6negsiPpQSPOQZ8XCioCv21TDdoVkRjEv01UsVQZ5HZ1IAzV
- 3smuTBpsGk2ZcIeEZFjquxVaefluGeaX1NQ9mUMvtoxQbxL4TN5Ml20f2Q2pKQ6gP9RF
- azVrsyNiuiIO7CeyyF48WpkRYhW/p0xSiYIyIqviXYS4BkVTqpPXbI0nH+D6Ya7ZVzAM
- J4/5gOJt8xaiOCYQ0bczqlF08xIRM72vEdNy/TBnQlajU7qAPc4mreVYMGV3w4RQChqK
- y54hbmLpjrZPYJpBZyZLWZE80iUlXxnuTZPBajrU8RrTCKdzQM1tL0YrKzccyXMawFdT
- WZig==
-X-Gm-Message-State: AOJu0YxFJzvxvLvkqt2of1q8wMszA4sT+t8LyTrkjtZCQEIQPhI5zzmj
- cZMouhZSBEtOepboTXxvn0A88PEXgw1pq+GTboKQ/+PmHW8CuXqaSvwCWg==
-X-Google-Smtp-Source: AGHT+IHsty/NyYjQMvVbzQXmagEXKVS13+E79RmvT3LQy7yfiwiOWJJdPFgpL1LVJSsCb2aKgQ7v6g==
-X-Received: by 2002:a05:6e02:1d07:b0:3a1:92bb:1e70 with SMTP id
- e9e14a558f8ab-3a192bb1fc7mr25506125ab.7.1726993829605; 
- Sun, 22 Sep 2024 01:30:29 -0700 (PDT)
-Received: from james-x399.localdomain (97-118-132-252.hlrn.qwest.net.
- [97.118.132.252]) by smtp.gmail.com with ESMTPSA id
- 8926c6da1cb9f-4d37ed60f34sm4495087173.173.2024.09.22.01.30.28
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 22 Sep 2024 01:30:29 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
+ client-ip=2a00:1828:2000:679::23; helo=helium.openadk.org;
+ envelope-from=wbx@openadk.org; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 4FF896065A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4FF896065A
+Received: from helium.openadk.org (helium.openadk.org
+ [IPv6:2a00:1828:2000:679::23])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 4FF896065A
+ for <buildroot@buildroot.org>; Sun, 22 Sep 2024 08:35:19 +0000 (UTC)
+Received: by helium.openadk.org (Postfix, from userid 1000)
+ id 62C06352115D; Sun, 22 Sep 2024 10:35:17 +0200 (CEST)
+Date: Sun, 22 Sep 2024 10:35:17 +0200
+From: Waldemar Brodkorb <wbx@openadk.org>
 To: buildroot@buildroot.org
-Date: Sun, 22 Sep 2024 02:30:27 -0600
-Message-Id: <20240922083027.1005650-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Message-ID: <Zu/WxVZUYehjdlX3@waldemar-brodkorb.de>
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1726993830; x=1727598630; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=tKggX0JmRfl0y/MrM56C25AopS1eZWWy8sNdPGRALBM=;
- b=nmiiOb3ZoS/bVj8I6CCDsvuSq6lcPVaRq0vLekefzf/YpUoR9Y4H49IqA6MKEQrQr4
- +Wowu2HzOdCkKf7q+H0NE4IC22M3jfSCLPoQB+YlM3VuINSQAEC3gvtIjifsg+gg4/3W
- GlKrLEWCUnytFj1IkopHg8ncfCImYMLX0a8btK5gXtxyyWs/pupQUO6U+aH/g4hCAY5v
- JGo3Yp/WGLdae3gygZjTkE+XoUAxxhYRdxq7RhXOUi81DQ3i69yCVwWTORgIoSRilhe+
- nhdryygVK4jTzobee1qySoy8CFEBsDYWFHaqSgROZIbq7oAwrI6sGD/SG9GI0WxLiDRv
- W7Nw==
+Content-Disposition: inline
+X-Operating-System: Linux 5.10.0-32-amd64 x86_64
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=openadk.org; s=2022; 
+ t=1726994117; bh=cxfD/xw8BfDcUN95sPcFC92G9W+jfUNJXb8IHFLYr4A=;
+ h=Date:From:To:Subject:From;
+ b=TyfDB+zwn20PsUd3BRUM4J7pbY/9tP5c4cVLNtXunjDHNV/CYEtmfdvHzNMEsa3qK
+ QrqhaKHsIW5i9GzepinilMk82ecY+j6pmUEA1qzxxjaKJ8Y2AfpaD5ZBt+0nSssir+
+ HeLV6IGkflCYS6hBSGPYm80ugWt56wqI+otF1iO2N4bpLrbgBv6KGD893KkZwpmNN5
+ T2zVwaXCnxzqVjsws1r4LKK4+2+w331jJqiIEEXSf++xKTpAY78xwMA0Zgdr3rprjI
+ pJj0WzsRVvqz2Za3QzONV8y27YYwczSlQCE4HuLTFRQpHdhJRsfQsrqZ0HQ/6fsoBt
+ iuM2de1qdF3yw==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
+ dmarc=none (p=none dis=none)
+ header.from=openadk.org
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=nmiiOb3Z
-Subject: [Buildroot] [PATCH 1/1] package/python-configobj: bump to version
- 5.0.9
+ dkim=pass (2048-bit key,
+ unprotected) header.d=openadk.org header.i=@openadk.org header.a=rsa-sha256
+ header.s=2022 header.b=TyfDB+zw
+Subject: [Buildroot] [PATCH] package/util-linux: update to 2.40.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,63 +76,106 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Drop no longer required python-six runtime dependency.
+Disable lsfd for uClibc-ng until 1.0.51 is out.
+Some files now are licensed under MIT.
+README.licensing was changed, MIT was added, GPL-2.0 was
+renamed to GPL-2.0-only.
 
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
 ---
- package/python-configobj/Config.in             | 1 -
- package/python-configobj/python-configobj.hash | 6 +++---
- package/python-configobj/python-configobj.mk   | 4 ++--
- 3 files changed, 5 insertions(+), 6 deletions(-)
+ package/util-linux/Config.in       |  6 ++++--
+ package/util-linux/util-linux.hash |  7 ++++---
+ package/util-linux/util-linux.mk   | 11 +++++++----
+ 3 files changed, 15 insertions(+), 9 deletions(-)
 
-diff --git a/package/python-configobj/Config.in b/package/python-configobj/Config.in
-index 365aa17fcb..cb9d914745 100644
---- a/package/python-configobj/Config.in
-+++ b/package/python-configobj/Config.in
-@@ -1,6 +1,5 @@
- config BR2_PACKAGE_PYTHON_CONFIGOBJ
- 	bool "python-configobj"
--	select BR2_PACKAGE_PYTHON_SIX # runtime
+diff --git a/package/util-linux/Config.in b/package/util-linux/Config.in
+index 1f5dacec2f..a168abe720 100644
+--- a/package/util-linux/Config.in
++++ b/package/util-linux/Config.in
+@@ -220,13 +220,15 @@ config BR2_PACKAGE_UTIL_LINUX_LSFD
+ 	bool "lsfd"
+ 	depends on BR2_USE_MMU # libsmartcols
+ 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_19
++	depends on !BR2_TOOLCHAIN_USES_UCLIBC # process_vm_readv
+ 	select BR2_PACKAGE_UTIL_LINUX_LIBSMARTCOLS
  	help
- 	  Config file reading, writing and validation.
+ 	  List file descriptors (modern replacement for lsof)
  
-diff --git a/package/python-configobj/python-configobj.hash b/package/python-configobj/python-configobj.hash
-index 682dc987f1..b173f0cdd7 100644
---- a/package/python-configobj/python-configobj.hash
-+++ b/package/python-configobj/python-configobj.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/configobj/json
--md5  8dda7b31bb3aea87ecfe3b7a87812b17  configobj-5.0.8.tar.gz
--sha256  6f704434a07dc4f4dc7c9a745172c1cad449feb548febd9f7fe362629c627a97  configobj-5.0.8.tar.gz
-+md5  496b60edcd943a900ddc0cb04132e81c  configobj-5.0.9.tar.gz
-+sha256  03c881bbf23aa07bccf1b837005975993c4ab4427ba57f959afdd9d1a2386848  configobj-5.0.9.tar.gz
- # Locally computed sha256 checksums
--sha256  0d95e648469a711f5ec1e59e6d4492150ec65d968c1ea6c6d96154a92879997a  LICENSE
-+sha256  fd227649f1956788444397bf0899e977140a5bc662d86826657bc2aad833fe2a  LICENSE
-diff --git a/package/python-configobj/python-configobj.mk b/package/python-configobj/python-configobj.mk
-index fe1776f79f..963bbcb2b8 100644
---- a/package/python-configobj/python-configobj.mk
-+++ b/package/python-configobj/python-configobj.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
+-comment "lsfd needs a toolchain w/ headers >= 3.19"
++comment "lsfd needs a musl or glibc toolchain w/ headers >= 3.19"
+ 	depends on BR2_USE_MMU
+-	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_19
++	depends on !BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_19 \
++		|| BR2_TOOLCHAIN_USES_UCLIBC
  
--PYTHON_CONFIGOBJ_VERSION = 5.0.8
-+PYTHON_CONFIGOBJ_VERSION = 5.0.9
- PYTHON_CONFIGOBJ_SOURCE = configobj-$(PYTHON_CONFIGOBJ_VERSION).tar.gz
--PYTHON_CONFIGOBJ_SITE = https://files.pythonhosted.org/packages/cb/87/17d4c6d634c044ab08b11c0cd2a8a136d103713d438f8792d7be2c5148fb
-+PYTHON_CONFIGOBJ_SITE = https://files.pythonhosted.org/packages/f5/c4/c7f9e41bc2e5f8eeae4a08a01c91b2aea3dfab40a3e14b25e87e7db8d501
- PYTHON_CONFIGOBJ_SETUP_TYPE = setuptools
- PYTHON_CONFIGOBJ_LICENSE = BSD-3-Clause
- PYTHON_CONFIGOBJ_LICENSE_FILES = LICENSE
+ config BR2_PACKAGE_UTIL_LINUX_LSLOGINS
+ 	bool "lslogins"
+diff --git a/package/util-linux/util-linux.hash b/package/util-linux/util-linux.hash
+index d47f47fdba..317efebcbf 100644
+--- a/package/util-linux/util-linux.hash
++++ b/package/util-linux/util-linux.hash
+@@ -1,9 +1,10 @@
+-# From https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/v2.39/sha256sums.asc
+-sha256  7b6605e48d1a49f43cc4b4cfc59f313d0dd5402fa40b96810bd572e167dfed0f  util-linux-2.39.3.tar.xz
++# From https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/v2.40/sha256sums.asc
++sha256  d78b37a66f5922d70edf3bdfb01a6b33d34ed3c3cafd6628203b2a2b67c8e8b3  util-linux-2.40.2.tar.xz
+ # License files, locally calculated
+-sha256  13f0ea46d12d798c095a6ad39d7ddc988e2e4d274c6494115f6b463f7bc4f702  README.licensing
++sha256  27f25514040a401b2ceb7057eae1f46cedb1666664b519b5be7e0960d1b35164  README.licensing
+ sha256  9b718a9460fed5952466421235bc79eb49d4e9eacc920d7a9dd6285ab8fd6c6d  Documentation/licenses/COPYING.BSD-3-Clause
+ sha256  ba7640f00d93e72e92b94b9d71f25ec53bac2f1682f5c4adcccb0018359f60f8  Documentation/licenses/COPYING.BSD-4-Clause-UC
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  Documentation/licenses/COPYING.GPL-2.0-or-later
+ sha256  e53348ce276358e9997014071c5294b36a18c4b34f32f00ee57b9acce0aafd63  Documentation/licenses/COPYING.ISC
+ sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  Documentation/licenses/COPYING.LGPL-2.1-or-later
++sha256  8555341619542abb48c102afd954e42d4478e5be16ad3d5af7b0ff71009e7348  Documentation/licenses/COPYING.MIT
+diff --git a/package/util-linux/util-linux.mk b/package/util-linux/util-linux.mk
+index f2821978c5..c3737a8d12 100644
+--- a/package/util-linux/util-linux.mk
++++ b/package/util-linux/util-linux.mk
+@@ -7,8 +7,8 @@
+ # When making changes to this file, please check if
+ # util-linux-libs/util-linux-libs.mk needs to be updated accordingly as well.
+ 
+-UTIL_LINUX_VERSION_MAJOR = 2.39
+-UTIL_LINUX_VERSION = $(UTIL_LINUX_VERSION_MAJOR).3
++UTIL_LINUX_VERSION_MAJOR = 2.40
++UTIL_LINUX_VERSION = $(UTIL_LINUX_VERSION_MAJOR).2
+ UTIL_LINUX_SOURCE = util-linux-$(UTIL_LINUX_VERSION).tar.xz
+ UTIL_LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/util-linux/v$(UTIL_LINUX_VERSION_MAJOR)
+ 
+@@ -21,13 +21,15 @@ UTIL_LINUX_LICENSE = \
+ 	LGPL-2.1+ (libblkid, libfdisk, libmount), \
+ 	BSD-3-Clause (libuuid), \
+ 	BSD-2-Clause (xxhash), \
+-	ISC (rfkill)
++	ISC (rfkill) \
++	MIT (hardlink, flock)
+ UTIL_LINUX_LICENSE_FILES = README.licensing \
+ 	Documentation/licenses/COPYING.BSD-3-Clause \
+ 	Documentation/licenses/COPYING.BSD-4-Clause-UC \
+ 	Documentation/licenses/COPYING.GPL-2.0-or-later \
+ 	Documentation/licenses/COPYING.ISC \
+-	Documentation/licenses/COPYING.LGPL-2.1-or-later
++	Documentation/licenses/COPYING.LGPL-2.1-or-later \
++	Documentation/licenses/COPYING.MIT
+ 
+ UTIL_LINUX_CPE_ID_VENDOR = kernel
+ 
+@@ -226,6 +228,7 @@ HOST_UTIL_LINUX_CONF_OPTS += \
+ 	--disable-chfn-chsh \
+ 	--disable-chmem \
+ 	--disable-ipcmk \
++	--disable-liblastlog2 \
+ 	--disable-login \
+ 	--disable-lsfd \
+ 	--disable-lslogins \
 -- 
-2.34.1
+2.30.2
 
 _______________________________________________
 buildroot mailing list
