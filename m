@@ -4,91 +4,92 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B4FECF9C69
-	for <buildroot@archiver.kernel.org>; Sun, 22 Sep 2024 05:17:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4CFC6CF9C69
+	for <buildroot@archiver.kernel.org>; Sun, 22 Sep 2024 05:27:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id EA711402D7;
-	Sun, 22 Sep 2024 05:17:37 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8E4EA405EF;
+	Sun, 22 Sep 2024 05:27:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tBc6-rekYEqf; Sun, 22 Sep 2024 05:17:36 +0000 (UTC)
+ id AAbDDEYRYZLn; Sun, 22 Sep 2024 05:27:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8EE3B40311
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 335694067F
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8EE3B40311;
-	Sun, 22 Sep 2024 05:17:36 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5FFE51BF3C5
- for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 05:17:35 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 335694067F;
+	Sun, 22 Sep 2024 05:27:18 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 7EA181BF3C5
+ for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 05:27:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 5BBEA40311
- for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 05:17:35 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6E0298137E
+ for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 05:27:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mAQZcJwJJQmM for <buildroot@lists.busybox.net>;
- Sun, 22 Sep 2024 05:17:34 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id aTdTnIuhHEEi for <buildroot@lists.busybox.net>;
+ Sun, 22 Sep 2024 05:27:15 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::d2d; helo=mail-io1-xd2d.google.com;
+ client-ip=2607:f8b0:4864:20::d29; helo=mail-io1-xd29.google.com;
  envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org D0B15402D7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org D0B15402D7
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com
- [IPv6:2607:f8b0:4864:20::d2d])
- by smtp4.osuosl.org (Postfix) with ESMTPS id D0B15402D7
- for <buildroot@buildroot.org>; Sun, 22 Sep 2024 05:17:33 +0000 (UTC)
-Received: by mail-io1-xd2d.google.com with SMTP id
- ca18e2360f4ac-82cd93a6617so121338739f.3
- for <buildroot@buildroot.org>; Sat, 21 Sep 2024 22:17:33 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 545878137A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 545878137A
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com
+ [IPv6:2607:f8b0:4864:20::d29])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 545878137A
+ for <buildroot@buildroot.org>; Sun, 22 Sep 2024 05:27:15 +0000 (UTC)
+Received: by mail-io1-xd29.google.com with SMTP id
+ ca18e2360f4ac-82a626d73efso124581539f.1
+ for <buildroot@buildroot.org>; Sat, 21 Sep 2024 22:27:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1726982252; x=1727587052;
+ d=1e100.net; s=20230601; t=1726982834; x=1727587634;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=7L3KonQu+D6xmlZusUSpYm1NMwjSDb++hI3sdo55G3M=;
- b=JwO4YglovjZkPyzrStKBEJbglboJJAUkul7DZy7AjVUSTj4e23l98RxnuYUBBOcHPg
- emH8ME1OqFBhXXxDViGvmnwJTK3bzRW8o7suPjmkApimUey9wPZxRYVZAu86jAB7iVBy
- QjbGgzC6gRhkvCdux98Yk1TN+aZtNf2921wGTQR5Glfxxr3ul3d7id8Xp1duM7984n36
- n63CvN6fU5bnZJun9mky27uxuO8yXko42acBRi2u7zXNVLLp4EHcqJQkT3VB+VNS1ZuY
- vLkwUvpONAMhuWRZZFRC3lFOirek/IxyPgWkkeqHPypWOz4zLPXLkKYFS6WB1bpjUvUr
- 9ozA==
-X-Gm-Message-State: AOJu0Yy4enobshjs9vuVphoqCEaK0K1uPoUM42lwZIOQlkf+Gys/Ikwb
- C0BCJPQF+lub0DE/FKDGdixlu3G0PdAO7rt42rHBG1KqSGMipq5GWWwGVQ==
-X-Google-Smtp-Source: AGHT+IEzDM5/QA5gTHKX9oma//vx6ZZ4z+YdiAzcgPct9lBJ3udSWYy0W+BuHAirqPwqMuoneiWGEQ==
-X-Received: by 2002:a05:6602:140a:b0:82a:1f14:997f with SMTP id
- ca18e2360f4ac-8320b287356mr727850239f.4.1726982252394; 
- Sat, 21 Sep 2024 22:17:32 -0700 (PDT)
+ bh=nQd7cFgOCOsvDVoAomqWMXpdO14gWEFAKNBSg7iIiQc=;
+ b=B/Dd2H+/+W+R6MdbLsh4PhMSFziEvUIT/i7p5t873Lm0ouSspPgdsTtkw5n5TQri79
+ P1KKKR10qAbdFzM+P5kjGt5xB3wOaOY97f3m4ZbHyAtvX3h2yRMKU4iJfMsFSdqWTqRJ
+ pgJhV+R5Va7vpOnn5Kx08vdZBPxHh+NZIrIXfXCxH2GCNNTbGVyZ0B2S7y2jCrGhxrdT
+ pNdqdwZNWxKB9WR9TQMhuMkJgUwkKj14xhAQisJoO1/HaUpgBXc70FiXdApHOp0sEw82
+ uqBpP0SaXq7EUFBq2dWAGIV9hRqQmA4+5js43vzzXRGRhcd//NSw5GAYK69H9RPFYJJg
+ ioaw==
+X-Gm-Message-State: AOJu0Yyq2Wu/j7b7qe/E5UrftcVmaxfomfa0M9QF/BrZwkzaGFeK58Dk
+ 1/ak9ZZypUfjlZGDPsGaymnVwsLpRkA4/xLGTUiQW1GcCEkNSxp6jw0dig==
+X-Google-Smtp-Source: AGHT+IHRCtEMdFTXYsA5KaI3zMpbUwCXvSLrskK/1fHIDyK/YzjNljiDIskUoi6lDGVftZcL6ajhIA==
+X-Received: by 2002:a05:6e02:2148:b0:3a0:9244:191d with SMTP id
+ e9e14a558f8ab-3a0c9d77da6mr49628775ab.16.1726982834059; 
+ Sat, 21 Sep 2024 22:27:14 -0700 (PDT)
 Received: from james-x399.localdomain (97-118-132-252.hlrn.qwest.net.
  [97.118.132.252]) by smtp.gmail.com with ESMTPSA id
- 8926c6da1cb9f-4d37ec2068asm4444518173.60.2024.09.21.22.17.31
+ 8926c6da1cb9f-4d37ed597dfsm4461164173.166.2024.09.21.22.27.13
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 21 Sep 2024 22:17:31 -0700 (PDT)
+ Sat, 21 Sep 2024 22:27:13 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 21 Sep 2024 23:17:30 -0600
-Message-Id: <20240922051730.932472-1-james.hilliard1@gmail.com>
+Date: Sat, 21 Sep 2024 23:27:11 -0600
+Message-Id: <20240922052711.938687-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1726982252; x=1727587052; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1726982834; x=1727587634; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=7L3KonQu+D6xmlZusUSpYm1NMwjSDb++hI3sdo55G3M=;
- b=fuDHPZvzsNmO65bQR/9m/ac1nH6l5U0a8/dnKYF/3GANnXTQg/AHYRFvf9n5KpDeMg
- IVTOnyZZ9DXvFpLsT6r2gdUxna/685ggV0Rj+5Iuk3MeUt86LLS3I7G/Po8Wxxd1Zc/U
- xm8tZYDhVFBGumjHj8C2uYWDWNZVgFfkSnlgqdg1+c/Y99cVaj3hr4IZNDWrKb9Njehj
- 3U6hr9+q+hTk9ga9hGR5TMs7UgzJOSFE4YSiBcSeT+pE4i0ig5uFnOxfZKMFDtzVUEOX
- l0BfpLvk6/jGfJg+w9OTnqoDecDLdhEOCPY89Y8c4EQpi/y1hguvhT2IqdiwX3enQayB
- F/+g==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ bh=nQd7cFgOCOsvDVoAomqWMXpdO14gWEFAKNBSg7iIiQc=;
+ b=JlN64YNDrxdJfqGuXlkyoMehVzfSBQw6D6T/0xMQub70pnynpr4sT0QvAT7+WEGHHa
+ nQJSS00RuSZDYslSGs7EnHSOdL2HJRJVkOLeKbLlX6mAF3wIByaK6nJa/gBr4CDqAgT5
+ b/rr5Y8ktREDxcbwdKnfIvnAepI64gWH8CH5bOk03LvQhJrllHL0Otz6Ma0nXQsMqxRd
+ ncROwFMWMukHtJC3LWiiA+DfeIEsACMRYIE+8cCw3JSpjbuDyuIK+yahYz1fZbloRP/l
+ zWioQgrQY2kAFYUja3uyljuRJYpVxNI9MB+JrNv9isxUXqdaPkW/793zF25Yo+4PvzNA
+ uS/A==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=fuDHPZvz
-Subject: [Buildroot] [PATCH 1/1] package/python-trove-classifiers: bump to
- version 2024.9.12
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=JlN64YND
+Subject: [Buildroot] [PATCH 1/1] package/python-twisted: bump to version
+ 24.7.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -106,41 +107,83 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Drop no longer required python-pyhamcrest runtime dependency.
+
+Drop no longer required python-pyasn1 runtime dependency.
+
+Migrate from setuptools to hatchling build backend.
+
+License hash changed due to year update:
+https://github.com/twisted/twisted/commit/4ed1a5b8ad9aaa1e3c5adb13076a2d79ec4279f1
+
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- .../python-trove-classifiers/python-trove-classifiers.hash  | 4 ++--
- .../python-trove-classifiers/python-trove-classifiers.mk    | 6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-twisted/Config.in           |  2 --
+ package/python-twisted/python-twisted.hash |  8 ++++----
+ package/python-twisted/python-twisted.mk   | 13 ++++++++-----
+ 3 files changed, 12 insertions(+), 11 deletions(-)
 
-diff --git a/package/python-trove-classifiers/python-trove-classifiers.hash b/package/python-trove-classifiers/python-trove-classifiers.hash
-index 2aac714a37..904ffd7167 100644
---- a/package/python-trove-classifiers/python-trove-classifiers.hash
-+++ b/package/python-trove-classifiers/python-trove-classifiers.hash
+diff --git a/package/python-twisted/Config.in b/package/python-twisted/Config.in
+index 1f3baf57e2..84786689b7 100644
+--- a/package/python-twisted/Config.in
++++ b/package/python-twisted/Config.in
+@@ -5,7 +5,6 @@ config BR2_PACKAGE_PYTHON_TWISTED
+ 	select BR2_PACKAGE_PYTHON_AUTOMAT # runtime
+ 	select BR2_PACKAGE_PYTHON_CONSTANTLY # runtime
+ 	select BR2_PACKAGE_PYTHON_HYPERLINK # runtime
+-	select BR2_PACKAGE_PYTHON_PYHAMCREST # runtime
+ 	select BR2_PACKAGE_PYTHON_ZOPE_INTERFACE # runtime
+ 	select BR2_PACKAGE_PYTHON_TYPING_EXTENSIONS # runtime
+ 	help
+@@ -35,7 +34,6 @@ config BR2_PACKAGE_PYTHON_TWISTED_CONCH
+ 	select BR2_PACKAGE_PYTHON_APPDIRS # runtime
+ 	select BR2_PACKAGE_PYTHON_BCRYPT # runtime
+ 	select BR2_PACKAGE_PYTHON_CRYPTOGRAPHY # runtime
+-	select BR2_PACKAGE_PYTHON_PYASN1 # runtime
+ 
+ config BR2_PACKAGE_PYTHON_TWISTED_SERIAL
+ 	bool "Serial support"
+diff --git a/package/python-twisted/python-twisted.hash b/package/python-twisted/python-twisted.hash
+index 36612ff5e7..a414058ca7 100644
+--- a/package/python-twisted/python-twisted.hash
++++ b/package/python-twisted/python-twisted.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/trove-classifiers/json
--md5  1e574abaf8803bab35289ab54d6bb251  trove-classifiers-2024.3.3.tar.gz
--sha256  df7edff9c67ff86b733628998330b180e81d125b1e096536d83ac0fd79673fdc  trove-classifiers-2024.3.3.tar.gz
-+md5  717cfc0ecefe6d49ace81adac3ebe0af  trove_classifiers-2024.9.12.tar.gz
-+sha256  4b46b3e134a4d01999ac5bc6e528afcc10cc48f0f724f185f267e276005768f4  trove_classifiers-2024.9.12.tar.gz
- # Locally computed sha256 checksums
- sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE
-diff --git a/package/python-trove-classifiers/python-trove-classifiers.mk b/package/python-trove-classifiers/python-trove-classifiers.mk
-index 5bfd045c38..567cddec64 100644
---- a/package/python-trove-classifiers/python-trove-classifiers.mk
-+++ b/package/python-trove-classifiers/python-trove-classifiers.mk
-@@ -4,9 +4,9 @@
+ # md5, sha256 from https://pypi.org/pypi/twisted/json
+-md5  c9a5dad0813512fabd9de502738c0bf8  Twisted-22.10.0.tar.gz
+-sha256  32acbd40a94f5f46e7b42c109bfae2b302250945561783a8b7a059048f2d4d31  Twisted-22.10.0.tar.gz
+-# Locally computed sha256
+-sha256  686f6426a775450eb3afd00bc3a5c2621f305ddb9c8478ee9bf28a368ef2dece  LICENSE
++md5  f89c2542ea9cb39c5343472fdefb4a22  twisted-24.7.0.tar.gz
++sha256  5a60147f044187a127ec7da96d170d49bcce50c6fd36f594e60f4587eff4d394  twisted-24.7.0.tar.gz
++# Locally computed sha256 checksums
++sha256  78d059391dddba18a695c1998ac9dde68160a1df1635f34adcfb3ecba4564802  LICENSE
+diff --git a/package/python-twisted/python-twisted.mk b/package/python-twisted/python-twisted.mk
+index 398baed2a8..71d1b32df2 100644
+--- a/package/python-twisted/python-twisted.mk
++++ b/package/python-twisted/python-twisted.mk
+@@ -4,14 +4,17 @@
  #
  ################################################################################
  
--PYTHON_TROVE_CLASSIFIERS_VERSION = 2024.3.3
--PYTHON_TROVE_CLASSIFIERS_SOURCE = trove-classifiers-$(PYTHON_TROVE_CLASSIFIERS_VERSION).tar.gz
--PYTHON_TROVE_CLASSIFIERS_SITE = https://files.pythonhosted.org/packages/13/11/e13906315b498cb8f5ce5a7ff39fc35941e8291e914158157937fd1c095d
-+PYTHON_TROVE_CLASSIFIERS_VERSION = 2024.9.12
-+PYTHON_TROVE_CLASSIFIERS_SOURCE = trove_classifiers-$(PYTHON_TROVE_CLASSIFIERS_VERSION).tar.gz
-+PYTHON_TROVE_CLASSIFIERS_SITE = https://files.pythonhosted.org/packages/16/14/55ceb59dabf95f554b5368fdabe8d370165a25f817a23d809ad6c87a0b06
- PYTHON_TROVE_CLASSIFIERS_SETUP_TYPE = setuptools
- PYTHON_TROVE_CLASSIFIERS_LICENSE = Apache-2.0
- PYTHON_TROVE_CLASSIFIERS_LICENSE_FILES = LICENSE
+-PYTHON_TWISTED_VERSION = 22.10.0
+-PYTHON_TWISTED_SOURCE = Twisted-$(PYTHON_TWISTED_VERSION).tar.gz
+-PYTHON_TWISTED_SITE = https://files.pythonhosted.org/packages/b2/ce/cbb56597127b1d51905b0cddcc3f314cc769769efc5e9a8a67f4617f7bca
+-PYTHON_TWISTED_SETUP_TYPE = setuptools
++PYTHON_TWISTED_VERSION = 24.7.0
++PYTHON_TWISTED_SOURCE = twisted-$(PYTHON_TWISTED_VERSION).tar.gz
++PYTHON_TWISTED_SITE = https://files.pythonhosted.org/packages/8b/bf/f30eb89bcd14a21a36b4cd3d96658432d4c590af3c24bbe08ea77fa7bbbb
++PYTHON_TWISTED_SETUP_TYPE = pep517
+ PYTHON_TWISTED_LICENSE = MIT
+ PYTHON_TWISTED_LICENSE_FILES = LICENSE
+ PYTHON_TWISTED_CPE_ID_VENDOR = twistedmatrix
+ PYTHON_TWISTED_CPE_ID_PRODUCT = twisted
+-PYTHON_TWISTED_DEPENDENCIES = python-incremental host-python-incremental
++PYTHON_TWISTED_DEPENDENCIES = \
++	host-python-hatchling \
++	host-python-hatch-fancy-pypi-readme \
++	host-python-incremental
+ 
+ $(eval $(python-package))
 -- 
 2.34.1
 
