@@ -4,91 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F40CCF9C69
-	for <buildroot@archiver.kernel.org>; Sun, 22 Sep 2024 05:49:03 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F2539CF9C69
+	for <buildroot@archiver.kernel.org>; Sun, 22 Sep 2024 05:55:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 22E014011C;
-	Sun, 22 Sep 2024 05:49:03 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B22D84011C;
+	Sun, 22 Sep 2024 05:55:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Rin1ldyGVcau; Sun, 22 Sep 2024 05:49:02 +0000 (UTC)
+ id lVxaUlAic5lz; Sun, 22 Sep 2024 05:55:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org CA65140360
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5959240360
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id CA65140360;
-	Sun, 22 Sep 2024 05:49:01 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 04DBE1BF3C5
- for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 05:49:01 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 5959240360;
+	Sun, 22 Sep 2024 05:55:27 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id C96311BF3C5
+ for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 05:55:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id E7E89606B1
- for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 05:49:00 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id C5EA98105C
+ for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 05:55:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id VmU7VUcFdqjx for <buildroot@lists.busybox.net>;
- Sun, 22 Sep 2024 05:49:00 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id WewFHsfnI_OZ for <buildroot@lists.busybox.net>;
+ Sun, 22 Sep 2024 05:55:25 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::d36; helo=mail-io1-xd36.google.com;
+ client-ip=2607:f8b0:4864:20::129; helo=mail-il1-x129.google.com;
  envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org D5FA66065A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D5FA66065A
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com
- [IPv6:2607:f8b0:4864:20::d36])
- by smtp3.osuosl.org (Postfix) with ESMTPS id D5FA66065A
- for <buildroot@buildroot.org>; Sun, 22 Sep 2024 05:48:59 +0000 (UTC)
-Received: by mail-io1-xd36.google.com with SMTP id
- ca18e2360f4ac-82cdb749598so199044839f.1
- for <buildroot@buildroot.org>; Sat, 21 Sep 2024 22:48:59 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org CC30880F82
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CC30880F82
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com
+ [IPv6:2607:f8b0:4864:20::129])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id CC30880F82
+ for <buildroot@buildroot.org>; Sun, 22 Sep 2024 05:55:24 +0000 (UTC)
+Received: by mail-il1-x129.google.com with SMTP id
+ e9e14a558f8ab-3a0cbc08b38so11441785ab.0
+ for <buildroot@buildroot.org>; Sat, 21 Sep 2024 22:55:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1726984138; x=1727588938;
+ d=1e100.net; s=20230601; t=1726984523; x=1727589323;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=Wwzns93A2266g4aVEvgZlf76mtgIJhn/cI/zTuWrZPY=;
- b=gpqvQF63q8fpCoIiv9aWZ1ttEa/Jz2Ubad1Bnbzp2SYrrtIy8Krc8ICBpCa/vhEHKF
- cs0Y9XnJJm8jTfVpdr+KkwjyCr3ssc5dw9iah3CfROUQ/FwzfXCWVaO+ciSedHmooUz1
- 8hYbw9sBasQMIwZEj8OcQWO22fg6fwPHgQV2rhsRbXuji0u4SuWjyaCMCVGUrgn2V167
- E6Q3psRkm4sXtBbES3ZO79/iJfxAS8PRg37fRN5C4fZDEj83w6sGCvefae74RnqHVte9
- Vw8RRGk3uetyjexGXQdVWuasmTFUZ6s/Niw0Ef6Qqs3zRCz1xPjV+j6krh3Tdql/Zw/Q
- +31Q==
-X-Gm-Message-State: AOJu0YxkFh8mBR5ZQMRZZejsHJpGVxsAM+h4SQGYegnCMI+5NqSeYWoc
- vpfnTvC18cO9sYN7upidFV/Art6UC1tG44lKrZWm1fRbrAiPDqCX3noT0Q==
-X-Google-Smtp-Source: AGHT+IGRZQIz/hp5UDNafn8eoshFCbeEqO8kyEyLhpAfdo3S/3uY9U6UTv9AaOjrt6gZ+kp6MFg4qQ==
-X-Received: by 2002:a05:6e02:1908:b0:3a0:911d:c277 with SMTP id
- e9e14a558f8ab-3a0c8c6a282mr74601295ab.5.1726984138459; 
- Sat, 21 Sep 2024 22:48:58 -0700 (PDT)
+ bh=bDdE8YF5DT9obSnrl+plmovkB+7PtTn0h/wOBVTyVFo=;
+ b=FJ9EZ/lHLU/DBRjjgxvmlDaYfCqz9xnkW4apQmTewHmAFK4WBmT4ul6MPNuIVJe4/t
+ HsllghjutKPyeb2dJCeSnF8HBMP1RQp4kR1mjq6ojZ2KAya/6Zlp58eeltybi/fj00DZ
+ AClV/4pQYyfwZnfCzcsj5BB5tlfXygUAXRRyqXxGVJOKfheEOBMcJjtf1c0IxDFqsB7L
+ wdt9jke9hirHffAh9KU8C06Lojn2YmNLU/1KelNpohNvIblatI2dPwQqxd0W8TQ958L1
+ jI+Dj5/t5CyuSChwrXO6emAVoYIECoZ3XPKzdKb6rZxt6iA6OUdCpJp9qBSrVS7Y4kQ6
+ OvQg==
+X-Gm-Message-State: AOJu0YzqCT3CluPh5F/zGwCRZRRoT0flpBE/VHU1wvR5V0h1/3w4Yvit
+ 2NExsvCtOlcIFhBBi/nK+8yEZGbV5HeLA1Xg03ddbIpTFqS0YH8jzH7w6w==
+X-Google-Smtp-Source: AGHT+IHWyVMa1l/PUC/kXKH+9UZ9VsBg1Qxe3RjJ2Qi0tQ6UPjVRcQX61t706CZvHET4OWRf9yytrA==
+X-Received: by 2002:a05:6e02:180f:b0:3a0:98b2:8f3b with SMTP id
+ e9e14a558f8ab-3a0c8ca77d2mr71180425ab.7.1726984523203; 
+ Sat, 21 Sep 2024 22:55:23 -0700 (PDT)
 Received: from james-x399.localdomain (97-118-132-252.hlrn.qwest.net.
  [97.118.132.252]) by smtp.gmail.com with ESMTPSA id
- e9e14a558f8ab-3a0ca4087ddsm16520505ab.65.2024.09.21.22.48.57
+ 8926c6da1cb9f-4d37ec17ebesm4532571173.41.2024.09.21.22.55.22
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 21 Sep 2024 22:48:57 -0700 (PDT)
+ Sat, 21 Sep 2024 22:55:22 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 21 Sep 2024 23:48:56 -0600
-Message-Id: <20240922054856.947641-1-james.hilliard1@gmail.com>
+Date: Sat, 21 Sep 2024 23:55:20 -0600
+Message-Id: <20240922055520.950674-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1726984138; x=1727588938; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1726984523; x=1727589323; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=Wwzns93A2266g4aVEvgZlf76mtgIJhn/cI/zTuWrZPY=;
- b=Ld9tYRe+Vl5d0Gm8RvqJp74VLWZnfNHBrD0P0gtE7GlaAedixxP5EWMaJ2Cd1O2xwM
- ZNbxuSwoQzKi/B4Cp0WMbvlrpWuUy78nZI4POF/geK/6cjJjTYgMkPZeW7qFTiYmlumi
- Ols2TX0Ps7ldqZX9bew8A3kVL67DHj+i2zIM4dR+uDAkIK+axIrxXnTAsDRWGeznBlZ+
- 3HWswziv/C8TdZtjrs/6Rfw5lVPrioRqG5KdJn3mDqArCxy7TKWsoKSCNDNf2rEDmZSh
- LkyIzsoFtLWJn3OfqXMfOKPveJgks35z47iK6QIXbaYFkzdYVjWlMBWnUomZaXzlDURY
- s7yQ==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=bDdE8YF5DT9obSnrl+plmovkB+7PtTn0h/wOBVTyVFo=;
+ b=CI+w3jmnOu70vK19FoHeMTMlfGzLvhxLpX97E/hjy0RON1aospZq8CCxO8cfgOz24o
+ NpbCI3ghjo/h3Bz/OFG/2/G0b3av4hrClYuXSplef/ANU4Pfon7R6SNZP2KT9z3AS9Hi
+ QgH0a8HwPEMjeh2BdoIxg45/j5K5aMnK+Bf8WRWp0gHkRfn8ZDyJTkftT5AoqiUorqb3
+ S8U5iMautfxJgFwa1daTL+KuksV3G2c71LvUxk6OdsHAjYXxA2peQ6vUCtvwkBhmTHVI
+ uinkl04bPK7zdODJK4nyN3IIv5SKQTsQoDjCrIxGHVYo3n13ZKP6EWNa+LBNUp7bThiB
+ w9Kg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=Ld9tYRe+
-Subject: [Buildroot] [PATCH 1/1] package/python-typing-inspect: bump to
- version 0.9.0
+ header.a=rsa-sha256 header.s=20230601 header.b=CI+w3jmn
+Subject: [Buildroot] [PATCH 1/1] package/python-u-msgpack: bump to version
+ 2.8.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -106,53 +106,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+License hash changed due to year update:
+https://github.com/vsergeev/u-msgpack-python/commit/931960b89372d1a94aa9734b549cbe87361222de
+
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-typing-inspect/Config.in                  | 1 +
- package/python-typing-inspect/python-typing-inspect.hash | 4 ++--
- package/python-typing-inspect/python-typing-inspect.mk   | 4 ++--
- 3 files changed, 5 insertions(+), 4 deletions(-)
+ package/python-u-msgpack/python-u-msgpack.hash | 6 +++---
+ package/python-u-msgpack/python-u-msgpack.mk   | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-typing-inspect/Config.in b/package/python-typing-inspect/Config.in
-index dda057a19c..b897676996 100644
---- a/package/python-typing-inspect/Config.in
-+++ b/package/python-typing-inspect/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_PYTHON_TYPING_INSPECT
- 	bool "python-typing-inspect"
- 	select BR2_PACKAGE_PYTHON_MYPY_EXTENSIONS # runtime
-+	select BR2_PACKAGE_PYTHON_TYPING_EXTENSIONS # runtime
- 	help
- 	  Runtime inspection utilities for typing module.
- 
-diff --git a/package/python-typing-inspect/python-typing-inspect.hash b/package/python-typing-inspect/python-typing-inspect.hash
-index 737373d609..55c29bf7ba 100644
---- a/package/python-typing-inspect/python-typing-inspect.hash
-+++ b/package/python-typing-inspect/python-typing-inspect.hash
+diff --git a/package/python-u-msgpack/python-u-msgpack.hash b/package/python-u-msgpack/python-u-msgpack.hash
+index 0ec2385533..22005747b9 100644
+--- a/package/python-u-msgpack/python-u-msgpack.hash
++++ b/package/python-u-msgpack/python-u-msgpack.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/typing-inspect/json
--md5  d56c8277a55d0bf061275df1ea3785d5  typing_inspect-0.8.0.tar.gz
--sha256  8b1ff0c400943b6145df8119c41c244ca8207f1f10c9c057aeed1560e4806e3d  typing_inspect-0.8.0.tar.gz
-+md5  334f7f909260ceebb05e10ebd7039ff0  typing_inspect-0.9.0.tar.gz
-+sha256  b23fc42ff6f6ef6954e4852c1fb512cdd18dbea03134f91f856a95ccc9461f78  typing_inspect-0.9.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/u-msgpack-python/json
+-md5  6c4fbe9e1df1c1563ecc9e435b82fdcb  u-msgpack-python-2.7.2.tar.gz
+-sha256  e86f7ac6aa0ef4c6c49f004b4fd435bce99c23e2dd5d73003f3f9816024c2bd8  u-msgpack-python-2.7.2.tar.gz
++md5  062ac5812bcd32f967356c384a37297c  u-msgpack-python-2.8.0.tar.gz
++sha256  b801a83d6ed75e6df41e44518b4f2a9c221dc2da4bcd5380e3a0feda520bc61a  u-msgpack-python-2.8.0.tar.gz
  # Locally computed sha256 checksums
- sha256  f9d3567d00ca2337f769fb28c553cc590213ecefed4ed599110c10ded2ea0117  LICENSE
-diff --git a/package/python-typing-inspect/python-typing-inspect.mk b/package/python-typing-inspect/python-typing-inspect.mk
-index 8573bb1c27..09930058b5 100644
---- a/package/python-typing-inspect/python-typing-inspect.mk
-+++ b/package/python-typing-inspect/python-typing-inspect.mk
+-sha256  f938fe2d3b7b329005d4b2851f106fd4351ca55f0836335acbe52386312f7f31  LICENSE
++sha256  2466f2b37a97e92bfe1ab9910c9e112e7b0dfd5d261f39cadb92629db503d13c  LICENSE
+diff --git a/package/python-u-msgpack/python-u-msgpack.mk b/package/python-u-msgpack/python-u-msgpack.mk
+index 372c5a8d45..f4a11eb0b9 100644
+--- a/package/python-u-msgpack/python-u-msgpack.mk
++++ b/package/python-u-msgpack/python-u-msgpack.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_TYPING_INSPECT_VERSION = 0.8.0
-+PYTHON_TYPING_INSPECT_VERSION = 0.9.0
- PYTHON_TYPING_INSPECT_SOURCE = typing_inspect-$(PYTHON_TYPING_INSPECT_VERSION).tar.gz
--PYTHON_TYPING_INSPECT_SITE = https://files.pythonhosted.org/packages/72/23/bed3ea644bcd77ffe9a7f591eb058c00739747e33ab94d80cc4319ddee8e
-+PYTHON_TYPING_INSPECT_SITE = https://files.pythonhosted.org/packages/dc/74/1789779d91f1961fa9438e9a8710cdae6bd138c80d7303996933d117264a
- PYTHON_TYPING_INSPECT_SETUP_TYPE = setuptools
- PYTHON_TYPING_INSPECT_LICENSE = MIT
- PYTHON_TYPING_INSPECT_LICENSE_FILES = LICENSE
+-PYTHON_U_MSGPACK_VERSION = 2.7.2
++PYTHON_U_MSGPACK_VERSION = 2.8.0
+ PYTHON_U_MSGPACK_SOURCE = u-msgpack-python-$(PYTHON_U_MSGPACK_VERSION).tar.gz
+-PYTHON_U_MSGPACK_SITE = https://files.pythonhosted.org/packages/44/a7/1cb4f059bbf72ea24364f9ba3ef682725af09969e29df988aa5437f0044e
++PYTHON_U_MSGPACK_SITE = https://files.pythonhosted.org/packages/36/9d/a40411a475e7d4838994b7f6bcc6bfca9acc5b119ce3a7503608c4428b49
+ PYTHON_U_MSGPACK_SETUP_TYPE = setuptools
+ PYTHON_U_MSGPACK_LICENSE = MIT
+ PYTHON_U_MSGPACK_LICENSE_FILES = LICENSE
 -- 
 2.34.1
 
