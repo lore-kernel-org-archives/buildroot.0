@@ -4,91 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3B302CF9C68
-	for <buildroot@archiver.kernel.org>; Sun, 22 Sep 2024 08:26:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2C5A4CF9C68
+	for <buildroot@archiver.kernel.org>; Sun, 22 Sep 2024 08:30:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C4204605CA;
-	Sun, 22 Sep 2024 08:26:48 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D8DA86061F;
+	Sun, 22 Sep 2024 08:30:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id F2Iq7jTwwhr9; Sun, 22 Sep 2024 08:26:48 +0000 (UTC)
+ id 7UN7cTjuDIey; Sun, 22 Sep 2024 08:30:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org D2C2360643
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EFECE60643
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D2C2360643;
-	Sun, 22 Sep 2024 08:26:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EFECE60643;
+	Sun, 22 Sep 2024 08:30:33 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id EFE0F1BF57C
- for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 08:26:46 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 29A991BF870
+ for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 08:30:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id DEF6260643
- for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 08:26:46 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 261AA60643
+ for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 08:30:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id roKbpv7FUJdT for <buildroot@lists.busybox.net>;
- Sun, 22 Sep 2024 08:26:46 +0000 (UTC)
+ id 81-2LL_1W2zn for <buildroot@lists.busybox.net>;
+ Sun, 22 Sep 2024 08:30:31 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::d2b; helo=mail-io1-xd2b.google.com;
+ client-ip=2607:f8b0:4864:20::12e; helo=mail-il1-x12e.google.com;
  envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org E7310605CA
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E7310605CA
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com
- [IPv6:2607:f8b0:4864:20::d2b])
- by smtp3.osuosl.org (Postfix) with ESMTPS id E7310605CA
- for <buildroot@buildroot.org>; Sun, 22 Sep 2024 08:26:45 +0000 (UTC)
-Received: by mail-io1-xd2b.google.com with SMTP id
- ca18e2360f4ac-82aa7c3b482so131128539f.2
- for <buildroot@buildroot.org>; Sun, 22 Sep 2024 01:26:45 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 2118A6061F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2118A6061F
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com
+ [IPv6:2607:f8b0:4864:20::12e])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 2118A6061F
+ for <buildroot@buildroot.org>; Sun, 22 Sep 2024 08:30:30 +0000 (UTC)
+Received: by mail-il1-x12e.google.com with SMTP id
+ e9e14a558f8ab-39f54ab8e69so14791375ab.1
+ for <buildroot@buildroot.org>; Sun, 22 Sep 2024 01:30:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1726993605; x=1727598405;
+ d=1e100.net; s=20230601; t=1726993830; x=1727598630;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=HAng/T/2emUoy2BpQ2CFgwt6ojOPTn2atGMOPqCg6/Y=;
- b=ai3VdQ0TWPaQm2QGJ3oHQ2Ah6ioYt5g+uPiS+6c0RwEZEaDMq048Azzfl9KKQXpN7s
- /GfJBwOBTN7dioGRG7JZ8VqXVPQZn7RiRGj2Qrv7KGnhxZfS+i/ppoV2VXbxR5KBGD3A
- VhI63UJSYMFY2yyl3NiewwRJioT8fxrVXxb9z2DgHWxHErH0Z8Fqw1gxhneUrDBpRLfq
- kDpCuSUQOM4sx+QknVHN1FGzJ+aQshA0+4d/pe6qNXGXjhzs5zFyptCvSTNG8bOoHAib
- 3z01ae3vVLV7rlu/8i7tLM9zbL+nBM3n2RHyRUj2xLjcMnYQ6lDidSLRVpucxNRty9vv
- q96Q==
-X-Gm-Message-State: AOJu0YzF2as3wgNtbVRPKoPfhJ9y14HxQPDV+RFYPECMxIearmjya+fo
- 0nay0dM5/+y2XzVMZsRfJbHtg7IhgXtBSNFuttFVy41SXEkguQAfs+d00g==
-X-Google-Smtp-Source: AGHT+IGkgf2/137nPk2daJGefpyR/3WHAk+r/u0rifmFFdOUkWweADsj0PfdTyA0Aq6Z/BZ6IoF31g==
-X-Received: by 2002:a05:6e02:1546:b0:3a0:98b2:8f2a with SMTP id
- e9e14a558f8ab-3a0c8c9a3eamr66621655ab.10.1726993604669; 
- Sun, 22 Sep 2024 01:26:44 -0700 (PDT)
+ bh=tKggX0JmRfl0y/MrM56C25AopS1eZWWy8sNdPGRALBM=;
+ b=TzX1CCeV+GrG9XkHTy6negsiPpQSPOQZ8XCioCv21TDdoVkRjEv01UsVQZ5HZ1IAzV
+ 3smuTBpsGk2ZcIeEZFjquxVaefluGeaX1NQ9mUMvtoxQbxL4TN5Ml20f2Q2pKQ6gP9RF
+ azVrsyNiuiIO7CeyyF48WpkRYhW/p0xSiYIyIqviXYS4BkVTqpPXbI0nH+D6Ya7ZVzAM
+ J4/5gOJt8xaiOCYQ0bczqlF08xIRM72vEdNy/TBnQlajU7qAPc4mreVYMGV3w4RQChqK
+ y54hbmLpjrZPYJpBZyZLWZE80iUlXxnuTZPBajrU8RrTCKdzQM1tL0YrKzccyXMawFdT
+ WZig==
+X-Gm-Message-State: AOJu0YxFJzvxvLvkqt2of1q8wMszA4sT+t8LyTrkjtZCQEIQPhI5zzmj
+ cZMouhZSBEtOepboTXxvn0A88PEXgw1pq+GTboKQ/+PmHW8CuXqaSvwCWg==
+X-Google-Smtp-Source: AGHT+IHsty/NyYjQMvVbzQXmagEXKVS13+E79RmvT3LQy7yfiwiOWJJdPFgpL1LVJSsCb2aKgQ7v6g==
+X-Received: by 2002:a05:6e02:1d07:b0:3a1:92bb:1e70 with SMTP id
+ e9e14a558f8ab-3a192bb1fc7mr25506125ab.7.1726993829605; 
+ Sun, 22 Sep 2024 01:30:29 -0700 (PDT)
 Received: from james-x399.localdomain (97-118-132-252.hlrn.qwest.net.
  [97.118.132.252]) by smtp.gmail.com with ESMTPSA id
- 8926c6da1cb9f-4d37ed1add8sm4442165173.119.2024.09.22.01.26.43
+ 8926c6da1cb9f-4d37ed60f34sm4495087173.173.2024.09.22.01.30.28
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 22 Sep 2024 01:26:43 -0700 (PDT)
+ Sun, 22 Sep 2024 01:30:29 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sun, 22 Sep 2024 02:26:42 -0600
-Message-Id: <20240922082642.1004417-1-james.hilliard1@gmail.com>
+Date: Sun, 22 Sep 2024 02:30:27 -0600
+Message-Id: <20240922083027.1005650-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1726993605; x=1727598405; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1726993830; x=1727598630; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=HAng/T/2emUoy2BpQ2CFgwt6ojOPTn2atGMOPqCg6/Y=;
- b=Ixv6P4wAPt4mbtppt9cpI6jzKrnGKqHXxjqKsgsQulMFCXJsB2FpnWRF8qNZE2Gh2P
- RUmyLOf89oqNHfIRLsJgNUKin9vy1ojPKCHbg9/34HwXLeow/WI6DwDvd9aYxbPmxDRL
- DjSjj41jjrZJCiT97emItx4smkWHkgt+VM9oVeLHRDz/uuRbbVeWOiIz3qStYRmjnvC2
- nQDoje9P6i1KBwO3fEgcSQShhcQY/qsiAfmKQhi1Ps7WywzKUFvCEdzqoA77ZlGK1sVQ
- uUKa7kf1voVGaWNuVK1CnSWsfEnONBeHeU1Shke/4GlZtTb1RfJ8lW/Wr93MoJB+Gobo
- WQ2w==
+ bh=tKggX0JmRfl0y/MrM56C25AopS1eZWWy8sNdPGRALBM=;
+ b=nmiiOb3ZoS/bVj8I6CCDsvuSq6lcPVaRq0vLekefzf/YpUoR9Y4H49IqA6MKEQrQr4
+ +Wowu2HzOdCkKf7q+H0NE4IC22M3jfSCLPoQB+YlM3VuINSQAEC3gvtIjifsg+gg4/3W
+ GlKrLEWCUnytFj1IkopHg8ncfCImYMLX0a8btK5gXtxyyWs/pupQUO6U+aH/g4hCAY5v
+ JGo3Yp/WGLdae3gygZjTkE+XoUAxxhYRdxq7RhXOUi81DQ3i69yCVwWTORgIoSRilhe+
+ nhdryygVK4jTzobee1qySoy8CFEBsDYWFHaqSgROZIbq7oAwrI6sGD/SG9GI0WxLiDRv
+ W7Nw==
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=Ixv6P4wA
-Subject: [Buildroot] [PATCH 1/1] package/python-anyio: bump to version 4.6.0
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=nmiiOb3Z
+Subject: [Buildroot] [PATCH 1/1] package/python-configobj: bump to version
+ 5.0.9
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -106,40 +106,55 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+Drop no longer required python-six runtime dependency.
+
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-anyio/python-anyio.hash | 4 ++--
- package/python-anyio/python-anyio.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ package/python-configobj/Config.in             | 1 -
+ package/python-configobj/python-configobj.hash | 6 +++---
+ package/python-configobj/python-configobj.mk   | 4 ++--
+ 3 files changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/package/python-anyio/python-anyio.hash b/package/python-anyio/python-anyio.hash
-index c1edeca10c..b378c32203 100644
---- a/package/python-anyio/python-anyio.hash
-+++ b/package/python-anyio/python-anyio.hash
+diff --git a/package/python-configobj/Config.in b/package/python-configobj/Config.in
+index 365aa17fcb..cb9d914745 100644
+--- a/package/python-configobj/Config.in
++++ b/package/python-configobj/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_PYTHON_CONFIGOBJ
+ 	bool "python-configobj"
+-	select BR2_PACKAGE_PYTHON_SIX # runtime
+ 	help
+ 	  Config file reading, writing and validation.
+ 
+diff --git a/package/python-configobj/python-configobj.hash b/package/python-configobj/python-configobj.hash
+index 682dc987f1..b173f0cdd7 100644
+--- a/package/python-configobj/python-configobj.hash
++++ b/package/python-configobj/python-configobj.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/anyio/json
--md5  04346dd3631f405d0786ca0f441dace1  anyio-4.4.0.tar.gz
--sha256  5aadc6a1bbb7cdb0bede386cac5e2940f5e2ff3aa20277e991cf028e0585ce94  anyio-4.4.0.tar.gz
-+md5  24b255a1f6c85757cea820e9355387df  anyio-4.6.0.tar.gz
-+sha256  137b4559cbb034c477165047febb6ff83f390fc3b20bf181c1fc0a728cb8beeb  anyio-4.6.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/configobj/json
+-md5  8dda7b31bb3aea87ecfe3b7a87812b17  configobj-5.0.8.tar.gz
+-sha256  6f704434a07dc4f4dc7c9a745172c1cad449feb548febd9f7fe362629c627a97  configobj-5.0.8.tar.gz
++md5  496b60edcd943a900ddc0cb04132e81c  configobj-5.0.9.tar.gz
++sha256  03c881bbf23aa07bccf1b837005975993c4ab4427ba57f959afdd9d1a2386848  configobj-5.0.9.tar.gz
  # Locally computed sha256 checksums
- sha256  5361ac9dc58f2ef5fd2e9b09c68297c17f04950909bbc8023bdb82eacf22c2b0  LICENSE
-diff --git a/package/python-anyio/python-anyio.mk b/package/python-anyio/python-anyio.mk
-index 4f9cbb78f7..b63c83166e 100644
---- a/package/python-anyio/python-anyio.mk
-+++ b/package/python-anyio/python-anyio.mk
+-sha256  0d95e648469a711f5ec1e59e6d4492150ec65d968c1ea6c6d96154a92879997a  LICENSE
++sha256  fd227649f1956788444397bf0899e977140a5bc662d86826657bc2aad833fe2a  LICENSE
+diff --git a/package/python-configobj/python-configobj.mk b/package/python-configobj/python-configobj.mk
+index fe1776f79f..963bbcb2b8 100644
+--- a/package/python-configobj/python-configobj.mk
++++ b/package/python-configobj/python-configobj.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_ANYIO_VERSION = 4.4.0
-+PYTHON_ANYIO_VERSION = 4.6.0
- PYTHON_ANYIO_SOURCE = anyio-$(PYTHON_ANYIO_VERSION).tar.gz
--PYTHON_ANYIO_SITE = https://files.pythonhosted.org/packages/e6/e3/c4c8d473d6780ef1853d630d581f70d655b4f8d7553c6997958c283039a2
-+PYTHON_ANYIO_SITE = https://files.pythonhosted.org/packages/78/49/f3f17ec11c4a91fe79275c426658e509b07547f874b14c1a526d86a83fc8
- PYTHON_ANYIO_SETUP_TYPE = setuptools
- PYTHON_ANYIO_LICENSE = MIT
- PYTHON_ANYIO_LICENSE_FILES = LICENSE
+-PYTHON_CONFIGOBJ_VERSION = 5.0.8
++PYTHON_CONFIGOBJ_VERSION = 5.0.9
+ PYTHON_CONFIGOBJ_SOURCE = configobj-$(PYTHON_CONFIGOBJ_VERSION).tar.gz
+-PYTHON_CONFIGOBJ_SITE = https://files.pythonhosted.org/packages/cb/87/17d4c6d634c044ab08b11c0cd2a8a136d103713d438f8792d7be2c5148fb
++PYTHON_CONFIGOBJ_SITE = https://files.pythonhosted.org/packages/f5/c4/c7f9e41bc2e5f8eeae4a08a01c91b2aea3dfab40a3e14b25e87e7db8d501
+ PYTHON_CONFIGOBJ_SETUP_TYPE = setuptools
+ PYTHON_CONFIGOBJ_LICENSE = BSD-3-Clause
+ PYTHON_CONFIGOBJ_LICENSE_FILES = LICENSE
 -- 
 2.34.1
 
