@@ -4,71 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 07607CF9C64
-	for <buildroot@archiver.kernel.org>; Sun, 22 Sep 2024 18:05:52 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E16D9CF9C64
+	for <buildroot@archiver.kernel.org>; Sun, 22 Sep 2024 18:06:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A324940018;
-	Sun, 22 Sep 2024 18:05:51 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A2A2C40018;
+	Sun, 22 Sep 2024 18:06:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hcNjLaX8G5KM; Sun, 22 Sep 2024 18:05:50 +0000 (UTC)
+ id KQqZTus2GdOn; Sun, 22 Sep 2024 18:06:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 28FBB40247
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 340044027F
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 28FBB40247;
-	Sun, 22 Sep 2024 18:05:50 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id D01CC1BF44A
- for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 18:05:37 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 340044027F;
+	Sun, 22 Sep 2024 18:06:09 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 050471BF44A
+ for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 18:06:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id BE57E405AE
- for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 18:05:37 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id CE4EE606BD
+ for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 18:06:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id s9QTdLS2slpe for <buildroot@lists.busybox.net>;
- Sun, 22 Sep 2024 18:05:36 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id YosfLlwcVMjt for <buildroot@lists.busybox.net>;
+ Sun, 22 Sep 2024 18:06:00 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::14;
  helo=smtp5-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 666AC40469
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 666AC40469
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org ACD3C606B1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org ACD3C606B1
 Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 666AC40469
- for <buildroot@buildroot.org>; Sun, 22 Sep 2024 18:05:36 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id ACD3C606B1
+ for <buildroot@buildroot.org>; Sun, 22 Sep 2024 18:05:59 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8290:3800:5d8d:eab4:d280:c2c4])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id 9158C60137;
- Sun, 22 Sep 2024 20:05:30 +0200 (CEST)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id BC9365FFAF;
+ Sun, 22 Sep 2024 20:05:55 +0200 (CEST)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 22 Sep 2024 20:05:30 +0200
-Date: Sun, 22 Sep 2024 20:05:30 +0200
+ Sun, 22 Sep 2024 20:05:55 +0200
+Date: Sun, 22 Sep 2024 20:05:55 +0200
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <ZvBcagz98OSWJlvG@landeda>
-References: <20240918004359.422768-1-james.hilliard1@gmail.com>
+To: Bernd Kuhls <bernd@kuhls.net>
+Message-ID: <ZvBcg8pOc97JgkuU@landeda>
+References: <20240917182118.3009727-1-bernd@kuhls.net>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20240918004359.422768-1-james.hilliard1@gmail.com>
+In-Reply-To: <20240917182118.3009727-1-bernd@kuhls.net>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1727028334;
- bh=eTB3TvkTcXXWaM2ZXg4GbprovumPrfPK9tQT07GDE/I=;
+ d=free.fr; s=smtp-20201208; t=1727028357;
+ bh=k3oo86Z+UQRdf+Hje7q2dT04Fur+0bfg6+n5xgToZCM=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=DS5NPXlsw9DF8cRNyifAPyfvtU8bo1iQHftY7yK/JrNfTXArQyIs7kal2ZkKCw2G4
- c/UsmBNBq/EIDfYGNWrOw8ErDflf/d6+h3T5E+6cBpAvftEgE0NANqjL0yp3Ho5Z57
- tSgmXaf6JW+UNvDwOc0Z+H5CBKk8doudlq3rCTQNVpaoDfcelPBZh+a925uhtcLuqx
- wgs1S1Alw+ToUQLbQjU3818c+WIhGm2K83NVWvnTTwg0ZsnBmhNBbz6/mPmceW+7/J
- D74dk2WdsiLKEDl931saQcLj3mvE4kq28De48ki8Vd5MSIcfpAtrP1TU7U7o6o+xh+
- TfeFe81AGly2w==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=LTZK8CQGoN52NLieHtfHi3gC7fGKUZMcQyZ9fYyMcOfVIKeKRi1Kqbxj57Gv7GEeP
+ 4w3+9Dd0L2P74OnsolSE8qNUsFvA+ly+UjtREN7msR3oiCUpsfV2B/FlPeSfhZbkHa
+ 9hahhRutFa2aHzD4SKIwFVbFsnoiMYo5OALFU97xKEeRm8X1U9irpnjB811/jFlrFt
+ pT/Ik1JPSH/jpErrHT1U5WecMD34g/odwfzgq/aI5eow+BWZtjy/mI2nQeiJPPkEIB
+ fplt3VhUU5t3YZ+D77Afc4QOGDWz1FcfBh5HiWLqQUzJLIxXd62iyycesY1RC/GTKD
+ PrtKQ7XH3UCOQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=DS5NPXls
-Subject: Re: [Buildroot] [PATCH 1/2] package/python-path: new package
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=LTZK8CQG
+Subject: Re: [Buildroot] [PATCH 1/1] package/libcurl: security bump version
+ to 8.10.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,91 +81,58 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Asaf Kahlon <asafka7@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-James, All,
+Bernd, All,
 
-On 2024-09-17 18:43 -0600, James Hilliard spake thusly:
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+On 2024-09-17 20:21 +0200, Bernd Kuhls spake thusly:
+> Changelog: https://curl.se/changes.html#8_10_0
+> 
+> Fixes CVE-2024-8096.
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 
-Both applied to master, thanks.
+Applied to master, thanks.
 
 Regards,
 Yann E. MORIN.
 
 > ---
->  package/Config.in                    |  1 +
->  package/python-path/Config.in        |  6 ++++++
->  package/python-path/python-path.hash |  5 +++++
->  package/python-path/python-path.mk   | 15 +++++++++++++++
->  4 files changed, 27 insertions(+)
->  create mode 100644 package/python-path/Config.in
->  create mode 100644 package/python-path/python-path.hash
->  create mode 100644 package/python-path/python-path.mk
+>  package/libcurl/libcurl.hash | 4 ++--
+>  package/libcurl/libcurl.mk   | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/package/Config.in b/package/Config.in
-> index 2200f16520..1033cfdef1 100644
-> --- a/package/Config.in
-> +++ b/package/Config.in
-> @@ -1246,6 +1246,7 @@ menu "External python modules"
->  	source "package/python-paramiko/Config.in"
->  	source "package/python-parso/Config.in"
->  	source "package/python-passlib/Config.in"
-> +	source "package/python-path/Config.in"
->  	source "package/python-pathpy/Config.in"
->  	source "package/python-pathspec/Config.in"
->  	source "package/python-pathtools/Config.in"
-> diff --git a/package/python-path/Config.in b/package/python-path/Config.in
-> new file mode 100644
-> index 0000000000..a03b568593
-> --- /dev/null
-> +++ b/package/python-path/Config.in
-> @@ -0,0 +1,6 @@
-> +config BR2_PACKAGE_PYTHON_PATH
-> +	bool "python-path"
-> +	help
-> +	  Object-oriented file system path manipulation.
-> +
-> +	  https://github.com/jaraco/path
-> diff --git a/package/python-path/python-path.hash b/package/python-path/python-path.hash
-> new file mode 100644
-> index 0000000000..9a0d1a3681
-> --- /dev/null
-> +++ b/package/python-path/python-path.hash
-> @@ -0,0 +1,5 @@
-> +# md5, sha256 from https://pypi.org/pypi/path/json
-> +md5  b970d0bcde985133cae6926a02e496b9  path-17.0.0.tar.gz
-> +sha256  e1540261d22df1416fb1b498b3b1ed5353a371a48fe197d66611bb01e7fab2d5  path-17.0.0.tar.gz
-> +# Locally computed sha256 checksums
-> +sha256  86da0f01aeae46348a3c3d465195dc1ceccde79f79e87769a64b8da04b2a4741  LICENSE
-> diff --git a/package/python-path/python-path.mk b/package/python-path/python-path.mk
-> new file mode 100644
-> index 0000000000..6e094aaad5
-> --- /dev/null
-> +++ b/package/python-path/python-path.mk
-> @@ -0,0 +1,15 @@
-> +################################################################################
-> +#
-> +# python-path
-> +#
-> +################################################################################
-> +
-> +PYTHON_PATH_VERSION = 17.0.0
-> +PYTHON_PATH_SOURCE = path-$(PYTHON_PATH_VERSION).tar.gz
-> +PYTHON_PATH_SITE = https://files.pythonhosted.org/packages/ff/a3/5dac44ce60ad6543578736a5729c5c2130cdac1c3117c61aad0583c2e3c6
-> +PYTHON_PATH_SETUP_TYPE = setuptools
-> +PYTHON_PATH_LICENSE = MIT
-> +PYTHON_PATH_LICENSE_FILES = LICENSE
-> +PYTHON_PATH_DEPENDENCIES = host-python-setuptools-scm
-> +
-> +$(eval $(python-package))
+> diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
+> index 1d01935501..d0feafde1e 100644
+> --- a/package/libcurl/libcurl.hash
+> +++ b/package/libcurl/libcurl.hash
+> @@ -1,5 +1,5 @@
+>  # Locally calculated after checking pgp signature
+> -# https://curl.se/download/curl-8.9.1.tar.xz.asc
+> +# https://curl.se/download/curl-8.10.0.tar.xz.asc
+>  # signed with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
+> -sha256  f292f6cc051d5bbabf725ef85d432dfeacc8711dd717ea97612ae590643801e5  curl-8.9.1.tar.xz
+> +sha256  e6b142f0e85e954759d37e26a3627e2278137595be80e3a860c4353e4335e5a0  curl-8.10.0.tar.xz
+>  sha256  adb1fc06547fd136244179809f7b7c2d2ae6c4534f160aa513af9b6a12866a32  COPYING
+> diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
+> index 3661cbf5bd..681799c6ac 100644
+> --- a/package/libcurl/libcurl.mk
+> +++ b/package/libcurl/libcurl.mk
+> @@ -4,7 +4,7 @@
+>  #
+>  ################################################################################
+>  
+> -LIBCURL_VERSION = 8.9.1
+> +LIBCURL_VERSION = 8.10.0
+>  LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
+>  LIBCURL_SITE = https://curl.se/download
+>  LIBCURL_DEPENDENCIES = host-pkgconf \
 > -- 
-> 2.34.1
+> 2.39.5
 > 
 > _______________________________________________
 > buildroot mailing list
