@@ -4,92 +4,94 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B3116CF9C69
-	for <buildroot@archiver.kernel.org>; Sun, 22 Sep 2024 18:18:48 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0370FCF9C69
+	for <buildroot@archiver.kernel.org>; Sun, 22 Sep 2024 18:18:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 63A2240018;
-	Sun, 22 Sep 2024 18:18:48 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id BBA1840247;
+	Sun, 22 Sep 2024 18:18:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vTvvNN7jUDwd; Sun, 22 Sep 2024 18:18:47 +0000 (UTC)
+ id LnjhlDjnP4jt; Sun, 22 Sep 2024 18:18:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 133ED40247
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 760A7403A2
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 133ED40247;
-	Sun, 22 Sep 2024 18:18:47 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 760A7403A2;
+	Sun, 22 Sep 2024 18:18:50 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 9CE8E1BF3E1
- for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 18:18:45 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id A31201BF3E1
+ for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 18:18:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8C604811B1
- for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 18:18:45 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 92A0F811AD
+ for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 18:18:46 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tt4qrwS3BXy1 for <buildroot@lists.busybox.net>;
- Sun, 22 Sep 2024 18:18:44 +0000 (UTC)
+ id USEj_ivr5RTj for <buildroot@lists.busybox.net>;
+ Sun, 22 Sep 2024 18:18:45 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::62d; helo=mail-ej1-x62d.google.com;
+ client-ip=2a00:1450:4864:20::636; helo=mail-ej1-x636.google.com;
  envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 38B73811AD
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 38B73811AD
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com
- [IPv6:2a00:1450:4864:20::62d])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 38B73811AD
- for <buildroot@buildroot.org>; Sun, 22 Sep 2024 18:18:44 +0000 (UTC)
-Received: by mail-ej1-x62d.google.com with SMTP id
- a640c23a62f3a-a83562f9be9so409697566b.0
- for <buildroot@buildroot.org>; Sun, 22 Sep 2024 11:18:43 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 2B517811AF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2B517811AF
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com
+ [IPv6:2a00:1450:4864:20::636])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2B517811AF
+ for <buildroot@buildroot.org>; Sun, 22 Sep 2024 18:18:45 +0000 (UTC)
+Received: by mail-ej1-x636.google.com with SMTP id
+ a640c23a62f3a-a8a789c4fc5so783764566b.0
+ for <buildroot@buildroot.org>; Sun, 22 Sep 2024 11:18:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1727029122; x=1727633922;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=uC0NinD4RAR+J93t1HtcJ+2f1Uv5sU6KbDnUAU/qnrE=;
- b=Ej9l7fRKJCZvXtJtMCROnSd56mxLMxtqcnr5B1Nd0CPEOrmjlTPS4aYo6aTzpIsByc
- 9AvsAcRLYRNfg9xiNTzJIs28eKV39UiT35JCQf9P3Tel2ZfqGLhgnwmrnu+AzVgS3HnJ
- UCXEt+oKJ0oI8o5zxPi4FGOgnKj3equ3n/rdGr51aMPfkj7O3vDiVQJTT4CGZHfTaO7/
- W3XEeG+pcdfYxd0hcwU2hD7pNXQ1Q8uQT2S/j95akoT9ju7UUZHqjvcXmpW0o8NLT03b
- DPbv/qG/t1Zom92OM242hgdwocG4+6M+fgWU5bkGgvd8T/SKl41AYVxkNm29BLGDHG/C
- G94w==
-X-Gm-Message-State: AOJu0YyXeZfRoZz9kWuGE9h/P0ZqPDberRxbqQt3R4A3IHfUPfl3ViHD
- udt6Un926zHJT8TWsiqqfQ8f6f2cuMRI72V0T3UEfbvF6Wzqg7pxwQkT+Mf2HstuA4r5dnRIAfi
- A9/s=
-X-Google-Smtp-Source: AGHT+IE0cqbtr9CsHdeOfYCqRESshS7FFe0IXuhpzRRZxyum82n3IKIoP79ug9LlTsXvqvsfcF5YEw==
-X-Received: by 2002:a17:907:868d:b0:a8a:cc5a:7f3c with SMTP id
- a640c23a62f3a-a90d5126c2emr947850866b.58.1727029121938; 
- Sun, 22 Sep 2024 11:18:41 -0700 (PDT)
+ d=1e100.net; s=20230601; t=1727029123; x=1727633923;
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=YkW9YTAjgxGhm9kaSVFMmDdvs/iVT/bOpOv00PNc7js=;
+ b=Qmfsm4YUNXqTZEowa8p43q7V6GS/l4RTG3dT5RTnzozwOMm+Lu5Ame5Nv2hSg46MTL
+ urqyZHIpTvCvBiHqu8Xvs9jDdPU9cYzhzcz+n6qguXpYTGeJuCRacWDkSgPAg2HJly6u
+ FFvnjIqWfuGaxek0PZN2js37SCukwhioGME1kbQLk3ClkCfLOy+Imw46GO9zC8pV64lc
+ 0sucES6G5C2JXuvSr/LJmpwJYR8Di7bzx2TP+g/TDrZYr63DivGJvT45oO9uBKe6XjBc
+ nsfznw0dTt5TRJxmoEuM9qUkXuflZI+5j5697L/BxAXDuJTzCxVEC+fvPe/Fu57tefb4
+ cEVA==
+X-Gm-Message-State: AOJu0Yy33VvUQpn33bqpMqarWVCt2Y2RAGMbioWaLEqCZ4UY22Vqtebf
+ DHKp3xUsaI5m6jhbaNqSE6IGCaZf2AM/T4QuiCGbkvLiW0jn0G74BblsznStdGA3OPoVD2UStMB
+ HK3g=
+X-Google-Smtp-Source: AGHT+IH4cFA+rOZDsY+OiafdtPoyck2eYRJNx/CEbf/Oqnwp5Shj0DGPAvAFvc+vQ2yOTOdHdJ2CPw==
+X-Received: by 2002:a17:906:7951:b0:a7a:acae:340b with SMTP id
+ a640c23a62f3a-a90d364468bmr896974066b.31.1727029122774; 
+ Sun, 22 Sep 2024 11:18:42 -0700 (PDT)
 Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it
  (host-79-20-102-52.retail.telecomitalia.it. [79.20.102.52])
  by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-a90610f3883sm1111852766b.50.2024.09.22.11.18.41
+ a640c23a62f3a-a90610f3883sm1111852766b.50.2024.09.22.11.18.42
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 22 Sep 2024 11:18:41 -0700 (PDT)
+ Sun, 22 Sep 2024 11:18:42 -0700 (PDT)
 From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Sun, 22 Sep 2024 20:18:30 +0200
-Message-ID: <20240922181831.2901344-1-dario.binacchi@amarulasolutions.com>
+Date: Sun, 22 Sep 2024 20:18:31 +0200
+Message-ID: <20240922181831.2901344-2-dario.binacchi@amarulasolutions.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240922181831.2901344-1-dario.binacchi@amarulasolutions.com>
+References: <20240922181831.2901344-1-dario.binacchi@amarulasolutions.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1727029122; x=1727633922;
+ d=amarulasolutions.com; s=google; t=1727029123; x=1727633923;
  darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=uC0NinD4RAR+J93t1HtcJ+2f1Uv5sU6KbDnUAU/qnrE=;
- b=g2B91RlIcU017LiG9yEyUhQIikwvGKSRpadx79Xy6IJcSV4pbcd2/cTQDcjJIlqP7u
- UjmbnZkG4TAboBHgdlBU6yDLxA7B9ZDDC6BWp32HFJjzOlS1Zva+EHCCJADaZuJTiUei
- ovWyMwFd4kcVEqOyQ+Wh9dCssTF3b+NeOd76E=
+ h=content-transfer-encoding:mime-version:references:in-reply-to
+ :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=YkW9YTAjgxGhm9kaSVFMmDdvs/iVT/bOpOv00PNc7js=;
+ b=Jcge6tK+WN/Odx0WHhHMzwr2Dv80ktER3qDNzNbpdMIYleKbmDKYkcSr+yvi2gQmkM
+ zMdxNob2k/sW584raBSqbUedsEsoT6h5sHmz+i61bnCUkay7BEhUcxboIOgjETDQItlW
+ 4GRwOQQ1tMIjH0bkEAAGtAdjv+sN6QwL0oViM=
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=amarulasolutions.com
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=g2B91RlI
-Subject: [Buildroot] [PATCH v2 1/2] package/iproute2: fix building error
- using designated initializers
+ dkim=pass (1024-bit key) header.d=amarulasolutions.com
+ header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
+ header.b=Jcge6tK+
+Subject: [Buildroot] [PATCH v2 2/2] package/iproute2: bump to version 6.11.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -109,128 +111,198 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This patch fixes the following error:
-
-arpd.c:442:17: error: initialization of 'int' from 'void *' makes integer from pointer without a cast [-Wint-conversion]
-  442 |                 NULL,   0,
-
-The analysis of socket.h [1] containing the msghdr structure shows that
-it has been modified with the addition of padding fields, which cause
-the compilation error:
-
-struct msghdr {
-	void *msg_name;
-	socklen_t msg_namelen;
-	struct iovec *msg_iov;
-#if __LONG_MAX > 0x7fffffff && __BYTE_ORDER == __BIG_ENDIAN
-	int __pad1;
-#endif
-	int msg_iovlen;
-#if __LONG_MAX > 0x7fffffff && __BYTE_ORDER == __LITTLE_ENDIAN
-	int __pad1;
-#endif
-	void *msg_control;
-#if __LONG_MAX > 0x7fffffff && __BYTE_ORDER == __BIG_ENDIAN
-	int __pad2;
-#endif
-	socklen_t msg_controllen;
-#if __LONG_MAX > 0x7fffffff && __BYTE_ORDER == __LITTLE_ENDIAN
-	int __pad2;
-#endif
-	int msg_flags;
-};
-
-The use of designated initializers allows the issue to be fixed.
-
-[1] iproute2/host/mips64-buildroot-linux-musl/sysroot/usr/include/sys/socket.h
-
-Fixes:
-- http://autobuild.buildroot.org/results/e4cdfa38ae9578992f1c0ff5c4edae3cc0836e3c
+The building test using musl as the C library for the cross-compilation
+toolchain raised errors that required the application of two additional
+patches. Furthermore, it was necessary, by properly setting CFLAGS, to
+instruct iproute2 not to define structures already provided by musl to
+avoid redefinition errors (i. e. in6_addr and sockaddr_in6).
 
 Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 ---
-No changes since v1
+Added in v2
 
- ...ted-initializers-for-msghdr-structur.patch | 70 +++++++++++++++++++
- 1 file changed, 70 insertions(+)
- create mode 100644 package/iproute2/0003-arpd-use-designated-initializers-for-msghdr-structur.patch
+ ...04-bridge-mst-fix-a-musl-build-issue.patch | 73 +++++++++++++++++++
+ ...e-mst-fix-a-further-musl-build-issue.patch | 56 ++++++++++++++
+ package/iproute2/iproute2.hash                |  2 +-
+ package/iproute2/iproute2.mk                  |  6 +-
+ 4 files changed, 135 insertions(+), 2 deletions(-)
+ create mode 100644 package/iproute2/0004-bridge-mst-fix-a-musl-build-issue.patch
+ create mode 100644 package/iproute2/0005-bridge-mst-fix-a-further-musl-build-issue.patch
 
-diff --git a/package/iproute2/0003-arpd-use-designated-initializers-for-msghdr-structur.patch b/package/iproute2/0003-arpd-use-designated-initializers-for-msghdr-structur.patch
+diff --git a/package/iproute2/0004-bridge-mst-fix-a-musl-build-issue.patch b/package/iproute2/0004-bridge-mst-fix-a-musl-build-issue.patch
 new file mode 100644
-index 000000000000..f8b9f7d08877
+index 000000000000..9dddfb6e7f26
 --- /dev/null
-+++ b/package/iproute2/0003-arpd-use-designated-initializers-for-msghdr-structur.patch
-@@ -0,0 +1,70 @@
-+From 13cea6bb5e4f08f534fa4b04b5fc4ea0c8a2467b Mon Sep 17 00:00:00 2001
++++ b/package/iproute2/0004-bridge-mst-fix-a-musl-build-issue.patch
+@@ -0,0 +1,73 @@
++From 0359ee6dc57ee8aa21a3f0f7404422c0f9372d3a Mon Sep 17 00:00:00 2001
 +From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-+Date: Wed, 18 Sep 2024 14:22:34 +0200
-+Subject: [PATCH] arpd: use designated initializers for msghdr structure
++Date: Sun, 22 Sep 2024 14:00:42 +0200
++Subject: [PATCH] bridge: mst: fix a musl build issue
 +
-+This patch fixes the following error:
++This patch fixes a compilation error raised by the bump to version 6.11.0
++in Buildroot using musl as the C library for the cross-compilation
++toolchain.
 +
-+arpd.c:442:17: error: initialization of 'int' from 'void *' makes integer from pointer without a cast [-Wint-conversion]
-+  442 |                 NULL,   0,
++After setting the CFLGAS
 +
-+raised by Buildroot autobuilder [1].
++ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
++IPROUTE2_CFLAGS += -D__UAPI_DEF_IN6_ADDR=0 -D__UAPI_DEF_SOCKADDR_IN6=0 \
++			-D__UAPI_DEF_IPV6_MREQ=0
++endif
 +
-+In the case in question, the analysis of socket.h [2] containing the
-+msghdr structure shows that it has been modified with the addition of
-+padding fields, which cause the compilation error. The use of designated
-+initializers allows the issue to be fixed.
++to fix the following errors:
 +
-+struct msghdr {
-+	void *msg_name;
-+	socklen_t msg_namelen;
-+	struct iovec *msg_iov;
-+#if __LONG_MAX > 0x7fffffff && __BYTE_ORDER == __BIG_ENDIAN
-+	int __pad1;
-+#endif
-+	int msg_iovlen;
-+#if __LONG_MAX > 0x7fffffff && __BYTE_ORDER == __LITTLE_ENDIAN
-+	int __pad1;
-+#endif
-+	void *msg_control;
-+#if __LONG_MAX > 0x7fffffff && __BYTE_ORDER == __BIG_ENDIAN
-+	int __pad2;
-+#endif
-+	socklen_t msg_controllen;
-+#if __LONG_MAX > 0x7fffffff && __BYTE_ORDER == __LITTLE_ENDIAN
-+	int __pad2;
-+#endif
-+	int msg_flags;
-+};
++In file included from ../../../host/mips64-buildroot-linux-musl/sysroot/usr/include/arpa/inet.h:9,
++                 from ../include/libnetlink.h:14,
++                 from mst.c:10:
++../../../host/mips64-buildroot-linux-musl/sysroot/usr/include/netinet/in.h:23:8: error: redefinition of 'struct in6_addr'
++   23 | struct in6_addr {
++      |        ^~~~~~~~
++In file included from ../include/uapi/linux/if_bridge.h:19,
++                 from mst.c:7:
++../include/uapi/linux/in6.h:33:8: note: originally defined here
++   33 | struct in6_addr {
++      |        ^~~~~~~~
++../../../host/mips64-buildroot-linux-musl/sysroot/usr/include/netinet/in.h:34:8: error: redefinition of 'struct sockaddr_in6'
++   34 | struct sockaddr_in6 {
++      |        ^~~~~~~~~~~~
++../include/uapi/linux/in6.h:50:8: note: originally defined here
++   50 | struct sockaddr_in6 {
++      |        ^~~~~~~~~~~~
++../../../host/mips64-buildroot-linux-musl/sysroot/usr/include/netinet/in.h:42:8: error: redefinition of 'struct ipv6_mreq'
++   42 | struct ipv6_mreq {
++      |        ^~~~~~~~~
++../include/uapi/linux/in6.h:60:8: note: originally defined here
++   60 | struct ipv6_mreq {
 +
-+[1] http://autobuild.buildroot.org/results/e4cdfa38ae9578992f1c0ff5c4edae3cc0836e3c/
-+[2] iproute2/host/mips64-buildroot-linux-musl/sysroot/usr/include/sys/socket.h
++I got this further errors
++
++../include/uapi/linux/in6.h:72:25: error: field 'flr_dst' has incomplete type
++   72 |         struct in6_addr flr_dst;
++      |                         ^~~~~~~
++../include/uapi/linux/if_bridge.h:711:41: error: field 'ip6' has incomplete type
++  711 |                         struct in6_addr ip6;
++      |                                         ^~~
++
++fixed by including the netinet/in.h header.
 +
 +Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-+Upstream: https://lore.kernel.org/netdev/20240919132454.7394-1-dario.binacchi@amarulasolutions.com/T/#mac98a56b7ce0235a6e2b97afe8aa8565de4c926d
++Upstream: https://patchwork.kernel.org/project/netdevbpf/patch/20240922145011.2104040-1-dario.binacchi@amarulasolutions.com/
 +---
-+ misc/arpd.c | 8 ++++----
-+ 1 file changed, 4 insertions(+), 4 deletions(-)
++ bridge/mst.c | 1 +
++ 1 file changed, 1 insertion(+)
 +
-+diff --git a/misc/arpd.c b/misc/arpd.c
-+index e77ef53928a2..b4935c23eebb 100644
-+--- a/misc/arpd.c
-++++ b/misc/arpd.c
-+@@ -437,10 +437,10 @@ static void get_kern_msg(void)
-+ 	struct iovec iov;
-+ 	char   buf[8192];
-+ 	struct msghdr msg = {
-+-		(void *)&nladdr, sizeof(nladdr),
-+-		&iov,	1,
-+-		NULL,	0,
-+-		0
-++		.msg_name = &nladdr, .msg_namelen = sizeof(nladdr),
-++		.msg_iov = &iov, .msg_iovlen = 1,
-++		.msg_control = (void *)NULL, .msg_controllen = 0,
-++		.msg_flags = 0
-+ 	};
++diff --git a/bridge/mst.c b/bridge/mst.c
++index 873ca5369fd6..c8f7e6606c3c 100644
++--- a/bridge/mst.c
+++++ b/bridge/mst.c
++@@ -4,6 +4,7 @@
++  */
 + 
-+ 	iov.iov_base = buf;
++ #include <stdio.h>
+++#include <netinet/in.h>
++ #include <linux/if_bridge.h>
++ #include <net/if.h>
++ 
 +-- 
 +2.43.0
 +
+diff --git a/package/iproute2/0005-bridge-mst-fix-a-further-musl-build-issue.patch b/package/iproute2/0005-bridge-mst-fix-a-further-musl-build-issue.patch
+new file mode 100644
+index 000000000000..f4e7c317bf9c
+--- /dev/null
++++ b/package/iproute2/0005-bridge-mst-fix-a-further-musl-build-issue.patch
+@@ -0,0 +1,56 @@
++From 62c4dfff5ff596984ece7960fba49b05d69f37a7 Mon Sep 17 00:00:00 2001
++From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
++Date: Sun, 22 Sep 2024 14:11:18 +0200
++Subject: [PATCH] bridge: mst: fix a further musl build issue
++
++This patch fixes the following build errors:
++
++In file included from mst.c:11:
++../include/json_print.h:80:30: warning: 'struct timeval' declared inside parameter list will not be visible outside of this definition or declaration
++   80 | _PRINT_FUNC(tv, const struct timeval *)
++      |                              ^~~~~~~
++../include/json_print.h:50:37: note: in definition of macro '_PRINT_FUNC'
++   50 |                                     type value);                        \
++      |                                     ^~~~
++../include/json_print.h:80:30: warning: 'struct timeval' declared inside parameter list will not be visible outside of this definition or declaration
++   80 | _PRINT_FUNC(tv, const struct timeval *)
++      |                              ^~~~~~~
++../include/json_print.h:55:45: note: in definition of macro '_PRINT_FUNC'
++   55 |                                             type value)                 \
++      |                                             ^~~~
++../include/json_print.h: In function 'print_tv':
++../include/json_print.h:58:48: error: passing argument 5 of 'print_color_tv' from incompatible pointer type [-Wincompatible-pointer-types]
++   58 |                                                value);                  \
++      |                                                ^~~~~
++      |                                                |
++      |                                                const struct timeval *
++../include/json_print.h:80:1: note: in expansion of macro '_PRINT_FUNC'
++   80 | _PRINT_FUNC(tv, const struct timeval *)
++      | ^~~~~~~~~~~
++../include/json_print.h:50:42: note: expected 'const struct timeval *' but argument is of type 'const struct timeval *'
++   50 |                                     type value);                        \
++      |                                          ^
++../include/json_print.h:80:1: note: in expansion of macro '_PRINT_FUNC'
++   80 | _PRINT_FUNC(tv, const struct timeval *)
++
++Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
++Upstream: https://patchwork.kernel.org/project/netdevbpf/patch/20240922145011.2104040-2-dario.binacchi@amarulasolutions.com/
++---
++ bridge/mst.c | 1 +
++ 1 file changed, 1 insertion(+)
++
++diff --git a/bridge/mst.c b/bridge/mst.c
++index c8f7e6606c3c..fccb7fd68140 100644
++--- a/bridge/mst.c
+++++ b/bridge/mst.c
++@@ -4,6 +4,7 @@
++  */
++ 
++ #include <stdio.h>
+++#include <sys/time.h>
++ #include <netinet/in.h>
++ #include <linux/if_bridge.h>
++ #include <net/if.h>
++-- 
++2.43.0
++
+diff --git a/package/iproute2/iproute2.hash b/package/iproute2/iproute2.hash
+index 0760183b9e66..028a32439644 100644
+--- a/package/iproute2/iproute2.hash
++++ b/package/iproute2/iproute2.hash
+@@ -1,3 +1,3 @@
+ # From https://kernel.org/pub/linux/utils/net/iproute2/sha256sums.asc
+-sha256  91a62f82737b44905a00fa803369c447d549e914e9a2a4018fdd75b1d54e8dce  iproute2-6.10.0.tar.xz
++sha256  1f795398a04aeaacd06a8f6ace2cfd913c33fa5953ca99daae83bb5c534611c3  iproute2-6.11.0.tar.xz
+ sha256  e6d6a009505e345fe949e1310334fcb0747f28dae2856759de102ab66b722cb4  COPYING
+diff --git a/package/iproute2/iproute2.mk b/package/iproute2/iproute2.mk
+index 08b890b33117..ae95de045b02 100644
+--- a/package/iproute2/iproute2.mk
++++ b/package/iproute2/iproute2.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-IPROUTE2_VERSION = 6.10.0
++IPROUTE2_VERSION = 6.11.0
+ IPROUTE2_SOURCE = iproute2-$(IPROUTE2_VERSION).tar.xz
+ IPROUTE2_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/net/iproute2
+ IPROUTE2_DEPENDENCIES = host-bison host-flex host-pkgconf \
+@@ -53,6 +53,10 @@ endef
+ 
+ # workaround for static_assert on uclibc-ng < 1.0.42
+ IPROUTE2_CFLAGS = $(TARGET_CFLAGS) -Dstatic_assert=_Static_assert
++ifeq ($(BR2_TOOLCHAIN_USES_MUSL),y)
++IPROUTE2_CFLAGS += -D__UAPI_DEF_IN6_ADDR=0 -D__UAPI_DEF_SOCKADDR_IN6=0 \
++			-D__UAPI_DEF_IPV6_MREQ=0
++endif
+ 
+ define IPROUTE2_BUILD_CMDS
+ 	$(TARGET_MAKE_ENV) LDFLAGS="$(TARGET_LDFLAGS)" \
 -- 
 2.43.0
 
