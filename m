@@ -4,72 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 77B41CF9C64
-	for <buildroot@archiver.kernel.org>; Sun, 22 Sep 2024 16:46:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C468ACF9C69
+	for <buildroot@archiver.kernel.org>; Sun, 22 Sep 2024 16:52:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 408A480BD8;
-	Sun, 22 Sep 2024 16:46:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5572980B4E;
+	Sun, 22 Sep 2024 16:52:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kR9iXIc89h0C; Sun, 22 Sep 2024 16:46:45 +0000 (UTC)
+ id j2t4QnazbMdV; Sun, 22 Sep 2024 16:52:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 4047480BEE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D80F080A55
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4047480BEE;
-	Sun, 22 Sep 2024 16:46:45 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 9B99E1BF403
- for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 16:46:44 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id D80F080A55;
+	Sun, 22 Sep 2024 16:52:00 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id DCC591BF403
+ for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 16:51:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8B154400AC
- for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 16:46:44 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id CBC5B60657
+ for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 16:51:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uJQ7tI6mu6na for <buildroot@lists.busybox.net>;
- Sun, 22 Sep 2024 16:46:43 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::14;
- helo=smtp5-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 3C76340018
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3C76340018
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 3C76340018
- for <buildroot@buildroot.org>; Sun, 22 Sep 2024 16:46:43 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8290:3800:5d8d:eab4:d280:c2c4])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id C8D2460134;
- Sun, 22 Sep 2024 18:46:35 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 22 Sep 2024 18:46:35 +0200
-Date: Sun, 22 Sep 2024 18:46:35 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <ZvBJ64YMhaSfOHK3@landeda>
-References: <20240907211638.945542-1-james.hilliard1@gmail.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id kUe9JV9odxD4 for <buildroot@lists.busybox.net>;
+ Sun, 22 Sep 2024 16:51:58 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::634; helo=mail-pl1-x634.google.com;
+ envelope-from=nemaakhilesh@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org F002B60643
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F002B60643
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com
+ [IPv6:2607:f8b0:4864:20::634])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id F002B60643
+ for <buildroot@buildroot.org>; Sun, 22 Sep 2024 16:51:57 +0000 (UTC)
+Received: by mail-pl1-x634.google.com with SMTP id
+ d9443c01a7336-206e614953aso34012545ad.1
+ for <buildroot@buildroot.org>; Sun, 22 Sep 2024 09:51:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1727023917; x=1727628717;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=wxOfFfuY2PV3RpUQV2LvkFihLOTIvr3Z5MJJoG3+/pM=;
+ b=AVy8wcl5jXEn+SyaLa9oESOnhl/gFvjpvKMQm+8C1MO9VcvCoTPsvKv4PM+fhDmBir
+ Z1TNg691Md7BExWSG7XLyalaA/3ZZt/ShEzNRtpm1/4PpKWIjKnStv5elJxuswnrmaOO
+ 6UYIWNDZwK9xsqzM5w8Q5A9Hhxd4Lsa5eY3M3giu15TTplXjpf8ivcMzaAkD00UkrCvu
+ /gyVLQdhQLD2R8TGn2Tk50QMvFCc3t28ItlzTSq4NMershiNBKBRGRjdKN+XelevqYMQ
+ bNQofrYWIM77I/hFdjoKU5bF8BPls3sktgy1aPaWul6stTtOUWmQbk13X4Z3LgO6bncy
+ vQMg==
+X-Gm-Message-State: AOJu0YwI25BFTRmE7m1lI/hC0XunEKvVhmCL2g3DSW6w585t6tVdoocb
+ JDn/OOcWCRmkfKiqueVRcBrjHtjqKpgUtFCOf2OJ+XGJpv3GZ7qp8vwxghp5sJs=
+X-Google-Smtp-Source: AGHT+IHONz9RNR3Psks4E74B2VBWvG+vED7M9tyURxJQqauHaJQ9HkUc1vB7RR8Aas2Ad3AHmhG5ew==
+X-Received: by 2002:a17:903:2b07:b0:205:4415:c62d with SMTP id
+ d9443c01a7336-208d83b85bcmr92626085ad.26.1727023916788; 
+ Sun, 22 Sep 2024 09:51:56 -0700 (PDT)
+Received: from localhost.localdomain ([2600:8802:2a05:9000:ad2f:66c:ef69:238f])
+ by smtp.gmail.com with ESMTPSA id
+ d9443c01a7336-20794746d76sm120976995ad.292.2024.09.22.09.51.56
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 22 Sep 2024 09:51:56 -0700 (PDT)
+From: Akhilesh Nema <nemaakhilesh@gmail.com>
+To: buildroot@buildroot.org
+Date: Sun, 22 Sep 2024 09:51:53 -0700
+Message-Id: <20240922165153.3086149-1-nemaakhilesh@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20240907211638.945542-1-james.hilliard1@gmail.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1727023599;
- bh=YcDGy1Sv184tseOjmh41iC5a4c5frQKkwqHlvQDYPk0=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=XpEnWhvGd+mV2QKrnESbIK4I7UCTwS8kjhbvM1xDiRZ8ioNGuWdvvWLwhmpI+upog
- eNr+sAUCCOxY8n9KlCkfSb65Pqnfx8zZ8h0WloRvWkTyZ3qcSNpmqTeR0q+YF1092B
- 1mnawWzgTUiE5wSxU6CmI/Rh7oIqLmp+QA8t8bR3UuqweyhX4/uQv0NBdzNzbIPGGB
- cXYs/YOyANufPrqvmsCjJvAgMu36JHuBHyZmnZm00X5/FLErF8DWDSbDpCoetAkoh9
- 5dd1NdDzn4IUOGZ1vzd4pPzlP4l6HsWWFuZf1g0Bao8HXWFJzO75RASPg2zWarD7wl
- DkDWyIX9C94Qw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1727023917; x=1727628717; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=wxOfFfuY2PV3RpUQV2LvkFihLOTIvr3Z5MJJoG3+/pM=;
+ b=BQYlbHzggSl5eKWWcIrxPSkA/6tAamcbsx8Bi6eOeBaEtzwhWA6nlLGlBcbCaN5ygW
+ nG+wRWIGLlmuNvbDUOTDmBdwAOyk50+n/KVslhAxYSjkdX/qcOQRuua2spcxhxK4s7Ns
+ /17LntmZhZH8NEPSRuy2HlpmFuRc8dfe7A91YjYx/rt40vlIP3Y75edv4hoAqGpkbwDd
+ iM5vtOG1av7/qR0PcrCTRb8JMtqEMkhnsrMdamQ9NUmQ1BgVQUeu5cXf+7s8H2PISbew
+ f5RXKuDR9CE69fmQXB5SkGZsTRaIkLTDVoUuE9xSj8LlmjMzMO+kGULOYgo/NxddNi0n
+ ZLhQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=XpEnWhvG
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-maturin: bump to version
- 1.7.1
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=BQYlbHzg
+Subject: [Buildroot] [PATCH 1/1] package/tcl: bump version to 8.6.15
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,80 +100,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Asaf Kahlon <asafka7@gmail.com>, buildroot@buildroot.org
+Cc: Akhilesh Nema <nemaakhilesh@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-James, All,
+Release announcement (with changelog) - https://sourceforge.net/p/tcl/mailman/message/58817026/
 
-On 2024-09-07 15:16 -0600, James Hilliard spake thusly:
-> Restore cargo2 archive suffix format as well.
+Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
+---
+ package/tcl/tcl.hash | 2 +-
+ package/tcl/tcl.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-It would have been better if the revert had been done in a separate
-patch, so that it could be backported to the stable branch...
-
-Could you do that for 2024.08.x, please?
-
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-> ---
->  package/python-maturin/python-maturin.hash | 2 +-
->  package/python-maturin/python-maturin.mk   | 7 ++++---
->  2 files changed, 5 insertions(+), 4 deletions(-)
-> 
-> diff --git a/package/python-maturin/python-maturin.hash b/package/python-maturin/python-maturin.hash
-> index 3c5f836ad5..2b601d6ee9 100644
-> --- a/package/python-maturin/python-maturin.hash
-> +++ b/package/python-maturin/python-maturin.hash
-> @@ -1,5 +1,5 @@
->  # Locally calculated after vendoring
-> -sha256  56c18b09d38080f9975fb679be1fda01b936d21f5ef233967cda3dd74905e683  maturin-1.7.0.tar.gz
-> +sha256  92c5fc2a24f32623a6994334b523a587dca63ebb5b46ae14a255a2ebc25fd3f7  python-maturin-1.7.1-cargo2.tar.gz
-
-I also got that same hash when testing here.
-
-Applied to master, thanks.
-
-Regards,
-Yann E. MORIN.
-
->  # Locally computed sha256 checksums
->  sha256  a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2  license-apache
->  sha256  ea7882c559733766ad08343bde1d1ec80a4967c03a738fb8e0058ef6289f7b7c  license-mit
-> diff --git a/package/python-maturin/python-maturin.mk b/package/python-maturin/python-maturin.mk
-> index 70cdb15949..76f136826a 100644
-> --- a/package/python-maturin/python-maturin.mk
-> +++ b/package/python-maturin/python-maturin.mk
-> @@ -4,9 +4,10 @@
->  #
->  ################################################################################
->  
-> -PYTHON_MATURIN_VERSION = 1.7.0
-> -PYTHON_MATURIN_SOURCE = maturin-$(PYTHON_MATURIN_VERSION).tar.gz
-> -PYTHON_MATURIN_SITE = https://files.pythonhosted.org/packages/80/da/a4bbd6e97f3645f4ebd725321aa235e22e31037dfd92caf4539f721c0a5a
-> +PYTHON_MATURIN_VERSION = 1.7.1
-> +PYTHON_MATURIN_SOURCE_PYPI = maturin-$(PYTHON_MATURIN_VERSION).tar.gz
-> +PYTHON_MATURIN_SITE_PYPI = https://files.pythonhosted.org/packages/1d/ec/1f688d6ad82a568fd7c239f1c7a130d3fc2634977df4ef662ee0ac58a153
-> +PYTHON_MATURIN_SITE = $(PYTHON_MATURIN_SITE_PYPI)/$(PYTHON_MATURIN_SOURCE_PYPI)?buildroot-path=filename
->  PYTHON_MATURIN_SETUP_TYPE = setuptools-rust
->  PYTHON_MATURIN_LICENSE = Apache-2.0 or MIT
->  PYTHON_MATURIN_LICENSE_FILES = license-apache license-mit
-> -- 
-> 2.34.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
+diff --git a/package/tcl/tcl.hash b/package/tcl/tcl.hash
+index 9e1f8fcaf5..d67a7c4e74 100644
+--- a/package/tcl/tcl.hash
++++ b/package/tcl/tcl.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated
+-sha256  5880225babf7954c58d4fb0f5cf6279104ce1cd6aa9b71e9a6322540e1c4de66  tcl8.6.14-src.tar.gz
++sha256  861e159753f2e2fbd6ec1484103715b0be56be3357522b858d3cbb5f893ffef1  tcl8.6.15-src.tar.gz
+ sha256  c0a69a2bfd757361ec7e6143973b103c90409316b49e9c88db26ad6388e79f16  license.terms
+diff --git a/package/tcl/tcl.mk b/package/tcl/tcl.mk
+index 8968f0f262..0cd242a2e9 100644
+--- a/package/tcl/tcl.mk
++++ b/package/tcl/tcl.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ TCL_VERSION_MAJOR = 8.6
+-TCL_VERSION = $(TCL_VERSION_MAJOR).14
++TCL_VERSION = $(TCL_VERSION_MAJOR).15
+ TCL_SOURCE = tcl$(TCL_VERSION)-src.tar.gz
+ TCL_SITE = http://downloads.sourceforge.net/project/tcl/Tcl/$(TCL_VERSION)
+ TCL_LICENSE = TCL
 -- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+2.25.1
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
