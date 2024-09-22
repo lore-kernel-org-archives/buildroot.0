@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 17419CF9C6C
-	for <buildroot@archiver.kernel.org>; Sun, 22 Sep 2024 10:36:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5DB31CF9C6C
+	for <buildroot@archiver.kernel.org>; Sun, 22 Sep 2024 10:36:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id DC27481771;
-	Sun, 22 Sep 2024 10:36:12 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 2AD39815CC;
+	Sun, 22 Sep 2024 10:36:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hsd-7KgGBCjv; Sun, 22 Sep 2024 10:36:12 +0000 (UTC)
+ id b76pYCNAr_dj; Sun, 22 Sep 2024 10:36:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9264B81DED
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 5DA1781DF7
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9264B81DED;
-	Sun, 22 Sep 2024 10:36:11 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5DA1781DF7;
+	Sun, 22 Sep 2024 10:36:14 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id B06511BF870
- for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 10:34:48 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 236B11BF47A
+ for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 10:34:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D47CF403A2
+ by smtp2.osuosl.org (Postfix) with ESMTP id E22F840022
  for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 10:34:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id f8856pLLIU_9 for <buildroot@lists.busybox.net>;
- Sun, 22 Sep 2024 10:34:42 +0000 (UTC)
+ id NcfFNWNeEnti for <buildroot@lists.busybox.net>;
+ Sun, 22 Sep 2024 10:34:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org EA8EC40022
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 32B3640165
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id EA8EC40022
+ by smtp2.osuosl.org (Postfix) with ESMTP id 32B3640165
  for <buildroot@buildroot.org>; Sun, 22 Sep 2024 10:34:41 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DF11B811F3; Sun, 22 Sep 2024 10:34:41 +0000 (UTC)
+ id 2B46980FD8; Sun, 22 Sep 2024 10:34:41 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 22 Sep 2024 12:30:43 +0200
+Date: Sun, 22 Sep 2024 11:38:14 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a9be7c30a9a0f7da47a82ba474924fb21913014a
-X-Git-Newrev: 5fba07832dacbe785bf655838beab57d442cd5a0
+X-Git-Oldrev: 085aabdfb15b05678d0b68c5fae8f20765e475c0
+X-Git-Newrev: b612a5e25c58ed9269d2ab94fc0e2186c68202e6
 X-Patchwork-Hint: ignore
-Message-Id: <20240922103441.DF11B811F3@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-u-msgpack: bump to version
- 2.8.0
+Message-Id: <20240922103441.2B46980FD8@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-tinyrpc: bump to version
+ 1.1.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,48 +65,58 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5fba07832dacbe785bf655838beab57d442cd5a0
+commit: https://git.buildroot.net/buildroot/commit/?id=b612a5e25c58ed9269d2ab94fc0e2186c68202e6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-License hash changed due to year update:
-https://github.com/vsergeev/u-msgpack-python/commit/931960b89372d1a94aa9734b549cbe87361222de
+Remove no longer required python-six runtime dependency.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-u-msgpack/python-u-msgpack.hash | 6 +++---
- package/python-u-msgpack/python-u-msgpack.mk   | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ package/python-tinyrpc/Config.in           | 1 -
+ package/python-tinyrpc/python-tinyrpc.hash | 4 ++--
+ package/python-tinyrpc/python-tinyrpc.mk   | 4 ++--
+ 3 files changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/package/python-u-msgpack/python-u-msgpack.hash b/package/python-u-msgpack/python-u-msgpack.hash
-index 0ec2385533..22005747b9 100644
---- a/package/python-u-msgpack/python-u-msgpack.hash
-+++ b/package/python-u-msgpack/python-u-msgpack.hash
+diff --git a/package/python-tinyrpc/Config.in b/package/python-tinyrpc/Config.in
+index 3c643c754a..e8f0f9ea0c 100644
+--- a/package/python-tinyrpc/Config.in
++++ b/package/python-tinyrpc/Config.in
+@@ -1,6 +1,5 @@
+ config BR2_PACKAGE_PYTHON_TINYRPC
+ 	bool "python-tinyrpc"
+-	select BR2_PACKAGE_PYTHON_SIX # runtime
+ 	help
+ 	  A small, modular, transport and protocol neutral RPC
+ 	  library that, among other things, supports JSON-RPC and
+diff --git a/package/python-tinyrpc/python-tinyrpc.hash b/package/python-tinyrpc/python-tinyrpc.hash
+index d4bd348e61..f1b2781ee3 100644
+--- a/package/python-tinyrpc/python-tinyrpc.hash
++++ b/package/python-tinyrpc/python-tinyrpc.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/u-msgpack-python/json
--md5  6c4fbe9e1df1c1563ecc9e435b82fdcb  u-msgpack-python-2.7.2.tar.gz
--sha256  e86f7ac6aa0ef4c6c49f004b4fd435bce99c23e2dd5d73003f3f9816024c2bd8  u-msgpack-python-2.7.2.tar.gz
-+md5  062ac5812bcd32f967356c384a37297c  u-msgpack-python-2.8.0.tar.gz
-+sha256  b801a83d6ed75e6df41e44518b4f2a9c221dc2da4bcd5380e3a0feda520bc61a  u-msgpack-python-2.8.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/tinyrpc/json
+-md5  cc7e62891eee806dfbbafb6e3875825e  tinyrpc-1.1.4.tar.gz
+-sha256  c99f412e5d9849c2deb468ea37fee2faf12fbc95bdd3616ae5c276ea195ed6bd  tinyrpc-1.1.4.tar.gz
++md5  b5079a23bbd8c41a33fe15c7486acf3e  tinyrpc-1.1.7.tar.gz
++sha256  15a8f41838e7b8be274467de59ad5c571e4cb5a2fe93bc2940b1d103bce4c6e5  tinyrpc-1.1.7.tar.gz
  # Locally computed sha256 checksums
--sha256  f938fe2d3b7b329005d4b2851f106fd4351ca55f0836335acbe52386312f7f31  LICENSE
-+sha256  2466f2b37a97e92bfe1ab9910c9e112e7b0dfd5d261f39cadb92629db503d13c  LICENSE
-diff --git a/package/python-u-msgpack/python-u-msgpack.mk b/package/python-u-msgpack/python-u-msgpack.mk
-index 372c5a8d45..f4a11eb0b9 100644
---- a/package/python-u-msgpack/python-u-msgpack.mk
-+++ b/package/python-u-msgpack/python-u-msgpack.mk
+ sha256  587f1ea174824613f4a7e0d7fb95fda000a7f58ca17df12416e014c9ee82e619  LICENSE
+diff --git a/package/python-tinyrpc/python-tinyrpc.mk b/package/python-tinyrpc/python-tinyrpc.mk
+index e976778fa2..1b3e4a83ed 100644
+--- a/package/python-tinyrpc/python-tinyrpc.mk
++++ b/package/python-tinyrpc/python-tinyrpc.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_U_MSGPACK_VERSION = 2.7.2
-+PYTHON_U_MSGPACK_VERSION = 2.8.0
- PYTHON_U_MSGPACK_SOURCE = u-msgpack-python-$(PYTHON_U_MSGPACK_VERSION).tar.gz
--PYTHON_U_MSGPACK_SITE = https://files.pythonhosted.org/packages/44/a7/1cb4f059bbf72ea24364f9ba3ef682725af09969e29df988aa5437f0044e
-+PYTHON_U_MSGPACK_SITE = https://files.pythonhosted.org/packages/36/9d/a40411a475e7d4838994b7f6bcc6bfca9acc5b119ce3a7503608c4428b49
- PYTHON_U_MSGPACK_SETUP_TYPE = setuptools
- PYTHON_U_MSGPACK_LICENSE = MIT
- PYTHON_U_MSGPACK_LICENSE_FILES = LICENSE
+-PYTHON_TINYRPC_VERSION = 1.1.4
++PYTHON_TINYRPC_VERSION = 1.1.7
+ PYTHON_TINYRPC_SOURCE = tinyrpc-$(PYTHON_TINYRPC_VERSION).tar.gz
+-PYTHON_TINYRPC_SITE = https://files.pythonhosted.org/packages/d2/86/2741f0c74cc339416c9803b6393eaf230254ecf36ffd839614799e15a202
++PYTHON_TINYRPC_SITE = https://files.pythonhosted.org/packages/6a/31/b0d0403cafda7965fab0741bcb7c63b26eab7fcfb605d4ece31a6f7b034d
+ PYTHON_TINYRPC_SETUP_TYPE = setuptools
+ PYTHON_TINYRPC_LICENSE = MIT
+ PYTHON_TINYRPC_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
