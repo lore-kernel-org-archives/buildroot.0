@@ -4,91 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ECB67CF9C6C
-	for <buildroot@archiver.kernel.org>; Sun, 22 Sep 2024 03:47:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 060ADCF9C6C
+	for <buildroot@archiver.kernel.org>; Sun, 22 Sep 2024 03:53:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A7D53605B1;
-	Sun, 22 Sep 2024 03:47:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id ADC9B605FD;
+	Sun, 22 Sep 2024 03:53:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Y1dJiJG4u58V; Sun, 22 Sep 2024 03:47:21 +0000 (UTC)
+ id dHyPBqynS0gw; Sun, 22 Sep 2024 03:53:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B4E23605E6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8B08260605
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B4E23605E6;
-	Sun, 22 Sep 2024 03:47:21 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 3E0931BF292
- for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 03:47:20 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8B08260605;
+	Sun, 22 Sep 2024 03:53:00 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 6FAD81BF292
+ for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 03:52:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 39BCF605E6
- for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 03:47:20 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 5E6AD402D0
+ for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 03:52:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Tp4HwL8tcsIY for <buildroot@lists.busybox.net>;
- Sun, 22 Sep 2024 03:47:19 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3q5Xa95mo-YB for <buildroot@lists.busybox.net>;
+ Sun, 22 Sep 2024 03:52:58 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::d29; helo=mail-io1-xd29.google.com;
+ client-ip=2607:f8b0:4864:20::d2c; helo=mail-io1-xd2c.google.com;
  envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 30E4F605B1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 30E4F605B1
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com
- [IPv6:2607:f8b0:4864:20::d29])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 30E4F605B1
- for <buildroot@buildroot.org>; Sun, 22 Sep 2024 03:47:18 +0000 (UTC)
-Received: by mail-io1-xd29.google.com with SMTP id
- ca18e2360f4ac-82cf3286261so125327639f.0
- for <buildroot@buildroot.org>; Sat, 21 Sep 2024 20:47:18 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org E90E9400CF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E90E9400CF
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com
+ [IPv6:2607:f8b0:4864:20::d2c])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id E90E9400CF
+ for <buildroot@buildroot.org>; Sun, 22 Sep 2024 03:52:57 +0000 (UTC)
+Received: by mail-io1-xd2c.google.com with SMTP id
+ ca18e2360f4ac-82aad6c83ecso125749239f.3
+ for <buildroot@buildroot.org>; Sat, 21 Sep 2024 20:52:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1726976838; x=1727581638;
+ d=1e100.net; s=20230601; t=1726977176; x=1727581976;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=zH5PcnLla6q6bpXFIPRvRlFhpT0UEda1YyUn+J3S/2o=;
- b=xTeysrlOq3zRWFzZCUW9ZoFOncgEi1Ow3JhTnZNnvvhsGielElFymQRXm7vTxtlYHu
- rKBGJzK9RMWjG50/Ynhr94169wQrtMLYh+AZvwoS1urEY6kTo8tfvYVG4PafQMma6oRx
- 9WgZLgWZkYhfl78zssvbXYIM37iMtOgcvqqbjoEX5NeAa3Bsmd9jfGRMS5KvXg6YhUSp
- HX/BMCOpFJ7Uevg3cSbP6a3eusqcpuwd2N2/RQB8X/SQB9zx4n4S8FFaPnXP0m5jKE9K
- 73hEpPjNUEncU5BiQAXRfXkORMwBtisBP0t3jlWgnxNo6iSkcaYOiTvCGNaMVzlu62lV
- BnJA==
-X-Gm-Message-State: AOJu0YwD33OhpYrIDOeQVYeO3lvY/gbk4eaviOVtbcBDe+ERfs8JTd1O
- tuqcUsjnf7zaDAJPI9iWmjVsXwF7bqMOl6D+pv5/vG9DCrEawO1ruIbHkw==
-X-Google-Smtp-Source: AGHT+IHjuM8gv+dJ76jlXfMiiLwLAv2E2YAKYr162T2tNEWzYqHXmqW0bUQhM51PYq7lIxWzYYv0FA==
-X-Received: by 2002:a92:ca47:0:b0:3a0:4250:165f with SMTP id
- e9e14a558f8ab-3a0c9b7f9a3mr73739435ab.0.1726976837673; 
- Sat, 21 Sep 2024 20:47:17 -0700 (PDT)
+ bh=PkJjEl5rcr4O/lxwt7rA3tB1i/UNui8ZOrlx5NnODvM=;
+ b=ZVfdpKnARhojI9tToZnwDO+HS8Ca6OkQWuSkPNjzkd4sogPVarfgMW4rLa9QaBOHmi
+ aZvP25iYYqwWUT73On/wY6aORqSqW0LFseiINsyWE9IzED7uXVO/5QmfHSXKR/+6fB2i
+ 7WbMVf1wRiBtXFb/0YCg9qPk9iJsvVYLjMjZ1OI/CAd7S3NnsBT7ULrh+7OJGkbQoR+4
+ Fx5IXpsvOtQWUJcyzfOsoaGH4SJ2kpt1n0DXsUw8vBCJFSThFz5FQ4rVVw/gF4peErvy
+ MI2/p5mlB68wFXngSJGFeJP7YW71QaN+kGYhuG+m70/QRuOwEj7kti6lzl0kJl+ltuap
+ LiEQ==
+X-Gm-Message-State: AOJu0YyztNjskf3JdAZ5dOPr7Y55m81+036g560ok8LeXqNP4xW/dMCY
+ FiZVNIqk4weg74iyAlaUf/V+kahxP7o88yXploBbLuTFjm6yApHdnmhZPg==
+X-Google-Smtp-Source: AGHT+IHekUJfwwT9KWzxJvg+UiZNSA2zUYHKTVkTSCkBPbNg4nvg5V9CuED4V+l/Z4EM5c8IsHgJZA==
+X-Received: by 2002:a05:6602:13cc:b0:82a:a7c6:dae1 with SMTP id
+ ca18e2360f4ac-8320b34e71cmr571028439f.13.1726977176592; 
+ Sat, 21 Sep 2024 20:52:56 -0700 (PDT)
 Received: from james-x399.localdomain (97-118-132-252.hlrn.qwest.net.
  [97.118.132.252]) by smtp.gmail.com with ESMTPSA id
- e9e14a558f8ab-3a0ca84091dsm15578575ab.15.2024.09.21.20.47.16
+ 8926c6da1cb9f-4d37ec3d027sm4469425173.80.2024.09.21.20.52.55
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 21 Sep 2024 20:47:17 -0700 (PDT)
+ Sat, 21 Sep 2024 20:52:56 -0700 (PDT)
 From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 21 Sep 2024 21:47:15 -0600
-Message-Id: <20240922034715.852415-1-james.hilliard1@gmail.com>
+Date: Sat, 21 Sep 2024 21:52:54 -0600
+Message-Id: <20240922035254.855480-1-james.hilliard1@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1726976838; x=1727581638; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1726977176; x=1727581976; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=zH5PcnLla6q6bpXFIPRvRlFhpT0UEda1YyUn+J3S/2o=;
- b=DTxMbu9fNLHLL1SAkZxKmCIAkFK5JqEjvp7+CCGgorzAgbLreib+XrQrlkuLz26NCt
- zq83mq9K2o8R7TvYzKXspXs6MM6aj4MYmv6WdKwFjYUcpHW0AD6IWr49InaXZGggwOwp
- Awb4glefcj68dPNqOXrabg1fPFejcb6ly3g23OLgaHT5fHzX4sLCFn4C/JhtL7FpQBc7
- OmhJW7K/iJgkBUGp5UJ1NfFvnHORSQdX8pQ9jFxFKzj7x4aF3S5wBSkzp4B/PdWun9y2
- uul9RTruzhBSwq6Lo9xqS2WYVwgSsF6dVrGDzrm2pjite5G7flQCjZzwN4vWT9XWEhwM
- BS4g==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=PkJjEl5rcr4O/lxwt7rA3tB1i/UNui8ZOrlx5NnODvM=;
+ b=JqJgiJ22Dd5We+yMXzrTMEAZOw5vcj8ly3081gnMcf6mwGwo7kEpqbeZqlrgT/S5Q5
+ t92mBy0ZWNFUIxORRk5EKbeoW/FsciEmaPbhYpyxXRFUtHpL5zzNJPG9b0c1VrX7EHGT
+ 6NfVTnYzsH/eDO58lse//gJDbd7j0cVVe8SPxJ2cinJBTDcFTLTnUeg0Xbbs+EUZaTfH
+ gLodvtdHw/3ld6YAK/BEH1vt5vwHFFXyvMLuGJWGCHGhk+JRZKYfWc07hrmrL1O1K4br
+ sjuHU6eEE3vdmhaFnvZr37UfezL1p9f62loeLKNxdduLtfspvgu3vg12o5IukohJ5ie6
+ qCoQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=DTxMbu9f
-Subject: [Buildroot] [PATCH 1/1] package/python-tinyrpc: bump to version
- 1.1.7
+ header.a=rsa-sha256 header.s=20230601 header.b=JqJgiJ22
+Subject: [Buildroot] [PATCH 1/1] package/python-tornado: bump to version
+ 6.4.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -106,54 +106,92 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Remove no longer required python-six runtime dependency.
+Drop patch which is now upstream.
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/python-tinyrpc/Config.in           | 1 -
- package/python-tinyrpc/python-tinyrpc.hash | 4 ++--
- package/python-tinyrpc/python-tinyrpc.mk   | 4 ++--
- 3 files changed, 4 insertions(+), 5 deletions(-)
+ ...n-open-redirect-in-StaticFileHandler.patch | 42 -------------------
+ package/python-tornado/python-tornado.hash    |  4 +-
+ package/python-tornado/python-tornado.mk      |  4 +-
+ 3 files changed, 4 insertions(+), 46 deletions(-)
+ delete mode 100644 package/python-tornado/0001-web-Fix-an-open-redirect-in-StaticFileHandler.patch
 
-diff --git a/package/python-tinyrpc/Config.in b/package/python-tinyrpc/Config.in
-index 3c643c754a..e8f0f9ea0c 100644
---- a/package/python-tinyrpc/Config.in
-+++ b/package/python-tinyrpc/Config.in
-@@ -1,6 +1,5 @@
- config BR2_PACKAGE_PYTHON_TINYRPC
- 	bool "python-tinyrpc"
--	select BR2_PACKAGE_PYTHON_SIX # runtime
- 	help
- 	  A small, modular, transport and protocol neutral RPC
- 	  library that, among other things, supports JSON-RPC and
-diff --git a/package/python-tinyrpc/python-tinyrpc.hash b/package/python-tinyrpc/python-tinyrpc.hash
-index d4bd348e61..f1b2781ee3 100644
---- a/package/python-tinyrpc/python-tinyrpc.hash
-+++ b/package/python-tinyrpc/python-tinyrpc.hash
+diff --git a/package/python-tornado/0001-web-Fix-an-open-redirect-in-StaticFileHandler.patch b/package/python-tornado/0001-web-Fix-an-open-redirect-in-StaticFileHandler.patch
+deleted file mode 100644
+index 357c6f2f12..0000000000
+--- a/package/python-tornado/0001-web-Fix-an-open-redirect-in-StaticFileHandler.patch
++++ /dev/null
+@@ -1,42 +0,0 @@
+-From ac79778c91bd9a4a92111f7e06d4b12674571113 Mon Sep 17 00:00:00 2001
+-From: Ben Darnell <ben@bendarnell.com>
+-Date: Sat, 13 May 2023 20:58:52 -0400
+-Subject: [PATCH] web: Fix an open redirect in StaticFileHandler
+-
+-Under some configurations the default_filename redirect could be exploited
+-to redirect to an attacker-controlled site. This change refuses to redirect
+-to URLs that could be misinterpreted.
+-
+-A test case for the specific vulnerable configuration will follow after the
+-patch has been available.
+-
+-Upstream: https://github.com/tornadoweb/tornado/commit/32ad07c54e607839273b4e1819c347f5c8976b2f
+-[Thomas: backported to fix CVE-2023-28370]
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+----
+- tornado/web.py | 9 +++++++++
+- 1 file changed, 9 insertions(+)
+-
+-diff --git a/tornado/web.py b/tornado/web.py
+-index cd6a81b4..05b571eb 100644
+---- a/tornado/web.py
+-+++ b/tornado/web.py
+-@@ -2806,6 +2806,15 @@ class StaticFileHandler(RequestHandler):
+-             # but there is some prefix to the path that was already
+-             # trimmed by the routing
+-             if not self.request.path.endswith("/"):
+-+                if self.request.path.startswith("//"):
+-+                    # A redirect with two initial slashes is a "protocol-relative" URL.
+-+                    # This means the next path segment is treated as a hostname instead
+-+                    # of a part of the path, making this effectively an open redirect.
+-+                    # Reject paths starting with two slashes to prevent this.
+-+                    # This is only reachable under certain configurations.
+-+                    raise HTTPError(
+-+                        403, "cannot redirect path with two initial slashes"
+-+                    )
+-                 self.redirect(self.request.path + "/", permanent=True)
+-                 return None
+-             absolute_path = os.path.join(absolute_path, self.default_filename)
+--- 
+-2.41.0
+-
+diff --git a/package/python-tornado/python-tornado.hash b/package/python-tornado/python-tornado.hash
+index f30a6bb136..f8ac0ceaf3 100644
+--- a/package/python-tornado/python-tornado.hash
++++ b/package/python-tornado/python-tornado.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/tinyrpc/json
--md5  cc7e62891eee806dfbbafb6e3875825e  tinyrpc-1.1.4.tar.gz
--sha256  c99f412e5d9849c2deb468ea37fee2faf12fbc95bdd3616ae5c276ea195ed6bd  tinyrpc-1.1.4.tar.gz
-+md5  b5079a23bbd8c41a33fe15c7486acf3e  tinyrpc-1.1.7.tar.gz
-+sha256  15a8f41838e7b8be274467de59ad5c571e4cb5a2fe93bc2940b1d103bce4c6e5  tinyrpc-1.1.7.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/tornado/json
+-md5  32fbad606b439c3e1bf4e79d4e872741  tornado-6.2.tar.gz
+-sha256  9b630419bde84ec666bfd7ea0a4cb2a8a651c2d5cccdbdd1972a0c859dfc3c13  tornado-6.2.tar.gz
++md5  07ebd88a2a7acee1b819738f3f4ca7ef  tornado-6.4.1.tar.gz
++sha256  92d3ab53183d8c50f8204a51e6f91d18a15d5ef261e84d452800d4ff6fc504e9  tornado-6.4.1.tar.gz
  # Locally computed sha256 checksums
- sha256  587f1ea174824613f4a7e0d7fb95fda000a7f58ca17df12416e014c9ee82e619  LICENSE
-diff --git a/package/python-tinyrpc/python-tinyrpc.mk b/package/python-tinyrpc/python-tinyrpc.mk
-index e976778fa2..1b3e4a83ed 100644
---- a/package/python-tinyrpc/python-tinyrpc.mk
-+++ b/package/python-tinyrpc/python-tinyrpc.mk
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/python-tornado/python-tornado.mk b/package/python-tornado/python-tornado.mk
+index f4a4c97d2a..84310f7613 100644
+--- a/package/python-tornado/python-tornado.mk
++++ b/package/python-tornado/python-tornado.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_TINYRPC_VERSION = 1.1.4
-+PYTHON_TINYRPC_VERSION = 1.1.7
- PYTHON_TINYRPC_SOURCE = tinyrpc-$(PYTHON_TINYRPC_VERSION).tar.gz
--PYTHON_TINYRPC_SITE = https://files.pythonhosted.org/packages/d2/86/2741f0c74cc339416c9803b6393eaf230254ecf36ffd839614799e15a202
-+PYTHON_TINYRPC_SITE = https://files.pythonhosted.org/packages/6a/31/b0d0403cafda7965fab0741bcb7c63b26eab7fcfb605d4ece31a6f7b034d
- PYTHON_TINYRPC_SETUP_TYPE = setuptools
- PYTHON_TINYRPC_LICENSE = MIT
- PYTHON_TINYRPC_LICENSE_FILES = LICENSE
+-PYTHON_TORNADO_VERSION = 6.2
++PYTHON_TORNADO_VERSION = 6.4.1
+ PYTHON_TORNADO_SOURCE = tornado-$(PYTHON_TORNADO_VERSION).tar.gz
+-PYTHON_TORNADO_SITE = https://files.pythonhosted.org/packages/f3/9e/225a41452f2d9418d89be5e32cf824c84fe1e639d350d6e8d49db5b7f73a
++PYTHON_TORNADO_SITE = https://files.pythonhosted.org/packages/ee/66/398ac7167f1c7835406888a386f6d0d26ee5dbf197d8a571300be57662d3
+ PYTHON_TORNADO_LICENSE = Apache-2.0
+ PYTHON_TORNADO_LICENSE_FILES = LICENSE
+ PYTHON_TORNADO_CPE_ID_VENDOR = tornadoweb
 -- 
 2.34.1
 
