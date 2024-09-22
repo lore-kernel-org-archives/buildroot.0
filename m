@@ -4,92 +4,92 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 92CB3CF9C6B
-	for <buildroot@archiver.kernel.org>; Sun, 22 Sep 2024 02:40:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A888BCF9C5B
+	for <buildroot@archiver.kernel.org>; Sun, 22 Sep 2024 02:51:01 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id DF0E440531;
-	Sun, 22 Sep 2024 02:40:39 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3E0B040124;
+	Sun, 22 Sep 2024 02:51:01 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id EgvGA5NuXp3S; Sun, 22 Sep 2024 02:40:38 +0000 (UTC)
+ id ET1B5JLX1IzU; Sun, 22 Sep 2024 02:51:00 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 628974032A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 03A924036A
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 628974032A;
-	Sun, 22 Sep 2024 02:40:38 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 42CDD1BF419
- for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 02:40:37 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 03A924036A;
+	Sun, 22 Sep 2024 02:51:00 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id DF0F51BF419
+ for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 02:50:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 31AFC81365
- for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 02:40:37 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id CD479405FA
+ for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 02:50:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KEjb_3sv-kFv for <buildroot@lists.busybox.net>;
- Sun, 22 Sep 2024 02:40:36 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id g1kyLP1L8rUk for <buildroot@lists.busybox.net>;
+ Sun, 22 Sep 2024 02:50:57 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::62f; helo=mail-pl1-x62f.google.com;
+ client-ip=2607:f8b0:4864:20::532; helo=mail-pg1-x532.google.com;
  envelope-from=nemaakhilesh@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 388D981302
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 388D981302
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com
- [IPv6:2607:f8b0:4864:20::62f])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 388D981302
- for <buildroot@buildroot.org>; Sun, 22 Sep 2024 02:40:36 +0000 (UTC)
-Received: by mail-pl1-x62f.google.com with SMTP id
- d9443c01a7336-2068a7c9286so33665845ad.1
- for <buildroot@buildroot.org>; Sat, 21 Sep 2024 19:40:36 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org BE71D405F3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BE71D405F3
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com
+ [IPv6:2607:f8b0:4864:20::532])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id BE71D405F3
+ for <buildroot@buildroot.org>; Sun, 22 Sep 2024 02:50:57 +0000 (UTC)
+Received: by mail-pg1-x532.google.com with SMTP id
+ 41be03b00d2f7-7db238d07b3so2678160a12.2
+ for <buildroot@buildroot.org>; Sat, 21 Sep 2024 19:50:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1726972835; x=1727577635;
+ d=1e100.net; s=20230601; t=1726973456; x=1727578256;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=bY2ua/EGpX3prEdyN/yoAAZxVVkW36q0hPmJtnyDBnY=;
- b=LxZ1RnZ/iCwJxrhf4H6O9xKFsRgQKl7DI53YQ0xo0az3zhHX8yMylI+WRdHfEgqEtQ
- zc4tvt5VCMP99OrLSCoP1NQjmUQM2KfYkKW7jvRvmXXfynSXZga7DHaU3P27MQTpEXSk
- phb+jlMvtUIG9g/M7hhIAFLY86k/4i59HYKZ0IsPkCEh11r7yqXI/jVj/UnR7q3/OxIE
- JOkdKnXXN7rgU634CEBfRjj3DnVzIVuDAoB0RjvkTFvdlG1W578TfhEoKgeX1RjuI6c1
- vvE4nsguN4JpUO6ameyDUbTGWNg4AlZoBh//MWvkx+JI8CPvVLaLpBa9rqcM0OcIv5xD
- CUTQ==
-X-Gm-Message-State: AOJu0YyyY4hpwYpDMnyrPu/oNknLRBTc48azHdDOjP2c/k3gKj2R4iyu
- buPa866bghKRd0X7o03N6BqF0lblhrJgRG6b+peLvfKk9vtScpccqQ9PpcmnVuk=
-X-Google-Smtp-Source: AGHT+IFOA6U0CUa3XjhNkpUBirE9q5LGG2XBaah0mBAENyfgINd/D/EWMe8LgQ/tMExAd10GEgiVfw==
-X-Received: by 2002:a17:903:1c9:b0:206:99a8:525f with SMTP id
- d9443c01a7336-208d8338b2dmr144161555ad.4.1726972835081; 
- Sat, 21 Sep 2024 19:40:35 -0700 (PDT)
+ bh=hz/wj9ndH2W7hSZNUzZ+berCKtzU2NNgYMDgbxGk/7s=;
+ b=V+qFuxruvIlDX3hR+aR21DbB9W4CeJ3+DnickSjODf636t6todcyRNVEtJ2R8h5YeX
+ MJoDgPB/IJt/RbxId37ad/CPsX0UAZ1IqSaDA3Z+eEFuUw5i2NOtup22EsMsIdzkNrjg
+ 21YjjXgDBaEfGX34LD3SWyiZsr9YIhH3WT8hPvMQ9ktioGuoDAAcAQqbfcb7pYrPiSFv
+ 2avqh9tjUWWlBBED4Yq8qK92kLapnVmuhmPdZ8rLj/SayJ/qMG/snXu3a5Ow8bcXDoug
+ e++KBrXl+iHP3GKzdDOEG6lFGxpV0xGFWXdHNXkefuSAPGz4F4w5X1Zl2l63odItABxT
+ Jmpg==
+X-Gm-Message-State: AOJu0YzKWWs09iO3WDjhnHaCsg0FuMuoM5G/R4jynunkfEd6PCZG+UVc
+ V3bGlG5DjXx8wrhwT7N9u4e/pZIrxOsfGOUN9VDbC4u8t7egd2/M2gn2mj6ZrMY=
+X-Google-Smtp-Source: AGHT+IF9x15kuPZAuT8KWtzeCkOdctsWaf8ke1IDS9q+donQ8ppk+yHv1TuhLlkY/U4jrl3Feay/+g==
+X-Received: by 2002:a05:6a21:3489:b0:1d2:e78d:2147 with SMTP id
+ adf61e73a8af0-1d30c9d3fe8mr10806397637.6.1726973456288; 
+ Sat, 21 Sep 2024 19:50:56 -0700 (PDT)
 Received: from localhost.localdomain
  ([2600:8802:2a05:9000:19d8:5269:4572:b863])
  by smtp.gmail.com with ESMTPSA id
- d9443c01a7336-2079460254dsm114225655ad.114.2024.09.21.19.40.34
+ d2e1a72fcca58-71944b97544sm12318654b3a.146.2024.09.21.19.50.54
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sat, 21 Sep 2024 19:40:34 -0700 (PDT)
+ Sat, 21 Sep 2024 19:50:55 -0700 (PDT)
 From: Akhilesh Nema <nemaakhilesh@gmail.com>
 To: buildroot@buildroot.org
-Date: Sat, 21 Sep 2024 19:40:31 -0700
-Message-Id: <20240922024031.2620153-1-nemaakhilesh@gmail.com>
+Date: Sat, 21 Sep 2024 19:50:51 -0700
+Message-Id: <20240922025051.2621578-1-nemaakhilesh@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1726972835; x=1727577635; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1726973456; x=1727578256; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=bY2ua/EGpX3prEdyN/yoAAZxVVkW36q0hPmJtnyDBnY=;
- b=GTvNh12T1ODkN2jdd7DWkz+X9Vf+uw5l8ODqwI1F6LEeEtp3Ep3d6VmZKmaZ2Foalb
- PQenvhU/8+HbK0qguDSvN3rzlNKv+weoOja+gn/uBmNPKEVKosRoTCrGUnMfxrsSKlZI
- UhlNLTGTGwkHnDdm6Ii3JwPfoWkDleQGYDB7DEPBvJ4hbRC0aNDWQ1n0pFxPUINxuDMx
- wdBI0Cz+RNR3GX4VqOWSiE30SilOd+Fo4zAkd+ZdO6pIR+xTx/8U21T+69Nh7npqKV36
- SUH7+JRgtm0TO2eCG9h7SXS1kUhth5TozeLIXJoyJwvgGV+Actpl+wgZwVhU3DLaSrVX
- N3xA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=hz/wj9ndH2W7hSZNUzZ+berCKtzU2NNgYMDgbxGk/7s=;
+ b=RV0lcVKsXfhpHNrFc09S2ma6CKrDNy4Tm2WZwvaxBlC4bYiHnvkVQFlnaofX1wK8mP
+ SBZUDUMTSSx1qB3RHq41JxaLYCf6gclx1dlL9aFvFNLKgIMShu0drhrApZDB2zpiXab/
+ IpeRjx6oBS5uA+jE8G08sNXOlYA4724d51ofbw5twdPqNFmiKBlC3jdnR1TN4483Lljv
+ ZMM93kRqKQtj0mhnj8rTd989q8V0YCtMwoQxyG6LeQtj5X6mUWUkxk0Eg3Amo+iSC7eJ
+ 8ruvO1rNkop30cZW+bSXYdxKeR7O6vod7g6P3h8vhIrc38/YxVqmALszYlbgm6XyyKX1
+ u/8Q==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=GTvNh12T
-Subject: [Buildroot] [PATCH 1/1] package/ustreamer: bump version to 6.16
+ header.s=20230601 header.b=RV0lcVKs
+Subject: [Buildroot] [PATCH 1/1] package/openssh: bump version to 9.9p1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,90 +101,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Kadambini Nema <kadambini.nema@gmail.com>,
- Akhilesh Nema <nemaakhilesh@gmail.com>
+Cc: Akhilesh Nema <nemaakhilesh@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Changelog - https://github.com/pikvm/ustreamer/compare/v6.11...v6.16
+https://www.openssh.com/txt/release-9.9
 
-Drop upstream patch 0001-src-libs-types.h-include-sys-types.h.patch.
-(https://github.com/pikvm/ustreamer/pull/273/commits/0ce1d6e1f61dfbebae35a9c3a8a77c69ee43a8b0)
+License sha256sum has changed due to inclusion of the openbsd-compat/base64.c license in the LICENSE file.
+(https://github.com/openssh/openssh-portable/commit/ef2d7f2d3e1b4c9ae71bacf963e76a92ab8be543)
 
 Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
 ---
- ...src-libs-types.h-include-sys-types.h.patch | 36 -------------------
- package/ustreamer/ustreamer.hash              |  2 +-
- package/ustreamer/ustreamer.mk                |  2 +-
- 3 files changed, 2 insertions(+), 38 deletions(-)
- delete mode 100644 package/ustreamer/0001-src-libs-types.h-include-sys-types.h.patch
+ package/openssh/openssh.hash | 6 +++---
+ package/openssh/openssh.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/ustreamer/0001-src-libs-types.h-include-sys-types.h.patch b/package/ustreamer/0001-src-libs-types.h-include-sys-types.h.patch
-deleted file mode 100644
-index 82fe596963..0000000000
---- a/package/ustreamer/0001-src-libs-types.h-include-sys-types.h.patch
-+++ /dev/null
-@@ -1,36 +0,0 @@
--From 6c24c9ea610e7cc0e47d1e7124697098d5ef365e Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Wed, 15 May 2024 19:56:49 +0200
--Subject: [PATCH] src/libs/types.h: include sys/types.h (#273)
--
--Include sys/types.h to avoid the following uclibc build failure since
--version 5.52 and
--https://github.com/pikvm/ustreamer/commit/2d6716aa4762151f0fb1b900d3cd3295d328cab6:
--
--In file included from libs/base64.h:25,
--                 from libs/base64.c:23:
--libs/types.h:30:9: error: unknown type name 'ssize_t'
--   30 | typedef ssize_t sz;
--      |         ^~~~~~~
--
--Fixes:
-- - http://autobuild.buildroot.org/results/24498049d7beb4afaaf9f9a0c2fc0bcd26a3ee04
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Upstream: https://github.com/pikvm/ustreamer/commit/6c24c9ea610e7cc0e47d1e7124697098d5ef365e
-----
-- src/libs/types.h | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/src/libs/types.h b/src/libs/types.h
--index 54e42325..b35bbaea 100644
----- a/src/libs/types.h
--+++ b/src/libs/types.h
--@@ -24,6 +24,7 @@
-- #include <stdio.h>
-- #include <stdbool.h>
-- #include <stdint.h>
--+#include <sys/types.h>
-- 
-- 
-- typedef long long sll;
-diff --git a/package/ustreamer/ustreamer.hash b/package/ustreamer/ustreamer.hash
-index 7c70f0195f..7a03b21b86 100644
---- a/package/ustreamer/ustreamer.hash
-+++ b/package/ustreamer/ustreamer.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  80ab01eeaa81c7d8e9c7f62304287d176fd729cb12ca5adb2e181b5a3da79216  ustreamer-6.11.tar.gz
-+sha256  88ac5e99c56729fecba2cf7f63b690a126dcaef420e2cce9c25c66c55c097f64  ustreamer-6.16.tar.gz
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  LICENSE
-diff --git a/package/ustreamer/ustreamer.mk b/package/ustreamer/ustreamer.mk
-index 5b73e387d6..2944827083 100644
---- a/package/ustreamer/ustreamer.mk
-+++ b/package/ustreamer/ustreamer.mk
+diff --git a/package/openssh/openssh.hash b/package/openssh/openssh.hash
+index 44f9645035..5758ce4f36 100644
+--- a/package/openssh/openssh.hash
++++ b/package/openssh/openssh.hash
+@@ -1,4 +1,4 @@
+-# From https://www.openssh.com/txt/release-9.8
+-sha256  dd8bd002a379b5d499dfb050dd1fa9af8029e80461f4bb6c523c49973f5a39f3  openssh-9.8p1.tar.gz
++# From https://www.openssh.com/txt/release-9.9
++sha256  b343fbcdbff87f15b1986e6e15d6d4fc9a7d36066be6b7fb507087ba8f966c02  openssh-9.9p1.tar.gz
+ # Locally calculated
+-sha256  05c30446ba738934b3f1efa965b454c122ca26cc4b268e5ae6843f58ccd1b16d  LICENCE
++sha256  5bb5b160726ef5756e4f32fe95b35249c294962419650f48d05134b486d27ccb  LICENCE
+diff --git a/package/openssh/openssh.mk b/package/openssh/openssh.mk
+index 7065c3ae4f..95c059e03d 100644
+--- a/package/openssh/openssh.mk
++++ b/package/openssh/openssh.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--USTREAMER_VERSION = 6.11
-+USTREAMER_VERSION = 6.16
- USTREAMER_SITE = $(call github,pikvm,ustreamer,v$(USTREAMER_VERSION))
- USTREAMER_LICENSE = GPL-3.0+
- USTREAMER_LICENSE_FILES = LICENSE
+-OPENSSH_VERSION_MAJOR = 9.8
++OPENSSH_VERSION_MAJOR = 9.9
+ OPENSSH_VERSION_MINOR = p1
+ OPENSSH_VERSION = $(OPENSSH_VERSION_MAJOR)$(OPENSSH_VERSION_MINOR)
+ OPENSSH_CPE_ID_VERSION = $(OPENSSH_VERSION_MAJOR)
 -- 
 2.25.1
 
