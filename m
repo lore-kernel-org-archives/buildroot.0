@@ -1,91 +1,94 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D2D8CF9C6C
-	for <buildroot@archiver.kernel.org>; Sun, 22 Sep 2024 14:30:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1432DCF9C64
+	for <buildroot@archiver.kernel.org>; Sun, 22 Sep 2024 15:06:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id C581D81398;
-	Sun, 22 Sep 2024 14:30:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AAF64606EB;
+	Sun, 22 Sep 2024 15:06:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id D73NS3pOumwR; Sun, 22 Sep 2024 14:30:12 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id gkZRy1VW0-cd; Sun, 22 Sep 2024 15:06:17 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 152D081091
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B5DD3606F0
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 152D081091;
-	Sun, 22 Sep 2024 14:30:12 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E92391BF8A8
- for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 14:30:10 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id B5DD3606F0;
+	Sun, 22 Sep 2024 15:06:17 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 523F31BF3E8
+ for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 15:06:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id E35C5405E7
- for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 14:30:10 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 409D7400D7
+ for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 15:06:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AtbQs3KVnhz1 for <buildroot@lists.busybox.net>;
- Sun, 22 Sep 2024 14:30:09 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id wf0VExTf9uHa for <buildroot@lists.busybox.net>;
+ Sun, 22 Sep 2024 15:06:15 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::b35; helo=mail-yb1-xb35.google.com;
- envelope-from=baxiche@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org A51574049F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A51574049F
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com
- [IPv6:2607:f8b0:4864:20::b35])
- by smtp4.osuosl.org (Postfix) with ESMTPS id A51574049F
- for <buildroot@buildroot.org>; Sun, 22 Sep 2024 14:30:09 +0000 (UTC)
-Received: by mail-yb1-xb35.google.com with SMTP id
- 3f1490d57ef6-e1d06c728b8so3255445276.0
- for <buildroot@buildroot.org>; Sun, 22 Sep 2024 07:30:09 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::32e; helo=mail-wm1-x32e.google.com;
+ envelope-from=thomas.perale@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 3F447400B5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3F447400B5
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com
+ [IPv6:2a00:1450:4864:20::32e])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 3F447400B5
+ for <buildroot@buildroot.org>; Sun, 22 Sep 2024 15:06:13 +0000 (UTC)
+Received: by mail-wm1-x32e.google.com with SMTP id
+ 5b1f17b1804b1-4280ca0791bso33896865e9.1
+ for <buildroot@buildroot.org>; Sun, 22 Sep 2024 08:06:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1727015408; x=1727620208;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ d=1e100.net; s=20230601; t=1727017571; x=1727622371;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=n3VMx3Ll7I5cWMkpTVD30L2GkRuYPH7PWdXH6bgDdYU=;
- b=RevMik90mJ+EmvUpuNTNdeI0OFWiXk4NgHp4jSQhsFZ6CGuw5M6cOziutrag7XcbiX
- +/jL3eFn6g5SHdj2P0gBZn054aXAKLV52wyEAt5yXfsCJq6U44VWv6ttLsEpD9ssMCPK
- SDZwxKIiQmwGFu+IUKBcp/O0v9hEJA1LpteEMVK99pIPFAu4hD9MytNPlp46s6Vfp9e/
- yiIHQsBWYI0XasKfERKWE1KYtubLJ1EvgF8qxvxVU0/qM540nl8/9lCcqgtKGq3tRK3n
- LNMLS0QgEx7Yav1n675TfiqluxbC1AHh0KEIscA/CjUWRzSlVSmZ7OZ5MtFIFMiYWbKL
- kOrA==
-X-Gm-Message-State: AOJu0Yyy7Kxaug2aTua0WI+FmNnj4f0D91TH+6PPGpfEhsZaUnCxN6cy
- rc4dHlDZmg9IAgUoAm58x2xqF2g86dIBUeVYLxOzgq/VwWKkMXnt38E2CpKs99ecoLzxqLk8/Y5
- GD6fiSQ4O7sy1JNE6Izvg6iJUbkJuAw==
-X-Google-Smtp-Source: AGHT+IF2zE1NCV3N7KXPvon8C1kZWpct0AhPOG03DK0TZPr2hN6HPy76eMMZP812LfIB7a7j3wjfZ79tD1j5duvAJEs=
-X-Received: by 2002:a05:6902:f89:b0:e1a:9336:8b54 with SMTP id
- 3f1490d57ef6-e2250c47987mr7918273276.32.1727015408389; Sun, 22 Sep 2024
- 07:30:08 -0700 (PDT)
+ bh=osqD/9YV2TBa2scIkuwtJqJpzM1iKDZ9ACjC3pqA7rY=;
+ b=aLLmAIAwaz54yFjyfotNuhnTbfJFG2OgGegVdM3zk7nW3ek/COYRL05UjDvEQb5PbK
+ gFLzScScHY0g4LnIOKonsZUA1sHDfFXng1OvL6SViUZBHFwBd8G5rvktSV/5ihSvchlZ
+ BGWUJx/ILbntB2TEICIRJ7L18yrmxINgVQIv+uVJQSzv9EVJUYYFIiFTNx1vHEN8NnHN
+ c0DPhRftuXsh7hT/K2ikkgUBjIuWV4HJ/nCgk+posPspZMPLhf/GvUnpQGON8U4PQilV
+ OeFKikK2wSPLoocyVEbThBcgLbIf/fBTsKMIiqxWDyy/okWYHZ+Q5h741mBkdrzt+Lt/
+ tAbQ==
+X-Gm-Message-State: AOJu0Yy9c/OG1WYpWpYzifn5K5CEqZEMZQ/eB0FeLq6HO7uJKaXdm0j2
+ j+0aqYa8inUJ3UnPFtV3kcebhmbAE+8sJazOay0KoPSqRI7PjZgIHBi7qTg8OEpOtIyuPcETayn
+ QOY0=
+X-Google-Smtp-Source: AGHT+IEXJ4Ys9qpk8/JfS0LyiI4DH0Sb9dMoHvRMD7bd/SZid5HdehPst//ntJ7yN6MqFEZGGGQp6g==
+X-Received: by 2002:a05:600c:358e:b0:42c:b45d:4a7b with SMTP id
+ 5b1f17b1804b1-42e7c1a2ffbmr67208695e9.25.1727017571422; 
+ Sun, 22 Sep 2024 08:06:11 -0700 (PDT)
+Received: from localhost.localdomain ([79.132.233.68])
+ by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-42e754a6638sm102542065e9.38.2024.09.22.08.06.09
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sun, 22 Sep 2024 08:06:10 -0700 (PDT)
+To: buildroot@buildroot.org
+Date: Sun, 22 Sep 2024 17:05:54 +0200
+Message-ID: <20240922150554.1348962-1-thomas.perale@mind.be>
+X-Mailer: git-send-email 2.46.0
 MIME-Version: 1.0
-References: <20240920160500.18551-1-baxiche@gmail.com>
- <CA+R_derRe3Pf0BdL3Y8ykcWjAZewrFJ2KjihXQ3C1axbAwvi2A@mail.gmail.com>
-In-Reply-To: <CA+R_derRe3Pf0BdL3Y8ykcWjAZewrFJ2KjihXQ3C1axbAwvi2A@mail.gmail.com>
-From: baxiche su <baxiche@gmail.com>
-Date: Sun, 22 Sep 2024 22:29:32 +0800
-Message-ID: <CAE3sgKjDQaG1R4L-FPQ3e0FVbcxNBir_DZQfeOu-FcxUPKJWMQ@mail.gmail.com>
-To: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1727015408; x=1727620208; darn=buildroot.org;
- h=cc:to:subject:message-id:date:from:in-reply-to:references
- :mime-version:from:to:cc:subject:date:message-id:reply-to;
- bh=n3VMx3Ll7I5cWMkpTVD30L2GkRuYPH7PWdXH6bgDdYU=;
- b=FGPAJGEevSZtQ0Fb2GgkidcfTi8977WSC5nc3nLj0ZZ+k/w/8O/x0AiY+wEuoKRCoG
- w7fm8tuiubGh49GW4aU92OSbUopcCRqXFywSVKNrlVc8Gk0FFWY9annXBqVTINA8P9Uo
- aK/hoyxubZSX+ct4EFa9lblbx2zNlHTlwAeMVGO7KwmKMT72+3aVHP6+8a+s2IF/Vd6d
- bof2Y1hZZkOhzWJvixEQKku5MH2hRUEsxWESpr/qifoJ47prbJqsbxCqAkCgHYtwkZ6B
- Zf/0agMNa6xZ2xYnaHLi/tVka7D4J++tPWGzEHeJA0IDyoWLfJG6PXVgPVeDeG38qqR5
- /+dA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=FGPAJGEe
-Subject: Re: [Buildroot] [PATCH v3 1/1] package/qt6: add qt6 multimedia
+ d=mind.be; s=google; t=1727017571; x=1727622371; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=osqD/9YV2TBa2scIkuwtJqJpzM1iKDZ9ACjC3pqA7rY=;
+ b=XTJMBlKPBe81Uzc6XLms3p8lwxu4oxKwdq4dF0jZGyIomh455j9Rhz7cw5iDP3ufqt
+ ITEbn7dRZEBuvgLFZUm75XGib0hZ1tqu953KKKDv9mVr5E7kTSghJ00qABYiYwuwlAV8
+ vTHVenV94dXfivDnMHJe8352S4oWj9cNamwv2bcGO4/Yf0r+5HG3u3BcgaZkMnkH13dE
+ hh0dI8vX6k8B92qZefw4IEdRe4UMYpRPwxa0eoU85+EBpBY/tCerus0eex20DkQWgRD9
+ GS1UHn1xdZ+GllOMY/6uHV4nMT/DQD1by3ui/8QXvJw5lodQF+B90+6yHxiMkCnC62i2
+ aUXQ==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=XTJMBlKP
+Subject: [Buildroot] [PATCH 1/1] package/aubio: fix build on big endian arch
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,75 +100,99 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Jesse Van Gavere <jesseevg@gmail.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
-Content-Type: multipart/mixed; boundary="===============2895526500516960690=="
+From: Thomas Perale via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Perale <thomas.perale@mind.be>
+Cc: Romain Naour <romain.naour@gmail.com>,
+ Thomas Perale <thomas.perale@mind.be>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============2895526500516960690==
-Content-Type: multipart/alternative; boundary="000000000000f0562c0622b61bfa"
+Fixes the following error happening on builds with
+big endian architecture target and libflac enabled.
 
---000000000000f0562c0622b61bfa
-Content-Type: text/plain; charset="UTF-8"
+```
+[ 75/243] Linking build/tests/test-pitchshift
+/home/autobuild/autobuild/instance-16/output-1/per-package/aubio/host/bin/../lib/gcc/mips64-buildroot-linux-gnu/13.3.0/../../../../mips64-buildroot-linux-gnu/bin/ld: src/libaubio.so: undefined reference to `SWAPS'
+collect2: error: ld returned 1 exit status
 
-Hi Roy,
+Waf: Leaving directory `/home/autobuild/autobuild/instance-16/output-1/build/aubio-152d6819b360c2e7b379ee3f373d444ab3df0895/build'
+Build failed
+```
 
-I'm sorry for the formatting issue with DEVELOPERS and the Config.in file.
-I will fix them in the next commit.
+There is a missing definition of the `SWAPS` macro in
+`/src/io/sink_flac.c` file.
+This patch adds an out of tree patch that copy the `SWAPS` definition from the
+`/src/io/sink_wavwrite.c` file in `sink_flac.c` to fix this issue.
 
-Regarding the qt6multimedia.mk file:
+Fixes:
+  - https://autobuild.buildroot.org/results/b88/b8895a81411dc7622b0aba9f2f0eaa0aef5a1a10/
+  - https://autobuild.buildroot.org/results/bc7/bc733f5192b354cb960b6a4726efb597be4bb06c/
+  - https://autobuild.buildroot.org/results/ea5/ea52dbcc14c2bab300277053f0b9599a8e82294a/
+  - ...
 
-1. The reason I don't make FFmpeg/GStreamer a choice, is because
-qt6-multimedia can be built with these two packages, and the media backend
-can be chosen at runtime, or even built without these packages.
+Signed-off-by: Thomas Perale <thomas.perale@mind.be>
+---
+ ...1-sink_flac-missing-SWAPS-definition.patch | 45 +++++++++++++++++++
+ 1 file changed, 45 insertions(+)
+ create mode 100644 package/aubio/0001-sink_flac-missing-SWAPS-definition.patch
 
-2. The reason I don't make ALSA/PulseAudio a choice is that qt6-multimedia
-can be built without these packages.
-
-3. I personally prefer to set all qt6-multimedia FEATURE to OFF at the
-beginning of the .mk file and set it to ON if the option is chosen. I have
-seen other qt6 packages do this. If you prefer to gather all the code
-related to one option in one place, I will make that change in the next
-commit as well.
-Thanks for reviewing my work.
-
-Baxiche
-
---000000000000f0562c0622b61bfa
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-<div dir=3D"ltr"><p>Hi Roy,</p><p>I&#39;m sorry for the formatting issue wi=
-th DEVELOPERS and the Config.in file. I will fix them in the next commit. <=
-br><br>Regarding the <code><font face=3D"arial, sans-serif"><a href=3D"http=
-://qt6multimedia.mk">qt6multimedia.mk</a></font></code> file:</p><p>1. The =
-reason I don&#39;t make FFmpeg/GStreamer a choice, is because <code><font f=
-ace=3D"arial, sans-serif">qt6-multimedia</font></code> can be built with th=
-ese two packages, and the media backend can be chosen at runtime, or even b=
-uilt without these packages.</p><p>2. The reason I don&#39;t make ALSA/Puls=
-eAudio a choice is that <code><font face=3D"arial, sans-serif">qt6-multimed=
-ia</font></code> can be built without these packages.</p><p>3. I personally=
- prefer to set all <code><font face=3D"arial, sans-serif">qt6-multimedia=C2=
-=A0</font><font face=3D"arial, sans-serif">FEATURE</font></code><font face=
-=3D"arial, sans-serif">=C2=A0to OFF at the beginning=C2=A0of the .mk file=
-=C2=A0and set it to ON if the option is chosen. I have seen other <code><fo=
-nt face=3D"arial, sans-serif">qt6</font></code> packages</font> do this. If=
- you prefer to gather all the code related to one option in one place, I wi=
-ll make that change in the next commit as well.</p><div>Thanks for reviewin=
-g my work.</div><div><br></div><div>Baxiche</div></div>
-
---000000000000f0562c0622b61bfa--
-
---===============2895526500516960690==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+diff --git a/package/aubio/0001-sink_flac-missing-SWAPS-definition.patch b/package/aubio/0001-sink_flac-missing-SWAPS-definition.patch
+new file mode 100644
+index 0000000000..5f321b5363
+--- /dev/null
++++ b/package/aubio/0001-sink_flac-missing-SWAPS-definition.patch
+@@ -0,0 +1,45 @@
++From aebf4fb23df2c4ec8857aef05a468991054a58c1 Mon Sep 17 00:00:00 2001
++From: Thomas Perale <thomas.perale@mind.be>
++Date: Thu, 19 Sep 2024 18:57:16 +0200
++Subject: [PATCH] [sink_flac] missing SWAPS definition
++
++On big endian architecture with libflac enabled the following error
++would happen when cross-compiling aubio with buildroot.
++
++```
++[ 75/243] Linking build/tests/test-pitchshift
++/home/autobuild/autobuild/instance-16/output-1/per-package/aubio/host/bin/../lib/gcc/mips64-buildroot-linux-gnu/13.3.0/../../../../mips64-buildroot-linux-gnu/bin/ld: src/libaubio.so: undefined reference to `SWAPS'
++collect2: error: ld returned 1 exit status
++
++Waf: Leaving directory `/home/autobuild/autobuild/instance-16/output-1/build/aubio-152d6819b360c2e7b379ee3f373d444ab3df0895/build'
++Build failed
++```
++
++Indeed there is a missing definition of the `SWAPS` macro in
++`/src/io/sink_flac.c` file.
++This commit copy the `SWAPS` definition from the
++`/src/io/sink_wavwrite.c` file in `sink_flac.c` to fix this issue.
++
++Signed-off-by: Thomas Perale <thomas.perale@mind.be>
++Upstream: https://github.com/aubio/aubio/pull/407
++---
++ src/io/sink_flac.c | 3 +++
++ 1 file changed, 3 insertions(+)
++
++diff --git a/src/io/sink_flac.c b/src/io/sink_flac.c
++index 04144793..0a1cbc26 100644
++--- a/src/io/sink_flac.c
+++++ b/src/io/sink_flac.c
++@@ -36,6 +36,9 @@
++ 
++ #define MAX_WRITE_SIZE 4096
++ 
+++// swap endian of a short
+++#define SWAPS(x) ((x & 0xff) << 8) | ((x & 0xff00) >> 8)
+++
++ // swap host to little endian
++ #if defined(__BYTE_ORDER__) && (__BYTE_ORDER__ == __ORDER_BIG_ENDIAN__)
++ #define HTOLES(x) SWAPS(x)
++-- 
++2.46.0
++
+-- 
+2.46.0
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============2895526500516960690==--
