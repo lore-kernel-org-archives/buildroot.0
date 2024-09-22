@@ -4,72 +4,72 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id BEADDCF9C6D
-	for <buildroot@archiver.kernel.org>; Sun, 22 Sep 2024 10:33:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1974FCF9C6C
+	for <buildroot@archiver.kernel.org>; Sun, 22 Sep 2024 10:34:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7876881393;
-	Sun, 22 Sep 2024 10:33:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C62B781393;
+	Sun, 22 Sep 2024 10:34:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id QPMczFFeDuAP; Sun, 22 Sep 2024 10:33:21 +0000 (UTC)
+ id L3JCOZDqWY8O; Sun, 22 Sep 2024 10:34:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7A576813AC
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B338B813B8
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7A576813AC;
-	Sun, 22 Sep 2024 10:33:21 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A54FE1BF47A
- for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 10:33:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id B338B813B8;
+	Sun, 22 Sep 2024 10:34:21 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 034AE1BF47A
+ for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 10:34:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D94976062D
- for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 10:33:19 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id E599C400AC
+ for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 10:34:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KLNV7-QUsUDS for <buildroot@lists.busybox.net>;
- Sun, 22 Sep 2024 10:33:16 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id sgfEa01W1jlm for <buildroot@lists.busybox.net>;
+ Sun, 22 Sep 2024 10:34:19 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
  helo=smtp5-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 595A46061F
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 595A46061F
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 833E540022
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 833E540022
 Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 595A46061F
- for <buildroot@buildroot.org>; Sun, 22 Sep 2024 10:33:14 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 833E540022
+ for <buildroot@buildroot.org>; Sun, 22 Sep 2024 10:34:19 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8290:3800:5d8d:eab4:d280:c2c4])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id DE5045FFAA;
- Sun, 22 Sep 2024 12:33:08 +0200 (CEST)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id D2CBF60128;
+ Sun, 22 Sep 2024 12:34:14 +0200 (CEST)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 22 Sep 2024 12:33:08 +0200
-Date: Sun, 22 Sep 2024 12:33:08 +0200
+ Sun, 22 Sep 2024 12:34:14 +0200
+Date: Sun, 22 Sep 2024 12:34:14 +0200
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <Zu_yZGNPf7OY3Hhh@landeda>
-References: <20240922035254.855480-1-james.hilliard1@gmail.com>
+Message-ID: <Zu_ypqLrKDtSYD4U@landeda>
+References: <20240922054607.946074-1-james.hilliard1@gmail.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20240922035254.855480-1-james.hilliard1@gmail.com>
+In-Reply-To: <20240922054607.946074-1-james.hilliard1@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1727001192;
- bh=PZcZCfVKeeayIKmcHhuAmg8VqLVB/GQM0yKntYooGYk=;
+ d=free.fr; s=smtp-20201208; t=1727001258;
+ bh=VN24G3GxiHV5dGo94UL1CtZtxKun6DRMqPfVUZIRBHY=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=lTVzXiwQv5arztppbr3h805QWLSuDwg6A19zQQHJEIAQPnPzjMlErGjWHLP7taPY6
- 6HYgU9jyh0/aBO85AlaxMIWBtIORSvClKzcoTMbqpkGsdW6oxYvaTS9WnFCs2VMxNJ
- N8svkDmZ4kQQ8MSyk30q2vlE0dg0o2lG6ajZpZJQ6mKNEXFvn9u5G+53zO0s2u9yxe
- GiUg+MiUvx8xBsCgCZaDCnKWoXRSQP6qAjmLj9eUO5mU6LlfgQrry+07iNyPPKM2Eq
- A2UpSjRcxtXZCi8DpWwFwk+j0i5aXGfP85Xhxb1b0vOmqq5XAHc25U3zE1gdkQjUaF
- IPxHNUCFeZBwA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ b=Bo+KaJqL8tMBl2WDYzjM8MGxfqgaN7AsbLbPzuATcm3IhPJEqzYUZ/VzQ+yjJZ0Kb
+ +Rf9d3o6wsUOeqAblCR88qgJ9IyD1ioSKLwAW2R+OHN+cdps/B9OxedXmUOsnV/dAg
+ HV5fVkc0lxD9RtrWCJSpXDGEJOSPP9BJOj8ponb8V1JjT5t+Gtp1IMEWccbGD1qDDp
+ /y/+SdUZL1WyBdnlUOHBVcm/jibJ2myMKilCUq0nxgnEU7Dkp0vYatYjEyVP4/hVju
+ zfKvfcjjcrUx4KHxhYtk2hbFz1+0FhKwMbXTqYSksHQkLYfzFhYWp6+6ZOPZ5qqsI1
+ Ze7D65pOdkrVw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=lTVzXiwQ
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-tornado: bump to version
- 6.4.1
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=Bo+KaJqL
+Subject: Re: [Buildroot] [PATCH 1/1] package/python-types-python-dateutil:
+ bump to version 2.9.0.20240906
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -89,36 +89,53 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 James, All,
 
-On 2024-09-21 21:52 -0600, James Hilliard spake thusly:
-> Drop patch which is now upstream.
-> 
+On 2024-09-21 23:46 -0600, James Hilliard spake thusly:
 > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 > ---
-[--SNIP--]
-> diff --git a/package/python-tornado/0001-web-Fix-an-open-redirect-in-StaticFileHandler.patch b/package/python-tornado/0001-web-Fix-an-open-redirect-in-StaticFileHandler.patch
-> deleted file mode 100644
-> index 357c6f2f12..0000000000
-> --- a/package/python-tornado/0001-web-Fix-an-open-redirect-in-StaticFileHandler.patch
-> +++ /dev/null
-> @@ -1,42 +0,0 @@
-> -From ac79778c91bd9a4a92111f7e06d4b12674571113 Mon Sep 17 00:00:00 2001
-> -From: Ben Darnell <ben@bendarnell.com>
-> -Date: Sat, 13 May 2023 20:58:52 -0400
-> -Subject: [PATCH] web: Fix an open redirect in StaticFileHandler
-[--SNIP--]
-> -Upstream: https://github.com/tornadoweb/tornado/commit/32ad07c54e607839273b4e1819c347f5c8976b2f
-> -[Thomas: backported to fix CVE-2023-28370]
+>  .../python-types-python-dateutil.hash                         | 4 ++--
+>  .../python-types-python-dateutil.mk                           | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/package/python-types-python-dateutil/python-types-python-dateutil.hash b/package/python-types-python-dateutil/python-types-python-dateutil.hash
+> index ef5e9380cf..4a2dcec502 100644
+> --- a/package/python-types-python-dateutil/python-types-python-dateutil.hash
+> +++ b/package/python-types-python-dateutil/python-types-python-dateutil.hash
+> @@ -1,3 +1,3 @@
+>  # md5, sha256 from https://pypi.org/pypi/types-python-dateutil/json
+> -md5  58072922ac0c740121e311e970f003bf  types-python-dateutil-2.8.19.14.tar.gz
+> -sha256  1f4f10ac98bb8b16ade9dbee3518d9ace017821d94b057a425b069f834737f4b  types-python-dateutil-2.8.19.14.tar.gz
+> +md5  0d91422e92000e77d633a8adff3039e7  types-python-dateutil-2.9.0.20240906.tar.gz
+> +sha256  9706c3b68284c25adffc47319ecc7947e5bb86b3773f843c73906fd598bc176e  types-python-dateutil-2.9.0.20240906.tar.gz
 
-This was a backport of a security fix to close off a CVE, so you forgot
-to also drop that exclusion in the .mk.
-
-I've done so when applying:
-
-    -# 0001-web-Fix-an-open-redirect-in-StaticFileHandler.patch
-    -PYTHON_TORNADO_IGNORE_CVES += CVE-2023-28370
+There's no license file identified, and no hash for it. Could you send
+a follow-up patch adding those, please?
 
 Regards,
 Yann E. MORIN.
+
+> diff --git a/package/python-types-python-dateutil/python-types-python-dateutil.mk b/package/python-types-python-dateutil/python-types-python-dateutil.mk
+> index b230394120..c210d71b0c 100644
+> --- a/package/python-types-python-dateutil/python-types-python-dateutil.mk
+> +++ b/package/python-types-python-dateutil/python-types-python-dateutil.mk
+> @@ -4,9 +4,9 @@
+>  #
+>  ################################################################################
+>  
+> -PYTHON_TYPES_PYTHON_DATEUTIL_VERSION = 2.8.19.14
+> +PYTHON_TYPES_PYTHON_DATEUTIL_VERSION = 2.9.0.20240906
+>  PYTHON_TYPES_PYTHON_DATEUTIL_SOURCE = types-python-dateutil-$(PYTHON_TYPES_PYTHON_DATEUTIL_VERSION).tar.gz
+> -PYTHON_TYPES_PYTHON_DATEUTIL_SITE = https://files.pythonhosted.org/packages/1b/2d/f189e5c03c22700c4ce5aece4b51bb73fa8adcfd7848629de0fb78af5f6f
+> +PYTHON_TYPES_PYTHON_DATEUTIL_SITE = https://files.pythonhosted.org/packages/3e/d9/9c9ec2d870af7aa9b722ce4fd5890bb55b1d18898df7f1d069cab194bb2a
+>  PYTHON_TYPES_PYTHON_DATEUTIL_SETUP_TYPE = setuptools
+>  PYTHON_TYPES_PYTHON_DATEUTIL_LICENSE = Apache-2.0
+>  
+> -- 
+> 2.34.1
+> 
+> _______________________________________________
+> buildroot mailing list
+> buildroot@buildroot.org
+> https://lists.buildroot.org/mailman/listinfo/buildroot
 
 -- 
 .-----------------.--------------------.------------------.--------------------.
