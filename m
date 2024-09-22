@@ -4,73 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9E714CF9C64
-	for <buildroot@archiver.kernel.org>; Sun, 22 Sep 2024 10:37:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 435F1CF9C6C
+	for <buildroot@archiver.kernel.org>; Sun, 22 Sep 2024 10:37:52 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 698218425B;
-	Sun, 22 Sep 2024 10:37:47 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DF99A817E4;
+	Sun, 22 Sep 2024 10:37:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FO_oiR43PgIT; Sun, 22 Sep 2024 10:37:46 +0000 (UTC)
+ id It-1bX_XyRtj; Sun, 22 Sep 2024 10:37:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 144E6842BB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C98F484331
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 144E6842BB;
-	Sun, 22 Sep 2024 10:37:46 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B7FFA1BF870
- for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 10:35:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C98F484331;
+	Sun, 22 Sep 2024 10:37:48 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id BED161BF47A
+ for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 10:35:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A2C778169A
- for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 10:35:05 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id EA2B240648
+ for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 10:34:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7s2gIhhiXlmE for <buildroot@lists.busybox.net>;
- Sun, 22 Sep 2024 10:35:04 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.5;
- helo=smtp5-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id N5CTaH-VrlNh for <buildroot@lists.busybox.net>;
+ Sun, 22 Sep 2024 10:34:42 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 6FC3581514
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6FC3581514
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [212.27.42.5])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 6FC3581514
- for <buildroot@buildroot.org>; Sun, 22 Sep 2024 10:35:02 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8290:3800:5d8d:eab4:d280:c2c4])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id 596A25FFA3;
- Sun, 22 Sep 2024 12:34:56 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 22 Sep 2024 12:34:56 +0200
-Date: Sun, 22 Sep 2024 12:34:56 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <Zu_y0GGFRunvO2ig@landeda>
-References: <20240921221340.688164-1-james.hilliard1@gmail.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20240921221340.688164-1-james.hilliard1@gmail.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1727001300;
- bh=RCUJCnCAWP+j6DlQRq1i3yVq5hXsnS1WtW8cRChLRkc=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=OVEnZ6+MVi5SUqsYksQxIfTuZykPEKWu+RFDeUVTv3DcE9RHcIac4YgTPl+Zu1dnH
- hibVfxAUaw1L+AAhrZmciN3jeo1nUHBZj2q72h4VM+GISGEA5k9/Rkcy1+gXs/aXep
- p6SgviQOoQUjhQybacSVHFXUR5/Ytj9F1FtIbFXNkPKqVm7SlEV2NQavUpVKXBw+ep
- W2hZ8Y4x6aDZ+V12xtypY4ekFeoLm99A9mtabgvXJ65EnCcwpOOKeRqMXHQc5p9QZS
- UVVnIHeSsz7jgoj5WzMM8h1IUXtj/8DGR5aLTngyAylDsIwdfVz91YGa8QTuwRy6W4
- 1DRQ22LnvgGlQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=OVEnZ6+M
-Subject: Re: [Buildroot] [PATCH v2 1/1] package/python-netaddr: bump to
- version 1.3.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 2C0574064A
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2C0574064A
+ for <buildroot@buildroot.org>; Sun, 22 Sep 2024 10:34:42 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 2781E805F4; Sun, 22 Sep 2024 10:34:42 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sun, 22 Sep 2024 12:30:51 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 432cb5cd0ea64e499b253e1ccba6d93f167a5e0a
+X-Git-Newrev: c8027a021ba8951fa9c85f1c93cea46f6d97cfb4
+X-Patchwork-Hint: ignore
+Message-Id: <20240922103442.2781E805F4@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-watchdog: bump to version
+ 5.0.2
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,84 +59,72 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Mauro Condarelli <mc5686@mclink.it>, Asaf Kahlon <asafka7@gmail.com>,
- buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-James, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=c8027a021ba8951fa9c85f1c93cea46f6d97cfb4
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2024-09-21 16:13 -0600, James Hilliard spake thusly:
-> License hash changed due to formatting changes:
-> https://github.com/netaddr/netaddr/commit/2a407439ea0c759e7c44d27750e2aa3834915e25
-> 
-> License renamed afterwards:
-> https://github.com/netaddr/netaddr/commit/e3de33de5335ce8c66cf095f9543961f35f73653
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Drop all runtime dependendencies which are no longer required.
 
-Applied to master, alonmg with a bunch of other such bumps, thanks.
+License hash changed due to header update:
+https://github.com/gorakhargosh/watchdog/commit/80576b4124dc0892a393365754ffe4e1521e3427
 
-Regards,
-Yann E. MORIN.
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/python-watchdog/Config.in            | 4 ----
+ package/python-watchdog/python-watchdog.hash | 6 +++---
+ package/python-watchdog/python-watchdog.mk   | 4 ++--
+ 3 files changed, 5 insertions(+), 9 deletions(-)
 
-> ---
-> Changes v1 -> v2:
->   - add license comments
-> ---
->  package/python-netaddr/python-netaddr.hash | 6 +++---
->  package/python-netaddr/python-netaddr.mk   | 6 +++---
->  2 files changed, 6 insertions(+), 6 deletions(-)
-> 
-> diff --git a/package/python-netaddr/python-netaddr.hash b/package/python-netaddr/python-netaddr.hash
-> index f969aeecfc..1ad35966bb 100644
-> --- a/package/python-netaddr/python-netaddr.hash
-> +++ b/package/python-netaddr/python-netaddr.hash
-> @@ -1,5 +1,5 @@
->  # md5, sha256 from https://pypi.org/pypi/netaddr/json
-> -md5  c0d7b080da18c851ea436389813d7652  netaddr-0.10.1.tar.gz
-> -sha256  f4da4222ca8c3f43c8e18a8263e5426c750a3a837fdfeccf74c68d0408eaa3bf  netaddr-0.10.1.tar.gz
-> +md5  b0307617f8f3aa73bbcfadac52d91df7  netaddr-1.3.0.tar.gz
-> +sha256  5c3c3d9895b551b763779ba7db7a03487dc1f8e3b385af819af341ae9ef6e48a  netaddr-1.3.0.tar.gz
->  # Locally computed sha256 checksums
-> -sha256  0e53de62547787462f41eefb5cee31a14f7ea767ba0362c6f9304f1742486d47  LICENSE
-> +sha256  36dcdc429f76107d1697396ca0d8c43b343808c98beacb3405f472a76b65bffa  LICENSE.rst
-> diff --git a/package/python-netaddr/python-netaddr.mk b/package/python-netaddr/python-netaddr.mk
-> index 79e55a739f..7c26b16bb4 100644
-> --- a/package/python-netaddr/python-netaddr.mk
-> +++ b/package/python-netaddr/python-netaddr.mk
-> @@ -4,11 +4,11 @@
->  #
->  ################################################################################
->  
-> -PYTHON_NETADDR_VERSION = 0.10.1
-> +PYTHON_NETADDR_VERSION = 1.3.0
->  PYTHON_NETADDR_SOURCE = netaddr-$(PYTHON_NETADDR_VERSION).tar.gz
-> -PYTHON_NETADDR_SITE = https://files.pythonhosted.org/packages/af/96/f4878091248450bbdebfbd01bf1d95821bd47eb38e756815a0431baa6b07
-> +PYTHON_NETADDR_SITE = https://files.pythonhosted.org/packages/54/90/188b2a69654f27b221fba92fda7217778208532c962509e959a9cee5229d
->  PYTHON_NETADDR_LICENSE = BSD-3-Clause
-> -PYTHON_NETADDR_LICENSE_FILES = LICENSE
-> +PYTHON_NETADDR_LICENSE_FILES = LICENSE.rst
->  PYTHON_NETADDR_SETUP_TYPE = setuptools
->  
->  $(eval $(python-package))
-> -- 
-> 2.34.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/python-watchdog/Config.in b/package/python-watchdog/Config.in
+index 18f569ee44..06518e0fde 100644
+--- a/package/python-watchdog/Config.in
++++ b/package/python-watchdog/Config.in
+@@ -1,9 +1,5 @@
+ config BR2_PACKAGE_PYTHON_WATCHDOG
+ 	bool "python-watchdog"
+-	select BR2_PACKAGE_PYTHON_ARGH # runtime
+-	select BR2_PACKAGE_PYTHON_PATHTOOLS # runtime
+-	select BR2_PACKAGE_PYTHON_PYYAML # runtime
+-	select BR2_PACKAGE_PYTHON_SETUPTOOLS # runtime
+ 	help
+ 	  Python API and shell utilities to monitor file system events.
+ 
+diff --git a/package/python-watchdog/python-watchdog.hash b/package/python-watchdog/python-watchdog.hash
+index 0653787110..0d6047e21b 100644
+--- a/package/python-watchdog/python-watchdog.hash
++++ b/package/python-watchdog/python-watchdog.hash
+@@ -1,6 +1,6 @@
+ # md5, sha256 from https://pypi.org/pypi/watchdog/json
+-md5  04cda210c7ffd04582d2466328ee7368  watchdog-2.2.1.tar.gz
+-sha256  cdcc23c9528601a8a293eb4369cbd14f6b4f34f07ae8769421252e9c22718b6f  watchdog-2.2.1.tar.gz
++md5  7e4eff2cd9a3e62f0dccd55801d5b0c0  watchdog-5.0.2.tar.gz
++sha256  dcebf7e475001d2cdeb020be630dc5b687e9acdd60d16fea6bb4508e7b94cf76  watchdog-5.0.2.tar.gz
+ # Locally computed sha256 checksums
+-sha256  02c8760f988a76e92a9d6cb525456a86f7b0fd1953870dd491de5955cb974d41  COPYING
++sha256  39f081828db6f94c70123fa4fb30c1bce3e215a8fdece53a49991fe076a69c08  COPYING
+ sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  LICENSE
+diff --git a/package/python-watchdog/python-watchdog.mk b/package/python-watchdog/python-watchdog.mk
+index 9c058e38ad..2a2b80b04b 100644
+--- a/package/python-watchdog/python-watchdog.mk
++++ b/package/python-watchdog/python-watchdog.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_WATCHDOG_VERSION = 2.2.1
++PYTHON_WATCHDOG_VERSION = 5.0.2
+ PYTHON_WATCHDOG_SOURCE = watchdog-$(PYTHON_WATCHDOG_VERSION).tar.gz
+-PYTHON_WATCHDOG_SITE = https://files.pythonhosted.org/packages/11/6f/0396d373e039b89c60e23a1a9025edc6dd203121fe0af7d1427e85d5ec98
++PYTHON_WATCHDOG_SITE = https://files.pythonhosted.org/packages/cd/5e/95dcd86d8339fcf76385f7fad5e49cbfd989b6c6199127121c9587febc65
+ PYTHON_WATCHDOG_SETUP_TYPE = setuptools
+ PYTHON_WATCHDOG_LICENSE = Apache-2.0
+ PYTHON_WATCHDOG_LICENSE_FILES = LICENSE COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
