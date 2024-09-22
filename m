@@ -4,164 +4,88 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D14E5CF9C6C
-	for <buildroot@archiver.kernel.org>; Sun, 22 Sep 2024 14:27:36 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2D2D8CF9C6C
+	for <buildroot@archiver.kernel.org>; Sun, 22 Sep 2024 14:30:14 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5CD3281193;
-	Sun, 22 Sep 2024 14:27:36 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C581D81398;
+	Sun, 22 Sep 2024 14:30:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6oAwwSATcp1u; Sun, 22 Sep 2024 14:27:34 +0000 (UTC)
+ id D73NS3pOumwR; Sun, 22 Sep 2024 14:30:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E9D0D81090
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 152D081091
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E9D0D81090;
-	Sun, 22 Sep 2024 14:27:33 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 20D561BF3F6
- for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 14:27:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 152D081091;
+	Sun, 22 Sep 2024 14:30:12 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id E92391BF8A8
+ for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 14:30:10 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 1044581090
- for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 14:27:32 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id E35C5405E7
+ for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 14:30:10 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id V0sEhFJso5ui for <buildroot@lists.busybox.net>;
- Sun, 22 Sep 2024 14:27:31 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id AtbQs3KVnhz1 for <buildroot@lists.busybox.net>;
+ Sun, 22 Sep 2024 14:30:09 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a01:111:f403:200a::611;
- helo=nam12-mw2-obe.outbound.protection.outlook.com;
- envelope-from=neal.frager@amd.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 140F98107C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 140F98107C
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com
- (mail-mw2nam12on20611.outbound.protection.outlook.com
- [IPv6:2a01:111:f403:200a::611])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 140F98107C
- for <buildroot@buildroot.org>; Sun, 22 Sep 2024 14:27:30 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=TZWy7DtEzhHp6ZACuA7U5urgmQ1xU2wfXCTmvgCRQFbX7wYnPv5Hsx1YMQO5dRFzvJlgHIBDf6HxMdO/Kr5KE0CRXaAs6Sayty3jd8ml8Rva6QX9U8bRYVepeQt3QwYRITm9lucVv08UNoc3/ZO7b7EhuytVxNhxsSVfMLNMvrZAeWtdA9rLfDBUP+X7mlVGen2b1RzxDBanSx3lwbTjyFAEvK2hXI8wJfOPQWHGPg3GBlaC0tMSEWilPGx2MlHrBJOCbeEdFqr6jmu71OXbaqhaWJY/bd5qNGFhLV037elYDjYgj3CXgF8auZviQd3Xb3qyUSF84cHmV27VFDJRSA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=gOKzRHgY4LCSAI3p3oPJm/riH2BEhtfQZCElHIKRD2c=;
- b=dKE00qb8LJRqVKIwwdwqSAYjNiJoGRYrXsay+jvZRaLgv+218ZSlO6RXkKJvBNqYBG2t/8vN9y1vc/wtaASa1Z/SbzB1x0qz3wUMwuNaoKqknoHv4KNkrhRXo9CZfw1OlCTgxqFNBONRC+PRPYrecCdPbJUrOVPXQoUj7z6tO05sFMt43YDRTPRzpz5zICqJ9mBvz6yvGa+7gP8lIc6xZgr50jY8R66u6TBVoKbBOlwmKBjmKBUpprjwin14X1MEO3Jbue3XyaTMbSJbtGfuPSbpdVzpmBYzlaR2eXrmc5qJQDewLTPiZb9zBSVAx6u3tOg7vGBYHS3HCKiPc4rHSw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-Received: from CH2PR12MB5004.namprd12.prod.outlook.com (2603:10b6:610:62::16)
- by SJ1PR12MB6052.namprd12.prod.outlook.com (2603:10b6:a03:489::15)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7982.25; Sun, 22 Sep
- 2024 14:27:26 +0000
-Received: from CH2PR12MB5004.namprd12.prod.outlook.com
- ([fe80::e6c1:191b:641d:4d1b]) by CH2PR12MB5004.namprd12.prod.outlook.com
- ([fe80::e6c1:191b:641d:4d1b%5]) with mapi id 15.20.7982.022; Sun, 22 Sep 2024
- 14:27:26 +0000
-To: "Frager, Neal" <neal.frager@amd.com>, "buildroot@buildroot.org"
- <buildroot@buildroot.org>
-Thread-Topic: [PATCH v1 1/1] board/xilinx/patches/xilinx-prebuilt: remove
- duplicate hash file
-Thread-Index: AQHbDPkFAwjGDT6nWE2ldwBV6eekOrJj3Ljg
-Date: Sun, 22 Sep 2024 14:27:26 +0000
-Message-ID: <CH2PR12MB50042E5AD8309FC7F051DB6FF06E2@CH2PR12MB5004.namprd12.prod.outlook.com>
-References: <20240922140907.918582-1-neal.frager@amd.com>
-In-Reply-To: <20240922140907.918582-1-neal.frager@amd.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: CH2PR12MB5004:EE_|SJ1PR12MB6052:EE_
-x-ms-office365-filtering-correlation-id: 4f09f77b-61b3-41d6-103b-08dcdb12ae72
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
- ARA:13230040|366016|376014|1800799024|38070700018|41080700001; 
-x-microsoft-antispam-message-info: =?us-ascii?Q?/h4OR9wLaTqeRrZVunzK2wVaK6/1cRXOnch6mDnvbE29vNsyXyGpR6GbbaLO?=
- =?us-ascii?Q?4ne4qwsOoflfltHjh35AWfkNF/oW4opINiGL+1bHB54QWqJ9Lwaie9rWDja2?=
- =?us-ascii?Q?Z056VFTXWQkzUz+KmFY8k3ZWQU0ZfoNtfdyLKSkk79053HVnengpZ+4axEtK?=
- =?us-ascii?Q?a8fnkmVki39kC8TEufoIPIK1FyxL00bvSwGMg2UFkM3OAgQ3Q9P5Cn9UhkcS?=
- =?us-ascii?Q?Dufre4YhlfNjYbiqKl4rGYGrs9h5qJ6rNU/lswuNdi5YqmTInQr1J6ROU2gP?=
- =?us-ascii?Q?L9+expn/F80FgYzDObvkQk6Yi0htxw5zsxLfhlz6iTPNhxZ3DNqloKvVzNnV?=
- =?us-ascii?Q?YTuydBEZUZRmPmO1FfZVBt5DFu34CF0M4Mc6+pKfoUDOpOBHusRPvISKAWqw?=
- =?us-ascii?Q?Crt+VcOorzfnBSUIesJ5v1jGHe9nHjacktNuwvoeN1PZSkjVBSlcs4zUQFb4?=
- =?us-ascii?Q?Ovgie4OnP/LT9wqwqEYuxAlXpaiL9hTgF/kwZ6DoEgQtlNYWMjV8sp7qhMnS?=
- =?us-ascii?Q?KGWa8/UzeCYAz8M0PHW7gADVK4OEOaC3BMCoinH6JFCzbMRi0mKpOETxw9ey?=
- =?us-ascii?Q?i18dkTkksE2YixsS6qbIutJZoYE5RgPQLjO6TCZHeHf8KpalZugkQdFF/RIp?=
- =?us-ascii?Q?YXy4vADN/Kt70SG8LAUO3GL1galSQ+PkPpwAhFnmh18GS5wds7j+4j3NcsGG?=
- =?us-ascii?Q?aAP8CF4zBYtBpi2SdlFtl3xWYExM59SCokfFZhpOdIhH770gsGYvAwl/w8bc?=
- =?us-ascii?Q?W5QLNgvIaox21MSMsdDtL2HLUleuF/440+U8favySW1Axi723Nhk43jDpVPA?=
- =?us-ascii?Q?49Rzv1A1i1xZeomjHjCZRmPB7Sr4FsJjXU+p/2Y7MPaG5wyEezweKdJFHZ2o?=
- =?us-ascii?Q?VhswQ7jEuyfvzlKNoX6E/+NQWVemKW7ohpQnUTgPYGV3kSvklUJ4fEVa2JFn?=
- =?us-ascii?Q?jNe9qZc/hsnNz1AARV5+4MX3R8kaXHhI8QMnKJ1NRlo4vTJm+IE+F7kr4y9m?=
- =?us-ascii?Q?LCm381sdfZdj5Wory6gYc66uLCZlisYlfuh2Chofz8z4UK2gHz5KQ+dd3Luc?=
- =?us-ascii?Q?P1ri9ihoDkb1/rIpKwgCZn7pTRgxgTzCm0GUNu1qFulxH2r3VaaFWsDNPjC/?=
- =?us-ascii?Q?qF8+lkiLWnjmwV8p6UKcXVx2InvVLPFJOymBL5s0pswOye2RFREQ0wDy4Xji?=
- =?us-ascii?Q?1qc6VzFQJ8wc3kS3jRlQJ4vOsb5xN2RDN7tiV/Xukw32Z7NdcOBCyXE9gZYg?=
- =?us-ascii?Q?JBghCI2Yq5VCxdukhftwbLhZDCapQPqRSJGKrp1+wUeNjzTifTG0Nu9wwfSV?=
- =?us-ascii?Q?mXJO0BEV0Oix9e+/8Np5KZLLjfoLoWZRrzTphafacmdBEkeGIBv1S6XDfzuY?=
- =?us-ascii?Q?DMconb0iTar/b2JG1/dRTaIgc/5t?=
-x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:CH2PR12MB5004.namprd12.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(13230040)(366016)(376014)(1800799024)(38070700018)(41080700001); DIR:OUT;
- SFP:1101; 
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?/oXhYzpW8iYc8QhEOG+jtDFtzcPwfQECZfI0wix+oET0iPmwtpGcNjgaqD8E?=
- =?us-ascii?Q?uzGchbK7i9a48y4Xp58lcMekWJwYEleKe5r5o+t3/q8XZQLu7yvVzE4ke2tW?=
- =?us-ascii?Q?XTwD2HkKupU/kqNOiNyc1mg4VC4+st02ngZ2o1GgxMEMNPjJuiQhsGo5icWB?=
- =?us-ascii?Q?s+hPktEFDCzC+L2Ju3C14BLirYYRvkhT7jfmBGqbNwEMj9cSEL0s8e7op0LA?=
- =?us-ascii?Q?wd5apYZy81QNEqLwl617H1dTTVGldbuhehWrQKvZa2UY37j6QW1ljXu24qGw?=
- =?us-ascii?Q?MriMsxw02paS2UwXWOWWAi85jlXbYaF0YyWnyowyr8RQeStuk3hpymiUsfDn?=
- =?us-ascii?Q?3xTlVKpZf7X5SkljouxqDtCFYaEfEbU/oUdDSGhgwRfHvQTViBobIYRR1y0w?=
- =?us-ascii?Q?VnOAeyZIde4PBSiiq3rlKwGl0uvV8EnJ9liCK5IeFcUd8UV+Wxn6n6rZ1E3p?=
- =?us-ascii?Q?4KD6m9ioW0hTvNdDb8U28UuAsjkJgbywdPR8PRO8Q0U8rloagvCQRORK1bpD?=
- =?us-ascii?Q?tQNOgLuww44O/9GArP4J7iSD2fx5jeVCW7dtgpnfLjzJgi2bqURY7r7+Eck4?=
- =?us-ascii?Q?h6fL6wQT36qZGQRNxd0ytZd2RaNDnI1PApQaRfijiJ3UcRke4nApgdlyxpI0?=
- =?us-ascii?Q?QCuJejAZpQHXwocPHHyVEC87IIztLc3inLsG7kOVo9TyRuI4rFTyNzPdIgJK?=
- =?us-ascii?Q?JttT2LS9GWxa4Lb40A6w+BjMXUtGGquMvIh2GiPIB7O5AFGNHA67twJGpCLd?=
- =?us-ascii?Q?zACKgwQ+MDxD5+tykPqQ5YK1wEf1ZisbODMQg0+4h0o65EXQN3gCRHKoY42C?=
- =?us-ascii?Q?HTlcVm62x6oAgWJSmoC0PURhrv9JPfMOMr+6kk/jf1QnQoIUykrYPuj8PuxQ?=
- =?us-ascii?Q?72IAsnx5jL0de64dENpUOzxYeOShZ0xo4nAlmQKqAnyc5P4hK9PQReeEygP9?=
- =?us-ascii?Q?TUdowSxb+5+xPpX0nmFA34PGWfr7Tl2G7gLWuX716TLWRbz7rMqANEgDghI+?=
- =?us-ascii?Q?wsd4dqpl7uPAylJ7/GGsZaLWDWmBvsf3hNLs9eZ8jpd+ZMngOQAJ1U5vastA?=
- =?us-ascii?Q?dMhWIOix4kP7bIS/Sv/cKhhyLxRGPW0/aYr2dNjiA1BoG80iURjjFa/r5NXW?=
- =?us-ascii?Q?RyWj1h7/42WxFcdQk/KUpzynU5rxChPOE34okOngkJEAQCwQnXS3+xYnr8Pw?=
- =?us-ascii?Q?GGgm4rNWvYf3cxJ2kZc0ZsNu01y9P7VFxNdxnJs9NxDfd5UrKBnekWuQhJHC?=
- =?us-ascii?Q?hDjKrC6vguEstB8s+paHNql9/aE6fh+xJoS3UuwjA83DPJdTKP5pWYB7pDcA?=
- =?us-ascii?Q?TUTQYEptNrnd+Wn1uHiLFROWzCsIHwVDIcIzF/kn11oE4qJi80+nlPLbqeeU?=
- =?us-ascii?Q?LYe3fhSY884Fsh/6kjOz4G9M/K+cg7lP5RnxCDysQ222Of4WREeoB1ZbQq0J?=
- =?us-ascii?Q?r/axQcRlK+6lYNFWlEZPXtOEyUF0HPiqe63bcDlot4hBYwm5F2kZqGJGMx3v?=
- =?us-ascii?Q?WYKC4jTBluiSgx1p9pYXtXU4AhxMnTvuE0Av/m/L/bpKmhpvoQkSGYw0Po97?=
- =?us-ascii?Q?YIhp56nX5P9qd/HjCuo=3D?=
+ client-ip=2607:f8b0:4864:20::b35; helo=mail-yb1-xb35.google.com;
+ envelope-from=baxiche@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org A51574049F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A51574049F
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com
+ [IPv6:2607:f8b0:4864:20::b35])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A51574049F
+ for <buildroot@buildroot.org>; Sun, 22 Sep 2024 14:30:09 +0000 (UTC)
+Received: by mail-yb1-xb35.google.com with SMTP id
+ 3f1490d57ef6-e1d06c728b8so3255445276.0
+ for <buildroot@buildroot.org>; Sun, 22 Sep 2024 07:30:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1727015408; x=1727620208;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=n3VMx3Ll7I5cWMkpTVD30L2GkRuYPH7PWdXH6bgDdYU=;
+ b=RevMik90mJ+EmvUpuNTNdeI0OFWiXk4NgHp4jSQhsFZ6CGuw5M6cOziutrag7XcbiX
+ +/jL3eFn6g5SHdj2P0gBZn054aXAKLV52wyEAt5yXfsCJq6U44VWv6ttLsEpD9ssMCPK
+ SDZwxKIiQmwGFu+IUKBcp/O0v9hEJA1LpteEMVK99pIPFAu4hD9MytNPlp46s6Vfp9e/
+ yiIHQsBWYI0XasKfERKWE1KYtubLJ1EvgF8qxvxVU0/qM540nl8/9lCcqgtKGq3tRK3n
+ LNMLS0QgEx7Yav1n675TfiqluxbC1AHh0KEIscA/CjUWRzSlVSmZ7OZ5MtFIFMiYWbKL
+ kOrA==
+X-Gm-Message-State: AOJu0Yyy7Kxaug2aTua0WI+FmNnj4f0D91TH+6PPGpfEhsZaUnCxN6cy
+ rc4dHlDZmg9IAgUoAm58x2xqF2g86dIBUeVYLxOzgq/VwWKkMXnt38E2CpKs99ecoLzxqLk8/Y5
+ GD6fiSQ4O7sy1JNE6Izvg6iJUbkJuAw==
+X-Google-Smtp-Source: AGHT+IF2zE1NCV3N7KXPvon8C1kZWpct0AhPOG03DK0TZPr2hN6HPy76eMMZP812LfIB7a7j3wjfZ79tD1j5duvAJEs=
+X-Received: by 2002:a05:6902:f89:b0:e1a:9336:8b54 with SMTP id
+ 3f1490d57ef6-e2250c47987mr7918273276.32.1727015408389; Sun, 22 Sep 2024
+ 07:30:08 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CH2PR12MB5004.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4f09f77b-61b3-41d6-103b-08dcdb12ae72
-X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Sep 2024 14:27:26.2096 (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: vay95SWkfIq8OpHLrmfrGr4ooBsx/jhnKurNjwSLiwLpMiAyJ/vposq/FGdKlxdb
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR12MB6052
+References: <20240920160500.18551-1-baxiche@gmail.com>
+ <CA+R_derRe3Pf0BdL3Y8ykcWjAZewrFJ2KjihXQ3C1axbAwvi2A@mail.gmail.com>
+In-Reply-To: <CA+R_derRe3Pf0BdL3Y8ykcWjAZewrFJ2KjihXQ3C1axbAwvi2A@mail.gmail.com>
+From: baxiche su <baxiche@gmail.com>
+Date: Sun, 22 Sep 2024 22:29:32 +0800
+Message-ID: <CAE3sgKjDQaG1R4L-FPQ3e0FVbcxNBir_DZQfeOu-FcxUPKJWMQ@mail.gmail.com>
+To: Roy Kollen Svendsen <roykollensvendsen@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amd.com; s=selector1; 
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=gOKzRHgY4LCSAI3p3oPJm/riH2BEhtfQZCElHIKRD2c=;
- b=uJhx5Pu4Cwitu37uKFUXNqp9uyzDze0v1KpYrvRlLtPIYM9CLOHRdySi1CFmDdxrtPT5cvRWN1MQEsse+FI7ZSGslGud7cg2VMu/FKW1K0bepOYuEKtOEEQVjtNCDB3hhgke6pe3UdHUdBD2+YIGHK2W4FwJmKED2xmneV4wtbo=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=amd.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amd.com header.i=@amd.com header.a=rsa-sha256
- header.s=selector1 header.b=uJhx5Pu4
-X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Subject: Re: [Buildroot] [PATCH v1 1/1]
- board/xilinx/patches/xilinx-prebuilt: remove duplicate hash file
+ d=gmail.com; s=20230601; t=1727015408; x=1727620208; darn=buildroot.org;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=n3VMx3Ll7I5cWMkpTVD30L2GkRuYPH7PWdXH6bgDdYU=;
+ b=FGPAJGEevSZtQ0Fb2GgkidcfTi8977WSC5nc3nLj0ZZ+k/w/8O/x0AiY+wEuoKRCoG
+ w7fm8tuiubGh49GW4aU92OSbUopcCRqXFywSVKNrlVc8Gk0FFWY9annXBqVTINA8P9Uo
+ aK/hoyxubZSX+ct4EFa9lblbx2zNlHTlwAeMVGO7KwmKMT72+3aVHP6+8a+s2IF/Vd6d
+ bof2Y1hZZkOhzWJvixEQKku5MH2hRUEsxWESpr/qifoJ47prbJqsbxCqAkCgHYtwkZ6B
+ Zf/0agMNa6xZ2xYnaHLi/tVka7D4J++tPWGzEHeJA0IDyoWLfJG6PXVgPVeDeG38qqR5
+ /+dA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=FGPAJGEe
+Subject: Re: [Buildroot] [PATCH v3 1/1] package/qt6: add qt6 multimedia
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -173,49 +97,75 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: "Frager, Neal via buildroot" <buildroot@buildroot.org>
-Reply-To: "Frager, Neal" <neal.frager@amd.com>
-Cc: "Erkiaga Elorza, Ibai" <ibai.erkiaga-elorza@amd.com>,
- "luca.ceresoli@bootlin.com" <luca.ceresoli@bootlin.com>,
- "brandon.maier@collins.com" <brandon.maier@collins.com>,
- "thomas.petazzoni@bootlin.com" <thomas.petazzoni@bootlin.com>, "Simek,
- Michal" <michal.simek@amd.com>,
- "yann.morin.1998@free.fr" <yann.morin.1998@free.fr>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Jesse Van Gavere <jesseevg@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Content-Type: multipart/mixed; boundary="===============2895526500516960690=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi all,
+--===============2895526500516960690==
+Content-Type: multipart/alternative; boundary="000000000000f0562c0622b61bfa"
 
-Please disregards this patch.  I just re-read Yann's commit msg:
-https://github.com/buildroot/buildroot/commit/85e41f5f21378a10adc3468c758555009e5ccda2
+--000000000000f0562c0622b61bfa
+Content-Type: text/plain; charset="UTF-8"
 
-> There is already a xilinx-prebuilt.hash in the boot/xilinx-prebuilt directory,
-> so having a hash file in the board/xilinx/patches/xilinx-prebuilt directory is
-> redundant.
+Hi Roy,
 
-> Signed-off-by: Neal Frager <neal.frager@amd.com>
-> ---
-> board/xilinx/patches/xilinx-prebuilt/xilinx-prebuilt.hash | 2 --
-> 1 file changed, 2 deletions(-)
-> delete mode 100644 board/xilinx/patches/xilinx-prebuilt/xilinx-prebuilt.hash
+I'm sorry for the formatting issue with DEVELOPERS and the Config.in file.
+I will fix them in the next commit.
 
-> diff --git a/board/xilinx/patches/xilinx-prebuilt/xilinx-prebuilt.hash b/board/xilinx/patches/xilinx-prebuilt/xilinx-prebuilt.hash
-> deleted file mode 100644
-> index c955cd79f5..0000000000
-> --- a/board/xilinx/patches/xilinx-prebuilt/xilinx-prebuilt.hash
-> +++ /dev/null
-> @@ -1,2 +0,0 @@
-> -# Locally calculated
-> -sha256  7abcba4e0e44e3a4adf9c1f971d918575226d7604dfd64a386baaa00c1c6c35f  xilinx-prebuilt-xilinx_v2024.1.tar.gz
-> -- 
-> 2.25.1
+Regarding the qt6multimedia.mk file:
 
-Best regards,
-Neal Frager
-AMD
+1. The reason I don't make FFmpeg/GStreamer a choice, is because
+qt6-multimedia can be built with these two packages, and the media backend
+can be chosen at runtime, or even built without these packages.
+
+2. The reason I don't make ALSA/PulseAudio a choice is that qt6-multimedia
+can be built without these packages.
+
+3. I personally prefer to set all qt6-multimedia FEATURE to OFF at the
+beginning of the .mk file and set it to ON if the option is chosen. I have
+seen other qt6 packages do this. If you prefer to gather all the code
+related to one option in one place, I will make that change in the next
+commit as well.
+Thanks for reviewing my work.
+
+Baxiche
+
+--000000000000f0562c0622b61bfa
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><p>Hi Roy,</p><p>I&#39;m sorry for the formatting issue wi=
+th DEVELOPERS and the Config.in file. I will fix them in the next commit. <=
+br><br>Regarding the <code><font face=3D"arial, sans-serif"><a href=3D"http=
+://qt6multimedia.mk">qt6multimedia.mk</a></font></code> file:</p><p>1. The =
+reason I don&#39;t make FFmpeg/GStreamer a choice, is because <code><font f=
+ace=3D"arial, sans-serif">qt6-multimedia</font></code> can be built with th=
+ese two packages, and the media backend can be chosen at runtime, or even b=
+uilt without these packages.</p><p>2. The reason I don&#39;t make ALSA/Puls=
+eAudio a choice is that <code><font face=3D"arial, sans-serif">qt6-multimed=
+ia</font></code> can be built without these packages.</p><p>3. I personally=
+ prefer to set all <code><font face=3D"arial, sans-serif">qt6-multimedia=C2=
+=A0</font><font face=3D"arial, sans-serif">FEATURE</font></code><font face=
+=3D"arial, sans-serif">=C2=A0to OFF at the beginning=C2=A0of the .mk file=
+=C2=A0and set it to ON if the option is chosen. I have seen other <code><fo=
+nt face=3D"arial, sans-serif">qt6</font></code> packages</font> do this. If=
+ you prefer to gather all the code related to one option in one place, I wi=
+ll make that change in the next commit as well.</p><div>Thanks for reviewin=
+g my work.</div><div><br></div><div>Baxiche</div></div>
+
+--000000000000f0562c0622b61bfa--
+
+--===============2895526500516960690==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============2895526500516960690==--
