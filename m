@@ -4,50 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 79F53CF9C6C
-	for <buildroot@archiver.kernel.org>; Sun, 22 Sep 2024 10:35:02 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8BCBECF9C64
+	for <buildroot@archiver.kernel.org>; Sun, 22 Sep 2024 10:35:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 49A8281489;
-	Sun, 22 Sep 2024 10:35:02 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5D1F0813B8;
+	Sun, 22 Sep 2024 10:35:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id V4j8dC9KQfOD; Sun, 22 Sep 2024 10:35:01 +0000 (UTC)
+ id m0EdO0lsO6Rd; Sun, 22 Sep 2024 10:35:05 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E49B881586
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CACD381468
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E49B881586;
-	Sun, 22 Sep 2024 10:35:00 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 773061BF47A
+	by smtp1.osuosl.org (Postfix) with ESMTP id CACD381468;
+	Sun, 22 Sep 2024 10:35:03 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 8C05A1BF870
  for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 10:34:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 81F076061F
- for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 10:34:40 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 8884E4063B
+ for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 10:34:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 902Vzi2uJ31C for <buildroot@lists.busybox.net>;
- Sun, 22 Sep 2024 10:34:39 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id N5wPWPoouThQ for <buildroot@lists.busybox.net>;
+ Sun, 22 Sep 2024 10:34:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 95ABA6062D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6A4714062F
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id 95ABA6062D
- for <buildroot@buildroot.org>; Sun, 22 Sep 2024 10:34:39 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6A4714062F
+ for <buildroot@buildroot.org>; Sun, 22 Sep 2024 10:34:40 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 842D281446; Sun, 22 Sep 2024 10:34:39 +0000 (UTC)
+ id 641F881446; Sun, 22 Sep 2024 10:34:39 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 22 Sep 2024 11:37:01 +0200
+Date: Sun, 22 Sep 2024 11:37:26 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a91a1b484d13db77e33e421b97d1d884cb761d9f
-X-Git-Newrev: f01897aa6ceca00831c9b2c14f3ae90faaefce68
+X-Git-Oldrev: 71a92525c43edc715269226473a808365835019a
+X-Git-Newrev: ce1c9bf64629a515ee02bdd047583d011c9f33fa
 X-Patchwork-Hint: ignore
-Message-Id: <20240922103439.842D281446@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/python-setuptools: bump to version
- 75.1.0
+Message-Id: <20240922103440.641F881446@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-simplelogging: bump to
+ version 0.12.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,102 +65,88 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=f01897aa6ceca00831c9b2c14f3ae90faaefce68
+commit: https://git.buildroot.net/buildroot/commit/?id=ce1c9bf64629a515ee02bdd047583d011c9f33fa
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Rebase add executable patch.
+Drop patch which is now upstream.
+
+License hash changed due to year update:
+https://github.com/vpoulailleau/simplelogging/commit/f1e551b962f55afd547cc842e416a95b20c860d1
 
 Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/python-setuptools/0001-add-executable.patch | 16 ++++++++--------
- package/python-setuptools/python-setuptools.hash    |  4 ++--
- package/python-setuptools/python-setuptools.mk      |  4 ++--
- 3 files changed, 12 insertions(+), 12 deletions(-)
+ .../0001-Switch-build-backend-to-poetry-core.patch | 31 ----------------------
+ .../python-simplelogging/python-simplelogging.hash |  6 ++---
+ .../python-simplelogging/python-simplelogging.mk   |  4 +--
+ 3 files changed, 5 insertions(+), 36 deletions(-)
 
-diff --git a/package/python-setuptools/0001-add-executable.patch b/package/python-setuptools/0001-add-executable.patch
-index da1bc68b39..cd3cb66a5b 100644
---- a/package/python-setuptools/0001-add-executable.patch
-+++ b/package/python-setuptools/0001-add-executable.patch
-@@ -1,4 +1,4 @@
--From a35dffe950d7bb0f7988d78ec4a963c5ce67e3c8 Mon Sep 17 00:00:00 2001
-+From aa232855cf717835a5d16954f1fd8ead315a5fa6 Mon Sep 17 00:00:00 2001
- From: =?UTF-8?q?J=C3=B6rg=20Krause?= <joerg.krause@embedded.rocks>
- Date: Mon, 7 Dec 2015 01:14:33 +0100
- Subject: [PATCH] add executable
-@@ -22,18 +22,18 @@ Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-  2 files changed, 11 insertions(+)
- 
- diff --git a/setuptools/command/install.py b/setuptools/command/install.py
--index c49fcda93..851950522 100644
-+index e2ec1abdd..e78ace3d4 100644
- --- a/setuptools/command/install.py
- +++ b/setuptools/command/install.py
--@@ -18,6 +18,7 @@ class install(orig.install):
--     """Use easy_install to install the package, w/dependencies"""
-+@@ -26,6 +26,7 @@ class install(orig.install):
-+     distribution: Distribution  # override distutils.dist.Distribution with setuptools.dist.Distribution
-  
-      user_options = orig.install.user_options + [
- +        ('executable=', 'e', "specify final destination interpreter path"),
-          ('old-and-unmanageable', None, "Try not to use this!"),
-          (
-              'single-version-externally-managed',
--@@ -50,6 +51,7 @@ class install(orig.install):
-+@@ -60,6 +61,7 @@ class install(orig.install):
-          )
-  
-          super().initialize_options()
-@@ -42,10 +42,10 @@ index c49fcda93..851950522 100644
-          self.single_version_externally_managed = None
-  
- diff --git a/setuptools/command/install_scripts.py b/setuptools/command/install_scripts.py
--index f44281b49..9e91cad87 100644
-+index 7b90611d1..216cadf80 100644
- --- a/setuptools/command/install_scripts.py
- +++ b/setuptools/command/install_scripts.py
--@@ -14,6 +14,13 @@ class install_scripts(orig.install_scripts):
-+@@ -18,6 +18,13 @@ class install_scripts(orig.install_scripts):
-      def initialize_options(self):
-          orig.install_scripts.initialize_options(self)
-          self.no_ep = False
-@@ -59,7 +59,7 @@ index f44281b49..9e91cad87 100644
-  
-      def run(self) -> None:
-          self.run_command("egg_info")
--@@ -40,6 +47,8 @@ class install_scripts(orig.install_scripts):
-+@@ -45,6 +52,8 @@ class install_scripts(orig.install_scripts):
-          )
-          bs_cmd = self.get_finalized_command('build_scripts')
-          exec_param = getattr(bs_cmd, 'executable', None)
-diff --git a/package/python-setuptools/python-setuptools.hash b/package/python-setuptools/python-setuptools.hash
-index 29237427a0..6ca17b8c73 100644
---- a/package/python-setuptools/python-setuptools.hash
-+++ b/package/python-setuptools/python-setuptools.hash
+diff --git a/package/python-simplelogging/0001-Switch-build-backend-to-poetry-core.patch b/package/python-simplelogging/0001-Switch-build-backend-to-poetry-core.patch
+deleted file mode 100644
+index 2c345fe268..0000000000
+--- a/package/python-simplelogging/0001-Switch-build-backend-to-poetry-core.patch
++++ /dev/null
+@@ -1,31 +0,0 @@
+-From 76c1c545bad28f592405ca1e5bcf6081051c946a Mon Sep 17 00:00:00 2001
+-From: James Hilliard <james.hilliard1@gmail.com>
+-Date: Tue, 13 Feb 2024 13:37:00 -0700
+-Subject: [PATCH] Switch build-backend to poetry-core
+-
+-poetry-core is the lightweight counterpart of poetry that is intended
+-to be used as a build-backend. Unlike poetry, it does not require
+-installing all the dependencies of the package manager, making
+-the builds much faster. The generated artifacts are the same.
+-
+-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+-Upstream: https://github.com/vpoulailleau/simplelogging/pull/230
+----
+- pyproject.toml | 4 ++--
+- 1 file changed, 2 insertions(+), 2 deletions(-)
+-
+-diff --git a/pyproject.toml b/pyproject.toml
+-index a89ab64..79403cb 100644
+---- a/pyproject.toml
+-+++ b/pyproject.toml
+-@@ -55,5 +55,5 @@ commands =
+- """
+- 
+- [build-system]
+--requires = ["poetry>=0.12"]
+--build-backend = "poetry.masonry.api"
+-+requires = ["poetry-core>=1.0.0"]
+-+build-backend = "poetry.core.masonry.api"
+--- 
+-2.34.1
+-
+diff --git a/package/python-simplelogging/python-simplelogging.hash b/package/python-simplelogging/python-simplelogging.hash
+index 6d80fb93ec..f080a3b123 100644
+--- a/package/python-simplelogging/python-simplelogging.hash
++++ b/package/python-simplelogging/python-simplelogging.hash
 @@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/setuptools/json
--md5  f404be507829989fcff7a8b63d92f357  setuptools-71.0.3.tar.gz
--sha256  3d8531791a27056f4a38cd3e54084d8b1c4228ff9cf3f2d7dd075ec99f9fd70d  setuptools-71.0.3.tar.gz
-+md5  8e8aed1625afae37b59272ff981d6e1c  setuptools-75.1.0.tar.gz
-+sha256  d59a21b17a275fb872a9c3dae73963160ae079f1049ed956880cd7c09b120538  setuptools-75.1.0.tar.gz
+ # md5, sha256 from https://pypi.org/pypi/simplelogging/json
+-md5  97b5f2a5cd9cff1b60c727cd03b3ffe1  simplelogging-0.11.0.tar.gz
+-sha256  23a128b47d3e88213adc51fdd102aae15a398cf459d782eb19534945d23f0bc5  simplelogging-0.11.0.tar.gz
++md5  993862aca6fe6d0962effe07a335b554  simplelogging-0.12.0.tar.gz
++sha256  a9695b05090951c029733606f14e24a783c7a100bbe96f8f16a5f2c4c9b08102  simplelogging-0.12.0.tar.gz
  # Locally computed sha256 checksums
- sha256  86da0f01aeae46348a3c3d465195dc1ceccde79f79e87769a64b8da04b2a4741  LICENSE
-diff --git a/package/python-setuptools/python-setuptools.mk b/package/python-setuptools/python-setuptools.mk
-index cf7016ecff..72d1c96543 100644
---- a/package/python-setuptools/python-setuptools.mk
-+++ b/package/python-setuptools/python-setuptools.mk
+-sha256  bd2a0fe3b3bab7092ffa7f58d46bb05d98f12f107b3a6be947c098f7c2ad1d1a  LICENSE
++sha256  71cc6fb7236f1a0734c24b4e5dff18d3afc87a5fb68f25f2d368d8fe099a6cda  LICENSE
+diff --git a/package/python-simplelogging/python-simplelogging.mk b/package/python-simplelogging/python-simplelogging.mk
+index dbd9ce3ae3..d725cccdd8 100644
+--- a/package/python-simplelogging/python-simplelogging.mk
++++ b/package/python-simplelogging/python-simplelogging.mk
 @@ -4,9 +4,9 @@
  #
  ################################################################################
  
--PYTHON_SETUPTOOLS_VERSION = 71.0.3
-+PYTHON_SETUPTOOLS_VERSION = 75.1.0
- PYTHON_SETUPTOOLS_SOURCE = setuptools-$(PYTHON_SETUPTOOLS_VERSION).tar.gz
--PYTHON_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/d1/8e/1d0b941ce1151009c6d98a0a590a608f346d4d272ce95ca09ee2bbb592cd
-+PYTHON_SETUPTOOLS_SITE = https://files.pythonhosted.org/packages/27/b8/f21073fde99492b33ca357876430822e4800cdf522011f18041351dfa74b
- PYTHON_SETUPTOOLS_LICENSE = MIT
- PYTHON_SETUPTOOLS_LICENSE_FILES = LICENSE
- PYTHON_SETUPTOOLS_CPE_ID_VENDOR = python
+-PYTHON_SIMPLELOGGING_VERSION = 0.11.0
++PYTHON_SIMPLELOGGING_VERSION = 0.12.0
+ PYTHON_SIMPLELOGGING_SOURCE = simplelogging-$(PYTHON_SIMPLELOGGING_VERSION).tar.gz
+-PYTHON_SIMPLELOGGING_SITE = https://files.pythonhosted.org/packages/73/d6/4c06aa7f2c3b9fc09429a1196fd357357cc555de5e16c09b2d12e9db1ebb
++PYTHON_SIMPLELOGGING_SITE = https://files.pythonhosted.org/packages/30/71/d6b6513598e6a4300f6142a839d1b0e10a25a4707f1b586d9a6331be91bb
+ PYTHON_SIMPLELOGGING_SETUP_TYPE = pep517
+ PYTHON_SIMPLELOGGING_LICENSE = BSD-3-Clause
+ PYTHON_SIMPLELOGGING_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
