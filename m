@@ -4,71 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 87C23CF9C69
-	for <buildroot@archiver.kernel.org>; Sun, 22 Sep 2024 18:09:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A5146CF9C69
+	for <buildroot@archiver.kernel.org>; Sun, 22 Sep 2024 18:17:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id ADE3C4025D;
-	Sun, 22 Sep 2024 18:09:44 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 65F5940247;
+	Sun, 22 Sep 2024 18:17:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 61VBQWeRPnv1; Sun, 22 Sep 2024 18:09:43 +0000 (UTC)
+ id iKFCfZczTAZQ; Sun, 22 Sep 2024 18:17:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 390F0402A7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 25E6F4025D
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 390F0402A7;
-	Sun, 22 Sep 2024 18:09:43 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 34D161BF44A
- for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 18:09:42 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 25E6F4025D;
+	Sun, 22 Sep 2024 18:17:33 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 7764F1BF3E1
+ for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 18:17:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 2325240305
- for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 18:09:42 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 73D8E811AF
+ for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 18:17:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HGmpdC3KFWFw for <buildroot@lists.busybox.net>;
- Sun, 22 Sep 2024 18:09:41 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::14;
- helo=smtp5-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id pS0S6nZMFE3u for <buildroot@lists.busybox.net>;
+ Sun, 22 Sep 2024 18:17:30 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org CABFE402F0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CABFE402F0
-Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp4.osuosl.org (Postfix) with ESMTPS id CABFE402F0
- for <buildroot@buildroot.org>; Sun, 22 Sep 2024 18:09:40 +0000 (UTC)
-Received: from ymorin.is-a-geek.org (unknown
- [IPv6:2a01:cb19:8290:3800:5d8d:eab4:d280:c2c4])
- (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id 9C5145FFB1;
- Sun, 22 Sep 2024 20:09:36 +0200 (CEST)
-Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Sun, 22 Sep 2024 20:09:36 +0200
-Date: Sun, 22 Sep 2024 20:09:36 +0200
-From: "Yann E. MORIN" <yann.morin.1998@free.fr>
-To: Akhilesh Nema <nemaakhilesh@gmail.com>
-Message-ID: <ZvBdYDVGjyu7rVM6@landeda>
-References: <20240922173522.3283547-1-nemaakhilesh@gmail.com>
-MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <20240922173522.3283547-1-nemaakhilesh@gmail.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1727028578;
- bh=xNQC8DC1GVgjnJUS1quOyGv9J+lXGSV+m81i5haD+to=;
- h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=EPxB/gLurzKwTqNBy3Vy211u1MxOeMBk/9MeSK1n4CXWvfN+b0pRzw9p2iQekG44K
- DIYdx+0SxEqrMdbMR0PpolBdtWvVM16iKyD/yUJCz6Y3iKz5LEA67JX95uS2RTW5nL
- XUoXYnQ3Mp2s6/pVu4AT7VLCd6OZvbcEPKj0ibvY/lDfrQTZLOJTMo9SngVgfZdPA9
- gZGRBZyjPiqEWgd9imOUHIAf6+xy/yaT5wFmrjQoywIr34rDkvYa3ZMPXYIZBsMkQD
- e1/UZEBmW/d0iy+K4plj1wZsMM6R76WYHCSBv/aa1eZ1Qfd3aPlsrJwiye7tTjhAVJ
- UTxzokDKFN49Q==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=EPxB/gLu
-Subject: Re: [Buildroot] [PATCH 1/1] package/libcurl: bump version to 8.10.1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 93F3A811A7
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 93F3A811A7
+ for <buildroot@buildroot.org>; Sun, 22 Sep 2024 18:17:30 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 79EE084333; Sun, 22 Sep 2024 18:17:30 +0000 (UTC)
+From: Yann E. MORIN <yann.morin.1998@free.fr>
+To: buildroot@buildroot.org
+Date: Sun, 22 Sep 2024 20:14:07 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 5370103e64384d0111a6bb722a1b1591b12e4a5f
+X-Git-Newrev: d2fe9e861bb29ace50876b7ff07c6ddbfa9c647d
+X-Patchwork-Hint: ignore
+Message-Id: <20240922181730.79EE084333@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-argcomplete: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,70 +58,80 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: buildroot@buildroot.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Akhilesh, All,
+commit: https://git.buildroot.net/buildroot/commit/?id=d2fe9e861bb29ace50876b7ff07c6ddbfa9c647d
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-On 2024-09-22 10:35 -0700, Akhilesh Nema spake thusly:
-> Changelog - https://curl.se/ch/8.10.1.html
-> 
-> Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
+---
+ package/Config.in                                  |  1 +
+ package/python-argcomplete/Config.in               |  6 ++++++
+ package/python-argcomplete/python-argcomplete.hash |  5 +++++
+ package/python-argcomplete/python-argcomplete.mk   | 15 +++++++++++++++
+ 4 files changed, 27 insertions(+)
 
-Applied to master, with a rebase after Bernd's security bump to 8.10.0
-was applied, thanks.
-
-Regards,
-Yann E. MORIN.
-
-> ---
->  package/libcurl/libcurl.hash | 4 ++--
->  package/libcurl/libcurl.mk   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/package/libcurl/libcurl.hash b/package/libcurl/libcurl.hash
-> index 1d01935501..4817ec11d6 100644
-> --- a/package/libcurl/libcurl.hash
-> +++ b/package/libcurl/libcurl.hash
-> @@ -1,5 +1,5 @@
->  # Locally calculated after checking pgp signature
-> -# https://curl.se/download/curl-8.9.1.tar.xz.asc
-> +# https://curl.se/download/curl-8.10.1.tar.xz.asc
->  # signed with key 27EDEAF22F3ABCEB50DB9A125CC908FDB71E12C2
-> -sha256  f292f6cc051d5bbabf725ef85d432dfeacc8711dd717ea97612ae590643801e5  curl-8.9.1.tar.xz
-> +sha256  73a4b0e99596a09fa5924a4fb7e4b995a85fda0d18a2c02ab9cf134bebce04ee  curl-8.10.1.tar.xz
->  sha256  adb1fc06547fd136244179809f7b7c2d2ae6c4534f160aa513af9b6a12866a32  COPYING
-> diff --git a/package/libcurl/libcurl.mk b/package/libcurl/libcurl.mk
-> index 3661cbf5bd..b81e355195 100644
-> --- a/package/libcurl/libcurl.mk
-> +++ b/package/libcurl/libcurl.mk
-> @@ -4,7 +4,7 @@
->  #
->  ################################################################################
->  
-> -LIBCURL_VERSION = 8.9.1
-> +LIBCURL_VERSION = 8.10.1
->  LIBCURL_SOURCE = curl-$(LIBCURL_VERSION).tar.xz
->  LIBCURL_SITE = https://curl.se/download
->  LIBCURL_DEPENDENCIES = host-pkgconf \
-> -- 
-> 2.25.1
-> 
-> _______________________________________________
-> buildroot mailing list
-> buildroot@buildroot.org
-> https://lists.buildroot.org/mailman/listinfo/buildroot
-
--- 
-.-----------------.--------------------.------------------.--------------------.
-|  Yann E. MORIN  | Real-Time Embedded | /"\ ASCII RIBBON | Erics' conspiracy: |
-| +33 662 376 056 | Software  Designer | \ / CAMPAIGN     |  ___               |
-| +33 561 099 427 `------------.-------:  X  AGAINST      |  \e/  There is no  |
-| http://ymorin.is-a-geek.org/ | _/*\_ | / \ HTML MAIL    |   v   conspiracy.  |
-'------------------------------^-------^------------------^--------------------'
+diff --git a/package/Config.in b/package/Config.in
+index fab4c1a657..e1ceb81dc0 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -998,6 +998,7 @@ menu "External python modules"
+ 	source "package/python-anyio/Config.in"
+ 	source "package/python-apispec/Config.in"
+ 	source "package/python-appdirs/Config.in"
++	source "package/python-argcomplete/Config.in"
+ 	source "package/python-argh/Config.in"
+ 	source "package/python-argon2-cffi/Config.in"
+ 	source "package/python-argon2-cffi-bindings/Config.in"
+diff --git a/package/python-argcomplete/Config.in b/package/python-argcomplete/Config.in
+new file mode 100644
+index 0000000000..ba9db643a7
+--- /dev/null
++++ b/package/python-argcomplete/Config.in
+@@ -0,0 +1,6 @@
++config BR2_PACKAGE_PYTHON_ARGCOMPLETE
++	bool "python-argcomplete"
++	help
++	  Bash tab completion for argparse.
++
++	  https://github.com/kislyuk/argcomplete
+diff --git a/package/python-argcomplete/python-argcomplete.hash b/package/python-argcomplete/python-argcomplete.hash
+new file mode 100644
+index 0000000000..88bd7c9565
+--- /dev/null
++++ b/package/python-argcomplete/python-argcomplete.hash
+@@ -0,0 +1,5 @@
++# md5, sha256 from https://pypi.org/pypi/argcomplete/json
++md5  5e5bb2e193a5581cb06abae2de3dd3d8  argcomplete-3.5.0.tar.gz
++sha256  4349400469dccfb7950bb60334a680c58d88699bff6159df61251878dc6bf74b  argcomplete-3.5.0.tar.gz
++# Locally computed sha256 checksums
++sha256  0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594  LICENSE.rst
+diff --git a/package/python-argcomplete/python-argcomplete.mk b/package/python-argcomplete/python-argcomplete.mk
+new file mode 100644
+index 0000000000..1773f98914
+--- /dev/null
++++ b/package/python-argcomplete/python-argcomplete.mk
+@@ -0,0 +1,15 @@
++################################################################################
++#
++# python-argcomplete
++#
++################################################################################
++
++PYTHON_ARGCOMPLETE_VERSION = 3.5.0
++PYTHON_ARGCOMPLETE_SOURCE = argcomplete-$(PYTHON_ARGCOMPLETE_VERSION).tar.gz
++PYTHON_ARGCOMPLETE_SITE = https://files.pythonhosted.org/packages/75/33/a3d23a2e9ac78f9eaf1fce7490fee430d43ca7d42c65adabbb36a2b28ff6
++PYTHON_ARGCOMPLETE_SETUP_TYPE = setuptools
++PYTHON_ARGCOMPLETE_LICENSE = Apache-2.0
++PYTHON_ARGCOMPLETE_LICENSE_FILES = LICENSE.rst
++PYTHON_ARGCOMPLETE_DEPENDENCIES = host-python-setuptools-scm
++
++$(eval $(python-package))
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
