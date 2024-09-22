@@ -4,90 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id AD0FFCF9C64
-	for <buildroot@archiver.kernel.org>; Sun, 22 Sep 2024 18:43:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8FEB2CF9C64
+	for <buildroot@archiver.kernel.org>; Sun, 22 Sep 2024 19:37:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 47C436061D;
-	Sun, 22 Sep 2024 18:43:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3CB3C60657;
+	Sun, 22 Sep 2024 19:37:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id v-NVlfTOEIIB; Sun, 22 Sep 2024 18:43:33 +0000 (UTC)
+ id VaHoaFr7Tkuk; Sun, 22 Sep 2024 19:37:58 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 36E196061F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3DB1060682
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 36E196061F;
-	Sun, 22 Sep 2024 18:43:33 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id A69B91BF3E1
- for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 18:43:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 3DB1060682;
+	Sun, 22 Sep 2024 19:37:58 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id C7E361BF3D4
+ for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 19:37:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 9566F40251
- for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 18:43:31 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id B415660682
+ for <buildroot@lists.busybox.net>; Sun, 22 Sep 2024 19:37:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XG_rHlVrtfrT for <buildroot@lists.busybox.net>;
- Sun, 22 Sep 2024 18:43:30 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::633; helo=mail-pl1-x633.google.com;
- envelope-from=nemaakhilesh@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 5FA2C400F8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5FA2C400F8
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com
- [IPv6:2607:f8b0:4864:20::633])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5FA2C400F8
- for <buildroot@buildroot.org>; Sun, 22 Sep 2024 18:43:30 +0000 (UTC)
-Received: by mail-pl1-x633.google.com with SMTP id
- d9443c01a7336-2068acc8a4fso32978005ad.1
- for <buildroot@buildroot.org>; Sun, 22 Sep 2024 11:43:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1727030609; x=1727635409;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=FUcJFtcKmrI8LZyGEauuSitBKmi9/G8k7PxeHlnBviI=;
- b=p0m9+e1R1pXqBxFiPhXosL/fzsJkWQ1eXJxFSHYA+3HjyCYwMHUXPfs5gHElKL1CiI
- OEg/Ivyr5NNv4oN2x65iZNqjjKrjO8ox687SJbTJbftbsbjhGcCxUYcR8H5o1FUqKEyb
- obJT4xwKCKejtHMxXqK0emYQC6tAIZUMEDsSwauk0tUd0QhhZHfLxnAb/88Xc+2rkPyf
- n/uzTutMj4GVoVBu+YhRLmNI+1UO4+c9oCYQMoD+DqlImW57zOfOkchlUPGn2KH/ocdT
- B7INfietxYY3lh0eXFEuipp5DM1tJBzAZLFmXP7CNN0r8+RsaR+xdq7u6P/VUaPq7/lB
- EdGA==
-X-Gm-Message-State: AOJu0YxsE+TJkyTIE6Ym3Hx9tLarfRZ29SdZO2FYvp+e0Dy/dpu+kCOu
- KxvOcxNBOMN3jRhmVG33wS9S7FZyPSQnhRcms5KbOQjKHhf0H9hPJfHf4zX0u6A=
-X-Google-Smtp-Source: AGHT+IErcz1TLmA3NwIq5OdgPfZVoabD/bcARfYRtp1XuRGq1DCDM6F3497RQMW41VpacKHdBqyGNw==
-X-Received: by 2002:a17:902:c404:b0:205:6566:cb07 with SMTP id
- d9443c01a7336-208d83861d1mr145890235ad.17.1727030609207; 
- Sun, 22 Sep 2024 11:43:29 -0700 (PDT)
-Received: from localhost.localdomain ([2600:8802:2a05:9000:ad2f:66c:ef69:238f])
- by smtp.gmail.com with ESMTPSA id
- d9443c01a7336-207945dc6d8sm121835545ad.29.2024.09.22.11.43.28
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 22 Sep 2024 11:43:28 -0700 (PDT)
-From: Akhilesh Nema <nemaakhilesh@gmail.com>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 9qnxi5pR2VBv for <buildroot@lists.busybox.net>;
+ Sun, 22 Sep 2024 19:37:56 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=85.13.140.57;
+ helo=dd20012.kasserver.com; envelope-from=bernd@kuhls.net; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 6C21B60657
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6C21B60657
+Received: from dd20012.kasserver.com (dd20012.kasserver.com [85.13.140.57])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 6C21B60657
+ for <buildroot@buildroot.org>; Sun, 22 Sep 2024 19:37:54 +0000 (UTC)
+Received: from fli4l.lan.fli4l (p5b3a0835.dip0.t-ipconnect.de [91.58.8.53])
+ by dd20012.kasserver.com (Postfix) with ESMTPSA id E6D74A4C2428;
+ Sun, 22 Sep 2024 21:37:51 +0200 (CEST)
+Received: from bruckner.lan.fli4l ([192.168.1.1]:60994)
+ by fli4l.lan.fli4l with esmtp (Exim 4.98)
+ (envelope-from <bernd@kuhls.net>) id 1ssSP1-0000000065g-2LnC;
+ Sun, 22 Sep 2024 19:37:51 +0000
+From: Bernd Kuhls <bernd@kuhls.net>
 To: buildroot@buildroot.org
-Date: Sun, 22 Sep 2024 11:43:24 -0700
-Message-Id: <20240922184324.3469302-1-nemaakhilesh@gmail.com>
-X-Mailer: git-send-email 2.25.1
+Date: Sun, 22 Sep 2024 21:37:46 +0200
+Message-Id: <20240922193751.862053-1-bernd@kuhls.net>
+X-Mailer: git-send-email 2.39.5
 MIME-Version: 1.0
+X-Spamd-Bar: +++
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1727030609; x=1727635409; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=FUcJFtcKmrI8LZyGEauuSitBKmi9/G8k7PxeHlnBviI=;
- b=H4aaNGnP7VBkMrNT3g9QlIFXQAdT1gzRgRe10ny7GMrQb87Ii1kN55fS9T3axRjh9i
- 6TtCEMNaGhUDpMon3ycHERp40AVVpqdZrbqZUSgblNgelVTYOvlL4t9X4zbZ4QB134pZ
- V0Y83sNEyBUpDtEW88z8OC//enSXRY/0lZrdv0Wov8vFsCV+IW/rdFiOdGZsTDqk6uyS
- zQ1IDQprjOnZVtmWcWc36bOyOh9oD/2seSp+QcsnzC0aqr+K8bPSHXvbJSwiYc1orslT
- iQ6jxlYKnxk9XjnwdQUsebIhVp9ZSFX1UCtTNfZ4ROut/o9z7M7c2qOH7GYGcEl+a6m3
- l+dg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=kuhls.net; 
+ s=kas202406071026; t=1727033871;
+ bh=gKvw96rX6D77nT0Gva0qaEQZ1goKr0mJ3wj9pfKAE4I=;
+ h=From:To:Cc:Subject:Date:From;
+ b=Zqpjlbv6jnWPbAYiAqviZNZRPJ7A8wjCnHFiXB9gATwAgdkBHmFQWQiRiGuRQeE3k
+ pRFPvCoY1Mc37caqLwEJbuxdJ/tUZbKMWSKU16t52ClTNeXMECf2Ew4GhdBc9e4RY7
+ FkX/R4VRiJ4e4rTfKXxHikEbahNCfAlzAMGqWtmRyo0b43gexUCOMMum3a+6fi8nwV
+ YBFga9lD0T1Yud1UxOLn3qTM2vPbbRGP/O1WmECqyNXSaDacn1P1I6q3dpobpekFDy
+ YKu/5X0lQO482G+gaOTDdBcDT9ul/y0b6Th5cGqWhkRpMNrKoZQKz8mhtEM+rWcR0i
+ c7YHGOqaBdIOA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=H4aaNGnP
-Subject: [Buildroot] [PATCH 1/1] package/strace: bump version to 6.11
+ header.from=kuhls.net
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=kuhls.net header.i=@kuhls.net header.a=rsa-sha256
+ header.s=kas202406071026 header.b=Zqpjlbv6
+Subject: [Buildroot] [PATCH 1/6] package/libdrm: add host variant
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,47 +80,54 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Akhilesh Nema <nemaakhilesh@gmail.com>
+Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
+ Romain Naour <romain.naour@gmail.com>, Daniel Lang <dalang@gmx.at>,
+ "Yann E . MORIN" <yann.morin.1998@free.fr>,
+ Valentin Korenblit <valentinkorenblit@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Changelog - https://github.com/strace/strace/releases/tag/v6.11
+Needed for mesa3d bump to 24.1.0.
 
-Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 ---
- package/strace/strace.hash | 4 ++--
- package/strace/strace.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/libdrm/libdrm.mk | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
 
-diff --git a/package/strace/strace.hash b/package/strace/strace.hash
-index dcaf1ad5d4..e167f9d20a 100644
---- a/package/strace/strace.hash
-+++ b/package/strace/strace.hash
-@@ -1,5 +1,5 @@
- # Locally calculated after checking signature with RSA key 0xA8041FA839E16E36
--# https://strace.io/files/6.10/strace-6.10.tar.xz.asc
--sha256  765ec71aa1de2fe37363c1e40c7b7669fc1d40c44bb5d38ba8e8cd82c4edcf07  strace-6.10.tar.xz
-+# https://strace.io/files/6.11/strace-6.11.tar.xz.asc
-+sha256  83262583a3529f02c3501aa8b8ac772b4cbc03dc934e98bab6e4883626e283a5  strace-6.11.tar.xz
- sha256  1988d0e1aa101d68855e8c4f940aacf2531051b82f6b608eb026c5fad1f33df1  COPYING
- sha256  7c379436436a562834aa7d2f5dcae1f80a25230fa74201046ca1fba4367d39aa  LGPL-2.1-or-later
-diff --git a/package/strace/strace.mk b/package/strace/strace.mk
-index 34a154357f..367a44da6e 100644
---- a/package/strace/strace.mk
-+++ b/package/strace/strace.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
+diff --git a/package/libdrm/libdrm.mk b/package/libdrm/libdrm.mk
+index fcf7f17e78..021a575474 100644
+--- a/package/libdrm/libdrm.mk
++++ b/package/libdrm/libdrm.mk
+@@ -116,4 +116,25 @@ else
+ LIBDRM_CONF_OPTS += -Dtests=false
+ endif
  
--STRACE_VERSION = 6.10
-+STRACE_VERSION = 6.11
- STRACE_SOURCE = strace-$(STRACE_VERSION).tar.xz
- STRACE_SITE = https://github.com/strace/strace/releases/download/v$(STRACE_VERSION)
- STRACE_LICENSE = LGPL-2.1+
++HOST_LIBDRM_CONF_OPTS = \
++	-Damdgpu=disabled \
++	-Dcairo-tests=disabled \
++	-Detnaviv=disabled \
++	-Dexynos=disabled \
++	-Dfreedreno=disabled \
++	-Dfreedreno-kgsl=false \
++	-Dinstall-test-programs=false \
++	-Dintel=disabled \
++	-Dman-pages=disabled \
++	-Dnouveau=disabled \
++	-Domap=disabled \
++	-Dradeon=disabled \
++	-Dtegra=disabled \
++	-Dvc4=disabled \
++	-Dvmwgfx=disabled \
++	-Dtests=false \
++	-Dudev=false \
++	-Dvalgrind=disabled
++
+ $(eval $(meson-package))
++$(eval $(host-meson-package))
 -- 
-2.25.1
+2.39.5
 
 _______________________________________________
 buildroot mailing list
