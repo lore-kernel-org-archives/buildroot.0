@@ -1,77 +1,76 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6D077CF9C5B
-	for <buildroot@archiver.kernel.org>; Mon, 23 Sep 2024 07:08:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1622CF9C69
+	for <buildroot@archiver.kernel.org>; Mon, 23 Sep 2024 10:29:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id F3C5B4059D;
-	Mon, 23 Sep 2024 07:08:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 41CB36087F;
+	Mon, 23 Sep 2024 10:29:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SLN4XrHfNH1y; Mon, 23 Sep 2024 07:08:07 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id zDmKAkyIu_kM; Mon, 23 Sep 2024 10:28:59 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CDCB540546
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 53784606B4
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CDCB540546;
-	Mon, 23 Sep 2024 07:08:06 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 53784606B4;
+	Mon, 23 Sep 2024 10:28:59 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 96EAD1BF398
- for <buildroot@lists.busybox.net>; Mon, 23 Sep 2024 07:08:05 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id C534B1BF419
+ for <buildroot@lists.busybox.net>; Mon, 23 Sep 2024 10:28:57 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7DA39811DC
- for <buildroot@lists.busybox.net>; Mon, 23 Sep 2024 07:08:03 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id B43E581292
+ for <buildroot@lists.busybox.net>; Mon, 23 Sep 2024 10:28:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id A5Tu7O76DRet for <buildroot@lists.busybox.net>;
- Mon, 23 Sep 2024 07:08:02 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=220.197.31.5;
- helo=m16.mail.163.com; envelope-from=andyshrk@163.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org E1E04811CF
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E1E04811CF
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.5])
- by smtp1.osuosl.org (Postfix) with ESMTP id E1E04811CF
- for <buildroot@buildroot.org>; Mon, 23 Sep 2024 07:07:59 +0000 (UTC)
-Received: from andyshrk$163.com ( [58.22.7.114] ) by
- ajax-webmail-wmsvr-40-111 (Coremail) ; Mon, 23 Sep 2024 15:07:49 +0800
- (CST)
-X-Originating-IP: [58.22.7.114]
-Date: Mon, 23 Sep 2024 15:07:49 +0800 (CST)
-From: "Andy Yan" <andyshrk@163.com>
-To: "Bernd Kuhls" <bernd@kuhls.net>
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20240801(9da12a7b)
- Copyright (c) 2002-2024 www.mailtech.cn 163com
-In-Reply-To: <20240922193751.862053-5-bernd@kuhls.net>
-References: <20240922193751.862053-1-bernd@kuhls.net>
- <20240922193751.862053-5-bernd@kuhls.net>
-X-NTES-SC: AL_Qu2ZBfycukot7yKfY+lS+zN027ZZGIPiw4tinfIOfuALgRno+Sw7QGRAAUPr2/slWGcc44TjnR4fyluuvfdU
+ id Mnq-9LsrczRw for <buildroot@lists.busybox.net>;
+ Mon, 23 Sep 2024 10:28:56 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=147.173.1.68;
+ helo=mailgw-out1.grenoble.cnrs.fr; envelope-from=bonet@grenoble.cnrs.fr;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org DE2CE8128F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DE2CE8128F
+Received: from mailgw-out1.grenoble.cnrs.fr (mailgw-out1.grenoble.cnrs.fr
+ [147.173.1.68])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id DE2CE8128F
+ for <buildroot@buildroot.org>; Mon, 23 Sep 2024 10:28:55 +0000 (UTC)
+Received: from [147.173.65.159] (unknown [147.173.65.159])
+ (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+ key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+ (No client certificate requested)
+ by mailgw-out1.grenoble.cnrs.fr (Postfix) with ESMTPSA id 20B20BFAC1;
+ Mon, 23 Sep 2024 12:28:52 +0200 (CEST)
+Message-ID: <b5c97a2a-49da-40a8-b546-059ee0bee52e@grenoble.cnrs.fr>
+Date: Mon, 23 Sep 2024 12:28:51 +0200
 MIME-Version: 1.0
-Message-ID: <c80de03.7818.1921db53aa2.Coremail.andyshrk@163.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: bygvCgD3X+DGE_FmnD8BAA--.13846W
-X-CM-SenderInfo: 5dqg52xkunqiywtou0bp/1tbiMwJjXmbxEpkkdQACsD
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: buildroot@buildroot.org
+From: Edgar Bonet <bonet@grenoble.cnrs.fr>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=163.com; 
- s=s110527; h=Date:From:Subject:Content-Type:MIME-Version:
- Message-ID; bh=/WQ92VpQX5+Ah2K5X/VJNKaQ2pIIZqAvqy4sNMm0Mpo=; b=J
- CpViT4mbY27JdE2/KXVNR0AOHkwXI7xvWsVLyJ/I+T1fgks3CmWzTiY/OpyEUlD1
- xGLvugid2vPVonQSZG7BGe3Rt74uEw8WSMxFuGaYxhGpLEbWve3xZsu1iIMmmF0J
- cwsrOflSlhB7MwP1Va33liFTj1aG4NJNxelPn20mk0=
+ d=grenoble.cnrs.fr; 
+ s=202106-grenoble.cnrs.fr; t=1727087332;
+ bh=aX52p5YB/eWTt23BAjEZ+JClVkRCWph2VpjRQesSmlo=;
+ h=Date:To:Cc:From:Subject:From;
+ b=l/4MZ4d2myXLGQ0PkYQUQ3ZUvFVKlbPofcP6/ZSIkBKSqzRQR29uWEU4yLn06vsGN
+ bnlQYbykvJUD+lbZUx6E0csWOQYXs1GaoCnD7I4ak9Rgmc2AIdxPq4DJkoqM0TN74e
+ fFcWCXMUBMKnjgX/4YUMBJ4meqHDUeWB0JfOuSIneahR1EfU6kXQMx1TtBzifZveBV
+ GouT8GeZX4KmirmYitSGvGv+LyQ23cQEWVsWYmzPQb8P+Ap90yNWVnRsJhxILiHAri
+ IEpmTDsPAOZvufL6BJkf3Y1HkUzz5m+FN6n/dMpM/UO4yT9cZBYtvASdjy6/EIvfeC
+ SOx7GP/SRZpuw==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=163.com
+ dmarc=none (p=none dis=none)
+ header.from=grenoble.cnrs.fr
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=fail reason="signature verification failed" (1024-bit key,
- unprotected) header.d=163.com header.i=@163.com header.a=rsa-sha256
- header.s=s110527 header.b=JCpViT4m
-Subject: Re: [Buildroot] [PATCH v2 5/6] package/{mesa3d,
- mesa3d-headers}: bump version to 24.2.3
+ dkim=pass (2048-bit key,
+ unprotected) header.d=grenoble.cnrs.fr header.i=@grenoble.cnrs.fr
+ header.a=rsa-sha256 header.s=202106-grenoble.cnrs.fr header.b=l/4MZ4d2
+Subject: [Buildroot] [PATCH 1/1] board/acmesystems/acqua-a5: update device
+ tree for newer kernels
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,298 +82,65 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>, Daniel Lang <dalang@gmx.at>,
- buildroot@buildroot.org, Romain Naour <romain.naour@gmail.com>,
- "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Valentin Korenblit <valentinkorenblit@gmail.com>
+Cc: Biagio Montaruli <biagio.hkr@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+The Ethernet MAC address of the Acqua board is stored in an onboard
+EEPROM. Its location is described in the device tree as:
 
-Hi Bernd,
+        eeprom@58 {  // NVMEM node
+                // EEPROM parameters...
 
-At 2024-09-23 03:37:50, "Bernd Kuhls" <bernd@kuhls.net> wrote:
->Release notes:
->https://lists.freedesktop.org/archives/mesa-announce/2024-May/000762.html
->https://lists.freedesktop.org/archives/mesa-announce/2024-June/000763.html
->https://lists.freedesktop.org/archives/mesa-announce/2024-June/000765.html
->https://lists.freedesktop.org/archives/mesa-announce/2024-July/000766.html
->https://lists.freedesktop.org/archives/mesa-announce/2024-July/000767.html
->https://lists.freedesktop.org/archives/mesa-announce/2024-July/000771.html
->https://lists.freedesktop.org/archives/mesa-announce/2024-August/000773.html
->https://lists.freedesktop.org/archives/mesa-announce/2024-August/000776.html
->https://lists.freedesktop.org/archives/mesa-announce/2024-September/000778.html
->https://lists.freedesktop.org/archives/mesa-announce/2024-September/000779.html
->------------------------------------------------------------------------
->Changes needed for the bump to 24.1.x:
->
->Added dependency to llvm & Co. for iris driver due to upstream commit:
->https://cgit.freedesktop.org/mesa/mesa/commit/meson.build?h=24.1&id=a512c2a8b572c5da360873320dbbd343c6223cd6
->
->Added host version of mesa tool intel_clc needed for target build of the
->iris driver.
->
->Added dependency to host-python-pycparser for etnaviv driver due to
->upstream commit:
->https://cgit.freedesktop.org/mesa/mesa/commit/src/etnaviv/hwdb/meson.build?h=24.1&id=2192e620bb0c68b75ff45165d0b117c7ecb77268
->
->Added dependency to host-python-ply for intel vulkan driver due to
->upstream commit:
->https://cgit.freedesktop.org/mesa/mesa/commit/src/intel/vulkan/grl/meson.build?h=24.1&id=dc1aedef2bd054884685ad971a3ef5be07ecd101
->
->Although this dependency exists since mesa3d 22.3 it is only needed when
->intel-clc is enabled, this dependency is added with this patch so no need
->to backport this dependency to older buildroot trees.
->
->Update configure parameter of glvnd option due to upstream commit:
->https://cgit.freedesktop.org/mesa/mesa/commit/meson.build?h=24.1&id=4f25b84b2460524d375424a81b42faa4d99c8e60
->------------------------------------------------------------------------
->Changes needed for the bump to 24.2.x:
->
->Added dependency to host-python-pyyaml to host and target build, needed
->due to upstream commit
->https://gitlab.freedesktop.org/mesa/mesa/-/commit/a3813327575e8875c8c3ed24b5f45a0b7ba64446
->
->Rebased patch 0002 due to upstream commit:
->https://cgit.freedesktop.org/mesa/mesa/commit/src/gallium/drivers/vc4/meson.build?h=24.2&id=da70827656757cd070faac7aff5ca057f1e7fb8a
->
->Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+                eth0_addr: eth-mac-addr@9A {  // NVMEM cells
+                        reg = <0x0 0x06>;
+                };
+        };
 
+Since Linux 6.5, defining NVMEM cells this way, as direct children of
+the NVMEM node, is deprecated. It is instead recommended to wrap the
+cells inside a "fixed-layout" node.
 
+The older, deprecated syntax is still supported on Linux 6.6. Since
+Linux 6.7 (commit 2cc3b37f5b6d: "nvmem: add explicit config option to
+read old syntax fixed OF cells") however, it is only supported by
+selected NVMEM drivers. It is not supported by the at24 driver used to
+access the Acqua's onboard EEPROM.
 
- Tested-by: Andy Yan <andyshrk@163.com>
+Update the device tree to the new, recommended, syntax. This makes it
+work with newer kernels, while preserving compatibility with the
+currently used 6.6.30.
 
-Thanks
+Signed-off-by: Edgar Bonet <bonet@grenoble.cnrs.fr>
+---
+ board/acmesystems/acqua-a5/at91-sama5d3_acqua.dts | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
->---
->v2: bump to 24.2.3, added dependency to host-python-pyyaml for target
->    package (Andy)
->
-> package/mesa3d-headers/mesa3d-headers.mk      |  2 +-
-> ...tion-to-disable-optional-neon-suppor.patch | 14 ++---
-> package/mesa3d/Config.in                      | 11 +++-
-> package/mesa3d/mesa3d.hash                    |  6 +--
-> package/mesa3d/mesa3d.mk                      | 52 +++++++++++++++----
-> 5 files changed, 64 insertions(+), 21 deletions(-)
->
->diff --git a/package/mesa3d-headers/mesa3d-headers.mk b/package/mesa3d-headers/mesa3d-headers.mk
->index 33c60b285f..2d6824c61c 100644
->--- a/package/mesa3d-headers/mesa3d-headers.mk
->+++ b/package/mesa3d-headers/mesa3d-headers.mk
->@@ -12,7 +12,7 @@ endif
-> 
-> # Not possible to directly refer to mesa3d variables, because of
-> # first/second expansion trickery...
->-MESA3D_HEADERS_VERSION = 24.0.9
->+MESA3D_HEADERS_VERSION = 24.2.3
-> MESA3D_HEADERS_SOURCE = mesa-$(MESA3D_HEADERS_VERSION).tar.xz
-> MESA3D_HEADERS_SITE = https://archive.mesa3d.org
-> MESA3D_HEADERS_DL_SUBDIR = mesa3d
->diff --git a/package/mesa3d/0002-vc4-add-meson-option-to-disable-optional-neon-suppor.patch b/package/mesa3d/0002-vc4-add-meson-option-to-disable-optional-neon-suppor.patch
->index f3919478a6..cda792b9db 100644
->--- a/package/mesa3d/0002-vc4-add-meson-option-to-disable-optional-neon-suppor.patch
->+++ b/package/mesa3d/0002-vc4-add-meson-option-to-disable-optional-neon-suppor.patch
->@@ -9,8 +9,8 @@ to force disabling it at compile time.
-> 
-> Upstream: https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/4114
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
->-Signed-off-by: Bernd Kuhls <bernd.kuhls@t-online.de>
->-[rebased for 20.2.0, 20.3.0, 21.1.0, 23.1.0 & 23.2.0]
->+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
->+[rebased for 20.2.0, 20.3.0, 21.1.0, 23.1.0, 23.2.0 & 24.2.1]
-> Signed-off-by: Peter Seiderer <ps.report@gmx.net>
-> [fix syntax error after previous rebases]
-> ---
->@@ -23,7 +23,7 @@ diff --git a/meson_options.txt b/meson_options.txt
-> index 8e0bf2a..1cf0e07 100644
-> --- a/meson_options.txt
-> +++ b/meson_options.txt
->-@@ -124,6 +124,13 @@ option(
->+@@ -148,6 +148,13 @@ option(
->    description : 'enable gallium va frontend.',
->  )
->  
->@@ -41,8 +41,8 @@ diff --git a/src/gallium/drivers/vc4/meson.build b/src/gallium/drivers/vc4/meson
-> index 84da951..7f950de 100644
-> --- a/src/gallium/drivers/vc4/meson.build
-> +++ b/src/gallium/drivers/vc4/meson.build
->-@@ -84,7 +84,7 @@ files_libvc4 = files(
->- vc4_c_args = []
->+@@ -72,7 +72,7 @@ files_libvc4 = files(
->+ ]
->  
->  libvc4_neon = []
-> -if host_machine.cpu_family() == 'arm'
->@@ -50,9 +50,9 @@ index 84da951..7f950de 100644
->    libvc4_neon = static_library(
->      'vc4_neon',
->      'vc4_tiling_lt_neon.c',
->-@@ -93,7 +93,7 @@ if host_machine.cpu_family() == 'arm'
->-     ],
->+@@ -82,7 +82,7 @@ if host_machine.cpu_family() == 'arm'
->      c_args : '-mfpu=neon',
->+     dependencies : vc4_deps,
->    )
-> -  vc4_c_args += '-DUSE_ARM_ASM'
-> +  vc4_c_args += '-DVC4_TILING_LT_NEON'
->diff --git a/package/mesa3d/Config.in b/package/mesa3d/Config.in
->index 7761b0a650..3586451bc6 100644
->--- a/package/mesa3d/Config.in
->+++ b/package/mesa3d/Config.in
->@@ -50,7 +50,8 @@ config BR2_PACKAGE_MESA3D_OPENCL
-> 	bool "OpenCL support"
-> 	depends on BR2_PACKAGE_MESA3D_LLVM
-> 	depends on BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_R600 || \
->-		BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI
->+		BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_RADEONSI || \
->+		BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_IRIS
-> 	select BR2_PACKAGE_LLVM_RTTI
-> 	select BR2_PACKAGE_CLANG
-> 	select BR2_PACKAGE_LIBCLC
->@@ -129,10 +130,18 @@ config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_I915
-> config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_IRIS
-> 	bool "Gallium iris driver"
-> 	depends on BR2_i386 || BR2_x86_64
->+	depends on BR2_PACKAGE_MESA3D_LLVM
-> 	select BR2_PACKAGE_MESA3D_GALLIUM_DRIVER
->+	select BR2_PACKAGE_MESA3D_OPENCL
->+	select BR2_PACKAGE_SPIRV_LLVM_TRANSLATOR
->+	select BR2_PACKAGE_SPIRV_TOOLS
-> 	help
-> 	  Mesa driver for iris-based Intel GPUs.
-> 
->+comment "iris driver needs llvm"
->+	depends on BR2_i386 || BR2_x86_64
->+	depends on !BR2_PACKAGE_MESA3D_LLVM
->+
-> config BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_LIMA
-> 	bool "Gallium lima driver"
-> 	depends on BR2_TOOLCHAIN_HAS_SYNC_4 || !BR2_PACKAGE_XORG7 # libxshmfence
->diff --git a/package/mesa3d/mesa3d.hash b/package/mesa3d/mesa3d.hash
->index d506d398b8..50385460f8 100644
->--- a/package/mesa3d/mesa3d.hash
->+++ b/package/mesa3d/mesa3d.hash
->@@ -1,5 +1,5 @@
->-# From https://lists.freedesktop.org/archives/mesa-announce/2024-June/000764.html
->-sha256  51aa686ca4060e38711a9e8f60c8f1efaa516baf411946ed7f2c265cd582ca4c  mesa-24.0.9.tar.xz
->-sha512  de2ee6c9df1fc106ee10befe0a76be1e9cfe83d65dbdb83bad6d8d7cfaa085232fb115293a1a790b37b50b1fe14bd58aafbcfe5a15e953b5901a7105d57569a5  mesa-24.0.9.tar.xz
->+# From https://lists.freedesktop.org/archives/mesa-announce/2024-September/000779.html
->+sha256  4ea18b1155a4544a09f7361848974768f6f73c19d88f63de2ec650be313b2d0c  mesa-24.2.3.tar.xz
->+sha512  7a1ace23568d1907b778a2859f97c8988a414ba74e02e1fb5af6f95f768e1b1a2dfdaf412b0d655678ed915d28273953fd1236ebcd87553a1880f1a7f3ea4d44  mesa-24.2.3.tar.xz
-> # License
-> sha256  a00275a53178e2645fb65be99a785c110513446a5071ff2c698ed260ad917d75  docs/license.rst
->diff --git a/package/mesa3d/mesa3d.mk b/package/mesa3d/mesa3d.mk
->index ce460c4475..ad530fc214 100644
->--- a/package/mesa3d/mesa3d.mk
->+++ b/package/mesa3d/mesa3d.mk
->@@ -5,7 +5,7 @@
-> ################################################################################
-> 
-> # When updating the version, please also update mesa3d-headers
->-MESA3D_VERSION = 24.0.9
->+MESA3D_VERSION = 24.2.3
-> MESA3D_SOURCE = mesa-$(MESA3D_VERSION).tar.xz
-> MESA3D_SITE = https://archive.mesa3d.org
-> MESA3D_LICENSE = MIT, SGI, Khronos
->@@ -21,12 +21,17 @@ MESA3D_DEPENDENCIES = \
-> 	host-bison \
-> 	host-flex \
-> 	host-python-mako \
->+	host-python-pyyaml \
-> 	expat \
-> 	libdrm \
-> 	zlib
-> 
-> MESA3D_CONF_OPTS = \
-> 	-Dgallium-omx=disabled \
->+	-Dgallium-opencl=disabled \
->+	-Dgallium-rusticl=false \
->+	-Dmicrosoft-clc=disabled \
->+	-Dopencl-spirv=false \
-> 	-Dpower8=disabled
-> 
-> ifeq ($(BR2_PACKAGE_MESA3D_DRIVER)$(BR2_PACKAGE_XORG7),yy)
->@@ -50,14 +55,9 @@ else
-> MESA3D_CONF_OPTS += -Dllvm=disabled
-> endif
-> 
->-# Disable opencl-icd: OpenCL lib will be named libOpenCL instead of
->-# libMesaOpenCL and CL headers are installed
-> ifeq ($(BR2_PACKAGE_MESA3D_OPENCL),y)
-> MESA3D_PROVIDES += libopencl
-> MESA3D_DEPENDENCIES += clang libclc
->-MESA3D_CONF_OPTS += -Dgallium-opencl=standalone
->-else
->-MESA3D_CONF_OPTS += -Dgallium-opencl=disabled
-> endif
-> 
-> ifeq ($(BR2_PACKAGE_MESA3D_NEEDS_ELFUTILS),y)
->@@ -126,6 +126,19 @@ MESA3D_CONF_OPTS += \
-> 	-Dgallium-extra-hud=true
-> endif
-> 
->+ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_ETNAVIV),y)
->+MESA3D_DEPENDENCIES += host-python-pycparser
->+endif
->+
->+ifeq ($(BR2_PACKAGE_MESA3D_VULKAN_DRIVER_INTEL),y)
->+MESA3D_DEPENDENCIES += host-python-ply
->+endif
->+
->+ifeq ($(BR2_PACKAGE_MESA3D_GALLIUM_DRIVER_IRIS),y)
->+MESA3D_CONF_OPTS += -Dintel-clc=system
->+MESA3D_DEPENDENCIES += host-mesa3d spirv-llvm-translator spirv-tools
->+endif
->+
-> ifeq ($(BR2_PACKAGE_MESA3D_VULKAN_DRIVER),)
-> MESA3D_CONF_OPTS += \
-> 	-Dvulkan-drivers=
->@@ -251,12 +264,33 @@ endif
-> ifeq ($(BR2_PACKAGE_LIBGLVND),y)
-> ifneq ($(BR2_PACKAGE_MESA3D_OPENGL_GLX)$(BR2_PACKAGE_MESA3D_OPENGL_EGL),)
-> MESA3D_DEPENDENCIES += libglvnd
->-MESA3D_CONF_OPTS += -Dglvnd=true
->+MESA3D_CONF_OPTS += -Dglvnd=enabled
-> else
->-MESA3D_CONF_OPTS += -Dglvnd=false
->+MESA3D_CONF_OPTS += -Dglvnd=disabled
-> endif
-> else
->-MESA3D_CONF_OPTS += -Dglvnd=false
->+MESA3D_CONF_OPTS += -Dglvnd=disabled
-> endif
-> 
->+HOST_MESA3D_CONF_OPTS = \
->+	-Dglvnd=disabled \
->+	-Dgallium-drivers=iris \
->+	-Dgallium-vdpau=disabled \
->+	-Dplatforms= \
->+	-Ddri3=disabled \
->+	-Dglx=disabled \
->+	-Dvulkan-drivers=""
->+
->+HOST_MESA3D_DEPENDENCIES = \
->+	host-libclc \
->+	host-libdrm \
->+	host-python-mako \
->+	host-python-pyyaml \
->+	host-spirv-tools
->+
->+define HOST_MESA3D_INSTALL_CMDS
->+	$(INSTALL) -D -m 0755 $(@D)/build/src/intel/compiler/intel_clc $(HOST_DIR)/bin/intel_clc
->+endef
->+
-> $(eval $(meson-package))
->+$(eval $(host-meson-package))
->-- 
->2.39.5
->
->_______________________________________________
->buildroot mailing list
->buildroot@buildroot.org
->https://lists.buildroot.org/mailman/listinfo/buildroot
+diff --git a/board/acmesystems/acqua-a5/at91-sama5d3_acqua.dts b/board/acmesystems/acqua-a5/at91-sama5d3_acqua.dts
+index a7a4a20352..411d1942f5 100644
+--- a/board/acmesystems/acqua-a5/at91-sama5d3_acqua.dts
++++ b/board/acmesystems/acqua-a5/at91-sama5d3_acqua.dts
+@@ -149,8 +149,14 @@
+ 					#address-cells = <1>;
+ 					#size-cells = <1>;
+ 
+-					eth0_addr: eth-mac-addr@9A {
+-						reg = <0x0 0x06>;
++					nvmem-layout {
++						compatible = "fixed-layout";
++						#address-cells = <1>;
++						#size-cells = <1>;
++
++						eth0_addr: eth-mac-addr@9A {
++							reg = <0x0 0x06>;
++						};
+ 					};
+ 				};
+ 				
+-- 
+2.34.1
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
