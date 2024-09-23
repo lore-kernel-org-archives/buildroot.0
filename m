@@ -4,71 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 649A0CF9C6F
-	for <buildroot@archiver.kernel.org>; Mon, 23 Sep 2024 19:48:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CFF3ECF9C71
+	for <buildroot@archiver.kernel.org>; Mon, 23 Sep 2024 19:49:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2CEA180DAB;
-	Mon, 23 Sep 2024 19:48:46 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 9282481D67;
+	Mon, 23 Sep 2024 19:49:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id f6tZO0rEuq8F; Mon, 23 Sep 2024 19:48:45 +0000 (UTC)
+ id 2qKs5zJy6_BT; Mon, 23 Sep 2024 19:49:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2E07680F1D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7BD1180F5C
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2E07680F1D;
-	Mon, 23 Sep 2024 19:48:45 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 1F8631BF307
- for <buildroot@lists.busybox.net>; Mon, 23 Sep 2024 19:48:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7BD1180F5C;
+	Mon, 23 Sep 2024 19:49:01 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B68171BF307
+ for <buildroot@lists.busybox.net>; Mon, 23 Sep 2024 19:49:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 0DD4740B3E
- for <buildroot@lists.busybox.net>; Mon, 23 Sep 2024 19:48:43 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id EB81780F5C
+ for <buildroot@lists.busybox.net>; Mon, 23 Sep 2024 19:48:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sOZj0uzY4un2 for <buildroot@lists.busybox.net>;
- Mon, 23 Sep 2024 19:48:42 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Q5BvkV34j71g for <buildroot@lists.busybox.net>;
+ Mon, 23 Sep 2024 19:48:59 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::14;
  helo=smtp5-g21.free.fr; envelope-from=yann.morin.1998@free.fr;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org DBE2B406C0
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org DBE2B406C0
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D3CE680DAB
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D3CE680DAB
 Received: from smtp5-g21.free.fr (smtp5-g21.free.fr [IPv6:2a01:e0c:1:1599::14])
- by smtp4.osuosl.org (Postfix) with ESMTPS id DBE2B406C0
- for <buildroot@buildroot.org>; Mon, 23 Sep 2024 19:48:41 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTPS id D3CE680DAB
+ for <buildroot@buildroot.org>; Mon, 23 Sep 2024 19:48:58 +0000 (UTC)
 Received: from ymorin.is-a-geek.org (unknown
  [IPv6:2a01:cb19:8290:3800:5d8d:eab4:d280:c2c4])
  (Authenticated sender: yann.morin.1998@free.fr)
- by smtp5-g21.free.fr (Postfix) with ESMTPSA id 3811D5FFAF;
- Mon, 23 Sep 2024 21:48:38 +0200 (CEST)
+ by smtp5-g21.free.fr (Postfix) with ESMTPSA id E66645FF3F;
+ Mon, 23 Sep 2024 21:48:54 +0200 (CEST)
 Received: by ymorin.is-a-geek.org (sSMTP sendmail emulation);
- Mon, 23 Sep 2024 21:48:38 +0200
-Date: Mon, 23 Sep 2024 21:48:38 +0200
+ Mon, 23 Sep 2024 21:48:54 +0200
+Date: Mon, 23 Sep 2024 21:48:54 +0200
 From: "Yann E. MORIN" <yann.morin.1998@free.fr>
 To: Akhilesh Nema <nemaakhilesh@gmail.com>
-Message-ID: <ZvHGFr9P7eP1NS9p@landeda>
-References: <20240922204145.3704517-1-nemaakhilesh@gmail.com>
+Message-ID: <ZvHGJv5KM7q5j0hx@landeda>
+References: <20240922205744.3811678-1-nemaakhilesh@gmail.com>
 MIME-Version: 1.0
 Content-Disposition: inline
-In-Reply-To: <20240922204145.3704517-1-nemaakhilesh@gmail.com>
+In-Reply-To: <20240922205744.3811678-1-nemaakhilesh@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1727120920;
- bh=0am2XjFz7rOWIqfeZtgIMnkL3uMVLtL844kc2rdkLd8=;
+ d=free.fr; s=smtp-20201208; t=1727120937;
+ bh=Z8zd6BUuEo1axvMd4QpueXH8/VJUrJLDb6ce0KT3VKo=;
  h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
- b=MZf7ArIYOGCUkhsj22SFH9/Ek6PN4T3o/vfFNMb71i2lmNPM/hOpPXHFYsw7qFlAZ
- y0HtTVASJFcNF+etq7pmnHJ5RCluAVGBV19w7T4sOjFlGAIGWhxG20x2FG+r2nYvfa
- 1mN0IBqqW8WiRoahj3no76jL+wl+dSoOSTJkMx09socG7NcI4VavH8ICpl6Bu1Lo/9
- V6oKvORoExT3tG1FKOyIy24zxIsY2j9E1tVN38kfgJJLw6nZ+lW2m1/ZgeihWyWT9p
- 1w1sUx79zh/81zYtHaHqz7PDK7/aWDNelNl3f2L18XZY6N2nd8tpgm1ZgKRD53glDv
- 3VfljjAZwyCGg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=aDyOP0j/rKF5ka5YhEUvmiO1yQq0XcUEAlIAaxssbqwKM6UzDGvSjRDM/04n186L9
+ 1t/N0K50Xa17Bc9IzFpZl9pJwotmIuD4VunIPe9lIJqg3WIz/wLxBgAloGnMgo58cX
+ SOD0viuRvSiiCDmRoVVrXQwkchDPb4PWEStmpsTcTAeKlGm9CI/9dotdxb3T0HZuNB
+ Br+35In9fLJMPLI6n9gB2dsSeGHTdv+4chEpSrts+JaMpZz9gALnnpLdJYo64+8Qrt
+ fl3605HQHKRUkx5B+xT0LzWYnbIaCVzl72hWkhwZXYidoOB9rQLTXUwknLCGc09eeH
+ U+8gGmQ440x7A==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=MZf7ArIY
-Subject: Re: [Buildroot] [PATCH 1/1] package/tcpdump: bump version to 4.99.5
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=aDyOP0j/
+Subject: Re: [Buildroot] [PATCH 1/1] package/libpcap: bump version to 1.10.5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -88,8 +88,8 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Akhilesh Nema, All,
 
-On 2024-09-22 13:41 -0700, Akhilesh Nema spake thusly:
-> Changelog: https://github.com/the-tcpdump-group/tcpdump/blob/4a789712f187e3ac7b2c0044c3a3f8c71b83646e/CHANGES
+On 2024-09-22 13:57 -0700, Akhilesh Nema spake thusly:
+> Changelog: https://github.com/the-tcpdump-group/libpcap/blob/bbcbc9174df3298a854daee2b3e666a4b6e5383a/CHANGES
 > 
 > Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
 
@@ -99,35 +99,36 @@ Regards,
 Yann E. MORIN.
 
 > ---
->  package/tcpdump/tcpdump.hash | 4 ++--
->  package/tcpdump/tcpdump.mk   | 2 +-
+>  package/libpcap/libpcap.hash | 4 ++--
+>  package/libpcap/libpcap.mk   | 2 +-
 >  2 files changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/package/tcpdump/tcpdump.hash b/package/tcpdump/tcpdump.hash
-> index 1a22889851..b29ac06060 100644
-> --- a/package/tcpdump/tcpdump.hash
-> +++ b/package/tcpdump/tcpdump.hash
-> @@ -1,5 +1,5 @@
->  # Locally calculated after checking pgp signature at
-> -# https://www.tcpdump.org/release/tcpdump-4.99.3.tar.gz.sig
-> +# https://www.tcpdump.org/release/tcpdump-4.99.5.tar.gz.sig
->  # using key 1F166A5742ABB9E0249A8D30E089DEF1D9C15D0D
-> -sha256  0232231bb2f29d6bf2426e70a08a7e0c63a0d59a9b44863b7f5e2357a6e49fea  tcpdump-4.99.4.tar.gz
-> +sha256  8c75856e00addeeadf70dad67c9ff3dd368536b2b8563abf6854d7c764cd3adb  tcpdump-4.99.5.tar.gz
+> diff --git a/package/libpcap/libpcap.hash b/package/libpcap/libpcap.hash
+> index 34339c1261..7f53b99b8c 100644
+> --- a/package/libpcap/libpcap.hash
+> +++ b/package/libpcap/libpcap.hash
+> @@ -1,6 +1,6 @@
+>  # Locally calculated after checking pgp signature
+> -# https://www.tcpdump.org/release/libpcap-1.10.4.tar.gz.sig
+> -sha256  ed19a0383fad72e3ad435fd239d7cd80d64916b87269550159d20e47160ebe5f  libpcap-1.10.4.tar.gz
+> +# https://www.tcpdump.org/release/libpcap-1.10.5.tar.gz.sig
+> +sha256  37ced90a19a302a7f32e458224a00c365c117905c2cd35ac544b6880a81488f0  libpcap-1.10.5.tar.gz
+>  
+>  # Hash for license file:
 >  sha256  8a54594d257e14a5260ac770f1633516cb51e3fc28c40136ce2697014eda7afd  LICENSE
-> diff --git a/package/tcpdump/tcpdump.mk b/package/tcpdump/tcpdump.mk
-> index 91643e7bea..f4086ef124 100644
-> --- a/package/tcpdump/tcpdump.mk
-> +++ b/package/tcpdump/tcpdump.mk
+> diff --git a/package/libpcap/libpcap.mk b/package/libpcap/libpcap.mk
+> index 3d05590da3..67adb0a978 100644
+> --- a/package/libpcap/libpcap.mk
+> +++ b/package/libpcap/libpcap.mk
 > @@ -4,7 +4,7 @@
 >  #
 >  ################################################################################
 >  
-> -TCPDUMP_VERSION = 4.99.4
-> +TCPDUMP_VERSION = 4.99.5
->  TCPDUMP_SITE = https://www.tcpdump.org/release
->  TCPDUMP_LICENSE = BSD-3-Clause
->  TCPDUMP_LICENSE_FILES = LICENSE
+> -LIBPCAP_VERSION = 1.10.4
+> +LIBPCAP_VERSION = 1.10.5
+>  LIBPCAP_SITE = https://www.tcpdump.org/release
+>  LIBPCAP_LICENSE = BSD-3-Clause
+>  LIBPCAP_LICENSE_FILES = LICENSE
 > -- 
 > 2.25.1
 > 
