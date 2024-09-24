@@ -4,93 +4,101 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6532FCF9C72
-	for <buildroot@archiver.kernel.org>; Tue, 24 Sep 2024 02:39:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB183CF9C72
+	for <buildroot@archiver.kernel.org>; Tue, 24 Sep 2024 02:58:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AF4FC41940;
-	Tue, 24 Sep 2024 02:39:57 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4951A40B41;
+	Tue, 24 Sep 2024 02:58:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KaKYq0xgxvJL; Tue, 24 Sep 2024 02:39:55 +0000 (UTC)
+ id Swt4v3qyjMBH; Tue, 24 Sep 2024 02:58:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 9D1A441964
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 48FEB40B63
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 9D1A441964;
-	Tue, 24 Sep 2024 02:39:54 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 48FEB40B63;
+	Tue, 24 Sep 2024 02:58:41 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1DCCE1BF37A
- for <buildroot@lists.busybox.net>; Tue, 24 Sep 2024 02:39:52 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3E4091BF37A
+ for <buildroot@lists.busybox.net>; Tue, 24 Sep 2024 02:58:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id E9FA681E59
- for <buildroot@lists.busybox.net>; Tue, 24 Sep 2024 02:39:51 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3A79180BD7
+ for <buildroot@lists.busybox.net>; Tue, 24 Sep 2024 02:58:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id inHw24hU8nu2 for <buildroot@lists.busybox.net>;
- Tue, 24 Sep 2024 02:39:50 +0000 (UTC)
+ id e66ryUDlF-6F for <buildroot@lists.busybox.net>;
+ Tue, 24 Sep 2024 02:58:38 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::d35; helo=mail-io1-xd35.google.com;
- envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 42B5381E58
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 42B5381E58
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com
- [IPv6:2607:f8b0:4864:20::d35])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 42B5381E58
- for <buildroot@buildroot.org>; Tue, 24 Sep 2024 02:39:50 +0000 (UTC)
-Received: by mail-io1-xd35.google.com with SMTP id
- ca18e2360f4ac-82aa7c3b482so194682739f.2
- for <buildroot@buildroot.org>; Mon, 23 Sep 2024 19:39:50 -0700 (PDT)
+ client-ip=2607:f8b0:4864:20::82c; helo=mail-qt1-x82c.google.com;
+ envelope-from=jarraneil@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org BD3A680BC1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BD3A680BC1
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com
+ [IPv6:2607:f8b0:4864:20::82c])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id BD3A680BC1
+ for <buildroot@buildroot.org>; Tue, 24 Sep 2024 02:58:37 +0000 (UTC)
+Received: by mail-qt1-x82c.google.com with SMTP id
+ d75a77b69052e-4582c62ee33so51989301cf.3
+ for <buildroot@buildroot.org>; Mon, 23 Sep 2024 19:58:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1727145589; x=1727750389;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=5DfgAz+mLFwiDsmIBMZgmJZqmssqWkS8AGdnhUi0ZxA=;
- b=UD98n6vfGvohpOI/57ymSqI6lrNHg8k+LNypeEqOtUsg0tjpTcRos7JttFf3fV8tpK
- 7ef42vhj7SkSy+rADqh8y9Rqu7MMivQHOTT1iycuT+gGTR7kLp4Yq593uhKg51iXap9r
- cT2jXz2PgtNYJ3S3N3o4W0+j8v/f1tl12Z8qnX/IeTMaJo/LHLfJGPPq7K8v9rfc2RbJ
- dDKfOdh7w/5h6Q82Ooit6GRJ1rJHEn1zIxB1VxCnM9FS6FcUFhWHulFgmaMcxWfcgchf
- SmNjLhZNdYjpZ47q2MqXXz2NAkmTZzEUHJhDfC1AUlPONXjjpdCTHRzbspvw0P2WYiyk
- BzVA==
-X-Gm-Message-State: AOJu0YxW4NobADwGRK3Fm7lPXFymOvAq/lhVNnjJneTv8M1hAr3PAaLP
- e7IHMHgjoGm6lsftlHCptjOA3Jh77KHT7uN5sHZuEdwi/fZzgkJmUAovBQ==
-X-Google-Smtp-Source: AGHT+IGp9Ge/X2etwPVh9NDylydtVmBQh/4zJHa6x2PAhJsKYKjUfEnRwkXRWcpCDrQTPMBuH7EhjA==
-X-Received: by 2002:a05:6602:168b:b0:82c:ebd2:3ec0 with SMTP id
- ca18e2360f4ac-83209c553aemr1125629639f.0.1727145588822; 
- Mon, 23 Sep 2024 19:39:48 -0700 (PDT)
-Received: from james-x399.localdomain (97-118-132-252.hlrn.qwest.net.
- [97.118.132.252]) by smtp.gmail.com with ESMTPSA id
- ca18e2360f4ac-8323f5eacc4sm15459339f.19.2024.09.23.19.39.47
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 23 Sep 2024 19:39:48 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
-To: buildroot@buildroot.org
-Date: Mon, 23 Sep 2024 20:39:19 -0600
-Message-Id: <20240924023919.1502635-3-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240924023919.1502635-1-james.hilliard1@gmail.com>
-References: <20240924023919.1502635-1-james.hilliard1@gmail.com>
+ d=1e100.net; s=20230601; t=1727146716; x=1727751516;
+ h=content-transfer-encoding:in-reply-to:content-language:references
+ :to:from:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=v18rTr1oEUCfRGd1LWH1OxeFR72YK48GMmB1RpafIZE=;
+ b=AWIazAw5lVCCtLRItXrQffaMVb6DRXlPwSFA6x7v3fn6XbPppooIsAKFZ1H4Wzxnmm
+ befw7kP5Ao/JObPFAbQslcfe0ZLRUNyvaj8hCTAzomXGPQt27BP74VX3STSeKQSVYrld
+ DsWHy0zpm9tGPQ8/IhC0ylfpPq9gSUB4P/m06Z0aZOqJikohOscmZxP2PryQ7HtO+2a8
+ RbbFIGLuiVn+IsG2Wz1dcEtzAzi6CaSxSfpNds5VIDPnQemTq0RjgcKB8aOaUtuscrlZ
+ v0Ntk7ZQsYwjqitK+5ExSXKq+rZQ2mXOPrmPuDCbBY23t8yRnlS/x4FGRrHQo0CKnaiM
+ Hefg==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCVoiCccIjr5IUcoRnkSIcjs0xdQdy9rXCPt4zjwfDPxEZe8DGwcGD8Te1IPSOBwKX1cOA626izdzPo=@buildroot.org
+X-Gm-Message-State: AOJu0YzAQ+mv5tnEQ13Gvx43U8qy6Yc6XmZFqW4RkmFv41NGXBAdmwDE
+ iLsKR+b/Y196xmpm78a2Ar5kLk0JekNLI/sUrroZVB2PpF56SqHX/npZHA==
+X-Google-Smtp-Source: AGHT+IFFKNN+hxR6GLyE+7H7Wfv9WbSk1YdmzS6UNZnnJZxRdOvIDChcTW1IqOBdOGwHJXh9h3LBEQ==
+X-Received: by 2002:a05:622a:206:b0:458:21f9:5a84 with SMTP id
+ d75a77b69052e-45b205605b7mr233151841cf.54.1727146716282; 
+ Mon, 23 Sep 2024 19:58:36 -0700 (PDT)
+Received: from [192.168.2.11] ([74.15.242.87])
+ by smtp.gmail.com with ESMTPSA id
+ d75a77b69052e-45b5253aca4sm2578731cf.19.2024.09.23.19.58.34
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Mon, 23 Sep 2024 19:58:35 -0700 (PDT)
+Message-ID: <283aa98a-e847-4bfa-a95d-fe2c62492ee4@gmail.com>
+Date: Mon, 23 Sep 2024 22:58:23 -0400
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+From: Neil Webster <jarraneil@gmail.com>
+To: Arnout Vandecappelle <arnout@mind.be>,
+ "buildroot@buildroot.org" <buildroot@buildroot.org>
+References: <bf3a752a-6954-44dc-b805-c7850be85539@tungstencollaborative.com>
+ <216539b9-4730-4adc-b400-655d287a082a@mind.be>
+ <a9c3d961-ceda-4092-9830-27e3c4bd114b@gmail.com>
+ <9d0c3fb8-a4ac-40f1-9608-a14ab281a861@mind.be>
+ <f9a209f6-cca2-4f37-83d4-faa6ab86ac36@gmail.com>
+Content-Language: en-US
+In-Reply-To: <f9a209f6-cca2-4f37-83d4-faa6ab86ac36@gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1727145589; x=1727750389; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=5DfgAz+mLFwiDsmIBMZgmJZqmssqWkS8AGdnhUi0ZxA=;
- b=cVB2nNhT37XA2hBLEgWtSulJfFx8SxMJc7m9gL02QBzNVgRylLsTK7V4EyDRdkf/js
- z4YrTenBzz2SyocM0iN4khPbQocctCQgge8pxV8KCd5X37qPHkZlQLTPqQssWMv6bz8h
- yYmu4Cn0aKRED84r4BZU5nmzZdcJe1NZkzMZSmcuLSf8w8ThSx670z9vCjAggnPnMdf6
- 3s77KXcQB8aeY/DsfgIh1hBFlTMoGGZC0PDlTS+zA67HYdV9zvl2woMisNBiAsGRu/Oo
- 7OjQmCbSazd96ujiHkTexuzypVI5pmP72KgbpcP9sRrWWO4gKKMZz9MU79jDC/H6ZWhV
- 3RlA==
+ d=gmail.com; s=20230601; t=1727146716; x=1727751516; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:content-language:references
+ :to:from:subject:user-agent:mime-version:date:message-id:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=v18rTr1oEUCfRGd1LWH1OxeFR72YK48GMmB1RpafIZE=;
+ b=HX6uG+owYVhqlUGawVZOM5EiPm28uMs1GtksLWJvGjIxGQ8UwUc+ZhYWcYK57BIfOg
+ K8lcTFyIFd1/0eRrp0odsi6UrzmEc6bCUo/wE4rHMML+touTiubr8i2RGXhHTgHIEice
+ PciycFAYLY8prfdRWOkiFNaFexuxJxt9O150QcWoi56tdnP+gKXF6WFjiR3A8tnjlcrN
+ k+qp4smUvo3MzgHQAn+b8NmX7yeq/f/L0a0ko+cHC8fobyziPVW+WVYfkO0Qkpa6sefI
+ dcyrys6HVpq5nKZbPEXEUq30Kp8Fk+oLhYh/4mO6z8rTbk/85LmLZuDDMD7yJZvfMvc7
+ /htw==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=cVB2nNhT
-Subject: [Buildroot] [PATCH v2 3/3] package/grpc: bump to version 1.66.1
+ header.a=rsa-sha256 header.s=20230601 header.b=HX6uG+ow
+Subject: Re: [Buildroot] Variscite Dart
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,484 +110,161 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Marcus Folkesson <marcus.folkesson@gmail.com>,
- Kamel Bouhara <kamel.bouhara@gmail.com>,
- Marcin Niestroj <m.niestroj@grinn-global.com>,
- James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>,
- Julien Olivain <ju.o@free.fr>,
- Woodrow Douglass <wdouglass@carnegierobotics.com>,
- Christian Stewart <christian@aperture.us>,
- Robert Rose <robertroyrose@gmail.com>,
- Fabrice Fontaine <fontaine.fabrice@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Add new -DgRPC_BUILD_CODEGEN=OFF config option which is required if
-no plugins are enabled.
-
-Drop no longer relevant add GPR_DISABLE_WRAPPED_MEMCPY patch.
-
-Rebase remaining patches.
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- .checkpackageignore                           |  3 +-
- ...the-availability-of-pthread_setname_.patch | 26 ++---
- ...trict-building-of-host-grpc-to-grpc.patch} | 98 ++++++++-----------
- ...py.cc-add-GPR_DISABLE_WRAPPED_MEMCPY.patch | 34 -------
- ...conditionally-downloading-api-repos.patch} | 21 ++--
- package/grpc/grpc.hash                        |  2 +-
- package/grpc/grpc.mk                          |  3 +-
- 7 files changed, 68 insertions(+), 119 deletions(-)
- rename package/grpc/{0003-host-grpc-only-cpp-plugin.patch => 0002-Add-option-to-restrict-building-of-host-grpc-to-grpc.patch} (63%)
- delete mode 100644 package/grpc/0002-wrap_memcpy.cc-add-GPR_DISABLE_WRAPPED_MEMCPY.patch
- rename package/grpc/{0004-disable-unconditionally-downloading-api-repos.patch => 0003-disable-unconditionally-downloading-api-repos.patch} (62%)
-
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 0cc742bf09..c22a9c3133 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -568,8 +568,7 @@ package/gobject-introspection/0002-Add-rpath-links-to-ccompiler.patch lib_patch.
- package/gpsd/S50gpsd Shellcheck lib_sysv.Indent lib_sysv.Variables
- package/gptfdisk/0001-gptcurses-partially-revert-Tweaks-for-building-on-th.patch lib_patch.Upstream
- package/graphite2/0001-don-t-install-a-libtool-file-with-static-library.patch lib_patch.Upstream
--package/grpc/0002-wrap_memcpy.cc-add-GPR_DISABLE_WRAPPED_MEMCPY.patch lib_patch.Upstream
--package/grpc/0004-disable-unconditionally-downloading-api-repos.patch lib_patch.Upstream
-+package/grpc/0003-disable-unconditionally-downloading-api-repos.patch lib_patch.Upstream
- package/gstreamer1/gstd/0001-Don-t-require-gstd-check-user-xenv.sh-for-systemd-se.patch lib_patch.Upstream
- package/guile/0001-calculate-csqrt_manually.patch lib_patch.Upstream
- package/guile/0002-Makefile.am-fix-build-without-makeinfo.patch lib_patch.Upstream
-diff --git a/package/grpc/0001-Properly-detect-the-availability-of-pthread_setname_.patch b/package/grpc/0001-Properly-detect-the-availability-of-pthread_setname_.patch
-index 92dc5a6c45..e8e211758a 100644
---- a/package/grpc/0001-Properly-detect-the-availability-of-pthread_setname_.patch
-+++ b/package/grpc/0001-Properly-detect-the-availability-of-pthread_setname_.patch
-@@ -1,4 +1,4 @@
--From 0dfb289a3b362b082ac3608d887e42f09dadc0d2 Mon Sep 17 00:00:00 2001
-+From dfec50b899c449bc964514f16e94869de7a68896 Mon Sep 17 00:00:00 2001
- From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- Date: Mon, 31 Dec 2018 16:22:07 +0100
- Subject: [PATCH] Properly detect the availability of pthread_setname_np()
-@@ -20,15 +20,15 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- ]
- Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
- ---
-- CMakeLists.txt                            | 6 ++++++
-- include/grpc/impl/codegen/port_platform.h | 2 ++
-+ CMakeLists.txt                       | 6 ++++++
-+ include/grpc/support/port_platform.h | 2 ++
-  2 files changed, 8 insertions(+)
- 
- diff --git a/CMakeLists.txt b/CMakeLists.txt
--index 45c2fcb..0b2be4f 100644
-+index 053b9e3784..2565dc5c84 100644
- --- a/CMakeLists.txt
- +++ b/CMakeLists.txt
--@@ -208,6 +208,12 @@ if (NOT DEFINED CMAKE_POSITION_INDEPENDENT_CODE)
-+@@ -291,6 +291,12 @@ if (NOT DEFINED CMAKE_POSITION_INDEPENDENT_CODE)
-  endif()
-  list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
-  
-@@ -41,11 +41,11 @@ index 45c2fcb..0b2be4f 100644
-  if(MSVC)
-    include(cmake/msvc_static_runtime.cmake)
-    add_definitions(-D_WIN32_WINNT=0x600 -D_SCL_SECURE_NO_WARNINGS -D_CRT_SECURE_NO_WARNINGS -D_WINSOCK_DEPRECATED_NO_WARNINGS)
--diff --git a/include/grpc/impl/codegen/port_platform.h b/include/grpc/impl/codegen/port_platform.h
--index 4f213ff..55ecd9d 100644
----- a/include/grpc/impl/codegen/port_platform.h
--+++ b/include/grpc/impl/codegen/port_platform.h
--@@ -186,6 +186,7 @@
-+diff --git a/include/grpc/support/port_platform.h b/include/grpc/support/port_platform.h
-+index 5fb7426af2..24d438d702 100644
-+--- a/include/grpc/support/port_platform.h
-++++ b/include/grpc/support/port_platform.h
-+@@ -228,6 +228,7 @@
-  #endif /* _LP64 */
-  #ifdef __GLIBC__
-  #define GPR_POSIX_CRASH_HANDLER 1
-@@ -53,7 +53,7 @@ index 4f213ff..55ecd9d 100644
-  #ifdef __GLIBC_PREREQ
-  #if __GLIBC_PREREQ(2, 12)
-  #define GPR_LINUX_PTHREAD_NAME 1
--@@ -194,6 +195,7 @@
-+@@ -236,6 +237,7 @@
-  // musl libc & others
-  #define GPR_LINUX_PTHREAD_NAME 1
-  #endif
-@@ -61,6 +61,6 @@ index 4f213ff..55ecd9d 100644
-  #include <linux/version.h>
-  #else /* musl libc */
-  #define GPR_MUSL_LIBC_COMPAT 1
--
- -- 
--2.26.63
-+2.34.1
-+
-diff --git a/package/grpc/0003-host-grpc-only-cpp-plugin.patch b/package/grpc/0002-Add-option-to-restrict-building-of-host-grpc-to-grpc.patch
-similarity index 63%
-rename from package/grpc/0003-host-grpc-only-cpp-plugin.patch
-rename to package/grpc/0002-Add-option-to-restrict-building-of-host-grpc-to-grpc.patch
-index bfb8713053..82705d8a1e 100644
---- a/package/grpc/0003-host-grpc-only-cpp-plugin.patch
-+++ b/package/grpc/0002-Add-option-to-restrict-building-of-host-grpc-to-grpc.patch
-@@ -1,4 +1,4 @@
--From 0f2c73b62bdc612f9d5cdd8e0c765995470d4f8b Mon Sep 17 00:00:00 2001
-+From 6aab068a6bd92e215b61eaab61062bf1d97bc065 Mon Sep 17 00:00:00 2001
- From: Thomas De Schampheleire <thomas.de_schampheleire@nokia.com>
- Date: Tue, 25 May 2021 14:55:23 +0200
- Subject: [PATCH] Add option to restrict building of (host-)grpc to
-@@ -15,17 +15,17 @@ Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
- Updated for 1.48.0:
- Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
- ---
-- CMakeLists.txt | 39 +++++++++++++++++++++++++++++++++++----
-- 1 file changed, 35 insertions(+), 4 deletions(-)
-+ CMakeLists.txt | 36 +++++++++++++++++++++++++++++++-----
-+ 1 file changed, 31 insertions(+), 5 deletions(-)
- 
- diff --git a/CMakeLists.txt b/CMakeLists.txt
--index 0dcae6b1aee5..57b3963a43b0 100644
-+index 2565dc5c84..94f8fd3e93 100644
- --- a/CMakeLists.txt
- +++ b/CMakeLists.txt
--@@ -49,12 +49,16 @@ option(gRPC_BUILD_TESTS "Build tests" OFF)
-+@@ -50,12 +50,16 @@ set(gRPC_BUILD_MSVC_MP_COUNT 0 CACHE STRING "The maximum number of processes for
-+ option(gRPC_BUILD_TESTS "Build tests" OFF)
-  option(gRPC_BUILD_CODEGEN "Build codegen" ON)
-- option(gRPC_BUILD_CSHARP_EXT "Build C# extensions" ON)
-- option(gRPC_BACKWARDS_COMPATIBILITY_MODE "Build libraries that are binary compatible across a larger number of OS and libc versions" OFF)
-+ option(gRPC_DOWNLOAD_ARCHIVES "Download archives for empty 3rd party directories" ON)
- +option(gRPC_BUILD_PLUGIN_SUPPORT_ONLY "Build plugin support only" OFF)
-  
-  set(gRPC_INSTALL_default ON)
-@@ -39,7 +39,7 @@ index 0dcae6b1aee5..57b3963a43b0 100644
-  set(gRPC_INSTALL ${gRPC_INSTALL_default} CACHE BOOL
-      "Generate installation target")
-  
--@@ -563,6 +567,8 @@ add_custom_target(plugins
-+@@ -662,6 +666,8 @@ add_custom_target(plugins
-    DEPENDS ${_gRPC_PLUGIN_LIST}
-  )
-  
-@@ -48,7 +48,7 @@ index 0dcae6b1aee5..57b3963a43b0 100644
-  add_custom_target(tools_c
-    DEPENDS
-  )
--@@ -574,6 +580,8 @@ add_custom_target(tools_cxx
-+@@ -673,6 +679,8 @@ add_custom_target(tools_cxx
-  add_custom_target(tools
-    DEPENDS tools_c tools_cxx)
-  
-@@ -57,15 +57,16 @@ index 0dcae6b1aee5..57b3963a43b0 100644
-  protobuf_generate_grpc_cpp_with_import_path_correction(
-    src/proto/grpc/channelz/channelz.proto src/proto/grpc/channelz/channelz.proto
-  )
--@@ -1307,6 +1315,7 @@ if(gRPC_BUILD_TESTS)
-+@@ -1660,7 +1668,7 @@ if(gRPC_BUILD_TESTS)
-      DEPENDS buildtests_c buildtests_cxx)
-  endif()
-  
-+-
- +if (NOT gRPC_BUILD_PLUGIN_SUPPORT_ONLY)
-  
-  add_library(address_sorting
-    third_party/address_sorting/address_sorting.c
--@@ -1359,6 +1368,8 @@ if(gRPC_INSTALL)
-+@@ -2855,6 +2863,8 @@ if(gRPC_INSTALL)
-    )
-  endif()
-  
-@@ -73,17 +74,17 @@ index 0dcae6b1aee5..57b3963a43b0 100644
- +
-  if(gRPC_BUILD_TESTS)
-  
-- add_library(end2end_tests
--@@ -1512,6 +1523,8 @@ target_link_libraries(end2end_tests
-+ add_library(grpc_test_util
-+@@ -2987,6 +2997,8 @@ endif()
-  
-  endif()
-  
- +if(NOT gRPC_BUILD_PLUGIN_SUPPORT_ONLY)
- +
-- add_library(gpr
--   src/core/lib/gpr/alloc.cc
--   src/core/lib/gpr/atm.cc
--@@ -2504,6 +2517,8 @@ if(gRPC_INSTALL)
-+ add_library(grpc_unsecure
-+   src/core/channelz/channel_trace.cc
-+   src/core/channelz/channelz.cc
-+@@ -3547,6 +3559,8 @@ if(gRPC_INSTALL)
-    )
-  endif()
-  
-@@ -91,17 +92,17 @@ index 0dcae6b1aee5..57b3963a43b0 100644
- +
-  if(gRPC_BUILD_TESTS)
-  
-- add_library(grpc_test_util
--@@ -2618,6 +2633,8 @@ endif()
-+ add_library(gtest
-+@@ -3621,6 +3635,8 @@ target_link_libraries(gtest
-  
-  endif()
-  
- +if(NOT gRPC_BUILD_PLUGIN_SUPPORT_ONLY)
- +
-- add_library(grpc_unsecure
--   src/core/ext/filters/census/grpc_context.cc
--   src/core/ext/filters/channel_idle/channel_idle_filter.cc
--@@ -3102,6 +3119,8 @@ if(gRPC_INSTALL)
-+ add_library(upb_base_lib
-+   third_party/upb/upb/base/status.c
-+ )
-+@@ -4108,6 +4124,8 @@ if(gRPC_INSTALL)
-    )
-  endif()
-  
-@@ -110,7 +111,7 @@ index 0dcae6b1aee5..57b3963a43b0 100644
-  if(gRPC_BUILD_TESTS)
-  
-  if(gRPC_BUILD_CODEGEN)
--@@ -3185,6 +3204,8 @@ endif()
-+@@ -4193,6 +4211,8 @@ endif()
-  
-  endif()
-  
-@@ -119,24 +120,24 @@ index 0dcae6b1aee5..57b3963a43b0 100644
-  add_library(grpc++
-    src/core/ext/transport/binder/client/binder_connector.cc
-    src/core/ext/transport/binder/client/channel_create.cc
--@@ -3635,6 +3656,7 @@ if(gRPC_INSTALL)
-+@@ -4684,6 +4704,7 @@ if(gRPC_INSTALL)
-    )
-  endif()
-  
- +endif() # gRPC_BUILD_PLUGIN_SUPPORT_ONLY
-  
-  if(gRPC_BUILD_CODEGEN)
-- add_library(grpc++_reflection
--@@ -3889,6 +3911,8 @@ target_link_libraries(grpc++_test_util
-+ add_library(grpc++_reflection ${_gRPC_STATIC_WIN32}
-+@@ -4967,6 +4988,8 @@ target_link_libraries(grpc++_test_util
-  
-  endif()
-  
- +if(NOT gRPC_BUILD_PLUGIN_SUPPORT_ONLY)
- +
-  add_library(grpc++_unsecure
-+   src/cpp/client/call_credentials.cc
-    src/cpp/client/channel_cc.cc
--   src/cpp/client/client_callback.cc
--@@ -4181,6 +4205,7 @@ if(gRPC_INSTALL)
-+@@ -5707,6 +5730,7 @@ if(gRPC_INSTALL)
-    )
-  endif()
-  
-@@ -144,7 +145,7 @@ index 0dcae6b1aee5..57b3963a43b0 100644
-  
-  add_library(grpc_plugin_support
-    src/compiler/cpp_generator.cc
--@@ -4240,7 +4265,7 @@ foreach(_hdr
-+@@ -5769,7 +5793,7 @@ foreach(_hdr
-  endforeach()
-  
-  
-@@ -153,25 +154,7 @@ index 0dcae6b1aee5..57b3963a43b0 100644
-    install(TARGETS grpc_plugin_support EXPORT gRPCTargets
-      RUNTIME DESTINATION ${gRPC_INSTALL_BINDIR}
-      BUNDLE DESTINATION  ${gRPC_INSTALL_BINDIR}
--@@ -4324,6 +4349,8 @@ endif()
-- 
-- endif()
-- 
--+if(NOT gRPC_BUILD_PLUGIN_SUPPORT_ONLY)
--+
-- add_library(upb
--   third_party/upb/third_party/utf8_range/naive.c
--   third_party/upb/third_party/utf8_range/range2-neon.c
--@@ -4393,6 +4420,8 @@ if(gRPC_INSTALL)
--   )
-- endif()
-- 
--+endif() # gRPC_BUILD_PLUGIN_SUPPORT_ONLY
--+
-- 
-- if(gRPC_BUILD_TESTS)
-- 
--@@ -11085,7 +11114,7 @@ target_link_libraries(grpc_completion_queue_test
-+@@ -16520,7 +16544,7 @@ target_link_libraries(grpc_completion_queue_test
-  
-  
-  endif()
-@@ -180,16 +163,16 @@ index 0dcae6b1aee5..57b3963a43b0 100644
-  
-  add_executable(grpc_cpp_plugin
-    src/compiler/cpp_plugin.cc
--@@ -11115,7 +11144,7 @@ target_link_libraries(grpc_cpp_plugin
-+@@ -16548,7 +16572,7 @@ target_link_libraries(grpc_cpp_plugin
-  
-  
-  
- -if(gRPC_INSTALL)
- +if(gRPC_INSTALL OR gRPC_BUILD_PLUGIN_SUPPORT_ONLY)
--   install(TARGETS grpc_cpp_plugin EXPORT gRPCTargets
-+   install(TARGETS grpc_cpp_plugin EXPORT gRPCPluginTargets
-      RUNTIME DESTINATION ${gRPC_INSTALL_BINDIR}
-      BUNDLE DESTINATION  ${gRPC_INSTALL_BINDIR}
--@@ -23128,7 +23157,7 @@ endif()
-+@@ -37968,7 +37992,7 @@ endif()
-  
-  
-  
-@@ -198,12 +181,13 @@ index 0dcae6b1aee5..57b3963a43b0 100644
-  
-  if(gRPC_INSTALL)
-    install(EXPORT gRPCTargets
--@@ -23225,3 +23254,5 @@ generate_pkgconfig(
--   "-lgrpc++_unsecure"
--   ""
--   "grpc++_unsecure.pc")
-+@@ -38089,3 +38113,5 @@ generate_pkgconfig(
-+   "-lgrpcpp_otel_plugin"
-+   "-laddress_sorting -lupb_textformat_lib -lupb_json_lib -lupb_wire_lib -lupb_message_lib -lutf8_range_lib -lupb_mini_descriptor_lib -lupb_mem_lib -lupb_base_lib"
-+   "grpcpp_otel_plugin.pc")
- +
- +endif() # gRPC_BUILD_PLUGIN_SUPPORT_ONLY
-+\ No newline at end of file
- -- 
--2.43.0
-+2.34.1
- 
-diff --git a/package/grpc/0002-wrap_memcpy.cc-add-GPR_DISABLE_WRAPPED_MEMCPY.patch b/package/grpc/0002-wrap_memcpy.cc-add-GPR_DISABLE_WRAPPED_MEMCPY.patch
-deleted file mode 100644
-index aac92bab13..0000000000
---- a/package/grpc/0002-wrap_memcpy.cc-add-GPR_DISABLE_WRAPPED_MEMCPY.patch
-+++ /dev/null
-@@ -1,34 +0,0 @@
--From be030314805137cd63b46ea6eaa702b608669910 Mon Sep 17 00:00:00 2001
--From: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--Date: Sun, 2 Jun 2019 17:45:47 +0200
--Subject: [PATCH] wrap_memcpy.cc: add GPR_DISABLE_WRAPPED_MEMCPY
--
--Add GPR_DISABLE_WRAPPED_MEMCPY to allow the user to disable wrapped
--memcpy. This will fix build on x86_64 on musl/uclibc without changing
--the cpu behavior.
--
--Fixes:
-- - http://autobuild.buildroot.org/results/20d6f2489a4e291a53bd514da66105eb607e1014
--
--Signed-off-by: Fabrice Fontaine <fontaine.fabrice@gmail.com>
--[Upstream status: https://github.com/grpc/grpc/pull/19207]
-----
-- src/core/lib/gpr/wrap_memcpy.cc | 2 +-
-- 1 file changed, 1 insertion(+), 1 deletion(-)
--
--diff --git a/src/core/lib/gpr/wrap_memcpy.cc b/src/core/lib/gpr/wrap_memcpy.cc
--index 9b8608e056..38b76acf95 100644
----- a/src/core/lib/gpr/wrap_memcpy.cc
--+++ b/src/core/lib/gpr/wrap_memcpy.cc
--@@ -29,7 +29,7 @@
-- extern "C" {
-- #ifdef __linux__
-- #if defined(__x86_64__) && !defined(GPR_MUSL_LIBC_COMPAT) && \
---    !defined(__ANDROID__)
--+    !defined(__ANDROID__) && !defined(GPR_DISABLE_WRAPPED_MEMCPY)
-- __asm__(".symver memcpy,memcpy@GLIBC_2.2.5");
-- void* __wrap_memcpy(void* destination, const void* source, size_t num) {
--   return memcpy(destination, source, num);
---- 
--2.20.1
--
-diff --git a/package/grpc/0004-disable-unconditionally-downloading-api-repos.patch b/package/grpc/0003-disable-unconditionally-downloading-api-repos.patch
-similarity index 62%
-rename from package/grpc/0004-disable-unconditionally-downloading-api-repos.patch
-rename to package/grpc/0003-disable-unconditionally-downloading-api-repos.patch
-index 967bbf6247..0cd5012b26 100644
---- a/package/grpc/0004-disable-unconditionally-downloading-api-repos.patch
-+++ b/package/grpc/0003-disable-unconditionally-downloading-api-repos.patch
-@@ -1,4 +1,4 @@
--From b0599c3d1b52818c79ea8fa5dfdc40a4ce01e454 Mon Sep 17 00:00:00 2001
-+From 2a73f6439b6d745b2cbfff120dc7adc555400247 Mon Sep 17 00:00:00 2001
- From: Michael Nosthoff <buildroot@heine.tech>
- Date: Fri, 22 Jul 2022 08:49:48 +0200
- Subject: [PATCH] disable unconditionally downloading api repos
-@@ -9,31 +9,30 @@ for now.
- See https://github.com/grpc/grpc/issues/30385
- 
- Signed-off-by: Michael Nosthoff <buildroot@heine.tech>
--
- ---
-  CMakeLists.txt | 2 ++
-  1 file changed, 2 insertions(+)
- 
- diff --git a/CMakeLists.txt b/CMakeLists.txt
--index 11e7ae2b67..a9062fa6ef 100644
-+index 94f8fd3e93..df43d2e193 100644
- --- a/CMakeLists.txt
- +++ b/CMakeLists.txt
--@@ -327,6 +327,7 @@ include(cmake/xxhash.cmake)
-- include(cmake/zlib.cmake)
-- include(cmake/download_archive.cmake)
-+@@ -402,6 +402,7 @@ if(gRPC_BUILD_GRPCPP_OTEL_PLUGIN)
-+   include(cmake/opentelemetry-cpp.cmake)
-+ endif()
-  
- +if(FALSE)
-  # Setup external proto library at third_party/envoy-api with 2 download URLs
-- if (NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/third_party/envoy-api)
-+ if (NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/third_party/envoy-api AND gRPC_DOWNLOAD_ARCHIVES)
-    # Download the archive via HTTP, validate the checksum, and extract to third_party/envoy-api.
--@@ -403,6 +404,7 @@ if (NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/third_party/xds)
--     xds-cb28da3451f158a947dfc45090fe92b07b243bc1
-+@@ -478,6 +479,7 @@ if (NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/third_party/xds AND gRPC_DOWNLOAD_ARC
-+     xds-3a472e524827f72d1ad621c4983dd5af54c46776
-    )
-  endif()
- +endif()
-  
-  if(WIN32)
--   set(_gRPC_BASELIB_LIBRARIES ws2_32 crypt32)
-+   set(_gRPC_ALLTARGETS_LIBRARIES ${_gRPC_ALLTARGETS_LIBRARIES} ws2_32 crypt32)
- -- 
--2.25.1
-+2.34.1
- 
-diff --git a/package/grpc/grpc.hash b/package/grpc/grpc.hash
-index e6b76dcb5e..08aada1454 100644
---- a/package/grpc/grpc.hash
-+++ b/package/grpc/grpc.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  b55696fb249669744de3e71acc54a9382bea0dce7cd5ba379b356b12b82d4229  grpc-1.51.1.tar.gz
-+sha256  79ed4ab72fa9589b20f8b0b76c16e353e4cfec1d773d33afad605d97b5682c61  grpc-1.66.1.tar.gz
- sha256  590198e3f305f2c347fde64d637c65492bbef554db6c8364e149cd375e3797ee  LICENSE
-diff --git a/package/grpc/grpc.mk b/package/grpc/grpc.mk
-index 9125b1f9f6..47ebf1997c 100644
---- a/package/grpc/grpc.mk
-+++ b/package/grpc/grpc.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--GRPC_VERSION = 1.51.1
-+GRPC_VERSION = 1.66.1
- GRPC_SITE = $(call github,grpc,grpc,v$(GRPC_VERSION))
- GRPC_LICENSE = Apache-2.0, BSD-3-Clause (third_party code), MPL-2.0 (etc/roots.pem)
- GRPC_LICENSE_FILES = LICENSE
-@@ -29,6 +29,7 @@ GRPC_CONF_OPTS = \
- 	-DgRPC_RE2_PROVIDER=package \
- 	-DgRPC_SSL_PROVIDER=package \
- 	-DgRPC_ZLIB_PROVIDER=package \
-+	-DgRPC_BUILD_CODEGEN=OFF \
- 	-DgRPC_BUILD_GRPC_CPP_PLUGIN=OFF \
- 	-DgRPC_BUILD_GRPC_CSHARP_PLUGIN=OFF \
- 	-DgRPC_BUILD_GRPC_NODE_PLUGIN=OFF \
--- 
-2.34.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGkgQXJub3V0LAoKQmVlbiBkaWdnaW5nIGEgYml0IG1vcmUuIEl0IHNlZW1zIHRoYXQgSSBoYXZl
+IGFuIGlzc3VlIHdpdGggbXkgCmRlZmluaXRpb24gb2YgdGhlIFVSTCBmb3IgdGhlIGtlcm5lbCB0
+YXJiYWxsLiBUaGUgcGF0aCBJIGhhdmUgZGVmaW5lZCAKaGFzIG11bHRpcGxlIHBvc3NpYmlsaXRp
+ZXMuIEkgd2lsbCBkbyBzb21lIG1vcmUgcmVzZWFyY2ggb24gdGhpcy4KCkNoZWVycywgTmVpbAoK
+T24gMjAyNC0wOS0yMyA0OjUzIHAubS4sIE5laWwgV2Vic3RlciB3cm90ZToKPiBIaSBBcm5vdXQs
+Cj4KPiBUaGFua3MgZm9yIHRoZSBxdWljayByZXNwb25zZS4KPgo+IEkgbG9va2VkIHRocm91Z2gg
+dGhlIHlvY3RvIGJ1aWxkIGRpcmVjdG9yeSBhbmQgaXQgc2VlbXMgdGhhdCB0aGV5IGFyZSAKPiB1
+c2luZyA2LjEuMS0xLjAuMCBmb3IgYWxsIG9mIHRoZSBiZWxvdy4KPgo+IEJSMl9UQVJHRVRfQVJN
+X1RSVVNURURfRklSTVdBUkVfQ1VTVE9NX1RBUkJBTExfTE9DQVRJT04KPgo+IEJSMl9UQVJHRVRf
+VUJPT1RfQ1VTVE9NX1RBUkJBTExfTE9DQVRJT04KPgo+IEJSMl9MSU5VWF9LRVJORUxfQ1VTVE9N
+X1RBUkJBTExfTE9DQVRJT04KPgo+IFNvIEkgY2hhbmdlZCB0aGVtICguY29uZmlnIGF0dGFjaGVk
+KS4KPgo+IFRoZSBidWlsZCBmYWlsZWQgd2l0aCB0aGUgZm9sbG93aW5nIC4uLgo+Cj4gRVJST1I6
+IE5vIGhhc2ggZm91bmQgZm9yIGxpbnV4LWlteC1sZi02LjEuMS0xLjAuMC50YXIuZ3oKPiBtYWtl
+WzFdOiAqKiogW3BhY2thZ2UvcGtnLWdlbmVyaWMubWs6MTc5OiAKPiAvaG9tZS9uZWlsL2J1aWxk
+cm9vdC0yMDI0LjA4L291dHB1dC9idWlsZC9saW51eC1oZWFkZXJzLWN1c3RvbS8uc3RhbXBfZG93
+bmxvYWRlZF0gCj4gRXJyb3IgMQo+Cj4gVGhvdWdodHMgb24gbmV4dCBzdGVwcyBhcHByZWNpYXRl
+ZC4KPgo+IFRoYW5rcyBmb3IgeW91ciBwYXRpZW5jZSBpbiB3b3JraW5nIHRocm91Z2ggdGhpcyB3
+aXRoIGEgbmV3YmllLgo+Cj4gQ2hlZXJzLCBOZWlsCj4KPiBPbiAyMDI0LTA5LTIzIDM6MzYgcC5t
+LiwgQXJub3V0IFZhbmRlY2FwcGVsbGUgd3JvdGU6Cj4+Cj4+Cj4+IE9uIDIzLzA5LzIwMjQgMjE6
+MzAsIE5laWwgV2Vic3RlciB3cm90ZToKPj4+IEhpIEFybm91dCwKPj4+Cj4+PiBUaGFuayB5b3Ug
+Zm9yIHRoZSByZXNwb25zZS4KPj4+Cj4+PiBJIHdpbGwgd29yayB0aHJvdWdoIGVhY2ggb2YgeW91
+ciBzdWdnZXN0aW9ucyBhbmQgSSBzdGFydGVkIHdpdGggdGhlIAo+Pj4gb25lIHRoYXQgeW91IHN0
+YXRlZCB3YXMgZGVmaW5pdGVseSBpbmNvcnJlY3QgaS5lLiBUaGUgRFRTIG5hbWUuCj4+Pgo+Pj4g
+VGhlIFZhcmlzY2l0ZSBkZXZpY2UgdHJlZXMgYXJlIGRlc2NyaWJlZCBoZXJlCj4+Pgo+Pj4gaHR0
+cHM6Ly93d3cudmFyaXNjaXRlLmNvbS9ibG9nL2dldHRpbmctc3RhcnRlZC13aXRoLXZhcmlzY2l0
+ZS1kZXZpY2UtdHJlZXMvIAo+Pj4KPj4+Cj4+PiBJIGZvdW5kIGFuZCBjb3BpZWQgdGhyZWUgRFRT
+KEkpIGZpbGVzCj4+Pgo+Pj4gaW14OG1tLXZhci1kYXJ0LWR0OG1jdXN0b21ib2FyZC5kdHMKPj4+
+Cj4+PiB3aGljaCAjaW5jbHVkZXMgLi4uCj4+Pgo+Pj4gaW14OG1tLXZhci1kYXJ0LmR0c2kKPj4+
+Cj4+PiB3aGljaCAjaW5jbHVkZXMgLi4uCj4+Pgo+Pj4gaW14OG1tLmR0c2kKPj4KPj4gwqBUaGlz
+IG9uZSwgYXQgbGVhc3QsIHNob3VsZCBiZSBpbiB0aGUga2VybmVsIHNvdXJjZSBpdHNlbGYuIElm
+IHlvdSdyZSAKPj4gdXNpbmcgYSBrZXJuZWwgdGhhdCBkb2Vzbid0IGFscmVhZHkgaGF2ZSBpbXg4
+bW0uZHRzaSwgaXQncyBwcm9iYWJseSAKPj4gZ29pbmcgdG8gYmUgd2lsZGx5IGluY29tcGF0aWJs
+ZSB3aXRoIFZhcmlzY2l0ZSdzIGRldmljZSB0cmVlLgo+Pgo+Pgo+Pj4gSSByZWZlcmVuY2VkIHRo
+ZSBsb2NhdGlvbiBvZiB0aGVzZSBmaWxlcyBpbiAKPj4+IEJSMl9MSU5VWF9LRVJORUxfQ1VTVE9N
+X0RUU19QQVRIIGFuZCBJIHNlZSBpdCBjb3BpZXMgdGhlbSB0byAKPj4+IG91dHB1dC9idWlsZC9s
+aW51eC1jdXN0b20vYXJjaC9hcm02NC9ib290L2R0cy8KPj4+Cj4+PiBUaGUgc3Vic2VxdWVudCBi
+dWlsZCBjb21wbGFpbmVkIGFib3V0IG1pc3NpbmcgZGVwZW5kZW5jaWVzIGFuZCBJIAo+Pj4gYWxz
+byBoYWQgdG8gYWRkIGlteDhtbS1waW5mdW5jLmggYW5kIG14bC04NjExeC5oIHRvIAo+Pj4gQlIy
+X0xJTlVYX0tFUk5FTF9DVVNUT01fRFRTX1BBVEguIElzIHRoYXQgCj4+Cj4+IMKgQWdhaW4sIHRo
+ZXNlIHNob3VsZCBub3JtYWxseSBiZSBwYXJ0IG9mIHRoZcKgIGtlcm5lbCBhbHJlYWR5Lgo+Pgo+
+Pj4gdGhlIGNvcnJlY3Qgd2F5IHRvIGFkZCAuaCBkZXBlbmRlbmNpZXMgb3IgaXMgdGhlcmUgYSBj
+bGVhbmVyIHdheSBvciAKPj4+IGRvaW5nIHRoaXMgaS5lLiBzaG91bGQgdGhlIEJSMl9MSU5VWF9L
+RVJORUxfQ1VTVE9NX0RUU19QQVRIIGJlIAo+Pj4gcmVzZXJ2ZWQgZm9yIERUUyBmaWxlcyBvbmx5
+IGFzIHRoZSBuYW1lIHN1Z2dlc3RzPwo+Pgo+PiDCoE5vdCByZWFsbHkgLSB0aGUgaGVhZGVyIGZp
+bGVzIGFyZSBzaGFyZWQgYmV0d2VlbiBkZXZpY2UgdHJlZSBhbmQgCj4+IGNvcnJlc3BvbmRpbmcg
+ZHJpdmVycy4gU28gdGhleSBzaG91bGQgYWxyZWFkeSBiZSBwYXJ0IG9mIHRoZSBrZXJuZWwgCj4+
+IHNvdXJjZS4gSWYgdGhleSBhcmUgbm90LCBpdCdzIHF1aXRlIGxpa2VseSB0aGF0IHRoaW5ncyBh
+cmUgbm90IGdvaW5nIAo+PiB0byB3b3JrLgo+Pgo+PiDCoFRoZXJlIG1heSBiZSBzaXR1YXRpb25z
+IHdoZXJlIGl0IG1ha2VzIHNlbnNlIHRvIGFkZCBoZWFkZXIgZmlsZXMgdG8gCj4+IENVU1RPTV9E
+VFNfUEFUSCwgYnV0IHRoYXQncyBzcXVhcmVseSBZb3UgTXVzdCBLbm93IFdoYXQgWW91J3JlIERv
+aW5nIAo+PiB0ZXJyaXRvcnkuLi4KPj4KPj4KPj4+Cj4+PiBBbnl3YXkgdGhlIGJ1aWxkIHN1Y2Nl
+ZWRlZCBhZnRlciBhZGRpbmcgdGhvc2UgLmggZmlsZXMgYnV0IHNhZGx5IAo+Pj4gc3RpbGwgbm8g
+Y29uc29sZS4gSSB3aWxsIG5vdyBtb3ZlIG9udG8gbG9va2luZyBhdCB0aGUgb3RoZXIgaXRlbXMg
+Cj4+PiB5b3UgbWVudGlvbmVkLgo+Pgo+PiDCoFdlbGwsIEknZCBzdGFydCB3aXRoIGNvbmNlbnRy
+YXRpbmcgb24gZ2V0dGluZyBvdXRwdXQgZnJvbSBURi1BIGFuZCAKPj4gVS1Cb290LiBSaWdodCBu
+b3cgeW91IGRvbid0IGV2ZW4ga25vdyBpZiB0aGUga2VybmVsIGlzIGxvYWRlZCEKPj4KPj4KPj4g
+wqBSZWdhcmRzLAo+PiDCoEFybm91dAo+Pgo+Pgo+Pj4KPj4+IENoZWVycywgTmVpbAo+Pj4KPj4+
+IE9uIDIwMjQtMDktMTkgNzo1MyBhLm0uLCBBcm5vdXQgVmFuZGVjYXBwZWxsZSB3cm90ZToKPj4+
+PiBbWW91IGRvbid0IG9mdGVuIGdldCBlbWFpbCBmcm9tIGFybm91dEBtaW5kLmJlLiBMZWFybiB3
+aHkgdGhpcyBpcyAKPj4+PiBpbXBvcnRhbnQgYXQgaHR0cHM6Ly9ha2EubXMvTGVhcm5BYm91dFNl
+bmRlcklkZW50aWZpY2F0aW9uIF0KPj4+Pgo+Pj4+IMKgSGkgTmVpbCwKPj4+Pgo+Pj4+IE9uIDE5
+LzA5LzIwMjQgMDA6MTksIE5laWwgV2Vic3RlciB3cm90ZToKPj4+Pj4gSGVsbG8sCj4+Pj4+Cj4+
+Pj4+IEkgYW0gbmV3IHRvIEJ1aWxkcm9vdCBhbmQgaGF2ZSBiZWVuIHN0cnVnZ2xpbmcgZm9yIGEg
+Y291cGxlIG9mIAo+Pj4+PiBkYXlzIHdpdGgKPj4+Pj4gc29tZXRoaW5nIGFuZCB3b25kZXJpbmcg
+aWYgSSBjb3VsZCBnZXQgc29tZSBwb2ludGVycy4gUGxlYXNlIGxldCAKPj4+Pj4gbWUga25vdwo+
+Pj4+PiBpZiB0aGlzIGlzIG5vdCB0aGUgYXBwcm9wcmlhdGUgcGxhY2UgdG8gcG9zdCBzdWNoIHF1
+ZXN0aW9ucy4KPj4+Pj4KPj4+Pj4gSSB3YW50IHRvIGdldCBhbiBlbWJlZGRlZCBMaW51eCBpbWFn
+ZSBydW5uaW5nIG9uIGEgVmFyaXNjaXRlIERhcnQgCj4+Pj4+IE1pbmkKPj4+Pj4gKGxpbmsgYmVs
+b3cpCj4+Pj4+Cj4+Pj4+IGh0dHBzOi8vd3d3LnZhcmlzY2l0ZS5jb20vcHJvZHVjdC9zeXN0ZW0t
+b24tbW9kdWxlLXNvbS9jb3J0ZXgtYTUzLWtyYWl0L2RhcnQtIAo+Pj4+PiBteDhtLW1pbmktbnhw
+LWktbXg4bS1taW5pLwo+Pj4+Pgo+Pj4+PiBJIGhhdmUgdGhlIFNPTSBjb25uZWN0ZWQgdG8gYSBk
+ZXYga2l0IHJlZmVyZW5jZWQgaW4gdGhlIHNhbWUgbGluayAKPj4+Pj4gYWJvdmUuCj4+Pj4+Cj4+
+Pj4+IEkgd2FudGVkIHRvIHVzZSB0aGUgb3Bwb3J0dW5pdHkgdG8gZ2V0IGZhbWlsaWFyIHdpdGgg
+QnVpbGRyb290IGJ1dCAKPj4+Pj4gc2FkbHkKPj4+Pj4gVmFyaXNjaXRlIGRvIG5vdCBzdXBwb3J0
+IEJ1aWxkcm9vdCBhbmQgaW5zdGVhZCB0aGV5IHN0ZWVyZWQgbWUgCj4+Pj4+IHRvd2FyZHMKPj4+
+Pj4gWW9jdG8uCj4+Pj4KPj4+PiDCoDpzYWQtZmFjZToKPj4+Pgo+Pj4+Cj4+Pj4+IEkgaGF2ZSBi
+ZWVuIGFibGUgdG8gZ2V0IGFuIGltYWdlIHJ1bm5pbmcgd2l0aCBZb2N0byBmb2xsb3dpbmcgdGhl
+aXIKPj4+Pj4gcmVjaXBlcyBidXQgSSBmb3VuZCB0aGUgd2hvbGUgcHJvY2VzcyB0byBiZSBvYnNj
+dXJlIGFuZCBvcGFxdWUgYW5kIAo+Pj4+PiBJIGFtCj4+Pj4+IHRoZXJlZm9yZSBiYWNrIHRvIG15
+IG9yaWdpbmFsIG9iamVjdGl2ZSBvZiB1c2luZyBCdWlsZHJvb3QuCj4+Pj4KPj4+PiDCoFBsZWFz
+ZSBtYWtlIHN1cmUgdG8gZ2l2ZSB0aGlzIGZlZWRiYWNrIHRvIFZhcmlzY2l0ZSEKPj4+Pgo+Pj4+
+Cj4+Pj4+Cj4+Pj4+IEkgaGF2ZSBiZWVuIGFibGUgdG8gZm9sbG93IHRoZSB0dXRvcmlhbHMgYW5k
+IGdldCBhIGJ1aWxkIHdvcmtpbmcgb24gYQo+Pj4+PiBSYXNwYmVycnkgUGkuCj4+Pj4+Cj4+Pj4+
+IEhvd2V2ZXIsIGFzIG1lbnRpb25lZCBhYm92ZSB0aGVyZSBpcyBubyBzdXBwb3J0IGF2YWlsYWJs
+ZSBmcm9tIAo+Pj4+PiBWYXJpc2NpdGUKPj4+Pj4gYW5kIHRoZXJlIGlzIG5vIHNwZWNpZmljIGRl
+ZmNvbmZpZyBmb3IgbXkgaGFyZHdhcmUsIHNvIEkgdHJpZWQgdG8gCj4+Pj4+IHN0YXJ0Cj4+Pj4+
+IHdpdGggZnJlZXNjYWxlX2lteDhtbWV2a19kZWZjb25maWcgYXMgdGhpcyBzZWVtcyB0byBiZSBj
+bG9zZSB3aXRoIAo+Pj4+PiB3aGF0Cj4+Pj4+IGFwcGVhciB0byBiZSBjb3JyZWN0IHNldHRpbmdz
+IHVuZGVyIHRoZSAidGFyZ2V0IG9wdGlvbnMiIG1lbnUuCj4+Pj4KPj4+PiDCoFllcywgdGhhdCdz
+IGFuIGV4Y2VsbGVudCBzdGFydCEKPj4+Pgo+Pj4+IMKgLi4uIGJ1dCBub3QgZW5vdWdoIHRvIGdl
+dCBhIHdvcmtpbmcgYm9hcmQuLi4KPj4+Pgo+Pj4+Cj4+Pj4+IEhvd2V2ZXIgSSBhbSBub3QgZ2V0
+dGluZyBhbnl0aGluZyBhdCB0aGUgY29uc29sZS4KPj4+Pj4KPj4+Pj4gSSBub3RpY2VkIHRoYXQg
+dGhlIGZyZWVzY2FsZV9pbXg4bW1ldmtfZGVmY29uZmlnIHNldHMgdGhlIGdldHR5IAo+Pj4+PiBU
+VFkgcG9ydAo+Pj4+PiB0byB0dHlteGMxLCBzbyBJIHRyaWVkIGNoYW5naW5nIHRoaXMgdG8gdHR5
+bXhjMCBhcyB0aGF0IGlzIHRoZSBwb3J0Cj4+Pj4+IG1hcHBlZCB0byB0aGUgZGVidWcgaW50ZXJm
+YWNlIG9uIHRoZSBkZXZlbG9wbWVudCBib2FyZC4gU3RpbGwgCj4+Pj4+IG5vdGhpbmcgYXQKPj4+
+Pj4gdGhlIGNvbnNvbGUuCj4+Pj4KPj4+PiDCoFRoYXQgaXMgb25lIG9mIHRoZSB0aGluZ3MgeW91
+IG5lZWQgdG8gY2hhbmdlIGluZGVlZC4gSG93ZXZlciwgCj4+Pj4gdGhpbmdzIGFscmVhZHkKPj4+
+PiB3ZW50IHdyb25nIHdheSBiZWZvcmUgdGhhdCwgYmVjYXVzZSB5b3Ugc2hvdWxkIGhhdmUgZ290
+dGVuIFUtQm9vdCAKPj4+PiBhbmQga2VybmVsCj4+Pj4gZGVidWcgb3V0cHV0IG9uIHRoZSBjb25z
+b2xlLgo+Pj4+Cj4+Pj4gwqBUaGVyZSBhcmUgYSBudW1iZXIgb2YgdGhpbmdzIHlvdSBoYXZlIHRv
+IGNoYW5nZSBpbiBhIGRlZmNvbmZpZyAKPj4+PiB3aGVuIHlvdSBzd2l0Y2gKPj4+PiB0byBhIGRp
+ZmZlcmVudCAoYnV0IHNpbWlsYXIpIGJvYXJkLiBJJ20gZ29pbmcgdG8gbGlzdCB0aGVtIGJlbG93
+IAo+Pj4+IHdpdGggdGhlIHN5bWJvbAo+Pj4+IG5hbWVzLCBub3QgaG93IHRoZXkgYXBwZWFyIGlu
+IHRoZSBtZW51LiBZb3UgY2FuIGFsd2F5cyBzZWFyY2ggZm9yIAo+Pj4+IHRob3NlIHN5bWJvbHMK
+Pj4+PiBpbiBgbWFrZSBtZW51Y29uZmlnYCBieSB0eXBpbmcgLwo+Pj4+Cj4+Pj4gQlIyX1RBUkdF
+VF9BUk1fVFJVU1RFRF9GSVJNV0FSRV9DVVNUT01fVEFSQkFMTF9MT0NBVElPTj0iJChjYWxsCj4+
+Pj4gZ2l0aHViLG54cC1pbXgsaW14LWF0ZixsZi02LjYuMjMtMi4wLjApL2lteC1hdGYtbGYtNi42
+LjIzLTIuMC4wLnRhci5neiIgCj4+Pj4KPj4+Pgo+Pj4+IFlvdSBzaG91bGQgY2hlY2sgVmFyaXNj
+aXRlJ3MgeW9jdG8gbGF5ZXIgdG8gc2VlIGlmIHRoZXkgdXNlIHRoZSBOWFAgCj4+Pj4gVEYtQSBv
+ciBpZgo+Pj4+IHRoZXkgZm9yayBpdCBldmVuIG1vcmUuIFRoZXkgbWF5IGFsc28gdXNlIGEgZGlm
+ZmVyZW50IHZlcnNpb24uCj4+Pj4KPj4+Pgo+Pj4+IEJSMl9UQVJHRVRfQVJNX1RSVVNURURfRklS
+TVdBUkVfUExBVEZPUk09ImlteDhtbSIKPj4+Pgo+Pj4+IEkgZXhwZWN0IHRoYXQgdGhpcyB3aWxs
+IGJlIE9LIGZvciB0aGUgVmFyaXNjaXRlIGJvYXJkIGFzIHdlbGwsIGJ1dCAKPj4+PiBpdCBpcwo+
+Pj4+IHBvc3NpYmxlIHRoYXQgdGhleSBoYXZlIGRlZmluZWQgdGhlaXIgb3duIHBsYXRmb3JtLgo+
+Pj4+Cj4+Pj4KPj4+Pgo+Pj4+IEJSMl9UQVJHRVRfVUJPT1RfQ1VTVE9NX1RBUkJBTExfTE9DQVRJ
+T049IiQoY2FsbAo+Pj4+IGdpdGh1YixueHAtaW14LHVib290LWlteCxsZi02LjYuMjMtMi4wLjAp
+L3Vib290LWlteC1sZi02LjYuMjMtMi4wLjAudGFyLmd6IiAKPj4+Pgo+Pj4+Cj4+Pj4gWW91IHNo
+b3VsZCBjaGVjayBWYXJpc2NpdGUncyB5b2N0byBsYXllciB0byBzZWUgaWYgdGhleSB1c2UgdGhl
+IE5YUCAKPj4+PiBVLUJvb3Qgb3IgaWYKPj4+PiB0aGV5IGZvcmsgaXQgZXZlbiBtb3JlLiBUaGV5
+IG1heSBhbHNvIHVzZSBhIGRpZmZlcmVudCB2ZXJzaW9uLgo+Pj4+Cj4+Pj4KPj4+PiBCUjJfVEFS
+R0VUX1VCT09UX0JPQVJEX0RFRkNPTkZJRz0iaW14OG1tX2V2ayIKPj4+Pgo+Pj4+IFRoaXMgbmVl
+ZHMgdG8gY2hhbmdlIHRvIHRoZSBVLUJvb3QgZGVmY29uZmlnLiBUaGF0IGRlZmNvbmZpZyBjb3Vs
+ZCAKPj4+PiBiZSBpbiBOWFAncwo+Pj4+IFUtQm9vdCBmb3JrIGFscmVhZHksIG9yIGl0IGNvdWxk
+IGJlIGluIFZhcmlzY2l0ZSdzIGZvcmssIG9yIAo+Pj4+IFZhcmlzY2l0ZSBtYXkgc3VwcGx5Cj4+
+Pj4gaXQgaW4gdGhlaXIgdS1ib290IHlvY3RvIHJlY2lwZS4KPj4+Pgo+Pj4+Cj4+Pj4gQlIyX0xJ
+TlVYX0tFUk5FTF9DVVNUT01fVEFSQkFMTF9MT0NBVElPTj0iJChjYWxsCj4+Pj4gZ2l0aHViLG54
+cC1pbXgsbGludXgtaW14LGxmLTYuNi4yMy0yLjAuMCkvbGludXgtaW14LWxmLTYuNi4yMy0yLjAu
+MC50YXIuZ3oiIAo+Pj4+Cj4+Pj4gQlIyX0xJTlVYX0tFUk5FTF9ERUZDT05GSUc9ImlteF92OCIK
+Pj4+PiBCUjJfTElOVVhfS0VSTkVMX0lOVFJFRV9EVFNfTkFNRT0iZnJlZXNjYWxlL2lteDhtbS1l
+dmsKPj4+PiBmcmVlc2NhbGUvaW14OG1tLWV2ay1yZXZiLXFjYS13aWZpIgo+Pj4+Cj4+Pj4gWW91
+IHByb2JhYmx5IHN0YXJ0IHRvIGtub3cgdGhlIGRyaWxsLCByaWdodD8gVGhlIGRlZmNvbmZpZyBp
+cyAKPj4+PiBwcm9iYWJseSBPSywKPj4+PiBhbHRob3VnaCBpdCdzIHBvc3NpYmxlIHRoYXQgVmFy
+aXNjaXRlIGFwcGVuZHMgYSBmcmFnbWVudCB0byBpdCBpbiAKPj4+PiB0aGVpcgo+Pj4+IGJiYXBw
+ZW5kLiBUaGUgRFRTIG5hbWUgaXMgbW9zdCBkZWZpbml0ZWx5IG5vdCBPSywgYnV0IGl0IG1pZ2h0
+IGNvbWUgCj4+Pj4gZnJvbQo+Pj4+IFZhcmlzY2l0ZSdzIG1ldGFsYXllciBpbnN0ZWFkIG9mIE5Y
+UCdzIGtlcm5lbC4gVGhlIGtlcm5lbCBpcyAKPj4+PiB1bmxpa2VseSB0byBiZQo+Pj4+IGZvcmtl
+ZCBieSBWYXJpc2NpdGUgc28gdGhhdCBvbmUgaXMgcHJvYmFibHkgT0ssIGJ1dCBpdCBtYXkgYmUg
+YSAKPj4+PiBkaWZmZXJlbnQgdmVyc2lvbi4KPj4+Pgo+Pj4+Cj4+Pj4+IEkgdHJpZWQgY2hhbmdp
+bmcgdGhlIGluaXQgc3lzdGVtIGZyb20gYnVzeWJveCB0byBzeXN0ZW1kLiBTdGlsbCAKPj4+Pj4g
+bm90aGluZy4KPj4+Pgo+Pj4+IMKgTm8sIGJ1c3lib3ggaW5pdCBzaG91bGQgd29yayBmaW5lLgo+
+Pj4+Cj4+Pj4KPj4+Pj4gSSBmZWVsIGxpa2UgSSBhbSBwb2tpbmcgYXJvdW5kIGluIHRoZSBkYXJr
+LiBBbnkgdGhvdWdodHMgb24gd2hhdCBJCj4+Pj4+IHNob3VsZCB0cnkgbmV4dD8KPj4+Pgo+Pj4+
+IMKgSWYgeW91IGRvIG1hbmFnZSB0byBhZHZhbmNlIHdpdGggdGhpcywgdGhlcmUgYXJlIHR3byBj
+b250cmlidXRpb25zIAo+Pj4+IHlvdSBjb3VsZCBtYWtlOgo+Pj4+IC0gWW91IGNhbiBhZGQgYSBk
+ZWZjb25maWcgZm9yIHRoZSBWYXJpc2NpdGUgYm9hcmQuCj4+Pj4gLSBZb3UgY291bGQgdXBkYXRl
+IHRoZSBkb2N1bWVudGF0aW9uIHdpdGggYSAiaG93IHRvIGFkZCBzdXBwb3J0IGZvciAKPj4+PiBh
+IG5ldyBib2FyZCIKPj4+PiBzZWN0aW9uIHRoYXQgZXhwbGFpbnMgd2hhdCBJIHdyb3RlIGFib3Zl
+IGluIGEgYmV0dGVyIChtb3JlIGdlbmVyaWMpIAo+Pj4+IHdheS4KPj4+Pgo+Pj4+Cj4+Pj4gwqBS
+ZWdhcmRzLAo+Pj4+IMKgQXJub3V0Cj4+Pj4KPj4KX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX18KYnVpbGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVp
+bGRyb290Lm9yZwpodHRwczovL2xpc3RzLmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9i
+dWlsZHJvb3QK
