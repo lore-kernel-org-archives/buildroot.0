@@ -1,72 +1,72 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3801FCF9C6B
-	for <buildroot@archiver.kernel.org>; Tue, 24 Sep 2024 09:08:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EA8F2CF9C6F
+	for <buildroot@archiver.kernel.org>; Tue, 24 Sep 2024 11:04:02 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 28C824022B;
-	Tue, 24 Sep 2024 09:08:10 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 67D9181E78;
+	Tue, 24 Sep 2024 11:04:02 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NmhNzD0YLNmS; Tue, 24 Sep 2024 11:04:01 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 55C6481E79
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id 55C6481E79;
+	Tue, 24 Sep 2024 11:04:01 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 070001BF318
+ for <buildroot@lists.busybox.net>; Tue, 24 Sep 2024 11:04:00 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 027C34023E
+ for <buildroot@lists.busybox.net>; Tue, 24 Sep 2024 11:04:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id z7keI4up5QNv; Tue, 24 Sep 2024 09:08:08 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 71E7F4037C
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 71E7F4037C;
-	Tue, 24 Sep 2024 09:08:08 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id A9BD21BF32B
- for <buildroot@lists.busybox.net>; Tue, 24 Sep 2024 09:08:07 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6953B60A38
- for <buildroot@lists.busybox.net>; Tue, 24 Sep 2024 09:08:05 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CBjYlDiLbKLN for <buildroot@lists.busybox.net>;
- Tue, 24 Sep 2024 09:08:03 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.156.42;
- helo=smtpcmd0642.aruba.it; envelope-from=giulio.benetti@benettiengineering.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 0921460A66
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0921460A66
-Received: from smtpcmd0642.aruba.it (smtpcmd0642.aruba.it [62.149.156.42])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 0921460A66
- for <buildroot@buildroot.org>; Tue, 24 Sep 2024 09:08:00 +0000 (UTC)
-Received: from localhost.localdomain ([84.33.84.190])
- by Aruba Outgoing Smtp  with ESMTPSA
- id t1WXszdnIDhSBt1WXs9Lzs; Tue, 24 Sep 2024 11:07:57 +0200
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+ id bMnSniFYVMKe for <buildroot@lists.busybox.net>;
+ Tue, 24 Sep 2024 11:03:58 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=220.197.31.3;
+ helo=m16.mail.163.com; envelope-from=andyshrk@163.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 96BE0401B1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 96BE0401B1
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.3])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 96BE0401B1
+ for <buildroot@buildroot.org>; Tue, 24 Sep 2024 11:03:55 +0000 (UTC)
+Received: from ProDesk.. (unknown [58.22.7.114])
+ by gzga-smtp-mta-g3-4 (Coremail) with SMTP id _____wD326CSnPJmIyjpFg--.32577S2;
+ Tue, 24 Sep 2024 19:03:49 +0800 (CST)
+From: Andy Yan <andyshrk@163.com>
 To: buildroot@buildroot.org
-Date: Tue, 24 Sep 2024 11:07:56 +0200
-Message-ID: <20240924090756.735949-1-giulio.benetti@benettiengineering.com>
+Date: Tue, 24 Sep 2024 19:03:44 +0800
+Message-ID: <20240924110345.34659-1-andyshrk@163.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfCxO2seXNTWAYy8GLtvfsCjdjtZWv7qbi6ywpKo67GBfWFCqaO/ePIg3ldxhOM789IlgHYEWhrBiOXa+a619sj4fz1AMoT5d4pTRCarUtDWuadoR7M2g
- X1obhQHdZN/A29upytx02i8seuGbhiI0tIZc8KiDYkXNmIwxlHxJE89/kixbzYps612ZLZ81FYNf3w/Omt9wH2EVfePn/7Clq+oxdG6gGbSsFE1qAehiTDNU
- rWlJ+/NPPvZqdvXr1hSW9kCn7wtpJ8qIPCm0ZHFcfLvTKtWFj7mL/BNNSNEpo3j/euJamy6wK7Cxo2ihodJLOg==
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1727168877; bh=hTR9NUzlj1yVqMONewRNdLX0b7mFE7xDxwuksO9b7rk=;
- h=From:To:Subject:Date:MIME-Version;
- b=V8rWEYktMDebmlGcV/Kh2KPF0lzOsrxBTjp9BtN23FwFVIg/N7fL9Hz7iF98Z3bfc
- xHhhkmoipHU9Ndc0AS5irYEn+pODtgrN0/hTetkpUZTjkbDiokaduMPhCunFlGld7l
- fYFNKEJd095jUqNch0tzmFlVzf7YW+wf9WlRfoRq7O3dGdqXrxtB83QYubODCMQiV4
- QyyqJlxlyot5tFpYeioMIiYqKL9houhyi1al3Wfuq3xkk9Ae68VrkJXtryvL0A8x2C
- ZoONQkmdvoz2DX6n53QGSjYqSCNh2dX7ZBCqKC77wy1pbGkOM+28+AzQAUlaQqY8H/
- LBI//ExgeLWGg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-CM-TRANSID: _____wD326CSnPJmIyjpFg--.32577S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxXF4kZFyrKrWDZr1UZr13urg_yoWrXr15pr
+ 47Gr15Kw4xKF1fXrW3KasrXF13uws7Cr1UJ3srJ34jvryUCa1UA3ykKayUGr9xWr17Aw4U
+ Jwn7Jr4Y9ry8taDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+ 9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0JUSAp8UUUUU=
+X-Originating-IP: [58.22.7.114]
+X-CM-SenderInfo: 5dqg52xkunqiywtou0bp/xtbB0hZkXmWX0nxRDgAAs9
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=163.com; 
+ s=s110527; h=From:Subject:Date:Message-ID:MIME-Version; bh=Tw0dc
+ H3s52hP6i/DHtOCkBFRvfJXBxRva1JaVxaY8Mk=; b=CcyrsSL2lr6Oi2CNTdZhJ
+ +Ac75f0CwdsUX3Y4ePifqBYY+y3C7rGlEOz3P00crxVsb0AlkVHLVgzUCiKDBoe4
+ Ph9GcmSu6rskqk9TeQIp3uPlKtyrottl7IrRTcHCo9JkLeg7sj0mCEE2exIu9Spb
+ vfTGZVbTb8E2UrCW+eaK6g=
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=benettiengineering.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
- header.s=a1 header.b=V8rWEYkt
-Subject: [Buildroot] [PATCH] package/nfs-utils: bump version to 2.7.1
+ header.from=163.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (1024-bit key,
+ unprotected) header.d=163.com header.i=@163.com header.a=rsa-sha256
+ header.s=s110527 header.b=CcyrsSL2
+Subject: [Buildroot] [PATCH V2] package/io: New package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,275 +78,133 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Petr Vorel <petr.vorel@gmail.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>
+Cc: Andy Yan <andyshrk@gmail.com>, Andy Yan <andyshrk@163.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-* add libxml2 dependency that is now mandatory
-* drop 2 local patches that have been committed.
-* add 2 patches committed upstream to fix musl build failure.
+From: Andy Yan <andyshrk@gmail.com>
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
- ...-reexport-.c-Re-add-missing-includes.patch | 44 ----------------
- ...de-junction.h-Define-macros-for-musl.patch | 51 +++++++++++++++++++
- ...d_sqlite.c-Add-missing-sys-syscall.h.patch | 31 -----------
- ...rt-junction-path.c-Fix-buld-for-musl.patch | 40 +++++++++++++++
- package/nfs-utils/Config.in                   |  1 +
- package/nfs-utils/nfs-utils.hash              |  4 +-
- package/nfs-utils/nfs-utils.mk                |  6 +--
- 7 files changed, 97 insertions(+), 80 deletions(-)
- delete mode 100644 package/nfs-utils/0001-reexport-fsidd-reexport-.c-Re-add-missing-includes.patch
- create mode 100644 package/nfs-utils/0001-support-include-junction.h-Define-macros-for-musl.patch
- delete mode 100644 package/nfs-utils/0002-support-backend_sqlite.c-Add-missing-sys-syscall.h.patch
- create mode 100644 package/nfs-utils/0002-support-junction-path.c-Fix-buld-for-musl.patch
+A utility to access memory/register via physicas address:
 
-diff --git a/package/nfs-utils/0001-reexport-fsidd-reexport-.c-Re-add-missing-includes.patch b/package/nfs-utils/0001-reexport-fsidd-reexport-.c-Re-add-missing-includes.patch
-deleted file mode 100644
-index 4f79af450e..0000000000
---- a/package/nfs-utils/0001-reexport-fsidd-reexport-.c-Re-add-missing-includes.patch
-+++ /dev/null
-@@ -1,44 +0,0 @@
--From 4710e469cd0f512ac5e2c3c4335d8e21b97f21b0 Mon Sep 17 00:00:00 2001
--From: Petr Vorel <pvorel@suse.cz>
--Date: Tue, 5 Dec 2023 20:40:36 +0100
--Subject: [PATCH] reexport/{fsidd,reexport}.c: Re-add missing includes
--
--Older uClibc-ng requires <unistd.h> for close(2), unlink(2) and write(2),
--<sys/un.h> for struct sockaddr_un.
--
--Fixes: 1a4edb2a ("reexport/fsidd.c: Remove unused headers")
--Fixes: bdc79f02 ("support/reexport.c: Remove unused headers")
--Signed-off-by: Petr Vorel <pvorel@suse.cz>
--Upstream: https://lore.kernel.org/linux-nfs/20231205223543.31443-1-pvorel@suse.cz/
-----
-- support/reexport/fsidd.c    | 2 ++
-- support/reexport/reexport.c | 1 +
-- 2 files changed, 3 insertions(+)
--
--diff --git a/support/reexport/fsidd.c b/support/reexport/fsidd.c
--index 3e62b3fc..814fb48e 100644
----- a/support/reexport/fsidd.c
--+++ b/support/reexport/fsidd.c
--@@ -7,6 +7,8 @@
-- #include <dlfcn.h>
-- #endif
-- #include <event2/event.h>
--+#include <sys/un.h>
--+#include <unistd.h>
--
-- #include "conffile.h"
-- #include "reexport_backend.h"
--diff --git a/support/reexport/reexport.c b/support/reexport/reexport.c
--index 78516586..1900b336 100644
----- a/support/reexport/reexport.c
--+++ b/support/reexport/reexport.c
--@@ -7,6 +7,7 @@
-- #endif
-- #include <sys/types.h>
-- #include <sys/vfs.h>
--+#include <unistd.h>
-- #include <errno.h>
--
-- #include "nfsd_path.h"
+Raw memory i/o utility
+
+io -v -1|2|4 -r|w [-l <len>] [-f <file>] <addr> [<value>]
+
+    -v         Verbose, asks for confirmation
+    -1|2|4     Sets memory access size in bytes (default byte)
+    -l <len>   Length in bytes of area to access (defaults to
+               one access, or whole file length)
+    -r|w       Read from or Write to memory (default read)
+    -f <file>  File to write on memory read, or
+               to read on memory write
+    <addr>     The memory address to access
+    <val>      The value to write (implies -w)
+
+Examples:
+    io 0x1000                  Reads one byte from 0x1000
+    io 0x1000 0x12             Writes 0x12 to location 0x1000
+    io -2 -l 8 0x1000          Reads 8 words from 0x1000
+    io -r -f dmp -l 100 200    Reads 100 bytes from addr 200 to file
+    io -w -f img 0x10000       Writes the whole of file to memory
+
+Note access size (-1|2|4) does not apply to file based accesses.
+
+Signed-off-by: Andy Yan <andyshrk@163.com>
+
+Series-version: 2
+Series-changes: 2
+- Add myself to the DEVELOPERS file
+- use git download method
+- add hash file
 ---
--2.43.0
-diff --git a/package/nfs-utils/0001-support-include-junction.h-Define-macros-for-musl.patch b/package/nfs-utils/0001-support-include-junction.h-Define-macros-for-musl.patch
+ DEVELOPERS           |  3 +++
+ package/Config.in    |  1 +
+ package/io/Config.in |  7 +++++++
+ package/io/io.hash   |  2 ++
+ package/io/io.mk     | 21 +++++++++++++++++++++
+ 5 files changed, 34 insertions(+)
+ create mode 100644 package/io/Config.in
+ create mode 100644 package/io/io.hash
+ create mode 100644 package/io/io.mk
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index b0efabfd5d..d9b73811b6 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -240,6 +240,9 @@ F:	package/sysdig/
+ N:	Andy Shevchenko <andy.shevchenko@gmail.com>
+ F:	package/fb-test-app/
+ 
++N:	Andy Yan <andyshrk@163.com>
++F:	package/io/
++
+ N:	Anisse Astier <anisse@astier.eu>
+ F:	package/go/
+ F:	package/nghttp2/
+diff --git a/package/Config.in b/package/Config.in
+index 4eccf77dd3..99856ff23b 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -2361,6 +2361,7 @@ menu "Miscellaneous"
+ 	source "package/gr-osmosdr/Config.in"
+ 	source "package/gsettings-desktop-schemas/Config.in"
+ 	source "package/haveged/Config.in"
++	source "package/io/Config.in"
+ 	source "package/linux-syscall-support/Config.in"
+ 	source "package/mobile-broadband-provider-info/Config.in"
+ 	source "package/netdata/Config.in"
+diff --git a/package/io/Config.in b/package/io/Config.in
 new file mode 100644
-index 0000000000..3ae6996d8c
+index 0000000000..acf32947cc
 --- /dev/null
-+++ b/package/nfs-utils/0001-support-include-junction.h-Define-macros-for-musl.patch
-@@ -0,0 +1,51 @@
-+From 34a7959ddfb50db806c3f0e848947ff1117f37e2 Mon Sep 17 00:00:00 2001
-+From: Robert Yang <liezhi.yang@windriver.com>
-+Date: Fri, 20 Sep 2024 07:43:00 -0400
-+Subject: [PATCH 1/2] support/include/junction.h: Define macros for musl
++++ b/package/io/Config.in
+@@ -0,0 +1,7 @@
++config BR2_PACKAGE_IO
++	bool "Raw memory i/o utility"
++	help
++	  A utility for read/write memory/register,
++	  you shoud make sure CONFIG_DEVMEM is enable in your linux kernel.
 +
-+Fixed 1:
-+In file included from cache.c:1217:
-+../../support/include/junction.h:128:21: error: expected ';' before 'char'
-+  128 | __attribute_malloc__
-+      |                     ^
-+      |                     ;
-+  129 | char            **nfs_dup_string_array(char **array);
-+
-+Fixed 2:
-+junction.c: In function 'junction_set_sticky_bit':
-+junction.c:164:39: error: 'ALLPERMS' undeclared (first use in this function)
-+  164 |         stb.st_mode &= (unsigned int)~ALLPERMS;
-+
-+Upstream: http://git.linux-nfs.org/?p=steved/nfs-utils.git;a=commit;h=34a7959ddfb50db806c3f0e848947ff1117f37e2
-+
-+Signed-off-by: Robert Yang <liezhi.yang@windriver.com>
-+Signed-off-by: Steve Dickson <steved@redhat.com>
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ support/include/junction.h | 10 ++++++++++
-+ 1 file changed, 10 insertions(+)
-+
-+diff --git a/support/include/junction.h b/support/include/junction.h
-+index 7257d80b..d127dd55 100644
-+--- a/support/include/junction.h
-++++ b/support/include/junction.h
-+@@ -26,6 +26,16 @@
-+ #ifndef _NFS_JUNCTION_H_
-+ #define _NFS_JUNCTION_H_
-+ 
-++/* For musl, refered to glibc's sys/cdefs.h */
-++#ifndef __attribute_malloc__
-++#define __attribute_malloc__ __attribute__((__malloc__))
-++#endif
-++
-++/* For musl, refered to glibc's sys/stat.h */
-++#ifndef ALLPERMS
-++#define ALLPERMS (S_ISUID|S_ISGID|S_ISVTX|S_IRWXU|S_IRWXG|S_IRWXO)/* 07777 */
-++#endif
-++
-+ #include <stdint.h>
-+ 
-+ /*
-+-- 
-+2.43.0
-+
-diff --git a/package/nfs-utils/0002-support-backend_sqlite.c-Add-missing-sys-syscall.h.patch b/package/nfs-utils/0002-support-backend_sqlite.c-Add-missing-sys-syscall.h.patch
-deleted file mode 100644
-index 88e1a9068d..0000000000
---- a/package/nfs-utils/0002-support-backend_sqlite.c-Add-missing-sys-syscall.h.patch
-+++ /dev/null
-@@ -1,31 +0,0 @@
--From aee92881ba80cf2ae7381d19f09e7fbeda57974c Mon Sep 17 00:00:00 2001
--From: Petr Vorel <petr.vorel@gmail.com>
--Date: Tue, 5 Dec 2023 23:20:33 +0100
--Subject: [PATCH] support/backend_sqlite.c: Add missing <sys/syscall.h>
--
--This fixes build on systems which actually needs getrandom()
--(to get SYS_getrandom).
--
--Fixes: f92fd6ca ("support/backend_sqlite.c: Add getrandom() fallback")
--Fixes: http://autobuild.buildroot.net/results/c5fde6099a8b228a8bdc3154d1e47dfa192e94ed/
--Reported-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
--Signed-off-by: Petr Vorel <pvorel@suse.cz>
--Upstream: https://lore.kernel.org/linux-nfs/20231205223543.31443-2-pvorel@suse.cz/
-----
-- support/reexport/backend_sqlite.c | 1 +
-- 1 file changed, 1 insertion(+)
--
--diff --git a/support/reexport/backend_sqlite.c b/support/reexport/backend_sqlite.c
--index 0eb5ea37..54dfe447 100644
----- a/support/reexport/backend_sqlite.c
--+++ b/support/reexport/backend_sqlite.c
--@@ -7,6 +7,7 @@
-- #include <stdio.h>
-- #include <stdlib.h>
-- #include <string.h>
--+#include <sys/syscall.h>
-- #include <unistd.h>
--
-- #ifdef HAVE_GETRANDOM
----
--2.43.0
-diff --git a/package/nfs-utils/0002-support-junction-path.c-Fix-buld-for-musl.patch b/package/nfs-utils/0002-support-junction-path.c-Fix-buld-for-musl.patch
++	  https://github.com/andyshrk/io.git
+diff --git a/package/io/io.hash b/package/io/io.hash
 new file mode 100644
-index 0000000000..6098eed3e2
+index 0000000000..7d45324196
 --- /dev/null
-+++ b/package/nfs-utils/0002-support-junction-path.c-Fix-buld-for-musl.patch
-@@ -0,0 +1,40 @@
-+From 4ddf3188f610a4ccfa8539cd94f5505a1a22db6c Mon Sep 17 00:00:00 2001
-+From: Robert Yang <liezhi.yang@windriver.com>
-+Date: Fri, 20 Sep 2024 07:44:53 -0400
-+Subject: [PATCH 2/2] support/junction/path.c: Fix buld for musl
++++ b/package/io/io.hash
+@@ -0,0 +1,2 @@
++sha256 d3b4d93988adddbc98af8d7014a045dca5b25aaa7cdbc08c29aa70ebdc86e21c  io-a2600e94aec6503fd0f0109ca26a703c4e7e166e-git4.tar.gz
++sha256 5352e426b563eda9252d76be92337b49f7b5cfdd1302a1e8d99389840c0e46be  LICENSE
+diff --git a/package/io/io.mk b/package/io/io.mk
+new file mode 100644
+index 0000000000..7abc6773c0
+--- /dev/null
++++ b/package/io/io.mk
+@@ -0,0 +1,21 @@
++################################################################################
++#
++# io
++#
++################################################################################
 +
-+Fixed:
-+path.c:164:24: error: implicit declaration of function 'strchrnul'; did you mean 'strchr'? [-Wimplicit-function-declaration]
-+[snip]
++IO_VERSION = a2600e94aec6503fd0f0109ca26a703c4e7e166e
++IO_SITE = https://github.com/andyshrk/io.git
++IO_SITE_METHOD = git
++IO_LICENSE = GPL-2.0+
++IO_LICENSE_FILES = COPYING.GPL
 +
-+path.c:239:27: error: 'NAME_MAX' undeclared (first use in this function); did you mean 'AF_MAX'?
++define IO_BUILD_CMDS
++	$(TARGET_CC) $(TARGET_CFLAGS) $(TARGET_LDFLAGS) $(@D)/io.c -o $(@D)/io
++endef
 +
-+Upstream: http://git.linux-nfs.org/?p=steved/nfs-utils.git;a=commit;h=4ddf3188f610a4ccfa8539cd94f5505a1a22db6c
++define IO_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 0755 -D $(@D)/io $(TARGET_DIR)/usr/bin/io
++endef
 +
-+Signed-off-by: Robert Yang <liezhi.yang@windriver.com>
-+Signed-off-by: Steve Dickson <steved@redhat.com>
-+Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
-+---
-+ support/junction/path.c | 6 ++++++
-+ 1 file changed, 6 insertions(+)
-+
-+diff --git a/support/junction/path.c b/support/junction/path.c
-+index 13a14386..dd0f59a0 100644
-+--- a/support/junction/path.c
-++++ b/support/junction/path.c
-+@@ -23,6 +23,12 @@
-+  *	http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
-+  */
-+ 
-++/* For musl */
-++#ifndef _GNU_SOURCE
-++#define _GNU_SOURCE
-++#endif
-++#include <limits.h>
-++
-+ #include <sys/types.h>
-+ #include <sys/stat.h>
-+ 
-+-- 
-+2.43.0
-+
-diff --git a/package/nfs-utils/Config.in b/package/nfs-utils/Config.in
-index 02cc7e78cc..062af104bf 100644
---- a/package/nfs-utils/Config.in
-+++ b/package/nfs-utils/Config.in
-@@ -9,6 +9,7 @@ config BR2_PACKAGE_NFS_UTILS
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 # getrandom()
- 	select BR2_PACKAGE_LIBEVENT
- 	select BR2_PACKAGE_LIBTIRPC # IPv6 requires libtirpc
-+	select BR2_PACKAGE_LIBXML2
- 	select BR2_PACKAGE_SQLITE
- 	select BR2_PACKAGE_UTIL_LINUX
- 	select BR2_PACKAGE_UTIL_LINUX_LIBBLKID
-diff --git a/package/nfs-utils/nfs-utils.hash b/package/nfs-utils/nfs-utils.hash
-index 9d74991df1..6241eb1c3d 100644
---- a/package/nfs-utils/nfs-utils.hash
-+++ b/package/nfs-utils/nfs-utils.hash
-@@ -1,4 +1,4 @@
--# From https://www.kernel.org/pub/linux/utils/nfs-utils/2.6.4/sha256sums.asc
--sha256  01b3b0fb9c7d0bbabf5114c736542030748c788ec2fd9734744201e9b0a1119d  nfs-utils-2.6.4.tar.xz
-+# From https://www.kernel.org/pub/linux/utils/nfs-utils/2.7.1/sha256sums.asc
-+sha256  885c948a84a58bca4148f459588f9a7369dbb40dcc466f04e455c6b10fd0aa48  nfs-utils-2.7.1.tar.xz
- # Locally computed
- sha256  576540abf5e95029ad4ad90e32071385a5e95b2c30708c706116f3eb87b9a3de  COPYING
-diff --git a/package/nfs-utils/nfs-utils.mk b/package/nfs-utils/nfs-utils.mk
-index b757e3e51d..7fb3c2a7ec 100644
---- a/package/nfs-utils/nfs-utils.mk
-+++ b/package/nfs-utils/nfs-utils.mk
-@@ -4,12 +4,12 @@
- #
- ################################################################################
- 
--NFS_UTILS_VERSION = 2.6.4
-+NFS_UTILS_VERSION = 2.7.1
- NFS_UTILS_SOURCE = nfs-utils-$(NFS_UTILS_VERSION).tar.xz
- NFS_UTILS_SITE = https://www.kernel.org/pub/linux/utils/nfs-utils/$(NFS_UTILS_VERSION)
- NFS_UTILS_LICENSE = GPL-2.0+
- NFS_UTILS_LICENSE_FILES = COPYING
--NFS_UTILS_DEPENDENCIES = host-nfs-utils host-pkgconf libevent libtirpc sqlite util-linux
-+NFS_UTILS_DEPENDENCIES = host-nfs-utils host-pkgconf libevent libtirpc libxml2 sqlite util-linux
- NFS_UTILS_CPE_ID_VENDOR = linux-nfs
- 
- NFS_UTILS_CONF_ENV = knfsd_cv_bsd_signals=no
-@@ -21,7 +21,7 @@ NFS_UTILS_CONF_OPTS = \
- 	--with-statedir=/run/nfs \
- 	--with-rpcgen=$(HOST_DIR)/bin/rpcgen
- 
--HOST_NFS_UTILS_DEPENDENCIES = host-pkgconf host-libtirpc host-libevent host-sqlite host-util-linux
-+HOST_NFS_UTILS_DEPENDENCIES = host-pkgconf host-libtirpc host-libxml2 host-libevent host-sqlite host-util-linux
- 
- HOST_NFS_UTILS_CONF_OPTS = \
- 	--enable-tirpc \
++$(eval $(generic-package))
 -- 
-2.43.0
+2.34.1
 
 _______________________________________________
 buildroot mailing list
