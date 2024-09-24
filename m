@@ -4,68 +4,102 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id ADD16CF9C6B
-	for <buildroot@archiver.kernel.org>; Tue, 24 Sep 2024 15:25:11 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id A2AFECF9C6B
+	for <buildroot@archiver.kernel.org>; Tue, 24 Sep 2024 15:25:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6C06160B34;
-	Tue, 24 Sep 2024 15:25:11 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EA48F60586;
+	Tue, 24 Sep 2024 15:25:14 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PbSn4Ysvj_KT; Tue, 24 Sep 2024 15:25:09 +0000 (UTC)
+ id gCZ7aT06ZIoe; Tue, 24 Sep 2024 15:25:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4AEE660AD9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0AF2060B2E
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4AEE660AD9;
-	Tue, 24 Sep 2024 15:25:09 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 89FB11BF401
- for <buildroot@lists.busybox.net>; Tue, 24 Sep 2024 15:24:51 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0AF2060B2E;
+	Tue, 24 Sep 2024 15:25:11 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 8A8691BF401
+ for <buildroot@lists.busybox.net>; Tue, 24 Sep 2024 15:25:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 77ACA40523
- for <buildroot@lists.busybox.net>; Tue, 24 Sep 2024 15:24:51 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 84D4D60B1D
+ for <buildroot@lists.busybox.net>; Tue, 24 Sep 2024 15:25:00 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hoeXu_7DHppx for <buildroot@lists.busybox.net>;
- Tue, 24 Sep 2024 15:24:49 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::13;
- helo=smtp4-g21.free.fr; envelope-from=vjardin@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 9F96040194
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 9F96040194
-Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 9F96040194
- for <buildroot@buildroot.org>; Tue, 24 Sep 2024 15:24:49 +0000 (UTC)
-Received: from localhost.localdomain (unknown [173.242.185.50])
- (Authenticated sender: vjardin@free.fr)
- by smtp4-g21.free.fr (Postfix) with ESMTPSA id 90C9B19F59C;
- Tue, 24 Sep 2024 17:24:40 +0200 (CEST)
-From: Vincent Jardin <vjardin@free.fr>
-To: buildroot@buildroot.org
-Date: Tue, 24 Sep 2024 17:24:30 +0200
-Message-ID: <20240924152430.61363-2-vjardin@free.fr>
-X-Mailer: git-send-email 2.46.1
-In-Reply-To: <20240924152430.61363-1-vjardin@free.fr>
-References: <o24zxu3iac7zacfdlxdzhpnjuixozkrf35tznhuodxxkbtv737@hxe2jgbd7d37>
- <20240924152430.61363-1-vjardin@free.fr>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id NsIrPn5LgeyE for <buildroot@lists.busybox.net>;
+ Tue, 24 Sep 2024 15:24:59 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::730; helo=mail-qk1-x730.google.com;
+ envelope-from=jarraneil@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 2F8FB60AFD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2F8FB60AFD
+Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com
+ [IPv6:2607:f8b0:4864:20::730])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 2F8FB60AFD
+ for <buildroot@buildroot.org>; Tue, 24 Sep 2024 15:24:58 +0000 (UTC)
+Received: by mail-qk1-x730.google.com with SMTP id
+ af79cd13be357-7a99e4417c3so498446385a.1
+ for <buildroot@buildroot.org>; Tue, 24 Sep 2024 08:24:58 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1727191497; x=1727796297;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=OvXJCisvX5ylHaZptBNXUxmhkJ0kq18sjudik9imGl4=;
+ b=kwRdukYEAIyW/y+gNFyoNRxt8uAavhWa19J3/TJKxOP62IMMeazkNiqmoqbxw7Ec4Y
+ C0t9q/djr7uqqaHpuglTdpvRuSTHUcCwA3QlZ70iLPSWGGpZWKv2HYSGbM8EjanbQ148
+ Isds5xd5fGFWEkaRzhR7e/uLbPZC7jUzUX1MvSbTwUlJ7T9vYPAXMJQ20R7KJ4q1Wcfu
+ h3bKB3LGrQ+87PzCwR5BMERq8CrKOLT5iLK/m1MgvKZF/j5cLPb4rOOeBXGEpS/5IFD9
+ 5ZliS9cg0TBEGukLr0H4nw8/YZ3h37v4L4iopVcwsADJ+9HPXm6d8M8vraSzZkMjGRgR
+ yElA==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCV5qmnpBzQ7qLXb9al9YxCCVxgceMvtP/fuKRBksTtI5HQNKVNTSuKVijl7ejAbN4fJOTYct+m8/Bc=@buildroot.org
+X-Gm-Message-State: AOJu0YylwZzJS+wE61fWl+entGFJm10JnTgkfivUIPDXC0eXCmvbLNWC
+ bZ+4cE+Pa5j6lteoqcCm+lFz+OfGgWz5pEftv7KxcHbPukW6og+XaG4feg==
+X-Google-Smtp-Source: AGHT+IHOLkzqaUvA3ZE2CoGi7B2VXiERqRWNJq6J1mHfKeF7p9Sie4SFjTKFdaItmDHcE9wbInB4Ag==
+X-Received: by 2002:a05:620a:400b:b0:7a9:d09e:cfba with SMTP id
+ af79cd13be357-7acb82226bcmr2689554385a.59.1727191497333; 
+ Tue, 24 Sep 2024 08:24:57 -0700 (PDT)
+Received: from [192.168.2.11] ([74.15.242.87])
+ by smtp.gmail.com with ESMTPSA id
+ af79cd13be357-7acde53c17csm78169385a.37.2024.09.24.08.24.55
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Tue, 24 Sep 2024 08:24:56 -0700 (PDT)
+Message-ID: <5294b549-5641-49ba-b586-4e444494f599@gmail.com>
+Date: Tue, 24 Sep 2024 11:24:45 -0400
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1727191488;
- bh=x3+Uimc35NQalzrdMN2TK0o5bFH+70GuxqaiuMe4MLU=;
- h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=eJK8D72Zk2y3qog0fvnXGvuq7mx/sCgwNlB5QT5igJqCvf1H1vmcMr2ngoUXMsoRD
- jQCVfXfIcT7eOUQcuSCjI3VcME6uVD257kqiKWXwaINWcUFXB1trrri36rzXmrB+SM
- ztehB2yMMuLrMAerrYKhhkq8Aln11+HlUNMzxCPGqs1OuMOstqrYnC9LCfmE4uGWzb
- 5LKRfBgBI69NZcwSAWBut0FYiyv2+hzby93eHLFv5YqEO5crpTWvIWy2c6xpsNnkqJ
- chXIiFTUomydFauKXfeVcT0rzrPBFlrl95aRINBNqUkeXbEtSJQnBf3Vwgyu45xrt4
- 4ym4gwzEfy2gA==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+User-Agent: Mozilla Thunderbird
+To: Arnout Vandecappelle <arnout@mind.be>,
+ "buildroot@buildroot.org" <buildroot@buildroot.org>
+References: <bf3a752a-6954-44dc-b805-c7850be85539@tungstencollaborative.com>
+ <216539b9-4730-4adc-b400-655d287a082a@mind.be>
+ <a9c3d961-ceda-4092-9830-27e3c4bd114b@gmail.com>
+ <9d0c3fb8-a4ac-40f1-9608-a14ab281a861@mind.be>
+ <f9a209f6-cca2-4f37-83d4-faa6ab86ac36@gmail.com>
+ <e52f4b06-392d-42ce-be58-3987f85b4caf@mind.be>
+Content-Language: en-US
+From: Neil Webster <jarraneil@gmail.com>
+In-Reply-To: <e52f4b06-392d-42ce-be58-3987f85b4caf@mind.be>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1727191497; x=1727796297; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:from:content-language
+ :references:to:subject:user-agent:mime-version:date:message-id:from
+ :to:cc:subject:date:message-id:reply-to;
+ bh=OvXJCisvX5ylHaZptBNXUxmhkJ0kq18sjudik9imGl4=;
+ b=EPZTRICvj/fuvkq0kWRPWig5Ec0fXc33j14L7cMxJ3c2OdBov4BoyrR9iLWrtAOINS
+ FUKiIwGD/XIJ8wI9gNbsW0QaTu85yA75t1juaTZnzCKNGcmfqxayQI8MHg4788Iz0neU
+ OAdvFkY7bEzycmwBQs2Yfnr9Fh+ch6GgFz8+gdmRnpbt7v1lNo0murPR8qr6UUzD7UVf
+ Q6gK6HgIeeGciMDuq96gd7WBrXY8P5T4vduNeB+jNyEuKANBQwnPncRnOZefK7mDwddt
+ j0+cNO+8xTX+6jmrZcsFRDcHWdsWLyEa83QR1qvwuObcUsZA4Dai2OSgxAE+TfpJim+g
+ SiXA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=eJK8D72Z
-Subject: [Buildroot] [PATCH v8 1/1] package/dpdk: add 24.07
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=EPZTRICv
+Subject: Re: [Buildroot] Variscite Dart
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -77,367 +111,179 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Vincent Jardin <vjardin@free.fr>, Julien Olivain <ju.o@free.fr>,
- Yann Morin <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Arnout Vandecappelle <arnout@mind.de>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-This commit adds the integration of the Data Plane Development Kit (DPDK).
-
-This commit does not enforce the use of UIO or VFIO kernel frameworks,
-as DPDK's architecture supports userland memory mappings that do not require
-these technologies. By maintaining this flexibility, DPDK can operate with
-a broader range of hardware and software configurations.
-
-Only the little endian targets are properly supported by DPDK. Big endian
-was supported, mostly on Power8, but it has not been used for a while and
-IBM is not strongly pushing any tests. Should big endian be supported
-again, DPDK community will be welcoming any  contributions.
-
-Notes about license:
-
-DPDK was released with the BSD-3-Clause license.
-
-One network driver, the Google Virtual Ethernet (GVE) include files
-under the MIT license. See [1] and [2].
-
-There used to be GPL-2.0-only licensed kernel modules, but they got
-removed in previous versions [K] [KNI], so Buildroot won't be used to compile
-the GPL-2.0-only code.
-
-There are also 2 files in "lib/eal/windows" under other licenses
-(namely BSD-2-Clause, ISC and MIT) but they are parts of the Environment
-Abstraction Library (EAL) for Microsoft Windows OS, it means they are
-not used when compiling for the Linux targets of Buildroot.
-
-The list of DPDK license exceptions is maintained at [2].
-
-Add configuration options to enable DPDK examples and tests.
-
-[1] https://git.dpdk.org/dpdk/tree/doc/guides/nics/gve.rst?h=v24.07
-[2] https://git.dpdk.org/dpdk/tree/license/exceptions.txt?h=v24.07
-[KNI] https://git.dpdk.org/dpdk/commit/?id=f78c100bc87119c6a94130a6689d773afdaa9d98
-[UIO] https://git.dpdk.org/dpdk/commit/?id=56bb5841fd0608989101d933f091852a3126b4fe
-[K] https://git.dpdk.org/dpdk-kmods/commit/?id=d16f3b44987be181b6effee139558a084eaf9f8c
-
-Signed-off-by: Vincent Jardin <vjardin@free.fr>
-Suggested-by: Julien Olivain <ju.o@free.fr>
-Reviewed-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Reviewed-by: Julien Olivain <ju.o@free.fr>
-Reviewed-by: Yann Morin <yann.morin.1998@free.fr>
-Reviewed-by: Arnout Vandecappelle <arnout@mind.de>
----
- DEVELOPERS                                    |  3 +
- package/Config.in                             |  1 +
- ...-cpu_instruction_set-from-meson-opti.patch | 35 +++++++
- package/dpdk/0010-Fix-aarch64-build.patch     | 43 +++++++++
- package/dpdk/Config.in                        | 54 +++++++++++
- package/dpdk/dpdk.hash                        |  6 ++
- package/dpdk/dpdk.mk                          | 95 +++++++++++++++++++
- 7 files changed, 237 insertions(+)
- create mode 100644 package/dpdk/0001-config-meson-get-cpu_instruction_set-from-meson-opti.patch
- create mode 100644 package/dpdk/0010-Fix-aarch64-build.patch
- create mode 100644 package/dpdk/Config.in
- create mode 100644 package/dpdk/dpdk.hash
- create mode 100644 package/dpdk/dpdk.mk
-
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 426590d5c5..7c3d858e40 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -3238,6 +3238,9 @@ F:	package/rtl8822cs/
- N:	Victor Huesca <victor.huesca@bootlin.com>
- F:	support/testing/tests/core/test_root_password.py
- 
-+N:	Vincent Jardin <vjardin@free.fr>
-+F:	package/dpdk/
-+
- N:	Vincent Prince <vincent.prince.fr@gmail.com>
- F:	package/nss-myhostname/
- F:	package/utp_com/
-diff --git a/package/Config.in b/package/Config.in
-index 211080345a..90e521330b 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1988,6 +1988,7 @@ menu "Networking"
- 	source "package/daq3/Config.in"
- 	source "package/davici/Config.in"
- 	source "package/dht/Config.in"
-+	source "package/dpdk/Config.in"
- 	source "package/enet/Config.in"
- 	source "package/filemq/Config.in"
- 	source "package/fmlib/Config.in"
-diff --git a/package/dpdk/0001-config-meson-get-cpu_instruction_set-from-meson-opti.patch b/package/dpdk/0001-config-meson-get-cpu_instruction_set-from-meson-opti.patch
-new file mode 100644
-index 0000000000..c1bfb86448
---- /dev/null
-+++ b/package/dpdk/0001-config-meson-get-cpu_instruction_set-from-meson-opti.patch
-@@ -0,0 +1,35 @@
-+From 121e5d019f0bb6dec0ace2b361611edd10fc8ff8 Mon Sep 17 00:00:00 2001
-+From: Lee Chee Yang <chee.yang.lee@intel.com>
-+Date: Wed, 6 Dec 2023 16:58:10 +0800
-+Subject: [PATCH] config/meson: get cpu_instruction_set from meson option
-+
-+Workaround error:
-+| ../git/config/meson.build:178:8: ERROR: Problem encountered: Compiler
-+does not support "x86_64" arch flag.
-+
-+Upstream-Status: Inappropriate [ yocto specific to set cpu_instruction_set ]
-+
-+Signed-off-by: Lee Chee Yang <chee.yang.lee@intel.com>
-+Links: https://git.yoctoproject.org/meta-dpdk/plain/recipes-extended/dpdk/dpdk/0001-config-meson-get-cpu_instruction_set-from-meson-opti.patch
-+Upstream: Not applicable, see Yocto's status, above
-+Signed-off-by: Vincent Jardin <vjardin@free.fr>
-+---
-+ config/meson.build | 2 +-
-+ 1 file changed, 1 insertion(+), 1 deletion(-)
-+
-+diff --git a/config/meson.build b/config/meson.build
-+index a9ccd56deb..f310c7adf6 100644
-+--- a/config/meson.build
-++++ b/config/meson.build
-+@@ -105,7 +105,7 @@ platform = get_option('platform')
-+ 
-+ # set the cpu_instruction_set and cflags for it
-+ if meson.is_cross_build()
-+-    cpu_instruction_set = host_machine.cpu()
-++    cpu_instruction_set = get_option('cpu_instruction_set')
-+ else
-+     cpu_instruction_set = get_option('cpu_instruction_set')
-+     machine = get_option('machine')
-+-- 
-+2.37.3
-+
-diff --git a/package/dpdk/0010-Fix-aarch64-build.patch b/package/dpdk/0010-Fix-aarch64-build.patch
-new file mode 100644
-index 0000000000..55c31c3647
---- /dev/null
-+++ b/package/dpdk/0010-Fix-aarch64-build.patch
-@@ -0,0 +1,43 @@
-+From c5ea091a74bbfa5fb095d2c6fe15be3a7b15cacb Mon Sep 17 00:00:00 2001
-+From: Julien Olivain <ju.o@free.fr>
-+Date: Sun, 8 Sep 2024 13:20:14 +0200
-+Subject: [PATCH] Fix aarch64 build
-+
-+The condition on which DPDK meson skip the -march detection for Aarch64
-+seems incorrect or incomplete. This patch changes the condition in order
-+to better match the comment (that the options are decided in
-+config/arm/meson.build). It actually test for the architecture name.
-+
-+While this patch might need some discussion with DPDK maintainers to
-+cover all situations, it can still be useful here in Buildroot, as it
-+fixes the Aarch64 cross compilation.
-+
-+Signed-off-by: Julien Olivain <ju.o@free.fr>
-+Signed-off-by: Vincent Jardin <vjardin@free.fr>
-+Upstream: to be proposed https://patches.dpdk.org/project/dpdk/list/
-+Links: cherry-picked from https://github.com/jolivain/dpdk/commit/c5ea091a74bbfa5fb095d2c6fe15be3a7b15cacb
-+---
-+ config/meson.build | 6 +++---
-+ 1 file changed, 3 insertions(+), 3 deletions(-)
-+
-+diff --git a/config/meson.build b/config/meson.build
-+index 8c8b019c25..ea48e55ce3 100644
-+--- a/config/meson.build
-++++ b/config/meson.build
-+@@ -176,10 +176,10 @@ if not is_ms_compiler
-+     else
-+         machine_args += '-march=' + cpu_instruction_set
-+         # arm manages generic/auto config in config/arm/meson.build
-+-        if cpu_instruction_set != 'generic' and cpu_instruction_set != 'auto'
-+-            compiler_arch_support = cc.has_argument('-march=' + cpu_instruction_set)
-+-        else
-++        if host_machine.cpu_family().startswith('aarch')
-+             compiler_arch_support = true
-++        else
-++            compiler_arch_support = cc.has_argument('-march=' + cpu_instruction_set)
-+         endif
-+     endif
-+     if not compiler_arch_support
-+--
-+2.46.0
-+
-diff --git a/package/dpdk/Config.in b/package/dpdk/Config.in
-new file mode 100644
-index 0000000000..328129ea65
---- /dev/null
-+++ b/package/dpdk/Config.in
-@@ -0,0 +1,54 @@
-+config BR2_PACKAGE_DPDK_ARCH_SUPPORTS
-+	bool
-+	# DPDK can be used for the following little endian architecture
-+	default y if BR2_aarch64
-+	# DPDK requires SSE4.2 for x86_64 since v17.08
-+	default y if BR2_x86_64 && BR2_X86_CPU_HAS_SSE42
-+
-+config BR2_PACKAGE_DPDK
-+	bool "dpdk"
-+	depends on BR2_PACKAGE_DPDK_ARCH_SUPPORTS
-+	depends on BR2_TOOLCHAIN_HAS_THREADS # DPDK design
-+	depends on BR2_USE_MMU # pthread() memory mappings
-+	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 # C11/stdatomic.h
-+	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_19
-+	depends on BR2_TOOLCHAIN_USES_GLIBC
-+	select BR2_PACKAGE_HOST_PYTHON3 # host-python-pyelftools
-+	help
-+	  DPDK (Data Plane Development Kit) is a set of libraries
-+	  and drivers for fast packet processing.
-+
-+	  http://dpdk.org/
-+
-+	  Optional but recommended kernel configurations:
-+	    - CONFIG_VFIO_IOMMU_TYPE1
-+	    - CONFIG_VFIO_VIRQFD
-+	    - CONFIG_VFIO
-+	    - CONFIG_VFIO_NOIOMMU
-+	    - CONFIG_VFIO_PCI
-+	    - CONFIG_VFIO_PCI_MMAP
-+	    - CONFIG_HUGETLBFS
-+	    - CONFIG_HUGETLB_PAGE
-+	    - CONFIG_PROC_PAGE_MONITOR
-+
-+	  For x86 only, the following can also be useful:
-+	    - CONFIG_HPET
-+	    - CONFIG_HPET_MMAP
-+
-+if BR2_PACKAGE_DPDK
-+
-+config BR2_PACKAGE_DPDK_EXAMPLES
-+	bool "Install examples"
-+
-+config BR2_PACKAGE_DPDK_TESTS
-+	bool "Install tests"
-+
-+endif
-+
-+comment "DPDK needs a toolchain w/ dynamic library, threads, wchar, kernel headers >= 4.19"
-+	depends on BR2_USE_MMU # pthread() memory mappings
-+	depends on BR2_PACKAGE_DPDK_ARCH_SUPPORTS
-+	depends on !BR2_TOOLCHAIN_HAS_THREADS || \
-+		!BR2_TOOLCHAIN_USES_GLIBC || \
-+		!BR2_TOOLCHAIN_GCC_AT_LEAST_4_9 || \
-+		!BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_19
-diff --git a/package/dpdk/dpdk.hash b/package/dpdk/dpdk.hash
-new file mode 100644
-index 0000000000..27c06476e7
---- /dev/null
-+++ b/package/dpdk/dpdk.hash
-@@ -0,0 +1,6 @@
-+# Locally computed
-+sha256  9944f7e5f268e7ac9b4193e2cd54ef6d98f6e1d7dddc967c77ae4f6616d6fbbd  dpdk-24.07.tar.xz
-+sha256  9acc4bc871a4742550158e3696dcb381953172ef808d04ca248184f9f6322712  license/bsd-3-clause.txt
-+sha256  e19808bccd90c238fac06da2fc3683e094c64f7ba647e9d86f03a98cf5f2ce05  license/exceptions.txt
-+sha256  6c54c4d44faf3cba829b3d0c21c6955953e758767018fd7244f809b01d4f4845  license/mit.txt
-+sha256  cae178052c96959741acb7f00634a09a8294e6cafb5ad53e158d63e3510875ab  license/README
-diff --git a/package/dpdk/dpdk.mk b/package/dpdk/dpdk.mk
-new file mode 100644
-index 0000000000..b685e12408
---- /dev/null
-+++ b/package/dpdk/dpdk.mk
-@@ -0,0 +1,95 @@
-+################################################################################
-+#
-+# dpdk
-+#
-+################################################################################
-+
-+DPDK_VERSION = 24.07
-+DPDK_SOURCE = dpdk-$(DPDK_VERSION).tar.xz
-+DPDK_SITE = https://fast.dpdk.org/rel
-+DPDK_LICENSE = \
-+	BSD-3-Clause, \
-+	MIT
-+
-+# Only the Windows target has the 2 following licenses:
-+# - license/bsd-2-clause.txt
-+# - license/isc.txt
-+# which is related to a Windows getopt.[ch] compatibility layer.
-+# Since Buildroot is not used for Windows target, it is not listed
-+# here.
-+#
-+# All the userland files of DPDK have dual licences BSD or GPL/LGPL
-+# Since the Linux kernel modules had been removed from the DPDK, there
-+# is no GPL only code into the DPDK anymore.
-+# The usage of DPDK with Buildroot is for userland only, it means
-+# that for the dual licenced files, BSD clause is used but not the
-+# following ones:
-+# - license/gpl-2.0.txt
-+# - license/lgpl-2.1.txt
-+# See the DPDK's license/README for more details.
-+#
-+# The legacy and historical license of the DPDK is BSD-3-clause.
-+DPDK_LICENSE_FILES = \
-+	license/README \
-+	license/bsd-3-clause.txt \
-+	license/exceptions.txt \
-+	license/mit.txt
-+
-+DPDK_DEPENDENCIES = \
-+	host-pkgconf \
-+	host-python-pyelftools
-+
-+ifeq ($(BR2_PACKAGE_DPDK_EXAMPLES),y)
-+DPDK_CONF_OPTS += -Dexamples=all
-+else
-+DPDK_CONF_OPTS += -Dexamples=
-+endif
-+
-+ifeq ($(BR2_PACKAGE_DPDK_TESTS),y)
-+DPDK_CONF_OPTS += -Dtests=true
-+else
-+DPDK_CONF_OPTS += -Dtests=false
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBBSD),y)
-+DPDK_DEPENDENCIES += libbsd
-+endif
-+
-+ifeq ($(BR2_PACKAGE_JANSSON),y)
-+DPDK_DEPENDENCIES += jansson
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBPCAP),y)
-+DPDK_DEPENDENCIES += libpcap
-+endif
-+
-+ifeq ($(BR2_PACKAGE_ZLIB),y)
-+DPDK_DEPENDENCIES += zlib
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBEXECINFO),y)
-+DPDK_DEPENDENCIES += libexecinfo
-+endif
-+
-+ifeq ($(BR2_PACKAGE_NUMACTL),y)
-+DPDK_DEPENDENCIES += numactl
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBARCHIVE),y)
-+DPDK_DEPENDENCIES += libarchive
-+endif
-+
-+ifeq ($(BR2_PACKAGE_LIBBPF),y)
-+DPDK_DEPENDENCIES += libbpf
-+endif
-+
-+ifeq ($(BR2_PACKAGE_RDMA_CORE),y)
-+DPDK_DEPENDENCIES += rdma-core
-+endif
-+
-+# DPDK's meson shall need to be clean'd, hack here along the enclosed patch
-+DPDK_CONF_OPTS += -Dcpu_instruction_set=$(BR2_GCC_TARGET_ARCH)
-+# Keep the following, even if not mandatory, until the removal of the patch
-+DPDK_MESON_EXTRA_PROPERTIES += platform='generic'
-+
-+$(eval $(meson-package))
--- 
-2.46.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGkgQXJub3V0LAoKSSB3YXMgdXNpbmcgYW4gaW5jb3JyZWN0IHZlcnNpb24gYW5kIHRoZSB1cmwg
+d2FzIG5vdCBjb3JyZWN0LgoKVGhlIFlvY3RvIGJ1aWxkIHVzZXMgNi4xLjM2LTIuMS4wIGFuZCBJ
+IGNoYW5nZWQgdGhlIHRocmVlIHRhcmJhbGxzIHRvIAp0aGF0LiBJIGFsc28gZGlzYWJsZWQgdGhl
+IGhhc2ggY2hlY2tpbmcgYXMgcGVyIHlvdXIgcHJldmlvdXMgY29tbWVudC4gClRoZSBkb3dubG9h
+ZCBub3cgd29ya3MgYnV0IEkgaGl0IHRoaXMgZXJyb3IgLi4uCgpJTlNUQUxMIAovaG9tZS9uZWls
+L2J1aWxkcm9vdC0yMDI0LjA4L291dHB1dC9ob3N0L2FhcmNoNjQtYnVpbGRyb290LWxpbnV4LWdu
+dS9zeXNyb290L3Vzci9pbmNsdWRlCmlmICEgc3VwcG9ydC9zY3JpcHRzL2NoZWNrLWtlcm5lbC1o
+ZWFkZXJzLnNoIAovaG9tZS9uZWlsL2J1aWxkcm9vdC0yMDI0LjA4L291dHB1dC9idWlsZCAKL2hv
+bWUvbmVpbC9idWlsZHJvb3QtMjAyNC4wOC9vdXRwdXQvaG9zdC9hYXJjaDY0LWJ1aWxkcm9vdC1s
+aW51eC1nbnUvc3lzcm9vdCAKNi42IHN0cmljdDsgdGhlbiBleGl0IDE7IGZpCkluY29ycmVjdCBz
+ZWxlY3Rpb24gb2Yga2VybmVsIGhlYWRlcnM6IGV4cGVjdGVkIDYuNi54LCBnb3QgNi4xLngKClJl
+Z2FyZHMsIE5laWwKCgpPbiAyMDI0LTA5LTI0IDI6MjMgYS5tLiwgQXJub3V0IFZhbmRlY2FwcGVs
+bGUgd3JvdGU6Cj4KPgo+IE9uIDIzLzA5LzIwMjQgMjI6NTMsIE5laWwgV2Vic3RlciB3cm90ZToK
+Pj4gSGkgQXJub3V0LAo+Pgo+PiBUaGFua3MgZm9yIHRoZSBxdWljayByZXNwb25zZS4KPj4KPj4g
+SSBsb29rZWQgdGhyb3VnaCB0aGUgeW9jdG8gYnVpbGQgZGlyZWN0b3J5IGFuZCBpdCBzZWVtcyB0
+aGF0IHRoZXkgYXJlIAo+PiB1c2luZyA2LjEuMS0xLjAuMCBmb3IgYWxsIG9mIHRoZSBiZWxvdy4K
+Pj4KPj4gQlIyX1RBUkdFVF9BUk1fVFJVU1RFRF9GSVJNV0FSRV9DVVNUT01fVEFSQkFMTF9MT0NB
+VElPTgo+Pgo+PiBCUjJfVEFSR0VUX1VCT09UX0NVU1RPTV9UQVJCQUxMX0xPQ0FUSU9OCj4+Cj4+
+IEJSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX1RBUkJBTExfTE9DQVRJT04KPj4KPj4gU28gSSBjaGFu
+Z2VkIHRoZW0gKC5jb25maWcgYXR0YWNoZWQpLgo+Pgo+PiBUaGUgYnVpbGQgZmFpbGVkIHdpdGgg
+dGhlIGZvbGxvd2luZyAuLi4KPj4KPj4gRVJST1I6IE5vIGhhc2ggZm91bmQgZm9yIGxpbnV4LWlt
+eC1sZi02LjEuMS0xLjAuMC50YXIuZ3oKPj4gbWFrZVsxXTogKioqIFtwYWNrYWdlL3BrZy1nZW5l
+cmljLm1rOjE3OTogCj4+IC9ob21lL25laWwvYnVpbGRyb290LTIwMjQuMDgvb3V0cHV0LyAKPj4g
+YnVpbGQvbGludXgtaGVhZGVycy1jdXN0b20vLnN0YW1wX2Rvd25sb2FkZWRdIEVycm9yIDEKPgo+
+IMKgWW91IHByb2JhYmx5IGhhdmUgQlIyX0RPV05MT0FEX0ZPUkNFX0NIRUNLX0hBU0hFUz15IHR1
+cm5lZCBvbiBiZWNhdXNlIAo+IHlvdSBzdGFydGVkIGZyb20gYSBkZWZjb25maWcgdGhhdCBoYXMg
+YSBoYXNoIGZpbGUuIEVpdGhlciBkaXNhYmxlIHRoaXMgCj4gb3B0aW9uLCBvciB1cGRhdGUgYm9h
+cmQvZnJlZXNjYWxlL2lteDhtbWV2ay9wYXRjaGVzL2xpbnV4L2xpbnV4Lmhhc2ggCj4gd2l0aCB0
+aGUgaGFzaCBvZiB0aGUgdGFyYmFsbC4KPgo+IMKgUmVnYXJkcywKPiDCoEFybm91dAo+Cj4+Cj4+
+IFRob3VnaHRzIG9uIG5leHQgc3RlcHMgYXBwcmVjaWF0ZWQuCj4+Cj4+IFRoYW5rcyBmb3IgeW91
+ciBwYXRpZW5jZSBpbiB3b3JraW5nIHRocm91Z2ggdGhpcyB3aXRoIGEgbmV3YmllLgo+Pgo+PiBD
+aGVlcnMsIE5laWwKPj4KPj4gT24gMjAyNC0wOS0yMyAzOjM2IHAubS4sIEFybm91dCBWYW5kZWNh
+cHBlbGxlIHdyb3RlOgo+Pj4KPj4+Cj4+PiBPbiAyMy8wOS8yMDI0IDIxOjMwLCBOZWlsIFdlYnN0
+ZXIgd3JvdGU6Cj4+Pj4gSGkgQXJub3V0LAo+Pj4+Cj4+Pj4gVGhhbmsgeW91IGZvciB0aGUgcmVz
+cG9uc2UuCj4+Pj4KPj4+PiBJIHdpbGwgd29yayB0aHJvdWdoIGVhY2ggb2YgeW91ciBzdWdnZXN0
+aW9ucyBhbmQgSSBzdGFydGVkIHdpdGggdGhlIAo+Pj4+IG9uZSB0aGF0IHlvdSBzdGF0ZWQgd2Fz
+IGRlZmluaXRlbHkgaW5jb3JyZWN0IGkuZS4gVGhlIERUUyBuYW1lLgo+Pj4+Cj4+Pj4gVGhlIFZh
+cmlzY2l0ZSBkZXZpY2UgdHJlZXMgYXJlIGRlc2NyaWJlZCBoZXJlCj4+Pj4KPj4+PiBodHRwczov
+L3d3dy52YXJpc2NpdGUuY29tL2Jsb2cvZ2V0dGluZy1zdGFydGVkLXdpdGgtdmFyaXNjaXRlLWRl
+dmljZS10cmVlcy8gCj4+Pj4KPj4+Pgo+Pj4+IEkgZm91bmQgYW5kIGNvcGllZCB0aHJlZSBEVFMo
+SSkgZmlsZXMKPj4+Pgo+Pj4+IGlteDhtbS12YXItZGFydC1kdDhtY3VzdG9tYm9hcmQuZHRzCj4+
+Pj4KPj4+PiB3aGljaCAjaW5jbHVkZXMgLi4uCj4+Pj4KPj4+PiBpbXg4bW0tdmFyLWRhcnQuZHRz
+aQo+Pj4+Cj4+Pj4gd2hpY2ggI2luY2x1ZGVzIC4uLgo+Pj4+Cj4+Pj4gaW14OG1tLmR0c2kKPj4+
+Cj4+PiDCoFRoaXMgb25lLCBhdCBsZWFzdCwgc2hvdWxkIGJlIGluIHRoZSBrZXJuZWwgc291cmNl
+IGl0c2VsZi4gSWYgCj4+PiB5b3UncmUgdXNpbmcgYSBrZXJuZWwgdGhhdCBkb2Vzbid0IGFscmVh
+ZHkgaGF2ZSBpbXg4bW0uZHRzaSwgaXQncyAKPj4+IHByb2JhYmx5IGdvaW5nIHRvIGJlIHdpbGRs
+eSBpbmNvbXBhdGlibGUgd2l0aCBWYXJpc2NpdGUncyBkZXZpY2UgdHJlZS4KPj4+Cj4+Pgo+Pj4+
+IEkgcmVmZXJlbmNlZCB0aGUgbG9jYXRpb24gb2YgdGhlc2UgZmlsZXMgaW4gCj4+Pj4gQlIyX0xJ
+TlVYX0tFUk5FTF9DVVNUT01fRFRTX1BBVEggYW5kIEkgc2VlIGl0IGNvcGllcyB0aGVtIHRvIAo+
+Pj4+IG91dHB1dC9idWlsZC9saW51eC1jdXN0b20vYXJjaC9hcm02NC9ib290L2R0cy8KPj4+Pgo+
+Pj4+IFRoZSBzdWJzZXF1ZW50IGJ1aWxkIGNvbXBsYWluZWQgYWJvdXQgbWlzc2luZyBkZXBlbmRl
+bmNpZXMgYW5kIEkgCj4+Pj4gYWxzbyBoYWQgdG8gYWRkIGlteDhtbS1waW5mdW5jLmggYW5kIG14
+bC04NjExeC5oIHRvIAo+Pj4+IEJSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX0RUU19QQVRILiBJcyB0
+aGF0IAo+Pj4KPj4+IMKgQWdhaW4sIHRoZXNlIHNob3VsZCBub3JtYWxseSBiZSBwYXJ0IG9mIHRo
+ZcKgIGtlcm5lbCBhbHJlYWR5Lgo+Pj4KPj4+PiB0aGUgY29ycmVjdCB3YXkgdG8gYWRkIC5oIGRl
+cGVuZGVuY2llcyBvciBpcyB0aGVyZSBhIGNsZWFuZXIgd2F5IG9yIAo+Pj4+IGRvaW5nIHRoaXMg
+aS5lLiBzaG91bGQgdGhlIEJSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX0RUU19QQVRIIGJlIAo+Pj4+
+IHJlc2VydmVkIGZvciBEVFMgZmlsZXMgb25seSBhcyB0aGUgbmFtZSBzdWdnZXN0cz8KPj4+Cj4+
+PiDCoE5vdCByZWFsbHkgLSB0aGUgaGVhZGVyIGZpbGVzIGFyZSBzaGFyZWQgYmV0d2VlbiBkZXZp
+Y2UgdHJlZSBhbmQgCj4+PiBjb3JyZXNwb25kaW5nIGRyaXZlcnMuIFNvIHRoZXkgc2hvdWxkIGFs
+cmVhZHkgYmUgcGFydCBvZiB0aGUga2VybmVsIAo+Pj4gc291cmNlLiBJZiB0aGV5IGFyZSBub3Qs
+IGl0J3MgcXVpdGUgbGlrZWx5IHRoYXQgdGhpbmdzIGFyZSBub3QgZ29pbmcgCj4+PiB0byB3b3Jr
+Lgo+Pj4KPj4+IMKgVGhlcmUgbWF5IGJlIHNpdHVhdGlvbnMgd2hlcmUgaXQgbWFrZXMgc2Vuc2Ug
+dG8gYWRkIGhlYWRlciBmaWxlcyB0byAKPj4+IENVU1RPTV9EVFNfUEFUSCwgYnV0IHRoYXQncyBz
+cXVhcmVseSBZb3UgTXVzdCBLbm93IFdoYXQgWW91J3JlIERvaW5nIAo+Pj4gdGVycml0b3J5Li4u
+Cj4+Pgo+Pj4KPj4+Pgo+Pj4+IEFueXdheSB0aGUgYnVpbGQgc3VjY2VlZGVkIGFmdGVyIGFkZGlu
+ZyB0aG9zZSAuaCBmaWxlcyBidXQgc2FkbHkgCj4+Pj4gc3RpbGwgbm8gY29uc29sZS4gSSB3aWxs
+IG5vdyBtb3ZlIG9udG8gbG9va2luZyBhdCB0aGUgb3RoZXIgaXRlbXMgCj4+Pj4geW91IG1lbnRp
+b25lZC4KPj4+Cj4+PiDCoFdlbGwsIEknZCBzdGFydCB3aXRoIGNvbmNlbnRyYXRpbmcgb24gZ2V0
+dGluZyBvdXRwdXQgZnJvbSBURi1BIGFuZCAKPj4+IFUtQm9vdC4gUmlnaHQgbm93IHlvdSBkb24n
+dCBldmVuIGtub3cgaWYgdGhlIGtlcm5lbCBpcyBsb2FkZWQhCj4+Pgo+Pj4KPj4+IMKgUmVnYXJk
+cywKPj4+IMKgQXJub3V0Cj4+Pgo+Pj4KPj4+Pgo+Pj4+IENoZWVycywgTmVpbAo+Pj4+Cj4+Pj4g
+T24gMjAyNC0wOS0xOSA3OjUzIGEubS4sIEFybm91dCBWYW5kZWNhcHBlbGxlIHdyb3RlOgo+Pj4+
+PiBbWW91IGRvbid0IG9mdGVuIGdldCBlbWFpbCBmcm9tIGFybm91dEBtaW5kLmJlLiBMZWFybiB3
+aHkgdGhpcyBpcyAKPj4+Pj4gaW1wb3J0YW50IGF0IGh0dHBzOi8vYWthLm1zL0xlYXJuQWJvdXRT
+ZW5kZXJJZGVudGlmaWNhdGlvbiBdCj4+Pj4+Cj4+Pj4+IMKgSGkgTmVpbCwKPj4+Pj4KPj4+Pj4g
+T24gMTkvMDkvMjAyNCAwMDoxOSwgTmVpbCBXZWJzdGVyIHdyb3RlOgo+Pj4+Pj4gSGVsbG8sCj4+
+Pj4+Pgo+Pj4+Pj4gSSBhbSBuZXcgdG8gQnVpbGRyb290IGFuZCBoYXZlIGJlZW4gc3RydWdnbGlu
+ZyBmb3IgYSBjb3VwbGUgb2YgCj4+Pj4+PiBkYXlzIHdpdGgKPj4+Pj4+IHNvbWV0aGluZyBhbmQg
+d29uZGVyaW5nIGlmIEkgY291bGQgZ2V0IHNvbWUgcG9pbnRlcnMuIFBsZWFzZSBsZXQgCj4+Pj4+
+PiBtZSBrbm93Cj4+Pj4+PiBpZiB0aGlzIGlzIG5vdCB0aGUgYXBwcm9wcmlhdGUgcGxhY2UgdG8g
+cG9zdCBzdWNoIHF1ZXN0aW9ucy4KPj4+Pj4+Cj4+Pj4+PiBJIHdhbnQgdG8gZ2V0IGFuIGVtYmVk
+ZGVkIExpbnV4IGltYWdlIHJ1bm5pbmcgb24gYSBWYXJpc2NpdGUgRGFydCAKPj4+Pj4+IE1pbmkK
+Pj4+Pj4+IChsaW5rIGJlbG93KQo+Pj4+Pj4KPj4+Pj4+IGh0dHBzOi8vd3d3LnZhcmlzY2l0ZS5j
+b20vcHJvZHVjdC9zeXN0ZW0tb24tbW9kdWxlLXNvbS9jb3J0ZXgtYTUzLWtyYWl0LyAKPj4+Pj4+
+IGRhcnQtIG14OG0tbWluaS1ueHAtaS1teDhtLW1pbmkvCj4+Pj4+Pgo+Pj4+Pj4gSSBoYXZlIHRo
+ZSBTT00gY29ubmVjdGVkIHRvIGEgZGV2IGtpdCByZWZlcmVuY2VkIGluIHRoZSBzYW1lIGxpbmsg
+Cj4+Pj4+PiBhYm92ZS4KPj4+Pj4+Cj4+Pj4+PiBJIHdhbnRlZCB0byB1c2UgdGhlIG9wcG9ydHVu
+aXR5IHRvIGdldCBmYW1pbGlhciB3aXRoIEJ1aWxkcm9vdCAKPj4+Pj4+IGJ1dCBzYWRseQo+Pj4+
+Pj4gVmFyaXNjaXRlIGRvIG5vdCBzdXBwb3J0IEJ1aWxkcm9vdCBhbmQgaW5zdGVhZCB0aGV5IHN0
+ZWVyZWQgbWUgCj4+Pj4+PiB0b3dhcmRzCj4+Pj4+PiBZb2N0by4KPj4+Pj4KPj4+Pj4gwqA6c2Fk
+LWZhY2U6Cj4+Pj4+Cj4+Pj4+Cj4+Pj4+PiBJIGhhdmUgYmVlbiBhYmxlIHRvIGdldCBhbiBpbWFn
+ZSBydW5uaW5nIHdpdGggWW9jdG8gZm9sbG93aW5nIHRoZWlyCj4+Pj4+PiByZWNpcGVzIGJ1dCBJ
+IGZvdW5kIHRoZSB3aG9sZSBwcm9jZXNzIHRvIGJlIG9ic2N1cmUgYW5kIG9wYXF1ZSAKPj4+Pj4+
+IGFuZCBJIGFtCj4+Pj4+PiB0aGVyZWZvcmUgYmFjayB0byBteSBvcmlnaW5hbCBvYmplY3RpdmUg
+b2YgdXNpbmcgQnVpbGRyb290Lgo+Pj4+Pgo+Pj4+PiDCoFBsZWFzZSBtYWtlIHN1cmUgdG8gZ2l2
+ZSB0aGlzIGZlZWRiYWNrIHRvIFZhcmlzY2l0ZSEKPj4+Pj4KPj4+Pj4KPj4+Pj4+Cj4+Pj4+PiBJ
+IGhhdmUgYmVlbiBhYmxlIHRvIGZvbGxvdyB0aGUgdHV0b3JpYWxzIGFuZCBnZXQgYSBidWlsZCB3
+b3JraW5nIAo+Pj4+Pj4gb24gYQo+Pj4+Pj4gUmFzcGJlcnJ5IFBpLgo+Pj4+Pj4KPj4+Pj4+IEhv
+d2V2ZXIsIGFzIG1lbnRpb25lZCBhYm92ZSB0aGVyZSBpcyBubyBzdXBwb3J0IGF2YWlsYWJsZSBm
+cm9tIAo+Pj4+Pj4gVmFyaXNjaXRlCj4+Pj4+PiBhbmQgdGhlcmUgaXMgbm8gc3BlY2lmaWMgZGVm
+Y29uZmlnIGZvciBteSBoYXJkd2FyZSwgc28gSSB0cmllZCB0byAKPj4+Pj4+IHN0YXJ0Cj4+Pj4+
+PiB3aXRoIGZyZWVzY2FsZV9pbXg4bW1ldmtfZGVmY29uZmlnIGFzIHRoaXMgc2VlbXMgdG8gYmUg
+Y2xvc2Ugd2l0aCAKPj4+Pj4+IHdoYXQKPj4+Pj4+IGFwcGVhciB0byBiZSBjb3JyZWN0IHNldHRp
+bmdzIHVuZGVyIHRoZSAidGFyZ2V0IG9wdGlvbnMiIG1lbnUuCj4+Pj4+Cj4+Pj4+IMKgWWVzLCB0
+aGF0J3MgYW4gZXhjZWxsZW50IHN0YXJ0IQo+Pj4+Pgo+Pj4+PiDCoC4uLiBidXQgbm90IGVub3Vn
+aCB0byBnZXQgYSB3b3JraW5nIGJvYXJkLi4uCj4+Pj4+Cj4+Pj4+Cj4+Pj4+PiBIb3dldmVyIEkg
+YW0gbm90IGdldHRpbmcgYW55dGhpbmcgYXQgdGhlIGNvbnNvbGUuCj4+Pj4+Pgo+Pj4+Pj4gSSBu
+b3RpY2VkIHRoYXQgdGhlIGZyZWVzY2FsZV9pbXg4bW1ldmtfZGVmY29uZmlnIHNldHMgdGhlIGdl
+dHR5IAo+Pj4+Pj4gVFRZIHBvcnQKPj4+Pj4+IHRvIHR0eW14YzEsIHNvIEkgdHJpZWQgY2hhbmdp
+bmcgdGhpcyB0byB0dHlteGMwIGFzIHRoYXQgaXMgdGhlIHBvcnQKPj4+Pj4+IG1hcHBlZCB0byB0
+aGUgZGVidWcgaW50ZXJmYWNlIG9uIHRoZSBkZXZlbG9wbWVudCBib2FyZC4gU3RpbGwgCj4+Pj4+
+PiBub3RoaW5nIGF0Cj4+Pj4+PiB0aGUgY29uc29sZS4KPj4+Pj4KPj4+Pj4gwqBUaGF0IGlzIG9u
+ZSBvZiB0aGUgdGhpbmdzIHlvdSBuZWVkIHRvIGNoYW5nZSBpbmRlZWQuIEhvd2V2ZXIsIAo+Pj4+
+PiB0aGluZ3MgYWxyZWFkeQo+Pj4+PiB3ZW50IHdyb25nIHdheSBiZWZvcmUgdGhhdCwgYmVjYXVz
+ZSB5b3Ugc2hvdWxkIGhhdmUgZ290dGVuIFUtQm9vdCAKPj4+Pj4gYW5kIGtlcm5lbAo+Pj4+PiBk
+ZWJ1ZyBvdXRwdXQgb24gdGhlIGNvbnNvbGUuCj4+Pj4+Cj4+Pj4+IMKgVGhlcmUgYXJlIGEgbnVt
+YmVyIG9mIHRoaW5ncyB5b3UgaGF2ZSB0byBjaGFuZ2UgaW4gYSBkZWZjb25maWcgCj4+Pj4+IHdo
+ZW4geW91IHN3aXRjaAo+Pj4+PiB0byBhIGRpZmZlcmVudCAoYnV0IHNpbWlsYXIpIGJvYXJkLiBJ
+J20gZ29pbmcgdG8gbGlzdCB0aGVtIGJlbG93IAo+Pj4+PiB3aXRoIHRoZSBzeW1ib2wKPj4+Pj4g
+bmFtZXMsIG5vdCBob3cgdGhleSBhcHBlYXIgaW4gdGhlIG1lbnUuIFlvdSBjYW4gYWx3YXlzIHNl
+YXJjaCBmb3IgCj4+Pj4+IHRob3NlIHN5bWJvbHMKPj4+Pj4gaW4gYG1ha2UgbWVudWNvbmZpZ2Ag
+YnkgdHlwaW5nIC8KPj4+Pj4KPj4+Pj4gQlIyX1RBUkdFVF9BUk1fVFJVU1RFRF9GSVJNV0FSRV9D
+VVNUT01fVEFSQkFMTF9MT0NBVElPTj0iJChjYWxsCj4+Pj4+IGdpdGh1YixueHAtaW14LGlteC1h
+dGYsbGYtNi42LjIzLTIuMC4wKS9pbXgtYXRmLWxmLTYuNi4yMy0yLjAuMC50YXIuZ3oiIAo+Pj4+
+Pgo+Pj4+Pgo+Pj4+PiBZb3Ugc2hvdWxkIGNoZWNrIFZhcmlzY2l0ZSdzIHlvY3RvIGxheWVyIHRv
+IHNlZSBpZiB0aGV5IHVzZSB0aGUgCj4+Pj4+IE5YUCBURi1BIG9yIGlmCj4+Pj4+IHRoZXkgZm9y
+ayBpdCBldmVuIG1vcmUuIFRoZXkgbWF5IGFsc28gdXNlIGEgZGlmZmVyZW50IHZlcnNpb24uCj4+
+Pj4+Cj4+Pj4+Cj4+Pj4+IEJSMl9UQVJHRVRfQVJNX1RSVVNURURfRklSTVdBUkVfUExBVEZPUk09
+ImlteDhtbSIKPj4+Pj4KPj4+Pj4gSSBleHBlY3QgdGhhdCB0aGlzIHdpbGwgYmUgT0sgZm9yIHRo
+ZSBWYXJpc2NpdGUgYm9hcmQgYXMgd2VsbCwgYnV0IAo+Pj4+PiBpdCBpcwo+Pj4+PiBwb3NzaWJs
+ZSB0aGF0IHRoZXkgaGF2ZSBkZWZpbmVkIHRoZWlyIG93biBwbGF0Zm9ybS4KPj4+Pj4KPj4+Pj4K
+Pj4+Pj4KPj4+Pj4gQlIyX1RBUkdFVF9VQk9PVF9DVVNUT01fVEFSQkFMTF9MT0NBVElPTj0iJChj
+YWxsCj4+Pj4+IGdpdGh1YixueHAtaW14LHVib290LWlteCxsZi02LjYuMjMtMi4wLjApL3Vib290
+LWlteC1sZi02LjYuMjMtMi4wLjAudGFyLmd6IiAKPj4+Pj4KPj4+Pj4KPj4+Pj4gWW91IHNob3Vs
+ZCBjaGVjayBWYXJpc2NpdGUncyB5b2N0byBsYXllciB0byBzZWUgaWYgdGhleSB1c2UgdGhlIAo+
+Pj4+PiBOWFAgVS1Cb290IG9yIGlmCj4+Pj4+IHRoZXkgZm9yayBpdCBldmVuIG1vcmUuIFRoZXkg
+bWF5IGFsc28gdXNlIGEgZGlmZmVyZW50IHZlcnNpb24uCj4+Pj4+Cj4+Pj4+Cj4+Pj4+IEJSMl9U
+QVJHRVRfVUJPT1RfQk9BUkRfREVGQ09ORklHPSJpbXg4bW1fZXZrIgo+Pj4+Pgo+Pj4+PiBUaGlz
+IG5lZWRzIHRvIGNoYW5nZSB0byB0aGUgVS1Cb290IGRlZmNvbmZpZy4gVGhhdCBkZWZjb25maWcg
+Y291bGQgCj4+Pj4+IGJlIGluIE5YUCdzCj4+Pj4+IFUtQm9vdCBmb3JrIGFscmVhZHksIG9yIGl0
+IGNvdWxkIGJlIGluIFZhcmlzY2l0ZSdzIGZvcmssIG9yIAo+Pj4+PiBWYXJpc2NpdGUgbWF5IHN1
+cHBseQo+Pj4+PiBpdCBpbiB0aGVpciB1LWJvb3QgeW9jdG8gcmVjaXBlLgo+Pj4+Pgo+Pj4+Pgo+
+Pj4+PiBCUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9UQVJCQUxMX0xPQ0FUSU9OPSIkKGNhbGwKPj4+
+Pj4gZ2l0aHViLG54cC1pbXgsbGludXgtaW14LGxmLTYuNi4yMy0yLjAuMCkvbGludXgtaW14LWxm
+LTYuNi4yMy0yLjAuMC50YXIuZ3oiIAo+Pj4+Pgo+Pj4+PiBCUjJfTElOVVhfS0VSTkVMX0RFRkNP
+TkZJRz0iaW14X3Y4Igo+Pj4+PiBCUjJfTElOVVhfS0VSTkVMX0lOVFJFRV9EVFNfTkFNRT0iZnJl
+ZXNjYWxlL2lteDhtbS1ldmsKPj4+Pj4gZnJlZXNjYWxlL2lteDhtbS1ldmstcmV2Yi1xY2Etd2lm
+aSIKPj4+Pj4KPj4+Pj4gWW91IHByb2JhYmx5IHN0YXJ0IHRvIGtub3cgdGhlIGRyaWxsLCByaWdo
+dD8gVGhlIGRlZmNvbmZpZyBpcyAKPj4+Pj4gcHJvYmFibHkgT0ssCj4+Pj4+IGFsdGhvdWdoIGl0
+J3MgcG9zc2libGUgdGhhdCBWYXJpc2NpdGUgYXBwZW5kcyBhIGZyYWdtZW50IHRvIGl0IGluIAo+
+Pj4+PiB0aGVpcgo+Pj4+PiBiYmFwcGVuZC4gVGhlIERUUyBuYW1lIGlzIG1vc3QgZGVmaW5pdGVs
+eSBub3QgT0ssIGJ1dCBpdCBtaWdodCAKPj4+Pj4gY29tZSBmcm9tCj4+Pj4+IFZhcmlzY2l0ZSdz
+IG1ldGFsYXllciBpbnN0ZWFkIG9mIE5YUCdzIGtlcm5lbC4gVGhlIGtlcm5lbCBpcyAKPj4+Pj4g
+dW5saWtlbHkgdG8gYmUKPj4+Pj4gZm9ya2VkIGJ5IFZhcmlzY2l0ZSBzbyB0aGF0IG9uZSBpcyBw
+cm9iYWJseSBPSywgYnV0IGl0IG1heSBiZSBhIAo+Pj4+PiBkaWZmZXJlbnQgdmVyc2lvbi4KPj4+
+Pj4KPj4+Pj4KPj4+Pj4+IEkgdHJpZWQgY2hhbmdpbmcgdGhlIGluaXQgc3lzdGVtIGZyb20gYnVz
+eWJveCB0byBzeXN0ZW1kLiBTdGlsbCAKPj4+Pj4+IG5vdGhpbmcuCj4+Pj4+Cj4+Pj4+IMKgTm8s
+IGJ1c3lib3ggaW5pdCBzaG91bGQgd29yayBmaW5lLgo+Pj4+Pgo+Pj4+Pgo+Pj4+Pj4gSSBmZWVs
+IGxpa2UgSSBhbSBwb2tpbmcgYXJvdW5kIGluIHRoZSBkYXJrLiBBbnkgdGhvdWdodHMgb24gd2hh
+dCBJCj4+Pj4+PiBzaG91bGQgdHJ5IG5leHQ/Cj4+Pj4+Cj4+Pj4+IMKgSWYgeW91IGRvIG1hbmFn
+ZSB0byBhZHZhbmNlIHdpdGggdGhpcywgdGhlcmUgYXJlIHR3byAKPj4+Pj4gY29udHJpYnV0aW9u
+cyB5b3UgY291bGQgbWFrZToKPj4+Pj4gLSBZb3UgY2FuIGFkZCBhIGRlZmNvbmZpZyBmb3IgdGhl
+IFZhcmlzY2l0ZSBib2FyZC4KPj4+Pj4gLSBZb3UgY291bGQgdXBkYXRlIHRoZSBkb2N1bWVudGF0
+aW9uIHdpdGggYSAiaG93IHRvIGFkZCBzdXBwb3J0IAo+Pj4+PiBmb3IgYSBuZXcgYm9hcmQiCj4+
+Pj4+IHNlY3Rpb24gdGhhdCBleHBsYWlucyB3aGF0IEkgd3JvdGUgYWJvdmUgaW4gYSBiZXR0ZXIg
+KG1vcmUgCj4+Pj4+IGdlbmVyaWMpIHdheS4KPj4+Pj4KPj4+Pj4KPj4+Pj4gwqBSZWdhcmRzLAo+
+Pj4+PiDCoEFybm91dAo+Pj4+Pgo+Pj4KPgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJv
+b3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxk
+cm9vdAo=
