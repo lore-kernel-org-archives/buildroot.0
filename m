@@ -4,62 +4,81 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B24E2CCF9EE
-	for <buildroot@archiver.kernel.org>; Wed, 25 Sep 2024 20:31:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5F57DCCF9F6
+	for <buildroot@archiver.kernel.org>; Wed, 25 Sep 2024 20:56:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6FDEB80BE2;
-	Wed, 25 Sep 2024 20:31:27 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 161F284A27;
+	Wed, 25 Sep 2024 20:56:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 7EfknScNxmJj; Wed, 25 Sep 2024 20:31:26 +0000 (UTC)
+ id ReT1goQBW9Zs; Wed, 25 Sep 2024 20:56:12 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6FE8880B25
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1A47884A2A
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6FE8880B25;
-	Wed, 25 Sep 2024 20:31:26 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1A47884A2A;
+	Wed, 25 Sep 2024 20:56:12 +0000 (UTC)
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 1A12F1BF340
- for <buildroot@lists.busybox.net>; Wed, 25 Sep 2024 20:31:25 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 889D41BF340
+ for <buildroot@lists.busybox.net>; Wed, 25 Sep 2024 20:56:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 08CA760844
- for <buildroot@lists.busybox.net>; Wed, 25 Sep 2024 20:31:25 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 849E9610C5
+ for <buildroot@lists.busybox.net>; Wed, 25 Sep 2024 20:56:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id tfRpjXB46aiL for <buildroot@lists.busybox.net>;
- Wed, 25 Sep 2024 20:31:24 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::229;
- helo=relay9-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+ id dRkzSPjmj1Da for <buildroot@lists.busybox.net>;
+ Wed, 25 Sep 2024 20:56:10 +0000 (UTC)
+Received-SPF: None (mailfrom) identity=mailfrom; client-ip=192.198.163.18;
+ helo=mgamail.intel.com; envelope-from=andriy.shevchenko@linux.intel.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org AE795607CF
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AE795607CF
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp3.osuosl.org (Postfix) with ESMTPS id AE795607CF
- for <buildroot@buildroot.org>; Wed, 25 Sep 2024 20:31:22 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id D194EFF802;
- Wed, 25 Sep 2024 20:31:19 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1stYfO-008n6e-39;
- Wed, 25 Sep 2024 22:31:18 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
-To: Arnout Vandecappelle <arnout@mind.be>
-References: <20240924122406.1125261-1-peter@korsgaard.com>
- <20240924122406.1125261-21-peter@korsgaard.com>
- <5b231a63-4043-4446-97f5-97faf5546dfa@mind.be>
-Date: Wed, 25 Sep 2024 22:31:18 +0200
-In-Reply-To: <5b231a63-4043-4446-97f5-97faf5546dfa@mind.be> (Arnout
- Vandecappelle's message of "Wed, 25 Sep 2024 20:53:38 +0200")
-Message-ID: <87ikuja31l.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 037E2606ED
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 037E2606ED
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 037E2606ED
+ for <buildroot@buildroot.org>; Wed, 25 Sep 2024 20:56:09 +0000 (UTC)
+X-CSE-ConnectionGUID: T9C1UfO9QEGZr+k3DLO7LQ==
+X-CSE-MsgGUID: qtHQpeflSbCfR19kIBX6ig==
+X-IronPort-AV: E=McAfee;i="6700,10204,11206"; a="25846033"
+X-IronPort-AV: E=Sophos;i="6.10,258,1719903600"; d="scan'208";a="25846033"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+ by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
+ 25 Sep 2024 13:56:09 -0700
+X-CSE-ConnectionGUID: 6LV/6t07ThWg9FnWWIeqHQ==
+X-CSE-MsgGUID: c0G2vQYFQV2q/COTWGKlNg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,258,1719903600"; d="scan'208";a="76827813"
+Received: from black.fi.intel.com ([10.237.72.28])
+ by orviesa004.jf.intel.com with ESMTP; 25 Sep 2024 13:56:08 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+ id 57785165; Wed, 25 Sep 2024 23:56:06 +0300 (EEST)
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: buildroot@buildroot.org
+Date: Wed, 25 Sep 2024 23:55:43 +0300
+Message-ID: <20240925205558.1176626-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.43.0.rc1.1336.g36b5255a03ac
 MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+ t=1727297770; x=1758833770;
+ h=from:to:cc:subject:date:message-id:mime-version:
+ content-transfer-encoding;
+ bh=UsLgy4nPWcl4h+PdPgJ2dTeE5usE4DdVMPJTyF9oK5A=;
+ b=SiHOZdaTI+feJ8EoUR7Bq7WNOv4BZyI5Hn5PoP1mqWXTiQElFYTf38zk
+ e/J7F2LRwS6l0R3eVWy1zf8WyyWLr4WirAkcgoPTXz4rLfmoV588aCRPR
+ ti5qZ8CZQ9aF9hGT0LF0ZcoH1MNgzGhzDFnZeuckrI+vyJVH3yd4v2PRV
+ yKASgAyRRo9fdoXScbF9Xx+AtN/3a8mIlq+Q3Wl3s+cWb4Cvysnz2I21/
+ iomZaJliVpmflTt79wMMDfVgBTwVM8mbiRMFvmUDKfIRIr+hoY1CWdnUL
+ HzVIA9Vox9o31veRU2IEQJliMWnOIIdwDTZ86YDTttlrwWTMAqTKt/+de
+ g==;
 X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 21/22] package/sysklogd: fix 'structured'
- typo in help text
+ header.from=linux.intel.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256
+ header.s=Intel header.b=SiHOZdaT
+Subject: [Buildroot] [PATCH v1 1/1] package: Add iotools package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,41 +90,116 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Joachim Wiberg <troglobit@gmail.com>, buildroot@buildroot.org
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ Andy Yan <andyshrk@163.com>, Andy Yan <andyshrk@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
+The iotools package provides a set of simple command line tools which
+allow access to hardware device registers. Supported register interfaces
+include PCI, IO, memory mapped IO, SMBus, CPUID, and MSR. Also included
+are some utilities which allow for simple arithmetic, logical, and other
+operations.
 
- > On 24/09/2024 14:24, Peter Korsgaard wrote:
- >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
- >> ---
- >> package/sysklogd/Config.in | 2 +-
- >> 1 file changed, 1 insertion(+), 1 deletion(-)
- >> diff --git a/package/sysklogd/Config.in b/package/sysklogd/Config.in
- >> index c9b9fe8c35..1dffacb08e 100644
- >> --- a/package/sysklogd/Config.in
- >> +++ b/package/sysklogd/Config.in
- >> @@ -45,7 +45,7 @@ config BR2_PACKAGE_SYSKLOGD_LOGGER
- >> This version of logger is receommended for use with
- >> sysklogd.
+If you ever have to debug hardware, you could probably use these tools.
 
- >  recommended
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ DEVELOPERS                   |  1 +
+ package/Config.in            |  1 +
+ package/iotools/Config.in    | 14 ++++++++++++++
+ package/iotools/iotools.hash |  3 +++
+ package/iotools/iotools.mk   | 21 +++++++++++++++++++++
+ 5 files changed, 40 insertions(+)
+ create mode 100644 package/iotools/Config.in
+ create mode 100644 package/iotools/iotools.hash
+ create mode 100644 package/iotools/iotools.mk
 
- >  Weird that your spellchecker didn't catch that one...
-
-Indeed, but it doesn't:
-
-git checkout 74bef5945f48fea2a863a456fa21271d136ed189^; codespell package/sysklogd/*
-HEAD is now at b55759c516 package/supertux: fix 'according' typo in help text
-package/sysklogd/Config.in:48: strucutred ==> structured
-
-Thanks for fixing it!
-
+diff --git a/DEVELOPERS b/DEVELOPERS
+index c3b1d66b016b..158313be9335 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -230,6 +230,7 @@ F:	package/sysdig/
+ 
+ N:	Andy Shevchenko <andy.shevchenko@gmail.com>
+ F:	package/fb-test-app/
++F:	package/iotools/
+ 
+ N:	Anisse Astier <anisse@astier.eu>
+ F:	package/go/
+diff --git a/package/Config.in b/package/Config.in
+index 5f88d1af4a73..fb90b5e273d5 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -535,6 +535,7 @@ endmenu
+ 	source "package/i7z/Config.in"
+ 	source "package/input-event-daemon/Config.in"
+ 	source "package/intel-microcode/Config.in"
++	source "package/iotools/Config.in"
+ 	source "package/ipmitool/Config.in"
+ 	source "package/ipmiutil/Config.in"
+ 	source "package/irda-utils/Config.in"
+diff --git a/package/iotools/Config.in b/package/iotools/Config.in
+new file mode 100644
+index 000000000000..ffa1a3666738
+--- /dev/null
++++ b/package/iotools/Config.in
+@@ -0,0 +1,14 @@
++config BR2_PACKAGE_IOTOOLS
++	bool "iotools"
++	help
++	  Tools for poking all types of IO, supported are:
++	  - CMOS NVRAM (via /dev/nvram)
++	  - CPU ID (x86)
++	  - IO port (x86, PowerPC)
++	  - MMIO
++	  - MSR (x86)
++	  - PCI configuration space
++	  - SCOM (PowerPC)
++	  - SMBus
++
++	  https://github.com/andy-shev/iotools
+diff --git a/package/iotools/iotools.hash b/package/iotools/iotools.hash
+new file mode 100644
+index 000000000000..11d7ffb73e39
+--- /dev/null
++++ b/package/iotools/iotools.hash
+@@ -0,0 +1,3 @@
++# Locally computed
++sha256  13b8b87c7d1f22b8d8f50c499af09f9414a0879d69c22393f1051ed4bf28f378  iotools-v1.7.tar.gz
++sha256  ab15fd526bd8dd18a9e77ebc139656bf4d33e97fc7238cd11bf60e2b9b8666c6  COPYING
+diff --git a/package/iotools/iotools.mk b/package/iotools/iotools.mk
+new file mode 100644
+index 000000000000..6490b0cde912
+--- /dev/null
++++ b/package/iotools/iotools.mk
+@@ -0,0 +1,21 @@
++################################################################################
++#
++# iotools
++#
++################################################################################
++
++IOTOOLS_VERSION = v1.7
++IOTOOLS_SITE = $(call github,andy-shev,iotools,$(IOTOOLS_VERSION))
++IOTOOLS_LICENSE = GPL-2.0+
++IOTOOLS_LICENSE_FILES = COPYING
++
++define IOTOOLS_BUILD_CMDS
++	$(TARGET_MAKE_ENV) $(MAKE) -C $(@D) CROSS_COMPILE=$(TARGET_CROSS) all
++endef
++
++define IOTOOLS_INSTALL_TARGET_CMDS
++	$(INSTALL) -m 0755 -t $(TARGET_DIR)/usr/bin -D $(@D)/iotools
++	$(TARGET_STRIP) $(TARGET_DIR)/usr/bin/iotools
++endef
++
++$(eval $(generic-package))
 -- 
-Bye, Peter Korsgaard
+2.43.0.rc1.1336.g36b5255a03ac
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
