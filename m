@@ -4,50 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2BAB8CCF9E7
-	for <buildroot@archiver.kernel.org>; Wed, 25 Sep 2024 17:38:18 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CCC5DCCF9E8
+	for <buildroot@archiver.kernel.org>; Wed, 25 Sep 2024 17:38:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id E7642841AB;
-	Wed, 25 Sep 2024 17:38:17 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5E5F78436C;
+	Wed, 25 Sep 2024 17:38:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kjtSbEZ5Z_KH; Wed, 25 Sep 2024 17:38:17 +0000 (UTC)
+ id ooXkADc8HRQp; Wed, 25 Sep 2024 17:38:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0405D8436C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EB48C8450D
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 0405D8436C;
-	Wed, 25 Sep 2024 17:38:17 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E2E251BF4E7
+	by smtp1.osuosl.org (Postfix) with ESMTP id EB48C8450D;
+	Wed, 25 Sep 2024 17:38:18 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id F3AB11BF97D
  for <buildroot@lists.busybox.net>; Wed, 25 Sep 2024 17:38:15 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D167D424BE
+ by smtp3.osuosl.org (Postfix) with ESMTP id E2EAA611C9
  for <buildroot@lists.busybox.net>; Wed, 25 Sep 2024 17:38:15 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uQ-pV2PbjfQN for <buildroot@lists.busybox.net>;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id t3a51WaMa-KS for <buildroot@lists.busybox.net>;
  Wed, 25 Sep 2024 17:38:15 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 027F542488
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EDF7660B1A
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 027F542488
- for <buildroot@buildroot.org>; Wed, 25 Sep 2024 17:38:15 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id EDF7660B1A
+ for <buildroot@buildroot.org>; Wed, 25 Sep 2024 17:38:14 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id F005B844B4; Wed, 25 Sep 2024 17:38:14 +0000 (UTC)
+ id E5082844B3; Wed, 25 Sep 2024 17:38:14 +0000 (UTC)
 From: Yann E. MORIN <yann.morin.1998@free.fr>
 To: buildroot@buildroot.org
-Date: Wed, 25 Sep 2024 19:34:03 +0200
+Date: Wed, 25 Sep 2024 19:33:59 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 1f6075c6346caed8afc4c9264b55bbe7b317f78e
-X-Git-Newrev: 5660a06c29e3008f168e986e81a51a6b011566ec
+X-Git-Oldrev: a5cef5339bd26f9d161d080d352d4adfe7627434
+X-Git-Newrev: 1f6075c6346caed8afc4c9264b55bbe7b317f78e
 X-Patchwork-Hint: ignore
-Message-Id: <20240925173814.F005B844B4@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/hicolor-icon-theme: bump to
- version 0.18
+Message-Id: <20240925173814.E5082844B3@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/gawk: bump to version 5.3.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,44 +64,56 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=5660a06c29e3008f168e986e81a51a6b011566ec
+commit: https://git.buildroot.net/buildroot/commit/?id=1f6075c6346caed8afc4c9264b55bbe7b317f78e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
-
-switch to meson build
 
 Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 Signed-off-by: Yann E. MORIN <yann.morin.1998@free.fr>
 ---
- package/hicolor-icon-theme/hicolor-icon-theme.hash | 2 +-
- package/hicolor-icon-theme/hicolor-icon-theme.mk   | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/gawk/Config.in | 2 +-
+ package/gawk/gawk.hash | 4 ++--
+ package/gawk/gawk.mk   | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/package/hicolor-icon-theme/hicolor-icon-theme.hash b/package/hicolor-icon-theme/hicolor-icon-theme.hash
-index ec9635f05a..5bff03fe4d 100644
---- a/package/hicolor-icon-theme/hicolor-icon-theme.hash
-+++ b/package/hicolor-icon-theme/hicolor-icon-theme.hash
-@@ -1,3 +1,3 @@
+diff --git a/package/gawk/Config.in b/package/gawk/Config.in
+index e9cf4c5ff7..86eba0b7b4 100644
+--- a/package/gawk/Config.in
++++ b/package/gawk/Config.in
+@@ -8,7 +8,7 @@ config BR2_PACKAGE_GAWK
+ 	  rather than procedural. Allows for simple data-reformatting
+ 	  jobs with just a few lines of code.
+ 
+-	  http://www.gnu.org/software/gawk/
++	  https://www.gnu.org/software/gawk/
+ 
+ comment "gawk needs a toolchain w/ wchar"
+ 	depends on BR2_USE_MMU
+diff --git a/package/gawk/gawk.hash b/package/gawk/gawk.hash
+index 3ff0a90030..b029ab330d 100644
+--- a/package/gawk/gawk.hash
++++ b/package/gawk/gawk.hash
+@@ -1,6 +1,6 @@
+ # Locally calculated after checking pgp signature
+-# https://ftp.gnu.org/gnu/gawk/gawk-5.3.0.tar.xz.sig
++# https://ftp.gnu.org/gnu/gawk/gawk-5.3.1.tar.xz.sig
+ # Primary key fingerprint: D196 7C63 7887 1317 7D86  1ED7 DF59 7815 937E C0D2
+-sha256  ca9c16d3d11d0ff8c69d79dc0b47267e1329a69b39b799895604ed447d3ca90b  gawk-5.3.0.tar.xz
++sha256  694db764812a6236423d4ff40ceb7b6c4c441301b72ad502bb5c27e00cd56f78  gawk-5.3.1.tar.xz
  # Locally calculated
--sha256  317484352271d18cbbcfac3868eab798d67fff1b8402e740baa6ff41d588a9d8  hicolor-icon-theme-0.17.tar.xz
-+sha256  db0e50a80aa3bf64bb45cbca5cf9f75efd9348cf2ac690b907435238c3cf81d7  hicolor-icon-theme-0.18.tar.xz
- sha256  b0a64377d4ee87b7dbcf418ce4fb33ec3b2d7081b6732890e4af06b8118c4526  COPYING
-diff --git a/package/hicolor-icon-theme/hicolor-icon-theme.mk b/package/hicolor-icon-theme/hicolor-icon-theme.mk
-index 088aecf31c..f3368a292b 100644
---- a/package/hicolor-icon-theme/hicolor-icon-theme.mk
-+++ b/package/hicolor-icon-theme/hicolor-icon-theme.mk
-@@ -4,10 +4,10 @@
+ sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
+diff --git a/package/gawk/gawk.mk b/package/gawk/gawk.mk
+index ff1b9920af..fbb620be7d 100644
+--- a/package/gawk/gawk.mk
++++ b/package/gawk/gawk.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--HICOLOR_ICON_THEME_VERSION = 0.17
-+HICOLOR_ICON_THEME_VERSION = 0.18
- HICOLOR_ICON_THEME_SITE = http://icon-theme.freedesktop.org/releases
- HICOLOR_ICON_THEME_SOURCE = hicolor-icon-theme-$(HICOLOR_ICON_THEME_VERSION).tar.xz
- HICOLOR_ICON_THEME_LICENSE = GPL-2.0
- HICOLOR_ICON_THEME_LICENSE_FILES = COPYING
- 
--$(eval $(autotools-package))
-+$(eval $(meson-package))
+-GAWK_VERSION = 5.3.0
++GAWK_VERSION = 5.3.1
+ GAWK_SOURCE = gawk-$(GAWK_VERSION).tar.xz
+ GAWK_SITE = $(BR2_GNU_MIRROR)/gawk
+ GAWK_DEPENDENCIES = host-gawk
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
