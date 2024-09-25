@@ -4,74 +4,62 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B8EFBCCF9EF
-	for <buildroot@archiver.kernel.org>; Wed, 25 Sep 2024 20:26:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B24E2CCF9EE
+	for <buildroot@archiver.kernel.org>; Wed, 25 Sep 2024 20:31:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 659CE84ADB;
-	Wed, 25 Sep 2024 20:26:22 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6FDEB80BE2;
+	Wed, 25 Sep 2024 20:31:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2HGDgMS5F1ZG; Wed, 25 Sep 2024 20:26:20 +0000 (UTC)
+ id 7EfknScNxmJj; Wed, 25 Sep 2024 20:31:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B855884AD5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6FE8880B25
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B855884AD5;
-	Wed, 25 Sep 2024 20:26:20 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 7F5BB1BF340
- for <buildroot@lists.busybox.net>; Wed, 25 Sep 2024 20:26:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6FE8880B25;
+	Wed, 25 Sep 2024 20:31:26 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 1A12F1BF340
+ for <buildroot@lists.busybox.net>; Wed, 25 Sep 2024 20:31:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6D71440413
- for <buildroot@lists.busybox.net>; Wed, 25 Sep 2024 20:26:19 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 08CA760844
+ for <buildroot@lists.busybox.net>; Wed, 25 Sep 2024 20:31:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5U3zWirx4zhh for <buildroot@lists.busybox.net>;
- Wed, 25 Sep 2024 20:26:18 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.198;
- helo=relay6-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id tfRpjXB46aiL for <buildroot@lists.busybox.net>;
+ Wed, 25 Sep 2024 20:31:24 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::229;
+ helo=relay9-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org E157B402F4
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E157B402F4
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [217.70.183.198])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E157B402F4
- for <buildroot@buildroot.org>; Wed, 25 Sep 2024 20:26:17 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 47E3CC0004;
- Wed, 25 Sep 2024 20:26:14 +0000 (UTC)
-Date: Wed, 25 Sep 2024 22:26:13 +0200
-To: Niklas Cassel <Niklas.Cassel@wdc.com>
-Message-ID: <20240925222613.3f62ed72@windsurf>
-In-Reply-To: <Zuk_RMVJAzqVO5s8@ryzen.lan>
-References: <20240909182103.3667296-1-niklas.cassel@wdc.com>
- <20240909182103.3667296-3-niklas.cassel@wdc.com>
- <20240914222032.3fee5e2e@windsurf> <Zuk_RMVJAzqVO5s8@ryzen.lan>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org AE795607CF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AE795607CF
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::229])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id AE795607CF
+ for <buildroot@buildroot.org>; Wed, 25 Sep 2024 20:31:22 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id D194EFF802;
+ Wed, 25 Sep 2024 20:31:19 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1stYfO-008n6e-39;
+ Wed, 25 Sep 2024 22:31:18 +0200
+From: Peter Korsgaard <peter@korsgaard.com>
+To: Arnout Vandecappelle <arnout@mind.be>
+References: <20240924122406.1125261-1-peter@korsgaard.com>
+ <20240924122406.1125261-21-peter@korsgaard.com>
+ <5b231a63-4043-4446-97f5-97faf5546dfa@mind.be>
+Date: Wed, 25 Sep 2024 22:31:18 +0200
+In-Reply-To: <5b231a63-4043-4446-97f5-97faf5546dfa@mind.be> (Arnout
+ Vandecappelle's message of "Wed, 25 Sep 2024 20:53:38 +0200")
+Message-ID: <87ikuja31l.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1727295974;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=9QXYS6iP8bV3DnPqtWFEzojfp14bVDltL2SWlOy2guM=;
- b=QVqqOsGzzYlIW42jVgUsIhgIiWbIfUr0QvAQabuHJFBrVxWRrektS3PJ4qurUYt3cjSw0S
- 9nykEgEPTLoN5YNmw36ucckKSHLotGosr58hwSlVVL+laQYQ7oT+qPxwYfLj1ksDKHG9Bd
- cXeYvFgmQ3FN+6Ceh1o64j0FfwC5AEHuDkh+spk293ruMLVsg4iq8RMpokYReXfeC4v1O2
- 7MWBsTtZHKhLP5h+yzDgzBwV7n01WON02M3jJeRkOo51Vg6o0GneoBwuHzlxbIQd38DLix
- 4gSiMilb0mgpr4bDsseiOT+8tqR0z5EecmkqhpomZnZlSt5z566wgH45Z5IkHg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=QVqqOsGz
-Subject: Re: [Buildroot] [PATCH 2/2] configs/rock5b_defconfig: enable
- uboot-env on the SD card
+X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: Re: [Buildroot] [PATCH 21/22] package/sysklogd: fix 'structured'
+ typo in help text
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,49 +71,41 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Niklas Cassel <cassel@kernel.org>, Damien Le Moal <dlemoal@kernel.org>,
- Kilian Zinnecker <kilian.zinnecker@mail.de>,
- Niklas Cassel via buildroot <buildroot@buildroot.org>
+Cc: Joachim Wiberg <troglobit@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello Niklas,
+>>>>> "Arnout" == Arnout Vandecappelle <arnout@mind.be> writes:
 
-It was nice meeting you during Linux Plumbers last week!
+ > On 24/09/2024 14:24, Peter Korsgaard wrote:
+ >> Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
+ >> ---
+ >> package/sysklogd/Config.in | 2 +-
+ >> 1 file changed, 1 insertion(+), 1 deletion(-)
+ >> diff --git a/package/sysklogd/Config.in b/package/sysklogd/Config.in
+ >> index c9b9fe8c35..1dffacb08e 100644
+ >> --- a/package/sysklogd/Config.in
+ >> +++ b/package/sysklogd/Config.in
+ >> @@ -45,7 +45,7 @@ config BR2_PACKAGE_SYSKLOGD_LOGGER
+ >> This version of logger is receommended for use with
+ >> sysklogd.
 
-On Tue, 17 Sep 2024 08:35:16 +0000
-Niklas Cassel <Niklas.Cassel@wdc.com> wrote:
+ >  recommended
 
-> > This won't work because the output directory is not always output/. But
-> > I believe this is useless, because you're creating an image of what is
-> > the default environment. So basically, you should instead not create an
-> > environment image at all: just tell U-Boot that the environment is at
-> > offset XYZ (or even better, in partition X). The environment partition
-> > will contain nothing or garbage, so at the first boot, U-Boot will use
-> > its built-in environment itself, and at the first "saveenv", it will
-> > save the environment to the designated partition.  
-> 
-> Well, what happens if you simply point to an offset or partition that is
-> empty, is that uboot will see an empty environment, so it will see bootcmd
-> as empty, so it will just enter the uboot command prompt without booting
-> anything at all.
+ >  Weird that your spellchecker didn't catch that one...
 
-This is not what should happen. Indeed, if the environment on the
-non-volatile storage is empty or corrupted, U-Boot should ignore it,
-and load its built-in environment (which is compiled into the U-Boot
-binary). Why isn't this working for you?
+Indeed, but it doesn't:
 
-Best regards,
+git checkout 74bef5945f48fea2a863a456fa21271d136ed189^; codespell package/sysklogd/*
+HEAD is now at b55759c516 package/supertux: fix 'according' typo in help text
+package/sysklogd/Config.in:48: strucutred ==> structured
 
-Thomas
+Thanks for fixing it!
+
 -- 
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
