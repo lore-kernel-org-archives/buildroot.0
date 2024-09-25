@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4F0F7CCF9EB
-	for <buildroot@archiver.kernel.org>; Wed, 25 Sep 2024 18:55:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 148BECCF9EB
+	for <buildroot@archiver.kernel.org>; Wed, 25 Sep 2024 18:55:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 175B961240;
-	Wed, 25 Sep 2024 18:55:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D3AE6611FF;
+	Wed, 25 Sep 2024 18:55:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Tlcx1nCC865E; Wed, 25 Sep 2024 18:55:29 +0000 (UTC)
+ id FftKl5FQqpG9; Wed, 25 Sep 2024 18:55:31 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 30AFC61397
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7CD71613B0
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 30AFC61397;
-	Wed, 25 Sep 2024 18:55:28 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7CD71613B0;
+	Wed, 25 Sep 2024 18:55:31 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 5E8221BF408
- for <buildroot@lists.busybox.net>; Wed, 25 Sep 2024 18:54:59 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 61C0C1BF408
+ for <buildroot@lists.busybox.net>; Wed, 25 Sep 2024 18:55:00 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D88C640475
+ by smtp2.osuosl.org (Postfix) with ESMTP id EE35A409A8
  for <buildroot@lists.busybox.net>; Wed, 25 Sep 2024 18:54:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id M9Dne1PX-AIc for <buildroot@lists.busybox.net>;
- Wed, 25 Sep 2024 18:54:56 +0000 (UTC)
+ id bl0RYBl-BJRQ for <buildroot@lists.busybox.net>;
+ Wed, 25 Sep 2024 18:54:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D7CD5409A8
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 01FC240982
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id D7CD5409A8
+ by smtp2.osuosl.org (Postfix) with ESMTP id 01FC240982
  for <buildroot@buildroot.org>; Wed, 25 Sep 2024 18:54:56 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D2F3B844BC; Wed, 25 Sep 2024 18:54:56 +0000 (UTC)
+ id F07AB844BC; Wed, 25 Sep 2024 18:54:56 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 25 Sep 2024 20:39:05 +0200
+Date: Wed, 25 Sep 2024 20:40:31 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: f301c007c70a2bfe26f0098a55f56a19ea61c299
-X-Git-Newrev: d21e6f815df3a1814b752b9b48c99b13903f3239
+X-Git-Oldrev: 1441be898a8b335600f9f2219051c3d50b6ee523
+X-Git-Newrev: 0dffd8ab1ce0d7d2b47f5c1f1320265a0e5d4cb4
 X-Patchwork-Hint: ignore
-Message-Id: <20240925185456.D2F3B844BC@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/rapidxml: fix 'usability' typo in
- help text
+Message-Id: <20240925185456.F07AB844BC@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/rpi-firmware: fix 'partition' typo
+ in help text
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,28 +66,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d21e6f815df3a1814b752b9b48c99b13903f3239
+commit: https://git.buildroot.net/buildroot/commit/?id=0dffd8ab1ce0d7d2b47f5c1f1320265a0e5d4cb4
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/rapidxml/Config.in | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ package/rpi-firmware/Config.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/rapidxml/Config.in b/package/rapidxml/Config.in
-index 76b2248ec2..9b6ee74844 100644
---- a/package/rapidxml/Config.in
-+++ b/package/rapidxml/Config.in
-@@ -2,7 +2,7 @@ config BR2_PACKAGE_RAPIDXML
- 	bool "rapidxml"
+diff --git a/package/rpi-firmware/Config.in b/package/rpi-firmware/Config.in
+index a9aeaed745..f99c116ca2 100644
+--- a/package/rpi-firmware/Config.in
++++ b/package/rpi-firmware/Config.in
+@@ -66,14 +66,14 @@ config BR2_PACKAGE_RPI_FIRMWARE_VARIANT_PI4_DB
+ config BR2_PACKAGE_RPI_FIRMWARE_CONFIG_FILE
+ 	string "Path to a file stored as boot/config.txt"
  	help
- 	  RapidXml is an attempt to create the fastest XML parser
--	  possible, while retaining useability, portability and
-+	  possible, while retaining usability, portability and
- 	  reasonable W3C compatibility. It is an in-situ parser with
- 	  parsing speed approaching speed of strlen function executed
- 	  on the same data.
+-	  Path to a file stored as config.txt in the boot partiton
++	  Path to a file stored as config.txt in the boot partition
+ 	  of the generated SD card image.
+ 
+ config BR2_PACKAGE_RPI_FIRMWARE_CMDLINE_FILE
+ 	string "Path to a file stored as boot/cmdline.txt"
+ 	default "board/raspberrypi/cmdline.txt"  # legacy
+ 	help
+-	  Path to a file stored as cmdline.txt in the boot partiton
++	  Path to a file stored as cmdline.txt in the boot partition
+ 	  of the generated SD card image.
+ 
+ config BR2_PACKAGE_RPI_FIRMWARE_INSTALL_DTBS
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
