@@ -4,60 +4,92 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 24C07C369D7
-	for <buildroot@archiver.kernel.org>; Wed, 25 Sep 2024 12:05:43 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4C942CF58C3
+	for <buildroot@archiver.kernel.org>; Wed, 25 Sep 2024 13:35:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id AF2D742666;
-	Wed, 25 Sep 2024 12:05:43 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 5CEF942665;
+	Wed, 25 Sep 2024 13:35:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SjvaMcocSUC6; Wed, 25 Sep 2024 12:05:42 +0000 (UTC)
+ id CP5tlLU0Hv3k; Wed, 25 Sep 2024 13:35:28 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 91EFB42667
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 96B4A42662
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 91EFB42667;
-	Wed, 25 Sep 2024 12:05:42 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id BFEE41BF2F8
- for <buildroot@lists.busybox.net>; Wed, 25 Sep 2024 12:05:40 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 96B4A42662;
+	Wed, 25 Sep 2024 13:35:28 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id DDC801BF38D
+ for <buildroot@lists.busybox.net>; Wed, 25 Sep 2024 13:35:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id AF099607CD
- for <buildroot@lists.busybox.net>; Wed, 25 Sep 2024 12:05:40 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id CD60D84902
+ for <buildroot@lists.busybox.net>; Wed, 25 Sep 2024 13:35:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id sNdxe55JE6mm for <buildroot@lists.busybox.net>;
- Wed, 25 Sep 2024 12:05:39 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::229;
- helo=relay9-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 3B903607CB
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 3B903607CB
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::229])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 3B903607CB
- for <buildroot@buildroot.org>; Wed, 25 Sep 2024 12:05:38 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id D341BFF802;
- Wed, 25 Sep 2024 12:05:35 +0000 (UTC)
-Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1stQlz-007oh2-1C;
- Wed, 25 Sep 2024 14:05:35 +0200
-From: Peter Korsgaard <peter@korsgaard.com>
-To: "Yann E. MORIN" <yann.morin.1998@free.fr>
-References: <20240922205744.3811678-1-nemaakhilesh@gmail.com>
- <ZvHGJv5KM7q5j0hx@landeda>
-Date: Wed, 25 Sep 2024 14:05:35 +0200
-In-Reply-To: <ZvHGJv5KM7q5j0hx@landeda> (Yann E. MORIN's message of "Mon, 23
- Sep 2024 21:48:54 +0200")
-Message-ID: <87zfnwey5s.fsf@dell.be.48ers.dk>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 2_0ZAC5l2EN1 for <buildroot@lists.busybox.net>;
+ Wed, 25 Sep 2024 13:35:26 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::42a; helo=mail-wr1-x42a.google.com;
+ envelope-from=francois.perrad@gadz.org; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9F5DC848FE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9F5DC848FE
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com
+ [IPv6:2a00:1450:4864:20::42a])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 9F5DC848FE
+ for <buildroot@busybox.net>; Wed, 25 Sep 2024 13:35:25 +0000 (UTC)
+Received: by mail-wr1-x42a.google.com with SMTP id
+ ffacd0b85a97d-3780c8d689aso4545760f8f.0
+ for <buildroot@busybox.net>; Wed, 25 Sep 2024 06:35:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1727271323; x=1727876123;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=XfLKLOO065aWOSWAHhWTRMSU2u+vMaBmDdNYs3Dp5zw=;
+ b=E1l+aQ6bAjRZ9MvxRUvocyaXmJR+wNlvjAKiDdxCfAKey6hBrRpXYP7KzaBubh7W1d
+ uHCfJ7e1LgqAplrE/BM9rqkG/6DK6Ud5MFSStb3ufbl/ani5+PlDxJoHeLM+poApzF7P
+ Do3NZuUEBW64O/ru+rJWCtYNqFWx5PfDlpUwssI++E3L99YPIrrMufx8jNDuOdaeh1y5
+ QfbvaS7V9lzwDnaJOpfYUkUutTspKC8AhMT4OIgNAEpu8IISn8DJefnf+BMr6+1xrpbc
+ lBSHrW3b32VsgM2foyU9XRRXF+lv3cTkDCPBJV/swHrFK72TaNQ/uQ4RQEWBnQdg8cGP
+ PxzQ==
+X-Gm-Message-State: AOJu0YxTMf6tqgGGSXQoh5EeMwX4GsIfGLs5PGQ2ODiKEfCpxshla0Xa
+ vukS+w5uKH2gqkbUbh9vIdx+oqten0cKmbYDtfBL3UsgoD6bUP6Gsc5YumDkFrpYMwrRVP1BElv
+ 8Yg==
+X-Google-Smtp-Source: AGHT+IEP5Jmg0uSDDVOlNzYk7iRA7EJq0RviaCAp0YnWbvGku73VXZTZzdFkPTKjJew7XumyRuD2eg==
+X-Received: by 2002:a5d:44c3:0:b0:378:fe6e:50fb with SMTP id
+ ffacd0b85a97d-37cc245c0f0mr1771871f8f.10.1727271323279; 
+ Wed, 25 Sep 2024 06:35:23 -0700 (PDT)
+Received: from vm-2404.. (55.6.65.37.rev.sfr.net. [37.65.6.55])
+ by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-42e969e18f7sm19052935e9.5.2024.09.25.06.35.22
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 25 Sep 2024 06:35:22 -0700 (PDT)
+From: Francois Perrad <francois.perrad@gadz.org>
+To: buildroot@busybox.net
+Date: Wed, 25 Sep 2024 15:35:11 +0200
+Message-ID: <20240925133512.3899750-1-francois.perrad@gadz.org>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] package/libpcap: bump version to 1.10.5
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gadz.org; s=google; t=1727271323; x=1727876123; darn=busybox.net;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=XfLKLOO065aWOSWAHhWTRMSU2u+vMaBmDdNYs3Dp5zw=;
+ b=g+ezuWUK8vEAJKU4IjBw7PBoeLwJOvsUnYGWwS3+Osr6DoAqZxZUvSpcdWCp20lSjM
+ Zpz8WMiH2RgtXw6laEsYBYG7pCd9o40KaO0LnsmVYGphevqPFD+hFv/NAVjSr3JFEZIJ
+ pL1RaTffu2DLWN5VXVrfvTk7WKAErZzedXEworI/taIdGYJEhqMorJp5FABMWyGbQicK
+ a8hqhUi44WVAsJGYBVB/bCUIdDvdNRioThL5eNh15pztj21sMI6MEMYj6PIdJpHiKKME
+ +78M1j1C6ErR86oDRsgKKstWPVtMBRWZpJ/R/LBar4Bd/ba6g7eKLk15xvsoJa9eRdxy
+ t0Pw==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gadz.org
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gadz.org header.i=@gadz.org header.a=rsa-sha256
+ header.s=google header.b=g+ezuWUK
+Subject: [Buildroot] [PATCH] package/freetype: bump to 2.13.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -69,34 +101,47 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Akhilesh Nema <nemaakhilesh@gmail.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Yann" == Yann E MORIN <yann.morin.1998@free.fr> writes:
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/freetype/freetype.hash | 6 +++---
+ package/freetype/freetype.mk   | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
- > Akhilesh Nema, All,
- > On 2024-09-22 13:57 -0700, Akhilesh Nema spake thusly:
- >> Changelog: https://github.com/the-tcpdump-group/libpcap/blob/bbcbc9174df3298a854daee2b3e666a4b6e5383a/CHANGES
- >> 
- >> Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
-
- > Applied to master, thanks.
-
-As noted in the CHANGES file this fixes a number of security issues:
-
-      CVE-2023-7256: Clean up sock_initaddress() and its callers to avoid
-        double frees in some cases.
-      CVE-2024-8006: Fix pcap_findalldevs_ex() not to crash if passed a
-        file:// URL with a path to a directory that cannot be opened.
-
-So it should have been marked as a security bump. Please take that into
-consideration for future bumps.
-
+diff --git a/package/freetype/freetype.hash b/package/freetype/freetype.hash
+index e7331d5ba..fcd99319c 100644
+--- a/package/freetype/freetype.hash
++++ b/package/freetype/freetype.hash
+@@ -1,6 +1,6 @@
+-# From https://sourceforge.net/projects/freetype/files/freetype2/2.13.2/
+-sha1  2d8d5917a1983ebd04921f2993a88858d6f72dec  freetype-2.13.2.tar.xz
+-sha256  12991c4e55c506dd7f9b765933e62fd2be2e06d421505d7950a132e4f1bb484d  freetype-2.13.2.tar.xz
++# From https://sourceforge.net/projects/freetype/files/freetype2/2.13.3/
++sha1  2437819d11c1205e81141735dcb0a36c0d541e96  freetype-2.13.3.tar.xz
++sha256  0550350666d427c74daeb85d5ac7bb353acba5f76956395995311a9c6f063289  freetype-2.13.3.tar.xz
+ 
+ # Locally calculated
+ sha256  2e3bbb7d7c5c396368dd0853a790ec29ce5b8647163dde42a0493fb0d6556b2b  LICENSE.TXT
+diff --git a/package/freetype/freetype.mk b/package/freetype/freetype.mk
+index 5032414d6..ad8cd00ec 100644
+--- a/package/freetype/freetype.mk
++++ b/package/freetype/freetype.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-FREETYPE_VERSION = 2.13.2
++FREETYPE_VERSION = 2.13.3
+ FREETYPE_SOURCE = freetype-$(FREETYPE_VERSION).tar.xz
+ FREETYPE_SITE = http://download.savannah.gnu.org/releases/freetype
+ FREETYPE_INSTALL_STAGING = YES
 -- 
-Bye, Peter Korsgaard
+2.43.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
