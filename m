@@ -1,94 +1,94 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12309CF9C69
-	for <buildroot@archiver.kernel.org>; Thu, 26 Sep 2024 12:41:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 371C3CDE012
+	for <buildroot@archiver.kernel.org>; Thu, 26 Sep 2024 15:14:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9280B400F6;
-	Thu, 26 Sep 2024 12:41:42 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A125141E78;
+	Thu, 26 Sep 2024 15:14:24 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id kzbZlbUsPP5h; Thu, 26 Sep 2024 15:14:23 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6A37541E7A
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id 6A37541E7A;
+	Thu, 26 Sep 2024 15:14:23 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id D18631BF30D
+ for <buildroot@lists.busybox.net>; Thu, 26 Sep 2024 15:14:21 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id BF99040338
+ for <buildroot@lists.busybox.net>; Thu, 26 Sep 2024 15:14:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Wvv5rVyrdrzd; Thu, 26 Sep 2024 12:41:41 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 3DC8540386
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3DC8540386;
-	Thu, 26 Sep 2024 12:41:41 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 1AECF1BF3EF
- for <buildroot@lists.busybox.net>; Thu, 26 Sep 2024 12:41:40 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 09F4280B84
- for <buildroot@lists.busybox.net>; Thu, 26 Sep 2024 12:41:40 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id PoCvTTfZaDBc for <buildroot@lists.busybox.net>;
- Thu, 26 Sep 2024 12:41:39 +0000 (UTC)
+ id 3YOUZxcVyb6J for <buildroot@lists.busybox.net>;
+ Thu, 26 Sep 2024 15:14:20 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::42e; helo=mail-wr1-x42e.google.com;
- envelope-from=aleksandr.o.makarov@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org BB0A480B58
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org BB0A480B58
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com
- [IPv6:2a00:1450:4864:20::42e])
- by smtp1.osuosl.org (Postfix) with ESMTPS id BB0A480B58
- for <buildroot@buildroot.org>; Thu, 26 Sep 2024 12:41:38 +0000 (UTC)
-Received: by mail-wr1-x42e.google.com with SMTP id
- ffacd0b85a97d-37cd1ccaf71so280368f8f.0
- for <buildroot@buildroot.org>; Thu, 26 Sep 2024 05:41:38 -0700 (PDT)
+ client-ip=2607:f8b0:4864:20::134; helo=mail-il1-x134.google.com;
+ envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 8158640275
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8158640275
+Received: from mail-il1-x134.google.com (mail-il1-x134.google.com
+ [IPv6:2607:f8b0:4864:20::134])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 8158640275
+ for <buildroot@buildroot.org>; Thu, 26 Sep 2024 15:14:20 +0000 (UTC)
+Received: by mail-il1-x134.google.com with SMTP id
+ e9e14a558f8ab-3a0cad8a0a5so4732385ab.1
+ for <buildroot@buildroot.org>; Thu, 26 Sep 2024 08:14:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1727354496; x=1727959296;
+ d=1e100.net; s=20230601; t=1727363659; x=1727968459;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
  :reply-to;
- bh=JopgqhopP/FwIOPy8RWNaj5bk07PkmWfHSX5cu0hczg=;
- b=bybwr6xFbQf2JSg+b/4tGyo0qcJbwvkL4y8D3rGAYojeK8JHM342umQ4fqWN7BDjSp
- PfJ69TYg3SAZR37dkvSKw5rn5OskWomEfe/BBqkW3qGmSaS3JlZyB5C3TEig6woYRzLm
- NvgjlVkeC5PX25q96b9VXxnCreVSEdqepXOIndkx/73U+bStGX3PQoKiYuxskhGcV6KQ
- etGTbauqX05MV6rmkhEAPfSVujk85WTlY5HolcQhKGTLeNirpsM6M294++HHacF8/AOk
- ymLv0d5pfYIrrfxwa0pRQH+XizSAhCn74cx8Wih6uJIMTK9vQlo0q2kaZxpJYKAzFuxh
- m/RA==
-X-Gm-Message-State: AOJu0YyTKynAWwORvzkDdsOG9PXggMPy2FLv39umlKkEN+PE9Yz7clHm
- 2DJDLWoWXhOYA2YRGHh5lFFyYF76gt4DACDfJ98bLfsS/ukhM58RbXccRFjw
-X-Google-Smtp-Source: AGHT+IGmni+8QGXvK5EgJQgN2Rw5JG+Rhv5L+8myMJIbVoAvPmGS3RlExSCTaWxfXLRx26JtIuTU4g==
-X-Received: by 2002:adf:ce8c:0:b0:374:c1ea:2d40 with SMTP id
- ffacd0b85a97d-37ccdb097ccmr2049818f8f.1.1727354496165; 
- Thu, 26 Sep 2024 05:41:36 -0700 (PDT)
-Received: from aleksandr-System-Product-Name.qscaudio.com ([146.70.124.140])
- by smtp.gmail.com with ESMTPSA id
- ffacd0b85a97d-37cd2878cf0sm505303f8f.75.2024.09.26.05.41.35
+ bh=eMdR3S05bAV+PlJktDks6Z8vCePQp6CwO0z9p1HV60E=;
+ b=Hk9DVDLcLxW++EuUvR6S7sha8q+wXrDKBjAJAdpbyj7Pc3zM7HQJ4LIO8/m2hw/aZG
+ DMNKODIc90yXzSFGY7yfYmR53RlwTfIiNKgCgZfKLpyrXizR6J+Eh4E1qRBQLFwroOGO
+ LVusf440F7fl7r5QmpTiMn/EQbv0ypdMLyVN3jjFftyw3Q7CCifPgwUNwKeRuN9Yld29
+ 77NIppakmWZupWQkgAEJqaSBxrqi6b9srI5ORFEssUfWSTuTg19sFbnUCZ2ybOnpO+15
+ p3OPLIFfW1k9b6prbvryGpyc/8iQePHN9UyvsFm/6eYmvQMUVr7rV5WZSqIF4S49mS5F
+ msRQ==
+X-Gm-Message-State: AOJu0Yw/wfe/A1cQwFckMOlqO3NcANypVbq34KpMoE1pfRRuU1n6o9MJ
+ FVaIDX6zoOrNo3UiRebeDPqHrJYYRAMx8q5Q8aUgRY0jSjC1F09kyO23pw==
+X-Google-Smtp-Source: AGHT+IEt3yd4oEbAuqW9dyFWIS/KSZqGH5vZBJlW2oxiHoB1zzyLlkk7cTYZty2zh6CHtpQEeE5Wgw==
+X-Received: by 2002:a05:6e02:170a:b0:3a0:ae35:f2eb with SMTP id
+ e9e14a558f8ab-3a26d7a738emr70175005ab.19.1727363659042; 
+ Thu, 26 Sep 2024 08:14:19 -0700 (PDT)
+Received: from james-x399.localdomain (71-33-156-34.hlrn.qwest.net.
+ [71.33.156.34]) by smtp.gmail.com with ESMTPSA id
+ e9e14a558f8ab-3a1a56db894sm18349395ab.46.2024.09.26.08.14.18
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 26 Sep 2024 05:41:35 -0700 (PDT)
-From: Aleksandr Makarov <aleksandr.o.makarov@gmail.com>
+ Thu, 26 Sep 2024 08:14:18 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu, 26 Sep 2024 15:41:31 +0300
-Message-ID: <20240926124131.930145-1-aleksandr.o.makarov@gmail.com>
-X-Mailer: git-send-email 2.43.0
+Date: Thu, 26 Sep 2024 09:14:16 -0600
+Message-Id: <20240926151416.7799-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1727354496; x=1727959296; darn=buildroot.org;
+ d=gmail.com; s=20230601; t=1727363659; x=1727968459; darn=buildroot.org;
  h=content-transfer-encoding:mime-version:message-id:date:subject:cc
  :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=JopgqhopP/FwIOPy8RWNaj5bk07PkmWfHSX5cu0hczg=;
- b=SSs126z83si4ZEPCSVNF2+7gVvTCRJguf+U8+TCCQoTAEUolpOXXjggBY2b4+VJ8j9
- qPQbGPdm53hchmMPK6TRUqhPMilQ47qCyTKSUDhkb6lyxhg4j0rdqr4v+QPcUolxnUdE
- MX2SOa3QRo0ezRSRH9l0Oiq96fqQ6CrGhSwuSEPofZatzczgX0L1wqr3UKJqfSaThfls
- fV5tu5TDMWRo/lOeOqSy2Q6X7W47SRbc/jY5POsimCdxrdceu0MI+F0fd3itw5V+YKxr
- Aol0Khg0Zj/0XPVya/8S9hz+Wie6D7ypPmc8uEYZKibc/m7bGINDz6ZiEx2f8rKBA578
- 6ogQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ bh=eMdR3S05bAV+PlJktDks6Z8vCePQp6CwO0z9p1HV60E=;
+ b=f5BOkT8RREIWBZBhhcGBLxrTHLicCe00daBpfm3XlnhhmVS7eCFsxdg3S1Z4pkAOBu
+ xxkZ8I/PgNxqv8G5JjA1GkvoNY91BMUYLvEVIGHHS8XcXf2FXekG1Mpg7sPoG9B0k5lh
+ cxkXD17m5NMDkWsfyflLESugnIbNorGPxAYRIUJs+odrmwVFIFQuQ4IeSsm80JXAej6A
+ 5LH5MuICle8AjjaK1wzEcitWU8E2zq4bEfyrKtKs49RfSAnk1hNXYppBwgq0YYm5wp2k
+ 6MDZ3BIaCm/Mbo9pnC3habe0T70aFN0E4mXkPL9xWQJ4c6fO/3zJ9JAtIPMqQm3b6bzD
+ LdBA==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=SSs126z8
-Subject: [Buildroot] [PATCH 1/1] package/cpp-httplib: new package
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=f5BOkT8R
+Subject: [Buildroot] [PATCH 1/1] package/python-aiohttp-sessio: bump to
+ version 2.12.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,124 +100,49 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Eric Le Bihan <eric.le.bihan.dev@free.fr>,
- Aleksandr Makarov <aleksandr.o.makarov@gmail.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Aleksandr Makarov <aleksandr.o.makarov@gmail.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/Config.in                    |  1 +
- package/cpp-httplib/Config.in        | 21 +++++++++++++
- package/cpp-httplib/cpp-httplib.hash |  3 ++
- package/cpp-httplib/cpp-httplib.mk   | 44 ++++++++++++++++++++++++++++
- 4 files changed, 69 insertions(+)
- create mode 100644 package/cpp-httplib/Config.in
- create mode 100644 package/cpp-httplib/cpp-httplib.hash
- create mode 100644 package/cpp-httplib/cpp-httplib.mk
+ package/python-aiohttp-session/python-aiohttp-session.hash | 4 ++--
+ package/python-aiohttp-session/python-aiohttp-session.mk   | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/Config.in b/package/Config.in
-index c0f4d9ece5..27f464b112 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1987,6 +1987,7 @@ menu "Networking"
- 	source "package/bluez5_utils-headers/Config.in"
- 	source "package/c-ares/Config.in"
- 	source "package/cni-plugins/Config.in"
-+	source "package/cpp-httplib/Config.in"
- 	source "package/cppzmq/Config.in"
- 	source "package/curlpp/Config.in"
- 	source "package/czmq/Config.in"
-diff --git a/package/cpp-httplib/Config.in b/package/cpp-httplib/Config.in
-new file mode 100644
-index 0000000000..ee24adff81
---- /dev/null
-+++ b/package/cpp-httplib/Config.in
-@@ -0,0 +1,21 @@
-+comment "cpp-httplib needs a toolchain w/ C++, wchar, threads"
-+	depends on !BR2_INSTALL_LIBSTDCPP || !BR2_USE_WCHAR || !BR2_TOOLCHAIN_HAS_THREADS
-+
-+config BR2_PACKAGE_CPP_HTTPLIB
-+	bool "cpp-httplib"
-+	depends on BR2_INSTALL_LIBSTDCPP
-+	depends on BR2_TOOLCHAIN_HAS_THREADS
-+	depends on BR2_USE_WCHAR
-+	help
-+	  A C++ header-only HTTP/HTTPS server and client library.
-+
-+	  https://github.com/yhirose/cpp-httplib
-+
-+if BR2_PACKAGE_CPP_HTTPLIB
-+config BR2_PACKAGE_CPP_HTTPLIB_COMPILE
-+	bool "compile"
-+	select BR2_PACKAGE_HOST_PYTHON3
-+	help
-+	  Build as library
-+
-+endif # BR2_PACKAGE_CPP_HTTPLIB
-diff --git a/package/cpp-httplib/cpp-httplib.hash b/package/cpp-httplib/cpp-httplib.hash
-new file mode 100644
-index 0000000000..45c2214105
---- /dev/null
-+++ b/package/cpp-httplib/cpp-httplib.hash
-@@ -0,0 +1,3 @@
-+# Locally computed:
-+sha256  6ed5894bbbc4a34a0f4c5e962672d0003d2ea099bbadacc66f6dee2b213ff394  cpp-httplib-0.18.0.tar.gz
-+sha256  4b45cbe16d7b71b89ae6127e26e0d90a029198ca5e958ad8e3d0b8bbed364d8b  LICENSE
-diff --git a/package/cpp-httplib/cpp-httplib.mk b/package/cpp-httplib/cpp-httplib.mk
-new file mode 100644
-index 0000000000..9b66114851
---- /dev/null
-+++ b/package/cpp-httplib/cpp-httplib.mk
-@@ -0,0 +1,44 @@
-+################################################################################
-+#
-+# cpp-httplib
-+#
-+################################################################################
-+
-+CPP_HTTPLIB_VERSION = 0.18.0
-+CPP_HTTPLIB_SITE = $(call github,yhirose,cpp-httplib,v$(CPP_HTTPLIB_VERSION))
-+CPP_HTTPLIB_LICENSE = MIT
-+CPP_HTTPLIB_LICENSE_FILES = LICENSE
-+CPP_HTTPLIB_CONF_OPTS = \
-+	-Dcpp-httplib_test=false
-+
-+
-+ifeq ($(BR2_PACKAGE_CPP_HTTPLIB_COMPILE),y)
-+CPP_HTTPLIB_CONF_OPTS += -Dcpp-httplib_compile=true
-+CPP_HTTPLIB_DEPENDENCIES += host-python3
-+else
-+CPP_HTTPLIB_INSTALL_STAGING = YES
-+endif
-+
-+ifeq ($(BR2_PACKAGE_OPENSSL),y)
-+CPP_HTTPLIB_CONF_OPTS += -Dcpp-httplib_openssl=enabled
-+CPP_HTTPLIB_DEPENDENCIES += openssl
-+else
-+CPP_HTTPLIB_CONF_OPTS += -Dcpp-httplib_openssl=disabled
-+endif
-+
-+ifeq ($(BR2_PACKAGE_ZLIB),y)
-+CPP_HTTPLIB_CONF_OPTS += -Dcpp-httplib_zlib=enabled
-+CPP_HTTPLIB_DEPENDENCIES += zlib
-+else
-+CPP_HTTPLIB_CONF_OPTS += -Dcpp-httplib_zlib=disabled
-+endif
-+
-+ifeq ($(BR2_PACKAGE_BROTLI),y)
-+CPP_HTTPLIB_CONF_OPTS += -Dcpp-httplib_brotli=enabled
-+CPP_HTTPLIB_DEPENDENCIES += brotli
-+else
-+CPP_HTTPLIB_CONF_OPTS += -Dcpp-httplib_brotli=disabled
-+endif
-+
-+$(eval $(meson-package))
-+
+diff --git a/package/python-aiohttp-session/python-aiohttp-session.hash b/package/python-aiohttp-session/python-aiohttp-session.hash
+index efdac39007..8559df057b 100644
+--- a/package/python-aiohttp-session/python-aiohttp-session.hash
++++ b/package/python-aiohttp-session/python-aiohttp-session.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/aiohttp-session/json
+-md5  b89bde69f6f3c61a991ff408d2733838  aiohttp-session-2.12.0.tar.gz
+-sha256  0ccd11a7c77cb9e5a61f4daacdc9170d561112f9cfaf9e9a2d9867c0587d1950  aiohttp-session-2.12.0.tar.gz
++md5  ff7a0c880ed7cee24e0a141c201adb8b  aiohttp_session-2.12.1.tar.gz
++sha256  15e6e0288e9bcccd4b1d0c28aae9c20e19a252b12d0cb682223ca9c83180e899  aiohttp_session-2.12.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256  7bc5dd2f229a6b922befb1427fd4ad2c0b255f12c1b1869370ba77520dc22bc7  LICENSE
+diff --git a/package/python-aiohttp-session/python-aiohttp-session.mk b/package/python-aiohttp-session/python-aiohttp-session.mk
+index 55bf0e87f3..8b8337e68e 100644
+--- a/package/python-aiohttp-session/python-aiohttp-session.mk
++++ b/package/python-aiohttp-session/python-aiohttp-session.mk
+@@ -4,9 +4,9 @@
+ #
+ ################################################################################
+ 
+-PYTHON_AIOHTTP_SESSION_VERSION = 2.12.0
+-PYTHON_AIOHTTP_SESSION_SOURCE = aiohttp-session-$(PYTHON_AIOHTTP_SESSION_VERSION).tar.gz
+-PYTHON_AIOHTTP_SESSION_SITE = https://files.pythonhosted.org/packages/34/87/8dbc1385c875497d6bc16c9d94e25dbd8ff62599843b73fb4048ba74c867
++PYTHON_AIOHTTP_SESSION_VERSION = 2.12.1
++PYTHON_AIOHTTP_SESSION_SOURCE = aiohttp_session-$(PYTHON_AIOHTTP_SESSION_VERSION).tar.gz
++PYTHON_AIOHTTP_SESSION_SITE = https://files.pythonhosted.org/packages/c2/c4/d73a7f19b1bd3149ba5bccd22e3ab580c19e4d9fcb83114309e8385ab807
+ PYTHON_AIOHTTP_SESSION_SETUP_TYPE = setuptools
+ PYTHON_AIOHTTP_SESSION_LICENSE = Apache-2.0
+ PYTHON_AIOHTTP_SESSION_LICENSE_FILES = LICENSE
 -- 
-2.43.0
+2.34.1
 
 _______________________________________________
 buildroot mailing list
