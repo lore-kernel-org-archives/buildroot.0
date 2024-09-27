@@ -4,90 +4,90 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EA185CDD1B9
-	for <buildroot@archiver.kernel.org>; Fri, 27 Sep 2024 20:36:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D87A0CDD1DF
+	for <buildroot@archiver.kernel.org>; Fri, 27 Sep 2024 20:39:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 91796811EF;
-	Fri, 27 Sep 2024 20:36:55 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 77240820FE;
+	Fri, 27 Sep 2024 20:39:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id JMjOgt2k4FFh; Fri, 27 Sep 2024 20:36:53 +0000 (UTC)
+ id BMV7yxSmDR1h; Fri, 27 Sep 2024 20:39:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org AD8DF80CC9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1D53D84171
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id AD8DF80CC9;
-	Fri, 27 Sep 2024 20:36:53 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id E369E1BF302
- for <buildroot@lists.busybox.net>; Fri, 27 Sep 2024 20:36:52 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 1D53D84171;
+	Fri, 27 Sep 2024 20:39:43 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 0FDE71BF302
+ for <buildroot@lists.busybox.net>; Fri, 27 Sep 2024 20:39:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id D1DDE40CAF
- for <buildroot@lists.busybox.net>; Fri, 27 Sep 2024 20:36:52 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id EDFB9400D7
+ for <buildroot@lists.busybox.net>; Fri, 27 Sep 2024 20:39:40 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FE9DJNZXQxy1 for <buildroot@lists.busybox.net>;
- Fri, 27 Sep 2024 20:36:51 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id HHtripI7SmTI for <buildroot@lists.busybox.net>;
+ Fri, 27 Sep 2024 20:39:39 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::131; helo=mail-il1-x131.google.com;
+ client-ip=2607:f8b0:4864:20::e34; helo=mail-vs1-xe34.google.com;
  envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 616C740CA7
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 616C740CA7
-Received: from mail-il1-x131.google.com (mail-il1-x131.google.com
- [IPv6:2607:f8b0:4864:20::131])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 616C740CA7
- for <buildroot@buildroot.org>; Fri, 27 Sep 2024 20:36:51 +0000 (UTC)
-Received: by mail-il1-x131.google.com with SMTP id
- e9e14a558f8ab-3a1a7c0f612so11798195ab.3
- for <buildroot@buildroot.org>; Fri, 27 Sep 2024 13:36:51 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org F3DE54029B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org F3DE54029B
+Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com
+ [IPv6:2607:f8b0:4864:20::e34])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id F3DE54029B
+ for <buildroot@buildroot.org>; Fri, 27 Sep 2024 20:39:38 +0000 (UTC)
+Received: by mail-vs1-xe34.google.com with SMTP id
+ ada2fe7eead31-4a3a4432737so477826137.1
+ for <buildroot@buildroot.org>; Fri, 27 Sep 2024 13:39:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1727469410; x=1728074210;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=/b2AcCx9fUkVwEVI17JpsEA1q1pbLSwm0SYS28Z9Lok=;
- b=E6qczVKXe3ZDoyM+8G+bQILhJuvmRsIlS1mqzsZwWVKlYDqp/ZyREWSSQbpXUg5aeB
- M+npGjqgiC1auzlwSDhy6r9vOrSZtq8fCUl6h9duy+qDBWUkd+RlNfA50kBxVzgnQ2Ho
- L8BMezq8CZ6XTcHQgqzPne0mw9CdVUVmjOmN6uKiVJgNn24G6DG4ubuR9tAhG6ySKi45
- HJ6/ZUnFu0u3txB/NgdSETVzrkpU+W2TLvmN6Ui/YsBpxrvmwM9Yb452YFjWx6sLVMys
- 7fXH5TxaK4e1sulZHM5hqpuzAIuDNZjxH7CGu0enneGecFmglqX5eTWZUS2NpeMkLyNR
- TH7Q==
-X-Gm-Message-State: AOJu0YwB2ivh6ddNnnCRZROqOw71/fKy9Cga9Pk7G52yIOsSUEmd6yTz
- Fr7Uk/z00VVoVnz65tn7cnVPOid1h2IPFiV23a3QqLkjTGgXjGIyVTAmfUrN
-X-Google-Smtp-Source: AGHT+IG4a20RwV/fBvgthREEtfOR1VLtE4mUKPi0S8z8eGJzuUKRzmW/67ZpJH01uZ3QiPmcV6c62g==
-X-Received: by 2002:a05:6e02:13a5:b0:3a0:90c7:f0f with SMTP id
- e9e14a558f8ab-3a345181626mr46655935ab.15.1727469409956; 
- Fri, 27 Sep 2024 13:36:49 -0700 (PDT)
-Received: from james-x399.localdomain (71-33-149-81.hlrn.qwest.net.
- [71.33.149.81]) by smtp.gmail.com with ESMTPSA id
- e9e14a558f8ab-3a344d82affsm7988925ab.25.2024.09.27.13.36.48
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 27 Sep 2024 13:36:49 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
-To: buildroot@buildroot.org
-Date: Fri, 27 Sep 2024 14:36:42 -0600
-Message-Id: <20240927203642.355640-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
+ d=1e100.net; s=20230601; t=1727469577; x=1728074377;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+ :subject:date:message-id:reply-to;
+ bh=aPnWWFI3hYVEJegtZ/Bzw7jICmPtyE/G3ABVW/pBtoc=;
+ b=Qxf+cOG7vMq8g63v7/7SmMW1GlCftzB7ixjdYsM0LYBKNSxCg+C3EOM7OdEG6kVjC6
+ FMB+zDeFSuvdSkxhoU1Em6rP6Gn53E95MqL+tQLXmJnUp9R+cTrS+vAW0ffmUagb/jhg
+ MQ4bz2Ygj37Nm9wwn3MNEACQht6ScMQtnKy0BgkogtDIB0MPa/fvZfYyiKDrfYnZOIzc
+ r9I3mrLyKhhmgJgEhoYZtD1ND2LEJgMlvkZ1jHo8mcIZYuVrmJ6vuc5UYU3k2K/hsG/l
+ m41lvbTj/3S2qTZ86PQh9znu4457OHzdWCvM8x/frLa1o8xymt7awj4bZKPmrT9x455Q
+ xU+w==
+X-Gm-Message-State: AOJu0YzUZpmYOzvZMi1RKjVujodfjw0pOMy5fcT0BcabpurC2V4T7TOS
+ 3jffBlFiJcBrILCKCHnfAEcSS5nyyvHxfLYIf6RDfQ65WCY9Qz0/BgA6agkcGAS7JnEYFJJ4Q9i
+ Hhw9l02XWHGP7CylqT3LLqYul87PbBa/etp8=
+X-Google-Smtp-Source: AGHT+IFzkqpoZF7tu4H9AhU9jumOZrfMqj+frC/qMD2zRCf90B8V46dq746qtcX2hVSEq1BGnpxL/2O97x2FAEx+RV0=
+X-Received: by 2002:a05:6102:5087:b0:492:84ac:2eb7 with SMTP id
+ ada2fe7eead31-4a28bf4aef8mr4053353137.11.1727469576982; Fri, 27 Sep 2024
+ 13:39:36 -0700 (PDT)
 MIME-Version: 1.0
+References: <20240512070217.3850799-1-james.hilliard1@gmail.com>
+ <3472c291-7d30-4918-aab9-bc914ba6bfa1@gmx.de>
+In-Reply-To: <3472c291-7d30-4918-aab9-bc914ba6bfa1@gmx.de>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Fri, 27 Sep 2024 14:39:25 -0600
+Message-ID: <CADvTj4q5B1FmsA4FrTUv_WcX6OdndtwvCuwOGGbavua6EJBo_g@mail.gmail.com>
+To: Fiona Klute <fiona.klute@gmx.de>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1727469410; x=1728074210; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=/b2AcCx9fUkVwEVI17JpsEA1q1pbLSwm0SYS28Z9Lok=;
- b=T4Z8JGSa0Z/eWHB0Qo5XQ4plLKNW7n0RrqxupqqtpKFcvsEFAMWyQg8sfjFolzQunM
- JV4lDmRyFv/G0GsP3Nl+QFyfWSWMFUW1jbkwGy6d7Jr0wLtXZdVXFB9Kh+mEM/gn1n4F
- ak475ivgNpIgsQMy9jqwle0pz6RPmc5a87KTXR30CbuaCJQNG/zhsTmpKQHMhXbNwZH5
- ceQjZsHAqYVvQqY3EE0fbEPJ5bKVUKbUMFywxR+wIOdQOZdbUuLOYxHUJeMZxePASoAa
- M9x4SV1ja8NHRllmSb/OaVclqJnPglRcft8506tJEk8DfzOtLJm85D/XgaArz7gcBA8a
- zzug==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ d=gmail.com; s=20230601; t=1727469577; x=1728074377; darn=buildroot.org;
+ h=content-transfer-encoding:cc:to:subject:message-id:date:from
+ :in-reply-to:references:mime-version:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=aPnWWFI3hYVEJegtZ/Bzw7jICmPtyE/G3ABVW/pBtoc=;
+ b=KppndNYkzjz1wSqCGl7FsIZdirDL4o5qAjKt3AswQCTTjx3kK+ODqD0Og66cJ2guGB
+ NsI9yaLO9XkbaHEGKtf6Ob/vSm82q2dDsJxf/yisqlDZjnpWCxnUjFVy/GFO0sGjJ8w9
+ Ufsod89K2rbsfEesZp+pZMW2bOZvwTrwPsiHpfLm8+mBL9o+u/gRTgRtVzf2FfuWkpWJ
+ t/Wb+Mj46BNyFwM+rI9sQcmmDFVIQ41ESEK07d8nA1l0lWtDhw5FUiOcJHZiU+BrOYgX
+ u2+WiV5WJd19+i+0/GoGsKIQEbg7Y77fx9zaMA+d1gy6laAF15Ur+jlZvfdOekiM3YWI
+ goFw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=T4Z8JGSa
-Subject: [Buildroot] [PATCH v4 1/1] utils/scanpypi: refactor setuptools
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=KppndNYk
+Subject: Re: [Buildroot] [PATCH v3 1/1] utils/scanpypi: refactor setuptools
  handling to not use imp
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -100,298 +100,246 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot@buildroot.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The imp module is deprecated as of python verison 3.12.
-
-Refactor setuptools handling to remove monkeypatching hack and
-instead do pep517 metadata generation and dependency resolution.
-
-This is effectively done by implementing the minimal neccesary
-pep517 frontend hooks needed for dependency resolution in scanpypi.
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
-Changes v3 -> v4:
-  - rebase
-Changes v2 -> v3:
-  - support pep517 dependency resolution for all build systems
-  - replace setuptools specific load_setup with generic load_metadata
-  - remove setuptools load_setup fallback exception hacks
-Changes v1 -> v2:
-  - split out set comprehension changes
----
- utils/scanpypi | 173 ++++++++++++++++++++++++++++---------------------
- 1 file changed, 100 insertions(+), 73 deletions(-)
-
-diff --git a/utils/scanpypi b/utils/scanpypi
-index 8765a98323..430bb4757d 100755
---- a/utils/scanpypi
-+++ b/utils/scanpypi
-@@ -18,8 +18,9 @@ import hashlib
- import re
- import textwrap
- import tempfile
--import imp
--from functools import wraps
-+import traceback
-+import importlib
-+import importlib.metadata
- import six.moves.urllib.request
- import six.moves.urllib.error
- import six.moves.urllib.parse
-@@ -93,32 +94,6 @@ def toml_load(f):
-         raise ex
- 
- 
--def setup_decorator(func, method):
--    """
--    Decorator for distutils.core.setup and setuptools.setup.
--    Puts the arguments with which setup is called as a dict
--    Add key 'method' which should be either 'setuptools' or 'distutils'.
--
--    Keyword arguments:
--    func -- either setuptools.setup or distutils.core.setup
--    method -- either 'setuptools' or 'distutils'
--    """
--
--    @wraps(func)
--    def closure(*args, **kwargs):
--        # Any python packages calls its setup function to be installed.
--        # Argument 'name' of this setup function is the package's name
--        BuildrootPackage.setup_args[kwargs['name']] = kwargs
--        BuildrootPackage.setup_args[kwargs['name']]['method'] = method
--    return closure
--
--# monkey patch
--import setuptools  # noqa E402
--setuptools.setup = setup_decorator(setuptools.setup, 'setuptools')
--import distutils   # noqa E402
--distutils.core.setup = setup_decorator(setuptools.setup, 'distutils')
--
--
- def find_file_upper_case(filenames, path='./'):
-     """
-     List generator:
-@@ -156,6 +131,44 @@ class DownloadFailed(Exception):
-     pass
- 
- 
-+class BackendUnavailable(Exception):
-+    """Raised if we cannot import the backend"""
-+
-+    def __init__(self, message, traceback=None):
-+        super().__init__(message)
-+        self.message = message
-+        self.traceback = traceback
-+
-+
-+class BackendPathFinder:
-+    """Implements the MetaPathFinder interface to locate modules in ``backend-path``.
-+
-+    Since the environment provided by the frontend can contain all sorts of
-+    MetaPathFinders, the only way to ensure the backend is loaded from the
-+    right place is to prepend our own.
-+    """
-+
-+    def __init__(self, backend_path, backend_module):
-+        self.backend_path = backend_path
-+        self.backend_module = backend_module
-+        self.backend_parent, _, _ = backend_module.partition(".")
-+
-+    def find_spec(self, fullname, _path, _target=None):
-+        if "." in fullname:
-+            # Rely on importlib to find nested modules based on parent's path
-+            return None
-+
-+        # Ignore other items in _path or sys.path and use backend_path instead:
-+        spec = importlib.machinery.PathFinder.find_spec(fullname, path=self.backend_path)
-+        if spec is None and fullname == self.backend_parent:
-+            # According to the spec, the backend MUST be loaded from backend-path.
-+            # Therefore, we can halt the import machinery and raise a clean error.
-+            msg = f"Cannot find module {self.backend_module!r} in {self.backend_path!r}"
-+            raise BackendUnavailable(msg)
-+
-+        return spec
-+
-+
- class BuildrootPackage():
-     """This class's methods are not meant to be used individually please
-     use them in the correct order:
-@@ -191,6 +204,8 @@ class BuildrootPackage():
-         self.metadata_url = None
-         self.pkg_req = None
-         self.setup_metadata = None
-+        self.backend_path = None
-+        self.build_backend = None
-         self.tmp_extract = None
-         self.used_url = None
-         self.filename = None
-@@ -339,32 +354,46 @@ class BuildrootPackage():
-             folder=tmp_pkg,
-             name=pkg_filename)
- 
--    def load_setup(self):
-+    def load_metadata(self):
-         """
-         Loads the corresponding setup and store its metadata
-         """
-         current_dir = os.getcwd()
-         os.chdir(self.tmp_extract)
--        sys.path.insert(0, self.tmp_extract)
-         try:
--            s_file, s_path, s_desc = imp.find_module('setup', [self.tmp_extract])
--            imp.load_module('__main__', s_file, s_path, s_desc)
--            if self.metadata_name in self.setup_args:
--                pass
--            elif self.metadata_name.replace('_', '-') in self.setup_args:
--                self.metadata_name = self.metadata_name.replace('_', '-')
--            elif self.metadata_name.replace('-', '_') in self.setup_args:
--                self.metadata_name = self.metadata_name.replace('-', '_')
-+            mod_path, _, obj_path = self.build_backend.partition(":")
-+
-+            path_finder = None
-+            if self.backend_path:
-+                path_finder = BackendPathFinder(self.backend_path, mod_path)
-+                sys.meta_path.insert(0, path_finder)
-+
-+            try:
-+                build_backend = importlib.import_module(self.build_backend)
-+            except ImportError:
-+                msg = f"Cannot import {mod_path!r}"
-+                raise BackendUnavailable(msg, traceback.format_exc())
-+
-+            if obj_path:
-+                for path_part in obj_path.split("."):
-+                    build_backend = getattr(build_backend, path_part)
-+
-+            if path_finder:
-+                sys.meta_path.remove(path_finder)
-+
-+            prepare_metadata_for_build_wheel = getattr(
-+                build_backend, 'prepare_metadata_for_build_wheel'
-+            )
-+            metadata = prepare_metadata_for_build_wheel(self.tmp_extract)
-             try:
--                self.setup_metadata = self.setup_args[self.metadata_name]
--            except KeyError:
--                # This means setup was not called
--                print('ERROR: Could not determine package metadata for {pkg}.\n'
--                      .format(pkg=self.real_name))
--                raise
-+                dist = importlib.metadata.Distribution.at(metadata)
-+                self.metadata_name = dist.name
-+                if dist.requires:
-+                    self.setup_metadata['install_requires'] = dist.requires
-+            finally:
-+                shutil.rmtree(metadata)
-         finally:
-             os.chdir(current_dir)
--            sys.path.remove(self.tmp_extract)
- 
-     def load_pyproject(self):
-         """
-@@ -372,28 +401,29 @@ class BuildrootPackage():
-         """
-         current_dir = os.getcwd()
-         os.chdir(self.tmp_extract)
--        sys.path.insert(0, self.tmp_extract)
-         try:
-             pyproject_data = toml_load('pyproject.toml')
--            try:
--                self.setup_metadata = pyproject_data.get('project', {})
--                self.metadata_name = self.setup_metadata.get('name', self.real_name)
--                build_system = pyproject_data.get('build-system', {})
--                build_backend = build_system.get('build-backend', None)
--                if build_backend and build_backend == 'flit_core.buildapi':
-+            self.setup_metadata = pyproject_data.get('project', {})
-+            self.metadata_name = self.setup_metadata.get('name', self.real_name)
-+            build_system = pyproject_data.get('build-system', {})
-+            build_backend = build_system.get('build-backend', None)
-+            self.backend_path = build_system.get('backend-path', None)
-+            if build_backend:
-+                self.build_backend = build_backend
-+                if build_backend == 'flit_core.buildapi':
-                     self.setup_metadata['method'] = 'flit'
--                elif build_system.get('backend-path', None):
--                    self.setup_metadata['method'] = 'pep517'
-+                elif build_backend == 'setuptools.build_meta':
-+                    self.setup_metadata['method'] = 'setuptools'
-                 else:
--                    self.setup_metadata['method'] = 'unknown'
--            except KeyError:
--                print('ERROR: Could not determine package metadata for {pkg}.\n'
--                      .format(pkg=self.real_name))
--                raise
-+                    if self.backend_path:
-+                        self.setup_metadata['method'] = 'pep517'
-+                    else:
-+                        self.setup_metadata['method'] = 'unknown'
-         except FileNotFoundError:
--            raise
--        os.chdir(current_dir)
--        sys.path.remove(self.tmp_extract)
-+            self.build_backend = 'setuptools.build_meta'
-+            self.setup_metadata = {'method': 'setuptools'}
-+        finally:
-+            os.chdir(current_dir)
- 
-     def get_requirements(self, pkg_folder):
-         """
-@@ -406,7 +436,11 @@ class BuildrootPackage():
-         if 'install_requires' not in self.setup_metadata:
-             self.pkg_req = None
-             return set()
--        self.pkg_req = self.setup_metadata['install_requires']
-+        self.pkg_req = set()
-+        extra_re = re.compile(r'''extra\s*==\s*("([^"]+)"|'([^']+)')''')
-+        for req in self.setup_metadata['install_requires']:
-+            if not extra_re.search(req):
-+                self.pkg_req.add(req)
-         self.pkg_req = [re.sub(r'([-.\w]+).*', r'\1', req)
-                         for req in self.pkg_req]
- 
-@@ -753,11 +787,6 @@ def main():
-                 package.fetch_package_info()
-             except (six.moves.urllib.error.URLError, six.moves.urllib.error.HTTPError):
-                 continue
--            if package.metadata_name.lower() == 'setuptools':
--                # setuptools imports itself, that does not work very well
--                # with the monkey path at the beginning
--                print('Error: setuptools cannot be built using scanPyPI')
--                continue
- 
-             try:
-                 package.download_package()
-@@ -777,17 +806,15 @@ def main():
-                 continue
- 
-             # Loading the package install info from the package
-+            package.load_pyproject()
-             try:
--                package.load_setup()
-+                package.load_metadata()
-             except ImportError as err:
-                 if 'buildutils' in str(err):
-                     print('This package needs buildutils')
-                     continue
-                 else:
--                    try:
--                        package.load_pyproject()
--                    except Exception:
--                        raise
-+                    raise
-             except (AttributeError, KeyError) as error:
-                 print('Error: Could not install package {pkg}: {error}'.format(
-                     pkg=package.real_name, error=error))
--- 
-2.34.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+T24gRnJpLCBTZXAgMjcsIDIwMjQgYXQgNjoyM+KAr0FNIEZpb25hIEtsdXRlIDxmaW9uYS5rbHV0
+ZUBnbXguZGU+IHdyb3RlOgo+Cj4gQW0gMTIuMDUuMjQgdW0gMDk6MDIgc2NocmllYiBKYW1lcyBI
+aWxsaWFyZDoKPiA+IFRoZSBpbXAgbW9kdWxlIGlzIGRlcHJlY2F0ZWQgYXMgb2YgcHl0aG9uIHZl
+cmlzb24gMy4xMi4KPiA+Cj4gPiBSZWZhY3RvciBzZXR1cHRvb2xzIGhhbmRsaW5nIHRvIHJlbW92
+ZSBtb25rZXlwYXRjaGluZyBoYWNrIGFuZAo+ID4gaW5zdGVhZCBkbyBwZXA1MTcgbWV0YWRhdGEg
+Z2VuZXJhdGlvbiBhbmQgZGVwZW5kZW5jeSByZXNvbHV0aW9uLgo+ID4KPiA+IFRoaXMgaXMgZWZm
+ZWN0aXZlbHkgZG9uZSBieSBpbXBsZW1lbnRpbmcgdGhlIG1pbmltYWwgbmVjY2VzYXJ5Cj4gPiBw
+ZXA1MTcgZnJvbnRlbmQgaG9va3MgbmVlZGVkIGZvciBkZXBlbmRlbmN5IHJlc29sdXRpb24gaW4g
+c2NhbnB5cGkuCj4gPgo+ID4gU2lnbmVkLW9mZi1ieTogSmFtZXMgSGlsbGlhcmQgPGphbWVzLmhp
+bGxpYXJkMUBnbWFpbC5jb20+Cj4KPiBUZXN0ZWQtQnk6IEZpb25hIEtsdXRlIChXSVdBKSA8Zmlv
+bmEua2x1dGVAZ214LmRlPgo+Cj4gVGhlcmUncyBhIG1lcmdlIGNvbmZsaWN0IHdpdGggY3VycmVu
+dCAibWFzdGVyIiBiZWNhdXNlIGEgdHlwbyBpbiBhCj4gY29tbWVudCBpbiBhIGNvZGUgYmxvY2sg
+ZGVsZXRlZCBieSB0aGlzIHBhdGNoIHdhcyBmaXhlZCBtZWFud2hpbGUuIEVhc3kKPiB0byBmaXgg
+d2l0aCAiZ2l0IGFtIC0zIiwgSSBjYW4gc2VuZCB0aGUgcmViYXNlZCBwYXRjaCBpZiBpdCBoZWxw
+cy4KCkkgc2VudCBhIHJlYmFzZWQgdjQganVzdCBub3c6Cmh0dHBzOi8vcGF0Y2h3b3JrLm96bGFi
+cy5vcmcvcHJvamVjdC9idWlsZHJvb3QvcGF0Y2gvMjAyNDA5MjcyMDM2NDIuMzU1NjQwLTEtamFt
+ZXMuaGlsbGlhcmQxQGdtYWlsLmNvbS8KCj4KPiBPbmUgc21hbGwgY29tbWVudCBiZWxvdy4KPgo+
+IEJlc3QgcmVnYXJkcywKPiBGaW9uYQo+Cj4gPiAtLS0KPiA+IENoYW5nZXMgdjIgLT4gdjM6Cj4g
+PiAgICAtIHN1cHBvcnQgcGVwNTE3IGRlcGVuZGVuY3kgcmVzb2x1dGlvbiBmb3IgYWxsIGJ1aWxk
+IHN5c3RlbXMKPiA+ICAgIC0gcmVwbGFjZSBzZXR1cHRvb2xzIHNwZWNpZmljIGxvYWRfc2V0dXAg
+d2l0aCBnZW5lcmljIGxvYWRfbWV0YWRhdGEKPiA+ICAgIC0gcmVtb3ZlIHNldHVwdG9vbHMgbG9h
+ZF9zZXR1cCBmYWxsYmFjayBleGNlcHRpb24gaGFja3MKPiA+IENoYW5nZXMgdjEgLT4gdjI6Cj4g
+PiAgICAtIHNwbGl0IG91dCBzZXQgY29tcHJlaGVuc2lvbiBjaGFuZ2VzCj4gPiAtLS0KPiA+ICAg
+dXRpbHMvc2NhbnB5cGkgfCAxNzMgKysrKysrKysrKysrKysrKysrKysrKysrKysrKy0tLS0tLS0t
+LS0tLS0tLS0tLS0tLQo+ID4gICAxIGZpbGUgY2hhbmdlZCwgMTAwIGluc2VydGlvbnMoKyksIDcz
+IGRlbGV0aW9ucygtKQo+ID4KPiA+IGRpZmYgLS1naXQgYS91dGlscy9zY2FucHlwaSBiL3V0aWxz
+L3NjYW5weXBpCj4gPiBpbmRleCA1YTU4NTUwMTQ1Li5mNTFmMTE5MmNhIDEwMDc1NQo+ID4gLS0t
+IGEvdXRpbHMvc2NhbnB5cGkKPiA+ICsrKyBiL3V0aWxzL3NjYW5weXBpCj4gPiBAQCAtMTgsOCAr
+MTgsOSBAQCBpbXBvcnQgaGFzaGxpYgo+ID4gICBpbXBvcnQgcmUKPiA+ICAgaW1wb3J0IHRleHR3
+cmFwCj4gPiAgIGltcG9ydCB0ZW1wZmlsZQo+ID4gLWltcG9ydCBpbXAKPiA+IC1mcm9tIGZ1bmN0
+b29scyBpbXBvcnQgd3JhcHMKPiA+ICtpbXBvcnQgdHJhY2ViYWNrCj4gPiAraW1wb3J0IGltcG9y
+dGxpYgo+ID4gK2ltcG9ydCBpbXBvcnRsaWIubWV0YWRhdGEKPiA+ICAgaW1wb3J0IHNpeC5tb3Zl
+cy51cmxsaWIucmVxdWVzdAo+ID4gICBpbXBvcnQgc2l4Lm1vdmVzLnVybGxpYi5lcnJvcgo+ID4g
+ICBpbXBvcnQgc2l4Lm1vdmVzLnVybGxpYi5wYXJzZQo+ID4gQEAgLTkzLDMyICs5NCw2IEBAIGRl
+ZiB0b21sX2xvYWQoZik6Cj4gPiAgICAgICAgICAgcmFpc2UgZXgKPiA+Cj4gPgo+ID4gLWRlZiBz
+ZXR1cF9kZWNvcmF0b3IoZnVuYywgbWV0aG9kKToKPiA+IC0gICAgIiIiCj4gPiAtICAgIERlY29y
+YXRvciBmb3IgZGlzdHV0aWxzLmNvcmUuc2V0dXAgYW5kIHNldHVwdG9vbHMuc2V0dXAuCj4gPiAt
+ICAgIFB1dHMgdGhlIGFyZ3VtZW50cyB3aXRoIHdoaWNoIHNldHVwIGlzIGNhbGxlZCBhcyBhIGRp
+Y3QKPiA+IC0gICAgQWRkIGtleSAnbWV0aG9kJyB3aGljaCBzaG91bGQgYmUgZWl0aGVyICdzZXR1
+cHRvb2xzJyBvciAnZGlzdHV0aWxzJy4KPiA+IC0KPiA+IC0gICAgS2V5d29yZCBhcmd1bWVudHM6
+Cj4gPiAtICAgIGZ1bmMgLS0gZWl0aGVyIHNldHVwdG9vbHMuc2V0dXAgb3IgZGlzdHV0aWxzLmNv
+cmUuc2V0dXAKPiA+IC0gICAgbWV0aG9kIC0tIGVpdGhlciAnc2V0dXB0b29scycgb3IgJ2Rpc3R1
+dGlscycKPiA+IC0gICAgIiIiCj4gPiAtCj4gPiAtICAgIEB3cmFwcyhmdW5jKQo+ID4gLSAgICBk
+ZWYgY2xvc3VyZSgqYXJncywgKiprd2FyZ3MpOgo+ID4gLSAgICAgICAgIyBBbnkgcHl0aG9uIHBh
+Y2thZ2VzIGNhbGxzIGl0cyBzZXR1cCBmdW5jdGlvbiB0byBiZSBpbnN0YWxsZWQuCj4gPiAtICAg
+ICAgICAjIEFyZ3VtZW50ICduYW1lJyBvZiB0aGlzIHNldHVwIGZ1bmN0aW9uIGlzIHRoZSBwYWNr
+YWdlJ3MgbmFtZQo+ID4gLSAgICAgICAgQnVpbGRyb290UGFja2FnZS5zZXR1cF9hcmdzW2t3YXJn
+c1snbmFtZSddXSA9IGt3YXJncwo+ID4gLSAgICAgICAgQnVpbGRyb290UGFja2FnZS5zZXR1cF9h
+cmdzW2t3YXJnc1snbmFtZSddXVsnbWV0aG9kJ10gPSBtZXRob2QKPiA+IC0gICAgcmV0dXJuIGNs
+b3N1cmUKPiA+IC0KPiA+IC0jIG1vbmtleSBwYXRjaAo+ID4gLWltcG9ydCBzZXR1cHRvb2xzICAj
+IG5vcWEgRTQwMgo+ID4gLXNldHVwdG9vbHMuc2V0dXAgPSBzZXR1cF9kZWNvcmF0b3Ioc2V0dXB0
+b29scy5zZXR1cCwgJ3NldHVwdG9vbHMnKQo+ID4gLWltcG9ydCBkaXN0dXRpbHMgICAjIG5vcWEg
+RTQwMgo+ID4gLWRpc3R1dGlscy5jb3JlLnNldHVwID0gc2V0dXBfZGVjb3JhdG9yKHNldHVwdG9v
+bHMuc2V0dXAsICdkaXN0dXRpbHMnKQo+ID4gLQo+ID4gLQo+ID4gICBkZWYgZmluZF9maWxlX3Vw
+cGVyX2Nhc2UoZmlsZW5hbWVzLCBwYXRoPScuLycpOgo+ID4gICAgICAgIiIiCj4gPiAgICAgICBM
+aXN0IGdlbmVyYXRvcjoKPiA+IEBAIC0xNTYsNiArMTMxLDQ0IEBAIGNsYXNzIERvd25sb2FkRmFp
+bGVkKEV4Y2VwdGlvbik6Cj4gPiAgICAgICBwYXNzCj4gPgo+ID4KPiA+ICtjbGFzcyBCYWNrZW5k
+VW5hdmFpbGFibGUoRXhjZXB0aW9uKToKPiA+ICsgICAgIiIiUmFpc2VkIGlmIHdlIGNhbm5vdCBp
+bXBvcnQgdGhlIGJhY2tlbmQiIiIKPiA+ICsKPiA+ICsgICAgZGVmIF9faW5pdF9fKHNlbGYsIG1l
+c3NhZ2UsIHRyYWNlYmFjaz1Ob25lKToKPiA+ICsgICAgICAgIHN1cGVyKCkuX19pbml0X18obWVz
+c2FnZSkKPiA+ICsgICAgICAgIHNlbGYubWVzc2FnZSA9IG1lc3NhZ2UKPiA+ICsgICAgICAgIHNl
+bGYudHJhY2ViYWNrID0gdHJhY2ViYWNrCj4KPiBXaHkgdXNlIGFuIG9wdGlvbmFsIHRyYWNlYmFj
+ayBwYXJhbWV0ZXIgaW5zdGVhZCBvZiB1c2luZyAicmFpc2UKPiBCYWNrZW5kVW5hdmFpbGFibGUo
+Li4uKSBmcm9tIC4uLiIgd2hlcmUgYXBwcm9wcmlhdGU/CgpUaGlzIGV4Y2VwdGlvbiBjbGFzcyBp
+bXBsZW1lbnRhdGlvbiB3YXMgZGlyZWN0bHkgY29waWVkIGZyb20gaGVyZToKaHR0cHM6Ly9naXRo
+dWIuY29tL3B5cGEvcHlwcm9qZWN0LWhvb2tzL2Jsb2IvdjEuMS4wL3NyYy9weXByb2plY3RfaG9v
+a3MvX2luX3Byb2Nlc3MvX2luX3Byb2Nlc3MucHkjTDQxLUw0NwoKPgo+ID4gKwo+ID4gKwo+ID4g
+K2NsYXNzIEJhY2tlbmRQYXRoRmluZGVyOgo+ID4gKyAgICAiIiJJbXBsZW1lbnRzIHRoZSBNZXRh
+UGF0aEZpbmRlciBpbnRlcmZhY2UgdG8gbG9jYXRlIG1vZHVsZXMgaW4gYGBiYWNrZW5kLXBhdGhg
+YC4KPiA+ICsKPiA+ICsgICAgU2luY2UgdGhlIGVudmlyb25tZW50IHByb3ZpZGVkIGJ5IHRoZSBm
+cm9udGVuZCBjYW4gY29udGFpbiBhbGwgc29ydHMgb2YKPiA+ICsgICAgTWV0YVBhdGhGaW5kZXJz
+LCB0aGUgb25seSB3YXkgdG8gZW5zdXJlIHRoZSBiYWNrZW5kIGlzIGxvYWRlZCBmcm9tIHRoZQo+
+ID4gKyAgICByaWdodCBwbGFjZSBpcyB0byBwcmVwZW5kIG91ciBvd24uCj4gPiArICAgICIiIgo+
+ID4gKwo+ID4gKyAgICBkZWYgX19pbml0X18oc2VsZiwgYmFja2VuZF9wYXRoLCBiYWNrZW5kX21v
+ZHVsZSk6Cj4gPiArICAgICAgICBzZWxmLmJhY2tlbmRfcGF0aCA9IGJhY2tlbmRfcGF0aAo+ID4g
+KyAgICAgICAgc2VsZi5iYWNrZW5kX21vZHVsZSA9IGJhY2tlbmRfbW9kdWxlCj4gPiArICAgICAg
+ICBzZWxmLmJhY2tlbmRfcGFyZW50LCBfLCBfID0gYmFja2VuZF9tb2R1bGUucGFydGl0aW9uKCIu
+IikKPiA+ICsKPiA+ICsgICAgZGVmIGZpbmRfc3BlYyhzZWxmLCBmdWxsbmFtZSwgX3BhdGgsIF90
+YXJnZXQ9Tm9uZSk6Cj4gPiArICAgICAgICBpZiAiLiIgaW4gZnVsbG5hbWU6Cj4gPiArICAgICAg
+ICAgICAgIyBSZWx5IG9uIGltcG9ydGxpYiB0byBmaW5kIG5lc3RlZCBtb2R1bGVzIGJhc2VkIG9u
+IHBhcmVudCdzIHBhdGgKPiA+ICsgICAgICAgICAgICByZXR1cm4gTm9uZQo+ID4gKwo+ID4gKyAg
+ICAgICAgIyBJZ25vcmUgb3RoZXIgaXRlbXMgaW4gX3BhdGggb3Igc3lzLnBhdGggYW5kIHVzZSBi
+YWNrZW5kX3BhdGggaW5zdGVhZDoKPiA+ICsgICAgICAgIHNwZWMgPSBpbXBvcnRsaWIubWFjaGlu
+ZXJ5LlBhdGhGaW5kZXIuZmluZF9zcGVjKGZ1bGxuYW1lLCBwYXRoPXNlbGYuYmFja2VuZF9wYXRo
+KQo+ID4gKyAgICAgICAgaWYgc3BlYyBpcyBOb25lIGFuZCBmdWxsbmFtZSA9PSBzZWxmLmJhY2tl
+bmRfcGFyZW50Ogo+ID4gKyAgICAgICAgICAgICMgQWNjb3JkaW5nIHRvIHRoZSBzcGVjLCB0aGUg
+YmFja2VuZCBNVVNUIGJlIGxvYWRlZCBmcm9tIGJhY2tlbmQtcGF0aC4KPiA+ICsgICAgICAgICAg
+ICAjIFRoZXJlZm9yZSwgd2UgY2FuIGhhbHQgdGhlIGltcG9ydCBtYWNoaW5lcnkgYW5kIHJhaXNl
+IGEgY2xlYW4gZXJyb3IuCj4gPiArICAgICAgICAgICAgbXNnID0gZiJDYW5ub3QgZmluZCBtb2R1
+bGUge3NlbGYuYmFja2VuZF9tb2R1bGUhcn0gaW4ge3NlbGYuYmFja2VuZF9wYXRoIXJ9Igo+ID4g
+KyAgICAgICAgICAgIHJhaXNlIEJhY2tlbmRVbmF2YWlsYWJsZShtc2cpCj4gPiArCj4gPiArICAg
+ICAgICByZXR1cm4gc3BlYwo+ID4gKwo+ID4gKwo+ID4gICBjbGFzcyBCdWlsZHJvb3RQYWNrYWdl
+KCk6Cj4gPiAgICAgICAiIiJUaGlzIGNsYXNzJ3MgbWV0aG9kcyBhcmUgbm90IG1lYW50IHRvIGJl
+IHVzZWQgaW5kaXZpZHVhbGx5IHBsZWFzZQo+ID4gICAgICAgdXNlIHRoZW0gaW4gdGhlIGNvcnJl
+Y3Qgb3JkZXI6Cj4gPiBAQCAtMTkxLDYgKzIwNCw4IEBAIGNsYXNzIEJ1aWxkcm9vdFBhY2thZ2Uo
+KToKPiA+ICAgICAgICAgICBzZWxmLm1ldGFkYXRhX3VybCA9IE5vbmUKPiA+ICAgICAgICAgICBz
+ZWxmLnBrZ19yZXEgPSBOb25lCj4gPiAgICAgICAgICAgc2VsZi5zZXR1cF9tZXRhZGF0YSA9IE5v
+bmUKPiA+ICsgICAgICAgIHNlbGYuYmFja2VuZF9wYXRoID0gTm9uZQo+ID4gKyAgICAgICAgc2Vs
+Zi5idWlsZF9iYWNrZW5kID0gTm9uZQo+ID4gICAgICAgICAgIHNlbGYudG1wX2V4dHJhY3QgPSBO
+b25lCj4gPiAgICAgICAgICAgc2VsZi51c2VkX3VybCA9IE5vbmUKPiA+ICAgICAgICAgICBzZWxm
+LmZpbGVuYW1lID0gTm9uZQo+ID4gQEAgLTMzOSwzMiArMzU0LDQ2IEBAIGNsYXNzIEJ1aWxkcm9v
+dFBhY2thZ2UoKToKPiA+ICAgICAgICAgICAgICAgZm9sZGVyPXRtcF9wa2csCj4gPiAgICAgICAg
+ICAgICAgIG5hbWU9cGtnX2ZpbGVuYW1lKQo+ID4KPiA+IC0gICAgZGVmIGxvYWRfc2V0dXAoc2Vs
+Zik6Cj4gPiArICAgIGRlZiBsb2FkX21ldGFkYXRhKHNlbGYpOgo+ID4gICAgICAgICAgICIiIgo+
+ID4gICAgICAgICAgIExvYWRzIHRoZSBjb3JyZXNwb25kaW5nIHNldHVwIGFuZCBzdG9yZSBpdHMg
+bWV0YWRhdGEKPiA+ICAgICAgICAgICAiIiIKPiA+ICAgICAgICAgICBjdXJyZW50X2RpciA9IG9z
+LmdldGN3ZCgpCj4gPiAgICAgICAgICAgb3MuY2hkaXIoc2VsZi50bXBfZXh0cmFjdCkKPiA+IC0g
+ICAgICAgIHN5cy5wYXRoLmluc2VydCgwLCBzZWxmLnRtcF9leHRyYWN0KQo+ID4gICAgICAgICAg
+IHRyeToKPiA+IC0gICAgICAgICAgICBzX2ZpbGUsIHNfcGF0aCwgc19kZXNjID0gaW1wLmZpbmRf
+bW9kdWxlKCdzZXR1cCcsIFtzZWxmLnRtcF9leHRyYWN0XSkKPiA+IC0gICAgICAgICAgICBpbXAu
+bG9hZF9tb2R1bGUoJ19fbWFpbl9fJywgc19maWxlLCBzX3BhdGgsIHNfZGVzYykKPiA+IC0gICAg
+ICAgICAgICBpZiBzZWxmLm1ldGFkYXRhX25hbWUgaW4gc2VsZi5zZXR1cF9hcmdzOgo+ID4gLSAg
+ICAgICAgICAgICAgICBwYXNzCj4gPiAtICAgICAgICAgICAgZWxpZiBzZWxmLm1ldGFkYXRhX25h
+bWUucmVwbGFjZSgnXycsICctJykgaW4gc2VsZi5zZXR1cF9hcmdzOgo+ID4gLSAgICAgICAgICAg
+ICAgICBzZWxmLm1ldGFkYXRhX25hbWUgPSBzZWxmLm1ldGFkYXRhX25hbWUucmVwbGFjZSgnXycs
+ICctJykKPiA+IC0gICAgICAgICAgICBlbGlmIHNlbGYubWV0YWRhdGFfbmFtZS5yZXBsYWNlKCct
+JywgJ18nKSBpbiBzZWxmLnNldHVwX2FyZ3M6Cj4gPiAtICAgICAgICAgICAgICAgIHNlbGYubWV0
+YWRhdGFfbmFtZSA9IHNlbGYubWV0YWRhdGFfbmFtZS5yZXBsYWNlKCctJywgJ18nKQo+ID4gKyAg
+ICAgICAgICAgIG1vZF9wYXRoLCBfLCBvYmpfcGF0aCA9IHNlbGYuYnVpbGRfYmFja2VuZC5wYXJ0
+aXRpb24oIjoiKQo+ID4gKwo+ID4gKyAgICAgICAgICAgIHBhdGhfZmluZGVyID0gTm9uZQo+ID4g
+KyAgICAgICAgICAgIGlmIHNlbGYuYmFja2VuZF9wYXRoOgo+ID4gKyAgICAgICAgICAgICAgICBw
+YXRoX2ZpbmRlciA9IEJhY2tlbmRQYXRoRmluZGVyKHNlbGYuYmFja2VuZF9wYXRoLCBtb2RfcGF0
+aCkKPiA+ICsgICAgICAgICAgICAgICAgc3lzLm1ldGFfcGF0aC5pbnNlcnQoMCwgcGF0aF9maW5k
+ZXIpCj4gPiArCj4gPiArICAgICAgICAgICAgdHJ5Ogo+ID4gKyAgICAgICAgICAgICAgICBidWls
+ZF9iYWNrZW5kID0gaW1wb3J0bGliLmltcG9ydF9tb2R1bGUoc2VsZi5idWlsZF9iYWNrZW5kKQo+
+ID4gKyAgICAgICAgICAgIGV4Y2VwdCBJbXBvcnRFcnJvcjoKPiA+ICsgICAgICAgICAgICAgICAg
+bXNnID0gZiJDYW5ub3QgaW1wb3J0IHttb2RfcGF0aCFyfSIKPiA+ICsgICAgICAgICAgICAgICAg
+cmFpc2UgQmFja2VuZFVuYXZhaWxhYmxlKG1zZywgdHJhY2ViYWNrLmZvcm1hdF9leGMoKSkKPiA+
+ICsKPiA+ICsgICAgICAgICAgICBpZiBvYmpfcGF0aDoKPiA+ICsgICAgICAgICAgICAgICAgZm9y
+IHBhdGhfcGFydCBpbiBvYmpfcGF0aC5zcGxpdCgiLiIpOgo+ID4gKyAgICAgICAgICAgICAgICAg
+ICAgYnVpbGRfYmFja2VuZCA9IGdldGF0dHIoYnVpbGRfYmFja2VuZCwgcGF0aF9wYXJ0KQo+ID4g
+Kwo+ID4gKyAgICAgICAgICAgIGlmIHBhdGhfZmluZGVyOgo+ID4gKyAgICAgICAgICAgICAgICBz
+eXMubWV0YV9wYXRoLnJlbW92ZShwYXRoX2ZpbmRlcikKPiA+ICsKPiA+ICsgICAgICAgICAgICBw
+cmVwYXJlX21ldGFkYXRhX2Zvcl9idWlsZF93aGVlbCA9IGdldGF0dHIoCj4gPiArICAgICAgICAg
+ICAgICAgIGJ1aWxkX2JhY2tlbmQsICdwcmVwYXJlX21ldGFkYXRhX2Zvcl9idWlsZF93aGVlbCcK
+PiA+ICsgICAgICAgICAgICApCj4gPiArICAgICAgICAgICAgbWV0YWRhdGEgPSBwcmVwYXJlX21l
+dGFkYXRhX2Zvcl9idWlsZF93aGVlbChzZWxmLnRtcF9leHRyYWN0KQo+ID4gICAgICAgICAgICAg
+ICB0cnk6Cj4gPiAtICAgICAgICAgICAgICAgIHNlbGYuc2V0dXBfbWV0YWRhdGEgPSBzZWxmLnNl
+dHVwX2FyZ3Nbc2VsZi5tZXRhZGF0YV9uYW1lXQo+ID4gLSAgICAgICAgICAgIGV4Y2VwdCBLZXlF
+cnJvcjoKPiA+IC0gICAgICAgICAgICAgICAgIyBUaGlzIG1lYW5zIHNldHVwIHdhcyBub3QgY2Fs
+bGVkCj4gPiAtICAgICAgICAgICAgICAgIHByaW50KCdFUlJPUjogQ291bGQgbm90IGRldGVybWlu
+ZSBwYWNrYWdlIG1ldGFkYXRhIGZvciB7cGtnfS5cbicKPiA+IC0gICAgICAgICAgICAgICAgICAg
+ICAgLmZvcm1hdChwa2c9c2VsZi5yZWFsX25hbWUpKQo+ID4gLSAgICAgICAgICAgICAgICByYWlz
+ZQo+ID4gKyAgICAgICAgICAgICAgICBkaXN0ID0gaW1wb3J0bGliLm1ldGFkYXRhLkRpc3RyaWJ1
+dGlvbi5hdChtZXRhZGF0YSkKPiA+ICsgICAgICAgICAgICAgICAgc2VsZi5tZXRhZGF0YV9uYW1l
+ID0gZGlzdC5uYW1lCj4gPiArICAgICAgICAgICAgICAgIGlmIGRpc3QucmVxdWlyZXM6Cj4gPiAr
+ICAgICAgICAgICAgICAgICAgICBzZWxmLnNldHVwX21ldGFkYXRhWydpbnN0YWxsX3JlcXVpcmVz
+J10gPSBkaXN0LnJlcXVpcmVzCj4gPiArICAgICAgICAgICAgZmluYWxseToKPiA+ICsgICAgICAg
+ICAgICAgICAgc2h1dGlsLnJtdHJlZShtZXRhZGF0YSkKPiA+ICAgICAgICAgICBmaW5hbGx5Ogo+
+ID4gICAgICAgICAgICAgICBvcy5jaGRpcihjdXJyZW50X2RpcikKPiA+IC0gICAgICAgICAgICBz
+eXMucGF0aC5yZW1vdmUoc2VsZi50bXBfZXh0cmFjdCkKPiA+Cj4gPiAgICAgICBkZWYgbG9hZF9w
+eXByb2plY3Qoc2VsZik6Cj4gPiAgICAgICAgICAgIiIiCj4gPiBAQCAtMzcyLDI4ICs0MDEsMjkg
+QEAgY2xhc3MgQnVpbGRyb290UGFja2FnZSgpOgo+ID4gICAgICAgICAgICIiIgo+ID4gICAgICAg
+ICAgIGN1cnJlbnRfZGlyID0gb3MuZ2V0Y3dkKCkKPiA+ICAgICAgICAgICBvcy5jaGRpcihzZWxm
+LnRtcF9leHRyYWN0KQo+ID4gLSAgICAgICAgc3lzLnBhdGguaW5zZXJ0KDAsIHNlbGYudG1wX2V4
+dHJhY3QpCj4gPiAgICAgICAgICAgdHJ5Ogo+ID4gICAgICAgICAgICAgICBweXByb2plY3RfZGF0
+YSA9IHRvbWxfbG9hZCgncHlwcm9qZWN0LnRvbWwnKQo+ID4gLSAgICAgICAgICAgIHRyeToKPiA+
+IC0gICAgICAgICAgICAgICAgc2VsZi5zZXR1cF9tZXRhZGF0YSA9IHB5cHJvamVjdF9kYXRhLmdl
+dCgncHJvamVjdCcsIHt9KQo+ID4gLSAgICAgICAgICAgICAgICBzZWxmLm1ldGFkYXRhX25hbWUg
+PSBzZWxmLnNldHVwX21ldGFkYXRhLmdldCgnbmFtZScsIHNlbGYucmVhbF9uYW1lKQo+ID4gLSAg
+ICAgICAgICAgICAgICBidWlsZF9zeXN0ZW0gPSBweXByb2plY3RfZGF0YS5nZXQoJ2J1aWxkLXN5
+c3RlbScsIHt9KQo+ID4gLSAgICAgICAgICAgICAgICBidWlsZF9iYWNrZW5kID0gYnVpbGRfc3lz
+dGVtLmdldCgnYnVpbGQtYmFja2VuZCcsIE5vbmUpCj4gPiAtICAgICAgICAgICAgICAgIGlmIGJ1
+aWxkX2JhY2tlbmQgYW5kIGJ1aWxkX2JhY2tlbmQgPT0gJ2ZsaXRfY29yZS5idWlsZGFwaSc6Cj4g
+PiArICAgICAgICAgICAgc2VsZi5zZXR1cF9tZXRhZGF0YSA9IHB5cHJvamVjdF9kYXRhLmdldCgn
+cHJvamVjdCcsIHt9KQo+ID4gKyAgICAgICAgICAgIHNlbGYubWV0YWRhdGFfbmFtZSA9IHNlbGYu
+c2V0dXBfbWV0YWRhdGEuZ2V0KCduYW1lJywgc2VsZi5yZWFsX25hbWUpCj4gPiArICAgICAgICAg
+ICAgYnVpbGRfc3lzdGVtID0gcHlwcm9qZWN0X2RhdGEuZ2V0KCdidWlsZC1zeXN0ZW0nLCB7fSkK
+PiA+ICsgICAgICAgICAgICBidWlsZF9iYWNrZW5kID0gYnVpbGRfc3lzdGVtLmdldCgnYnVpbGQt
+YmFja2VuZCcsIE5vbmUpCj4gPiArICAgICAgICAgICAgc2VsZi5iYWNrZW5kX3BhdGggPSBidWls
+ZF9zeXN0ZW0uZ2V0KCdiYWNrZW5kLXBhdGgnLCBOb25lKQo+ID4gKyAgICAgICAgICAgIGlmIGJ1
+aWxkX2JhY2tlbmQ6Cj4gPiArICAgICAgICAgICAgICAgIHNlbGYuYnVpbGRfYmFja2VuZCA9IGJ1
+aWxkX2JhY2tlbmQKPiA+ICsgICAgICAgICAgICAgICAgaWYgYnVpbGRfYmFja2VuZCA9PSAnZmxp
+dF9jb3JlLmJ1aWxkYXBpJzoKPiA+ICAgICAgICAgICAgICAgICAgICAgICBzZWxmLnNldHVwX21l
+dGFkYXRhWydtZXRob2QnXSA9ICdmbGl0Jwo+ID4gLSAgICAgICAgICAgICAgICBlbGlmIGJ1aWxk
+X3N5c3RlbS5nZXQoJ2JhY2tlbmQtcGF0aCcsIE5vbmUpOgo+ID4gLSAgICAgICAgICAgICAgICAg
+ICAgc2VsZi5zZXR1cF9tZXRhZGF0YVsnbWV0aG9kJ10gPSAncGVwNTE3Jwo+ID4gKyAgICAgICAg
+ICAgICAgICBlbGlmIGJ1aWxkX2JhY2tlbmQgPT0gJ3NldHVwdG9vbHMuYnVpbGRfbWV0YSc6Cj4g
+PiArICAgICAgICAgICAgICAgICAgICBzZWxmLnNldHVwX21ldGFkYXRhWydtZXRob2QnXSA9ICdz
+ZXR1cHRvb2xzJwo+ID4gICAgICAgICAgICAgICAgICAgZWxzZToKPiA+IC0gICAgICAgICAgICAg
+ICAgICAgIHNlbGYuc2V0dXBfbWV0YWRhdGFbJ21ldGhvZCddID0gJ3Vua25vd24nCj4gPiAtICAg
+ICAgICAgICAgZXhjZXB0IEtleUVycm9yOgo+ID4gLSAgICAgICAgICAgICAgICBwcmludCgnRVJS
+T1I6IENvdWxkIG5vdCBkZXRlcm1pbmUgcGFja2FnZSBtZXRhZGF0YSBmb3Ige3BrZ30uXG4nCj4g
+PiAtICAgICAgICAgICAgICAgICAgICAgIC5mb3JtYXQocGtnPXNlbGYucmVhbF9uYW1lKSkKPiA+
+IC0gICAgICAgICAgICAgICAgcmFpc2UKPiA+ICsgICAgICAgICAgICAgICAgICAgIGlmIHNlbGYu
+YmFja2VuZF9wYXRoOgo+ID4gKyAgICAgICAgICAgICAgICAgICAgICAgIHNlbGYuc2V0dXBfbWV0
+YWRhdGFbJ21ldGhvZCddID0gJ3BlcDUxNycKPiA+ICsgICAgICAgICAgICAgICAgICAgIGVsc2U6
+Cj4gPiArICAgICAgICAgICAgICAgICAgICAgICAgc2VsZi5zZXR1cF9tZXRhZGF0YVsnbWV0aG9k
+J10gPSAndW5rbm93bicKPiA+ICAgICAgICAgICBleGNlcHQgRmlsZU5vdEZvdW5kRXJyb3I6Cj4g
+PiAtICAgICAgICAgICAgcmFpc2UKPiA+IC0gICAgICAgIG9zLmNoZGlyKGN1cnJlbnRfZGlyKQo+
+ID4gLSAgICAgICAgc3lzLnBhdGgucmVtb3ZlKHNlbGYudG1wX2V4dHJhY3QpCj4gPiArICAgICAg
+ICAgICAgc2VsZi5idWlsZF9iYWNrZW5kID0gJ3NldHVwdG9vbHMuYnVpbGRfbWV0YScKPiA+ICsg
+ICAgICAgICAgICBzZWxmLnNldHVwX21ldGFkYXRhID0geydtZXRob2QnOiAnc2V0dXB0b29scyd9
+Cj4gPiArICAgICAgICBmaW5hbGx5Ogo+ID4gKyAgICAgICAgICAgIG9zLmNoZGlyKGN1cnJlbnRf
+ZGlyKQo+ID4KPiA+ICAgICAgIGRlZiBnZXRfcmVxdWlyZW1lbnRzKHNlbGYsIHBrZ19mb2xkZXIp
+Ogo+ID4gICAgICAgICAgICIiIgo+ID4gQEAgLTQwNiw3ICs0MzYsMTEgQEAgY2xhc3MgQnVpbGRy
+b290UGFja2FnZSgpOgo+ID4gICAgICAgICAgIGlmICdpbnN0YWxsX3JlcXVpcmVzJyBub3QgaW4g
+c2VsZi5zZXR1cF9tZXRhZGF0YToKPiA+ICAgICAgICAgICAgICAgc2VsZi5wa2dfcmVxID0gTm9u
+ZQo+ID4gICAgICAgICAgICAgICByZXR1cm4gc2V0KCkKPiA+IC0gICAgICAgIHNlbGYucGtnX3Jl
+cSA9IHNlbGYuc2V0dXBfbWV0YWRhdGFbJ2luc3RhbGxfcmVxdWlyZXMnXQo+ID4gKyAgICAgICAg
+c2VsZi5wa2dfcmVxID0gc2V0KCkKPiA+ICsgICAgICAgIGV4dHJhX3JlID0gcmUuY29tcGlsZShy
+JycnZXh0cmFccyo9PVxzKigiKFteIl0rKSJ8JyhbXiddKyknKScnJykKPiA+ICsgICAgICAgIGZv
+ciByZXEgaW4gc2VsZi5zZXR1cF9tZXRhZGF0YVsnaW5zdGFsbF9yZXF1aXJlcyddOgo+ID4gKyAg
+ICAgICAgICAgIGlmIG5vdCBleHRyYV9yZS5zZWFyY2gocmVxKToKPiA+ICsgICAgICAgICAgICAg
+ICAgc2VsZi5wa2dfcmVxLmFkZChyZXEpCj4gPiAgICAgICAgICAgc2VsZi5wa2dfcmVxID0gW3Jl
+LnN1YihyJyhbLS5cd10rKS4qJywgcidcMScsIHJlcSkKPiA+ICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgZm9yIHJlcSBpbiBzZWxmLnBrZ19yZXFdCj4gPgo+ID4gQEAgLTc1MywxMSArNzg3LDYg
+QEAgZGVmIG1haW4oKToKPiA+ICAgICAgICAgICAgICAgICAgIHBhY2thZ2UuZmV0Y2hfcGFja2Fn
+ZV9pbmZvKCkKPiA+ICAgICAgICAgICAgICAgZXhjZXB0IChzaXgubW92ZXMudXJsbGliLmVycm9y
+LlVSTEVycm9yLCBzaXgubW92ZXMudXJsbGliLmVycm9yLkhUVFBFcnJvcik6Cj4gPiAgICAgICAg
+ICAgICAgICAgICBjb250aW51ZQo+ID4gLSAgICAgICAgICAgIGlmIHBhY2thZ2UubWV0YWRhdGFf
+bmFtZS5sb3dlcigpID09ICdzZXR1cHRvb2xzJzoKPiA+IC0gICAgICAgICAgICAgICAgIyBzZXR1
+cHRvb2xzIGltcG9ydHMgaXRzZWxmLCB0aGF0IGRvZXMgbm90IHdvcmsgdmVyeSB3ZWxsCj4gPiAt
+ICAgICAgICAgICAgICAgICMgd2l0aCB0aGUgbW9ua2V5IHBhdGggYXQgdGhlIGJlZ2luaW5nCj4g
+PiAtICAgICAgICAgICAgICAgIHByaW50KCdFcnJvcjogc2V0dXB0b29scyBjYW5ub3QgYmUgYnVp
+bHQgdXNpbmcgc2NhblB5UEknKQo+ID4gLSAgICAgICAgICAgICAgICBjb250aW51ZQo+ID4KPiA+
+ICAgICAgICAgICAgICAgdHJ5Ogo+ID4gICAgICAgICAgICAgICAgICAgcGFja2FnZS5kb3dubG9h
+ZF9wYWNrYWdlKCkKPiA+IEBAIC03NzcsMTcgKzgwNiwxNSBAQCBkZWYgbWFpbigpOgo+ID4gICAg
+ICAgICAgICAgICAgICAgY29udGludWUKPiA+Cj4gPiAgICAgICAgICAgICAgICMgTG9hZGluZyB0
+aGUgcGFja2FnZSBpbnN0YWxsIGluZm8gZnJvbSB0aGUgcGFja2FnZQo+ID4gKyAgICAgICAgICAg
+IHBhY2thZ2UubG9hZF9weXByb2plY3QoKQo+ID4gICAgICAgICAgICAgICB0cnk6Cj4gPiAtICAg
+ICAgICAgICAgICAgIHBhY2thZ2UubG9hZF9zZXR1cCgpCj4gPiArICAgICAgICAgICAgICAgIHBh
+Y2thZ2UubG9hZF9tZXRhZGF0YSgpCj4gPiAgICAgICAgICAgICAgIGV4Y2VwdCBJbXBvcnRFcnJv
+ciBhcyBlcnI6Cj4gPiAgICAgICAgICAgICAgICAgICBpZiAnYnVpbGR1dGlscycgaW4gc3RyKGVy
+cik6Cj4gPiAgICAgICAgICAgICAgICAgICAgICAgcHJpbnQoJ1RoaXMgcGFja2FnZSBuZWVkcyBi
+dWlsZHV0aWxzJykKPiA+ICAgICAgICAgICAgICAgICAgICAgICBjb250aW51ZQo+ID4gICAgICAg
+ICAgICAgICAgICAgZWxzZToKPiA+IC0gICAgICAgICAgICAgICAgICAgIHRyeToKPiA+IC0gICAg
+ICAgICAgICAgICAgICAgICAgICBwYWNrYWdlLmxvYWRfcHlwcm9qZWN0KCkKPiA+IC0gICAgICAg
+ICAgICAgICAgICAgIGV4Y2VwdCBFeGNlcHRpb246Cj4gPiAtICAgICAgICAgICAgICAgICAgICAg
+ICAgcmFpc2UKPiA+ICsgICAgICAgICAgICAgICAgICAgIHJhaXNlCj4gPiAgICAgICAgICAgICAg
+IGV4Y2VwdCAoQXR0cmlidXRlRXJyb3IsIEtleUVycm9yKSBhcyBlcnJvcjoKPiA+ICAgICAgICAg
+ICAgICAgICAgIHByaW50KCdFcnJvcjogQ291bGQgbm90IGluc3RhbGwgcGFja2FnZSB7cGtnfTog
+e2Vycm9yfScuZm9ybWF0KAo+ID4gICAgICAgICAgICAgICAgICAgICAgIHBrZz1wYWNrYWdlLnJl
+YWxfbmFtZSwgZXJyb3I9ZXJyb3IpKQo+Cl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9v
+dC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRy
+b290Cg==
