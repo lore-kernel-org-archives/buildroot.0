@@ -4,89 +4,86 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E1324CDD1D3
-	for <buildroot@archiver.kernel.org>; Fri, 27 Sep 2024 18:34:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4A668CDD1D2
+	for <buildroot@archiver.kernel.org>; Fri, 27 Sep 2024 18:34:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8E34084EBC;
-	Fri, 27 Sep 2024 18:34:20 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 94FDB84ECD;
+	Fri, 27 Sep 2024 18:34:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BF73Co1Qo7Se; Fri, 27 Sep 2024 18:34:19 +0000 (UTC)
+ id q4bBmhDSvE5g; Fri, 27 Sep 2024 18:34:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 905C484EC4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 83DDB84ECB
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 905C484EC4;
-	Fri, 27 Sep 2024 18:34:19 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id A03F61BF376
+	by smtp1.osuosl.org (Postfix) with ESMTP id 83DDB84ECB;
+	Fri, 27 Sep 2024 18:34:21 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id DF2761BF376
  for <buildroot@lists.busybox.net>; Fri, 27 Sep 2024 18:34:18 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 9B7B042541
+ by smtp2.osuosl.org (Postfix) with ESMTP id CD58640042
  for <buildroot@lists.busybox.net>; Fri, 27 Sep 2024 18:34:18 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id WzFPvHeIUS6R for <buildroot@lists.busybox.net>;
- Fri, 27 Sep 2024 18:34:17 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.18;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id xVPOrPy0SjtE for <buildroot@lists.busybox.net>;
+ Fri, 27 Sep 2024 18:34:18 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.227.15.19;
  helo=mout.gmx.net; envelope-from=fiona.klute@gmx.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org C5C224253B
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C5C224253B
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
- by smtp4.osuosl.org (Postfix) with ESMTPS id C5C224253B
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 6B4DD40022
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6B4DD40022
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 6B4DD40022
  for <buildroot@buildroot.org>; Fri, 27 Sep 2024 18:34:16 +0000 (UTC)
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from haruka.lan ([85.22.6.179]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MVvL5-1sSvtm0UGD-00WwqZ; Fri, 27
- Sep 2024 20:34:11 +0200
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1M42nS-1suFn80to8-00597O; Fri, 27
+ Sep 2024 20:34:10 +0200
 To: buildroot@buildroot.org
-Date: Fri, 27 Sep 2024 20:33:59 +0200
-Message-ID: <20240927183400.339491-3-fiona.klute@gmx.de>
+Date: Fri, 27 Sep 2024 20:33:57 +0200
+Message-ID: <20240927183400.339491-1-fiona.klute@gmx.de>
 X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20240927183400.339491-1-fiona.klute@gmx.de>
-References: <20240927183400.339491-1-fiona.klute@gmx.de>
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:CCwI+i4qq7v3TUXYL/+XSLv1iwlRgMsTsVe6cWDDnFD8ZImnIfV
- xtPPVQLLIggStB5myWR5HqymNH+Ym32UrgE5hAbsJHDcEHGZd7/PROmSYSlpSBHVoQbGXFO
- SJ4UCF4hBCbvZIglzAhX/5avyVnI+vdU8kD66P+pTl4xbcewfcl1/4ZL+vSmSlfsOTwvfn/
- y26iev3+8O2bsgepEoi3g==
-UI-OutboundReport: notjunk:1;M01:P0:YbwvnNK5/JU=;kZolmdeIBVbqDHFE0235liXoi2+
- ScYfFNGPMm8jbAbKmig2ShUj4a4yoCXgUGJJUhgvCnVD1UT3CigW1qx3jIlAaU76SR4s5Ar3t
- 2rqAOe0pYepECIVOr6tRD/sXo9/sDBthSw3jUPx6n2fjK1WrdhJG7OQBlsJF0ZVN2XYVhvbe5
- hPv9Vi++0vlv8ipflUKb0uMiUMSujpt//tZrMG5bJavLDzaYMvxvk94CThuM/YZew6MI4CvVm
- Q16XA1hARr4G2kTX9wpf6j5hRymWAiZ+wANF3HfFHzLIBQ9wEUz3O4XLp2LffYdVV/BSRURNT
- puoy2bV/Ti83Dvt0Q7T9u4f52A/ft6K6YCIaSChbrTPgpve/O1PSBTK/jW7BzRoZbw9edWmeM
- KBdHeE2+ydHxI50+QRkXKorrWvO+pOm2DNvdnMzMpO0FL25iMAG33llXSE+GZSAN0oy61t495
- iyl/luOAuvYsM6GLw+m+QtGHC2+scAF7KKsC/Cj8t50Uaw+hqgkVWIMvUnzygKHhyJtRhGDj8
- JZtH+SD4pfPY+iJpv+VCXG01CDHmW93juC5FrdhnKNDIqs2vMnvYX4i32idXoxWg/u/yyerfw
- yNg8aGr81e0hos5PQLD2++pG9GmWsi23JpE786owl7exhvhSur1QWZVk9om4xRUoGtYBDoyoc
- 3eMbesZH0V9qWIMu1CxUoau4CITu1LJckxdIbhmVDYKUgr6qhnSH+7njscMOCvrp2jPTOyBhZ
- s0rfcaRpqCdZPSCpwkHwQC08tO3Z9bYdTZr6+wIzGW1j4c/H8lAwgeHU2TQ7So8Cl6HMDADoS
- 0evzTxhmzSkTy7j4qZ6tbaiQ==
+X-Provags-ID: V03:K1:fJ5kyEVAwIwfEPuHCvAMPpjz5S8VIV7bu7hJxPAILU0DIpkGRNP
+ OBs33vHrwOu+whiUGv7U1KJs9vX05ZMOeMifXUs6ZaRKGNMgYqFlUlooc236RUWTm6Fi1hS
+ CCA/ZE7onch7McfhG4a1g80oNzY4s7ET/9cS/RA15w2BLf5ODboCg1TIWvDjX+UXG/xHZio
+ EgcLjpmlKZW7Xnwn201Ew==
+UI-OutboundReport: notjunk:1;M01:P0:Azw/yyK04nc=;YVFTtl+JMiYUC5TZxRBC2TBaX7x
+ 9R9qzzGnxywueLXo0WeLVW57kqECBnKrdGKJ5fzJdZEIEOKL9mF/lzPNdyTNOG8xC866r8csB
+ I2XhMvZtNPLsXkZnIzX/YGzNhjbugCjSpWeb1BcfH7F0euK71DpksbhaPhYoqnV23v8/2q6jJ
+ p/i6geyrIuVeLWoz2gyFhuaXMbtYD8SWNVa4GZDH0uHerJzElc6s6xGIkMDX0UHJmYq9EwIk1
+ rUgvu/5/KA7NnXshiP045n3qH8VfE95sXyaiC90v38+lBnmgltEAtwBeHBurxS3HwxGivDOzO
+ lqBsZdv9Q1YIIH2tfzVBD9MQ6ikeozJjPw8+9OSxyPD5yFnSqo42GrOT+5Ldi34iZ7hUhFW3B
+ /OR/kUO48cN5sYamAE/MWsRVdZ+HH3WpqUcAjOGXgxDkIus65sTYfMr2VyYabNlXLV0xE7hCC
+ KIQM8J65TkknIPF2ZKEJYBMQrAH508B2SFPQCYOzTk7uLeRtTYaBkd+BQXSuM+kbk5/WqIpnQ
+ IWanJe2oxVQGHbSpQlxYBCvPdCo8+O9cocO2RSTNwC+eGPW9yfHax4DLQj6xF7IhwHIkXWH7w
+ bP0Kykq2U8ENe2l0DemfHvE7V+87x+UW5CCaldJaxtTR8s5wJmSbg8NKjVtCqhKCeeEziCxnH
+ 4DM22F1RxWzvp33khmG5yCJyyaSA4HvAOOBeDm8EtP/bJ4qPQwWNMs5ghg3uFbWO9gTx5QqQf
+ SriNnnusInUKzTwNx8f3ab8W3YYeStH3TpEoCm4BOMVMQ2dUCV5e3WC8vJWH2A0kSRKwBxV/L
+ 7jiuAkhgNtS+xp5XyEtfzElg==
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=gmx.de; 
- s=s31663417; t=1727462051; x=1728066851; i=fiona.klute@gmx.de;
- bh=2/3E168Pj3JPAGUQb1uXnTfQju+nwcHJFbdw30XihU0=;
- h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:In-Reply-To:
- References:MIME-Version:Content-Transfer-Encoding:cc:
+ s=s31663417; t=1727462050; x=1728066850; i=fiona.klute@gmx.de;
+ bh=1lz8BJr3l3scXv4VTmVEUqUnAMI5f/wedqUVbIai73E=;
+ h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:
+ MIME-Version:Content-Transfer-Encoding:cc:
  content-transfer-encoding:content-type:date:from:message-id:
  mime-version:reply-to:subject:to;
- b=LaWhCx0oPBrPcN+Odfyd62F19VDu4/tQJoW/LzkyU/Ad70L1ZjS47/gJn5d7mDGf
- t6cx2a3TV9Qbt5OWNid/HROrxjbwqTnd9Cc9qc66MWkgv9kjI5WbGOOJsg+7aZUNA
- EAqzTIJJNCVFLRkL1cZFxMCRFq8N+EvhVjEoM/X/mDwIKmWRZBvlj80XThKHvhsZM
- 0JhcfuoTTV95I98zH0tJtRY7jEL40o76k9YR2b+rqjREMblV8NdoyWryptQ3rWyNa
- 4tea7RkDM0BVQ+11sp/OhkN0g5R3HuVvzJ2SM0A+1ZgeHcp60Nt//WfdcAP3Tb3pV
- 4DP+AZWsLzLRR3rkkA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ b=uGU/nwPHsJ8jADcSENfY7CPIbY6Kl/Jii2qrWgYfRVNDNJ2n1pRfcAUd6gGBLbat
+ SoGvHm3iWFJnPOox+WLgZwZe6aXOyOu96AzondVyRPy7T1L49UYMd1BLWaTotJ41p
+ omJwmT/OEq2FC9JdjBnqzTaqw+6qNYcpdAqkw0oMjrqL/RVOimZMDv6f/hBYP0xE6
+ 2xedc+pdlSMOFE9yzQ4uQeg+JyNH78F3HGhUEHNigAud79Rqt/59C6qoc0aP+YggT
+ dxg5ywPV/OXPsyomhFqKqhlfRbtIgJWitnSHrR+dno7A6DtYqlEOvUHm87GgchuZs
+ DEY8a1GlxqTuGdoS2Q==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=gmx.de
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=gmx.de header.i=fiona.klute@gmx.de header.a=rsa-sha256
- header.s=s31663417 header.b=LaWhCx0o
-Subject: [Buildroot] [PATCH 3/4] package/python-poetry-dynamic-versioning:
- new host package
+ header.s=s31663417 header.b=uGU/nwPH
+Subject: [Buildroot] [PATCH 1/4] package/python-tomlkit: add host package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -110,63 +107,24 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: "Fiona Klute (WIWA)" <fiona.klute@gmx.de>
 
-Build dependency of aiomqtt (Python package).
+Required to run poetry-dynamic-versioning on the host.
 
 Signed-off-by: Fiona Klute (WIWA) <fiona.klute@gmx.de>
 ---
- DEVELOPERS                                     |  1 +
- .../python-poetry-dynamic-versioning.hash      |  5 +++++
- .../python-poetry-dynamic-versioning.mk        | 18 ++++++++++++++++++
- 3 files changed, 24 insertions(+)
- create mode 100644 package/python-poetry-dynamic-versioning/python-poetry-dynamic-versioning.hash
- create mode 100644 package/python-poetry-dynamic-versioning/python-poetry-dynamic-versioning.mk
+ package/python-tomlkit/python-tomlkit.mk | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 5371a7a59e..248be00cda 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1112,6 +1112,7 @@ F:	package/python-pymodbus/
+diff --git a/package/python-tomlkit/python-tomlkit.mk b/package/python-tomlkit/python-tomlkit.mk
+index 99b974da5d..0b1d32c374 100644
+--- a/package/python-tomlkit/python-tomlkit.mk
++++ b/package/python-tomlkit/python-tomlkit.mk
+@@ -11,5 +11,7 @@ PYTHON_TOMLKIT_SETUP_TYPE = pep517
+ PYTHON_TOMLKIT_LICENSE = MIT
+ PYTHON_TOMLKIT_LICENSE_FILES = LICENSE
+ PYTHON_TOMLKIT_DEPENDENCIES = host-python-poetry-core
++HOST_PYTHON_TOMLKIT_DEPENDENCIES = host-python-poetry-core
 
- N:	Fiona Klute <fiona.klute@gmx.de>
- F:	package/python-dunamai/
-+F:	package/python-poetry-dynamic-versioning/
- F:	package/python-pyasynchat/
- F:	package/python-pyasyncore/
- F:	support/testing/tests/package/test_nftables.py
-diff --git a/package/python-poetry-dynamic-versioning/python-poetry-dynamic-versioning.hash b/package/python-poetry-dynamic-versioning/python-poetry-dynamic-versioning.hash
-new file mode 100644
-index 0000000000..abe063096d
---- /dev/null
-+++ b/package/python-poetry-dynamic-versioning/python-poetry-dynamic-versioning.hash
-@@ -0,0 +1,5 @@
-+# md5, sha256 from https://pypi.org/pypi/poetry-dynamic-versioning/json
-+md5  91032d27f9da010d8a9b7e76bfd09d24  poetry_dynamic_versioning-1.4.1.tar.gz
-+sha256  21584d21ca405aa7d83d23d38372e3c11da664a8742995bdd517577e8676d0e1  poetry_dynamic_versioning-1.4.1.tar.gz
-+# Locally computed sha256 checksums
-+sha256  cd75c5564078e3aadf662a9df3d23430f4705dfeedebbd0ebbeef53998ad94a8  LICENSE
-diff --git a/package/python-poetry-dynamic-versioning/python-poetry-dynamic-versioning.mk b/package/python-poetry-dynamic-versioning/python-poetry-dynamic-versioning.mk
-new file mode 100644
-index 0000000000..c49e4e9e7a
---- /dev/null
-+++ b/package/python-poetry-dynamic-versioning/python-poetry-dynamic-versioning.mk
-@@ -0,0 +1,18 @@
-+################################################################################
-+#
-+# python-poetry-dynamic-versioning
-+#
-+################################################################################
-+
-+PYTHON_POETRY_DYNAMIC_VERSIONING_VERSION = 1.4.1
-+PYTHON_POETRY_DYNAMIC_VERSIONING_SOURCE = poetry_dynamic_versioning-$(PYTHON_POETRY_DYNAMIC_VERSIONING_VERSION).tar.gz
-+PYTHON_POETRY_DYNAMIC_VERSIONING_SITE = https://github.com/mtkennerly/poetry-dynamic-versioning/releases/download/v$(PYTHON_POETRY_DYNAMIC_VERSIONING_VERSION)
-+PYTHON_POETRY_DYNAMIC_VERSIONING_SETUP_TYPE = pep517
-+PYTHON_POETRY_DYNAMIC_VERSIONING_LICENSE = MIT
-+PYTHON_POETRY_DYNAMIC_VERSIONING_LICENSE_FILES = LICENSE
-+HOST_PYTHON_POETRY_DYNAMIC_VERSIONING_DEPENDENCIES = host-python-poetry-core \
-+	host-python-dunamai \
-+	host-python-jinja2 \
-+	host-python-tomlkit
-+
+ $(eval $(python-package))
 +$(eval $(host-python-package))
 --
 2.45.2
