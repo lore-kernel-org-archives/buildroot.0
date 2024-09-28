@@ -4,75 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A111FCF6496
-	for <buildroot@archiver.kernel.org>; Sat, 28 Sep 2024 20:58:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 56327CF6496
+	for <buildroot@archiver.kernel.org>; Sat, 28 Sep 2024 21:48:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4DC9E6070F;
-	Sat, 28 Sep 2024 20:58:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id EA243605D4;
+	Sat, 28 Sep 2024 21:48:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cAQC_UOOPkUS; Sat, 28 Sep 2024 20:58:32 +0000 (UTC)
+ id lYI0wn_HXwp6; Sat, 28 Sep 2024 21:48:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6C59D60710
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0976960688
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6C59D60710;
-	Sat, 28 Sep 2024 20:58:32 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id B60A31BF33C
- for <buildroot@lists.busybox.net>; Sat, 28 Sep 2024 20:58:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0976960688;
+	Sat, 28 Sep 2024 21:48:41 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 9D51B1BF580
+ for <buildroot@lists.busybox.net>; Sat, 28 Sep 2024 21:48:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A519B81499
- for <buildroot@lists.busybox.net>; Sat, 28 Sep 2024 20:58:30 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 89FF8404A8
+ for <buildroot@lists.busybox.net>; Sat, 28 Sep 2024 21:48:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GoGm-FDkaska for <buildroot@lists.busybox.net>;
- Sat, 28 Sep 2024 20:58:29 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id S7wFaUrgJ7Ei for <buildroot@lists.busybox.net>;
+ Sat, 28 Sep 2024 21:48:38 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2001:660:530d:201::44; helo=mailgw-out1.grenoble.cnrs.fr;
- envelope-from=bonet@grenoble.cnrs.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org DE1EF81498
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org DE1EF81498
-Received: from mailgw-out1.grenoble.cnrs.fr (mailgw-out1.grenoble.cnrs.fr
- [IPv6:2001:660:530d:201::44])
- by smtp1.osuosl.org (Postfix) with ESMTPS id DE1EF81498
- for <buildroot@buildroot.org>; Sat, 28 Sep 2024 20:58:27 +0000 (UTC)
-Received: from [IPV6:2a01:e0a:12:eba0:986e:c481:d6c4:acc1] (unknown
- [IPv6:2a01:e0a:12:eba0:986e:c481:d6c4:acc1])
- (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
- key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
- (No client certificate requested)
- by mailgw-out1.grenoble.cnrs.fr (Postfix) with ESMTPSA id 07458BFA84;
- Sat, 28 Sep 2024 22:58:23 +0200 (CEST)
-Message-ID: <b6eff46e-374f-4f4e-8caa-7ad9c5d40ce0@grenoble.cnrs.fr>
-Date: Sat, 28 Sep 2024 22:58:22 +0200
+ client-ip=2607:f8b0:4864:20::12e; helo=mail-il1-x12e.google.com;
+ envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 6B8DF4047E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6B8DF4047E
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com
+ [IPv6:2607:f8b0:4864:20::12e])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 6B8DF4047E
+ for <buildroot@buildroot.org>; Sat, 28 Sep 2024 21:48:38 +0000 (UTC)
+Received: by mail-il1-x12e.google.com with SMTP id
+ e9e14a558f8ab-3a275a7649dso12013735ab.2
+ for <buildroot@buildroot.org>; Sat, 28 Sep 2024 14:48:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1727560117; x=1728164917;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=Mwfx9uDsqZOOdZfbf6cnbl88ZI2/p5tKfZmIW+LKfvk=;
+ b=IHP1OqYooHVG1NqW93U1Nnz11h3pO1Wq9s9SrUa6Q895YB/rqa7a0ZvUDzjWh/0MAR
+ rrH52KBxAQshXHxJQ4jaLzzmAkFMfLKDqMNSm2E63lvu9Gu8S3lnbp4HrtpULaKwdw4+
+ ZLxphYILmpn0TVYV99dDF1uaGqu8NNcXI6Ktqbxx4vMYOVpRKtl0kwTyLeWLec5IC5tJ
+ Qu7Hn+gvn+JJ77qNURD3iVjygf2qnY8U1ZRhHrKN+gJuvkjucrV8m55+lPs522bnII1S
+ sNW1bZpOfooZiscJDXvw+IATb93SQxvDTF5ZjjdMudyi9+Z4nNa6LfmMwa04mw6PcCsl
+ G2JA==
+X-Gm-Message-State: AOJu0YzWVW12BCivUqKFp4Pxx8VCxBcGi8troebkWVUujwKshIU0CAQ4
+ bNaG9tnBs8aI+1ib0Oolu0Y3jKuxbo5oRsiY2zrAFvjzxA6QIjwHeFNn0w==
+X-Google-Smtp-Source: AGHT+IEheCcUO7d1py/0BT/298jKN6VjV7CTJ0No55ze7Sma62OGVNQAV9+PCRRC6DIGrTLM0NpDUA==
+X-Received: by 2002:a05:6e02:2188:b0:3a0:9088:e2a4 with SMTP id
+ e9e14a558f8ab-3a3452bee09mr54189495ab.21.1727560117076; 
+ Sat, 28 Sep 2024 14:48:37 -0700 (PDT)
+Received: from james-x399.localdomain (71-33-149-81.hlrn.qwest.net.
+ [71.33.149.81]) by smtp.gmail.com with ESMTPSA id
+ 8926c6da1cb9f-4d888849fbesm1267683173.63.2024.09.28.14.48.36
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Sat, 28 Sep 2024 14:48:36 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
+To: buildroot@buildroot.org
+Date: Sat, 28 Sep 2024 15:48:34 -0600
+Message-Id: <20240928214834.3357300-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Andrew McCann <andrew.2.622266@gmail.com>, buildroot@buildroot.org
-References: <CAPKzRz-HU2_WJesQKDn_Nj8dZLgzYpJXL9+Gt6tH1Xgk8LzT=A@mail.gmail.com>
-Content-Language: en-US
-From: Edgar Bonet <bonet@grenoble.cnrs.fr>
-In-Reply-To: <CAPKzRz-HU2_WJesQKDn_Nj8dZLgzYpJXL9+Gt6tH1Xgk8LzT=A@mail.gmail.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=grenoble.cnrs.fr; 
- s=202106-grenoble.cnrs.fr; t=1727557104;
- bh=oadWdXXZNh/Enx7QWrlbvjwxSuMP+2q9kYi8Fb6qoJw=;
- h=Date:Subject:To:References:From:In-Reply-To:From;
- b=AEYxKLHOS7+JOAFnmBH1wcC0naswWwswnzA2PXCFEXxLdRLKZ2MVO8lstL0hs6taA
- 0NIZt6xfAWKuSJGWkCUpjDpX5dwwhQqylKz2AxB0ZkMgyznmbA0aBr4gGvwVGb+B+B
- +TfOhq2yiq4YlGoxmdQgYIgXLkBK/eEXf03DeWZYuONZ+Tn33Nih8WagBbWvmrCynn
- y9mb2uitC9f0jg+gXWHoXbU3iwvIBNgZ7s+9gJGVoepJvdPSufCIDL6Mckumn03FLs
- 7JhuJsUXgi+/D+SU1Wyo1T1gEhPXSPKpE4tFZ3rz/ndvVOwCwKSojaUm5F8/F9q3sM
- RTjcP8HqDvESA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=grenoble.cnrs.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=gmail.com; s=20230601; t=1727560117; x=1728164917; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=Mwfx9uDsqZOOdZfbf6cnbl88ZI2/p5tKfZmIW+LKfvk=;
+ b=j60LwxMHHzhEy+8xSZB5F9SBob/nZYSEUkxsuWld4LNamAsngspuLydt1l2rpuN5oS
+ vi1wA/UowYGK9uEycFeKQEyijLryRqOrXEZGEdaV7jq5rkCkd8E94NfAJJJsx19cpZwI
+ VMab/oDqLJT6BA/Joj+HG7/6yPjtbeLgV3rypIchLpBn/ujeGGRFIVH5EnsLIO+8DLw8
+ UZh1tOFZ+EZcI+WJ8WecJUjfyAp6eEEua8NbgxGI5+KPe+yySvQF25H5HqSh4GDqZFQI
+ qdfLriRNiYYaGoPdZ+fqgBwj7UgYMaAq4eknh76RAjmyqav9xnHr162DtawPEzVHO59n
+ Q7uA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=grenoble.cnrs.fr header.i=@grenoble.cnrs.fr
- header.a=rsa-sha256 header.s=202106-grenoble.cnrs.fr header.b=AEYxKLHO
-Subject: Re: [Buildroot] Change config.txt Not Working
+ unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
+ header.s=20230601 header.b=j60LwxMH
+Subject: [Buildroot] [PATCH 1/1] package/bluez5_utils: bump to version 5.78
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -84,35 +100,45 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: James Hilliard <james.hilliard1@gmail.com>, Marcin Bis <marcin@bis.org.pl>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello!
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ package/bluez5_utils/bluez5_utils.hash | 2 +-
+ package/bluez5_utils/bluez5_utils.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Andy wrote:
-> I change the menuconfig option for the path to a file stored as
-> /boot/config.txt (image below) I then exit and then run 'make', I'm
-> expecting the file at board/output/images/rpi-firmware/config.txt to
-> be changed to the file at the specified path. Instead, there is no
-> change to the file; it is still the default file. Am I missing
-> something?
+diff --git a/package/bluez5_utils/bluez5_utils.hash b/package/bluez5_utils/bluez5_utils.hash
+index 1b10bfbf64..41e39e0b5c 100644
+--- a/package/bluez5_utils/bluez5_utils.hash
++++ b/package/bluez5_utils/bluez5_utils.hash
+@@ -1,5 +1,5 @@
+ # From https://www.kernel.org/pub/linux/bluetooth/sha256sums.asc:
+-sha256  5d032fdc1d4a085813554f57591e2e1fb0ceb2b3616ee56f689bc00e1d150812  bluez-5.77.tar.xz
++sha256  830fed1915c5d375b8de0f5e6f45fcdea0dcc5ff5ffb3d31db6ed0f00d73c5e3  bluez-5.78.tar.xz
+ # Locally computed
+ sha256  b499eddebda05a8859e32b820a64577d91f1de2b52efa2a1575a2cb4000bc259  COPYING
+ sha256  ec60b993835e2c6b79e6d9226345f4e614e686eb57dc13b6420c15a33a8996e5  COPYING.LIB
+diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
+index 59eb68de61..13a8ce2f0b 100644
+--- a/package/bluez5_utils/bluez5_utils.mk
++++ b/package/bluez5_utils/bluez5_utils.mk
+@@ -5,7 +5,7 @@
+ ################################################################################
+ 
+ # Keep the version and patches in sync with bluez5_utils-headers
+-BLUEZ5_UTILS_VERSION = 5.77
++BLUEZ5_UTILS_VERSION = 5.78
+ BLUEZ5_UTILS_SOURCE = bluez-$(BLUEZ5_UTILS_VERSION).tar.xz
+ BLUEZ5_UTILS_SITE = $(BR2_KERNEL_MIRROR)/linux/bluetooth
+ BLUEZ5_UTILS_INSTALL_STAGING = YES
+-- 
+2.34.1
 
-Are you sure you saved your .config before exiting menuconfig? What is
-the output of the following command?
-
-    grep BR2_PACKAGE_RPI_FIRMWARE_CONFIG_FILE .config
-
-Otherwise, you may try building your .config from the command line, like
-this:
-
-    make raspberrypi3_64_defconfig
-    ./utils/config --set-str BR2_PACKAGE_RPI_FIRMWARE_CONFIG_FILE board/andrew/rpi/config_3_64bit.txt
-
-Regards,
-
-Edgar.
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
