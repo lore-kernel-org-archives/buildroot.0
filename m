@@ -4,86 +4,68 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 58BA6CF6495
-	for <buildroot@archiver.kernel.org>; Sun, 29 Sep 2024 15:18:56 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3CA54CF6495
+	for <buildroot@archiver.kernel.org>; Sun, 29 Sep 2024 16:38:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E925F402D2;
-	Sun, 29 Sep 2024 15:18:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 8B63540353;
+	Sun, 29 Sep 2024 16:38:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id W4soO7U1pc1O; Sun, 29 Sep 2024 15:18:55 +0000 (UTC)
+ id EO0XfC9s-TUy; Sun, 29 Sep 2024 16:38:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C249840329
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 4AEE640345
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id C249840329;
-	Sun, 29 Sep 2024 15:18:54 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id E57761BF2A1
- for <buildroot@lists.busybox.net>; Sun, 29 Sep 2024 15:18:53 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 4AEE640345;
+	Sun, 29 Sep 2024 16:38:11 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 885EC1BF29F
+ for <buildroot@lists.busybox.net>; Sun, 29 Sep 2024 16:38:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id D42E1605F4
- for <buildroot@lists.busybox.net>; Sun, 29 Sep 2024 15:18:53 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 779A981189
+ for <buildroot@lists.busybox.net>; Sun, 29 Sep 2024 16:38:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uAnTc_ylkhaL for <buildroot@lists.busybox.net>;
- Sun, 29 Sep 2024 15:18:53 +0000 (UTC)
-X-Greylist: delayed 434 seconds by postgrey-1.37 at util1.osuosl.org;
- Sun, 29 Sep 2024 15:18:52 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 4919E605DE
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4919E605DE
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2001:868:100:600::216; helo=shout01.mail.de;
- envelope-from=kilian.zinnecker@mail.de; receiver=<UNKNOWN> 
-Received: from shout01.mail.de (shout01.mail.de [IPv6:2001:868:100:600::216])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 4919E605DE
- for <buildroot@buildroot.org>; Sun, 29 Sep 2024 15:18:51 +0000 (UTC)
-Received: from postfix03.mail.de (postfix03.bt.mail.de [10.0.121.127])
- by shout01.mail.de (Postfix) with ESMTP id B1AA8240D86
- for <buildroot@buildroot.org>; Sun, 29 Sep 2024 17:11:36 +0200 (CEST)
-Received: from smtp01.mail.de (smtp01.bt.mail.de [10.0.121.211])
- by postfix03.mail.de (Postfix) with ESMTP id 933A22605AC;
- Sun, 29 Sep 2024 17:11:36 +0200 (CEST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
- (No client certificate requested)
- by smtp01.mail.de (Postfix) with ESMTPSA id 52820240BD0;
- Sun, 29 Sep 2024 17:11:36 +0200 (CEST)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id l-TiZ42WkuOX for <buildroot@lists.busybox.net>;
+ Sun, 29 Sep 2024 16:38:08 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 1DC9D80F73
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1DC9D80F73
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1DC9D80F73
+ for <buildroot@buildroot.org>; Sun, 29 Sep 2024 16:38:07 +0000 (UTC)
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 71A9AB00571;
+ Sun, 29 Sep 2024 18:38:03 +0200 (CEST)
+From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun, 29 Sep 2024 17:11:24 +0200
-Message-ID: <20240929151124.103921-1-kilian.zinnecker@mail.de>
+Date: Sun, 29 Sep 2024 18:37:52 +0200
+Message-ID: <20240929163752.1493752-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.46.2
 MIME-Version: 1.0
-X-purgate: clean
-X-purgate: This mail is considered clean (visit http://www.eleven.de for
- further information)
-X-purgate-type: clean
-X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
-X-purgate: This mail is considered clean (visit http://www.eleven.de for
- further information)
-X-purgate: clean
-X-purgate-size: 2022
-X-purgate-ID: 154282::1727622696-E5CC9779-A863D3AB/0/0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=mail.de; s=mailde202009; t=1727622696;
- bh=+OHoIgBOes6VhHbig3MR2NGbfxI7s6F2oJ2skKwrg/4=;
- h=From:To:Cc:Subject:Date:Message-ID:From:To:CC:Subject:Reply-To;
- b=bpTGAMWAL8mpVP/F1E/XazwoFIPwjvtohsb6rRMPBmLSilEVDuQW4xge021Qwgu5/
- 77UfeBDNQkatPmdzG3MAMK+0uo0xXj1WJnhVdWpAvYrpLMCyj/uGug7ejAL9dZHO1q
- 4WY2+Jr5qDrGBdZ58MhyYjGHCqAtXkKesxgiX+2TzRPy+GWWY5K+QkI4jr45LWIrRB
- fVOb1VvrHMbUbap+4W7Nxkic16zyG0vh0ZUZEu5oR0rkyOnMpem4oIKlNViGxxdKMk
- eKGebEK6GxugvjPv36nZ3iRjTNrPdIeWtK+p9Dd4+kIuwTyhBXAa6WnS9vq0uguvV9
- QiUULjfYHDyGA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mail.de
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=free.fr; s=smtp-20201208; t=1727627884;
+ bh=G0ZZ4JFBmhPkle6HpS/6S2NEvyYx+i8Q/8hQZ87KXVk=;
+ h=From:To:Cc:Subject:Date:From;
+ b=jmuksj9FcCkIvyzt3GJV3lVDMEXqP63mwY4yluoTOkS/Bn/HvHluSUOShwjQHQqua
+ mQNPPDpAaS/nI7fVat+tVz9GFgEDjXrkg/JZ61SQTMYrXBpik9zyP+oxNanCss4yFh
+ itNltEUT00Rca/GwvYivF4P2JUApjiiFYmdCWKge7uQCYi+Q7Oba1Q7w+XOCyDROcs
+ aqtoMHpCXgybwdnsRFLu7kd8HPZsHZvK/wqvUr3EJN6XlsABaXiXW41MrWWUg+tgZb
+ k2uAmSJpE0Zztdi16l7jsnRO03eTC+mQES4uAsoZJEmbKK2ujMfBxfT47DI17btqep
+ rJ+U47+ifvTGA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=mail.de header.i=@mail.de header.a=rsa-sha256
- header.s=mailde202009 header.b=bpTGAMWA
-Subject: [Buildroot] [PATCH 1/1] configs/rock5b: Switch to mainline
- TrustedFirmware
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=jmuksj9F
+Subject: [Buildroot] [PATCH 1/1] linux: replace host-python3 with
+ BR2_PYTHON3_HOST_DEPENDENCY
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -95,62 +77,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: "kilian.zinnecker--- via buildroot" <buildroot@buildroot.org>
-Reply-To: kilian.zinnecker@mail.de
-Cc: Kilian Zinnecker <kilian.zinnecker@mail.de>
+Cc: Julien Olivain <ju.o@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Kilian Zinnecker <kilian.zinnecker@mail.de>
+Commit abce4a2b3 "linux: add BR2_LINUX_KERNEL_NEEDS_HOST_PYTHON3" [1]
+introduced a Kernel dependency on host-python3.
 
-The Rock 5b board support currently uses a binary trusted firmware
-blob from the rockchip-rkbin package. Recently, the Rock 5b's SoC,
-i.e., the rk3588, received mainline TrustedFirmware-A support:
+Since the Kernel does not have any specific requirements on host
+Python modules, or recent host Python version, this commit replaces
+the host-python3 dependency with BR2_PYTHON3_HOST_DEPENDENCY. This
+will skip the host-python3 compilation if a sufficient version (3.4 or
+greater at the time of this commit) is already present on host. This
+will save build time.
 
-https://review.trustedfirmware.org/c/TF-A/trusted-firmware-a/+/21840
-https://review.trustedfirmware.org/c/TF-A/trusted-firmware-a/+/29363
+This optimization was suggested by Peter, in [2].
 
-This patch changes the defconfig from using the rockchip-rkbin atf
-binary blob to building the TrustedFirmware-A for the rk3588 from
-source.
+Note 1: this commit was checked to ensure that Kernel v6.10.9 arm64
+defconfig (which does require a python3 interpreter to build) is
+working with Python 3.4.
 
-Signed-off-by: Kilian Zinnecker <kilian.zinnecker@mail.de>
+Note 2: BR2_PYTHON3_HOST_DEPENDENCY was introduced in commit b60729784
+"support/dependencies: add a check for python3" [3].
+
+[1] https://gitlab.com/buildroot.org/buildroot/-/commit/abce4a2b365276a7fa081d327289e5e6d8bdca7e
+[2] https://lists.buildroot.org/pipermail/buildroot/2024-September/763967.html
+[3] https://gitlab.com/buildroot.org/buildroot/-/commit/b60729784ab1c2f75dca30f924f4dd3176713ae8
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
- configs/rock5b_defconfig | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ linux/linux.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/configs/rock5b_defconfig b/configs/rock5b_defconfig
-index b88d8c5da3..8dc2053cdf 100644
---- a/configs/rock5b_defconfig
-+++ b/configs/rock5b_defconfig
-@@ -13,17 +13,23 @@ BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.01"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.07"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="rock5b-rk3588"
- BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
- BR2_TARGET_UBOOT_NEEDS_PYELFTOOLS=y
- BR2_TARGET_UBOOT_NEEDS_ROCKCHIP_RKBIN=y
-+BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
-+BR2_TARGET_UBOOT_NEEDS_ATF_BL31_ELF=y
- BR2_PACKAGE_ROCKCHIP_RKBIN=y
- BR2_PACKAGE_ROCKCHIP_RKBIN_TPL_FILENAME="bin/rk35/rk3588_ddr_lp4_2112MHz_lp5_2736MHz_v1.12.bin"
--BR2_PACKAGE_ROCKCHIP_RKBIN_BL31_FILENAME="bin/rk35/rk3588_bl31_v1.40.elf"
- BR2_PACKAGE_LINUX_FIRMWARE=y
- BR2_PACKAGE_LINUX_FIRMWARE_RTL_8169=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="2975ad055bd6e1ea3fc4179e8b785266785f0398"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_PLATFORM="rk3588"
-+BR2_TARGET_ARM_TRUSTED_FIRMWARE_IMAGES="bl31/bl31.elf"
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 0a213d17b5..111a21f039 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -139,7 +139,7 @@ endef
+ endif
  
- # Kernel
- BR2_LINUX_KERNEL=y
+ ifeq ($(BR2_LINUX_KERNEL_NEEDS_HOST_PYTHON3),y)
+-LINUX_DEPENDENCIES += host-python3
++LINUX_DEPENDENCIES += $(BR2_PYTHON3_HOST_DEPENDENCY)
+ endif
+ 
+ # If host-uboot-tools is selected by the user, assume it is needed to
 -- 
 2.46.2
 
