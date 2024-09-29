@@ -4,94 +4,94 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B52EBCF6497
-	for <buildroot@archiver.kernel.org>; Sun, 29 Sep 2024 20:15:34 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9001BCF6497
+	for <buildroot@archiver.kernel.org>; Sun, 29 Sep 2024 20:15:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 4402A80FA7;
-	Sun, 29 Sep 2024 20:15:34 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 5A0EA80FAF;
+	Sun, 29 Sep 2024 20:15:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 24B2ZG_hQl9K; Sun, 29 Sep 2024 20:15:32 +0000 (UTC)
+ id SnoQLuuOpWbi; Sun, 29 Sep 2024 20:15:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6B1AC80FA1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EA8C18101F
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6B1AC80FA1;
-	Sun, 29 Sep 2024 20:15:29 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id EA8C18101F;
+	Sun, 29 Sep 2024 20:15:36 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 4ACF41BF334
- for <buildroot@lists.busybox.net>; Sun, 29 Sep 2024 20:15:17 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 3F7FE1BF334
+ for <buildroot@lists.busybox.net>; Sun, 29 Sep 2024 20:15:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 39386402AC
- for <buildroot@lists.busybox.net>; Sun, 29 Sep 2024 20:15:17 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 2E152402AC
+ for <buildroot@lists.busybox.net>; Sun, 29 Sep 2024 20:15:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ua-4ADWe6l_A for <buildroot@lists.busybox.net>;
- Sun, 29 Sep 2024 20:15:16 +0000 (UTC)
+ id tJhoWhQvwQbh for <buildroot@lists.busybox.net>;
+ Sun, 29 Sep 2024 20:15:18 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::52f; helo=mail-ed1-x52f.google.com;
+ client-ip=2a00:1450:4864:20::52b; helo=mail-ed1-x52b.google.com;
  envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 1DD7D4014C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 1DD7D4014C
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com
- [IPv6:2a00:1450:4864:20::52f])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 1DD7D4014C
- for <buildroot@buildroot.org>; Sun, 29 Sep 2024 20:15:15 +0000 (UTC)
-Received: by mail-ed1-x52f.google.com with SMTP id
- 4fb4d7f45d1cf-5c8952f7f95so791947a12.0
- for <buildroot@buildroot.org>; Sun, 29 Sep 2024 13:15:15 -0700 (PDT)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org C887E4014C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org C887E4014C
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com
+ [IPv6:2a00:1450:4864:20::52b])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id C887E4014C
+ for <buildroot@buildroot.org>; Sun, 29 Sep 2024 20:15:17 +0000 (UTC)
+Received: by mail-ed1-x52b.google.com with SMTP id
+ 4fb4d7f45d1cf-5c89bdb9019so196443a12.0
+ for <buildroot@buildroot.org>; Sun, 29 Sep 2024 13:15:17 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1727640914; x=1728245714;
+ d=1e100.net; s=20230601; t=1727640916; x=1728245716;
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
  :subject:date:message-id:reply-to;
- bh=ceODNqSm9hg37wywX8Ojzcv3XUtRabHbELIzd4cVhkI=;
- b=M3l6ehiR1EsKS3FPkTX2qMgN3+cRH/jN/35UHuMUhigP76c+LB4FgEbg2lVvfNEaNo
- vk42RSIbdvG8DQnR1ejMtOR18dd3wz12/5Qvnx9ZcK29e25FZdVtzIZgzv+GidNuz7rr
- D2m6X39tVs/V0YqWcMnTrd/noGpDdUVsPy5MN5T6eMV/4P4pjFDQkyNysUrBZJ5zPfsU
- 6kcXXBwGQIMJkp7leOAZcQ8EIgjAiIPilcGBqcFmwoFg8UornpHn0GE3gtA+5wS4loGn
- SZTE2PIfEOw8GomGf4AwrkqZHloFRbmBHTNbzslEAz1gjyPjlgmLsgId7tHBZ0KqvkOS
- 8+HQ==
-X-Gm-Message-State: AOJu0Yy1cdPsDa1SHaMJbOZwXOgOO6s5r5n+yJmP4gkvvFlK2vm0NVtO
- utMmcZtGfhSsi6zp9OzuHBeaNFg9ooIJupvDbyfOrRCRHGIaqLijP+J0V00BFWZHR8FAM5Gh1BZ
- oyXs=
-X-Google-Smtp-Source: AGHT+IE5ryCg+nWkLAIlFMRrZv+TX9KfZV5+pHub130JQFLyulHo447Oy4h5ARIsoa+NXG4zTN2IdQ==
-X-Received: by 2002:a05:6402:2109:b0:5be:f3ae:b9ce with SMTP id
- 4fb4d7f45d1cf-5c88261a9a5mr8890540a12.27.1727640913912; 
- Sun, 29 Sep 2024 13:15:13 -0700 (PDT)
+ bh=CeJG81OZ8OQSShGXUwhwpIU/MBCtwAE+7QfGzGqhkyA=;
+ b=dukJpojaZpcYNHaLawPWL8q+93HjI35irV18+/Cu6/ATqo53tIJQIH2t26PIjQcL44
+ rSncqui8HP4/vsPP40qydSrJrWYXkIPXKgIdRgy0eU9Mf5tLAp1zM+RyqYlVcR0pbH3X
+ NHyWbCNNJgutWB+u4LETpTymmKbH9jsfE75vQOQ3Gd1QS5GknwEH6vivmiremfNdkHJO
+ PZh0KEXxZMbgpy3HPDBevrFkhQFAbWEGOU9N44YO9CDDKvmWxSHu9jCznKygs2eaSmXV
+ ArCBz+RkJ18LThirOYGg8VGE1tZS+TQmQSRa509htBzbjUvpzfzYnfN8MnwLa6VQMz5D
+ yQlQ==
+X-Gm-Message-State: AOJu0YznwA1DbBhGPHWRgqjLQ30DmLJVP8L4Of+3gCpEDXva0zq6ARMs
+ 0Oi7/2xjfH3Nwu+Nic4BM9bLPr2eGE1nt/z2S4+KLVT1OaghOcX8n/L1ijneR6NjihOg8UaJ1SI
+ 5Xro=
+X-Google-Smtp-Source: AGHT+IHfDNm16w8z2MwCE74zo16S7OJN8FcnA27T54ty4Chr8YJA1jk2wmht4Y70siDh2iS3/WeZLg==
+X-Received: by 2002:a50:f688:0:b0:5c2:4404:a193 with SMTP id
+ 4fb4d7f45d1cf-5c88260c5eamr7218908a12.34.1727640915307; 
+ Sun, 29 Sep 2024 13:15:15 -0700 (PDT)
 Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it
  (host-79-54-102-102.retail.telecomitalia.it. [79.54.102.102])
  by smtp.gmail.com with ESMTPSA id
- 4fb4d7f45d1cf-5c88245fbd2sm3537870a12.42.2024.09.29.13.15.12
+ 4fb4d7f45d1cf-5c88245fbd2sm3537870a12.42.2024.09.29.13.15.14
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Sun, 29 Sep 2024 13:15:13 -0700 (PDT)
+ Sun, 29 Sep 2024 13:15:15 -0700 (PDT)
 From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Sun, 29 Sep 2024 22:14:55 +0200
-Message-ID: <20240929201459.1761285-6-dario.binacchi@amarulasolutions.com>
+Date: Sun, 29 Sep 2024 22:14:56 +0200
+Message-ID: <20240929201459.1761285-7-dario.binacchi@amarulasolutions.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240929201459.1761285-1-dario.binacchi@amarulasolutions.com>
 References: <20240929201459.1761285-1-dario.binacchi@amarulasolutions.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1727640914; x=1728245714;
+ d=amarulasolutions.com; s=google; t=1727640916; x=1728245716;
  darn=buildroot.org; 
  h=content-transfer-encoding:mime-version:references:in-reply-to
  :message-id:date:subject:cc:to:from:from:to:cc:subject:date
  :message-id:reply-to;
- bh=ceODNqSm9hg37wywX8Ojzcv3XUtRabHbELIzd4cVhkI=;
- b=JXNek2UMptdyMeKHSRpPFKEmvU5+xE7ROahUkS2xy4Amd8w4MgNeLZgUHRAtasYKmM
- 9+K+FPHEDxZq83tptNo8xb9FpREn0Ri7F+U+CkblW2w5igHhmz64UjnW/S+lipfTV2+h
- ZAO4oAEEMRS/srz49JOMdhDoNeiydWv/63sG0=
+ bh=CeJG81OZ8OQSShGXUwhwpIU/MBCtwAE+7QfGzGqhkyA=;
+ b=bchcWHLQQHzvsg2lZo0aX07KCUu91/Q9NaKlcYvW3e6NCIYljX9p2UNpf6uxOfOpP3
+ zpQJByXGvULYcRDXBVhqybCt0DdkrnEJTB+3aj2VJ4UysyE3vslU+DhqwD7k+y6FXm6L
+ UG4yLG4sOQ8FYuPL9wPscdqDrIhpBI2lpFbRE=
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=amarulasolutions.com
 X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (1024-bit key) header.d=amarulasolutions.com
  header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=JXNek2UM
-Subject: [Buildroot] [PATCH v3 5/9] boot/uboot: pass -mno-fdpic if FDPIC is
+ header.b=bchcWHLQ
+Subject: [Buildroot] [PATCH v3 6/9] linux: pass -mno-fdpic if FDPIC is
  enabled
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -117,7 +117,7 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 From: Ben Wolsieffer <ben.wolsieffer@hefring.com>
 
 If the FDPIC ABI is enabled by default in the toolchain, it must be
-explicitly disabled when building U-Boot.
+explicitly disabled when building the kernel.
 
 Signed-off-by: Ben Wolsieffer <Ben.Wolsieffer@hefring.com>
 Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
@@ -125,25 +125,35 @@ Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 ---
 No changes since v1
 
- boot/uboot/uboot.mk | 5 +++++
- 1 file changed, 5 insertions(+)
+ linux/linux.mk | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
-index ab534a8b3a20..d8faef648fad 100644
---- a/boot/uboot/uboot.mk
-+++ b/boot/uboot/uboot.mk
-@@ -172,6 +172,11 @@ UBOOT_MAKE_OPTS += \
- 	HOSTLDFLAGS="$(HOST_LDFLAGS)" \
- 	$(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS))
- 
-+# Disable FDPIC if enabled by default in toolchain
-+ifeq ($(BR2_BINFMT_FDPIC),y)
-+UBOOT_MAKE_OPTS += KCFLAGS=-mno-fdpic
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 0a213d17b518..126e92e84c11 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -163,6 +163,7 @@ endif
+ LINUX_MAKE_FLAGS = \
+ 	HOSTCC="$(HOSTCC) $(subst -I/,-isystem /,$(subst -I /,-isystem /,$(HOST_CFLAGS))) $(HOST_LDFLAGS)" \
+ 	ARCH=$(KERNEL_ARCH) \
++	KCFLAGS="$(LINUX_CFLAGS)" \
+ 	INSTALL_MOD_PATH=$(TARGET_DIR) \
+ 	CROSS_COMPILE="$(TARGET_CROSS)" \
+ 	WERROR=0 \
+@@ -184,7 +185,12 @@ endif
+ # sanitize the arguments passed from user space in registers.
+ # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=82435
+ ifeq ($(BR2_TOOLCHAIN_GCC_AT_LEAST_8),y)
+-LINUX_MAKE_ENV += KCFLAGS=-Wno-attribute-alias
++LINUX_CFLAGS += -Wno-attribute-alias
 +endif
 +
- ifeq ($(BR2_TARGET_UBOOT_NEEDS_ATF_BL31),y)
- UBOOT_DEPENDENCIES += arm-trusted-firmware
- ifeq ($(BR2_TARGET_UBOOT_NEEDS_ATF_BL31_ELF),y)
++# Disable FDPIC if enabled by default in toolchain
++ifeq ($(BR2_BINFMT_FDPIC),y)
++LINUX_CFLAGS += -mno-fdpic
+ endif
+ 
+ ifeq ($(BR2_LINUX_KERNEL_DTB_OVERLAY_SUPPORT),y)
 -- 
 2.43.0
 
