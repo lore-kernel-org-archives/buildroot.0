@@ -1,90 +1,95 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E9313CE8379
-	for <buildroot@archiver.kernel.org>; Mon, 30 Sep 2024 17:36:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 53881CE8379
+	for <buildroot@archiver.kernel.org>; Mon, 30 Sep 2024 19:02:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9E9EC80C14;
-	Mon, 30 Sep 2024 17:36:55 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id EE143400BF;
+	Mon, 30 Sep 2024 19:02:34 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id G-JHKd4yTsU9; Mon, 30 Sep 2024 19:02:33 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B4186400E2
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp4.osuosl.org (Postfix) with ESMTP id B4186400E2;
+	Mon, 30 Sep 2024 19:02:33 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id DABD61BF2F5
+ for <buildroot@lists.busybox.net>; Mon, 30 Sep 2024 19:02:32 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id D73F980ED0
+ for <buildroot@lists.busybox.net>; Mon, 30 Sep 2024 19:02:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kiQKSHSkRUjQ; Mon, 30 Sep 2024 17:36:54 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B0DDE80C58
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B0DDE80C58;
-	Mon, 30 Sep 2024 17:36:54 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 10DED1BF290
- for <buildroot@lists.busybox.net>; Mon, 30 Sep 2024 17:36:53 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 0CEA6606D0
- for <buildroot@lists.busybox.net>; Mon, 30 Sep 2024 17:36:53 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qbPVQ3oAwcor for <buildroot@lists.busybox.net>;
- Mon, 30 Sep 2024 17:36:52 +0000 (UTC)
-Received-SPF: None (mailfrom) identity=mailfrom; client-ip=198.175.65.12;
- helo=mgamail.intel.com; envelope-from=andriy.shevchenko@linux.intel.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 2B64D606BD
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2B64D606BD
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 2B64D606BD
- for <buildroot@buildroot.org>; Mon, 30 Sep 2024 17:36:51 +0000 (UTC)
-X-CSE-ConnectionGUID: FrDQDeINRzOYj6/wzUVSwQ==
-X-CSE-MsgGUID: BCbPeqJFRmebYAer8ujapA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11211"; a="38212197"
-X-IronPort-AV: E=Sophos;i="6.11,166,1725346800"; d="scan'208";a="38212197"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
- by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
- 30 Sep 2024 10:36:40 -0700
-X-CSE-ConnectionGUID: BQSjiLbDQ9imRnCS6pkM3Q==
-X-CSE-MsgGUID: xXZ0rk0RT/C07HYaI5hzIw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,166,1725346800"; d="scan'208";a="72982769"
-Received: from smile.fi.intel.com ([10.237.72.54])
- by fmviesa006.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384;
- 30 Sep 2024 10:36:27 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98)
- (envelope-from <andriy.shevchenko@linux.intel.com>)
- id 1svKJs-0000000EspW-3yvJ; Mon, 30 Sep 2024 20:36:24 +0300
-Date: Mon, 30 Sep 2024 20:36:24 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Andy Yan <andyshrk@163.com>
-Message-ID: <ZvrhmHHKezLXHFI0@smile.fi.intel.com>
-References: <20240927183553.2866682-1-andriy.shevchenko@linux.intel.com>
- <1980998d.2daf.19237e561b7.Coremail.andyshrk@163.com>
+ id j8GVy94nDMiH for <buildroot@lists.busybox.net>;
+ Mon, 30 Sep 2024 19:02:32 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::62d; helo=mail-ej1-x62d.google.com;
+ envelope-from=francois.perrad@gadz.org; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 9F9F780E2C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9F9F780E2C
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com
+ [IPv6:2a00:1450:4864:20::62d])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 9F9F780E2C
+ for <buildroot@busybox.net>; Mon, 30 Sep 2024 19:02:31 +0000 (UTC)
+Received: by mail-ej1-x62d.google.com with SMTP id
+ a640c23a62f3a-a8a7596b7dfso612064666b.0
+ for <buildroot@busybox.net>; Mon, 30 Sep 2024 12:02:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1727722949; x=1728327749;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=6iysb/vr8wEQOdTcTn2vJn8vYg55orN87Rv/xB7+Bzc=;
+ b=NdRU6Qg0UFlMk+MT02EGOJ6L20RUIxS4dz2g6Xicll+h8RhrQMT83FPdE5lmchqXIO
+ sXez96TUUwkkEI85mqdP3/XRjR4taheq4eAdLqPn3CyeigVXGLfpiNMw3UEznqvkdkrv
+ ITanzhjnHWodlLjnJJ3WbdjlRfMuo1sodbXVxatmCUD0Zctj9QyGZ8bzQZ1GHET2ZE2g
+ u26OMqob9/IgAtZRaOZzypee2AKdSw3XC4fSsf6ig8s2+Z4lbS1AosDsoMxpydeeAy0B
+ fWz5qsQ0yBEqTs5D6eTeceOLir2JHH6Cny0b2a4VAZGF84Fq7kBj0ubFf9g9RjnsulEe
+ c9Iw==
+X-Gm-Message-State: AOJu0Yz+LLYXOU2wzhRlsaf71/xPZfFFkYKw8/wGohIHJH4FR7X1aNUr
+ ejvizI1FaNM3GrVI4oTJkZlIdDryHeD/PLN3VjoxHdRQxy0CFsPF16OZRb01GP+PUEj2JEgWB0R
+ agQ==
+X-Google-Smtp-Source: AGHT+IGZcte+EpWJ5dWe/M5AaXbHrlOsz3vrKXsUMeEjWBenlY1ZorI4PNw3uOoFvUYM1Y7J70KCMQ==
+X-Received: by 2002:a17:907:c88e:b0:a90:9fb5:2c43 with SMTP id
+ a640c23a62f3a-a967c049722mr66973066b.34.1727722949244; 
+ Mon, 30 Sep 2024 12:02:29 -0700 (PDT)
+Received: from vm-2404.. (206.34.66.37.rev.sfr.net. [37.66.34.206])
+ by smtp.gmail.com with ESMTPSA id
+ a640c23a62f3a-a93c27756fasm581547666b.18.2024.09.30.12.02.28
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Mon, 30 Sep 2024 12:02:28 -0700 (PDT)
+From: Francois Perrad <francois.perrad@gadz.org>
+To: buildroot@busybox.net
+Date: Mon, 30 Sep 2024 21:02:25 +0200
+Message-ID: <20240930190225.3923277-1-francois.perrad@gadz.org>
+X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-Content-Disposition: inline
-In-Reply-To: <1980998d.2daf.19237e561b7.Coremail.andyshrk@163.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
- t=1727717813; x=1759253813;
- h=date:from:to:cc:subject:message-id:references:
- mime-version:content-transfer-encoding:in-reply-to;
- bh=yTN7XouxPgDUN0nbJ3tNCdzW1T6ZBFeCS0V5jJU5GH8=;
- b=PUyb8M7CB6oECykEzcJxN8mcod3JhuTQpzWLBgRyy+PakDQ6WY1AQjT6
- VBid3lDhQ++0GGCT/OFjfDiZXzoOYy191zXkFHHuBmzN6C9Siw6CadWEk
- W9eCCSrvBl+9mS+KE9dY/nsQwnsbHTBMxrYj3AMwhvd/89oNB+Vd7gv7E
- vXwqWp65fsCte8i61dkffMEes0FAdJIzPR9OHZ0faIkfkv0+udp3ISrXD
- pCeOaCKU6CNNlR+nb2PHYqP+C92WGkFkS76Mrv3EyHSs86MMeMfqp6v1m
- pJ6sE+iALG7LrtzPkegv7ek/5HMQlff2/93EDZQGTTVcJFDhkTTjiOivV
- g==;
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=linux.intel.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gadz.org; s=google; t=1727722949; x=1728327749; darn=busybox.net;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=6iysb/vr8wEQOdTcTn2vJn8vYg55orN87Rv/xB7+Bzc=;
+ b=Bga+UIgLvxnVuvVTXljSmNf+/TsWsm2YnDAniAElfTAYD3N7ipLSmnmllNoJXrFXAs
+ qddi1vB0ygAevBfyXSpWb6rsQ8SeQ9mrXB+4by7maDPwwFF+9TLMD4UHXPRkDZclETWA
+ mItspgZ9pDmG58AxPR/KYhoCPp2WG45NDXjqMc7s0i7EQNELkz+1ZxRQZ1M+0jZCPJ2X
+ 34fL2kjzT8yrjpaKIjBJsfZLGTzPsFvrxcaW06gI+rBg+kuCoL3XpNnn+Hlb2OGDT+YL
+ 653fsKFLA48KvRqQzswgnkxW9mMavCpAvy07s5++YLyRq+n2Q6C4FhE0UwrqdMwMdXqw
+ cpQQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gadz.org
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256
- header.s=Intel header.b=PUyb8M7C
-Subject: Re: [Buildroot] [PATCH v2 1/1] package: Add iotools package
+ unprotected) header.d=gadz.org header.i=@gadz.org header.a=rsa-sha256
+ header.s=google header.b=Bga+UIgL
+Subject: [Buildroot] [PATCH] package/libfribidi: bump to version 1.0.16
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -96,31 +101,43 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Andy Yan <andyshrk@gmail.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-T24gU2F0LCBTZXAgMjgsIDIwMjQgYXQgMDU6MTA6MzJQTSArMDgwMCwgQW5keSBZYW4gd3JvdGU6
-Cj4gCj4gVGhhbmtzIGZvciB5b3VyIHBhdGNo77yMSSBoYXZlIGEgcXVpY2sgdGVzdCB3aXRoIHRo
-aXMgdG9vbCwgaXQgY2FuIHdvcmsgb24gYXJtNjQgcGxhdGZvcm0uCj4gQnV0IGkgZm91bmQgaXQg
-YWxzbyAgbGFja3Mgc29tZSBmZWF0dXJlcyB0aGF0IElPIGRvZXNuJ3QgaGF2ZSwgc3VjaCBhcyBp
-byBjbWQgc3VwcG9ydCBhIGxlbmd0aAo+IGFyZ3VtZW50cywgdGhhdCBtYWtlIGl0IGNhbiByZWFk
-IEl0IGNhbiByZWFkIGEgYmF0Y2ggb2YgcmVnaXN0ZXJzIGF0IG9uY2UuCj4gV291bGQgeW91IGNv
-bnNpZGVyIGFkZGluZyB0aGVzZSBmZWF0dXJlcyBpbiB0aGUgZnV0dXJlPwoKSSdtIG5vdCBzdXJl
-IEkgZ290IHRoaXMuIFRoZXJlIGFyZSB0d28gY29tbWFuZHMgbW1pb19kdW1wICh0byByZWFkIGFu
-eSBtZW1vcnkKbWFwcGVkIElPIHJhbmdlKSBhbmQgbW1pb19sb2FkICh0byB3cml0ZSB0aGUgcmFu
-Z2UgZnJvbSBhIGZpbGUpLgoKPiBBdCAyMDI0LTA5LTI4IDAyOjM0OjU5LCAiQW5keSBTaGV2Y2hl
-bmtvIiA8YW5kcml5LnNoZXZjaGVua29AbGludXguaW50ZWwuY29tPiB3cm90ZToKPiA+VGhlIGlv
-dG9vbHMgcGFja2FnZSBwcm92aWRlcyBhIHNldCBvZiBzaW1wbGUgY29tbWFuZCBsaW5lIHRvb2xz
-IHdoaWNoCj4gPmFsbG93IGFjY2VzcyB0byBoYXJkd2FyZSBkZXZpY2UgcmVnaXN0ZXJzLiBTdXBw
-b3J0ZWQgcmVnaXN0ZXIgaW50ZXJmYWNlcwo+ID5pbmNsdWRlIFBDSSwgSU8sIG1lbW9yeSBtYXBw
-ZWQgSU8sIFNNQnVzLCBDUFVJRCwgYW5kIE1TUi4gQWxzbyBpbmNsdWRlZAo+ID5hcmUgc29tZSB1
-dGlsaXRpZXMgd2hpY2ggYWxsb3cgZm9yIHNpbXBsZSBhcml0aG1ldGljLCBsb2dpY2FsLCBhbmQg
-b3RoZXIKPiA+b3BlcmF0aW9ucy4KPiA+Cj4gPklmIHlvdSBldmVyIGhhdmUgdG8gZGVidWcgaGFy
-ZHdhcmUsIHlvdSBjb3VsZCBwcm9iYWJseSB1c2UgdGhlc2UgdG9vbHMuCgotLSAKV2l0aCBCZXN0
-IFJlZ2FyZHMsCkFuZHkgU2hldmNoZW5rbwoKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxk
-cm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVp
-bGRyb290Cg==
+Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
+---
+ package/libfribidi/libfribidi.hash | 2 +-
+ package/libfribidi/libfribidi.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/package/libfribidi/libfribidi.hash b/package/libfribidi/libfribidi.hash
+index 29948fbba..9da9281c8 100644
+--- a/package/libfribidi/libfribidi.hash
++++ b/package/libfribidi/libfribidi.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  0bbc7ff633bfa208ae32d7e369cf5a7d20d5d2557a0b067c9aa98bcbf9967587  fribidi-1.0.15.tar.xz
++sha256  1b1cde5b235d40479e91be2f0e88a309e3214c8ab470ec8a2744d82a5a9ea05c  fribidi-1.0.16.tar.xz
+ sha256  32434afcc8666ba060e111d715bfdb6c2d5dd8a35fa4d3ab8ad67d8f850d2f2b  COPYING
+diff --git a/package/libfribidi/libfribidi.mk b/package/libfribidi/libfribidi.mk
+index ab7fe7030..ca0a39ccb 100644
+--- a/package/libfribidi/libfribidi.mk
++++ b/package/libfribidi/libfribidi.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBFRIBIDI_VERSION = 1.0.15
++LIBFRIBIDI_VERSION = 1.0.16
+ LIBFRIBIDI_SOURCE = fribidi-$(LIBFRIBIDI_VERSION).tar.xz
+ LIBFRIBIDI_SITE = https://github.com/fribidi/fribidi/releases/download/v$(LIBFRIBIDI_VERSION)
+ LIBFRIBIDI_LICENSE = LGPL-2.1+
+-- 
+2.43.0
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
