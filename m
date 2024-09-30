@@ -4,62 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 2A726CEB2C1
-	for <buildroot@archiver.kernel.org>; Mon, 30 Sep 2024 21:05:06 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 32EB2CEB2C2
+	for <buildroot@archiver.kernel.org>; Mon, 30 Sep 2024 21:20:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id C5D004017A;
-	Mon, 30 Sep 2024 21:05:05 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id CA558400AF;
+	Mon, 30 Sep 2024 21:20:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wZdUNp6ojW2d; Mon, 30 Sep 2024 21:05:04 +0000 (UTC)
+ id OdDgxQNNLE5y; Mon, 30 Sep 2024 21:20:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 74CA0400E5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A7F25400C5
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 74CA0400E5;
-	Mon, 30 Sep 2024 21:05:04 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 17E391BF348
- for <buildroot@lists.busybox.net>; Mon, 30 Sep 2024 21:05:03 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A7F25400C5;
+	Mon, 30 Sep 2024 21:20:56 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id DCC201BF38B
+ for <buildroot@lists.busybox.net>; Mon, 30 Sep 2024 21:20:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 076A780E8C
- for <buildroot@lists.busybox.net>; Mon, 30 Sep 2024 21:05:03 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id CBE1760659
+ for <buildroot@lists.busybox.net>; Mon, 30 Sep 2024 21:20:54 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Rn9T2WWu40zg for <buildroot@lists.busybox.net>;
- Mon, 30 Sep 2024 21:05:02 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id OhT9Lh41C8Sa for <buildroot@lists.busybox.net>;
+ Mon, 30 Sep 2024 21:20:54 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
  client-ip=2001:868:100:600::216; helo=shout01.mail.de;
  envelope-from=kilian.zinnecker@mail.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org C97E180E85
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org C97E180E85
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org F26D060595
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org F26D060595
 Received: from shout01.mail.de (shout01.mail.de [IPv6:2001:868:100:600::216])
- by smtp1.osuosl.org (Postfix) with ESMTPS id C97E180E85
- for <buildroot@buildroot.org>; Mon, 30 Sep 2024 21:05:00 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id F26D060595
+ for <buildroot@buildroot.org>; Mon, 30 Sep 2024 21:20:53 +0000 (UTC)
 Received: from postfix03.mail.de (postfix03.bt.mail.de [10.0.121.127])
- by shout01.mail.de (Postfix) with ESMTP id D3387240EC0;
- Mon, 30 Sep 2024 23:04:58 +0200 (CEST)
-Received: from smtp01.mail.de (smtp04.bt.mail.de [10.0.121.214])
- by postfix03.mail.de (Postfix) with ESMTP id B28EE260286;
- Mon, 30 Sep 2024 23:04:58 +0200 (CEST)
+ by shout01.mail.de (Postfix) with ESMTP id 2C92E240F1F;
+ Mon, 30 Sep 2024 23:20:52 +0200 (CEST)
+Received: from smtp01.mail.de (smtp01.bt.mail.de [10.0.121.211])
+ by postfix03.mail.de (Postfix) with ESMTP id 0A503260286;
+ Mon, 30 Sep 2024 23:20:52 +0200 (CEST)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
  (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
  key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
  (No client certificate requested)
- by smtp01.mail.de (Postfix) with ESMTPSA id EE511240A18;
- Mon, 30 Sep 2024 23:04:57 +0200 (CEST)
-Message-ID: <cbab2142-67df-40ee-a508-659775259385@mail.de>
-Date: Mon, 30 Sep 2024 23:04:55 +0200
+ by smtp01.mail.de (Postfix) with ESMTPSA id BE8FB240571;
+ Mon, 30 Sep 2024 23:20:51 +0200 (CEST)
+Message-ID: <79861be1-00c9-4f61-baca-2a276683910e@mail.de>
+Date: Mon, 30 Sep 2024 23:20:49 +0200
 MIME-Version: 1.0
-To: Andrew McCann <andrew.2.622266@gmail.com>
-References: <CAPKzRz-HU2_WJesQKDn_Nj8dZLgzYpJXL9+Gt6tH1Xgk8LzT=A@mail.gmail.com>
- <763b02bb-2b74-4afc-b670-d41183bef12c@grenoble.cnrs.fr>
- <CAPKzRz83KTOgnyyBBuZjzV7uSti+G05KaUnM4=mFV8U2GhcKCw@mail.gmail.com>
- <97e1c0a9-9ebc-4b45-b231-75ac947a7ead@mail.de>
- <CAPKzRz87tMVoYkmSMrCfVB8xw-6CQq45MfVz0jK_yTExgR-yaw@mail.gmail.com>
+To: Quentin Schulz <quentin.schulz@cherry.de>, buildroot@buildroot.org
+References: <20240929151124.103921-1-kilian.zinnecker@mail.de>
+ <2460269a-e521-4add-ac09-6bd1b0a7a872@cherry.de>
 Content-Language: en-US
-In-Reply-To: <CAPKzRz87tMVoYkmSMrCfVB8xw-6CQq45MfVz0jK_yTExgR-yaw@mail.gmail.com>
+In-Reply-To: <2460269a-e521-4add-ac09-6bd1b0a7a872@cherry.de>
 X-purgate: clean
 X-purgate: This mail is considered clean (visit http://www.eleven.de for
  further information)
@@ -68,26 +65,27 @@ X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
 X-purgate: This mail is considered clean (visit http://www.eleven.de for
  further information)
 X-purgate: clean
-X-purgate-size: 778
-X-purgate-ID: 154282::1727730298-DACAF6E7-5DC5FC0A/0/0
+X-purgate-size: 726
+X-purgate-ID: 154282::1727731251-064C8779-E29731AA/0/0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=mail.de; s=mailde202009; t=1727730298;
- bh=1avr+atW9L9EbQg3urjMCZW4X71B3YYI+Y7qyrpV+No=;
- h=Message-ID:Date:Subject:To:Cc:From:From:To:CC:Subject:Reply-To;
- b=n0g2HcOOnvnU3/S1LU5ZjX5OqI4NocnrxpV5y7cH6zJTTJDgDJ/esibT88HkUkJHX
- 4qlZnc487699otWqlrkfWxUzb2Pz1PrtLlRyEnBei+o4b7zbpnyu9Okt7fBCVJjODQ
- MZc6pQJoPvHUgVAFAnCJfGTDvewvaHG6IxDzXHBa2wiOyb8d2FtRU4D+38WBgboHVV
- 5hQCmI+KA8sdQc62+vGkokme/6wkW5iAauX+I96fhcxz94Uw5k7Xaiu9dRJiRByw1a
- Tu7Ke7Z0u5adRpBiE7LMLqG8u0Lfv0Xt35OzQ23SnHFekfi5Wr8/X4vEue/dh/gHLc
- ez0e1Sp6a6Vag==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=mail.de; s=mailde202009; t=1727731252;
+ bh=aUKAsUQhyjhk2g4iobqhVDu/U+jhZWyNEWcU7lh0Fo0=;
+ h=Message-ID:Date:Subject:To:From:From:To:CC:Subject:Reply-To;
+ b=OCXSYdAeKUr0P0T8hYR3A5QH+F880zYLNbwEX4DB0O1LJyZe3SqCuJ/HxNzf2TBQz
+ mHKm0XY4cv4BIYwWiXjVf0Nar0KlRB3SWtTsImWgcma0G6SE8S7bWJZE/arGuJroqA
+ utkBWYV0s2qH3j45gixS4NuStSTLIFLDPVKdppmFUSlJePSY0jazQHeauHGiiso4qU
+ wjADk6vkeQIij+nQFkNjrtjvW6G2ux5rA+G2X+NebuKekkL3oqk/QTHXzf644QYnW+
+ 2OkXM+w6GDGkN+u1wWvweFybAUAw8g2J0yOaZyU0NqhPpjxKoeYRAlq2d8K5tCOSNP
+ JSilJtK+h+rIg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=mail.de
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=mail.de header.i=@mail.de header.a=rsa-sha256
- header.s=mailde202009 header.b=n0g2HcOO
-Subject: Re: [Buildroot] Change config.txt Not Working
+ header.s=mailde202009 header.b=OCXSYdAe
+Subject: Re: [Buildroot] [PATCH 1/1] configs/rock5b: Switch to mainline
+ TrustedFirmware
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,25 +99,31 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Kilian Zinnecker via buildroot <buildroot@buildroot.org>
 Reply-To: Kilian Zinnecker <kilian.zinnecker@mail.de>
-Cc: Edgar Bonet <bonet@grenoble.cnrs.fr>, buildroot@buildroot.org
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="utf-8"; Format="flowed"
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGkgQW5keSwKCj4gVGhhbmtzIHZlcnkgbXVjaCBmb3IgeW91ciByZXNwb25zZS7CoCBJIHdhcyBz
-dWNjZXNzZnVsIHVwZGF0aW5nIHRoZSAKPiBjb25maWcudHh0IHVzaW5nIHlvdXIgc2VyaWVzIG9m
-IGNvbW1hbmRzLsKgIFNvIEkgc3VwcG9zZSBJIGRpZG4ndCBoYXZlIAo+IHNvbWUgcHJvcGVyIGNs
-ZWFudXAuwqAgSSBkaWQgbm90IGtub3cgYWJvdXQgdGhlc2UgY29tbWFuZHMsIGFuZCBJIGRvbid0
-IAo+IGJlbGlldmUgdGhleSBhcmUgcmVmZXJlbmNlZCBpbiB0aGUgYnVpbGRyb290IGRvY3VtZW50
-YXRpb24uwqAgSXMgdGhlcmUgYSAKPiBwbGFjZSB0byByZWFkIGFib3V0IHRoZW0/CgpHbGFkIHRv
-IGhlbHAhIEhhdmUgYSBsb29rIGhlcmU6Cmh0dHBzOi8vYnVpbGRyb290Lm9yZy9kb3dubG9hZHMv
-bWFudWFsL21hbnVhbC5odG1sI3JlYnVpbGQtcGtnCgpBbHNvIHNlZSBoZXJlLCB0aGUgKHNhbWU/
-KSBkb2N1bWVudGF0aW9uIGluc2lkZSB0aGUgYnVpbGRyb290IHJlcG9zaXRvcnk6CgpodHRwczov
-L2dpdGxhYi5jb20vYnVpbGRyb290Lm9yZy9idWlsZHJvb3QvLS9ibG9iLzIwMjQuMDIuNi9kb2Nz
-L21hbnVhbC9yZWJ1aWxkaW5nLXBhY2thZ2VzLmFkb2M/cmVmX3R5cGU9dGFncwoKU28sIGlmIHlv
-dSBoYXBwZW4gdG8gZmluZCBzb21lIHR5cG8gb3IgaGF2ZSBzb21lIGlkZWEgZm9yIGltcHJvdmVt
-ZW50LCAKcGF0Y2hlcyBhcmUgb2YgY291cnNlIGFwcHJlY2lhdGVkLCBJIGd1ZXNzIDopCgpCZXN0
-IHJlZ2FyZHMsCktpbGlhbgpfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBsaXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0
-dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9tYWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
+Hi Quentin,
+
+> Is it really reasonable to use a random commit in the master branch?
+> 
+> The v2.12 tag should happen somewhere in November/December if it follows 
+> the release cycle of the last few releases, shouldn't we rather wait for 
+> that?
+
+My thoughts were, that it might be better to take the commit from the 
+master branch of the upstream ATF, than the binary blob. And switching 
+to the release version can be done, when it is released.
+
+However, I also understand, that one might argue, that a rather random 
+commit from the master branch might not be so stable vs. the binary 
+blob. Hence, for me it would also be ok if we wait till v2.12 is 
+released. What do you think?
+
+Best regards,
+Kilian
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
