@@ -4,175 +4,70 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 09416CF649D
-	for <buildroot@archiver.kernel.org>; Mon, 30 Sep 2024 09:22:05 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id B1708CF649D
+	for <buildroot@archiver.kernel.org>; Mon, 30 Sep 2024 09:32:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A685D80B0E;
-	Mon, 30 Sep 2024 09:22:05 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 79B3F80F42;
+	Mon, 30 Sep 2024 09:32:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GLMbpW3VXcZ5; Mon, 30 Sep 2024 09:22:04 +0000 (UTC)
+ id 2ixfqvJ-e6Ne; Mon, 30 Sep 2024 09:32:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B049980BCE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7CD7780F45
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B049980BCE;
-	Mon, 30 Sep 2024 09:22:04 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 32F6B1BF955
- for <buildroot@lists.busybox.net>; Mon, 30 Sep 2024 09:22:03 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7CD7780F45;
+	Mon, 30 Sep 2024 09:32:25 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 404A71BF40E
+ for <buildroot@lists.busybox.net>; Mon, 30 Sep 2024 09:32:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1D518404C2
- for <buildroot@lists.busybox.net>; Mon, 30 Sep 2024 09:22:03 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 3C76780C48
+ for <buildroot@lists.busybox.net>; Mon, 30 Sep 2024 09:32:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id IEe5ziAxdGuK for <buildroot@lists.busybox.net>;
- Mon, 30 Sep 2024 09:22:01 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a01:111:f403:260c::60f;
- helo=eur03-vi1-obe.outbound.protection.outlook.com;
- envelope-from=quentin.schulz@cherry.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 5685340180
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 5685340180
-Received: from EUR03-VI1-obe.outbound.protection.outlook.com
- (mail-vi1eur03on2060f.outbound.protection.outlook.com
- [IPv6:2a01:111:f403:260c::60f])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 5685340180
- for <buildroot@buildroot.org>; Mon, 30 Sep 2024 09:22:00 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=H4F4TvZ+LwKEGccJHW0WwWoGWu1n0wCodTT17TTnBVh6/X9p718KUinNBRVQk0sRD8XgWWfIFeVtObFO1rcBldSJDuEl6JzPJfL/rz2fhiQxOGniFI2UKkuwIF6OCZ0WiA0A4y2snSvG2iXE+CwNNuiPteV6rRysZBIypSAg/9cw+90DfAmg6SZeFLmv5BukWpRS8FKouqhdo9cUaXZHL6zwiAOiA3I7W5oPkA9M3hJQlWH9SO+g6HsHv3cEioHt2QaOJ0Jd1i8zYb3caWNB7FUh/3yQH7iYdgQoYaGofxRpUDftrVJOphAnvDUGiNdxgLmr6CYPohhDuYb3E98cjw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Ysz6hb7EHtZAgi+q8Y98IiYzqusBMvARXh4tI15I6iU=;
- b=xcsGJrXjLnEnCt9CCIyEE1ZA4fgCTK6AQ6MwL5JQWQciGy2Kh2Oez/e4l/nWmNsYtdEKiQl2cklPVLbdMA72h8OUVyo5mft0o14AvvFYbc4lTtRT/hgnjPHxVa6XhxP5qSWIcyDlu4wEN6FengUK9YeDpjllJ4gefhRyUiJjejbVSmbYuUUWsKdE6r6TiVFBbJMNsS7fS6PeMdiwn7kiSiXgSyB2XSxFcQETCkyF7cTmwU9u0JwCrXmr9dUiO1Szfky/yiBjkL6uOqHAvuQy+Xe3wHv2WScIi78aJCSjQpPQu07p9051PNIsZq5m/gziO59d0BT6eVE43PNO1bPaWQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=cherry.de; dmarc=pass action=none header.from=cherry.de;
- dkim=pass header.d=cherry.de; arc=none
-Received: from AM9PR04MB8906.eurprd04.prod.outlook.com (2603:10a6:20b:409::9)
- by AM7PR04MB6886.eurprd04.prod.outlook.com (2603:10a6:20b:106::15)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8005.26; Mon, 30 Sep
- 2024 09:21:54 +0000
-Received: from AM9PR04MB8906.eurprd04.prod.outlook.com
- ([fe80::d379:5378:b1:cea]) by AM9PR04MB8906.eurprd04.prod.outlook.com
- ([fe80::d379:5378:b1:cea%2]) with mapi id 15.20.7918.024; Mon, 30 Sep 2024
- 09:21:54 +0000
-Message-ID: <2460269a-e521-4add-ac09-6bd1b0a7a872@cherry.de>
-Date: Mon, 30 Sep 2024 11:21:54 +0200
-User-Agent: Mozilla Thunderbird
-To: kilian.zinnecker@mail.de, buildroot@buildroot.org
-References: <20240929151124.103921-1-kilian.zinnecker@mail.de>
-Content-Language: en-US
-In-Reply-To: <20240929151124.103921-1-kilian.zinnecker@mail.de>
-X-ClientProxiedBy: FR2P281CA0166.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:99::13) To AM9PR04MB8906.eurprd04.prod.outlook.com
- (2603:10a6:20b:409::9)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id HK6tW3jX2Q8a for <buildroot@lists.busybox.net>;
+ Mon, 30 Sep 2024 09:32:22 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
+ helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org B7CA180C29
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org B7CA180C29
+Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id B7CA180C29
+ for <buildroot@buildroot.org>; Mon, 30 Sep 2024 09:32:21 +0000 (UTC)
+Received: from [192.168.178.36] (unknown [212.37.174.96])
+ (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+ key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+ (No client certificate requested)
+ by smtp.bubu1.eu (Postfix) with ESMTPSA id 7412C2C801B0
+ for <buildroot@buildroot.org>; Mon, 30 Sep 2024 11:32:18 +0200 (CEST)
+Message-ID: <f1394abb-fd3e-4dd7-9ee1-1a245a505804@bubu1.eu>
+Date: Mon, 30 Sep 2024 11:32:17 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM9PR04MB8906:EE_|AM7PR04MB6886:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6d0ec56c-39c7-45d4-6c58-08dce1315341
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|376014;
-X-Microsoft-Antispam-Message-Info: =?utf-8?B?R2ZTQ0d0Sm5mc3VWQmVDRS85TDZGMlFRdEt6VldvNnIzQTA5ck53SFdZT3Bt?=
- =?utf-8?B?b1M5bUV2bXNnYXh0V0hOMnlLUkhDdStjVjVMUXFRakRETUpPSjNWKzJCK0U3?=
- =?utf-8?B?Wk83MHFXYmovMHREc2ppQTdraWhUV3N1a1VJeWlrUEsxU2l2OFh3ZStKT3BJ?=
- =?utf-8?B?emk1amVlNk9PdkMxTHVKY3djaTA0b1NCQ2xZUFo4MFE0eHZwS2N2bldRTE5G?=
- =?utf-8?B?UW1qeWx3UGhOTmdyZC9WdEZSSHloaWpVRkF1eXUzS0NhZmxZTE1sM25yZTlp?=
- =?utf-8?B?YVN2VW1BMUllU1ZhMVhLN2JQSG1IdTJjSkJ1enpXQWh1MDJVa2lEUzd5L3Zr?=
- =?utf-8?B?VytNV3dDUjhzY0dKNnN1RWg4MVR0YWdiL1VoYlZXOFVYTUZmYjFoSHplNGtC?=
- =?utf-8?B?NEhXZFJNVEZTT3RTMjN4RE1SM0dZbzVBVXFUWGVJMkl2QW1qbHNDT29ueE5X?=
- =?utf-8?B?Y1JtWCtmYmdCMVdEVHJpUFArRGtISW9aTVhjQjJZa3ZqbHdwTVhQOUUvSVpv?=
- =?utf-8?B?VEE2UHAzZlVVZ3NKcStlcGRzbEREMXIxMzNiMlpKOTRSOUxSUGhGZXFXcmFS?=
- =?utf-8?B?Q3lMUkovYVliUGVsZ3JpcEFjV1FBY1ZZVk5ETW5wY1BSYlVzc0FDMEE1Vkt1?=
- =?utf-8?B?M1l5cXlvN1lBbG8zWWtuVks5VUsraHhDSVNyZXpQVnFROStoRWIrR2FRRmps?=
- =?utf-8?B?L2Y5cE9Fc3hJZWNPcFl1WS9zQVYvcGpxQkJTbTRUTVliRjZmVEFzaXdFOGs2?=
- =?utf-8?B?NWVpL0xZOTk2b2FjdGZudDExRUFIRmk5ZHBrZUNpZFRsTDd2aHNLZkFrSDc5?=
- =?utf-8?B?TStaRDRXaHZiVExmTDg2ZFliVmdZZTVnb2FoS2lnNHNpem9OOFpBOGhsUjhv?=
- =?utf-8?B?VmxObHFzQkNUWWU4UFYxZnA1elZNRHlMTXkySkV3WGV1R1N0ZHphN3F6azcw?=
- =?utf-8?B?TjI2TUdaazByUTdJZnlOQ3JCaHBZenN2ZTlKL1JtU0lYZ2xHZGlrMGEzRkJ2?=
- =?utf-8?B?dVIxRkdHN0xiQlMzeGpxL2ZaWmc5UDVxMVJOMzY1ZUc3YWxtV0w3UVBJZUVP?=
- =?utf-8?B?cFhranJxUk1NYmFmRUlHcndGTWVlUitiZnNCTHdLUnFZdGwxV2VGVS9EQnc1?=
- =?utf-8?B?UmJZbVJkSHlLSTlLa00yaVF0dGdwb01aOTJsUHprRDhWNnlDRit1aWIxV2tP?=
- =?utf-8?B?N2JLS1ZuaEJNanhuVlNOZXE3bnZIc2FIOUQweUJESFdiQXVLSllrU1BMNWt3?=
- =?utf-8?B?ZHNjellIVFVtNHZrbnZELzFFd0EycUpNR3lUU09CMURhdEJ2cndJUDkwMzRD?=
- =?utf-8?B?d2U5VWlhS3JydFNlN0ptQVFEbjR6OHNHaW1OUisvTS90OFhnYVB3Nlo4U0Fn?=
- =?utf-8?B?TXZiaHdVdmE2TVBnWVYvK3grWFVuNWFhTHdJL0JLOEhpQ0VxQ1lxcDZoNDUw?=
- =?utf-8?B?N1RtRjN4cjRGdDVmVzNESGpRdWZsYkpMOXo4ODhSZDJVcDFkTVFYZlR5RVly?=
- =?utf-8?B?eFF2Z3JQY0F5QVJ5RmZISUh3a05DZi9tWHZSQ0t3Y2NwUXFVNU9lamNWREY3?=
- =?utf-8?B?TW5sa0RIbGp6RzJxODhGMWdyY0dBRUdVRTdHMCt3elV5MS9lc21acXhzdXFs?=
- =?utf-8?B?U043bFdVMjM0aERKRnlvV0Q5NGxpb0pvM2MyMWlEYnZjd3lkZ1o1cU90WHlS?=
- =?utf-8?B?dXU3UWlzMnFSZW9FVjZoNXZGSVczWUc0dDVqQmJKdHVyRldTVFJkb2ZLSTlY?=
- =?utf-8?Q?OVLONpwYvxLZwuTM+4=3D?=
-X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:AM9PR04MB8906.eurprd04.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(13230040)(366016)(1800799024)(376014); DIR:OUT; SFP:1101; 
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZThEVVYzbkdYaGhwME9ZZ1VibmFzWlN3dnFCVGV5czZHbVdlMFhPWG0rWHlY?=
- =?utf-8?B?Z0s2ZTJmQlU2K3JoYjV0MFM0MysxaHh5ZndjZUZ5WEMrWmdFNE5EYWpKNEV3?=
- =?utf-8?B?Skc1Q1NnT1Y0aWRHbG16SmY2bzNUU0lRemRxQXkrcG5saW5MRkNGSnBibjlp?=
- =?utf-8?B?SFIwWmlJTjY4MkRiU1poYmliNnB0UXlWSHVzMnhtYmdYZVNCejZjaXRPeVBT?=
- =?utf-8?B?ZzRoTGZFallEbkMvVElNcFd3SnRJODFqeXV1Vy90WjBmYXUzZmUzajNOc2s1?=
- =?utf-8?B?OHF1OFFKOE8rcEN3MytDbXZVWTRtb3JvTDI5MkZtYVNDdEJFdHZpankwRTFl?=
- =?utf-8?B?QW5meC9SaklCVHhFVGNZWEZSMVkrbUhZUEkrbmxNSkNQZnExdHpnQU9hV1F5?=
- =?utf-8?B?cWx0V1BhVy9mMmxNaXNPb1M1UWM5TlVGQ28yY1oyOGtzWVRlaXdxZTZQbEZ5?=
- =?utf-8?B?TG9iZlNYMXdSVE9XV3NIcjUyQ1E1R1BuTkVlOVZlTFluUWdXRFhMY0kyQWlI?=
- =?utf-8?B?SW5xdTZQTWpmdDdNOTVBdC80VnJkZkErUnF3ZWlxMlVBcDBlT1lvMWNaditW?=
- =?utf-8?B?S1pBUEh3Z3NzOWxBSUFrc081MjlVSmdId01oanRrcHBKM3Q5bGR6TFpIQWN1?=
- =?utf-8?B?RXIyZ3k2Ulhyekx4NFVUWEF3cEtWeGZjRHRpTkJ2N0J0SG5rMXBuWUNZV1VI?=
- =?utf-8?B?TWdOOWJzUTVVZEVQWHJRSmFpQWJVRkFGYVAyS2VucWJIZDhleEp3eVZBS2tj?=
- =?utf-8?B?d0ZVSlB6OGVDMmNNL0tGdFphRzV0TFVURm43a2xMSWF2enpDMTd5eGVPS2h3?=
- =?utf-8?B?VVJ0eGNUNG95U1NHL01kelpXMndIc0dTOUdNUm9zN3VHZ1hYODZKUUZvUkZ6?=
- =?utf-8?B?NXFvUGJWZHN2QnZpaENQaFg2Ymt0aHhwTjR5NStkV1NTNkVDQldGY2haMXRN?=
- =?utf-8?B?M0oyQWd2bnl3WHVQNEIxbi9ZaWIrQWRCZE82TUJwd0FiUWVxU3RjbkdFUEU2?=
- =?utf-8?B?TXJpTms0Y3BWd0c3TDRwS2ZFL1BwTmJxWW9pK1QrL3VDS2VXbnh2aUhzbVVL?=
- =?utf-8?B?YWZaVDFRMUdiNXdFSDVFaXhUS3lYM0RlN3hBbzg3N0s1MGwyQlBhTUVFQktt?=
- =?utf-8?B?UThZNGoyU1J2dTdRNlkxK00wV0JTcHpnZWpIaEpvNFNnM2hXM0huQXVvNlJV?=
- =?utf-8?B?Sk1RTGY4akZlazU0cGhUcnQ3eUJmSkM1b1lBRlBqVHJpZDEyUnlTN1I3UUE5?=
- =?utf-8?B?N01LWTBJZ295Q0w3R21ZRDZpTmhpRnBzMVhSbklWNTMydGNZV0VmYmFNa3E0?=
- =?utf-8?B?VTNiRVBpeWRjT3U2UWFlSnVqTkQxNzM3TEFJOWc2Q3RvUDFucERvTE5US05h?=
- =?utf-8?B?RGdMYlZ0UlB0enRCdHNVajRkMnQ3TE1LR0RXZ3BrdVQ2UGI3OFhUL0NXRTdL?=
- =?utf-8?B?eFlIeXhPOW1TUjdTL01UYjBueXhnVlExZmNDd1pHaW5HYUt0QkFtV1ZyQXZ0?=
- =?utf-8?B?RXI5SHBaQkJDb202dEFMNjd2N0RYeklDcHNqakhSOS9iRnYzcjBnVGhvcDdZ?=
- =?utf-8?B?S1pQYm1SdnJNYUpQdFdKU1BUT3pNL2Ezeks4ay9TWGlrVGJ0VThpL0E0a3JS?=
- =?utf-8?B?aHlZMTdBclpPOXJ4dUwyM0NoeFlacTFqSHowUzZvVEF1bi92TCtwTWJnYkI3?=
- =?utf-8?B?VThhL3h4MEg1OWM3NnZIRmR4a0s2UUs3UXpjeXJhcEhRSDN1R1NtT2hrSlNU?=
- =?utf-8?B?bnh4T2VJaC9XSVl4TzlBVFRyWVBMb0RIcGtFdUg2cFlkcWlRei9PYmdWRTVl?=
- =?utf-8?B?V1R0L2lrUWZ6Z0tMaDNFT29uaXQyTWlDUXNTZXVPbTUzVkFxOHZJUjlFY3Q2?=
- =?utf-8?B?ZGdKeEpTMXg5cFV6WUFSSTFtWEVWMWtYZzEzY2ZGci83aXJSR1BzcGIrck5k?=
- =?utf-8?B?L0FQZ0NNNWNtSHdOWDBVbHpsTUhGblFOSVMzb2s4ZmUrcURhTUhYZHovOGYz?=
- =?utf-8?B?V1dXSUpvL2xZSWNqanoxekdZekhxTUU4ZnllNEx0R0JESWNtbVZsaXJTdzBI?=
- =?utf-8?B?WlhoaXkyeU1RNnI3bE42dHk1ZURCWU5QNFJKYTFVTW4wOWlLaFpQeDlBSG1B?=
- =?utf-8?B?ZW5uUzdCLzIvZS9ha1VhNUh3TEJIMkVjNXdDUk9WV3NCODdFd1pYUXVQSCt0?=
- =?utf-8?B?dkE9PQ==?=
-X-OriginatorOrg: cherry.de
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6d0ec56c-39c7-45d4-6c58-08dce1315341
-X-MS-Exchange-CrossTenant-AuthSource: AM9PR04MB8906.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Sep 2024 09:21:54.7636 (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 5e0e1b52-21b5-4e7b-83bb-514ec460677e
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: BPijbdDiRo430saf1Zz/6/qahba9B2NZ7J/2wLK7rc39HJ9oekJ6/wmo+KfISQB4V9YT9e6dI9b397mg0yRV6JMQF8HLykZL9Ap9tU0Edwo=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR04MB6886
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=cherry.de; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Ysz6hb7EHtZAgi+q8Y98IiYzqusBMvARXh4tI15I6iU=;
- b=iPw/hfQ2Qlo6pzXCus1xQK9V/PwEjXJpfz+wWQ8UNEWCostdHcCsV1l9dUaT7XKIF87LP11B28kDv8D0o05udKDKZvUTYHdpv8I+N1dAFihDpEKSSrx8v5WvbCrEo+H/RyzO/5r5R6wJPS91N3iHU4/PybGPn1SsO6iwiW5wlns=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=cherry.de
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=cherry.de header.i=@cherry.de header.a=rsa-sha256
- header.s=selector1 header.b=iPw/hfQ2
-X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=cherry.de;
-Subject: Re: [Buildroot] [PATCH 1/1] configs/rock5b: Switch to mainline
- TrustedFirmware
+User-Agent: Mozilla Thunderbird
+To: buildroot@buildroot.org
+References: <20240927230848.1853667-1-james.hilliard1@gmail.com>
+Content-Language: en-US
+In-Reply-To: <20240927230848.1853667-1-james.hilliard1@gmail.com>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=bubu1.eu; s=bubu; 
+ t=1727688738; bh=1Ic1MvERma0Qf7pJ5xoQlyBYUaukk5UKFcwLgweJb1w=;
+ h=Date:Subject:To:References:From:In-Reply-To;
+ b=TOf3P3U6DPi3p3HT4Bjrq8pTe1pWnM61rBA8ovwY9OdpU47awQ5tvVWUNLEftKIy/
+ nX2FDYGb4nWsCH0g9oa4O00M3usXrwm4iTuG/JMSzuEG/J8tLIUypfygPgeb3mNR2x
+ S6GuUJ1s8OVz/vkdg7RKoG76a8EguUb4MMk5HJDv6aejZ84zTXKn6ttYpWIp8hXWNh
+ dS8/jk6mDuQ7pREQ0+o4vvuVuvmP5ioN6VbZ1u9TXJLa0M5AZteKDWmk5ugGd4XVnz
+ fwlEksnLOl7wleuGhKSH5igAeKZY58JXe8SvEgpvGnAxGh2Et0qtMVdwxav4mhjdgB
+ P7adlXjW93J2A==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bubu1.eu
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bubu1.eu header.i=@bubu1.eu header.a=rsa-sha256
+ header.s=bubu header.b=TOf3P3U6
+Subject: Re: [Buildroot] [PATCH 1/2] package/python-dotenv: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -184,68 +79,92 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Quentin Schulz via buildroot <buildroot@buildroot.org>
-Reply-To: Quentin Schulz <quentin.schulz@cherry.de>
+From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
+Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Kilian,
+Hi James,
 
-On 9/29/24 5:11 PM, kilian.zinnecker--- via buildroot wrote:
-> From: Kilian Zinnecker <kilian.zinnecker@mail.de>
-> 
-> The Rock 5b board support currently uses a binary trusted firmware
-> blob from the rockchip-rkbin package. Recently, the Rock 5b's SoC,
-> i.e., the rk3588, received mainline TrustedFirmware-A support:
-> 
-> https://review.trustedfirmware.org/c/TF-A/trusted-firmware-a/+/21840
-> https://review.trustedfirmware.org/c/TF-A/trusted-firmware-a/+/29363
-> 
-> This patch changes the defconfig from using the rockchip-rkbin atf
-> binary blob to building the TrustedFirmware-A for the rk3588 from
-> source.
-> 
-> Signed-off-by: Kilian Zinnecker <kilian.zinnecker@mail.de>
+On 28.09.24 01:08, James Hilliard wrote:
+> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+
+I submitted this package in a similar patch a while ago as well:
+
+https://patchwork.ozlabs.org/project/buildroot/patch/20240822123936.726609-1-buildroot@bubu1.eu/
+
+So, I guess:
+
+Reviewed-by: Marcus Hoffmann <buildroot@bubu1.eu>
+
 > ---
->   configs/rock5b_defconfig | 10 ++++++++--
->   1 file changed, 8 insertions(+), 2 deletions(-)
+>   package/Config.in                        |  1 +
+>   package/python-dotenv/Config.in          |  7 +++++++
+>   package/python-dotenv/python-dotenv.hash |  5 +++++
+>   package/python-dotenv/python-dotenv.mk   | 13 +++++++++++++
+>   4 files changed, 26 insertions(+)
+>   create mode 100644 package/python-dotenv/Config.in
+>   create mode 100644 package/python-dotenv/python-dotenv.hash
+>   create mode 100644 package/python-dotenv/python-dotenv.mk
 > 
-> diff --git a/configs/rock5b_defconfig b/configs/rock5b_defconfig
-> index b88d8c5da3..8dc2053cdf 100644
-> --- a/configs/rock5b_defconfig
-> +++ b/configs/rock5b_defconfig
-> @@ -13,17 +13,23 @@ BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
->   BR2_TARGET_UBOOT=y
->   BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
->   BR2_TARGET_UBOOT_CUSTOM_VERSION=y
-> -BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.01"
-> +BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.07"
->   BR2_TARGET_UBOOT_BOARD_DEFCONFIG="rock5b-rk3588"
->   BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
->   BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
->   BR2_TARGET_UBOOT_NEEDS_PYELFTOOLS=y
->   BR2_TARGET_UBOOT_NEEDS_ROCKCHIP_RKBIN=y
-> +BR2_TARGET_UBOOT_NEEDS_ATF_BL31=y
-> +BR2_TARGET_UBOOT_NEEDS_ATF_BL31_ELF=y
->   BR2_PACKAGE_ROCKCHIP_RKBIN=y
->   BR2_PACKAGE_ROCKCHIP_RKBIN_TPL_FILENAME="bin/rk35/rk3588_ddr_lp4_2112MHz_lp5_2736MHz_v1.12.bin"
-> -BR2_PACKAGE_ROCKCHIP_RKBIN_BL31_FILENAME="bin/rk35/rk3588_bl31_v1.40.elf"
->   BR2_PACKAGE_LINUX_FIRMWARE=y
->   BR2_PACKAGE_LINUX_FIRMWARE_RTL_8169=y
-> +BR2_TARGET_ARM_TRUSTED_FIRMWARE=y
-> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION=y
-> +BR2_TARGET_ARM_TRUSTED_FIRMWARE_CUSTOM_VERSION_VALUE="2975ad055bd6e1ea3fc4179e8b785266785f0398"
+> diff --git a/package/Config.in b/package/Config.in
+> index e1ceb81dc0..77216dc70b 100644
+> --- a/package/Config.in
+> +++ b/package/Config.in
+> @@ -1092,6 +1092,7 @@ menu "External python modules"
+>   	source "package/python-docopt/Config.in"
+>   	source "package/python-docutils/Config.in"
+>   	source "package/python-dominate/Config.in"
+> +	source "package/python-dotenv/Config.in"
+>   	source "package/python-dpkt/Config.in"
+>   	source "package/python-dtschema/Config.in"
+>   	source "package/python-ecdsa/Config.in"
+> diff --git a/package/python-dotenv/Config.in b/package/python-dotenv/Config.in
+> new file mode 100644
+> index 0000000000..f9b42bd28e
+> --- /dev/null
+> +++ b/package/python-dotenv/Config.in
+> @@ -0,0 +1,7 @@
+> +config BR2_PACKAGE_PYTHON_DOTENV
+> +	bool "python-dotenv"
+> +	help
+> +	  Read key-value pairs from a .env file and set them as
+> +	  environment variables.
+> +
+> +	  https://github.com/theskumar/python-dotenv
+> diff --git a/package/python-dotenv/python-dotenv.hash b/package/python-dotenv/python-dotenv.hash
+> new file mode 100644
+> index 0000000000..710922fba3
+> --- /dev/null
+> +++ b/package/python-dotenv/python-dotenv.hash
+> @@ -0,0 +1,5 @@
+> +# md5, sha256 from https://pypi.org/pypi/python-dotenv/json
+> +md5  68abb78e05460ce558ca255de550e1ea  python-dotenv-1.0.1.tar.gz
+> +sha256  e324ee90a023d808f1959c46bcbc04446a10ced277783dc6ee09987c37ec10ca  python-dotenv-1.0.1.tar.gz
+> +# Locally computed sha256 checksums
+> +sha256  80619b7049f08c81683ad0e01f08f257a840652dd71ee83146d36658c7d2c2b9  LICENSE
+> diff --git a/package/python-dotenv/python-dotenv.mk b/package/python-dotenv/python-dotenv.mk
+> new file mode 100644
+> index 0000000000..324eea239e
+> --- /dev/null
+> +++ b/package/python-dotenv/python-dotenv.mk
+> @@ -0,0 +1,13 @@
+> +################################################################################
+> +#
+> +# python-dotenv
+> +#
+> +################################################################################
+> +
+> +PYTHON_DOTENV_VERSION = 1.0.1
+> +PYTHON_DOTENV_SITE = https://files.pythonhosted.org/packages/bc/57/e84d88dfe0aec03b7a2d4327012c1627ab5f03652216c63d49846d7a6c58
+> +PYTHON_DOTENV_SETUP_TYPE = setuptools
+> +PYTHON_DOTENV_LICENSE = BSD-3-Clause
+> +PYTHON_DOTENV_LICENSE_FILES = LICENSE
+> +
+> +$(eval $(python-package))
 
-Is it really reasonable to use a random commit in the master branch?
-
-The v2.12 tag should happen somewhere in November/December if it follows 
-the release cycle of the last few releases, shouldn't we rather wait for 
-that?
-
-Cheers,
-Quentin
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
