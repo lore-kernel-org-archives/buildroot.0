@@ -1,70 +1,95 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5ADCECE8343
-	for <buildroot@archiver.kernel.org>; Mon, 30 Sep 2024 13:53:14 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9B042CE8356
+	for <buildroot@archiver.kernel.org>; Mon, 30 Sep 2024 14:55:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2D59240593;
-	Mon, 30 Sep 2024 13:53:13 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1660B606BE;
+	Mon, 30 Sep 2024 14:55:20 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id w31oc6xY3eg8; Mon, 30 Sep 2024 14:55:19 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org EB1E3606D5
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id EB1E3606D5;
+	Mon, 30 Sep 2024 14:55:18 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id B12AA1BF335
+ for <buildroot@lists.busybox.net>; Mon, 30 Sep 2024 14:55:17 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp2.osuosl.org (Postfix) with ESMTP id 9FE1E40118
+ for <buildroot@lists.busybox.net>; Mon, 30 Sep 2024 14:55:17 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UkwTlZ59CkK4; Mon, 30 Sep 2024 13:53:10 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4DD5C4016B
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4DD5C4016B;
-	Mon, 30 Sep 2024 13:53:10 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 863261BF300
- for <buildroot@lists.busybox.net>; Mon, 30 Sep 2024 13:53:09 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 745FE40231
- for <buildroot@lists.busybox.net>; Mon, 30 Sep 2024 13:53:09 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iHQme2aPFS8H for <buildroot@lists.busybox.net>;
- Mon, 30 Sep 2024 13:53:07 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=176.9.145.28;
- helo=smtp.bubu1.eu; envelope-from=buildroot@bubu1.eu; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 8082C401B3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 8082C401B3
-Received: from smtp.bubu1.eu (smtp.bubu1.eu [176.9.145.28])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 8082C401B3
- for <buildroot@buildroot.org>; Mon, 30 Sep 2024 13:53:07 +0000 (UTC)
-Received: from tuxedoOT.fritz.box (unknown [212.37.174.96])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
- (No client certificate requested)
- by smtp.bubu1.eu (Postfix) with ESMTPSA id 385A02C801B0;
- Mon, 30 Sep 2024 15:53:04 +0200 (CEST)
-To: buildroot@buildroot.org
-Date: Mon, 30 Sep 2024 15:53:02 +0200
-Message-Id: <20240930135303.3015837-1-buildroot@bubu1.eu>
-X-Mailer: git-send-email 2.34.1
+ id QYXjQqFpJdxu for <buildroot@lists.busybox.net>;
+ Mon, 30 Sep 2024 14:55:16 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::634; helo=mail-ej1-x634.google.com;
+ envelope-from=andrew.2.622266@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 1CB01400BF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1CB01400BF
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com
+ [IPv6:2a00:1450:4864:20::634])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1CB01400BF
+ for <buildroot@buildroot.org>; Mon, 30 Sep 2024 14:55:16 +0000 (UTC)
+Received: by mail-ej1-x634.google.com with SMTP id
+ a640c23a62f3a-a8d4093722bso682335466b.0
+ for <buildroot@buildroot.org>; Mon, 30 Sep 2024 07:55:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1727708114; x=1728312914;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=L7CwIHc5GgN4+3+MeP28+tO0eyj7FQ+Zf/z2jqv1/rI=;
+ b=lNkOf2Zg3PSb1U3p9ccTBKcimCjby40Syg2e87P6q1/B6QccH70pkQ2o1QiR/ACPio
+ E1tvaE54PMFmMJHFHiSChSXHgRtk/kFFQZoQ6VlcnZ0jf4k2e2fvoYG75Iu/VOQukx26
+ vd/CHnPIgoucsutAT2nBzdMFOm05asiLBT2UaLN9RJkP0RmBaxqQ0MJc694jIB8g40y/
+ eWZdL+nvlgNVpPr/9Anjubt/5EAK1HkONz6Et1jqExXM7ivv3gun4ge6VcxmZV4yaeX1
+ 5WTarsnW7/k2OVzNCbgEU8W3Rd/NGRc6ktvf66h5IZmPexfmm3Wc9aQd1h6I4KKIPngL
+ JyeQ==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCUMXhGvF3WvwrwxXGorM+axKOhjltKvABNvNQ3nVQ7+YsorFTMrxOSAHWoqPIw49JqoRF3dg6ZGaOo=@buildroot.org
+X-Gm-Message-State: AOJu0YyyTMDANopJnz4ZfXYhDRDlhwuvPDqWT2ubemRgk7fsrxT5Qkvj
+ 99Wq6GJ1Rx+6fIP9iVdABLBdDKoNwOR3SENj5NHKFkF9NEIFKQewHp+rbNHNrbOMTJXtkYY/cMF
+ jT5JOX0MO0vpR1MhFvgf3b4yJIuM=
+X-Google-Smtp-Source: AGHT+IGDaaxcOPSUosPF2CsSDqaayHznBnjvMXi5TJHHpUJ8nQaB9uHC02muwHuamxr2V2AESoD2srF+mrXPUQoU580=
+X-Received: by 2002:a17:907:2d0a:b0:a8a:43bd:a9e8 with SMTP id
+ a640c23a62f3a-a93c4a9d65dmr1412308466b.65.1727708113790; Mon, 30 Sep 2024
+ 07:55:13 -0700 (PDT)
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=bubu1.eu; s=bubu; 
- t=1727704384; bh=woWHBRRD+3IoLniSBraeVK5eSrnAys2xLnQ3zXomX48=;
- h=From:To:Cc:Subject:Date;
- b=PLNdgqC5T+4lfX2l5evpidn9YJzaNoWIvBFqwPtzoon3YtrDuzvU3ZtVgEzQvh+/H
- W2sgd+SbSqSvFjBd5Qo9Gft18HrbzkuG3+N72FQe/umaQPkfKBg279ebO7f1F/ZaE/
- PBRPLbwDX8ckhdHNR8nA/snzeKukdNXMwyPLOW14Yc2HwpBobnDPEza1b0moiQgR/t
- 33bjGsjqbe+8MOdYmsSVoDp/C4BGy7gROiitI1DClK6ITesOvWGBlibjHRxsa6tN/i
- A5Cskus5Abzhc8Vv9/vq1s30t0ddIZzG+ZuLbW+Dp5yUGX5RfhQV7W2zOIjsUVKG5T
- fzadtvRKeeAyg==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bubu1.eu
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bubu1.eu header.i=@bubu1.eu header.a=rsa-sha256
- header.s=bubu header.b=PLNdgqC5
-Subject: [Buildroot] [PATCH] package/python-uvicorn: bump to version 0.31.0
+References: <CAPKzRz-HU2_WJesQKDn_Nj8dZLgzYpJXL9+Gt6tH1Xgk8LzT=A@mail.gmail.com>
+ <763b02bb-2b74-4afc-b670-d41183bef12c@grenoble.cnrs.fr>
+ <CAPKzRz83KTOgnyyBBuZjzV7uSti+G05KaUnM4=mFV8U2GhcKCw@mail.gmail.com>
+ <97e1c0a9-9ebc-4b45-b231-75ac947a7ead@mail.de>
+In-Reply-To: <97e1c0a9-9ebc-4b45-b231-75ac947a7ead@mail.de>
+From: Andrew McCann <andrew.2.622266@gmail.com>
+Date: Mon, 30 Sep 2024 10:55:02 -0400
+Message-ID: <CAPKzRz87tMVoYkmSMrCfVB8xw-6CQq45MfVz0jK_yTExgR-yaw@mail.gmail.com>
+To: Kilian Zinnecker <kilian.zinnecker@mail.de>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1727708114; x=1728312914; darn=buildroot.org;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=L7CwIHc5GgN4+3+MeP28+tO0eyj7FQ+Zf/z2jqv1/rI=;
+ b=XchT+lSpSl4r8yyuCspUKb6h2KF6yNRTRGtR2aNx76QZNIPqLb+8YMoTTRuvo2UYcL
+ 3N9V3h/vJYijJYqNHx6FOeRez5LhyDqtSxv7stn7NDKbqFfyrbX588GWbwY+hNQwrJuv
+ 1BGwMC53SMbsKNMCTHhcJ/Z6v44B+kxoRWRHMR8iwDErkzeGj9kkGHtdiPMWrvUTPTQY
+ 9bDChrluuRNjC2WmliIYzC9OP+SguHQN5N6MsJCnVjQ71qK6XHIKpjuzfs0RTwDxY0b2
+ 84w2J5FV0X1Izcn4BgumMn3DVSiEnpMmefLnAVq87AiT+i6q+BufXfXrhlHG11wmSS5z
+ +T4w==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=XchT+lSp
+Subject: Re: [Buildroot] Change config.txt Not Working
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,55 +101,133 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Marcus Hoffmann via buildroot <buildroot@buildroot.org>
-Reply-To: Marcus Hoffmann <buildroot@bubu1.eu>
-Cc: James Hilliard <james.hilliard1@gmail.com>, Asaf Kahlon <asafka7@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: Edgar Bonet <bonet@grenoble.cnrs.fr>, buildroot@buildroot.org
+Content-Type: multipart/mixed; boundary="===============6271713780654225258=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Changelog:
-https://github.com/encode/uvicorn/blob/master/CHANGELOG.md#0310-2024-09-27
+--===============6271713780654225258==
+Content-Type: multipart/alternative; boundary="00000000000065ed670623576459"
 
-Signed-off-by: Marcus Hoffmann <buildroot@bubu1.eu>
----
- package/python-uvicorn/python-uvicorn.hash | 4 ++--
- package/python-uvicorn/python-uvicorn.mk   | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+--00000000000065ed670623576459
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/package/python-uvicorn/python-uvicorn.hash b/package/python-uvicorn/python-uvicorn.hash
-index 57839debd2..be6e2e325c 100644
---- a/package/python-uvicorn/python-uvicorn.hash
-+++ b/package/python-uvicorn/python-uvicorn.hash
-@@ -1,5 +1,5 @@
- # md5, sha256 from https://pypi.org/pypi/uvicorn/json
--md5  d75153180f8c19a1bf8299818d3acdb2  uvicorn-0.30.6.tar.gz
--sha256  4b15decdda1e72be08209e860a1e10e92439ad5b97cf44cc945fcbee66fc5788  uvicorn-0.30.6.tar.gz
-+md5  a5b7951b8d9e335fbee8002e9081c108  uvicorn-0.31.0.tar.gz
-+sha256  13bc21373d103859f68fe739608e2eb054a816dea79189bc3ca08ea89a275906  uvicorn-0.31.0.tar.gz
- # Locally computed sha256 checksums
- sha256  efe1acf3e62fb99c288b0ec73e5a773b7268ef4320fe757ea994214e4b63c371  LICENSE.md
-diff --git a/package/python-uvicorn/python-uvicorn.mk b/package/python-uvicorn/python-uvicorn.mk
-index e9676d3765..3917e3a4e7 100644
---- a/package/python-uvicorn/python-uvicorn.mk
-+++ b/package/python-uvicorn/python-uvicorn.mk
-@@ -4,9 +4,9 @@
- #
- ################################################################################
- 
--PYTHON_UVICORN_VERSION = 0.30.6
-+PYTHON_UVICORN_VERSION = 0.31.0
- PYTHON_UVICORN_SOURCE = uvicorn-$(PYTHON_UVICORN_VERSION).tar.gz
--PYTHON_UVICORN_SITE = https://files.pythonhosted.org/packages/5a/01/5e637e7aa9dd031be5376b9fb749ec20b86f5a5b6a49b87fabd374d5fa9f
-+PYTHON_UVICORN_SITE = https://files.pythonhosted.org/packages/0a/96/ee52d900f8e41cc35eaebfda76f3619c2e45b741f3ee957d6fe32be1b2aa
- PYTHON_UVICORN_SETUP_TYPE = pep517
- PYTHON_UVICORN_LICENSE = BSD-3-Clause
- PYTHON_UVICORN_LICENSE_FILES = LICENSE.md
--- 
-2.34.1
+Hi Kilian
+Thanks very much for your response.  I was successful updating the
+config.txt using your series of commands.  So I suppose I didn't have some
+proper cleanup.  I did not know about these commands, and I don't believe
+they are referenced in the buildroot documentation.  Is there a place to
+read about them?
+
+Regards
+Andy
+
+On Sun, Sep 29, 2024 at 3:29=E2=80=AFPM Kilian Zinnecker <kilian.zinnecker@=
+mail.de>
+wrote:
+
+> Hi Andrew,
+>
+>  > I appreciate your effort.  I am surprised we don't see the same thing.
+>  > I installed a new instance of buildroot.  Below are my settings of
+>  > PACKAGE_RPI_FIRMWARE configs.  I run make, but the contents of board/
+>  > andrew/rpi/config_3_64bit.txt do not end up in output/images/rpi-
+>  > firmware/config.txt.   I have't changed any other buildroot settings
+>  > in menuconfig to try to narrow down the issue.  Any other
+> suggestions?  > I'm guessing I'm making some small mistake, but I just
+> don't see it..
+>
+> I didn't try your or Edgar's steps myself. So just a suggestion, judging
+> from the outside, what might be the problem, without actually knowing:
+> Maybe you are missing some cleanup and rebuild step after changing your
+> ".config". Maybe try something like:
+>
+> $ make rpi-firmware-dirclean
+> $ make rpi-firmware-rebuild
+> $ make
+>
+> Ensure, that you have your modified BR2_PACKAGE_RPI_FIRMWARE_CONFIG_FILE
+> parameter inside your ".config" when doing these commands.
+>
+> Maybe also have look at the section "Understanding how to rebuild
+> packages" of:
+>
+> https://bootlin.com/~thomas/site/buildroot/common-usage.html
+>
+> Hope this helps and best regards,
+> Kilian
+>
+
+--00000000000065ed670623576459
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div>Hi Kilian</div><div>Thanks very much for your respons=
+e.=C2=A0 I was successful updating the config.txt using your series of comm=
+ands.=C2=A0 So I suppose I didn&#39;t have some proper cleanup.=C2=A0 I did=
+ not know about these commands, and I don&#39;t believe they are referenced=
+ in the buildroot documentation.=C2=A0 Is there a place to read about them?=
+</div><div><br></div><div>Regards</div><div>Andy<br></div></div><br><div cl=
+ass=3D"gmail_quote"><div dir=3D"ltr" class=3D"gmail_attr">On Sun, Sep 29, 2=
+024 at 3:29=E2=80=AFPM Kilian Zinnecker &lt;<a href=3D"mailto:kilian.zinnec=
+ker@mail.de">kilian.zinnecker@mail.de</a>&gt; wrote:<br></div><blockquote c=
+lass=3D"gmail_quote" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px soli=
+d rgb(204,204,204);padding-left:1ex">Hi Andrew,<br>
+<br>
+=C2=A0&gt; I appreciate your effort.=C2=A0 I am surprised we don&#39;t see =
+the same thing.<br>
+=C2=A0&gt; I installed a new instance of buildroot.=C2=A0 Below are my sett=
+ings of<br>
+=C2=A0&gt; PACKAGE_RPI_FIRMWARE configs.=C2=A0 I run make, but the contents=
+ of board/<br>
+=C2=A0&gt; andrew/rpi/config_3_64bit.txt do not end up in output/images/rpi=
+-<br>
+=C2=A0&gt; firmware/config.txt.=C2=A0 =C2=A0I have&#39;t changed any other =
+buildroot settings<br>
+=C2=A0&gt; in menuconfig to try to narrow down the issue.=C2=A0 Any other <=
+br>
+suggestions?=C2=A0 &gt; I&#39;m guessing I&#39;m making some small mistake,=
+ but I just <br>
+don&#39;t see it..<br>
+<br>
+I didn&#39;t try your or Edgar&#39;s steps myself. So just a suggestion, ju=
+dging <br>
+from the outside, what might be the problem, without actually knowing: <br>
+Maybe you are missing some cleanup and rebuild step after changing your <br=
+>
+&quot;.config&quot;. Maybe try something like:<br>
+<br>
+$ make rpi-firmware-dirclean<br>
+$ make rpi-firmware-rebuild<br>
+$ make<br>
+<br>
+Ensure, that you have your modified BR2_PACKAGE_RPI_FIRMWARE_CONFIG_FILE <b=
+r>
+parameter inside your &quot;.config&quot; when doing these commands.<br>
+<br>
+Maybe also have look at the section &quot;Understanding how to rebuild <br>
+packages&quot; of:<br>
+<br>
+<a href=3D"https://bootlin.com/~thomas/site/buildroot/common-usage.html" re=
+l=3D"noreferrer" target=3D"_blank">https://bootlin.com/~thomas/site/buildro=
+ot/common-usage.html</a><br>
+<br>
+Hope this helps and best regards,<br>
+Kilian<br>
+</blockquote></div>
+
+--00000000000065ed670623576459--
+
+--===============6271713780654225258==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============6271713780654225258==--
