@@ -4,91 +4,66 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA5EFCE8379
-	for <buildroot@archiver.kernel.org>; Mon, 30 Sep 2024 19:02:44 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 97A36CDD1A9
+	for <buildroot@archiver.kernel.org>; Mon, 30 Sep 2024 19:36:48 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 8F3C6400BF;
-	Mon, 30 Sep 2024 19:02:44 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 37A51402D8;
+	Mon, 30 Sep 2024 19:36:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 5SJHOdCVHsGK; Mon, 30 Sep 2024 19:02:43 +0000 (UTC)
+ id RYDQ31v4T5J2; Mon, 30 Sep 2024 19:36:47 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A4C2E402D2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org F2D80402BA
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id A4C2E402D2;
-	Mon, 30 Sep 2024 19:02:43 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 6E8B91BF2F5
- for <buildroot@lists.busybox.net>; Mon, 30 Sep 2024 19:02:41 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id F2D80402BA;
+	Mon, 30 Sep 2024 19:36:46 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id B6E841BF4E5
+ for <buildroot@lists.busybox.net>; Mon, 30 Sep 2024 19:36:45 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 657A880ED0
- for <buildroot@lists.busybox.net>; Mon, 30 Sep 2024 19:02:41 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id B26C3402BA
+ for <buildroot@lists.busybox.net>; Mon, 30 Sep 2024 19:36:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Qs8Rcs10n4tc for <buildroot@lists.busybox.net>;
- Mon, 30 Sep 2024 19:02:40 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::62c; helo=mail-ej1-x62c.google.com;
- envelope-from=francois.perrad@gadz.org; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 563CB80E2C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 563CB80E2C
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com
- [IPv6:2a00:1450:4864:20::62c])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 563CB80E2C
- for <buildroot@busybox.net>; Mon, 30 Sep 2024 19:02:40 +0000 (UTC)
-Received: by mail-ej1-x62c.google.com with SMTP id
- a640c23a62f3a-a8d29b7edc2so665208466b.1
- for <buildroot@busybox.net>; Mon, 30 Sep 2024 12:02:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1727722958; x=1728327758;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=rvhmgyDRbwMhu4ZGX2RwqfcwGpGs582wko128zdqOK4=;
- b=kW1apwmRDW8dNx5ehAYIj96jBSwp0N9P8zuKj+hcAwXFw5e4UQ6wXgteiDGuPfTY2J
- 2qi1UPApQuQjg+0W0NAn1s996ecB0Y0JHD0gAMxzlA5i4b7/HHbgAHorpk4qY8rJOOw5
- L1p2+y79z9c6HVf6UoRoVb03r5H4wM39FqVBXPRnn4e8HWoKd2vZ08oot0nkZKQ2bN/H
- Ppsij79zN6Na7z/mQ7kYjMxXv6g8Po67soGYT15WSn02ArSSyiMgfXcnzmYaYxN07yhO
- ErRlZgk2Rst2gAuFnIr9f2yHtNFCv3KJjlX50t/SHHGolc6p4CVpmnI8/jXnXiBzmYDU
- T1kA==
-X-Gm-Message-State: AOJu0Yy9xUdvoUIOP6dteQKfktkPt6+vwhkX3Dof2X3PBBUtItgtNV8s
- L+apYIaD7wR0C7AZQOgmg4FawRjwj4COjpmyd3jsjD+fwoNzp6p8bCv57XJGXgeIuMy6KSPOZWz
- u3A==
-X-Google-Smtp-Source: AGHT+IHvhl0/gULdk6sp1sijQHFD16SDCDtK18UvmSHc9gIoYOfuEU/EYM72MtjWNrLaCz11Pa4umQ==
-X-Received: by 2002:a17:906:c104:b0:a86:b762:52ec with SMTP id
- a640c23a62f3a-a93c4adf8ebmr1375582866b.51.1727722958207; 
- Mon, 30 Sep 2024 12:02:38 -0700 (PDT)
-Received: from vm-2404.. (206.34.66.37.rev.sfr.net. [37.66.34.206])
- by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-a93c2776dd4sm582060466b.16.2024.09.30.12.02.37
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Mon, 30 Sep 2024 12:02:37 -0700 (PDT)
-From: Francois Perrad <francois.perrad@gadz.org>
-To: buildroot@busybox.net
-Date: Mon, 30 Sep 2024 21:02:34 +0200
-Message-ID: <20240930190234.3923303-1-francois.perrad@gadz.org>
-X-Mailer: git-send-email 2.43.0
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id IhcsAxwQgGww for <buildroot@lists.busybox.net>;
+ Mon, 30 Sep 2024 19:36:44 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org BB8574029C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BB8574029C
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id BB8574029C
+ for <buildroot@buildroot.org>; Mon, 30 Sep 2024 19:36:43 +0000 (UTC)
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 969A5B0053D;
+ Mon, 30 Sep 2024 21:36:38 +0200 (CEST)
+From: Julien Olivain <ju.o@free.fr>
+To: buildroot@buildroot.org
+Date: Mon, 30 Sep 2024 21:36:27 +0200
+Message-ID: <20240930193627.50229-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.46.2
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gadz.org; s=google; t=1727722958; x=1728327758; darn=busybox.net;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=rvhmgyDRbwMhu4ZGX2RwqfcwGpGs582wko128zdqOK4=;
- b=A5+Jdj7iQblYtt4K/5X05t1jgLWmTFlvOdtpomRNPr8cOtPCLbEJqJn525nEtJXRzY
- fcJz+3auR5bPoRPH3s+80eEN4P4y+nZGrgQtUR47LMYuffoKjmQoip5KMvH3XdexyVkX
- QZTvl+XjNEIzVbwL7vCijv2Sf+J4Xncgq0v5Yunh/tJLVnVsiwD2FIDR80+I7kqx1A1O
- WqlFyIMVpfO8HWQHTAAHsfEs5x8CVsCKy26tQzr5NlBtWmUvq2Gpz5QpAFsqMT2cqYkK
- U93tg3Hf7c7XeTcGTvDa0u+yV4ovX9tiTcJowxpDcib3uHy0GKcj9x4Je5j0gqvLVlJE
- TrfQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1727725000;
+ bh=eXY07Z7B305LE5xg8WvgNxAOSIF1GtqgVvk1ugZhTgs=;
+ h=From:To:Cc:Subject:Date:From;
+ b=KLd7ANcFPEk37eWpnh8nmNNMTQkOsiwU8fUuZ72KT2FWR+kB7NvdcoxGK3KMdDueI
+ bzD8L+xgim1u329TyllkKr8k3Ohen6yBYD65MuVohs047RE6dHSraPKQTlV+WXxXiL
+ 8l7IdorvQlu8J4DTmjva4XYls5ygvWEWXIEhjUXRlaHLxmkAPxVWzBzuP9rAAttpVZ
+ mW+xK8IkvD/hjR56tVbkoeZ6rzWE37w9UShNSNLwK8kiNXFd9HNedvGONeuduNNTp6
+ xr2htjdEbwfo8LflHFXKpst+gRKL0ARi6IsJktW4CNfEHCcqLzCEqBHPk30gYUBvXE
+ CJ6KrShDEN2dA==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gadz.org
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=gadz.org header.i=@gadz.org
- header.a=rsa-sha256 header.s=google header.b=A5+Jdj7i
-Subject: [Buildroot] [PATCH] package/kbd: bump to 2.6.4
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=KLd7ANcF
+Subject: [Buildroot] [PATCH 1/1] package/liblinear: fix _SITE url
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,42 +75,61 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
+Cc: Romain Naour <romain.naour@gmail.com>, Julien Olivain <ju.o@free.fr>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
----
- package/kbd/kbd.hash | 2 +-
- package/kbd/kbd.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+The package _SITE url only contains the latest version at a given point
+in time. When a new version is published, it is replacing the old one.
 
-diff --git a/package/kbd/kbd.hash b/package/kbd/kbd.hash
-index 63f7286d3..25866751f 100644
---- a/package/kbd/kbd.hash
-+++ b/package/kbd/kbd.hash
-@@ -1,4 +1,4 @@
- # From https://www.kernel.org/pub/linux/utils/kbd/sha256sums.asc
--sha256  ccdf452387a6380973d2927363e9cbb939fa2068915a6f937ff9d24522024683  kbd-2.5.1.tar.xz
-+sha256  519f8d087aecca7e0a33cd084bef92c066eb19731666653dcc70c9d71aa40926  kbd-2.6.4.tar.xz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  5a16340fe773f422144b436df90319114a2884933c56e9be6fad642e59be5e1f  CREDITS
-diff --git a/package/kbd/kbd.mk b/package/kbd/kbd.mk
-index 15912419f..953adccd0 100644
---- a/package/kbd/kbd.mk
-+++ b/package/kbd/kbd.mk
-@@ -4,7 +4,7 @@
- #
+This issue was not detected because the archive was downloaded from the
+sources.buildroot.org backup mirror, when the primary source became
+unavailable.
+
+Since commit 559bb33ae "support/testing: do not use s.b.o" [1], the
+runtime test infrastructure is disabling this backup mirror. This
+makes the nmap runtime test failing [2], which is using liblinear as
+a dependency.
+
+The liblinear package author confirmed in a private email that all the
+releases, including the latest version, are all kept in the "oldfiles"
+directory.
+
+This commit fixes this download issue by updating the _SITE url to that
+location. While at it, this commit also change the url to use https
+(since the http equivalent redirects to https).
+
+Fixes:
+- [2]
+
+[1] https://gitlab.com/buildroot.org/buildroot/-/commit/559bb33ae71dd2358ca2314ccb24b56cc3809fc1
+[2] https://gitlab.com/buildroot.org/buildroot/-/jobs/7948008007
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+Patch tested in:
+https://gitlab.com/jolivain/buildroot/-/jobs/7957597476
+---
+ package/liblinear/liblinear.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/package/liblinear/liblinear.mk b/package/liblinear/liblinear.mk
+index 014f9e2de4..134673a230 100644
+--- a/package/liblinear/liblinear.mk
++++ b/package/liblinear/liblinear.mk
+@@ -5,7 +5,7 @@
  ################################################################################
  
--KBD_VERSION = 2.5.1
-+KBD_VERSION = 2.6.4
- KBD_SOURCE = kbd-$(KBD_VERSION).tar.xz
- KBD_SITE = $(BR2_KERNEL_MIRROR)/linux/utils/kbd
- KBD_CONF_OPTS = \
+ LIBLINEAR_VERSION = 2.45
+-LIBLINEAR_SITE = http://www.csie.ntu.edu.tw/~cjlin/liblinear
++LIBLINEAR_SITE = https://www.csie.ntu.edu.tw/~cjlin/liblinear/oldfiles
+ LIBLINEAR_LICENSE = BSD-3-Clause
+ LIBLINEAR_LICENSE_FILES = COPYRIGHT
+ LIBLINEAR_INSTALL_STAGING = YES
 -- 
-2.43.0
+2.46.2
 
 _______________________________________________
 buildroot mailing list
