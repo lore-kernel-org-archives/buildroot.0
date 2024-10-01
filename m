@@ -4,176 +4,89 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 00E52CE7D05
-	for <buildroot@archiver.kernel.org>; Tue,  1 Oct 2024 09:50:55 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 617E7CEACDD
+	for <buildroot@archiver.kernel.org>; Tue,  1 Oct 2024 15:36:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A29CA60808;
-	Tue,  1 Oct 2024 09:50:55 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 8DCA16079A;
+	Tue,  1 Oct 2024 15:36:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MGsC-c87dnlS; Tue,  1 Oct 2024 09:50:54 +0000 (UTC)
+ id sI7WuVq9NMnj; Tue,  1 Oct 2024 15:36:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org E56FE607CA
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DD7F3607B4
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id E56FE607CA;
-	Tue,  1 Oct 2024 09:50:53 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 142661BF27E
- for <buildroot@lists.busybox.net>; Tue,  1 Oct 2024 09:50:53 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DD7F3607B4;
+	Tue,  1 Oct 2024 15:36:33 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id BC9CF1BF846
+ for <buildroot@lists.busybox.net>; Tue,  1 Oct 2024 15:36:32 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 027894042C
- for <buildroot@lists.busybox.net>; Tue,  1 Oct 2024 09:50:53 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id AB4FB607B4
+ for <buildroot@lists.busybox.net>; Tue,  1 Oct 2024 15:36:32 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id INrdJwO78KHo for <buildroot@lists.busybox.net>;
- Tue,  1 Oct 2024 09:50:52 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id uu3GHQ56xFeF for <buildroot@lists.busybox.net>;
+ Tue,  1 Oct 2024 15:36:31 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a01:111:f403:c200::4;
- helo=duzpr83cu001.outbound.protection.outlook.com;
- envelope-from=quentin.schulz@cherry.de; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org A4FC3400D1
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org A4FC3400D1
-Received: from DUZPR83CU001.outbound.protection.outlook.com
- (mail-northeuropeazlp170130004.outbound.protection.outlook.com
- [IPv6:2a01:111:f403:c200::4])
- by smtp2.osuosl.org (Postfix) with ESMTPS id A4FC3400D1
- for <buildroot@buildroot.org>; Tue,  1 Oct 2024 09:50:50 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=d8xyQOsJe0+wO+whSRrvjETT9lnv+WRWdUzYHIScisbZUAKgE7qEmqxw1VrpcMVkBpUaZ31Hxj5pqbKLR80GmoAB2iiPnWjzYdBgw2Yg2VanLyh8PZF+5ri0khTL9ZbAeE9IBm/A4wJMZCSbbHYJmKtQSX5btbL+fi5F416BFopqvQ9eWaiER30ZAdrudQajvAmKdLVqPITZCocpq7jpwhPvk7yd6pfHys1zWTGP2eGZmnWcWmvsinsbaGEK9ptuCC9XwpE2HduvMZ6rTvdqFipJFmcmIVsJI/6TmlsHRYXXbFo1GWW8ZM3PGoABbzklS48yE9DHqE374Gm0ieAvnQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3SkoQiWGgFwYH6zecxGH+MX6jQ9tZZWu4YBP9Y3OZXw=;
- b=Ji0MQEKDq6Rw0D3Cr6cIU33hZFNxYkEL1kUmkFKaWPgNbXqQ3AOdpPUI+mPaIuBGG0PvoGxGsh+Q09dMfzbm+x+D2HGUkUvQ+jwbPAp+Rrk58N6kIMaaXLQtaIurUQfW3tdUSZPSDImWAwSNI0NBFND4fRMNqfO92UZASurZQnaCREMAm2eOsI62Auu2OW0W0CFdv3Nvq3PDBH4SdFD9ZHE0Vi3X7oI1y5YhhwyL2t41Z9B9e0vIRei35TPitzez2dFKiVttKjF+QpDp2wqx78nOSWJGXzdF/wFH5oUZVdNr+/hgZW9ympF4Ipa3Oxg04kOFqXsSQuHnd5Dqly9UTw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=cherry.de; dmarc=pass action=none header.from=cherry.de;
- dkim=pass header.d=cherry.de; arc=none
-Received: from AM9PR04MB8906.eurprd04.prod.outlook.com (2603:10a6:20b:409::9)
- by DU2PR04MB8566.eurprd04.prod.outlook.com (2603:10a6:10:2d5::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7918.27; Tue, 1 Oct
- 2024 09:50:45 +0000
-Received: from AM9PR04MB8906.eurprd04.prod.outlook.com
- ([fe80::d379:5378:b1:cea]) by AM9PR04MB8906.eurprd04.prod.outlook.com
- ([fe80::d379:5378:b1:cea%2]) with mapi id 15.20.7918.024; Tue, 1 Oct 2024
- 09:50:45 +0000
-Message-ID: <05372228-2faa-4024-9be7-89e1b2ee07d0@cherry.de>
-Date: Tue, 1 Oct 2024 11:50:44 +0200
-User-Agent: Mozilla Thunderbird
-To: Kilian Zinnecker <kilian.zinnecker@mail.de>, buildroot@buildroot.org
-References: <20240929151124.103921-1-kilian.zinnecker@mail.de>
- <2460269a-e521-4add-ac09-6bd1b0a7a872@cherry.de>
- <79861be1-00c9-4f61-baca-2a276683910e@mail.de>
-Content-Language: en-US
-In-Reply-To: <79861be1-00c9-4f61-baca-2a276683910e@mail.de>
-X-ClientProxiedBy: FR3P281CA0184.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:a4::19) To AM9PR04MB8906.eurprd04.prod.outlook.com
- (2603:10a6:20b:409::9)
+ client-ip=2607:f8b0:4864:20::92f; helo=mail-ua1-x92f.google.com;
+ envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 154016079A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 154016079A
+Received: from mail-ua1-x92f.google.com (mail-ua1-x92f.google.com
+ [IPv6:2607:f8b0:4864:20::92f])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 154016079A
+ for <buildroot@buildroot.org>; Tue,  1 Oct 2024 15:36:30 +0000 (UTC)
+Received: by mail-ua1-x92f.google.com with SMTP id
+ a1e0cc1a2514c-84e8ca005caso3176512241.1
+ for <buildroot@buildroot.org>; Tue, 01 Oct 2024 08:36:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1727796989; x=1728401789;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=cOTE/7WFKWDbzegUrERNx5egtE4N2+EBYO94xyRAXpE=;
+ b=m6o88z78OUtvRJg4UBX6NnTB/vu1yxx/2O1oEN+70A7A1V5th+KbjxJ9kF2U6zNwKS
+ pSoQtfrcMyrXxVo7zwxP8eUEsJL60aWGU2kt0Vv/j/6rNaoFBAMzr+DuWDtRgP2SPuts
+ 6ll5yb0lrGJzsSjiEZd9GaYdO50gGip9iWT6EU0yWwH38qBPD8Bjkt7Pdpk+NOFi0YBd
+ C/Ytcfzrw2Onh82709fN/TTDZl+ouRtl3carGA32k3TggDHt8iwabekRnZzHLCJ/r9c8
+ FqN/2NZ8C/FnWdJhqmllxE1hnNE0ExltDO/Yk/txFqZEnGUo0toALjtmWkXBLilYA8cZ
+ TZsA==
+X-Gm-Message-State: AOJu0Yw+mPMppUwjRvJ6J2aQUeZajEllhEh/ab4JgHu+AvAY+v1STI3+
+ W+CuvIdBmjolOz+tdeaNT230F8NGrHOUaowb92w+7t0S6wS8cRlR1yrOF+RAEiNzUVauZDkMSTV
+ DuCYt6fIvzr7VzBGFX4edCY1T1vPHHwDU
+X-Google-Smtp-Source: AGHT+IHTjziiAMMdgmAOZJFpHTGSsI2ClXgqSSw91SnpzmZVXyExK1e5Uby38AaBsMu5E82SrzOvJr2Wsi4OFmufIiM=
+X-Received: by 2002:a05:6122:130a:b0:503:e3b5:36eb with SMTP id
+ 71dfb90a1353d-50ad3c5db3emr2765030e0c.3.1727796989243; Tue, 01 Oct 2024
+ 08:36:29 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM9PR04MB8906:EE_|DU2PR04MB8566:EE_
-X-MS-Office365-Filtering-Correlation-Id: 43bceabf-6c33-4e89-4193-08dce1fe8520
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|1800799024|366016;
-X-Microsoft-Antispam-Message-Info: =?utf-8?B?cFR0bTZ5Smk1YjFCdTM2b1p1dm9WbFVGSjlvR1c4YmZpWE1YZW5QWDRrWTdw?=
- =?utf-8?B?TFR5YUUxNkZ3cmhsL1JxNzJPNDc5TG8yendXdVhlQjl2ZVVUY1hiSTJhRHox?=
- =?utf-8?B?d3lFNGdmdVdKaEdCYnRTQVFxeiszUzJ0YXhnZ0N2QS9GZTNGbnljYWxmNU5O?=
- =?utf-8?B?eUdLVCtIMGpkMSs1ZXhodUViRkM5QVpuTlIwbjZEY3lFWEtzd0Q2eG9ld3JT?=
- =?utf-8?B?eFY3NlZIbVE4bnJobmd5Q0ZGelRQWDgwcDk1L1dFV1dyVzM5bEsramMxUmpV?=
- =?utf-8?B?SFQvbU5lR2hlT1dSb3BJbUVyMG9qK0JPNUlvUkFnc3RiSlY4ai9uQXFLV091?=
- =?utf-8?B?TmpqK05rYjExOTRnenNFYTRwMm1QRUx6UGZUMVU0QUR4eGpxNSt0Nk8xbzhS?=
- =?utf-8?B?OWxYWHVmWkV4Z29jZ1B1aVJYQnZZSlA5eUxaN3hDazB1aDJLdTVKeXBoY1p1?=
- =?utf-8?B?YzVHTzNhSm5FdWVDaEd6K0t6QnRhWkZHVVZZZEpnYzA3aGpST3hQUlFtR0Fs?=
- =?utf-8?B?emN5dmp5djRZRFZHam44djUvRnE2WSswV1dYN241cTFMMHdjM0JQM0pibFdG?=
- =?utf-8?B?MTZ1c2lOeEpjbnlqakhtWUlDN2lVL0JLaTJsdjFvSGtTSnNCNTJhaVdUa1Zi?=
- =?utf-8?B?VHNkWm4rcU9iVDIxQVRkcnNYVVRFQVBaclgveTRWN2k0NG04ai9ZaTdvaXBR?=
- =?utf-8?B?TEZ0cjcyWXNNeTlCaGlvU2dSbmRYWnRiU3JOd0g1WjJIeWp1aEp3bEJLZGZZ?=
- =?utf-8?B?b1lad2VuMnFiL1o5VkpaTHh4Qi80WEc1ZmhTKzNJOU5kYWVUMzBNb3dJTStt?=
- =?utf-8?B?bGRYWUczWVBGUFJrWGJVYVFQUFMweWhIaDJkUHhHaWU3dFoxaE90d2NuNTJt?=
- =?utf-8?B?dGk1cGRkTkxnQUtzQWVyWlp4NjFvNElzV3BzemgrNmxMTWpPaXZHY24vVnhk?=
- =?utf-8?B?RHk5czR5QTZXVXlKQXMrQzhWRzdFVXhwbXRVUG5ONDdjN0tvU09kTnpyZGxa?=
- =?utf-8?B?RDVFZzVzRllYY1dqSmpUdGw4KzhFajVxeTZGRUFNcTI1aVpSTWk0eEllMll3?=
- =?utf-8?B?aVV2c2VXVGVJSnhUYjNnMzJGdDhxc3VKMUw4Ty9SQnZ0c05HWHZaZ3p4dGlT?=
- =?utf-8?B?SGErSkZlT1pTeGF0M2FXRVNYN0ZPVXdMdEdLVDRxZXEvTzBEa1lCVzlUTEpR?=
- =?utf-8?B?QmxYNG9hRjR6eUtMbng1N0ZHWG1DUmdubW5tM0h1TUowMWJFOGd1RHRsVHVO?=
- =?utf-8?B?bndQMTdHdVBwOWhtcWpyZ01xU2w5MGRvTTdnWUE1c1JRYSsxVzU3WTZvdU5z?=
- =?utf-8?B?dkZzbVYvSk51SWdseGZveURwdGVqeURWdjI5RENyTHpkM0l6U0NuMEFHSy9N?=
- =?utf-8?B?UldPZlFjeWN3ZkdHeG4zQ2Uzc1FHTnUrOFcvYkhhTXJURlhnQ0JXcXFSZUF2?=
- =?utf-8?B?bWdWL3ZQeFM3MnB1TVNoTm1ydE00SVdhUmd4YU9SYjBXZ2Ixb3JCaVM4YzhJ?=
- =?utf-8?B?Wld5T0xwRTRDeHlielBHWDhBN1Q2RjBSekFXOFZHNGRmSGpOZE9aL3dOV0JQ?=
- =?utf-8?B?ajFOR2Y3RWNMTVp6blNhWHdaSlcxNDhLcDd2dmxvamMxZ04rQm5PSVFSNEY2?=
- =?utf-8?B?QzFBeGJLdzNSb25JcUNDWG15UTdLYWw0V3BCeEluVmcvR1M0K3pXU2N4ZWpY?=
- =?utf-8?B?WGx1dG1QUHlmZk1tUWJWVzhqckdGL1psZmMxZTJHVkVmVlp5SnM2NnNRPT0=?=
-X-Forefront-Antispam-Report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
- IPV:NLI; SFV:NSPM; H:AM9PR04MB8906.eurprd04.prod.outlook.com; PTR:; CAT:NONE;
- SFS:(13230040)(376014)(1800799024)(366016); DIR:OUT; SFP:1101; 
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Y2oxc1grb2JFSGx6Qjc0aWRpY1RmZHQzS2hHRzEwWnlMc3JOSXZFdnArMW9F?=
- =?utf-8?B?OXVqMGR3WEU0Q1doZW8xc25JdXV2UFlpRDZyaWZLbGt1ZHRyZjExRWJhU3lB?=
- =?utf-8?B?WDNsQjBGbFY1dGNhYjN3enZ0dXQzNG1nVVpGRDVZajlnSkFsSHN4QnRVQlN6?=
- =?utf-8?B?aWhxOEFNMDJEMXY2bVJvdTVFRGVBYUNKTzgwM04zdUx4M2tKV0lvNVBNdE16?=
- =?utf-8?B?MzBrZFVrOUJFV2lMaUY0dGZSbzdjM2hPTTlJbkdPVUdJSUVSakhuT3IyQWJn?=
- =?utf-8?B?WWJ4djFvMGY3aWlYUlV5eTRUdHVNRzJOTXZvMzFEd1Z3eCtEaFJTaWxUQW1R?=
- =?utf-8?B?N2tIQnpibGpwR3plVzFYR011dm9VaURSMktaZHV0djU5MnpFZUZzM3o5dDc2?=
- =?utf-8?B?aHc2SWRyRjlzZ3JSMTUzWDljbWJTYkVNL1IyWmFhcjNNWWZud3FJa0x5bHFj?=
- =?utf-8?B?cUtCS2htcnhGdms1QzMxZXVxQUVLNy9OWVhBbVBweTN5Yjc5VG9vVDVjZnk0?=
- =?utf-8?B?bWhSM05MRFo3YjVkWXJQTll0dituVGdJWlk0R1k2dFdzc1pWbm5uUnhkTkNz?=
- =?utf-8?B?TEhNZ2x5Z09KNFVGNW42QnpseFozNlIwYnBsV2RaemJ1OURlekF4VnVxV3pR?=
- =?utf-8?B?a0VLTWpDY3NsNFl5dVFVUEVPYWNnVkl1VEUrOUlJdHU2SkxPMkVTRjBSV01S?=
- =?utf-8?B?NndDOVB0MmlGdzdZYXJHM2dTYmFlOE1EdUozRUM0QmVmbTdUeGFScEtodFNL?=
- =?utf-8?B?dGg0MGViYTR4N0J1Wi95dWZRU04vb3lZZkJodkdod1lrWjYwWjQzOUhjUGlo?=
- =?utf-8?B?MWdzaUFaYk5HSlM5SSt2NXdMSWh1ZmN3cEMvRzlyNHAybVZ0Ly96aWxpMTVp?=
- =?utf-8?B?R044SnZmTCtaOFVHN0p1czRCb21TeEQyTHJDSjFnblFaVFNXaHhyOGxJYVpw?=
- =?utf-8?B?UERIVFdiSjVUMzZQVkY2azJmNDdtVjVjUFJFWU1aR25zdGJXeXdkVmsvS3N3?=
- =?utf-8?B?NVBza2tVMU5Ib3NnMmltS1FXLzNUcGQ2VkF1S1JtcDRiMnVvc0tRMlFRRWYv?=
- =?utf-8?B?N1JJVW1lQ3FPd2t1WVFXN1RkeTR1Wk1XRjI4eU9BQnQzU1pPL1hvNTFoc0RO?=
- =?utf-8?B?aW9YR05HSmwwTlFoclRvVHFramUvNzRGdDdpRjA4YVR1NXlEMjZmKzg2aU40?=
- =?utf-8?B?dE1wWFNRYWNIY2M5MFM5eU1sbUM4S25wdGd1SGZrWkZMZ3hZVnVxZmx2M2ky?=
- =?utf-8?B?YWdTMTkxL01yYnl2UkkrV0dMaUxpT2N2YUFaWGNZbGp1SVVHWlY0ZUR3Q0xQ?=
- =?utf-8?B?WFdYbnM2amx5ZTVnQ2s2bW8zN1ZvZDdSNlF4Nkk5VGZCUTZ1WW9UM3p4UEhs?=
- =?utf-8?B?bmtFSHA4LzlmNmdPZ0gxMUdVdWdiK0NWTjJwb2pueHRwdHFMdnhUd1VMMUlN?=
- =?utf-8?B?ZFYxV1dESlh4LzdPME5lNU8zakpBOGZpY2kveWJtbUp3YXdSZGdyQ0R3cUhw?=
- =?utf-8?B?K0JNSVhLSUVIRVpjUFpjbGllN0Y0RHNJS2ZpRTB6UW5kZXlQWjJwNHRidnZ6?=
- =?utf-8?B?c0hBUlJZSVpmUkJ4SGhqMk1LQkQ3S2hqdVJLZ09kbExKVWtOWUNkb3NPd3p6?=
- =?utf-8?B?NUV1ZmU0NE15clRCdGVBdUVkcUgxT1ZnQlJkcHB6UHM1alZ0cURiaTVseUpq?=
- =?utf-8?B?L3czMVF6OXcvOW5Sb0oxaUFiN3hVVEVnN1lGT2h4WUJHcjVGelVETXcrbktQ?=
- =?utf-8?B?WGZjcWRRemtLUDFNNjhSbkI1MnBRRTdDdFdPT3QvY2F6dy9qMFN5Y2d1OE8y?=
- =?utf-8?B?Smx5VnhhYkMzYnByQ2FHc2s2UjhzVzRHMEFLVGlGUUNCeERocWN6c253dHox?=
- =?utf-8?B?dVBlOHlNMlBzU3ZsWUU3RXZ5NGNHZWM2Q3Q1a244U1B4U2pKeDBWME56QUFw?=
- =?utf-8?B?N1JyNDVoTi9KWVBxZlFEWFBITkpDeEZuVjVsaU5xRWhOeDNWdFRnek5RckVM?=
- =?utf-8?B?eHlscjQvek1JbXh4eFBmQllXS3hqYnpJbTFjL0NXQUlLOWpjamlCSnhGcmRl?=
- =?utf-8?B?TExjamZMdFN5K2g5ZlZxcVRaamgwcitUUURLYm91eUN4QmNDMFd2L0RKVHRS?=
- =?utf-8?B?aTl6NGJIblR1SDAyUUpOUk9zU3cwQjBVaGRHWmVXM0tjdVRUM0NiMVNNMWJY?=
- =?utf-8?B?S0E9PQ==?=
-X-OriginatorOrg: cherry.de
-X-MS-Exchange-CrossTenant-Network-Message-Id: 43bceabf-6c33-4e89-4193-08dce1fe8520
-X-MS-Exchange-CrossTenant-AuthSource: AM9PR04MB8906.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Oct 2024 09:50:45.2166 (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 5e0e1b52-21b5-4e7b-83bb-514ec460677e
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 4i8OI0hvDdDu9sRkYx2+aEku6ii55H4f+kPaOEg9H+FLZAdS6vxhmRQEIu/c0yM83k+xcOzD4ys6HO7FPp0J5NfaQXasBRxdJ7TybCKaLW0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR04MB8566
+References: <20240927235259.2046297-1-james.hilliard1@gmail.com>
+ <1e9d4998-f628-4ec2-85c6-98d357ce6479@gmx.de>
+In-Reply-To: <1e9d4998-f628-4ec2-85c6-98d357ce6479@gmx.de>
+From: James Hilliard <james.hilliard1@gmail.com>
+Date: Tue, 1 Oct 2024 09:36:17 -0600
+Message-ID: <CADvTj4oU=VKxmHhSu0S7mH=5uGnjq0ocsNkm+9kXyM-eMQf_AA@mail.gmail.com>
+To: Fiona Klute <fiona.klute@gmx.de>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=cherry.de; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3SkoQiWGgFwYH6zecxGH+MX6jQ9tZZWu4YBP9Y3OZXw=;
- b=nTLKnFtjLA3ud79t4bZRflfBPKZL6ze3l75dyPh2tWRvLoq+OFisBxo/fTDD/4yGS6hdKwYSQdeBxn7Nq/8OjtXgs2KrLKCWfey7aa7tDuan2AzblPOrgwejcJHfiqEHlfWnAsEo1SXs3W1b7LDTK7lih0pP8vdsL93dy4cuErM=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=cherry.de
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=cherry.de header.i=@cherry.de header.a=rsa-sha256
- header.s=selector1 header.b=nTLKnFtj
-X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=cherry.de;
-Subject: Re: [Buildroot] [PATCH 1/1] configs/rock5b: Switch to mainline
- TrustedFirmware
+ d=gmail.com; s=20230601; t=1727796989; x=1728401789; darn=buildroot.org;
+ h=cc:to:subject:message-id:date:from:in-reply-to:references
+ :mime-version:from:to:cc:subject:date:message-id:reply-to;
+ bh=cOTE/7WFKWDbzegUrERNx5egtE4N2+EBYO94xyRAXpE=;
+ b=XcH+SeVwARZ7BVYw1Kc4q26fCL3fGtG+9MsJqCWIUR4uW6SeiOh7p339DkBbk4SC+0
+ KKe8nJMorrMCZn5nouFJZDr9VpEMpGz0owVp7kzeF/0ds+aKd9aqaqOfKqDGXOTsF/7x
+ Xtu3dOJemb20DaNxpRDgRV4cHn3OS2a9SSu2SxKvx2Y4GjWuuvHuhnO0ztsXqdICpk/e
+ MiXHGUcMjBO1wiC8LSBUAimiKhzqMPSgGRAKPmSAbDs6zJomNZS1fmUCqCN9XTPmNp45
+ kDpTEyBxciY98LFJDMg6f1K4qZfVTWBfJXImZa/p6xD4o9YtrwDUHUKyEhbbFhKOJXEA
+ d7DQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=XcH+SeVw
+Subject: Re: [Buildroot] [PATCH 1/1] package/gobject-introspection: fix
+ build with latest setuptools
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -185,46 +98,419 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Quentin Schulz via buildroot <buildroot@buildroot.org>
-Reply-To: Quentin Schulz <quentin.schulz@cherry.de>
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
+Cc: "Yann E. MORIN" <yann.morin.1998@free.fr>, buildroot@buildroot.org
+Content-Type: multipart/mixed; boundary="===============1565976823998424855=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hi Kilian,
+--===============1565976823998424855==
+Content-Type: multipart/alternative; boundary="000000000000c9ba9a06236c15cb"
 
-On 9/30/24 11:20 PM, Kilian Zinnecker wrote:
-> Hi Quentin,
-> 
->> Is it really reasonable to use a random commit in the master branch?
->>
->> The v2.12 tag should happen somewhere in November/December if it 
->> follows the release cycle of the last few releases, shouldn't we 
->> rather wait for that?
-> 
-> My thoughts were, that it might be better to take the commit from the 
-> master branch of the upstream ATF, than the binary blob. And switching 
-> to the release version can be done, when it is released.
-> 
-> However, I also understand, that one might argue, that a rather random 
-> commit from the master branch might not be so stable vs. the binary 
-> blob. Hence, for me it would also be ok if we wait till v2.12 is 
-> released. What do you think?
-> 
+--000000000000c9ba9a06236c15cb
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-I don't use the Rock 5B nor Buildroot for any RK3588 devices, so my 
-"concern" is the only thing I can bring to the discussion. Put as much 
-value as you want into this concern :)
+On Mon, Sep 30, 2024 at 4:33=E2=80=AFAM Fiona Klute <fiona.klute@gmx.de> wr=
+ote:
 
-Up to users/maintainers to decide, just wanted to raise that I found 
-this a bit odd :) Especially since it is possible Buildroot v2024.11 
-will be released before TF-A v2.12 is, meaning we'll need to patch both 
-master and v2024.11 to use the v2.12 version.
+> Am 28.09.24 um 01:52 schrieb James Hilliard:
+> > When setuptools was updated to version 75.1.0 in buildroot commit
+> > f01897aa6ceca00831c9b2c14f3ae90faaefce68 it broke gobject
+> > introspection builds which relied on a deprecated MSVCCompiler
+> > distutils module.
+> >
+> > Backport an upstream patch removing this module dependency.
+>
+> I'd prefer to see the update to gobject-introspection 1.82.0 merged
+> instead, which already includes the patch. Though the backport could be
+> a stop-gap measure if the update series needs any lengthy fixes. :-)
+>
 
-Cheers,
-Quentin
+Yeah, probably best to just use the updated gobject-introspection if
+it's not too problematic to merge.
+
+
+>
+> See:
+>
+> https://patchwork.ozlabs.org/project/buildroot/patch/20240925090526.34622=
+17-4-fiona.klute@gmx.de/
+> Series: https://patchwork.ozlabs.org/project/buildroot/list/?series=3D425=
+356
+>
+> Best regards,
+> Fiona
+>
+> > Fixes:
+> >   -
+> http://autobuild.buildroot.net/results/8e0/8e020d65509181148c597997280f19=
+6c33b28574
+> >   -
+> http://autobuild.buildroot.net/results/2db/2db8ce60917b66030286da936c1f1f=
+3aa657b6b7
+> >
+> > Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> > ---
+> >   ...-dependency-on-distutils.msvccompile.patch | 104 +++++++++++++++++=
++
+> >   1 file changed, 104 insertions(+)
+> >   create mode 100644
+> package/gobject-introspection/0003-giscanner-remove-dependency-on-distuti=
+ls.msvccompile.patch
+> >
+> > diff --git
+> a/package/gobject-introspection/0003-giscanner-remove-dependency-on-distu=
+tils.msvccompile.patch
+> b/package/gobject-introspection/0003-giscanner-remove-dependency-on-distu=
+tils.msvccompile.patch
+> > new file mode 100644
+> > index 0000000000..a3231a5ad6
+> > --- /dev/null
+> > +++
+> b/package/gobject-introspection/0003-giscanner-remove-dependency-on-distu=
+tils.msvccompile.patch
+> > @@ -0,0 +1,104 @@
+> > +From c8310afa42dfa598097eb0e003cef7965b5ed7be Mon Sep 17 00:00:00 2001
+> > +From: Christoph Reiter <reiter.christoph@gmail.com>
+> > +Date: Wed, 28 Aug 2024 21:26:02 +0200
+> > +Subject: [PATCH] giscanner: remove dependency on distutils.msvccompile=
+r
+> > +
+> > +It was removed with setuptools 74.0.0. Since we still depend on the
+> > +MSVCCompiler class use new_compiler() to get it some other way.
+> > +
+> > +Remove any reference to MSVC9Compiler, which was for Visual Studio 200=
+8
+> > +which we no longer support anyway.
+> > +
+> > +Fixes #515
+> > +
+> > +Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> > +Upstream:
+> https://gitlab.gnome.org/GNOME/gobject-introspection/-/commit/a2139dba59e=
+ac283a7f543ed737f038deebddc19
+> > +---
+> > + giscanner/ccompiler.py    |  7 +++----
+> > + giscanner/msvccompiler.py | 14 +++++++-------
+> > + 2 files changed, 10 insertions(+), 11 deletions(-)
+> > +
+> > +diff --git a/giscanner/ccompiler.py b/giscanner/ccompiler.py
+> > +index 2912fe0e..766c9a36 100644
+> > +--- a/giscanner/ccompiler.py
+> > ++++ b/giscanner/ccompiler.py
+> > +@@ -26,7 +26,6 @@ import tempfile
+> > + import sys
+> > + import distutils
+> > +
+> > +-from distutils.msvccompiler import MSVCCompiler
+> > + from distutils.unixccompiler import UnixCCompiler
+> > + from distutils.cygwinccompiler import Mingw32CCompiler
+> > + from distutils.sysconfig import get_config_vars
+> > +@@ -167,7 +166,7 @@ class CCompiler(object):
+> > +         # Now, create the distutils ccompiler instance based on the
+> info we have.
+> > +         if compiler_name =3D=3D 'msvc':
+> > +             # For MSVC, we need to create a instance of a subclass of
+> distutil's
+> > +-            # MSVC9Compiler class, as it does not provide a
+> preprocess()
+> > ++            # MSVCCompiler class, as it does not provide a preprocess=
+()
+> > +             # implementation
+> > +             from . import msvccompiler
+> > +             self.compiler =3D msvccompiler.get_msvc_compiler()
+> > +@@ -453,7 +452,7 @@ class CCompiler(object):
+> > +             return self.compiler.linker_exe
+> > +
+> > +     def check_is_msvc(self):
+> > +-        return isinstance(self.compiler, MSVCCompiler)
+> > ++        return self.compiler.compiler_type =3D=3D "msvc"
+> > +
+> > +     # Private APIs
+> > +     def _set_cpp_options(self, options):
+> > +@@ -479,7 +478,7 @@ class CCompiler(object):
+> > +                     # macros for compiling using distutils
+> > +                     # get dropped for MSVC builds, so
+> > +                     # escape the escape character.
+> > +-                    if isinstance(self.compiler, MSVCCompiler):
+> > ++                    if self.check_is_msvc():
+> > +                         macro_value =3D macro_value.replace('\"', '\\=
+\"')
+> > +                 macros.append((macro_name, macro_value))
+> > +             elif option.startswith('-U'):
+> > +diff --git a/giscanner/msvccompiler.py b/giscanner/msvccompiler.py
+> > +index 0a543982..e333a80f 100644
+> > +--- a/giscanner/msvccompiler.py
+> > ++++ b/giscanner/msvccompiler.py
+> > +@@ -19,30 +19,30 @@
+> > + #
+> > +
+> > + import os
+> > +-import distutils
+> > ++from typing import Type
+> > +
+> > + from distutils.errors import DistutilsExecError, CompileError
+> > +-from distutils.ccompiler import CCompiler, gen_preprocess_options
+> > ++from distutils.ccompiler import CCompiler, gen_preprocess_options,
+> new_compiler
+> > + from distutils.dep_util import newer
+> > +
+> > + # Distutil's MSVCCompiler does not provide a preprocess()
+> > + # Implementation, so do our own here.
+> > +
+> > +
+> > ++DistutilsMSVCCompiler: Type =3D type(new_compiler(compiler=3D"msvc"))
+> > ++
+> > ++
+> > + def get_msvc_compiler():
+> > +     return MSVCCompiler()
+> > +
+> > +
+> > +-class MSVCCompiler(distutils.msvccompiler.MSVCCompiler):
+> > ++class MSVCCompiler(DistutilsMSVCCompiler):
+> > +
+> > +     def __init__(self, verbose=3D0, dry_run=3D0, force=3D0):
+> > +-        super(distutils.msvccompiler.MSVCCompiler, self).__init__()
+> > ++        super(DistutilsMSVCCompiler, self).__init__()
+> > +         CCompiler.__init__(self, verbose, dry_run, force)
+> > +         self.__paths =3D []
+> > +         self.__arch =3D None  # deprecated name
+> > +-        if os.name =3D=3D 'nt':
+> > +-            if isinstance(self, distutils.msvc9compiler.MSVCCompiler)=
+:
+> > +-                self.__version =3D distutils.msvc9compiler.VERSION
+> > +         self.initialized =3D False
+> > +         self.preprocess_options =3D None
+> > +         if self.check_is_clang_cl():
+> > +--
+> > +2.34.1
+> > +
+>
+>
+
+--000000000000c9ba9a06236c15cb
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr"><div dir=3D"ltr">On Mon, Sep 30, 2024 at 4:33=E2=80=AFAM F=
+iona Klute &lt;<a href=3D"mailto:fiona.klute@gmx.de">fiona.klute@gmx.de</a>=
+&gt; wrote:</div><div class=3D"gmail_quote"><blockquote class=3D"gmail_quot=
+e" style=3D"margin:0px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204)=
+;padding-left:1ex">Am 28.09.24 um 01:52 schrieb James Hilliard:<br>
+&gt; When setuptools was updated to version 75.1.0 in buildroot commit<br>
+&gt; f01897aa6ceca00831c9b2c14f3ae90faaefce68 it broke gobject<br>
+&gt; introspection builds which relied on a deprecated MSVCCompiler<br>
+&gt; distutils module.<br>
+&gt;<br>
+&gt; Backport an upstream patch removing this module dependency.<br>
+<br>
+I&#39;d prefer to see the update to gobject-introspection 1.82.0 merged<br>
+instead, which already includes the patch. Though the backport could be<br>
+a stop-gap measure if the update series needs any lengthy fixes. :-)<br></b=
+lockquote><div><br></div><div>Yeah, probably best to just use the updated g=
+object-introspection if</div><div>it&#39;s not too problematic to merge.<br=
+></div><div>=C2=A0</div><blockquote class=3D"gmail_quote" style=3D"margin:0=
+px 0px 0px 0.8ex;border-left:1px solid rgb(204,204,204);padding-left:1ex">
+<br>
+See:<br>
+<a href=3D"https://patchwork.ozlabs.org/project/buildroot/patch/20240925090=
+526.3462217-4-fiona.klute@gmx.de/" rel=3D"noreferrer" target=3D"_blank">htt=
+ps://patchwork.ozlabs.org/project/buildroot/patch/20240925090526.3462217-4-=
+fiona.klute@gmx.de/</a><br>
+Series: <a href=3D"https://patchwork.ozlabs.org/project/buildroot/list/?ser=
+ies=3D425356" rel=3D"noreferrer" target=3D"_blank">https://patchwork.ozlabs=
+.org/project/buildroot/list/?series=3D425356</a><br>
+<br>
+Best regards,<br>
+Fiona<br>
+<br>
+&gt; Fixes:<br>
+&gt;=C2=A0 =C2=A0- <a href=3D"http://autobuild.buildroot.net/results/8e0/8e=
+020d65509181148c597997280f196c33b28574" rel=3D"noreferrer" target=3D"_blank=
+">http://autobuild.buildroot.net/results/8e0/8e020d65509181148c597997280f19=
+6c33b28574</a><br>
+&gt;=C2=A0 =C2=A0- <a href=3D"http://autobuild.buildroot.net/results/2db/2d=
+b8ce60917b66030286da936c1f1f3aa657b6b7" rel=3D"noreferrer" target=3D"_blank=
+">http://autobuild.buildroot.net/results/2db/2db8ce60917b66030286da936c1f1f=
+3aa657b6b7</a><br>
+&gt;<br>
+&gt; Signed-off-by: James Hilliard &lt;<a href=3D"mailto:james.hilliard1@gm=
+ail.com" target=3D"_blank">james.hilliard1@gmail.com</a>&gt;<br>
+&gt; ---<br>
+&gt;=C2=A0 =C2=A0...-dependency-on-distutils.msvccompile.patch | 104 ++++++=
+++++++++++++<br>
+&gt;=C2=A0 =C2=A01 file changed, 104 insertions(+)<br>
+&gt;=C2=A0 =C2=A0create mode 100644 package/gobject-introspection/0003-gisc=
+anner-remove-dependency-on-distutils.msvccompile.patch<br>
+&gt;<br>
+&gt; diff --git a/package/gobject-introspection/0003-giscanner-remove-depen=
+dency-on-distutils.msvccompile.patch b/package/gobject-introspection/0003-g=
+iscanner-remove-dependency-on-distutils.msvccompile.patch<br>
+&gt; new file mode 100644<br>
+&gt; index 0000000000..a3231a5ad6<br>
+&gt; --- /dev/null<br>
+&gt; +++ b/package/gobject-introspection/0003-giscanner-remove-dependency-o=
+n-distutils.msvccompile.patch<br>
+&gt; @@ -0,0 +1,104 @@<br>
+&gt; +From c8310afa42dfa598097eb0e003cef7965b5ed7be Mon Sep 17 00:00:00 200=
+1<br>
+&gt; +From: Christoph Reiter &lt;<a href=3D"mailto:reiter.christoph@gmail.c=
+om" target=3D"_blank">reiter.christoph@gmail.com</a>&gt;<br>
+&gt; +Date: Wed, 28 Aug 2024 21:26:02 +0200<br>
+&gt; +Subject: [PATCH] giscanner: remove dependency on distutils.msvccompil=
+er<br>
+&gt; +<br>
+&gt; +It was removed with setuptools 74.0.0. Since we still depend on the<b=
+r>
+&gt; +MSVCCompiler class use new_compiler() to get it some other way.<br>
+&gt; +<br>
+&gt; +Remove any reference to MSVC9Compiler, which was for Visual Studio 20=
+08<br>
+&gt; +which we no longer support anyway.<br>
+&gt; +<br>
+&gt; +Fixes #515<br>
+&gt; +<br>
+&gt; +Signed-off-by: James Hilliard &lt;<a href=3D"mailto:james.hilliard1@g=
+mail.com" target=3D"_blank">james.hilliard1@gmail.com</a>&gt;<br>
+&gt; +Upstream: <a href=3D"https://gitlab.gnome.org/GNOME/gobject-introspec=
+tion/-/commit/a2139dba59eac283a7f543ed737f038deebddc19" rel=3D"noreferrer" =
+target=3D"_blank">https://gitlab.gnome.org/GNOME/gobject-introspection/-/co=
+mmit/a2139dba59eac283a7f543ed737f038deebddc19</a><br>
+&gt; +---<br>
+&gt; + giscanner/ccompiler.py=C2=A0 =C2=A0 |=C2=A0 7 +++----<br>
+&gt; + giscanner/msvccompiler.py | 14 +++++++-------<br>
+&gt; + 2 files changed, 10 insertions(+), 11 deletions(-)<br>
+&gt; +<br>
+&gt; +diff --git a/giscanner/ccompiler.py b/giscanner/ccompiler.py<br>
+&gt; +index 2912fe0e..766c9a36 100644<br>
+&gt; +--- a/giscanner/ccompiler.py<br>
+&gt; ++++ b/giscanner/ccompiler.py<br>
+&gt; +@@ -26,7 +26,6 @@ import tempfile<br>
+&gt; + import sys<br>
+&gt; + import distutils<br>
+&gt; +<br>
+&gt; +-from distutils.msvccompiler import MSVCCompiler<br>
+&gt; + from distutils.unixccompiler import UnixCCompiler<br>
+&gt; + from distutils.cygwinccompiler import Mingw32CCompiler<br>
+&gt; + from distutils.sysconfig import get_config_vars<br>
+&gt; +@@ -167,7 +166,7 @@ class CCompiler(object):<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0# Now, create the distutils ccompil=
+er instance based on the info we have.<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0if compiler_name =3D=3D &#39;msvc&#=
+39;:<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0# For MSVC, we need t=
+o create a instance of a subclass of distutil&#39;s<br>
+&gt; +-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 # MSVC9Compiler class, as =
+it does not provide a preprocess()<br>
+&gt; ++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 # MSVCCompiler class, as i=
+t does not provide a preprocess()<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0# implementation<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0from . import msvccom=
+piler<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0self.compiler =3D msv=
+ccompiler.get_msvc_compiler()<br>
+&gt; +@@ -453,7 +452,7 @@ class CCompiler(object):<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0return self.compiler.=
+linker_exe<br>
+&gt; +<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0def check_is_msvc(self):<br>
+&gt; +-=C2=A0 =C2=A0 =C2=A0 =C2=A0 return isinstance(self.compiler, MSVCCom=
+piler)<br>
+&gt; ++=C2=A0 =C2=A0 =C2=A0 =C2=A0 return self.compiler.compiler_type =3D=
+=3D &quot;msvc&quot;<br>
+&gt; +<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0# Private APIs<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0def _set_cpp_options(self, options):<br>
+&gt; +@@ -479,7 +478,7 @@ class CCompiler(object):<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
+ =C2=A0# macros for compiling using distutils<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
+ =C2=A0# get dropped for MSVC builds, so<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
+ =C2=A0# escape the escape character.<br>
+&gt; +-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 if isinstance(self.compiler, MSVCCompiler):<br>
+&gt; ++=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=
+=A0 if self.check_is_msvc():<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0=
+ =C2=A0 =C2=A0 =C2=A0macro_value =3D macro_value.replace(&#39;\&quot;&#39;,=
+ &#39;\\\&quot;&#39;)<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0macros.=
+append((macro_name, macro_value))<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0elif option.startswit=
+h(&#39;-U&#39;):<br>
+&gt; +diff --git a/giscanner/msvccompiler.py b/giscanner/msvccompiler.py<br=
+>
+&gt; +index 0a543982..e333a80f 100644<br>
+&gt; +--- a/giscanner/msvccompiler.py<br>
+&gt; ++++ b/giscanner/msvccompiler.py<br>
+&gt; +@@ -19,30 +19,30 @@<br>
+&gt; + #<br>
+&gt; +<br>
+&gt; + import os<br>
+&gt; +-import distutils<br>
+&gt; ++from typing import Type<br>
+&gt; +<br>
+&gt; + from distutils.errors import DistutilsExecError, CompileError<br>
+&gt; +-from distutils.ccompiler import CCompiler, gen_preprocess_options<br=
+>
+&gt; ++from distutils.ccompiler import CCompiler, gen_preprocess_options, n=
+ew_compiler<br>
+&gt; + from distutils.dep_util import newer<br>
+&gt; +<br>
+&gt; + # Distutil&#39;s MSVCCompiler does not provide a preprocess()<br>
+&gt; + # Implementation, so do our own here.<br>
+&gt; +<br>
+&gt; +<br>
+&gt; ++DistutilsMSVCCompiler: Type =3D type(new_compiler(compiler=3D&quot;m=
+svc&quot;))<br>
+&gt; ++<br>
+&gt; ++<br>
+&gt; + def get_msvc_compiler():<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0return MSVCCompiler()<br>
+&gt; +<br>
+&gt; +<br>
+&gt; +-class MSVCCompiler(distutils.msvccompiler.MSVCCompiler):<br>
+&gt; ++class MSVCCompiler(DistutilsMSVCCompiler):<br>
+&gt; +<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0def __init__(self, verbose=3D0, dry_run=3D0, forc=
+e=3D0):<br>
+&gt; +-=C2=A0 =C2=A0 =C2=A0 =C2=A0 super(distutils.msvccompiler.MSVCCompile=
+r, self).__init__()<br>
+&gt; ++=C2=A0 =C2=A0 =C2=A0 =C2=A0 super(DistutilsMSVCCompiler, self).__ini=
+t__()<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0CCompiler.__init__(self, verbose, d=
+ry_run, force)<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0self.__paths =3D []<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0self.__arch =3D None=C2=A0 # deprec=
+ated name<br>
+&gt; +-=C2=A0 =C2=A0 =C2=A0 =C2=A0 if <a href=3D"http://os.name" rel=3D"nor=
+eferrer" target=3D"_blank">os.name</a> =3D=3D &#39;nt&#39;:<br>
+&gt; +-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 if isinstance(self, distut=
+ils.msvc9compiler.MSVCCompiler):<br>
+&gt; +-=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0 self.__versi=
+on =3D distutils.msvc9compiler.VERSION<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0self.initialized =3D False<br>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0self.preprocess_options =3D None<br=
+>
+&gt; +=C2=A0 =C2=A0 =C2=A0 =C2=A0 =C2=A0if self.check_is_clang_cl():<br>
+&gt; +--<br>
+&gt; +2.34.1<br>
+&gt; +<br>
+<br>
+</blockquote></div></div>
+
+--000000000000c9ba9a06236c15cb--
+
+--===============1565976823998424855==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============1565976823998424855==--
