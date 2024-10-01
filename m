@@ -4,50 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C49ECCEACFF
-	for <buildroot@archiver.kernel.org>; Tue,  1 Oct 2024 20:03:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C52DCEACFF
+	for <buildroot@archiver.kernel.org>; Tue,  1 Oct 2024 20:03:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 965EC60886;
-	Tue,  1 Oct 2024 20:03:21 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6860160898;
+	Tue,  1 Oct 2024 20:03:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ge2M5KZ5PLdS; Tue,  1 Oct 2024 20:03:20 +0000 (UTC)
+ id XZCdmE_3vMZs; Tue,  1 Oct 2024 20:03:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9E4A560889
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org CAECA608A2
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9E4A560889;
-	Tue,  1 Oct 2024 20:03:20 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 6AEAD1BF294
+	by smtp3.osuosl.org (Postfix) with ESMTP id CAECA608A2;
+	Tue,  1 Oct 2024 20:03:22 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 7560F1BF97A
  for <buildroot@lists.busybox.net>; Tue,  1 Oct 2024 20:03:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 591424061F
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6399D40A56
  for <buildroot@lists.busybox.net>; Tue,  1 Oct 2024 20:03:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Rht9_QBONFgg for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id jnKzOhtRQPYY for <buildroot@lists.busybox.net>;
  Tue,  1 Oct 2024 20:03:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 62067405F4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 58389402B1
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 62067405F4
+ by smtp2.osuosl.org (Postfix) with ESMTP id 58389402B1
  for <buildroot@buildroot.org>; Tue,  1 Oct 2024 20:03:18 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 5B63F8462D; Tue,  1 Oct 2024 20:03:18 +0000 (UTC)
+ id 431E18462F; Tue,  1 Oct 2024 20:03:18 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 1 Oct 2024 21:59:03 +0200
+Date: Tue, 1 Oct 2024 21:50:40 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 5271e90a6a2cc7633f3f917391865d2f9df54142
-X-Git-Newrev: 0509885d8dc221978fd332f9768b427ed2775942
+X-Git-Oldrev: a2da88519fc1f96e517171dfb053aca8c00f7daf
+X-Git-Newrev: 93c81b1b1f8dceaa6bd3eb5d203285b94015b8cb
 X-Patchwork-Hint: ignore
-Message-Id: <20241001200318.5B63F8462D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/expat: security bump version to
- 2.6.3
+Message-Id: <20241001200318.431E18462F@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/sdl2: bump version to 2.30.7
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,63 +64,40 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=0509885d8dc221978fd332f9768b427ed2775942
+commit: https://git.buildroot.net/buildroot/commit/?id=93c81b1b1f8dceaa6bd3eb5d203285b94015b8cb
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Changelog:
-https://github.com/libexpat/libexpat/blob/R_2_6_3/expat/Changes
-
-Fixes CVE-2024-45490, CVE-2024-45491 & CVE-2024-45492.
-
-Follow upstream switch of project repository to github:
-https://sourceforge.net/p/expat/news/2022/01/project-moved-to-github/
-
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Michael Fischer <mf@go-sys.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/expat/Config.in  | 2 +-
- package/expat/expat.hash | 6 +-----
- package/expat/expat.mk   | 4 ++--
- 3 files changed, 4 insertions(+), 8 deletions(-)
+ package/sdl2/sdl2.hash | 4 ++--
+ package/sdl2/sdl2.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/expat/Config.in b/package/expat/Config.in
-index 758fb7d516..c227912b03 100644
---- a/package/expat/Config.in
-+++ b/package/expat/Config.in
-@@ -3,4 +3,4 @@ config BR2_PACKAGE_EXPAT
- 	help
- 	  The Expat XML Parser.
- 
--	  http://expat.sourceforge.net
-+	  https://libexpat.github.io/
-diff --git a/package/expat/expat.hash b/package/expat/expat.hash
-index 63890b54df..e40b250ba0 100644
---- a/package/expat/expat.hash
-+++ b/package/expat/expat.hash
-@@ -1,7 +1,3 @@
--# From https://sourceforge.net/projects/expat/files/expat/2.6.2/
--md5  0cb75c8feb842c0794ba89666b762a2d  expat-2.6.1.tar.xz
--sha1  d9e5f953dcacda3c9e69b4886382c3d8847b81bd  expat-2.6.1.tar.xz
--
+diff --git a/package/sdl2/sdl2.hash b/package/sdl2/sdl2.hash
+index d45ed1c73e..4cd3cb08d8 100644
+--- a/package/sdl2/sdl2.hash
++++ b/package/sdl2/sdl2.hash
+@@ -1,4 +1,4 @@
+-# Locally calculated after checking http://www.libsdl.org/release/SDL2-2.30.6.tar.gz.sig
+-sha256  c6ef64ca18a19d13df6eb22df9aff19fb0db65610a74cc81dae33a82235cacd4  SDL2-2.30.6.tar.gz
++# Locally calculated after checking http://www.libsdl.org/release/SDL2-2.30.7.tar.gz.sig
++sha256  2508c80438cd5ff3bbeb8fe36b8f3ce7805018ff30303010b61b03bb83ab9694  SDL2-2.30.7.tar.gz
  # Locally calculated
--sha256  ee14b4c5d8908b1bec37ad937607eab183d4d9806a08adee472c3c3121d27364  expat-2.6.2.tar.xz
-+sha256  274db254a6979bde5aad404763a704956940e465843f2a9bd9ed7af22e2c0efc  expat-2.6.3.tar.xz
- sha256  122f2c27000472a201d337b9b31f7eb2b52d091b02857061a8880371612d9534  COPYING
-diff --git a/package/expat/expat.mk b/package/expat/expat.mk
-index c6b7fc8b44..f5c6175f28 100644
---- a/package/expat/expat.mk
-+++ b/package/expat/expat.mk
-@@ -4,8 +4,8 @@
+ sha256  9b9e1764f06701bcf7ce21e942c682d5921ba0900c6fca760321b1c8837a9662  LICENSE.txt
+diff --git a/package/sdl2/sdl2.mk b/package/sdl2/sdl2.mk
+index 6b7d19bae5..558deed4bc 100644
+--- a/package/sdl2/sdl2.mk
++++ b/package/sdl2/sdl2.mk
+@@ -4,7 +4,7 @@
  #
  ################################################################################
  
--EXPAT_VERSION = 2.6.2
--EXPAT_SITE = http://downloads.sourceforge.net/project/expat/expat/$(EXPAT_VERSION)
-+EXPAT_VERSION = 2.6.3
-+EXPAT_SITE = https://github.com/libexpat/libexpat/releases/download/R_$(subst .,_,$(EXPAT_VERSION))
- EXPAT_SOURCE = expat-$(EXPAT_VERSION).tar.xz
- EXPAT_INSTALL_STAGING = YES
- EXPAT_LICENSE = MIT
+-SDL2_VERSION = 2.30.6
++SDL2_VERSION = 2.30.7
+ SDL2_SOURCE = SDL2-$(SDL2_VERSION).tar.gz
+ SDL2_SITE = http://www.libsdl.org/release
+ SDL2_LICENSE = Zlib
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
