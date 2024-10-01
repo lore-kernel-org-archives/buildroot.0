@@ -4,50 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 31C9BCEACFF
-	for <buildroot@archiver.kernel.org>; Tue,  1 Oct 2024 20:03:28 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 63AF5CEACFB
+	for <buildroot@archiver.kernel.org>; Tue,  1 Oct 2024 20:03:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id EF18A60895;
-	Tue,  1 Oct 2024 20:03:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 30EDC6088C;
+	Tue,  1 Oct 2024 20:03:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RMRZWBwERIAZ; Tue,  1 Oct 2024 20:03:27 +0000 (UTC)
+ id BHfwCQOgn4ZF; Tue,  1 Oct 2024 20:03:30 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C04CB608B6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 72633608BA
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id C04CB608B6;
-	Tue,  1 Oct 2024 20:03:26 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 816441BF97D
- for <buildroot@lists.busybox.net>; Tue,  1 Oct 2024 20:03:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 72633608BA;
+	Tue,  1 Oct 2024 20:03:29 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 2DEAB1BF294
+ for <buildroot@lists.busybox.net>; Tue,  1 Oct 2024 20:03:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 7091C80DA2
+ by smtp4.osuosl.org (Postfix) with ESMTP id 89340405F4
  for <buildroot@lists.busybox.net>; Tue,  1 Oct 2024 20:03:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wbzOzJ4g7Ukc for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id ueXyuBOAQFny for <buildroot@lists.busybox.net>;
  Tue,  1 Oct 2024 20:03:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 769F380D58
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 6314B405F7
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 769F380D58
+ by smtp4.osuosl.org (Postfix) with ESMTP id 6314B405F7
  for <buildroot@buildroot.org>; Tue,  1 Oct 2024 20:03:18 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 71B548462F; Tue,  1 Oct 2024 20:03:18 +0000 (UTC)
+ id 4EED184630; Tue,  1 Oct 2024 20:03:18 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 1 Oct 2024 22:00:35 +0200
+Date: Tue, 1 Oct 2024 21:54:59 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d4cbc887a3bc6df8bf5d7c1a2a8bae349c275228
-X-Git-Newrev: d3a12bc6f1fc231948d1b6b154dd890bf6df4fa5
+X-Git-Oldrev: 93c81b1b1f8dceaa6bd3eb5d203285b94015b8cb
+X-Git-Newrev: 5271e90a6a2cc7633f3f917391865d2f9df54142
 X-Patchwork-Hint: ignore
-Message-Id: <20241001200318.71B548462F@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] {linux, linux-headers}: bump 4.19.x / 5.{4,
- 10, 15}.x / 6.{1, 6, 10}.x series
+Message-Id: <20241001200318.4EED184630@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/pure-ftpd: bump version to 1.0.52
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,80 +64,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=d3a12bc6f1fc231948d1b6b154dd890bf6df4fa5
+commit: https://git.buildroot.net/buildroot/commit/?id=5271e90a6a2cc7633f3f917391865d2f9df54142
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+This version fixes an out-of-bound reads in the MLSD command, so upgrading is recommended.
+It also improves compatibility with various systems.
+
+Update the COPYING hash because of a change in copyright year
+
+Signed-off-by: Michael Fischer <mf@go-sys.de>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- linux/Config.in                      |  2 +-
- linux/linux.hash                     | 14 +++++++-------
- package/linux-headers/Config.in.host | 14 +++++++-------
- 3 files changed, 15 insertions(+), 15 deletions(-)
+ package/pure-ftpd/pure-ftpd.hash | 4 ++--
+ package/pure-ftpd/pure-ftpd.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/linux/Config.in b/linux/Config.in
-index b4e88214d6..e8c0722de0 100644
---- a/linux/Config.in
-+++ b/linux/Config.in
-@@ -134,7 +134,7 @@ config BR2_LINUX_KERNEL_CUSTOM_REPO_GIT_SUBMODULES
+diff --git a/package/pure-ftpd/pure-ftpd.hash b/package/pure-ftpd/pure-ftpd.hash
+index 4cbbfa15ad..2c7a1849ff 100644
+--- a/package/pure-ftpd/pure-ftpd.hash
++++ b/package/pure-ftpd/pure-ftpd.hash
+@@ -1,3 +1,3 @@
+ # Locally calculated after checking pgp signature
+-sha256  622360b86c60b563abe0e994f0a86cfe5ccfde597b29a14b0a79b6e5aa05a304  pure-ftpd-1.0.51.tar.bz2
+-sha256  88c813191c1a59213c641e322cf4562618ab0116ddd7c8341c419f8863b8b0a9  COPYING
++sha256  b3b879468275e0344555458c8e62465dcf525205ecf9ad78c3f208557d0c1947  pure-ftpd-1.0.52.tar.bz2
++sha256  1ec531b1bc4035019545d6a83e260a5a56d3a6bec52895393e9f25965e608e85  COPYING
+diff --git a/package/pure-ftpd/pure-ftpd.mk b/package/pure-ftpd/pure-ftpd.mk
+index 2c01bc8804..fb247f51ca 100644
+--- a/package/pure-ftpd/pure-ftpd.mk
++++ b/package/pure-ftpd/pure-ftpd.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
  
- config BR2_LINUX_KERNEL_VERSION
- 	string
--	default "6.10.9" if BR2_LINUX_KERNEL_LATEST_VERSION
-+	default "6.10.10" if BR2_LINUX_KERNEL_LATEST_VERSION
- 	default "5.10.162-cip24" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
- 	default "5.10.162-cip24-rt10" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
- 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
-diff --git a/linux/linux.hash b/linux/linux.hash
-index 5c745f7c7c..8f369e5f36 100644
---- a/linux/linux.hash
-+++ b/linux/linux.hash
-@@ -1,13 +1,13 @@
- # From https://www.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc
--sha256  a4489b70e0a7c2dc8f501b9cd7fc76989be2febb5519e163ecf816064f2f6858  linux-6.10.9.tar.xz
--sha256  c065e36daf28210060c91a37ef3e92ac5814784e634577e04e406297ead2e86e  linux-6.6.50.tar.xz
--sha256  732ff40ac63642c5ddbb7d65c24c90ed08b95af0e8c92df4739e9703eec01ac1  linux-6.1.109.tar.xz
-+sha256  e687e735b5eb9efb6d67b42433c93fc9118106a995514f062652873b5e809bcd  linux-6.10.10.tar.xz
-+sha256  1c0c9a14650879c4913efdbac428ba31a540c3d987155ddf34d33e11eca008b3  linux-6.6.51.tar.xz
-+sha256  9ebe34b4742f8c9104678f32a6bc20e91299ebac2ae607ff2ed137d928df8f6a  linux-6.1.110.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v5.x/sha256sums.asc
--sha256  e56caae259b85b7685ee589075d58bb7b227024497a60fa27a7b43e0b48839cf  linux-5.15.166.tar.xz
--sha256  85d7bf3a807538b9032e3f798ab978da9b77352bcb526534038c351a4f39e01c  linux-5.10.225.tar.xz
--sha256  250c6a3199b42a1cb1427c9bbeacf5d90fb91bcf9f227195f484a1c877e1f797  linux-5.4.283.tar.xz
-+sha256  b1751f18ece3df08d502dd87a9ab1a317dc0f9486355bf8ee62ba6af0b35da30  linux-5.15.167.tar.xz
-+sha256  f6a19a64785965b9fcac0bcb6fd2412b45ca449495bb03592d46f9a50be51ca6  linux-5.10.226.tar.xz
-+sha256  77221ab9aebeac746915c755ec3b7d320f85cd219c63d9c501820fbca1e3b32b  linux-5.4.284.tar.xz
- # From https://www.kernel.org/pub/linux/kernel/v4.x/sha256sums.asc
--sha256  f13aa1465a2578a910f64b65d743d167466edfb1e0671bc70fa2328cb66b06d9  linux-4.19.321.tar.xz
-+sha256  4e27cdf999359876a0ff489bff6ece7ba5798ff37c2289db0c9e9422a9014162  linux-4.19.322.tar.xz
- # Locally computed
- sha256  fb0edc3c18e47d2b6974cb0880a0afb5c3fa08f50ee87dfdf24349405ea5f8ae  linux-cip-5.10.162-cip24.tar.gz
- sha256  b5539243f187e3d478d76d44ae13aab83952c94b885ad889df6fa9997e16a441  linux-cip-5.10.162-cip24-rt10.tar.gz
-diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
-index 003c2f6a66..067c3b96aa 100644
---- a/package/linux-headers/Config.in.host
-+++ b/package/linux-headers/Config.in.host
-@@ -423,13 +423,13 @@ endchoice
- 
- config BR2_DEFAULT_KERNEL_HEADERS
- 	string
--	default "4.19.321"	if BR2_KERNEL_HEADERS_4_19
--	default "5.4.283"	if BR2_KERNEL_HEADERS_5_4
--	default "5.10.225"	if BR2_KERNEL_HEADERS_5_10
--	default "5.15.166"	if BR2_KERNEL_HEADERS_5_15
--	default "6.1.109"	if BR2_KERNEL_HEADERS_6_1
--	default "6.6.50"	if BR2_KERNEL_HEADERS_6_6
--	default "6.10.9"	if BR2_KERNEL_HEADERS_6_10
-+	default "4.19.322"	if BR2_KERNEL_HEADERS_4_19
-+	default "5.4.284"	if BR2_KERNEL_HEADERS_5_4
-+	default "5.10.226"	if BR2_KERNEL_HEADERS_5_10
-+	default "5.15.167"	if BR2_KERNEL_HEADERS_5_15
-+	default "6.1.110"	if BR2_KERNEL_HEADERS_6_1
-+	default "6.6.51"	if BR2_KERNEL_HEADERS_6_6
-+	default "6.10.10"	if BR2_KERNEL_HEADERS_6_10
- 	default BR2_DEFAULT_KERNEL_VERSION if BR2_KERNEL_HEADERS_VERSION
- 	default "custom"	if BR2_KERNEL_HEADERS_CUSTOM_TARBALL
- 	default BR2_KERNEL_HEADERS_CUSTOM_REPO_VERSION \
+-PURE_FTPD_VERSION = 1.0.51
++PURE_FTPD_VERSION = 1.0.52
+ PURE_FTPD_SITE = https://download.pureftpd.org/pub/pure-ftpd/releases
+ PURE_FTPD_SOURCE = pure-ftpd-$(PURE_FTPD_VERSION).tar.bz2
+ PURE_FTPD_LICENSE = ISC
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
