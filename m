@@ -4,49 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 175EDCEACFB
-	for <buildroot@archiver.kernel.org>; Tue,  1 Oct 2024 20:03:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id E29E1CEACFF
+	for <buildroot@archiver.kernel.org>; Tue,  1 Oct 2024 20:03:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 52487608C6;
-	Tue,  1 Oct 2024 20:03:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AA0DD608DB;
+	Tue,  1 Oct 2024 20:03:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xPKscodcsrGh; Tue,  1 Oct 2024 20:03:33 +0000 (UTC)
+ id lH-I_S1w-jyj; Tue,  1 Oct 2024 20:03:36 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2EF6F6088B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 0ACA860899
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 2EF6F6088B;
-	Tue,  1 Oct 2024 20:03:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0ACA860899;
+	Tue,  1 Oct 2024 20:03:36 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 3EE6E1BF294
- for <buildroot@lists.busybox.net>; Tue,  1 Oct 2024 20:03:21 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 42F381BF294
+ for <buildroot@lists.busybox.net>; Tue,  1 Oct 2024 20:03:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 8F163405F7
+ by smtp4.osuosl.org (Postfix) with ESMTP id B7D8F40604
  for <buildroot@lists.busybox.net>; Tue,  1 Oct 2024 20:03:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id BG-232AHInvN for <buildroot@lists.busybox.net>;
+ id nIaT5XQT3Jhr for <buildroot@lists.busybox.net>;
  Tue,  1 Oct 2024 20:03:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 80F5540604
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 429304022E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id 80F5540604
+ by smtp4.osuosl.org (Postfix) with ESMTP id 429304022E
  for <buildroot@buildroot.org>; Tue,  1 Oct 2024 20:03:18 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 7BF308462D; Tue,  1 Oct 2024 20:03:18 +0000 (UTC)
+ id 389698462D; Tue,  1 Oct 2024 20:03:18 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Tue, 1 Oct 2024 22:01:18 +0200
+Date: Tue, 1 Oct 2024 21:49:55 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: d3a12bc6f1fc231948d1b6b154dd890bf6df4fa5
-X-Git-Newrev: b52c204e6f108949f88d35cdb0d26b21668b47f3
+X-Git-Oldrev: 09964bc5c0f8b329cda6383a1297029354269da9
+X-Git-Newrev: a2da88519fc1f96e517171dfb053aca8c00f7daf
 X-Patchwork-Hint: ignore
-Message-Id: <20241001200318.7BF308462D@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/samba4: bump version to 4.20.5
+Message-Id: <20241001200318.389698462D@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/php: security bump version to
+ 8.3.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,43 +65,110 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b52c204e6f108949f88d35cdb0d26b21668b47f3
+commit: https://git.buildroot.net/buildroot/commit/?id=a2da88519fc1f96e517171dfb053aca8c00f7daf
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Release notes:
-https://www.samba.org/samba/history/samba-4.20.5.html
+Removed patch which is included in this release.
+
+Fixes CVE-2024-8926, CVE-2024-8927, CVE-2024-9026, and CVE-2024-8925.
+
+Changelog: https://www.php.net/ChangeLog-8.php#PHP_8_3
+Release notes: https://news-web.php.net/php.announce/438
 
 Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/samba4/samba4.hash | 4 ++--
- package/samba4/samba4.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ ...fix-configure-check-for-aarch64-CRC32-API.patch | 56 ----------------------
+ package/php/php.hash                               |  2 +-
+ package/php/php.mk                                 |  2 +-
+ 3 files changed, 2 insertions(+), 58 deletions(-)
 
-diff --git a/package/samba4/samba4.hash b/package/samba4/samba4.hash
-index 71fe862901..2c867a03bf 100644
---- a/package/samba4/samba4.hash
-+++ b/package/samba4/samba4.hash
-@@ -1,4 +1,4 @@
- # Locally calculated after checking pgp signature
--# https://download.samba.org/pub/samba/stable/samba-4.20.4.tar.asc
--sha256  3a92e97eaeb345b6b32232f503e14d34f03a7aa64c451fe8c258a11bbda908e5  samba-4.20.4.tar.gz
-+# https://download.samba.org/pub/samba/stable/samba-4.20.5.tar.asc
-+sha256  0697a8a57ff8b268cc268d508ee4f9ec86fd82350e84eba47a709242b71f6962  samba-4.20.5.tar.gz
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/samba4/samba4.mk b/package/samba4/samba4.mk
-index f08303a346..4cece4b477 100644
---- a/package/samba4/samba4.mk
-+++ b/package/samba4/samba4.mk
+diff --git a/package/php/0006-Autotools-fix-configure-check-for-aarch64-CRC32-API.patch b/package/php/0006-Autotools-fix-configure-check-for-aarch64-CRC32-API.patch
+deleted file mode 100644
+index 46e6558dcd..0000000000
+--- a/package/php/0006-Autotools-fix-configure-check-for-aarch64-CRC32-API.patch
++++ /dev/null
+@@ -1,56 +0,0 @@
+-From 5947db6bb8e336252337fb0194c3b8e834d100b6 Mon Sep 17 00:00:00 2001
+-From: Bernd Kuhls <bernd@kuhls.net>
+-Date: Sun, 25 Aug 2024 18:00:29 +0200
+-Subject: [PATCH] Fix GH-15587: Autotools: fix configure check for aarch64
+- CRC32 API
+-
+-On arm32 bit the check succeeds leading to a build error later on:
+-
+-/home/autobuild/autobuild/instance-3/output-1/build/php-8.3.10/ext/standard/crc32.c:70:12:
+- error: 'armv8-a' does not support feature 'nothing'
+-   70 | #   pragma GCC target ("+nothing+crc")
+-
+-Upstream: https://github.com/php/php-src/commit/5947db6bb8e336252337fb0194c3b8e834d100b6
+-
+-Co-authored-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+-[http://lists.busybox.net/pipermail/buildroot/2024-August/761151.html]
+-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+----
+- configure.ac | 24 +++++++++++++++++++-----
+- 1 file changed, 19 insertions(+), 5 deletions(-)
+-
+-diff --git a/configure.ac b/configure.ac
+-index 1142c9459d71..fb59a81700f4 100644
+---- a/configure.ac
+-+++ b/configure.ac
+-@@ -738,11 +738,25 @@ AC_FUNC_ALLOCA
+- PHP_TIME_R_TYPE
+- PHP_CHECK_IN_ADDR_T
+- 
+--AC_CACHE_CHECK([for aarch64 CRC32 API], ac_cv_func___crc32d,
+--[AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <arm_acle.h>]],[[__crc32d(0, 0);]])],[ac_cv_func___crc32d=yes],[ac_cv_func___crc32d="no"])])
+--if test "$ac_cv_func___crc32d" = "yes"; then
+--  AC_DEFINE([HAVE_AARCH64_CRC32], [1], [Define when aarch64 CRC32 API is available.])
+--fi
+-+AC_CACHE_CHECK([for aarch64 CRC32 API], [ac_cv_func___crc32d],
+-+[AC_LINK_IFELSE([AC_LANG_PROGRAM([
+-+#include <arm_acle.h>
+-+# if defined(__GNUC__)
+-+#  if!defined(__clang__)
+-+#   pragma GCC push_options
+-+#   pragma GCC target ("+nothing+crc")
+-+#  elif defined(__APPLE__)
+-+#   pragma clang attribute push(__attribute__((target("crc"))), apply_to=function)
+-+#  else
+-+#   pragma clang attribute push(__attribute__((target("+nothing+crc"))), apply_to=function)
+-+#  endif
+-+# endif
+-+], [__crc32d(0, 0);])],
+-+[ac_cv_func___crc32d=yes],
+-+[ac_cv_func___crc32d=no])])
+-+AS_VAR_IF([ac_cv_func___crc32d], [yes],
+-+  [AC_DEFINE([HAVE_AARCH64_CRC32], [1],
+-+    [Define to 1 when aarch64 CRC32 API is available.])])
+- 
+- dnl Check for asm goto support.
+- AC_CACHE_CHECK([for asm goto], ac_cv__asm_goto,
+diff --git a/package/php/php.hash b/package/php/php.hash
+index 7df051df4e..3110e205ef 100644
+--- a/package/php/php.hash
++++ b/package/php/php.hash
+@@ -1,5 +1,5 @@
+ # From https://www.php.net/downloads.php
+-sha256  b862b098a08ab9bf4b36ed12c7d0d9f65353656b36fb0e3c5344093aceb35802  php-8.3.11.tar.xz
++sha256  f774e28633e26fc8c5197f4dae58ec9e3ff87d1b4311cbc61ab05a7ad24bd131  php-8.3.12.tar.xz
+ 
+ # License file
+ sha256  b42e4df5e50e6ecda1047d503d6d91d71032d09ed1027ba1ef29eed26f890c5a  LICENSE
+diff --git a/package/php/php.mk b/package/php/php.mk
+index d7788107c1..3202902322 100644
+--- a/package/php/php.mk
++++ b/package/php/php.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--SAMBA4_VERSION = 4.20.4
-+SAMBA4_VERSION = 4.20.5
- SAMBA4_SITE = https://download.samba.org/pub/samba/stable
- SAMBA4_SOURCE = samba-$(SAMBA4_VERSION).tar.gz
- SAMBA4_INSTALL_STAGING = YES
+-PHP_VERSION = 8.3.11
++PHP_VERSION = 8.3.12
+ PHP_SITE = https://www.php.net/distributions
+ PHP_SOURCE = php-$(PHP_VERSION).tar.xz
+ PHP_INSTALL_STAGING = YES
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
