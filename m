@@ -4,90 +4,73 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7BE41CF6D3C
-	for <buildroot@archiver.kernel.org>; Wed,  2 Oct 2024 16:26:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7B4CCCF3189
+	for <buildroot@archiver.kernel.org>; Wed,  2 Oct 2024 19:10:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1C530610DC;
-	Wed,  2 Oct 2024 16:26:09 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 0A41E6111E;
+	Wed,  2 Oct 2024 19:10:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id aDgd0kb5NDIE; Wed,  2 Oct 2024 16:26:07 +0000 (UTC)
+ id D_7M_MNKGiiV; Wed,  2 Oct 2024 19:10:21 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1FB736065A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4D74B61113
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 1FB736065A;
-	Wed,  2 Oct 2024 16:26:07 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 21E5F1BF422
- for <buildroot@lists.busybox.net>; Wed,  2 Oct 2024 16:26:05 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4D74B61113;
+	Wed,  2 Oct 2024 19:10:21 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 667E61BF2EF
+ for <buildroot@lists.busybox.net>; Wed,  2 Oct 2024 19:10:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 1D92D40D5B
- for <buildroot@lists.busybox.net>; Wed,  2 Oct 2024 16:26:05 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 55A6381F71
+ for <buildroot@lists.busybox.net>; Wed,  2 Oct 2024 19:10:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id F4_W8jffRtKP for <buildroot@lists.busybox.net>;
- Wed,  2 Oct 2024 16:26:03 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::d32; helo=mail-io1-xd32.google.com;
- envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 64E6640D97
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 64E6640D97
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com
- [IPv6:2607:f8b0:4864:20::d32])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 64E6640D97
- for <buildroot@buildroot.org>; Wed,  2 Oct 2024 16:26:03 +0000 (UTC)
-Received: by mail-io1-xd32.google.com with SMTP id
- ca18e2360f4ac-8323b555ae2so339252239f.2
- for <buildroot@buildroot.org>; Wed, 02 Oct 2024 09:26:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1727886362; x=1728491162;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=7I2zMBB5vAl+dZUZgjwkVbSP/4V3RumitCryqrlUSw8=;
- b=USnZy9DSP8uwmGp31Pc0Ua0lXU5U7N4iHMsI2AQXYztAzEkuCSB3E7/thWu4uS4jTK
- imphYg14ZUVRumm/tEZhY6Mluk6c1L9q16YOR2gvTwzeW2CdOIe3vqrccBqSZhJ/lyT/
- U/1YzSDN68SDn60v3zVq7pk3spaI7S5s0RWsMpugYbo2xCXsX0YbE6dMXwlrW4hVDWQ/
- /5janCmtcPBq/jCtuyxz+T6nqQ9eK65o90QQRMrveUhrCaT45i+UD9wjhE2GJXBkrb0L
- 8T7a5Hwl92jvSIpbirhjPP/fAoWJJWk8nK1B7h4bhR9gungxY/bHKxp+eujTo9oPgLsT
- iU7Q==
-X-Gm-Message-State: AOJu0YwbAZLh/cDyPSVoD4vkiWjkFn3wAlgMTccbHsDwujZypzQWKY0T
- BXlHF5FmL4gzJ5W+CAJJcgXMXAOzCNGx+IkEDGaHrTckgDlt87bwUognVQ==
-X-Google-Smtp-Source: AGHT+IFUtTl0bDShIwzyBj37A28IG1JWQVCqczEn17hnOnnvipDFG3uDff++qh7CsvFkD3be7qR1mA==
-X-Received: by 2002:a05:6e02:1e0d:b0:3a3:49f0:f425 with SMTP id
- e9e14a558f8ab-3a3658b83d8mr40339915ab.0.1727886361325; 
- Wed, 02 Oct 2024 09:26:01 -0700 (PDT)
-Received: from james-x399.localdomain (71-33-149-81.hlrn.qwest.net.
- [71.33.149.81]) by smtp.gmail.com with ESMTPSA id
- e9e14a558f8ab-3a344d928ecsm37090015ab.47.2024.10.02.09.25.59
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 02 Oct 2024 09:26:00 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
-To: buildroot@buildroot.org
-Date: Wed,  2 Oct 2024 10:25:58 -0600
-Message-Id: <20241002162558.3375414-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id XKZzVZjpEhxN for <buildroot@lists.busybox.net>;
+ Wed,  2 Oct 2024 19:10:19 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::15;
+ helo=smtp6-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 1849E81F70
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 1849E81F70
+Received: from smtp6-g21.free.fr (smtp6-g21.free.fr [IPv6:2a01:e0c:1:1599::15])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 1849E81F70
+ for <buildroot@buildroot.org>; Wed,  2 Oct 2024 19:10:18 +0000 (UTC)
+Received: from webmail.free.fr (unknown [172.20.246.2])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp6-g21.free.fr (Postfix) with ESMTPA id E8D77780502;
+ Wed,  2 Oct 2024 21:10:11 +0200 (CEST)
+Received: from 82-64-214-120.subs.proxad.net ([82.64.214.120:56604])
+ via 82-64-214-120.subs.proxad.net ([82.64.214.120])
+ by webmail.free.fr
+ with HTTP (HTTP/1.0 POST); Wed, 02 Oct 2024 21:10:11 +0200
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1727886362; x=1728491162; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=7I2zMBB5vAl+dZUZgjwkVbSP/4V3RumitCryqrlUSw8=;
- b=jI5kSRMCscKSgMqkfRpxjes9pDWw1zHBiw1SrxH+FHGPGSdJdoDBrO5KIzkafao/7u
- PQ1Fsve/Uxc+CAjp2RFXf0H6+L0MaQrfjU6xwB+YL92jyEexWgJ6XKow5WCiDYI1y1kY
- 5mmbagT3qy8GVxwGSRcIz0Rzzgg3/TmfAIzSIIOhIW9/Jb1gO0SZXD37SeqZCGJN+lrv
- rRk4UuLO2CmAQVMI7LlFwcfuYbrblGFxtjglZ/MymSAQ+3GLBFJ4rejiR3ZaKvvLFFbJ
- XvZqgPJMKBtCVO/UfEIb0j4oPUharybYsiTEJp3/4214ymwqqzgHplCgVF1pvwpGywbx
- aCCw==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+Date: Wed, 02 Oct 2024 21:10:11 +0200
+From: Julien Olivain <ju.o@free.fr>
+To: =?UTF-8?Q?Vincent_Stehl=C3=A9?= <vincent.stehle@arm.com>
+In-Reply-To: <20241002112334.3193139-1-vincent.stehle@arm.com>
+References: <20241002112334.3193139-1-vincent.stehle@arm.com>
+User-Agent: Webmail Free/1.6.9
+Message-ID: <52206e50e14b42e631e4be26e42a23dc@free.fr>
+X-Sender: ju.o@free.fr
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1727896215;
+ bh=okYU8IBshhQpGjV1U81Tt2KBkw2vCYq5DVPvNwgyn4I=;
+ h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+ b=NWr/lDqgR8dAzirby+bOWsY/IH/eHaPblsuFxuzcU3REOzDUekpRnZy3UO6Nbz9dw
+ lopa3iJGrQDnwbPFfEvWsHQVaUj3szwIPFYhZIHnWpXvAjENotwjeni851YZFuMxgx
+ D+deqwiy1dCxMf1KqreoDSeP857Ih0PQ2GDaQhXFoSv9k6q4v93Ho44jqyG8euYrCk
+ ES63uGlIcIFHVjxnfhJ2mszkm7/2MdUA4ppAVVuTDHNxaefKxngl1evwVBdc4cQcta
+ FG9+PnVCGGQprQZpGm491vOeejGJ+6QpCqwdZC2DUeOyhjrbzKNfSFy7CjceZAK6dC
+ mkWQ3U2uL/kbg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=jI5kSRMC
-Subject: [Buildroot] [PATCH 1/1] package/pkgconf: bump to version 2.3.0
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=NWr/lDqg
+Subject: Re: [Buildroot] [PATCH v2] configs/aarch64_efi: bump Linux to
+ 6.10.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -99,284 +82,105 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: James Hilliard <james.hilliard1@gmail.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Cc: buildroot@buildroot.org
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Rebase only prefix subset of variables patch.
-
-Drop revert main assume modversion patch which is now upstream.
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
----
- .checkpackageignore                           |  1 -
- ...th-the-sysroot-a-subset-of-variables.patch | 78 ++++++++++---------
- ...me-modversion-insted-of-version-if-o.patch | 45 -----------
- package/pkgconf/pkgconf.hash                  |  2 +-
- package/pkgconf/pkgconf.mk                    |  2 +-
- 5 files changed, 42 insertions(+), 86 deletions(-)
- delete mode 100644 package/pkgconf/0002-Revert-main-assume-modversion-insted-of-version-if-o.patch
-
-diff --git a/.checkpackageignore b/.checkpackageignore
-index 0cc742bf09..75fa99787b 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -1036,7 +1036,6 @@ package/pistache/0001-src-common-transport.cc-fallback-value-for-RUSAGE_TH.patch
- package/pistache/0002-src-server-listener.cc-fix-libressl-build.patch lib_patch.Upstream
- package/pixman/0001-Disable-tests.patch lib_patch.Upstream
- package/pkgconf/0001-Only-prefix-with-the-sysroot-a-subset-of-variables.patch lib_patch.Upstream
--package/pkgconf/0002-Revert-main-assume-modversion-insted-of-version-if-o.patch lib_patch.Upstream
- package/pkgconf/pkg-config.in Shellcheck
- package/poke/0001-configure.ac-HELP2MAN-replace-by-true-when-cross-com.patch lib_patch.Upstream
- package/policycoreutils/0001-Add-DESTDIR-to-all-paths-that-use-an-absolute-path.patch lib_patch.Upstream
-diff --git a/package/pkgconf/0001-Only-prefix-with-the-sysroot-a-subset-of-variables.patch b/package/pkgconf/0001-Only-prefix-with-the-sysroot-a-subset-of-variables.patch
-index a039d0c1bc..d25039ade2 100644
---- a/package/pkgconf/0001-Only-prefix-with-the-sysroot-a-subset-of-variables.patch
-+++ b/package/pkgconf/0001-Only-prefix-with-the-sysroot-a-subset-of-variables.patch
-@@ -1,4 +1,4 @@
--From 267a57022699453e8d8f517519df25ac6bf6ac4e Mon Sep 17 00:00:00 2001
-+From c1f9e60f46f2207f9dd07dd290ad5a2da05ad41d Mon Sep 17 00:00:00 2001
- From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- Date: Sun, 16 Dec 2018 11:52:18 +0100
- Subject: [PATCH] Only prefix with the sysroot a subset of variables
-@@ -23,19 +23,19 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
- [Updated to include gobject-introspection paths]
- Signed-off-by: Adam Duskett <aduskett@gmail.com>
- ---
-- libpkgconf/tuple.c | 60 ++++++++++++++++++++++++++++++++--------------
-- 1 file changed, 42 insertions(+), 18 deletions(-)
-+ libpkgconf/tuple.c | 65 ++++++++++++++++++++++++++++++++--------------
-+ 1 file changed, 46 insertions(+), 19 deletions(-)
- 
- diff --git a/libpkgconf/tuple.c b/libpkgconf/tuple.c
--index 8523709..7cd2fff 100644
-+index 83f6a47..a2aa427 100644
- --- a/libpkgconf/tuple.c
- +++ b/libpkgconf/tuple.c
--@@ -161,6 +161,21 @@ dequote(const char *value)
-+@@ -178,6 +178,21 @@ dequote(const char *value)
-  	return buf;
-  }
-  
- +static char *
--+pkgconf_tuple_parse_sysroot(const pkgconf_client_t *client, pkgconf_list_t *vars, const char *value, bool add_sysroot);
-++pkgconf_tuple_parse_sysroot(const pkgconf_client_t *client, pkgconf_list_t *vars, const char *value, unsigned int flags, bool add_sysroot);
- +
- +const char *sysrooted_keys[] = {
- +	"g_ir_scanner",
-@@ -49,21 +49,19 @@ index 8523709..7cd2fff 100644
- +	NULL,
- +};
- +
-- /*
--  * !doc
--  *
--@@ -181,6 +193,8 @@ pkgconf_tuple_add(const pkgconf_client_t *client, pkgconf_list_t *list, const ch
-+ static const char *
-+ find_sysroot(const pkgconf_client_t *client, pkgconf_list_t *vars)
-+ {
-+@@ -237,14 +252,20 @@ pkgconf_tuple_add(const pkgconf_client_t *client, pkgconf_list_t *list, const ch
-  {
-  	char *dequote_value;
-- 	pkgconf_tuple_t *tuple = calloc(sizeof(pkgconf_tuple_t), 1);
-+ 	pkgconf_tuple_t *tuple = calloc(1, sizeof(pkgconf_tuple_t));
- +	bool add_sysroot = false;
- +	int i;
-  
-  	pkgconf_tuple_find_delete(list, key);
-  
--@@ -188,9 +202,13 @@ pkgconf_tuple_add(const pkgconf_client_t *client, pkgconf_list_t *list, const ch
-- 
-- 	PKGCONF_TRACE(client, "adding tuple to @%p: %s => %s (parsed? %d)", list, key, dequote_value, parse);
-+ 	dequote_value = dequote(value);
-  
- +	for (i = 0; sysrooted_keys[i] != NULL; i++)
- +		if (!strcmp(key, sysrooted_keys[i]))
-@@ -71,77 +69,81 @@ index 8523709..7cd2fff 100644
- +
-  	tuple->key = strdup(key);
-  	if (parse)
---		tuple->value = pkgconf_tuple_parse(client, list, dequote_value);
--+		tuple->value = pkgconf_tuple_parse_sysroot(client, list, dequote_value, add_sysroot);
-+-		tuple->value = pkgconf_tuple_parse(client, list, dequote_value, flags);
-++		tuple->value = pkgconf_tuple_parse_sysroot(client, list, dequote_value, flags, add_sysroot);
-  	else
-  		tuple->value = strdup(dequote_value);
-  
--@@ -234,27 +252,14 @@ pkgconf_tuple_find(const pkgconf_client_t *client, pkgconf_list_t *list, const c
-+@@ -294,22 +315,8 @@ pkgconf_tuple_find(const pkgconf_client_t *client, pkgconf_list_t *list, const c
-  	return NULL;
-  }
-  
- -/*
- - * !doc
- - *
--- * .. c:function:: char *pkgconf_tuple_parse(const pkgconf_client_t *client, pkgconf_list_t *vars, const char *value)
-+- * .. c:function:: char *pkgconf_tuple_parse(const pkgconf_client_t *client, pkgconf_list_t *vars, const char *value, unsigned int flags)
- - *
- - *    Parse an expression for variable substitution.
- - *
- - *    :param pkgconf_client_t* client: The pkgconf client object to access.
- - *    :param pkgconf_list_t* list: The variable list to search for variables (along side the global variable list).
- - *    :param char* value: The ``key=value`` string to parse.
-+- *    :param uint flags: Any flags to consider while parsing.
- - *    :return: the variable data with any variables substituted
- - *    :rtype: char *
- - */
- -char *
---pkgconf_tuple_parse(const pkgconf_client_t *client, pkgconf_list_t *vars, const char *value)
-+-pkgconf_tuple_parse(const pkgconf_client_t *client, pkgconf_list_t *vars, const char *value, unsigned int flags)
- +static char *
--+pkgconf_tuple_parse_sysroot(const pkgconf_client_t *client, pkgconf_list_t *vars, const char *value, bool add_sysroot)
-++pkgconf_tuple_parse_sysroot(const pkgconf_client_t *client, pkgconf_list_t *vars, const char *value, unsigned int flags, bool add_sysroot)
-  {
-  	char buf[PKGCONF_BUFSIZE];
-  	const char *ptr;
-- 	char *bptr = buf;
-- 
---	if (*value == '/' && client->sysroot_dir != NULL && strncmp(value, client->sysroot_dir, strlen(client->sysroot_dir)))
--+	if (add_sysroot && *value == '/' && client->sysroot_dir != NULL && strncmp(value, client->sysroot_dir, strlen(client->sysroot_dir)))
-- 		bptr += pkgconf_strlcpy(buf, client->sysroot_dir, sizeof buf);
-+@@ -318,7 +325,7 @@ pkgconf_tuple_parse(const pkgconf_client_t *client, pkgconf_list_t *vars, const
-+ 	if (!(client->flags & PKGCONF_PKG_PKGF_FDO_SYSROOT_RULES) &&
-+ 		(!(flags & PKGCONF_PKG_PROPF_UNINSTALLED) || (client->flags & PKGCONF_PKG_PKGF_PKGCONF1_SYSROOT_RULES)))
-+ 	{
-+-		if (*value == '/' && client->sysroot_dir != NULL && strncmp(value, client->sysroot_dir, strlen(client->sysroot_dir)))
-++		if (add_sysroot && *value == '/' && client->sysroot_dir != NULL && strncmp(value, client->sysroot_dir, strlen(client->sysroot_dir)))
-+ 			bptr += pkgconf_strlcpy(buf, client->sysroot_dir, sizeof buf);
-+ 	}
-  
-- 	for (ptr = value; *ptr != '\0' && bptr - buf < PKGCONF_BUFSIZE; ptr++)
--@@ -294,7 +299,7 @@ pkgconf_tuple_parse(const pkgconf_client_t *client, pkgconf_list_t *vars, const
-- 
-- 				if (kv != NULL)
-+@@ -381,7 +388,7 @@ pkgconf_tuple_parse(const pkgconf_client_t *client, pkgconf_list_t *vars, const
-  				{
---					parsekv = pkgconf_tuple_parse(client, vars, kv);
--+					parsekv = pkgconf_tuple_parse_sysroot(client, vars, kv, add_sysroot);
-+ 					size_t nlen;
-+ 
-+-					parsekv = pkgconf_tuple_parse(client, vars, kv, flags);
-++					parsekv = pkgconf_tuple_parse_sysroot(client, vars, kv, flags, add_sysroot);
-+ 					nlen = pkgconf_strlcpy(bptr, parsekv, remain);
-+ 					free(parsekv);
-  
-- 					strncpy(bptr, parsekv, PKGCONF_BUFSIZE - (bptr - buf));
-- 					bptr += strlen(parsekv);
--@@ -339,6 +344,25 @@ pkgconf_tuple_parse(const pkgconf_client_t *client, pkgconf_list_t *vars, const
-+@@ -432,6 +439,26 @@ pkgconf_tuple_parse(const pkgconf_client_t *client, pkgconf_list_t *vars, const
-  	return strdup(buf);
-  }
-  
- +/*
- + * !doc
- + *
--+ * .. c:function:: char *pkgconf_tuple_parse(const pkgconf_client_t *client, pkgconf_list_t *vars, const char *value)
-++ * .. c:function:: char *pkgconf_tuple_parse(const pkgconf_client_t *client, pkgconf_list_t *vars, const char *value, unsigned int flags)
- + *
- + *    Parse an expression for variable substitution.
- + *
- + *    :param pkgconf_client_t* client: The pkgconf client object to access.
- + *    :param pkgconf_list_t* list: The variable list to search for variables (along side the global variable list).
- + *    :param char* value: The ``key=value`` string to parse.
-++ *    :param uint flags: Any flags to consider while parsing.
- + *    :return: the variable data with any variables substituted
- + *    :rtype: char *
- + */
- +char *
--+pkgconf_tuple_parse(const pkgconf_client_t *client, pkgconf_list_t *vars, const char *value)
-++pkgconf_tuple_parse(const pkgconf_client_t *client, pkgconf_list_t *vars, const char *value, unsigned int flags)
- +{
--+	return pkgconf_tuple_parse_sysroot(client, vars, value, true);
-++	return pkgconf_tuple_parse_sysroot(client, vars, value, flags, true);
- +}
- +
-  /*
-   * !doc
-   *
- -- 
--2.19.2
-+2.34.1
- 
-diff --git a/package/pkgconf/0002-Revert-main-assume-modversion-insted-of-version-if-o.patch b/package/pkgconf/0002-Revert-main-assume-modversion-insted-of-version-if-o.patch
-deleted file mode 100644
-index f659a3b07f..0000000000
---- a/package/pkgconf/0002-Revert-main-assume-modversion-insted-of-version-if-o.patch
-+++ /dev/null
-@@ -1,45 +0,0 @@
--From 4ccef40918a539905a2951bfb81cf8dba4a245c6 Mon Sep 17 00:00:00 2001
--From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
--Date: Wed, 2 Jan 2019 18:15:50 +0100
--Subject: [PATCH] Revert "main: assume --modversion insted of --version if
-- other flags or module names are provided"
--
--This reverts commit 12a0eb124cea85586e57f33c91a1e4c73459eef6, as it
--causes pkg-config to assume --modversion is used when something as
--simple as 'pkg-config --static --version' is used, leading to a
--failure instead of the expected behavior: the one of "pkg-config
----version".
--
--Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-----
-- cli/main.c | 14 ++------------
-- 1 file changed, 2 insertions(+), 12 deletions(-)
--
--diff --git a/cli/main.c b/cli/main.c
--index b52cc85..c5acc10 100644
----- a/cli/main.c
--+++ b/cli/main.c
--@@ -1002,18 +1002,8 @@ main(int argc, char *argv[])
-- 
-- 	if ((want_flags & PKG_VERSION) == PKG_VERSION)
-- 	{
---		if (argc > 2)
---		{
---			fprintf(stderr, "%s: --version specified with other options or module names, assuming --modversion.\n", argv[0]);
---
---			want_flags &= ~PKG_VERSION;
---			want_flags |= PKG_MODVERSION;
---		}
---		else
---		{
---			version();
---			return EXIT_SUCCESS;
---		}
--+		version();
--+		return EXIT_SUCCESS;
-- 	}
-- 
-- 	if ((want_flags & PKG_HELP) == PKG_HELP)
---- 
--2.20.1
--
-diff --git a/package/pkgconf/pkgconf.hash b/package/pkgconf/pkgconf.hash
-index f210869c03..6d4b7972d6 100644
---- a/package/pkgconf/pkgconf.hash
-+++ b/package/pkgconf/pkgconf.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  61f0b31b0d5ea0e862b454a80c170f57bad47879c0c42bd8de89200ff62ea210  pkgconf-1.6.3.tar.xz
-+sha256  3a9080ac51d03615e7c1910a0a2a8df08424892b5f13b0628a204d3fcce0ea8b  pkgconf-2.3.0.tar.xz
- sha256  07ee94b50a41ee3fc4e13a9b9c60b26fc28488494c465639f7e5f07a3952ec04  COPYING
-diff --git a/package/pkgconf/pkgconf.mk b/package/pkgconf/pkgconf.mk
-index a8c7b48287..057f43bb98 100644
---- a/package/pkgconf/pkgconf.mk
-+++ b/package/pkgconf/pkgconf.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--PKGCONF_VERSION = 1.6.3
-+PKGCONF_VERSION = 2.3.0
- PKGCONF_SITE = https://distfiles.ariadne.space/pkgconf
- PKGCONF_SOURCE = pkgconf-$(PKGCONF_VERSION).tar.xz
- PKGCONF_LICENSE = pkgconf license
--- 
-2.34.1
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
+SGkgVmluY2VudCwgQWxsLAoKVGhhbmsgeW91IGZvciB0aGUgdXBkYXRlIQoKT24gMDIvMTAvMjAy
+NCAxMzoyMiwgVmluY2VudCBTdGVobMOpIHdyb3RlOgo+IFdoaWxlIGF0IGl0Ogo+IC0gVHVybiBv
+biBoYXNoZXMgdmVyaWZpY2F0aW9uIGFuZCBhZGQgYSBoYXNoIGZvciB0aGUgTGludXgga2VybmVs
+Lgo+IC0gTGludXgga2VybmVsIG5lZWRzIGhvc3QtcHl0aG9uMzsgYWRkIGl0Lgo+IC0gQ29udmVy
+dCB0byBgbWFrZSBzYXZlZGVmY29uZmlnJyBmb3JtYXQuCj4gLSBGaXggc2hlbGxjaGVjayB3YXJu
+aW5ncyBpbiBvdXIgcG9zdC1pbWFnZSBzY3JpcHQgYW5kIHVwZGF0ZQo+ICAgLmNoZWNrcGFja2Fn
+ZWlnbm9yZS4KPiAKClJldmlld2VkLWJ5OiBKdWxpZW4gT2xpdmFpbiA8anUub0BmcmVlLmZyPgoK
+PiBTaWduZWQtb2ZmLWJ5OiBWaW5jZW50IFN0ZWhsw6kgPHZpbmNlbnQuc3RlaGxlQGFybS5jb20+
+Cj4gQ2M6IEVyaWNvIE51bmVzIDxudW5lcy5lcmljb0BnbWFpbC5jb20+Cj4gQ2M6IERpY2sgT2xz
+c29uIDxoaUBzZW56aWxsYS5pbz4KPiBDYzogSnVsaWVuIE9saXZhaW4gPGp1Lm9AZnJlZS5mcj4K
+PiAtLS0KPiAKPiAKPiBDaGFuZ2VzIHYxIC0+IHYyOgo+ICAgLSBDb252ZXJ0IHRvIGBtYWtlIHNh
+dmVkZWZjb25maWcnIGZvcm1hdCAgKHN1Z2dlc3RlZCBieSBKdWxpZW4pCj4gICAtIEFkZCBob3N0
+LXB5dGhvbjMgZm9yIExpbnV4IGtlcm5lbCAgKHN1Z2dlc3RlZCBieSBKdWxpZW4pCj4gCj4gCj4g
+IC5jaGVja3BhY2thZ2VpZ25vcmUgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAyIC0tCj4g
+IC4uLi9wYXRjaGVzL2xpbnV4LWhlYWRlcnMvbGludXgtaGVhZGVycy5oYXNoICB8ICAxICsKPiAg
+Ym9hcmQvYWFyY2g2NC1lZmkvcGF0Y2hlcy9saW51eC9saW51eC5oYXNoICAgIHwgIDIgKysKPiAg
+Ym9hcmQvYWFyY2g2NC1lZmkvcG9zdC1pbWFnZS5zaCAgICAgICAgICAgICAgIHwgIDQgKy0tCj4g
+IGNvbmZpZ3MvYWFyY2g2NF9lZmlfZGVmY29uZmlnICAgICAgICAgICAgICAgICB8IDM1ICsrKysr
+Ky0tLS0tLS0tLS0tLS0KPiAgNSBmaWxlcyBjaGFuZ2VkLCAxNiBpbnNlcnRpb25zKCspLCAyOCBk
+ZWxldGlvbnMoLSkKPiAgY3JlYXRlIG1vZGUgMTIwMDAwIAo+IGJvYXJkL2FhcmNoNjQtZWZpL3Bh
+dGNoZXMvbGludXgtaGVhZGVycy9saW51eC1oZWFkZXJzLmhhc2gKPiAgY3JlYXRlIG1vZGUgMTAw
+NjQ0IGJvYXJkL2FhcmNoNjQtZWZpL3BhdGNoZXMvbGludXgvbGludXguaGFzaAo+IAo+IGRpZmYg
+LS1naXQgYS8uY2hlY2twYWNrYWdlaWdub3JlIGIvLmNoZWNrcGFja2FnZWlnbm9yZQo+IGluZGV4
+IDBjYzc0MmJmMDkuLmZlZDhhNWMyYjYgMTAwNjQ0Cj4gLS0tIGEvLmNoZWNrcGFja2FnZWlnbm9y
+ZQo+ICsrKyBiLy5jaGVja3BhY2thZ2VpZ25vcmUKPiBAQCAtMSw0ICsxLDMgQEAKPiAtYm9hcmQv
+YWFyY2g2NC1lZmkvcG9zdC1pbWFnZS5zaCBTaGVsbGNoZWNrCj4gIGJvYXJkL2FtYXJ1bGEvdnlh
+c2EvcG9zdC1idWlsZC5zaCBTaGVsbGNoZWNrCj4gIAo+IGJvYXJkL2FuZGVzL2FlMzUwL3BhdGNo
+ZXMvdWJvb3QvMDAwMS1tbWMtZnRzZGMwMTBfbWNpLVN1cHBvcnQtRFRTLW9mLWZ0c2RjMDEwLWRy
+aXZlci1mb3ItLnBhdGNoIAo+IGxpYl9wYXRjaC5VcHN0cmVhbQo+ICAKPiBib2FyZC9hbmRlcy9h
+ZTM1MC9wYXRjaGVzL3Vib290LzAwMDItc3BsLUFsaWduLWRldmljZS10cmVlLWJsb2ItYWRkcmVz
+cy1hdC04LWJ5dGUtYm91bmRhci5wYXRjaCAKPiBsaWJfcGF0Y2guVXBzdHJlYW0KPiBAQCAtMTA2
+LDcgKzEwNSw2IEBAIAo+IGJvb3Qvc3lzbGludXgvMDAxMy1GaXgtYnVpbGQtd2l0aC1nbnUtZWZp
+LXZlcnNpb24tMy4wLjkucGF0Y2ggCj4gbGliX3BhdGNoLlVwc3RyZWFtCj4gIAo+IGJvb3Qvc3lz
+bGludXgvMDAxNC1GaXgtYnVpbGQtd2l0aC1iaW51dGlscy1ub3RlLWdudS1wcm9wZXJ0eS1zZWN0
+aW9uLnBhdGNoIAo+IGxpYl9wYXRjaC5VcHN0cmVhbQo+ICAKPiBib290L3N5c2xpbnV4LzAwMTYt
+V29ya2Fyb3VuZC1tdWx0aXBsZS1kZWZpbml0aW9uLW9mLXN5bWJvbC1lcnJvcnMucGF0Y2ggCj4g
+bGliX3BhdGNoLlVwc3RyZWFtCj4gIAo+IGJvb3Qvc3lzbGludXgvMDAxNy1SZXBsYWNlLWJ1aWx0
+aW4tc3RybGVuLXRoYXQtYXBwZWFycy10by1nZXQtb3B0aW1pemVkLnBhdGNoIAo+IGxpYl9wYXRj
+aC5VcHN0cmVhbQo+IC1jb25maWdzL2FhcmNoNjRfZWZpX2RlZmNvbmZpZyBsaWJfZGVmY29uZmln
+LkZvcmNlQ2hlY2tIYXNoCj4gIGNvbmZpZ3MvYW01NzR4X2lka19kZWZjb25maWcgbGliX2RlZmNv
+bmZpZy5Gb3JjZUNoZWNrSGFzaAo+ICBjb25maWdzL2FuZGVzX2FlMzUwXzQ1X2RlZmNvbmZpZyBs
+aWJfZGVmY29uZmlnLkZvcmNlQ2hlY2tIYXNoCj4gIGNvbmZpZ3MvYXJjdHVydXNfdWNsczEwMTJh
+X2RlZmNvbmZpZyBsaWJfZGVmY29uZmlnLkZvcmNlQ2hlY2tIYXNoCj4gZGlmZiAtLWdpdCBhL2Jv
+YXJkL2FhcmNoNjQtZWZpL3BhdGNoZXMvbGludXgtaGVhZGVycy9saW51eC1oZWFkZXJzLmhhc2gg
+Cj4gYi9ib2FyZC9hYXJjaDY0LWVmaS9wYXRjaGVzL2xpbnV4LWhlYWRlcnMvbGludXgtaGVhZGVy
+cy5oYXNoCj4gbmV3IGZpbGUgbW9kZSAxMjAwMDAKPiBpbmRleCAwMDAwMDAwMDAwLi41ODA4ZDky
+YWZlCj4gLS0tIC9kZXYvbnVsbAo+ICsrKyBiL2JvYXJkL2FhcmNoNjQtZWZpL3BhdGNoZXMvbGlu
+dXgtaGVhZGVycy9saW51eC1oZWFkZXJzLmhhc2gKPiBAQCAtMCwwICsxIEBACj4gKy4uL2xpbnV4
+L2xpbnV4Lmhhc2gKPiBcIE5vIG5ld2xpbmUgYXQgZW5kIG9mIGZpbGUKPiBkaWZmIC0tZ2l0IGEv
+Ym9hcmQvYWFyY2g2NC1lZmkvcGF0Y2hlcy9saW51eC9saW51eC5oYXNoIAo+IGIvYm9hcmQvYWFy
+Y2g2NC1lZmkvcGF0Y2hlcy9saW51eC9saW51eC5oYXNoCj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQK
+PiBpbmRleCAwMDAwMDAwMDAwLi4yMDk0MWEyNjliCj4gLS0tIC9kZXYvbnVsbAo+ICsrKyBiL2Jv
+YXJkL2FhcmNoNjQtZWZpL3BhdGNoZXMvbGludXgvbGludXguaGFzaAo+IEBAIC0wLDAgKzEsMiBA
+QAo+ICsjIEZyb20gaHR0cHM6Ly93d3cua2VybmVsLm9yZy9wdWIvbGludXgva2VybmVsL3Y2Lngv
+c2hhMjU2c3Vtcy5hc2MKPiArc2hhMjU2ICAKPiA1MjQ4NTg4NTJmNTg2OWE5ZWYxN2RlOGIxZTZl
+N2ZhZjA1YmNiMmM0NjJiYzk2YjNjMjRkYmY4MmVkZTM3M2NmICAKPiBsaW51eC02LjEwLjEyLnRh
+ci54ego+IGRpZmYgLS1naXQgYS9ib2FyZC9hYXJjaDY0LWVmaS9wb3N0LWltYWdlLnNoIAo+IGIv
+Ym9hcmQvYWFyY2g2NC1lZmkvcG9zdC1pbWFnZS5zaAo+IGluZGV4IGYwMjE0ZGM4NjYuLjFhZWYx
+NWVmNmYgMTAwNzU1Cj4gLS0tIGEvYm9hcmQvYWFyY2g2NC1lZmkvcG9zdC1pbWFnZS5zaAo+ICsr
+KyBiL2JvYXJkL2FhcmNoNjQtZWZpL3Bvc3QtaW1hZ2Uuc2gKPiBAQCAtMSw1ICsxLDUgQEAKPiAg
+IyEvYmluL3NoCj4gCj4gLUJPQVJEX0RJUj0iJChkaXJuYW1lICQwKSIKPiArQk9BUkRfRElSPSQo
+ZGlybmFtZSAiJDAiKQo+IAo+IC1jcCAtZiAke0JPQVJEX0RJUn0vZ3J1Yi5jZmcgJHtCSU5BUklF
+U19ESVJ9L2VmaS1wYXJ0L0VGSS9CT09UL2dydWIuY2ZnCj4gK2NwIC1mICIke0JPQVJEX0RJUn0v
+Z3J1Yi5jZmciIAo+ICIke0JJTkFSSUVTX0RJUn0vZWZpLXBhcnQvRUZJL0JPT1QvZ3J1Yi5jZmci
+Cj4gZGlmZiAtLWdpdCBhL2NvbmZpZ3MvYWFyY2g2NF9lZmlfZGVmY29uZmlnIAo+IGIvY29uZmln
+cy9hYXJjaDY0X2VmaV9kZWZjb25maWcKPiBpbmRleCA0NDMxMTNlNDdiLi45ZjI4NGZmNzRiIDEw
+MDY0NAo+IC0tLSBhL2NvbmZpZ3MvYWFyY2g2NF9lZmlfZGVmY29uZmlnCj4gKysrIGIvY29uZmln
+cy9hYXJjaDY0X2VmaV9kZWZjb25maWcKPiBAQCAtMSwzNCArMSwyMSBAQAo+IC0jIEFyY2hpdGVj
+dHVyZQo+ICBCUjJfYWFyY2g2ND15Cj4gLQo+IC0jIFN5c3RlbQo+ICtCUjJfUEFDS0FHRV9IT1NU
+X0xJTlVYX0hFQURFUlNfQ1VTVE9NXzZfMTA9eQo+ICtCUjJfR0xPQkFMX1BBVENIX0RJUj0iYm9h
+cmQvYWFyY2g2NC1lZmkvcGF0Y2hlcyIKPiArQlIyX0RPV05MT0FEX0ZPUkNFX0NIRUNLX0hBU0hF
+Uz15Cj4gIEJSMl9ST09URlNfREVWSUNFX0NSRUFUSU9OX0RZTkFNSUNfRVVERVY9eQo+IC0KPiAt
+IyMgUmVxdWlyZWQgdG9vbHMgdG8gY3JlYXRlIGJvb3RhYmxlIG1lZGlhCj4gLUJSMl9QQUNLQUdF
+X0hPU1RfR0VOSU1BR0U9eQo+IC0KPiAtIyBCb290bG9hZGVyCj4gLUJSMl9UQVJHRVRfR1JVQjI9
+eQo+IC1CUjJfVEFSR0VUX0dSVUIyX0FSTTY0X0VGST15Cj4gLQo+IC0jIEZpbGVzeXN0ZW0gLyBp
+bWFnZQo+IC1CUjJfVEFSR0VUX1JPT1RGU19FWFQyPXkKPiAtQlIyX1RBUkdFVF9ST09URlNfRVhU
+Ml80PXkKPiAtQlIyX1RBUkdFVF9ST09URlNfRVhUMl9TSVpFPSIyMDBNIgo+IC0jIEJSMl9UQVJH
+RVRfUk9PVEZTX1RBUiBpcyBub3Qgc2V0Cj4gIEJSMl9ST09URlNfUE9TVF9JTUFHRV9TQ1JJUFQ9
+ImJvYXJkL2FhcmNoNjQtZWZpL3Bvc3QtaW1hZ2Uuc2ggCj4gc3VwcG9ydC9zY3JpcHRzL2dlbmlt
+YWdlLnNoIgo+ICBCUjJfUk9PVEZTX1BPU1RfU0NSSVBUX0FSR1M9Ii1jIGJvYXJkL2FhcmNoNjQt
+ZWZpL2dlbmltYWdlLWVmaS5jZmciCj4gLQo+IC0jIExpbnV4IGhlYWRlcnMgc2FtZSBhcyBrZXJu
+ZWwsIGEgNS4xNSBzZXJpZXMKPiAtQlIyX1BBQ0tBR0VfSE9TVF9MSU5VWF9IRUFERVJTX0NVU1RP
+TV81XzE1PXkKPiAtCj4gLSMgS2VybmVsCj4gIEJSMl9MSU5VWF9LRVJORUw9eQo+ICBCUjJfTElO
+VVhfS0VSTkVMX0NVU1RPTV9WRVJTSU9OPXkKPiAtQlIyX0xJTlVYX0tFUk5FTF9DVVNUT01fVkVS
+U0lPTl9WQUxVRT0iNS4xNS40Igo+ICtCUjJfTElOVVhfS0VSTkVMX0NVU1RPTV9WRVJTSU9OX1ZB
+TFVFPSI2LjEwLjEyIgo+ICBCUjJfTElOVVhfS0VSTkVMX1VTRV9BUkNIX0RFRkFVTFRfQ09ORklH
+PXkKPiAgQlIyX0xJTlVYX0tFUk5FTF9ORUVEU19IT1NUX09QRU5TU0w9eQo+IC0KPiAtIyBIb3N0
+IHRvb2xzIGZvciBnZW5pbWFnZQo+ICtCUjJfTElOVVhfS0VSTkVMX05FRURTX0hPU1RfUFlUSE9O
+Mz15Cj4gK0JSMl9UQVJHRVRfUk9PVEZTX0VYVDI9eQo+ICtCUjJfVEFSR0VUX1JPT1RGU19FWFQy
+XzQ9eQo+ICtCUjJfVEFSR0VUX1JPT1RGU19FWFQyX1NJWkU9IjIwME0iCj4gKyMgQlIyX1RBUkdF
+VF9ST09URlNfVEFSIGlzIG5vdCBzZXQKPiArQlIyX1RBUkdFVF9HUlVCMj15Cj4gIEJSMl9QQUNL
+QUdFX0hPU1RfRE9TRlNUT09MUz15Cj4gK0JSMl9QQUNLQUdFX0hPU1RfR0VOSU1BR0U9eQo+ICBC
+UjJfUEFDS0FHRV9IT1NUX01UT09MUz15Cj4gLS0KPiAyLjQ1LjIKCkJlc3QgcmVnYXJkcywKCkp1
+bGllbi4KX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX18KYnVp
+bGRyb290IG1haWxpbmcgbGlzdApidWlsZHJvb3RAYnVpbGRyb290Lm9yZwpodHRwczovL2xpc3Rz
+LmJ1aWxkcm9vdC5vcmcvbWFpbG1hbi9saXN0aW5mby9idWlsZHJvb3QK
