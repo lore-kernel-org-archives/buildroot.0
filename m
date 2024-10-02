@@ -4,54 +4,94 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 42A98CF31B5
-	for <buildroot@archiver.kernel.org>; Wed,  2 Oct 2024 11:23:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EBE32CF6D2C
+	for <buildroot@archiver.kernel.org>; Wed,  2 Oct 2024 14:33:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id A519681EBC;
-	Wed,  2 Oct 2024 11:23:45 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 73CD181F12;
+	Wed,  2 Oct 2024 14:33:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 327-CJax_7_V; Wed,  2 Oct 2024 11:23:44 +0000 (UTC)
+ id Vv_vINRoWHa4; Wed,  2 Oct 2024 14:33:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 8CA7981D3A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 52D1381F13
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 8CA7981D3A;
-	Wed,  2 Oct 2024 11:23:44 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 6FEE81BF293
- for <buildroot@lists.busybox.net>; Wed,  2 Oct 2024 11:23:43 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 52D1381F13;
+	Wed,  2 Oct 2024 14:33:24 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id D8E901BF232
+ for <buildroot@lists.busybox.net>; Wed,  2 Oct 2024 14:33:22 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 5EB69607B5
- for <buildroot@lists.busybox.net>; Wed,  2 Oct 2024 11:23:43 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id D590D81F13
+ for <buildroot@lists.busybox.net>; Wed,  2 Oct 2024 14:33:22 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id UGW3QiRXTqZH for <buildroot@lists.busybox.net>;
- Wed,  2 Oct 2024 11:23:42 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.140.110.172;
- helo=foss.arm.com; envelope-from=vincent.stehle@arm.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 17471606B8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 17471606B8
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
- by smtp3.osuosl.org (Postfix) with ESMTP id 17471606B8
- for <buildroot@buildroot.org>; Wed,  2 Oct 2024 11:23:41 +0000 (UTC)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
- by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D9B54339;
- Wed,  2 Oct 2024 04:24:09 -0700 (PDT)
-Received: from localhost.localdomain (W6YXVX39XF.nice.arm.com [10.34.128.51])
- by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id
- 764583F640; Wed,  2 Oct 2024 04:23:39 -0700 (PDT)
-From: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@arm.com>
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 8va9q4oV5WaK for <buildroot@lists.busybox.net>;
+ Wed,  2 Oct 2024 14:33:21 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::82f; helo=mail-qt1-x82f.google.com;
+ envelope-from=jdknight@jdknight.me; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 44EAC81F12
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 44EAC81F12
+Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com
+ [IPv6:2607:f8b0:4864:20::82f])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 44EAC81F12
+ for <buildroot@buildroot.org>; Wed,  2 Oct 2024 14:33:20 +0000 (UTC)
+Received: by mail-qt1-x82f.google.com with SMTP id
+ d75a77b69052e-45812fdcd0aso8610921cf.0
+ for <buildroot@buildroot.org>; Wed, 02 Oct 2024 07:33:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1727879599; x=1728484399;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+ :message-id:reply-to;
+ bh=xXMC2VyVlxCf83PRMyRDpgyp45k/pq0uFMoeU0/TWVs=;
+ b=sf+s0n4ws4hVvYP042pKNpjS5M5by7VvAFEm1Ifstzq0kPn8kLjjj7eSOw6zsSaztq
+ lRen6lHTUmJGm8jS/AMhEPwc0nHMiIwUSVBzSzbjiZncsXk9Q5vvcWfNhjvKCknOk7qB
+ nuCeb70TN0pR3P7lnoAEl4u1NRKDkDhOrztyyeIAdxz1QhpnRFpcWcqrvGGJFVIKZIro
+ s5cidxZAIK1aw0daiMBlFB2rgHGBZASZm46bs0jmK5v5nqAdYH6xUX1AKPsnqHWv8/hS
+ WQkFP6LyN9iNFoPwErqXuTGgQ882poYimnWqnYAPQvBU24faX5prSWW1sgCNKyvmBrHH
+ TU+w==
+X-Gm-Message-State: AOJu0YxHWYXy27DtTlMQUbAj9S/8NcRx1smdXl9YvrBaTSD9McBv2eSA
+ GSF4jMs4U3+ViCFM5o6BWbTU0WXOQasJJnr8Hb7lWtcVroclRLpsED3mYUZL+dMQ3Kd3r/VyWJg
+ GJY0=
+X-Google-Smtp-Source: AGHT+IGBXWkh3AD7xjJL//c5DRbGyvbQ6UeI+d4LHIyAQpRUlSocAWLvhpXIa2OUkN/dzd8KVXT5lQ==
+X-Received: by 2002:a05:6214:451e:b0:6cb:49d2:c700 with SMTP id
+ 6a1803df08f44-6cb816dd922mr58755186d6.22.1727879599235; 
+ Wed, 02 Oct 2024 07:33:19 -0700 (PDT)
+Received: from localhost.localdomain ([74.15.0.190])
+ by smtp.gmail.com with ESMTPSA id
+ 6a1803df08f44-6cb3b62da07sm60783026d6.68.2024.10.02.07.33.18
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 02 Oct 2024 07:33:18 -0700 (PDT)
+From: James Knight <james.d.knight@live.com>
 To: buildroot@buildroot.org
-Date: Wed,  2 Oct 2024 13:22:34 +0200
-Message-ID: <20241002112334.3193139-1-vincent.stehle@arm.com>
-X-Mailer: git-send-email 2.45.2
+Date: Wed,  2 Oct 2024 10:32:56 -0400
+Message-ID: <20241002143256.702-1-james.d.knight@live.com>
+X-Mailer: git-send-email 2.46.2.windows.1
 MIME-Version: 1.0
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=arm.com
-Subject: [Buildroot] [PATCH v2] configs/aarch64_efi: bump Linux to 6.10.12
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=jdknight-me.20230601.gappssmtp.com; s=20230601; t=1727879599; x=1728484399;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+ bh=xXMC2VyVlxCf83PRMyRDpgyp45k/pq0uFMoeU0/TWVs=;
+ b=jCaclPnMlsfcphecVoaZ6aefGLv64tquvPu5ZCacXs8GEiFczFxDBH4av1UZh4Aqi4
+ 3jK4cpktdr5X9eI91s9V7cz9BtV0ydUx76HtQk6reXwblHXGXLuar28YRppJ/YqE9B0E
+ Xn8BFiccSJViOWT2EVVxrxG59b0hC2VBAfJoEvaErXG7dT7jgL7Cb26k6HgTVA+uE3Gu
+ I5PadxAoBB4/8oYT/gprTWYIcp4CISy5PbRXRET73dk++rBi9xLY1SpXvBkf0XFF+62A
+ 9THl0/acnNpqAe+ymM6PwzXtwD+L9yiJwSU0JsCW47m5MNE/MxzWNWwPyI248CQ2p9tw
+ ZfIA==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dmarc=fail (p=none dis=none)
+ header.from=live.com
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=jdknight-me.20230601.gappssmtp.com
+ header.i=@jdknight-me.20230601.gappssmtp.com header.a=rsa-sha256
+ header.s=20230601 header.b=jCaclPnM
+Subject: [Buildroot] [PATCH 1/1] linux: support each linux latest lts version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -63,98 +103,161 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>,
- =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@arm.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: James Knight <james.d.knight@live.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-V2hpbGUgYXQgaXQ6Ci0gVHVybiBvbiBoYXNoZXMgdmVyaWZpY2F0aW9uIGFuZCBhZGQgYSBoYXNo
-IGZvciB0aGUgTGludXgga2VybmVsLgotIExpbnV4IGtlcm5lbCBuZWVkcyBob3N0LXB5dGhvbjM7
-IGFkZCBpdC4KLSBDb252ZXJ0IHRvIGBtYWtlIHNhdmVkZWZjb25maWcnIGZvcm1hdC4KLSBGaXgg
-c2hlbGxjaGVjayB3YXJuaW5ncyBpbiBvdXIgcG9zdC1pbWFnZSBzY3JpcHQgYW5kIHVwZGF0ZQog
-IC5jaGVja3BhY2thZ2VpZ25vcmUuCgpTaWduZWQtb2ZmLWJ5OiBWaW5jZW50IFN0ZWhsw6kgPHZp
-bmNlbnQuc3RlaGxlQGFybS5jb20+CkNjOiBFcmljbyBOdW5lcyA8bnVuZXMuZXJpY29AZ21haWwu
-Y29tPgpDYzogRGljayBPbHNzb24gPGhpQHNlbnppbGxhLmlvPgpDYzogSnVsaWVuIE9saXZhaW4g
-PGp1Lm9AZnJlZS5mcj4KLS0tCgoKQ2hhbmdlcyB2MSAtPiB2MjoKICAtIENvbnZlcnQgdG8gYG1h
-a2Ugc2F2ZWRlZmNvbmZpZycgZm9ybWF0ICAoc3VnZ2VzdGVkIGJ5IEp1bGllbikKICAtIEFkZCBo
-b3N0LXB5dGhvbjMgZm9yIExpbnV4IGtlcm5lbCAgKHN1Z2dlc3RlZCBieSBKdWxpZW4pCgoKIC5j
-aGVja3BhY2thZ2VpZ25vcmUgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAyIC0tCiAuLi4v
-cGF0Y2hlcy9saW51eC1oZWFkZXJzL2xpbnV4LWhlYWRlcnMuaGFzaCAgfCAgMSArCiBib2FyZC9h
-YXJjaDY0LWVmaS9wYXRjaGVzL2xpbnV4L2xpbnV4Lmhhc2ggICAgfCAgMiArKwogYm9hcmQvYWFy
-Y2g2NC1lZmkvcG9zdC1pbWFnZS5zaCAgICAgICAgICAgICAgIHwgIDQgKy0tCiBjb25maWdzL2Fh
-cmNoNjRfZWZpX2RlZmNvbmZpZyAgICAgICAgICAgICAgICAgfCAzNSArKysrKystLS0tLS0tLS0t
-LS0tCiA1IGZpbGVzIGNoYW5nZWQsIDE2IGluc2VydGlvbnMoKyksIDI4IGRlbGV0aW9ucygtKQog
-Y3JlYXRlIG1vZGUgMTIwMDAwIGJvYXJkL2FhcmNoNjQtZWZpL3BhdGNoZXMvbGludXgtaGVhZGVy
-cy9saW51eC1oZWFkZXJzLmhhc2gKIGNyZWF0ZSBtb2RlIDEwMDY0NCBib2FyZC9hYXJjaDY0LWVm
-aS9wYXRjaGVzL2xpbnV4L2xpbnV4Lmhhc2gKCmRpZmYgLS1naXQgYS8uY2hlY2twYWNrYWdlaWdu
-b3JlIGIvLmNoZWNrcGFja2FnZWlnbm9yZQppbmRleCAwY2M3NDJiZjA5Li5mZWQ4YTVjMmI2IDEw
-MDY0NAotLS0gYS8uY2hlY2twYWNrYWdlaWdub3JlCisrKyBiLy5jaGVja3BhY2thZ2VpZ25vcmUK
-QEAgLTEsNCArMSwzIEBACi1ib2FyZC9hYXJjaDY0LWVmaS9wb3N0LWltYWdlLnNoIFNoZWxsY2hl
-Y2sKIGJvYXJkL2FtYXJ1bGEvdnlhc2EvcG9zdC1idWlsZC5zaCBTaGVsbGNoZWNrCiBib2FyZC9h
-bmRlcy9hZTM1MC9wYXRjaGVzL3Vib290LzAwMDEtbW1jLWZ0c2RjMDEwX21jaS1TdXBwb3J0LURU
-Uy1vZi1mdHNkYzAxMC1kcml2ZXItZm9yLS5wYXRjaCBsaWJfcGF0Y2guVXBzdHJlYW0KIGJvYXJk
-L2FuZGVzL2FlMzUwL3BhdGNoZXMvdWJvb3QvMDAwMi1zcGwtQWxpZ24tZGV2aWNlLXRyZWUtYmxv
-Yi1hZGRyZXNzLWF0LTgtYnl0ZS1ib3VuZGFyLnBhdGNoIGxpYl9wYXRjaC5VcHN0cmVhbQpAQCAt
-MTA2LDcgKzEwNSw2IEBAIGJvb3Qvc3lzbGludXgvMDAxMy1GaXgtYnVpbGQtd2l0aC1nbnUtZWZp
-LXZlcnNpb24tMy4wLjkucGF0Y2ggbGliX3BhdGNoLlVwc3RyZWFtCiBib290L3N5c2xpbnV4LzAw
-MTQtRml4LWJ1aWxkLXdpdGgtYmludXRpbHMtbm90ZS1nbnUtcHJvcGVydHktc2VjdGlvbi5wYXRj
-aCBsaWJfcGF0Y2guVXBzdHJlYW0KIGJvb3Qvc3lzbGludXgvMDAxNi1Xb3JrYXJvdW5kLW11bHRp
-cGxlLWRlZmluaXRpb24tb2Ytc3ltYm9sLWVycm9ycy5wYXRjaCBsaWJfcGF0Y2guVXBzdHJlYW0K
-IGJvb3Qvc3lzbGludXgvMDAxNy1SZXBsYWNlLWJ1aWx0aW4tc3RybGVuLXRoYXQtYXBwZWFycy10
-by1nZXQtb3B0aW1pemVkLnBhdGNoIGxpYl9wYXRjaC5VcHN0cmVhbQotY29uZmlncy9hYXJjaDY0
-X2VmaV9kZWZjb25maWcgbGliX2RlZmNvbmZpZy5Gb3JjZUNoZWNrSGFzaAogY29uZmlncy9hbTU3
-NHhfaWRrX2RlZmNvbmZpZyBsaWJfZGVmY29uZmlnLkZvcmNlQ2hlY2tIYXNoCiBjb25maWdzL2Fu
-ZGVzX2FlMzUwXzQ1X2RlZmNvbmZpZyBsaWJfZGVmY29uZmlnLkZvcmNlQ2hlY2tIYXNoCiBjb25m
-aWdzL2FyY3R1cnVzX3VjbHMxMDEyYV9kZWZjb25maWcgbGliX2RlZmNvbmZpZy5Gb3JjZUNoZWNr
-SGFzaApkaWZmIC0tZ2l0IGEvYm9hcmQvYWFyY2g2NC1lZmkvcGF0Y2hlcy9saW51eC1oZWFkZXJz
-L2xpbnV4LWhlYWRlcnMuaGFzaCBiL2JvYXJkL2FhcmNoNjQtZWZpL3BhdGNoZXMvbGludXgtaGVh
-ZGVycy9saW51eC1oZWFkZXJzLmhhc2gKbmV3IGZpbGUgbW9kZSAxMjAwMDAKaW5kZXggMDAwMDAw
-MDAwMC4uNTgwOGQ5MmFmZQotLS0gL2Rldi9udWxsCisrKyBiL2JvYXJkL2FhcmNoNjQtZWZpL3Bh
-dGNoZXMvbGludXgtaGVhZGVycy9saW51eC1oZWFkZXJzLmhhc2gKQEAgLTAsMCArMSBAQAorLi4v
-bGludXgvbGludXguaGFzaApcIE5vIG5ld2xpbmUgYXQgZW5kIG9mIGZpbGUKZGlmZiAtLWdpdCBh
-L2JvYXJkL2FhcmNoNjQtZWZpL3BhdGNoZXMvbGludXgvbGludXguaGFzaCBiL2JvYXJkL2FhcmNo
-NjQtZWZpL3BhdGNoZXMvbGludXgvbGludXguaGFzaApuZXcgZmlsZSBtb2RlIDEwMDY0NAppbmRl
-eCAwMDAwMDAwMDAwLi4yMDk0MWEyNjliCi0tLSAvZGV2L251bGwKKysrIGIvYm9hcmQvYWFyY2g2
-NC1lZmkvcGF0Y2hlcy9saW51eC9saW51eC5oYXNoCkBAIC0wLDAgKzEsMiBAQAorIyBGcm9tIGh0
-dHBzOi8vd3d3Lmtlcm5lbC5vcmcvcHViL2xpbnV4L2tlcm5lbC92Ni54L3NoYTI1NnN1bXMuYXNj
-CitzaGEyNTYgIDUyNDg1ODg1MmY1ODY5YTllZjE3ZGU4YjFlNmU3ZmFmMDViY2IyYzQ2MmJjOTZi
-M2MyNGRiZjgyZWRlMzczY2YgIGxpbnV4LTYuMTAuMTIudGFyLnh6CmRpZmYgLS1naXQgYS9ib2Fy
-ZC9hYXJjaDY0LWVmaS9wb3N0LWltYWdlLnNoIGIvYm9hcmQvYWFyY2g2NC1lZmkvcG9zdC1pbWFn
-ZS5zaAppbmRleCBmMDIxNGRjODY2Li4xYWVmMTVlZjZmIDEwMDc1NQotLS0gYS9ib2FyZC9hYXJj
-aDY0LWVmaS9wb3N0LWltYWdlLnNoCisrKyBiL2JvYXJkL2FhcmNoNjQtZWZpL3Bvc3QtaW1hZ2Uu
-c2gKQEAgLTEsNSArMSw1IEBACiAjIS9iaW4vc2gKIAotQk9BUkRfRElSPSIkKGRpcm5hbWUgJDAp
-IgorQk9BUkRfRElSPSQoZGlybmFtZSAiJDAiKQogCi1jcCAtZiAke0JPQVJEX0RJUn0vZ3J1Yi5j
-ZmcgJHtCSU5BUklFU19ESVJ9L2VmaS1wYXJ0L0VGSS9CT09UL2dydWIuY2ZnCitjcCAtZiAiJHtC
-T0FSRF9ESVJ9L2dydWIuY2ZnIiAiJHtCSU5BUklFU19ESVJ9L2VmaS1wYXJ0L0VGSS9CT09UL2dy
-dWIuY2ZnIgpkaWZmIC0tZ2l0IGEvY29uZmlncy9hYXJjaDY0X2VmaV9kZWZjb25maWcgYi9jb25m
-aWdzL2FhcmNoNjRfZWZpX2RlZmNvbmZpZwppbmRleCA0NDMxMTNlNDdiLi45ZjI4NGZmNzRiIDEw
-MDY0NAotLS0gYS9jb25maWdzL2FhcmNoNjRfZWZpX2RlZmNvbmZpZworKysgYi9jb25maWdzL2Fh
-cmNoNjRfZWZpX2RlZmNvbmZpZwpAQCAtMSwzNCArMSwyMSBAQAotIyBBcmNoaXRlY3R1cmUKIEJS
-Ml9hYXJjaDY0PXkKLQotIyBTeXN0ZW0KK0JSMl9QQUNLQUdFX0hPU1RfTElOVVhfSEVBREVSU19D
-VVNUT01fNl8xMD15CitCUjJfR0xPQkFMX1BBVENIX0RJUj0iYm9hcmQvYWFyY2g2NC1lZmkvcGF0
-Y2hlcyIKK0JSMl9ET1dOTE9BRF9GT1JDRV9DSEVDS19IQVNIRVM9eQogQlIyX1JPT1RGU19ERVZJ
-Q0VfQ1JFQVRJT05fRFlOQU1JQ19FVURFVj15Ci0KLSMjIFJlcXVpcmVkIHRvb2xzIHRvIGNyZWF0
-ZSBib290YWJsZSBtZWRpYQotQlIyX1BBQ0tBR0VfSE9TVF9HRU5JTUFHRT15Ci0KLSMgQm9vdGxv
-YWRlcgotQlIyX1RBUkdFVF9HUlVCMj15Ci1CUjJfVEFSR0VUX0dSVUIyX0FSTTY0X0VGST15Ci0K
-LSMgRmlsZXN5c3RlbSAvIGltYWdlCi1CUjJfVEFSR0VUX1JPT1RGU19FWFQyPXkKLUJSMl9UQVJH
-RVRfUk9PVEZTX0VYVDJfND15Ci1CUjJfVEFSR0VUX1JPT1RGU19FWFQyX1NJWkU9IjIwME0iCi0j
-IEJSMl9UQVJHRVRfUk9PVEZTX1RBUiBpcyBub3Qgc2V0CiBCUjJfUk9PVEZTX1BPU1RfSU1BR0Vf
-U0NSSVBUPSJib2FyZC9hYXJjaDY0LWVmaS9wb3N0LWltYWdlLnNoIHN1cHBvcnQvc2NyaXB0cy9n
-ZW5pbWFnZS5zaCIKIEJSMl9ST09URlNfUE9TVF9TQ1JJUFRfQVJHUz0iLWMgYm9hcmQvYWFyY2g2
-NC1lZmkvZ2VuaW1hZ2UtZWZpLmNmZyIKLQotIyBMaW51eCBoZWFkZXJzIHNhbWUgYXMga2VybmVs
-LCBhIDUuMTUgc2VyaWVzCi1CUjJfUEFDS0FHRV9IT1NUX0xJTlVYX0hFQURFUlNfQ1VTVE9NXzVf
-MTU9eQotCi0jIEtlcm5lbAogQlIyX0xJTlVYX0tFUk5FTD15CiBCUjJfTElOVVhfS0VSTkVMX0NV
-U1RPTV9WRVJTSU9OPXkKLUJSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX1ZFUlNJT05fVkFMVUU9IjUu
-MTUuNCIKK0JSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX1ZFUlNJT05fVkFMVUU9IjYuMTAuMTIiCiBC
-UjJfTElOVVhfS0VSTkVMX1VTRV9BUkNIX0RFRkFVTFRfQ09ORklHPXkKIEJSMl9MSU5VWF9LRVJO
-RUxfTkVFRFNfSE9TVF9PUEVOU1NMPXkKLQotIyBIb3N0IHRvb2xzIGZvciBnZW5pbWFnZQorQlIy
-X0xJTlVYX0tFUk5FTF9ORUVEU19IT1NUX1BZVEhPTjM9eQorQlIyX1RBUkdFVF9ST09URlNfRVhU
-Mj15CitCUjJfVEFSR0VUX1JPT1RGU19FWFQyXzQ9eQorQlIyX1RBUkdFVF9ST09URlNfRVhUMl9T
-SVpFPSIyMDBNIgorIyBCUjJfVEFSR0VUX1JPT1RGU19UQVIgaXMgbm90IHNldAorQlIyX1RBUkdF
-VF9HUlVCMj15CiBCUjJfUEFDS0FHRV9IT1NUX0RPU0ZTVE9PTFM9eQorQlIyX1BBQ0tBR0VfSE9T
-VF9HRU5JTUFHRT15CiBCUjJfUEFDS0FHRV9IT1NUX01UT09MUz15Ci0tIAoyLjQ1LjIKCl9fX19f
-X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWls
-aW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qu
-b3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
+Provides support for a board configuration to use the latest version of
+the Linux kernel for a specific LTS. While the existing
+`BR2_LINUX_KERNEL_LATEST_VERSION` allows desired configurations to roll
+with a latest stable release, in some scenarios, a user may want the
+same ability but for a specific Linux LTS. For example, if a user is
+using an external toolchain that is also tied to a specific Linux LTS.
+
+Having these new options avoids the need for rolling configuration to
+rely on `BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE` with the
+`BR2_DOWNLOAD_FORCE_CHECK_HASHES` option disabled.
+
+Signed-off-by: James Knight <james.d.knight@live.com>
+---
+See also: https://lore.kernel.org/buildroot/CALAjcgXZKYjpsFV1E7Ry-0N5NEGV01hebSb8tEgoAtHvkfvCOA@mail.gmail.com/
+---
+ linux/Config.ext.in                  |  4 +--
+ linux/Config.in                      | 45 ++++++++++++++++++++++++++++
+ linux/linux.mk                       |  2 +-
+ package/linux-headers/Config.in.host |  4 +--
+ 4 files changed, 48 insertions(+), 7 deletions(-)
+
+diff --git a/linux/Config.ext.in b/linux/Config.ext.in
+index 3cbf42d344..fe4abd779c 100644
+--- a/linux/Config.ext.in
++++ b/linux/Config.ext.in
+@@ -48,9 +48,7 @@ comment "xenomai needs a uClibc or glibc toolchain w/ threads"
+ # RTAI
+ config BR2_LINUX_KERNEL_EXT_RTAI
+ 	bool "RTAI Real-time patch"
+-	depends on !BR2_LINUX_KERNEL_LATEST_VERSION
+-	depends on !BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+-	depends on !BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
++	depends on !BR2_LINUX_KERNEL_LATEST_SERIES
+ 	select BR2_PACKAGE_RTAI
+ 	help
+ 	  RTAI Kernel part.
+diff --git a/linux/Config.in b/linux/Config.in
+index e8c0722de0..8692031559 100644
+--- a/linux/Config.in
++++ b/linux/Config.in
+@@ -16,6 +16,12 @@ if BR2_LINUX_KERNEL
+ config BR2_LINUX_NEEDS_MODULES
+ 	bool
+ 
++# Track if the selected kernel version is a "latest" series. This can be
++# used handle certain configurations such as preventing the use of the
++# RTAI Real-time patch.
++config BR2_LINUX_KERNEL_LATEST_SERIES
++	bool
++
+ #
+ # Version selection. We provide the choice between:
+ #
+@@ -29,10 +35,42 @@ choice
+ 
+ config BR2_LINUX_KERNEL_LATEST_VERSION
+ 	bool "Latest version (6.10)"
++	select BR2_LINUX_KERNEL_LATEST_SERIES
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_10 if BR2_KERNEL_HEADERS_AS_KERNEL
+ 
++config BR2_LINUX_KERNEL_LATEST_LTS_6_6_VERSION
++	bool "Latest LTS 6.6 version"
++	select BR2_LINUX_KERNEL_LATEST_SERIES
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_6 if BR2_KERNEL_HEADERS_AS_KERNEL
++
++config BR2_LINUX_KERNEL_LATEST_LTS_6_1_VERSION
++	bool "Latest LTS 6.1 version"
++	select BR2_LINUX_KERNEL_LATEST_SERIES
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_6_1 if BR2_KERNEL_HEADERS_AS_KERNEL
++
++config BR2_LINUX_KERNEL_LATEST_LTS_5_15_VERSION
++	bool "Latest LTS 5.15 version"
++	select BR2_LINUX_KERNEL_LATEST_SERIES
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_15 if BR2_KERNEL_HEADERS_AS_KERNEL
++
++config BR2_LINUX_KERNEL_LATEST_LTS_5_10_VERSION
++	bool "Latest LTS 5.10 version"
++	select BR2_LINUX_KERNEL_LATEST_SERIES
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_10 if BR2_KERNEL_HEADERS_AS_KERNEL
++
++config BR2_LINUX_KERNEL_LATEST_LTS_5_4_VERSION
++	bool "Latest LTS 5.4 version"
++	select BR2_LINUX_KERNEL_LATEST_SERIES
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_4 if BR2_KERNEL_HEADERS_AS_KERNEL
++
++config BR2_LINUX_KERNEL_LATEST_LTS_4_19_VERSION
++	bool "Latest LTS 4.19 version"
++	select BR2_LINUX_KERNEL_LATEST_SERIES
++	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_19 if BR2_KERNEL_HEADERS_AS_KERNEL
++
+ config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	bool "Latest CIP SLTS version (5.10.162-cip24)"
++	select BR2_LINUX_KERNEL_LATEST_SERIES
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_10 if BR2_KERNEL_HEADERS_AS_KERNEL
+ 	help
+ 	  CIP launched in the spring of 2016 to address the needs of
+@@ -53,6 +91,7 @@ config BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 
+ config BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	bool "Latest CIP RT SLTS version (5.10.162-cip24-rt10)"
++	select BR2_LINUX_KERNEL_LATEST_SERIES
+ 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_10 if BR2_KERNEL_HEADERS_AS_KERNEL
+ 	help
+ 	  Same as the CIP version, but this is the PREEMPT_RT realtime
+@@ -135,6 +174,12 @@ config BR2_LINUX_KERNEL_CUSTOM_REPO_GIT_SUBMODULES
+ config BR2_LINUX_KERNEL_VERSION
+ 	string
+ 	default "6.10.10" if BR2_LINUX_KERNEL_LATEST_VERSION
++	default "6.6.51" if BR2_LINUX_KERNEL_LATEST_LTS_6_6_VERSION
++	default "6.1.110" if BR2_LINUX_KERNEL_LATEST_LTS_6_1_VERSION
++	default "5.15.167" if BR2_LINUX_KERNEL_LATEST_LTS_5_15_VERSION
++	default "5.10.226" if BR2_LINUX_KERNEL_LATEST_LTS_5_10_VERSION
++	default "5.4.284" if BR2_LINUX_KERNEL_LATEST_LTS_5_4_VERSION
++	default "4.19.322" if BR2_LINUX_KERNEL_LATEST_LTS_4_19_VERSION
+ 	default "5.10.162-cip24" if BR2_LINUX_KERNEL_LATEST_CIP_VERSION
+ 	default "5.10.162-cip24-rt10" if BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION
+ 	default BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE \
+diff --git a/linux/linux.mk b/linux/linux.mk
+index 0a213d17b5..c59075621b 100644
+--- a/linux/linux.mk
++++ b/linux/linux.mk
+@@ -49,7 +49,7 @@ LINUX_SITE = $(BR2_KERNEL_MIRROR)/linux/kernel/v$(firstword $(subst ., ,$(LINUX_
+ endif
+ endif
+ 
+-ifeq ($(BR2_LINUX_KERNEL)$(BR2_LINUX_KERNEL_LATEST_VERSION),y)
++ifeq ($(BR2_LINUX_KERNEL)$(BR2_LINUX_KERNEL_LATEST_SERIES),y)
+ BR_NO_CHECK_HASH_FOR += $(LINUX_SOURCE)
+ endif
+ 
+diff --git a/package/linux-headers/Config.in.host b/package/linux-headers/Config.in.host
+index 067c3b96aa..70eec06498 100644
+--- a/package/linux-headers/Config.in.host
++++ b/package/linux-headers/Config.in.host
+@@ -113,9 +113,7 @@ endif
+ 
+ choice
+ 	bool "Custom kernel headers series"
+-	depends on !BR2_LINUX_KERNEL_LATEST_VERSION || !BR2_KERNEL_HEADERS_AS_KERNEL
+-	depends on !BR2_LINUX_KERNEL_LATEST_CIP_VERSION || !BR2_KERNEL_HEADERS_AS_KERNEL
+-	depends on !BR2_LINUX_KERNEL_LATEST_CIP_RT_VERSION || !BR2_KERNEL_HEADERS_AS_KERNEL
++	depends on !BR2_LINUX_KERNEL_LATEST_SERIES || !BR2_KERNEL_HEADERS_AS_KERNEL
+ 	depends on BR2_KERNEL_HEADERS_VERSION || BR2_KERNEL_HEADERS_AS_KERNEL || \
+ 		   BR2_KERNEL_HEADERS_CUSTOM_TARBALL || BR2_KERNEL_HEADERS_CUSTOM_GIT
+ 	help
+-- 
+2.46.2.windows.1
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
