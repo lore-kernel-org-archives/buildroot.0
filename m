@@ -1,72 +1,93 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB132CF6D2D
-	for <buildroot@archiver.kernel.org>; Wed,  2 Oct 2024 15:08:26 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7BE41CF6D3C
+	for <buildroot@archiver.kernel.org>; Wed,  2 Oct 2024 16:26:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 95DF2400D6;
-	Wed,  2 Oct 2024 15:08:26 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iuqWO0eoMn8j; Wed,  2 Oct 2024 15:08:25 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6858240148
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6858240148;
-	Wed,  2 Oct 2024 15:08:25 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 7DE6D1BF29D
- for <buildroot@lists.busybox.net>; Wed,  2 Oct 2024 15:08:24 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 6D1AC606BF
- for <buildroot@lists.busybox.net>; Wed,  2 Oct 2024 15:08:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1C530610DC;
+	Wed,  2 Oct 2024 16:26:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id i1J1lH2yxTy2 for <buildroot@lists.busybox.net>;
- Wed,  2 Oct 2024 15:08:23 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.158.102;
- helo=smtpcmd02102.aruba.it;
- envelope-from=giulio.benetti@benettiengineering.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org C3D2560B17
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C3D2560B17
-Received: from smtpcmd02102.aruba.it (smtpcmd02102.aruba.it [62.149.158.102])
- by smtp3.osuosl.org (Postfix) with ESMTPS id C3D2560B17
- for <buildroot@buildroot.org>; Wed,  2 Oct 2024 15:08:22 +0000 (UTC)
-Received: from localhost.localdomain ([84.33.84.190])
- by Aruba Outgoing Smtp  with ESMTPSA
- id w0xfswz0dNKTWw0xfsfDBf; Wed, 02 Oct 2024 17:08:19 +0200
-From: Giulio Benetti <giulio.benetti@benettiengineering.com>
+ id aDgd0kb5NDIE; Wed,  2 Oct 2024 16:26:07 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1FB736065A
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1FB736065A;
+	Wed,  2 Oct 2024 16:26:07 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 21E5F1BF422
+ for <buildroot@lists.busybox.net>; Wed,  2 Oct 2024 16:26:05 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 1D92D40D5B
+ for <buildroot@lists.busybox.net>; Wed,  2 Oct 2024 16:26:05 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id F4_W8jffRtKP for <buildroot@lists.busybox.net>;
+ Wed,  2 Oct 2024 16:26:03 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::d32; helo=mail-io1-xd32.google.com;
+ envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 64E6640D97
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 64E6640D97
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com
+ [IPv6:2607:f8b0:4864:20::d32])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 64E6640D97
+ for <buildroot@buildroot.org>; Wed,  2 Oct 2024 16:26:03 +0000 (UTC)
+Received: by mail-io1-xd32.google.com with SMTP id
+ ca18e2360f4ac-8323b555ae2so339252239f.2
+ for <buildroot@buildroot.org>; Wed, 02 Oct 2024 09:26:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1727886362; x=1728491162;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=7I2zMBB5vAl+dZUZgjwkVbSP/4V3RumitCryqrlUSw8=;
+ b=USnZy9DSP8uwmGp31Pc0Ua0lXU5U7N4iHMsI2AQXYztAzEkuCSB3E7/thWu4uS4jTK
+ imphYg14ZUVRumm/tEZhY6Mluk6c1L9q16YOR2gvTwzeW2CdOIe3vqrccBqSZhJ/lyT/
+ U/1YzSDN68SDn60v3zVq7pk3spaI7S5s0RWsMpugYbo2xCXsX0YbE6dMXwlrW4hVDWQ/
+ /5janCmtcPBq/jCtuyxz+T6nqQ9eK65o90QQRMrveUhrCaT45i+UD9wjhE2GJXBkrb0L
+ 8T7a5Hwl92jvSIpbirhjPP/fAoWJJWk8nK1B7h4bhR9gungxY/bHKxp+eujTo9oPgLsT
+ iU7Q==
+X-Gm-Message-State: AOJu0YwbAZLh/cDyPSVoD4vkiWjkFn3wAlgMTccbHsDwujZypzQWKY0T
+ BXlHF5FmL4gzJ5W+CAJJcgXMXAOzCNGx+IkEDGaHrTckgDlt87bwUognVQ==
+X-Google-Smtp-Source: AGHT+IFUtTl0bDShIwzyBj37A28IG1JWQVCqczEn17hnOnnvipDFG3uDff++qh7CsvFkD3be7qR1mA==
+X-Received: by 2002:a05:6e02:1e0d:b0:3a3:49f0:f425 with SMTP id
+ e9e14a558f8ab-3a3658b83d8mr40339915ab.0.1727886361325; 
+ Wed, 02 Oct 2024 09:26:01 -0700 (PDT)
+Received: from james-x399.localdomain (71-33-149-81.hlrn.qwest.net.
+ [71.33.149.81]) by smtp.gmail.com with ESMTPSA id
+ e9e14a558f8ab-3a344d928ecsm37090015ab.47.2024.10.02.09.25.59
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Wed, 02 Oct 2024 09:26:00 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Wed,  2 Oct 2024 17:08:18 +0200
-Message-ID: <20241002150818.2471574-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.43.0
+Date: Wed,  2 Oct 2024 10:25:58 -0600
+Message-Id: <20241002162558.3375414-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfDyEh/IUp/qUN4LjnbXHThLuaAx4TUE2S8gJfkXtK2SEjiyzX9pdbB30NDbApab5DebJORJIwMxkyUX21GLYEOC8TXfO4G5AsH6HleWqlzEZtuj213Pl
- 1FvB3qBqMMVoRKUPK3WChVtzzcoFZQpmo4f1j+o15XX/aSfFk+ve02LvzyjM9Kv6EXgCkJOMpCU9d4cTR2juDmfDdYD93nZoD68c7GULBY6WVm15kEF4lOvc
- bmqHzc4VeoVuKbT287h/UC4bm6cwO3aJoPn25sPR6rU=
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=aruba.it; s=a1; 
- t=1727881699; bh=2usMKWSZQaMcIqXHqfKQQa7MUnCS1Vd4knbpCtKp6Zg=;
- h=From:To:Subject:Date:MIME-Version;
- b=Ipkshotf4+VCJtNzjuJpyGJ7jzxBBL3T4VyviPMA3nJt9XH7BDtXMtREKG+zXyX2f
- 5uEjsA31DJXVe02LyXMvN6eOz8SRRVJn8nw+Za3qu7BpDWYwqOIKoPBcQ2ptUm08Gm
- LBy3asgigH/YePR0IKlnxYoBGlCbWuCkKP0GV750RfIc1ylexPjO2obSEQBVY6KxbT
- E3EIh9/xLyTC+WiphxqZ+JcsScKwXfvW+W8aVBDXxkS0ZNBT+JDWHaLlLpSMMQzJbJ
- mBQt3uj/VW6NvjvBqKxap3QMWN2ILNg5HLwpMwluF+uyt0bWP6+aVDxq5+OLYIiMFY
- Mn+9+m+JCE5jA==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=gmail.com; s=20230601; t=1727886362; x=1728491162; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=7I2zMBB5vAl+dZUZgjwkVbSP/4V3RumitCryqrlUSw8=;
+ b=jI5kSRMCscKSgMqkfRpxjes9pDWw1zHBiw1SrxH+FHGPGSdJdoDBrO5KIzkafao/7u
+ PQ1Fsve/Uxc+CAjp2RFXf0H6+L0MaQrfjU6xwB+YL92jyEexWgJ6XKow5WCiDYI1y1kY
+ 5mmbagT3qy8GVxwGSRcIz0Rzzgg3/TmfAIzSIIOhIW9/Jb1gO0SZXD37SeqZCGJN+lrv
+ rRk4UuLO2CmAQVMI7LlFwcfuYbrblGFxtjglZ/MymSAQ+3GLBFJ4rejiR3ZaKvvLFFbJ
+ XvZqgPJMKBtCVO/UfEIb0j4oPUharybYsiTEJp3/4214ymwqqzgHplCgVF1pvwpGywbx
+ aCCw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=benettiengineering.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
- header.s=a1 header.b=Ipkshotf
-Subject: [Buildroot] [PATCH] package/harfbuzz: bump to version 10.0.1
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=jI5kSRMC
+Subject: [Buildroot] [PATCH 1/1] package/pkgconf: bump to version 2.3.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,42 +99,282 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
- package/harfbuzz/harfbuzz.hash | 2 +-
- package/harfbuzz/harfbuzz.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Rebase only prefix subset of variables patch.
 
-diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
-index fa4ee16a9f..562727d3df 100644
---- a/package/harfbuzz/harfbuzz.hash
-+++ b/package/harfbuzz/harfbuzz.hash
+Drop revert main assume modversion patch which is now upstream.
+
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+---
+ .checkpackageignore                           |  1 -
+ ...th-the-sysroot-a-subset-of-variables.patch | 78 ++++++++++---------
+ ...me-modversion-insted-of-version-if-o.patch | 45 -----------
+ package/pkgconf/pkgconf.hash                  |  2 +-
+ package/pkgconf/pkgconf.mk                    |  2 +-
+ 5 files changed, 42 insertions(+), 86 deletions(-)
+ delete mode 100644 package/pkgconf/0002-Revert-main-assume-modversion-insted-of-version-if-o.patch
+
+diff --git a/.checkpackageignore b/.checkpackageignore
+index 0cc742bf09..75fa99787b 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -1036,7 +1036,6 @@ package/pistache/0001-src-common-transport.cc-fallback-value-for-RUSAGE_TH.patch
+ package/pistache/0002-src-server-listener.cc-fix-libressl-build.patch lib_patch.Upstream
+ package/pixman/0001-Disable-tests.patch lib_patch.Upstream
+ package/pkgconf/0001-Only-prefix-with-the-sysroot-a-subset-of-variables.patch lib_patch.Upstream
+-package/pkgconf/0002-Revert-main-assume-modversion-insted-of-version-if-o.patch lib_patch.Upstream
+ package/pkgconf/pkg-config.in Shellcheck
+ package/poke/0001-configure.ac-HELP2MAN-replace-by-true-when-cross-com.patch lib_patch.Upstream
+ package/policycoreutils/0001-Add-DESTDIR-to-all-paths-that-use-an-absolute-path.patch lib_patch.Upstream
+diff --git a/package/pkgconf/0001-Only-prefix-with-the-sysroot-a-subset-of-variables.patch b/package/pkgconf/0001-Only-prefix-with-the-sysroot-a-subset-of-variables.patch
+index a039d0c1bc..d25039ade2 100644
+--- a/package/pkgconf/0001-Only-prefix-with-the-sysroot-a-subset-of-variables.patch
++++ b/package/pkgconf/0001-Only-prefix-with-the-sysroot-a-subset-of-variables.patch
+@@ -1,4 +1,4 @@
+-From 267a57022699453e8d8f517519df25ac6bf6ac4e Mon Sep 17 00:00:00 2001
++From c1f9e60f46f2207f9dd07dd290ad5a2da05ad41d Mon Sep 17 00:00:00 2001
+ From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ Date: Sun, 16 Dec 2018 11:52:18 +0100
+ Subject: [PATCH] Only prefix with the sysroot a subset of variables
+@@ -23,19 +23,19 @@ Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+ [Updated to include gobject-introspection paths]
+ Signed-off-by: Adam Duskett <aduskett@gmail.com>
+ ---
+- libpkgconf/tuple.c | 60 ++++++++++++++++++++++++++++++++--------------
+- 1 file changed, 42 insertions(+), 18 deletions(-)
++ libpkgconf/tuple.c | 65 ++++++++++++++++++++++++++++++++--------------
++ 1 file changed, 46 insertions(+), 19 deletions(-)
+ 
+ diff --git a/libpkgconf/tuple.c b/libpkgconf/tuple.c
+-index 8523709..7cd2fff 100644
++index 83f6a47..a2aa427 100644
+ --- a/libpkgconf/tuple.c
+ +++ b/libpkgconf/tuple.c
+-@@ -161,6 +161,21 @@ dequote(const char *value)
++@@ -178,6 +178,21 @@ dequote(const char *value)
+  	return buf;
+  }
+  
+ +static char *
+-+pkgconf_tuple_parse_sysroot(const pkgconf_client_t *client, pkgconf_list_t *vars, const char *value, bool add_sysroot);
+++pkgconf_tuple_parse_sysroot(const pkgconf_client_t *client, pkgconf_list_t *vars, const char *value, unsigned int flags, bool add_sysroot);
+ +
+ +const char *sysrooted_keys[] = {
+ +	"g_ir_scanner",
+@@ -49,21 +49,19 @@ index 8523709..7cd2fff 100644
+ +	NULL,
+ +};
+ +
+- /*
+-  * !doc
+-  *
+-@@ -181,6 +193,8 @@ pkgconf_tuple_add(const pkgconf_client_t *client, pkgconf_list_t *list, const ch
++ static const char *
++ find_sysroot(const pkgconf_client_t *client, pkgconf_list_t *vars)
++ {
++@@ -237,14 +252,20 @@ pkgconf_tuple_add(const pkgconf_client_t *client, pkgconf_list_t *list, const ch
+  {
+  	char *dequote_value;
+- 	pkgconf_tuple_t *tuple = calloc(sizeof(pkgconf_tuple_t), 1);
++ 	pkgconf_tuple_t *tuple = calloc(1, sizeof(pkgconf_tuple_t));
+ +	bool add_sysroot = false;
+ +	int i;
+  
+  	pkgconf_tuple_find_delete(list, key);
+  
+-@@ -188,9 +202,13 @@ pkgconf_tuple_add(const pkgconf_client_t *client, pkgconf_list_t *list, const ch
+- 
+- 	PKGCONF_TRACE(client, "adding tuple to @%p: %s => %s (parsed? %d)", list, key, dequote_value, parse);
++ 	dequote_value = dequote(value);
+  
+ +	for (i = 0; sysrooted_keys[i] != NULL; i++)
+ +		if (!strcmp(key, sysrooted_keys[i]))
+@@ -71,77 +69,81 @@ index 8523709..7cd2fff 100644
+ +
+  	tuple->key = strdup(key);
+  	if (parse)
+--		tuple->value = pkgconf_tuple_parse(client, list, dequote_value);
+-+		tuple->value = pkgconf_tuple_parse_sysroot(client, list, dequote_value, add_sysroot);
++-		tuple->value = pkgconf_tuple_parse(client, list, dequote_value, flags);
+++		tuple->value = pkgconf_tuple_parse_sysroot(client, list, dequote_value, flags, add_sysroot);
+  	else
+  		tuple->value = strdup(dequote_value);
+  
+-@@ -234,27 +252,14 @@ pkgconf_tuple_find(const pkgconf_client_t *client, pkgconf_list_t *list, const c
++@@ -294,22 +315,8 @@ pkgconf_tuple_find(const pkgconf_client_t *client, pkgconf_list_t *list, const c
+  	return NULL;
+  }
+  
+ -/*
+ - * !doc
+ - *
+-- * .. c:function:: char *pkgconf_tuple_parse(const pkgconf_client_t *client, pkgconf_list_t *vars, const char *value)
++- * .. c:function:: char *pkgconf_tuple_parse(const pkgconf_client_t *client, pkgconf_list_t *vars, const char *value, unsigned int flags)
+ - *
+ - *    Parse an expression for variable substitution.
+ - *
+ - *    :param pkgconf_client_t* client: The pkgconf client object to access.
+ - *    :param pkgconf_list_t* list: The variable list to search for variables (along side the global variable list).
+ - *    :param char* value: The ``key=value`` string to parse.
++- *    :param uint flags: Any flags to consider while parsing.
+ - *    :return: the variable data with any variables substituted
+ - *    :rtype: char *
+ - */
+ -char *
+--pkgconf_tuple_parse(const pkgconf_client_t *client, pkgconf_list_t *vars, const char *value)
++-pkgconf_tuple_parse(const pkgconf_client_t *client, pkgconf_list_t *vars, const char *value, unsigned int flags)
+ +static char *
+-+pkgconf_tuple_parse_sysroot(const pkgconf_client_t *client, pkgconf_list_t *vars, const char *value, bool add_sysroot)
+++pkgconf_tuple_parse_sysroot(const pkgconf_client_t *client, pkgconf_list_t *vars, const char *value, unsigned int flags, bool add_sysroot)
+  {
+  	char buf[PKGCONF_BUFSIZE];
+  	const char *ptr;
+- 	char *bptr = buf;
+- 
+--	if (*value == '/' && client->sysroot_dir != NULL && strncmp(value, client->sysroot_dir, strlen(client->sysroot_dir)))
+-+	if (add_sysroot && *value == '/' && client->sysroot_dir != NULL && strncmp(value, client->sysroot_dir, strlen(client->sysroot_dir)))
+- 		bptr += pkgconf_strlcpy(buf, client->sysroot_dir, sizeof buf);
++@@ -318,7 +325,7 @@ pkgconf_tuple_parse(const pkgconf_client_t *client, pkgconf_list_t *vars, const
++ 	if (!(client->flags & PKGCONF_PKG_PKGF_FDO_SYSROOT_RULES) &&
++ 		(!(flags & PKGCONF_PKG_PROPF_UNINSTALLED) || (client->flags & PKGCONF_PKG_PKGF_PKGCONF1_SYSROOT_RULES)))
++ 	{
++-		if (*value == '/' && client->sysroot_dir != NULL && strncmp(value, client->sysroot_dir, strlen(client->sysroot_dir)))
+++		if (add_sysroot && *value == '/' && client->sysroot_dir != NULL && strncmp(value, client->sysroot_dir, strlen(client->sysroot_dir)))
++ 			bptr += pkgconf_strlcpy(buf, client->sysroot_dir, sizeof buf);
++ 	}
+  
+- 	for (ptr = value; *ptr != '\0' && bptr - buf < PKGCONF_BUFSIZE; ptr++)
+-@@ -294,7 +299,7 @@ pkgconf_tuple_parse(const pkgconf_client_t *client, pkgconf_list_t *vars, const
+- 
+- 				if (kv != NULL)
++@@ -381,7 +388,7 @@ pkgconf_tuple_parse(const pkgconf_client_t *client, pkgconf_list_t *vars, const
+  				{
+--					parsekv = pkgconf_tuple_parse(client, vars, kv);
+-+					parsekv = pkgconf_tuple_parse_sysroot(client, vars, kv, add_sysroot);
++ 					size_t nlen;
++ 
++-					parsekv = pkgconf_tuple_parse(client, vars, kv, flags);
+++					parsekv = pkgconf_tuple_parse_sysroot(client, vars, kv, flags, add_sysroot);
++ 					nlen = pkgconf_strlcpy(bptr, parsekv, remain);
++ 					free(parsekv);
+  
+- 					strncpy(bptr, parsekv, PKGCONF_BUFSIZE - (bptr - buf));
+- 					bptr += strlen(parsekv);
+-@@ -339,6 +344,25 @@ pkgconf_tuple_parse(const pkgconf_client_t *client, pkgconf_list_t *vars, const
++@@ -432,6 +439,26 @@ pkgconf_tuple_parse(const pkgconf_client_t *client, pkgconf_list_t *vars, const
+  	return strdup(buf);
+  }
+  
+ +/*
+ + * !doc
+ + *
+-+ * .. c:function:: char *pkgconf_tuple_parse(const pkgconf_client_t *client, pkgconf_list_t *vars, const char *value)
+++ * .. c:function:: char *pkgconf_tuple_parse(const pkgconf_client_t *client, pkgconf_list_t *vars, const char *value, unsigned int flags)
+ + *
+ + *    Parse an expression for variable substitution.
+ + *
+ + *    :param pkgconf_client_t* client: The pkgconf client object to access.
+ + *    :param pkgconf_list_t* list: The variable list to search for variables (along side the global variable list).
+ + *    :param char* value: The ``key=value`` string to parse.
+++ *    :param uint flags: Any flags to consider while parsing.
+ + *    :return: the variable data with any variables substituted
+ + *    :rtype: char *
+ + */
+ +char *
+-+pkgconf_tuple_parse(const pkgconf_client_t *client, pkgconf_list_t *vars, const char *value)
+++pkgconf_tuple_parse(const pkgconf_client_t *client, pkgconf_list_t *vars, const char *value, unsigned int flags)
+ +{
+-+	return pkgconf_tuple_parse_sysroot(client, vars, value, true);
+++	return pkgconf_tuple_parse_sysroot(client, vars, value, flags, true);
+ +}
+ +
+  /*
+   * !doc
+   *
+ -- 
+-2.19.2
++2.34.1
+ 
+diff --git a/package/pkgconf/0002-Revert-main-assume-modversion-insted-of-version-if-o.patch b/package/pkgconf/0002-Revert-main-assume-modversion-insted-of-version-if-o.patch
+deleted file mode 100644
+index f659a3b07f..0000000000
+--- a/package/pkgconf/0002-Revert-main-assume-modversion-insted-of-version-if-o.patch
++++ /dev/null
+@@ -1,45 +0,0 @@
+-From 4ccef40918a539905a2951bfb81cf8dba4a245c6 Mon Sep 17 00:00:00 2001
+-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+-Date: Wed, 2 Jan 2019 18:15:50 +0100
+-Subject: [PATCH] Revert "main: assume --modversion insted of --version if
+- other flags or module names are provided"
+-
+-This reverts commit 12a0eb124cea85586e57f33c91a1e4c73459eef6, as it
+-causes pkg-config to assume --modversion is used when something as
+-simple as 'pkg-config --static --version' is used, leading to a
+-failure instead of the expected behavior: the one of "pkg-config
+---version".
+-
+-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+----
+- cli/main.c | 14 ++------------
+- 1 file changed, 2 insertions(+), 12 deletions(-)
+-
+-diff --git a/cli/main.c b/cli/main.c
+-index b52cc85..c5acc10 100644
+---- a/cli/main.c
+-+++ b/cli/main.c
+-@@ -1002,18 +1002,8 @@ main(int argc, char *argv[])
+- 
+- 	if ((want_flags & PKG_VERSION) == PKG_VERSION)
+- 	{
+--		if (argc > 2)
+--		{
+--			fprintf(stderr, "%s: --version specified with other options or module names, assuming --modversion.\n", argv[0]);
+--
+--			want_flags &= ~PKG_VERSION;
+--			want_flags |= PKG_MODVERSION;
+--		}
+--		else
+--		{
+--			version();
+--			return EXIT_SUCCESS;
+--		}
+-+		version();
+-+		return EXIT_SUCCESS;
+- 	}
+- 
+- 	if ((want_flags & PKG_HELP) == PKG_HELP)
+--- 
+-2.20.1
+-
+diff --git a/package/pkgconf/pkgconf.hash b/package/pkgconf/pkgconf.hash
+index f210869c03..6d4b7972d6 100644
+--- a/package/pkgconf/pkgconf.hash
++++ b/package/pkgconf/pkgconf.hash
 @@ -1,3 +1,3 @@
- # Locally computed
--sha256  a41b272ceeb920c57263ec851604542d9ec85ee3030506d94662067c7b6ab89e  harfbuzz-9.0.0.tar.xz
-+sha256  b2cb13bd351904cb9038f907dc0dee0ae07127061242fe3556b2795c4e9748fc  harfbuzz-10.0.1.tar.xz
- sha256  ba8f810f2455c2f08e2d56bb49b72f37fcf68f1f4fade38977cfd7372050ad64  COPYING
-diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
-index 946b2b0f70..510c0a946c 100644
---- a/package/harfbuzz/harfbuzz.mk
-+++ b/package/harfbuzz/harfbuzz.mk
+ # Locally calculated
+-sha256  61f0b31b0d5ea0e862b454a80c170f57bad47879c0c42bd8de89200ff62ea210  pkgconf-1.6.3.tar.xz
++sha256  3a9080ac51d03615e7c1910a0a2a8df08424892b5f13b0628a204d3fcce0ea8b  pkgconf-2.3.0.tar.xz
+ sha256  07ee94b50a41ee3fc4e13a9b9c60b26fc28488494c465639f7e5f07a3952ec04  COPYING
+diff --git a/package/pkgconf/pkgconf.mk b/package/pkgconf/pkgconf.mk
+index a8c7b48287..057f43bb98 100644
+--- a/package/pkgconf/pkgconf.mk
++++ b/package/pkgconf/pkgconf.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--HARFBUZZ_VERSION = 9.0.0
-+HARFBUZZ_VERSION = 10.0.1
- HARFBUZZ_SITE = https://github.com/harfbuzz/harfbuzz/releases/download/$(HARFBUZZ_VERSION)
- HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.xz
- HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
+-PKGCONF_VERSION = 1.6.3
++PKGCONF_VERSION = 2.3.0
+ PKGCONF_SITE = https://distfiles.ariadne.space/pkgconf
+ PKGCONF_SOURCE = pkgconf-$(PKGCONF_VERSION).tar.xz
+ PKGCONF_LICENSE = pkgconf license
 -- 
-2.43.0
+2.34.1
 
 _______________________________________________
 buildroot mailing list
