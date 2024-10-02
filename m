@@ -4,72 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 34672CF8542
-	for <buildroot@archiver.kernel.org>; Wed,  2 Oct 2024 21:38:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 353B8CF8542
+	for <buildroot@archiver.kernel.org>; Wed,  2 Oct 2024 21:40:54 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EE0FC40190;
-	Wed,  2 Oct 2024 21:38:52 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id BF05F40190;
+	Wed,  2 Oct 2024 21:40:53 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id J3Cjc8CXWa75; Wed,  2 Oct 2024 21:38:51 +0000 (UTC)
+ id aYrbxTFnskOr; Wed,  2 Oct 2024 21:40:52 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 98018413F3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 75E9A413F6
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 98018413F3;
-	Wed,  2 Oct 2024 21:38:51 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id E0E411BF31B
- for <buildroot@lists.busybox.net>; Wed,  2 Oct 2024 21:38:49 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 75E9A413F6;
+	Wed,  2 Oct 2024 21:40:52 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 8F5671BF31B
+ for <buildroot@lists.busybox.net>; Wed,  2 Oct 2024 21:40:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DC192413F6
- for <buildroot@lists.busybox.net>; Wed,  2 Oct 2024 21:38:49 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7E6B761181
+ for <buildroot@lists.busybox.net>; Wed,  2 Oct 2024 21:40:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id YagEz9wCRJhq for <buildroot@lists.busybox.net>;
- Wed,  2 Oct 2024 21:38:48 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.198;
- helo=relay6-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id p0A1zWZLU5K8 for <buildroot@lists.busybox.net>;
+ Wed,  2 Oct 2024 21:40:49 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 0EDF740190
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0EDF740190
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net
- [217.70.183.198])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 0EDF740190
- for <buildroot@buildroot.org>; Wed,  2 Oct 2024 21:38:47 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 0B8CFC0002;
- Wed,  2 Oct 2024 21:38:45 +0000 (UTC)
-Date: Wed, 2 Oct 2024 23:38:45 +0200
-To: Thomas Perale via buildroot <buildroot@buildroot.org>
-Message-ID: <20241002233845.709e0e6d@windsurf>
-In-Reply-To: <20240922150554.1348962-1-thomas.perale@mind.be>
-References: <20240922150554.1348962-1-thomas.perale@mind.be>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1727905126;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=A90DT9ByxesZMPLiSBJ4J3TgCYWYBxm+pQuSm6lkoPk=;
- b=YDEdMe6qubB4wFTDj0CyFdmyXkTIwYxp8srvuVmoEy+Aue8aI74mCvAZncpkcCN3B2EWN+
- TQqWS5w6VbP/Q/6oyHFQ9WmyCTA3bHUHBfPW3I8inCHr/sf+5PvXPOZwm2zZFVPyKq1rKG
- wr+C1Us0Knpwzo6Jq4hhyN4BOQKUYAp6vaFzRkYKaVvqfrK1ehzAaJS6tWB+J8t321xYgq
- qG0Okx6DqA6X8OIu+OqPk+RJSJAX9WpOnIBoR+JF3Fq0FGYUmKTzY8yqrwrQMMmJ8ELHKP
- 5y6dQXrgUZwi8R1ru0pQn+/tSpFpMA3OOL1x8bDPirtBPP3shwtMo7xLyty8UQ==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=YDEdMe6q
-Subject: Re: [Buildroot] [PATCH 1/1] package/aubio: fix build on big endian
- arch
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 8FA436117F
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 8FA436117F
+ for <buildroot@buildroot.org>; Wed,  2 Oct 2024 21:40:49 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 7BD4E84C26; Wed,  2 Oct 2024 21:40:49 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 2 Oct 2024 23:40:20 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 1af4eae9036b96b78c4e123559fe3efae23f4672
+X-Git-Newrev: 08b0dc61ec8b7ffc27c84e1b8b2fc85235ea415f
+X-Patchwork-Hint: ignore
+Message-Id: <20241002214049.7BD4E84C26@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/strace: bump version to 6.11
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,52 +59,49 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Romain Naour <romain.naour@gmail.com>,
- Thomas Perale <thomas.perale@mind.be>
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Sun, 22 Sep 2024 17:05:54 +0200
-Thomas Perale via buildroot <buildroot@buildroot.org> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=08b0dc61ec8b7ffc27c84e1b8b2fc85235ea415f
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Fixes the following error happening on builds with
-> big endian architecture target and libflac enabled.
-> 
-> ```
-> [ 75/243] Linking build/tests/test-pitchshift
-> /home/autobuild/autobuild/instance-16/output-1/per-package/aubio/host/bin/../lib/gcc/mips64-buildroot-linux-gnu/13.3.0/../../../../mips64-buildroot-linux-gnu/bin/ld: src/libaubio.so: undefined reference to `SWAPS'
-> collect2: error: ld returned 1 exit status
-> 
-> Waf: Leaving directory `/home/autobuild/autobuild/instance-16/output-1/build/aubio-152d6819b360c2e7b379ee3f373d444ab3df0895/build'
-> Build failed
-> ```
-> 
-> There is a missing definition of the `SWAPS` macro in
-> `/src/io/sink_flac.c` file.
-> This patch adds an out of tree patch that copy the `SWAPS` definition from the
-> `/src/io/sink_wavwrite.c` file in `sink_flac.c` to fix this issue.
-> 
-> Fixes:
->   - https://autobuild.buildroot.org/results/b88/b8895a81411dc7622b0aba9f2f0eaa0aef5a1a10/
->   - https://autobuild.buildroot.org/results/bc7/bc733f5192b354cb960b6a4726efb597be4bb06c/
->   - https://autobuild.buildroot.org/results/ea5/ea52dbcc14c2bab300277053f0b9599a8e82294a/
->   - ...
-> 
-> Signed-off-by: Thomas Perale <thomas.perale@mind.be>
-> ---
->  ...1-sink_flac-missing-SWAPS-definition.patch | 45 +++++++++++++++++++
->  1 file changed, 45 insertions(+)
->  create mode 100644 package/aubio/0001-sink_flac-missing-SWAPS-definition.patch
+Changelog - https://github.com/strace/strace/releases/tag/v6.11
 
-Applied to master, thanks.
+Signed-off-by: Akhilesh Nema <nemaakhilesh@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/strace/strace.hash | 4 ++--
+ package/strace/strace.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/strace/strace.hash b/package/strace/strace.hash
+index dcaf1ad5d4..e167f9d20a 100644
+--- a/package/strace/strace.hash
++++ b/package/strace/strace.hash
+@@ -1,5 +1,5 @@
+ # Locally calculated after checking signature with RSA key 0xA8041FA839E16E36
+-# https://strace.io/files/6.10/strace-6.10.tar.xz.asc
+-sha256  765ec71aa1de2fe37363c1e40c7b7669fc1d40c44bb5d38ba8e8cd82c4edcf07  strace-6.10.tar.xz
++# https://strace.io/files/6.11/strace-6.11.tar.xz.asc
++sha256  83262583a3529f02c3501aa8b8ac772b4cbc03dc934e98bab6e4883626e283a5  strace-6.11.tar.xz
+ sha256  1988d0e1aa101d68855e8c4f940aacf2531051b82f6b608eb026c5fad1f33df1  COPYING
+ sha256  7c379436436a562834aa7d2f5dcae1f80a25230fa74201046ca1fba4367d39aa  LGPL-2.1-or-later
+diff --git a/package/strace/strace.mk b/package/strace/strace.mk
+index 34a154357f..367a44da6e 100644
+--- a/package/strace/strace.mk
++++ b/package/strace/strace.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-STRACE_VERSION = 6.10
++STRACE_VERSION = 6.11
+ STRACE_SOURCE = strace-$(STRACE_VERSION).tar.xz
+ STRACE_SITE = https://github.com/strace/strace/releases/download/v$(STRACE_VERSION)
+ STRACE_LICENSE = LGPL-2.1+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
