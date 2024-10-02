@@ -4,71 +4,48 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5CD48CF8542
-	for <buildroot@archiver.kernel.org>; Wed,  2 Oct 2024 21:11:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 332F4CF8540
+	for <buildroot@archiver.kernel.org>; Wed,  2 Oct 2024 21:20:29 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 290BC41C11;
-	Wed,  2 Oct 2024 21:11:27 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id E90F240190;
+	Wed,  2 Oct 2024 21:20:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 22OXRQCDJoug; Wed,  2 Oct 2024 21:11:26 +0000 (UTC)
+ id Cl2BSi_6yP4s; Wed,  2 Oct 2024 21:20:27 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 243F541C1A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AF1B840261
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 243F541C1A;
-	Wed,  2 Oct 2024 21:11:26 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 96D6F1BF5EA
- for <buildroot@lists.busybox.net>; Wed,  2 Oct 2024 21:11:25 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id AF1B840261;
+	Wed,  2 Oct 2024 21:20:27 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 075A81BF5EA
+ for <buildroot@lists.busybox.net>; Wed,  2 Oct 2024 21:20:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 93F88804E3
- for <buildroot@lists.busybox.net>; Wed,  2 Oct 2024 21:11:25 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id EB2EA61129
+ for <buildroot@lists.busybox.net>; Wed,  2 Oct 2024 21:20:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2gTfBqzvGCVb for <buildroot@lists.busybox.net>;
- Wed,  2 Oct 2024 21:11:24 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::221;
- helo=relay1-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id kvnmPWY_lIO6 for <buildroot@lists.busybox.net>;
+ Wed,  2 Oct 2024 21:20:25 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 96A71802D5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 96A71802D5
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 96A71802D5
- for <buildroot@busybox.net>; Wed,  2 Oct 2024 21:11:24 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 960F7240004;
- Wed,  2 Oct 2024 21:11:22 +0000 (UTC)
-Date: Wed, 2 Oct 2024 23:11:21 +0200
-To: Francois Perrad <francois.perrad@gadz.org>
-Message-ID: <20241002231121.7ce505de@windsurf>
-In-Reply-To: <20240925133816.3899931-1-francois.perrad@gadz.org>
-References: <20240925133816.3899931-1-francois.perrad@gadz.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-X-GND-Sasl: thomas.petazzoni@bootlin.com
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1727903483;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:content-type:content-type:
- content-transfer-encoding:content-transfer-encoding:
- in-reply-to:in-reply-to:references:references;
- bh=/RUVleRqeRidO25p900aH8DOx92r4QpFTFMC0CxyYe8=;
- b=Tr+5y+cCzw6CzrVnjnSQw+8kdiC9z3PErCu0AgZFCUpk+tqrlXSSFWIaayTC2MW7jCvrUm
- hVRvRmjNhVMjeTzuW2gOM1+1AErdwQgERMZylr0hB2VXBbrbLdRX+a2Igc1mAOkxkxnHsM
- 4dbukEZi9pE7aARBOSDbeUPPP7qc1QJlut/uh6+dlxB8MS5CySor5VH8gZF6ZjEAWYdWbx
- KlbxACcvrJXvsZwIbwVZ8USDHi2+uvdhR5EriX4NoCF2FAtMddPSQORcdhVsEU0Ey0WJKQ
- VZcfLn9YgaFLGd1jW2BL6C47ZXGwSIMiCQobjnYMoUBp7pJMLw14mvjDHEb4kA==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=reject dis=none)
- header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=Tr+5y+cC
-Subject: Re: [Buildroot] [PATCH] package/webp: bump to version 1.4.0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 31622607C3
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 31622607C3
+ for <buildroot@buildroot.org>; Wed,  2 Oct 2024 21:20:24 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id D59AD84BC9; Wed,  2 Oct 2024 21:20:24 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 2 Oct 2024 23:18:12 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 4e5fd24c8b7438672c475d0559200ff72c4b1cc7
+X-Git-Newrev: 540a0a567a4d3f092bb5a2ff7f4fdd1042533c51
+X-Patchwork-Hint: ignore
+Message-Id: <20241002212024.D59AD84BC9@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/libilbc: bump version
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -82,28 +59,44 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: buildroot@busybox.net
+MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, 25 Sep 2024 15:38:16 +0200
-Francois Perrad <francois.perrad@gadz.org> wrote:
+commit: https://git.buildroot.net/buildroot/commit/?id=540a0a567a4d3f092bb5a2ff7f4fdd1042533c51
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
-> ---
->  package/webp/webp.hash | 2 +-
->  package/webp/webp.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ package/libilbc/libilbc.hash | 2 +-
+ package/libilbc/libilbc.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Applied to master, thanks.
-
-Thomas
--- 
-Thomas Petazzoni, CTO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/package/libilbc/libilbc.hash b/package/libilbc/libilbc.hash
+index be88d6f9c3..dbd1795765 100644
+--- a/package/libilbc/libilbc.hash
++++ b/package/libilbc/libilbc.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  fe4827a548e96f0549dd8f30eb6a48c6c55fd4535de6c8e9c6e4f38bea6190bf  libilbc-829b08c7902ceb87a261279fabb36b6d523c6e07.tar.gz
++sha256  a09a244e5e24607303478aa9995765d2b26c52b15c2721cae5a83c109ed51ed3  libilbc-51d3cf8e157c3c80d7169b738073865eca83f5a3.tar.gz
+ sha256  b7f4cbb4a12cd11a3d1aeda9bd17c99f59b054de4b3ee53045531cd2fa74dd2a  gips_iLBClicense.pdf
+diff --git a/package/libilbc/libilbc.mk b/package/libilbc/libilbc.mk
+index d8139ba205..089215f204 100644
+--- a/package/libilbc/libilbc.mk
++++ b/package/libilbc/libilbc.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-LIBILBC_VERSION = 829b08c7902ceb87a261279fabb36b6d523c6e07
++LIBILBC_VERSION = 51d3cf8e157c3c80d7169b738073865eca83f5a3
+ LIBILBC_SITE = $(call github,freeswitch,libilbc,$(LIBILBC_VERSION))
+ LIBILBC_LICENSE = Global IP Sound iLBC Public License v2.0
+ LIBILBC_LICENSE_FILES = gips_iLBClicense.pdf
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
