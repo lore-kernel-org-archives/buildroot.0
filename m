@@ -4,71 +4,69 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D45E1CF6D2C
-	for <buildroot@archiver.kernel.org>; Wed,  2 Oct 2024 14:56:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id EB132CF6D2D
+	for <buildroot@archiver.kernel.org>; Wed,  2 Oct 2024 15:08:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6D7E840965;
-	Wed,  2 Oct 2024 14:56:13 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 95DF2400D6;
+	Wed,  2 Oct 2024 15:08:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id C5_Rel7oZauh; Wed,  2 Oct 2024 14:56:12 +0000 (UTC)
+ id iuqWO0eoMn8j; Wed,  2 Oct 2024 15:08:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 150AA4099C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6858240148
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 150AA4099C;
-	Wed,  2 Oct 2024 14:56:12 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6A0841BF2A1
- for <buildroot@lists.busybox.net>; Wed,  2 Oct 2024 14:56:10 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 6858240148;
+	Wed,  2 Oct 2024 15:08:25 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 7DE6D1BF29D
+ for <buildroot@lists.busybox.net>; Wed,  2 Oct 2024 15:08:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 57C604099C
- for <buildroot@lists.busybox.net>; Wed,  2 Oct 2024 14:56:10 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6D1AC606BF
+ for <buildroot@lists.busybox.net>; Wed,  2 Oct 2024 15:08:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6-MLva8Uc3zJ for <buildroot@lists.busybox.net>;
- Wed,  2 Oct 2024 14:56:08 +0000 (UTC)
-X-Greylist: delayed 428 seconds by postgrey-1.37 at util1.osuosl.org;
- Wed, 02 Oct 2024 14:56:07 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 07AD940965
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 07AD940965
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id i1J1lH2yxTy2 for <buildroot@lists.busybox.net>;
+ Wed,  2 Oct 2024 15:08:23 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=62.149.158.102;
  helo=smtpcmd02102.aruba.it;
  envelope-from=giulio.benetti@benettiengineering.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org C3D2560B17
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org C3D2560B17
 Received: from smtpcmd02102.aruba.it (smtpcmd02102.aruba.it [62.149.158.102])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 07AD940965
- for <buildroot@buildroot.org>; Wed,  2 Oct 2024 14:56:06 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTPS id C3D2560B17
+ for <buildroot@buildroot.org>; Wed,  2 Oct 2024 15:08:22 +0000 (UTC)
 Received: from localhost.localdomain ([84.33.84.190])
  by Aruba Outgoing Smtp  with ESMTPSA
- id w0euswjKqNKTWw0eusf2Hr; Wed, 02 Oct 2024 16:48:56 +0200
+ id w0xfswz0dNKTWw0xfsfDBf; Wed, 02 Oct 2024 17:08:19 +0200
 From: Giulio Benetti <giulio.benetti@benettiengineering.com>
 To: buildroot@buildroot.org
-Date: Wed,  2 Oct 2024 16:48:55 +0200
-Message-ID: <20241002144855.88551-1-giulio.benetti@benettiengineering.com>
+Date: Wed,  2 Oct 2024 17:08:18 +0200
+Message-ID: <20241002150818.2471574-1-giulio.benetti@benettiengineering.com>
 X-Mailer: git-send-email 2.43.0
 MIME-Version: 1.0
-X-CMAE-Envelope: MS4xfNLLgDUmIL2woU/qAIYce2vCpD/wH5dIfyVNxc7UHjU5YTe8jkBoWYTyp5GwQQlcHeNK9zU5X7SpqAyMl+rkET3xh6AaMCCUulEOQPoXAPxh6vUo8+4S
- 6znsODPcgLHPzsldSTDtkwCyd5DGX+edilOVBHY10g9fmJ+DQeUiEyGpZjaYvLVMu9NIUCjTscPf46FoGe/VHYR5/YzMfQ0UQ+6Rx3cC5HIRjmyuwBJDUh4A
- 7giAnQU+cuBN7SVFamz+HyaTt3lL/+jy+CJXt+5SnKPmPNvL+w9xQVngr7XmdWbB0PEC8fIl79WZXtrON1dEUA==
+X-CMAE-Envelope: MS4xfDyEh/IUp/qUN4LjnbXHThLuaAx4TUE2S8gJfkXtK2SEjiyzX9pdbB30NDbApab5DebJORJIwMxkyUX21GLYEOC8TXfO4G5AsH6HleWqlzEZtuj213Pl
+ 1FvB3qBqMMVoRKUPK3WChVtzzcoFZQpmo4f1j+o15XX/aSfFk+ve02LvzyjM9Kv6EXgCkJOMpCU9d4cTR2juDmfDdYD93nZoD68c7GULBY6WVm15kEF4lOvc
+ bmqHzc4VeoVuKbT287h/UC4bm6cwO3aJoPn25sPR6rU=
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
  d=aruba.it; s=a1; 
- t=1727880536; bh=ZG7bFh78FqdLytl2nKaleGK0kh3yn6zgHQth2E3KPcA=;
+ t=1727881699; bh=2usMKWSZQaMcIqXHqfKQQa7MUnCS1Vd4knbpCtKp6Zg=;
  h=From:To:Subject:Date:MIME-Version;
- b=JNqatW/6Uw1NaTl1ZHLdtq9qv9IJsT+2B0YssKtEuB6/2Cztmd2LmTrLXG+bJpBd4
- POjRsW1Y5Z9wUJESV8YeSxUU7ROTyV4XiIRxVyzSGx4lTGbcluY+weIRvqJjcWzn9V
- NJM1ZLJJYiH1Z1MJkv59xMFINHjpNHm11t1WhF8MnIpKbO964zgimVozObAtOAKwgl
- Peptv4MF71Q1YfGdDBK/7owGLtoTK93GLyw51Z4nemth1+PPXfF+fQOhKXbmDr32BH
- Ebq1+nbVokXhC537sjuWWA2H9f4HoCmiYJ8E6+vsSuX5LD5lqsO7yYIhNuL7CrQZDN
- wKeDnNsidv9Yw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ b=Ipkshotf4+VCJtNzjuJpyGJ7jzxBBL3T4VyviPMA3nJt9XH7BDtXMtREKG+zXyX2f
+ 5uEjsA31DJXVe02LyXMvN6eOz8SRRVJn8nw+Za3qu7BpDWYwqOIKoPBcQ2ptUm08Gm
+ LBy3asgigH/YePR0IKlnxYoBGlCbWuCkKP0GV750RfIc1ylexPjO2obSEQBVY6KxbT
+ E3EIh9/xLyTC+WiphxqZ+JcsScKwXfvW+W8aVBDXxkS0ZNBT+JDWHaLlLpSMMQzJbJ
+ mBQt3uj/VW6NvjvBqKxap3QMWN2ILNg5HLwpMwluF+uyt0bWP6+aVDxq5+OLYIiMFY
+ Mn+9+m+JCE5jA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=benettiengineering.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=aruba.it header.i=@aruba.it header.a=rsa-sha256
- header.s=a1 header.b=JNqatW/6
-Subject: [Buildroot] [PATCH] package/libnss: bump version to 3.105
+ header.s=a1 header.b=Ipkshotf
+Subject: [Buildroot] [PATCH] package/harfbuzz: bump to version 10.0.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -80,8 +78,7 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Joseph Kogut <joseph.kogut@gmail.com>,
- Giulio Benetti <giulio.benetti@benettiengineering.com>
+Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
@@ -89,34 +86,32 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
 ---
- package/libnss/libnss.hash | 4 ++--
- package/libnss/libnss.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/harfbuzz/harfbuzz.hash | 2 +-
+ package/harfbuzz/harfbuzz.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/libnss/libnss.hash b/package/libnss/libnss.hash
-index e92a6fee25..00be413ddc 100644
---- a/package/libnss/libnss.hash
-+++ b/package/libnss/libnss.hash
-@@ -1,4 +1,4 @@
--# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_104_RTM/src/SHA256SUMS
--sha256  e2763223622d1e76b98a43030873856f248af0a41b03b2fa2ca06a91bc50ac8e  nss-3.104.tar.gz
-+# From https://ftp.mozilla.org/pub/security/nss/releases/NSS_3_105_RTM/src/SHA256SUMS
-+sha256  8e8e4c8c88ca5c828b207cfaf66c6188e7f96c97cc18946d3db7da4c0d395619  nss-3.105.tar.gz
- # Locally calculated
- sha256  a20c1a32d1f8102432360b42e932869f7c11c7cdbacf9cac554c422132af47f4  nss/COPYING
-diff --git a/package/libnss/libnss.mk b/package/libnss/libnss.mk
-index 0fd9858647..ec9c591739 100644
---- a/package/libnss/libnss.mk
-+++ b/package/libnss/libnss.mk
+diff --git a/package/harfbuzz/harfbuzz.hash b/package/harfbuzz/harfbuzz.hash
+index fa4ee16a9f..562727d3df 100644
+--- a/package/harfbuzz/harfbuzz.hash
++++ b/package/harfbuzz/harfbuzz.hash
+@@ -1,3 +1,3 @@
+ # Locally computed
+-sha256  a41b272ceeb920c57263ec851604542d9ec85ee3030506d94662067c7b6ab89e  harfbuzz-9.0.0.tar.xz
++sha256  b2cb13bd351904cb9038f907dc0dee0ae07127061242fe3556b2795c4e9748fc  harfbuzz-10.0.1.tar.xz
+ sha256  ba8f810f2455c2f08e2d56bb49b72f37fcf68f1f4fade38977cfd7372050ad64  COPYING
+diff --git a/package/harfbuzz/harfbuzz.mk b/package/harfbuzz/harfbuzz.mk
+index 946b2b0f70..510c0a946c 100644
+--- a/package/harfbuzz/harfbuzz.mk
++++ b/package/harfbuzz/harfbuzz.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LIBNSS_VERSION = 3.104
-+LIBNSS_VERSION = 3.105
- LIBNSS_SOURCE = nss-$(LIBNSS_VERSION).tar.gz
- LIBNSS_SITE = https://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_$(subst .,_,$(LIBNSS_VERSION))_RTM/src
- LIBNSS_DISTDIR = dist
+-HARFBUZZ_VERSION = 9.0.0
++HARFBUZZ_VERSION = 10.0.1
+ HARFBUZZ_SITE = https://github.com/harfbuzz/harfbuzz/releases/download/$(HARFBUZZ_VERSION)
+ HARFBUZZ_SOURCE = harfbuzz-$(HARFBUZZ_VERSION).tar.xz
+ HARFBUZZ_LICENSE = MIT, ISC (ucdn library)
 -- 
 2.43.0
 
