@@ -4,100 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 85187CF8540
-	for <buildroot@archiver.kernel.org>; Wed,  2 Oct 2024 20:58:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 76D09CF8541
+	for <buildroot@archiver.kernel.org>; Wed,  2 Oct 2024 20:59:34 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 3B5A240480;
-	Wed,  2 Oct 2024 20:58:51 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3DA8840A96;
+	Wed,  2 Oct 2024 20:59:34 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 4jQTBH4BMBi1; Wed,  2 Oct 2024 20:58:50 +0000 (UTC)
+ id ioiUGKfdumq5; Wed,  2 Oct 2024 20:59:33 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0751F409C4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D750140480
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0751F409C4;
-	Wed,  2 Oct 2024 20:58:50 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 7DC8B1BF30E
- for <buildroot@lists.busybox.net>; Wed,  2 Oct 2024 20:58:48 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id D750140480;
+	Wed,  2 Oct 2024 20:59:32 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 577B81BF232
+ for <buildroot@lists.busybox.net>; Wed,  2 Oct 2024 20:59:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 6BA04410BA
- for <buildroot@lists.busybox.net>; Wed,  2 Oct 2024 20:58:48 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 46C2B81EBC
+ for <buildroot@lists.busybox.net>; Wed,  2 Oct 2024 20:59:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id T3Lv12WINs-A for <buildroot@lists.busybox.net>;
- Wed,  2 Oct 2024 20:58:47 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::332; helo=mail-wm1-x332.google.com;
- envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 238FD40D93
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 238FD40D93
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com
- [IPv6:2a00:1450:4864:20::332])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 238FD40D93
- for <buildroot@buildroot.org>; Wed,  2 Oct 2024 20:58:46 +0000 (UTC)
-Received: by mail-wm1-x332.google.com with SMTP id
- 5b1f17b1804b1-42cd74c0d16so1645175e9.1
- for <buildroot@buildroot.org>; Wed, 02 Oct 2024 13:58:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1727902725; x=1728507525;
- h=content-transfer-encoding:in-reply-to:content-language:from
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
- bh=eQd1iN6R1GUFPm58OXORfc1yO7c9dF9eBYMDY6PDQIo=;
- b=QIY3vRmSTKirICAzBwJhzt0/ao2qJ/pu5yuNXb30QcXfJZzQqGFowfkl3FwZyBzRxB
- D6qSFd5nT/nKYYb/BncZ3AXRz+EVsOhR/sWVRXEA78CPMR9i9NcA8hX72AnjAAKcxwqh
- INaGyl/sr8fhxPCGQvI82QIKbPaF8QdySWgzES0d9Fi8ub1TYNt4MGkYRTd+K2MWvSus
- P2B6mAkJmMxy5Ib2wmf6jOwYLXBNS9F9iMlT0HWArHkbzmMB6wUu8o5VaOgIwpETiQN8
- Lyi2wzFCNeHtIvmNrsSzfF+Rqd+NoBtpAcqP+t/JmOha4c3VRkbg21lP14RBgay6QYwv
- 1ARw==
-X-Forwarded-Encrypted: i=1;
- AJvYcCXE72/rSS3pnbVwxrFiOSk92nI9m3y872se3PzHZV+gf7TY/O75FU7tNpBNblc5Zk6xDUgG1GVrRFk=@buildroot.org
-X-Gm-Message-State: AOJu0YxgjWDmFjWIuFO3/hk5im/EQoPTUEwl1BVdA9LonSl2P4QCusUE
- uCCcOxI7HBcxST1gdi3nyEkvLWHBli4jk+vEDiT/QKO6ZV4pOBQHIy9LTH+NxW0=
-X-Google-Smtp-Source: AGHT+IEdEKzzwC7AAAvL9uxEZzL7xrlySMS5+kVIJCM8S+8Y5HmW2n0cmv16gwAnzJuIxUP9fS2kXA==
-X-Received: by 2002:a05:600c:1ca0:b0:42c:b180:d452 with SMTP id
- 5b1f17b1804b1-42f777c31b1mr31051075e9.19.1727902724803; 
- Wed, 02 Oct 2024 13:58:44 -0700 (PDT)
-Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
- (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
- [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-42f7a02eb07sm28115105e9.41.2024.10.02.13.58.42
- (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
- Wed, 02 Oct 2024 13:58:43 -0700 (PDT)
-Message-ID: <a4ea9e57-79f3-4093-86b7-9e75e78646fc@mind.be>
-Date: Wed, 2 Oct 2024 22:58:41 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Adam Duskett <adam.duskett@amarulasolutions.com>, buildroot@buildroot.org
-References: <20240904142509.3295502-1-adam.duskett@amarulasolutions.com>
- <20240904142509.3295502-4-adam.duskett@amarulasolutions.com>
-Content-Language: en-GB
-In-Reply-To: <20240904142509.3295502-4-adam.duskett@amarulasolutions.com>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mind.be; s=google; t=1727902725; x=1728507525; darn=buildroot.org;
- h=content-transfer-encoding:in-reply-to:content-language:from
- :references:cc:to:subject:user-agent:mime-version:date:message-id
- :from:to:cc:subject:date:message-id:reply-to;
- bh=eQd1iN6R1GUFPm58OXORfc1yO7c9dF9eBYMDY6PDQIo=;
- b=QccBJlCUWpiuLIKALSRYYkBCMHrt7PuBf7ZMkiW5Bp7trKIBDc2txlfFfjbwuQUNHq
- VGlhsNzTbyfeeuzkvN0WgbiKpgm+Fz7z8xGDLglKyKs+TzbPu23STVV61+uDVUA9AuQS
- xD01S8/odtCOEbHYy+bFDQckjlu6NDcThAxu0XbegpRxysn+nyx3on4e7VFnObEsMHO5
- olC6tN/vpkauM4dtgW8fWkxR5ZL263ovDF0epVEUTfYVx39NwlTqwEIb8Cm5xnes4dY7
- lp7A6kwQM+KY/wzVRT+kFurzkDRQS0mSG58DxHb5ieHF17hzKcRtYS111lFfWWIrrLfA
- 7leA==
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dmarc=pass (p=quarantine dis=none)
- header.from=mind.be
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
- header.s=google header.b=QccBJlCU
-Subject: Re: [Buildroot] [PATCH v2 4/5] package/mender-artifact: bump
- version to 3.11.2
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id vhQrP07EnTeh for <buildroot@lists.busybox.net>;
+ Wed,  2 Oct 2024 20:59:30 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
+ helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 41AD781EB4
+Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 41AD781EB4
+ for <buildroot@buildroot.org>; Wed,  2 Oct 2024 20:59:30 +0000 (UTC)
+Received: by busybox.osuosl.org (Postfix, from userid 4053)
+ id 3AE6C84777; Wed,  2 Oct 2024 20:59:30 +0000 (UTC)
+To: buildroot@buildroot.org
+Date: Wed, 2 Oct 2024 22:59:09 +0200
+X-Git-Refname: refs/heads/master
+X-Git-Oldrev: 7b4561650d6b0d76d04a81f7fbe6c5630ec93087
+X-Git-Newrev: c08d233e048cb44139121e8ca39e24569b3a56e6
+X-Patchwork-Hint: ignore
+Message-Id: <20241002205930.3AE6C84777@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/mender-connect: bump version to
+ 2.2.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -111,47 +60,100 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
 Reply-To: Arnout Vandecappelle <arnout@mind.be>
-Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>,
- Christian Stewart <christian@paral.in>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
+commit: https://git.buildroot.net/buildroot/commit/?id=c08d233e048cb44139121e8ca39e24569b3a56e6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
+License changes:
+New:
+  BSD-3-Clause:
+    vendor/golang.org/x/net/LICENSE
+    vendor/github.com/gorilla/websocket/LICENSE
 
-On 04/09/2024 16:25, Adam Duskett wrote:
-> mender-artifact now explicitly depends on host-openssl and uses host-pkgconf
-> to find the correct libraries.
-> 
-> Use the same variables as defined in HOST_MAKE_ENV (in package/Makefile.in) for
-> HOST_MENDER_ARTIFACT_GO_ENV.
+Removed:
+  BSD-2-Clause:
+    vendor/github.com/gorilla/websocket/LICENSE
 
-[snip]
+Modified:
+  Apache-2.0
+    LICENSE (Year change)
+    vendor/github.com/mendersoftware/go-lib-micro/LICENSE
 
-> +HOST_MENDER_ARTIFACT_GO_ENV += \
-> +	PATH=$(BR_PATH) \
-> +	PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
-> +	PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 \
-> +	PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 \
-> +	PKG_CONFIG_LIBDIR="$(HOST_DIR)/lib/pkgconfig:$(HOST_DIR)/share/pkgconfig" \
-> +	PKG_CONFIG_PATH="$(HOST_DIR)/lib/pkgconfig" \
-> +	PKG_CONFIG_SYSROOT_DIR="/"
+Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+---
+ package/mender-connect/mender-connect.hash | 11 ++++++-----
+ package/mender-connect/mender-connect.mk   |  5 +++--
+ 2 files changed, 9 insertions(+), 7 deletions(-)
 
-  Perhaps this should be done in the infra? This is relevant for all host go 
-packages, right?
-
-  Cc Christian, what do you think?
-
-  Anyway, for now, applied to master, thanks. The rest of the series as well.
-
-  Regards,
-  Arnout
-
->   
->   HOST_MENDER_ARTIFACT_LDFLAGS = -X github.com/mendersoftware/mender-artifact/cli.Version=$(HOST_MENDER_ARTIFACT_VERSION)
->   
-
+diff --git a/package/mender-connect/mender-connect.hash b/package/mender-connect/mender-connect.hash
+index 33ad999180..5f7e082e1b 100644
+--- a/package/mender-connect/mender-connect.hash
++++ b/package/mender-connect/mender-connect.hash
+@@ -1,17 +1,16 @@
+ # Locally computed:
+-sha256  96b81bb4c72eb8c1756febb94101c0dea5a6d4884591824e61a5f2509cd9ca9b  mender-connect-2.1.0-go2.tar.gz
+-sha256  78b3954421ec6499c3f9735b96d52288574ae80c747416a52548d7f526f26e8c  LIC_FILES_CHKSUM.sha256
++sha256  7e83c4cabc090ed26088036c6c68fc8e73546fa4a75db817f676dc8b1e8a3c8f  mender-connect-2.2.1-go2.tar.gz
++sha256  c57e1178f932015d7f08b4d76c4b18e4a55083a6fbc97629cd25ef426bf1db30  LIC_FILES_CHKSUM.sha256
+ 
+ # Vendor licenses
+ # Generated with sed '/^[A-Za-z0-9_]/s/^/sha256  /' LIC_FILES_CHKSUM.sha256
+ 
+ #
+ # Apache-2.0
+-sha256  1033348db7606a7e61b6484f293847cf8d7a35766efebb97e304d4bd5d7f3f6b  LICENSE
+-sha256  3eb823230e5d112e1bd032ccc82ae765cf676d0d6d46a1a1daa2d658b3005b67  vendor/github.com/mendersoftware/go-lib-micro/LICENSE
++sha256  d0f406b04e7901e6b4076bdf5fd20f9d7f04fc41681069fd8954413ac6295688  LICENSE
++sha256  a4e99d13c6cd0e4faf3867ae5c9815ff88cab3cefdefe0dc1ec9ac28b1152944  vendor/github.com/mendersoftware/go-lib-micro/LICENSE
+ #
+ # BSD-2-Clause
+-sha256  2be1b548b0387ca8948e1bb9434e709126904d15f622cc2d0d8e7f186e4d122d  vendor/github.com/gorilla/websocket/LICENSE
+ sha256  8d427fd87bc9579ea368fde3d49f9ca22eac857f91a9dec7e3004bdfab7dee86  vendor/github.com/pkg/errors/LICENSE
+ sha256  1530185dd39cdde7cb2f786a7a5fcf8bc34368b6ae73c15e72bafe88fd80b9a2  vendor/github.com/vmihailenco/msgpack/v5/LICENSE
+ sha256  0f02aac22084ef463aa5f42f566feeec6aa4c99653519744a8c25cb079da5b5d  vendor/github.com/vmihailenco/tagparser/v2/LICENSE
+@@ -19,6 +18,8 @@ sha256  0f02aac22084ef463aa5f42f566feeec6aa4c99653519744a8c25cb079da5b5d  vendor
+ # BSD-3-Clause
+ sha256  2eb550be6801c1ea434feba53bf6d12e7c71c90253e0a9de4a4f46cf88b56477  vendor/github.com/pmezard/go-difflib/LICENSE
+ sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  vendor/golang.org/x/sys/LICENSE
++sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  vendor/golang.org/x/net/LICENSE
++sha256  0b77fdea862f869ef4f201ac5649bdbd38ccb055c7f6454dffae9e2adb4941c1  vendor/github.com/gorilla/websocket/LICENSE
+ #
+ # ISC
+ sha256  1b93a317849ee09d3d7e4f1d20c2b78ddb230b4becb12d7c224c927b9d470251  vendor/github.com/davecgh/go-spew/LICENSE
+diff --git a/package/mender-connect/mender-connect.mk b/package/mender-connect/mender-connect.mk
+index 36ddd5f7db..f4f7e0f195 100644
+--- a/package/mender-connect/mender-connect.mk
++++ b/package/mender-connect/mender-connect.mk
+@@ -4,7 +4,7 @@
+ #
+ ################################################################################
+ 
+-MENDER_CONNECT_VERSION = 2.1.0
++MENDER_CONNECT_VERSION = 2.2.1
+ MENDER_CONNECT_SITE = $(call github,mendersoftware,mender-connect,$(MENDER_CONNECT_VERSION))
+ MENDER_CONNECT_LICENSE = Apache-2.0, BSD-2-Clause, BSD-3-Clause, ISC, MIT
+ 
+@@ -14,12 +14,13 @@ MENDER_CONNECT_LICENSE_FILES = \
+ 	LIC_FILES_CHKSUM.sha256 \
+ 	LICENSE \
+ 	vendor/github.com/mendersoftware/go-lib-micro/LICENSE \
+-	vendor/github.com/gorilla/websocket/LICENSE \
+ 	vendor/github.com/pkg/errors/LICENSE \
+ 	vendor/github.com/vmihailenco/msgpack/v5/LICENSE \
+ 	vendor/github.com/vmihailenco/tagparser/v2/LICENSE \
+ 	vendor/github.com/pmezard/go-difflib/LICENSE \
+ 	vendor/golang.org/x/sys/LICENSE \
++	vendor/golang.org/x/net/LICENSE \
++	vendor/github.com/gorilla/websocket/LICENSE \
+ 	vendor/github.com/davecgh/go-spew/LICENSE \
+ 	vendor/github.com/creack/pty/LICENSE \
+ 	vendor/github.com/go-ozzo/ozzo-validation/v4/LICENSE \
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
