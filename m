@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 67915CF31BA
-	for <buildroot@archiver.kernel.org>; Wed,  2 Oct 2024 20:35:21 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 32283CF31BA
+	for <buildroot@archiver.kernel.org>; Wed,  2 Oct 2024 20:35:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6DE618174F;
-	Wed,  2 Oct 2024 20:35:19 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id DF8D48137A;
+	Wed,  2 Oct 2024 20:35:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id TyBzA9tw9lB6; Wed,  2 Oct 2024 20:35:17 +0000 (UTC)
+ id EAUYzkQcPt52; Wed,  2 Oct 2024 20:35:22 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2699B8176A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0E8C381F71
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 2699B8176A;
-	Wed,  2 Oct 2024 20:35:16 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 0E8C381F71;
+	Wed,  2 Oct 2024 20:35:20 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id CC8A91BF282
- for <buildroot@lists.busybox.net>; Wed,  2 Oct 2024 20:35:12 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 43A8C1BF282
+ for <buildroot@lists.busybox.net>; Wed,  2 Oct 2024 20:35:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id BA1E5401B1
- for <buildroot@lists.busybox.net>; Wed,  2 Oct 2024 20:35:12 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 3F7AF40042
+ for <buildroot@lists.busybox.net>; Wed,  2 Oct 2024 20:35:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mZ7p36XCnCrO for <buildroot@lists.busybox.net>;
+ id HdIUJhvgXbPQ for <buildroot@lists.busybox.net>;
  Wed,  2 Oct 2024 20:35:11 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8B4D340042
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B392140124
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8B4D340042
+ by smtp2.osuosl.org (Postfix) with ESMTP id B392140124
  for <buildroot@buildroot.org>; Wed,  2 Oct 2024 20:35:11 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 750B484706; Wed,  2 Oct 2024 20:35:11 +0000 (UTC)
+ id 9FEF3838FA; Wed,  2 Oct 2024 20:35:11 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 2 Oct 2024 22:30:52 +0200
+Date: Wed, 2 Oct 2024 22:34:38 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 66e8b5ece41c8edb0d519b2093c6c1741862224e
-X-Git-Newrev: a6b364c2e311011bb5626c6a156be34daf919dd0
+X-Git-Oldrev: d75e29c9b23d0edf47dadba365f592e5f7f957a7
+X-Git-Newrev: ceff8dbaa554ed543ec1c09ee8e2a76f40a0415c
 X-Patchwork-Hint: ignore
-Message-Id: <20241002203511.750B484706@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] support/scripts/gen-bootlin-toolchains:
- handle BR2_BINFMT_FLAT
+Message-Id: <20241002203511.9FEF3838FA@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] boot/uboot: pass -mno-fdpic if FDPIC is
+ enabled
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,62 +66,36 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a6b364c2e311011bb5626c6a156be34daf919dd0
+commit: https://git.buildroot.net/buildroot/commit/?id=ceff8dbaa554ed543ec1c09ee8e2a76f40a0415c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-With the introduction of ARM FDPIC support, we need to make sure that
-the existing ARM FLAT external toolchains are not made
-visible/available when ARM FDPIC is selected. This commit updates the
-gen-bootlin-toolchains script to take this into account.
+If the FDPIC ABI is enabled by default in the toolchain, it must be
+explicitly disabled when building U-Boot.
 
+Signed-off-by: Ben Wolsieffer <Ben.Wolsieffer@hefring.com>
+Signed-off-by: Waldemar Brodkorb <wbx@openadk.org>
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- support/scripts/gen-bootlin-toolchains                                | 2 +-
- .../toolchain-external/toolchain-external-bootlin/Config.in.options   | 4 +++-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ boot/uboot/uboot.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/support/scripts/gen-bootlin-toolchains b/support/scripts/gen-bootlin-toolchains
-index ef034058e1..bd1beec995 100755
---- a/support/scripts/gen-bootlin-toolchains
-+++ b/support/scripts/gen-bootlin-toolchains
-@@ -62,7 +62,7 @@ arches = {
-         'prefix': 'armeb',
-     },
-     'armv7m': {
--        'conditions': ['BR2_arm', 'BR2_ARM_CPU_ARMV7M'],
-+        'conditions': ['BR2_arm', 'BR2_ARM_CPU_ARMV7M', 'BR2_BINFMT_FLAT'],
-         'test_options': ['BR2_arm', 'BR2_cortex_m4'],
-         'prefix': 'arm',
-     },
-diff --git a/toolchain/toolchain-external/toolchain-external-bootlin/Config.in.options b/toolchain/toolchain-external/toolchain-external-bootlin/Config.in.options
-index e3ee7aa2c0..098e44fc36 100644
---- a/toolchain/toolchain-external/toolchain-external-bootlin/Config.in.options
-+++ b/toolchain/toolchain-external/toolchain-external-bootlin/Config.in.options
-@@ -10,7 +10,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARCH_SUPPORTS
- 	default y if BR2_arm && BR2_ARM_CPU_ARMV6 && BR2_ARM_EABIHF
- 	default y if BR2_arm && BR2_ARM_CPU_ARMV7A && BR2_ARM_EABIHF
- 	default y if BR2_armeb && BR2_ARM_CPU_ARMV7A && BR2_ARM_EABIHF
--	default y if BR2_arm && BR2_ARM_CPU_ARMV7M
-+	default y if BR2_arm && BR2_ARM_CPU_ARMV7M && BR2_BINFMT_FLAT
- 	default y if BR2_m68k_m68k
- 	default y if BR2_m68k_cf
- 	default y if BR2_microblazebe
-@@ -1136,6 +1136,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7M_UCLIBC_BLEEDING_EDGE
- 	bool "armv7m uclibc bleeding-edge 2024.05-1"
- 	depends on BR2_arm
- 	depends on BR2_ARM_CPU_ARMV7M
-+	depends on BR2_BINFMT_FLAT
- 	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_15
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_14
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_5_15
-@@ -1160,6 +1161,7 @@ config BR2_TOOLCHAIN_EXTERNAL_BOOTLIN_ARMV7M_UCLIBC_STABLE
- 	bool "armv7m uclibc stable 2024.05-1"
- 	depends on BR2_arm
- 	depends on BR2_ARM_CPU_ARMV7M
-+	depends on BR2_BINFMT_FLAT
- 	depends on !BR2_ARCH_NEEDS_GCC_AT_LEAST_14
- 	select BR2_TOOLCHAIN_GCC_AT_LEAST_13
- 	select BR2_TOOLCHAIN_HEADERS_AT_LEAST_4_19
+diff --git a/boot/uboot/uboot.mk b/boot/uboot/uboot.mk
+index ab534a8b3a..d8faef648f 100644
+--- a/boot/uboot/uboot.mk
++++ b/boot/uboot/uboot.mk
+@@ -172,6 +172,11 @@ UBOOT_MAKE_OPTS += \
+ 	HOSTLDFLAGS="$(HOST_LDFLAGS)" \
+ 	$(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS))
+ 
++# Disable FDPIC if enabled by default in toolchain
++ifeq ($(BR2_BINFMT_FDPIC),y)
++UBOOT_MAKE_OPTS += KCFLAGS=-mno-fdpic
++endif
++
+ ifeq ($(BR2_TARGET_UBOOT_NEEDS_ATF_BL31),y)
+ UBOOT_DEPENDENCIES += arm-trusted-firmware
+ ifeq ($(BR2_TARGET_UBOOT_NEEDS_ATF_BL31_ELF),y)
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
