@@ -4,69 +4,67 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E8AE0CF319E
-	for <buildroot@archiver.kernel.org>; Wed,  2 Oct 2024 19:26:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 95B73CEACF3
+	for <buildroot@archiver.kernel.org>; Wed,  2 Oct 2024 19:37:09 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B590561126;
-	Wed,  2 Oct 2024 19:26:49 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 438FE60772;
+	Wed,  2 Oct 2024 19:37:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3xG1RRDzZArj; Wed,  2 Oct 2024 19:26:48 +0000 (UTC)
+ id 50dZ5UmEB3gu; Wed,  2 Oct 2024 19:37:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org BCC786112B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4A95660775
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id BCC786112B;
-	Wed,  2 Oct 2024 19:26:48 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 486F61BF2EF
- for <buildroot@lists.busybox.net>; Wed,  2 Oct 2024 19:26:47 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4A95660775;
+	Wed,  2 Oct 2024 19:37:08 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 8B52A1BF2EF
+ for <buildroot@lists.busybox.net>; Wed,  2 Oct 2024 19:37:06 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4536C80A4A
- for <buildroot@lists.busybox.net>; Wed,  2 Oct 2024 19:26:47 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 7A0426114E
+ for <buildroot@lists.busybox.net>; Wed,  2 Oct 2024 19:37:06 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9YI-AXmQWaq3 for <buildroot@lists.busybox.net>;
- Wed,  2 Oct 2024 19:26:46 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
- helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 39CD6809F5
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 39CD6809F5
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 39CD6809F5
- for <buildroot@buildroot.org>; Wed,  2 Oct 2024 19:26:45 +0000 (UTC)
-Received: from home.juju.sh (unknown
- [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
- (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 71872B00539;
- Wed,  2 Oct 2024 21:26:40 +0200 (CEST)
-From: Julien Olivain <ju.o@free.fr>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id YUmg8EWOKFMd for <buildroot@lists.busybox.net>;
+ Wed,  2 Oct 2024 19:37:06 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.201;
+ helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org A922961148
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A922961148
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id A922961148
+ for <buildroot@buildroot.org>; Wed,  2 Oct 2024 19:37:05 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPA id 044B71BF203;
+ Wed,  2 Oct 2024 19:37:00 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed,  2 Oct 2024 21:26:21 +0200
-Message-ID: <20241002192621.14605-2-ju.o@free.fr>
-X-Mailer: git-send-email 2.46.2
-In-Reply-To: <20241002192621.14605-1-ju.o@free.fr>
-References: <20241002192621.14605-1-ju.o@free.fr>
+Date: Wed,  2 Oct 2024 21:36:46 +0200
+Message-ID: <20241002193648.2910408-1-thomas.petazzoni@bootlin.com>
+X-Mailer: git-send-email 2.46.1
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1727897204;
- bh=Us2ZR8q/eWb1Kn8+oFoMniUEb3IHI2dXuXLkZmCs82Y=;
- h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
- b=LCpmRVbFIcrvvCvKtF1mF5XVqzwhYSSAtAs/X1lSWHUQYyQGjj2CuGYaawrlHp38+
- TrpfVOH6kD/putxIlxs8/CgEee9gKgZZTzAgtgS/T5h1J7xFLJHWzNjVF723934OJp
- KtC9tyKhDNOurKfXiiprNgUNSEkkYiE4UeFUHZtiWM+140noeo1gAbTgiCCQ7aHFYY
- GExh4p2VogdBfTg7DpNGLGDea1Wy/z13rk//rxIkuRUiFWVX375vNBtmTowEX9x/c4
- 6PRClX0O4zNNpknJsqQ6ggAjk+DJYkv04y9p4enhnn1HiLkuiyPg5/ix1U4Q2HUHlN
- Q1CQNuEr/4MzQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=LCpmRVbF
-Subject: [Buildroot] [PATCH 2/2] support/testing: add oath-toolkit runtime
- test
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1727897823;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=Xiw9gnMnfEcdKhbo3yyYvlfuOKoFIQDo27RF9HPQT88=;
+ b=XgAcKOlmd9JuI9qxkkB3RE+zsksWpaRXsKLPzoJQ5YgoIa9XCh4vnUfiuDnpuTwfVL7b0P
+ eBt9Dp74Efd+uP8A19/BbvGSy5gyQ1QZoVG0WCp3XLZiG0IeK508Ee0rPjWIyGe6qD5m1c
+ FMKlFOsLTCz9C9TvL2B0uE8QAsyTKxw5rRFU03teppr9LsvB8B1XeR5q/rkcWkBBVRFJal
+ FB0V2qFGh9FnWH7icUzipK9/nB/IkvbfK7riRMVSCswGvlUd5AOe+H0P+gpqKPk60QpmyG
+ UlsBHMXsFeoYZYHaIDSV5suP7j/h5Bc4LgvbSGEf67Dfj5DtMPyjvwRJCHWvAw==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=XgAcKOlm
+Subject: [Buildroot] [PATCH 1/2] docs/website/sponsors.html: fix page layout
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -78,81 +76,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Julien Olivain <ju.o@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
----
-Patch series tested in:
-https://gitlab.com/jolivain/buildroot/-/jobs/7978663011
----
- DEVELOPERS                                    |  1 +
- .../tests/package/test_oath_toolkit.py        | 38 +++++++++++++++++++
- 2 files changed, 39 insertions(+)
- create mode 100644 support/testing/tests/package/test_oath_toolkit.py
+The LTS block was glued with the next block, add missing </div>.
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 505ca3f4ba..40ab4a1707 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -1957,6 +1957,7 @@ F:	support/testing/tests/package/test_ntp.py
- F:	support/testing/tests/package/test_ntp/
- F:	support/testing/tests/package/test_numactl.py
- F:	support/testing/tests/package/test_numactl/
-+F:	support/testing/tests/package/test_oath_toolkit.py
- F:	support/testing/tests/package/test_octave.py
- F:	support/testing/tests/package/test_ola.py
- F:	support/testing/tests/package/test_ola/
-diff --git a/support/testing/tests/package/test_oath_toolkit.py b/support/testing/tests/package/test_oath_toolkit.py
-new file mode 100644
-index 0000000000..92c0845614
---- /dev/null
-+++ b/support/testing/tests/package/test_oath_toolkit.py
-@@ -0,0 +1,38 @@
-+import os
-+
-+import infra.basetest
-+
-+
-+class TestOathToolKit(infra.basetest.BRTest):
-+    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
-+        """
-+        BR2_PACKAGE_OATH_TOOLKIT=y
-+        BR2_TARGET_ROOTFS_CPIO=y
-+        # BR2_TARGET_ROOTFS_TAR is not set
-+        """
-+
-+    def test_run(self):
-+        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
-+        self.emulator.boot(arch="armv5",
-+                           kernel="builtin",
-+                           options=["-initrd", cpio_file])
-+        self.emulator.login()
-+
-+        self.assertRunOk("oathtool --version")
-+
-+        # Test commands and expected results are coming from examples
-+        # producing stable/reproducible outputs given in the oathtool
-+        # manual page. See:
-+        # https://www.nongnu.org/oath-toolkit/oathtool.1.html
-+
-+        tests = [
-+            ("echo 00 | oathtool -", "328482"),
-+            ("oathtool -c 5 3132333435363738393031323334353637383930", "254676"),
-+            ("oathtool -w 10 3132333435363738393031323334353637383930 969429", "3"),
-+            ("oathtool --totp --now \"2008-04-23 17:42:17 UTC\" 00", "974945")
-+        ]
-+
-+        for cmd, expected_out in tests:
-+            out, ret = self.emulator.run(cmd)
-+            self.assertEqual(ret, 0, f"Failed to run '{cmd}'")
-+            self.assertEqual(expected_out, out[0])
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+---
+ docs/website/sponsors.html | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/docs/website/sponsors.html b/docs/website/sponsors.html
+index bfb83663c6..af691779f8 100644
+--- a/docs/website/sponsors.html
++++ b/docs/website/sponsors.html
+@@ -13,6 +13,7 @@
+          Program</a>.</p>
+       <p>When the Buildroot LTS Sponsoring program will be operational
+          later in 2024, those sponsors will be mentioned here.</p>
++      </div>
+     </div>
+ 
+     <div class="panel panel-primary">
 -- 
-2.46.2
+2.46.1
 
 _______________________________________________
 buildroot mailing list
