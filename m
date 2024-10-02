@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 50136CF8541
-	for <buildroot@archiver.kernel.org>; Wed,  2 Oct 2024 20:59:45 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DAA1FCF8541
+	for <buildroot@archiver.kernel.org>; Wed,  2 Oct 2024 21:02:21 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9995D41061;
-	Wed,  2 Oct 2024 20:59:44 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 793A940A96;
+	Wed,  2 Oct 2024 21:02:21 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id XMKq9D4b0qGv; Wed,  2 Oct 2024 20:59:42 +0000 (UTC)
+ id 5GjvQGHlFa8N; Wed,  2 Oct 2024 21:02:20 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E4043413F6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0E31040A99
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E4043413F6;
-	Wed,  2 Oct 2024 20:59:41 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0E31040A99;
+	Wed,  2 Oct 2024 21:02:20 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id DBB9B1BF232
- for <buildroot@lists.busybox.net>; Wed,  2 Oct 2024 20:59:32 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2082E1BF30E
+ for <buildroot@lists.busybox.net>; Wed,  2 Oct 2024 21:02:19 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D6C4881EB4
- for <buildroot@lists.busybox.net>; Wed,  2 Oct 2024 20:59:31 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 1006F81125
+ for <buildroot@lists.busybox.net>; Wed,  2 Oct 2024 21:02:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6doPSdM00tWs for <buildroot@lists.busybox.net>;
- Wed,  2 Oct 2024 20:59:30 +0000 (UTC)
+ id U0xzH-YnTzWl for <buildroot@lists.busybox.net>;
+ Wed,  2 Oct 2024 21:02:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 33D2980D9D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2C44E8101C
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 33D2980D9D
- for <buildroot@buildroot.org>; Wed,  2 Oct 2024 20:59:30 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 2C44E8101C
+ for <buildroot@buildroot.org>; Wed,  2 Oct 2024 21:02:18 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 2D51884776; Wed,  2 Oct 2024 20:59:30 +0000 (UTC)
+ id 2383684A09; Wed,  2 Oct 2024 21:02:18 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Wed, 2 Oct 2024 22:59:07 +0200
+Date: Wed, 2 Oct 2024 23:01:04 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: e003ff76975798096024046bd5f6a3ef15c9e6e2
-X-Git-Newrev: 7b4561650d6b0d76d04a81f7fbe6c5630ec93087
+X-Git-Oldrev: c08d233e048cb44139121e8ca39e24569b3a56e6
+X-Git-Newrev: afc683d0bfe40a7c01442fe0fffecd3de8831ea6
 X-Patchwork-Hint: ignore
-Message-Id: <20241002205930.2D51884776@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/mender-artifact: bump version to
- 3.11.2
+Message-Id: <20241002210218.2383684A09@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/python-aiohttp-session: bump to
+ version 2.12.1
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,296 +58,53 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
+From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7b4561650d6b0d76d04a81f7fbe6c5630ec93087
+commit: https://git.buildroot.net/buildroot/commit/?id=afc683d0bfe40a7c01442fe0fffecd3de8831ea6
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-mender-artifact now explicitly depends on host-openssl and uses host-pkgconf
-to find the correct libraries.
-
-Use the same variables as defined in HOST_MAKE_ENV (in package/Makefile.in) for
-HOST_MENDER_ARTIFACT_GO_ENV.
-
-The updated mender-artifact package introduces the write bootstrap-artifact
-argument which is needed for mender versions >= 3.5.1.
-
-License changes:
-New:
-  Apache 2.0:
-    vendor/google.golang.org/genproto/googleapis/api/LICENSE
-    vendor/google.golang.org/genproto/googleapis/rpc/LICENSE
-    vendor/cloud.google.com/go/compute/metadata/LICENSE
-
-Removed:
-  Apache 2.0:
-    vendor/cloud.google.com/go/LICENSE
-
-  MIT:
-    vendor/github.com/shurcooL/sanitized_anchor_name/LICENSE
-    vendor/go.uber.org/atomic/LICENSE.txt
-    vendor/github.com/mitchellh/go-testing-interface/LICENSE
-    vendor/github.com/mitchellh/copystructure/LICENSE
-    vendor/github.com/mitchellh/reflectwalk/LICENSE
-    vendor/github.com/mattn/go-colorable/LICENSE
-    vendor/github.com/fatih/color/LICENSE.md
-    vendor/github.com/armon/go-radix/LICENSE
-    vendor/github.com/armon/go-metrics/LICENSE
-
-  MPL-2.0:
-    vendor/github.com/hashicorp/go-version/LICENSE
-    vendor/github.com/hashicorp/go-uuid/LICENSE
-    vendor/github.com/hashicorp/go-plugin/LICENSE
-    vendor/github.com/hashicorp/golang-lru/LICENSE
-
-Modified:
-
-  Apache 2.0:
-    vendor/gopkg.in/square/go-jose.v2/LICENSE
-    vendor/github.com/oklog/run/LICENSE
-
-  BSD 3 Clause:
-    vendor/github.com/golang/snappy/LICENSE
-    vendor/gopkg.in/square/go-jose.v2/json/LICENSE
-    vendor/github.com/pierrec/lz4/LICENSE
-
-  MIT:
-    vendor/github.com/urfave/cli/LICENSE
-    vendor/github.com/klauspost/pgzip/LICENSE
-    vendor/github.com/hashicorp/go-hclog/LICENSE
-
-  MPL-2.0:
-    vendor/github.com/hashicorp/vault/sdk/LICENSE
-    vendor/github.com/hashicorp/vault/api/LICENSE
-    vendor/github.com/hashicorp/yamux/LICENSE
-    vendor/github.com/hashicorp/go-immutable-radix/LICENSE
-
-Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 ---
- package/mender-artifact/mender-artifact.hash | 48 ++++++++++---------------
- package/mender-artifact/mender-artifact.mk   | 54 ++++++++++++++--------------
- 2 files changed, 46 insertions(+), 56 deletions(-)
+ package/python-aiohttp-session/python-aiohttp-session.hash | 4 ++--
+ package/python-aiohttp-session/python-aiohttp-session.mk   | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/package/mender-artifact/mender-artifact.hash b/package/mender-artifact/mender-artifact.hash
-index 9d77f068e2..e87d52fa72 100644
---- a/package/mender-artifact/mender-artifact.hash
-+++ b/package/mender-artifact/mender-artifact.hash
-@@ -1,6 +1,6 @@
- # Locally computed:
--sha256  d3ed68d8637195ff35de97b12c8fa148cebffb1ee0fd0d43909ec1643c0c296a  mender-artifact-3.8.0-go2.tar.gz
--sha256  b8462a14975e30fb0dff14ed50e7563e833ccce13c2aa93f95386ffe877ed673  LIC_FILES_CHKSUM.sha256
-+sha256  3fc2d45bedf28843f84c4b8fcc6a9592e1dc176fc91123d99a5172935d7c78a0  mender-artifact-3.11.2-go2.tar.gz
-+sha256  8c41e20f891ae04abd2d32367248eaf33e1bd2f1328789ab60b8b0d10cc414a1  LIC_FILES_CHKSUM.sha256
- 
- # License hash extracted from LIC_FILES_CHKSUM.sha256 using the
- # following command:
-@@ -8,21 +8,25 @@ sha256  b8462a14975e30fb0dff14ed50e7563e833ccce13c2aa93f95386ffe877ed673  LIC_FI
- #     sed '/^[A-Za-z0-9_]/s/^/sha256  /' LIC_FILES_CHKSUM.sha256
- 
- # Apache 2.0 licenses.
--sha256  1033348db7606a7e61b6484f293847cf8d7a35766efebb97e304d4bd5d7f3f6b  LICENSE
-+sha256  d0f406b04e7901e6b4076bdf5fd20f9d7f04fc41681069fd8954413ac6295688  LICENSE
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/github.com/minio/sha256-simd/LICENSE
- sha256  8f5d89b47d7a05a199b77b7e0f362dad391d451ebda4ef48ba11c50c071564c7  vendor/github.com/mendersoftware/progressbar/LICENSE
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/google.golang.org/genproto/LICENSE
-+sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/google.golang.org/genproto/googleapis/api/LICENSE
-+sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/google.golang.org/genproto/googleapis/rpc/LICENSE
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/google.golang.org/grpc/LICENSE
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/google.golang.org/appengine/LICENSE
--sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/cloud.google.com/go/LICENSE
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/cloud.google.com/go/kms/LICENSE
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/cloud.google.com/go/iam/LICENSE
- sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/cloud.google.com/go/compute/LICENSE
-+sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/cloud.google.com/go/compute/metadata/LICENSE
- sha256  58d1e17ffe5109a7ae296caafcadfdbe6a7d176f0bc4ab01e12a689b0499d8bd  vendor/go.opencensus.io/LICENSE
- sha256  73ba74dfaa520b49a401b5d21459a8523a146f3b7518a833eea5efa85130bf68  vendor/github.com/golang/groupcache/LICENSE
--sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/gopkg.in/square/go-jose.v2/LICENSE
--sha256  c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  vendor/github.com/oklog/run/LICENSE
--
-+sha256  73ba74dfaa520b49a401b5d21459a8523a146f3b7518a833eea5efa85130bf68  vendor/github.com/mendersoftware/openssl/LICENSE
-+sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/github.com/googleapis/enterprise-certificate-proxy/LICENSE
-+sha256  dd26a7abddd02e2d0aba97805b31f248ef7835d9e10da289b22e3b8ab78b324d  vendor/github.com/go-jose/go-jose/v3/json/LICENSE
-+sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/github.com/go-jose/go-jose/v3/LICENSE
-+sha256  cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30  vendor/github.com/google/s2a-go/LICENSE.md
- #
- # BSD 2 Clause licenses.
- sha256  8d427fd87bc9579ea368fde3d49f9ca22eac857f91a9dec7e3004bdfab7dee86  vendor/github.com/pkg/errors/LICENSE
-@@ -44,36 +48,27 @@ sha256  fc0a2f71df4e8f047902da53d1f85301be43e0f360fc167057a2d04658ed2ba9  vendor
- sha256  4835612df0098ca95f8e7d9e3bffcb02358d435dbb38057c844c99d7f725eb20  vendor/google.golang.org/protobuf/LICENSE
- sha256  8778a9fc1eaffb03ab873caae251df2d224f6b5502be8777d3cd573a4dd43903  vendor/github.com/golang/protobuf/LICENSE
- sha256  b95218cd9607855a6536384c0262922b30a0c2bf56e4ced790240f3a3bac4722  vendor/github.com/googleapis/gax-go/v2/LICENSE
--sha256  f69f157b0be75da373605dbc8bbf142e8924ee82d8f44f11bcaf351335bf98cf  vendor/github.com/golang/snappy/LICENSE
--sha256  dd26a7abddd02e2d0aba97805b31f248ef7835d9e10da289b22e3b8ab78b324d  vendor/gopkg.in/square/go-jose.v2/json/LICENSE
--sha256  6a358d2540ca14048f02d366f23787c0a480157e58f058113f0e27168dd4e447  vendor/github.com/pierrec/lz4/LICENSE
-+sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  vendor/golang.org/x/crypto/LICENSE
-+sha256  2d36597f7117c38b006835ae7f537487207d8ec407aa9d9980794b2030cbc067  vendor/golang.org/x/time/LICENSE
-+sha256  f69f157b0be75da373605dbc8bbf142e8924ee82d8f44f11bcaf351335bf98cf  vendor/github.com/klauspost/compress/internal/snapref/LICENSE
- #
- # ISC licenses.
- sha256  1b93a317849ee09d3d7e4f1d20c2b78ddb230b4becb12d7c224c927b9d470251  vendor/github.com/davecgh/go-spew/LICENSE
- #
- # MIT licenses.
- sha256  f8e536c1c7b695810427095dc85f5f80d44ff7c10535e8a9486cf393e2599189  vendor/github.com/stretchr/testify/LICENSE
--sha256  da277af11b85227490377fbcac6afccc68be560c4fff36ac05ca62de55345fd7  vendor/github.com/urfave/cli/LICENSE
-+sha256  2be6c75f36f3022ea015fea7b1b7135ce67d477ee721d0fc6c98678badb13b8b  vendor/github.com/urfave/cli/LICENSE
- sha256  51a0c9ec7f8b7634181b8d4c03e5b5d204ac21d6e72f46c313973424664b2e6b  vendor/github.com/sirupsen/logrus/LICENSE
--sha256  6d2de1cde19c4d2bd8bcd9aaa1d581f4cfa3db9cf71896140330eaa2f2687685  vendor/github.com/klauspost/pgzip/LICENSE
-+sha256  7709cc030f078b17809884f92f33a2016944e1180312dc3f1371b02313d313ed  vendor/github.com/klauspost/pgzip/LICENSE
- sha256  a55959c4e3e8917bfa857359bb641115336276a6cc97408fd8197e079fb18470  vendor/github.com/cpuguy83/go-md2man/v2/LICENSE.md
--sha256  c8024e31c1de453fea90f22a221968835cc7af9d520274a2576c9ec9976055b0  vendor/github.com/shurcooL/sanitized_anchor_name/LICENSE
- sha256  d18f6323b71b0b768bb5e9616e36da390fbd39369a81807cca352de4e4e6aa0b  vendor/gopkg.in/yaml.v3/LICENSE
- sha256  08eab1118c80885fa1fa6a6dd7303f65a379fcb3733e063d20d1bbc2c76e6fa1  vendor/github.com/mattn/go-isatty/LICENSE
- sha256  5d966570d7a442d4e969892860a914e542c97f262c873baee8f0aa48e1f40212  vendor/github.com/klauspost/cpuid/v2/LICENSE
--sha256  edbb5a4d165ac69376c765b551c0662ff42bea87e1f1eda85f42ac90c34b09d0  vendor/go.uber.org/atomic/LICENSE.txt
- sha256  22adc4abdece712a737573672f082fd61ac2b21df878efb87ffcff4354a07f26  vendor/github.com/mitchellh/go-homedir/LICENSE
--sha256  f48b778b7fccb6650f915cf4527c941a9578f8876a2911d035c4e44641a916be  vendor/github.com/mitchellh/go-testing-interface/LICENSE
- sha256  22adc4abdece712a737573672f082fd61ac2b21df878efb87ffcff4354a07f26  vendor/github.com/mitchellh/mapstructure/LICENSE
--sha256  3c377fad2e5ae1d7081c7c2f16da867a87cca1d1f5f1aa7ed0b8a16bb553142a  vendor/github.com/mitchellh/copystructure/LICENSE
--sha256  22adc4abdece712a737573672f082fd61ac2b21df878efb87ffcff4354a07f26  vendor/github.com/mitchellh/reflectwalk/LICENSE
- sha256  38049e50b486f5394e40b786388f4a006401996e46c7c1cd18925afe7c3b4e34  vendor/github.com/ryanuber/go-glob/LICENSE
--sha256  88a2379b3ca34bf5c57127aff9dcb802bbb60ece0805cdbda65b3bd115f971d9  vendor/github.com/mattn/go-colorable/LICENSE
--sha256  de95ed802d2f90e3c72cb3c9a927cca5f2aec234a3ef1250232db0f8178b2d93  vendor/github.com/fatih/color/LICENSE.md
--sha256  831892cd31b9eef0311bb1de9014527ef5d3592eed7add1f9f829510d2065e62  vendor/github.com/armon/go-radix/LICENSE
--sha256  d0bb61dd59b6d59021893751bdd1205ee88c8206dcabd6b4c68d35b94ee19750  vendor/github.com/armon/go-metrics/LICENSE
- sha256  5c0476add4c38b55d0ed5ac11b85e00c38f26e1caee20dfe3ab58190103d1fbc  vendor/github.com/cenkalti/backoff/v3/LICENSE
--sha256  b8ce983c0e0b1410115d42b65d5471b3666a8d4f4334a52f29f457a39a71b463  vendor/github.com/hashicorp/go-hclog/LICENSE
-+sha256  f566a9f97bacdaf00d9f21dd991e81dc11201c4e016c86b470799429a1c9a79c  vendor/github.com/klauspost/compress/zstd/internal/xxhash/LICENSE.txt
- #
- # MPL-2.0 licenses.
- sha256  60222c28c1a7f6a92c7df98e5c5f4459e624e6e285e0b9b94467af5f6ab3343d  vendor/github.com/hashicorp/go-secure-stdlib/strutil/LICENSE
-@@ -81,15 +76,8 @@ sha256  60222c28c1a7f6a92c7df98e5c5f4459e624e6e285e0b9b94467af5f6ab3343d  vendor
- sha256  bef1747eda88b9ed46e94830b0d978c3499dad5dfe38d364971760881901dadd  vendor/github.com/hashicorp/errwrap/LICENSE
- sha256  bef1747eda88b9ed46e94830b0d978c3499dad5dfe38d364971760881901dadd  vendor/github.com/hashicorp/hcl/LICENSE
- sha256  60222c28c1a7f6a92c7df98e5c5f4459e624e6e285e0b9b94467af5f6ab3343d  vendor/github.com/hashicorp/go-cleanhttp/LICENSE
--sha256  bef1747eda88b9ed46e94830b0d978c3499dad5dfe38d364971760881901dadd  vendor/github.com/hashicorp/go-version/LICENSE
- sha256  60222c28c1a7f6a92c7df98e5c5f4459e624e6e285e0b9b94467af5f6ab3343d  vendor/github.com/hashicorp/go-rootcerts/LICENSE
- sha256  60222c28c1a7f6a92c7df98e5c5f4459e624e6e285e0b9b94467af5f6ab3343d  vendor/github.com/hashicorp/go-retryablehttp/LICENSE
--sha256  60222c28c1a7f6a92c7df98e5c5f4459e624e6e285e0b9b94467af5f6ab3343d  vendor/github.com/hashicorp/go-uuid/LICENSE
--sha256  a830016911a348a54e89bd54f2f8b0d8fffdeac20aecfba8e36ebbf38a03f5ff  vendor/github.com/hashicorp/go-plugin/LICENSE
- sha256  1f256ecad192880510e84ad60474eab7589218784b9a50bc7ceee34c2b91f1d5  vendor/github.com/hashicorp/go-sockaddr/LICENSE
--sha256  60222c28c1a7f6a92c7df98e5c5f4459e624e6e285e0b9b94467af5f6ab3343d  vendor/github.com/hashicorp/vault/sdk/LICENSE
--sha256  60222c28c1a7f6a92c7df98e5c5f4459e624e6e285e0b9b94467af5f6ab3343d  vendor/github.com/hashicorp/vault/api/LICENSE
--sha256  812e9d96e900a093ae4d1d3f22c5f82f568a0a0461c3007a99d00573d41c5461  vendor/github.com/hashicorp/yamux/LICENSE
--sha256  60222c28c1a7f6a92c7df98e5c5f4459e624e6e285e0b9b94467af5f6ab3343d  vendor/github.com/hashicorp/go-immutable-radix/LICENSE
-+sha256  d6b1a865f1c8c697d343bd4e0ce61025f91898486a1f00d727f32e8644af77d3  vendor/github.com/hashicorp/vault/api/LICENSE
- sha256  a830016911a348a54e89bd54f2f8b0d8fffdeac20aecfba8e36ebbf38a03f5ff  vendor/github.com/hashicorp/go-multierror/LICENSE
--sha256  af175b9d96ee93c21a036152e1b905b0b95304d4ae8c2c921c7609100ba8df7e  vendor/github.com/hashicorp/golang-lru/LICENSE
-diff --git a/package/mender-artifact/mender-artifact.mk b/package/mender-artifact/mender-artifact.mk
-index 6ade624a23..399c194c99 100644
---- a/package/mender-artifact/mender-artifact.mk
-+++ b/package/mender-artifact/mender-artifact.mk
-@@ -4,7 +4,7 @@
+diff --git a/package/python-aiohttp-session/python-aiohttp-session.hash b/package/python-aiohttp-session/python-aiohttp-session.hash
+index efdac39007..8559df057b 100644
+--- a/package/python-aiohttp-session/python-aiohttp-session.hash
++++ b/package/python-aiohttp-session/python-aiohttp-session.hash
+@@ -1,5 +1,5 @@
+ # md5, sha256 from https://pypi.org/pypi/aiohttp-session/json
+-md5  b89bde69f6f3c61a991ff408d2733838  aiohttp-session-2.12.0.tar.gz
+-sha256  0ccd11a7c77cb9e5a61f4daacdc9170d561112f9cfaf9e9a2d9867c0587d1950  aiohttp-session-2.12.0.tar.gz
++md5  ff7a0c880ed7cee24e0a141c201adb8b  aiohttp_session-2.12.1.tar.gz
++sha256  15e6e0288e9bcccd4b1d0c28aae9c20e19a252b12d0cb682223ca9c83180e899  aiohttp_session-2.12.1.tar.gz
+ # Locally computed sha256 checksums
+ sha256  7bc5dd2f229a6b922befb1427fd4ad2c0b255f12c1b1869370ba77520dc22bc7  LICENSE
+diff --git a/package/python-aiohttp-session/python-aiohttp-session.mk b/package/python-aiohttp-session/python-aiohttp-session.mk
+index 55bf0e87f3..8b8337e68e 100644
+--- a/package/python-aiohttp-session/python-aiohttp-session.mk
++++ b/package/python-aiohttp-session/python-aiohttp-session.mk
+@@ -4,9 +4,9 @@
  #
  ################################################################################
  
--HOST_MENDER_ARTIFACT_VERSION = 3.8.0
-+HOST_MENDER_ARTIFACT_VERSION = 3.11.2
- HOST_MENDER_ARTIFACT_SITE = $(call github,mendersoftware,mender-artifact,$(HOST_MENDER_ARTIFACT_VERSION))
- HOST_MENDER_ARTIFACT_LICENSE = Apache2.0, BSD-2-Clause, BSD-3-Clause, ISC, MIT, MPL-2.0
- HOST_MENDER_ARTIFACT_LICENSE_FILES = \
-@@ -13,16 +13,21 @@ HOST_MENDER_ARTIFACT_LICENSE_FILES = \
- 	vendor/github.com/minio/sha256-simd/LICENSE \
- 	vendor/github.com/mendersoftware/progressbar/LICENSE \
- 	vendor/google.golang.org/genproto/LICENSE \
-+	vendor/google.golang.org/genproto/googleapis/api/LICENSE \
-+	vendor/google.golang.org/genproto/googleapis/rpc/LICENSE \
- 	vendor/google.golang.org/grpc/LICENSE \
- 	vendor/google.golang.org/appengine/LICENSE \
--	vendor/cloud.google.com/go/LICENSE \
- 	vendor/cloud.google.com/go/kms/LICENSE \
- 	vendor/cloud.google.com/go/iam/LICENSE \
- 	vendor/cloud.google.com/go/compute/LICENSE \
-+	vendor/cloud.google.com/go/compute/metadata/LICENSE \
- 	vendor/go.opencensus.io/LICENSE \
- 	vendor/github.com/golang/groupcache/LICENSE \
--	vendor/gopkg.in/square/go-jose.v2/LICENSE \
--	vendor/github.com/oklog/run/LICENSE \
-+	vendor/github.com/mendersoftware/openssl/LICENSE \
-+	vendor/github.com/googleapis/enterprise-certificate-proxy/LICENSE \
-+	vendor/github.com/go-jose/go-jose/v3/json/LICENSE \
-+	vendor/github.com/go-jose/go-jose/v3/LICENSE \
-+	vendor/github.com/google/s2a-go/LICENSE.md \
- 	vendor/github.com/pkg/errors/LICENSE \
- 	vendor/github.com/pmezard/go-difflib/LICENSE \
- 	vendor/golang.org/x/sys/LICENSE \
-@@ -40,51 +45,48 @@ HOST_MENDER_ARTIFACT_LICENSE_FILES = \
- 	vendor/google.golang.org/protobuf/LICENSE \
- 	vendor/github.com/golang/protobuf/LICENSE \
- 	vendor/github.com/googleapis/gax-go/v2/LICENSE \
--	vendor/github.com/golang/snappy/LICENSE \
--	vendor/gopkg.in/square/go-jose.v2/json/LICENSE \
--	vendor/github.com/pierrec/lz4/LICENSE \
-+	vendor/golang.org/x/crypto/LICENSE \
-+	vendor/golang.org/x/time/LICENSE \
-+	vendor/github.com/klauspost/compress/internal/snapref/LICENSE \
- 	vendor/github.com/davecgh/go-spew/LICENSE \
- 	vendor/github.com/stretchr/testify/LICENSE \
- 	vendor/github.com/urfave/cli/LICENSE \
- 	vendor/github.com/sirupsen/logrus/LICENSE \
- 	vendor/github.com/klauspost/pgzip/LICENSE \
- 	vendor/github.com/cpuguy83/go-md2man/v2/LICENSE.md \
--	vendor/github.com/shurcooL/sanitized_anchor_name/LICENSE \
- 	vendor/gopkg.in/yaml.v3/LICENSE \
- 	vendor/github.com/mattn/go-isatty/LICENSE \
- 	vendor/github.com/klauspost/cpuid/v2/LICENSE \
--	vendor/go.uber.org/atomic/LICENSE.txt \
- 	vendor/github.com/mitchellh/go-homedir/LICENSE \
--	vendor/github.com/mitchellh/go-testing-interface/LICENSE \
- 	vendor/github.com/mitchellh/mapstructure/LICENSE \
--	vendor/github.com/mitchellh/copystructure/LICENSE \
--	vendor/github.com/mitchellh/reflectwalk/LICENSE \
- 	vendor/github.com/ryanuber/go-glob/LICENSE \
--	vendor/github.com/mattn/go-colorable/LICENSE \
--	vendor/github.com/fatih/color/LICENSE.md \
--	vendor/github.com/armon/go-radix/LICENSE \
--	vendor/github.com/armon/go-metrics/LICENSE \
- 	vendor/github.com/cenkalti/backoff/v3/LICENSE \
--	vendor/github.com/hashicorp/go-hclog/LICENSE \
-+	vendor/github.com/klauspost/compress/zstd/internal/xxhash/LICENSE.txt \
- 	vendor/github.com/hashicorp/go-secure-stdlib/strutil/LICENSE \
- 	vendor/github.com/hashicorp/go-secure-stdlib/parseutil/LICENSE \
- 	vendor/github.com/hashicorp/errwrap/LICENSE \
- 	vendor/github.com/hashicorp/hcl/LICENSE \
- 	vendor/github.com/hashicorp/go-cleanhttp/LICENSE \
--	vendor/github.com/hashicorp/go-version/LICENSE \
- 	vendor/github.com/hashicorp/go-rootcerts/LICENSE \
- 	vendor/github.com/hashicorp/go-retryablehttp/LICENSE \
--	vendor/github.com/hashicorp/go-uuid/LICENSE \
--	vendor/github.com/hashicorp/go-plugin/LICENSE \
- 	vendor/github.com/hashicorp/go-sockaddr/LICENSE \
--	vendor/github.com/hashicorp/vault/sdk/LICENSE \
- 	vendor/github.com/hashicorp/vault/api/LICENSE \
--	vendor/github.com/hashicorp/yamux/LICENSE \
--	vendor/github.com/hashicorp/go-immutable-radix/LICENSE \
--	vendor/github.com/hashicorp/go-multierror/LICENSE \
--	vendor/github.com/hashicorp/golang-lru/LICENSE
-+	vendor/github.com/hashicorp/go-multierror/LICENSE
-+
-+HOST_MENDER_ARTIFACT_DEPENDENCIES = host-pkgconf host-openssl host-xz
-+
-+ifeq ($(BR2_PACKAGE_HOST_ZSTD),y)
-+HOST_MENDER_ARTIFACT_DEPENDENCIES += host-zstd
-+endif
- 
--HOST_MENDER_ARTIFACT_DEPENDENCIES = host-xz
-+HOST_MENDER_ARTIFACT_GO_ENV += \
-+	PATH=$(BR_PATH) \
-+	PKG_CONFIG="$(PKG_CONFIG_HOST_BINARY)" \
-+	PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1 \
-+	PKG_CONFIG_ALLOW_SYSTEM_LIBS=1 \
-+	PKG_CONFIG_LIBDIR="$(HOST_DIR)/lib/pkgconfig:$(HOST_DIR)/share/pkgconfig" \
-+	PKG_CONFIG_PATH="$(HOST_DIR)/lib/pkgconfig" \
-+	PKG_CONFIG_SYSROOT_DIR="/"
- 
- HOST_MENDER_ARTIFACT_LDFLAGS = -X github.com/mendersoftware/mender-artifact/cli.Version=$(HOST_MENDER_ARTIFACT_VERSION)
- 
+-PYTHON_AIOHTTP_SESSION_VERSION = 2.12.0
+-PYTHON_AIOHTTP_SESSION_SOURCE = aiohttp-session-$(PYTHON_AIOHTTP_SESSION_VERSION).tar.gz
+-PYTHON_AIOHTTP_SESSION_SITE = https://files.pythonhosted.org/packages/34/87/8dbc1385c875497d6bc16c9d94e25dbd8ff62599843b73fb4048ba74c867
++PYTHON_AIOHTTP_SESSION_VERSION = 2.12.1
++PYTHON_AIOHTTP_SESSION_SOURCE = aiohttp_session-$(PYTHON_AIOHTTP_SESSION_VERSION).tar.gz
++PYTHON_AIOHTTP_SESSION_SITE = https://files.pythonhosted.org/packages/c2/c4/d73a7f19b1bd3149ba5bccd22e3ab580c19e4d9fcb83114309e8385ab807
+ PYTHON_AIOHTTP_SESSION_SETUP_TYPE = setuptools
+ PYTHON_AIOHTTP_SESSION_LICENSE = Apache-2.0
+ PYTHON_AIOHTTP_SESSION_LICENSE_FILES = LICENSE
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
