@@ -4,48 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 99382CF8540
-	for <buildroot@archiver.kernel.org>; Wed,  2 Oct 2024 21:20:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0148FCF8542
+	for <buildroot@archiver.kernel.org>; Wed,  2 Oct 2024 21:20:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 731F440261;
-	Wed,  2 Oct 2024 21:20:32 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 90DCF41427;
+	Wed,  2 Oct 2024 21:20:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Kb7I5KRxTfwN; Wed,  2 Oct 2024 21:20:31 +0000 (UTC)
+ id C0WuugMmzttl; Wed,  2 Oct 2024 21:20:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6CD70413E2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B91104141D
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6CD70413E2;
-	Wed,  2 Oct 2024 21:20:30 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B91104141D;
+	Wed,  2 Oct 2024 21:20:38 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 2A3FF1BF5EA
- for <buildroot@lists.busybox.net>; Wed,  2 Oct 2024 21:20:26 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 8BB891BF5EA
+ for <buildroot@lists.busybox.net>; Wed,  2 Oct 2024 21:20:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 18F9540261
- for <buildroot@lists.busybox.net>; Wed,  2 Oct 2024 21:20:26 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6B1A741C05
+ for <buildroot@lists.busybox.net>; Wed,  2 Oct 2024 21:20:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ukJJL5vrnK-8 for <buildroot@lists.busybox.net>;
- Wed,  2 Oct 2024 21:20:25 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id UrM2WKao81XW for <buildroot@lists.busybox.net>;
+ Wed,  2 Oct 2024 21:20:36 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::221;
+ helo=relay1-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E0D1140190
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id E0D1140190
- for <buildroot@buildroot.org>; Wed,  2 Oct 2024 21:20:24 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id CA0C284BC8; Wed,  2 Oct 2024 21:20:24 +0000 (UTC)
-To: buildroot@buildroot.org
-Date: Wed, 2 Oct 2024 23:17:53 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 440b6a29164b9037f25947aa965a486fc7c0ac91
-X-Git-Newrev: 4e5fd24c8b7438672c475d0559200ff72c4b1cc7
-X-Patchwork-Hint: ignore
-Message-Id: <20241002212024.CA0C284BC8@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/libilbc: switch to github
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org C546941C02
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C546941C02
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id C546941C02
+ for <buildroot@buildroot.org>; Wed,  2 Oct 2024 21:20:35 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id B3F2C240002;
+ Wed,  2 Oct 2024 21:20:33 +0000 (UTC)
+Date: Wed, 2 Oct 2024 23:20:32 +0200
+To: Bernd Kuhls <bernd@kuhls.net>
+Message-ID: <20241002232032.39bf97d4@windsurf>
+In-Reply-To: <20240926061512.13021-1-bernd@kuhls.net>
+References: <20240926061512.13021-1-bernd@kuhls.net>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+X-GND-Sasl: thomas.petazzoni@bootlin.com
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=bootlin.com; s=gm1; t=1727904033;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=Fk6cxoPLKbdreulq0HulxqIAVYitK6CNCbP1LAqO+YQ=;
+ b=FJBiMBi+sHElXPiQEeGxiGT8CvpkzpIHm1E/ra3EY+rT5Ks75L7B37Qt9L4OF8u0TsDrtq
+ QHLcDwZeoE7WOxReB7j3Qua3Vpf4Xj02fJkw7ZD9hpuZQSmVxxViWzUFG/vwc/YawB0lNK
+ 1X1r6T28BZ52dzDcB5KkwYylctspN/kmvYt+BGfJTDi8IO2xApox7l3yOtuK0wdzGLplVr
+ UJGzDBRy0giNjIBqbhs1sd4G2Yn0OUwN2DxG0VQt09GVwAFfNTmCBgKflOzHbCm0ZrWFsM
+ lukbe7SOUs2MxTXva0ipZGVjKoKr7Jx8akeoqjCD2a48OiVPAIIeB3U3vvT1/w==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=reject dis=none)
+ header.from=bootlin.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
+ header.s=gm1 header.b=FJBiMBi+
+Subject: Re: [Buildroot] [PATCH 1/2] package/libilbc: switch to github
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,61 +82,31 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=4e5fd24c8b7438672c475d0559200ff72c4b1cc7
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+On Thu, 26 Sep 2024 08:15:11 +0200
+Bernd Kuhls <bernd@kuhls.net> wrote:
 
-The previous repo is not available anymore.
+> The previous repo is not available anymore.
+> 
+> Fixes:
+> https://autobuild.buildroot.org/results/8c8b073ce163131763fca978b400e596fcf39e62
+> 
+> Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
+> ---
+> This patch is suitable to be backported to LTS releases.
 
-Fixes:
-https://autobuild.buildroot.org/results/8c8b073ce163131763fca978b400e596fcf39e62
+Series applied, thanks!
 
-Signed-off-by: Bernd Kuhls <bernd@kuhls.net>
-Signed-off-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
----
- package/libilbc/Config.in    | 2 +-
- package/libilbc/libilbc.hash | 2 +-
- package/libilbc/libilbc.mk   | 3 +--
- 3 files changed, 3 insertions(+), 4 deletions(-)
-
-diff --git a/package/libilbc/Config.in b/package/libilbc/Config.in
-index 89d5db2fd6..db3486c1cb 100644
---- a/package/libilbc/Config.in
-+++ b/package/libilbc/Config.in
-@@ -4,4 +4,4 @@ config BR2_PACKAGE_LIBILBC
- 	  iLBC (internet Low Bitrate Codec) is a FREE speech codec
- 	  suitable for robust voice communication over IP.
- 
--	  http://www.webrtc.org/license-rights/ilbc-freeware
-+	  https://github.com/freeswitch/libilbc
-diff --git a/package/libilbc/libilbc.hash b/package/libilbc/libilbc.hash
-index bd0bf89d42..be88d6f9c3 100644
---- a/package/libilbc/libilbc.hash
-+++ b/package/libilbc/libilbc.hash
-@@ -1,3 +1,3 @@
- # Locally computed
--sha256  ba11bc22e353887cd7c605a25a5b9bac464f11f8cb103f652e095ae7e0f04f77  libilbc-829b08c7902ceb87a261279fabb36b6d523c6e07-git4.tar.gz
-+sha256  fe4827a548e96f0549dd8f30eb6a48c6c55fd4535de6c8e9c6e4f38bea6190bf  libilbc-829b08c7902ceb87a261279fabb36b6d523c6e07.tar.gz
- sha256  b7f4cbb4a12cd11a3d1aeda9bd17c99f59b054de4b3ee53045531cd2fa74dd2a  gips_iLBClicense.pdf
-diff --git a/package/libilbc/libilbc.mk b/package/libilbc/libilbc.mk
-index 06d94eb36d..d8139ba205 100644
---- a/package/libilbc/libilbc.mk
-+++ b/package/libilbc/libilbc.mk
-@@ -5,8 +5,7 @@
- ################################################################################
- 
- LIBILBC_VERSION = 829b08c7902ceb87a261279fabb36b6d523c6e07
--LIBILBC_SITE = https://freeswitch.org/stash/scm/sd/libilbc.git
--LIBILBC_SITE_METHOD = git
-+LIBILBC_SITE = $(call github,freeswitch,libilbc,$(LIBILBC_VERSION))
- LIBILBC_LICENSE = Global IP Sound iLBC Public License v2.0
- LIBILBC_LICENSE_FILES = gips_iLBClicense.pdf
- LIBILBC_AUTORECONF = YES
+Thomas
+-- 
+Thomas Petazzoni, CTO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
