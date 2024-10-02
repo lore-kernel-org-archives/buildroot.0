@@ -4,71 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 6F58DCF8542
-	for <buildroot@archiver.kernel.org>; Wed,  2 Oct 2024 21:11:23 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 5CD48CF8542
+	for <buildroot@archiver.kernel.org>; Wed,  2 Oct 2024 21:11:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 39F514140E;
-	Wed,  2 Oct 2024 21:11:23 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 290BC41C11;
+	Wed,  2 Oct 2024 21:11:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id NSc77aH0kIaq; Wed,  2 Oct 2024 21:11:22 +0000 (UTC)
+ id 22OXRQCDJoug; Wed,  2 Oct 2024 21:11:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E206241428
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 243F541C1A
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id E206241428;
-	Wed,  2 Oct 2024 21:11:21 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 243F541C1A;
+	Wed,  2 Oct 2024 21:11:26 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id A187F1BF97E
- for <buildroot@lists.busybox.net>; Wed,  2 Oct 2024 21:11:20 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 96D6F1BF5EA
+ for <buildroot@lists.busybox.net>; Wed,  2 Oct 2024 21:11:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id EEFA281F95
- for <buildroot@lists.busybox.net>; Wed,  2 Oct 2024 21:11:19 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 93F88804E3
+ for <buildroot@lists.busybox.net>; Wed,  2 Oct 2024 21:11:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mahlF3xatqdj for <buildroot@lists.busybox.net>;
- Wed,  2 Oct 2024 21:11:19 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::222;
- helo=relay2-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+ id 2gTfBqzvGCVb for <buildroot@lists.busybox.net>;
+ Wed,  2 Oct 2024 21:11:24 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::221;
+ helo=relay1-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org CCFCE81F91
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org CCFCE81F91
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::222])
- by smtp1.osuosl.org (Postfix) with ESMTPS id CCFCE81F91
- for <buildroot@busybox.net>; Wed,  2 Oct 2024 21:11:18 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 17FA440003;
- Wed,  2 Oct 2024 21:11:17 +0000 (UTC)
-Date: Wed, 2 Oct 2024 23:11:16 +0200
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 96A71802D5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 96A71802D5
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 96A71802D5
+ for <buildroot@busybox.net>; Wed,  2 Oct 2024 21:11:24 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 960F7240004;
+ Wed,  2 Oct 2024 21:11:22 +0000 (UTC)
+Date: Wed, 2 Oct 2024 23:11:21 +0200
 To: Francois Perrad <francois.perrad@gadz.org>
-Message-ID: <20241002231116.34c854db@windsurf>
-In-Reply-To: <20240925133735.3899867-1-francois.perrad@gadz.org>
-References: <20240925133735.3899867-1-francois.perrad@gadz.org>
+Message-ID: <20241002231121.7ce505de@windsurf>
+In-Reply-To: <20240925133816.3899931-1-francois.perrad@gadz.org>
+References: <20240925133816.3899931-1-francois.perrad@gadz.org>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1727903477;
+ d=bootlin.com; s=gm1; t=1727903483;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=r3BsFKboKtiikKqD8pSDTFtsk3A+egC0tz/yaxVNIL4=;
- b=lGTLbxncu7dQdPXR9S+SbjQxMCjfgOf7qW9GMfnk2ti3sP6+m3kmWLwwDbXQ59lCob2//o
- UpVE/GcdoQCBcr8H5klhKxCtDFRO9c76HGmLYdNtwIiLQKhDDx5fu+ERwf1r9XMCrn13/l
- +nHn7P1yAWc88ky4Frj8kqytTkIhXvrA9o3iUoJNnMZ+VT3SZ2mWZzYmf8XiDI2wXeZ7zy
- 5JVnxd+4NJld6twq4nZJTcgoyOe9cyVlXxALAuGDuB14OAmc6eld3VC58KxQcsO1ktJ9t8
- UiFkXWYKpaefCjFp3Clpeupoj+v/QPXX9arMwL+GU71FO5yvTEYJ5xIqZVKMVg==
+ bh=/RUVleRqeRidO25p900aH8DOx92r4QpFTFMC0CxyYe8=;
+ b=Tr+5y+cCzw6CzrVnjnSQw+8kdiC9z3PErCu0AgZFCUpk+tqrlXSSFWIaayTC2MW7jCvrUm
+ hVRvRmjNhVMjeTzuW2gOM1+1AErdwQgERMZylr0hB2VXBbrbLdRX+a2Igc1mAOkxkxnHsM
+ 4dbukEZi9pE7aARBOSDbeUPPP7qc1QJlut/uh6+dlxB8MS5CySor5VH8gZF6ZjEAWYdWbx
+ KlbxACcvrJXvsZwIbwVZ8USDHi2+uvdhR5EriX4NoCF2FAtMddPSQORcdhVsEU0Ey0WJKQ
+ VZcfLn9YgaFLGd1jW2BL6C47ZXGwSIMiCQobjnYMoUBp7pJMLw14mvjDHEb4kA==
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=lGTLbxnc
-Subject: Re: [Buildroot] [PATCH] package/libarchive: bump to version 3.7.6
+ header.s=gm1 header.b=Tr+5y+cC
+Subject: Re: [Buildroot] [PATCH] package/webp: bump to version 1.4.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -88,16 +88,14 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Wed, 25 Sep 2024 15:37:34 +0200
+On Wed, 25 Sep 2024 15:38:16 +0200
 Francois Perrad <francois.perrad@gadz.org> wrote:
 
 > Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 > ---
->  ...1-Revert-Only-add-iconv-to-the-.pc-file-if-needed-1825.patch | 2 +-
->  .../0002-autotools-do-not-add-iconv-for-Requires.private.patch  | 2 +-
->  package/libarchive/libarchive.hash                              | 2 +-
->  package/libarchive/libarchive.mk                                | 2 +-
->  4 files changed, 4 insertions(+), 4 deletions(-)
+>  package/webp/webp.hash | 2 +-
+>  package/webp/webp.mk   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
 
 Applied to master, thanks.
 
