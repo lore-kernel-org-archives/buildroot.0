@@ -4,72 +4,71 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3EEB6CF8542
-	for <buildroot@archiver.kernel.org>; Wed,  2 Oct 2024 21:03:47 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4B13ECF8542
+	for <buildroot@archiver.kernel.org>; Wed,  2 Oct 2024 21:10:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0937041402;
-	Wed,  2 Oct 2024 21:03:47 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id B192D413E1;
+	Wed,  2 Oct 2024 21:10:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id vY8fTJAj5okV; Wed,  2 Oct 2024 21:03:46 +0000 (UTC)
+ id g9hHFqJVQT1s; Wed,  2 Oct 2024 21:10:40 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 7034B43056
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1825F409C4
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7034B43056;
-	Wed,  2 Oct 2024 21:03:45 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 3C5CA1BF30E
- for <buildroot@lists.busybox.net>; Wed,  2 Oct 2024 21:03:29 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1825F409C4;
+	Wed,  2 Oct 2024 21:10:40 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id B6B0A1BF5EA
+ for <buildroot@lists.busybox.net>; Wed,  2 Oct 2024 21:10:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 1DD7E41C3F
- for <buildroot@lists.busybox.net>; Wed,  2 Oct 2024 21:03:29 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id A61FB81F91
+ for <buildroot@lists.busybox.net>; Wed,  2 Oct 2024 21:10:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bG9Xx4Fr5cju for <buildroot@lists.busybox.net>;
- Wed,  2 Oct 2024 21:03:28 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::224;
- helo=relay4-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id u5h4zl1AOu6P for <buildroot@lists.busybox.net>;
+ Wed,  2 Oct 2024 21:10:37 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.201;
+ helo=relay8-d.mail.gandi.net; envelope-from=thomas.petazzoni@bootlin.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org E36AF43041
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org E36AF43041
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::224])
- by smtp2.osuosl.org (Postfix) with ESMTPS id E36AF43041
- for <buildroot@buildroot.org>; Wed,  2 Oct 2024 21:03:27 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id B1B6EE0003;
- Wed,  2 Oct 2024 21:03:25 +0000 (UTC)
-Date: Wed, 2 Oct 2024 23:03:25 +0200
-To: James Hilliard <james.hilliard1@gmail.com>
-Message-ID: <20241002230325.10acaec7@windsurf>
-In-Reply-To: <20240926221912.212859-1-james.hilliard1@gmail.com>
-References: <20240926221912.212859-1-james.hilliard1@gmail.com>
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 2608C81F8F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 2608C81F8F
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net
+ [217.70.183.201])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 2608C81F8F
+ for <buildroot@busybox.net>; Wed,  2 Oct 2024 21:10:36 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 4C8021BF204;
+ Wed,  2 Oct 2024 21:10:35 +0000 (UTC)
+Date: Wed, 2 Oct 2024 23:10:34 +0200
+To: Francois Perrad <francois.perrad@gadz.org>
+Message-ID: <20241002231034.2c25b1c4@windsurf>
+In-Reply-To: <20240925133512.3899750-1-francois.perrad@gadz.org>
+References: <20240925133512.3899750-1-francois.perrad@gadz.org>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
 X-GND-Sasl: thomas.petazzoni@bootlin.com
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=bootlin.com; s=gm1; t=1727903006;
+ d=bootlin.com; s=gm1; t=1727903435;
  h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
  to:to:cc:cc:mime-version:mime-version:content-type:content-type:
  content-transfer-encoding:content-transfer-encoding:
  in-reply-to:in-reply-to:references:references;
- bh=w21deYcF4hyboorbD6mZZ1VfXuteunhVaw4rvgk9yqU=;
- b=SQI8nSNZB1qDdezmi0JfytQUwvVXYSyFcnkfZwydvS8RNSBFXMrIE//1w7U5VZzFP+bBGO
- KmNAhPWDLrRt/1+McN5dTJVk0m32yHvErRLtgyo6J3b/3LPFOzciXlB5RcuLc8dkxEwnmt
- jGNaIbQePvRFsowRPGX2N4N3t5AQnSOQLNN25oDekCHSK5/FmFh7JWo2DREQNf7KuaFbc7
- R9Cw0rzhT7UeDUorEfkLy/XiM3pyva2mLF8gcJe9K3wNZ6a+a9veGNFKU/RFsbsepUSAPp
- XTSH8aYYTJ+aOqCr9C8NFfAv4IbdbyU2Cl7mRDoj+FFtVWyznB7JPBpsMLByMw==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ bh=extCvkPRs7ZpM57+HX8+JMJozYNQllW/JmHvxGyJ2kM=;
+ b=a4CMNkvAVgH4V2utk49JVRy9E9UzZCyFvrfSNpAAad4UNvbflRKcZ1rDghaBWMlevd09K3
+ Ymt52Ssn7ExgXSWYApr6ut8VMU80huAlnxsfKAZq9GghUYnh1aGbqTkZE3ElUYNzdtl5qA
+ CI4oSpqctnLV290HJR8P0bDR3Q8cx/BDizzxskAy36qrlKtg1mnqmy+tE3dhRWBt4mmlv1
+ H5G2i34aYkULENytKuANerlrRjWUScnHUxBkap2Oga7vDGBlnle/qZMpsO9wqYrSQK67NK
+ TgHuGF0Grx1liQ+6MApmW4A/fcYfEoZYURz2bTSZQ3qJwQqwKHCSbyi+lNORrg==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=reject dis=none)
  header.from=bootlin.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=bootlin.com header.i=@bootlin.com header.a=rsa-sha256
- header.s=gm1 header.b=SQI8nSNZ
-Subject: Re: [Buildroot] [PATCH 1/1] package/python-ujson: bump to version
- 5.10.0
+ header.s=gm1 header.b=a4CMNkvA
+Subject: Re: [Buildroot] [PATCH] package/freetype: bump to 2.13.3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,26 +82,53 @@ List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 From: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
 Reply-To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Cc: Mauro Condarelli <mc5686@mclink.it>, Asaf Kahlon <asafka7@gmail.com>,
- buildroot@buildroot.org
+Cc: buildroot@busybox.net
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-On Thu, 26 Sep 2024 16:19:12 -0600
-James Hilliard <james.hilliard1@gmail.com> wrote:
+On Wed, 25 Sep 2024 15:35:11 +0200
+Francois Perrad <francois.perrad@gadz.org> wrote:
 
-> License hash changed due to TCL license added and reformatting:
-> https://github.com/ultrajson/ultrajson/commit/54497bd58386c1630dc0333f65b40157e285c329
-> 
-> Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
+> Signed-off-by: Francois Perrad <francois.perrad@gadz.org>
 > ---
->  package/python-ujson/python-ujson.hash | 6 +++---
->  package/python-ujson/python-ujson.mk   | 6 +++---
->  2 files changed, 6 insertions(+), 6 deletions(-)
+>  package/freetype/freetype.hash | 6 +++---
+>  package/freetype/freetype.mk   | 2 +-
+>  2 files changed, 4 insertions(+), 4 deletions(-)
 
-Applied to master, thanks.
+Thanks, I wanted to apply this, but their mirror stuff is not
+working... the Savannah mirror I'm redirected to doesn't have the new
+tarball:
+
+>>> freetype 2.13.3 Downloading
+wget -nd -t 3 -O '/home/thomas/projets/buildroot/output/build/.freetype-2.13.3.tar.xz.wS1eqo/output' 'http://download.savannah.gnu.org/releases/freetype/freetype-2.13.3.tar.xz' 
+--2024-10-02 23:07:47--  http://download.savannah.gnu.org/releases/freetype/freetype-2.13.3.tar.xz
+Resolving download.savannah.gnu.org (download.savannah.gnu.org)... 2001:470:142:5::200, 209.51.188.200
+Connecting to download.savannah.gnu.org (download.savannah.gnu.org)|2001:470:142:5::200|:80... connected.
+HTTP request sent, awaiting response... 302 Moved Temporarily
+Location: http://mirror.netcologne.de/savannah/freetype/freetype-2.13.3.tar.xz [following]
+--2024-10-02 23:07:47--  http://mirror.netcologne.de/savannah/freetype/freetype-2.13.3.tar.xz
+Resolving mirror.netcologne.de (mirror.netcologne.de)... 2001:4dd0:1234:1::deb, 194.8.197.22
+Connecting to mirror.netcologne.de (mirror.netcologne.de)|2001:4dd0:1234:1::deb|:80... connected.
+HTTP request sent, awaiting response... 404 Not Found
+2024-10-02 23:07:47 ERROR 404: Not Found.
+
+wget -nd -t 3 -O '/home/thomas/projets/buildroot/output/build/.freetype-2.13.3.tar.xz.uaZVXJ/output' 'https://sources.buildroot.net/freetype/freetype-2.13.3.tar.xz' 
+--2024-10-02 23:07:47--  https://sources.buildroot.net/freetype/freetype-2.13.3.tar.xz
+Resolving sources.buildroot.net (sources.buildroot.net)... 2606:4700:20::681a:25, 2606:4700:20::681a:125, 2606:4700:20::ac43:4838, ...
+Connecting to sources.buildroot.net (sources.buildroot.net)|2606:4700:20::681a:25|:443... connected.
+HTTP request sent, awaiting response... 404 Not Found
+2024-10-02 23:07:47 ERROR 404: Not Found.
+
+wget -nd -t 3 -O '/home/thomas/projets/buildroot/output/build/.freetype-2.13.3.tar.xz.r7WbPt/output' 'https://sources.buildroot.net/freetype-2.13.3.tar.xz' 
+--2024-10-02 23:07:47--  https://sources.buildroot.net/freetype-2.13.3.tar.xz
+Resolving sources.buildroot.net (sources.buildroot.net)... 2606:4700:20::ac43:4838, 2606:4700:20::681a:125, 2606:4700:20::681a:25, ...
+Connecting to sources.buildroot.net (sources.buildroot.net)|2606:4700:20::ac43:4838|:443... connected.
+HTTP request sent, awaiting response... 404 Not Found
+2024-10-02 23:07:48 ERROR 404: Not Found.
+
+make: *** [package/pkg-generic.mk:179: /home/thomas/projets/buildroot/output/build/freetype-2.13.3/.stamp_downloaded] Error 1
 
 Thomas
 -- 
