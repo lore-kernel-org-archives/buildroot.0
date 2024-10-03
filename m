@@ -1,53 +1,65 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3872CCF8572
-	for <buildroot@archiver.kernel.org>; Thu,  3 Oct 2024 09:33:04 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3EF97CF857A
+	for <buildroot@archiver.kernel.org>; Thu,  3 Oct 2024 11:05:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B36F560780;
-	Thu,  3 Oct 2024 09:33:03 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id A6EE440102;
+	Thu,  3 Oct 2024 11:05:57 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 90pHpXtOZuLI; Thu,  3 Oct 2024 09:33:02 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id w3muTXqko7wZ; Thu,  3 Oct 2024 11:05:56 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 94CC960A82
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 81147403E4
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 94CC960A82;
-	Thu,  3 Oct 2024 09:33:01 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 81147403E4;
+	Thu,  3 Oct 2024 11:05:56 +0000 (UTC)
 Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 572941BF59A
- for <buildroot@lists.busybox.net>; Thu,  3 Oct 2024 09:32:58 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 5BAAE1BF285
+ for <buildroot@lists.busybox.net>; Thu,  3 Oct 2024 11:05:55 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 44F0D411CC
- for <buildroot@lists.busybox.net>; Thu,  3 Oct 2024 09:32:58 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 47FCA4125C
+ for <buildroot@lists.busybox.net>; Thu,  3 Oct 2024 11:05:55 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id wdfnlUb1VmBH for <buildroot@lists.busybox.net>;
- Thu,  3 Oct 2024 09:32:57 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+ id SWZt73GsNMg5 for <buildroot@lists.busybox.net>;
+ Thu,  3 Oct 2024 11:05:54 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::221;
+ helo=relay1-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org E4D94410B1
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp4.osuosl.org (Postfix) with ESMTP id E4D94410B1
- for <buildroot@buildroot.org>; Thu,  3 Oct 2024 09:32:56 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D5E3584D1E; Thu,  3 Oct 2024 09:32:56 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 915834124C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 915834124C
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 915834124C
+ for <buildroot@buildroot.org>; Thu,  3 Oct 2024 11:05:52 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 496B9240003;
+ Thu,  3 Oct 2024 11:05:48 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1swJeV-000FeM-2e;
+ Thu, 03 Oct 2024 13:05:47 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Thu, 3 Oct 2024 11:30:21 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 29888ab35e047099d239f266b7b565cd4023503e
-X-Git-Newrev: 8a71fda371c1785f9e4364f05ab0a632e1946c53
-X-Patchwork-Hint: ignore
-Message-Id: <20241003093256.D5E3584D1E@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] boot/grub2: replace host-python3 with
- BR2_PYTHON3_HOST_DEPENDENCY
+To: Julien Olivain <ju.o@free.fr>
+References: <20240911171937.10842-1-ju.o@free.fr>
+ <87jzf5h12z.fsf@dell.be.48ers.dk>
+ <7884535cac565004d351d4d143364104@free.fr>
+ <87frpiiy6k.fsf@dell.be.48ers.dk>
+Date: Thu, 03 Oct 2024 13:05:47 +0200
+In-Reply-To: <87frpiiy6k.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
+ "Sun, 29 Sep 2024 11:52:51 +0200")
+Message-ID: <874j5to390.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: Re: [Buildroot] [PATCH 1/1] boot/grub2: needs host-python3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -59,60 +71,39 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: Vincent =?utf-8?Q?Stehl=C3=A9?= <vincent.stehle@arm.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=8a71fda371c1785f9e4364f05ab0a632e1946c53
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
 
-Commit 86bb1b236 "boot/grub2: needs host-python3" [1] introduced a
-dependency on host-python3.
+>>>>> "Julien" == Julien Olivain <ju.o@free.fr> writes:
+ > Hi,
 
-Since grub does not have any specific requirements on host Python
-modules, or recent host Python version, this commit replaces the
-host-python3 dependency with BR2_PYTHON3_HOST_DEPENDENCY. This will
-skip the host-python3 compilation if a sufficient version (3.4 or
-greater at the time of this commit) is already present on host. This
-will save build time.
+ >>> Given that it apparently doesn't need any special python modules
+ >>> could
+ >>> we use $(BR2_PYTHON3_HOST_DEPENDENCY) instead to only build python3 if
+ >>> not available on the host / older than 3.4?
 
-This optimization was suggested by Peter, in [2].
+ >> Yes, I confirm that for now, there is no specific python module
+ >> requirement, and Python 3.4 should also be sufficient. So we could
+ >> switch to BR2_PYTHON3_HOST_DEPENDENCY to save the time of the host
+ >> python build.
 
-Note 1: this commit was checked to ensure that grub is building with
-Python 3.4.
+ >> The same comment applies to the Linux kernel.
 
-Note 2: BR2_PYTHON3_HOST_DEPENDENCY was introduced in commit b60729784
-"support/dependencies: add a check for python3" [3].
+ >> Since those patches were recently merged in [1] and [2], I'll propose
+ >> followup patches as an improvement.
 
-[1] https://gitlab.com/buildroot.org/buildroot/-/commit/86bb1b2360bdaed069cd087541f4edad1d5ce925
-[2] https://lists.buildroot.org/pipermail/buildroot/2024-September/763967.html
-[3] https://gitlab.com/buildroot.org/buildroot/-/commit/b60729784ab1c2f75dca30f924f4dd3176713ae8
+ > Great, thanks!
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- boot/grub2/grub2.mk | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+Committed to 2024.02.x and 2024.08.x, thanks.
 
-diff --git a/boot/grub2/grub2.mk b/boot/grub2/grub2.mk
-index 7c95adc739..4df12774a3 100644
---- a/boot/grub2/grub2.mk
-+++ b/boot/grub2/grub2.mk
-@@ -9,8 +9,10 @@ GRUB2_SITE = http://ftp.gnu.org/gnu/grub
- GRUB2_SOURCE = grub-$(GRUB2_VERSION).tar.xz
- GRUB2_LICENSE = GPL-3.0+
- GRUB2_LICENSE_FILES = COPYING
--GRUB2_DEPENDENCIES = host-bison host-flex host-gawk host-grub2 host-python3
--HOST_GRUB2_DEPENDENCIES = host-bison host-flex host-gawk host-python3
-+GRUB2_DEPENDENCIES = host-bison host-flex host-gawk host-grub2 \
-+	$(BR2_PYTHON3_HOST_DEPENDENCY)
-+HOST_GRUB2_DEPENDENCIES = host-bison host-flex host-gawk \
-+	$(BR2_PYTHON3_HOST_DEPENDENCY)
- GRUB2_INSTALL_IMAGES = YES
- 
- # CVE-2019-14865 is about a flaw in the grub2-set-bootflag tool, which
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
