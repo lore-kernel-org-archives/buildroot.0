@@ -1,129 +1,58 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1F5C7CF31BF
-	for <buildroot@archiver.kernel.org>; Thu,  3 Oct 2024 05:40:51 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1A9DBCF8563
+	for <buildroot@archiver.kernel.org>; Thu,  3 Oct 2024 07:45:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7C5CC401FE;
-	Thu,  3 Oct 2024 05:40:51 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 1FCBE60715;
+	Thu,  3 Oct 2024 07:45:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Bz8WibOSw-lh; Thu,  3 Oct 2024 05:40:50 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id k3K9OE-fhRzp; Thu,  3 Oct 2024 07:45:32 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 24E5E40236
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6C772606B1
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 24E5E40236;
-	Thu,  3 Oct 2024 05:40:50 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6C772606B1;
+	Thu,  3 Oct 2024 07:45:32 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 6307E1BF83C
- for <buildroot@lists.busybox.net>; Thu,  3 Oct 2024 05:40:49 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id E58A41BF5D7
+ for <buildroot@lists.busybox.net>; Thu,  3 Oct 2024 07:45:31 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 4F4F0401FE
- for <buildroot@lists.busybox.net>; Thu,  3 Oct 2024 05:40:48 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id D3C89401FE
+ for <buildroot@lists.busybox.net>; Thu,  3 Oct 2024 07:45:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id FL8F4PsdhFEG for <buildroot@lists.busybox.net>;
- Thu,  3 Oct 2024 05:40:47 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a01:111:f403:2c13::801;
- helo=nam10-dm6-obe.outbound.protection.outlook.com;
- envelope-from=fran.millocs@live.com.ar; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 15A34403A2
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 15A34403A2
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com
- (mail-dm6nam10olkn20801.outbound.protection.outlook.com
- [IPv6:2a01:111:f403:2c13::801])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 15A34403A2
- for <buildroot@buildroot.org>; Thu,  3 Oct 2024 05:40:45 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Qjc0/uopPf0vdgbFExSR/aZcfJ7+E+K1iiJPVl3F6OSgVSZydXfR71XL65CJq9cjklRYWoNoRQgE90IiAlzN0RXtkWmb9DEyRDatdpynp0oIhbXgQFApbFgVYs08G0dLVDJSLwLxi4OOwXMCdYK1ZV9hEXeSkCSyFou8opsYCW0Hy4+K51WYolM2ZXA6knoztE17L7HxvRjAzBnPKNEVU9WWaCAYBieOCsMsV4AU8n9MwheFZ8Zv/IsLLPTkGCBSya8xMe35bFtZ9HB/StuFcjJTBRUXjywDKXKaBMlPa+FS1X/xDxdgzCBzTVkfl3QT7XnveVBDxwHqRv6YuT5H+Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=DZWr4BeJb0aOd2e+5YWWqJ+yLKQNGpYB8lMoZi4N1sY=;
- b=CNTo8ma1bOft4OX/6aNLVYyw6N0ws/A81xroCpO/R7xqyyxQVF7JPdfVkZrqea9snTTR1dR3vOyM6PRYVX0KTBvBl2OnqR4+YmLvKs5CIts3SrC4bXTFDSDmtKHRVy27pyrQUMnu6Ds5jHQA0ZCfs2/ssdiUxlKf0lHGCACTzv2NMNbhLXBay6DISJJLxtydBn8FDfGpqD9mlFYBLljjCh6QvegH1cUqDgSmLpl3CF8hRZEX0RWZVFsKdhFMFVEt237RqLH76yWm3jS7I3zLM+WshLGyByeijlfWZYxepcCRYBI3o9eKJtXnPbwccFUU1Q3xhY7xmAE0mVVdEksP3w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-Received: from PH7P222MB1231.NAMP222.PROD.OUTLOOK.COM (2603:10b6:510:316::9)
- by LV8P222MB0837.NAMP222.PROD.OUTLOOK.COM (2603:10b6:408:1cb::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8005.29; Thu, 3 Oct
- 2024 05:40:41 +0000
-Received: from PH7P222MB1231.NAMP222.PROD.OUTLOOK.COM
- ([fe80::7a0e:44d:cc74:141c]) by PH7P222MB1231.NAMP222.PROD.OUTLOOK.COM
- ([fe80::7a0e:44d:cc74:141c%4]) with mapi id 15.20.8026.017; Thu, 3 Oct 2024
- 05:40:41 +0000
-From: franco ariel <fran.millocs@live.com.ar>
-To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
-Thread-Topic: [Help] Qt5WebEngine Crashing on Khadas VIM3 (ARM64) 
-Thread-Index: AQHbFVZNmUQTkLkhgk+Im1ZcTvPSEw==
-Date: Thu, 3 Oct 2024 05:40:41 +0000
-Message-ID: <PH7P222MB1231C70837725FB7416DE9BCD0712@PH7P222MB1231.NAMP222.PROD.OUTLOOK.COM>
-Accept-Language: es-AR, en-US
-Content-Language: es-AR
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PH7P222MB1231:EE_|LV8P222MB0837:EE_
-x-ms-office365-filtering-correlation-id: 8f184caf-a9b3-4716-f739-08dce36deb2b
-x-microsoft-antispam: BCL:0;
- ARA:14566002|7092599003|15080799006|461199028|8060799006|15030799003|8062599003|19110799003|3412199025|440099028|102099032;
-x-microsoft-antispam-message-info: /fgZWFnxO4TWp72mq70kukEedJq3V1ORzVXlSFqOl9YoLivwYyvPEY8oHcr2mQetHCeFGRDkL1q35VtClyWsr1uUYBlN10RCqUT/X8rYvXRL3CdNAAfOoPml7stBZBYI1J+E6DLWhNbQ4WtSfeaeeLSTiAMGO1o14xDa9I3HbvQE+nix0JS5LTY07J3aPzA0cJxkzywWoGmWe2GXzpcf+Dp07oQXb5l70ybdjcxRWzjyKjGix4LUHn7xq4gYiSelwRf86lpyx1BnHa+Up6Qdsv5q+iXu0JWp+Ej9yP/E5z1KibeI43mjtPIzNWlsrMoE/Cq5HtptRO3u21+vloeTsu8qWlVaubC6xOHXSeoUpvtm2jKXKBgtndTsKDU3EqWy5xQAg7rr8UV0uuw78omwR/i/ou05mpVsNSsoRtFIiFvqQpSl2EekrLINVYffAE8DCH5ldx5mKw8y1jYxVtlojrXSQYfOW5rUx5mhJDawJfbixexsr1VXZlJUHVLu/l50s0fg4RInqN6APRa/igjkdu203cCjpeWp2fMsxYmE/Or8T3Fc0g3RsZUI1APDNzJX48I7QKwlZXfY9r4mE+Li+kmoZ01M/o/Qkuuik+9ziZRbK9gUpVq7KehxZ9XmpkAe5TqHAJUOYKDdoPEugUAOdB2dRnPCVfBgTK/v8IdQNDBGjw6zPLZrMaae+3jRuaMAb1ROJAwwH99IKnBwedfA+3zOqJqHXauDfH82FM/3J2stOHGY/sOnz7vxEOr/AyR6PblsxS0WLabQOdAkjKlXZA==
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?+5S+xWpe49VTCsyuHD68q/B7Jb+pVhCfFXADtj3hI+HwfU/lkFv1tSyXi1?=
- =?iso-8859-1?Q?CJUarfJntfzgDZQa5UBKOt7bWPpHRj00pnt1XIOnkAGRZnJM1iOk0Sa8kO?=
- =?iso-8859-1?Q?J2Borru/xPo6F0U4U172ABlbQT+S9ru6Uu/aFSjB42aeQ7pulJrO7Zao75?=
- =?iso-8859-1?Q?al7R3SW6oYzL/AtCMXOHfa19azTgYet2QMRh1qmYVoHc+TcNWeQJ9G8/RY?=
- =?iso-8859-1?Q?8qLQPoh/sUPy6q1Fj34fLD1Xn5cS8Lg2W/YkXWodvMlKfrakDdHGOVgiSl?=
- =?iso-8859-1?Q?txfRSuLEF9rJgtp8NUj4zSexrrm+yCtMjU8kDvVmxGIEBagKWXNYBNuoXN?=
- =?iso-8859-1?Q?T4A47pNotb4wZ/OHbq3DoN+Om/i+B/rU1sbuW+bnPGuvwPVX319ETmB9xB?=
- =?iso-8859-1?Q?sbpbmw1KDQko7WMMeUgekBIXvyEQHa+qHBVpGcbbnwsjR+43PzZgZRAOCp?=
- =?iso-8859-1?Q?N43tOVFpBXhJkRVkV/a3vAtmtVudXK4+eb6b4tMExvs1YVxA1RGUwrJHgc?=
- =?iso-8859-1?Q?eaehzckPtG6bFqgelBOG5h7CgLLF9KXt6lW6ytVaisPKeH1Yw7SEqk+o2W?=
- =?iso-8859-1?Q?1JgFgHYtfuIW8ISCBEbst2RCcx+wzXzrTDo19nAU1+4oIZLYj6u9AKje0Z?=
- =?iso-8859-1?Q?QgKbGNmVU3AyX36JPYJv7nvT3Wzqcmk9BVU8FDd8u874qfmj6MJMYPNX2M?=
- =?iso-8859-1?Q?Nf4FS2xzgN87epkjbflOZDM3QrChNps3ItjczYmVSqEoAcFmvHsqx8fMCl?=
- =?iso-8859-1?Q?zYKxPOEaiDx5ncFQtj2jDBVSQutHXgh+nCFQ/bseqZlnnmtboAPNpxRYvN?=
- =?iso-8859-1?Q?7VFRJV5QVvE07dNFmVI9vB97IqkiCYkZjxssgrlzZtTRVinPrNfsLPHTYr?=
- =?iso-8859-1?Q?3zgLgJtYgJjq+upeGpSgpYlkAmqZEWRutohELZCnKNmaLp5Ddl4E8fPjTn?=
- =?iso-8859-1?Q?AbDb4CoCw0wzoFsH2IarfZVm6Y8ztoPRba1nBp3eJ9eJcObv5YoxyykLFv?=
- =?iso-8859-1?Q?eZsOB9b9aLXewIs1og1cZa4749GLYmFIKRuteSwH9xh5oMXe0d36ErK9PG?=
- =?iso-8859-1?Q?s3qYWQp+se0YQ5jaXEKeSMSedrAp3eYwP6bkI9RvUikQd7RfORbevIVI1j?=
- =?iso-8859-1?Q?QRYfL2MCFOWzvmc80TwTL/6uhBAj+/mq5dX3z51IY0PCybpwVuV7mTBSW4?=
- =?iso-8859-1?Q?g4jlH+rdXNn8JDTo1trO44NG13rEghOjC8jp+6jviZ5GeznFE0dH4uZkHa?=
- =?iso-8859-1?Q?iVXPhyvIP4iTLPGzSyOLBUpJ1WY9um0KVdAz5ZddYqKI486QePRN0dplgx?=
- =?iso-8859-1?Q?YaA1BzLEMygrW6udY0Z4pw5hWlPc+3a2y6XP5tWW2Dq+T7w=3D?=
+ id 2CSQj9dYRAB5 for <buildroot@lists.busybox.net>;
+ Thu,  3 Oct 2024 07:45:30 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.140.110.172;
+ helo=foss.arm.com; envelope-from=vincent.stehle@arm.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org ED4A5400D6
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ED4A5400D6
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+ by smtp2.osuosl.org (Postfix) with ESMTP id ED4A5400D6
+ for <buildroot@buildroot.org>; Thu,  3 Oct 2024 07:45:29 +0000 (UTC)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+ by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EA4BC339;
+ Thu,  3 Oct 2024 00:45:57 -0700 (PDT)
+Received: from localhost.localdomain (X72Y076X74.nice.arm.com [10.34.129.15])
+ by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id
+ CD14A3F640; Thu,  3 Oct 2024 00:45:27 -0700 (PDT)
+From: =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@arm.com>
+To: buildroot@buildroot.org
+Date: Thu,  3 Oct 2024 09:45:18 +0200
+Message-ID: <20241003074518.3214072-1-vincent.stehle@arm.com>
+X-Mailer: git-send-email 2.45.2
 MIME-Version: 1.0
-X-OriginatorOrg: sct-15-20-7719-20-msonline-outlook-6509f.templateTenant
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH7P222MB1231.NAMP222.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8f184caf-a9b3-4716-f739-08dce36deb2b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Oct 2024 05:40:41.5761 (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV8P222MB0837
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=LIVE.COM.AR; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DZWr4BeJb0aOd2e+5YWWqJ+yLKQNGpYB8lMoZi4N1sY=;
- b=UOAnGMllunfaKI82D0zCNE/Z6lYzRv+GS991pJI6XvVT9fFrNBcOmsjm4GzI0MtW2eK67c1dEvMzlkf5Hc7cxD6GVQRp/0URIWhgPy8F80WHgMMaowzvPp8fqqWVx0wQI4sxkUEk0lIWgx3du6BupdbuZSulO/FHF4E9//QU+Wcqbo2pUnu06j/8tFgWOKGSMAWQ74yD+Y8gQG5bPm/4e/lgQalyX7lOMJCKm30/Yi7s4pDl8otVqAc7yw/xZy+NjV7qgKwWgCj5iPsNdPq09M1PFvx/nUkQTWIzh+Fw96kJOwTrgl+vz24GTi0vtAjvDT2MYITChXB47Cn0RfNKWw==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=live.com.ar
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key,
- unprotected) header.d=LIVE.COM.AR header.i=@LIVE.COM.AR header.a=rsa-sha256
- header.s=selector1 header.b=UOAnGMll
-Subject: [Buildroot] [Help] Qt5WebEngine Crashing on Khadas VIM3 (ARM64)
+ header.from=arm.com
+Subject: [Buildroot] [PATCH] configs/arm_fvp_ebbr: bump Linux, U-Boot,
+ TF-A and FVP
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -135,159 +64,142 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============8578471745690153655=="
+Cc: Julien Olivain <ju.o@free.fr>,
+ =?UTF-8?q?Vincent=20Stehl=C3=A9?= <vincent.stehle@arm.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============8578471745690153655==
-Content-Language: es-AR
-Content-Type: multipart/alternative;
-	boundary="_000_PH7P222MB1231C70837725FB7416DE9BCD0712PH7P222MB1231NAMP_"
-
---_000_PH7P222MB1231C70837725FB7416DE9BCD0712PH7P222MB1231NAMP_
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
-
-Hello everyone,
-
-I am encountering an issue when running a Qt 5.12.2 application with QtWebE=
-ngine on a Khadas VIM3 board (ARM64) using Buildroot. The application crash=
-es when transitioning to the WebEngineView with the following error:
-
-[ 4021.882789] audit: type=3D1701 audit(1727931778.322:7): auid=3D429496729=
-5 uid=3D0 gid=3D0 ses=3D4294967295 pid=3D2253 comm=3D"test" exe=3D"/home/te=
-st" sig=3D5 res=3D1 Trace/breakpoint trap (core dumped)
-
-
-Steps to Reproduce:
-
-  1.  I have a simple Qt application with a button that switches to a WebEn=
-gineView when clicked.
-  2.  On Windows 11, the application runs without issues, and I can success=
-fully view web content.
-  3.
-On the Khadas VIM3 (ARM64), the application crashes immediately when I pres=
-s the button and switch to the WebEngineView.
-
-Questions:
-
-  1.
-Is there a known issue with QtWebEngine on ARM64 in Buildroot?
-  2.
-Has anyone successfully run a QtWebEngine application on a similar ARM-base=
-d board?
-
-Any guidance or suggestions on how to debug or resolve this issue would be =
-greatly appreciated!
-Thank you for your time and assistance.
-
-
---_000_PH7P222MB1231C70837725FB7416DE9BCD0712PH7P222MB1231NAMP_
-Content-Type: text/html; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
-
-<html>
-<head>
-<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Diso-8859-=
-1">
-<style type=3D"text/css" style=3D"display:none;"> P {margin-top:0;margin-bo=
-ttom:0;} </style>
-</head>
-<body dir=3D"ltr">
-<div class=3D"elementToProof" style=3D"font-family: Calibri, Helvetica, san=
-s-serif; font-size: 12pt; color: rgb(0, 0, 0);">
-Hello everyone,</div>
-<div class=3D"elementToProof" style=3D"font-family: Calibri, Helvetica, san=
-s-serif; font-size: 12pt; color: rgb(0, 0, 0);">
-<br>
-</div>
-<div class=3D"elementToProof" style=3D"font-family: Calibri, Helvetica, san=
-s-serif; font-size: 12pt; color: rgb(0, 0, 0);">
-I am encountering an issue when running a Qt 5.12.2 application with <code>=
-QtWebEngine</code>&nbsp;on a Khadas VIM3 board (ARM64) using Buildroot. The=
- application crashes when transitioning to the
-<code>WebEngineView</code>&nbsp;with the following error:</div>
-<div class=3D"elementToProof" style=3D"font-family: Calibri, Helvetica, san=
-s-serif; font-size: 12pt; color: rgb(0, 0, 0);">
-<br>
-</div>
-<div class=3D"elementToProof" style=3D"font-family: Calibri, Helvetica, san=
-s-serif; font-size: 12pt; color: rgb(0, 0, 0);">
-[ 4021.882789] audit: type=3D1701 audit(1727931778.322:7): auid=3D429496729=
-5 uid=3D0 gid=3D0 ses=3D4294967295 pid=3D2253 comm=3D&quot;test&quot;&nbsp;=
-exe=3D&quot;/home/test&quot;&nbsp;sig=3D5 res=3D1 Trace/breakpoint trap&nbs=
-p;(core dumped)</div>
-<div class=3D"elementToProof" style=3D"font-family: Calibri, Helvetica, san=
-s-serif; font-size: 12pt; color: rgb(0, 0, 0);">
-<br>
-</div>
-<div class=3D"elementToProof" style=3D"font-family: Calibri, Helvetica, san=
-s-serif; font-size: 12pt; color: rgb(0, 0, 0);">
-<br>
-</div>
-<div class=3D"elementToProof" style=3D"font-family: Calibri, Helvetica, san=
-s-serif; font-size: 12pt; color: rgb(0, 0, 0);">
-<b>Steps to Reproduce:</b></div>
-<ol start=3D"1">
-<li style=3D"font-family: Calibri, Helvetica, sans-serif; font-size: 12pt; =
-color: rgb(0, 0, 0);">
-I have a simple Qt application with a button that switches to a <code>WebEn=
-gineView</code>&nbsp;when clicked.</li><li style=3D"font-family: Calibri, H=
-elvetica, sans-serif; font-size: 12pt; color: rgb(0, 0, 0);">
-On Windows 11, the application runs without issues, and I can successfully =
-view web content.</li><li style=3D"font-family: Calibri, Helvetica, sans-se=
-rif; font-size: 12pt; color: rgb(0, 0, 0);">
-<div class=3D"elementToProof">On the Khadas VIM3 (ARM64), the application c=
-rashes immediately when I press the button and switch to the
-<code>WebEngineView</code>.</div>
-</li></ol>
-<div class=3D"elementToProof" style=3D"font-family: Calibri, Helvetica, san=
-s-serif; font-size: 12pt; color: rgb(0, 0, 0);">
-<br>
-</div>
-<div class=3D"elementToProof" style=3D"font-family: Calibri, Helvetica, san=
-s-serif; font-size: 12pt; color: rgb(0, 0, 0);">
-<b>Questions:</b></div>
-<ol start=3D"1">
-<li style=3D"font-family: Calibri, Helvetica, sans-serif; font-size: 12pt; =
-color: rgb(0, 0, 0);">
-<div class=3D"elementToProof">Is there a known issue with QtWebEngine on AR=
-M64 in Buildroot?</div>
-</li><li style=3D"font-family: Calibri, Helvetica, sans-serif; font-size: 1=
-2pt; color: rgb(0, 0, 0);">
-<div class=3D"elementToProof">Has anyone successfully run a QtWebEngine app=
-lication on a similar ARM-based board?</div>
-</li></ol>
-<div class=3D"elementToProof" style=3D"font-family: Calibri, Helvetica, san=
-s-serif; font-size: 12pt; color: rgb(0, 0, 0);">
-<br>
-</div>
-<div class=3D"elementToProof" style=3D"margin-top: 1em; margin-bottom: 1em;=
- font-family: Calibri, Helvetica, sans-serif; font-size: 12pt; color: rgb(0=
-, 0, 0);">
-Any guidance or suggestions on how to debug or resolve this issue would be =
-greatly appreciated!</div>
-<div style=3D"margin-top: 1em; margin-bottom: 1em; font-family: Calibri, He=
-lvetica, sans-serif; font-size: 12pt; color: rgb(0, 0, 0);">
-Thank you for your time and assistance.</div>
-<div class=3D"elementToProof" style=3D"font-family: Calibri, Helvetica, san=
-s-serif; font-size: 12pt; color: rgb(0, 0, 0);">
-<br>
-</div>
-</body>
-</html>
-
---_000_PH7P222MB1231C70837725FB7416DE9BCD0712PH7P222MB1231NAMP_--
-
---===============8578471745690153655==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============8578471745690153655==--
+LSBCdW1wIExpbnV4IGtlcm5lbCB0byA2LjEwLjEyIGFuZCBhZGQgdGhlIGRlcGVuZGVuY3kgb24g
+aG9zdC1weXRob24zLgotIEJ1bXAgVS1Cb290IHRvIDIwMjQuMDcuCi0gQnVtcCBURi1BIHRvIHYy
+LjExLiBSZW1vdmUgdGhlIHN0ZG91dCBwYXRjaCwgd2hpY2ggaXMgcHJlc2VudAogIHVwc3RyZWFt
+LiBSZW1vdmUgb3VyIGhhc2ggZmlsZSBub3cgdGhhdCB0aGUgYXJtLXRydXN0ZWQtZmlybXdhcmUK
+ICBwYWNrYWdlIGNlbnRyYWxpc2VzIHRob3NlLgotIEJ1bXAgRlZQIHRvIDExLjI3LjE5IGluIHRo
+ZSBkb2N1bWVudGF0aW9uLgotIENvbnZlcnQgdG8gYG1ha2Ugc2F2ZWRlZmNvbmZpZycgZm9ybWF0
+LgoKU2lnbmVkLW9mZi1ieTogVmluY2VudCBTdGVobMOpIDx2aW5jZW50LnN0ZWhsZUBhcm0uY29t
+PgotLS0KIC4uLi8wMDAxLWZlYXQtZnZwLWFkZC1zdGRvdXQtcGF0aC5wYXRjaCAgICAgICB8IDQ1
+IC0tLS0tLS0tLS0tLS0tLS0tLS0KIC4uLi9hcm0tdHJ1c3RlZC1maXJtd2FyZS5oYXNoICAgICAg
+ICAgICAgICAgICB8ICAyIC0KIGJvYXJkL2FybS9mdnAtZWJici9wYXRjaGVzL2xpbnV4L2xpbnV4
+Lmhhc2ggICB8ICA0ICstCiBib2FyZC9hcm0vZnZwLWViYnIvcGF0Y2hlcy91Ym9vdC91Ym9vdC5o
+YXNoICAgfCAgMiArLQogYm9hcmQvYXJtL2Z2cC1lYmJyL3JlYWRtZS50eHQgICAgICAgICAgICAg
+ICAgIHwgIDQgKy0KIGNvbmZpZ3MvYXJtX2Z2cF9lYmJyX2RlZmNvbmZpZyAgICAgICAgICAgICAg
+ICB8IDI0ICsrKy0tLS0tLS0KIDYgZmlsZXMgY2hhbmdlZCwgMTAgaW5zZXJ0aW9ucygrKSwgNzEg
+ZGVsZXRpb25zKC0pCiBkZWxldGUgbW9kZSAxMDA2NDQgYm9hcmQvYXJtL2Z2cC1lYmJyL3BhdGNo
+ZXMvYXJtLXRydXN0ZWQtZmlybXdhcmUvMDAwMS1mZWF0LWZ2cC1hZGQtc3Rkb3V0LXBhdGgucGF0
+Y2gKIGRlbGV0ZSBtb2RlIDEwMDY0NCBib2FyZC9hcm0vZnZwLWViYnIvcGF0Y2hlcy9hcm0tdHJ1
+c3RlZC1maXJtd2FyZS9hcm0tdHJ1c3RlZC1maXJtd2FyZS5oYXNoCgpkaWZmIC0tZ2l0IGEvYm9h
+cmQvYXJtL2Z2cC1lYmJyL3BhdGNoZXMvYXJtLXRydXN0ZWQtZmlybXdhcmUvMDAwMS1mZWF0LWZ2
+cC1hZGQtc3Rkb3V0LXBhdGgucGF0Y2ggYi9ib2FyZC9hcm0vZnZwLWViYnIvcGF0Y2hlcy9hcm0t
+dHJ1c3RlZC1maXJtd2FyZS8wMDAxLWZlYXQtZnZwLWFkZC1zdGRvdXQtcGF0aC5wYXRjaApkZWxl
+dGVkIGZpbGUgbW9kZSAxMDA2NDQKaW5kZXggMGEwNGMwMjI0MC4uMDAwMDAwMDAwMAotLS0gYS9i
+b2FyZC9hcm0vZnZwLWViYnIvcGF0Y2hlcy9hcm0tdHJ1c3RlZC1maXJtd2FyZS8wMDAxLWZlYXQt
+ZnZwLWFkZC1zdGRvdXQtcGF0aC5wYXRjaAorKysgL2Rldi9udWxsCkBAIC0xLDQ1ICswLDAgQEAK
+LUZyb20gOGMzMGEwYzdmZTAxNjJkZTA2MThiMjZmYjM0Y2M5MWVhNTgyZTVmNyBNb24gU2VwIDE3
+IDAwOjAwOjAwIDIwMDEKLUZyb206IERlYmJpZSBNYXJ0aW4gPERlYmJpZS5NYXJ0aW5AYXJtLmNv
+bT4KLURhdGU6IFdlZCwgMjcgU2VwIDIwMjMgMTg6MDU6MjYgKzAxMDAKLVN1YmplY3Q6IFtQQVRD
+SF0gZmVhdChmdnApOiBhZGQgc3Rkb3V0LXBhdGgKLQotQWRkIHN0ZG91dC1wYXRoIHRvIHRoZSBm
+dnAtYmFzZSBkZXZpY2V0cmVlIHRvIGJlIHBhc3NlZCB0byBCTDMzIChVLUJvb3QpCi1hbmQgdGhl
+biB0byB0aGUgTGludXgga2VybmVsIHRvIGJlIGNvbXBsaWFudCB0byBBcm0gU3lzdGVtUmVhZHkg
+SVI6Ci1odHRwczovL2RldmVsb3Blci5hcm0uY29tL2RvY3VtZW50YXRpb24vRFVJMTEwMS8yLTAv
+Ci1Db25maWd1cmUtVS1Cb290LWZvci1TeXN0ZW1SZWFkeS9BZGFwdC10aGUtRGV2aWNldHJlZQot
+Ci1UaGlzIGhhcyBiZWVuIHRlc3RlZCBieSBib290aW5nIGZ2cC1iYXNlIHRvIExpbnV4IGFuZCBl
+bnN1cmluZyB0aGUKLWNvbnNvbGUgaXMgYWNjZXNzaWJsZS4KLQotQ2hhbmdlLUlkOiBJYWU5ODYz
+MGYxOGY3MzVjZTM0NGMxMTU4ZjQxZjM1OGMyYTQ5ZWViNgotU2lnbmVkLW9mZi1ieTogRGllZ28g
+U3VlaXJvIDxEaWVnby5TdWVpcm9AYXJtLmNvbT4KLVNpZ25lZC1vZmYtYnk6IERlYmJpZSBNYXJ0
+aW4gPERlYmJpZS5NYXJ0aW5AYXJtLmNvbT4KLVVwc3RyZWFtOiBodHRwczovL2dpdC50cnVzdGVk
+ZmlybXdhcmUub3JnL1RGLUEvdHJ1c3RlZC1maXJtd2FyZS1hLmdpdC8rLzhjMzBhMGM3ZmUwMTYy
+ZGUwNjE4YjI2ZmIzNGNjOTFlYTU4MmU1ZjclNUUhLwotU2lnbmVkLW9mZi1ieTogVmluY2VudCBT
+dGVobMOpIDx2aW5jZW50LnN0ZWhsZUBhcm0uY29tPgotLS0tCi0gZmR0cy9mdnAtYmFzZS1wc2Np
+LWNvbW1vbi5kdHNpIHwgNyArKysrLS0tCi0gMSBmaWxlIGNoYW5nZWQsIDQgaW5zZXJ0aW9ucygr
+KSwgMyBkZWxldGlvbnMoLSkKLQotZGlmZiAtLWdpdCBhL2ZkdHMvZnZwLWJhc2UtcHNjaS1jb21t
+b24uZHRzaSBiL2ZkdHMvZnZwLWJhc2UtcHNjaS1jb21tb24uZHRzaQotaW5kZXggNzljZjM3ZDNi
+MC4uZmYzMWJhNzYxNiAxMDA2NDQKLS0tLSBhL2ZkdHMvZnZwLWJhc2UtcHNjaS1jb21tb24uZHRz
+aQotKysrIGIvZmR0cy9mdnAtYmFzZS1wc2NpLWNvbW1vbi5kdHNpCi1AQCAtMjcsMTEgKzI3LDEy
+IEBACi0gCSNhZGRyZXNzLWNlbGxzID0gPDI+OwotIAkjc2l6ZS1jZWxscyA9IDwyPjsKLSAKLSsJ
+Y2hvc2VuIHsKLSsJCXN0ZG91dC1wYXRoID0gInNlcmlhbDA6MTE1MjAwbjgiOwotICNpZiAoRU5B
+QkxFX1JNRSA9PSAxKQotLQljaG9zZW4geyBib290YXJncyA9ICJjb25zb2xlPXR0eUFNQTAgZWFy
+bHljb249cGwwMTEsMHgxYzA5MDAwMCByb290PS9kZXYvdmRhIGlwPW9uIjt9OwotLSNlbHNlCi0t
+CWNob3NlbiB7fTsKLSsJCWJvb3RhcmdzID0gImNvbnNvbGU9dHR5QU1BMCBlYXJseWNvbj1wbDAx
+MSwweDFjMDkwMDAwIHJvb3Q9L2Rldi92ZGEgaXA9b24iOwotICNlbmRpZgotKwl9OwotIAotIAlh
+bGlhc2VzIHsKLSAJCXNlcmlhbDAgPSAmdjJtX3NlcmlhbDA7Ci0tLSAKLTIuNDMuMAotCmRpZmYg
+LS1naXQgYS9ib2FyZC9hcm0vZnZwLWViYnIvcGF0Y2hlcy9hcm0tdHJ1c3RlZC1maXJtd2FyZS9h
+cm0tdHJ1c3RlZC1maXJtd2FyZS5oYXNoIGIvYm9hcmQvYXJtL2Z2cC1lYmJyL3BhdGNoZXMvYXJt
+LXRydXN0ZWQtZmlybXdhcmUvYXJtLXRydXN0ZWQtZmlybXdhcmUuaGFzaApkZWxldGVkIGZpbGUg
+bW9kZSAxMDA2NDQKaW5kZXggNmYwMmJmYmIyMi4uMDAwMDAwMDAwMAotLS0gYS9ib2FyZC9hcm0v
+ZnZwLWViYnIvcGF0Y2hlcy9hcm0tdHJ1c3RlZC1maXJtd2FyZS9hcm0tdHJ1c3RlZC1maXJtd2Fy
+ZS5oYXNoCisrKyAvZGV2L251bGwKQEAgLTEsMiArMCwwIEBACi0jIExvY2FsbHkgY2FsY3VsYXRl
+ZAotc2hhMjU2ICA3ZWZhODllMWI0ZTQxMDZlZTA1ZDY4ZTg3NmM4ZWZiYjE0NjM2NGQ4OWNmZDVk
+MjZiZjQ2NDdiMDljMDhmMzJiICBhcm0tdHJ1c3RlZC1maXJtd2FyZS12Mi4xMC1naXQ0LnRhci5n
+egpkaWZmIC0tZ2l0IGEvYm9hcmQvYXJtL2Z2cC1lYmJyL3BhdGNoZXMvbGludXgvbGludXguaGFz
+aCBiL2JvYXJkL2FybS9mdnAtZWJici9wYXRjaGVzL2xpbnV4L2xpbnV4Lmhhc2gKaW5kZXggMDRl
+NjllODgyYS4uMjA5NDFhMjY5YiAxMDA2NDQKLS0tIGEvYm9hcmQvYXJtL2Z2cC1lYmJyL3BhdGNo
+ZXMvbGludXgvbGludXguaGFzaAorKysgYi9ib2FyZC9hcm0vZnZwLWViYnIvcGF0Y2hlcy9saW51
+eC9saW51eC5oYXNoCkBAIC0xLDIgKzEsMiBAQAotIyBMb2NhbGx5IGNhbGN1bGF0ZWQKLXNoYTI1
+NiAgYjc4ZGNkMDlmNmI3MjU4NzJhMmMwYzg3YTcwYTA2NGIwZmJiY2NjZmU1Y2U2MGFhNDZjNjY5
+OTM0YTllMjhiNiAgbGludXgtNi44LjExLnRhci54egorIyBGcm9tIGh0dHBzOi8vd3d3Lmtlcm5l
+bC5vcmcvcHViL2xpbnV4L2tlcm5lbC92Ni54L3NoYTI1NnN1bXMuYXNjCitzaGEyNTYgIDUyNDg1
+ODg1MmY1ODY5YTllZjE3ZGU4YjFlNmU3ZmFmMDViY2IyYzQ2MmJjOTZiM2MyNGRiZjgyZWRlMzcz
+Y2YgIGxpbnV4LTYuMTAuMTIudGFyLnh6CmRpZmYgLS1naXQgYS9ib2FyZC9hcm0vZnZwLWViYnIv
+cGF0Y2hlcy91Ym9vdC91Ym9vdC5oYXNoIGIvYm9hcmQvYXJtL2Z2cC1lYmJyL3BhdGNoZXMvdWJv
+b3QvdWJvb3QuaGFzaAppbmRleCA5ZjU1NGQ1YzY4Li5mZTliNGY1M2RjIDEwMDY0NAotLS0gYS9i
+b2FyZC9hcm0vZnZwLWViYnIvcGF0Y2hlcy91Ym9vdC91Ym9vdC5oYXNoCisrKyBiL2JvYXJkL2Fy
+bS9mdnAtZWJici9wYXRjaGVzL3Vib290L3Vib290Lmhhc2gKQEAgLTEsMiArMSwyIEBACiAjIExv
+Y2FsbHkgY2FsY3VsYXRlZAotc2hhMjU2ICAwNzdjZjhjYTI4MzQxMTEwM2FkMjc0YTM3MjRkYWNi
+NTA2OGVkZTgyNGRlNzQ5YmVmZjljOWU1YjUzMWI0M2VhICB1LWJvb3QtMjAyNC4wNy1yYzMudGFy
+LmJ6Mgorc2hhMjU2ICBmNTkxZGE5YWI5MGVmM2Q2YjNkMTczNzY2ZDBkZGZmOTBjNGVkNzMzMDY4
+MDg5NzQ4NjExN2RmMzkwZDgzYzhmICB1LWJvb3QtMjAyNC4wNy50YXIuYnoyCmRpZmYgLS1naXQg
+YS9ib2FyZC9hcm0vZnZwLWViYnIvcmVhZG1lLnR4dCBiL2JvYXJkL2FybS9mdnAtZWJici9yZWFk
+bWUudHh0CmluZGV4IDgxMTViZmJkZmIuLmZlN2Q0ZGU1YzUgMTAwNjQ0Ci0tLSBhL2JvYXJkL2Fy
+bS9mdnAtZWJici9yZWFkbWUudHh0CisrKyBiL2JvYXJkL2FybS9mdnAtZWJici9yZWFkbWUudHh0
+CkBAIC0yNiw4ICsyNiw4IEBAIFJ1bm5pbmcgb24gdGhlIEZWUAogRG93bmxvYWQgdGhlIEZWUCBm
+cm9tIG9uZSBvZiB0aGUgZm9sbG93aW5nIHNvdXJjZXMsIGNvcnJlc3BvbmRpbmcgdG8geW91ciBo
+b3N0CiBjb21wdXRlcjoKIAotLSBodHRwczovL2RldmVsb3Blci5hcm0uY29tLy0vbWVkaWEvRmls
+ZXMvZG93bmxvYWRzL2Vjb3N5c3RlbS1tb2RlbHMvRk1fMTFfMjUvRlZQX0Jhc2VfUmV2Qy0yeEFF
+TXZBXzExLjI1XzE1X0xpbnV4NjQudGd6Ci0tIGh0dHBzOi8vZGV2ZWxvcGVyLmFybS5jb20vLS9t
+ZWRpYS9GaWxlcy9kb3dubG9hZHMvZWNvc3lzdGVtLW1vZGVscy9GTV8xMV8yNS9GVlBfQmFzZV9S
+ZXZDLTJ4QUVNdkFfMTEuMjVfMTVfTGludXg2NF9hcm12OGwudGd6CistIGh0dHBzOi8vZGV2ZWxv
+cGVyLmFybS5jb20vLS9jZG4tZG93bmxvYWRzL3Blcm1hbGluay9GaXhlZC1WaXJ0dWFsLVBsYXRm
+b3Jtcy9GTS0xMS4yNy9GVlBfQmFzZV9SZXZDLTJ4QUVNdkFfMTEuMjdfMTlfTGludXg2NC50Z3oK
+Ky0gaHR0cHM6Ly9kZXZlbG9wZXIuYXJtLmNvbS8tL2Nkbi1kb3dubG9hZHMvcGVybWFsaW5rL0Zp
+eGVkLVZpcnR1YWwtUGxhdGZvcm1zL0ZNLTExLjI3L0ZWUF9CYXNlX1JldkMtMnhBRU12QV8xMS4y
+N18xOV9MaW51eDY0X2FybXY4bC50Z3oKIAogVGhlIEZWUCB3aWxsIGJlIGxvY2F0ZWQgdW5kZXIg
+b25lIG9mIHRoZSBjb3JyZXNwb25kaW5nIGZvbGRlcnM6CiAKZGlmZiAtLWdpdCBhL2NvbmZpZ3Mv
+YXJtX2Z2cF9lYmJyX2RlZmNvbmZpZyBiL2NvbmZpZ3MvYXJtX2Z2cF9lYmJyX2RlZmNvbmZpZwpp
+bmRleCA1N2I2NzFkNWY3Li41YWExNzI3ODg5IDEwMDY0NAotLS0gYS9jb25maWdzL2FybV9mdnBf
+ZWJicl9kZWZjb25maWcKKysrIGIvY29uZmlncy9hcm1fZnZwX2ViYnJfZGVmY29uZmlnCkBAIC0x
+LDM1ICsxLDIzIEBACi0jIEFyY2hpdGVjdHVyZQogQlIyX2FhcmNoNjQ9eQotCi0jIEltYWdlCitC
+UjJfUEFDS0FHRV9IT1NUX0xJTlVYX0hFQURFUlNfQ1VTVE9NXzZfMTA9eQogQlIyX0dMT0JBTF9Q
+QVRDSF9ESVI9ImJvYXJkL2FybS9mdnAtZWJici9wYXRjaGVzIgogQlIyX0RPV05MT0FEX0ZPUkNF
+X0NIRUNLX0hBU0hFUz15CiBCUjJfUk9PVEZTX1BPU1RfSU1BR0VfU0NSSVBUPSJib2FyZC9hcm0v
+ZnZwLWViYnIvcG9zdC1pbWFnZS5zaCBzdXBwb3J0L3NjcmlwdHMvZ2VuaW1hZ2Uuc2giCiBCUjJf
+Uk9PVEZTX1BPU1RfU0NSSVBUX0FSR1M9Ii1jIGJvYXJkL2FybS9mdnAtZWJici9nZW5pbWFnZS5j
+ZmciCi0KLSMgTGludXggaGVhZGVycwotQlIyX1BBQ0tBR0VfSE9TVF9MSU5VWF9IRUFERVJTX0NV
+U1RPTV82Xzg9eQotCi0jIEtlcm5lbAogQlIyX0xJTlVYX0tFUk5FTD15CiBCUjJfTElOVVhfS0VS
+TkVMX0NVU1RPTV9WRVJTSU9OPXkKLUJSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX1ZFUlNJT05fVkFM
+VUU9IjYuOC4xMSIKK0JSMl9MSU5VWF9LRVJORUxfQ1VTVE9NX1ZFUlNJT05fVkFMVUU9IjYuMTAu
+MTIiCiBCUjJfTElOVVhfS0VSTkVMX1VTRV9BUkNIX0RFRkFVTFRfQ09ORklHPXkKIEJSMl9MSU5V
+WF9LRVJORUxfTkVFRFNfSE9TVF9PUEVOU1NMPXkKLQotIyBQYWNrYWdlcworQlIyX0xJTlVYX0tF
+Uk5FTF9ORUVEU19IT1NUX1BZVEhPTjM9eQogQlIyX1BBQ0tBR0VfT1BURUVfQ0xJRU5UPXkKLQot
+IyBGaWxlc3lzdGVtCiBCUjJfVEFSR0VUX1JPT1RGU19FWFQyPXkKIEJSMl9UQVJHRVRfUk9PVEZT
+X0VYVDJfND15CiBCUjJfVEFSR0VUX1JPT1RGU19FWFQyX1NJWkU9IjIwME0iCiAjIEJSMl9UQVJH
+RVRfUk9PVEZTX1RBUiBpcyBub3Qgc2V0Ci0KLSMgRmlybXdhcmUgYW5kIGJvb3Rsb2FkZXIKIEJS
+Ml9UQVJHRVRfQVJNX1RSVVNURURfRklSTVdBUkU9eQogQlIyX1RBUkdFVF9BUk1fVFJVU1RFRF9G
+SVJNV0FSRV9DVVNUT01fVkVSU0lPTj15Ci1CUjJfVEFSR0VUX0FSTV9UUlVTVEVEX0ZJUk1XQVJF
+X0NVU1RPTV9WRVJTSU9OX1ZBTFVFPSJ2Mi4xMCIKK0JSMl9UQVJHRVRfQVJNX1RSVVNURURfRklS
+TVdBUkVfQ1VTVE9NX1ZFUlNJT05fVkFMVUU9InYyLjExIgogQlIyX1RBUkdFVF9BUk1fVFJVU1RF
+RF9GSVJNV0FSRV9QTEFURk9STT0iZnZwIgogQlIyX1RBUkdFVF9BUk1fVFJVU1RFRF9GSVJNV0FS
+RV9DVVNUT01fRFRTX1BBVEg9ImJvYXJkL2FybS9mdnAtZWJici9mdnAtZWJici5kdHMiCiBCUjJf
+VEFSR0VUX0FSTV9UUlVTVEVEX0ZJUk1XQVJFX0ZJUD15CkBAIC00NSwxMiArMzMsMTAgQEAgQlIy
+X1RBUkdFVF9PUFRFRV9PU19BRERJVElPTkFMX1ZBUklBQkxFUz0iQ0ZHX0FSTV9HSUNWMz15Igog
+QlIyX1RBUkdFVF9VQk9PVD15CiBCUjJfVEFSR0VUX1VCT09UX0JVSUxEX1NZU1RFTV9LQ09ORklH
+PXkKIEJSMl9UQVJHRVRfVUJPT1RfQ1VTVE9NX1ZFUlNJT049eQotQlIyX1RBUkdFVF9VQk9PVF9D
+VVNUT01fVkVSU0lPTl9WQUxVRT0iMjAyNC4wNy1yYzMiCitCUjJfVEFSR0VUX1VCT09UX0NVU1RP
+TV9WRVJTSU9OX1ZBTFVFPSIyMDI0LjA3IgogQlIyX1RBUkdFVF9VQk9PVF9CT0FSRF9ERUZDT05G
+SUc9InZleHByZXNzX2Z2cCIKIEJSMl9UQVJHRVRfVUJPT1RfQ09ORklHX0ZSQUdNRU5UX0ZJTEVT
+PSJib2FyZC9hcm0vZnZwLWViYnIvdS1ib290LmZyYWdtZW50IgogQlIyX1RBUkdFVF9VQk9PVF9O
+RUVEU19PUEVOU1NMPXkKLQotIyBIb3N0IHRvb2xzCiBCUjJfUEFDS0FHRV9IT1NUX0RPU0ZTVE9P
+TFM9eQogQlIyX1BBQ0tBR0VfSE9TVF9HRU5JTUFHRT15CiBCUjJfUEFDS0FHRV9IT1NUX01UT09M
+Uz15Ci0tIAoyLjQ1LjIKCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9vdC5vcmcKaHR0
+cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRyb290Cg==
