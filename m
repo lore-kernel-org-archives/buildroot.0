@@ -4,91 +4,126 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0D446CF8558
-	for <buildroot@archiver.kernel.org>; Thu,  3 Oct 2024 03:18:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1F5C7CF31BF
+	for <buildroot@archiver.kernel.org>; Thu,  3 Oct 2024 05:40:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 7904F4023A;
-	Thu,  3 Oct 2024 03:18:15 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 7C5CC401FE;
+	Thu,  3 Oct 2024 05:40:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id utaYo_QqRSw1; Thu,  3 Oct 2024 03:18:13 +0000 (UTC)
+ id Bz8WibOSw-lh; Thu,  3 Oct 2024 05:40:50 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 33896403A2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 24E5E40236
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 33896403A2;
-	Thu,  3 Oct 2024 03:18:13 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 783821BF28D
- for <buildroot@lists.busybox.net>; Thu,  3 Oct 2024 03:18:11 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 24E5E40236;
+	Thu,  3 Oct 2024 05:40:50 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 6307E1BF83C
+ for <buildroot@lists.busybox.net>; Thu,  3 Oct 2024 05:40:49 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 7467860634
- for <buildroot@lists.busybox.net>; Thu,  3 Oct 2024 03:18:11 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 4F4F0401FE
+ for <buildroot@lists.busybox.net>; Thu,  3 Oct 2024 05:40:48 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 45Ao3GkSV9sV for <buildroot@lists.busybox.net>;
- Thu,  3 Oct 2024 03:18:09 +0000 (UTC)
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id FL8F4PsdhFEG for <buildroot@lists.busybox.net>;
+ Thu,  3 Oct 2024 05:40:47 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::629; helo=mail-ej1-x629.google.com;
- envelope-from=buildroot.notifications@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 666AB60632
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 666AB60632
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com
- [IPv6:2a00:1450:4864:20::629])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 666AB60632
- for <buildroot@buildroot.org>; Thu,  3 Oct 2024 03:18:09 +0000 (UTC)
-Received: by mail-ej1-x629.google.com with SMTP id
- a640c23a62f3a-a8a7b1c2f2bso62797966b.0
- for <buildroot@buildroot.org>; Wed, 02 Oct 2024 20:18:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1727925487; x=1728530287;
- h=date:from:to:subject:content-transfer-encoding:mime-version
- :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=QciyRvI25IkZsc1ghFpOkUe/IXk3es71eA6nsHvvhg0=;
- b=c+WkqnQUxre9hQTbYovr/7WIp2MKczHX8l5nw3dQbYBAztQ8aH66BZITcodDSjCM0x
- SKaKEv9DPSkdrDBxzRskKOk27bTrCJC5+Ps3tVx0NnFKVKH8YwBiRVTN97Fqvb/J/fdX
- DMUdjxD1RJRLFXNaPkF2ZpF7X9/pXt6+q4FxbM433ClwGcKk3tO/rYboXmysJv1jzBw4
- nLMgqe1LWL/2GZLIyWzK1vEwrSq/sNtpbm693SjJwMgasToXGjKoqrtNk6w8c77lBeyS
- 2ClZu6y5qa0iFZu/87Faw0miwpGFmIlwPysNALzmkuJj/ITI6xedIRJnGEOM+9pTqtbx
- Zdrw==
-X-Gm-Message-State: AOJu0YztKa7ZsaLU09VzDKWYqhc/pxLBrKHtM/GtmuXbMtobNXP5rkZ3
- 3dLXL5d89Lng31myoD3PJvTtWIbRCvHJjUwh6oMFfJZS6MT1Q4x055c7BA==
-X-Google-Smtp-Source: AGHT+IHyPP2aF4D8fYgqJLE1kpNYfIM1CCOcAqr74Th0Z4vFUvwmNcNvfPTCYUZaRivj+NeC0drZjg==
-X-Received: by 2002:a17:907:d29:b0:a7a:be06:d8eb with SMTP id
- a640c23a62f3a-a98f838781bmr506057566b.53.1727925487091; 
- Wed, 02 Oct 2024 20:18:07 -0700 (PDT)
-Received: from [138.201.205.61] ([2a01:4f8:173:1526::2])
- by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-a99104bf8b0sm16926866b.194.2024.10.02.20.18.06
- for <buildroot@buildroot.org>
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Wed, 02 Oct 2024 20:18:06 -0700 (PDT)
-Message-ID: <66fe0cee.170a0220.905e7.0492@mx.google.com>
+ client-ip=2a01:111:f403:2c13::801;
+ helo=nam10-dm6-obe.outbound.protection.outlook.com;
+ envelope-from=fran.millocs@live.com.ar; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 15A34403A2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 15A34403A2
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com
+ (mail-dm6nam10olkn20801.outbound.protection.outlook.com
+ [IPv6:2a01:111:f403:2c13::801])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 15A34403A2
+ for <buildroot@buildroot.org>; Thu,  3 Oct 2024 05:40:45 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Qjc0/uopPf0vdgbFExSR/aZcfJ7+E+K1iiJPVl3F6OSgVSZydXfR71XL65CJq9cjklRYWoNoRQgE90IiAlzN0RXtkWmb9DEyRDatdpynp0oIhbXgQFApbFgVYs08G0dLVDJSLwLxi4OOwXMCdYK1ZV9hEXeSkCSyFou8opsYCW0Hy4+K51WYolM2ZXA6knoztE17L7HxvRjAzBnPKNEVU9WWaCAYBieOCsMsV4AU8n9MwheFZ8Zv/IsLLPTkGCBSya8xMe35bFtZ9HB/StuFcjJTBRUXjywDKXKaBMlPa+FS1X/xDxdgzCBzTVkfl3QT7XnveVBDxwHqRv6YuT5H+Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=DZWr4BeJb0aOd2e+5YWWqJ+yLKQNGpYB8lMoZi4N1sY=;
+ b=CNTo8ma1bOft4OX/6aNLVYyw6N0ws/A81xroCpO/R7xqyyxQVF7JPdfVkZrqea9snTTR1dR3vOyM6PRYVX0KTBvBl2OnqR4+YmLvKs5CIts3SrC4bXTFDSDmtKHRVy27pyrQUMnu6Ds5jHQA0ZCfs2/ssdiUxlKf0lHGCACTzv2NMNbhLXBay6DISJJLxtydBn8FDfGpqD9mlFYBLljjCh6QvegH1cUqDgSmLpl3CF8hRZEX0RWZVFsKdhFMFVEt237RqLH76yWm3jS7I3zLM+WshLGyByeijlfWZYxepcCRYBI3o9eKJtXnPbwccFUU1Q3xhY7xmAE0mVVdEksP3w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+Received: from PH7P222MB1231.NAMP222.PROD.OUTLOOK.COM (2603:10b6:510:316::9)
+ by LV8P222MB0837.NAMP222.PROD.OUTLOOK.COM (2603:10b6:408:1cb::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8005.29; Thu, 3 Oct
+ 2024 05:40:41 +0000
+Received: from PH7P222MB1231.NAMP222.PROD.OUTLOOK.COM
+ ([fe80::7a0e:44d:cc74:141c]) by PH7P222MB1231.NAMP222.PROD.OUTLOOK.COM
+ ([fe80::7a0e:44d:cc74:141c%4]) with mapi id 15.20.8026.017; Thu, 3 Oct 2024
+ 05:40:41 +0000
+From: franco ariel <fran.millocs@live.com.ar>
+To: Thomas Petazzoni via buildroot <buildroot@buildroot.org>
+Thread-Topic: [Help] Qt5WebEngine Crashing on Khadas VIM3 (ARM64) 
+Thread-Index: AQHbFVZNmUQTkLkhgk+Im1ZcTvPSEw==
+Date: Thu, 3 Oct 2024 05:40:41 +0000
+Message-ID: <PH7P222MB1231C70837725FB7416DE9BCD0712@PH7P222MB1231.NAMP222.PROD.OUTLOOK.COM>
+Accept-Language: es-AR, en-US
+Content-Language: es-AR
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PH7P222MB1231:EE_|LV8P222MB0837:EE_
+x-ms-office365-filtering-correlation-id: 8f184caf-a9b3-4716-f739-08dce36deb2b
+x-microsoft-antispam: BCL:0;
+ ARA:14566002|7092599003|15080799006|461199028|8060799006|15030799003|8062599003|19110799003|3412199025|440099028|102099032;
+x-microsoft-antispam-message-info: /fgZWFnxO4TWp72mq70kukEedJq3V1ORzVXlSFqOl9YoLivwYyvPEY8oHcr2mQetHCeFGRDkL1q35VtClyWsr1uUYBlN10RCqUT/X8rYvXRL3CdNAAfOoPml7stBZBYI1J+E6DLWhNbQ4WtSfeaeeLSTiAMGO1o14xDa9I3HbvQE+nix0JS5LTY07J3aPzA0cJxkzywWoGmWe2GXzpcf+Dp07oQXb5l70ybdjcxRWzjyKjGix4LUHn7xq4gYiSelwRf86lpyx1BnHa+Up6Qdsv5q+iXu0JWp+Ej9yP/E5z1KibeI43mjtPIzNWlsrMoE/Cq5HtptRO3u21+vloeTsu8qWlVaubC6xOHXSeoUpvtm2jKXKBgtndTsKDU3EqWy5xQAg7rr8UV0uuw78omwR/i/ou05mpVsNSsoRtFIiFvqQpSl2EekrLINVYffAE8DCH5ldx5mKw8y1jYxVtlojrXSQYfOW5rUx5mhJDawJfbixexsr1VXZlJUHVLu/l50s0fg4RInqN6APRa/igjkdu203cCjpeWp2fMsxYmE/Or8T3Fc0g3RsZUI1APDNzJX48I7QKwlZXfY9r4mE+Li+kmoZ01M/o/Qkuuik+9ziZRbK9gUpVq7KehxZ9XmpkAe5TqHAJUOYKDdoPEugUAOdB2dRnPCVfBgTK/v8IdQNDBGjw6zPLZrMaae+3jRuaMAb1ROJAwwH99IKnBwedfA+3zOqJqHXauDfH82FM/3J2stOHGY/sOnz7vxEOr/AyR6PblsxS0WLabQOdAkjKlXZA==
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?+5S+xWpe49VTCsyuHD68q/B7Jb+pVhCfFXADtj3hI+HwfU/lkFv1tSyXi1?=
+ =?iso-8859-1?Q?CJUarfJntfzgDZQa5UBKOt7bWPpHRj00pnt1XIOnkAGRZnJM1iOk0Sa8kO?=
+ =?iso-8859-1?Q?J2Borru/xPo6F0U4U172ABlbQT+S9ru6Uu/aFSjB42aeQ7pulJrO7Zao75?=
+ =?iso-8859-1?Q?al7R3SW6oYzL/AtCMXOHfa19azTgYet2QMRh1qmYVoHc+TcNWeQJ9G8/RY?=
+ =?iso-8859-1?Q?8qLQPoh/sUPy6q1Fj34fLD1Xn5cS8Lg2W/YkXWodvMlKfrakDdHGOVgiSl?=
+ =?iso-8859-1?Q?txfRSuLEF9rJgtp8NUj4zSexrrm+yCtMjU8kDvVmxGIEBagKWXNYBNuoXN?=
+ =?iso-8859-1?Q?T4A47pNotb4wZ/OHbq3DoN+Om/i+B/rU1sbuW+bnPGuvwPVX319ETmB9xB?=
+ =?iso-8859-1?Q?sbpbmw1KDQko7WMMeUgekBIXvyEQHa+qHBVpGcbbnwsjR+43PzZgZRAOCp?=
+ =?iso-8859-1?Q?N43tOVFpBXhJkRVkV/a3vAtmtVudXK4+eb6b4tMExvs1YVxA1RGUwrJHgc?=
+ =?iso-8859-1?Q?eaehzckPtG6bFqgelBOG5h7CgLLF9KXt6lW6ytVaisPKeH1Yw7SEqk+o2W?=
+ =?iso-8859-1?Q?1JgFgHYtfuIW8ISCBEbst2RCcx+wzXzrTDo19nAU1+4oIZLYj6u9AKje0Z?=
+ =?iso-8859-1?Q?QgKbGNmVU3AyX36JPYJv7nvT3Wzqcmk9BVU8FDd8u874qfmj6MJMYPNX2M?=
+ =?iso-8859-1?Q?Nf4FS2xzgN87epkjbflOZDM3QrChNps3ItjczYmVSqEoAcFmvHsqx8fMCl?=
+ =?iso-8859-1?Q?zYKxPOEaiDx5ncFQtj2jDBVSQutHXgh+nCFQ/bseqZlnnmtboAPNpxRYvN?=
+ =?iso-8859-1?Q?7VFRJV5QVvE07dNFmVI9vB97IqkiCYkZjxssgrlzZtTRVinPrNfsLPHTYr?=
+ =?iso-8859-1?Q?3zgLgJtYgJjq+upeGpSgpYlkAmqZEWRutohELZCnKNmaLp5Ddl4E8fPjTn?=
+ =?iso-8859-1?Q?AbDb4CoCw0wzoFsH2IarfZVm6Y8ztoPRba1nBp3eJ9eJcObv5YoxyykLFv?=
+ =?iso-8859-1?Q?eZsOB9b9aLXewIs1og1cZa4749GLYmFIKRuteSwH9xh5oMXe0d36ErK9PG?=
+ =?iso-8859-1?Q?s3qYWQp+se0YQ5jaXEKeSMSedrAp3eYwP6bkI9RvUikQd7RfORbevIVI1j?=
+ =?iso-8859-1?Q?QRYfL2MCFOWzvmc80TwTL/6uhBAj+/mq5dX3z51IY0PCybpwVuV7mTBSW4?=
+ =?iso-8859-1?Q?g4jlH+rdXNn8JDTo1trO44NG13rEghOjC8jp+6jviZ5GeznFE0dH4uZkHa?=
+ =?iso-8859-1?Q?iVXPhyvIP4iTLPGzSyOLBUpJ1WY9um0KVdAz5ZddYqKI486QePRN0dplgx?=
+ =?iso-8859-1?Q?YaA1BzLEMygrW6udY0Z4pw5hWlPc+3a2y6XP5tWW2Dq+T7w=3D?=
 MIME-Version: 1.0
-To: buildroot@buildroot.org
-From: Buildroot Notifications <buildroot.notifications@gmail.com>
-Date: Thu, 03 Oct 2024 03:18:06 -0000
+X-OriginatorOrg: sct-15-20-7719-20-msonline-outlook-6509f.templateTenant
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PH7P222MB1231.NAMP222.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8f184caf-a9b3-4716-f739-08dce36deb2b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Oct 2024 05:40:41.5761 (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV8P222MB0837
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1727925487; x=1728530287; darn=buildroot.org;
- h=date:from:to:subject:content-transfer-encoding:mime-version
- :message-id:from:to:cc:subject:date:message-id:reply-to;
- bh=QciyRvI25IkZsc1ghFpOkUe/IXk3es71eA6nsHvvhg0=;
- b=WokIB5ZGzH6iI99XKpgeJQs2JW2Nf7UtoBfYIs/Xu1zH7s7Mivt0zXa2bb7S+YJoHE
- fXtcmq7LjsV2KSzmZf4kTprgqda8V25Qvp0/S7qvsTROu3OYbA6XZWme5QFWHcKpsN24
- HnFd+xChSultNV0bNE1TcKoViV63FpX6q8L6B54jR8eK3IkSQtNcfXrBFJo+j8m2rdgv
- q2kSpLEynBLO53dOyMMmiPYvQR3fyQwo9JU1H/chwYJDHkz+qwJpWBZwnjwlb/nKglvk
- Pwuxm2tTYupfai8D21loj9sRSOREcdRMQRUiGnURYslgVMo/umPFmTE4wpMMbLpFENhA
- qPCg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ d=LIVE.COM.AR; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=DZWr4BeJb0aOd2e+5YWWqJ+yLKQNGpYB8lMoZi4N1sY=;
+ b=UOAnGMllunfaKI82D0zCNE/Z6lYzRv+GS991pJI6XvVT9fFrNBcOmsjm4GzI0MtW2eK67c1dEvMzlkf5Hc7cxD6GVQRp/0URIWhgPy8F80WHgMMaowzvPp8fqqWVx0wQI4sxkUEk0lIWgx3du6BupdbuZSulO/FHF4E9//QU+Wcqbo2pUnu06j/8tFgWOKGSMAWQ74yD+Y8gQG5bPm/4e/lgQalyX7lOMJCKm30/Yi7s4pDl8otVqAc7yw/xZy+NjV7qgKwWgCj5iPsNdPq09M1PFvx/nUkQTWIzh+Fw96kJOwTrgl+vz24GTi0vtAjvDT2MYITChXB47Cn0RfNKWw==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ header.from=live.com.ar
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=gmail.com header.i=@gmail.com header.a=rsa-sha256
- header.s=20230601 header.b=WokIB5ZG
-Subject: [Buildroot] [autobuild.buildroot.org] Daily results for 2024-10-02
+ unprotected) header.d=LIVE.COM.AR header.i=@LIVE.COM.AR header.a=rsa-sha256
+ header.s=selector1 header.b=UOAnGMll
+Subject: [Buildroot] [Help] Qt5WebEngine Crashing on Khadas VIM3 (ARM64)
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,251 +135,159 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============8578471745690153655=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Hello,
+--===============8578471745690153655==
+Content-Language: es-AR
+Content-Type: multipart/alternative;
+	boundary="_000_PH7P222MB1231C70837725FB7416DE9BCD0712PH7P222MB1231NAMP_"
 
-Autobuild statistics for 2024-10-02
-===================================
+--_000_PH7P222MB1231C70837725FB7416DE9BCD0712PH7P222MB1231NAMP_
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 
-      branch |  OK | NOK | TIM | TOT |
-  2024.02.x  |  4  |  2  |  0  |  6  |
-  2024.05.x  | 21  | 22  |  1  | 44  |
-  2024.08.x  |  2  |  5  |  0  |  7  |
-    master   | 12  | 79  |  0  | 91  |
+Hello everyone,
 
-Classification of failures by reason for master
------------------------------------------------
+I am encountering an issue when running a Qt 5.12.2 application with QtWebE=
+ngine on a Khadas VIM3 board (ARM64) using Buildroot. The application crash=
+es when transitioning to the WebEngineView with the following error:
 
-host-gobject-introspection-... | 10
-             bluez5_utils-5.77 | 7 
-           host-librsvg-2.50.9 | 5 
-                libcurl-8.10.1 | 5 
-               procps-ng-4.0.4 | 5 
-             bluez5_utils-5.78 | 3 
-          linux-5.10.162-cip24 | 3 
-     linux-5.10.162-cip24-rt10 | 3 
-          obsidian-cursors-1.0 | 3 
-                  bind-9.18.28 | 2 
-                   duma-2.5.21 | 2 
-                 gnuplot-6.0.1 | 2 
-            host-ccache-4.10.2 | 2 
-    host-python-greenlet-3.1.1 | 2 
-                 linux-6.10.10 | 2 
-                 apache-2.4.62 | 1 
-           at-spi2-core-2.50.0 | 1 
-             dahdi-linux-3.3.0 | 1 
-              fftw-quad-3.3.10 | 1 
-                     file-5.45 | 1 
-               graphene-1.10.8 | 1 
-            host-binutils-2.42 | 1 
-         host-libxcrypt-4.4.36 | 1 
-              host-rust-1.80.1 | 1 
-                 libgee-0.20.6 | 1 
-                   libidn-1.42 | 1 
-                liblinear-2.45 | 1 
-                  libva-2.22.0 | 1 
-               linux-pam-1.6.1 | 1 
-                 mesa3d-24.0.9 | 1 
-                    mpir-3.0.0 | 1 
-                  ntp-4.2.8p18 | 1 
-package/zabbix/zabbix.mk:14... | 1 
-                 pixman-0.42.2 | 1 
-               popperjs-1.16.0 | 1 
-               postgresql-16.4 | 1 
-                       unknown | 1 
-               valgrind-3.23.0 | 1 
+[ 4021.882789] audit: type=3D1701 audit(1727931778.322:7): auid=3D429496729=
+5 uid=3D0 gid=3D0 ses=3D4294967295 pid=3D2253 comm=3D"test" exe=3D"/home/te=
+st" sig=3D5 res=3D1 Trace/breakpoint trap (core dumped)
 
 
-Detail of failures for master
------------------------------
+Steps to Reproduce:
 
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-   mips64    |         apache-2.4.62          | NOK | https://autobuild.buildroot.org/results/8f49ecd464e783dc0a7492901aae99808d072053 |     
-    or1k     |      at-spi2-core-2.50.0       | NOK | https://autobuild.buildroot.org/results/b03640977f45448fac7cedd6881d89b1223e8e94 |     
-   x86_64    |          bind-9.18.28          | NOK | https://autobuild.buildroot.org/results/5f5607c34cdcf6f1895ec65c99d7f4531f9445f1 | ORPH
-  riscv64    |          bind-9.18.28          | NOK | https://autobuild.buildroot.org/results/6d15f6dad430f4924f29601f073f0eade9c10279 | ORPH
- aarch64_be  |       bluez5_utils-5.77        | NOK | https://autobuild.buildroot.org/results/2edd6e6cbadfb7b702ccdc80d1d3f9eb0de15cbc |     
-    sh4      |       bluez5_utils-5.77        | NOK | https://autobuild.buildroot.org/results/24c99b6be4c36db50049167663f20acb6cd9c278 |     
-   mips64    |       bluez5_utils-5.77        | NOK | https://autobuild.buildroot.org/results/be2668bc52569177f58e80e066560f7aa16562df |     
-powerpc64le  |       bluez5_utils-5.77        | NOK | https://autobuild.buildroot.org/results/945b1c8313b40f813cc6ca11dd616f803c2307bb |     
-   mips64    |       bluez5_utils-5.77        | NOK | https://autobuild.buildroot.org/results/6f799bd0c83739dc0602288c7237e8cc4e2cb6ec |     
-  mips64el   |       bluez5_utils-5.77        | NOK | https://autobuild.buildroot.org/results/6b453e9fea49f8dbe96c879ab56394e3a9cc8dc1 |     
-   arceb     |       bluez5_utils-5.77        | NOK | https://autobuild.buildroot.org/results/acad971b4a1cfa0860b7edbd2ba963ce9c59f91e |     
- aarch64_be  |       bluez5_utils-5.78        | NOK | https://autobuild.buildroot.org/results/5d61048adb1c7eb49fc8296f4cabf870eb5423c5 |     
-   sh4aeb    |       bluez5_utils-5.78        | NOK | https://autobuild.buildroot.org/results/9c06a292e4e18fdedc5f69de32dccb945d434cf1 |     
-    mips     |       bluez5_utils-5.78        | NOK | https://autobuild.buildroot.org/results/088aac6cbaf67caa72797d113cf24a373f97548d |     
-   mips64    |       dahdi-linux-3.3.0        | NOK | https://autobuild.buildroot.org/results/488abfc6313a150d2cddf03befcac56c5e478704 |     
-   x86_64    |          duma-2.5.21           | NOK | https://autobuild.buildroot.org/results/3b33cd480b8d344d514766d9856ffeed61a01e54 | ORPH
-   sh4aeb    |          duma-2.5.21           | NOK | https://autobuild.buildroot.org/results/6fe32e93863e11cd97229810e025c0d09b8e9ba6 | ORPH
-powerpc64le  |        fftw-quad-3.3.10        | NOK | https://autobuild.buildroot.org/results/88a42c0d42fbd7e23b93d1c637e470c8973565cd | ORPH
-  powerpc    |           file-5.45            | NOK | https://autobuild.buildroot.org/results/5f5b91c156e1e03cc46d0b8dff586e7ec704e4f0 | ORPH
-   mips64    |         gnuplot-6.0.1          | NOK | https://autobuild.buildroot.org/results/307395fa34a849f901d134da235c044708d199ba |     
- microblaze  |         gnuplot-6.0.1          | NOK | https://autobuild.buildroot.org/results/ccd77e7828e5ce5be2a3ede7557a46fd06f17e4c |     
-    sh4a     |        graphene-1.10.8         | NOK | https://autobuild.buildroot.org/results/3bef05f2ea39b3d5a5d2b5b2e519875085e3526a |     
-   x86_64    |       host-binutils-2.42       | NOK | https://autobuild.buildroot.org/results/6ec682f144c9a6866d571298c9f03122963bcf85 |     
-   sparc     |       host-ccache-4.10.2       | NOK | https://autobuild.buildroot.org/results/b76eab4990c164c6533d7204581aa362a5fc2f50 | ORPH
-    i686     |       host-ccache-4.10.2       | NOK | https://autobuild.buildroot.org/results/a522c05408dc5c77403de5baaee21a3496a55a5d | ORPH
-    sh4      | host-gobject-introspection-... | NOK | https://autobuild.buildroot.org/results/8fb18378be2fd05150e224b5e27f430c4ea4ffdb | ORPH
-   nios2     | host-gobject-introspection-... | NOK | https://autobuild.buildroot.org/results/28456d9d7976ca04a872b4c2a8cdc77070e2a4c2 | ORPH
- powerpc64   | host-gobject-introspection-... | NOK | https://autobuild.buildroot.org/results/db04d51735b26148a8ce93651f5ee41a0656112c | ORPH
-  sparc64    | host-gobject-introspection-... | NOK | https://autobuild.buildroot.org/results/a3ca3278b0647fd5be18216de6f58867474dc185 | ORPH
-    sh4a     | host-gobject-introspection-... | NOK | https://autobuild.buildroot.org/results/a104e1b24d4b88a367201130b9ef8cfd8d922703 | ORPH
-   nios2     | host-gobject-introspection-... | NOK | https://autobuild.buildroot.org/results/848a28ef6684f7de5d30fb0f38ad37f8a1058843 | ORPH
-    m68k     | host-gobject-introspection-... | NOK | https://autobuild.buildroot.org/results/31f3b80a7bf7c0314aa0412c0349c4c88a3b822c | ORPH
-    or1k     | host-gobject-introspection-... | NOK | https://autobuild.buildroot.org/results/3dcad82bcd86588ffa52391eca56d32a28266ea2 | ORPH
-  sparc64    | host-gobject-introspection-... | NOK | https://autobuild.buildroot.org/results/07b07b4ef842db99d6e9be5ed84ae450b72d9905 | ORPH
-  powerpc    | host-gobject-introspection-... | NOK | https://autobuild.buildroot.org/results/dccdf3d7a2fca6490176f5612d2e9689669124fe | ORPH
-  powerpc    |      host-librsvg-2.50.9       | NOK | https://autobuild.buildroot.org/results/60aac4167158fb18db49d627e652c6ae5c895b58 |     
-   xtensa    |      host-librsvg-2.50.9       | NOK | https://autobuild.buildroot.org/results/e614ea9ab5c7906b23b87162fd75a5144f807cc1 |     
-    i686     |      host-librsvg-2.50.9       | NOK | https://autobuild.buildroot.org/results/1feddcac92a0259fa4b08a79ce5a9f91dd492920 |     
-microblazeel |      host-librsvg-2.50.9       | NOK | https://autobuild.buildroot.org/results/153bafc9ebf14ddd8ec1674776942d3a235a9087 |     
-   sh4eb     |      host-librsvg-2.50.9       | NOK | https://autobuild.buildroot.org/results/b68e7b3476434223b8eeae73edfdf50b3bb5637a |     
-  mips64el   |     host-libxcrypt-4.4.36      | NOK | https://autobuild.buildroot.org/results/f95e460733a630a9d9c18301a49990f1874c9ac1 |     
-   nios2     |   host-python-greenlet-3.1.1   | NOK | https://autobuild.buildroot.org/results/67c146b23cd3e44fee308bde97f9238f04421ddb |     
-   x86_64    |   host-python-greenlet-3.1.1   | NOK | https://autobuild.buildroot.org/results/a8534e6d84a718ec7c247465025913b6e293fccd |     
-  powerpc    |        host-rust-1.80.1        | NOK | https://autobuild.buildroot.org/results/e31d2b4a7189597fbbb10470ae15aae042ede980 |     
-   sparc     |         libcurl-8.10.1         | NOK | https://autobuild.buildroot.org/results/c4ab75fde37f647601c482688300154375d52f06 |     
-  sparc64    |         libcurl-8.10.1         | NOK | https://autobuild.buildroot.org/results/06a4d854bddf77c03a58ee693f32d17f4e439ec7 |     
-    m68k     |         libcurl-8.10.1         | NOK | https://autobuild.buildroot.org/results/0bc9fee4f2ab20c0fbfea3df4aa8cf8385ed1c42 |     
-  sparc64    |         libcurl-8.10.1         | NOK | https://autobuild.buildroot.org/results/1c29c1ec72422c4cd181b2b23edd548008f43bf9 |     
-    or1k     |         libcurl-8.10.1         | NOK | https://autobuild.buildroot.org/results/cd00e81eece120ddbfe6af14fb8ab046b5ba24c5 |     
-   sparc     |         libgee-0.20.6          | NOK | https://autobuild.buildroot.org/results/dc607a7db9238a899f1908af7fda06cab1cc9e23 |     
-    arm      |          libidn-1.42           | NOK | https://autobuild.buildroot.org/results/9ff9bd0a9aa1627beee0b745dedc71c5eb08c66e |     
-    or1k     |         liblinear-2.45         | NOK | https://autobuild.buildroot.org/results/9244e85c7766ff23f3e716c53a3525706a6ab5e0 |     
-    mips     |          libva-2.22.0          | NOK | https://autobuild.buildroot.org/results/f3e30b4d7088faa98e86dd440698abb446dd5019 |     
-    mips     |      linux-5.10.162-cip24      | NOK | https://autobuild.buildroot.org/results/6f85af6e46b998fa4e410398f49e0950de8aacda | ORPH
-  powerpc    |      linux-5.10.162-cip24      | NOK | https://autobuild.buildroot.org/results/0ae29b9041435a59fd52ad8c801111cad8d266c6 | ORPH
-powerpc64le  |      linux-5.10.162-cip24      | NOK | https://autobuild.buildroot.org/results/44d171279d8f4b4f7eb1dabeee46e68b98f1f0cb | ORPH
-    arm      |   linux-5.10.162-cip24-rt10    | NOK | https://autobuild.buildroot.org/results/acc9dc3a596282528e42870b4c1611fb43c63554 | ORPH
-    i686     |   linux-5.10.162-cip24-rt10    | NOK | https://autobuild.buildroot.org/results/6ee28ef84a81ed015fa79c09653b980e5ef182bd | ORPH
-    m68k     |   linux-5.10.162-cip24-rt10    | NOK | https://autobuild.buildroot.org/results/4499ecd8881088acbbdbf11f83b193414295500c | ORPH
-    mips     |         linux-6.10.10          | NOK | https://autobuild.buildroot.org/results/987442efc9038d25ec4adc25ca848b5bc6ab4b27 | ORPH
-   nios2     |         linux-6.10.10          | NOK | https://autobuild.buildroot.org/results/12548cfdf2cdf5014a07f8d429aed9a78ce584e4 | ORPH
-  riscv64    |        linux-pam-1.6.1         | NOK | https://autobuild.buildroot.org/results/929f1ad7db41c73a0f21160ecef64acf0fca5ec4 | ORPH
- aarch64_be  |         mesa3d-24.0.9          | NOK | https://autobuild.buildroot.org/results/b234dcb4061885a8d1d8fc167a34b84c194a1934 |     
- powerpc64   |           mpir-3.0.0           | NOK | https://autobuild.buildroot.org/results/52449515e410a40867448b075a46dce49f3ef77a |     
-powerpc64le  |          ntp-4.2.8p18          | NOK | https://autobuild.buildroot.org/results/c6cf520f7699e744db57ba63c68b9d1c048675fc |     
-   mips64    |      obsidian-cursors-1.0      | NOK | https://autobuild.buildroot.org/results/b81f90b8e2910c2a97ffa22aeafa79f1e221dfa2 | ORPH
-    or1k     |      obsidian-cursors-1.0      | NOK | https://autobuild.buildroot.org/results/b8d73294e87ef345ba52a37554a629a6b59a467c | ORPH
-   s390x     |      obsidian-cursors-1.0      | NOK | https://autobuild.buildroot.org/results/16ca353bcb4cfe9e3d7d4843e2a27788226fc5c3 | ORPH
-  mips64el   | package/zabbix/zabbix.mk:14... | NOK | https://autobuild.buildroot.org/results/67b72b325de578b12c4a953b6b635dfcb71e77ac |     
-    m68k     |         pixman-0.42.2          | NOK | https://autobuild.buildroot.org/results/57556769c2fc2ae0a11fd7953728a45b3d0565c2 | ORPH
-   s390x     |        popperjs-1.16.0         | NOK | https://autobuild.buildroot.org/results/be2c9d23192d7b59ce981b9cd9f9ac7a15998d94 | ORPH
-  aarch64    |        postgresql-16.4         | NOK | https://autobuild.buildroot.org/results/6a1a24ff53112a96628aa87f1c7426b657aefae7 |     
-    or1k     |        procps-ng-4.0.4         | NOK | https://autobuild.buildroot.org/results/601b30d894bbeb540ced468a235f7e555b30977a | ORPH
-   armeb     |        procps-ng-4.0.4         | NOK | https://autobuild.buildroot.org/results/b7ff99a364f85586e71a41fb4697cfbdd848976b | ORPH
-microblazeel |        procps-ng-4.0.4         | NOK | https://autobuild.buildroot.org/results/c0e8467165f589f0f6b76b2198fb4159e4237277 | ORPH
-   armeb     |        procps-ng-4.0.4         | NOK | https://autobuild.buildroot.org/results/7ae6aab9f6463e068f9f89db7185eabd47c25005 | ORPH
- aarch64_be  |        procps-ng-4.0.4         | NOK | https://autobuild.buildroot.org/results/8fa573c68fc130e58721dd6a89d4a2dfa44bde95 | ORPH
-   mipsel    |            unknown             | NOK | https://autobuild.buildroot.org/results/1b078c88e438efc287486370e8ce2d53b8a21644 |     
-  powerpc    |        valgrind-3.23.0         | NOK | https://autobuild.buildroot.org/results/9dc645203f4f332e621c59f6066efa8b5cb7a7a5 | ORPH
+  1.  I have a simple Qt application with a button that switches to a WebEn=
+gineView when clicked.
+  2.  On Windows 11, the application runs without issues, and I can success=
+fully view web content.
+  3.
+On the Khadas VIM3 (ARM64), the application crashes immediately when I pres=
+s the button and switch to the WebEngineView.
+
+Questions:
+
+  1.
+Is there a known issue with QtWebEngine on ARM64 in Buildroot?
+  2.
+Has anyone successfully run a QtWebEngine application on a similar ARM-base=
+d board?
+
+Any guidance or suggestions on how to debug or resolve this issue would be =
+greatly appreciated!
+Thank you for your time and assistance.
 
 
-Classification of failures by reason for 2024.02.x
---------------------------------------------------
+--_000_PH7P222MB1231C70837725FB7416DE9BCD0712PH7P222MB1231NAMP_
+Content-Type: text/html; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 
-           babeld-babeld-1.9.2 | 1 
-        host-python-lxml-5.1.0 | 1 
+<html>
+<head>
+<meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3Diso-8859-=
+1">
+<style type=3D"text/css" style=3D"display:none;"> P {margin-top:0;margin-bo=
+ttom:0;} </style>
+</head>
+<body dir=3D"ltr">
+<div class=3D"elementToProof" style=3D"font-family: Calibri, Helvetica, san=
+s-serif; font-size: 12pt; color: rgb(0, 0, 0);">
+Hello everyone,</div>
+<div class=3D"elementToProof" style=3D"font-family: Calibri, Helvetica, san=
+s-serif; font-size: 12pt; color: rgb(0, 0, 0);">
+<br>
+</div>
+<div class=3D"elementToProof" style=3D"font-family: Calibri, Helvetica, san=
+s-serif; font-size: 12pt; color: rgb(0, 0, 0);">
+I am encountering an issue when running a Qt 5.12.2 application with <code>=
+QtWebEngine</code>&nbsp;on a Khadas VIM3 board (ARM64) using Buildroot. The=
+ application crashes when transitioning to the
+<code>WebEngineView</code>&nbsp;with the following error:</div>
+<div class=3D"elementToProof" style=3D"font-family: Calibri, Helvetica, san=
+s-serif; font-size: 12pt; color: rgb(0, 0, 0);">
+<br>
+</div>
+<div class=3D"elementToProof" style=3D"font-family: Calibri, Helvetica, san=
+s-serif; font-size: 12pt; color: rgb(0, 0, 0);">
+[ 4021.882789] audit: type=3D1701 audit(1727931778.322:7): auid=3D429496729=
+5 uid=3D0 gid=3D0 ses=3D4294967295 pid=3D2253 comm=3D&quot;test&quot;&nbsp;=
+exe=3D&quot;/home/test&quot;&nbsp;sig=3D5 res=3D1 Trace/breakpoint trap&nbs=
+p;(core dumped)</div>
+<div class=3D"elementToProof" style=3D"font-family: Calibri, Helvetica, san=
+s-serif; font-size: 12pt; color: rgb(0, 0, 0);">
+<br>
+</div>
+<div class=3D"elementToProof" style=3D"font-family: Calibri, Helvetica, san=
+s-serif; font-size: 12pt; color: rgb(0, 0, 0);">
+<br>
+</div>
+<div class=3D"elementToProof" style=3D"font-family: Calibri, Helvetica, san=
+s-serif; font-size: 12pt; color: rgb(0, 0, 0);">
+<b>Steps to Reproduce:</b></div>
+<ol start=3D"1">
+<li style=3D"font-family: Calibri, Helvetica, sans-serif; font-size: 12pt; =
+color: rgb(0, 0, 0);">
+I have a simple Qt application with a button that switches to a <code>WebEn=
+gineView</code>&nbsp;when clicked.</li><li style=3D"font-family: Calibri, H=
+elvetica, sans-serif; font-size: 12pt; color: rgb(0, 0, 0);">
+On Windows 11, the application runs without issues, and I can successfully =
+view web content.</li><li style=3D"font-family: Calibri, Helvetica, sans-se=
+rif; font-size: 12pt; color: rgb(0, 0, 0);">
+<div class=3D"elementToProof">On the Khadas VIM3 (ARM64), the application c=
+rashes immediately when I press the button and switch to the
+<code>WebEngineView</code>.</div>
+</li></ol>
+<div class=3D"elementToProof" style=3D"font-family: Calibri, Helvetica, san=
+s-serif; font-size: 12pt; color: rgb(0, 0, 0);">
+<br>
+</div>
+<div class=3D"elementToProof" style=3D"font-family: Calibri, Helvetica, san=
+s-serif; font-size: 12pt; color: rgb(0, 0, 0);">
+<b>Questions:</b></div>
+<ol start=3D"1">
+<li style=3D"font-family: Calibri, Helvetica, sans-serif; font-size: 12pt; =
+color: rgb(0, 0, 0);">
+<div class=3D"elementToProof">Is there a known issue with QtWebEngine on AR=
+M64 in Buildroot?</div>
+</li><li style=3D"font-family: Calibri, Helvetica, sans-serif; font-size: 1=
+2pt; color: rgb(0, 0, 0);">
+<div class=3D"elementToProof">Has anyone successfully run a QtWebEngine app=
+lication on a similar ARM-based board?</div>
+</li></ol>
+<div class=3D"elementToProof" style=3D"font-family: Calibri, Helvetica, san=
+s-serif; font-size: 12pt; color: rgb(0, 0, 0);">
+<br>
+</div>
+<div class=3D"elementToProof" style=3D"margin-top: 1em; margin-bottom: 1em;=
+ font-family: Calibri, Helvetica, sans-serif; font-size: 12pt; color: rgb(0=
+, 0, 0);">
+Any guidance or suggestions on how to debug or resolve this issue would be =
+greatly appreciated!</div>
+<div style=3D"margin-top: 1em; margin-bottom: 1em; font-family: Calibri, He=
+lvetica, sans-serif; font-size: 12pt; color: rgb(0, 0, 0);">
+Thank you for your time and assistance.</div>
+<div class=3D"elementToProof" style=3D"font-family: Calibri, Helvetica, san=
+s-serif; font-size: 12pt; color: rgb(0, 0, 0);">
+<br>
+</div>
+</body>
+</html>
 
+--_000_PH7P222MB1231C70837725FB7416DE9BCD0712PH7P222MB1231NAMP_--
 
-Detail of failures for 2024.02.x
---------------------------------
+--===============8578471745690153655==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-   s390x     |      babeld-babeld-1.9.2       | NOK | https://autobuild.buildroot.org/results/f31a2455009e7dc30b2b0c5686b35e90ef594cf9 |     
- aarch64_be  |     host-python-lxml-5.1.0     | NOK | https://autobuild.buildroot.org/results/6c5aff49b45efa7418df3bb2f5b026eee691f93b |     
-
-
-Classification of failures by reason for 2024.05.x
---------------------------------------------------
-
-                 apache-2.4.62 | 1 
-                    eza-0.18.8 | 1 
-         gobject-introspection | 1 
-       gst1-plugins-bad-1.22.9 | 1 
-            host-binutils-2.42 | 1 
-                host-go-1.22.5 | 1 
-host-heimdal-f4faaeaba371ff... | 1 
-                  libffi-3.4.6 | 1 
-                  libsepol-3.6 | 1 
-               libunwind-1.8.1 | 1 
-          linux-5.10.162-cip24 | 1 
-                  linux-6.8.12 | 1 
-                    ncmpc-0.49 | 1 
-                  nginx-1.26.1 | 1 
-                 openssh-9.7p1 | 1 
-                 pixman-0.42.2 | 1 
-               procps-ng-4.0.4 | 1 
-python-unittest-xml-reporti... | 1 
-qt5base-da6e958319e95fe564d... | 1 
-                  screen-4.9.1 | 1 
-ulog-0389d243352255f6182326... | 1 
-                ustreamer-6.11 | 1 
-                wtfutil-0.41.0 | 1 
-
-
-Detail of failures for 2024.05.x
---------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-   mipsel    |         apache-2.4.62          | NOK | https://autobuild.buildroot.org/results/ecb7bcf339d451ff7614a791c9d69f48bd4f47c5 |     
-   x86_64    |           eza-0.18.8           | NOK | https://autobuild.buildroot.org/results/b95dc0fc940d155474bd228e70f2c8ff2152b60a |     
- microblaze  |     gobject-introspection      | TIM | https://autobuild.buildroot.org/results/dc6c0ba862c8e19512d1ebc54fdba2017f32dee7 |     
-   nios2     |    gst1-plugins-bad-1.22.9     | NOK | https://autobuild.buildroot.org/results/820012c6abf6f4886d320bf97d10915a15b5d9c7 | ORPH
-    mips     |       host-binutils-2.42       | NOK | https://autobuild.buildroot.org/results/d51adfd259d1da42e5d40029ce44528aebb6b6b8 |     
-  mips64el   |         host-go-1.22.5         | NOK | https://autobuild.buildroot.org/results/da1bc6f441860356816754e8f6aa37d6157b925c |     
-microblazeel | host-heimdal-f4faaeaba371ff... | NOK | https://autobuild.buildroot.org/results/83d2e7a8de47aedffa22fe1c88e59ee239bfd440 | ORPH
-    or1k     |          libffi-3.4.6          | NOK | https://autobuild.buildroot.org/results/b2568923d6fa4cb6a2357cc1e4ea2fb55103f6cf |     
-   xtensa    |          libsepol-3.6          | NOK | https://autobuild.buildroot.org/results/f5b28c0883aeb2677ed3438de64130146a723b69 |     
-  aarch64    |        libunwind-1.8.1         | NOK | https://autobuild.buildroot.org/results/724caa658c0258b64a091b9f4e0adffb3c4c3442 | ORPH
-    mips     |      linux-5.10.162-cip24      | NOK | https://autobuild.buildroot.org/results/b0c237cb6ed0ba5ac49a8976beab15f6a5f11bd5 | ORPH
-    sh4a     |          linux-6.8.12          | NOK | https://autobuild.buildroot.org/results/38c09d47b1af1f47f6019c4bc1ba4aaa118eeaf4 | ORPH
-   nios2     |           ncmpc-0.49           | NOK | https://autobuild.buildroot.org/results/a21cf9b3abe1ca32afe87051aeea11e855029f06 |     
-    or1k     |          nginx-1.26.1          | NOK | https://autobuild.buildroot.org/results/c1634cef3741f9f7d02aee1da9735cbdca8e1ff5 | ORPH
-  powerpc    |         openssh-9.7p1          | NOK | https://autobuild.buildroot.org/results/d093fd285e58f6e0201aff01488884d05862fe09 | ORPH
-   mipsel    |         pixman-0.42.2          | NOK | https://autobuild.buildroot.org/results/da57f6a434ec6544a9ae68b0df9f4ff9e96cd508 | ORPH
-    i686     |        procps-ng-4.0.4         | NOK | https://autobuild.buildroot.org/results/1ad343dd3ec03de20703475580f96421de919eda | ORPH
-  sparc64    | python-unittest-xml-reporti... | NOK | https://autobuild.buildroot.org/results/59bc7524dc36a8388b483ff8161a63f23b465a3d |     
-   x86_64    | qt5base-da6e958319e95fe564d... | NOK | https://autobuild.buildroot.org/results/8fdea836a4d3e4e87d234f532dc090db2c1854d1 |     
-   xtensa    |          screen-4.9.1          | NOK | https://autobuild.buildroot.org/results/d33751d88af521f0e09d74e86d94d3ce20976c20 | ORPH
-  mips64el   | ulog-0389d243352255f6182326... | NOK | https://autobuild.buildroot.org/results/1992aa76a734a96ed2837ad0fb97515905b8db7b |     
- aarch64_be  |         ustreamer-6.11         | NOK | https://autobuild.buildroot.org/results/bf1ada7931b146842b94a6bde3a370c1714e0da7 |     
-  riscv64    |         wtfutil-0.41.0         | NOK | https://autobuild.buildroot.org/results/ecb2d30ac880e75b1015e3377f96f9717da45372 |     
-
-
-Classification of failures by reason for 2024.08.x
---------------------------------------------------
-
-                elfutils-0.189 | 1 
-                 host-gdb-14.2 | 1 
-               lighttpd-1.4.76 | 1 
-                nushell-0.85.0 | 1 
-                    sslh-2.0.1 | 1 
-
-
-Detail of failures for 2024.08.x
---------------------------------
-
-    arch     |             reason             | OK? |                                       url                                       | orph?
--------------+--------------------------------+-----+---------------------------------------------------------------------------------+-------
-   mips64    |         elfutils-0.189         | NOK | https://autobuild.buildroot.org/results/20dc2f4138dad0cf60efe691ccbc014676caf8f3 | ORPH
-   s390x     |         host-gdb-14.2          | NOK | https://autobuild.buildroot.org/results/983fec29846e4b3e6c25c9cab670dafe288a19e2 | ORPH
-  sparc64    |        lighttpd-1.4.76         | NOK | https://autobuild.buildroot.org/results/30dfc2602d0022f0c75a4d93479a08ea2dd51ffb | ORPH
-   armeb     |         nushell-0.85.0         | NOK | https://autobuild.buildroot.org/results/045b6314e4e27d08b4de999d785db7d7602657c6 | ORPH
-   armeb     |           sslh-2.0.1           | NOK | https://autobuild.buildroot.org/results/7e3b0f94f5619c0483ce1b8da27e1d2b9816cfa0 | ORPH
-
-
-
--- 
-https://autobuild.buildroot.org
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============8578471745690153655==--
