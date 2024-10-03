@@ -4,70 +4,70 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id E2049CF34A9
-	for <buildroot@archiver.kernel.org>; Thu,  3 Oct 2024 13:45:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1366FCF34AD
+	for <buildroot@archiver.kernel.org>; Thu,  3 Oct 2024 13:49:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 768C7607C1;
-	Thu,  3 Oct 2024 13:45:22 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id CD4CD60609;
+	Thu,  3 Oct 2024 13:49:29 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 9NTrPlHo8XeI; Thu,  3 Oct 2024 13:45:21 +0000 (UTC)
+ id HIEF9usDvhTk; Thu,  3 Oct 2024 13:49:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6174F6076D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DF2046065A
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 6174F6076D;
-	Thu,  3 Oct 2024 13:45:21 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id B808A1BF311
- for <buildroot@lists.busybox.net>; Thu,  3 Oct 2024 13:45:19 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id DF2046065A;
+	Thu,  3 Oct 2024 13:49:28 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id D832F1BF311
+ for <buildroot@lists.busybox.net>; Thu,  3 Oct 2024 13:49:27 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id A6DA7606F1
- for <buildroot@lists.busybox.net>; Thu,  3 Oct 2024 13:45:19 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id C5D69407BB
+ for <buildroot@lists.busybox.net>; Thu,  3 Oct 2024 13:49:27 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id m4VnpfNQVPc9 for <buildroot@lists.busybox.net>;
- Thu,  3 Oct 2024 13:45:18 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=216.71.154.42;
- helo=esa4.hgst.iphmx.com; envelope-from=prvs=9995b4c5d=niklas.cassel@wdc.com;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id o6KtIW-SoAf9 for <buildroot@lists.busybox.net>;
+ Thu,  3 Oct 2024 13:49:27 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=68.232.143.124;
+ helo=esa2.hgst.iphmx.com; envelope-from=prvs=9995b4c5d=niklas.cassel@wdc.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 9124560664
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 9124560664
-Received: from esa4.hgst.iphmx.com (esa4.hgst.iphmx.com [216.71.154.42])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 9124560664
- for <buildroot@buildroot.org>; Thu,  3 Oct 2024 13:45:18 +0000 (UTC)
-X-CSE-ConnectionGUID: Xv/EXHzbQSu00voD3hu+mw==
-X-CSE-MsgGUID: G5IrjnbPQQKgxW2RXZpQyg==
-X-IronPort-AV: E=Sophos;i="6.11,174,1725292800"; d="scan'208";a="27547105"
-Received: from mail-eastus2azlp17010000.outbound.protection.outlook.com (HELO
- BN1PR04CU002.outbound.protection.outlook.com) ([40.93.12.0])
- by ob1.hgst.iphmx.com with ESMTP; 03 Oct 2024 21:45:16 +0800
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org B0AD540735
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org B0AD540735
+Received: from esa2.hgst.iphmx.com (esa2.hgst.iphmx.com [68.232.143.124])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id B0AD540735
+ for <buildroot@buildroot.org>; Thu,  3 Oct 2024 13:49:26 +0000 (UTC)
+X-CSE-ConnectionGUID: nYjqNd3GREu2Xc5smr/xPg==
+X-CSE-MsgGUID: xgufWlUTTCe+W61OsuvqEg==
+X-IronPort-AV: E=Sophos;i="6.11,174,1725292800"; d="scan'208";a="28582444"
+Received: from mail-bn8nam11lp2168.outbound.protection.outlook.com (HELO
+ NAM11-BN8-obe.outbound.protection.outlook.com) ([104.47.58.168])
+ by ob1.hgst.iphmx.com with ESMTP; 03 Oct 2024 21:49:24 +0800
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=dgUxP6Mzbg+mAjy46ff1Yz8BNgef5MvwDtKcVlpRSxj01LJnJelMvF1n4u+k2FGJy5zOVWRU5Y9m78aU1YhjjZwmvqnyQkkKlT9Dg4APIWX5bLip7NMQMIB5DiPQ3T2zm2TOnUJa/3MY6Vft5oZOt6g+APZBsnXyjGMY9XLmfYHX9z0vXBRjG8Kb3yAYb/jlEec+e4Rdb9WOynOTlPRJ28k4wnG/VHLzNg2VHVxWZNAuiJk1TIcJd0QSvy/R4wpXJqakcIlEB5tBiEhMmfhMEiRkFY/tRJFhq9hVYlGoPHsKx0OX7nE6yYbCvqliTjf1SwBLZ67iS7JnOXD5sz1Y4g==
+ b=Ox2keBEN412ao/+mlAbB2McRpB/dg35qdYdEM+ScHveG6R1rcu81MszdG2bOGLP63ZqOY2WKx/fiCSV7xnf23F29MhilYYgZlbhcBFjwOJST/QDQRvMJsu/ElPaTYITZUjREU+W2jhXDvQubx4+iPzIUE+JTASYtCfwzHCZOOoPcVXaL81WXTk2WqWUqTQQN/Ty/asbsA4v1BkhFcN0pKhYkT1Nx/sYIEFCFqeukJp5kFzmUWzsY81MGpKJit3qOCDs2QWebB+6wnpo2wpbf+USqX2fx0FTGCXm5JJdFXRXFIDHoO1AjEHhmU2e38FIicptuVqkpoDH0IPdMnXipRA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com; 
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=XSvVFV5MLZShmmlOlbIaZE38Mqh6KPRyikEbCS96KYI=;
- b=n4pXXe/8P38bOHL8rA5fO9IPZboqWUa7uI1B6shrZnUKeorF+f8SNYInrB6sYzcEzOV/q9u8LnjvC1fU65F+Dy/ytObQy35TwwIZLSPs8gc/vEMaHUyaJVN5vr5FzMXJeBZLc3jbDLuN/dvUYaYtMwtTFs19zSqkJgTNheASYX9232AKdt/G7a5RPXuW31Ps+UTVPRVy6zB8cP5QSrYjRFwVwURb+DY610+wFL/RQ3MoRfaLJ6w5LdaQUBM23M5ZRwox3ZybnliJjpgThABuwRm03LM4YhGkTMPyy+RNbyh4JdOKeAcHdPuMkF5XTPFeai76CFOHRb5oeSKX0SXcdQ==
+ bh=lVIAeoyfNQh33Ts9bx6oPsPDh3bZRB6x8Ooy+32Ji38=;
+ b=U3jNmykIR0uAsltTrhJYZLiKz6lRvW8qdPO7b+m72PY6NixlTQz2U/+LecQ/y4vsUaEWFOA6mPYmpy3tutq4tP5fW9I81dcN15SyvhCrq2bsCi80dHI4BumbLa4DTxnFrjHh7cfs90vuiBUYIexpKPBwDodvkU6Y0NO1KSijcaCM3K8oyzddeT61SFKfsHsqNnCBnB/lNJ5UdFb5LmqBqgYVNXMkkhdwVmNIEcqOMpVifpnlpqSdESbQrCyPsqpnZISMyuoUfKwTe0zjBzaIL3CqUPa6/kfLiKmOzaF8MjEHpUzunMujDbHzv1NX2ehMv3G4pq8atXwE867Fgoo26g==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
  header.d=wdc.com; arc=none
 Received: from SJ0PR04MB8326.namprd04.prod.outlook.com (2603:10b6:a03:3db::16)
- by SA6PR04MB9352.namprd04.prod.outlook.com (2603:10b6:806:436::12)
+ by MN2PR04MB6463.namprd04.prod.outlook.com (2603:10b6:208:1a3::15)
  with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8026.16; Thu, 3 Oct
- 2024 13:45:14 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8026.18; Thu, 3 Oct
+ 2024 13:49:22 +0000
 Received: from SJ0PR04MB8326.namprd04.prod.outlook.com
  ([fe80::5088:5f08:45a0:9a8]) by SJ0PR04MB8326.namprd04.prod.outlook.com
  ([fe80::5088:5f08:45a0:9a8%5]) with mapi id 15.20.8026.017; Thu, 3 Oct 2024
- 13:45:14 +0000
+ 13:49:22 +0000
 To: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
 Thread-Topic: [Buildroot] [PATCH 2/2] configs/rock5b_defconfig: enable
  uboot-env on the SD card
-Thread-Index: AQHbAuUc1CB3U8OPVUq64u+ENUXuQbJXwU4AgAPx8gCADVlKgIAMIpyA
-Date: Thu, 3 Oct 2024 13:45:14 +0000
-Message-ID: <Zv6f6eMFxAUl5EuI@ryzen.lan>
+Thread-Index: AQHbAuUc1CB3U8OPVUq64u+ENUXuQbJXwU4AgAPx8gCADVlKgIAMI8SA
+Date: Thu, 3 Oct 2024 13:49:22 +0000
+Message-ID: <Zv6g4RCi0pJWh0GL@ryzen.lan>
 References: <20240909182103.3667296-1-niklas.cassel@wdc.com>
  <20240909182103.3667296-3-niklas.cassel@wdc.com>
  <20240914222032.3fee5e2e@windsurf> <Zuk_RMVJAzqVO5s8@ryzen.lan>
@@ -78,110 +78,110 @@ Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
 x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SJ0PR04MB8326:EE_|SA6PR04MB9352:EE_
-x-ms-office365-filtering-correlation-id: a96ccd71-1e89-4c84-38ca-08dce3b19bd1
+x-ms-traffictypediagnostic: SJ0PR04MB8326:EE_|MN2PR04MB6463:EE_
+x-ms-office365-filtering-correlation-id: 93349902-329c-4ca5-3b21-08dce3b22fdf
 wdcipoutbound: EOP-TRUE
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0; ARA:13230040|376014|1800799024|366016|38070700018;
-x-microsoft-antispam-message-info: =?us-ascii?Q?zlRHTPMGTi+oezOcQeyiX59wWTjOxgUBtVqEeSHwMELA42hn3Rebc1rmf0Kz?=
- =?us-ascii?Q?nKUdhhS0xrfF2Bw18L6LwRVr2byUf9eC00UGK6p001B6CRcCxkmFtilJ1vrX?=
- =?us-ascii?Q?5xDqHws/AatUHmLMJrZP3KOyhkOzGsdhWlS2V46ENui+Yy4OZ+oLj6hG6lun?=
- =?us-ascii?Q?TqLbE+kws5msFwixEY0A84z9iTEI3LGElyiDFZThQ+bxYg7ddwxg9j6izd1x?=
- =?us-ascii?Q?VjNByBP09AuDlFKmis86ONag4S9fBACCRLa65IQV0KwqUixiBN6OwHrCGLxG?=
- =?us-ascii?Q?k8NqF38jEgETCWBBnmJgWkXfio3EaKknLrvm6vYbHBu6vH8JCYHClfPJRgMD?=
- =?us-ascii?Q?Kjd6cfb5hTjnmHiST8kPvZ4e4Yo/Ptc+T4MYV48nHe4xDF+4ftuyVEkgiuiK?=
- =?us-ascii?Q?XufvRMiIGFDmaTVHrzBI+poNjIM0hZpcaAjQGcDZ/48kSBW2fh5+sUd/j8b4?=
- =?us-ascii?Q?mnQlZyJBIC1vXcqQX1U8sIUas2x+N4uwEyadbE2zqst1hneW7njPYFhhAQ4R?=
- =?us-ascii?Q?K7eDwrmk6mahLAUBUIMfNsnhSlgh2f64EdNzekNHy710Fem/NrXY5Uzah1jk?=
- =?us-ascii?Q?D+PU/0kOvU0y9POWxoslQ+VN7MVjH2nWPySb5mEefCWwhs8/q3cpO/S2Oo+h?=
- =?us-ascii?Q?SNl/2LMEPCZx/M58vOB5Pxh7YHAWITRQ4sRq9wUCdPsmgRGPPiUqDt/XL11i?=
- =?us-ascii?Q?Qn8oduJhtpXt9+LdkISHe/8NvGi0oC/xA6lPiXu8DhKm2IPDIULCurHwpR3p?=
- =?us-ascii?Q?3+Lc5he1eFfMxhcyMCWSZkLyc5aU5my+S2LC2AdLu9/tOrGQMT0EmRB0BJE8?=
- =?us-ascii?Q?Vjw+QU0jQvVIYyeNnlwlNFX2xVx9gJbeW/wPob8U6BUBKdjb7/9hBaeJFbFk?=
- =?us-ascii?Q?sPWm/Mfb29MY/CjgX5w3noPr77oSioG2uAJumX2yTQ99kcHj5uoXPmVfeMNV?=
- =?us-ascii?Q?Ohc0xt3eLs57lfFg1cDtf8/Yreo9ULlkkK0wFVZltLldK5LcOy/FkPXXIR9A?=
- =?us-ascii?Q?qryGvDIdRmLgY80wnbtYtldscL4U/30RyTiWpmLXLiYdtXhE471fNu5I9G2J?=
- =?us-ascii?Q?Pz3y9O7I1M/Cgix+jRlZ9i3duRqWUI7N9POd7V3KQkD4iXR7cH53ObpxZMBm?=
- =?us-ascii?Q?3CW9XA4lLqQULLWlx+f3qwFB4G2umHWZIHxsbbhzzMjyHem1QXN64+CeiKyd?=
- =?us-ascii?Q?UUmg2VFba0WZhOqTgU3fcXJoJ68o0Yt4dn3ACro0u6Uing6sDeQggVyBjtoJ?=
- =?us-ascii?Q?sWSh9+yP2jA4NLGLthdy1sJZZ5ftm4QYg8WY1kmqZU0ljHuiRIzFwcYDfr1y?=
- =?us-ascii?Q?mDnRJ47Ih0uQ7EqWN+iqC4T5f0V1hMYSEPUGBjcs1N1f2g=3D=3D?=
+x-microsoft-antispam-message-info: =?us-ascii?Q?XhStdN18Gn/h/dAeNiNKkKDY/B8qDxVc83lDep7LM+KVfSM6X+vQQqXqpOtP?=
+ =?us-ascii?Q?a2vdnxq2Rk954oLVQmZ9LWQKdha+Ey6+udLVlt4Zhto6SSpSBaiuv/c0gK8b?=
+ =?us-ascii?Q?VtPDw7qUPyoMYCkkk7OAKqJ2jGUAtk2jKZcW4VptSkuwb8gP9zseyN6aPfVR?=
+ =?us-ascii?Q?m+oOx+ssYaq66KdfghACQot31thnXTlNovZZoaqBQ3zdW8v4WhlYPOolnsC3?=
+ =?us-ascii?Q?ujRQlFzxOIUA9AkpaiaIHVfvC7rOqKskYq8NR/iDvKaFo1MV30iqCGnKYZ3J?=
+ =?us-ascii?Q?iWwapm9ooWPefoJxw0iftx/EbrlOVCjHiPvj1dlA/kl4P0hb2X26Qenkf9SM?=
+ =?us-ascii?Q?lCXrxzVSALrNMFHHHnoFEECmL44bxWUa7kiMuSpBNjG+kuf1J8/mxrp05SQd?=
+ =?us-ascii?Q?b7Bks3MqSGUFvbzRXwu5RdHWUevSNvUDxe8d9WZqhuDefxffYtDABBw2R82R?=
+ =?us-ascii?Q?DxYrje6gGO1XuneOb+jLsriF8NsyE1kGPz1iKi5vC7eDzRL/ZLNaRq5mPS4p?=
+ =?us-ascii?Q?41VNaQjJB/0nRa+XmIY13gKGVqlIz0jRSMXkowM/IWyO30zD5u1y0VS7ZRwn?=
+ =?us-ascii?Q?tEq75otzXRFLD3assg/En2V02d7FQvMpQGnbtcUR2Ro9AQAybohZnINQYf0l?=
+ =?us-ascii?Q?DxyJOcbETMxcY5i4CxzKl9khDIQdWVIkPcAt3wJMjQqIdmoO9obS2pmiSWdC?=
+ =?us-ascii?Q?CbcABSGlWs8ASyQW9aEsdjEDVDT5e4L5MCao8j2hmM1AmYBOkBIdJ0U44vs2?=
+ =?us-ascii?Q?/QKkk0U1IZ645ZejdjGdny0My0BzLktj70goGTMQWY0NNk3mxC+Qd8JWjwmr?=
+ =?us-ascii?Q?woEV484lE7nb21bSFaLF+mkVxReFx40CTmu6ngE1FXKNJhx1G83BSlBvnWdQ?=
+ =?us-ascii?Q?mGGAxKzffJldJoIBzIp071xYQ5tjXtHzBax7SpE2xINzgJ+rpIX1xbz5GwiI?=
+ =?us-ascii?Q?cC1TBMWjdUOdEGg9M5GkjRm+TXp8lZAwT2H3hJUKcW+Tkg3iT8TdTp9pP7mI?=
+ =?us-ascii?Q?QFB7yEx27RxoKZ9r78dKe3gEJ5l5aWKMXRooPh7L2fahL7iRzFv6EA0/oTMt?=
+ =?us-ascii?Q?ZjIWvL+/aYtiZ9BmBUiZb+GnGC90oC2DtCgbggxF/ax5XmC7koXWey2qaCLS?=
+ =?us-ascii?Q?u/Q4WEEwr7iAe3WH1xWn+VRWNcqHASxgRnKAX3VqdJDeXKRvRdHf7S1fmURi?=
+ =?us-ascii?Q?U6BRhHYdqlH35A7Q1K0eh7/IJmnCd0RmlzmmlpcUsUkitGlk/FHDSIq/aYPc?=
+ =?us-ascii?Q?qbP2D3WmIeXSBFge23f6dUxEhcpN42bydbRnzfoNEX6+D1snyk9yNrQQ7JPn?=
+ =?us-ascii?Q?2J8hc95H/IaanYd9ZUNXKUF7xZpdaztiKqYbCGEdxxiHdQ=3D=3D?=
 x-forefront-antispam-report: CIP:255.255.255.255; CTRY:; LANG:en; SCL:1; SRV:;
  IPV:NLI; SFV:NSPM; H:SJ0PR04MB8326.namprd04.prod.outlook.com; PTR:; CAT:NONE;
  SFS:(13230040)(376014)(1800799024)(366016)(38070700018); DIR:OUT; SFP:1101; 
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?gy/q3NOM/vdTC+Xdl9vKPDpVU4x78AqupsI2qstn+sEUDDGd9cI6S4UrXehB?=
- =?us-ascii?Q?TxpiIwwUweU/Wb1JrCkr5kEXH/bWhjMn1b3mdeo/jgkER5LNCCv5qUzM2qEt?=
- =?us-ascii?Q?8+en0/2dxM6okgEGoVRsp5/iW3UreNKnBlZT9rRFAE0eKBTMMhO10y371sWT?=
- =?us-ascii?Q?EByD9JdrasFNoBMV3qe8MeF/r/38SVhHub9NNzc+z4bC0OZ+Y3Jt0Z8smQyi?=
- =?us-ascii?Q?VQjEgcwpsBbTV9IItUijgsYIsoAO6bXCYd+dcYw8/+y6lWlHvXucYwRke8bf?=
- =?us-ascii?Q?B1uR+6w1srzzGNhrxyh8Wc9z8M/rc1M53tZ+HDseFa8n/3KQzQkWM7AjRggX?=
- =?us-ascii?Q?4cZgnP+9R+QgRZhDd4aJInYuEoypAsUPIGSCcSWU+VS+hwF/Kv+FJlE/6F6V?=
- =?us-ascii?Q?UZKSv+LgWDFSjdBMPhxvytADU+ZT4mHBmkNAsu534L1xpVaikjiBJNoA5TrX?=
- =?us-ascii?Q?T0rn6nUYKYhEKMQx1T83SGRHRRumfWdrcOuaRPwWaQ8VOegPsd5GDO8K8KvW?=
- =?us-ascii?Q?q7v1b3+HJ/RXcPW+SMENxcXWyKH9T/BlX6LxDAplpa4vJS6lsw0fQwC0O5Pw?=
- =?us-ascii?Q?cr4Xpt9vrrumplcsqgfrHPWk4pZIUgx6rRvvdUECN9maBAOrzBxUimGsWGJp?=
- =?us-ascii?Q?mM11kyhAbyuRi4yd/1PVq03xzuU3RWi20pjgkDbDqo36yF9tR3vtyuNR/p6+?=
- =?us-ascii?Q?g6lt6KrFoPXMEOZVrPJWGmglUVcR0SLbodMRSM1dPp4z1X12zsBq8U4ULNO+?=
- =?us-ascii?Q?lVItTaaoJQFSiPSfiQcGoWthGe32nELl6YgDr9JUmCkYFP2/6RXIo1gMN0Zf?=
- =?us-ascii?Q?Zkaxums8GPTmEfds1eeGgRosVZBQQo06NjEXdT2Jz1GHm8R8fVrcSDZqZAYY?=
- =?us-ascii?Q?zMYT8O+YRKi+yEgZpeRpJnxPwjRWhS1NbVlWL5plRm4xktNrIO30l6jvO+Wl?=
- =?us-ascii?Q?R1uzNUJnJ7tG4o4rx9vN5bRNpqREQWEQ9U4ybLNkGxcXv/+12TSpIAytvWKc?=
- =?us-ascii?Q?OV1n2WGYsClKIdFLysrWtyeuYy82/QLyzGnwy97R02WfQKoqvTLXJ/XiJkBd?=
- =?us-ascii?Q?mlsCyXUpUWiG17uFdsQL2N6/PEGwGr+W2X6GuhBQNcayS/0Qn6s6KFRY3asV?=
- =?us-ascii?Q?imoUiQh37sZqFav/0T1FE3HYLkzdYAsHQsQ9vaOrUIv3t5TP7aSvOlFvUZ9n?=
- =?us-ascii?Q?sE3JYpp+KIf5H5JKkGSkwSpgHbEyf0iirFcrsllLiEHMvBkiQW6eV2KrnJ5A?=
- =?us-ascii?Q?B75qWsS3LrAxVrAVKSLi/Z+R1j0ZQnUPXsdYtkOzOy5o7KMEJfBXq3f1qd3c?=
- =?us-ascii?Q?aMl+8WoiN2iCl1ScCfnNaA8+5eFSPqFjvgT3i+uqFXIc5kfS38CWI1umrx4j?=
- =?us-ascii?Q?UXDC7Wp5+zOb/Fr/xgyCv4isFtstuHEK4xPTeuKIsSTvFJ5/YZCwq0boJEQR?=
- =?us-ascii?Q?BRozndaVE0EsGSMM60HDkFMolBXSkgmUAFlvwyeEHuoChCM21Oxa1I3u/nny?=
- =?us-ascii?Q?cekoDw+Ha52FYxpIMvbo6qjsYI0hjcHO/EkTxWgFFCb2p3FJQK5MuyDAtFdx?=
- =?us-ascii?Q?gH8ZzZLxWozhbFPIDgm6GDBey8Cl7+tApbghYvJ64ktJwmlbGz3sB06ypn4T?=
- =?us-ascii?Q?LQ=3D=3D?=
-Content-ID: <F0C3579B5C4519499D6524D6F0632534@namprd04.prod.outlook.com>
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?seKgRrSN3B0iNCoglBLlWb9FBiKIRr2aa+lbeVesWaEMSZMpgr4ATF+q6oQV?=
+ =?us-ascii?Q?XXGFw21OI+aChcLRpcniRfDypfGjlShSoHwi2yI7n7+o3J2AlRISgpogWa0Y?=
+ =?us-ascii?Q?K1QtFpUlRK/um9OHlYo0Qenci0x+d3UGcQ4ojzwP0H8k7Cg9y+zsLMlLBgh6?=
+ =?us-ascii?Q?yYusEvglTe6hxBHsEsWM2AeN499DYlmRyqEKGtHendTEk3jO0njoGEAd1Qus?=
+ =?us-ascii?Q?lTNmPpFZHjedcFhMQss6NIDRyCsFNgBQsUxx4GMzCgUDNiUT8/Jb6VALFk7+?=
+ =?us-ascii?Q?6ktzafGhfublsE1ZhwpI8oCfrD4DqGD1erdk/utVwbVj4XkmHU03TTUuvYPO?=
+ =?us-ascii?Q?n7Aklnqe339YkoqyhEAzcl+CVo2rw1Kxt4gcHtz4W2QNq1YQuJ7yD1Rkqc0h?=
+ =?us-ascii?Q?39EjDFlHF1ivFfXt58PzT6NYfWDZSJPYlDmMgVADAbKzS7GwGWAwMA31gLpg?=
+ =?us-ascii?Q?BMrgdUVzWIPElUVbOUJ4ch0J7uVJDfpHhvC1O0l3MDaXjD85sYyyuDak27o5?=
+ =?us-ascii?Q?adPV4gVFqSUsJ6luUX6wDUG9fS23WblU0X6BfbSQ5oiW98jDvJ1jWjA/C4IK?=
+ =?us-ascii?Q?wTrIQO6z7DoIVhjhl6ycX74eYxOxxEt36WoonjMpf/qTDb0UyxFDWNDvWg2c?=
+ =?us-ascii?Q?VSGOZ3x/wOr7UFWIUepJbS1zIeo+7pVxJXwb8GApfxiULtLmNwXHsd0iieMt?=
+ =?us-ascii?Q?LgvJXuKQ/5cIRXYYaV4rAQ3VdoLPfoVIIxIUw6YSrfQR2+norSlJ6qwhEwjl?=
+ =?us-ascii?Q?Ynkyd3Smfn/Gh9A5ipQc248qzwiNBcufG+NZCBFk331GA9912VWuNi38ntyx?=
+ =?us-ascii?Q?gpEfnX+078xKrb+GHChqrK5ZfLmT8w2MjlAC/dwtvHL/Kw1ruolW2A/u5mMf?=
+ =?us-ascii?Q?2PA/TgXcSjZF66iKVMIPl55bMBlZnijM9J5QNyuMr6GL46FzUtJOA8Kpajwh?=
+ =?us-ascii?Q?I4S27SvkDbZT2L9alpeqJCrUmBRBS4a8ldZ8LcDKY5oex87OSQC8Ypn6r2/v?=
+ =?us-ascii?Q?zbNYh5vCXxbe1GRfg1TjRwHrVVctB/fQlxqlGBmE4+1AJTY0bkpaslnxHjXF?=
+ =?us-ascii?Q?rj8qc42tjSCzE++szxJ+I0y/yfOb5Xm/0DpoE40gus5NsDbKEqCHhdLZt7Qx?=
+ =?us-ascii?Q?z/x7j5IZV9zpjic4FNKhFXcMNEmAiuCmmU+gIe/UYC8KM3zixmwUSgPXnlYS?=
+ =?us-ascii?Q?K9MdjWiCqQqlPFxsacvs0f5xsi4Mi5IXCYk2bP2XbDERTEX9o1tpAcIvlYKV?=
+ =?us-ascii?Q?fTYZdwe4KFABFcI7176n9zapuiAZe9LwoTqg3L8MXZMhwtueMCmC7eL1LHpg?=
+ =?us-ascii?Q?/IqMz4TAnPoxX0cENMAwgEANvLJFGCfwggJV4wYyGlCF3jrziplrWmGFYAXJ?=
+ =?us-ascii?Q?T3bvADU9EoZjm0ZRR//W8AOh0gDFfjOc7eZOUAmVKCyc6+HRTb5vzh3pD/u0?=
+ =?us-ascii?Q?LGSlmpaSr5dIB8Ht1BjSNv/1SQZZ9GxtQax3uU21Y5LGp/W8DLtH/7MxEWxA?=
+ =?us-ascii?Q?7FxvHYFHqXaoogGN47IlkAX+J3VTcil9MLlS3KyTC+O1BcVEPuU1VjKusCYC?=
+ =?us-ascii?Q?kwDUILIjHd73UDE+7YnCV2i3vGhvyB4WLp7L8f0uEe4+8E7fhB6pohqYQHkl?=
+ =?us-ascii?Q?Ww=3D=3D?=
+Content-ID: <21EDA716626F1B4C8E9DF786F508B3C4@namprd04.prod.outlook.com>
 MIME-Version: 1.0
 X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: M3MCcEGW0f3sMOansxiOOn7jVsf7EuBR1/dKfFQBvpkeeT8Zhl07Y6PIiebIvq915K/m7vFxNGdeDCCN9k62B2O8G/FfXLKM5rI5H2e1FyQzUzxWttRD6EvRiRfhAOGQEVTX8VcgW26UYJJTkmiiLwi/PA14Q5jLjwivwD9JkL+vG+NkvP8cvXcV6sAcRh1TdjStF7Mer9cRPI/JT7hGUDymiZnZH9DIsjdnUN1+kr7DMKXJcgvtgUTH/z9JzC7GPdo1QXZfTjKNNYbvL+ojx1jqSo1pdyVZ361Vze2HOcBk51wUiD1Lw+IfchcEm0AOcXR9Dp7aJMTMzd3Eys9JSDoTTdNZKqA3JMcb2SXs1cucOX7Exvcd5bdcCaMaxJwgSw9fQcmioISIKBxYOlJOjhawtYUl/Y9sNZfA/ftrIcls3Na3K+CBSCZi9EJuJVsF0DfWJJ2s5Yj5Ft/fxbjKG1N5R2JwH1deqmudzLvve2SGC7T4YFAXIQAvMBAzJFb2SAAurTWoEe0WP5ZvXQYmzQLJRLA9k3A+edRTS4kS/SaNdXLDegUjXYeG5mBSxZd4fvkabbCGN5/2R48tmdg3PFGPcJiybRxoLfKy8GV6aWMp9VBXPr3jEgZq/GBdwLMX
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: dZvc9/ExBGD3jlrVRkIsrMR9Y+xAvbNu3M/5ndhc7BHZrUpyYFsiN7xTK0RcAU/peQUCrZwxRJgjjr6biNT6tZbPeFOSgsh7EF2WxMdwiiiXzgUWfIYr2c4u4ciS38XC8tiAGrcSBhnrHM+DQTO+Bq2PGDfThaXX3s8nzmRJEAhXO0b3ryK8p7woj1GuLzJPF8kaU0+34KCY3/EZaafP5DGs95gB+8LiiEe00A08f9KbxqWRqu3EC6VlubShZDFXkkTu48dFOhueYOxsjItoU5TLyOjDQPhvU+776hbwsdi6o5+avKVdZJyJU/7oJLE8efbJfkUdgWKr+vAU+kpm+RvOhhg5jvuX91+jturklzrPgojmp4k7AkS8nJsimCO4zsDeripFVLR7tsTpulgHIRlZkDA4Ip3zVjEiMDnXdmSrbq9yXMSsnI4raekUq8Fz6GOLaxEpPbwAoLm3kDfRPUMzZg1rFgOdtbCb8ttiUzmo9KbpRMNU8lQVRFrLKNN+tVookf+NtQjgBOOSE97wuglzRxynRRc2z1mcESOEOJKENw202qpZGvYxYwUx64jGzsc57DLWr2ANgzVUEmE9Px+r7p9Wwhjp/Yl+zdtgD7cZPfxpSwzaY3bPVQXekgEx
 X-OriginatorOrg: wdc.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: SJ0PR04MB8326.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a96ccd71-1e89-4c84-38ca-08dce3b19bd1
-X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Oct 2024 13:45:14.2139 (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 93349902-329c-4ca5-3b21-08dce3b22fdf
+X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Oct 2024 13:49:22.6144 (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: DAn0xXzWefZxXKMr/S9BAKXp5AEmwlC1T+BW/PFbVn8TsBEAn9EMof9RdRMSo88at7VyiCJwsgIaiHpimWAHXA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA6PR04MB9352
+X-MS-Exchange-CrossTenant-userprincipalname: BshzbcLGYMviKxJAR6f9cj2Pkv+n6JBs4BNnY7kkUapyL0fT1lyfQxUVBE40AhPIWMh6+WFtKdhTKeO/QQ80Tg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR04MB6463
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
- t=1727963118; x=1759499118;
+ t=1727963366; x=1759499366;
  h=from:to:cc:subject:date:message-id:references:
  in-reply-to:content-id:content-transfer-encoding:
  mime-version;
- bh=FRBD0pCOhSo1i20wjrLkpR/iAdu9IjpJhySr0fYVk+Y=;
- b=hz8MNEBD758jdP60uaampl7We4v3NMJJzakyGyGwVlhuoiTm6laHZB9j
- 7Gcw/ha2buMxy2GLfxDCg4HNzT7ZMGIKRcfQs2HbWRvUqzknMQWU8rWtu
- 6jGNU6XYczEHH8CcB6oDwn48TI83GVgOYLf9J9X30AfM8/nPHKCv0y+pE
- PstGRmlBR53Fet8u3ADQ1HWGEY0vCyYSkIF+oatHnjvEifXAAtzOZfPxp
- QhS+NwX5PBGaxPY7lfMGL5AjyqeDUN9s/7D2DFSl+ua6guG8X5vTz+lAx
- IVwNZyv2rOGmUGJYhTpO54+81jvcRGsMd9L9d8xaABNBjS/17exSjaY+s
- g==;
+ bh=lVIAeoyfNQh33Ts9bx6oPsPDh3bZRB6x8Ooy+32Ji38=;
+ b=ahJNgZFDwHgXeNETn9VaJRy+4g2XXLxciX4+mklf6KDbz0RoKs4TG8tb
+ OFAdhjOo+Kj8S95PVslf0PDkDKB0pqRhcexpBF52Di3+ikcKkG0APFOpS
+ OibjSYrWAqiQd4Oqnj6v8jyF8bx/Bo2epgaoe9MBPEd2EqjKe0vzM860k
+ qj4XfUXX3jIhh7JITOsmXAsqOJ60LJnDPpb5q6MtCR43ppjakZHJanTdA
+ jK/vhwEhoKz9rgMgN4eufWH9VMBt6sqfM7lQlTnvCrVCjHopDaOg/59ci
+ sw62OxZCqqG+wzrZ1sSR7U7peWKBdTA1dMkCDCAAAUQ/RM+gatIwMqT81
+ A==;
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XSvVFV5MLZShmmlOlbIaZE38Mqh6KPRyikEbCS96KYI=;
- b=ruf7Lqo6SML6ksE+rXul13QXbejcI6xTgTYoIeHpv0PmcGEh146+XoA8DrZsnbKqF7E7IDSkZy7KE/lfnun05+/KSqEOpg4F2dPOS/r2Eozy1cbM00mrHKZDR62S2zRrIyxOMk2VobMjsPcBvasXAu8N4p52dR1V4triAP+RO6c=
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ bh=lVIAeoyfNQh33Ts9bx6oPsPDh3bZRB6x8Ooy+32Ji38=;
+ b=oVdX1cyogiNsRv/ZDsRZmPeND8LOr8x0vna2SnPNfy+ECi+xpWdmc/rJKonlF2aAyoc4qoxVhAj3vNr+7/aWI0yH7CnxovF+O3/t+geM85A8IsHRT2P7S65bzkxlAEJrUOyKZnmUDfL8C3tLdsXz0V7ykaW2uwrcaKTGAAezj0k=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=wdc.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key, unprotected) header.d=wdc.com header.i=@wdc.com
- header.a=rsa-sha256 header.s=dkim.wdc.com header.b=hz8MNEBD; 
+ header.a=rsa-sha256 header.s=dkim.wdc.com header.b=ahJNgZFD; 
  dkim=pass (1024-bit key,
  unprotected) header.d=sharedspace.onmicrosoft.com
  header.i=@sharedspace.onmicrosoft.com header.a=rsa-sha256
- header.s=selector2-sharedspace-onmicrosoft-com header.b=ruf7Lqo6
+ header.s=selector2-sharedspace-onmicrosoft-com header.b=oVdX1cyo
 X-Mailman-Original-Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=wdc.com;
 Subject: Re: [Buildroot] [PATCH 2/2] configs/rock5b_defconfig: enable
@@ -211,107 +211,8 @@ On Wed, Sep 25, 2024 at 10:26:13PM +0200, Thomas Petazzoni wrote:
 > Hello Niklas,
 > 
 > It was nice meeting you during Linux Plumbers last week!
-> 
-> On Tue, 17 Sep 2024 08:35:16 +0000
-> Niklas Cassel <Niklas.Cassel@wdc.com> wrote:
-> 
-> > > This won't work because the output directory is not always output/. But
-> > > I believe this is useless, because you're creating an image of what is
-> > > the default environment. So basically, you should instead not create an
-> > > environment image at all: just tell U-Boot that the environment is at
-> > > offset XYZ (or even better, in partition X). The environment partition
-> > > will contain nothing or garbage, so at the first boot, U-Boot will use
-> > > its built-in environment itself, and at the first "saveenv", it will
-> > > save the environment to the designated partition.  
-> > 
-> > Well, what happens if you simply point to an offset or partition that is
-> > empty, is that uboot will see an empty environment, so it will see bootcmd
-> > as empty, so it will just enter the uboot command prompt without booting
-> > anything at all.
-> 
-> This is not what should happen. Indeed, if the environment on the
-> non-volatile storage is empty or corrupted, U-Boot should ignore it,
-> and load its built-in environment (which is compiled into the U-Boot
-> binary). Why isn't this working for you?
 
-
-My first appoach:
-
-It turns out that is you use:
-BR2_PACKAGE_HOST_UBOOT_TOOLS_ENVIMAGE_SOURCE="board/radxa/rock5b/boot-env.txt"
-Even if that file is empty, if will have a correct CRC, so when uboot loads
-the environment, it will successfully load an empty environment.
-
-Ok, so this is no good.
-
-
-
-Second approach:
-
-I tried to create an empty partition:
-	partition uboot-env {
-		offset = 16M
-		size = 64K
-	}
-
-Then I can see that uboot uses the default environment:
-Loading Environment from MMC... *** Warning - bad CRC, using default environment
-
-However, it then continues trying to PXE boot.
-
-It doesn't try to boot using extlinux from mmc partition 2.
-
-Looking at why, it seems that it doesn't even find the boot flow.
-
-
-$ bootflow scan mmc
-$ bootflow list
-<nothing>
-
-If I don't have the uboot-env partition:
-
-$ bootflow scan mmc
-$ bootflow list
-Showing all bootflows
-Seq  Method       State   Uclass    Part  Name                      Filename
----  -----------  ------  --------  ----  ------------------------  ----------------
-  0  extlinux     ready   mmc          1  mmc@fe2c0000.bootdev.part /boot/extlinux/extlinux.conf
----  -----------  ------  --------  ----  ------------------------  ----------------
-(1 bootflow, 1 valid)
-
-
-So for some reason, bootflow does not find the extlinux if it is not on
-partition 1... I've looked at the bootflow code in uboot, an it appears
-to be able to scan multiple partitions on a device, so I'm not sure why
-it is not working.
-
-
-My third approach was to use:
-
-	partition uboot-env {
-		in-partition-table = "false"
-		offset = 16M
-		size = 64K
-	}
-
-However, genimage does not allow you to use '"in-partition-table = "false"'
-without also using "image =". I guess we could add code to the rockchip
-post-build.sh to do "dd if=/dev/zero of="$BINARIES_DIR/uboot-env.img" bs=64k count=1
-and then use "image = uboot-env.img", but that seems ugly.
-
-
-The fourth appoarch is to do:
-
-        partition rootfs {
-                offset = 16448K # 16MB (uboot env offset) + 64KB (uboot env size)
-                partition-type-uuid = root-arm64
-                image = "rootfs.ext2"
-        }
-
-and simply skip having the uboot-env as a partition.
-This works, but is not the most beautiful either.
-
-Will submit a patch using this appoarch and see what you think.
+Nice meeting you too btw :)
 
 
 Kind regards,
