@@ -4,62 +4,62 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3EF97CF857A
-	for <buildroot@archiver.kernel.org>; Thu,  3 Oct 2024 11:05:58 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9EE4BCF857C
+	for <buildroot@archiver.kernel.org>; Thu,  3 Oct 2024 11:13:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id A6EE440102;
-	Thu,  3 Oct 2024 11:05:57 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 4768040102;
+	Thu,  3 Oct 2024 11:13:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id w3muTXqko7wZ; Thu,  3 Oct 2024 11:05:56 +0000 (UTC)
+ id S1kI9bgB8xwl; Thu,  3 Oct 2024 11:13:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 81147403E4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1885D40547
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 81147403E4;
-	Thu,  3 Oct 2024 11:05:56 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 5BAAE1BF285
- for <buildroot@lists.busybox.net>; Thu,  3 Oct 2024 11:05:55 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1885D40547;
+	Thu,  3 Oct 2024 11:13:43 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 8CCFE1BF28B
+ for <buildroot@lists.busybox.net>; Thu,  3 Oct 2024 11:13:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id 47FCA4125C
- for <buildroot@lists.busybox.net>; Thu,  3 Oct 2024 11:05:55 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 7AD2240547
+ for <buildroot@lists.busybox.net>; Thu,  3 Oct 2024 11:13:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id SWZt73GsNMg5 for <buildroot@lists.busybox.net>;
- Thu,  3 Oct 2024 11:05:54 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::221;
- helo=relay1-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Ql3Irxj1xwts for <buildroot@lists.busybox.net>;
+ Thu,  3 Oct 2024 11:13:40 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=217.70.183.196;
+ helo=relay4-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 915834124C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 915834124C
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
- [IPv6:2001:4b98:dc4:8::221])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 915834124C
- for <buildroot@buildroot.org>; Thu,  3 Oct 2024 11:05:52 +0000 (UTC)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 496B9240003;
- Thu,  3 Oct 2024 11:05:48 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 1606640102
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1606640102
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net
+ [217.70.183.196])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1606640102
+ for <buildroot@buildroot.org>; Thu,  3 Oct 2024 11:13:39 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id C8B71E0003;
+ Thu,  3 Oct 2024 11:13:36 +0000 (UTC)
 Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
- (envelope-from <peter@korsgaard.com>) id 1swJeV-000FeM-2e;
- Thu, 03 Oct 2024 13:05:47 +0200
+ (envelope-from <peter@korsgaard.com>) id 1swJm4-000G1P-0l;
+ Thu, 03 Oct 2024 13:13:36 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: Julien Olivain <ju.o@free.fr>
-References: <20240911171937.10842-1-ju.o@free.fr>
- <87jzf5h12z.fsf@dell.be.48ers.dk>
- <7884535cac565004d351d4d143364104@free.fr>
- <87frpiiy6k.fsf@dell.be.48ers.dk>
-Date: Thu, 03 Oct 2024 13:05:47 +0200
-In-Reply-To: <87frpiiy6k.fsf@dell.be.48ers.dk> (Peter Korsgaard's message of
- "Sun, 29 Sep 2024 11:52:51 +0200")
-Message-ID: <874j5to390.fsf@dell.be.48ers.dk>
+To: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+References: <20240914114318.1912121-1-festevam@gmail.com>
+ <d3159ae8-45a0-4957-95e7-3571f3fa6ccf@mind.be>
+Date: Thu, 03 Oct 2024 13:13:36 +0200
+In-Reply-To: <d3159ae8-45a0-4957-95e7-3571f3fa6ccf@mind.be> (Arnout
+ Vandecappelle via buildroot's message of "Sat, 14 Sep 2024 18:31:40
+ +0200")
+Message-ID: <87wmipmobj.fsf@dell.be.48ers.dk>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
 X-GND-Sasl: peter@korsgaard.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=none (p=none dis=none)
  header.from=korsgaard.com
-Subject: Re: [Buildroot] [PATCH 1/1] boot/grub2: needs host-python3
+Subject: Re: [Buildroot] [PATCH 1/2] configs/imx7dpico: Select
+ BR2_TARGET_UBOOT_NEEDS_OPENSSL
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -71,36 +71,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Vincent =?utf-8?Q?Stehl=C3=A9?= <vincent.stehle@arm.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
+Cc: Fabio Estevam <festevam@gmail.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
->>>>> "Peter" == Peter Korsgaard <peter@korsgaard.com> writes:
+>>>>> "Arnout" == Arnout Vandecappelle via buildroot <buildroot@buildroot.org> writes:
 
->>>>> "Julien" == Julien Olivain <ju.o@free.fr> writes:
- > Hi,
+ > On 14/09/2024 13:43, Fabio Estevam wrote:
+ >> Select BR2_TARGET_UBOOT_NEEDS_OPENSSL to fix the following
+ >> build warning:
+ >> include/image.h:1471:12: fatal error: openssl/evp.h: No such file or
+ >> directory
+ >> 1471 | #  include <openssl/evp.h>
+ >> Fixes: https://gitlab.com/buildroot.org/buildroot/-/jobs/7803199869
+ >> Signed-off-by: Fabio Estevam <festevam@gmail.com>
 
- >>> Given that it apparently doesn't need any special python modules
- >>> could
- >>> we use $(BR2_PYTHON3_HOST_DEPENDENCY) instead to only build python3 if
- >>> not available on the host / older than 3.4?
+ >  Applied both to master, thanks.
 
- >> Yes, I confirm that for now, there is no specific python module
- >> requirement, and Python 3.4 should also be sufficient. So we could
- >> switch to BR2_PYTHON3_HOST_DEPENDENCY to save the time of the host
- >> python build.
+ >  If you're actively working with these boards, perhaps you could also
+ >  add hashes for U-Boot and kernel and enable
+ > BR2_DOWNLOAD_FORCE_CHECK_HASHES?
 
- >> The same comment applies to the Linux kernel.
 
- >> Since those patches were recently merged in [1] and [2], I'll propose
- >> followup patches as an improvement.
-
- > Great, thanks!
-
-Committed to 2024.02.x and 2024.08.x, thanks.
+NIT: This is a build ERROR, not a warning and it was presumably
+introduced by your recent u-boot bump in commit 8cf677f4
+(configs/imx7dpico: bump kernel and U-Boot version). It would be great
+to mention such things in future patches as it helps with figuring out
+what needs to be backported to the stable branches.
 
 -- 
 Bye, Peter Korsgaard
