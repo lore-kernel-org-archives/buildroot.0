@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7CDF5CF857A
-	for <buildroot@archiver.kernel.org>; Thu,  3 Oct 2024 11:16:22 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 525BECF857A
+	for <buildroot@archiver.kernel.org>; Thu,  3 Oct 2024 11:17:28 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B62AF413F9;
-	Thu,  3 Oct 2024 11:16:20 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 1C512401E1;
+	Thu,  3 Oct 2024 11:17:28 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id xTsC9f7xhcNs; Thu,  3 Oct 2024 11:16:18 +0000 (UTC)
+ id LYD-v8V156Zo; Thu,  3 Oct 2024 11:17:26 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org B42BD4054A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org ACBEB403E4
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id B42BD4054A;
-	Thu,  3 Oct 2024 11:16:17 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id ACBEB403E4;
+	Thu,  3 Oct 2024 11:17:26 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id DFA521BF28B
- for <buildroot@lists.busybox.net>; Thu,  3 Oct 2024 11:16:15 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 7A57F1BF28B
+ for <buildroot@lists.busybox.net>; Thu,  3 Oct 2024 11:17:25 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D80D94056E
- for <buildroot@lists.busybox.net>; Thu,  3 Oct 2024 11:16:15 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 67FD4403E4
+ for <buildroot@lists.busybox.net>; Thu,  3 Oct 2024 11:17:25 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HBH2TgoK7ysI for <buildroot@lists.busybox.net>;
- Thu,  3 Oct 2024 11:16:14 +0000 (UTC)
+ id sy1yxK7pT0FK for <buildroot@lists.busybox.net>;
+ Thu,  3 Oct 2024 11:17:24 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6FB7B4054A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1882A401E1
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6FB7B4054A
- for <buildroot@buildroot.org>; Thu,  3 Oct 2024 11:16:14 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 1882A401E1
+ for <buildroot@buildroot.org>; Thu,  3 Oct 2024 11:17:24 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 57B2E84BD0; Thu,  3 Oct 2024 11:16:14 +0000 (UTC)
+ id 04BC783C39; Thu,  3 Oct 2024 11:17:24 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Thu, 3 Oct 2024 11:29:57 +0200
-X-Git-Refname: refs/heads/2024.02.x
-X-Git-Oldrev: c4d4df57b3e1c450c75fbd22b9e87377236176fc
-X-Git-Newrev: 7a4f80420781f533a2db61d6597d6c50c9ac54d1
+Date: Thu, 3 Oct 2024 11:29:53 +0200
+X-Git-Refname: refs/heads/2024.08.x
+X-Git-Oldrev: cadcb1f90819533e71067306d35a4d8b1f443e9e
+X-Git-Newrev: a0e4c65124aaeea3d50ea4a397ac1ea59346aae6
 X-Patchwork-Hint: ignore
-Message-Id: <20241003111614.57B2E84BD0@busybox.osuosl.org>
-Subject: [Buildroot] [git commit branch/2024.02.x] boot/grub2: needs
+Message-Id: <20241003111724.04BC783C39@busybox.osuosl.org>
+Subject: [Buildroot] [git commit branch/2024.08.x] boot/grub2: needs
  host-python3
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
@@ -60,15 +60,15 @@ List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="===============3909045599760361423=="
+Content-Type: multipart/mixed; boundary="===============5097583727224903172=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============3909045599760361423==
+--===============5097583727224903172==
 Content-Type: text/plain
 
-commit: https://git.buildroot.net/buildroot/commit/?id=7a4f80420781f533a2db61d6597d6c50c9ac54d1
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.02.x
+commit: https://git.buildroot.net/buildroot/commit/?id=a0e4c65124aaeea3d50ea4a397ac1ea59346aae6
+branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/2024.08.x
 
 When the build host does not have a Python interpreter installed,
 host-grub2 is failing to configure due to this missing interpreter.
@@ -129,7 +129,7 @@ index 1263c63cfd..7c95adc739 100644
  
  # CVE-2019-14865 is about a flaw in the grub2-set-bootflag tool, which
 
---===============3909045599760361423==
+--===============5097583727224903172==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -140,4 +140,4 @@ buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
 
---===============3909045599760361423==--
+--===============5097583727224903172==--
