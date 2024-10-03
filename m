@@ -4,80 +4,80 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40495CF34AE
-	for <buildroot@archiver.kernel.org>; Thu,  3 Oct 2024 14:01:09 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1AB16CF34A9
+	for <buildroot@archiver.kernel.org>; Thu,  3 Oct 2024 14:01:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 59E2A81D72;
-	Thu,  3 Oct 2024 14:01:06 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 89CB98209E;
+	Thu,  3 Oct 2024 14:01:09 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id bnkMbcJHCsnK; Thu,  3 Oct 2024 14:01:05 +0000 (UTC)
+ id vrwKyDd5TlQW; Thu,  3 Oct 2024 14:01:08 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org F0F7B81EE3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 86F9581FF2
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id F0F7B81EE3;
-	Thu,  3 Oct 2024 14:01:04 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 86F9581FF2;
+	Thu,  3 Oct 2024 14:01:08 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 354141BF311
- for <buildroot@lists.busybox.net>; Thu,  3 Oct 2024 14:01:02 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 2413A1BF311
+ for <buildroot@lists.busybox.net>; Thu,  3 Oct 2024 14:01:04 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 31C2981DF2
- for <buildroot@lists.busybox.net>; Thu,  3 Oct 2024 14:01:02 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0140B81EA2
+ for <buildroot@lists.busybox.net>; Thu,  3 Oct 2024 14:01:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id N4ZN8Q2LjKgV for <buildroot@lists.busybox.net>;
- Thu,  3 Oct 2024 14:01:01 +0000 (UTC)
+ id a0tibL8gCVxC for <buildroot@lists.busybox.net>;
+ Thu,  3 Oct 2024 14:01:03 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=68.232.141.245;
  helo=esa1.hgst.iphmx.com; envelope-from=prvs=9995b4c5d=niklas.cassel@wdc.com;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 7CE9981D72
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7CE9981D72
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 39BFB81EB0
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 39BFB81EB0
 Received: from esa1.hgst.iphmx.com (esa1.hgst.iphmx.com [68.232.141.245])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 7CE9981D72
- for <buildroot@buildroot.org>; Thu,  3 Oct 2024 14:01:01 +0000 (UTC)
-X-CSE-ConnectionGUID: NiscRaAjQZiGXxxVmBGdTg==
-X-CSE-MsgGUID: O1lg8ZYiTACyyCFfYvy6LA==
-X-IronPort-AV: E=Sophos;i="6.11,174,1725292800"; d="scan'208";a="29066248"
+ by smtp1.osuosl.org (Postfix) with ESMTPS id 39BFB81EB0
+ for <buildroot@buildroot.org>; Thu,  3 Oct 2024 14:01:03 +0000 (UTC)
+X-CSE-ConnectionGUID: eVsX7rikRyeHpBdtttLTNg==
+X-CSE-MsgGUID: /5a7hooyRG2gcZ8+OJz50g==
+X-IronPort-AV: E=Sophos;i="6.11,174,1725292800"; d="scan'208";a="29066254"
 Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com)
  ([199.255.45.15])
- by ob1.hgst.iphmx.com with ESMTP; 03 Oct 2024 22:01:01 +0800
-IronPort-SDR: 66fe955c_a6e+DKA7/JtsfrklUVzuadby7Gl+q2porrXYRdV/PyVcevp
- g6E0vsNOyB4E62c0gG5A7xuOD30We1RutDGlooA==
+ by ob1.hgst.iphmx.com with ESMTP; 03 Oct 2024 22:01:02 +0800
+IronPort-SDR: 66fe955e_pJuUsuC5aa/b5m3q6fEEoX5dXYmScCLo73FxtE1qdIvde0+
+ CCD0pvs1fEAtwei7yTLwjupFZCUQgapt8iU4Stw==
 Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256;
- 03 Oct 2024 06:00:12 -0700
+ 03 Oct 2024 06:00:14 -0700
 WDCIronportException: Internal
 Received: from unknown (HELO ryzen.lan) ([10.224.3.161])
- by uls-op-cesaip02.wdc.com with ESMTP; 03 Oct 2024 07:01:00 -0700
+ by uls-op-cesaip02.wdc.com with ESMTP; 03 Oct 2024 07:01:02 -0700
 To: buildroot@buildroot.org
-Date: Thu,  3 Oct 2024 16:00:51 +0200
-Message-ID: <20241003140054.250140-2-niklas.cassel@wdc.com>
+Date: Thu,  3 Oct 2024 16:00:52 +0200
+Message-ID: <20241003140054.250140-3-niklas.cassel@wdc.com>
 X-Mailer: git-send-email 2.46.2
 In-Reply-To: <20241003140054.250140-1-niklas.cassel@wdc.com>
 References: <20241003140054.250140-1-niklas.cassel@wdc.com>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
- t=1727964061; x=1759500061;
+ t=1727964063; x=1759500063;
  h=from:to:cc:subject:date:message-id:in-reply-to:
  references:mime-version:content-transfer-encoding;
- bh=HL2j7jmalPz4KKg3Fh43OQMNfIoGvQFt9k31MkooFjE=;
- b=oncRPNZiuFrEclygg5phT6aLp4wbjcie+KV5n+wQpR5Zqthq3EjoT828
- n/iBu3EmhrV4c35ltFx6QntEm7QYGJmW6/thb2G9PPT4RdM5UjqrtBFkZ
- 1S0DQBy65OhwGjAkJ10PAIWe7JoEq3DyP8dtBGe/KAeRCXhJCf4US7pD2
- h7Jh2jlGrkeu5L0H6tgLFRDrUuJ2HAdjYcaJ2mutpT48vb/fDZ/BHQd/o
- yfNBc54Ezq7O5gO4eCLcI0bB5k7s4E2ekHaoS1HVeKQeETNbBjVl1BQNF
- PWMMkTJLytMl36eEKRjE44VGB4jnkVdx68BFjV1w7cIUa6WJR9HmkQ2im
- w==;
+ bh=T/SdAcGnf3PTxxvADgRwHc/0XmeBsRnl4FjmShMQ5dQ=;
+ b=dyP6P6sCk529t4DHKfyyyiQ9p2elPitIQ3+Mut13pHZ4QeZGeqL4cVZ3
+ UhRuJEhm58K8aA53hgeZDOHCDE7I6YTxn/QBEOHra4DqYU0Beq2Ym1HJK
+ 9KsRBfgMH8aaUlUWiZAtK95y9y4oBsPng2drA/29zXhP/dGZvuT2CSIKu
+ te9qPiti2zf8NO7RScVPZypwkLN8zwjUgFGVt4XOTB3C+WOxRLmqivluC
+ 8Dv0nrjkP4ak1jK4TpldiEu+St6JKZuNCBqDz4ScdTAY2A0ge9+QG88hR
+ zvpwOp2O5obv6ttxDkP8bQLRazDNLbF23+ZM4L0/1BUW8T/1kaA8/BDgm
+ g==;
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=quarantine dis=none)
  header.from=wdc.com
 X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dkim=pass (2048-bit key) header.d=wdc.com header.i=@wdc.com
- header.a=rsa-sha256 header.s=dkim.wdc.com header.b=oncRPNZi
-Subject: [Buildroot] [PATCH 1/4] configs/rock5b: update to linux 6.10.10
+ header.a=rsa-sha256 header.s=dkim.wdc.com header.b=dyP6P6sC
+Subject: [Buildroot] [PATCH 2/4] configs/rock5b: update to uboot 2024.07
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,44 +101,38 @@ Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
 From: Niklas Cassel <cassel@kernel.org>
 
-A bunch of new hardware has been enabled for rock5b in linux 6.10,
-most notably USB3 host controller support and GPU support.
+Newer uboot versions contain commit ebb0ad4eef0a ("arch: arm:
+mach-rockchip: Kconfig: Enable BOOTSTD_FULL for RK3399 and RK3588"),
+which enables BOOTSTD_FULL for RK3588, making it easier to figure
+out issues with the bootflow, if any.
 
 Signed-off-by: Niklas Cassel <cassel@kernel.org>
 ---
- board/radxa/rock5b/patches/linux/linux.hash | 2 +-
- configs/rock5b_defconfig                    | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ board/radxa/rock5b/patches/uboot/uboot.hash | 2 +-
+ configs/rock5b_defconfig                    | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/board/radxa/rock5b/patches/linux/linux.hash b/board/radxa/rock5b/patches/linux/linux.hash
-index ba90c84f54..5296620e47 100644
---- a/board/radxa/rock5b/patches/linux/linux.hash
-+++ b/board/radxa/rock5b/patches/linux/linux.hash
+diff --git a/board/radxa/rock5b/patches/uboot/uboot.hash b/board/radxa/rock5b/patches/uboot/uboot.hash
+index bc999536af..fe9b4f53dc 100644
+--- a/board/radxa/rock5b/patches/uboot/uboot.hash
++++ b/board/radxa/rock5b/patches/uboot/uboot.hash
 @@ -1,2 +1,2 @@
  # Locally calculated
--sha256  f68d9f5ffc0a24f850699b86c8aea8b8687de7384158d5ed3bede37de098d60c  linux-6.7.4.tar.xz
-+sha256  e687e735b5eb9efb6d67b42433c93fc9118106a995514f062652873b5e809bcd  linux-6.10.10.tar.xz
+-sha256  b99611f1ed237bf3541bdc8434b68c96a6e05967061f992443cb30aabebef5b3  u-boot-2024.01.tar.bz2
++sha256  f591da9ab90ef3d6b3d173766d0ddff90c4ed7330680897486117df390d83c8f  u-boot-2024.07.tar.bz2
 diff --git a/configs/rock5b_defconfig b/configs/rock5b_defconfig
-index 4d5e7ca583..c0c6877d81 100644
+index c0c6877d81..bdf3c5a27f 100644
 --- a/configs/rock5b_defconfig
 +++ b/configs/rock5b_defconfig
-@@ -1,6 +1,6 @@
- BR2_aarch64=y
- BR2_cortex_a76_a55=y
--BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_7=y
-+BR2_PACKAGE_HOST_LINUX_HEADERS_CUSTOM_6_10=y
- BR2_GLOBAL_PATCH_DIR="board/radxa/rock5b/patches"
- BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
- BR2_TARGET_GENERIC_HOSTNAME="rock5b"
-@@ -12,7 +12,7 @@ BR2_ROOTFS_POST_IMAGE_SCRIPT="support/scripts/genimage.sh"
- BR2_ROOTFS_POST_SCRIPT_ARGS="-c board/radxa/rock5b/genimage.cfg"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.7.4"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.10.10"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
- BR2_LINUX_KERNEL_CONFIG_FRAGMENT_FILES="board/radxa/rock5b/linux.fragment"
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
+@@ -30,7 +30,7 @@ BR2_TARGET_ROOTFS_EXT2_SIZE="250M"
+ BR2_TARGET_UBOOT=y
+ BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
+ BR2_TARGET_UBOOT_CUSTOM_VERSION=y
+-BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.01"
++BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.07"
+ BR2_TARGET_UBOOT_BOARD_DEFCONFIG="rock5b-rk3588"
+ BR2_TARGET_UBOOT_NEEDS_PYLIBFDT=y
+ BR2_TARGET_UBOOT_NEEDS_PYELFTOOLS=y
 -- 
 2.46.2
 
