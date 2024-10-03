@@ -1,97 +1,94 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A2E48CF34B0
-	for <buildroot@archiver.kernel.org>; Thu,  3 Oct 2024 16:26:53 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 38992CF34B0
+	for <buildroot@archiver.kernel.org>; Thu,  3 Oct 2024 16:59:33 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 907C360656;
-	Thu,  3 Oct 2024 16:26:52 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id C9DF082032;
+	Thu,  3 Oct 2024 16:59:32 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id eg9sSBHi__jK; Thu,  3 Oct 2024 16:59:32 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E56EC82033
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp1.osuosl.org (Postfix) with ESMTP id E56EC82033;
+	Thu,  3 Oct 2024 16:59:31 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 1F0281BF282
+ for <buildroot@lists.busybox.net>; Thu,  3 Oct 2024 16:59:31 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp3.osuosl.org (Postfix) with ESMTP id 19F27607B6
+ for <buildroot@lists.busybox.net>; Thu,  3 Oct 2024 16:59:31 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 66sO9L9PhwkB; Thu,  3 Oct 2024 16:26:51 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 55FDD607DA
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 55FDD607DA;
-	Thu,  3 Oct 2024 16:26:51 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id F070A1BF285
- for <buildroot@lists.busybox.net>; Thu,  3 Oct 2024 16:26:46 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id DF2C540126
- for <buildroot@lists.busybox.net>; Thu,  3 Oct 2024 16:26:46 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id nSNfSg1okl0I for <buildroot@lists.busybox.net>;
- Thu,  3 Oct 2024 16:26:45 +0000 (UTC)
+ id 72sCy_UW-eU3 for <buildroot@lists.busybox.net>;
+ Thu,  3 Oct 2024 16:59:30 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::62d; helo=mail-ej1-x62d.google.com;
- envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 385B640065
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 385B640065
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com
- [IPv6:2a00:1450:4864:20::62d])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 385B640065
- for <buildroot@buildroot.org>; Thu,  3 Oct 2024 16:26:45 +0000 (UTC)
-Received: by mail-ej1-x62d.google.com with SMTP id
- a640c23a62f3a-a8d6d0fe021so190479266b.1
- for <buildroot@buildroot.org>; Thu, 03 Oct 2024 09:26:44 -0700 (PDT)
+ client-ip=2607:f8b0:4864:20::d2e; helo=mail-io1-xd2e.google.com;
+ envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 2954B607B2
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 2954B607B2
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com
+ [IPv6:2607:f8b0:4864:20::d2e])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 2954B607B2
+ for <buildroot@buildroot.org>; Thu,  3 Oct 2024 16:59:29 +0000 (UTC)
+Received: by mail-io1-xd2e.google.com with SMTP id
+ ca18e2360f4ac-82fa0ccb0cdso48307639f.3
+ for <buildroot@buildroot.org>; Thu, 03 Oct 2024 09:59:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1727972803; x=1728577603;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=zFPUvHEIVZamKmasYmkwF35aaGgnDV0nTEkihqZS/bQ=;
- b=J5EFx64Y3B92KHl9L/XTP0PAypR5VUvvKcOZW9dG4XxDfBpJvjEazkqbLcCkWousdO
- 4c41p7Rb0k0FBhWUK+FRbxNAi5Mf5/Mv8+iGlVhG/JX96GDw4cFgh5n0XENSWnTjYWfL
- a97tGIkSaEP5w+INUyPLrcYpDY2LxAFGfIH5qSIc2uq88b6Of6XnWb0Xex1KRiC0TLZl
- AzCxc1my08TvcLu8uavQEAhsOkdp0CVXCM54oKXDKRymHiiBthkyDawEQqqzvAA8AVHC
- NEsnH5Y2gnNC0QjM0mqGlbrHR6OAlFqnrGlPzkk3sdii9XD21GTjiS8F16FtMD9EnrSF
- pgeQ==
-X-Gm-Message-State: AOJu0YwXrx9GzC16UZ2lNCwtqfsQswne+FtWzBYNHf8EtcOGp/Mv54qj
- rwIBWBTOvwlGdiA3ttQq0MZE4SLJwy++I5b18gV1tliu/SeKUPz7gxm3C+EgiMm/7zRNYEk3fDr
- OTLM=
-X-Google-Smtp-Source: AGHT+IF3MZHu0wymh4DdKbtD9ggcmEs+wtx7DdpOKT9IrrupBFEjke9P3WUIu2GYGZJk/U8pILkzeQ==
-X-Received: by 2002:a17:906:478a:b0:a8d:6910:d0dc with SMTP id
- a640c23a62f3a-a98f8397f5fmr701750166b.53.1727972802821; 
- Thu, 03 Oct 2024 09:26:42 -0700 (PDT)
-Received: from dario-ThinkPad-T14s-Gen-2i.amarulasolutions.com ([2.196.43.153])
- by smtp.gmail.com with ESMTPSA id
- a640c23a62f3a-a99100a3200sm106996166b.4.2024.10.03.09.26.41
+ d=1e100.net; s=20230601; t=1727974769; x=1728579569;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=BWNfRa69g+34qNh9hlydxUuUX244rblV48++5QerwO4=;
+ b=oYG60ME+PIQCF7ND83GneOuGtYu3FSL+i8h5ghfwy43rqKj05IweFQnM2aPOO2f48w
+ HdjrTzi+L7dgu75t0YVfAhti5p6Q7iPq/IAuPtgQabgYBhDrLVr8uIcDus5WhB8x3nB5
+ hiYDSxdCBFasx+Yw7uU4+RS9Y9F+iuWaAEA0lHkN5SQbjV6Jm6QohTCuM3rt+3ShjxrG
+ 6Ym2hhLtUq3tgi+DO0LnZT7PiXMisAm9d7BQ1LVdjw/j3RGEOUSYtZydnTtxfedNmvYA
+ wRc7xpNPRhqXvhP4QRgXubGjV/DBazhCtNRFsNwj6+W1Bti1XvOVNXbVGy5GYQuxvXwU
+ c8Jg==
+X-Gm-Message-State: AOJu0Yy90vrJMj5F+kk8uo+2/NfCgKTDYtKZdhtfF3OzhQKPN6deWS81
+ 4X0TJnoHNI7cJkRBMxpakYp5gqKwwAirNi5iiqcgaZB1BRdmbQEEK1zknA==
+X-Google-Smtp-Source: AGHT+IFJaSL1gVZUfO5KxtiABL3laJouQQS3jsfQiLv4qVcg/CxQVroEUSlXxrUHm5xZ+HdHpzvu8Q==
+X-Received: by 2002:a05:6602:158c:b0:82d:18d:bab with SMTP id
+ ca18e2360f4ac-834d84fc56bmr676120139f.15.1727974768630; 
+ Thu, 03 Oct 2024 09:59:28 -0700 (PDT)
+Received: from james-x399.localdomain (71-33-149-81.hlrn.qwest.net.
+ [71.33.149.81]) by smtp.gmail.com with ESMTPSA id
+ ca18e2360f4ac-834efc4ec88sm33593239f.8.2024.10.03.09.59.27
  (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Thu, 03 Oct 2024 09:26:42 -0700 (PDT)
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+ Thu, 03 Oct 2024 09:59:28 -0700 (PDT)
+From: James Hilliard <james.hilliard1@gmail.com>
 To: buildroot@buildroot.org
-Date: Thu,  3 Oct 2024 18:26:29 +0200
-Message-ID: <20241003162629.470273-2-dario.binacchi@amarulasolutions.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20241003162629.470273-1-dario.binacchi@amarulasolutions.com>
-References: <20241003162629.470273-1-dario.binacchi@amarulasolutions.com>
+Date: Thu,  3 Oct 2024 10:59:26 -0600
+Message-Id: <20241003165926.849456-1-james.hilliard1@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1727972803; x=1728577603;
- darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=zFPUvHEIVZamKmasYmkwF35aaGgnDV0nTEkihqZS/bQ=;
- b=EJyUU3TYtVyW6/ZGF1up2pCwmdUmPI7iN3thQoEFtXPOfVMQdRtnzpDcWq60yHzTC1
- rhrMxh3McjhcKfJPu4E67H21PxQS9tIKZUEIuM2iWq5v+uzjXRwVCCufQQG4u9r6l2og
- MZSOZa3ozgw8ewseWVudLFzYzzMQjpJ74VCIc=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=gmail.com; s=20230601; t=1727974769; x=1728579569; darn=buildroot.org;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=BWNfRa69g+34qNh9hlydxUuUX244rblV48++5QerwO4=;
+ b=k5IMx32IMIpQ+9hyMPeQCZwHHT2TkYue2qw2rvvIjGJU7bhaOhG5pAtlZEidnTgKo1
+ sFAO3GhGBEawBnRTs1GuMVGiLkCSpOs1t609TTbNjPlLMSxFwm9mZktwJyqPd8W0+SNw
+ aCIkfaXYtRZumU78nt3diWANlSif61rah1n1A4oUyYrrvG/kI1JtRnG9JYY04S/Na8Bj
+ 5STLu1GQ6FEGcoXpMrx1llpIwbCjkhXwGw7yDT9s8ORuQUaY9w2lTEwfRTNhpinvzAYg
+ PpCO7y56e9QQgYzhM3dXWiVYlne/hbCVlDxd7RETstiXYHREdGvF8PXm70f3NMX3RSr3
+ nIzQ==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=EJyUU3TY
-Subject: [Buildroot] [RFC PATCH 2/2] package/libcap: fix build failure on
- ARC targets
+ header.from=gmail.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
+ header.a=rsa-sha256 header.s=20230601 header.b=k5IMx32I
+Subject: [Buildroot] [PATCH 1/1] package/bluez5_utils: enable asha when
+ building audio plugins
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -103,214 +100,55 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Marcus Folkesson <marcus.folkesson@gmail.com>,
- Raphael Pavlidis <raphael.pavlidis@gmail.com>, Bernd Kuhls <bernd@kuhls.net>,
- Sen Hastings <sen@hastings.org>, "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Adrian Perez de Castro <aperez@igalia.com>,
- Romain Naour <romain.naour@gmail.com>,
- Dario Binacchi <dario.binacchi@amarulasolutions.com>,
- linux-amarula@amarulasolutions.com,
- Giulio Benetti <giulio.benetti@benettiengineering.com>,
- Norbert Lange <nolange79@gmail.com>
+Cc: James Hilliard <james.hilliard1@gmail.com>, Marcin Bis <marcin@bis.org.pl>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Building arp-scan with --with-libcap for the ARC target raises the
-following error:
-
-configure:5053: checking for cap_set_proc in -lcap
-
-cap_proc.c:(.text+0x78): undefined reference to `__atomic_test_and_set'
-
-configure:5086: result: no
-configure:5097: error: libcap support was requested but the library was not found
-
-The patch adds the dependency on BR2_TOOLCHAIN_HAS_ATOMIC_TEST_AND_SET
-to libcap.
-
-Additionally, besides libcap, it was necessary to add the dependency on
-BR2_TOOLCHAIN_HAS_ATOMIC_TEST_AND_SET to other packages to remove
-warnings of this type:
-
-WARNING: unmet direct dependencies detected for BR2_PACKAGE_LIBCAP
-  Depends on [n]: BR2_USE_MMU [=y] && BR2_TOOLCHAIN_HAS_ATOMIC_TEST_AND_SET [=n]
-  Selected by [y]:
-  - BR2_PACKAGE_RNG_TOOLS [=y] && BR2_TOOLCHAIN_HAS_THREADS_NPTL [=y] && BR2_USE_MMU [=y]
-
-WARNING: unmet direct dependencies detected for BR2_PACKAGE_LIBCAP
-  Depends on [n]: BR2_USE_MMU [=y] && BR2_TOOLCHAIN_HAS_ATOMIC_TEST_AND_SET [=n]
-  Selected by [y]:
-  - BR2_PACKAGE_RNG_TOOLS [=y] && BR2_TOOLCHAIN_HAS_THREADS_NPTL [=y] && BR2_USE_MMU [=y]
+Symbols from the asha plugin are required when building a2dp
+support as part of the audio plugins, so always enable asha
+when audio plugins are selected.
 
 Fixes:
-- http://autobuild.buildroot.net/results/66ee26677777124eafb4740a3c7437e06f704f98
+ - http://autobuild.buildroot.net/results/5a3/5a306356f5f190a14a0a2294a4428544b1a018bb
+ - http://autobuild.buildroot.net/results/353/3539c83deaa45a3548bcd488659148c62af3fc73
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
 ---
- package/bubblewrap/Config.in  | 1 +
- package/cdrkit/Config.in      | 1 +
- package/chrony/Config.in      | 1 +
- package/criu/Config.in        | 1 +
- package/libcap/Config.in      | 1 +
- package/ntpsec/Config.in      | 1 +
- package/proftpd/Config.in     | 1 +
- package/rng-tools/Config.in   | 2 +-
- package/slirp4netns/Config.in | 1 +
- package/squid/Config.in       | 1 +
- package/systemd/Config.in     | 1 +
- package/vdr/Config.in         | 1 +
- 12 files changed, 12 insertions(+), 1 deletion(-)
+ package/bluez5_utils/bluez5_utils.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/package/bubblewrap/Config.in b/package/bubblewrap/Config.in
-index 2492cee0e564..95aa171b46b0 100644
---- a/package/bubblewrap/Config.in
-+++ b/package/bubblewrap/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_BUBBLEWRAP
- 	bool "bubblewrap"
- 	depends on BR2_USE_MMU # fork()
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC_TEST_AND_SET # libcap
- 	select BR2_PACKAGE_LIBCAP
- 	help
- 	  Unprivileged sandbox tool based on Linux namespaces.
-diff --git a/package/cdrkit/Config.in b/package/cdrkit/Config.in
-index b3ddcbd13540..8b6ed6984993 100644
---- a/package/cdrkit/Config.in
-+++ b/package/cdrkit/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_CDRKIT
- 	bool "cdrkit"
- 	depends on BR2_USE_MMU # fork
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC_TEST_AND_SET # libcap
- 	# Needed for libbz
- 	select BR2_PACKAGE_BZIP2
- 	select BR2_PACKAGE_LIBCAP
-diff --git a/package/chrony/Config.in b/package/chrony/Config.in
-index c22b756c113f..2784d20516ce 100644
---- a/package/chrony/Config.in
-+++ b/package/chrony/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_CHRONY
- 	bool "chrony"
- 	depends on BR2_USE_MMU # fork()
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC_TEST_AND_SET # libcap
- 	select BR2_PACKAGE_LIBCAP
- 	help
- 	  Chrony is a pair of programs which are used to maintain the
-diff --git a/package/criu/Config.in b/package/criu/Config.in
-index 30b131cd30a6..913583cfee96 100644
---- a/package/criu/Config.in
-+++ b/package/criu/Config.in
-@@ -26,6 +26,7 @@ config BR2_PACKAGE_CRIU
- 	depends on BR2_INSTALL_LIBSTDCPP # protobuf
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # protobuf, libnl
- 	depends on BR2_USE_WCHAR # libbsd
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC_TEST_AND_SET # libcap
- 	select BR2_PACKAGE_HOST_PYTHON3
- 	select BR2_PACKAGE_HOST_PYTHON3_SSL
- 	select BR2_PACKAGE_PROTOBUF
-diff --git a/package/libcap/Config.in b/package/libcap/Config.in
-index e1971b7bb15a..b0379d8f5094 100644
---- a/package/libcap/Config.in
-+++ b/package/libcap/Config.in
-@@ -1,6 +1,7 @@
- config BR2_PACKAGE_LIBCAP
- 	bool "libcap"
- 	depends on BR2_USE_MMU # fork()
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC_TEST_AND_SET
- 	help
- 	  This library implements the user-space interfaces to the
- 	  POSIX 1003.1e capabilities available in Linux kernels. These
-diff --git a/package/ntpsec/Config.in b/package/ntpsec/Config.in
-index 3b20daecc77a..9135527c238a 100644
---- a/package/ntpsec/Config.in
-+++ b/package/ntpsec/Config.in
-@@ -4,6 +4,7 @@ config BR2_PACKAGE_NTPSEC
- 	depends on BR2_USE_WCHAR # python3
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # python3
- 	depends on !BR2_STATIC_LIBS # python3
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC_TEST_AND_SET # libcap
- 	select BR2_PACKAGE_LIBCAP
- 	select BR2_PACKAGE_OPENSSL
- 	select BR2_PACKAGE_PYTHON3
-diff --git a/package/proftpd/Config.in b/package/proftpd/Config.in
-index 9d99ff70c485..f82c2c460029 100644
---- a/package/proftpd/Config.in
-+++ b/package/proftpd/Config.in
-@@ -12,6 +12,7 @@ if BR2_PACKAGE_PROFTPD
+diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
+index 13a8ce2f0b..10bb067dd3 100644
+--- a/package/bluez5_utils/bluez5_utils.mk
++++ b/package/bluez5_utils/bluez5_utils.mk
+@@ -28,7 +28,6 @@ BLUEZ5_UTILS_CONF_OPTS = \
+ 	--disable-lsan \
+ 	--disable-ubsan \
+ 	--disable-pie \
+-	--disable-asha \
+ 	--with-dbusconfdir=/etc
  
- config BR2_PACKAGE_PROFTPD_MOD_CAP
- 	bool "mod_cap support"
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC_TEST_AND_SET # libcap
- 	select BR2_PACKAGE_LIBCAP
- 	help
- 	  Compile ProFTPD with mod_cap support
-diff --git a/package/rng-tools/Config.in b/package/rng-tools/Config.in
-index 7f08fa25fbf7..cc11484aefd9 100644
---- a/package/rng-tools/Config.in
-+++ b/package/rng-tools/Config.in
-@@ -2,7 +2,7 @@ config BR2_PACKAGE_RNG_TOOLS
- 	bool "rng-tools"
- 	# pthread_setaffinity_np
- 	depends on BR2_TOOLCHAIN_HAS_THREADS_NPTL
--	depends on BR2_USE_MMU # libcap
-+	depends on BR2_USE_MMU && BR2_TOOLCHAIN_HAS_ATOMIC_TEST_AND_SET # libcap
- 	select BR2_PACKAGE_ARGP_STANDALONE if BR2_TOOLCHAIN_USES_UCLIBC || BR2_TOOLCHAIN_USES_MUSL
- 	select BR2_PACKAGE_LIBCAP
- 	select BR2_PACKAGE_OPENSSL
-diff --git a/package/slirp4netns/Config.in b/package/slirp4netns/Config.in
-index 22414dfbc972..9103eea70cbc 100644
---- a/package/slirp4netns/Config.in
-+++ b/package/slirp4netns/Config.in
-@@ -5,6 +5,7 @@ config BR2_PACKAGE_SLIRP4NETNS
- 	depends on BR2_TOOLCHAIN_HAS_THREADS # libglib2, slirp
- 	depends on BR2_PACKAGE_LIBSECCOMP_ARCH_SUPPORTS # libseccomp
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_17 # libseccomp
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC_TEST_AND_SET # libcap
- 	select BR2_PACKAGE_LIBCAP
- 	select BR2_PACKAGE_LIBGLIB2
- 	select BR2_PACKAGE_LIBSECCOMP
-diff --git a/package/squid/Config.in b/package/squid/Config.in
-index ab13e735e114..ca02c9f97ea1 100644
---- a/package/squid/Config.in
-+++ b/package/squid/Config.in
-@@ -15,6 +15,7 @@ config BR2_PACKAGE_SQUID
- 	depends on BR2_HOST_GCC_AT_LEAST_8 # C++17
- 	# needs fork()
- 	depends on BR2_USE_MMU
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC_TEST_AND_SET # libcap
- 	select BR2_PACKAGE_LIBCAP
- 	select BR2_PACKAGE_LIBTOOL
- 	select BR2_PACKAGE_LIBXCRYPT if BR2_TOOLCHAIN_USES_GLIBC
-diff --git a/package/systemd/Config.in b/package/systemd/Config.in
-index d9545e9db04f..f5ec1cc854d6 100644
---- a/package/systemd/Config.in
-+++ b/package/systemd/Config.in
-@@ -25,6 +25,7 @@ menuconfig BR2_PACKAGE_SYSTEMD
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_15
- 	depends on BR2_TOOLCHAIN_GCC_AT_LEAST_8
- 	depends on BR2_HOST_GCC_AT_LEAST_8 # host-systemd
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC_TEST_AND_SET # libcap
- 	select BR2_PACKAGE_HAS_UDEV
- 	select BR2_PACKAGE_DBUS if !BR2_PACKAGE_DBUS_BROKER # runtime
- 	select BR2_PACKAGE_LIBCAP
-diff --git a/package/vdr/Config.in b/package/vdr/Config.in
-index 38502729a7fb..0000eac361e0 100644
---- a/package/vdr/Config.in
-+++ b/package/vdr/Config.in
-@@ -6,6 +6,7 @@ config BR2_PACKAGE_VDR
- 	depends on BR2_TOOLCHAIN_HEADERS_AT_LEAST_3_9
- 	depends on BR2_USE_MMU # fork()
- 	depends on BR2_USE_WCHAR
-+	depends on BR2_TOOLCHAIN_HAS_ATOMIC_TEST_AND_SET # libcap
- 	select BR2_PACKAGE_FONTCONFIG
- 	select BR2_PACKAGE_FREETYPE
- 	select BR2_PACKAGE_JPEG
+ ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS_OBEX),y)
+@@ -68,6 +67,7 @@ endif
+ ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_AUDIO),y)
+ BLUEZ5_UTILS_CONF_OPTS += \
+ 	--enable-a2dp \
++	--enable-asha \
+ 	--enable-avrcp \
+ 	--enable-bap \
+ 	--enable-mcp \
+@@ -75,6 +75,7 @@ BLUEZ5_UTILS_CONF_OPTS += \
+ else
+ BLUEZ5_UTILS_CONF_OPTS += \
+ 	--disable-a2dp \
++	--disable-asha \
+ 	--disable-avrcp \
+ 	--disable-bap \
+ 	--disable-mcp \
 -- 
-2.43.0
+2.34.1
 
 _______________________________________________
 buildroot mailing list
