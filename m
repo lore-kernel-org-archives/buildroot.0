@@ -1,96 +1,75 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 84A90CF885B
-	for <buildroot@archiver.kernel.org>; Fri,  4 Oct 2024 21:55:10 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id DCBA7CF8860
+	for <buildroot@archiver.kernel.org>; Fri,  4 Oct 2024 22:05:50 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id E2B514187E;
-	Fri,  4 Oct 2024 21:55:08 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 679E8610A6;
+	Fri,  4 Oct 2024 22:05:50 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id GVWjIUbNu24f; Fri,  4 Oct 2024 21:55:07 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id KOV06c4bZvhM; Fri,  4 Oct 2024 22:05:49 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 309B441868
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 6B07661198
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 309B441868;
-	Fri,  4 Oct 2024 21:55:07 +0000 (UTC)
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
- by ash.osuosl.org (Postfix) with ESMTP id 025C71BF5F5
- for <buildroot@lists.busybox.net>; Fri,  4 Oct 2024 21:55:03 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 6B07661198;
+	Fri,  4 Oct 2024 22:05:49 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id AB2BD1BF35F
+ for <buildroot@lists.busybox.net>; Fri,  4 Oct 2024 22:05:47 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp4.osuosl.org (Postfix) with ESMTP id DA29440E52
- for <buildroot@lists.busybox.net>; Fri,  4 Oct 2024 21:55:02 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id A6CA240374
+ for <buildroot@lists.busybox.net>; Fri,  4 Oct 2024 22:05:47 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZG1BWAa1h5uG for <buildroot@lists.busybox.net>;
- Fri,  4 Oct 2024 21:55:01 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::32b; helo=mail-wm1-x32b.google.com;
- envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 7EC3D40D27
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 7EC3D40D27
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com
- [IPv6:2a00:1450:4864:20::32b])
- by smtp4.osuosl.org (Postfix) with ESMTPS id 7EC3D40D27
- for <buildroot@buildroot.org>; Fri,  4 Oct 2024 21:55:01 +0000 (UTC)
-Received: by mail-wm1-x32b.google.com with SMTP id
- 5b1f17b1804b1-42e5e758093so22561185e9.1
- for <buildroot@buildroot.org>; Fri, 04 Oct 2024 14:55:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1728078899; x=1728683699;
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=/L4c7/Dqis5xfMTWF1O1Uf0enRGILuMN9c2h20w00V4=;
- b=Xl27+GoVXxKEAiOBBFJqQl7nDYPUzzxDmCn6OrAfW04UyvOQq9ZqB3EYhj0Aa6hi23
- dXhE7M4i4vNv9nH30Xlg4rN8GnfE7lsyNpxQKkwA112EZNbQo+NTFqZrD8C6QQY2RQ+A
- 2sI3hLrIyUTqv8NpWKQ7ZDSdM0hfIzX3Wcsw0C57nXH0frbCM0o0pG8aFrKGDLRL5d6E
- SI+ZD7pTymadOjjoxbSpEZrGVO34dASOSH8URFNAWkR4phCtIVBXTZf461XseY6c4MGg
- 1b+Fxrn764JGMO8J6imellaKy/XbZObRSN+3gLU17m/g8C5/2Ale9hp2YM1OFkr7gLxS
- YshQ==
-X-Gm-Message-State: AOJu0YwROrRutSg3bvK+BwB1eggm2RvKDzHUv01niVBFnMjFDAUrmuqq
- cMvVdTBv+YIaltIH5IF5t96sML+akhPoCf1Sv6R2pR3TC6unNkkor8iEmZi/GYJBYwIu8bJV7dB
- jetI=
-X-Google-Smtp-Source: AGHT+IHKpz+QGOjkPzb5G3+jYvK26JZ+0t9bZudUz2duHEXQhjcYZnzgZrT+lBddhzPaRL8eWYWFgA==
-X-Received: by 2002:adf:edc9:0:b0:371:8c9c:d97f with SMTP id
- ffacd0b85a97d-37d0e6f2461mr2376292f8f.10.1728078899062; 
- Fri, 04 Oct 2024 14:54:59 -0700 (PDT)
-Received: from dario-ThinkPad-T14s-Gen-2i.amarulasolutions.com ([2.196.43.206])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-42f89e39aebsm6972005e9.0.2024.10.04.14.54.56
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 04 Oct 2024 14:54:58 -0700 (PDT)
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id EoJmgIvHuVA9 for <buildroot@lists.busybox.net>;
+ Fri,  4 Oct 2024 22:05:46 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=178.60.130.6;
+ helo=fanzine2.igalia.com; envelope-from=aperez@igalia.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 619D740176
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 619D740176
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 619D740176
+ for <buildroot@buildroot.org>; Fri,  4 Oct 2024 22:05:45 +0000 (UTC)
+Received: from 91-153-34-109.elisa-laajakaista.fi ([91.153.34.109] helo=kodama)
+ by fanzine2.igalia.com with esmtpsa 
+ (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+ id 1swqQg-0051Zh-6G; Sat, 05 Oct 2024 00:05:42 +0200
+Received: from localhost (kodama [local])
+ by kodama (OpenSMTPD) with ESMTPA id 09491944;
+ Fri, 4 Oct 2024 22:05:41 +0000 (UTC)
+From: Adrian Perez de Castro <aperez@igalia.com>
 To: buildroot@buildroot.org
-Date: Fri,  4 Oct 2024 23:54:46 +0200
-Message-ID: <20241004215451.1198861-3-dario.binacchi@amarulasolutions.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20241004215451.1198861-1-dario.binacchi@amarulasolutions.com>
-References: <20241004215451.1198861-1-dario.binacchi@amarulasolutions.com>
+Date: Sat,  5 Oct 2024 01:05:37 +0300
+Message-ID: <20241004220541.2290809-1-aperez@igalia.com>
+X-Mailer: git-send-email 2.46.2
 MIME-Version: 1.0
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1728078899; x=1728683699;
- darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:references:in-reply-to
- :message-id:date:subject:cc:to:from:from:to:cc:subject:date
- :message-id:reply-to;
- bh=/L4c7/Dqis5xfMTWF1O1Uf0enRGILuMN9c2h20w00V4=;
- b=FqcDFpGGTC1ZB3w9rmZb0A8JTaj5yu6X2M49DWL0Dhb/GNU4eAHqbmQD+W2qs7KfEe
- 6CUEE7hjri/uqybNltYdZdWvJukjaMkWewV0RBrvnug9aI1sFpn9i4RiwA6gyXAeAgTN
- pTuOFNg7OV8qwyrnXWHSFuuor9ngIByfqoMmY=
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt;
+ c=relaxed/relaxed; d=igalia.com; 
+ s=20170329; h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:
+ Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
+ Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+ In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+ List-Post:List-Owner:List-Archive;
+ bh=tUHFTwzNXitfhHY+4Ev5393xwxoHPMIK+8q6dgKqPFA=; b=svQgVu/4sAhtlOgWQS11XpLGHc
+ IpNxjMqTQP3AzWtzFMlK7ZGUABKS93M1A6EVhtoxcwp++yI8A/O09xNOCuQqhSzG4hTHZVR8U4H3x
+ RgPNF1r2gR/lA3L+Uu6UPcQH7lVloty5rYcH1p+cseWvXcluHu+XOyuUCnbsjjNFwAHgi1dO8SnSN
+ pqAG0+sjYz2BzdY8uC3a3zYxKnFg+K/8BVrB4k+7tjLgOZPmzFc7sUhrBcEwGS4iJ3X+p1aMO+i3L
+ JyqA7bNfBMQ9gwzzpyxlMEkWLFs1XqNxJ+CzZkUePKrwNfpz8BZLB0kZVTrzI3hf5pl9D4L2ztB7R
+ fiIKwehg==;
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
- dkim=pass (1024-bit key) header.d=amarulasolutions.com
- header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
- header.b=FqcDFpGG
-Subject: [Buildroot] [PATCH 3/3] DEVELOPERS: add Dario Binacchi for bsdiff
+ header.from=igalia.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=igalia.com header.i=@igalia.com header.a=rsa-sha256
+ header.s=20170329 header.b=svQgVu/4
+Subject: [Buildroot] [PATCH 0/2] Update Sysprof and libdex to 47.0
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -102,32 +81,35 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Dario Binacchi <dario.binacchi@amarulasolutions.com>,
- linux-amarula@amarulasolutions.com
+Cc: Adrian Perez de Castro <aperez@igalia.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
----
- DEVELOPERS | 1 +
- 1 file changed, 1 insertion(+)
+Hi all,
 
-diff --git a/DEVELOPERS b/DEVELOPERS
-index 458da4e4e051..fea34b53d696 100644
---- a/DEVELOPERS
-+++ b/DEVELOPERS
-@@ -797,6 +797,7 @@ F:	configs/stm32f746_disco_sd_defconfig
- F:	configs/stm32f769_disco_sd_defconfig
- F:	package/armadillo/
- F:	package/babeld/
-+F:	package/bsdiff/
- F:	package/iana-assignments/
- F:	package/libdivsufsort/
- F:	package/sscep/
+This small patch set updates Sysprof to 47.0, and its libdex dependency.
+In libdex we can drop one patch, and for Sysprof I added a small one that
+avoids needing to update the GLib version packaged in Buildroot.
+
+
+Adrian Perez de Castro (2):
+  package/libdex: bump to version 0.8.0
+  package/sysprof: bump to version 47.0
+
+ .../0001-add-stack-protector-option.patch     | 45 -------------------
+ package/libdex/libdex.hash                    |  4 +-
+ package/libdex/libdex.mk                      |  5 ++-
+ .../0001-build-reduce-GLib-requirement.patch  | 30 +++++++++++++
+ package/sysprof/sysprof.hash                  |  4 +-
+ package/sysprof/sysprof.mk                    |  2 +-
+ 6 files changed, 38 insertions(+), 52 deletions(-)
+ delete mode 100644 package/libdex/0001-add-stack-protector-option.patch
+ create mode 100644 package/sysprof/0001-build-reduce-GLib-requirement.patch
+
 -- 
-2.43.0
+2.46.2
 
 _______________________________________________
 buildroot mailing list
