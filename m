@@ -4,91 +4,74 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 12B03CF8853
-	for <buildroot@archiver.kernel.org>; Fri,  4 Oct 2024 17:27:17 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7D9FACF8853
+	for <buildroot@archiver.kernel.org>; Fri,  4 Oct 2024 17:39:20 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 82B53400E7;
-	Fri,  4 Oct 2024 17:27:17 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id EDB394136A;
+	Fri,  4 Oct 2024 17:39:19 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MU3nKezGCnHB; Fri,  4 Oct 2024 17:27:16 +0000 (UTC)
+ id iVKhfGe4nso2; Fri,  4 Oct 2024 17:39:18 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 4D8F540154
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0B2394021C
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 4D8F540154;
-	Fri,  4 Oct 2024 17:27:16 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 0B2394021C;
+	Fri,  4 Oct 2024 17:39:18 +0000 (UTC)
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 446521BF390
- for <buildroot@lists.busybox.net>; Fri,  4 Oct 2024 17:27:14 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id D60D61BF390
+ for <buildroot@lists.busybox.net>; Fri,  4 Oct 2024 17:39:16 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 2E9B7400E7
- for <buildroot@lists.busybox.net>; Fri,  4 Oct 2024 17:27:13 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id D26944021C
+ for <buildroot@lists.busybox.net>; Fri,  4 Oct 2024 17:39:16 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id U3hxPwZrG4bH for <buildroot@lists.busybox.net>;
- Fri,  4 Oct 2024 17:27:12 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2607:f8b0:4864:20::d33; helo=mail-io1-xd33.google.com;
- envelope-from=james.hilliard1@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 025034021C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 025034021C
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com
- [IPv6:2607:f8b0:4864:20::d33])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 025034021C
- for <buildroot@buildroot.org>; Fri,  4 Oct 2024 17:27:11 +0000 (UTC)
-Received: by mail-io1-xd33.google.com with SMTP id
- ca18e2360f4ac-82d24e18dfcso94197139f.3
- for <buildroot@buildroot.org>; Fri, 04 Oct 2024 10:27:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1728062831; x=1728667631;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=EQ+aed7moRXwvribyBZgInGcJkaLKzzZWMghWbjj8ZM=;
- b=nIFNjsoKMKwC/MfxBVzAxTAD46bFKRp3/gXj0Zbdk/28mPTVLVkX7UJM3w81QNgSy8
- eGDJyt1+eX57HWjVmH36kANRPkFua4WRK3A3aQmqVVbvLp+17cPnXNdMvIzpFZHTRxWY
- 6Lwr1uub5C8VBxV2kuetWd14cisBr45lvlrHTrJ0dOM5e11jEushKQSn5PPbUlLA5acx
- AGZPmwkOdMN/GbiA+jloDqswdAFeUtthhgWS6ZMYwo/UZHHMsKJUEy50K0boxEroNIGZ
- Yr27sp5jRxJUGlbgFW1QzF+WDQp2bDq9CB2ShMaS64WApXk//oYchdSKUC1YE8T7Dz1H
- NMCw==
-X-Gm-Message-State: AOJu0YyqHpVwawG9bV1a2N4PX9UbpNr8wFwF+rlom3HKrl3VORxpTWUR
- Puz5Oj7nNsxs4g8lJOiWTuC+rnQZJP6wi+ioQ+qZlqEthu/PNvLJgudulVPK
-X-Google-Smtp-Source: AGHT+IH0UZZOdty35cWhWml9lC12mk1CjW/Crxm2lv1t5IxN4wjv4qEPI8dPbPBVxaiJaQfhGwo+Xw==
-X-Received: by 2002:a05:6602:14c1:b0:82a:2143:8 with SMTP id
- ca18e2360f4ac-834f7d65974mr501958839f.10.1728062830524; 
- Fri, 04 Oct 2024 10:27:10 -0700 (PDT)
-Received: from james-x399.localdomain (71-33-149-81.hlrn.qwest.net.
- [71.33.149.81]) by smtp.gmail.com with ESMTPSA id
- 8926c6da1cb9f-4db6ebf09easm58313173.102.2024.10.04.10.27.10
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 04 Oct 2024 10:27:10 -0700 (PDT)
-From: James Hilliard <james.hilliard1@gmail.com>
+ id 44PiwaqO3TsV for <buildroot@lists.busybox.net>;
+ Fri,  4 Oct 2024 17:39:15 +0000 (UTC)
+X-Greylist: delayed 601 seconds by postgrey-1.37 at util1.osuosl.org;
+ Fri, 04 Oct 2024 17:39:15 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 31BE8401DD
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 31BE8401DD
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.241.56.152;
+ helo=mout-p-102.mailbox.org; envelope-from=ralf.dragon@lindra.de;
+ receiver=<UNKNOWN> 
+Received: from mout-p-102.mailbox.org (mout-p-102.mailbox.org [80.241.56.152])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 31BE8401DD
+ for <buildroot@buildroot.org>; Fri,  4 Oct 2024 17:39:15 +0000 (UTC)
+Received: from smtp1.mailbox.org (smtp1.mailbox.org
+ [IPv6:2001:67c:2050:b231:465::1])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+ (No client certificate requested)
+ by mout-p-102.mailbox.org (Postfix) with ESMTPS id 4XKwMc0XLRz9syP;
+ Fri,  4 Oct 2024 19:22:04 +0200 (CEST)
+From: Ralf Dragon <hypnotoad@lindra.de>
 To: buildroot@buildroot.org
-Date: Fri,  4 Oct 2024 11:27:07 -0600
-Message-Id: <20241004172707.3662311-1-james.hilliard1@gmail.com>
-X-Mailer: git-send-email 2.34.1
+Date: Fri,  4 Oct 2024 19:21:06 +0200
+Message-Id: <20241004172105.2050317-1-hypnotoad@lindra.de>
 MIME-Version: 1.0
+X-Rspamd-Queue-Id: 4XKwMc0XLRz9syP
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1728062831; x=1728667631; darn=buildroot.org;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=EQ+aed7moRXwvribyBZgInGcJkaLKzzZWMghWbjj8ZM=;
- b=KHdUn5d9unGOKrbWsx2wLxG0YQeyGZvuvzYCMDpR7AgZVq7s2ZMcjNaGGl0uF4pc7l
- uClU7ZYibBHdckCWqYHcoj6a2lQf51xLas5nLwZBDKo521IK+LwhLjJAGCRFoAFEFlTQ
- 9hvOW6ms/cClFLglDpLLbUHvOgNhFF4fhl4bJOHbGtG3eJiriR9Zi5SeK9kviUQcoxk7
- IwUG05r3ROqErWZaTzSY01DliWX+PEatXvHhc3sLErCV2+9UOSe8n3TxQqyU6GBaxxX9
- A3gLluVPk72JQjuXYxgcOENYrgT02wObMOtgmfS6cDNK60nzKti0hwNbkzKWeLNGoAbK
- 6/pw==
+ d=lindra.de; s=MBO0001; t=1728062524;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:
+ content-transfer-encoding:content-transfer-encoding;
+ bh=5y69N0IV9CvJE5xdYRsOhxxPSuNICjvtjJB/AuTpb70=;
+ b=eGceab/FpuSPUqI+nQZMQKN6I2mNSQkwafXFEd734iE9aEkPZDdxQGCNrLyJY4lUFnAs7O
+ HH2pju/Q2OuudkZt8EWA37jAeXJgL75qEfHE49IdCSX+r9ArcDujI3wUHAY2+NcgIUnPDQ
+ cyJ0Kg1GmJQDx9Fikgb7+Yzq0U9zdTdamkfuxqogvK+1+I8vbNc4hNcAa75VM/CvWisW5/
+ EBepiNjGf12btFtpteG+LvJM8oOOYKnKrJkQJfNrb/5nEVUpC97mAAlKND85p5u1f3isSi
+ lUTgHn6AMfRobXeyec1jTN12IMsrDzMbu/iYzrtXkAB8nTMqBrv0WvokqYjKEg==
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
+ header.from=lindra.de
 X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=KHdUn5d9
-Subject: [Buildroot] [PATCH v2 1/1] package/bluez5_utils: enable asha/bass
- when building audio plugins
+ dkim=pass (2048-bit key,
+ unprotected) header.d=lindra.de header.i=@lindra.de header.a=rsa-sha256
+ header.s=MBO0001 header.b=eGceab/F
+Subject: [Buildroot] [PATCH] package/x11vnc: Fix multiple symbol definition
+ error
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -100,71 +83,81 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Frank TEO <frank128@ymail.com>, James Hilliard <james.hilliard1@gmail.com>,
- Marcin Bis <marcin@bis.org.pl>
+Cc: Martin Kepplinger <martink@posteo.de>, Ralf Dragon <hypnotoad@lindra.de>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Symbols from the asha plugin are required when building a2dp
-support as part of the audio plugins, so always enable asha
-when audio plugins are selected.
+Error seems to happen if LIBVNCSERVER_HAVE_LIBPTHREAD is defined:
+/bin/ld: x11vnc-xwrappers.o:(.bss+0x494): multiple definition of
+`clientMutex'; x11vnc-8to24.o:(.bss+0x59600): first defined here
 
-Symbols from the bass plugin are required when building bap
-support as part of the audio plugins, so always enable bass
-when audio plugins are selected.
+Patch is from https://bugs.gentoo.org/706840 . It moves the
+implementation from header to a source file, thus avoiding multiple
+definitions.
 
-This issue appeared during an attempt to fix a related issue in
-ce4e5fd129b557ac0411d0a0704be43717310d6d.
-
-Fixes:
- - http://autobuild.buildroot.net/results/5a3/5a306356f5f190a14a0a2294a4428544b1a018bb
- - http://autobuild.buildroot.net/results/353/3539c83deaa45a3548bcd488659148c62af3fc73
-
-Signed-off-by: James Hilliard <james.hilliard1@gmail.com>
-Cc: Frank TEO <frank128@ymail.com>
+Signed-off-by: Ralf Dragon <hypnotoad@lindra.de>
 ---
-Changes v1 -> v2:
-  - also enable/disable bass plugin
+Backport to: 2024.02.x
 ---
- package/bluez5_utils/bluez5_utils.mk | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ .../x11vnc/0003-Fix-multi-definition.patch    | 45 +++++++++++++++++++
+ 1 file changed, 45 insertions(+)
+ create mode 100644 package/x11vnc/0003-Fix-multi-definition.patch
 
-diff --git a/package/bluez5_utils/bluez5_utils.mk b/package/bluez5_utils/bluez5_utils.mk
-index 13a8ce2f0b..717c10e870 100644
---- a/package/bluez5_utils/bluez5_utils.mk
-+++ b/package/bluez5_utils/bluez5_utils.mk
-@@ -28,7 +28,6 @@ BLUEZ5_UTILS_CONF_OPTS = \
- 	--disable-lsan \
- 	--disable-ubsan \
- 	--disable-pie \
--	--disable-asha \
- 	--with-dbusconfdir=/etc
- 
- ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS_OBEX),y)
-@@ -68,15 +67,19 @@ endif
- ifeq ($(BR2_PACKAGE_BLUEZ5_UTILS_PLUGINS_AUDIO),y)
- BLUEZ5_UTILS_CONF_OPTS += \
- 	--enable-a2dp \
-+	--enable-asha \
- 	--enable-avrcp \
- 	--enable-bap \
-+	--enable-bass \
- 	--enable-mcp \
- 	--enable-vcp
- else
- BLUEZ5_UTILS_CONF_OPTS += \
- 	--disable-a2dp \
-+	--disable-asha \
- 	--disable-avrcp \
- 	--disable-bap \
-+	--disable-bass \
- 	--disable-mcp \
- 	--disable-vcp
- endif
+diff --git a/package/x11vnc/0003-Fix-multi-definition.patch b/package/x11vnc/0003-Fix-multi-definition.patch
+new file mode 100644
+index 0000000000..504159efe9
+--- /dev/null
++++ b/package/x11vnc/0003-Fix-multi-definition.patch
+@@ -0,0 +1,45 @@
++From a48b0b1cd887d7f3ae67f525d7d334bd2feffe60 Mon Sep 17 00:00:00 2001
++From: Alexander Tsoy <alexander@tsoy.me>
++Date: Tue, 28 Jan 2020 22:21:01 +0300
++Subject: [PATCH] Fix build with -fno-common
++
++GCC 10 defaults to -fno-common
++---
++ src/util.c | 3 +++
++ src/util.h | 6 +++---
++ 2 files changed, 6 insertions(+), 3 deletions(-)
++
++diff --git a/src/util.c b/src/util.c
++index a82a1a4..6a52ebf 100644
++--- a/src/util.c
+++++ b/src/util.c
++@@ -47,6 +47,9 @@ int hxl = 0;
++ #ifdef LIBVNCSERVER_HAVE_LIBPTHREAD
++ MUTEX(x11Mutex);
++ MUTEX(scrollMutex);
+++MUTEX(clientMutex);
+++MUTEX(inputMutex);
+++MUTEX(pointerMutex);
++ #endif
++ 
++ int nfix(int i, int n);
++diff --git a/src/util.h b/src/util.h
++index 35c1afd..99b5dd1 100644
++--- a/src/util.h
+++++ b/src/util.h
++@@ -102,9 +102,9 @@ extern struct timeval _mysleep;
++ #ifdef LIBVNCSERVER_HAVE_LIBPTHREAD
++ extern MUTEX(x11Mutex);
++ extern MUTEX(scrollMutex);
++-MUTEX(clientMutex);
++-MUTEX(inputMutex);
++-MUTEX(pointerMutex);
+++extern MUTEX(clientMutex);
+++extern MUTEX(inputMutex);
+++extern MUTEX(pointerMutex);
++ #endif
++ 
++ #define X_INIT INIT_MUTEX(x11Mutex)
++-- 
++2.24.1
++
 -- 
-2.34.1
+2.39.5
 
 _______________________________________________
 buildroot mailing list
