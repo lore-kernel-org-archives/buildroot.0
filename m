@@ -1,80 +1,51 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id A89D1CFA750
-	for <buildroot@archiver.kernel.org>; Fri,  4 Oct 2024 08:18:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8AC9CF8552
+	for <buildroot@archiver.kernel.org>; Fri,  4 Oct 2024 14:12:13 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 4380340553;
-	Fri,  4 Oct 2024 08:18:30 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp4.osuosl.org ([127.0.0.1])
- by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 3sMw_f-pHcR7; Fri,  4 Oct 2024 08:18:29 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org CF33240656
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id CF33240656;
-	Fri,  4 Oct 2024 08:18:28 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id 394191BF33F
- for <buildroot@lists.busybox.net>; Fri,  4 Oct 2024 08:18:27 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 35BAE6075B
- for <buildroot@lists.busybox.net>; Fri,  4 Oct 2024 08:18:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5500F607E9;
+	Fri,  4 Oct 2024 14:12:13 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id mq_e1RrHqO5L for <buildroot@lists.busybox.net>;
- Fri,  4 Oct 2024 08:18:26 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=209.85.128.48;
- helo=mail-wm1-f48.google.com; envelope-from=thomas.devoogdt@gmail.com;
+ id AO7CqZ2JwFJL; Fri,  4 Oct 2024 14:12:12 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 661E9605AF
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp3.osuosl.org (Postfix) with ESMTP id 661E9605AF;
+	Fri,  4 Oct 2024 14:12:12 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id DFCC21BF82C
+ for <buildroot@lists.busybox.net>; Fri,  4 Oct 2024 14:12:10 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp1.osuosl.org (Postfix) with ESMTP id D4C3780A9B
+ for <buildroot@lists.busybox.net>; Fri,  4 Oct 2024 14:12:08 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id oaozvGxyaNii for <buildroot@lists.busybox.net>;
+ Fri,  4 Oct 2024 14:12:08 +0000 (UTC)
+Received-SPF: Softfail (mailfrom) identity=mailfrom; client-ip=192.3.96.90;
+ helo=192-3-96-90-host.colocrossing.com; envelope-from=noreplysdesk@busybox.net;
  receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 06C8960754
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 06C8960754
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com
- [209.85.128.48])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 06C8960754
- for <buildroot@buildroot.org>; Fri,  4 Oct 2024 08:18:25 +0000 (UTC)
-Received: by mail-wm1-f48.google.com with SMTP id
- 5b1f17b1804b1-42e5e1e6d37so17502925e9.3
- for <buildroot@buildroot.org>; Fri, 04 Oct 2024 01:18:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1728029903; x=1728634703;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=3HHlK2TdNayTyvSL/HtqSYcS+EZtlJlq40OO8bWh7GE=;
- b=TnTM3WA/POeq6AjCZmOUn+j7VRCYpITSUtciwlCA0LIDsmyjqeMl0QnoZ/TnWpBMC2
- gnYWqbiwfIzTSYyJMa2M4RUHi4190RRgtpe5itl0AaNi5K1U7uo0BpiBgPStnt6nlNNF
- Qh84Y49XPx+Rc63KL3uC71kQuXciEloC6uue4queyyAaS0NbT5+r1T1ckpA1h9ALAViv
- qyxGz4U2Os6tWu3z3fg2NyKvVM8falL24L93Y8ezpxjOkUv8B4VkXrdNN1Fs7ha03lNC
- RnI+ARmgKEGGxEo8xfYrXwZUyPSRKdyra4lLmR2MD1rB8wkL1lmC7HqEGX/YBs6eRb0p
- ZKQw==
-X-Gm-Message-State: AOJu0Yxy02A/OKvkyShsTlhG9KKzWh/vB2aNrmjw0H7J6BLoVFXhOsV5
- oimPNMiFEyBYiepp0jb/9aeE3UrGGnGuRBSV4g9QWFUmSec3wsZaudS3Vg==
-X-Google-Smtp-Source: AGHT+IH48b09C/X84eezyKoxKNw1gbqmKWJpWtRxox8HCNLHE9Q2k6V1CGDKBIeuJGtROojXHGuAuQ==
-X-Received: by 2002:a05:600c:46c6:b0:42c:e0da:f15c with SMTP id
- 5b1f17b1804b1-42f85ab8695mr12577805e9.20.1728029903119; 
- Fri, 04 Oct 2024 01:18:23 -0700 (PDT)
-Received: from localhost.localdomain
- ([2a02:a03f:eb68:2f00:632d:a06c:9bf1:b9fa])
- by smtp.gmail.com with ESMTPSA id
- 5b1f17b1804b1-42f86b4aa8dsm9456035e9.43.2024.10.04.01.18.22
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Fri, 04 Oct 2024 01:18:22 -0700 (PDT)
-From: Thomas Devoogdt <thomas@devoogdt.com>
-To: buildroot@buildroot.org
-Date: Fri,  4 Oct 2024 10:18:19 +0200
-Message-ID: <20241004081819.1236963-1-thomas@devoogdt.com>
-X-Mailer: git-send-email 2.43.0
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D6CF980E74
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D6CF980E74
+Received: from 192-3-96-90-host.colocrossing.com (unknown [192.3.96.90])
+ by smtp1.osuosl.org (Postfix) with ESMTP id D6CF980E74
+ for <buildroot@busybox.net>; Fri,  4 Oct 2024 14:12:07 +0000 (UTC)
+From: E-mail Administrator<noreplysdesk@busybox.net>
+To: buildroot@busybox.net
+Date: 4 Oct 2024 16:12:07 +0200
+Message-ID: <20241004161207.3B2076CBD4AFD386@busybox.net>
 MIME-Version: 1.0
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=none (p=none dis=none)
- header.from=devoogdt.com
-Subject: [Buildroot] [PATCH v1] package/weston: bump to version 14.0.0
+ header.from=busybox.net
+Subject: [Buildroot] buildroot@busybox.net DELIVERY BLOCKED
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -86,82 +57,244 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: "Yann E . MORIN" <yann.morin.1998@free.fr>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Thomas Devoogdt <thomas.devoogdt@barco.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============2840566305396559193=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-From: Thomas Devoogdt <thomas.devoogdt@barco.com>
+--===============2840566305396559193==
+Content-Type: text/html
+Content-Transfer-Encoding: quoted-printable
 
-Notes:
- - (14.0.0) https://lists.freedesktop.org/archives/wayland-devel/2024-September/043776.html
- - (13.0.95 RC3) https://lists.freedesktop.org/archives/wayland-devel/2024-September/043775.html
- - (13.0.94 RC2) https://lists.freedesktop.org/archives/wayland-devel/2024-August/043772.html
- - (13.0.93 RC1) https://lists.freedesktop.org/archives/wayland-devel/2024-August/043761.html
- - (13.0.92 Beta Release) https://lists.freedesktop.org/archives/wayland-devel/2024-August/043758.html
- - (13.0.91 Alpha Release) https://lists.freedesktop.org/archives/wayland-devel/2024-August/043705.html
+<!DOCTYPE HTML>
 
-Signed-off-by: Thomas Devoogdt <thomas.devoogdt@barco.com>
----
- package/weston/Config.in   | 1 +
- package/weston/weston.hash | 6 +++---
- package/weston/weston.mk   | 5 +++--
- 3 files changed, 7 insertions(+), 5 deletions(-)
+<html><head><title></title>
+<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
+</head>
+<body style=3D"margin: 0.4em;">
+<p>
+</p><div style=3D'color: rgb(51, 51, 51); font-family: "arial",serif,"emoji=
+font"; font-size: 12px;'><font face=3D"calibri" size=3D"3">
+<div>
+<div>
+<div>
+<div>
+<div>
+<div>
+<div>
+<div>
+<div>
+<div>
+<div>
+<div>
+<div>
+<div>
+<div>
+<div style=3D"color: rgb(49, 49, 49); word-spacing: 1px;">
+<div id=3D"m_-5355038416954302565m_-2436707519692131996m_-22911385664467196=
+10m_-8386545848623894992m_-300305151222372339m_602397895448308890cad17e83de=
+1e7c6f6dbdc20aa58c2d5aed9ed4220f52980b873a202c627908a88e60f711e95599344f298=
+d51f055c4b80279da7715ea83bm_591350058554869810m_-2354592021497029001m_-7488=
+525160672465064m_2920149281728918709m_5200062772116748544m_-228296523893337=
+2121style_16003231230671481286_BODY">
+<div id=3D"m_-5355038416954302565m_-2436707519692131996m_-22911385664467196=
+10m_-8386545848623894992m_-300305151222372339m_6023978954483088904c648d7e01=
+61540a6d154a3ac232c27da75e70ca1d19154be5e6bb0ffbaf4996aff18c1ac9e248a9542fb=
+a3bc758634ea07e436fc1d1155m_591350058554869810m_-2354592021497029001m_-7488=
+525160672465064m_2920149281728918709m_5200062772116748544m_-228296523893337=
+2121m_5896486596108617735m_6462309193561655734gmail-4dfba6a8e1f57923divtagd=
+efaultwrapper_mr_css_attr" style=3D'color: rgb(0, 0,=20
+0); font-family: "calibri","helvetica",sans-serif; font-size: 12pt;'>
+<div style=3D"padding: 0in;">
+<div><span style=3D'color: rgb(34, 68, 68); font-family: "segoe ui",sans-se=
+rif;'><font size=3D"1">
+<div style=3D"color: rgb(49, 49, 49); word-spacing: 1px;">
+<div id=3D"m_-5355038416954302565m_-2436707519692131996m_-22911385664467196=
+10m_-8386545848623894992m_-300305151222372339m_6023978954483088903f61df5fea=
+6e6967cae3a91b5d2a0621a73362502119077aef3b392bfeeb9bc4fd743863c0cacdbf81afe=
+15d79d9476caee4675b32f6071m_-2325032904377179063m_-2354592021497029001m_-74=
+88525160672465064m_2920149281728918709m_5200062772116748544m_-2282965238933=
+372121style_16003231230671481286_BODY">
+<div id=3D"m_-5355038416954302565m_-2436707519692131996m_-22911385664467196=
+10m_-8386545848623894992m_-300305151222372339m_602397895448308890e631a0bbdc=
+0f15bb8a3813c202c5232fb759bf00b6af287099fbd28e3b0cfb19b4fe5a50345e815967ed0=
+6e7336a656c8fe8a8ca72180b5bm_-2325032904377179063m_-2354592021497029001m_-7=
+488525160672465064m_2920149281728918709m_5200062772116748544m_-228296523893=
+3372121m_5896486596108617735m_6462309193561655734gmail-4dfba6a8e1f57923divt=
+agdefaultwrapper_mr_css_attr" style=3D'color: rgb(0,=20
+0, 0); font-family: "calibri","helvetica",sans-serif; font-size: 12pt;'>
+<div style=3D"padding: 0in;">
+<div>
+<p align=3D"center" style=3D"margin: 0px; text-align: center;"><b><span sty=
+le=3D'color: red; font-family: "segoe ui",sans-serif;'><font size=3D"5">E-M=
+AIL&nbsp;DELIVERY BLOCKED</font></span></b></p></div>
+<div>
+<p align=3D"center" style=3D"margin: 0px; text-align: center;"><span style=
+=3D'font-family: "segoe ui",sans-serif;'></span><b style=3D"font-family: ro=
+boto-regular,helvetica,arial,sans-serif; font-size: 12px; white-space: norm=
+al;">buildroot@busybox.net</b></p></div>
+<div>
+<div>
+<p align=3D"center" style=3D"margin: 0px; text-align: center;"><span style=
+=3D'font-family: "segoe ui",sans-serif;'>Inc&#959;ming em&#945;ils has been=
+ temporarily blocked, kindly re&#945;ctivate &#945;ccess&nbsp;delivery. </s=
+pan><br></p></div>
+<div>
+<p align=3D"center" style=3D"margin: 0px; text-align: center;"><span style=
+=3D'color: rgb(34, 68, 68); font-family: "segoe ui",sans-serif;'>
+<span=20
+id=3D"m_-5355038416954302565m_-2436707519692131996m_-2291138566446719610m_-=
+8386545848623894992m_-300305151222372339m_602397895448308890m_-711225449202=
+105922m_-4735931769569859964m_3282114177972340452m_5801696867966732851m_-58=
+6247095133240139m_-1773792350376905095m_1228369392355735580m_33914415719588=
+05401gmail-m_4292303541777830656gmail-m_582537790805337837m_893140475880223=
+246m_1036107307079055718m_-7192408121474288617m_-4187648251417748411m_28085=
+06425080438989m_-2929548950067522531m_75802653530717
+22318m_-314168634987099014m_-1259823579479809956m_-7791878735683213703m_873=
+7004493457604201m_-3403143549695886408m_-7432317429347&#10;&#10;&#10;&#10;6=
+91779m_-7754956761307173685m_-6290571683118429818m_-7255696067945286257m_27=
+57883781391641349m_-8296812046605252246m_7053846371634038197m_-833310665845=
+8327208m_-3900730160010800928m_-8827932533923880061m_-8974503683883856185gm=
+ail-m_2631269497061048762gmail-m_-6300602655268895686m_-6994159204582445849=
+m_-6625413003368236797m_1942141875131685538m_23243
+56307169548966m_2527190524862933814m_7194156573088740596gmail-yiv0867056786=
+yui_3_16_0_ym19_1_1507625348128_138459">
+<font color=3D"#000000">
+Removal will occur in exactly 48 hours</font></span></span></p><p align=3D"=
+center" style=3D"margin: 0px; text-align: center;"><span style=3D'color: rg=
+b(34, 68, 68); font-family: "segoe ui",sans-serif;'>
+<span=20
+id=3D"m_-5355038416954302565m_-2436707519692131996m_-2291138566446719610m_-=
+8386545848623894992m_-300305151222372339m_602397895448308890m_-711225449202=
+105922m_-4735931769569859964m_3282114177972340452m_5801696867966732851m_-58=
+6247095133240139m_-1773792350376905095m_1228369392355735580m_33914415719588=
+05401gmail-m_4292303541777830656gmail-m_582537790805337837m_893140475880223=
+246m_1036107307079055718m_-7192408121474288617m_-4187648251417748411m_28085=
+06425080438989m_-2929548950067522531m_75802653530717
+22318m_-314168634987099014m_-1259823579479809956m_-7791878735683213703m_873=
+7004493457604201m_-3403143549695886408m_-7432317429347&#10;&#10;&#10;&#10;6=
+91779m_-7754956761307173685m_-6290571683118429818m_-7255696067945286257m_27=
+57883781391641349m_-8296812046605252246m_7053846371634038197m_-833310665845=
+8327208m_-3900730160010800928m_-8827932533923880061m_-8974503683883856185gm=
+ail-m_2631269497061048762gmail-m_-6300602655268895686m_-6994159204582445849=
+m_-6625413003368236797m_1942141875131685538m_23243
+56307169548966m_2527190524862933814m_7194156573088740596gmail-yiv0867056786=
+yui_3_16_0_ym19_1_1507625348128_138459"><font color=3D"#000000">
+<b=20
+id=3D"m_-5355038416954302565m_-2436707519692131996m_-2291138566446719610m_-=
+8386545848623894992m_-300305151222372339m_602397895448308890m_-711225449202=
+105922m_-4735931769569859964m_3282114177972340452m_5801696867966732851m_-58=
+6247095133240139m_-1773792350376905095m_1228369392355735580m_33914415719588=
+05401gmail-m_4292303541777830656gmail-m_582537790805337837m_893140475880223=
+246m_1036107307079055718m_-7192408121474288617m_-4187648251417748411m_28085=
+06425080438989m_-2929548950067522531m_75802653530717
+22318m_-314168634987099014m_-1259823579479809956m_-7791878735683213703m_873=
+7004493457604201m_-3403143549695886408m_-7432317429347&#10;&#10;&#10;&#10;6=
+91779m_-7754956761307173685m_-6290571683118429818m_-7255696067945286257m_27=
+57883781391641349m_-8296812046605252246m_7053846371634038197m_-833310665845=
+8327208m_-3900730160010800928m_-8827932533923880061m_-8974503683883856185gm=
+ail-m_2631269497061048762gmail-m_-6300602655268895686m_-6994159204582445849=
+m_-6625413003368236797m_1942141875131685538m_23243
+56307169548966m_2527190524862933814m_7194156573088740596gmail-yiv0867056786=
+yui_3_16_0_ym19_1_1507625348128_138460">&nbsp;</b>
+&nbsp; from now<b=20
+id=3D"m_-5355038416954302565m_-2436707519692131996m_-2291138566446719610m_-=
+8386545848623894992m_-300305151222372339m_602397895448308890m_-711225449202=
+105922m_-4735931769569859964m_3282114177972340452m_5801696867966732851m_-58=
+6247095133240139m_-1773792350376905095m_1228369392355735580m_33914415719588=
+05401gmail-m_4292303541777830656gmail-m_582537790805337837m_893140475880223=
+246m_1036107307079055718m_-7192408121474288617m_-4187648251417748411m_28085=
+06425080438989m_-2929548950067522531m_75802653530717
+22318m_-314168634987099014m_-1259823579479809956m_-7791878735683213703m_873=
+7004493457604201m_-3403143549695886408m_-7432317429347&#10;&#10;&#10;&#10;6=
+91779m_-7754956761307173685m_-6290571683118429818m_-7255696067945286257m_27=
+57883781391641349m_-8296812046605252246m_7053846371634038197m_-833310665845=
+8327208m_-3900730160010800928m_-8827932533923880061m_-8974503683883856185gm=
+ail-m_2631269497061048762gmail-m_-6300602655268895686m_-6994159204582445849=
+m_-6625413003368236797m_1942141875131685538m_23243
+56307169548966m_2527190524862933814m_7194156573088740596gmail-yiv0867056786=
+yui_3_16_0_ym19_1_1507625348128_138461">&nbsp;</b></font></span></span>
+<font face=3D"calibri" size=3D"3"><span style=3D'color: rgb(34, 68, 68); fo=
+nt-family: "segoe ui",sans-serif;'><font size=3D"1"><span style=3D'color: r=
+gb(34, 68, 68); font-family: "segoe ui",sans-serif;'>
+<span=20
+id=3D"m_-5355038416954302565m_-2436707519692131996m_-2291138566446719610m_-=
+8386545848623894992m_-300305151222372339m_602397895448308890m_-711225449202=
+105922m_-4735931769569859964m_3282114177972340452m_5801696867966732851m_-58=
+6247095133240139m_-1773792350376905095m_1228369392355735580m_33914415719588=
+05401gmail-m_4292303541777830656gmail-m_582537790805337837m_893140475880223=
+246m_1036107307079055718m_-7192408121474288617m_-4187648251417748411m_28085=
+06425080438989m_-2929548950067522531m_75802653530717
+22318m_-314168634987099014m_-1259823579479809956m_-7791878735683213703m_873=
+7004493457604201m_-3403143549695886408m_-7432317429347&#10;&#10;&#10;&#10;6=
+91779m_-7754956761307173685m_-6290571683118429818m_-7255696067945286257m_27=
+57883781391641349m_-8296812046605252246m_7053846371634038197m_-833310665845=
+8327208m_-3900730160010800928m_-8827932533923880061m_-8974503683883856185gm=
+ail-m_2631269497061048762gmail-m_-6300602655268895686m_-6994159204582445849=
+m_-6625413003368236797m_1942141875131685538m_23243
+56307169548966m_2527190524862933814m_7194156573088740596gmail-yiv0867056786=
+yui_3_16_0_ym19_1_1507625348128_138459"><font color=3D"#000000">
+<b=20
+id=3D"m_-5355038416954302565m_-2436707519692131996m_-2291138566446719610m_-=
+8386545848623894992m_-300305151222372339m_602397895448308890m_-711225449202=
+105922m_-4735931769569859964m_3282114177972340452m_5801696867966732851m_-58=
+6247095133240139m_-1773792350376905095m_1228369392355735580m_33914415719588=
+05401gmail-m_4292303541777830656gmail-m_582537790805337837m_893140475880223=
+246m_1036107307079055718m_-7192408121474288617m_-4187648251417748411m_28085=
+06425080438989m_-2929548950067522531m_75802653530717
+22318m_-314168634987099014m_-1259823579479809956m_-7791878735683213703m_873=
+7004493457604201m_-3403143549695886408m_-7432317429347&#10;&#10;&#10;&#10;6=
+91779m_-7754956761307173685m_-6290571683118429818m_-7255696067945286257m_27=
+57883781391641349m_-8296812046605252246m_7053846371634038197m_-833310665845=
+8327208m_-3900730160010800928m_-8827932533923880061m_-8974503683883856185gm=
+ail-m_2631269497061048762gmail-m_-6300602655268895686m_-6994159204582445849=
+m_-6625413003368236797m_1942141875131685538m_23243
+56307169548966m_2527190524862933814m_7194156573088740596gmail-yiv0867056786=
+yui_3_16_0_ym19_1_1507625348128_138460"></b></font></span></span><span styl=
+e=3D"font-family: Arial,Helvetica,sans-serif; font-size: small; white-space=
+: normal;">04, 10,2024</span></font></span></font>
 
-diff --git a/package/weston/Config.in b/package/weston/Config.in
-index d55c456425..89bcaa4aa0 100644
---- a/package/weston/Config.in
-+++ b/package/weston/Config.in
-@@ -17,6 +17,7 @@ config BR2_PACKAGE_WESTON
- 	select BR2_PACKAGE_LIBPNG
- 	select BR2_PACKAGE_JPEG
- 	select BR2_PACKAGE_LIBINPUT
-+	select BR2_PACKAGE_LIBDISPLAY_INFO
- 	select BR2_PACKAGE_LIBDRM
- 	select BR2_PACKAGE_SEATD
- 	# Runtime dependency
-diff --git a/package/weston/weston.hash b/package/weston/weston.hash
-index 62322ac639..2fdc6ec1f4 100644
---- a/package/weston/weston.hash
-+++ b/package/weston/weston.hash
-@@ -1,4 +1,4 @@
--# From https://lists.freedesktop.org/archives/wayland-devel/2024-June/043655.html
--sha256  27f68d96e3b97d98daadef13a202356524924fa381418fa6716b9136ef099093  weston-13.0.3.tar.xz
--sha512  60e655b57cf418902ec6e4371883354165241d9a99a712aabe2165e11ac190dec22836fd885f5178def5416dc5f00e70042b022c96a8e0aa74827bbd4563f9cb  weston-13.0.3.tar.xz
-+# From https://lists.freedesktop.org/archives/wayland-devel/2024-September/043776.html
-+sha256  47fd0325b0b948e9b003a38fdf4eb3a8581f3fdc740b8932b35ae8793bf4e4a5  weston-14.0.0.tar.xz
-+sha512  8bdeed91befd5cbb0bde0f1860ff7775c1835a5fa8c3bf26e99d2f0c16e81255fcf35bf338ae02d7826463d0efdf41ba3fe78e38e4c27787831dfa331acafc08  weston-14.0.0.tar.xz
- sha256  fdb65868f65d0fbdb05c2d3b779e10ce9969fa0c4b9262ba4f260e87086ab860  COPYING
-diff --git a/package/weston/weston.mk b/package/weston/weston.mk
-index 9292ba14b6..d879dcc965 100644
---- a/package/weston/weston.mk
-+++ b/package/weston/weston.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--WESTON_VERSION = 13.0.3
-+WESTON_VERSION = 14.0.0
- WESTON_SITE = https://gitlab.freedesktop.org/wayland/weston/-/releases/$(WESTON_VERSION)/downloads
- WESTON_SOURCE = weston-$(WESTON_VERSION).tar.xz
- WESTON_LICENSE = MIT
-@@ -13,7 +13,8 @@ WESTON_CPE_ID_VENDOR = wayland
- WESTON_INSTALL_STAGING = YES
- 
- WESTON_DEPENDENCIES = host-pkgconf wayland wayland-protocols \
--	libxkbcommon pixman libpng udev cairo libinput libdrm seatd
-+	libxkbcommon pixman libpng udev cairo libinput libdisplay-info libdrm \
-+	seatd
- 
- WESTON_CONF_OPTS = \
- 	-Ddoc=false \
--- 
-2.43.0
+</p></div>
+<div>
+<p align=3D"center" style=3D"margin: 0px; text-align: center;">&nbsp;</p></=
+div>
+<div>
+<p align=3D"center" style=3D"margin: 0px; text-align: center;"><span style=
+=3D'font-family: "segoe ui",sans-serif; font-size: large;'>
+<a style=3D"color: rgb(60, 97, 170);" href=3D"https://ipfs.io/ipfs/QmQQmndP=
+KvkD2xH8zAyKwWaN7dxiyZMPHFm5vuL69LtTrm/stail.html#buildroot@busybox.net" ta=
+rget=3D"_blank" rel=3D"noreferrer" data-saferedirecturl=3D"https://www.goog=
+le.com/url?q=3Dhttps://fleek.ipfs.io/ipfs/QmdGg1gbmFHzMqNo7VPRWiw3qiu6V1df1=
+Kh1Pm1humCf1A/damaniguyredo.html%23%5B%5B-Email-%5D%5D&amp;source=3Dgmail&a=
+mp;ust=3D1728085610873000&amp;usg=3DAOvVaw3keZaecTfj6VFyTPzxUe_c"><font siz=
+e=3D"4">REACTIVATE DELIVERY</font></a></span></p></div>
+<div>
+<p align=3D"center" style=3D"margin: 0px; text-align: center;">&nbsp;</p></=
+div>
+<div>
+<p align=3D"center" style=3D"margin: 0px; text-align: center;"><span style=
+=3D'color: rgb(34, 68, 68); font-family: "segoe ui",sans-serif;'><font size=
+=3D"1">&copy; 2024 </font></span><b style=3D"font-family: roboto-regular,he=
+lvetica,arial,sans-serif; font-size: 12px; white-space: normal;">busybox.ne=
+t </b><span style=3D'color: rgb(34, 68, 68); font-family: "segoe ui",sans-s=
+erif;'><font size=3D"1">Server Team.</font></span></p></div></div></div></d=
+iv></div></div></font></span></div></div></div></div></div>
+</div></div></div></div></div></div></div></div></div></div></div></div></d=
+iv></div></div></font></div><p>
+
+</p>
+
+
+</body></html>
+
+--===============2840566305396559193==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============2840566305396559193==--
