@@ -4,74 +4,85 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 7D9FACF8853
-	for <buildroot@archiver.kernel.org>; Fri,  4 Oct 2024 17:39:20 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 1F20FCF8840
+	for <buildroot@archiver.kernel.org>; Fri,  4 Oct 2024 17:56:03 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id EDB394136A;
-	Fri,  4 Oct 2024 17:39:19 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id C27E340438;
+	Fri,  4 Oct 2024 17:56:02 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp2.osuosl.org ([127.0.0.1])
  by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id iVKhfGe4nso2; Fri,  4 Oct 2024 17:39:18 +0000 (UTC)
+ id wGujlN_MS3yt; Fri,  4 Oct 2024 17:56:01 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 0B2394021C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 8ADA7413B3
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 0B2394021C;
-	Fri,  4 Oct 2024 17:39:18 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id D60D61BF390
- for <buildroot@lists.busybox.net>; Fri,  4 Oct 2024 17:39:16 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 8ADA7413B3;
+	Fri,  4 Oct 2024 17:56:01 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 7C7B81BF982
+ for <buildroot@lists.busybox.net>; Fri,  4 Oct 2024 17:55:59 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id D26944021C
- for <buildroot@lists.busybox.net>; Fri,  4 Oct 2024 17:39:16 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id 6BBA56117B
+ for <buildroot@lists.busybox.net>; Fri,  4 Oct 2024 17:55:59 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 44PiwaqO3TsV for <buildroot@lists.busybox.net>;
- Fri,  4 Oct 2024 17:39:15 +0000 (UTC)
-X-Greylist: delayed 601 seconds by postgrey-1.37 at util1.osuosl.org;
- Fri, 04 Oct 2024 17:39:15 UTC
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 31BE8401DD
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 31BE8401DD
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=80.241.56.152;
- helo=mout-p-102.mailbox.org; envelope-from=ralf.dragon@lindra.de;
- receiver=<UNKNOWN> 
-Received: from mout-p-102.mailbox.org (mout-p-102.mailbox.org [80.241.56.152])
- by smtp2.osuosl.org (Postfix) with ESMTPS id 31BE8401DD
- for <buildroot@buildroot.org>; Fri,  4 Oct 2024 17:39:15 +0000 (UTC)
-Received: from smtp1.mailbox.org (smtp1.mailbox.org
- [IPv6:2001:67c:2050:b231:465::1])
- (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
- key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
- (No client certificate requested)
- by mout-p-102.mailbox.org (Postfix) with ESMTPS id 4XKwMc0XLRz9syP;
- Fri,  4 Oct 2024 19:22:04 +0200 (CEST)
-From: Ralf Dragon <hypnotoad@lindra.de>
-To: buildroot@buildroot.org
-Date: Fri,  4 Oct 2024 19:21:06 +0200
-Message-Id: <20241004172105.2050317-1-hypnotoad@lindra.de>
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 52w0T8n0X2ld for <buildroot@lists.busybox.net>;
+ Fri,  4 Oct 2024 17:55:58 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2607:f8b0:4864:20::a31; helo=mail-vk1-xa31.google.com;
+ envelope-from=pholden@nklabs.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 614E16117E
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 614E16117E
+Received: from mail-vk1-xa31.google.com (mail-vk1-xa31.google.com
+ [IPv6:2607:f8b0:4864:20::a31])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 614E16117E
+ for <buildroot@buildroot.org>; Fri,  4 Oct 2024 17:55:58 +0000 (UTC)
+Received: by mail-vk1-xa31.google.com with SMTP id
+ 71dfb90a1353d-50c937b92d9so226041e0c.2
+ for <buildroot@buildroot.org>; Fri, 04 Oct 2024 10:55:58 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1728064557; x=1728669357;
+ h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=Bd1kGUtsI9DiYIq48hemKEoctkytY9A697COxNiQylE=;
+ b=Yssjo7Mszjh/3KijaLvOLtWB6fT5XYJAG33rngcyQUvjl376kCIbnU3UoG2FSv3rxU
+ YjYiGD/mqxzujUY5YzaodoYQXIgp2Bc0Z2a3j3C/ECKySJJrNrkYfoSA9uJE3C5ypAkq
+ 5hPCNamAC4AJRKmEPSd/Axy7Arb28HD0Rl3AWFmZz2l9vOmLnugthaUjiW4ugSnI5vSd
+ RIeZepAaxgy+Aa/Wbpx2IsUF6cX6KpBV3FALexJaKH4s5PGGLf/V3IeKaCGdR1mGP3qN
+ +3R4tPM2dnhdqOGcgZdFtXIIEsWwyxpQoa7N8CmcZ0bCWYAsEYGSwmHc/sEOYk5MYfdo
+ D31Q==
+X-Gm-Message-State: AOJu0YzHmldNLTesXzf2AvbiVIBmjFdhcmGD3MLwwBXOnAWSAiGnXgiW
+ 8NXXpgSw20XmOluvsyc1nHW+OSQc56kXzhPMwv9fW72eqL177Qgq7SNQUOcSNJYYS2BO5SO0gaI
+ vx2BRLFDJ8L1GeI0poPpfgpPzU8SyGLlwbsQncfiwFggCp/K1VGY=
+X-Google-Smtp-Source: AGHT+IEdsW4OMpTCwVz0Emf/gwHR1Fbp9aC0Zwus1NkmfmW7i3+orEBWhLQsvGE1hIcU0BV9jqatNF4qq8HNWiR7oa4=
+X-Received: by 2002:a05:6122:459a:b0:50a:d1e3:82f7 with SMTP id
+ 71dfb90a1353d-50c8557deb1mr4510737e0c.8.1728064556753; Fri, 04 Oct 2024
+ 10:55:56 -0700 (PDT)
 MIME-Version: 1.0
-X-Rspamd-Queue-Id: 4XKwMc0XLRz9syP
+From: Patricia Holden <pholden@nklabs.com>
+Date: Fri, 4 Oct 2024 13:55:46 -0400
+Message-ID: <CAJ6EmCfKm3W5yFiTTnMO48n75YRKr2kPFHUttwfwvCn8tbSeaA@mail.gmail.com>
+To: buildroot@buildroot.org
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=lindra.de; s=MBO0001; t=1728062524;
- h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
- to:to:cc:cc:mime-version:mime-version:
- content-transfer-encoding:content-transfer-encoding;
- bh=5y69N0IV9CvJE5xdYRsOhxxPSuNICjvtjJB/AuTpb70=;
- b=eGceab/FpuSPUqI+nQZMQKN6I2mNSQkwafXFEd734iE9aEkPZDdxQGCNrLyJY4lUFnAs7O
- HH2pju/Q2OuudkZt8EWA37jAeXJgL75qEfHE49IdCSX+r9ArcDujI3wUHAY2+NcgIUnPDQ
- cyJ0Kg1GmJQDx9Fikgb7+Yzq0U9zdTdamkfuxqogvK+1+I8vbNc4hNcAa75VM/CvWisW5/
- EBepiNjGf12btFtpteG+LvJM8oOOYKnKrJkQJfNrb/5nEVUpC97mAAlKND85p5u1f3isSi
- lUTgHn6AMfRobXeyec1jTN12IMsrDzMbu/iYzrtXkAB8nTMqBrv0WvokqYjKEg==
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=lindra.de
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ d=nklabs.com; s=google; t=1728064557; x=1728669357; darn=buildroot.org;
+ h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+ :date:message-id:reply-to;
+ bh=Bd1kGUtsI9DiYIq48hemKEoctkytY9A697COxNiQylE=;
+ b=RpGu3pZb1a9wBrCRIm7B8BzDRrAFHpWf1pjJ5lZXnLQ58scaNi+gexJOreF935/juJ
+ BOs6JuCV8UMDqX41UNnMdmVum03MgEtNYEchfRHp5Q/xOE3xIFrsRrkV99rpBy2xO/Tt
+ oSLeEzwVRwTxkalw7ouztpm5uTyQi3iK0Lw0wPtICbvy0es0BIU6UwObwxebWryCaHqM
+ +bXbiCUp88FWZAYP3i8G7/GeJg48wF3IxIVJmwnNQOaTyjddM6d9tVq/0e0PMkOW63Co
+ DRqlXkJtEodl7vfR9S8uuQ2kVgEfK2U0eTcWlNYhmQw1zr1NZIz+3Mm8VmhpzZg0Dg/1
+ gJhg==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=nklabs.com
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
  dkim=pass (2048-bit key,
- unprotected) header.d=lindra.de header.i=@lindra.de header.a=rsa-sha256
- header.s=MBO0001 header.b=eGceab/F
-Subject: [Buildroot] [PATCH] package/x11vnc: Fix multiple symbol definition
- error
+ unprotected) header.d=nklabs.com header.i=@nklabs.com header.a=rsa-sha256
+ header.s=google header.b=RpGu3pZb
+Subject: [Buildroot] Qt6Charts support in 2024.02
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,83 +94,42 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Martin Kepplinger <martink@posteo.de>, Ralf Dragon <hypnotoad@lindra.de>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============0642135316933117473=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Error seems to happen if LIBVNCSERVER_HAVE_LIBPTHREAD is defined:
-/bin/ld: x11vnc-xwrappers.o:(.bss+0x494): multiple definition of
-`clientMutex'; x11vnc-8to24.o:(.bss+0x59600): first defined here
+--===============0642135316933117473==
+Content-Type: multipart/alternative; boundary="0000000000000dfe5f0623aa6200"
 
-Patch is from https://bugs.gentoo.org/706840 . It moves the
-implementation from header to a source file, thus avoiding multiple
-definitions.
+--0000000000000dfe5f0623aa6200
+Content-Type: text/plain; charset="UTF-8"
 
-Signed-off-by: Ralf Dragon <hypnotoad@lindra.de>
----
-Backport to: 2024.02.x
----
- .../x11vnc/0003-Fix-multi-definition.patch    | 45 +++++++++++++++++++
- 1 file changed, 45 insertions(+)
- create mode 100644 package/x11vnc/0003-Fix-multi-definition.patch
+I am working on a TI AM62x project which will feature a QT based UI.  We
+need Qt6Charts support for some of the screens for this UI.  Is there a
+patch available to enable Qt6Charts?
 
-diff --git a/package/x11vnc/0003-Fix-multi-definition.patch b/package/x11vnc/0003-Fix-multi-definition.patch
-new file mode 100644
-index 0000000000..504159efe9
---- /dev/null
-+++ b/package/x11vnc/0003-Fix-multi-definition.patch
-@@ -0,0 +1,45 @@
-+From a48b0b1cd887d7f3ae67f525d7d334bd2feffe60 Mon Sep 17 00:00:00 2001
-+From: Alexander Tsoy <alexander@tsoy.me>
-+Date: Tue, 28 Jan 2020 22:21:01 +0300
-+Subject: [PATCH] Fix build with -fno-common
-+
-+GCC 10 defaults to -fno-common
-+---
-+ src/util.c | 3 +++
-+ src/util.h | 6 +++---
-+ 2 files changed, 6 insertions(+), 3 deletions(-)
-+
-+diff --git a/src/util.c b/src/util.c
-+index a82a1a4..6a52ebf 100644
-+--- a/src/util.c
-++++ b/src/util.c
-+@@ -47,6 +47,9 @@ int hxl = 0;
-+ #ifdef LIBVNCSERVER_HAVE_LIBPTHREAD
-+ MUTEX(x11Mutex);
-+ MUTEX(scrollMutex);
-++MUTEX(clientMutex);
-++MUTEX(inputMutex);
-++MUTEX(pointerMutex);
-+ #endif
-+ 
-+ int nfix(int i, int n);
-+diff --git a/src/util.h b/src/util.h
-+index 35c1afd..99b5dd1 100644
-+--- a/src/util.h
-++++ b/src/util.h
-+@@ -102,9 +102,9 @@ extern struct timeval _mysleep;
-+ #ifdef LIBVNCSERVER_HAVE_LIBPTHREAD
-+ extern MUTEX(x11Mutex);
-+ extern MUTEX(scrollMutex);
-+-MUTEX(clientMutex);
-+-MUTEX(inputMutex);
-+-MUTEX(pointerMutex);
-++extern MUTEX(clientMutex);
-++extern MUTEX(inputMutex);
-++extern MUTEX(pointerMutex);
-+ #endif
-+ 
-+ #define X_INIT INIT_MUTEX(x11Mutex)
-+-- 
-+2.24.1
-+
--- 
-2.39.5
+Thanks!
+
+--0000000000000dfe5f0623aa6200
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div dir=3D"ltr">I am working on a TI AM62x project which will feature a QT=
+ based UI.=C2=A0 We need Qt6Charts=C2=A0support for some of the screens for=
+ this UI.=C2=A0 Is there a patch available to enable Qt6Charts?<div><br></d=
+iv><div>Thanks!</div></div>
+
+--0000000000000dfe5f0623aa6200--
+
+--===============0642135316933117473==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============0642135316933117473==--
