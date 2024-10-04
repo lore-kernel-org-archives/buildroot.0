@@ -1,51 +1,81 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D8AC9CF8552
-	for <buildroot@archiver.kernel.org>; Fri,  4 Oct 2024 14:12:13 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 33720CF884D
+	for <buildroot@archiver.kernel.org>; Fri,  4 Oct 2024 15:50:39 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 5500F607E9;
-	Fri,  4 Oct 2024 14:12:13 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 9171A40D13;
+	Fri,  4 Oct 2024 15:50:39 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id AO7CqZ2JwFJL; Fri,  4 Oct 2024 14:12:12 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 57MsXYoEaolO; Fri,  4 Oct 2024 15:50:38 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 661E9605AF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 625E040D27
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 661E9605AF;
-	Fri,  4 Oct 2024 14:12:12 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id DFCC21BF82C
- for <buildroot@lists.busybox.net>; Fri,  4 Oct 2024 14:12:10 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 625E040D27;
+	Fri,  4 Oct 2024 15:50:38 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 10CFC1BF3D2
+ for <buildroot@lists.busybox.net>; Fri,  4 Oct 2024 15:50:37 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id D4C3780A9B
- for <buildroot@lists.busybox.net>; Fri,  4 Oct 2024 14:12:08 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 0C6BA4137D
+ for <buildroot@lists.busybox.net>; Fri,  4 Oct 2024 15:50:37 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oaozvGxyaNii for <buildroot@lists.busybox.net>;
- Fri,  4 Oct 2024 14:12:08 +0000 (UTC)
-Received-SPF: Softfail (mailfrom) identity=mailfrom; client-ip=192.3.96.90;
- helo=192-3-96-90-host.colocrossing.com; envelope-from=noreplysdesk@busybox.net;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org D6CF980E74
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org D6CF980E74
-Received: from 192-3-96-90-host.colocrossing.com (unknown [192.3.96.90])
- by smtp1.osuosl.org (Postfix) with ESMTP id D6CF980E74
- for <buildroot@busybox.net>; Fri,  4 Oct 2024 14:12:07 +0000 (UTC)
-From: E-mail Administrator<noreplysdesk@busybox.net>
-To: buildroot@busybox.net
-Date: 4 Oct 2024 16:12:07 +0200
-Message-ID: <20241004161207.3B2076CBD4AFD386@busybox.net>
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id e9IR7HrgvjYz for <buildroot@lists.busybox.net>;
+ Fri,  4 Oct 2024 15:50:36 +0000 (UTC)
+X-Greylist: delayed 371 seconds by postgrey-1.37 at util1.osuosl.org;
+ Fri, 04 Oct 2024 15:50:34 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org 1BFD3402D4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 1BFD3402D4
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2001:67c:2050:0:465::201; helo=mout-p-201.mailbox.org;
+ envelope-from=hypnotoad@lindra.de; receiver=<UNKNOWN> 
+Received: from mout-p-201.mailbox.org (mout-p-201.mailbox.org
+ [IPv6:2001:67c:2050:0:465::201])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id 1BFD3402D4
+ for <buildroot@buildroot.org>; Fri,  4 Oct 2024 15:50:34 +0000 (UTC)
+Received: from smtp202.mailbox.org (smtp202.mailbox.org [10.196.197.202])
+ (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+ key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+ (No client certificate requested)
+ by mout-p-201.mailbox.org (Postfix) with ESMTPS id 4XKtBp3jStz9t44;
+ Fri,  4 Oct 2024 17:44:18 +0200 (CEST)
+Message-ID: <1e3d0c06-17b1-422f-9e9d-a501e3f9fcf8@lindra.de>
+Date: Fri, 4 Oct 2024 17:44:16 +0200
 MIME-Version: 1.0
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=none (p=none dis=none)
- header.from=busybox.net
-Subject: [Buildroot] buildroot@busybox.net DELIVERY BLOCKED
+To: Andreas Naumann <dev@andin.de>, buildroot@buildroot.org
+References: <20240401084841.439073-1-hypnotoad@lindra.de>
+ <20240405175454.14431-2-hypnotoad@lindra.de>
+ <6b23799f-7a89-4665-935f-22176901d87e@andin.de>
+Content-Language: en-US, de-DE
+From: Ralf Dragon <hypnotoad@lindra.de>
+In-Reply-To: <6b23799f-7a89-4665-935f-22176901d87e@andin.de>
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=lindra.de; s=MBO0001; t=1728056658;
+ h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+ to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+ content-transfer-encoding:content-transfer-encoding:
+ in-reply-to:in-reply-to:references:references;
+ bh=j4W7P8ulacjeMcHs4szB/H0DFB69G0784UnR7b8WTbw=;
+ b=MxuUcxUoebjrzLeG1R0r0n3MQxZlWgp37zzB3jE78WFyPTr8/FFToGlPgFvqJU0dsn+Tqy
+ O2oBphc6/Z3yCSUkG/U5pocJcwJrVpP3yOT+KYYNhRDQwLWg+ZS/egucpA9z0Wp2L/skgP
+ 73RfBDhnRy8gJcKFSJ3O+OPBa4BtSpbPwj91GzXN7s1SegA9j0JXihInBnil9T3ypMaN3w
+ NIkzprNGdzUWlsT8HcLWALLiXClrEmMDBacTUzZ7+wFJdBeZRebWShBqgkLZE/JwcwXjWn
+ hjyg970O0z/n2HAyUmu1aORMmMbSY7vwtD95GCuZqJ9Z5wbLaYOvOn6yC9z43A==
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=lindra.de
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=lindra.de header.i=@lindra.de header.a=rsa-sha256
+ header.s=MBO0001 header.b=MxuUcxUo
+Subject: Re: [Buildroot] [PATCH v3 2/2] add missing SIP module for PyQt5
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -57,244 +87,37 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Content-Type: multipart/mixed; boundary="===============2840566305396559193=="
+Cc: James Hilliard <james.hilliard1@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ Asaf Kahlon <asafka7@gmail.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset="utf-8"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
---===============2840566305396559193==
-Content-Type: text/html
-Content-Transfer-Encoding: quoted-printable
-
-<!DOCTYPE HTML>
-
-<html><head><title></title>
-<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
-</head>
-<body style=3D"margin: 0.4em;">
-<p>
-</p><div style=3D'color: rgb(51, 51, 51); font-family: "arial",serif,"emoji=
-font"; font-size: 12px;'><font face=3D"calibri" size=3D"3">
-<div>
-<div>
-<div>
-<div>
-<div>
-<div>
-<div>
-<div>
-<div>
-<div>
-<div>
-<div>
-<div>
-<div>
-<div>
-<div style=3D"color: rgb(49, 49, 49); word-spacing: 1px;">
-<div id=3D"m_-5355038416954302565m_-2436707519692131996m_-22911385664467196=
-10m_-8386545848623894992m_-300305151222372339m_602397895448308890cad17e83de=
-1e7c6f6dbdc20aa58c2d5aed9ed4220f52980b873a202c627908a88e60f711e95599344f298=
-d51f055c4b80279da7715ea83bm_591350058554869810m_-2354592021497029001m_-7488=
-525160672465064m_2920149281728918709m_5200062772116748544m_-228296523893337=
-2121style_16003231230671481286_BODY">
-<div id=3D"m_-5355038416954302565m_-2436707519692131996m_-22911385664467196=
-10m_-8386545848623894992m_-300305151222372339m_6023978954483088904c648d7e01=
-61540a6d154a3ac232c27da75e70ca1d19154be5e6bb0ffbaf4996aff18c1ac9e248a9542fb=
-a3bc758634ea07e436fc1d1155m_591350058554869810m_-2354592021497029001m_-7488=
-525160672465064m_2920149281728918709m_5200062772116748544m_-228296523893337=
-2121m_5896486596108617735m_6462309193561655734gmail-4dfba6a8e1f57923divtagd=
-efaultwrapper_mr_css_attr" style=3D'color: rgb(0, 0,=20
-0); font-family: "calibri","helvetica",sans-serif; font-size: 12pt;'>
-<div style=3D"padding: 0in;">
-<div><span style=3D'color: rgb(34, 68, 68); font-family: "segoe ui",sans-se=
-rif;'><font size=3D"1">
-<div style=3D"color: rgb(49, 49, 49); word-spacing: 1px;">
-<div id=3D"m_-5355038416954302565m_-2436707519692131996m_-22911385664467196=
-10m_-8386545848623894992m_-300305151222372339m_6023978954483088903f61df5fea=
-6e6967cae3a91b5d2a0621a73362502119077aef3b392bfeeb9bc4fd743863c0cacdbf81afe=
-15d79d9476caee4675b32f6071m_-2325032904377179063m_-2354592021497029001m_-74=
-88525160672465064m_2920149281728918709m_5200062772116748544m_-2282965238933=
-372121style_16003231230671481286_BODY">
-<div id=3D"m_-5355038416954302565m_-2436707519692131996m_-22911385664467196=
-10m_-8386545848623894992m_-300305151222372339m_602397895448308890e631a0bbdc=
-0f15bb8a3813c202c5232fb759bf00b6af287099fbd28e3b0cfb19b4fe5a50345e815967ed0=
-6e7336a656c8fe8a8ca72180b5bm_-2325032904377179063m_-2354592021497029001m_-7=
-488525160672465064m_2920149281728918709m_5200062772116748544m_-228296523893=
-3372121m_5896486596108617735m_6462309193561655734gmail-4dfba6a8e1f57923divt=
-agdefaultwrapper_mr_css_attr" style=3D'color: rgb(0,=20
-0, 0); font-family: "calibri","helvetica",sans-serif; font-size: 12pt;'>
-<div style=3D"padding: 0in;">
-<div>
-<p align=3D"center" style=3D"margin: 0px; text-align: center;"><b><span sty=
-le=3D'color: red; font-family: "segoe ui",sans-serif;'><font size=3D"5">E-M=
-AIL&nbsp;DELIVERY BLOCKED</font></span></b></p></div>
-<div>
-<p align=3D"center" style=3D"margin: 0px; text-align: center;"><span style=
-=3D'font-family: "segoe ui",sans-serif;'></span><b style=3D"font-family: ro=
-boto-regular,helvetica,arial,sans-serif; font-size: 12px; white-space: norm=
-al;">buildroot@busybox.net</b></p></div>
-<div>
-<div>
-<p align=3D"center" style=3D"margin: 0px; text-align: center;"><span style=
-=3D'font-family: "segoe ui",sans-serif;'>Inc&#959;ming em&#945;ils has been=
- temporarily blocked, kindly re&#945;ctivate &#945;ccess&nbsp;delivery. </s=
-pan><br></p></div>
-<div>
-<p align=3D"center" style=3D"margin: 0px; text-align: center;"><span style=
-=3D'color: rgb(34, 68, 68); font-family: "segoe ui",sans-serif;'>
-<span=20
-id=3D"m_-5355038416954302565m_-2436707519692131996m_-2291138566446719610m_-=
-8386545848623894992m_-300305151222372339m_602397895448308890m_-711225449202=
-105922m_-4735931769569859964m_3282114177972340452m_5801696867966732851m_-58=
-6247095133240139m_-1773792350376905095m_1228369392355735580m_33914415719588=
-05401gmail-m_4292303541777830656gmail-m_582537790805337837m_893140475880223=
-246m_1036107307079055718m_-7192408121474288617m_-4187648251417748411m_28085=
-06425080438989m_-2929548950067522531m_75802653530717
-22318m_-314168634987099014m_-1259823579479809956m_-7791878735683213703m_873=
-7004493457604201m_-3403143549695886408m_-7432317429347&#10;&#10;&#10;&#10;6=
-91779m_-7754956761307173685m_-6290571683118429818m_-7255696067945286257m_27=
-57883781391641349m_-8296812046605252246m_7053846371634038197m_-833310665845=
-8327208m_-3900730160010800928m_-8827932533923880061m_-8974503683883856185gm=
-ail-m_2631269497061048762gmail-m_-6300602655268895686m_-6994159204582445849=
-m_-6625413003368236797m_1942141875131685538m_23243
-56307169548966m_2527190524862933814m_7194156573088740596gmail-yiv0867056786=
-yui_3_16_0_ym19_1_1507625348128_138459">
-<font color=3D"#000000">
-Removal will occur in exactly 48 hours</font></span></span></p><p align=3D"=
-center" style=3D"margin: 0px; text-align: center;"><span style=3D'color: rg=
-b(34, 68, 68); font-family: "segoe ui",sans-serif;'>
-<span=20
-id=3D"m_-5355038416954302565m_-2436707519692131996m_-2291138566446719610m_-=
-8386545848623894992m_-300305151222372339m_602397895448308890m_-711225449202=
-105922m_-4735931769569859964m_3282114177972340452m_5801696867966732851m_-58=
-6247095133240139m_-1773792350376905095m_1228369392355735580m_33914415719588=
-05401gmail-m_4292303541777830656gmail-m_582537790805337837m_893140475880223=
-246m_1036107307079055718m_-7192408121474288617m_-4187648251417748411m_28085=
-06425080438989m_-2929548950067522531m_75802653530717
-22318m_-314168634987099014m_-1259823579479809956m_-7791878735683213703m_873=
-7004493457604201m_-3403143549695886408m_-7432317429347&#10;&#10;&#10;&#10;6=
-91779m_-7754956761307173685m_-6290571683118429818m_-7255696067945286257m_27=
-57883781391641349m_-8296812046605252246m_7053846371634038197m_-833310665845=
-8327208m_-3900730160010800928m_-8827932533923880061m_-8974503683883856185gm=
-ail-m_2631269497061048762gmail-m_-6300602655268895686m_-6994159204582445849=
-m_-6625413003368236797m_1942141875131685538m_23243
-56307169548966m_2527190524862933814m_7194156573088740596gmail-yiv0867056786=
-yui_3_16_0_ym19_1_1507625348128_138459"><font color=3D"#000000">
-<b=20
-id=3D"m_-5355038416954302565m_-2436707519692131996m_-2291138566446719610m_-=
-8386545848623894992m_-300305151222372339m_602397895448308890m_-711225449202=
-105922m_-4735931769569859964m_3282114177972340452m_5801696867966732851m_-58=
-6247095133240139m_-1773792350376905095m_1228369392355735580m_33914415719588=
-05401gmail-m_4292303541777830656gmail-m_582537790805337837m_893140475880223=
-246m_1036107307079055718m_-7192408121474288617m_-4187648251417748411m_28085=
-06425080438989m_-2929548950067522531m_75802653530717
-22318m_-314168634987099014m_-1259823579479809956m_-7791878735683213703m_873=
-7004493457604201m_-3403143549695886408m_-7432317429347&#10;&#10;&#10;&#10;6=
-91779m_-7754956761307173685m_-6290571683118429818m_-7255696067945286257m_27=
-57883781391641349m_-8296812046605252246m_7053846371634038197m_-833310665845=
-8327208m_-3900730160010800928m_-8827932533923880061m_-8974503683883856185gm=
-ail-m_2631269497061048762gmail-m_-6300602655268895686m_-6994159204582445849=
-m_-6625413003368236797m_1942141875131685538m_23243
-56307169548966m_2527190524862933814m_7194156573088740596gmail-yiv0867056786=
-yui_3_16_0_ym19_1_1507625348128_138460">&nbsp;</b>
-&nbsp; from now<b=20
-id=3D"m_-5355038416954302565m_-2436707519692131996m_-2291138566446719610m_-=
-8386545848623894992m_-300305151222372339m_602397895448308890m_-711225449202=
-105922m_-4735931769569859964m_3282114177972340452m_5801696867966732851m_-58=
-6247095133240139m_-1773792350376905095m_1228369392355735580m_33914415719588=
-05401gmail-m_4292303541777830656gmail-m_582537790805337837m_893140475880223=
-246m_1036107307079055718m_-7192408121474288617m_-4187648251417748411m_28085=
-06425080438989m_-2929548950067522531m_75802653530717
-22318m_-314168634987099014m_-1259823579479809956m_-7791878735683213703m_873=
-7004493457604201m_-3403143549695886408m_-7432317429347&#10;&#10;&#10;&#10;6=
-91779m_-7754956761307173685m_-6290571683118429818m_-7255696067945286257m_27=
-57883781391641349m_-8296812046605252246m_7053846371634038197m_-833310665845=
-8327208m_-3900730160010800928m_-8827932533923880061m_-8974503683883856185gm=
-ail-m_2631269497061048762gmail-m_-6300602655268895686m_-6994159204582445849=
-m_-6625413003368236797m_1942141875131685538m_23243
-56307169548966m_2527190524862933814m_7194156573088740596gmail-yiv0867056786=
-yui_3_16_0_ym19_1_1507625348128_138461">&nbsp;</b></font></span></span>
-<font face=3D"calibri" size=3D"3"><span style=3D'color: rgb(34, 68, 68); fo=
-nt-family: "segoe ui",sans-serif;'><font size=3D"1"><span style=3D'color: r=
-gb(34, 68, 68); font-family: "segoe ui",sans-serif;'>
-<span=20
-id=3D"m_-5355038416954302565m_-2436707519692131996m_-2291138566446719610m_-=
-8386545848623894992m_-300305151222372339m_602397895448308890m_-711225449202=
-105922m_-4735931769569859964m_3282114177972340452m_5801696867966732851m_-58=
-6247095133240139m_-1773792350376905095m_1228369392355735580m_33914415719588=
-05401gmail-m_4292303541777830656gmail-m_582537790805337837m_893140475880223=
-246m_1036107307079055718m_-7192408121474288617m_-4187648251417748411m_28085=
-06425080438989m_-2929548950067522531m_75802653530717
-22318m_-314168634987099014m_-1259823579479809956m_-7791878735683213703m_873=
-7004493457604201m_-3403143549695886408m_-7432317429347&#10;&#10;&#10;&#10;6=
-91779m_-7754956761307173685m_-6290571683118429818m_-7255696067945286257m_27=
-57883781391641349m_-8296812046605252246m_7053846371634038197m_-833310665845=
-8327208m_-3900730160010800928m_-8827932533923880061m_-8974503683883856185gm=
-ail-m_2631269497061048762gmail-m_-6300602655268895686m_-6994159204582445849=
-m_-6625413003368236797m_1942141875131685538m_23243
-56307169548966m_2527190524862933814m_7194156573088740596gmail-yiv0867056786=
-yui_3_16_0_ym19_1_1507625348128_138459"><font color=3D"#000000">
-<b=20
-id=3D"m_-5355038416954302565m_-2436707519692131996m_-2291138566446719610m_-=
-8386545848623894992m_-300305151222372339m_602397895448308890m_-711225449202=
-105922m_-4735931769569859964m_3282114177972340452m_5801696867966732851m_-58=
-6247095133240139m_-1773792350376905095m_1228369392355735580m_33914415719588=
-05401gmail-m_4292303541777830656gmail-m_582537790805337837m_893140475880223=
-246m_1036107307079055718m_-7192408121474288617m_-4187648251417748411m_28085=
-06425080438989m_-2929548950067522531m_75802653530717
-22318m_-314168634987099014m_-1259823579479809956m_-7791878735683213703m_873=
-7004493457604201m_-3403143549695886408m_-7432317429347&#10;&#10;&#10;&#10;6=
-91779m_-7754956761307173685m_-6290571683118429818m_-7255696067945286257m_27=
-57883781391641349m_-8296812046605252246m_7053846371634038197m_-833310665845=
-8327208m_-3900730160010800928m_-8827932533923880061m_-8974503683883856185gm=
-ail-m_2631269497061048762gmail-m_-6300602655268895686m_-6994159204582445849=
-m_-6625413003368236797m_1942141875131685538m_23243
-56307169548966m_2527190524862933814m_7194156573088740596gmail-yiv0867056786=
-yui_3_16_0_ym19_1_1507625348128_138460"></b></font></span></span><span styl=
-e=3D"font-family: Arial,Helvetica,sans-serif; font-size: small; white-space=
-: normal;">04, 10,2024</span></font></span></font>
-
-</p></div>
-<div>
-<p align=3D"center" style=3D"margin: 0px; text-align: center;">&nbsp;</p></=
-div>
-<div>
-<p align=3D"center" style=3D"margin: 0px; text-align: center;"><span style=
-=3D'font-family: "segoe ui",sans-serif; font-size: large;'>
-<a style=3D"color: rgb(60, 97, 170);" href=3D"https://ipfs.io/ipfs/QmQQmndP=
-KvkD2xH8zAyKwWaN7dxiyZMPHFm5vuL69LtTrm/stail.html#buildroot@busybox.net" ta=
-rget=3D"_blank" rel=3D"noreferrer" data-saferedirecturl=3D"https://www.goog=
-le.com/url?q=3Dhttps://fleek.ipfs.io/ipfs/QmdGg1gbmFHzMqNo7VPRWiw3qiu6V1df1=
-Kh1Pm1humCf1A/damaniguyredo.html%23%5B%5B-Email-%5D%5D&amp;source=3Dgmail&a=
-mp;ust=3D1728085610873000&amp;usg=3DAOvVaw3keZaecTfj6VFyTPzxUe_c"><font siz=
-e=3D"4">REACTIVATE DELIVERY</font></a></span></p></div>
-<div>
-<p align=3D"center" style=3D"margin: 0px; text-align: center;">&nbsp;</p></=
-div>
-<div>
-<p align=3D"center" style=3D"margin: 0px; text-align: center;"><span style=
-=3D'color: rgb(34, 68, 68); font-family: "segoe ui",sans-serif;'><font size=
-=3D"1">&copy; 2024 </font></span><b style=3D"font-family: roboto-regular,he=
-lvetica,arial,sans-serif; font-size: 12px; white-space: normal;">busybox.ne=
-t </b><span style=3D'color: rgb(34, 68, 68); font-family: "segoe ui",sans-s=
-erif;'><font size=3D"1">Server Team.</font></span></p></div></div></div></d=
-iv></div></div></font></span></div></div></div></div></div>
-</div></div></div></div></div></div></div></div></div></div></div></div></d=
-iv></div></div></font></div><p>
-
-</p>
-
-
-</body></html>
-
---===============2840566305396559193==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-
-_______________________________________________
-buildroot mailing list
-buildroot@buildroot.org
-https://lists.buildroot.org/mailman/listinfo/buildroot
-
---===============2840566305396559193==--
+QW0gMTIuMDkuMjQgdW0gMjE6MjMgc2NocmllYiBBbmRyZWFzIE5hdW1hbm46Cj4KPgo+IEFtIDA1
+LjA0LjI0IHVtIDE5OjU0IHNjaHJpZWIgUmFsZiBEcmFnb246Cj4+IFRoaXMgZml4ZXMgdGhlIGZv
+bGxvd2luZyBydW50aW1lIGVycm9yIHdoZW4gaW1wb3J0aW5nIFB5UXQ1IGluIHB5dGhvbjoKPj4K
+Pj4gZnJvbSBQeVF0NS5RdENvcmUgaW1wb3J0ICoKPj4gTW9kdWxlTm90Rm91bmRFcnJvcjogTm8g
+bW9kdWxlIG5hbWVkICdQeVF0NS5zaXAnCj4+Cj4+IFRoZSBwcm9ibGVtIHdhcyBsaWtlbHkgdHJp
+Z2dlcmVkIGJ5IHRoZSBhdG9taWMgdXBncmFkZSBmcm9tIDUuNyB0bwo+PiA1LjE1IGluIGIzNmNl
+N2UuIFRoaXMgY29tbWl0IGlzIHBhcnQgb2YgdGhlIDIwMjItMjAyNCBMVFMuCj4+Cj4+IFNpZ25l
+ZC1vZmYtYnk6IFJhbGYgRHJhZ29uIDxoeXBub3RvYWRAbGluZHJhLmRlPgo+Cj4gUmFuIGludG8g
+dGhlIHNhbWUgcHJvYmxlbSwgZm91bmQgYW5kIGFwcGxpZWQgYm90aCBwYXRjaGVzIG9uIDIwMjQu
+MDIsIAo+IGNvbXBpbGVkIGEgcXQ1IGNvbmZpZyBpbmNsdWRpbmcgcHlxdDUgZm9yIGlteDhtcCBh
+bmQgc3VjY2Vzc2Z1bGx5IHJhbiAKPiBpdCBvbiB0aGUgdGFyZ2V0Lgo+Cj4gVGVzdGVkLWJ5OiBB
+bmRyZWFzIE5hdW1hbm4gPGFuYXVtYW5uQHVsdHJhdHJvbmlrLmRlPgo+Cj4KPj4gLS0tCj4+IMKg
+IHBhY2thZ2UvcHl0aG9uLXB5cXQ1L0NvbmZpZy5pbiB8IDEgKwo+PiDCoCAxIGZpbGUgY2hhbmdl
+ZCwgMSBpbnNlcnRpb24oKykKPj4KPj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvcHl0aG9uLXB5cXQ1
+L0NvbmZpZy5pbiAKPj4gYi9wYWNrYWdlL3B5dGhvbi1weXF0NS9Db25maWcuaW4KPj4gaW5kZXgg
+OWZhNzY3NmY5OC4uMGIzN2YxNDMxNyAxMDA2NDQKPj4gLS0tIGEvcGFja2FnZS9weXRob24tcHlx
+dDUvQ29uZmlnLmluCj4+ICsrKyBiL3BhY2thZ2UvcHl0aG9uLXB5cXQ1L0NvbmZpZy5pbgo+PiBA
+QCAtNSw2ICs1LDcgQEAgY29uZmlnIEJSMl9QQUNLQUdFX1BZVEhPTl9QWVFUNQo+PiDCoMKgwqDC
+oMKgIGJvb2wgInB5dGhvbi1weXF0NSIKPj4gwqDCoMKgwqDCoCBkZXBlbmRzIG9uIEJSMl9QQUNL
+QUdFX1FUNQo+PiDCoMKgwqDCoMKgIHNlbGVjdCBCUjJfUEFDS0FHRV9QWVRIT05fU0lQCj4+ICvC
+oMKgwqAgc2VsZWN0IEJSMl9QQUNLQUdFX1BZVEhPTl9QWVFUNV9TSVAgIyBydW50aW1lCj4+IMKg
+wqDCoMKgwqAgc2VsZWN0IEJSMl9QQUNLQUdFX1FUNUJBU0VfR1VJCj4+IMKgwqDCoMKgwqAgaGVs
+cAo+PiDCoMKgwqDCoMKgwqDCoCBQeXRob24gYmluZGluZ3MgZm9yIFF0IDUKCgpfX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXwpidWlsZHJvb3QgbWFpbGluZyBs
+aXN0CmJ1aWxkcm9vdEBidWlsZHJvb3Qub3JnCmh0dHBzOi8vbGlzdHMuYnVpbGRyb290Lm9yZy9t
+YWlsbWFuL2xpc3RpbmZvL2J1aWxkcm9vdAo=
