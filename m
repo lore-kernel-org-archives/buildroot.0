@@ -4,67 +4,70 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA083CFB43C
-	for <buildroot@archiver.kernel.org>; Sat,  5 Oct 2024 22:58:38 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 98932CFB43F
+	for <buildroot@archiver.kernel.org>; Sat,  5 Oct 2024 22:58:44 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 6BD3481253;
-	Sat,  5 Oct 2024 22:58:38 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 4E1198126D;
+	Sat,  5 Oct 2024 22:58:44 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id HLXRZxA_0Rbd; Sat,  5 Oct 2024 22:58:37 +0000 (UTC)
+ id ucdi9g4ey313; Sat,  5 Oct 2024 22:58:43 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 46E8B8124B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 39C2081274
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 46E8B8124B;
-	Sat,  5 Oct 2024 22:58:37 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 69AD21BF5A7
- for <buildroot@lists.busybox.net>; Sat,  5 Oct 2024 22:58:35 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 39C2081274;
+	Sat,  5 Oct 2024 22:58:43 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 590C61BF5A7
+ for <buildroot@lists.busybox.net>; Sat,  5 Oct 2024 22:58:41 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6649E8124B
- for <buildroot@lists.busybox.net>; Sat,  5 Oct 2024 22:58:35 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id 541734050A
+ for <buildroot@lists.busybox.net>; Sat,  5 Oct 2024 22:58:41 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id P19m2BVTBUQp for <buildroot@lists.busybox.net>;
- Sat,  5 Oct 2024 22:58:34 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id Y3qRT1YS3kbD for <buildroot@lists.busybox.net>;
+ Sat,  5 Oct 2024 22:58:40 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
  helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org A9AC48112C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A9AC48112C
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
- by smtp1.osuosl.org (Postfix) with ESMTPS id A9AC48112C
- for <buildroot@buildroot.org>; Sat,  5 Oct 2024 22:58:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org BD8F94018A
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org BD8F94018A
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id BD8F94018A
+ for <buildroot@buildroot.org>; Sat,  5 Oct 2024 22:58:39 +0000 (UTC)
 Received: from home.juju.sh (unknown
  [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
  (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 17B9EB0054E;
- Sun,  6 Oct 2024 00:58:25 +0200 (CEST)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 44FBBB00548;
+ Sun,  6 Oct 2024 00:58:32 +0200 (CEST)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun,  6 Oct 2024 00:58:07 +0200
-Message-ID: <20241005225808.903365-1-ju.o@free.fr>
+Date: Sun,  6 Oct 2024 00:58:08 +0200
+Message-ID: <20241005225808.903365-2-ju.o@free.fr>
 X-Mailer: git-send-email 2.46.2
+In-Reply-To: <20241005225808.903365-1-ju.o@free.fr>
+References: <20241005225808.903365-1-ju.o@free.fr>
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1728169109;
- bh=CRu8wBfkrya1ZNvwPvauvNDrgomkWT1FFVgZnS1seBo=;
- h=From:To:Cc:Subject:Date:From;
- b=hx+2RHLCjbyeuaoggcHCIzrkewpou7u3joEqWBKnenc9tK6ZS7WaqjblaPJ2zCRp4
- imm8DTYk0aZsH2NEM0Tbh77dbI32o50DSfe8rQpFj8oY42yZwLwE+HWKJlLR75v3s2
- PalH3TWphyINDkc0Fgog0Hmbvn5FgwHBKfkrBySbMUlI0EWtgUPl6KJy5HoR15il4N
- NvC9ZyW6F2H1p0C5D8ytkpESrX+Xw5IIvvb/BpNRlwu2FjwQENzGlsAT0W6my73Cy1
- 79IfhCnNr2wYL0eIZkfELBEwVTfGXxhGMXPoVP5d/XnyENOc8v9OycfMSsH3MAirPu
- EMzjRi313xyWQ==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ d=free.fr; s=smtp-20201208; t=1728169117;
+ bh=3KPePN/0vljq89mKG+HOYLz/OmckVZdnPEKSxsA7rs0=;
+ h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+ b=Ik1vAwfBzIeNsmteoVf+aBNV07/buwzSNPf4SS48bRP3GFhz0j8dpoWyu0ScnQiSt
+ ZWQTeNBtVQ788BbUeMY+i8nlkPMaRC7g56+cIyal0UG7je7NV8ldQ+iRECa/wB6Why
+ EY2oIENF7TI/SS+Uknh0iT+KqxfrFvkF1ALnzaqyxHyGr5JZAGy9oQrw3cuLLuZNQM
+ TqNzGUp9mUwbxvuEQZzDuPE0xCgwVlTEBWq/s2x5Z7YmimKtuwlxfpgAqQu9DZFSNX
+ E+e2JPiEjdO0JeuofhCyx9VnNPgipRtdFyLPGt9S1LPieGYJ9PuEysQvldAnnGoJH5
+ D7B31EY+6WcMw==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key,
  unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
- header.s=smtp-20201208 header.b=hx+2RHLC
-Subject: [Buildroot] [PATCH v2 1/2] package/oath-toolkit: new package
+ header.s=smtp-20201208 header.b=Ik1vAwfB
+Subject: [Buildroot] [PATCH v2 2/2] support/testing: add oath-toolkit
+ runtime test
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -83,156 +86,69 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-OATH Toolkit provide components to build one-time password
-authentication systems. It contains shared C libraries,
-command line tools and a PAM module. Supported technologies
-include the event-based HOTP algorithm (RFC 4226), the
-time-based TOTP algorithm (RFC 6238), and Portable Symmetric
-Key Container (PSKC, RFC 6030) to manage secret key
-data. OATH stands for Open AuTHentication, which is the
-organization that specify the algorithms.
-
-https://www.nongnu.org/oath-toolkit/
-
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
-Changes v1 -> v2:
-- Included all changes recommended by Gilles:
- - bump to 2.6.12 to include recent security fix
- - add _INSTALL_STAGING = YES
- - Fix PSKC typo
-
-Patch tested in:
-https://gitlab.com/jolivain/buildroot/-/jobs/8002912026
----
- DEVELOPERS                             |  1 +
- package/Config.in                      |  1 +
- package/oath-toolkit/Config.in         | 27 +++++++++++++++++++
- package/oath-toolkit/oath-toolkit.hash | 12 +++++++++
- package/oath-toolkit/oath-toolkit.mk   | 37 ++++++++++++++++++++++++++
- 5 files changed, 78 insertions(+)
- create mode 100644 package/oath-toolkit/Config.in
- create mode 100644 package/oath-toolkit/oath-toolkit.hash
- create mode 100644 package/oath-toolkit/oath-toolkit.mk
+ DEVELOPERS                                    |  1 +
+ .../tests/package/test_oath_toolkit.py        | 38 +++++++++++++++++++
+ 2 files changed, 39 insertions(+)
+ create mode 100644 support/testing/tests/package/test_oath_toolkit.py
 
 diff --git a/DEVELOPERS b/DEVELOPERS
-index 44b1947487..8c20c329ea 100644
+index 8c20c329ea..ac19704923 100644
 --- a/DEVELOPERS
 +++ b/DEVELOPERS
-@@ -1814,6 +1814,7 @@ F:	package/kexec/
- F:	package/libjxl/
- F:	package/libopenmpt/
- F:	package/mokutil/
-+F:	package/oath-toolkit/
- F:	package/octave/
- F:	package/ola/
- F:	package/openblas/
-diff --git a/package/Config.in b/package/Config.in
-index e1ceb81dc0..ca5508fbfa 100644
---- a/package/Config.in
-+++ b/package/Config.in
-@@ -1611,6 +1611,7 @@ menu "Crypto"
- 	source "package/libxcrypt/Config.in"
- 	source "package/mbedtls/Config.in"
- 	source "package/nettle/Config.in"
-+	source "package/oath-toolkit/Config.in"
- 	source "package/openssl/Config.in"
- 	source "package/parsec-tool/Config.in"
- 	source "package/pkcs11-helper/Config.in"
-diff --git a/package/oath-toolkit/Config.in b/package/oath-toolkit/Config.in
+@@ -1959,6 +1959,7 @@ F:	support/testing/tests/package/test_ntp.py
+ F:	support/testing/tests/package/test_ntp/
+ F:	support/testing/tests/package/test_numactl.py
+ F:	support/testing/tests/package/test_numactl/
++F:	support/testing/tests/package/test_oath_toolkit.py
+ F:	support/testing/tests/package/test_octave.py
+ F:	support/testing/tests/package/test_ola.py
+ F:	support/testing/tests/package/test_ola/
+diff --git a/support/testing/tests/package/test_oath_toolkit.py b/support/testing/tests/package/test_oath_toolkit.py
 new file mode 100644
-index 0000000000..f2d697a7c9
+index 0000000000..92c0845614
 --- /dev/null
-+++ b/package/oath-toolkit/Config.in
-@@ -0,0 +1,27 @@
-+config BR2_PACKAGE_OATH_TOOLKIT
-+	bool "oath-toolkit"
-+	depends on BR2_USE_WCHAR
-+	help
-+	  OATH Toolkit provide components to build one-time password
-+	  authentication systems. It contains shared C libraries,
-+	  command line tools and a PAM module. Supported technologies
-+	  include the event-based HOTP algorithm (RFC 4226), the
-+	  time-based TOTP algorithm (RFC 6238), and Portable Symmetric
-+	  Key Container (PSKC, RFC 6030) to manage secret key
-+	  data. OATH stands for Open AuTHentication, which is the
-+	  organization that specify the algorithms.
++++ b/support/testing/tests/package/test_oath_toolkit.py
+@@ -0,0 +1,38 @@
++import os
 +
-+	  https://www.nongnu.org/oath-toolkit/
++import infra.basetest
 +
-+if BR2_PACKAGE_OATH_TOOLKIT
 +
-+config BR2_PACKAGE_OATH_TOOLKIT_PSKC
-+	bool "enable PSKC"
-+	select BR2_PACKAGE_LIBXML2
-+	help
-+	  Enable the Portable Symmetric Key Container (PSKC) support.
++class TestOathToolKit(infra.basetest.BRTest):
++    config = infra.basetest.BASIC_TOOLCHAIN_CONFIG + \
++        """
++        BR2_PACKAGE_OATH_TOOLKIT=y
++        BR2_TARGET_ROOTFS_CPIO=y
++        # BR2_TARGET_ROOTFS_TAR is not set
++        """
 +
-+endif
++    def test_run(self):
++        cpio_file = os.path.join(self.builddir, "images", "rootfs.cpio")
++        self.emulator.boot(arch="armv5",
++                           kernel="builtin",
++                           options=["-initrd", cpio_file])
++        self.emulator.login()
 +
-+comment "oath-toolkit needs a toolchain w/ wchar"
-+	depends on !BR2_USE_WCHAR
-diff --git a/package/oath-toolkit/oath-toolkit.hash b/package/oath-toolkit/oath-toolkit.hash
-new file mode 100644
-index 0000000000..a89dd6bb94
---- /dev/null
-+++ b/package/oath-toolkit/oath-toolkit.hash
-@@ -0,0 +1,12 @@
-+# After checking pgp signature from:
-+# https://download.savannah.nongnu.org/releases/oath-toolkit/oath-toolkit-2.6.12.tar.gz.sig
-+# using key A3CC9C870B9D310ABAD4CF2F51722B08FE4745A2
-+# From release announce:
-+# https://mail.gnu.org/archive/html/oath-toolkit-help/2024-10/msg00002.html
-+sha1  0bfb6ad29d59628487c9e180c7a43f4ca301e4d1  oath-toolkit-2.6.12.tar.gz
-+sha256  cafdf739b1ec4b276441c6aedae6411434bbd870071f66154b909cc6e2d9e8ba  oath-toolkit-2.6.12.tar.gz
-+# Locally calculated
-+sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-+sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  liboath/COPYING
-+sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  oathtool/COPYING
-+sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  pam_oath/COPYING
-diff --git a/package/oath-toolkit/oath-toolkit.mk b/package/oath-toolkit/oath-toolkit.mk
-new file mode 100644
-index 0000000000..b36cd47053
---- /dev/null
-+++ b/package/oath-toolkit/oath-toolkit.mk
-@@ -0,0 +1,37 @@
-+################################################################################
-+#
-+# oath-toolkit
-+#
-+################################################################################
++        self.assertRunOk("oathtool --version")
 +
-+OATH_TOOLKIT_VERSION = 2.6.12
-+OATH_TOOLKIT_SITE = https://download.savannah.nongnu.org/releases/oath-toolkit
-+OATH_TOOLKIT_LICENSE = GPL-3.0+ (tools), LGPL-2.1+ (libraries)
-+OATH_TOOLKIT_LICENSE_FILES = \
-+	COPYING \
-+	liboath/COPYING \
-+	oathtool/COPYING \
-+	pam_oath/COPYING
-+OATH_TOOLKIT_CPE_ID_VENDOR = nongnu
-+OATH_TOOLKIT_CPE_ID_PRODUCT = oath_toolkit
-+OATH_TOOLKIT_INSTALL_STAGING = YES
++        # Test commands and expected results are coming from examples
++        # producing stable/reproducible outputs given in the oathtool
++        # manual page. See:
++        # https://www.nongnu.org/oath-toolkit/oathtool.1.html
 +
-+ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
-+# Set the pam directory defined in linux-pam (see --enable-securedir
-+# in LINUX_PAM_CONF_OPTS in package/linux-pam/linux-pam.mk).
-+OATH_TOOLKIT_CONF_OPTS += \
-+	--enable-pam \
-+	--with-pam-dir=/lib/security
-+OATH_TOOLKIT_DEPENDENCIES += linux-pam
-+else
-+OATH_TOOLKIT_CONF_OPTS += --disable-pam
-+endif
++        tests = [
++            ("echo 00 | oathtool -", "328482"),
++            ("oathtool -c 5 3132333435363738393031323334353637383930", "254676"),
++            ("oathtool -w 10 3132333435363738393031323334353637383930 969429", "3"),
++            ("oathtool --totp --now \"2008-04-23 17:42:17 UTC\" 00", "974945")
++        ]
 +
-+ifeq ($(BR2_PACKAGE_OATH_TOOLKIT_PSKC),y)
-+OATH_TOOLKIT_CONF_OPTS += --enable-pskc
-+OATH_TOOLKIT_DEPENDENCIES += libxml2
-+else
-+OATH_TOOLKIT_CONF_OPTS += --disable-pskc
-+endif
-+
-+$(eval $(autotools-package))
++        for cmd, expected_out in tests:
++            out, ret = self.emulator.run(cmd)
++            self.assertEqual(ret, 0, f"Failed to run '{cmd}'")
++            self.assertEqual(expected_out, out[0])
 -- 
 2.46.2
 
