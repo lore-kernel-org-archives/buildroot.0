@@ -1,91 +1,70 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 96E92CFB43F
-	for <buildroot@archiver.kernel.org>; Sat,  5 Oct 2024 21:02:15 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id CA083CFB43C
+	for <buildroot@archiver.kernel.org>; Sat,  5 Oct 2024 22:58:38 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4EF70606A3;
-	Sat,  5 Oct 2024 21:02:15 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 6BD3481253;
+	Sat,  5 Oct 2024 22:58:38 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Qa4oO7HcKmFZ; Sat,  5 Oct 2024 21:02:14 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id HLXRZxA_0Rbd; Sat,  5 Oct 2024 22:58:37 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 36C1B606BE
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 46E8B8124B
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 36C1B606BE;
-	Sat,  5 Oct 2024 21:02:14 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id AD7161BF5A5
- for <buildroot@lists.busybox.net>; Sat,  5 Oct 2024 21:02:13 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 46E8B8124B;
+	Sat,  5 Oct 2024 22:58:37 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 69AD21BF5A7
+ for <buildroot@lists.busybox.net>; Sat,  5 Oct 2024 22:58:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id 9DB4A606BE
- for <buildroot@lists.busybox.net>; Sat,  5 Oct 2024 21:02:13 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 6649E8124B
+ for <buildroot@lists.busybox.net>; Sat,  5 Oct 2024 22:58:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2kpi0BIJxBUX for <buildroot@lists.busybox.net>;
- Sat,  5 Oct 2024 21:02:12 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::529; helo=mail-ed1-x529.google.com;
- envelope-from=gilles.talis@gmail.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 1EF35606A3
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 1EF35606A3
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com
- [IPv6:2a00:1450:4864:20::529])
- by smtp3.osuosl.org (Postfix) with ESMTPS id 1EF35606A3
- for <buildroot@buildroot.org>; Sat,  5 Oct 2024 21:02:11 +0000 (UTC)
-Received: by mail-ed1-x529.google.com with SMTP id
- 4fb4d7f45d1cf-5c718bb04a3so4226564a12.3
- for <buildroot@buildroot.org>; Sat, 05 Oct 2024 14:02:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1728162130; x=1728766930;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
- :subject:date:message-id:reply-to;
- bh=c+0dadF0GqyD0zDtkLCceJqMMgC/PStD7xr4cIm4b3E=;
- b=mXIZjE9iR0Q3knJ8aHGF9ju2K7RbXYL4iRDpn37GuWnOPsC5pMiVHlkAJrB9yvNG2e
- rXokiFtmGG5GCvCjmdzI66GdQgQeo23/Wr9CoYFmN/lY31zhnjifkiNlvEENOrOxvI77
- rUCobxx/nDaKmWVLDl/rKB4rwS53nv/2/sc5+BrIYh22EZtpLNNo31P2WdnRVLnexeAh
- s1foNv7BHMjErKU8jLP1GJJsbsF1N5vQoWBMCg1mQlTbZ3a0i+UxBcB7nGQWKBeRTo2v
- 0P6BzC5QbXxY/qb7oMn9BLxedbqW4bqgj0BvZw9xln1QAaLb1LgvN865gXJcU7AXUm2n
- JDzw==
-X-Gm-Message-State: AOJu0YxdPXHGFb7Kk/QREymxSibrk2KmZN0VyKuSemmPjZuv+A6euC62
- sk3HSgNqFnJ6bigW5T141DdW/FGNPheg5lLMwvMnPN6qaLOLcHftLr5WMeaaNt+S7nCIVHxUpSV
- VrzI8J4ctEiamegwNP7890i3Dp68=
-X-Google-Smtp-Source: AGHT+IE1c8LQKtf098rSOCJJeRFiRhmpKPxqKiIrr0tCXq+vXJ3rPzK5VYeUGDN8yFjg1WXp00eIWSovwvvRutVXf20=
-X-Received: by 2002:a17:906:7303:b0:a99:22e:9658 with SMTP id
- a640c23a62f3a-a991c031334mr782229166b.40.1728162129478; Sat, 05 Oct 2024
- 14:02:09 -0700 (PDT)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id P19m2BVTBUQp for <buildroot@lists.busybox.net>;
+ Sat,  5 Oct 2024 22:58:34 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
+ helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org A9AC48112C
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org A9AC48112C
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp1.osuosl.org (Postfix) with ESMTPS id A9AC48112C
+ for <buildroot@buildroot.org>; Sat,  5 Oct 2024 22:58:33 +0000 (UTC)
+Received: from home.juju.sh (unknown
+ [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
+ (Authenticated sender: ju.o@free.fr)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 17B9EB0054E;
+ Sun,  6 Oct 2024 00:58:25 +0200 (CEST)
+From: Julien Olivain <ju.o@free.fr>
+To: buildroot@buildroot.org
+Date: Sun,  6 Oct 2024 00:58:07 +0200
+Message-ID: <20241005225808.903365-1-ju.o@free.fr>
+X-Mailer: git-send-email 2.46.2
 MIME-Version: 1.0
-References: <20241002192621.14605-1-ju.o@free.fr>
-In-Reply-To: <20241002192621.14605-1-ju.o@free.fr>
-From: Gilles Talis <gilles.talis@gmail.com>
-Date: Sat, 5 Oct 2024 17:01:58 -0400
-Message-ID: <CAKcgs2xjJ2DoRe1ADQgpEt8CxBV4MSWV3HP3rq2px0c5kzO-+g@mail.gmail.com>
-To: Julien Olivain <ju.o@free.fr>
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=gmail.com; s=20230601; t=1728162130; x=1728766930; darn=buildroot.org;
- h=content-transfer-encoding:cc:to:subject:message-id:date:from
- :in-reply-to:references:mime-version:from:to:cc:subject:date
- :message-id:reply-to;
- bh=c+0dadF0GqyD0zDtkLCceJqMMgC/PStD7xr4cIm4b3E=;
- b=HBJfERx7aTvvLPpNZmt2k5NrSrVOVdWfw84ceQMjdYD1gyH5smJW/2gWR/3MLa89EK
- 46hl4u8ouoA6M9zRwwBuO/kQUXoO7g5h3rucGRB1VWHg3ICdmIAwed8Hb1F/ejFgDB6a
- OaUiyIjfiYT2kQyRlFq6/OiQs/Vsyo8WsPNsWPT5HWoWUArt0ssgvai6ENDOfWC9i/OD
- 78gXDU9Luk/b4YH8/+5FMnzu8MBZ/pnRPnUzcOvxSaWPzNQvkhM1P3VCissOW6MLhB3O
- VDz3NQpQ49hMor9pyWkX5SaY5MIK5wpzAq8anV8JhTGFtCU4/aG13a4tVmG71Onw4mEN
- 8XUg==
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+ d=free.fr; s=smtp-20201208; t=1728169109;
+ bh=CRu8wBfkrya1ZNvwPvauvNDrgomkWT1FFVgZnS1seBo=;
+ h=From:To:Cc:Subject:Date:From;
+ b=hx+2RHLCjbyeuaoggcHCIzrkewpou7u3joEqWBKnenc9tK6ZS7WaqjblaPJ2zCRp4
+ imm8DTYk0aZsH2NEM0Tbh77dbI32o50DSfe8rQpFj8oY42yZwLwE+HWKJlLR75v3s2
+ PalH3TWphyINDkc0Fgog0Hmbvn5FgwHBKfkrBySbMUlI0EWtgUPl6KJy5HoR15il4N
+ NvC9ZyW6F2H1p0C5D8ytkpESrX+Xw5IIvvb/BpNRlwu2FjwQENzGlsAT0W6my73Cy1
+ 79IfhCnNr2wYL0eIZkfELBEwVTfGXxhGMXPoVP5d/XnyENOc8v9OycfMSsH3MAirPu
+ EMzjRi313xyWQ==
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=pass (p=none dis=none)
- header.from=gmail.com
-X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
- dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com
- header.a=rsa-sha256 header.s=20230601 header.b=HBJfERx7
-Subject: Re: [Buildroot] [PATCH 1/2] package/oath-toolkit: new package
+ header.from=free.fr
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=free.fr header.i=@free.fr header.a=rsa-sha256
+ header.s=smtp-20201208 header.b=hx+2RHLC
+Subject: [Buildroot] [PATCH v2 1/2] package/oath-toolkit: new package
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -97,124 +76,167 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, buildroot@buildroot.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Cc: Julien Olivain <ju.o@free.fr>, Gilles Talis <gilles.talis@gmail.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-SGVsbG8gSnVsaWVuLCBhbGwKCkxlIG1lci4gMiBvY3QuIDIwMjQgw6AgMTU6MjYsIEp1bGllbiBP
-bGl2YWluIDxqdS5vQGZyZWUuZnI+IGEgw6ljcml0IDoKPgo+IE9BVEggVG9vbGtpdCBwcm92aWRl
-IGNvbXBvbmVudHMgdG8gYnVpbGQgb25lLXRpbWUgcGFzc3dvcmQKPiBhdXRoZW50aWNhdGlvbiBz
-eXN0ZW1zLiBJdCBjb250YWlucyBzaGFyZWQgQyBsaWJyYXJpZXMsCj4gY29tbWFuZCBsaW5lIHRv
-b2xzIGFuZCBhIFBBTSBtb2R1bGUuIFN1cHBvcnRlZCB0ZWNobm9sb2dpZXMKPiBpbmNsdWRlIHRo
-ZSBldmVudC1iYXNlZCBIT1RQIGFsZ29yaXRobSAoUkZDIDQyMjYpLCB0aGUKPiB0aW1lLWJhc2Vk
-IFRPVFAgYWxnb3JpdGhtIChSRkMgNjIzOCksIGFuZCBQb3J0YWJsZSBTeW1tZXRyaWMKPiBLZXkg
-Q29udGFpbmVyIChQU0tDLCBSRkMgNjAzMCkgdG8gbWFuYWdlIHNlY3JldCBrZXkKPiBkYXRhLiBP
-QVRIIHN0YW5kcyBmb3IgT3BlbiBBdVRIZW50aWNhdGlvbiwgd2hpY2ggaXMgdGhlCj4gb3JnYW5p
-emF0aW9uIHRoYXQgc3BlY2lmeSB0aGUgYWxnb3JpdGhtcy4KPgo+IGh0dHBzOi8vd3d3Lm5vbmdu
-dS5vcmcvb2F0aC10b29sa2l0Lwo+Cj4gU2lnbmVkLW9mZi1ieTogSnVsaWVuIE9saXZhaW4gPGp1
-Lm9AZnJlZS5mcj4KPiAtLS0KPiAgREVWRUxPUEVSUyAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgfCAgMSArCj4gIHBhY2thZ2UvQ29uZmlnLmluICAgICAgICAgICAgICAgICAgICAgIHwgIDEg
-Kwo+ICBwYWNrYWdlL29hdGgtdG9vbGtpdC9Db25maWcuaW4gICAgICAgICB8IDI3ICsrKysrKysr
-KysrKysrKysrKysKPiAgcGFja2FnZS9vYXRoLXRvb2xraXQvb2F0aC10b29sa2l0Lmhhc2ggfCAx
-MyArKysrKysrKysrCj4gIHBhY2thZ2Uvb2F0aC10b29sa2l0L29hdGgtdG9vbGtpdC5tayAgIHwg
-MzYgKysrKysrKysrKysrKysrKysrKysrKysrKysKPiAgNSBmaWxlcyBjaGFuZ2VkLCA3OCBpbnNl
-cnRpb25zKCspCj4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL29hdGgtdG9vbGtpdC9Db25m
-aWcuaW4KPiAgY3JlYXRlIG1vZGUgMTAwNjQ0IHBhY2thZ2Uvb2F0aC10b29sa2l0L29hdGgtdG9v
-bGtpdC5oYXNoCj4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBwYWNrYWdlL29hdGgtdG9vbGtpdC9vYXRo
-LXRvb2xraXQubWsKPgo+IGRpZmYgLS1naXQgYS9ERVZFTE9QRVJTIGIvREVWRUxPUEVSUwo+IGlu
-ZGV4IGVhNGVlMzM3N2YuLjUwNWNhM2Y0YmEgMTAwNjQ0Cj4gLS0tIGEvREVWRUxPUEVSUwo+ICsr
-KyBiL0RFVkVMT1BFUlMKPiBAQCAtMTgxMiw2ICsxODEyLDcgQEAgRjogICAgICAgIHBhY2thZ2Uv
-a2V4ZWMvCj4gIEY6ICAgICBwYWNrYWdlL2xpYmp4bC8KPiAgRjogICAgIHBhY2thZ2UvbGlib3Bl
-bm1wdC8KPiAgRjogICAgIHBhY2thZ2UvbW9rdXRpbC8KPiArRjogICAgIHBhY2thZ2Uvb2F0aC10
-b29sa2l0Lwo+ICBGOiAgICAgcGFja2FnZS9vY3RhdmUvCj4gIEY6ICAgICBwYWNrYWdlL29sYS8K
-PiAgRjogICAgIHBhY2thZ2Uvb3BlbmJsYXMvCj4gZGlmZiAtLWdpdCBhL3BhY2thZ2UvQ29uZmln
-LmluIGIvcGFja2FnZS9Db25maWcuaW4KPiBpbmRleCBlMWNlYjgxZGMwLi5jYTU1MDhmYmZhIDEw
-MDY0NAo+IC0tLSBhL3BhY2thZ2UvQ29uZmlnLmluCj4gKysrIGIvcGFja2FnZS9Db25maWcuaW4K
-PiBAQCAtMTYxMSw2ICsxNjExLDcgQEAgbWVudSAiQ3J5cHRvIgo+ICAgICAgICAgc291cmNlICJw
-YWNrYWdlL2xpYnhjcnlwdC9Db25maWcuaW4iCj4gICAgICAgICBzb3VyY2UgInBhY2thZ2UvbWJl
-ZHRscy9Db25maWcuaW4iCj4gICAgICAgICBzb3VyY2UgInBhY2thZ2UvbmV0dGxlL0NvbmZpZy5p
-biIKPiArICAgICAgIHNvdXJjZSAicGFja2FnZS9vYXRoLXRvb2xraXQvQ29uZmlnLmluIgo+ICAg
-ICAgICAgc291cmNlICJwYWNrYWdlL29wZW5zc2wvQ29uZmlnLmluIgo+ICAgICAgICAgc291cmNl
-ICJwYWNrYWdlL3BhcnNlYy10b29sL0NvbmZpZy5pbiIKPiAgICAgICAgIHNvdXJjZSAicGFja2Fn
-ZS9wa2NzMTEtaGVscGVyL0NvbmZpZy5pbiIKPiBkaWZmIC0tZ2l0IGEvcGFja2FnZS9vYXRoLXRv
-b2xraXQvQ29uZmlnLmluIGIvcGFja2FnZS9vYXRoLXRvb2xraXQvQ29uZmlnLmluCj4gbmV3IGZp
-bGUgbW9kZSAxMDA2NDQKPiBpbmRleCAwMDAwMDAwMDAwLi4xMDZmZGY3NDU3Cj4gLS0tIC9kZXYv
-bnVsbAo+ICsrKyBiL3BhY2thZ2Uvb2F0aC10b29sa2l0L0NvbmZpZy5pbgo+IEBAIC0wLDAgKzEs
-MjcgQEAKPiArY29uZmlnIEJSMl9QQUNLQUdFX09BVEhfVE9PTEtJVAo+ICsgICAgICAgYm9vbCAi
-b2F0aC10b29sa2l0Igo+ICsgICAgICAgZGVwZW5kcyBvbiBCUjJfVVNFX1dDSEFSCj4gKyAgICAg
-ICBoZWxwCj4gKyAgICAgICAgIE9BVEggVG9vbGtpdCBwcm92aWRlIGNvbXBvbmVudHMgdG8gYnVp
-bGQgb25lLXRpbWUgcGFzc3dvcmQKPiArICAgICAgICAgYXV0aGVudGljYXRpb24gc3lzdGVtcy4g
-SXQgY29udGFpbnMgc2hhcmVkIEMgbGlicmFyaWVzLAo+ICsgICAgICAgICBjb21tYW5kIGxpbmUg
-dG9vbHMgYW5kIGEgUEFNIG1vZHVsZS4gU3VwcG9ydGVkIHRlY2hub2xvZ2llcwo+ICsgICAgICAg
-ICBpbmNsdWRlIHRoZSBldmVudC1iYXNlZCBIT1RQIGFsZ29yaXRobSAoUkZDIDQyMjYpLCB0aGUK
-PiArICAgICAgICAgdGltZS1iYXNlZCBUT1RQIGFsZ29yaXRobSAoUkZDIDYyMzgpLCBhbmQgUG9y
-dGFibGUgU3ltbWV0cmljCj4gKyAgICAgICAgIEtleSBDb250YWluZXIgKFBTS0MsIFJGQyA2MDMw
-KSB0byBtYW5hZ2Ugc2VjcmV0IGtleQo+ICsgICAgICAgICBkYXRhLiBPQVRIIHN0YW5kcyBmb3Ig
-T3BlbiBBdVRIZW50aWNhdGlvbiwgd2hpY2ggaXMgdGhlCj4gKyAgICAgICAgIG9yZ2FuaXphdGlv
-biB0aGF0IHNwZWNpZnkgdGhlIGFsZ29yaXRobXMuCj4gKwo+ICsgICAgICAgICBodHRwczovL3d3
-dy5ub25nbnUub3JnL29hdGgtdG9vbGtpdC8KPiArCj4gK2lmIEJSMl9QQUNLQUdFX09BVEhfVE9P
-TEtJVAo+ICsKPiArY29uZmlnIEJSMl9QQUNLQUdFX09BVEhfVE9PTEtJVF9QU0tDCj4gKyAgICAg
-ICBib29sICJlbmFibGUgUFNDSyIKUFNDSyAtLT4gUFNLQwoKPiArICAgICAgIHNlbGVjdCBCUjJf
-UEFDS0FHRV9MSUJYTUwyCj4gKyAgICAgICBoZWxwCj4gKyAgICAgICAgIEVuYWJsZSB0aGUgUG9y
-dGFibGUgU3ltbWV0cmljIEtleSBDb250YWluZXIgKFBTS0MpIHN1cHBvcnQuCj4gKwo+ICtlbmRp
-Zgo+ICsKPiArY29tbWVudCAib2F0aC10b29sa2l0IG5lZWRzIGEgdG9vbGNoYWluIHcvIHdjaGFy
-Igo+ICsgICAgICAgZGVwZW5kcyBvbiAhQlIyX1VTRV9XQ0hBUgo+IGRpZmYgLS1naXQgYS9wYWNr
-YWdlL29hdGgtdG9vbGtpdC9vYXRoLXRvb2xraXQuaGFzaCBiL3BhY2thZ2Uvb2F0aC10b29sa2l0
-L29hdGgtdG9vbGtpdC5oYXNoCj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQKPiBpbmRleCAwMDAwMDAw
-MDAwLi4wNDI4MmZhMDQwCj4gLS0tIC9kZXYvbnVsbAo+ICsrKyBiL3BhY2thZ2Uvb2F0aC10b29s
-a2l0L29hdGgtdG9vbGtpdC5oYXNoCj4gQEAgLTAsMCArMSwxMyBAQAo+ICsjIEFmdGVyIGNoZWNr
-aW5nIHBncCBzaWduYXR1cmUgZnJvbToKPiArIyBodHRwczovL2Rvd25sb2FkLnNhdmFubmFoLm5v
-bmdudS5vcmcvcmVsZWFzZXMvb2F0aC10b29sa2l0L29hdGgtdG9vbGtpdC0yLjYuMTEudGFyLmd6
-LnNpZwo+ICsjIHVzaW5nIGtleSBBM0NDOUM4NzBCOUQzMTBBQkFENENGMkY1MTcyMkIwOEZFNDc0
-NUEyCj4gKyMgRnJvbSByZWxlYXNlIGFubm91bmNlOgo+ICsjIGh0dHBzOi8vbWFpbC5nbnUub3Jn
-L2FyY2hpdmUvaHRtbC9vYXRoLXRvb2xraXQtaGVscC8yMDI0LTAxL21zZzAwMDA0Lmh0bWwKPiAr
-c2hhMSAgN2UzNjVkMGZhODkyYzRkMTQ5MzU4NTc1MWFkYWVjMGViZDA3ZDY2ZSAgb2F0aC10b29s
-a2l0LTIuNi4xMS50YXIuZ3oKPiArc2hhMjI0ICBhNmE5MWNmZThhYTU0OThkMDMyMjc4YWE0ZTc1
-OWUzOWM5Yjg3ZTA0ZjY4YWVkNTVhNjhjOWVmYSAgb2F0aC10b29sa2l0LTIuNi4xMS50YXIuZ3oK
-PiArIyBMb2NhbGx5IGNhbGN1bGF0ZWQKPiArc2hhMjU2ICBmYzUxMmE0YTViNDZmNGM0M2FiMDU4
-NmMzMTg5ZmVjZTRkNTRmN2U2NDkzOTdkNmZhMWUyMzQyODQzMWUyY2I0ICBvYXRoLXRvb2xraXQt
-Mi42LjExLnRhci5nego+ICtzaGEyNTYgIDhjZWI0YjllZTVhZGVkZGU0N2IzMWU5NzVjMWQ5MGM3
-M2FkMjdiNmIxNjVhMWRjZDgwYzdjNTQ1ZWI2NWI5MDMgIENPUFlJTkcKPiArc2hhMjU2ICBkYzYy
-NjUyMGRjZDUzYTIyZjcyN2FmM2VlNDJjNzcwZTU2Yzk3YTY0ZmUzYWRiMDYzNzk5ZDhhYjAzMmZl
-NTUxICBsaWJvYXRoL0NPUFlJTkcKPiArc2hhMjU2ICA4Y2ViNGI5ZWU1YWRlZGRlNDdiMzFlOTc1
-YzFkOTBjNzNhZDI3YjZiMTY1YTFkY2Q4MGM3YzU0NWViNjViOTAzICBvYXRodG9vbC9DT1BZSU5H
-Cj4gK3NoYTI1NiAgOGNlYjRiOWVlNWFkZWRkZTQ3YjMxZTk3NWMxZDkwYzczYWQyN2I2YjE2NWEx
-ZGNkODBjN2M1NDVlYjY1YjkwMyAgcGFtX29hdGgvQ09QWUlORwo+IGRpZmYgLS1naXQgYS9wYWNr
-YWdlL29hdGgtdG9vbGtpdC9vYXRoLXRvb2xraXQubWsgYi9wYWNrYWdlL29hdGgtdG9vbGtpdC9v
-YXRoLXRvb2xraXQubWsKPiBuZXcgZmlsZSBtb2RlIDEwMDY0NAo+IGluZGV4IDAwMDAwMDAwMDAu
-LjlkNDA4MmE2ODYKPiAtLS0gL2Rldi9udWxsCj4gKysrIGIvcGFja2FnZS9vYXRoLXRvb2xraXQv
-b2F0aC10b29sa2l0Lm1rCj4gQEAgLTAsMCArMSwzNiBAQAo+ICsjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIwo+ICsjCj4gKyMgb2F0aC10b29sa2l0Cj4gKyMKPiArIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMj
-IyMKPiArCj4gK09BVEhfVE9PTEtJVF9WRVJTSU9OID0gMi42LjExCkEgMi42LjEyIHNlY3VyaXR5
-IHVwZGF0ZSB3YXMgbWFkZSBvbiBPY3QgM3JkIFsxXS4gQ2FuIHlvdSBwbGVhc2Ugc2VuZAphIG5l
-dyBwYXRjaCB3aXRoIHRoaXMgdmVyc2lvbj8KCj4gK09BVEhfVE9PTEtJVF9TSVRFID0gaHR0cHM6
-Ly9kb3dubG9hZC5zYXZhbm5haC5ub25nbnUub3JnL3JlbGVhc2VzL29hdGgtdG9vbGtpdAo+ICtP
-QVRIX1RPT0xLSVRfTElDRU5TRSA9IEdQTC0zLjArICh0b29scyksIExHUEwtMi4xKyAobGlicmFy
-aWVzKQo+ICtPQVRIX1RPT0xLSVRfTElDRU5TRV9GSUxFUyA9IFwKPiArICAgICAgIENPUFlJTkcg
-XAo+ICsgICAgICAgbGlib2F0aC9DT1BZSU5HIFwKPiArICAgICAgIG9hdGh0b29sL0NPUFlJTkcg
-XAo+ICsgICAgICAgcGFtX29hdGgvQ09QWUlORwo+ICtPQVRIX1RPT0xLSVRfQ1BFX0lEX1ZFTkRP
-UiA9IG5vbmdudQo+ICtPQVRIX1RPT0xLSVRfQ1BFX0lEX1BST0RVQ1QgPSBvYXRoX3Rvb2xraXQK
-SWYgdGhpcyBwYWNrYWdlIGluc3RhbGxzIGxpYnJhcmllcywgeW91IG1pZ2h0IG5lZWQgdG8gYWRk
-Ck9BVEhfVE9PTEtJVF9JTlNUQUxMX1NUQUdJTkcgPSBZRVMKCj4gKwo+ICtpZmVxICgkKEJSMl9Q
-QUNLQUdFX0xJTlVYX1BBTSkseSkKPiArIyBTZXQgdGhlIHBhbSBkaXJlY3RvcnkgZGVmaW5lZCBp
-biBsaW51eC1wYW0gKHNlZSAtLWVuYWJsZS1zZWN1cmVkaXIKPiArIyBpbiBMSU5VWF9QQU1fQ09O
-Rl9PUFRTIGluIHBhY2thZ2UvbGludXgtcGFtL2xpbnV4LXBhbS5taykuCj4gK09BVEhfVE9PTEtJ
-VF9DT05GX09QVFMgKz0gXAo+ICsgICAgICAgLS1lbmFibGUtcGFtIFwKPiArICAgICAgIC0td2l0
-aC1wYW0tZGlyPS9saWIvc2VjdXJpdHkKPiArT0FUSF9UT09MS0lUX0RFUEVOREVOQ0lFUyArPSBs
-aW51eC1wYW0KPiArZWxzZQo+ICtPQVRIX1RPT0xLSVRfQ09ORl9PUFRTICs9IC0tZGlzYWJsZS1w
-YW0KPiArZW5kaWYKPiArCj4gK2lmZXEgKCQoQlIyX1BBQ0tBR0VfT0FUSF9UT09MS0lUX1BTS0Mp
-LHkpCj4gK09BVEhfVE9PTEtJVF9DT05GX09QVFMgKz0gLS1lbmFibGUtcHNrYwo+ICtPQVRIX1RP
-T0xLSVRfREVQRU5ERU5DSUVTICs9IGxpYnhtbDIKPiArZWxzZQo+ICtPQVRIX1RPT0xLSVRfQ09O
-Rl9PUFRTICs9IC0tZGlzYWJsZS1wc2tjCj4gK2VuZGlmCj4gKwo+ICskKGV2YWwgJChhdXRvdG9v
-bHMtcGFja2FnZSkpCj4gLS0KPiAyLjQ2LjIKPgo+IF9fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fX19fX19fCj4gYnVpbGRyb290IG1haWxpbmcgbGlzdAo+IGJ1aWxkcm9v
-dEBidWlsZHJvb3Qub3JnCj4gaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlz
-dGluZm8vYnVpbGRyb290Cgp0aGFua3MKR2lsbGVzCgpbMV0gaHR0cHM6Ly93d3cubm9uZ251Lm9y
-Zy9vYXRoLXRvb2xraXQvTkVXUy5odG1sCl9fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX19fX19fX19fCmJ1aWxkcm9vdCBtYWlsaW5nIGxpc3QKYnVpbGRyb290QGJ1aWxkcm9v
-dC5vcmcKaHR0cHM6Ly9saXN0cy5idWlsZHJvb3Qub3JnL21haWxtYW4vbGlzdGluZm8vYnVpbGRy
-b290Cg==
+OATH Toolkit provide components to build one-time password
+authentication systems. It contains shared C libraries,
+command line tools and a PAM module. Supported technologies
+include the event-based HOTP algorithm (RFC 4226), the
+time-based TOTP algorithm (RFC 6238), and Portable Symmetric
+Key Container (PSKC, RFC 6030) to manage secret key
+data. OATH stands for Open AuTHentication, which is the
+organization that specify the algorithms.
+
+https://www.nongnu.org/oath-toolkit/
+
+Signed-off-by: Julien Olivain <ju.o@free.fr>
+---
+Changes v1 -> v2:
+- Included all changes recommended by Gilles:
+ - bump to 2.6.12 to include recent security fix
+ - add _INSTALL_STAGING = YES
+ - Fix PSKC typo
+
+Patch tested in:
+https://gitlab.com/jolivain/buildroot/-/jobs/8002912026
+---
+ DEVELOPERS                             |  1 +
+ package/Config.in                      |  1 +
+ package/oath-toolkit/Config.in         | 27 +++++++++++++++++++
+ package/oath-toolkit/oath-toolkit.hash | 12 +++++++++
+ package/oath-toolkit/oath-toolkit.mk   | 37 ++++++++++++++++++++++++++
+ 5 files changed, 78 insertions(+)
+ create mode 100644 package/oath-toolkit/Config.in
+ create mode 100644 package/oath-toolkit/oath-toolkit.hash
+ create mode 100644 package/oath-toolkit/oath-toolkit.mk
+
+diff --git a/DEVELOPERS b/DEVELOPERS
+index 44b1947487..8c20c329ea 100644
+--- a/DEVELOPERS
++++ b/DEVELOPERS
+@@ -1814,6 +1814,7 @@ F:	package/kexec/
+ F:	package/libjxl/
+ F:	package/libopenmpt/
+ F:	package/mokutil/
++F:	package/oath-toolkit/
+ F:	package/octave/
+ F:	package/ola/
+ F:	package/openblas/
+diff --git a/package/Config.in b/package/Config.in
+index e1ceb81dc0..ca5508fbfa 100644
+--- a/package/Config.in
++++ b/package/Config.in
+@@ -1611,6 +1611,7 @@ menu "Crypto"
+ 	source "package/libxcrypt/Config.in"
+ 	source "package/mbedtls/Config.in"
+ 	source "package/nettle/Config.in"
++	source "package/oath-toolkit/Config.in"
+ 	source "package/openssl/Config.in"
+ 	source "package/parsec-tool/Config.in"
+ 	source "package/pkcs11-helper/Config.in"
+diff --git a/package/oath-toolkit/Config.in b/package/oath-toolkit/Config.in
+new file mode 100644
+index 0000000000..f2d697a7c9
+--- /dev/null
++++ b/package/oath-toolkit/Config.in
+@@ -0,0 +1,27 @@
++config BR2_PACKAGE_OATH_TOOLKIT
++	bool "oath-toolkit"
++	depends on BR2_USE_WCHAR
++	help
++	  OATH Toolkit provide components to build one-time password
++	  authentication systems. It contains shared C libraries,
++	  command line tools and a PAM module. Supported technologies
++	  include the event-based HOTP algorithm (RFC 4226), the
++	  time-based TOTP algorithm (RFC 6238), and Portable Symmetric
++	  Key Container (PSKC, RFC 6030) to manage secret key
++	  data. OATH stands for Open AuTHentication, which is the
++	  organization that specify the algorithms.
++
++	  https://www.nongnu.org/oath-toolkit/
++
++if BR2_PACKAGE_OATH_TOOLKIT
++
++config BR2_PACKAGE_OATH_TOOLKIT_PSKC
++	bool "enable PSKC"
++	select BR2_PACKAGE_LIBXML2
++	help
++	  Enable the Portable Symmetric Key Container (PSKC) support.
++
++endif
++
++comment "oath-toolkit needs a toolchain w/ wchar"
++	depends on !BR2_USE_WCHAR
+diff --git a/package/oath-toolkit/oath-toolkit.hash b/package/oath-toolkit/oath-toolkit.hash
+new file mode 100644
+index 0000000000..a89dd6bb94
+--- /dev/null
++++ b/package/oath-toolkit/oath-toolkit.hash
+@@ -0,0 +1,12 @@
++# After checking pgp signature from:
++# https://download.savannah.nongnu.org/releases/oath-toolkit/oath-toolkit-2.6.12.tar.gz.sig
++# using key A3CC9C870B9D310ABAD4CF2F51722B08FE4745A2
++# From release announce:
++# https://mail.gnu.org/archive/html/oath-toolkit-help/2024-10/msg00002.html
++sha1  0bfb6ad29d59628487c9e180c7a43f4ca301e4d1  oath-toolkit-2.6.12.tar.gz
++sha256  cafdf739b1ec4b276441c6aedae6411434bbd870071f66154b909cc6e2d9e8ba  oath-toolkit-2.6.12.tar.gz
++# Locally calculated
++sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
++sha256  dc626520dcd53a22f727af3ee42c770e56c97a64fe3adb063799d8ab032fe551  liboath/COPYING
++sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  oathtool/COPYING
++sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  pam_oath/COPYING
+diff --git a/package/oath-toolkit/oath-toolkit.mk b/package/oath-toolkit/oath-toolkit.mk
+new file mode 100644
+index 0000000000..b36cd47053
+--- /dev/null
++++ b/package/oath-toolkit/oath-toolkit.mk
+@@ -0,0 +1,37 @@
++################################################################################
++#
++# oath-toolkit
++#
++################################################################################
++
++OATH_TOOLKIT_VERSION = 2.6.12
++OATH_TOOLKIT_SITE = https://download.savannah.nongnu.org/releases/oath-toolkit
++OATH_TOOLKIT_LICENSE = GPL-3.0+ (tools), LGPL-2.1+ (libraries)
++OATH_TOOLKIT_LICENSE_FILES = \
++	COPYING \
++	liboath/COPYING \
++	oathtool/COPYING \
++	pam_oath/COPYING
++OATH_TOOLKIT_CPE_ID_VENDOR = nongnu
++OATH_TOOLKIT_CPE_ID_PRODUCT = oath_toolkit
++OATH_TOOLKIT_INSTALL_STAGING = YES
++
++ifeq ($(BR2_PACKAGE_LINUX_PAM),y)
++# Set the pam directory defined in linux-pam (see --enable-securedir
++# in LINUX_PAM_CONF_OPTS in package/linux-pam/linux-pam.mk).
++OATH_TOOLKIT_CONF_OPTS += \
++	--enable-pam \
++	--with-pam-dir=/lib/security
++OATH_TOOLKIT_DEPENDENCIES += linux-pam
++else
++OATH_TOOLKIT_CONF_OPTS += --disable-pam
++endif
++
++ifeq ($(BR2_PACKAGE_OATH_TOOLKIT_PSKC),y)
++OATH_TOOLKIT_CONF_OPTS += --enable-pskc
++OATH_TOOLKIT_DEPENDENCIES += libxml2
++else
++OATH_TOOLKIT_CONF_OPTS += --disable-pskc
++endif
++
++$(eval $(autotools-package))
+-- 
+2.46.2
+
+_______________________________________________
+buildroot mailing list
+buildroot@buildroot.org
+https://lists.buildroot.org/mailman/listinfo/buildroot
