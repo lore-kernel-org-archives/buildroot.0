@@ -1,69 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3ACDDCFB424
-	for <buildroot@archiver.kernel.org>; Sun,  6 Oct 2024 19:44:35 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id F08E6CFB43F
+	for <buildroot@archiver.kernel.org>; Sun,  6 Oct 2024 20:39:11 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 9E6A640004;
-	Sun,  6 Oct 2024 19:44:34 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 96264605E4;
+	Sun,  6 Oct 2024 20:39:11 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Ux6dFPuFDZj6; Sun,  6 Oct 2024 19:44:33 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id df4fo7kLZLvH; Sun,  6 Oct 2024 20:39:09 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6875B400AF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org AC098606F5
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 6875B400AF;
-	Sun,  6 Oct 2024 19:44:33 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 74DB91BF279
- for <buildroot@lists.busybox.net>; Sun,  6 Oct 2024 19:44:31 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id AC098606F5;
+	Sun,  6 Oct 2024 20:39:09 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id B48511BF279
+ for <buildroot@lists.busybox.net>; Sun,  6 Oct 2024 20:39:08 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6438C81076
- for <buildroot@lists.busybox.net>; Sun,  6 Oct 2024 19:44:31 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id AF9AB403A1
+ for <buildroot@lists.busybox.net>; Sun,  6 Oct 2024 20:39:08 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id ZUDo-1xcowvB for <buildroot@lists.busybox.net>;
- Sun,  6 Oct 2024 19:44:30 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id c3U9cu0Sr64m for <buildroot@lists.busybox.net>;
+ Sun,  6 Oct 2024 20:39:07 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
  helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 20AC78106A
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 20AC78106A
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 20AC78106A
- for <buildroot@buildroot.org>; Sun,  6 Oct 2024 19:44:29 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 15B7540398
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 15B7540398
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 15B7540398
+ for <buildroot@buildroot.org>; Sun,  6 Oct 2024 20:39:06 +0000 (UTC)
 Received: from home.juju.sh (unknown
  [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
  (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id B115DB00563;
- Sun,  6 Oct 2024 21:44:25 +0200 (CEST)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id 964C5B00579;
+ Sun,  6 Oct 2024 22:39:02 +0200 (CEST)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun,  6 Oct 2024 21:44:19 +0200
-Message-ID: <20241006194419.385751-1-ju.o@free.fr>
+Date: Sun,  6 Oct 2024 22:38:54 +0200
+Message-ID: <20241006203854.674166-1-ju.o@free.fr>
 X-Mailer: git-send-email 2.46.2
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1728243867;
- bh=E5pn8cjlt36qPp9DQik11nfx0lqGJlqlJr9CRBzZJ0M=;
+ d=free.fr; s=smtp-20201208; t=1728247143;
+ bh=ZLY8IroHC4nL9rXOukhVLrCX4uXThLFhRI3gZLKB6RQ=;
  h=From:To:Cc:Subject:Date:From;
- b=LYiytHELighcC0EzHQ7+sRCoiKebpXgQXmYByKxd6FyDYE9HP5hZqDu/ztbR+IcZO
- /w1RLHIBRBOV+PBdYMLLwV3CkvmQLjSqNct12EmdYMZ6iQq6ncmY8z3wyGnUCl2xyL
- dyrRegmlBNm3d9ZGhX161PTdcp9zaV+1Gmr+9XeYyq+jAaWPp+n+BTbl4H1bJHUR6w
- ZSkHzcK/SVdu0zv8xqKQeAGLMKXJtM6G5wS8uPV58MRW9fCehR7ZrHnlsMJmeItW01
- 1l3u0qb2FTr41OREBSODhiVrdEnBNhnNQMCdqTGm8lG92GiiSeVwq0jHFkZ+5xueSf
- 9NCYhUNgZZIvg==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=qKJt8ZixeTo+ma4uHlSmwTXJYhsj9iLtEV85p8OmGHCmfshuyYTRRF9Mfgzg01rWg
+ Jn3BiBGAG5WuQyZ5naAh9W+bkBjnPaJg3sqvqJBgjHosGWEkpnyD8kRpGyF1EHKITh
+ k0STZ/FpRgUnMW4BL4ZghOJolw1kHESqzEMmpemRvzrTZ0HASfcPNODTRlX+ovVp45
+ N6EmtupoADS70wIx5jzHF80z4eLzjLvmy7sA0fPWbJqcOKl09Q/ZxcmIq/v9Pr+z2X
+ LSWodBLNEK8ugFIXEwdsPabHh25Jv8K7O1ozTf6fwrq4k/glVHusyWxhDYz5Wo+OaG
+ 43Xlz6voXXMow==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=LYiytHEL
-Subject: [Buildroot] [PATCH 1/1] package/links: bump to version 2.30
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=qKJt8Zix
+Subject: [Buildroot] [PATCH 1/1] package/lvm2: bump to version 2.03.27
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,40 +81,140 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-For change log, see:
-http://links.twibright.com/download/ChangeLog
+For release notes since 2.03.23, see:
+https://gitlab.com/lvmteam/lvm2/-/blob/v2_03_27/WHATS_NEW
+
+This commit also rebased the package patches on this new version.
 
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
 Patch tested in:
-https://gitlab.com/jolivain/buildroot/-/jobs/8005066305
+https://gitlab.com/jolivain/buildroot/-/jobs/8005134618
 ---
- package/links/links.hash | 2 +-
- package/links/links.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ ...ne-use-freopen-to-reopen-standard-streams.patch | 14 ++++++++------
+ ...og-use-freopen-to-reopen-standard-streams.patch | 10 ++++++----
+ package/lvm2/lvm2.hash                             |  2 +-
+ package/lvm2/lvm2.mk                               |  2 +-
+ 4 files changed, 16 insertions(+), 12 deletions(-)
 
-diff --git a/package/links/links.hash b/package/links/links.hash
-index 36a4b90592..30b006b4a8 100644
---- a/package/links/links.hash
-+++ b/package/links/links.hash
-@@ -1,3 +1,3 @@
- # Locally calculated
--sha256  22aa96c0b38e1a6f8f7ed9d7a4167a47fc37246097759ef6059ecf8f9ead7998  links-2.29.tar.bz2
-+sha256  c4631c6b5a11527cdc3cb7872fc23b7f2b25c2b021d596be410dadb40315f166  links-2.30.tar.bz2
- sha256  92deeb70791366630095d4e0714fe37d6e2bd5db0e6ef498ebb8de328f45b253  COPYING
-diff --git a/package/links/links.mk b/package/links/links.mk
-index 30a26b2740..7ebe3af474 100644
---- a/package/links/links.mk
-+++ b/package/links/links.mk
+diff --git a/package/lvm2/0001-cmdline-use-freopen-to-reopen-standard-streams.patch b/package/lvm2/0001-cmdline-use-freopen-to-reopen-standard-streams.patch
+index 8d0be40320..aef6fb8e1d 100644
+--- a/package/lvm2/0001-cmdline-use-freopen-to-reopen-standard-streams.patch
++++ b/package/lvm2/0001-cmdline-use-freopen-to-reopen-standard-streams.patch
+@@ -1,4 +1,4 @@
+-From 7c74ad9c349e381decc84c218112ea8e7bcc0b9c Mon Sep 17 00:00:00 2001
++From 1c35333cd7836c3cc9b39cf6c5599d2221268e94 Mon Sep 17 00:00:00 2001
+ From: Simon Rowe <simon.rowe@nutanix.com>
+ Date: Thu, 23 Mar 2023 09:57:59 +0000
+ Subject: [PATCH] cmdline: use freopen() to reopen standard streams
+@@ -19,15 +19,17 @@ with
+ 
+ Taken from: https://github.com/gentoo/gentoo/blob/master/sys-fs/lvm2/files/lvm2-2.03.14-r1-fopen-to-freopen.patch
+ Signed-off-by: Simon Rowe <simon.rowe@nutanix.com>
++[Julien: rebased patch on v2.03.27]
++Signed-off-by: Julien Olivain <ju.o@free.fr>
+ ---
+  tools/lvmcmdline.c | 12 ++++++++++++
+  1 file changed, 12 insertions(+)
+ 
+ diff --git a/tools/lvmcmdline.c b/tools/lvmcmdline.c
+-index 1e12bedca..534368575 100644
++index 7209ebd9b..3c0c957b1 100644
+ --- a/tools/lvmcmdline.c
+ +++ b/tools/lvmcmdline.c
+-@@ -3384,7 +3384,11 @@ static int _check_standard_fds(void)
++@@ -3378,7 +3378,11 @@ static int _check_standard_fds(void)
+  	int err = is_valid_fd(STDERR_FILENO);
+  
+  	if (!is_valid_fd(STDIN_FILENO) &&
+@@ -39,7 +41,7 @@ index 1e12bedca..534368575 100644
+  		if (err)
+  			perror("stdin stream open");
+  		else
+-@@ -3394,7 +3398,11 @@ static int _check_standard_fds(void)
++@@ -3388,7 +3392,11 @@ static int _check_standard_fds(void)
+  	}
+  
+  	if (!is_valid_fd(STDOUT_FILENO) &&
+@@ -51,7 +53,7 @@ index 1e12bedca..534368575 100644
+  		if (err)
+  			perror("stdout stream open");
+  		/* else no stdout */
+-@@ -3402,7 +3410,11 @@ static int _check_standard_fds(void)
++@@ -3396,7 +3404,11 @@ static int _check_standard_fds(void)
+  	}
+  
+  	if (!is_valid_fd(STDERR_FILENO) &&
+@@ -64,5 +66,5 @@ index 1e12bedca..534368575 100644
+  		       strerror(errno));
+  		return 0;
+ -- 
+-2.22.3
++2.46.2
+ 
+diff --git a/package/lvm2/0002-log-use-freopen-to-reopen-standard-streams.patch b/package/lvm2/0002-log-use-freopen-to-reopen-standard-streams.patch
+index 0b57fb6fd2..747c3cbc83 100644
+--- a/package/lvm2/0002-log-use-freopen-to-reopen-standard-streams.patch
++++ b/package/lvm2/0002-log-use-freopen-to-reopen-standard-streams.patch
+@@ -1,4 +1,4 @@
+-From 6d6b953cf7d2b8d06e7b0363b1b06cb2e902aa0f Mon Sep 17 00:00:00 2001
++From 760ac03a8d8870ad47776075c1e59b6395d308bf Mon Sep 17 00:00:00 2001
+ From: Simon Rowe <simon.rowe@nutanix.com>
+ Date: Thu, 23 Mar 2023 10:07:02 +0000
+ Subject: [PATCH] log: use freopen() to reopen standard streams
+@@ -19,17 +19,19 @@ with
+ 
+ Taken from: https://github.com/gentoo/gentoo/blob/master/sys-fs/lvm2/files/lvm2-2.03.14-freopen_n2.patch
+ Signed-off-by: Simon Rowe <simon.rowe@nutanix.com>
++[Julien: rebased patch on v2.03.27]
++Signed-off-by: Julien Olivain <ju.o@free.fr>
+ ---
+  lib/log/log.c | 4 ++++
+  1 file changed, 4 insertions(+)
+ 
+ diff --git a/lib/log/log.c b/lib/log/log.c
+-index 7b4d537b3..5f62c048c 100644
++index 3eda7d343..0bcd9552d 100644
+ --- a/lib/log/log.c
+ +++ b/lib/log/log.c
+ @@ -208,7 +208,11 @@ int reopen_standard_stream(FILE **stream, const char *mode)
+  
+- 	_check_and_replace_standard_log_streams(old_stream, new_stream);
++ 	_check_and_replace_standard_log_streams(*stream, new_stream);
+  
+ +#ifdef __GLIBC__
+  	*stream = new_stream;
+@@ -40,5 +42,5 @@ index 7b4d537b3..5f62c048c 100644
+  }
+  
+ -- 
+-2.22.3
++2.46.2
+ 
+diff --git a/package/lvm2/lvm2.hash b/package/lvm2/lvm2.hash
+index 74c5f4f1bc..1abaeb0497 100644
+--- a/package/lvm2/lvm2.hash
++++ b/package/lvm2/lvm2.hash
+@@ -1,5 +1,5 @@
+ # From https://sourceware.org/ftp/lvm2/sha512.sum
+-sha512  293430a80c7f599d14e77610456d0f44cac8164e6159cd0e2e287462278a89787e289fdb4d481eb8fd6b5eea07a6535c41cb7fdc3deee83df7fea9bf77dcbdaa  LVM2.2.03.23.tgz
++sha512  02607797f067b2b26d615b9a182ad70017e61d436e3866acf820a04154e503fb59114e9a4540a273d9f570d0337332ca995fb3be83c11eadaca53c1b826eb810  LVM2.2.03.27.tgz
+ # Locally computed sha256 checksums
+ sha256  e76fbcd2fb97cf202da330301327754d2db5c58b5b4bebd3a8a749393e7603d1  COPYING
+ sha256  5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a  COPYING.LIB
+diff --git a/package/lvm2/lvm2.mk b/package/lvm2/lvm2.mk
+index 4fcfddb1bb..2fc24be60e 100644
+--- a/package/lvm2/lvm2.mk
++++ b/package/lvm2/lvm2.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--LINKS_VERSION = 2.29
-+LINKS_VERSION = 2.30
- LINKS_SOURCE = links-$(LINKS_VERSION).tar.bz2
- LINKS_SITE = http://links.twibright.com/download
- LINKS_DEPENDENCIES = host-pkgconf
+-LVM2_VERSION = 2.03.23
++LVM2_VERSION = 2.03.27
+ LVM2_SOURCE = LVM2.$(LVM2_VERSION).tgz
+ LVM2_SITE = https://sourceware.org/ftp/lvm2
+ LVM2_INSTALL_STAGING = YES
 -- 
 2.46.2
 
