@@ -4,49 +4,59 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0E1C8CFB43F
-	for <buildroot@archiver.kernel.org>; Sun,  6 Oct 2024 20:46:46 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 4BB47CFB43F
+	for <buildroot@archiver.kernel.org>; Sun,  6 Oct 2024 20:46:51 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id D4F90607AF;
-	Sun,  6 Oct 2024 20:46:45 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 13DC8607C2;
+	Sun,  6 Oct 2024 20:46:51 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id M7jhrRHiUyVv; Sun,  6 Oct 2024 20:46:45 +0000 (UTC)
+ id 6dZ7ZRe0PecI; Sun,  6 Oct 2024 20:46:48 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A3767607B3
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 03524607C8
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id A3767607B3;
-	Sun,  6 Oct 2024 20:46:44 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 6573C1BF279
- for <buildroot@lists.busybox.net>; Sun,  6 Oct 2024 20:46:36 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 03524607C8;
+	Sun,  6 Oct 2024 20:46:48 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 1494C1BF279
+ for <buildroot@lists.busybox.net>; Sun,  6 Oct 2024 20:46:43 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id A8C26808B1
- for <buildroot@lists.busybox.net>; Sun,  6 Oct 2024 20:46:35 +0000 (UTC)
+ by smtp2.osuosl.org (Postfix) with ESMTP id 03619400F6
+ for <buildroot@lists.busybox.net>; Sun,  6 Oct 2024 20:46:43 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 2d7XlGZYbMh5 for <buildroot@lists.busybox.net>;
- Sun,  6 Oct 2024 20:46:34 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id mjS6pDBSFDlC for <buildroot@lists.busybox.net>;
+ Sun,  6 Oct 2024 20:46:42 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2001:4b98:dc4:8::221;
+ helo=relay1-d.mail.gandi.net; envelope-from=peter@korsgaard.com;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 08B5380A4E
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 08B5380A4E
- for <buildroot@buildroot.org>; Sun,  6 Oct 2024 20:46:33 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id E9D9E851EF; Sun,  6 Oct 2024 20:46:32 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org AD059400AF
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org AD059400AF
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net
+ [IPv6:2001:4b98:dc4:8::221])
+ by smtp2.osuosl.org (Postfix) with ESMTPS id AD059400AF
+ for <buildroot@buildroot.org>; Sun,  6 Oct 2024 20:46:41 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 7E73F240004;
+ Sun,  6 Oct 2024 20:46:39 +0000 (UTC)
+Received: from peko by dell.be.48ers.dk with local (Exim 4.96)
+ (envelope-from <peter@korsgaard.com>) id 1sxY9H-003Vmh-00;
+ Sun, 06 Oct 2024 22:46:39 +0200
 From: Peter Korsgaard <peter@korsgaard.com>
-To: buildroot@buildroot.org
-Date: Sun, 6 Oct 2024 22:45:13 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: a0017a687d489f6fbede1cc46a354e9b77df7e5c
-X-Git-Newrev: 36f7569b6d6b6828029a5787b6b266ac8524bb98
-X-Patchwork-Hint: ignore
-Message-Id: <20241006204632.E9D9E851EF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/sispmctl: bump to version 4.12
+To: Julien Olivain <ju.o@free.fr>
+References: <20241006192807.229895-1-ju.o@free.fr>
+Date: Sun, 06 Oct 2024 22:46:38 +0200
+In-Reply-To: <20241006192807.229895-1-ju.o@free.fr> (Julien Olivain's message
+ of "Sun, 6 Oct 2024 21:28:07 +0200")
+Message-ID: <87msjhklht.fsf@dell.be.48ers.dk>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+MIME-Version: 1.0
+X-GND-Sasl: peter@korsgaard.com
+X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+ dmarc=none (p=none dis=none)
+ header.from=korsgaard.com
+Subject: Re: [Buildroot] [PATCH 1/1] package/less: bump to version 661
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,47 +68,26 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-MIME-Version: 1.0
+Cc: buildroot@buildroot.org
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=36f7569b6d6b6828029a5787b6b266ac8524bb98
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+>>>>> "Julien" == Julien Olivain <ju.o@free.fr> writes:
 
-For change log, see:
-https://sourceforge.net/p/sispmctl/git/ci/release-4.12/tree/ChangeLog
+ > For change log, see:
+ > https://www.greenwoodsoftware.com/less/news.661.html
 
-Signed-off-by: Julien Olivain <ju.o@free.fr>
-Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
----
- package/sispmctl/sispmctl.hash | 2 +-
- package/sispmctl/sispmctl.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ > Signed-off-by: Julien Olivain <ju.o@free.fr>
+ > ---
+ > Patch tested in:
+ > https://gitlab.com/jolivain/buildroot/-/jobs/8005018898
 
-diff --git a/package/sispmctl/sispmctl.hash b/package/sispmctl/sispmctl.hash
-index f6cff1910b..8ffa173470 100644
---- a/package/sispmctl/sispmctl.hash
-+++ b/package/sispmctl/sispmctl.hash
-@@ -1,3 +1,3 @@
- # Locally computed:
--sha256  74b94a3710046b15070c7311f0cacb81554c86b4227719cc2733cb96c7052578  sispmctl-4.11.tar.gz
-+sha256  e757863a4838da6e1ca72a57adc5aca6fc47ffbddc72a69052d8abd743d57082  sispmctl-4.12.tar.gz
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
-diff --git a/package/sispmctl/sispmctl.mk b/package/sispmctl/sispmctl.mk
-index df39793845..4302c0ab89 100644
---- a/package/sispmctl/sispmctl.mk
-+++ b/package/sispmctl/sispmctl.mk
-@@ -4,7 +4,7 @@
- #
- ################################################################################
- 
--SISPMCTL_VERSION = 4.11
-+SISPMCTL_VERSION = 4.12
- SISPMCTL_SITE = https://downloads.sourceforge.net/project/sispmctl/sispmctl/sispmctl-$(SISPMCTL_VERSION)
- SISPMCTL_LICENSE = GPL-2.0+
- SISPMCTL_LICENSE_FILES = COPYING
+Committed, thanks.
+
+-- 
+Bye, Peter Korsgaard
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
