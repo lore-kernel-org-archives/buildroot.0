@@ -4,50 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id DB19ACFB440
-	for <buildroot@archiver.kernel.org>; Sun,  6 Oct 2024 20:46:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D77E9CFB43F
+	for <buildroot@archiver.kernel.org>; Sun,  6 Oct 2024 20:46:42 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 991E460771;
-	Sun,  6 Oct 2024 20:46:40 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9A60460783;
+	Sun,  6 Oct 2024 20:46:42 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id fUPyMRVbCSiH; Sun,  6 Oct 2024 20:46:38 +0000 (UTC)
+ id y5iG2vbaXXOr; Sun,  6 Oct 2024 20:46:41 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org B643760741
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7883B60786
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id B643760741;
-	Sun,  6 Oct 2024 20:46:37 +0000 (UTC)
-Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
- by ash.osuosl.org (Postfix) with ESMTP id CABA01BF86D
- for <buildroot@lists.busybox.net>; Sun,  6 Oct 2024 20:46:33 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 7883B60786;
+	Sun,  6 Oct 2024 20:46:41 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 976001BF279
+ for <buildroot@lists.busybox.net>; Sun,  6 Oct 2024 20:46:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp3.osuosl.org (Postfix) with ESMTP id B86D2606F6
- for <buildroot@lists.busybox.net>; Sun,  6 Oct 2024 20:46:33 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 8642C80A67
+ for <buildroot@lists.busybox.net>; Sun,  6 Oct 2024 20:46:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp3.osuosl.org ([127.0.0.1])
- by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qCsjchQgEGWT for <buildroot@lists.busybox.net>;
- Sun,  6 Oct 2024 20:46:32 +0000 (UTC)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 50zTX9D3Um0V for <buildroot@lists.busybox.net>;
+ Sun,  6 Oct 2024 20:46:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org DB25C606F5
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E6FDD808B1
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp3.osuosl.org (Postfix) with ESMTP id DB25C606F5
+ by smtp1.osuosl.org (Postfix) with ESMTP id E6FDD808B1
  for <buildroot@buildroot.org>; Sun,  6 Oct 2024 20:46:32 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id D3396851FD; Sun,  6 Oct 2024 20:46:32 +0000 (UTC)
+ id DE2F1851FF; Sun,  6 Oct 2024 20:46:32 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 6 Oct 2024 22:44:46 +0200
+Date: Sun, 6 Oct 2024 22:45:01 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 434750665a47a69aaa58fe84c61016b1ece3dce6
-X-Git-Newrev: bd127d0c3ffc57646f4908264728da4ea074241b
+X-Git-Oldrev: bd127d0c3ffc57646f4908264728da4ea074241b
+X-Git-Newrev: a0017a687d489f6fbede1cc46a354e9b77df7e5c
 X-Patchwork-Hint: ignore
-Message-Id: <20241006204632.D3396851FD@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/mosquitto: security bump to
- version 2.0.19
+Message-Id: <20241006204632.DE2F1851FF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/ethtool: bump to version 6.10
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -65,48 +64,43 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=bd127d0c3ffc57646f4908264728da4ea074241b
+commit: https://git.buildroot.net/buildroot/commit/?id=a0017a687d489f6fbede1cc46a354e9b77df7e5c
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For change log, see:
-https://github.com/eclipse/mosquitto/blob/v2.0.19/ChangeLog.txt
-
-The change log mention 2 security related fixes.
-There is no allocated CVE.
+For change log since 6.9, see:
+https://git.kernel.org/pub/scm/network/ethtool/ethtool.git/tree/NEWS?h=v6.10
 
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/mosquitto/mosquitto.hash | 4 ++--
- package/mosquitto/mosquitto.mk   | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ package/ethtool/ethtool.hash | 2 +-
+ package/ethtool/ethtool.mk   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/mosquitto/mosquitto.hash b/package/mosquitto/mosquitto.hash
-index 453c1934dd..34f50906c1 100644
---- a/package/mosquitto/mosquitto.hash
-+++ b/package/mosquitto/mosquitto.hash
-@@ -1,6 +1,6 @@
- # Locally calculated after checking gpg signature
--# from https://mosquitto.org/files/source/mosquitto-2.0.18.tar.gz.asc
--sha256  d665fe7d0032881b1371a47f34169ee4edab67903b2cd2b4c083822823f4448a  mosquitto-2.0.18.tar.gz
-+# from https://mosquitto.org/files/source/mosquitto-2.0.19.tar.gz.asc
-+sha256  33af3637f119a61c509c01d2f8f6cc3d8be76f49e850132f2860af142abf82a9  mosquitto-2.0.19.tar.gz
- 
- # License files
- sha256  d3c4ccace4e5d3cc89d34cf2a0bc85b8596bfc0a32b815d0d77f9b7c41b5350c  LICENSE.txt
-diff --git a/package/mosquitto/mosquitto.mk b/package/mosquitto/mosquitto.mk
-index c031f10c6b..b54535b9d9 100644
---- a/package/mosquitto/mosquitto.mk
-+++ b/package/mosquitto/mosquitto.mk
+diff --git a/package/ethtool/ethtool.hash b/package/ethtool/ethtool.hash
+index 6c442c3729..5931903e22 100644
+--- a/package/ethtool/ethtool.hash
++++ b/package/ethtool/ethtool.hash
+@@ -1,5 +1,5 @@
+ # From https://www.kernel.org/pub/software/network/ethtool/sha256sums.asc
+-sha256  a71b0354010661c5cf178bc606ed50fcb91805cf1897ad0eb2818387a5fd0cd9  ethtool-6.9.tar.xz
++sha256  cc613fe8a2bcddee17a1e6e0d763c0f3ea33c7e930658d2d7f601aa65e426a1f  ethtool-6.10.tar.xz
+ # Locally calculated
+ sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
+ sha256  5d632934396f90c82dfebe3c9512648bbb6333b406113d0cd331b0e0aa2d34a1  LICENSE
+diff --git a/package/ethtool/ethtool.mk b/package/ethtool/ethtool.mk
+index bd04fca8f3..02f4c1fe4f 100644
+--- a/package/ethtool/ethtool.mk
++++ b/package/ethtool/ethtool.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MOSQUITTO_VERSION = 2.0.18
-+MOSQUITTO_VERSION = 2.0.19
- MOSQUITTO_SITE = https://mosquitto.org/files/source
- MOSQUITTO_LICENSE = EPL-2.0 or EDLv1.0
- MOSQUITTO_LICENSE_FILES = LICENSE.txt epl-v20 edl-v10
+-ETHTOOL_VERSION = 6.9
++ETHTOOL_VERSION = 6.10
+ ETHTOOL_SOURCE = ethtool-$(ETHTOOL_VERSION).tar.xz
+ ETHTOOL_SITE = $(BR2_KERNEL_MIRROR)/software/network/ethtool
+ ETHTOOL_LICENSE = GPL-2.0
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
