@@ -1,69 +1,69 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 634DECFB424
-	for <buildroot@archiver.kernel.org>; Sun,  6 Oct 2024 17:34:40 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 9C749CFB43F
+	for <buildroot@archiver.kernel.org>; Sun,  6 Oct 2024 19:28:23 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp4.osuosl.org (Postfix) with ESMTP id D0F2C40394;
-	Sun,  6 Oct 2024 17:34:39 +0000 (UTC)
+	by smtp2.osuosl.org (Postfix) with ESMTP id 3833240004;
+	Sun,  6 Oct 2024 19:28:23 +0000 (UTC)
+X-Virus-Scanned: amavis at osuosl.org
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1JnNtdEflCPq; Sun,  6 Oct 2024 19:28:22 +0000 (UTC)
+X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org D1B51400AF
+Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
+	by smtp2.osuosl.org (Postfix) with ESMTP id D1B51400AF;
+	Sun,  6 Oct 2024 19:28:21 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 71C971BF279
+ for <buildroot@lists.busybox.net>; Sun,  6 Oct 2024 19:28:20 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+ by smtp4.osuosl.org (Postfix) with ESMTP id 5FE9A401A2
+ for <buildroot@lists.busybox.net>; Sun,  6 Oct 2024 19:28:20 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp4.osuosl.org ([127.0.0.1])
  by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id RPtvcYB5Y_WG; Sun,  6 Oct 2024 17:34:38 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 720A740393
-Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp4.osuosl.org (Postfix) with ESMTP id 720A740393;
-	Sun,  6 Oct 2024 17:34:38 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 28FD21BF310
- for <buildroot@lists.busybox.net>; Sun,  6 Oct 2024 17:34:36 +0000 (UTC)
-Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 18706810E9
- for <buildroot@lists.busybox.net>; Sun,  6 Oct 2024 17:34:36 +0000 (UTC)
-X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id MjCwbNN9kjsi for <buildroot@lists.busybox.net>;
- Sun,  6 Oct 2024 17:34:35 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=212.27.42.1;
+ id U_Z2mPpqbrfg for <buildroot@lists.busybox.net>;
+ Sun,  6 Oct 2024 19:28:19 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=2a01:e0c:1:1599::10;
  helo=smtp1-g21.free.fr; envelope-from=ju.o@free.fr; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 20C95810E8
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 20C95810E8
-Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 20C95810E8
- for <buildroot@buildroot.org>; Sun,  6 Oct 2024 17:34:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org 114174019D
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 114174019D
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [IPv6:2a01:e0c:1:1599::10])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id 114174019D
+ for <buildroot@buildroot.org>; Sun,  6 Oct 2024 19:28:18 +0000 (UTC)
 Received: from home.juju.sh (unknown
  [IPv6:2a01:e0a:485:b220:8213:2270:4a8d:a1d5])
  (Authenticated sender: ju.o@free.fr)
- by smtp1-g21.free.fr (Postfix) with ESMTPSA id 82278B00573;
- Sun,  6 Oct 2024 19:34:30 +0200 (CEST)
+ by smtp1-g21.free.fr (Postfix) with ESMTPSA id A8C5CB0055A;
+ Sun,  6 Oct 2024 21:28:14 +0200 (CEST)
 From: Julien Olivain <ju.o@free.fr>
 To: buildroot@buildroot.org
-Date: Sun,  6 Oct 2024 19:34:24 +0200
-Message-ID: <20241006173424.1487914-1-ju.o@free.fr>
+Date: Sun,  6 Oct 2024 21:28:07 +0200
+Message-ID: <20241006192807.229895-1-ju.o@free.fr>
 X-Mailer: git-send-email 2.46.2
 MIME-Version: 1.0
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=free.fr; s=smtp-20201208; t=1728236071;
- bh=MaWXpIdJR1lZFvRmGz1PXyX5rucvnMq5rtSxevXBJBU=;
+ d=free.fr; s=smtp-20201208; t=1728242895;
+ bh=kcNun7wpBQ80BbUoEeWd7mU8Rg9AqutP+gFdhFw/pq4=;
  h=From:To:Cc:Subject:Date:From;
- b=LrblP+l4A/wCNWKA/b2cVk5R1vfJKJadQcre/LTH+ICEZYYyVpVu1LmuqxHq25KM4
- 2NVYme/z9YPQ6dbkUwloDg1XuH9A2JZb+nu1+2wU2Zf3UpRVm5wcVtZWbOrE1XuWDH
- 803RFUTwmaGtDZNhqKPmYMXhxYRStIkotwngHFUcjniDRfqiNVqEFegxwgeMz4QyEL
- wGDaosONQ60plNG20/+fUO8YjegVSc6XE3NIUeAaBM0gCARPU89x48JQsI8QJigEwT
- QScumz+xp3+5AY2o3IQGc5UvylFUZs4Fiat1hPazeQHLgrtbqCAb8zVc5xNO1/wrs4
- efSwV74zc/t1g==
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+ b=oJccfDcBvFR+BClenFeKkI9AdKzWHj2WjBs/8A5AaIjbEU6DaSI6o5laHDe45G1oV
+ XofzXKxiKF9Cc2Tk61zAxhWVY+2v28YeorQ8BfROrm8etenWZHKdm1LSOqUnRm07g5
+ EyshmDdkjGICnwByIYCpQQG0GiGHjBQ6Hxfmy6Bbwbv3nwkZn3+Mh7RYTwdpC6YWWh
+ i+PQTm9s69M71SGV7OMubYTgkdbAzuVTIxAdrl2aaMV1YpTBKPzZMu0au+dP3QkKBf
+ sN7UI1A7sTSf6ezdTs3KDcIrO9KrQQP8rw97AjrPlstdXkjZQD2AwH1WL2RKgK9hAJ
+ LG7H4gPmjPCqg==
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dmarc=pass (p=none dis=none)
  header.from=free.fr
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
  dkim=pass (2048-bit key) header.d=free.fr header.i=@free.fr
- header.a=rsa-sha256 header.s=smtp-20201208 header.b=LrblP+l4
-Subject: [Buildroot] [PATCH 1/1] package/mtools: bump to version 4.0.45
+ header.a=rsa-sha256 header.s=smtp-20201208 header.b=oJccfDcB
+Subject: [Buildroot] [PATCH 1/1] package/less: bump to version 661
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -81,46 +81,44 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Release announces:
-https://lists.gnu.org/archive/html/info-mtools/2024-09/msg00001.html
-https://lists.gnu.org/archive/html/info-mtools/2024-06/msg00000.html
-
-For change log since 4.0.43, see:
-https://svn.savannah.gnu.org/viewvc/mtools/tags/4.0.45/NEWS?view=markup
+For change log, see:
+https://www.greenwoodsoftware.com/less/news.661.html
 
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 ---
 Patch tested in:
-https://gitlab.com/jolivain/buildroot/-/jobs/8004817614
+https://gitlab.com/jolivain/buildroot/-/jobs/8005018898
 ---
- package/mtools/mtools.hash | 2 +-
- package/mtools/mtools.mk   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ package/less/less.hash | 4 ++--
+ package/less/less.mk   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/package/mtools/mtools.hash b/package/mtools/mtools.hash
-index 412d67a328..0cad06ce58 100644
---- a/package/mtools/mtools.hash
-+++ b/package/mtools/mtools.hash
-@@ -1,5 +1,5 @@
+diff --git a/package/less/less.hash b/package/less/less.hash
+index c44e246773..b97d0fac41 100644
+--- a/package/less/less.hash
++++ b/package/less/less.hash
+@@ -1,6 +1,6 @@
  # Locally calculated after checking pgp signature
--sha256  997ffe4125a19de1fd433ed63f128f7d54bc1a5915f3cdb36da6491ef917f217  mtools-4.0.43.tar.lz
-+sha256  32ca85dfc1674c536143d4e0da60e3134039eb9552e0fecfa110e9c8736093ce  mtools-4.0.45.tar.lz
- 
+ # using DSA key F153A7C833235259
+-# https://www.greenwoodsoftware.com/less/less-643.sig
+-sha256  2911b5432c836fa084c8a2e68f6cd6312372c026a58faaa98862731c8b6052e8  less-643.tar.gz
++# https://www.greenwoodsoftware.com/less/less-661.sig
++sha256  2b5f0167216e3ef0ffcb0c31c374e287eb035e4e223d5dae315c2783b6e738ed  less-661.tar.gz
  # Locally calculated
- sha256  8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903  COPYING
-diff --git a/package/mtools/mtools.mk b/package/mtools/mtools.mk
-index 96d8e43ea2..7089af339e 100644
---- a/package/mtools/mtools.mk
-+++ b/package/mtools/mtools.mk
+ sha256  3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986  COPYING
+diff --git a/package/less/less.mk b/package/less/less.mk
+index 7431d80cc4..25bbbd6d88 100644
+--- a/package/less/less.mk
++++ b/package/less/less.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--MTOOLS_VERSION = 4.0.43
-+MTOOLS_VERSION = 4.0.45
- MTOOLS_SOURCE = mtools-$(MTOOLS_VERSION).tar.lz
- MTOOLS_SITE = $(BR2_GNU_MIRROR)/mtools
- MTOOLS_LICENSE = GPL-3.0+
+-LESS_VERSION = 643
++LESS_VERSION = 661
+ LESS_SITE = http://www.greenwoodsoftware.com/less
+ LESS_LICENSE = GPL-3.0+
+ LESS_LICENSE_FILES = COPYING
 -- 
 2.46.2
 
