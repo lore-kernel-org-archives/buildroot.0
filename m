@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id D77E9CFB43F
-	for <buildroot@archiver.kernel.org>; Sun,  6 Oct 2024 20:46:42 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 0E1C8CFB43F
+	for <buildroot@archiver.kernel.org>; Sun,  6 Oct 2024 20:46:46 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9A60460783;
-	Sun,  6 Oct 2024 20:46:42 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id D4F90607AF;
+	Sun,  6 Oct 2024 20:46:45 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id y5iG2vbaXXOr; Sun,  6 Oct 2024 20:46:41 +0000 (UTC)
+ id M7jhrRHiUyVv; Sun,  6 Oct 2024 20:46:45 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 7883B60786
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org A3767607B3
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 7883B60786;
-	Sun,  6 Oct 2024 20:46:41 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id A3767607B3;
+	Sun,  6 Oct 2024 20:46:44 +0000 (UTC)
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 976001BF279
- for <buildroot@lists.busybox.net>; Sun,  6 Oct 2024 20:46:35 +0000 (UTC)
+ by ash.osuosl.org (Postfix) with ESMTP id 6573C1BF279
+ for <buildroot@lists.busybox.net>; Sun,  6 Oct 2024 20:46:36 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 8642C80A67
+ by smtp1.osuosl.org (Postfix) with ESMTP id A8C26808B1
  for <buildroot@lists.busybox.net>; Sun,  6 Oct 2024 20:46:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 50zTX9D3Um0V for <buildroot@lists.busybox.net>;
+ id 2d7XlGZYbMh5 for <buildroot@lists.busybox.net>;
  Sun,  6 Oct 2024 20:46:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org E6FDD808B1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 08B5380A4E
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id E6FDD808B1
- for <buildroot@buildroot.org>; Sun,  6 Oct 2024 20:46:32 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id 08B5380A4E
+ for <buildroot@buildroot.org>; Sun,  6 Oct 2024 20:46:33 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id DE2F1851FF; Sun,  6 Oct 2024 20:46:32 +0000 (UTC)
+ id E9D9E851EF; Sun,  6 Oct 2024 20:46:32 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Sun, 6 Oct 2024 22:45:01 +0200
+Date: Sun, 6 Oct 2024 22:45:13 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: bd127d0c3ffc57646f4908264728da4ea074241b
-X-Git-Newrev: a0017a687d489f6fbede1cc46a354e9b77df7e5c
+X-Git-Oldrev: a0017a687d489f6fbede1cc46a354e9b77df7e5c
+X-Git-Newrev: 36f7569b6d6b6828029a5787b6b266ac8524bb98
 X-Patchwork-Hint: ignore
-Message-Id: <20241006204632.DE2F1851FF@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/ethtool: bump to version 6.10
+Message-Id: <20241006204632.E9D9E851EF@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/sispmctl: bump to version 4.12
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,43 +64,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=a0017a687d489f6fbede1cc46a354e9b77df7e5c
+commit: https://git.buildroot.net/buildroot/commit/?id=36f7569b6d6b6828029a5787b6b266ac8524bb98
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For change log since 6.9, see:
-https://git.kernel.org/pub/scm/network/ethtool/ethtool.git/tree/NEWS?h=v6.10
+For change log, see:
+https://sourceforge.net/p/sispmctl/git/ci/release-4.12/tree/ChangeLog
 
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/ethtool/ethtool.hash | 2 +-
- package/ethtool/ethtool.mk   | 2 +-
+ package/sispmctl/sispmctl.hash | 2 +-
+ package/sispmctl/sispmctl.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/ethtool/ethtool.hash b/package/ethtool/ethtool.hash
-index 6c442c3729..5931903e22 100644
---- a/package/ethtool/ethtool.hash
-+++ b/package/ethtool/ethtool.hash
-@@ -1,5 +1,5 @@
- # From https://www.kernel.org/pub/software/network/ethtool/sha256sums.asc
--sha256  a71b0354010661c5cf178bc606ed50fcb91805cf1897ad0eb2818387a5fd0cd9  ethtool-6.9.tar.xz
-+sha256  cc613fe8a2bcddee17a1e6e0d763c0f3ea33c7e930658d2d7f601aa65e426a1f  ethtool-6.10.tar.xz
- # Locally calculated
+diff --git a/package/sispmctl/sispmctl.hash b/package/sispmctl/sispmctl.hash
+index f6cff1910b..8ffa173470 100644
+--- a/package/sispmctl/sispmctl.hash
++++ b/package/sispmctl/sispmctl.hash
+@@ -1,3 +1,3 @@
+ # Locally computed:
+-sha256  74b94a3710046b15070c7311f0cacb81554c86b4227719cc2733cb96c7052578  sispmctl-4.11.tar.gz
++sha256  e757863a4838da6e1ca72a57adc5aca6fc47ffbddc72a69052d8abd743d57082  sispmctl-4.12.tar.gz
  sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING
- sha256  5d632934396f90c82dfebe3c9512648bbb6333b406113d0cd331b0e0aa2d34a1  LICENSE
-diff --git a/package/ethtool/ethtool.mk b/package/ethtool/ethtool.mk
-index bd04fca8f3..02f4c1fe4f 100644
---- a/package/ethtool/ethtool.mk
-+++ b/package/ethtool/ethtool.mk
+diff --git a/package/sispmctl/sispmctl.mk b/package/sispmctl/sispmctl.mk
+index df39793845..4302c0ab89 100644
+--- a/package/sispmctl/sispmctl.mk
++++ b/package/sispmctl/sispmctl.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--ETHTOOL_VERSION = 6.9
-+ETHTOOL_VERSION = 6.10
- ETHTOOL_SOURCE = ethtool-$(ETHTOOL_VERSION).tar.xz
- ETHTOOL_SITE = $(BR2_KERNEL_MIRROR)/software/network/ethtool
- ETHTOOL_LICENSE = GPL-2.0
+-SISPMCTL_VERSION = 4.11
++SISPMCTL_VERSION = 4.12
+ SISPMCTL_SITE = https://downloads.sourceforge.net/project/sispmctl/sispmctl/sispmctl-$(SISPMCTL_VERSION)
+ SISPMCTL_LICENSE = GPL-2.0+
+ SISPMCTL_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
