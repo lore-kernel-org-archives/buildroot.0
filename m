@@ -4,49 +4,50 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 40D60CFB442
-	for <buildroot@archiver.kernel.org>; Mon,  7 Oct 2024 06:06:33 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73A46CFB440
+	for <buildroot@archiver.kernel.org>; Mon,  7 Oct 2024 06:06:35 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id B188680B6D;
-	Mon,  7 Oct 2024 06:06:32 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 43A0780C71;
+	Mon,  7 Oct 2024 06:06:35 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id CEq76eBbve-R; Mon,  7 Oct 2024 06:06:31 +0000 (UTC)
+ id fzjus1ATh4R0; Mon,  7 Oct 2024 06:06:34 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 9AC7F80AE7
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org EA48A80AF8
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 9AC7F80AE7;
-	Mon,  7 Oct 2024 06:06:30 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 53D9C1BF955
+	by smtp1.osuosl.org (Postfix) with ESMTP id EA48A80AF8;
+	Mon,  7 Oct 2024 06:06:33 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id 84E151BF471
  for <buildroot@lists.busybox.net>; Mon,  7 Oct 2024 06:06:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 4FE1E805BD
+ by smtp4.osuosl.org (Postfix) with ESMTP id 720B0402CE
  for <buildroot@lists.busybox.net>; Mon,  7 Oct 2024 06:06:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qzElT0G8j0Ad for <buildroot@lists.busybox.net>;
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id E0RFZfc_fU5z for <buildroot@lists.busybox.net>;
  Mon,  7 Oct 2024 06:06:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6636F8055B
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 738A4402C2
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6636F8055B
+ by smtp4.osuosl.org (Postfix) with ESMTP id 738A4402C2
  for <buildroot@buildroot.org>; Mon,  7 Oct 2024 06:06:25 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 4EB4285735; Mon,  7 Oct 2024 06:06:25 +0000 (UTC)
+ id 6B6148574E; Mon,  7 Oct 2024 06:06:25 +0000 (UTC)
 From: Peter Korsgaard <peter@korsgaard.com>
 To: buildroot@buildroot.org
-Date: Mon, 7 Oct 2024 07:59:57 +0200
+Date: Mon, 7 Oct 2024 08:01:24 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 9cb45b749755f397035f80966150180d76ebca91
-X-Git-Newrev: b554775c64c76f68fe94e0ce9b9f37dc9a6739f9
+X-Git-Oldrev: ac0b092981068b4b89a6644b4d8faf2564e3e095
+X-Git-Newrev: 2b6455ff4f4fb94dd2afb719ad880d8039abb1be
 X-Patchwork-Hint: ignore
-Message-Id: <20241007060625.4EB4285735@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/rdma-core: bump to version v53.0
+Message-Id: <20241007060625.6B6148574E@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] package/perftest: bump to version
+ 24.07.0-0.44
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -64,43 +65,41 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=b554775c64c76f68fe94e0ce9b9f37dc9a6739f9
+commit: https://git.buildroot.net/buildroot/commit/?id=2b6455ff4f4fb94dd2afb719ad880d8039abb1be
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-For change log since v52.0, see:
-https://github.com/linux-rdma/rdma-core/releases/tag/v53.0
+For change log since 24.04.0-0.41, see:
+https://github.com/linux-rdma/perftest/releases/tag/24.07.0-0.44
 
 Signed-off-by: Julien Olivain <ju.o@free.fr>
 Signed-off-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- package/rdma-core/rdma-core.hash | 2 +-
- package/rdma-core/rdma-core.mk   | 2 +-
+ package/perftest/perftest.hash | 2 +-
+ package/perftest/perftest.mk   | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/package/rdma-core/rdma-core.hash b/package/rdma-core/rdma-core.hash
-index 0f28b5609f..05f1efa8ed 100644
---- a/package/rdma-core/rdma-core.hash
-+++ b/package/rdma-core/rdma-core.hash
-@@ -1,5 +1,5 @@
+diff --git a/package/perftest/perftest.hash b/package/perftest/perftest.hash
+index f40d1d1e96..496ced9a61 100644
+--- a/package/perftest/perftest.hash
++++ b/package/perftest/perftest.hash
+@@ -1,3 +1,3 @@
  # Locally calculated
--sha256  05e111f560b7c5bef1a208880a3d94eb2e7f1ad484bf916a81780d2fde5d3dcc  rdma-core-52.0.tar.gz
-+sha256  06436548dadb67e8becdb524451444bf4a50d123b1777f98293d79cfc79ec341  rdma-core-53.0.tar.gz
- sha256  99e0df1d009a21d0dfb031600c550fd8f4efc0c6b2a4ef8b34a995aa6f79c9f4  COPYING.BSD_MIT
- sha256  8177f97513213526df2cf6184d8ff986c675afb514d4e68a404010521b880643  COPYING.GPL2
- sha256  c46a557f25b8ef9bec76526c4e593fc13e6cba27e7ba30d73b6497a689cf06f6  COPYING.md
-diff --git a/package/rdma-core/rdma-core.mk b/package/rdma-core/rdma-core.mk
-index 3ad3ad5954..2433dca6ba 100644
---- a/package/rdma-core/rdma-core.mk
-+++ b/package/rdma-core/rdma-core.mk
+-sha256  d398cb7a364735485b5ae033b242d7cf0bedcdb5f4d512e54b18c9a3e7a98b87  perftest-24.04.0-0.41.tar.gz
++sha256  3e62774a4b098ad91aa13353333ad221cf541d280dc9ba94db50270d4bb5b84a  perftest-24.07.0-0.44.tar.gz
+ sha256  763adb7d5094f2127b026adea8701f042d28d4b1f6fb8b6e828989227a9cf7f5  COPYING
+diff --git a/package/perftest/perftest.mk b/package/perftest/perftest.mk
+index 36cb775254..12d5c1fdba 100644
+--- a/package/perftest/perftest.mk
++++ b/package/perftest/perftest.mk
 @@ -4,7 +4,7 @@
  #
  ################################################################################
  
--RDMA_CORE_VERSION = 52.0
-+RDMA_CORE_VERSION = 53.0
- RDMA_CORE_SITE = $(call github,linux-rdma,rdma-core,v$(RDMA_CORE_VERSION))
- RDMA_CORE_LICENSE = GPL-2.0 or BSD-2-Clause
- RDMA_CORE_LICENSE_FILES = COPYING.GPL2 COPYING.BSD_MIT COPYING.md
+-PERFTEST_VERSION = 24.04.0-0.41
++PERFTEST_VERSION = 24.07.0-0.44
+ PERFTEST_SITE = $(call github,linux-rdma,perftest,$(PERFTEST_VERSION))
+ PERFTEST_LICENSE = GPL-2.0 or BSD-2-Clause
+ PERFTEST_LICENSE_FILES = COPYING
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
