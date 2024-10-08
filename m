@@ -4,92 +4,100 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id B2D08CED60C
-	for <buildroot@archiver.kernel.org>; Wed,  9 Oct 2024 06:26:41 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id D71FBCED618
+	for <buildroot@archiver.kernel.org>; Wed,  9 Oct 2024 07:26:26 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 5B6CE8114C;
-	Wed,  9 Oct 2024 06:26:41 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 7B9438101C;
+	Wed,  9 Oct 2024 07:26:26 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp1.osuosl.org ([127.0.0.1])
  by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id h9-ym1t96MWf; Wed,  9 Oct 2024 06:26:40 +0000 (UTC)
+ id Z7ebQMnLOOuz; Wed,  9 Oct 2024 07:26:25 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 7707A811D1
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 79BD18112B
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp1.osuosl.org (Postfix) with ESMTP id 7707A811D1;
-	Wed,  9 Oct 2024 06:26:40 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 6DC671BF40B
- for <buildroot@lists.busybox.net>; Wed,  9 Oct 2024 06:26:39 +0000 (UTC)
+	by smtp1.osuosl.org (Postfix) with ESMTP id 79BD18112B;
+	Wed,  9 Oct 2024 07:26:25 +0000 (UTC)
+Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
+ by ash.osuosl.org (Postfix) with ESMTP id 0A8161BF868
+ for <buildroot@lists.busybox.net>; Wed,  9 Oct 2024 07:26:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 5CB76811D1
- for <buildroot@lists.busybox.net>; Wed,  9 Oct 2024 06:26:39 +0000 (UTC)
+ by smtp3.osuosl.org (Postfix) with ESMTP id EDCBC607A3
+ for <buildroot@lists.busybox.net>; Wed,  9 Oct 2024 07:26:23 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id kXyv3s13Txhv for <buildroot@lists.busybox.net>;
- Wed,  9 Oct 2024 06:26:38 +0000 (UTC)
+Received: from smtp3.osuosl.org ([127.0.0.1])
+ by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id JAatzpEe4Jfl for <buildroot@lists.busybox.net>;
+ Wed,  9 Oct 2024 07:26:23 +0000 (UTC)
 Received-SPF: Pass (mailfrom) identity=mailfrom;
- client-ip=2a00:1450:4864:20::536; helo=mail-ed1-x536.google.com;
- envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 411FF8114C
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 411FF8114C
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com
- [IPv6:2a00:1450:4864:20::536])
- by smtp1.osuosl.org (Postfix) with ESMTPS id 411FF8114C
- for <buildroot@buildroot.org>; Wed,  9 Oct 2024 06:26:38 +0000 (UTC)
-Received: by mail-ed1-x536.google.com with SMTP id
- 4fb4d7f45d1cf-5c915308486so1409161a12.0
- for <buildroot@buildroot.org>; Tue, 08 Oct 2024 23:26:38 -0700 (PDT)
+ client-ip=2a00:1450:4864:20::32a; helo=mail-wm1-x32a.google.com;
+ envelope-from=arnout.vandecappelle@essensium.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp3.osuosl.org 01D1A60609
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 01D1A60609
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com
+ [IPv6:2a00:1450:4864:20::32a])
+ by smtp3.osuosl.org (Postfix) with ESMTPS id 01D1A60609
+ for <buildroot@buildroot.org>; Wed,  9 Oct 2024 07:26:22 +0000 (UTC)
+Received: by mail-wm1-x32a.google.com with SMTP id
+ 5b1f17b1804b1-42cba8340beso3114455e9.1
+ for <buildroot@buildroot.org>; Wed, 09 Oct 2024 00:26:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=1e100.net; s=20230601; t=1728455196; x=1729059996;
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
- :reply-to;
- bh=WLx9kUF1SlIO9jjky7Pmxw1Kp+h+W/yK/RcJ5Onr4P0=;
- b=Wl4rEUV+xsMBNMQGuYDgeikltYpICCexgFJjIiv5681AOyZs5xywZAekss6oQi0QE2
- bz5HSqseM97OtOU00xNSfuMmQ7+s++UoAXyNGtsv6kJaZuF8QqGRwHW5Q4f2fqkvr59H
- E0Sak3dYwFPcdU2pUy9Mhei6xpPK5MBnHES524b4Hi+UR/vEgF7KyJgxz3sCdQSyP2vW
- y+V6h3RmV2QfhheVwDlmlgCRxsuNSG9iU9Kun1cDxH8x6dvSDXg4UeFlxNvYwWmtCAg1
- /0c+ku6RAXYInL7ZiQEud8hLQl4c360DryArYBrV1fDzavv7cEcLvEnLZ4CZ49ZOtePL
- O/Fw==
-X-Gm-Message-State: AOJu0YwCBrJpNut9WrQttlv2W04l/zQfFDrRVYugvfFZHILtt9l+EcPr
- YJAk7l2VTBYhUBhsgWU8pAimQToD+Vo5alxePDi0ykt2iZP+Z/T0DMtQ5Y4RxcdxByrzhzznWje
- BEKs=
-X-Google-Smtp-Source: AGHT+IH90/aoN8uTcshZyu+RqGJy6XxFiPWkpx82SYn6BjCLAqNfJ8/IWM/D4zGYPy96jjyjdvpnDA==
-X-Received: by 2002:a05:6402:5188:b0:5c9:446:7231 with SMTP id
- 4fb4d7f45d1cf-5c91d67e3ddmr877777a12.29.1728455195780; 
- Tue, 08 Oct 2024 23:26:35 -0700 (PDT)
-Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it
- (host-79-44-94-237.retail.telecomitalia.it. [79.44.94.237])
+ d=1e100.net; s=20230601; t=1728458780; x=1729063580;
+ h=content-transfer-encoding:in-reply-to:content-language:from
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+ bh=Pg3A3VqyWYPrvbSMY/5gkkmTbRi/b0YINVVKPQ3swCk=;
+ b=MEqkKIq0qfHIdiXMvi0KJJDwUPjeZFuQSbqTmTHKSWYquu6+/bzxrTlNn9DFF5QND6
+ CLObMsqORU4Vt0YtEdmELCsPKXkvYwiYjvXnAUj7LPAFR6lFXy3WS2ap8Esbubdi4yt0
+ A37tV/aPlDhZu7HMmPHPpoo1Xwu1PCK1lJr1d2ZZJU3EIxd7GDGJjG6okqG9nolwuhoh
+ guwtAyX29V5gomYCD5zr6jr0vXy36UJKcn5NipkCIYS8nMOi9HGiiw3Cviwo+f0aYKKU
+ 2tir4BPzogY6I8F6VTHhpmsGC/v7lu8NyX2R2Jf6qBbS421dRXCLfv0AtVQjRvvlERlI
+ NtFQ==
+X-Forwarded-Encrypted: i=1;
+ AJvYcCUYbylxh7sRKWiKkMTvUT9qrjqQj9rN2Z3AADDvgeV59oxOCywNQa8iYlA2tiLeDBPzP//qva5R1Dw=@buildroot.org
+X-Gm-Message-State: AOJu0YzZhyJjfFPnHtrZMz4sKuYdhZI1estkB8UNPeRbbBkMcKyFHK9x
+ NM+IMr4z0QwBD8CRXkU2WKjyaFmZ+G3R9CyAoxa3x6k38fprEbcgxaNZVnNGo0Q=
+X-Google-Smtp-Source: AGHT+IEKPABGwfjX7u3XIJISXdIql/ArRygIuLFQ3URrU0OaycfpLkuSKoAZWfD3FrCaW92EPkP8Yg==
+X-Received: by 2002:adf:fbcf:0:b0:374:c7cd:8818 with SMTP id
+ ffacd0b85a97d-37d293405cemr3380428f8f.22.1728458780462; 
+ Wed, 09 Oct 2024 00:26:20 -0700 (PDT)
+Received: from ?IPV6:2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385?
+ (ptr-9fplejngm4eebjbmd8l.18120a2.ip6.access.telenet.be.
+ [2a02:1811:3a7e:7b00:29c8:f1e0:f17f:3385])
  by smtp.gmail.com with ESMTPSA id
- 4fb4d7f45d1cf-5c8e05a7e87sm5035449a12.24.2024.10.08.23.26.34
- (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
- Tue, 08 Oct 2024 23:26:35 -0700 (PDT)
-From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-To: buildroot@buildroot.org
-Date: Wed,  9 Oct 2024 08:26:31 +0200
-Message-ID: <20241009062631.895124-1-dario.binacchi@amarulasolutions.com>
-X-Mailer: git-send-email 2.43.0
+ 5b1f17b1804b1-430d59b2412sm11075225e9.32.2024.10.09.00.26.19
+ (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+ Wed, 09 Oct 2024 00:26:19 -0700 (PDT)
+Message-ID: <d2ded792-0749-4187-b5a2-ed43710dc8fc@mind.be>
+Date: Tue, 8 Oct 2024 22:15:08 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Adam Duskett <adam.duskett@amarulasolutions.com>, buildroot@buildroot.org
+References: <20240904142509.3295502-1-adam.duskett@amarulasolutions.com>
+ <20240904142509.3295502-2-adam.duskett@amarulasolutions.com>
+Content-Language: en-GB
+In-Reply-To: <20240904142509.3295502-2-adam.duskett@amarulasolutions.com>
 X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amarulasolutions.com; s=google; t=1728455196; x=1729059996;
- darn=buildroot.org; 
- h=content-transfer-encoding:mime-version:message-id:date:subject:cc
- :to:from:from:to:cc:subject:date:message-id:reply-to;
- bh=WLx9kUF1SlIO9jjky7Pmxw1Kp+h+W/yK/RcJ5Onr4P0=;
- b=RT4cI0wOfoNTGX0Zi0UIx89/Gwc6ma/MXY6xKpw86P+TR+nqjpZbcyQIoW0aqGc6fv
- qEWZqR/mwXD5YWUdwcGgSQ1JDKJ0xHoxsZJwgpr+ocvcTzilmrx2b3Vpa4Cm94EXUpVO
- eRrcetRUc8CRBfRD7Zt9FVAHuWo1h7DUsAKk8=
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dmarc=pass (p=none dis=none)
- header.from=amarulasolutions.com
-X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=amarulasolutions.com header.i=@amarulasolutions.com
- header.a=rsa-sha256 header.s=google header.b=RT4cI0wO
-Subject: [Buildroot] [PATCH 1/1] configs/ti_am62x_sk: bump Linux to 6.10.13
- and U-Boot to 2024.10
+ d=mind.be; s=google; t=1728458780; x=1729063580; darn=buildroot.org;
+ h=content-transfer-encoding:in-reply-to:content-language:from
+ :references:cc:to:subject:user-agent:mime-version:date:message-id
+ :from:to:cc:subject:date:message-id:reply-to;
+ bh=Pg3A3VqyWYPrvbSMY/5gkkmTbRi/b0YINVVKPQ3swCk=;
+ b=FQ7YfiYHcxwP2MnFwva/BdD/P7f06a/QOjJww6lIjneakcgYEWRpHyXockjLa4foOh
+ O8Oy77DupyVpsemESxk68iyUP1Qz/UC8KNaZLMxofidtWPMWzFWqcDwpeEKthiR1gxZk
+ IN+Wsv2V23TRzuB0YBBxihrKFyhmj8BO8/iKAAEwSDwz/DSEbEYn7A9pppyWmyqcBeDg
+ 6JKvaoJGBtmlYSgTjGNP/TYnViZ6CWgQBWHTs8ih24/EoGpUBh9b/9RKY9nrlGQxHQT9
+ Lpl/4OtucO0Ap08DVUpHQXXqwapHR1RB3fOQg3582b3oZPZHPykOU3n8p1fe7lzFkYXY
+ 8HXA==
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dmarc=pass (p=quarantine dis=none)
+ header.from=mind.be
+X-Mailman-Original-Authentication-Results: smtp3.osuosl.org;
+ dkim=pass (2048-bit key,
+ unprotected) header.d=mind.be header.i=@mind.be header.a=rsa-sha256
+ header.s=google header.b=FQ7YfiYH
+Subject: Re: [Buildroot] [PATCH v2 2/5] package/mender-grubenv: Fix
+ per-package building
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -101,71 +109,96 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Xuanhao Shi <X15000177@gmail.com>,
- Dario Binacchi <dario.binacchi@amarulasolutions.com>,
- linux-amarula@amarulasolutions.com, Bryan Brattlof <bb@ti.com>,
- Anand Gadiyar <gadiyar@ti.com>
-Content-Type: text/plain; charset="us-ascii"
+From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
+Reply-To: Arnout Vandecappelle <arnout@mind.be>
+Cc: Angelo Compagnucci <angelo.compagnucci@gmail.com>
 Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"; Format="flowed"
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-The patch bumps the Linux kernel to version 6.10.13 and U-Boot to
-version 2024.10. Arm trusted firmware is already up to date.
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
----
- board/ti/am62x-sk/patches/linux/linux.hash | 2 +-
- board/ti/am62x-sk/patches/uboot/uboot.hash | 2 +-
- configs/ti_am62x_sk_defconfig              | 6 +++---
- 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/board/ti/am62x-sk/patches/linux/linux.hash b/board/ti/am62x-sk/patches/linux/linux.hash
-index 53eb1438945b..706ddb8dbbd4 100644
---- a/board/ti/am62x-sk/patches/linux/linux.hash
-+++ b/board/ti/am62x-sk/patches/linux/linux.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  774698422ee54c5f1e704456f37c65c06b51b4e9a8b0866f34580d86fef8e226  linux-6.10.tar.xz
-+sha256  5ffceb2350db1547e69231a63df2d3beed015a313d7d7adf8b5cb71dedaeb16a  linux-6.10.13.tar.xz
-diff --git a/board/ti/am62x-sk/patches/uboot/uboot.hash b/board/ti/am62x-sk/patches/uboot/uboot.hash
-index fe9b4f53dc63..904fa56c02a3 100644
---- a/board/ti/am62x-sk/patches/uboot/uboot.hash
-+++ b/board/ti/am62x-sk/patches/uboot/uboot.hash
-@@ -1,2 +1,2 @@
- # Locally calculated
--sha256  f591da9ab90ef3d6b3d173766d0ddff90c4ed7330680897486117df390d83c8f  u-boot-2024.07.tar.bz2
-+sha256  b28daf4ac17e43156363078bf510297584137f6df50fced9b12df34f61a92fb0  u-boot-2024.10.tar.bz2
-diff --git a/configs/ti_am62x_sk_defconfig b/configs/ti_am62x_sk_defconfig
-index e11b803b73e4..6d071b4cc148 100644
---- a/configs/ti_am62x_sk_defconfig
-+++ b/configs/ti_am62x_sk_defconfig
-@@ -8,7 +8,7 @@ BR2_ROOTFS_POST_BUILD_SCRIPT_ARGS="-c ttyS2,115200n8 -d k3-am625-sk.dtb -l am62x
- BR2_ROOTFS_POST_IMAGE_SCRIPT_ARGS="-c board/ti/am62x-sk/genimage.cfg"
- BR2_LINUX_KERNEL=y
- BR2_LINUX_KERNEL_CUSTOM_VERSION=y
--BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.10"
-+BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.10.13"
- BR2_LINUX_KERNEL_USE_ARCH_DEFAULT_CONFIG=y
- BR2_LINUX_KERNEL_DTS_SUPPORT=y
- BR2_LINUX_KERNEL_INTREE_DTS_NAME="ti/k3-am625-sk"
-@@ -27,12 +27,12 @@ BR2_TARGET_OPTEE_OS=y
- BR2_TARGET_OPTEE_OS_PLATFORM="k3-am62x"
- BR2_TARGET_TI_K3_R5_LOADER=y
- BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_VERSION=y
--BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_VERSION_VALUE="2024.07"
-+BR2_TARGET_TI_K3_R5_LOADER_CUSTOM_VERSION_VALUE="2024.10"
- BR2_TARGET_TI_K3_R5_LOADER_BOARD_DEFCONFIG="am62x_evm_r5"
- BR2_TARGET_UBOOT=y
- BR2_TARGET_UBOOT_BUILD_SYSTEM_KCONFIG=y
- BR2_TARGET_UBOOT_CUSTOM_VERSION=y
--BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.07"
-+BR2_TARGET_UBOOT_CUSTOM_VERSION_VALUE="2024.10"
- BR2_TARGET_UBOOT_BOARD_DEFCONFIG="am62x_evm_a53"
- BR2_TARGET_UBOOT_NEEDS_DTC=y
- BR2_TARGET_UBOOT_NEEDS_OPENSSL=y
--- 
-2.43.0
+On 04/09/2024 16:25, Adam Duskett wrote:
+> Normally, two packages should never touch the same file. However, the
+> mender-grubenv package is a special case, as its sole purpose is to overwrite
+> the grub.cfg file.
+> 
+> As per-package directory building has no guarantee that the grub package is
+> rsynced to the target directory before the mender-grubenv package, this leads
+> to the possiblity that mender-grubenvs grub.conf file is overwritten with the
+> stock grub2 packages grub.conf file.
+> 
+> Instead of a MENDER_GRUBENV_INSTALL_I386_CFG and MENDER_GRUBENV_INSTALL_EFI_CFG
+> being part if MENDER_GRUBENV_INSTALL_IMAGES_CMDS, move them to
+> TARGET_FINALIZE_HOOKS. This guarantees that the grub.cfg provided by the
+> mender-grubenv package is installed after grub.conf provided by the grub2
+> package.
+> 
+> Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+
+  Applied to master, thanks.
+
+  Regards,
+  Arnout
+
+> ---
+>   package/mender-grubenv/mender-grubenv.mk | 12 ++++--------
+>   1 file changed, 4 insertions(+), 8 deletions(-)
+> 
+> diff --git a/package/mender-grubenv/mender-grubenv.mk b/package/mender-grubenv/mender-grubenv.mk
+> index 8679ad9236..a6d8d48d43 100644
+> --- a/package/mender-grubenv/mender-grubenv.mk
+> +++ b/package/mender-grubenv/mender-grubenv.mk
+> @@ -11,7 +11,6 @@ MENDER_GRUBENV_LICENSE_FILES = LICENSE
+>   # Grub2 must be built first so this package can overwrite the config files
+>   # provided by grub.
+>   MENDER_GRUBENV_DEPENDENCIES = grub2
+> -MENDER_GRUBENV_INSTALL_IMAGES = YES
+>   
+>   MENDER_GRUBENV_MAKE_ENV = \
+>   	$(TARGET_CONFIGURE_OPTS) \
+> @@ -34,12 +33,13 @@ MENDER_GRUBENV_MAKE_ENV += BOOT_DIR=/boot/grub
+>   
+>   define MENDER_GRUBENV_INSTALL_I386_CFG
+>   	mkdir -p $(BINARIES_DIR)/boot-part/grub
+> -	cp -dpfr $(@D)/mender_grub.cfg \
+> +	cp -dpfr $(MENDER_GRUBENV_BUILDDIR)/mender_grub.cfg \
+>   		$(TARGET_DIR)/boot/grub/grub.cfg
+>   	cp -dpfr $(TARGET_DIR)/boot/grub/grub.cfg \
+>   		$(TARGET_DIR)/boot/grub/grub-mender-grubenv \
+>   		$(BINARIES_DIR)/boot-part/
+>   endef
+> +MENDER_GRUBENV_TARGET_FINALIZE_HOOKS += MENDER_GRUBENV_INSTALL_I386_CFG
+>   endif # BR2_TARGET_GRUB2_HAS_LEGACY_BOOT
+>   
+>   ifeq ($(BR2_TARGET_GRUB2_HAS_EFI_BOOT),y)
+> @@ -51,13 +51,14 @@ MENDER_GRUBENV_MAKE_ENV += BOOT_DIR=/boot/EFI/BOOT
+>   
+>   define MENDER_GRUBENV_INSTALL_EFI_CFG
+>   	mkdir -p $(BINARIES_DIR)/efi-part/EFI/BOOT
+> -	cp -dpfr $(@D)/mender_grub.cfg \
+> +	cp -dpfr $(MENDER_GRUBENV_BUILDDIR)/mender_grub.cfg \
+>   		$(TARGET_DIR)/boot/EFI/BOOT/grub.cfg
+>   	cp -dpfr $(TARGET_DIR)/boot/EFI/BOOT/grub.cfg \
+>   		$(BINARIES_DIR)/efi-part/EFI/BOOT
+>   	cp -dpfr $(TARGET_DIR)/boot/EFI/BOOT/grub-mender-grubenv \
+>   		$(BINARIES_DIR)/efi-part/
+>   endef
+> +MENDER_GRUBENV_TARGET_FINALIZE_HOOKS += MENDER_GRUBENV_INSTALL_EFI_CFG
+>   endif # BR2_TARGET_GRUB2_HAS_EFI_BOOT
+>   
+>   ifeq ($(BR2_PACKAGE_MENDER_GRUBENV)$(BR_BUILDING),yy)
+> @@ -86,9 +87,4 @@ define MENDER_GRUBENV_INSTALL_TARGET_CMDS
+>   	echo 'ENV_DIR=/boot/grub-mender-grubenv' > $(TARGET_DIR)/etc/mender_grubenv.config
+>   endef
+>   
+> -define MENDER_GRUBENV_INSTALL_IMAGES_CMDS
+> -	$(MENDER_GRUBENV_INSTALL_I386_CFG)
+> -	$(MENDER_GRUBENV_INSTALL_EFI_CFG)
+> -endef
+> -
+>   $(eval $(generic-package))
 
 _______________________________________________
 buildroot mailing list
