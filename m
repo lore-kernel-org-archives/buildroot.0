@@ -4,49 +4,49 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 73FCFCEFC56
-	for <buildroot@archiver.kernel.org>; Tue,  8 Oct 2024 20:42:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5E20CEFC56
+	for <buildroot@archiver.kernel.org>; Tue,  8 Oct 2024 20:42:30 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 443C06063A;
-	Tue,  8 Oct 2024 20:42:27 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 9870560898;
+	Tue,  8 Oct 2024 20:42:30 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id oTpmo7Emd43j; Tue,  8 Oct 2024 20:42:26 +0000 (UTC)
+ id cNlTbbdf4eBr; Tue,  8 Oct 2024 20:42:29 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 48BDF60658
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4D3046089F
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 48BDF60658;
-	Tue,  8 Oct 2024 20:42:26 +0000 (UTC)
-Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
- by ash.osuosl.org (Postfix) with ESMTP id 81E321BF31C
+	by smtp3.osuosl.org (Postfix) with ESMTP id 4D3046089F;
+	Tue,  8 Oct 2024 20:42:29 +0000 (UTC)
+Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+ by ash.osuosl.org (Postfix) with ESMTP id 932BE1BF97C
  for <buildroot@lists.busybox.net>; Tue,  8 Oct 2024 20:42:24 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp1.osuosl.org (Postfix) with ESMTP id 713F880F4A
+ by smtp2.osuosl.org (Postfix) with ESMTP id 8E6A940065
  for <buildroot@lists.busybox.net>; Tue,  8 Oct 2024 20:42:24 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp1.osuosl.org ([127.0.0.1])
- by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id Za3_2AhN45Ta for <buildroot@lists.busybox.net>;
+Received: from smtp2.osuosl.org ([127.0.0.1])
+ by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id haQ6JMLV63GS for <buildroot@lists.busybox.net>;
  Tue,  8 Oct 2024 20:42:23 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
  helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
  receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 6151D80F3F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6A7994034B
 Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp1.osuosl.org (Postfix) with ESMTP id 6151D80F3F
+ by smtp2.osuosl.org (Postfix) with ESMTP id 6A7994034B
  for <buildroot@buildroot.org>; Tue,  8 Oct 2024 20:42:23 +0000 (UTC)
 Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 57E0985BE2; Tue,  8 Oct 2024 20:42:23 +0000 (UTC)
+ id 63F0A85BEB; Tue,  8 Oct 2024 20:42:23 +0000 (UTC)
 To: buildroot@buildroot.org
-Date: Tue, 8 Oct 2024 22:10:05 +0200
+Date: Tue, 8 Oct 2024 22:19:29 +0200
 X-Git-Refname: refs/heads/master
-X-Git-Oldrev: 699b3c38fd5cd4de88b1df8d10c1ab45edcf2468
-X-Git-Newrev: aa3ba9755417eda35a68a6fdb4752a57fe5620a8
+X-Git-Oldrev: aa3ba9755417eda35a68a6fdb4752a57fe5620a8
+X-Git-Newrev: 451470b7a5f2bf26954673a87e74b580735f2d6e
 X-Patchwork-Hint: ignore
-Message-Id: <20241008204223.57E0985BE2@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] package/mender-grubenv: Fix per-package
- building
+Message-Id: <20241008204223.63F0A85BEB@busybox.osuosl.org>
+Subject: [Buildroot] [git commit] board/mender/x86_64: clean up post build
+ and image scripts
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -66,83 +66,119 @@ Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=aa3ba9755417eda35a68a6fdb4752a57fe5620a8
+commit: https://git.buildroot.net/buildroot/commit/?id=451470b7a5f2bf26954673a87e74b580735f2d6e
 branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
 
-Normally, two packages should never touch the same file. However, the
-mender-grubenv package is a special case, as its sole purpose is to overwrite
-the grub.cfg file.
-
-As per-package directory building has no guarantee that the grub package is
-rsynced to the target directory before the mender-grubenv package, this leads
-to the possiblity that mender-grubenvs grub.conf file is overwritten with the
-stock grub2 packages grub.conf file.
-
-Instead of a MENDER_GRUBENV_INSTALL_I386_CFG and MENDER_GRUBENV_INSTALL_EFI_CFG
-being part if MENDER_GRUBENV_INSTALL_IMAGES_CMDS, move them to
-TARGET_FINALIZE_HOOKS. This guarantees that the grub.cfg provided by the
-mender-grubenv package is installed after grub.conf provided by the grub2
-package.
+- Use function_name() {} instead of function function_name {}
+- Use consistent double newlines between methods.
+- Un-indent the comment aboe the mender_fixup method.
+- Remove "Consecutive empty lines" check-package warning
 
 Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
+[Arnout: Remove "Consecutive empty lines" check-package warning]
 Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
 ---
- package/mender-grubenv/mender-grubenv.mk | 12 ++++--------
- 1 file changed, 4 insertions(+), 8 deletions(-)
+ .checkpackageignore                   |  1 -
+ board/mender/x86_64/post-build.sh     |  8 ++++----
+ board/mender/x86_64/post-image-efi.sh | 13 +++++--------
+ 3 files changed, 9 insertions(+), 13 deletions(-)
 
-diff --git a/package/mender-grubenv/mender-grubenv.mk b/package/mender-grubenv/mender-grubenv.mk
-index cdda26bfbb..a47531fe58 100644
---- a/package/mender-grubenv/mender-grubenv.mk
-+++ b/package/mender-grubenv/mender-grubenv.mk
-@@ -11,7 +11,6 @@ MENDER_GRUBENV_LICENSE_FILES = LICENSE
- # Grub2 must be built first so this package can overwrite the config files
- # provided by grub.
- MENDER_GRUBENV_DEPENDENCIES = grub2 util-linux
--MENDER_GRUBENV_INSTALL_IMAGES = YES
+diff --git a/.checkpackageignore b/.checkpackageignore
+index ce638a7c39..207d72fd20 100644
+--- a/.checkpackageignore
++++ b/.checkpackageignore
+@@ -44,7 +44,6 @@ board/lego/ev3/post-image.sh Shellcheck
+ board/lemaker/bananapro/patches/linux/0001-arch-arm-boot-dts-sun7i-a20-bananapro.dts-disable-00.patch lib_patch.Upstream
+ board/lemaker/bananapro/post-build.sh Shellcheck
+ board/lemaker/bananapro/post-image.sh Shellcheck
+-board/mender/x86_64/post-image-efi.sh lib_shellscript.ConsecutiveEmptyLines
+ board/minnowboard/post-build.sh Shellcheck
+ board/nexbox/a95x/post-build.sh Shellcheck
+ board/nexbox/a95x/post-image.sh Shellcheck
+diff --git a/board/mender/x86_64/post-build.sh b/board/mender/x86_64/post-build.sh
+index 23d1120d45..bc4f4b8f11 100755
+--- a/board/mender/x86_64/post-build.sh
++++ b/board/mender/x86_64/post-build.sh
+@@ -3,7 +3,7 @@ set -e
+ DEVICE_TYPE="buildroot-x86_64"
+ ARTIFACT_NAME="1.0"
  
- MENDER_GRUBENV_MAKE_ENV = \
- 	$(TARGET_CONFIGURE_OPTS) \
-@@ -34,12 +33,13 @@ MENDER_GRUBENV_MAKE_ENV += BOOT_DIR=/boot
+-function parse_args {
++parse_args() {
+     local o O opts
+     o='a:o:d:'
+     O='artifact-name:,data-part-size:,device-type:'
+@@ -28,8 +28,8 @@ function parse_args {
+     done
+ }
  
- define MENDER_GRUBENV_INSTALL_I386_CFG
- 	mkdir -p $(BINARIES_DIR)/boot-part/grub
--	cp -dpfr $(@D)/mender_grub.cfg \
-+	cp -dpfr $(MENDER_GRUBENV_BUILDDIR)/mender_grub.cfg \
- 		$(TARGET_DIR)/boot/grub/grub.cfg
- 	cp -dpfr $(TARGET_DIR)/boot/grub/grub.cfg \
- 		$(TARGET_DIR)/boot/grub-mender-grubenv \
- 		$(BINARIES_DIR)/boot-part/
- endef
-+MENDER_GRUBENV_TARGET_FINALIZE_HOOKS += MENDER_GRUBENV_INSTALL_I386_CFG
- endif # BR2_TARGET_GRUB2_HAS_LEGACY_BOOT
+-  # Create a persistent directory to mount the data partition at.
+-function mender_fixup {
++# Create a persistent directory to mount the data partition at.
++mender_fixup() {
+     pushd "${TARGET_DIR}"
+     if [[ -L var/lib/mender ]]; then
+         rm var/lib/mender
+@@ -44,7 +44,7 @@ function mender_fixup {
+     popd
+ }
  
- ifeq ($(BR2_TARGET_GRUB2_HAS_EFI_BOOT),y)
-@@ -51,13 +51,14 @@ MENDER_GRUBENV_MAKE_ENV += BOOT_DIR=/boot/EFI/BOOT
+-function main {
++main() {
+     parse_args "${@}"
+     mender_fixup
+     echo "device_type=${DEVICE_TYPE}" > "${TARGET_DIR}/etc/mender/device_type"
+diff --git a/board/mender/x86_64/post-image-efi.sh b/board/mender/x86_64/post-image-efi.sh
+index 97b9e06d21..073b18c972 100755
+--- a/board/mender/x86_64/post-image-efi.sh
++++ b/board/mender/x86_64/post-image-efi.sh
+@@ -5,9 +5,8 @@ DATA_PART_SIZE="32M"
+ DEVICE_TYPE="buildroot-x86_64"
+ ARTIFACT_NAME="1.0"
  
- define MENDER_GRUBENV_INSTALL_EFI_CFG
- 	mkdir -p $(BINARIES_DIR)/efi-part/EFI/BOOT
--	cp -dpfr $(@D)/mender_grub.cfg \
-+	cp -dpfr $(MENDER_GRUBENV_BUILDDIR)/mender_grub.cfg \
- 		$(TARGET_DIR)/boot/EFI/BOOT/grub.cfg
- 	cp -dpfr $(TARGET_DIR)/boot/EFI/BOOT/grub.cfg \
- 		$(BINARIES_DIR)/efi-part/EFI/BOOT
- 	cp -dpfr $(TARGET_DIR)/boot/EFI/BOOT/grub-mender-grubenv \
- 		$(BINARIES_DIR)/efi-part/
- endef
-+MENDER_GRUBENV_TARGET_FINALIZE_HOOKS += MENDER_GRUBENV_INSTALL_EFI_CFG
- endif # BR2_TARGET_GRUB2_HAS_EFI_BOOT
- 
- ifeq ($(BR2_PACKAGE_MENDER_GRUBENV)$(BR_BUILDING),yy)
-@@ -86,9 +87,4 @@ define MENDER_GRUBENV_INSTALL_TARGET_CMDS
- 	echo 'ENV_DIR=/boot/grub-mender-grubenv' > $(TARGET_DIR)/etc/mender_grubenv.config
- endef
- 
--define MENDER_GRUBENV_INSTALL_IMAGES_CMDS
--	$(MENDER_GRUBENV_INSTALL_I386_CFG)
--	$(MENDER_GRUBENV_INSTALL_EFI_CFG)
--endef
 -
- $(eval $(generic-package))
+ # Parse arguments.
+-function parse_args {
++parse_args() {
+     local o O opts
+     o='a:o:d:'
+     O='artifact-name:,data-part-size:,device-type:'
+@@ -32,7 +31,7 @@ function parse_args {
+ }
+ 
+ # Create the data partition
+-function make_data_partition {
++make_data_partition() {
+     "${HOST_DIR}/sbin/mkfs.ext4" \
+         -F \
+         -r 1 \
+@@ -42,9 +41,8 @@ function make_data_partition {
+         "${BINARIES_DIR}/data-part.ext4" "${DATA_PART_SIZE}"
+ }
+ 
+-
+ # Create a mender image.
+-function generate_mender_image {
++generate_mender_image() {
+     echo "Creating ${BINARIES_DIR}/${DEVICE_TYPE}-${ARTIFACT_NAME}.mender"
+     "${HOST_DIR}/bin/mender-artifact" \
+         --compression lzma \
+@@ -55,13 +53,12 @@ function generate_mender_image {
+         -o "${BINARIES_DIR}/${DEVICE_TYPE}-${ARTIFACT_NAME}.mender"
+ }
+ 
+-
+-function generate_image {
++generate_image() {
+     sh support/scripts/genimage.sh -c "${BOARD_DIR}/genimage-efi.cfg"
+ }
+ 
+ # Main function.
+-function main {
++main() {
+     parse_args "${@}"
+     make_data_partition
+     generate_image
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
