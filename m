@@ -4,49 +4,91 @@ X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 Received: from smtp3.osuosl.org (smtp3.osuosl.org [140.211.166.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id C5E20CEFC56
-	for <buildroot@archiver.kernel.org>; Tue,  8 Oct 2024 20:42:30 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 8BE4ECEFC56
+	for <buildroot@archiver.kernel.org>; Tue,  8 Oct 2024 20:44:58 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 9870560898;
-	Tue,  8 Oct 2024 20:42:30 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5B47B6063A;
+	Tue,  8 Oct 2024 20:44:58 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
 Received: from smtp3.osuosl.org ([127.0.0.1])
  by localhost (smtp3.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id cNlTbbdf4eBr; Tue,  8 Oct 2024 20:42:29 +0000 (UTC)
+ id xtfjSR5ljsqy; Tue,  8 Oct 2024 20:44:57 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 4D3046089F
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp3.osuosl.org 5B09460658
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp3.osuosl.org (Postfix) with ESMTP id 4D3046089F;
-	Tue,  8 Oct 2024 20:42:29 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 932BE1BF97C
- for <buildroot@lists.busybox.net>; Tue,  8 Oct 2024 20:42:24 +0000 (UTC)
+	by smtp3.osuosl.org (Postfix) with ESMTP id 5B09460658;
+	Tue,  8 Oct 2024 20:44:57 +0000 (UTC)
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
+ by ash.osuosl.org (Postfix) with ESMTP id D1ED81BF31C
+ for <buildroot@lists.busybox.net>; Tue,  8 Oct 2024 20:44:56 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 8E6A940065
- for <buildroot@lists.busybox.net>; Tue,  8 Oct 2024 20:42:24 +0000 (UTC)
+ by smtp4.osuosl.org (Postfix) with ESMTP id C0B14401FE
+ for <buildroot@lists.busybox.net>; Tue,  8 Oct 2024 20:44:56 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id haQ6JMLV63GS for <buildroot@lists.busybox.net>;
- Tue,  8 Oct 2024 20:42:23 +0000 (UTC)
-X-Comment: SPF check N/A for local connections - client-ip=140.211.167.122;
- helo=busybox.osuosl.org; envelope-from=buildroot-git-push@osuosl.org;
- receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 6A7994034B
-Received: from busybox.osuosl.org (busybox.osuosl.org [140.211.167.122])
- by smtp2.osuosl.org (Postfix) with ESMTP id 6A7994034B
- for <buildroot@buildroot.org>; Tue,  8 Oct 2024 20:42:23 +0000 (UTC)
-Received: by busybox.osuosl.org (Postfix, from userid 4053)
- id 63F0A85BEB; Tue,  8 Oct 2024 20:42:23 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id nJOMLD9E_sFO for <buildroot@lists.busybox.net>;
+ Tue,  8 Oct 2024 20:44:56 +0000 (UTC)
+Received-SPF: Pass (mailfrom) identity=mailfrom;
+ client-ip=2a00:1450:4864:20::334; helo=mail-wm1-x334.google.com;
+ envelope-from=dario.binacchi@amarulasolutions.com; receiver=<UNKNOWN> 
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp4.osuosl.org A5FEA401D4
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org A5FEA401D4
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com
+ [IPv6:2a00:1450:4864:20::334])
+ by smtp4.osuosl.org (Postfix) with ESMTPS id A5FEA401D4
+ for <buildroot@buildroot.org>; Tue,  8 Oct 2024 20:44:55 +0000 (UTC)
+Received: by mail-wm1-x334.google.com with SMTP id
+ 5b1f17b1804b1-42cbb08a1a5so62256835e9.3
+ for <buildroot@buildroot.org>; Tue, 08 Oct 2024 13:44:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=1e100.net; s=20230601; t=1728420293; x=1729025093;
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+ :reply-to;
+ bh=rafb1NsY2B+S++Wl+zaVYilPKWwn7swRi/kgszOf16M=;
+ b=B+eOlZOgA7SOM3nmvRD2HgEg2EFAIL/MY1bLsHLQz4eBfj0F9HUjmHN5XRHq+LP0fc
+ 6XhlFjHNYGmnsEf97kzVmQdMDpYEN7l3Twq+cYbwQaNazfuODNl2xmFbei2+bDiO/K0d
+ bQB38sizN/zgpgWHZkcnjBBw+nC7VZVROlz6WNJxJf/CsGTLMVTMF0NXYD+u3D2Gzql0
+ nEoX37q0ujI8Z6EyywkgyNOXzTbpth7BxdgYH/bCYQOxEQDr938SOhBjwFGlnlC94ALc
+ kRei9zIdhT0teI49IVE8r5+by//U86AK7rMLfUdQOdnmsjLF1jtct5YtXESWWVnuuX3n
+ gEWA==
+X-Gm-Message-State: AOJu0YwdSD1NEmvKtmLyEBUgrEpHNninmlSYByok5JdzGhvcTMDWSqCa
+ ELLX+98BTtP6OCFG/b3NKny/k+09wZ1LiafsF6N3EW0uHD4nGg1pcJPinUTXcIPSwA4lwVgu70z
+ hw8w=
+X-Google-Smtp-Source: AGHT+IGbKEPeDGmp0jl28vOmJ+EOTOlhl0Smwi2qonldzJG4gND5x2AmGobYfPpp79Twm1CTS3F17w==
+X-Received: by 2002:a05:600c:4fc6:b0:42c:b52b:4335 with SMTP id
+ 5b1f17b1804b1-430ccf28421mr139745e9.10.1728420293458; 
+ Tue, 08 Oct 2024 13:44:53 -0700 (PDT)
+Received: from dario-ThinkPad-T14s-Gen-2i.. ([2.196.41.106])
+ by smtp.gmail.com with ESMTPSA id
+ 5b1f17b1804b1-430d6fab661sm31795e9.47.2024.10.08.13.44.52
+ (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+ Tue, 08 Oct 2024 13:44:52 -0700 (PDT)
+From: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 To: buildroot@buildroot.org
-Date: Tue, 8 Oct 2024 22:19:29 +0200
-X-Git-Refname: refs/heads/master
-X-Git-Oldrev: aa3ba9755417eda35a68a6fdb4752a57fe5620a8
-X-Git-Newrev: 451470b7a5f2bf26954673a87e74b580735f2d6e
-X-Patchwork-Hint: ignore
-Message-Id: <20241008204223.63F0A85BEB@busybox.osuosl.org>
-Subject: [Buildroot] [git commit] board/mender/x86_64: clean up post build
- and image scripts
+Date: Tue,  8 Oct 2024 22:44:50 +0200
+Message-ID: <20241008204450.3838045-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.43.0
+MIME-Version: 1.0
+X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=amarulasolutions.com; s=google; t=1728420293; x=1729025093;
+ darn=buildroot.org; 
+ h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+ :to:from:from:to:cc:subject:date:message-id:reply-to;
+ bh=rafb1NsY2B+S++Wl+zaVYilPKWwn7swRi/kgszOf16M=;
+ b=C7IubP38bO8zZIc0gdvOHOi72V/cpKrlnHXC+8gBZV5KA4VNx5JilmBdV7zeqLehAy
+ FbPf+dyKQ73TilAPRHW70ttbtDw3uBhXNqk68kwxnBe88tBi0dX3HZO0Jj76j8MbZhPo
+ VutFbamk7dDBT9Unss3efjnZ9C/jUz1QWEibE=
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dmarc=pass (p=none dis=none)
+ header.from=amarulasolutions.com
+X-Mailman-Original-Authentication-Results: smtp4.osuosl.org;
+ dkim=pass (1024-bit key) header.d=amarulasolutions.com
+ header.i=@amarulasolutions.com header.a=rsa-sha256 header.s=google
+ header.b=C7IubP38
+Subject: [Buildroot] [PATCH 1/1] configs/stm32f429_disco_xip: bump Linux to
+ 6.1.112
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -58,127 +100,48 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-From: Arnout Vandecappelle via buildroot <buildroot@buildroot.org>
-Reply-To: Arnout Vandecappelle <arnout@mind.be>
-MIME-Version: 1.0
+Cc: linux-amarula@amarulasolutions.com,
+ Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+ Christophe Priouzeau <christophe.priouzeau@foss.st.com>
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-commit: https://git.buildroot.net/buildroot/commit/?id=451470b7a5f2bf26954673a87e74b580735f2d6e
-branch: https://git.buildroot.net/buildroot/commit/?id=refs/heads/master
+The patch bumps the Linux kernel to version 6.1.112. The size of xipImage
+has increased by only 54 bytes (1669958 bytes compared to 1669904 in
+version 6.1.98).
 
-- Use function_name() {} instead of function function_name {}
-- Use consistent double newlines between methods.
-- Un-indent the comment aboe the mender_fixup method.
-- Remove "Consecutive empty lines" check-package warning
-
-Signed-off-by: Adam Duskett <adam.duskett@amarulasolutions.com>
-[Arnout: Remove "Consecutive empty lines" check-package warning]
-Signed-off-by: Arnout Vandecappelle <arnout@mind.be>
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 ---
- .checkpackageignore                   |  1 -
- board/mender/x86_64/post-build.sh     |  8 ++++----
- board/mender/x86_64/post-image-efi.sh | 13 +++++--------
- 3 files changed, 9 insertions(+), 13 deletions(-)
+ .../stmicroelectronics/stm32f429-disco/patches/linux/linux.hash | 2 +-
+ configs/stm32f429_disco_xip_defconfig                           | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/.checkpackageignore b/.checkpackageignore
-index ce638a7c39..207d72fd20 100644
---- a/.checkpackageignore
-+++ b/.checkpackageignore
-@@ -44,7 +44,6 @@ board/lego/ev3/post-image.sh Shellcheck
- board/lemaker/bananapro/patches/linux/0001-arch-arm-boot-dts-sun7i-a20-bananapro.dts-disable-00.patch lib_patch.Upstream
- board/lemaker/bananapro/post-build.sh Shellcheck
- board/lemaker/bananapro/post-image.sh Shellcheck
--board/mender/x86_64/post-image-efi.sh lib_shellscript.ConsecutiveEmptyLines
- board/minnowboard/post-build.sh Shellcheck
- board/nexbox/a95x/post-build.sh Shellcheck
- board/nexbox/a95x/post-image.sh Shellcheck
-diff --git a/board/mender/x86_64/post-build.sh b/board/mender/x86_64/post-build.sh
-index 23d1120d45..bc4f4b8f11 100755
---- a/board/mender/x86_64/post-build.sh
-+++ b/board/mender/x86_64/post-build.sh
-@@ -3,7 +3,7 @@ set -e
- DEVICE_TYPE="buildroot-x86_64"
- ARTIFACT_NAME="1.0"
- 
--function parse_args {
-+parse_args() {
-     local o O opts
-     o='a:o:d:'
-     O='artifact-name:,data-part-size:,device-type:'
-@@ -28,8 +28,8 @@ function parse_args {
-     done
- }
- 
--  # Create a persistent directory to mount the data partition at.
--function mender_fixup {
-+# Create a persistent directory to mount the data partition at.
-+mender_fixup() {
-     pushd "${TARGET_DIR}"
-     if [[ -L var/lib/mender ]]; then
-         rm var/lib/mender
-@@ -44,7 +44,7 @@ function mender_fixup {
-     popd
- }
- 
--function main {
-+main() {
-     parse_args "${@}"
-     mender_fixup
-     echo "device_type=${DEVICE_TYPE}" > "${TARGET_DIR}/etc/mender/device_type"
-diff --git a/board/mender/x86_64/post-image-efi.sh b/board/mender/x86_64/post-image-efi.sh
-index 97b9e06d21..073b18c972 100755
---- a/board/mender/x86_64/post-image-efi.sh
-+++ b/board/mender/x86_64/post-image-efi.sh
-@@ -5,9 +5,8 @@ DATA_PART_SIZE="32M"
- DEVICE_TYPE="buildroot-x86_64"
- ARTIFACT_NAME="1.0"
- 
--
- # Parse arguments.
--function parse_args {
-+parse_args() {
-     local o O opts
-     o='a:o:d:'
-     O='artifact-name:,data-part-size:,device-type:'
-@@ -32,7 +31,7 @@ function parse_args {
- }
- 
- # Create the data partition
--function make_data_partition {
-+make_data_partition() {
-     "${HOST_DIR}/sbin/mkfs.ext4" \
-         -F \
-         -r 1 \
-@@ -42,9 +41,8 @@ function make_data_partition {
-         "${BINARIES_DIR}/data-part.ext4" "${DATA_PART_SIZE}"
- }
- 
--
- # Create a mender image.
--function generate_mender_image {
-+generate_mender_image() {
-     echo "Creating ${BINARIES_DIR}/${DEVICE_TYPE}-${ARTIFACT_NAME}.mender"
-     "${HOST_DIR}/bin/mender-artifact" \
-         --compression lzma \
-@@ -55,13 +53,12 @@ function generate_mender_image {
-         -o "${BINARIES_DIR}/${DEVICE_TYPE}-${ARTIFACT_NAME}.mender"
- }
- 
--
--function generate_image {
-+generate_image() {
-     sh support/scripts/genimage.sh -c "${BOARD_DIR}/genimage-efi.cfg"
- }
- 
- # Main function.
--function main {
-+main() {
-     parse_args "${@}"
-     make_data_partition
-     generate_image
+diff --git a/board/stmicroelectronics/stm32f429-disco/patches/linux/linux.hash b/board/stmicroelectronics/stm32f429-disco/patches/linux/linux.hash
+index 88e1ba4660dc..fc2057c3f249 100644
+--- a/board/stmicroelectronics/stm32f429-disco/patches/linux/linux.hash
++++ b/board/stmicroelectronics/stm32f429-disco/patches/linux/linux.hash
+@@ -1,2 +1,2 @@
+ # Locally calculated
+-sha256  97cdc9127c7700556ea0891267a0c24cf372f4b81636fb8203a914f3a69f3406  linux-6.1.98.tar.xz
++sha256  8bd8de3562fb006653e550a934e66ed9f80b7576258a03e2caa2e3ce1c1f9f24  linux-6.1.112.tar.xz
+diff --git a/configs/stm32f429_disco_xip_defconfig b/configs/stm32f429_disco_xip_defconfig
+index 41970d469d90..33f725e18530 100644
+--- a/configs/stm32f429_disco_xip_defconfig
++++ b/configs/stm32f429_disco_xip_defconfig
+@@ -8,7 +8,7 @@ BR2_DOWNLOAD_FORCE_CHECK_HASHES=y
+ BR2_ROOTFS_POST_BUILD_SCRIPT="board/stmicroelectronics/common/stm32f4xx/stm32-post-build.sh"
+ BR2_LINUX_KERNEL=y
+ BR2_LINUX_KERNEL_CUSTOM_VERSION=y
+-BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.98"
++BR2_LINUX_KERNEL_CUSTOM_VERSION_VALUE="6.1.112"
+ BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
+ BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="board/stmicroelectronics/stm32f429-disco/linux.config"
+ BR2_LINUX_KERNEL_IMAGE_TARGET_CUSTOM=y
+-- 
+2.43.0
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
